@@ -994,7 +994,7 @@ load_themes (GtkIconTheme *icon_theme)
 		{
 		  if (new_suffix == ICON_SUFFIX_SVG)
 		    {
-		      if (unthemed_icon->no_svg_filename)
+		      if (unthemed_icon->svg_filename)
 			g_free (abs_file);
 		      else
 			unthemed_icon->svg_filename = abs_file;
@@ -1025,7 +1025,7 @@ load_themes (GtkIconTheme *icon_theme)
 		  if (new_suffix == ICON_SUFFIX_SVG)
 		    unthemed_icon->svg_filename = abs_file;
 		  else
-		    unthemed_icon->svg_filename = abs_file;
+		    unthemed_icon->no_svg_filename = abs_file;
 		  
 		  g_hash_table_insert (priv->unthemed_icons,
 				       base_name,

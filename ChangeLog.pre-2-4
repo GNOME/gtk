@@ -1,3 +1,14 @@
+Mon Apr 19 17:59:17 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* INSTALL.in: Update libpng and libjpeg URLs, remove
+	note about building without since that's not the normal
+	case.
+
+Sun Apr 11 09:45:11 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkicontheme.c (load_themes): Fix a couple of typos in
+	handling of SVG/non-SVG unthemed icons.
+
 2004-04-19  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_focus): Don't leak list of
