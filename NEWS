@@ -1,3 +1,28 @@
+Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.3
+=================================================
+* GtkFileChooser [Federico]:
+ - Support bookmarks in GtkFileSystemUnix. [Jan Arne Petersen]
+ - Correctly handle typed-in filenames in save mode, folder mode, and
+   multiple-selection mode in all combinations.
+ - Don't erase the filename in the entry when changing folders.
+ - Support icons in GtkFileSystemUnix.
+ - GtkFileChooserDialog now comes up at a reasonable size.
+ - GtkFileSystemUnix now notifies correctly on ::create_folder().
+ - Slight GUI reorganization.
+ - File system module support. [Alexander Larsson]
+ - Miscellaneous fixes. [Christian Persch, Jan Arne Petersen]
+ - Memory leak fixes [Morten Welinder]
+* GtkTreeView:
+ - Fix return values. [Federico, R. McFarland]
+* Add a "use-separator" style property to GtkMessageDialog, and make
+  it not resizable. [Federico]
+* Add 'const' to uses of GdkColor that need it. [Federico]
+* Put focusable labels in the focus chain. [Federico]
+* Fixes to GtkIconTheme [Tosten Schoenfeld]
+* Remove C++-style comments. [Damien Carbery]
+* Memory leak fixes. [Christian Persch]
+* Miscellaneous fixes. [Morten Welinder]
+
 Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 =================================================
 * GdkPixbuf
