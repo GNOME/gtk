@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-07-10 08:43+0400\n"
-"PO-Revision-Date: 2002-07-10 08:45+0400\n"
+"POT-Creation-Date: 2002-07-18 17:10+0400\n"
+"PO-Revision-Date: 2002-07-18 17:12+0400\n"
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -519,15 +519,20 @@ msgstr "Недостаточно памяти для загрузки файла
 # gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 #: gdk-pixbuf/io-ras.c:158
 msgid "RAS image has bogus header data"
-msgstr "Изображение формата RAS имеет неправильные данные в заголовке"
+msgstr "изображение формата RAS имеет неправильные данные в заголовке"
 
 # gdk-pixbuf/gdk-pixdata.c:151
 #: gdk-pixbuf/io-ras.c:180
 msgid "RAS image has unknown type"
-msgstr "Неизвестный формата RAS имеет неизвестный тип"
+msgstr "неизвестный формата RAS имеет неизвестный тип"
+
+# gdk-pixbuf/io-tga.c:1308 gdk-pixbuf/io-tga.c:1337
+#: gdk-pixbuf/io-ras.c:188
+msgid "unsupported RAS image variation"
+msgstr "неподдерживаемая разновидность изображения формата RAS"
 
 # gdk-pixbuf/io-wbmp.c:307
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "Недостаточно памяти для загрузки изображения формата RAS"
 
