@@ -37,6 +37,7 @@ enum
   PROP_VISIBLE,
   PROP_RESIZABLE,
   PROP_WIDTH,
+  PROP_SPACING,
   PROP_SIZING,
   PROP_FIXED_WIDTH,
   PROP_MIN_WIDTH,
@@ -243,12 +244,21 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 						     0,
 						     G_PARAM_READABLE));
   g_object_class_install_property (object_class,
+                                   PROP_SPACING,
+                                   g_param_spec_int ("spacing",
+						     P_("Spacing"),
+						     P_("Space which is inserted between cells"),
+						     0,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
                                    PROP_SIZING,
                                    g_param_spec_enum ("sizing",
                                                       P_("Sizing"),
                                                       P_("Resize mode of the column"),
                                                       GTK_TYPE_TREE_VIEW_COLUMN_SIZING,
-                                                      GTK_TREE_VIEW_COLUMN_AUTOSIZE,
+                                                      GTK_TREE_VIEW_COLUMN_GROW_ONLY,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,
@@ -302,7 +312,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    g_param_spec_boolean ("clickable",
                                                         P_("Clickable"),
                                                         P_("Whether the header can be clicked"),
-                                                         TRUE,
+                                                         FALSE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   
 
@@ -321,7 +331,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                        P_("X Alignment of the column header text or widget"),
                                                        0.0,
                                                        1.0,
-                                                       0.5,
+                                                       0.0,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
@@ -369,6 +379,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->button = NULL;
   tree_column->xalign = 0.0;
   tree_column->width = 0;
+  tree_column->spacing = 0;
   tree_column->requested_width = -1;
   tree_column->min_width = -1;
   tree_column->max_width = -1;
@@ -376,6 +387,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->column_type = GTK_TREE_VIEW_COLUMN_GROW_ONLY;
   tree_column->visible = TRUE;
   tree_column->resizable = FALSE;
+  tree_column->expand = FALSE;
   tree_column->clickable = FALSE;
   tree_column->dirty = TRUE;
   tree_column->sort_order = GTK_SORT_ASCENDING;
@@ -386,7 +398,9 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->sort_column_id = -1;
   tree_column->reorderable = FALSE;
   tree_column->maybe_reordered = FALSE;
+  tree_column->fixed_width = 1;
   tree_column->use_resized_width = FALSE;
+  tree_column->title = g_strdup ("");
 }
 
 static void
@@ -462,6 +476,11 @@ gtk_tree_view_column_set_property (GObject         *object,
                                           g_value_get_int (value));
       break;
 
+    case PROP_SPACING:
+      gtk_tree_view_column_set_spacing (tree_column,
+					g_value_get_int (value));
+      break;
+
     case PROP_TITLE:
       gtk_tree_view_column_set_title (tree_column,
                                       g_value_get_string (value));
@@ -533,6 +552,11 @@ gtk_tree_view_column_get_property (GObject         *object,
     case PROP_WIDTH:
       g_value_set_int (value,
                        gtk_tree_view_column_get_width (tree_column));
+      break;
+
+    case PROP_SPACING:
+      g_value_set_int (value,
+                       gtk_tree_view_column_get_spacing (tree_column));
       break;
 
     case PROP_SIZING:

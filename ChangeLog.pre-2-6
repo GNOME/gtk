@@ -1,5 +1,10 @@
 2004-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): 
+	Make spacing a property, correct the declared default values 
+	of several properties to be in sync with the actual initial 
+	values.  (#147654, Matthias Clasen)
+
 	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): Don't reparent
 	back to menu->toplevel if it is already gone because we're
 	shutting down.  (#147656, John Cupitt)
