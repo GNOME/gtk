@@ -1,3 +1,8 @@
+2004-11-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/migrating-GtkIconView.sgml: Add a first version of
+	a GnomeIconList --> GtkIconView migration chapter.
+
 2004-11-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkcellrenderercombo.sgml: 
