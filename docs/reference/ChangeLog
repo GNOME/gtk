@@ -1,3 +1,7 @@
+Tue Oct 12 11:04:47 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/glossary.xml: Fix SGML errors.
+
 2004-10-11  Matthias Clasen  <matthias@localhost.localdomain>
 
 	* gtk/glossary.xml: Add some terms.

@@ -240,10 +240,11 @@
         applications may place their windows. Each screen has a 
         <glossterm linkend="rootwindow">root window</glossterm> which
         defines the area of the screen. Screens under X may have quite
-        dissimilar <glossterm linkend="visual">visuals</visuals>.
+        dissimilar <glossterm linkend="visual">visuals</glossterm>.
         Each screen can stretch across multiple physical monitors.
         In GDK, screens are represented by 
         <link linkend="GdkScreen">GdkScreen</link> objects.
+      </para>
     </glossdef>
   </glossentry>
 

@@ -60,6 +60,8 @@ for the "price" column could be one which returns
 @b: Another #GtkTreeIter in @model
 @user_data: Data passed when the compare func is assigned e.g. by
 gtk_tree_sortable_set_sort_func()
+@Returns: 
+
 
 <!-- ##### FUNCTION gtk_tree_sortable_sort_column_changed ##### -->
 <para>

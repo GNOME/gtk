@@ -332,3 +332,13 @@ gtk_action_group_add_radio_actions() to construct groups of radio actions.
 @domain: 
 
 
+<!-- ##### FUNCTION gtk_action_group_translate_string ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@string: 
+@Returns: 
+
+

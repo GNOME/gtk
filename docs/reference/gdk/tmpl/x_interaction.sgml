@@ -436,6 +436,15 @@ Since: 2.2
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_x11_window_set_user_time ##### -->
+<para>
+
+</para>
+
+@window: 
+@timestamp: 
+
+
 <!-- ##### FUNCTION gdk_x11_colormap_foreign_new ##### -->
 <para>
 

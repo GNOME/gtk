@@ -276,6 +276,16 @@ Deprecated equivalent of g_object_unref().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_accelerator_get_label ##### -->
+<para>
+
+</para>
+
+@accelerator_key: 
+@accelerator_mods: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_accelerator_set_default_mod_mask ##### -->
 <para>
 
