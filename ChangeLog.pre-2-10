@@ -1,3 +1,7 @@
+2002-02-05  Abel Cheung  <maddog@linux.org.hk>
+
+	* configure.in (ALL_LINGUAS): zh_CN.GB2312 -> zh_CN
+
 2002-01-14  Hasbullah Bin Pit <sebol@ikhlas.com>
 
 	* configure.in (ALL_LINGUAS): Add "ms" to the language list.
