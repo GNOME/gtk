@@ -661,6 +661,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   GtkEntry *entry;
   PangoFontMetrics metrics;
   PangoFont *font;
+  char *lang;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
@@ -683,8 +684,10 @@ gtk_entry_size_request (GtkWidget      *widget,
   
   font = pango_context_load_font (pango_layout_get_context (entry->layout),
 				  widget->style->font_desc);
-
-  pango_font_get_metrics (font, "fr_FR", &metrics);
+  lang = pango_context_get_lang (pango_layout_get_context (entry->layout));
+  pango_font_get_metrics (font, lang, &metrics);
+  g_free (lang);
+  
   pango_font_unref (font);
 
   entry->ascent = metrics.ascent;
@@ -1352,6 +1355,11 @@ gtk_entry_find_position (GtkEntry *entry,
 
   line = pango_layout_get_lines (entry->layout)->data;
   pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
+
+  if (trailing)
+    index = unicode_next_utf8 (entry->text + index) - entry->text;
+
+  return index;
 }
 
 static void
@@ -1373,7 +1381,7 @@ gtk_entry_get_cursor_locations (GtkEntry *entry,
     *strong_x = strong_pos.x / PANGO_SCALE;
 
   if (weak_x)
-    *strong_x = weak_pos.x / PANGO_SCALE;
+    *weak_x = weak_pos.x / PANGO_SCALE;
 }
 
 static void
@@ -1626,15 +1634,50 @@ gtk_entry_move_cursor (GtkEditable *editable,
 		       gint         y)
 {
   GtkEntry *entry;
+  gint index;
+
   entry = GTK_ENTRY (editable);
 
+  index  = unicode_offset_to_index (entry->text, editable->current_pos);
+  
   /* Horizontal motion */
+
+  gtk_entry_ensure_layout (entry);
+
+  while (x != 0)
+    {
+      int new_index, new_trailing;
+      
+      if (x > 0)
+	{
+	  pango_layout_move_cursor_visually (entry->layout, index, 0, 1, &new_index, &new_trailing);
+	  x--;
+	}
+      else
+	{
+	  pango_layout_move_cursor_visually (entry->layout, index, 0, -1, &new_index, &new_trailing);
+	  x++;
+	}
+
+      if (new_index < 0 || new_index == G_MAXINT)
+	break;
+      
+      if (new_trailing)
+	index = unicode_next_utf8 (entry->text + new_index) - entry->text;
+      else
+	index = new_index;
+    }
+
+  editable->current_pos = unicode_index_to_offset (entry->text, index);
+
+#if 0  
   if ((gint)editable->current_pos < -x)
     editable->current_pos = 0;
   else if (editable->current_pos + x > entry->text_length)
     editable->current_pos = entry->text_length;
   else
     editable->current_pos += x;
+#endif  
 
   /* Ignore vertical motion */
 }

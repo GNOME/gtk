@@ -26,6 +26,7 @@
 
 #include <stdarg.h>
 #include <string.h>
+#include <locale.h>
 #include "gtkcontainer.h"
 #include "gtkmain.h"
 #include "gtkrc.h"
@@ -3197,6 +3198,7 @@ PangoContext *
 gtk_widget_create_pango_context (GtkWidget *widget)
 {
   PangoContext *context;
+  char *lang, *p;
 
   context = gdk_pango_context_get ();
 
@@ -3205,6 +3207,17 @@ gtk_widget_create_pango_context (GtkWidget *widget)
 			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			        PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
   pango_context_set_font_description (context, widget->style->font_desc);
+
+  lang = g_strdup (setlocale (LC_CTYPE, NULL));
+  p = strchr (lang, '.');
+  if (p)
+    *p = '\0';
+  p = strchr (lang, '@');
+  if (p)
+    *p = '\0';
+  
+  pango_context_set_lang (context, lang);
+  g_free (lang);
 
   return context;
 }
