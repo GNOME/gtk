@@ -1,3 +1,11 @@
+2005-02-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-pnm.c (pnm_read_next_value): Pass in the max number 
+	of bytes to read.
+	(pnm_read_ascii_scanline): And use it here to enable 
+	parsing of pbm images without whitespace between the 
+	pixels.  (#165803, Samuel Hym)
+
 2005-01-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_new_with_type) 

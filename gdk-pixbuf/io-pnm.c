@@ -212,7 +212,7 @@ pnm_skip_whitespace (PnmIOBuffer *inbuf, GError **error)
 
 /* read next number from buffer */
 static gint
-pnm_read_next_value (PnmIOBuffer *inbuf, guint *value, GError **error)
+pnm_read_next_value (PnmIOBuffer *inbuf, gint max_length, guint *value, GError **error)
 {
 	register guchar *inptr, *word, *p;
 	guchar *inend, buf[129];
@@ -224,6 +224,9 @@ pnm_read_next_value (PnmIOBuffer *inbuf, guint *value, GError **error)
 	g_return_val_if_fail (inbuf->byte != NULL, PNM_FATAL_ERR);
 	g_return_val_if_fail (value != NULL, PNM_FATAL_ERR);
 	
+	if (max_length < 0)
+		max_length = 128;
+
 	/* skip white space */
 	if ((retval = pnm_skip_whitespace (inbuf, error)) != PNM_OK)
 		return retval;
@@ -232,12 +235,12 @@ pnm_read_next_value (PnmIOBuffer *inbuf, guint *value, GError **error)
 	inptr = inbuf->byte;
 	
 	/* copy this pnm 'word' into a temp buffer */
-	for (p = inptr, word = buf; (p < inend) && !g_ascii_isspace (*p) && (*p != '#') && (p - inptr < 128); p++, word++)
+	for (p = inptr, word = buf; (p < inend) && !g_ascii_isspace (*p) && (*p != '#') && (p - inptr < max_length); p++, word++)
 		*word = *p;
 	*word = '\0';
 	
 	/* hmmm, there must be more data to this 'word' */
-	if (p == inend || (!g_ascii_isspace (*p) && (*p != '#')  && (p - inptr < 128)))
+	if (p == inend || (!g_ascii_isspace (*p) && (*p != '#')  && (p - inptr < max_length)))
 	    return PNM_SUSPEND;
 	
 	/* get the value */
@@ -323,7 +326,7 @@ pnm_read_header (PnmLoaderContext *context)
 		/* read the pixmap width */
 		guint width = 0;
 		
-		retval = pnm_read_next_value (inbuf, &width,
+		retval = pnm_read_next_value (inbuf, -1, &width,
 					      context->error);
 		
 		if (retval != PNM_OK) 
@@ -344,7 +347,7 @@ pnm_read_header (PnmLoaderContext *context)
 		/* read the pixmap height */
 		guint height = 0;
 		
-		retval = pnm_read_next_value (inbuf, &height,
+		retval = pnm_read_next_value (inbuf, -1, &height,
 					      context->error);
 		
 		if (retval != PNM_OK)
@@ -367,7 +370,7 @@ pnm_read_header (PnmLoaderContext *context)
 	case PNM_FORMAT_PGM:
 	case PNM_FORMAT_PGM_RAW:
 		if (!context->maxval) {
-			retval = pnm_read_next_value (inbuf, &context->maxval,
+			retval = pnm_read_next_value (inbuf, -1, &context->maxval,
 						      context->error);
 			
 			if (retval != PNM_OK)
@@ -525,6 +528,7 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 	guchar mask;
 	guchar *dptr;
 	gint retval;
+	gint max_length;
 	
 	g_return_val_if_fail (context != NULL, PNM_FATAL_ERR);
 	
@@ -536,14 +540,17 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 	
 	switch (context->type) {
 	case PNM_FORMAT_PBM:
+		max_length = 1;
 		numval = MIN (8, context->width - context->output_col);
 		offset = context->output_col / 8;
 		break;
 	case PNM_FORMAT_PGM:
+		max_length = -1;
 		numval = 1;
 		offset = context->output_col;
 		break;
 	case PNM_FORMAT_PPM:
+		max_length = -1;
 		numval = 3;
 		offset = context->output_col * 3;
 		break;
@@ -567,8 +574,8 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 		}
 		
 		for (i = context->scan_state; i < numval; i++) {
-			retval = pnm_read_next_value (inbuf, &value,
-						      context->error);
+			retval = pnm_read_next_value (inbuf, max_length, 
+						      &value, context->error);
 			if (retval != PNM_OK) {
 				/* save state and return */
 				context->scan_state = i;
