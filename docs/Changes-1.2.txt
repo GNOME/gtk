@@ -206,13 +206,13 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
 
   This means:
 
-   - You must call g_thread_init(), then gtk_thread_init()
-     in a threaded GTK+ program.
+   - You must call g_thread_init() before executing any
+     other GTK+ or GDK functions in a threaded GTK+ program.
 
    - Idles, timeouts, and input functions are executed outside 
      of the main GTK+ lock. So, if you need to call GTK+ 
      inside of such a callback, you must surround the callback
-     with a gtk_thread_enter()/gtk_thread_leave() pair.
+     with a gdk_threads_enter()/gdk_threads_leave() pair.
 
      [ However, signals are still executed within the main
        GTK+ lock ]
@@ -221,6 +221,10 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
      that might be used in threaded programs, you _must_
      surround timeouts and idle functions in this matter.
 
+     As always, you must also surround any calls to GTK+
+     not made within a signal handler with a 
+     gdk_threads_enter()/gdk_threads_leave() pair.
+    
    - There is no longer a special --with-threads configure
      option for GTK+. To use threads in a GTK+ program, you
      must:
@@ -233,3 +237,11 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
       b) Link with the libraries returned by:
  
            gtk-config --libs gthread
+
+         and use the cflags from:
+
+            gtk-config --cflags gthread
+
+     You can get these CFLAGS and LIBS by passing gthread
+     as the fourth parameter to the AM_PATH_GTK automake
+     macro.

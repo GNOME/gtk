@@ -36,6 +36,14 @@ gtk-config takes the following flags:
      If PREFIX is specified, overrides the configured value of $exec_prefix.
      Otherwise, prints out the configured value of $exec_prefix
  
+You may also add to the command line a list of additional
+libraries that gtk-config should supply the CFLAGS and LIBS
+for. The only currently supported library is 'gthread'.
+
+As an example of this latter usage, you can get the
+appropriate cflags for a threaded program with:
+
+ gtk-config --cflags gthread
 
 
 Example of using gtk-config
