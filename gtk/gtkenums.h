@@ -158,7 +158,8 @@ typedef enum
 typedef enum
 {
   GTK_POLICY_ALWAYS,
-  GTK_POLICY_AUTOMATIC
+  GTK_POLICY_AUTOMATIC,
+  GTK_POLICY_NEVER
 } GtkPolicyType;
 
 typedef enum
@@ -194,12 +195,12 @@ typedef enum
 /* signal run types */
 typedef enum			/*< flags >*/
 {
-  GTK_RUN_FIRST      = 0x01,
-  GTK_RUN_LAST       = 0x02,
+  GTK_RUN_FIRST      = 1 << 0,
+  GTK_RUN_LAST       = 1 << 1,
   GTK_RUN_BOTH       = (GTK_RUN_FIRST | GTK_RUN_LAST),
-  GTK_RUN_NO_RECURSE = 0x10,
-  GTK_RUN_ACTION     = 0x20,
-  GTK_RUN_NO_HOOKS   = 0x30
+  GTK_RUN_NO_RECURSE = 1 << 2,
+  GTK_RUN_ACTION     = 1 << 3,
+  GTK_RUN_NO_HOOKS   = 1 << 4
 } GtkSignalRunType;
 
 /* scrolling types */

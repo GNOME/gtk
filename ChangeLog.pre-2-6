@@ -1,3 +1,8 @@
+Tue Dec  1 02:19:54 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkenums.h: fixed a stupid error of mine about the run type
+	values.
+
 1998-11-30  Elliot Lee  <sopwith@cuc.ml.org>
 
 	* {gdk,gtk}/*.c: Make read-only data structures "static const" to
