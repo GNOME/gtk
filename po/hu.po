@@ -345,40 +345,40 @@ msgstr "Betûkészlet: (Szûrt)"
 
 #: gtk/gtkfontsel.c:2680
 msgid "heavy"
-msgstr ""
+msgstr "vastag"
 
 #: gtk/gtkfontsel.c:2682
 msgid "extrabold"
-msgstr ""
+msgstr "extra kövér"
 
 #: gtk/gtkfontsel.c:2684
 msgid "bold"
-msgstr ""
+msgstr "kövér"
 
 #: gtk/gtkfontsel.c:2687
 msgid "demibold"
-msgstr ""
+msgstr "félkövér"
 
 #: gtk/gtkfontsel.c:2690
 msgid "medium"
-msgstr ""
+msgstr "közepes"
 
 #: gtk/gtkfontsel.c:2692
 msgid "normal"
-msgstr ""
+msgstr "normál"
 
 #: gtk/gtkfontsel.c:2694
 #, fuzzy
 msgid "light"
-msgstr "Szélesség:"
+msgstr "vékony"
 
 #: gtk/gtkfontsel.c:2696
 msgid "extralight"
-msgstr ""
+msgstr "extra vékony"
 
 #: gtk/gtkfontsel.c:2698
 msgid "thin"
-msgstr ""
+msgstr "vékony"
 
 #: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
@@ -459,11 +459,11 @@ msgstr "Nyomás"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr ""
+msgstr "X döntés"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr ""
+msgstr "Y döntés"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
