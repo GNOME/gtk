@@ -89,9 +89,12 @@ struct _GtkTextView
   
   guint overwrite_mode : 1;
   guint cursor_visible : 1;
-  guint  need_im_reset : 1;	/* If we have reset the IM since the last character entered */
-  /* just selected a word or line via double/triple click */
-  guint just_selected_element : 1;
+
+  /* if we have reset the IM since the last character entered */  
+  guint  need_im_reset : 1;	
+
+  /* this flag is no longer used */
+  guint just_selected_element : 1; 
 
   /* disable scrolling to cursor on focus */
   guint disable_scroll_on_focus : 1;

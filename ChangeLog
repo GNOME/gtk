@@ -1,3 +1,18 @@
+2003-01-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.h (struct _GtkTextView): Add a comment that
+	the just_selected_element is unused.
+
+	* gtk/gtktextview.c (extend_selection): New helper function to
+	find the range that should be added to the selection. 
+	(selection_motion_event_handler): 
+	(gtk_text_view_start_selection_drag): 
+	(gtk_text_view_end_selection_drag): 
+	(selection_motion_event_handler): 
+	(selection_scan_timeout): Support select-by-words/lines.
+	(gtk_text_view_button_press_event): Start a selection drag on
+	double/triple clicks.  (#78599)
+
 2003-01-06  Matthias Clasen  <maclas@gmx.de>
 
 	Implement a utility function proposed in #102534:
