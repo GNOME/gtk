@@ -1,3 +1,9 @@
+2003-01-16  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_cursor_locations): Typo fixes.
+	(totally_invisible_line): Fix an incorrect optimization which
+	caused invisible paragraphs to be occasionally misrendered.
+
 Wed Jan 15 15:55:47 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c: Set the double click speed from

@@ -1035,25 +1035,16 @@ totally_invisible_line (GtkTextLayout *layout,
   GtkTextLineSegment *seg;
   int bytes = 0;
 
-  /* If we have a cached style, then we know it does actually apply
-   * and we can just see if it is invisible.
+  /* Check if the first char is visible, if so we are partially visible.  
+   * Note that we have to check this since we don't know the current 
+   * invisible/noninvisible toggle state; this function can use the whole btree 
+   * to get it right.
    */
-  if (layout->one_style_cache &&
-      !layout->one_style_cache->invisible)
+  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+				    iter, line, 0);
+  
+  if (!_gtk_text_btree_char_is_invisible (iter))
     return FALSE;
-  /* Without the cache, we check if the first char is visible, if so
-   * we are partially visible.  Note that we have to check this since
-   * we don't know the current invisible/noninvisible toggle state; this
-   * function can use the whole btree to get it right.
-   */
-  else
-    {
-      _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                       iter, line, 0);
-
-      if (!_gtk_text_btree_char_is_invisible (iter))
-        return FALSE;
-    }
 
   bytes = 0;
   seg = line->segments;
@@ -2138,13 +2129,13 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
 }
 
 /**
- * gtk_text_layout_get_cursor_locations
+ * gtk_text_layout_get_cursor_locations:
  * @layout: a #GtkTextLayout
  * @iter: a #GtkTextIter
  * @strong_pos: location to store the strong cursor position (may be %NULL)
  * @weak_pos: location to store the weak cursor position (may be %NULL)
  *
- * Given an iterator within a text laout, determine the positions that of the
+ * Given an iterator within a text layout, determine the positions of the
  * strong and weak cursors if the insertion point is at that
  * iterator. The position of each cursor is stored as a zero-width
  * rectangle. The strong cursor location is the location where
