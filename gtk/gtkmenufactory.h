@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -25,20 +25,21 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-typedef struct _GtkMenuEntry    GtkMenuEntry;
-typedef struct _GtkMenuPath     GtkMenuPath;
-typedef struct _GtkMenuFactory  GtkMenuFactory;
+typedef struct _GtkMenuEntry	GtkMenuEntry;
+typedef struct _GtkMenuPath	GtkMenuPath;
+typedef struct _GtkMenuFactory	GtkMenuFactory;
 
 typedef void (*GtkMenuCallback) (GtkWidget *widget,
 				 gpointer   user_data);
 
 struct _GtkMenuEntry
 {
-  char *path;
-  char *accelerator;
+  gchar *path;
+  gchar *accelerator;
   GtkMenuCallback callback;
   gpointer callback_data;
   GtkWidget *widget;
@@ -52,33 +53,38 @@ struct _GtkMenuPath
 
 struct _GtkMenuFactory
 {
-  char *path;
+  gchar *path;
   GtkMenuFactoryType type;
-  GtkAcceleratorTable *table;
+  GtkAccelGroup *accel_group;
   GtkWidget *widget;
   GList *subfactories;
 };
 
+/* Note: the use of GtkMenuFactory is strongly deprecated.
+ * use GtkItemFactory instead (gtkitemfactory.h and gtkitemfactory.c).
+ * gtkmenufactory.h and gtkmenufactory.c are sheduled for removal
+ * in some future gtk versions.
+ */
 
-GtkMenuFactory* gtk_menu_factory_new               (GtkMenuFactoryType  type);
-void            gtk_menu_factory_destroy           (GtkMenuFactory     *factory);
-void            gtk_menu_factory_add_entries       (GtkMenuFactory     *factory,
+GtkMenuFactory* gtk_menu_factory_new		   (GtkMenuFactoryType	type);
+void		gtk_menu_factory_destroy	   (GtkMenuFactory     *factory);
+void		gtk_menu_factory_add_entries	   (GtkMenuFactory     *factory,
 						    GtkMenuEntry       *entries,
-						    int                 nentries);
-void            gtk_menu_factory_add_subfactory    (GtkMenuFactory     *factory,
+						    int			nentries);
+void		gtk_menu_factory_add_subfactory	   (GtkMenuFactory     *factory,
 						    GtkMenuFactory     *subfactory,
-						    const char         *path);
-void            gtk_menu_factory_remove_paths      (GtkMenuFactory     *factory,
-						    char              **paths,
-						    int                 npaths);
-void            gtk_menu_factory_remove_entries    (GtkMenuFactory     *factory,
+						    const char	       *path);
+void		gtk_menu_factory_remove_paths	   (GtkMenuFactory     *factory,
+						    char	      **paths,
+						    int			npaths);
+void		gtk_menu_factory_remove_entries	   (GtkMenuFactory     *factory,
 						    GtkMenuEntry       *entries,
-						    int                 nentries);
-void            gtk_menu_factory_remove_subfactory (GtkMenuFactory     *factory,
+						    int			nentries);
+void		gtk_menu_factory_remove_subfactory (GtkMenuFactory     *factory,
 						    GtkMenuFactory     *subfactory,
-						    const char         *path);
-GtkMenuPath*    gtk_menu_factory_find              (GtkMenuFactory     *factory,
-						    const char         *path);
+						    const char	       *path);
+GtkMenuPath*	gtk_menu_factory_find		   (GtkMenuFactory     *factory,
+						    const char	       *path);
 
 
 #ifdef __cplusplus

@@ -98,14 +98,14 @@ extern "C" {
  * is a kinda nasty break up, it does make the size of
  * derived objects smaller.
  */
-enum
+typedef enum
 {
   GTK_DESTROYED		= 1 << 0,
   GTK_FLOATING		= 1 << 1,
   GTK_CONNECTED		= 1 << 2,
   GTK_RESERVED_2	= 1 << 3,
   GTK_OBJECT_FLAG_LAST	= GTK_RESERVED_2
-};
+} GtkObjectFlags;
 
 /* Macros for extracting the object_flags from GtkObject.
  */
@@ -121,15 +121,16 @@ enum
 
 /* GtkArg flag bits for gtk_object_add_arg_type
  */
-enum
+typedef enum
 {
   GTK_ARG_READABLE	= 1 << 0,
   GTK_ARG_WRITABLE	= 1 << 1,
   GTK_ARG_CONSTRUCT	= 1 << 2,
+  GTK_ARG_MASK		= 0x03,
   /* aliases
    */
   GTK_ARG_READWRITE	= GTK_ARG_READABLE | GTK_ARG_WRITABLE
-};
+} GtkArgFlags;
 
 
 typedef struct _GtkObjectClass	GtkObjectClass;
@@ -233,6 +234,12 @@ guint	gtk_object_class_add_user_signal (GtkObjectClass     *klass,
 					  GtkType	      return_val,
 					  guint		      nparams,
 					  ...);
+guint	gtk_object_class_add_user_signal_no_recurse (GtkObjectClass     *klass,
+						     const gchar	*name,
+						     GtkSignalMarshaller marshaller,
+						     GtkType	         return_val,
+						     guint		 nparams,
+						     ...);
 
 GtkObject*	gtk_object_new		(GtkType	type,
 					 ...);

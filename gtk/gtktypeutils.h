@@ -78,6 +78,8 @@ extern GtkType gtk_type_builtins[];
 typedef struct _GtkArg	       GtkArg;
 typedef struct _GtkObject      GtkObject;   /* forward declaration of object type */
 typedef struct _GtkTypeInfo    GtkTypeInfo;
+typedef struct _GtkEnumValue   GtkEnumValue;
+typedef struct _GtkEnumValue   GtkFlagValue;
 
 typedef void (*GtkClassInitFunc)  (gpointer klass);
 typedef void (*GtkObjectInitFunc) (gpointer object);
@@ -177,6 +179,13 @@ struct _GtkTypeInfo
   GtkArgGetFunc arg_get_func;
 };
 
+struct _GtkEnumValue
+{
+  guint  value;
+  gchar	*value_name;
+  gchar *value_nick;
+};
+
 
 void	 gtk_type_init		    (void);
 GtkType	 gtk_type_unique	    (guint	  parent_type,
@@ -206,7 +215,9 @@ void	 gtk_type_set_arg	    (GtkObject	 *object,
 				     guint	  arg_id);
 GtkArg*	 gtk_arg_copy		    (GtkArg	 *src_arg,
 				     GtkArg	 *dest_arg);
-
+GtkEnumValue *gtk_enum_get_values   (GtkType	  enum_type);
+void	      gtk_enum_set_values   (GtkType	  enum_type,
+				     GtkEnumValue*values);
 
 
 #ifdef __cplusplus

@@ -24,24 +24,19 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
   
 
-#define GTK_BUTTON_BOX(obj)          GTK_CHECK_CAST (obj, gtk_button_box_get_type (), GtkButtonBox)
-#define GTK_BUTTON_BOX_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_button_box_get_type (), GtkButtonBoxClass)
-#define GTK_IS_BUTTON_BOX(obj)       GTK_CHECK_TYPE (obj, gtk_button_box_get_type ())
+#define	GTK_TYPE_BUTTON_BOX		(gtk_button_box_get_type ())
+#define GTK_BUTTON_BOX(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_BUTTON_BOX, GtkButtonBox))
+#define GTK_BUTTON_BOX_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BUTTON_BOX, GtkButtonBoxClass))
+#define GTK_IS_BUTTON_BOX(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_BUTTON_BOX))
+#define GTK_IS_BUTTON_BOX_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BUTTON_BOX))
   
 
 #define GTK_BUTTONBOX_DEFAULT -1
  
-typedef enum {
-  GTK_BUTTONBOX_DEFAULT_STYLE,
-  GTK_BUTTONBOX_SPREAD,
-  GTK_BUTTONBOX_EDGE,
-  GTK_BUTTONBOX_START,
-  GTK_BUTTONBOX_END
-} GtkButtonBoxStyle;
-
 typedef struct _GtkButtonBox       GtkButtonBox;
 typedef struct _GtkButtonBoxClass  GtkButtonBoxClass;
 
@@ -62,7 +57,7 @@ struct _GtkButtonBoxClass
 };
 
 
-guint gtk_button_box_get_type (void);
+GtkType gtk_button_box_get_type (void);
 
 void gtk_button_box_get_child_size_default (gint *min_width, gint *min_height);
 void gtk_button_box_get_child_ipadding_default (gint *ipad_x, gint *ipad_y);

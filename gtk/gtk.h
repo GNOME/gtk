@@ -21,12 +21,14 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkaccelerator.h>
+#include <gtk/gtkaccelgroup.h>
+#include <gtk/gtkaccellabel.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkbin.h>
+#include <gtk/gtkbindings.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbbox.h>
 #include <gtk/gtkbutton.h>
@@ -62,6 +64,7 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkinputdialog.h>
 #include <gtk/gtkitem.h>
+#include <gtk/gtkitemfactory.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtklistitem.h>

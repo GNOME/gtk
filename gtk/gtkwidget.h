@@ -21,7 +21,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkaccelerator.h>
+#include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkobject.h>
 #include <gtk/gtkstyle.h>
 
@@ -35,7 +35,7 @@ extern "C" {
 /* The flags that are used by GtkWidget on top of the
  * flags field of GtkObject.
  */
-enum
+typedef enum
 {
   GTK_TOPLEVEL		= 1 <<	4,
   GTK_NO_WINDOW		= 1 <<	5,
@@ -49,10 +49,9 @@ enum
   GTK_CAN_DEFAULT	= 1 << 13,
   GTK_HAS_DEFAULT	= 1 << 14,
   GTK_HAS_GRAB		= 1 << 15,
-  GTK_BASIC		= 1 << 16,
-  GTK_RESERVED_3	= 1 << 17,
-  GTK_RC_STYLE		= 1 << 18
-};
+  GTK_RC_STYLE		= 1 << 16,
+  GTK_BASIC		= 1 << 17
+} GtkWidgetFlags;
 
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
@@ -259,12 +258,16 @@ struct _GtkWidgetClass
 				GtkStyle       *previous_style);
   
   /* accelerators */
-  gint (* install_accelerator) (GtkWidget      *widget,
-				const gchar    *signal_name,
-				gchar		key,
-				guint8		modifiers);
+  gint (* add_accelerator)     (GtkWidget      *widget,
+				guint           accel_signal_id,
+				GtkAccelGroup  *accel_group,
+				guint           accel_key,
+				guint           accel_mods,
+				GtkAccelFlags   accel_flags);
   void (* remove_accelerator)  (GtkWidget      *widget,
-				const gchar    *signal_name);
+				GtkAccelGroup  *accel_group,
+				guint           accel_key,
+				guint           accel_mods);
   
   /* events */
   gint (* event)		   (GtkWidget	       *widget,
@@ -395,14 +398,24 @@ void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
-void	   gtk_widget_install_accelerator (GtkWidget	       *widget,
-					   GtkAcceleratorTable *table,
-					   const gchar	       *signal_name,
-					   gchar		key,
-					   guint8		modifiers);
-void	   gtk_widget_remove_accelerator  (GtkWidget	       *widget,
-					   GtkAcceleratorTable *table,
-					   const gchar	       *signal_name);
+void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
+					   const gchar         *accel_signal,
+					   GtkAccelGroup       *accel_group,
+					   guint                accel_key,
+					   guint                accel_mods,
+					   GtkAccelFlags        accel_flags);
+void	   gtk_widget_stop_accelerator    (GtkWidget	       *widget);
+void	   gtk_widget_remove_accelerator  (GtkWidget           *widget,
+					   GtkAccelGroup       *accel_group,
+					   guint                accel_key,
+					   guint                accel_mods);
+void	   gtk_widget_remove_accelerators (GtkWidget           *widget,
+					   const gchar	       *accel_signal,
+					   gboolean		visible_only);
+guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
+					   GtkAccelGroup       *accel_group,
+					   guint                accel_key,
+					   guint                accel_mods);
 gint	   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 
@@ -501,6 +514,18 @@ void	     gtk_widget_shape_combine_mask (GtkWidget *widget,
 					    GdkBitmap *shape_mask,
 					    gint       offset_x,
 					    gint       offset_y);
+
+/* Compute a widget's path in the form "GtkWindow.MyLabel", and
+ * return newly alocated strings.
+ */
+void	     gtk_widget_path		   (GtkWidget *widget,
+					    guint     *path_length,
+					    gchar    **path,
+					    gchar    **path_reversed);
+void	     gtk_widget_class_path	   (GtkWidget *widget,
+					    guint     *path_length,
+					    gchar    **path,
+					    gchar    **path_reversed);
 
 /* When you get a drag_enter event, you can use this to tell Gtk of other
  *  items that are to be dragged as well...

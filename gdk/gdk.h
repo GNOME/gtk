@@ -25,6 +25,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
@@ -710,9 +711,6 @@ void   gdk_ic_set_attr		(GdkIC ic, const char *target, ...);
 void   gdk_ic_get_attr		(GdkIC ic, const char *target, ...);
 GdkEventMask gdk_ic_get_events	(GdkIC ic);
 
-/* Miscellaneous */
-void gdk_event_send_clientmessage_toall(GdkEvent *event);
-
 /* Color Context */
 
 GdkColorContext *gdk_color_context_new			  (GdkVisual   *visual,
@@ -807,6 +805,9 @@ GdkRegion*    gdk_regions_subtract	  (GdkRegion	  *source1,
 GdkRegion*    gdk_regions_xor		  (GdkRegion	  *source1,
 					   GdkRegion	  *source2);
 
+/* Threads
+ */
+
 gboolean      gdk_threads_init  (void);
 void          gdk_threads_enter (void);
 void          gdk_threads_leave (void);
@@ -815,6 +816,20 @@ void          gdk_threads_leave (void);
  * For GTK's idle handling 
  */
 void          gdk_threads_wake (void);
+
+/* Miscellaneous */
+void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
+
+/* Key values
+ */
+gchar*   gdk_keyval_name		  (guint	keyval);
+guint    gdk_keyval_from_name		  (const gchar *keyval_name);
+guint    gdk_keyval_to_upper		  (guint	keyval);
+guint    gdk_keyval_to_lower		  (guint	keyval);
+gboolean gdk_keyval_is_upper		  (guint	keyval);
+gboolean gdk_keyval_is_lower		  (guint	keyval);
+
+
 
 #ifdef __cplusplus
 }

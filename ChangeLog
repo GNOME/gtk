@@ -1,3 +1,115 @@
+Sat Jun  6 06:01:24 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_emitv): fixed an assertment.
+
+	* gtk/makeenums.awk: a script to generate the GtkEnumValue arrays from,
+	this should eventually be done by gentypeinfo.el somewhen.
+	* gtk/gtkenumvalues.c: new generated file to hold GtkEnumValue arrays.
+
+	* gtk/gtktypeutils.h: new function gtk_enum_values() to retrive all the
+	enum values of an enum type.
+
+	* gtk/gtk.defs:
+	* gtk/gtkcurve.h: 
+	* gtk/gtkobject.h: 
+	* gtk/gtkprivate.h: 
+	* gtk/gtkwidget.h:
+	* gtk/gtkenums.h: 
+	brought enum/flags definitions in sync, added a few more enum
+ 	definitions for bindings and pattern matching.
+
+	* some more macro and GtkType fixups in various places.
+
+	* gdk/gdktypes.h (enum): added a new value GDK_AFTER_MASK, which is used
+	as a key-release modifier for the binding system.
+
+Fri Jun  5 06:06:06 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenu.h (struct _GtkMenu): removed GList*children, since it
+	was a stale list pointer that is already present in GtkMenuShell.
+
+	* gtk/gtkmenushell.h (struct _GtkMenuShellClass): added a signal
+	GtkMenuShell::selection_done which is emitted after the menu shell
+ 	poped down again and all possible menu items have been activated.
+
+Thu Jun  4 02:20:42 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): flush the x-queue
+	before activation of the menuitem, so the menu is actually taken off the
+	screen prior to any menu item activation.
+
+	* gtk/gtkctree.c (gtk_ctree_get_row_data): allow function invokation
+	for NULL nodes.
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c: new function gtk_widget_stop_accelerator to stop
+	the emission of the "add-accelerator" signal on a widget. this is
+	usefull to prevent accelerator installation on certain widgets.
+
+	* gtk/gtknotebook.c (gtk_notebook_menu_item_create): keep the menu
+	labels left justified, by setting their alignment. stop accelerator
+	installation for the menu items, since we use dynamic menus.
+
+Wed Jun  3 06:41:22 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenufactory.c: adaptions to use the new accel groups. people
+	should *really* use GtkItemFactory. this is only for preserving source
+	compatibility where possible, use of GtkMenuFactory is deprecated as of
+ 	now.
+
+	* gtk/gtkobject.h (gtk_object_class_add_user_signal): new function
+	to create user signals of type GTK_RUN_NO_RECURSE. don't know why i
+	missed this possibility when i added gtk_object_class_add_user_signal
+	in late january.
+
+	* gtk/gtkmain.c (gtk_init): ignore subsequent function calls.
+
+Sun May 31 07:31:09 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccelgroup.h: 
+	* gtk/gtkaccelgroup.c: new implementation of the accelerator concept.
+
+	* gtk/gtkaccellabel.h: 
+	* gtk/gtkaccellabel.c: new widget derived from GtkLabel whitch features
+	display of the accelerators associated with a certain widget.
+
+	* gtk/gtkitemfactory.h: 
+	* gtk/gtkitemfactory.c: new widget, item factory with automatic rc
+ 	parsing and accelerator handling.
+
+	* gtk/gtkmenu.c (gtk_menu_reposition): new function to care for
+	positioning a menu.
+	(gtk_menu_map): removed the allocation code.
+	(gtk_menu_size_allocate): care for redrawing of children and resize
+	our widget->window correctly.
+	(gtk_menu_key_press): feature the new accelerator groups.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate): reposition the
+ 	submenu if neccessary.
+
+	* gtk/gtkmenuitem.c:
+	* gtk/gtkcheckmenuitem.c:
+	* gtk/gtkradiomenuitem.c: use GtkAccelLabel in the *_new_with_label()
+ 	function variants.
+
+	* gdk/gdk.c:
+ 	(gdk_keyval_from_name): 
+	(gdk_keyval_name): new functions for keyval<->key-name associations.
+	(gdk_keyval_to_upper): 
+	(gdk_keyval_to_lower): 
+	(gdk_keyval_is_upper): 
+	(gdk_keyval_is_lower): new functions to check/translate keyvalues with
+ 	regards to their cases.
+
+Wed May 27 00:48:10 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_class_path): new function to calculate a
+	widget's class path.
+	(gtk_widget_path): new function to calculate a widget's name path.
+
+	* gtk/gtkrc.c: newly introduced GtkPatternSpec structures to speed up
+	pattern matching, features reversed pattern matches.
+
 Thu Jun  4 12:12:11 BST 1998  Tony Gale  <gale@gtk.org>
 
 	* examples/extract.sh, examples/extract.awk:

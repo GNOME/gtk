@@ -3,6 +3,11 @@ Sat Jun  6 14:09:22 PDT 1998 Manish Singh <yosh@gimp.org>
 	* gmem.c: commented out MEM_PROFILE and MEM_CHECK, causing weird
 	problems
 
+Wed Jun  3 06:19:42 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h (g_chunk_new0): convenience macro, for allocating small chunks 
+	like g_chunk_new() with additional 0 initialization.
+
 Mon Jun  1 04:43:27 1998  Tim Janik  <timj@gtk.org>
 
 	* ghash.c (g_hash_table_insert): wrote a comment describing why

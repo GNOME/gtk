@@ -25,23 +25,20 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_CURVE(obj)         (GTK_CHECK_CAST ((obj), gtk_curve_get_type (), GtkCurve))
-#define GTK_CURVE_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), gtk_curve_get_type (), GtkCurveClass))
-#define GTK_IS_CURVE(obj)      (GTK_CHECK_TYPE ((obj), gtk_curve_get_type ()))
+#define GTK_TYPE_CURVE                  (gtk_curve_get_type ())
+#define GTK_CURVE(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_CURVE, GtkCurve))
+#define GTK_CURVE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CURVE, GtkCurveClass))
+#define GTK_IS_CURVE(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_CURVE))
+#define GTK_IS_CURVE_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CURVE))
 
 
 typedef struct _GtkCurve	GtkCurve;
 typedef struct _GtkCurveClass	GtkCurveClass;
 
-typedef enum
-{
-  GTK_CURVE_TYPE_LINEAR,	/* linear interpolation */
-  GTK_CURVE_TYPE_SPLINE,	/* spline interpolation */
-  GTK_CURVE_TYPE_FREE		/* free form curve */
-} GtkCurveType;
 
 struct _GtkCurve
 {
@@ -75,7 +72,7 @@ struct _GtkCurveClass
 };
 
 
-guint		gtk_curve_get_type	(void);
+GtkType		gtk_curve_get_type	(void);
 GtkWidget*	gtk_curve_new		(void);
 void		gtk_curve_reset		(GtkCurve *curve);
 void		gtk_curve_set_gamma	(GtkCurve *curve, gfloat gamma);

@@ -25,6 +25,7 @@
 #include "gtkrc.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
+#include "gtkbindings.h"
 
 enum {
   MOVE_RESIZE,
@@ -107,9 +108,6 @@ static void gtk_real_window_set_focus     (GtkWindow         *window,
 static gint gtk_window_move_resize        (GtkWidget         *widget);
 static void gtk_window_set_hints          (GtkWidget         *widget,
 					   GtkRequisition    *requisition);
-static gint gtk_window_check_accelerator  (GtkWindow         *window,
-					   gint               key,
-					   guint              mods);
 
 static void gtk_window_read_rcfiles       (GtkWidget         *widget,
 					   GdkEventClient    *event);
@@ -220,7 +218,6 @@ gtk_window_init (GtkWindow *window)
   window->wmclass_name = g_strdup (gdk_progname);
   window->wmclass_class = g_strdup (gdk_progclass);
   window->type = GTK_WINDOW_TOPLEVEL;
-  window->accelerator_tables = NULL;
   window->focus_widget = NULL;
   window->default_widget = NULL;
   window->resize_count = 0;
@@ -397,38 +394,25 @@ gtk_window_set_policy (GtkWindow *window,
 }
 
 void
-gtk_window_add_accelerator_table (GtkWindow           *window,
-				  GtkAcceleratorTable *table)
+gtk_window_add_accel_group (GtkWindow        *window,
+			    GtkAccelGroup    *accel_group)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (table != NULL);
+  g_return_if_fail (accel_group != NULL);
 
-  gtk_accelerator_table_ref (table);
-  window->accelerator_tables = g_list_prepend (window->accelerator_tables,
-					       table);
+  gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
 }
 
 void
-gtk_window_remove_accelerator_table (GtkWindow           *window,
-				     GtkAcceleratorTable *table)
+gtk_window_remove_accel_group (GtkWindow       *window,
+			       GtkAccelGroup   *accel_group)
 {
-  GList *list;
-
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (table != NULL);
+  g_return_if_fail (accel_group != NULL);
 
-  for (list = window->accelerator_tables; list; list = list->next)
-    {
-      if (list->data == table)
-	{
-	  gtk_accelerator_table_unref (table);
-	  window->accelerator_tables = g_list_remove_link (window->accelerator_tables, list);
-	  g_list_free_1 (list);
-	  break;
-	}
-    }
+  gtk_accel_group_detach (accel_group, GTK_OBJECT (window));
 }
 
 void
@@ -507,18 +491,11 @@ gtk_window_marshal_signal_2 (GtkObject      *object,
 static void
 gtk_window_destroy (GtkObject *object)
 {
-  GList *list;
-
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_WINDOW (object));
 
   gtk_container_unregister_toplevel (GTK_CONTAINER (object));
 
-  for (list = GTK_WINDOW (object)->accelerator_tables; list; list = list->next)
-    gtk_accelerator_table_unref (list->data);
-  g_list_free (GTK_WINDOW (object)->accelerator_tables);
-  GTK_WINDOW (object)->accelerator_tables = NULL;
-  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -765,7 +742,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
 {
   GtkWindow *window;
   GtkDirectionType direction = 0;
-  gint return_val;
+  gboolean handled;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
@@ -773,14 +750,21 @@ gtk_window_key_press_event (GtkWidget   *widget,
 
   window = GTK_WINDOW (widget);
 
-  return_val = FALSE;
+  handled = FALSE;
+  
   if (window->focus_widget)
-    return_val = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
+    {
+      handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
 
-  if (!return_val && gtk_window_check_accelerator (window, event->keyval, event->state))
-    return_val = TRUE;
+      if (!handled)
+	handled = gtk_bindings_activate (GTK_OBJECT (window->focus_widget),
+					 event->keyval, event->state);
+    }
+    
+  if (!handled)
+    handled = gtk_accel_groups_activate (GTK_OBJECT (window), event->keyval, event->state);
 
-  if (!return_val)
+  if (!handled)
     {
       switch (event->keyval)
 	{
@@ -788,7 +772,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	  if (window->focus_widget)
 	    {
 	      gtk_widget_activate (window->focus_widget);
-	      return_val = TRUE;
+	      handled = TRUE;
 	    }
 	  break;
 	case GDK_Return:
@@ -796,12 +780,12 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	  if (window->default_widget)
 	    {
 	      gtk_widget_activate (window->default_widget);
-	      return_val = TRUE;
+	      handled = TRUE;
 	    }
           else if (window->focus_widget)
 	    {
 	      gtk_widget_activate (window->focus_widget);
-	      return_val = TRUE;
+	      handled = TRUE;
 	    }
 	  break;
 	case GDK_Up:
@@ -840,12 +824,12 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	  if (!GTK_CONTAINER (window)->focus_child)
 	    gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 	  else
-	    return_val = TRUE;
+	    handled = TRUE;
 	  break;
 	}
     }
 
-  return return_val;
+  return handled;
 }
 
 static gint
@@ -853,18 +837,24 @@ gtk_window_key_release_event (GtkWidget   *widget,
 			      GdkEventKey *event)
 {
   GtkWindow *window;
-  gint return_val;
-
+  gint handled;
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
+  
   window = GTK_WINDOW (widget);
-  return_val = FALSE;
+  handled = FALSE;
   if (window->focus_widget)
-    return_val = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
-
-  return return_val;
+    {
+      handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
+      
+      if (!handled)
+	handled = gtk_bindings_activate (GTK_OBJECT (window->focus_widget),
+					 event->keyval, event->state | GDK_AFTER_MASK);
+    }
+  
+  return handled;
 }
 
 static gint
@@ -1319,31 +1309,4 @@ gtk_window_set_hints (GtkWidget      *widget,
 	  gdk_window_move (widget->window, ux, uy);
 	}
     }
-}
-
-static gint
-gtk_window_check_accelerator (GtkWindow *window,
-			      gint       key,
-			      guint      mods)
-{
-  GtkAcceleratorTable *table;
-  GList *tmp;
-
-  if ((key >= 0x20) && (key <= 0xFF))
-    {
-      tmp = window->accelerator_tables;
-      while (tmp)
-	{
-	  table = tmp->data;
-	  tmp = tmp->next;
-
-	  if (gtk_accelerator_table_check (table, key, mods))
-	    return TRUE;
-	}
-
-      if (gtk_accelerator_table_check (NULL, key, mods))
-	return TRUE;
-    }
-
-  return FALSE;
 }

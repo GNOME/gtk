@@ -210,6 +210,9 @@
 #define g_chunk_new(type, chunk)	( \
   (type *) g_mem_chunk_alloc (chunk) \
 )
+#define g_chunk_new0(type, chunk)	( \
+  (type *) memset (g_mem_chunk_alloc (chunk), 0, sizeof (type)) \
+)
 #define	g_chunk_free(mem, mem_chunk)    G_STMT_START { \
   g_mem_chunk_free ((mem_chunk), (mem)); \
 } G_STMT_END

@@ -28,6 +28,7 @@
 
 enum {
   DEACTIVATE,
+  SELECTION_DONE,
   LAST_SIGNAL
 };
 
@@ -62,10 +63,10 @@ static GtkContainerClass *parent_class = NULL;
 static guint menu_shell_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_menu_shell_get_type (void)
 {
-  static guint menu_shell_type = 0;
+  static GtkType menu_shell_type = 0;
 
   if (!menu_shell_type)
     {
@@ -106,7 +107,13 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, deactivate),
                     gtk_signal_default_marshaller,
 		    GTK_TYPE_NONE, 0);
-
+  menu_shell_signals[SELECTION_DONE] =
+    gtk_signal_new ("selection-done",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, selection_done),
+                    gtk_signal_default_marshaller,
+		    GTK_TYPE_NONE, 0);
   gtk_object_class_add_signals (object_class, menu_shell_signals, LAST_SIGNAL);
 
   widget_class->map = gtk_menu_shell_map;
@@ -122,6 +129,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   klass->submenu_placement = GTK_TOP_BOTTOM;
   klass->deactivate = gtk_real_menu_shell_deactivate;
+  klass->selection_done = NULL;
 }
 
 static void
@@ -328,7 +336,10 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
     {
       widget = gtk_get_event_widget ((GdkEvent*) event);
       if (widget == GTK_WIDGET (menu_shell))
-	gtk_menu_shell_deactivate (menu_shell);
+	{
+	  gtk_menu_shell_deactivate (menu_shell);
+	  gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
+	}
     }
 
   return TRUE;
@@ -369,7 +380,15 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	      if (GTK_MENU_ITEM (menu_item)->submenu == NULL)
 		{
 		  gtk_menu_shell_deactivate (menu_shell);
+
+		  /* flush the x-queue, so any grabs are removed and
+		   * the menu is actually taken down
+		   */
+		  gdk_flush ();
 		  gtk_widget_activate (menu_item);
+
+		  gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
+		  
 		  return TRUE;
 		}
 	    }
@@ -396,7 +415,10 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	deactivate = TRUE;
 
       if (deactivate)
-	gtk_menu_shell_deactivate (menu_shell);
+	{
+	  gtk_menu_shell_deactivate (menu_shell);
+	  gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
+	}
     }
 
   return TRUE;
@@ -470,14 +492,14 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
 
       menu_item = GTK_MENU_ITEM (event_widget);
 
-      if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
-	return TRUE;
-
       if (menu_shell->ignore_leave)
 	{
 	  menu_shell->ignore_leave = FALSE;
 	  return TRUE;
 	}
+
+      if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
+	return TRUE;
 
       if ((menu_shell->active_menu_item == event_widget) &&
 	  (menu_item->submenu == NULL))

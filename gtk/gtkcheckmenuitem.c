@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 #include "gtkcheckmenuitem.h"
-#include "gtklabel.h"
+#include "gtkaccellabel.h"
 #include "gtksignal.h"
 
 
@@ -81,14 +81,15 @@ GtkWidget*
 gtk_check_menu_item_new_with_label (const gchar *label)
 {
   GtkWidget *check_menu_item;
-  GtkWidget *label_widget;
+  GtkWidget *accel_label;
 
   check_menu_item = gtk_check_menu_item_new ();
-  label_widget = gtk_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+  accel_label = gtk_accel_label_new (label);
+  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
 
-  gtk_container_add (GTK_CONTAINER (check_menu_item), label_widget);
-  gtk_widget_show (label_widget);
+  gtk_container_add (GTK_CONTAINER (check_menu_item), accel_label);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), check_menu_item);
+  gtk_widget_show (accel_label);
 
   return check_menu_item;
 }

@@ -3557,9 +3557,8 @@ gtk_ctree_get_row_data (GtkCTree *ctree,
 {
   g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
-  g_return_val_if_fail (node != NULL, NULL);
 
-  return GTK_CTREE_ROW (node)->row.data;
+  return node ? GTK_CTREE_ROW (node)->row.data : NULL;
 }
 
 void

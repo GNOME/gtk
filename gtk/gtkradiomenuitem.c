@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "gtklabel.h"
+#include "gtkaccellabel.h"
 #include "gtkradiomenuitem.h"
 
 
@@ -115,14 +115,14 @@ gtk_radio_menu_item_new_with_label (GSList *group,
 				    const gchar *label)
 {
   GtkWidget *radio_menu_item;
-  GtkWidget *label_widget;
+  GtkWidget *accel_label;
 
   radio_menu_item = gtk_radio_menu_item_new (group);
-  label_widget = gtk_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (radio_menu_item), label_widget);
-  gtk_widget_show (label_widget);
+  accel_label = gtk_accel_label_new (label);
+  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
+  gtk_container_add (GTK_CONTAINER (radio_menu_item), accel_label);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), radio_menu_item);
+  gtk_widget_show (accel_label);
 
   return radio_menu_item;
 }

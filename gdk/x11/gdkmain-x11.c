@@ -4247,7 +4247,7 @@ gdk_drop_get_real_window (GdkWindow   *w,
   GList *children;
   gint16 myx = *x, myy = *y;
 
-  g_return_val_if_fail(w != NULL && x != NULL && y != NULL, NULL);
+  g_return_val_if_fail (w != NULL && x != NULL && y != NULL, NULL);
 
   myx = *x; 
   myy = *y;
@@ -4278,7 +4278,7 @@ descend:
 
 /* Sends a ClientMessage to all toplevel client windows */
 void
-gdk_event_send_clientmessage_toall(GdkEvent *event)
+gdk_event_send_clientmessage_toall (GdkEvent *event)
 {
   XEvent sev;
   Window *ret_children, ret_root, ret_parent, curwin;
@@ -4332,4 +4332,74 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   gdk_error_warnings = 1;
     
   return result && (gdk_error_code != -1);
+}
+
+gchar*
+gdk_keyval_name (guint        keyval)
+{
+  return XKeysymToString (keyval);
+}
+
+guint
+gdk_keyval_from_name (const gchar *keyval_name)
+{
+  g_return_val_if_fail (keyval_name != NULL, 0);
+
+  return XStringToKeysym (keyval_name);
+}
+
+guint
+gdk_keyval_to_upper (guint        keyval)
+{
+  if (keyval)
+    {
+      KeySym lower_val = 0;
+      KeySym upper_val = 0;
+
+      XConvertCase (keyval, &lower_val, &upper_val);
+      return upper_val;
+    }
+  return 0;
+}
+
+guint
+gdk_keyval_to_lower (guint        keyval)
+{
+  if (keyval)
+    {
+      KeySym lower_val = 0;
+      KeySym upper_val = 0;
+
+      XConvertCase (keyval, &lower_val, &upper_val);
+      return lower_val;
+    }
+  return 0;
+}
+
+gboolean
+gdk_keyval_is_upper (guint        keyval)
+{
+  if (keyval)
+    {
+      KeySym lower_val = 0;
+      KeySym upper_val = 0;
+
+      XConvertCase (keyval, &lower_val, &upper_val);
+      return upper_val == keyval;
+    }
+  return TRUE;
+}
+
+gboolean
+gdk_keyval_is_lower (guint        keyval)
+{
+  if (keyval)
+    {
+      KeySym lower_val = 0;
+      KeySym upper_val = 0;
+
+      XConvertCase (keyval, &lower_val, &upper_val);
+      return lower_val == keyval;
+    }
+  return TRUE;
 }

@@ -2913,9 +2913,14 @@ gtk_notebook_menu_item_create (GtkNotebook     *notebook,
 	page->menu_label = gtk_label_new (GTK_LABEL (page->tab_label)->label);
       else
 	page->menu_label = gtk_label_new ("");
+      gtk_misc_set_alignment (GTK_MISC (page->menu_label), 0.0, 0.5);
     }
   gtk_widget_show (page->menu_label);
   menu_item = gtk_menu_item_new ();
+  gtk_signal_connect (GTK_OBJECT (menu_item),
+		      "add_accelerator",
+		      GTK_SIGNAL_FUNC (gtk_widget_stop_accelerator),
+		      NULL);
   gtk_container_add (GTK_CONTAINER (menu_item), page->menu_label);
   gtk_menu_insert (GTK_MENU (notebook->menu), menu_item, position);
   gtk_signal_connect (GTK_OBJECT (menu_item), "activate",

@@ -1,16 +1,18 @@
-## Process this file with automake to produce Makefile.in
+### Process this file with automake to produce Makefile.in
 
 gtkincludedir = $(includedir)/gtk
 
 lib_LTLIBRARIES = libgtk-1.1.la
 
 libgtk_1_1_la_SOURCES = \
-	gtkaccelerator.c	\
+	gtkaccelgroup.c		\
+	gtkaccellabel.c		\
 	gtkadjustment.c		\
 	gtkaspectframe.c	\
 	gtkalignment.c		\
 	gtkarrow.c		\
 	gtkbin.c		\
+	gtkbindings.c		\
 	gtkbbox.c		\
 	gtkbox.c		\
 	gtkbutton.c		\
@@ -44,6 +46,7 @@ libgtk_1_1_la_SOURCES = \
 	gtkimage.c		\
 	gtkinputdialog.c	\
 	gtkitem.c		\
+	gtkitemfactory.c	\
 	gtklabel.c		\
 	gtklist.c		\
 	gtklistitem.c		\
@@ -99,12 +102,14 @@ libgtk_1_1_la_SOURCES = \
 
 gtkinclude_HEADERS = \
 	gtk.h			\
-	gtkaccelerator.h	\
+	gtkaccelgroup.h		\
+	gtkaccellabel.h		\
 	gtkadjustment.h		\
 	gtkaspectframe.h	\
 	gtkalignment.h		\
 	gtkarrow.h		\
 	gtkbin.h		\
+	gtkbindings.h		\
 	gtkbbox.h		\
 	gtkbox.h		\
 	gtkbutton.h		\
@@ -141,6 +146,7 @@ gtkinclude_HEADERS = \
 	gtkimage.h		\
 	gtkinputdialog.h	\
 	gtkitem.h		\
+	gtkitemfactory.h	\
 	gtklabel.h		\
 	gtklist.h		\
 	gtklistitem.h		\
@@ -200,6 +206,14 @@ $(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 $(srcdir)/gtktypebuiltins.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
+$(srcdir)/gtkenumvalues.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/makeenums.awk
+	awk -f makeenums.awk $(srcdir)/gtk.defs > $@
+
+# special remake rules
+$(srcdir)/gtktypeutils.h: @MAINT@ $(srcdir)/gtktypebuiltins.h
+$(srcdir)/gtktypeutils.c: @MAINT@ $(srcdir)/gtktypebuiltins.c
+$(srcdir)/gtktypeutils.c: @MAINT@ $(srcdir)/gtkenumvalues.c
+
 libgtk_1_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 EXTRA_DIST = \
@@ -211,7 +225,9 @@ EXTRA_DIST = \
 	gtkfeatures.h.in	\
 	runelisp 		\
 	gentypeinfo.el 		\
+	makeenums.awk		\
 	gtktypebuiltins.c	\
+	gtkenumvalues.c		\
 	test.xpm		\
 	marble.xpm		\
 	3DRings.xpm		\
@@ -223,7 +239,7 @@ EXTRA_DIST = \
 	tree_minus.xbm          \
         circles.xbm
 
-INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
+INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@
 
 noinst_PROGRAMS = testgtk testinput testselection testthreads simple 
 

@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 #include <string.h>
-#include "gtklabel.h"
+#include "gtkaccellabel.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
@@ -43,12 +43,6 @@ static void gtk_menu_item_size_request   (GtkWidget        *widget,
 					  GtkRequisition   *requisition);
 static void gtk_menu_item_size_allocate  (GtkWidget        *widget,
 					  GtkAllocation    *allocation);
-static gint gtk_menu_item_install_accel  (GtkWidget        *widget,
-					  const gchar      *signal_name,
-					  gchar             key,
-					  guint8            modifiers);
-static void gtk_menu_item_remove_accel   (GtkWidget        *widget,
-					  const gchar      *signal_name);
 static void gtk_menu_item_paint          (GtkWidget        *widget,
 					  GdkRectangle     *area);
 static void gtk_menu_item_draw           (GtkWidget        *widget,
@@ -69,10 +63,10 @@ static GtkItemClass *parent_class;
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_menu_item_get_type (void)
 {
-  static guint menu_item_type = 0;
+  static GtkType menu_item_type = 0;
 
   if (!menu_item_type)
     {
@@ -122,8 +116,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->activate_signal = menu_item_signals[ACTIVATE];
   widget_class->size_request = gtk_menu_item_size_request;
   widget_class->size_allocate = gtk_menu_item_size_allocate;
-  widget_class->install_accelerator = gtk_menu_item_install_accel;
-  widget_class->remove_accelerator = gtk_menu_item_remove_accel;
   widget_class->draw = gtk_menu_item_draw;
   widget_class->expose_event = gtk_menu_item_expose;
   widget_class->show_all = gtk_menu_item_show_all;
@@ -135,20 +127,13 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   klass->activate = NULL;
 
   klass->toggle_size = 0;
-  klass->shift_text = "Shft";
-  klass->control_text = "Ctl";
-  klass->alt_text = "Alt";
-  klass->separator_text = "+";
 }
 
 static void
 gtk_menu_item_init (GtkMenuItem *menu_item)
 {
   menu_item->submenu = NULL;
-  menu_item->accelerator_key = 0;
-  menu_item->accelerator_mods = 0;
-  menu_item->accelerator_size = 0;
-  menu_item->accelerator_signal = 0;
+  menu_item->accelerator_signal = menu_item_signals[ACTIVATE];
   menu_item->toggle_size = 0;
   menu_item->show_toggle_indicator = FALSE;
   menu_item->show_submenu_indicator = FALSE;
@@ -169,14 +154,15 @@ GtkWidget*
 gtk_menu_item_new_with_label (const gchar *label)
 {
   GtkWidget *menu_item;
-  GtkWidget *label_widget;
+  GtkWidget *accel_label;
 
   menu_item = gtk_menu_item_new ();
-  label_widget = gtk_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+  accel_label = gtk_accel_label_new (label);
+  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
 
-  gtk_container_add (GTK_CONTAINER (menu_item), label_widget);
-  gtk_widget_show (label_widget);
+  gtk_container_add (GTK_CONTAINER (menu_item), accel_label);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), menu_item);
+  gtk_widget_show (accel_label);
 
   return menu_item;
 }
@@ -255,58 +241,6 @@ gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
 }
 
 void
-gtk_menu_item_accelerator_size (GtkMenuItem *menu_item)
-{
-  char buf[32];
-
-  g_return_if_fail (menu_item != NULL);
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  if (menu_item->accelerator_key)
-    {
-      gtk_menu_item_accelerator_text (menu_item, buf);
-      menu_item->accelerator_size = gdk_string_width (GTK_WIDGET (menu_item)->style->font, buf) + 13;
-    }
-  else if (menu_item->submenu && menu_item->show_submenu_indicator)
-    {
-      menu_item->accelerator_size = 21;
-    }
-  else
-    {
-      menu_item->accelerator_size = 0;
-    }
-}
-
-void
-gtk_menu_item_accelerator_text (GtkMenuItem *menu_item,
-				gchar       *buffer)
-{
-  g_return_if_fail (menu_item != NULL);
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  if (menu_item->accelerator_key)
-    {
-      buffer[0] = '\0';
-      if (menu_item->accelerator_mods & GDK_SHIFT_MASK)
-	{
-	  strcat (buffer, MENU_ITEM_CLASS (menu_item)->shift_text);
-	  strcat (buffer, MENU_ITEM_CLASS (menu_item)->separator_text);
-	}
-      if (menu_item->accelerator_mods & GDK_CONTROL_MASK)
-	{
-	  strcat (buffer, MENU_ITEM_CLASS (menu_item)->control_text);
-	  strcat (buffer, MENU_ITEM_CLASS (menu_item)->separator_text);
-	}
-      if (menu_item->accelerator_mods & GDK_MOD1_MASK)
-	{
-	  strcat (buffer, MENU_ITEM_CLASS (menu_item)->alt_text);
-	  strcat (buffer, MENU_ITEM_CLASS (menu_item)->separator_text);
-	}
-      strncat (buffer, &menu_item->accelerator_key, 1);
-    }
-}
-
-void
 gtk_menu_item_configure (GtkMenuItem *menu_item,
 			 gint         show_toggle_indicator,
 			 gint         show_submenu_indicator)
@@ -341,6 +275,7 @@ static void
 gtk_menu_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
+  GtkMenuItem *menu_item;
   GtkBin *bin;
 
   g_return_if_fail (widget != NULL);
@@ -348,8 +283,7 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   g_return_if_fail (requisition != NULL);
 
   bin = GTK_BIN (widget);
-
-  gtk_menu_item_accelerator_size (GTK_MENU_ITEM (widget));
+  menu_item = GTK_MENU_ITEM (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
 			widget->style->klass->xthickness +
@@ -364,12 +298,15 @@ gtk_menu_item_size_request (GtkWidget      *widget,
       requisition->width += bin->child->requisition.width;
       requisition->height += bin->child->requisition.height;
     }
+  if (menu_item->submenu && menu_item->show_submenu_indicator)
+    requisition->width += 21;
 }
 
 static void
 gtk_menu_item_size_allocate (GtkWidget     *widget,
 			     GtkAllocation *allocation)
 {
+  GtkMenuItem *menu_item;
   GtkBin *bin;
   GtkAllocation child_allocation;
 
@@ -377,13 +314,10 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
   g_return_if_fail (allocation != NULL);
 
-  widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
-    gdk_window_move_resize (widget->window,
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
-
+  menu_item = GTK_MENU_ITEM (widget);
   bin = GTK_BIN (widget);
+  
+  widget->allocation = *allocation;
 
   if (bin->child)
     {
@@ -395,70 +329,20 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2);
       child_allocation.height = MAX (1, allocation->height - child_allocation.y * 2);
       child_allocation.x += GTK_MENU_ITEM (widget)->toggle_size;
-      child_allocation.width -= (GTK_MENU_ITEM (widget)->toggle_size +
-				 GTK_MENU_ITEM (widget)->accelerator_size);
-
+      child_allocation.width -= GTK_MENU_ITEM (widget)->toggle_size;
+      if (menu_item->submenu && menu_item->show_submenu_indicator)
+	child_allocation.width -= 21;
+      
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
-}
 
-static gint
-gtk_menu_item_install_accel (GtkWidget   *widget,
-			     const gchar *signal_name,
-			     gchar        key,
-			     guint8       modifiers)
-{
-  GtkMenuItem *menu_item;
+  if (GTK_WIDGET_REALIZED (widget))
+    gdk_window_move_resize (widget->window,
+                            allocation->x, allocation->y,
+                            allocation->width, allocation->height);
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_MENU_ITEM (widget), FALSE);
-  g_return_val_if_fail (signal_name != NULL, FALSE);
-
-  menu_item = GTK_MENU_ITEM (widget);
-
-  menu_item->accelerator_signal = gtk_signal_lookup (signal_name, GTK_OBJECT_TYPE (widget));
-  if (menu_item->accelerator_signal > 0)
-    {
-      menu_item->accelerator_key = key;
-      menu_item->accelerator_mods = modifiers;
-
-      if (widget->parent)
-	gtk_widget_queue_resize (widget);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-gtk_menu_item_remove_accel (GtkWidget   *widget,
-			    const gchar *signal_name)
-{
-  GtkMenuItem *menu_item;
-  guint signal_num;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
-  g_return_if_fail (signal_name != NULL);
-
-  menu_item = GTK_MENU_ITEM (widget);
-
-  signal_num = gtk_signal_lookup (signal_name, GTK_OBJECT_TYPE (widget));
-  if (menu_item->accelerator_signal == signal_num)
-    {
-      menu_item->accelerator_key = 0;
-      menu_item->accelerator_mods = 0;
-      menu_item->accelerator_signal = 0;
-
-      if (GTK_WIDGET_VISIBLE (widget))
-	{
-	  gtk_widget_queue_draw (widget);
-	  GTK_MENU_SHELL (widget->parent)->menu_flag = TRUE;
-	}
-      else
-	gtk_container_need_resize (GTK_CONTAINER (widget->parent));
-    }
+  if (menu_item->submenu)
+    gtk_menu_reposition (GTK_MENU (menu_item->submenu));
 }
 
 static void
@@ -468,10 +352,8 @@ gtk_menu_item_paint (GtkWidget    *widget,
   GtkMenuItem *menu_item;
   GtkStateType state_type;
   GtkShadowType shadow_type;
-  GdkFont *font;
   gint width, height;
   gint x, y;
-  char buf[32];
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
@@ -500,24 +382,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
 			 GTK_SHADOW_OUT,
 			 x, y, width, height);
 
-      if (menu_item->accelerator_key)
-	{
-	  gtk_menu_item_accelerator_text (menu_item, buf);
-
-	  font = widget->style->font;
-	  x = x + width - menu_item->accelerator_size + 13 - 4;
-	  y = y + ((height - (font->ascent + font->descent)) / 2) + font->ascent;
-
-	  if (state_type == GTK_STATE_INSENSITIVE)
-	    gdk_draw_string (widget->window, widget->style->font,
-			     widget->style->white_gc,
-			     x + 1, y + 1, buf);
-
-	  gdk_draw_string (widget->window, widget->style->font,
-			   widget->style->fg_gc[state_type],
-			   x, y, buf);
-	}
-      else if (menu_item->submenu && menu_item->show_submenu_indicator)
+      if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
 	  shadow_type = GTK_SHADOW_OUT;
 	  if (state_type == GTK_STATE_PRELIGHT)

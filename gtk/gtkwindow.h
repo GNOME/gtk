@@ -21,7 +21,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkaccelerator.h>
+#include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkbin.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
@@ -50,7 +50,6 @@ struct _GtkWindow
   gchar *wmclass_name;
   gchar *wmclass_class;
   GtkWindowType type;
-  GList *accelerator_tables;
 
   GtkWidget *focus_widget;
   GtkWidget *default_widget;
@@ -94,10 +93,10 @@ void       gtk_window_set_policy               (GtkWindow           *window,
 						gint                 allow_shrink,
 						gint                 allow_grow,
 						gint                 auto_shrink);
-void       gtk_window_add_accelerator_table    (GtkWindow           *window,
-						GtkAcceleratorTable *table);
-void       gtk_window_remove_accelerator_table (GtkWindow           *window,
-						GtkAcceleratorTable *table);
+void       gtk_window_add_accel_group          (GtkWindow           *window,
+						GtkAccelGroup	    *accel_group);
+void       gtk_window_remove_accel_group       (GtkWindow           *window,
+						GtkAccelGroup	    *accel_group);
 void       gtk_window_position                 (GtkWindow           *window,
 						GtkWindowPosition    position);
 gint	   gtk_window_activate_focus	       (GtkWindow           *window);

@@ -32,7 +32,7 @@ extern "C" {
 
 /* The private flags that are used in the private_flags member of GtkWidget.
  */
-enum
+typedef enum
 {
   PRIVATE_GTK_USER_STYLE	= 1 <<  0,
   PRIVATE_GTK_REDRAW_PENDING	= 1 <<  1,
@@ -41,7 +41,7 @@ enum
   PRIVATE_GTK_LEAVE_PENDING	= 1 <<  4,
   PRIVATE_GTK_HAS_SHAPE_MASK	= 1 <<  5,
   PRIVATE_GTK_IN_REPARENT       = 1 <<  6
-};
+} GtkPrivateFlags;
 
 /* Macros for extracting a widgets private_flags from GtkWidget.
  */

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,12 +26,14 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
-
-#define GTK_LABEL(obj)          GTK_CHECK_CAST (obj, gtk_label_get_type (), GtkLabel)
-#define GTK_LABEL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_label_get_type (), GtkLabelClass)
-#define GTK_IS_LABEL(obj)       GTK_CHECK_TYPE (obj, gtk_label_get_type ())
+#define GTK_TYPE_LABEL			(gtk_label_get_type ())
+#define GTK_LABEL(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_LABEL, GtkLabel))
+#define GTK_LABEL_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL, GtkLabelClass))
+#define GTK_IS_LABEL(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_LABEL))
+#define GTK_IS_LABEL_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL))
 
 
 typedef struct _GtkLabel       GtkLabel;
@@ -40,11 +42,12 @@ typedef struct _GtkLabelClass  GtkLabelClass;
 struct _GtkLabel
 {
   GtkMisc misc;
-
-  char *label;
+  
+  gchar  *label;
   GSList *row;
-  guint jtype : 2;
-  gint  needs_clear : 1;
+  guint	  max_width : 16;
+  guint   jtype : 2;
+  guint	  needs_clear : 1;
 };
 
 struct _GtkLabelClass
@@ -53,14 +56,14 @@ struct _GtkLabelClass
 };
 
 
-guint      gtk_label_get_type    (void);
-GtkWidget* gtk_label_new         (const char        *str);
-void       gtk_label_set         (GtkLabel          *label,
-                                  const char        *str);
-void       gtk_label_set_justify (GtkLabel          *label,
-                                  GtkJustification   jtype);
-void       gtk_label_get         (GtkLabel          *label,
-                                  char             **str);
+GtkType	   gtk_label_get_type	 (void);
+GtkWidget* gtk_label_new	 (const gchar	    *string);
+void	   gtk_label_set	 (GtkLabel	    *label,
+				  const gchar	    *string);
+void	   gtk_label_set_justify (GtkLabel	    *label,
+				  GtkJustification   jtype);
+void	   gtk_label_get	 (GtkLabel	    *label,
+				  gchar		   **string);
 
 
 #ifdef __cplusplus

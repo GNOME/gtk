@@ -231,7 +231,12 @@ void
 gtk_init (int	 *argc,
 	  char ***argv)
 {
+  static gboolean gtk_initialized = FALSE;
   gchar *current_locale;
+
+  if (gtk_initialized)
+    return;
+  gtk_initialized = TRUE;
 
   if (0)
     {

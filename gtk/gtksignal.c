@@ -18,6 +18,7 @@
  */
 #include <stdarg.h>
 #include <string.h>
+#include <stdio.h>
 #include "gtksignal.h"
 
 
@@ -475,11 +476,13 @@ gtk_signal_emitv (GtkObject           *object,
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (signal_id >= 1);
-  g_return_if_fail (params != NULL);
   
   signal = LOOKUP_SIGNAL_ID (signal_id);
   g_return_if_fail (signal != NULL);
   g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
+
+  if (signal->nparams > 0)
+    g_return_if_fail (params != NULL);
 
   gtk_signal_real_emit (object, signal, params);
 }
@@ -1341,6 +1344,8 @@ gtk_signal_handler_insert (GtkObject  *object,
       }
 }
 
+static GtkObject *gtk_trace_signal_object = NULL;
+
 static void
 gtk_signal_real_emit (GtkObject *object,
 		      GtkSignal *signal,
@@ -1351,9 +1356,14 @@ gtk_signal_real_emit (GtkObject *object,
   guchar       **signal_func_offset;
   register guint signal_id = signal->signal_id;
 
-  if(gtk_debug_flags & GTK_DEBUG_SIGNALS)
-	g_print("Sending signal %s to object %p (%s)\n",
-		signal->name, object, gtk_type_name(object->klass->type));
+#ifdef  G_ENABLE_DEBUG
+  if (gtk_debug_flags & GTK_DEBUG_SIGNALS ||
+      object == gtk_trace_signal_object)
+    fprintf (stdout, "trace: signal_emit(\"%s\") for %s:%p\n",
+	     signal->name,
+	     gtk_type_name (GTK_OBJECT_TYPE (object)),
+	     object);
+#endif  /* G_ENABLE_DEBUG */
   
   if ((signal->run_type & GTK_RUN_NO_RECURSE) &&
       gtk_emission_check (current_emissions, object, signal_id))
@@ -1524,6 +1534,9 @@ gtk_signal_connect_by_type (GtkObject	    *object,
    *  sure the one we are adding is valid. We need to perform
    *  the lookup on the objects parents as well. If it isn't
    *  valid then issue a warning and return.
+   * As of now (1998-05-27) this lookup shouldn't be neccessarry
+   *  anymore since gtk_signal_lookup() has been reworked to only
+   *  return correct signal ids per class-branch.
    */
   found_it = FALSE;
   class = object->klass;
@@ -1898,7 +1911,7 @@ gtk_params_get (GtkArg	       *params,
     case GTK_TYPE_C_CALLBACK:
     case GTK_TYPE_ARGS:
     default:
-      g_error ("unsupported type `%s' in signal return",
+      g_error ("Gtk: unsupported type `%s' in signal return",
 	       gtk_type_name (return_val));
       break;
     }

@@ -29,10 +29,10 @@ static gint default_child_ipad_x = 7;
 static gint default_child_ipad_y = 0;
 
 
-guint
+GtkType
 gtk_button_box_get_type (void)
 {
-  static guint button_box_type = 0;
+  static GtkType button_box_type = 0;
 
   if (!button_box_type)
     {

@@ -25,12 +25,14 @@
 #include "gtksignal.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
+#include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gdk/gdk.h"
 #include "gdk/gdkx.h"
 
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_CLASS (GTK_OBJECT (w)->klass)
+#define	INIT_PATH_SIZE	(512)
 
 
 enum {
@@ -48,7 +50,7 @@ enum {
   STATE_CHANGED,
   PARENT_SET,
   STYLE_SET,
-  INSTALL_ACCELERATOR,
+  ADD_ACCELERATOR,
   REMOVE_ACCELERATOR,
   EVENT,
   BUTTON_PRESS_EVENT,
@@ -141,14 +143,6 @@ struct _GtkStateData
 
 
 static void gtk_widget_marshal_signal_1 (GtkObject	*object,
-					 GtkSignalFunc	 func,
-					 gpointer	 func_data,
-					 GtkArg		*args);
-static void gtk_widget_marshal_signal_2 (GtkObject	*object,
-					 GtkSignalFunc	 func,
-					 gpointer	 func_data,
-					 GtkArg		*args);
-static void gtk_widget_marshal_signal_3 (GtkObject	*object,
 					 GtkSignalFunc	 func,
 					 gpointer	 func_data,
 					 GtkArg		*args);
@@ -417,24 +411,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_7,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_BOXED);
-  widget_signals[INSTALL_ACCELERATOR] =
-    gtk_signal_new ("install_accelerator",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, install_accelerator),
-		    gtk_widget_marshal_signal_2,
-		    GTK_TYPE_BOOL, 3,
-		    GTK_TYPE_STRING,
-		    GTK_TYPE_CHAR,
-		    GTK_TYPE_INT);
+  widget_signals[ADD_ACCELERATOR] =
+    gtk_accel_group_create_add (object_class->type, GTK_RUN_LAST,
+				GTK_SIGNAL_OFFSET (GtkWidgetClass, add_accelerator));
   widget_signals[REMOVE_ACCELERATOR] =
-    gtk_signal_new ("remove_accelerator",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator),
-		    gtk_widget_marshal_signal_3,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_STRING);
+    gtk_accel_group_create_remove (object_class->type, GTK_RUN_LAST,
+				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
   widget_signals[EVENT] =
     gtk_signal_new ("event",
 		    GTK_RUN_LAST,
@@ -723,8 +705,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->state_changed = NULL;
   klass->parent_set = NULL;
   klass->style_set = gtk_widget_style_set;
-  klass->install_accelerator = NULL;
-  klass->remove_accelerator = NULL;
+  klass->add_accelerator = (void*) gtk_accel_group_handle_add;
+  klass->remove_accelerator = (void*) gtk_accel_group_handle_remove;
   klass->event = NULL;
   klass->button_press_event = NULL;
   klass->button_release_event = NULL;
@@ -755,6 +737,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drop_data_available_event = NULL;
   klass->other_event = NULL;
   klass->no_expose_event = NULL;
+
+  /* bindings test
+   */
+  {
+    GtkBindingSet *binding_set;
+
+    binding_set = gtk_binding_set_by_class (klass);
+    gtk_binding_entry_add_signal (binding_set, '9', GDK_CONTROL_MASK, "hide", 0);
+    gtk_binding_entry_add_signal (binding_set, '9', GDK_CONTROL_MASK, "show", 0);
+  }
 }
 
 /*****************************************
@@ -1854,58 +1846,99 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 }
 
-/*****************************************
- * gtk_widget_install_accelerator:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 void
-gtk_widget_install_accelerator (GtkWidget	    *widget,
-				GtkAcceleratorTable *table,
-				const gchar	    *signal_name,
-				gchar		     key,
-				guint8		     modifiers)
+gtk_widget_add_accelerator (GtkWidget           *widget,
+			    const gchar         *accel_signal,
+			    GtkAccelGroup       *accel_group,
+			    guint                accel_key,
+			    guint                accel_mods,
+			    GtkAccelFlags        accel_flags)
 {
-  gint return_val;
-
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (accel_group != NULL);
 
-  gtk_widget_ref (widget);
-  return_val = TRUE;
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[INSTALL_ACCELERATOR],
-		   signal_name, key, modifiers, &return_val);
-  if (return_val)
-    gtk_accelerator_table_install (table,
-				   GTK_OBJECT (widget),
-				   signal_name,
-				   key,
-				   modifiers);
-  gtk_widget_unref (widget);
+  gtk_accel_group_add (accel_group,
+		       accel_key,
+		       accel_mods,
+		       accel_flags,
+		       (GtkObject*) widget,
+		       accel_signal);
 }
 
-/*****************************************
- * gtk_widget_remove_accelerator:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 void
-gtk_widget_remove_accelerator (GtkWidget	   *widget,
-			       GtkAcceleratorTable *table,
-			       const gchar	   *signal_name)
+gtk_widget_stop_accelerator (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_ref (widget);
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[REMOVE_ACCELERATOR],
-		   signal_name);
-  gtk_accelerator_table_remove (table, GTK_OBJECT (widget), signal_name);
-  gtk_widget_unref (widget);
+  gtk_signal_emit_stop (GTK_OBJECT (widget), widget_signals[ADD_ACCELERATOR]);
+}
+
+void
+gtk_widget_remove_accelerator (GtkWidget           *widget,
+			       GtkAccelGroup       *accel_group,
+			       guint                accel_key,
+			       guint                accel_mods)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (accel_group != NULL);
+
+  gtk_accel_group_remove (accel_group,
+			  accel_key,
+			  accel_mods,
+			  (GtkObject*) widget);
+}
+
+void
+gtk_widget_remove_accelerators (GtkWidget           *widget,
+				const gchar         *accel_signal,
+				gboolean             visible_only)
+{
+  GSList *slist;
+  guint signal_id;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (accel_signal != NULL);
+  
+  signal_id = gtk_signal_lookup (accel_signal, GTK_OBJECT_TYPE (widget));
+  g_return_if_fail (signal_id != 0);
+  
+  slist = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
+  while (slist)
+    {
+      GtkAccelEntry *ac_entry;
+      
+      ac_entry = slist->data;
+      slist = slist->next;
+      if (ac_entry->accel_flags & GTK_ACCEL_VISIBLE &&
+	  ac_entry->signal_id == signal_id)
+	gtk_widget_remove_accelerator (GTK_WIDGET (widget),
+				       ac_entry->accel_group,
+				       ac_entry->accelerator_key,
+				       ac_entry->accelerator_mods);
+    }
+}
+
+guint
+gtk_widget_accelerator_signal (GtkWidget           *widget,
+			       GtkAccelGroup       *accel_group,
+			       guint                accel_key,
+			       guint                accel_mods)
+{
+  GtkAccelEntry *ac_entry;
+
+  g_return_val_if_fail (widget != NULL, 0);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+  g_return_val_if_fail (accel_group != NULL, 0);
+
+  ac_entry = gtk_accel_group_get_entry (accel_group, accel_key, accel_mods);
+
+  if (ac_entry && ac_entry->object == (GtkObject*) widget)
+    return ac_entry->signal_id;
+  return 0;
 }
 
 /*****************************************
@@ -3339,56 +3372,6 @@ gtk_widget_marshal_signal_1 (GtkObject	    *object,
 }
 
 /*****************************************
- * gtk_widget_marshal_signal_2:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_widget_marshal_signal_2 (GtkObject	    *object,
-			     GtkSignalFunc   func,
-			     gpointer	     func_data,
-			     GtkArg	    *args)
-{
-  GtkWidgetSignal2 rfunc;
-  gint *return_val;
-  
-  rfunc = (GtkWidgetSignal2) func;
-  return_val = GTK_RETLOC_BOOL (args[3]);
-  
-  *return_val = (* rfunc) (object,
-			   GTK_VALUE_STRING (args[0]),
-			   GTK_VALUE_CHAR (args[1]),
-			   GTK_VALUE_INT (args[2]),
-			   func_data);
-}
-
-/*****************************************
- * gtk_widget_marshal_signal_3:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_widget_marshal_signal_3 (GtkObject	    *object,
-			     GtkSignalFunc   func,
-			     gpointer	     func_data,
-			     GtkArg	    *args)
-{
-  GtkWidgetSignal3 rfunc;
-  
-  rfunc = (GtkWidgetSignal3) func;
-  
-  (* rfunc) (object,
-	     GTK_VALUE_STRING (args[0]),
-	     func_data);
-}
-
-/*****************************************
  * gtk_widget_marshal_signal_4:
  *
  *   arguments:
@@ -3519,7 +3502,6 @@ gtk_widget_real_destroy (GtkObject *object)
 
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
-  gtk_accelerator_tables_delete (object);
   
   saved_style = gtk_object_get_data_by_id (object, saved_default_style_key_id);
   if (saved_style)
@@ -4143,4 +4125,110 @@ gtk_widget_unref (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_object_unref ((GtkObject*) widget);
+}
+
+void
+gtk_widget_path (GtkWidget *widget,
+		 guint     *path_length_p,
+		 gchar    **path_p,
+		 gchar    **path_reversed_p)
+{
+  static gchar *rev_path = NULL;
+  static guint  path_len = 0;
+  guint len;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  len = 0;
+  do
+    {
+      gchar *string;
+      gchar *d, *s;
+      guint l;
+      
+      string = gtk_widget_get_name (widget);
+      l = strlen (string);
+      while (path_len <= len + l + 1)
+	{
+	  path_len += INIT_PATH_SIZE;
+	  rev_path = g_realloc (rev_path, path_len);
+	}
+      s = string + l - 1;
+      d = rev_path + len;
+      while (s >= string)
+	*(d++) = *(s--);
+      len += l;
+      
+      widget = widget->parent;
+      
+      if (widget)
+	rev_path[len++] = '.';
+      else
+	rev_path[len++] = 0;
+    }
+  while (widget);
+  
+  if (path_length_p)
+    *path_length_p = len - 1;
+  if (path_reversed_p)
+    *path_reversed_p = g_strdup (rev_path);
+  if (path_p)
+    {
+      *path_p = g_strdup (rev_path);
+      g_strreverse (*path_p);
+    }
+}
+
+void
+gtk_widget_class_path (GtkWidget *widget,
+		       guint     *path_length_p,
+		       gchar    **path_p,
+		       gchar    **path_reversed_p)
+{
+  static gchar *rev_path = NULL;
+  static guint  path_len = 0;
+  guint len;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  len = 0;
+  do
+    {
+      gchar *string;
+      gchar *d, *s;
+      guint l;
+      
+      string = gtk_type_name (GTK_WIDGET_TYPE (widget));
+      l = strlen (string);
+      while (path_len <= len + l + 1)
+	{
+	  path_len += INIT_PATH_SIZE;
+	  rev_path = g_realloc (rev_path, path_len);
+	}
+      s = string + l - 1;
+      d = rev_path + len;
+      while (s >= string)
+	*(d++) = *(s--);
+      len += l;
+      
+      widget = widget->parent;
+      
+      if (widget)
+	rev_path[len++] = '.';
+      else
+	rev_path[len++] = 0;
+    }
+  while (widget);
+  
+  if (path_length_p)
+    *path_length_p = len - 1;
+  if (path_reversed_p)
+    *path_reversed_p = g_strdup (rev_path);
+  if (path_p)
+    {
+      *path_p = g_strdup (rev_path);
+      g_strreverse (*path_p);
+    }
 }

@@ -60,7 +60,9 @@ static void  gtk_type_init_builtin_types	(void);
 
 static GtkTypeNode *type_nodes = NULL;
 static guint        n_type_nodes = 0;
-static GHashTable *type_name_2_type_ht = NULL;
+static GHashTable  *type_name_2_type_ht = NULL;
+static const gchar *key_enum_vals = "gtk-type-enum-values";
+static guint        key_id_enum_vals = 0;
 
 
 static GtkTypeNode*
@@ -494,6 +496,46 @@ gtk_arg_copy (GtkArg         *src_arg,
   return dest_arg;
 }
 
+GtkEnumValue*
+gtk_enum_get_values (GtkType      enum_type)
+{
+  if (gtk_type_is_a (enum_type, GTK_TYPE_ENUM) ||
+      gtk_type_is_a (enum_type, GTK_TYPE_FLAGS))
+    return g_dataset_id_get_data (gtk_type_name (enum_type), key_id_enum_vals);
+
+  g_warning ("gtk_enum_get_values(): type `%s' is not derived from `enum' or `flags'",
+	     gtk_type_name (enum_type));
+
+  return NULL;
+}
+
+void
+gtk_enum_set_values (GtkType       enum_type,
+		     GtkEnumValue *values)
+{
+  if (!key_id_enum_vals)
+    key_id_enum_vals = g_dataset_force_id (key_enum_vals);
+    
+  if (gtk_type_is_a (enum_type, GTK_TYPE_ENUM) ||
+      gtk_type_is_a (enum_type, GTK_TYPE_FLAGS))
+    {
+      gchar *type_name;
+
+      type_name = gtk_type_name (enum_type);
+      if (g_dataset_id_get_data (type_name, key_id_enum_vals))
+	g_warning ("gtk_enum_set_values(): enum values for `%s' are already set",
+		   type_name);
+      else
+	g_dataset_id_set_data (type_name,
+			       key_id_enum_vals,
+			       values);
+      return;
+    }
+
+  g_warning ("gtk_enum_set_values(): type `%s' is not derived from `enum' or `flags'",
+	     gtk_type_name (enum_type));
+}
+
 static void
 gtk_type_class_init (GtkTypeNode *node)
 {
@@ -573,54 +615,59 @@ extern void gtk_object_init_type (void);
 
 GtkType gtk_type_builtins[GTK_TYPE_NUM_BUILTINS];
 
+#include "gtkwidget.h"		/* include for enum values from GtkWidgetFlags */
+#include "gtkprivate.h"		/* include for enum values from GtkPrivateFlags */
+#include "gtkenumvalues.c"
+
 static void
 gtk_type_init_builtin_types (void)
 {
   /* GTK_TYPE_INVALID has typeid 0.  The first type id returned by
-     gtk_type_unique is 1, which is GTK_TYPE_NONE.  And so on. */
+   * gtk_type_unique is 1, which is GTK_TYPE_NONE.  And so on.
+   */
 
-  static struct {
-    GtkType enum_id;
+  struct {
+    GtkType type_id;
     gchar *name;
   } fundamental_info[] = {
-    { GTK_TYPE_NONE, "void" },
-    { GTK_TYPE_CHAR, "char" },
-    { GTK_TYPE_BOOL, "bool" },
-    { GTK_TYPE_INT, "int" },
-    { GTK_TYPE_UINT, "uint" },
-    { GTK_TYPE_LONG, "long" },
-    { GTK_TYPE_ULONG, "ulong" },
-    { GTK_TYPE_FLOAT, "float" },
-    { GTK_TYPE_DOUBLE, "double" },
-    { GTK_TYPE_STRING, "string" },
-    { GTK_TYPE_ENUM, "enum" },
-    { GTK_TYPE_FLAGS, "flags" },
-    { GTK_TYPE_BOXED, "boxed" },
-    { GTK_TYPE_FOREIGN, "foreign" },
-    { GTK_TYPE_CALLBACK, "callback" },
-    { GTK_TYPE_ARGS, "args" },
+    { GTK_TYPE_NONE,		"void" },
+    { GTK_TYPE_CHAR,		"char" },
+    { GTK_TYPE_BOOL,		"bool" },
+    { GTK_TYPE_INT,		"int" },
+    { GTK_TYPE_UINT,		"uint" },
+    { GTK_TYPE_LONG,		"long" },
+    { GTK_TYPE_ULONG,		"ulong" },
+    { GTK_TYPE_FLOAT,		"float" },
+    { GTK_TYPE_DOUBLE,		"double" },
+    { GTK_TYPE_STRING,		"string" },
+    { GTK_TYPE_ENUM,		"enum" },
+    { GTK_TYPE_FLAGS,		"flags" },
+    { GTK_TYPE_BOXED,		"boxed" },
+    { GTK_TYPE_FOREIGN,		"foreign" },
+    { GTK_TYPE_CALLBACK,	"callback" },
+    { GTK_TYPE_ARGS,		"args" },
     
-    { GTK_TYPE_POINTER, "pointer" },
-    { GTK_TYPE_SIGNAL, "signal" },
-    { GTK_TYPE_C_CALLBACK, "c_callback" }
+    { GTK_TYPE_POINTER,		"pointer" },
+    { GTK_TYPE_SIGNAL,		"signal" },
+    { GTK_TYPE_C_CALLBACK,	"c_callback" }
   };
-  
-  static struct {
-    char *name;
+  struct {
+    gchar *name;
     GtkType parent;
+    GtkEnumValue *values;
   } builtin_info[] = {
 #include "gtktypebuiltins.c"
     { NULL }
   };
-  
-  int i;
+  guint i;
   
   for (i = 0; i < sizeof (fundamental_info) / sizeof (fundamental_info[0]); i++)
     {
       GtkType id;
+
       id = gtk_type_register_builtin (fundamental_info[i].name,
 				      GTK_TYPE_INVALID);
-      g_assert (id == fundamental_info[i].enum_id);
+      g_assert (id == fundamental_info[i].type_id);
     }
   
   gtk_object_init_type ();
@@ -630,5 +677,8 @@ gtk_type_init_builtin_types (void)
       gtk_type_builtins[i] =
 	gtk_type_register_builtin (builtin_info[i].name,
 				   builtin_info[i].parent);
+      if (gtk_type_is_a (gtk_type_builtins[i], GTK_TYPE_ENUM) ||
+	  gtk_type_is_a (gtk_type_builtins[i], GTK_TYPE_FLAGS))
+	gtk_enum_set_values (gtk_type_builtins[i], builtin_info[i].values);
     }
 }

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,54 +26,58 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_MENU_SHELL(obj)          GTK_CHECK_CAST (obj, gtk_menu_shell_get_type (), GtkMenuShell)
-#define GTK_MENU_SHELL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_menu_shell_get_type (), GtkMenuShellClass)
-#define GTK_IS_MENU_SHELL(obj)       GTK_CHECK_TYPE (obj, gtk_menu_shell_get_type ())
+#define	GTK_TYPE_MENU_SHELL		(gtk_menu_shell_get_type ())
+#define GTK_MENU_SHELL(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_MENU_SHELL, GtkMenuShell))
+#define GTK_MENU_SHELL_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_SHELL, GtkMenuShellClass))
+#define GTK_IS_MENU_SHELL(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MENU_SHELL))
+#define GTK_IS_MENU_SHELL_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_SHELL))
 
 
-typedef struct _GtkMenuShell       GtkMenuShell;
+typedef struct _GtkMenuShell	   GtkMenuShell;
 typedef struct _GtkMenuShellClass  GtkMenuShellClass;
 
 struct _GtkMenuShell
 {
   GtkContainer container;
-
+  
   GList *children;
   GtkWidget *active_menu_item;
   GtkWidget *parent_menu_shell;
-
+  
   guint active : 1;
   guint have_grab : 1;
   guint have_xgrab : 1;
   guint button : 2;
   guint ignore_leave : 1;
   guint menu_flag : 1;
-
+  
   guint32 activate_time;
 };
 
 struct _GtkMenuShellClass
 {
   GtkContainerClass parent_class;
-
+  
   guint submenu_placement : 1;
-
-  void (*deactivate) (GtkMenuShell *menu_shell);
+  
+  void (*deactivate)     (GtkMenuShell *menu_shell);
+  void (*selection_done) (GtkMenuShell *menu_shell);
 };
 
 
-guint gtk_menu_shell_get_type   (void);
-void  gtk_menu_shell_append     (GtkMenuShell *menu_shell,
-				 GtkWidget    *child);
-void  gtk_menu_shell_prepend    (GtkMenuShell *menu_shell,
-				 GtkWidget    *child);
-void  gtk_menu_shell_insert     (GtkMenuShell *menu_shell,
-				 GtkWidget    *child,
-				 gint          position);
-void  gtk_menu_shell_deactivate (GtkMenuShell *menu_shell);
+GtkType gtk_menu_shell_get_type	  (void);
+void	gtk_menu_shell_append	  (GtkMenuShell *menu_shell,
+				   GtkWidget	*child);
+void	gtk_menu_shell_prepend	  (GtkMenuShell *menu_shell,
+				   GtkWidget	*child);
+void	gtk_menu_shell_insert	  (GtkMenuShell *menu_shell,
+				   GtkWidget	*child,
+				   gint		 position);
+void	gtk_menu_shell_deactivate (GtkMenuShell *menu_shell);
 
 
 #ifdef __cplusplus

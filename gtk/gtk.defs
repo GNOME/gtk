@@ -1,18 +1,30 @@
 ;; -*- scheme -*-
 
-;;; Gtk enums
+;;; Gtk enums from gtkenums.h
 
-(define-enum GtkWindowType
-  (toplevel GTK_WINDOW_TOPLEVEL)
-  (dialog GTK_WINDOW_DIALOG)
-  (popup GTK_WINDOW_POPUP))
+(define-flags GtkAccelFlags
+  (visible GTK_ACCEL_VISIBLE)
+  (signal-visible GTK_ACCEL_SIGNAL_VISIBLE)
+  (locked GTK_ACCEL_LOCKED)
+  (mask GTK_ACCEL_MASK))
 
-(define-enum GtkStateType
-  (normal GTK_STATE_NORMAL)
-  (active GTK_STATE_ACTIVE)
-  (prelight GTK_STATE_PRELIGHT)
-  (selected GTK_STATE_SELECTED)
-  (insensitive GTK_STATE_INSENSITIVE))
+(define-enum GtkArrowType
+  (up GTK_ARROW_UP)
+  (down GTK_ARROW_DOWN)
+  (left GTK_ARROW_LEFT)
+  (right GTK_ARROW_RIGHT))
+
+(define-flags GtkAttachOptions
+  (expand GTK_EXPAND)
+  (shrink GTK_SHRINK)
+  (fill GTK_FILL))
+
+(define-enum GtkButtonBoxStyle
+  (default GTK_BUTTONBOX_DEFAULT_STYLE)
+  (spread GTK_BUTTONBOX_SPREAD)
+  (edge GTK_BUTTONBOX_EDGE)
+  (start GTK_BUTTONBOX_START)
+  (end GTK_BUTTONBOX_END))
 
 (define-enum GtkDirectionType
   (tab-forward GTK_DIR_TAB_FORWARD)
@@ -22,56 +34,19 @@
   (left GTK_DIR_LEFT)
   (right GTK_DIR_RIGHT))
 
-(define-enum GtkShadowType
-  (none GTK_SHADOW_NONE)
-  (in GTK_SHADOW_IN)
-  (out GTK_SHADOW_OUT)
-  (etched-in GTK_SHADOW_ETCHED_IN)
-  (etched-out GTK_SHADOW_ETCHED_OUT))
+(define-enum GtkJustification
+  (left GTK_JUSTIFY_LEFT)
+  (right GTK_JUSTIFY_RIGHT)
+  (center GTK_JUSTIFY_CENTER)
+  (fill GTK_JUSTIFY_FILL))
 
-(define-enum GtkArrowType
-  (up GTK_ARROW_UP)
-  (down GTK_ARROW_DOWN)
-  (left GTK_ARROW_LEFT)
-  (right GTK_ARROW_RIGHT))
-
-(define-enum GtkPackType
-  (start GTK_PACK_START)
-  (end GTK_PACK_END))
-
-(define-enum GtkPolicyType
-  (always GTK_POLICY_ALWAYS)
-  (automatic GTK_POLICY_AUTOMATIC))
-
-(define-enum GtkUpdateType
-  (continuous GTK_UPDATE_CONTINUOUS)
-  (discontinuous GTK_UPDATE_DISCONTINUOUS)
-  (delayed GTK_UPDATE_DELAYED))
-
-(define-flags GtkAttachOptions
-  (expand GTK_EXPAND)
-  (shrink GTK_SHRINK)
-  (fill GTK_FILL))
-
-(define-flags GtkSignalRunType
-  (first GTK_RUN_FIRST)
-  (last GTK_RUN_LAST)
-  (both GTK_RUN_BOTH)
-  (mask GTK_RUN_MASK)
-  (no-recurse GTK_RUN_NO_RECURSE))
-
-(define-enum GtkWindowPosition
-  (none GTK_WIN_POS_NONE)
-  (center GTK_WIN_POS_CENTER)
-  (mouse GTK_WIN_POS_MOUSE))
-
-(define-enum GtkSubmenuDirection
-  (left GTK_DIRECTION_LEFT)
-  (right GTK_DIRECTION_RIGHT))
-
-(define-enum GtkSubmenuPlacement
-  (top-bottom GTK_TOP_BOTTOM)
-  (left-right GTK_LEFT_RIGHT))
+(define-enum GtkMatchType
+  (all GTK_MATCH_ALL)
+  (all-tail GTK_MATCH_ALL_TAIL)
+  (head GTK_MATCH_HEAD)
+  (tail GTK_MATCH_TAIL)
+  (exact GTK_MATCH_EXACT)
+  (last GTK_MATCH_LAST))
 
 (define-enum GtkMenuFactoryType
   (menu GTK_MENU_FACTORY_MENU)
@@ -83,17 +58,30 @@
   (inches GTK_INCHES)
   (centimeters GTK_CENTIMETERS))
 
-(define-enum GtkScrollType
-  (none GTK_SCROLL_NONE)
-  (step-backward GTK_SCROLL_STEP_BACKWARD)
-  (step-forward GTK_SCROLL_STEP_FORWARD)
-  (page-backward GTK_SCROLL_PAGE_BACKWARD)
-  (page-forward GTK_SCROLL_PAGE_FORWARD))
+(define-enum GtkOrientation
+  (horizontal GTK_ORIENTATION_HORIZONTAL)
+  (vertical GTK_ORIENTATION_VERTICAL))
 
-(define-enum GtkTroughType
-  (none GTK_TROUGH_NONE)
-  (start GTK_TROUGH_START)
-  (end GTK_TROUGH_END))
+(define-enum GtkPackType
+  (start GTK_PACK_START)
+  (end GTK_PACK_END))
+
+(define-enum GtkPathPriorityType
+  (lowest GTK_PATH_PRIO_LOWEST)
+  (gtk GTK_PATH_PRIO_GTK)
+  (application GTK_PATH_PRIO_APPLICATION)
+  (rc GTK_PATH_PRIO_RC)
+  (highest GTK_PATH_PRIO_HIGHEST)
+  (mask GTK_PATH_PRIO_MASK))
+
+(define-enum GtkPathType
+  (widget GTK_PATH_WIDGET)
+  (widget-class GTK_PATH_WIDGET_CLASS)
+  (class GTK_PATH_CLASS))
+
+(define-enum GtkPolicyType
+  (always GTK_POLICY_ALWAYS)
+  (automatic GTK_POLICY_AUTOMATIC))
 
 (define-enum GtkPositionType
   (left GTK_POS_LEFT)
@@ -105,28 +93,127 @@
   (color GTK_PREVIEW_COLOR)
   (grayscale GTK_PREVIEW_GRAYSCALE))
 
-(define-flags GtkWidgetFlags
-  (visible GTK_VISIBLE)
-  (mapped GTK_MAPPED)
-  (unmapped GTK_UNMAPPED)
-  (realized GTK_REALIZED)
-  (sensitive GTK_SENSITIVE)
-  (parent-sensitive GTK_PARENT_SENSITIVE)
-  (no-window GTK_NO_WINDOW)
-  (has-focus GTK_HAS_FOCUS)
-  (can-focus GTK_CAN_FOCUS)
-  (has-default GTK_HAS_DEFAULT)
-  (can-default GTK_CAN_DEFAULT)
-  (propagate-state GTK_PROPAGATE_STATE)
-  (anchored GTK_ANCHORED)
-  (basic GTK_BASIC)
-  (user-style GTK_USER_STYLE))
+(define-enum GtkReliefStyle
+  (normal GTK_RELIEF_NORMAL)
+  (none GTK_RELIEF_NONE))
+
+(define-enum GtkScrollType
+  (none GTK_SCROLL_NONE)
+  (step-backward GTK_SCROLL_STEP_BACKWARD)
+  (step-forward GTK_SCROLL_STEP_FORWARD)
+  (page-backward GTK_SCROLL_PAGE_BACKWARD)
+  (page-forward GTK_SCROLL_PAGE_FORWARD)
+  (jump GTK_SCROLL_JUMP))
 
 (define-enum GtkSelectionMode
   (single GTK_SELECTION_SINGLE)
   (browse GTK_SELECTION_BROWSE)
   (multiple GTK_SELECTION_MULTIPLE)
   (extended GTK_SELECTION_EXTENDED))
+
+(define-enum GtkShadowType
+  (none GTK_SHADOW_NONE)
+  (in GTK_SHADOW_IN)
+  (out GTK_SHADOW_OUT)
+  (etched-in GTK_SHADOW_ETCHED_IN)
+  (etched-out GTK_SHADOW_ETCHED_OUT))
+
+(define-flags GtkSignalRunType
+  (first GTK_RUN_FIRST)
+  (last GTK_RUN_LAST)
+  (both GTK_RUN_BOTH)
+  (mask GTK_RUN_MASK)
+  (no-recurse GTK_RUN_NO_RECURSE))
+
+(define-enum GtkStateType
+  (normal GTK_STATE_NORMAL)
+  (active GTK_STATE_ACTIVE)
+  (prelight GTK_STATE_PRELIGHT)
+  (selected GTK_STATE_SELECTED)
+  (insensitive GTK_STATE_INSENSITIVE))
+
+(define-enum GtkSubmenuDirection
+  (left GTK_DIRECTION_LEFT)
+  (right GTK_DIRECTION_RIGHT))
+
+(define-enum GtkSubmenuPlacement
+  (top-bottom GTK_TOP_BOTTOM)
+  (left-right GTK_LEFT_RIGHT))
+
+(define-enum GtkToolbarStyle
+  (icons GTK_TOOLBAR_ICONS)
+  (text GTK_TOOLBAR_TEXT)
+  (both GTK_TOOLBAR_BOTH))
+
+(define-enum GtkTroughType
+  (none GTK_TROUGH_NONE)
+  (start GTK_TROUGH_START)
+  (end GTK_TROUGH_END)
+  (jump GTK_TROUGH_JUMP))
+
+(define-enum GtkUpdateType
+  (continuous GTK_UPDATE_CONTINUOUS)
+  (discontinuous GTK_UPDATE_DISCONTINUOUS)
+  (delayed GTK_UPDATE_DELAYED))
+
+(define-enum GtkVisibility
+  (none GTK_VISIBILITY_NONE)
+  (discontinuous GTK_UPDATE_DISCONTINUOUS)
+  (delayed GTK_UPDATE_DELAYED))
+
+(define-enum GtkWindowPosition
+  (none GTK_WIN_POS_NONE)
+  (center GTK_WIN_POS_CENTER)
+  (mouse GTK_WIN_POS_MOUSE))
+
+(define-enum GtkWindowType
+  (toplevel GTK_WINDOW_TOPLEVEL)
+  (dialog GTK_WINDOW_DIALOG)
+  (popup GTK_WINDOW_POPUP))
+
+;;; Gtk enums from gtkobject.h
+
+(define-flags GtkObjectFlags
+  (destroyed GTK_DESTROYED)
+  (floating GTK_FLOATING)
+  (connected GTK_CONNECTED)
+  (object-flag-last GTK_OBJECT_FLAG_LAST))
+
+(define-flags GtkArgFlags
+  (readable GTK_ARG_READABLE)
+  (writable GTK_ARG_WRITABLE)
+  (construct GTK_ARG_CONSTRUCT)
+  (mask GTK_ARG_MASK)
+  (readwrite GTK_ARG_READWRITE))
+
+;;; Gtk enums from gtkwidget.h
+
+(define-flags GtkWidgetFlags
+  (toplevel GTK_TOPLEVEL)
+  (no-window GTK_NO_WINDOW)
+  (realized GTK_REALIZED)
+  (mapped GTK_MAPPED)
+  (visible GTK_VISIBLE)
+  (sensitive GTK_SENSITIVE)
+  (parent-sensitive GTK_PARENT_SENSITIVE)
+  (can-focus GTK_CAN_FOCUS)
+  (has-focus GTK_HAS_FOCUS)
+  (can-default GTK_CAN_DEFAULT)
+  (has-default GTK_HAS_DEFAULT)
+  (has-grab GTK_HAS_GRAB)
+  (rc-style GTK_RC_STYLE)
+  (basic GTK_BASIC))
+
+;;; Gtk enums from gtkprivate.h
+
+(define-flags GtkPrivateFlags
+  (user-style PRIVATE_GTK_USER_STYLE)
+  (redraw-pending PRIVATE_GTK_REDRAW_PENDING)
+  (resize-pending PRIVATE_GTK_RESIZE_PENDING)
+  (resize-needed PRIVATE_GTK_RESIZE_NEEDED)
+  (leave-pending PRIVATE_GTK_LEAVE_PENDING)
+  (has-shape-mask PRIVATE_GTK_HAS_SHAPE_MASK)
+  (in-reparent PRIVATE_GTK_IN_REPARENT))
 
 (define-enum GtkCurveType
   (linear GTK_CURVE_TYPE_LINEAR)
@@ -143,6 +230,7 @@
   (long GTK_TYPE_LONG)
   (ulong GTK_TYPE_ULONG)
   (float GTK_TYPE_FLOAT)
+  (double GTK_TYPE_DOUBLE)
   (string GTK_TYPE_STRING)
   (enum GTK_TYPE_ENUM)
   (flags GTK_TYPE_FLAGS)
@@ -154,23 +242,6 @@
   (signal GTK_TYPE_SIGNAL)
   (c-callback GTK_TYPE_C_CALLBACK)
   (object GTK_TYPE_OBJECT))
-
-(define-enum GtkJustification
-  (left GTK_JUSTIFY_LEFT)
-  (right GTK_JUSTIFY_RIGHT)
-  (center GTK_JUSTIFY_CENTER)
-  (fill GTK_JUSTIFY_FILL))
-
-(define-enum GtkButtonBoxStyle
-  (default GTK_BUTTONBOX_DEFAULT_STYLE)
-  (spread GTK_BUTTONBOX_SPREAD)
-  (edge GTK_BUTTONBOX_EDGE)
-  (start GTK_BUTTONBOX_START)
-  (end GTK_BUTTONBOX_END))
-
-(define-enum GtkOrientation
-  (horizontal GTK_ORIENTATION_HORIZONTAL)
-  (vertical GTK_ORIENTATION_VERTICAL))
 
 ;;; Gdk enums
 
@@ -264,6 +335,16 @@
   (selection-clear GDK_SELECTION_CLEAR)
   (selection-request GDK_SELECTION_REQUEST)
   (selection-notify GDK_SELECTION_NOTIFY)
+  (proximity-in GDK_PROXIMITY_IN)
+  (proximity-out GDK_PROXIMITY_OUT)
+  (drag-begin GDK_DRAG_BEGIN)
+  (drag-request GDK_DRAG_REQUEST)
+  (drop-enter GDK_DROP_ENTER)
+  (drop-leave GDK_DROP_LEAVE)
+  (drop-data-avail GDK_DROP_DATA_AVAIL)
+  (client-event GDK_CLIENT_EVENT)
+  (visibility-notify GDK_VISIBILITY_NOTIFY)
+  (no-expose GDK_NO_EXPOSE)
   (other-event GDK_OTHER_EVENT))
 
 (define-flags GdkEventMask
@@ -282,6 +363,11 @@
   (leave-notify-mask GDK_LEAVE_NOTIFY_MASK)
   (focus-change-mask GDK_FOCUS_CHANGE_MASK)
   (structure-mask GDK_STRUCTURE_MASK)
+  (property-change-mask GDK_PROPERTY_CHANGE_MASK)
+  (visibility-notify-mask GDK_VISIBILITY_NOTIFY_MASK)
+  (proximity-in-mask GDK_PROXIMITY_IN_MASK)
+  (proximity-out-mask GDK_PROXIMITY_OUT_MASK)
+  (substructure-mask GDK_SUBSTRUCTURE_MASK)
   (all-events-mask GDK_ALL_EVENTS_MASK))
 
 (define-enum GdkNotifyType
@@ -291,6 +377,11 @@
   (nonlinear GDK_NOTIFY_NONLINEAR)
   (nonlinear-virtual GDK_NOTIFY_NONLINEAR_VIRTUAL)
   (unknown GDK_NOTIFY_UNKNOWN))
+
+(define-flags GdkCrossingMode
+  (crossing-normal GDK_CROSSING_NORMAL)
+  (crossing-grab GDK_CROSSING_GRAB)
+  (crossing-ungrab GDK_CROSSING_UNGRAB))
 
 (define-flags GdkModifierType
   (shift-mask GDK_SHIFT_MASK)
@@ -305,7 +396,9 @@
   (button2-mask GDK_BUTTON2_MASK)
   (button3-mask GDK_BUTTON3_MASK)
   (button4-mask GDK_BUTTON4_MASK)
-  (button5-mask GDK_BUTTON5_MASK))
+  (button5-mask GDK_BUTTON5_MASK)
+  (after-mask GDK_AFTER_MASK)
+  (modifier-mask GDK_MODIFIER_MASK))
 
 (define-enum GdkSubwindowMode
   (clip-by-children GDK_CLIP_BY_CHILDREN)
@@ -362,9 +455,9 @@
 
 ;;; Gtk boxed types
 
-(define-boxed GtkAcceleratorTable
-  gtk_accelerator_table_ref
-  gtk_accelerator_table_unref)
+(define-boxed GtkAccelGroup
+  gtk_accel_group_ref
+  gtk_accel_group_unref)
 
 (define-boxed GtkStyle
   gtk_style_ref
@@ -546,19 +639,21 @@
   none
   ((GtkWidget widget)))
 
-					;(define-func gtk_widget_install_accelerator
-					;  none
-					;  ((GtkWidget widget)
-					;  (GtkAcceleratorTable table)
-					;  (string signal_name)
-					;  (char key)
-					;  (...)))
+(define-func gtk_widget_add_accelerator
+  none
+  ((GtkWidget widget)
+   (string accel_signal)
+   (GtkAccelGroup accel_group)
+   (guint accel_key)
+   (guint accel_mods)
+   (GtkAccelFlags accel_flags)))
 
 (define-func gtk_widget_remove_accelerator
   none
   ((GtkWidget widget)
-   (GtkAcceleratorTable table)
-   (string signal_name)))
+   (GtkAccelGroup accel_group)
+   (guint accel_key)
+   (guint accel_mods)))
 
 (define-func gtk_widget_event
   bool
@@ -797,15 +892,15 @@
    (bool allow_grow)
    (bool auto_shrink)))
 
-(define-func gtk_window_add_accelerator_table
+(define-func gtk_window_add_accel_group
   none
   ((GtkWindow window)
-   (GtkAcceleratorTable table)))
+   (GtkAccelGroup accel_group)))
 
-(define-func gtk_window_remove_accelerator_table
+(define-func gtk_window_remove_accel_group
   none
   ((GtkWindow window)
-   (GtkAcceleratorTable table)))
+   (GtkAccelGroup accel_group)))
 
 (define-func gtk_window_position
   none
@@ -1233,10 +1328,10 @@
   ((GtkMenu menu)
    (int index)))
 
-(define-func gtk_menu_set_accelerator_table
+(define-func gtk_menu_set_accel_group
   none
   ((GtkMenu menu)
-   (GtkAcceleratorTable table)))
+   (GtkAccelGroup accel_group)))
 
 
 ;; Item
@@ -1276,10 +1371,6 @@
   none
   ((GtkMenuItem menu_item)
    (GtkSubmenuPlacement placement)))
-
-(define-func gtk_menu_item_accelerator_size
-  none
-  ((GtkMenuItem menu_item)))
 
 (define-func gtk_menu_item_configure
   none

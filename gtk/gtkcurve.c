@@ -51,10 +51,10 @@ static gint gtk_curve_graph_events (GtkWidget     *widget,
 				    GtkCurve      *c);
 static void gtk_curve_size_graph   (GtkCurve      *curve);
 
-guint
+GtkType
 gtk_curve_get_type (void)
 {
-  static guint curve_type = 0;
+  static GtkType curve_type = 0;
 
   if (!curve_type)
     {

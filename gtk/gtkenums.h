@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -21,26 +21,63 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-/* Widget states */
-typedef enum
-{
-  GTK_STATE_NORMAL,
-  GTK_STATE_ACTIVE,
-  GTK_STATE_PRELIGHT,
-  GTK_STATE_SELECTED,
-  GTK_STATE_INSENSITIVE
-} GtkStateType;
+/* the enum definitions in this file are ordered alphabetically.
+ * this file *must* be kept in sync with gtk.defs
+ */
 
-/* Window types */
+/* Accelerator flags */
 typedef enum
 {
-  GTK_WINDOW_TOPLEVEL,
-  GTK_WINDOW_DIALOG,
-  GTK_WINDOW_POPUP
-} GtkWindowType;
+  GTK_ACCEL_VISIBLE		= 1 << 0   /* should the accelerator appear in
+					    * the widget's display?
+					    */,
+  GTK_ACCEL_SIGNAL_VISIBLE	= 1 << 1   /* should the signal associated with
+					    * this accelerator be also visible?
+					    */,
+  GTK_ACCEL_LOCKED		= 1 << 2   /* may the accelerator be removed
+					    * again?
+					    */,
+  GTK_ACCEL_MASK		= 0x07
+} GtkAccelFlags;
+
+/* Arrow types */
+typedef enum
+{
+  GTK_ARROW_UP,
+  GTK_ARROW_DOWN,
+  GTK_ARROW_LEFT,
+  GTK_ARROW_RIGHT
+} GtkArrowType;
+
+/* Attach options (for tables) */
+typedef enum
+{
+  GTK_EXPAND = 1 << 0,
+  GTK_SHRINK = 1 << 1,
+  GTK_FILL   = 1 << 2
+} GtkAttachOptions;
+
+/* button box styles */
+typedef enum
+{
+  GTK_BUTTONBOX_DEFAULT_STYLE,
+  GTK_BUTTONBOX_SPREAD,
+  GTK_BUTTONBOX_EDGE,
+  GTK_BUTTONBOX_START,
+  GTK_BUTTONBOX_END
+} GtkButtonBoxStyle;
+
+/* curve types */
+typedef enum
+{
+  GTK_CURVE_TYPE_LINEAR,        /* linear interpolation */
+  GTK_CURVE_TYPE_SPLINE,        /* spline interpolation */
+  GTK_CURVE_TYPE_FREE           /* free form curve */
+} GtkCurveType;
 
 /* Focus movement types */
 typedef enum
@@ -53,24 +90,48 @@ typedef enum
   GTK_DIR_RIGHT
 } GtkDirectionType;
 
-/* Shadow types */
+/* justification for label and maybe other widgets (text?) */
 typedef enum
 {
-  GTK_SHADOW_NONE,
-  GTK_SHADOW_IN,
-  GTK_SHADOW_OUT,
-  GTK_SHADOW_ETCHED_IN,
-  GTK_SHADOW_ETCHED_OUT
-} GtkShadowType;
+  GTK_JUSTIFY_LEFT,
+  GTK_JUSTIFY_RIGHT,
+  GTK_JUSTIFY_CENTER,
+  GTK_JUSTIFY_FILL
+} GtkJustification;
 
-/* Arrow types */
+/* GtkPatternSpec match types */
 typedef enum
 {
-  GTK_ARROW_UP,
-  GTK_ARROW_DOWN,
-  GTK_ARROW_LEFT,
-  GTK_ARROW_RIGHT
-} GtkArrowType;
+  GTK_MATCH_ALL         /* "*A?A*" */,
+  GTK_MATCH_ALL_TAIL    /* "*A?AA" */,
+  GTK_MATCH_HEAD        /* "AAAA*" */,
+  GTK_MATCH_TAIL        /* "*AAAA" */,
+  GTK_MATCH_EXACT       /* "AAAAA" */,
+  GTK_MATCH_LAST
+} GtkMatchType;
+
+/* menu factory types (outdated) */
+typedef enum
+{
+  GTK_MENU_FACTORY_MENU,
+  GTK_MENU_FACTORY_MENU_BAR,
+  GTK_MENU_FACTORY_OPTION_MENU
+} GtkMenuFactoryType;
+
+/* gtk metrics */
+typedef enum
+{
+  GTK_PIXELS,
+  GTK_INCHES,
+  GTK_CENTIMETERS
+} GtkMetricType;
+
+/* Orientation for toolbars, etc. */
+typedef enum
+{
+  GTK_ORIENTATION_HORIZONTAL,
+  GTK_ORIENTATION_VERTICAL
+} GtkOrientation;
 
 /* Packing types (for boxes) */
 typedef enum
@@ -79,6 +140,25 @@ typedef enum
   GTK_PACK_END
 } GtkPackType;
 
+/* priorities for path lookups */
+typedef enum
+{
+  GTK_PATH_PRIO_LOWEST		=  0,
+  GTK_PATH_PRIO_GTK		=  4,
+  GTK_PATH_PRIO_APPLICATION	=  8,
+  GTK_PATH_PRIO_RC		= 12,
+  GTK_PATH_PRIO_HIGHEST		= 15,
+  GTK_PATH_PRIO_MASK		= 0x0f
+} GtkPathPriorityType;
+
+/* widget path types */
+typedef enum
+{
+  GTK_PATH_WIDGET,
+  GTK_PATH_WIDGET_CLASS,
+  GTK_PATH_CLASS
+} GtkPathType;
+
 /* Scrollbar policy types (for scrolled windows) */
 typedef enum
 {
@@ -86,64 +166,30 @@ typedef enum
   GTK_POLICY_AUTOMATIC
 } GtkPolicyType;
 
-/* Data update types (for ranges) */
+/* gtk position */
 typedef enum
 {
-  GTK_UPDATE_CONTINUOUS,
-  GTK_UPDATE_DISCONTINUOUS,
-  GTK_UPDATE_DELAYED
-} GtkUpdateType;
+  GTK_POS_LEFT,
+  GTK_POS_RIGHT,
+  GTK_POS_TOP,
+  GTK_POS_BOTTOM
+} GtkPositionType;
 
-/* Attach options (for tables) */
+/* GtkPreview types */
 typedef enum
 {
-  GTK_EXPAND = 1 << 0,
-  GTK_SHRINK = 1 << 1,
-  GTK_FILL   = 1 << 2
-} GtkAttachOptions;
+  GTK_PREVIEW_COLOR,
+  GTK_PREVIEW_GRAYSCALE
+} GtkPreviewType;
 
+/* Style for buttons */
 typedef enum
 {
-  GTK_RUN_FIRST      = 0x1,
-  GTK_RUN_LAST       = 0x2,
-  GTK_RUN_BOTH       = 0x3,
-  GTK_RUN_MASK       = 0xF,
-  GTK_RUN_NO_RECURSE = 0x10
-} GtkSignalRunType;
+  GTK_RELIEF_NORMAL,
+  GTK_RELIEF_NONE
+} GtkReliefStyle;
 
-typedef enum
-{
-  GTK_WIN_POS_NONE,
-  GTK_WIN_POS_CENTER,
-  GTK_WIN_POS_MOUSE
-} GtkWindowPosition;
-
-typedef enum
-{
-  GTK_DIRECTION_LEFT,
-  GTK_DIRECTION_RIGHT
-} GtkSubmenuDirection;
-
-typedef enum
-{
-  GTK_TOP_BOTTOM,
-  GTK_LEFT_RIGHT
-} GtkSubmenuPlacement;
-
-typedef enum
-{
-  GTK_MENU_FACTORY_MENU,
-  GTK_MENU_FACTORY_MENU_BAR,
-  GTK_MENU_FACTORY_OPTION_MENU
-} GtkMenuFactoryType;
-
-typedef enum
-{
-  GTK_PIXELS,
-  GTK_INCHES,
-  GTK_CENTIMETERS
-} GtkMetricType;
-
+/* scrolling types */
 typedef enum
 {
   GTK_SCROLL_NONE,
@@ -154,37 +200,6 @@ typedef enum
   GTK_SCROLL_JUMP
 } GtkScrollType;
 
-typedef enum
-{
-  GTK_TROUGH_NONE,
-  GTK_TROUGH_START,
-  GTK_TROUGH_END,
-  GTK_TROUGH_JUMP
-} GtkTroughType;
-
-typedef enum
-{
-  GTK_POS_LEFT,
-  GTK_POS_RIGHT,
-  GTK_POS_TOP,
-  GTK_POS_BOTTOM
-} GtkPositionType;
-
-typedef enum
-{
-  GTK_PREVIEW_COLOR,
-  GTK_PREVIEW_GRAYSCALE
-} GtkPreviewType;
-
-/* justification for label and maybe other widgets (text?) */
-typedef enum
-{
-  GTK_JUSTIFY_LEFT,
-  GTK_JUSTIFY_RIGHT,
-  GTK_JUSTIFY_CENTER,
-  GTK_JUSTIFY_FILL
-} GtkJustification;
-
 /* list selection modes */
 typedef enum
 {
@@ -194,12 +209,49 @@ typedef enum
   GTK_SELECTION_EXTENDED
 } GtkSelectionMode;
 
-/* Orientation for toolbars, etc. */
+/* Shadow types */
 typedef enum
 {
-  GTK_ORIENTATION_HORIZONTAL,
-  GTK_ORIENTATION_VERTICAL
-} GtkOrientation;
+  GTK_SHADOW_NONE,
+  GTK_SHADOW_IN,
+  GTK_SHADOW_OUT,
+  GTK_SHADOW_ETCHED_IN,
+  GTK_SHADOW_ETCHED_OUT
+} GtkShadowType;
+
+/* signal run types */
+typedef enum
+{
+  GTK_RUN_FIRST	     = 0x1,
+  GTK_RUN_LAST	     = 0x2,
+  GTK_RUN_BOTH	     = 0x3,
+  GTK_RUN_MASK	     = 0xF,
+  GTK_RUN_NO_RECURSE = 0x10
+} GtkSignalRunType;
+
+/* Widget states */
+typedef enum
+{
+  GTK_STATE_NORMAL,
+  GTK_STATE_ACTIVE,
+  GTK_STATE_PRELIGHT,
+  GTK_STATE_SELECTED,
+  GTK_STATE_INSENSITIVE
+} GtkStateType;
+
+/* directions for submenus */
+typedef enum
+{
+  GTK_DIRECTION_LEFT,
+  GTK_DIRECTION_RIGHT
+} GtkSubmenuDirection;
+
+/* placement of submenus */
+typedef enum
+{
+  GTK_TOP_BOTTOM,
+  GTK_LEFT_RIGHT
+} GtkSubmenuPlacement;
 
 /* Style for toolbars */
 typedef enum
@@ -209,12 +261,22 @@ typedef enum
   GTK_TOOLBAR_BOTH
 } GtkToolbarStyle;
 
-/* Style for buttons */
+/* trough types for GtkRange */
 typedef enum
 {
-  GTK_RELIEF_NORMAL,
-  GTK_RELIEF_NONE
-} GtkReliefStyle;
+  GTK_TROUGH_NONE,
+  GTK_TROUGH_START,
+  GTK_TROUGH_END,
+  GTK_TROUGH_JUMP
+} GtkTroughType;
+
+/* Data update types (for ranges) */
+typedef enum
+{
+  GTK_UPDATE_CONTINUOUS,
+  GTK_UPDATE_DISCONTINUOUS,
+  GTK_UPDATE_DELAYED
+} GtkUpdateType;
 
 /* Generic visibility flags */
 typedef enum
@@ -223,6 +285,24 @@ typedef enum
   GTK_VISIBILITY_PARTIAL,
   GTK_VISIBILITY_FULL
 } GtkVisibility;
+
+/* window position types */
+typedef enum
+{
+  GTK_WIN_POS_NONE,
+  GTK_WIN_POS_CENTER,
+  GTK_WIN_POS_MOUSE
+} GtkWindowPosition;
+
+/* Window types */
+typedef enum
+{
+  GTK_WINDOW_TOPLEVEL,
+  GTK_WINDOW_DIALOG,
+  GTK_WINDOW_POPUP
+} GtkWindowType;
+
+
 
 #ifdef __cplusplus
 }

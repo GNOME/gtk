@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "gtkrc.h"
+#include "gtkbindings.h"
 
 
 enum {
@@ -86,8 +87,8 @@ struct _GtkRcStyle
 
 struct _GtkRcSet
 {
-  char *set;
-  GtkRcStyle *rc_style;
+  GtkPatternSpec pspec;
+  GtkRcStyle	*rc_style;
 };
 
 struct _GtkRcFile
@@ -103,9 +104,9 @@ static gint	   gtk_rc_style_compare		   (const char   *a,
 						    const char   *b);
 static GtkRcStyle* gtk_rc_style_find		   (const char   *name);
 static GtkRcStyle* gtk_rc_styles_match		   (GSList       *sets,
-						    const char	 *path);
-static gint	   gtk_rc_style_match		   (const char   *set,
-						    const char   *path);
+						    guint	  path_length,
+						    gchar	 *path,
+						    gchar	 *path_reversed);
 static GtkStyle*   gtk_rc_style_init		   (GtkRcStyle   *rc_style,
 						    GdkColormap  *cmap);
 static void        gtk_rc_parse_file               (const gchar  *filename,
@@ -142,8 +143,6 @@ static char*	   gtk_rc_find_pixmap_in_path	   (GScanner	 *scanner,
 						    gchar *pixmap_file);
 static gint	   gtk_rc_parse_widget_style	   (GScanner	 *scanner);
 static gint	   gtk_rc_parse_widget_class_style (GScanner	 *scanner);
-static char*	   gtk_rc_widget_path		   (GtkWidget *widget);
-static char*	   gtk_rc_widget_class_path	   (GtkWidget *widget);
 static void        gtk_rc_clear_hash_node          (gpointer   key, 
 						    gpointer   data, 
 						    gpointer   user_data);
@@ -363,7 +362,6 @@ static void
 gtk_rc_clear_styles (void)
 {
   GSList *tmp_list;
-  GtkRcSet *rc_set;
 
   /* Clear out all old rc_styles */
 
@@ -374,8 +372,10 @@ gtk_rc_clear_styles (void)
   tmp_list = widget_sets;
   while (tmp_list)
     {
-      rc_set = (GtkRcSet *)tmp_list->data;
-      g_free (rc_set->set);
+      GtkRcSet *rc_set;
+
+      rc_set = tmp_list->data;
+      gtk_pattern_spec_free_segs (&rc_set->pspec);
       g_free (rc_set);
       
       tmp_list = tmp_list->next;
@@ -386,8 +386,10 @@ gtk_rc_clear_styles (void)
   tmp_list = widget_class_sets;
   while (tmp_list)
     {
-      rc_set = (GtkRcSet *)tmp_list->data;
-      g_free (rc_set->set);
+      GtkRcSet *rc_set;
+
+      rc_set = tmp_list->data;
+      gtk_pattern_spec_free_segs (&rc_set->pspec);
       g_free (rc_set);
       
       tmp_list = tmp_list->next;
@@ -447,38 +449,33 @@ GtkStyle*
 gtk_rc_get_style (GtkWidget *widget)
 {
   GtkRcStyle *rc_style;
-  char *path;
   
   if (widget_sets)
     {
-      path = gtk_rc_widget_path (widget);
-      if (path)
-	{
-	  rc_style = gtk_rc_styles_match (widget_sets, path);
-	  g_free (path);
-	  
-	  if (rc_style)
-	    {
-	      return gtk_rc_style_init (rc_style,
-					gtk_widget_get_colormap (widget));
-	    }
-	}
+      gchar *path, *path_reversed;
+      guint path_length;
+
+      gtk_widget_path (widget, &path_length, &path, &path_reversed);
+      rc_style = gtk_rc_styles_match (widget_sets, path_length, path, path_reversed);
+      g_free (path);
+      g_free (path_reversed);
+      
+      if (rc_style)
+	return gtk_rc_style_init (rc_style, gtk_widget_get_colormap (widget));
     }
   
   if (widget_class_sets)
     {
-      path = gtk_rc_widget_class_path (widget);
-      if (path)
-	{
-	  rc_style = gtk_rc_styles_match (widget_class_sets, path);
-	  g_free (path);
-	  
-	  if (rc_style)
-	    {
-	      return gtk_rc_style_init (rc_style,
-					gtk_widget_get_colormap (widget));
-	    }
-	}
+      gchar *path, *path_reversed;
+      guint path_length;
+
+      gtk_widget_class_path (widget, &path_length, &path, &path_reversed);
+      rc_style = gtk_rc_styles_match (widget_class_sets, path_length, path, path_reversed);
+      g_free (path);
+      g_free (path_reversed);
+      
+      if (rc_style)
+	return gtk_rc_style_init (rc_style, gtk_widget_get_colormap (widget));
     }
   
   return NULL;
@@ -503,9 +500,9 @@ gtk_rc_add_widget_name_style (GtkStyle	 *style,
     rc_style->bg_pixmap_name[i] = NULL;
   
   rc_style->styles = g_list_append (NULL, style);
-  
+
   rc_set = g_new (GtkRcSet, 1);
-  rc_set->set = g_strdup (pattern);
+  gtk_pattern_spec_init (&rc_set->pspec, pattern);
   rc_set->rc_style = rc_style;
   
   widget_sets = g_slist_append (widget_sets, rc_set);
@@ -532,7 +529,7 @@ gtk_rc_add_widget_class_style (GtkStyle *style,
   rc_style->styles = g_list_append (NULL, style);
   
   rc_set = g_new (GtkRcSet, 1);
-  rc_set->set = g_strdup (pattern);
+  gtk_pattern_spec_init (&rc_set->pspec, pattern);
   rc_set->rc_style = rc_style;
   
   widget_class_sets = g_slist_append (widget_class_sets, rc_set);
@@ -627,71 +624,22 @@ gtk_rc_style_find (const char *name)
 
 static GtkRcStyle*
 gtk_rc_styles_match (GSList	  *sets,
-		     const char	  *path)
+		     guint         path_length,
+		     gchar        *path,
+		     gchar        *path_reversed)
 {
   GtkRcSet *rc_set;
-  
+
   while (sets)
     {
       rc_set = sets->data;
       sets = sets->next;
-      
-      if (gtk_rc_style_match (rc_set->set, path))
+
+      if (gtk_pattern_match (&rc_set->pspec, path_length, path, path_reversed))
 	return rc_set->rc_style;
     }
   
   return NULL;
-}
-
-static gint
-gtk_rc_style_match (const char *set,
-		    const char *path)
-{
-  char ch;
-  
-  while (1)
-    {
-      ch = *set++;
-      if (ch == '\0')
-	return (*path == '\0');
-      
-      switch (ch)
-	{
-	case '*':
-	  while (*set == '*')
-	    set++;
-	  
-	  ch = *set++;
-	  if (ch == '\0')
-	    return TRUE;
-	  
-	  while (*path)
-	    {
-	      while (*path && (ch != *path))
-		path++;
-	      
-	      if (!(*path))
-		return FALSE;
-	      
-	      path++;
-	      if (gtk_rc_style_match (set, path))
-		return TRUE;
-	    }
-	  break;
-	  
-	case '?':
-	  break;
-	  
-	default:
-	  if (ch == *path)
-	    path++;
-	  else
-	    return FALSE;
-	  break;
-	}
-    }
-  
-  return TRUE;
 }
 
 static GtkStyle *
@@ -1478,14 +1426,14 @@ gtk_rc_parse_widget_style (GScanner *scanner)
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
     return PARSE_ERROR;
-  
+
   rc_set = g_new (GtkRcSet, 1);
-  rc_set->set = g_strdup (scanner->value.v_string);
+  gtk_pattern_spec_init (&rc_set->pspec, scanner->value.v_string);
   
   token = g_scanner_get_next_token (scanner);
   if (token != TOKEN_STYLE)
     {
-      g_free (rc_set->set);
+      gtk_pattern_spec_free_segs (&rc_set->pspec);
       g_free (rc_set);
       return PARSE_ERROR;
     }
@@ -1493,7 +1441,7 @@ gtk_rc_parse_widget_style (GScanner *scanner)
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
     {
-      g_free (rc_set->set);
+      gtk_pattern_spec_free_segs (&rc_set->pspec);
       g_free (rc_set);
       return PARSE_ERROR;
     }
@@ -1501,7 +1449,7 @@ gtk_rc_parse_widget_style (GScanner *scanner)
   rc_set->rc_style = gtk_rc_style_find (scanner->value.v_string);
   if (!rc_set->rc_style)
     {
-      g_free (rc_set->set);
+      gtk_pattern_spec_free_segs (&rc_set->pspec);
       g_free (rc_set);
       return PARSE_ERROR;
     }
@@ -1529,12 +1477,12 @@ gtk_rc_parse_widget_class_style (GScanner *scanner)
     return PARSE_ERROR;
   
   rc_set = g_new (GtkRcSet, 1);
-  rc_set->set = g_strdup (scanner->value.v_string);
-  
+  gtk_pattern_spec_init (&rc_set->pspec, scanner->value.v_string);
+
   token = g_scanner_get_next_token (scanner);
   if (token != TOKEN_STYLE)
     {
-      g_free (rc_set->set);
+      gtk_pattern_spec_free_segs (&rc_set->pspec);
       g_free (rc_set);
       return PARSE_ERROR;
     }
@@ -1542,7 +1490,7 @@ gtk_rc_parse_widget_class_style (GScanner *scanner)
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
     {
-      g_free (rc_set->set);
+      gtk_pattern_spec_free_segs (&rc_set->pspec);
       g_free (rc_set);
       return PARSE_ERROR;
     }
@@ -1550,7 +1498,7 @@ gtk_rc_parse_widget_class_style (GScanner *scanner)
   rc_set->rc_style = gtk_rc_style_find (scanner->value.v_string);
   if (!rc_set->rc_style)
     {
-      g_free (rc_set->set);
+      gtk_pattern_spec_free_segs (&rc_set->pspec);
       g_free (rc_set);
       return PARSE_ERROR;
     }
@@ -1558,102 +1506,6 @@ gtk_rc_parse_widget_class_style (GScanner *scanner)
   widget_class_sets = g_slist_append (widget_class_sets, rc_set);
   
   return PARSE_OK;
-}
-
-static char*
-gtk_rc_widget_path (GtkWidget *widget)
-{
-  GtkWidget *tmp_widget;
-  char *path;
-  char *name;
-  int pathlength;
-  int namelength;
-  
-  path = NULL;
-  pathlength = 0;
-  
-  tmp_widget = widget;
-  while (tmp_widget)
-    {
-      name = gtk_widget_get_name (tmp_widget);
-      pathlength += strlen (name);
-      
-      tmp_widget = tmp_widget->parent;
-      
-      if (tmp_widget)
-	pathlength += 1;
-    }
-  
-  path = g_new (char, pathlength + 1);
-  path[pathlength] = '\0';
-  
-  tmp_widget = widget;
-  while (tmp_widget)
-    {
-      name = gtk_widget_get_name (tmp_widget);
-      namelength = strlen (name);
-      
-      strncpy (&path[pathlength - namelength], name, namelength);
-      pathlength -= namelength;
-      
-      tmp_widget = tmp_widget->parent;
-      
-      if (tmp_widget)
-	{
-	  pathlength -= 1;
-	  path[pathlength] = '.';
-	}
-    }
-  
-  return path;
-}
-
-static char*
-gtk_rc_widget_class_path (GtkWidget *widget)
-{
-  GtkWidget *tmp_widget;
-  char *path;
-  char *name;
-  int pathlength;
-  int namelength;
-  
-  path = NULL;
-  pathlength = 0;
-  
-  tmp_widget = widget;
-  while (tmp_widget)
-    {
-      name = gtk_type_name (GTK_WIDGET_TYPE (tmp_widget));
-      pathlength += strlen (name);
-      
-      tmp_widget = tmp_widget->parent;
-      
-      if (tmp_widget)
-	pathlength += 1;
-    }
-  
-  path = g_new (char, pathlength + 1);
-  path[pathlength] = '\0';
-  
-  tmp_widget = widget;
-  while (tmp_widget)
-    {
-      name = gtk_type_name (GTK_WIDGET_TYPE (tmp_widget));
-      namelength = strlen (name);
-      
-      strncpy (&path[pathlength - namelength], name, namelength);
-      pathlength -= namelength;
-      
-      tmp_widget = tmp_widget->parent;
-      
-      if (tmp_widget)
-	{
-	  pathlength -= 1;
-	  path[pathlength] = '.';
-	}
-    }
-  
-  return path;
 }
 
 /*

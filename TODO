@@ -3,8 +3,13 @@ For 1.1.0 release:
 	gtkobject.c
 	
 Bugs:
- * Scrolled windows (GtkList?) get cought in an endless reallocation loop
-   under certain (rare) circumstances.
+ * gtk_ctree_set_selection_mode should be a mere alias of
+        gtk_clist_set_selection_mode, and clist should implement a new member
+        function `set_selection_mode' (doesn't need to have a gtk_signal_new
+        declaration) that can be overridden by ctree, this
+        is needed for proper widget argument support on GtkCList basis.
+        this applies similarly to `gtk_ctree_clear', one should be able to
+        get the same effect by invoking gtk_clist_clear (GTK_CLIST (ctree));
 
  * Widget redrawing when the window resizes sometimes messes up.
    GtkLabels sometimes redraw without clearing up the underlying background on

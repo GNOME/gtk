@@ -107,12 +107,20 @@
 (defun emit-ids (defs)
   (map-interesting
    #'(lambda (form)
-       (printf "  { %S, %s },\n"
+       (printf "  { %S, %s, %s%s },\n"
 	       (symbol-name (cadr form))
 	       (case (car form)
-		 ((define-enum) "GTK_TYPE_ENUM")
-		 ((define-flags) "GTK_TYPE_FLAGS")
-		 ((define-boxed) "GTK_TYPE_BOXED"))))
+		     ((define-enum) "GTK_TYPE_ENUM")
+		     ((define-flags) "GTK_TYPE_FLAGS")
+		     ((define-boxed) "GTK_TYPE_BOXED"))
+	       (case (car form)
+		     ((define-enum) "enum_values_")
+		     ((define-flags) "enum_values_")
+		     ((define-boxed) "NULL"))
+	       (case (car form)
+		     ((define-enum) (symbol-name (cadr form)))
+		     ((define-flags) (symbol-name (cadr form)))
+		     ((define-boxed) ""))))
    defs))
 
        
