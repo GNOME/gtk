@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
-"POT-Creation-Date: 2004-02-19 18:53+0100\n"
-"PO-Revision-Date: 2004-02-19 18:53+0100\n"
+"POT-Creation-Date: 2004-02-20 16:10+0100\n"
+"PO-Revision-Date: 2004-02-20 16:10+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgstr "Namn"
 msgid "A unique name for the action."
 msgstr "Ett unikt namn för åtgärden."
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:209 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:288 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Etikett"
@@ -287,7 +287,7 @@ msgstr "Sidstorleken på justeringen"
 msgid "Horizontal alignment"
 msgstr "Horisontell justering"
 
-#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:260
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -299,7 +299,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Vertikal justering"
 
-#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:279
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -536,7 +536,7 @@ msgstr "Position"
 msgid "The index of the child in the parent"
 msgstr "Indexet för barnet i föräldern"
 
-#: gtk/gtkbutton.c:204
+#: gtk/gtkbutton.c:210
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -544,12 +544,12 @@ msgstr ""
 "Texten på etikettwidgeten inuti knappen, om knappen innehåller en "
 "etikettwidget"
 
-#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
+#: gtk/gtkbutton.c:217 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Använd understrykning"
 
-#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -557,54 +557,54 @@ msgstr ""
 "Om detta är angivet kommer en understrykning i texten att indikera att nästa "
 "tecken ska användas som en genvägstangent"
 
-#: gtk/gtkbutton.c:219
+#: gtk/gtkbutton.c:225
 msgid "Use stock"
 msgstr "Använd standard"
 
-#: gtk/gtkbutton.c:220
+#: gtk/gtkbutton.c:226
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Om detta är angivet kommer etiketten att användas för att plocka ett "
 "standardobjekt istället för att visas"
 
-#: gtk/gtkbutton.c:227
+#: gtk/gtkbutton.c:233
 msgid "Focus on click"
 msgstr "Fokusera vid klick"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:234
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Huruvida knappen tar fokus när den klickas på med musen"
 
-#: gtk/gtkbutton.c:235
+#: gtk/gtkbutton.c:241
 msgid "Border relief"
 msgstr "Kantrelief"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:242
 msgid "The border relief style"
 msgstr "Reliefstilen på kanten"
 
-#: gtk/gtkbutton.c:253
+#: gtk/gtkbutton.c:259
 msgid "Horizontal alignment for child"
 msgstr "Horisontell justering för barn"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:278
 msgid "Vertical alignment for child"
 msgstr "Vertikal justering för barn"
 
-#: gtk/gtkbutton.c:340
+#: gtk/gtkbutton.c:346
 msgid "Default Spacing"
 msgstr "Standardmellanrum"
 
-#: gtk/gtkbutton.c:341
+#: gtk/gtkbutton.c:347
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Extra mellanrum att lägga till för alla CAN_DEFAULT-knappar"
 
-#: gtk/gtkbutton.c:347
+#: gtk/gtkbutton.c:353
 msgid "Default Outside Spacing"
 msgstr "Standardmellanrum på utsidan"
 
-#: gtk/gtkbutton.c:348
+#: gtk/gtkbutton.c:354
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -612,23 +612,31 @@ msgstr ""
 "Extra mellanrum att lägga till för CAN_DEFAULT-knappar som alltid visas "
 "utanför kanten"
 
-#: gtk/gtkbutton.c:353
+#: gtk/gtkbutton.c:359
 msgid "Child X Displacement"
 msgstr "X-förflyttning av barn"
 
-#: gtk/gtkbutton.c:354
+#: gtk/gtkbutton.c:360
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "Hur långt bort i x-riktingen barnet ska flyttas då knappen trycks ned"
 
-#: gtk/gtkbutton.c:361
+#: gtk/gtkbutton.c:367
 msgid "Child Y Displacement"
 msgstr "Y-förflyttning av barn"
 
-#: gtk/gtkbutton.c:362
+#: gtk/gtkbutton.c:368
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Hur långt bort i y-riktningen barnet ska flyttas då knappen trycks ned"
+
+#: gtk/gtkbutton.c:375
+msgid "Show button images"
+msgstr "Visa knappbilder"
+
+#: gtk/gtkbutton.c:376
+msgid "Whether stock icons should be shown in buttons"
+msgstr "Huruvida standardikoner ska visas i knappar"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -1984,13 +1992,21 @@ msgstr "Lagringstyp"
 msgid "The representation being used for image data"
 msgstr "Representationen som används för bilddata"
 
-#: gtk/gtkimagemenuitem.c:124
+#: gtk/gtkimagemenuitem.c:137
 msgid "Image widget"
 msgstr "Bildwidget"
 
-#: gtk/gtkimagemenuitem.c:125
+#: gtk/gtkimagemenuitem.c:138
 msgid "Child widget to appear next to the menu text"
 msgstr "Bildwidget att visa vid sidan om menytexten"
+
+#: gtk/gtkimagemenuitem.c:143
+msgid "Show menu images"
+msgstr "Visa menybilder"
+
+#: gtk/gtkimagemenuitem.c:144
+msgid "Whether images should be shown in menus"
+msgstr "Huruvida bilder ska visas i menyer"
 
 #: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:542
 msgid "Screen"
