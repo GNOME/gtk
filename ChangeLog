@@ -1,3 +1,9 @@
+2003-08-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.def
+	* gdk/win32/gdkfont-win32.c (gdk_fontset_load_for_display): Add
+	missing function, trivially implement.
+
 2003-08-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkctree.c (draw_row): Don't cut descenders when rendering.  (#118646, Charles Kerr)

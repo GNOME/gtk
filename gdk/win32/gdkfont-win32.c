@@ -1334,6 +1334,15 @@ gdk_fontset_load (const gchar *fontset_name)
   return font;
 }
 
+GdkFont*
+gdk_fontset_load_for_display (GdkDisplay  *display,
+			      const gchar *fontset_name)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  
+  return gdk_fontset_load (fontset_name);
+}
+
 void
 _gdk_font_destroy (GdkFont *font)
 {

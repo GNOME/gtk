@@ -187,6 +187,7 @@ EXPORTS
 	gdk_font_type_get_type
 	gdk_font_unref
 	gdk_fontset_load
+	gdk_fontset_load_for_display
 	gdk_free_compound_text
 	gdk_free_text_list
 	gdk_function_get_type
