@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-30 16:55-0300\n"
-"PO-Revision-Date: 2005-03-30 17:08-0300\n"
+"POT-Creation-Date: 2005-04-03 19:59-0300\n"
+"PO-Revision-Date: 2005-04-03 19:55-0300\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.br>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -200,15 +200,15 @@ msgstr "A imagem BMP possui um tamanho de cabeçalho não suportado"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Imagens BMP topdown não podem ser compactadas"
 
-#: ../gdk-pixbuf/io-bmp.c:1194
+#: ../gdk-pixbuf/io-bmp.c:1198
 msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Impossível alocar memória para carregar o arquivo BMP"
+msgstr "Impossível alocar memória para salvar o arquivo BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1235
+#: ../gdk-pixbuf/io-bmp.c:1239
 msgid "Couldn't write to BMP file"
-msgstr "Impossível gravar o arquivo BMP"
+msgstr "Impossível gravar no arquivo BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1284
+#: ../gdk-pixbuf/io-bmp.c:1288
 msgid "The BMP image format"
 msgstr "Formato de imagem BMP"
 
@@ -864,8 +864,9 @@ msgstr "A licença do programa"
 
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:491
+#, fuzzy
 msgid "C_redits"
-msgstr "C_réditos"
+msgstr "Créditos"
 
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:500
@@ -1183,12 +1184,14 @@ msgstr ""
 "válido."
 
 #: ../gtk/gtkfilechooserdefault.c:2938
+#, fuzzy
 msgid "Remove"
-msgstr "Remover"
+msgstr "_Remover"
 
 #: ../gtk/gtkfilechooserdefault.c:2947
+#, fuzzy
 msgid "Rename..."
-msgstr "Renomear..."
+msgstr "_Renomear"
 
 #: ../gtk/gtkfilechooserdefault.c:3070
 msgid "Shortcuts"
@@ -1569,9 +1572,9 @@ msgstr ""
 "utilize um nome diferente."
 
 #: ../gtk/gtkfilesystemunix.c:1449
-#, c-format
+#, fuzzy, c-format
 msgid "Writing %s failed: %s"
-msgstr "Falha ao graver %s: %s"
+msgstr "Falha ao salvar o marcador: %s"
 
 #: ../gtk/gtkfilesystemunix.c:1538
 #, c-format
@@ -1591,12 +1594,12 @@ msgstr "Erro ao obter informações para '/': %s"
 #: ../gtk/gtkfilesystemwin32.c:611
 #, c-format
 msgid "Network Drive (%s)"
-msgstr "Dispositivo de Rede (%s)"
+msgstr ""
 
 #: ../gtk/gtkfilesystemwin32.c:626
 #, c-format
 msgid "%s (%s)"
-msgstr "%s (%s)"
+msgstr ""
 
 #: ../gtk/gtkfilesystemwin32.c:1007
 #, c-format
@@ -1921,42 +1924,42 @@ msgstr "_Disquete"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:334
 msgid "Navigation|_Bottom"
-msgstr "_Baixo"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:336
 msgid "Navigation|_First"
-msgstr "_Primeiro"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_Last"
-msgstr "Ú_ltimo"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
 msgid "Navigation|_Top"
-msgstr "_Cima"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:342
 msgid "Navigation|_Back"
-msgstr "_Anterior"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:344
 msgid "Navigation|_Down"
-msgstr "A_baixo"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:346
 msgid "Navigation|_Forward"
-msgstr "_Próximo"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
 msgid "Navigation|_Up"
-msgstr "_Acima"
+msgstr ""
 
 #: ../gtk/gtkstock.c:349
 msgid "_Harddisk"
@@ -1992,61 +1995,71 @@ msgstr "_Ir para"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:358
+#, fuzzy
 msgid "Justify|_Center"
 msgstr "_Centralizar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:360
 msgid "Justify|_Fill"
-msgstr "_Justificar"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:362
 msgid "Justify|_Left"
-msgstr "_Esquerda"
+msgstr ""
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:364
+#, fuzzy
 msgid "Justify|_Right"
 msgstr "_Direita"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:367
+#, fuzzy
 msgid "Media|_Forward"
 msgstr "_Avançar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:369
+#, fuzzy
 msgid "Media|_Next"
 msgstr "_Próximo"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:371
+#, fuzzy
 msgid "Media|P_ause"
 msgstr "P_ausar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:373
+#, fuzzy
 msgid "Media|_Play"
 msgstr "_Reproduzir"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:375
+#, fuzzy
 msgid "Media|Pre_vious"
 msgstr "_Anterior"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:377
+#, fuzzy
 msgid "Media|_Record"
 msgstr "_Gravar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:379
+#, fuzzy
 msgid "Media|R_ewind"
 msgstr "_Voltar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:381
+#, fuzzy
 msgid "Media|_Stop"
 msgstr "_Parar"
 
