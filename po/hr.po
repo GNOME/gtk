@@ -1,12 +1,11 @@
 # Translation of gtk+ to Croatiann
 # Copyright (C) Croatiann team
 # Translators: Automatski Prijevod <>,Denis Lackovic <delacko@fly.srk.fer.hr>,Kresimir Kalafatic <>,Mato Kutlić <mate@iskraemeco.hr>,pr pr <delacko@192.168.0.1>,Robert Sedak <robert.sedak@sk.tel.hr>,Vlatko Kosturjak <kost@linux.hr>,
-
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
-"POT-Creation-Date: 2004-03-13 12:06+0100\n"
-"PO-Revision-Date: 2004-03-13 12:07+CET\n"
+"POT-Creation-Date: 2004-03-13 13:10+0100\n"
+"PO-Revision-Date: 2004-03-13 13:10+CET\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "MIME-Version: 1.0\n"
@@ -101,14 +100,14 @@ msgstr "Nema dovoljno memorije za spremanje slike u međuspremnik"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:378
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Nije podržano postepeno učitavanje slike vrste \"%\""
+msgstr "Nije podržano postepeno učitavanje slike vrste \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:402 gdk-pixbuf/gdk-pixbuf-loader.c:504
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Unutrašnja greška: Dio za učitavanje slika %s\" nije uspio da počne "
+"Unutrašnja greška: Dio za učitavanje slika \"%s\" nije uspio da počne "
 "učitavanje slike, a nije naveden razlog neuspjeha"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
@@ -1119,7 +1118,7 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Greška pri pravljenju direktorija \"s\": %s\n"
+"Greška pri pravljenju direktorija \"%s\": %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
