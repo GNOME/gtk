@@ -1,3 +1,20 @@
+Thu Mar 25 12:38:31 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkrc.c (gtk_rc_append_default_module_path): get $HOME from
+	g_get_home_dir() (gtk-pmc-990123-0.patch.gz).
+
+	* gtk/gtkwindow.c (gtk_window_key_press_event): feature keypad up/down/
+	left/right as well (gtk-michael-980726-0.patch.gz).
+
+	* gtk/gtklabel.[hc]: bunch of miscellaneous cleanups, such as s/0/NULL/
+	for pointer values, use gchar instead of char. fixed uline allocation
+	leaks, changed the allocation pattern so we use G_ALLOC_AND_FREE mem
+	chunks instead of G_ALLOC_ONLY.
+	(gtk_label_size_request): always alter requisition as passed and leave
+	widget->requisition alone.
+	(gtk_label_set_text): allow NULL strings.
+	(gtk_label_new): likewise.
+
 Wed Mar 24 23:03:49 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.2.1

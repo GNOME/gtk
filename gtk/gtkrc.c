@@ -288,7 +288,7 @@ gtk_rc_append_default_module_path(void)
   module_path[n++] = g_strdup(path);
   g_free(path);
 
-  var = getenv("HOME");
+  var = g_get_home_dir ();
   if (var)
     path = g_strdup_printf("%s%s", var, ".gtk/lib/themes/engines");
   module_path[n++] = g_strdup(path);

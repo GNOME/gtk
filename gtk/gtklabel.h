@@ -54,7 +54,7 @@ struct _GtkLabel
 
   gchar    *label;
   GdkWChar *label_wc;
-  gchar  *pattern;
+  gchar    *pattern;
 
   GtkLabelWord *words;
 
@@ -69,10 +69,10 @@ struct _GtkLabelClass
 };
 
 
-guint      gtk_label_get_type      (void);
-GtkWidget* gtk_label_new           (const char        *str);
+GtkType    gtk_label_get_type      (void);
+GtkWidget* gtk_label_new           (const gchar       *str);
 void       gtk_label_set_text      (GtkLabel          *label,
-                                    const char        *str);
+                                    const gchar       *str);
 void       gtk_label_set_justify   (GtkLabel          *label,
                                     GtkJustification   jtype);
 void	   gtk_label_set_pattern   (GtkLabel	      *label,
@@ -80,13 +80,12 @@ void	   gtk_label_set_pattern   (GtkLabel	      *label,
 void	   gtk_label_set_line_wrap (GtkLabel	      *label,
 				    gboolean           wrap);
 void       gtk_label_get           (GtkLabel          *label,
-                                    char             **str);
+                                    gchar            **str);
 
 /* Convenience function to set the name and pattern by parsing
  * a string with embedded underscores, and return the appropriate
  * key symbol for the accelerator.
  */
-
 guint      gtk_label_parse_uline    (GtkLabel         *label,
 				     const gchar      *string);
 

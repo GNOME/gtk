@@ -1062,20 +1062,28 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	case GDK_Down:
 	case GDK_Left:
 	case GDK_Right:
+	case GDK_KP_Up:
+	case GDK_KP_Down:
+	case GDK_KP_Left:
+	case GDK_KP_Right:
 	case GDK_Tab:
 	case GDK_ISO_Left_Tab:
 	  switch (event->keyval)
 	    {
 	    case GDK_Up:
+	    case GDK_KP_Up:
 	      direction = GTK_DIR_UP;
 	      break;
 	    case GDK_Down:
+	    case GDK_KP_Down:
 	      direction = GTK_DIR_DOWN;
 	      break;
 	    case GDK_Left:
+	    case GDK_KP_Left:
 	      direction = GTK_DIR_LEFT;
 	      break;
 	    case GDK_Right:
+	    case GDK_KP_Right:
 	      direction = GTK_DIR_RIGHT;
 	      break;
 	    case GDK_Tab:
