@@ -2140,6 +2140,15 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
   _gdk_windowing_window_get_pointer (display, root_window, x, y, mask);
 }
 
+void
+gdk_display_warp_pointer (GdkDisplay *display,
+			  GdkScreen  *screen,
+			  gint        x,
+			  gint        y)
+{
+  SetCursorPos (x, y);
+}
+
 GdkWindow*
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
 				  gint       *win_x,

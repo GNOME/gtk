@@ -63,14 +63,6 @@
 
 #include <string.h>
 
-#ifdef GDK_WINDOWING_X11
-#include <X11/Xlib.h>
-#include "x11/gdkx.h"
-#elif defined GDK_WINDOWING_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
-
 /* Number of elements in the custom palatte */
 #define GTK_CUSTOM_PALETTE_WIDTH 10
 #define GTK_CUSTOM_PALETTE_HEIGHT 2
@@ -1283,9 +1275,12 @@ key_press (GtkWidget   *invisible,
            gpointer     data)
 {  
   GdkDisplay *display = gtk_widget_get_display (invisible);
+  GdkScreen *screen = gdk_event_get_screen ((GdkEvent *)event);
   guint state = event->state & gtk_accelerator_get_default_mod_mask ();
   gint x, y;
   gint dx, dy;
+
+  gdk_display_get_pointer (display, NULL, &x, &y, NULL);
 
   dx = 0;
   dy = 0;
@@ -1296,10 +1291,7 @@ key_press (GtkWidget   *invisible,
     case GDK_Return:
     case GDK_KP_Enter:
     case GDK_KP_Space:
-      gdk_display_get_pointer (display, 
-			       NULL, &x, &y, NULL);
-      grab_color_at_mouse (gdk_event_get_screen ((GdkEvent *)event),
-			   x, y, data);
+      grab_color_at_mouse (screen, x, y, data);
       /* fall through */
 
     case GDK_Escape:
@@ -1340,16 +1332,7 @@ key_press (GtkWidget   *invisible,
       return FALSE;
     }
 
-#ifdef GDK_WINDOWING_X11
-  XWarpPointer (gdk_x11_display_get_xdisplay (display),
-		None, None, 0, 0, 0, 0, dx, dy);
-#elif defined GDK_WINDOWING_WIN32
-  {
-    POINT point;
-    if (GetCursorPos (&point))
-      SetCursorPos (point.x + dx, point.y + dy);
-  }
-#endif
+  gdk_display_warp_pointer (display, screen, x + dx, y + dy);
   
   return TRUE;
 

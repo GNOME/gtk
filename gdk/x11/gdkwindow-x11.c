@@ -3265,6 +3265,42 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   return return_val;
 }
 
+/**
+ * gdk_display_warp_pointer:
+ * @display: a #GdkDisplay
+ * @screen: the screen of @display to warp the pointer to
+ * @x: the x coordinate of the destination
+ * @y: the y coordinate of the destination
+ * 
+ * Warps the pointer of @display to the point @x,@y on 
+ * the screen @screen, unless the pointer is confined
+ * to a window by a grab, in which case it will be moved
+ * as far as allowed by the grab. Warping the pointer 
+ * creates events as if the user had moved the mouse 
+ * instantaneously to the destination.
+ * 
+ * Note that the pointer should normally be under the
+ * control of the user. This function was added to cover
+ * some rare use cases like keyboard navigation support
+ * for the color picker in the #GtkColorSelectionDialog.
+ *
+ * Since: 2.8
+ */ 
+void
+gdk_display_warp_pointer (GdkDisplay *display,
+			  GdkScreen  *screen,
+			  gint        x,
+			  gint        y)
+{
+  Display *xdisplay;
+  Window dest;
+
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  dest = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
+
+  XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0, x, y);  
+}
+
 GdkWindow*
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
                                   gint       *win_x,

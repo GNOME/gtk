@@ -98,6 +98,7 @@ gdk_display_supports_cursor_alpha
 gdk_display_supports_cursor_color
 gdk_display_supports_selection_notification
 gdk_display_sync
+gdk_display_warp_pointer
 gdk_drag_abort
 gdk_drag_action_get_type G_GNUC_CONST
 gdk_drag_begin

@@ -1,5 +1,14 @@
 2005-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkdisplay.h: 
+	* gdk/x11/gdkwindow-x11.c (gdk_display_warp_pointer): 
+	* gdk/win32/gdkwindow-win32.c (gdk_display_warp_pointer): Add
+	pointer warping to GDK.  (#160437)
+	
+	* gtk/gtkcolorsel.c (key_press): Use gdk_display_warp_pointer.
+	
+2005-01-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkstyle.c (gtk_default_draw_check) 
 	(gtk_default_draw_option, gtk_default_draw_handle): Add some
 	more NULL checks, patch by Michael Natterer.
