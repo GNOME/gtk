@@ -1959,7 +1959,6 @@ update_smart_separators (GtkWidget *proxy)
   else if (GTK_IS_MENU_ITEM (proxy) || GTK_IS_TOOL_ITEM (proxy))
     parent = gtk_widget_get_parent (proxy);
 
-  
   if (parent) 
     {
       gboolean visible;
@@ -1980,10 +1979,11 @@ update_smart_separators (GtkWidget *proxy)
       while (cur) 
 	{
 	  if (g_object_get_data (cur->data, "gtk-empty-menu-item"))
-	    filler = cur->data;
-
-	  if (GTK_IS_SEPARATOR_MENU_ITEM (cur->data) ||
-	      GTK_IS_SEPARATOR_TOOL_ITEM (cur->data))
+	    {
+	      filler = cur->data;
+	    }
+	  else if (GTK_IS_SEPARATOR_MENU_ITEM (cur->data) ||
+		   GTK_IS_SEPARATOR_TOOL_ITEM (cur->data))
 	    {
 	      gint mode = 
 		GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cur->data), 

@@ -1,3 +1,9 @@
+2004-12-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c (update_smart_separators): Don't let the
+	empty menu filler affect visibility of separators.  (#160500,
+	Christian Persch)
+
 2004-12-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_row_changed): Pass a 
