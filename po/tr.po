@@ -11,12 +11,12 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-28 21:46+0000\n"
-"PO-Revision-Date: 2003-02-08 23:48+0200\n"
+"PO-Revision-Date: 2003-12-29 10:00+0000\n"
 "Last-Translator: Arman Aksoy (Armish) <armish@linux-sevenler.de>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:516
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
@@ -867,13 +867,12 @@ msgstr "Hızlandırıcı değişiklikleri için gözlemlenen parça"
 
 # gtk/gtkfontsel.c:185
 #: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:117
-#, fuzzy
 msgid "Name"
-msgstr "Yazıtipi İsmi"
+msgstr "İsim"
 
 #: gtk/gtkaction.c:186
 msgid "A unique name for the action."
-msgstr ""
+msgstr "Bu eylem için bir isim"
 
 # gtk/gtkbutton.c:179 gtk/gtkframe.c:124 gtk/gtklabel.c:198
 #: gtk/gtkaction.c:193 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
@@ -2410,9 +2409,8 @@ msgstr ""
 
 # gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:144
 #: gtk/gtkcombobox.c:379
-#, fuzzy
 msgid "Active item"
-msgstr "Etkin"
+msgstr "Etkin öğe"
 
 # gtk/gtkfontsel.c:193
 #: gtk/gtkcombobox.c:380
@@ -2429,9 +2427,8 @@ msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr ""
 
 #: gtk/gtkcomboboxentry.c:104
-#, fuzzy
 msgid "Text Column"
-msgstr "Arama Sütunu"
+msgstr "Metin Sütunu"
 
 #: gtk/gtkcomboboxentry.c:105
 msgid "A column in the data source model to get the strings from"
@@ -2677,9 +2674,8 @@ msgstr "Odaklandığında bir girdiğinin içeriği seçilsin"
 
 # gtk/gtklabel.c:251
 #: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
-#, fuzzy
 msgid "Select _All"
-msgstr "Tümünü Seç"
+msgstr "_Tümünü Seç"
 
 # gtk/gtkentry.c:3653 gtk/gtktextview.c:5336
 #: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
@@ -2687,9 +2683,8 @@ msgid "Input _Methods"
 msgstr "Girdi _Yöntemleri"
 
 #: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
-#, fuzzy
 msgid "_Insert Unicode Control Character"
-msgstr "_Unicode denetim karakteri gir"
+msgstr "_Unicode Denetim Karakteri Gir"
 
 #: gtk/gtkentrycompletion.c:196
 msgid "Completion Model"
@@ -2713,9 +2708,8 @@ msgstr ""
 
 # gtk/gtktreeview.c:481 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:442
 #: gtk/gtkeventbox.c:119
-#, fuzzy
 msgid "Visible Window"
-msgstr "Görünür"
+msgstr "Görünür Pencere"
 
 #: gtk/gtkeventbox.c:120
 msgid ""
@@ -2737,9 +2731,8 @@ msgstr ""
 
 # gtk/gtkpreview.c:134
 #: gtk/gtkexpander.c:194
-#, fuzzy
 msgid "Expanded"
-msgstr "Genişlet"
+msgstr "Genişletilmiş"
 
 # gtk/gtkwidget.c:478
 #: gtk/gtkexpander.c:195
@@ -2796,9 +2789,8 @@ msgstr "Belirteç etrafındaki alan"
 
 # gtk/gtkprogressbar.c:187
 #: gtk/gtkfilechooser.c:92
-#, fuzzy
 msgid "Action"
-msgstr "Bölme"
+msgstr "Eylem"
 
 #: gtk/gtkfilechooser.c:93
 msgid "The type of operation that the file selector is performing"
@@ -2806,9 +2798,8 @@ msgstr ""
 
 # gtk/gtkfilesel.c:651
 #: gtk/gtkfilechooser.c:99
-#, fuzzy
 msgid "File System"
-msgstr "Dosyalar"
+msgstr "Dosya Sistemi"
 
 #: gtk/gtkfilechooser.c:100
 msgid "File system object to use"
@@ -2816,9 +2807,8 @@ msgstr ""
 
 # gtk/gtkfilesel.c:651
 #: gtk/gtkfilechooser.c:105
-#, fuzzy
 msgid "Filter"
-msgstr "Dosyalar"
+msgstr "Filtre"
 
 #: gtk/gtkfilechooser.c:106
 #, fuzzy
@@ -2827,9 +2817,8 @@ msgstr "Pencerenin gösterileceği ekran"
 
 # gtk/gtkfilesel.c:502
 #: gtk/gtkfilechooser.c:111
-#, fuzzy
 msgid "Folder Mode"
-msgstr "Di_zin ismi:"
+msgstr "Dizin Kipi"
 
 # gtk/gtkprogress.c:131
 #: gtk/gtkfilechooser.c:112
@@ -2903,9 +2892,9 @@ msgstr "Dosyaları oluşturmak/değiştirmek için düğmeler gösterilsin"
 # gdk-pixbuf/io-xbm.c:284
 #: gtk/gtkfilechooser.c:1446 gtk/gtkfilechooser.c:1490
 #: gtk/gtkfilechooser.c:1565 gtk/gtkfilechooser.c:1609
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid filename: %s"
-msgstr "Geçersiz XBM dosyası"
+msgstr "Geçersiz dosya adı: %s"
 
 #: gtk/gtkfilechooserdefault.c:425
 #, c-format
@@ -2923,9 +2912,8 @@ msgstr ""
 
 # gtk/gtkstock.c:287
 #: gtk/gtkfilechooserdefault.c:585
-#, fuzzy
 msgid "Home"
-msgstr "_Başlangıç"
+msgstr "Başlangıç"
 
 #. FIXME: What is the Right Way of finding the desktop directory?
 #: gtk/gtkfilechooserdefault.c:601
@@ -2945,9 +2933,8 @@ msgstr ""
 
 # gtk/gtkfilesel.c:502
 #: gtk/gtkfilechooserdefault.c:972 gtk/gtkfilechooserdefault.c:1390
-#, fuzzy
 msgid "File name"
-msgstr "Dosyaismi"
+msgstr "Dosya adı"
 
 #: gtk/gtkfilechooserdefault.c:998
 #, c-format
@@ -2968,9 +2955,8 @@ msgstr ""
 
 # gtk/gtkfilesel.c:651
 #: gtk/gtkfilechooserdefault.c:1294
-#, fuzzy
 msgid "Folder"
-msgstr "Dizinler"
+msgstr "Dizin"
 
 #: gtk/gtkfilechooserdefault.c:1332
 msgid "Add bookmark"
@@ -2978,29 +2964,26 @@ msgstr ""
 
 # gtk/gtksizegroup.c:241
 #: gtk/gtkfilechooserdefault.c:1420
-#, fuzzy
 msgid "Modified"
-msgstr "Kip"
+msgstr "Değiştirilmiş"
 
 # gtk/gtkfilesel.c:1795
 #: gtk/gtkfilechooserdefault.c:1441
-#, fuzzy
 msgid "_Location:"
-msgstr "_Seçim: "
+msgstr "_Konum:"
 
 # gtk/gtkfontsel.c:391
 #. Preview
 #: gtk/gtkfilechooserdefault.c:1563
-#, fuzzy
 msgid "Preview"
-msgstr "Ö_nizleme:"
+msgstr "Önizleme"
 
 # gtk/gtkcolorsel.c:1682
 #. Change the current folder label
 #: gtk/gtkfilechooserdefault.c:2015
-#, fuzzy, c-format
+#, c-format
 msgid "Current folder: %s"
-msgstr "Şu anki Renk"
+msgstr "Güncel dizin: %s"
 
 #: gtk/gtkfilechooserdefault.c:2210 gtk/gtkfilechooserdefault.c:2784
 #, c-format
@@ -3036,9 +3019,8 @@ msgstr ""
 
 # gtk/gtkwindow.c:372
 #: gtk/gtkfilechooserdefault.c:2995
-#, fuzzy
 msgid "Today"
-msgstr "Yönetsel"
+msgstr "Bugün"
 
 #: gtk/gtkfilechooserdefault.c:2997
 msgid "Yesterday"
@@ -3050,9 +3032,8 @@ msgstr ""
 
 # gtk/gtkinputdialog.c:577
 #: gtk/gtkfilechooserdefault.c:3008
-#, fuzzy
 msgid "Unknown"
-msgstr "(bilinmiyor)"
+msgstr "Bilinmeyen"
 
 # gtk/gtkfilesel.c:502
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
@@ -3277,9 +3258,8 @@ msgstr ""
 
 # gdk-pixbuf/io-xbm.c:284
 #: gtk/gtkfilesel.c:3142
-#, fuzzy
 msgid "Invalid UTF-8"
-msgstr "Geçersiz Utf-8"
+msgstr "Geçersiz UTF-8"
 
 # gtk/gtkfilesel.c:3275
 #: gtk/gtkfilesel.c:4019
@@ -3307,9 +3287,8 @@ msgstr ""
 
 # gtk/gtkfilesel.c:651
 #: gtk/gtkfilesystemunix.c:394
-#, fuzzy
 msgid "Filesystem"
-msgstr "Dosyalar"
+msgstr "Dosya sistemi"
 
 #: gtk/gtkfilesystemunix.c:656
 msgid "This file system does not support icons"
@@ -3401,9 +3380,8 @@ msgstr "Etiket metninin fare ile seçilebilsin"
 # gtk/gtkhandlebox.c:183 gtk/gtkmenubar.c:154 gtk/gtkstatusbar.c:157
 # gtk/gtktoolbar.c:276 gtk/gtkviewport.c:147
 #: gtk/gtkfontbutton.c:240
-#, fuzzy
 msgid "Show style"
-msgstr "Gölge tipi"
+msgstr "Biçemi göster"
 
 # gtk/gtkprogress.c:131
 #: gtk/gtkfontbutton.c:241
@@ -3413,9 +3391,8 @@ msgstr "Süreç metin olarak mı gösterilecektir"
 
 # gtk/gtkprogress.c:130
 #: gtk/gtkfontbutton.c:256
-#, fuzzy
 msgid "Show size"
-msgstr "Metni göster"
+msgstr "Boyu göster"
 
 # gtk/gtkprogress.c:131
 #: gtk/gtkfontbutton.c:257
@@ -3680,9 +3657,8 @@ msgstr "Menü metninde sonra görünecek ast parça"
 
 # gtk/gtkwindow.c:389
 #: gtk/gtkimmodule.c:419
-#, fuzzy
 msgid "Default"
-msgstr "Öntanımlı Genişlik"
+msgstr "Öntanımlı"
 
 # gtk/gtkinputdialog.c:181
 #: gtk/gtkinputdialog.c:233
@@ -3691,7 +3667,6 @@ msgstr "Girdi"
 
 # gtk/gtkinputdialog.c:189
 #: gtk/gtkinputdialog.c:242
-#, fuzzy
 msgid "No extended input devices"
 msgstr "Hiç girdi aygıtı yok"
 
