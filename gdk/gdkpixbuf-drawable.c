@@ -204,9 +204,9 @@ rgb1 (GdkImage    *image,
                                   (0x80 >> (xx & 7)) :
                                   (1 << (xx & 7)));
 
-	  *o++ = colormap->colors[data].red;
-	  *o++ = colormap->colors[data].green;
-	  *o++ = colormap->colors[data].blue;
+	  *o++ = colormap->colors[data].red   >> 8;
+	  *o++ = colormap->colors[data].green >> 8;
+	  *o++ = colormap->colors[data].blue  >> 8;
 	}
       srow += bpl;
       orow += rowstride;
@@ -251,9 +251,9 @@ rgb1a (GdkImage    *image,
                                   (0x80 >> (xx & 7)) :
                                   (1 << (xx & 7)));
 
-          *o++ = colormap->colors[data].red;
-	  *o++ = colormap->colors[data].green;
-	  *o++ = colormap->colors[data].blue;
+          *o++ = colormap->colors[data].red   >> 8;
+	  *o++ = colormap->colors[data].green >> 8;
+	  *o++ = colormap->colors[data].blue  >> 8;
 	  *o++ = 255;
 	}
       srow += bpl;
@@ -296,9 +296,9 @@ rgb8 (GdkImage    *image,
       for (xx = x1; xx < x2; xx++)
         {
           data = *s++ & mask;
-          *o++ = colormap->colors[data].red;
-          *o++ = colormap->colors[data].green;
-          *o++ = colormap->colors[data].blue;
+          *o++ = colormap->colors[data].red   >> 8;
+          *o++ = colormap->colors[data].green >> 8;
+          *o++ = colormap->colors[data].blue  >> 8;
         }
       srow += bpl;
       orow += rowstride;
@@ -338,14 +338,14 @@ rgb8a (GdkImage    *image,
     {
 #ifdef LITTLE
       remap[xx] = 0xff000000
-	| colormap->colors[xx].blue << 16
-	| colormap->colors[xx].green << 8
-	| colormap->colors[xx].red;
+	| (colormap->colors[xx].blue  & 0xff00) << 8
+	| (colormap->colors[xx].green & 0xff00)
+	| (colormap->colors[xx].red   >> 8);
 #else
       remap[xx] = 0xff
-	| colormap->colors[xx].red << 24
-	| colormap->colors[xx].green << 16
-	| colormap->colors[xx].blue << 8;
+	| (colormap->colors[xx].red   & 0xff00) << 16
+	| (colormap->colors[xx].green & 0xff00) << 8
+	| (colormap->colors[xx].blue  & 0xff00));
 #endif
     }
 
@@ -1244,9 +1244,9 @@ convert_real_slow (GdkImage    *image,
 	    case GDK_VISUAL_GRAYSCALE:
 	    case GDK_VISUAL_STATIC_COLOR:
 	    case GDK_VISUAL_PSEUDO_COLOR:
-	      *o++ = cmap->colors[pixel].red;
-	      *o++ = cmap->colors[pixel].green;
-	      *o++ = cmap->colors[pixel].blue;
+	      *o++ = cmap->colors[pixel].red   >> 8; 
+	      *o++ = cmap->colors[pixel].green >> 8;
+	      *o++ = cmap->colors[pixel].blue  >> 8;
 	      break;
 	    case GDK_VISUAL_TRUE_COLOR:
 				/* This is odd because it must sometimes shift left (otherwise
@@ -1267,9 +1267,9 @@ convert_real_slow (GdkImage    *image,
 	      *o++ = component;
 	      break;
 	    case GDK_VISUAL_DIRECT_COLOR:
-	      *o++ = cmap->colors[((pixel & v->red_mask) << (32 - v->red_shift - v->red_prec)) >> 24].red;
-	      *o++ = cmap->colors[((pixel & v->green_mask) << (32 - v->green_shift - v->green_prec)) >> 24].green;
-	      *o++ = cmap->colors[((pixel & v->blue_mask) << (32 - v->blue_shift - v->blue_prec)) >> 24].blue;
+	      *o++ = cmap->colors[((pixel & v->red_mask) << (32 - v->red_shift - v->red_prec)) >> 24].red >> 8;
+	      *o++ = cmap->colors[((pixel & v->green_mask) << (32 - v->green_shift - v->green_prec)) >> 24].green >> 8;
+	      *o++ = cmap->colors[((pixel & v->blue_mask) << (32 - v->blue_shift - v->blue_prec)) >> 24].blue >> 8;
 	      break;
 	    }
 	  if (alpha)
