@@ -1,3 +1,11 @@
+Sat May  2 20:19:03 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkadjustment.c (gtk_adjustment_set_value): only emit
+ 	"value_changed" if we really passed a new value.
+	(gtk_adjustment_changed): new function to emit the "changed" signal.
+	(gtk_adjustment_set_value): new function to emit the "value_changed"
+	signal.
+
 Fri May  1 12:28:35 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkcombo.c: Further changes to the way the window

@@ -59,19 +59,21 @@ struct _GtkAdjustmentClass
 };
 
 
-GtkType	   gtk_adjustment_get_type   (void);
-GtkObject* gtk_adjustment_new	     (gfloat		  value,
-				      gfloat		  lower,
-				      gfloat		  upper,
-				      gfloat		  step_increment,
-				      gfloat		  page_increment,
-				      gfloat		  page_size);
-void	   gtk_adjustment_set_value  (GtkAdjustment	 *adjustment,
-				      gfloat		  value);
-void	   gtk_adjustment_clamp_page (GtkAdjustment	 *adjustment,
-				      gfloat		  lower,
-				      gfloat		  upper);
-     
+GtkType	   gtk_adjustment_get_type	(void);
+GtkObject* gtk_adjustment_new		(gfloat		  value,
+					 gfloat		  lower,
+					 gfloat		  upper,
+					 gfloat		  step_increment,
+					 gfloat		  page_increment,
+					 gfloat		  page_size);
+void	   gtk_adjustment_set_value	(GtkAdjustment	 *adjustment,
+					 gfloat		  value);
+void	   gtk_adjustment_changed	(GtkAdjustment	 *adjustment);
+void	   gtk_adjustment_value_changed	(GtkAdjustment	 *adjustment);
+void	   gtk_adjustment_clamp_page	(GtkAdjustment	 *adjustment,
+					 gfloat		  lower,
+					 gfloat		  upper);
+
 
 
 
