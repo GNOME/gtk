@@ -1,3 +1,7 @@
+Wed Jun 10 20:54:37 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk-config.in: Added missing quotes.
+
 1998-06-10  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* acconfig.h (GTK_COMPILED_WITH_DEBUGGING): Renamed from
