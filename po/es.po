@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2004-04-24 14:12+0200\n"
+"POT-Creation-Date: 2004-07-11 18:37+0200\n"
+"PO-Revision-Date: 2004-07-11 18:37+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -934,15 +934,15 @@ msgstr "Rueda de color"
 msgid "Color Selection"
 msgstr "Selección de color"
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar carácter de control Unicode"
 
@@ -1371,9 +1371,9 @@ msgid "Filesystem"
 msgstr "Sistema de archivos"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "No se ha podido obtener información para el archivo «%s» : %s"
+msgstr "No se ha podido obtener un icono predeterminado para %s"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
