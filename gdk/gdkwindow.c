@@ -1302,6 +1302,69 @@ gdk_window_get_origin (GdkWindow *window,
   return return_val;
 }
 
+gint
+gdk_window_get_deskrelative_origin (GdkWindow *window,
+				    gint      *x,
+				    gint      *y)
+{
+  GdkWindowPrivate *private;
+  gint return_val, num_children, format_return;
+  Window win, *child, parent, root;
+  gint tx = 0;
+  gint ty = 0;
+  Atom type_return;
+  static Atom atom = 0;
+  gulong number_return, bytes_after_return;
+  guchar *data_return;
+  
+  g_return_val_if_fail (window != NULL, 0);
+
+  private = (GdkWindowPrivate*) window;
+
+  return_val = 0;
+  if (!private->destroyed)
+    {
+      if (!atom)
+	atom = XInternAtom(private->xdisplay, "ENLIGHTENMENT_DESKTOP", False);
+      win = private->xwindow;
+      while (XQueryTree(private->xdisplay, win, &root, &parent,
+			&child, (unsigned int *)&num_children))
+	{
+	  if ((child) && (num_children > 0))
+	    XFree(child);
+	  win = parent;
+	  data_return = NULL;
+	  XGetWindowProperty(private->xdisplay, win, atom, 0, 0x7fffffff, 
+			     False, XA_CARDINAL, &type_return, &format_return,
+			     &number_return, &bytes_after_return, &data_return);
+	  if (data_return)
+	    {
+	      if (data_return)
+		XFree(data_return);
+	      return_val = XTranslateCoordinates (private->xdisplay,
+						  private->xwindow,
+						  win,
+						  0, 0, &tx, &ty,
+						  &root);
+              break;
+	    }
+	}
+    }
+  if (!return_val)
+    return_val = XTranslateCoordinates (private->xdisplay,
+					private->xwindow,
+					gdk_root_window,
+					0, 0, &tx, &ty,
+					&root);
+  
+  if (x)
+    *x = tx;
+  if (y)
+    *y = ty;
+  
+  return return_val;
+}
+
 void
 gdk_window_get_root_origin (GdkWindow *window,
 			    gint      *x,

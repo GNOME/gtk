@@ -308,6 +308,9 @@ GdkWindowType gdk_window_get_type	 (GdkWindow	  *window);
 gint	      gdk_window_get_origin	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
+gint	      gdk_window_get_deskrelative_origin (GdkWindow	  *window,
+					  gint		  *x,
+					  gint		  *y);
 void	      gdk_window_get_root_origin (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);

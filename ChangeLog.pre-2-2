@@ -1,3 +1,12 @@
+Tue Nov 17 1998 The Rasterman <raster@redhat.com>
+	* gdk/gdk.h, gdk/gdkwindow.c: Added gdk_window_get_deskrelative_origin
+	  function to correctly determine gdk window position relative to
+	  its "root window" - contains check for an Enlightenment
+	  virtual root window.
+	* gtk/gtkhandlebox.c: changed gdk_window_get_origin ->
+	  gdk_window_get_deskrelative_origin to get the origin of dragged
+	  handleboxes correctly. Now it works correctly with E.
+	  
 Tue Nov 17 1998  Tuomas Lukka <lukka@iki.fi>
 
 	* gtk/gtktypeutils.c: Fix vital bug where LOOKUP was used when

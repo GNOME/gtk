@@ -859,7 +859,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
   ox = 0;
   oy = 0;
-  gdk_window_get_origin (hb->float_window, &ox, &oy);
+  gdk_window_get_deskrelative_origin (hb->float_window, &ox, &oy);
   new_x = 0;
   new_y = 0;
   gdk_window_get_pointer (hb->float_window, &new_x, &new_y, NULL);
