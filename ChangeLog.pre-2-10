@@ -1,3 +1,7 @@
+Sun Mar  8 00:18:04 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkobject.c: register living objects in a hashtable.
+
 Sat Mar  7 20:20:53 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkobject.c:

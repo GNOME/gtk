@@ -93,32 +93,39 @@ static GHashTable *arg_info_ht = NULL;
 static const char *user_data_key = "user_data";
 
 
+#ifdef G_ENABLE_DEBUG
 static gint obj_count = 0;
-static GSList *living_objs = NULL;
-
-
+static GHashTable *living_objs_ht = NULL;
+static void
+gtk_object_debug_foreach (gpointer key, gpointer value, gpointer user_data)
+{
+  GtkObject *object;
+  
+  object = (GtkObject*) value;
+  g_print ("%p: %s ref_count=%d%s%s\n",
+	   object,
+	   gtk_type_name (GTK_OBJECT_TYPE (object)),
+	   object->ref_count,
+	   GTK_OBJECT_FLOATING (object) ? " (floating)" : "",
+	   GTK_OBJECT_DESTROYED (object) ? " (destroyed)" : "");
+}
 static void
 gtk_object_debug (void)
 {
-  if (1)
-    {
-      GSList *node;
-      
-      printf ("living objects (%d):\n", g_slist_length (living_objs));
-      for (node = living_objs; node; node = node->next)
-	{
-	  GtkObject *obj;
-	  
-	  obj = (GtkObject*) node->data;
-	  printf ("%p: %s ref_count=%d%s%s\n",
-		  obj, gtk_type_name (GTK_OBJECT_TYPE (obj)),
-		  obj->ref_count,
-		  GTK_OBJECT_FLOATING (obj) ? " (floating)" : "",
-		  GTK_OBJECT_DESTROYED (obj) ? " (destroyed)" : "");
-	}
-    }
-  printf ("living objects count = %d\n", obj_count);
+  g_hash_table_foreach (living_objs_ht, gtk_object_debug_foreach, NULL);
+
+  g_print ("living objects count = %d\n", obj_count);
 }
+static guint
+gtk_object_pointer_hash (const gpointer v)
+{
+  gint i;
+
+  i = (gint) v;
+  
+  return i;
+}
+#endif	/* G_ENABLE_DEBUG */
 
 /*****************************************
  * gtk_object_init_type:
@@ -237,7 +244,11 @@ gtk_object_init (GtkObject *object)
   if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
     {
       obj_count++;
-      living_objs = g_slist_prepend (living_objs, object);
+      
+      if (!living_objs_ht)
+	living_objs_ht = g_hash_table_new (gtk_object_pointer_hash, NULL);
+
+      g_hash_table_insert (living_objs_ht, object, object);
     }
 #endif /* G_ENABLE_DEBUG */
 }
@@ -1582,8 +1593,8 @@ gtk_object_unref (GtkObject *object)
 #ifdef G_ENABLE_DEBUG
       if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
 	{
-	  g_assert (g_slist_find (living_objs, object));
-	  living_objs = g_slist_remove (living_objs, object);
+	  g_assert (g_hash_table_lookup (living_objs_ht, object) == object);
+	  g_hash_table_remove (living_objs_ht, object);
 	  obj_count--;
 	}
 #endif /* G_ENABLE_DEBUG */      
@@ -1591,10 +1602,9 @@ gtk_object_unref (GtkObject *object)
     }
 }
 
+
 #ifdef G_ENABLE_DEBUG
-
 static GtkObject *gtk_trace_object = NULL;
-
 void
 gtk_trace_referencing (gpointer    *o,
 		       const gchar *func,
@@ -1610,7 +1620,7 @@ gtk_trace_referencing (gpointer    *o,
       g_return_if_fail (object != NULL);
       g_return_if_fail (GTK_IS_OBJECT (object));
 
-      exists = (g_slist_find (living_objs, object) != NULL);
+      exists = g_hash_table_lookup (living_objs_ht, object) != NULL;
       
       if (exists &&
 	  (object == gtk_trace_object ||
@@ -1639,6 +1649,5 @@ gtk_trace_referencing (gpointer    *o,
   else
     gtk_object_unref (object);
 }
-
 #endif /* G_ENABLE_DEBUG */
 
