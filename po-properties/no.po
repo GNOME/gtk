@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-04 13:26-0500\n"
-"PO-Revision-Date: 2005-01-19 15:16+0100\n"
+"PO-Revision-Date: 2005-02-15 01:21+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -215,19 +215,19 @@ msgstr "Farge på hyperlenker"
 
 #: gtk/gtkaccellabel.c:139
 msgid "Accelerator Closure"
-msgstr "Aksellerator-«closure»"
+msgstr "Akselerator-«closure»"
 
 #: gtk/gtkaccellabel.c:140
 msgid "The closure to be monitored for accelerator changes"
-msgstr "«Closure» som skal overvåkes for akselleratorendringer"
+msgstr "«Closure» som skal overvåkes for akseleratorendringer"
 
 #: gtk/gtkaccellabel.c:146
 msgid "Accelerator Widget"
-msgstr "Akselleratorwidget"
+msgstr "Akseleratorwidget"
 
 #: gtk/gtkaccellabel.c:147
 msgid "The widget to be monitored for accelerator changes"
-msgstr "Widgetet som skal overvåkes for akselleratorendringer"
+msgstr "Widgetet som skal overvåkes for akseleratorendringer"
 
 #: gtk/gtkaction.c:196 gtk/gtkactiongroup.c:134
 msgid "Name"
@@ -689,9 +689,7 @@ msgstr "Bruk understreking"
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
-msgstr ""
-"Hvis satt vil en underscore i teksten indikere at neste tegn skal brukes som "
-"akselleratorhint"
+msgstr "Hvis satt vil en underscore i teksten indikere at neste tegn skal brukes som akseleratorhint"
 
 #: gtk/gtkbutton.c:236
 msgid "Use stock"
@@ -1350,9 +1348,8 @@ msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Om denne merkingen påvirker språket teksten skal rendres som"
 
 #: gtk/gtkcellrenderertext.c:503
-#, fuzzy
 msgid "Ellipsize set"
-msgstr "Heving satt"
+msgstr "Ellipse satt"
 
 #: gtk/gtkcellrenderertext.c:504
 #, fuzzy
@@ -2237,29 +2234,24 @@ msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
 #: gtk/gtkiconview.c:398
-#, fuzzy
 msgid "Icon View Model"
-msgstr "TreeView modell"
+msgstr "Modell for ikonvisning"
 
 #: gtk/gtkiconview.c:399
-#, fuzzy
 msgid "The model for the icon view"
-msgstr "Modell for treevisning"
+msgstr "Modell for ikonvisning"
 
 #: gtk/gtkiconview.c:415
-#, fuzzy
 msgid "Number of columns"
-msgstr "Antall kanaler"
+msgstr "Antall kolonner"
 
 #: gtk/gtkiconview.c:416
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "Antall desimalplasser som skal vises"
+msgstr "Antall kolonner som skal vises"
 
 #: gtk/gtkiconview.c:433
-#, fuzzy
 msgid "Width for each item"
-msgstr "Komponent som skal brukes som etikett for oppføringen"
+msgstr "Bredde for hver oppføring"
 
 #: gtk/gtkiconview.c:434
 msgid "The width used for each item"
@@ -2303,9 +2295,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkiconview.c:523
-#, fuzzy
 msgid "Selection Box Color"
-msgstr "Utvalg bundet"
+msgstr "Farge på utvalgsboks"
 
 #: gtk/gtkiconview.c:524
 #, fuzzy
@@ -2484,7 +2475,7 @@ msgstr "Hinttast"
 
 #: gtk/gtklabel.c:381
 msgid "The mnemonic accelerator key for this label"
-msgstr "Hint for akselleratortast for denne etiketten"
+msgstr "Hint for akseleratortast for denne etiketten"
 
 #: gtk/gtklabel.c:389
 msgid "Mnemonic widget"
@@ -2634,17 +2625,16 @@ msgstr "Bunnfeste"
 
 #: gtk/gtkmenu.c:604 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
-msgstr "Radnummer som bunn av etterkommer skal festes til"
+msgstr "Radnummer nederste del av avkommet skal festes til"
 
 #: gtk/gtkmenu.c:691
 msgid "Can change accelerators"
-msgstr "Kan endre akselleratorer"
+msgstr "Kan endre akseleratorer"
 
 #: gtk/gtkmenu.c:692
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr ""
-"Om menyakselleratorer kan endres ved å trykke en tast over menyoppføringen"
+msgstr "Om menyakseleratorer kan endres ved å trykke en tast over menyoppføringen"
 
 #: gtk/gtkmenu.c:697
 msgid "Delay before submenus appear"
@@ -2840,25 +2830,22 @@ msgid "Tab label"
 msgstr "Etikett for fanen"
 
 #: gtk/gtknotebook.c:482
-#, fuzzy
 msgid "The string displayed on the child's tab label"
-msgstr "Strengen som vises i etterkommerens faneetikett"
+msgstr "Streng som vises i avkommets faneetikett"
 
 #: gtk/gtknotebook.c:488
 msgid "Menu label"
 msgstr "Etikett for meny"
 
 #: gtk/gtknotebook.c:489
-#, fuzzy
 msgid "The string displayed in the child's menu entry"
-msgstr "Strengen som vises i etterkommerens menyoppføring"
+msgstr "Streng som vises i avkommets menyoppføring"
 
 #: gtk/gtknotebook.c:502
 msgid "Tab expand"
 msgstr "Faneutvidelse"
 
 #: gtk/gtknotebook.c:503
-#, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Om etterkommers fane skal utvides eller ikke"
 
@@ -2867,7 +2854,6 @@ msgid "Tab fill"
 msgstr "Fyll for fane"
 
 #: gtk/gtknotebook.c:510
-#, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Om etterkommers fane skal fylle allokert område eller ikke"
 
@@ -3428,7 +3414,7 @@ msgstr "Navn på RC-fil for nøkkeltema som skal lastes"
 
 #: gtk/gtksettings.c:336
 msgid "Menu bar accelerator"
-msgstr "Aksellerator for menylinje"
+msgstr "Akselerator for menylinje"
 
 #: gtk/gtksettings.c:337
 msgid "Keybinding to activate the menu bar"
@@ -3539,7 +3525,7 @@ msgstr "Klatrerate"
 
 #: gtk/gtkspinbutton.c:251
 msgid "The acceleration rate when you hold down a button"
-msgstr "Akselleratorrate når du holder nede en knapp"
+msgstr "Akseleratorrate når du holder nede en knapp"
 
 #: gtk/gtkspinbutton.c:261
 msgid "The number of decimal places to display"
@@ -4197,9 +4183,7 @@ msgstr "Tekst som skal vises i oppføringen."
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
-msgstr ""
-"Hvis satt vil en understreking i teksten indikere at neste tegn skal brukes "
-"som akselleratortast i overflytmenyen"
+msgstr "Hvis satt vil en understreking i teksten indikere at neste tegn skal brukes som akseleratortast i overflytmenyen"
 
 #: gtk/gtktoolbutton.c:196
 msgid "Widget to use as the item label"
@@ -4833,9 +4817,8 @@ msgid "Icon for this window"
 msgstr "Ikon for dette vinduet"
 
 #: gtk/gtkwindow.c:526
-#, fuzzy
 msgid "Name of the themed icon for this window"
-msgstr "Ikon for dette vinduet"
+msgstr "Navn på temaikon for dette vinduet"
 
 #: gtk/gtkwindow.c:541
 msgid "Is Active"
@@ -4890,12 +4873,10 @@ msgid "TRUE if the window should receive the input focus."
 msgstr "SANN hvis vinduet skal motta fokus for inndata."
 
 #: gtk/gtkwindow.c:604
-#, fuzzy
 msgid "Focus on map"
-msgstr "Fokus ved klikk"
+msgstr "Fokus ved visning"
 
 #: gtk/gtkwindow.c:605
-#, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "SANN hvis vinduet skal motta fokus for inndata."
 
