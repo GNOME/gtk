@@ -1021,11 +1021,11 @@ gtk_calendar_main_button (GtkWidget	 *widget,
       if (!GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
 	  
-      gtk_calendar_select_and_focus_day (calendar, day);
-
       private_data->in_drag = 1;
       private_data->drag_start_x = x;
       private_data->drag_start_y = y;
+
+      gtk_calendar_select_and_focus_day (calendar, day);
     }
   else if (event->type == GDK_2BUTTON_PRESS)
     {
@@ -3066,7 +3066,10 @@ gtk_calendar_state_changed (GtkWidget	   *widget,
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
   
   if (!GTK_WIDGET_IS_SENSITIVE (widget))
-    stop_spinning (widget);    
+    {
+      private_data->in_drag = 0;
+      stop_spinning (widget);    
+    }
 
   for (i = 0; i < 4; i++)
     if (GTK_WIDGET_IS_SENSITIVE (widget))
