@@ -1,3 +1,19 @@
+2004-03-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (update_from_entry): In the Save
+	modes, set the Name entry of the file chooser if we get a
+	nonexistent filename from the file entry.  Fixes #135911.
+	(gtk_file_chooser_default_set_current_name): Oops, this should
+	also work if we are in CREATE_FOLDER mode.
+
+	* gtk/gtkfilesystem.c (gtk_file_path_real_copy): Use
+	gtk_file_path_copy().
+
+	* gtk/gtkfilechooserentry.c (check_completion_callback): Free the
+	path that we got from the model.
+	(completion_match_func): Use DISPLAY_NAME_COLUMN rather than a
+	hard-coded constant.
+
 Mon Mar 15 13:50:14 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_set_property):

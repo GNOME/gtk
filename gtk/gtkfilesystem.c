@@ -886,7 +886,7 @@ gtk_file_folder_get_info (GtkFileFolder     *folder,
 static gpointer
 gtk_file_path_real_copy (gpointer boxed)
 {
-  return gtk_file_path_new_dup (gtk_file_path_get_string ((GtkFilePath *) boxed));
+  return gtk_file_path_copy ((GtkFilePath *) boxed);
 }
 
 static void

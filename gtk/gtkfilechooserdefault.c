@@ -3757,7 +3757,8 @@ gtk_file_chooser_default_set_current_name (GtkFileChooser *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
 
-  g_return_if_fail (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
+  g_return_if_fail (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+		    || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
   gtk_entry_set_text (GTK_ENTRY (impl->save_file_name_entry), name);
 }
@@ -4951,11 +4952,17 @@ update_from_entry (GtkFileChooserDefault *impl,
 
       if (!info)
 	{
-#if 0
-	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-	    return;
-#endif
-	  error_getting_info_dialog (impl, subfolder_path, error);
+	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	    {
+	      if (!change_folder_and_display_error (impl, folder_path))
+		goto out;
+
+	      gtk_file_chooser_default_set_current_name (GTK_FILE_CHOOSER (impl), file_part);
+	    }
+	  else
+	    error_getting_info_dialog (impl, subfolder_path, error);
+
 	  goto out;
 	}
 

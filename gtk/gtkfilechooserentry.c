@@ -300,7 +300,7 @@ completion_match_func (GtkEntryCompletion *comp,
   if (chooser_entry->no_pop_down)
     return FALSE;
 
-  gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store), iter, 0, &name, -1);
+  gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store), iter, DISPLAY_NAME_COLUMN, &name, -1);
   if (!name)
     {
       return FALSE; /* Uninitialized row, ugh */
@@ -431,6 +431,7 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 	}
 
       g_free (display_name);
+      gtk_file_path_free (path);
       valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store),
 					&iter);
     }
