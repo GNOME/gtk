@@ -129,7 +129,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
-                                   PROP_INCONSISTENT,
+                                   PROP_DRAW_AS_RADIO,
                                    g_param_spec_boolean ("draw_as_radio",
                                                          _("Draw as radio menu item"),
                                                          _("Whether the menu item looks like a radio menu item"),

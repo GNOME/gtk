@@ -1,3 +1,8 @@
+2003-08-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_class_init): Install "draw_as_radio"
+	as a separate property, not as an alias of "inconsistent".
+
 Fri Aug 29 20:32:07 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c: Only treat buttons as homogeneous when they
