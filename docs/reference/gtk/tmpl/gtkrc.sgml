@@ -138,6 +138,7 @@ The possible toplevel declarations are:
       <para>Declares a binding set.</para>
     </listitem>
   </varlistentry>
+
   <varlistentry>
     <term><literal>class <replaceable>pattern</replaceable> 
           [ style | binding ][ : <replaceable>priority</replaceable> ]
@@ -147,6 +148,7 @@ The possible toplevel declarations are:
      branch of the inheritance hierarchy.</para>
     </listitem>
   </varlistentry>
+
   <varlistentry>
     <term><literal>include <replaceable>filename</replaceable></literal></term>
     <listitem>
@@ -160,6 +162,7 @@ The possible toplevel declarations are:
        </para>
     </listitem>
   </varlistentry>
+
   <varlistentry>
     <term><literal>module_path <replaceable>path</replaceable></literal></term>
     <listitem>
@@ -168,6 +171,7 @@ The possible toplevel declarations are:
       RC files.</para>
     </listitem>
   </varlistentry>
+
   <varlistentry>
     <term><literal>pixmap_path <replaceable>path</replaceable></literal></term>
     <listitem>
@@ -176,6 +180,16 @@ The possible toplevel declarations are:
       RC files.</para>
     </listitem>
   </varlistentry>
+
+  <varlistentry>
+    <term><literal>im_module_file <replaceable>pathname</replaceable></literal></term>
+    <listitem>
+      <para>Sets the pathname for the IM modules file. Setting this from RC files
+      is deprecated; you should use the environment variable <envar>GTK_IM_MODULE_FILE</envar>
+      instead.</para>
+    </listitem>
+  </varlistentry>
+
   <varlistentry>
     <term><literal>style <replaceable>name</replaceable> [ =
     <replaceable>parent</replaceable> ] { ... }</literal></term>
@@ -183,6 +197,7 @@ The possible toplevel declarations are:
       <para>Declares a style.</para>
     </listitem>
   </varlistentry>
+
   <varlistentry>
     <term><literal>widget <replaceable>pattern</replaceable> 
           [ style | binding ][ : <replaceable>priority</replaceable> ]
@@ -192,6 +207,7 @@ The possible toplevel declarations are:
      group of widgets by matching on the widget pathname.</para>
     </listitem>
   </varlistentry>
+
   <varlistentry>
     <term><literal>widget_class <replaceable>pattern</replaceable> 
           [ style | binding ][ : <replaceable>priority</replaceable> ]
@@ -199,6 +215,15 @@ The possible toplevel declarations are:
     <listitem>
      <para>Specifies a style or binding set for a particular
      group of widgets by matching on the class pathname.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><replaceable>setting</replaceable> = <replaceable>value<replaceable></literal></term>
+    <listitem>
+      <para>Specifies a value for a <link linkend="GtkSettings">setting</link>. Note that
+        settings in RC files are overwritten by system-wide settings which are managed by
+        an XSettings manager.</para>
     </listitem>
   </varlistentry>
 </variablelist>
