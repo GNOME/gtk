@@ -1,3 +1,7 @@
+2001-10-05  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/stock_broken_image.png: broken images icon
+
 2001-10-04  Havoc Pennington  <hp@pobox.com>
 
         Fix #56586
