@@ -1060,7 +1060,7 @@ gdk_window_clear_area_e (GdkWindow *window,
       rect.top = y;
       rect.bottom = y + height;
       if (!InvalidateRect (GDK_DRAWABLE_XID (window), &rect, TRUE))
-	WIN32_API_FAILED ("InvalidateRect");
+	WIN32_GDI_FAILED ("InvalidateRect");
       UpdateWindow (GDK_DRAWABLE_XID (window));
     }
 }

@@ -15,10 +15,12 @@ WTKIT = ..\..\wtkit126
 
 !IFNDEF DEBUG
 # Full optimization:
-OPTIMIZE = -Ox -MD
+OPTIMIZE = -Ox -MD -Zi
+LINKDEBUG = /nodefaultlib:libc.lib
 !ELSE
 # Debugging:
 OPTIMIZE = -Zi -MDd
+LINKDEBUG = /nodefaultlib:libcd.lib /nodefaultlib:libc.lib /debug
 !ENDIF
 
 # cl -? describes the options

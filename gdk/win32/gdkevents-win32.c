@@ -332,7 +332,7 @@ gdk_events_init (void)
   if (p_TrackMouseEvent != NULL)
     GDK_NOTE (EVENTS, g_print ("Using TrackMouseEvent to detect leave events\n"));
 #endif
-  if (windows_version < 0x80000000 && (windows_version & 0xFF) == 5)
+  if (IS_WIN_NT (windows_version) && (windows_version & 0xFF) == 5)
     {
       /* On Win2k (Beta 3, at least) WM_IME_CHAR doesn't seem to work
        * correctly for non-Unicode applications. Handle
@@ -2900,7 +2900,11 @@ static gboolean
 doesnt_want_scroll (gint mask,
 		    MSG *xevent)
 {
+#if 0
   return !(mask & GDK_SCROLL_MASK);
+#else
+  return !(mask & GDK_BUTTON_PRESS_MASK);
+#endif
 }
 
 static gboolean
@@ -3782,9 +3786,9 @@ gdk_event_translate (GdkEvent *event,
 
 	  if (SelectPalette (hdc,  colormap_private->xcolormap->palette,
 			     FALSE) == NULL)
-	    WIN32_API_FAILED ("SelectPalette");
+	    WIN32_GDI_FAILED ("SelectPalette");
 	  if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	    WIN32_API_FAILED ("RealizePalette");
+	    WIN32_GDI_FAILED ("RealizePalette");
 #if 0
 	  g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
 		   colormap_private->xcolormap->palette, k);
@@ -3828,7 +3832,7 @@ gdk_event_translate (GdkEvent *event,
 	  g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
 #endif
 	  if (!FillRect (hdc, &rect, hbr))
-	    WIN32_API_FAILED ("FillRect");
+	    WIN32_GDI_FAILED ("FillRect");
 	  DeleteObject (hbr);
 	}
       else if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXMAP)
@@ -3843,7 +3847,7 @@ gdk_event_translate (GdkEvent *event,
 	      GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
 	      hbr = CreatePatternBrush (GDK_DRAWABLE_XID (pixmap));
 	      if (!FillRect (hdc, &rect, hbr))
-		WIN32_API_FAILED ("FillRect");
+		WIN32_GDI_FAILED ("FillRect");
 	      DeleteObject (hbr);
 	    }
 	  else
@@ -3859,12 +3863,12 @@ gdk_event_translate (GdkEvent *event,
 
 	      if (!(bgdc = CreateCompatibleDC (hdc)))
 		{
-		  WIN32_API_FAILED ("CreateCompatibleDC");
+		  WIN32_GDI_FAILED ("CreateCompatibleDC");
 		  break;
 		}
 	      if (!(oldbitmap = SelectObject (bgdc, GDK_DRAWABLE_XID (pixmap))))
 		{
-		  WIN32_API_FAILED ("SelectObject");
+		  WIN32_GDI_FAILED ("SelectObject");
 		  DeleteDC (bgdc);
 		  break;
 		}
@@ -3881,7 +3885,7 @@ gdk_event_translate (GdkEvent *event,
 				       pixmap_private->width, pixmap_private->height,
 				       bgdc, 0, 0, SRCCOPY))
 			    {
-			      WIN32_API_FAILED (" BitBlt");
+			      WIN32_GDI_FAILED ("BitBlt");
 			      goto loopexit;
 			    }
 			}
@@ -3900,7 +3904,7 @@ gdk_event_translate (GdkEvent *event,
 	  hbr = GetStockObject (BLACK_BRUSH);
 	  GetClipBox (hdc, &rect);
 	  if (!FillRect (hdc, &rect, hbr))
-	    WIN32_API_FAILED ("FillRect");
+	    WIN32_GDI_FAILED ("FillRect");
 	}
       break;
 

@@ -100,29 +100,36 @@ _gdk_windowing_init_check (int    argc,
   return TRUE;
 }
 
-gchar *
-gdk_win32_last_error_string (void)
-{
-  static gchar error[100];
-  int nbytes;
-
-  if ((nbytes = FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError (),
-			       0, error, sizeof (error), NULL)) == 0)
-    strcat (error, "Unknown error");
-
-  if (nbytes > 2 && error[nbytes-1] == '\n' && error[nbytes-2] == '\r')
-    error[nbytes-2] = '\0';
-
-  return error;
-}
-
 void
 gdk_win32_api_failed (const gchar *where,
 		      gint         line,
 		      const gchar *api)
 {
-  g_warning ("%s:%d: %s failed: %s", where, line, api,
-	     gdk_win32_last_error_string ());
+  gchar *msg = g_win32_error_message (GetLastError ());
+  g_warning ("%s:%d: %s failed: %s", where, line, api, msg);
+  g_free (msg);
+}
+
+void
+gdk_other_api_failed (const gchar *where,
+		      gint         line,
+		      const gchar *api)
+{
+  g_warning ("%s:%d: %s failed", where, line, api);
+}
+
+void
+gdk_win32_gdi_failed (const gchar *where,
+		      gint         line,
+		      const gchar *api)
+{
+  /* On Win9x GDI calls are implemented in 16-bit code and thus
+   * don't set the 32-bit error code, sigh.
+   */
+  if (IS_WIN_NT (windows_version))
+    gdk_win32_api_failed (where, line, api);
+  else
+    gdk_other_api_failed (where, line, api);
 }
 
 void

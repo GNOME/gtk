@@ -87,7 +87,7 @@ alloc_color_cells(Colormap      colormap,
 #ifdef SOME_STRANGE_BUG
       if (!ResizePalette (colormap->palette, colormap->size + nmore))
 	{
-	  WIN32_API_FAILED ("ResizePalette")
+	  WIN32_GDI_FAILED ("ResizePalette")
 	  return FALSE;
 	}
       g_print("alloc_color_cells: %#x to %d\n",
@@ -204,7 +204,7 @@ alloc_color(Colormap  colormap,
 	      /* It was a free'd entry anyway, so we can use it, and
 		 set it to the correct color. */
 	      if (SetPaletteEntries (colormap->palette, index, 1, &entry) == 0)
-		WIN32_API_FAILED ("SetPaletteEntries #1");
+		WIN32_GDI_FAILED ("SetPaletteEntries");
 	    }
 	  else
 	    {
@@ -217,7 +217,7 @@ alloc_color(Colormap  colormap,
 		    /* A free slot, use it. */
 		    if (SetPaletteEntries (colormap->palette,
 					   index, 1, &entry) == 0)
-		      WIN32_API_FAILED ("SetPaletteEntries #2");
+		      WIN32_GDI_FAILED ("SetPaletteEntries");
 		    index = i;
 		    break;
 		  }
@@ -237,9 +237,9 @@ alloc_color(Colormap  colormap,
 		      index = colormap->size;
 		      colormap->size++;
 		      if (!ResizePalette (colormap->palette, colormap->size))
-			WIN32_API_FAILED ("ResizePalette");
+			WIN32_GDI_FAILED ("ResizePalette");
 		      if (SetPaletteEntries (colormap->palette, index, 1, &entry) == 0)
-			WIN32_API_FAILED ("SetPaletteEntries #3");
+			WIN32_GDI_FAILED ("SetPaletteEntries");
 		    }
 		}
 	    }
@@ -327,7 +327,7 @@ free_colors (Colormap colormap,
       if (SetPaletteEntries (colormap->palette, lowestpixel,
 			     highestpixel - lowestpixel + 1,
 			     entries + lowestpixel) == 0)
-	WIN32_API_FAILED ("SetPaletteEntries");
+	WIN32_GDI_FAILED ("SetPaletteEntries");
 #endif
       colormap->stale = TRUE;
 #if 0
@@ -1551,7 +1551,7 @@ gdk_colormap_change (GdkColormap *colormap,
 
       if (SetPaletteEntries (private->xcolormap->palette,
 			     0, ncolors, palette) == 0)
-	WIN32_API_FAILED ("SetPaletteEntries");
+	WIN32_GDI_FAILED ("SetPaletteEntries");
       private->xcolormap->stale = TRUE;
       break;
 
@@ -1858,7 +1858,7 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
   
   if (SetPaletteEntries (private->xcolormap->palette,
 			 0, nstore, store) == 0)
-    WIN32_API_FAILED ("SetPaletteEntries");
+    WIN32_GDI_FAILED ("SetPaletteEntries");
   private->xcolormap->stale = TRUE;
 
   g_free (store);
@@ -2116,7 +2116,7 @@ gdk_color_change (GdkColormap *colormap,
 
   if (SetPaletteEntries (private->xcolormap->palette,
 			 color->pixel, 1, &xcolor) == 0)
-    WIN32_API_FAILED ("SetPaletteEntries");
+    WIN32_GDI_FAILED ("SetPaletteEntries");
   private->xcolormap->stale = TRUE;
 
   return TRUE;

@@ -58,7 +58,7 @@ gdk_win32_pixmap_destroy (GdkPixmap *pixmap)
 			   GDK_DRAWABLE_XID (pixmap)));
 
   if (!DeleteObject (GDK_DRAWABLE_XID (pixmap)))
-    WIN32_API_FAILED ("DeleteObject");
+    WIN32_GDI_FAILED ("DeleteObject");
 
   gdk_xid_table_remove (GDK_DRAWABLE_XID (pixmap));
 
@@ -137,7 +137,7 @@ gdk_pixmap_new (GdkWindow *window,
 
   if ((hdc = GetDC (GDK_DRAWABLE_XID (window))) == NULL)
     {
-      WIN32_API_FAILED ("GetDC");
+      WIN32_GDI_FAILED ("GetDC");
       g_free (private);
       return NULL;
     }
@@ -207,7 +207,7 @@ gdk_pixmap_new (GdkWindow *window,
        CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
 			 iUsage, (PVOID *) &bits, NULL, 0)) == NULL)
     {
-      WIN32_API_FAILED ("CreateDIBSection");
+      WIN32_GDI_FAILED ("CreateDIBSection");
       ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
       g_free (pixmap);
       return NULL;

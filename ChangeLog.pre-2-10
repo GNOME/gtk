@@ -1,3 +1,42 @@
+2000-03-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkmain-win32.c: Internal GDK error reporting changes:
+	(gdk_win32_gdi_failed) New function for reporting errors from GDI,
+	for which it is no use to call GetLastError onWin9x.
+	(gdk_other_api_failed) New function, for general error
+	reporting without calling GetLastError.
+	(gdk_win32_api_failed) OTOH, this function always calls
+	GetLastError. (gdk_win32_last_error_string) Remove this function,
+	GLib has the equivalent now.
+
+	* gdk/win32/gdkprivate-win32.h: Declare the above, and macros to
+	call them with function name, file name and line number in the
+	arguments.
+
+	* gdk/win32/*.c: Use the new macros for reporting errors from GDI
+	functions.
+	
+	* gtk/gtk.def: Add some missing entry points.
+
+	* gtk/gtkcompat.h.in: Define gtk_paned_gutter_size and
+	gtk_paned_set_gutter_size, which don't exist any longer, as void.
+	
+	Fixes by Hans Breuer:
+
+	* gdk/makefile.msc: Update for debugging.
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_dashes): Fake
+	implementation, just use the PS_DASH, PS_DOT, PS_DASHDOT or
+	PS_DASHDOTDOT or PS_DASH styles depending on the number of entries
+	in the dash_list.
+
+	* gdk/win32/gdkwin32.h (GDK_FONT_XFONT): New macro, similar as in
+	the x11 backend.
+
+	* gdk/win32/gdkprivate-win32.h (IS_WIN_NT): New macro.
+
+	* gtk/testgtk.c: Include config.h, guard inclusion of unistd.h.
+
 2000-03-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate-win32.h (struct _GdkWindowWin32Data): Store

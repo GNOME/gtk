@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "config.h"
+
 #undef	G_LOG_DOMAIN
 
 #include <stdio.h>
@@ -32,7 +34,10 @@
 #include <sys/stat.h>
 #include <math.h>
 #include <time.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
 #include "gtk.h"
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"

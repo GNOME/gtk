@@ -311,15 +311,24 @@ void gdk_wchar_text_handle       (GdkFont       *font,
 							  void *),
 				  void          *arg);
 
-gchar *gdk_color_to_string         (const GdkColor *);
-gchar *gdk_win32_last_error_string (void);
-void   gdk_win32_api_failed        (const gchar *where,
-				    gint line,
-				    const gchar *api);
+gchar *gdk_color_to_string       (const GdkColor *);
+void   gdk_win32_api_failed      (const gchar *where,
+				  gint         line,
+				  const gchar *api);
+void   gdk_other_api_failed      (const gchar *where,
+				  gint         line,
+				  const gchar *api);
+void   gdk_win32_gdi_failed      (const gchar *where,
+				  gint         line,
+				  const gchar *api);
 #ifdef __GNUC__
-#define WIN32_API_FAILED(api) gdk_win32_api_failed (__PRETTY_FUNCTION__, __LINE__, api)
+#define WIN32_API_FAILED(api) gdk_win32_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
+#define WIN32_GDI_FAILED(api) gdk_win32_gdi_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
+#define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
 #else
 #define WIN32_API_FAILED(api) gdk_win32_api_failed (__FILE__, __LINE__, api)
+#define WIN32_GDI_FAILED(api) gdk_win32_gdi_failed (__FILE__, __LINE__, api)
+#define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__, __LINE__, api)
 #endif
  
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
@@ -342,6 +351,7 @@ extern GdkAtom		 gdk_win32_dropfiles_atom;
 extern GdkAtom		 gdk_ole2_dnd_atom;
 
 extern DWORD		 windows_version;
+#define IS_WIN_NT(dwVersion) (dwVersion < 0x80000000)
 
 #ifdef __cplusplus
 }

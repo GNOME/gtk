@@ -243,7 +243,7 @@ gdk_image_new_with_depth (GdkImageType  type,
 
   if (private->ximage == NULL)
     {
-      WIN32_API_FAILED ("CreateDIBSection");
+      WIN32_GDI_FAILED ("CreateDIBSection");
       g_free (image);
       return NULL;
     }
@@ -349,13 +349,13 @@ gdk_image_get (GdkWindow *window,
     {
       if ((hdc = CreateCompatibleDC (NULL)) == NULL)
 	{
-	  WIN32_API_FAILED ("CreateCompatibleDC #1");
+	  WIN32_GDI_FAILED ("CreateCompatibleDC");
 	  g_free (image);
 	  return NULL;
 	}
       if ((oldbitmap1 = SelectObject (hdc, GDK_DRAWABLE_XID (window))) == NULL)
 	{
-	  WIN32_API_FAILED ("SelectObject #1");
+	  WIN32_GDI_FAILED ("SelectObject");
 	  DeleteDC (hdc);
 	  g_free (image);
 	  return NULL;
@@ -378,7 +378,7 @@ gdk_image_get (GdkWindow *window,
     {
       if ((hdc = GetDC (GDK_DRAWABLE_XID (window))) == NULL)
 	{
-	  WIN32_API_FAILED ("GetDC");
+	  WIN32_GDI_FAILED ("GetDC");
 	  g_free (image);
 	  return NULL;
 	}
@@ -395,7 +395,7 @@ gdk_image_get (GdkWindow *window,
 
   if ((memdc = CreateCompatibleDC (hdc)) == NULL)
     {
-      WIN32_API_FAILED ("CreateCompatibleDC #2");
+      WIN32_GDI_FAILED ("CreateCompatibleDC");
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
 	{
 	  SelectObject (hdc, oldbitmap1);
@@ -443,7 +443,7 @@ gdk_image_get (GdkWindow *window,
        CreateDIBSection (hdc, (BITMAPINFO *) &bmi, iUsage,
 			 &image->mem, NULL, 0)) == NULL)
     {
-      WIN32_API_FAILED ("CreateDIBSection");
+      WIN32_GDI_FAILED ("CreateDIBSection");
       DeleteDC (memdc);
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
 	{
@@ -460,7 +460,7 @@ gdk_image_get (GdkWindow *window,
 
   if ((oldbitmap2 = SelectObject (memdc, private->ximage)) == NULL)
     {
-      WIN32_API_FAILED ("SelectObject #2");
+      WIN32_GDI_FAILED ("SelectObject");
       DeleteObject (private->ximage);
       DeleteDC (memdc);
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
@@ -478,7 +478,7 @@ gdk_image_get (GdkWindow *window,
 
   if (!BitBlt (memdc, 0, 0, width, height, hdc, x, y, SRCCOPY))
     {
-      WIN32_API_FAILED ("BitBlt");
+      WIN32_GDI_FAILED ("BitBlt");
       SelectObject (memdc, oldbitmap2);
       DeleteObject (private->ximage);
       DeleteDC (memdc);
@@ -496,10 +496,10 @@ gdk_image_get (GdkWindow *window,
     }
 
   if (SelectObject (memdc, oldbitmap2) == NULL)
-    WIN32_API_FAILED ("SelectObject #3");
+    WIN32_GDI_FAILED ("SelectObject");
 
   if (!DeleteDC (memdc))
-    WIN32_API_FAILED ("DeleteDC");
+    WIN32_GDI_FAILED ("DeleteDC");
 
   if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
     {
@@ -643,7 +643,7 @@ gdk_win32_image_destroy (GdkImage *image)
 
     case GDK_IMAGE_SHARED:
       if (!DeleteObject (private->ximage))
-	WIN32_API_FAILED ("DeleteObject");
+	WIN32_GDI_FAILED ("DeleteObject");
       break;
 
     default:
@@ -702,7 +702,7 @@ gdk_image_put (GdkImage    *image,
       if (GetObject (image_private->ximage, sizeof (DIBSECTION),
 		     &ds) != sizeof (DIBSECTION))
 	{
-	  WIN32_API_FAILED ("GetObject");
+	  WIN32_GDI_FAILED ("GetObject");
 	}
 #if 0
       g_print("xdest = %d, ydest = %d, xsrc = %d, ysrc = %d, width = %d, height = %d\n",
@@ -725,7 +725,7 @@ gdk_image_put (GdkImage    *image,
 			     ds.dsBm.bmBits,
 			     (CONST BITMAPINFO *) &bmi,
 			     DIB_PAL_COLORS) == 0)
-	WIN32_API_FAILED ("SetDIBitsToDevice");
+	WIN32_GDI_FAILED ("SetDIBitsToDevice");
     }
   else
     {
@@ -734,26 +734,26 @@ gdk_image_put (GdkImage    *image,
 
       if ((memdc = CreateCompatibleDC (hdc)) == NULL)
 	{
-	  WIN32_API_FAILED ("CreateCompatibleDC");
+	  WIN32_GDI_FAILED ("CreateCompatibleDC");
 	  gdk_gc_postdraw (drawable, gc_private, 0);
 	  return;
 	}
 
       if ((oldbitmap = SelectObject (memdc, image_private->ximage)) == NULL)
 	{
-	  WIN32_API_FAILED ("SelectObject #1");
+	  WIN32_GDI_FAILED ("SelectObject");
 	  gdk_gc_postdraw (drawable, gc_private, 0);
 	  return;
 	}
       if (!BitBlt (hdc, xdest, ydest, width, height,
 		   memdc, xsrc, ysrc, SRCCOPY))
-	WIN32_API_FAILED ("BitBlt");
+	WIN32_GDI_FAILED ("BitBlt");
 
       if (SelectObject (memdc, oldbitmap) == NULL)
-	WIN32_API_FAILED ("SelectObject #2");
+	WIN32_GDI_FAILED ("SelectObject");
 
       if (!DeleteDC (memdc))
-	WIN32_API_FAILED ("DeleteDC");
+	WIN32_GDI_FAILED ("DeleteDC");
     }
   gdk_gc_postdraw (drawable, gc_private, 0);
 }

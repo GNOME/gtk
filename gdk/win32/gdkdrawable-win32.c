@@ -225,7 +225,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   if (gc_data->fill_style == GDK_OPAQUE_STIPPLED)
     {
       if (!BeginPath (hdc))
-	WIN32_API_FAILED ("BeginPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("BeginPath"), ok = FALSE;
 
       /* Win9x doesn't support Rectangle calls in a path,
        * thus use Polyline.
@@ -244,24 +244,24 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 	MoveToEx (hdc, x, y, NULL);
       
       if (ok && !Polyline (hdc, pts, 4))
-	WIN32_API_FAILED ("Polyline"), ok = FALSE;
+	WIN32_GDI_FAILED ("Polyline"), ok = FALSE;
 	  
       if (ok && !CloseFigure (hdc))
-	WIN32_API_FAILED ("CloseFigure"), ok = FALSE;
+	WIN32_GDI_FAILED ("CloseFigure"), ok = FALSE;
 
       if (ok && !EndPath (hdc))
-	WIN32_API_FAILED ("EndPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("EndPath"), ok = FALSE;
 	  
       if (ok && !filled)
 	if (!WidenPath (hdc))
-	  WIN32_API_FAILED ("WidenPath"), ok = FALSE;
+	  WIN32_GDI_FAILED ("WidenPath"), ok = FALSE;
 	  
       if (ok && !FillPath (hdc))
-	WIN32_API_FAILED ("FillPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
 
       if (hbr != NULL)
 	if (!DeleteObject (hbr))
-	  WIN32_API_FAILED ("DeleteObject");
+	  WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
@@ -271,7 +271,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 	oldbrush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
   
       if (!Rectangle (hdc, x, y, x+width+1, y+height+1))
-	WIN32_API_FAILED ("Rectangle");
+	WIN32_GDI_FAILED ("Rectangle");
   
       if (filled)
 	SelectObject (hdc, oldpen);
@@ -336,8 +336,9 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 				   x, y, x+width, y+height,
 				   nXStartArc, nYStartArc,
 				   nXEndArc, nYEndArc));
-	  Pie (hdc, x, y, x+width, y+height,
-	       nXStartArc, nYStartArc, nXEndArc, nYEndArc);
+	  if (!Pie (hdc, x, y, x+width, y+height,
+		    nXStartArc, nYStartArc, nXEndArc, nYEndArc))
+	    WIN32_GDI_FAILED ("Pie");
 	}
       else
 	{
@@ -345,8 +346,9 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 				   x, y, x+width, y+height,
 				   nXStartArc, nYStartArc,
 				   nXEndArc, nYEndArc));
-	  Arc (hdc, x, y, x+width, y+height,
-	       nXStartArc, nYStartArc, nXEndArc, nYEndArc);
+	  if (!Arc (hdc, x, y, x+width, y+height,
+		    nXStartArc, nYStartArc, nXEndArc, nYEndArc))
+	    WIN32_GDI_FAILED ("Arc");
 	}
       gdk_gc_postdraw (drawable, gc_private,
 		       GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
@@ -388,7 +390,7 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   if (gc_data->fill_style == GDK_OPAQUE_STIPPLED)
     {
       if (!BeginPath (hdc))
-	WIN32_API_FAILED ("BeginPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("BeginPath"), ok = FALSE;
 
       MoveToEx (hdc, points[0].x, points[0].y, NULL);
 
@@ -396,24 +398,24 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 	npoints--;
 
       if (ok && !Polyline (hdc, pts, 4))
-	WIN32_API_FAILED ("Polyline"), ok = FALSE;
+	WIN32_GDI_FAILED ("Polyline"), ok = FALSE;
 	  
       if (ok && !CloseFigure (hdc))
-	WIN32_API_FAILED ("CloseFigure"), ok = FALSE;
+	WIN32_GDI_FAILED ("CloseFigure"), ok = FALSE;
 
       if (ok && !EndPath (hdc))
-	WIN32_API_FAILED ("EndPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("EndPath"), ok = FALSE;
 	  
       if (ok && !filled)
 	if (!WidenPath (hdc))
-	  WIN32_API_FAILED ("WidenPath"), ok = FALSE;
+	  WIN32_GDI_FAILED ("WidenPath"), ok = FALSE;
 	  
       if (ok && !FillPath (hdc))
-	WIN32_API_FAILED ("FillPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
 
       if (hbr != NULL)
 	if (!DeleteObject (hbr))
-	  WIN32_API_FAILED ("DeleteObject");
+	  WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
@@ -428,12 +430,12 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
       if (filled)
 	{
 	  if (!Polygon (hdc, pts, npoints))
-	    WIN32_API_FAILED ("Polygon");
+	    WIN32_GDI_FAILED ("Polygon");
 	}
       else
 	{
 	  if (!Polyline (hdc, pts, npoints))
-	    WIN32_API_FAILED ("Polyline");
+	    WIN32_GDI_FAILED ("Polyline");
 	}
     }
   g_free (pts);
@@ -461,12 +463,12 @@ gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
 
   if ((oldfont = SelectObject (argp->hdc, singlefont->xfont)) == NULL)
     {
-      WIN32_API_FAILED ("SelectObject");
+      WIN32_GDI_FAILED ("SelectObject");
       return;
     }
   
   if (!TextOutW (argp->hdc, argp->x, argp->y, wcstr, wclen))
-    WIN32_API_FAILED ("TextOutW");
+    WIN32_GDI_FAILED ("TextOutW");
   GetTextExtentPoint32W (argp->hdc, wcstr, wclen, &size);
   argp->x += size.cx;
 
@@ -662,20 +664,20 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   if (src_private->window_type == GDK_DRAWABLE_PIXMAP)
     {
       if ((srcdc = CreateCompatibleDC (hdc)) == NULL)
-	WIN32_API_FAILED ("CreateCompatibleDC");
+	WIN32_GDI_FAILED ("CreateCompatibleDC");
       
       if ((hgdiobj = SelectObject (srcdc, GDK_DRAWABLE_XID (src))) == NULL)
-	WIN32_API_FAILED ("SelectObject #1");
+	WIN32_GDI_FAILED ("SelectObject");
       
       if (!BitBlt (hdc, xdest, ydest, width, height,
 		   srcdc, xsrc, ysrc, SRCCOPY))
-	WIN32_API_FAILED ("BitBlt");
+	WIN32_GDI_FAILED ("BitBlt");
       
       if ((SelectObject (srcdc, hgdiobj) == NULL))
-	WIN32_API_FAILED ("SelectObject #2");
+	WIN32_GDI_FAILED ("SelectObject");
       
       if (!DeleteDC (srcdc))
-	WIN32_API_FAILED ("DeleteDC");
+	WIN32_GDI_FAILED ("DeleteDC");
     }
   else
     {
@@ -700,20 +702,20 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 	  if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc,
 			 &scrollRect, &clipRect,
 			 updateRgn, NULL))
-	    WIN32_API_FAILED ("ScrollDC");
+	    WIN32_GDI_FAILED ("ScrollDC");
 	  if (!InvalidateRgn (GDK_DRAWABLE_XID (drawable), updateRgn, FALSE))
-	    WIN32_API_FAILED ("InvalidateRgn");
+	    WIN32_GDI_FAILED ("InvalidateRgn");
 	  if (!UpdateWindow (GDK_DRAWABLE_XID (drawable)))
-	    WIN32_API_FAILED ("UpdateWindow");
+	    WIN32_GDI_FAILED ("UpdateWindow");
 	}
       else
 	{
 	  if ((srcdc = GetDC (GDK_DRAWABLE_XID (src))) == NULL)
-	    WIN32_API_FAILED ("GetDC");
+	    WIN32_GDI_FAILED ("GetDC");
 	  
 	  if (!BitBlt (hdc, xdest, ydest, width, height,
 		       srcdc, xsrc, ysrc, SRCCOPY))
-	    WIN32_API_FAILED ("BitBlt");
+	    WIN32_GDI_FAILED ("BitBlt");
 	  ReleaseDC (GDK_DRAWABLE_XID (src), srcdc);
 	}
     }
@@ -761,11 +763,8 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   gboolean ok = TRUE;
   int i;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %#x destdc: (%d) %#x "
-			   "nsegs: %d\n",
-			   GDK_DRAWABLE_XID (drawable),
-			   gc_private, hdc,
-			   nsegs));
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %#x nsegs: %d\n",
+			   GDK_DRAWABLE_XID (drawable), nsegs));
 
   hdc = gdk_gc_predraw (drawable, gc_private,
 			GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
@@ -773,47 +772,47 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   if (gc_data->fill_style == GDK_OPAQUE_STIPPLED)
     {
       if (!BeginPath (hdc))
-	WIN32_API_FAILED ("BeginPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("BeginPath"), ok = FALSE;
       
       for (i = 0; i < nsegs; i++)
 	{
 	  if (ok && !MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
-	    WIN32_API_FAILED ("MoveToEx"), ok = FALSE;
+	    WIN32_GDI_FAILED ("MoveToEx"), ok = FALSE;
 	  if (ok && !LineTo (hdc, segs[i].x2, segs[i].y2))
-	    WIN32_API_FAILED ("LineTo #1"), ok = FALSE;
+	    WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
 	  
 	  /* Draw end pixel */
 	  if (ok && gc_data->pen_width == 1)
 	    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
-	      WIN32_API_FAILED ("LineTo #2"), ok = FALSE;
+	      WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
 	}
 
       if (ok && !EndPath (hdc))
-	WIN32_API_FAILED ("EndPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("EndPath"), ok = FALSE;
 	  
       if (ok && !WidenPath (hdc))
-	WIN32_API_FAILED ("WidenPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("WidenPath"), ok = FALSE;
 	  
       if (ok && !FillPath (hdc))
-	WIN32_API_FAILED ("FillPath"), ok = FALSE;
+	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
 
       if (hbr != NULL)
 	if (!DeleteObject (hbr))
-	  WIN32_API_FAILED ("DeleteObject");
+	  WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
       for (i = 0; i < nsegs; i++)
 	{
 	  if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
-	    WIN32_API_FAILED ("MoveToEx");
+	    WIN32_GDI_FAILED ("MoveToEx");
 	  if (!LineTo (hdc, segs[i].x2, segs[i].y2))
-	    WIN32_API_FAILED ("LineTo #1");
+	    WIN32_GDI_FAILED ("LineTo");
 	  
 	  /* Draw end pixel */
 	  if (gc_data->pen_width == 1)
 	    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
-	      WIN32_API_FAILED ("LineTo #2");
+	      WIN32_GDI_FAILED ("LineTo");
 	}
     }
   gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
@@ -846,7 +845,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
     }
   
   if (!Polyline (hdc, pts, npoints))
-    WIN32_API_FAILED ("Polyline");
+    WIN32_GDI_FAILED ("Polyline");
   
   g_free (pts);
   
@@ -855,13 +854,13 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
     {
       MoveToEx (hdc, points[npoints-1].x, points[npoints-1].y, NULL);
       if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
-	WIN32_API_FAILED ("LineTo");
+	WIN32_GDI_FAILED ("LineTo");
     }
 #else
   MoveToEx (hdc, points[0].x, points[0].y, NULL);
   for (i = 1; i < npoints; i++)
     if (!LineTo (hdc, points[i].x, points[i].y))
-      WIN32_API_FAILED ("LineTo #1");
+      WIN32_GDI_FAILED ("LineTo");
   
   /* Draw end pixel */
   /* LineTo doesn't draw the last point, so if we have a pen width of 1,
@@ -870,7 +869,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
    */
   if (gc_data->pen_width == 1 && windows_version > 0x80000000)
     if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
-      WIN32_API_FAILED ("LineTo #2");
+      WIN32_GDI_FAILED ("LineTo");
 #endif	
   gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
 }

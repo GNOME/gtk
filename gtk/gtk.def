@@ -160,6 +160,8 @@ EXPORTS
 	gtk_alignment_get_type
 	gtk_alignment_new
 	gtk_alignment_set
+	gtk_arg_name_strip_type
+	gtk_args_collect_cleanup
 	gtk_arrow_get_type
 	gtk_arrow_new
 	gtk_arrow_set
@@ -560,6 +562,7 @@ EXPORTS
 	gtk_hscrollbar_new
 	gtk_hseparator_get_type
 	gtk_hseparator_new
+	gtk_identifier_get_type
 	gtk_idle_add
 	gtk_idle_add_full
 	gtk_idle_add_priority
@@ -980,6 +983,8 @@ EXPORTS
 	gtk_rc_reparse_all
 	gtk_rc_set_default_files
 	gtk_rc_set_image_loader
+	gtk_rc_style_new
+	gtk_rc_style_ref
 	gtk_ruler_draw_pos
 	gtk_ruler_draw_ticks
 	gtk_ruler_get_type

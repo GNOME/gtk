@@ -43,6 +43,7 @@
 
 #define GDK_WINDOW_XDISPLAY	      GDK_DRAWABLE_XDISPLAY
 #define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
+#define GDK_FONT_XFONT(font)          (((GdkWin32SingleFont *)((GdkFontPrivateWin32 *)font)->fonts->data)->xfont)
 
 GdkVisual*   gdkx_visual_get   (VisualID xvisualid);
 
