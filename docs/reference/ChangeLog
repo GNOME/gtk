@@ -1,5 +1,7 @@
 2002-12-08  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtksignal.sgml: Add deprecation info.
+
 	* gdk-pixbuf/tmpl/module_interface.sgml: Add docs.	
 
 2002-12-06  Matthias Clasen  <maclas@gmx.de>
