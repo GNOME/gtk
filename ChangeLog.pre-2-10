@@ -1,3 +1,11 @@
+Wed Feb 18 04:38:24 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c:
+	  new signal GtkWidget::set_parent. this signal will be emitted once a
+ 	  widget gets a new/no parent assigned (i.e. from gtk_widget_unparent
+	  and gtk_widget_set_parent).
+
 Wed Feb 18 02:58:50 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtktooltips.h:

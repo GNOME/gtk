@@ -252,6 +252,8 @@ struct _GtkWidgetClass
 				GtkAllocation  *allocation);
   void (* state_changed)       (GtkWidget      *widget,
 				guint		previous_state);
+  void (* set_parent)	       (GtkWidget      *widget,
+				GtkWidget      *previous_parent);
 
   /* accelerators */
   gint (* install_accelerator) (GtkWidget      *widget,

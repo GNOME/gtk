@@ -45,6 +45,7 @@ enum {
   SIZE_REQUEST,
   SIZE_ALLOCATE,
   STATE_CHANGED,
+  SET_PARENT,
   INSTALL_ACCELERATOR,
   REMOVE_ACCELERATOR,
   EVENT,
@@ -118,6 +119,9 @@ typedef gint (*GtkWidgetSignal4) (GtkObject *object,
 typedef void (*GtkWidgetSignal5) (GtkObject *object,
 				  guint      arg1,
 				  gpointer   data);
+typedef void (*GtkWidgetSignal6) (GtkObject *object,
+				  GtkObject *arg1,
+				  gpointer   data);
 
 typedef	struct	_GtkStateData	 GtkStateData;
 
@@ -145,6 +149,10 @@ static void gtk_widget_marshal_signal_4 (GtkObject	*object,
 					 gpointer	 func_data,
 					 GtkArg		*args);
 static void gtk_widget_marshal_signal_5 (GtkObject	*object,
+					 GtkSignalFunc	 func,
+					 gpointer	 func_data,
+					 GtkArg		*args);
+static void gtk_widget_marshal_signal_6 (GtkObject	*object,
 					 GtkSignalFunc	 func,
 					 gpointer	 func_data,
 					 GtkArg		*args);
@@ -373,6 +381,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_5,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_UINT);
+  widget_signals[SET_PARENT] =
+    gtk_signal_new ("set_parent",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, set_parent),
+		    gtk_widget_marshal_signal_6,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_OBJECT);
   widget_signals[INSTALL_ACCELERATOR] =
     gtk_signal_new ("install_accelerator",
 		    GTK_RUN_FIRST,
@@ -660,6 +676,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->size_request = NULL;
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->state_changed = NULL;
+  klass->set_parent = NULL;
   klass->install_accelerator = NULL;
   klass->remove_accelerator = NULL;
   klass->event = NULL;
@@ -1066,6 +1083,7 @@ gtk_widget_unparent (GtkWidget *widget)
 {
   GtkWidget *toplevel;
   GtkWidget *child;
+  GtkWidget *old_parent;
   
   g_return_if_fail (widget != NULL);
   if (widget->parent == NULL)
@@ -1104,8 +1122,10 @@ gtk_widget_unparent (GtkWidget *widget)
 
   if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_IN_REPARENT (widget))
     gtk_widget_unrealize (widget);
-  
+
+  old_parent = widget->parent;
   widget->parent = NULL;
+  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SET_PARENT], old_parent);
   
   gtk_widget_unref (widget);
 }
@@ -1925,7 +1945,7 @@ gtk_widget_reparent (GtkWidget *widget,
 	  if (GTK_WIDGET_NO_WINDOW (widget))
     	    {
 	      if (GTK_IS_CONTAINER (widget))
-		gtk_container_foreach (GTK_CONTAINER(widget),
+		gtk_container_foreach (GTK_CONTAINER (widget),
 				       gtk_widget_reparent_container_child,
 				       gtk_widget_get_parent_window (widget));
 	      else
@@ -2293,6 +2313,8 @@ gtk_widget_set_parent (GtkWidget *widget,
 			       gtk_widget_set_style_recurse,
 			       NULL);
     }
+
+  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SET_PARENT], NULL);
 }
 
 /*************************************************************
@@ -3087,12 +3109,31 @@ gtk_widget_marshal_signal_5 (GtkObject	    *object,
 			     GtkArg	    *args)
 {
   GtkWidgetSignal5 rfunc;
-  gint *return_val;
   
   rfunc = (GtkWidgetSignal5) func;
-  return_val = GTK_RETLOC_BOOL (args[1]);
   
   (* rfunc) (object, GTK_VALUE_UINT (args[0]), func_data);
+}
+
+/*****************************************
+ * gtk_widget_marshal_signal_6:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+static void
+gtk_widget_marshal_signal_6 (GtkObject	    *object,
+			     GtkSignalFunc   func,
+			     gpointer	     func_data,
+			     GtkArg	    *args)
+{
+  GtkWidgetSignal6 rfunc;
+  
+  rfunc = (GtkWidgetSignal6) func;
+  
+  (* rfunc) (object, GTK_VALUE_OBJECT (args[0]), func_data);
 }
 
 static void
