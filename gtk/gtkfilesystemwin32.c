@@ -608,7 +608,7 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
 
   if (filename_is_drive_root (volume->drive) &&
       volume->drive_type == DRIVE_REMOTE)
-    real_display_name = g_strdup (volume->drive);
+    real_display_name = g_strdup_printf (_("Network Drive (%s)"), volume->drive);
   else if ((filename_is_drive_root (volume->drive) && volume->drive[0] >= 'C') ||
       volume->drive_type != DRIVE_REMOVABLE)
     {
@@ -623,7 +623,7 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
 	  wname[0])
 	{
 	  gchar *name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
-	  real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
+	  real_display_name = g_strdup_printf (_("%s (%s)"), name, volume->drive);
 	  g_free (name);
 	}
       else

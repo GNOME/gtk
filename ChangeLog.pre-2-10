@@ -16,6 +16,8 @@
 	connected or not, so it's easier to just not try getting the
 	volume name for them. See the bug report for discussion.
 
+	Make volume name display formats translatable.
+
 	Fix for #163702, from Ivan Wong: 
 	
 	* gdk/win32/gdkprivate-win32.h 
