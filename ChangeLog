@@ -1,3 +1,9 @@
+Mon Jan 25 19:41:56 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_page_allocate): Queue
+	a redraw on the tab area when a tab changes size.
+	(Includes improvements from Lars Hamann)
+
 Mon Jan 25 19:00:13 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_value_events): 
@@ -5,7 +11,9 @@ Mon Jan 25 19:00:13 1999  Owen Taylor  <otaylor@redhat.com>
 	 try a different one that is less dependent on
 	 the state of the widget. Just redraw the value_marker
 	 when it gets mapped. Somebody needs to analyze
-	 this widget more carefully and figure out 
+	 this widget more carefully and figure out when
+	 it should be setting the contents of the previews
+	 with more care.
 
 Mon Jan 25 17:48:03 1999  Owen Taylor  <otaylor@redhat.com>
 

@@ -2988,6 +2988,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 			    GtkNotebookPage *page,
 			    GtkAllocation   *allocation)
 {
+  GtkWidget *widget;
   GtkAllocation child_allocation;
   gint xthickness;
   gint ythickness;
@@ -2997,10 +2998,59 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   g_return_if_fail (page != NULL);
   g_return_if_fail (allocation != NULL);
 
-  page->allocation = *allocation;
+  widget = GTK_WIDGET (notebook);
 
-  xthickness = GTK_WIDGET (notebook)->style->klass->xthickness;
-  ythickness = GTK_WIDGET (notebook)->style->klass->ythickness;
+  xthickness = widget->style->klass->xthickness;
+  ythickness = widget->style->klass->ythickness;
+
+  /* If the size of the notebook tabs change, we need to queue
+   * a redraw on the tab area
+   */
+  if ((allocation->width != page->allocation.width) ||
+      (allocation->height != page->allocation.height))
+    {
+      gint x, y, width, height, border_width;
+
+      border_width = GTK_CONTAINER (notebook)->border_width;
+
+      switch (notebook->tab_pos)
+       {
+       case GTK_POS_TOP:
+         width = widget->allocation.width;
+         height = MAX (page->allocation.height, allocation->height) +
+           ythickness;
+         x = 0;                              
+         y = border_width;
+         break;
+
+       case GTK_POS_BOTTOM:
+         width = widget->allocation.width + xthickness;
+         height = MAX (page->allocation.height, allocation->height) +
+           ythickness;
+         x = 0;                              
+         y = widget->allocation.height - height - border_width;
+         break;
+
+       case GTK_POS_LEFT:
+         width = MAX (page->allocation.width, allocation->width) + xthickness;
+         height = widget->allocation.height;
+         x = border_width;
+         y = 0;
+         break;
+
+       case GTK_POS_RIGHT:
+       default:                /* quiet gcc */
+         width = MAX (page->allocation.width, allocation->width) + xthickness;
+         height = widget->allocation.height;
+         x = widget->allocation.width - width - border_width;
+         y = 0;
+         break;
+       }
+
+      gtk_widget_queue_clear_area (widget, x, y, width, height);
+    }
+
+  page->allocation = *allocation;
 
   if (notebook->cur_page != page)
     {
