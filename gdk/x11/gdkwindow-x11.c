@@ -820,8 +820,8 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   {
     GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
 
-    if (draw_impl->picture)
-      XRenderFreePicture (GDK_WINDOW_XDISPLAY (window), draw_impl->picture);
+    if (draw_impl->xft_draw)
+      XftDrawDestroy (draw_impl->xft_draw);
   }
 #endif /* HAVE_XFT */  
 

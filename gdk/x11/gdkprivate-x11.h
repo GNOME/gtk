@@ -106,8 +106,10 @@ gint _gdk_send_xevent      (GdkDisplay *display,
 GType _gdk_gc_x11_get_type (void);
 
 #ifdef HAVE_XFT
-gboolean _gdk_x11_have_render       (GdkDisplay *display);
-Picture  _gdk_x11_gc_get_fg_picture (GdkGC      *gc);
+gboolean _gdk_x11_have_render         (GdkDisplay *display);
+Picture  _gdk_x11_gc_get_fg_picture   (GdkGC      *gc);
+void     _gdk_gc_x11_get_fg_xft_color (GdkGC      *gc,
+				       XftColor   *xftcolor);
 #endif /* HAVE_XFT */
 
 GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,

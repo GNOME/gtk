@@ -958,6 +958,10 @@ if test "x$gdktarget" = "xx11"; then
 
   AM_CONDITIONAL(HAVE_XFT, $have_xft)
 
+  if $PKG_CONFIG --exists xft ; then
+    AC_DEFINE(HAVE_XFT2, 1, [Define if we have Xft, version 2])
+  fi
+
   #
   # If Pango included the shared library dependencies from X11 in
   # the pkg-config output, then we use that (to avoid duplicates).

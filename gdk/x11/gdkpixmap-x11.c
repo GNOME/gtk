@@ -133,8 +133,8 @@ gdk_pixmap_impl_x11_finalize (GObject *object)
       {
 	GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (impl);
 	
-	if (draw_impl->picture)
-	  XRenderFreePicture (GDK_DISPLAY_XDISPLAY (display), draw_impl->picture);
+	if (draw_impl->xft_draw)
+	  XftDrawDestroy (draw_impl->xft_draw);
       }
 #endif /* HAVE_XFT */  
 

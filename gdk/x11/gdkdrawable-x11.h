@@ -34,7 +34,7 @@
 #include <X11/Xlib.h>
 
 #ifdef HAVE_XFT
-#include <X11/extensions/Xrender.h>
+#include <X11/Xft/Xft.h>
 #endif
 
 #ifdef __cplusplus
@@ -66,7 +66,7 @@ struct _GdkDrawableImplX11
   GdkScreen *screen;
 
 #ifdef HAVE_XFT
-  Picture picture;
+  XftDraw *xft_draw;
 #endif  
 };
  

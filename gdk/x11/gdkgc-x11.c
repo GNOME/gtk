@@ -818,7 +818,7 @@ Picture
 _gdk_x11_gc_get_fg_picture (GdkGC *gc)
 {
   GdkGCX11 *x11_gc;
-  GdkColormap *cmap = gdk_gc_get_colormap (gc);
+  GdkColormap *cmap;
   gboolean new = FALSE;
   GdkColor color;
   
@@ -828,6 +828,7 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
     return None;
 
   x11_gc = GDK_GC_X11 (gc);
+  cmap = gdk_gc_get_colormap (gc);
 
   if (x11_gc->fg_picture == None)
     {
@@ -870,4 +871,34 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
 
   return x11_gc->fg_picture;
 }
+
+/**
+ * _gdk_gc_x11_get_fg_xft_color:
+ * @gc: a #GdkGC
+ * @xftcolor: location to store the color
+ * 
+ * Gets the foreground color of the GC as a XftColor.
+ **/
+void
+_gdk_gc_x11_get_fg_xft_color (GdkGC    *gc,
+			      XftColor *xftcolor)
+{
+  GdkGCX11 *x11_gc;
+  GdkColormap *cmap;
+  GdkColor color;
+  
+  g_return_if_fail (GDK_IS_GC_X11 (gc));
+
+  x11_gc = GDK_GC_X11 (gc);
+  cmap = gdk_gc_get_colormap (gc);
+
+  xftcolor->pixel = x11_gc->fg_pixel;
+
+  gdk_colormap_query_color (cmap, xftcolor->pixel, &color);
+  xftcolor->color.red = color.red;
+  xftcolor->color.green = color.green;
+  xftcolor->color.blue = color.blue;
+  xftcolor->color.alpha = 0xffff;
+}
+
 #endif /* HAVE_XFT */

@@ -59,9 +59,19 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   if (display_x11->use_xft == -1)
     {
       const char *val = g_getenv ("GDK_USE_XFT");
-
+      
+      /* Version 2 of Xft supports rendering FreeType fonts via
+       * the core X protocol, so we default to it everywhere.
+       *
+       * For Xft1, we only enable Xft if the user explicitely
+       * specifies it, and we have the RENDER extension
+       */
+#  ifdef HAVE_XFT2      
+      display_x11->use_xft = !val || (atoi (val) != 0);
+#  else
       display_x11->use_xft = val && (atoi (val) != 0) && 
 	_gdk_x11_have_render (GDK_SCREEN_DISPLAY (screen));
+#  endif /* HAVE_XFT2 */      
     }
   
   if (display_x11->use_xft)
