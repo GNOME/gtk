@@ -1,3 +1,9 @@
+2003-01-15  Matthias Clasen  <maclas@gmx.de>
+
+	* examples/menu/itemfactory.c: 
+	* docs/tutorial/gtk-tut.sgml: Add a <StockItem> to the itemfactory
+	example.  (#103211)
+
 2002-12-29  Murray Cumming  <murrayc@usa.net>
 
 	Fixes #102168.
@@ -75,7 +81,7 @@ Tue Jan 14 23:11:55 2002  Kristian Rietveld  <kris@gtk.org>
 Tue Jan 14 20:58:44 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (invalite_last_column): split out actual column
-	invalidation into invalite_column(),
+	invalidation into invalidate_column(),
 	(gtk_tree_view_size_allocate_columns): invalidate column if the
 	new width is larger than the old width.
 	(fixes #102890, reported by Alex Duggan).

@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>December 7, 2002</date>
+    <date>January 15, 2003</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -8682,6 +8682,9 @@ NULL or "" or "&lt;Item&gt;" - create a simple item
 "&lt;Separator&gt;"          - create a separator
 "&lt;Branch&gt;"             - create an item to hold submenus (optional)
 "&lt;LastBranch&gt;"         - create a right justified branch
+"&lt;StockItem&gt;"          - create a simple item with a stock image. 
+                               see <filename>gtkstock.h</filename> for builtin stock items
+ 
 </programlisting>
 
 <para>Note that &lt;LastBranch&gt; is only useful for one submenu of
@@ -8807,7 +8810,7 @@ static GtkItemFactoryEntry entries[] = {
   { "/File/_New",     "&lt;CTRL&gt;N", new_file,     1, "&lt;Item&gt;" },
   { "/File/_Open...", "&lt;CTRL&gt;O", open_file,    1, "&lt;Item&gt;" },
   { "/File/sep1",     NULL,      NULL,         0, "&lt;Separator&gt;" },
-  { "/File/_Quit",    "&lt;CTRL&gt;Q", quit_program, 0, "&lt;Item&gt;"} };
+  { "/File/_Quit",    "&lt;CTRL&gt;Q", quit_program, 0, "&lt;StockItem&gt;", GTK_STOCK_QUIT } };
 </programlisting>
 </sect3>
 </sect2>
@@ -8965,7 +8968,7 @@ static GtkItemFactoryEntry menu_items[] = {
   { "/File/_Save",    "&amp;lt;control&amp;gt;S", print_hello,    0, "&lt;Item&gt;" },
   { "/File/Save _As", NULL,         NULL,           0, "&lt;Item&gt;" },
   { "/File/sep1",     NULL,         NULL,           0, "&amp;lt;Separator&amp;gt;" },
-  { "/File/Quit",     "&amp;lt;control&amp;gt;Q", gtk_main_quit,  0, "&lt;Item&gt;" },
+  { "/File/_Quit",    "&lt;CTRL&gt;Q", gtk_main_quit, 0, "&lt;StockItem&gt;", GTK_STOCK_QUIT },
   { "/_Options",      NULL,         NULL,           0, "&amp;lt;Branch&amp;gt;" },
   { "/Options/tear",  NULL,         NULL,           0, "&amp;lt;Tearoff&amp;gt;" },
   { "/Options/Check", NULL,         print_toggle,   1, "&amp;lt;CheckItem&amp;gt;" },
@@ -9103,7 +9106,7 @@ int main( int argc,
  
   return(0);
 }
-/* example-end */
+<!-- example-end -->
 </programlisting>
 
 </sect1>

@@ -35,7 +35,7 @@ static GtkItemFactoryEntry menu_items[] = {
   { "/File/_Save",    "<control>S", print_hello,    0, "<Item>" },
   { "/File/Save _As", NULL,         NULL,           0, "<Item>" },
   { "/File/sep1",     NULL,         NULL,           0, "<Separator>" },
-  { "/File/Quit",     "<control>Q", gtk_main_quit,  0, "<Item>" },
+  { "/File/_Quit",    "<CTRL>Q", gtk_main_quit, 0, "<StockItem>", GTK_STOCK_QUIT },
   { "/_Options",      NULL,         NULL,           0, "<Branch>" },
   { "/Options/tear",  NULL,         NULL,           0, "<Tearoff>" },
   { "/Options/Check", NULL,         print_toggle,   1, "<CheckItem>" },
