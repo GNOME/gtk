@@ -158,7 +158,7 @@ typedef enum
   GDK_PIXDATA_DUMP_STATIC		= 1 << 9,
   GDK_PIXDATA_DUMP_CONST		= 1 << 10,
   /* save RLE decoder macro? */
-  GDK_PIXDATA_DUMP_RLE_DECODER		= 1 << 16,
+  GDK_PIXDATA_DUMP_RLE_DECODER		= 1 << 16
 } GdkPixdataDumpType;
   
 
