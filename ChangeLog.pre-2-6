@@ -1,7 +1,23 @@
+Wed May 21 15:53:14 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkprogress.c (gtk_progress_set_format_string,
+	gtk_progress_set_show_text): Always queue a resize ... 
+	we rely on the size-allocate to do the update, plus a 
+	different format can actually change our size requisition.
+	(#111052)
+
+	* gtk/gtkprogress.c (gtk_progress_changed): Track
+	::changed as well as ::value_changed, and queue a
+	resize on ::changed when necessary.
+
+	* gtk/gtkprogress.c (gtk_progress_set_adjustment): 
+	Call gtk_progress_changed() here to update or 
+	queue a resize as necessary.
+
 Wed May 21 14:06:13 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* gtk/gtkimcontextsimple.c: added composing rules of
-	Greek acceted letters, patch by Vasilis Vasaitis (#107507)
+	Greek accented letters, patch by Vasilis Vasaitis (#107507)
 
 Wed May 21 13:19:05 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
