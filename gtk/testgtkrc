@@ -36,7 +36,7 @@ style "button"
 style 'main_button' = 'button'
 {
   font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
-  bg[PRELIGHT] = { 0, 0x00, 0.75 }
+  bg[PRELIGHT] = { 0, 0.75, 0x00 }
 }
 
 style "toggle_button" = "button"

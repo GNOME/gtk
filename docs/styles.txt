@@ -57,26 +57,31 @@ gtk_style_copy ()
 
 
 GtkWidget::style_set
-This signal will be emitted for a widget once its style changes with
-the previous style supplied.
-the GtkWidgetClass implements a default handler for this signal that
-will set the widget's window's background of widgets that provide their
-own windows according to the new style.
-Derived widgets need to overide this default handler, if:
-- their size requisition depends on the current style.
-  (e.g., on the style's fonts)
-- they set the background of widget->window to something other than.
-  style->bg. (e.g., GtkListItem)
-- the widget provides windows other than widget->window.
-- the widget has any other stored dependencies on the style.
+  This signal will be emitted for a widget once its style changes with
+  an additional argument previous_style wich will hold the widget->style
+  avlue from a previous emission.
+  The initial emission of this signal is guaranteed to happen prior
+  to any GtkWidget::size_request emission, and will have the previous_style
+  argument set to NULL.
+  The GtkWidgetClass implements a default handler for this signal that
+  will set the widget's window's background of widgets that provide their
+  own windows according to the new style.
+  Derived widgets need to overide this default handler, if:
+  - their size requisition depends on the current style.
+    (e.g., on the style's fonts)
+  - they set the background of widget->window to something other than.
+    style->bg. (e.g., GtkListItem)
+  - the widget provides windows other than widget->window.
+  - the widget has any other stored dependencies on the style.
                    
 
 
 Flag indications:
 
 !GTK_RC_STYLE && !GTK_USER_STYLE:
-  The widget has it's default style set, and no rc lookup has been
-  performed.
+  The widget has it's default style set, no rc lookup has been
+  performed, the widget has not been size requested yet and is
+  therefore not yet realized.
 
 GTK_USER_STYLE:
   GTK_RC_STYLE is not set.
@@ -86,9 +91,8 @@ GTK_USER_STYLE:
 GTK_RC_STYLE:
   GTK_USER_STYLE is not set.
   If the widget has a saved default style, it has been assigned an
-  rc style.
-  If the widget does not have a saved default style, it still has its
-  default style but an rc lookup has already been performed.
+  rc style. If the widget does not have a saved default style, it still
+  has its default style but an rc lookup has already been performed.
 
 
 	- Tim Janik <timj@gimp.org>

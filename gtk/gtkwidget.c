@@ -200,7 +200,8 @@ static void gtk_widget_propagate_state		 (GtkWidget	*widget,
 static void gtk_widget_draw_children_recurse	 (GtkWidget	*widget,
 						  gpointer	 client_data);
 static void gtk_widget_set_style_internal	 (GtkWidget	*widget,
-						  GtkStyle	*style);
+						  GtkStyle	*style,
+						  gboolean	 initial_emission);
 static void gtk_widget_set_style_recurse	 (GtkWidget	*widget,
 						  gpointer	 client_data);
 
@@ -1631,6 +1632,7 @@ gtk_widget_size_request (GtkWidget	*widget,
   g_return_if_fail (widget != NULL);
 
   gtk_widget_ref (widget);
+  gtk_widget_ensure_style (widget);
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_REQUEST],
 		   requisition);
   aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
@@ -2337,9 +2339,12 @@ gtk_widget_set_style (GtkWidget *widget,
 		      GtkStyle	*style)
 {
   GtkStyle *default_style;
+  gboolean initial_emission;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (style != NULL);
+
+  initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_RC_STYLE);
   GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
@@ -2351,7 +2356,7 @@ gtk_widget_set_style (GtkWidget *widget,
       gtk_object_set_data (GTK_OBJECT (widget), saved_default_style, widget->style);
     }
 
-  gtk_widget_set_style_internal (widget, style);
+  gtk_widget_set_style_internal (widget, style, initial_emission);
 }
 
 void
@@ -2367,8 +2372,11 @@ gtk_widget_set_rc_style (GtkWidget *widget)
 {
   GtkStyle *saved_style;
   GtkStyle *new_style;
+  gboolean initial_emission;
   
   g_return_if_fail (widget != NULL);
+
+  initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
 
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
   GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
@@ -2382,15 +2390,23 @@ gtk_widget_set_rc_style (GtkWidget *widget)
 	  gtk_style_ref (widget->style);
 	  gtk_object_set_data (GTK_OBJECT (widget), saved_default_style, widget->style);
 	}
-      gtk_widget_set_style_internal (widget, new_style);
+      gtk_widget_set_style_internal (widget, new_style, initial_emission);
     }
   else
     {
       if (saved_style)
 	{
+	  g_assert (initial_emission == FALSE); /* FIXME: remove this line */
+
 	  gtk_object_remove_data (GTK_OBJECT (widget), saved_default_style);
-	  gtk_widget_set_style_internal (widget, saved_style);
+	  gtk_widget_set_style_internal (widget, saved_style, initial_emission);
 	  gtk_style_unref (saved_style);
+	}
+      else
+	{
+	  g_assert (initial_emission == TRUE); /* FIXME: remove this line */
+
+	  gtk_widget_set_style_internal (widget, new_style, TRUE);
 	}
     }
 }
@@ -2414,7 +2430,8 @@ gtk_widget_style_set (GtkWidget *widget,
 
 static void
 gtk_widget_set_style_internal (GtkWidget *widget,
-			       GtkStyle	 *style)
+			       GtkStyle	 *style,
+			       gboolean   initial_emission)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (style != NULL);
@@ -2433,7 +2450,9 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       if (GTK_WIDGET_REALIZED (widget))
 	widget->style = gtk_style_attach (widget->style, widget->window);
 
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STYLE_SET], previous_style);
+      gtk_signal_emit (GTK_OBJECT (widget),
+		       widget_signals[STYLE_SET],
+		       initial_emission ? NULL : previous_style);
       gtk_style_unref (previous_style);
 
       if (widget->parent)
@@ -2449,6 +2468,12 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 	  else if (GTK_WIDGET_DRAWABLE (widget))
 	    gtk_widget_queue_draw (widget);
 	}
+    }
+  else if (initial_emission)
+    {
+      gtk_signal_emit (GTK_OBJECT (widget),
+		       widget_signals[STYLE_SET],
+		       NULL);
     }
 }
 
