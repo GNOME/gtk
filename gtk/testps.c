@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <time.h>
 
+gint a4w = 595;
+gint a4h = 842;
 
 GdkColor red;
 GdkColor blue;
@@ -20,11 +22,16 @@ GtkWidget *vb;
 GtkWidget *sw;
 GtkWidget *pix;
 GdkPixmap* bp;
+GdkPixmap* xpm;
+GdkBitmap* bitmap;
+gint xpm_w, xpm_h;
 gint depth;
+gchar dashes[] = {1,2,3,4,5};
+gint ndashes=5;
 
 void page1(GdkDrawable* d, int print) {
 	if (print)
-		gdk_ps_drawable_page_start(d, 0, 1, 0, 300, 600, 1200);
+		gdk_ps_drawable_page_start(d, 0, 1, 0, 72, a4w, a4h);
 	else {
 		d = gdk_pixmap_new(win->window, 300, 300, depth);
 		gdk_gc_set_foreground(gc, &white);
@@ -49,6 +56,9 @@ void page1(GdkDrawable* d, int print) {
 	gdk_gc_set_line_attributes(gc, 16, -1, GDK_CAP_NOT_LAST, -1);
 	gdk_draw_line(d, gc, 20, 100, 100, 100);
 	gdk_draw_text(d, font, gc, 120, 100, "(not last)", 10);
+	/*gdk_draw_pixmap(d, gc, xpm, 0, 0, 160, 100, xpm_w, xpm_h);
+	gdk_draw_pixmap(d, gc, bitmap, 0, 0, 160, 140, xpm_w, xpm_h);
+	*/
 	if (print)
 		gdk_ps_drawable_page_end(d);
 	else {
@@ -62,7 +72,7 @@ void page1(GdkDrawable* d, int print) {
 void page2(GdkDrawable* d, int print) {
 	GdkRectangle clip = {30, 30, 320, 350};
 	if (print)
-		gdk_ps_drawable_page_start(d, 0, 1, 0, 300, 600, 1200);
+		gdk_ps_drawable_page_start(d, 0, 1, 0, 72, a4w, a4h);
 	else {
 		d = gdk_pixmap_new(win->window, 350, 350, depth);
 		gdk_gc_set_foreground(gc, &white);
@@ -100,7 +110,7 @@ void page3(GdkDrawable* d, int print) {
 	gdk_region_destroy(region2);
 	gdk_gc_set_clip_rectangle(gc, NULL);
 	if (print)
-		gdk_ps_drawable_page_start(d, 0, 1, 0, 300, 600, 1200);
+		gdk_ps_drawable_page_start(d, 0, 1, 0, 72, a4w, a4h);
 	else {
 		d = gdk_pixmap_new(win->window, 300, 300, depth);
 		gdk_gc_set_foreground(gc, &white);
@@ -118,6 +128,12 @@ void page3(GdkDrawable* d, int print) {
 	gdk_draw_string(d, font, gc, 50, fsize*5, "Fifth line");
 	len = gdk_string_width(font, "Fifth line");
 	gdk_draw_string(d, font, gc, 50+len, fsize*5, "This continues right after line");
+	gdk_gc_set_foreground(gc, &black);
+	gdk_draw_rectangle(d, gc, 0, 50, fsize*5-font->ascent, len, font->ascent+font->descent);
+	gdk_gc_set_line_attributes(gc, 1, GDK_LINE_DOUBLE_DASH, GDK_CAP_BUTT, -1);
+	gdk_draw_rectangle(d, gc, 0, 50, 10+fsize*6, len, font->ascent+font->descent);
+	gdk_gc_set_dashes(gc, 0, dashes, ndashes);
+	gdk_draw_rectangle(d, gc, 0, 50+10+len, 10+fsize*6, len, font->ascent+font->descent);
 	if (print)
 		gdk_ps_drawable_page_end(d);
 	else {
@@ -139,7 +155,7 @@ int main(int argc, char* argv[]) {
 	vb = gtk_vbox_new(5, 5);
 	gtk_container_add(GTK_CONTAINER(sw), vb);
 	gc = gdk_gc_new(win->window);
-	font = gdk_font_load(argc>1?argv[1]:"fixed");
+	font = gdk_font_load(argc>1?argv[1]:"-adobe-helvetica-medium-r-*");
 	gdk_window_get_geometry(win->window, NULL, NULL, NULL, NULL, &depth);
 	gtk_signal_connect(GTK_OBJECT(win), "delete_event", 
 		(GtkSignalFunc)gtk_main_quit, NULL);
@@ -159,6 +175,9 @@ int main(int argc, char* argv[]) {
 	gdk_color_alloc(cmap, &black);
 
 	fsize = font->ascent+font->descent;
+
+	xpm = gdk_pixmap_create_from_xpm(win->window, &bitmap, &white, "test.xpm");
+	gdk_window_get_size(xpm, &xpm_w, &xpm_h);
 	
 	d = gdk_ps_drawable_new(1, "Test for GdkPs", "lupus");
 	page1(d, 1);
@@ -170,6 +189,7 @@ int main(int argc, char* argv[]) {
 	gdk_ps_drawable_end(d);
 	gtk_widget_show_all(win);
 	gtk_main();
+	gdk_window_destroy(d);
 	return 0;
 }
 

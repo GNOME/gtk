@@ -21,6 +21,21 @@
 #include "gdk.h"
 #include "gdkprivate.h"
 
+static void
+gc_set_dashes(GdkGCPrivate* gc, gint offset, gchar* dashes, gint n) 
+{
+  if ( gc->dash_list)
+    g_free(gc->dash_list);
+  if ( n ) {
+    gc->dash_num = n;
+    gc->dash_offset = offset;
+    gc->dash_list = g_new(gchar, n);
+    memcpy(gc->dash_list, dashes, n);
+  } else {
+    gc->dash_list = NULL;
+    gc->dash_num = gc->dash_offset = 0;
+  }
+}
 
 GdkGC*
 gdk_gc_new (GdkWindow *window)
@@ -213,12 +228,15 @@ gdk_gc_new_with_values (GdkWindow	*window,
 	{
 	case GDK_LINE_SOLID:
 	  xvalues.line_style = LineSolid;
+	  gc_set_dashes(private, 0, NULL, 0);
 	  break;
 	case GDK_LINE_ON_OFF_DASH:
 	  xvalues.line_style = LineOnOffDash;
+	  gc_set_dashes(private, 0, "\1\1", 2);
 	  break;
 	case GDK_LINE_DOUBLE_DASH:
 	  xvalues.line_style = LineDoubleDash;
+	  gc_set_dashes(private, 0, "\2\1", 2); /* FIXME: is this right? */
 	  break;
 	}
       xvalues_mask |= GCLineStyle;
@@ -792,12 +810,15 @@ gdk_gc_set_line_attributes (GdkGC	*gc,
     {
     case GDK_LINE_SOLID:
       xline_style = LineSolid;
+      gc_set_dashes(private, 0, NULL, 0);
       break;
     case GDK_LINE_ON_OFF_DASH:
       xline_style = LineOnOffDash;
+      gc_set_dashes(private, 0, "\1\1", 2);
       break;
     case GDK_LINE_DOUBLE_DASH:
       xline_style = LineDoubleDash;
+      gc_set_dashes(private, 0, "\2\1", 2);
       break;
     default:
       xline_style = None;
@@ -855,14 +876,7 @@ gdk_gc_set_dashes (GdkGC *gc,
 
   XSetDashes (private->xdisplay, private->xgc, dash_offset, dash_list, n);
 
-  g_free(private->dash_list);
-  private->dash_list = NULL;
-  private->dash_num = n;
-  private->dash_offset = dash_offset;
-  if ( n ) {
-    private->dash_list = g_new(gchar, n);
-    memcpy(private->dash_list, dash_list, n);
-  }
+  gc_set_dashes(private, dash_offset, dash_list, n);
 }
 
 void
@@ -885,13 +899,6 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 
   dst_private->fg = src_private->fg;
   dst_private->bg = src_private->bg;
-  
-  g_free(dst_private->dash_list);
-  dst_private->dash_list = NULL;
-  dst_private->dash_num = src_private->dash_num;
-  dst_private->dash_offset = src_private->dash_offset;
-  if ( src_private->dash_num ) {
-    dst_private->dash_list = g_new(gchar, src_private->dash_num);
-    memcpy(dst_private->dash_list, src_private->dash_list, src_private->dash_num);
-  }
+
+  gc_set_dashes(dst_private, src_private->dash_offset, src_private->dash_list, src_private->dash_num);
 }

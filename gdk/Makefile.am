@@ -72,7 +72,7 @@ gxid_LDADD = \
 
 BUILT_SOURCES = gdkcursors.h gdkkeysyms.h
 
-EXTRA_DIST = makecursors.awk makekeysyms.awk PolyReg.c Region.c region.c region.h
+EXTRA_DIST = makecursors.awk makekeysyms.awk PolyReg.c Region.c region.h poly.h
 
 gdkcursors.h:
 	awk -f $(srcdir)/makecursors.awk @x_includes@/X11/cursorfont.h > $@

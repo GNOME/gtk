@@ -1,3 +1,15 @@
+Fri, 13 Nov 1998 18:54:13 +0100 Paolo Molaro <lupus@debian.org>
+
+	* gdk/Makefile.am: added poly.h to EXTRA_DIST.
+	* gdk/gdkgc.c: support dashes in GdkGCPrivate
+	* gdk/gdkprivate.h: move here GdkPsDrawable definition
+	* gdk/gdkdrawable.c: gdk_drawable_register returns an int
+	* gdk/gdkps.c: beginning support for pixmaps, better
+	guessing of postscript font name, beginning of downloading
+	function, better emulation of dashed lines,
+	* gtk/testps.c: better example to show pixmaps, dashes,
+	font size and a4 page size.
+
 Wed, 21 Oct 1998 19:29:03 +0200 Paolo Molaro <lupus@debian.org>
 
 	* gdk/gdkps.c: fixed silly error.

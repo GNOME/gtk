@@ -23,17 +23,18 @@
 static GList* engines = NULL;
 
 
-void
+gint
 gdk_drawable_register(GdkDrawableClass* d_engine) 
 {
   gint type = 0;
-  g_return_if_fail(d_engine != NULL);
+  g_return_val_if_fail(d_engine != NULL, 0);
 
   if ( d_engine->type )
-    return;
+    return d_engine->type;
   type = g_list_length(engines)+1;
   d_engine->type = type;
   engines = g_list_append(engines, d_engine);
+  return type;
 }
 
 

@@ -49,6 +49,7 @@ typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
 typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
 typedef struct _GdkRegionPrivate       GdkRegionPrivate;
+typedef struct _GdkPsDrawable          GdkPsDrawable;
 
 
 struct _GdkWindowPrivate
@@ -114,7 +115,6 @@ struct _GdkGCPrivate
   guint ref_count;
   guint nrects;
   GdkRectangle* rects;
-  /* FIXME: need to store here the dashes as well */
   GdkColor fg;
   GdkColor bg;
   gint dash_offset;
@@ -232,6 +232,33 @@ struct _GdkRegionPrivate
 {
   GdkRegion region;
   Region xregion;
+};
+
+struct _GdkPsDrawable { 
+	gint page;
+	gint fd;
+	gint width;
+	gint height;
+	GString *sbuf;
+	gint xoff;
+	gint yoff;
+	gint intile;
+	gint inframe;
+	GdkFont* font;
+	GdkColor fg;
+	GdkColor bg;
+	GdkCapStyle cap_style;
+	GdkJoinStyle join_style;
+	gint line_width;
+	gint valid;
+	gint valid_fg;
+	gint valid_bg;
+	gint nrects;
+	GdkRectangle *rects;
+	gint clipped;
+	gint dash_offset;
+	gint dash_num;
+	gchar* dash_list;
 };
 
 typedef enum {

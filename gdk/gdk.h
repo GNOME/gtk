@@ -907,7 +907,7 @@ guint    gdk_keyval_to_lower		  (guint	keyval);
 gboolean gdk_keyval_is_upper		  (guint	keyval);
 gboolean gdk_keyval_is_lower		  (guint	keyval);
 
-void gdk_drawable_register (GdkDrawableClass* draw_class);
+gint gdk_drawable_register (GdkDrawableClass* draw_class);
 
 #include <gdk/gdkps.h>
 #include <gdk/gdkrgb.h>

@@ -25,34 +25,30 @@ extern "C" {
 
 /*typedef struct _GdkPsDrawable GdkPsDrawable;*/
 
-typedef struct {
-	gint page;
-	gint fd;
-	gint width;
-	gint height;
-	GString *sbuf;
-	gint xoff;
-	gint yoff;
-	gint intile;
-	gint inframe;
-	GdkFont* font;
-	GdkColor fg;
-	GdkColor bg;
-	GdkCapStyle cap_style;
-	GdkJoinStyle join_style;
-	gint line_width;
-	gint valid;
-	gint valid_fg;
-	gint nrects;
-	GdkRectangle *rects;
-	gint clipped;
-} GdkPsDrawable;
 
+typedef struct 
+{
+  gchar* name;
+  gchar* face;
+  gchar* family;
+  gint download;
+  gchar* afm;
+  gchar* pfa;
+} GdkPsFontInfo;
+
+void         gdk_ps_drawable_add_font_info(GdkPsFontInfo *info);
 
 GdkDrawable* gdk_ps_drawable_new (gint   fd, 
 				  gchar *title, 
 				  gchar *author);
-
+void         gdk_ps_drawable_draw_rgb (GdkDrawable *d,
+				       GdkGC       *gc,
+				       gchar       *data,
+				       gint         bpp,
+				       gint         x,
+				       gint         y,
+				       gint         width,
+				       gint         height);
 void	     gdk_ps_drawable_put_data (GdkDrawable *d,
 				       gchar       *data,
 				       guint        len);
