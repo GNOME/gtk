@@ -201,7 +201,9 @@ gtk_text_tag_table_get_property (GObject      *object,
  *
  * Add a tag to the table. The tag is assigned the highest priority
  * in the table.
- * 
+ *
+ * @tag must not be in a tag table already, and may not have
+ * the same name as an already-added tag.
  **/
 void
 gtk_text_tag_table_add (GtkTextTagTable *table,
@@ -211,10 +213,15 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
 
   g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
-  g_return_if_fail (tag->name == NULL ||
-                    g_hash_table_lookup (table->hash, tag->name) == NULL);
   g_return_if_fail (tag->table == NULL);
 
+  if (tag->name && g_hash_table_lookup (table->hash, tag->name))
+    {
+      g_warning ("A tag named '%s' is already in the tag table.",
+                 tag->name);
+      return;
+    }
+  
   g_object_ref (G_OBJECT (tag));
 
   if (tag->name)

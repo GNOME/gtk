@@ -1,3 +1,25 @@
+2001-06-14  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkwindow.c (window_group_cleanup_grabs): fix other typo
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_state): fix typo
+
+	* gtk/gtktextbtree.c: don't leak node data all over the place.
+
+	* demos/gtk-demo/main.c (main): create fontify tags for the right
+	buffer
+
+	* gtk/gtktextbuffer.c, gtk/gtktexttagtable.c: enhance docs
+	to mention tags in the same table can't have the same name,
+	suggested by Skip Montanaro
+
+2001-06-11  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktexttagtable.c (gtk_text_tag_table_add): improve warning 
+	for trying to add two tags with same name to the tag table
+
+	* demos/gtk-demo/main.c (main): fix colors ;-)
+
 Fri Jun  8 17:56:52 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.[ch] gtk/gtkmain.c: Add a GtkWindowGroup struct

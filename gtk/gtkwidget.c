@@ -5293,7 +5293,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
     {
       gtk_widget_ref (widget);
       
-      if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_HAS_GRAB (widget))
+      if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_HAS_GRAB (widget))
 	gtk_grab_remove (widget);
       
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED], old_state);

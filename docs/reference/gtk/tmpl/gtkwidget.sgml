@@ -1564,6 +1564,14 @@ GtkWidget
 
 @widget: the object which received the signal.
 
+<!-- ##### SIGNAL GtkWidget::grab-notify ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkWidget::hide ##### -->
 <para>
 

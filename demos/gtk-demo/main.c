@@ -347,7 +347,7 @@ fontify ()
 	      tmp_iter = next_iter;
 	    }
 	  if (tag)
-	    gtk_text_buffer_apply_tag_by_name (info_buffer, tag, &start_iter, &tmp_iter);
+	    gtk_text_buffer_apply_tag_by_name (source_buffer, tag, &start_iter, &tmp_iter);
 
 	  start_iter = tmp_iter;
 	  start_ptr = end_ptr;
@@ -637,13 +637,14 @@ create_text (GtkTextBuffer **buffer,
 				       GTK_SHADOW_IN);
   
   text_view = gtk_text_view_new ();
-  gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
   
   *buffer = gtk_text_buffer_new (NULL);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (text_view), *buffer);
   gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
 
+  gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
+  
   if (is_source)
     {
       font_desc = pango_font_description_from_string ("Courier 12");
@@ -770,28 +771,28 @@ main (int argc, char **argv)
                                     "font", "Sans 18",
                                     NULL);
 
-  tag = gtk_text_buffer_create_tag (info_buffer, "comment",
-				    "foreground", "blue",
-                                    NULL);
-  tag = gtk_text_buffer_create_tag (info_buffer, "type",
+  tag = gtk_text_buffer_create_tag (source_buffer, "comment",
 				    "foreground", "red",
                                     NULL);
-  tag = gtk_text_buffer_create_tag (info_buffer, "string",
-				    "foreground", "SpringGreen3",
+  tag = gtk_text_buffer_create_tag (source_buffer, "type",
+				    "foreground", "ForestGreen",
+                                    NULL);
+  tag = gtk_text_buffer_create_tag (source_buffer, "string",
+				    "foreground", "RosyBrown",
 				    "weight", PANGO_WEIGHT_BOLD,
                                     NULL);
-  tag = gtk_text_buffer_create_tag (info_buffer, "control",
+  tag = gtk_text_buffer_create_tag (source_buffer, "control",
 				    "foreground", "purple",
                                     NULL);
-  tag = gtk_text_buffer_create_tag (info_buffer, "preprocessor",
+  tag = gtk_text_buffer_create_tag (source_buffer, "preprocessor",
 				    "style", PANGO_STYLE_OBLIQUE,
  				    "foreground", "burlywood4",
                                     NULL);
-  tag = gtk_text_buffer_create_tag (info_buffer, "function",
+  tag = gtk_text_buffer_create_tag (source_buffer, "function",
 				    "weight", PANGO_WEIGHT_BOLD,
  				    "foreground", "DarkGoldenrod4",
                                     NULL);
-
+  
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);
   

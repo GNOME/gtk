@@ -3663,10 +3663,10 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
   GSList *tmp_list;
   GSList *to_remove = NULL;
 
-  tmp_list = window_group->grabs;
+  tmp_list = group->grabs;
   while (tmp_list)
     {
-      if (gtk_widget_get_toplevel (tmp_list->data) == window)
+      if (gtk_widget_get_toplevel (tmp_list->data) == (GtkWidget*) window)
 	to_remove = g_slist_prepend (to_remove, g_object_ref (tmp_list->data));
       tmp_list = tmp_list->next;
     }

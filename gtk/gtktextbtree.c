@@ -280,6 +280,8 @@ static void                  gtk_text_btree_node_remove_view         (BTreeView 
                                                                       gpointer          view_id);
 static void                  gtk_text_btree_node_destroy             (GtkTextBTree     *tree,
                                                                       GtkTextBTreeNode *node);
+static void                  gtk_text_btree_node_free_empty          (GtkTextBTree *tree,
+                                                                      GtkTextBTreeNode *node);
 static NodeData         *    gtk_text_btree_node_ensure_data         (GtkTextBTreeNode *node,
                                                                       gpointer          view_id);
 static void                  gtk_text_btree_node_remove_data         (GtkTextBTreeNode *node,
@@ -736,7 +738,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
                   prevnode->next = curnode->next;
                 }
               parent->num_children--;
-              g_free (curnode);
+              gtk_text_btree_node_free_empty (tree, curnode);
               curnode = parent;
             }
           curnode = curline->parent;
@@ -1361,7 +1363,7 @@ _gtk_text_btree_add_view (GtkTextBTree *tree,
   GtkTextLineData *line_data;
 
   g_return_if_fail (tree != NULL);
-
+  
   view = g_new (BTreeView, 1);
 
   view->view_id = layout;
@@ -1390,14 +1392,14 @@ _gtk_text_btree_add_view (GtkTextBTree *tree,
 
 void
 _gtk_text_btree_remove_view (GtkTextBTree *tree,
-                            gpointer view_id)
+                             gpointer      view_id)
 {
   BTreeView *view;
   GtkTextLine *last_line;
   GtkTextLineData *line_data;
 
   g_return_if_fail (tree != NULL);
-
+  
   view = tree->views;
 
   while (view != NULL)
@@ -1557,9 +1559,9 @@ queue_tag_redisplay (GtkTextBTree      *tree,
 
 void
 _gtk_text_btree_tag (const GtkTextIter *start_orig,
-                    const GtkTextIter *end_orig,
-                    GtkTextTag *tag,
-                    gboolean add)
+                     const GtkTextIter *end_orig,
+                     GtkTextTag        *tag,
+                     gboolean           add)
 {
   GtkTextLineSegment *seg, *prev;
   GtkTextLine *cleanupline;
@@ -1577,7 +1579,8 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
   g_return_if_fail (_gtk_text_iter_get_btree (start_orig) ==
                     _gtk_text_iter_get_btree (end_orig));
-
+  g_return_if_fail (tag->table == _gtk_text_iter_get_btree (start_orig)->table);
+  
 #if 0
   printf ("%s tag %s from %d to %d\n",
           add ? "Adding" : "Removing",
@@ -4408,7 +4411,7 @@ static NodeData*
 node_data_new (gpointer view_id)
 {
   NodeData *nd;
-
+  
   nd = g_new (NodeData, 1);
 
   nd->view_id = view_id;
@@ -4423,7 +4426,6 @@ node_data_new (gpointer view_id)
 static void
 node_data_destroy (NodeData *nd)
 {
-
   g_free (nd);
 }
 
@@ -5113,6 +5115,16 @@ gtk_text_btree_node_destroy (GtkTextBTree *tree, GtkTextBTreeNode *node)
         }
     }
 
+  gtk_text_btree_node_free_empty (tree, node);
+}
+
+static void
+gtk_text_btree_node_free_empty (GtkTextBTree *tree,
+                                GtkTextBTreeNode *node)
+{
+  g_return_if_fail ((node->level > 0 && node->children.node == NULL) ||
+                    (node->level == 0 && node->children.line == NULL));
+
   summary_list_destroy (node->summary);
   node_data_list_destroy (node->node_data);
   g_free (node);
@@ -5410,8 +5422,9 @@ gtk_text_btree_rebalance (GtkTextBTree *tree,
                 {
                   tree->root_node = node->children.node;
                   tree->root_node->parent = NULL;
-                  summary_list_destroy (node->summary);
-                  g_free (node);
+
+                  node->children.node = NULL;
+                  gtk_text_btree_node_free_empty (tree, node);
                 }
               return;
             }
@@ -5515,8 +5528,10 @@ gtk_text_btree_rebalance (GtkTextBTree *tree,
               recompute_node_counts (tree, node);
               node->next = other->next;
               node->parent->num_children--;
-              summary_list_destroy (other->summary);
-              g_free (other);
+
+              other->children.node = NULL;
+              other->children.line = NULL;
+              gtk_text_btree_node_free_empty (tree, other);
               continue;
             }
 
