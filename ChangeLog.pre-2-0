@@ -1,3 +1,9 @@
+Thu Sep  2 07:38:56 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize):
+	s/size_changed/default_size_changed/g so i know what's
+	really going on (frying brain on smaller flame now).
+
 Thu Sep  2 05:47:47 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): queue a new resize if

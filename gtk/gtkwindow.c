@@ -1508,7 +1508,7 @@ gtk_window_move_resize (GtkWindow *window)
   gint x, y;
   gint width, height;
   gint new_width, new_height;
-  gboolean size_changed = FALSE;
+  gboolean default_size_changed = FALSE;
   gboolean hints_changed = FALSE;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -1525,7 +1525,7 @@ gtk_window_move_resize (GtkWindow *window)
       info->last_width != new_width ||
       info->last_height != new_height)
     {
-      size_changed = TRUE;
+      default_size_changed = TRUE;
 
       /* We currently always force a reposition in this case
        */
@@ -1550,7 +1550,7 @@ gtk_window_move_resize (GtkWindow *window)
   /* From the default size and the allocation, figure out the size
    * the window should be.
    */
-  if (!size_changed ||
+  if (!default_size_changed ||
       (!window->auto_shrink &&
        new_width <= widget->allocation.width &&
        new_height <= widget->allocation.height))
@@ -1559,7 +1559,7 @@ gtk_window_move_resize (GtkWindow *window)
       new_height = widget->allocation.height;
     }
   
-  if (size_changed || hints_changed)
+  if (default_size_changed || hints_changed)
     gtk_window_constrain_size (window,
 			       &new_geometry, new_flags,
 			       new_width, new_height,
@@ -1609,12 +1609,12 @@ gtk_window_move_resize (GtkWindow *window)
       gtk_widget_queue_draw (widget);
 
 #ifdef FIXME_ZVT_ME_HARDER
-      if ((size_changed || hints_changed) && (width != new_width || height != new_height))
+      if ((default_size_changed || hints_changed) && (width != new_width || height != new_height))
 	{
 	  /* We could be here for two reasons
 	   *  1) We coincidentally got a resize while handling
 	   *     another resize.
-	   *  2) Our computation of size_changed was completely
+	   *  2) Our computation of default_size_changed was completely
 	   *     screwed up, probably because one of our children
 	   *     is broken (i.e. changes requisition during
 	   *     size allocation). It's probably a zvt widget.
@@ -1645,7 +1645,7 @@ gtk_window_move_resize (GtkWindow *window)
 #endif /* FIXME_ZVT_ME_HARDER */
     }
 
-  if ((size_changed || hints_changed) &&
+  if ((default_size_changed || hints_changed) &&
       (width != new_width || height != new_height))
     {
       /* our requisition has changed and we need a different window size,
