@@ -73,7 +73,20 @@
       <bugs>#3958</bugs>
     </entry>
 
-
+    <entry size="small" status="0%" target="1.4">
+      <title>Make color handling more convenient</title>
+      <description>
+	<p>
+          Add some color convenience functions; such as a way to get an
+          allocated GdkColor from GdkRGB, and export functions from gtkstyle.c
+          that lighten/darken a given color, and set a color from HSV in
+          addition to RGB. Also, consider having static variables that contain
+          preallocated common colors (gdk_blue, gdk_red, etc.), the problem
+          being colormap issues.
+	</p>
+      </description>
+      <contact>gtk-devel-list@gnome.org</contact>
+    </entry>
 
     <entry size="small" status="0%" target="1.4">
       <title>Cursors</title>
@@ -110,7 +123,7 @@
   <section>
     <title>Internationalization</title>
     
-    <entry size="big" status="0%" target="1.4">
+    <entry size="big" status="70%" target="1.4">
       <title>Integrate Pango</title>
       <description>
 	<p>
@@ -123,7 +136,7 @@
       <contact>gtk-i18n-list@redhat.com</contact>
     </entry>
 
-    <entry size="medium" status="20%" target="1.4">
+    <entry size="medium" status="80%" target="1.4">
       <title>Switch to using UTF-8</title>
       <description>
 	<p>
@@ -145,11 +158,11 @@
       <contact>gtk-i18n-list@redhat.com</contact>
     </entry>
 
-    <entry size="big" status="0%" target="1.4">
+    <entry size="big" status="40%" target="1.4">
       <title>Rewrite Input Method Support</title>
       <description>
 	<p>
-	  Current support for Input Methods is done via XIM, with
+	  Support for Input Methods is GTK+-1.2 is done via XIM, with
 	  supported styles being over-the-spot and the root-window
 	  styles. However, the over-the-spot style is not going to
 	  work well with the Pango integration, since it relies on the
@@ -159,8 +172,9 @@
 	  set of callbacks that are invoked by the input methods.
 	</p>
 	<p>
-	  While adding the above support, it may be desirable to
-	  generalize the input-method support to the point where 
+	  GTK+-1.4 will have a new system with loadable input method
+	  modules. These modules can either be implemented using XIM,
+	  or written from scratch.
 	</p>
       </description>
       <contact>gtk-i18n-list@redhat.com</contact>
@@ -288,21 +302,6 @@
 
 
     <entry size="small" status="0%" target="1.4">
-      <title>Make color handling more convenient</title>
-      <description>
-	<p>
-          Add some color convenience functions; such as a way to get an
-          allocated GdkColor from GdkRGB, and export functions from gtkstyle.c
-          that lighten/darken a given color, and set a color from HSV in
-          addition to RGB. Also, consider having static variables that contain
-          preallocated common colors (gtk_blue, gtk_red, etc.), the problem
-          being colormap issues.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="small" status="0%" target="1.4">
       <title>Convenient widget setup</title>
       <description>
 	<p>
@@ -391,7 +390,7 @@
   <section>
     <title>GTK+ Widgets</title>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="50%" target="1.4">
       <title>Make GtkFrame use a label</title>
       <description>
 	<p>
@@ -406,22 +405,22 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="big" status="50%" target="1.4">
+    <entry size="big" status="75%" target="1.4">
       <title>Replace GtkText Widget</title>
       <description>
 	<p>
-	  The GtkText widget is badly in need of replacement, since it is
-	  buggy and insufficiently feature rich. There are a number
-	  of possible candidates for a replacement, with the most
-	  promising at the current time being Havoc Pennington's
-	  (hp@redhat.com) port of the Tk Text widget.
+	  The GtkText widget is badly in need of replacement, since it
+	  is buggy and insufficiently feature rich. This is being done
+	  using Havoc Pennington's port of the Tk Text widget.
 	</p>
 	<p>
-	  As part of this job it will be necessary to add
-	  <a href="http://www.pango.org">Pango</a> support to the
-	  replacement. The structure of the Tk text widget port seems
-	  suited to this as it works paragraph-by-paragraph, and
-	  Pango works at a sub-paragraph scale.
+	  As part of this job <a href="http://www.pango.org">Pango</a>
+	  support is being added to the replacement. The structure of
+	  the Tk text widget port is suited to this as it works
+	  paragraph-by-paragraph, and Pango works at a sub-paragraph
+	  scale. The main remaining tasks here are to implement
+	  incremental reflow to make performance acceptable and to
+	  implement embedded pixmaps and widgets.
 	</p>
       </description>
       <contact>gtk-devel-list@gnome.org</contact>
@@ -675,7 +674,7 @@
       <contact>otaylor@redhat.com</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="100%" target="1.4">
       <title>Don't highlight first menu item when menus come up</title>
       <description>
 	<p>
@@ -685,7 +684,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="95%" target="1.4">
       <title>Integrate new color selector</title>
       <description>
 	<p>

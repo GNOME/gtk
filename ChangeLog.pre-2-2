@@ -1,3 +1,7 @@
+Thu May 11 12:39:50 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* TODO.xml: Various updates to current status.
+
 Wed May 10 20:25:04 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk.m4: Print out version when test succeeds.
