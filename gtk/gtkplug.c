@@ -204,7 +204,9 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 	  break;
 	case GDK_Return:
 	case GDK_KP_Enter:
-	  if (window->default_widget)
+	  if (window->default_widget &&
+	      (!window->focus_widget || 
+	       !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget)))
 	    {
 	      gtk_widget_activate (window->default_widget);
 	      return_val = TRUE;

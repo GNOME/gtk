@@ -99,6 +99,7 @@ static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
   GTK_WIDGET_SET_FLAGS (radio_button, GTK_NO_WINDOW);
+  GTK_WIDGET_UNSET_FLAGS (radio_button, GTK_RECEIVES_DEFAULT);
 
   GTK_TOGGLE_BUTTON (radio_button)->active = TRUE;
 

@@ -107,6 +107,7 @@ enum {
   ARG_HAS_FOCUS,
   ARG_CAN_DEFAULT,
   ARG_HAS_DEFAULT,
+  ARG_RECEIVES_DEFAULT,
   ARG_COMPOSITE_CHILD,
   ARG_STYLE,
   ARG_EVENTS,
@@ -276,6 +277,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_FOCUS);
   gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_DEFAULT);
   gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::receives_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_RECEIVES_DEFAULT);
   gtk_object_add_arg_type ("GtkWidget::composite_child", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_COMPOSITE_CHILD);
   gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, GTK_ARG_READWRITE, ARG_STYLE);
   gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EVENTS);
@@ -838,6 +840,12 @@ gtk_widget_set_arg (GtkObject   *object,
       if (GTK_VALUE_BOOL (*arg))
 	gtk_widget_grab_default (widget);
       break;
+    case ARG_RECEIVES_DEFAULT:
+      if (GTK_VALUE_BOOL (*arg))
+	GTK_WIDGET_SET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+      else
+	GTK_WIDGET_UNSET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+      break;
     case ARG_COMPOSITE_CHILD:
       if (GTK_VALUE_BOOL(*arg))
 	GTK_WIDGET_SET_FLAGS (widget, GTK_COMPOSITE_CHILD);
@@ -939,6 +947,9 @@ gtk_widget_get_arg (GtkObject   *object,
       break;
     case ARG_HAS_DEFAULT:
       GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_HAS_DEFAULT (widget) != FALSE);
+      break;
+    case ARG_RECEIVES_DEFAULT:
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_RECEIVES_DEFAULT (widget) != FALSE);
       break;
     case ARG_COMPOSITE_CHILD:
       GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_COMPOSITE_CHILD (widget) != FALSE);

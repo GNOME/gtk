@@ -205,7 +205,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 static void
 gtk_button_init (GtkButton *button)
 {
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_FOCUS);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_FOCUS | GTK_RECEIVES_DEFAULT);
   GTK_WIDGET_UNSET_FLAGS (button, GTK_NO_WINDOW);
 
   button->child = NULL;
@@ -672,8 +672,6 @@ gtk_button_button_press (GtkWidget      *widget,
     {
       button = GTK_BUTTON (widget);
 
-      if (GTK_WIDGET_CAN_DEFAULT (widget) && (event->button == 1))
-	gtk_widget_grab_default (widget);
       if (!GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
 

@@ -1,3 +1,23 @@
+Mon Jan 25 11:05:10 1999  George Lebl  <jirka@5z.com>
+
+	* gtk/gtkbutton.c: set RECEIVES_DEFAULT on init, and a
+	  button press on the widget doesn't grab default anymore
+
+	* gtk/gtkcheckbutton.c,gtk/gtkoptionmenu.c,gtk/gtkradiobutton.c:
+	  unset RECEIVES_DEFAULT on init
+
+	* gtk/gtkwidget.[ch]: add a RECEIVES_DEFAULT flag to widget
+	  flags
+
+	* gtk/gtkwindow.c,gtk/gtkplug.c: on pressing <enter>, activate
+	  the focused widget if it is a RECEIVES_DEFAULT widget,
+	  no matter what the current default_widget is
+
+	* gtk/gtkwindow.c: on focus change, migrate the HAS_DEFAULT
+	  flag to CAN_DEFAULT widgets if they RECEIVE_DEFAULT as well
+	  or migrate it back to the default_widget if the focus widget
+	  doesn't "RECEIVE_DEFAULT"
+
 Sun Jan 24 18:09:24 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdnd.c (motif_read_initiator_info): Byteswap

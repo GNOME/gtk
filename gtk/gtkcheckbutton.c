@@ -95,6 +95,7 @@ static void
 gtk_check_button_init (GtkCheckButton *check_button)
 {
   GTK_WIDGET_SET_FLAGS (check_button, GTK_NO_WINDOW);
+  GTK_WIDGET_UNSET_FLAGS (check_button, GTK_RECEIVES_DEFAULT);
   GTK_TOGGLE_BUTTON (check_button)->draw_indicator = TRUE;
 }
 

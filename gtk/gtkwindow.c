@@ -1033,7 +1033,9 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	  break;
 	case GDK_Return:
 	case GDK_KP_Enter:
-	  if (window->default_widget)
+	  if (window->default_widget &&
+	      (!window->focus_widget || 
+	       !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget)))
 	    {
 	      gtk_widget_activate (window->default_widget);
 	      handled = TRUE;
@@ -1494,16 +1496,31 @@ gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
   GdkEventFocus event;
+  gboolean def_flags = 0;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
-
+  
+  if (window->default_widget)
+    def_flags = GTK_WIDGET_HAS_DEFAULT (window->default_widget);
+  
   if (window->focus_widget)
     {
       event.type = GDK_FOCUS_CHANGE;
       event.window = window->focus_widget->window;
       event.in = FALSE;
       
+      if (GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget) &&
+	  (window->focus_widget != window->default_widget))
+        {
+	  GTK_WIDGET_UNSET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
+	  /* if any widget had the default set there should be
+	     a default_widget, but might not so this is a sanity
+	     check */
+	  if (window->default_widget)
+	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+        }
+	
       gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
     }
   
@@ -1514,9 +1531,32 @@ gtk_window_real_set_focus (GtkWindow *window,
       event.type = GDK_FOCUS_CHANGE;
       event.window = window->focus_widget->window;
       event.in = TRUE;
+
+      if (window->default_widget)
+        {
+          if (GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget) &&
+	      (window->focus_widget != window->default_widget))
+            {
+	      if (GTK_WIDGET_CAN_DEFAULT (window->focus_widget))
+	        GTK_WIDGET_SET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
+	      GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+            }
+	  else
+	    {
+	      GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+	    }
+	}
       
       gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
     }
+  else if (window->default_widget)
+    {
+      GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+    }
+  
+  if (window->default_widget &&
+      (def_flags != GTK_WIDGET_FLAGS (window->default_widget)))
+    gtk_widget_queue_draw (window->default_widget);
 }
 
 static void
