@@ -317,6 +317,7 @@ void             _gtk_tree_view_column_autosize          (GtkTreeView       *tre
 
 gboolean         _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column);
 GtkCellRenderer *_gtk_tree_view_column_get_editable_cell (GtkTreeViewColumn *column);
+gint             _gtk_tree_view_column_count_special_cells (GtkTreeViewColumn *column);
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);

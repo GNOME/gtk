@@ -1,3 +1,29 @@
+Fri Apr 26 00:00:00 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merge TreeView fixes from HEAD up to Apr 26:
+
+	(Apr 25):
+        * gtk/gtktreemodelsort.c (gtk_tree_model_sort_reset_default_sort_func):
+        resort if we're already in 'unsorted' state, and update the docs
+	
+        * gtk/gtktreeview.c (gtk_tree_view_search_iter): make the search
+        dialog not scroll horizontally (prolly fixes #74806).
+
+	(Also from Apr 25, fixes #74206):
+        * gtk/gtktreeprivate.h: add _gtk_tree_view_column_count_special_cells
+
+        * gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_has_editable_cell),
+        (_gtk_tree_view_column_get_editable_cell): remove a space which made
+        the code look ugly
+        (_gtk_tree_view_column_count_special_cells): new function,
+        (gtk_tree_view_column_cell_process_action): if there's only one
+        activatable cell, the whole column will activate that renderer.
+
+	(Apr 24):
+        * gtk/gtktreeview.c (gtk_tree_view_stop_editing): temporarily set
+        ->priv->edited_column to NULL. Pleas read the comment in this
+        function for an explanation (fixes #79632).
+
 Thu Apr 25 20:24:37 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate): use the child's
