@@ -1,4 +1,4 @@
-/* Text Widget
+/* Text Widget/Multiple Views
  *
  * The GtkTextView widget displays a GtkTextBuffer. One GtkTextBuffer
  * can be displayed by multiple GtkTextViews. This demo has two views

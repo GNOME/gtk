@@ -21,7 +21,8 @@ demos =						\
 	sizegroup.c				\
 	stock_browser.c				\
 	textview.c				\
-	tree_store.c
+	tree_store.c				\
+	hypertext.c
 
 INCLUDES = \
 	-DDEMOCODEDIR="\"$(democodedir)\""		\
