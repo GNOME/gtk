@@ -286,6 +286,11 @@ gdk_parse_args (int    *argc,
   GdkArgContext *arg_context;
   gint i;
 
+  if (gdk_initialized)
+    return TRUE;
+
+  gdk_initialized = TRUE;
+
   if (argc && argv)
     {
       gdk_argc = *argc;
@@ -385,13 +390,11 @@ gdk_init_check (int    *argc,
 {
   GdkDisplay *display;
   
-  if (gdk_initialized)
-    return TRUE;
-
   gdk_parse_args (argc, argv);
 
-  gdk_initialized = 1;
-
+  if (gdk_get_default_display ())
+    return TRUE;
+    
   display = gdk_open_display (_gdk_display_name);
 
   if (display)
