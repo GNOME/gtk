@@ -32,6 +32,7 @@
 #include "gtkintl.h"
 
 #define EPSILON  1e-5
+#define DEFAULT_FORMAT "%P %%";
 
 enum {
   PROP_0,
@@ -221,7 +222,7 @@ gtk_progress_init (GtkProgress *progress)
 {
   progress->adjustment = NULL;
   progress->offscreen_pixmap = NULL;
-  progress->format = g_strdup ("%P %%");
+  progress->format = g_strdup (DEFAULT_FORMAT);
   progress->x_align = 0.5;
   progress->y_align = 0.5;
   progress->show_text = FALSE;
@@ -656,22 +657,25 @@ void
 gtk_progress_set_format_string (GtkProgress *progress,
 				const gchar *format)
 {
+  gchar *old_format;
+  
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   /* Turn on format, in case someone called
    * gtk_progress_bar_set_text() and turned it off.
    */
   progress->use_text_format = TRUE;
-  
-  if (format)
-    {
-      if (progress->format)
-	g_free (progress->format);
-      progress->format = g_strdup (format);
 
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
-	gtk_widget_queue_resize (GTK_WIDGET (progress));
-    }
+  old_format = progress->format;
+
+  if (!format)
+    format = DEFAULT_FORMAT;
+
+  progress->format = g_strdup (format);
+  g_free (old_format);
+  
+  if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
+    gtk_widget_queue_resize (GTK_WIDGET (progress));
 }
 
 gchar *

@@ -75,7 +75,8 @@ current progress.  The string can contain the following substitution characters:
 </para>
 
 @progress: a #GtkProgress.
-@format: a string used to display progress text.
+@format: a string used to display progress text, or %NULL
+         to restore to the default format.
 
 
 <!-- ##### FUNCTION gtk_progress_set_adjustment ##### -->
