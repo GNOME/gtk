@@ -40,6 +40,10 @@ struct _GtkPathBar
 {
   GtkContainer parent;
 
+  GtkFilePath *home_directory;
+  GdkPixbuf *home_icon;
+  GdkPixbuf *root_icon;
+
   GList *button_list;
   GList *first_scrolled_button;
   GtkWidget *up_slider_button;
@@ -58,11 +62,17 @@ struct _GtkPathBarClass
 			 GtkFilePath *file_path);
 };
 
-GType gtk_path_bar_get_type (void) G_GNUC_CONST;
-gboolean gtk_path_bar_set_path (GtkPathBar         *path_bar,
-				const GtkFilePath  *file_path,
-				GtkFileSystem      *file_system,
-				GError            **error);
+GType    gtk_path_bar_get_type (void) G_GNUC_CONST;
+gboolean _gtk_path_bar_set_path (GtkPathBar         *path_bar,
+				 const GtkFilePath  *file_path,
+				 GtkFileSystem      *file_system,
+				 GError            **error);
+void     _gtk_path_bar_set_root_icon (GtkPathBar         *path_bar,
+				      GdkPixbuf          *home_icon);
+void     _gtk_path_bar_set_home_icon (GtkPathBar         *path_bar,
+				      const GtkFilePath  *home_dir,
+				      GdkPixbuf          *home_icon);
+
 G_END_DECLS
 
 #endif /* __GTK_PATH_BAR__ */

@@ -131,6 +131,12 @@ gtk_path_bar_finalize (GObject *object)
 
   path_bar = GTK_PATH_BAR (object);
   g_list_free (path_bar->button_list);
+  if (path_bar->home_directory)
+    gtk_file_path_free (path_bar->home_directory);
+  if (path_bar->home_icon)
+    g_object_unref (path_bar->home_icon);
+  if (path_bar->root_icon)
+    g_object_unref (path_bar->home_icon);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
 }
@@ -570,11 +576,53 @@ button_clicked_cb (GtkWidget *button,
   GtkFilePath *file_path;
 
   path_bar = button->parent;
-  g_assert (path_bar);
+  g_assert (GTK_IS_PATH_BAR (path_bar));
 
-  file_path = gtk_file_path_new_dup ((char *)data);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+
+  file_path = g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-path");
   g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, file_path);
-  gtk_file_path_free (file_path);
+}
+
+static void
+update_button_appearance (GtkWidget *button,
+			  gboolean   current_dir)
+{
+  GtkWidget *label;
+  const gchar *dir_name;
+
+  dir_name = (const gchar *) g_object_get_data (G_OBJECT (button),
+						"gtk-path-bar-button-dir-name");
+  label = gtk_bin_get_child (GTK_BIN (button));
+
+  if (current_dir)
+    {
+      char *markup;
+
+      markup = g_markup_printf_escaped ("<b>%s</b>", dir_name);
+      gtk_label_set_markup (GTK_LABEL (label), markup);
+      g_free (markup);
+    }
+  else
+    {
+      gtk_label_set_text (GTK_LABEL (label), dir_name);
+    }
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) != current_dir)
+    {
+      g_signal_handlers_block_by_func (G_OBJECT (button), button_clicked_cb, NULL);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), current_dir);
+      g_signal_handlers_unblock_by_func (G_OBJECT (button), button_clicked_cb, NULL);
+    }
+}
+
+/* Since gtk_file_path_free() can be a macro, we provide a real function that
+ * can be used as a callback.
+ */
+static void
+file_path_destroy (GtkFilePath *path)
+{
+  gtk_file_path_free (path);
 }
 
 static GtkWidget *
@@ -585,55 +633,66 @@ make_directory_button (const char  *dir_name,
   GtkWidget *button, *label;
       
   button = gtk_toggle_button_new ();
-  if (current_dir)
-    {
-      /* Yay gsignal! */
-      g_signal_connect (G_OBJECT (button), "toggled",
-			G_CALLBACK (gtk_toggle_button_set_active),
-			GINT_TO_POINTER (TRUE));
-    }
-  else
-    {
-      gchar *str;
-
-      /* FIXME: gtk_file_path_free is not be a function!! I have to
-       * copy it to a string in order to manage this correctly */
-      str = g_strdup (gtk_file_path_get_string (path));
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (button_clicked_cb),
-			str);
-      g_object_weak_ref (G_OBJECT (button), (GWeakNotify) g_free, str);
-    }
-
   label = gtk_label_new (NULL);
 
-  if (current_dir)
-    {
-      gchar *label_str;
-      
-      label_str = g_markup_printf_escaped ("<b>%s</b>", dir_name);
-      gtk_label_set_markup (GTK_LABEL (label), label_str);
-      g_free (label_str);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (button_clicked_cb),
+		    NULL);
 
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    }
-  else
-    {
-      gtk_label_set_text (GTK_LABEL (label), dir_name);
-    }
+  g_object_set_data_full (G_OBJECT (button), "gtk-path-bar-button-dir-name",
+			  g_strdup (dir_name),
+			  (GDestroyNotify) g_free);
+  g_object_set_data_full (G_OBJECT (button), "gtk-path-bar-button-path",
+			  gtk_file_path_new_dup (gtk_file_path_get_string (path)),
+			  (GDestroyNotify) file_path_destroy);
 
   gtk_container_add (GTK_CONTAINER (button), label);
   gtk_widget_show_all (button);
 
+  update_button_appearance (button, current_dir);
+
   return button;
 }
 
+static gboolean
+gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
+				const GtkFilePath  *file_path,
+				GtkFileSystem      *file_system)
+{
+  GList *list;
+  GList *current_path = NULL;
+
+  for (list = path_bar->button_list; list; list = list->next)
+    {
+      GtkFilePath *tmp_path;
+
+      tmp_path = (GtkFilePath *) g_object_get_data (G_OBJECT (list->data),
+						    "gtk-path-bar-button-path");
+      if (! gtk_file_path_compare (file_path, tmp_path))
+	{
+	  current_path = list;
+	  break;
+	}
+
+    }
+
+  if (current_path)
+    {
+      for (list = path_bar->button_list; list; list = list->next)
+	{
+	  update_button_appearance (GTK_WIDGET (list->data),
+				    (list == current_path) ? TRUE : FALSE);
+	}
+      return TRUE;
+    }
+  return FALSE;
+}
 
 gboolean
-gtk_path_bar_set_path (GtkPathBar         *path_bar,
-		       const GtkFilePath  *file_path,
-		       GtkFileSystem      *file_system,
-		       GError            **error)
+_gtk_path_bar_set_path (GtkPathBar         *path_bar,
+			const GtkFilePath  *file_path,
+			GtkFileSystem      *file_system,
+			GError            **error)
 {
   GtkFilePath *path;
   gboolean first_directory = TRUE;
@@ -645,6 +704,9 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
   result = TRUE;
 
+  if (gtk_path_bar_check_parent_path (path_bar, file_path, file_system))
+    return TRUE;
+      
   gtk_path_bar_clear_buttons (path_bar);
   path = gtk_file_path_copy (file_path);
 
@@ -691,6 +753,7 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
 	}
 
       display_name = gtk_file_info_get_display_name (file_info);
+      /* FIXME: Do this better */
       if (! strcmp ("/", display_name))
 	display_name = " / ";
       button = make_directory_button (display_name, path, first_directory);
@@ -711,3 +774,41 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
   return result;
 }
+
+void
+gtk_path_bar_set_root_icon (GtkPathBar *path_bar,
+			    GdkPixbuf  *root_icon)
+{
+  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
+
+  if (root_icon)
+    path_bar->home_icon = g_object_ref (root_icon);
+
+  if (path_bar->root_icon)
+    g_object_unref (root_icon);
+
+  path_bar->root_icon = root_icon;
+}
+
+void
+gtk_path_bar_set_home_icon (GtkPathBar        *path_bar,
+			    const GtkFilePath *home_directory,
+			    GdkPixbuf         *home_icon)
+{
+  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
+
+  if (home_icon)
+    g_object_ref (home_icon);
+
+  if (path_bar->home_directory != NULL)
+    gtk_file_path_free (path_bar->home_directory);
+  if (path_bar->home_icon)
+    g_object_unref (home_icon);
+
+  if (home_directory)
+    path_bar->home_directory = gtk_file_path_new_dup (gtk_file_path_get_string (home_directory));
+  else
+    path_bar->home_directory = NULL;
+  path_bar->home_icon = home_icon;
+}
+		    

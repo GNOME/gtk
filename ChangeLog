@@ -1,3 +1,13 @@
+Thu Mar  4 01:32:19 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_set_path): Modified patch from
+	muppet <scott@asofyet.org> to keep child directories around if we
+	change to a child.
+
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_home_icon): Start of
+	icon-setting functions.  Not used yet.
+	(_gtk_path_bar_set_root_icon): Ditto.
+	
 Thu Mar  4 00:31:54 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (extend_selection): 

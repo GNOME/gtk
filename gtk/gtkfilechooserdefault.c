@@ -1930,7 +1930,7 @@ file_pane_create (GtkFileChooserDefault *impl,
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox);
   impl->browse_path_bar = g_object_new (GTK_TYPE_PATH_BAR, NULL);
-  g_signal_connect (impl->browse_path_bar, "path_clicked", G_CALLBACK (path_bar_clicked), impl);
+  g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
   gtk_widget_show_all (impl->browse_path_bar);
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_path_bar, TRUE, TRUE, 0);
 
@@ -2842,7 +2842,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   GError *error;
 
   error = NULL;
-  if (!gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, impl->file_system, &error))
+  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, impl->file_system, &error))
     {
       error_dialog (impl,
 		    _("Could not set current folder: %s"),
