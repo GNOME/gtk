@@ -1,3 +1,10 @@
+Tue Nov 19 17:01:40 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_modify_range):
+	initialize anchor_path to NULL.
+
+	* examples/buttonbox/buttonbox.c: remove useless static qualifier.
+
 2002-11-19  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testgtk.c (do_bench): 

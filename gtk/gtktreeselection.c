@@ -1147,7 +1147,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
 {
   GtkRBNode *start_node, *end_node;
   GtkRBTree *start_tree, *end_tree;
-  GtkTreePath *anchor_path;
+  GtkTreePath *anchor_path = NULL;
   gboolean dirty = FALSE;
 
   switch (gtk_tree_path_compare (start_path, end_path))
