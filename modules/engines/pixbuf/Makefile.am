@@ -14,6 +14,7 @@ libpixmap_la_SOURCES = 		\
 	pixbuf.h
 
 libpixmap_la_LDFLAGS =  -avoid-version -module
+libpixmap_la_LIBADD = $(GTK_LIBS)
 
 dist-hook:
 	cp -pr examples $(distdir);					\

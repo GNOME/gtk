@@ -1,3 +1,10 @@
+2002-03-07  James Henstridge  <james@daa.com.au>
+
+	* Makefile.am (libpixmap_la_LIBADD): link pixbuf engine against
+	the gtk+ libraries, so that it can be used with programs that
+	dlopen gtk+ without the RTLD_GLOBAL flag (such as scripting
+	languages and mozilla).
+
 Thu Feb  7 00:21:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixbuf-render.c (pixbuf_render): Add gradient
