@@ -1888,7 +1888,7 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  *
  *
  * Creates a tag and adds it to the tag table for @buffer.
- * Equivalent to calling gtk_text_tag_ne () and then adding the
+ * Equivalent to calling gtk_text_tag_new () and then adding the
  * tag to the buffer's tag table. The returned tag is owned by
  * the buffer's tag table, so the ref count will be equal to one.
  *

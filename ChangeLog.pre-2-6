@@ -1,3 +1,11 @@
+2001-11-23  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_create_tag),
+	gtk/gtkruler.c (gtk_ruler_get_metric): Actually commit typo 
+	fixes already mentioned in ChangeLog entry on 2001-11-14.
+
+	* docs/reference/gtk/tmpl/drawing.sgml: Minor markup fixes.
+
 2001-11-23  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkfont-win32.c (gdk_font_from_description) : 

@@ -242,7 +242,7 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
  * gtk_ruler_get_metric:
  * @ruler: a #GtkRuler
  *
- * Gets the units used for a #GtkRule . See gtk_ruler_set_metric().
+ * Gets the units used for a #GtkRuler. See gtk_ruler_set_metric().
  *
  * Return value: the units currently used for @ruler
  **/

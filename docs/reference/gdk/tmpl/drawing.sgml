@@ -222,9 +222,9 @@ and other attributes of the #GdkGC.
 <note>
 <para>
 A rectangle drawn filled is 1 pixel smaller in both dimensions than a rectangle
-outlined. Calling gdk_draw_rectangle (window, gc, TRUE, 0, 0, 20, 20) results
+outlined. Calling <literal>gdk_draw_rectangle (window, gc, TRUE, 0, 0, 20, 20)</literal> results
 in a filled rectangle 20 pixels wide and 20 pixels high. Calling
-gdk_draw_rectangle (window, gc, FALSE, 0, 0, 20, 20) results in an outlined
+<literal>gdk_draw_rectangle (window, gc, FALSE, 0, 0, 20, 20)</literal> results in an outlined
 rectangle with corners at (0, 0), (0, 20), (20, 20), and (20, 0), which
 makes it 21 pixels wide and 21 pixels high.
 </para>
@@ -232,7 +232,7 @@ makes it 21 pixels wide and 21 pixels high.
 
 @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
 @gc: a #GdkGC.
-@filled: TRUE if the rectangle should be filled.
+@filled: %TRUE if the rectangle should be filled.
 @x: the x coordinate of the left edge of the rectangle.
 @y: the y coordinate of the top edge of the rectangle.
 @width: the width of the rectangle.
@@ -248,7 +248,7 @@ the ellipse to be drawn.
 
 @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
 @gc: a #GdkGC.
-@filled: TRUE if the arc should be filled, producing a 'pie slice'.
+@filled: %TRUE if the arc should be filled, producing a 'pie slice'.
 @x: the x coordinate of the left edge of the bounding rectangle.
 @y: the y coordinate of the top edge of the bounding rectangle.
 @width: the width of the bounding rectangle.
@@ -265,7 +265,7 @@ Draws an outlined or filled polygon.
 
 @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
 @gc: a #GdkGC.
-@filled: TRUE if the polygon should be filled. The polygon is closed
+@filled: %TRUE if the polygon should be filled. The polygon is closed
 automatically, connecting the last point to the first point if necessary.
 @points: an array of #GdkPoint structures specifying the points making up the
 polygon.
