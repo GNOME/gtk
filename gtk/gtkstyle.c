@@ -5684,7 +5684,7 @@ _gtk_draw_insertion_cursor (GtkWidget        *widget,
   for (i = 0; i < stem_width; i++)
     gdk_draw_line (drawable, gc,
 		   location->x + i - stem_width / 2, location->y,
-		   location->x + i - stem_width / 2, location->y + location->height);
+		   location->x + i - stem_width / 2, location->y + location->height - 1);
 
   if (dir == GTK_TEXT_DIR_RTL)
     {

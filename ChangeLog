@@ -1,5 +1,11 @@
 2002-02-22  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkstyle.c (_gtk_draw_insertion_cursor): subtract 1 from
+	line endpoint, to avoid cursor dirt in the text widget.
+	zero-width lines appear to draw the endpoint always. #67999
+
+2002-02-22  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (buffer_to_widget): implement more cleanly by
 	using text_window->allocation.x/y instead of recomputing it. 
 	Fixes a bug caused by leaving out the border width here.
