@@ -168,6 +168,7 @@ static GtkToolbarSpaceStyle get_space_style                  (GtkToolbar     *to
 static gint                 get_internal_padding             (GtkToolbar     *toolbar);
 static void                 gtk_toolbar_remove_tool_item     (GtkToolbar     *toolbar,
 							      GtkToolItem    *item);
+static gboolean		    gtk_toolbar_popup_menu	     (GtkWidget      *toolbar);
 
 static GtkWidget *gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
 						       GtkToolbarChildType  type,
@@ -297,6 +298,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->unrealize = gtk_toolbar_unrealize;
   widget_class->map = gtk_toolbar_map;
   widget_class->unmap = gtk_toolbar_unmap;
+  widget_class->popup_menu = gtk_toolbar_popup_menu;
   
   widget_class->drag_leave = gtk_toolbar_drag_leave;
   widget_class->drag_motion = gtk_toolbar_drag_motion;
@@ -332,11 +334,13 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   toolbar_signals[POPUP_CONTEXT_MENU] =
     g_signal_new ("popup_context_menu",
 		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_FIRST,
+		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolbarClass, popup_context_menu),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__INT_INT_INT,
-		  G_TYPE_NONE, 0);
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__INT_INT_INT,
+		  G_TYPE_BOOLEAN, 3,
+		  G_TYPE_INT, G_TYPE_INT,
+		  G_TYPE_INT);
   toolbar_signals[MOVE_FOCUS] =
     _gtk_binding_signal_new ("move_focus",
 			     G_TYPE_FROM_CLASS (klass),
@@ -1746,6 +1750,7 @@ gtk_toolbar_remove (GtkContainer *container,
   GtkToolItem *item = NULL;
   
   g_return_if_fail (GTK_IS_TOOLBAR (container));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   toolbar = GTK_TOOLBAR (container);
 
@@ -1987,11 +1992,29 @@ gtk_toolbar_button_press (GtkWidget      *toolbar,
 {
   if (event->button == 3)
     {
+      gboolean return_value;
+    
       g_signal_emit (toolbar, toolbar_signals[POPUP_CONTEXT_MENU], 0,
-		     (int)event->x_root, (int)event->y_root, event->button, NULL);
+		     (int)event->x_root, (int)event->y_root, event->button,
+		     &return_value);
+
+      return return_value;
     }
 
   return FALSE;
+}
+
+static gboolean
+gtk_toolbar_popup_menu (GtkWidget *toolbar)
+{
+  gboolean return_value;
+  /* This function is the handler for the "popup menu" keybinding,
+   * ie., it is called when the user presses Shift F10
+   */
+  g_signal_emit (toolbar, toolbar_signals[POPUP_CONTEXT_MENU], 0,
+		 -1, -1, -1, &return_value);
+
+  return return_value;
 }
 
 static void
@@ -2104,36 +2127,38 @@ gtk_toolbar_remove_tool_item (GtkToolbar  *toolbar,
 {
   GtkToolbarPrivate *priv;
   GList *tmp;
+  gint nth_child;
 
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
-  g_return_if_fail (GTK_IS_TOOL_ITEM (item));
-  
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  g_return_if_fail (GTK_IS_TOOL_ITEM (item));
+  g_return_if_fail (g_list_find (priv->items, item));
+  
+  nth_child = 0;
 
-  tmp = priv->items;
-  while (tmp)
+  for (tmp = priv->items; tmp != NULL; tmp = tmp->next)
     {
-      GList *next = tmp->next;
-      GtkWidget *child = tmp->data;
-      
-      if (child == GTK_WIDGET (item))
-	{
-	  gboolean was_visible;
-	  
-	  was_visible = GTK_WIDGET_VISIBLE (item);
-	  gtk_widget_unparent (GTK_WIDGET (item));
+      if (tmp->data == item)
+	break;
 
-	  priv->items = g_list_remove_link (priv->items, tmp);
-	  toolbar->num_children--;
-
-	  if (was_visible && GTK_WIDGET_VISIBLE (toolbar))
-	    gtk_widget_queue_resize (GTK_WIDGET (toolbar));
-
-	  break;
-	}
-      
-      tmp = next;
+      nth_child++;
     }
+
+  priv->items = g_list_remove (priv->items, item);
+
+  gtk_widget_unparent (GTK_WIDGET (item));
+
+  if (priv->api_mode == OLD_API)
+    {
+      GtkToolbarChild *toolbar_child;
+
+      toolbar_child = g_list_nth_data (toolbar->children, nth_child);
+      toolbar->children = g_list_remove (toolbar->children, toolbar_child);
+
+      g_free (toolbar_child);
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 }
 
 GtkWidget *
@@ -2772,10 +2797,16 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
 static void
 gtk_toolbar_finalize (GObject *object)
 {
+  GList *list;
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
 
   if (toolbar->tooltips)
     g_object_unref (toolbar->tooltips);
+
+  for (list = toolbar->children; list != NULL; list = list->next)
+    g_free (list->data);
+
+  g_list_free (toolbar->children);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

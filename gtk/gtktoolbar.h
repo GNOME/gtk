@@ -57,7 +57,6 @@ G_BEGIN_DECLS
 #define GTK_TOOLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOOLBAR, GtkToolbarClass))
 #define GTK_TOOLBAR_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
 
-
 #ifndef GTK_DISABLE_DEPRECATED
 typedef enum
 {
@@ -117,14 +116,14 @@ struct _GtkToolbarClass
   GtkContainerClass parent_class;
 
   /* signals */
-  void (* orientation_changed) (GtkToolbar       *toolbar,
-				GtkOrientation    orientation);
-  void (* style_changed)       (GtkToolbar       *toolbar,
-				GtkToolbarStyle   style);
-  void (* popup_context_menu)  (GtkToolbar       *toolbar,
-				gint		   x,
-				gint		   y,
-				gint		   button_number);
+  void (* orientation_changed)     (GtkToolbar       *toolbar,
+				    GtkOrientation    orientation);
+  void (* style_changed)           (GtkToolbar       *toolbar,
+				    GtkToolbarStyle   style);
+  gboolean (* popup_context_menu)  (GtkToolbar       *toolbar,
+				    gint              x,
+				    gint              y,
+				    gint              button_number);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

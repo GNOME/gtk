@@ -42,6 +42,7 @@ noinst_PROGRAMS =			\
 	testtext			\
         testtextbuffer			\
 	testtoolbar			\
+	stresstest-toolbar		\
 	testtreeedit			\
 	testtreeview			\
 	testtreefocus			\
@@ -94,6 +95,7 @@ testsocket_LDADD = $(LDADDS)
 testsocket_child_LDADD = $(LDADDS)
 testtextbuffer_LDADD = $(LDADDS)
 testtoolbar_LDADD = $(LDADDS)
+stresstest_toolbar_LDADD = $(LDADDS)
 testtreeedit_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)

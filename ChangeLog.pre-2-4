@@ -1,3 +1,19 @@
+Fri Jul  4 19:06:31 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* tests/stresstest-toolbar.c: new test for removing items
+	
+	* tests/testtoolbar.c: add a popup menu
+
+	* gtk/gtkcontainer.c (gtk_container_remove): add hack to avoid
+	  assert widget->parent == container when the container is a
+	  toolbar.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_remove_tool_item): Make much
+	simpler. Also make correct.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_button_press): make
+	popup_context_menu a boolean handled signal.
+
 2003-07-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_polygon,

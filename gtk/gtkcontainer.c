@@ -34,6 +34,7 @@
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
+#include "gtktoolbar.h"
 #include <gobject/gobjectnotifyqueue.c>
 #include <gobject/gvaluecollector.h>
 
@@ -978,7 +979,13 @@ gtk_container_remove (GtkContainer *container,
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (widget->parent == GTK_WIDGET (container));
+
+  /* When using the deprecated API of the toolbar, it is possible
+   * to legitimately call this function with a widget that is not
+   * a direct child of the container.
+   */
+  g_return_if_fail (GTK_IS_TOOLBAR (container) ||
+		    widget->parent == GTK_WIDGET (container));
   
   g_signal_emit (container, container_signals[REMOVE], 0, widget);
 }

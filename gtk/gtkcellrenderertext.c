@@ -201,6 +201,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         NULL,
                                                         G_PARAM_WRITABLE));
 
+  g_print ("installing background gdk\n");
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background_gdk",

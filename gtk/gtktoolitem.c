@@ -148,9 +148,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, create_menu_proxy),
-		  _gtk_boolean_handled_accumulator, NULL, /* FIXME: use gtk_boolean_handled() when
-							  * we are added to gtk+
-							  */
+		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
   toolitem_signals[TOOLBAR_RECONFIGURED] =
@@ -166,9 +164,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, set_tooltip),
-		  _gtk_boolean_handled_accumulator, NULL, /* FIXME: use gtk_boolean_handled() when
-							  * we are added to gtk+
-							  */
+		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__OBJECT_STRING_STRING,
 		  G_TYPE_BOOLEAN, 3,
 		  GTK_TYPE_TOOLTIPS,

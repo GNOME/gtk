@@ -19,7 +19,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
+#undef GTK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 #include "prop-editor.h"
 
@@ -378,6 +378,60 @@ rtl_toggled (GtkCheckButton *check)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
 }
 
+typedef struct
+{
+  int x;
+  int y;
+} MenuPositionData;
+
+static void
+position_function (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer user_data)
+{
+  /* Do not do this in your own code */
+
+  MenuPositionData *position_data = user_data;
+
+  if (x)
+    *x = position_data->x;
+
+  if (y)
+    *y = position_data->y;
+
+  if (push_in)
+    *push_in = FALSE;
+}
+
+static gboolean
+popup_context_menu (GtkToolbar *toolbar, gint x, gint y, gint button_number)
+{
+  MenuPositionData position_data;
+  
+  GtkMenu *menu = GTK_MENU (gtk_menu_new ());
+  int i;
+
+  for (i = 0; i < 5; i++)
+    {
+      GtkWidget *item;
+      gchar *label = g_strdup_printf ("Item _%d", i);
+      item = gtk_menu_item_new_with_mnemonic (label);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    }
+  gtk_widget_show_all (GTK_WIDGET (menu));
+
+  if (button_number != -1)
+    {
+      position_data.x = x;
+      position_data.y = y;
+      
+      gtk_menu_popup (menu, NULL, NULL, position_function,
+		      &position_data, button_number, gtk_get_current_event_time());
+    }
+  else
+    gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 0, gtk_get_current_event_time());
+
+  return TRUE;
+}
+
 gint
 main (gint argc, gchar **argv)
 {
@@ -580,6 +634,8 @@ main (gint argc, gchar **argv)
   gtk_widget_show_all (window);
 
   make_prop_editor (G_OBJECT (toolbar));
+
+  g_signal_connect (toolbar, "popup_context_menu", G_CALLBACK (popup_context_menu), NULL);
   
   gtk_main ();
   
