@@ -32,7 +32,7 @@
 #define PM_SIZE                    8
 #define TAB_SIZE                   (PM_SIZE + 6)
 #define CELL_SPACING               1
-#define CLIST_OPTIMUM_SIZE         512
+#define CLIST_OPTIMUM_SIZE         64
 #define COLUMN_INSET               3
 #define DRAG_WIDTH                 6
 
@@ -1956,7 +1956,8 @@ draw_row (GtkCList     *clist,
     }
 
   /* draw focus rectangle */
-  if (clist->focus_row == row && GTK_WIDGET_HAS_FOCUS (widget))
+  if (clist->focus_row == row &&
+      GTK_WIDGET_CAN_FOCUS (widget) && GTK_WIDGET_HAS_FOCUS (widget))
     {
       if (!area)
 	gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE,

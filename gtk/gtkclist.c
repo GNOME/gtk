@@ -5886,7 +5886,8 @@ draw_row (GtkCList     *clist,
     }
 
   /* draw focus rectangle */
-  if (clist->focus_row == row && GTK_WIDGET_HAS_FOCUS(widget))
+  if (clist->focus_row == row &&
+      GTK_WIDGET_CAN_FOCUS (widget) && GTK_WIDGET_HAS_FOCUS(widget))
     {
       if (!area)
 	gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE,
@@ -6256,8 +6257,8 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 	  return;
 	}
 
-      if (GTK_WIDGET_HAS_FOCUS(clist) && !GTK_CLIST_CHILD_HAS_FOCUS(clist) &&
-	  GTK_CLIST_ADD_MODE(clist))
+      if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
+	  !GTK_CLIST_CHILD_HAS_FOCUS(clist) && GTK_CLIST_ADD_MODE(clist))
 	{
 	  y = ROW_TOP_YPIXEL (clist, clist->focus_row);
 	      
@@ -6291,8 +6292,8 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 	  return;
 	}
       
-      if (GTK_WIDGET_HAS_FOCUS(clist) && !GTK_CLIST_CHILD_HAS_FOCUS(clist) &&
-	  GTK_CLIST_ADD_MODE(clist))
+      if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
+	  !GTK_CLIST_CHILD_HAS_FOCUS(clist) && GTK_CLIST_ADD_MODE(clist))
 	{
 	  y = ROW_TOP_YPIXEL (clist, clist->focus_row);
 	  
@@ -6319,7 +6320,8 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 
   check_exposures (clist);
 
-  if (GTK_WIDGET_HAS_FOCUS(clist) && !GTK_CLIST_CHILD_HAS_FOCUS(clist))
+  if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
+      !GTK_CLIST_CHILD_HAS_FOCUS(clist))
     {
       if (GTK_CLIST_ADD_MODE(clist))
 	{
@@ -6618,7 +6620,7 @@ gtk_clist_draw_focus (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CLIST (widget));
 
-  if (!GTK_WIDGET_DRAWABLE (widget))
+  if (!GTK_WIDGET_DRAWABLE (widget) || !GTK_WIDGET_CAN_FOCUS (widget))
     return;
 
   clist = GTK_CLIST (widget);
