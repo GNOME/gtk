@@ -1,3 +1,14 @@
+Sun Mar 14 23:36:15 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: Implement local_only by
+	filtering the shortcuts and bookmarks list by 
+	gtk_file_system_path_to_filename (file_system, path) != NULL.
+	(#132894)
+
+	* gtk/gtkfilesystem.c (gtk_file_system_path_is_local): Add
+	a convenience function, may by interesting to push to the 
+	file system vtable later for performance.
+
 2004-03-14  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesystem.c (gtk_file_folder_get_info): Allow the path

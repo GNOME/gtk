@@ -256,6 +256,9 @@ GtkFilePath *gtk_file_system_uri_to_path      (GtkFileSystem     *file_system,
 GtkFilePath *gtk_file_system_filename_to_path (GtkFileSystem     *file_system,
 					       const gchar       *filename);
 
+gboolean     gtk_file_system_path_is_local    (GtkFileSystem     *filesystem,
+					       const GtkFilePath *path);
+
 GdkPixbuf   *gtk_file_system_render_icon   (GtkFileSystem      *file_system,
 					    const GtkFilePath  *path,
 					    GtkWidget          *widget,

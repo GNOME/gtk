@@ -654,6 +654,33 @@ gtk_file_system_filename_to_path (GtkFileSystem *file_system,
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->filename_to_path (file_system, filename);
 }
 
+/**
+ * gtk_file_system_path_is_local:
+ * @filesystem: a #GtkFileSystem
+ * @path: A #GtkFilePath from that filesystem
+ * 
+ * Checks whether a #GtkFilePath is local; that is whether
+ * gtk_file_system_path_to_filename would return non-%NULL.
+ * 
+ * Return value: %TRUE if the path is loca
+ **/
+gboolean
+gtk_file_system_path_is_local (GtkFileSystem     *file_system,
+			       const GtkFilePath *path)
+{
+  gchar *filename;
+  gboolean result;
+    
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  filename = gtk_file_system_path_to_filename (file_system, path);
+  result = filename != NULL;
+  g_free (filename);
+
+  return result;
+}
+
 GdkPixbuf *
 gtk_file_system_render_icon (GtkFileSystem      *file_system,
 			     const GtkFilePath  *path,

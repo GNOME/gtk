@@ -1065,6 +1065,10 @@ shortcuts_append_paths (GtkFileChooserDefault *impl,
       path = paths->data;
       error = NULL;
 
+      if (impl->local_only &&
+	  !gtk_file_system_path_is_local (impl->file_system, path))
+	continue;
+
       /* NULL GError, but we don't really want to show error boxes here */
       if (shortcuts_insert_path (impl, start_row + num_inserted, FALSE, NULL, path, NULL, TRUE, NULL))
 	num_inserted++;
@@ -1192,6 +1196,17 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
       GtkFileSystemVolume *volume;
 
       volume = l->data;
+      
+      if (impl->local_only)
+	{
+	  GtkFilePath *base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
+	  gboolean is_local = gtk_file_system_path_is_local (impl->file_system, base_path);
+	  gtk_file_path_free (base_path);
+
+	  if (!is_local)
+	    continue;
+	}
+
       shortcuts_insert_path (impl, start_row + n, TRUE, volume, NULL, NULL, FALSE, NULL);
       n++;
     }
@@ -2910,6 +2925,37 @@ set_extra_widget (GtkFileChooserDefault *impl,
 }
 
 static void
+set_local_only (GtkFileChooserDefault *impl,
+		gboolean               local_only)
+{
+  if (local_only != impl->local_only)
+    {
+      impl->local_only = local_only;
+
+      if (impl->shortcuts_model && impl->file_system)
+	{
+	  shortcuts_add_volumes (impl);
+	  shortcuts_add_bookmarks (impl);
+	}
+
+      if (local_only &&
+	  !gtk_file_system_path_is_local (impl->file_system, impl->current_folder))
+	{
+	  /* If we are pointing to a non-local folder, make an effort to change
+	   * back to a local folder, but it's really up to the app to not cause
+	   * such a situation, so we ignore errors.
+	   */
+	  const gchar *home = g_get_home_dir ();
+	  GtkFilePath *home_path = gtk_file_system_filename_to_path (impl->file_system, home);
+
+	  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), home_path, NULL);
+
+	  gtk_file_path_free (home_path);
+	}
+    }
+}
+
+static void
 volumes_changed_cb (GtkFileSystem         *file_system,
 		    GtkFileChooserDefault *impl)
 {
@@ -3160,7 +3206,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
       set_current_filter (impl, g_value_get_object (value));
       break;
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      impl->local_only = g_value_get_boolean (value);
+      set_local_only (impl, g_value_get_boolean (value));
       break;
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
       set_preview_widget (impl, g_value_get_object (value));
@@ -3604,6 +3650,17 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   /* Test validity of path here.  */
   if (!check_is_folder (impl->file_system, path, error))
     return FALSE;
+
+  if (impl->local_only &&
+      !gtk_file_system_path_is_local (impl->file_system, path))
+    {
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_FAILED,
+		   _("Can't change to folder because it isn't local"));
+      
+      return FALSE;
+    }
 
   if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, error))
     return FALSE;
