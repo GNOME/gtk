@@ -1,3 +1,10 @@
+Thu Jan 24 23:03:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): update docs,
+	return current FALSE if x is smaller than the current visible area,
+	not than the requested area, don't correct y coordinate,
+	TREE_WINDOW_Y_TO_RBTREE_Y will do that. Fixes #67477.
+
 Thu Jan 24 15:41:08 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c

@@ -8355,14 +8355,15 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * @cell_y: A pointer where the Y coordinate relative to the cell can be placed, or %NULL
  *
  * Finds the path at the point (@x, @y), relative to widget coordinates.  That
- * is, @x and @y are relative to an events coordinates.  It is primarily for
- * things like popup menus.  If @path is non-%NULL, then it will be filled with
- * the #GtkTreePath at that point.  This path should be freed with
- * gtk_tree_path_free().  If @column is non-%NULL, then it will be filled with
- * the column at that point. @cell_x and @cell_y return the coordinates relative
- * to the cell background (i.e. the @background_area passed to
- * gtk_cell_renderer_render()).  This function is only meaningful if @tree_view
- * is realized.
+ * is, @x and @y are relative to an events coordinates. @x and @y must come
+ * from an event on the @tree_view only where event->window ==
+ * gtk_tree_view_get_bin (). It is primarily for things like popup menus.
+ * If @path is non-%NULL, then it will be filled with the #GtkTreePath at that
+ * point.  This path should be freed with gtk_tree_path_free().  If @column
+ * is non-%NULL, then it will be filled with the column at that point.
+ * @cell_x and @cell_y return the coordinates relative to the cell background
+ * (i.e. the @background_area passed to gtk_cell_renderer_render()).  This
+ * function is only meaningful if @tree_view is realized.
  *
  * Return value: %TRUE if a row exists at that coordinate.
  **/
@@ -8390,7 +8391,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
   if (tree_view->priv->tree == NULL)
     return FALSE;
 
-  if (x > tree_view->priv->hadjustment->upper)
+  if (x > tree_view->priv->hadjustment->page_size)
     return FALSE;
 
   if (x < 0 || y < 0)
@@ -8438,7 +8439,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
     }
 
   y_offset = _gtk_rbtree_find_offset (tree_view->priv->tree,
-				      TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y + tree_view->priv->vadjustment->value),
+				      TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y),
 				      &tree, &node);
 
   if (tree == NULL)
