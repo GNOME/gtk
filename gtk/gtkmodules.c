@@ -297,7 +297,7 @@ load_module (GSList      *module_list,
 		      g_module_symbol (module, "gtk_module_display_init",
 				       (gpointer *) &info->display_init_func);
 		      
-		      gtk_modules = g_slist_prepend (gtk_modules, info);
+		      gtk_modules = g_slist_append (gtk_modules, info);
 		      
 		      /* display_init == NULL indicates a non-multihead aware module.
 		       * For these, we delay the call to init_func until first display is 

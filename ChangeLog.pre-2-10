@@ -1,5 +1,9 @@
 2005-01-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmodules.c (load_module): Don't reverse the order
+	of modules when putting them in gtk_modules.  (#162676, Dennis
+	Cranston, patch by Remus Draica)
+
 	* gtk/gtktreeview.c (gtk_tree_view_search_move): Don't crash 
 	if the tree is empty.  (#164669, Priit Laes)
 
