@@ -1,5 +1,10 @@
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkrange.c (gtk_range_scroll_event): change SCROLL_RIGHT to
+	SCROLL_LEFT, reported by Thomas Broyer.
+
+2001-06-04  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkrange.c (gtk_range_adjustment_value_changed): 
 	Process updates immediately, to prevent funny lag effect
 	when scrolling, at some mild potential efficiency cost.

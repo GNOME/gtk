@@ -1052,7 +1052,7 @@ gtk_range_scroll_event (GtkWidget      *widget,
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
       gdouble new_value = adj->value + ((event->direction == GDK_SCROLL_UP ||
-                                         event->direction == GDK_SCROLL_RIGHT) ? 
+                                         event->direction == GDK_SCROLL_LEFT) ? 
 					-adj->page_increment / 2: 
 					adj->page_increment / 2);
 
