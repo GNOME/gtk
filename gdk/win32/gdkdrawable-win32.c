@@ -560,9 +560,30 @@ gdk_draw_pixmap (GdkDrawable *drawable,
       if ((srcdc = GetDC (src_private->xwindow)) == NULL)
 	g_warning ("gdk_draw_pixmap: GetDC failed");
       
+#if 0
       if (!BitBlt (hdc, xdest, ydest, width, height,
 		   srcdc, xsrc, ysrc, SRCCOPY))
 	g_warning ("gdk_draw_pixmap: BitBlt failed");
+#else
+      /* If we are in fact just blitting inside one window,
+       * ScrollWindowEx works better.
+       * Thanks to Philippe Colantoni <colanton@aris.ss.uci.edu>
+       * for noticing and fixing this.
+       */
+      if (drawable_private->xwindow==src_private->xwindow)
+	{
+	  if (!ScrollWindowEx (drawable_private->xwindow,-xsrc+xdest, -ysrc+ydest, NULL,
+			       NULL, NULL, NULL, SW_INVALIDATE))
+	    g_warning ("gdk_draw_pixmap: ScrollWindowEx failed");
+
+	  if (!UpdateWindow (drawable_private->xwindow))
+	    g_warning ("gdk_draw_pixmap: UpdateWindow failed");
+	}
+      else
+	if (!BitBlt (hdc, xdest, ydest, width, height,
+		     srcdc, xsrc, ysrc, SRCCOPY))
+	  g_warning ("gdk_draw_pixmap: BitBlt failed");
+#endif
       
       ReleaseDC (src_private->xwindow, srcdc);
     }

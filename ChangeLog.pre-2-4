@@ -1,3 +1,10 @@
+1999-08-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdraw.c (gdk_draw_pixmap): When blitting inside one
+	window, use ScrollWindowEx, and call UpdateWindow. This prevents
+	bugs when for instance part of the window was outside the
+	display. Thanks to Philippe Colantoni for finding and fixing this.
+
 1999-08-16  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdraw.c (gdk_draw_arc): Fix start and end radial
