@@ -22,10 +22,7 @@
  */
 
 #include <config.h>
-#include <gnome.h>
 #include "gdk-pixbuf.h"
-#include "gdk-pixbuf-loader.h"
-#include "gnome-canvas-pixbuf.h"
 
 
 
