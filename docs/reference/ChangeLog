@@ -1,3 +1,8 @@
+Sat Mar  6 23:50:37 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkrc.sgml: Document that [xy]thickness can
+	be specified in a style.
+
 Fri Mar  5 23:58:01 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktreemodelfilter.sgml: A little addition.

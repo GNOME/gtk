@@ -264,6 +264,27 @@ elements are:
      </listitem>
   </varlistentry>
   <varlistentry>
+    <term><literal>xthickness =
+      <replaceable>number</replaceable></literal></term>
+     <listitem>
+       <para>
+         Sets the xthickness, which is used for various horizontal padding
+         values in GTK+.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>ythickness =
+      <replaceable>number</replaceable></literal></term>
+     <listitem>
+       <para>
+         Sets the ythickness, which is used for various vertical padding
+         values in GTK+.
+       </para>
+     </listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><literal>bg_pixmap[<replaceable>state</replaceable>] =
       <replaceable>pixmap</replaceable></literal></term>
      <listitem>
