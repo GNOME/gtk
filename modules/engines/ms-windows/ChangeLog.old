@@ -1,3 +1,13 @@
+2004-02-25  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix 
+	http://bugzilla.gnome.org/show_bug.cgi?id=135098
+	http://sourceforge.net/tracker/index.php?func=detail&aid=895762&group_id=76416&atid=547655
+
+2004-01-25  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.5.3 ===
+	
 2004-01-20  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c: Fix disappearing text in Gimp option menus.

@@ -147,6 +147,216 @@ get_system_font(XpThemeClass klazz, XpThemeFont type, LOGFONT *out_lf)
   return FALSE;
 }
 
+/***************************** STOLEN FROM PANGO *****************************/
+
+/*
+	This code is stolen from Pango 1.4. It attempts to address the following problems:
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=135098
+	http://sourceforge.net/tracker/index.php?func=detail&aid=895762&group_id=76416&atid=547655
+
+	As Owen suggested in bug 135098, once Pango 1.6 is released, we need to get rid of this code.
+*/
+
+#define PING(printlist)
+
+/* TrueType defines: */
+
+#define MAKE_TT_TABLE_NAME(c1, c2, c3, c4) \
+   (((guint32)c4) << 24 | ((guint32)c3) << 16 | ((guint32)c2) << 8 | ((guint32)c1))
+
+#define CMAP (MAKE_TT_TABLE_NAME('c','m','a','p'))
+#define CMAP_HEADER_SIZE 4
+
+#define NAME (MAKE_TT_TABLE_NAME('n','a','m','e'))
+#define NAME_HEADER_SIZE 6
+
+#define ENCODING_TABLE_SIZE 8
+
+#define APPLE_UNICODE_PLATFORM_ID 0
+#define MACINTOSH_PLATFORM_ID 1
+#define ISO_PLATFORM_ID 2
+#define MICROSOFT_PLATFORM_ID 3
+
+#define SYMBOL_ENCODING_ID 0
+#define UNICODE_ENCODING_ID 1
+#define UCS4_ENCODING_ID 10
+
+struct name_header
+{
+  guint16 format_selector;
+  guint16 num_records;
+  guint16 string_storage_offset;
+};
+
+struct name_record
+{
+  guint16 platform_id;
+  guint16 encoding_id;
+  guint16 language_id;
+  guint16 name_id;
+  guint16 string_length;
+  guint16 string_offset;
+};
+
+gboolean
+pango_win32_get_name_header (HDC                 hdc,
+			     struct name_header *header)
+{
+  if (GetFontData (hdc, NAME, 0, header, sizeof (*header)) != sizeof (*header))
+    return FALSE;
+
+  header->num_records = GUINT16_FROM_BE (header->num_records);
+  header->string_storage_offset = GUINT16_FROM_BE (header->string_storage_offset);
+
+  return TRUE;
+}
+
+gboolean
+pango_win32_get_name_record (HDC                 hdc,
+			     gint                i,
+			     struct name_record *record)
+{
+  if (GetFontData (hdc, NAME, 6 + i * sizeof (*record),
+		   record, sizeof (*record)) != sizeof (*record))
+    return FALSE;
+
+  record->platform_id = GUINT16_FROM_BE (record->platform_id);
+  record->encoding_id = GUINT16_FROM_BE (record->encoding_id);
+  record->language_id = GUINT16_FROM_BE (record->language_id);
+  record->name_id = GUINT16_FROM_BE (record->name_id);
+  record->string_length = GUINT16_FROM_BE (record->string_length);
+  record->string_offset = GUINT16_FROM_BE (record->string_offset);
+
+  return TRUE;
+}
+
+static gchar *
+get_family_name (LOGFONT *lfp, HDC pango_win32_hdc)
+{
+  HFONT hfont;
+  HFONT oldhfont;
+
+  struct name_header header;
+  struct name_record record;
+
+  gint unicode_ix = -1, mac_ix = -1, microsoft_ix = -1;
+  gint name_ix;
+  gchar *codeset;
+
+  gchar *string = NULL;
+  gchar *name;
+
+  gint i, l;
+  gsize nbytes;
+
+  /* If lfFaceName is ASCII, assume it is the common (English) name
+   * for the font. Is this valid? Do some TrueType fonts have
+   * different names in French, German, etc, and does the system
+   * return these if the locale is set to use French, German, etc?
+   */
+  l = strlen (lfp->lfFaceName);
+  for (i = 0; i < l; i++)
+    if (lfp->lfFaceName[i] < ' ' || lfp->lfFaceName[i] > '~')
+      break;
+
+  if (i == l)
+    return g_strdup (lfp->lfFaceName);
+
+  if ((hfont = CreateFontIndirect (lfp)) == NULL)
+    goto fail0;
+
+  if ((oldhfont = SelectObject (pango_win32_hdc, hfont)) == NULL)
+    goto fail1;
+
+  if (!pango_win32_get_name_header (pango_win32_hdc, &header))
+    goto fail2;
+
+  PING (("%d name records", header.num_records));
+
+  for (i = 0; i < header.num_records; i++)
+    {
+      if (!pango_win32_get_name_record (pango_win32_hdc, i, &record))
+	goto fail2;
+
+      if ((record.name_id != 1 && record.name_id != 16) || record.string_length <= 0)
+	continue;
+
+      PING(("platform:%d encoding:%d language:%04x name_id:%d",
+	    record.platform_id, record.encoding_id, record.language_id, record.name_id));
+
+      if (record.platform_id == APPLE_UNICODE_PLATFORM_ID ||
+	  record.platform_id == ISO_PLATFORM_ID)
+	unicode_ix = i;
+      else if (record.platform_id == MACINTOSH_PLATFORM_ID &&
+	       record.encoding_id == 0 && /* Roman */
+	       record.language_id == 0)	/* English */
+	mac_ix = i;
+      else if (record.platform_id == MICROSOFT_PLATFORM_ID)
+	if ((microsoft_ix == -1 ||
+	     PRIMARYLANGID (record.language_id) == LANG_ENGLISH) &&
+	    (record.encoding_id == SYMBOL_ENCODING_ID ||
+	     record.encoding_id == UNICODE_ENCODING_ID ||
+	     record.encoding_id == UCS4_ENCODING_ID))
+	  microsoft_ix = i;
+    }
+
+  if (microsoft_ix >= 0)
+    name_ix = microsoft_ix;
+  else if (mac_ix >= 0)
+    name_ix = mac_ix;
+  else if (unicode_ix >= 0)
+    name_ix = unicode_ix;
+  else
+    goto fail2;
+
+  if (!pango_win32_get_name_record (pango_win32_hdc, name_ix, &record))
+    goto fail2;
+
+  string = g_malloc (record.string_length + 1);
+  if (GetFontData (pango_win32_hdc, NAME,
+		   header.string_storage_offset + record.string_offset,
+		   string, record.string_length) != record.string_length)
+    goto fail2;
+
+  string[record.string_length] = '\0';
+
+  if (name_ix == microsoft_ix)
+    if (record.encoding_id == SYMBOL_ENCODING_ID ||
+	record.encoding_id == UNICODE_ENCODING_ID)
+      codeset = "UTF-16BE";
+    else
+      codeset = "UCS-4BE";
+  else if (name_ix == mac_ix)
+    codeset = "MacRoman";
+  else /* name_ix == unicode_ix */
+    codeset = "UCS-4BE";
+
+  name = g_convert (string, record.string_length, "UTF-8", codeset, NULL, &nbytes, NULL);
+  if (name == NULL)
+    goto fail2;
+  g_free (string);
+
+  PING(("%s", name));
+
+  SelectObject (pango_win32_hdc, oldhfont);
+  DeleteObject (hfont);
+
+  return name;
+
+ fail2:
+  g_free (string);
+  SelectObject (pango_win32_hdc, oldhfont);
+
+ fail1:
+  DeleteObject (hfont);
+
+ fail0:
+  return g_locale_to_utf8 (lfp->lfFaceName, -1, NULL, NULL, NULL);
+}
+
+/***************************** STOLEN FROM PANGO *****************************/
+
 static char *
 sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf, size_t bufsiz)
 {
@@ -156,6 +366,7 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf, size_t
   int pt_size;
   const char * weight;
   const char * style;
+  char * font;
 
   if (get_system_font(klazz, type, &lf))
     {
@@ -204,7 +415,9 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf, size_t
 	} else
 		pt_size = 10;
 
-    g_snprintf(buf, bufsiz, "%s %s %s %d", lf.lfFaceName, style, weight, pt_size);
+	font = get_family_name(&lf, hDC);
+    g_snprintf(buf, bufsiz, "%s %s %s %d", font, style, weight, pt_size);
+	g_free(font);
 
     return buf;
    }
