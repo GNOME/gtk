@@ -71,7 +71,7 @@ static void         gtk_combo_size_allocate   (GtkWidget     *widget,
 
 static GtkHBoxClass *parent_class = NULL;
 
-void
+static void
 gtk_combo_class_init (GtkComboClass * klass)
 {
   GtkObjectClass *oclass;
@@ -437,7 +437,7 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
   return FALSE;
 }
 
-void
+static void
 gtk_combo_init (GtkCombo * combo)
 {
   GtkWidget *arrow;

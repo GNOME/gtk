@@ -26,6 +26,7 @@
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#include "gtkprivate.h"
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
@@ -861,7 +862,6 @@ gtk_entry_key_press (GtkWidget   *widget,
   gint return_val;
   gint key;
   guint initial_pos;
-  guint tmp_pos;
   gint extend_selection;
   gint extend_start;
 
@@ -995,6 +995,8 @@ gtk_entry_key_press (GtkWidget   *widget,
 	}
       if (event->length > 0)
 	{
+	  gint tmp_pos;
+
 	  extend_selection = FALSE;
 	  gtk_editable_delete_selection (editable);
 
@@ -1508,7 +1510,7 @@ gtk_entry_update_text (GtkEditable *editable,
   gtk_entry_queue_draw (GTK_ENTRY(editable));
 }
 
-gchar *    
+static gchar *    
 gtk_entry_get_chars      (GtkEditable   *editable,
 			  gint           start_pos,
 			  gint           end_pos)
@@ -1551,13 +1553,21 @@ gtk_move_forward_character (GtkEntry *entry)
   GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
-  if (editable->current_pos < entry->text_length)
+  if (gtk_use_mb)
     {
-      len = mblen (entry->text+editable->current_pos, MB_CUR_MAX);
-      editable->current_pos += (len>0)? len:1;
+      if (editable->current_pos < entry->text_length)
+	{
+	  len = mblen (entry->text+editable->current_pos, MB_CUR_MAX);
+	  editable->current_pos += (len>0)? len:1;
+	}
+      if (editable->current_pos > entry->text_length)
+	editable->current_pos = entry->text_length;
     }
-  if (editable->current_pos > entry->text_length)
-    editable->current_pos = entry->text_length;
+  else
+    {
+      if (editable->current_pos < entry->text_length)
+	editable->current_pos ++;
+    }
 }
 
 static gint
@@ -1583,11 +1593,14 @@ gtk_move_backward_character (GtkEntry *entry)
   GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
-  /* this routine is correct only if string is state-independent-encoded */
-
   if (0 < editable->current_pos)
-    editable->current_pos = move_backward_character (entry->text,
-						     editable->current_pos);
+    {
+      if (gtk_use_mb)
+	editable->current_pos = move_backward_character (entry->text,
+					     editable->current_pos);
+      else
+	editable->current_pos--;
+    }
 }
 
 static void
@@ -1605,26 +1618,46 @@ gtk_move_forward_word (GtkEntry *entry)
     {
       text = entry->text;
       i = editable->current_pos;
-
-      len = mbtowc (&c, text+i, MB_CUR_MAX);
-      if (!iswalnum(c))
-	for (; i < entry->text_length; i+=len)
-	  {
-	    len = mbtowc (&c, text+i, MB_CUR_MAX);
-	    if (len < 1 || iswalnum(c))
-	      break;
-	  }
-  
-      for (; i < entry->text_length; i+=len)
+	  
+      if (gtk_use_mb)
 	{
 	  len = mbtowc (&c, text+i, MB_CUR_MAX);
-	  if (len < 1 || !iswalnum(c))
-	    break;
+	  if (!iswalnum(c))
+	    for (; i < entry->text_length; i+=len)
+	      {
+		len = mbtowc (&c, text+i, MB_CUR_MAX);
+		if (len < 1 || iswalnum(c))
+		  break;
+	      }
+	  
+	  for (; i < entry->text_length; i+=len)
+	    {
+	      len = mbtowc (&c, text+i, MB_CUR_MAX);
+	      if (len < 1 || !iswalnum(c))
+		break;
+	    }
+	  
+	  editable->current_pos = i;
+	  if (editable->current_pos > entry->text_length)
+	    editable->current_pos = entry->text_length;
 	}
+      else
+	{
+	  if (!isalnum (text[i]))
+	    for (; i < entry->text_length; i++)
+	      {
+		if (isalnum(text[i]))
+		  break;
+	      }
+	  
+	  for (; i < entry->text_length; i++)
+	    {
+	      if (!isalnum(text[i]))
+		break;
+	    }
 
-      editable->current_pos = i;
-      if (editable->current_pos > entry->text_length)
-	editable->current_pos = entry->text_length;
+	  editable->current_pos = i;
+	}
     }
 }
 
@@ -1639,39 +1672,57 @@ gtk_move_backward_word (GtkEntry *entry)
   GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
-  if (entry->text)
+  if (entry->text && editable->current_pos > 0)
     {
       text = entry->text;
-      i=move_backward_character(text, editable->current_pos);
-      if (i < 0) /* Per */
-	{
-	  editable->selection_start_pos = 0;
-	  editable->selection_end_pos = 0;
-	  return;
-	}
 
-      len = mbtowc (&c, text+i, MB_CUR_MAX);
-      if (!iswalnum(c))
-        for (; i >= 0; i=move_backward_character(text, i))
-	  {
-	    len = mbtowc (&c, text+i, MB_CUR_MAX);
-	    if (iswalnum(c))
-	      break;
-	  }
-
-      for (; i >= 0; i=move_backward_character(text, i))
+      if (gtk_use_mb)
 	{
+	  i=move_backward_character(text, editable->current_pos);
+	  
 	  len = mbtowc (&c, text+i, MB_CUR_MAX);
 	  if (!iswalnum(c))
+	    for (; i >= 0; i=move_backward_character(text, i))
+	      {
+		len = mbtowc (&c, text+i, MB_CUR_MAX);
+		if (iswalnum(c))
+		  break;
+	      }
+	  
+	  for (; i >= 0; i=move_backward_character(text, i))
 	    {
-	      i += len;
-	      break;
+	      len = mbtowc (&c, text+i, MB_CUR_MAX);
+	      if (!iswalnum(c))
+		{
+		  i += len;
+		  break;
+		}
 	    }
 	}
-
+      else
+	{
+	  i = editable->current_pos - 1;
+	  
+	  if (!isalnum(text[i]))
+	    for (; i >= 0; i--)
+	      {
+		if (isalnum(text[i]))
+		  break;
+	      }
+	  
+	  for (; i >= 0; i--)
+	    {
+	      if (!isalnum(text[i]))
+		{
+		  i++;
+		  break;
+		}
+	    }
+	}
+	 
       if (i < 0)
-        i = 0;
-
+	i = 0;
+      
       editable->current_pos = i;
     }
 }

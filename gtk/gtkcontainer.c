@@ -42,7 +42,7 @@ typedef void (*GtkContainerSignal1) (GtkObject *object,
 				     gpointer   arg1,
 				     gpointer   data);
 typedef void (*GtkContainerSignal2) (GtkObject *object,
-				     gpointer   arg1,
+				     GtkFunction arg1,
 				     gpointer   arg2,
 				     gpointer   data);
 typedef gint (*GtkContainerSignal3) (GtkObject *object,

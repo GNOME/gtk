@@ -3430,6 +3430,7 @@ gdk_ic_new (GdkWindow* client_window,
 	    GdkIMStyle style, ...)
 {
   va_list list;
+  void *argsptr;
   GdkICPrivate *private;
   XVaNestedList preedit_attr;
 
@@ -3440,7 +3441,8 @@ gdk_ic_new (GdkWindow* client_window,
   private = g_new (GdkICPrivate, 1);
 
   va_start (list, style);
-  preedit_attr =  (XVaNestedList) & (va_arg (list, void *));
+  argsptr = va_arg (list, void *);
+  preedit_attr =  (XVaNestedList)&argsptr;
   va_end (list);
 
   private->style = gdk_im_decide_style (style);
@@ -3500,6 +3502,7 @@ void
 gdk_ic_set_values (GdkIC ic, ...)
 {
   va_list list;
+  void *argsptr;
   XVaNestedList args;
   GdkICPrivate *private;
 
@@ -3508,7 +3511,8 @@ gdk_ic_set_values (GdkIC ic, ...)
   private = (GdkICPrivate *) ic;
 
   va_start (list, ic);
-  args =  (XVaNestedList) & (va_arg (list, void *));
+  argsptr = va_arg (list, void *);
+  args =  (XVaNestedList)&argsptr;
   va_end (list);
 
   XSetICValues (private->xic, XNVaNestedList, args, NULL);
@@ -3518,6 +3522,7 @@ void
 gdk_ic_get_values (GdkIC ic, ...)
 {
   va_list list;
+  void *argsptr;
   XVaNestedList args;
   GdkICPrivate *private;
 
@@ -3526,7 +3531,8 @@ gdk_ic_get_values (GdkIC ic, ...)
   private = (GdkICPrivate *) ic;
 
   va_start (list, ic);
-  args =  (XVaNestedList) & (va_arg (list, void *));
+  argsptr = va_arg (list, void *);
+  args =  (XVaNestedList)&argsptr;
   va_end (list);
 
   XGetICValues (private->xic, XNVaNestedList, args, NULL);
@@ -3536,6 +3542,7 @@ void
 gdk_ic_set_attr (GdkIC ic, const char *target, ...)
 {
   va_list list;
+  void *argsptr;
   XVaNestedList attr;
   GdkICPrivate *private;
 
@@ -3545,7 +3552,8 @@ gdk_ic_set_attr (GdkIC ic, const char *target, ...)
   private = (GdkICPrivate *) ic;
 
   va_start (list, target);
-  attr =  (XVaNestedList) & (va_arg (list, void *));
+  argsptr = va_arg (list, void *);
+  attr =  (XVaNestedList)&argsptr;
   va_end (list);
 
   XSetICValues (private->xic, target, attr, NULL);
@@ -3555,6 +3563,7 @@ void
 gdk_ic_get_attr (GdkIC ic, const char *target, ...)
 {
   va_list list;
+  void *argsptr;
   XVaNestedList attr;
   GdkICPrivate *private;
 
@@ -3564,7 +3573,8 @@ gdk_ic_get_attr (GdkIC ic, const char *target, ...)
   private = (GdkICPrivate *) ic;
 
   va_start (list, target);
-  attr =  (XVaNestedList) & (va_arg (list, void *));
+  argsptr = va_arg (list, void *);
+  attr =  (XVaNestedList)&argsptr;
   va_end (list);
 
   XGetICValues (private->xic, target, attr, NULL);

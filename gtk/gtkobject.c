@@ -348,7 +348,7 @@ gtk_object_class_add_signals (GtkObjectClass *class,
 
   g_return_if_fail (class != NULL);
 
-  new_signals = g_new (gint, class->nsignals + nsignals);
+  new_signals = g_new (guint, class->nsignals + nsignals);
   for (i = 0; i < class->nsignals; i++)
     new_signals[i] = class->signals[i];
   for (i = 0; i < nsignals; i++)

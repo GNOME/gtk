@@ -4546,7 +4546,7 @@ recompute_geometry (GtkText* text)
 /*                            Selection                               */
 /**********************************************************************/
 
-void 
+static void 
 gtk_text_set_selection  (GtkEditable   *editable,
 			 gint           start,
 			 gint           end)

@@ -360,7 +360,7 @@ gtk_editable_selection_handler (GtkWidget        *widget,
     {
       gtk_selection_data_set (selection_data,
                               GDK_SELECTION_TYPE_STRING,
-                              8*sizeof(gchar), str, length);
+                              8*sizeof(gchar), (guchar *)str, length);
     }
   else if (selection_data->target == text_atom ||
            selection_data->target == ctext_atom)
@@ -441,7 +441,8 @@ gtk_editable_selection_received  (GtkWidget         *widget,
     case STRING:
       selection_data->data[selection_data->length] = 0;
       gtk_editable_insert_text (editable, selection_data->data,
-				strlen (selection_data->data), &tmp_pos);
+				strlen ((gchar *)selection_data->data), 
+				&tmp_pos);
       editable->current_pos = tmp_pos;
       break;
     case CTEXT:

@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <X11/Xlocale.h>	/* so we get the right setlocale */
 #include <stdio.h>
 #include <stdlib.h>
 #include "gtkbutton.h"
@@ -32,6 +33,7 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "gdk/gdki18n.h"
 #include "../config.h"
 
 
@@ -166,10 +168,13 @@ guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
 
 #ifdef G_ENABLE_DEBUG
 static GDebugKey gtk_debug_keys[] = {
-  {"objects", GTK_DEBUG_OBJECTS}
+  {"objects", GTK_DEBUG_OBJECTS},
+  {"misc", GTK_DEBUG_MISC}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
+
+gboolean gtk_use_mb = -1;
 
 #endif /* G_ENABLE_DEBUG */
 
@@ -180,6 +185,8 @@ void
 gtk_init (int	 *argc,
 	  char ***argv)
 {
+  gchar *current_locale;
+
   if (0)
     {
       g_set_error_handler (gtk_error);
@@ -254,6 +261,28 @@ gtk_init (int	 *argc,
     }
 
 #endif /* G_ENABLE_DEBUG */
+
+  /* Check if there is a good chance the mb functions will handle things
+   * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
+   * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
+   */
+
+  current_locale = setlocale (LC_CTYPE, NULL);
+  setlocale (LC_CTYPE, "C");
+
+#ifdef X_LOCALE
+  if ((strcmp (current_locale, "C")) && (!strcmp (current_locale, "POSIX")))
+    gtk_use_mb = TRUE;
+  else
+#endif
+    {
+      gtk_use_mb = (mblen ("\xc0", MB_CUR_MAX) == 1);
+    }
+
+  setlocale (LC_CTYPE, current_locale);
+
+  GTK_NOTE (MISC, g_print("%s multi-byte string functions.\n", 
+			  gtk_use_mb ? "Using" : "Not using"));
 
   /* Initialize the default visual and colormap to be
    *  used in creating widgets. (We want to use the system

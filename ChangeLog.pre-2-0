@@ -1,3 +1,35 @@
+Tue Mar 17 01:55:00 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c gtk/gtkentry.c: Try to guess if we can
+	  use the mb* functions safely. (For glibc, they do
+	  UTF-8). Heuristic is (X_LOCALE && locale != C/POSIX)
+	  || (mblen("\xc0", MB_CUR_MAX) == 1).
+       
+	(From: "Richard Lloyd" <rkl@csc.liv.ac.uk>)
+	
+	* gdk/gdk.c (gdk_ic_get_attr): Use an intermediate
+	  variable to avoid taking the address of the result
+	  of va_arg. 
+
+	* gtk/gtkentry.c gtk/gtkeditable.c gtkobject.c
+	  gtk/testselection.c: signedness fixups
+
+	* gtk/gtkcontainer.c: Fixed implicit cast between
+	  gpointer and func pointer by changing.
+
+	* gtk/gtkcombo.c, gtk/gtkentry.c, gtk/gtktext.c:
+	  static void forward declaration vs. void actual fixed
+
+	* gtk/testgtk.c: Limit total number of tree items to 10,000
+	
+Mon Mar 16 21:14:52 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkvisual.c: Put visual names into #ifdef G_ENABLE_DEBUG
+	    gtk-jbuhler-980315-0.patch
+
+	* gdk/gdkcc.c: Changed DEBUG => G_ENABLE_DEBUG, eliminate
+	  unused variable warnings.
+
 Tue Mar 17 16:19:47 1998  Tim Janik  <timj@gimp.org>
 
 	* gdk/gdk.c: 
@@ -52,7 +84,6 @@ Mon Mar 16 18:19:31 GMT 1998 Tony Gale  <gale@gimp.org>
 	    - new question on updating progressbars
 	    - update all the links to gtk.org
 
->>>>>>> 1.255
 Mon Mar 16 09:15:03 GMT 1998 Tony Gale  <gale@gimp.org>
 
 	* docs/gtk_tut.sgml: 
