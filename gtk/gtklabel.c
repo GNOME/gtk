@@ -877,6 +877,8 @@ gtk_label_expose (GtkWidget      *widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LABEL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
+
+  label = GTK_LABEL (widget);
   
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
       label->label && (*label->label != '\0'))

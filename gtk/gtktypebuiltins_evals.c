@@ -23,6 +23,20 @@ static const GtkEnumValue _gtk_cell_type_values[] = {
   { GTK_CELL_WIDGET, "GTK_CELL_WIDGET", "widget" },
   { 0, NULL, NULL }
 };
+static const GtkEnumValue _gtk_clist_drag_pos_values[] = {
+  { GTK_CLIST_DRAG_NONE, "GTK_CLIST_DRAG_NONE", "none" },
+  { GTK_CLIST_DRAG_BEFORE, "GTK_CLIST_DRAG_BEFORE", "before" },
+  { GTK_CLIST_DRAG_INTO, "GTK_CLIST_DRAG_INTO", "into" },
+  { GTK_CLIST_DRAG_AFTER, "GTK_CLIST_DRAG_AFTER", "after" },
+  { 0, NULL, NULL }
+};
+static const GtkEnumValue _gtk_button_action_values[] = {
+  { GTK_BUTTON_IGNORED, "GTK_BUTTON_IGNORED", "ignored" },
+  { GTK_BUTTON_SELECTS, "GTK_BUTTON_SELECTS", "selects" },
+  { GTK_BUTTON_DRAGS, "GTK_BUTTON_DRAGS", "drags" },
+  { GTK_BUTTON_EXPANDS, "GTK_BUTTON_EXPANDS", "expands" },
+  { 0, NULL, NULL }
+};
 static const GtkEnumValue _gtk_ctree_pos_values[] = {
   { GTK_CTREE_POS_BEFORE, "GTK_CTREE_POS_BEFORE", "before" },
   { GTK_CTREE_POS_AS_CHILD, "GTK_CTREE_POS_AS_CHILD", "as-child" },
@@ -448,6 +462,11 @@ static const GtkEnumValue _gtk_toolbar_child_type_values[] = {
   { GTK_TOOLBAR_CHILD_WIDGET, "GTK_TOOLBAR_CHILD_WIDGET", "widget" },
   { 0, NULL, NULL }
 };
+static const GtkEnumValue _gtk_toolbar_space_style_values[] = {
+  { GTK_TOOLBAR_SPACE_EMPTY, "GTK_TOOLBAR_SPACE_EMPTY", "empty" },
+  { GTK_TOOLBAR_SPACE_LINE, "GTK_TOOLBAR_SPACE_LINE", "line" },
+  { 0, NULL, NULL }
+};
 static const GtkEnumValue _gtk_tree_view_mode_values[] = {
   { GTK_TREE_VIEW_LINE, "GTK_TREE_VIEW_LINE", "line" },
   { GTK_TREE_VIEW_ITEM, "GTK_TREE_VIEW_ITEM", "item" },
@@ -493,6 +512,8 @@ static const GtkEnumValue _gtk_widget_flags_values[] = {
   { GTK_HAS_GRAB, "GTK_HAS_GRAB", "has-grab" },
   { GTK_RC_STYLE, "GTK_RC_STYLE", "rc-style" },
   { GTK_COMPOSITE_CHILD, "GTK_COMPOSITE_CHILD", "composite-child" },
+  { GTK_NO_REPARENT, "GTK_NO_REPARENT", "no-reparent" },
+  { GTK_APP_PAINTABLE, "GTK_APP_PAINTABLE", "app-paintable" },
   { 0, NULL, NULL }
 };
 static const GtkEnumValue _gdk_window_type_values[] = {
@@ -545,6 +566,9 @@ static const GtkEnumValue _gdk_window_hints_values[] = {
   { GDK_HINT_POS, "GDK_HINT_POS", "pos" },
   { GDK_HINT_MIN_SIZE, "GDK_HINT_MIN_SIZE", "min-size" },
   { GDK_HINT_MAX_SIZE, "GDK_HINT_MAX_SIZE", "max-size" },
+  { GDK_HINT_BASE_SIZE, "GDK_HINT_BASE_SIZE", "base-size" },
+  { GDK_HINT_ASPECT, "GDK_HINT_ASPECT", "aspect" },
+  { GDK_HINT_RESIZE_INC, "GDK_HINT_RESIZE_INC", "resize-inc" },
   { 0, NULL, NULL }
 };
 static const GtkEnumValue _gdk_function_values[] = {
@@ -904,6 +928,38 @@ static const GtkEnumValue _gdk_im_style_values[] = {
   { GDK_IM_STATUS_NOTHING, "GDK_IM_STATUS_NOTHING", "status-nothing" },
   { GDK_IM_STATUS_NONE, "GDK_IM_STATUS_NONE", "status-none" },
   { GDK_IM_STATUS_MASK, "GDK_IM_STATUS_MASK", "status-mask" },
+  { 0, NULL, NULL }
+};
+static const GtkEnumValue _gdk_ic_attributes_type_values[] = {
+  { GDK_IC_STYLE, "GDK_IC_STYLE", "style" },
+  { GDK_IC_CLIENT_WINDOW, "GDK_IC_CLIENT_WINDOW", "client-window" },
+  { GDK_IC_FOCUS_WINDOW, "GDK_IC_FOCUS_WINDOW", "focus-window" },
+  { GDK_IC_FILTER_EVENTS, "GDK_IC_FILTER_EVENTS", "filter-events" },
+  { GDK_IC_SPOT_LOCATION, "GDK_IC_SPOT_LOCATION", "spot-location" },
+  { GDK_IC_LINE_SPACING, "GDK_IC_LINE_SPACING", "line-spacing" },
+  { GDK_IC_CURSOR, "GDK_IC_CURSOR", "cursor" },
+  { GDK_IC_PREEDIT_FONTSET, "GDK_IC_PREEDIT_FONTSET", "preedit-fontset" },
+  { GDK_IC_PREEDIT_AREA, "GDK_IC_PREEDIT_AREA", "preedit-area" },
+  { GDK_IC_PREEDIT_AREA_NEEDED, "GDK_IC_PREEDIT_AREA_NEEDED", "preedit-area-needed" },
+  { GDK_IC_PREEDIT_FOREGROUND, "GDK_IC_PREEDIT_FOREGROUND", "preedit-foreground" },
+  { GDK_IC_PREEDIT_BACKGROUND, "GDK_IC_PREEDIT_BACKGROUND", "preedit-background" },
+  { GDK_IC_PREEDIT_PIXMAP, "GDK_IC_PREEDIT_PIXMAP", "preedit-pixmap" },
+  { GDK_IC_PREEDIT_COLORMAP, "GDK_IC_PREEDIT_COLORMAP", "preedit-colormap" },
+  { GDK_IC_STATUS_FONTSET, "GDK_IC_STATUS_FONTSET", "status-fontset" },
+  { GDK_IC_STATUS_AREA, "GDK_IC_STATUS_AREA", "status-area" },
+  { GDK_IC_STATUS_AREA_NEEDED, "GDK_IC_STATUS_AREA_NEEDED", "status-area-needed" },
+  { GDK_IC_STATUS_FOREGROUND, "GDK_IC_STATUS_FOREGROUND", "status-foreground" },
+  { GDK_IC_STATUS_BACKGROUND, "GDK_IC_STATUS_BACKGROUND", "status-background" },
+  { GDK_IC_STATUS_PIXMAP, "GDK_IC_STATUS_PIXMAP", "status-pixmap" },
+  { GDK_IC_STATUS_COLORMAP, "GDK_IC_STATUS_COLORMAP", "status-colormap" },
+  { GDK_IC_ALL_REQ, "GDK_IC_ALL_REQ", "all-req" },
+  { GDK_IC_CLIENT_WINDOW, "GDK_IC_CLIENT_WINDOW", "client-window" },
+  { GDK_IC_PREEDIT_AREA_REQ, "GDK_IC_PREEDIT_AREA_REQ", "preedit-area-req" },
+  { GDK_IC_PREEDIT_FONTSET, "GDK_IC_PREEDIT_FONTSET", "preedit-fontset" },
+  { GDK_IC_PREEDIT_POSITION_REQ, "GDK_IC_PREEDIT_POSITION_REQ", "preedit-position-req" },
+  { GDK_IC_PREEDIT_FONTSET, "GDK_IC_PREEDIT_FONTSET", "preedit-fontset" },
+  { GDK_IC_STATUS_AREA_REQ, "GDK_IC_STATUS_AREA_REQ", "status-area-req" },
+  { GDK_IC_STATUS_FONTSET, "GDK_IC_STATUS_FONTSET", "status-fontset" },
   { 0, NULL, NULL }
 };
 static const GtkEnumValue _gdk_wm_decoration_values[] = {
