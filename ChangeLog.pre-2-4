@@ -1,3 +1,14 @@
+Tue Mar  2 11:45:50 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombobox.c: Always connect to the changed
+	signals on the model, update the active item as
+	appropriate when rows are inserted/deleted/reordered,
+	re-layout the menu on ::rows-reordered.
+
+	* gtk/gtkcellview.c (gtk_cell_view_set_displayed_row):
+	Allow %NULL for path to unset and leave no current
+	path.
+
 Tue Mar  2 19:54:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_position): Position
@@ -242,7 +253,7 @@ Sun Feb 29 22:01:49 2004  Owen Taylor  <otaylor@redhat.com>
 
 Sun Feb 29 20:34:06 2004  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtkwindow.[ch] gtk/gtkmenushellx.c: export
+	* gtk/gtkwindow.[ch] gtk/gtkmenushell.c: export
 	gtk_window_activate_key() (Request from Tim Janik)
 
 Mon Mar  1 01:00:11 2004  Matthias Clasen  <maclas@gmx.de>
@@ -251,8 +262,8 @@ Mon Mar  1 01:00:11 2004  Matthias Clasen  <maclas@gmx.de>
 	Make DND operations within a buffer move the dragged 
 	text instead of copying it; also make DND operations 
 	a single user action for undo purposes.  (#135191, 
-	#93139, reported by Tommi Komulainen, patch by Paolo 
-	Borelly and Paolo Maggi)
+	#93139, reported by Tommi Komulainen, patch by Paolo Borelli
+	and Paolo Maggi)
 
 Mon Mar  1 00:51:11 2004  Matthias Clasen  <maclas@gmx.de>
 

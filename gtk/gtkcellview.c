@@ -877,19 +877,35 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
     g_object_ref (G_OBJECT (cell_view->priv->model));
 }
 
+/**
+ * gtk_cell_view_set_displayed_row:
+ * @cell_view: a #GtkCellView
+ * @path: a #GtkTreePath or %NULL to unset.
+ * 
+ * Sets the row of the model that is currently displayed
+ * by the #GtkCellView. If the path is unset, then the
+ * contents of the cellview "stick" at their last value;
+ * this is not normally a desired result, but may be
+ * a needed intermediate state if say, the model for
+ * the #GtkCellView becomes temporarily empty.
+ **/
 void
 gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
                                  GtkTreePath *path)
 {
   g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
   g_return_if_fail (GTK_IS_TREE_MODEL (cell_view->priv->model));
-  g_return_if_fail (path != NULL);
 
   if (cell_view->priv->displayed_row)
     gtk_tree_row_reference_free (cell_view->priv->displayed_row);
 
-  cell_view->priv->displayed_row =
-    gtk_tree_row_reference_new (cell_view->priv->model, path);
+  if (path)
+    {
+      cell_view->priv->displayed_row =
+	gtk_tree_row_reference_new (cell_view->priv->model, path);
+    }
+  else
+    cell_view->priv->displayed_row = NULL;
 
   /* force resize and redraw */
   gtk_widget_queue_resize (GTK_WIDGET (cell_view));

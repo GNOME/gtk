@@ -91,11 +91,11 @@ struct _GtkComboBoxPrivate
 
   guint inserted_id;
   guint deleted_id;
+  guint reordered_id;
+  guint changed_id;
 
   gint width;
   GSList *cells;
-
-  guint changed_id;
 
   guint popup_in_progress : 1;
 };
@@ -233,6 +233,24 @@ static gboolean gtk_combo_box_expose_event         (GtkWidget        *widget,
 static gboolean gtk_combo_box_scroll_event         (GtkWidget        *widget,
                                                     GdkEventScroll   *event);
 
+/* listening to the model */
+static void     gtk_combo_box_model_row_inserted   (GtkTreeModel     *model,
+						    GtkTreePath      *path,
+						    GtkTreeIter      *iter,
+						    gpointer          user_data);
+static void     gtk_combo_box_model_row_deleted    (GtkTreeModel     *model,
+						    GtkTreePath      *path,
+						    gpointer          user_data);
+static void     gtk_combo_box_model_rows_reordered (GtkTreeModel     *model,
+						    GtkTreePath      *path,
+						    GtkTreeIter      *iter,
+						    gint             *new_order,
+						    gpointer          user_data);
+static void     gtk_combo_box_model_row_changed    (GtkTreeModel     *model,
+						    GtkTreePath      *path,
+						    GtkTreeIter      *iter,
+						    gpointer          data);
+
 /* list */
 static void     gtk_combo_box_list_position        (GtkComboBox      *combo_box, 
 						    gint             *x, 
@@ -285,6 +303,11 @@ static void     gtk_combo_box_menu_row_inserted    (GtkTreeModel     *model,
 static void     gtk_combo_box_menu_row_deleted     (GtkTreeModel     *model,
                                                     GtkTreePath      *path,
                                                     gpointer          user_data);
+static void     gtk_combo_box_menu_rows_reordered  (GtkTreeModel     *model,
+						    GtkTreePath      *path,
+						    GtkTreeIter      *iter,
+						    gint             *new_order,
+						    gpointer          user_data);
 static void     gtk_combo_box_menu_row_changed     (GtkTreeModel     *model,
                                                     GtkTreePath      *path,
                                                     GtkTreeIter      *iter,
@@ -1252,6 +1275,12 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
 				   combo_box->priv->deleted_id);
       combo_box->priv->deleted_id = -1;
     }
+  if (combo_box->priv->reordered_id != -1)
+    {
+      g_signal_handler_disconnect (combo_box->priv->model,
+				   combo_box->priv->reordered_id);
+      combo_box->priv->reordered_id = -1;
+    }
   if (combo_box->priv->changed_id != -1)
     {
       g_signal_handler_disconnect (combo_box->priv->model,
@@ -1271,32 +1300,28 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
 static void
 gtk_combo_box_set_model_internal (GtkComboBox *combo_box)
 {
-  if (!combo_box->priv->tree_view)
-    {
-      /* menu mode */
-      combo_box->priv->inserted_id =
-        g_signal_connect (combo_box->priv->model, "row_inserted",
-                          G_CALLBACK (gtk_combo_box_menu_row_inserted),
-                          combo_box);
-      combo_box->priv->deleted_id =
-        g_signal_connect (combo_box->priv->model, "row_deleted",
-                          G_CALLBACK (gtk_combo_box_menu_row_deleted),
-                          combo_box);
-      combo_box->priv->changed_id =
-        g_signal_connect (combo_box->priv->model, "row_changed",
-                          G_CALLBACK (gtk_combo_box_menu_row_changed),
-                          combo_box);
-    }
-  else
+  combo_box->priv->inserted_id =
+    g_signal_connect (combo_box->priv->model, "row_inserted",
+		      G_CALLBACK (gtk_combo_box_model_row_inserted),
+		      combo_box);
+  combo_box->priv->deleted_id =
+    g_signal_connect (combo_box->priv->model, "row_deleted",
+		      G_CALLBACK (gtk_combo_box_model_row_deleted),
+		      combo_box);
+  combo_box->priv->reordered_id =
+    g_signal_connect (combo_box->priv->model, "rows_reordered",
+		      G_CALLBACK (gtk_combo_box_model_rows_reordered),
+		      combo_box);
+  combo_box->priv->changed_id =
+    g_signal_connect (combo_box->priv->model, "row_changed",
+		      G_CALLBACK (gtk_combo_box_model_row_changed),
+		      combo_box);
+      
+  if (combo_box->priv->tree_view)
     {
       /* list mode */
       gtk_tree_view_set_model (GTK_TREE_VIEW (combo_box->priv->tree_view),
                                combo_box->priv->model);
-
-      combo_box->priv->changed_id =
-        g_signal_connect (combo_box->priv->model, "row_changed",
-                          G_CALLBACK (gtk_combo_box_list_row_changed),
-                          combo_box);
     }
 }
 
@@ -1775,6 +1800,89 @@ gtk_combo_box_menu_item_activate (GtkWidget *item,
 }
 
 static void
+gtk_combo_box_model_row_inserted (GtkTreeModel     *model,
+				  GtkTreePath      *path,
+				  GtkTreeIter      *iter,
+				  gpointer          user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  gint index = gtk_tree_path_get_indices (path)[0];
+  
+  if (combo_box->priv->active_item >= index)
+    combo_box->priv->active_item++;
+      
+  if (!combo_box->priv->tree_view)
+    gtk_combo_box_menu_row_inserted (model, path, iter, user_data);
+}
+
+static void
+gtk_combo_box_model_row_deleted (GtkTreeModel     *model,
+				 GtkTreePath      *path,
+				 gpointer          user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  gint index = gtk_tree_path_get_indices (path)[0];
+
+  if (index == combo_box->priv->active_item)
+    {
+      gint items = gtk_tree_model_iter_n_children (model, NULL);
+
+      if (items == 0)
+	  gtk_combo_box_set_active (combo_box, -1);
+      else
+	  gtk_combo_box_set_active (combo_box, (index + 1) % items);
+    }
+  else if (combo_box->priv->active_item > index)
+    combo_box->priv->active_item--;
+
+  if (!combo_box->priv->tree_view)
+    gtk_combo_box_menu_row_deleted (model, path, user_data);
+}
+
+static void
+gtk_combo_box_model_rows_reordered (GtkTreeModel    *model,
+				    GtkTreePath     *path,
+				    GtkTreeIter     *iter,
+				    gint            *new_order,
+				    gpointer         user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  gint items = gtk_tree_model_iter_n_children (model, NULL);
+  gint i;
+
+  for (i = 0; i < items; i++)
+    if (new_order[i] == combo_box->priv->active_item)
+      {
+	combo_box->priv->active_item = i;
+	break;
+      }
+
+  if (!combo_box->priv->tree_view)
+    gtk_combo_box_menu_rows_reordered (model, path, iter, new_order, user_data);
+  
+}
+						    
+static void
+gtk_combo_box_model_row_changed (GtkTreeModel     *model,
+				 GtkTreePath      *path,
+				 GtkTreeIter      *iter,
+				 gpointer          user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  gint index = gtk_tree_path_get_indices (path)[0];
+
+  if (index == combo_box->priv->active_item &&
+      combo_box->priv->cell_view)
+    gtk_widget_queue_resize (GTK_WIDGET (combo_box->priv->cell_view));
+  
+  if (combo_box->priv->tree_view)
+    gtk_combo_box_list_row_changed (model, path, iter, user_data);
+  else
+    gtk_combo_box_menu_row_changed (model, path, iter, user_data);
+}
+
+
+static void
 gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
                                  GtkTreePath  *path,
                                  GtkTreeIter  *iter,
@@ -1807,7 +1915,7 @@ gtk_combo_box_menu_row_deleted (GtkTreeModel *model,
                                 GtkTreePath  *path,
                                 gpointer      user_data)
 {
-  gint index, items;
+  gint index;
   GtkWidget *menu;
   GtkWidget *item;
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
@@ -1816,10 +1924,6 @@ gtk_combo_box_menu_row_deleted (GtkTreeModel *model,
     return;
 
   index = gtk_tree_path_get_indices (path)[0];
-  items = gtk_tree_model_iter_n_children (model, NULL);
-
-  if (gtk_combo_box_get_active (combo_box) == index)
-    gtk_combo_box_set_active (combo_box, index + 1 % items);
 
   menu = combo_box->priv->popup_widget;
   g_return_if_fail (GTK_IS_MENU (menu));
@@ -1830,6 +1934,18 @@ gtk_combo_box_menu_row_deleted (GtkTreeModel *model,
   gtk_container_remove (GTK_CONTAINER (menu), item);
 }
 
+static void
+gtk_combo_box_menu_rows_reordered  (GtkTreeModel     *model,
+				    GtkTreePath      *path,
+				    GtkTreeIter      *iter,
+				    gint             *new_order,
+				    gpointer          user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+
+  gtk_combo_box_relayout (combo_box);
+}
+				    
 static void
 gtk_combo_box_menu_row_changed (GtkTreeModel *model,
                                 GtkTreePath  *path,
