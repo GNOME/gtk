@@ -1,3 +1,7 @@
+Tue May 23 12:25:07 CEST 2000 lupus <lupus@debian.org>
+
+	* gdk/nanox/*.h: add missing header files.
+
 Fri May 19 11:52:59 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkdrawingarea.c (gtk_drawing_area_send_configure): set
