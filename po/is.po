@@ -873,13 +873,15 @@ msgstr ""
 
 #: gtk/gtkbbox.c:155
 msgid "Layout style"
-msgstr ""
+msgstr "Útliststíll"
 
 #: gtk/gtkbbox.c:156
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
+"Hvernig á að raða hnöppunum í kassanum. Möguleg gildi eru default, spread, "
+"edge, start og end"
 
 #: gtk/gtkbbox.c:164
 msgid "Secondary"
@@ -1164,19 +1166,19 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:167
 msgid "Size"
-msgstr ""
+msgstr "Stærð"
 
 #: gtk/gtkcellrendererpixbuf.c:168
 msgid "The size of the rendered icon"
-msgstr ""
+msgstr "Stærð táknmyndarinnar"
 
 #: gtk/gtkcellrendererpixbuf.c:176
 msgid "Detail"
-msgstr ""
+msgstr "Gæði"
 
 #: gtk/gtkcellrendererpixbuf.c:177
 msgid "Render detail to pass to the theme engine"
-msgstr ""
+msgstr "Gæðastuðullinn sem senda á til þemuvélarinnar"
 
 #: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:527 gtk/gtkprogressbar.c:218
 msgid "Text"
@@ -1437,7 +1439,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "Toggle state"
-msgstr ""
+msgstr "Víxla ástandi"
 
 #: gtk/gtkcellrenderertoggle.c:133
 msgid "The toggle state of the button"
@@ -1592,35 +1594,35 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
-msgstr ""
+msgstr "_Gildi:"
 
 #: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
-msgstr ""
+msgstr "Birtustig litsins."
 
 #: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
-msgstr ""
+msgstr "_Rauður:"
 
 #: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "Magn rauða litsins."
 
 #: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
-msgstr ""
+msgstr "_Grænn:"
 
 #: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "Magn græna litsins."
 
 #: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
-msgstr ""
+msgstr "_Blár:"
 
 #: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "Magn bláa litsins."
 
 #: gtk/gtkcolorsel.c:1882
 msgid "_Opacity:"
@@ -1632,7 +1634,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
-msgstr ""
+msgstr "_Heiti lits:"
 
 #: gtk/gtkcolorsel.c:1920
 msgid ""
@@ -1718,35 +1720,35 @@ msgstr ""
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum X"
-msgstr ""
+msgstr "Lágmarks X"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "Lágmarksgildi á X ásnum"
 
 #: gtk/gtkcurve.c:140
 msgid "Maximum X"
-msgstr ""
+msgstr "Hámarks X"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum possible X value"
-msgstr ""
+msgstr "Hámarksgildi á X ásnum"
 
 #: gtk/gtkcurve.c:150
 msgid "Minimum Y"
-msgstr ""
+msgstr "Lágmarks Y"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr ""
+msgstr "Lágmarksgildi á Y ásnum"
 
 #: gtk/gtkcurve.c:160
 msgid "Maximum Y"
-msgstr ""
+msgstr "Hámarks Y"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
-msgstr ""
+msgstr "Hámarksgildi á Y ásnum"
 
 #: gtk/gtkdialog.c:136
 msgid "Has separator"
@@ -1782,7 +1784,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:439 gtk/gtklabel.c:368
 msgid "Cursor Position"
-msgstr ""
+msgstr "Staðsetning bendils"
 
 #: gtk/gtkentry.c:440 gtk/gtklabel.c:369
 msgid "The current position of the insertion cursor in chars"
@@ -1799,15 +1801,15 @@ msgstr ""
 
 #: gtk/gtkentry.c:460
 msgid "Whether the entry contents can be edited"
-msgstr ""
+msgstr "Hvort breyta megi innihaldinu"
 
 #: gtk/gtkentry.c:467
 msgid "Maximum length"
-msgstr ""
+msgstr "Hámarks lengd"
 
 #: gtk/gtkentry.c:468
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr ""
+msgstr "Hámarksfjöldi stafa í þessari færslu. Núll ef ekkert hámark"
 
 #: gtk/gtkentry.c:476
 msgid "Visibility"
@@ -1821,7 +1823,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:484
 msgid "Has Frame"
-msgstr ""
+msgstr "Hefur ramma"
 
 #: gtk/gtkentry.c:485
 msgid "FALSE removes outside bevel from entry"
@@ -1829,11 +1831,11 @@ msgstr ""
 
 #: gtk/gtkentry.c:492
 msgid "Invisible character"
-msgstr ""
+msgstr "Ósýnilegur stafur"
 
 #: gtk/gtkentry.c:493
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr ""
+msgstr "Táknið sem nota á til að fela innslátt (í \"lykilorðaham\")"
 
 #: gtk/gtkentry.c:500
 msgid "Activates default"
@@ -1847,11 +1849,11 @@ msgstr ""
 
 #: gtk/gtkentry.c:507
 msgid "Width in chars"
-msgstr ""
+msgstr "Breydd í stöfum"
 
 #: gtk/gtkentry.c:508
 msgid "Number of characters to leave space for in the entry"
-msgstr ""
+msgstr "Fjöldi stafa sem gera á ráð fyrir í færslunni"
 
 #: gtk/gtkentry.c:517
 msgid "Scroll offset"
@@ -1875,7 +1877,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
 msgid "Select All"
-msgstr ""
+msgstr "Velja allt"
 
 #: gtk/gtkentry.c:4003 gtk/gtklabel.c:3232
 msgid "Input Methods"
@@ -2089,19 +2091,19 @@ msgstr "Gat ekki umbreytt skráarheitinu"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
-msgstr ""
+msgstr "X staðsetning"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position of child widget"
-msgstr ""
+msgstr "Staðsetning græjunnar á X ásnum"
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
 msgid "Y position"
-msgstr ""
+msgstr "Y staðsetning"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position of child widget"
-msgstr ""
+msgstr "Staðsetning græjunnar á Y ásnum"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -2111,48 +2113,48 @@ msgstr "abcdefghijk áéýúíóþæðö ABCDEFGHIJK ÁÉÝÚÍÓÞÆÐÖ"
 
 #: gtk/gtkfontsel.c:210
 msgid "Font name"
-msgstr ""
+msgstr "Heiti leturs"
 
 #: gtk/gtkfontsel.c:211
 msgid "The X string that represents this font"
-msgstr ""
+msgstr "X strengur þessa leturs"
 
 #: gtk/gtkfontsel.c:218
 msgid "The GdkFont that is currently selected"
-msgstr ""
+msgstr "GdkFont letrið sem nú er valið"
 
 #: gtk/gtkfontsel.c:224
 msgid "Preview text"
-msgstr ""
+msgstr "Forsýna texta"
 
 #: gtk/gtkfontsel.c:225
 msgid "The text to display in order to demonstrate the selected font"
-msgstr ""
+msgstr "Textinn sem sýna skal til að prófa letur"
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
-msgstr ""
+msgstr "_Fjölskylda:"
 
 #: gtk/gtkfontsel.c:338
 msgid "_Style:"
-msgstr ""
+msgstr "_Stíll:"
 
 #: gtk/gtkfontsel.c:344
 msgid "Si_ze:"
-msgstr ""
+msgstr "S_tærð:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
 msgid "_Preview:"
-msgstr ""
+msgstr "_Forsýn:"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
-msgstr ""
+msgstr "Leturval"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label"
-msgstr ""
+msgstr "Texti í merkingi ramma"
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
@@ -2176,11 +2178,11 @@ msgstr ""
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
-msgstr ""
+msgstr "Skuggi ramma"
 
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border"
-msgstr ""
+msgstr "Hvernig ramminn er teiknaður"
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
@@ -2201,11 +2203,11 @@ msgstr ""
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:284 gtk/gtkviewport.c:150
 msgid "Shadow type"
-msgstr ""
+msgstr "Tegung skugga"
 
 #: gtk/gtkhandlebox.c:203
 msgid "Appearance of the shadow that surrounds the container"
-msgstr ""
+msgstr "Útlit skuggans sem er utanum rammann"
 
 #: gtk/gtkhandlebox.c:211
 msgid "Handle position"
@@ -2241,43 +2243,43 @@ msgstr ""
 #: gtk/gtkiconfactory.c:1693
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "Villa við lestur táknmyndar: %s"
 
 #: gtk/gtkimage.c:135
 msgid "Pixbuf"
-msgstr ""
+msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:136
 msgid "A GdkPixbuf to display"
-msgstr ""
+msgstr "GdkPixbuf sem birta skal"
 
 #: gtk/gtkimage.c:143
 msgid "Pixmap"
-msgstr ""
+msgstr "Pixmap"
 
 #: gtk/gtkimage.c:144
 msgid "A GdkPixmap to display"
-msgstr ""
+msgstr "GdkPixmap sem birta skal"
 
 #: gtk/gtkimage.c:151
 msgid "Image"
-msgstr ""
+msgstr "Mynd"
 
 #: gtk/gtkimage.c:152
 msgid "A GdkImage to display"
-msgstr ""
+msgstr "GdkImage sem birta skal"
 
 #: gtk/gtkimage.c:159
 msgid "Mask"
-msgstr ""
+msgstr "Maski"
 
 #: gtk/gtkimage.c:160
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
+msgstr "Mask bitmap sem nota skal með GdkImage eða GdkPixmap"
 
 #: gtk/gtkimage.c:168
 msgid "Filename to load and display"
-msgstr ""
+msgstr "Skráarheiti sem lesa skal og birta"
 
 #: gtk/gtkimage.c:177
 msgid "Stock ID for a stock image to display"
@@ -2285,15 +2287,15 @@ msgstr ""
 
 #: gtk/gtkimage.c:184
 msgid "Icon set"
-msgstr ""
+msgstr "Táknmyndasett"
 
 #: gtk/gtkimage.c:185
 msgid "Icon set to display"
-msgstr ""
+msgstr "Táknmyndasett sem birta skal"
 
 #: gtk/gtkimage.c:192
 msgid "Icon size"
-msgstr ""
+msgstr "Stærð táknmyndar"
 
 #: gtk/gtkimage.c:193
 msgid "Size to use for stock icon or icon set"
@@ -2301,7 +2303,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:201
 msgid "Animation"
-msgstr ""
+msgstr "Hreyfimynd"
 
 #: gtk/gtkimage.c:202
 msgid "GdkPixbufAnimation to display"
@@ -2325,7 +2327,7 @@ msgstr ""
 
 #: gtk/gtkimmodule.c:419
 msgid "Default"
-msgstr ""
+msgstr "Sjálfgefið"
 
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
@@ -2337,74 +2339,74 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:251
 msgid "_Device:"
-msgstr ""
+msgstr "_Tæki:"
 
 #: gtk/gtkinputdialog.c:268
 msgid "Disabled"
-msgstr ""
+msgstr "Óvirkt"
 
 #: gtk/gtkinputdialog.c:275 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:552
 msgid "Screen"
-msgstr ""
+msgstr "Skjár"
 
 #: gtk/gtkinputdialog.c:282
 msgid "Window"
-msgstr ""
+msgstr "Gluggi"
 
 #: gtk/gtkinputdialog.c:289
 msgid "_Mode: "
-msgstr ""
+msgstr "_Hamur: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:320
 msgid "_Axes"
-msgstr ""
+msgstr "Á_sar"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:337
 msgid "_Keys"
-msgstr ""
+msgstr "_Lyklar"
 
 #: gtk/gtkinputdialog.c:557
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:558
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:559
 msgid "Pressure"
-msgstr ""
+msgstr "Þrýstingur"
 
 #: gtk/gtkinputdialog.c:560
 msgid "X Tilt"
-msgstr ""
+msgstr "X halli"
 
 #: gtk/gtkinputdialog.c:561
 msgid "Y Tilt"
-msgstr ""
+msgstr "Y halli"
 
 #: gtk/gtkinputdialog.c:562
 msgid "Wheel"
-msgstr ""
+msgstr "Hjól"
 
 #: gtk/gtkinputdialog.c:602
 msgid "none"
-msgstr ""
+msgstr "enginn"
 
 #: gtk/gtkinputdialog.c:638 gtk/gtkinputdialog.c:674
 msgid "(disabled)"
-msgstr ""
+msgstr "(óvirkt)"
 
 #: gtk/gtkinputdialog.c:667
 msgid "(unknown)"
-msgstr ""
+msgstr "(óþekkt)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:754
 msgid "clear"
-msgstr ""
+msgstr "hreinsa"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:553
 msgid "The screen where this window will be displayed"
@@ -2439,7 +2441,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:328
 msgid "Pattern"
-msgstr ""
+msgstr "Mynstur"
 
 #: gtk/gtklabel.c:329
 msgid ""
@@ -2457,7 +2459,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:343
 msgid "Selectable"
-msgstr ""
+msgstr "Veljanlegt"
 
 #: gtk/gtklabel.c:344
 msgid "Whether the label text can be selected with the mouse"
@@ -2497,7 +2499,7 @@ msgstr ""
 
 #: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
-msgstr ""
+msgstr "Breydd"
 
 #: gtk/gtklayout.c:648
 msgid "The width of the layout"
@@ -2505,7 +2507,7 @@ msgstr ""
 
 #: gtk/gtklayout.c:656
 msgid "Height"
-msgstr ""
+msgstr "Hæð"
 
 #: gtk/gtklayout.c:657
 msgid "The height of the layout"
@@ -2518,7 +2520,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:806
 msgid "default:LTR"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
@@ -3562,7 +3564,7 @@ msgstr "_Stöðva"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
-msgstr ""
+msgstr "_Strika"
 
 #: gtk/gtkstock.c:330
 msgid "_Undelete"
@@ -3570,11 +3572,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr ""
+msgstr "_Undirlína"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr ""
+msgstr "_Afturkalla"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
@@ -3582,7 +3584,7 @@ msgstr "_Já"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Renna í _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
