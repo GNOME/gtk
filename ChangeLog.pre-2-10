@@ -1,3 +1,9 @@
+2001-08-25  Chema Celorio  <chema@celorio.com>
+
+	* gtk/gtktable.c (gtk_table_set_child_property): pass ->nrows to
+	gtk_table_resize as the first argument for CHILD_PROP_RIGHT_ATTACH
+	and CHILD_PROP_LEFT_ATTACH v.s. using ->ncols
+
 2001-08-24  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkcompat.h: remove gtk_menu_* compat defines; 
@@ -424,6 +430,7 @@ Sun Aug 12 10:39:12 2001  Owen Taylor  <otaylor@redhat.com>
 	* Makefile.am (EXTRA_DIST): Fix problem with trying to
 	dist files from intl/, which is no longer there.
 
+>>>>>>> 1.2213
 2001-08-11  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkalignment.c, gtk/gtkarrow.c, gtk/gtkaspectframe.c,
