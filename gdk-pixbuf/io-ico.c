@@ -224,7 +224,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  
  	IconCount = (Data[5] << 8) + (Data[4]);
  
- 	printf("There are %i icons in this file \n",IconCount);
+/* 	printf("There are %i icons in this file \n",IconCount);*/
  	State->HeaderSize = 6 + IconCount*16;
  	
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
@@ -250,7 +250,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		if (ThisColors==0) 
 			ThisColors=256; /* Yes, this is in the spec */
 		
-		printf("Option: %ix%ix%i ",ThisWidth,ThisHeight,ThisColors);
+/*		printf("Option: %ix%ix%i ",ThisWidth,ThisHeight,ThisColors);*/
 	
 		ThisScore = ThisColors*1024+ThisWidth*ThisHeight; 
 
@@ -258,11 +258,11 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 			State->ImageScore = ThisScore;
 			State->DIBoffset = (Ptr[15]<<24)+(Ptr[14]<<16)+
 					   (Ptr[13]<<8) + (Ptr[12]);
-			printf("*");
+/*			printf("*");*/
 								 
 		}
 		
-		printf("\n");
+/*		printf("\n");*/
 		
 		Ptr += 16;	
 	} 
@@ -293,7 +293,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	State->Header.depth = (BIH[15] << 8) + (BIH[14]);;
 
 	State->Type = State->Header.depth;	/* This may be less trivial someday */
-	if (State->Lines>State->Header.height)
+	if (State->Lines>=State->Header.height)
 		State->Type = 1;
 	
 	I =(BIH[35] << 24) + (BIH[34] << 16) + (BIH[33] << 8) + (BIH[32]);
@@ -570,15 +570,13 @@ static void OneLineTransp(struct ico_progressive_state *context)
 		Bit = Bit & 1;
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 4 + 3] = 255-Bit*255;
-#if 0
+#if 0		
 		if (Bit){
 		  Pixels[X*4+0] = 255;
 		  Pixels[X*4+1] = 255;
-		  Pixels[X*4+2] = 255;
 		} else {
 		  Pixels[X*4+0] = 0;
 		  Pixels[X*4+1] = 0;
-		  Pixels[X*4+2] = 0;
 		}
 #endif		
 		X++;
@@ -648,7 +646,7 @@ gboolean image_load_increment(gpointer data, guchar * buf, guint size)
 	gint BytesToCopy;
 
 	while (size > 0) {
-		printf("Y=%i  C=%i H=%i\n",context->Lines,context->Type,context->Header.height);
+/*		printf("Y=%i  C=%i H=%i\n",context->Lines,context->Type,context->Header.height);*/
 		g_assert(context->LineDone >= 0);
 		if (context->HeaderDone < context->HeaderSize) {	/* We still 
 									   have headerbytes to do */
