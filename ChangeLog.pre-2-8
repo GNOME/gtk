@@ -1,5 +1,9 @@
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_position_below): If we don't
+	do the move-selected-item below pointer thingie, do the 
+	place-below-or-above one.
+
 	* tests/testentrycompletion.c: Make the second example use the 
 	::match-selected signal to make it actually work.
 

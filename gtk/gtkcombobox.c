@@ -948,30 +948,48 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
 				   gint     *push_in,
 				   gpointer  user_data)
 {
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
   gint sx, sy;
   GtkWidget *child;
   GtkRequisition req;
-  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  GdkScreen *screen;
+  gint monitor_num;
+  GdkRectangle monitor;
   
   /* FIXME: is using the size request here broken? */
    child = GTK_BIN (combo_box)->child;
    
    gdk_window_get_origin (child->window, &sx, &sy);
    
+   if (GTK_WIDGET_NO_WINDOW (child))
+      {
+	sx += child->allocation.x;
+	sy += child->allocation.y;
+      }
+
    gtk_widget_size_request (GTK_WIDGET (menu), &req);
-   
+
    if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_LTR)
      *x = sx;
    else
      *x = sx + child->allocation.width - req.width;
-   *y = sy + child->allocation.height;
-   
-   if (GTK_WIDGET_NO_WINDOW (child))
-      {
-	*x += child->allocation.x;
-	*y += child->allocation.y;
-      }
-   
+   *y = sy;
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (combo_box));
+  monitor_num = gdk_screen_get_monitor_at_window (screen, 
+						  GTK_WIDGET (combo_box)->window);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  
+  if (*x < monitor.x)
+    *x = monitor.x;
+  else if (*x + req.width > monitor.x + monitor.width)
+    *x = monitor.x + monitor.width - req.width;
+  
+  if (*y + child->allocation.height + req.height <= monitor.y + monitor.height)
+    *y += child->allocation.height;
+  else
+    *y -= req.height;
+
    *push_in = TRUE;
 }
 
