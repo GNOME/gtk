@@ -1587,6 +1587,9 @@ add_preedit_attrs (GtkTextLayout     *layout,
       if (end == G_MAXINT)
 	end = layout->preedit_len;
       
+      if (end == start)
+	continue;
+
       pango_attr_iterator_get_font (iter, font_desc, &language, &extra_attrs);
       
       tmp_list = extra_attrs;

@@ -1,3 +1,8 @@
+2002-12-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextlayout.c (add_preedit_attrs): Don't add attributes
+	with empty ranges.  (fixes #101564 and #80637)
+
 2002-12-21  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Move the code that
