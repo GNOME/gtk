@@ -2,7 +2,7 @@
 # Copyright © 2002 Free Software Foundation, Inc.
 # Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>, 2002.
 # Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002.
-# Tino Meinen <a.t.meinen@chelo.nl>, 2002, 2003.
+# Tino Meinen <a.t.meinen@chelo.nl>, 2002, 2003, 2004
 # --------------
 # Discussiepunten:
 # tag -> markering/etiket?
@@ -17,14 +17,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-04 04:26+0100\n"
-"PO-Revision-Date: 2004-01-04 15:07+0100\n"
+"POT-Creation-Date: 2004-01-05 15:44+0100\n"
+"PO-Revision-Date: 2004-01-05 16:53+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
 #: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
@@ -2886,12 +2886,12 @@ msgstr "Kon bestandsnaam niet converteren"
 msgid "(Empty)"
 msgstr "(Leeg)"
 
-#: gtk/gtkfilesystemunix.c:343 gtk/gtkfilesystemwin32.c:383
+#: gtk/gtkfilesystemunix.c:343 gtk/gtkfilesystemwin32.c:417
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "fout bij aanmaken van map '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:386
+#: gtk/gtkfilesystemunix.c:386 gtk/gtkfilesystemwin32.c:458
 msgid "This file system does not support mounting"
 msgstr "Dit bestandsysteem ondersteunt geen aankoppelen"
 
@@ -2907,17 +2907,17 @@ msgstr "Dit bestandsysteem ondersteunt geen pictogrammen"
 msgid "This file system does not support bookmarks"
 msgstr "Dit bestandsysteem ondersteunt geen favorieten"
 
-#: gtk/gtkfilesystemunix.c:855 gtk/gtkfilesystemwin32.c:1069
+#: gtk/gtkfilesystemunix.c:855 gtk/gtkfilesystemwin32.c:1197
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "fout bij verkrijgen vna in formatie over '%s': %s"
 
-#: gtk/gtkfilesystemwin32.c:692
+#: gtk/gtkfilesystemwin32.c:820
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Opslaan favorieten mislukt (%s)"
 
-#: gtk/gtkfilesystemwin32.c:848
+#: gtk/gtkfilesystemwin32.c:976
 msgid "This file system does not support icons for everything"
 msgstr "Dit bestandsysteem ondersteunt geen pictogrammen voor alles"
 
@@ -3123,7 +3123,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1547
+#: gtk/gtkiconfactory.c:1551
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van pictogram: %s"
@@ -4550,162 +4550,166 @@ msgid "_Up"
 msgstr "Om_hoog"
 
 #: gtk/gtkstock.c:298
+msgid "_Harddisk"
+msgstr "_Harde schijf"
+
+#: gtk/gtkstock.c:299
 msgid "_Help"
 msgstr "_Hulp"
 
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:300
 msgid "_Home"
 msgstr "_Thuis"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:301
 msgid "_Index"
 msgstr "_Index"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:302
 msgid "_Italic"
 msgstr "Schu_ingedrukt"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:303
 msgid "_Jump to"
 msgstr "_Spring naar"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:304
 msgid "_Center"
 msgstr "Ge_centreerd"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:305
 msgid "_Fill"
 msgstr "Uit_vullen"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:306
 msgid "_Left"
 msgstr "_Links"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:307
 msgid "_Right"
 msgstr "_Rechts"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:308
 msgid "_New"
 msgstr "_Nieuw"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:309
 msgid "_No"
 msgstr "_Nee"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:310
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgid "_Open"
 msgstr "_Openen"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_Paste"
 msgstr "_Plakken"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_Preferences"
 msgstr "_Voorkeuren"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Print"
 msgstr "_Afdrukken"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "Print Pre_view"
 msgstr "Afdruk_voorbeeld"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Properties"
 msgstr "_Eigenschappen"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Quit"
 msgstr "_Afsluiten"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "_Redo"
 msgstr "_Herhalen"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Refresh"
 msgstr "_Verversen"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Remove"
 msgstr "_Verwijderen"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Revert"
 msgstr "_Terugzetten"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Save"
 msgstr "Op_slaan"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "Save _As"
 msgstr "Opslaan _Als"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Color"
 msgstr "_Kleur"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Font"
 msgstr "_Lettertype"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "_Ascending"
 msgstr "_Oplopend"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Descending"
 msgstr "_Aflopend"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Spell Check"
 msgstr "_Spellingscontrole"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Stop"
 msgstr "_Stop"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Strikethrough"
 msgstr "_Doorhalen"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Undelete"
 msgstr "Ter_ugplaatsen"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Underline"
 msgstr "_Onderstrepen"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Undo"
 msgstr "_Herstel"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Yes"
 msgstr "_Ja"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "Zoom to _Fit"
 msgstr "Zoom _Passend"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "Zoom _In"
 msgstr "Zoom _In"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _Out"
 msgstr "Zoom _Uit"
 
