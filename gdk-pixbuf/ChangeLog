@@ -1,5 +1,10 @@
 1999-11-01  Federico Mena Quintero  <federico@redhat.com>
 
+	* src/gnome-canvas-pixbuf.c (recompute_bounding_box): Fixed
+	bounding box computation.
+
+1999-11-01  Federico Mena Quintero  <federico@redhat.com>
+
 	* src/gnome-canvas-pixbuf.c: Start of the pixbuf canvas item.
 	Drawing affines seem to work.  Bounding box is fubared.  ::point()
 	is not implemented.  This is a work in progress.

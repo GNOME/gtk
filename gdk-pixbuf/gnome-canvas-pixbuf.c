@@ -411,7 +411,8 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 	ArtPoint i_c, j_c;
 	double w, h;
 	double x1, y1, x2, y2, x3, y3, x4, y4;
-	double mx1, my1, mx2, my2;
+	double min_x1, min_y1, min_x2, min_y2;
+	double max_x1, max_y1, max_x2, max_y2;
 
 	item = GNOME_CANVAS_ITEM (gcp);
 	priv = gcp->priv;
@@ -473,26 +474,42 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 
 	/* Compute bounds */
 
-	mx1 = MIN (x1, x2);
-	my1 = MIN (y1, y2);
-	mx2 = MAX (x3, x4);
-	my2 = MAX (y3, y4);
-
-	if (mx1 < mx2) {
-		item->x1 = mx1;
-		item->x2 = mx2;
+	if (x1 < x2) {
+		min_x1 = x1;
+		max_x1 = x2;
 	} else {
-		item->x1 = mx2;
-		item->x2 = mx1;
+		min_x1 = x2;
+		max_x1 = x1;
 	}
 
-	if (my1 < my2) {
-		item->y1 = my1;
-		item->y2 = my2;
+	if (y1 < y2) {
+		min_y1 = y1;
+		max_y1 = y2;
 	} else {
-		item->y1 = my2;
-		item->y2 = my1;
+		min_y1 = y2;
+		max_y1 = y1;
 	}
+
+	if (x3 < x4) {
+		min_x2 = x3;
+		max_x2 = x4;
+	} else {
+		min_x2 = x4;
+		max_x2 = x3;
+	}
+
+	if (y3 < y4) {
+		min_y2 = y3;
+		max_y2 = y4;
+	} else {
+		min_y2 = y4;
+		max_y2 = y3;
+	}
+
+	item->x1 = MIN (min_x1, min_x2);
+	item->y1 = MIN (min_y1, min_y2);
+	item->x2 = MAX (max_x1, max_x2);
+	item->y2 = MAX (max_y1, max_y2);
 
 	item->x2++;
 	item->y2++;
@@ -657,30 +674,6 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
 	art_affine_scale (scale, i_len, j_len);
 	art_affine_multiply (final, scale, i2c);
-
-#if 0
-	compute_xform_vectors (gcp, i2c, &i_c, &j_c);
-
-	i_len = sqrt (i_c.x * i_c.x + i_c.y * i_c.y);
-	j_len = sqrt (j_c.x * j_c.x + j_c.y * j_c.y);
-
-	if (priv->width_set)
-		i_len *= priv->width;
-	else
-		i_len *= priv->pixbuf->art_pixbuf->width;
-
-	i_len /= priv->pixbuf->art_pixbuf->width;
-
-	if (priv->height_set)
-		j_len *= priv->height;
-	else
-		j_len *= priv->pixbuf->art_pixbuf->height;
-
-	j_len /= priv->pixbuf->art_pixbuf->height;
-
-	art_affine_scale (scale, i_len, j_len);
-	art_affine_multiply (final, i2c, scale);
-#endif
 
 	buf = g_new0 (guchar, width * height * 4);
 	transform_pixbuf (buf, x, y, width, height, width * 4, priv->pixbuf, final);
