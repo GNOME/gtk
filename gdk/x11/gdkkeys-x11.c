@@ -227,7 +227,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
         XFreeModifiermap (keymap_x11->mod_keymap);
       
       keymap_x11->keymap = XGetKeyboardMapping (xdisplay, keymap_x11->min_keycode,
-						keymap_x11->max_keycode - keymap_x11->min_keycode,
+						keymap_x11->max_keycode - keymap_x11->min_keycode + 1,
 						&keymap_x11->keysyms_per_keycode);
 
 
@@ -237,7 +237,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
        * we we fudge the map here.
        */
       keycode = keymap_x11->min_keycode;
-      while (keycode < keymap_x11->max_keycode)
+      while (keycode <= keymap_x11->max_keycode)
         {
           KeySym *syms = keymap_x11->keymap + (keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
 	  /* Check both groups */
@@ -529,7 +529,7 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
       gint keycode;
       
       keycode = keymap_x11->min_keycode;
-      while (keycode < keymap_x11->max_keycode)
+      while (keycode <= keymap_x11->max_keycode)
         {
           const KeySym *syms = map + (keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
           gint i = 0;

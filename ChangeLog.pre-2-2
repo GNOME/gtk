@@ -1,3 +1,12 @@
+Fri Oct  4 14:49:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from Shivram U <shivaram.upadhyayula@wipro.com>
+ 
+  	* gdk/x11/gdkkeys-x11.c (update_keymaps): Increased the keycount to
+ 	(max_keycode - min_keycode) + 1 from (max_keycode - min_keycode).
+ 	(update_keymaps), (gdk_keymap_get_entries_for_keyval) looping through
+ 	less than or equal to max_keycode. (#79184)
+
 2002-10-04  jacob berkman  <jacob@ximian.com>
 
 	* gdk/x11/gdkscreen-x11.c (init_xinerama_support): make legal C
