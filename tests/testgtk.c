@@ -6713,7 +6713,7 @@ create_range_controls (void)
       adjustment = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
 
       scale = gtk_hscale_new (GTK_ADJUSTMENT (adjustment));
-      gtk_widget_set_usize (GTK_WIDGET (scale), 150, 30);
+      gtk_widget_set_usize (GTK_WIDGET (scale), 150, -1);
       gtk_range_set_update_policy (GTK_RANGE (scale), GTK_UPDATE_DELAYED);
       gtk_scale_set_digits (GTK_SCALE (scale), 1);
       gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
