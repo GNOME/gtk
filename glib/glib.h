@@ -531,6 +531,9 @@ GList* g_list_nth	  (GList     *list,
 			   guint      n);
 GList* g_list_find	  (GList     *list,
 			   gpointer   data);
+GList *g_list_find_custom (GList *list,
+			   gpointer data,
+			   GCompareFunc func);
 gint   g_list_position    (GList     *list,
 			   GList     *link);
 gint   g_list_index	  (GList     *list,
@@ -574,6 +577,9 @@ GSList* g_slist_nth	    (GSList   *list,
 			     guint     n);
 GSList* g_slist_find	    (GSList   *list,
 			     gpointer  data);
+GSList *g_slist_find_custom (GSList *list,
+			     gpointer data,
+			     GCompareFunc func);
 gint    g_slist_position    (GSList   *list,
 			     GSList   *link);
 gint	g_slist_index	    (GSList   *list,

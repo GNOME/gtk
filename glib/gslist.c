@@ -313,6 +313,20 @@ g_slist_find (GSList   *list,
   return list;
 }
 
+GSList *
+g_slist_find_custom(GSList *list, gpointer data, GCompareFunc func)
+{
+  if(!func) return g_slist_find(list, data);
+
+  while (list)
+    {
+      if ( !((*func)(list->data, data)) ) break;
+      list = list->next;
+    }
+
+  return list;
+}
+
 gint
 g_slist_position (GSList *list,
 		  GSList *link)
