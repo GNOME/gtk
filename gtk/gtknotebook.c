@@ -288,6 +288,9 @@ static gboolean focus_tabs_in  (GtkNotebook      *notebook);
 static gboolean focus_child_in (GtkNotebook      *notebook,
 				GtkDirectionType  direction);
 
+static void stop_scrolling (GtkNotebook *notebook);
+
+
 static GtkContainerClass *parent_class = NULL;
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
@@ -1119,6 +1122,8 @@ gtk_notebook_unmap (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_NOTEBOOK (widget));
 
+  stop_scrolling (GTK_NOTEBOOK (widget));
+  
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
   gdk_window_hide (GTK_NOTEBOOK (widget)->event_window);
