@@ -28,7 +28,6 @@
 
 typedef struct _GtkSignal       GtkSignal;
 typedef struct _GtkSignalInfo   GtkSignalInfo;
-typedef struct _GtkHandler      GtkHandler;
 typedef struct _GtkHandlerInfo  GtkHandlerInfo;
 typedef struct _GtkEmission     GtkEmission;
 
@@ -51,21 +50,6 @@ struct _GtkSignal
   GtkType return_val;
   GtkType *params;
   gint nparams;
-};
-
-struct _GtkHandler
-{
-  guint16 id;
-  guint16 ref_count;
-  guint16 signal_type;
-  guint object_signal : 1;
-  guint blocked : 1;
-  guint after : 1;
-  guint no_marshal : 1;
-  GtkSignalFunc func;
-  gpointer func_data;
-  GtkSignalDestroy destroy_func;
-  GtkHandler *next;
 };
 
 struct _GtkHandlerInfo
@@ -103,8 +87,6 @@ static void         gtk_signal_handler_insert  (GtkObject     *object,
 static void         gtk_signal_real_emit       (GtkObject     *object,
 						gint           signal_type,
 						va_list        args);
-static GtkHandler*  gtk_signal_get_handlers    (GtkObject     *object,
-						gint           signal_type);
 static gint         gtk_signal_connect_by_type (GtkObject     *object,
 						gint           signal_type,
 						gint           object_signal,
@@ -1070,7 +1052,7 @@ done:
   gtk_object_unref (object);
 }
 
-static GtkHandler*
+GtkHandler*
 gtk_signal_get_handlers (GtkObject *object,
 			 gint       signal_type)
 {

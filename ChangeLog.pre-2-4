@@ -1,3 +1,9 @@
+Mon Feb  9 16:42:21 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gtk/gtksignal.c (gtk_signal_get_handlers): no longer a private
+	routine;
+	gtksignal.h: export gtk_signal_get_handlers and GtkHandlers type. 
+
 Sun Feb  8 07:06:54 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkmenu.c (gtk_menu_get_attach_widget): new fundtion to return
