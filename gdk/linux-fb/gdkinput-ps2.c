@@ -123,27 +123,54 @@ send_button_event (MouseDevice *mouse,
   else
     window = gdk_window_at_pointer(NULL, NULL);
 
-  gdk_window_get_origin (window, &x, &y);
-  x = mouse->x - x;
-  y = mouse->y - y;
-
   event = gdk_event_make (window, press_event ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE, FALSE);
 
-  if (!event)
-    return;
-
-  event->button.x = x;
-  event->button.y = y;
-  event->button.button = button;
-  event->button.state = (mouse->button1_pressed?GDK_BUTTON1_MASK:0) |
-    (mouse->button2_pressed ? GDK_BUTTON2_MASK : 0) |
-    (mouse->button3_pressed ? GDK_BUTTON3_MASK : 0) |
-    (1 << (button + 8)) /* badhack */ |
-    keyboard->modifier_state;
-  event->button.device = gdk_core_pointer;
-  event->button.x_root = mouse->x;
-  event->button.y_root = mouse->y;
-
+  if (event)
+    {
+      gdk_window_get_origin (window, &x, &y);
+      x = mouse->x - x;
+      y = mouse->y - y;
+      
+      event->button.x = x;
+      event->button.y = y;
+      event->button.button = button;
+      event->button.state = (mouse->button1_pressed?GDK_BUTTON1_MASK:0) |
+	(mouse->button2_pressed ? GDK_BUTTON2_MASK : 0) |
+	(mouse->button3_pressed ? GDK_BUTTON3_MASK : 0) |
+	(1 << (button + 8)) /* badhack */ |
+	keyboard->modifier_state;
+      event->button.device = gdk_core_pointer;
+      event->button.x_root = mouse->x;
+      event->button.y_root = mouse->y;
+      
+      event->button.time = the_time;
+      
+#if 0
+      g_message ("Button #%d %s [%d, %d] in %p",
+		 button, press_event?"pressed":"released",
+		 x, y, window);
+      
+      /* Debugging aid */
+      if (window && window != gdk_parent_root)
+	{
+	  GdkGC *tmp_gc;
+	  
+	  tmp_gc = gdk_gc_new (window);
+	  GDK_GC_FBDATA (tmp_gc)->values.foreground.pixel = 0;
+	  gdk_fb_draw_rectangle (GDK_DRAWABLE_IMPL(window), tmp_gc, TRUE, 0, 0,
+				 GDK_DRAWABLE_IMPL_FBDATA(window)->width, GDK_DRAWABLE_IMPL_FBDATA(window)->height);
+	  gdk_gc_unref(tmp_gc);
+	}
+#endif
+      
+      gdk_event_queue_append (event);
+      
+      /* For double-clicks */
+      if (press_event)
+	gdk_event_button_generate (event);
+      
+    }
+  
   if (mouse->button1_pressed)
     nbuttons++;
   if (mouse->button2_pressed)
@@ -151,6 +178,7 @@ send_button_event (MouseDevice *mouse,
   if (mouse->button3_pressed)
     nbuttons++;
 
+  /* Handle implicit button grabs: */
   if (press_event && nbuttons == 1)
     {
       gdk_fb_pointer_grab (window, FALSE,
@@ -164,33 +192,6 @@ send_button_event (MouseDevice *mouse,
       gdk_fb_pointer_ungrab (GDK_CURRENT_TIME, TRUE);
       mouse->click_grab = FALSE;
     }
-
-  event->button.time = the_time;
-  
-#if 0
-  g_message ("Button #%d %s [%d, %d] in %p",
-	     button, press_event?"pressed":"released",
-	    x, y, window);
-
-  /* Debugging aid */
-  if (window && window != gdk_parent_root)
-    {
-      GdkGC *tmp_gc;
-
-      tmp_gc = gdk_gc_new (window);
-      GDK_GC_FBDATA (tmp_gc)->values.foreground.pixel = 0;
-      gdk_fb_draw_rectangle (GDK_DRAWABLE_IMPL(window), tmp_gc, TRUE, 0, 0,
-			     GDK_DRAWABLE_IMPL_FBDATA(window)->width, GDK_DRAWABLE_IMPL_FBDATA(window)->height);
-      gdk_gc_unref(tmp_gc);
-    }
-#endif
-
-  gdk_event_queue_append (event);
-  
-  /* For double-clicks */
-  if (press_event)
-    gdk_event_button_generate (event);
-
 }
 
 static GdkPixmap *last_contents = NULL;
@@ -427,15 +428,25 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
   GdkModifierType my_mask;
   GList *path, *list;
   gboolean non_linear;
+  gboolean only_grabbed_window;
   GdkWindow *a;
   GdkWindow *b;
-  
+
   if (gdk_fb_mouse->prev_window == NULL)
     gdk_fb_mouse->prev_window = gdk_window_ref (gdk_parent_root);
 
-  a = gdk_fb_mouse->prev_window;
+  if (mode == GDK_CROSSING_UNGRAB)
+    a = _gdk_fb_pointer_grab_window;
+  else
+    a = gdk_fb_mouse->prev_window;
   b = dest;
 
+  /* When grab in progress only send normal crossing events about
+   * the grabbed window.
+   */
+  only_grabbed_window = (_gdk_fb_pointer_grab_window != NULL) &&
+                        (mode == GDK_CROSSING_NORMAL);
+  
   if (a==b)
     return;
 
@@ -444,8 +455,11 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
   c = gdk_fb_find_common_ancestor (a, b);
 
   non_linear = (c != a) && (c != b);
-  
-  event = gdk_event_make (a, GDK_LEAVE_NOTIFY, TRUE);
+
+  if (!only_grabbed_window || (a == _gdk_fb_pointer_grab_window))
+    event = gdk_event_make (a, GDK_LEAVE_NOTIFY, TRUE);
+  else
+    event = NULL;
   if (event)
     {
       event->crossing.subwindow = NULL;
@@ -472,7 +486,10 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
       win = GDK_WINDOW (GDK_WINDOW_OBJECT (a)->parent);
       while (win != c)
 	{
-	  event = gdk_event_make (win, GDK_LEAVE_NOTIFY, TRUE);
+	  if (!only_grabbed_window || (win == _gdk_fb_pointer_grab_window))
+	    event = gdk_event_make (win, GDK_LEAVE_NOTIFY, TRUE);
+	  else
+	    event = NULL;
 	  if (event)
 	    {
 	      event->crossing.subwindow = gdk_window_ref (last);
@@ -498,7 +515,7 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
   if (c != b) 
     {
       path = NULL;
-      win = b;
+      win = GDK_WINDOW( GDK_WINDOW_OBJECT (b)->parent);
       while (win != c)
 	{
 	  path = g_list_prepend (path, win);
@@ -515,7 +532,10 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
 	  else 
 	    next = b;
 	  
-	  event = gdk_event_make (win, GDK_ENTER_NOTIFY, TRUE);
+	  if (!only_grabbed_window || (win == _gdk_fb_pointer_grab_window))
+	    event = gdk_event_make (win, GDK_ENTER_NOTIFY, TRUE);
+	  else
+	    event = NULL;
 	  if (event)
 	    {
 	      event->crossing.subwindow = gdk_window_ref (next);
@@ -536,7 +556,10 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
       g_list_free (path);
     }
 
-  event = gdk_event_make (b, GDK_ENTER_NOTIFY, TRUE);
+  if (!only_grabbed_window || (b == _gdk_fb_pointer_grab_window))
+    event = gdk_event_make (b, GDK_ENTER_NOTIFY, TRUE);
+  else
+    event = NULL;
   if (event)
     {
       event->crossing.subwindow = NULL;
@@ -556,8 +579,12 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
       event->crossing.state = my_mask;
     }
 
-  gdk_window_unref (gdk_fb_mouse->prev_window);
-  gdk_fb_mouse->prev_window = gdk_window_ref (b);
+  if ((mode != GDK_CROSSING_GRAB) &&
+      (b != gdk_fb_mouse->prev_window))
+    {
+      gdk_window_unref (gdk_fb_mouse->prev_window);
+      gdk_fb_mouse->prev_window = gdk_window_ref (b);
+    }
 }
 
 static void
@@ -567,7 +594,7 @@ handle_mouse_input(MouseDevice *mouse,
   GdkWindow *mousewin;
   GdkEvent *event;
   gint x, y;
-  GdkWindow *win;
+  GdkWindow *win, *grabwin;
   guint state;
 
   if (_gdk_fb_pointer_grab_confine)
@@ -589,11 +616,14 @@ handle_mouse_input(MouseDevice *mouse,
     return;
 
   win = gdk_window_at_pointer (NULL, NULL);
-  move_pointer (mouse, win);
   if (_gdk_fb_pointer_grab_window_events)
-    win = _gdk_fb_pointer_grab_window_events;
+    grabwin = _gdk_fb_pointer_grab_window_events;
+  else
+    grabwin = win;
 
-  gdk_window_get_origin (win, &x, &y);
+  move_pointer (mouse, grabwin);
+  
+  gdk_window_get_origin (grabwin, &x, &y);
   x = mouse->x - x;
   y = mouse->y - y;
 
@@ -603,7 +633,7 @@ handle_mouse_input(MouseDevice *mouse,
     (mouse->button3_pressed?GDK_BUTTON3_MASK:0) |
     keyboard->modifier_state;
 
-  event = gdk_event_make (win, GDK_MOTION_NOTIFY, TRUE);
+  event = gdk_event_make (grabwin, GDK_MOTION_NOTIFY, TRUE);
   if (event)
     {
       event->motion.x = x;

@@ -1,3 +1,16 @@
+2000-11-29  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkinput-ps2.c (send_button_event):
+	Do implicit button grabs, even if the window doesn't
+	want the event.
+	(gdk_fb_window_send_crossing_events): If there is a
+	grab, only the grabbed window gets normal enter/leave
+	notifications. On ungrab go from grabbed window to current.
+	Don't send any notification to b when propagating from c -> b.
+	If setting a grab on window, don't set prev_window.
+	(handle_mouse_input): Send enter/leave events to the window the
+	mouse is over, not the grabbed one.
+	
 2000-11-28  Elliot Lee  <sopwith@redhat.com>
 
 	* gdk/gdkregion-generic.c: Zap warning.
