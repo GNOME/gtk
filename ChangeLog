@@ -1,5 +1,8 @@
 2005-02-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (gtk_icon_theme_init): Look for icons
+	in XDG_DATA_DIRS/pixmaps.  (#165950, Thomas Zajic)
+
 	* gtk/gtkwindow.c (gtk_window_set_icon_name): Set info->icon_list
 	to NULL after freeing it.  (#165800, Damon Chaplin)
 
