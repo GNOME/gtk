@@ -483,26 +483,44 @@ static GtkStyle *
 gtk_rc_style_init (GtkRcStyle *rc_style, GdkColormap *cmap)
 {
   GdkFont *old_font;
+  gboolean match_cmap = FALSE;
   gint i;
 
   GList *tmp_list;
   GtkStyle *style = NULL;
+  GtkRcNode *node;
 
   tmp_list = rc_style->styles;
 
+  for (i=0; i<5; i++)
+    if (rc_style->bg_pixmap_name[i])
+      match_cmap = TRUE;
+      
   while (tmp_list)
     {
-      GtkRcNode *node = (GtkRcNode *)tmp_list->data;
+      node = (GtkRcNode *)tmp_list->data;
 
-      if (node->cmap == cmap)
-	style = node->style;
+      if (!match_cmap || (node->cmap == cmap))
+	{
+	  style = node->style;
+	  break;
+	}
 
       tmp_list = tmp_list->next;
     }
   
   if (!style)
     {
+      node = g_new (GtkRcNode, 1);
       style = gtk_style_copy (rc_style->proto_style);
+
+     /* FIXME, this leaks colormaps, but if we don't do this, then we'll
+       * be screwed, because we identify colormaps by address equality
+       */
+      gdk_colormap_ref (cmap);
+ 
+      node->style = style;
+      node->cmap = cmap;
       
       if (rc_style->fontset_name)
 	{
@@ -536,12 +554,7 @@ gtk_rc_style_init (GtkRcStyle *rc_style, GdkColormap *cmap)
 						     rc_style->bg_pixmap_name[i]);
 	  }
 
-      rc_style->styles = g_list_append (rc_style->styles, style);
-
-      /* FIXME, this leaks colormaps, but if we don't do this, then we'll
-       * be screwed, because we identify colormaps by address equality
-       */
-      gdk_colormap_ref (cmap);
+      rc_style->styles = g_list_append (rc_style->styles, node);
     }
 
   return style;

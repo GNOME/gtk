@@ -1,3 +1,10 @@
+Mon Mar  9 01:01:41 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkrc.c: No, you can't add a GtkStyle * to a
+	  list of GtkRcNode *. (Fixes huge performance problem)
+	  Plus, don't bother creating a new style unless style
+	  actually has bg pixmaps.
+
 Sun Mar  8 15:53:33 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktext.c: 
