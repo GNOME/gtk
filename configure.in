@@ -4,9 +4,9 @@ AC_INIT(gdk/gdktypes.h)
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
-GTK_MAJOR_VERSION=0
-GTK_MINOR_VERSION=99
-GTK_MICRO_VERSION=10
+GTK_MAJOR_VERSION=1
+GTK_MINOR_VERSION=0
+GTK_MICRO_VERSION=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 
 # For automake.

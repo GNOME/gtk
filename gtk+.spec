@@ -1,5 +1,5 @@
 # Note that this is NOT a relocatable package
-%define ver      0.99.10
+%define ver      1.0.0
 %define rel      SNAP
 %define prefix   /usr
 
@@ -9,7 +9,7 @@ Version: %ver
 Release: %rel
 Copyright: LGPL
 Group: X11/Libraries
-Source: ftp://ftp.gimp.org/pub/gtk/v0.99/gtk+-%{ver}.tar.gz
+Source: ftp://ftp.gimp.org/pub/gtk/v1.0/gtk+-%{ver}.tar.gz
 BuildRoot: /tmp/gtk-root
 Obsoletes: gtk
 Packager: Marc Ewing <marc@redhat.com>
@@ -36,6 +36,10 @@ Xlib to help automate things like dealing with different color depths,
 and GTK is a widget set for creating user interfaces.
 
 %changelog
+
+* Tue Apr  8 1998 Shawn T. Amundson <amundson@gtk.org>
+
+- Changed version to 1.0.0
 
 * Tue Apr  7 1998 Owen Taylor <otaylor@gtk.org>
 

@@ -1,3 +1,8 @@
+Thu Apr  9 19:31:51 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* AUTHORS NEWS README configure.in gtk+.spec glib/configure.in:
+	  changes for 1.0.0 release.
+
 Thu Apr  9 18:36:31 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmisc.c gdk/gdkwindow gtk/gtkentry.c gtk/testgtk.c:
