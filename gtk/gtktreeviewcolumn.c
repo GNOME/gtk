@@ -1242,6 +1242,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_set_cell_data_func:
  * @tree_column: A #GtkTreeViewColumn
+ * @cell_renderer: A #GtkCellRenderer
  * @func: The #GtkTreeViewColumnFunc to use. 
  * @func_data: The user data for @func.
  * @destroy: The destroy notification for @func_data
@@ -1462,7 +1463,7 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_fixed_width:
  * @tree_column: A #GtkTreeViewColumn.
- * @width: The size to set the @tree_column to.
+ * @fixed_width: The size to set the @tree_column to.
  * 
  * Sets the size of the column in pixels.  This is meaningful only if the sizing
  * type is #GTK_TREE_VIEW_COLUMN_FIXED.  In this case, the value is discarded
@@ -1471,7 +1472,7 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
  **/
 void
 gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
-				      gint               width)
+				      gint               fixed_width)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   g_return_if_fail (width > 0);

@@ -2592,12 +2592,12 @@ GTK_TREE_ITEM_GET_CLASS
 
 <SECTION>
 <FILE>gtktreemodel</FILE>
-<TITLE>GtkTreeModel</TITLE>
-GTK_TREE_MODEL_GET_IFACE
 GtkTreeIter
 GtkTreePath
+GtkTreeRowReference
 GtkTreeModel
 GtkTreeModelIface
+GtkTreeModelForeachFunc
 GtkTreeModelFlags
 gtk_tree_path_new
 gtk_tree_path_new_from_string
@@ -2614,12 +2614,23 @@ gtk_tree_path_next
 gtk_tree_path_prev
 gtk_tree_path_up
 gtk_tree_path_down
+gtk_tree_path_is_ancestor
+gtk_tree_path_is_descendant
+gtk_tree_row_reference_new
+gtk_tree_row_reference_new_proxy
+gtk_tree_row_reference_get_path
+gtk_tree_row_reference_valid
+gtk_tree_row_reference_free
+gtk_tree_row_reference_inserted
+gtk_tree_row_reference_deleted
+gtk_tree_row_reference_reordered
 gtk_tree_iter_copy
 gtk_tree_iter_free
 gtk_tree_model_get_flags
 gtk_tree_model_get_n_columns
 gtk_tree_model_get_column_type
 gtk_tree_model_get_iter
+gtk_tree_model_get_iter_root
 gtk_tree_model_get_path
 gtk_tree_model_get_value
 gtk_tree_model_iter_next
@@ -2630,20 +2641,29 @@ gtk_tree_model_iter_nth_child
 gtk_tree_model_iter_parent
 gtk_tree_model_ref_node
 gtk_tree_model_unref_node
+gtk_tree_model_get
+gtk_tree_model_get_valist
+gtk_tree_model_foreach
+gtk_tree_model_row_changed
+gtk_tree_model_row_inserted
+gtk_tree_model_row_has_child_toggled
+gtk_tree_model_row_deleted
+gtk_tree_model_rows_reordered
 <SUBSECTION Standard>
 GTK_TREE_MODEL
 GTK_IS_TREE_MODEL
 GTK_TYPE_TREE_MODEL
 gtk_tree_model_get_type
+GTK_TREE_MODEL_GET_IFACE
 </SECTION>
 
 <SECTION>
 <FILE>gtktreemodelsort</FILE>
 <TITLE>GtkTreeModelSort</TITLE>
-GtkTreeModelSort
 gtk_tree_model_sort_new
 gtk_tree_model_sort_new_with_model
 gtk_tree_model_sort_set_model
+gtk_tree_model_sort_get_model
 gtk_tree_model_sort_convert_path
 gtk_tree_model_sort_convert_iter
 <SUBSECTION Standard>
@@ -2653,6 +2673,7 @@ GTK_TYPE_TREE_MODEL_SORT
 gtk_tree_model_sort_get_type
 GTK_TREE_MODEL_SORT_CLASS
 GTK_IS_TREE_MODEL_SORT_CLASS
+GTK_TREE_MODEL_SORT_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -2661,6 +2682,7 @@ GtkTreeSelectionFunc
 GtkTreeSelectionForeachFunc
 <TITLE>GtkTreeSelection</TITLE>
 gtk_tree_selection_set_mode
+gtk_tree_selection_get_mode
 gtk_tree_selection_set_select_function
 gtk_tree_selection_get_user_data
 gtk_tree_selection_get_tree_view
@@ -2680,6 +2702,51 @@ GTK_TYPE_TREE_SELECTION
 gtk_tree_selection_get_type
 GTK_TREE_SELECTION_CLASS
 GTK_IS_TREE_SELECTION_CLASS
+</SECTION>
+
+<SECTION>
+<FILE>gtktreesortable</FILE>
+GtkTreeSortable
+GtkTreeSortableIface
+GtkTreeIterCompareFunc
+gtk_tree_sortable_sort_column_changed
+gtk_tree_sortable_get_sort_column_id
+gtk_tree_sortable_set_sort_column_id
+gtk_tree_sortable_set_sort_func
+gtk_tree_sortable_set_default_sort_func
+gtk_tree_sortable_has_default_sort_func
+<SUBSECTION Standard>
+GTK_TREE_SORTABLE
+GTK_IS_TREE_SORTABLE
+GTK_TYPE_TREE_SORTABLE
+gtk_tree_sortable_get_type
+GTK_TREE_SORTABLE_CLASS
+GTK_TREE_SORTABLE_GET_IFACE
+</SECTION>
+
+<SECTION>
+<FILE>gtktreednd</FILE>
+GtkTreeDragSource
+GtkTreeDragSourceIface
+gtk_tree_drag_source_drag_data_delete
+gtk_tree_drag_source_drag_data_get
+GTK_TYPE_TREE_DRAG_DEST
+GTK_TREE_DRAG_DEST
+GTK_IS_TREE_DRAG_DEST
+GTK_TREE_DRAG_DEST_GET_IFACE
+GtkTreeDragDest
+GtkTreeDragDestIface
+gtk_tree_drag_dest_get_type
+gtk_tree_drag_dest_drag_data_received
+gtk_tree_drag_dest_row_drop_possible
+gtk_selection_data_set_tree_row
+gtk_selection_data_get_tree_row
+<SUBSECTION Standard>
+GTK_TREE_DRAG_SOURCE
+GTK_IS_TREE_DRAG_SOURCE
+GTK_TYPE_TREE_DRAG_SOURCE
+gtk_tree_drag_source_get_type
+GTK_TREE_DRAG_SOURCE_GET_IFACE
 </SECTION>
 
 <SECTION>
@@ -2712,37 +2779,66 @@ GTK_TREE_STORE_GET_CLASS
 
 <SECTION>
 <FILE>gtktreeviewcolumn</FILE>
-GtkTreeViewColumn
 GtkTreeViewColumnSizing
+GtkTreeCellDataFunc
 <TITLE>GtkTreeViewColumn</TITLE>
+GtkTreeViewColumn
 gtk_tree_view_column_new
 gtk_tree_view_column_new_with_attributes
+gtk_tree_view_column_pack_start
+gtk_tree_view_column_pack_end
+gtk_tree_view_column_clear
+gtk_tree_view_column_get_cell_renderers
 gtk_tree_view_column_add_attribute
 gtk_tree_view_column_set_attributes
+gtk_tree_view_column_set_cell_data_func
+gtk_tree_view_column_clear_attributes
+gtk_tree_view_column_set_spacing
+gtk_tree_view_column_get_spacing
 gtk_tree_view_column_set_visible
 gtk_tree_view_column_get_visible
 gtk_tree_view_column_set_sizing
 gtk_tree_view_column_get_sizing
 gtk_tree_view_column_get_width
+gtk_tree_view_column_get_fixed_width
+gtk_tree_view_column_set_fixed_width
 gtk_tree_view_column_set_min_width
 gtk_tree_view_column_get_min_width
 gtk_tree_view_column_set_max_width
 gtk_tree_view_column_get_max_width
+gtk_tree_view_column_clicked
 gtk_tree_view_column_set_title
 gtk_tree_view_column_get_title
 gtk_tree_view_column_set_clickable
+gtk_tree_view_column_get_clickable
 gtk_tree_view_column_set_widget
 gtk_tree_view_column_get_widget
 gtk_tree_view_column_set_alignment
 gtk_tree_view_column_get_alignment
-gtk_tree_view_column_clicked
+gtk_tree_view_column_set_reorderable
+gtk_tree_view_column_get_reorderable
+gtk_tree_view_column_set_sort_column_id
+gtk_tree_view_column_get_sort_column_id
+gtk_tree_view_column_set_sort_indicator
+gtk_tree_view_column_get_sort_indicator
+gtk_tree_view_column_set_sort_order
+gtk_tree_view_column_get_sort_order
+gtk_tree_view_column_cell_set_cell_data
+gtk_tree_view_column_cell_get_size
+gtk_tree_view_column_cell_render
+gtk_tree_view_column_cell_event
+gtk_tree_view_column_cell_focus
+gtk_tree_view_column_cell_draw_focus
+gtk_tree_view_column_cell_is_visible
+gtk_tree_view_column_cell_set_dirty
 <SUBSECTION Standard>
-GTK_TYPE_TREE_VIEW_COLUMN
 GTK_TREE_VIEW_COLUMN
 GTK_IS_TREE_VIEW_COLUMN
+GTK_TYPE_TREE_VIEW_COLUMN
 gtk_tree_view_column_get_type
 GTK_TREE_VIEW_COLUMN_CLASS
 GTK_IS_TREE_VIEW_COLUMN_CLASS
+GTK_TREE_VIEW_COLUMN_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -2784,6 +2880,8 @@ gtk_tree_view_get_expander_column
 gtk_tree_view_set_column_drag_function
 gtk_tree_view_scroll_to_point
 gtk_tree_view_scroll_to_cell
+gtk_tree_view_set_cursor
+gtk_tree_view_get_cursor
 gtk_tree_view_row_activated
 gtk_tree_view_expand_all
 gtk_tree_view_collapse_all
@@ -2793,7 +2891,6 @@ gtk_tree_view_map_expanded_rows
 gtk_tree_view_row_expanded
 gtk_tree_view_set_reorderable
 gtk_tree_view_get_reorderable
-gtk_tree_view_set_cursor
 gtk_tree_view_get_path_at_pos
 gtk_tree_view_get_cell_area
 gtk_tree_view_get_background_area
@@ -2867,6 +2964,22 @@ GTK_CELL_RENDERER_GET_CLASS
 </SECTION>
 
 <SECTION>
+<FILE>gtkcelleditable</FILE>
+GtkCellEditable
+GtkCellEditableIface
+gtk_cell_editable_start_editing
+gtk_cell_editable_editing_done
+gtk_cell_editable_remove_widget
+<SUBSECTION Standard>
+GTK_CELL_EDITABLE
+GTK_IS_CELL_EDITABLE
+GTK_TYPE_CELL_EDITABLE
+gtk_cell_editable_get_type
+GTK_CELL_EDITABLE_CLASS
+GTK_CELL_EDITABLE_GET_IFACE
+</SECTION>
+
+<SECTION>
 <FILE>gtkcellrendererpixbuf</FILE>
 <TITLE>GtkCellRendererPixbuf</TITLE>
 GtkCellRendererPixbuf
@@ -2886,6 +2999,7 @@ GTK_CELL_RENDERER_PIXBUF_GET_CLASS
 <TITLE>GtkCellRendererText</TITLE>
 GtkCellRendererText
 gtk_cell_renderer_text_new
+gtk_cell_renderer_text_set_fixed_height_from_font
 <SUBSECTION Standard>
 GTK_CELL_RENDERER_TEXT
 GTK_IS_CELL_RENDERER_TEXT
@@ -2904,6 +3018,7 @@ gtk_cell_renderer_toggle_new
 gtk_cell_renderer_toggle_set_radio
 gtk_cell_renderer_toggle_get_active
 gtk_cell_renderer_toggle_set_active
+gtk_cell_renderer_toggle_get_radio
 <SUBSECTION Standard>
 GTK_CELL_RENDERER_TOGGLE
 GTK_IS_CELL_RENDERER_TOGGLE
@@ -2919,12 +3034,17 @@ GTK_CELL_RENDERER_TOGGLE_GET_CLASS
 <TITLE>GtkListStore</TITLE>
 GtkListStore
 gtk_list_store_new
+gtk_list_store_newv
+gtk_list_store_set
+gtk_list_store_set_valist
+gtk_list_store_set_value
 gtk_list_store_remove
 gtk_list_store_insert
 gtk_list_store_insert_before
 gtk_list_store_insert_after
 gtk_list_store_prepend
 gtk_list_store_append
+gtk_list_store_clear
 <SUBSECTION Standard>
 GTK_LIST_STORE
 GTK_IS_LIST_STORE
@@ -2932,6 +3052,7 @@ GTK_TYPE_LIST_STORE
 gtk_list_store_get_type
 GTK_LIST_STORE_CLASS
 GTK_IS_LIST_STORE_CLASS
+GTK_LIST_STORE_GET_CLASS
 </SECTION>
 
 <SECTION>

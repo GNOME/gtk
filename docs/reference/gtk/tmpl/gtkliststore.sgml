@@ -30,6 +30,47 @@ GtkListStore
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_list_store_newv ##### -->
+<para>
+
+</para>
+
+@n_columns: 
+@types: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_list_store_set ##### -->
+<para>
+
+</para>
+
+@list_store: 
+@iter: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_list_store_set_valist ##### -->
+<para>
+
+</para>
+
+@list_store: 
+@iter: 
+@var_args: 
+
+
+<!-- ##### FUNCTION gtk_list_store_set_value ##### -->
+<para>
+
+</para>
+
+@list_store: 
+@iter: 
+@column: 
+@value: 
+
+
 <!-- ##### FUNCTION gtk_list_store_remove ##### -->
 <para>
 
@@ -97,5 +138,13 @@ GtkListStore
 @iter: 
 <!-- # Unused Parameters # -->
 @store: 
+
+
+<!-- ##### FUNCTION gtk_list_store_clear ##### -->
+<para>
+
+</para>
+
+@list_store: 
 
 

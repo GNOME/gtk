@@ -312,6 +312,13 @@ Get the array of signals defined for this object.
 </para>
 
 
+<!-- ##### MACRO GTK_TREE_MODEL_GET_IFACE ##### -->
+<para>
+
+</para>
+
+@obj: 
+
 <!-- ##### MACRO GTK_TREE_SELECTION ##### -->
 <para>
 A macro that returns a GList that contains the selection of the root tree of @obj.
@@ -996,6 +1003,12 @@ produce superscript and subscript.
 
 
 <!-- ##### ARG GtkTextView:justify ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTreeModelSort ##### -->
 <para>
 
 </para>

@@ -14,14 +14,6 @@ The tree interface used by #GtkTreeView
 #GtkTreeView, #GtkTreeStore, #GtkListStore
 </para>
 
-<!-- ##### MACRO GTK_TREE_MODEL_GET_IFACE ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-
 <!-- ##### STRUCT GtkTreeIter ##### -->
 <para>
 
@@ -33,6 +25,12 @@ The tree interface used by #GtkTreeView
 @user_data3: 
 
 <!-- ##### STRUCT GtkTreePath ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTreeRowReference ##### -->
 <para>
 
 </para>
@@ -69,6 +67,18 @@ The tree interface used by #GtkTreeView
 @iter_parent: 
 @ref_node: 
 @unref_node: 
+
+<!-- ##### USER_FUNCTION GtkTreeModelForeachFunc ##### -->
+<para>
+
+</para>
+
+@model: 
+@path: 
+@iter: 
+@data: 
+@Returns: 
+
 
 <!-- ##### ENUM GtkTreeModelFlags ##### -->
 <para>
@@ -209,6 +219,102 @@ The tree interface used by #GtkTreeView
 @path: 
 
 
+<!-- ##### FUNCTION gtk_tree_path_is_ancestor ##### -->
+<para>
+
+</para>
+
+@path: 
+@descendant: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_is_descendant ##### -->
+<para>
+
+</para>
+
+@path: 
+@ancestor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_new ##### -->
+<para>
+
+</para>
+
+@model: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_new_proxy ##### -->
+<para>
+
+</para>
+
+@proxy: 
+@model: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_get_path ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_valid ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_free ##### -->
+<para>
+
+</para>
+
+@reference: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_inserted ##### -->
+<para>
+
+</para>
+
+@proxy: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_deleted ##### -->
+<para>
+
+</para>
+
+@proxy: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_reordered ##### -->
+<para>
+
+</para>
+
+@proxy: 
+@path: 
+@iter: 
+@new_order: 
+
+
 <!-- ##### FUNCTION gtk_tree_iter_copy ##### -->
 <para>
 
@@ -262,6 +368,16 @@ The tree interface used by #GtkTreeView
 @tree_model: 
 @iter: 
 @path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_iter_root ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
 @Returns: 
 
 
@@ -366,6 +482,89 @@ The tree interface used by #GtkTreeView
 
 @tree_model: 
 @iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_valist ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@var_args: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_foreach ##### -->
+<para>
+
+</para>
+
+@model: 
+@func: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_row_changed ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+@iter: 
+<!-- # Unused Parameters # -->
+@start_path: 
+@start_iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_row_inserted ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_row_has_child_toggled ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_row_deleted ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_rows_reordered ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@path: 
+@iter: 
+@new_order: 
 
 
 <!-- ##### SIGNAL GtkTreeModel::row-changed ##### -->

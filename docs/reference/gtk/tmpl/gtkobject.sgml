@@ -295,7 +295,7 @@ object, then a list of name/return location pairs in a list, followed by NULL.
 </para>
 
 @object: a #GtkObject
-@first_property_name: name of first property to get the value for 
+@first_property_name: name of first property to get the value for
 @Varargs: list of name-return location pairs.
 
 
@@ -536,10 +536,14 @@ to get an id from a string.
 Useless deprecated macro. Ignore it.
 </para>
 
+
+
 <!-- ##### MACRO gtk_object_data_force_id ##### -->
 <para>
 Useless deprecated macro. Ignore it. 
 </para>
+
+
 
 <!-- ##### SIGNAL GtkObject::destroy ##### -->
 <para>

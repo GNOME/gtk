@@ -46,6 +46,15 @@ GtkTreeSelection
 @type: 
 
 
+<!-- ##### FUNCTION gtk_tree_selection_get_mode ##### -->
+<para>
+
+</para>
+
+@selection: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_selection_set_select_function ##### -->
 <para>
 

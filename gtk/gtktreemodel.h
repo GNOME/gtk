@@ -219,8 +219,8 @@ void              gtk_tree_model_foreach         (GtkTreeModel            *model
 
 /* Signals */
 void gtk_tree_model_row_changed           (GtkTreeModel *tree_model,
-					   GtkTreePath  *start_path,
-					   GtkTreeIter  *start_iter);
+					   GtkTreePath  *path,
+					   GtkTreeIter  *iter);
 void gtk_tree_model_row_inserted          (GtkTreeModel *tree_model,
 					   GtkTreePath  *path,
 					   GtkTreeIter  *iter);

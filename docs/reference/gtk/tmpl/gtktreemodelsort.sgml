@@ -14,12 +14,6 @@ GtkTreeModelSort
 
 </para>
 
-<!-- ##### STRUCT GtkTreeModelSort ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION gtk_tree_model_sort_new ##### -->
 <para>
 
@@ -50,6 +44,15 @@ GtkTreeModelSort
 @child_model: 
 <!-- # Unused Parameters # -->
 @model: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_get_model ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_sort_convert_path ##### -->

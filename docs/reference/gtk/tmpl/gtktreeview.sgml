@@ -382,6 +382,27 @@ GtkTreeView
 @col_align: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_set_cursor ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@focus_column: 
+@start_editing: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_cursor ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@focus_column: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_row_activated ##### -->
 <para>
 
@@ -465,17 +486,6 @@ GtkTreeView
 
 @tree_view: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_set_cursor ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@path: 
-@focus_column: 
-@start_editing: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_path_at_pos ##### -->
