@@ -32,9 +32,58 @@
 #define __GDK_PRIVATE_X11_H__
 
 #include <gdk/gdkprivate.h>
-#include "gdkx.h"
+#include <gdk/x11/gdkwindow-x11.h>
+#include <gdk/x11/gdkpixmap-x11.h>
+
+#include "gdkinternals.h"
 
 #include <config.h>
+
+#define GDK_TYPE_GC_X11              (_gdk_gc_x11_get_type ())
+#define GDK_GC_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_X11, GdkGCX11))
+#define GDK_GC_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_X11, GdkGCX11Class))
+#define GDK_IS_GC_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_X11))
+#define GDK_IS_GC_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_X11))
+#define GDK_GC_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_X11, GdkGCX11Class))
+
+typedef struct _GdkCursorPrivate       GdkCursorPrivate;
+typedef struct _GdkVisualPrivate       GdkVisualPrivate;
+typedef struct _GdkGCX11      GdkGCX11;
+typedef struct _GdkGCX11Class GdkGCX11Class;
+
+struct _GdkGCX11
+{
+  GdkGC parent_instance;
+  
+  GC xgc;
+  Display *xdisplay;
+  GdkRegion *clip_region;
+  guint dirty_mask;
+
+  /* We can't conditionalize on HAVE_XFT here, so we simply always
+   * have this here as a gpointer.
+   */
+  gpointer xft_draw;
+  gulong fg_pixel;
+};
+
+struct _GdkGCX11Class
+{
+  GdkGCClass parent_class;
+};
+
+struct _GdkCursorPrivate
+{
+  GdkCursor cursor;
+  Cursor xcursor;
+  Display *xdisplay;
+};
+
+struct _GdkVisualPrivate
+{
+  GdkVisual visual;
+  Visual *xvisual;
+};
 
 void          gdk_xid_table_insert     (XID             *xid,
 					gpointer         data);
@@ -43,6 +92,8 @@ gint          gdk_send_xevent          (Window           window,
 					gboolean         propagate,
 					glong            event_mask,
 					XEvent          *event_send);
+
+GType _gdk_gc_x11_get_type (void);
 
 GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 					 GdkGCValues     *values,
@@ -97,17 +148,21 @@ void     _gdk_moveresize_configure_done    (void);
 
 void     _gdk_keymap_state_changed         (void);
 
-extern GdkDrawableClass  _gdk_x11_drawable_class;
-extern gboolean	         gdk_use_xshm;
-extern Atom		 gdk_wm_delete_window;
-extern Atom		 gdk_wm_take_focus;
-extern Atom		 gdk_wm_protocols;
-extern Atom		 gdk_wm_window_protocols[];
-extern gboolean          gdk_null_window_warnings;
-extern const int         gdk_nevent_masks;
-extern const int         gdk_event_mask_table[];
+GC _gdk_x11_gc_flush (GdkGC *gc);
 
-extern GdkWindowObject *gdk_xgrab_window;  /* Window that currently holds the
+extern GdkDrawableClass  _gdk_x11_drawable_class;
+extern Window		 _gdk_root_window;
+extern gboolean	         _gdk_use_xshm;
+extern Atom		 _gdk_wm_window_protocols[];
+extern const int         _gdk_nenvent_masks;
+extern const int         _gdk_event_mask_table[];
+extern gint		 _gdk_screen;
+extern Atom		 _gdk_selection_property;
+extern gchar		*_gdk_display_name;
+
+extern Window		 _gdk_leader_window;
+
+extern GdkWindowObject *_gdk_xgrab_window;  /* Window that currently holds the
 					    * x pointer grab
 					    */
 

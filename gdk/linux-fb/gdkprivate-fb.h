@@ -407,6 +407,8 @@ void       gdk_shadow_fb_init              (void);
 void       gdk_shadow_fb_stop_updates      (void);
 void       gdk_fb_recompute_all            (void);
 
+extern GdkAtom _gdk_selection_property;
+
 extern GdkFBAngle _gdk_fb_screen_angle;
 
 /* Pointer grab info */

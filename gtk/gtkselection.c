@@ -1439,7 +1439,7 @@ gtk_selection_property_notify (GtkWidget	*widget,
 
 #if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11)
   if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
-      (event->atom != gdk_selection_property)) /* not the right property */
+      (event->atom != gdk_atom_intern ("GDK_SELECTION", FALSE))) /* not the right property */
 #endif
     return FALSE;
   

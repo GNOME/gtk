@@ -228,14 +228,14 @@ _gdk_windowing_window_init (void)
   guint width;
   guint height;
 
-  g_assert (gdk_parent_root == NULL);
+  g_assert (_gdk_parent_root == NULL);
   
   SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
   width  = rect.right - rect.left;
   height = rect.bottom - rect.top;
 
-  gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
-  private = (GdkWindowObject *)gdk_parent_root;
+  _gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
+  private = (GdkWindowObject *)_gdk_parent_root;
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   
@@ -247,7 +247,7 @@ _gdk_windowing_window_init (void)
   impl->width = width;
   impl->height = height;
 
-  gdk_win32_handle_table_insert (&gdk_root_window, gdk_parent_root);
+  gdk_win32_handle_table_insert (&gdk_root_window, _gdk_parent_root);
 }
 
 /* The Win API function AdjustWindowRect may return negative values
@@ -427,7 +427,7 @@ gdk_window_new (GdkWindow     *parent,
   g_return_val_if_fail (attributes != NULL, NULL);
 
   if (!parent)
-    parent = gdk_parent_root;
+    parent = _gdk_parent_root;
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
   
@@ -560,7 +560,7 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_TEMP:
       dwStyle = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       /* a temp window is not necessarily a top level window */
-      dwStyle |= (gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
+      dwStyle |= (_gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
       dwExStyle |= WS_EX_TOOLWINDOW;
       break;
 
@@ -850,7 +850,7 @@ show_window_internal (GdkWindow *window,
 	          ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
 	          ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
 	        }
-              if (parent == gdk_parent_root)
+              if (parent == _gdk_parent_root)
                 SetForegroundWindow (GDK_WINDOW_HWND (window));
 	      if (raise)
 	        BringWindowToTop (GDK_WINDOW_HWND (window));
@@ -1080,7 +1080,7 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (window != NULL);
 
   if (!new_parent)
-    new_parent = gdk_parent_root;
+    new_parent = _gdk_parent_root;
 
   window_private = (GdkWindowObject*) window;
   old_parent_private = (GdkWindowObject *) window_private->parent;
@@ -1663,7 +1663,7 @@ gdk_window_get_geometry (GdkWindow *window,
   g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
   
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -1822,7 +1822,7 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   return_val = NULL;
   GetCursorPos (&pointc);
@@ -1886,7 +1886,7 @@ _gdk_windowing_window_at_pointer (gint *win_x,
 
   if (hwnd == NULL)
     {
-      window = gdk_parent_root;
+      window = _gdk_parent_root;
       if (win_x)
 	*win_x = pointc.x;
       if (win_y)

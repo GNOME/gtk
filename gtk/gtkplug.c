@@ -580,7 +580,7 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
   xevent.xkey.same_screen = TRUE; /* FIXME ? */
 
   gdk_error_trap_push ();
-  XSendEvent (gdk_display,
+  XSendEvent (GDK_DISPLAY (),
 	      GDK_WINDOW_XWINDOW (plug->socket_window),
 	      False, NoEventMask, &xevent);
   gdk_flush ();
@@ -610,7 +610,7 @@ gtk_plug_set_focus (GtkWindow *window,
       xevent.xfocus.detail = FALSE; /* Don't force */
 
       gdk_error_trap_push ();
-      XSendEvent (gdk_display,
+      XSendEvent (GDK_DISPLAY (),
 		  GDK_WINDOW_XWINDOW (plug->socket_window),
 		  False, NoEventMask, &xevent);
       gdk_flush ();
@@ -857,7 +857,7 @@ send_xembed_message (GtkPlug *plug,
       xevent.xclient.data.l[4] = data2;
 
       gdk_error_trap_push ();
-      XSendEvent (gdk_display,
+      XSendEvent (GDK_DISPLAY (),
 		  GDK_WINDOW_XWINDOW (plug->socket_window),
 		  False, NoEventMask, &xevent);
       gdk_flush ();

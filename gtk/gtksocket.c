@@ -705,7 +705,7 @@ gtk_socket_key_press_event (GtkWidget   *widget,
       xevent.xkey.same_screen = TRUE; /* FIXME ? */
       
       gdk_error_trap_push ();
-      XSendEvent (gdk_display,
+      XSendEvent (GDK_DISPLAY (),
 		  GDK_WINDOW_XWINDOW (socket->plug_window),
 		  False, NoEventMask, &xevent);
       gdk_flush ();
@@ -880,7 +880,7 @@ gtk_socket_focus (GtkWidget *widget, GtkDirectionType direction)
 
 
       gdk_error_trap_push ();
-      XSendEvent (gdk_display,
+      XSendEvent (GDK_DISPLAY (),
 		  GDK_WINDOW_XWINDOW (socket->plug_window),
 		  False, NoEventMask, &xevent);
       gdk_flush();
@@ -926,7 +926,7 @@ gtk_socket_send_configure_event (GtkSocket *socket)
   g_return_if_fail (socket->plug_window != NULL);
 
   event.xconfigure.type = ConfigureNotify;
-  event.xconfigure.display = gdk_display;
+  event.xconfigure.display = GDK_DISPLAY ();
 
   event.xconfigure.event = GDK_WINDOW_XWINDOW (socket->plug_window);
   event.xconfigure.window = GDK_WINDOW_XWINDOW (socket->plug_window);
@@ -941,7 +941,7 @@ gtk_socket_send_configure_event (GtkSocket *socket)
   event.xconfigure.override_redirect = False;
 
   gdk_error_trap_push ();
-  XSendEvent (gdk_display,
+  XSendEvent (GDK_DISPLAY (),
 	      GDK_WINDOW_XWINDOW (socket->plug_window),
 	      False, NoEventMask, &event);
   gdk_flush ();
@@ -1087,7 +1087,7 @@ send_xembed_message (GtkSocket *socket,
       xevent.xclient.data.l[4] = data2;
 
       gdk_error_trap_push ();
-      XSendEvent (gdk_display,
+      XSendEvent (GDK_DISPLAY (),
 		  GDK_WINDOW_XWINDOW (socket->plug_window),
 		  False, NoEventMask, &xevent);
       gdk_flush ();

@@ -68,13 +68,13 @@ gdk_atom_name (GdkAtom atom)
   /* If this atom doesn't exist, we'll die with an X error unless
      we take precautions */
 
-  old_error_warnings = gdk_error_warnings;
-  gdk_error_warnings = 0;
-  gdk_error_code = 0;
+  old_error_warnings = _gdk_error_warnings;
+  _gdk_error_warnings = 0;
+  _gdk_error_code = 0;
   t = XGetAtomName (gdk_display, atom);
-  gdk_error_warnings = old_error_warnings;
+  _gdk_error_warnings = old_error_warnings;
 
-  if (gdk_error_code)
+  if (_gdk_error_code)
     {
       if (t)
 	XFree (t);
@@ -125,7 +125,7 @@ gdk_property_get (GdkWindow   *window,
   else
     {
       xdisplay = gdk_display;
-      xwindow = gdk_root_window;
+      xwindow = _gdk_root_window;
     }
 
   ret_data = NULL;
@@ -213,7 +213,7 @@ gdk_property_change (GdkWindow    *window,
   else
     {
       xdisplay = gdk_display;
-      xwindow = gdk_root_window;
+      xwindow = _gdk_root_window;
     }
 
   XChangeProperty (xdisplay, xwindow, property, type,
@@ -240,7 +240,7 @@ gdk_property_delete (GdkWindow *window,
   else
     {
       xdisplay = gdk_display;
-      xwindow = gdk_root_window;
+      xwindow = _gdk_root_window;
     }
 
   XDeleteProperty (xdisplay, xwindow, property);

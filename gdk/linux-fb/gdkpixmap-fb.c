@@ -125,7 +125,7 @@ gdk_pixmap_new (GdkWindow *window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
   
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   if (depth == -1)
     depth = gdk_drawable_get_visual (window)->depth;
@@ -160,7 +160,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   pixmap = gdk_pixmap_new (window, width, height, 1);
 
@@ -188,7 +188,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   if (depth == -1)
     depth = gdk_drawable_get_visual (window)->depth;

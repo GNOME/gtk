@@ -1128,7 +1128,7 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 	WIN32_API_FAILED ("OffsetClipRgn"), ok = FALSE;
     }
 
-  if (gdk_debug_flags & GDK_DEBUG_MISC)
+  if (_gdk_debug_flags & GDK_DEBUG_MISC)
     {
       HGDIOBJ obj;
       LOGBRUSH logbrush;

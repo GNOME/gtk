@@ -302,12 +302,12 @@ gdk_selection_convert (GdkWindow *requestor,
       GdkSelProp *prop;
 
       prop = g_hash_table_lookup (sel_prop_table,
-				  &GDK_WINDOW_HWND (gdk_parent_root));
+				  &GDK_WINDOW_HWND (_gdk_parent_root));
 
       if (prop != NULL)
 	{
 	  g_hash_table_remove (sel_prop_table,
-			       &GDK_WINDOW_HWND (gdk_parent_root));
+			       &GDK_WINDOW_HWND (_gdk_parent_root));
 	  gdk_sel_prop_store (requestor, prop->type, prop->format,
 			      prop->data, prop->length);
 	  g_free (prop);

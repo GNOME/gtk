@@ -30,23 +30,15 @@
 #include "gdkprivate-x11.h"
 #include "config.h"
 
-gboolean          gdk_use_xshm = TRUE;
-gchar            *gdk_display_name = NULL;
+gboolean          _gdk_use_xshm = TRUE;
+gchar            *_gdk_display_name = NULL;
 Display          *gdk_display = NULL;
-gint              gdk_screen;
-Window            gdk_root_window;
-Window            gdk_leader_window;
-Atom              gdk_wm_delete_window;
-Atom              gdk_wm_take_focus;
-Atom              gdk_wm_protocols;
-Atom              gdk_wm_window_protocols[3];
-Atom              gdk_selection_property;
-gchar            *gdk_progclass = NULL;
-gboolean          gdk_null_window_warnings = TRUE;
+gint              _gdk_screen;
+Window            _gdk_root_window;
+Window            _gdk_leader_window;
+Atom              _gdk_wm_window_protocols[3];
+Atom              _gdk_selection_property;
 
-gboolean          gdk_xim_using;  	        /* using XIM Protocol if TRUE */
-GdkWindow        *gdk_xim_window;		/* currently using Widow */
-
-GdkWindowObject *gdk_xgrab_window = NULL;  /* Window that currently holds the
+GdkWindowObject *_gdk_xgrab_window = NULL;  /* Window that currently holds the
                                             *	x pointer grab
                                             */

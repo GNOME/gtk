@@ -44,48 +44,11 @@ G_BEGIN_DECLS
 #define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)
 #define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
 
-typedef struct _GdkColorInfo           GdkColorInfo;
-typedef struct _GdkEventFilter	       GdkEventFilter;
-typedef struct _GdkClientFilter	       GdkClientFilter;
-
-typedef enum {
-  GDK_COLOR_WRITEABLE = 1 << 0
-} GdkColorInfoFlags;
-
-struct _GdkColorInfo
-{
-  GdkColorInfoFlags flags;
-  guint ref_count;
-};
-
-struct _GdkEventFilter {
-  GdkFilterFunc function;
-  gpointer data;
-};
-
-struct _GdkClientFilter {
-  GdkAtom       type;
-  GdkFilterFunc function;
-  gpointer      data;
-};
-
 void gdk_window_destroy_notify	     (GdkWindow *window);
 
-GDKVAR GdkWindow  	*gdk_parent_root;
-GDKVAR gint		 gdk_error_code;
-GDKVAR gint		 gdk_error_warnings;
-
-#ifndef GDK_DISABLE_DEPRECATED
-
-typedef struct _GdkFontPrivate	       GdkFontPrivate;
-
-struct _GdkFontPrivate
-{
-  GdkFont font;
-  guint ref_count;
-};
-
-#endif /* GDK_DISABLE_DEPRECATED */
+void gdk_synthesize_window_state (GdkWindow     *window,
+                                  GdkWindowState unset_flags,
+                                  GdkWindowState set_flags);
 
 G_END_DECLS
 

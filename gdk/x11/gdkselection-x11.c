@@ -42,7 +42,7 @@ struct _OwnerInfo
   gulong     serial;
 };
 
-GSList *owner_list;
+static GSList *owner_list;
 
 /* When a window is destroyed we check if it is the owner
  * of any selections. This is somewhat inefficient, but
@@ -170,7 +170,7 @@ gdk_selection_convert (GdkWindow *requestor,
     return;
 
   XConvertSelection (GDK_WINDOW_XDISPLAY (requestor), selection, target,
-		     gdk_selection_property, GDK_WINDOW_XID (requestor), time);
+		     _gdk_selection_property, GDK_WINDOW_XID (requestor), time);
 }
 
 gint
@@ -199,7 +199,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
   t = NULL;
   XGetWindowProperty (GDK_WINDOW_XDISPLAY (requestor),
 		      GDK_WINDOW_XID (requestor),
-		      gdk_selection_property, 0, 0, False,
+		      _gdk_selection_property, 0, 0, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);
 
@@ -230,7 +230,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
      Otherwise there's no guarantee we'll win the race ... */
   XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
 		      GDK_DRAWABLE_XID (requestor),
-		      gdk_selection_property, 0, (nbytes + 3) / 4, False,
+		      _gdk_selection_property, 0, (nbytes + 3) / 4, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);
 

@@ -4,15 +4,6 @@
 
 #include <gtk/gtk.h>
 
-#ifdef GDK_WINDOWING_X11
-#include <gdk/x11/gdkx.h>
-#elif defined (GDK_WINDOWING_WIN32)
-#include <gdk/win32/gdkwin32.h>
-#elif defined (GDK_WINDOWING_FB)
-#include <gdk/linux-fb/gdkfb.h>
-#endif
-
-
 void
 keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
 {
@@ -105,7 +96,7 @@ configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
                 GdkWindow *root;
                 GdkPixbuf *new_pixbuf;
 
-                root = GDK_ROOT_PARENT ();
+                root = gdk_get_default_root_window ();
                 new_pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
                                                            0, 0, 0, 0, evt->width, evt->height);
                 gtk_object_set_data (GTK_OBJECT (drawing_area), "pixbuf", new_pixbuf);
@@ -128,7 +119,7 @@ main (int argc, char **argv)
 
         gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
-        root = GDK_ROOT_PARENT ();
+        root = gdk_get_default_root_window ();
         pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
                                                0, 0, 0, 0, 150, 160);
    

@@ -84,7 +84,7 @@ handle_mouse_movement(GdkFBMouse *mouse)
   if (_gdk_fb_pointer_grab_confine)
     mousewin = _gdk_fb_pointer_grab_confine;
   else
-    mousewin = gdk_parent_root;
+    mousewin = _gdk_parent_root;
 
   mousewin_private = GDK_DRAWABLE_IMPL_FBDATA (mousewin);
   
@@ -107,7 +107,7 @@ handle_mouse_movement(GdkFBMouse *mouse)
       
       cursor_win = _gdk_fb_pointer_grab_window;
       w = win;
-      while (w != gdk_parent_root)
+      while (w != _gdk_parent_root)
 	{
 	  if (w == _gdk_fb_pointer_grab_window)
 	    {
@@ -139,7 +139,7 @@ handle_mouse_movement(GdkFBMouse *mouse)
       event->motion.y = y;
       event->motion.state = state;
       event->motion.is_hint = FALSE;
-      event->motion.device = gdk_core_pointer;
+      event->motion.device = _gdk_core_pointer;
       event->motion.x_root = mouse->x;
       event->motion.y_root = mouse->y;
     }
@@ -179,15 +179,15 @@ send_button_event (GdkFBMouse *mouse,
 	(mouse->button_pressed[2] ? GDK_BUTTON3_MASK : 0) |
 	(1 << (button + 8)) /* badhack */ |
 	gdk_fb_keyboard_modifiers ();
-      event->button.device = gdk_core_pointer;
+      event->button.device = _gdk_core_pointer;
       event->button.x_root = mouse->x;
       event->button.y_root = mouse->y;
       
-      gdk_event_queue_append (event);
+      _gdk_event_queue_append (event);
       
       /* For double-clicks */
       if (press_event)
-	gdk_event_button_generate (event);
+	_gdk_event_button_generate (event);
     }
 
   nbuttons = 0;

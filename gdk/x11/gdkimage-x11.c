@@ -52,6 +52,15 @@
 #include "gdkprivate.h"
 #include "gdkprivate-x11.h"
 
+typedef struct _GdkImagePrivateX11     GdkImagePrivateX11;
+
+struct _GdkImagePrivateX11
+{
+  XImage *ximage;
+  Display *xdisplay;
+  gpointer x_shm_info;
+};
+
 static GList *image_list = NULL;
 static gpointer parent_class = NULL;
 
@@ -118,7 +127,7 @@ gdk_image_finalize (GObject *object)
 
 
 void
-gdk_image_exit (void)
+_gdk_image_exit (void)
 {
   GdkImage *image;
 
@@ -187,11 +196,11 @@ gdk_image_check_xshm(Display *display)
 void
 _gdk_windowing_image_init (void)
 {
-  if (gdk_use_xshm)
+  if (_gdk_use_xshm)
     {
       if (!gdk_image_check_xshm (gdk_display))
 	{
-	  gdk_use_xshm = False;
+	  _gdk_use_xshm = False;
 	}
     }
 }
@@ -237,7 +246,7 @@ gdk_image_new (GdkImageType  type,
 	{
 	case GDK_IMAGE_SHARED:
 #ifdef USE_SHM
-	  if (gdk_use_xshm)
+	  if (_gdk_use_xshm)
 	    {
 	      private->x_shm_info = g_new (XShmSegmentInfo, 1);
 	      x_shm_info = private->x_shm_info;
@@ -249,7 +258,7 @@ gdk_image_new (GdkImageType  type,
 	      if (private->ximage == NULL)
 		{
 		  g_warning ("XShmCreateImage failed");
-		  gdk_use_xshm = FALSE;
+		  _gdk_use_xshm = FALSE;
 
 		  goto error;
 		}
@@ -268,7 +277,7 @@ gdk_image_new (GdkImageType  type,
 		  if (errno != EINVAL)
 		    {
 		      g_warning ("shmget failed: error %d (%s)", errno, g_strerror (errno));
-		      gdk_use_xshm = FALSE;
+		      _gdk_use_xshm = FALSE;
 		    }
 
 		  goto error;
@@ -285,7 +294,7 @@ gdk_image_new (GdkImageType  type,
 		   * EMFILE, which would mean that we've exceeded the per-process
 		   * Shm segment limit.
 		   */
-		  gdk_use_xshm = FALSE;
+		  _gdk_use_xshm = FALSE;
 		  goto error;
 		}
 
@@ -297,7 +306,7 @@ gdk_image_new (GdkImageType  type,
 	      if (gdk_error_trap_pop ())
 		{
 		  /* this is the common failure case so omit warning */
-		  gdk_use_xshm = FALSE;
+		  _gdk_use_xshm = FALSE;
 		  goto error;
 		}
 	      
@@ -408,7 +417,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
 
       /* Translate screen area into window coordinates */
       XTranslateCoordinates (gdk_display,
-			     gdk_root_window,
+			     _gdk_root_window,
                              impl->xid,
 			     0, 0, 
 			     &screen_rect.x, &screen_rect.y, 
@@ -599,7 +608,7 @@ gdk_x11_image_destroy (GdkImage *image)
 
   private = PRIVATE_DATA (image);
 
-  if (private == NULL) /* This means that gdk_image_exit() destroyed the
+  if (private == NULL) /* This means that _gdk_image_exit() destroyed the
                         * image already, and now we're called a second
                         * time from _finalize()
                         */
@@ -639,4 +648,28 @@ gdk_x11_image_destroy (GdkImage *image)
 
   g_free (private);
   image->windowing_data = NULL;
+}
+
+Display *
+gdk_x11_image_get_xdisplay (GdkImage *image)
+{
+  GdkImagePrivateX11 *private;
+
+  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
+
+  private = PRIVATE_DATA (image);
+
+  return private->xdisplay;
+}
+
+XImage *
+gdk_x11_image_get_ximage (GdkImage *image)
+{
+  GdkImagePrivateX11 *private;
+
+  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
+
+  private = PRIVATE_DATA (image);
+
+  return private->ximage;
 }

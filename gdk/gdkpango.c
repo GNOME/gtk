@@ -95,7 +95,7 @@ gdk_pango_get_gc (PangoContext   *context,
       return NULL;
     }
 
-  result = gdk_gc_new (gdk_parent_root);
+  result = gdk_gc_new (gdk_get_default_root_window ());
   gdk_gc_copy (result, base_gc);
   
   if (fg_color)

@@ -106,6 +106,7 @@ struct _GtkWindow
   guint frame_bottom;
   
   GdkModifierType mnemonic_modifier;
+  gpointer gtk_reserved1;	/* For future GdkScreen * */
 };
 
 struct _GtkWindowClass

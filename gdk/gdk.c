@@ -51,14 +51,6 @@ struct _GdkErrorTrap
   gint error_code;
 };
 
-/* 
- * Private function declarations
- */
-
-GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
-					 GdkEvent  *event,
-					 gpointer   data);
-
 /* Private variable declarations
  */
 static int gdk_initialized = 0;			    /* 1 if the library is initialized,
@@ -67,6 +59,8 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 
 static GSList *gdk_error_traps = NULL;               /* List of error traps */
 static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
+
+static gchar  *gdk_progclass = NULL;
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
@@ -214,19 +208,25 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 static void
 gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
 {
-  gdk_debug_flags |= g_parse_debug_string (value,
-					   (GDebugKey *) gdk_debug_keys,
-					   gdk_ndebug_keys);
+  _gdk_debug_flags |= g_parse_debug_string (value,
+					    (GDebugKey *) gdk_debug_keys,
+					    gdk_ndebug_keys);
 }
 
 static void
 gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
 {
-  gdk_debug_flags &= ~g_parse_debug_string (value,
-					    (GDebugKey *) gdk_debug_keys,
-					    gdk_ndebug_keys);
+  _gdk_debug_flags &= ~g_parse_debug_string (value,
+					     (GDebugKey *) gdk_debug_keys,
+					     gdk_ndebug_keys);
 }
 #endif /* G_ENABLE_DEBUG */
+
+static void
+gdk_arg_class_cb (const char *key, const char *value, gpointer user_data)
+{
+  gdk_set_program_class (value);
+}
 
 static void
 gdk_arg_name_cb (const char *key, const char *value, gpointer user_data)
@@ -235,6 +235,7 @@ gdk_arg_name_cb (const char *key, const char *value, gpointer user_data)
 }
 
 static GdkArgDesc gdk_args[] = {
+  { "class" ,       GDK_ARG_STRING,   NULL, gdk_arg_class_cb    },
   { "name",         GDK_ARG_STRING,   NULL, gdk_arg_name_cb     },
 #ifdef G_ENABLE_DEBUG
   { "gdk-debug",    GDK_ARG_CALLBACK, NULL, gdk_arg_debug_cb    },
@@ -307,7 +308,7 @@ gdk_init_check (int    *argc,
   {
     gchar *debug_string = getenv("GDK_DEBUG");
     if (debug_string != NULL)
-      gdk_debug_flags = g_parse_debug_string (debug_string,
+      _gdk_debug_flags = g_parse_debug_string (debug_string,
 					      (GDebugKey *) gdk_debug_keys,
 					      gdk_ndebug_keys);
   }
@@ -332,12 +333,12 @@ gdk_init_check (int    *argc,
   if (!result)
     return FALSE;
   
-  gdk_visual_init ();
+  _gdk_visual_init ();
   _gdk_windowing_window_init ();
   _gdk_windowing_image_init ();
-  gdk_events_init ();
-  gdk_input_init ();
-  gdk_dnd_init ();
+  _gdk_events_init ();
+  _gdk_input_init ();
+  _gdk_dnd_init ();
 
   gdk_initialized = 1;
 
@@ -419,11 +420,10 @@ gdk_exit_func (void)
   
   if (gdk_initialized)
     {
-      gdk_image_exit ();
-      gdk_input_exit ();
-      gdk_key_repeat_restore ();
+      _gdk_image_exit ();
+      _gdk_input_exit ();
 
-      gdk_windowing_exit ();
+      _gdk_windowing_exit ();
       
       gdk_initialized = 0;
     }
@@ -462,11 +462,11 @@ gdk_error_trap_push (void)
   gdk_error_traps = node;
   
   trap = node->data;
-  trap->error_code = gdk_error_code;
-  trap->error_warnings = gdk_error_warnings;
+  trap->error_code = _gdk_error_code;
+  trap->error_warnings = _gdk_error_warnings;
 
-  gdk_error_code = 0;
-  gdk_error_warnings = 0;
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
 }
 
 /*************************************************************
@@ -493,11 +493,11 @@ gdk_error_trap_pop (void)
   node->next = gdk_error_trap_free_list;
   gdk_error_trap_free_list = node;
   
-  result = gdk_error_code;
+  result = _gdk_error_code;
   
   trap = node->data;
-  gdk_error_code = trap->error_code;
-  gdk_error_warnings = trap->error_warnings;
+  _gdk_error_code = trap->error_code;
+  _gdk_error_warnings = trap->error_warnings;
   
   return result;
 }
@@ -514,3 +514,23 @@ gdk_threads_leave ()
   GDK_THREADS_LEAVE ();
 }
 
+G_CONST_RETURN char *
+gdk_get_program_class (void)
+{
+  if (gdk_progclass == NULL)
+    {
+      gdk_progclass = g_strdup (g_get_prgname ());
+      gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);
+    }
+  
+  return gdk_progclass;
+}
+
+void
+gdk_set_program_class (const char *program_class)
+{
+  if (gdk_progclass)
+    g_free (gdk_progclass);
+
+  gdk_progclass = g_strdup (program_class);
+}

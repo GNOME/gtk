@@ -210,7 +210,7 @@ _gdk_fb_get_image (GdkDrawable *drawable,
   fbd.drawable_data.depth = image->depth;
   fbd.drawable_data.window_type = GDK_DRAWABLE_PIXMAP;
 
-  if (GDK_DRAWABLE_FBDATA (drawable)->mem == GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->mem)
+  if (GDK_DRAWABLE_FBDATA (drawable)->mem == GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->mem)
     {
       region = gdk_fb_clip_region (drawable, _gdk_fb_screen_gc, TRUE, FALSE, FALSE);
 
@@ -311,6 +311,6 @@ gdk_image_put_pixel (GdkImage *image,
 }
 
 void
-gdk_image_exit(void)
+_gdk_image_exit(void)
 {
 }

@@ -585,7 +585,7 @@ gtk_window_init (GtkWindow *window)
 
   window->title = NULL;
   window->wmclass_name = g_strdup (g_get_prgname ());
-  window->wmclass_class = g_strdup (gdk_progclass);
+  window->wmclass_class = g_strdup (gdk_get_program_class ());
   window->wm_role = NULL;
   window->geometry_info = NULL;
   window->type = GTK_WINDOW_TOPLEVEL;

@@ -49,6 +49,7 @@ struct _GtkInvisible
 {
   GtkWidget widget;
   gboolean has_user_ref_count;
+  gpointer gtk_reserved1;	/* For future GdkScreen * */
 };
 
 struct _GtkInvisibleClass

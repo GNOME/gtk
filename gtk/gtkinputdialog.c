@@ -199,7 +199,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
       for (tmp_list = device_info; tmp_list; tmp_list = tmp_list->next) {
 	GdkDevice *info = (GdkDevice *)(tmp_list->data);
-	if (info != gdk_core_pointer)
+	if (info != gdk_device_get_core_pointer ())
 	  {
 	    menuitem = gtk_menu_item_new_with_label(info->name);
 

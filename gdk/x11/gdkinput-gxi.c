@@ -49,30 +49,30 @@ static GdkDevicePrivate *gdk_input_current_device;
 static GdkDevicePrivate *gdk_input_core_pointer;
 
 void
-gdk_input_init(void)
+_gdk_input_init(void)
 {
   GList *tmp_list;
   
   _gdk_init_input_core ();
-  gdk_input_ignore_core = FALSE;
+  _gdk_input_ignore_core = FALSE;
   gdk_input_core_pointer = NULL;
 
-  if (!gdk_input_gxid_host) 
+  if (!_gdk_input_gxid_host) 
     {
-      gdk_input_gxid_host = getenv("GXID_HOST");
+      _gdk_input_gxid_host = getenv("GXID_HOST");
     }
-  if (!gdk_input_gxid_port) 
+  if (!_gdk_input_gxid_port) 
     {
       char *t = getenv("GXID_PORT");
       if (t)
-	gdk_input_gxid_port = atoi(t);
+	_gdk_input_gxid_port = atoi(t);
     }
   
   gdk_input_common_init(TRUE);
 
   /* find initial core pointer */
   
-  for (tmp_list = gdk_input_devices; tmp_list; tmp_list = tmp_list->next) 
+  for (tmp_list = _gdk_input_devices; tmp_list; tmp_list = tmp_list->next) 
     {
       GdkDevicePrivate *gdkdev = (GdkDevicePrivate *)tmp_list->data;
       if (gdk_input_is_extension_device (gdkdev))
@@ -94,7 +94,7 @@ gdk_input_gxi_select_notify (GdkDevicePrivate *gdkdev)
 
   ChangeDeviceNotify  (gdkdev->xdevice, gdkdev->changenotify_type, class);
 
-  XSelectExtensionEvent (gdk_display, gdk_root_window, &class, 1);
+  XSelectExtensionEvent (gdk_display, _gdk_root_window, &class, 1);
 }
 
 /* Set the core pointer. Device should already be enabled. */
@@ -167,7 +167,7 @@ gdk_device_set_mode (GdkDevice      *device,
 
   if (old_mode != GDK_MODE_DISABLED)
     {
-      for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
+      for (tmp_list = _gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
 	{
 	  input_window = (GdkInputWindow *)tmp_list->data;
 	  if (input_window->mode != GDK_EXTENSION_EVENTS_CURSOR)
@@ -177,7 +177,7 @@ gdk_device_set_mode (GdkDevice      *device,
   
   if (mode != GDK_MODE_DISABLED)
     {
-      for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
+      for (tmp_list = _gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
 	{
 	  input_window = (GdkInputWindow *)tmp_list->data;
 	  if (input_window->mode != GDK_EXTENSION_EVENTS_CURSOR)
@@ -320,7 +320,7 @@ gdk_input_gxi_update_device (GdkDevicePrivate *gdkdev)
 	}
       if (gdkdev->needs_update && gdkdev->xdevice)
 	{
-	  for (t = gdk_input_windows; t; t = t->next)
+	  for (t = _gdk_input_windows; t; t = t->next)
 	    gdk_input_common_select_events (((GdkInputWindow *)t->data)->window,
 					 gdkdev);
 	  gdkdev->needs_update = 0;
@@ -365,7 +365,7 @@ _gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 
   if (!gdkdev->claimed)
     {
-      if (gxid_claim_device(gdk_input_gxid_host, gdk_input_gxid_port,
+      if (gxid_claim_device(_gdk_input_gxid_host, _gdk_input_gxid_port,
 			    gdkdev->deviceid,
 			    GDK_WINDOW_XWINDOW(window), FALSE) !=
 	  GXID_RETURN_OK)
@@ -394,7 +394,7 @@ _gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 
   if (gdkdev->claimed)
     {
-      gxid_release_device(gdk_input_gxid_host, gdk_input_gxid_port,
+      gxid_release_device(_gdk_input_gxid_host, _gdk_input_gxid_port,
 			  gdkdev->deviceid,
 			  GDK_WINDOW_XWINDOW(window));
 
@@ -529,7 +529,7 @@ _gdk_input_grab_pointer (GdkWindow *     window,
   GdkInputWindow *input_window;
   GdkDevicePrivate *gdkdev;
 
-  tmp_list = gdk_input_windows;
+  tmp_list = _gdk_input_windows;
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;
@@ -542,7 +542,7 @@ _gdk_input_grab_pointer (GdkWindow *     window,
       tmp_list = tmp_list->next;
     }
 
-  tmp_list = gdk_input_devices;
+  tmp_list = _gdk_input_devices;
   while (tmp_list)
     {
       gdkdev = (GdkDevicePrivate *)tmp_list->data;
@@ -563,7 +563,7 @@ _gdk_input_ungrab_pointer (guint32 time)
   GdkInputWindow *input_window;
   GList *tmp_list;
 
-  tmp_list = gdk_input_windows;
+  tmp_list = _gdk_input_windows;
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;

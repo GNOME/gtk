@@ -31,6 +31,11 @@
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
 
+struct _GdkVisualClass
+{
+  GObjectClass parent_class;
+};
+
 static void     gdk_visual_add            (GdkVisual *visual);
 static void     gdk_visual_decompose_mask (gulong     mask,
 					   gint      *shift,
@@ -109,7 +114,7 @@ gdk_visual_get_type (void)
 
 
 void
-gdk_visual_init (void)
+_gdk_visual_init (void)
 {
   static const gint possible_depths[7] = { 32, 24, 16, 15, 8, 4, 1 };
   static const GdkVisualType possible_types[6] =
@@ -132,14 +137,14 @@ gdk_visual_init (void)
   int nxvisuals;
   int i, j;
 
-  visual_template.screen = gdk_screen;
+  visual_template.screen = _gdk_screen;
   visual_list = XGetVisualInfo (gdk_display, VisualScreenMask, &visual_template, &nxvisuals);
   
   visuals = g_new (GdkVisualPrivate *, nxvisuals);
   for (i = 0; i < nxvisuals; i++)
     visuals[i] = g_object_new (GDK_TYPE_VISUAL, NULL);
 
-  default_xvisual = DefaultVisual (gdk_display, gdk_screen);
+  default_xvisual = DefaultVisual (gdk_display, _gdk_screen);
 
   nvisuals = 0;
   for (i = 0; i < nxvisuals; i++)
@@ -262,7 +267,7 @@ gdk_visual_init (void)
       }
 
 #ifdef G_ENABLE_DEBUG 
-  if (gdk_debug_flags & GDK_DEBUG_MISC)
+  if (_gdk_debug_flags & GDK_DEBUG_MISC)
     for (i = 0; i < nvisuals; i++)
       g_message ("visual: %s: %d",
 		 visual_names[visuals[i]->visual.type],
@@ -483,4 +488,12 @@ gdk_visual_equal (Visual *a,
 		  Visual *b)
 {
   return (a->visualid == b->visualid);
+}
+
+Visual *
+gdk_x11_visual_get_xvisual (GdkVisual *visual)
+{
+  g_return_val_if_fail (visual != NULL, NULL);
+
+  return  ((GdkVisualPrivate*) visual)->xvisual;
 }

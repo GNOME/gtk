@@ -145,6 +145,20 @@ the device ID for the core pointer device.
 </para>
 
 
+<!-- ##### MACRO GDK_GC_X11 ##### -->
+<para>
+
+</para>
+
+@object: 
+
+<!-- ##### MACRO GDK_GC_X11_GET_CLASS ##### -->
+<para>
+
+</para>
+
+@obj: 
+
 <!-- ##### STRUCT GdkColorContext ##### -->
 <para>
 
@@ -531,6 +545,18 @@ status information, so the application does not need to do anything.
 @num_colors: 
 @Returns: 
 
+<!-- ##### VARIABLE gdk_core_pointer ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gdk_display_name ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gdk_ic_attr_destroy ##### -->
 <para>
 Destroys the given #GdkICAttr struct, freeing the allocated memory.
@@ -767,4 +793,28 @@ they will be ignored.
 @xtilt: location to store current tilt in the x direction.
 @ytilt: location to store current tilt in the y direction.
 @mask: location to store the current modifier state.
+
+<!-- ##### VARIABLE gdk_leader_window ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gdk_progclass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gdk_screen ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gdk_selection_property ##### -->
+<para>
+
+</para>
+
 

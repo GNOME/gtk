@@ -57,7 +57,7 @@ gdk_fb_get_time(void)
 }
 
 void 
-gdk_events_init (void)
+_gdk_events_init (void)
 {
   GSource *source;
 
@@ -87,7 +87,7 @@ gdk_events_init (void)
 gboolean
 gdk_events_pending (void)
 {
-  return gdk_event_queue_find_first () ? TRUE : FALSE;
+  return _gdk_event_queue_find_first () ? TRUE : FALSE;
 }
 
 GdkEvent*
@@ -96,7 +96,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   GList *ltmp;
   g_return_val_if_fail (window != NULL, NULL);
   
-  for (ltmp = gdk_queued_events; ltmp; ltmp = ltmp->next)
+  for (ltmp = _gdk_queued_events; ltmp; ltmp = ltmp->next)
     {
       GdkEvent *event = ltmp->data;
       if (event->type == GDK_EXPOSE &&
@@ -108,7 +108,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
     {
       GdkEvent *retval = ltmp->data;
 
-      gdk_event_queue_remove_link (ltmp);
+      _gdk_event_queue_remove_link (ltmp);
       g_list_free_1 (ltmp);
 
       return retval;
@@ -118,7 +118,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
 }
 
 void
-gdk_events_queue (void)
+_gdk_events_queue (void)
 {  
 }
 
@@ -138,7 +138,7 @@ fb_events_check (GSource    *source)
 
   GDK_THREADS_ENTER ();
 
-  retval = (gdk_event_queue_find_first () != NULL);
+  retval = (_gdk_event_queue_find_first () != NULL);
 
   GDK_THREADS_LEAVE ();
 
@@ -154,18 +154,18 @@ fb_events_dispatch (GSource  *source,
 
   GDK_THREADS_ENTER ();
 
-  while ((event = gdk_event_unqueue ()))
+  while ((event = _gdk_event_unqueue ()))
     {
       if (event->type == GDK_EXPOSE &&
-	  event->expose.window == gdk_parent_root)
+	  event->expose.window == _gdk_parent_root)
 	gdk_window_clear_area (event->expose.window,
 			       event->expose.area.x,
 			       event->expose.area.y,
 			       event->expose.area.width,
 			       event->expose.area.height);
 
-      else if (gdk_event_func)
-	(*gdk_event_func) (event, gdk_event_data);
+      else if (_gdk_event_func)
+	(*_gdk_event_func) (event, _gdk_event_data);
 
       gdk_event_free (event);
     }

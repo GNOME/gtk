@@ -32,6 +32,19 @@
 #include "gdkfont.h"
 #include "gdkprivate-x11.h"
 
+typedef struct _GdkFontPrivateX        GdkFontPrivateX;
+
+struct _GdkFontPrivateX
+{
+  GdkFontPrivate base;
+  /* XFontStruct *xfont; */
+  /* generic pointer point to XFontStruct or XFontSet */
+  gpointer xfont;
+  Display *xdisplay;
+
+  GSList *names;
+};
+
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
 
@@ -648,3 +661,20 @@ gdk_text_extents_wc (GdkFont        *font,
     }
 
 }
+
+Display *
+gdk_x11_font_get_xdisplay (GdkFont *font)
+{
+  g_return_val_if_fail (font != NULL, NULL);
+
+  return ((GdkFontPrivateX *)font)->xdisplay;
+}
+
+gpointer
+gdk_x11_font_get_xfont (GdkFont *font)
+{
+  g_return_val_if_fail (font != NULL, NULL);
+
+  return ((GdkFontPrivateX *)font)->xfont;
+}
+

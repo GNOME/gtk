@@ -143,23 +143,23 @@ _gdk_windowing_window_init (void)
   attr.cursor = NULL;
   attr.event_mask = GDK_EXPOSURE_MASK;
   attr.wclass = GDK_INPUT_OUTPUT;
-  gdk_parent_root = gdk_window_new (NULL, &attr, GDK_WA_CURSOR);
-  private = (GdkWindowObject *)gdk_parent_root;
+  _gdk_parent_root = gdk_window_new (NULL, &attr, GDK_WA_CURSOR);
+  private = (GdkWindowObject *)_gdk_parent_root;
 
   private->state = 0;
 
-  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->lim_x = attr.width;
-  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->lim_y = attr.height;
+  GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->lim_x = attr.width;
+  GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->lim_y = attr.height;
 
-  _gdk_fb_screen_gc = gdk_gc_new (gdk_parent_root);
+  _gdk_fb_screen_gc = gdk_gc_new (_gdk_parent_root);
 
-  gdk_fb_drawable_clear (gdk_parent_root);
+  gdk_fb_drawable_clear (_gdk_parent_root);
   
   /* Must be done after root is created, since gdk_cursor_new()
-   * references gdk_parent_root.
+   * references _gdk_parent_root.
    */
   cursor = gdk_cursor_new (GDK_LEFT_PTR);
-  gdk_window_set_cursor (gdk_parent_root, cursor);
+  gdk_window_set_cursor (_gdk_parent_root, cursor);
 }
 
 GdkWindow*
@@ -180,7 +180,7 @@ gdk_window_new (GdkWindow     *parent,
   if (!parent ||
       (attributes->window_type != GDK_WINDOW_CHILD &&
        attributes->window_type != GDK_WINDOW_TEMP))
-    parent = gdk_parent_root;
+    parent = _gdk_parent_root;
   
   parent_private = (GdkWindowObject*) parent;
   
@@ -241,7 +241,7 @@ gdk_window_new (GdkWindow     *parent,
 	  break;
 	  
 	case GDK_WINDOW_ROOT:
-	  if (gdk_parent_root)
+	  if (_gdk_parent_root)
 	    g_error ("cannot make windows of type GDK_WINDOW_ROOT");
 	  break;
 	case GDK_DRAWABLE_PIXMAP:
@@ -288,7 +288,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   r.height = GDK_DRAWABLE_IMPL_FBDATA (window)->height;
   /* Clear the root window, as it might be visible under
      the destroyed window */
-  gdk_window_clear_area (gdk_parent_root,
+  gdk_window_clear_area (_gdk_parent_root,
 			 r.x,
 			 r.y,
 			 r.width,
@@ -459,9 +459,9 @@ gdk_fb_redraw_all (void)
 {
   GdkRectangle r;
   r.x = r.y = 0;
-  r.width = GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->width;
-  r.height = GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->height;
-  gdk_window_invalidate_rect_clear (gdk_parent_root, &r);
+  r.width = GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->width;
+  r.height = GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->height;
+  gdk_window_invalidate_rect_clear (_gdk_parent_root, &r);
   gdk_window_process_all_updates ();
 }
 
@@ -471,14 +471,14 @@ static GdkWindow *
 gdk_fb_window_find_toplevel (GdkWindow *window)
 {
   GdkWindowObject *priv = (GdkWindowObject *)window;
-  while (priv != (GdkWindowObject *)gdk_parent_root)
+  while (priv != (GdkWindowObject *)_gdk_parent_root)
     {
-      if ((priv->parent == (GdkWindowObject *)gdk_parent_root) && GDK_WINDOW_IS_MAPPED (priv))
+      if ((priv->parent == (GdkWindowObject *)_gdk_parent_root) && GDK_WINDOW_IS_MAPPED (priv))
 	return (GdkWindow *)priv;
       priv = priv->parent;
     }
  
-  return gdk_parent_root;
+  return _gdk_parent_root;
 }
 
 GdkWindow *
@@ -488,7 +488,7 @@ gdk_fb_window_find_focus (void)
     return _gdk_fb_keyboard_grab_window;
   
   if (!gdk_fb_focused_window)
-    gdk_fb_focused_window = gdk_window_ref (gdk_parent_root);
+    gdk_fb_focused_window = gdk_window_ref (_gdk_parent_root);
   
   return gdk_fb_focused_window;
 }
@@ -589,7 +589,7 @@ gdk_fb_window_send_crossing_events (GdkWindow *src,
     return;
 
   if (gdk_fb_window_containing_pointer == NULL)
-    gdk_fb_window_containing_pointer = gdk_window_ref (gdk_parent_root);
+    gdk_fb_window_containing_pointer = gdk_window_ref (_gdk_parent_root);
 
   if (src)
     a = src;
@@ -605,7 +605,7 @@ gdk_fb_window_send_crossing_events (GdkWindow *src,
    * might have died.
    */
   if (GDK_WINDOW_DESTROYED (a))
-    a = gdk_parent_root;
+    a = _gdk_parent_root;
   
   gdk_fb_mouse_get_info (&x, &y, &my_mask);
 
@@ -774,7 +774,7 @@ gdk_window_show (GdkWindow *window)
 	  rect.y = GDK_DRAWABLE_IMPL_FBDATA (window)->llim_y;
 	  rect.width = GDK_DRAWABLE_IMPL_FBDATA (window)->lim_x - rect.x;
 	  rect.height = GDK_DRAWABLE_IMPL_FBDATA (window)->lim_y - rect.y;
-	  gdk_window_invalidate_rect (gdk_parent_root, &rect, TRUE);
+	  gdk_window_invalidate_rect (_gdk_parent_root, &rect, TRUE);
 	}
     }
 }
@@ -823,13 +823,13 @@ gdk_window_hide (GdkWindow *window)
 
       /* Clear the root window, as it might be visible under
 	 the hidden window*/
-      gdk_window_clear_area (gdk_parent_root,
+      gdk_window_clear_area (_gdk_parent_root,
 			     r.x,
 			     r.y,
 			     r.width,
 			     r.height);
       /* Invalidate the rect */
-      gdk_window_invalidate_rect (gdk_parent_root, &r, TRUE);
+      gdk_window_invalidate_rect (_gdk_parent_root, &r, TRUE);
       
       if (do_hide)
 	gdk_fb_cursor_unhide ();
@@ -966,13 +966,13 @@ recompute_rowstride(GdkDrawable *drawable)
 void
 gdk_fb_recompute_all (void)
 {
-  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->width = gdk_display->fb_width;
-  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->height = gdk_display->fb_height;
+  GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->width = gdk_display->fb_width;
+  GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->height = gdk_display->fb_height;
   
-  recompute_abs_positions (gdk_parent_root,
+  recompute_abs_positions (_gdk_parent_root,
 			   0, 0, 0, 0,
 			   gdk_display->fb_width, gdk_display->fb_height);
-  recompute_rowstride (gdk_parent_root);
+  recompute_rowstride (_gdk_parent_root);
 }
 
 static void
@@ -985,7 +985,7 @@ recompute_drawable (GdkDrawable *drawable)
 
       parent = (GdkWindow *)private->parent;
       if (!parent)
-	parent = gdk_parent_root;
+	parent = _gdk_parent_root;
 
       recompute_abs_positions (drawable,
 			       GDK_DRAWABLE_IMPL_FBDATA (parent)->abs_x,
@@ -1081,7 +1081,7 @@ gdk_fb_window_move_resize (GdkWindow *window,
 		      handle_cursor = TRUE;
 		    }
 
-		  gdk_fb_drawing_context_init (&fbdc, GDK_DRAWABLE_IMPL (gdk_parent_root), NULL, FALSE, FALSE);
+		  gdk_fb_drawing_context_init (&fbdc, GDK_DRAWABLE_IMPL (_gdk_parent_root), NULL, FALSE, FALSE);
 		  
 		  draw_dir = 1;
 		  if ((dy>0) || ((dy==0) && (dx>0)))
@@ -1091,9 +1091,9 @@ gdk_fb_window_move_resize (GdkWindow *window,
 		    {
 		      GdkRegionBox *reg = &region->rects[i];
 
-		      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL(gdk_parent_root),
+		      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL(_gdk_parent_root),
 					      _gdk_fb_screen_gc,
-					      GDK_DRAWABLE_IMPL(gdk_parent_root),
+					      GDK_DRAWABLE_IMPL(_gdk_parent_root),
 					      &fbdc,
 					      (reg->x1 - dx),
 					      (reg->y1 - dy),
@@ -1119,13 +1119,13 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	      root_rect.height = gdk_screen_height();
 	      gdk_region_get_clipbox (new_region, &update_rect);
 	      if (gdk_rectangle_intersect (&update_rect, &root_rect, &update_rect))
-		gdk_window_clear_area (gdk_parent_root,
+		gdk_window_clear_area (_gdk_parent_root,
 				       update_rect.x,
 				       update_rect.y,
 				       update_rect.width,
 				       update_rect.height);
 	      /* Invalidate regions in new_region */
-	      gdk_window_invalidate_region (gdk_parent_root, new_region, TRUE);
+	      gdk_window_invalidate_region (_gdk_parent_root, new_region, TRUE);
 	      
 	      if (handle_cursor)
 		gdk_fb_cursor_unhide ();
@@ -1183,7 +1183,7 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (new_parent));
   
   if (!new_parent)
-    new_parent = gdk_parent_root;
+    new_parent = _gdk_parent_root;
 
   window_private = (GdkWindowObject*) window;
   old_parent_private = (GdkWindowObject*)window_private->parent;
@@ -1216,7 +1216,7 @@ gdk_window_reparent (GdkWindow *window,
       r.height = GDK_DRAWABLE_IMPL_FBDATA (window)->lim_y - r.y;
       gdk_region_union_with_rect (region, &r);
 
-      gdk_window_invalidate_region (gdk_parent_root, region, TRUE);
+      gdk_window_invalidate_region (_gdk_parent_root, region, TRUE);
       gdk_region_destroy (region);
     }
 }
@@ -1398,7 +1398,7 @@ gdk_window_set_transient_for (GdkWindow *window,
 			      GdkWindow *parent)
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-  GdkWindowObject *root = GDK_WINDOW_OBJECT (gdk_parent_root);
+  GdkWindowObject *root = GDK_WINDOW_OBJECT (_gdk_parent_root);
   int i;
   
   g_return_if_fail (window != NULL);
@@ -1407,8 +1407,8 @@ gdk_window_set_transient_for (GdkWindow *window,
   g_return_if_fail (parent != NULL);
   g_return_if_fail (GDK_IS_WINDOW (parent));
   
-  g_return_if_fail ((GdkWindow *)private->parent == gdk_parent_root);
-  g_return_if_fail ((GdkWindow *)GDK_WINDOW_OBJECT (parent)->parent == gdk_parent_root);
+  g_return_if_fail ((GdkWindow *)private->parent == _gdk_parent_root);
+  g_return_if_fail ((GdkWindow *)GDK_WINDOW_OBJECT (parent)->parent == _gdk_parent_root);
   
   root->children = g_list_remove (root->children, window);
 
@@ -1509,7 +1509,7 @@ gdk_window_get_geometry (GdkWindow *window,
   g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
   
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
   
   if (!private->destroyed)
     {
@@ -1618,7 +1618,7 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
   
   gdk_window_get_root_origin (window, &x_int, &y_int);
   gdk_fb_mouse_get_info (&winx, &winy, &my_mask);
@@ -1680,7 +1680,7 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
     }
 
   if (!return_val)
-    return_val = gdk_parent_root;
+    return_val = _gdk_parent_root;
 
   return return_val;
 }
@@ -1926,7 +1926,7 @@ _gdk_window_shape_combine_region (GdkWindow *window,
 
       gdk_region_subtract (old_region, new_region);
       gdk_region_destroy (new_region);
-      gdk_window_invalidate_region (gdk_parent_root, old_region, TRUE);
+      gdk_window_invalidate_region (_gdk_parent_root, old_region, TRUE);
       gdk_region_destroy (old_region);
     }
 }

@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/gdk
 
 SUBDIRS=$(gdktarget)
-DIST_SUBDIRS=linux-fb nanox win32 x11
+DIST_SUBDIRS=linux-fb win32 x11
 
 EXTRA_DIST =			\
 	gdkconfig.h.win32 	\

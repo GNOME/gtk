@@ -83,7 +83,7 @@ static GdkDevicePrivate *
 gdk_input_find_dev_from_ctx (HCTX hctx,
 			     UINT cursor)
 {
-  GList *tmp_list = gdk_input_devices;
+  GList *tmp_list = _gdk_input_devices;
   GdkDevicePrivate *gdkdev;
 
   while (tmp_list)
@@ -210,7 +210,7 @@ gdk_input_wintab_init (void)
   int devix, cursorix;
   char devname[100], csrname[100];
 
-  gdk_input_devices = NULL;
+  _gdk_input_devices = NULL;
   wintab_contexts = NULL;
 
   if (!gdk_input_ignore_wintab &&
@@ -246,7 +246,7 @@ gdk_input_wintab_init (void)
       wa.window_type = GDK_WINDOW_TOPLEVEL;
       if ((wintab_window = gdk_window_new (NULL, &wa, GDK_WA_X|GDK_WA_Y)) == NULL)
 	{
-	  g_warning ("gdk_input_init: gdk_window_new failed");
+	  g_warning ("_gdk_input_init: gdk_window_new failed");
 	  return;
 	}
       gdk_drawable_ref (wintab_window);
@@ -330,7 +330,7 @@ gdk_input_wintab_init (void)
 	  hctx = g_new (HCTX, 1);
           if ((*hctx = WTOpen (GDK_WINDOW_HWND (wintab_window), &lc, TRUE)) == NULL)
 	    {
-	      g_warning ("gdk_input_init: WTOpen failed");
+	      g_warning ("_gdk_input_init: WTOpen failed");
 	      return;
 	    }
 	  GDK_NOTE (MISC, g_print ("opened Wintab device %d %p\n",
@@ -468,7 +468,7 @@ gdk_input_wintab_init (void)
 				   gdkdev->axes[i].min_value, 
 				   gdkdev->axes[i].max_value, 
 				   gdkdev->axes[i].resolution));
-	      gdk_input_devices = g_list_append (gdk_input_devices,
+	      _gdk_input_devices = g_list_append (_gdk_input_devices,
 						 gdkdev);
 	    }
 	}
@@ -506,7 +506,7 @@ gdk_input_window_find_within (GdkWindow *window)
   GdkWindow *tmpw;
   GdkInputWindow *candidate = NULL;
 
-  for (list = gdk_input_windows; list != NULL; list = list->next)
+  for (list = _gdk_input_windows; list != NULL; list = list->next)
     {
       tmpw = ((GdkInputWindow *) (tmp_list->data))->window;
       if (tmpw == window
@@ -716,7 +716,7 @@ _gdk_input_other_event (GdkEvent  *event,
 #if USE_SYSCONTEXT
   window = gdk_window_at_pointer (&x, &y);
   if (window == NULL)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   gdk_drawable_ref (window);
 
@@ -747,7 +747,7 @@ _gdk_input_other_event (GdkEvent  *event,
   switch (msg->message)
     {
     case WT_PACKET:
-      if (window == gdk_parent_root)
+      if (window == _gdk_parent_root)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...is root\n"));
 	  return FALSE;
@@ -815,7 +815,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	{
 	  GDK_NOTE (EVENTS, g_print ("...not selected\n"));
 
-	  if (obj->parent == GDK_WINDOW_OBJECT (gdk_parent_root))
+	  if (obj->parent == GDK_WINDOW_OBJECT (_gdk_parent_root))
 	    return FALSE;
 	  
 	  pt.x = x;
@@ -925,7 +925,7 @@ _gdk_input_other_event (GdkEvent  *event,
 					 event2->button.button,
 					 event2->button.x,
 					 event2->button.y));
-	      gdk_event_queue_append (event2);
+	      _gdk_event_queue_append (event2);
 	    }
 	}
       return TRUE;
@@ -934,12 +934,12 @@ _gdk_input_other_event (GdkEvent  *event,
       if (LOWORD (msg->lParam) == 0)
 	{
 	  event->proximity.type = GDK_PROXIMITY_OUT;
-	  gdk_input_ignore_core = FALSE;
+	  _gdk_input_ignore_core = FALSE;
 	}
       else
 	{
 	  event->proximity.type = GDK_PROXIMITY_IN;
-	  gdk_input_ignore_core = TRUE;
+	  _gdk_input_ignore_core = TRUE;
 	}
       event->proximity.time = msg->time;
       event->proximity.device = &gdkdev->info;
@@ -992,7 +992,7 @@ _gdk_input_grab_pointer (GdkWindow    *window,
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
 
-  tmp_list = gdk_input_windows;
+  tmp_list = _gdk_input_windows;
   new_window = NULL;
   need_ungrab = FALSE;
 
@@ -1020,7 +1020,7 @@ _gdk_input_grab_pointer (GdkWindow    *window,
     {
       new_window->grabbed = TRUE;
       
-      tmp_list = gdk_input_devices;
+      tmp_list = _gdk_input_devices;
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
@@ -1048,7 +1048,7 @@ _gdk_input_grab_pointer (GdkWindow    *window,
     }
   else
     { 
-      tmp_list = gdk_input_devices;
+      tmp_list = _gdk_input_devices;
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
@@ -1080,7 +1080,7 @@ _gdk_input_ungrab_pointer (guint32 time)
 
   GDK_NOTE (MISC, g_print ("gdk_input_win32_ungrab_pointer\n"));
 
-  tmp_list = gdk_input_windows;
+  tmp_list = _gdk_input_windows;
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;
@@ -1093,7 +1093,7 @@ _gdk_input_ungrab_pointer (guint32 time)
     {
       input_window->grabbed = FALSE;
 
-      tmp_list = gdk_input_devices;
+      tmp_list = _gdk_input_devices;
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
@@ -1192,16 +1192,16 @@ gdk_device_get_state (GdkDevice       *device,
 }
 
 void 
-gdk_input_init (void)
+_gdk_input_init (void)
 {
-  gdk_input_ignore_core = FALSE;
-  gdk_input_devices = NULL;
+  _gdk_input_ignore_core = FALSE;
+  _gdk_input_devices = NULL;
 
   _gdk_init_input_core ();
 #ifdef HAVE_WINTAB
   gdk_input_wintab_init ();
 #endif /* HAVE_WINTAB */
 
-  gdk_input_devices = g_list_append (gdk_input_devices, gdk_core_pointer);
+  _gdk_input_devices = g_list_append (_gdk_input_devices, _gdk_core_pointer);
 }
 

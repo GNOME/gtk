@@ -1,3 +1,145 @@
+Fri Sep  7 11:51:44 2001  Owen Taylor  <otaylor@redhat.com>
+
+      Make gdkx.h the only installed header from gdk/x11.
+      All structures in gdk/x11 are opaque.
+
+	* gdk/x11/Makefile.am gdk/x11/gdkx.h gdk/x11/gdkprivate-x11.h:
+	Don't install gdk{drawable,pixmap,window}-x11.h.
+
+	* gdk/x11/{gdkcolormap-x11.c, gdkfont-x11.c, gdkx.h, gdkvisual-x11.c: 
+	Move GdkColormapPrivateX11, GdkFontPrivateX GdkImagePrivateX11, 
+	GdkVisualClass into C files.
+
+	* gdk/gdkpixmap-x11.[ch]: Make gdk_pixmap_impl_get_type() static.
+
+	* gdk/x11/{gdkcolor-x11.c, gdkcursor-x11.c, gdkdrawable-x11.c,
+	gdkfont-x11.c, gdkgc-x11.c, gdkx.h, gdkimage-x11,gdkvisual-x11.c}
+	Add public functions to replace previously exported direct
+	structure access.
+	gdk_x11_colormap_get_{xdisplay,xcolormap} 
+	gdk_x11_cursor_get_{xdisplay,xcursor},
+	gdk_x11_drawable_get_{xdisplay,xcursor,gdk_x11_visual_get_xvisual, 
+	gdk_x11_font_get_{xdisplay,xfont}, gdk_x11_image_get_{xdisplay,ximage},
+	gdk_x11_gc_get_{xdisplay,ximage}
+	
+	* gdk/gdkprivate.h gdk/gdkinternals.h: Move GdkColorInfo,
+	GdkEventFilter, GdkClientFilter, GdkFontPrivate to gdkinternals.
+
+      Fix a number of variables and functions that were exported
+      "accidentally" from GDK.
+
+	* gdk/**.[ch]: gdk => _gdk for gdk_visual_init,
+	gdk_events_init, gdk_input_init, gdk_dnd_init, gdk_image_exit, 
+	gdk_input_exit,	gdk_windowing_exit, gdk_event_func, gdk_event_data,
+	gdk_event_notify, gdk_queued_events, gdk_queued_tail,
+	gdk_event_new, gdk_events_queue, gdk_events_unqueue,
+	gdk_event_queue_find_first, gdk_event_queue_remove_link,
+	gdk_event_queue_append, gdk_event_button_generate,
+	gdk_debug_flags, gdk_default_filters, gdk_parent_root.
+
+	* gdk/x11/{gdkevents-x11.c, gdkglobals-x11.c, gdkimage-x11.c, 
+	   gdkmain-x11.c, gdkprivate-x11.h, gdk/x11/gdkwindow-x11.c}:
+	gdk => _gdk for gdk_event_mask_table, gkd_nevent_masks, 
+	gdk_wm_window_protocols, gdk_leader_window, gdk_xgrab_window,
+	gdk_use_xshm, gdk_input_ignore_core.
+
+	* gdk/x11/xsettings-common.h (xsettings_list_insert): Add
+	#defines to namespace functions into the private _gdk_ 
+	namespace.
+
+	* gdk/gdkwindow.[ch] gdk/x11/gdkx.h: Add gdk_get_default_root_window ()
+	to replace gdk_parent_root exported variable. Adjust and
+	deprecate GDK_ROOT_PARENT().
+
+	* demos/{testpixbuf-drawable.c,testpixbuf-save.c}: Fix
+	GDK_ROOT_PARENT usage, remove includes of port-specific
+	headers.
+
+	* gdk/{win32,x11,fb}/gdkinput*.[ch]: s/gdk/_gdk/ for 
+	_gdk_input_gxid_host, _gdk_input_gxid_port, _gdk_input_ignore_core, 
+	gdk_input_devices, _gdk_input_windows, gdk_init_input_core.
+
+	* gdk/x11/{gdkevents-x11.,c gdkglobals-x11.c, gdkmain-x11.c}
+	docs/Changes-2.0.txt: Remove gdk_wm_protocols, 
+	gdk_wm_delete_window functions, gdk_wm_take_focus, 
+	use gdk_atom_intern() instead.
+
+	* gdk/linux-fb/{gdkselection-fb.c, gdkmain-fb.c, gdkprivatefb.h}
+	  gdk/win32/{gdkselection-win32.c, gdkmgdkwin32.h, gdkprivate-win32.h} 
+	  gdk/x11/{gdkselection-x11.c gdkx.h, gtkprivate-x11.h}
+	  gtk/gtkselection.c 
+        Unexport gdk_selection_property, just use 
+	gdk_atom_intern ("GDK_SELECTION").
+
+	* gdk/x11/{gdkprivate-x11.h,gdkdrawable-x11h,gdkgc-x11.c,gdkx.h}: 
+	Unexport gdk_drawable_impl_x11_get_type, gdk_gc_x11_get_type, 
+	GDK_GC_X11 cast macros, GdkGCX11 structures, GdkCursorPrivate, 
+	GdkVisualprivate, gdk_x11_gc_flush.
+
+      Make a number of public exports of variables into functions
+      to increase encapsulation.
+
+	* gdk/gdkinternals.h gdk/gdkinput.h gdk/gdkevents.h 
+	gdk/linux-fb/gdkmouse-fb.c: gdk_core_pointer => _gdk_core_pointer, 
+	move to gdkinternals.h. Add gdk_device_get_core_pointer ().	
+
+	* gdk/gdkprivate.h gdk/gdkpango.c gdk/gdkinternals.h
+	docs/Changes-2.0.txt: Unexport gdk_parent_root, gdk_error_code, 
+	gdk_error_warnings.
+
+	* gdk/x11/{gdkcolormap-x11.c, gdkmain-x11.c, gdkx.h}
+	  docs/Changes-2.0.txt: 
+	s/gdk_screen/_gdk_screen/, add gdk_x11_get_default_screen()
+	s/gdk_root_window/_gdk_root_window/, add gdk_x11_get_default_root_xwindow()
+	Add gdk_x11_get_default_xdisplay().
+
+	* gdk/gdk.h gdk/gdk.c linux-fb/gdkfb.h linux-fb/gdkglobals-fb.c 
+	win32/gdkwin32.h x11/gdkglobals-x11.c gdk/x11/gdkmain-x11.c 
+	gdk/x11/gdkx.h: gdk/gdk.def: Add gdk_get/set_program_class, 
+	Don't export gdk_progclass, move --class command line
+	option and handling to common portion of GDK.
+
+      Miscellaneous fixes:
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon_list): Fix
+	g_return_val_if_fail that should have been g_return_if_fail.
+
+	* gdk/gdkinternals.h gdk/gdkprivate.h: Move
+	gdk_synthesize_window_state() to the semi-public gdkprivate.h.
+
+	* gtk/gtkdnd.c (_gtk_drag_source_handle_event): Remove uneeded
+	X11 dependency.
+
+	* gdk/linux-fb/gdkmain-fb.c gdk/win32/gdkmain-win32.c gdk/TODO: 
+	Remove unused gdk_key_repeat_disable/restore.
+
+	* linux-fb/gdkglobals-fb.c win32/gdkglobals-win32.c 
+	x11/gdkglobals-x11.c x11/gdkprivate-x11.h gdk/gdk.def:
+	Remove unused gdk_null_window_warnings variable.
+
+	* gdk/Makefile.am (DIST_SUBDIRS) nanox/*: cvs remove nanox;
+	it can be retrieved from the repository; it is too far
+	from functional to be worth having people check out;
+	it would be easier to start from scratch, I suspect.
+
+	* gdk/x11/gdkpixmap-x11.c: Fix lvalue usage of GDK_PIXMAP_XID().
+
+	* gdk/x11/gdkkeys-x11.c gdk/gdkrgb.c gdk/gdkwindow.c 
+	gdk/x11/gdkpango-x11.c gdk/x11/gdkselection-x11.c: 
+	Fix some accidentally global variables and unused global variables.
+
+	* gdk/x11/gdkkeys-x11.c gdk/gdkrgb.c gdk/gdkwindow.c 
+	gdk/x11/gdkpango-x11.c gdk/x11/gdkselection-x11.c: 
+	Fix some accidentally global variables and unused global variables.
+
+      Add some space for future expansion to multihead.
+
+	* gdk/gdkdrawable.h: Add four reserved function pointers
+	for future expansion of GdkDrawableClass.
+
+	* gtk/gtkwindow.h gtk/gtkinvisible.h: Add reserved pointer
+	where we can put a GdkScreen * later.
+
 2001-09-07  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_flush_scroll): update

@@ -313,7 +313,7 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  current_device = gdk_core_pointer;
+  current_device = gdk_device_get_core_pointer ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "Test Input");

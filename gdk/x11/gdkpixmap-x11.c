@@ -32,7 +32,8 @@
 #include <unistd.h>
 #include <X11/Xlib.h>
 
-#include <gdk/gdkpixmap.h>
+#include "gdkx.h"
+
 #include "gdkpixmap-x11.h"
 #include "gdkprivate-x11.h"
 
@@ -60,7 +61,7 @@ static void gdk_pixmap_impl_x11_finalize   (GObject            *object);
 
 static gpointer parent_class = NULL;
 
-GType
+static GType
 gdk_pixmap_impl_x11_get_type (void)
 {
   static GType object_type = 0;
@@ -157,7 +158,7 @@ gdk_pixmap_new (GdkWindow *window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
   
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -188,7 +189,7 @@ gdk_pixmap_new (GdkWindow *window,
         gdk_drawable_set_colormap (pixmap, cmap);
     }
   
-  gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
+  gdk_xid_table_insert (&draw_impl->xid, pixmap);
   
   return pixmap;
 }
@@ -208,7 +209,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -228,7 +229,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
                                           GDK_WINDOW_XID (window),
                                           (char *)data, width, height);
 
-  gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
+  gdk_xid_table_insert (&draw_impl->xid, pixmap);
   
   return pixmap;
 }
@@ -254,7 +255,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
-    window = gdk_parent_root;
+    window = _gdk_parent_root;
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -278,7 +279,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
                                                 (char *)data, width, height,
                                                 fg->pixel, bg->pixel, depth);
 
-  gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
+  gdk_xid_table_insert (&draw_impl->xid, pixmap);
 
   return pixmap;
 }
@@ -321,7 +322,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   pix_impl->height = h_ret;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth_ret;
   
-  gdk_xid_table_insert(&GDK_PIXMAP_XID (pixmap), pixmap);
+  gdk_xid_table_insert(&draw_impl->xid, pixmap);
 
   return pixmap;
 }

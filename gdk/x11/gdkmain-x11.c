@@ -103,12 +103,11 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 #endif /* G_ENABLE_DEBUG */
 
 GdkArgDesc _gdk_windowing_args[] = {
-  { "display",     GDK_ARG_STRING,   &gdk_display_name,    (GdkArgFunc)NULL   },
+  { "display",     GDK_ARG_STRING,   &_gdk_display_name,    (GdkArgFunc)NULL   },
   { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,     (GdkArgFunc)NULL   },
-  { "no-xshm",     GDK_ARG_NOBOOL,   &gdk_use_xshm,        (GdkArgFunc)NULL   },
-  { "class",       GDK_ARG_STRING,   &gdk_progclass,       (GdkArgFunc)NULL   },
-  { "gxid-host",   GDK_ARG_STRING,   &gdk_input_gxid_host, (GdkArgFunc)NULL   },
-  { "gxid-port",   GDK_ARG_INT,      &gdk_input_gxid_port, (GdkArgFunc)NULL   },
+  { "no-xshm",     GDK_ARG_NOBOOL,   &_gdk_use_xshm,        (GdkArgFunc)NULL   },
+  { "gxid-host",   GDK_ARG_STRING,   &_gdk_input_gxid_host, (GdkArgFunc)NULL   },
+  { "gxid-port",   GDK_ARG_INT,      &_gdk_input_gxid_port, (GdkArgFunc)NULL   },
   { NULL }
 };
 
@@ -122,46 +121,35 @@ _gdk_windowing_init_check (int argc, char **argv)
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
   
-  gdk_display = XOpenDisplay (gdk_display_name);
+  gdk_display = XOpenDisplay (_gdk_display_name);
   if (!gdk_display)
     return FALSE;
   
   if (gdk_synchronize)
     XSynchronize (gdk_display, True);
   
-  gdk_screen = DefaultScreen (gdk_display);
-  gdk_root_window = RootWindow (gdk_display, gdk_screen);
+  _gdk_screen = DefaultScreen (gdk_display);
+  _gdk_root_window = RootWindow (gdk_display, _gdk_screen);
   
-  gdk_leader_window = XCreateSimpleWindow(gdk_display, gdk_root_window,
+  _gdk_leader_window = XCreateSimpleWindow(gdk_display, _gdk_root_window,
 					  10, 10, 10, 10, 0, 0 , 0);
   class_hint = XAllocClassHint();
   class_hint->res_name = g_get_prgname ();
-  if (gdk_progclass == NULL)
-    {
-      gdk_progclass = g_strdup (g_get_prgname ());
-      gdk_progclass[0] = toupper (gdk_progclass[0]);
-    }
-  class_hint->res_class = gdk_progclass;
-  XmbSetWMProperties (gdk_display, gdk_leader_window,
+  class_hint->res_class = gdk_get_program_class ();
+  XmbSetWMProperties (gdk_display, _gdk_leader_window,
                       NULL, NULL, argv, argc, 
                       NULL, NULL, class_hint);
   XFree (class_hint);
 
   pid = getpid();
-  XChangeProperty (gdk_display, gdk_leader_window,
+  XChangeProperty (gdk_display, _gdk_leader_window,
 		   gdk_atom_intern ("_NET_WM_PID", FALSE),
 		   XA_CARDINAL, 32,
 		   PropModeReplace,
 		   (guchar *)&pid, 1);
   
-  gdk_wm_delete_window = gdk_atom_intern ("WM_DELETE_WINDOW", FALSE);
-  gdk_wm_take_focus = gdk_atom_intern ("WM_TAKE_FOCUS", FALSE);
-  gdk_wm_protocols = gdk_atom_intern ("WM_PROTOCOLS", FALSE);
-  gdk_wm_window_protocols[0] = gdk_wm_delete_window;
-  gdk_wm_window_protocols[1] = gdk_wm_take_focus;
-  gdk_wm_window_protocols[2] = gdk_atom_intern ("_NET_WM_PING", FALSE);
-  gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
-  
+  _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+
   XGetKeyboardControl (gdk_display, &keyboard_state);
   autorepeat = keyboard_state.global_auto_repeat;
 
@@ -205,13 +193,13 @@ _gdk_windowing_init_check (int argc, char **argv)
 void
 gdk_set_use_xshm (gboolean use_xshm)
 {
-  gdk_use_xshm = use_xshm;
+  _gdk_use_xshm = use_xshm;
 }
 
 gboolean
 gdk_get_use_xshm (void)
 {
-  return gdk_use_xshm;
+  return _gdk_use_xshm;
 }
 
 static GdkGrabStatus
@@ -295,10 +283,10 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   
   xevent_mask = 0;
-  for (i = 0; i < gdk_nevent_masks; i++)
+  for (i = 0; i < _gdk_nenvent_masks; i++)
     {
       if (event_mask & (1 << (i + 1)))
-	xevent_mask |= gdk_event_mask_table[i];
+	xevent_mask |= _gdk_event_mask_table[i];
     }
   
   return_val = _gdk_input_grab_pointer (window,
@@ -323,7 +311,7 @@ gdk_pointer_grab (GdkWindow *	  window,
     }
   
   if (return_val == GrabSuccess)
-    gdk_xgrab_window = (GdkWindowObject *)window;
+    _gdk_xgrab_window = (GdkWindowObject *)window;
 
   return gdk_x11_convert_grab_status (return_val);
 }
@@ -349,7 +337,7 @@ gdk_pointer_ungrab (guint32 time)
   _gdk_input_ungrab_pointer (time);
   
   XUngrabPointer (gdk_display, time);
-  gdk_xgrab_window = NULL;
+  _gdk_xgrab_window = NULL;
 }
 
 /*
@@ -370,7 +358,7 @@ gdk_pointer_ungrab (guint32 time)
 gboolean
 gdk_pointer_is_grabbed (void)
 {
-  return gdk_xgrab_window != NULL;
+  return _gdk_xgrab_window != NULL;
 }
 
 /*
@@ -456,7 +444,7 @@ gdk_screen_width (void)
 {
   gint return_val;
   
-  return_val = DisplayWidth (gdk_display, gdk_screen);
+  return_val = DisplayWidth (gdk_display, _gdk_screen);
   
   return return_val;
 }
@@ -481,7 +469,7 @@ gdk_screen_height (void)
 {
   gint return_val;
   
-  return_val = DisplayHeight (gdk_display, gdk_screen);
+  return_val = DisplayHeight (gdk_display, _gdk_screen);
   
   return return_val;
 }
@@ -506,7 +494,7 @@ gdk_screen_width_mm (void)
 {
   gint return_val;
   
-  return_val = DisplayWidthMM (gdk_display, gdk_screen);
+  return_val = DisplayWidthMM (gdk_display, _gdk_screen);
   
   return return_val;
 }
@@ -531,7 +519,7 @@ gdk_screen_height_mm (void)
 {
   gint return_val;
   
-  return_val = DisplayHeightMM (gdk_display, gdk_screen);
+  return_val = DisplayHeightMM (gdk_display, _gdk_screen);
   
   return return_val;
 }
@@ -563,13 +551,13 @@ gdk_set_sm_client_id (const gchar* sm_client_id)
 {
   if (sm_client_id && strcmp (sm_client_id, ""))
     {
-      XChangeProperty (gdk_display, gdk_leader_window,
+      XChangeProperty (gdk_display, _gdk_leader_window,
 	   	       gdk_atom_intern ("SM_CLIENT_ID", FALSE),
 		       XA_STRING, 8, PropModeReplace,
 		       sm_client_id, strlen(sm_client_id));
     }
   else
-     XDeleteProperty (gdk_display, gdk_leader_window,
+     XDeleteProperty (gdk_display, _gdk_leader_window,
 	   	      gdk_atom_intern ("SM_CLIENT_ID", FALSE));
 }
 
@@ -580,7 +568,7 @@ gdk_beep (void)
 }
 
 void
-gdk_windowing_exit (void)
+_gdk_windowing_exit (void)
 {
   pango_x_shutdown_display (gdk_display);
   
@@ -599,7 +587,7 @@ gdk_windowing_exit (void)
  *
  * Results:
  *   Either we were expecting some sort of error to occur,
- *   in which case we set the "gdk_error_code" flag, or this
+ *   in which case we set the "_gdk_error_code" flag, or this
  *   error was unexpected, in which case we will print an
  *   error message and exit. (Since trying to continue will
  *   most likely simply lead to more errors).
@@ -615,7 +603,7 @@ gdk_x_error (Display	 *display,
 {
   if (error->error_code)
     {
-      if (gdk_error_warnings)
+      if (_gdk_error_warnings)
 	{
 	  gchar buf[64];
           gchar *msg;
@@ -647,7 +635,7 @@ gdk_x_error (Display	 *display,
 	  exit(1);
 #endif /* G_ENABLE_DEBUG */
 	}
-      gdk_error_code = error->error_code;
+      _gdk_error_code = error->error_code;
     }
   
   return 0;
@@ -707,7 +695,7 @@ gdk_x_io_error (Display *display)
 gchar *
 gdk_get_display (void)
 {
-  return (gchar *)XDisplayName (gdk_display_name);
+  return (gchar *)XDisplayName (_gdk_display_name);
 }
 
 gint 
@@ -715,16 +703,16 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 		 XEvent *event_send)
 {
   Status result;
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
   
-  gdk_error_code = 0;
+  _gdk_error_code = 0;
   
-  gdk_error_warnings = 0;
+  _gdk_error_warnings = 0;
   result = XSendEvent (gdk_display, window, propagate, event_mask, event_send);
   XSync (gdk_display, False);
-  gdk_error_warnings = old_warnings;
+  _gdk_error_warnings = old_warnings;
   
-  return result && !gdk_error_code;
+  return result && !_gdk_error_code;
 }
 
 void
@@ -768,4 +756,31 @@ gdk_x11_ungrab_server (void)
   --grab_count;
   if (grab_count == 0)
     XUngrabServer (gdk_display);
+}
+
+/**
+ * gdk_x11_get_default_screen:
+ * 
+ * Gets the default GTK+ screen number.
+ * 
+ * Return value: returns the screen number specified by
+ *   the --display command line option on the DISPLAY environment
+ *   variable gdk_init() calls XOpenDisplay().
+ **/
+gint
+gdk_x11_get_default_screen (void)
+{
+  return _gdk_screen;
+}
+
+Window
+gdk_x11_get_default_root_xwindow (void)
+{
+  return _gdk_root_window;
+}
+
+Display *
+gdk_x11_get_default_xdisplay (void)
+{
+  return gdk_display;
 }

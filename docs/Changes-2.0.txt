@@ -459,3 +459,25 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   GtkList/GtkTree nor the GtkCList/GtkCTree support
   GTK_SELECTION_EXTENDED anymore.  However, the old extended behavior
   replaces MULTIPLE behavior.
+
+* The following variables are no longer exported from GDK. (Other variables
+  are also no longer exported; the following are the ones found used
+  externally in a large sample of GTK+ code.)
+
+   Variable                               Replacement
+   ========                               ===========
+   gdk_null_window_warnings               None - did nothing in GTK+-1.2.
+   gdk_leader_window                      None - private variable
+   gdk_screen                             gdk_x11_get_default_screen ()
+   gdk_root_window                        gdk_x11_get_default_root_xwindow ()
+   gdk_root_parent                        gdk_get_default_root_window ()
+   gdk_error_code/gdk_error_warnings      gdk_error_trap_push()/pop()
+   gdk_display_name                       gdk_get_display ()
+   gdk_wm_delete_window                   gdk_atom_intern ("WM_DELETE_WINDOW", FALSE)
+   gdk_wm_take_focus                      gdk_atom_intern ("WM_TAKE_FOCUS", FALSE)
+   gdk_wm_protocols                       gdk_atom_intern ("WM_PROTOCOLS", FALSE)
+   
+   
+
+  
+

@@ -138,7 +138,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	  event->selection.requestor = requestor;
 	  event->selection.selection = selection;
 	  event->selection.target = target;
-	  event->selection.property = gdk_selection_property;
+	  event->selection.property = _gdk_selection_property;
 	}
     }
   else
@@ -169,7 +169,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
   
   if (!gdk_property_get (requestor,
-			 gdk_selection_property,
+			 _gdk_selection_property,
 			 0/*AnyPropertyType?*/,
 			 0, 0,
 			 FALSE,
@@ -186,7 +186,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
     *ret_format = prop_format;
 
   if (!gdk_property_get (requestor,
-			 gdk_selection_property,
+			 _gdk_selection_property,
 			 0/*AnyPropertyType?*/,
 			 0, prop_len + 1,
 			 FALSE,

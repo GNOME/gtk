@@ -228,7 +228,6 @@ EXPORTS
 	gdk_mbstowcs
 	gdk_modifier_type_get_type
 	gdk_notify_type_get_type
-	gdk_null_window_warnings
 	gdk_overlap_type_get_type
 	gdk_pango_attr_embossed_new
 	gdk_pango_attr_stipple_new
@@ -252,7 +251,6 @@ EXPORTS
 	gdk_pointer_grab
 	gdk_pointer_is_grabbed
 	gdk_pointer_ungrab
-	gdk_progclass
 	gdk_prop_mode_get_type
 	gdk_property_change
 	gdk_property_delete

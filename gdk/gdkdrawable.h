@@ -81,7 +81,7 @@ struct _GdkDrawableClass
 			  GdkGC	       *gc,
 			  GdkSegment   *segs,
 			  gint		nsegs);
-  void (*draw_lines)     (GdkDrawable  *drawable,
+ void (*draw_lines)     (GdkDrawable  *drawable,
 			  GdkGC        *gc,
 			  GdkPoint     *points,
 			  gint          npoints);
@@ -131,6 +131,10 @@ struct _GdkDrawableClass
                                           gint        *composite_x_offset,
                                           gint        *composite_y_offset);
   
+  void         (*_gdk_reserved1) (void);
+  void         (*_gdk_reserved2) (void);
+  void         (*_gdk_reserved3) (void);
+  void         (*_gdk_reserved4) (void);
 };
 
 GType           gdk_drawable_get_type     (void);

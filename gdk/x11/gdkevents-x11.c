@@ -101,9 +101,9 @@ static gboolean gdk_event_dispatch (GSource     *source,
 				    GSourceFunc  callback,
 				    gpointer     user_data);
 
-GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
-					 GdkEvent  *event,
-					 gpointer   data);
+static GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
+						GdkEvent  *event,
+						gpointer   data);
 
 static void gdk_xsettings_watch_cb  (Window            window,
 				     Bool              is_start,
@@ -143,7 +143,7 @@ static XSettingsClient *xsettings_client;
  *********************************************/
 
 void 
-gdk_events_init (void)
+_gdk_events_init (void)
 {
   GSource *source;
   
@@ -162,7 +162,11 @@ gdk_events_init (void)
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 
-  gdk_add_client_message_filter (gdk_wm_protocols, 
+  _gdk_wm_window_protocols[0] = gdk_atom_intern ("WM_DELETE_WINDOW", FALSE);
+  _gdk_wm_window_protocols[1] = gdk_atom_intern ("WM_TAKE_FOCUS", FALSE);
+  _gdk_wm_window_protocols[2] = gdk_atom_intern ("_NET_WM_PING", FALSE);
+  
+  gdk_add_client_message_filter (gdk_atom_intern ("WM_PROTOCOLS", FALSE),
 				 gdk_wm_protocols_filter, NULL);
 
   xsettings_client = xsettings_client_new (gdk_display, DefaultScreen (gdk_display),
@@ -190,7 +194,7 @@ gdk_events_init (void)
 gboolean
 gdk_events_pending (void)
 {
-  return (gdk_event_queue_find_first() || XPending (gdk_display));
+  return (_gdk_event_queue_find_first() || XPending (gdk_display));
 }
 
 /*
@@ -214,7 +218,7 @@ graphics_expose_predicate (Display  *display,
 			   XEvent   *xevent,
 			   XPointer  arg)
 {
-  if (xevent->xany.window == GDK_DRAWABLE_XID (arg) &&
+  if (xevent->xany.window == GDK_DRAWABLE_XID ((GdkDrawable *)arg) &&
       (xevent->xany.type == GraphicsExpose ||
        xevent->xany.type == NoExpose))
     return True;
@@ -234,7 +238,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   
   if (xevent.xany.type == GraphicsExpose)
     {
-      event = gdk_event_new ();
+      event = _gdk_event_new ();
       
       if (gdk_event_translate (event, &xevent, TRUE))
 	return event;
@@ -444,12 +448,12 @@ gdk_event_translate (GdkEvent *event,
   window_private = NULL;
   event->any.window = NULL;
   
-  if (gdk_default_filters)
+  if (_gdk_default_filters)
     {
       /* Apply global filters */
       GdkFilterReturn result;
       result = gdk_event_apply_filters (xevent, event,
-                                        gdk_default_filters);
+                                        _gdk_default_filters);
       
       if (result != GDK_FILTER_CONTINUE)
         {
@@ -600,7 +604,7 @@ gdk_event_translate (GdkEvent *event,
 	buf[charcount] = '\0';
       
 #ifdef G_ENABLE_DEBUG
-      if (gdk_debug_flags & GDK_DEBUG_EVENTS)
+      if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
 	{
 	  g_message ("key press:\twindow: %ld  key: %12s  %d",
 		     xevent->xkey.window,
@@ -683,7 +687,7 @@ gdk_event_translate (GdkEvent *event,
       
       if (window_private == NULL || 
 	  ((window_private->extension_events != 0) &&
-           gdk_input_ignore_core))
+           _gdk_input_ignore_core))
 	{
 	  return_val = FALSE;
 	  break;
@@ -715,7 +719,7 @@ gdk_event_translate (GdkEvent *event,
 	  event->scroll.x_root = (gfloat)xevent->xbutton.x_root;
 	  event->scroll.y_root = (gfloat)xevent->xbutton.y_root;
 	  event->scroll.state = (GdkModifierType) xevent->xbutton.state;
-	  event->scroll.device = gdk_core_pointer;
+	  event->scroll.device = _gdk_core_pointer;
           break;
           
         default:
@@ -729,9 +733,9 @@ gdk_event_translate (GdkEvent *event,
 	  event->button.axes = NULL;
 	  event->button.state = (GdkModifierType) xevent->xbutton.state;
 	  event->button.button = xevent->xbutton.button;
-	  event->button.device = gdk_core_pointer;
+	  event->button.device = _gdk_core_pointer;
 	  
-	  gdk_event_button_generate (event);
+	  _gdk_event_button_generate (event);
           break;
 	}
 
@@ -746,7 +750,7 @@ gdk_event_translate (GdkEvent *event,
       
       if (window_private == NULL ||
 	  ((window_private->extension_events != 0) &&
-           gdk_input_ignore_core))
+           _gdk_input_ignore_core))
 	{
 	  return_val = FALSE;
 	  break;
@@ -770,7 +774,7 @@ gdk_event_translate (GdkEvent *event,
       event->button.axes = NULL;
       event->button.state = (GdkModifierType) xevent->xbutton.state;
       event->button.button = xevent->xbutton.button;
-      event->button.device = gdk_core_pointer;
+      event->button.device = _gdk_core_pointer;
       
       break;
       
@@ -783,7 +787,7 @@ gdk_event_translate (GdkEvent *event,
       
       if (window_private == NULL ||
 	  ((window_private->extension_events != 0) &&
-           gdk_input_ignore_core))
+           _gdk_input_ignore_core))
 	{
 	  return_val = FALSE;
 	  break;
@@ -799,7 +803,7 @@ gdk_event_translate (GdkEvent *event,
       event->motion.axes = NULL;
       event->motion.state = (GdkModifierType) xevent->xmotion.state;
       event->motion.is_hint = xevent->xmotion.is_hint;
-      event->motion.device = gdk_core_pointer;
+      event->motion.device = _gdk_core_pointer;
       
       break;
       
@@ -1158,7 +1162,7 @@ gdk_event_translate (GdkEvent *event,
       
     case VisibilityNotify:
 #ifdef G_ENABLE_DEBUG
-      if (gdk_debug_flags & GDK_DEBUG_EVENTS)
+      if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
 	switch (xevent->xvisibility.state)
 	  {
 	  case VisibilityFullyObscured:
@@ -1254,8 +1258,8 @@ gdk_event_translate (GdkEvent *event,
                                      0,
                                      GDK_WINDOW_STATE_ICONIFIED);
       
-      if (gdk_xgrab_window == window_private)
-	gdk_xgrab_window = NULL;
+      if (_gdk_xgrab_window == window_private)
+	_gdk_xgrab_window = NULL;
       
       break;
       
@@ -1330,7 +1334,7 @@ gdk_event_translate (GdkEvent *event,
 	      gdk_error_trap_push ();
 	      if (XTranslateCoordinates (GDK_DRAWABLE_XDISPLAY (window),
 					 GDK_DRAWABLE_XID (window),
-					 gdk_root_window,
+					 _gdk_root_window,
 					 0, 0,
 					 &tx, &ty,
 					 &child_window))
@@ -1578,14 +1582,14 @@ gdk_event_translate (GdkEvent *event,
   return return_val;
 }
 
-GdkFilterReturn
+static GdkFilterReturn
 gdk_wm_protocols_filter (GdkXEvent *xev,
 			 GdkEvent  *event,
 			 gpointer data)
 {
   XEvent *xevent = (XEvent *)xev;
 
-  if ((Atom) xevent->xclient.data.l[0] == gdk_wm_delete_window)
+  if ((Atom) xevent->xclient.data.l[0] == gdk_atom_intern ("WM_DELETE_WINDOW", FALSE))
     {
   /* The delete window request specifies a window
    *  to delete. We don't actually destroy the
@@ -1603,7 +1607,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 
       return GDK_FILTER_TRANSLATE;
     }
-  else if ((Atom) xevent->xclient.data.l[0] == gdk_wm_take_focus)
+  else if ((Atom) xevent->xclient.data.l[0] == gdk_atom_intern ("WM_TAKE_FOCUS", FALSE))
     {
       GdkWindow *win = event->any.window;
       Window focus_win = GDK_WINDOW_IMPL_X11(((GdkWindowObject *)win)->impl)->focus_window;
@@ -1623,8 +1627,8 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
     {
       XEvent xev = *xevent;
       
-      xev.xclient.window = gdk_root_window;
-      XSendEvent (gdk_display, gdk_root_window, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+      xev.xclient.window = _gdk_root_window;
+      XSendEvent (gdk_display, _gdk_root_window, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
     }
 
   return GDK_FILTER_REMOVE;
@@ -1650,13 +1654,13 @@ gdk_event_get_type (Display  *display,
 #endif
 
 void
-gdk_events_queue (void)
+_gdk_events_queue (void)
 {
   GList *node;
   GdkEvent *event;
   XEvent xevent;
 
-  while (!gdk_event_queue_find_first() && XPending (gdk_display))
+  while (!_gdk_event_queue_find_first() && XPending (gdk_display))
     {
       XNextEvent (gdk_display, &xevent);
 
@@ -1670,7 +1674,7 @@ gdk_events_queue (void)
 	    continue;
 	}
       
-      event = gdk_event_new ();
+      event = _gdk_event_new ();
       
       event->any.type = GDK_NOTHING;
       event->any.window = NULL;
@@ -1678,8 +1682,8 @@ gdk_events_queue (void)
 
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
-      gdk_event_queue_append (event);
-      node = gdk_queued_tail;
+      _gdk_event_queue_append (event);
+      node = _gdk_queued_tail;
 
       if (gdk_event_translate (event, &xevent, FALSE))
 	{
@@ -1687,7 +1691,7 @@ gdk_events_queue (void)
 	}
       else
 	{
-	  gdk_event_queue_remove_link (node);
+	  _gdk_event_queue_remove_link (node);
 	  g_list_free_1 (node);
 	  gdk_event_free (event);
 	}
@@ -1704,7 +1708,7 @@ gdk_event_prepare (GSource  *source,
 
   *timeout = -1;
 
-  retval = (gdk_event_queue_find_first () != NULL) || XPending (gdk_display);
+  retval = (_gdk_event_queue_find_first () != NULL) || XPending (gdk_display);
 
   GDK_THREADS_LEAVE ();
 
@@ -1719,7 +1723,7 @@ gdk_event_check (GSource  *source)
   GDK_THREADS_ENTER ();
 
   if (event_poll_fd.revents & G_IO_IN)
-    retval = (gdk_event_queue_find_first () != NULL) || XPending (gdk_display);
+    retval = (_gdk_event_queue_find_first () != NULL) || XPending (gdk_display);
   else
     retval = FALSE;
 
@@ -1737,13 +1741,13 @@ gdk_event_dispatch (GSource    *source,
  
   GDK_THREADS_ENTER ();
 
-  gdk_events_queue();
-  event = gdk_event_unqueue();
+  _gdk_events_queue();
+  event = _gdk_event_unqueue();
 
   if (event)
     {
-      if (gdk_event_func)
-	(*gdk_event_func) (event, gdk_event_data);
+      if (_gdk_event_func)
+	(*_gdk_event_func) (event, _gdk_event_data);
       
       gdk_event_free (event);
     }
@@ -1785,7 +1789,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   unsigned char *data;
   Window *ret_children, ret_root, ret_parent;
   unsigned int ret_nchildren;
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
   gboolean send = FALSE;
   gboolean found = FALSE;
   int i;
@@ -1793,14 +1797,14 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   if (!wm_state_atom)
     wm_state_atom = gdk_atom_intern ("WM_STATE", FALSE);
 
-  gdk_error_warnings = FALSE;
-  gdk_error_code = 0;
+  _gdk_error_warnings = FALSE;
+  _gdk_error_code = 0;
   XGetWindowProperty (gdk_display, xid, wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
 
-  if (gdk_error_code)
+  if (_gdk_error_code)
     {
-      gdk_error_warnings = old_warnings;
+      _gdk_error_warnings = old_warnings;
 
       return FALSE;
     }
@@ -1815,9 +1819,9 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
       /* OK, we're all set, now let's find some windows to send this to */
       if (XQueryTree (gdk_display, xid, &ret_root, &ret_parent,
 		      &ret_children, &ret_nchildren) != True ||
-	  gdk_error_code)
+	  _gdk_error_code)
 	{
-	  gdk_error_warnings = old_warnings;
+	  _gdk_error_warnings = old_warnings;
 
 	  return FALSE;
 	}
@@ -1835,7 +1839,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
       gdk_send_xevent (xid, False, NoEventMask, xev);
     }
 
-  gdk_error_warnings = old_warnings;
+  _gdk_error_warnings = old_warnings;
 
   return (send || found);
 }
@@ -1844,7 +1848,7 @@ void
 gdk_event_send_clientmessage_toall (GdkEvent *event)
 {
   XEvent sev;
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
 
   g_return_if_fail(event != NULL);
   
@@ -1855,9 +1859,9 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
   sev.xclient.message_type = event->client.message_type;
 
-  gdk_event_send_client_message_to_all_recurse(&sev, gdk_root_window, 0);
+  gdk_event_send_client_message_to_all_recurse(&sev, _gdk_root_window, 0);
 
-  gdk_error_warnings = old_warnings;
+  _gdk_error_warnings = old_warnings;
 }
 
 /*
@@ -1990,7 +1994,7 @@ gdk_net_wm_supports (GdkAtom property)
   if (wmspec_supported_atom == 0)
     wmspec_supported_atom = gdk_atom_intern ("_NET_SUPPORTED", FALSE);
   
-  XGetWindowProperty (gdk_display, gdk_root_window,
+  XGetWindowProperty (gdk_display, _gdk_root_window,
 		      wmspec_check_atom, 0, G_MAXLONG,
 		      False, XA_WINDOW, &type, &format, &nitems,
 		      &bytes_after, (guchar **)&xwindow);
@@ -2012,7 +2016,7 @@ gdk_net_wm_supports (GdkAtom property)
       return FALSE;
     }
 
-  XGetWindowProperty (gdk_display, gdk_root_window,
+  XGetWindowProperty (gdk_display, _gdk_root_window,
 		      wmspec_supported_atom, 0, G_MAXLONG,
 		      False, XA_ATOM, &type, &format, &n_atoms,
 		      &bytes_after, (guchar **)&atoms);
@@ -2175,7 +2179,7 @@ gdk_setting_get (const gchar *name,
   return success;
 }
 
-GdkFilterReturn 
+static GdkFilterReturn 
 gdk_xsettings_client_event_filter (GdkXEvent *xevent,
 				   GdkEvent  *event,
 				   gpointer   data)

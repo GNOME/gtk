@@ -31,10 +31,10 @@
 static void gdk_input_check_proximity (void);
 
 void 
-gdk_input_init(void)
+_gdk_input_init(void)
 {
   _gdk_init_input_core ();
-  gdk_input_ignore_core = FALSE;
+  _gdk_input_ignore_core = FALSE;
   gdk_input_common_init(FALSE);
 }
 
@@ -61,7 +61,7 @@ gdk_device_set_mode (GdkDevice      *device,
   if (mode == GDK_MODE_WINDOW)
     {
       device->has_cursor = FALSE;
-      for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
+      for (tmp_list = _gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
 	{
 	  input_window = (GdkInputWindow *)tmp_list->data;
 	  if (input_window->mode != GDK_EXTENSION_EVENTS_CURSOR)
@@ -74,13 +74,13 @@ gdk_device_set_mode (GdkDevice      *device,
   else if (mode == GDK_MODE_SCREEN)
     {
       device->has_cursor = TRUE;
-      for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
+      for (tmp_list = _gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
 	_gdk_input_enable_window (((GdkInputWindow *)tmp_list->data)->window,
 				  gdkdev);
     }
   else  /* mode == GDK_MODE_DISABLED */
     {
-      for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
+      for (tmp_list = _gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
 	{
 	  input_window = (GdkInputWindow *)tmp_list->data;
 	  if (old_mode != GDK_MODE_WINDOW ||
@@ -97,7 +97,7 @@ static void
 gdk_input_check_proximity (void)
 {
   gint new_proximity = 0;
-  GList *tmp_list = gdk_input_devices;
+  GList *tmp_list = _gdk_input_devices;
 
   while (tmp_list && !new_proximity) 
     {
@@ -132,7 +132,7 @@ gdk_input_check_proximity (void)
       tmp_list = tmp_list->next;
     }
 
-  gdk_input_ignore_core = new_proximity;
+  _gdk_input_ignore_core = new_proximity;
 }
 
 void
@@ -202,14 +202,14 @@ _gdk_input_other_event (GdkEvent *event,
        && input_window->mode == GDK_EXTENSION_EVENTS_CURSOR))
     return FALSE;
   
-  if (!gdk_input_ignore_core)
+  if (!_gdk_input_ignore_core)
     gdk_input_check_proximity();
 
   return_val = gdk_input_common_other_event (event, xevent, 
 					     input_window, gdkdev);
 
   if (return_val > 0 && event->type == GDK_PROXIMITY_OUT &&
-      gdk_input_ignore_core)
+      _gdk_input_ignore_core)
     gdk_input_check_proximity();
 
   return return_val;
@@ -245,7 +245,7 @@ _gdk_input_grab_pointer (GdkWindow *     window,
   gint num_classes;
   gint result;
 
-  tmp_list = gdk_input_windows;
+  tmp_list = _gdk_input_windows;
   new_window = NULL;
   need_ungrab = FALSE;
 
@@ -268,7 +268,7 @@ _gdk_input_grab_pointer (GdkWindow *     window,
     {
       new_window->grabbed = TRUE;
       
-      tmp_list = gdk_input_devices;
+      tmp_list = _gdk_input_devices;
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
@@ -293,7 +293,7 @@ _gdk_input_grab_pointer (GdkWindow *     window,
     }
   else
     { 
-      tmp_list = gdk_input_devices;
+      tmp_list = _gdk_input_devices;
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
@@ -319,7 +319,7 @@ _gdk_input_ungrab_pointer (guint32 time)
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
 
-  tmp_list = gdk_input_windows;
+  tmp_list = _gdk_input_windows;
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;
@@ -332,7 +332,7 @@ _gdk_input_ungrab_pointer (guint32 time)
     {
       input_window->grabbed = FALSE;
 
-      tmp_list = gdk_input_devices;
+      tmp_list = _gdk_input_devices;
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;

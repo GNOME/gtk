@@ -194,7 +194,7 @@ get_keymap (void)
 }
 
 #if HAVE_XKB
-PangoDirection
+static PangoDirection
 get_direction (void)
 {
   XkbDescRec *xkb = get_xkb ();

@@ -52,14 +52,6 @@ struct _GdkEventPrivate
   guint    flags;
 };
 
-/* 
- * Private function declarations
- */
-
-GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
-					 GdkEvent  *event,
-					 gpointer   data);
-
 /* Private variable declarations
  */
 
@@ -73,11 +65,9 @@ static GdkWindow *button_window[2] = { NULL, NULL}; /* The last 2 windows to rec
 					     */
 static guint button_number[2] = { -1, -1 }; /* The last 2 buttons to be pressed.
 					     */
-GdkEventFunc   gdk_event_func = NULL;    /* Callback for events */
-gpointer       gdk_event_data = NULL;
-GDestroyNotify gdk_event_notify = NULL;
-
-GPollFD event_poll_fd;
+GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
+gpointer       _gdk_event_data = NULL;
+GDestroyNotify _gdk_event_notify = NULL;
 
 static guint double_click_time = 250;
 #define TRIPLE_CLICK_TIME      (2*double_click_time)
@@ -89,7 +79,7 @@ static guint double_click_time = 250;
  *********************************************/
 
 /*************************************************************
- * gdk_event_queue_find_first:
+ * _gdk_event_queue_find_first:
  *     Find the first event on the queue that is not still
  *     being filled in.
  *   arguments:
@@ -99,9 +89,9 @@ static guint double_click_time = 250;
  *************************************************************/
 
 GList*
-gdk_event_queue_find_first (void)
+_gdk_event_queue_find_first (void)
 {
-  GList *tmp_list = gdk_queued_events;
+  GList *tmp_list = _gdk_queued_events;
 
   while (tmp_list)
     {
@@ -116,7 +106,7 @@ gdk_event_queue_find_first (void)
 }
 
 /*************************************************************
- * gdk_event_queue_remove_link:
+ * _gdk_event_queue_remove_link:
  *     Remove a specified list node from the event queue.
  *   arguments:
  *     node: Node to remove.
@@ -124,21 +114,21 @@ gdk_event_queue_find_first (void)
  *************************************************************/
 
 void
-gdk_event_queue_remove_link (GList *node)
+_gdk_event_queue_remove_link (GList *node)
 {
   if (node->prev)
     node->prev->next = node->next;
   else
-    gdk_queued_events = node->next;
+    _gdk_queued_events = node->next;
   
   if (node->next)
     node->next->prev = node->prev;
   else
-    gdk_queued_tail = node->prev;
+    _gdk_queued_tail = node->prev;
 }
 
 /*************************************************************
- * gdk_event_queue_append:
+ * _gdk_event_queue_append:
  *     Append an event onto the tail of the event queue.
  *   arguments:
  *     event: Event to append.
@@ -146,14 +136,14 @@ gdk_event_queue_remove_link (GList *node)
  *************************************************************/
 
 void
-gdk_event_queue_append (GdkEvent *event)
+_gdk_event_queue_append (GdkEvent *event)
 {
-  gdk_queued_tail = g_list_append (gdk_queued_tail, event);
+  _gdk_queued_tail = g_list_append (_gdk_queued_tail, event);
   
-  if (!gdk_queued_events)
-    gdk_queued_events = gdk_queued_tail;
+  if (!_gdk_queued_events)
+    _gdk_queued_events = _gdk_queued_tail;
   else
-    gdk_queued_tail = gdk_queued_tail->next;
+    _gdk_queued_tail = _gdk_queued_tail->next;
 }
 
 /*************************************************************
@@ -172,12 +162,12 @@ gdk_event_handler_set (GdkEventFunc   func,
 		       gpointer       data,
 		       GDestroyNotify notify)
 {
-  if (gdk_event_notify)
-    (*gdk_event_notify) (gdk_event_data);
+  if (_gdk_event_notify)
+    (*_gdk_event_notify) (_gdk_event_data);
 
-  gdk_event_func = func;
-  gdk_event_data = data;
-  gdk_event_notify = notify;
+  _gdk_event_func = func;
+  _gdk_event_data = data;
+  _gdk_event_notify = notify;
 }
 
 /*
@@ -201,9 +191,9 @@ gdk_event_handler_set (GdkEventFunc   func,
 GdkEvent*
 gdk_event_get (void)
 {
-  gdk_events_queue ();
+  _gdk_events_queue ();
 
-  return gdk_event_unqueue ();
+  return _gdk_event_unqueue ();
 }
 
 /*
@@ -230,7 +220,7 @@ gdk_event_peek (void)
 {
   GList *tmp_list;
 
-  tmp_list = gdk_event_queue_find_first ();
+  tmp_list = _gdk_event_queue_find_first ();
   
   if (tmp_list)
     return gdk_event_copy (tmp_list->data);
@@ -247,7 +237,7 @@ gdk_event_put (GdkEvent *event)
   
   new_event = gdk_event_copy (event);
 
-  gdk_event_queue_append (new_event);
+  _gdk_event_queue_append (new_event);
 }
 
 /*
@@ -271,7 +261,7 @@ gdk_event_put (GdkEvent *event)
 static GMemChunk *event_chunk = NULL;
 
 GdkEvent*
-gdk_event_new (void)
+_gdk_event_new (void)
 {
   GdkEventPrivate *new_event;
   
@@ -294,7 +284,7 @@ gdk_event_copy (GdkEvent *event)
   
   g_return_val_if_fail (event != NULL, NULL);
   
-  new_event = gdk_event_new ();
+  new_event = _gdk_event_new ();
   
   *new_event = *event;
   if (new_event->any.window)
@@ -776,15 +766,15 @@ void
 gdk_set_show_events (gboolean show_events)
 {
   if (show_events)
-    gdk_debug_flags |= GDK_DEBUG_EVENTS;
+    _gdk_debug_flags |= GDK_DEBUG_EVENTS;
   else
-    gdk_debug_flags &= ~GDK_DEBUG_EVENTS;
+    _gdk_debug_flags &= ~GDK_DEBUG_EVENTS;
 }
 
 gboolean
 gdk_get_show_events (void)
 {
-  return (gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
+  return (_gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
 }
 
 static void
@@ -874,17 +864,17 @@ gdk_input_remove (gint tag)
 }
 
 GdkEvent*
-gdk_event_unqueue (void)
+_gdk_event_unqueue (void)
 {
   GdkEvent *event = NULL;
   GList *tmp_list;
 
-  tmp_list = gdk_event_queue_find_first ();
+  tmp_list = _gdk_event_queue_find_first ();
 
   if (tmp_list)
     {
       event = tmp_list->data;
-      gdk_event_queue_remove_link (tmp_list);
+      _gdk_event_queue_remove_link (tmp_list);
       g_list_free_1 (tmp_list);
     }
 
@@ -906,7 +896,7 @@ gdk_synthesize_click (GdkEvent *event,
 }
 
 void
-gdk_event_button_generate (GdkEvent *event)
+_gdk_event_button_generate (GdkEvent *event)
 {
   if ((event->button.time < (button_click_time[1] + TRIPLE_CLICK_TIME)) &&
       (event->button.window == button_window[1]) &&
@@ -1015,4 +1005,10 @@ gdk_event_get_type (void)
 					     (GBoxedFreeFunc)gdk_event_free,
 					     FALSE);
   return our_type;
+}
+
+GdkDevice *
+gdk_device_get_core_pointer (void)
+{
+  return _gdk_core_pointer;
 }

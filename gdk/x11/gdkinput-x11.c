@@ -47,7 +47,7 @@ static guint gdk_input_translate_state(guint state, guint device_state);
 GdkDevicePrivate *
 gdk_input_find_device (guint32 id)
 {
-  GList *tmp_list = gdk_input_devices;
+  GList *tmp_list = _gdk_input_devices;
   GdkDevicePrivate *gdkdev;
   while (tmp_list)
     {
@@ -386,7 +386,7 @@ gdk_input_common_init(gint include_core)
   for (loop = 0; loop < num_extensions &&
 	 (strcmp(extensions[loop], "XInputExtension") != 0); loop++);
   XFreeExtensionList(extensions);
-  gdk_input_devices = NULL;
+  _gdk_input_devices = NULL;
   if (loop < num_extensions)
     {
       /* XInput extension found */
@@ -398,12 +398,12 @@ gdk_input_common_init(gint include_core)
 	  GdkDevicePrivate *gdkdev = gdk_input_device_new(&devices[loop],
 						      include_core);
 	  if (gdkdev)
-	    gdk_input_devices = g_list_append(gdk_input_devices, gdkdev);
+	    _gdk_input_devices = g_list_append(_gdk_input_devices, gdkdev);
 	}
       XFreeDeviceList(devices);
     }
 
-  gdk_input_devices = g_list_append (gdk_input_devices, gdk_core_pointer);
+  _gdk_input_devices = g_list_append (_gdk_input_devices, _gdk_core_pointer);
 
   return TRUE;
 }

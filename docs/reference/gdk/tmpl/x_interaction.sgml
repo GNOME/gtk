@@ -14,22 +14,6 @@ X Window System Interaction
 
 </para>
 
-<!-- ##### MACRO GDK_GC_X11 ##### -->
-<para>
-
-</para>
-
-@object: 
-
-
-<!-- ##### MACRO GDK_GC_X11_GET_CLASS ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-
 <!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
 <para>
 
@@ -184,36 +168,6 @@ X Window System Interaction
 
 </para>
 
-
-
-<!-- ##### VARIABLE gdk_screen ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### VARIABLE gdk_display_name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### VARIABLE gdk_leader_window ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### VARIABLE gdk_selection_property ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### VARIABLE gdk_progclass ##### -->
-<para>
-
-</para>
 
 
 <!-- ##### FUNCTION gdkx_visual_get ##### -->

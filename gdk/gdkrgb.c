@@ -3419,8 +3419,6 @@ gdk_draw_gray_image (GdkDrawable *drawable,
 			     image_info->conv_gray_d, NULL, 0, 0);
 }
 
-guchar lut[256]; /* for 8-bit modes */
-
 static GdkRgbCmapInfo *
 gdk_rgb_cmap_get_info (GdkRgbCmap *cmap,
 		       GdkRgbInfo *image_info)

@@ -97,7 +97,7 @@ gdk_image_finalize (GObject *object)
 }
 
 void
-gdk_image_exit (void)
+_gdk_image_exit (void)
 {
   GdkImage *image;
 
@@ -655,7 +655,7 @@ gdk_win32_image_destroy (GdkImage *image)
 
   private = IMAGE_PRIVATE_DATA (image);
 
-  if (private == NULL) /* This means that gdk_image_exit() destroyed the
+  if (private == NULL) /* This means that _gdk_image_exit() destroyed the
                         * image already, and now we're called a second
                         * time from _finalize()
                         */

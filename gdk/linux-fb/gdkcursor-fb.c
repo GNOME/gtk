@@ -206,14 +206,14 @@ gdk_cursor_new (GdkCursorType cursor_type)
       GdkGC *copy_gc;
       char *data;
      
-      tmp_pm = gdk_bitmap_create_from_data (gdk_parent_root,
+      tmp_pm = gdk_bitmap_create_from_data (_gdk_parent_root,
 					    stock_cursors[cursor_type].bits,
 					    stock_cursors[cursor_type].width,
 					    stock_cursors[cursor_type].height);
 
       /* Create an empty bitmap the size of the mask */
       data = g_malloc0 (((stock_cursors[cursor_type+1].width+7)/8) * stock_cursors[cursor_type+1].height);
-      pm = gdk_bitmap_create_from_data (gdk_parent_root,
+      pm = gdk_bitmap_create_from_data (_gdk_parent_root,
 					data,
 					stock_cursors[cursor_type+1].width,
 					stock_cursors[cursor_type+1].height);
@@ -230,7 +230,7 @@ gdk_cursor_new (GdkCursorType cursor_type)
       g_free (data);
       gdk_gc_unref (copy_gc);
 
-      mask =  gdk_bitmap_create_from_data (gdk_parent_root,
+      mask =  gdk_bitmap_create_from_data (_gdk_parent_root,
 					   stock_cursors[cursor_type+1].bits,
 					   stock_cursors[cursor_type+1].width,
 					   stock_cursors[cursor_type+1].height);
@@ -303,7 +303,7 @@ gdk_fb_cursor_dc_reset (void)
 
   gdk_fb_cursor_dc = &cursor_dc_dat;
   gdk_fb_drawing_context_init (gdk_fb_cursor_dc,
-			       GDK_DRAWABLE_IMPL(gdk_parent_root),
+			       GDK_DRAWABLE_IMPL(_gdk_parent_root),
 			       cursor_gc,
 			       TRUE,
 			       FALSE);
@@ -329,7 +329,7 @@ gdk_fb_cursor_hide (void)
     {
       gdk_gc_set_clip_mask (cursor_gc, NULL);
       /* Restore old picture */
-      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL(gdk_parent_root),
+      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL(_gdk_parent_root),
 			      cursor_gc,
 			      GDK_DRAWABLE_IMPL(last_contents),
 			      mydc,
@@ -381,16 +381,16 @@ gdk_fb_cursor_unhide()
 	  if (last_contents)
 	    gdk_pixmap_unref (last_contents);
 
-	  last_contents = gdk_pixmap_new (gdk_parent_root,
+	  last_contents = gdk_pixmap_new (_gdk_parent_root,
 					  pixmap_last->width,
 					  pixmap_last->height,
-					  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->depth);
+					  GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->depth);
 	}
 
       gdk_gc_set_clip_mask (cursor_gc, NULL);
       gdk_fb_draw_drawable_2 (GDK_DRAWABLE_IMPL (last_contents),
 			      cursor_gc,
-			      GDK_DRAWABLE_IMPL (gdk_parent_root),
+			      GDK_DRAWABLE_IMPL (_gdk_parent_root),
 			      last_location.x,
 			      last_location.y,
 			      0, 0,
@@ -406,7 +406,7 @@ gdk_fb_cursor_unhide()
 			      last_location.y);
 
       gdk_fb_cursor_dc_reset ();
-      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL (gdk_parent_root),
+      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL (_gdk_parent_root),
 			      cursor_gc,
 			      GDK_DRAWABLE_IMPL (last_private->cursor),
 			      mydc,
@@ -479,7 +479,7 @@ gdk_fb_cursor_move (gint x, gint y, GdkWindow *in_window)
   if (!cursor_gc)
     {
       GdkColor white, black;
-      cursor_gc = gdk_gc_new (gdk_parent_root);
+      cursor_gc = gdk_gc_new (_gdk_parent_root);
       gdk_color_black (gdk_colormap_get_system (), &black);
       gdk_color_white (gdk_colormap_get_system (), &white);
       gdk_gc_set_foreground (cursor_gc, &black);

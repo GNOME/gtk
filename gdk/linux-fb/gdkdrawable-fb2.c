@@ -338,7 +338,7 @@ gdk_fb_clip_region (GdkDrawable *drawable,
   if (GDK_IS_WINDOW (private->wrapper))
     {
       parent = GDK_WINDOW_P (private->wrapper);
-      while (parent != (GdkWindowObject *)gdk_parent_root)
+      while (parent != (GdkWindowObject *)_gdk_parent_root)
 	{
 	  if (full_shapes)
 	    {
@@ -529,7 +529,7 @@ gdk_fb_fill_spans (GdkDrawable *real_drawable,
 
   real_clip_region = gdk_fb_clip_region (drawable, gc, TRUE, GDK_GC_FBDATA (gc)->values.function != GDK_INVERT, TRUE);
 
-  if (private->mem == GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->mem &&
+  if (private->mem == GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->mem &&
       gdk_fb_cursor_region_need_hide (real_clip_region))
     {
       handle_cursor = TRUE;
@@ -622,7 +622,7 @@ gdk_fb_drawing_context_init (GdkFBDrawingContext *dc,
     }
 
   if (do_clipping &&
-      private->mem == GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->mem &&
+      private->mem == GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->mem &&
       gdk_fb_cursor_region_need_hide (dc->real_clip_region))
     {
       dc->handle_cursor = TRUE;
@@ -965,7 +965,7 @@ gdk_fb_draw_rectangle (GdkDrawable    *drawable,
       
       real_clip_region = gdk_fb_clip_region (drawable, gc, TRUE, GDK_GC_FBDATA (gc)->values.function != GDK_INVERT, TRUE);
       
-      if (private->mem == GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->mem &&
+      if (private->mem == GDK_DRAWABLE_IMPL_FBDATA (_gdk_parent_root)->mem &&
 	  gdk_fb_cursor_region_need_hide (real_clip_region))
 	{
 	  handle_cursor = TRUE;

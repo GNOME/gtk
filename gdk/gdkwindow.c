@@ -48,7 +48,7 @@ static const GdkPointerHooks default_pointer_hooks = {
   _gdk_windowing_window_at_pointer
 };
 
-const GdkPointerHooks *current_pointer_hooks = &default_pointer_hooks;
+static const GdkPointerHooks *current_pointer_hooks = &default_pointer_hooks;
 
 static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
@@ -495,7 +495,7 @@ gdk_window_add_filter (GdkWindow     *window,
   if (private)
     tmp_list = private->filters;
   else
-    tmp_list = gdk_default_filters;
+    tmp_list = _gdk_default_filters;
   
   while (tmp_list)
     {
@@ -512,7 +512,7 @@ gdk_window_add_filter (GdkWindow     *window,
   if (private)
     private->filters = g_list_append (private->filters, filter);
   else
-    gdk_default_filters = g_list_append (gdk_default_filters, filter);
+    _gdk_default_filters = g_list_append (_gdk_default_filters, filter);
 }
 
 void
@@ -531,7 +531,7 @@ gdk_window_remove_filter (GdkWindow     *window,
   if (private)
     tmp_list = private->filters;
   else
-    tmp_list = gdk_default_filters;
+    tmp_list = _gdk_default_filters;
   
   while (tmp_list)
     {
@@ -544,7 +544,7 @@ gdk_window_remove_filter (GdkWindow     *window,
 	  if (private)
 	    private->filters = g_list_remove_link (private->filters, node);
 	  else
-	    gdk_default_filters = g_list_remove_link (gdk_default_filters, node);
+	    _gdk_default_filters = g_list_remove_link (_gdk_default_filters, node);
 	  g_list_free_1 (node);
 	  g_free (filter);
 	  
@@ -559,7 +559,7 @@ gdk_window_get_toplevels (void)
   GList *new_list = NULL;
   GList *tmp_list;
   
-  tmp_list = ((GdkWindowObject *)gdk_parent_root)->children;
+  tmp_list = ((GdkWindowObject *)_gdk_parent_root)->children;
   while (tmp_list)
     {
       new_list = g_list_prepend (new_list, tmp_list->data);
@@ -607,7 +607,7 @@ gdk_window_is_viewable (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
   
   while (private && 
-	 (private != (GdkWindowObject *)gdk_parent_root) &&
+	 (private != (GdkWindowObject *)_gdk_parent_root) &&
 	 (GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN))
     {
       if (!GDK_WINDOW_IS_MAPPED (window))
@@ -1805,7 +1805,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
       GdkRegion *update_area = private->update_area;
       private->update_area = NULL;
       
-      if (gdk_event_func && gdk_window_is_viewable (window))
+      if (_gdk_event_func && gdk_window_is_viewable (window))
 	{
 	  GdkEvent event;
 	  GdkRectangle window_rect;
@@ -1847,7 +1847,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  
 	  if (!gdk_region_empty (expose_region))
 	    {
-	      (*gdk_event_func) (&event, gdk_event_data);
+	      (*_gdk_event_func) (&event, _gdk_event_data);
 	    }
 
 	  if (expose_region != update_area)
@@ -2385,3 +2385,10 @@ gdk_window_at_pointer (gint *win_x,
 {
   return current_pointer_hooks->window_at_pointer (win_x, win_y);
 }
+
+GdkWindow *
+gdk_get_default_root_window (void)
+{
+  return _gdk_parent_root;
+}
+

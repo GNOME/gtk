@@ -340,7 +340,7 @@ struct _GdkGCWin32Class
 GType gdk_gc_win32_get_type (void);
 
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
-#define GDK_ROOT_PARENT()             ((GdkWindow *) gdk_parent_root)
+#define GDK_ROOT_PARENT()             ((GdkWindow *) _gdk_parent_root)
 #define GDK_DISPLAY()                 NULL
 #define GDK_WINDOW_HWND(win)          (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
 #define GDK_PIXMAP_HBITMAP(pixmap)    (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)pixmap)->impl)->handle)
@@ -349,9 +349,6 @@ GType gdk_gc_win32_get_type (void);
 #define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
 #define GDK_COLORMAP_WIN32COLORMAP(cmap) (((GdkColormapPrivateWin32 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
-
-GDKVAR gchar		*gdk_progclass;
-GDKVAR ATOM		 gdk_selection_property;
 
 /* Functions to create GDK pixmaps and windows from their native equivalents */
 GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);

@@ -38,6 +38,31 @@
 
 /* Debugging support */
 
+typedef struct _GdkColorInfo           GdkColorInfo;
+typedef struct _GdkEventFilter	       GdkEventFilter;
+typedef struct _GdkClientFilter	       GdkClientFilter;
+
+typedef enum {
+  GDK_COLOR_WRITEABLE = 1 << 0
+} GdkColorInfoFlags;
+
+struct _GdkColorInfo
+{
+  GdkColorInfoFlags flags;
+  guint ref_count;
+};
+
+struct _GdkEventFilter {
+  GdkFilterFunc function;
+  gpointer data;
+};
+
+struct _GdkClientFilter {
+  GdkAtom       type;
+  GdkFilterFunc function;
+  gpointer      data;
+};
+
 typedef enum {
   GDK_DEBUG_MISC          = 1 << 0,
   GDK_DEBUG_EVENTS        = 1 << 1,
@@ -45,16 +70,29 @@ typedef enum {
   GDK_DEBUG_XIM           = 1 << 3
 } GdkDebugFlag;
 
-extern gint		 gdk_debug_level;
-extern gboolean		 gdk_show_events;
-extern GList            *gdk_default_filters;
+#ifndef GDK_DISABLE_DEPRECATED
 
-GDKVAR guint gdk_debug_flags;
+typedef struct _GdkFontPrivate	       GdkFontPrivate;
+
+struct _GdkFontPrivate
+{
+  GdkFont font;
+  guint ref_count;
+};
+
+#endif /* GDK_DISABLE_DEPRECATED */
+
+extern GList            *_gdk_default_filters;
+extern GdkWindow  	*_gdk_parent_root;
+extern gint		 _gdk_error_code;
+extern gint		 _gdk_error_warnings;
+
+extern guint _gdk_debug_flags;
 
 #ifdef G_ENABLE_DEBUG
 
 #define GDK_NOTE(type,action)		     G_STMT_START { \
-    if (gdk_debug_flags & GDK_DEBUG_##type)		    \
+    if (_gdk_debug_flags & GDK_DEBUG_##type)		    \
        { action; };			     } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
@@ -95,30 +133,29 @@ struct _GdkArgDesc
 
 /* Event handling */
 
-extern GdkEventFunc   gdk_event_func;    /* Callback for events */
-extern gpointer       gdk_event_data;
-extern GDestroyNotify gdk_event_notify;
+extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
+extern gpointer       _gdk_event_data;
+extern GDestroyNotify _gdk_event_notify;
 
 /* FIFO's for event queue, and for events put back using
  * gdk_event_put().
  */
-extern GList *gdk_queued_events;
-extern GList *gdk_queued_tail;
+extern GList *_gdk_queued_events;
+extern GList *_gdk_queued_tail;
 
-GdkEvent* gdk_event_new (void);
+extern GdkDevice *_gdk_core_pointer;
 
-void      gdk_events_init   (void);
-void      gdk_events_queue  (void);
-GdkEvent* gdk_event_unqueue (void);
+GdkEvent* _gdk_event_new (void);
 
-GList* gdk_event_queue_find_first  (void);
-void   gdk_event_queue_remove_link (GList    *node);
-void   gdk_event_queue_append      (GdkEvent *event);
+void      _gdk_events_init   (void);
+void      _gdk_events_queue  (void);
+GdkEvent* _gdk_event_unqueue (void);
 
-void gdk_event_button_generate (GdkEvent *event);
-void gdk_synthesize_window_state (GdkWindow     *window,
-                                  GdkWindowState unset_flags,
-                                  GdkWindowState set_flags);
+GList* _gdk_event_queue_find_first  (void);
+void   _gdk_event_queue_remove_link (GList    *node);
+void   _gdk_event_queue_append      (GdkEvent *event);
+
+void _gdk_event_button_generate (GdkEvent *event);
 
 /*************************************
  * Interfaces used by windowing code *
@@ -202,16 +239,16 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
  ************************************/
 
 void _gdk_windowing_window_init (void);
-void gdk_visual_init (void);
-void gdk_dnd_init    (void);
+void _gdk_visual_init (void);
+void _gdk_dnd_init    (void);
 
 void _gdk_windowing_image_init  (void);
-void gdk_image_exit  (void);
+void _gdk_image_exit  (void);
 
-void gdk_input_init  (void);
-void gdk_input_exit  (void);
+void _gdk_input_init  (void);
+void _gdk_input_exit  (void);
 
-void gdk_windowing_exit (void);
+void _gdk_windowing_exit (void);
 
 #ifdef __cplusplus
 }

@@ -836,7 +836,7 @@ _gdk_windowing_init_check (int argc, char **argv)
 
   gdk_initialized = TRUE;
 
-  gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+  _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
 
   
   return TRUE;
@@ -1183,21 +1183,11 @@ gdk_set_sm_client_id (const gchar* sm_client_id)
 {
 }
 
-void
-gdk_key_repeat_disable (void)
-{
-}
-
-void
-gdk_key_repeat_restore (void)
-{
-}
-
 
 extern void keyboard_shutdown(void);
 
 void
-gdk_windowing_exit (void)
+_gdk_windowing_exit (void)
 {
 
   gdk_fb_mouse_close ();
@@ -1293,7 +1283,7 @@ gdk_fb_other_event_window (GdkWindow *window,
   GdkWindow *w;
 
   w = window;
-  while (w != gdk_parent_root)
+  while (w != _gdk_parent_root)
     {
       /* Huge hack, so that we don't propagate events to GtkWindow->frame */
       if ((w != window) &&
@@ -1342,7 +1332,7 @@ gdk_fb_pointer_event_window (GdkWindow *window,
     }
 
   w = window;
-  while (w != gdk_parent_root)
+  while (w != _gdk_parent_root)
     {
       /* Huge hack, so that we don't propagate events to GtkWindow->frame */
       if ((w != window) &&
@@ -1400,7 +1390,7 @@ gdk_fb_keyboard_event_window (GdkWindow *window,
     }
   
   w = window;
-  while (w != gdk_parent_root)
+  while (w != _gdk_parent_root)
     {
       /* Huge hack, so that we don't propagate events to GtkWindow->frame */
       if ((w != window) &&
@@ -1430,7 +1420,7 @@ gdk_event_make (GdkWindow *window,
 		GdkEventType type,
 		gboolean append_to_queue)
 {
-  GdkEvent *event = gdk_event_new ();
+  GdkEvent *event = _gdk_event_new ();
   guint32 the_time;
   
   the_time = gdk_fb_get_time ();
@@ -1498,7 +1488,7 @@ gdk_event_make (GdkWindow *window,
     }
   
   if (append_to_queue)
-    gdk_event_queue_append (event);
+    _gdk_event_queue_append (event);
   
   return event;
 }
