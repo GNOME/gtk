@@ -1,3 +1,9 @@
+Mon Apr 13 05:03:11 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_add_accelerator_table): check for
+	accelerator table to be != NULL.
+	(gtk_window_remove_accelerator_table): likewise.
+
 Sun Apr 12 19:35:09 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* INSTALL: typo, gtk-1.0.0 should be gtk+-1.0.0

@@ -350,13 +350,15 @@ gtk_window_set_focus (GtkWindow *window,
 
 void
 gtk_window_set_default (GtkWindow *window,
-			GtkWidget *defaultw)
+			GtkWidget *default_widget)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail ((defaultw == NULL) || GTK_WIDGET_CAN_DEFAULT (defaultw));
 
-  if (window->default_widget != defaultw)
+  if (default_widget)
+    g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (default_widget));
+
+  if (window->default_widget != default_widget)
     {
       if (window->default_widget)
 	{
@@ -364,7 +366,7 @@ gtk_window_set_default (GtkWindow *window,
 	  gtk_widget_draw_default (window->default_widget);
 	}
 
-      window->default_widget = defaultw;
+      window->default_widget = default_widget;
 
       if (window->default_widget)
 	{
@@ -396,6 +398,7 @@ gtk_window_add_accelerator_table (GtkWindow           *window,
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (table != NULL);
 
   gtk_accelerator_table_ref (table);
   window->accelerator_tables = g_list_prepend (window->accelerator_tables,
@@ -410,6 +413,7 @@ gtk_window_remove_accelerator_table (GtkWindow           *window,
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (table != NULL);
 
   for (list = window->accelerator_tables; list; list = list->next)
     {
