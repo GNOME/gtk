@@ -1,5 +1,9 @@
 2004-08-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (gtk_menu_attach_to_widget): Steal ATTACHED_MENUS
+	list so its tail isn't freed when we re-set it, noticed
+	by Hans Petter Jansson.
+
 	* gtk/gtksizegroup.c (gtk_size_group_add_widget): Fix
 	a typo, noticed by Tim Janik.
 

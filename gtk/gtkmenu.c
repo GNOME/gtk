@@ -1037,7 +1037,7 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   
   data->detacher = detacher;
   g_object_set_data (G_OBJECT (menu), attach_data_key, data);
-  list = g_object_get_data (G_OBJECT (attach_widget), ATTACHED_MENUS);
+  list = g_object_steal_data (G_OBJECT (attach_widget), ATTACHED_MENUS);
   if (!g_list_find (list, menu))
     {
       list = g_list_prepend (list, menu);
