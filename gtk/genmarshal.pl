@@ -9,9 +9,9 @@
 	   "DOUBLE"=>"gdouble", "STRING"=>"gpointer",
 	   "ENUM"=>"gint", "FLAGS"=>"gint",
 	   "BOXED"=>"gpointer", "FOREIGN"=>"gpointer",
-	   "CALLBACK"=>"gpointer", "POINTER"=>"gpointer",
+	   "C_CALLBACK"=>"C_CALLBACK", "POINTER"=>"gpointer",
 	   "ARGS"=>"gpointer", "SIGNAL"=>"gpointer",
-	   "C_CALLBACK"=>"gpointer", "OBJECT"=>"gpointer",
+	   "OBJECT"=>"gpointer",
 	   "STYLE"=>"gpointer", "GDK_EVENT"=>"gpointer");
 
 $srcdir = $ENV{'srcdir'} || '.';
@@ -98,7 +98,12 @@ EOT
   print OS "typedef $trans{$retval} (*GtkSignal_$funcname) (GtkObject *object, \n";
   $argn = 1;
   for (@params) { 
-      print OS "$trans{$_} arg".$argn++.",\n" unless $_ eq "NONE";
+	if($_ eq "C_CALLBACK") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn++."b,\n";
+	} else {
+		print OS "$trans{$_} arg".$argn++.",\n" unless $_ eq "NONE";
+	}
   }
   print OS "gpointer user_data);\n";
 
@@ -120,8 +125,14 @@ EOT
   print OS                  " (* rfunc) (object,\n";
 
   for($i = 0; $i < (scalar @params); $i++) {
-      if ($params[$i] ne "NONE") {
-	  print OS "                      GTK_VALUE_$params[$i](args[$i]),\n";
+      if($params[$i] eq "C_CALLBACK") {
+	print OS <<EOT;
+GTK_VALUE_C_CALLBACK(args[$i]).func,
+GTK_VALUE_C_CALLBACK(args[$i]).func_data,
+EOT
+      } elsif ($params[$i] eq "NONE") {
+      } else {
+	print OS "                      GTK_VALUE_$params[$i](args[$i]),\n";
       }
   }
 

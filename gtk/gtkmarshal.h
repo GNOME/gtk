@@ -29,6 +29,13 @@ extern "C"
 						  gpointer func_data,
 						  GtkArg * args);
 
+#define gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER
+
+  void gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER (GtkObject * object,
+							  GtkSignalFunc func,
+							  gpointer func_data,
+							  GtkArg * args);
+
 #define gtk_marshal_ENUM__ENUM gtk_marshal_INT__INT
 
   void gtk_marshal_INT__INT (GtkObject * object,
@@ -46,6 +53,11 @@ extern "C"
 					   gpointer func_data,
 					   GtkArg * args);
 
+  void gtk_marshal_NONE__BOOL (GtkObject * object,
+			       GtkSignalFunc func,
+			       gpointer func_data,
+			       GtkArg * args);
+
 #define gtk_marshal_NONE__BOXED gtk_marshal_NONE__POINTER
 
   void gtk_marshal_NONE__POINTER (GtkObject * object,
@@ -53,12 +65,15 @@ extern "C"
 				  gpointer func_data,
 				  GtkArg * args);
 
-#define gtk_marshal_NONE__C_CALLBACK_C_CALLBACK gtk_marshal_NONE__POINTER_POINTER
+  void gtk_marshal_NONE__C_CALLBACK (GtkObject * object,
+				     GtkSignalFunc func,
+				     gpointer func_data,
+				     GtkArg * args);
 
-  void gtk_marshal_NONE__POINTER_POINTER (GtkObject * object,
-					  GtkSignalFunc func,
-					  gpointer func_data,
-					  GtkArg * args);
+  void gtk_marshal_NONE__C_CALLBACK_C_CALLBACK (GtkObject * object,
+						GtkSignalFunc func,
+						gpointer func_data,
+						GtkArg * args);
 
 #define gtk_marshal_NONE__ENUM gtk_marshal_NONE__INT
 
@@ -103,10 +118,19 @@ extern "C"
 				      gpointer func_data,
 				      GtkArg * args);
 
+  void gtk_marshal_NONE__POINTER_POINTER (GtkObject * object,
+					  GtkSignalFunc func,
+					  gpointer func_data,
+					  GtkArg * args);
+
   void gtk_marshal_NONE__POINTER_POINTER_POINTER (GtkObject * object,
 						  GtkSignalFunc func,
 						  gpointer func_data,
 						  GtkArg * args);
+
+#define gtk_marshal_NONE__POINTER_STRING_STRING gtk_marshal_NONE__POINTER_POINTER_POINTER
+
+#define gtk_marshal_NONE__POINTER_UINT gtk_marshal_NONE__POINTER_INT
 
 #define gtk_marshal_NONE__POINTER_UINT_ENUM gtk_marshal_NONE__POINTER_INT_INT
 
@@ -114,6 +138,8 @@ extern "C"
 					  GtkSignalFunc func,
 					  gpointer func_data,
 					  GtkArg * args);
+
+#define gtk_marshal_NONE__POINTER_UINT_UINT gtk_marshal_NONE__POINTER_INT_INT
 
 #define gtk_marshal_NONE__STRING gtk_marshal_NONE__POINTER
 
@@ -135,32 +161,12 @@ extern "C"
 							  gpointer func_data,
 							  GtkArg * args);
 
-#define gtk_marshal_NONE__POINTER_UINT_UINT gtk_marshal_NONE__POINTER_INT_INT
-
 #define gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM gtk_marshal_NONE__INT_POINTER_INT_INT_INT
 
   void gtk_marshal_NONE__INT_POINTER_INT_INT_INT (GtkObject * object,
 						  GtkSignalFunc func,
 						  gpointer func_data,
 						  GtkArg * args);
-
-#define gtk_marshal_NONE__C_CALLBACK gtk_marshal_NONE__POINTER
-
-  void gtk_marshal_NONE__BOOL (GtkObject * object,
-			       GtkSignalFunc func,
-			       gpointer func_data,
-			       GtkArg * args);
-
-#define gtk_marshal_NONE__POINTER_UINT gtk_marshal_NONE__POINTER_INT
-
-#define gtk_marshal_NONE__POINTER_STRING_STRING gtk_marshal_NONE__POINTER_POINTER_POINTER
-
-#define gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER
-
-  void gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER (GtkObject * object,
-							  GtkSignalFunc func,
-							  gpointer func_data,
-							  GtkArg * args);
 
 #define gtk_marshal_NONE__UINT_STRING gtk_marshal_NONE__INT_POINTER
 

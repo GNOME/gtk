@@ -58,6 +58,30 @@ gtk_marshal_BOOL__POINTER_POINTER_INT_INT (GtkObject * object,
 			  func_data);
 }
 
+typedef gboolean (*GtkSignal_BOOL__POINTER_POINTER_POINTER_POINTER) (GtkObject * object,
+							      gpointer arg1,
+							      gpointer arg2,
+							      gpointer arg3,
+							      gpointer arg4,
+							gpointer user_data);
+void 
+gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER (GtkObject * object,
+						   GtkSignalFunc func,
+						   gpointer func_data,
+						   GtkArg * args)
+{
+  GtkSignal_BOOL__POINTER_POINTER_POINTER_POINTER rfunc;
+  gboolean *return_val;
+  return_val = GTK_RETLOC_BOOL (args[4]);
+  rfunc = (GtkSignal_BOOL__POINTER_POINTER_POINTER_POINTER) func;
+  *return_val = (*rfunc) (object,
+			  GTK_VALUE_POINTER (args[0]),
+			  GTK_VALUE_POINTER (args[1]),
+			  GTK_VALUE_POINTER (args[2]),
+			  GTK_VALUE_POINTER (args[3]),
+			  func_data);
+}
+
 typedef gint (*GtkSignal_INT__INT) (GtkObject * object,
 				    gint arg1,
 				    gpointer user_data);
@@ -116,6 +140,22 @@ gtk_marshal_INT__POINTER_CHAR_CHAR (GtkObject * object,
 			  func_data);
 }
 
+typedef void (*GtkSignal_NONE__BOOL) (GtkObject * object,
+				      gboolean arg1,
+				      gpointer user_data);
+void 
+gtk_marshal_NONE__BOOL (GtkObject * object,
+			GtkSignalFunc func,
+			gpointer func_data,
+			GtkArg * args)
+{
+  GtkSignal_NONE__BOOL rfunc;
+  rfunc = (GtkSignal_NONE__BOOL) func;
+  (*rfunc) (object,
+	    GTK_VALUE_BOOL (args[0]),
+	    func_data);
+}
+
 typedef void (*GtkSignal_NONE__POINTER) (GtkObject * object,
 					 gpointer arg1,
 					 gpointer user_data);
@@ -132,21 +172,43 @@ gtk_marshal_NONE__POINTER (GtkObject * object,
 	    func_data);
 }
 
-typedef void (*GtkSignal_NONE__POINTER_POINTER) (GtkObject * object,
-						 gpointer arg1,
-						 gpointer arg2,
-						 gpointer user_data);
+typedef void (*GtkSignal_NONE__C_CALLBACK) (GtkObject * object,
+					    gpointer arg1a,
+					    gpointer arg1b,
+					    gpointer user_data);
 void 
-gtk_marshal_NONE__POINTER_POINTER (GtkObject * object,
-				   GtkSignalFunc func,
-				   gpointer func_data,
-				   GtkArg * args)
+gtk_marshal_NONE__C_CALLBACK (GtkObject * object,
+			      GtkSignalFunc func,
+			      gpointer func_data,
+			      GtkArg * args)
 {
-  GtkSignal_NONE__POINTER_POINTER rfunc;
-  rfunc = (GtkSignal_NONE__POINTER_POINTER) func;
+  GtkSignal_NONE__C_CALLBACK rfunc;
+  rfunc = (GtkSignal_NONE__C_CALLBACK) func;
   (*rfunc) (object,
-	    GTK_VALUE_POINTER (args[0]),
-	    GTK_VALUE_POINTER (args[1]),
+	    GTK_VALUE_C_CALLBACK (args[0]).func,
+	    GTK_VALUE_C_CALLBACK (args[0]).func_data,
+	    func_data);
+}
+
+typedef void (*GtkSignal_NONE__C_CALLBACK_C_CALLBACK) (GtkObject * object,
+						       gpointer arg1a,
+						       gpointer arg1b,
+						       gpointer arg2a,
+						       gpointer arg2b,
+						       gpointer user_data);
+void 
+gtk_marshal_NONE__C_CALLBACK_C_CALLBACK (GtkObject * object,
+					 GtkSignalFunc func,
+					 gpointer func_data,
+					 GtkArg * args)
+{
+  GtkSignal_NONE__C_CALLBACK_C_CALLBACK rfunc;
+  rfunc = (GtkSignal_NONE__C_CALLBACK_C_CALLBACK) func;
+  (*rfunc) (object,
+	    GTK_VALUE_C_CALLBACK (args[0]).func,
+	    GTK_VALUE_C_CALLBACK (args[0]).func_data,
+	    GTK_VALUE_C_CALLBACK (args[1]).func,
+	    GTK_VALUE_C_CALLBACK (args[1]).func_data,
 	    func_data);
 }
 
@@ -274,6 +336,24 @@ gtk_marshal_NONE__POINTER_INT (GtkObject * object,
 	    func_data);
 }
 
+typedef void (*GtkSignal_NONE__POINTER_POINTER) (GtkObject * object,
+						 gpointer arg1,
+						 gpointer arg2,
+						 gpointer user_data);
+void 
+gtk_marshal_NONE__POINTER_POINTER (GtkObject * object,
+				   GtkSignalFunc func,
+				   gpointer func_data,
+				   GtkArg * args)
+{
+  GtkSignal_NONE__POINTER_POINTER rfunc;
+  rfunc = (GtkSignal_NONE__POINTER_POINTER) func;
+  (*rfunc) (object,
+	    GTK_VALUE_POINTER (args[0]),
+	    GTK_VALUE_POINTER (args[1]),
+	    func_data);
+}
+
 typedef void (*GtkSignal_NONE__POINTER_POINTER_POINTER) (GtkObject * object,
 							 gpointer arg1,
 							 gpointer arg2,
@@ -382,46 +462,6 @@ gtk_marshal_NONE__INT_POINTER_INT_INT_INT (GtkObject * object,
 	    GTK_VALUE_INT (args[3]),
 	    GTK_VALUE_INT (args[4]),
 	    func_data);
-}
-
-typedef void (*GtkSignal_NONE__BOOL) (GtkObject * object,
-				      gboolean arg1,
-				      gpointer user_data);
-void 
-gtk_marshal_NONE__BOOL (GtkObject * object,
-			GtkSignalFunc func,
-			gpointer func_data,
-			GtkArg * args)
-{
-  GtkSignal_NONE__BOOL rfunc;
-  rfunc = (GtkSignal_NONE__BOOL) func;
-  (*rfunc) (object,
-	    GTK_VALUE_BOOL (args[0]),
-	    func_data);
-}
-
-typedef gboolean (*GtkSignal_BOOL__POINTER_POINTER_POINTER_POINTER) (GtkObject * object,
-							      gpointer arg1,
-							      gpointer arg2,
-							      gpointer arg3,
-							      gpointer arg4,
-							gpointer user_data);
-void 
-gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER (GtkObject * object,
-						   GtkSignalFunc func,
-						   gpointer func_data,
-						   GtkArg * args)
-{
-  GtkSignal_BOOL__POINTER_POINTER_POINTER_POINTER rfunc;
-  gboolean *return_val;
-  return_val = GTK_RETLOC_BOOL (args[4]);
-  rfunc = (GtkSignal_BOOL__POINTER_POINTER_POINTER_POINTER) func;
-  *return_val = (*rfunc) (object,
-			  GTK_VALUE_POINTER (args[0]),
-			  GTK_VALUE_POINTER (args[1]),
-			  GTK_VALUE_POINTER (args[2]),
-			  GTK_VALUE_POINTER (args[3]),
-			  func_data);
 }
 
 typedef void (*GtkSignal_NONE__INT_POINTER) (GtkObject * object,
