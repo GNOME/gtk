@@ -176,37 +176,39 @@ pixops_composite_nearest (guchar        *dest_buf,
 	  else
 	    a0 = overall_alpha;
 
-	  if (dest_has_alpha)
-	    {
-	      unsigned int w0 = 0xff * a0;
-	      unsigned int w1 = (0xff - a0) * dest[3];
-	      unsigned int w = w0 + w1;
+          switch (a0)
+            {
+            case 0:
+              break;
+            case 255:
+              dest[0] = p[0];
+              dest[1] = p[1];
+              dest[2] = p[2];
+              if (dest_has_alpha)
+                dest[3] = 0xff;
+              break;
+            default:
+              if (dest_has_alpha)
+                {
+                  unsigned int w0 = 0xff * a0;
+                  unsigned int w1 = (0xff - a0) * dest[3];
+                  unsigned int w = w0 + w1;
 
-	      if (w != 0)
-		{
 		  dest[0] = (w0 * p[0] + w1 * dest[0]) / w;
 		  dest[1] = (w0 * p[1] + w1 * dest[1]) / w;
 		  dest[2] = (w0 * p[2] + w1 * dest[2]) / w;
 		  dest[3] = w / 0xff;
-		}
-	      else
-		{
-		  dest[0] = 0;
-		  dest[1] = 0;
-		  dest[2] = 0;
-		  dest[3] = 0;
-		}
-	    }
-	  else
-	    {
-	      dest[0] = (a0 * p[0] + (0xff - a0) * dest[0]) / 0xff;
-	      dest[1] = (a0 * p[1] + (0xff - a0) * dest[1]) / 0xff;
-	      dest[2] = (a0 * p[2] + (0xff - a0) * dest[2]) / 0xff;
-	      
-	      if (dest_channels == 4)
-		dest[3] = 0xff;
-	    }
-
+                }
+              else
+                {
+                  unsigned int a1 = 0xff - a0;
+                  
+                  dest[0] = (a0 * p[0] + a1 * dest[0]) / 0xff;
+                  dest[1] = (a0 * p[1] + a1 * dest[1]) / 0xff;
+                  dest[2] = (a0 * p[2] + a1 * dest[2]) / 0xff;
+                }
+              break;
+            }
 	  dest += dest_channels;
 	  x += x_step;
 	}
@@ -283,31 +285,48 @@ pixops_composite_color_nearest (guchar        *dest_buf,
 	  else
 	    a0 = overall_alpha;
 
-	  if (a0 == 255)
-	    {
+          switch (a0)
+            {
+            case 0:
+              if (((j + check_x) >> check_shift) & 1)
+                {
+                  dest[0] = r2; 
+                  dest[1] = g2; 
+                  dest[2] = b2;
+                }
+              else
+                {
+                  dest[0] = r1; 
+                  dest[1] = g1; 
+                  dest[2] = b1;
+                }
+            break;
+            case 255:
 	      dest[0] = p[0];
 	      dest[1] = p[1];
 	      dest[2] = p[2];
-	    }
-	  else
-	    if (((j + check_x) >> check_shift) & 1)
-	      {
-		tmp = ((int) p[0] - r2) * a0;
-		dest[0] = r2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
-		tmp = ((int) p[1] - g2) * a0;
-		dest[1] = g2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
-		tmp = ((int) p[2] - b2) * a0;
-		dest[2] = b2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
-	      }
-	    else
-	      {
-		tmp = ((int) p[0] - r1) * a0;
-		dest[0] = r1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
-		tmp = ((int) p[1] - g1) * a0;
-		dest[1] = g1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
-		tmp = ((int) p[2] - b1) * a0;
-		dest[2] = b1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
-	      }
+              break;
+            default:
+              if (((j + check_x) >> check_shift) & 1)
+                {
+                  tmp = ((int) p[0] - r2) * a0;
+                  dest[0] = r2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+                  tmp = ((int) p[1] - g2) * a0;
+                  dest[1] = g2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+                  tmp = ((int) p[2] - b2) * a0;
+                  dest[2] = b2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+                }
+              else
+                {
+                  tmp = ((int) p[0] - r1) * a0;
+                  dest[0] = r1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+                  tmp = ((int) p[1] - g1) * a0;
+                  dest[1] = g1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+                  tmp = ((int) p[2] - b1) * a0;
+                  dest[2] = b1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+                }
+              break;
+            }
 	  
 	  if (dest_channels == 4)
 	    dest[3] = 0xff;

@@ -1,3 +1,8 @@
+2001-08-19  Sven Neumann  <sven@gimp.org>
+
+	* pixops/pixops.c: applied some simple but effective optimizations 
+	to pixops_composite_nearest() and pixops_composite_color_nearest().
+
 2001-08-07  Sven Neumann  <sven@gimp.org>
 
 	* gdk-pixbuf.c (gdk_pixbuf_fill): a comment asked to optimize this
