@@ -291,7 +291,7 @@ struct _GdkImagePrivateWin32
 typedef struct _GdkGCWin32      GdkGCWin32;
 typedef struct _GdkGCWin32Class GdkGCWin32Class;
 
-#define GDK_TYPE_GC_WIN32              (gdk_gc_win32_get_type ())
+#define GDK_TYPE_GC_WIN32              (_gdk_gc_win32_get_type ())
 #define GDK_GC_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_WIN32, GdkGCWin32))
 #define GDK_GC_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_WIN32, GdkGCWin32Class))
 #define GDK_IS_GC_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_WIN32))
@@ -340,7 +340,7 @@ struct _GdkGCWin32Class
   GdkGCClass parent_class;
 };
 
-GType gdk_gc_win32_get_type (void);
+GType _gdk_gc_win32_get_type (void);
 
 #undef GDK_ROOT_PARENT /* internal access is direct */
 #define GDK_ROOT_PARENT()             ((GdkWindow *) _gdk_parent_root)

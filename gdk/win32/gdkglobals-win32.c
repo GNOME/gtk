@@ -38,6 +38,6 @@ UINT		  gdk_selection_clear_msg;
 GdkAtom		  gdk_clipboard_atom;
 GdkAtom		  gdk_win32_dropfiles_atom;
 GdkAtom		  gdk_ole2_dnd_atom;
-ATOM              _gdk_selection_property;
+GdkAtom             _gdk_selection_property;
 DWORD		  windows_version = 0;
 gint		  gdk_input_ignore_wintab = FALSE;

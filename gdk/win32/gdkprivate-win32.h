@@ -44,16 +44,16 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     GdkRectangle  *area);
 
 /* gdkdrawable-win32.c, background draw helper */
-void gdk_win32_draw_tiles (GdkDrawable *drawable,
-                           GdkGC       *gc,
-                           GdkPixmap   *tile,
-                           gint        x, 
-                           gint        y, 
-                           gint        width, 
-                           gint        height);
+void _gdk_win32_draw_tiles (GdkDrawable *drawable,
+                            GdkGC       *gc,
+                            GdkPixmap   *tile,
+                            gint        x, 
+                            gint        y, 
+                            gint        width, 
+                            gint        height);
 
-void gdk_win32_selection_init (void);
-void gdk_win32_dnd_exit (void);
+void _gdk_win32_selection_init (void);
+void _gdk_win32_dnd_exit (void);
 
 void	 gdk_win32_handle_table_insert    (HANDLE   *handle,
 					   gpointer data);
@@ -69,36 +69,34 @@ GdkImage* _gdk_win32_get_image (GdkDrawable    *drawable,
 				gint            width,
 				gint            height);
 
-COLORREF gdk_colormap_color      (GdkColormap        *colormap,
-				  gulong              pixel);
+COLORREF _gdk_win32_colormap_color      (GdkColormap        *colormap,
+				          gulong              pixel);
 
 HRGN	 BitmapToRegion          (HBITMAP hBmp);
 
 gchar  *gdk_font_full_name_get   (GdkFont *font);
 
-void    gdk_sel_prop_store       (GdkWindow *owner,
-				  GdkAtom    type,
-				  gint       format,
-				  guchar    *data,
-				  gint       length);
+void    _gdk_selection_property_store (GdkWindow *owner,
+                                       GdkAtom    type,
+                                       gint       format,
+                                       guchar    *data,
+                                       gint       length);
 
-gint    gdk_nmbstowcs            (GdkWChar    *dest,
-				  const gchar *src,
-				  gint         src_len,
-				  gint         dest_max);
-gint    gdk_nmbstowchar_ts       (wchar_t     *dest,
-				  const gchar *src,
-				  gint         src_len,
-				  gint         dest_max);
+void    _gdk_selection_property_delete (GdkWindow *);
 
-void    gdk_wchar_text_handle    (GdkFont       *font,
-				  const wchar_t *wcstr,
-				  int            wclen,
-				  void         (*handler)(GdkWin32SingleFont *,
-							  const wchar_t *,
-							  int,
-							  void *),
-				  void          *arg);
+gint    _gdk_win32_nmbstowchar_ts (wchar_t     *dest,
+                                   const gchar *src,
+                                   gint         src_len,
+                                   gint         dest_max);
+
+void    _gdk_wchar_text_handle    (GdkFont       *font,
+				   const wchar_t *wcstr,
+				   int            wclen,
+				   void         (*handler)(GdkWin32SingleFont *,
+							   const wchar_t *,
+							   int,
+							   void *),
+				   void          *arg);
 
 #ifdef G_ENABLE_DEBUG
 gchar *gdk_win32_color_to_string      (const        GdkColor *color);
@@ -131,7 +129,7 @@ void    gdk_win32_gdi_failed        (const gchar *where,
 #define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__, __LINE__, api)
 #endif
  
-extern LRESULT CALLBACK gdk_window_procedure (HWND, UINT, WPARAM, LPARAM);
+extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
 extern HWND		 gdk_root_window;
 extern gboolean		 gdk_event_func_from_window_proc;
@@ -152,7 +150,7 @@ extern DWORD		 windows_version;
 
 extern gint		 gdk_input_ignore_wintab;
 
-extern ATOM		 _gdk_selection_property;
+extern GdkAtom	 _gdk_selection_property;
 
 #define IMAGE_PRIVATE_DATA(image) ((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)
 

@@ -49,18 +49,18 @@ typedef struct {
 static GHashTable *sel_prop_table = NULL;
 
 void
-gdk_win32_selection_init (void)
+_gdk_win32_selection_init (void)
 {
   if (sel_prop_table == NULL)
     sel_prop_table = g_hash_table_new (g_int_hash, g_int_equal);
 }
 
 void
-gdk_sel_prop_store (GdkWindow *owner,
-		    GdkAtom    type,
-		    gint       format,
-		    guchar    *data,
-		    gint       length)
+_gdk_selection_property_store (GdkWindow *owner,
+                               GdkAtom    type,
+                               gint       format,
+                               guchar    *data,
+                               gint       length)
 {
   GdkSelProp *prop;
 
@@ -98,7 +98,7 @@ gdk_selection_owner_set (GdkWindow *owner,
     {
       if (!owner)
         return FALSE;
-      gdk_sel_prop_store (owner, selection, 0, 0, 0);
+      _gdk_selection_property_store (owner, selection, 0, 0, 0);
       return TRUE;
     }
 
@@ -142,7 +142,7 @@ gdk_selection_owner_set (GdkWindow *owner,
        * gdk_property_change will be called to store the clipboard data.
        */
       SendMessage (xwindow, gdk_selection_request_msg,
-		   selection, 0);
+		   GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (selection)), 0);
     }
 
   return TRUE;
@@ -278,7 +278,7 @@ gdk_selection_convert (GdkWindow *requestor,
 		  p++;
 		}
 	      *datap++ = '\0';
-	      gdk_sel_prop_store (requestor, GDK_TARGET_STRING, 8,
+	      _gdk_selection_property_store (requestor, GDK_TARGET_STRING, 8,
 				  data, strlen (data) + 1);
 	      
 	      GlobalUnlock (hdata);
@@ -291,7 +291,9 @@ gdk_selection_convert (GdkWindow *requestor,
       /* Send ourselves an ersatz selection notify message so that we actually
        * fetch the data.
        */
-      SendMessage (GDK_WINDOW_HWND (requestor), gdk_selection_notify_msg, selection, target);
+      SendMessage (GDK_WINDOW_HWND (requestor), gdk_selection_notify_msg, 
+                   GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (selection)), 
+                   GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (target)));
     }
   else if (selection == gdk_win32_dropfiles_atom)
     {
@@ -308,10 +310,12 @@ gdk_selection_convert (GdkWindow *requestor,
 	{
 	  g_hash_table_remove (sel_prop_table,
 			       &GDK_WINDOW_HWND (_gdk_parent_root));
-	  gdk_sel_prop_store (requestor, prop->type, prop->format,
+	  _gdk_selection_property_store (requestor, prop->type, prop->format,
 			      prop->data, prop->length);
 	  g_free (prop);
-	  SendMessage (GDK_WINDOW_HWND (requestor), gdk_selection_notify_msg, selection, target);
+	  SendMessage (GDK_WINDOW_HWND (requestor), gdk_selection_notify_msg, 
+                     GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (selection)), 
+                     GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (target)));
 	}
     }
   else
@@ -356,7 +360,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 }
 
 void
-gdk_selection_property_delete (GdkWindow *window)
+_gdk_selection_property_delete (GdkWindow *window)
 {
   GdkSelProp *prop;
   
@@ -408,8 +412,8 @@ gdk_selection_send_notify (guint32  requestor,
 
   SendMessage ((HWND) requestor, 
                gdk_selection_clear_msg, 
-               selection, 
-               target);
+               GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (selection)), 
+               GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (target)));
 }
 
 gint
@@ -742,7 +746,7 @@ gdk_utf8_to_compound_text (const gchar *str,
 	  if (encoding)
 	    *encoding = GDK_NONE;
 	  if (format)
-	    *format = GDK_NONE;
+	    *format = GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (GDK_NONE));
 	  if (ctext)
 	    *ctext = NULL;
 	  if (length)

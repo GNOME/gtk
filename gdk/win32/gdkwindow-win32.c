@@ -53,7 +53,7 @@ static void gdk_window_impl_win32_finalize   (GObject                 *object);
 static gpointer parent_class = NULL;
 
 GType
-gdk_window_impl_win32_get_type (void)
+_gdk_window_impl_win32_get_type (void)
 {
   static GType object_type = 0;
 
@@ -83,7 +83,7 @@ gdk_window_impl_win32_get_type (void)
 GType
 _gdk_window_impl_get_type (void)
 {
-  return gdk_window_impl_win32_get_type ();
+  return _gdk_window_impl_win32_get_type ();
 }
 
 static void
@@ -253,7 +253,7 @@ _gdk_windowing_window_init (void)
 /* The Win API function AdjustWindowRect may return negative values
  * resulting in obscured title bars. This helper function is coreccting it.
  */
-BOOL
+static BOOL
 SafeAdjustWindowRectEx (RECT* lpRect,
 			DWORD dwStyle, 
 			BOOL  bMenu, 
@@ -284,7 +284,7 @@ SafeAdjustWindowRectEx (RECT* lpRect,
  *   is ever needed (e.g Dialog specific), every such window should
  *   get its own class
  */
-ATOM
+static ATOM
 RegisterGdkClass (GdkWindowType wtype)
 {
   static ATOM klassTOPLEVEL = 0;
@@ -299,7 +299,7 @@ RegisterGdkClass (GdkWindowType wtype)
   wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
                   * on WM_SIZE and WM_MOVE. Flicker, Performance!
                   */
-  wcl.lpfnWndProc = gdk_window_procedure;
+  wcl.lpfnWndProc = _gdk_win32_window_procedure;
   wcl.cbClsExtra = 0;
   wcl.cbWndExtra = 0;
   wcl.hInstance = gdk_app_hmodule;

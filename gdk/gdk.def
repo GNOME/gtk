@@ -1,4 +1,5 @@
 EXPORTS
+	gdk_add_client_message_filter
 	gdk_atom_intern
 	gdk_atom_name
 	gdk_axis_use_get_type
@@ -28,6 +29,7 @@ EXPORTS
 	gdk_colormap_get_system_size
 	gdk_colormap_get_type
 	gdk_colormap_get_visual
+	gdk_colormap_lookup
 	gdk_colormap_new
 	gdk_colormap_query_color
 	gdk_colormap_ref
@@ -35,8 +37,8 @@ EXPORTS
 	gdk_colors_alloc
 	gdk_colors_free
 	gdk_colors_store
-	gdk_device_get_core_pointer
 	gdk_crossing_mode_get_type
+	gdk_cursor_get_type
 	gdk_cursor_new
 	gdk_cursor_new_from_pixmap
 	gdk_cursor_ref
@@ -44,8 +46,10 @@ EXPORTS
 	gdk_cursor_unref
 	gdk_device_free_history
 	gdk_device_get_axis
+	gdk_device_get_core_pointer
 	gdk_device_get_history
 	gdk_device_get_state
+	gdk_device_get_type
 	gdk_device_set_axis_use
 	gdk_device_set_key
 	gdk_device_set_mode
@@ -73,6 +77,7 @@ EXPORTS
 	gdk_draw_indexed_image
 	gdk_draw_layout
 	gdk_draw_layout_line
+	gdk_draw_layout_line_with_colors
 	gdk_draw_layout_with_colors
 	gdk_draw_line
 	gdk_draw_lines
@@ -88,11 +93,14 @@ EXPORTS
 	gdk_draw_string
 	gdk_draw_text
 	gdk_draw_text_wc
+	gdk_drawable_get_clip_region
 	gdk_drawable_get_colormap
+	gdk_drawable_get_data
 	gdk_drawable_get_depth
 	gdk_drawable_get_image
 	gdk_drawable_get_size
 	gdk_drawable_get_type
+	gdk_drawable_get_visible_region
 	gdk_drawable_get_visual
 	gdk_drawable_impl_win32_get_type
 	gdk_drawable_ref
@@ -107,7 +115,9 @@ EXPORTS
 	gdk_event_free
 	gdk_event_get
 	gdk_event_get_axis
+	gdk_event_get_coords
 	gdk_event_get_graphics_expose
+	gdk_event_get_root_coords
 	gdk_event_get_state
 	gdk_event_get_time
 	gdk_event_get_type
@@ -145,6 +155,7 @@ EXPORTS
 	gdk_gc_get_values
 	gdk_gc_new
 	gdk_gc_new_with_values
+	gdk_gc_offset
 	gdk_gc_ref
 	gdk_gc_set_background
 	gdk_gc_set_clip_mask
@@ -165,7 +176,9 @@ EXPORTS
 	gdk_gc_set_subwindow
 	gdk_gc_set_tile
 	gdk_gc_set_ts_origin
+	gdk_gc_set_values
 	gdk_gc_unref
+	gdk_gc_values_mask_get_type
 	gdk_get_default_root_window
 	gdk_get_display
 	gdk_get_program_class
@@ -174,12 +187,14 @@ EXPORTS
 	gdk_grab_status_get_type
 	gdk_gravity_get_type
 	gdk_image_get
+	gdk_image_get_colormap
 	gdk_image_get_pixel
 	gdk_image_get_type
 	gdk_image_new
 	gdk_image_new_bitmap
 	gdk_image_put_pixel
 	gdk_image_ref
+	gdk_image_set_colormap
 	gdk_image_type_get_type
 	gdk_image_unref
 	gdk_init
@@ -192,6 +207,7 @@ EXPORTS
 	gdk_input_remove
 	gdk_input_set_extension_events
 	gdk_input_source_get_type
+	gdk_input_window_destroy
 	gdk_join_style_get_type
 	gdk_keyboard_grab
 	gdk_keyboard_ungrab
@@ -221,7 +237,9 @@ EXPORTS
 	gdk_pango_context_get
 	gdk_pango_context_set_colormap
 	gdk_pango_layout_get_clip_region
+	gdk_pango_layout_line_get_clip_region
 	gdk_pixbuf_get_from_drawable
+	gdk_pixbuf_get_from_image
 	gdk_pixbuf_render_pixmap_and_mask
 	gdk_pixbuf_render_pixmap_and_mask_for_colormap
 	gdk_pixbuf_render_threshold_alpha
@@ -248,10 +266,12 @@ EXPORTS
 	gdk_rectangle_get_type
 	gdk_rectangle_intersect
 	gdk_rectangle_union
+	gdk_region_copy
 	gdk_region_destroy
 	gdk_region_empty
 	gdk_region_equal
 	gdk_region_get_clipbox
+	gdk_region_get_rectangles
 	gdk_region_intersect
 	gdk_region_new
 	gdk_region_offset
@@ -260,6 +280,7 @@ EXPORTS
 	gdk_region_rect_in
 	gdk_region_rectangle
 	gdk_region_shrink
+	gdk_region_spans_intersect_foreach
 	gdk_region_subtract
 	gdk_region_union
 	gdk_region_union_with_rect
@@ -269,6 +290,7 @@ EXPORTS
 	gdk_rgb_colormap_ditherable
 	gdk_rgb_dither_get_type
 	gdk_rgb_ditherable
+	gdk_rgb_find_color
 	gdk_rgb_gc_set_background
 	gdk_rgb_gc_set_foreground
 	gdk_rgb_get_colormap
@@ -290,6 +312,8 @@ EXPORTS
 	gdk_selection_send_notify
 	gdk_set_double_click_time
 	gdk_set_locale
+	gdk_set_pointer_hooks
+	gdk_set_program_class
 	gdk_set_show_events
 	gdk_set_sm_client_id
 	gdk_set_use_xshm
@@ -312,6 +336,7 @@ EXPORTS
 	gdk_text_width
 	gdk_text_width_wc
 	gdk_threads_enter
+	gdk_threads_init
 	gdk_threads_leave
 	gdk_threads_mutex
 	gdk_unicode_to_keyval
@@ -326,6 +351,7 @@ EXPORTS
 	gdk_visual_get_best_with_type
 	gdk_visual_get_system
 	gdk_visual_get_type
+	gdk_visual_lookup
 	gdk_visual_type_get_type
 	gdk_wcstombs
 	gdk_win32_drawable_get_handle
@@ -357,13 +383,16 @@ EXPORTS
 	gdk_window_get_events
 	gdk_window_get_frame_extents
 	gdk_window_get_geometry
+	gdk_window_get_internal_paint_info
 	gdk_window_get_origin
 	gdk_window_get_parent
 	gdk_window_get_pointer
 	gdk_window_get_position
 	gdk_window_get_root_origin
+	gdk_window_get_state
 	gdk_window_get_toplevel
 	gdk_window_get_toplevels
+	gdk_window_get_update_area
 	gdk_window_get_user_data
 	gdk_window_get_window_type
 	gdk_window_hide
@@ -373,6 +402,7 @@ EXPORTS
 	gdk_window_invalidate_region
 	gdk_window_is_viewable
 	gdk_window_is_visible
+	gdk_window_lookup
 	gdk_window_lower
 	gdk_window_maximize
 	gdk_window_merge_child_shapes
@@ -414,6 +444,7 @@ EXPORTS
 	gdk_window_shape_combine_mask
 	gdk_window_shape_combine_region
 	gdk_window_show
+	gdk_window_show_unraised
 	gdk_window_state_get_type
 	gdk_window_stick
 	gdk_window_thaw_updates
@@ -424,5 +455,4 @@ EXPORTS
 	gdk_window_withdraw
 	gdk_wm_decoration_get_type
 	gdk_wm_function_get_type
-	gdk_window_lookup
-	gdk_device_get_type
+

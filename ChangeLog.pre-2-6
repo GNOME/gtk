@@ -1,3 +1,21 @@
+2001-10-28  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.c gdk/gdkevents.c
+	  gdk/win32/gdkcolor-win32.c gdk/win32/gdkdnd-win32.c
+	  gdk/win32/gdkdrawable-win32.c gdk/win32/gdkevents-win32.c
+	  gdk/win32/gdkfont-win32.c gdk/win32/gdkgc-win32.c
+	  gdk/win32/gdkim-win32.c gdk/win32/gdkmain-win32.c
+	  gdk/win32/gdkprivate-win32.h gdk/win32/gdkproperty-win32.c
+	  gdk/win32/gdkselection-win32.c gdk/win32/gdkwin32.h
+	  gdk/win32/gdkwindow-win32.c gdk/win32/gdkwindow-win32.h :
+	static correct-ness, underscore prefixing of library internal 
+	functions
+	(applied the undisputed and the win32 part. Of the latter 
+	 I'm probably the one who will change it back again, if Owen
+	 decides that the Gdk*Impl types should not be private to Gdk)
+
+	* gdk/gdk.def : added the remaining exported functions
+
 2001-10-28  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkcellrenderertoggle.c, gtk/gtkimcontextsimple.c,

@@ -1791,7 +1791,7 @@ unicode_classify (wchar_t wc)
 }
 
 void
-gdk_wchar_text_handle (GdkFont       *font,
+_gdk_wchar_text_handle (GdkFont       *font,
 		       const wchar_t *wcstr,
 		       int            wclen,
 		       void         (*handler)(GdkWin32SingleFont *,
@@ -1812,7 +1812,7 @@ gdk_wchar_text_handle (GdkFont       *font,
 
   g_assert (private->base.ref_count > 0);
 
-  GDK_NOTE (MISC, g_print ("gdk_wchar_text_handle: "));
+  GDK_NOTE (MISC, g_print ("_gdk_wchar_text_handle: "));
 
   while (wcp < end)
     {
@@ -1901,14 +1901,14 @@ gdk_text_size (GdkFont           *font,
       /* For single characters, don't try to interpret as UTF-8.
        */
       wcstr[0] = (guchar) text[0];
-      gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, arg);
+      _gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, arg);
     }
   else
     {
-      if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_text_size: gdk_nmbstowchar_ts failed");
+      if ((wlen = _gdk_win32_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_text_size: _gdk_win32_nmbstowchar_ts failed");
       else
-	gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
+	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
     }
 
   g_free (wcstr);
@@ -1959,7 +1959,7 @@ gdk_text_width_wc (GdkFont	  *font,
 
   arg.total.cx = arg.total.cy = 0;
 
-  gdk_wchar_text_handle (font, wcstr, text_length,
+  _gdk_wchar_text_handle (font, wcstr, text_length,
 			 gdk_text_size_handler, &arg);
 
   if (sizeof (wchar_t) != sizeof (GdkWChar))
@@ -2008,14 +2008,14 @@ gdk_text_extents (GdkFont     *font,
   if (text_length == 1)
     {
       wcstr[0] = (guchar) text[0];
-      gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, &arg);
+      _gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, &arg);
     }
   else
     {
-      if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_text_extents: gdk_nmbstowchar_ts failed");
+      if ((wlen = _gdk_win32_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_text_extents: _gdk_win32_nmbstowchar_ts failed");
       else
-	gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
+	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
     }
 
   g_free (wcstr);
@@ -2079,7 +2079,7 @@ gdk_text_extents_wc (GdkFont        *font,
 
   arg.total.cx = arg.total.cy = 0;
 
-  gdk_wchar_text_handle (font, wcstr, text_length,
+  _gdk_wchar_text_handle (font, wcstr, text_length,
 			 gdk_text_size_handler, &arg);
 
   if (sizeof (wchar_t) != sizeof (GdkWChar))

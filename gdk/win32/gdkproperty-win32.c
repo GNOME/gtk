@@ -222,7 +222,6 @@ gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
   gchar *prop_name;
-  extern void gdk_selection_property_delete (GdkWindow *);
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -235,7 +234,7 @@ gdk_property_delete (GdkWindow *window,
 	     g_free (prop_name)));
 
   if (property == _gdk_selection_property)
-    gdk_selection_property_delete (window);
+    _gdk_selection_property_delete (window);
   else
     g_warning ("gdk_property_delete: General case not implemented");
 }

@@ -46,7 +46,7 @@ static void gdk_pixmap_impl_win32_finalize   (GObject                 *object);
 static gpointer parent_class = NULL;
 
 GType
-gdk_pixmap_impl_win32_get_type (void)
+_gdk_pixmap_impl_win32_get_type (void)
 {
   static GType object_type = 0;
 
@@ -76,7 +76,7 @@ gdk_pixmap_impl_win32_get_type (void)
 GType
 _gdk_pixmap_impl_get_type (void)
 {
-  return gdk_pixmap_impl_win32_get_type ();
+  return _gdk_pixmap_impl_win32_get_type ();
 }
 
 static void

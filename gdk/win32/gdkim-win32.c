@@ -166,7 +166,7 @@ gdk_wcstombs (const GdkWChar *src)
  */
 
 /* First a helper function for not zero-terminated strings */
-gint
+static gint
 gdk_nmbstowcs (GdkWChar    *dest,
 	       const gchar *src,
 	       gint         src_len,
@@ -252,10 +252,10 @@ gdk_mbstowcs (GdkWChar    *dest,
 /* A version that converts to wchar_t wide chars */
 
 gint
-gdk_nmbstowchar_ts (wchar_t     *dest,
-		    const gchar *src,
-		    gint         src_len,
-		    gint         dest_max)
+_gdk_win32_nmbstowchar_ts (wchar_t     *dest,
+                           const gchar *src,
+                           gint         src_len,
+                           gint         dest_max)
 {
   wchar_t *wcp;
   guchar *cp, *end;

@@ -270,19 +270,19 @@ real_window_procedure (HWND   hwnd,
 }
 
 LRESULT CALLBACK
-gdk_window_procedure (HWND   hwnd,
-		      UINT   message,
-		      WPARAM wparam,
-		      LPARAM lparam)
+_gdk_win32_window_procedure (HWND   hwnd,
+                             UINT   message,
+                             WPARAM wparam,
+                             LPARAM lparam)
 {
   LRESULT retval;
 
-  GDK_NOTE (MISC, g_print ("gdk_window_procedure: %#lx %s\n",
+  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %#lx %s\n",
 			     (gulong) hwnd, gdk_win32_message_name (message)));
 
   retval = real_window_procedure (hwnd, message, wparam, lparam);
 
-  GDK_NOTE (MISC, g_print ("gdk_window_procedure: %#lx returns %ld\n",
+  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %#lx returns %ld\n",
 			     (gulong) hwnd, retval));
 
   return retval;
@@ -1646,8 +1646,8 @@ gdk_event_translate (GdkEvent *event,
 
       event->selection.type = GDK_SELECTION_NOTIFY;
       event->selection.window = window;
-      event->selection.selection = msg->wParam;
-      event->selection.target = msg->lParam;
+      event->selection.selection = GDK_POINTER_TO_ATOM (msg->wParam);
+      event->selection.target = GDK_POINTER_TO_ATOM (msg->lParam);
       event->selection.property = _gdk_selection_property;
       event->selection.time = msg->time;
 
@@ -1679,8 +1679,8 @@ gdk_event_translate (GdkEvent *event,
 
       event->selection.type = GDK_SELECTION_CLEAR;
       event->selection.window = window;
-      event->selection.selection = msg->wParam;
-      event->selection.target = msg->lParam;
+      event->selection.selection = GDK_POINTER_TO_ATOM (msg->wParam);
+      event->selection.target = GDK_POINTER_TO_ATOM (msg->lParam);
       event->selection.time = msg->time;
 
       return_val = !GDK_WINDOW_DESTROYED (window);
@@ -1753,7 +1753,11 @@ gdk_event_translate (GdkEvent *event,
       while (tmp_list)
 	{
 	  GdkClientFilter *filter = tmp_list->data;
-	  if (filter->type == msg->message)
+	  /* FIXME: under win32 messages are not really atoms
+	   * as the following cast suggest, but the appears to be right
+	   * Haven't found a use case though ...
+	   */
+	  if (filter->type == GDK_POINTER_TO_ATOM (msg->message))
 	    {
 	      GDK_NOTE (EVENTS, g_print ("client filter matched\n"));
 	      event->any.window = window;
@@ -1776,7 +1780,8 @@ gdk_event_translate (GdkEvent *event,
 		  return_val = TRUE;
 		  event->client.type = GDK_CLIENT_EVENT;
 		  event->client.window = window;
-		  event->client.message_type = msg->message;
+		  /* FIXME: check if the cast is correct, see above */
+		  event->client.message_type = GDK_POINTER_TO_ATOM (msg->message);
 		  event->client.data_format = 0;
 		  event->client.data.l[0] = msg->wParam;
 		  event->client.data.l[1] = msg->lParam;
@@ -2589,7 +2594,7 @@ gdk_event_translate (GdkEvent *event,
 
       if (GDK_WINDOW_OBJECT (window)->bg_pixmap == NULL)
 	{
-	  bg = gdk_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap,
+	  bg = _gdk_win32_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap,
 				   GDK_WINDOW_OBJECT (window)->bg_color.pixel);
 
 	  GetClipBox (hdc, &rect);

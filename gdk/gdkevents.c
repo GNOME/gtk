@@ -881,7 +881,7 @@ _gdk_event_unqueue (void)
   return event;
 }
 
-void
+static void
 gdk_synthesize_click (GdkEvent *event,
 		      gint	nclicks)
 {

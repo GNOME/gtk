@@ -74,7 +74,7 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
 
-GdkArgContext *
+static GdkArgContext *
 gdk_arg_context_new (gpointer cb_data)
 {
   GdkArgContext *result = g_new (GdkArgContext, 1);
@@ -84,20 +84,20 @@ gdk_arg_context_new (gpointer cb_data)
   return result;
 }
 
-void
+static void
 gdk_arg_context_destroy (GdkArgContext *context)
 {
   g_ptr_array_free (context->tables, TRUE);
   g_free (context);
 }
 
-void
+static void
 gdk_arg_context_add_table (GdkArgContext *context, GdkArgDesc *table)
 {
   g_ptr_array_add (context->tables, table);
 }
 
-void
+static void
 gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 {
   int i, j, k;
