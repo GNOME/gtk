@@ -1,5 +1,7 @@
 ### Process this file with automake to produce Makefile.in
 
+top_builddir_full=`cd \$(top_builddir); pwd`
+
 gtkincludedir = $(includedir)/gtk
 
 lib_LTLIBRARIES = libgtk.la
@@ -307,6 +309,7 @@ libgtk_la_LDFLAGS = \
 	@GLIB_DEPLIBS@ 						\
 	@x_ldflags@						\
 	@x_libs@ 						\
+	@GTK_LIBS_EXTRA@					\
 	-lm
 #	$(top_builddir)/gdk/libgdk.la
 

@@ -196,6 +196,20 @@ AC_TRY_RUN([#include <math.h>
 )
 LIBS=$gtk_save_LIBS
 
+MATH_LIB=-lm
+GTK_LIBS_EXTRA=
+AC_MSG_CHECKING(for the BeOS)
+case $host in
+  *-*-beos*)
+    GTK_LIBS_EXTRA="-L\$(top_builddir_full)/gdk/.libs -lgdk"
+    MATH_LIB=
+  ;;
+  default)
+  ;;
+esac
+AC_SUBST(MATH_LIB)
+AC_SUBST(GTK_LIBS_EXTRA)
+
 dnl NeXTStep cc seems to need this
 AC_MSG_CHECKING([for extra flags for POSIX compliance])
 AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],

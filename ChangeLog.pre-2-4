@@ -1,3 +1,12 @@
+Wed May 12 03:00:56 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* configure.in
+	  gtk-config.in
+	  ltconfig
+	  ltmain.sh     
+	  gtk/Makefile.am: changes to compile nicely (with xlib) 
+          on BeOS
+
 Sat May  1 15:04:42 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* acinclude.m4

@@ -115,6 +115,6 @@ if test "$echo_libs" = "yes"; then
         fi
       done
 
-      echo $libdirs @x_ldflags@ -lgtk -lgdk $my_glib_libs @INTLLIBS@ @x_libs@ @GDK_WLIBS@ -lm
+      echo $libdirs @x_ldflags@ -lgtk -lgdk $my_glib_libs @INTLLIBS@ @x_libs@ @GDK_WLIBS@ @MATH_LIB@
 fi      
 
