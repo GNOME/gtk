@@ -1,6 +1,8 @@
 2004-07-27  Anders Carlsson  <andersca@gnome.org>
 
 	* demos/gtk-demo/iconview.c: (do_iconview):
+	Change selection mode to multiple.
+	
 	* gdk/gdkdrawable.h:
 	* gdk/linux-fb/gdkdrawable-fb2.c:
 	(gdk_draw_rectangle_alpha_libgtk_only):
