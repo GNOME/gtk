@@ -1,3 +1,17 @@
+Fri Aug 15 12:34:04 2003  Owen Taylor  <otaylor@redhat.com>
+
+	Fixes for X/Cygwin builds of GTK+ (#107623, Masahiro Sakai):
+
+	* configure.in (GDK_DEP_LIBS_FOR_X): Make sure that
+	we link libgtk against X explicitely, since we
+	make GTK+ calls for plug/socket.
+
+	* gtk/queryimmodules.c: Use USE_LA_MODULES and 
+	G_MODULE_SUFFIX here. 
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_image): Protect
+	XShmPutImage with #ifdef USE_SHM.
+
 Thu Aug 14 18:25:39 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_populate):

@@ -929,6 +929,7 @@ AC_SUBST(GDK_PIXBUF_DEP_CFLAGS)
 
 GDK_EXTRA_LIBS=$GDK_WLIBS
 GDK_EXTRA_CFLAGS= 
+GTK_DEP_LIBS_FOR_X=
 
 FREETYPE_LIBS=
 FREETYPE_CFLAGS=
@@ -1015,13 +1016,12 @@ if test "x$gdktarget" = "xx11"; then
   x_cflags="`$PKG_CONFIG --cflags $PANGO_PACKAGES`"
   x_extra_libs=
 
+  AC_PATH_XTRA
+  if test x$no_x = xyes ; then
+    AC_MSG_ERROR([X development libraries not found])
+  fi
+
   if test $pango_omitted_x_deps = yes ; then
-    AC_PATH_XTRA
-
-    if test x$no_x = xyes ; then
-      AC_MSG_ERROR([X development libraries not found])
-    fi
-
     x_libs="$X_LIBS -lX11 $X_EXTRA_LIBS"
 
     #
@@ -1093,6 +1093,11 @@ if test "x$gdktarget" = "xx11"; then
   GDK_PIXBUF_XLIB_EXTRA_CFLAGS="$x_cflags"
   # Don't ever pull in the pangoxft libraries for gdk-pixbuf-x11
   GDK_PIXBUF_XLIB_EXTRA_LIBS="$x_extra_libs $x_libs"
+
+  # GTK+ uses some X calls, so needs to link against X directly
+  if test $enable_explicit_deps != yes ; then
+    GTK_DEP_LIBS_FOR_X="$X_LIBS -lX11 $X_EXTRA_LIBS"
+  fi
 
   # Check for Xinerama extension (Solaris impl or Xfree impl)
 
@@ -1380,7 +1385,7 @@ GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PAC
 
 #
 # If we aren't writing explicit dependencies, then don't put the extra libraries we need
-# into the pkg-config files
+a# into the pkg-config files
 #
 if test $enable_explicit_deps != yes ; then
   GDK_EXTRA_LIBS=
@@ -1425,7 +1430,7 @@ fi
 GTK_PACKAGES=atk
 GTK_EXTRA_LIBS=
 GTK_EXTRA_CFLAGS= 
-GTK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PACKAGES $GTK_PACKAGES` $GTK_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
+GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PACKAGES $GTK_PACKAGES` $GTK_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
 GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PACKAGES $GTK_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
 
 AC_SUBST(GTK_PACKAGES)
