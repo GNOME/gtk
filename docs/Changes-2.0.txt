@@ -477,7 +477,21 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
    gdk_wm_take_focus                      gdk_atom_intern ("WM_TAKE_FOCUS", FALSE)
    gdk_wm_protocols                       gdk_atom_intern ("WM_PROTOCOLS", FALSE)
    
-   
+* The handling of Colormaps and widgets has been changed:
+
+    - The default colormap for widgets is now the GdkRGB colormap, not
+      the system default colormap. If you try to use resources created for  
+      a widget (e.g., widget->style) with a window using the system
+      colormap, errors will result on some machines.
+
+    - gtk_widget_push/pop_colormap() only cause the colormap to be
+      explicitely set on toplevel widgets not on all widgets. The
+      colormap for other widgets (when not set using 
+      gtk_widget_set_colormap()), is determined by finding the nearest
+      ancestor with a colormap set on it explicitely, or if that
+      fails, the default colormap.
 
   
+      
 
+      

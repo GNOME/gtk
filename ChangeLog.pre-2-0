@@ -1,3 +1,24 @@
+Fri Sep  7 18:50:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_get_default_colormap): 
+	Make the default default colormap the GdkRGB colormap,
+	not the system colormap.
+
+	* gtk/gtkinvisible.c (gtk_invisible_init) 
+	  gtk/gtkwindow.c (gtk_window_init): Set the current
+	colormap, as returned by _gtk_widget_peek_colormap()
+	on the widget.
+
+	* gtk/gtkwidget.[ch]: Export _gtk_widget_peek_colormap
+	to GTK+. Make it return %NULL instead of the default
+	colormap if no colormap has explicitely been pushed.
+
+	* gtk/gtkwidget.c (gtk_widget_get_colormap): Check for
+	colormaps on ancestral widgets before defaulting the
+	the system default colormap.
+
+	* docs/Changes-2.0.txt: explain colormap changes.
+
 2001-09-07  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c: add some lame code to handle G_MININT, fixes 

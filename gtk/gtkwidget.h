@@ -757,6 +757,8 @@ GtkWidgetAuxInfo *_gtk_widget_get_aux_info                (GtkWidget    *widget,
 void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
 							   GtkWidget    *previous_toplevel);
 
+GdkColormap* _gtk_widget_peek_colormap (void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

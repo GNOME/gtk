@@ -576,6 +576,8 @@ gtk_window_class_init (GtkWindowClass *klass)
 static void
 gtk_window_init (GtkWindow *window)
 {
+  GdkColormap *colormap;
+  
   GTK_WIDGET_UNSET_FLAGS (window, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
 
@@ -609,6 +611,10 @@ gtk_window_init (GtkWindow *window)
   window->gravity = GDK_GRAVITY_NORTH_WEST;
   window->decorated = TRUE;
   window->mnemonic_modifier = GDK_MOD1_MASK;
+  
+  colormap = _gtk_widget_peek_colormap ();
+  if (colormap)
+    gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
   
   gtk_widget_ref (GTK_WIDGET (window));
   gtk_object_sink (GTK_OBJECT (window));

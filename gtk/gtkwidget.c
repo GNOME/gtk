@@ -194,7 +194,6 @@ static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 								 GdkEventFocus    *event);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
-static GdkColormap*	gtk_widget_peek_colormap		(void);
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void		gtk_widget_reparent_container_child	(GtkWidget	  *widget,
 								 gpointer          client_data);
@@ -1253,11 +1252,6 @@ gtk_widget_init (GtkWidget *widget)
 
   widget->style = gtk_widget_get_default_style ();
   gtk_style_ref (widget->style);
-  
-  colormap = gtk_widget_peek_colormap ();
-  
-  if (colormap != gtk_widget_get_default_colormap ())
-    gtk_widget_set_colormap (widget, colormap);
 }
 
 
@@ -4695,10 +4689,15 @@ gtk_widget_get_colormap (GtkWidget *widget)
       if (colormap)
 	return colormap;
     }
-  
-  colormap = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_colormap);
-  if (colormap)
-    return colormap;
+
+  while (widget)
+    {
+      colormap = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_colormap);
+      if (colormap)
+	return colormap;
+
+      widget = widget->parent;
+    }
 
   return gtk_widget_get_default_colormap ();
 }
@@ -4944,14 +4943,8 @@ gtk_widget_push_colormap (GdkColormap *cmap)
 void
 gtk_widget_pop_colormap (void)
 {
-  GSList *tmp;
-  
   if (colormap_stack)
-    {
-      tmp = colormap_stack;
-      colormap_stack = colormap_stack->next;
-      g_slist_free_1 (tmp);
-    }
+    colormap_stack = g_slist_delete_link (colormap_stack, colormap_stack);
 }
 
 /**
@@ -4987,7 +4980,7 @@ GdkColormap*
 gtk_widget_get_default_colormap (void)
 {
   if (!default_colormap)
-    gtk_widget_set_default_colormap (gdk_colormap_get_system ());
+    gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
   
   return default_colormap;
 }
@@ -5346,20 +5339,18 @@ gtk_widget_real_size_request (GtkWidget         *widget,
   requisition->height = widget->requisition.height;
 }
 
-/*****************************************
- * gtk_widget_peek_colormap:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static GdkColormap*
-gtk_widget_peek_colormap (void)
+/**
+ * _gtk_widget_peek_colormap:
+ * 
+ * Returns colormap currently pushed by gtk_widget_push_colormap, if any.
+ * 
+ * Return value: the currently pushed colormap, or %NULL if there is none.
+ **/
+GdkColormap*
+_gtk_widget_peek_colormap (void)
 {
   if (colormap_stack)
     return (GdkColormap*) colormap_stack->data;
-  return gtk_widget_get_default_colormap ();
 }
 
 static void
