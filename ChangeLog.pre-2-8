@@ -1,7 +1,10 @@
 2005-04-06  Matthias Clasen  <mclasen@redhat.com>
+	
+	* po/.cvsignore, po-properties/.cvsignore: Remove
+	Makefile.in.in.  (#171092, Stefan Kasal)
 
-	* gtk/gtkrc.c (gtk_rc_parse_style): Don't modify scanner->value,
-	copy it first.  (#165693, Tommi Komulainen)
+	* gtk/gtkrc.c (gtk_rc_parse_style): Don't modify 
+	scanner->value, copy it first.  (#165693, Tommi Komulainen)
 
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
