@@ -449,7 +449,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_STRUCT_OFFSET (GtkNotebookClass, focus_tab),
                   NULL, NULL,
                   _gtk_marshal_BOOLEAN__ENUM,
-                  G_TYPE_NONE, 1,
+                  G_TYPE_BOOLEAN, 1,
                   GTK_TYPE_NOTEBOOK_TAB);
   notebook_signals[SELECT_PAGE] = 
     g_signal_new ("select_page",

@@ -1,3 +1,15 @@
+Thu Feb  7 19:00:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_key_release): Convert
+	to using  binding set for doing key bindings. (#62622,
+	Requested by Skip Montaro)
+
+	* gtk/gtkwindow.c (gtk_window_class_init): Add control-arrow
+	bindings as overrides along with control-tab bindings.
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): Fix return
+	type for ::focus_tab signal.
+
 Thu Feb  7 19:39:27 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #70782 and some drag dest rectangle/line issues
