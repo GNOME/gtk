@@ -1,22 +1,22 @@
 <SIGNAL>
 <NAME>GdkPixbufLoader::area-updated</NAME>
 <RETURNS>void</RETURNS>
-GdkPixbufLoader *gdkpixbufloader
-gint  arg1
-gint  arg2
-gint  arg3
-gint  arg4
+GdkPixbufLoader *loader
+gint  x
+gint  y
+gint  width
+gint  height
 </SIGNAL>
 
 <SIGNAL>
 <NAME>GdkPixbufLoader::area-prepared</NAME>
 <RETURNS>void</RETURNS>
-GdkPixbufLoader *gdkpixbufloader
+GdkPixbufLoader *loader
 </SIGNAL>
 
 <SIGNAL>
 <NAME>GdkPixbufLoader::closed</NAME>
 <RETURNS>void</RETURNS>
-GdkPixbufLoader *gdkpixbufloader
+GdkPixbufLoader *loader
 </SIGNAL>
 

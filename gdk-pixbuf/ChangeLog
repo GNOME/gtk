@@ -1,3 +1,12 @@
+1999-11-10  Federico Mena Quintero  <federico@redhat.com>
+
+	* doc/tmpl/gdk-pixbuf-loader.sgml: Populated.
+
+	* doc/gdk-pixbuf.signals: Put in the real names of signal
+	arguments.
+
+	* src/gdk-pixbuf-loader.c: Improved documentation comments.
+
 1999-11-10  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): emit the

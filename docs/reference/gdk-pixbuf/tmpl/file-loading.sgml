@@ -31,8 +31,7 @@ Loading a pixbuf from a file.
 </para>
 
 @filename: 
-@Returns: 
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")

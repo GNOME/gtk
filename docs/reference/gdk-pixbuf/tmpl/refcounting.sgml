@@ -33,8 +33,7 @@ Functions to perform reference counting on a #GdkPixbuf.
 
 </para>
 
-@pixbuf: 
-<!--
+@pixbuf: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")

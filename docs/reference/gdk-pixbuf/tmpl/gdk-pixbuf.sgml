@@ -98,8 +98,7 @@ the image data.
 </para>
 
 @pixbuf: 
-@Returns: 
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")

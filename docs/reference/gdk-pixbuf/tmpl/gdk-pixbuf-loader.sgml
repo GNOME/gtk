@@ -7,20 +7,23 @@ Application-driven image loading.
 <!-- ##### SECTION Long_Description ##### -->
   <para>
     #GdkPIxbufLoader provides a way for applications to drive the
-    process of loading an image.  
+    process of loading an image.  Applications can use this
+    functionality instead of gdk_pixbuf_new_from_file() when they need
+    to parse image data in small chunks, such as when reading it from
+    a network connection.
   </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
+  <para>
+    gdk_pixbuf_new_from_file()
+  </para>
 
 <!-- ##### MACRO GDK_PIXBUF_LOADER ##### -->
-<para>
+  <para>
+    Casts a #GtkObject to a #GdkPixbufLoader.
+  </para>
 
-</para>
-
-@obj: 
+@obj: A GTK+ object.
 
 
 <!-- ##### FUNCTION gdk_pixbuf_loader_new ##### -->
@@ -60,29 +63,40 @@ Application-driven image loading.
 
 
 <!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
-<para>
+  <para>
+    This signal is emitted when a significant area of the image being
+    loaded has been updated.  Normally it means that a complete
+    scanline has been read in, but it could be a different area as
+    well.  Applications can use this signal to know when to repaint
+    areas of an image that is being loaded.
+  </para>
 
-</para>
-
-@gdkpixbufloader: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@arg4: 
+@loader: Loader which emitted the signal.
+@x: X offset of upper-left corner of the updated area.
+@y: Y offset of upper-left corner of the updated area.
+@width: Width of updated area.
+@height: Height of updated area.
 
 <!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
-<para>
+  <para>
+    This signal is emitted when the pixbuf loader has been fed the
+    initial amount of data that is required to figure out the size and
+    format of the image that it will create.  After this signal is
+    emitted, applications can call gdk_pixbuf_loader_get_pixbuf() to
+    fetch the partially-loaded pixbuf.
+  </para>
 
-</para>
-
-@gdkpixbufloader: the object which received the signal.
+@loader: Loader which emitted the signal.
 
 <!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
-<para>
+  <para>
+    This signal is emitted when gdk_pixbuf_loader_close() is called.
+    It can be used by different parts of an application to receive
+    notification when an image loader is closed by the code that
+    drives it.
+  </para>
 
-</para>
-
-@gdkpixbufloader: the object which received the signal.
+@loader: Loader which emitted the signal.
 
 <!--
 Local variables:
@@ -90,3 +104,4 @@ mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+

@@ -307,15 +307,16 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, const gchar *buf, s
 /**
  * gdk_pixbuf_loader_write:
  * @loader: A pixbuf loader.
- * @buf: The image data.
- * @count: The length of @buf in bytes.
+ * @buf: Pointer to image data.
+ * @count: Length of the @buf buffer in bytes.
  *
- * This will load the next @size bytes of the image.  It will return TRUE if the
- * data was loaded successfully, and FALSE if an error occurred. In this case,
- * the loader will be closed, and will not accept further writes.
+ * This will cause a pixbuf loader to parse the next @count bytes of an image.
+ * It will return TRUE if the data was loaded successfully, and FALSE if an
+ * error occurred.  In the latter case, the loader will be closed, and will not
+ * accept further writes.
  *
- * Return value: Returns TRUE if the write was successful -- FALSE if the loader
- * cannot parse the buf.
+ * Return value: #TRUE if the write was successful, or #FALSE if the loader
+ * cannot parse the buffer.
  **/
 gboolean
 gdk_pixbuf_loader_write (GdkPixbufLoader *loader, const gchar *buf, size_t count)
@@ -354,14 +355,16 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader, const gchar *buf, size_t count
  * gdk_pixbuf_loader_get_pixbuf:
  * @loader: A pixbuf loader.
  *
- * Gets the GdkPixbuf that the loader is currently loading.  If the loader
- * hasn't been enough data via gdk_pixbuf_loader_write, then NULL is returned.
- * Any application using this function should check for this value when it is
- * used.  The pixbuf returned will be the same in all future calls to the
- * loader, so simply calling a gdk_pixbuf_ref() should be sufficient to continue
- * using it.
+ * Queries the GdkPixbuf that a pixbuf loader is currently creating.  In general
+ * it only makes sense to call this function afer the "area_prepared" signal has
+ * been emitted by the loader; this means that enough data has been read to know
+ * the size of the image that will be allocated.  If the loader has not received
+ * enough data via gdk_pixbuf_loader_write(), then this function returns NULL.
+ * The returned pixbuf will be the same in all future calls to the loader, so
+ * simply calling gdk_pixbuf_ref() should be sufficient to continue using it.
  *
- * Return value: The GdkPixbuf that the loader is loading.
+ * Return value: The GdkPixbuf that the loader is creating, or NULL if not
+ * enough data has been read to determine how to create the image buffer.
  **/
 GdkPixbuf *
 gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
@@ -380,7 +383,8 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
  * gdk_pixbuf_loader_close:
  * @loader: A pixbuf loader.
  *
- * Tells the loader to stop accepting writes.
+ * Informs a pixbuf loader that no further writes with gdk_pixbuf_load_write()
+ * will occur, so that it can free its internal loading structures.
  **/
 void
 gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
