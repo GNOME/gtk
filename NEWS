@@ -1,3 +1,9 @@
+Overview of Changes in GTK+ 1.2.8:
+
+* Make 3.79 bug workaround
+* FAQ and tutorial updates and improvements
+* Miscellaneous bug fixes: CList, Calendar, rc-files, FontSelection
+
 Overview of Changes in GTK+ 1.2.7:
 
 * More header cleanups.
