@@ -3683,6 +3683,7 @@ gtk_widget_real_realize (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_NO_WINDOW (widget));
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   if (widget->parent)
