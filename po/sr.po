@@ -8,8 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
-"POT-Creation-Date: 2003-08-16 01:26+0200\n"
-"PO-Revision-Date: 2003-08-16 01:25+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-09-18 23:17+0200\n"
+"PO-Revision-Date: 2003-09-18 23:20+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -981,7 +982,7 @@ msgstr "Размаци"
 msgid "The amount of space between children"
 msgstr "Количина размака међу садржаним елементима"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:450
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:455
 msgid "Homogeneous"
 msgstr "Једнообразно"
 
@@ -989,7 +990,7 @@ msgstr "Једнообразно"
 msgid "Whether the children should all be the same size"
 msgstr "Да ли сви садржани елементи треба да буду исте величине"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:442
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:447
 #: gtk/gtktreeviewcolumn.c:291
 msgid "Expand"
 msgstr "Рашири"
@@ -1416,11 +1417,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Боја исцртавања као GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:582
+#: gtk/gtktextview.c:584
 msgid "Editable"
 msgstr "Измењив"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:583
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:585
 msgid "Whether the text can be modified by the user"
 msgstr "Да ли корисник може мењати текст"
 
@@ -1668,21 +1669,29 @@ msgstr "Размаци показатеља"
 msgid "Spacing around check or radio indicator"
 msgstr "Размаци око показатеља означавања или једноизборника"
 
-#: gtk/gtkcheckmenuitem.c:117 gtk/gtktogglebutton.c:132
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
 msgid "Active"
 msgstr "Активан"
 
-#: gtk/gtkcheckmenuitem.c:118
+#: gtk/gtkcheckmenuitem.c:119
 msgid "Whether the menu item is checked"
 msgstr "Да ли је ставка менија означена"
 
-#: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:140
+#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "Недоследно"
 
-#: gtk/gtkcheckmenuitem.c:126
+#: gtk/gtkcheckmenuitem.c:127
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Да ли приказати „недоследно“ стање"
+
+#: gtk/gtkcheckmenuitem.c:134
+msgid "Draw as radio menu item"
+msgstr "Исцртај као радио дугме"
+
+#: gtk/gtkcheckmenuitem.c:135
+msgid "Whether the menu item looks like a radio menu item"
+msgstr "Да ли ставка менија изгледа на искључиву ставку"
 
 #: gtk/gtkcolorbutton.c:200
 msgid "Use alpha"
@@ -2119,15 +2128,15 @@ msgstr "Изабери кад је у жижи"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Да ли изабрати садржај када поље пређе у жижу"
 
-#: gtk/gtkentry.c:4059 gtk/gtktextview.c:6809
+#: gtk/gtkentry.c:4059 gtk/gtktextview.c:6811
 msgid "Select _All"
 msgstr "Изабери _све"
 
-#: gtk/gtkentry.c:4069 gtk/gtktextview.c:6819
+#: gtk/gtkentry.c:4069 gtk/gtktextview.c:6821
 msgid "Input _Methods"
 msgstr "Начини уноса"
 
-#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6830
+#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6832
 msgid "_Insert Unicode Control Character"
 msgstr "_Убацити Уникод контролни знак"
 
@@ -2516,7 +2525,7 @@ msgid "_Gamma value"
 msgstr "_Гама вредност"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:499 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:504 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Врста сенке"
 
@@ -2750,7 +2759,7 @@ msgstr "Користи ознаке"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Текст ознаке садржи XML ознаке. Видети pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:599
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:601
 msgid "Justification"
 msgstr "Слагање редова"
 
@@ -2855,70 +2864,102 @@ msgstr "Висина приказа"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:263
+#: gtk/gtkmenu.c:344
 msgid "Tearoff Title"
 msgstr "Наслов отргнутог"
 
-#: gtk/gtkmenu.c:264
+#: gtk/gtkmenu.c:345
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Наслов који може приказати управник прозора када се овај мени отргне"
 
-#: gtk/gtkmenu.c:270
+#: gtk/gtkmenu.c:351
 msgid "Vertical Padding"
 msgstr "Усправна попуна"
 
-#: gtk/gtkmenu.c:271
+#: gtk/gtkmenu.c:352
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Количина размака који се додаје на врху и на дну менија"
 
-#: gtk/gtkmenu.c:279
+#: gtk/gtkmenu.c:360
 msgid "Vertical Offset"
 msgstr "Усправни померај"
 
-#: gtk/gtkmenu.c:280
+#: gtk/gtkmenu.c:361
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Када је мени заправо подмени, помери га усправно за овај број тачака"
 
-#: gtk/gtkmenu.c:288
+#: gtk/gtkmenu.c:369
 msgid "Horizontal Offset"
 msgstr "Водоравни померај"
 
-#: gtk/gtkmenu.c:289
+#: gtk/gtkmenu.c:370
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Када је мени заправо подмени, помери га водоравно за овај број тачака"
 
-#: gtk/gtkmenu.c:406
+#: gtk/gtkmenu.c:380
+msgid "Left Attach"
+msgstr "Лево припајање"
+
+#: gtk/gtkmenu.c:381 gtk/gtktable.c:203
+msgid "The column number to attach the left side of the child to"
+msgstr "Број колоне за коју прикачити леву страну садржаног елемента"
+
+#: gtk/gtkmenu.c:388
+msgid "Right Attach"
+msgstr "Десно припајање"
+
+#: gtk/gtkmenu.c:389
+msgid "The column number to attach the right side of the child to"
+msgstr "Број колоне за коју прикачити десну страну садржаног елемента"
+
+#: gtk/gtkmenu.c:396
+msgid "Top Attach"
+msgstr "Горње припајање"
+
+#: gtk/gtkmenu.c:397
+msgid "The row number to attach the top of the child to"
+msgstr "Број реда за који прикачити горњу страну садржаног елемента"
+
+#: gtk/gtkmenu.c:404
+msgid "Bottom Attach"
+msgstr "Доње припајање"
+
+#: gtk/gtkmenu.c:405 gtk/gtktable.c:224
+msgid "The row number to attach the bottom of the child to"
+msgstr "Број реда за који прикачити доњу страну садржаног елемента"
+
+#: gtk/gtkmenu.c:492
 msgid "Can change accelerators"
 msgstr "Дозвољена измена пречица"
 
-#: gtk/gtkmenu.c:407
+#: gtk/gtkmenu.c:493
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Да ли је дозвољена измена пречица притиском на тастере над ставком менија"
 
-#: gtk/gtkmenu.c:412
+#: gtk/gtkmenu.c:498
 msgid "Delay before submenus appear"
 msgstr "Време пре појаве подменија"
 
-#: gtk/gtkmenu.c:413
+#: gtk/gtkmenu.c:499
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Најмање време које се показивач миша мора задржати преко ставке менија да би "
 "се појавио подмени"
 
-#: gtk/gtkmenu.c:420
+#: gtk/gtkmenu.c:506
 msgid "Delay before hiding a submenu"
 msgstr "Време пре скривања подменија"
 
-#: gtk/gtkmenu.c:421
+#: gtk/gtkmenu.c:507
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2928,7 +2969,7 @@ msgstr "Време пре скривања подменија када се по
 msgid "Style of bevel around the menubar"
 msgstr "Стил удубљења око мени линије"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:475
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:480
 msgid "Internal padding"
 msgstr "Унутрашња попуна"
 
@@ -3154,7 +3195,7 @@ msgstr "Корачница унапред"
 msgid "Display the standard forward arrow button"
 msgstr "Прикажи обично дугме са стрелицом унапред"
 
-#: gtk/gtknotebook.c:2647 gtk/gtknotebook.c:4973
+#: gtk/gtknotebook.c:2645 gtk/gtknotebook.c:4971
 #, c-format
 msgid "Page %u"
 msgstr "Лист %u"
@@ -3276,7 +3317,7 @@ msgstr "Поправка"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment везан за елемент за приказ напретка (превазиђено)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:416
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:421
 msgid "Orientation"
 msgstr "Правац пружања"
 
@@ -3428,17 +3469,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Колико померити стрелицу у правцу Y осе када се дугме притисне"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Не може пронаћи датотеку за укључивање: „%s“"
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Не може пронаћи датотеку са сликом у путањи за слике: „%s“"
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Део путање за слике: „%s“ мора бити апсолутна путања, %s, ред %d"
@@ -3539,11 +3580,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Прикажи другу стрелицу унапред на супротној страни клизача"
 
-#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:528
+#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:529
 msgid "Horizontal Adjustment"
 msgstr "Водоравна поправка"
 
-#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:536
+#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:537
 msgid "Vertical Adjustment"
 msgstr "Усправна поправка"
 
@@ -3980,11 +4021,11 @@ msgstr "_Врати"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "_Запамти"
+msgstr "_Сачувај"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "Запамти _Као"
+msgstr "Сачувај _као"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
@@ -4091,10 +4132,6 @@ msgstr "Уколико је постављено, онда су сва поља 
 msgid "Left attachment"
 msgstr "Лево припајање"
 
-#: gtk/gtktable.c:203
-msgid "The column number to attach the left side of the child to"
-msgstr "Број колоне за коју прикачити леву страну садржаног елемента"
-
 #: gtk/gtktable.c:209
 msgid "Right attachment"
 msgstr "Десно припајање"
@@ -4114,10 +4151,6 @@ msgstr "Број реда за који прикачити горњу стран
 #: gtk/gtktable.c:223
 msgid "Bottom attachment"
 msgstr "Доње припајање"
-
-#: gtk/gtktable.c:224
-msgid "The row number to attach the bottom of the child to"
-msgstr "Број реда за који прикачити доњу страну садржаног елемента"
 
 #: gtk/gtktable.c:230
 msgid "Horizontal options"
@@ -4283,7 +4316,7 @@ msgstr ""
 "се исправно прилагођава измени теме и слично, па се препоручује. Pango "
 "успоставља неке размере као што је PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:602
 msgid "Left, right, or center justification"
 msgstr "Лево, десно, или средишње поравнање"
 
@@ -4305,7 +4338,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Лева маргина"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:609
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:611
 msgid "Width of the left margin in pixels"
 msgstr "Ширина леве маргине у тачкама"
 
@@ -4313,15 +4346,15 @@ msgstr "Ширина леве маргине у тачкама"
 msgid "Right margin"
 msgstr "Десна маргина"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:621
 msgid "Width of the right margin in pixels"
 msgstr "Ширина десне маргине у тачкама"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:628
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:630
 msgid "Indent"
 msgstr "Увлачење"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:631
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Колико тачака треба користити за увлачење пасуса"
 
@@ -4335,7 +4368,7 @@ msgstr "Померај текста у односу на основну лини
 msgid "Pixels above lines"
 msgstr "Тачака изнад линија"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:553
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:555
 msgid "Pixels of blank space above paragraphs"
 msgstr "Број тачака празног простора изнад пасуса"
 
@@ -4343,7 +4376,7 @@ msgstr "Број тачака празног простора изнад пас�
 msgid "Pixels below lines"
 msgstr "Тачака испод линија"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:563
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:565
 msgid "Pixels of blank space below paragraphs"
 msgstr "Број тачака празног простора испод пасуса"
 
@@ -4351,7 +4384,7 @@ msgstr "Број тачака празног простора испод пас�
 msgid "Pixels inside wrap"
 msgstr "Тачака унутар пасуса"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:573
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:575
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Број тачака празног простора између преломљених редова у пасусу"
 
@@ -4359,16 +4392,16 @@ msgstr "Број тачака празног простора између пр�
 msgid "Wrap mode"
 msgstr "Прелом"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:593
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Да ли се прелом не врши никад, између речи, или између знакова"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:638
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:640
 msgid "Tabs"
 msgstr "Табулатори"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:639
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:641
 msgid "Custom tabs for this text"
 msgstr "Постави табулаторе за овај текст"
 
@@ -4528,51 +4561,51 @@ msgstr "ZWJ _спојница без ширине"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ _неспојница без ширине"
 
-#: gtk/gtktextview.c:552
+#: gtk/gtktextview.c:554
 msgid "Pixels Above Lines"
 msgstr "Тачака изнад линија"
 
-#: gtk/gtktextview.c:562
+#: gtk/gtktextview.c:564
 msgid "Pixels Below Lines"
 msgstr "Тачака испод линија"
 
-#: gtk/gtktextview.c:572
+#: gtk/gtktextview.c:574
 msgid "Pixels Inside Wrap"
 msgstr "Тачака између линија"
 
-#: gtk/gtktextview.c:590
+#: gtk/gtktextview.c:592
 msgid "Wrap Mode"
 msgstr "Начин прелома"
 
-#: gtk/gtktextview.c:608
+#: gtk/gtktextview.c:610
 msgid "Left Margin"
 msgstr "Лева маргина"
 
-#: gtk/gtktextview.c:618
+#: gtk/gtktextview.c:620
 msgid "Right Margin"
 msgstr "Десна маргина"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:648
 msgid "Cursor Visible"
 msgstr "Курсор се види"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:649
 msgid "If the insertion cursor is shown"
 msgstr "Да ли се приказује курсор за унос"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:656
 msgid "Buffer"
 msgstr "Бафер"
 
-#: gtk/gtktextview.c:655
+#: gtk/gtktextview.c:657
 msgid "The buffer which is displayed"
 msgstr "Бафер који се приказује"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:664
 msgid "Overwrite mode"
 msgstr "Начин преписивања"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:665
 msgid "Whether entered text overwrites existing contents"
 msgstr "Да ли унети текст иде преко постојећег садржаја"
 
@@ -4601,92 +4634,92 @@ msgstr "Приказ показатеља"
 msgid "If the toggle part of the button is displayed"
 msgstr "Да ли се приказује показатељ жабице"
 
-#: gtk/gtktoolbar.c:417
+#: gtk/gtktoolbar.c:422
 msgid "The orientation of the toolbar"
 msgstr "Правац пружања линије са алаткама"
 
-#: gtk/gtktoolbar.c:425
+#: gtk/gtktoolbar.c:430
 msgid "Toolbar Style"
 msgstr "Стил линије са алаткама"
 
-#: gtk/gtktoolbar.c:426
+#: gtk/gtktoolbar.c:431
 msgid "How to draw the toolbar"
 msgstr "Како исцртати линију са алаткама"
 
-#: gtk/gtktoolbar.c:433
+#: gtk/gtktoolbar.c:438
 msgid "Show Arrow"
 msgstr "Прикажи стрелицу"
 
-#: gtk/gtktoolbar.c:434
+#: gtk/gtktoolbar.c:439
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Да ли треба да прикаже стрелицу уколико не стане линија са алаткама"
 
-#: gtk/gtktoolbar.c:443
+#: gtk/gtktoolbar.c:448
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Да ли ставка треба да добије додатни простор када расте линија са алаткама"
 
-#: gtk/gtktoolbar.c:451
+#: gtk/gtktoolbar.c:456
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Да ли ставка треба да буде исте величине као и остале једнообразне ставке"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:463
 msgid "Pack End"
 msgstr "Стави на крај"
 
-#: gtk/gtktoolbar.c:459
+#: gtk/gtktoolbar.c:464
 msgid "Whether the item is positioned at the end of the toolbar"
 msgstr "Да ли се ставка смешта на крај линије са алаткама"
 
-#: gtk/gtktoolbar.c:466
+#: gtk/gtktoolbar.c:471
 msgid "Spacer size"
 msgstr "Величина размака"
 
-#: gtk/gtktoolbar.c:467
+#: gtk/gtktoolbar.c:472
 msgid "Size of spacers"
 msgstr "Величина размака"
 
-#: gtk/gtktoolbar.c:476
+#: gtk/gtktoolbar.c:481
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Количина ивичног размака између сенке линије са алатима и дугмића"
 
-#: gtk/gtktoolbar.c:484
+#: gtk/gtktoolbar.c:489
 msgid "Space style"
 msgstr "Стил размака"
 
-#: gtk/gtktoolbar.c:485
+#: gtk/gtktoolbar.c:490
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Да ли су размаци усправне линије или само празнине"
 
-#: gtk/gtktoolbar.c:492
+#: gtk/gtktoolbar.c:497
 msgid "Button relief"
 msgstr "Ивица дугмића"
 
-#: gtk/gtktoolbar.c:493
+#: gtk/gtktoolbar.c:498
 msgid "Type of bevel around toolbar buttons"
 msgstr "Врста удубљења око дугмића на линији са алаткама"
 
-#: gtk/gtktoolbar.c:500
+#: gtk/gtktoolbar.c:505
 msgid "Style of bevel around the toolbar"
 msgstr "Врста удубљења око линије са алаткама"
 
-#: gtk/gtktoolbar.c:506
+#: gtk/gtktoolbar.c:511
 msgid "Toolbar style"
 msgstr "Начин приказа линије са алаткама"
 
-#: gtk/gtktoolbar.c:507
+#: gtk/gtktoolbar.c:512
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Да ли уобичајене линије са алаткама имају само текст, текст и иконе, само "
 "иконе, итд."
 
-#: gtk/gtktoolbar.c:513
+#: gtk/gtktoolbar.c:518
 msgid "Toolbar icon size"
 msgstr "Величина икона за алатке"
 
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:519
 msgid "Size of icons in default toolbars"
 msgstr "Величина икона за уобичајене линије са алаткама"
 
@@ -4698,134 +4731,134 @@ msgstr "TreeModelSort модел"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Модел који треба уредити помоћу TreeModelSort-а"
 
-#: gtk/gtktreeview.c:520
+#: gtk/gtktreeview.c:521
 msgid "TreeView Model"
 msgstr "Модел TreeView-а"
 
-#: gtk/gtktreeview.c:521
+#: gtk/gtktreeview.c:522
 msgid "The model for the tree view"
 msgstr "Модел за разгранати преглед"
 
-#: gtk/gtktreeview.c:529
+#: gtk/gtktreeview.c:530
 msgid "Horizontal Adjustment for the widget"
 msgstr "Водоравна поправка за елемент"
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:538
 msgid "Vertical Adjustment for the widget"
 msgstr "Усправна поправка за елемент"
 
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:219 gtk/gtkwidget.c:434
+#: gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:219 gtk/gtkwidget.c:434
 msgid "Visible"
 msgstr "Видљив"
 
-#: gtk/gtktreeview.c:545
+#: gtk/gtktreeview.c:546
 msgid "Show the column header buttons"
 msgstr "Прикажи дугмиће за заглавље колона"
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:553
 msgid "Headers Clickable"
 msgstr "Заглавља се могу кликнути"
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:554
 msgid "Column headers respond to click events"
 msgstr "Заглавља колона одговарају на притиске мишем"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:561
 msgid "Expander Column"
 msgstr "Колона гранања"
 
-#: gtk/gtktreeview.c:561
+#: gtk/gtktreeview.c:562
 msgid "Set the column for the expander column"
 msgstr "Поставите колону у којој се врши гранање"
 
-#: gtk/gtktreeview.c:568 gtk/gtktreeviewcolumn.c:326
+#: gtk/gtktreeview.c:569 gtk/gtktreeviewcolumn.c:326
 msgid "Reorderable"
 msgstr "Редослед променљив"
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:570
 msgid "View is reorderable"
 msgstr "Дозвољена је измена редоследа"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:577
 msgid "Rules Hint"
 msgstr "Наговештај за линије"
 
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:578
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Поставите наговештај за мотор теме ради исцртавања редова у наизменичним "
 "бојама"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:585
 msgid "Enable Search"
 msgstr "Омогући претрагу"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:586
 msgid "View allows user to search through columns interactively"
 msgstr "Преглед дозвољава корисницима да траже интерактивно кроз колоне"
 
-#: gtk/gtktreeview.c:592
+#: gtk/gtktreeview.c:593
 msgid "Search Column"
 msgstr "Колона за претрагу"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:594
 msgid "Model column to search through when searching through code"
 msgstr "Колона кроз коју се претражује када се претражује помоћу кода"
 
 # Ovo je LOSE!
-#: gtk/gtktreeview.c:606
+#: gtk/gtktreeview.c:607
 msgid "Expander Size"
 msgstr "Величина разграника"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:608
 msgid "Size of the expander arrow"
 msgstr "Величина стрелице за гранање"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:616
 msgid "Vertical Separator Width"
 msgstr "Ширина усправних раздвојника"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:617
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Усправни размак између поља. Мора бити паран број"
 
-#: gtk/gtktreeview.c:624
+#: gtk/gtktreeview.c:625
 msgid "Horizontal Separator Width"
 msgstr "Ширина водоравних раздвојника"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:626
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Водоравни размак између поља. Мора бити паран број"
 
-#: gtk/gtktreeview.c:633
+#: gtk/gtktreeview.c:634
 msgid "Allow Rules"
 msgstr "Дозволи линије"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:635
 msgid "Allow drawing of alternating color rows"
 msgstr "Дозволи исцртавање редова у наизменичним бојама"
 
-#: gtk/gtktreeview.c:640
+#: gtk/gtktreeview.c:641
 msgid "Indent Expanders"
 msgstr "Увлачење за гранање"
 
-#: gtk/gtktreeview.c:641
+#: gtk/gtktreeview.c:642
 msgid "Make the expanders indented"
 msgstr "Поставити да гранање буде увучено"
 
-#: gtk/gtktreeview.c:647
+#: gtk/gtktreeview.c:648
 msgid "Even Row Color"
 msgstr "Боја парног реда"
 
-#: gtk/gtktreeview.c:648
+#: gtk/gtktreeview.c:649
 msgid "Color to use for even rows"
 msgstr "Боја за парне редове"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:655
 msgid "Odd Row Color"
 msgstr "Боја непарног реда"
 
-#: gtk/gtktreeview.c:655
+#: gtk/gtktreeview.c:656
 msgid "Color to use for odd rows"
 msgstr "Боја за непарне редове"
 
@@ -5319,19 +5352,19 @@ msgstr "Привлачење"
 msgid "The window gravity of the window"
 msgstr "Привлачење између прозора"
 
-#: modules/input/gtkimcontextxim.c:280
+#: modules/input/gtkimcontextxim.c:325
 msgid "IM Preedit style"
 msgstr "IM начин предуноса"
 
-#: modules/input/gtkimcontextxim.c:281
+#: modules/input/gtkimcontextxim.c:326
 msgid "How to draw the input method preedit string"
 msgstr "Како исцртати текст предуноса за начине уноса"
 
-#: modules/input/gtkimcontextxim.c:289
+#: modules/input/gtkimcontextxim.c:334
 msgid "IM Status style"
 msgstr "Стил стања IM-а"
 
-#: modules/input/gtkimcontextxim.c:290
+#: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Како исцртати линију стања начина уноса"
 
