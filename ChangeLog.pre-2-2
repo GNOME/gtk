@@ -1,3 +1,9 @@
+Sun Jun  7 14:34:31 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_create_menu_entries): feature
+	check menu items in the compatibility code (this required me to remove
+	the "<check>" part from the menu item name, grrr).
+
 1998-06-07  Marius Vollmer  <mvo@zagadka.ping.de>
 
 	* gdk/gdk.h (gdk_color_copy, gdk_color_free): New prototypes.

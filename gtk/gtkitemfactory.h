@@ -187,7 +187,7 @@ void	gtk_item_factory_popup_with_data(GtkItemFactory		*ifactory,
 gpointer gtk_item_factory_popup_data	(GtkItemFactory		*ifactory);
 gpointer gtk_item_factory_popup_data_from_widget (GtkWidget	*widget);
 
-/* Compatibility functions for ol GtkMenuFactory code
+/* Compatibility functions for deprecated GtkMenuFactory code
  */
 GtkItemFactory*	gtk_item_factory_from_path   (const gchar       *path);
 void	gtk_item_factory_create_menu_entries (guint		 n_entries,

@@ -1028,21 +1028,26 @@ void
 gtk_item_factory_create_menu_entries (guint              n_entries,
 				      GtkMenuEntry      *entries)
 {
-  static GtkPatternSpec pspec = { 42, 0 };
+  static GtkPatternSpec pspec_separator = { 42, 0 };
+  static GtkPatternSpec pspec_check = { 42, 0 };
   guint i;
 
   if (!n_entries)
     return;
   g_return_if_fail (entries != NULL);
 
-  if (pspec.pattern_length == 0)
-    gtk_pattern_spec_init (&pspec, "*<separator>*");
+  if (pspec_separator.pattern_length == 0)
+    {
+      gtk_pattern_spec_init (&pspec_separator, "*<separator>*");
+      gtk_pattern_spec_init (&pspec_check, "*<check>*");
+    }
 
   for (i = 0; i < n_entries; i++)
     {
       GtkItemFactory *ifactory;
       GtkItemFactoryEntry entry;
       gchar *path;
+      gchar *cpath;
 
       path = entries[i].path;
       ifactory = gtk_item_factory_from_path (path);
@@ -1057,17 +1062,41 @@ gtk_item_factory_create_menu_entries (guint              n_entries,
       while (*path != '>')
 	path++;
       path++;
+      cpath = NULL;
 
       entry.path = path;
       entry.accelerator = entries[i].accelerator;
       entry.callback = entries[i].callback;
       entry.callback_action = 0;
-      entry.item_type = (gtk_pattern_match_string (&pspec, path) ?
-			 (gpointer) key_type_separator_item :
-			 NULL);
-
+      if (gtk_pattern_match_string (&pspec_separator, path))
+	entry.item_type = (gpointer) key_type_separator_item;
+      else if (!gtk_pattern_match_string (&pspec_check, path))
+	entry.item_type = NULL;
+      else
+	{
+	  gboolean in_brace = FALSE;
+	  gchar *c;
+	  
+	  cpath = g_new (gchar, strlen (path));
+	  c = cpath;
+	  while (*path != 0)
+	    {
+	      if (*path == '<')
+		in_brace = TRUE;
+	      else if (*path == '>')
+		in_brace = FALSE;
+	      else if (!in_brace)
+		*(c++) = *path;
+	      path++;
+	    }
+	  *c = 0;
+	  entry.item_type = (gpointer) key_type_toggle_item;
+	  entry.path = cpath;
+	}
+      
       gtk_item_factory_create_item (ifactory, &entry, entries[i].callback_data, 2);
       entries[i].widget = gtk_item_factory_get_widget (ifactory, entries[i].path);
+      g_free (cpath);
     }
 }
 

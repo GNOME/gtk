@@ -162,6 +162,15 @@
 #define G_GNUC_CONST
 #endif  /* !__GNUC__ */
 
+/* Hacker macro to place breakpoints for x86 machines.
+ * Actuall use is strongly deprecated of course ;)
+ */
+#if	defined (__i386__)
+#define	G_BREAKPOINT()		G_STMT_START{ __asm__ ("int $03"); }G_STMT_END
+#else	/* !__i386__ */
+#define	G_BREAKPOINT()
+#endif	/* __i386__ */
+
 /* Wrap the __PRETTY_FUNCTION__ and __FUNCTION__ variables with macros,
  * so we can refer to them as strings unconditionally.
  */
