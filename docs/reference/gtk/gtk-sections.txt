@@ -259,6 +259,8 @@ gtk_button_get_use_stock
 gtk_button_set_use_stock
 gtk_button_get_use_underline
 gtk_button_set_use_underline
+gtk_button_set_focus_on_click
+gtk_button_get_focus_on_click
 
 <SUBSECTION Standard>
 GTK_BUTTON
@@ -735,6 +737,25 @@ GTK_IS_DIALOG_CLASS
 GTK_DIALOG_GET_CLASS
 <SUBSECTION Private>
 gtk_dialog_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkdisclosure</FILE>
+<TITLE>GtkDisclosure</TITLE>
+GtkDisclosure
+gtk_disclosure_new
+gtk_disclosure_new_with_label
+gtk_disclosure_new_with_labels
+gtk_disclosure_set_container
+<SUBSECTION Standard>
+GTK_DISCLOSURE
+GTK_IS_DISCLOSURE
+GTK_TYPE_DISCLOSURE
+GTK_DISCLOSURE_CLASS
+GTK_IS_DISCLOSURE_CLASS
+GTK_DISCLOSURE_GET_CLASS
+<SUBSECTION Private>
+gtk_disclosure_get_type
 </SECTION>
 
 <SECTION>
@@ -2361,6 +2382,7 @@ gtk_text_buffer_get_mark
 gtk_text_buffer_get_insert
 gtk_text_buffer_get_selection_bound
 gtk_text_buffer_place_cursor
+gtk_text_buffer_select_range
 gtk_text_buffer_apply_tag
 gtk_text_buffer_remove_tag
 gtk_text_buffer_apply_tag_by_name
@@ -2901,6 +2923,7 @@ GTK_TYPE_TREE_ITER
 GTK_TYPE_TREE_PATH
 GTK_TYPE_TREE_ROW_REFERENCE
 <SUBSECTION Private>
+gtk_tree_row_reference_get_type
 gtk_tree_model_get_type
 gtk_tree_iter_get_type
 gtk_tree_path_get_type
@@ -3085,6 +3108,8 @@ gtk_tree_view_column_get_max_width
 gtk_tree_view_column_clicked
 gtk_tree_view_column_set_title
 gtk_tree_view_column_get_title
+gtk_tree_view_column_set_expand
+gtk_tree_view_column_get_expand
 gtk_tree_view_column_set_clickable
 gtk_tree_view_column_get_clickable
 gtk_tree_view_column_set_widget
@@ -3101,6 +3126,7 @@ gtk_tree_view_column_set_sort_order
 gtk_tree_view_column_get_sort_order
 gtk_tree_view_column_cell_set_cell_data
 gtk_tree_view_column_cell_get_size
+gtk_tree_view_column_cell_get_position
 gtk_tree_view_column_cell_is_visible
 gtk_tree_view_column_focus_cell
 <SUBSECTION Standard>
