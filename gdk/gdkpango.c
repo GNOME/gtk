@@ -278,9 +278,9 @@ gdk_draw_layout (GdkDrawable     *drawable,
       
       pango_layout_line_get_extents (line, NULL, &logical_rect);
 
-      if (width != 1 && align == PANGO_ALIGN_RIGHT)
+      if (width != -1 && align == PANGO_ALIGN_RIGHT)
 	x_offset = width - logical_rect.width;
-      else if (width != 1 && align == PANGO_ALIGN_CENTER)
+      else if (width != -1 && align == PANGO_ALIGN_CENTER)
 	x_offset = (width - logical_rect.width) / 2;
       else
 	x_offset = 0;

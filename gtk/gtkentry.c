@@ -589,6 +589,8 @@ gtk_entry_realize (GtkWidget *widget)
     gtk_editable_claim_selection (editable, TRUE, GDK_CURRENT_TIME);
 
   gtk_im_context_set_client_window (entry->im_context, entry->text_area);
+
+  entry_adjust_scroll (entry);
 }
 
 static void
@@ -723,10 +725,9 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      allocation->width - widget->style->xthickness * 2,
 			      requisition.height - widget->style->ythickness * 2);
 
+      /* And make sure the cursor is on screen */
+      entry_adjust_scroll (entry);
     }
-
-  /* And make sure the cursor is on screen */
-  entry_adjust_scroll (entry);
 }
 
 static void
@@ -1387,11 +1388,13 @@ entry_adjust_scroll (GtkEntry *entry)
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   widget = GTK_WIDGET (entry);
-  text_area_width = widget->allocation.width - 2 * (widget->style->xthickness + INNER_BORDER);
 
-  if (!entry->layout)
+  if (!entry->layout || !GTK_WIDGET_REALIZED (entry))
     return;
   
+  gdk_window_get_size (entry->text_area, &text_area_width, NULL);
+  text_area_width -= 2 * INNER_BORDER;
+
   line = pango_layout_get_lines (entry->layout)->data;
   
   /* Display as much text as we can */
