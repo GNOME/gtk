@@ -187,12 +187,6 @@ gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
   pix_impl->height = height;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth;
 
-  if (window) {
-    cmap = gdk_drawable_get_colormap (window);
-    if (cmap)
-      gdk_drawable_set_colormap (pixmap, cmap);
-  }
-
   if (depth == window_depth)
     {
       cmap = gdk_drawable_get_colormap (window);
