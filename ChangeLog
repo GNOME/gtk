@@ -1,3 +1,9 @@
+Fri Dec  5 15:30:16 2003  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkaccelgroup.c (quick_accel_find): Applied patch from
+	Ross McFarland <rwmcfa1@neces.com>, initialize *count_p to 0
+	before doing anything to prevent garbage returns.
+
 Sat Dec  6 00:23:46 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkviewport.c: Implement RTL flipping for 
