@@ -1,3 +1,9 @@
+Tue Jul 30 15:39:06 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/Makefile.am: Honor GDK_PIXBUF_CSOURCE from
+	configure.in when cross-compiling. (#87099,
+	J. Ali Harlow)
+
 Mon Jul 29 16:42:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontext.c (gtk_im_context_real_get_surrounding):
