@@ -49,6 +49,12 @@ G_CONST_RETURN static char *gdk_display_x11_get_display_name   (GdkDisplay      
 static GdkScreen *          gdk_display_x11_get_default_screen (GdkDisplay         *display);
 static void                 gdk_display_x11_finalize           (GObject            *object);
 
+static void gdk_internal_connection_watch (Display  *display,
+					   XPointer  arg,
+					   gint      fd,
+					   gboolean  opening,
+					   XPointer *watch_data);
+
 static gpointer parent_class = NULL;
 
 GType
@@ -125,6 +131,9 @@ gdk_open_display (const gchar *display_name)
 
   display_x11->use_xft = -1;
   display_x11->xdisplay = xdisplay;
+
+  /* Set up handlers for Xlib internal connections */
+  XAddConnectionWatch (xdisplay, gdk_internal_connection_watch, NULL);
   
   /* initialize the display's screens */ 
   display_x11->screens = g_new (GdkScreen *, ScreenCount (display_x11->xdisplay));
@@ -202,6 +211,78 @@ gdk_open_display (const gchar *display_name)
   _gdk_dnd_init (display);
 
   return display;
+}
+
+/*
+ * XLib internal connection handling
+ */
+typedef struct _GdkInternalConnection GdkInternalConnection;
+
+struct _GdkInternalConnection
+{
+  gint	         fd;
+  GSource	*source;
+  Display	*display;
+};
+
+static gboolean
+process_internal_connection (GIOChannel  *gioc,
+			     GIOCondition cond,
+			     gpointer     data)
+{
+  GdkInternalConnection *connection = (GdkInternalConnection *)data;
+
+  GDK_THREADS_ENTER ();
+
+  XProcessInternalConnection ((Display*)connection->display, connection->fd);
+
+  GDK_THREADS_LEAVE ();
+
+  return TRUE;
+}
+
+static GdkInternalConnection *
+gdk_add_connection_handler (Display *display,
+			    guint    fd)
+{
+  GIOChannel *io_channel;
+  GdkInternalConnection *connection;
+
+  connection = g_new (GdkInternalConnection, 1);
+
+  connection->fd = fd;
+  connection->display = display;
+  
+  io_channel = g_io_channel_unix_new (fd);
+  
+  connection->source = g_io_create_watch (io_channel, G_IO_IN);
+  g_source_set_callback (connection->source,
+			 (GSourceFunc)process_internal_connection, connection, NULL);
+  g_source_attach (connection->source, NULL);
+  
+  g_io_channel_unref (io_channel);
+  
+  return connection;
+}
+
+static void
+gdk_remove_connection_handler (GdkInternalConnection *connection)
+{
+  g_source_destroy (connection->source);
+  g_free (connection);
+}
+
+static void
+gdk_internal_connection_watch (Display  *display,
+			       XPointer  arg,
+			       gint      fd,
+			       gboolean  opening,
+			       XPointer *watch_data)
+{
+  if (opening)
+    *watch_data = (XPointer)gdk_add_connection_handler (display, fd);
+  else
+    gdk_remove_connection_handler ((GdkInternalConnection *)watch_data);
 }
 
 static G_CONST_RETURN gchar*
