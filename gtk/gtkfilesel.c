@@ -2106,7 +2106,7 @@ open_user_dir (gchar           *text_to_complete,
     {
       /* ~/ */
       gchar *homedir = g_get_home_dir ();
-      gchar *utf8_home = g_filename_to_utf8 (homedir);
+      gchar *utf8_homedir = g_filename_to_utf8 (homedir);
 
       g_free (homedir);
 
@@ -2546,7 +2546,7 @@ find_parent_dir_fullname (gchar* dirname)
   if (chdir (sys_dirname) != 0 || chdir ("..") != 0)
     {
       g_free (sys_dirname);
-      g_free (sys_orig_dir)
+      g_free (sys_orig_dir);
       cmpl_errno = errno;
       return NULL;
     }
@@ -2559,7 +2559,7 @@ find_parent_dir_fullname (gchar* dirname)
   if (chdir (sys_orig_dir) != 0)
     {
       cmpl_errno = errno;
-      g_free (sys_orig_dir)
+      g_free (sys_orig_dir);
       return NULL;
     }
 
