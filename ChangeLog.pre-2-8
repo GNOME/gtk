@@ -1,3 +1,11 @@
+Fri Apr  5 01:06:15 2002  Tim Janik  <timj@gtk.org>
+
+	* gdk/x11/gdkwindow-x11.c (set_text_property): fix segfault
+	upon NULL return from gdk_utf8_to_string_target().
+
+	* gdk/x11/gdkselection-x11.c (gdk_utf8_to_string_target): fix
+	return value comment to mention NULL returns upon EMFILE.
+
 Thu Apr  4 22:35:42 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* tests/testgtk.c (menu_items): revert accidentally commited
@@ -34,6 +42,7 @@ Thu Apr  4 22:28:08 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 	static color.
 
 Tue Apr  2 11:10:13 2002  Jonathan Blandford  <jrb@redhat.com>
+
 	* gtk/gtkliststore.c (gtk_list_store_set_sort_func): set the
 	sort_func correctly, 77030
 

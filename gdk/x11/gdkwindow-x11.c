@@ -1819,7 +1819,7 @@ set_text_property (GdkWindow   *window,
     {
       prop_type = XA_STRING;
       prop_text = gdk_utf8_to_string_target (utf8_str);
-      prop_length = strlen (prop_text);
+      prop_length = prop_text ? strlen (prop_text) : 0;
       prop_format = 8;
     }
   else

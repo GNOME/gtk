@@ -591,7 +591,8 @@ sanitize_utf8 (const gchar *src)
  * 
  * Return value: the newly-allocated string, or %NULL if the
  *               conversion failed. (It should not fail for
- *               any properly formed UTF-8 string.)
+ *               any properly formed UTF-8 string unless system
+ *               limits like memory or file descriptors are exceeded.)
  **/
 gchar *
 gdk_utf8_to_string_target (const gchar *str)
