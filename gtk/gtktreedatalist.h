@@ -39,17 +39,17 @@ struct _GtkTreeDataList
   } data;
 };
 
-/* FIXME: s/gtk/_gtk/g to make internal */
-void             gtk_tree_data_list_push_allocator (GAllocator      *allocator);
-void             gtk_tree_data_list_pop_allocator  (void);
-GtkTreeDataList *gtk_tree_data_list_alloc          (void);
-void             gtk_tree_data_list_free           (GtkTreeDataList *list);
+void             _gtk_tree_data_list_push_allocator (GAllocator      *allocator);
+void             _gtk_tree_data_list_pop_allocator  (void);
+GtkTreeDataList *_gtk_tree_data_list_alloc          (void);
+void             _gtk_tree_data_list_free           (GtkTreeDataList *list,
+						     GType           *column_headers);
+void             _gtk_tree_data_list_node_to_value  (GtkTreeDataList *list,
+						     GType            type,
+						     GValue          *value);
+void             _gtk_tree_data_list_value_to_node  (GtkTreeDataList *list,
+						     GValue          *value);
 
-void             gtk_tree_data_list_node_to_value  (GtkTreeDataList   *list,
-						    GType              type,
-						    GValue            *value);
-void             gtk_tree_data_list_value_to_node  (GtkTreeDataList   *list,
-						    GValue            *value);
 
 
 #endif /* __GTK_TREE_DATA_LIST_H__ */

@@ -71,11 +71,9 @@ struct _GtkTreeModelIface
   gboolean     (* get_iter)        (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter,
 				    GtkTreePath  *path);
-  gboolean     (* iter_invalid)    (GtkTreeModel *tree_model,
-				    GtkTreeIter  *iter);
   GtkTreePath *(* get_path)        (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter);
-  void         (* iter_get_value)  (GtkTreeModel *tree_model,
+  void         (* get_value)       (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter,
 				    gint          column,
 				    GValue       *value);
@@ -83,7 +81,7 @@ struct _GtkTreeModelIface
 				    GtkTreeIter  *iter);
   gboolean     (* iter_children)   (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter,
-				    GtkTreeIter  *child);
+				    GtkTreeIter  *parent);
   gboolean     (* iter_has_child)  (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter);
   gint         (* iter_n_children) (GtkTreeModel *tree_model,
@@ -94,7 +92,7 @@ struct _GtkTreeModelIface
 				    gint          n);
   gboolean     (* iter_parent)     (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter,
-				    GtkTreeIter  *parent);
+				    GtkTreeIter  *child);
 };
 
 
@@ -133,11 +131,9 @@ GType        gtk_tree_model_get_column_type (GtkTreeModel      *tree_model,
 gboolean     gtk_tree_model_get_iter        (GtkTreeModel      *tree_model,
 					     GtkTreeIter       *iter,
 					     GtkTreePath       *path);
-gboolean     gtk_tree_model_iter_invalid    (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter);
 GtkTreePath *gtk_tree_model_get_path        (GtkTreeModel      *tree_model,
 					     GtkTreeIter       *iter);
-void         gtk_tree_model_iter_get_value  (GtkTreeModel      *tree_model,
+void         gtk_tree_model_get_value       (GtkTreeModel      *tree_model,
 					     GtkTreeIter       *iter,
 					     gint               column,
 					     GValue            *value);

@@ -26,7 +26,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#if 0
 
 #define GTK_TYPE_MODEL_SIMPLE			(gtk_model_simple_get_type ())
 #define GTK_MODEL_SIMPLE(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_MODEL_SIMPLE, GtkModelSimple))
@@ -40,6 +39,8 @@ typedef struct _GtkModelSimpleClass  GtkModelSimpleClass;
 struct _GtkModelSimple
 {
   GtkObject parent;
+
+  gint stamp;
 };
 
 struct _GtkModelSimpleClass
@@ -49,37 +50,36 @@ struct _GtkModelSimpleClass
   /* signals */
   /* Will be moved into the GtkTreeModelIface eventually */
   void       (* changed)         (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
+				  GtkTreePath  *path,
+				  GtkTreeIter  *iter);
   void       (* inserted)        (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
+				  GtkTreePath  *path,
+				  GtkTreeIter  *iter);
   void       (* child_toggled)   (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
+				  GtkTreePath  *path,
+				  GtkTreeIter  *iter);
   void       (* deleted)         (GtkTreeModel *tree_model,
-				       GtkTreePath  *path);
+				  GtkTreePath  *path);
 };
 
 
-GtkType    gtk_model_simple_get_type           (void);
-GtkObject *gtk_model_simple_new                (void);
+GtkType         gtk_model_simple_get_type           (void);
+GtkModelSimple *gtk_model_simple_new                (void);
+void            gtk_model_simple_node_changed       (GtkModelSimple *simple,
+						     GtkTreePath    *path,
+						     GtkTreeIter    *iter);
+void            gtk_model_simple_node_inserted      (GtkModelSimple *simple,
+						     GtkTreePath    *path,
+						     GtkTreeIter    *iter);
+void            gtk_model_simple_node_child_toggled (GtkModelSimple *simple,
+						     GtkTreePath    *path,
+						     GtkTreeIter    *iter);
+void            gtk_model_simple_node_deleted       (GtkModelSimple *simple,
+						     GtkTreePath    *path,
+						     GtkTreeIter    *iter);
 
-void       gtk_model_simple_node_changed       (GtkModelSimple *simple,
-						GtkTreePath    *path,
-						GtkTreeNode     node);
-void       gtk_model_simple_node_inserted      (GtkModelSimple *simple,
-						GtkTreePath    *path,
-						GtkTreeNode     node);
-void       gtk_model_simple_node_child_toggled (GtkModelSimple *simple,
-						GtkTreePath    *path,
-						GtkTreeNode     node);
-void       gtk_model_simple_node_deleted       (GtkModelSimple *simple,
-						GtkTreePath    *path,
-						GtkTreeNode     node);
 
 
-#endif
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -214,14 +214,16 @@ button_press_event_cb (GtkTreeView    *tree_view,
 	  GVoidFunc func;
 
 	  gtk_tree_model_get_iter (model, &iter, path);
-	  gtk_tree_store_iter_get (model, &iter,
-				   FUNC_COLUMN, &func,
-				   ITALIC_COLUMN, &italic,
-				   -1);
+	  gtk_tree_store_get (GTK_TREE_STORE (model),
+			      &iter,
+			      FUNC_COLUMN, &func,
+			      ITALIC_COLUMN, &italic,
+			      -1);
 	  (func) ();
-	  gtk_tree_store_iter_set (model, &iter,
-				   ITALIC_COLUMN, !italic,
-				   -1);
+	  gtk_tree_store_set (GTK_TREE_STORE (model),
+			      &iter,
+			      ITALIC_COLUMN, !italic,
+			      -1);
 	  gtk_tree_path_free (path);
 	}
 
@@ -243,9 +245,9 @@ selection_cb (GtkTreeSelection *selection,
   if (! gtk_tree_selection_get_selected (selection, &iter))
     return;
 
-  gtk_tree_model_iter_get_value (model, &iter,
-				 FILENAME_COLUMN,
-				 &value);
+  gtk_tree_model_get_value (model, &iter,
+			    FILENAME_COLUMN,
+			    &value);
   load_file (g_value_get_string (&value));
   g_value_unset (&value);
 }
@@ -307,15 +309,15 @@ create_tree (void)
 
   for (i=0; i < G_N_ELEMENTS (testgtk_demos); i++)
     {
-      gtk_tree_store_iter_append (GTK_TREE_STORE (model), &iter, NULL);
+      gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
 
-      gtk_tree_store_iter_set (GTK_TREE_STORE (model),
-			       &iter,
-			       TITLE_COLUMN, testgtk_demos[i].title,
-			       FILENAME_COLUMN, testgtk_demos[i].filename,
-			       FUNC_COLUMN, testgtk_demos[i].func,
-			       ITALIC_COLUMN, FALSE,
-			       -1);
+      gtk_tree_store_set (GTK_TREE_STORE (model),
+			  &iter,
+			  TITLE_COLUMN, testgtk_demos[i].title,
+			  FILENAME_COLUMN, testgtk_demos[i].filename,
+			  FUNC_COLUMN, testgtk_demos[i].func,
+			  ITALIC_COLUMN, FALSE,
+			  -1);
     }
 
   cell = gtk_cell_renderer_text_new ();

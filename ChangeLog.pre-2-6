@@ -1,3 +1,11 @@
+Fri Oct 27 17:56:26 2000  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkliststore.c: Not sure how this ever worked.  Fixed it to
+	use new iter stuff, and added all the appropriate signals et al.
+
+	* gtk/gtktreedatalist.h: s/gtk/_gtk to further reinforce that this
+	code is internal to gtk only.
+
 2000-10-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtk.def
@@ -56,7 +64,6 @@ Fri Oct 27 18:51:44 2000  Tim Janik  <timj@gtk.org>
 2000-10-26  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkmarshal.list: add new marshallers used by the text widget
-
 	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): fix marshaller
 	types
 

@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
-GtkObject *model;
+GtkTreeStore *model;
 
 static void
 selection_changed (GtkTreeSelection *selection,
@@ -21,7 +21,7 @@ node_set (GtkTreeIter *iter)
   gchar *str;
 
   str = g_strdup_printf ("FOO: %d", i++);
-  gtk_tree_store_iter_set (GTK_TREE_STORE (model), iter, 0, str, -1);
+  gtk_tree_store_set (model, iter, 0, str, -1);
   g_free (str);
 
 }
@@ -33,8 +33,7 @@ iter_remove (GtkWidget *button, GtkTreeView *tree_view)
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				       &selected))
     {
-      gtk_tree_store_iter_remove (GTK_TREE_STORE (model),
-				  &selected);
+      gtk_tree_store_remove (model, &selected);
     }
 }
 
@@ -49,17 +48,17 @@ iter_insert (GtkWidget *button, GtkTreeView *tree_view)
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				       &selected))
     {
-      gtk_tree_store_iter_insert (GTK_TREE_STORE (model),
-				  &iter,
-				  &selected,
-				  atoi (gtk_entry_get_text (GTK_ENTRY (entry))));
+      gtk_tree_store_insert (model,
+			     &iter,
+			     &selected,
+			     atoi (gtk_entry_get_text (GTK_ENTRY (entry))));
     }
   else
     {
-      gtk_tree_store_iter_insert (GTK_TREE_STORE (model),
-				  &iter,
-				  NULL,
-				  atoi (gtk_entry_get_text (GTK_ENTRY (entry))));
+      gtk_tree_store_insert (model,
+			     &iter,
+			     NULL,
+			     atoi (gtk_entry_get_text (GTK_ENTRY (entry))));
     }
 
   node_set (&iter);
@@ -74,17 +73,17 @@ iter_insert_before  (GtkWidget *button, GtkTreeView *tree_view)
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				       &selected))
     {
-      gtk_tree_store_iter_insert_before (GTK_TREE_STORE (model),
-					 &iter,
-					 NULL,
-					 &selected);
+      gtk_tree_store_insert_before (model,
+				    &iter,
+				    NULL,
+				    &selected);
     }
   else
     {
-      gtk_tree_store_iter_insert_before (GTK_TREE_STORE (model),
-					 &iter,
-					 NULL,
-					 NULL);
+      gtk_tree_store_insert_before (model,
+				    &iter,
+				    NULL,
+				    NULL);
     }
 
   node_set (&iter);
@@ -99,17 +98,17 @@ iter_insert_after (GtkWidget *button, GtkTreeView *tree_view)
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				       &selected))
     {
-      gtk_tree_store_iter_insert_after (GTK_TREE_STORE (model),
-					 &iter,
-					 NULL,
-					 &selected);
+      gtk_tree_store_insert_after (model,
+				   &iter,
+				   NULL,
+				   &selected);
     }
   else
     {
-      gtk_tree_store_iter_insert_after (GTK_TREE_STORE (model),
-					&iter,
-					NULL,
-					&selected);
+      gtk_tree_store_insert_after (model,
+				   &iter,
+				   NULL,
+				   &selected);
     }
 
   node_set (&iter);
@@ -124,15 +123,15 @@ iter_prepend (GtkWidget *button, GtkTreeView *tree_view)
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				       &selected))
     {
-      gtk_tree_store_iter_prepend (GTK_TREE_STORE (model),
-				   &iter,
-				   &selected);
+      gtk_tree_store_prepend (model,
+			      &iter,
+			      &selected);
     }
   else
     {
-      gtk_tree_store_iter_prepend (GTK_TREE_STORE (model),
-				   &iter,
-				   NULL);
+      gtk_tree_store_prepend (model,
+			      &iter,
+			      NULL);
     }
 
   node_set (&iter);
@@ -147,15 +146,11 @@ iter_append (GtkWidget *button, GtkTreeView *tree_view)
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				       &selected))
     {
-      gtk_tree_store_iter_append (GTK_TREE_STORE (model),
-				  &iter,
-				  &selected);
+      gtk_tree_store_append (model, &iter, &selected);
     }
   else
     {
-      gtk_tree_store_iter_append (GTK_TREE_STORE (model),
-				  &iter,
-				  NULL);
+      gtk_tree_store_append (model, &iter, NULL);
     }
 
   node_set (&iter);
@@ -194,7 +189,7 @@ make_window ()
   gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
 
   /* buttons */
-  button = gtk_button_new_with_label ("gtk_tree_store_iter_remove");
+  button = gtk_button_new_with_label ("gtk_tree_store_remove");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (selection),
 		      "selection_changed",
@@ -203,7 +198,7 @@ make_window ()
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_remove, tree_view);
   gtk_widget_set_sensitive (button, FALSE);
 
-  button = gtk_button_new_with_label ("gtk_tree_store_iter_insert");
+  button = gtk_button_new_with_label ("gtk_tree_store_insert");
   hbox = gtk_hbox_new (FALSE, 8);
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
@@ -213,7 +208,7 @@ make_window ()
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_insert, tree_view);
 
   
-  button = gtk_button_new_with_label ("gtk_tree_store_iter_insert_before");
+  button = gtk_button_new_with_label ("gtk_tree_store_insert_before");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_insert_before, tree_view);
   gtk_signal_connect (GTK_OBJECT (selection),
@@ -222,7 +217,7 @@ make_window ()
 		      button);
   gtk_widget_set_sensitive (button, FALSE);
 
-  button = gtk_button_new_with_label ("gtk_tree_store_iter_insert_after");
+  button = gtk_button_new_with_label ("gtk_tree_store_insert_after");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_insert_after, tree_view);
   gtk_signal_connect (GTK_OBJECT (selection),
@@ -231,11 +226,11 @@ make_window ()
 		      button);
   gtk_widget_set_sensitive (button, FALSE);
 
-  button = gtk_button_new_with_label ("gtk_tree_store_iter_prepend");
+  button = gtk_button_new_with_label ("gtk_tree_store_prepend");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_prepend, tree_view);
 
-  button = gtk_button_new_with_label ("gtk_tree_store_iter_append");
+  button = gtk_button_new_with_label ("gtk_tree_store_append");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_append, tree_view);
 

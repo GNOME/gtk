@@ -336,10 +336,9 @@ gtk_tree_view_column_set_cell_data (GtkTreeViewColumn *tree_column,
 
   while (list && list->next)
     {
-      gtk_tree_model_iter_get_value (tree_model,
-				     iter,
-				     GPOINTER_TO_INT (list->next->data),
-				     &value);
+      gtk_tree_model_get_value (tree_model, iter,
+				GPOINTER_TO_INT (list->next->data),
+				&value);
       g_object_set_param (cell, (gchar *) list->data, &value);
       g_value_unset (&value);
       list = list->next->next;

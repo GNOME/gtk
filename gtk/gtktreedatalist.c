@@ -68,7 +68,7 @@ gtk_tree_data_list_validate_allocator (GAllocator *allocator)
 }
 
 void
-gtk_tree_data_list_push_allocator (GAllocator *allocator)
+_gtk_tree_data_list_push_allocator (GAllocator *allocator)
 {
   G_LOCK (current_allocator);
   gtk_tree_data_list_validate_allocator ( allocator );
@@ -78,7 +78,7 @@ gtk_tree_data_list_push_allocator (GAllocator *allocator)
 }
 
 void
-gtk_tree_data_list_pop_allocator (void)
+_gtk_tree_data_list_pop_allocator (void)
 {
   G_LOCK (current_allocator);
   if (current_allocator)
@@ -94,7 +94,7 @@ gtk_tree_data_list_pop_allocator (void)
 }
 
 GtkTreeDataList *
-gtk_tree_data_list_alloc (void)
+_gtk_tree_data_list_alloc (void)
 {
   GtkTreeDataList *list;
 
@@ -120,8 +120,28 @@ gtk_tree_data_list_alloc (void)
 }
 
 void
-gtk_tree_data_list_free (GtkTreeDataList *list)
+_gtk_tree_data_list_free (GtkTreeDataList *list,
+			  GType           *column_headers)
 {
+  GtkTreeDataList *tmp;
+  gint i = 0;
+
+  for (tmp = list; tmp; tmp = tmp->next)
+    {
+      switch (column_headers [i])
+	{
+	case G_TYPE_STRING:
+	  g_free ((gchar *) tmp->data.v_pointer);
+	  break;
+	case G_TYPE_OBJECT:
+	  g_object_unref (G_OBJECT (tmp->data.v_pointer));
+	  break;
+	default:
+	  break;
+	}
+      i++;
+    }
+
   G_LOCK (current_allocator);
   list->next = current_allocator->free_nodes;
   current_allocator->free_nodes = list;
@@ -129,9 +149,9 @@ gtk_tree_data_list_free (GtkTreeDataList *list)
 }
 
 void
-gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
-				  GType            type,
-				  GValue          *value)
+_gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
+				   GType            type,
+				   GValue          *value)
 {
   g_value_init (value, type);
 
@@ -171,8 +191,8 @@ gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
 }
 
 void
-gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
-				  GValue          *value)
+_gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
+				   GValue          *value)
 {
   switch (value->g_type)
     {

@@ -1917,7 +1917,7 @@ gtk_tree_view_changed (GtkTreeModel *model,
   gint height;
   gboolean dirty_marked;
 
-  g_return_if_fail (path != NULL || node != NULL);
+  g_return_if_fail (path != NULL || iter != NULL);
 
   if (path == NULL)
     path = gtk_tree_model_get_path (model, iter);
@@ -2067,7 +2067,7 @@ gtk_tree_view_child_toggled (GtkTreeModel *model,
   GtkRBTree *tree;
   GtkRBNode *node;
 
-  g_return_if_fail (path != NULL || node != NULL);
+  g_return_if_fail (path != NULL || iter != NULL);
 
   if (iter)
     real_iter = *iter;
@@ -2237,9 +2237,6 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
   GtkRBNode *temp = NULL;
   gint max_height;
 
-  if (gtk_tree_model_iter_invalid (tree_view->priv->model, iter))
-    return;
-
   do
     {
       max_height = 0;
@@ -2284,10 +2281,6 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
   GtkTreeViewColumn *column;
   gint max_height;
   gint i;
-
-  /* FIXME: Make this function robust against internal inconsistencies! */
-  if (gtk_tree_model_iter_invalid (tree_view->priv->model, iter))
-    return;
 
   TREE_VIEW_INTERNAL_ASSERT_VOID (tree != NULL);
 
@@ -2398,11 +2391,6 @@ gtk_tree_view_discover_dirty (GtkTreeView *tree_view,
   GList *list;
   GtkTreeIter child;
   gboolean is_all_dirty;
-
-  /* FIXME: Make this function robust against internal inconsistencies! */
-  if (gtk_tree_model_iter_invalid (tree_view->priv->model,
-				   iter))
-    return;
 
   TREE_VIEW_INTERNAL_ASSERT_VOID (tree != NULL);
 
