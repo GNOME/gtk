@@ -55,7 +55,7 @@ static GHashTable *visual_hash = NULL;
 void
 gdk_visual_init ()
 {
-  static gint possible_depths[5] = { 32, 24, 16, 15, 8 };
+  static gint possible_depths[6] = { 32, 24, 16, 15, 8, 1 };
   static GdkVisualType possible_types[6] =
     {
       GDK_VISUAL_DIRECT_COLOR,
@@ -66,7 +66,7 @@ gdk_visual_init ()
       GDK_VISUAL_STATIC_GRAY
     };
 
-  static gint npossible_depths = 5;
+  static gint npossible_depths = 6;
   static gint npossible_types = 6;
 
   XVisualInfo *visual_list;
@@ -85,7 +85,7 @@ gdk_visual_init ()
   nvisuals = 0;
   for (i = 0; i < nxvisuals; i++)
     {
-      if (visual_list[i].depth >= 8)
+      if (visual_list[i].depth >= 1)
 	{
 #ifdef __cplusplus
 	  switch (visual_list[i].c_class)

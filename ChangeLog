@@ -1,6 +1,10 @@
 
 Thu Dec 18 23:46:11 CST 1997 Shawn T. Amundson <amundson@gimp.org>
 
+        * GDK support for 1 bpp depth screens.
+
+Thu Dec 18 23:46:11 CST 1997 Shawn T. Amundson <amundson@gimp.org>
+
 	* Changes from Bolliet Jerome <bolliet@in2p3.fr> to gtktree.
           Corrects a bug in gtk_tree_remove_items and gtk_tree_item_destroy.
           Adds the possibility to connect all items by lines. This is the 

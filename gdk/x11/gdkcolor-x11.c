@@ -182,7 +182,8 @@ gdk_colormap_get_system (void)
 	  xpalette[i].blue = 0;
 	}
 
-      XQueryColors (gdk_display, private->xcolormap, xpalette, 256);
+      XQueryColors (gdk_display, private->xcolormap, xpalette, 
+                    private->visual->colormap_size);
 
       for (i = 0; i < 256; i++)
 	{
