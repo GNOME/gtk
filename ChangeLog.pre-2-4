@@ -1,3 +1,13 @@
+Wed Aug 29 17:28:04 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
+	change color when the GtkTreeView loses focus.
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render):
+	ditto.
+	
+	* gtk/gtkstyle.c (gtk_default_draw_flat_box): ditto
+
 2001-08-28  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkwindow.c (gtk_window_set_icon_list): fix g_object_notify

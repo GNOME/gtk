@@ -2946,13 +2946,16 @@ gtk_default_draw_flat_box (GtkStyle      *style,
         {
           if (!strcmp ("text", detail))
             gc1 = style->bg_gc[GTK_STATE_SELECTED];
-          else if (!strcmp ("cell_even_sorted", detail) ||
-                   !strcmp ("cell_odd_sorted", detail) ||
-                   !strcmp ("cell_even_ruled_sorted", detail) ||
-                   !strcmp ("cell_odd_ruled_sorted", detail))
+          else if (!strncmp ("cell_even", detail, strlen ("cell_even")) ||
+		   !strncmp ("cell_odd", detail, strlen ("cell_odd")))
             {
-              freeme = get_darkened_gc (window, &style->bg[state_type], 1);
-              gc1 = freeme;
+	      /* This has to be really broken; alex made me do it. -jrb */
+	      /* Red rum!!! REd RUM!!! */
+	      if (GTK_WIDGET_HAS_FOCUS (widget))
+		gc1 = style->bg_gc[state_type];
+	      else 
+		gc1 = style->bg_gc[GTK_STATE_ACTIVE];
+	      
             }
           else
             {
@@ -2978,14 +2981,14 @@ gtk_default_draw_flat_box (GtkStyle      *style,
                    !strcmp ("cell_odd", detail) ||
                    !strcmp ("cell_even_ruled", detail))
             {
-              gc1 = style->base_gc[state_type];
+	      gc1 = style->base_gc[state_type];
             }
           else if (!strcmp ("cell_even_sorted", detail) ||
                    !strcmp ("cell_odd_sorted", detail) ||
                    !strcmp ("cell_odd_ruled", detail) ||
                    !strcmp ("cell_even_ruled_sorted", detail))
             {
-              freeme = get_darkened_gc (window, &style->base[state_type], 1);
+	      freeme = get_darkened_gc (window, &style->base[state_type], 1);
               gc1 = freeme;
             }
           else if (!strcmp ("cell_odd_ruled_sorted", detail))

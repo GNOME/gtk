@@ -279,11 +279,24 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
   shadow = celltoggle->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
   if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
-    state = GTK_STATE_SELECTED;
+    {
+      if (GTK_WIDGET_HAS_FOCUS (widget))
+	{
+	  state = GTK_STATE_SELECTED;
+	}
+      else
+	{
+	  state = GTK_STATE_ACTIVE;
+	}
+    }
   else if (! cell->can_activate)
-    state = GTK_STATE_INSENSITIVE;
+    {
+      state = GTK_STATE_INSENSITIVE;
+    }
   else
-    state = GTK_STATE_NORMAL;
+    {
+      state = GTK_STATE_NORMAL;
+    }
 
   if (celltoggle->radio)
     {

@@ -2560,6 +2560,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	{
 	  GtkTreeViewColumn *column = list->data;
 	  const gchar *detail = NULL;
+	  GtkStateType state;
 
 	  if (!column->visible)
             continue;
@@ -2635,11 +2636,15 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
           g_assert (detail);
 
+	  if (flags & GTK_CELL_RENDERER_SELECTED)
+	    state = GTK_STATE_SELECTED;
+	  else
+	    state = GTK_STATE_NORMAL;
+
           /* Draw background */
           gtk_paint_flat_box (widget->style,
                               event->window,
-                              (flags & GTK_CELL_RENDERER_SELECTED) ?
-                              GTK_STATE_SELECTED : GTK_STATE_NORMAL,
+			      state,
                               GTK_SHADOW_NONE,
                               &event->area,
                               widget,
