@@ -5,6 +5,12 @@ Signals
 Object methods and callbacks.
 
 <!-- ##### SECTION Long_Description ##### -->
+<para>
+The GTK+ signal system merely proxies the GLib signal system now. For future 
+usage, direct use of the #GSignal API is recommended, this avoids significant 
+performance hits where #GtkArg structures have to be converted into #GValues.
+</para>
+
 <refsect2>
 <title>What are signals?</title>
 <para>
@@ -126,7 +132,7 @@ maps to a unique connection id.
 The functions responsible for translating an array of #GtkArgs
 to your C compiler's normal semantics are called Marshallers.
 They are identified by
-gtk_marshal_return_value__parameter_list()
+gtk_marshal_<replaceable>return_value</replaceable>__<replaceable>parameter_list</replaceable>()
 for example a C function returning a gboolean and taking a gint
 can be invoked by using gtk_marshal_BOOL__INT().
 Not all possibly combinations of return/params are available,
@@ -396,7 +402,7 @@ isn't being emitted.
 </para>
 
 @object: the object whose signal handlers you wish to stop.
-@signal_id: the signal identifier, as returned by gtk_signal_lookup().
+@signal_id: the signal identifier, as returned by g_signal_lookup().
 <!-- # Unused Parameters # -->
 @i: 
 @s: 

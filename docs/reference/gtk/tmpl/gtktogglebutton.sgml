@@ -37,15 +37,15 @@ void make_toggles (void) {
    /* Makes this toggle button invisible */
    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle1), TRUE);
    
-   gtk_signal_connect (GTK_OBJECT (toggle1), "toggled",
-                       GTK_SIGNAL_FUNC (output_state), NULL);
+   g_signal_connect (GTK_OBJECT (toggle1), "toggled",
+                     G_CALLBACK (output_state), NULL);
    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
                        toggle1, FALSE, FALSE, 2);
 
    toggle2 = gtk_toggle_button_new_with_label ("Hi, i'm another toggle button.");
    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle2), FALSE);
-   gtk_signal_connect (GTK_OBJECT (toggle2), "toggled",
-                       GTK_SIGNAL_FUNC (output_state), NULL);
+   g_signal_connect (GTK_OBJECT (toggle2), "toggled",
+                     G_CALLBACK (output_state), NULL);
    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
                        toggle2, FALSE, FALSE, 2);
 

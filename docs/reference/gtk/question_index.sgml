@@ -173,7 +173,7 @@ or <link
           linkend="gtk-text-iter-get-text">gtk_text_iter_get_text()</link>.
 </para>
 <para>
-<programlisting>
+<informalexample><programlisting>
   GtkTextIter start, end;
   GtkTextBuffer *buffer;
   char *text;
@@ -183,7 +183,7 @@ or <link
   text = gtk_text_iter_get_text (&amp;start, &amp;end);
   /* use text */
   g_free (text);
-</programlisting>
+</programlisting></informalexample>
 </para></answer>
 </qandaentry>
 

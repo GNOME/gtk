@@ -32,8 +32,8 @@ can pop up a menu when the 3rd mouse button is pressed.
 <title>Connecting the popup signal handler.</title>
 <programlisting>
     /* connect our handler which will popup the menu */
-    gtk_signal_connect_object (GTK_OBJECT (window), "button_press_event",
-	GTK_SIGNAL_FUNC (my_popup_handler), GTK_OBJECT (menu));
+    g_signal_connect_swapped (GTK_OBJECT (window), "button_press_event",
+	G_CALLBACK (my_popup_handler), GTK_OBJECT (menu));
 </programlisting>
 </example>
 
@@ -51,7 +51,7 @@ my_popup_handler (GtkWidget *widget, GdkEvent *event)
   g_return_val_if_fail (event != NULL, FALSE);
 
   /* The "widget" is the menu that was supplied when 
-   * gtk_signal_connect_object was called.
+   * g_signal_connect_swapped() was called.
    */
   menu = GTK_MENU (widget);
 

@@ -95,9 +95,9 @@ appears by moving these marks around.
 <footnote>
 <para>
 If you want to place the cursor in response to a user action, be sure to use
-gtk_text_buffer_place_cursor(), which moves both at once without causing a
-temporary selection (moving one then the other temporarily selects the range in
-between the old and new positions).
+<function>gtk_text_buffer_place_cursor()</function>, which moves both at once 
+without causing a temporary selection (moving one then the other temporarily 
+selects the range in between the old and new positions).
 </para>
 </footnote>
 </para>
@@ -122,7 +122,7 @@ considered a line separator.
 <para>
 The simplest usage of <link linkend="GtkTextView">GtkTextView</link> 
 might look like this:
-<programlisting>
+<informalexample><programlisting>
   GtkWidget *view;
   GtkTextBuffer *buffer;
 
@@ -136,12 +136,12 @@ might look like this:
    * screen; when the user edits the text, signals on the buffer
    * will be emitted, such as "changed", "insert_text", and so on.
    */
-</programlisting>
+</programlisting></informalexample>
 In many cases it's also convenient to first create the buffer with
-gtk_text_buffer_new(), then create a widget for that buffer with
-gtk_text_view_new_with_buffer(). Or you can change the buffer the
-widget displays after the widget is created with
-gtk_text_view_set_buffer().
+<function>gtk_text_buffer_new()</function>, then create a widget for that 
+buffer with <function>gtk_text_view_new_with_buffer()</function>. Or you can 
+change the buffer the widget displays after the widget is created with
+<function>gtk_text_view_set_buffer()</function>.
 </para>
 
 </refsect1>
@@ -167,7 +167,7 @@ For other attributes there are dedicated methods on
 <link linkend="GtkTextView">GtkTextView</link> such as 
 <link linkend="gtk-text-view-set-tabs">gtk_text_view_set_tabs()</link>.
 
-<programlisting>
+<informalexample><programlisting>
   GtkWidget *view;
   GtkTextBuffer *buffer;
   PangoFontDescription *font_desc;
@@ -198,7 +198,7 @@ For other attributes there are dedicated methods on
   gtk_text_buffer_get_iter_at_offset (buffer, &amp;start, 7);
   gtk_text_buffer_get_iter_at_offset (buffer, &amp;end, 12);
   gtk_text_buffer_apply_tag (buffer, tag, &amp;start, &amp;end);
-</programlisting>
+</programlisting></informalexample>
 
 </para>
 

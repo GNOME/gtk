@@ -61,7 +61,7 @@ void create_integer_spin_button (void) {
  */
 
 gfloat grab_int_value (GtkSpinButton *a_spinner, gpointer user_data) {
-   return gtk_spin_button_get_value_as_float (a_spinner);
+   return gtk_spin_button_get_value (a_spinner);
 }
 
 void create_floating_spin_button (void) {

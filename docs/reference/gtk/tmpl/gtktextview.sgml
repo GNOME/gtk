@@ -593,7 +593,8 @@ types related to the text widget and how they work together.
 
 <!-- ##### MACRO GTK_TEXT_VIEW_PRIORITY_VALIDATE ##### -->
 <para>
-
+The priority at which the text view validates onscreen lines
+in an idle job in the background.
 </para>
 
 

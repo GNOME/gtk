@@ -83,20 +83,20 @@ the key <literal>AliasFiles</literal> in the <literal>PangoFT2</literal> section
 
 <para>
 An example of a font alias file for the urw fontset is:
-<programlisting>
+<informalexample><programlisting>
 sans normal normal normal normal "urw gothic l"
 serif normal normal normal normal "urw palladio l"
 monospace normal normal normal normal "nimbus mono l"
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 <para>
 And one using the Windows TrueType fonts is:
-<programlisting>
+<informalexample><programlisting>
 sans normal normal normal normal "arial"
 serif normal normal normal normal "times new roman"
 monospace normal normal normal normal "courier new"
-</programlisting>
+</programlisting></informalexample>
 
 A more detailed example can be found in 
 <filename>examples/pangoft2.aliases</filename> in the

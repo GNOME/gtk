@@ -50,7 +50,7 @@ exist whenever possible.
 
 <listitem>
 <para>
-The <function>gdk_time*()</function> functions have been removed. This 
+The <function>gdk_time*</function> functions have been removed. This 
   functionality has been unused since the main loop was moved into GLib
   prior to 1.2. 
 </para>
@@ -163,27 +163,30 @@ The type macros <function>GTK_TYPE_MAKE()</function> and <function>GTK_TYPE_SEQN
 <listitem>
 <para>
 The following type functions vanished/were replaced:
-<programlisting>
-    Old Function		 Replacement
-    gtk_type_query()		 - being investigated -
-    gtk_type_set_varargs_type()	 -
-    gtk_type_get_varargs_type()	 -
-    gtk_type_check_object_cast() g_type_check_instance_cast()
-    gtk_type_check_class_cast()	 g_type_check_class_cast()
-    gtk_type_describe_tree()	 -
-    gtk_type_describe_heritage() -
-    gtk_type_free()		 -
-    gtk_type_children_types()	 g_type_children()
-    gtk_type_set_chunk_alloc()	 GTypeInfo.n_preallocs
-    gtk_type_register_enum()	 g_enum_register_static()
-    gtk_type_register_flags()	 g_flags_register_static()
-    gtk_type_parent_class()	 g_type_parent() /
-    g_type_class_peek_parent()
-</programlisting>
-    Use of g_type_class_ref() / g_type_class_unref() and g_type_class_peek()
-    is recommended over usage of gtk_type_class().
-    Use of g_type_register_static() / g_type_register_dynamic() is recommended
-    over usage of gtk_type_unique().
+<informaltable>
+<thead>
+<row><entry>Old Function</entry><entry>Replacement</entry></row>
+</thead>
+<tbody>
+<row><entry><function>gtk_type_query()</function></entry><entry>being investigated</entry></row>
+<row><entry><function>gtk_type_set_varargs_type()</function></entry><entry>-</entry></row>
+<row><entry><function>gtk_type_get_varargs_type()</function></entry><entry>-</entry></row>
+<row><entry><function>gtk_type_check_object_cast()</function></entry><entry><function>g_type_check_instance_cast()</function></entry></row>
+<row><entry><function>gtk_type_check_class_cast()</function></entry><entry><function>g_type_check_class_cast()</function></entry></row>
+<row><entry><function>gtk_type_describe_tree()</function></entry><entry>-</entry></row>
+<row><entry><function>gtk_type_describe_heritage()</function></entry><entry>-</entry></row>
+<row><entry><function>gtk_type_free()</function></entry><entry>-</entry></row>
+<row><entry><function>gtk_type_children_types()</function></entry><entry><function>g_type_children()</function></entry></row>
+<row><entry><function>gtk_type_set_chunk_alloc()</function></entry><entry><structfield>GTypeInfo.n_preallocs</structfield></entry></row>
+<row><entry><function>gtk_type_register_enum()</function></entry><entry><function>g_enum_register_static()</function></entry></row>
+<row><entry><function>gtk_type_register_flags()</function></entry><entry><function>g_flags_register_static()</function></entry></row>
+<row><entry><function>gtk_type_parent_class()</function></entry><entry><functiono>g_type_parent()</function>/<function>g_type_class_peek_parent()</function></entry></row>
+</tbody>
+</informaltable>
+    Use of <function>g_type_class_ref()</function>/<function>g_type_class_unref()</function> and <function>g_type_class_peek()</function>
+    is recommended over usage of <function>gtk_type_class()</function>.
+    Use of <function>g_type_register_static()</function>/<function>g_type_register_dynamic()</function> is recommended
+    over usage of <function>gtk_type_unique()</function>.
 </para>
 </listitem>
 </itemizedlist>
@@ -199,14 +202,14 @@ Object system changes:
 
 <listitem>
 <para>
-<structname>GtkObject</structname> has no <literal>klass</literal> field anymore, an object's class can be retrieved
+<structname>GtkObject</structname> has no <structfield>klass</structfield> field anymore, an object's class can be retrieved
     with the object's coresponding <literal>GTK_&lt;OBJECT&gt;_GET_CLASS (object)</literal>
     macro.
 </para>
 </listitem>
 <listitem>
 <para>
-<structname>GtkObjectClass</structname> has no <literal>type</literal> field anymore, a class's type can be retrived
+<structname>GtkObjectClass</structname> has no <structfield>type</structfield> field anymore, a class's type can be retrived
     with the <literal>GTK_CLASS_TYPE (class)</literal> macro.
 </para>
 </listitem>
@@ -216,7 +219,7 @@ Object system changes:
     anymore. While <function>shutdown()</function> is intended for GTK+ internal use only, <function>finalize()</function>
     is required by a variety of object implementations. <function>GObjectClass.finalize</function>
     should be overriden here, e.g.:
-<programlisting>
+<informalexample><programlisting>
     static void gtk_label_finalize (GObject *gobject)
     {
       GtkLabel *label = GTK_LABEL (gobject);
@@ -229,7 +232,7 @@ Object system changes:
       
       gobject_class-&gt;finalize = gtk_label_finalize;
     }
-</programlisting>
+</programlisting></informalexample>
 </para>
 </listitem>
 
@@ -243,23 +246,23 @@ The GtkObject::destroy signal can now be emitted multiple times on an object.
     ::destroy implementations should check that make sure that they take this
     into account, by checking to make sure that resources are there before
     freeing them. For example:
-<programlisting>
+<informalexample><programlisting>
     if (object-&gt;foo_data)
       { 
         g_free (object-&gt;foo_data);
         object-&gt;foo_data = NULL;
       }
-</programlisting>
+</programlisting></informalexample>
 
     Also, ::destroy implementations have to release object references that
     the object holds. Code in finalize implementations such as:
-<programlisting>
+<informalexample><programlisting>
     if (object-&gt;adjustment)
       {
         gtk_object_unref (object-&gt;adjustment);
         object-&gt;adjustment = NULL;
       }
-</programlisting>
+</programlisting></informalexample>
     have to be moved into the ::destroy implementations. The reason for doing
     this is that all object reference cycles should be broken at destruction 
     time.
@@ -275,11 +278,11 @@ The GtkObject::destroy signal can now be emitted multiple times on an object.
 <listitem>
 <para>
 Signal system changes:
-  The GTK+ 2.0 signal system merely proxies the <structname>GSignal</structname 
+  The GTK+ 2.0 signal system merely proxies the <structname>GSignal</structname> 
   system now. For future usage, direct use of the 
   <structname>GSignal</structname> API is recommended,
   this avoids significant performance hits where <structname>GtkArg</structname>
-  structures have to be converted into <structname>GValues</structname>. For 
+  structures have to be converted into <structname>GValue</structname>s. For 
   language bindings, <structname>GSignal</structname>+</structname>GClosure</structname>
   provide a much more flexible and convenient mechanism to hook into signal 
   emissions or install class default handlers, so the old 
@@ -320,9 +323,9 @@ Inserting and deleting text in <structname>GtkEntry</structname> though
 
 <listitem>
 <para>
-The <literal>-&gt;label</literal> field of <structname>GtkFrame</structname> 
-  widgets has been removed. (As part of a change to allow arbitrary widgets 
-  in the title position.) The text can now be retrieved with the new function 
+The <structfield>label</structfield> field of <structname>GtkFrame</structname> 
+  widgets has been removed (as part of a change to allow arbitrary widgets 
+  in the title position). The text can now be retrieved with the new function 
   <function>gtk_frame_get_text()</function>.
 </para>
 </listitem>
@@ -373,18 +376,18 @@ All drawables including pixmaps used to have a type tag, the
 
 <listitem>
 <para>
-<literal>xthickness</literal>/</literal>ythickness</literal> have moved from 
+<structfield>xthickness</structfield> and <structfield>ythickness</structfield> have moved from 
   <structname>GtkStyleClass</structname> to <structname>GtkStyle</structname>
   (from class to instance). This gives themes a bit more flexibility
   and is generally more of the Right Thing. You can trivially fix
   your code with <literal>s/style-&gt;klass-&gt;xthickness/style-&gt;xthickness/g</literal> and 
-  same for <literal>ythickness</literal>.
+  same for <structfield>ythickness</structfield>.
 </para>
 </listitem>
 
 <listitem>
 <para>
-Some <structname>GtkStyle</structname> <function>draw_*()</function> methods 
+Some <structname>GtkStyle</structname> <function>draw_*</function> methods 
   have been removed (cross, oval, ramp) 
   and others have been added (expander, layout). This will require
   changes to theme engines.
@@ -418,35 +421,34 @@ A number of functions in GDK have been renamed for consistency and
   clarity. #defines to provide backwards compatibility have been
   included, but can be disabled by defining <literal>GDK_DISABLE_DEPRECATED</literal>.
 
-<programlisting>
-  #define gdk_draw_pixmap                gdk_draw_drawable
-  #define gdk_draw_bitmap                gdk_draw_drawable
-
-  #define gdk_window_get_size            gdk_drawable_get_size
-  #define gdk_window_get_type            gdk_window_get_window_type
-  #define gdk_window_get_colormap        gdk_drawable_get_colormap
-  #define gdk_window_set_colormap        gdk_drawable_set_colormap
-  #define gdk_window_get_visual          gdk_drawable_get_visual
-
-  #define gdk_window_ref                 gdk_drawable_ref
-  #define gdk_window_unref               gdk_drawable_unref
-  #define gdk_bitmap_ref                 gdk_drawable_ref
-  #define gdk_bitmap_unref               gdk_drawable_unref
-  #define gdk_pixmap_ref                 gdk_drawable_ref
-  #define gdk_pixmap_unref               gdk_drawable_unref
-
-  #define gdk_gc_destroy                 gdk_gc_unref
-  #define gdk_image_destroy              gdk_image_unref
-  #define gdk_cursor_destroy             gdk_cursor_unref
-
-  (Note that g_object_ref() and g_object_unref() may be used for all of
-  the above _ref and _unref functions.)
-
-  #define gdk_window_copy_area(drawable,gc,x,y,source_drawable,source_x,source_y,width,height) \
-     gdk_draw_pixmap(drawable,gc,source_drawable,source_x,source_y,x,y,width,height)
-
-  #define gdk_rgb_get_cmap               gdk_rgb_get_colormap
-</programlisting>  
+<informaltable>
+<thead>
+<row><entry>Old function</entry><entry>Defined As</entry></row>
+</thead>
+<tbody>
+<row><entry><function>gdk_draw_pixmap</function></entry><entry><function>gdk_draw_drawable</function></entry></row>
+ <row><entry><function>gdk_draw_bitmap</function></entry><entry><function>gdk_draw_drawable</function></entry></row>               
+<row><entry><function>gdk_window_get_size</function></entry><entry><function>gdk_drawable_get_size</function></entry></row>               
+<row><entry><function>gdk_window_get_type</function></entry><entry><function>gdk_window_get_window_type</function></entry></row>               
+<row><entry><function>gdk_window_get_colormap</function></entry><entry><function>gdk_drawable_get_colormap</function></entry></row>
+<row><entry><function>gdk_window_set_colormap</function></entry><entry><function>gdk_drawable_set_colormap</function></entry></row>
+<row><entry><function>gdk_window_get_visual</function></entry><entry><function>gdk_drawable_get_visual</function></entry></row>
+<row><entry><function>gdk_window_ref</function></entry><entry><function>gdk_drawable_ref</function></entry></row>
+<row><entry><function>gdk_window_unref</function></entry><entry><function>gdk_drawable_unref</function></entry></row>
+<row><entry><function>gdk_bitmap_ref</function></entry><entry><function>gdk_drawable_ref</function></entry></row>
+<row><entry><function>gdk_bitmap_unref</function></entry><entry><function>gdk_drawable_unref</function></entry></row>
+<row><entry><function>gdk_pixmap_ref</function></entry><entry><function>gdk_drawable_ref</function></entry></row>
+<row><entry><function>gdk_pixmap_unref</function></entry><entry><function>gdk_drawable_unref</function></entry></row>
+<row><entry><function>gdk_gc_destroy</function></entry><entry><function>gdk_gc_unref</function></entry></row>
+<row><entry><function>gdk_image_destroy</function></entry><entry><function>gdk_image_unref</function></entry></row>
+<row><entry><function>gdk_cursor_destroy</function></entry><entry><function>gdk_cursor_unref</function></entry></row>
+<row><entry><function>gdk_window_copy_area(drawable,gc,x,y,source_drawable,source_x,source_y,width,height)</function></entry><entry><function>gdk_draw_pixmap(drawable,gc,source_drawable,source_x,source_y,x,y,width,height)</function></entry></row>
+<row><entry><function>gdk_rgb_get_cmap</function></entry><entry><function>gdk_rgb_get_colormap</function></entry></row>
+</tbody>
+</informaltable>
+  (Note that <function>g_object_ref()</function> and 
+  <function>g_object_unref()</function> may be used for all of the above ref 
+  and unref functions.)
 
   <function>gtk_widget_popup()</function> was removed, it was only usable 
   for <structname>GtkWindow</structname>s, and there the same effect can be 
@@ -474,9 +476,9 @@ A number of functions in GDK have been renamed for consistency and
 <itemizedlist>
 <listitem>
 <para>
-Only 3 or 4 functions are really needed for 95% of progress  
-    interfaces; <structname>GtkProgress[Bar]</structname> had about 25 
-    functions, and didn't even include these 3 or 4.
+Only 3 or 4 functions are really needed for 95% of progress interfaces; 
+  <structname>GtkProgress</structname>/<structname>GtkProgressBar</structname> 
+  had about 25 functions, and didn't even include these 3 or 4.
 </para>
 </listitem>
 
@@ -581,8 +583,8 @@ The "draw" signal and virtual method on <structname>GtkWidget</structname>
 
 <listitem>
 <para>
-The <structname>GdkExposeEvent</structname> has a new <literal>region</literal>
-  field. This can be used instead of the <literal>area</literal> field if you 
+The <structname>GdkExposeEvent</structname> has a new <structfield>region</structfield>
+  field. This can be used instead of the <structfield>area</structfield> field if you 
   want a more exact representation of the area to update.
 </para>
 </listitem>
@@ -637,7 +639,7 @@ The draw_default and draw_focus methods/signals on
 
 <listitem>
 <para>
-<structname>GtkMenuBar</structname> now draws the GtkContainer::border_width 
+<structname>GtkMenuBar</structname> now draws the <structfield>GtkContainer::border_width</structfield> 
   space outside the frame, not inside the frame.
 </para>
 </listitem>
@@ -741,14 +743,19 @@ The <function>set_child_arg()</function> and <function>get_child_arg()</function
 <para>
 Other removed <structname>GtkContainer</structname> functions with the replacements:
 
-<programlisting>
-     gtk_container_add_child_arg_type => gtk_container_class_install_child_property
-     gtk_container_query_child_args   => gtk_container_class_list_child_properties
-     gtk_container_child_getv         => gtk_container_child_set_property
-     gtk_container_child_setv         => gtk_container_child_get_property
-     gtk_container_add_with_args      => gtk_container_add_with_properties
-     gtk_container_addv               => gtk_container_add / gtk_container_child_set_property
-</programlisting>
+<informaltable>
+<thead>
+<row><entry>Old function</entry><entry>Replacement</entry></row>
+</thead>
+<tbody>
+<row><entry><function>gtk_container_add_child_arg_type</function></entry><entry><function>gtk_container_class_install_child_property</function></entry></row>
+<row><entry><function>gtk_container_query_child_args</function></entry><entry><function>gtk_container_class_list_child_properties</function></entry></row>
+<row><entry><function>gtk_container_child_getv</function></entry><entry><function>gtk_container_child_set_property</function></entry></row>
+<row><entry><function>gtk_container_child_setv</function></entry><entry><function>gtk_container_child_get_property</function></entry></row>
+<row><entry><function>gtk_container_add_with_args</function></entry><entry><function>gtk_container_add_with_properties</function></entry></row>
+<row><entry><function>gtk_container_addv</function></entry><entry><function>gtk_container_add</function>/<function>gtk_container_child_set_property</function></entry></row>
+</tbody>
+</informaltable>
 </para>
 </listitem>
 

@@ -448,7 +448,7 @@ modifiers can be:
 The action that is bound to the key is a sequence
 of signal names (strings) followed by parameters for 
 each signal. The signals must be action signals.
-(See gtk_signal_new()). Each parameter can be
+(See g_signal_new()). Each parameter can be
 a float, integer, string, or unquoted string
 representing an enumeration value. The types of
 the parameters specified must match the types of the 

@@ -89,9 +89,10 @@ void quick_message (gchar *message) {
    
    /* Ensure that the dialog box is destroyed when the user responds. */
    
-   gtk_signal_connect_object (GTK_OBJECT (dialog), "response",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy), 
-                              GTK_OBJECT (dialog));
+   g_signal_connect_swapped (GTK_OBJECT (dialog), 
+                             "response", 
+                             G_CALLBACK (gtk_widget_destroy),
+                             GTK_OBJECT (dialog));
 
    /* Add the label, and show everything we've added to the dialog. */
 

@@ -1,3 +1,21 @@
+2002-01-04  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtktextview.sgml: Small additions.
+
+	* gtk/tmpl/gtksignal.sgml: Explain what to use instead.
+
+	* gtk/question_index.sgml, gtk/text_widget.sgml, gtk/tree_widget.sgml,
+	gtk/changes-1.2.sgml, gtk/changes-2.0.sgml,
+	gtk/framebuffer.sgml: SGML fixes and additions.
+
+	* gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkdialog.sgml,
+	gtk/tmpl/gtkeditable.sgml, gtk/tmpl/gtkfilesel.sgml,
+	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkmenu.sgml,
+	gtk/tmpl/gtkmessagedialog.sgml, gtk/tmpl/gtkrc.sgml,
+	gtk/tmpl/gtktogglebutton.sgml, gtk/tmpl/gtkspinbutton.sgml,
+        gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkwindow.sgml:
+	Replace references to deprecated functions.
+
 2002-01-03  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/changes-1.2.sgml, gtk/changes-2.0.sgml, 

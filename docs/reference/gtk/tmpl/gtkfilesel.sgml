@@ -47,18 +47,22 @@ void create_file_selection (void) {
    
    file_selector = gtk_file_selection_new ("Please select a file for editing.");
    
-   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
-   			   "clicked", GTK_SIGNAL_FUNC (store_filename), NULL);
+   g_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
+                     "clicked",
+                     G_CALLBACK (store_filename),
+                     NULL);
    			   
    /* Ensure that the dialog box is destroyed when the user clicks a button. */
    
-   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
-   					  "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
-   					  (gpointer) file_selector);
+   g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
+                             "clicked",
+                             G_CALLBACK (gtk_widget_destroy), 
+                             (gpointer) file_selector); 
 
-   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->cancel_button),
-   					  "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
-   					  (gpointer) file_selector);
+   g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->cancel_button),
+                             "clicked",
+                             G_CALLBACK (gtk_widget_destroy),
+                             (gpointer) file_selector); 
    
    /* Display that dialog */
    

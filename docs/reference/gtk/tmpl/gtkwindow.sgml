@@ -114,7 +114,7 @@ upshot is that @allow_shrink should always be set to %FALSE.
 <para>
 Sometimes when you think you want to use @allow_shrink, the real problem is that
 some specific child widget is requesting too much space, so the user can't
-shrink the window sufficiently. Perhaps you are calling gtk_widget_set_usize()
+shrink the window sufficiently. Perhaps you are calling gtk_widget_set_size_request()
 on a child widget, and forcing its size request to be too large. Instead of
 setting the child's usize, consider using gtk_window_set_default_size() so that
 the child gets a larger allocation than it requests.

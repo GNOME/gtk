@@ -25,10 +25,10 @@
       <firstterm>Model/View/Controller</firstterm> design and consists
       of four major parts:
       <simplelist>
-	<member>the tree view widget (GtkTreeView)</member>
-	<member>the view column (GtkTreeViewColumn)</member>
-	<member>the cell renderers (GtkCellRenderer etc.)</member>
-	<member>and the model interface (GtkTreeModel)</member>
+	<member>the tree view widget (<structname>GtkTreeView</structname>)</member>
+	<member>the view column (<structname>GtkTreeViewColumn</structname>)</member>
+	<member>the cell renderers (<structname>GtkCellRenderer</structname> etc.)</member>
+	<member>and the model interface (<structname>GtkTreeModel</structname>)</member>
       </simplelist>
       The <emphasis>View</emphasis> is composed of the first three,
 	while the last is the <emphasis>Model</emphasis>.  One of the
@@ -49,7 +49,7 @@
       data &mdash; that is left as an exercise for the reader.  More
       information can be found on this in the <link
       linkend="GtkTreeStore">GtkTreeModel</link> section.
-      <programlisting><![CDATA[
+      <informalexample><programlisting><![CDATA[
 {
   GtkTreeStore *model;
   GtkWidget *view;
@@ -84,7 +84,7 @@
   gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
 }
 ]]>
-      </programlisting>
+      </programlisting></informalexample>
     </para>
   </refsect1>
 </refentry>

@@ -88,27 +88,29 @@ A number of GTK+ functions were renamed. For compatibility,
 
   Here is the list of the old names and replacements:
 
-<programlisting>
-  Old:				      Replacement:
-
-  gtk_accel_label_accelerator_width   gtk_accel_label_get_accel_width
-  gtk_check_menu_item_set_state	      gtk_check_menu_item_set_active
-  gtk_container_border_width	      gtk_container_set_border_width
-  gtk_label_set  	              gtk_label_set_text
-  gtk_notebook_current_page           gtk_notebook_get_current_page
-  gtk_packer_configure                gtk_packer_set_child_packing
-  gtk_paned_gutter_size	              gtk_paned_set_gutter_size
-  gtk_paned_handle_size		      gtk_paned_set_handle_size
-  gtk_scale_value_width               gtk_scale_get_value_width
-  gtk_style_apply_default_pixmap      gtk_style_apply_default_background (1)
-  gtk_toggle_button_set_state         gtk_toggle_button_set_active
-  gtk_window_position		      gtk_window_set_position
- 
-  (1) gtk_style_apply_default_background() has an additional
-      argument, gboolean set_bg. This parameter should be 
+<informaltable>
+<thead>
+<row><entry>Old</entry><entry>Replacement</entry></row>
+</thead>
+<tbody>
+<row><entry><function>gtk_accel_label_accelerator_width</function></entry><entry><function>gtk_accel_label_get_accel_width</function></entry></row>
+<row><entry><function>gtk_check_menu_item_set_state</function></entry><entry><function>gtk_check_menu_item_set_active</function></entry></row>
+<row><entry><function>gtk_container_border_width</function></entry><entry><function>gtk_container_set_border_width</function></entry></row>
+<row><entry><function>gtk_label_set</function></entry><entry><function>gtk_label_set_text</function></entry></row>
+<row><entry><function>gtk_notebook_current_page</function></entry><entry><function>gtk_notebook_get_current_page</function></entry></row>
+<row><entry><function>gtk_packer_configure</function></entry><entry><function>gtk_packer_set_child_packing</function></entry></row>
+<row><entry><function>gtk_paned_gutter_size</function></entry><entry><function>gtk_paned_set_gutter_size</function></entry></row>
+<row><entry><function>gtk_paned_handle_size</function></entry><entry><function>gtk_paned_set_handle_size</function></entry></row>
+<row><entry><function>gtk_scale_value_width</function></entry><entry><function>gtk_scale_get_value_width</function></entry></row>
+<row><entry><function>gtk_style_apply_default_pixmap</function></entry><entry><function>gtk_style_apply_default_background</function></entry></row>
+<row><entry><function>gtk_toggle_button_set_state</function></entry><entry><function>gtk_toggle_button_set_active</function></entry></row>
+<row><entry><function>gtk_window_position</function></entry><entry><function>gtk_window_set_position</function></entry></row>
+</tbody>
+</informaltable> 
+Note that <function>gtk_style_apply_default_background()</function> has an 
+      additional argument, <literal>set_bg</literal>. This parameter should be 
       <literal>FALSE</literal> if the background is being set for a 
-      NO_WINDOW widget, otherwise <literal>TRUE</literal>.
-</programlisting>
+      <literal>NO_WINDOW</literal> widget, otherwise <literal>TRUE</literal>.
 </para>
 </listitem>
 
@@ -117,26 +119,32 @@ A number of GTK+ functions were renamed. For compatibility,
 During the development phase of the 1.1.x line of GTK+ certain functions
   were deprecated and later removed. Functions affected are:
 
-<programlisting>
-  Removed:                          Replacement:
-  gtk_clist_set_border		    gtk_clist_set_shadow_type
-  gtk_container_block_resize	    gtk_container_set_resize_mode
-  gtk_container_unblock_resize	    gtk_container_set_resize_mode
-  gtk_container_need_resize	    gtk_container_check_resize
-  gtk_ctree_show_stub		    gtk_ctree_set_show_stub
-  gtk_ctree_set_reorderable	    gtk_clist_set_reorderable
-  gtk_ctree_set_use_drag_icons	    gtk_clist_set_use_drag_icons
-  gtk_entry_adjust_scroll	    (1)
-  gtk_object_class_add_user_signal  gtk_object_class_user_signal_new
-  gtk_preview_put_row		    gtk_preview_put
-  gtk_progress_bar_construct	    gtk_progress_set_adjustment
-  gtk_scrolled_window_construct	    gtk_scrolled_window_set_{h|v}adjustment
-  gtk_spin_button_construct	    gtk_spin_button_configure
-  gtk_widget_thaw_accelerators	    gtk_widget_unlock_accelerators
-  gtk_widget_freeze_accelerators    gtk_widget_lock_accelerators
+<informaltable>
+<thead>
+<row><entry>Removed</entry><entry>Replacement</entry></row>
+</thead>
+<tbody>
+<row><entry><function>gtk_clist_set_border</function></entry><entry><function>gtk_clist_set_shadow_type</function></entry></row>
+<row><entry><function>gtk_container_block_resize</function></entry><entry><function>gtk_container_set_resize_mode</function></entry></row>
+<row><entry><function>gtk_container_unblock_resize</function></entry><entry><function>gtk_container_set_resize_mode</function></entry></row>
+<row><entry><function>gtk_container_need_resize</function></entry><entry><function>gtk_container_check_resize</function></entry></row>
+<row><entry><function>gtk_ctree_show_stub</function></entry><entry><function>gtk_ctree_set_show_stub</function></entry></row>
+<row><entry><function>gtk_ctree_set_reorderable</function></entry><entry><function>gtk_clist_set_reorderable</function></entry></row>
+<row><entry><function>gtk_ctree_set_use_drag_icons</function></entry><entry><function>gtk_clist_set_use_drag_icons</function></entry></row>
+<row><entry><function>gtk_entry_adjust_scroll</function></entry><entry><function>-</function></entry></row>
+<row><entry><function>gtk_object_class_add_user_signal</function></entry><entry><function>gtk_object_class_user_signal_new</function></entry></row>
+<row><entry><function>gtk_preview_put_row</function></entry><entry><function>gtk_preview_put</function></entry></row>
+<row><entry><function>gtk_progress_bar_construct</function></entry><entry><function>gtk_progress_set_adjustment</function></entry></row>
+<row><entry><function>gtk_scrolled_window_construct</function></entry><entry><function>gtk_scrolled_window_set_{h|v}adjustment</function></entry></row>
+<row><entry><function>gtk_spin_button_construct</function></entry><entry><function>gtk_spin_button_configure</function></entry></row>
+<row><entry><function>gtk_widget_thaw_accelerators</function></entry><entry><function>gtk_widget_unlock_accelerators</function></entry></row>
+<row><entry><function>gtk_widget_freeze_accelerators</function></entry><entry><function>gtk_widget_lock_accelerators</function></entry></row>
+</tbody>
+</informaltable>
 
-(1) This function is no longer needed as GtkEntry should automatically
-    keep the scroll adjusted properly.
+Note that <function>gtk_entry_adjust_scroll()</function> is no longer needed 
+    as <structname>GtkEntry</structname> should automatically keep the scroll 
+    adjusted properly.
 </programlisting>
 </para>
 </listitem>
@@ -253,7 +261,7 @@ The <structname>GtkScrolledWindow</structname> widget no longer creates a
 
 <para>
   To add scrollbars to a non self-scrolling widget, (such as a 
-  <function>GtkList</function>),
+  <structname>GtkList</structname>),
   first add it to a viewport, then add the viewport to a scrolled window.
   The scrolled window code provides a convenience function to do this:
 
@@ -300,22 +308,22 @@ All freeze/thaw methods are now recursive - that is, if you
 
   Therefore, if you have code like:
 
-<programlisting>
+<informalexample><programlisting>
   gboolean frozen;
   frozen = GTK_CLIST_FROZEN (clist);
   gtk_clist_freeze (clist);
   [...]
   if (!frozen)
     gtk_clist_thaw (clist);
-</programlisting>
+</programlisting></informalexample>
 
   it will not work anymore. It must be, simply:
 
-<programlisting>
+<informalexample><programlisting>
   gtk_clist_freeze (clist);
   [...]
   gtk_clist_thaw (clist);
-</programlisting>
+</programlisting></informalexample>
 </para>
 </listitem>
 
@@ -351,7 +359,7 @@ The thread safety in GTK+ 1.2 is slightly different than
      </para>
 
      <para>In particular, this means, if you are writing widgets
-       that might be used in threaded programs, you _must_
+       that might be used in threaded programs, you <emphasis>must</emphasis>
        surround timeouts and idle functions in this matter.
      </para>
      
