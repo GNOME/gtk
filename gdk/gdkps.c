@@ -249,7 +249,7 @@ ps_out_begin(GdkPsDrawable *d, gchar* title, gchar* author) {
 	
 	ps_out_text(d, "%!PS-Adobe-3.0 EPSF-3.0\n");
 	ps_out_text(d, "%%Creator: Gdk PostScript Print Driver\n");
-	ps_out_text(d, "%%DocumentMedia: A4 595 842 80 white {}\n"); /* FIXME */
+	ps_out_text(d, "%%DocumentMedia: A4 595 842 80 white ()\n"); /* FIXME */
 	ps_out_text(d, "%%CreationDate: ");
 	ps_out_text(d, ctime(&date));
 	if (title ) {
@@ -258,7 +258,7 @@ ps_out_begin(GdkPsDrawable *d, gchar* title, gchar* author) {
 		ps_out_text(d, "\n");
 	}
 	if ( author ) {
-		ps_out_text(d, "%%CreatedFor: ");
+		ps_out_text(d, "%%For: ");
 		ps_out_text(d, author?author:"");
 		ps_out_text(d, "\n");
 	}
@@ -697,6 +697,7 @@ ps_out_font(GdkPsDrawable* d, GdkFont* font, GdkGC* gc) {
 	GdkFontPrivate* fp;
 	unsigned long value;
 	gchar *pname=NULL;
+	gchar* psname=NULL;
 	gchar buf[128];
 	gint iso=1;
 
@@ -709,22 +710,35 @@ ps_out_font(GdkPsDrawable* d, GdkFont* font, GdkGC* gc) {
 
 	fp = (GdkFontPrivate*)font;
 
-	face = XInternAtom(fp->xdisplay, "FACE_NAME", True);
-	/* FIXME: check fontset */
-	if ( face != None ) {
+	if ( (face = XInternAtom(fp->xdisplay, "_ADOBE_PSFONT", True)) != None ) {
+		if (XGetFontProperty(fp->xfont, face, &value)) {
+			psname = pname = XGetAtomName(fp->xdisplay, value);
+		}
+	} else if ( (face = XInternAtom(fp->xdisplay, "_ADOBE_POSTSCRIPT_FONTNAME", True)) != None ) {
+		if (XGetFontProperty(fp->xfont, face, &value)) {
+			psname = pname = XGetAtomName(fp->xdisplay, value);
+		}
+	} else if ( (face = XInternAtom(fp->xdisplay, "_DEC_DEVICE_FONTNAMES", True)) != None ) {
 		if (XGetFontProperty(fp->xfont, face, &value)) {
 			pname = XGetAtomName(fp->xdisplay, value);
+			if ( (psname=ststr(pname, "PS=")) )
+				psname = psname+3;
+		}
+	} else if ( (face = XInternAtom(fp->xdisplay, "FACE", True)) != None ) {
+		if (XGetFontProperty(fp->xfont, face, &value)) {
+			gint i;
+			pname = XGetAtomName(fp->xdisplay, value);
+			for (i=0; pname[i]; ++i) /* FIXME: Need better font guessing! */
+				if (pname[i] == ' ')
+					pname[i] = '-';
+			psname = pname;
+			if ( strlen(psname) > 29 )
+				psname[29]=0;
 		}
 	}
-	if (!pname)
+	if (!psname)
 		g_warning("Using a non-PS font");
-	else {
-		gint i;
-		for (i=0; pname[i]; ++i) /* FIXME: Need better font guessing! */
-			if (pname[i] == ' ')
-				pname[i] = '-';
-	}
-	sprintf(buf, " /%s %d %c Tf\n", pname?pname:fname, 
+	sprintf(buf, " /%s %d %c Tf\n", psname?psname:fname, 
 		font->ascent+font->descent, iso?'t':'f');
 	ps_out_text(d, buf);
 	if (pname)
@@ -897,9 +911,9 @@ gdk_ps_drawable_page_start (GdkDrawable *w, gint orientation, gint count, gint p
 	d = GDKPS(w);
 	wp = (GdkWindowPrivate*)w;
 
-	/*wp->width = width;
+	wp->width = width;
 	wp->height = height;
-	*/
+	
 	ps_out_page(w, orientation, count, plex, resolution, width, height);
 }
 

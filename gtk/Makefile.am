@@ -310,7 +310,7 @@ EXTRA_DIST = \
 
 INCLUDES = -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@
 
-noinst_PROGRAMS = testgtk testinput testselection testthreads testrgb testdnd simple 
+noinst_PROGRAMS = testgtk testinput testselection testthreads testrgb testdnd simple testps
 
 # FIXME, we currently rely on linking against libglib-1.1
 
@@ -333,6 +333,7 @@ testselection_DEPENDENCIES = $(DEPS)
 testrgb_DEPENDENCIES = $(DEPS)
 testdnd_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
+testps_DEPENDENCIES = $(DEPS)
 
 testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
@@ -341,6 +342,7 @@ testselection_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
+testps_LDADD = $(LDADDS)
 
 .PHONY: files test test-debug
 

@@ -9,6 +9,7 @@ testgtk
 testinput
 testselection
 testrgb
+testps
 simple
 testtree
 gtkfeatures.h

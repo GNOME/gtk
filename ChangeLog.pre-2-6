@@ -1,3 +1,8 @@
+Wed, 21 Oct 1998 19:10:02 +0200 Paolo Molaro <lupus@debian.org>
+
+	* gdk/gdkps.c: better guessing of postscript font name.
+	* gtk/Makefile.am: compile testps.c
+
 Tue, 20 Oct 1998 12:03:46 +0200 Paolo Molaro <lupus@debian.org>
 
 	* gdk/gdkprivate.h: GdkGCPrivate now stores complete info
