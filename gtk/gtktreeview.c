@@ -4253,17 +4253,15 @@ gtk_tree_view_enter_notify (GtkWidget        *widget,
   if (tree_view->priv->tree == NULL)
     return FALSE;
 
-  if ((tree_view->priv->button_pressed_node != NULL) &&
-      (tree_view->priv->button_pressed_node != node))
-    return TRUE;
-
   /* find the node internally */
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, event->y);
   if (new_y < 0)
     new_y = 0;
   _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
-  prelight_or_select (tree_view, tree, node, event->x, event->y);
+  if ((tree_view->priv->button_pressed_node == NULL) ||
+      (tree_view->priv->button_pressed_node == node))
+    prelight_or_select (tree_view, tree, node, event->x, event->y);
 
   return TRUE;
 }
