@@ -1366,7 +1366,7 @@ msgstr "Tilstand for knapp (vending)"
 
 #: gtk/gtkcellrenderertoggle.c:151
 msgid "Inconsistent state"
-msgstr "Ukonsistent tilstand"
+msgstr "Inkonsistent tilstand"
 
 #: gtk/gtkcellrenderertoggle.c:152
 msgid "The inconsistent state of the button"
