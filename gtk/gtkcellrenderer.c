@@ -283,7 +283,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     G_PARAM_READWRITE | STATIC_STRING));
+						     G_PARAM_READWRITE | STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDER,
