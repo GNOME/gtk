@@ -1928,7 +1928,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                         priv->hex_entry,
                         _("You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."), NULL);
   
-  gtk_widget_set_size_request (priv->hex_entry, 75, -1);  
+  gtk_entry_set_width_chars (GTK_ENTRY (priv->hex_entry), 7);
   gtk_table_set_col_spacing (GTK_TABLE (table), 3, 15);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->hex_entry, 1, 5, 5, 6);
   

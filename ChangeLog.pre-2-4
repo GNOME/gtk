@@ -1,3 +1,14 @@
+Wed Mar  3 16:47:10 2004  Owen Taylor  <otaylor@redhat.com>
+
+	 #109594, reported by Olivier Ripoll
+
+	* gtk/gtkentry.c (gtk_entry_size_request): Use max of 
+	width and digit width for gtk_entry_set_width_chars,
+	and round up.
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_init): Set the
+	width of the entry to 7 chars.
+
 Wed Mar  3 16:00:10 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Strip out the "export-dynamic" libtool

@@ -1144,7 +1144,10 @@ gtk_entry_size_request (GtkWidget      *widget,
   else
     {
       gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
-      requisition->width = PANGO_PIXELS (char_width) * entry->width_chars + xborder * 2;
+      gint digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
+      gint char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
+      
+      requisition->width = char_pixels * entry->width_chars + xborder * 2;
     }
     
   requisition->height = PANGO_PIXELS (entry->ascent + entry->descent) + yborder * 2;
