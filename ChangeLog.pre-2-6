@@ -1,5 +1,8 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.[ch]: Improve the docs.  (#157785,
+	Torsten Schoenfeld)
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_get_geometry): Add
 	a hint about using gdk_drawable_get_size() instead.
 

@@ -755,7 +755,8 @@ gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
  * @icon_theme: a #GtkIconTheme
  * @path: directory name to append to the icon path
  * 
- * Appends a directory to the search path. See gtk_icon_theme_set_search_path(). 
+ * Appends a directory to the search path. 
+ * See gtk_icon_theme_set_search_path(). 
  *
  * Since: 2.4
  **/
@@ -782,7 +783,8 @@ gtk_icon_theme_append_search_path (GtkIconTheme *icon_theme,
  * @icon_theme: a #GtkIconTheme
  * @path: directory name to prepend to the icon path
  * 
- * Prepends a directory to the search path. See gtk_icon_theme_set_search_path().
+ * Prepends a directory to the search path. 
+ * See gtk_icon_theme_set_search_path().
  *
  * Since: 2.4
  **/
@@ -1420,7 +1422,8 @@ add_size (gpointer  key,
  * is zero-terminated.
  * 
  * Return value: An newly allocated array describing the sizes at
- * which the icon is available.
+ * which the icon is available. The array should be freed with g_free()
+ * when it is no longer needed.
  *
  * Since: 2.6
  **/
@@ -2790,7 +2793,7 @@ gtk_icon_info_get_display_name  (GtkIconInfo *icon_info)
  * that the icon is generally available.
  *
  * This function will generally be used with pixbufs loaded
- * via gdk_pixbuf_new_from_inline ().
+ * via gdk_pixbuf_new_from_inline().
  *
  * Since: 2.4
  **/
