@@ -1,5 +1,11 @@
 2004-06-22  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (location_popup_handler): Use a Save
+	or an Open stock button for the C-l dialog depending on the action
+	in which the file chooser operates.  Fixes #141753.
+
+2004-06-22  Federico Mena Quintero  <federico@ximian.com>
+
 	Fixes the GTK+ part of #142308:
 
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_filename_to_path):

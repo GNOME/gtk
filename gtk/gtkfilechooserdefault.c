@@ -5328,7 +5328,8 @@ location_popup_handler (GtkFileChooserDefault *impl)
   GtkWidget *label;
   GtkWidget *entry;
   gboolean refocus;
-  char *title;
+  const char *title;
+  const char *accept_stock;
 
   /* Create dialog */
 
@@ -5338,19 +5339,21 @@ location_popup_handler (GtkFileChooserDefault *impl)
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       title = _("Open Location");
+      accept_stock = GTK_STOCK_OPEN;
     }
   else
     {
       g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
       title = _("Save in Location");
+      accept_stock = GTK_STOCK_SAVE;
     }
 
   dialog = gtk_dialog_new_with_buttons (title,
 					toplevel,
 					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					accept_stock, GTK_RESPONSE_ACCEPT,
 					NULL);
   gtk_window_set_default_size (GTK_WINDOW (dialog), 300, -1);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
