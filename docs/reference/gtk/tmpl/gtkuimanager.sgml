@@ -7,13 +7,13 @@ constructing menus and toolbars from an XML description
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 A #GtkUIManager constructs a user interface (menus and toolbars) from
-one or more UI definitions, which reference actions from one or ore 
-action groups.
+one or more UI definitions, which reference actions from one or more 
+action groups. 
 </para>
 <refsect2 id="XML-UI"><title>UI Definitions</title>
 <para>
-The UI definitions are specified in a #GMarkup format which can be
-roughly described by the following XML DTD.
+The UI definitions are specified in an XML format which can be
+roughly described by the following DTD. 
 <programlisting>
 &lt;!ELEMENT ui          (menubar|toolbar|popup)* &gt;
 &lt;!ELEMENT menubar     (menuitem|separator|placeholder|menu)* &gt;
@@ -40,9 +40,11 @@ roughly described by the following XML DTD.
 </programlisting>
 There are some additional restrictions beyond those specified in the
 DTD, e.g. every toolitem must have a toolbar in its anchestry and
-every menuitem must have a menubar or popup in its anchestry. If a name 
-is not specified, it defaults to the action. If an action is not specified 
-either, the element name is used.  
+every menuitem must have a menubar or popup in its anchestry. Since
+a #GMarkup parser is used to parse the UI description, it must not only
+be valid XML, but valid #GMarkup. If a name is not specified, it defaults 
+to the action. If an action is not specified either, the element name is 
+used.  
 </para>
 <example>
 <title>A UI definition</title>
@@ -111,6 +113,21 @@ wrt. to its siblings in the partially constructed tree. If it is
 "top", the widget is prepended, otherwise it is appended.
 </para>
 </refsect2>
+<refsect2 id="UI-Merging">
+<title>UI Merging</title>
+<para>
+The most remarkable feature of #GtkUIManager is that it can overlay a set
+of menuitems and toolitems over another one, and demerge them later.
+</para>
+<para>
+Merging is done based on the name of the XML elements. Each element is 
+identified by a path which consists of the names of its anchestors, separated
+by slashes. For example, the menuitem named "Left" in the example above
+has the path <literal>/ui/menubar/JustifyMenu/Left</literal> and the
+toolitem with the same name has path 
+<literal>/ui/toolbar1/JustifyToolItems/Left</literal>.
+</para>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -119,7 +136,8 @@ wrt. to its siblings in the partially constructed tree. If it is
 
 <!-- ##### STRUCT GtkUIManager ##### -->
 <para>
-
+The <structname>GtkUIManager</structname> struct contains only private
+members and should not be accessed directly.
 </para>
 
 
@@ -227,6 +245,27 @@ wrt. to its siblings in the partially constructed tree. If it is
 @filename: 
 @error: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_new_merge_id ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_add_ui ##### -->
+<para>
+
+</para>
+
+@self: 
+@merge_id: 
+@path: 
+@name: 
+@action: 
 
 
 <!-- ##### FUNCTION gtk_ui_manager_remove_ui ##### -->
