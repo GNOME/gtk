@@ -417,15 +417,18 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *sort,
   GtkTreeIter iter;
   SortElt elt;
   SortElt *tmp_elt;
-  gint high, low, middle;
+  gint offset;
+  gint high, low, middle, j;
   GValueCompareFunc func;
   GValue s_value = {0, };
   GValue tmp_value = {0, };
 
+  offset = gtk_tree_path_get_indices (s_path)[gtk_tree_path_get_depth (s_path) - 1];
+
   elt.iter = *s_iter;
   elt.ref = 0;
   elt.children = NULL;
-
+  elt.offset = offset;
   tmp_path = gtk_tree_path_copy (s_path);
   if (gtk_tree_path_up (tmp_path))
     {
@@ -473,6 +476,11 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *sort,
 
   gtk_tree_model_get_value (sort->model, s_iter, sort->sort_col, &s_value);
 
+#if 0
+  /* FIXME: we can, as we are an array, do binary search to find the correct
+   * location to insert the element.  However, I'd rather get it working.  The
+   * below is quite wrong, but a step in the right direction.
+   */
   low = 0;
   high = array->len;
   middle = (low + high)/2;
@@ -498,9 +506,36 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *sort,
 	break;
       middle = (low + high)/2;
     }
+#endif
+  for (middle = 0; middle < array->len; middle++)
+    {
+      gint cmp;
+
+      tmp_elt = &(g_array_index (array, SortElt, middle));
+      gtk_tree_model_get_value (sort->model,
+				(GtkTreeIter *) tmp_elt,
+				sort->sort_col,
+				&tmp_value);
+
+      cmp = ((func) (&s_value, &tmp_value));
+      g_value_unset (&tmp_value);
+
+      if (cmp >= 0)
+	break;
+    }
 
   g_array_insert_vals (array, middle, &elt, 1);
+
   g_value_unset (&s_value);
+
+  /* update all the larger offsets */
+  tmp_elt = (SortElt *) array->data;
+  for (j = 0; j < array->len; j++, tmp_elt++)
+	{
+	  if ((tmp_elt->offset >= offset) &&
+	      j != middle)
+	    tmp_elt->offset ++;
+	}
 }
 
 static void
@@ -530,15 +565,17 @@ gtk_tree_model_sort_inserted (GtkTreeModel *s_model,
       if (s_iter == NULL)
 	gtk_tree_model_get_iter (s_model, &real_s_iter, s_path);
       else
-	real_s_iter = *s_iter;
+	real_s_iter = (* s_iter);
 
       gtk_tree_model_sort_insert_value (tree_model_sort, s_path, &real_s_iter);
     }
 
   path = gtk_tree_model_sort_convert_path (tree_model_sort, s_path);
 
+  g_return_if_fail (path != NULL);
+
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
-  gtk_signal_emit_by_name (GTK_OBJECT (data), "inserted", path, iter);
+  gtk_signal_emit_by_name (GTK_OBJECT (data), "inserted", path, &iter);
   gtk_tree_path_free (path);
 }
 
@@ -756,7 +793,7 @@ gtk_tree_model_sort_iter_next (GtkTreeModel *tree_model,
       iter->stamp = 0;
       return FALSE;
     }
-  iter->tree_node = elt+1;
+  iter->tree_node = elt + 1;
   return TRUE;
 }
 
@@ -969,8 +1006,15 @@ gint
 g_value_string_compare_func (const GValue *a,
 			     const GValue *b)
 {
-  return strcmp (g_value_get_string (a),
-		 g_value_get_string (b));
+  gchar *a_str = g_value_get_string (a);
+  gchar *b_str = g_value_get_string (b);
+
+  if (b_str == NULL)
+    return a_str == NULL;
+  if (a_str == NULL)
+    return -1;
+
+  return strcmp (a_str, b_str);
 }
 
 gint

@@ -1,3 +1,11 @@
+Mon Nov 13 14:29:32 2000  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_path_copy): confirm path != NULL
+	* gtk/gtktreemodel.c (gtk_tree_path_free): ditto
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_insert_value): make
+	work better.
+
 2000-11-13  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkimmodule.c (gtk_im_module_init): Free the filename of 
