@@ -399,6 +399,7 @@ gtk_entry_set_text (GtkEntry *entry,
 
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (text != NULL);
 
   gtk_real_entry_delete_text (entry, 0, entry->text_length);
 

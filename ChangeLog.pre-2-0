@@ -1,3 +1,8 @@
+Sat Feb 21 12:06:11 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gtk/gtkentry.c (gtk_entry_set_text): Added a test for passing a
+	NULL text pointer.
+
 Sat Feb 21 14:49:17 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkobject.h:
