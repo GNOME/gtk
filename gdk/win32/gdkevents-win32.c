@@ -51,6 +51,8 @@
 #include "gdkinput-win32.h"
 #include "gdkkeysyms.h"
 
+#include <windowsx.h>
+
 #ifdef G_WITH_CYGWIN
 #include <fcntl.h>
 #include <errno.h>
@@ -171,8 +173,8 @@ real_window_procedure (HWND   hwnd,
   msg.lParam = lparam;
   msg.time = _gdk_win32_get_next_tick (0);
   pos = GetMessagePos ();
-  msg.pt.x = LOWORD (pos);
-  msg.pt.y = HIWORD (pos);
+  msg.pt.x = GET_X_LPARAM (pos);
+  msg.pt.y = GET_Y_LPARAM (pos);
 
   event = gdk_event_new (GDK_NOTHING);
   ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
@@ -1231,11 +1233,11 @@ synthesize_enter_event (GdkWindow    *window,
   if (!(GDK_WINDOW_OBJECT (window)->event_mask & GDK_ENTER_NOTIFY_MASK))
     return;
 
-  /* Enter events are at LOWORD (msg->lParam), HIWORD
+  /* Enter events are at GET_X_LPARAM (msg->lParam), GET_Y_LPARAM
    * (msg->lParam) in msg->hwnd */
 
-  pt.x = LOWORD (msg->lParam);
-  pt.y = HIWORD (msg->lParam);
+  pt.x = GET_X_LPARAM (msg->lParam);
+  pt.y = GET_Y_LPARAM (msg->lParam);
   if (msg->hwnd != GDK_WINDOW_HWND (window))
     {
       ClientToScreen (msg->hwnd, &pt);
@@ -1475,11 +1477,12 @@ translate_mouse_coords (GdkWindow *window1,
 {
   POINT pt;
 
-  pt.x = LOWORD (msg->lParam);
-  pt.y = HIWORD (msg->lParam);
+  pt.x = GET_X_LPARAM (msg->lParam);
+  pt.y = GET_Y_LPARAM (msg->lParam);
   ClientToScreen (GDK_WINDOW_HWND (window1), &pt);
   ScreenToClient (GDK_WINDOW_HWND (window2), &pt);
   msg->lParam = MAKELPARAM (pt.x, pt.y);
+
   GDK_NOTE (EVENTS, g_print ("...new coords are (%ld,%ld)\n", pt.x, pt.y));
 }
 
@@ -1982,8 +1985,8 @@ gdk_event_translate (GdkDisplay *display,
        * around that. Also, the position is in screen coordinates, not
        * client coordinates as with the button messages.
        */
-      pt.x = LOWORD (msg->lParam);
-      pt.y = HIWORD (msg->lParam);
+      pt.x = GET_X_LPARAM (msg->lParam);
+      pt.y = GET_Y_LPARAM (msg->lParam);
       if ((hwnd = WindowFromPoint (pt)) == NULL)
 	goto done;
 
@@ -2021,8 +2024,8 @@ gdk_event_translate (GdkDisplay *display,
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->scroll.x = (gint16) pt.x + xoffset;
       event->scroll.y = (gint16) pt.y + yoffset;
-      event->scroll.x_root = (gint16) LOWORD (msg->lParam);
-      event->scroll.y_root = (gint16) HIWORD (msg->lParam);
+      event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam);
+      event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam);
       event->scroll.state = 0;	/* No state information with MSH_MOUSEWHEEL */
       event->scroll.device = display->core_pointer;
       return_val = !GDK_WINDOW_DESTROYED (window);
@@ -2508,7 +2511,7 @@ gdk_event_translate (GdkDisplay *display,
 		g_print ("WM_%cBUTTONDOWN: %p  (%d,%d)\n",
 			 " LMR"[button],
 			 msg->hwnd,
-			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
+			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       if (GDK_WINDOW_OBJECT (window)->extension_events != 0
 	  && _gdk_input_ignore_core)
@@ -2548,8 +2551,8 @@ gdk_event_translate (GdkDisplay *display,
       event->button.time = _gdk_win32_get_next_tick (msg->time);
       if (window != orig_window)
 	translate_mouse_coords (orig_window, window, msg);
-      event->button.x = current_x = (gint16) LOWORD (msg->lParam);
-      event->button.y = current_y = (gint16) HIWORD (msg->lParam);
+      event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
+      event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->button.x += xoffset;
       event->button.y += yoffset;
@@ -2577,7 +2580,7 @@ gdk_event_translate (GdkDisplay *display,
 		g_print ("WM_%cBUTTONUP: %p  (%d,%d)\n",
 			 " LMR"[button],
 			 msg->hwnd,
-			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
+			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
 
@@ -2605,8 +2608,8 @@ gdk_event_translate (GdkDisplay *display,
 	  event->button.time = _gdk_win32_get_next_tick (msg->time);
 	  if (window != orig_window)
 	    translate_mouse_coords (orig_window, window, msg);
-	  event->button.x = current_x = (gint16) LOWORD (msg->lParam);
-	  event->button.y = current_y = (gint16) HIWORD (msg->lParam);
+	  event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
+	  event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
 	  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
 	  event->button.x += xoffset;
 	  event->button.y += yoffset;
@@ -2630,7 +2633,7 @@ gdk_event_translate (GdkDisplay *display,
       GDK_NOTE (EVENTS,
 		g_print ("WM_MOUSEMOVE: %p  %#x (%d,%d)\n",
 			 msg->hwnd, msg->wParam,
-			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
+			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
 
@@ -2667,12 +2670,12 @@ gdk_event_translate (GdkDisplay *display,
        * even if the mouse doesn't move. This disturbs gtk.
        */
       if (window == current_window
-	  && LOWORD (msg->lParam) == current_x
-	  && HIWORD (msg->lParam) == current_y)
+	  && GET_X_LPARAM (msg->lParam) == current_x
+	  && GET_Y_LPARAM (msg->lParam) == current_y)
 	break;
 
-      event->motion.x = current_x = (gint16) LOWORD (msg->lParam);
-      event->motion.y = current_y = (gint16) HIWORD (msg->lParam);
+      event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
+      event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->motion.x += xoffset;
       event->motion.y += yoffset;
@@ -2688,9 +2691,9 @@ gdk_event_translate (GdkDisplay *display,
 
     case WM_NCMOUSEMOVE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_NCMOUSEMOVE: %p  x,y: %d %d\n",
+		g_print ("WM_NCMOUSEMOVE: %p (%d,%d)\n",
 			 msg->hwnd,
-			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
+			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
       if (current_window != NULL
 	  && (GDK_WINDOW_OBJECT (current_window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
 	{
@@ -2732,8 +2735,8 @@ gdk_event_translate (GdkDisplay *display,
        * coordinates as with the button messages. I love the
        * consistency of Windows.
        */
-      pt.x = LOWORD (msg->lParam);
-      pt.y = HIWORD (msg->lParam);
+      pt.x = GET_X_LPARAM (msg->lParam);
+      pt.y = GET_Y_LPARAM (msg->lParam);
       if ((hwnd = WindowFromPoint (pt)) == NULL)
 	break;
 
@@ -2771,8 +2774,8 @@ gdk_event_translate (GdkDisplay *display,
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->scroll.x = (gint16) pt.x + xoffset;
       event->scroll.y = (gint16) pt.y + yoffset;
-      event->scroll.x_root = (gint16) LOWORD (msg->lParam);
-      event->scroll.y_root = (gint16) HIWORD (msg->lParam);
+      event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam);
+      event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam);
       event->scroll.state = build_pointer_event_state (msg);
       event->scroll.device = display->core_pointer;
       return_val = !GDK_WINDOW_DESTROYED (window);
@@ -3126,7 +3129,7 @@ gdk_event_translate (GdkDisplay *display,
     case WM_MOVE:
       GDK_NOTE (EVENTS, g_print ("WM_MOVE: %p  (%d,%d)\n",
 				 msg->hwnd,
-				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
+				 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       if (!(private->event_mask & GDK_STRUCTURE_MASK))
 	break;
@@ -3137,8 +3140,8 @@ gdk_event_translate (GdkDisplay *display,
 	{
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
-	  event->configure.x = LOWORD (msg->lParam);
-	  event->configure.y = HIWORD (msg->lParam);
+	  event->configure.x = GET_X_LPARAM (msg->lParam);
+	  event->configure.y = GET_Y_LPARAM (msg->lParam);
 	  GetClientRect (msg->hwnd, &rect);
 	  event->configure.width = rect.right;
 	  event->configure.height = rect.bottom;

@@ -1,3 +1,11 @@
+2003-03-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c: Use the signed GET_X_LPARAM() and
+	GET_Y_LPARAM() to extract x and y coordinates from an LPARAM or
+	DWORD, and not the unsigned HIWORD() and LOWORD(). Systems with
+	multiple monitors can have negative coordinates on some of the
+	monitors. (partial fix for #99496, Arnaud Charlet)
+
 2003-03-15  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c: Add a "buffer" property.  (#108353) 
