@@ -1,3 +1,14 @@
+Tue Mar  5 10:29:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreeview.c (do_presize_handler)
+	gtk/gtktreeview.c (do_validate_rows): Don't use this 
+	same functions as idle callbacks and directly, to avoid
+	threading deadlocks. (#72392, Scott Guilbeaux)
+
+	* gtk/gtktable.c (gtk_table_size_request_init): Fix 
+	row/column confusion from recent patch. (#73505,
+	Vitaly Tishkov.)
+
 2002-03-04  Matthias Clasen  <maclas@gmx.de>
 
 	* docs/tutorial/gtk-tut.sgml: Make color selection and selection 

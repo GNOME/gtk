@@ -3893,7 +3893,7 @@ validate_visible_area (GtkTreeView *tree_view)
  */
 
 static gboolean
-validate_rows_handler (GtkTreeView *tree_view)
+do_validate_rows (GtkTreeView *tree_view)
 {
   GtkRBTree *tree = NULL;
   GtkRBNode *node = NULL;
@@ -3904,15 +3904,11 @@ validate_rows_handler (GtkTreeView *tree_view)
   gint i = 0;
   g_assert (tree_view);
 
-  GDK_THREADS_ENTER ();
-
   if (tree_view->priv->tree == NULL)
     {
       tree_view->priv->validate_rows_timer = 0;
-      GDK_THREADS_LEAVE ();
       return FALSE;
     }
-
   do
     {
 
@@ -3991,18 +3987,26 @@ validate_rows_handler (GtkTreeView *tree_view)
   if (! retval)
     tree_view->priv->validate_rows_timer = 0;
 
+  return retval;
+}
+
+static gboolean
+validate_rows_handler (GtkTreeView *tree_view)
+{
+  gboolean retval;
+
+  GDK_THREADS_ENTER ();
+
+  retval = do_validate_rows (tree_view);
+  
   GDK_THREADS_LEAVE ();
 
   return retval;
 }
 
 static gboolean
-presize_handler_callback (gpointer data)
+do_presize_handler (GtkTreeView *tree_view)
 {
-  GtkTreeView *tree_view = GTK_TREE_VIEW (data);
-
-  GDK_THREADS_ENTER ();
-
   if (tree_view->priv->mark_rows_col_dirty)
     {
       if (tree_view->priv->tree)
@@ -4011,6 +4015,16 @@ presize_handler_callback (gpointer data)
     }
   validate_visible_area (tree_view);
   tree_view->priv->presize_handler_timer = 0;
+		   
+  return FALSE;
+}
+
+static gboolean
+presize_handler_callback (gpointer data)
+{
+  GDK_THREADS_ENTER ();
+
+  do_presize_handler (GTK_TREE_VIEW (data));
 		   
   GDK_THREADS_LEAVE ();
 
@@ -7655,8 +7669,8 @@ gtk_tree_view_column_autosize (GtkTreeView *tree_view,
 
   _gtk_tree_view_column_cell_set_dirty (column, FALSE);
 
-  presize_handler_callback (tree_view);
-  while (validate_rows_handler (tree_view));
+  do_presize_handler (tree_view);
+  while (do_validate_rows (tree_view));
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 }
