@@ -1,3 +1,12 @@
+2003-06-28  Matthias Clasen  <maclas@gmx.de>
+
+	* io-ico.c (DecodeHeader): Stop discriminating against 32bpp ICOs a): Use the byte 
+	size of the image as a heuristic when selecting the bitmap  to load - this lets us 
+	select 32bpp bitmaps which come after a 8bpp bitmap.
+	(OneLineTransp): Stop discriminating against 32bpp ICOs b): Don't overwrite the 
+	alpha channel of 32bpp ICOs. 
+	(gdk_pixbuf__ico_image_load_increment): Stop decoding the header unnecessarily.
+
 2003-06-23  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif.c (gif_get_frame_info): Remove the pointless refusal to load images with dubious 

@@ -191,9 +191,8 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 			 GError **error)
 {
 /* For ICO's we have to be very clever. There are multiple images possible
-   in an .ICO. For now, we select (in order of priority):
-     1) The one with the highest number of colors
-     2) The largest one
+   in an .ICO. As a simple heuristic, we select the image which occupies the 
+   largest number of bytes.
  */   
  
 	gint IconCount = 0; /* The number of icon-versions in the file */
@@ -231,18 +230,11 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  	State->DIBoffset  = 0;
  	Ptr = Data + 6;
 	for (I=0;I<IconCount;I++) {
-		int ThisWidth, ThisHeight,ThisColors;
 		int ThisScore;
 		
-		ThisWidth = Ptr[0];
-		ThisHeight = Ptr[1];
-		ThisColors = (Ptr[2]);
-		if (ThisColors==0) 
-			ThisColors=256; /* Yes, this is in the spec, ugh */
-		
-		ThisScore = ThisColors*1024+ThisWidth*ThisHeight; 
+		ThisScore = (Ptr[11] << 24) + (Ptr[10] << 16) + (Ptr[9] << 8) + (Ptr[8]);
 
-		if (ThisScore>State->ImageScore) {
+		if (ThisScore>=State->ImageScore) {
 			State->ImageScore = ThisScore;
 			State->x_hot = (Ptr[5] << 8) + Ptr[4];
 			State->y_hot = (Ptr[7] << 8) + Ptr[6];
@@ -691,6 +683,10 @@ static void OneLineTransp(struct ico_progressive_state *context)
 	gint X;
 	guchar *Pixels;
 
+	/* Ignore the XOR mask for XP style 32-bpp icons with alpha */ 
+	if (context->Header.depth == 32)
+		return;
+
 	X = 0;
 	if (context->Header.Negative == 0)
 		Pixels = (context->pixbuf->pixels +
@@ -827,7 +823,7 @@ gdk_pixbuf__ico_image_load_increment(gpointer data,
 
 		}
 
-		if (context->HeaderDone >= 6) {
+		if (context->HeaderDone >= 6 && context->pixbuf == NULL) {
 			GError *decode_err = NULL;
 			DecodeHeader(context->HeaderBuf,
 				     context->HeaderDone, context, &decode_err);
