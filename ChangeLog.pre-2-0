@@ -1,3 +1,26 @@
+2001-03-09  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.def : updated
+
+	* gdk/win32/gdkevents-win32.c : don't ask input_only windows
+	for their palette
+
+	* gdk/win32/gdkgeometry-win32.c : reflect GdkWindowObject::mapped
+	removing
+
+	* gdk/win32/gdkwindow-win32.c : reflect GdkWindowObject::mapped
+	removing and implemented Havoc's GdkWindow state functions; 
+	stick/unstick only as no-op, cause I don't know how to emulate 
+	on win32 ...
+
+	* gtk/gtk.def : updated
+
+	* gtk/gtkbox.c (gtk_box_get_spacing) : use g_return_val_if_fail ()
+
+	* gtk/gtktypeutils.c : #include <string.h>
+
+	* gtk/gtkwindow.h : declare gtk_window_set_decorated ()
+
 Fri Mar  9 09:31:55 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): fixed signals with

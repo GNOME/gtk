@@ -378,5 +378,15 @@ EXPORTS
 	gdk_window_set_transient_for
 	gdk_window_set_user_data
 	gdk_window_shape_combine_mask
+	gdk_window_shape_combine_region
 	gdk_window_show
 	gdk_window_withdraw
+	gdk_window_deiconify
+	gdk_window_focus
+	gdk_window_iconify
+	gdk_window_maximize
+	gdk_window_set_modal_hint
+	gdk_window_set_type_hint
+	gdk_window_stick
+	gdk_window_unmaximize
+	gdk_window_unstick

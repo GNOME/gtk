@@ -718,7 +718,10 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   impl->height = rect.bottom - rect.top;
   private->window_type = GDK_WINDOW_FOREIGN;
   private->destroyed = FALSE;
-  private->mapped = IsWindowVisible ((HWND) anid);
+  if (IsWindowVisible ((HWND) anid))
+    private->state &= (~GDK_WINDOW_STATE_WITHDRAWN);
+  else
+    private->state |= GDK_WINDOW_STATE_WITHDRAWN;
   private->depth = gdk_visual_get_system ()->depth;
 
   gdk_drawable_ref (window);
@@ -804,7 +807,7 @@ gdk_window_show (GdkWindow *window)
       GDK_NOTE (MISC, g_print ("gdk_window_show: %#x\n",
 			       (guint) GDK_WINDOW_HWND (window)));
 
-      private->mapped = TRUE;
+      private->state &= (~GDK_WINDOW_STATE_WITHDRAWN);
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
 	{
 	  ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
@@ -852,7 +855,7 @@ gdk_window_hide (GdkWindow *window)
       GDK_NOTE (MISC, g_print ("gdk_window_hide: %#x\n",
 			       (guint) GDK_WINDOW_HWND (window)));
 
-      private->mapped = FALSE;
+      private->state |= GDK_WINDOW_STATE_WITHDRAWN;
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
 	ShowOwnedPopups (GDK_WINDOW_HWND (window), FALSE);
 
@@ -2220,4 +2223,217 @@ gdk_window_set_static_gravities (GdkWindow *window,
     }
   
   return TRUE;
+}
+
+/*
+ * Setting window states
+ */
+void
+gdk_window_iconify (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+    }
+  else
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_window_state (window,
+                                   0,
+                                   GDK_WINDOW_STATE_ICONIFIED);
+    }
+}
+
+void
+gdk_window_deiconify (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {  
+      gdk_window_show (window);
+    }
+  else
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_ICONIFIED,
+                                   0);
+    }
+}
+
+void
+gdk_window_stick (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      /* "stick" means stick to all desktops _and_ do not scroll with the
+       * viewport. i.e. glue to the monitor glass in all cases.
+       */
+      g_warning ("gdk_window_stick (0x%X) ???", GDK_WINDOW_HWND (window));
+    }
+  else
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_window_state (window,
+                                   0,
+                                   GDK_WINDOW_STATE_STICKY);
+    }
+}
+
+void
+gdk_window_unstick (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      g_warning ("gdk_window_unstick (0x%X) ???", GDK_WINDOW_HWND (window));
+    }
+  else
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_STICKY,
+                                   0);
+
+    }
+}
+
+void
+gdk_window_maximize (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
+  else
+    gdk_synthesize_window_state (window,
+				 0,
+				 GDK_WINDOW_STATE_MAXIMIZED);
+}
+
+void
+gdk_window_unmaximize (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+  else
+    gdk_synthesize_window_state (window,
+				 GDK_WINDOW_STATE_MAXIMIZED,
+				 0);
+}
+
+void
+gdk_window_focus (GdkWindow *window,
+                  guint32    timestamp)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
+  ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+}
+
+void
+gdk_window_set_modal_hint (GdkWindow *window,
+			   gboolean   modal)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  private = (GdkWindowObject*) window;
+
+  private->modal_hint = modal;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    if (!SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST,
+                           0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
+      WIN32_API_FAILED ("SetWindowPos");
+}
+
+void
+gdk_window_set_type_hint (GdkWindow        *window,
+			  GdkWindowTypeHint hint)
+{
+  GdkAtom atom;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  switch (hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_DIALOG:
+      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_DIALOG", FALSE);
+      break;
+    case GDK_WINDOW_TYPE_HINT_MENU:
+      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_MENU", FALSE);
+      break;
+    case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_TOOLBAR", FALSE);
+      break;
+    default:
+      g_warning ("Unknown hint %d passed to gdk_window_set_type_hint", hint);
+      /* Fall thru */
+    case GDK_WINDOW_TYPE_HINT_NORMAL:
+      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_NORMAL", FALSE);
+      break;
+    }
+  /*
+   * XXX ???
+   */
+  GDK_NOTE (MISC,
+            g_print ("gdk_window_set_type_hint (0x%0X)\n",
+                     GDK_WINDOW_HWND (window)));
+}
+
+void
+gdk_window_shape_combine_region (GdkWindow *window,
+                                 GdkRegion *shape_region,
+                                 gint       offset_x,
+                                 gint       offset_y)
+{
+  gint xoffset, yoffset;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* XXX: even on X implemented conditional ... */  
 }

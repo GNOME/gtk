@@ -218,8 +218,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                    PROP_PATTERN,
                                    g_param_spec_string ("pattern",
                                                         _("Pattern"),
-                                                        _("A string with _ characters in positions correspond to characters in
-  the text to underline."),
+                                                        _("A string with _ characters in positions correspond to characters in the text to underline."),
                                                         NULL,
                                                         G_PARAM_WRITABLE));
 

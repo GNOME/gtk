@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <string.h> /* strcmp */
+
 #include "gtktypeutils.h"
 #include "gtkobject.h"
 

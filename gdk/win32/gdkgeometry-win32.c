@@ -326,7 +326,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
       if (impl->position_info.no_bg)
 	gdk_window_tmp_reset_bg (window);
 
-      if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
+      if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
 	ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNA);
       
       impl->position_info = new_info;
@@ -386,7 +386,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
       if (impl->position_info.no_bg)
 	gdk_window_tmp_reset_bg (window);
 
-      if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
+      if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
 	ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNA);
 
       impl->position_info = new_info;
@@ -660,7 +660,7 @@ gdk_window_postmove (GdkWindow          *window,
 	WIN32_API_FAILED ("MoveWindow");
     }
 
-  if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
+  if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNA);
 
   if (impl->position_info.no_bg)

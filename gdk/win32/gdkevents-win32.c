@@ -2599,6 +2599,9 @@ gdk_event_translate (GdkEvent *event,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
+      if (GDK_WINDOW_OBJECT (window)->input_only)
+	break;
+
       colormap = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
       if (colormap)
 	colormap_private = GDK_COLORMAP_PRIVATE_DATA (colormap);
@@ -2619,9 +2622,6 @@ gdk_event_translate (GdkEvent *event,
 	}
       *ret_val_flagp = TRUE;
       *ret_valp = 1;
-
-      if (GDK_WINDOW_OBJECT (window)->input_only)
-	break;
 
       if (GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
 	{

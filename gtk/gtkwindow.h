@@ -164,6 +164,9 @@ void       gtk_window_set_frame_dimensions     (GtkWindow *window,
 						gint       right,
 						gint       bottom);
 
+void       gtk_window_set_decorated           (GtkWindow *window,
+                                               gboolean   setting);
+
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal                (GtkWindow           *window,
                                                 gboolean             modal);

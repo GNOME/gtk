@@ -202,20 +202,15 @@ EXPORTS
 	gtk_box_set_child_packing
 	gtk_box_set_homogeneous
 	gtk_box_set_spacing
-	gtk_button_box_child_requisition
 	gtk_button_box_get_child_ipadding
-	gtk_button_box_get_child_ipadding_default
 	gtk_button_box_get_child_size
-	gtk_button_box_get_child_size_default
 	gtk_button_box_get_layout
-	gtk_button_box_get_spacing
+	gtk_box_get_spacing
 	gtk_button_box_get_type
 	gtk_button_box_set_child_ipadding
-	gtk_button_box_set_child_ipadding_default
 	gtk_button_box_set_child_size
-	gtk_button_box_set_child_size_default
 	gtk_button_box_set_layout
-	gtk_button_box_set_spacing
+	gtk_box_set_spacing
 	gtk_button_clicked
 	gtk_button_enter
 	gtk_button_get_relief
@@ -732,46 +727,38 @@ EXPORTS
 	gtk_main_level
 	gtk_main_quit
 	gtk_major_version
-	gtk_marshal_BOOLEAN__POINTER
-	gtk_marshal_BOOLEAN__POINTER_INT_INT
-	gtk_marshal_BOOLEAN__POINTER_INT_INT_UINT
-	gtk_marshal_BOOLEAN__POINTER_POINTER_INT_INT
-	gtk_marshal_BOOLEAN__POINTER_POINTER_POINTER_POINTER
+	gtk_marshal_BOOLEAN__BOXED
+	gtk_marshal_BOOLEAN__BOXED_INT_INT_UINT
+	gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED
 	gtk_marshal_BOOLEAN__VOID
 	gtk_marshal_ENUM__ENUM
+	gtk_marshal_INT__OBJECT_BOXED_BOXED
 	gtk_marshal_INT__POINTER
-	gtk_marshal_INT__POINTER_CHAR_CHAR
-	gtk_marshal_INT__POINTER_POINTER_POINTER
-	gtk_marshal_INT__VOID
-	gtk_marshal_POINTER__POINTER
-	gtk_marshal_POINTER__POINTER_INT
-	gtk_marshal_POINTER__VOID
 	gtk_marshal_VOID__BOOLEAN
+	gtk_marshal_VOID__BOXED
+	gtk_marshal_VOID__BOXED_BOXED
+	gtk_marshal_VOID__BOXED_BOXED_UINT_UINT
+	gtk_marshal_VOID__BOXED_INT_INT_BOXED_UINT_UINT
+	gtk_marshal_VOID__BOXED_OBJECT
+	gtk_marshal_VOID__BOXED_STRING_INT
+	gtk_marshal_VOID__BOXED_UINT
+	gtk_marshal_VOID__BOXED_UINT_UINT
 	gtk_marshal_VOID__ENUM
 	gtk_marshal_VOID__ENUM_FLOAT
 	gtk_marshal_VOID__ENUM_FLOAT_BOOLEAN
+	gtk_marshal_VOID__ENUM_INT
+	gtk_marshal_VOID__ENUM_INT_BOOLEAN
 	gtk_marshal_VOID__INT_INT
 	gtk_marshal_VOID__INT_INT_INT
-	gtk_marshal_VOID__INT_INT_INT_INT
-	gtk_marshal_VOID__INT_INT_POINTER
-	gtk_marshal_VOID__POINTER_BOOLEAN
+	gtk_marshal_VOID__OBJECT_BOOLEAN
+	gtk_marshal_VOID__OBJECT_BOXED_BOXED
+	gtk_marshal_VOID__OBJECT_INT_INT
+	gtk_marshal_VOID__OBJECT_OBJECT
+	gtk_marshal_VOID__OBJECT_STRING_STRING
 	gtk_marshal_VOID__POINTER_INT
-	gtk_marshal_VOID__POINTER_INT_INT_POINTER_UINT_UINT
-	gtk_marshal_VOID__POINTER_INT_POINTER
-	gtk_marshal_VOID__POINTER_POINTER
-	gtk_marshal_VOID__POINTER_POINTER_BOOLEAN
-	gtk_marshal_VOID__POINTER_POINTER_INT
-	gtk_marshal_VOID__POINTER_POINTER_INT_BOOLEAN
-	gtk_marshal_VOID__POINTER_POINTER_INT_INT
 	gtk_marshal_VOID__POINTER_POINTER_POINTER
-	gtk_marshal_VOID__POINTER_POINTER_UINT_UINT
 	gtk_marshal_VOID__POINTER_UINT
-	gtk_marshal_VOID__POINTER_UINT_ENUM
-	gtk_marshal_VOID__POINTER_UINT_FLAGS
-	gtk_marshal_VOID__POINTER_UINT_UINT
-	gtk_marshal_VOID__UINT_POINTER_UINT_ENUM_ENUM_POINTER
-	gtk_marshal_VOID__UINT_POINTER_UINT_FLAGS_FLAGS
-	gtk_marshal_VOID__UINT_POINTER_UINT_UINT_ENUM
+	gtk_marshal_VOID__UINT_STRING
 	gtk_menu_attach_to_widget
 	gtk_menu_bar_append
 	gtk_menu_bar_get_type
@@ -1317,11 +1304,11 @@ EXPORTS
 	gtk_tree_item_remove_subtree
 	gtk_tree_item_select
 	gtk_tree_item_set_subtree
-	gtk_tree_model_simple_changed
-	gtk_tree_model_simple_child_toggled
-	gtk_tree_model_simple_get_type
-	gtk_tree_model_simple_inserted
-	gtk_tree_model_simple_new
+;	gtk_tree_model_simple_changed
+;	gtk_tree_model_simple_child_toggled
+;	gtk_tree_model_simple_get_type
+;	gtk_tree_model_simple_inserted
+;	gtk_tree_model_simple_new
 	gtk_tree_model_sort_convert_path
 	gtk_tree_model_sort_get_type
 	gtk_tree_model_sort_new
@@ -1459,8 +1446,6 @@ EXPORTS
 	gtk_widget_destroy
 	gtk_widget_destroyed
 	gtk_widget_draw
-	gtk_widget_draw_default
-	gtk_widget_draw_focus
 	gtk_widget_ensure_style
 	gtk_widget_event
 	gtk_widget_get_ancestor
@@ -1571,5 +1556,14 @@ EXPORTS
 	gtk_window_set_title
 	gtk_window_set_transient_for
 	gtk_window_set_wmclass
-
-
+	gtk_dialog_get_has_separator
+	gtk_dialog_set_has_separator
+	gtk_entry_set_activates_default
+	gtk_window_deiconify
+	gtk_window_iconify
+	gtk_window_maximize
+	gtk_window_present
+	gtk_window_set_decorated
+	gtk_window_stick
+	gtk_window_unmaximize
+	gtk_window_unstick
