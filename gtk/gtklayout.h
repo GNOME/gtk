@@ -63,8 +63,6 @@ struct _GtkLayout {
   gint scroll_y;
 
   guint freeze_count;
-
-  guint gravity_works : 1;
 };
 
 struct _GtkLayoutClass {

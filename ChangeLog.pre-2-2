@@ -1,3 +1,10 @@
+Wed Jan 27 23:05:55 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.[ch] (gtk_layout_realize): Move 
+	gravity_works back to a static global variable,
+	since it is a global constant, and this way we
+	keep structure sizes uniform.
+
 Wed Jan 27 22:59:07 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (static_SOURCES): Move gtkintl.h

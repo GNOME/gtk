@@ -110,6 +110,7 @@ static void     gtk_layout_remove_child_cb (GdkWindow *parent,
 
 
 static GtkWidgetClass *parent_class = NULL;
+static gboolean gravity_works;
 
 /* Public interface
  */
@@ -473,7 +474,11 @@ gtk_layout_realize (GtkWidget *widget)
   gdk_window_add_filter (widget->window, gtk_layout_main_filter, layout);
   gdk_window_add_filter (layout->bin_window, gtk_layout_filter, layout);
 
-  layout->gravity_works = gdk_window_set_static_gravities (layout->bin_window, TRUE);
+  /* XXX: If we ever get multiple displays for GTK+, then gravity_works
+   *      will have to become a widget member. Right now we just
+   *      keep it as a global
+   */
+  gravity_works = gdk_window_set_static_gravities (layout->bin_window, TRUE);
 
   tmp_list = layout->children;
   while (tmp_list)
@@ -939,7 +944,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 
   if (dx > 0)
     {
-      if (layout->gravity_works)
+      if (gravity_works)
 	{
 	  gdk_window_resize (layout->bin_window,
 			     widget->allocation.width + dx,
@@ -963,7 +968,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
     }
   else if (dx < 0)
     {
-      if (layout->gravity_works)
+      if (gravity_works)
 	{
 	  gdk_window_move_resize (layout->bin_window,
 				  dx, 0,
@@ -988,7 +993,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 
   if (dy > 0)
     {
-      if (layout->gravity_works)
+      if (gravity_works)
 	{
 	  gdk_window_resize (layout->bin_window,
 			     widget->allocation.width,
@@ -1012,7 +1017,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
     }
   else if (dy < 0)
     {
-      if (layout->gravity_works)
+      if (gravity_works)
 	{
 	  gdk_window_move_resize (layout->bin_window,
 				  0, dy,
