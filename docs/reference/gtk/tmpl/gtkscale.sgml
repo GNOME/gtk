@@ -69,7 +69,7 @@ slider.
 </para>
 
 @scale: a #GtkScale.
-@draw_value: 
+@draw_value: a boolean. 
 
 
 <!-- ##### FUNCTION gtk_scale_set_value_pos ##### -->
@@ -83,29 +83,30 @@ Sets the position in which the current value is displayed.
 
 <!-- ##### FUNCTION gtk_scale_get_digits ##### -->
 <para>
-
+Gets the number of decimal places that are displayed in the value.
 </para>
 
-@scale: 
-@Returns: 
+@scale: a #GtkScale.
+@Returns: the number of decimal places that are displayed.
 
 
 <!-- ##### FUNCTION gtk_scale_get_draw_value ##### -->
 <para>
-
+Returns whether the current value is displayed as a string next to the
+slider.
 </para>
 
-@scale: 
-@Returns: 
+@scale: a #GtkScale.
+@Returns: whether the current value is displayed as a string.
 
 
 <!-- ##### FUNCTION gtk_scale_get_value_pos ##### -->
 <para>
-
+Gets the position in which the current value is displayed.
 </para>
 
-@scale: 
-@Returns: 
+@scale: a #GtkScale.
+@Returns: the position in which the current value is displayed.
 
 
 <!-- ##### SIGNAL GtkScale::format-value ##### -->

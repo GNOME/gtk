@@ -1277,17 +1277,17 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
  * @context_simple: A #GtkIMContextSimple
  * @data: the table 
  * @max_seq_len: Maximum length of a sequence in the table
- *               (cannot be greater than 7)
+ *               (cannot be greater than #GTK_MAX_COMPOSE_LEN)
  * @n_seqs: number of sequences in the table
  * 
- * Add an additional table to search to the input context.
- * Each row of the table consists of max_seq_len key symbols
- * followed by two guint16 interpreted as the high and low
- * words of a gunicode value. Tables are searched starting
+ * Adds an additional table to search to the input context.
+ * Each row of the table consists of @max_seq_len key symbols
+ * followed by two #guint16 interpreted as the high and low
+ * words of a #gunicode value. Tables are searched starting
  * from the last added.
  *
  * The table must be sorted in dictionary order on the
- * by numeric value of the key symbol fields. (Values beyond
+ * numeric value of the key symbol fields. (Values beyond
  * the length of the sequence should be zero.)
  **/
 void

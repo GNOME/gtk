@@ -845,7 +845,7 @@ gtk_window_get_title (GtkWindow *window)
  * Don't use this function. It sets the X Window System "class" and
  * "name" hints for a window.  According to the ICCCM, you should
  * always set these to the same value for all windows in an
- * application, and GTK sets them to that value by default, so calling
+ * application, and GTK+ sets them to that value by default, so calling
  * this function is sort of pointless. However, you may want to call
  * gtk_window_set_role() on each window in your application, for the
  * benefit of the session manager. Setting the role allows the window
@@ -1318,7 +1318,7 @@ gtk_window_activate_focus (GtkWindow *window)
  * Retrieves the current focused widget within the window.
  * Note that this is the widget that would have the focus
  * if the toplevel window focused; if the toplevel window
- * is not focused the  GTK_WIDGET_HAS_FOCUS(widget) will
+ * is not focused then  <literal>GTK_WIDGET_HAS_FOCUS (widget)</literal> will
  * not be %TRUE for the widget. 
  * 
  * Return value: the currently focused widget.
@@ -1406,8 +1406,8 @@ gtk_window_get_modal (GtkWindow *window)
  * Returns a list of all existing toplevel windows. The widgets
  * in the list are not individually referenced. If you want
  * to iterate through the list and perform actions involving
- * callbacks that might destroy the widgets, you MUST call
- * g_list_foreach (result, (GFunc)g_object_ref, NULL) first, and
+ * callbacks that might destroy the widgets, you <emphasis>must</emphasis> call
+ * <literal>g_list_foreach (result, (GFunc)g_object_ref, NULL)</literal> first, and
  * then unref all the widgets afterwards.
  * 
  * Return value: list of toplevel widgets
@@ -1683,7 +1683,7 @@ gtk_window_get_type_hint (GtkWindow *window)
  * @window: a #GtkWindow
  * @setting: whether to destroy @window with its transient parent
  * 
- * If @setting is TRUE, then destroying the transient parent of @window
+ * If @setting is %TRUE, then destroying the transient parent of @window
  * will also destroy @window itself. This is useful for dialogs that
  * shouldn't persist beyond the lifetime of the main window they're
  * associated with, for example.
@@ -2513,7 +2513,7 @@ gtk_window_resize (GtkWindow *window,
  * "configure_event" on the window and adjust your size-dependent
  * state to match the size delivered in the #GdkEventConfigure.
  *
- * Note 2: The returned size does NOT include the size of the window
+ * Note 2: The returned size does <emphasis>not</emphasis> include the size of the window
  * manager decorations (aka the window frame or border). Those
  * are not drawn by GTK+ and GTK+ has no reliable method of
  * determining their size.
@@ -2533,7 +2533,7 @@ gtk_window_resize (GtkWindow *window,
  * application cannot.
  *
  * In any case, if you insist on application-specified window
- * positioning, there's STILL a better way than doing it yourself -
+ * positioning, there's <emphasis>still</emphasis> a better way than doing it yourself -
  * gtk_window_set_position() will frequently handle the details
  * for you.
  * 
@@ -2607,8 +2607,8 @@ gtk_window_get_size (GtkWindow *window,
  * the bottom-right corner of the window border will be placed at that
  * reference point. So, to place a window in the bottom right corner
  * you would first set gravity to south east, then write:
- * gtk_window_move (window, gdk_screen_width () - window_width,
- * gdk_screen_height () - window_height).
+ * <literal>gtk_window_move (window, gdk_screen_width () - window_width,
+ * gdk_screen_height () - window_height)</literal>.
  *
  * The extended window manager hints specification at <ulink 
  * url="http://www.freedesktop.org/standards/wm-spec.html"
@@ -4100,7 +4100,7 @@ gtk_window_move_resize (GtkWindow *window)
    * or gtk_window_move().
    *
    * If the configure request has changed, we send off a new one.  To
-   * ensure GTK invariants are maintained (resize queue does what it
+   * ensure GTK+ invariants are maintained (resize queue does what it
    * should), we go ahead and size_allocate the requested size in this
    * function.
    *
@@ -4692,9 +4692,9 @@ gtk_window_expose (GtkWidget      *widget,
  *  you want gtk_window_set_decorated() instead, which tells the window
  *  manager whether to draw the window border.)
  * 
- * If this function is called on a window with setting of TRUE, before
+ * If this function is called on a window with setting of %TRUE, before
  * it is realized or showed, it will have a "frame" window around
- * widget->window, accessible in window->frame. Using the signal 
+ * @window->window, accessible in @window->frame. Using the signal 
  * frame_event you can recieve all events targeted at the frame.
  * 
  * This function is used by the linux-fb port to implement managed
@@ -4717,10 +4717,10 @@ gtk_window_set_has_frame (GtkWindow *window,
  * @window: a #GtkWindow
  * 
  * Accessor for whether the window has a frame window exterior to
- * widget->window. Gets the value set by gtk_window_set_has_frame ().
+ * @window->window. Gets the value set by gtk_window_set_has_frame ().
  *
  * Return value: %TRUE if a frame has been added to the window
- *   via gtk_widow_has_frame
+ *   via gtk_window_set_has_frame().
  **/
 gboolean
 gtk_window_get_has_frame (GtkWindow *window)
@@ -4743,7 +4743,7 @@ gtk_window_get_has_frame (GtkWindow *window)
  *  window border drawn by the window manager, which is the normal
  *  case when using the X Window system.)
  *
- * For windows with frames (see #gtk_window_set_has_frame) this function
+ * For windows with frames (see gtk_window_set_has_frame()) this function
  * can be used to change the size of the frame border.
  **/
 void

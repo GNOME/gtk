@@ -1,3 +1,7 @@
+2001-12-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkwindow.c, gtk/gtkimcontextsimple.c: Minor documentation tweaks.
+
 2001-12-28  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/x11/gdkproperty-x11.c, gdk/x11/gdkselection-x11.c: 

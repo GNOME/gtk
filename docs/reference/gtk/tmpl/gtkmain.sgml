@@ -279,7 +279,7 @@ the event:
   </para></listitem>
   </itemizedlist>
 
-  Another point of interest might be that all keypresses are first passed
+  Another point of interest might be that all key events are first passed
   through the key snooper functions if there are any. Read the description
   of gtk_key_snooper_install() if you need this feature.
 </para></listitem>
@@ -556,24 +556,26 @@ Removes the idle function identified by the user data.
 
 <!-- ##### FUNCTION gtk_input_add_full ##### -->
 <para>
-
+Registers a function to be called when a condition becomes true 
+on a file descriptor.
 </para>
 
-@source: 
-@condition: 
-@function: 
-@marshal: 
-@data: 
-@destroy: 
-@Returns: 
+@source: a file descriptor.
+@condition: the condition.
+@function: The function to call.
+@marshal: The marshaller to use instead of the function (if non-%NULL).
+@data: callback data passed to @function.
+@destroy: callback function to call with @data when the input
+  handler is removed, or %NULL.
+@Returns: A unique id for the event source; to be used with gtk_input_remove().
 
 
 <!-- ##### FUNCTION gtk_input_remove ##### -->
 <para>
-
+Removes the function with the given id.
 </para>
 
-@input_handler_id: 
+@input_handler_id: Identifies the function to remove.
 
 
 <!-- ##### MACRO GTK_PRIORITY_REDRAW ##### -->
@@ -636,31 +638,33 @@ This macro is deprecated. You should use %G_PRIORITY_LOW instead.
 
 <!-- ##### FUNCTION gtk_key_snooper_install ##### -->
 <para>
-
+Installs a key snooper function, which will get called on all key events
+before delivering them normally.
 </para>
 
-@snooper: 
-@func_data: 
-@Returns: 
+@snooper: a #GtkKeySnoopFunc. 
+@func_data: data to pass to @snooper.
+@Returns: a unique id for this key snooper for use with gtk_key_snooper_remove().
 
 
 <!-- ##### USER_FUNCTION GtkKeySnoopFunc ##### -->
 <para>
-
+Key snooper functions are called before normal event delivery.
+They can be used to implement custom key event handling.
 </para>
 
-@grab_widget: 
-@event: 
-@func_data: 
-@Returns: 
+@grab_widget: the widget to which the event will be delivered. 
+@event: the key event.
+@func_data: the @func_data supplied to gtk_key_snooper_install().
+@Returns: %TRUE to stop further processing of @event, %FALSE to continue.
 
 
 <!-- ##### FUNCTION gtk_key_snooper_remove ##### -->
 <para>
-
+Removes the key snooper function with the given id.
 </para>
 
-@snooper_handler_id: 
+@snooper_handler_id: Identifies the key snooper to remove.
 
 
 <!-- ##### FUNCTION gtk_get_current_event ##### -->
