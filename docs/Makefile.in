@@ -76,7 +76,7 @@ xinput_progs = @xinput_progs@
 
 info_TEXINFOS = gdk.texi gtk.texi
 
-EXTRA_DIST = texinfo.tex macros.texi
+EXTRA_DIST = texinfo.tex macros.texi Makefile.gtkfaq gtkfaq.sgml gtkfaq_fix
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 

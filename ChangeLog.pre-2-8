@@ -1,3 +1,12 @@
+Tue Jan 27 15:52:48 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_realize): The auto_shrink
+	policy of the floating window is now set to TRUE.  This fixes the
+	problem of the floating window being too big when the handlebox
+	child is small.
+	(gtk_handle_box_motion): Now we use GDK_POINTER_MOTION_HINT_MASK
+	to improve movement.
+
 Tue Jan 27 14:15:50 CST 1998 Shawn T. Amundson <amundson@gimp.org>
 
         * docs/gtkfaq.sgml: more additions/changes Tony Gale.

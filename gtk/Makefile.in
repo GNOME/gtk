@@ -92,7 +92,7 @@ libgtk_la_SOURCES = \
 	gtkcheckmenuitem.c	\
 	gtkclist.c		\
 	gtkcolorsel.c		\
-	gtkcombobox.c		\
+	gtkcombo.c		\
 	gtkcontainer.c		\
 	gtkcurve.c		\
 	gtkdata.c		\
@@ -145,6 +145,7 @@ libgtk_la_SOURCES = \
 	gtkseparator.c		\
 	gtksignal.c		\
 	gtkstyle.c		\
+	gtkstatusbar.c		\
 	gtktable.c		\
 	gtktext.c		\
 	gtktogglebutton.c	\
@@ -181,7 +182,7 @@ gtkinclude_HEADERS = \
 	gtkcheckmenuitem.h	\
 	gtkclist.h		\
 	gtkcolorsel.h		\
-	gtkcombobox.h		\
+	gtkcombo.h		\
 	gtkcontainer.h		\
 	gtkcurve.h		\
 	gtkdata.h		\
@@ -235,6 +236,7 @@ gtkinclude_HEADERS = \
 	gtkseparator.h		\
 	gtksignal.h		\
 	gtkstyle.h		\
+	gtkstatusbar.h		\
 	gtktable.h		\
 	gtktext.h		\
 	gtktogglebutton.h	\
@@ -346,7 +348,7 @@ libgtk_la_LIBADD =
 libgtk_la_OBJECTS =  gtkaccelerator.lo gtkadjustment.lo \
 gtkaspectframe.lo gtkalignment.lo gtkarrow.lo gtkbin.lo gtkbbox.lo \
 gtkbox.lo gtkbutton.lo gtkcheckbutton.lo gtkcheckmenuitem.lo \
-gtkclist.lo gtkcolorsel.lo gtkcombobox.lo gtkcontainer.lo gtkcurve.lo \
+gtkclist.lo gtkcolorsel.lo gtkcombo.lo gtkcontainer.lo gtkcurve.lo \
 gtkdata.lo gtkdialog.lo gtkdrawingarea.lo gtkentry.lo gtkeventbox.lo \
 gtkfilesel.lo gtkfixed.lo gtkframe.lo gtkgamma.lo gtkgc.lo \
 gtkhandlebox.lo gtkhbbox.lo gtkhbox.lo gtkhpaned.lo gtkhruler.lo \
@@ -357,8 +359,8 @@ gtkmenushell.lo gtkmisc.lo gtknotebook.lo gtkobject.lo gtkoptionmenu.lo \
 gtkpaned.lo gtkpixmap.lo gtkpreview.lo gtkprogressbar.lo \
 gtkradiobutton.lo gtkradiomenuitem.lo gtkrange.lo gtkrc.lo gtkruler.lo \
 gtkscale.lo gtkscrollbar.lo gtkscrolledwindow.lo gtkselection.lo \
-gtkseparator.lo gtksignal.lo gtkstyle.lo gtktable.lo gtktext.lo \
-gtktogglebutton.lo gtktoolbar.lo gtktooltips.lo gtktree.lo \
+gtkseparator.lo gtksignal.lo gtkstyle.lo gtkstatusbar.lo gtktable.lo \
+gtktext.lo gtktogglebutton.lo gtktoolbar.lo gtktooltips.lo gtktree.lo \
 gtktreeitem.lo gtktypeutils.lo gtkvbbox.lo gtkvbox.lo gtkviewport.lo \
 gtkvpaned.lo gtkvruler.lo gtkvscale.lo gtkvscrollbar.lo \
 gtkvseparator.lo gtkwidget.lo gtkwindow.lo fnmatch.lo
@@ -396,7 +398,7 @@ DEP_FILES =  .deps/fnmatch.P .deps/gtkaccelerator.P \
 .deps/gtkadjustment.P .deps/gtkalignment.P .deps/gtkarrow.P \
 .deps/gtkaspectframe.P .deps/gtkbbox.P .deps/gtkbin.P .deps/gtkbox.P \
 .deps/gtkbutton.P .deps/gtkcheckbutton.P .deps/gtkcheckmenuitem.P \
-.deps/gtkclist.P .deps/gtkcolorsel.P .deps/gtkcombobox.P \
+.deps/gtkclist.P .deps/gtkcolorsel.P .deps/gtkcombo.P \
 .deps/gtkcontainer.P .deps/gtkcurve.P .deps/gtkdata.P .deps/gtkdialog.P \
 .deps/gtkdrawingarea.P .deps/gtkentry.P .deps/gtkeventbox.P \
 .deps/gtkfilesel.P .deps/gtkfixed.P .deps/gtkframe.P .deps/gtkgamma.P \
@@ -412,14 +414,14 @@ DEP_FILES =  .deps/fnmatch.P .deps/gtkaccelerator.P \
 .deps/gtkradiomenuitem.P .deps/gtkrange.P .deps/gtkrc.P \
 .deps/gtkruler.P .deps/gtkscale.P .deps/gtkscrollbar.P \
 .deps/gtkscrolledwindow.P .deps/gtkselection.P .deps/gtkseparator.P \
-.deps/gtksignal.P .deps/gtkstyle.P .deps/gtktable.P .deps/gtktext.P \
-.deps/gtktogglebutton.P .deps/gtktoolbar.P .deps/gtktooltips.P \
-.deps/gtktree.P .deps/gtktreeitem.P .deps/gtktypeutils.P \
-.deps/gtkvbbox.P .deps/gtkvbox.P .deps/gtkviewport.P .deps/gtkvpaned.P \
-.deps/gtkvruler.P .deps/gtkvscale.P .deps/gtkvscrollbar.P \
-.deps/gtkvseparator.P .deps/gtkwidget.P .deps/gtkwindow.P \
-.deps/simple.P .deps/testgtk.P .deps/testinput.P .deps/testselection.P \
-.deps/testtree.P
+.deps/gtksignal.P .deps/gtkstatusbar.P .deps/gtkstyle.P \
+.deps/gtktable.P .deps/gtktext.P .deps/gtktogglebutton.P \
+.deps/gtktoolbar.P .deps/gtktooltips.P .deps/gtktree.P \
+.deps/gtktreeitem.P .deps/gtktypeutils.P .deps/gtkvbbox.P \
+.deps/gtkvbox.P .deps/gtkviewport.P .deps/gtkvpaned.P .deps/gtkvruler.P \
+.deps/gtkvscale.P .deps/gtkvscrollbar.P .deps/gtkvseparator.P \
+.deps/gtkwidget.P .deps/gtkwindow.P .deps/simple.P .deps/testgtk.P \
+.deps/testinput.P .deps/testselection.P .deps/testtree.P
 SOURCES = $(libgtk_la_SOURCES) testgtk.c testinput.c testselection.c simple.c testtree.c
 OBJECTS = $(libgtk_la_OBJECTS) testgtk.o testinput.o testselection.o simple.o testtree.o
 
@@ -671,10 +673,10 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 ../gtk/gtktypebuiltins.h: gtk.defs gentypeinfo.el
-	$(srcdir)/runelisp $(srcdir)/gentypeinfo.el idmac $< $@
+	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el idmac $< $@
 
 gtktypebuiltins.c: gtk.defs gentypeinfo.el
-	$(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
+	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
 .PHONY: files
 

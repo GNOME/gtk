@@ -212,7 +212,7 @@ gtk_handle_box_realize (GtkWidget *widget)
    */
 
   hb->float_window = gtk_window_new (GTK_WINDOW_DIALOG);
-  gtk_window_set_policy (GTK_WINDOW (hb->float_window), FALSE, FALSE, FALSE);
+  gtk_window_set_policy (GTK_WINDOW (hb->float_window), FALSE, FALSE, TRUE);
   gtk_container_border_width (GTK_CONTAINER (hb->float_window), 0);
   gtk_signal_connect (GTK_OBJECT (hb->float_window), "delete_event",
 		      (GtkSignalFunc) gtk_handle_box_delete_float,
@@ -237,6 +237,7 @@ gtk_handle_box_realize (GtkWidget *widget)
   attributes.x = 0;
   attributes.y = 0;
   attributes.event_mask |= (GDK_BUTTON1_MOTION_MASK
+			    | GDK_POINTER_MOTION_HINT_MASK
 			    | GDK_BUTTON_PRESS_MASK
 			    | GDK_BUTTON_RELEASE_MASK);
 
@@ -533,7 +534,9 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	  gtk_grab_add (widget);
 	  while (gdk_pointer_grab (widget->window,
 				   FALSE,
-				   GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+				   (GDK_BUTTON1_MOTION_MASK
+				    | GDK_POINTER_MOTION_HINT_MASK
+				    | GDK_BUTTON_RELEASE_MASK),
 				   NULL,
 				   hb->fleur_cursor,
 				   GDK_CURRENT_TIME) != 0); /* wait for success */
@@ -554,12 +557,29 @@ gtk_handle_box_motion (GtkWidget      *widget,
 {
   GtkHandleBox *hb;
   gint newx, newy;
+  gint ox, oy;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   hb = GTK_HANDLE_BOX (widget);
+
+  if (event->is_hint)
+    {
+      gdk_window_get_origin (widget->window, &ox, &oy);
+      gdk_window_get_pointer (widget->window, &newx, &newy, NULL);
+      newx += ox;
+      newy += oy;
+    }
+  else
+    {
+      newx = event->x_root;
+      newy = event->y_root;
+    }
+
+  newx -= hb->dragoff_x;
+  newy -= hb->dragoff_y;
 
   if (hb->is_being_dragged)
     {
@@ -581,7 +601,9 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
 	      while (gdk_pointer_grab (widget->window,
 				       FALSE,
-				       GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+				       (GDK_BUTTON1_MOTION_MASK
+					| GDK_POINTER_MOTION_HINT_MASK
+					| GDK_BUTTON_RELEASE_MASK),
 				       NULL,
 				       hb->fleur_cursor,
 				       GDK_CURRENT_TIME) != 0); /* wait for success */
@@ -611,7 +633,9 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
 	      while (gdk_pointer_grab (widget->window,
 				       FALSE,
-				       GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+				       (GDK_BUTTON1_MOTION_MASK
+					| GDK_POINTER_MOTION_HINT_MASK
+					| GDK_BUTTON_RELEASE_MASK),
 				       NULL,
 				       hb->fleur_cursor,
 				       GDK_CURRENT_TIME) != 0); /* wait for success */
