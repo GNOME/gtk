@@ -1,3 +1,8 @@
+Fri Jun 25 00:32:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreestore.c (gtk_tree_store_swap): Commit the change
+	which was mentioned below.
+
 2004-06-22  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:
