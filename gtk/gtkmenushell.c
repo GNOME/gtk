@@ -1070,6 +1070,20 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	      gtk_menu_shell_select_submenu_first (parent_menu_shell); 
 	    }
 	}
+      /* If there is no parent and the submenu is in the opposite direction
+       * to the menu, then make the PARENT direction wrap around to
+       * the bottom of the submenu.
+       */
+      else if (menu_shell->active_menu_item &&
+	       _gtk_menu_item_is_selectable (menu_shell->active_menu_item) &&
+	       GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu)
+	{
+	  GtkMenuShell *submenu = GTK_MENU_SHELL (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu);
+
+	  if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement !=
+	      GTK_MENU_SHELL_GET_CLASS (submenu)->submenu_placement)
+	    _gtk_menu_shell_select_last (submenu, TRUE);
+	}
       break;
       
     case GTK_MENU_DIR_CHILD:
