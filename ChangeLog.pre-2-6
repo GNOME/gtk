@@ -1,3 +1,11 @@
+Mon Feb 16 00:04:46 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_*): 
+	Split declaration and assignment of combo_box.
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): Remove a 
+	pointless cast
+
 Sun Feb 15 22:08:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_get_history): Add 
