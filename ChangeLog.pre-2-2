@@ -1,3 +1,17 @@
+Fri May 17 13:56:23 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkplug.c (gtk_plug_filter_func): Fix a missing
+ 	unref in the local/passive case. (#82067, Michael
+ 	Meeks)
+ 
+ 	* gtk/gtkplug.c (_gtk_plug_remove_from_socket): Fix
+ 	reference leak on the plug window.
+ 
+ 	* tests/testsocket.c (add_child): Fix memory leak.
+ 
+ 	* gtk/gtkdnd.c (gtk_drag_dest_site_destroy): Unref
+ 	the proxy window.
+ 
 Thu May 16 19:49:24 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkwindow.c (gtk_window_configure_event): Only 

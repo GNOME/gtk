@@ -1511,6 +1511,9 @@ gtk_drag_dest_site_destroy (gpointer data)
 {
   GtkDragDestSite *site = data;
 
+  if (site->proxy_window)
+    g_object_unref (site->proxy_window);
+    
   if (site->target_list)
     gtk_target_list_unref (site->target_list);
 
