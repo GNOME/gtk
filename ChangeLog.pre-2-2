@@ -1,3 +1,17 @@
+2002-11-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgeometry-win32.c (gdk_window_copy_area_scroll,
+	_gdk_window_move_resize_child): Call UpdateWindow() after
+	scrolling or moving/resizing the window. This causes a WM_PAINT
+	message to be sent to the window procedure. Improves scrolling a
+	lot, for instance in testgtk's "scrolled windows" dialog or
+	gtk-demo's "Text Widget".
+
+	Without calling UpdateWindow(), Windows generates a WM_PAINT only
+	when there is no other message in the queue. Thus, while you keep
+	moving the scrollbar slider and generating mouse messages, no
+	WM_PAINT messages are sent.
+
 Thu Nov  7 17:18:06 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_pixbuf): 

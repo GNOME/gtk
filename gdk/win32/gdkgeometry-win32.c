@@ -148,6 +148,7 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
                            NULL, /* out: update rect */
                            SW_INVALIDATE | SW_SCROLLCHILDREN))
         WIN32_API_FAILED ("ScrollWindowEx");
+      UpdateWindow (GDK_WINDOW_HWND (window));
     }
 
 #if 0 /* Not needed, ScrollWindowEx also scrolls the children. */
@@ -402,12 +403,14 @@ _gdk_window_move_resize_child (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  GDK_NOTE (MISC, g_print ("_gdk_window_move_resize_child: %p %dx%d@+%d+%d\n",
-			   GDK_WINDOW_HWND (window), width, height, x, y));
-
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
   obj = GDK_WINDOW_OBJECT (window);
   
+  GDK_NOTE (MISC, g_print ("_gdk_window_move_resize_child: %s@+%d+%d %dx%d@+%d+%d\n",
+			   gdk_win32_drawable_description (window),
+			   obj->x, obj->y,
+			   width, height, x, y));
+
   dx = x - obj->x;
   dy = y - obj->y;
   
@@ -539,8 +542,11 @@ _gdk_window_move_resize_child (GdkWindow *window,
                          new_info.x, new_info.y, 
                          new_info.width, new_info.height,
                          SWP_NOACTIVATE | SWP_NOZORDER | 
+                         (is_move ? 0 : SWP_NOMOVE) |
                          (is_resize ? 0 : SWP_NOSIZE)))
         WIN32_API_FAILED ("SetWindowPos");
+
+      UpdateWindow (GDK_WINDOW_HWND (window));
 
       tmp_list = obj->children;
       while (tmp_list)
@@ -1016,7 +1022,9 @@ gdk_window_tmp_reset_bg (GdkWindow *window)
 }
 
 static void
-gdk_window_clip_changed (GdkWindow *window, GdkRectangle *old_clip, GdkRectangle *new_clip)
+gdk_window_clip_changed (GdkWindow    *window,
+			 GdkRectangle *old_clip,
+			 GdkRectangle *new_clip)
 {
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
