@@ -1,5 +1,9 @@
 2004-11-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Make the size of 
+	the arrow depend only on the font size, not on the child 
+	allocation.  (#131345, Morten Welinder)
+
 	* configure.in: Require Pango 1.7.0 for PangoRenderer (#159061,
 	Crispin Flowerday)
 	

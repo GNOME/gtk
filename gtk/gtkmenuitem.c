@@ -725,6 +725,10 @@ gtk_menu_item_paint (GtkWidget    *widget,
 	  guint horizontal_padding;
 	  GtkTextDirection direction;
 	  GtkArrowType arrow_type;
+	  PangoContext *context;
+	  PangoFontMetrics *metrics;
+	  gint ascent, descent;
+	  PangoLayout *layout;
 
 	  direction = gtk_widget_get_direction (widget);
       
@@ -732,10 +736,17 @@ gtk_menu_item_paint (GtkWidget    *widget,
  				"horizontal_padding", &horizontal_padding,
  				NULL);
  	  
-	  gtk_widget_get_child_requisition (GTK_BIN (menu_item)->child,
-					    &child_requisition);
+	  context = gtk_widget_get_pango_context (GTK_BIN (menu_item)->child);
+	  metrics = pango_context_get_metrics (context, 
+					       GTK_WIDGET (GTK_BIN (menu_item)->child)->style->font_desc,
+					       pango_context_get_language (context));
+	  
+	  ascent = pango_font_metrics_get_ascent (metrics);
+	  descent = pango_font_metrics_get_descent (metrics);
+	  pango_font_metrics_unref (metrics);
+	  
+	  arrow_size = PANGO_PIXELS (ascent + descent) - 2 * widget->style->ythickness;
 
-	  arrow_size = child_requisition.height - 2 * widget->style->ythickness;
 	  arrow_extent = arrow_size * 0.8;
 	  
 	  shadow_type = GTK_SHADOW_OUT;
