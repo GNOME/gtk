@@ -1234,6 +1234,7 @@ gtk_scrolled_window_focus (GtkWidget        *widget,
 			   GtkDirectionType  direction)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  gboolean had_focus_child = GTK_CONTAINER (widget)->focus_child != NULL;
   
   if (scrolled_window->focus_out)
     {
@@ -1253,8 +1254,13 @@ gtk_scrolled_window_focus (GtkWidget        *widget,
 	return TRUE;
     }
 
-  gtk_widget_grab_focus (widget);
-  return TRUE;
+  if (!had_focus_child)
+    {
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 static void

@@ -824,7 +824,8 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel,
   GtkListStore *model;
   GtkTreeSelection *selection;
   gchar buffer[128];
-
+  gchar *p;
+      
   model = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->size_list)));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (fontsel->size_list));
 
@@ -847,26 +848,63 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel,
   else
     {
       GtkTreeIter iter;
+      gboolean found = FALSE;
       
       gtk_tree_model_get_iter_root (GTK_TREE_MODEL (model), &iter);
-      for (i = 0; i < G_N_ELEMENTS (font_sizes); i++)
+      for (i = 0; i < G_N_ELEMENTS (font_sizes) && !found; i++)
 	{
 	  if (font_sizes[i] * PANGO_SCALE == fontsel->size)
-	    set_cursor_to_iter (GTK_TREE_VIEW (fontsel->size_list), &iter);
+	    {
+	      set_cursor_to_iter (GTK_TREE_VIEW (fontsel->size_list), &iter);
+	      found = TRUE;
+	    }
 
 	  gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &iter);
 	}
-      
+
+      if (!found)
+	{
+	  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (fontsel->size_list));
+	  gtk_tree_selection_unselect_all (selection);
+	}
     }
 
-  sprintf (buffer, "%i", fontsel->size / PANGO_SCALE);
-  gtk_entry_set_text (GTK_ENTRY (fontsel->size_entry), buffer);
+  /* Set the entry to the new size, rounding to 1 digit,
+   * trimming of trailing 0's and a trailing period
+   */
+  sprintf (buffer, "%.1f", fontsel->size / (1.0 * PANGO_SCALE));
+  if (strchr (buffer, '.'))
+    {
+      p = buffer + strlen (buffer) - 1;
+      while (*p == '0')
+	p--;
+      if (*p == '.')
+	p--;
+      p[1] = '\0';
+    }
+
+  /* Compare, to avoid moving the cursor unecessarily */
+  if (strcmp (gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry)), buffer) != 0)
+    gtk_entry_set_text (GTK_ENTRY (fontsel->size_entry), buffer);
 }
 
 static void
 gtk_font_selection_select_best_size (GtkFontSelection *fontsel)
 {
   gtk_font_selection_load_font (fontsel);  
+}
+
+static void
+gtk_font_selection_set_size (GtkFontSelection *fontsel,
+			     gint              new_size)
+{
+  if (fontsel->size != new_size)
+    {
+      fontsel->size = new_size;
+
+      gtk_font_selection_show_available_sizes (fontsel, FALSE);      
+      gtk_font_selection_load_font (fontsel);
+    }
 }
 
 /* If the user hits return in the font size entry, we change to the new font
@@ -882,13 +920,9 @@ gtk_font_selection_size_activate (GtkWidget   *w,
   fontsel = GTK_FONT_SELECTION (data);
 
   text = gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry));
-  new_size = atoi (text) * PANGO_SCALE;
-  
-  if (fontsel->size != new_size)
-    {
-      fontsel->size = new_size;
-      gtk_font_selection_load_font (fontsel);
-    }
+  new_size = MAX (0.1, atof (text) * PANGO_SCALE + 0.5);
+
+  gtk_font_selection_set_size (fontsel, new_size);
 }
 
 /* This is called when a size is selected in the list. */
@@ -900,25 +934,13 @@ gtk_font_selection_select_size (GtkTreeSelection *selection,
   GtkTreeModel *model;
   GtkTreeIter iter;
   gint new_size;
-  gchar buffer[128];
   
   fontsel = GTK_FONT_SELECTION (data);
   
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
       gtk_tree_model_get (model, &iter, SIZE_COLUMN, &new_size, -1);
-      new_size *= PANGO_SCALE;
-  
-      if (fontsel->size != new_size)
-	{
-	  /* If the size was selected by the user we set the selected_size. */
-	  fontsel->size = new_size;
-
-	  sprintf (buffer, "%i", fontsel->size / PANGO_SCALE);
-	  gtk_entry_set_text (GTK_ENTRY (fontsel->size_entry), buffer);
-
-	  gtk_font_selection_load_font (fontsel);
-	}
+      gtk_font_selection_set_size (fontsel, new_size * PANGO_SCALE);
     }
 }
 
@@ -1025,6 +1047,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   PangoFontDescription *new_desc;
   GtkTreeModel *model;
   GtkTreeIter iter;
+  GtkTreeIter match_iter;
   gboolean valid;
   
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
@@ -1056,6 +1079,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
     return FALSE;
 
   fontsel->family = new_family;
+  set_cursor_to_iter (GTK_TREE_VIEW (fontsel->family_list), &iter);
   gtk_font_selection_show_available_styles (fontsel);
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->face_list));
@@ -1073,25 +1097,35 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 	new_face = face;
       
       if (!fallback_face)
-	fallback_face = face;
+	{
+	  fallback_face = face;
+	  match_iter = iter;
+	}
       
       pango_font_description_free (tmp_desc);
       g_object_unref (face);
       
       if (new_face)
-	break;
+	{
+	  match_iter = iter;
+	  break;
+	}
     }
 
   if (!new_face)
     new_face = fallback_face;
 
   fontsel->face = new_face;
-  gtk_font_selection_select_best_size (fontsel);
+  set_cursor_to_iter (GTK_TREE_VIEW (fontsel->face_list), &match_iter);  
 
+  gtk_font_selection_set_size (fontsel, pango_font_description_get_size (new_desc));
+  
   g_object_freeze_notify (G_OBJECT (fontsel));
   g_object_notify (G_OBJECT (fontsel), "font_name");
   g_object_notify (G_OBJECT (fontsel), "font");
   g_object_thaw_notify (G_OBJECT (fontsel));
+
+  pango_font_description_free (new_desc);
 
   return TRUE;
 }

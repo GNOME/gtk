@@ -1,3 +1,21 @@
+Mon Feb 18 18:27:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name): Select
+	the right item in the family list. (Reported by Mark Patton,
+	Patch from Satajyit Kanungo, #64240)
+
+	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name): Update
+	the size and face entry lists as well, fix memory leak.
+	(Also #64240)
+
+	* gtk/gtkfontsel.c (gtk_font_selection_show_available_sizes): 
+	Allow fractional sizes, unselect the selected row if none
+	matches.
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_focus): Fix
+	a bug where the scrolled window would always get focus
+	when focusing out of the child.
+
 2002-02-18  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkevents-win32.c : process WM_PAINT messages
