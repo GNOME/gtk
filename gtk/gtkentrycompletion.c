@@ -275,7 +275,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    PROP_MINIMUM_KEY_LENGTH,
-                                   g_param_spec_int ("minimum_key_length",
+                                   g_param_spec_int ("minimum-key-length",
                                                      P_("Minimum Key Length"),
                                                      P_("Minimum length of the search key in order to look up matches"),
                                                      0,
@@ -291,7 +291,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_TEXT_COLUMN,
-                                   g_param_spec_int ("text_column",
+                                   g_param_spec_int ("text-column",
                                                      P_("Text column"),
                                                      P_("The column of the model containing the strings."),
                                                      -1,
@@ -309,7 +309,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    **/
   g_object_class_install_property (object_class,
 				   PROP_INLINE_COMPLETION,
-				   g_param_spec_boolean ("inline_completion",
+				   g_param_spec_boolean ("inline-completion",
  							 P_("Inline completion"),
  							 P_("Whether the common prefix should be inserted automatically"),
  							 FALSE,
@@ -324,7 +324,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    **/
   g_object_class_install_property (object_class,
 				   PROP_POPUP_COMPLETION,
-				   g_param_spec_boolean ("popup_completion",
+				   g_param_spec_boolean ("popup-completion",
  							 P_("Popup completion"),
  							 P_("Whether the completions should be shown in a popup window"),
  							 TRUE,

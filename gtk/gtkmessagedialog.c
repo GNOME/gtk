@@ -120,7 +120,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   gobject_class->get_property = gtk_message_dialog_get_property;
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("message_border",
+					   g_param_spec_int ("message-border",
                                                              P_("Image/label border"),
                                                              P_("Width of border around the label and image in the message dialog"),
                                                              0,
@@ -136,14 +136,14 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * Since: 2.4
    */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("use_separator",
+					   g_param_spec_boolean ("use-separator",
 								 P_("Use separator"),
 								 P_("Whether to put a separator between the message dialog's text and the buttons"),
 								 FALSE,
 								 G_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_MESSAGE_TYPE,
-                                   g_param_spec_enum ("message_type",
+                                   g_param_spec_enum ("message-type",
 						      P_("Message Type"),
 						      P_("The type of message"),
 						      GTK_TYPE_MESSAGE_TYPE,

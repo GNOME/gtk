@@ -173,7 +173,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_RESIZE_GRIP,
-				   g_param_spec_boolean ("has_resize_grip",
+				   g_param_spec_boolean ("has-resize-grip",
  							 P_("Has Resize Grip"),
  							 P_("Whether the statusbar has a grip for resizing the toplevel"),
  							 TRUE,
@@ -200,7 +200,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		  G_TYPE_STRING);
 
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_enum ("shadow_type",
+                                           g_param_spec_enum ("shadow-type",
                                                               P_("Shadow type"),
                                                               P_("Style of bevel around the statusbar text"),
                                                               GTK_TYPE_SHADOW_TYPE,

@@ -196,7 +196,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_PACK_DIRECTION,
-				   g_param_spec_enum ("pack_direction",
+				   g_param_spec_enum ("pack-direction",
  						      P_("Pack direction"),
  						      P_("The pack direction of the menubar"),
  						      GTK_TYPE_PACK_DIRECTION,
@@ -213,7 +213,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_CHILD_PACK_DIRECTION,
-				   g_param_spec_enum ("child_pack_direction",
+				   g_param_spec_enum ("child-pack-direction",
  						      P_("Child Pack direction"),
  						      P_("The child pack direction of the menubar"),
  						      GTK_TYPE_PACK_DIRECTION,
@@ -222,7 +222,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_enum ("shadow_type",
+					   g_param_spec_enum ("shadow-type",
                                                               P_("Shadow type"),
                                                               P_("Style of bevel around the menubar"),
                                                               GTK_TYPE_SHADOW_TYPE,
@@ -230,7 +230,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                               G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("internal_padding",
+					   g_param_spec_int ("internal-padding",
 							     P_("Internal padding"),
 							     P_("Amount of border space between the menubar shadow and the menu items"),
 							     0,

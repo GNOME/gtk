@@ -157,7 +157,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_BAR_STYLE,
-                                   g_param_spec_enum ("bar_style",
+                                   g_param_spec_enum ("bar-style",
 						      P_("Bar style"),
 						      P_("Specifies the visual style of the bar in percentage mode (Deprecated)"),
 						      GTK_TYPE_PROGRESS_BAR_STYLE,
@@ -166,7 +166,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVITY_STEP,
-                                   g_param_spec_uint ("activity_step",
+                                   g_param_spec_uint ("activity-step",
 						      P_("Activity Step"),
 						      P_("The increment used for each iteration in activity mode (Deprecated)"),
 						      -G_MAXUINT,
@@ -176,7 +176,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVITY_BLOCKS,
-                                   g_param_spec_uint ("activity_blocks",
+                                   g_param_spec_uint ("activity-blocks",
 						      P_("Activity Blocks"),
 						      P_("The number of blocks which can fit in the progress bar area in activity mode (Deprecated)"),
 						      2,
@@ -186,7 +186,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_DISCRETE_BLOCKS,
-                                   g_param_spec_uint ("discrete_blocks",
+                                   g_param_spec_uint ("discrete-blocks",
 						      P_("Discrete Blocks"),
 						      P_("The number of discrete blocks in a progress bar (when shown in the discrete style)"),
 						      2,
@@ -206,7 +206,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   
   g_object_class_install_property (gobject_class,
 				   PROP_PULSE_STEP,
-				   g_param_spec_double ("pulse_step",
+				   g_param_spec_double ("pulse-step",
 							P_("Pulse Step"),
 							P_("The fraction of total progress to move the bouncing block when pulsed"),
 							0.0,

@@ -200,7 +200,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_ALPHA,
-                                   g_param_spec_boolean ("use_alpha", P_("Use alpha"), 
+                                   g_param_spec_boolean ("use-alpha", P_("Use alpha"), 
                                                          P_("Whether or not to give the color an alpha value"),
                                                          FALSE,
                                                          (G_PARAM_READABLE | G_PARAM_WRITABLE)));

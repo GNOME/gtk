@@ -105,7 +105,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_TEXT_COLUMN,
-                                   g_param_spec_int ("text_column",
+                                   g_param_spec_int ("text-column",
                                                      P_("Text Column"),
                                                      P_("A column in the data source model to get the strings from"),
                                                      -1,
@@ -123,7 +123,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_HAS_ENTRY,
-                                   g_param_spec_boolean ("has_entry",
+                                   g_param_spec_boolean ("has-entry",
 							 P_("Has Entry"),
 							 P_("If FALSE, don't allow to enter strings other than the chosen ones"),
 							 TRUE,

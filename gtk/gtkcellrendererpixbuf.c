@@ -143,7 +143,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_OPEN,
-				   g_param_spec_object ("pixbuf_expander_open",
+				   g_param_spec_object ("pixbuf-expander-open",
 							P_("Pixbuf Expander Open"),
 							P_("Pixbuf for open expander"),
 							GDK_TYPE_PIXBUF,
@@ -152,7 +152,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_CLOSED,
-				   g_param_spec_object ("pixbuf_expander_closed",
+				   g_param_spec_object ("pixbuf-expander-closed",
 							P_("Pixbuf Expander Closed"),
 							P_("Pixbuf for closed expander"),
 							GDK_TYPE_PIXBUF,
@@ -161,7 +161,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_ID,
-				   g_param_spec_string ("stock_id",
+				   g_param_spec_string ("stock-id",
 							P_("Stock ID"),
 							P_("The stock ID of the stock icon to render"),
 							NULL,
@@ -169,7 +169,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,
-				   g_param_spec_uint ("stock_size",
+				   g_param_spec_uint ("stock-size",
 						      P_("Size"),
 						      P_("The GtkIconSize value that specifies the size of the rendered icon"),
 						      0,
@@ -179,7 +179,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_DETAIL,
-				   g_param_spec_string ("stock_detail",
+				   g_param_spec_string ("stock-detail",
 							P_("Detail"),
 							P_("Render detail to pass to the theme engine"),
 							NULL,
@@ -195,7 +195,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    */
   g_object_class_install_property (object_class,
 				   PROP_FOLLOW_STATE,
-				   g_param_spec_boolean ("follow_state",
+				   g_param_spec_boolean ("follow-state",
  							 P_("Follow State"),
  							 P_("Whether the rendered pixbuf should be "
 							    "colorized according to the state"),

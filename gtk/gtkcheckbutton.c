@@ -96,7 +96,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   class->draw_indicator = gtk_real_check_button_draw_indicator;
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("indicator_size",
+					   g_param_spec_int ("indicator-size",
 							     P_("Indicator Size"),
 							     P_("Size of check or radio indicator"),
 							     0,
@@ -104,7 +104,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 							     INDICATOR_SIZE,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("indicator_spacing",
+					   g_param_spec_int ("indicator-spacing",
 							     P_("Indicator Spacing"),
 							     P_("Spacing around check or radio indicator"),
 							     0,

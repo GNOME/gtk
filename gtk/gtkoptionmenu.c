@@ -197,13 +197,13 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("indicator_size",
+					   g_param_spec_boxed ("indicator-size",
 							       P_("Indicator Size"),
 							       P_("Size of dropdown indicator"),
 							       GTK_TYPE_REQUISITION,
 							       G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("indicator_spacing",
+					   g_param_spec_boxed ("indicator-spacing",
 							       P_("Indicator Spacing"),
 							       P_("Spacing around indicator"),
 							       GTK_TYPE_BORDER,

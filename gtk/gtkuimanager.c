@@ -225,7 +225,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ADD_TEAROFFS,
-                                   g_param_spec_boolean ("add_tearoffs",
+                                   g_param_spec_boolean ("add-tearoffs",
 							 P_("Add tearoffs to menus"),
 							 P_("Whether tearoff menu items should be added to menus"),
                                                          FALSE,

@@ -211,7 +211,7 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
    
   g_object_class_install_property (gobject_class,
                                    PROP_FONT_NAME,
-                                   g_param_spec_string ("font_name",
+                                   g_param_spec_string ("font-name",
                                                         P_("Font name"),
                                                         P_("The X string that represents this font"),
                                                         NULL,
@@ -225,7 +225,7 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
 						       G_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_PREVIEW_TEXT,
-                                   g_param_spec_string ("preview_text",
+                                   g_param_spec_string ("preview-text",
                                                         P_("Preview text"),
                                                         P_("The text to display in order to demonstrate the selected font"),
                                                         PREVIEW_TEXT,

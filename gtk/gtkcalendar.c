@@ -496,7 +496,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_HEADING,
-                                   g_param_spec_boolean ("show_heading",
+                                   g_param_spec_boolean ("show-heading",
 							 P_("Show Heading"),
 							 P_("If TRUE, a heading is displayed"),
 							 TRUE,
@@ -511,7 +511,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_DAY_NAMES,
-                                   g_param_spec_boolean ("show_day_names",
+                                   g_param_spec_boolean ("show-day-names",
 							 P_("Show Day Names"),
 							 P_("If TRUE, day names are displayed"),
 							 TRUE,
@@ -525,7 +525,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  */
   g_object_class_install_property (gobject_class,
                                    PROP_NO_MONTH_CHANGE,
-                                   g_param_spec_boolean ("no_month_change",
+                                   g_param_spec_boolean ("no-month-change",
 							 P_("No Month Change"),
 							 P_("If TRUE, the selected month cannot be changed"),
 							 FALSE,
@@ -540,7 +540,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
  */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_WEEK_NUMBERS,
-                                   g_param_spec_boolean ("show_week_numbers",
+                                   g_param_spec_boolean ("show-week-numbers",
 							 P_("Show Week Numbers"),
 							 P_("If TRUE, week numbers are displayed"),
 							 FALSE,

@@ -127,7 +127,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE ));
   g_object_class_install_property (gobject_class,
                                    PROP_OBEY_CHILD,
-                                   g_param_spec_boolean ("obey_child",
+                                   g_param_spec_boolean ("obey-child",
                                                          P_("Obey child"),
                                                          P_("Force aspect ratio to match that of the frame's child"),
                                                          TRUE,

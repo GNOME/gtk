@@ -146,7 +146,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_INDICATOR,
-                                   g_param_spec_boolean ("draw_indicator",
+                                   g_param_spec_boolean ("draw-indicator",
 							 P_("Draw Indicator"),
 							 P_("If the toggle part of the button is displayed"),
 							 FALSE,

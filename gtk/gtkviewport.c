@@ -148,7 +148,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
-                                   g_param_spec_enum ("shadow_type",
+                                   g_param_spec_enum ("shadow-type",
 						      P_("Shadow type"),
 						      P_("Determines how the shadowed box around the viewport is drawn"),
 						      GTK_TYPE_SHADOW_TYPE,

@@ -130,14 +130,14 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_AS_RADIO,
-                                   g_param_spec_boolean ("draw_as_radio",
+                                   g_param_spec_boolean ("draw-as-radio",
                                                          P_("Draw as radio menu item"),
                                                          P_("Whether the menu item looks like a radio menu item"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("indicator_size",
+                                           g_param_spec_int ("indicator-size",
                                                              P_("Indicator Size")
 ,
                                                              P_("Size of check or radio indicator"),

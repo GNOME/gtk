@@ -321,7 +321,7 @@ gtk_range_class_init (GtkRangeClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_UPDATE_POLICY,
-                                   g_param_spec_enum ("update_policy",
+                                   g_param_spec_enum ("update-policy",
 						      P_("Update policy"),
 						      P_("How the range should be updated on the screen"),
 						      GTK_TYPE_UPDATE_TYPE,
@@ -345,7 +345,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                                          G_PARAM_READWRITE));
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("slider_width",
+					   g_param_spec_int ("slider-width",
 							     P_("Slider Width"),
 							     P_("Width of scrollbar or scale thumb"),
 							     0,
@@ -353,7 +353,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     14,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("trough_border",
+					   g_param_spec_int ("trough-border",
                                                              P_("Trough Border"),
                                                              P_("Spacing between thumb/steppers and outer trough bevel"),
                                                              0,
@@ -361,7 +361,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                                              1,
                                                              G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("stepper_size",
+					   g_param_spec_int ("stepper-size",
 							     P_("Stepper Size"),
 							     P_("Length of step buttons at ends"),
 							     0,
@@ -369,7 +369,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     14,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("stepper_spacing",
+					   g_param_spec_int ("stepper-spacing",
 							     P_("Stepper Spacing"),
 							     P_("Spacing between step buttons and thumb"),
                                                              0,
@@ -377,7 +377,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     0,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("arrow_displacement_x",
+					   g_param_spec_int ("arrow-displacement-x",
 							     P_("Arrow X Displacement"),
 							     P_("How far in the x direction to move the arrow when the button is depressed"),
 							     G_MININT,
@@ -385,7 +385,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     0,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("arrow_displacement_y",
+					   g_param_spec_int ("arrow-displacement-y",
 							     P_("Arrow Y Displacement"),
 							     P_("How far in the y direction to move the arrow when the button is depressed"),
 							     G_MININT,

@@ -298,7 +298,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    */  
   g_object_class_install_property (object_class,
 				   PROP_WEBSITE_LABEL,
-				   g_param_spec_string ("website_label",
+				   g_param_spec_string ("website-label",
 							P_("Website label"),
 							P_("The label for the link to the website of the program. If this is not set, it defaults to the URL"),
 							NULL,
@@ -367,7 +367,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    */  
   g_object_class_install_property (object_class,
 				   PROP_TRANSLATOR_CREDITS,
-				   g_param_spec_string ("translator_credits",
+				   g_param_spec_string ("translator-credits",
 							P_("Translator credits"),
 							P_("Credits to the translators. This string should be marked as translatable"),
 							NULL,
@@ -399,7 +399,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    */  
   g_object_class_install_property (object_class,
 				   PROP_LOGO_ICON_NAME,
-				   g_param_spec_string ("logo_icon_name",
+				   g_param_spec_string ("logo-icon-name",
 							P_("Logo Icon Name"),
 							P_("A named icon to use as the logo for the about box."),
 							NULL,
@@ -407,7 +407,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
   /* Style properties */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boxed ("link_color",
+                                           g_param_spec_boxed ("link-color",
                                                                P_("Link Color"),
                                                                P_("Color of hyperlinks"),
                                                                GDK_TYPE_COLOR,

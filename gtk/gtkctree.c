@@ -404,11 +404,11 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
   klass->tree_move = real_tree_move;
   klass->change_focus_row_expansion = change_focus_row_expansion;
 
-  gtk_object_add_arg_type ("GtkCTree::n_columns", /* overrides GtkCList::n_columns!! */
+  gtk_object_add_arg_type ("GtkCTree::n-columns", /* overrides GtkCList::n_columns!! */
 			   GTK_TYPE_UINT,
 			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
 			   ARG_N_COLUMNS);
-  gtk_object_add_arg_type ("GtkCTree::tree_column",
+  gtk_object_add_arg_type ("GtkCTree::tree-column",
 			   GTK_TYPE_UINT,
 			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
 			   ARG_TREE_COLUMN);
@@ -420,15 +420,15 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 			   GTK_TYPE_UINT,
 			   GTK_ARG_READWRITE,
 			   ARG_SPACING);
-  gtk_object_add_arg_type ("GtkCTree::show_stub",
+  gtk_object_add_arg_type ("GtkCTree::show-stub",
 			   GTK_TYPE_BOOL,
 			   GTK_ARG_READWRITE,
 			   ARG_SHOW_STUB);
-  gtk_object_add_arg_type ("GtkCTree::line_style",
+  gtk_object_add_arg_type ("GtkCTree::line-style",
 			   GTK_TYPE_CTREE_LINE_STYLE,
 			   GTK_ARG_READWRITE,
 			   ARG_LINE_STYLE);
-  gtk_object_add_arg_type ("GtkCTree::expander_style",
+  gtk_object_add_arg_type ("GtkCTree::expander-style",
 			   GTK_TYPE_CTREE_EXPANDER_STYLE,
 			   GTK_ARG_READWRITE,
 			   ARG_EXPANDER_STYLE);

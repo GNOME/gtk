@@ -134,10 +134,10 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
   class->widget_entered = gtk_tips_query_widget_entered;
   class->widget_selected = NULL;
 
-  gtk_object_add_arg_type ("GtkTipsQuery::emit_always", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EMIT_ALWAYS);
+  gtk_object_add_arg_type ("GtkTipsQuery::emit-always", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EMIT_ALWAYS);
   gtk_object_add_arg_type ("GtkTipsQuery::caller", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_CALLER);
-  gtk_object_add_arg_type ("GtkTipsQuery::label_inactive", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_INACTIVE);
-  gtk_object_add_arg_type ("GtkTipsQuery::label_no_tip", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_NO_TIP);
+  gtk_object_add_arg_type ("GtkTipsQuery::label-inactive", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_INACTIVE);
+  gtk_object_add_arg_type ("GtkTipsQuery::label-no-tip", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_NO_TIP);
 
   tips_query_signals[SIGNAL_START_QUERY] =
     gtk_signal_new ("start_query",

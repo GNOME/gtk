@@ -512,7 +512,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLBAR_STYLE,
-				   g_param_spec_enum ("toolbar_style",
+				   g_param_spec_enum ("toolbar-style",
  						      P_("Toolbar Style"),
  						      P_("How to draw the toolbar"),
  						      GTK_TYPE_TOOLBAR_STYLE,
@@ -520,7 +520,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
  						      G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_ARROW,
-				   g_param_spec_boolean ("show_arrow",
+				   g_param_spec_boolean ("show-arrow",
 							 P_("Show Arrow"),
 							 P_("If an arrow should be shown if the toolbar doesn't fit"),
 							 TRUE,
@@ -545,7 +545,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   /* style properties */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("space_size",
+					   g_param_spec_int ("space-size",
 							     P_("Spacer size"),
 							     P_("Size of spacers"),
 							     0,
@@ -554,7 +554,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							     G_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("internal_padding",
+					   g_param_spec_int ("internal-padding",
 							     P_("Internal padding"),
 							     P_("Amount of border space between the toolbar shadow and the buttons"),
 							     0,
@@ -563,7 +563,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                              G_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_enum ("space_style",
+					   g_param_spec_enum ("space-style",
 							      P_("Space style"),
 							      P_("Whether spacers are vertical lines or just blank"),
                                                               GTK_TYPE_TOOLBAR_SPACE_STYLE,
@@ -571,14 +571,14 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                               G_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_enum ("button_relief",
+					   g_param_spec_enum ("button-relief",
 							      P_("Button relief"),
 							      P_("Type of bevel around toolbar buttons"),
                                                               GTK_TYPE_RELIEF_STYLE,
                                                               GTK_RELIEF_NONE,
                                                               G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_enum ("shadow_type",
+                                           g_param_spec_enum ("shadow-type",
                                                               P_("Shadow type"),
                                                               P_("Style of bevel around the toolbar"),
                                                               GTK_TYPE_SHADOW_TYPE,

@@ -575,19 +575,19 @@ gtk_clist_class_init (GtkCListClass *klass)
   klass->set_cell_contents = set_cell_contents;
   klass->cell_size_request = cell_size_request;
 
-  gtk_object_add_arg_type ("GtkCList::n_columns",
+  gtk_object_add_arg_type ("GtkCList::n-columns",
 			   GTK_TYPE_UINT,
 			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
 			   ARG_N_COLUMNS);
-  gtk_object_add_arg_type ("GtkCList::shadow_type",
+  gtk_object_add_arg_type ("GtkCList::shadow-type",
 			   GTK_TYPE_SHADOW_TYPE,
 			   GTK_ARG_READWRITE,
 			   ARG_SHADOW_TYPE);
-  gtk_object_add_arg_type ("GtkCList::selection_mode",
+  gtk_object_add_arg_type ("GtkCList::selection-mode",
 			   GTK_TYPE_SELECTION_MODE,
 			   GTK_ARG_READWRITE,
 			   ARG_SELECTION_MODE);
-  gtk_object_add_arg_type ("GtkCList::row_height",
+  gtk_object_add_arg_type ("GtkCList::row-height",
 			   GTK_TYPE_UINT,
 			   GTK_ARG_READWRITE,
 			   ARG_ROW_HEIGHT);
@@ -595,15 +595,15 @@ gtk_clist_class_init (GtkCListClass *klass)
 			   GTK_TYPE_BOOL,
 			   GTK_ARG_READWRITE,
 			   ARG_REORDERABLE);
-  gtk_object_add_arg_type ("GtkCList::titles_active",
+  gtk_object_add_arg_type ("GtkCList::titles-active",
 			   GTK_TYPE_BOOL,
 			   GTK_ARG_READWRITE,
 			   ARG_TITLES_ACTIVE);
-  gtk_object_add_arg_type ("GtkCList::use_drag_icons",
+  gtk_object_add_arg_type ("GtkCList::use-drag-icons",
 			   GTK_TYPE_BOOL,
 			   GTK_ARG_READWRITE,
 			   ARG_USE_DRAG_ICONS);
-  gtk_object_add_arg_type ("GtkCList::sort_type",
+  gtk_object_add_arg_type ("GtkCList::sort-type",
 			   GTK_TYPE_SORT_TYPE,
 			   GTK_ARG_READWRITE,
 			   ARG_SORT_TYPE);  
@@ -870,11 +870,11 @@ gtk_clist_class_init (GtkCListClass *klass)
 				"scroll_horizontal", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
 				GTK_TYPE_FLOAT, 1.0);
+
   gtk_binding_entry_add_signal (binding_set, GDK_KP_End, 0,
 				"scroll_horizontal", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
 				GTK_TYPE_FLOAT, 1.0);
-
   
   gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0,
 				"undo_selection", 0);

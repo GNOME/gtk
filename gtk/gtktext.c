@@ -615,7 +615,7 @@ gtk_text_class_init (GtkTextClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_LINE_WRAP,
-                                   g_param_spec_boolean ("line_wrap",
+                                   g_param_spec_boolean ("line-wrap",
 							 P_("Line Wrap"),
 							 P_("Whether lines are wrapped at widget edges"),
 							 TRUE,
@@ -623,7 +623,7 @@ gtk_text_class_init (GtkTextClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_WORD_WRAP,
-                                   g_param_spec_boolean ("word_wrap",
+                                   g_param_spec_boolean ("word-wrap",
 							 P_("Word Wrap"),
 							 P_("Whether words are wrapped at widget edges"),
 							 FALSE,

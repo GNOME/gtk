@@ -141,21 +141,21 @@ gtk_combo_class_init (GtkComboClass * klass)
 
   g_object_class_install_property (gobject_class,
                                    PROP_ENABLE_ARROW_KEYS,
-                                   g_param_spec_boolean ("enable_arrow_keys",
+                                   g_param_spec_boolean ("enable-arrow-keys",
                                                          P_("Enable arrow keys"),
                                                          P_("Whether the arrow keys move through the list of items"),
                                                          TRUE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_ENABLE_ARROWS_ALWAYS,
-                                   g_param_spec_boolean ("enable_arrows_always",
+                                   g_param_spec_boolean ("enable-arrows-always",
                                                          P_("Always enable arrows"),
                                                          P_("Obsolete property, ignored"),
                                                          TRUE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_CASE_SENSITIVE,
-                                   g_param_spec_boolean ("case_sensitive",
+                                   g_param_spec_boolean ("case-sensitive",
                                                          P_("Case sensitive"),
                                                          P_("Whether list item matching is case sensitive"),
                                                          FALSE,
@@ -163,7 +163,7 @@ gtk_combo_class_init (GtkComboClass * klass)
 
   g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_EMPTY,
-                                   g_param_spec_boolean ("allow_empty",
+                                   g_param_spec_boolean ("allow-empty",
                                                          P_("Allow empty"),
 							 P_("Whether an empty value may be entered in this field"),
                                                          TRUE,
@@ -171,7 +171,7 @@ gtk_combo_class_init (GtkComboClass * klass)
 
   g_object_class_install_property (gobject_class,
                                    PROP_VALUE_IN_LIST,
-                                   g_param_spec_boolean ("value_in_list",
+                                   g_param_spec_boolean ("value-in-list",
                                                          P_("Value in list"),
                                                          P_("Whether entered values must already be present in the list"),
                                                          FALSE,

@@ -205,7 +205,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  G_TYPE_INT);
 
   gtk_widget_class_install_style_property_parser (widget_class,
-						  g_param_spec_enum ("selected_shadow_type",
+						  g_param_spec_enum ("selected-shadow-type",
 								     "Selected Shadow Type",
 								     "Shadow type when item is selected",
 								     GTK_TYPE_SHADOW_TYPE,
@@ -214,7 +214,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 						  gtk_rc_property_parse_enum);
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("horizontal_padding",
+					   g_param_spec_int ("horizontal-padding",
 							     "Horizontal Padding",
 							     "Padding to left and right of the menu item",
 							     0,
@@ -223,7 +223,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 							     G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("toggle_spacing",
+					   g_param_spec_int ("toggle-spacing",
 							     "Icon Spacing",
 							     "Space between icon and label",
 							     0,
@@ -232,7 +232,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 							     G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("arrow_spacing",
+					   g_param_spec_int ("arrow-spacing",
 							     "Arrow Spacing",
 							     "Space between label and arrow",
 							     0,

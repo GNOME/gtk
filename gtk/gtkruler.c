@@ -146,7 +146,7 @@ gtk_ruler_class_init (GtkRulerClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_MAX_SIZE,
-                                   g_param_spec_double ("max_size",
+                                   g_param_spec_double ("max-size",
 							P_("Max Size"),
 							P_("Maximum size of the ruler"),
 							-G_MAXDOUBLE,

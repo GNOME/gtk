@@ -110,7 +110,7 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_TEXT_COLUMN,
-                                   g_param_spec_int ("text_column",
+                                   g_param_spec_int ("text-column",
                                                      P_("Text Column"),
                                                      P_("A column in the data source model to get the strings from"),
                                                      -1,

@@ -119,7 +119,7 @@ gtk_curve_class_init (GtkCurveClass *class)
   
   g_object_class_install_property (gobject_class,
 				   PROP_CURVE_TYPE,
-				   g_param_spec_enum ("curve_type",
+				   g_param_spec_enum ("curve-type",
 						      P_("Curve type"),
 						      P_("Is this curve linear, spline interpolated, or free-form"),
 						      GTK_TYPE_CURVE_TYPE,
@@ -128,7 +128,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						      G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_MIN_X,
-				   g_param_spec_float ("min_x",
+				   g_param_spec_float ("min-x",
 						       P_("Minimum X"),
 						       P_("Minimum possible value for X"),
 						       -G_MAXFLOAT,
@@ -138,7 +138,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_MAX_X,
-				   g_param_spec_float ("max_x",
+				   g_param_spec_float ("max-x",
 						       P_("Maximum X"),
 						       P_("Maximum possible X value"),
 						       -G_MAXFLOAT,
@@ -148,7 +148,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_MIN_Y,
-				   g_param_spec_float ("min_y",
+				   g_param_spec_float ("min-y",
 						       P_("Minimum Y"),
 						       P_("Minimum possible value for Y"),
                                                        -G_MAXFLOAT,
@@ -158,7 +158,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       G_PARAM_WRITABLE));  
   g_object_class_install_property (gobject_class,
 				   PROP_MAX_Y,
-				   g_param_spec_float ("max_y",
+				   g_param_spec_float ("max-y",
 						       P_("Maximum Y"),
 						       P_("Maximum possible value for Y"),
 						       -G_MAXFLOAT,

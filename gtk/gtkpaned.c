@@ -245,14 +245,14 @@ gtk_paned_class_init (GtkPanedClass *class)
 						     G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (object_class,
 				   PROP_POSITION_SET,
-				   g_param_spec_boolean ("position_set",
+				   g_param_spec_boolean ("position-set",
 							 P_("Position Set"),
 							 P_("TRUE if the Position property should be used"),
 							 FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
 				   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("handle_size",
+					   g_param_spec_int ("handle-size",
 							     P_("Handle Size"),
 							     P_("Width of handle"),
 							     0,
@@ -269,7 +269,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    */
   g_object_class_install_property (object_class,
 				   PROP_MIN_POSITION,
-				   g_param_spec_int ("min_position",
+				   g_param_spec_int ("min-position",
 						     P_("Minimal Position"),
 						     P_("Smallest possible value for the \"position\" property"),
 						     0,
@@ -287,7 +287,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    */
   g_object_class_install_property (object_class,
 				   PROP_MAX_POSITION,
-				   g_param_spec_int ("max_position",
+				   g_param_spec_int ("max-position",
 						     P_("Maximal Position"),
 						     P_("Largest possible value for the \"position\" property"),
 						     0,

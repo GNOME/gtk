@@ -323,7 +323,7 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
    */
   g_object_class_install_property (object_class,
                                    PROP_CHILD_MODEL,
-                                   g_param_spec_object ("child_model",
+                                   g_param_spec_object ("child-model",
                                                         ("The child model"),
                                                         ("The model for the filtermodel to filter"),
                                                         GTK_TYPE_TREE_MODEL,
@@ -331,7 +331,7 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
 
   g_object_class_install_property (object_class,
                                    PROP_VIRTUAL_ROOT,
-                                   g_param_spec_boxed ("virtual_root",
+                                   g_param_spec_boxed ("virtual-root",
                                                        ("The virtual root"),
                                                        ("The virtual root (relative to the child model) for this filtermodel"),
                                                        GTK_TYPE_TREE_PATH,

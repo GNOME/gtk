@@ -203,7 +203,7 @@ gtk_image_class_init (GtkImageClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_ICON_SET,
-                                   g_param_spec_boxed ("icon_set",
+                                   g_param_spec_boxed ("icon-set",
                                                        P_("Icon set"),
                                                        P_("Icon set to display"),
                                                        GTK_TYPE_ICON_SET,
@@ -211,7 +211,7 @@ gtk_image_class_init (GtkImageClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_ICON_SIZE,
-                                   g_param_spec_int ("icon_size",
+                                   g_param_spec_int ("icon-size",
                                                      P_("Icon size"),
                                                      P_("Symbolic size to use for stock icon, icon set or named icon"),
                                                      0, G_MAXINT,
@@ -228,7 +228,7 @@ gtk_image_class_init (GtkImageClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_PIXEL_SIZE,
-				   g_param_spec_int ("pixel_size",
+				   g_param_spec_int ("pixel-size",
 						     P_("Pixel size"),
 						     P_("Pixel size to use for named icon"),
 						     -1, G_MAXINT,
@@ -237,7 +237,7 @@ gtk_image_class_init (GtkImageClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_PIXBUF_ANIMATION,
-                                   g_param_spec_object ("pixbuf_animation",
+                                   g_param_spec_object ("pixbuf-animation",
                                                         P_("Animation"),
                                                         P_("GdkPixbufAnimation to display"),
                                                         GDK_TYPE_PIXBUF_ANIMATION,
@@ -253,7 +253,7 @@ gtk_image_class_init (GtkImageClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ICON_NAME,
-                                   g_param_spec_string ("icon_name",
+                                   g_param_spec_string ("icon-name",
                                                         P_("Icon Name"),
                                                         P_("The name of the icon from the icon theme"),
                                                         NULL,
@@ -261,7 +261,7 @@ gtk_image_class_init (GtkImageClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_STORAGE_TYPE,
-                                   g_param_spec_enum ("storage_type",
+                                   g_param_spec_enum ("storage-Type",
                                                       P_("Storage type"),
                                                       P_("The representation being used for image data"),
                                                       GTK_TYPE_IMAGE_TYPE,

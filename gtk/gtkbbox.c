@@ -117,7 +117,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
    */
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child_min_width",
+					   g_param_spec_int ("child-min-width",
 							     P_("Minimum child width"),
 							     P_("Minimum width of buttons inside the box"),
 							     0,
@@ -126,7 +126,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child_min_height",
+					   g_param_spec_int ("child-min-height",
 							     P_("Minimum child height"),
 							     P_("Minimum height of buttons inside the box"),
 							     0,
@@ -135,7 +135,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child_internal_pad_x",
+					   g_param_spec_int ("child-internal-pad-x",
 							     P_("Child internal width padding"),
 							     P_("Amount to increase child's size on either side"),
 							     0,
@@ -144,7 +144,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child_internal_pad_y",
+					   g_param_spec_int ("child-internal-pad-y",
 							     P_("Child internal height padding"),
 							     P_("Amount to increase child's size on the top and bottom"),
 							     0,
@@ -153,7 +153,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     G_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_LAYOUT_STYLE,
-                                   g_param_spec_enum ("layout_style",
+                                   g_param_spec_enum ("layout-style",
                                                       P_("Layout style"),
                                                       P_("How to layout the buttons in the box. Possible values are default, spread, edge, start and end"),
 						      GTK_TYPE_BUTTON_BOX_STYLE,

@@ -144,7 +144,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_SEPARATOR,
-                                   g_param_spec_boolean ("has_separator",
+                                   g_param_spec_boolean ("has-separator",
 							 P_("Has separator"),
 							 P_("The dialog has a separator bar above its buttons"),
                                                          TRUE,
@@ -170,7 +170,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 		  G_TYPE_NONE, 0);
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("content_area_border",
+					   g_param_spec_int ("content-area-border",
                                                              P_("Content area border"),
                                                              P_("Width of border around the main dialog area"),
                                                              0,
@@ -178,7 +178,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              2,
                                                              G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("button_spacing",
+                                           g_param_spec_int ("button-spacing",
                                                              P_("Button spacing"),
                                                              P_("Spacing between buttons"),
                                                              0,
@@ -187,7 +187,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              G_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("action_area_border",
+                                           g_param_spec_int ("action-area-border",
                                                              P_("Action area border"),
                                                              P_("Width of border around the button area at the bottom of the dialog"),
                                                              0,

@@ -564,7 +564,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_WRAP_WIDTH,
-                                   g_param_spec_int ("wrap_width",
+                                   g_param_spec_int ("wrap-width",
                                                      P_("Wrap width"),
                                                      P_("Wrap width for layouting the items in a grid"),
                                                      0,
@@ -587,7 +587,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_ROW_SPAN_COLUMN,
-                                   g_param_spec_int ("row_span_column",
+                                   g_param_spec_int ("row-span-column",
                                                      P_("Row span column"),
                                                      P_("TreeModel column containing the row span values"),
                                                      -1,
@@ -609,7 +609,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_COLUMN_SPAN_COLUMN,
-                                   g_param_spec_int ("column_span_column",
+                                   g_param_spec_int ("column-span-column",
                                                      P_("Column span column"),
                                                      P_("TreeModel column containing the column span values"),
                                                      -1,
@@ -674,7 +674,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   
   g_object_class_install_property (object_class,
                                    PROP_FOCUS_ON_CLICK,
-                                   g_param_spec_boolean ("focus_on_click",
+                                   g_param_spec_boolean ("focus-on-click",
 							 P_("Focus on click"),
 							 P_("Whether the combo box grabs focus when it is clicked with the mouse"),
 							 TRUE,

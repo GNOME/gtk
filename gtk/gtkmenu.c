@@ -575,7 +575,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_LEFT_ATTACH,
-					      g_param_spec_int ("left_attach",
+					      g_param_spec_int ("left-attach",
                                                                P_("Left Attach"),
                                                                P_("The column number to attach the left side of the child to"),
 								-1, INT_MAX, -1,
@@ -583,7 +583,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_RIGHT_ATTACH,
-					      g_param_spec_int ("right_attach",
+					      g_param_spec_int ("right-attach",
                                                                P_("Right Attach"),
                                                                P_("The column number to attach the right side of the child to"),
 								-1, INT_MAX, -1,
@@ -591,7 +591,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_TOP_ATTACH,
-					      g_param_spec_int ("top_attach",
+					      g_param_spec_int ("top-attach",
                                                                P_("Top Attach"),
                                                                P_("The row number to attach the top of the child to"),
 								-1, INT_MAX, -1,
@@ -599,7 +599,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_BOTTOM_ATTACH,
-					      g_param_spec_int ("bottom_attach",
+					      g_param_spec_int ("bottom-attach",
                                                                P_("Bottom Attach"),
                                                                P_("The row number to attach the bottom of the child to"),
 								-1, INT_MAX, -1,
