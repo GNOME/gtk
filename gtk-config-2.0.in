@@ -13,7 +13,7 @@ exec_prefix_set=no
 usage()
 {
 	cat <<EOF
-Usage: gtk2-config [OPTIONS] [LIBRARIES]
+Usage: gtk-config-2.0 [OPTIONS] [LIBRARIES]
 Options:
 	[--prefix[=DIR]]
 	[--exec-prefix[=DIR]]
@@ -96,8 +96,8 @@ if test "$lib_gthread" = "yes"; then
 fi
 
 if test "$echo_cflags" = "yes"; then
-      includes=-I@includedir@/gtk2
-      echo -I@libdir@/gtk2/include $includes $glib_cflags @PANGO_CFLAGS@ @more_cflags@ 
+      includes=-I@includedir@/gtk-2.0
+      echo -I@libdir@/gtk-2.0/include $includes $glib_cflags @PANGO_CFLAGS@ @more_cflags@ 
 fi
 
 if test "$echo_libs" = "yes"; then
