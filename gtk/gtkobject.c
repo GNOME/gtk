@@ -19,7 +19,6 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include "gtkobject.h"
 #include "gtksignal.h"
 
@@ -138,7 +137,7 @@ gtk_object_init_type (void)
 
 #ifdef G_ENABLE_DEBUG
   if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
-    ATEXIT (gtk_object_debug);
+    g_atexit (gtk_object_debug);
 #endif	/* G_ENABLE_DEBUG */
 }
 

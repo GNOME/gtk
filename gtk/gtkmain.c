@@ -452,8 +452,7 @@ gtk_init (int	 *argc,
   
   /* Register an exit function to make sure we are able to cleanup.
    */
-  if (ATEXIT (gtk_exit_func))
-    g_warning ("unable to register exit function");
+  g_atexit (gtk_exit_func);
   
   /* Set the 'initialized' flag.
    */

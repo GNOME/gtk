@@ -571,8 +571,7 @@ gdk_init (int	 *argc,
   button_number[0] = -1;
   button_number[1] = -1;
   
-  if (ATEXIT (gdk_exit_func))
-    g_warning ("unable to register exit function");
+  g_atexit (gdk_exit_func);
   
   gdk_visual_init ();
   gdk_window_init ();

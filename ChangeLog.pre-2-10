@@ -1,3 +1,14 @@
+Tue Sep  8 05:19:51 1998  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdk.c (gdk_init): use g_atexit() instead of ATEXIT.
+
+	* gtk/gtkmain.c (gtk_init): use g_atexit() instead of ATEXIT.
+
+	* gtk/gtkobject.c (gtk_object_init_type): use g_atexit() instead of
+	ATEXIT.
+	
+	* ltconfig: use GLib's ltconfig which honours lcc.
+
 Mon Sep  7 20:09:23 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in: comment the -std1 check and save LIBS properly
