@@ -1,3 +1,7 @@
+Wed May 12 00:30:57 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/gcs.sgml: Additions.
+
 2004-05-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkenums.sgml: Document the selection modes here,

@@ -445,11 +445,15 @@ drawn with alternating on and off segments of the
 lengths specified in @dash_list. The manner in
 which the on and off segments are drawn is determined
 by the @line_style value of the GC. (This can
-be changed with gdk_gc_set_line_attributes())
+be changed with gdk_gc_set_line_attributes().)
+</para>
+<para>
+The @dash_offset defines the phase of the pattern, specifying how many
+pixels into the dash-list the pattern should actually begin.
 </para>
 
 @gc: a #GdkGC.
-@dash_offset: the
+@dash_offset: the phase of the dash pattern.
 @dash_list: an array of dash lengths.
 @n: the number of elements in @dash_list.
 
