@@ -604,7 +604,7 @@ gdk_window_destroy_notify (GdkWindow *window)
       if (private->window_type == GDK_WINDOW_FOREIGN)
 	gdk_window_internal_destroy (window, FALSE, FALSE);
       else
-	g_warning ("Window %#lx unexpectedly destroyed", private->xwindow);
+	g_warning ("GdkWindow %#lx unexpectedly destroyed", private->xwindow);
     }
   
   gdk_xid_table_remove (private->xwindow);

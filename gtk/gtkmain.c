@@ -331,16 +331,15 @@ gtk_main ()
 
 	  quit_functions = g_list_remove_link (quit_functions, quit_functions);
 
-	  if ((quitf->main_level &&
-	       quitf->main_level != main_level) ||
-	      gtk_quit_invoke_function (quitf) == FALSE)
+	  if ((quitf->main_level && quitf->main_level != main_level) ||
+	      gtk_quit_invoke_function (quitf))
 	    {
-	      g_list_free (tmp_list);
-	      gtk_quit_destroy (quitf);
+	      reinvoke_list = g_list_prepend (reinvoke_list, quitf);
 	    }
 	  else
 	    {
-	      reinvoke_list = g_list_prepend (reinvoke_list, quitf);
+	      g_list_free (tmp_list);
+	      gtk_quit_destroy (quitf);
 	    }
 	}
       if (reinvoke_list)
