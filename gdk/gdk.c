@@ -382,8 +382,9 @@ gdk_init (int	 *argc,
       gdk_progclass[0] = toupper (gdk_progclass[0]);
     }
   class_hint->res_class = gdk_progclass;
-  XSetClassHint(gdk_display, gdk_leader_window, class_hint);
-  XSetCommand(gdk_display, gdk_leader_window, argv_orig, argc_orig);
+  XmbSetWMProperties (gdk_display, gdk_leader_window,
+                      NULL, NULL, argv_orig, argc_orig, 
+                      NULL, NULL, class_hint);
   XFree (class_hint);
   
   for (i = 0; i < argc_orig; i++)
@@ -871,6 +872,43 @@ gdk_screen_height_mm (void)
   return_val = DisplayHeightMM (gdk_display, gdk_screen);
   
   return return_val;
+}
+
+/*
+ *--------------------------------------------------------------
+ * gdk_set_sm_client_id
+ *
+ *   Set the SM_CLIENT_ID property on the WM_CLIENT_LEADER window
+ *   so that the window manager can save our state using the
+ *   X11R6 ICCCM session management protocol. A NULL value should 
+ *   be set following disconnection from the session manager to
+ *   remove the SM_CLIENT_ID property.
+ *
+ * Arguments:
+ * 
+ *   "sm_client_id" specifies the client id assigned to us by the
+ *   session manager or NULL to remove the property.
+ *
+ * Results:
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+void
+gdk_set_sm_client_id (const gchar* sm_client_id)
+{
+  if (sm_client_id && strcmp (sm_client_id, ""))
+    {
+      XChangeProperty (gdk_display, gdk_leader_window,
+	   	       gdk_atom_intern ("SM_CLIENT_ID", FALSE),
+		       XA_STRING, 8, PropModeReplace,
+		       sm_client_id, strlen(sm_client_id));
+    }
+  else
+     XDeleteProperty (gdk_display, gdk_leader_window,
+	   	      gdk_atom_intern ("SM_CLIENT_ID", FALSE));
 }
 
 void

@@ -233,6 +233,8 @@ gdk_window_init (void)
   gdk_xid_table_insert (&gdk_root_window, &gdk_root_parent);
 }
 
+static GdkAtom wm_client_leader_atom = GDK_NONE;
+
 GdkWindow*
 gdk_window_new (GdkWindow     *parent,
 		GdkWindowAttr *attributes,
@@ -446,6 +448,14 @@ gdk_window_new (GdkWindow     *parent,
   XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
 
   XSetWMHints (private->xdisplay, private->xwindow, &wm_hints);
+
+  if (!wm_client_leader_atom)
+     wm_client_leader_atom = gdk_atom_intern ("WM_CLIENT_LEADER", FALSE);
+
+  XChangeProperty (private->xdisplay, private->xwindow,
+	   	   wm_client_leader_atom,
+		   XA_WINDOW, 32, PropModeReplace,
+		   (guchar*) &gdk_leader_window, 1);
 
   if (attributes_mask & GDK_WA_TITLE)
     title = attributes->title;

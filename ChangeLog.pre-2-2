@@ -1,3 +1,19 @@
+Sun Jan 17 17:56:33 1999  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from Felix Bellaby <felix@pooh.u-net.com>
+
+	* gdk/gdk.c: Use XmbSetWMProperties to set
+	the class/command on the loader window so that the
+	client machine is also set in the same place.
+	(For X11R5 sesssion management compatibility)
+
+	* gdk/gdk.c: (gdk_set_sm_client_id) Implementation
+	of function to set the session manager client ID.
+
+	* gdk/gdkwindow.c (gdk_window_new): Set 
+	WM_CLIENT_LEADER propertiy on all windows pointing
+	back to GDK's leader window.
+
 Sun Jan 17 12:01:57 1999  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkrc.c (gtk_rc_style_init): Allow a bg_pixmap
