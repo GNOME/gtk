@@ -1795,6 +1795,7 @@ gdk_event_translate (GdkDisplay *display,
 
 	  switch (xkb_event->any.xkb_type)
 	    {
+	    case XkbNewKeyboardNotify:
 	    case XkbMapNotify:
 	      _gdk_keymap_keys_changed (display);
 
