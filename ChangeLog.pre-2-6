@@ -1,3 +1,15 @@
+Mon Sep  8 21:44:20 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes from David Hampton <hampton@employees.org> via gtk-devel-list.
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_elt_get_path): fix
+	the call to gtk_tree_model_filter_add_root,
+	(gtk_tree_model_filter_row_changed): bail out if c_path is not above
+	the virtual root, allow building levels on the second try to convert
+	the child path to a filter path,
+	(gtk_tree_model_filter_convert_iter_to_child_iter): pass the virtual
+	root when calling gtk_tree_model_filter_elt_get_path.
+
 2003-09-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (update_node): Fix a C99ism.  (#121640,

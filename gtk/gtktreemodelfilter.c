@@ -584,9 +584,7 @@ gtk_tree_model_filter_elt_get_path (FilterLevel *level,
 
   if (root)
     {
-      real_path = gtk_tree_path_copy (root);
-
-      gtk_tree_model_filter_add_root (real_path, path);
+      real_path = gtk_tree_model_filter_add_root (path, root);
       gtk_tree_path_free (path);
       return real_path;
     }
@@ -1019,6 +1017,12 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
   else
     gtk_tree_model_get_iter (c_model, &real_c_iter, c_path);
 
+  /* is this node above the virtual root? */
+  if (filter->priv->virtual_root
+      && (gtk_tree_path_get_depth (filter->priv->virtual_root)
+          >= gtk_tree_path_get_depth (c_path)))
+    goto done;
+
   /* what's the requested state? */
   requested_state = gtk_tree_model_filter_visible (filter, &real_c_iter);
 
@@ -1096,7 +1100,7 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
   if (!path)
     path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
                                                                   c_path,
-                                                                  FALSE,
+                                                                  TRUE,
                                                                   TRUE);
 
   g_return_if_fail (path != NULL);
@@ -2505,7 +2509,7 @@ gtk_tree_model_filter_convert_iter_to_child_iter (GtkTreeModelFilter *filter,
 
       path = gtk_tree_model_filter_elt_get_path (filter_iter->user_data,
                                                  filter_iter->user_data2,
-                                                 NULL);
+                                                 filter->priv->virtual_root);
       gtk_tree_model_get_iter (filter->priv->child_model, child_iter, path);
       gtk_tree_path_free (path);
     }
