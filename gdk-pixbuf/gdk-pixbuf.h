@@ -97,7 +97,7 @@ int          gdk_pixbuf_get_rowstride       (GdkPixbuf *pixbuf);
 
 /* Reference counting */
 
-void gdk_pixbuf_ref (GdkPixbuf *pixbuf);
+GdkPixbuf *gdk_pixbuf_ref (GdkPixbuf *pixbuf);
 void gdk_pixbuf_unref (GdkPixbuf *pixbuf);
 
 /* Wrap a libart pixbuf */
@@ -234,7 +234,7 @@ GdkPixbuf *gdk_pixbuf_composite_color_simple (GdkPixbuf      *src,
 
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char *filename);
 
-void gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation);
+GdkPixbufAnimation *gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation);
 void gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation);
 
 /* General (presently empty) initialization hooks, primarily for gnome-libs */

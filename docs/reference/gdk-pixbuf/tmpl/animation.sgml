@@ -73,6 +73,7 @@ Animations as multi-frame structures.
 </para>
 
 @animation: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_animation_unref ##### -->

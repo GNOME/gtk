@@ -26,6 +26,7 @@ Functions to perform reference counting on a #GdkPixbuf.
   </para>
 
 @pixbuf: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_unref ##### -->

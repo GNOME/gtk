@@ -41,14 +41,17 @@
  *
  * Adds a reference to a pixbuf.  It must be released afterwards using
  * gdk_pixbuf_unref().
+ *
+ * Return value: The same as the @pixbuf argument.
  **/
-void
+GdkPixbuf *
 gdk_pixbuf_ref (GdkPixbuf *pixbuf)
 {
-	g_return_if_fail (pixbuf != NULL);
-	g_return_if_fail (pixbuf->ref_count > 0);
+	g_return_val_if_fail (pixbuf != NULL, NULL);
+	g_return_val_if_fail (pixbuf->ref_count > 0, NULL);
 
 	pixbuf->ref_count++;
+	return pixbuf;
 }
 
 /**

@@ -1,5 +1,13 @@
+2000-01-21  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf.c (gdk_pixbuf_ref): Return the same pixbuf
+	as the input parameter.
+
+	* gdk-pixbuf/gdk-pixbuf-animation.c (gdk_pixbuf_animation_ref):
+	Return the same animation as the input parameter.
+
 2000-01-16  Elliot Lee  <sopwith@redhat.com>
-	
+
 	* gdk-pixbuf/Makefile.am: Don't link against libgnomecanvaspixbuf.la
 
 2000-01-16  Federico Mena Quintero  <federico@helixcode.com>
@@ -80,22 +88,22 @@
 	loading.
 	* gdk-pixbuf/io-gif.c (image_load_increment): I think the
 	ref-counting mess is finally fixed.  Added progressive animation
-	loading. 
+	loading.
 	(gif_get_lzw): remove memory_leak
 
 	* doc/tmpl/gdk-pixbuf-loader.sgml: much longer long description
-	added. 
+	added.
 
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf/pixops/pixops.c (pixops_process): Fix computation of end of run indices.
-	  
+
 	* gdk-pixbuf/pixops/pixops.c: Fix double increments when dest_channels == 4.
 	  (Pointed out by Tomas Ogren)
 
 2000-01-05  Mark Crichton  <crichton@gimp.org>
 
-	* gdk-pixbuf/gdk-pixbuf-loader.c (gdk_pixbuf_loader_eat_header_write): 
+	* gdk-pixbuf/gdk-pixbuf-loader.c (gdk_pixbuf_loader_eat_header_write):
 	Return 0 if gdk_pixbuf_load_loader_module returns FALSE.
 
 2000-01-05 Elliot Lee <sopwith@redhat.com>
@@ -104,7 +112,7 @@
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
 
 	* doc/Makefile.am doc/gdk-pixbuf-sections.txt
-	  doc/gdk-pixbuf.sgml doc/tmpl/scaling.sgml: 
+	  doc/gdk-pixbuf.sgml doc/tmpl/scaling.sgml:
 	Added scaling functions into gtk-doc framework.
 
 	* gdk-pixbuf/gdk-pixbuf-scale.c: Documentation fixes.
@@ -124,9 +132,9 @@
 	* gdk-pixbuf/gdk-pixbuf-io.h: Change the order of the update func
 	to make it more compatible with the rest of GTK.  Added animation
 	framework for progressive loading.
- 
+
 	* gdk-pixbuf/io-bmp.c (image_begin_load): Modified to handle new
-	system.  
+	system.
 	* gdk-pixbuf/io-ico.c (image_begin_load): ditto
 	* gdk-pixbuf/io-png.c (image_begin_load): ditto
 	* gdk-pixbuf/io-ras.c (image_begin_load): ditto
@@ -153,10 +161,10 @@
 	* gdk-pixbuf/gdk-pixbuf.h gdk-pixbuf/gdk-pixbuf-scale.c:
 	Nice wrapper routines for the code in pixops that operate
 	on pixbufs instead of raw data.
-	
+
 	* gdk-pixbuf/testpixbuf-scale: Test program for scaling
 	routines.
-	
+
 2000-01-05  Jonathan Blandford  <jrb@redhat.com>
 
 	* doc/tmpl/animation.sgml: Documentation changes.

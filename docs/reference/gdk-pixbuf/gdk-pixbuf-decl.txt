@@ -224,7 +224,7 @@ GdkPixbuf *pixbuf
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_ref</NAME>
-<RETURNS>void  </RETURNS>
+<RETURNS>GdkPixbuf  *</RETURNS>
 GdkPixbuf *pixbuf
 </FUNCTION>
 <FUNCTION>
@@ -331,7 +331,7 @@ const char *filename
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_animation_ref</NAME>
-<RETURNS>void  </RETURNS>
+<RETURNS>GdkPixbufAnimation  *</RETURNS>
 GdkPixbufAnimation *animation
 </FUNCTION>
 <FUNCTION>

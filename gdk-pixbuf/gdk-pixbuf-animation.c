@@ -117,14 +117,17 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
  *
  * Adds a reference to an animation.  It must be released afterwards using
  * gdk_pixbuf_animation_unref().
+ *
+ * Return value: The same as the @animation argument.
  **/
-void
+GdkPixbufAnimation *
 gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation)
 {
-	g_return_if_fail (animation != NULL);
-	g_return_if_fail (animation->ref_count > 0);
+	g_return_val_if_fail (animation != NULL, NULL);
+	g_return_val_if_fail (animation->ref_count > 0, NULL);
 
 	animation->ref_count++;
+	return animation;
 }
 
 /**
