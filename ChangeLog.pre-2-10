@@ -1,3 +1,15 @@
+Fri Jan 22 07:33:44 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkvscale.c (gtk_vscale_pos_trough): take value_spacing into
+	account for GTK_POS_LEFT.
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_set_group): use
+	gtk_toggle_button_set_active () to set the new state.
+	(gtk_radio_button_new): only _set_group if group != NULL.
+	(gtk_radio_button_clicked): reference the widget.
+	(gtk_radio_button_init): make radio buttons active upon
+	startup.
+
 Thu Jan 21 17:13:12 1999  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gtk/gtkselection.c:

@@ -14,6 +14,10 @@
 include "testgtkrc2"
 
 #include "/usr/local/share/themes/Pixmap/gtk/gtkrc"
+#include "/usr/local/share/themes/Redmond95/gtk/gtkrc"
+#include "/usr/local/share/themes/Metal/gtk/gtkrc"
+#include "/usr/local/share/themes/Notif/gtk/gtkrc"
+#include "/usr/local/share/themes/Default/gtk/gtkrc"
 
 pixmap_path "."
 

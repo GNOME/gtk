@@ -398,7 +398,7 @@ gtk_vscale_pos_trough (GtkVScale *vscale,
       switch (scale->value_pos)
         {
         case GTK_POS_LEFT:
-          *x = (gtk_scale_get_value_width (scale) +
+          *x = (gtk_scale_get_value_width (scale) + SCALE_CLASS (scale)->value_spacing +
                 (widget->allocation.width - widget->requisition.width) / 2);
           break;
         case GTK_POS_RIGHT:

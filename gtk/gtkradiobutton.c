@@ -99,7 +99,12 @@ static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
   GTK_WIDGET_SET_FLAGS (radio_button, GTK_NO_WINDOW);
+
+  GTK_TOGGLE_BUTTON (radio_button)->active = TRUE;
+
   radio_button->group = g_slist_prepend (NULL, radio_button);
+
+  gtk_widget_set_state (GTK_WIDGET (radio_button), GTK_STATE_ACTIVE);
 }
 
 static void
@@ -146,12 +151,12 @@ gtk_radio_button_get_arg (GtkObject      *object,
 
 void
 gtk_radio_button_set_group (GtkRadioButton *radio_button,
-			    GSList *group)
+			    GSList         *group)
 {
   g_return_if_fail (radio_button != NULL);
   g_return_if_fail (GTK_IS_RADIO_BUTTON (radio_button));
   g_return_if_fail (!g_slist_find (group, radio_button));
-  
+
   if (radio_button->group)
     {
       GSList *slist;
@@ -183,11 +188,8 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 	  tmp_button->group = radio_button->group;
 	}
     }
-  else
-    {
-      GTK_TOGGLE_BUTTON (radio_button)->active = TRUE;
-      gtk_widget_set_state (GTK_WIDGET (radio_button), GTK_STATE_ACTIVE);
-    }
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), group == NULL);
 }
 
 GtkWidget*
@@ -197,7 +199,8 @@ gtk_radio_button_new (GSList *group)
 
   radio_button = gtk_type_new (gtk_radio_button_get_type ());
 
-  gtk_radio_button_set_group (radio_button, group);
+  if (group)
+    gtk_radio_button_set_group (radio_button, group);
 
   return GTK_WIDGET (radio_button);
 }
@@ -293,6 +296,8 @@ gtk_radio_button_clicked (GtkButton *button)
   toggle_button = GTK_TOGGLE_BUTTON (button);
   toggled = FALSE;
 
+  gtk_widget_ref (GTK_WIDGET (button));
+
   if (toggle_button->active)
     {
       tmp_button = NULL;
@@ -303,7 +308,7 @@ gtk_radio_button_clicked (GtkButton *button)
 	  tmp_button = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_button->active && (tmp_button != toggle_button))
+	  if (tmp_button->active && tmp_button != toggle_button)
 	    break;
 
 	  tmp_button = NULL;
@@ -348,6 +353,8 @@ gtk_radio_button_clicked (GtkButton *button)
     gtk_toggle_button_toggled (toggle_button);
 
   gtk_widget_queue_draw (GTK_WIDGET (button));
+
+  gtk_widget_unref (GTK_WIDGET (button));
 }
 
 static void
