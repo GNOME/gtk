@@ -1,3 +1,10 @@
+Wed Oct  2 17:36:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.[ch] gdk/x11/gdkevents-x11.c: Add
+	gdk_screen_set_screen()/_get_screen() which (by evil
+	hacks) work for for heap allocated events and
+	fall back gracefully for stack allocated events.
+
 Wed Oct  2 08:47:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.[ch]: Privately export:

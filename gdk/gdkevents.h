@@ -470,6 +470,10 @@ void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);
 
+void       gdk_event_set_screen (GdkEvent  *event,
+				 GdkScreen *screen);
+GdkScreen *gdk_event_get_screen (GdkEvent  *event);
+
 void	  gdk_set_show_events		(gboolean	 show_events);
 gboolean  gdk_get_show_events		(void);
 

@@ -256,6 +256,7 @@ gdk_event_put (GdkEvent *event)
 }
 
 static GMemChunk *event_chunk = NULL;
+static GHashTable *event_hash = NULL;
 
 GdkEvent*
 _gdk_event_new (void)
@@ -263,17 +264,30 @@ _gdk_event_new (void)
   GdkEventPrivate *new_event;
   
   if (event_chunk == NULL)
-    event_chunk = g_mem_chunk_new ("events",
-				   sizeof (GdkEventPrivate),
-				   4096,
-				   G_ALLOC_AND_FREE);
+    {
+      event_chunk = g_mem_chunk_new ("events",
+				     sizeof (GdkEventPrivate),
+				     4096,
+				     G_ALLOC_AND_FREE);
+      event_hash = g_hash_table_new (g_direct_hash, NULL);
+    }
   
   new_event = g_chunk_new (GdkEventPrivate, event_chunk);
   new_event->flags = 0;
+  new_event->screen = NULL;
+
+  g_hash_table_insert (event_hash, new_event, GUINT_TO_POINTER (1));
   
   return (GdkEvent*) new_event;
 }
 
+static gboolean
+gdk_event_is_allocated (GdkEvent *event)
+{
+  if (event_hash)
+    return g_hash_table_lookup (event_hash, event) != NULL;
+}
+ 
 /**
  * gdk_event_copy:
  * @event: a #GdkEvent
@@ -399,7 +413,8 @@ gdk_event_free (GdkEvent *event)
     default:
       break;
     }
-  
+
+  g_hash_table_remove (event_chunk, event);
   g_mem_chunk_free (event_chunk, event);
 }
 
@@ -736,6 +751,59 @@ gdk_event_get_axis (GdkEvent   *event,
     return FALSE;
 
   return gdk_device_get_axis (device, axes, axis_use, value);
+}
+
+/**
+ * gdk_event_set_screen:
+ * @event: a #GdkEvent
+ * @screen: a #GdkScreen
+ * 
+ * Sets the screen for @event to @screen. The event must
+ * have been allocated by GTK+, for instance, by
+ * gdk_event_copy().
+ **/
+void
+gdk_event_set_screen (GdkEvent  *event,
+		      GdkScreen *screen)
+{
+  GdkEventPrivate *private;
+  
+  g_return_if_fail (gdk_event_is_allocated (event));
+
+  private = (GdkEventPrivate *)event;
+  
+  private->screen = screen;
+}
+
+/**
+ * gdk_event_get_screen:
+ * @event: a #GdkEvent
+ * 
+ * Returns the screen for the event. The screen is
+ * typically the screen for event->any.window, but
+ * for events such as mouse events, it is the screen
+ * where the the pointer was when the event occurs -
+ * that is, the screen which has the root window 
+ * to which event->motion.x_root and
+ * event->motion.y_root are relative.
+ * 
+ * Return value: the screen for the event
+ **/
+GdkScreen *
+gdk_event_get_screen (GdkEvent *event)
+{
+  if (gdk_event_is_allocated (event))
+    {
+      GdkEventPrivate *private = (GdkEventPrivate *)event;
+
+      if (private->screen)
+	return private->screen;
+    }
+
+  if (event->any.window)
+    return gdk_drawable_get_screen (event->any.window);
+
+  return NULL;
 }
 
 /**

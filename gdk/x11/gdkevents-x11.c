@@ -499,6 +499,19 @@ generate_focus_event (GdkWindow *window,
   gdk_event_put (&event);
 }
 
+static void
+set_screen_from_root (GdkDisplay *display,
+		      GdkEvent   *event,
+		      Window      xrootwin)
+{
+  GdkScreen *screen;
+
+  screen = _gdk_x11_display_screen_for_xrootwin (display, xrootwin);
+  g_assert (screen);
+
+  gdk_event_set_screen (event, screen);
+}
+
 static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     GdkEvent   *event,
@@ -817,6 +830,9 @@ gdk_event_translate (GdkDisplay *display,
 	  event->scroll.y_root = (gfloat)xevent->xbutton.y_root;
 	  event->scroll.state = (GdkModifierType) xevent->xbutton.state;
 	  event->scroll.device = display->core_pointer;
+
+	  set_screen_from_root (display, event, xevent->xbutton.root);
+	  
           break;
           
         default:
@@ -832,6 +848,8 @@ gdk_event_translate (GdkDisplay *display,
 	  event->button.button = xevent->xbutton.button;
 	  event->button.device = display->core_pointer;
 	  
+	  set_screen_from_root (display, event, xevent->xbutton.root);
+
 	  _gdk_event_button_generate (display, event);
           break;
 	}
@@ -872,6 +890,8 @@ gdk_event_translate (GdkDisplay *display,
       event->button.state = (GdkModifierType) xevent->xbutton.state;
       event->button.button = xevent->xbutton.button;
       event->button.device = display->core_pointer;
+
+      set_screen_from_root (display, event, xevent->xbutton.root);
       
       break;
       
@@ -901,6 +921,8 @@ gdk_event_translate (GdkDisplay *display,
       event->motion.state = (GdkModifierType) xevent->xmotion.state;
       event->motion.is_hint = xevent->xmotion.is_hint;
       event->motion.device = display->core_pointer;
+      
+      set_screen_from_root (display, event, xevent->xmotion.root);
       
       break;
       
@@ -953,6 +975,8 @@ gdk_event_translate (GdkDisplay *display,
       event->crossing.y = xevent->xcrossing.y + yoffset;
       event->crossing.x_root = xevent->xcrossing.x_root;
       event->crossing.y_root = xevent->xcrossing.y_root;
+      
+      set_screen_from_root (display, event, xevent->xcrossing.root);
       
       /* Translate the crossing mode into Gdk terms.
        */
@@ -1040,6 +1064,8 @@ gdk_event_translate (GdkDisplay *display,
       event->crossing.y = xevent->xcrossing.y + yoffset;
       event->crossing.x_root = xevent->xcrossing.x_root;
       event->crossing.y_root = xevent->xcrossing.y_root;
+      
+      set_screen_from_root (display, event, xevent->xcrossing.root);
       
       /* Translate the crossing mode into Gdk terms.
        */
