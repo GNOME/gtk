@@ -1,3 +1,7 @@
+Sun Aug  8 01:28:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk.def: Remove duplicate gtk_tree_view_get_hover_expand.
+
 Sun Aug  8 01:23:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk.def: Remove the static function gtk_menu_get_private.
