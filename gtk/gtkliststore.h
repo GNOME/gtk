@@ -21,6 +21,7 @@
 #define __GTK_LIST_STORE_H__
 
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtktreesortable.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,8 +43,11 @@ struct _GtkListStore
   /*< private >*/
   gint stamp;
   gpointer root;
-  GSList *tail;
+  gpointer tail;
+  GList *sort_list;
   gint n_columns;
+  gint sort_column_id;
+  GtkTreeSortOrder order;
   GType *column_headers;
   gint length;
 };

@@ -291,8 +291,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
                         window,
                         state, shadow,
                         cell_area, widget, "cellradio",
-                        cell_area->x + x_offset,
-                        cell_area->y + y_offset,
+                        cell_area->x + x_offset + cell->xpad,
+                        cell_area->y + y_offset + cell->ypad,
                         width, height);
     }
   else
@@ -301,8 +301,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
                        window,
                        state, shadow,
                        cell_area, widget, "cellcheck",
-                       cell_area->x + x_offset,
-                       cell_area->y + y_offset,
+                       cell_area->x + x_offset + cell->xpad,
+                       cell_area->y + y_offset + cell->ypad,
                        width, height);
     }
 }

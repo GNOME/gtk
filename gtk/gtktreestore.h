@@ -40,6 +40,7 @@ struct _GtkTreeStore
 {
   GObject parent;
 
+  GList *sort_list;
   gint stamp;
   gpointer root;
   gpointer last;

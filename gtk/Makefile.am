@@ -344,6 +344,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtktreemodel.c		\
 	gtktreemodelsort.c	\
 	gtktreeselection.c	\
+	gtktreesortable.c	\
 	gtktreestore.c		\
 	gtktreeview.c		\
 	gtktreeviewcolumn.c	\

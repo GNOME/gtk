@@ -15,10 +15,13 @@
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
+ * 
+ * This file contains code shared between GtkTreeStore and GtkListStore.  Please
+ * do not use it.
  */
 
 #include "gtktreedatalist.h"
-
+#include <string.h>
 static GMemChunk *tree_chunk = NULL;
 #define TREE_CHUNK_PREALLOCS 64
 
@@ -250,3 +253,106 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
   return new_list;
 }
 
+static gint
+gtk_tree_data_list_compare_func (GtkTreeModel *model,
+				 GtkTreeIter  *a,
+				 GtkTreeIter  *b,
+				 gpointer      user_data)
+{
+  gint column = GPOINTER_TO_INT (user_data);
+  GType type = gtk_tree_model_get_column_type (model, column);
+  GValue a_value = {0, };
+  GValue b_value = {0, };
+  gint retval;
+  
+  gtk_tree_model_get_value (model, a, column, &a_value);
+  gtk_tree_model_get_value (model, b, column, &b_value);
+
+  switch (G_TYPE_FUNDAMENTAL (type))
+    {
+    case G_TYPE_BOOLEAN:
+      retval = (g_value_get_int (&a_value) < g_value_get_int (&b_value));
+      break;
+    case G_TYPE_CHAR:
+      retval = (g_value_get_char (&a_value) < g_value_get_char (&b_value));
+      break;
+    case G_TYPE_UCHAR:
+      retval = (g_value_get_uchar (&a_value) < g_value_get_uchar (&b_value));
+      break;
+    case G_TYPE_INT:
+      retval = (g_value_get_int (&a_value) < g_value_get_int (&b_value));
+      break;
+    case G_TYPE_UINT:
+      retval = (g_value_get_uint (&a_value) < g_value_get_uint (&b_value));
+      break;
+    case G_TYPE_ENUM:
+      /* this is somewhat bogus. */
+      retval = (g_value_get_int (&a_value) < g_value_get_int (&b_value));
+      break;
+    case G_TYPE_FLAGS:
+      retval = (g_value_get_uint (&a_value) < g_value_get_uint (&b_value));
+      break;
+    case G_TYPE_FLOAT:
+      retval = (g_value_get_float (&a_value) < g_value_get_float (&b_value));
+      break;
+    case G_TYPE_DOUBLE:
+      retval = (g_value_get_double (&a_value) < g_value_get_double (&b_value));
+      break;
+    case G_TYPE_STRING:
+      retval = strcmp (g_value_get_string (&a_value), g_value_get_string (&b_value));
+      break;
+    case G_TYPE_POINTER:
+    case G_TYPE_BOXED:
+    case G_TYPE_OBJECT:
+    default:
+      g_warning ("Attempting to sort on invalid type %s\n", g_type_name (type));
+      retval = FALSE;
+      break;
+    }
+
+  g_value_unset (&a_value);
+  g_value_unset (&b_value);
+
+  return retval;
+}
+
+
+GList *
+_gtk_tree_data_list_header_new (gint   n_columns,
+				GType *types)
+{
+  GList *retval = NULL;
+
+  gint i;
+
+  for (i = 0; i < n_columns; i ++)
+    {
+      GtkTreeDataSortHeader *header;
+
+      header = g_new (GtkTreeDataSortHeader, 1);
+
+      retval = g_list_prepend (retval, header);
+      header->sort_column_id = i;
+      header->func = gtk_tree_data_list_compare_func;
+      header->destroy = NULL;
+      header->data = GINT_TO_POINTER (i);
+    }
+  return g_list_reverse (retval);
+}
+
+void
+_gtk_tree_data_list_header_free (GList *list)
+{
+  GList *tmp;
+
+  for (tmp = list; tmp; tmp = tmp->next)
+    {
+      GtkTreeDataSortHeader *header = (GtkTreeDataSortHeader *) tmp->data;
+
+      if (header->destroy)
+	(* header->destroy) (header->data);
+
+      g_free (header);
+    }
+  g_list_free (list);
+}

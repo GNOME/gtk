@@ -23,6 +23,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include "gtktreesortable.h"
 
 typedef struct _GtkTreeDataList GtkTreeDataList;
 struct _GtkTreeDataList
@@ -40,6 +41,13 @@ struct _GtkTreeDataList
   } data;
 };
 
+typedef struct _GtkTreeDataSortHeader
+{
+  gint sort_column_id;
+  GtkTreeIterCompareFunc func;
+  gpointer data;
+  GtkDestroyNotify destroy;
+} GtkTreeDataSortHeader;
 
 GtkTreeDataList *_gtk_tree_data_list_alloc          (void);
 void             _gtk_tree_data_list_free           (GtkTreeDataList *list,
@@ -54,5 +62,9 @@ void             _gtk_tree_data_list_value_to_node  (GtkTreeDataList *list,
 GtkTreeDataList *_gtk_tree_data_list_node_copy      (GtkTreeDataList *list,
                                                      GType            type);
 
+/* Header code */
+GList *_gtk_tree_data_list_header_new  (gint   n_columns,
+					GType *types);
+void   _gtk_tree_data_list_header_free (GList *header_list);
 
 #endif /* __GTK_TREE_DATA_LIST_H__ */

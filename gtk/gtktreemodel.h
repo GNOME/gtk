@@ -217,6 +217,9 @@ void gtk_tree_model_has_child_toggled (GtkTreeModel *tree_model,
 				       GtkTreeIter  *iter);
 void gtk_tree_model_deleted           (GtkTreeModel *tree_model,
 				       GtkTreePath  *path);
+void gtk_tree_model_reordered         (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       gint         *new_order);
 
 
 

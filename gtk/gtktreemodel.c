@@ -42,7 +42,7 @@ gtk_tree_model_get_type (void)
 {
   static GtkType tree_model_type = 0;
 
-  if (!tree_model_type)
+  if (! tree_model_type)
     {
       static const GTypeInfo tree_model_info =
       {
@@ -68,9 +68,9 @@ gtk_tree_model_get_type (void)
 static void
 gtk_tree_model_base_init (gpointer g_class)
 {
-  static gboolean initted = FALSE;
+  static gboolean initialized = FALSE;
 
-  if (! initted)
+  if (! initialized)
     {
       g_signal_newc ("changed",
 		     GTK_TYPE_TREE_MODEL,
@@ -107,7 +107,16 @@ gtk_tree_model_base_init (gpointer g_class)
 		     gtk_marshal_VOID__BOXED,
 		     G_TYPE_NONE, 1,
 		     GTK_TYPE_TREE_PATH);
-      initted = TRUE;
+      g_signal_newc ("reordered",
+		     GTK_TYPE_TREE_MODEL,
+		     G_SIGNAL_RUN_LAST,
+		     G_STRUCT_OFFSET (GtkTreeModelIface, reordered),
+		     NULL, NULL,
+		     gtk_marshal_VOID__BOXED_POINTER,
+		     G_TYPE_NONE, 2,
+		     GTK_TYPE_TREE_PATH,
+		     G_TYPE_POINTER);
+      initialized = TRUE;
     }
 }
 
@@ -1055,6 +1064,18 @@ gtk_tree_model_deleted (GtkTreeModel *tree_model,
   g_return_if_fail (path != NULL);
 
   g_signal_emit_by_name (tree_model, "deleted", path);
+}
+
+void
+gtk_tree_model_reordered (GtkTreeModel *tree_model,
+			  GtkTreePath  *path,
+			  gint         *new_order)
+{
+  g_return_if_fail (tree_model != NULL);
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (new_order != NULL);
+
+  g_signal_emit_by_name (tree_model, "reordered", path, new_order);
 }
 
 

@@ -1,3 +1,21 @@
+Thu Mar 22 19:27:34 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
+	fix braino.
+	* gtk/gtktreesortable.[ch]: New interface to add cleanup sortable
+	support.
+
+	* gtk/gtktreeview.c: Addition of initial sortable support.
+
+	* gtk/gtktreestore.c: Addition of initial sortable support.
+
+	* gtk/gtkliststore.c: Addition of initial sortable support.
+
+	* gtk/gtkmarshal.list: yet another marshaller.
+
+	* gtk/gtktreedatallist.[ch]: shared code between the store models
+	for handling sorting headers.
+
 2001-03-22  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkcontainer.c (gtk_container_set_focus_chain): 
