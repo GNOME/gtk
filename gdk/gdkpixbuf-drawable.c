@@ -544,12 +544,12 @@ rgb565msb (GdkImage    *image,
 	    | (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
 #else
 	  data = *s++;
-	  *o++ = (data & 0xf800) | (data & 0xe000) >> 5
-	    | (data & 0x7e0) >> 3 | (data & 0x600) >> 9;
-	  *o++ = (data & 0x1f) << 11 | (data & 0x1c) << 6
-	    | (data & 0xf8000000) >> 24 | (data & 0xe0000000) >> 29;
-	  *o++ = (data & 0x7e00000) >> 11 | (data & 0x6000000) >> 17
-	    | (data & 0x1f0000) >> 13 | (data & 0x1c0000) >> 18;
+	  *o++ = (data & 0xf8000000) >> 16 | (data & 0xe0000000) >> 21
+	    | (data & 0x7e00000) >> 19 | (data & 0x6000000) >> 25;
+	  *o++ = (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10
+	    | (data & 0xf800) >> 8 | (data & 0xe000) >> 13;
+	  *o++ = (data & 0x7e0) << 5 | (data & 0x600) >> 1
+	    | (data & 0x1f) << 3 | (data & 0x1c) >> 2;
 #endif
 	}
       /* check for last remaining pixel */
