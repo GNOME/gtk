@@ -28,6 +28,8 @@
 #include "gdkinternals.h"
 #include "gdk.h"		/* For gdk_rectangle_union() */
 #include "gdkpixmap.h"
+#include "gdkdrawable.h"
+#include "gdkpixmap.h"
 
 #ifndef USE_BACKING_STORE
 #ifndef GDK_WINDOWING_WIN32
@@ -120,6 +122,12 @@ static void   gdk_window_draw_image     (GdkDrawable     *drawable,
                                          gint             width,
                                          gint             height);
 
+static GdkImage*  gdk_window_get_image  (GdkDrawable     *drawable,
+                                         gint             x,
+                                         gint             y,
+                                         gint             width,
+                                         gint             height);
+
 
 static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
@@ -130,7 +138,15 @@ static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
 static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
                                              GdkColormap *cmap);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
-     
+
+static GdkDrawable* gdk_window_get_composite_drawable (GdkDrawable *drawable,
+                                                       gint         x,
+                                                       gint         y,
+                                                       gint         width,
+                                                       gint         height,
+                                                       gint        *composite_x_offset,
+                                                       gint        *composite_y_offset);
+
 static void gdk_window_free_paint_stack (GdkWindow *window);
 
 static void gdk_window_init       (GdkWindowObject      *window);
@@ -204,6 +220,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->set_colormap = gdk_window_real_set_colormap;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
   drawable_class->get_visual = gdk_window_real_get_visual;
+  drawable_class->get_image = gdk_window_get_image;
+  drawable_class->get_composite_drawable = gdk_window_get_composite_drawable;
 }
 
 static void
@@ -650,12 +668,20 @@ gdk_window_paint_init_bg (GdkWindow      *window,
 			  GdkRegion      *init_region)
 {
   GdkGC *tmp_gc;
-
+  
   tmp_gc = gdk_window_get_bg_gc (window, paint);
+
+  gdk_region_offset (init_region,
+                     - paint->x_offset,
+                     - paint->y_offset);
+  gdk_gc_set_clip_region (tmp_gc, init_region);
+
   gdk_draw_rectangle (paint->pixmap, tmp_gc, TRUE, 0, 0, -1, -1);
   gdk_gc_unref (tmp_gc);
 }
-  
+
+
+#include "x11/gdkx.h"
 void	      
 gdk_window_begin_paint_region (GdkWindow *window,
 			       GdkRegion *region)
@@ -697,11 +723,13 @@ gdk_window_begin_paint_region (GdkWindow *window,
 
       if (new_rect.width > old_rect.width || new_rect.height > old_rect.height)
 	{
-	  paint->pixmap = gdk_pixmap_new (window, new_rect.width, new_rect.height, -1);
+	  paint->pixmap = gdk_pixmap_new (window,
+                                          new_rect.width, new_rect.height, -1);
           tmp_gc = gdk_gc_new (paint->pixmap);
 	  gdk_draw_drawable (paint->pixmap, tmp_gc, tmp_paint->pixmap,
-			     0, 0, old_rect.width, old_rect.height,
-			     old_rect.x - new_rect.x, old_rect.y - new_rect.y);
+			     0, 0,
+			     old_rect.x - new_rect.x, old_rect.y - new_rect.y,
+                             old_rect.width, old_rect.height);
           gdk_gc_unref (tmp_gc);
 	  gdk_drawable_unref (tmp_paint->pixmap);
 
@@ -711,13 +739,13 @@ gdk_window_begin_paint_region (GdkWindow *window,
 	  tmp_list = private->paint_stack;
 	  while (tmp_list)
 	    {
-	      tmp_paint = private->paint_stack->data;
+	      tmp_paint = tmp_list->data;
 	      gdk_region_subtract (init_region, tmp_paint->region);
 
 	      tmp_paint->pixmap = paint->pixmap;
 	      tmp_paint->x_offset = paint->x_offset;
-	      tmp_paint->y_offset = paint->x_offset;
-
+	      tmp_paint->y_offset = paint->y_offset;
+              
 	      tmp_list = tmp_list->next;
 	    }
 	}
@@ -730,7 +758,7 @@ gdk_window_begin_paint_region (GdkWindow *window,
 	  tmp_list = private->paint_stack;
 	  while (tmp_list)
 	    {
-	      tmp_paint = private->paint_stack->data;
+	      tmp_paint = tmp_list->data;
 	      gdk_region_subtract (init_region, tmp_paint->region);
 
 	      tmp_list = tmp_list->next;
@@ -746,6 +774,7 @@ gdk_window_begin_paint_region (GdkWindow *window,
 
   if (!gdk_region_empty (init_region))
     gdk_window_paint_init_bg (window, paint, init_region);
+  
   gdk_region_destroy (init_region);
   
   private->paint_stack = g_slist_prepend (private->paint_stack, paint);
@@ -796,7 +825,7 @@ gdk_window_end_paint (GdkWindow *window)
 	{
 	  GdkWindowPaint *tmp_paint = tmp_list->data;
 	  gdk_region_subtract (tmp_paint->region, paint->region);
-	  
+          
 	  tmp_list = tmp_list->next;
 	}
     }
@@ -1048,6 +1077,138 @@ gdk_window_draw_text_wc (GdkDrawable    *drawable,
   RESTORE_GC (gc);
 }
 
+static GdkDrawable*
+gdk_window_get_composite_drawable (GdkDrawable *window,
+                                   gint         x,
+                                   gint         y,
+                                   gint         width,
+                                   gint         height,
+                                   gint        *composite_x_offset,
+                                   gint        *composite_y_offset)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowPaint *paint;
+  GdkRegion *buffered_region;
+  GSList *tmp_list;
+  GdkPixmap *buffer;
+  GdkPixmap *tmp_pixmap;
+  GdkRectangle rect;
+  GdkRegion *rect_region;
+  GdkGC *tmp_gc;
+  gint windowing_x_offset, windowing_y_offset;
+  gint buffer_x_offset, buffer_y_offset;
+
+  if (GDK_WINDOW_DESTROYED (window) || private->paint_stack == NULL)
+    {
+      /* No backing store */
+      _gdk_windowing_window_get_offsets (window,
+                                         composite_x_offset,
+                                         composite_y_offset);
+      
+      return GDK_DRAWABLE (g_object_ref (G_OBJECT (window)));
+    }
+  
+  buffered_region = NULL;
+  buffer = NULL;
+
+  /* All GtkWindowPaint structs have the same pixmap and offsets, just
+   * get the first one. (should probably be cleaned up so that the
+   * pixmap is stored in the window)
+   */
+  paint = private->paint_stack->data;
+  buffer = paint->pixmap;
+  buffer_x_offset = paint->x_offset;
+  buffer_y_offset = paint->y_offset;
+  
+  tmp_list = private->paint_stack;
+  while (tmp_list != NULL)
+    {
+      paint = tmp_list->data;
+      
+      if (buffered_region == NULL)
+        buffered_region = gdk_region_copy (paint->region);
+      else
+        gdk_region_union (buffered_region, paint->region);
+
+      tmp_list = g_slist_next (tmp_list);
+    }
+
+  /* See if the buffered part is overlapping the part we want
+   * to get
+   */
+  rect.x = x;
+  rect.y = y;
+  rect.width = width;
+  rect.height = height;
+
+  rect_region = gdk_region_rectangle (&rect);
+  
+  gdk_region_intersect (buffered_region, rect_region);
+
+  gdk_region_destroy (rect_region);
+
+  if (gdk_region_empty (buffered_region))
+    {
+      gdk_region_destroy (buffered_region);
+
+      _gdk_windowing_window_get_offsets (window,
+                                         composite_x_offset,
+                                         composite_y_offset);
+
+      return GDK_DRAWABLE (g_object_ref (G_OBJECT (window)));
+    }
+  
+  tmp_pixmap = gdk_pixmap_new (window,
+                               width, height,
+                               -1);
+
+  tmp_gc = gdk_gc_new (tmp_pixmap);
+
+  _gdk_windowing_window_get_offsets (window,
+                                     &windowing_x_offset,
+                                     &windowing_y_offset);
+  
+  /* Copy the current window contents */
+  gdk_draw_drawable (tmp_pixmap,
+                     tmp_gc,
+                     private->impl,
+                     x - windowing_x_offset,
+                     y - windowing_y_offset,
+                     0, 0,
+                     width, height);
+
+  /* Make buffered_region relative to the tmp_pixmap */
+  gdk_region_offset (buffered_region,
+                     - x,
+                     - y);
+  
+  /* Set the clip mask to avoid drawing over non-buffered areas of
+   * tmp_pixmap. 
+   */
+  
+  gdk_gc_set_clip_region (tmp_gc, buffered_region);
+  gdk_region_destroy (buffered_region);
+  
+  /* Draw backing pixmap onto the tmp_pixmap, offsetting
+   * appropriately.
+   */
+  gdk_draw_drawable (tmp_pixmap,
+                     tmp_gc,
+                     buffer,
+                     x - buffer_x_offset,
+                     y - buffer_y_offset,
+                     0, 0,
+                     width, height);
+  
+  /* Set these to location of tmp_pixmap within the window */
+  *composite_x_offset = x;
+  *composite_y_offset = y;
+
+  g_object_unref (G_OBJECT (tmp_gc));
+  
+  return tmp_pixmap;
+}
+
 static void
 gdk_window_draw_drawable (GdkDrawable *drawable,
 			  GdkGC       *gc,
@@ -1061,21 +1222,25 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 {
   GdkWindowObject *private = (GdkWindowObject *)drawable;
   OFFSET_GC (gc);
-
+  
   if (GDK_WINDOW_DESTROYED (drawable))
     return;
-  
+
+  /* If we have a backing pixmap draw to that */
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      gdk_draw_drawable (paint->pixmap, gc, src, xsrc, ysrc,
+      gdk_draw_drawable (paint->pixmap, gc,
+                         src, xsrc, ysrc,
 			 xdest - x_offset, ydest - y_offset, width, height);
 
     }
   else
-    gdk_draw_drawable (private->impl, gc, src, xsrc, ysrc,
+    gdk_draw_drawable (private->impl, gc,
+                       src, xsrc, ysrc,
                        xdest - x_offset, ydest - y_offset,
                        width, height);
+
   RESTORE_GC (gc);
 }
 
@@ -1402,6 +1567,32 @@ gdk_window_real_get_colormap (GdkDrawable *drawable)
     return NULL;
   
   return gdk_drawable_get_colormap (((GdkWindowObject*)drawable)->impl);
+}
+                      
+static GdkImage*
+gdk_window_get_image (GdkDrawable *drawable,
+                      gint         x,
+                      gint         y,
+                      gint         width,
+                      gint         height)
+{
+  gint x_offset, y_offset;
+  
+  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
+  
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return NULL;
+
+  /* If we're here, a composite image was not necessary, so
+   * we can ignore the paint stack.
+   */
+  
+  _gdk_windowing_window_get_offsets (drawable, &x_offset, &y_offset);
+  
+  return gdk_drawable_get_image (((GdkWindowObject*)drawable)->impl,
+                                 x - x_offset,
+                                 y - y_offset,
+                                 width, height);
 }
 
 /* Code for dirty-region queueing

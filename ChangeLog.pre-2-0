@@ -1,3 +1,61 @@
+2000-10-23  Havoc Pennington  <hp@redhat.com>
+
+        * gtk/testtext.c: Re-enable the "find" dialog
+
+	* gtk/testgtk.c: Add test for gdk_drawable_get_image
+	
+	* gdk/gdkwindow.c (gdk_window_begin_paint_region): Fix bug where
+	the arguments to gdk_draw_drawable were in the wrong order
+	(gdk_window_paint_init_bg): This function was ignoring the
+	init_region, instead of clipping to it, so the entire backing
+	pixmap was cleared on every begin_paint()
+	(gdk_window_begin_paint_region): Hmm, the same list-walking bug
+	was in here again, the loop kept using the same GtkWindowPaint
+	over and over.
+	(gdk_window_begin_paint_region): Fix a bug where we had two
+	x_offset instead of x_offset and y_offset
+
+	* gdk/gdkdraw.c (gdk_drawable_get_image): get composite drawable
+	before we get the image.
+	(gdk_draw_drawable): get the composite before we draw the drawable.
+	(gdk_drawable_real_get_composite_drawable): default
+	get_composite_drawable implementation that returns the drawable 
+	itself
+
+	* gdk/gdkdrawable.h (struct _GdkDrawableClass ): Add
+	get_composite_drawable virtual function
+
+	* gdk/gdkwindow.c (gdk_window_begin_paint_region): Fix a cheesy
+	list-walking bug
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_drawable): Add a hack to
+	make this work if the source drawable is a GdkDrawableImplX11
+	instead of a public drawable type. This is really broken; the
+	problem is that GdkDrawable needs a virtual method get_xid(), but
+	of course that doesn't work in practice. Enter RTTI.
+
+	Also, improve mismatched depth message.
+
+	* gdk/gdkpixmap.c (gdk_pixmap_get_image): Implement get_image for
+	GdkPixmap
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_drawable_impl_x11_class_init):
+	install _gdk_x11_get_image as our implementation of get_image
+	
+	* gdk/x11/gdkimage-x11.c (gdk_image_get): Rename to
+	_gdk_x11_get_image and export for use in gdkdrawable-x11.c
+
+	* gdk/gdkimage.c (gdk_image_get): Make this just a wrapper around
+	gdk_drawable_get_image
+
+	* gdk/gdkdraw.c (gdk_drawable_get_image): call virtual get_image
+
+	* gdk/gdkdrawable.h (struct _GdkDrawableClass ): Virtualize
+	get_image
+
+	* gtk/gtktreestore.c (gtk_tree_store_get_node): remove weird
+	trailing semicolon after for loop
+
 Mon Oct 23 12:07:57 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_set_style_internal): Fix problem

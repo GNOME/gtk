@@ -113,6 +113,21 @@ struct _GdkDrawableClass
 
   GdkColormap* (*get_colormap) (GdkDrawable *drawable);
   GdkVisual*   (*get_visual) (GdkDrawable  *drawable);
+
+  GdkImage*    (*get_image)  (GdkDrawable  *drawable,
+                              gint          x,
+                              gint          y,
+                              gint          width,
+                              gint          height);
+
+  GdkDrawable* (*get_composite_drawable) (GdkDrawable *drawable,
+                                          gint         x,
+                                          gint         y,
+                                          gint         width,
+                                          gint         height,
+                                          gint        *composite_x_offset,
+                                          gint        *composite_y_offset);
+  
 };
 
 GType           gdk_drawable_get_type     (void);
@@ -238,6 +253,12 @@ void gdk_draw_layout      (GdkDrawable      *drawable,
 			   gint              x,
 			   gint              y,
 			   PangoLayout      *layout);
+
+GdkImage* gdk_drawable_get_image (GdkDrawable *drawable,
+                                  gint         x,
+                                  gint         y,
+                                  gint         width,
+                                  gint         height);
 
 #ifdef __cplusplus
 }

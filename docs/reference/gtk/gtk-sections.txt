@@ -1951,7 +1951,6 @@ GTK_IS_TEXT_CLASS
 
 <SECTION>
 <FILE>gtktextbuffer</FILE>
-GtkTextBTree
 <TITLE>GtkTextBuffer</TITLE>
 gtk_text_buffer_new
 gtk_text_buffer_get_line_count

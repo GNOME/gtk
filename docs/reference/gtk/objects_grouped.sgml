@@ -46,25 +46,31 @@
 
 <emphasis>Data Entry Widgets</emphasis>
     <link linkend="GtkEntry">GtkEntry</link>
-    <link linkend="GtkText">GtkText</link>
     <link linkend="GtkSpinButton">GtkSpinButton</link>
+    <link linkend="GtkTextView">GtkTextView</link>
     <link linkend="GtkOptionMenu">GtkOptionMenu</link>
     <link linkend="GtkCombo">GtkCombo</link>
     <link linkend="GtkHScale">GtkHScale</link>
     <link linkend="GtkVScale">GtkVScale</link>
+                    
 
 <emphasis>Lists &amp; Trees</emphasis>
     <link linkend="GtkCList">GtkCList</link>
     <link linkend="GtkCTree">GtkCTree</link>
     <link linkend="GtkList">GtkList</link>
     <link linkend="GtkListItem">GtkListItem</link>
-    <link linkend="GtkTree">GtkTree</link>
-    <link linkend="GtkTreeItem">GtkTreeItem</link>
+
+<emphasis>Text Widget Objects</emphasis>
+    <link linkend="GtkTextBuffer">GtkTextBuffer</link>
+    <link linkend="GtkTextTag">GtkTextTag</link>
+    <link linkend="GtkTextTagTable">GtkTextTagTable</link>
+    <link linkend="GtkTextView">GtkTextView</link>
 
 <emphasis>Tooltips</emphasis>
     <link linkend="GtkTooltips">GtkTooltips</link>
     <link linkend="GtkTipsQuery">GtkTipsQuery</link>
 </literallayout></entry>
+
 <entry><literallayout>
 <emphasis>Menus &amp; Menu Bars</emphasis>
     <link linkend="GtkMenuBar">GtkMenuBar</link>
@@ -96,6 +102,7 @@
     <link linkend="GtkColorSelection">GtkColorSelection</link>
     <link linkend="GtkFontSelection">GtkFontSelection</link>
 </literallayout></entry>
+
 <entry><literallayout>
 <emphasis>Abstract Base Classes</emphasis>
     <link linkend="GtkWidget">GtkWidget</link>
@@ -125,6 +132,13 @@
     <link linkend="GtkAdjustment">GtkAdjustment</link>
     <link linkend="GtkItemFactory">GtkItemFactory</link>
     <link linkend="GtkInvisible">GtkInvisible</link>
+</literallayout></entry>
+
+<entry><literallayout>
+<emphasis>Deprecated Objects</emphasis>
+    <link linkend="GtkText">GtkText</link>
+    <link linkend="GtkTree">GtkTree</link>
+    <link linkend="GtkTreeItem">GtkTreeItem</link>
 </literallayout></entry>
 </row>
 </tbody></tgroup></informaltable>

@@ -49,6 +49,12 @@ GdkVisual *   gdk_visual_lookup        (Visual          *xvisual);
 
 void gdk_window_add_colormap_windows (GdkWindow *window);
 
+GdkImage* _gdk_x11_get_image (GdkDrawable    *drawable,
+                              gint            x,
+                              gint            y,
+                              gint            width,
+                              gint            height);
+
 /* Please see gdkwindow.c for comments on how to use */ 
 Window gdk_window_xid_at        (Window    base,
 				 gint      bx,

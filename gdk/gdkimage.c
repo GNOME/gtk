@@ -43,3 +43,19 @@ gdk_image_unref (GdkImage *image)
 
   g_object_unref (G_OBJECT (image));
 }
+
+GdkImage*
+gdk_image_get (GdkWindow *window,
+	       gint       x,
+	       gint       y,
+	       gint       width,
+	       gint       height)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (window), NULL);
+  g_return_val_if_fail (x >= 0, NULL);
+  g_return_val_if_fail (y >= 0, NULL);
+  g_return_val_if_fail (width >= 0, NULL);
+  g_return_val_if_fail (height >= 0, NULL);
+  
+  return gdk_drawable_get_image (window, x, y, width, height);
+}

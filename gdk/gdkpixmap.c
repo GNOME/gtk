@@ -107,6 +107,13 @@ static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
                                          gint            *height);
 
+static GdkImage* gdk_pixmap_get_image   (GdkDrawable     *drawable,
+                                         gint             x,
+                                         gint             y,
+                                         gint             width,
+                                         gint             height);
+
+
 static GdkVisual*   gdk_pixmap_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_pixmap_real_get_depth    (GdkDrawable *drawable);
 static void         gdk_pixmap_real_set_colormap (GdkDrawable *drawable,
@@ -181,6 +188,7 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->set_colormap = gdk_pixmap_real_set_colormap;
   drawable_class->get_colormap = gdk_pixmap_real_get_colormap;
   drawable_class->get_visual = gdk_pixmap_real_get_visual;
+  drawable_class->get_image = gdk_pixmap_get_image;
 }
 
 static void
@@ -408,6 +416,19 @@ gdk_pixmap_real_get_colormap (GdkDrawable *drawable)
   g_return_val_if_fail (GDK_IS_PIXMAP (drawable), NULL);
   
   return gdk_drawable_get_colormap (((GdkPixmapObject*)drawable)->impl);
+}
+
+static GdkImage*
+gdk_pixmap_get_image (GdkDrawable     *drawable,
+                      gint             x,
+                      gint             y,
+                      gint             width,
+                      gint             height)
+{
+  g_return_val_if_fail (GDK_IS_PIXMAP (drawable), NULL);
+  
+  return gdk_drawable_get_image (((GdkPixmapObject*)drawable)->impl,
+                                 x, y, width, height);
 }
 
 #define PACKED_COLOR(c) ((((c)->red & 0xff) << 8) | ((c)->green & 0xff) | ((c)->blue >> 8))

@@ -954,13 +954,12 @@ do_search (gpointer callback_data,
   GtkWidget *search_text;
   GtkTextBuffer *buffer;
 
-#if 0
-  
   dialog = gtk_dialog_new_with_buttons ("Search",
                                         GTK_WINDOW (view->window),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_STOCK_BUTTON_CLOSE,
                                         GTK_RESPONSE_NONE, NULL);
+
 
   buffer = gtk_text_buffer_new (NULL);
 
@@ -983,7 +982,6 @@ do_search (gpointer callback_data,
   gtk_widget_grab_focus (search_text);
   
   gtk_widget_show_all (dialog);
-#endif
 }
 
 static void
@@ -1300,6 +1298,7 @@ buffer_search_forward (Buffer *buffer, const char *str,
   GtkTextIter iter;
   GtkTextIter start, end;
   GtkWidget *dialog;
+  int i;
   
   /* remove tag from whole buffer */
   gtk_text_buffer_get_bounds (buffer->buffer, &start, &end);
@@ -1310,7 +1309,7 @@ buffer_search_forward (Buffer *buffer, const char *str,
                                     gtk_text_buffer_get_mark (buffer->buffer,
                                                               "insert"));
 
-
+  i = 0;
   if (*str != '\0')
     {
       GtkTextIter match_start, match_end;
@@ -1318,6 +1317,7 @@ buffer_search_forward (Buffer *buffer, const char *str,
       while (gtk_text_iter_forward_search (&iter, str, TRUE, FALSE,
                                            &match_start, &match_end))
         {
+          ++i;
           gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
                                      &match_start, &match_end);
 
@@ -1325,7 +1325,6 @@ buffer_search_forward (Buffer *buffer, const char *str,
         }
     }
 
-#if 0  
   dialog = gtk_message_dialog_new (GTK_WINDOW (view->window),
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_OK,
@@ -1339,7 +1338,6 @@ buffer_search_forward (Buffer *buffer, const char *str,
                              GTK_OBJECT (dialog));
   
   gtk_widget_show (dialog);
-#endif
 }
 
 static void

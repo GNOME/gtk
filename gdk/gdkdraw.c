@@ -28,6 +28,16 @@
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 
+static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
+                                                              gint         x,
+                                                              gint         y,
+                                                              gint         width,
+                                                              gint         height,
+                                                              gint        *composite_x_offset,
+                                                              gint        *composite_y_offset);
+
+static void gdk_drawable_class_init (GdkDrawableClass *klass);
+
 GType
 gdk_drawable_get_type (void)
 {
@@ -40,7 +50,7 @@ gdk_drawable_get_type (void)
         sizeof (GdkDrawableClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) NULL,
+        (GClassInitFunc) gdk_drawable_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
         sizeof (GdkDrawable),
@@ -54,6 +64,12 @@ gdk_drawable_get_type (void)
     }  
 
   return object_type;
+}
+
+static void
+gdk_drawable_class_init (GdkDrawableClass *klass)
+{
+  klass->get_composite_drawable = gdk_drawable_real_get_composite_drawable;
 }
 
 /* Manipulation of drawables
@@ -323,6 +339,10 @@ gdk_draw_drawable (GdkDrawable *drawable,
 		   gint         width,
 		   gint         height)
 {
+  GdkDrawable *composite;
+  gint composite_x_offset = 0;
+  gint composite_y_offset = 0;
+
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (src != NULL);
   g_return_if_fail (GDK_IS_GC (gc));
@@ -340,9 +360,22 @@ gdk_draw_drawable (GdkDrawable *drawable,
         height = real_height;
     }
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, src,
-                                                    xsrc, ysrc, xdest, ydest,
+
+  composite =
+    GDK_DRAWABLE_GET_CLASS (src)->get_composite_drawable (src,
+                                                          xsrc, ysrc,
+                                                          width, height,
+                                                          &composite_x_offset,
+                                                          &composite_y_offset);
+
+  
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, composite,
+                                                    xsrc - composite_x_offset,
+                                                    ysrc - composite_y_offset,
+                                                    xdest, ydest,
                                                     width, height);
+  
+  g_object_unref (G_OBJECT (composite));
 }
 
 void
@@ -430,7 +463,6 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
 		 gint              y,
 		 PangoGlyphString *glyphs)
 {
-
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (GDK_IS_GC (gc));
 
@@ -439,3 +471,54 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
 }
 
 
+GdkImage*
+gdk_drawable_get_image (GdkDrawable *drawable,
+                        gint         x,
+                        gint         y,
+                        gint         width,
+                        gint         height)
+{
+  GdkDrawable *composite;
+  gint composite_x_offset = 0;
+  gint composite_y_offset = 0;
+  GdkImage *retval;
+  
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+  g_return_val_if_fail (x >= 0, NULL);
+  g_return_val_if_fail (y >= 0, NULL);
+  g_return_val_if_fail (width >= 0, NULL);
+  g_return_val_if_fail (height >= 0, NULL);
+
+  composite =
+    GDK_DRAWABLE_GET_CLASS (drawable)->get_composite_drawable (drawable,
+                                                               x, y,
+                                                               width, height,
+                                                               &composite_x_offset,
+                                                               &composite_y_offset); 
+  
+  retval = GDK_DRAWABLE_GET_CLASS (composite)->get_image (composite,
+                                                          x - composite_x_offset,
+                                                          y - composite_y_offset,
+                                                          width, height);
+
+  g_object_unref (G_OBJECT (composite));
+
+  return retval;
+}
+
+static GdkDrawable*
+gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
+                                          gint         x,
+                                          gint         y,
+                                          gint         width,
+                                          gint         height,
+                                          gint        *composite_x_offset,
+                                          gint        *composite_y_offset)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  *composite_x_offset = 0;
+  *composite_y_offset = 0;
+  
+  return GDK_DRAWABLE (g_object_ref (G_OBJECT (drawable)));
+}

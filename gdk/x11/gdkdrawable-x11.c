@@ -121,6 +121,8 @@ static GdkColormap* gdk_x11_get_colormap   (GdkDrawable    *drawable);
 
 static gint         gdk_x11_get_depth      (GdkDrawable    *drawable);
 
+static GdkVisual*   gdk_x11_get_visual     (GdkDrawable    *drawable);
+
 static void gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass);
 
 static gpointer parent_class = NULL;
@@ -177,6 +179,9 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->get_colormap = gdk_x11_get_colormap;
 
   drawable_class->get_depth = gdk_x11_get_depth;
+  drawable_class->get_visual = gdk_x11_get_visual;
+  
+  drawable_class->get_image = _gdk_x11_get_image;
 }
 
 /*****************************************************
@@ -412,13 +417,19 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
   int src_depth = gdk_drawable_get_depth (src);
   int dest_depth = gdk_drawable_get_depth (drawable);
   GdkDrawableImplX11 *impl;
-
+  GdkDrawableImplX11 *src_impl;
+  
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+
+  if (GDK_IS_DRAWABLE_IMPL_X11 (src))
+    src_impl = GDK_DRAWABLE_IMPL_X11 (src);
+  else
+    src_impl = NULL;
   
   if (src_depth == 1)
     {
       XCopyArea (impl->xdisplay,
-		 GDK_DRAWABLE_XID (src),
+                 src_impl ? src_impl->xid : GDK_DRAWABLE_XID (src),
 		 impl->xid,
 		 GDK_GC_GET_XGC (gc),
 		 xsrc, ysrc,
@@ -428,7 +439,7 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
   else if (dest_depth != 0 && src_depth == dest_depth)
     {
       XCopyArea (impl->xdisplay,
-		 GDK_DRAWABLE_XID (src),
+                 src_impl ? src_impl->xid : GDK_DRAWABLE_XID (src),
 		 impl->xid,
 		 GDK_GC_GET_XGC (gc),
 		 xsrc, ysrc,
@@ -436,7 +447,8 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
 		 xdest, ydest);
     }
   else
-    g_warning ("Attempt to copy between drawables of mismatched depths!\n");
+    g_warning ("Attempt to draw a drawable with depth %d to a drawable with depth %d",
+               src_depth, dest_depth);
 }
 
 static void
@@ -603,3 +615,8 @@ gdk_x11_get_depth (GdkDrawable *drawable)
   return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
 }
 
+static GdkVisual*
+gdk_x11_get_visual (GdkDrawable    *drawable)
+{
+  return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
+}

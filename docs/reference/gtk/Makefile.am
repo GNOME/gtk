@@ -62,7 +62,8 @@ GTKDOC_CC=$(LIBTOOL) --mode=compile $(CC)
 GTKDOC_LD=$(LIBTOOL) --mode=link $(CC)
 
 content_files = 		\
-	objects_grouped.sgml
+	objects_grouped.sgml	\
+	text_widget.sgml
 
 ####################################
 # Everything below here is generic #

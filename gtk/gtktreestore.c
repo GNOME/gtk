@@ -267,7 +267,7 @@ gtk_tree_store_get_node (GtkTreeModel *tree_model,
 							  indices[i]);
       if (node == NULL)
 	return NULL;
-    };
+    }
   return (GtkTreeNode) node;
 }
 

@@ -1,0 +1,127 @@
+<refentry id="TextWidget" revision="18 Oct 2000">
+<refmeta>
+<refentrytitle>Text Widget Overview</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Text Widget Overview</refname><refpurpose>Overview of <link linkend="GtkTextBuffer">GtkTextBuffer</link>, <link linkend="GtkTextView">GtkTextView</link>, and friends</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Conceptual Overview</title>
+
+<para>
+GTK+ has an extremely powerful framework for multiline text editing.  The
+primary objects involved in the process are <link
+linkend="GtkTextBuffer">GtkTextBuffer</link>, which represents the text being
+edited, and <link linkend="GtkTextView">GtkTextView</link>, a widget which can
+display a <link linkend="GtkTextBuffer">GtkTextBuffer</link>. Each buffer can be
+displayed by any number of views.
+</para>
+
+<para>
+Text in a buffer can be marked with <firstterm>tags</firstterm>. A tag is an
+attribute that can be applied to some range of text. For example, a tag might be
+called "bold" and make the text inside the tag bold. However, the tag concept is
+more general than that; tags don't have to affect appearance. They can instead
+affect change the behavior of mouse and key presses, "lock" a range of text so
+the user can't edit it, or countless other things. A tag is represented by a
+<link linkend="GtkTextTag">GtkTextTag</link> object. One <link
+linkend="GtkTextTag">GtkTextTag</link> can be applied to any number of text
+ranges in any number of buffers.
+</para>
+
+<para>
+Each tag is stored in a <link
+linkend="GtkTextTagTable">GtkTextTagTable</link>. A tag table defines a set of
+tags that can be used together. Each buffer has one tag table associated with
+it; only tags from that tag table can be used with the buffer. A single tag
+table can be shared between multiple buffers, however.
+</para>
+
+<para>
+Tags can have names, which is convenient sometimes (for example, you can name
+your tag that makes things bold "bold"), but they can also be anonymous (which
+is convenient if you're creating tags on-the-fly).
+</para>
+
+<para>
+Most text manipulation is accomplished with <firstterm>iterators</firstterm>,
+represented by a <link linkend="GtkTextIter">GtkTextIter</link>. An iterator
+represents a position in the text buffer. <link
+linkend="GtkTextIter">GtkTextIter</link> is a struct designed to be allocated on
+the stack; it's guaranteed to be copiable by value and never contain any
+heap-allocated data. Iterators are not valid indefinitely; whenever the buffer
+is modified in a way that affects the number of characters in the buffer, all
+outstanding iterators become invalid. (Note that deleting 5 characters and then
+reinserting 5 still invalidates iterators, though you end up with the same
+number of characters).
+</para>
+
+<para>
+Because of this, iterators can't be used to preserve positions across buffer
+modifications. To preserve a position, the <link
+linkend="GtkTextMark">GtkTextMark</link> object is ideal. You can think of a
+mark as an invisible cursor or insertion point; it floats in the buffer, saving
+a position. If the text surrounding the mark is deleted, the mark remains in the
+position the text once occupied; if text is inserted at the mark, the mark ends
+up either to the left or to the right of the new text, depending on its
+<firstterm>gravity</firstterm>. The standard text cursor in left-to-right
+languages is a mark with right gravity, because it stays to the right of
+inserted text.
+</para>
+
+<para>
+Like tags, marks can be either named or anonymous. There are two marks built-in
+to <link linkend="GtkTextBuffer">GtkTextBuffer</link>; these are named
+<literal>"insert"</literal> and <literal>"selection_bound"</literal> and refer
+to the insertion point and the boundary of the selection which is not the
+insertion point, respectively. If no text is selected, these two marks will be
+in the same position. You can manipulate what is selected and where the cursor
+appears by moving these marks around.
+
+<footnote>
+<para>
+If you want to place the cursor in response to a user action, be sure to use
+gtk_text_buffer_place_cursor(), which moves both at once without causing a
+temporary selection (moving one then the other temporarily selects the range in
+between the old and new positions).
+</para>
+</footnote>
+</para>
+
+</refsect1>
+
+
+<refsect1>
+<title>Simple Example</title>
+
+<para>
+The simplest usage of <link linkend="GtkTextView">GtkTextView</link> 
+might look like this:
+<programlisting>
+
+  /* Get a buffer (it's a GObject, not a GtkObject, so we own a reference
+   * after this). Passing NULL as argument causes an empty tag table to be
+   * automatically created.  
+   */
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  view = gtk_text_view_new_with_buffer (buffer);
+
+  /* view holds a reference now */
+  g_object_unref (G_OBJECT (buffer));
+
+  /* Now you might put the view in a container and display it on the
+   * screen; when the user edits the text, signals on the buffer
+   * will be emitted, such as "changed", "insert_text", and so on.
+   */
+</programlisting>
+</para>
+
+</refsect1>
+
+</refentry>

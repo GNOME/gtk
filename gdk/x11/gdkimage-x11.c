@@ -371,31 +371,44 @@ gdk_image_new (GdkImageType  type,
 }
 
 GdkImage*
-gdk_image_get (GdkWindow *window,
-	       gint       x,
-	       gint       y,
-	       gint       width,
-	       gint       height)
+_gdk_x11_get_image (GdkDrawable    *drawable,
+                    gint            x,
+                    gint            y,
+                    gint            width,
+                    gint            height)
 {
   GdkImage *image;
   GdkImagePrivateX11 *private;
+  GdkDrawableImplX11 *impl;
+  GdkVisual *visual;
+  
+  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable), NULL);
 
-  g_return_val_if_fail (GDK_IS_DRAWABLE (window), NULL);
+  visual = gdk_drawable_get_visual (drawable);
 
-  if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
-    return NULL;
+  if (visual == NULL)
+    {
+      g_warning ("To get the image from a drawable, the drawable "
+                 "must have a visual and colormap; calling "
+                 "gtk_drawable_set_colormap() on a drawable "
+                 "created without a colormap should solve this problem");
 
+      return NULL;
+    }
+  
+  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  
   image = g_object_new (gdk_image_get_type (), NULL);
   private = PRIVATE_DATA (image);
 
   private->xdisplay = gdk_display;
   private->ximage = XGetImage (private->xdisplay,
-			       GDK_DRAWABLE_XID (window),
+                               impl->xid,
 			       x, y, width, height,
 			       AllPlanes, ZPixmap);
 
   image->type = GDK_IMAGE_NORMAL;
-  image->visual = gdk_window_get_visual (window);
+  image->visual = visual;
   image->width = width;
   image->height = height;
   image->depth = private->ximage->depth;

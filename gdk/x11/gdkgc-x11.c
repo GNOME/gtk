@@ -650,7 +650,7 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
   gc->clip_y_origin = 0;
   
   x11_gc->dirty_mask |= GDK_GC_DIRTY_CLIP;
-} 
+}
 
 void
 gdk_gc_set_clip_region (GdkGC	  *gc,
