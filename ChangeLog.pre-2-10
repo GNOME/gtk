@@ -1,3 +1,13 @@
+2002-08-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkrgb.c (gdk_rgb_try_colormap): 
+	(gdk_rgb_create_info): 
+	(gdk_rgb_select_conv): 
+	(gdk_draw_gray_image): 
+	(gdk_rgb_cmap_get_info): Changes to support depth 8 StaticColor
+	visuals.  (#81631)
+	(gdk_rgb_cmap_free): Don't loop forever.
+
 Fri Aug  9 08:04:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdisplay.h (struct _GdkDisplayClass): Fix 

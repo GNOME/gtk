@@ -272,7 +272,8 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
       }
 #endif
 
-  if (colors_needed)
+  if (colors_needed && 
+      image_info->visual->type != GDK_VISUAL_STATIC_COLOR)
     {
       if (!gdk_colors_alloc (cmap, 0, NULL, 0, junk, colors_needed))
 	{
@@ -642,7 +643,8 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
       
       gdk_rgb_colorcube_222 (image_info);
     }
-  else if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
+  else if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR
+    || image_info->visual->type == GDK_VISUAL_STATIC_COLOR)
     {
       if (!image_info->cmap &&
 	  (gdk_rgb_install_cmap || image_info->visual != gdk_screen_get_system_visual (screen)))
@@ -2999,6 +3001,7 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
 	   depth <= 8 &&
 	   depth > 4 &&
 	   (vtype == GDK_VISUAL_PSEUDO_COLOR
+	    || vtype == GDK_VISUAL_STATIC_COLOR
 #ifdef ENABLE_GRAYSCALE
 	    || vtype == GDK_VISUAL_GRAYSCALE
 #endif
@@ -3324,6 +3327,7 @@ gdk_draw_gray_image (GdkDrawable *drawable,
   if (image_info->bpp == 1 &&
       image_info->gray_cmap == NULL &&
       (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+       image_info->visual->type == GDK_VISUAL_STATIC_COLOR ||
        image_info->visual->type == GDK_VISUAL_GRAYSCALE))
     gdk_rgb_make_gray_cmap (image_info);
   
@@ -3347,9 +3351,10 @@ gdk_rgb_cmap_get_info (GdkRgbCmap *cmap,
   int i, j;
   guint32 rgb;
 
-  /* We only need a LUT for pseudo-color and grayscale cmaps */
+  /* We don't need a LUT for TrueColor or DirectColor visuals */
   if (image_info->bpp != 1 ||
       !(image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+	image_info->visual->type == GDK_VISUAL_STATIC_COLOR ||
 	image_info->visual->type == GDK_VISUAL_GRAYSCALE))
     return NULL;
   
@@ -3413,6 +3418,7 @@ gdk_rgb_cmap_free (GdkRgbCmap *cmap)
       GdkRgbCmapInfo *cmap_info = tmp_list->data;
       cmap_info->image_info->cmap_info_list = g_slist_remove (cmap_info->image_info->cmap_info_list, cmap_info);
       g_free (cmap_info);
+      tmp_list = tmp_list->next;
     }
   g_slist_free (cmap->info_list);
   
