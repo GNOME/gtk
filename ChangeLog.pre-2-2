@@ -1,3 +1,15 @@
+Sat Feb 19 12:01:53 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_drawable):
+	Use gdk_drawable_get_depth instead of gdk_drawable_get_visual.
+	Add some more detailed checking.
+
+	* gdk/gdkdraw.c gdk/gdkdrawable.h (gdk_drawable_get_depth):
+	New function to retrieve the depth of a drawable.
+
+	* gdk/gdkprivate.h (struct _GdkDrawablePrivate): Add a depth
+	field, reorder fields to save memory. 
+
 Mon Dec 13 14:06:03 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_draw_cursor_on_drawable): Draw a small portion

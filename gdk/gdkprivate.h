@@ -71,7 +71,6 @@ struct _GdkDrawablePrivate
   GdkDrawableClass *klass;
   gpointer klass_data;
 
-  guint8 window_type;
   guint ref_count;
 
   guint16 width;
@@ -79,6 +78,9 @@ struct _GdkDrawablePrivate
 
   GdkColormap *colormap;
 
+  guint8 window_type;
+  guint8 depth;
+  
   guint destroyed : 2;
 };
 

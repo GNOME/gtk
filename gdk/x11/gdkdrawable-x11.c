@@ -319,8 +319,20 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
 		       gint         width,
 		       gint         height)
 {
-  /* FIXME: this doesn't work because bitmaps don't have visuals */
-  if (gdk_drawable_get_visual (src)->depth == 1)
+  int src_depth = gdk_drawable_get_depth (src);
+  int dest_depth = gdk_drawable_get_depth (drawable);
+
+  if (src_depth == 1)
+    {
+      XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
+		 GDK_DRAWABLE_XID (src),
+		 GDK_DRAWABLE_XID (drawable),
+		 GDK_GC_XGC (gc),
+		 xsrc, ysrc,
+		 width, height,
+		 xdest, ydest);
+    }
+  else if (dest_depth != 0 && src_depth == dest_depth)
     {
       XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
 		 GDK_DRAWABLE_XID (src),
@@ -331,15 +343,7 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
 		 xdest, ydest);
     }
   else
-    {
-      XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
-		 GDK_DRAWABLE_XID (src),
-		 GDK_DRAWABLE_XID (drawable),
-		 GDK_GC_XGC (gc),
-		 xsrc, ysrc,
-		 width, height,
-		 xdest, ydest);
-    }
+    g_warning ("Attempt to copy between drawables of mismatched depths!\n");
 }
 
 static void
