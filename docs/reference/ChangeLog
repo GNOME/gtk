@@ -1,3 +1,8 @@
+2005-02-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktreemodel.sgml: Fix stack vs heap 
+	confusion.  (#168690, Torsten Schoenfeld)
+
 2005-02-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkcalendar.sgml: Add some more 
