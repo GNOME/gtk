@@ -1,5 +1,8 @@
 2005-01-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdialog.c (gtk_dialog_map): Don't loop forever
+	here, even if the only focusable widgets are labels.
+
 	* gtk/gtkmodules.c (load_module): Don't reverse the order
 	of modules when putting them in gtk_modules.  (#162676, Dennis
 	Cranston, patch by Remus Draica)
