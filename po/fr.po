@@ -6,10 +6,10 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.3\n"
-"POT-Creation-Date: 2002-07-07 13:37+0200\n"
-"PO-Revision-Date: 2002-07-07 14:12+0200\n"
-"Last-Translator: Christophe Fergeau <teuf@users.sourceforge.net>\n"
+"Project-Id-Version: gtk+ 2.0.5\n"
+"POT-Creation-Date: 2002-07-21 12:04+0200\n"
+"PO-Revision-Date: 2002-07-21 12:04+0200\n"
+"Last-Translator: Christophe Merlet (RedFox) <christophe@merlet.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,17 +35,17 @@ msgstr "Ne sait pas comment charger l'animation du fichier « %s »"
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Échec au chargement de l'image « %s » : raison inconnue, probablement "
-"un fichier d'image corrompu"
+"Échec au chargement de l'image « %s » : raison inconnue, probablement un "
+"fichier d'image corrompu"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
 msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt animation "
-"file"
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
 msgstr ""
-"Échec au chargement de l'animation « %s » : raison inconnu, "
-"probablement un fichier d'animation corrompu"
+"Échec au chargement de l'animation « %s » : raison inconnu, probablement un "
+"fichier d'animation corrompu"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
@@ -58,8 +58,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Le module de chargement d'image %s n'exporte pas la bonne interface ; "
-"peut-être qu'il est d'une version différente de GTK ?"
+"Le module de chargement d'image %s n'exporte pas la bonne interface ; peut-"
+"être qu'il est d'une version différente de GTK ?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
@@ -101,17 +101,16 @@ msgstr "Échec de l'ouverture de « %s » en écriture : %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:884
 #, c-format
 msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: "
-"%s"
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
 msgstr ""
-"Échec à la fermeture de « %s » durand l'écriture de l'image, toutes "
-"les données n'ont peut-être pas été enregistré : %s"
+"Échec à la fermeture de « %s » durand l'écriture de l'image, toutes les "
+"données n'ont peut-être pas été enregistré : %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
-"Le chargement progressif d'image de type « %s » n'est pas supporté"
+msgstr "Le chargement progressif d'image de type « %s » n'est pas supporté"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
@@ -119,9 +118,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Erreur interne : le module chargeur d'image « %s » a échoué à "
-"commencer le chargement d'une image, mais ne donne pas de raison pour son "
-"échec"
+"Erreur interne : le module chargeur d'image « %s » a échoué à commencer le "
+"chargement d'une image, mais ne donne pas de raison pour son échec"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -160,8 +158,7 @@ msgstr "Échec lors de la lecture du fichier GIF : %s"
 #: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
-"Il manque au fichier GIF quelques données (peut-être a t'il été "
-"tronqué ?)"
+"Il manque au fichier GIF quelques données (peut-être a t'il été tronqué ?)"
 
 #: gdk-pixbuf/io-gif.c:469
 #, c-format
@@ -208,8 +205,7 @@ msgstr ""
 "L'image GIF contient une trame positionnée en dehors des limites de l'image."
 
 #: gdk-pixbuf/io-gif.c:1173
-msgid ""
-"First frame of GIF image had 'revert to previous' as its disposal mode."
+msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1208
@@ -229,8 +225,7 @@ msgstr "Erreur lors de la lecture du fichier ICO : %s"
 
 #: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"Il manque des données dans le fichier ICO (il est peut-être tronqué ?)"
+msgstr "Il manque des données dans le fichier ICO (il est peut-être tronqué ?)"
 
 #: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 #: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
@@ -284,16 +279,16 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %s » "
-"ne peut être analysée."
+"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %s » ne "
+"peut être analysée."
 
 #: gdk-pixbuf/io-jpeg.c:736
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » "
-"n'est pas autorisée."
+"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » n'est "
+"pas autorisée."
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -436,7 +431,12 @@ msgstr "L'image RAS a un en-tête erronnée"
 msgid "RAS image has unknown type"
 msgstr "L'image RAS a un type inconnu"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+#, fuzzy
+msgid "unsupported RAS image variation"
+msgstr "Type d'image TGA non supporté"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "Pas assez de mémoire pour charger l'image RAS"
 
@@ -459,14 +459,12 @@ msgstr "Impossible d'allouer les données d'IOBuffer temporaires"
 #: gdk-pixbuf/io-tga.c:282
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
-"fread() a échoué - ceci est probablement dû à une fin de fichier "
-"inattendue"
+"fread() a échoué - ceci est probablement dû à une fin de fichier inattendue"
 
 #: gdk-pixbuf/io-tga.c:292
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr ""
-"fseek() a échoué - ceci est probablement dû à une fin de fichier "
-"prématurée"
+"fseek() a échoué - ceci est probablement dû à une fin de fichier prématurée"
 
 #: gdk-pixbuf/io-tga.c:325
 msgid "Can't allocate new pixbuf"
@@ -836,8 +834,8 @@ msgstr "Secondaire"
 
 #: gtk/gtkbbox.c:161
 msgid ""
-"If TRUE, the child appears in a secondary group of children, suitable for, "
-"e.g., help buttons."
+"If TRUE, the child appears in a secondary group of children, suitable for, e."
+"g., help buttons."
 msgstr ""
 
 #: gtk/gtkbox.c:125
@@ -1550,8 +1548,7 @@ msgstr "Mode de redimensionnement"
 
 #: gtk/gtkcontainer.c:201
 msgid "Specify how resize events are handled"
-msgstr ""
-"Indique la façon dont sont gérés les évènements de redimensionnement"
+msgstr "Indique la façon dont sont gérés les évènements de redimensionnement"
 
 #: gtk/gtkcontainer.c:208
 msgid "Border width"
@@ -1576,8 +1573,8 @@ msgstr "Type de courbe"
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
 msgstr ""
-"Indique si cette courbe est linéaire, interpolée à l'aide d'une spline ou "
-"de forme libre"
+"Indique si cette courbe est linéaire, interpolée à l'aide d'une spline ou de "
+"forme libre"
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum X"
@@ -1660,8 +1657,8 @@ msgstr "Sélection :"
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
-"Position de l'autre extrêmité de la sélection comptée en caractères à "
-"partir de la position du curseur."
+"Position de l'autre extrêmité de la sélection comptée en caractères à partir "
+"de la position du curseur."
 
 #: gtk/gtkentry.c:456
 msgid "Whether the entry contents can be edited"
@@ -1686,8 +1683,8 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"FAUX affiche le « caractère invisible » au lieu du texte tapé (mode mot "
-"de passe)"
+"FAUX affiche le « caractère invisible » au lieu du texte tapé (mode mot de "
+"passe)"
 
 #: gtk/gtkentry.c:480
 #, fuzzy
@@ -1703,11 +1700,10 @@ msgid "Invisible character"
 msgstr "Caractère invisible"
 
 #: gtk/gtkentry.c:489
-msgid ""
-"The character to use when masking entry contents (in \"password mode\")"
+msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
-"Caractère à utiliser pour masquer le contenu d'une entrée (en « mode mot "
-"de passe »)"
+"Caractère à utiliser pour masquer le contenu d'une entrée (en « mode mot de "
+"passe »)"
 
 #: gtk/gtkentry.c:496
 msgid "Activates default"
@@ -1719,8 +1715,7 @@ msgid ""
 "dialog) when Enter is pressed."
 msgstr ""
 "Indique si le widget par défaut (par exemple le bouton par défaut dans une "
-"boîte de dialogue) doit être activé quand l'utilisateur appuie sur "
-"Entrée."
+"boîte de dialogue) doit être activé quand l'utilisateur appuie sur Entrée."
 
 #: gtk/gtkentry.c:503
 msgid "Width in chars"
@@ -1750,8 +1745,8 @@ msgstr "Sélection :"
 #: gtk/gtkentry.c:740
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
-"Indique si le contenu de l'entrée de texte doit être sélectionné quand "
-"elle obtient le focus."
+"Indique si le contenu de l'entrée de texte doit être sélectionné quand elle "
+"obtient le focus."
 
 #: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
 msgid "Select All"
@@ -1819,13 +1814,13 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Le fichier « %s » est stocké sur une autre machine (appelée %s) et peut "
-"ne pas être utilisable par ce programme.\n"
+"Le fichier « %s » est stocké sur une autre machine (appelée %s) et peut ne "
+"pas être utilisable par ce programme.\n"
 "Êtes-vous sûr de vouloir le sélectionner ?"
 
 #: gtk/gtkfilesel.c:1086
 msgid "_New Folder"
-msgstr "_Nouveau répertoire"
+msgstr "_Créer un répertoire"
 
 #: gtk/gtkfilesel.c:1097
 msgid "De_lete File"
@@ -1840,8 +1835,8 @@ msgstr "_Renommer le fichier"
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"Le nom du répertoire « %s » contient des symboles non autorisés dans "
-"des noms de fichier."
+"Le nom du répertoire « %s » contient des symboles non autorisés dans des "
+"noms de fichier."
 
 #: gtk/gtkfilesel.c:1388
 #, c-format
@@ -1855,8 +1850,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
-"Vous avez probablement utilisé des symboles invalides dans un nom de "
-"fichier."
+"Vous avez probablement utilisé des symboles invalides dans un nom de fichier."
 
 #: gtk/gtkfilesel.c:1397
 #, c-format
@@ -1865,7 +1859,7 @@ msgstr "Erreur lors de la création du répertoire « %s » : %s\n"
 
 #: gtk/gtkfilesel.c:1431
 msgid "New Folder"
-msgstr "Nouveau répertoire"
+msgstr "Créer un répertoire"
 
 #: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
@@ -1912,8 +1906,7 @@ msgstr "Supprimer le fichier"
 
 #: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
 #, c-format
-msgid ""
-"The file name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Le nom du fichier « %s » contient des symboles invalides dans un nom de "
 "fichier."
@@ -2411,11 +2404,10 @@ msgstr ""
 
 #: gtk/gtkmenu.c:195
 msgid ""
-"A title that may be displayed by the window manager when this menu is "
-"torn-off."
+"A title that may be displayed by the window manager when this menu is torn-"
+"off."
 msgstr ""
-"Titre que le gestionnaire de fenêtre peut afficher quand le menu est "
-"détaché."
+"Titre que le gestionnaire de fenêtre peut afficher quand le menu est détaché."
 
 #: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
@@ -2426,9 +2418,8 @@ msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
 msgstr ""
-"Indique si les accélérateurs pour les entrées de menu peuvent être "
-"modifiés en pressant une combinaison de touche au dessus d'une entrée de "
-"menu."
+"Indique si les accélérateurs pour les entrées de menu peuvent être modifiés "
+"en pressant une combinaison de touche au dessus d'une entrée de menu."
 
 #: gtk/gtkmenubar.c:152
 msgid "Style of bevel around the menubar"
@@ -2440,8 +2431,7 @@ msgstr "Espacement interne"
 
 #: gtk/gtkmenubar.c:160
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr ""
-"Espacement entre l'ombre de la barre de menu et les éléments de menu."
+msgstr "Espacement entre l'ombre de la barre de menu et les éléments de menu."
 
 #: gtk/gtkmessagedialog.c:104
 msgid "Image/label border"
@@ -2461,34 +2451,31 @@ msgstr "Type de message"
 
 #: gtk/gtkmessagedialog.c:121
 msgid "Message Buttons"
-msgstr ""
+msgstr "Boutons de message"
 
 #: gtk/gtkmessagedialog.c:122
 msgid "The buttons shown in the message dialog"
 msgstr "Boutons affichés dans la boîte de dialogue"
 
 #: gtk/gtkmisc.c:97
-#, fuzzy
 msgid "X align"
-msgstr "xalign"
+msgstr "Alignement X"
 
 #: gtk/gtkmisc.c:98
 msgid "The horizontal alignment, from 0 (left) to 1 (right)"
 msgstr "Alignement horizontal, de 0 (gauche) à 1 (droite)"
 
 #: gtk/gtkmisc.c:107
-#, fuzzy
 msgid "Y align"
-msgstr "xalign"
+msgstr "Alignement Y"
 
 #: gtk/gtkmisc.c:108
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr "Alignement vertical, de 0 (haut) à 1 (bas)"
 
 #: gtk/gtkmisc.c:117
-#, fuzzy
 msgid "X pad"
-msgstr "ypad"
+msgstr "Marge X"
 
 #: gtk/gtkmisc.c:118
 msgid ""
@@ -2496,9 +2483,8 @@ msgid ""
 msgstr "Espacement à ajouter à droite et à gauche du widget, en pixels"
 
 #: gtk/gtkmisc.c:127
-#, fuzzy
 msgid "Y pad"
-msgstr "ypad"
+msgstr "Marge Y"
 
 #: gtk/gtkmisc.c:128
 msgid ""
@@ -2568,12 +2554,11 @@ msgstr "Défilement possible"
 #: gtk/gtknotebook.c:421
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
 msgstr ""
-"Si VRAI, des flèches de défilement sont affichées quand il y a trop "
-"d'onglets"
+"Si VRAI, des flèches de défilement sont affichées quand il y a trop d'onglets"
 
 #: gtk/gtknotebook.c:427
 msgid "Enable Popup"
-msgstr ""
+msgstr "Activer les popups"
 
 #: gtk/gtknotebook.c:428
 msgid ""
@@ -2652,13 +2637,14 @@ msgstr "Mode d'activité"
 #: gtk/gtkprogress.c:123
 msgid ""
 "If true the GtkProgress is in activity mode, meaning that is signals "
-"something is happening, but not how much of the activity is finished. This is "
-"used when you're doing something that you don't know how long it will take."
+"something is happening, but not how much of the activity is finished. This "
+"is used when you're doing something that you don't know how long it will "
+"take."
 msgstr ""
 "Si vrai, le GtkProgress est en mode d'activité, ce qui signifie qu'il "
-"indique que quelque chose en train d'arriver, mais qu'il n'indique pas quelle "
-"quantité a été effectuée. C'est utile quand vous effectuez quelque chose, "
-"mais que vous ne savez pas combien de temps cela va prendre."
+"indique que quelque chose en train d'arriver, mais qu'il n'indique pas "
+"quelle quantité a été effectuée. C'est utile quand vous effectuez quelque "
+"chose, mais que vous ne savez pas combien de temps cela va prendre."
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
@@ -2669,9 +2655,8 @@ msgid "Whether the progress is shown as text"
 msgstr "Indique si la progression est indiquée par du texte"
 
 #: gtk/gtkprogress.c:138
-#, fuzzy
 msgid "Text x alignment"
-msgstr "Le x-align."
+msgstr "Alignement x du texte"
 
 #: gtk/gtkprogress.c:139
 msgid ""
@@ -2682,14 +2667,13 @@ msgstr ""
 "widget de progression"
 
 #: gtk/gtkprogress.c:147
-#, fuzzy
 msgid "Text y alignment"
-msgstr "Le y-align."
+msgstr "Alignement y du texte"
 
 #: gtk/gtkprogress.c:148
 msgid ""
-"A number between 0.0 and 1.0 specifying the vertical alignment of the text in "
-"the progress widget"
+"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
+"in the progress widget"
 msgstr ""
 "Nombre entre 0.0 et 1.0 indiquant l'alignement vertical du texte dans le "
 "widget de progression"
@@ -2725,8 +2709,7 @@ msgstr "Pas d'activité"
 
 #: gtk/gtkprogressbar.c:158
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr ""
-"Incrément utilisé pour chaque itération en mode d'activité (obsolète)"
+msgstr "Incrément utilisé pour chaque itération en mode d'activité (obsolète)"
 
 #: gtk/gtkprogressbar.c:167
 msgid "Activity Blocks"
@@ -2856,14 +2839,12 @@ msgstr "Impossible de trouver le fichier à inclure : « %s »"
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
-"Incapable de localiser le fichier image dans le chemin des pixmaps : "
-"« %s »"
+"Incapable de localiser le fichier image dans le chemin des pixmaps : « %s »"
 
 #: gtk/gtkrc.c:3362
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-"L'élément de chemin de pixmap « %s » doit être absolu, %s, ligne %d"
+msgstr "L'élément de chemin de pixmap « %s » doit être absolu, %s, ligne %d"
 
 #: gtk/gtkruler.c:118
 #, fuzzy
@@ -3064,11 +3045,11 @@ msgstr ""
 
 #: gtk/gtksettings.c:173
 msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and "
-"right-to-left text"
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
 msgstr ""
-"Indique si deux curseurs doivent être affichés lors de l'entrée "
-"simultanée de texte s'écrivant de droite à gauche et de gauche à droite"
+"Indique si deux curseurs doivent être affichés lors de l'entrée simultanée "
+"de texte s'écrivant de droite à gauche et de gauche à droite"
 
 #: gtk/gtksettings.c:180
 msgid "Theme Name"
@@ -3143,8 +3124,8 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:266
 msgid ""
-"Whether erroneous values are automatically changed to a spin button's nearest "
-"step increment"
+"Whether erroneous values are automatically changed to a spin button's "
+"nearest step increment"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:273
@@ -3848,8 +3829,7 @@ msgstr "_Méthode d'entrées"
 #: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr ""
-"Impossible de trouver le moteur de thème dans module_path : « %s »"
+msgstr "Impossible de trouver le moteur de thème dans module_path : « %s »"
 
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
@@ -4204,8 +4184,8 @@ msgstr "Requête de hauteur"
 
 #: gtk/gtkwidget.c:415
 msgid ""
-"Override for height request of the widget, or -1 if natural request should be "
-"used."
+"Override for height request of the widget, or -1 if natural request should "
+"be used."
 msgstr ""
 
 #: gtk/gtkwidget.c:424
@@ -4266,8 +4246,7 @@ msgid "Receives default"
 msgstr ""
 
 #: gtk/gtkwidget.c:473
-msgid ""
-"If TRUE, the widget will receive the default action when it is focused."
+msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr "Si VRAI, le widget recevra l'action par défaut quand il a le focus."
 
 #: gtk/gtkwidget.c:479
@@ -4315,8 +4294,7 @@ msgstr ""
 #: gtk/gtkwidget.c:1052
 msgid "Whether to draw the focus indicator inside widgets."
 msgstr ""
-"Indique si l'indicateur de focus doit être dessiné à l'intérieur des "
-"widgets."
+"Indique si l'indicateur de focus doit être dessiné à l'intérieur des widgets."
 
 #: gtk/gtkwidget.c:1058
 msgid "Focus linewidth"
@@ -4341,8 +4319,7 @@ msgstr ""
 #: gtk/gtkwidget.c:1072
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
 msgstr ""
-"Espacement, en pixels, entre l'indicateur de focus et la « boîte » du "
-"widget."
+"Espacement, en pixels, entre l'indicateur de focus et la « boîte » du widget."
 
 #: gtk/gtkwidget.c:1077
 msgid "Cursor color"
@@ -4455,8 +4432,8 @@ msgstr "Hauteur par défaut"
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr ""
-"Hauteur par défaut de la fenêtre, utilisé lors de l'affichage initial de "
-"la fenêtre"
+"Hauteur par défaut de la fenêtre, utilisé lors de l'affichage initial de la "
+"fenêtre"
 
 #: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
@@ -4498,7 +4475,7 @@ msgstr ""
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Thaï (cassé)"
 
 #. ID
 #: modules/input/imti-er.c:453
@@ -4518,7 +4495,7 @@ msgstr "Vietnamien (VIQR)"
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
+msgstr "Méthode d'entrée X"
 
 #, fuzzy
 #~ msgid "Whether the child should receive extra space when the parent grows"
