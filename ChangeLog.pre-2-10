@@ -1,5 +1,8 @@
 2002-09-25  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/x11/gdkvisual-x11.c (gdkx_visual_get): Replace leftover 
+	gdkx_visual_get_for_screen () by gdk_x11_screen_lookup_visual().
+
 	* gtk/gtkaccelgroup.h: Add a missing ; to make things compile.
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_get_colormap):

@@ -565,7 +565,7 @@ gdk_x11_screen_lookup_visual (GdkScreen *screen,
 GdkVisual*
 gdkx_visual_get (VisualID xvisualid)
 {
-  return gdkx_visual_get_for_screen (gdk_screen_get_default (), xvisualid);
+  return gdk_x11_screen_lookup_visual (gdk_screen_get_default (), xvisualid);
 }
 
 static void
