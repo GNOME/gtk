@@ -41,12 +41,12 @@ types related to the text widget and how they work together.
 
 <!-- ##### ENUM GtkWrapMode ##### -->
 <para>
-
+Describes a type of line wrapping.
 </para>
 
-@GTK_WRAPMODE_NONE: 
-@GTK_WRAPMODE_CHAR: 
-@GTK_WRAPMODE_WORD: 
+@GTK_WRAPMODE_NONE: don't wrap lines; just use scrollbars
+@GTK_WRAPMODE_CHAR: allow line breaks between any two characters
+@GTK_WRAPMODE_WORD: allow line breaks only between words
 
 <!-- ##### STRUCT GtkTextAttributes ##### -->
 <para>
@@ -176,127 +176,138 @@ types related to the text widget and how they work together.
 
 <!-- ##### ARG GtkTextTag:name ##### -->
 <para>
-
+Name of the tag, or NULL for anonymous tags. Can only be set
+when the tag is created.
 </para>
 
 <!-- ##### ARG GtkTextTag:background ##### -->
 <para>
-
+Background color, as a string such as "red" or "#FFFFFF"
 </para>
 
 <!-- ##### ARG GtkTextTag:background_gdk ##### -->
 <para>
-
+Background color, as a #GdkColor.
 </para>
 
 <!-- ##### ARG GtkTextTag:background_full_height ##### -->
 <para>
-
+Whether to make the background color for each character the height of
+the highest font used on the current line, or the height of the font 
+used for the current character.
 </para>
 
 <!-- ##### ARG GtkTextTag:background_stipple ##### -->
 <para>
-
+A #GdkBitmap to use for stippling the background color.
 </para>
 
 <!-- ##### ARG GtkTextTag:direction ##### -->
 <para>
-
+The #GtkTextDirection for the tagged text.
 </para>
 
 <!-- ##### ARG GtkTextTag:editable ##### -->
 <para>
-
+Whether the user can modify the tagged text.
 </para>
 
 <!-- ##### ARG GtkTextTag:font ##### -->
 <para>
-
+Font as a Pango font name, e.g. "Sans Italic 12"
 </para>
 
 <!-- ##### ARG GtkTextTag:font_desc ##### -->
 <para>
-
+Font as a #PangoFontDescription.
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground ##### -->
 <para>
-
+Foreground color as a string such as "red" or "#FFFFFF".
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground_gdk ##### -->
 <para>
-
+Foreground color as a #GdkColor.
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground_stipple ##### -->
 <para>
-
+A #GdkBitmap to use as a stipple pattern for the foreground.
 </para>
 
 <!-- ##### ARG GtkTextTag:justify ##### -->
 <para>
-
+A #GtkJustification for the text. This is only used when the tag is
+applied to the first character in a paragraph.
 </para>
 
 <!-- ##### ARG GtkTextTag:language ##### -->
 <para>
-
+The language this text is in, as an ISO code. Pango can use this as a
+hint when rendering the text. If you don't understand this argument, 
+you probably don't need it.
 </para>
 
 <!-- ##### ARG GtkTextTag:left_margin ##### -->
 <para>
-
+Pixel width of left margin of the text.
 </para>
 
 <!-- ##### ARG GtkTextTag:left_wrapped_line_margin ##### -->
 <para>
-
+Pixel width of the left margin of the text for lines after the first
+line in a wrapped paragraph.
 </para>
 
 <!-- ##### ARG GtkTextTag:offset ##### -->
 <para>
-
+Pixels to offset the text horizontally or vertically, useful to
+produce superscript and subscript.
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels_above_lines ##### -->
 <para>
-
+Pixels of blank space to leave above each newline-terminated line.
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels_below_lines ##### -->
 <para>
-
+Pixels of blank space to leave below each newline-terminated line.
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels_inside_wrap ##### -->
 <para>
-
+Pixels of blank space to leave between wrapped lines inside the same
+newline-terminated line (paragraph).
 </para>
 
 <!-- ##### ARG GtkTextTag:right_margin ##### -->
 <para>
-
+Pixel width of right margin.
 </para>
 
 <!-- ##### ARG GtkTextTag:strikethrough ##### -->
 <para>
-
+%TRUE to draw a line through the text.
 </para>
 
 <!-- ##### ARG GtkTextTag:underline ##### -->
 <para>
-
+A #PangoUnderline value.
 </para>
 
 <!-- ##### ARG GtkTextTag:wrap_mode ##### -->
 <para>
-
+A #GtkWrapMode value. Only used if the tag applies to the first
+character in a paragraph.
 </para>
 
 <!-- ##### ARG GtkTextTag:tabs ##### -->
 <para>
-
+A #PangoTabArray indicating tabs for this text.  Only used if the tag
+applies to the first character in a paragraph.
 </para>
 
 <!-- ##### ARG GtkTextTag:background_set ##### -->

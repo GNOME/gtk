@@ -541,14 +541,6 @@ The first "flat" (no struct) enumerated type value.
 @func_data: 
 @args: 
 
-<!-- ##### MACRO GTK_PRIVATE_UNSET_FLAG ##### -->
-<para>
-
-</para>
-
-@wid: 
-@flag: 
-
 <!-- ##### FUNCTION gtk_window_set_focus ##### -->
 <para>
 
@@ -556,6 +548,14 @@ The first "flat" (no struct) enumerated type value.
 
 @window: 
 @focus: 
+
+<!-- ##### MACRO GTK_PRIVATE_UNSET_FLAG ##### -->
+<para>
+
+</para>
+
+@wid: 
+@flag: 
 
 <!-- ##### MACRO gtk_marshal_NONE__BOXED ##### -->
 <para>
@@ -799,6 +799,10 @@ The pointer is allocated just for you:  you must g_free() it.
 @func_data: 
 @args: 
 
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Short_Description ##### -->
+
+
+
 <!-- ##### FUNCTION gtk_text_mark_deleted ##### -->
 <para>
 
@@ -806,10 +810,6 @@ The pointer is allocated just for you:  you must g_free() it.
 
 @mark: 
 @Returns: 
-
-<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Short_Description ##### -->
-
-
 
 <!-- ##### FUNCTION gtk_text_buffer_cut ##### -->
 <para>

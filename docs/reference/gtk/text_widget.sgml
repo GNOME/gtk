@@ -36,7 +36,7 @@ Text in a buffer can be marked with <firstterm>tags</firstterm>. A tag is an
 attribute that can be applied to some range of text. For example, a tag might be
 called "bold" and make the text inside the tag bold. However, the tag concept is
 more general than that; tags don't have to affect appearance. They can instead
-affect change the behavior of mouse and key presses, "lock" a range of text so
+affect the behavior of mouse and key presses, "lock" a range of text so
 the user can't edit it, or countless other things. A tag is represented by a
 <link linkend="GtkTextTag">GtkTextTag</link> object. One <link
 linkend="GtkTextTag">GtkTextTag</link> can be applied to any number of text
@@ -112,24 +112,25 @@ between the old and new positions).
 The simplest usage of <link linkend="GtkTextView">GtkTextView</link> 
 might look like this:
 <programlisting>
+  GtkWidget *view;
+  GtkTextBuffer *buffer;
 
-  /* Get a buffer (it's a GObject, not a GtkObject, so we own a reference
-   * after this). Passing NULL as argument causes an empty tag table to be
-   * automatically created.  
-   */
+  view = gtk_text_view_new ();
 
-  buffer = gtk_text_buffer_new (NULL);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-  view = gtk_text_view_new_with_buffer (buffer);
-
-  /* view holds a reference now */
-  g_object_unref (G_OBJECT (buffer));
+  gtk_text_buffer_set_text (buffer, "Hello, this is some text");
 
   /* Now you might put the view in a container and display it on the
    * screen; when the user edits the text, signals on the buffer
    * will be emitted, such as "changed", "insert_text", and so on.
    */
 </programlisting>
+In many cases it's also convenient to first create the buffer with
+gtk_text_buffer_new(), then create a widget for that buffer with
+gtk_text_view_new_with_buffer(). Or you can change the buffer the
+widget displays after the widget is created with
+gtk_text_view_set_buffer().
 </para>
 
 </refsect1>
