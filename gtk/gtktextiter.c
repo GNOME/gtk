@@ -3033,7 +3033,8 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
         break;
       --count;
     }
-  return TRUE;
+  
+  return !gtk_text_iter_is_end (iter);
 }
 
 /**
@@ -3066,7 +3067,8 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
         break;
       --count;
     }
-  return TRUE;
+
+  return !gtk_text_iter_is_end (iter);
 }
 
 /**
@@ -3244,7 +3246,8 @@ gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
         break;
       --count;
     }
-  return TRUE;
+
+  return !gtk_text_iter_is_end (iter);
 }
 
 /**
@@ -3277,7 +3280,8 @@ gtk_text_iter_backward_sentence_starts (GtkTextIter      *iter,
         break;
       --count;
     }
-  return TRUE;
+
+  return !gtk_text_iter_is_end (iter);
 }
 
 static gboolean
@@ -3400,7 +3404,8 @@ gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
         break;
       --count;
     }
-  return TRUE;
+  
+  return !gtk_text_iter_is_end (iter);
 }
 
 /**
@@ -3437,7 +3442,8 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
         break;
       --count;
     }
-  return TRUE;
+
+  return !gtk_text_iter_is_end (iter);
 }
 
 /**

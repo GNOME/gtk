@@ -1,5 +1,15 @@
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextiter.c (gtk_text_iter_forward_cursor_positions): fix
+	return value, #61714 (Vitaly Tishkov)
+	(gtk_text_iter_backward_sentence_starts): ditto
+	(gtk_text_iter_backward_word_starts): ditto
+	(gtk_text_iter_forward_word_ends): ditto
+	(gtk_text_iter_forward_sentence_ends): ditto
+	(gtk_text_iter_backward_cursor_positions): ditto
+
+2001-10-23  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextlayout.c (gtk_text_layout_get_iter_at_pixel): Apply
 	fix from Dov Grobgeld, #61858
 
