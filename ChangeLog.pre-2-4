@@ -1,3 +1,9 @@
+Mon Aug 27 22:00:41 2001 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkradiobutton.c: fix silly cut'n'paste error,
+	with_label and with_mnemonic should create radio buttons, not
+	check buttons
+
 Mon Aug 27 15:28:56 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* tests/testtreefocus.c (main): Fix to use GtkSelectionMode.
