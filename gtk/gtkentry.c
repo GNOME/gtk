@@ -4639,6 +4639,17 @@ gtk_entry_completion_changed (GtkWidget *entry,
                    completion);
 }
 
+/**
+ * gtk_entry_set_completion:
+ * @entry: A #GtkEntry.
+ * @completion: The #GtkEntryCompletion.
+ *
+ * Sets @completion to be the auxiliary completion object to use with @entry.
+ * All further configuration of the completion mechanism is done on
+ * @completion using the #GtkEntryCompletion API.
+ *
+ * Since: 2.4
+ */
 void
 gtk_entry_set_completion (GtkEntry           *entry,
                           GtkEntryCompletion *completion)
@@ -4695,6 +4706,16 @@ gtk_entry_set_completion (GtkEntry           *entry,
   g_object_set_data (G_OBJECT (entry), GTK_ENTRY_COMPLETION_KEY, completion);
 }
 
+/**
+ * gtk_entry_get_completion:
+ * @entry: A #GtkEntry.
+ *
+ * Returns the auxiliary completion object currently in use by @entry.
+ *
+ * Return value: The auxiliary completion object currently in use by @entry.
+ *
+ * Since: 2.4
+ */
 GtkEntryCompletion *
 gtk_entry_get_completion (GtkEntry *entry)
 {

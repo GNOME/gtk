@@ -1,3 +1,10 @@
+Tue Sep 30 23:42:56 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_set_completion),
+	(gtk_entry_get_completion): Add API doc comments.
+
+	* gtk/gtkentrycompletion.c: Fix #includes and add API doc comments.
+
 Tue Sep 30 23:12:34 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelfilter.c: Add "Since: 2.4" to all API doc comments.

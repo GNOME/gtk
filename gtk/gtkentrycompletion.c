@@ -17,9 +17,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gtkentrycompletion.h"
-#include "gtkentryprivate.h"
-#include "gtkcelllayout.h"
+#include <gtk/gtkentrycompletion.h>
+#include <gtk/gtkentryprivate.h>
+#include <gtk/gtkcelllayout.h>
 
 #include <gtk/gtkintl.h>
 #include <gtk/gtkcellrenderertext.h>
@@ -664,6 +664,16 @@ gtk_entry_completion_action_data_func (GtkTreeViewColumn *tree_column,
 }
 
 /* public API */
+
+/**
+ * gtk_entry_completion_new:
+ *
+ * Creates a new #GtkEntryCompletion object.
+ *
+ * Return value: A newly created #GtkEntryCompletion object.
+ *
+ * Since: 2.4
+ */
 GtkEntryCompletion *
 gtk_entry_completion_new (void)
 {
@@ -674,6 +684,16 @@ gtk_entry_completion_new (void)
   return completion;
 }
 
+/**
+ * gtk_entry_completion_get_entry:
+ * @completion: A #GtkEntryCompletion.
+ *
+ * Gets the entry @completion has been attached to.
+ *
+ * Return value: The entry @completion has been attached to.
+ *
+ * Since: 2.4
+ */
 GtkWidget *
 gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
 {
@@ -682,6 +702,16 @@ gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
   return completion->priv->entry;
 }
 
+/**
+ * gtk_entry_completion_set_model:
+ * @completion: A #GtkEntryCompletion.
+ * @model: The #GtkTreeModel.
+ *
+ * Sets the model for a #GtkEntryCompletion. If @completion already has
+ * a model set, it will remove it before setting the new model.
+ *
+ * Since: 2.4
+ */
 void
 gtk_entry_completion_set_model (GtkEntryCompletion *completion,
                                 GtkTreeModel       *model)
@@ -701,6 +731,17 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
   g_object_unref (G_OBJECT (completion->priv->filter_model));
 }
 
+/**
+ * gtk_entry_completion_get_model:
+ * @completion: A #GtkEntryCompletion.
+ *
+ * Returns the model the #GtkEntryCompletion is using as data source.
+ * Returns %NULL if the model is unset.
+ *
+ * Return value: A #GtkTreeModel, or %NULL if none is currently being used.
+ *
+ * Since: 2.4
+ */
 GtkTreeModel *
 gtk_entry_completion_get_model (GtkEntryCompletion *completion)
 {
@@ -709,6 +750,19 @@ gtk_entry_completion_get_model (GtkEntryCompletion *completion)
   return gtk_tree_model_filter_get_model (completion->priv->filter_model);
 }
 
+/**
+ * gtk_entry_completion_set_match_func:
+ * @completion: A #GtkEntryCompletion.
+ * @func: The #GtkEntryCompletionMatchFunc to use.
+ * @func_data: The user data for @func.
+ * @func_notify: Destroy notifier for @func_data.
+ *
+ * Sets the match function for @completion to be @func. The match function
+ * is used to determine if a row should or should not be in the completion
+ * list.
+ *
+ * Since: 2.4.
+ */
 void
 gtk_entry_completion_set_match_func (GtkEntryCompletion          *completion,
                                      GtkEntryCompletionMatchFunc  func,
@@ -725,6 +779,18 @@ gtk_entry_completion_set_match_func (GtkEntryCompletion          *completion,
   completion->priv->match_notify = func_notify;
 }
 
+/**
+ * gtk_entry_completion_set_minimum_key_length:
+ * @completion: A #GtkEntryCompletion.
+ * @length: The minimum length of the key in order to start completing.
+ *
+ * Requires the length of the search key for @completion to be at least
+ * @length. This is useful for long lists, where completing using a small
+ * key takes a lot of time and will come up with meaningless results anyway
+ * (ie, a too large dataset).
+ *
+ * Since: 2.4
+ */
 void
 gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
                                              gint                length)
@@ -735,6 +801,16 @@ gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
   completion->priv->minimum_key_length = length;
 }
 
+/**
+ * gtk_entry_completion_get_minimum_key_length:
+ * @completion: A #GtkEntryCompletion.
+ *
+ * Returns the minimum key length as set for @completion.
+ *
+ * Return value: The currently used minimum key length.
+ *
+ * Since: 2.4
+ */
 gint
 gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion *completion)
 {
@@ -743,6 +819,16 @@ gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion *completion)
   return completion->priv->minimum_key_length;
 }
 
+/**
+ * gtk_entry_completion_complete:
+ * @completion: A #GtkEntryCompletion.
+ *
+ * Requests a completion operation, or in other words a refiltering of the
+ * current list with completions, using the current key. The completion list
+ * view will be updated accordingly.
+ *
+ * Since: 2.4
+ */
 void
 gtk_entry_completion_complete (GtkEntryCompletion *completion)
 {
@@ -790,6 +876,18 @@ gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
     }
 }
 
+/**
+ * gtk_entry_completion_insert_action_text:
+ * @completion: A #GtkEntryCompletion.
+ * @index: The index of the item to insert.
+ * @text: Text of the item to insert.
+ *
+ * Inserts an action in @completion's action item list at position @index
+ * with text @text. If you want the action item to have markup, use
+ * gtk_entry_completion_insert_action_markup().
+ *
+ * Since: 2.4
+ */
 void
 gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
                                          gint                index,
@@ -801,6 +899,17 @@ gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
   gtk_entry_completion_insert_action (completion, index, text, FALSE);
 }
 
+/**
+ * gtk_entry_completion_insert_action_markup:
+ * @completion: A #GtkEntryCompletion.
+ * @index: The index of the item to insert.
+ * @markup: Markup of the item to insert.
+ *
+ * Inserts an action in @completion's action item list at position @index
+ * with markup @markup.
+ *
+ * Since: 2.4
+ */
 void
 gtk_entry_completion_insert_action_markup (GtkEntryCompletion *completion,
                                            gint                index,
@@ -812,6 +921,15 @@ gtk_entry_completion_insert_action_markup (GtkEntryCompletion *completion,
   gtk_entry_completion_insert_action (completion, index, markup, TRUE);
 }
 
+/**
+ * gtk_entry_completion_delete_action:
+ * @completion: A #GtkEntryCompletion.
+ * @index: The index of the item to Delete.
+ *
+ * Deletes the action at @index from @completion's action list.
+ *
+ * Since: 2.4
+ */
 void
 gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
                                     gint                index)
@@ -826,6 +944,18 @@ gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
   gtk_list_store_remove (completion->priv->actions, &iter);
 }
 
+/**
+ * gtk_entry_completion_set_text_column:
+ * @completion: A #GtkEntryCompletion.
+ * @column: The column in the model of @completion to get strings from.
+ *
+ * Conviencefunction for setting up the most used case of this code: a
+ * completion list with just strings. This function will set up @completion
+ * to have a list displaying all (and just) strings in the completion list,
+ * and to get those strings from @column in the model of @completion.
+ *
+ * Since: 2.4
+ */
 void
 gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
                                       gint                column)
