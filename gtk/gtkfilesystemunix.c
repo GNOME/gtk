@@ -547,7 +547,7 @@ filename_get_info (const gchar     *filename,
 
   if (types & GTK_FILE_INFO_SIZE)
     {
-      gtk_file_info_set_size (info, (gint64)512 * (gint16)statbuf.st_blocks);
+      gtk_file_info_set_size (info, (gint64)statbuf.st_size);
     }
   
   if (types & GTK_FILE_INFO_ICON)

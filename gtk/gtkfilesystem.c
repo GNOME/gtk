@@ -204,7 +204,7 @@ gtk_file_info_set_size (GtkFileInfo *info,
 			gint64       size)
 {
   g_return_if_fail (info != NULL);
-  g_return_if_fail (size < 0);
+  g_return_if_fail (size >= 0);
   
   info->size = size;
 }

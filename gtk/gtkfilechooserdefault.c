@@ -29,6 +29,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtktreeview.h>
+#include <gtk/gtktreemodelsort.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtkvbox.h>
 
@@ -50,6 +51,7 @@ struct _GtkFileChooserImplDefault
   GtkFileSystem *file_system;
   GtkFileSystemModel *tree_model;
   GtkFileSystemModel *list_model;
+  GtkTreeModelSort *sort_model;
 
   GtkFileChooserAction action;
 
@@ -197,6 +199,7 @@ gtk_file_chooser_impl_default_init (GtkFileChooserImplDefault *impl)
   gtk_widget_show (impl->list_scrollwin);
   
   impl->list = gtk_tree_view_new ();
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->list), TRUE);
   gtk_container_add (GTK_CONTAINER (impl->list_scrollwin), impl->list);
   gtk_widget_show (impl->list);
   
@@ -380,6 +383,22 @@ gtk_file_chooser_impl_default_get_current_folder (GtkFileChooser *chooser)
 }
 
 static void
+select_func (GtkFileSystemModel *model,
+	     GtkTreePath        *path,
+	     GtkTreeIter        *iter,
+	     gpointer            user_data)
+{
+  GtkFileChooserImplDefault *impl = user_data;
+  GtkTreeView *tree_view = GTK_TREE_VIEW (impl->list);
+  GtkTreePath *sorted_path;
+
+  sorted_path = gtk_tree_model_sort_convert_child_path_to_path (impl->sort_model, path);
+  gtk_tree_view_set_cursor (tree_view, sorted_path, NULL, FALSE);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->tree), sorted_path, NULL, TRUE, 0.3, 0.0);
+  gtk_tree_path_free (sorted_path);
+}
+
+static void
 gtk_file_chooser_impl_default_select_uri (GtkFileChooser *chooser,
 					  const char     *uri)
 {
@@ -398,7 +417,7 @@ gtk_file_chooser_impl_default_select_uri (GtkFileChooser *chooser,
       gtk_file_chooser_set_current_folder_uri (chooser, parent_uri);
       g_free (parent_uri);
       _gtk_file_system_model_uri_do (impl->list_model, uri,
-				     expand_and_select_func, impl);
+				     select_func, impl);
     }
 }
 
@@ -410,9 +429,13 @@ unselect_func (GtkFileSystemModel *model,
 {
   GtkFileChooserImplDefault *impl = user_data;
   GtkTreeView *tree_view = GTK_TREE_VIEW (impl->list);
+  GtkTreePath *sorted_path;
 
+  sorted_path = gtk_tree_model_sort_convert_child_path_to_path (impl->sort_model,
+								path);
   gtk_tree_selection_unselect_path (gtk_tree_view_get_selection (tree_view),
-				    path);
+				    sorted_path);
+  gtk_tree_path_free (sorted_path);
 }
 
 static void
@@ -451,12 +474,20 @@ get_uris_foreach (GtkTreeModel      *model,
 		  GtkTreeIter       *iter,
 		  gpointer           data)
 {
+  GtkTreePath *child_path;
+  GtkTreeIter child_iter;
+  const gchar *uri;
+  
   struct {
     GSList *result;
     GtkFileChooserImplDefault *impl;
   } *info = data;
-
-  const gchar *uri = _gtk_file_system_model_get_uri (info->impl->tree_model, iter);
+  
+  child_path = gtk_tree_model_sort_convert_path_to_child_path (info->impl->sort_model, path);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (info->impl->list_model), &child_iter, child_path);
+  gtk_tree_path_free (child_path);
+  
+  uri = _gtk_file_system_model_get_uri (info->impl->tree_model, &child_iter);
   info->result = g_slist_prepend (info->result, g_strdup (uri));
 }
 
@@ -478,6 +509,91 @@ gtk_file_chooser_impl_default_get_uris (GtkFileChooser *chooser)
   return g_slist_reverse (info.result);
 }
 
+static gint
+name_sort_func (GtkTreeModel *model,
+		GtkTreeIter  *a,
+		GtkTreeIter  *b,
+		gpointer      user_data)
+{
+  GtkFileChooserImplDefault *impl = user_data;
+  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
+  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
+
+  return g_utf8_collate (gtk_file_info_get_display_name (info_a), gtk_file_info_get_display_name (info_b));
+}
+
+static gint
+size_sort_func (GtkTreeModel *model,
+		GtkTreeIter  *a,
+		GtkTreeIter  *b,
+		gpointer      user_data)
+{
+  GtkFileChooserImplDefault *impl = user_data;
+  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
+  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
+  gint64 size_a = gtk_file_info_get_size (info_a);
+  gint64 size_b = gtk_file_info_get_size (info_b);
+
+  return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
+}
+
+static void
+open_and_close (GtkTreeView *tree_view,
+		GtkTreePath *target_path)
+{
+  GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
+  GtkTreeIter iter;
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (path, 0);
+
+  gtk_tree_model_get_iter (model, &iter, path);
+
+  while (TRUE)
+    {
+      if (gtk_tree_path_is_ancestor (path, target_path) ||
+	  gtk_tree_path_compare (path, target_path) == 0)
+	{
+	  GtkTreeIter child_iter;
+	  gtk_tree_view_expand_row (tree_view, path, FALSE);
+	  if (gtk_tree_model_iter_children (model, &child_iter, &iter))
+	    {
+	      iter = child_iter;
+	      gtk_tree_path_down (path);
+	      goto next;
+	    }
+	}
+      else
+	gtk_tree_view_collapse_row (tree_view, path);
+
+      while (TRUE)
+	{
+	  GtkTreeIter parent_iter;
+	  GtkTreeIter next_iter;
+      
+	  next_iter = iter;
+	  if (gtk_tree_model_iter_next (model, &next_iter))
+	    {
+	      iter = next_iter;
+	      gtk_tree_path_next (path);
+	      goto next;
+	    }
+
+	  if (!gtk_tree_model_iter_parent (model, &parent_iter, &iter))
+	    goto out;
+
+	  iter = parent_iter;
+	  gtk_tree_path_up (path);
+	}
+    next:
+      ;
+    }
+  
+ out:
+  gtk_tree_path_free (path);
+}
+
 static void
 tree_selection_changed (GtkTreeSelection          *selection,
 			GtkFileChooserImplDefault *impl)
@@ -488,21 +604,42 @@ tree_selection_changed (GtkTreeSelection          *selection,
     {
       g_object_unref (impl->list_model);
       impl->list_model = NULL;
+
+      g_object_unref (impl->sort_model);
+      impl->sort_model = NULL;
     }
 
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
-      const gchar *uri = _gtk_file_system_model_get_uri (impl->tree_model, &iter);
+      GtkTreePath *path;
+      const gchar *uri;
+
+      /* Close the tree up to only the parents of the newly selected
+       * node and it's immediate children visible.
+       */
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->tree_model), &iter);
+      open_and_close (GTK_TREE_VIEW (impl->tree), path);
+      gtk_tree_path_free (path);
+      
+      /* Now update the list view to show the new row.
+       */
+      uri = _gtk_file_system_model_get_uri (impl->tree_model, &iter);
 
       impl->list_model = _gtk_file_system_model_new (impl->file_system,
 						     uri, 0,
-						     GTK_FILE_INFO_DISPLAY_NAME);
-
+						     GTK_FILE_INFO_DISPLAY_NAME |
+						     GTK_FILE_INFO_SIZE); 
       _gtk_file_system_model_set_show_folders (impl->list_model, FALSE);
+      
+      impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
+      gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 0, name_sort_func, impl, NULL);
+      gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 1, size_sort_func, impl, NULL);
+      gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model),
+					       name_sort_func, impl, NULL);
     }
       
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->list),
-			   GTK_TREE_MODEL (impl->list_model));
+			   GTK_TREE_MODEL (impl->sort_model));
   
   g_signal_emit_by_name (impl, "current_folder_changed", 0);
   g_signal_emit_by_name (impl, "selection_changed", 0);
@@ -515,12 +652,25 @@ list_selection_changed (GtkTreeSelection          *selection,
   g_signal_emit_by_name (impl, "selection_changed", 0);
 }
 
+const GtkFileInfo *
+get_list_file_info (GtkFileChooserImplDefault *impl,
+		    GtkTreeIter               *iter)
+{
+  GtkTreeIter child_iter;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
+						  &child_iter,
+						  iter);
+
+  return _gtk_file_system_model_get_info (impl->tree_model, &child_iter);
+}
+
 static void
-name_data_func (GtkTreeViewColumn *tree_column,
-		GtkCellRenderer   *cell,
-		GtkTreeModel      *tree_model,
-		GtkTreeIter       *iter,
-		gpointer           data)
+tree_name_data_func (GtkTreeViewColumn *tree_column,
+		     GtkCellRenderer   *cell,
+		     GtkTreeModel      *tree_model,
+		     GtkTreeIter       *iter,
+		     gpointer           data)
 {
   GtkFileChooserImplDefault *impl = data;
   const GtkFileInfo *info = _gtk_file_system_model_get_info (impl->tree_model, iter);
@@ -533,29 +683,95 @@ name_data_func (GtkTreeViewColumn *tree_column,
     }
 }
 
+static void
+list_name_data_func (GtkTreeViewColumn *tree_column,
+		     GtkCellRenderer   *cell,
+		     GtkTreeModel      *tree_model,
+		     GtkTreeIter       *iter,
+		     gpointer           data)
+{
+  GtkFileChooserImplDefault *impl = data;
+  const GtkFileInfo *info = get_list_file_info (impl, iter);
+
+  if (info)
+    {
+      g_object_set (cell,
+		    "text", gtk_file_info_get_display_name (info),
+		    NULL);
+    }
+}
+
+static void
+list_size_data_func (GtkTreeViewColumn *tree_column,
+		     GtkCellRenderer   *cell,
+		     GtkTreeModel      *tree_model,
+		     GtkTreeIter       *iter,
+		     gpointer           data)
+{
+  GtkFileChooserImplDefault *impl = data;
+  const GtkFileInfo *info = get_list_file_info (impl, iter);
+
+  if (info)
+    {
+      gint64 size = gtk_file_info_get_size (info);
+      gchar *str;
+      
+      if (size < (gint64)1024)
+	str = g_strdup_printf ("%d bytes", (gint)size);
+      else if (size < (gint64)1024*1024)
+	str = g_strdup_printf ("%.1f K", size / (1024.));
+      else if (size < (gint64)1024*1024*1024)
+	str = g_strdup_printf ("%.1f M", size / (1024.*1024.));
+      else
+	str = g_strdup_printf ("%.1f G", size / (1024.*1024.*1024.));
+
+      g_object_set (cell,
+		    "text", str,
+		    NULL);
+      
+      g_free (str);
+    }
+
+}
+
 GtkWidget *
 _gtk_file_chooser_impl_default_new (GtkFileSystem *file_system)
 {
   GtkWidget *result = g_object_new (GTK_TYPE_FILE_CHOOSER_IMPL_DEFAULT, NULL);
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (result);
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
 
   impl->file_system = file_system;
-  impl->tree_model = _gtk_file_system_model_new (file_system, NULL, -1, GTK_FILE_INFO_DISPLAY_NAME);
+  impl->tree_model = _gtk_file_system_model_new (file_system, NULL, -1,
+						 GTK_FILE_INFO_DISPLAY_NAME);
   _gtk_file_system_model_set_show_files (impl->tree_model, FALSE);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->tree),
 			   GTK_TREE_MODEL (impl->tree_model));
 
   gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (impl->tree), 0,
-					      "Name",
+					      "File name",
 					      gtk_cell_renderer_text_new (),
-					      name_data_func, impl, NULL);
+					      tree_name_data_func, impl, NULL);
 
-  gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (impl->list), 0,
-					      "Name",
-					      gtk_cell_renderer_text_new (),
-					      name_data_func, impl, NULL);
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title  (column, "File name");
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+					   list_name_data_func, impl, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, 0);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
+  
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title  (column, "Size");
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+					   list_size_data_func, impl, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, 1);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
 
   return result;
 }
-

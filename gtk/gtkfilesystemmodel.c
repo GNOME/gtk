@@ -563,6 +563,8 @@ _gtk_file_system_model_new (GtkFileSystem  *file_system,
     }
   else
     roots = gtk_file_system_list_roots (file_system);
+
+  roots = g_slist_sort (roots, (GCompareFunc)strcmp);
   
   for (tmp_list = roots; tmp_list; tmp_list = tmp_list->next)
     {
@@ -1099,6 +1101,8 @@ file_model_node_get_children (GtkFileSystemModel *model,
 	  
 	  if (gtk_file_folder_list_children (node->folder, &child_uris, NULL)) /* NULL-GError */
 	    {
+	      child_uris = g_slist_sort (child_uris, (GCompareFunc)strcmp);
+
 	      for (tmp_list = child_uris; tmp_list; tmp_list = tmp_list->next)
 		{
 		  FileModelNode *child_node = file_model_node_new (tmp_list->data);
