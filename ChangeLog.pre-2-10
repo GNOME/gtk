@@ -1,3 +1,8 @@
+1999-08-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc.c (gdk_gc_new_with_values): Fix a cut&paste
+	error that caused crashes.
+
 1999-08-17  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdraw.c (gdk_draw_pixmap): When blitting inside one

@@ -147,7 +147,7 @@ gdk_gc_new_with_values (GdkWindow	*window,
 
   if (values_mask & GDK_GC_STIPPLE)
     {
-      private->stipple = values->tile;
+      private->stipple = values->stipple;
       gdk_pixmap_ref (private->stipple);
       GDK_NOTE (MISC, g_print (" stipple=%#x", ((GdkPixmapPrivate *)private->stipple)->xwindow));
     }
