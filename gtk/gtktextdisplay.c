@@ -466,11 +466,6 @@ render_para (GdkDrawable        *drawable,
   layout_logical.y += line_display->top_margin * PANGO_SCALE;
 
   screen_width = line_display->total_width;
-  if (screen_width < 0)
-    {
-      screen_width = pango_layout_get_width (layout);
-      screen_width = PANGO_PIXELS (screen_width);
-    }
   
   do
     {

@@ -1,3 +1,15 @@
+Wed Nov 15 18:39:40 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* **/Makefile.am : remove unecessary rules for win32-specific
+	config-substituted targets. If you want these rules, use
+	--enable-maintainer-mode (called automatically by autogen.sh).
+	Stops a lot of unneccessary make-time warnings.
+
+	* gtk/gtktext{layout,display}.c: Factor in total width as
+	well as screen when figuring alignment for word-wrap as well as
+	no wrap; this is necessary to handle lines that cannot be wrapped
+	at all.
+
 2000-11-15  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testtext.c: Implement essential color cycling feature

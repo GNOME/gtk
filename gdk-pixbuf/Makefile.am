@@ -199,6 +199,3 @@ EXTRA_DIST =			\
 	pixbufloader_png.def		\
 	pixbufloader_tiff.def		\
 	pixbufloader_wbmp.def
-
-makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk-pixbuf/makefile.mingw.in
-	cd $(top_builddir) && CONFIG_FILES=gdk-pixbuf/$@ CONFIG_HEADERS= $(SHELL) ./config.status

@@ -1132,14 +1132,14 @@ set_para_values (GtkTextLayout      *layout,
     case GTK_WRAPMODE_CHAR:
       /* FIXME: Handle this; for now, fall-through */
     case GTK_WRAPMODE_WORD:
-      display->total_width = -1;
       layout_width = layout->screen_width - display->left_margin - display->right_margin;
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
       break;
     case GTK_WRAPMODE_NONE:
-      display->total_width = MAX (layout->screen_width, layout->width) - display->left_margin - display->right_margin;
       break;
     }
+  
+  display->total_width = MAX (layout->screen_width, layout->width) - display->left_margin - display->right_margin;
 }
 
 static PangoAttribute *
@@ -1790,10 +1790,9 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   pango_layout_get_extents (display->layout, NULL, &extents);
 
-  if (display->total_width >= 0)
-    display->x_offset += (display->total_width - PANGO_PIXELS (extents.width)) * align;
+  display->x_offset += (display->total_width - PANGO_PIXELS (extents.x + extents.width)) * align;
 
-  display->width = PANGO_PIXELS (extents.width) + display->x_offset + display->right_margin;
+  display->width = PANGO_PIXELS (extents.width) + display->left_margin + display->right_margin;
   display->height += PANGO_PIXELS (extents.height);
 
   /* Free this if we aren't in a loop */

@@ -607,15 +607,6 @@ testdnd_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 #testthreads_LDADD = $(LDADDS)
 
-makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gtk/makefile.mingw.in
-	cd $(top_builddir) && CONFIG_FILES=gtk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-makefile.msc: $(top_builddir)/config.status $(top_srcdir)/gtk/makefile.msc.in
-	cd $(top_builddir) && CONFIG_FILES=gtk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-gtk-win32.rc: $(top_builddir)/config.status $(top_srcdir)/gtk/gtk-win32.rc.in
-	cd $(top_builddir) && CONFIG_FILES=gtk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
 .PHONY: files test test-debug
 
 files:

@@ -26,7 +26,3 @@ EXTRA_DIST = \
 	gdkwin32id.c \
 	gdkwindow-win32.c \
 	surrogate-dimm.h
-
-makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk/win32/makefile.mingw.in
-	cd $(top_builddir) && CONFIG_FILES=gdk/win32/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-

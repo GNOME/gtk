@@ -25,7 +25,3 @@ EXTRA_DIST =				\
 	DETAILS				\
 	makefile.mingw			\
 	makefile.mingw.in
-
-makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk-pixbuf/pixops/makefile.mingw.in
-	cd $(top_builddir) && CONFIG_FILES=gdk-pixbuf/pixops/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-

@@ -79,6 +79,3 @@ EXTRA_DIST = \
 	cursor94.cur \
 	cursor96.cur \
 	cursor98.cur
-
-gdk.rc: $(top_builddir)/config.status $(top_srcdir)/gdk/win32/rc/gdk.rc.in
-	cd $(top_builddir) && CONFIG_FILES=gdk/win32/rc/$@ CONFIG_HEADERS= $(SHELL) ./config.status
