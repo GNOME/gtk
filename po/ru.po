@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
@@ -371,8 +371,8 @@ msgstr "Преобразованное изображение формата PNG
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
-"Преобразованное иображение формата PNG имеет неподдерживаемое числоканалов, "
-"это число должно быть 3 или 4"
+"Преобразованное изображение формата PNG имеет неподдерживаемое число "
+"каналов, это число должно быть 3 или 4"
 
 # gdk-pixbuf/io-png.c:183
 #: gdk-pixbuf/io-png.c:183
@@ -552,7 +552,7 @@ msgstr "Невозможно перераспределить память дл�
 # gdk-pixbuf/io-tga.c:218
 #: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Невозсожно распределить память для временных данных IOBuffer"
+msgstr "Невозможно распределить память для временных данных IOBuffer"
 
 # gdk-pixbuf/io-tga.c:251
 #: gdk-pixbuf/io-tga.c:251
@@ -1024,8 +1024,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons."
 msgstr ""
-"Если ИСТИНА, то вложенный элемент появляется во вторичной группе "
-"вложенныхэлементов, применимо, например, для кнопок вызова справки."
+"Если ИСТИНА, то вложенный элемент появляется во вторичной группе вложенных "
+"элементов, применимо, например, для кнопок вызова справки."
 
 # gtk/gtkbox.c:125
 #: gtk/gtkbox.c:125
@@ -1062,7 +1062,7 @@ msgstr "Текст метки на кнопке, если кнопка соде�
 # gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
-msgstr "Использовать подчеркивание"
+msgstr "Использовать подчёркивание"
 
 # gtk/gtkbutton.c:198 gtk/gtklabel.c:302
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:302
@@ -1083,7 +1083,7 @@ msgstr "Использовать встроенное"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"Если установлено, метка будет использована для выбора из встроенныхкнопок "
+"Если установлено, метка будет использована для выбора из встроенных кнопок "
 "вместо отображения"
 
 # gtk/gtkbutton.c:213
@@ -1293,12 +1293,12 @@ msgstr "Разметка текста для отображения"
 # gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:287
 #: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:287
 msgid "Attributes"
-msgstr "Аттрибуты"
+msgstr "Атрибуты"
 
 # gtk/gtkcellrenderertext.c:191
 #: gtk/gtkcellrenderertext.c:191
 msgid "A list of style attributes to apply to the text of the renderer."
-msgstr "Список аттрибутов стиля применяемых к визуализируемому тексту."
+msgstr "Список атрибутов стиля, применяемых к визуализируемому тексту."
 
 # gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
 #: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
@@ -1350,7 +1350,7 @@ msgstr "Редактируемое"
 # gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 #: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
-msgstr "Может ли текст быть изменен пользователем"
+msgstr "Может ли текст быть изменён пользователем"
 
 # gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
 # gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
@@ -1460,12 +1460,12 @@ msgstr "Будет ли текст перечеркнут"
 # gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
 msgid "Underline"
-msgstr "Подчеркивание"
+msgstr "Подчёркивание"
 
 # gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
-msgstr "Стиль подчеркивания для этого текста"
+msgstr "Стиль подчёркивания для этого текста"
 
 # gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
 #: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
@@ -1769,7 +1769,7 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Щелкните на пипетке, затем щёлкните на цвете в любом месте экрана, чтобы "
+"Щёлкните на пипетке, затем щёлкните на цвете в любом месте экрана, чтобы "
 "выбрать этот цвет."
 
 # gtk/gtkcolorsel.c:1821
@@ -1815,7 +1815,7 @@ msgstr "Количество красного оттенка в цвете."
 # gtk/gtkcolorsel.c:1829
 #: gtk/gtkcolorsel.c:1829
 msgid "_Green:"
-msgstr "_Зеленый:"
+msgstr "_Зелёный:"
 
 # gtk/gtkcolorsel.c:1830
 #: gtk/gtkcolorsel.c:1830
@@ -1853,7 +1853,7 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"Вы можете ввести в этой строке или шестнадцатиричное значение цвета (в стиле "
+"Вы можете ввести в этой строке или шестнадцатеричное значение цвета (в стиле "
 "HTML), или название цвета,\n"
 "такое как \"orange\"."
 
@@ -2014,7 +2014,7 @@ msgstr ""
 # gtk/gtkdialog.c:153
 #: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
-msgstr "Ширина границы вокрук области основного диалога"
+msgstr "Ширина границы вокруг области основного диалога"
 
 # gtk/gtkdialog.c:160
 #: gtk/gtkdialog.c:160
@@ -2034,7 +2034,7 @@ msgstr ""
 # gtk/gtkdialog.c:170
 #: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr "Ширина отсупа вокруг кнопки снизу в диалоге"
+msgstr "Ширина отступа вокруг кнопки снизу в диалоге"
 
 # gtk/gtkentry.c:435 gtk/gtklabel.c:358
 #: gtk/gtkentry.c:435 gtk/gtklabel.c:358
@@ -2391,6 +2391,8 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
+"Имя файла \"%s\" не может быть преобразовано в UTF-8 (попробуйте установить "
+"переменную окружения G_BROKEN_FILENAMES)): %s"
 
 # gtk/gtkfilesel.c:2986
 #: gtk/gtkfilesel.c:2986
@@ -2800,7 +2802,7 @@ msgstr "Текст метки."
 # gtk/gtklabel.c:288
 #: gtk/gtklabel.c:288
 msgid "A list of style attributes to apply to the text of the label."
-msgstr "Список аттрибутов стиля применяемый к тексту метки."
+msgstr "Список атрибутов стиля применяемый к тексту метки."
 
 # gtk/gtklabel.c:294
 #: gtk/gtklabel.c:294
@@ -2974,7 +2976,7 @@ msgstr "Граница изображения/метки"
 # gtk/gtkmessagedialog.c:105
 #: gtk/gtkmessagedialog.c:105
 msgid "Width of border around the label and image in the message dialog"
-msgstr "Ширина отсупа вокруг метки и изображения в диалоге сообщения"
+msgstr "Ширина отступа вокруг метки и изображения в диалоге сообщения"
 
 # gtk/gtkmessagedialog.c:113
 #: gtk/gtkmessagedialog.c:113
@@ -3066,7 +3068,7 @@ msgstr "Граница ярлыка"
 # gtk/gtknotebook.c:380
 #: gtk/gtknotebook.c:380
 msgid "Width of the border around the tab labels"
-msgstr "Ширина отсупа вокруг меток ярлыка"
+msgstr "Ширина отступа вокруг меток ярлыка"
 
 # gtk/gtknotebook.c:388
 #: gtk/gtknotebook.c:388
@@ -3658,7 +3660,7 @@ msgid ""
 "click (in milliseconds)"
 msgstr ""
 "Максимальное время между двумя щелчками, при котором они считаются двойным "
-"щелчком (в милисекундах)"
+"щелчком (в миллисекундах)"
 
 # gtk/gtksettings.c:156
 #: gtk/gtksettings.c:156
@@ -3702,7 +3704,7 @@ msgstr "Название темы"
 # gtk/gtksettings.c:181
 #: gtk/gtksettings.c:181
 msgid "Name of theme RC file to load"
-msgstr "Название файла RC тему для загрузки"
+msgstr "Название файла RC темы для загрузки"
 
 # gtk/gtksettings.c:188
 #: gtk/gtksettings.c:188
@@ -4263,7 +4265,7 @@ msgstr "Название ярлыка"
 # gtk/gtktexttag.c:200
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
-msgstr "Название используемое для ссылки на текстовый ярлык"
+msgstr "Название, используемое для ссылки на текстовый ярлык"
 
 # gtk/gtktexttag.c:225
 #: gtk/gtktexttag.c:225
@@ -4330,7 +4332,7 @@ msgstr "Отступ слева"
 # gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 #: gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 msgid "Width of the left margin in pixels"
-msgstr "Ширина отсупа слева в точках растра"
+msgstr "Ширина отступа слева в точках растра"
 
 # gtk/gtktexttag.c:405
 #: gtk/gtktexttag.c:405
@@ -5102,7 +5104,7 @@ msgstr "Чувствительный"
 # gtk/gtkwidget.c:431
 #: gtk/gtkwidget.c:431
 msgid "Whether the widget responds to input"
-msgstr "Будет ли виждет использовать ввод"
+msgstr "Будет ли виджет использовать ввод"
 
 # gtk/gtkwidget.c:437
 #: gtk/gtkwidget.c:437
@@ -5254,7 +5256,7 @@ msgstr "Цвет курсора"
 # gtk/gtkwidget.c:1078
 #: gtk/gtkwidget.c:1078
 msgid "Color with which to draw insertion cursor"
-msgstr "Цвет используемый для куросра"
+msgstr "Цвет используемый для курсора"
 
 # gtk/gtkwidget.c:1083
 #: gtk/gtkwidget.c:1083
