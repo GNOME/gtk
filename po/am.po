@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2002-10-24 05:28+0200\n"
-"PO-Revision-Date: 2002-12-21 22:37+EDT\n"
+"PO-Revision-Date: 2002-12-27 22:19+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1406,7 +1406,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1825
 msgid "_Value:"
-msgstr ""
+msgstr "_ዕሴት፦"
 
 #: gtk/gtkcolorsel.c:1826
 msgid "Brightness of the color."
@@ -1694,7 +1694,7 @@ msgstr "ሁሉንም ምረጡ"
 
 #: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
-msgstr "የመረጃ ዘዴዎች"
+msgstr "ዘገባ የማስትገባት ዘዴዎች"
 
 #: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
@@ -1827,7 +1827,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1552
 msgid "Delete File"
-msgstr "ፋይል ሰረዝ"
+msgstr "ፋይል አጥፉ"
 
 #: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
@@ -1994,11 +1994,11 @@ msgstr ""
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr ""
+msgstr "ጋማ"
 
 #: gtk/gtkgamma.c:406
 msgid "_Gamma value"
-msgstr ""
+msgstr "የ_ጋማ ዕሴት"
 
 #: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
@@ -2201,7 +2201,7 @@ msgstr "ሰርዝ"
 
 #: gtk/gtklabel.c:281
 msgid "The text of the label."
-msgstr ""
+msgstr "የጽሑፉ መለያ።"
 
 #: gtk/gtklabel.c:288
 msgid "A list of style attributes to apply to the text of the label."
@@ -2739,7 +2739,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:128
 msgid "Upper"
-msgstr ""
+msgstr "የበላይ"
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
@@ -3026,7 +3026,7 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:298
 msgid "Value"
-msgstr ""
+msgstr "ዕሴት"
 
 #: gtk/gtkspinbutton.c:299
 msgid "Reads the current value, or sets a new value"
@@ -3098,7 +3098,7 @@ msgstr "ቁረጥ (_t)"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "መሰረዣ (_D)"
+msgstr "አጥፉ (_D)"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
@@ -3114,7 +3114,7 @@ msgstr "ፈልግ እና ተካ (_R)"
 
 #: gtk/gtkstock.c:289
 msgid "_Floppy"
-msgstr ""
+msgstr "ፍሎፒ (_F)"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
@@ -3310,7 +3310,7 @@ msgstr "ከርቀት እይታ (_O)"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
-msgstr "መደዳዎች"
+msgstr "ረድፎች"
 
 #: gtk/gtktable.c:157
 msgid "The number of rows in the table"
@@ -3681,7 +3681,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:6417
 msgid "Input _Methods"
-msgstr " የመረጃ ዘዴዎች (_I)"
+msgstr "ዘገባ የማስትገባት ዘዴ (_M)"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -4327,4 +4327,4 @@ msgstr "ቪትናምኛ (VIQR)"
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr "የX የመረጃ ዘዴ"
+msgstr "የX ዘገባ የማስትገባት ዘዴ"
