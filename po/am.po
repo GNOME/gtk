@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-11-20 20:37+0100\n"
-"PO-Revision-Date: 2002-11-01 21:06+EDT\n"
+"POT-Creation-Date: 2002-10-24 05:28+0200\n"
+"PO-Revision-Date: 2002-11-23 23:19+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -133,7 +133,7 @@ msgstr ""
 msgid "BMP image has unsupported header size"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:407
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
 msgid "BMP image has bogus header data"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgstr ""
 msgid "Failure reading GIF: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 
@@ -151,59 +151,59 @@ msgstr ""
 msgid "Internal error in the GIF loader (%s)"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:543
+#: gdk-pixbuf/io-gif.c:541
 msgid "Stack overflow"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:603
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:632
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:642
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
-#: gdk-pixbuf/io-gif.c:1543
+#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1022
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1072
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1084
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1170
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1186
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1221
+#: gdk-pixbuf/io-gif.c:1218
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1450
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr ""
 
@@ -810,7 +810,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:125
 msgid "Spacing"
-msgstr ""
+msgstr "ክፍተት"
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
@@ -1700,7 +1700,7 @@ msgstr ""
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "የፋይል ስም"
 
@@ -1870,22 +1870,22 @@ msgstr ""
 msgid "Selection: "
 msgstr "ምርጫ፦ "
 
-#: gtk/gtkfilesel.c:3005
+#: gtk/gtkfilesel.c:3004
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3008
+#: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
 msgstr "Utf-8 ተቀብሏል"
 
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3873
 msgid "Name too long"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3877
+#: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
 msgstr ""
 
@@ -2035,79 +2035,79 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr ""
 
-#: gtk/gtkimage.c:133
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr ""
 
-#: gtk/gtkimage.c:134
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr ""
 
-#: gtk/gtkimage.c:141
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr ""
 
-#: gtk/gtkimage.c:142
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr ""
 
-#: gtk/gtkimage.c:149
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "ምስል"
 
-#: gtk/gtkimage.c:150
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr ""
 
-#: gtk/gtkimage.c:157
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr ""
 
-#: gtk/gtkimage.c:158
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr ""
 
-#: gtk/gtkimage.c:166
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr ""
 
-#: gtk/gtkimage.c:174
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr ""
 
-#: gtk/gtkimage.c:175
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr ""
 
-#: gtk/gtkimage.c:182
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr ""
 
-#: gtk/gtkimage.c:183
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr ""
 
-#: gtk/gtkimage.c:190
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "የምልክት መጠን"
 
-#: gtk/gtkimage.c:191
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr ""
 
-#: gtk/gtkimage.c:199
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr ""
 
-#: gtk/gtkimage.c:200
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr ""
 
-#: gtk/gtkimage.c:207
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr ""
 
-#: gtk/gtkimage.c:208
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr ""
 
@@ -2899,7 +2899,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:156
 msgid "Cursor Blink"
-msgstr ""
+msgstr "የመጠቆሚያዋ አበራርና አጠፋፍ"
 
 #: gtk/gtksettings.c:157
 msgid "Whether the cursor should blink"
@@ -3062,11 +3062,11 @@ msgstr "ተጨማሪ (_A)"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr ""
+msgstr "ተጠቀም (_A)"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr ""
+msgstr "ደማቅ (_B)"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
@@ -3485,7 +3485,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
-msgstr ""
+msgstr "የዶሴ ምክፈቻ"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
@@ -3963,7 +3963,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
-msgstr ""
+msgstr "ኩልኩል"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
