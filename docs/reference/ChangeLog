@@ -1,3 +1,8 @@
+Fri May 28 14:34:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkcontainer.sgml: Fix docs for 
+	gtk_container_border_width().  (#143309, Doug Quale)
+
 Thu May 27 00:44:48 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_entry_completion_get_text_column.
