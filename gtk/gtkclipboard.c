@@ -641,18 +641,18 @@ request_text_received_func (GtkClipboard     *clipboard,
 
   if (!result)
     {
-      /* If we asked for UTF8 and didn't get it, try text; if we asked
-       * for text and didn't get it, try string.  If we asked for
-       * anything else and didn't get it, give up.
+      /* If we asked for UTF8 and didn't get it, try compound_text;
+       * if we asked for compound_text and didn't get it, try string;
+       * If we asked for anything else and didn't get it, give up.
        */
       if (selection_data->target == gdk_atom_intern ("UTF8_STRING", FALSE))
 	{
 	  gtk_clipboard_request_contents (clipboard,
-					  gdk_atom_intern ("TEXT", FALSE), 
+					  gdk_atom_intern ("COMPOUND_TEXT", FALSE), 
 					  request_text_received_func, info);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern ("TEXT", FALSE))
+      else if (selection_data->target == gdk_atom_intern ("COMPOUND_TEXT", FALSE))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  GDK_TARGET_STRING, 

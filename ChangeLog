@@ -1,3 +1,11 @@
+2001-08-08  HideToshi Tajima  <tajima@eng.sun.com>
+
+	* gtk/gtkclipboard.c (request_text_received_func): ask apps for
+	COMPOUND_TEXT instead of TEXT
+	* gdk/x11/gdkselection-x11.c (gdk_utf8_to_compound_text): correctly
+	interpret the return value of g_string_to_compound_text()
+	(#55152)
+
 2001-08-08  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
 	* gtk/gtktreestore.c (gtk_tree_store_iter_n_children): Don't
