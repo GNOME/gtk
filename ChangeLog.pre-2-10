@@ -1,3 +1,12 @@
+Mon Jul  5 23:47:38 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilechooserutils.c (delegate_notify): Use
+	the less efficient g_object_interface_find_property () instead
+	of the param_id range check, since the GParamSpecs we're 
+	dealing with are the overridden onces on the interface, whose
+	param_id is always zero.  (#145312, Alex Roitman, fix proposed
+	by Owen Taylor)
+
 2004-07-05  Lorenzo Gil Sanchez  <lgs@sicem.biz>
 
 	* gtk/gtklayout.c (gtk_layout_add): added a default method for the add
