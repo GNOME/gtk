@@ -29,6 +29,9 @@
 	to some functions, related to moving and resizing and expose
 	and antiexpose queue processing. Use %p to output HWNDs.
 
+	* gdk/win32/gdkkeys-win32.c (print_keysym_tab): Factor out
+	debugging output to new function.
+
 	Fix for #81831 by Tim Evans:
 	
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Don't call
