@@ -1,0 +1,24 @@
+
+Overview of Changes in GTK+ 0.99.3:
+
+* Filesel enhancement / stability changes
+* New widget, gtkcombo 
+* Widgets in the toolbar do not get the focus
+* New widget, gtkstatusbar (still in-progress)
+* g_string_equal renamed g_str_equal
+* g_string_hash renamed g_str_hash
+* new gtkbox functions to allow modification of the child 
+  linkage after the widget tree is setup
+* gtk_*_get_arg() and gtk_*_set_arg() fixes and implementations
+* DND changes/fixes
+* Entry widget now has set_max_length function
+* Handlebox widget changes/fixes 
+* Some work on text widget (still in-progress)
+* Now the toolbar supports arbitrary widgets as well
+* CList has resizable columns again
+* CList now looks consistant with scrolled windows
+* Remove flickering from entry widget
+* Added switch_page signal to notebook widget
+* Documentation additions
+* Other bug fixes...
+
