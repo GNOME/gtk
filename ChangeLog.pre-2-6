@@ -1,3 +1,12 @@
+2004-05-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdktypes.h (GdkModifierType): Add a comment about unused
+	bits.
+
+	* gtk/gtkstock.c (real_add, gtk_stock_lookup): Use an unused
+	modifier bit to mark stock item which need to be freed 
+	eventually.  (#140654, Michal Pasternak, Scott Tsai)
+
 2004-05-11  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Add missing

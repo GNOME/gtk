@@ -130,7 +130,9 @@ typedef enum
   GDK_BUTTON3_MASK  = 1 << 10,
   GDK_BUTTON4_MASK  = 1 << 11,
   GDK_BUTTON5_MASK  = 1 << 12,
-  /* The next few modifiers are used by XKB, so we skip to the end
+  /* The next few modifiers are used by XKB, so we skip to the end.
+   * Bits 16 - 28 are currently unused, but will eventually
+   * be used for "virtual modifiers". Bit 29 is used internally.
    */
   GDK_RELEASE_MASK  = 1 << 30,
   GDK_MODIFIER_MASK = GDK_RELEASE_MASK | 0x1fff
