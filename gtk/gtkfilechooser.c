@@ -1796,8 +1796,8 @@ gtk_file_chooser_list_shortcut_folder_uris (GtkFileChooser *chooser)
  * Since: 2.6
  **/
 void
-gtk_file_chooser_set_select_multiple (GtkFileChooser *chooser,
-				      gboolean        show_hidden)
+gtk_file_chooser_set_show_hidden (GtkFileChooser *chooser,
+				  gboolean        show_hidden)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
 
