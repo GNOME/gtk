@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-16 10:50+0100\n"
+"POT-Creation-Date: 2004-02-19 18:04+0100\n"
 "PO-Revision-Date: 2003-11-14 17:38+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1696,12 +1696,12 @@ msgid "The type of operation that the file selector is performing"
 msgstr "Typ operacji przeprowadzanej przez narzędzie do wyboru plików"
 
 #: gtk/gtkfilechooser.c:99
-msgid "File System"
-msgstr "System plików"
+msgid "File System Backend"
+msgstr "Wsparcie systemu plików"
 
 #: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr "Używany obiekt systemu plików"
+msgid "Name of file system backend to use"
+msgstr "Nazwa używanego wsparcia systemu plików"
 
 #: gtk/gtkfilechooser.c:105
 msgid "Filter"
@@ -4468,3 +4468,6 @@ msgstr "Styl stanu metody wejściowej"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Sposób rysowania paska stanu metody wejściowej"
+
+#~ msgid "File system object to use"
+#~ msgstr "Używany obiekt systemu plików"
