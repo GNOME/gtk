@@ -3,3 +3,10 @@ Makefile
 .deps
 _libs
 libglib.la
+config.log
+glibconfig.h
+libtool
+config.status
+stamp-h
+.libs
+testglib
