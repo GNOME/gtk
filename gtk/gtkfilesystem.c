@@ -518,22 +518,22 @@ gtk_file_folder_base_init (gpointer g_class)
 		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
-      g_signal_new ("file_changed",
+      g_signal_new ("files_changed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkFileFolderIface, file_changed),
+		    G_STRUCT_OFFSET (GtkFileFolderIface, files_changed),
 		    NULL, NULL,
-		    g_cclosure_marshal_VOID__STRING,
+		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
-		    G_TYPE_STRING);
-      g_signal_new ("file_removed",
+		    G_TYPE_POINTER);
+      g_signal_new ("files_removed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkFileFolderIface, file_removed),
+		    G_STRUCT_OFFSET (GtkFileFolderIface, files_removed),
 		    NULL, NULL,
-		    g_cclosure_marshal_VOID__STRING,
+		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
-		    G_TYPE_STRING);
+		    G_TYPE_POINTER);
 
       initialized = TRUE;
     }

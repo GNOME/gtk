@@ -200,13 +200,13 @@ struct _GtkFileFolderIface
 
   /* Signals
    */
-  void (*deleted)      (GtkFileFolder *monitor);
+  void (*deleted)       (GtkFileFolder *monitor);
   void (*files_added)   (GtkFileFolder *monitor,
 			 GSList        *uris);
-  void (*file_changed) (GtkFileFolder *monitor,
-			const gchar   *uri);
-  void (*file_removed) (GtkFileFolder *monitor,
-			const gchar   *uri);
+  void (*files_changed) (GtkFileFolder *monitor,
+			 GSList        *uris);
+  void (*files_removed) (GtkFileFolder *monitor,
+			 GSList        *uris);
 };
 
 GType        gtk_file_folder_get_type      (void);

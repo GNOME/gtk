@@ -66,6 +66,9 @@ struct _GtkFileFolderUnix
   gchar *filename;
 };
 
+GObjectClass *system_parent_class;
+GObjectClass *folder_parent_class;
+
 static void gtk_file_system_unix_class_init   (GtkFileSystemUnixClass *class);
 static void gtk_file_system_unix_iface_init   (GtkFileSystemIface     *iface);
 static void gtk_file_system_unix_init         (GtkFileSystemUnix      *impl);
@@ -179,6 +182,8 @@ static void
 gtk_file_system_unix_class_init (GtkFileSystemUnixClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  system_parent_class = g_type_class_peek_parent (class);
   
   gobject_class->finalize = gtk_file_system_unix_finalize;
 }
@@ -203,6 +208,7 @@ gtk_file_system_unix_init (GtkFileSystemUnix *system_unix)
 static void
 gtk_file_system_unix_finalize (GObject *object)
 {
+  system_parent_class->finalize (object);
 }
 
 static GSList *
@@ -529,6 +535,8 @@ gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
+  folder_parent_class = g_type_class_peek_parent (class);
+
   gobject_class->finalize = gtk_file_folder_unix_finalize;
 }
 
@@ -550,6 +558,8 @@ gtk_file_folder_unix_finalize (GObject *object)
   GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (object);
 
   g_free (folder_unix->filename);
+  
+  folder_parent_class->finalize (object);
 }
 
 static GtkFileInfo *
