@@ -1,3 +1,11 @@
+2001-09-21  Matt Wilson  <msw@redhat.com>
+
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_destroy): set
+	radio_menu_item->group to NULL after removing it from the list, as
+	it is no longer in the group. (#60869)
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_destroy): likewise
+
 2001-09-20  Havoc Pennington  <hp@pobox.com>
 
 	* configure.in (PANGO_REQUIRED_VERSION)

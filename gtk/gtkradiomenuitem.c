@@ -226,6 +226,9 @@ gtk_radio_menu_item_destroy (GtkObject *object)
       tmp_menu_item->group = radio_menu_item->group;
     }
 
+  /* this radio menu item is no longer in the group */
+  radio_menu_item->group = NULL;
+  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }

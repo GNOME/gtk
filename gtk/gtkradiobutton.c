@@ -323,6 +323,9 @@ gtk_radio_button_destroy (GtkObject *object)
       tmp_button->group = radio_button->group;
     }
 
+  /* this button is no longer in the group */
+  radio_button->group = NULL;
+  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
