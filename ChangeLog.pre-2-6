@@ -1,3 +1,10 @@
+Wed Jan 31 21:20:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (real_tree_move): If the node being moved isn't
+	viewable there is no way that moving the node will cause the 
+	focus row to become not viewable, so omit check on the visibility
+	of new_sibling, which is irrelevant. (Fixes #8002, David Helder)
+
 Wed Jan 31 20:33:35 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_set_selection): Check bounds

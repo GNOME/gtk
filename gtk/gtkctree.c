@@ -2413,8 +2413,7 @@ real_tree_move (GtkCTree     *ctree,
   gtk_clist_freeze (clist);
 
   work = NULL;
-  if (gtk_ctree_is_viewable (ctree, node) ||
-      gtk_ctree_is_viewable (ctree, new_sibling))
+  if (gtk_ctree_is_viewable (ctree, node))
     work = GTK_CTREE_NODE (g_list_nth (clist->row_list, clist->focus_row));
       
   gtk_ctree_unlink (ctree, node, FALSE);
