@@ -64,10 +64,13 @@ gdk_pixbuf_headers = 	\
 	gdk-pixbuf-transform.h
 
 gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
-	..\..\glib\gobject\glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h
+	..\..\glib\gobject\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h
 
-gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.list
-	..\..\glib\gobject\glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >gdk-pixbuf-marshal.c
+gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.h gdk-pixbuf-marshal.list
+	..\..\glib\gobject\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >gdk-pixbuf-marshal.c
+
+gdk-pixbuf-alias.h: gdk-pixbuf.symbols
+	perl makegdkpixbufalias.pl < gdk-pixbuf.symbols > gdk-pixbuf-alias.h
 
 ## common stuff
 
@@ -83,8 +86,9 @@ sub-pixops :
 ## targets
 all : \
 	$(PRJ_TOP)\config.h \
-	gdk-pixbuf-marshal.c \
+	gdk-pixbuf-alias.h \
 	gdk-pixbuf-marshal.h \
+	gdk-pixbuf-marshal.c \
 	sub-pixops \
 	lib$(PACKAGE)-$(PKG_VER)-0.dll \
 	$(PACKAGE)-$(PKG_VER)s.lib \
@@ -144,4 +148,9 @@ $(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
 
 clean::
 	del config.h
+	del gdk-pixbuf-marshal.h
+	del gdk-pixbuf-marshal.c
+	del gdk-pixbuf-alaias.h
+
+
 
