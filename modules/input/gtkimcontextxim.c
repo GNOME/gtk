@@ -30,7 +30,7 @@ typedef struct _StatusWindow StatusWindow;
 
 struct _GtkXIMInfo
 {
-  GdkDisplay *display;
+  GdkScreen *screen;
   XIM im;
   char *locale;
   XIMStyle preedit_style_setting;
@@ -40,6 +40,7 @@ struct _GtkXIMInfo
   gulong status_set;
   gulong preedit_set;
   XIMStyles *xim_styles;
+  GSList *ics;
 };
 
 /* A context status window; these are kept in the status_windows list. */
@@ -74,7 +75,12 @@ static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *co
 						       PangoAttrList        **attrs,
 						       gint                  *cursor_pos);
 
-static void reinitialize_ic (GtkIMContextXIM *context_xim);
+static void reinitialize_ic      (GtkIMContextXIM *context_xim,
+				  gboolean         send_signal);
+static void set_ic_client_window (GtkIMContextXIM *context_xim,
+				  GdkWindow       *client_window,
+				  gboolean         send_signal);
+
 static void setup_styles (GtkXIMInfo *info);
 
 static void status_window_show     (GtkIMContextXIM *context_xim);
@@ -162,9 +168,19 @@ choose_better_style (XIMStyle style1, XIMStyle style2)
 }
 
 static void
+reinitialize_all_ics (GtkXIMInfo *info)
+{
+  GSList *tmp_list;
+
+  for (tmp_list = info->ics; tmp_list; tmp_list = tmp_list->next)
+    reinitialize_ic (tmp_list->data, TRUE);
+}
+
+static void
 status_style_change (GtkXIMInfo *info)
 {
   GtkIMStatusStyle status_style;
+  
   g_object_get (info->settings,
 		"gtk-im-status-style", &status_style,
 		NULL);
@@ -176,6 +192,8 @@ status_style_change (GtkXIMInfo *info)
     return;
 
   setup_styles (info);
+  
+  reinitialize_all_ics (info);
 }
 
 static void
@@ -193,24 +211,8 @@ preedit_style_change (GtkXIMInfo *info)
     return;
 
   setup_styles (info);
-}
-
-static void
-status_style_change_notify (GtkIMContextXIM *context_xim)
-{
-  GtkXIMInfo *info = context_xim->im_info;
-  status_style_change (info);
-
-  reinitialize_ic (context_xim);
-}
-
-static void
-preedit_style_change_notify (GtkIMContextXIM *context_xim)
-{
-  GtkXIMInfo *info = context_xim->im_info;
-  preedit_style_change (info);
-
-  reinitialize_ic (context_xim);
+  
+  reinitialize_all_ics (info);
 }
 
 static void
@@ -238,18 +240,16 @@ setup_styles (GtkXIMInfo *info)
 }
 
 static void
-setup_im (GtkXIMInfo *info, GdkWindow *window)
+setup_im (GtkXIMInfo *info)
 {
   XIMValuesList *ic_values = NULL;
-  int i;
-  GdkScreen *screen = gdk_drawable_get_screen (window);
 
   XGetIMValues (info->im,
 		XNQueryInputStyle, &info->xim_styles,
 		XNQueryICValuesList, &ic_values,
 		NULL);
 
-  info->settings = gtk_settings_get_for_screen (screen);
+  info->settings = gtk_settings_get_for_screen (info->screen);
 
   if (!g_object_class_find_property (G_OBJECT_GET_CLASS (info->settings),
 				     "gtk-im-preedit-style"))
@@ -268,6 +268,16 @@ setup_im (GtkXIMInfo *info, GdkWindow *window)
 						      GTK_TYPE_IM_STATUS_STYLE,
 						      GTK_IM_STATUS_CALLBACK,
 						      G_PARAM_READWRITE));
+
+  info->status_set = g_signal_connect_swapped (info->settings,
+					       "notify::gtk-im-status-style",
+					       G_CALLBACK (status_style_change),
+					       info);
+  info->preedit_set = g_signal_connect_swapped (info->settings,
+						"notify::gtk-im-preedit-style",
+						G_CALLBACK (preedit_style_change),
+						info);
+
   status_style_change (info);
   preedit_style_change (info);
 
@@ -285,6 +295,34 @@ setup_im (GtkXIMInfo *info, GdkWindow *window)
     XFree (ic_values);
 }
 
+static void
+xim_info_display_closed (GdkDisplay *display,
+			 gboolean    is_error,
+			 GtkXIMInfo *info)
+{
+  GSList *ics, *tmp_list;
+
+  open_ims = g_slist_remove (open_ims, info);
+
+  ics = info->ics;
+  info->ics = NULL;
+
+  for (tmp_list = ics; tmp_list; tmp_list = tmp_list->next)
+    set_ic_client_window (tmp_list->data, NULL, TRUE);
+
+  g_slist_free (tmp_list);
+  
+  g_signal_handler_disconnect (info->settings, info->status_set);
+  g_signal_handler_disconnect (info->settings, info->preedit_set);
+  
+  XFree (info->xim_styles->supported_styles);
+  XFree (info->xim_styles);
+  g_free (info->locale);
+  XCloseIM (info->im);
+
+  g_free (info);
+}
+
 static GtkXIMInfo *
 get_im (GdkWindow *client_window,
 	const char *locale)
@@ -292,13 +330,14 @@ get_im (GdkWindow *client_window,
   GSList *tmp_list;
   GtkXIMInfo *info;
   XIM im = NULL;
-  GdkDisplay *display = gdk_drawable_get_display (client_window);
+  GdkScreen *screen = gdk_drawable_get_screen (client_window);
+  GdkDisplay *display = gdk_screen_get_display (screen);
 
   tmp_list = open_ims;
   while (tmp_list)
     {
       info = tmp_list->data;
-      if (info->display == display &&
+      if (info->screen == screen &&
 	  strcmp (info->locale, locale) == 0)
 	return info;
 
@@ -322,17 +361,20 @@ get_im (GdkWindow *client_window,
 	  info = g_new (GtkXIMInfo, 1);
 	  open_ims = g_slist_prepend (open_ims, info);
 
-	  info->display = display;
+	  info->screen = screen;
 	  info->locale = g_strdup (locale);
 	  info->im = im;
 	  info->xim_styles = NULL;
 	  info->preedit_style_setting = 0;
 	  info->status_style_setting = 0;
-	  info->settings = 0;
+	  info->settings = NULL;
 	  info->preedit_set = 0;
 	  info->status_set = 0;
 
-	  setup_im (info, client_window);
+	  setup_im (info);
+
+	  g_signal_connect_swapped (display, "closed",
+				    G_CALLBACK (xim_info_display_closed), info);
 	}
     }
 
@@ -356,7 +398,6 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
   im_context_class->set_cursor_location = gtk_im_context_xim_set_cursor_location;
   im_context_class->set_use_preedit = gtk_im_context_xim_set_use_preedit;
   gobject_class->finalize = gtk_im_context_xim_finalize;
-
 }
 
 static void
@@ -371,28 +412,15 @@ gtk_im_context_xim_finalize (GObject *obj)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (obj);
 
-  if (context_xim->ic)
-    {
-      XDestroyIC (context_xim->ic);
-      context_xim->ic = NULL;
-    }
-  if (context_xim->im_info)
-    {
-      GtkXIMInfo *info = context_xim->im_info;
-      XFree (info->xim_styles->supported_styles);
-      XFree (info->xim_styles);
-      g_free (info->locale);
-      g_signal_handler_disconnect (info->settings, info->status_set);
-      g_signal_handler_disconnect (info->settings, info->preedit_set);
-      XCloseIM (info->im);
-    }
+  set_ic_client_window (context_xim, NULL, FALSE);
 
   g_free (context_xim->locale);
   g_free (context_xim->mb_charset);
 }
 
 static void
-reinitialize_ic (GtkIMContextXIM *context_xim)
+reinitialize_ic (GtkIMContextXIM *context_xim,
+		 gboolean         send_signal)
 {
   if (context_xim->ic)
     {
@@ -402,8 +430,30 @@ reinitialize_ic (GtkIMContextXIM *context_xim)
       if (context_xim->preedit_length)
 	{
 	  context_xim->preedit_length = 0;
-	  g_signal_emit_by_name (context_xim, "preedit_changed");
+	  if (send_signal)
+	    g_signal_emit_by_name (context_xim, "preedit_changed");
 	}
+    }
+}
+
+static void
+set_ic_client_window (GtkIMContextXIM *context_xim,
+		      GdkWindow       *client_window,
+		      gboolean         send_signal)
+{
+  reinitialize_ic (context_xim, send_signal);
+  if (context_xim->client_window)
+    {
+      context_xim->im_info->ics = g_slist_remove (context_xim->im_info->ics, context_xim);
+      context_xim->im_info = NULL;
+    }
+  
+  context_xim->client_window = client_window;
+
+  if (context_xim->client_window)
+    {
+      context_xim->im_info = get_im (context_xim->client_window, context_xim->locale);
+      context_xim->im_info->ics = g_slist_prepend (context_xim->im_info->ics, context_xim);
     }
 }
 
@@ -413,13 +463,7 @@ gtk_im_context_xim_set_client_window (GtkIMContext          *context,
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
 
-  reinitialize_ic (context_xim);
-  context_xim->client_window = client_window;
-
-  if (context_xim->client_window)
-    context_xim->im_info = get_im (context_xim->client_window, context_xim->locale);
-  else
-    context_xim->im_info = NULL;
+  set_ic_client_window (context_xim, client_window, TRUE);
 }
 
 GtkIMContext *
@@ -614,7 +658,7 @@ gtk_im_context_xim_set_use_preedit (GtkIMContext *context,
   if (context_xim->use_preedit != use_preedit)
     {
       context_xim->use_preedit = use_preedit;
-      reinitialize_ic (context_xim);
+      reinitialize_ic (context_xim, TRUE);
     }
 
   return;
@@ -1077,31 +1121,8 @@ static XIC
 gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 {
   if (!context_xim->ic && context_xim->im_info)
-    {
-      context_xim->ic = get_ic_real (context_xim);
-
-      /* 
-       * connect property-notify signal handlers to respond runtime
-       * changes of status_style and preedit_style in the settings
-       */
-      if (context_xim->im_info->settings)
-	{
-	  GtkXIMInfo *info = context_xim->im_info;
-	  if (info->status_set)
-	    g_signal_handler_disconnect (info->settings, info->status_set);
-	  if (info->preedit_set)
-	    g_signal_handler_disconnect (info->settings, info->preedit_set);
-
-	  info->status_set = g_signal_connect_swapped (info->settings,
-						       "notify::gtk-im-status-style",
-						       G_CALLBACK (status_style_change_notify),
-						       context_xim);
-	  info->preedit_set = g_signal_connect_swapped (info->settings,
-							"notify::gtk-im-preedit-style",
-							G_CALLBACK (preedit_style_change_notify),
-							context_xim);
-	}
-    }
+    context_xim->ic = get_ic_real (context_xim);
+  
   return context_xim->ic;
 }
 

@@ -1,3 +1,12 @@
+Mon Oct 14 15:10:34 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c:
+ 	- Make GtkXIMInfo structures per-screen (they were
+ 	  a mix between per-display and per-context before)
+ 	- Make signal connections info->settings one-per-info
+         - Handle a GdkDisplay being closed, by destroying
+ 	  all XIC, calling XCloseIM on the XIM. (#87482)
+ 
 Sun Oct 13 16:55:49 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkdnd.c gtk/gtkradiobutton.[ch]: Deprecation cleanup
