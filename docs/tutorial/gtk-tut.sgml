@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>October 27, 2002</date>
+    <date>December 7, 2002</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -34,13 +34,13 @@
 
 <para>A copy of this tutorial in SGML and HTML is distributed with each
 source code release of GTK+. For binary distributions, please check with
-you vendor.</para>
+your vendor.</para>
 
 <para>A copy is available online for reference at <ulink 
-url="http://www.gtk.org/tutorial">http://www.gtk.org/tutorial</ulink>.</para>
+url="http://www.gtk.org/tutorial/">http://www.gtk.org/tutorial</ulink>.</para>
 
 <para>A packaged verion of this tutorial is available from
-<ulink url="ftp://ftp.gtk.org/pub/gtk/tutorial">
+<ulink url="ftp://ftp.gtk.org/pub/gtk/tutorial/">
 ftp://ftp.gtk.org/pub/gtk/tutorial</ulink> which contains the tutorial in
 various different formats. This
 package is primary for those people wanting to have the tutorial
@@ -1307,7 +1307,7 @@ it. Compile it yourself and play with it.</para>
 <title>Packing Demonstration Program</title>
 
 <programlisting role="C">
-<!-- example-start packbox packbox.c -->
+/* example-start packbox packbox.c */
 
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -8806,7 +8806,7 @@ static GtkItemFactoryEntry entries[] = {
   { "/File/tear1",    NULL,      NULL,         0, "&lt;Tearoff&gt;" },
   { "/File/_New",     "&lt;CTRL&gt;N", new_file,     1, "&lt;Item&gt;" },
   { "/File/_Open...", "&lt;CTRL&gt;O", open_file,    1, "&lt;Item&gt;" },
-  { "/File/sep1",     NULL,      NULL,         0, "&lt;Seperator&gt;" },
+  { "/File/sep1",     NULL,      NULL,         0, "&lt;Separator&gt;" },
   { "/File/_Quit",    "&lt;CTRL&gt;Q", quit_program, 0, "&lt;Item&gt;"} };
 </programlisting>
 </sect3>
@@ -8927,10 +8927,10 @@ section.</para>
 <para>Here is an example using the GTK item factory.</para>
 
 <programlisting role="C">
-/* example-start menu itemfactory.c */
+<!-- example-start menu itemfactory.c -->
 
-#include &amp;lt;gtk/gtk.h&amp;gt;
-#include &amp;lt;strings.h&amp;gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;strings.h&gt;
 
 /* Obligatory basic callback */
 static void print_hello( GtkWidget *w,

@@ -69,7 +69,7 @@ int main( int   argc,
                                            (gchar **)xpm_data);
 
     /* a pixmap widget to contain the pixmap */
-    pixmapwid = gtk_pixmap_new (pixmap, mask);
+    pixmapwid = gtk_image_new_from_pixmap (pixmap, mask);
     gtk_widget_show (pixmapwid);
 
     /* a button to contain the pixmap widget */
