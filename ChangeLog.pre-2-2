@@ -1,3 +1,14 @@
+2000-12-19  Ramiro Estrugo  <ramiro@eazel.com>
+
+	* gdk/gdkimage.c: (gdk_image_get):
+	Deal with the possibility that XGetImage() might return NULL.
+	Allocate the GdkImagePrivate structure only after XGetImage()
+	succeeds in order not to dereference a NULL ximage pointer.  This
+	prevents a core dump when XGetImage() fails - which is unlikely,
+	but can happen due to race conditions accessing the geometries of
+	drawables.  An x error will still be triggered, but the gdk image
+	wrapper at least wont seg fault.
+	
 Tue Dec 12 11:52:16 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (gtk_clist_optimal_column_width): Fix 

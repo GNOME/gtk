@@ -342,6 +342,7 @@ gdk_image_get (GdkWindow *window,
   GdkImage *image;
   GdkImagePrivate *private;
   GdkWindowPrivate *win_private;
+  XImage *ximage;
 
   g_return_val_if_fail (window != NULL, NULL);
 
@@ -349,16 +350,20 @@ gdk_image_get (GdkWindow *window,
   if (win_private->destroyed)
     return NULL;
 
+  ximage = XGetImage (gdk_display,
+		      win_private->xwindow,
+		      x, y, width, height,
+		      AllPlanes, ZPixmap);
+  
+  if (ximage == NULL)
+    return NULL;
+  
   private = g_new (GdkImagePrivate, 1);
   image = (GdkImage*) private;
 
   private->xdisplay = gdk_display;
   private->image_put = gdk_image_put_normal;
-  private->ximage = XGetImage (private->xdisplay,
-			       win_private->xwindow,
-			       x, y, width, height,
-			       AllPlanes, ZPixmap);
-
+  private->ximage = ximage;
   image->type = GDK_IMAGE_NORMAL;
   image->visual = gdk_window_get_visual (window);
   image->width = width;
