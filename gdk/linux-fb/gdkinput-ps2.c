@@ -782,7 +782,7 @@ handle_input_ps2(GIOChannel *gioc, GIOCondition cond, gpointer data)
 static MouseDevice *
 mouse_open(void)
 {
-  MouseDevice *retval = g_new0(MouseDevice, 1);
+  MouseDevice *retval;
   guchar buf[7];
   int i = 0;
   GIOChannel *gioc;
@@ -790,6 +790,7 @@ mouse_open(void)
   int mode;
   enum { PS2_MOUSE, FIDMOUR_MOUSE, UNKNOWN_MOUSE } type;
 
+  retval = g_new0(MouseDevice, 1);
   retval->fd = -1;
   mode = O_RDWR;
   ctmp = getenv("GDK_MOUSETYPE");
@@ -842,9 +843,12 @@ mouse_open(void)
       buf[i++] = 232; /* device resolution */
       buf[i++] = 1;
       write(retval->fd, buf, i);
-      if(read(retval->fd, buf, 3) < 0)
-	goto error;
       fcntl(retval->fd, F_SETFL, O_RDWR|O_NONBLOCK);
+
+      usleep(10000); /* sleep 10 ms, then read whatever junk we can get from the mouse, in a vain attempt
+			to get synchronized with the event stream */
+      while((i = read(retval->fd, buf, sizeof(buf))) > 0)
+	g_print("Got %d bytes of junk from psaux\n", i);
 
       gioc = g_io_channel_unix_new(retval->fd);
       retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_input_ps2, retval);
