@@ -68,6 +68,7 @@ static gboolean get_keyboard_mode          (GtkWidget   *widget);
 
 static GtkObjectClass *parent_class;
 static const gchar  *tooltips_data_key = "_GtkTooltipsData";
+static const gchar  *tooltips_info_key = "_GtkTooltipsInfo";
 
 GType
 gtk_tooltips_get_type (void)
@@ -407,6 +408,8 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   style = tooltips->tip_window->style;
   
   widget = tooltips->active_tips_data->widget;
+  g_object_set_data (G_OBJECT (tooltips->tip_window), tooltips_info_key,
+                     tooltips);
 
   keyboard_mode = get_keyboard_mode (widget);
 
@@ -746,3 +749,42 @@ _gtk_tooltips_toggle_keyboard_mode (GtkWidget *widget)
     start_keyboard_mode (widget);
 }
 
+/**
+ * gtk_tooltips_get_info_from_tip_window:
+ * @tip_window: a #GtkWindow 
+ * @tooltips: the return location for the tooltips which are displayed 
+ *    in @tip_window, or %NULL
+ * @current_widget: the return location for the widget whose tooltips 
+ *    are displayed, or %NULL
+ * 
+ * Determines the tooltips and the widget they belong to from the window in 
+ * which they are displayed. 
+ *
+ * This function is mostly intended for use by accessibility technologies;
+ * applications should have little use for it.
+ * 
+ * Return value: %TRUE if @tip_window is displaying tooltips, otherwise %FALSE.
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_tooltips_get_info_from_tip_window (GtkWindow    *tip_window,
+                                       GtkTooltips **tooltips,
+                                       GtkWidget   **current_widget)
+{
+  GtkTooltips  *current_tooltips;  
+  gboolean has_tips;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (tip_window), FALSE);
+
+  current_tooltips = g_object_get_data (G_OBJECT (tip_window), tooltips_info_key);
+
+  has_tips = current_tooltips != NULL;
+
+  if (tooltips)
+    *tooltips = current_tooltips;
+  if (current_widget)
+    *current_widget = has_tips ? current_tooltips->active_tips_data->widget : NULL;
+
+  return has_tips;
+}

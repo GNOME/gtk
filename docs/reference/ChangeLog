@@ -1,3 +1,7 @@
+Thu Feb 12 23:56:12 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_tooltips_get_info_from_tip_window.
+
 Thu Feb 12 23:30:25 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_combo_box_{popup,popdown}.

@@ -28,6 +28,7 @@
 #define __GTK_TOOLTIPS_H__
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkwindow.h>
 
 
 #ifdef __cplusplus
@@ -101,6 +102,10 @@ void             gtk_tooltips_force_window (GtkTooltips   *tooltips);
 
 
 void             _gtk_tooltips_toggle_keyboard_mode (GtkWidget *widget);
+
+gboolean         gtk_tooltips_get_info_from_tip_window (GtkWindow    *tip_window,
+                                                        GtkTooltips **tooltips,
+                                                        GtkWidget   **current_widget);
 
 #ifdef __cplusplus
 }
