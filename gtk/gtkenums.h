@@ -202,7 +202,8 @@ typedef enum {
   GTK_MOVEMENT_PARAGRAPHS,        /* move up/down paragraphs (newline-ended lines) */
   GTK_MOVEMENT_PARAGRAPH_ENDS,    /* move to either end of a paragraph */
   GTK_MOVEMENT_PAGES,	          /* move by pages */
-  GTK_MOVEMENT_BUFFER_ENDS        /* move to ends of the buffer */
+  GTK_MOVEMENT_BUFFER_ENDS,       /* move to ends of the buffer */
+  GTK_MOVEMENT_HORIZONTAL_PAGES   /* move horizontally by pages */
 } GtkMovementStep;
 
 /* Orientation for toolbars, etc. */

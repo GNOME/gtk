@@ -1,3 +1,10 @@
+2003-01-30  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c: Replace PAGE_HORIZONTALLY_HACK_VALUE by
+	GTK_MOVEMENT_HORIZONTAL_PAGES.  (#68947)
+
+	* gtk/gtkenums.h: Add GTK_MOVEMENT_HORIZONTAL_PAGES to GtkMovementStep.
+	
 Thu Jan 30 16:01:29 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrgb.c (gdk_rgb_try_colormap): Remove the 

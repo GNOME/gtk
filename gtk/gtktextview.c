@@ -853,6 +853,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_KP_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
 
+  add_move_binding (binding_set, GDK_Page_Up, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_HORIZONTAL_PAGES, -1);
+
+  add_move_binding (binding_set, GDK_KP_Page_Up, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_HORIZONTAL_PAGES, -1);
+  
+  add_move_binding (binding_set, GDK_Page_Down, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_HORIZONTAL_PAGES, 1);
+
+  add_move_binding (binding_set, GDK_KP_Page_Down, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_HORIZONTAL_PAGES, 1);
+
   /* Select all
    */
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
@@ -885,48 +897,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				G_TYPE_INT, 0,
 				G_TYPE_BOOLEAN, FALSE);
 
-  
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, GDK_CONTROL_MASK,
-				"page_horizontally", 2,
-				G_TYPE_INT, -1,
-				G_TYPE_BOOLEAN, FALSE);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-				"page_horizontally", 2,
-				G_TYPE_INT, -1,
-				G_TYPE_BOOLEAN, TRUE);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, GDK_CONTROL_MASK,
-				"page_horizontally", 2,
-				G_TYPE_INT, -1,
-				G_TYPE_BOOLEAN, FALSE);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-				"page_horizontally", 2,
-				G_TYPE_INT, -1,
-				G_TYPE_BOOLEAN, TRUE);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, GDK_CONTROL_MASK,
-				"page_horizontally", 2,
-				G_TYPE_INT, 1,
-				G_TYPE_BOOLEAN, FALSE);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-				"page_horizontally", 2,
-				G_TYPE_INT, 1,
-				G_TYPE_BOOLEAN, TRUE);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, GDK_CONTROL_MASK,
-				"page_horizontally", 2,
-				G_TYPE_INT, 1,
-				G_TYPE_BOOLEAN, FALSE);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-				"page_horizontally", 2,
-				G_TYPE_INT, 1,
-				G_TYPE_BOOLEAN, TRUE);
-  
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
 				"delete_from_cursor", 2,
@@ -4475,11 +4445,6 @@ move_cursor (GtkTextView       *text_view,
                                   new_location);
 }
 
-/* FIXME when we are unfrozen and can change GtkMovementStep,
- * fix this
- */
-#define PAGE_HORIZONTALLY_HACK_VALUE 57
-
 static void
 gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
                                     GtkMovementStep  step,
@@ -4499,7 +4464,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       gtk_text_view_pend_cursor_blink (text_view);
       return;
     }
-  else if (step == PAGE_HORIZONTALLY_HACK_VALUE)
+  else if (step == GTK_MOVEMENT_HORIZONTAL_PAGES)
     {
       gtk_text_view_scroll_hpages (text_view, count, extend_selection);
       gtk_text_view_pend_cursor_blink (text_view);
@@ -4628,7 +4593,7 @@ gtk_text_view_page_horizontally (GtkTextView     *text_view,
                                  gint             count,
                                  gboolean         extend_selection)
 {
-  gtk_text_view_move_cursor_internal (text_view, PAGE_HORIZONTALLY_HACK_VALUE,
+  gtk_text_view_move_cursor_internal (text_view, GTK_MOVEMENT_HORIZONTAL_PAGES,
                                       count, extend_selection);
 }
 
