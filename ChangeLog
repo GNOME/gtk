@@ -1,3 +1,8 @@
+Fri Aug 24 22:12:32 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenuitem.[ch]: Remove unused and useless function
+	gtk_menu_item_configure(). (#58925)
+
 Fri Aug 24 16:03:45 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_cell): Add

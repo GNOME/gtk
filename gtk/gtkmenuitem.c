@@ -197,7 +197,6 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   menu_item->accelerator_signal = menu_item_signals[ACTIVATE];
   menu_item->toggle_size = 0;
   menu_item->accelerator_width = 0;
-  menu_item->show_toggle_indicator = FALSE;
   menu_item->show_submenu_indicator = FALSE;
   menu_item->submenu_direction = GTK_DIRECTION_RIGHT;
   menu_item->submenu_placement = GTK_TOP_BOTTOM;
@@ -341,17 +340,6 @@ gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   menu_item->submenu_placement = placement;
-}
-
-void
-gtk_menu_item_configure (GtkMenuItem *menu_item,
-			 gboolean     show_toggle_indicator,
-			 gboolean     show_submenu_indicator)
-{
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  menu_item->show_toggle_indicator = show_toggle_indicator;
-  menu_item->show_submenu_indicator = show_submenu_indicator;
 }
 
 void

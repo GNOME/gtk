@@ -58,7 +58,6 @@ struct _GtkMenuItem
   guint16 toggle_size;
   guint16 accelerator_width;
   
-  guint show_toggle_indicator : 1;
   guint show_submenu_indicator : 1;
   guint submenu_placement : 1;
   guint submenu_direction : 1;
@@ -97,9 +96,6 @@ GtkWidget* gtk_menu_item_get_submenu          (GtkMenuItem         *menu_item);
 void       gtk_menu_item_remove_submenu       (GtkMenuItem         *menu_item);
 void       gtk_menu_item_set_placement        (GtkMenuItem         *menu_item,
 					       GtkSubmenuPlacement  placement);
-void       gtk_menu_item_configure            (GtkMenuItem         *menu_item,
-					       gboolean		    show_toggle_indicator,
-					       gboolean		    show_submenu_indicator);
 void       gtk_menu_item_select               (GtkMenuItem         *menu_item);
 void       gtk_menu_item_deselect             (GtkMenuItem         *menu_item);
 void       gtk_menu_item_activate             (GtkMenuItem         *menu_item);
