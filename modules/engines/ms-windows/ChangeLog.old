@@ -1,5 +1,7 @@
 2004-05-21  Raymond Penners  <raymond@dotsphinx.com>
 
+	* === Released 0.6.0 ===
+	
 	* configure.in: Bump version number (0.6.0)
 	
 	* src/msw_style.c: Applied patch by John Ehresman that fixes a
