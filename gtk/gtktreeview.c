@@ -1654,7 +1654,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 			"horizontal_separator", &horizontal_separator,
 			NULL);
 
-  if (event->window == tree_view->priv->bin_window)
+  if (event->window == tree_view->priv->bin_window &&
+      tree_view->priv->tree != NULL)
     {
       GtkRBNode *node;
       GtkRBTree *tree;
