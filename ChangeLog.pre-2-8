@@ -1,3 +1,8 @@
+Tue Nov 23 19:37:34 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_flush): A little bit
+	of microoptimization of repeated GDK_GC_XDISPLAY()/XGC().
+
 2004-11-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates.

@@ -208,12 +208,14 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
 GC
 _gdk_x11_gc_flush (GdkGC *gc)
 {
+  Display *xdisplay = GDK_GC_XDISPLAY (gc);
   GdkGCX11 *private = GDK_GC_X11 (gc);
+  GC xgc = private->xgc;
 
   if (private->dirty_mask & GDK_GC_DIRTY_CLIP)
     {
       if (!private->clip_region)
-	XSetClipOrigin (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc),
+	XSetClipOrigin (xdisplay, xgc,
 			gc->clip_x_origin, gc->clip_y_origin);
       else
 	{
@@ -226,7 +228,7 @@ _gdk_x11_gc_flush (GdkGC *gc)
                                        &rectangles,
                                        &n_rects);
 	  
-	  XSetClipRectangles (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), 0, 0,
+	  XSetClipRectangles (xdisplay, xgc, 0, 0,
                               rectangles,
                               n_rects, YXBanded);
           
@@ -236,12 +238,12 @@ _gdk_x11_gc_flush (GdkGC *gc)
 
   if (private->dirty_mask & GDK_GC_DIRTY_TS)
     {
-      XSetTSOrigin (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc),
+      XSetTSOrigin (xdisplay, xgc,
 		    gc->ts_x_origin, gc->ts_y_origin);
     }
 
   private->dirty_mask = 0;
-  return GDK_GC_XGC (gc);
+  return xgc;
 }
 
 static void
