@@ -1,3 +1,8 @@
+2004-01-06  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystemunix.c (filename_is_root): g_path_skip_root()
+	can return NULL; handle this.  Fixes #129565.
+
 2004-01-06  Alexander Winston  <alexander.winston@comcast.net>
 
 	* gtk/gtkfilesel.c: (gtk_file_selection_delete_file): Removed space

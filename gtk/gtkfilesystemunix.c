@@ -195,7 +195,7 @@ gtk_file_system_unix_get_type (void)
 	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_file_system_unix_init,
       };
-      
+
       static const GInterfaceInfo file_system_info =
       {
 	(GInterfaceInitFunc) gtk_file_system_unix_iface_init, /* interface_init */
@@ -216,11 +216,11 @@ gtk_file_system_unix_get_type (void)
 
 /**
  * gtk_file_system_unix_new:
- * 
+ *
  * Creates a new #GtkFileSystemUnix object. #GtkFileSystemUnix
  * implements the #GtkFileSystem interface with direct access to
  * the filesystem using Unix/Linux API calls
- * 
+ *
  * Return value: the new #GtkFileSystemUnix object
  **/
 GtkFileSystem *
@@ -235,7 +235,7 @@ gtk_file_system_unix_class_init (GtkFileSystemUnixClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
   system_parent_class = g_type_class_peek_parent (class);
-  
+
   gobject_class->finalize = gtk_file_system_unix_finalize;
 }
 
@@ -296,7 +296,7 @@ gtk_file_system_unix_get_root_info (GtkFileSystem    *file_system,
 				    GError          **error)
 {
   const gchar *filename = gtk_file_path_get_string (path);
-  
+
   g_return_val_if_fail (strcmp (filename, "/") == 0, NULL);
 
   return filename_get_info ("/", types, error);
@@ -331,9 +331,9 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
 
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, FALSE);
-  
+
   result = mkdir (filename, 0777) != 0;
-  
+
   if (!result)
     {
       gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
@@ -345,9 +345,9 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
 		   g_strerror (errno));
       g_free (filename_utf8);
     }
-  
+
   g_free (filename);
-  
+
   return result;
 }
 
@@ -376,7 +376,7 @@ gtk_file_system_unix_volume_get_is_mounted (GtkFileSystem        *file_system,
 }
 
 static gboolean
-gtk_file_system_unix_volume_mount (GtkFileSystem        *file_system, 
+gtk_file_system_unix_volume_mount (GtkFileSystem        *file_system,
 				   GtkFileSystemVolume  *volume,
 				   GError              **error)
 {
@@ -440,7 +440,7 @@ gtk_file_system_unix_make_path (GtkFileSystem    *file_system,
   gchar *full_filename;
   GError *tmp_error = NULL;
   GtkFilePath *result;
-  
+
   base_filename = filename_from_path (base_path);
   g_return_val_if_fail (base_filename != NULL, NULL);
 
@@ -452,19 +452,19 @@ gtk_file_system_unix_make_path (GtkFileSystem    *file_system,
 		   GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
 		   "%s",
 		   tmp_error->message);
-      
+
       g_error_free (tmp_error);
       g_free (base_filename);
 
       return FALSE;
     }
-    
+
   full_filename = g_build_filename (base_filename, filename, NULL);
   result = filename_to_path (full_filename);
   g_free (base_filename);
   g_free (filename);
   g_free (full_filename);
-  
+
   return result;
 }
 
@@ -499,7 +499,7 @@ canonicalize_filename (gchar *filename)
 		{
 		  if (*(p + 1) == '\0')
 		    break;
-		  
+
 		  p += 1;
 		}
 	      else if (*(p + 1) == '.' &&
@@ -516,7 +516,7 @@ canonicalize_filename (gchar *filename)
 
 		  if (*(p + 2) == '\0')
 		    break;
-		  
+
 		  p += 2;
 		}
 	      else
@@ -555,7 +555,7 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
 
   base_filename = filename_from_path (base_path);
   g_return_val_if_fail (base_filename != NULL, FALSE);
-  
+
   last_slash = strrchr (str, G_DIR_SEPARATOR);
   if (!last_slash)
     {
@@ -595,7 +595,7 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
 	    }
 
 	  canonicalize_filename (folder_path);
-	  
+
 	  *folder = filename_to_path (folder_path);
 	  *file_part = g_strdup (last_slash + 1);
 
@@ -606,7 +606,7 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
     }
 
   g_free (base_filename);
-  
+
   return result;
 }
 
@@ -712,7 +712,7 @@ gtk_file_folder_unix_get_type (void)
 	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_file_folder_unix_init,
       };
-      
+
       static const GInterfaceInfo file_folder_info =
       {
 	(GInterfaceInitFunc) gtk_file_folder_unix_iface_init, /* interface_init */
@@ -759,7 +759,7 @@ gtk_file_folder_unix_finalize (GObject *object)
   GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (object);
 
   g_free (folder_unix->filename);
-  
+
   folder_parent_class->finalize (object);
 }
 
@@ -772,7 +772,7 @@ gtk_file_folder_unix_get_info (GtkFileFolder  *folder,
   GtkFileInfo *info;
   gchar *dirname;
   gchar *filename;
-  
+
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, NULL);
 
@@ -806,7 +806,7 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   "%s",
 		   tmp_error->message);
-      
+
       g_error_free (tmp_error);
 
       return FALSE;
@@ -828,7 +828,7 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
   g_dir_close (dir);
 
   *children = g_slist_reverse (*children);
-  
+
   return TRUE;
 }
 
@@ -842,7 +842,7 @@ filename_get_info (const gchar     *filename,
   GtkFileIconType icon_type = GTK_FILE_ICON_REGULAR;
 #endif
   struct stat statbuf;
-  
+
   /* If stat fails, try to fall back to lstat to catch broken links
    */
   if (stat (filename, &statbuf) != 0 &&
@@ -856,7 +856,7 @@ filename_get_info (const gchar     *filename,
 		   filename_utf8 ? filename_utf8 : "???",
 		   g_strerror (errno));
       g_free (filename_utf8);
-      
+
       return NULL;
     }
 
@@ -866,25 +866,25 @@ filename_get_info (const gchar     *filename,
     {
       if (types & GTK_FILE_INFO_DISPLAY_NAME)
 	gtk_file_info_set_display_name (info, "/");
-      
+
       if (types & GTK_FILE_INFO_IS_HIDDEN)
 	gtk_file_info_set_is_hidden (info, FALSE);
     }
   else
     {
       gchar *basename = g_path_get_basename (filename);
-  
+
       if (types & GTK_FILE_INFO_DISPLAY_NAME)
 	{
 	  gchar *display_name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
 	  if (!display_name)
 	    display_name = g_strescape (basename, NULL);
-	  
+
 	  gtk_file_info_set_display_name (info, display_name);
-	  
+
 	  g_free (display_name);
 	}
-      
+
       if (types & GTK_FILE_INFO_IS_HIDDEN)
 	{
 	  gtk_file_info_set_is_hidden (info, basename[0] == '.');
@@ -945,7 +945,7 @@ filename_get_info (const gchar     *filename,
     {
       gtk_file_info_set_size (info, (gint64)statbuf.st_size);
     }
-  
+
   return info;
 }
 
@@ -965,8 +965,8 @@ static gboolean
 filename_is_root (const char *filename)
 {
   const gchar *after_root;
-  
+
   after_root = g_path_skip_root (filename);
-  
-  return (*after_root == '\0');
+
+  return (after_root != NULL && *after_root == '\0');
 }
