@@ -55,7 +55,7 @@ Wed Jun  2 11:44:25 PDT 1999 Manish Singh <yosh@gimp.org>
  	these with <gdk/*.h> without trouble.
 
 	* gdk/win32/gdkimage.c (gdk_image_new_with_depth): Code simplified.
-	(gdk_image_destroy): Plugged resource leak, some GdkImages didn't
+	(gdk_image_destroy): Plug resource leak, some GdkImages didn't
 	have their bitmap destroyed.
 
 	* gdk/win32/gdk.def: Add gdk_root_parent.
@@ -179,7 +179,7 @@ Fri Mar 19 16:50:33 PST 1999 Manish Singh <yosh@gimp.org>
 	gdk_color_hash should have only one parameter. Declare
 	gdk_threads_mutex with GDKVAR.
 	
-	* gdk/gdkcolor.c (gdk_color_hash): As a hash function should have
+	* gdk/gdkcolor.c (gdk_color_hash): A hash function should have
 	just one parameter.
 
 	* gdk/gdkimage.c (gdk_image_get): Initialize bpp correctly. Bytes
@@ -197,7 +197,7 @@ Fri Mar 19 16:50:33 PST 1999 Manish Singh <yosh@gimp.org>
 	in the backend-dependent directory, not in the common gdk
 	directory.
 
-	* gtk/testgtk.c: Ditto. Also, don't use ../gdk patchs to gdk
+	* gtk/testgtk.c: Ditto. Also, don't use ../gdk path to gdk
 	headers.
 
 Wed Mar 17 05:06:49 1999  Tim Janik  <timj@gtk.org>
