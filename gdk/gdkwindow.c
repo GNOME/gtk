@@ -105,6 +105,12 @@ static void   gdk_window_draw_lines     (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPoint        *points,
 					 gint             npoints);
+static void   gdk_window_draw_glyphs    (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 PangoFont        *font,
+					 gint              x,
+					 gint              y,
+					 PangoGlyphString *glyphs);
 
 static void gdk_window_free_paint_stack (GdkWindow *window);
 
@@ -122,7 +128,8 @@ GdkDrawableClass _gdk_window_class = {
   gdk_window_draw_drawable,
   gdk_window_draw_points,
   gdk_window_draw_segments,
-  gdk_window_draw_lines
+  gdk_window_draw_lines,
+  gdk_window_draw_glyphs,
 };
 
 GdkWindow *
@@ -1097,6 +1104,30 @@ gdk_window_draw_lines (GdkDrawable *drawable,
   RESTORE_GC (gc);
 }
 
+static void
+gdk_window_draw_glyphs (GdkDrawable      *drawable,
+			GdkGC            *gc,
+			PangoFont        *font,
+			gint              x,
+			gint              y,
+			PangoGlyphString *glyphs)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+
+  OFFSET_GC (gc);
+
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+      gdk_draw_glyphs (paint->pixmap, gc, font, x - x_offset, y - y_offset, glyphs);
+    }
+  else
+    _gdk_windowing_window_class.draw_glyphs (drawable, gc, font,
+					     x - x_offset, y - y_offset, glyphs);
+
+  RESTORE_GC (gc);
+}
+
 /* Fixme - this is just like gdk_window_paint_init_bg */
 static void
 gdk_window_clear_backing_rect (GdkWindow *window,
@@ -1200,8 +1231,6 @@ _gdk_window_draw_image (GdkDrawable *drawable,
 
 static GSList *update_windows = NULL;
 static guint update_idle = 0;
-
-#define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
 
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
@@ -1310,6 +1339,7 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 			      GdkRectangle *rect,
 			      gboolean      invalidate_children)
 {
+  GdkRectangle window_rect;
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
 
   g_return_if_fail (window != NULL);
@@ -1317,6 +1347,15 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 
   if (GDK_DRAWABLE_DESTROYED (window))
     return;
+  
+  if (!rect)
+    {
+      window_rect.x = 0;
+      window_rect.y = 0;
+      window_rect.width = private->drawable.width;
+      window_rect.height = private->drawable.height;
+      rect = &window_rect;
+    }
   
   if (private->update_area)
     {

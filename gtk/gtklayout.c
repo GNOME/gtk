@@ -270,25 +270,52 @@ gtk_layout_move (GtkLayout     *layout,
     }
 }
 
+static void
+gtk_layout_set_adjustment_upper (GtkAdjustment *adj, gfloat upper)
+{
+  if (upper != adj->upper)
+    {
+      gfloat min = MAX (0., upper - adj->page_size);
+      gboolean value_changed = FALSE;
+      
+      adj->upper = upper;
+      
+      if (adj->value > min)
+	{
+	  adj->value = min;
+	  value_changed = TRUE;
+	}
+      
+      gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
+      if (value_changed)
+	gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
+    }
+}
+
 void
 gtk_layout_set_size (GtkLayout     *layout, 
 		     guint          width,
 		     guint          height)
 {
+  GtkWidget *widget;
+  
   g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
+  widget = GTK_WIDGET (layout);
+  
   layout->width = width;
   layout->height = height;
 
-  layout->hadjustment->upper = layout->width;
-  gtk_signal_emit_by_name (GTK_OBJECT (layout->hadjustment), "changed");
-
-  layout->vadjustment->upper = layout->height;
-  gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");
+  gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
+  gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
 
   if (GTK_WIDGET_REALIZED (layout))
-    gdk_window_resize (layout->bin_window, width, height);
+    {
+      width = MAX (width, widget->allocation.width);
+      height = MAX (height, widget->allocation.height);
+      gdk_window_resize (layout->bin_window, width, height);
+    }
 }
 
 void
@@ -433,8 +460,8 @@ gtk_layout_realize (GtkWidget *widget)
 
   attributes.x = 0;
   attributes.y = 0;
-  attributes.width = layout->width;
-  attributes.height = layout->height;
+  attributes.width = MAX (layout->width, widget->allocation.width);
+  attributes.height = MAX (layout->height, widget->allocation.height);
   attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK | 
                           gtk_widget_get_events (widget);
 
@@ -561,18 +588,22 @@ gtk_layout_size_allocate (GtkWidget     *widget,
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
+
+      gdk_window_resize (layout->bin_window,
+			 MAX (layout->width, allocation->width),
+			 MAX (layout->height, allocation->height));
     }
 
   layout->hadjustment->page_size = allocation->width;
   layout->hadjustment->page_increment = allocation->width / 2;
   layout->hadjustment->lower = 0;
-  layout->hadjustment->upper = layout->width;
+  layout->hadjustment->upper = MAX (allocation->width, layout->width);
   gtk_signal_emit_by_name (GTK_OBJECT (layout->hadjustment), "changed");
 
   layout->vadjustment->page_size = allocation->height;
   layout->vadjustment->page_increment = allocation->height / 2;
   layout->vadjustment->lower = 0;
-  layout->vadjustment->upper = layout->height;
+  layout->vadjustment->upper = MAX (allocation->height, layout->height);
   gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");
 }
 

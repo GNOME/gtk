@@ -108,6 +108,12 @@ struct _GdkDrawableClass
 			  GdkGC        *gc,
 			  GdkPoint     *points,
 			  gint          npoints);
+  void (*draw_glyphs)    (GdkDrawable      *drawable,
+			  GdkGC	           *gc,
+			  PangoFont        *font,
+			  gint              x,
+			  gint              y,
+			  PangoGlyphString *glyphs);
 };
 
 /* Manipulation of drawables
@@ -136,88 +142,105 @@ void            gdk_drawable_unref        (GdkDrawable    *drawable);
 
 /* Drawing
  */
-void gdk_draw_point	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  gint		x,
-			  gint		y);
-void gdk_draw_line	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  gint		x1,
-			  gint		y1,
-			  gint		x2,
-			  gint		y2);
-void gdk_draw_rectangle	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  gint		filled,
-			  gint		x,
-			  gint		y,
-			  gint		width,
-			  gint		height);
-void gdk_draw_arc	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  gint		filled,
-			  gint		x,
-			  gint		y,
-			  gint		width,
-			  gint		height,
-			  gint		angle1,
-			  gint		angle2);
-void gdk_draw_polygon	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  gint		filled,
-			  GdkPoint     *points,
-			  gint		npoints);
-void gdk_draw_string	 (GdkDrawable  *drawable,
-			  GdkFont      *font,
-			  GdkGC	       *gc,
-			  gint		x,
-			  gint		y,
-			  const gchar  *string);
-void gdk_draw_text	 (GdkDrawable  *drawable,
-			  GdkFont      *font,
-			  GdkGC	       *gc,
-			  gint		x,
-			  gint		y,
-			  const gchar  *text,
-			  gint		text_length);
-void gdk_draw_text_wc	 (GdkDrawable	 *drawable,
-			  GdkFont	 *font,
-			  GdkGC		 *gc,
-			  gint		  x,
-			  gint		  y,
-			  const GdkWChar *text,
-			  gint		  text_length);
-void gdk_draw_drawable	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  GdkDrawable  *src,
-			  gint		xsrc,
-			  gint		ysrc,
-			  gint		xdest,
-			  gint		ydest,
-			  gint		width,
-			  gint		height);
-void gdk_draw_image	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  GdkImage     *image,
-			  gint		xsrc,
-			  gint		ysrc,
-			  gint		xdest,
-			  gint		ydest,
-			  gint		width,
-			  gint		height);
-void gdk_draw_points	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  GdkPoint     *points,
-			  gint		npoints);
-void gdk_draw_segments	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  GdkSegment   *segs,
-			  gint		nsegs);
-void gdk_draw_lines      (GdkDrawable  *drawable,
-                          GdkGC        *gc,
-                          GdkPoint     *points,
-                          gint          npoints);
- 
+void gdk_draw_point     (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 gint              x,
+			 gint              y);
+void gdk_draw_line      (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 gint              x1,
+			 gint              y1,
+			 gint              x2,
+			 gint              y2);
+void gdk_draw_rectangle (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 gint              filled,
+			 gint              x,
+			 gint              y,
+			 gint              width,
+			 gint              height);
+void gdk_draw_arc       (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 gint              filled,
+			 gint              x,
+			 gint              y,
+			 gint              width,
+			 gint              height,
+			 gint              angle1,
+			 gint              angle2);
+void gdk_draw_polygon   (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 gint              filled,
+			 GdkPoint         *points,
+			 gint              npoints);
+void gdk_draw_string    (GdkDrawable      *drawable,
+			 GdkFont          *font,
+			 GdkGC            *gc,
+			 gint              x,
+			 gint              y,
+			 const gchar      *string);
+void gdk_draw_text      (GdkDrawable      *drawable,
+			 GdkFont          *font,
+			 GdkGC            *gc,
+			 gint              x,
+			 gint              y,
+			 const gchar      *text,
+			 gint              text_length);
+void gdk_draw_text_wc   (GdkDrawable      *drawable,
+			 GdkFont          *font,
+			 GdkGC            *gc,
+			 gint              x,
+			 gint              y,
+			 const GdkWChar   *text,
+			 gint              text_length);
+void gdk_draw_drawable  (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 GdkDrawable      *src,
+			 gint              xsrc,
+			 gint              ysrc,
+			 gint              xdest,
+			 gint              ydest,
+			 gint              width,
+			 gint              height);
+void gdk_draw_image     (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 GdkImage         *image,
+			 gint              xsrc,
+			 gint              ysrc,
+			 gint              xdest,
+			 gint              ydest,
+			 gint              width,
+			 gint              height);
+void gdk_draw_points    (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 GdkPoint         *points,
+			 gint              npoints);
+void gdk_draw_segments  (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 GdkSegment       *segs,
+			 gint              nsegs);
+void gdk_draw_lines     (GdkDrawable      *drawable,
+			 GdkGC            *gc,
+			 GdkPoint         *points,
+			 gint              npoints);
+
+void gdk_draw_glyphs      (GdkDrawable      *drawable,
+			   GdkGC            *gc,
+			   PangoFont        *font,
+			   gint              x,
+			   gint              y,
+			   PangoGlyphString *glyphs);
+void gdk_draw_layout_line (GdkDrawable      *drawable,
+			   GdkGC            *gc,
+			   gint              x,
+			   gint              y,
+			   PangoLayoutLine  *line);
+void gdk_draw_layout      (GdkDrawable      *drawable,
+			   GdkGC            *gc,
+			   gint              x,
+			   gint              y,
+			   PangoLayout      *layout);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

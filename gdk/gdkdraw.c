@@ -445,3 +445,21 @@ gdk_draw_lines (GdkDrawable *drawable,
 
   ((GdkDrawablePrivate *)drawable)->klass->draw_lines (drawable, gc, points, npoints);
 }
+
+void
+gdk_draw_glyphs (GdkDrawable      *drawable,
+		 GdkGC            *gc,
+		 PangoFont        *font,
+		 gint              x,
+		 gint              y,
+		 PangoGlyphString *glyphs)
+{
+
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (gc != NULL);
+
+  if (GDK_DRAWABLE_DESTROYED (drawable))
+    return;
+
+  ((GdkDrawablePrivate *)drawable)->klass->draw_glyphs (drawable, gc, font, x, y, glyphs);
+}

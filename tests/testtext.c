@@ -1,0 +1,1261 @@
+#include <stdio.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unicode.h>
+
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+
+typedef struct _Buffer Buffer;
+typedef struct _View View;
+
+static gint untitled_serial = 1;
+
+GSList *active_window_stack = NULL;
+
+struct _Buffer
+{
+  gint refcount;
+  GtkTextBuffer *buffer;
+  char *filename;
+  gint untitled_serial;
+};
+
+struct _View
+{
+  GtkWidget *window;
+  GtkWidget *text_view;
+  GtkAccelGroup *accel_group;
+  GtkItemFactory *item_factory;
+  Buffer *buffer;
+};
+
+static void push_active_window (GtkWindow *window);
+static void pop_active_window (void);
+static GtkWindow *get_active_window (void);
+
+static Buffer * create_buffer      (void);
+static gboolean check_buffer_saved (Buffer *buffer);
+static gboolean save_buffer        (Buffer *buffer);
+static gboolean save_as_buffer     (Buffer *buffer);
+static char *   buffer_pretty_name (Buffer *buffer);
+static void     buffer_filename_set (Buffer *buffer);
+
+static View *view_from_widget (GtkWidget *widget);
+
+static View *create_view      (Buffer *buffer);
+static void  check_close_view (View   *view);
+static void  close_view       (View   *view);
+static void  view_set_title   (View   *view);
+static void  view_init_menus  (View   *view);
+
+GSList *buffers = NULL;
+GSList *views = NULL;
+
+static void
+push_active_window (GtkWindow *window)
+{
+  gtk_object_ref (GTK_OBJECT (window));
+  active_window_stack = g_slist_prepend (active_window_stack, window);
+}
+
+static void
+pop_active_window (void)
+{
+  gtk_object_unref (active_window_stack->data);
+  active_window_stack = g_slist_delete_link (active_window_stack, active_window_stack);
+}
+
+static GtkWindow *
+get_active_window (void)
+{
+  if (active_window_stack)
+    return active_window_stack->data;
+  else
+    return NULL;
+}
+
+/*
+ * Filesel utility function
+ */
+
+typedef gboolean (*FileselOKFunc) (const char *filename, gpointer data);
+
+static void
+filesel_ok_cb (GtkWidget *button, GtkWidget *filesel)
+{
+  FileselOKFunc ok_func = gtk_object_get_data (GTK_OBJECT (filesel), "ok-func");
+  gpointer data = gtk_object_get_data (GTK_OBJECT (filesel), "ok-data");
+  gint *result = gtk_object_get_data (GTK_OBJECT (filesel), "ok-result");
+  
+  gtk_widget_hide (filesel);
+  
+  if ((*ok_func) (gtk_file_selection_get_filename (GTK_FILE_SELECTION (filesel)), data))
+    {
+      gtk_widget_destroy (filesel);
+      *result = TRUE;
+    }
+  else
+    gtk_widget_show (filesel);
+}
+
+gboolean
+filesel_run (GtkWindow    *parent, 
+	     const char   *title,
+	     const char   *start_file,
+	     FileselOKFunc func,
+	     gpointer      data)
+{
+  GtkWidget *filesel = gtk_file_selection_new (title);
+  gboolean result = FALSE;
+
+  if (!parent)
+    parent = get_active_window ();
+  
+  if (parent)
+    gtk_window_set_transient_for (GTK_WINDOW (filesel), parent);
+
+  if (start_file)
+    gtk_file_selection_set_filename (GTK_FILE_SELECTION (filesel), start_file);
+
+  
+  gtk_object_set_data (GTK_OBJECT (filesel), "ok-func", func);
+  gtk_object_set_data (GTK_OBJECT (filesel), "ok-data", data);
+  gtk_object_set_data (GTK_OBJECT (filesel), "ok-result", &result);
+
+  gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filesel)->ok_button),
+		      "clicked",
+		      GTK_SIGNAL_FUNC (filesel_ok_cb), filesel);
+  gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (filesel)->cancel_button),
+			     "clicked",
+			     GTK_SIGNAL_FUNC (gtk_widget_destroy), GTK_OBJECT (filesel));
+
+  gtk_signal_connect (GTK_OBJECT (filesel), "destroy",
+		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  gtk_window_set_modal (GTK_WINDOW (filesel), TRUE);
+
+  gtk_widget_show (filesel);
+  gtk_main ();
+
+  return result;
+}
+
+/*
+ * MsgBox utility functions
+ */
+
+static void
+msgbox_yes_cb (GtkWidget *widget, gboolean *result)
+{
+  *result = 0;
+  gtk_object_destroy (GTK_OBJECT (gtk_widget_get_toplevel (widget)));
+}
+
+static void
+msgbox_no_cb (GtkWidget *widget, gboolean *result)
+{
+  *result = 1;
+  gtk_object_destroy (GTK_OBJECT (gtk_widget_get_toplevel (widget)));
+}
+
+static gboolean
+msgbox_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+  if (event->keyval == GDK_Escape)
+    {
+      gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+      gtk_object_destroy (GTK_OBJECT (widget));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gint
+msgbox_run (GtkWindow  *parent,
+	    const char *message,
+	    const char *yes_button,
+	    const char *no_button,
+	    const char *cancel_button,
+	    gint default_index)
+{
+  gboolean result = -1;
+  GtkWidget *dialog;
+  GtkWidget *button;
+  GtkWidget *label;
+  GtkWidget *vbox;
+  GtkWidget *button_box;
+  GtkWidget *separator;
+
+  g_return_val_if_fail (message != NULL, FALSE);
+  g_return_val_if_fail (default_index >= 0 && default_index <= 1, FALSE);
+
+  if (!parent)
+    parent = get_active_window ();
+  
+  /* Create a dialog
+   */
+  dialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  if (parent)
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+
+  /* Quit our recursive main loop when the dialog is destroyed.
+   */
+  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+
+  /* Catch Escape key presses and have them destroy the dialog
+   */
+  gtk_signal_connect (GTK_OBJECT (dialog), "key_press_event",
+		      GTK_SIGNAL_FUNC (msgbox_key_press_cb), NULL);
+
+  /* Fill in the contents of the widget
+   */
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (dialog), vbox);
+  
+  label = gtk_label_new (message);
+  gtk_misc_set_padding (GTK_MISC (label), 12, 12);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+
+  separator = gtk_hseparator_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
+
+  button_box = gtk_hbutton_box_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), button_box, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (button_box), 8);
+  
+
+  /* When Yes is clicked, call the msgbox_yes_cb
+   * This sets the result variable and destroys the dialog
+   */
+  if (yes_button)
+    {
+      button = gtk_button_new_with_label (yes_button);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_container_add (GTK_CONTAINER (button_box), button);
+
+      if (default_index == 0)
+	gtk_widget_grab_default (button);
+      
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (msgbox_yes_cb), &result);
+    }
+
+  /* When No is clicked, call the msgbox_no_cb
+   * This sets the result variable and destroys the dialog
+   */
+  if (no_button)
+    {
+      button = gtk_button_new_with_label (no_button);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_container_add (GTK_CONTAINER (button_box), button);
+
+      if (default_index == 0)
+	gtk_widget_grab_default (button);
+      
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (msgbox_no_cb), &result);
+    }
+
+  /* When Cancel is clicked, destroy the dialog
+   */
+  if (cancel_button)
+    {
+      button = gtk_button_new_with_label (cancel_button);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_container_add (GTK_CONTAINER (button_box), button);
+      
+      if (default_index == 1)
+	gtk_widget_grab_default (button);
+      
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_object_destroy), GTK_OBJECT (dialog));
+    }
+
+  gtk_widget_show_all (dialog);
+
+  /* Run a recursive main loop until a button is clicked
+   * or the user destroys the dialog through the window mananger */
+  gtk_main ();
+
+  return result;
+}
+
+/*
+ * Example buffer filling code
+ */
+static gint
+blink_timeout(gpointer data)
+{
+  GtkTextTag *tag;
+  static gboolean flip = FALSE;
+  
+  tag = GTK_TEXT_TAG(data);
+
+  gtk_object_set(GTK_OBJECT(tag),
+                 "foreground", flip ? "blue" : "purple",
+                 NULL);
+
+  flip = !flip;
+
+  return TRUE;
+}
+
+static gint
+tag_event_handler(GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
+                  const GtkTextIter *iter, gpointer user_data)
+{
+  gint char_index;
+
+  char_index = gtk_text_iter_get_char_index(iter);
+  
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+      printf("Motion event at char %d tag `%s'\n",
+             char_index, tag->name);
+      break;
+        
+    case GDK_BUTTON_PRESS:
+      printf("Button press at char %d tag `%s'\n",
+             char_index, tag->name);
+      break;
+        
+    case GDK_2BUTTON_PRESS:
+      printf("Double click at char %d tag `%s'\n",
+             char_index, tag->name);
+      break;
+        
+    case GDK_3BUTTON_PRESS:
+      printf("Triple click at char %d tag `%s'\n",
+             char_index, tag->name);
+      break;
+        
+    case GDK_BUTTON_RELEASE:
+      printf("Button release at char %d tag `%s'\n",
+             char_index, tag->name);
+      break;
+        
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_PROPERTY_NOTIFY:
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_REQUEST:
+    case GDK_SELECTION_NOTIFY:
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    default:
+      break;
+    }
+
+  return FALSE;
+}
+
+static void
+setup_tag(GtkTextTag *tag)
+{
+
+  gtk_signal_connect(GTK_OBJECT(tag),
+                     "event",
+                     GTK_SIGNAL_FUNC(tag_event_handler),
+                     NULL);
+}
+
+static char  *book_closed_xpm[] = {
+"16 16 6 1",
+"       c None s None",
+".      c black",
+"X      c red",
+"o      c yellow",
+"O      c #808080",
+"#      c white",
+"                ",
+"       ..       ",
+"     ..XX.      ",
+"   ..XXXXX.     ",
+" ..XXXXXXXX.    ",
+".ooXXXXXXXXX.   ",
+"..ooXXXXXXXXX.  ",
+".X.ooXXXXXXXXX. ",
+".XX.ooXXXXXX..  ",
+" .XX.ooXXX..#O  ",
+"  .XX.oo..##OO. ",
+"   .XX..##OO..  ",
+"    .X.#OO..    ",
+"     ..O..      ",
+"      ..        ",
+"                "};
+
+
+
+void
+fill_example_buffer (GtkTextBuffer *buffer)
+{
+  GtkTextIter iter, iter2;
+  GtkTextTag *tag;
+  GdkColor color;
+  GdkColor color2;
+  GdkPixmap *pixmap;
+  GdkBitmap *mask;
+  int i;
+  char *str;
+  
+  tag = gtk_text_buffer_create_tag(buffer, "fg_blue");
+
+  /*       gtk_timeout_add(1000, blink_timeout, tag); */
+      
+  setup_tag(tag);
+  
+  color.red = color.green = 0;
+  color.blue = 0xffff;
+  color2.red = 0xfff;
+  color2.blue = 0x0;
+  color2.green = 0;
+  gtk_object_set(GTK_OBJECT(tag),
+		 "foreground_gdk", &color,
+		 "background_gdk", &color2,
+		 "font", "Sans 24",
+		 NULL);
+
+  tag = gtk_text_buffer_create_tag(buffer, "fg_red");
+
+  setup_tag(tag);
+      
+  color.blue = color.green = 0;
+  color.red = 0xffff;
+  gtk_object_set(GTK_OBJECT(tag),
+		 "offset", -4,
+		 "foreground_gdk", &color,
+		 NULL);
+
+  tag = gtk_text_buffer_create_tag(buffer, "bg_green");
+
+  setup_tag(tag);
+      
+  color.blue = color.red = 0;
+  color.green = 0xffff;
+  gtk_object_set(GTK_OBJECT(tag),
+		 "background_gdk", &color,
+		 "font", "Sans 10",
+		 NULL);
+
+  tag = gtk_text_buffer_create_tag(buffer, "overstrike");
+
+  setup_tag(tag);
+      
+  gtk_object_set(GTK_OBJECT(tag),
+		 "overstrike", TRUE,
+		 NULL);
+
+
+  tag = gtk_text_buffer_create_tag(buffer, "underline");
+
+  setup_tag(tag);
+      
+  gtk_object_set(GTK_OBJECT(tag),
+		 "underline", PANGO_UNDERLINE_SINGLE,
+		 NULL);
+
+  setup_tag(tag);
+      
+  gtk_object_set(GTK_OBJECT(tag),
+		 "underline", PANGO_UNDERLINE_SINGLE,
+		 NULL);
+
+  tag = gtk_text_buffer_create_tag(buffer, "centered");
+      
+  gtk_object_set(GTK_OBJECT(tag),
+		 "justify", GTK_JUSTIFY_CENTER,
+		 NULL);
+
+  tag = gtk_text_buffer_create_tag(buffer, "rtl_quote");
+      
+  gtk_object_set(GTK_OBJECT(tag),
+		 "wrap_mode", GTK_WRAPMODE_WORD,
+		 "direction", GTK_TEXT_DIR_RTL,
+		 "left_wrapped_line_margin", 20,
+		 "left_margin", 20,
+		 "right_margin", 20,
+		 NULL);
+  
+  pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
+						  gtk_widget_get_default_colormap(),
+						  &mask,
+						  NULL, book_closed_xpm);
+  
+  g_assert(pixmap != NULL);
+  
+  i = 0;
+  while (i < 100)
+    {
+      gtk_text_buffer_get_iter_at_char(buffer, &iter, 0);
+          
+      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
+          
+      str = g_strdup_printf("%d Hello World! blah blah blah blah blah blah blah blah blah blah blah blah\nwoo woo woo woo woo woo woo woo woo woo woo woo woo woo woo\n",
+			    i);
+      
+      gtk_text_buffer_insert(buffer, &iter, str, -1);
+
+      g_free(str);
+      
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 5);
+          
+      gtk_text_buffer_insert(buffer, &iter,
+			     "(Hello World!)\nfoo foo Hello this is some text we are using to text word wrap. It has punctuation! gee; blah - hmm, great.\nnew line with a significant quantity of text on it. This line really does contain some text. More text! More text! More text!\n"
+			     /* This is UTF8 stuff, Emacs doesn't
+				really know how to display it */
+			     "German (Deutsch Süd) Grüß Gott Greek (Ελληνικά) Γειά σας Hebrew   שלום Japanese (日本語)\n", -1);
+
+      gtk_text_buffer_create_mark (buffer, "tmp_mark", &iter, TRUE);
+
+#if 1
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 6);
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 0, 13);
+
+      gtk_text_buffer_apply_tag(buffer, "fg_blue", &iter, &iter2);
+
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 1, 10);
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 1, 16);
+
+      gtk_text_buffer_apply_tag(buffer, "underline", &iter, &iter2);
+
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 1, 14);
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 1, 24);
+
+      gtk_text_buffer_apply_tag(buffer, "overstrike", &iter, &iter2);
+          
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 9);
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 0, 16);
+
+      gtk_text_buffer_apply_tag(buffer, "bg_green", &iter, &iter2);
+  
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 4, 2);
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 4, 10);
+
+      gtk_text_buffer_apply_tag(buffer, "bg_green", &iter, &iter2);
+
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 4, 8);
+      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 4, 15);
+
+      gtk_text_buffer_apply_tag(buffer, "fg_red", &iter, &iter2);
+#endif
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, "tmp_mark");
+      gtk_text_buffer_insert (buffer, &iter, "Centered text!\n", -1);
+	  
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter2, "tmp_mark");
+      gtk_text_buffer_apply_tag (buffer, "centered", &iter2, &iter);
+
+      gtk_text_buffer_move_mark (buffer, "tmp_mark", &iter);
+      gtk_text_buffer_insert (buffer, &iter, "Word wrapped, Right-to-left Quote\n", -1);
+      gtk_text_buffer_insert (buffer, &iter, "وقد بدأ ثلاث من أكثر المؤسسات تقدما في شبكة اكسيون برامجها كمنظمات لا تسعى للربح، ثم تحولت في السنوات الخمس الماضية إلى مؤسسات مالية منظمة، وباتت جزءا من النظام المالي في بلدانها، ولكنها تتخصص في خدمة قطاع المشروعات الصغيرة. وأحد أكثر هذه المؤسسات نجاحا هو »بانكوسول« في بوليفيا.\n", -1);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter2, "tmp_mark");
+      gtk_text_buffer_apply_tag (buffer, "rtl_quote", &iter2, &iter);
+	  
+      ++i;
+    }
+
+  gdk_pixmap_unref(pixmap);
+  if (mask)
+    gdk_bitmap_unref(mask);
+  
+  printf("%d lines %d chars\n",
+	 gtk_text_buffer_get_line_count(buffer),
+	 gtk_text_buffer_get_char_count(buffer));
+
+  gtk_text_buffer_set_modified (buffer, FALSE);
+}
+
+gboolean
+fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
+{
+  FILE* f;
+  gchar buf[2048];
+  gint remaining = 0;
+  GtkTextIter iter, end;
+
+  f = fopen(filename, "r");
+  
+  if (f == NULL)
+    {
+      gchar *err = g_strdup_printf ("Cannot open file '%s': %s",
+				    filename, g_strerror (errno));
+      msgbox_run (NULL, err, "OK", NULL, NULL, 0);
+      g_free (err);
+      return FALSE;
+    }
+  
+  gtk_text_buffer_get_iter_at_char(buffer, &iter, 0);
+  while (!feof (f))
+    {
+      gint count;
+      char *leftover, *next;
+      unicode_char_t wc;
+      int to_read = 2047  - remaining;
+      
+      count = fread (buf + remaining, 1, to_read, f);
+      buf[count + remaining] = '\0';
+
+      leftover = next = buf;
+      while (next)
+	{
+	  leftover = next;
+	  if (!*leftover)
+	    break;
+	  
+	  next = unicode_get_utf8 (next, &wc);
+	}
+
+      gtk_text_buffer_insert (buffer, &iter, buf, leftover - buf);
+
+      remaining = buf + remaining + count - leftover;
+      g_memmove (buf, leftover, remaining);
+
+      if (remaining > 6 || count < to_read)
+	  break;
+    }
+
+  if (remaining)
+    {
+      gchar *err = g_strdup_printf ("Invalid UTF-8 data encountered reading file '%s'", filename);
+      msgbox_run (NULL, err, "OK", NULL, NULL, 0);
+      g_free (err);
+    }
+  
+  /* We had a newline in the buffer to begin with. (The buffer always contains
+   * a newline, so we delete to the end of the buffer to clean up.
+   */
+  gtk_text_buffer_get_last_iter (buffer, &end);
+  gtk_text_buffer_delete (buffer, &iter, &end);
+  
+  gtk_text_buffer_set_modified (buffer, FALSE);
+
+  return TRUE;
+}
+
+static gint
+delete_event_cb(GtkWidget *window, GdkEventAny *event, gpointer data)
+{
+  View *view = view_from_widget (window);
+
+  push_active_window (GTK_WINDOW (window));
+  check_close_view (view);
+  pop_active_window ();
+
+  return TRUE;
+}
+
+/*
+ * Menu callbacks
+ */
+
+static View *
+get_empty_view (View *view)
+{
+  if (!view->buffer->filename &&
+      !gtk_text_buffer_modified (view->buffer->buffer))
+    return view;
+  else
+    return create_view (create_buffer ());
+}
+
+static View *
+view_from_widget (GtkWidget *widget)
+{
+  GtkWidget *app;
+
+  if (GTK_IS_MENU_ITEM (widget))
+    {
+      GtkItemFactory *item_factory = gtk_item_factory_from_widget (widget);
+      return gtk_object_get_data (GTK_OBJECT (item_factory), "view");      
+    }
+  else
+    {
+      GtkWidget *app = gtk_widget_get_toplevel (widget);
+      return gtk_object_get_data (GTK_OBJECT (app), "view");
+    }
+}
+
+static void
+do_new (gpointer             callback_data,
+	guint                callback_action,
+	GtkWidget           *widget)
+{
+  create_view (create_buffer ());
+}
+
+static void
+do_new_view (gpointer             callback_data,
+	     guint                callback_action,
+	     GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+  
+  create_view (view->buffer);
+}
+
+gboolean
+open_ok_func (const char *filename, gpointer data)
+{
+  View *view = data;
+  View *new_view = get_empty_view (view);
+
+  if (!fill_file_buffer (new_view->buffer->buffer, filename))
+    {
+      if (new_view != view)
+	close_view (new_view);
+      return FALSE;
+    }
+  else
+    {
+      g_free (new_view->buffer->filename);
+      new_view->buffer->filename = g_strdup (filename);
+      buffer_filename_set (new_view->buffer);
+      
+      return TRUE;
+    }
+}
+
+static void
+do_open (gpointer             callback_data,
+	 guint                callback_action,
+	 GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+
+  push_active_window (GTK_WINDOW (view->window));
+  filesel_run (NULL, "Open File", NULL, open_ok_func, view);
+  pop_active_window ();
+}
+
+static void
+do_save_as (gpointer             callback_data,
+	    guint                callback_action,
+	    GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);  
+
+  push_active_window (GTK_WINDOW (view->window));
+  save_as_buffer (view->buffer);
+  pop_active_window ();
+}
+
+static void
+do_save (gpointer             callback_data,
+	 guint                callback_action,
+	 GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+
+  push_active_window (GTK_WINDOW (view->window));
+  if (!view->buffer->filename)
+    do_save_as (callback_data, callback_action, widget);
+  else
+    save_buffer (view->buffer);
+  pop_active_window ();
+}
+
+static void
+do_close   (gpointer             callback_data,
+	    guint                callback_action,
+	    GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+
+  push_active_window (GTK_WINDOW (view->window));
+  check_close_view (view);
+  pop_active_window ();
+}
+
+static void
+do_exit    (gpointer             callback_data,
+	    guint                callback_action,
+	    GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+
+  GSList *tmp_list = buffers;
+
+  push_active_window (GTK_WINDOW (view->window));
+  while (tmp_list)
+    {
+      if (!check_buffer_saved (tmp_list->data))
+	return;
+
+      tmp_list = tmp_list->next;
+    }
+
+  gtk_main_quit();
+  pop_active_window ();
+}
+
+static void
+do_example (gpointer             callback_data,
+	    guint                callback_action,
+	    GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+  View *new_view;
+
+  new_view = get_empty_view (view);
+  
+  fill_example_buffer (new_view->buffer->buffer);
+}
+
+static void
+do_wrap_changed (gpointer             callback_data,
+		 guint                callback_action,
+		 GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view->text_view), callback_action);
+}
+
+static void
+do_direction_changed (gpointer             callback_data,
+		      guint                callback_action,
+		      GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+  
+  gtk_widget_set_direction (view->text_view, callback_action);
+  gtk_widget_queue_resize (view->text_view);
+}
+
+static void
+view_init_menus (View *view)
+{
+  GtkTextDirection direction = gtk_widget_get_direction (view->text_view);
+  GtkWrapMode wrap_mode = gtk_text_view_get_wrap_mode (GTK_TEXT_VIEW (view->text_view));
+  GtkWidget *menu_item = NULL;
+
+  switch (direction)
+    {
+    case GTK_TEXT_DIR_LTR:
+      menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Left-to-Right");
+      break;
+    case GTK_TEXT_DIR_RTL:
+      menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Right-to-Left");
+      break;
+    default:
+      break;
+    }
+
+  if (menu_item)
+    gtk_menu_item_activate (GTK_MENU_ITEM (menu_item));
+
+  switch (wrap_mode)
+    {
+    case GTK_WRAPMODE_NONE:
+      menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Wrap Off");
+      break;
+    case GTK_WRAPMODE_WORD:
+      menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Wrap Words");
+      break;
+    default:
+      break;
+    }
+  
+  if (menu_item)
+    gtk_menu_item_activate (GTK_MENU_ITEM (menu_item));
+}
+
+static GtkItemFactoryEntry menu_items[] =
+{
+  { "/_File",            NULL,         0,           0, "<Branch>" },
+  { "/File/_New",        "<control>N", do_new,      0, NULL },
+  { "/File/New _View",   NULL,         do_new_view, 0, NULL },
+  { "/File/_Open",       "<control>O", do_open,     0, NULL },
+  { "/File/_Save",       "<control>S", do_save,     0, NULL },
+  { "/File/Save _As...", NULL,         do_save_as,  0, NULL },
+  { "/File/sep1",        NULL,         0,           0, "<Separator>" },
+  { "/File/_Close",     "<control>W" , do_close,    0, NULL },
+  { "/File/E_xit",      "<control>Q" , do_exit,     0, NULL },
+
+  { "/_Settings",   	  NULL,         0,                0, "<Branch>" },
+  { "/Settings/Wrap _Off",   NULL,      do_wrap_changed,  GTK_WRAPMODE_NONE, "<RadioItem>" },
+  { "/Settings/Wrap _Words", NULL,      do_wrap_changed,  GTK_WRAPMODE_WORD, "/Settings/Wrap Off" },
+  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/Left-to-Right", NULL,    do_direction_changed,  GTK_TEXT_DIR_LTR, "<RadioItem>" },
+  { "/Settings/Right-to-Left", NULL,    do_direction_changed,  GTK_TEXT_DIR_RTL, "/Settings/Left-to-Right" },
+  
+  { "/_Test",   	 NULL,         0,           0, "<Branch>" },
+  { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
+};
+
+static gboolean
+save_buffer (Buffer *buffer)
+{
+  GtkTextIter start, end;
+  gchar *chars;
+  gboolean result = FALSE;
+  gboolean have_backup = FALSE;
+  gchar *bak_filename;
+  FILE *file;
+
+  g_return_val_if_fail (buffer->filename != NULL, FALSE);
+
+  bak_filename = g_strconcat (buffer->filename, "~", NULL);
+  
+  if (rename (buffer->filename, bak_filename) != 0)
+    {
+      if (errno != ENOENT)
+	{
+	  gchar *err = g_strdup_printf ("Cannot back up '%s' to '%s': %s",
+					buffer->filename, bak_filename, g_strerror (errno));
+	  msgbox_run (NULL, err, "OK", NULL, NULL, 0);
+	  g_free (err);
+	}
+      
+      return FALSE;
+    }
+  else
+    have_backup = TRUE;
+  
+  file = fopen (buffer->filename, "w");
+  if (!file)
+    {
+      gchar *err = g_strdup_printf ("Cannot back up '%s' to '%s': %s",
+				    buffer->filename, bak_filename, g_strerror (errno));
+      msgbox_run (NULL, err, "OK", NULL, NULL, 0);
+    }
+  else
+    {
+      gtk_text_buffer_get_iter_at_char (buffer->buffer, &start, 0);
+      gtk_text_buffer_get_last_iter (buffer->buffer, &end);
+  
+      chars = gtk_text_buffer_get_slice (buffer->buffer, &start, &end, FALSE);
+
+      if (fputs (chars, file) == EOF ||
+	  fclose (file) == EOF)
+	{
+	  gchar *err = g_strdup_printf ("Error writing to '%s': %s",
+					buffer->filename, g_strerror (errno));
+	  msgbox_run (NULL, err, "OK", NULL, NULL, 0);
+	  g_free (err);
+	}
+      else
+	{
+	  /* Success
+	   */
+	  result = TRUE;
+	  gtk_text_buffer_set_modified (buffer->buffer, FALSE);	  
+	}
+	
+      g_free (chars);
+    }
+
+  if (!result && have_backup)
+    {
+      if (rename (bak_filename, buffer->filename) != 0)
+	{
+	  gchar *err = g_strdup_printf ("Error restoring backup file '%s' to '%s': %s\nBackup left as '%s'",
+					buffer->filename, bak_filename, g_strerror (errno), bak_filename);
+	  msgbox_run (NULL, err, "OK", NULL, NULL, 0);
+	  g_free (err);
+	}
+    }
+
+  g_free (bak_filename);
+  
+  return result;
+}
+
+static gboolean
+save_as_ok_func (const char *filename, gpointer data)
+{
+  Buffer *buffer = data;
+  char *old_filename = buffer->filename;
+
+  if (!buffer->filename || strcmp (filename, buffer->filename) != 0)
+    {
+      struct stat statbuf;
+
+      if (stat(filename, &statbuf) == 0)
+	{
+	  gchar *err = g_strdup_printf ("Ovewrite existing file '%s'?", filename);
+	  gint result = msgbox_run (NULL, err, "Yes", "No", NULL, 1);
+	  g_free (err);
+
+	  if (result != 0)
+	    return FALSE;
+	}
+    }
+  
+  buffer->filename = g_strdup (filename);
+
+  if (save_buffer (buffer))
+    {
+      g_free (old_filename);
+      buffer_filename_set (buffer);
+      return TRUE;
+    }
+  else
+    {
+      g_free (buffer->filename);
+      buffer->filename = old_filename;
+      return FALSE;
+    }
+}
+
+static gboolean
+save_as_buffer (Buffer *buffer)
+{
+  return filesel_run (NULL, "Save File", NULL, save_as_ok_func, buffer);
+}
+
+static gboolean
+check_buffer_saved (Buffer *buffer)
+{
+  if (gtk_text_buffer_modified (buffer->buffer))
+    {
+      char *pretty_name = buffer_pretty_name (buffer);
+      char *msg = g_strdup_printf ("Save changes to '%s'?", pretty_name);
+      gint result;
+      
+      g_free (pretty_name);
+      
+      result = msgbox_run (NULL, msg, "Yes", "No", "Cancel", 0);
+      g_free (msg);
+  
+      if (result == 0)
+	return save_as_buffer (buffer);
+      else if (result == 1)
+	return TRUE;
+      else
+	return FALSE;
+    }
+  else
+    return TRUE;
+}
+
+static Buffer *
+create_buffer (void)
+{
+  Buffer *buffer;
+
+  buffer = g_new (Buffer, 1);
+
+  buffer->buffer = gtk_text_buffer_new (NULL);
+  gtk_object_ref (GTK_OBJECT (buffer->buffer));
+  gtk_object_sink (GTK_OBJECT (buffer->buffer));
+  
+  buffer->refcount = 1;
+  buffer->filename = NULL;
+  buffer->untitled_serial = -1;
+
+  buffers = g_slist_prepend (buffers, buffer);
+  
+  return buffer;
+}
+
+static char *
+buffer_pretty_name (Buffer *buffer)
+{
+  if (buffer->filename)
+    {
+      char *p;
+      char *result = g_strdup (g_basename (buffer->filename));
+      p = strchr (result, '/');
+      if (p)
+	*p = '\0';
+
+      return result;
+    }
+  else
+    {
+      if (buffer->untitled_serial == -1)
+	buffer->untitled_serial = untitled_serial++;
+
+      if (buffer->untitled_serial == 1)
+	return g_strdup ("Untitled");
+      else
+	return g_strdup_printf ("Untitled #%d", buffer->untitled_serial);
+    }
+}
+
+static void
+buffer_filename_set (Buffer *buffer)
+{
+  GSList *tmp_list = views;
+
+  while (tmp_list)
+    {
+      View *view = tmp_list->data;
+
+      if (view->buffer == buffer)
+	view_set_title (view);
+
+      tmp_list = tmp_list->next;
+    }
+}
+
+static void
+buffer_ref (Buffer *buffer)
+{
+  buffer->refcount++;
+}
+
+static void
+buffer_unref (Buffer *buffer)
+{
+  buffer->refcount--;
+  if (buffer->refcount == 0)
+    {
+      buffers = g_slist_remove (buffers, buffer);
+      gtk_object_unref (GTK_OBJECT (buffer->buffer));
+      g_free (buffer->filename);
+      g_free (buffer);
+    }
+}
+
+static void
+close_view (View *view)
+{
+  views = g_slist_remove (views, view);
+  buffer_unref (view->buffer);
+  gtk_widget_destroy (view->window);
+  g_object_unref (G_OBJECT (view->item_factory));
+  
+  g_free (view);
+  
+  if (!views)
+    gtk_main_quit();
+}
+
+static void
+check_close_view (View *view)
+{
+  if (view->buffer->refcount > 1 ||
+      check_buffer_saved (view->buffer))
+    close_view (view);
+}
+
+static void
+view_set_title (View *view)
+{
+  char *pretty_name = buffer_pretty_name (view->buffer);
+  char *title = g_strconcat ("testtext - ", pretty_name, NULL);
+
+  gtk_window_set_title (GTK_WINDOW (view->window), title);
+
+  g_free (pretty_name);
+  g_free (title);
+}
+
+static View *
+create_view (Buffer *buffer)
+{
+  View *view;
+  
+  GtkWidget *sw;
+  GtkWidget *vbox;
+
+  view = g_new0 (View, 1);
+  views = g_slist_prepend (views, view);
+
+  view->buffer = buffer;
+  buffer_ref (buffer);
+  
+  view->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (view->window), "view", view);
+  
+  gtk_signal_connect (GTK_OBJECT (view->window), "delete_event",
+		      GTK_SIGNAL_FUNC(delete_event_cb), NULL);
+
+  view->accel_group = gtk_accel_group_new ();
+  view->item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", view->accel_group);
+  gtk_object_set_data (GTK_OBJECT (view->item_factory), "view", view);
+  
+  gtk_item_factory_create_items (view->item_factory, G_N_ELEMENTS (menu_items), menu_items, view);
+
+  gtk_window_add_accel_group (GTK_WINDOW (view->window), view->accel_group);
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (view->window), vbox);
+
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_item_factory_get_widget (view->item_factory, "<main>"),
+		      FALSE, FALSE, 0);
+  
+  sw = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+                                 GTK_POLICY_AUTOMATIC,
+                                 GTK_POLICY_AUTOMATIC);
+
+  view->text_view = gtk_text_view_new_with_buffer (buffer->buffer);
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view->text_view), GTK_WRAPMODE_WORD);
+
+  gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
+  gtk_container_add(GTK_CONTAINER(sw), view->text_view);
+
+  gtk_window_set_default_size (GTK_WINDOW (view->window), 500, 500);
+
+  gtk_widget_grab_focus(view->text_view);
+
+  view_set_title (view);
+  view_init_menus (view);
+  
+  gtk_widget_show_all (view->window);
+  return view;
+}
+
+int
+main(int argc, char** argv)
+{
+  Buffer *buffer;
+  View *view;
+  int i;
+  
+  gtk_init(&argc, &argv);
+
+  buffer = create_buffer ();
+  view = create_view (buffer);
+  buffer_unref (buffer);
+  
+  push_active_window (GTK_WINDOW (view->window));
+  for (i=1; i < argc; i++)
+    {
+      char *filename;
+
+      /* Quick and dirty canonicalization - better should be in GLib
+       */
+
+      if (!g_path_is_absolute (argv[i]))
+	{
+	  char *cwd = g_get_current_dir ();
+	  filename = g_strconcat (cwd, "/", argv[i], NULL);
+	  g_free (cwd);
+	}
+      else
+	filename = argv[i];
+
+      open_ok_func (filename, view);
+
+      if (filename != argv[i])
+	g_free (filename);
+    }
+  pop_active_window ();
+  
+  gtk_main();
+
+  return 0;
+}
+
+

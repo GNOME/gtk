@@ -1487,6 +1487,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
   gint x, y;
   gint row, col;
   GtkAllocation allocation;
+  GtkWidget *widget = GTK_WIDGET (table);
   
   children = table->children;
   while (children)
@@ -1551,6 +1552,10 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	      allocation.height = child_requisition.height;
 	      allocation.y = y + (max_height - allocation.height) / 2;
 	    }
+
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	    allocation.x = widget->allocation.x + widget->allocation.width
+	      - (allocation.x - widget->allocation.x) - allocation.width;
 	  
 	  gtk_widget_size_allocate (child->widget, &allocation);
 	}

@@ -29,7 +29,6 @@
 #include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
 
-
 #define SCALE_CLASS(w)  GTK_SCALE_GET_CLASS (w)
 #define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
@@ -314,7 +313,6 @@ gtk_hscale_size_request (GtkWidget      *widget,
                          GtkRequisition *requisition)
 {
   GtkScale *scale;
-  gint value_width;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HSCALE (widget));
@@ -326,24 +324,25 @@ gtk_hscale_size_request (GtkWidget      *widget,
                         widget->style->klass->xthickness) * 2;
   requisition->height = (RANGE_CLASS (scale)->slider_width +
                          widget->style->klass->ythickness * 2);
-  
+
   if (scale->draw_value)
     {
-      value_width = gtk_scale_get_value_width (scale);
+      gint value_width, value_height;
+      gtk_scale_get_value_size (scale, &value_width, &value_height);
       
       if ((scale->value_pos == GTK_POS_LEFT) ||
           (scale->value_pos == GTK_POS_RIGHT))
         {
           requisition->width += value_width + SCALE_CLASS (scale)->value_spacing;
-          if (requisition->height < (widget->style->font->ascent + widget->style->font->descent))
-            requisition->height = widget->style->font->ascent + widget->style->font->descent;
+          if (requisition->height < value_height)
+            requisition->height = value_height;
         }
       else if ((scale->value_pos == GTK_POS_TOP) ||
                (scale->value_pos == GTK_POS_BOTTOM))
         {
           if (requisition->width < value_width)
             requisition->width = value_width;
-          requisition->height += widget->style->font->ascent + widget->style->font->descent;
+          requisition->height += value_height;
         }
     }
 }
@@ -398,23 +397,25 @@ gtk_hscale_pos_trough (GtkHScale *hscale,
   
   if (scale->draw_value)
     {
+      gint value_width, value_height;
+      gtk_scale_get_value_size (scale, &value_width, &value_height);
+      
       *x = 0;
       *y = 0;
       
       switch (scale->value_pos)
         {
         case GTK_POS_LEFT:
-          *x += gtk_scale_get_value_width (scale) + SCALE_CLASS (scale)->value_spacing;
+          *x += value_width + SCALE_CLASS (scale)->value_spacing;
           *y = (widget->allocation.height - *h) / 2;
           *w -= *x;
           break;
         case GTK_POS_RIGHT:
-          *w -= gtk_scale_get_value_width (scale) + SCALE_CLASS (scale)->value_spacing;
+          *w -= value_width + SCALE_CLASS (scale)->value_spacing;
           *y = (widget->allocation.height - *h) / 2;
           break;
         case GTK_POS_TOP:
-          *y = (widget->style->font->ascent + widget->style->font->descent +
-                (widget->allocation.height - widget->requisition.height) / 2);
+          *y = (value_height + (widget->allocation.height - widget->requisition.height) / 2);
           break;
         case GTK_POS_BOTTOM:
           *y = (widget->allocation.height - widget->requisition.height) / 2;
@@ -510,7 +511,6 @@ gtk_hscale_draw_value (GtkScale *scale)
   GtkStateType state_type;
   GtkWidget *widget;
   gchar buffer[32];
-  gint text_width;
   gint width, height;
   gint x, y;
   
@@ -521,30 +521,30 @@ gtk_hscale_draw_value (GtkScale *scale)
   
   if (scale->draw_value)
     {
-      sprintf (buffer, "%0.*f", GTK_RANGE (scale)->digits, GTK_RANGE (scale)->adjustment->value);
-      text_width = gdk_string_measure (GTK_WIDGET (scale)->style->font, buffer);
+      PangoLayout *layout;
+      PangoRectangle logical_rect;
       
+      sprintf (buffer, "%0.*f", GTK_RANGE (scale)->digits, GTK_RANGE (scale)->adjustment->value);
+
+      layout = gtk_widget_create_pango_layout (widget);
+      pango_layout_set_text (layout, buffer, -1);
+      pango_layout_get_extents (layout, NULL, &logical_rect);
+
       switch (scale->value_pos)
         {
         case GTK_POS_LEFT:
           gdk_window_get_position (GTK_RANGE (scale)->trough, &x, &y);
           gdk_window_get_size (GTK_RANGE (scale)->trough, &width, &height);
           
-          x -= SCALE_CLASS (scale)->value_spacing + text_width;
-          y += ((height -
-                 (GTK_WIDGET (scale)->style->font->ascent +
-                  GTK_WIDGET (scale)->style->font->descent)) / 2 +
-                GTK_WIDGET (scale)->style->font->ascent);
+          x -= SCALE_CLASS (scale)->value_spacing + logical_rect.width / PANGO_SCALE;
+          y += (height - logical_rect.height / PANGO_SCALE) / 2;
           break;
         case GTK_POS_RIGHT:
           gdk_window_get_position (GTK_RANGE (scale)->trough, &x, &y);
           gdk_window_get_size (GTK_RANGE (scale)->trough, &width, &height);
           
           x += width + SCALE_CLASS (scale)->value_spacing;
-          y += ((height -
-                 (GTK_WIDGET (scale)->style->font->ascent +
-                  GTK_WIDGET (scale)->style->font->descent)) / 2 +
-                GTK_WIDGET (scale)->style->font->ascent);
+          y += (height - logical_rect.height / PANGO_SCALE) / 2;
           break;
         case GTK_POS_TOP:
           gdk_window_get_position (GTK_RANGE (scale)->slider, &x, NULL);
@@ -552,10 +552,10 @@ gtk_hscale_draw_value (GtkScale *scale)
           gdk_window_get_size (GTK_RANGE (scale)->slider, &width, NULL);
           gdk_window_get_size (GTK_RANGE (scale)->trough, NULL, &height);
           
-          x += widget->allocation.x + (width - text_width) / 2;
+          x += widget->allocation.x + (width - logical_rect.width / PANGO_SCALE) / 2;
 	  x = CLAMP (x, widget->allocation.x,
-		     widget->allocation.x + widget->allocation.width - text_width);
-          y -= GTK_WIDGET (scale)->style->font->descent;
+		     widget->allocation.x + widget->allocation.width - logical_rect.width / PANGO_SCALE);
+          y -= logical_rect.height / PANGO_SCALE;
           break;
         case GTK_POS_BOTTOM:
           gdk_window_get_position (GTK_RANGE (scale)->slider, &x, NULL);
@@ -563,22 +563,30 @@ gtk_hscale_draw_value (GtkScale *scale)
           gdk_window_get_size (GTK_RANGE (scale)->slider, &width, NULL);
           gdk_window_get_size (GTK_RANGE (scale)->trough, NULL, &height);
           
-          x += widget->allocation.x + (width - text_width) / 2;
+          x += widget->allocation.x + (width - logical_rect.width / PANGO_SCALE) / 2;
 	  x = CLAMP (x, widget->allocation.x,
-		     widget->allocation.x + widget->allocation.width - text_width);
-          y += height + GTK_WIDGET (scale)->style->font->ascent;
+		     widget->allocation.x + widget->allocation.width - logical_rect.width / PANGO_SCALE);
+          y += height;
           break;
         }
       
       state_type = GTK_STATE_NORMAL;
       if (!GTK_WIDGET_IS_SENSITIVE (scale))
         state_type = GTK_STATE_INSENSITIVE;
-      
+
+#if 0      
       gtk_paint_string (GTK_WIDGET (scale)->style,
                         GTK_WIDGET (scale)->window,
                         state_type, 
                         NULL, GTK_WIDGET (scale), "hscale", 
                         x, y, buffer);
+#endif
+      
+      gdk_draw_layout (GTK_WIDGET (scale)->window,
+		       GTK_WIDGET (scale)->style->fg_gc [state_type],
+		       x, y, layout);
+
+      pango_layout_unref (layout);
     }
 }
 

@@ -106,3 +106,16 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
     have to be moved into the ::destroy implementations. The reason for doing
     this is that all object reference cycles should be broken at destruction 
     time.
+
+- Inserting and deleting text in GtkEntry though functions such
+  as gtk_entry_insert_text() now leave the cursor at its original
+  position in the text instead of moving it to the location of
+  the insertion/deletion.
+
+- The ->label field of GtkFrame widgets has been removed. (As part of
+  a change to allow the arbitrary widgets in the title position.) The
+  text can now be retrieved with the new function gtk_frame_get_text().
+
+- The 'font' and 'font_set' declarations in RC files are now ignored. There
+  is a new 'font_name' field that holds the string form of a Pango font
+

@@ -38,6 +38,7 @@
 #include <gdk/gdkim.h>
 #include <gdk/gdkimage.h>
 #include <gdk/gdkinput.h>
+#include <gdk/gdkpango.h>
 #include <gdk/gdkpixmap.h>
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkregion.h>
@@ -144,6 +145,8 @@ guint    gdk_keyval_to_lower     (guint        keyval);
 gboolean gdk_keyval_is_upper     (guint        keyval);
 gboolean gdk_keyval_is_lower     (guint        keyval);
 
+guint32  gdk_keyval_to_unicode   (guint        keyval);
+guint    gdk_unicode_to_keyval   (guint32      wc);
 
 /* Threading
  */

@@ -403,10 +403,12 @@ gtk_style_new (void)
   
   style = g_new0 (GtkStyle, 1);
   
+  style->font_desc = pango_font_description_from_string ("Sans 10");
+    
   if (!default_font)
     {
-      default_font =
-	gdk_font_load ("-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-iso8859-1");
+      default_font = gdk_font_from_description (style->font_desc);
+
       if (!default_font)
 	default_font = gdk_font_load ("fixed");
       if (!default_font)
@@ -746,9 +748,11 @@ gtk_style_destroy (GtkStyle *style)
     }
   
   gdk_font_unref (style->font);
+  pango_font_description_free (style->font_desc);
+  
   if (style->rc_style)
     gtk_rc_style_unref (style->rc_style);
-  
+
   g_free (style);
 }
 
@@ -3141,7 +3145,7 @@ gtk_default_draw_handle (GtkStyle      *style,
   gtk_paint_box (style, window, state_type, shadow_type, area, widget, 
                  detail, x, y, width, height);
   
-
+  
   if (!strcmp (detail, "paned"))
     {
       /* we want to ignore the shadow border in paned widgets */

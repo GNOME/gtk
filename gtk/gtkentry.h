@@ -30,7 +30,8 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkeditable.h>
-
+#include <gtk/gtkimcontext.h>
+#include <pango/pango.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,27 +56,21 @@ struct _GtkEntry
   GdkWindow *text_area;
   GdkPixmap *backing_pixmap;
   GdkCursor *cursor;
-  GdkWChar  *text;
+  gchar     *text;
 
-  guint16 text_size;	/* allocated size */
-  guint16 text_length;	/* length in use */
+  guint16 text_size;	/* allocated size, in bytes */
+
+  guint16 text_length;	/* length in use, in chars */
   guint16 text_max_length;
-  gint    scroll_offset;
-  guint   visible : 1;	/* deprecated - see editable->visible */
-  guint32 timer;
+
+  /*< private >*/
   guint   button;
-
-  /* The x-offset of each character (including the last insertion position)
-   * only valid when the widget is realized */
-  gint   *char_offset;
-
-  /* Same as 'text', but in multibyte */
-  gchar  *text_mb;
-  /* If true, 'text' and 'text_mb' are not coherent */
-  guint   text_mb_dirty : 1;
-  /* If true, we use the encoding of wchar_t as the encoding of 'text'.
-   * Otherwise we use the encoding of multi-byte characters instead. */
-  guint   use_wchar : 1;
+  guint32 timer;
+  guint16 n_bytes;	/* length in use, in bytes */
+  PangoLayout *layout;
+  gint    scroll_offset;
+  gint    ascent;	/* font ascent, in pango units  */
+  GtkIMContext *im_context;
 };
 
 struct _GtkEntryClass

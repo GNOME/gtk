@@ -54,14 +54,14 @@ struct _GtkLabel
   GtkMisc misc;
 
   gchar    *label;
-  GdkWChar *label_wc;
-  gchar  *pattern;
+  gchar    *pattern;
 
-  GtkLabelWord *words;
-
-  guint	  max_width : 16;
   guint   jtype : 2;
-  gboolean wrap;
+  gboolean wrap : 1;
+
+  /*< private >*/
+  gint rtl : 2;			/* Base dir, cached to detect changes */
+  PangoLayout *layout;
 };
 
 struct _GtkLabelClass
@@ -69,18 +69,17 @@ struct _GtkLabelClass
   GtkMiscClass parent_class;
 };
 
-GtkType     gtk_label_get_type      (void);
-GtkWidget * gtk_label_new           (const char       *str);
-void        gtk_label_set_text      (GtkLabel         *label,
-				     const char       *str);
-void        gtk_label_set_justify   (GtkLabel         *label,
-				     GtkJustification  jtype);
-void        gtk_label_set_pattern   (GtkLabel         *label,
-				     const gchar      *pattern);
-void        gtk_label_set_line_wrap (GtkLabel         *label,
-				     gboolean          wrap);
-gchar *     gtk_label_get_text      (GtkLabel         *label);
-
+GtkType    gtk_label_get_type      (void);
+GtkWidget *gtk_label_new           (const char       *str);
+void       gtk_label_set_text      (GtkLabel         *label,
+				    const char       *str);
+gchar *    gtk_label_get_text      (GtkLabel         *label);
+void       gtk_label_set_justify   (GtkLabel         *label,
+				    GtkJustification  jtype);
+void       gtk_label_set_pattern   (GtkLabel         *label,
+				    const gchar      *pattern);
+void       gtk_label_set_line_wrap (GtkLabel         *label,
+				    gboolean          wrap);
 /* Convenience function to set the name and pattern by parsing
  * a string with embedded underscores, and return the appropriate
  * key symbol for the accelerator.

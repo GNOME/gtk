@@ -43,12 +43,21 @@
 #include "gdk/gdkkeysyms.h"
 
 #include "circles.xbm"
+#include "test.xpm"
 
 typedef struct _OptionMenuItem
 {
   gchar        *name;
   GtkSignalFunc func;
 } OptionMenuItem;
+
+gboolean
+file_exists (const char *filename)
+{
+  struct stat statbuf;
+
+  return stat (filename, &statbuf) == 0;
+}
 
 GtkWidget *
 shape_create_icon (char     *xpm_file,
@@ -586,9 +595,18 @@ new_pixmap (char      *filename,
   GdkPixmap *pixmap;
   GdkBitmap *mask;
 
-  pixmap = gdk_pixmap_create_from_xpm (window, &mask,
-				       background,
-				       filename);
+  if (strcmp (filename, "test.xpm") == 0 ||
+      !file_exists (filename))
+    {
+      pixmap = gdk_pixmap_create_from_xpm_d (window, &mask,
+					     background,
+					     openfile);
+    }
+  else
+    pixmap = gdk_pixmap_create_from_xpm (window, &mask,
+					 background,
+					 filename);
+  
   wpixmap = gtk_pixmap_new (pixmap, mask);
 
   return wpixmap;
@@ -1696,6 +1714,22 @@ void create_labels (void)
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
+      frame = gtk_frame_new ("Internationalized Label");
+      label = gtk_label_new ("French (Français) Bonjour, Salut\n"
+			     "Korean (한글)   안녕하세요, 안녕하십니까\n"
+			     "Russian (Русский) Здравствуйте!");
+      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Bidirection Label");
+      label = gtk_label_new ("Arabic  السلام عليكم\n"
+			     "Hebrew   שלום");
+      gtk_widget_set_direction (label, GTK_TEXT_DIR_RTL);
+      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
       frame = gtk_frame_new ("Line wrapped label");
@@ -1726,12 +1760,11 @@ void create_labels (void)
 
       frame = gtk_frame_new ("Underlined label");
       label = gtk_label_new ("This label is underlined!\n"
-			     "This one is underlined in ���ܸ������quite a funky fashion");
+			     "This one is underlined (こんにちは) in quite a funky fashion");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_label_set_pattern (GTK_LABEL (label), "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
-
     }
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show_all (window);
@@ -1983,8 +2016,6 @@ create_pixmap (void)
   GtkWidget *label;
   GtkWidget *separator;
   GtkWidget *pixmapwid;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
 
   if (!window)
     {
@@ -2008,11 +2039,7 @@ create_pixmap (void)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
 
-      pixmap = gdk_pixmap_create_from_xpm (window->window, &mask, NULL,
-					   "test.xpm");
-      pixmapwid = gtk_pixmap_new (pixmap, mask);
-      gdk_pixmap_unref (pixmap);
-      gdk_pixmap_unref (mask);
+      pixmapwid = new_pixmap ("test.xpm", window->window, NULL);
 
       label = gtk_label_new ("Pixmap\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
@@ -2830,7 +2857,7 @@ create_entry (void)
       gtk_widget_show (box2);
 
       entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
+      gtk_entry_set_text (GTK_ENTRY (entry), "hello world السلام عليكم");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
       gtk_widget_show (entry);
@@ -3946,9 +3973,8 @@ insert_row_clist (GtkWidget *widget, gpointer data)
       style3 = gtk_style_copy (GTK_WIDGET (data)->style);
       style3->fg[GTK_STATE_NORMAL] = col1;
       style3->base[GTK_STATE_NORMAL] = col2;
-      gdk_font_unref (style3->font);
-      style3->font =
-	gdk_font_load ("-*-courier-medium-*-*-*-*-120-*-*-*-*-*-*");
+      pango_font_description_free (style3->font_desc);
+      style3->font_desc = pango_font_description_from_string ("courier 12");
     }
 
   gtk_clist_set_cell_style (GTK_CLIST (data), row, 3, style1);
@@ -4197,10 +4223,9 @@ create_clist (void)
       style = gtk_style_new ();
       style->fg[GTK_STATE_NORMAL] = col1;
       style->base[GTK_STATE_NORMAL] = col2;
-      
-      gdk_font_unref (style->font);
-      style->font =
-	gdk_font_load ("-adobe-helvetica-bold-r-*-*-*-140-*-*-*-*-*-*");
+
+      style->font_desc->size = 14 * PANGO_SCALE;
+      style->font_desc->weight = PANGO_WEIGHT_BOLD;
 
       for (i = 0; i < 10; i++)
 	{
@@ -4369,9 +4394,8 @@ void change_style (GtkWidget *widget, GtkCTree *ctree)
       style2->base[GTK_STATE_SELECTED] = col2;
       style2->fg[GTK_STATE_NORMAL] = col1;
       style2->base[GTK_STATE_NORMAL] = col2;
-      gdk_font_unref (style2->font);
-      style2->font =
-	gdk_font_load ("-*-courier-medium-*-*-*-*-300-*-*-*-*-*-*");
+      pango_font_description_free (style2->font_desc);
+      style2->font_desc = pango_font_description_from_string ("courier 30");
     }
 
   gtk_ctree_node_set_cell_style (ctree, node, 1, style1);
@@ -5326,6 +5350,72 @@ create_file_selection (void)
   
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+void
+flipping_toggled_cb (GtkWidget *widget, gpointer data)
+{
+  int state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+  int new_direction = state ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+
+  if (new_direction != gtk_widget_get_default_direction ())
+    {
+      GList *toplevels;
+      
+      gtk_widget_set_default_direction (new_direction);
+
+      toplevels = gtk_window_list_toplevels ();
+      while (toplevels)
+	{
+	  gtk_widget_queue_resize (toplevels->data);
+	  g_object_unref (toplevels->data);
+	  toplevels = toplevels->next;
+	}
+
+      g_list_free (toplevels);
+    }
+
+}
+
+void
+create_flipping (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *check_button, *button;
+
+  if (!window)
+    {
+      window = gtk_dialog_new ();
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Bidirectional Flipping");
+
+      check_button = gtk_check_button_new_with_label ("Right-to-left global direction");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+			  check_button, TRUE, TRUE, 0);
+
+      if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL)
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
+
+      gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
+			  flipping_toggled_cb, FALSE);
+
+      gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
+      
+      button = gtk_button_new_with_label ("Close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy), GTK_OBJECT (window));
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
+			  button, TRUE, TRUE, 0);
+    }
+  
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
@@ -6777,6 +6867,12 @@ create_shapes (void)
   static GtkWidget *modeller = NULL;
   static GtkWidget *sheets = NULL;
   static GtkWidget *rings = NULL;
+
+  if (!(file_exists ("Modeller.xpm") &&
+	file_exists ("FilesQueue.xpm") &&
+	file_exists ("3DRings.xpm")))
+    return;
+  
 
   if (!modeller)
     {
@@ -8434,6 +8530,7 @@ create_main_window (void)
       { "entry", create_entry },
       { "event watcher", create_event_watcher },
       { "file selection", create_file_selection },
+      { "flipping", create_flipping },
       { "font selection", create_font_selection },
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },
@@ -8562,7 +8659,6 @@ int
 main (int argc, char *argv[])
 {
   GtkBindingSet *binding_set;
-  struct stat statbuf;
 
   srand (time (NULL));
 
@@ -8571,14 +8667,8 @@ main (int argc, char *argv[])
   /* Check to see if we are being run from the correct
    * directory.
    */
-  if (stat("./testgtkrc", &statbuf) < 0)
-    {
-      fprintf (stderr, "*** The testgtk program must be run from within the\n"
-	               "*** gtk/ subdirectory of the GTK+ distribution.\n");
-      exit (1);
-    }
-
-  gtk_rc_add_default_file ("testgtkrc");
+  if (file_exists ("testgtkrc"))
+    gtk_rc_add_default_file ("testgtkrc");
 
   gtk_init (&argc, &argv);
 

@@ -187,15 +187,19 @@ EXTRA_DIST += \
 	gtk_tut_fr.sgml			\
 	gtk_tut_packbox1.gif 		\
 	gtk_tut_packbox2.gif 		\
-	html/gtk_tut_table.gif		\
-	html/gtk_tut_packbox1.gif 	\
-	html/gtk_tut_packbox2.gif 	\
-	gtk_tut_table.gif		\
-	html/gdk.html            	\
-	html/gdk_toc.html        	\
-	html/gtk.html            	\
-	html/gtk_toc.html        	\
-	$(TUTORIAL_FILES)		\
-	$(TUTORIAL_FR_FILES)		\
-	$(TUTORIAL_IT_FILES)		\
-	$(FAQ_FILES)
+	gtk_tut_table.gif
+
+if HAVE_SGML2HTML
+dist-hook: faq tutorial tutorial_it tutorial_fr
+	mkdir $(distdir)/html
+	cp -p $(srcdir)/html/*.html $(distdir)/html
+	cp -p $(srcdir)/html/*.gif $(distdir)/html
+	mkdir $(distdir)/text
+	cp -p $(srcdir)/text/*.txt $(distdir)/text
+else
+dist-hook:
+	echo "***"
+	echo "*** Warning: Tutorial and faq not built"
+	echo "*** DISTRIBUTION IS INCOMPLETE"
+	echo "***"
+endif

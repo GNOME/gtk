@@ -148,8 +148,11 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
   gfloat start, end, cur;
   gchar unit_str[32];
   gint digit_height;
+  gint digit_offset;
   gint text_width;
   gint pos;
+  PangoLayout *layout;
+  PangoRectangle logical_rect, ink_rect;
 
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_HRULER (ruler));
@@ -165,20 +168,28 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 
   xthickness = widget->style->klass->xthickness;
   ythickness = widget->style->klass->ythickness;
-  digit_height = font->ascent; /* assume descent == 0 ? */
+
+  digit_height = ink_rect.height / PANGO_SCALE + 2;
+  digit_offset = ink_rect.y;
+
+  layout = gtk_widget_create_pango_layout (widget);
+  pango_layout_set_text (layout, "012456789", -1);
+  pango_layout_get_extents (layout, &ink_rect, &logical_rect);
+  
+  digit_height = ink_rect.height / PANGO_SCALE + 1;
+  digit_offset = ink_rect.y;
 
   width = widget->allocation.width;
   height = widget->allocation.height - ythickness * 2;
-
    
-   gtk_paint_box (widget->style, ruler->backing_store,
-		  GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		  NULL, widget, "hruler",
-		  0, 0, 
-		  widget->allocation.width, widget->allocation.height);
-
-
-   gdk_draw_line (ruler->backing_store, gc,
+  gtk_paint_box (widget->style, ruler->backing_store,
+		 GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		 NULL, widget, "hruler",
+		 0, 0, 
+		 widget->allocation.width, widget->allocation.height);
+  
+  
+  gdk_draw_line (ruler->backing_store, gc,
 		 xthickness,
 		 height + ythickness,
 		 widget->allocation.width - xthickness,
@@ -247,12 +258,18 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 	  if (i == 0)
 	    {
 	      sprintf (unit_str, "%d", (int) cur);
-	      gdk_draw_string (ruler->backing_store, font, gc,
-			       pos + 2, ythickness + font->ascent - 1,
-			       unit_str);
+	      
+	      pango_layout_set_text (layout, unit_str, -1);
+	      pango_layout_get_extents (layout, &logical_rect, NULL);
+
+	      gdk_draw_layout (ruler->backing_store, gc,
+			       pos + 2, ythickness + (logical_rect.y - digit_offset) / PANGO_SCALE,
+			       layout);
 	    }
 	}
     }
+
+  pango_layout_unref (layout);
 }
 
 static void

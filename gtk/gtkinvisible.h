@@ -51,6 +51,7 @@ typedef struct _GtkInvisibleClass  GtkInvisibleClass;
 struct _GtkInvisible
 {
   GtkWidget widget;
+  gboolean has_user_ref_count;
 };
 
 struct _GtkInvisibleClass

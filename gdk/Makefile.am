@@ -15,6 +15,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	@GTK_DEBUG_FLAGS@ 	\
 	@GTK_XIM_FLAGS@		\
 	@GTK_LOCALE_FLAGS@	\
+	@PANGO_CFLAGS@		\
 	@GLIB_CFLAGS@		\
 	@x_cflags@ 		\
 @STRIP_END@
@@ -30,6 +31,7 @@ libgdk_la_LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
 	-release $(LT_RELEASE) \
 	-export-dynamic \
+	@PANGO_LIBS@	\
 	@GLIB_DEPLIBS@	\
 	@x_ldflags@	\
 	@x_libs@	\
@@ -64,6 +66,7 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkim.h		\
 	gdkimage.h	\
 	gdkinput.h	\
+	gdkpango.h	\
 	gdkpixmap.h	\
 	gdkprivate.h	\
 	gdkproperty.h	\
@@ -83,8 +86,10 @@ gdk_c_sources = @STRIP_BEGIN@ \
 	gdkfont.c	\
 	gdkgc.c		\
 	gdkglobals.c	\
+	gdkkeyuni.c	\
 	gdkimage.c	\
 	gdkinternals.h  \
+	gdkpango.c	\
 	gdkrgb.c	\
 	gdkrectangle.c	\
 	gdkwindow.c	\

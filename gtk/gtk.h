@@ -117,6 +117,8 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtktearoffmenuitem.h>
 #include <gtk/gtktext.h>
+#include <gtk/gtktextbuffer.h>
+#include <gtk/gtktextview.h>
 #include <gtk/gtkthemes.h>
 #include <gtk/gtktipsquery.h>
 #include <gtk/gtktogglebutton.h>

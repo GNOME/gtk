@@ -162,7 +162,6 @@ struct _GtkCList
   
   /* rows */
   gint rows;
-  gint row_center_offset;
   gint row_height;
   GList *row_list;
   GList *row_list_end;
@@ -779,6 +778,11 @@ void gtk_clist_sort (GtkCList *clist);
 void gtk_clist_set_auto_sort (GtkCList *clist,
 			      gboolean  auto_sort);
 
+/* Private function for clist, ctree */
+
+PangoLayout *_gtk_clist_create_cell_layout (GtkCList       *clist,
+					    GtkCListRow    *clist_row,
+					    gint            column);
 
 #ifdef __cplusplus
 }

@@ -30,6 +30,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
+#include <pango/pango.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,6 +73,7 @@ struct _GtkStyle
   GdkColor black;
   GdkColor white;
   GdkFont *font;
+  PangoFontDescription *font_desc;
   
   GdkGC *fg_gc[5];
   GdkGC *bg_gc[5];
@@ -96,7 +98,7 @@ struct _GtkStyle
   GtkThemeEngine *engine;
   
   gpointer	  engine_data;
-  
+
   GtkRcStyle	 *rc_style;	/* the Rc style from which this style
 				 * was created
 				 */

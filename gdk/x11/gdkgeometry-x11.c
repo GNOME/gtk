@@ -110,6 +110,116 @@ _gdk_window_init_position (GdkWindow *window)
   gdk_window_compute_position (window, &parent_pos, &data->position_info);
 }
 
+/**
+ * gdk_window_scroll:
+ * @window: a #GdkWindow
+ * @dx: Amount to scroll in the X direction
+ * @dy: Amount to scroll in the Y direction
+ * 
+ * Scroll the contents of its window, both pixels and children, by
+ * the given amount. Portions of the window that the scroll operation
+ * brings in from offscreen areas are invalidated. The invalidated
+ * region may be bigger than what would strictly be necessary.
+ * (For X11, a minimum area will be invalidated if the window has
+ * no subwindows, or if the edges of the window's parent do not extend
+ * beyond the edges of the window. In other cases, a multi-step process
+ * is used to scroll the window which may produce temporary visual
+ * artifacts and unnecessary invalidations.)
+ **/
+void
+gdk_window_scroll (GdkWindow *window,
+		   gint       dx,
+		   gint       dy)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  gboolean can_guffaw_scroll = FALSE;
+  GdkWindowXData *data;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return;
+
+  data = (GdkWindowXData *)private->drawable.klass_data;
+
+  /* We can guffaw scroll if we are a child window, and the parent
+   * does not extend beyond our edges.
+   */
+
+  if (GDK_DRAWABLE_TYPE (private) == GDK_WINDOW_CHILD)
+    {
+      GdkWindowPrivate *parent_private = (GdkWindowPrivate *)private->parent;
+      
+      can_guffaw_scroll = (private->x <= 0 &&
+			   private->y <= 0 &&
+			   private->x + private->drawable.width >= parent_private->drawable.width &&
+			   private->y + private->drawable.height >= parent_private->drawable.height);
+    }
+
+  if (!private->children || !can_guffaw_scroll)
+    {
+      /* Use XCopyArea, then move any children later
+       */
+      GList *tmp_list;
+      GdkRegion *invalidate_region;
+      GdkRectangle dest_rect;
+
+      invalidate_region = gdk_region_rectangle (&data->position_info.clip_rect);
+      
+      dest_rect = data->position_info.clip_rect;
+      dest_rect.x += dx;
+      dest_rect.y += dy;
+      gdk_rectangle_intersect (&dest_rect, &data->position_info.clip_rect, &dest_rect);
+
+      if (dest_rect.width > 0 && dest_rect.height > 0)
+	{
+	  GC gc;
+	  XGCValues values;
+	  GdkRegion *tmp_region;
+
+	  tmp_region = gdk_region_rectangle (&dest_rect);
+	  gdk_region_subtract (invalidate_region, tmp_region);
+	  gdk_region_destroy (tmp_region);
+	  
+	  gdk_window_queue_translation (window, dx, dy);
+
+	  values.graphics_exposures = True;
+	  gc = XCreateGC (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window),
+			  GCGraphicsExposures, &values);
+
+	  XCopyArea (GDK_DRAWABLE_XDISPLAY (window),
+		     GDK_DRAWABLE_XID (window),
+		     GDK_DRAWABLE_XID (window),
+		     gc,
+		     dest_rect.x - dx, dest_rect.y - dy,
+		     dest_rect.width, dest_rect.height,
+		     dest_rect.x, dest_rect.y);
+
+	  XFreeGC (GDK_DRAWABLE_XDISPLAY (window), gc);
+	}
+
+      gdk_window_invalidate_region (window, invalidate_region, TRUE);
+      gdk_region_destroy (invalidate_region);
+
+      tmp_list = private->children;
+      while (tmp_list)
+	{
+	  private = tmp_list->data;
+	  
+	  gdk_window_move (tmp_list->data, private->x + dx, private->y + dy);
+	  
+	  tmp_list = tmp_list->next;
+	}
+    }
+  else
+    {
+      /* Guffaw scroll
+       */
+      g_warning ("gdk_window_scroll(): guffaw scrolling not yet implemented");
+    }
+}
+
 void
 _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       x,

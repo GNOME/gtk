@@ -349,6 +349,8 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   GtkProgress *progress;
   GtkProgressBar *pbar;
   gchar *buf;
+  PangoRectangle logical_rect;
+  PangoLayout *layout;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
@@ -357,26 +359,30 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   progress = GTK_PROGRESS (widget);
   pbar = GTK_PROGRESS_BAR (widget);
 
+  if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
+    {
+      buf = gtk_progress_get_text_from_value (progress, progress->adjustment->upper);
+
+      layout = gtk_widget_create_pango_layout (widget);
+      pango_layout_set_text (layout, buf, -1);
+      pango_layout_get_extents (layout, NULL, &logical_rect);
+	  
+      pango_layout_unref (layout);
+      g_free (buf);
+    }
+  
   if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
       pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
     {
       if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
 	{
-	  buf = gtk_progress_get_text_from_value (progress,
-						  progress->adjustment->upper);
-
 	  requisition->width = MAX (MIN_HORIZONTAL_BAR_WIDTH,
 				    2 * widget->style->klass->xthickness + 3 +
-				    gdk_text_width (widget->style->font, 
-						    buf, strlen (buf)) +
-				    2 * TEXT_SPACING);
+				    logical_rect.width / PANGO_SCALE + 2 * TEXT_SPACING);
 
 	  requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT,
 				     2 * widget->style->klass->ythickness + 3 +
-				     gdk_text_height (widget->style->font, 
-						      buf, strlen (buf)) +
-				     2 * TEXT_SPACING);
-	  g_free (buf);
+				     logical_rect.height / PANGO_SCALE + 2 * TEXT_SPACING);
 	}
       else
 	{
@@ -388,21 +394,13 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
     {
       if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
 	{	  
-	  buf = gtk_progress_get_text_from_value (progress,
-						  progress->adjustment->upper);
-
 	  requisition->width = MAX (MIN_VERTICAL_BAR_WIDTH,
 				    2 * widget->style->klass->xthickness + 3 +
-				    gdk_text_width (widget->style->font, 
-						    buf, strlen (buf)) +
-				    2 * TEXT_SPACING);
+				    logical_rect.width / PANGO_SCALE + 2 * TEXT_SPACING);
 
 	  requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT,
 				     2 * widget->style->klass->ythickness + 3 +
-				     gdk_text_height (widget->style->font, 
-						      buf, strlen (buf)) +
-				     2 * TEXT_SPACING);
-	  g_free (buf);
+				     logical_rect.height / PANGO_SCALE + 2 * TEXT_SPACING);
 	}
       else
 	{
@@ -707,17 +705,23 @@ gtk_progress_bar_paint (GtkProgress *progress)
 	  gint y;
 	  gchar *buf;
 	  GdkRectangle rect;
+	  PangoLayout *layout;
+	  PangoRectangle logical_rect;
 
 	  buf = gtk_progress_get_current_text (progress);
 
+	  layout = gtk_widget_create_pango_layout (widget);
+	  pango_layout_set_text (layout, buf, -1);
+	  pango_layout_get_extents (layout, NULL, &logical_rect);
+	  
 	  x = widget->style->klass->xthickness + 1 + 
 	    (widget->allocation.width - 2 * widget->style->klass->xthickness -
-	     3 - gdk_text_width (widget->style->font, buf, strlen (buf)))
+	     3 - logical_rect.width / PANGO_SCALE)
 	    * progress->x_align; 
 
-	  y = widget->style->font->ascent + 1 +
+	  y = widget->style->klass->ythickness + 1 +
 	    (widget->allocation.height - 2 * widget->style->klass->ythickness -
-	     3 - gdk_text_height (widget->style->font, buf, strlen (buf)))
+	     3 - logical_rect.height / PANGO_SCALE)
 	    * progress->y_align;
 
 	  rect.x = widget->style->klass->xthickness + 1;
@@ -730,12 +734,13 @@ gtk_progress_bar_paint (GtkProgress *progress)
 	  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
 				     &rect);
 
-	  gdk_draw_text (progress->offscreen_pixmap, widget->style->font,
-			 widget->style->fg_gc[widget->state],
-			 x, y, buf, strlen (buf));
+	  gdk_draw_layout (progress->offscreen_pixmap, 
+			   widget->style->fg_gc[widget->state],
+			   x, y, layout);
 
 	  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
 				     NULL);
+	  pango_layout_unref (layout);
 	  g_free (buf);
  	}
     }

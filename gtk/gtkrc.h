@@ -46,9 +46,8 @@ typedef enum {
 struct _GtkRcStyle
 {
   gchar *name;
-  gchar *font_name;
-  gchar *fontset_name;
   gchar *bg_pixmap_name[5];
+  PangoFontDescription *font_desc;
 
   GtkRcFlags color_flags[5];
   GdkColor   fg[5];
@@ -113,6 +112,7 @@ typedef enum {
   GTK_RC_TOKEN_TEXT,
   GTK_RC_TOKEN_FONT,
   GTK_RC_TOKEN_FONTSET,
+  GTK_RC_TOKEN_FONT_NAME,
   GTK_RC_TOKEN_BG_PIXMAP,
   GTK_RC_TOKEN_PIXMAP_PATH,
   GTK_RC_TOKEN_STYLE,

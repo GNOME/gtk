@@ -311,6 +311,7 @@ AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
 
+
 # Find the X11 include and library directories
 AC_PATH_X
 AC_PATH_XTRA
@@ -396,6 +397,24 @@ fi
 
 x_cflags="$X_CFLAGS"
 x_ldflags="$X_LDFLAGS $X_LIBS"
+
+#
+# Check for Pango
+#
+AC_PATH_PROG(PANGO_CONFIG, pango-config, no)
+if test x$PANGO_CONFIG = xno ; then
+  AC_MSG_ERROR([*** pango-config not found])
+fi
+PANGO_CFLAGS="`pango-config --cflags pangox`"
+CFLAGS="$CFLAGS $PANGO_CFLAGS"
+PANGO_LIBS="`pango-config --libs pangox`"
+AC_SUBST(PANGO_LIBS)
+AC_SUBST(PANGO_CFLAGS)
+
+AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
+*** Pango not found. Pango is required to build
+*** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS $x_ldflags $x_libs)
+
 
 # set up things for XInput
 
@@ -619,6 +638,9 @@ fi
 
 
 ])
+
+AC_PATH_PROG(SGML2HTML, sgml2html, no)
+AM_CONDITIONAL(HAVE_SGML2HTML, ! test x$SGML2HTML = xno)
 
 AC_OUTPUT([
 gtk+.spec

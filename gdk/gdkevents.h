@@ -9,7 +9,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define	  GDK_PRIORITY_EVENTS		(G_PRIORITY_DEFAULT)
+#define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
+#define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
+
 
 typedef struct _GdkEventAny	    GdkEventAny;
 typedef struct _GdkEventExpose	    GdkEventExpose;

@@ -29,6 +29,7 @@
 
 static void gtk_invisible_class_init               (GtkInvisibleClass *klass);
 static void gtk_invisible_init                     (GtkInvisible      *invisible);
+static void gtk_invisible_destroy                  (GtkObject        *object);
 static void gtk_invisible_realize                  (GtkWidget        *widget);
 static void gtk_invisible_show                     (GtkWidget        *widget);
 static void gtk_invisible_size_allocate            (GtkWidget        *widget,
@@ -62,13 +63,17 @@ gtk_invisible_get_type (void)
 static void
 gtk_invisible_class_init (GtkInvisibleClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   widget_class = (GtkWidgetClass*) class;
+  object_class = (GtkObjectClass*) class;
 
   widget_class->realize = gtk_invisible_realize;
   widget_class->show = gtk_invisible_show;
   widget_class->size_allocate = gtk_invisible_size_allocate;
+
+  object_class->destroy = gtk_invisible_destroy;
 }
 
 static void
@@ -78,6 +83,20 @@ gtk_invisible_init (GtkInvisible *invisible)
 
   gtk_widget_ref (GTK_WIDGET (invisible));
   gtk_object_sink (GTK_OBJECT (invisible));
+
+  invisible->has_user_ref_count = TRUE;
+}
+
+static void
+gtk_invisible_destroy (GtkObject *object)
+{
+  GtkInvisible *invisible = GTK_INVISIBLE (object);
+  
+  if (invisible->has_user_ref_count)
+    {
+      invisible->has_user_ref_count = FALSE;
+      gtk_widget_unref (GTK_WIDGET (invisible));
+    }
 }
 
 GtkWidget*

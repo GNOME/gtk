@@ -424,6 +424,9 @@ gtk_editable_insert_text (GtkEditable *editable,
 
   klass = GTK_EDITABLE_GET_CLASS (editable);
 
+  if (new_text_length < 0)
+    new_text_length = strlen (new_text);
+  
   if (new_text_length <= 64)
     text = buf;
   else
@@ -965,32 +968,3 @@ gtk_editable_changed (GtkEditable *editable)
   
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
 }
-
-#if 0
-static void
-gtk_editable_parent_set (GtkWidget *widget, 
-			 GtkWidget *old_parent, 
-			 GtkWidget *editable)
-{
-  GtkWidget *parent;
-
-  parent = old_parent;
-  while (parent)
-    {
-      gtk_signal_disconnect_by_func (GTK_OBJECT (parent),
-				     GTK_SIGNAL_FUNC (gtk_editable_parent_set),
-				     editable);
-      parent = parent->parent;
-    }
-
-  parent = widget->parent;
-  while (parent)
-    {
-      gtk_signal_connect (GTK_OBJECT (parent), "parent_set",
-			  GTK_SIGNAL_FUNC (gtk_editable_parent_set), 
-			  editable);
-      
-      parent = parent->parent;
-    }
-}
-#endif

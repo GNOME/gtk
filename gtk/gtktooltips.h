@@ -54,9 +54,6 @@ struct _GtkTooltipsData
   GtkWidget *widget;
   gchar *tip_text;
   gchar *tip_private;
-  GdkFont *font;
-  gint width;
-  GList *row;
 };
 
 struct _GtkTooltips
@@ -64,6 +61,7 @@ struct _GtkTooltips
   GtkData data;
 
   GtkWidget *tip_window;
+  GtkWidget *tip_label;
   GtkTooltipsData *active_tips_data;
   GList *tips_data_list;
 

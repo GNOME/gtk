@@ -1,3 +1,639 @@
+Thu Jun  1 23:05:13 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: Remove all references to 
+	offscreen flag which was no longer used.
+
+	* gtk/gtkprivate.h (enum): Remove unused flags and compress.
+
+	* gtk/gtkframe.c (gtk_frame_set_label_widget): Check
+	for non-null label_widget->parent.
+
+	* gtk/gtkentry.c: Get rid of code to deal with PangoAttribute 
+	which no longer was used.
+
+	* gdk/gdkpango.c (gdk_pango_context_get_info): make static.
+
+	* gdk/gdkpango.c (gdk_draw_layout[_line]): Add checks
+	for null arguments.
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_scroll): add
+	check for destroyed windows.
+
+Thu Jun  1 13:48:45 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.c: Add a finalize method and unref
+	the slave context there.
+
+	* gtk/gtkinvisible.[ch]: Make reference counting behavior
+	identical to GtkWindow.
+
+Thu Jun  1 01:54:11 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am gdk/gdkpango.c: Copy the layout render function from
+	pangox to here, so we can write them independent of rendering
+	system, using GDK primitives.
+
+	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkwindow.c
+	gdk/x11/gdkdrawable-x11.c: Remove draw_layout() from the vtable,
+	since we have a rendering-system independent implementation in
+	terms of draw_glyphs().
+	
+	* gdk/gdkpango.c gdkdrawable.h (gdk_draw_layout_line): New
+	function to render a single line.
+
+	* gdk/x11/gdkpango.c: Move the guts of this file mostly
+	into ../gdkpango.c, which simplifies things, since we
+	don't have to deal with raw X gc's.
+
+Fri May 19 04:28:16 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.[ch]: Add get_log_attrs() function to
+	get the logical attributes for a given GtkTextLine.
+
+Tue May 30 16:05:39 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_charset_for_locale): Track
+	g_locale_get_codeset() to g_get_codeset() change.
+
+Tue May 30 15:03:19 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testcalendar.c (calendar_font_selection_ok): Use font
+	descriptions.
+
+	* gtk/gtkentry.c (gtk_entry_draw_text): Center text within
+	the entry.
+
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): Start of
+	redoing (vastly simplifying) for Pango. Still needs quite
+	a bit of work. (Size selection is currently poor. List of 
+	predefined sizes is not a good idea, since all of these
+	sizes won't necessarily be distinct.)
+
+Tue May 30 13:50:19 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_charset_for_locale): Handle
+	CODESET results for LANG=C.
+
+Mon May 29 15:49:10 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.[ch]: Add a 'font_name' declaration to RC
+	which takes a stringized pango font description;
+	ignore the older 'font' and 'fontset' declarations.
+
+	* gtk/gtkstyle.c gtk/gtkrc.c: Fill in the style->font
+	field with a GdkFont derived via gdk_font_from_description(),
+	for compatibility. (Should we just remove it entirely?
+	Probably too much compatibility breakage, but people
+	should be migrating to the new Pango stuff as quickly
+	as possible.)
+
+Mon May 29 15:47:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtkclist.c: s/pango_font_unref/g_object_unref/.
+
+Mon May 29 15:44:46 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkcalender.c: Roughly pango-ized. Really needs 
+	redoing; there are some bugs in size allocation right
+	now, the semi-existant distinction between header / day
+	fonts was removed, but, with Pango, could actually
+	be made functional in a nice way.
+	
+	* gtk/testcalender: Move calender from examples into this
+	directory as a test program. (We really need to restrcture
+	testgtk into a whole directory full of tests for every
+	widget or functionality group, separated into multiple .c
+	files.)
+
+Mon May 29 15:19:56 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c (file_exists): Fix stupid typo that
+	was keeping RC file from being loaded.
+
+	* gtk/testgtkrc gtk/testgtkrc2: Test new pango-ized
+	RC file font code.
+
+Mon May 29 14:31:27 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkfont.h gdk/x11/gdkfont-x11.c (gdk_font_from_description):
+	Add function to load a GdkFont from a PangoFontDescription.
+
+Fri May 26 17:16:40 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/frame.[ch] gtkaspectframe.c: Make frame widgets able
+	to have any widget for the label, use a GtkLabel widget
+	to display the text. (Based partially on a patch from
+	Anders Carlson.)
+
+	(Quite a bit of code reorganization - strip 90% of the
+	guts out of gtkaspectframe and add a single virtual
+	func to GtkFrameClass - compute_child_allocation.)
+
+Fri May 26 12:00:02 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c gtk/gtkclist.[ch]: Pangoized.
+	(Removed clist->row_center_offset field because caching
+	it wasn't saving time or code, added private function
+	_gtk_clist_create_cell_layout()).
+
+Wed May 24 15:59:37 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c: Pangoized.
+
+	* gtk/[hv]ruler.c: Pangoized
+
+Mon May 22 19:23:59 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_init):
+	Use gtk_clist_set_column_auto_resize() to remove need
+	need for manual column width computations.
+
+Mon May 22 18:50:26 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtktooltips.[ch]: Replace custom drawing with a GtkLabel, 
+	ensuring Pango correctness, and considerably simplifying the
+	code.
+	
+	* gtk/gtklabel.c gtk[hv]scale.c: 1000 => PANGO_SCALE.
+
+	* gtk/gtklabel.c (gtk_label_size_request): Fixed incorrect
+	getting of numbers of lines.
+
+	* gtk/gtklabel.c (gtk_label_size_request): Set the requisition
+	to the actual requested width of the lable, not to the wrap
+	width we set.
+
+	* gtk/gtktextchild.h: Remove extraneous include of gtk/gtk.h.
+
+	* gtk/gtktextbtree.c gtk/gtktextbuffer.c gtk/gtktextlayout.c
+	  gtk/gtktextview.c gtk/gtktextview.[ch]: Fix up includes.
+
+	* gtk/gtktextview.c: Fix structure inheritance.
+
+	* gtk/gtkprogressbar.c: Pangoize.
+
+Mon May 22 15:47:30 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_get_first_para_iter): Encapsulate
+	in a function.
+
+	* gtk/gtktextlayout.c (find_display_line_above): Fixed
+	bug with computing line tops.
+
+	* gtk/gtktextview.c (changed_handler): Fix < , <= confusion.
+
+Thu May 18 18:53:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Fix up the x_offset
+	and y_offset coordinates to do what we need now. (The offset between
+	buffer and layout coordinates has been reintroduced, but is a 
+	bit different than before.)
+
+	* gtk/gtktextview.[ch]: No longer inherit from GtkLayout; instead
+	handle the adjustments ourselves, and scroll as necessary using
+	the new gdk_window_scroll().
+	
+	The advantage of this is that when we are incrementally revalidating,
+	we are essentially rearranging things around the visible portion
+	of the screen. With the old setup, the visible portion of the
+	screen was moved around in the layout, so scrolling and redrawing
+	to track that caused jumping of the display. Since we now
+	control the scrolling ourselves, we can suppress this and
+	only redraw when things actually change.
+
+Thu May 18 18:47:25 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbtree.c (redisplay_mark): We need to invalidate
+	the region not just redisplay it after-all, since we store the
+	cursors in the LineDisplay. (Ugly interactions here between
+	GtkLayout and GtkTextBTree here.)
+	
+	* gtk/gtktextbtree.c (redisplay_region): Fixed reversed comparison.
+
+Thu May 18 18:43:21 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.h gdk/x11/gdkgeometry-x11.c (gdk_window_scroll): 
+	Added function to scroll contents of a window while keeping the
+	window constant. Works by XCopyArea or guffaw-scrolling depending
+	on the details of how the window is set up. (guffaw-scrolling
+	still needs to be filled in.)
+
+Wed May 17 22:36:53 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextiter.c gtk/gtkmain.c: Add a debug key for the text widget,
+	move the debugging that was tied to a global variable
+	to that.
+
+	* gtk/gtkmarshal.list: Add NONE:INT,INT,INT
+
+	* gtk/gtktextbtree.[ch] gtk/gtktextlayout.c: Keep a separate
+	validated flag, in line data instead of setting height/width to
+	-1. This allows us to perform operations with partially invalid
+	buffer (using the old size for invalid lines) and thus to do
+	incremental vaidation. Keep height/width aggregates up to date
+	when deleting text and rebalancing the tree.
+
+	* gtk/gtktextbtree.[ch]: Add functions validate a line
+	(gtk_text_btree_validate_line), and to validate up
+	to a number of pixels (gtk_text_btree_validate).
+
+	* gtk/gtktextlayout.[ch]: Add an ::invalidated signal
+	that indicates that something is changed and a revalidation
+	pass is needed. Change ::need_repaint to ::changed, and
+	make it take old and new yranges instead of a rectangle.
+
+	* gtk/gtktextbtree.[ch] gtk/gtktextlayout.[ch]: Move
+	the line_data_destroy() function from 
+	gtk_text_btree_add_view() to a virtual function in 
+	GtkTextLayout
+
+	* gtk/gtktextbtree.[ch]: Remove gtk_text_btree_get_damage_range(),
+	since we are handling partial repaints in a different fashion
+	now.
+
+	* gtk/gtktextbtree.[ch]: Only repaint the changed portion
+	of the selection instead of queueing a repaint on the
+	entire widget.
+
+	* gtk/gtktextbuffer.[ch] gtk/gtktextbtree.[ch]: Move
+	get_selection_bounds() down to btree, make the function
+	in buffer a wrapper around the btree function.
+
+	* gtk/gtktextlayout.[ch]: Add functions to check if the
+	layout is valid and to recompute either a range of pixels
+	aroudn a line or a certain total number of pixels.
+
+	* gtk/gtktextlayout.[ch]: Cache a single line display;
+	now that we only redraw the needed portions, the hit rate
+	for this cache is quite high.
+	
+	* gtk/gtktextview.[ch]: Keep track of the first paragraph
+	on the screen so that when re-laying-out the buffer, we can
+	keep the same place. This requires connecting to ::value_changed
+	on the adjustments
+
+	* gtk/gtktextview.[ch]: Add idle functions to revalidate
+	the buffer after we receive an ::invalidated signal.
+	
+Wed May 17 22:10:47 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c (gtk_layout_size_allocate): Set upper
+	to max of allocation and layout size, not just to the
+	layout size.
+
+	* gtk/gtk[hv]scrollbar.c (gtk_[hv]scrollbar_calc_slider_size): 
+	Invalidate window so it gets redrawn properly.
+
+	* gdk/gdkwindow.c (gdk_window_invalidate_rect): Allow rect == NULL
+	to mean the entire window.
+
+	* gdk/gdkevents.h: Move definition for GDK_PRIORITY_REDRAW
+	into public header.
+
+Mon May 15 14:51:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextmark.c (gtk_text_mark_get_name): Add function
+	to get the name of a mark.
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_at_y): Add a function
+	to find the paragraph from a y position.
+
+Thu May 11 12:57:20 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbtree.c (gtk_text_btree_node_invalidate_upward): Valid
+	nodes have width/height >= 0, not > 0.
+
+Tue May  9 21:29:06 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextdisplay.c (gtk_text_layout_get_line_display):
+	Add a size_only flag, so when we only need the size, we don't create
+	useless appearance attributes.
+
+	* gtk/gtktextview.c (gtk_text_view_ensure_layout): Remove
+	duplicate setting of font description.
+
+	* gtk/gtkscale.c: Use PANGO_SCALE instead of 1000 
+
+Wed Apr 26 01:53:23 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (EXTRA_DIST): Add OLD_STAMP into 
+	EXTRA_DIST. It does not work well when the file that
+	everything depends on is not in the tarball.
+
+Wed Apr 26 00:56:14 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c: Some hacks and fixes so that it basically
+	works when not sitting in the GTK+ build tree.
+
+2000-05-03  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (gtk_text_line_next_could_contain_tag):
+	Properly determine the ordering of the tag root and the current
+	line within the tree. Previous algorithm only worked if the tag
+	root's immediate parent was the common root of both the current
+	line and the tag root.
+
+Wed Apr 26 00:43:00 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (set_para_values): Fix some bugs in
+	alignment.
+
+	* gtk/gtktextview.c (gtk_text_view_ensure_layout): Track
+	the widget text directional dynamically.
+
+	* gtk/gtktextview.[ch]: Added functions to get and set default
+	wrap mode.
+
+Tue Apr 25 23:47:38 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_iter_location): Fix bug
+	in cursor location computation.
+
+Tue Apr 25 23:22:59 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c (gtk_layout_set_size): Clamp hadjustment/
+	vadjusment values properly when layout gets smaller.
+
+	* gtk/gtktextview.c (need_repaint_handler): Areas being
+	passed in are far completely inaccurate, and sometimes
+	too small, so, for now, just queue a redraw on the
+	whole visible region.
+
+2000-04-25  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (summary_destroy): new function to 
+	destroy tag summary nodes
+	(gtk_text_line_next_could_contain_tag): this function was 
+	totally broken if the line passed in wasn't below the tag
+	root. Fix it.
+	(gtk_text_btree_first_could_contain_tag): In the tag == NULL 
+	"wildcard" case, we have to do a linear scan. Blah.
+	(gtk_text_btree_last_could_contain_tag): In tag == NULL case,
+	we have to do the linear scan
+	(tag_removed_cb): When a tag is removed from the tag table, 
+	remove the GtkTextTagInfo node from the btree.
+	(gtk_text_btree_spew): Implement the spew function, for 
+	our debugging pleasure.
+
+Tue Apr 25 19:40:18 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_set_buffer): Fix
+	a problem with referring to the wrong buffer.
+
+	* gtk/gtkentry.c: Fix focus-in/focus-out confusion.
+
+	* gtk/gtkrc.c gtk/gtkstyle.c: Moving setting default
+	font description to gtk_style_new() - otherwise things
+	don't work without a .gtkrc file.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_new): Sink the
+	tags table if we create it ourself, too.
+
+	* gdk/gdktypes.h (enum): Move GDK_RELEASE_MASK, since
+	it was conflicting with XKB modifiers.
+
+	* gtk/gtktextview.[ch]: Add simple support for 
+	GtkIMContext.
+
+Mon Apr 24 19:34:18 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_move_cursor_visually): Fix problem
+	with deletion from last commit.
+
+Mon Apr 24 19:29:40 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_create_pango_context): Set the language
+	in the context from the current locale.
+	
+	* gtk/gtkentry.c (gtk_entry_size_request): Use language from the
+	context, not hardcoded value.
+
+	* gtk/gtkentry.c (gtk_entry_move_cursor): Make character movement visual,
+	not logical.
+
+Sun Apr 23 23:39:18 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtktextdisplay.c: Don't handle selections as
+	attributes - that doesn't handle partial-glyph selection
+	properly. Instead use new pango_layout_line_get_x_ranges()
+	functionality to draw the selection.
+
+	* gtk/gtkentry.c: Simplify code since pango_layout_line_index_to_x()
+	now properly handles out-of-range coordinates.
+
+	* gtk/gtktextbuffer.c: Emit "mark_set" when the cursor is moved.
+
+	* gtk/gtktextiter.h gtk/gtktextiterprivate.h: Make gtk_text_iter_get_line_byte()
+	public.
+
+	* gtk/gtktextlayout.[ch]: Properly set the direction in the PangoContext
+	for paragraphs opposite to the base direction of the widget.
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextdisplay.c: Fixes for alignment.
+
+	* gtk/gtktextlayout.c: Don't split segments on marks, since that
+	causes Arabic words to reshape as you cursor through.
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextview.[ch]: Implement virtual
+	cursor position when moving vertically with the arrow keys and
+	scrolling with page-up/page-down. (Arrow keys save only the X,
+	scrolling saves both X and Y.)
+
+	This means you can line-up / line-down or page-up / page-down
+	without losing your place, and also that moving vertically
+	with the cursor keys keeps the same X position, not the same
+	character count:
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextview.[ch]: Make vertical
+	arrow keys move by display lines, not paragraphs.
+
+Tue Apr 18 14:16:50 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c: Make sure that the bin window is at least
+	as big as the allocation. (Should we also make sure that the
+	bin window is big enough to completely cover widget->window?)
+
+	* gtk/gtktextview.c (gtk_text_view_get_visible_rect): Add
+	function to get the onscreen rectangle.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_pointer): Correctly account
+	for offsets in window coordinates.
+
+Sun Apr 16 16:13:27 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_get_cursor_locations): Fix index/offset
+	confusion.
+
+	* gtk/gtktextview.c (gtk_text_view_ensure_layout): Set the default direction
+	from the widget direction.
+
+	* gtk/gtktexttag.c gtk/gtktexttagprivate.h (gtk_text_tag_set_arg): 
+	Add a "direction" attribute.
+
+	* gtk/gtktextview.c: global s/tkxt/text_view/.
+
+	* gtk/testtext.c: Added long block of text in Arabic, to test out
+	the direction attributes. (Some problems with the shaping system
+	for arabic become obvious - like the fact the cursor splits words
+	into unjoined pieces.)
+
+Fri Apr 14 12:54:34 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextdisplay.c (render_layout): Add overstrike handling.
+
+	* gtk/gtktextlayout.c: Fix up alignment.
+
+	* gtk/testtext.c: Add some tests for centering, wrapping.
+
+Fri Apr 14 09:26:22 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkwindow.c gdk/x11/gdkdrawable-x11.c:
+	Add a draw_glyphs() operation to the drawable vtable and gdk_draw_glyphs().
+	If we wrote GTK+-specific layout-render function this could just replace
+	the draw_layout() operation in the vtable.
+
+	* gtk/gtkentry.c: Move guts of gtk_entry_get_cursor_locations to 
+	pango_layout_get_cursor_pos() and use that function.
+
+	* gtk/gtktextchild.[ch]: add gtk_ onto pixmap_segment_new(), since it
+	is a non-static symbol.
+
+	* gtk/gtktextbtree.[ch]: Replace gtk_text_btree_find_line_data_by_y()
+	with gtk_text_btree_find_line_by_y()
+
+	* gtk/gtktextdisplay.c: Rewrote for Pango - uses a custom layout
+	renderer that handles GtkTextAppearance attributes.
+
+	* gtk/gtktexttag.[ch] gtk/gtktexttagprivate.h: 
+
+	  - Move the values in the style that don't affect geometry into a
+	    GtkTextAppearance structure.
+	  - Change underline to take a PangoUnderline and "font" a string
+	    representation of a font description
+	  - Add a "font_desc" attribute which takes a FontDescription structure.
+
+	* gtk/gtktextlayout.[ch]:
+
+	  - Get rid of the display-line list per each line. Instead, we
+	    generate, on demand, a GtkTextLineDisplay structure which]
+	    contains a PangoLayout * and other necesary information
+	    (offsets, cursor locations) for displaying a paragraph.
+	  - Get rid of the code to wrap lines, create display chunks,
+	    etc. Instead, we just go through a paragraph and convert
+	    it into the necessary inputs to a PangoLayout.
+	  - Implement a new attribute type, GtkTextAttrAppearance. This
+	    holds a GtkTextAppearance, and is used to pass colors, 
+	    stipple, etc, through from the layout to the display without
+	    having to use lots and lots of individual attributes.
+	  - Reimplement gtk_layout_get_iter_at_pixel() gtk_layout_get_iter_pos()
+	    in terms of PangoLayout functions.
+	
+	* gtk/gtktextview.c: 
+	 
+	  - Handle passing the necessary PangoContext to the layout
+	  - Some fixups in painting to deal with the automatic backing store
+	    and offsetting of GTK+-1.4
+	  - Add a style_set handler so that the default style reacts
+	    properly to theme changes.
+	
+	* gtk/gtktext?*.[ch]: Random code-style fixes.
+
+	* gtk/testtext.c: Substitute in languages that Pango handles now for Thai
+
+Mon Apr 10 10:33:45 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext?*.[ch]: Check in Havoc's port of the Tk text widget,
+	in original form preparatory to Pango-ization and gdkimcontext-ization.
+
+Thu Apr  6 19:25:39 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontext.c: Move default implementations to real_* vfuncs,
+	so that we can derive from gtkimcontext in language bindings properly.
+
+Thu Apr  6 16:02:52 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.[ch]: Use gdk_keyval_to_unicode to gdk_unicode_to_keyval.
+	Add a compose table including (almost) all the compose combinations
+	from X. This is 6k of static, shared data as opposed to 50k or so of dynamic
+	data in the XIM implementation.
+
+	* gdk/gdk.h gdk/gdkkeyuni.c gdk/win32/gdkevents-win32.c (gdk_keyval_to_unicode, gdk_unicode_to_keyval):
+	Moved functions to convert keyvalues from and to unicode here from
+	the win32 port and made them public.
+
+Wed Apr  5 16:37:29 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkeditable.c (gtk_editable_insert_text): Allow new_text_length == -1.
+
+Wed Apr  5 16:27:45 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontext.[ch]: Base class for new input context system
+
+	* gtk/gtkimmulticontext.[ch]: Proxy input context that allows
+	the real input context implementation to be loaded from modules
+	and switched on the fly.
+
+	* gtk/gtkcontextsimple.[ch]: Simple implementation of an input
+	context that just does direct keysymbol => unicode translation.
+
+	* gtk/gtkentry.[ch]: Start switching editing over to using
+	GtkInputContext. (No handling of preedit yet.)
+
+Wed Apr  5 15:48:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktypeutils.h (GTK_CHECK_GET_CLASS): Fix problem with one too
+	many substitutions. (klass should not be subsituted.)
+
+Wed Apr  5 00:18:14 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add checks for Pango
+
+	* configure.in docs/Makefile.am: Add test for sgml2html
+	and allow 'make dist' without building html, but print out
+	warnings in that case. (For making snapshots)
+
+	* gdk/Makefile.am gdk/x11/Makefile.am gtk/Makefile.am:
+	Add Pango libraries and C flags
+
+	* gdk/gdkdraw.c gdk/gdkdrawable.h gdkwindow.c gdk/x11/gdkdrawable-x11.c:
+	Add function (gdk_draw_layout) to draw a pango layout.
+
+	* gdk/gdkpango.h gdk/x11/gdkpango-x11.c: New file with functions
+	for getting Pango contexts for GDK.
+
+	* gtk/gtkeditable.c: Get rid of dead code gtk_editable_parent_set()
+
+	* gtk/gtkentry.[ch]: Complete rewrite to use Pango, add bidirectional
+	editing.
+
+	* gtk/gtkentry.c: Hack in simple Hebrew input with direct
+	keysym => unicode translations. More languages can be added
+	here, but real input-method support is needed.
+
+	* docs/Changes-1.4.txt: Added note about entry behavior.
+	
+	* gtk/gtkenums.h gtk/gtkwidget.[ch] testgtk.c gtkprivate.h: Add functions
+	to set the reading direction for a widget and the global direction.
+	Add test which allows toggling the global direction. Two private
+	flags are used to store the direction. (GTK_DIRECTION_SET + GTK_DIRECTION_LTR)
+
+	* gtk/gtkcheckbutton.c gtk/gtkframe.c gtk/gtkhbbox.c gtk/gtkhbox.c
+	  gtk/gtkradiobutton.c gtk/gtkspinbutton.c gtk/gtktable.c 
+
+	* gtk/gtk[hv]scale.c gtk/gtkscale.[ch]: Draw numbers using Pango
+
+	* gtk/gtklabel.[ch]: Moved to Pango and considerably rewritten. Line breaking,
+	underlining now handled by Pango.
+
+	* gtk/gtkstyle.[ch] gtk/gtkrc.[ch]: Add a PangoFontDescription
+	to RCStyle and Style. (Having both this and the old font name and GdkFont 
+	is temporary.)
+
+	* gtk/gtkwidget.[ch] (gtk_widget_create_pango_{context,layout}): Added 
+	convenience functions for creating contexts and layouts for widgets.
+
+	* gtk/testgtk.c: Enhance label tests with multilingual labels.
+
 2000-05-29  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkclist.c (gtk_clist_column_titles_active): let you set the

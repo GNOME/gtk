@@ -135,7 +135,6 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget;
   GdkGC *gc, *bg_gc;
-  GdkFont *font;
   gint i, j;
   gint width, height;
   gint xthickness;
@@ -147,10 +146,12 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   gfloat subd_incr;
   gfloat start, end, cur;
   gchar unit_str[32];
-  gchar digit_str[2] = { '\0', '\0' };
   gint digit_height;
+  gint digit_offset;
   gint text_height;
   gint pos;
+  PangoLayout *layout;
+  PangoRectangle logical_rect, ink_rect;
 
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_VRULER (ruler));
@@ -162,26 +163,31 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 
   gc = widget->style->fg_gc[GTK_STATE_NORMAL];
   bg_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-  font = widget->style->font;
   xthickness = widget->style->klass->xthickness;
   ythickness = widget->style->klass->ythickness;
-  digit_height = font->ascent; /* assume descent == 0 ? */
+
+  layout = gtk_widget_create_pango_layout (widget);
+  pango_layout_set_text (layout, "012456789", -1);
+  pango_layout_get_extents (layout, &ink_rect, &logical_rect);
+  
+  digit_height = ink_rect.height / PANGO_SCALE + 2;
+  digit_offset = ink_rect.y;
 
   width = widget->allocation.height;
   height = widget->allocation.width - ythickness * 2;
 
-   gtk_paint_box (widget->style, ruler->backing_store,
-		  GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		  NULL, widget, "vruler",
-		  0, 0, 
+  gtk_paint_box (widget->style, ruler->backing_store,
+		 GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		 NULL, widget, "vruler",
+		 0, 0, 
 		  widget->allocation.width, widget->allocation.height);
-
-   gdk_draw_line (ruler->backing_store, gc,
+  
+  gdk_draw_line (ruler->backing_store, gc,
 		 height + xthickness,
 		 ythickness,
 		 height + xthickness,
 		 widget->allocation.height - ythickness);
-
+  
   upper = ruler->upper / ruler->metric->pixels_per_unit;
   lower = ruler->lower / ruler->metric->pixels_per_unit;
 
@@ -245,17 +251,22 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 	  if (i == 0)
 	    {
 	      sprintf (unit_str, "%d", (int) cur);
+	      
 	      for (j = 0; j < (int) strlen (unit_str); j++)
 		{
-		  digit_str[0] = unit_str[j];
-		  gdk_draw_string (ruler->backing_store, font, gc,
+		  pango_layout_set_text (layout, unit_str + j, 1);
+		  pango_layout_get_extents (layout, NULL, &logical_rect);
+		  
+		  gdk_draw_layout (ruler->backing_store, gc,
 				   xthickness + 1,
-				   pos + digit_height * (j + 1) + 1,
-				   digit_str);
+				   pos + digit_height * j + 2 + (logical_rect.y - digit_offset) / PANGO_SCALE,
+				   layout);
 		}
 	    }
 	}
     }
+
+  pango_layout_unref (layout);
 }
 
 

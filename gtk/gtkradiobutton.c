@@ -417,6 +417,9 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       else
 	shadow_type = GTK_SHADOW_OUT;
       
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	x = widget->allocation.x + widget->allocation.width - (width + x - widget->allocation.x);
+
       gtk_paint_option (widget->style, widget->window,
 			GTK_WIDGET_STATE (widget), shadow_type,
 			area, widget, "radiobutton",

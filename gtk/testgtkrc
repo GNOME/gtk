@@ -26,8 +26,7 @@ pixmap_path "."
 
 style "defaultfont"
 {
-#  fontset = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*,*"
-  font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
+  font_name = "Sans 12"
 }
 
 # common default
@@ -77,7 +76,7 @@ style "slider"
 
 style "ruler"
 {
-  font = '-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*'
+  font_name = 'Sans 8'
 }
 
 style "curve"
@@ -93,7 +92,7 @@ style "red-bar"
 # override testgtk2, introduce the green color in the button list
 style 'button_list' = 'button'
 {
-  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+  font_name = "Monospace 10"
   bg[PRELIGHT] = { 0, 0.75, 0x00 }
 }
 widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"

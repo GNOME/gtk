@@ -26,6 +26,7 @@
 
 #include <stdarg.h>
 #include <string.h>
+#include <locale.h>
 #include "gtkcontainer.h"
 #include "gtkmain.h"
 #include "gtkrc.h"
@@ -178,8 +179,6 @@ static void gtk_widget_set_style_internal	 (GtkWidget	*widget,
 static void gtk_widget_set_style_recurse	 (GtkWidget	*widget,
 						  gpointer	 client_data);
 
-static gboolean gtk_widget_is_offscreen           (GtkWidget     *widget);
-
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
@@ -213,6 +212,8 @@ static const gchar *visual_key = "gtk-visual";
 
 static const gchar *rc_style_key = "gtk-rc-style";
 static guint        rc_style_key_id = 0;
+
+static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 
 /*****************************************
  * gtk_widget_get_type:
@@ -1229,13 +1230,8 @@ gtk_widget_queue_clear_child (GtkWidget *widget)
 {
   GtkWidget *parent;
 
-  /* We check for GTK_WIDGET_IS_OFFSCREEN (widget), 
-   * and queue_clear_area(parent...) will check the rest of
-   * way up the tree with gtk_widget_is_offscreen (parent)
-   */
   parent = widget->parent;
-  if (parent && GTK_WIDGET_DRAWABLE (parent) &&
-      !GTK_WIDGET_IS_OFFSCREEN (widget))
+  if (parent && GTK_WIDGET_DRAWABLE (parent))
     gtk_widget_queue_clear_area (parent,
 				 widget->allocation.x,
 				 widget->allocation.y,
@@ -1743,8 +1739,7 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!(widget->window && gdk_window_is_viewable (widget->window)) ||
-      gtk_widget_is_offscreen (widget))
+  if (!(widget->window && gdk_window_is_viewable (widget->window)))
     return;
 
   /* Find the correct widget */
@@ -3181,6 +3176,71 @@ gtk_widget_pop_style (void)
     }
 }
 
+/**
+ * gtk_widget_create_pango_context:
+ * @widget: a #PangoWidget
+ * 
+ * Create a new pango context with the appropriate colormap,
+ * font description, and base direction for drawing text for
+ * this widget.
+ * 
+ * Return value: the new #PangoContext
+ **/
+PangoContext *
+gtk_widget_create_pango_context (GtkWidget *widget)
+{
+  PangoContext *context;
+  char *lang, *p;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  context = gdk_pango_context_get ();
+
+  gdk_pango_context_set_colormap (context, gtk_widget_get_colormap (widget));
+  pango_context_set_base_dir (context,
+			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
+			        PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
+  pango_context_set_font_description (context, widget->style->font_desc);
+
+  lang = g_strdup (setlocale (LC_CTYPE, NULL));
+  p = strchr (lang, '.');
+  if (p)
+    *p = '\0';
+  p = strchr (lang, '@');
+  if (p)
+    *p = '\0';
+  
+  pango_context_set_lang (context, lang);
+  g_free (lang);
+
+  return context;
+}
+
+/**
+ * gtk_widget_create_pango_layout:
+ * @widget: a #PangoWidget
+ * 
+ * Create a new #PangoLayout with the appropriate colormap,
+ * font description, and base direction for drawing text for
+ * this widget.
+ * 
+ * Return value: the new #PangoLayout
+ **/
+PangoLayout *
+gtk_widget_create_pango_layout (GtkWidget *widget)
+{
+  PangoLayout *layout;
+  PangoContext *context;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  context = gtk_widget_create_pango_context (widget);
+  layout = pango_layout_new (context);
+  pango_context_unref (context);
+
+  return layout;
+}
+
 /*************************************************************
  * gtk_widget_set_parent_window:
  *     Set a non default parent window for widget
@@ -3887,6 +3947,93 @@ gtk_widget_get_default_visual (void)
   return default_visual;
 }
 
+/**
+ * gtk_widget_set_direction:
+ * @widget: a #GtkWidget
+ * @dir:    the new direction
+ * 
+ * Set the reading direction on a particular widget. This direction
+ * controls the primary direction for widgets containing text,
+ * and also the direction in which the children of a container are
+ * packed. The ability to set the direction is present in order
+ * so that correct localization into languages with right-to-left
+ * reading directions can be done. Generally, applications will
+ * let the default reading direction present, except for containers
+ * where the containers are arranged in an order that is explicitely
+ * visual rather than logical (such as buttons for text justificiation).
+ *
+ * If the direction is set to %GTK_TEXT_DIR_NONE, then the value
+ * set by gtk_widget_set_default_direction() will be used.
+ **/
+void
+gtk_widget_set_direction (GtkWidget        *widget,
+			  GtkTextDirection  dir)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (dir >= GTK_TEXT_DIR_NONE && dir <= GTK_TEXT_DIR_RTL);
+ 
+  if (dir == GTK_TEXT_DIR_NONE)
+    GTK_PRIVATE_UNSET_FLAG (widget, GTK_DIRECTION_SET);
+  else
+    {
+      GTK_PRIVATE_SET_FLAG (widget, GTK_DIRECTION_SET);
+      if (dir == GTK_TEXT_DIR_LTR)
+	GTK_PRIVATE_SET_FLAG (widget, GTK_DIRECTION_LTR);
+      else
+	GTK_PRIVATE_UNSET_FLAG (widget, GTK_DIRECTION_LTR);
+    }
+}
+
+/**
+ * gtk_widget_get_direction:
+ * @widget: a #GtkWidget
+ * 
+ * Get the reading direction for a particular widget. See
+ * gtk_widget_set_direction().
+ * 
+ * Return value: the reading direction for the widget.
+ **/
+GtkTextDirection
+gtk_widget_get_direction (GtkWidget *widget)
+{
+  g_return_val_if_fail (widget != NULL, GTK_TEXT_DIR_LTR);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  if (GTK_WIDGET_DIRECTION_SET (widget))
+    return GTK_WIDGET_DIRECTION_LTR (widget) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+  else
+    return gtk_default_direction;
+}
+
+/**
+ * gtk_widget_set_default_direction:
+ * @dir: the new default direction. This cannot be
+ *        %GTK_TEXT_DIR_NONE.
+ * 
+ * Set the default reading direction for widgets where the
+ * direction has not been explicitely set by gtk_widget_set_direction().
+ **/
+void
+gtk_widget_set_default_direction (GtkTextDirection dir)
+{
+  g_return_if_fail (dir == GTK_TEXT_DIR_RTL || GTK_TEXT_DIR_LTR);
+
+  gtk_default_direction = dir;
+}
+
+/**
+ * gtk_widget_get_default_direction:
+ * 
+ * Return value: the current default direction. See
+ * gtk_widget_set_direction().
+ **/
+GtkTextDirection
+gtk_widget_get_default_direction (void)
+{
+  return gtk_default_direction;
+}
+
 static void
 gtk_widget_shutdown (GObject *object)
 {
@@ -4228,29 +4375,6 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	}
       gtk_widget_unref (widget);
     }
-}
-
-/*************************************************************
- * gtk_widget_is_offscreen:
- *     Check if a widget is "offscreen"
- *   arguments:
- *     widget: a widget
- *   results:
- *     TRUE if the widget or any of ancestors has the
- *     PRIVATE_GTK_WIDGET_IS_OFFSCREEN set.
- *************************************************************/
-
-static gboolean 
-gtk_widget_is_offscreen (GtkWidget *widget)
-{
-  while (widget)
-    {
-      if (GTK_WIDGET_IS_OFFSCREEN (widget))
-	return TRUE;
-      widget = widget->parent;
-    }
-
-  return FALSE;
 }
 
 /*****************************************

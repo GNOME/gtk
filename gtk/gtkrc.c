@@ -125,6 +125,8 @@ static guint	   gtk_rc_parse_font		   (GScanner	 *scanner,
 						    GtkRcStyle	 *rc_style);
 static guint	   gtk_rc_parse_fontset		   (GScanner	 *scanner,
 						    GtkRcStyle	 *rc_style);
+static guint	   gtk_rc_parse_font_name	   (GScanner	 *scanner,
+						    GtkRcStyle	 *rc_style);
 static guint	   gtk_rc_parse_engine		   (GScanner	 *scanner,
 						    GtkRcStyle	 *rc_style);
 static guint	   gtk_rc_parse_pixmap_path	   (GScanner	 *scanner);
@@ -199,6 +201,7 @@ static const struct
   { "text", GTK_RC_TOKEN_TEXT },
   { "font", GTK_RC_TOKEN_FONT },
   { "fontset", GTK_RC_TOKEN_FONTSET },
+  { "font_name", GTK_RC_TOKEN_FONT_NAME },
   { "bg_pixmap", GTK_RC_TOKEN_BG_PIXMAP },
   { "pixmap_path", GTK_RC_TOKEN_PIXMAP_PATH },
   { "style", GTK_RC_TOKEN_STYLE },
@@ -803,10 +806,8 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
 
       if (rc_style->name)
 	g_free (rc_style->name);
-      if (rc_style->fontset_name)
-	g_free (rc_style->fontset_name);
-      if (rc_style->font_name)
-	g_free (rc_style->font_name);
+      if (rc_style->font_desc)
+	pango_font_description_free (rc_style->font_desc);
       
       for (i=0 ; i<5 ; i++)
 	if (rc_style->bg_pixmap_name[i])
@@ -1048,8 +1049,8 @@ gtk_rc_add_rc_sets (GSList     *slist,
   new_style = gtk_rc_style_new ();
   *new_style = *rc_style;
   new_style->name = g_strdup (rc_style->name);
-  new_style->font_name = g_strdup (rc_style->font_name);
-  new_style->fontset_name = g_strdup (rc_style->fontset_name);
+  if (rc_style->font_desc)
+    new_style->font_desc = pango_font_description_copy (rc_style->font_desc);
   
   for (i = 0; i < 5; i++)
     new_style->bg_pixmap_name[i] = g_strdup (rc_style->bg_pixmap_name[i]);
@@ -1249,26 +1250,20 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
   style = gtk_style_new ();
 
   style->rc_style = rc_style;
-  
-  if (rc_style->fontset_name)
+
+  if (rc_style->font_desc)
     {
+      pango_font_description_free (style->font_desc);
+      style->font_desc = pango_font_description_copy (rc_style->font_desc);
+
       old_font = style->font;
-      style->font = gdk_fontset_load (rc_style->fontset_name);
+      style->font = gdk_font_from_description (style->font_desc);
       if (style->font)
 	gdk_font_unref (old_font);
       else
 	style->font = old_font;
     }
-  else if (rc_style->font_name)
-    {
-      old_font = style->font;
-      style->font = gdk_font_load (rc_style->font_name);
-      if (style->font)
-	gdk_font_unref (old_font);
-      else
-	style->font = old_font;
-    }
-  
+    
   for (i = 0; i < 5; i++)
     {
       if (rc_style->color_flags[i] & GTK_RC_FG)
@@ -1349,10 +1344,8 @@ gtk_rc_style_init (GSList *rc_styles)
 		}
 	    }
 
-	  if (!proto_style->font_name && rc_style->font_name)
-	    proto_style->font_name = g_strdup (rc_style->font_name);
-	  if (!proto_style->fontset_name && rc_style->fontset_name)
-	    proto_style->fontset_name = g_strdup (rc_style->fontset_name);
+	  if (!proto_style->font_desc && rc_style->font_desc)
+	    proto_style->font_desc = pango_font_description_copy (rc_style->font_desc);
 
 	  if (!proto_style->engine && rc_style->engine)
 	    {
@@ -1505,17 +1498,11 @@ gtk_rc_parse_style (GScanner *scanner)
 	      rc_style->base[i] = parent_style->base[i];
 	    }
 	  
-	  if (parent_style->fontset_name)
+	  if (parent_style->font_desc)
 	    {
-	      if (rc_style->fontset_name)
-		g_free (rc_style->fontset_name);
-	      rc_style->fontset_name = g_strdup (parent_style->fontset_name);
-	    }
-	  else if (parent_style->font_name)
-	    {
-	      if (rc_style->font_name)
-		g_free (rc_style->font_name);
-	      rc_style->font_name = g_strdup (parent_style->font_name);
+	      if (rc_style->font_desc)
+		pango_font_description_free (rc_style->font_desc);
+	      rc_style->font_desc = pango_font_description_copy (parent_style->font_desc);
 	    }
 	  
 	  for (i = 0; i < 5; i++)
@@ -1562,6 +1549,9 @@ gtk_rc_parse_style (GScanner *scanner)
 	case GTK_RC_TOKEN_FONTSET:
 	  token = gtk_rc_parse_fontset (scanner, rc_style);
 	  break;
+	case GTK_RC_TOKEN_FONT_NAME:
+	  token = gtk_rc_parse_font_name (scanner, rc_style);
+	  break;
 	case GTK_RC_TOKEN_ENGINE:
 	  token = gtk_rc_parse_engine (scanner, rc_style);
 	  break;
@@ -1575,10 +1565,9 @@ gtk_rc_parse_style (GScanner *scanner)
 	{
 	  if (insert)
 	    {
-	      if (rc_style->fontset_name)
-		g_free (rc_style->fontset_name);
-	      if (rc_style->font_name)
-		g_free (rc_style->font_name);
+	      if (rc_style->font_desc)
+		pango_font_description_free (rc_style->font_desc);
+	      
 	      for (i = 0; i < 5; i++)
 		if (rc_style->bg_pixmap_name[i])
 		  g_free (rc_style->bg_pixmap_name[i]);
@@ -1594,10 +1583,8 @@ gtk_rc_parse_style (GScanner *scanner)
     {
       if (insert)
 	{
-	  if (rc_style->fontset_name)
-	    g_free (rc_style->fontset_name);
-	  if (rc_style->font_name)
-	    g_free (rc_style->font_name);
+	  if (rc_style->font_desc)
+	    pango_font_description_free (rc_style->font_desc);
 	  
 	  for (i = 0; i < 5; i++)
 	    if (rc_style->bg_pixmap_name[i])
@@ -1849,10 +1836,8 @@ gtk_rc_parse_font (GScanner   *scanner,
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
-  
-  if (rc_style->font_name)
-    g_free (rc_style->font_name);
-  rc_style->font_name = g_strdup (scanner->value.v_string);
+
+  /* Ignore, do nothing */
   
   return G_TOKEN_NONE;
 }
@@ -1874,10 +1859,31 @@ gtk_rc_parse_fontset (GScanner	 *scanner,
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
+
+  /* Do nothing - silently ignore */
   
-  if (rc_style->fontset_name)
-    g_free (rc_style->fontset_name);
-  rc_style->fontset_name = g_strdup (scanner->value.v_string);
+  return G_TOKEN_NONE;
+}
+
+static guint
+gtk_rc_parse_font_name (GScanner   *scanner,
+			GtkRcStyle *rc_style)
+{
+  guint token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_FONT_NAME)
+    return GTK_RC_TOKEN_FONT;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_EQUAL_SIGN)
+    return G_TOKEN_EQUAL_SIGN;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_STRING)
+    return G_TOKEN_STRING;
+
+  rc_style->font_desc = pango_font_description_from_string (scanner->value.v_string);
   
   return G_TOKEN_NONE;
 }

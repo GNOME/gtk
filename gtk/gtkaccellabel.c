@@ -230,6 +230,8 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
 			      GtkRequisition *requisition)
 {
   GtkAccelLabel *accel_label;
+  PangoLayout *layout;
+  PangoRectangle logical_rect;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (widget));
@@ -239,9 +241,13 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   
   if (GTK_WIDGET_CLASS (parent_class)->size_request)
     GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+
+  layout = gtk_widget_create_pango_layout (widget);
+  pango_layout_set_text (layout, accel_label->accel_string, -1);
+  pango_layout_get_extents (layout, NULL, &logical_rect);
   
-  accel_label->accel_string_width = gdk_string_width (GTK_WIDGET (accel_label)->style->font,
-						      accel_label->accel_string);
+  accel_label->accel_string_width = logical_rect.width / PANGO_SCALE;
+  pango_layout_unref (layout);
 }
 
 static gint
@@ -250,6 +256,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 {
   GtkMisc *misc;
   GtkAccelLabel *accel_label;
+  PangoLayout *layout;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (widget), FALSE);
@@ -279,22 +286,25 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	  y = (widget->allocation.y * (1.0 - misc->yalign) +
 	       (widget->allocation.y + widget->allocation.height -
 		(widget->requisition.height - misc->ypad * 2)) *
-	       misc->yalign + widget->style->font->ascent) + 1.5;
+	       misc->yalign) + 1.5;
+	  
+	  layout = gtk_widget_create_pango_layout (widget);
+	  pango_layout_set_text (layout, accel_label->accel_string, -1);
 	  
 	  if (GTK_WIDGET_STATE (accel_label) == GTK_STATE_INSENSITIVE)
-	    gdk_draw_string (widget->window,
-			     widget->style->font,
+	    gdk_draw_layout (widget->window,
 			     widget->style->white_gc,
 			     x + 1,
 			     y + 1,
-			     accel_label->accel_string);
+			     layout);
 	  
-	  gdk_draw_string (widget->window,
-			   widget->style->font,
+	  gdk_draw_layout (widget->window,
 			   widget->style->fg_gc[GTK_WIDGET_STATE (accel_label)],
 			   x,
 			   y,
-			   accel_label->accel_string);
+			   layout);
+
+	  pango_layout_unref (layout);
 	}
       else
 	{

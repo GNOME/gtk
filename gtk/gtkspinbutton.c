@@ -513,6 +513,9 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   if (child_allocation.width > ARROW_SIZE + 2 * widget->style->klass->xthickness)
     child_allocation.width -= ARROW_SIZE + 2 * widget->style->klass->xthickness;
 
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    child_allocation.x += ARROW_SIZE + 2 * widget->style->klass->xthickness;
+
   GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, &child_allocation);
 
   widget->allocation = *allocation;
@@ -520,9 +523,14 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   if (GTK_WIDGET_REALIZED (widget))
     {
       child_allocation.width = ARROW_SIZE + 2 * widget->style->klass->xthickness;
-      child_allocation.height = widget->requisition.height;  
-      child_allocation.x = (allocation->x + allocation->width - ARROW_SIZE - 
-			    2 * widget->style->klass->xthickness);
+      child_allocation.height = widget->requisition.height;
+
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	child_allocation.x = (allocation->x + allocation->width - ARROW_SIZE - 
+			      2 * widget->style->klass->xthickness);
+      else
+	child_allocation.x = allocation->x;
+      
       child_allocation.y = allocation->y + (allocation->height - widget->requisition.height) / 2;
 
       gdk_window_move_resize (GTK_SPIN_BUTTON (widget)->panel, 

@@ -2,6 +2,7 @@
 #define __GDK_FONT_H__
 
 #include <gdk/gdktypes.h>
+#include <pango/pango-font.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,6 +34,11 @@ void     gdk_font_list_free (gchar **font_list);
 #endif
 GdkFont* gdk_font_load	    (const gchar    *font_name);
 GdkFont* gdk_fontset_load   (const gchar    *fontset_name);
+
+GdkFont* gdk_font_load             (const gchar          *font_name);
+GdkFont* gdk_fontset_load          (const gchar          *fontset_name);
+GdkFont* gdk_font_from_description (PangoFontDescription *font_desc);
+
 GdkFont* gdk_font_ref	    (GdkFont        *font);
 void	 gdk_font_unref	    (GdkFont        *font);
 gint	 gdk_font_id	    (const GdkFont  *font);

@@ -7,8 +7,9 @@ _libs
 libgtk-1.1.la
 testgtk
 testinput
-testselection
 testrgb
+testselection
+testtext
 simple
 testtree
 gtkcompat.h

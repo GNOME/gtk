@@ -30,6 +30,7 @@
 /* GDK uses "glib". (And so does GTK).
  */
 #include <glib.h>
+#include <pango/pango.h>
 
 #ifdef G_OS_WIN32
 #  ifdef GDK_COMPILATION
@@ -115,8 +116,10 @@ typedef enum
   GDK_BUTTON3_MASK  = 1 << 10,
   GDK_BUTTON4_MASK  = 1 << 11,
   GDK_BUTTON5_MASK  = 1 << 12,
-  GDK_RELEASE_MASK  = 1 << 13,
-  GDK_MODIFIER_MASK = 0x3fff
+  /* The next few modifiers are used by XKB, so we skip to the end
+   */
+  GDK_RELEASE_MASK  = 1 << 31,
+  GDK_MODIFIER_MASK = GDK_RELEASE_MASK | 0x1fff
 } GdkModifierType;
 
 typedef enum
