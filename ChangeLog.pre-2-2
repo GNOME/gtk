@@ -1,3 +1,15 @@
+2002-04-21  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextiter.c (gtk_text_iter_forward_search): More verbose
+	description of match_start and match_end return values.  (#57929)
+
+	* gtk/gtktreeselection.c (_gtk_tree_selection_internal_select_node):
+	* gtk/gtktreeview.c (_gtk_tree_view_column_autosize): Remove doc
+	comment markers on freeform comments.
+
+	* gtk/gtktreemodelsort.c
+	(gtk_tree_model_sort_convert_path_to_child_path): Doc fixes. (#68404)
+
 Sat Apr 20 21:15:11 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenuitem.c: add "selected_shadow_type" style property

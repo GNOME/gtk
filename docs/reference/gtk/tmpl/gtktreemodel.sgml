@@ -190,7 +190,7 @@ enum
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-#GtkTreeView, #GtkTreeStore, #GtkListStore, #GtkTreeDnd, #GtkTreeSortable
+#GtkTreeView, #GtkTreeStore, #GtkListStore, <link linkend="gtk-GtkTreeView-drag-and-drop">GtkTreeDnd</link>, #GtkTreeSortable
 </para>
 
 <!-- ##### STRUCT GtkTreeModel ##### -->

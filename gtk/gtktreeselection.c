@@ -992,7 +992,7 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
 /* Called internally by gtktreeview.c It handles actually selecting the tree.
  */
 
-/**
+/*
  * docs about the 'override_browse_mode', we set this flag when we want to
  * unset select the node and override the select browse mode behaviour (that is
  * 'one node should *always* be selected').

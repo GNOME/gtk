@@ -170,6 +170,7 @@ For other attributes there are dedicated methods on
 <informalexample><programlisting>
   GtkWidget *view;
   GtkTextBuffer *buffer;
+  GtkTextIter start, end;
   PangoFontDescription *font_desc;
   GdkColor color;
   GtkTextTag *tag;
@@ -187,7 +188,7 @@ For other attributes there are dedicated methods on
 
   /* Change default color throughout the widget */
   gdk_color_parse ("green", &amp;color);
-  gtk_widget_modify_fg (view, GTK_STATE_NORMAL, &amp;color);
+  gtk_widget_modify_text (view, GTK_STATE_NORMAL, &amp;color);
 
   /* Change left margin throughout the widget */
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 30);

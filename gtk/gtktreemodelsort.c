@@ -1937,9 +1937,10 @@ gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sor
  * @tree_model_sort: A #GtkTreeModelSort
  * @sorted_path: A #GtkTreePath to convert
  * 
- * Converts @sort_path to a path on the child model of @tree_model_sort.  That
- * is, @sort_path points ot a location in @tree_model_sort.  The returned path
- * will point to the same location in the model not being sorted.  If @path does not point to a 
+ * Converts @sorted_path to a path on the child model of @tree_model_sort.  That
+ * is, @sorted_path points to a location in @tree_model_sort.  The returned path
+ * will point to the same location in the model not being sorted.  If @sorted_path 
+ * does not point to a location in the child model, %NULL is returned.
  * 
  * Return value: A newly allocated #GtkTreePath, or %NULL
  **/

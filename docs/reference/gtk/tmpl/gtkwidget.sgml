@@ -20,6 +20,12 @@ GtkWidget
 </para>
 
 
+<!-- ##### STRUCT GtkWidgetClass ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GtkWidgetFlags ##### -->
 <para>
 Tells about certain properties of the widget.
@@ -929,7 +935,12 @@ Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
 
 <!-- ##### FUNCTION gtk_widget_reset_rc_styles ##### -->
 <para>
-Calls gtk_widget_set_rc_style() recursively on all descendants.
+Reset the styles of @widget and all descendents, so when 
+they are looked up again, they get the correct values 
+for the currently loaded RC file settings. 
+</para>
+<para>
+This function is not useful for applications.
 </para>
 
 @widget: a #GtkWidget.

@@ -82,7 +82,7 @@ void quick_message (gchar *message) {
    dialog = gtk_dialog_new_with_buttons ("Message",
                                          main_application_window,
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_BUTTON_OK,
+                                         GTK_STOCK_OK,
                                          GTK_RESPONSE_NONE,
                                          NULL);
    label = gtk_label_new (message);

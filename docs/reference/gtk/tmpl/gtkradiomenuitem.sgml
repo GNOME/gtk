@@ -38,7 +38,7 @@ for(i = 0; i < 5; i++)
 <listitem><para>because a radio menu item is a menu item.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term>#GtkCheckItem</term>
+<term>#GtkCheckMenuItem</term>
 <listitem><para>to know how to handle the check.</para></listitem>
 </varlistentry>
 </variablelist>

@@ -1,1675 +1,2622 @@
-2002-04-18  Matthias Clasen  <maclas@gmx.de>
+2002-04-21  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/tmpl/rgb.sgml:
-	* gdk/tmpl/general.sgml:
-	* gtk/tmpl/gtktogglebutton.sgml:
-	* gtk/tmpl/gtkaccellabel.sgml:
-	* gtk/tmpl/gtkradiobutton.sgml:
-	* gtk/tmpl/gtktreemodel.sgml:
-	* gtk/tmpl/gtkwidget.sgml:
-	* gtk/tmpl/gtkimage.sgml:
-	* gtk/tmpl/gtktooltips.sgml:
-	* gtk/tmpl/gtksignal.sgml:
-	* gtk/tmpl/gtkcombo.sgml:
-	* gtk/tmpl/gtkdnd.sgml:
-	* gtk/tmpl/gtksocket.sgml:
-	* gtk/tmpl/gtkdrawingarea.sgml:
-	* gtk/tmpl/gtkobject.sgml:
-	* gtk/tmpl/gtkpaned.sgml:
-	* gtk/tmpl/gtkmain.sgml: s/<!>/<!-- -->/g throughout the
-	documentation to bring the produced Docbook closer to XML.
+	* gtk/tmpl/gtktreemodel.sgml: 
+	* gtk/tmpl/gtkradiomenuitem.sgml: Fix crossreferences.  (#78392) 
 
-Tue Mar 26 15:41:49 2002  Owen Taylor  <otaylor@redhat.com>
+	* gtk/gtk-sections.txt: Add GtkWidgetClass.  (#78392)
 
-	* gtk/building.sgml: Add a mention of running ldconfig.
-	(#76126, Bill Nayland.)
+	* gtk/tmpl/gtkwidget.sgml: Rewrite docs for
+	gtk_widget_reset_rc_styles.  (#75588)
 
-Mon Mar 25 11:31:41 2002  Jonathan Blandford  <jrb@redhat.com>
+	* gdk/tmpl/properties.sgml: Fix gdk_property_change docs. (#72312)
 
-	* gtk/tree_widget.sgml: fix bugs in the code.
-
-2002-03-20  Cody Russell  <cody@jhu.edu>
-
-	* gtk/tree_widget.sgml: Much expanded overview of the tree.
-
-Tue Mar 12 00:29:31 2002  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/question_index.sgml: new FAQ.
-
-	* gtk/tmpl/gtktreemodel.sgml: clean up example
-
-2002-03-12  Matthias Clasen  <maclas@gmx.de>
-
-	* gdk/tmpl/windows.sgml: Document GdkScreen.
-
-	* gtk/gtk-sections.txt: Move a few Class structs to Standard sections.
-
-2002-03-11  Matthias Clasen  <maclas@gmx.de>
-
-	* gtk/tmpl/gtktreemodel.sgml, gtk/tmpl/gtkprogress.sgml,
-	gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkimage.sgml: Generate proper
-	markup for format strings in examples, also fix an oversight in
-	the GtkTreeModel example.  (#74213)
-
-	* gtk/gtk.types: Add interfaces to get docs on their signals.
-
-Sat Mar  9 13:00:38 2002  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/tmpl/gtktreemodel.sgml: Lots of docs.
-
-Fri Mar  8 15:14:32 2002  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/building.sgml: List -I/opt/gtk/include not
-	-I /opt/gtk/include.
-
-	* gtk/building.sgml: Add a gloss for XIM.
-
-2002-03-07  Matthias Clasen  <maclas@gmx.de>
-
-	* gdk-pixbuf/tmpl/animation.sgml, gdk-pixbuf/tmpl/gdk-pixbuf.sgml,
-	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtktextview.sgml, gtk/tmpl/gtkiconfactory.sgml,
-	gtk/tmpl/gtkaccelgroup.sgml: Add some ids which are referenced
-	from the object hierarchy.
-
-	* gtk/gtk-docs.sgml: Use parts as top-level division (#61575),
-	include gtkaccessible docs.
-
-	* gtk/building.sgml: Some typo and markup fixes.
-
-Thu Mar  7 02:58:16 2002  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/tmpl/gtkliststore.sgml: start implementing
-
-	* gtk/question_index.sgml: "I can set with the tree, but not
-	get???!?!"
-
-Wed Mar  6 18:11:05 2002  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/resources.sgml: Mention the need to subscribe
-	to the GTK+ mailing lists.
-
-        * gtk/building.sgml: Go into much more details about
-	building the entire set of GTK+ libraries and about the
-	dependencies that are required.
-
-	* gtk/building.sgml: Add docs for --enable-explicit-deps,
-	--with-xinput.
-
-Wed Mar  6 14:12:34 2002  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/tmpl/gtktreeselection.sgml: docs
-
-	* gtk/tree_widget.sgml: clean up docs
-
-2002-03-05  Matthias Clasen  <maclas@gmx.de>
-
-	* gtk/gtk-sections.txt: Remove gtk_win32_get_installation_directory.
-
-Tue Mar  5 14:28:28 2002  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/compiling.sgml: Update version numbers in example.
-
-2002-03-04  Matthias Clasen  <maclas@gmx.de>
-
-	* gtk/gtk-docs.sgml: Move GtkOldEditable to the "Deprecated" 
-	section.  (#68408)
-
-	* gtk/tmpl/gtktreeview.sgml: Close linkend attribute.  (#73364)
-
-Sun Mar  3 01:36:21 2002  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/tmpl/gtktreeviewcolumn.sgml: Write documentation
-	* gtk/tmpl/gtktreeview.sgml: Write documentation
-
-Sat Mar  2 15:46:29 2002  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkentry.sgml: Move a couple of function
-	docs into the C file.
-
-Fri Mar  1 10:35:15 2002  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/changes-2.0.sgml: Add note about gtk_notebook_reorder_child().
-
-Tue Feb 26 22:01:59 2002  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkbox.sgml: Fix docs to correspond to the code -
-	negative @position indicates the end of the list.
-
-2002-02-26  Matthias Clasen  <maclas@gmx.de>
-
-	Fixes for #72478:
+	* gtk/text_widget.sgml: Fix misleading example.  (
 	
-	* gtk/tmpl/gtkprogressbar.sgml: Add note about new GtkProgressBar
-	API to introduction. 
+	* gtk/tmpl/gtkdialog.sgml: Fix stock id in example.  (#74439)
 
-	* gtk/gtk-sections.txt: Reorder GtkProgressBar functions to move 
-	undeprecated API to top.
+Tue Apr  9 18:34:58 2002  Owen Taylor  <otaylor@redhat.com>
 
-Sat Feb 23 23:39:14 2002  Owen Taylor  <otaylor@redhat.com>
+	* gtk/gtkcontainer.c (_gtk_container_queue_resize): Always
+	set the ALLOC_NEEDED and REQUEST_NEEDED flags up the hierarchy,
+	even if we aren't currently in a resize container... we need
+	this to properly handle size changes to widgets that are
+	being moved from one heirarchy to another. (#78226)
 
-	* gtk/tmpl/gtktreemodel.sgml: Document gtk_tree_path_new_root(),
-	gtk_tree_model_get_iter_root() as compatibility macros.
+Tue Apr  9 21:41:24 2002  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/gtk-sections.txt: Updates.
+	Fixes #78110
 
-2002-02-23  Anders Carlsson  <andersca@gnu.org>
+	* gtk/gtktreeselection.c (_gtk_tree_selection_internal_select_node):
+	add override_browse_mode argument and implement,
+	(gtk_tree_selection_unselect_path): always unselect the path,
+	(toplevel): update uses of _gtk_tree_selection_internal_select_node
 
-	* gtk/Makefile.am (HTML_IMAGES): Rename strikeout to 
-	strikethrough.
+	* gtk/gtktreeview.c: update uses of
+	_gtk_tree_selection_internal_select_node
 
-2002-02-22  Anders Carlsson  <andersca@gnu.org>
+	* gtk/gtktreeprivate.h (_gtk_tree_selection_internal_select_node):
+	update prototype
 
-	* gtk/Makefile.am (HTML_IMAGES): Update for name changes.
+Tue Apr  9 21:39:44 2002  Kristian Rietveld  <kris@gtk.org>
 
-2002-02-22  Matthias Clasen  <maclas@gmx.de>
+	Fixes #77862
 
-	* gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkimage.sgml: s/%d/%%d/ in
-	examples.  (#71479)
+	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_has_editable_cell
 
-	* gtk/tmpl/gtkmenu.sgml: Document gtk_menu_set_active as 
-	quasi-private.  (#69788)
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_has_editable_cell):
+	new function
 
-	* gtk/tmpl/gtkcalendar.sgml: Document month as zero-based and 
-	selected_day as one-based.  (#57169)
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): send cell event
+	on first click when cell isn't editable
 
-Thu Feb 21 12:11:42 2002  Owen Taylor  <otaylor@redhat.com>
+Tue Apr  9 21:37:31 2002  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/Makefile.am (IGNORE_HFILES): Add gtkkeyhash.h
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_check_type): add some
+	types which were missing and useful to use (fixes #77870)
 
-2002-02-20  Sven Neumann  <sven@gimp.org>
+2002-04-09  Anders Carlsson  <andersca@gnu.org>
 
-	* gtk/gtk-sections.txt
-	* gtk/tmpl/gtktreeviewcolumn.sgml: updated for treeviewcolumn changes.
+	* gtk/gtkfilesel.c (open_new_dir): Initialize error to NULL.
 
-Mon Feb 18 23:00:52 2002  Owen Taylor  <otaylor@redhat.com>
+2002-04-08  Manish Singh  <yosh@gimp.org>
 
-	* gtk/running.sgml: Remove docs for GTK_IM_MODULE_PATH,
-	replace docs for GTK_MODULE_PATH with docs for GTK_PATH.
+	* tests/testgtk.c: really revert testgtk.c
 
-Sun Feb 17 21:33:33 2002  Owen Taylor  <otaylor@redhat.com>
+Mon Apr  8 20:28:54 2002  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/gtk-sections.txt: Updated for filesel changes.
+	* gtk/gtktreeselection.c (gtk_tree_selection_select_path),
+	(gtk_tree_selection_unselect_path),
+	(gtk_tree_selection_path_is_selected): check the return value of
+	_gtk_tree_view_find_node and return if it's TRUE. This makes those
+	functions work somewhat saner on non-expanded trees.
 
-2002-02-05  Matthias Clasen  <maclas@gmx.de>
+Fri Apr  5 18:28:56 2002  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/tmpl/gtkrc.sgml: Update the description of RC file loading
-	to match recent code changes. Also document font_name and engine. 
+	* gtk/gtktreeselection.c (gtk_tree_selection_set_mode): free
+	anchor row reference after unselecting the selection (fixes #76272)
 
-Tue Jan 29 23:41:31 2002  Owen Taylor  <otaylor@redhat.com>
+Fri Apr  5 18:27:48 2002  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/Makefile.am (content_files): Add x11.sgml.
+	* gtk/gtktreeview.c (gtk_tree_view_real_expand_row): only return
+	when we don't have to open all children (fixes #75736)
 
-	* gtk/changes-2.0.sgml: SGML fix.
+Fri Apr  5 18:24:24 2002  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/gtk-sections.txt: Updated.
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_clear): unref
+	cellrenderer after clearing the attributes of the renderer (fixes
+	#75592)
 
-2002-01-23  Damon Chaplin  <damon@ximian.com>
+Fri Apr  5 05:55:14 2002  Jonathan Blandford  <jrb@gnome.org>
 
-	* gtk/Makefile.am: added SCANGOBJ_OPTIONS to set the type-init-func
-	to pass to gtkdoc-scangobj.
+	* gtk/gtktreeview.c (gtk_tree_view_grab_focus): implement.
+	  (gtk_tree_view_move_cursor_up_down): check for focus
+	  (gtk_tree_view_move_cursor_page_up_down): ditto
+	  (gtk_tree_view_move_cursor_left_right): ditto
+	  (gtk_tree_view_move_cursor_start_end): ditto
+	  (gtk_tree_view_real_select_all): ditto
+	  (gtk_tree_view_real_unselect_all): ditto
+	  (gtk_tree_view_real_select_cursor_row): ditto	
+	  (gtk_tree_view_real_toggle_cursor_row): ditto
+	  (gtk_tree_view_real_expand_collapse_cursor_row): ditto
+	  (gtk_tree_view_real_select_cursor_parent): ditto
+	  (gtk_tree_view_real_start_interactive_search): ditto
 
-Mon Jan 21 23:39:42 2002  Jonathan Blandford  <jrb@redhat.com>
+	* gtk/gtktreeviewcolumn.c: grab focus
 
-	* gtk/tmpl/gtkfixed.sgml: change guint16 to gint to reflect
-	changes in the code, found by Jody Goldberg <jody@gnome.org>
+2002-04-05  Alex Larsson  <alexl@redhat.com>
 
-2002-01-19  Havoc Pennington  <hp@pobox.com>
+	* gdk/linux-fb/gdkkeyboard-fb.c (write_string):
+	Fix undefined variable typo.
+	Patch from Simon Floery <simon.floery@gmx.at>
 
-	* gtk/x11.sgml: add a mostly-empty X11 section
+Fri Apr  5 01:06:15 2002  Tim Janik  <timj@gtk.org>
 
-	* gtk/framebuffer.sgml: make title consistent with windows section
+	* gdk/x11/gdkwindow-x11.c (set_text_property): fix segfault
+	upon NULL return from gdk_utf8_to_string_target().
 
-	* gtk/tmpl/gtkdrawingarea.sgml: couple of fixes
+	* gdk/x11/gdkselection-x11.c (gdk_utf8_to_string_target): fix
+	return value comment to mention NULL returns upon EMFILE.
 
-2002-01-17  Matthias Clasen  <matthiasc@poet.de>
+Thu Apr  4 22:35:42 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
-	* gtk/resources.sgml: Tiny markup fix.
+	* tests/testgtk.c (menu_items): revert accidentally commited
+	change to testgtk.c
 
-2002-01-15  Matthias Clasen  <matthiasc@poet.de>
+Thu Apr  4 22:28:08 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
-	* gtk/changes-2.0.sgml: Details about GtkRange and subclasses
-	rewrite. (#67730)
-
-2002-01-14  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/running.sgml: Add ids to some elements to make them
-	addressable as link targets.
-
-2002-01-14  Matthias Clasen  <matthiasc@poet.de>
+	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Fix problem with menu
+	titles being clipped (#75948)
 	
-	* gtk/tmpl/gtktooltips.sgml: Minor fixes.
+2002-04-04  Tor Lillqvist  <tml@iki.fi>
 
-	* gtk/tmpl/gtkrc.sgml: Minor fixes.
+	* gdk/gdkrgb.c: Fix some bugs, and introduce a minor feature.
 
-2002-01-11  Havoc Pennington  <hp@pobox.com>
+	(gdk_rgb_convert_4_pack): New function, for 16-color (4 bits per
+	pixel) static visuals (fixes #858).
 
-	* gtk/running.sgml: sgml fixes
+	(gdk_rgb_convert_gray4_pack, gdk_rgb_convert_gray4_d_pack): Fix
+	same bugs in both functions: Odd start coordinate (partial byte)
+	was not handled correctly. Also a partial final byte was not
+	handled correctly.
 
-	* gtk/tmpl/gtksignal.sgml: sgml fixes
+	(gdk_rgb_do_colormaps): Use G_N_ELEMENTS.
+	(gdk_rgb_create_info): For pseudocolor visuals, use the 2x2x2
+	colorcube only for depths 3 and 4. For static color, use it for
+	depths 3..7 like before. (Depth 5..7 pseudocolor probably never
+	occurs on X11. It doesn't normally occur on Win32 either, but
+	there is experimental code in gdkvisual-win32.c to let the user
+	restrict the size of palette used.)
+	(gdk_rgb_init): Set gdk_rgb_verbose if the GDK_DEBUG_GDKRGB flag
+	is set.
+	(gdk_rgb_select_conv): Use gdk_rgb_convert_8 also for depths 5, 6
+	and 7 (see above). Use gdk_rgb_convert_4_pack for 4 bits per pixel
+	static color.
 
-	* gtk/tmpl/gtklabel.sgml: do the intro section
+Tue Apr  2 11:10:13 2002  Jonathan Blandford  <jrb@redhat.com>
 
-2002-01-10  Matthias Clasen  <matthiasc@poet.de>
+	* gtk/gtkliststore.c (gtk_list_store_set_sort_func): set the
+	sort_func correctly, 77030
 
-	* gdk/tmpl/general.sgml (gdk_set_program_class): Expand.
+Tue Apr  2 13:44:27 2002  Tim Janik  <timj@gtk.org>
 
-	* gtk/running.sgml: New file.
+	* configure.in: update version to 2.0.2, binary age 2, interface
+	age 2.
 
-	* gtk/building.sgml: Document a few more configure options.
+	* NEWS: updates for 2.0.2.
 
-	* gtk/Makefile.am (content_files): Add running.sgml.
+Mon Apr  1 22:20:24 2002  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/gtk-docs.sgml: Include running.sgml, sort H and V 
-	variants of widgets to be next to each other.
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): add
+	check for y > tree_view->priv->height (fixes #76974)
 
-2002-01-09  Matthias Clasen  <matthiasc@poet.de>
+Mon Apr  1 22:19:39 2002  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/tmpl/gtkaccellabel.sgml: Remove duplicate docs.
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_sort_level): get
+	the stamp changes right this time
+
+Mon Apr  1 22:13:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_free): only
+	disconnect the ref callbacks when model == proxy (Thanks go to
+	Manuel Clos Crespo for the remote debugging)
+
+Sat Mar 30 15:19:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c: revert the latest stamp increment changes,
+	as it broke stuff for trees
+
+Fri Mar 29 18:15:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* ===== Released 2.0.1 ======
+
+Fri Mar 29 18:09:18 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_query): Call 
+	gdk_keyval_to_lower() on the key passed in, since we
+	lowercase all other key vals passed in, so querying
+	keyvals will otherwise fail if the caller used
+	an uppercase accelerators (#76899, Vitaly Tishkov)
+
+Fri Mar 29 17:41:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (load_modules): Fix screwup in handling
+	of module path that was resulting in freed memory being
+	accessed when both GTK_MODULES and a theme were set.
+	(#76902, Johan Dahlin)
+
+Fri Mar 29 17:57:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c (get_default_icons): Fix wrong
+	stock id's for ADD/REMOVE. (#76915, Vitaly Tishkov)
+
+2002-03-29  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkmain.h : fix typo in gtk_init_check macro, which
+	caused crashes if argc != 0
+
+	* gtk/stock-icons/makefile.msc : added new icons
+
+Fri Mar 29 20:17:35 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_rows_reordered):
+	remove call to gtk_tree_model_sort_increment_stamp
+	(gtk_tree_model_sort_sort_level): always increment the stamp
+
+Fri Mar 29 00:19:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Updates
+
+	* configure.in: Version 2.0.1, binary, interface age 1.
+
+	* configure.in (GDK_PIXBUF_VERSION): Up required versions
+	of dependencies.
+
+	* gtk/gtkiconfactory.c gtk/stock-icons/Makefile.am:
+	Add stock_add/remove_16.
+
+Thu Mar 28 18:38:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): 
+	Don't show the window unless the widget is mapped.
+	(#76742, Dennis Björklund, Soeren Sandmann)
+
+2002-03-29  Hans Breuer  <hans@breuer.org>
+
+	Fixed dashed line issues (#74441) to an IMO reasonable extend. 
+	That is: use PS_USERSTYLE on WinNT (the next GDI limit appears
+	to be with lines width > 50); Render horizontal and vertical
+	dashed lines on Win9x 'by hand'. Dotted selection rectangles 
+	and Dia look nice ...
+
+	* gdk/win32/gdkprivate-win32.h : add pen_dashes pointer and
+	num_pen_dashes to _GdkGCWin32
+	* gdk/win32/gdkgc-win32.c : initialize pen_dashes and remove
+	the guesses from dashes to windoze line styles.
+	(predraw_set_forground) : always ExtCreatePen (PS_SOLID) on
+	Win9x, which does not support PS_USERSTYLE.
+	* gdk/win32/gdkdrawable-win32.c : new functions render_line_
+	<horizontal|vertical>. Use them if not running on NT in
+	gdk_win32_draw_<rectangle|segments|lines> ()
+
+	* gdk/win32/gdkkeys-win32.c (gdk_keyval_name) : return NULL
+	for keyval == 0 to avoid to have zeros in all menu entries 
+	without accelerator.
+
+2002-03-29  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/stock_add_24.png:
+	* gtk/stock-icons/stock_add_16.png:
+	* gtk/stock-icons/stock_remove_24.png:
+	* gtk/stock-icons/stock_remove_16.png: use a simple '+' and '-',
+	  works better. the old box was too clumsy
+
+Thu Mar 28 21:11:04 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfilesel.c (open_new_dir): when encountering non-UTF-8 file
+	names, alert the user with g_message() instead of g_warning() and
+	put out the actual conversion error.
+
+2002-03-28  Dave Camp  <dave@ximian.com>
+
+	* gtk/gtktreeview.c (install_scroll_sync_handler): Don't install
+	the handler if the widget isn't realized.
+
+2002-03-28  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/stock_font*:
+	* gtk/stock-icons/stock_align*:
+	* gtk/stock-icons/stock_text*: better solution to the dark theme
+	  problem. Also looks more pretty IMHO
+
+2002-03-27  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Try to find libpng via pkg-config first,
+	since libpng-1.2.2 will come with a .pc file.
+
+Wed Mar 27 11:10:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_real_remove): Set
+	page->last_focus_child to NULL as well as removing the
+	weak reference, to deal with reentrancy in set_focus_child().
+	(#76634, Dennis Björklund)
+
+2002-03-27  Murray Cumming  <murrayc@usa.net>
+ 
+ 	* gtk/gtktreeview.c: Corrected registered return type of
+	"move-cursor" signal. Had to add a marshaller to 
+ 	gtk/gtkmarshalers.list.
 	
-	* gdk-pixbuf/Makefile.am (content_files): Add 
-	gdk-pixbuf-from-drawables.sgml. (#68232)
+Tue Mar 26 14:46:50 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Shuffle the ordering around
+	some more (position before realizing) fixing problems with 
+	arrows popping up at the wrong time (#73386), hopefully not
+	introducing other problems. (Reported by Ettore Perrazoli, others)
+
+2002-03-26  Dave Camp  <dave@ximian.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Free the path
+	after calling gtk_tree_view_row_activated() rather than before.
+
+2002-03-25  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkrc.c (gtk_rc_parse_font_name): free the style's
+	font_description before assigning a new one.
+	(gtk_rc_parse_stock): always unref the created icon_set. #76289
 	
-	* gtk/tmpl/gtkwidget.sgml: Improve docs for GTK_NO_REPARENT
-	and GTK_APP_PAINTABLE. (#68060)
+2002-03-25  Mark McLoughlin  <mark@skynet.ie>
 
-2002-01-08  Matthias Clasen  <matthiasc@poet.de>
+	* gtk/gtkbindings.c: (gtk_binding_entry_add_signal),
+	kill code duplicated in gtk_binding_entry_add_signall.
 
-	* gtk/tmpl/gtkgc.sgml: Improve wording.
+Sun Mar 24 10:32:38 2002  Jonathan Blandford  <jrb@redhat.com>
 
-	* gtk/tmpl/gtksocket.sgml, gtk/tmpl/gtkplug.sgml: speak of 
-	window IDs rather than XIDs.
+	* gtk/gtktreemodel.c (gtk_tree_path_copy): Make path arg const, #75653
 
-2002-01-07  Matthias Clasen  <matthiasc@poet.de>
- 	
-	* gtk/tmpl/gtksocket.sgml: Mention gtk_socket_get_id()
-	instead of GTK_WINDOW_XWINDOW().  (#68172)
+	* gtk/gtkfontsel.c (gtk_font_selection_show_available_styles): fix
+	a warning
 
-	* gtk/gtk-sections.txt: Move functions which are documented
-	as "private" or "internal" into Private subsections.
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): remove the grab
+	when we emit row_activated so that listeners of this signal can
+	grab the mouse, #75629
 
-	* gtk/tmpl/gtkdnd.sgml, gtk/tmpl/gtkobject.sgml, 
-	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtktooltips.sgml,
-	gtk/tmpl/gtkwidget.sgml, gtk/tmpl/gtkclipboard.sgml,
-	gtk/tmpl/gtkstyle.sgml, gtk/tmpl/gtkselection.sgml,
-	gtk/tmpl/gtkfeatures.sgml: Minor markup fixes.
+2002-03-23  Havoc Pennington  <hp@pobox.com>
 
-	* gtk/tmpl/gtksignal.sgml: Add link to GLib signal docs.
+	* gtk/gtktextlayout.c (gtk_text_layout_real_invalidate):
+	invalidate the line containing start, even if the [start,end)
+	range is empty (just invalidate [start,end], essentially).
+	Partially fixes #72374
 
-	* gtk/tmpl/gtkpreview.sgml, gtk/tmpl/gtktext.sgml,
-	gtk/tmpl/gtktree.sgml: Remove "deprecated" from short desc.
+2002-03-23  Havoc Pennington  <hp@pobox.com>
 
-	* gtk/tmpl/gtkrc.sgml: Correct names of default RC files. 
+	* gtk/gtktextview.c (gtk_text_view_do_popup): end any selection in
+	progress, patch from db@zigo.dhs.org, #74620
 
-2002-01-06  Matthias Clasen  <matthiasc@poet.de>
+2002-03-23  Havoc Pennington  <hp@pobox.com>
 
-	* gtk/tmpl/gtktypeutils.sgml: Replace GTK_NO_CHECK_CASTS by 
-	G_DISABLE_CAST_CHECKS, fix some markup and add stuff.
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): extend
+	selection for pageup/pagedown and ctrl+pageup/pagedown if 
+	shift is held. more of #53934
 
-	* gtk/tmpl/gtkaccelgroup.sgml, gtk/tmpl/gtkwidget.sgml: Additions.
+2002-03-23  Havoc Pennington  <hp@pobox.com>
 
-	* gtk/gtk-sections.txt: Make gtk_accel_group_get_type private.
+	* gtk/gtktextview.c (gtk_text_view_destroy_layout): disconnect 
+	layout handlers earlier in the function, to avoid possible
+	reentrancy screwups
+	(gtk_text_view_invalidate): Don't install idle handlers if 
+	layout == NULL, otherwise we get problems during finalization 
+	since clearing the buffer invalidates and puts the idle handlers
+	back after we destroy the layout. #74660
+	(gtk_text_view_ensure_layout): Install the validation handlers
+	right after creating the layout.
 
-2002-01-06  Havoc Pennington  <hp@pobox.com>
+	* gtk/gtktexttagtable.c (foreach_unref): call
+	_gtk_text_buffer_notify_will_remove_tag(), #75126
 
-	* gtk/question_index.sgml: a few more questions I thought of
+2002-03-22  Havoc Pennington  <hp@pobox.com>
 
-2002-01-06  Havoc Pennington  <hp@pobox.com>
+	* gdk/x11/gdkfont-x11.c (gdk_fontset_load): add more explanatory
+	text to the error message about missing charsets, and use
+	g_printerr() not g_warning() since this is typically not a
+	programming error (we do not export any API to ask whether 
+	a font set will have missing charsets so apps realistically can't 
+	do anything other than try the gdk_fontset_load())
 
-	* gtk/gtk-docs.sgml: remove gtk- prefix from TreeView and a few
-	other entities, more consistent anyway (I thought this would make
-	links to "GtkTreeView" etc. go to the ref page, not the struct,
-	but it wasn't the problem, the issue is the way gtkdoc-mkdb
-	decides what's an object, see CheckIsObject() routine)
+	* gtk/gtktextview.c (gtk_text_view_key_press_event): return FALSE
+	if the text view isn't editable and the user presses Return, 
+	so default buttons and such can be activated, #74937
 
-	* gtk/changes-1.2.sgml: sgml fixes to get rid of warnings
+	* gtk/gtktextbuffer.c (paste_from_buffer): don't insert 
+	if the insertion point is not editable and the paste 
+	is interactive, #74125
 
-	* gtk/changes-2.0.sgml: ditto
+	* gtk/gtkwindow.c (gtk_window_move_resize): enhance the #if 0
+	debug spew
+
+	* gtk/gtktextbuffer.c (cut_or_copy): only remove the previous 
+	cut/copied data right before replacing it, when we know we are
+	going to replace it. Fixes #74049
+
+2002-03-22  Richard Hult  <rhult@codefactory.se>
+
+	* gdk/gdkevents.c (gdk_event_get_root_coords): Fix typo, where x
+	value was assigned to both x and y.
+
+Fri Mar 22 11:29:11 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Partial fix for problem where keypad keys acted
+	as shift-arrows in an entry rather than arrows (#74327)
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_lookup): Sort lookup
+	results by number of modifiers in the entry. Fixes
+	problem where if a key matched both modified and unmodified
+	key bindings ... e.g., the distinguishing key binding
+	was consumed, then it was random which was used. 
+
+	* gtk/gtkbindings.c (gtk_binding_entries_sort_patterns): 
+	Catch the case where there are multiple entries from the
+	same bindingset (with different modifiers), and use only
+	the first entry, which, with the change in _gtk_key_hash_lookup()
+	will be the preferred value.
+
+Fri Mar 22 10:56:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelmap.c (gtk_accel_map_save_fd): Fix memory
+	leak. (#74400, Morten Welinder.)
+
+	* gtk/gtkaccelmap.c: Properly handle short returns from
+	write() calls. (Handling EINTR isn't enough... that only
+	handles the case where you were interrupted before you
+	wrote a single byte.)
 	
-	* gtk/question_index.sgml: add some questions
+	* gdk/linux-fb/gdkmouse-fb.c gdk/linux-fb/gdkkeyboard-fb.c:
+	Robustify against short returns from write() calls.
 
-2002-01-04  Matthias Clasen  <matthiasc@poet.de>
+Fri Mar 22 10:12:10 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/tmpl/gtkwidget.sgml: Additions.
-
-2002-01-04  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/changes-1.2.sgml, gtk/changes-2.0.sgml: SGML fixes.
-
-	* gtk/tmpl/gtkobject.sgml: Document GTK_IN_DESTRUCTION.
+	* gtk/gtktextview.c (gtk_text_view_paint): Change
+	G_BREAKPOINT() to g_assert_not_reached ().
+	(#75865, Ashok Venkiteswaran)
 	
-	* gtk/tmpl/gtkwidget.sgml: Additions.
-
-2002-01-04  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/question_index.sgml: add question to help people find
-	gtk_widget_set_sensitive() if they're used to another term for 
-	that.
-	
-2002-01-03  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtkdrawingarea.sgml: add mention of
-	gtk_widget_add_events() and GTK_CAN_FOCUS
-
-2002-01-04  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtktextview.sgml: Small additions.
-
-	* gtk/tmpl/gtksignal.sgml: Explain what to use instead.
-
-	* gtk/question_index.sgml, gtk/text_widget.sgml, gtk/tree_widget.sgml,
-	gtk/changes-1.2.sgml, gtk/changes-2.0.sgml,
-	gtk/framebuffer.sgml: SGML fixes and additions.
-
-	* gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkdialog.sgml,
-	gtk/tmpl/gtkeditable.sgml, gtk/tmpl/gtkfilesel.sgml,
-	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkmenu.sgml,
-	gtk/tmpl/gtkmessagedialog.sgml, gtk/tmpl/gtkrc.sgml,
-	gtk/tmpl/gtktogglebutton.sgml, gtk/tmpl/gtkspinbutton.sgml,
-        gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkwindow.sgml:
-	Replace references to deprecated functions.
-
-2002-01-03  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/changes-1.2.sgml, gtk/changes-2.0.sgml, 
-	gtk/framebuffer.sgml: Add markup.
-
-2002-01-01  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/framebuffer.sgml: move README.linux-fb in here
-
-	* gtk/tmpl/gtkpreview.sgml: explain what to use instead
-
-	* gtk/tmpl/gtkseparator.sgml: typo fix
-
-	* gtk/tmpl/gtkstock.sgml: add some overview docs
-
-	* gtk/Makefile.am (content_files): add new files
-
-	* gtk/changes-1.2.sgml: move Changes-1.2.txt in here
-
-	* gtk/changes-2.0.sgml: move Changes-2.0.txt in here
-
-	* gdk/tmpl/threads.sgml: mention gdk_threads_init() in the
-	overview docs, copy in the examples from the FAQ
-
-	* gtk/gtk-docs.sgml: change DTD to 3.1, and add
-	question_index.sgml and changes-1.2, changes-2.0
-
-	* gtk/tmpl/gtkdrawingarea.sgml: fixups to reflect 2.0 changes
-
-	* gtk/question_index.sgml: new section with question-based 
-	index of the manual
-
-	* gtk/text_widget.sgml: fix some cross-references
-
-2002-01-01  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtktexttag.sgml: docs updates, mention that invisible 
-	property isn't implemented
-
-	* gtk/text_widget.sgml: small tweaks
-
-2001-12-30  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtkbbox.sgml: Remove references to nonexisting functions.
-	
-	* gtk/tmpl/gtkcolorseldlg.sgml, gtk/tmpl/gtkdrawingarea.sgml,
-	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkhseparator.sgml, 
-	gtk/tmpl/gtktree.sgml, gtk/tmpl/gtkradiobutton.sgml,
-	gtk/tmpl/gtkradiomenuitem.sgml: 
-	Replace references to deprecated functions.
-
-	* gtk/tmpl/gtkhbbox.sgml,gtk/tmpl/gtkvbbox.sgml: Minor fixes.
-
-2001-12-30  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtkpixmap.sgml, gtk/tmpl/gtkscale.sgml,
-	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkimcontextsimple.sgml: Additions.
-
-2001-12-28  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/properties.sgml, gdk/tmpl/selections.sgml: Additions.
-
-2001-12-23  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk-pixbuf/porting-from-imlib.sgml: GDK instead of Gdk.
-
-	* gdk-pixbuf/tmpl/gdk-pixbuf-xlib-init.sgml: Replace references to
-	deprecated functions.
-
-	* gdk/tmpl/event_structs.sgml, gdk/tmpl/gcs.sgml,
-	gdk/tmpl/images.sgml: Replace references to deprecated functions.
-
-2001-12-28	Vitaly Tishkov <tvv@sparc.spb.su>
-
-	* gtkwindow.sgml: additional fix for #59314 ('<programlisting>' is
-	changed to '<literal>' in docs for gtk_window_set_policy ())
-
-Sat Dec 22 18:18:07 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/Makefile.am (IGNORE_HFILES): Add gtktextutil.h
-
-	* gtk/text_widget.sgml (linkend): SGML fixes.
-
-	* gtk/gtk-sections.txt: Update
-
-	* gdk/gdk-sections.txt: Update.
-
-	* gdk/tmpl/cursors.sgml: SGML fix.
-
-	* gdk/gdk-docs.sgml: Add PNG handling magic.
-
-2001-12-21  Matthias Clasen  <matthiasc@poet.de>
-		
-	* gtk/text_widget.sgml: More precise wording. (#63388)
-
-	* gtk/tmpl/gtksignal.sgml (GTK_SIGNAL_OFFSET): Add docs.
-
-	* gtk/resources.sgml: Fix markup of mail URLs.
-	
-	* gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkobject.sgml: Markup fixes.
-
-	* gtk/tmpl/gtktoolbar.sgml (gtk_toolbar_{prepend,append}_element):
-	Expand documentation. (#60471)
-
-	* gtk/tmpl/gtkmain.sgml: Remove misleading information about 
-	gtk_set_locale().  (#65758)
-
-2001-12-18  Anders Carlsson  <andersca@gnu.org>
-
-	* gtk/tmpl/gtkdrawingarea.sgml: Change GdkWidget to
-	GtkWidget. Fixes #67162.
-
-2001-12-17  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk-pixbuf/tmpl/creating.sgml, 
-	gdk-pixbuf/tmpl/gdk-pixbuf-xlib-from-drawables.sgml,
-	gdk-pixbuf/tmpl/gdk-pixbuf-xlib-init.sgml,
-	gdk-pixbuf/tmpl/gdk-pixbuf-xlib-rendering.sgml,
-	gdk-pixbuf/tmpl/refcounting.sgml: Markup fixes.
-
-	* gtk/building.sgml, gtk/resources.sgml: Markup fixes.
-
-	* gtk/gtk.types: Remove gtk_text_layout_get_type(). (???)
-
-	* gdk/tmpl/general.sgml: Use <envar>, not <envvar>.
-
-2001-12-16  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/windows.sgml: Document GDK_RELEASE_MASK.
-
-2001-12-16  Havoc Pennington  <hp@pobox.com>
-
-	* gdk-pixbuf/gdk-pixbuf-sections.txt: put _simple variants at the
-	top of the docs
-
-2001-12-16  Havoc Pennington  <hp@pobox.com>
-
-	* gdk-pixbuf/tmpl/scaling.sgml: small doc tweaks, specifically
-	some "just do XYZ" advice next to the InterpMode technojargon.
-
-2001-12-16  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/windows.sgml: Add something about GdkModifierType.
-
-2001-12-13  Matthias Clasen  <matthiasc@poet.de>
-	
-	* gdk-pixbuf/tmpl/scaling.sgml,	gdk/tmpl/fonts.sgml, 
-	gdk/tmpl/general.sgml, gdk/tmpl/rgb.sgml, gdk/tmpl/visuals.sgml,
-	gdk/tmpl/windows.sgml, gtk/gtk-docs.sgml, gtk/tmpl/gtkaccellabel.sgml,
-	gtk/tmpl/gtkcombo.sgml, gtk/tmpl/gtkdialog.sgml, 
-	gtk/tmpl/gtkdrawingarea.sgml, gtk/tmpl/gtkeditable.sgml, 
-	gtk/tmpl/gtkfilesel.sgml, gtk/tmpl/gtkfontseldlg.sgml,
-	gtk/tmpl/gtkimage.sgml, gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkmenu.sgml,
-	gtk/tmpl/gtkmessagedialog.sgml, gtk/tmpl/gtkobject.sgml,
-	gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkradiobutton.sgml, 
-	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtkscale.sgml, gtk/tmpl/gtksignal.sgml, 
-	gtk/tmpl/gtksocket.sgml, gtk/tmpl/gtkspinbutton.sgml,
-	gtk/tmpl/gtktogglebutton.sgml, gtk/tmpl/gtksignal.sgml, 
-	gtk/tmpl/gtktooltips.sgml, gtk/tmpl/gtkwindow.sgml,
-	gdk/tmpl/regions.sgml, gtk/tmpl/gtkfontsel.sgml,
-	gtk/tmpl/gtkpixmap.sgml, gtk/tmpl/gtkprogress.sgml,
-	gtk/tmpl/gtkselection.sgml, gtk/tmpl/gtktable.sgml,
-	gtk/tmpl/gtktipsquery.sgml: Markup fixes (mainly examples).
-
-2001-12-12  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtklist.sgml: Markup fixes.
-
-	* gdk/tmpl/selections.sgml, gtk/tmpl/gtksocket.sgml: s/succesful/successful/g.
-
-	* gtk/gtk-sections.txt, gtk/tmpl/gtkstyle.sgml: Remove
-	GTK_STYLE_NUM_STYLECOLORS. (#66467)
-
-2001-12-12  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/text_widget.sgml: add another example
-
-2001-12-09  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtkmain.sgml: Markup fixes.
-
-	* gtk/gtk-docs.sgml: Add an empty entity to suppress 
-	crossreferencing in programlistings.
-
-2001-12-08  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtkclipboard.sgml: Fix references to 
-	get_clipboard_set_with_owner(). (#66424)
-
-2001-12-07  Matthias Clasen  <matthiasc@poet.de>
-	
-	* gtk/tmpl/gtktypeutils.sgml, gtk/tmpl/gtkobject.sgml,
-	gtk/tmpl/gtkstyle.sgml: Add docs.
-
-2001-12-06  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtklabel.sgml: Remove redundant docs. (#66383)
-
-	* gtk/tree_widget.sgml: Typo fix. (#66256)
-
-	* gdk-pixbuf/Makefile.am (SCAN_OPTIONS): Add --deprecated-guards.
-	
-	* gtk/tmpl/gtktext.sgml, gtk/tmpl/gtktree.sgml, 
-	gtk/tmpl/gtktreeitem.sgml: Updates.
-
-2001-12-04  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtkwidget.sgml: Updates.
-	* gtk/Makefile.am (IGNORE_HFILES): Remove gtktextchild.h.
-
-2001-12-03  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/input_devices.sgml, 
-	gdk/gdk-sections.txt, gdk/tmpl/windows.sgml: Updates.
-
-2001-12-02  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/dnd.sgml: Updates.
-
-2001-11-30  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/keys.sgml: Updates.
-
-2001-12-01  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtkoptionmenu.sgml: add brief explanation of how to use
-	GtkOptionMenu
-
-2001-11-30  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/colors.sgml, gdk/tmpl/pixmaps.sgml, gdk/tmpl/dnd.sgml,
-	gdk/tmpl/gcs.sgml: Document ref and unref functions as deprecated.
-
-2001-11-29  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/gtk-sections.sgml: Add GtkTextChildAnchor.
-
-	* gdk/tmpl/dnd.sgml: Updates.
-
-	* gdk/tmpl/pango_interaction.sgml: Document GdkPangoAttrEmbossed
-	and GdkPangoAttrStipple.
-	
-2001-11-28  Matthias Clasen  <matthiasc@poet.de>
-	
-	* gtk/tmpl/gtkwindow.sgml: Document gtk_window_position.
-
-	* gdk/tmpl/dnd.sgml: Document GdkDragProtocol and GdkDragContext.
-
-	* gdk/tmpl/events.sgml: Document gdk_setting_get.
-
-	* gdk/tmpl/fonts.sgml: Document gdk_font_full_name_get and
-	gdk_font_full_name_free.
-
-	* gdk/tmpl/windows.sgml: Document gdk_window_register_dnd.
-
-2001-11-28  Matthias Clasen  <matthiasc@poet.de>
-	
-	* gdk/tmpl/windows.sgml, gdk/tmpl/general.sgml,
-	gdk/tmpl/pixmaps.sgml, gdk/tmpl/drawing.sgml,
-	gdk/tmpl/gcs.sgml: Updates. 
-
-	* gdk/tmpl/cursors.sgml: Document GdkCursor and standard cursors.
-
-2001-11-23  Matthias Clasen  <matthiasc@poet.de>
-
-        * gdk/tmpl/drawing.sgml: Minor markup fixes.
-
-Fri Nov 23 15:12:07 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/Makefile.am (content_files): Add windows.sgml
-
-	* gdk/tmpl/cursors.sgml: Revert last diff to get things to
-	build.
-
-2001-11-22  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/event_structs.sgml: Add better explanation of proximity
-	events. 
-
-	* gdk/tmpl/cursors.sgml: Document GdkCursor and standard cursors.
-
-	* gdk/images/*.png: The standard X cursors as pngs.
-
-	* gdk/Makefile.am (HTML_IMAGES): Add the images.
-
-Wed Nov 21 15:57:29 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtk-sections.txt: Updates
-
-	* gtk/tmpl/gtkstock.sgml: Close end tags.
-
-	* gtk/gtk.types: Remove interface types which gtk-doc
-	can't handle currently.
-
-	* gtk/tmpl/gtknotebook.sgml: Fix some garbage in file.
-
-	* gdk/tmpl/x_interaction.sgml: Fix SGML errors.
-
-	* gdk/gdk-overrides.txt gdk/gdk-sections.txt: Updates. 
-
-2001-11-20  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtkwindow.sgml: fix docs for gtk_window_set_policy() to
-	reflect existence of gtk_window_set_resizable()
-
-2001-11-20  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/event_structs.sgml: Small fixes.
-
-2001-11-16  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/event_structs.sgml: Updates. 
-
-	* gdk/tmpl/windows.sgml: Document GdkFilterFunction, GdkFilterReturn
-	and GdkXEvent, add markup.
-
-2001-11-15  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/gtk-docs.sgml: Go back to DocBook 3.0 to get the
-	autobuilder on developer.gnome.org back to work, but add
-	the png notation for the stock icons.
-
-2001-11-14  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/Makefile.am (MKDB_OPTIONS), 
-	gdk-pixbuf/Makefile.am (MKDB_OPTIONS),
-	gtk/Makefile.am (MKDB_OPTIONS): Add --sgml-mode.
-
-	* gdk-pixbuf/tmpl/file-saving.sgml,
-	gdk-pixbuf/tmpl/module_interface.sgml,
-	gdk-pixbuf/tmpl/gdk-pixbuf-xlib-rgb.sgml: Consistent short descriptions.
-
-	* gtk/tmpl/gtkprogressbar.sgml: Remove duplicate docs. (#64469)
-	
-	* gtk/gtk-sections.txt: Add missing TITLEs (#64459, #64568)
-
-	* gtk/tmpl/gtkadjustment.sgml: Typo fix. (#64448)
-
-Mon Nov 12 23:06:38 2001  Tim Janik  <timj@gtk.org>
-
-	* added gtkaccelmap.sgml. other updates.
-
-2001-11-11  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk-pixbuf/gdk-pixbuf-rendering.sgml, 
-	gdk-pixbuf/gdk-pixbuf-from-drawables.sgml: new files explaining
-	where the code for rendering pixbufs lives. (#61151) 
-	
-	* gdk-pixbuf/gdk-pixbuf.sgml: Use the new files.
-
-	* gtk/tmpl/gtkaccellabel.sgml, gtk/tmpl/gtkcombo.sgml,
-	gtk/tmpl/gtkentry.sgml, gtk/tmpl/gtkhscrollbar.sgml,
-	gtk/tmpl/gtkvscrollbar.sgml, gtk/tmpl/gtktoolbar.sgml,
-	gtk/tmpl/gtkdialog.sgml, gtk/tmpl/gtkstatusbar.sgml: 
-	Mass fixing of trivial doc bugs. (#55579, #56760, #58769, #55918,
-	#64154, #60422, #54697)
-
-2001-11-10  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/tmpl/gtkpaned.sgml: Document gtk_paned_set_gutter_size
-	as noop. (#45802)
-
-	* gtk/tmpl/gtkcolorsel.sgml: Remove stuff duplicating inline
-	docs. (#60481)
-
-	* gtk/tmpl/gtkstock.sgml: Document all stock items
-	with their stock text. 
-
-	* gtk/tmpl/gtkhseparator.sgml: Small corrections.
-
-	* gdk-pixbuf/tmpl/gdk-pixbuf-loader.sgml: Updates.
-
-2001-11-03  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
-
-	* gdk-pixbuf/tmpl/refcounting.sgml,
-	gdk-pixbuf/porting-from-imlib.sgml, tmpl/creating.sgml:
-	gdk_rgb_init() doesn't need to be called anymore. Use
-	g_object_(un)_ref instead of gdk_pixbuf_(un)ref.
-
-	* tmpl/module_interface.sgml: Typo fix.
-
-	* gdk-pixbuf/gdk-pixbuf.sgml: Fixed jade complaining about '_' by
-	replacing it with '-'. Now builds again.
-
-2001-10-31  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk-pixbuf/gdk-pixbuf.sgml: include initialization_versions.sgml,
-	file-saving.sgml and module_interface.sgml.
-
-	* gdk-pixbuf/tmpl/module_interface.sgml: add short description.
-
-	* gtk/tmpl/gtkarg.sgml, gtk/tmpl/gtkdata.sgml, 
-	gtk/tmpl/gtkcellrenderertextpixbuf.sgml: removed, since they described 
-	no longer existent stuff and aren't included anymore.
-
-	* gdk/tmpl/color_contexts.sgml, gdk/tmpl/input_contexts.sgml, 
-	gdk/tmpl/input_methods.sgml: removed, since they described no longer 
-	existent stuff and aren't included anymore.
-
-2001-10-31  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk-pixbuf/gdk-pixbuf-sections.txt,
-	gdk-pixbuf/tmpl/animation.sgml, 
-	gdk-pixbuf/tmpl/module_interface.sgml: Updates. (#63293)
-
-2001-10-28  Anders Carlsson  <andersca@gnu.org>
-
-	* gtk/tmpl/gtkadjustment.sgml: Update struct member docs
-	since they're gdouble now instead of gfloat. Fixes #55699.
-
-2001-10-28  Matthias Clasen  <matthiasc@poet.de>
-
-	* docs/reference/gtk/tmpl/gtkmenuitem.sgml,
-	docs/reference/gtk/tmpl/gtkmenu.sgml,
-	docs/reference/gtk/tmpl/gtkmenushell.sgml,
-	docs/reference/gtk/tmpl/gtkcontainer.sgml,
-	docs/reference/gtk/gtk-sections.txt: Updates.
-
-2001-10-28  Anders Carlsson  <andersca@gnu.org>
-
-	* gdk/tmpl/regions.sgml: Remove note about coordinates in GdkPoint
-	being 16-bit since they're 32-bit now. Fixes #62681.
-
-2001-10-27  Matthias Clasen  <matthiasc@poet.de>
-
-	* gdk/tmpl/input_devices.sgml: Updates.
-
-	* gtk/tmpl/gtkrc.sgml: Document the special values <none> and
-	<parent> for bg_pixmap.
-
-2001-10-27  Anders Carlsson  <andersca@gnu.org>
-
-	* gtk/tmpl/gtkaccellabel.sgml: Clarify that the string
-	argument in gtk_accel_label_new most be non-NULL.
-	This fixes #54826.
-
-	* gtk/tmpl/gtkentry.sgml: Clarify that a maximum length
-	of 0 means infinity. This fixes #58771.
-
-	* gtk/tmpl/gtkhandlebox.sgml: Finish a sentence. 
-	This fixes #56702.
-
-	* gtk/tmpl/gtkspinbutton.sgml: Clarify that we're
-	returning a spin button in the _new function.
-	This fixes #54097.
-
-	* gtk/tmpl/gtktoolbar.sgml: Change docs for 
-	gtk_toolbar_append_item to say that it appends an item
-	to the end of a toolbar. This fixes #60428.
-
-Fri Oct 26 11:54:53 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* */Makefile.am: Update to install images.
-
-2001-10-27  Anders Carlsson  <andersca@gnu.org>
-
-	* gtk/gtk-sections.txt,
-	* gtk/tmpl/gtktreeviewcolumn.sgml: Remove documentation for
-	gtk_tree_view_column_cell_event since that function has been
-	removed. This fixes #62084.
-
-	* gdk/tmpl/properties.sgml: Change FALSE to TRUE in 
-	documentation for gdk_atom_intern, to document the
-	correct behavior. This fixes #58798.
-
-	* gtk/gtk-sections.txt: Update GtkStyle since it's now a
-	GObject and not a struct. This fixes #55807. 
-
-Thu Oct 18 16:40:00 2001  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/gtk-docs.sgml: add GtkCellEditable and GtkTreeModelSort.
-
-Sat Oct 20 18:35:21 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkentry.sgml (Note): Remove note about
-	deprecation. (We've standard on G_CONST_RETURN 
-	rather than the reverse.) #58768, Vitaly Tishkov.
-
-2001-10-20  jacob berkman  <jacob@ximian.com>
-
-	* gtk/Makefile.am (HTML_IMAGES): get them from
-	$(top_srcdir)/gtk/stock-icons/ rather than
-	../../../gtk/stock-items/
-
-Fri Oct 19 15:44:52 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/Makefile.am gtk/gtk-sections.txt gtk/gtk-docs.sgml:
-	Add gtkimcontextsimple.
-
-2001-10-19  Matthias Clasen   <matthiasc@poet.de>
-
-	* gtk/gtk-docs.sgml: Switch to DocBook 4.1 (for the PNG notation).
-
-	* gtk/Makefile.am, gtk/tmpl/gtkstock.sgml: Add inlinegraphics for
-	the stock icons.
-
-2001-10-18  Matthias Clasen   <matthiasc@poet.de>
-
-	* gdk/tmpl/visuals.sgml: Resurrect 1.2 documentation. (#62604)
-
-	* gtk/tmpl/gtkpaned.sgml: Fixes. (#62146)
-
-	* gtk/tmpl/gtkgamma.sgml: Fixes. (#62155)
-
-	* gtk/Makefile.am (IGNORE_HFILES): Add xembed.h (#61929)
-
-	* gdk-pixbuf/gdk-pixbuf.types: Add GdkPixbuf, 
-	GdkPixbufAnimation and GdkPixbufAnimationIter. (#62590)
-
-	* gtk/tmpl/gtkscrolledwindow.sgml: Replace GtkCList by
-	GtkTreeView in example. (#62200)
-
-2001-10-17  Matthias Clasen   <matthiasc@poet.de>
-
-	* gtk/tmpl/gtkdnd.sgml, gtk/tmpl/gtkclipboard.sgml,
-	gdk/tmpl/general.sgml, gdk/tmpl/threads.sgml, 
-	gdk/tmpl/x_interaction.sgml: Updates.
-
-2001-10-13  Matthias Clasen   <matthiasc@poet.de>
-
-	* gdk/tmpl/x_interaction.sgml: Update.
-
-2001-10-10  Matthias Clasen   <matthiasc@poet.de>
-
-	* gtk/gtk-sections.txt, gtk/tmpl/gtkspinbutton.sgml,
-	gtk/tmpl/gtkseparatormenuitem.sgml, gtk/tmpl/gtknotebook.sgml,
-	gtk/tmpl/gtkstatusbar.sgml, gtk/tmpl/gtkradiobutton.sgml,
-	gtk/tmpl/gtkradiomenuitem.sgml: Updates.
-
-	* gdk-pixbuf/gdk-pixbuf-sections.txt, 
-	gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Follow recent API changes.
-
-2001-10-10  Matthias Clasen   <matthiasc@poet.de>
-
-	* gtk/tmpl/gtkcalendar.sgml, gtk/tmpl/gtkeditable.sgml: Update.
-
-	* gdk-pixbuf/gdk-pixbuf.sgml: Add entity for tmpl/inline.sgml.
-
-	* gdk-pixbuf/tmpl/inline.sgml: Update.
-
-	* gtk/gtk-sections.sgml: Update.
-
-2001-10-08  Matthias Clasen   <matthiasc@poet.de>
-
-	* gdk-pixbuf/gdk-pixbuf-sections.txt,
-	gdk-pixbuf/Makefile.am, gdk-pixbuf/tmpl/creating.sgml: Update.
-
-	* gdk-pixbuf/tmpl/inline.sgml: New file.
-	
-2001-10-07  Matthias Clasen   <matthiasc@poet.de>
-
-	* gdk/tmpl/properties.sgml, gdk/tmpl/events.sgml,
-	gdk/tmpl/regions.sgml, gdk/tmpl/general.sgml,
-	gdk/tmpl/keys.sgml: Update. 
-
-	* gdk/gdk-overrides.txt, gdk/gdk-sections.txt: Remove nanox traces.
-
-2001-10-06  Matthias Clasen   <matthiasc@poet.de>
-
-	* gtk/gtk-docs.sgml: add gtkimagemenuitem, 
-	gtksettings, gtkseparatormenuitem.
-	
-	* gtk/tmpl/gtktreemodelsimple.sgml: remove unused file.
-
-2001-10-05  Matthias Clasen   <matthiasc@poet.de>
-
-	* gtk/gtk-sections.sgml, gtk/objects_grouped.sgml: remove GtkPacker.
-
-2001-10-05  Sven Neumann  <sven@gimp.org>
-
-	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: adapt to changes in GDK_PIXBUF_ERROR
-	enum.
-
-2001-10-04  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtkimage.sgml: fix GtkImage overview
-
-Wed Oct  3 15:09:18 2001  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/gtk.types: remove gtk_cell_editable_get_type
-
-2001-10-02  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/tree_widget.sgml: s/empahsis/emphasis/
-
-	* gtk/tmpl/gtkobject.sgml: update docs
-
-2001-10-01  Matthias Clasen  <matthiasc@poet.de>
-
-	* gtk/gtk-sections.txt: Move standard gobject stuff to
-	the 'Standard' sections. (#61483)
-
-Wed Sep 26 15:05:28 2001  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/gtk.types: Add missing types.
-
-Mon Sep 24 12:43:45 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtk-sections.txt: Updates for removed/renamed functions.
-
-2001-09-08  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/gtk-sections.txt: move some of the accel group functions 
-	into a Private subsection
-
-2001-09-08  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtklayout.sgml: docs
-
-	* gdk-pixbuf/gdk-pixbuf.sgml: remove the section on compiling
-	gdk-pixbuf since it isn't a standalone package anymore
-
-	* gtk/building.sgml: section on compiling GTK itself
-
-2001-09-08  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/gtk-sections.txt: put GtkPacker back in here so it won't be
-	in gtk-unused.txt, but don't put it back in gtk-docs.sgml. 
-
-	Tons of other additions from gtk-unused.txt, but mostly skipping
-	all the tree stuff for now.
-
-2001-09-08  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/gtk-docs.sgml: remove CellRendererTextPixbuf
-
-	* gtk/resources.sgml: add section on mailing lists, bugzilla, etc.
-
-	* gtk/tmpl/gtkaccelgroup.sgml: add long description
-
-	* gtk/gtk-sections.txt: reorder accel group section; probably need
-	to delete most of it
-
-	* gtk/tmpl/gtkmain.sgml: Clean it up a little bit
-
-	* gtk/gtk-docs.sgml: rearrange the list of "core/misc" sections so
-	that useful things are near the top and stupid junk is near the
-	bottom.
-
-	* gtk/tmpl/gtkfeatures.sgml: fix/finish this section
-
-	* gtk/gtk-docs.sgml: create a separate section for
-	overview/tutorial material and special notes, and put the
-	reference docs for the "misc non-widget" stuff into its own
-	section.
-
-	* gtk/compiling.sgml: write this section
-
-	* gtk/gtk-docs.sgml: The intro section weirdly had two paragraphs
-	that said the same thing. Delete one of them.
-
-Tue Sep  4 01:33:51 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtk-docs.sgml: Remove references to a couple
-	sections that are no longer there.
-
-Thu Aug 30 19:34:38 2001  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/tmpl/gtkdialog.sgml: Fix obvious mistake.
-
-Tue Aug 21 12:42:19 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtk-sections.txt: Remove GtkPacker
-
-Sun Aug 12 10:03:42 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* */Makefile.am: Set GPATH to fix srcdir != builddir  
-	problems with GNU make.
-
-Sun Jul 22 17:01:34 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtksignal.sgml: Fix missing not
-	(Skip Montanaro, #56361)
-
-Wed Jul  4 22:53:33 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkplug.sgml gtk/tmpl/gtksocket.sgml: Some
-	updates and moving docs to the C files.
-
-2001-05-19  Havoc Pennington  <hp@pobox.com>
-
-	* gdk-pixbuf/tmpl/initialization_versions.sgml: docs
-
-	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: docs
-
-	* gdk-pixbuf/tmpl/gdk-pixbuf-xlib-init.sgml: docs
-
-Sun Apr 15 15:04:12 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkdnd.sgml: Move some of the function docs to the
-	C files.
-
-Thu Jun 21 12:31:29 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtk-sections.txt: Update a bit.
-
-	* Makefile.am: build GTK+ docs. 
-
-Fri Jun  8 12:33:29 2001  Jonathan Blandford  <jrb@redhat.com>
-
-	* gtk/tmpl/gtktable.sgml: fix bug #55921
-
-2001-06-05  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/tmpl/gtkscale.sgml: more docs
-
-Tue Jun  5 10:54:48 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkenums.sgml: Improve docs for GtkStateType.
-	(Fixes #55751, among other things.)
-
-Mon Jun  4 15:08:21 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtk-overrides.txt: Remove GtkArgSetFunc, GtkArgGetFunc.
-
-Wed May 30 16:56:07 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkrc.sgml (pattern): Correct typoe when
-	describing order of composition. (#53371, Skip Montanaro)
-	
-2001-05-22  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/gtk-sections.txt: add gtk_bin_get_child
-
-Fri May 18 12:28:08 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtksizegroup.sgml gtk/gtk-sections.txt gtk/gtk.types:
-	Add documentation about GtkSizeGroup.
-
-2001-05-11  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtkvruler.sgml, 
-	gtk/tmpl/gtkhruler.sgml: fix bug #54431
-
-	* gtk/tmpl/gtkdrawingarea.sgml: fix bug #54331
-
-	* gtk/tmpl/gtkenums.sgml: fix bug #54329, and 
-	update some other random things
-
-	* gtk/gtk-sections.txt: updates
-
-	* gtk/tmpl/gtkmenuitem.sgml: fix bug #54277
-
-	* gtk/tmpl/gtkradiomenuitem.sgml: fix bug #54323,
-	#54324, #54325 
-
-2001-04-26  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/tmpl/gtkimage.sgml: document GtkImageType
-
-	* gtk/gtk-sections.txt: GtkImageType is public
-
-	* gdk/tmpl/images.sgml: add warning about gtk_image_new_bitmap
-
-Wed Apr 25 12:33:03 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtktreeitem.sgml: Add note about GTK_ENABLE_BROKEN.
-
-Tue Apr 17 10:59:13 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/Makefile.am (GTKDOC_CFLAGS): Remove -DGTK_DISABLE_COMPAT
-	add -DGTK_ENABLE_BROKEN
-
-	* {gtk/gtk,gdk/gdk}-sections.txt: Updated
-
-Fri Apr 13 10:41:10 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* */Makefile.am: Add $(top_builddir) to includes as necessary,
-	Run gtkdoc-scangobj from builddir, not srcdir, don't distribute
-	foo-doc.{top,bottom}, recomment in code to distribute HTML
-	images, with shell fixes.
-
-	* gtk/gtk.hierarchy gdk-pixbuf/gdk-pixbuf.{args,signals,hierarchy}:
-	Remove generated files.
-	
-Wed Apr  4 01:26:04 2001  Tim Janik  <timj@gtk.org>
-
-        * gdk-pixbuf/Makefile.am: disabled "for i in $(HTML_IMAGES) ;"
-	dist-hook because $(HTML_IMAGES) is empty.
-	* gtk/Makefile.am: same here.
-	* gdk/Makefile.am: same here. touched gdk.types since make rules
-	require it ;(
-
-2001-03-29  Mike Kestner  <mkestner@ameritech.net>
-
-	* gtk/tmpl/gtkspinbutton.html: killed function docs that are now
-	inline.
-
-2001-03-23  Havoc Pennington  <hp@redhat.com>
-
-	* gdk/gdk-sections.txt: updates
-
-	* gtk/gtk-sections.txt: updates
-
-	* gtk/gtk-docs.sgml: mop up TreeModelSimple entity
-
-	* gdk/gdk-docs.sgml: remove input method
-	and input context docs
-
-2001-03-22  Havoc Pennington  <hp@redhat.com>
-
-	* gdk/tmpl/keys.sgml: docs on GdkKeymap
-
-2001-03-16  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/gtk-docs.sgml: remove GtkData entity usage
-
-2001-03-14  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/gtk-docs.sgml: remove gtkdata, gtktreemodelsimple
-
-	* gtk/gtk.types: remove gtk_data_get_type
-
-Wed Mar  7 23:58:53 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkwidget.sgml: Document ::hierarchy-changed.
-
-Wed Mar  7 00:27:13 2001  Jonathan Blandford  <jrb@redhat.com>
-
-	* gdk-pixbuf/Makefile.am (scan-build.stamp): add --nogtkinit.
-
-Sat Mar  3 17:20:53 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* */Makefile.am (scan-build.stamp): You can't use
-	+ as a metacharacter for basic regular expressions.
-	(This was the "all objects disappear")
-
-	* gdk/gdk-sections.txt gdk-pixbuf/gdk-pixbuf-sections.txt
-
-	* */*-unused.sgml: Remove a lot of empty stuff. (No
-	point in saving old docs when there aren't any.)
-
-2001-02-20  Havoc Pennington  <hp@pobox.com>
-
-	* gdk/tmpl/rgb.sgml: fix these docs to reflect the current state
-	of affairs
-
-2001-02-19  Havoc Pennington  <hp@pobox.com>
-
-	* gdk/Makefile.am (SCAN_OPTIONS): add --deprecated-guards
-
-	* gdk/gdk-sections.txt: update
-
-	* gdk/gdk-docs.sgml: update
-
-2001-02-18  Havoc Pennington  <hp@pobox.com>
-
-	* gdk-pixbuf/Makefile.am (IGNORE_HFILES): add gdk-pixbuf-marshal.h
-
-	* gdk-pixbuf/gdk-pixbuf-sections.txt: fixes
-
-Sun Feb 11 22:16:34 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* */Makefile.am: Use the new snazzy mother-of-all-gtk-doc-makefiles.
-
-	* gdk/tmpl/* gdk-pixbuf/tmpl/*: Recover a bunch of docs that were 
-	lost at one point.
-
-2001-02-08  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/windows.sgml: windows (file is blank)
-
-	* gtk/framebuffer.sgml: framebuffer (file is blank)
-
-	* gtk/compiling.sgml: how to use pkg-config, etc. (file is 
-	blank for now)
-
-2001-02-03  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtkfixed.sgml: Add the intro docs section
-
-2001-02-01  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/gtk-sections.txt: updated
-
-	* gtk/gtk-docs.sgml: Move the below from "Deprecated" section to
-	"special-purpose" section; move GtkItem out of deprecated section,
-	since GtkMenuItem uses it, though probably the GtkItem signals
-	should just migrate down to GtkMenuItem someday it won't happen
-	for 2.0
-
-	* gtk/tmpl/gtkgamma.sgml: add note about eventual removal
-
-	* gtk/tmpl/gtkcurve.sgml: add note about eventual removal
-
-	* gtk/tmpl/gtkruler.sgml: add note about eventual removal
-
-	* gtk/tmpl/gtkhruler.sgml: add note about eventual removal
-
-	* gtk/tmpl/gtkvruler.sgml: add note about eventual removal
-
-	* gtk/tmpl/gtkinputdialog.sgml: add note about eventual removal
-
-2001-01-30  Havoc Pennington  <hp@pobox.com>
-
-        Also committed a bunch of automatic changes made by gtk-doc, 
-	after reviewing for correctness.
-	
-	* gtk/tmpl/gtktext.sgml: add warning about deprecation and note
-	about what to use instead
-
-	* gtk/tmpl/gtktree.sgml: ditto
-
-	* gtk/Makefile.am (scan): pass --deprecated-guards option to
-	gtk-doc
-
-	* gtk/gtk-docs.sgml: move GtkText to the deprecated section 
-	instead of the GtkTextView section. Oops.
-
-Tue Jan 30 16:01:54 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkclist.sgml: Added note explaining how
-	the @button parameter is off by 1. (#6739)
-
-Mon Jan  8 15:21:15 2001  Owen Taylor  <otaylor@redhat.com>
-
-	* Makefile.am (SUBDIRS): Restore build.
-
-	* gdk/gdk-sections.txt gdk/gdk-docs.sgml 
-	  gdk-pixbuf/gdk-pixbuf-sections.txt 
-	  gtk/gtk-sections.txt gtk/gtk-docs.sgml: : Update.
-
-	* */tmpl/*: Changes from update.
-
-Wed Oct 25 15:19:40 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtknotebook.sgml: Moved function docs into .c
-	file, fairly extensive rewriting.
-
-Thu Nov 30 00:53:45 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkfilesel.sgml: Fix to say that file_selection_complete()
-	filters both files and directories.
-
-	* gtk/tmpl/gtktogglebutton.sgml: Fix description
-	of gtk_toggle_button_toggled().
-
-Fri Nov 17 17:31:30 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/Makefile.am (content_files): Add a couple
-	of files.
-
-Mon Nov 13 16:58:43 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* {gtk,gdk,gdk-pixbuf}/Makefile.am: cd to srcdir before
-	calling gtkdoc-fixref, distribute index.sgml.
-
-	* gtk/gtk-docs.sgml gtk/Makefile.am gtk/gtk-sections.txt
-	gtk/gtk.types: Update
-
-2000-11-05  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/tmpl/gtktexttag.sgml: documented some of the object args
-
-	* gtk/text_widget.sgml: fixups
-
-2000-11-04  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/gtk-sections.txt: Added a bunch of stuff from unused
-
-2000-11-01  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/tmpl/gtkmessagedialog.sgml: Check in these docs, I seem to
-	have written them a while ago then forgotten about them.
-
-2000-11-01  Havoc Pennington  <hp@pobox.com>
-
-	* gtk/gtk-sections.txt: Add new label functions
-
-Sun Oct 29 02:59:50 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* **: Updates to new gtk-doc, gsignal, causing quite
-	a bit of diffs but little real changes.
-
-2000-10-24  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/text_widget.sgml: add note about UTF-8
-
-2000-10-23  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/gtk-sections.txt: remove GtkTextBTree
-
-	* gtk/text_widget.sgml: Overview of the text widget
-
-	* gtk/gtk-docs.sgml: Change to using categories for the toplevel 
-	organization of the reference entries. We'll add an alphabetical 
-	index eventually. The category way is a lot easier for people who
-	aren't familiar with the widgets. Removed objects_grouped.sgml 
-	from gtk-docs.sgml for now, it doesn't seem useful anymore.
-
-	* gtk/objects_grouped.sgml: Add a section for deprecated
-	objects; add a section for the TextView object collection
-
-Wed Oct 18 11:01:12 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/Makefile.am gdk-pixbuf/Makefile.am: Fix typo
-
-2000-10-20  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/gtk-sections.txt: Add dialog docs
-
-2000-10-18  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/gtk-sections.txt: Some updates
-
-	* gdk/gdk-sections.txt: remove GdkPixbufAlphaMode
-
-	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add new API, remove 
-	GdkPixbufClass/GdkAnimationClass since those are private
-
-	* gdk-pixbuf/Makefile.am (IGNORE_HFILES): ignore more headers
-
-2000-10-06  Havoc Pennington  <hp@redhat.com>
-
-        * gdk-pixbuf/*.sgml, gdk-pixbuf/tmpl/*.sgml: copy in from 1.0
-	
-	* gdk-pixbuf/gdk-pixbuf-sections.txt: add Xlib sections from 1.0
-	tree
-
-	* gdk-pixbuf/Makefile.am: add stuff from 1.0 tree
-
-	* gdk-pixbuf/compiling.sgml: copy from 1.0 tree
-
-2000-09-26  Havoc Pennington  <hp@redhat.com>
-
-	* gtk/tmpl/gtkrc.sgml: Document stock icon stuff
-
-Thu Sep  7 14:15:03 2000  Owen Taylor  <otaylor@redhat.com>
-
-        * gdk/* gtk/*: Move gtk-reference files into GTK+ tree proper.
-
-	* Update sections.txt files to correspond to current code,
-	tweak .sgml files and Makefiles to correspond.
-
-	* gtk/tmpl/gtkradiomenuitem.sgml (this): Remove extra <para>
-
-2000-06-14  Damon Chaplin  <damon@helixcode.com>
-
-	* gtk/tmpl/gtktooltips.sgml: added a note about no-window widgets.
-
-Mon Jun  5 11:17:25 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* gdk/tmpl/general.sgml: Fix gdk_pointer_grab description
-	as pointed out by Dave Morse.
-
-Sun May 28 12:16:01 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkaspectframe.sgml: Fix typo
-	pointed out by Gregory McLean.
-
-2000-05-28  Damon Chaplin  <damon@helixcode.com>
-
-	* gdk/tmpl/event_structs.sgml: typo.
-
-2000-04-22  Damon Chaplin  <damon@helixcode.com>
-
-	* gtk/tmpl/gtkenums.sgml: update from Lee Mallabone
-	<lee0@callnetuk.com>
-
-2000-04-09  Damon Chaplin  <damon@helixcode.com>
-
-	* gtk/tmpl/gtkmain.sgml: update from Torsten Landschoff
-	<t.landschoff@gmx.net>
-
-	* gdk/tmpl/input_methods.sgml: 
-	* gdk/tmpl/general.sgml: fixed typos.
-
-Tue Mar 14 14:17:46 2000  Raph Levien  <raph@acm.org>
-
-	* gdk/tmpl/rgb.sgml: Better explanation of gdk_rgb_set_min_colors.
-	Thanks to Stric for spotting it.
-
-2000-03-07  Damon Chaplin  <damon@helixcode.com>
-
-	* gtk/tmpl/gtkclist.sgml: fix to gtk_clist_set_reorderable(). It
-	reorders rows, not columns. From Guy Harris <gharris@flashcom.net>.
-
-2000-02-29  Damon Chaplin  <damon@helixcode.com>
-
-	* gtk/tmpl/gtkmenuitem.sgml: minor fix from Nicolas GEORGE
-	<nicolas.george@ens.fr>.
-
-2000-02-28  Damon Chaplin  <damon@helixcode.com>
-
-	* gtk/tmpl/gtkradiomenuitem.sgml: 
-	* gtk/tmpl/gtkmenuitem.sgml: 
-	* gtk/tmpl/gtknotebook.sgml: new menu item sections and minor update to
-	notebook section from Nicolas GEORGE <nicolas.george@ens.fr>.
-
-2000-02-18  Damon Chaplin  <damon@helixcode.com>
-
-	* gtk/tmpl/gtktooltips.sgml: patch from
-	David Benson <daveb@idealab.com> to note that gtk_tooltips_set_colors()
-	does not work.
-
-2000-02-09  Damon Chaplin  <damon@helixcode.com>
-
-	* gdk/tmpl/input_methods.sgml: minor fix.
-
-2000-02-03  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gdk/gdk-sections.txt: rearranged a bit.
-
-	* gdk/tmpl/event_structs.sgml: updated.
-
-	* gtk/gtk-sections.txt: added INCLUDE tag for Private Info section.
-
-	* gdk/tmpl/color_contexts.sgml: added note saying it is deprecated.
-	* gdk/tmpl/dnd.sgml: added note saying read the GTK+ DnD docs.
-
-2000-02-02  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gdk/tmpl/*.sgml: ran make templates.
-
-	* gdk/gdk-docs.sgml: rearranged sections.
-
-	* gdk/tmpl/events.sgml: documented.
-
-	* gdk/tmpl/general.sgml: documented.
-
-	* gdk/tmpl/rgb.sgml: fixed a few '@' -> '#'.
-
-	* gdk/gdk-sections.txt: rearranged a few bits, including moving
-	GdkWChar and related functions from the input method section to the
-	font section, and GdkCapStyle etc. from Drawing Primitives to GCs.
-
-	* gdk/tmpl/images.sgml: documented.
-
-	* gdk/tmpl/drawing.sgml: updated.
-
-	* gdk/tmpl/regions.sgml: updated.
-
-	* gdk/tmpl/input_contexts.sgml: documented.
-
-	* gdk/tmpl/input_methods.sgml: documented.
-
-	* gdk/tmpl/selections.sgml: changed xref to a link since Jade says
-	a xref to a RefEntry is not supported.
-
-2000-01-19  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/tmpl/gtkscrollbar.sgml: Started.
-
-2000-01-08  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/tmpl/gtkclist.sgml: update from Paul Schifferer
-	<isengard@geocities.com>
-
-Wed Jan  5 10:23:41 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkprogress.sgml: Missing </listitem>, remove extra <para>
-	* gtk/tmpl/gtkobject.sgml: dos2unix
-	* gtk/tmpl/gtkcurve.sgml: missing </para>
-	* gtk/tmpl/gtkarg.sgml: dos2unix, missing </para>
-	* gtk/tmpl/gtkcolorsel.sgml: Missing </listitem>'s
-	* gtk/tmpl/gtksignal.sgml (signal): dos2unix, missing </para>'s
-	* gtk/tmpl/gtkmarshal.sgml: Missing </refsect2>
-
-1999-11-16  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/tmpl/gtkmenubar.sgml: fixed minor error - using <em>.
-
-	* gtk/tmpl/gtknotebook.sgml: 
-	* gtk/tmpl/gtklist.sgml: new sections from
-	Nicolas George <george@clipper.ens.fr>, with help from
-	"Bob Springett"	<bobspringett@claranet.fr>.
-
-	* gtk/tmpl/gtkobject.sgml: 
-	* gtk/tmpl/gtkarg.sgml: new sections from
-	David Benson <daveb@idealab.com>.
-
-	* gtk/tmpl/gtkvbox.sgml: 
-	* gtk/tmpl/gtkhbox.sgml: fixed line endings.
-
-	* gtk/tmpl/gtkvbbox.sgml: update from Lee Mallabone
-	<lee0@callnetuk.com>
-
-	* gdk/tmpl/drawing.sgml: fixed error in gdk_draw_arc() @angle2 param
-	- it is relative to @angle1 rather than from the 3 o'clock position.
-
-	* gtk/tmpl/gtkfontseldlg.sgml: changed enums to use @ fields.
-
-	* gtk/tmpl/gtkcolorsel.sgml: 
-	* gtk/tmpl/gtkcolorseldlg.sgml: 
-	* gtk/tmpl/gtkprogress.sgml: 
-	* gtk/tmpl/gtkprogressbar.sgml: new sections from Tom Martone
-	<tom@martoneconsulting.com>
-
-	* gtk/tmpl/gtkclist.sgml: partially written documentation from
-	Paul Schifferer <isengard@geocities.com> who won't be able to finish it
-
-1999-09-22  Martin Norb�ck  <d95mback@dtek.chalmers.se>
-	
-	* gtk/tmpl/gtkclist.sgml: Added information about the sorting functions
-
-Tue Oct 26 16:50:15 1999  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtkrc.sgml: Added information about widget
-	paths and pattern matching.
-
-1999-09-22  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/tmpl/*.sgml: ran make templates, to fix problems with structs.
-
-	* gtk/gtk-sections.txt: rearranged GtkCombo section.
-
-	* gtk/tmpl/gtkvseparator.sgml: 
-	* gtk/tmpl/gtkhseparator.sgml: 
-	* gtk/tmpl/gtkgc.sgml: 
-	* gtk/tmpl/gtkfeatures.sgml: 
-	* gtk/tmpl/gtktipsquery.sgml: 
-	* gtk/tmpl/gtkitem.sgml: 
-	* gtk/tmpl/gtkinvisible.sgml: 
-	* gtk/tmpl/gtkgamma.sgml: 
-	* gtk/tmpl/gtkdata.sgml: 
-	* gtk/tmpl/gtkcurve.sgml: 
-	* gtk/tmpl/gtkcombo.sgml: 
-	* gtk/tmpl/gtkaccellabel.sgml: documented.
-
-1999-09-20  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/gtk-docs.sgml: added role="no-toc" to the GTK+ Widgets & Objects
-	chapter since we've created our own special contents page.
-
-1999-09-19  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/tmpl/gtkmarshal.sgml: 
-	* gtk/tmpl/gtksignal.sgml: new sections from 
-         David Benson <daveb@idealab.com>.
-
-	* gtk/gtk-sections.txt: rearranged signal sections, and made most
-	marshallers private. Moved GtkSignalRunType to signals section.
-
-	* gtk/tmpl/gtkradiobutton.sgml: new section from Lee Mallabone.
-
-1999-09-17  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/gtk-docs.sgml: removed menu factory and debugging sections.
-
-	* gtk/gtk-sections.txt: made menu factory stuff private since it is
-	deprecated. Also made debugging stuff private since it is only useful
-	within GTK+.
-
-1999-09-14  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/tmpl/gtkfilesel.sgml: fixed mismatched parentheses.
-
-1999-09-02  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gdk/tmpl/event_structs.sgml: 
-	* gdk/tmpl/drawing.sgml: minor fixes.
-
-1999-09-20  David C. Mason  <dcm@redhat.com>
-
-	* gtk/tmpl/gtkimage.sgml: first pass at gtkimage... not complete
-
-1999-08-28  Damon Chaplin  <damon@karuna.freeserve.co.uk>
-
-	* gtk/tmpl/gtkbbox.sgml: new section from Lee Mallabone.
-
-	* gdk/gdk-sections.txt: rearranged rgb, regions, and drawing sections.
-
-	* gdk/tmpl/rgb.sgml: new section from Raph Levien, with a few changes
-	by me, including a little example app.
-
-	* gdk/tmpl/regions.sgml: 
-	* gdk/tmpl/event_structs.sgml: 
-	* gdk/tmpl/drawing.sgml: my first attempt.
-	* gdk/tmpl/cursors.sgml: tiny changes.
-
-Tue Aug 17 09:14:01 1999  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/tmpl/gtktypeutils.sgml: Fix corrupted end tag.
-
-	* gtk/tmpl/gtkselection.sgml gtk/tmpl/gtkrc.sgml
-	  gtk/tmpl/gtkdnd.sgml gtk/tmpl/gtkarrow.sgml
-	  gtk/tmpl/gtkpaned.sgml gtk/tmpl/gtkmisc.sgml
-	  gtk/tmpl/gtkhandlebox.sgml gtk/tmpl/gtkctree.sgml:
-	Added missing close tags.
-
-Thu Aug 19 14:43:08 1999  Owen Taylor  <otaylor@redhat.com>
-
-	* gdk/tmpl/gcs.sgml gdk/gdk-sections.txt: Added section. 
-	  (Written a while ago but fell through the cracks)
-
-	* gtk/gtk-docs.sgml: Add a &hash; entity here as a
-	  temporary hack. (There is no standard entity
-	  for '#', and no way of escaping '#' in gtk-doc)
-
-	* gtk/tmpl/gtkrc.sgml: Use the above to fix up #rrggbb
-	  string literals.
-
-	* gtk/tmpl/gtkdrawingarea.sgml: Fixed a couple
-	  of errors in the example. (pointed out by
-	  Nick Lamb)
-
-Mon Aug 16 6:60:53 1999  Owen Taylor  <otaylor@redhat.com>
-
-	* gdk/tmpl/properties.sgml
-	  gdk/tmpl/selections.sgml
-	  gdk/tmpl/input_devices.sgml: Documented
-
-	* gdk/gdk-sections.txt: Moved around types for
-	  input devices properties and selections, marked
-	  a few functions as private.
+2002-03-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_dashes): Don't clear
+	all of the pen_style, just the PS_STYLE_MASK. Seems to fix #74441,
+	but that is just the special case of one-pixel wide one-pixel
+	on-off dotted lines. To fully implement generic X11 style dashed
+	lines a major rewrite would be needed.
+
+2002-03-21  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Trivial typo
+	fix. (Vitaly Tishkov, #75726)
+
+Thu Mar 21 10:04:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_real_get_depth): Remove
+	some left over debugging code with a G_BREAKPOINT()
+	in it.
+
+Wed Mar 20 19:33:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_main_button): When
+	changing months when the user clicks on a prev-month
+	or next-month day, focus and select the new day.
+	Ignore double clicks on prev-month, next-month days.
+	(Based on suggestions from Andras Salamon, #74173)
+
+	* gtk/gtkcalendar.c: Implement th01700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002d0000002f746d702f6f726269742d6d617474686961732f6f72622d3230343432383833373231323236303434343638000000001800000000000000481c141e963f0a0d0400000015e1f72e64770034"
+ADD 134217747 "def" "/apps/nautilus" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002d0000002f746d702f6f726269742d6d617474686961732f6f72622d3230343432383833373231323236303434343638000000001800000000000000481c141e963f0a0d0400000015e1f72e64770034"
+ADD 150994964 "def" "/system/gnome-vfs" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002d0000002f746d702f6f726269742d6d617474686961732f6f72622d3230343432383833373231323236303434343638000000001800000000000000481c141e963f0a0d0400000015e1f72e64770034"
+CLIENTADD "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002b0000002f746d702f6f726269742d6d617474686961732f6f72622d3738303530313930373932313535333437300000000000001800000000000000aa339f6f8b3d48850400000096860fef60231737"
+ADD 167772181 "def" "/apps/nautilus" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002b0000002f746d702f6f726269742d6d617474686961732f6f72622d3738303530313930373932313535333437300000000000001800000000000000aa339f6f8b3d48850400000096860fef60231737"
+CLIENTADD "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002b0000002f746d702f6f726269742d6d617474686961732f6f72622d36313132313137333236333037393935383300000000000018000000000000008d73b7d1346083e8040000009196fd8de688604d"
+ADD 184549398 "def" "/apps/nautilus" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002b0000002f746d702f6f726269742d6d617474686961732f6f72622d36313132313137333236333037393935383300000000000018000000000000008d73b7d1346083e8040000009196fd8de688604d"
+CLIENTADD "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002d0000002f746d702f6f726269742d6d617474686961732f6f72622d3135363339303134353031393239333638383337000000001800000000000000ddd33ce6282042d304000000e640a9f986363f72"
+ADD 201326615 "def" "/apps/nautilus" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002d0000002f746d702f6f726269742d6d617474686961732f6f72622d3135363339303134353031393239333638383337000000001800000000000000ddd33ce6282042d304000000e640a9f986363f72"
+CLIENTADD "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002c0000002f746d702f6f726269742d6d617474686961732f6f72622d3131383231333939373238343433353033323400000000001800000000000000d4f6f197a3d8217704000000dd5fdd74d176f84c"
+ADD 218103832 "def" "/apps/nautilus" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002c0000002f746d702f6f726269742d6d617474686961732f6f72622d3131383231333939373238343433353033323400000000001800000000000000d4f6f197a3d8217704000000dd5fdd74d176f84c"
+ADD 234881049 "def" "/system/gnome-vfs" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002b0000002f746d702f6f726269742d6d617474686961732f6f72622d3738303530313930373932313535333437300000000000001800000000000000aa339f6f8b3d48850400000096860fef60231737"
+ADD 251658266 "def" "/system/gnome-vfs" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002d0000002f746d702f6f726269742d6d617474686961732f6f72622d3135363339303134353031393239333638383337000000001800000000000000ddd33ce6282042d304000000e640a9f986363f72"
+ADD 268435483 "def" "/system/gnome-vfs" "IOR:010000001700000049444c3a436f6e6669674c697374656e65723a312e30000001000000caaedfba54000000010100002b0000002f746d702f6f726269742d6d617474686961732f6f72622d36313132313137333236333037393935383300000000000018000000000000008d73b7d1346083e8040000009196fd8de688604d"
+ADD 285212700 "def" "/system/gnome-vfs" ""
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a new <A
+HREF="gtk-themeable-stock-images.html#GTKICONFACTORY"
+>GtkIconFactory</A
+></TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN6890"
+></A
+><H3
+><A
+NAME="GTK-ICON-FACTORY-REMOVE-DEFAULT"
+></A
+>gtk_icon_factory_remove_default ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>void        gtk_icon_factory_remove_default (<A
+HREF="gtk-themeable-stock-images.html#GTKICONFACTORY"
+>GtkIconFactory</A
+> *factory);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Removes an icon factory from the list of default icon
+factories. Not normally used; you might use it for a library that
+can be unloaded or shut down.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN6897"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>factory</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONFACTORY"
+>GtkIconFactory</A
+> previously added with <A
+HREF="gtk-themeable-stock-images.html#GTK-ICON-FACTORY-ADD-DEFAULT"
+>gtk_icon_factory_add_default</A
+>()</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN6908"
+></A
+><H3
+><A
+NAME="GTK-ICON-SET-ADD-SOURCE"
+></A
+>gtk_icon_set_add_source ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>void        gtk_icon_set_add_source         (<A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> *icon_set,
+                                             const <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+> *source);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Icon sets have a list of <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+>, which they use as base
+icons for rendering icons in different states and sizes. Icons are
+scaled, made to look insensitive, etc. in
+<A
+HREF="gtk-themeable-stock-images.html#GTK-ICON-SET-RENDER-ICON"
+>gtk_icon_set_render_icon</A
+>(), but <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> needs base images to
+work with. The base images and when to use them are described by
+a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+>.</P
+><P
+>This function copies <TT
+CLASS="PARAMETER"
+><I
+>source</I
+></TT
+>, so you can reuse the same source immediately
+without affecting the icon set.</P
+><P
+>An example of when you'd use this function: a web browser's "Back
+to Previous Page" icon might point in a different direction in
+Hebrew and in English; it might look different when insensitive;
+and it might change size depending on toolbar mode (small/large
+icons). So a single icon set would contain all those variants of
+the icon, and you might add a separate source for each one.</P
+><P
+>You should nearly always add a "default" icon source with all
+fields wildcarded, which will be used as a fallback if no more
+specific source matches. <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> always prefers more specific
+icon sources to more generic icon sources. The order in which you
+add the sources to the icon set does not matter.</P
+><P
+><A
+HREF="gtk-themeable-stock-images.html#GTK-ICON-SET-NEW-FROM-PIXBUF"
+>gtk_icon_set_new_from_pixbuf</A
+>() creates a new icon set with a
+default icon source based on the given pixbuf.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN6927"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>source</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+></TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN6942"
+></A
+><H3
+><A
+NAME="GTK-ICON-SET-COPY"
+></A
+>gtk_icon_set_copy ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+>* gtk_icon_set_copy               (<A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> *icon_set);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Copies <TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+> by value.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN6951"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a new <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> identical to the first.</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN6966"
+></A
+><H3
+><A
+NAME="GTK-ICON-SET-NEW"
+></A
+>gtk_icon_set_new ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+>* gtk_icon_set_new                (void);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Creates a new <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+>. A <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> represents a single icon
+in various sizes and widget states. It can provide a <GTKDOCLINK
+HREF="GDKPIXBUF"
+>GdkPixbuf</GTKDOCLINK
+>
+for a given size and state on request, and automatically caches
+some of the rendered <GTKDOCLINK
+HREF="GDKPIXBUF"
+>GdkPixbuf</GTKDOCLINK
+> objects.</P
+><P
+>Normally you would use <A
+HREF="gtkwidget.html#GTK-WIDGET-RENDER-ICON"
+>gtk_widget_render_icon</A
+>() instead of
+using <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> directly. The one case where you'd use
+<A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> is to create application-specific icon sets to place in
+a <A
+HREF="gtk-themeable-stock-images.html#GTKICONFACTORY"
+>GtkIconFactory</A
+>.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN6982"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a new <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+></TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN6992"
+></A
+><H3
+><A
+NAME="GTK-ICON-SET-NEW-FROM-PIXBUF"
+></A
+>gtk_icon_set_new_from_pixbuf ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+>* gtk_icon_set_new_from_pixbuf    (<GTKDOCLINK
+HREF="GDKPIXBUF"
+>GdkPixbuf</GTKDOCLINK
+> *pixbuf);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Creates a new <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> with <TT
+CLASS="PARAMETER"
+><I
+>pixbuf</I
+></TT
+> as the default/fallback
+source image. If you don't add any additional <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+> to the
+icon set, all variants of the icon will be created from <TT
+CLASS="PARAMETER"
+><I
+>pixbuf</I
+></TT
+>,
+using scaling, pixelation, etc. as required to adjust the icon size
+or make the icon look insensitive/prelighted.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7004"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>pixbuf</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <GTKDOCLINK
+HREF="GDKPIXBUF"
+>GdkPixbuf</GTKDOCLINK
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a new <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+></TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7019"
+></A
+><H3
+><A
+NAME="GTK-ICON-SET-REF"
+></A
+>gtk_icon_set_ref ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+>* gtk_icon_set_ref                (<A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> *icon_set);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Increments the reference count on <TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7028"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+>.</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> <TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>.</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7043"
+></A
+><H3
+><A
+NAME="GTK-ICON-SET-RENDER-ICON"
+></A
+>gtk_icon_set_render_icon ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><GTKDOCLINK
+HREF="GDKPIXBUF"
+>GdkPixbuf</GTKDOCLINK
+>*  gtk_icon_set_render_icon        (<A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> *icon_set,
+                                             <A
+HREF="gtkstyle.html"
+>GtkStyle</A
+> *style,
+                                             <A
+HREF="gtkwidget.html#GTKTEXTDIRECTION"
+>GtkTextDirection</A
+> direction,
+                                             <A
+HREF="gtk-standard-enumerations.html#GTKSTATETYPE"
+>GtkStateType</A
+> state,
+                                             <A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+> size,
+                                             <A
+HREF="gtkwidget.html"
+>GtkWidget</A
+> *widget,
+                                             const char *detail);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Renders an icon using <A
+HREF="gtkstyle.html#GTK-STYLE-RENDER-ICON"
+>gtk_style_render_icon</A
+>(). In most cases,
+<A
+HREF="gtkwidget.html#GTK-WIDGET-RENDER-ICON"
+>gtk_widget_render_icon</A
+>() is better, since it automatically provides
+most of the arguments from the current widget settings.  This
+function never returns <TT
+CLASS="LITERAL"
+>NULL</TT
+>; if the icon can't be rendered
+(perhaps because an image file fails to load), a default "missing
+image" icon will be returned instead.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7059"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>style</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtkstyle.html"
+>GtkStyle</A
+> associated with <TT
+CLASS="PARAMETER"
+><I
+>widget</I
+></TT
+>, or <TT
+CLASS="LITERAL"
+>NULL</TT
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>direction</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> text direction</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>state</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> widget state</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>size</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> icon size</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>widget</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> widget that will display the icon, or <TT
+CLASS="LITERAL"
+>NULL</TT
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>detail</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> detail to pass to the theme engine, or <TT
+CLASS="LITERAL"
+>NULL</TT
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <GTKDOCLINK
+HREF="GDKPIXBUF"
+>GdkPixbuf</GTKDOCLINK
+> to be displayed</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7103"
+></A
+><H3
+><A
+NAME="GTK-ICON-SET-UNREF"
+></A
+>gtk_icon_set_unref ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>void        gtk_icon_set_unref              (<A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> *icon_set);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Decrements the reference count on <TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>, and frees memory
+if the reference count reaches 0.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7111"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+></TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7121"
+></A
+><H3
+><A
+NAME="GTK-ICON-SIZE-LOOKUP"
+></A
+>gtk_icon_size_lookup ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><GTKDOCLINK
+HREF="GBOOLEAN"
+>gboolean</GTKDOCLINK
+>    gtk_icon_size_lookup            (<A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+> size,
+                                             <GTKDOCLINK
+HREF="GINT"
+>gint</GTKDOCLINK
+> *width,
+                                             <GTKDOCLINK
+HREF="GINT"
+>gint</GTKDOCLINK
+> *height);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Obtains the pixel size of a semantic icon size, normally <TT
+CLASS="PARAMETER"
+><I
+>size</I
+></TT
+> would be
+<GTKDOCLINK
+HREF="GTK-ICON-SIZE-MENU-CAPS"
+>GTK_ICON_SIZE_MENU</GTKDOCLINK
+>, <GTKDOCLINK
+HREF="GTK-ICON-SIZE-BUTTON-CAPS"
+>GTK_ICON_SIZE_BUTTON</GTKDOCLINK
+>, etc.  This function
+isn't normally needed, <A
+HREF="gtkwidget.html#GTK-WIDGET-RENDER-ICON"
+>gtk_widget_render_icon</A
+>() is the usual
+way to get an icon for rendering, then just look at the size of
+the rendered pixbuf. The rendered pixbuf may not even correspond to
+the width/height returned by <A
+HREF="gtk-themeable-stock-images.html#GTK-ICON-SIZE-LOOKUP"
+>gtk_icon_size_lookup</A
+>(), because themes
+are free to render the pixbuf however they like, including changing
+the usual size.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7136"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>size</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> an icon size</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>width</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> location to store icon width</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>height</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> location to store icon height</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> <TT
+CLASS="LITERAL"
+>TRUE</TT
+> if <TT
+CLASS="PARAMETER"
+><I
+>size</I
+></TT
+> was a valid size</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7159"
+></A
+><H3
+><A
+NAME="GTK-ICON-SIZE-REGISTER"
+></A
+>gtk_icon_size_register ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+> gtk_icon_size_register          (const <GTKDOCLINK
+HREF="GCHAR"
+>gchar</GTKDOCLINK
+> *name,
+                                             <GTKDOCLINK
+HREF="GINT"
+>gint</GTKDOCLINK
+> width,
+                                             <GTKDOCLINK
+HREF="GINT"
+>gint</GTKDOCLINK
+> height);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Registers a new icon size, along the same lines as <GTKDOCLINK
+HREF="GTK-ICON-SIZE-MENU-CAPS"
+>GTK_ICON_SIZE_MENU</GTKDOCLINK
+>,
+etc. Returns the integer value for the size.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7170"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> name of the icon size</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>width</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> the icon width</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>height</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> the icon height</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> integer value representing the size&#13;</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7191"
+></A
+><H3
+><A
+NAME="GTK-ICON-SIZE-REGISTER-ALIAS"
+></A
+>gtk_icon_size_register_alias ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>void        gtk_icon_size_register_alias    (const <GTKDOCLINK
+HREF="GCHAR"
+>gchar</GTKDOCLINK
+> *alias,
+                                             <A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+> target);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Registers <TT
+CLASS="PARAMETER"
+><I
+>alias</I
+></TT
+> as another name for <TT
+CLASS="PARAMETER"
+><I
+>target</I
+></TT
+>.
+So calling <A
+HREF="gtk-themeable-stock-images.html#GTK-ICON-SIZE-FROM-NAME"
+>gtk_icon_size_from_name</A
+>() with <TT
+CLASS="PARAMETER"
+><I
+>alias</I
+></TT
+> as argument
+will return <TT
+CLASS="PARAMETER"
+><I
+>target</I
+></TT
+>.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7204"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>alias</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> an alias for <TT
+CLASS="PARAMETER"
+><I
+>target</I
+></TT
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>target</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> an existing icon size</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7218"
+></A
+><H3
+><A
+NAME="GTK-ICON-SIZE-FROM-NAME"
+></A
+>gtk_icon_size_from_name ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+> gtk_icon_size_from_name         (const <GTKDOCLINK
+HREF="GCHAR"
+>gchar</GTKDOCLINK
+> *name);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Looks up the icon size associated with <TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+>.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7227"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>name</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> the name to look up.</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> the icon size with the given name.</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7240"
+></A
+><H3
+><A
+NAME="GTK-ICON-SIZE-GET-NAME"
+></A
+>gtk_icon_size_get_name ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>G_CONST_RETURN <GTKDOCLINK
+HREF="GCHAR"
+>gchar</GTKDOCLINK
+>* gtk_icon_size_get_name
+                                            (<A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+> size);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Gets the canonical name of the given icon size. The returned string 
+is statically allocated and should not be freed.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7248"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>size</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+>.</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> the name of the given icon size.</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7262"
+></A
+><H3
+><A
+NAME="GTK-ICON-SET-GET-SIZES"
+></A
+>gtk_icon_set_get_sizes ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>void        gtk_icon_set_get_sizes          (<A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+> *icon_set,
+                                             <A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+> **sizes,
+                                             <GTKDOCLINK
+HREF="GINT"
+>gint</GTKDOCLINK
+> *n_sizes);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Obtains a list of icon sizes this icon set can render. The returned
+array must be freed with <GTKDOCLINK
+HREF="G-FREE"
+>g_free</GTKDOCLINK
+>().</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7272"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>icon_set</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSET"
+>GtkIconSet</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>sizes</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> return location for array of sizes</TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>n_sizes</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> location to store number of elements in returned array</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7290"
+></A
+><H3
+><A
+NAME="GTK-ICON-SOURCE-GET-DIRECTION"
+></A
+>gtk_icon_source_get_direction ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><A
+HREF="gtkwidget.html#GTKTEXTDIRECTION"
+>GtkTextDirection</A
+> gtk_icon_source_get_direction
+                                            (const <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+> *source);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Obtains the text direction this icon source applies to. The return
+value is only useful/meaningful if the text direction is <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>not</I
+></SPAN
+> 
+wildcarded.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7299"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>source</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> text direction this source matches</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7313"
+></A
+><H3
+><A
+NAME="GTK-ICON-SOURCE-GET-DIRECTION-WILDCARDED"
+></A
+>gtk_icon_source_get_direction_wildcarded ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><GTKDOCLINK
+HREF="GBOOLEAN"
+>gboolean</GTKDOCLINK
+>    gtk_icon_source_get_direction_wildcarded
+                                            (const <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+> *source);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Gets the value set by <A
+HREF="gtk-themeable-stock-images.html#GTK-ICON-SOURCE-SET-DIRECTION-WILDCARDED"
+>gtk_icon_source_set_direction_wildcarded</A
+>().</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7322"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>source</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> <TT
+CLASS="LITERAL"
+>TRUE</TT
+> if this icon source is a base for any text direction variant</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7337"
+></A
+><H3
+><A
+NAME="GTK-ICON-SOURCE-GET-FILENAME"
+></A
+>gtk_icon_source_get_filename ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>G_CONST_RETURN <GTKDOCLINK
+HREF="GCHAR"
+>gchar</GTKDOCLINK
+>* gtk_icon_source_get_filename
+                                            (const <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+> *source);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Retrieves the source filename, or <TT
+CLASS="LITERAL"
+>NULL</TT
+> if none is set.  The
+filename is not a copy, and should not be modified or expected to
+persist beyond the lifetime of the icon source.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7346"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>source</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> image filename</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7360"
+></A
+><H3
+><A
+NAME="GTK-ICON-SOURCE-GET-PIXBUF"
+></A
+>gtk_icon_source_get_pixbuf ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><GTKDOCLINK
+HREF="GDKPIXBUF"
+>GdkPixbuf</GTKDOCLINK
+>*  gtk_icon_source_get_pixbuf      (const <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+> *source);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Retrieves the source pixbuf, or <TT
+CLASS="LITERAL"
+>NULL</TT
+> if none is set.
+The reference count on the pixbuf is not incremented.</P
+><P
+></P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN7369"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+WIDTH="100%"
+BGCOLOR="#FFD0D0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><TT
+CLASS="PARAMETER"
+><I
+>source</I
+></TT
+>&nbsp;:</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> a <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="20%"
+ALIGN="RIGHT"
+VALIGN="TOP"
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Returns</I
+></SPAN
+> :</TD
+><TD
+WIDTH="80%"
+ALIGN="LEFT"
+VALIGN="TOP"
+> source pixbuf</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><HR><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN7383"
+></A
+><H3
+><A
+NAME="GTK-ICON-SOURCE-GET-SIZE"
+></A
+>gtk_icon_source_get_size ()</H3
+><TABLE
+BORDER="0"
+BGCOLOR="#D6E8FF"
+WIDTH="100%"
+CELLPADDING="6"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+><A
+HREF="gtk-themeable-stock-images.html#GTKICONSIZE"
+>GtkIconSize</A
+> gtk_icon_source_get_size        (const <A
+HREF="gtk-themeable-stock-images.html#GTKICONSOURCE"
+>GtkIconSource</A
+> *source);</PRE
+></TD
+></TR
+></TABLE
+><P
+>Obtains the icon size this source applies to. The return value
+is only useful/meaningful if the icon size is <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
