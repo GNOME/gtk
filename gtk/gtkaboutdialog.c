@@ -1924,6 +1924,14 @@ display_credits_dialog (GtkWidget *button,
 }
 
 static void
+set_policy (GtkWidget *sw)
+{
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+				  GTK_POLICY_AUTOMATIC,
+				  GTK_POLICY_AUTOMATIC);  
+}
+
+static void
 display_license_dialog (GtkWidget *button, 
 			gpointer   data)
 {
