@@ -146,7 +146,7 @@ static void         gtk_tree_model_filter_rows_reordered                  (GtkTr
                                                                            gpointer                data);
 
 /* GtkTreeModel interface */
-static guint        gtk_tree_model_filter_get_flags                       (GtkTreeModel           *model);
+static GtkTreeModelFlags gtk_tree_model_filter_get_flags                       (GtkTreeModel           *model);
 static gint         gtk_tree_model_filter_get_n_columns                   (GtkTreeModel           *model);
 static GType        gtk_tree_model_filter_get_column_type                 (GtkTreeModel           *model,
                                                                            gint                    index);
@@ -1784,7 +1784,7 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 }
 
 /* TreeModelIface implementation */
-static guint
+static GtkTreeModelFlags
 gtk_tree_model_filter_get_flags (GtkTreeModel *model)
 {
   GtkTreeModelFlags flags;
