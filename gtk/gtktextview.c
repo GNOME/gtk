@@ -79,7 +79,9 @@
 #define SCREEN_WIDTH(widget) text_window_get_width (GTK_TEXT_VIEW (widget)->text_window)
 #define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->text_window)
 
-/* #define DEBUG_VALIDATION_AND_SCROLLING */
+#if 0
+#define DEBUG_VALIDATION_AND_SCROLLING
+#endif
 
 #ifdef DEBUG_VALIDATION_AND_SCROLLING
 #define DV(x) (x)
@@ -1526,7 +1528,7 @@ gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gdouble upper)
         }
 
       gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
-      DV(g_print(">Changed adj upper to %d ("G_STRLOC")\n", upper));
+      DV(g_print(">Changed adj upper to %g ("G_STRLOC")\n", upper));
       
       if (value_changed)
         {
@@ -2785,10 +2787,18 @@ invalidated_handler (GtkTextLayout *layout,
   DV(g_print(">Invalidate, onscreen_validated = FALSE ("G_STRLOC")\n"));
   
   if (!text_view->first_validate_idle)
-    text_view->first_validate_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 1, first_validate_callback, text_view, NULL);
-
+    {
+      text_view->first_validate_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 2, first_validate_callback, text_view, NULL);
+      DV (g_print (G_STRLOC": adding first validate idle %d\n",
+                   text_view->first_validate_idle));
+    }
+      
   if (!text_view->incremental_validate_idle)
-    text_view->incremental_validate_idle = g_idle_add_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE, incremental_validate_callback, text_view, NULL);
+    {
+      text_view->incremental_validate_idle = g_idle_add_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE, incremental_validate_callback, text_view, NULL);
+      DV (g_print (G_STRLOC": adding incremental validate idle %d\n",
+                   text_view->incremental_validate_idle));
+    }
 }
 
 static void
@@ -3181,6 +3191,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     {
       gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), "\n", 1,
                                                     text_view->editable);
+      DV(g_print (G_STRLOC": scrolling to mark\n"));
       gtk_text_view_scroll_to_mark (text_view,
                                     gtk_text_buffer_get_mark (get_buffer (text_view),
                                                               "insert"),
@@ -3195,6 +3206,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     {
       gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), "\t", 1,
                                                     text_view->editable);
+      DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
                                           gtk_text_buffer_get_mark (get_buffer (text_view),
                                                                     "insert"));
@@ -3415,6 +3427,8 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
+  DV(g_print (G_STRLOC": focus_in_event\n"));
+  
   if (text_view->cursor_visible && text_view->layout)
     {
       gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
@@ -3440,6 +3454,8 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
+  DV(g_print (G_STRLOC": focus_out_event\n"));
+  
   if (text_view->cursor_visible && text_view->layout)
     {
       gtk_text_layout_set_cursor_visible (text_view->layout, FALSE);
@@ -3506,6 +3522,9 @@ gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
   g_return_if_fail (text_view->layout != NULL);
   g_return_if_fail (text_view->xoffset >= 0);
   g_return_if_fail (text_view->yoffset >= 0);
+  
+  DV (g_print (G_STRLOC": first_validate_idle: %d\n",
+               text_view->first_validate_idle));
   
   if (!text_view->onscreen_validated)
     {
@@ -3908,6 +3927,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       else
         gtk_text_buffer_place_cursor (get_buffer (text_view), &newplace);
 
+      DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
                                           gtk_text_buffer_get_mark (get_buffer (text_view),
                                                                     "insert"));
@@ -3983,6 +4003,7 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
   /* Adjust to have the cursor _entirely_ onscreen, move_mark_onscreen
    * only guarantees 1 pixel onscreen.
    */
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
                                                                 "insert"));
@@ -4139,7 +4160,8 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
         }
 
       gtk_text_buffer_end_user_action (get_buffer (text_view));
-      
+
+      DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
                                           gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
     }
@@ -4149,6 +4171,7 @@ static void
 gtk_text_view_cut_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_cut_clipboard (get_buffer (text_view), text_view->editable);
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
                                                                 "insert"));
@@ -4158,6 +4181,7 @@ static void
 gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_copy_clipboard (get_buffer (text_view));
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
                                                                 "insert"));
@@ -4167,6 +4191,7 @@ static void
 gtk_text_view_paste_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_paste_clipboard (get_buffer (text_view), text_view->editable);
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
                                                                 "insert"));
@@ -4206,9 +4231,12 @@ move_mark_to_pointer_and_scroll (GtkTextView *text_view,
   GdkModifierType state;
   GtkTextIter newplace;
 
+  /*   DV(g_print (G_STRLOC": begin\n")); */
+  
   gdk_window_get_pointer (text_view->text_window->bin_window,
                           &x, &y, &state);
-  
+
+  /*   DV(g_print (G_STRLOC": get iter at pixel\n"); */
   gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                      &newplace,
                                      x + text_view->xoffset,
@@ -4218,10 +4246,12 @@ move_mark_to_pointer_and_scroll (GtkTextView *text_view,
     GtkTextMark *mark =
       gtk_text_buffer_get_mark (get_buffer (text_view), mark_name);
 
+    DV(g_print (G_STRLOC": move mark\n"));
     gtk_text_buffer_move_mark (get_buffer (text_view),
                                mark,
                                &newplace);
 
+    DV(g_print (G_STRLOC": scrolling onscreen\n"));
     gtk_text_view_scroll_mark_onscreen (text_view, mark);
   }
 }
@@ -4235,6 +4265,7 @@ selection_scan_timeout (gpointer data)
   
   text_view = GTK_TEXT_VIEW (data);
 
+  DV(g_print (G_STRLOC": calling move_mark_to_pointer_and_scroll\n"));
   move_mark_to_pointer_and_scroll (text_view, "insert");
 
   GDK_THREADS_LEAVE ();
@@ -4267,7 +4298,8 @@ drag_scan_timeout (gpointer data)
   gtk_text_buffer_move_mark (get_buffer (text_view),
                              text_view->dnd_mark,
                              &newplace);
-  
+
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_to_mark (text_view,
                                 text_view->dnd_mark,
                                 DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
@@ -4280,6 +4312,7 @@ drag_scan_timeout (gpointer data)
 static gint
 selection_motion_event_handler (GtkTextView *text_view, GdkEventMotion *event, gpointer data)
 {
+  DV(g_print (G_STRLOC": calling move_mark_to_pointer_and_scroll\n"));
   move_mark_to_pointer_and_scroll (text_view, "insert");
 
   /* If we had to scroll offscreen, insert a timeout to do so
@@ -4334,6 +4367,7 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view, GdkEventButton *event)
     }
 
   /* one last update to current position */
+  DV(g_print (G_STRLOC": calling move_mark_to_pointer_and_scroll\n"));
   move_mark_to_pointer_and_scroll (text_view, "insert");
 
   gtk_grab_remove (GTK_WIDGET (text_view));
@@ -4755,6 +4789,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
                              text_view->dnd_mark,
                              &newplace);
 
+  DV(g_print (G_STRLOC": scrolling to mark\n"));
   gtk_text_view_scroll_to_mark (text_view,
                                 text_view->dnd_mark,
                                 DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
@@ -5091,7 +5126,8 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
     }
 
   gtk_text_buffer_end_user_action (get_buffer (text_view));
-  
+
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
                                                                 "insert"));

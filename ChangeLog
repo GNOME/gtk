@@ -1,5 +1,10 @@
 2001-08-30  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (invalidated_handler): put validate idle at
+	resize - 2 just for flexibility
+
+2001-08-30  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextdisplay.c (render_layout_line): handle NULL shaped
 	object from the empty-child-anchor case by drawing a little box.
 	
