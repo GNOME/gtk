@@ -1,3 +1,9 @@
+Thu Jun  4 12:12:11 BST 1998  Tony Gale  <gale@gtk.org>
+
+	* examples/extract.sh, examples/extract.awk:
+	  New files to automagically extract code examples from the
+	  tutorial.
+
 Tue Jun  2 20:04:45 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_page_select) (gtk_notebook_focus)
