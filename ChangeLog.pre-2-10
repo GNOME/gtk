@@ -1,3 +1,9 @@
+Mon Sep  9 16:16:25 2002  Shivram U  <shivaram.upadhyayula@wipro.com>
+
+	* gtk/gtktextview.c (gtk_text_view_drag_motion): If the end iter
+	is also a part of the selection, then we are in the selection.
+	(#92768)
+
 2002-09-08  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Add AM_CONDITIONAL calls also in the non-x11
