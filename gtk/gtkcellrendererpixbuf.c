@@ -279,17 +279,14 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       if (cellinfo->stock_id)
         g_free (cellinfo->stock_id);
       cellinfo->stock_id = g_strdup (g_value_get_string (value));
-      g_object_notify (G_OBJECT (object), "stock_id");
       break;
     case PROP_STOCK_SIZE:
       cellinfo->stock_size = g_value_get_enum (value);
-      g_object_notify (G_OBJECT (object), "stock_size");
       break;
     case PROP_STOCK_DETAIL:
       if (cellinfo->stock_detail)
         g_free (cellinfo->stock_detail);
       cellinfo->stock_detail = g_strdup (g_value_get_string (value));
-      g_object_notify (G_OBJECT (object), "stock_detail");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -372,8 +369,8 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
       pixbuf_height = MAX (pixbuf_height, gdk_pixbuf_get_height (cellpixbuf->pixbuf_expander_closed));
     }
   
-  calc_width = (gint) GTK_CELL_RENDERER (cellpixbuf)->xpad * 2 + pixbuf_width;
-  calc_height = (gint) GTK_CELL_RENDERER (cellpixbuf)->ypad * 2 + pixbuf_height;
+  calc_width  = (gint) cell->xpad * 2 + pixbuf_width;
+  calc_height = (gint) cell->ypad * 2 + pixbuf_height;
   
   if (x_offset) *x_offset = 0;
   if (y_offset) *y_offset = 0;
@@ -382,13 +379,15 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
     {
       if (x_offset)
 	{
-	  *x_offset = GTK_CELL_RENDERER (cellpixbuf)->xalign * (cell_area->width - calc_width - (2 * GTK_CELL_RENDERER (cellpixbuf)->xpad));
-	  *x_offset = MAX (*x_offset, 0) + GTK_CELL_RENDERER (cellpixbuf)->xpad;
+	  *x_offset = (cell->xalign *
+                       (cell_area->width - calc_width - 2 * cell->xpad));
+	  *x_offset = MAX (*x_offset, 0) + cell->xpad;
 	}
       if (y_offset)
 	{
-	  *y_offset = GTK_CELL_RENDERER (cellpixbuf)->yalign * (cell_area->height - calc_height - (2 * GTK_CELL_RENDERER (cellpixbuf)->ypad));
-	  *y_offset = MAX (*y_offset, 0) + GTK_CELL_RENDERER (cellpixbuf)->ypad;
+	  *y_offset = (cell->yalign *
+                       (cell_area->height - calc_height - 2 * cell->ypad));
+	  *y_offset = MAX (*y_offset, 0) + cell->ypad;
 	}
     }
 
@@ -443,7 +442,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   
   pix_rect.x += cell_area->x;
   pix_rect.y += cell_area->y;
-  pix_rect.width -= cell->xpad * 2;
+  pix_rect.width  -= cell->xpad * 2;
   pix_rect.height -= cell->ypad * 2;
 
   if (gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect) &&
