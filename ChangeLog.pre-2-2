@@ -1,3 +1,21 @@
+2001-09-25  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_key_press_event): use 
+	gtk_text_iter_can_insert
+
+	* gtk/gtktextbuffer.c: use gtk_text_iter_can_insert
+
+	* gtk/gtktextiter.c (find_line_log_attrs): fixes, #57611, #57613
+	 (gtk_text_iter_can_insert): new function to fix #60282, should
+	also fix msw's "can paste into empty buffer" bug.
+
+	* gtk/gtktexttag.c (gtk_text_tag_event): change type check for 
+	"event object,"  #59091
+
+	* gtk/gtktextbtree.c: indentation fixes
+
+	* gtk/gtktextiter.c (find_by_log_attrs): fixes
+
 Tue Sep 25 12:41:17 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Version 1.3.9, interface age 0, binary age 0.

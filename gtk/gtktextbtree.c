@@ -3115,9 +3115,9 @@ find_toggle_outside_current_line (GtkTextLine *line,
 /* FIXME this function is far too slow, for no good reason. */
 gboolean
 _gtk_text_line_char_has_tag (GtkTextLine *line,
-                            GtkTextBTree *tree,
-                            gint char_in_line,
-                            GtkTextTag *tag)
+                             GtkTextBTree *tree,
+                             gint char_in_line,
+                             GtkTextTag *tag)
 {
   GtkTextLineSegment *toggle_seg;
 
@@ -3139,9 +3139,9 @@ _gtk_text_line_char_has_tag (GtkTextLine *line,
 
 gboolean
 _gtk_text_line_byte_has_tag (GtkTextLine *line,
-                            GtkTextBTree *tree,
-                            gint byte_in_line,
-                            GtkTextTag *tag)
+                             GtkTextBTree *tree,
+                             gint byte_in_line,
+                             GtkTextTag *tag)
 {
   GtkTextLineSegment *toggle_seg;
 
@@ -3163,7 +3163,7 @@ _gtk_text_line_byte_has_tag (GtkTextLine *line,
 
 gboolean
 _gtk_text_line_is_last (GtkTextLine *line,
-                       GtkTextBTree *tree)
+                        GtkTextBTree *tree)
 {
   return line == get_last_line (tree);
 }

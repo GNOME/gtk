@@ -28,6 +28,8 @@ static void check_get_set_text (GtkTextBuffer *buffer,
 
 static void line_separator_tests (void);
 
+static void logical_motion_tests (void);
+
 int
 main (int argc, char** argv)
 {
@@ -48,6 +50,9 @@ main (int argc, char** argv)
 
   /* Check some line separator stuff */
   line_separator_tests ();
+
+  /* Check log attr motion */
+  logical_motion_tests ();
   
   /* Create a buffer */
   buffer = gtk_text_buffer_new (NULL);
@@ -884,4 +889,106 @@ line_separator_tests (void)
   str = g_strdup_printf ("line%sqw", buf);
   test_line_separation (str, TRUE, FALSE, 2, 4, 5);
   g_free (str);
+
+  g_print ("Line separator tests passed\n");
+}
+
+static void
+logical_motion_tests (void)
+{
+  char *str;
+  char buf1[7] = { '\0', };
+  char buf2[7] = { '\0', };
+  char buf3[7] = { '\0', };
+  int expected[30];
+  int expected_steps;
+  int i;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  
+  buffer = gtk_text_buffer_new (NULL);
+  
+#define LEADING_JAMO 0x1111
+#define VOWEL_JAMO 0x1167
+#define TRAILING_JAMO 0x11B9
+  
+  g_unichar_to_utf8 (LEADING_JAMO, buf1);
+  g_unichar_to_utf8 (VOWEL_JAMO, buf2);
+  g_unichar_to_utf8 (TRAILING_JAMO, buf3);
+
+  /* Build the string "abc<leading><vowel><trailing>def\r\nxyz" */
+  str = g_strconcat ("abc", buf1, buf2, buf3, "def\r\nxyz", NULL);
+  gtk_text_buffer_set_text (buffer, str, -1);
+  g_free (str);
+  
+  /* Check cursor positions */
+  memset (expected, 0, sizeof (expected));
+  expected[0] = 0;    /* before 'a' */
+  expected[1] = 1;    /* before 'b' */
+  expected[2] = 2;    /* before 'c' */
+  expected[3] = 3;    /* before jamo */
+  expected[4] = 6;    /* before 'd' */
+  expected[5] = 7;    /* before 'e' */
+  expected[6] = 8;    /* before 'f' */
+  expected[7] = 9;    /* before '\r' */
+  expected[8] = 11;   /* before 'x' */
+  expected[9] = 12;   /* before 'y' */
+  expected[10] = 13;  /* before 'z' */
+  expected[11] = 14;  /* after 'z' */
+  expected_steps = 11;
+  
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  i = 0;
+  do
+    {
+      int pos;
+
+      pos = gtk_text_iter_get_offset (&iter);
+      
+      if (pos != expected[i])
+        {
+          g_error ("Cursor position %d, expected %d",
+                   pos, expected[i]);
+        }
+
+      /* g_print ("%d = %d\n", pos, expected[i]); */
+
+      ++i;      
+    }
+  while (gtk_text_iter_forward_cursor_position (&iter));
+
+  if (i != expected_steps)
+    g_error ("Expected %d steps, there were actually %d\n", expected_steps, i);
+
+  if (!gtk_text_iter_is_end (&iter))
+    g_error ("Expected to stop at the end iterator\n");
+
+  i = expected_steps;
+  do
+    {
+      int pos;
+
+      pos = gtk_text_iter_get_offset (&iter);
+      
+      if (pos != expected[i])
+        {
+          g_error ("Moving backward, cursor position %d, expected %d",
+                   pos, expected[i]);
+        }
+
+      /* g_print ("%d = %d\n", pos, expected[i]); */
+      
+      --i;
+    }
+  while (gtk_text_iter_backward_cursor_position (&iter));
+
+  if (i != -1)
+    g_error ("Expected %d steps, there were actually %d\n", expected_steps - i, i);
+
+  if (!gtk_text_iter_is_start (&iter))
+    g_error ("Expected to stop at the start iterator\n");
+  
+  g_print ("Logical motion tests passed\n");
+
+  g_object_unref (G_OBJECT (buffer));
 }

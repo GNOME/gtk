@@ -2361,6 +2361,14 @@ a gtk_object_unref().
 @tree_model: 
 @iter: 
 
+<!-- ##### FUNCTION gtk_tree_view_column_set_cell_renderer ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@cell: 
+
 <!-- ##### FUNCTION gtk_tree_view_column_set_width ##### -->
 <para>
 

@@ -1242,8 +1242,8 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
  * Return value: whether @tag is toggled on or off at @iter
  **/
 gboolean
-gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
-                                 GtkTextTag         *tag)
+gtk_text_iter_toggles_tag (const GtkTextIter  *iter,
+                           GtkTextTag         *tag)
 {
   GtkTextRealIter *real;
   GtkTextLineSegment *seg;
@@ -1282,8 +1282,8 @@ gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
  * Return value: whether @iter is tagged with @tag
  **/
 gboolean
-gtk_text_iter_has_tag           (const GtkTextIter   *iter,
-                                 GtkTextTag          *tag)
+gtk_text_iter_has_tag (const GtkTextIter   *iter,
+                       GtkTextTag          *tag)
 {
   GtkTextRealIter *real;
 
@@ -1300,13 +1300,13 @@ gtk_text_iter_has_tag           (const GtkTextIter   *iter,
   if (real->line_byte_offset >= 0)
     {
       return _gtk_text_line_byte_has_tag (real->line, real->tree,
-                                         real->line_byte_offset, tag);
+                                          real->line_byte_offset, tag);
     }
   else
     {
       g_assert (real->line_char_offset >= 0);
       return _gtk_text_line_char_has_tag (real->line, real->tree,
-                                         real->line_char_offset, tag);
+                                          real->line_char_offset, tag);
     }
 }
 
@@ -1363,14 +1363,21 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
 /**
  * gtk_text_iter_editable:
  * @iter: an iterator
- * @default_setting: TRUE if text is editable by default
+ * @default_setting: %TRUE if text is editable by default
  *
- * Returns whether @iter is within an editable region of text.
- * Non-editable text is "locked" and can't be changed by the user via
- * #GtkTextView. This function is simply a convenience wrapper around
- * gtk_text_iter_get_attributes (). If no tags applied to this text
- * affect editability, @default_setting will be returned.
+ * Returns whether the character at @iter is within an editable region
+ * of text.  Non-editable text is "locked" and can't be changed by the
+ * user via #GtkTextView. This function is simply a convenience
+ * wrapper around gtk_text_iter_get_attributes (). If no tags applied
+ * to this text affect editability, @default_setting will be returned.
  *
+ * You don't want to use this function to decide whether text can be
+ * inserted at @iter, because for insertion you don't want to know
+ * whether the char at @iter is inside an editable range, you want to
+ * know whether a new character inserted at @iter would be inside an
+ * editable range. Use gtk_text_iter_can_insert() to handle this
+ * case.
+ * 
  * Return value: whether @iter is inside an editable range
  **/
 gboolean
@@ -1380,6 +1387,8 @@ gtk_text_iter_editable (const GtkTextIter *iter,
   GtkTextAttributes *values;
   gboolean retval;
 
+  g_return_val_if_fail (iter != NULL, FALSE);
+  
   values = gtk_text_attributes_new ();
 
   values->editable = default_setting;
@@ -1392,6 +1401,46 @@ gtk_text_iter_editable (const GtkTextIter *iter,
 
   return retval;
 }
+
+/**
+ * gtk_text_iter_can_insert:
+ * @iter: an iterator
+ * @default_editability: %TRUE if text is editable by default
+ * 
+ * Considering the default editability of the buffer, and tags that
+ * affect editability, determines whether text inserted at @iter would
+ * be editable. If text inserted at @iter would be editable then the
+ * user should be allowed to insert text at @iter.
+ * gtk_text_buffer_insert_interactive() uses this function to decide
+ * whether insertions are allowed at a given position.
+ * 
+ * Return value: whether text inserted at @iter would be editable
+ **/
+gboolean
+gtk_text_iter_can_insert (const GtkTextIter *iter,
+                          gboolean           default_editability)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+  
+  if (gtk_text_iter_editable (iter, default_editability))
+    return TRUE;
+  /* If at start/end of buffer, default editability is used */
+  else if ((gtk_text_iter_is_start (iter) ||
+            gtk_text_iter_is_end (iter)) &&
+           default_editability)
+    return TRUE;
+  else
+    {
+      /* if iter isn't editable, and the char before iter is,
+       * then iter is the first char in an editable region
+       * and thus insertion at iter results in editable text.
+       */
+      GtkTextIter prev = *iter;
+      gtk_text_iter_backward_char (&prev);
+      return gtk_text_iter_editable (&prev, default_editability);
+    }
+}
+
 
 /**
  * gtk_text_iter_get_language:
@@ -1677,7 +1726,7 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
  **/
 gboolean
 gtk_text_iter_get_attributes (const GtkTextIter  *iter,
-                              GtkTextAttributes *values)
+                              GtkTextAttributes  *values)
 {
   GtkTextTag** tags;
   gint tag_count = 0;
@@ -2827,12 +2876,12 @@ find_line_log_attrs (const GtkTextIter *iter,
                                                iter, &char_len);      
 
   offset = gtk_text_iter_get_line_offset (iter);
-
+  
   /* char_len may be 0 and attrs will be NULL if so, if
    * iter is the end iter and the last line is empty
    */
   
-  if (offset < char_len)
+  if (attrs)
     result = (* func) (attrs, offset, 0, char_len, found_offset,
                        already_moved_initially);
 
@@ -2868,22 +2917,29 @@ find_by_log_attrs (GtkTextIter    *iter,
         }
       else
         {                    
-          /* go to end of previous line */
-          gtk_text_iter_set_line_offset (iter, 0);
-          
-          if (gtk_text_iter_backward_char (iter))
-            return find_by_log_attrs (iter, func, forward,
-                                      TRUE);
+          /* go to end of previous line. need to check that
+           * line is > 0 because backward_line snaps to start of
+           * line 0 if it's on line 0
+           */
+          if (gtk_text_iter_get_line (iter) > 0 && 
+              gtk_text_iter_backward_line (iter))
+            {
+              if (!gtk_text_iter_ends_line (iter))
+                gtk_text_iter_forward_to_line_end (iter);
+              
+              return find_by_log_attrs (iter, func, forward,
+                                        TRUE);
+            }
           else
             return FALSE;
         }
     }
   else
-    {
+    {      
       gtk_text_iter_set_line_offset (iter, offset);
 
       return
-        !gtk_text_iter_equal (iter, &orig) &&
+        (already_moved_initially || !gtk_text_iter_equal (iter, &orig)) &&
         !gtk_text_iter_is_end (iter);
     }
 }
@@ -3235,7 +3291,7 @@ find_backward_cursor_pos_func (const PangoLogAttr *attrs,
                                gint          len,
                                gint         *found_offset,
                                gboolean      already_moved_initially)
-{
+{  
   if (!already_moved_initially)
     --offset;
 

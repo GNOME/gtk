@@ -128,6 +128,8 @@ GSList  *gtk_text_iter_get_tags          (const GtkTextIter   *iter);
 
 gboolean gtk_text_iter_editable          (const GtkTextIter   *iter,
                                           gboolean             default_setting);
+gboolean gtk_text_iter_can_insert        (const GtkTextIter   *iter,
+                                          gboolean             default_editability);
 
 gboolean gtk_text_iter_starts_word        (const GtkTextIter   *iter);
 gboolean gtk_text_iter_ends_word          (const GtkTextIter   *iter);

@@ -1742,7 +1742,7 @@ gtk_text_tag_event (GtkTextTag        *tag,
   gboolean retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
-  g_return_val_if_fail (GTK_IS_OBJECT (event_object), FALSE);
+  g_return_val_if_fail (G_IS_OBJECT (event_object), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   g_signal_emit (G_OBJECT (tag),

@@ -561,7 +561,7 @@ gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
   g_return_val_if_fail (text != NULL, FALSE);
   g_return_val_if_fail (gtk_text_iter_get_buffer (iter) == buffer, FALSE);
 
-  if (gtk_text_iter_editable (iter, default_editable))
+  if (gtk_text_iter_can_insert (iter, default_editable))
     {
       gtk_text_buffer_begin_user_action (buffer);
       gtk_text_buffer_emit_insert (buffer, iter, text, len);
@@ -965,7 +965,7 @@ gtk_text_buffer_insert_range_interactive (GtkTextBuffer     *buffer,
                         buffer->tag_table, FALSE);
 
 
-  if (gtk_text_iter_editable (iter, default_editable))
+  if (gtk_text_iter_can_insert (iter, default_editable))
     {
       gtk_text_buffer_real_insert_range (buffer, iter, start, end, TRUE);
       return TRUE;

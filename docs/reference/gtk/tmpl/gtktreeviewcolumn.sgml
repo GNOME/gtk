@@ -87,15 +87,6 @@ GtkTreeViewColumn
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_set_cell_renderer ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@cell: 
-
-
 <!-- ##### FUNCTION gtk_tree_view_column_add_attribute ##### -->
 <para>
 

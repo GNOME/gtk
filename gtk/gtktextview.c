@@ -3250,7 +3250,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
   insert = gtk_text_buffer_get_insert (get_buffer (text_view));
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
-  if (gtk_text_iter_editable (&iter, text_view->editable) &&
+  if (gtk_text_iter_can_insert (&iter, text_view->editable) &&
       gtk_im_context_filter_keypress (text_view->im_context, event))
     {
       text_view->need_im_reset = TRUE;
@@ -4829,7 +4829,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     }
   else
     {      
-      if (gtk_text_iter_editable (&newplace, text_view->editable))
+      if (gtk_text_iter_can_insert (&newplace, text_view->editable))
         {
           GtkWidget *source_widget;
           
@@ -5429,7 +5429,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
                                     &iter,
                                     gtk_text_buffer_get_insert (get_buffer (text_view)));
   
-  can_insert = gtk_text_iter_editable (&iter, text_view->editable);
+  can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
   
   append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard",
                         have_selection);
