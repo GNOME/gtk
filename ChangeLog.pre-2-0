@@ -217,7 +217,6 @@ Mon Oct 29 11:31:40 2001  Owen Taylor  <otaylor@redhat.com>
 	* docs/Changes-2.0.txt: add a little note about the GtkPreviewInfo
 	changes
 
->>>>>>> 1.2483
 Sun Oct 28 09:15:39 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontext.h (struct _GtkIMContext): Fixed
