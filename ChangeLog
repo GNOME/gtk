@@ -1,3 +1,60 @@
+Fri Jul  4 15:57:52 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter):
+	Use asynchronously _gdk_x11_set_input_focus_safe
+	to avoid having to trap errors and XSync().
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_focus): Use
+	_gdk_x11_set_input_focus_safe() here as well.
+
+	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed):
+	Rework handling of property notifies on _NET_WM_STATE
+	so that we ignore _NET_WM_DESKTOP notifies unless we
+	really care.
+
+	* gdk/x11/gdkimage-x11.c (gdk_image_check_xshm): Use
+	XShmQueryExtension() rather than XQueryExtension() to
+	avoid extra rountrip.
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_init):
+	Remove unused call to XGetWindowAttributes()
+	
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Remove
+	unused call to XGetKeyboardControl().
+
+	* gdk/x11/gdkdisplay-x11.c gdk/gdk.def (gdk_display_flush):
+	Add (#99571)
+
+	* gdk/win32/gdkevents-win32.c gdk/linux-fb/gdkevents-fb.c 
+	No-op implementations of gdk_display_flush().
+
+	* gdk/gdkwindow.c (gdk_window_process_all_updates): Use
+	gdk_display_flush() rather than gdk_flush() to avoid
+	XSync().
+	
+	* gdk/x11/gdkwindow-x11.c (update_wm_hints)
+	gdk/x11/gdkwindow-x11.h: Centralize all handling of WM_HINTS here
+	so that we don't have to get the property back from the server.
+
+	* gdk/x11/gdkwindow-x11.c (show_window_internal): Store
+	the serial of when we map a toplevel to allow optimizing
+	out notifies on _NET_WM_STATE/_NET_WM_DESKTOP.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Don't
+	XTranslateCoordinates() for override-redirect windows.
+
+Fri Jul  4 15:59:27 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_group): Remove comment
+	about setting window group after the window is mapped from docs
+	- nothing the ICCCM forbids that.
+
+	* gdk/x11/gdkcursor-x11.c (gdk_display_get_maximal_cursor_size):
+	Fix g_return_val_if_fail() in void return function.
+
+	* configure.in: Fix misplaced comma that was resulting
+	in XShm always being disabled.
+
 Fri Jul  4 19:55:49 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* tests/stresstest-toolbar: remove this accidentally committed

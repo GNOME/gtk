@@ -205,16 +205,12 @@ static int
 gdk_image_check_xshm(Display *display)
 {
 #ifdef USE_SHM
-  int major, minor, ignore;
+  int major, minor;
   Bool pixmaps;
   
-  if (XQueryExtension(display, "MIT-SHM", &ignore, &ignore, &ignore)) 
-    {
-      if (XShmQueryVersion(display, &major, &minor, &pixmaps )==True) 
-	{
-	  return (pixmaps==True) ? 2 : 1;
-	}
-    }
+  if (XShmQueryExtension (display) &&
+      XShmQueryVersion (display, &major, &minor, &pixmaps))
+    return pixmaps ? 2 : 1;
 #endif /* USE_SHM */
   return 0;
 }

@@ -57,6 +57,32 @@ static void gdk_internal_connection_watch (Display  *display,
 
 static gpointer parent_class = NULL;
 
+/* Note that we never *directly* use WM_LOCALE_NAME, WM_PROTOCOLS,
+ * but including them here has the side-effect of getting them
+ * into the internal Xlib cache
+ */
+static const char *const precache_atoms[] = {
+  "UTF8_STRING",
+  "WM_CLIENT_LEADER",
+  "WM_DELETE_WINDOW",
+  "WM_LOCALE_NAME",
+  "WM_PROTOCOLS",
+  "WM_TAKE_FOCUS",
+  "_NET_WM_DESKTOP",
+  "_NET_WM_ICON",
+  "_NET_WM_ICON_NAME",
+  "_NET_WM_NAME",
+  "_NET_WM_PID",
+  "_NET_WM_PING",
+  "_NET_WM_STATE",
+  "_NET_WM_STATE_STICKY",
+  "_NET_WM_STATE_MAXIMIZED_VERT",
+  "_NET_WM_STATE_MAXIMIZED_HORZ",
+  "_NET_WM_STATE_FULLSCREEN",
+  "_NET_WM_WINDOW_TYPE",
+  "_NET_WM_WINDOW_TYPE_NORMAL",
+};
+
 GType
 _gdk_display_x11_get_type (void)
 {
@@ -117,7 +143,6 @@ gdk_display_open (const gchar *display_name)
   const char *sm_client_id;
   
   XClassHint *class_hint;
-  XKeyboardState keyboard_state;
   gulong pid;
   gint i;
 
@@ -162,6 +187,8 @@ gdk_display_open (const gchar *display_name)
   if (_gdk_synchronize)
     XSynchronize (display_x11->xdisplay, True);
   
+  _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
+
   class_hint = XAllocClassHint();
   class_hint->res_name = g_get_prgname ();
   
@@ -183,8 +210,6 @@ gdk_display_open (const gchar *display_name)
 		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PID"),
 		   XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
   
-  XGetKeyboardControl (display_x11->xdisplay, &keyboard_state);
-
 #ifdef HAVE_XKB
   {
     gint xkb_major = XkbMajorVersion;
@@ -507,6 +532,31 @@ gdk_display_sync (GdkDisplay * display)
   g_return_if_fail (GDK_IS_DISPLAY (display));
   
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
+}
+
+/**
+ * gdk_display_flush:
+ * @display: a #GdkDisplay
+ *
+ * Flushes any requests queued for the windowing system; this happens automatically
+ * when the main loop blocks waiting for new events, but if your application
+ * is drawing without returning control to the main loop, you may need
+ * to call this function explicitely. A common case where this function
+ * needs to be called is when an application is executing drawing commands
+ * from a thread other than the thread where the main loop is running.
+ *
+ * This is most useful for X11. On windowing systems where requests are
+ * handled synchronously, this function will do nothing.
+ *
+ * Since: 2.4
+ */
+void 
+gdk_display_flush (GdkDisplay *display)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  if (!display->closed)
+    XFlush (GDK_DISPLAY_XDISPLAY (display));
 }
 
 /**

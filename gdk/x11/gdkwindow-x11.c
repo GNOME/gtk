@@ -33,6 +33,7 @@
 #include "config.h"
 
 #include "gdkwindow.h"
+#include "gdkasync.h"
 #include "gdkinputprivate.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
@@ -283,12 +284,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   GdkScreenX11 *screen_x11;
-  XWindowAttributes xattributes;
-  unsigned int width;
-  unsigned int height;
-  unsigned int border_width;
-  unsigned int depth;
-  int x, y;
 
   screen_x11 = GDK_SCREEN_X11 (screen);
 
@@ -296,10 +291,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
 
   gdk_screen_set_default_colormap (screen,
 				   gdk_screen_get_system_colormap (screen));
-
-  XGetGeometry (screen_x11->xdisplay, screen_x11->xroot_window,
-		&screen_x11->xroot_window, &x, &y, &width, &height, &border_width, &depth);
-  XGetWindowAttributes (screen_x11->xdisplay, screen_x11->xroot_window, &xattributes);
 
   screen_x11->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)screen_x11->root_window;
@@ -313,10 +304,10 @@ _gdk_windowing_window_init (GdkScreen * screen)
   g_object_ref (draw_impl->colormap);
   
   private->window_type = GDK_WINDOW_ROOT;
-  private->depth = depth;
+  private->depth = DefaultDepthOfScreen (screen_x11->xscreen);
   
-  impl->width = width;
-  impl->height = height;
+  impl->width = WidthOfScreen (screen_x11->xscreen);
+  impl->height = HeightOfScreen (screen_x11->xscreen);
   
   _gdk_window_init_position (GDK_WINDOW (private));
 
@@ -400,7 +391,6 @@ gdk_window_new (GdkWindow     *parent,
   XSetWindowAttributes xattributes;
   long xattributes_mask;
   XSizeHints size_hints;
-  XWMHints wm_hints;
   XClassHint *class_hint;
   int x, y, depth;
   
@@ -659,18 +649,11 @@ gdk_window_new (GdkWindow     *parent,
 
   check_leader_window_title (screen_x11->display);
   
-  wm_hints.flags = StateHint | WindowGroupHint;
-  wm_hints.window_group = GDK_DISPLAY_X11 (screen_x11->display)->leader_window;
-  wm_hints.input = True;
-  wm_hints.initial_state = NormalState;
-  
   /* FIXME: Is there any point in doing this? Do any WM's pay
    * attention to PSize, and even if they do, is this the
    * correct value???
    */
   XSetWMNormalHints (xdisplay, xid, &size_hints);
-  
-  XSetWMHints (xdisplay, xid, &wm_hints);
   
   /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
   XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
@@ -855,13 +838,37 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 			       gboolean   foreign_destroy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-
+  GdkWindowImplX11 *window_impl;
+  
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  window_impl = GDK_WINDOW_IMPL_X11 (private->impl);
 
   _gdk_selection_window_destroyed (window);
   
   if (private->extension_events != 0)
     _gdk_input_window_destroy (window);
+
+  if (window_impl->icon_window)
+    {
+      g_object_unref (window_impl->icon_window);
+      window_impl->icon_window = NULL;
+    }
+  if (window_impl->icon_pixmap)
+    {
+      g_object_unref (window_impl->icon_pixmap);
+      window_impl->icon_pixmap = NULL;
+    }
+  if (window_impl->icon_mask)
+    {
+      g_object_unref (window_impl->icon_mask);
+      window_impl->icon_mask = NULL;
+    }
+  if (window_impl->group_leader)
+    {
+      g_object_unref (window_impl->group_leader);
+      window_impl->group_leader = NULL;
+    }
 
 #ifdef HAVE_XFT  
   {
@@ -945,6 +952,61 @@ gdk_window_destroy_notify (GdkWindow *window)
 }
 
 static void
+update_wm_hints (GdkWindow *window,
+		 gboolean   force)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+  XWMHints wm_hints;
+
+  if (!force &&
+      private->state & GDK_WINDOW_STATE_WITHDRAWN)
+    return;
+
+  wm_hints.flags = StateHint;
+  wm_hints.input = True;
+  wm_hints.initial_state = NormalState;
+  
+  if (private->state & GDK_WINDOW_STATE_ICONIFIED)
+    {
+      wm_hints.flags |= StateHint;
+      wm_hints.initial_state = IconicState;
+    }
+
+  if (impl->icon_window && !GDK_WINDOW_DESTROYED (impl->icon_window))
+    {
+      wm_hints.flags |= IconWindowHint;
+      wm_hints.icon_window = GDK_WINDOW_XID (impl->icon_window);
+    }
+
+  if (impl->icon_pixmap)
+    {
+      wm_hints.flags |= IconPixmapHint;
+      wm_hints.icon_pixmap = GDK_PIXMAP_XID (impl->icon_pixmap);
+    }
+
+  if (impl->icon_mask)
+    {
+      wm_hints.flags |= IconMaskHint;
+      wm_hints.icon_mask = GDK_PIXMAP_XID (impl->icon_mask);
+    }
+  
+  wm_hints.flags |= WindowGroupHint;
+  if (impl->group_leader && !GDK_WINDOW_DESTROYED (impl->group_leader))
+    {
+      wm_hints.flags |= WindowGroupHint;
+      wm_hints.window_group = GDK_WINDOW_XID (impl->group_leader);
+    }
+  else
+    wm_hints.window_group = GDK_DISPLAY_X11 (display)->leader_window;
+  
+  XSetWMHints (GDK_WINDOW_XDISPLAY (window),
+	       GDK_WINDOW_XID (window),
+	       &wm_hints);
+}
+
+static void
 set_initial_hints (GdkWindow *window)
 {
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
@@ -957,22 +1019,9 @@ set_initial_hints (GdkWindow *window)
 
   private = (GdkWindowObject*) window;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+  update_wm_hints (window, TRUE);
   
-  if (private->state & GDK_WINDOW_STATE_ICONIFIED)
-    {
-      XWMHints *wm_hints;
-      
-      wm_hints = XGetWMHints (xdisplay, xwindow);
-      if (!wm_hints)
-        wm_hints = XAllocWMHints ();
-
-      wm_hints->flags |= StateHint;
-      wm_hints->initial_state = IconicState;
-      
-      XSetWMHints (xdisplay, xwindow, wm_hints);
-      XFree (wm_hints);
-    }
-
   /* We set the spec hints regardless of whether the spec is supported,
    * since it can't hurt and it's kind of expensive to check whether
    * it's supported.
@@ -1068,9 +1117,12 @@ show_window_internal (GdkWindow *window,
   private = (GdkWindowObject*) window;
   if (!private->destroyed)
     {
+      GdkWindowImplX11 *impl =GDK_WINDOW_IMPL_X11 (private->impl);
+      Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
+      Window xwindow = GDK_WINDOW_XID (window);
+      
       if (raise)
-        XRaiseWindow (GDK_WINDOW_XDISPLAY (window),
-                      GDK_WINDOW_XID (window));
+        XRaiseWindow (xdisplay, xwindow);
 
       if (!GDK_WINDOW_IS_MAPPED (window))
         {
@@ -1079,13 +1131,14 @@ show_window_internal (GdkWindow *window,
           gdk_synthesize_window_state (window,
                                        GDK_WINDOW_STATE_WITHDRAWN,
                                        0);
+
+	  impl->map_serial = NextRequest (xdisplay);
         }
       
       g_assert (GDK_WINDOW_IS_MAPPED (window));
-      
-      if (GDK_WINDOW_IMPL_X11 (private->impl)->position_info.mapped)
-        XMapWindow (GDK_WINDOW_XDISPLAY (window),
-                    GDK_WINDOW_XID (window));
+
+      if (impl->position_info.mapped)
+        XMapWindow (xdisplay, xwindow);
     }
 }
 
@@ -1550,10 +1603,14 @@ void
 gdk_window_focus (GdkWindow *window,
                   guint32    timestamp)
 {
+  GdkDisplay *display;
+  
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  display = GDK_WINDOW_DISPLAY (window);
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern ("_NET_ACTIVE_WINDOW", FALSE)))
@@ -1564,7 +1621,7 @@ gdk_window_focus (GdkWindow *window,
       xev.xclient.serial = 0;
       xev.xclient.send_event = True;
       xev.xclient.window = GDK_WINDOW_XWINDOW (window);
-      xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+      xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display,
 									"_NET_ACTIVE_WINDOW");
       xev.xclient.format = 32;
       xev.xclient.data.l[0] = 0;
@@ -1573,24 +1630,20 @@ gdk_window_focus (GdkWindow *window,
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = 0;
       
-      XSendEvent (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XROOTWIN (window), False,
+      XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
                   SubstructureRedirectMask | SubstructureNotifyMask,
                   &xev);
     }
   else
     {
-      XRaiseWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+      XRaiseWindow (GDK_DISPLAY_XDISPLAY (window), GDK_WINDOW_XID (window));
 
-      /* There is no way of knowing reliably whether we are viewable so we need
-       * to trap errors so we don't cause a BadMatch.
+      /* There is no way of knowing reliably whether we are viewable;
+       * _gdk_x11_set_input_focus_safe() traps errors asynchronously.
        */
-      gdk_error_trap_push ();
-      XSetInputFocus (GDK_WINDOW_XDISPLAY (window),
-                      GDK_WINDOW_XWINDOW (window),
-                      RevertToParent,
-                      timestamp);
-      XSync (GDK_WINDOW_XDISPLAY (window), False);
-      gdk_error_trap_pop ();
+      _gdk_x11_set_input_focus_safe (display, GDK_WINDOW_XID (window),
+				     RevertToParent,
+				     timestamp);
     }
 }
 
@@ -3277,40 +3330,40 @@ gdk_window_set_icon (GdkWindow *window,
 		     GdkPixmap *pixmap,
 		     GdkBitmap *mask)
 {
-  XWMHints *wm_hints;
-  
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  wm_hints = XGetWMHints (GDK_WINDOW_XDISPLAY (window),
-			  GDK_WINDOW_XID (window));
-  if (!wm_hints)
-    wm_hints = XAllocWMHints ();
+  private = (GdkWindowObject *)window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
 
-  if (icon_window != NULL)
+  if (impl->icon_window != icon_window)
     {
-      wm_hints->flags |= IconWindowHint;
-      wm_hints->icon_window = GDK_WINDOW_XID (icon_window);
+      if (impl->icon_window)
+	g_object_unref (impl->icon_window);
+      impl->icon_window = g_object_ref (icon_window);
     }
   
-  if (pixmap != NULL)
+  if (impl->icon_pixmap != pixmap)
     {
-      wm_hints->flags |= IconPixmapHint;
-      wm_hints->icon_pixmap = GDK_PIXMAP_XID (pixmap);
+      if (impl->icon_pixmap)
+	g_object_unref (impl->icon_pixmap);
+      impl->icon_pixmap = g_object_ref (pixmap);
     }
   
-  if (mask != NULL)
+  if (impl->icon_mask != mask)
     {
-      wm_hints->flags |= IconMaskHint;
-      wm_hints->icon_mask = GDK_PIXMAP_XID (mask);
+      if (impl->icon_mask)
+	g_object_unref (impl->icon_mask);
+      impl->icon_mask = g_object_ref (mask);
     }
-
-  XSetWMHints (GDK_WINDOW_XDISPLAY (window),
-	       GDK_WINDOW_XID (window), wm_hints);
-  XFree (wm_hints);
+  
+  update_wm_hints (window, FALSE);
 }
 
 static gboolean
@@ -3733,15 +3786,13 @@ gdk_window_unfullscreen (GdkWindow *window)
  * allow users to minimize/unminimize all windows belonging to an
  * application at once. You should only set a non-default group window
  * if your application pretends to be multiple applications.
- * The group leader window may not be changed after a window has been
- * mapped (with gdk_window_show() for example).
- * 
  **/
 void          
 gdk_window_set_group (GdkWindow *window, 
 		      GdkWindow *leader)
 {
-  XWMHints *wm_hints;
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -3751,17 +3802,17 @@ gdk_window_set_group (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (leader))
     return;
   
-  wm_hints = XGetWMHints (GDK_WINDOW_XDISPLAY (window),
-			  GDK_WINDOW_XID (window));
-  if (!wm_hints)
-    wm_hints = XAllocWMHints ();
+  private = (GdkWindowObject *)window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
 
-  wm_hints->flags |= WindowGroupHint;
-  wm_hints->window_group = GDK_WINDOW_XID (leader);
+  if (impl->group_leader != leader)
+    {
+      if (impl->group_leader)
+	g_object_unref (impl->group_leader);
+      impl->group_leader = g_object_ref (impl->group_leader);
+    }
 
-  XSetWMHints (GDK_WINDOW_XDISPLAY (window),
-	       GDK_WINDOW_XID (window), wm_hints);
-  XFree (wm_hints);
+  update_wm_hints (window, FALSE);
 }
 
 static MotifWmHints *

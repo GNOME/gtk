@@ -587,7 +587,7 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
   GdkScreen *screen;
   GdkWindow *window;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_if_fail (GDK_IS_DISPLAY (display));
   
   screen = gdk_display_get_default_screen (display);
   window = gdk_screen_get_root_window (screen);

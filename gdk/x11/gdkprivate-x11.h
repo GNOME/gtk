@@ -167,6 +167,10 @@ void _gdk_xgrab_check_destroy (GdkWindow *window);
 gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
 					  Window      xroot_window);
 
+void _gdk_x11_precache_atoms (GdkDisplay          *display,
+			      const gchar * const *atom_names,
+			      gint                 n_atoms);
+
 void _gdk_x11_events_init_screen   (GdkScreen *screen);
 void _gdk_x11_events_uninit_screen (GdkScreen *screen);
 

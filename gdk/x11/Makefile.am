@@ -20,6 +20,8 @@ noinst_LTLIBRARIES = libgdk-x11.la
 
 libgdk_x11_la_SOURCES =    	\
 	MwmUtil.h	   	\
+	gdkasync.c		\
+	gdkasync.h		\
 	gdkcolor-x11.c	   	\
 	gdkcursor-x11.c	   	\
 	gdkdisplay-x11.c	\

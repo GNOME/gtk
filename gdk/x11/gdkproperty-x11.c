@@ -142,6 +142,23 @@ insert_atom_pair (GdkDisplay *display,
 		       GUINT_TO_POINTER (xatom), 
 		       GDK_ATOM_TO_POINTER (virtual_atom));
 }
+
+static Atom
+lookup_cached_xatom (GdkDisplay *display,
+		     GdkAtom     atom)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+
+  if (ATOM_TO_INDEX (atom) < G_N_ELEMENTS (XAtomsStrings) - N_CUSTOM_PREDEFINED)
+    return ATOM_TO_INDEX (atom);
+  
+  if (display_x11->atom_from_virtual)
+    return GPOINTER_TO_UINT (g_hash_table_lookup (display_x11->atom_from_virtual,
+						  GDK_ATOM_TO_POINTER (atom)));
+
+  return None;
+}
+
 /**
  * gdk_x11_atom_to_xatom_for_display:
  * @display: A #GdkDisplay
@@ -158,7 +175,6 @@ Atom
 gdk_x11_atom_to_xatom_for_display (GdkDisplay *display, 
 				   GdkAtom atom)
 {
-  GdkDisplayX11 *display_x11;
   Atom xatom = None;
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
@@ -166,14 +182,8 @@ gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
   if (display->closed)
     return None;
   
-  display_x11 = GDK_DISPLAY_X11 (display); 
+  xatom = lookup_cached_xatom (display, atom);
   
-  if (ATOM_TO_INDEX (atom) < G_N_ELEMENTS (XAtomsStrings) - N_CUSTOM_PREDEFINED)
-    return ATOM_TO_INDEX (atom);
-  
-  if (display_x11->atom_from_virtual)
-    xatom = GPOINTER_TO_UINT (g_hash_table_lookup (display_x11->atom_from_virtual,
-						   GDK_ATOM_TO_POINTER (atom)));
   if (!xatom)
     {
       char *name;
@@ -187,6 +197,45 @@ gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
     }
 
   return xatom;
+}
+
+void
+_gdk_x11_precache_atoms (GdkDisplay          *display,
+			 const gchar * const *atom_names,
+			 gint                 n_atoms)
+{
+  Atom *xatoms;
+  GdkAtom *atoms;
+  const gchar **xatom_names;
+  gint n_xatoms;
+  gint i;
+
+  xatoms = g_new (Atom, n_atoms);
+  xatom_names = g_new (const gchar *, n_atoms);
+  atoms = g_new (GdkAtom, n_atoms);
+
+  n_xatoms = 0;
+  for (i = 0; i < n_atoms; i++)
+    {
+      GdkAtom atom = gdk_atom_intern (atom_names[i], FALSE);
+      if (lookup_cached_xatom (display, atom) == None)
+	{
+	  atoms[n_xatoms] = atom;
+	  xatom_names[n_xatoms] = atom_names[i];
+	  n_xatoms++;
+	}
+    }
+
+  if (n_xatoms)
+    XInternAtoms (GDK_DISPLAY_XDISPLAY (display),
+		  (char **)xatom_names, n_xatoms, False, xatoms);
+
+  for (i = 0; i < n_xatoms; i++)
+    insert_atom_pair (display, atoms[i], xatoms[i]);
+
+  g_free (xatoms);
+  g_free (atoms);
+  g_free (atom_names);
 }
 
 /**

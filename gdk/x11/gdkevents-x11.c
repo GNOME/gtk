@@ -30,6 +30,7 @@
 #include "gdkx.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
+#include "gdkasync.h"
 
 #include "gdkkeysyms.h"
 
@@ -357,28 +358,122 @@ gdk_add_client_message_filter (GdkAtom       message_type,
 }
 
 static void
-gdk_check_wm_state_changed (GdkWindow *window)
+do_net_wm_state_changes (GdkWindow *window)
 {  
+  GdkWindowObject *window_private = (GdkWindowObject *)window;
+  GdkWindowImplX11 *window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+  GdkWindowState old_state;
+  
+  if (GDK_WINDOW_DESTROYED (window) ||
+      gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
+    return;
+  
+  old_state = gdk_window_get_state (window);
+
+  /* For found_sticky to remain TRUE, we have to also be on desktop
+   * 0xFFFFFFFF
+   */
+  if (old_state & GDK_WINDOW_STATE_STICKY)
+    {
+      if (!(window_impl->have_sticky && window_impl->on_all_desktops))
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_STICKY,
+                                     0);
+    }
+  else
+    {
+      if (window_impl->have_sticky && window_impl->on_all_desktops)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_STICKY);
+    }
+
+  if (old_state & GDK_WINDOW_STATE_FULLSCREEN)
+    {
+      if (!window_impl->have_fullscreen)
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_FULLSCREEN,
+                                     0);
+    }
+  else
+    {
+      if (window_impl->have_fullscreen)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_FULLSCREEN);
+    }
+  
+  /* Our "maximized" means both vertical and horizontal; if only one,
+   * we don't expose that via GDK
+   */
+  if (old_state & GDK_WINDOW_STATE_MAXIMIZED)
+    {
+      if (!(window_impl->have_maxvert && window_impl->have_maxhorz))
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_MAXIMIZED,
+                                     0);
+    }
+  else
+    {
+      if (window_impl->have_maxvert && window_impl->have_maxhorz)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_MAXIMIZED);
+    }
+}
+
+static void
+gdk_check_wm_desktop_changed (GdkWindow *window)
+{
+  GdkWindowObject *window_private = (GdkWindowObject *)window;
+  GdkWindowImplX11 *window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+
+  Atom type;
+  gint format;
+  gulong nitems;
+  gulong bytes_after;
+
+  if (window_impl->have_sticky)
+    {
+      gulong *desktop;
+      
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), 
+			  GDK_WINDOW_XID (window),
+                          gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
+			  0, G_MAXLONG, False, XA_CARDINAL, &type, 
+			  &format, &nitems,
+                          &bytes_after, (guchar **)&desktop);
+
+      if (type != None)
+        {
+          window_impl->on_all_desktops = (*desktop == 0xFFFFFFFF);
+          XFree (desktop);
+        }
+      else
+	window_impl->on_all_desktops = FALSE;
+      
+      do_net_wm_state_changes (window);
+    }
+}
+
+static void
+gdk_check_wm_state_changed (GdkWindow *window)
+{
+  GdkWindowObject *window_private = (GdkWindowObject *)window;
+  GdkWindowImplX11 *window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+  
   Atom type;
   gint format;
   gulong nitems;
   gulong bytes_after;
   Atom *atoms = NULL;
   gulong i;
-  gboolean found_sticky, found_maxvert, found_maxhorz, found_fullscreen;
-  GdkWindowState old_state;
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
-  
-  if (GDK_WINDOW_DESTROYED (window) ||
-      gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
-    return;
-  
-  found_sticky = FALSE;
-  found_maxvert = FALSE;
-  found_maxhorz = FALSE;
-  found_fullscreen = FALSE;
-  
-  XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
+
+  gboolean had_sticky = window_impl->have_sticky;
+
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
 		      0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
 		      &bytes_after, (guchar **)&atoms);
@@ -394,13 +489,13 @@ gdk_check_wm_state_changed (GdkWindow *window)
       while (i < nitems)
         {
           if (atoms[i] == sticky_atom)
-            found_sticky = TRUE;
+            window_impl->have_sticky = TRUE;
           else if (atoms[i] == maxvert_atom)
-            found_maxvert = TRUE;
+            window_impl->have_maxvert = TRUE;
           else if (atoms[i] == maxhorz_atom)
-            found_maxhorz = TRUE;
+            window_impl->have_maxhorz = TRUE;
           else if (atoms[i] == fullscreen_atom)
-            found_fullscreen = TRUE;
+            window_impl->have_fullscreen = TRUE;
           
           ++i;
         }
@@ -408,79 +503,13 @@ gdk_check_wm_state_changed (GdkWindow *window)
       XFree (atoms);
     }
 
-  /* For found_sticky to remain TRUE, we have to also be on desktop
-   * 0xFFFFFFFF
+  /* When have_sticky is turned on, we have to check the DESKTOP property
+   * as well.
    */
-
-  if (found_sticky)
-    {
-      gulong *desktop;
-      
-      XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), 
-			  GDK_WINDOW_XID (window),
-                          gdk_x11_get_xatom_by_name_for_display 
-			  (display, "_NET_WM_DESKTOP"),
-			  0, G_MAXLONG, False, XA_CARDINAL, &type, 
-			  &format, &nitems,
-                          &bytes_after, (guchar **)&desktop);
-
-      if (type != None)
-        {
-          if (*desktop != 0xFFFFFFFF)
-            found_sticky = FALSE;
-          XFree (desktop);
-        }
-    }
-          
-  old_state = gdk_window_get_state (window);
-
-  if (old_state & GDK_WINDOW_STATE_STICKY)
-    {
-      if (!found_sticky)
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_STICKY,
-                                     0);
-    }
+  if (window_impl->have_sticky && !had_sticky)
+    gdk_check_wm_desktop_changed (window);
   else
-    {
-      if (found_sticky)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_STICKY);
-    }
-
-  if (old_state & GDK_WINDOW_STATE_FULLSCREEN)
-    {
-      if (!found_fullscreen)
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_FULLSCREEN,
-                                     0);
-    }
-  else
-    {
-      if (found_fullscreen)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_FULLSCREEN);
-    }
-  
-  /* Our "maximized" means both vertical and horizontal; if only one,
-   * we don't expose that via GDK
-   */
-  if (old_state & GDK_WINDOW_STATE_MAXIMIZED)
-    {
-      if (!(found_maxvert && found_maxhorz))
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_MAXIMIZED,
-                                     0);
-    }
-  else
-    {
-      if (found_maxvert && found_maxhorz)
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_MAXIMIZED);
-    }
+    do_net_wm_state_changes (window);
 }
 
 #define HAS_FOCUS(window_impl)                           \
@@ -1590,7 +1619,8 @@ gdk_event_translate (GdkDisplay *display,
 	  event->configure.width = xevent->xconfigure.width;
 	  event->configure.height = xevent->xconfigure.height;
 	  
-	  if (!xevent->xconfigure.send_event && 
+	  if (!xevent->xconfigure.send_event &&
+	      !xevent->xconfigure.override_redirect &&
 	      !GDK_WINDOW_DESTROYED (window))
 	    {
 	      gint tx = 0;
@@ -1605,14 +1635,10 @@ gdk_event_translate (GdkDisplay *display,
 					 &tx, &ty,
 					 &child_window))
 		{
-		  if (!gdk_error_trap_pop ())
-		    {
-		      event->configure.x = tx;
-		      event->configure.y = ty;
-		    }
+		  event->configure.x = tx;
+		  event->configure.y = ty;
 		}
-	      else
-		gdk_error_trap_pop ();
+	      gdk_error_trap_pop ();
 	    }
 	  else
 	    {
@@ -1647,13 +1673,18 @@ gdk_event_translate (GdkDisplay *display,
 	  return_val = FALSE;
           break;
         }
-      
-      if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE") ||
-	  xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"))
-        {
-          /* If window state changed, then synthesize those events. */
-          gdk_check_wm_state_changed (window);
-        }
+
+      /* We compare with the serial of the last time we mapped the
+       * window to avoid refetching properties that we set ourselves
+       */
+      if (xevent->xproperty.serial >= GDK_WINDOW_IMPL_X11 (window_private->impl)->map_serial)
+	{
+	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"))
+	    gdk_check_wm_state_changed (window);
+	  
+	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"))
+	    gdk_check_wm_desktop_changed (window);
+	}
       
       if (window_private->event_mask & GDK_PROPERTY_CHANGE_MASK) 
 	{
@@ -1876,18 +1907,14 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
   else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
     {
       GdkWindow *win = event->any.window;
-      Window focus_win = GDK_WINDOW_IMPL_X11(((GdkWindowObject *)win)->impl)->focus_window;
+      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *)win)->impl);
 
-      /* There is no way of knowing reliably whether we are viewable so we need
-       * to trap errors so we don't cause a BadMatch.
+      /* There is no way of knowing reliably whether we are viewable;
+       * _gdk_x11_set_input_focus_safe() traps errors asynchronously.
        */
-      gdk_error_trap_push ();
-      XSetInputFocus (GDK_WINDOW_XDISPLAY (win),
-		      focus_win,
-		      RevertToParent,
-		      xevent->xclient.data.l[1]);
-      XSync (GDK_WINDOW_XDISPLAY (win), False);
-      gdk_error_trap_pop ();
+      _gdk_x11_set_input_focus_safe (display, impl->focus_window,
+				     RevertToParent,
+				     xevent->xclient.data.l[1]);
     }
   else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING") &&
 	   !_gdk_x11_display_is_root_window (display,
@@ -2190,8 +2217,8 @@ timestamp_predicate (Display *display,
 
   if (xevent->type == PropertyNotify &&
       xevent->xproperty.window == xwindow &&
-      xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display 
-      (gdk_display, "GDK_TIMESTAMP_PROP"))
+      xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (gdk_display,
+								       "GDK_TIMESTAMP_PROP"))
     return True;
 
   return False;

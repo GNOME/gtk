@@ -3516,3 +3516,11 @@ gdk_display_sync (GdkDisplay * display)
       DispatchMessage (&msg);
     }
 }
+
+void
+gdk_display_flush (GdkDisplay * display)
+{
+  g_return_if_fail (display == gdk_display_get_default ());
+
+  /* Nothing */
+}

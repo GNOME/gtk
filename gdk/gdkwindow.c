@@ -2144,6 +2144,18 @@ gdk_window_process_updates_internal (GdkWindow *window)
     }
 }
 
+static void
+flush_all_displays (void)
+{
+  GSList *displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  GSList *tmp_list;
+
+  for (tmp_list = displays; tmp_list; tmp_list = tmp_list->next)
+    gdk_display_flush (tmp_list->data);
+
+  g_slist_free (displays);
+}
+
 /**
  * gdk_window_process_all_updates:
  *
@@ -2174,7 +2186,7 @@ gdk_window_process_all_updates (void)
 
   g_slist_free (old_update_windows);
 
-  gdk_flush();
+  flush_all_displays ();
 }
 
 static gboolean

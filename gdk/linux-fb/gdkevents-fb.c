@@ -225,3 +225,8 @@ void
 gdk_display_sync (GdkDisplay *display)
 {
 }
+
+void
+gdk_display_flush (GdkDisplay * display)
+{
+}

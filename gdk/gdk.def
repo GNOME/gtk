@@ -60,6 +60,7 @@ EXPORTS
 	gdk_display_add_client_message_filter
 	gdk_display_beep
 	gdk_display_close
+	gdk_display_flush
 	gdk_display_get_core_pointer
 	gdk_display_get_default
 	gdk_display_get_default_screen

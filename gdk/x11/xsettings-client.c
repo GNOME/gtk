@@ -439,7 +439,9 @@ xsettings_client_new (Display             *display,
 {
   XSettingsClient *client;
   char buffer[256];
-
+  char *atom_names[3];
+  Atom atoms[3];
+  
   client = malloc (sizeof *client);
   if (!client)
     return NULL;
@@ -454,9 +456,15 @@ xsettings_client_new (Display             *display,
   client->settings = NULL;
 
   sprintf(buffer, "_XSETTINGS_S%d", screen);
-  client->selection_atom = XInternAtom (display, buffer, False);
-  client->xsettings_atom = XInternAtom (display, "_XSETTINGS_SETTINGS", False);
-  client->manager_atom = XInternAtom (display, "MANAGER", False);
+  atom_names[0] = buffer;
+  atom_names[1] = "_XSETTINGS_SETTINGS";
+  atom_names[2] = "MANAGER";
+
+  XInternAtoms (display, atom_names, 3, False, atoms);
+  
+  client->selection_atom = atoms[0];
+  client->xsettings_atom = atoms[1];
+  client->manager_atom = atoms[2];
 
   /* Select on StructureNotify so we get MANAGER events
    */
