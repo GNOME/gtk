@@ -6,14 +6,11 @@ Interface for text-editing widgets.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The #GtkEditable class is a base class for widgets
-for editing text, such as #GtkEntry and #GtkText. It
-cannot be instantiated by itself. The editable
-class contains functions for generically manipulating
-an editable widget, a large number of action signals
-used for key bindings, and several signals that
-an application can connect to to modify the behavior
-of a widget. 
+The #GtkEditable interface is an interface which should be implemented by
+text editing widgets, such as #GtkEntry and #GtkText. It contains functions 
+for generically manipulating an editable widget, a large number of action 
+signals used for key bindings, and several signals that an application can 
+connect to to modify the behavior of a widget. 
 </para>
 
 <para>

@@ -1,4 +1,13 @@
+2002-12-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkwindow-x11.c (set_initial_hints): Delete EWMH
+	properties if no private->state flags are set.  (#66754)
+
 2002-12-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_class_find_style_property): 
+	* gtk/gtkcontainer.c (gtk_container_class_find_child_property):
+	Doc typo fixes.
 
 	* gtk/tree_plus.xpm: 
 	* gtk/tree_plus.xbm: 

@@ -944,26 +944,27 @@ gdk_window_destroy_notify (GdkWindow *window)
 static void
 set_initial_hints (GdkWindow *window)
 {
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  Window xwindow = GDK_WINDOW_XID (window);  
   GdkWindowObject *private;
   Atom atoms[6];
   gint i;
-  
-  private = (GdkWindowObject*) window;
 
+  private = (GdkWindowObject*) window;
+  
   if (private->state & GDK_WINDOW_STATE_ICONIFIED)
     {
       XWMHints *wm_hints;
       
-      wm_hints = XGetWMHints (GDK_WINDOW_XDISPLAY (window),
-                              GDK_WINDOW_XID (window));
+      wm_hints = XGetWMHints (xdisplay, xwindow);
       if (!wm_hints)
         wm_hints = XAllocWMHints ();
 
       wm_hints->flags |= StateHint;
       wm_hints->initial_state = IconicState;
       
-      XSetWMHints (GDK_WINDOW_XDISPLAY (window),
-                   GDK_WINDOW_XID (window), wm_hints);
+      XSetWMHints (xdisplay, xwindow, wm_hints);
       XFree (wm_hints);
     }
 
@@ -976,52 +977,64 @@ set_initial_hints (GdkWindow *window)
 
   if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
     {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
 							"_NET_WM_STATE_MAXIMIZED_VERT");
       ++i;
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
 							"_NET_WM_STATE_MAXIMIZED_HORZ");
       ++i;
     }
 
   if (private->state & GDK_WINDOW_STATE_STICKY)
     {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
 							"_NET_WM_STATE_STICKY");
       ++i;
     }
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
     {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
 							"_NET_WM_STATE_FULLSCREEN");
       ++i;
     }
   
   if (private->modal_hint)
     {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
 							"_NET_WM_STATE_MODAL");
       ++i;
     }
 
   if (i > 0)
     {
-      XChangeProperty (GDK_WINDOW_XDISPLAY (window),
-                       GDK_WINDOW_XID (window),
-		       gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window), "_NET_WM_STATE"),
+      XChangeProperty (xdisplay,
+                       xwindow,
+		       gdk_x11_get_xatom_by_name_for_display (xdisplay, "_NET_WM_STATE"),
                        XA_ATOM, 32, PropModeReplace,
                        (guchar*) atoms, i);
+    }
+  else 
+    {
+      XDeleteProperty (xdisplay,
+                       xwindow,
+		       gdk_x11_get_xatom_by_name_for_display (xdisplay, "_NET_WM_STATE"));
     }
 
   if (private->state & GDK_WINDOW_STATE_STICKY)
     {
       atoms[0] = 0xFFFFFFFF;
-      XChangeProperty (GDK_WINDOW_XDISPLAY (window),
-                       GDK_WINDOW_XID (window),
-		       gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window), "_NET_WM_DESKTOP"),
+      XChangeProperty (xdisplay,
+                       xwindow,
+		       gdk_x11_get_xatom_by_name_for_display (xdisplay, "_NET_WM_DESKTOP"),
                        XA_CARDINAL, 32, PropModeReplace,
                        (guchar*) atoms, 1);
+    }
+  else
+    {
+      XDeleteProperty (xdisplay,
+                       xwindow,
+		       gdk_x11_get_xatom_by_name_for_display (xdisplay, "_NET_WM_DESKTOP"));
     }
 }
 

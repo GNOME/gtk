@@ -6402,7 +6402,7 @@ gtk_widget_class_install_style_property (GtkWidgetClass *class,
  * gtk_widget_class_find_style_property:
  * @klass: a #GtkWidgetClass
  * @property_name: the name of the style property to find
- * @returns: the #GParamSpec of the style property or %NULL if @class has ho
+ * @returns: the #GParamSpec of the style property or %NULL if @class has no
  *   style property with that name.
  *
  * Finds a style property of a widget class by name.

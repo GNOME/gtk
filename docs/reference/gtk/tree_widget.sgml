@@ -83,14 +83,14 @@ GtkTreeStore *store = gtk_tree_store_new (N_COLUMNS,       /* Total number of co
                                           G_TYPE_BOOLEAN); /* Is checked out?         */
 ]]></programlisting></informalexample>
     <para>
-      Adding data to the model is done using <link linkend="gtk_tree_store_set">
-      gtk_tree_store_set()</link> or <link linkend="gtk_list_store_set">
+      Adding data to the model is done using <link linkend="gtk-tree-store-set">
+      gtk_tree_store_set()</link> or <link linkend="gtk-list-store-set">
       gtk_list_store_set()</link>, depending upon which sort of model was
       created.  To do this, a <link linkend="GtkTreeIter">GtkTreeIter</link> must
       be acquired.  The iterator points to the location where data will be added.
     </para>
     <para>
-      Once an iterator has been acquired, <link linkend="gtk_tree_store_set">
+      Once an iterator has been acquired, <link linkend="gtk-tree-store-set">
       gtk_tree_store_set()</link> is used to apply data to the part of the model
       that the iterator points to.  Consider the following example:
     </para>
@@ -113,7 +113,7 @@ gtk_tree_store_set (store, &iter,
     columns in a given row.
   </para>
   <para>
-    The third argument to gtk_tree_store_append() is the parent iterator.  It
+    The third argument to <link linkend="gtk-tree-store-append">gtk_tree_store_append()</link> is the parent iterator.  It
     is used to add a row to a GtkTreeStore as a child of an existing row.  This
     means that the new row will only be visible when its parent is visible and
     in its expanded state.  Consider the following example:

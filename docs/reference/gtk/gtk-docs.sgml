@@ -322,6 +322,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkHScale;      
         &GtkVScale;
         &GtkSpinButton;
+        &GtkEditable;
     </chapter>
 
     <chapter id="TextWidgetObjects">
@@ -433,7 +434,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkBox;
         &GtkButtonBox;
         &GtkContainer;
-        &GtkEditable;
         &GtkItem;
         &GtkMisc;
         &GtkObject;

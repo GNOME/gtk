@@ -663,7 +663,7 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  * gtk_container_class_find_child_property:
  * @cclass: a #GtkContainerClass
  * @property_name: the name of the child property to find
- * @returns: the #GParamSpec of the child property or %NULL if @class has ho
+ * @returns: the #GParamSpec of the child property or %NULL if @class has no
  *   child property with that name.
  *
  * Finds a child property of a container class by name.

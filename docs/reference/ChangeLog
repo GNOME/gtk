@@ -1,3 +1,17 @@
+2002-12-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktextview.sgml: Add docs.
+
+	* gtk/tree_widget.sgml: Fix some links.
+
+	* gtk/tmpl/gtkwindow.sgml: Add docs.
+
+	* gtk/tmpl/gtkeditable.sgml: Document GtkEditable as an interface,
+	not as an abstract base class.
+
+	* gtk/gtk-docs.sgml: Move GtkEditable from "Abstract Base Classes"
+	to "Numeric/Text Data Entry".
+
 2002-12-09  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/tmpl/gdk-pixbuf-loader.sgml: Add docs.

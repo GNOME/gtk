@@ -123,9 +123,9 @@ the child gets a larger allocation than it requests.
 @window: the window
 @allow_shrink: whether the user can shrink the window below its size request
 @allow_grow: whether the user can grow the window larger than its size request
-@auto_shrink: whether the window automatically snaps back to its size request if
-it's larger
-
+@auto_shrink: whether the window automatically snaps back to its size request 
+              if it's larger
+@Deprecated: Use gtk_window_set_resizable() instead.
 
 <!-- ##### FUNCTION gtk_window_set_resizable ##### -->
 <para>
