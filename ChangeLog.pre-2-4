@@ -1,3 +1,14 @@
+2003-09-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdisplay-win32.c (gdk_display_open): Don't call
+	CloseHandle() on the HMODULE returned from GetModuleHandle().
+	Didn't cause any harm, but didn't do anything useful either. When
+	running a GTK+ program under MS's debugger, the CloseHandle() call
+	would cause a "first-chance exception" in ntdll.dll to show up.
+	(The exception is caught appropriately if you let it proceed, but
+	it confuses the person using the debugger). Thanks to Bruce
+	Hochstetler for noticing.
+
 Tue Sep  2 21:01:19 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from stable.

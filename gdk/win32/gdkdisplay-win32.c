@@ -119,8 +119,6 @@ gdk_display_open (const gchar *display_name)
   p_EnumDisplayMonitors = (t_EnumDisplayMonitors) GetProcAddress (user32, "EnumDisplayMonitors");
   p_GetMonitorInfoA = (t_GetMonitorInfoA) GetProcAddress (user32, "GetMonitorInfoA");
 
-  CloseHandle (user32);
-  
   if (p_EnumDisplayMonitors != NULL && p_GetMonitorInfoA != NULL)
     {
       gint i, index;
