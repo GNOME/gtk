@@ -138,7 +138,7 @@ gtk_check_button_draw (GtkWidget    *widget,
       if (check_button->toggle_button.draw_indicator)
 	{
 	  gint border_width;
-	  button = GTK_BUTTON (widget);
+ 	  button = GTK_BUTTON (widget);
 
 	  gtk_check_button_draw_indicator (check_button, area);
 	  	  
@@ -171,6 +171,7 @@ gtk_check_button_draw_focus (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
 
+  border_width = GTK_CONTAINER (widget)->border_width;
   gtk_widget_queue_draw_area(widget->parent, 
                              border_width + widget->allocation.x,
 			     border_width + widget->allocation.y,
