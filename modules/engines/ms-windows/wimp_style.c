@@ -1508,10 +1508,12 @@ draw_handle (GtkStyle        *style,
 	     gint             height,
 	     GtkOrientation   orientation)
 {
-  XpThemeElement hndl;
-
   if (!GTK_IS_HANDLE_BOX (widget))
     {
+      XpThemeElement hndl;
+
+      sanitize_size (window, &width, &height);
+  
       if (orientation == GTK_ORIENTATION_VERTICAL)
         hndl = XP_THEME_ELEMENT_GRIPPER_V;
       else

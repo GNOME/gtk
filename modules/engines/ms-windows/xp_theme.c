@@ -303,7 +303,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
     case XP_THEME_ELEMENT_REBAR:
     case XP_THEME_ELEMENT_GRIPPER_H:
     case XP_THEME_ELEMENT_GRIPPER_V:
-      ret = 0;
+      ret = CHEVS_NORMAL;
       break;
 
     case XP_THEME_ELEMENT_CHEVRON:
@@ -661,6 +661,22 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
     return FALSE;
 
   part_state = xp_theme_map_gtk_state(element, state_type);
+
+#ifdef GNATS_HACK
+  if (element == XP_THEME_ELEMENT_GRIPPER_V
+      || element == XP_THEME_ELEMENT_GRIPPER_H)
+    {
+      /* Hack alert: when XP draws a gripper, it does not seem to fill
+         up the whole rectangle. It only fills the gripper line
+         itself. Therefore we manually fill up the background here
+         ourselves. I still have to look into this a bit further, as
+         tests with GNAT Programming System show some awkward
+         interference between this FillRect and the subsequent
+         DrawThemeBackground(). */
+      FillRect (dc, &rect, (HBRUSH) (COLOR_3DFACE+1));
+    }
+#endif
+  
   draw_theme_background_func(theme, dc, element_part_map[element], part_state, &rect, pClip);
   gdk_win32_hdc_release(drawable, style->dark_gc[state_type], 0);
 
