@@ -1,3 +1,7 @@
+2003-09-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktable.sgml: Fix a copy-and-paste error.  (#122800)
+
 2003-09-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_widget_[gs]et_no_show_all.
