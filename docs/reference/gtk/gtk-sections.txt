@@ -1162,6 +1162,7 @@ GTK_IS_FILE_CHOOSER
 GTK_TYPE_FILE_CHOOSER
 <SUBSECTION Private>
 gtk_file_chooser_get_type
+GtkFileChooserEmbed
 </SECTION>
 
 <SECTION>

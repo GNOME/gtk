@@ -1,3 +1,8 @@
+2004-04-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add GtkFileChooserEmbed to a 
+	Private section, so gtk-doc can strip it out of the hierarchy.
+
 2004-04-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/tmpl/gtkfilechooser.sgml: Added a section explaining
