@@ -43,7 +43,9 @@ noinst_PROGRAMS = 		\
 BUILT_SOURCES=test-inline-pixbufs.h
 
 test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/make-inline-pixbuf apple-red.png gnome-foot.png
-	GDK_PIXBUF_MODULEDIR=$(top_builddir)/gdk-pixbuf/.libs $(top_builddir)/gdk-pixbuf/make-inline-pixbuf test-inline-pixbufs.h apple_red apple-red.png gnome_foot gnome-foot.png 
+	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
+         cd $(srcdir) &&				     \
+            GDK_PIXBUF_MODULEDIR=$$topdir/gdk-pixbuf/.libs $$topdir/gdk-pixbuf/make-inline-pixbuf $$curdir/test-inline-pixbufs.h  apple_red apple-red.png gnome_foot gnome-foot.png)
 
 testpixbuf_DEPENDENCIES = $(DEPS)
 testpixbuf_drawable_DEPENDENCIES = $(DEPS)

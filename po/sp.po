@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.1\n"
-"POT-Creation-Date: 2000-08-10 21:20-0400\n"
+"POT-Creation-Date: 2000-11-13 17:00-0500\n"
 "PO-Revision-Date: 2000-07-29 19:35+0100\n"
 "Last-Translator: Tomislav Jankovic <tomaja@net.yu>\n"
 "Language-Team: Serbian(Latin) <tomaja@net.yu>\n"
@@ -14,62 +14,71 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:1420
+#: gdk-pixbuf/io-gif.c:426
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:435
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:584
+msgid "Circular table entry in GIF file"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:921
+msgid "File does not appear to be a GIF file"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:933
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:985
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1422
 msgid "Hue:"
 msgstr "Ниjанса:"
 
-#: gtk/gtkcolorsel.c:1421
+#: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
 msgstr "Засићеност: "
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1424
 msgid "Value:"
 msgstr "Вредност:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1425
 msgid "Red:"
 msgstr "Црвенa:"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1426
 msgid "Green:"
 msgstr "Зелена:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1427
 msgid "Blue:"
 msgstr "Плава:"
 
-#: gtk/gtkcolorsel.c:1428
+#: gtk/gtkcolorsel.c:1430
 msgid "Opacity:"
 msgstr "Прозирност:"
 
-#: gtk/gtkcolorsel.c:1443
+#: gtk/gtkcolorsel.c:1445
 msgid "Hex Value:"
 msgstr "Hex вредност:"
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1466
 msgid "Custom Palette"
 msgstr "Класичнa палетa "
 
-#: gtk/gtkcolorsel.c:1469
+#: gtk/gtkcolorsel.c:1471
 msgid "Set Color"
 msgstr "Подеси боjу"
-
-#. The OK button
-#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
-#: gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "У реду"
-
-#. The Cancel button
-#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
-#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
-#: gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Поништи"
-
-#: gtk/gtkcolorseldialog.c:116
-msgid "Help"
-msgstr ""
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
@@ -81,20 +90,20 @@ msgstr "Директориjуми"
 msgid "Files"
 msgstr "Фаjлови"
 
-#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
+#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Директориjум %s ниjе могуће  прочитaти"
 
-#: gtk/gtkfilesel.c:637
+#: gtk/gtkfilesel.c:632
 msgid "Create Dir"
 msgstr "Креираj директориjум"
 
-#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
+#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
 msgid "Delete File"
 msgstr "Избриши фаjл"
 
-#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
+#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
 msgid "Rename File"
 msgstr "Промени име фаjлa"
 
@@ -103,65 +112,66 @@ msgstr "Промени име фаjлa"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:828
+#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
 msgid "Error"
 msgstr "Грeшкa"
 
 #. close button
-#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "Затвори"
 
-#: gtk/gtkfilesel.c:927
+#: gtk/gtkfilesel.c:929
 msgid "Create Directory"
 msgstr "Креираj директориjум"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:943
 msgid "Directory name:"
 msgstr "Име дректориjума:"
 
 #. buttons
-#: gtk/gtkfilesel.c:954
+#: gtk/gtkfilesel.c:956
 msgid "Create"
 msgstr "Креираj"
 
+#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
+msgid "Cancel"
+msgstr "Поништи"
+
 #. buttons
-#: gtk/gtkfilesel.c:1058
+#: gtk/gtkfilesel.c:1065
 msgid "Delete"
 msgstr "Избриши"
 
 #. buttons
-#: gtk/gtkfilesel.c:1173
+#: gtk/gtkfilesel.c:1189
 msgid "Rename"
 msgstr "Промени имe"
 
-#: gtk/gtkfilesel.c:1600
+#: gtk/gtkfilesel.c:1615
 msgid "Selection: "
 msgstr "Избор:"
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:190
 msgid "Family:"
 msgstr "Фамилиjа:"
 
-#: gtk/gtkfontsel.c:194
+#: gtk/gtkfontsel.c:195
 #, fuzzy
 msgid "Style:"
 msgstr "Додаj стил:"
 
-#: gtk/gtkfontsel.c:199
+#: gtk/gtkfontsel.c:200
 msgid "Size:"
 msgstr "Величина:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:309
+#: gtk/gtkfontsel.c:310
 msgid "Preview:"
 msgstr "Приказ: "
 
-#: gtk/gtkfontsel.c:959
-msgid "Apply"
-msgstr "Примени"
-
-#: gtk/gtkfontsel.c:981
+#: gtk/gtkfontsel.c:966
 msgid "Font Selection"
 msgstr "Избор фонтa"
 
@@ -172,6 +182,10 @@ msgstr "Gamma"
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Вредност gamma"
+
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
+msgid "OK"
+msgstr "У реду"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
@@ -214,7 +228,7 @@ msgstr "Тастери"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329
+#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "Сними"
 
@@ -259,25 +273,85 @@ msgstr "(непознато)"
 msgid "clear"
 msgstr "чисто"
 
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR
+#.
+#: gtk/gtkmain.c:417
+msgid "default:LTR"
+msgstr ""
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:169
+#, fuzzy
+msgid "Information"
+msgstr "Информациjе о фонту"
+
+#: gtk/gtkstock.c:170
+msgid "Warning"
+msgstr ""
+
+#: gtk/gtkstock.c:172
+msgid "Question"
+msgstr ""
+
+#: gtk/gtkstock.c:174
+#, fuzzy
+msgid "_Apply"
+msgstr "Примени"
+
+#: gtk/gtkstock.c:177
+#, fuzzy
+msgid "_Close"
+msgstr "Затвори"
+
+#: gtk/gtkstock.c:178
+msgid "_Yes"
+msgstr ""
+
+#: gtk/gtkstock.c:179
+msgid "_No"
+msgstr ""
+
+#: gtk/gtkstock.c:182
+msgid "Quit"
+msgstr ""
+
+#: gtk/gtkstock.c:183
+msgid "Help"
+msgstr ""
+
+#: gtk/gtkstock.c:184
+msgid "New"
+msgstr ""
+
+#: gtk/gtkstock.c:185
+msgid "Open"
+msgstr ""
+
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Странa %u"
 
-#: gtk/gtkrc.c:1872
+#: gtk/gtkrc.c:2042
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Не могу да лоцирам слику са путaњом: \"%s\" линиjа %d"
+msgstr ""
+"Не могу да лоцирам слику са путaњом: \"%s\" "
+"линиjа %d"
 
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:2045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Не могу да лоцирам слику са путaњом:  \"%s\""
+msgstr ""
+"Не могу да лоцирам слику са путaњом:  \"%s\""
 
-#: gtk/gtkthemes.c:117
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Не могу да лоцирам стартни модул са путaњом:  \"%s\","
+msgstr ""
+"Не могу да лоцирам стартни модул са "
+"путaњом:  \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
@@ -346,9 +420,6 @@ msgstr "--- Без типа ---"
 #~ msgid "Pixels"
 #~ msgstr "Пиксели"
 
-#~ msgid "Font Information"
-#~ msgstr "Информациjе о фонту"
-
 #~ msgid "Requested Font Name:"
 #~ msgstr "Трaжено име фонта:"
 
@@ -356,7 +427,8 @@ msgstr "--- Без типа ---"
 #~ msgstr "Стварно име фонта:"
 
 #~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i фонтови су доступни са укупно %i стиловa"
+#~ msgstr ""
+#~ "%i фонтови су доступни са укупно %i стиловa"
 
 #~ msgid "Filter"
 #~ msgstr "Филтер"
@@ -410,7 +482,9 @@ msgstr "--- Без типа ---"
 #~ msgstr "Селектовани фонт ниjе валидан фонт."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Ово jе 2 битни фонт и можда нeће бити коректно приказан"
+#~ msgstr ""
+#~ "Ово jе 2 битни фонт и можда нeће бити "
+#~ "коректно приказан"
 
 #~ msgid "roman"
 #~ msgstr "римски"
@@ -455,4 +529,5 @@ msgstr "--- Без типа ---"
 #~ msgstr "танко"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS досегнут.Неки фонтови ће недостаjати"
+#~ msgstr ""
+#~ "MAX_FONTS досегнут.Неки фонтови ће недостаjати"

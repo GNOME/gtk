@@ -164,12 +164,14 @@ gtk_im_context_set_client_window (GtkIMContext *context,
 
 /**
  * gtk_im_context_get_preedit_string:
- * @context: a #GtkIMContext
- * @str:     location to store the retrieved string. The
- *           string retrieved must be freed with g_free ().
- * @attrs:   location to store the retrieved attribute list.
- *           When you are done with this list, you must
- *           unreference it with pango_attr_list_unref().
+ * @context:    a #GtkIMContext
+ * @str:        location to store the retrieved string. The
+ *              string retrieved must be freed with g_free ().
+ * @attrs:      location to store the retrieved attribute list.
+ *              When you are done with this list, you must
+ *              unreference it with pango_attr_list_unref().
+ * @cursor_pos: location to store position of cursor (in bytes)
+ *              within the preedit string.  
  * 
  * Retrieve the current preedit string for the input context,
  * and a list of attributes to apply to the string.

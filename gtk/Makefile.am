@@ -1,4 +1,4 @@
-## Makefile.am for gtk+/gtk
+# Makefile.am for gtk+/gtk
 
 SUBDIRS=stock-icons
 
@@ -11,6 +11,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
+	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_srcdir)/gdk-pixbuf -I../gdk-pixbuf	\
@@ -200,6 +201,7 @@ gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtktextmarkprivate.h	\
 	gtktexttagprivate.h	\
 	gtkthemes.h		\
+	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 @STRIP_END@
 # GTK+ C sources to build the library from

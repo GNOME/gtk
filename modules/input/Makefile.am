@@ -2,6 +2,7 @@
 
 INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) 				\
+	-I$(top_srcdir)/gdk				\
 	-I$(top_builddir)/gdk				\
 	-DGTK_DISABLE_COMPAT_H				\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
@@ -31,7 +32,7 @@ LDADDS = @STRIP_BEGIN@ 					\
 	-lm						\
 @STRIP_END@
 
-moduledir = $(libdir)/gtk+/gtk-2.0/$(GTK_VERSION)/immodules
+moduledir = $(libdir)/gtk-2.0/$(GTK_VERSION)/immodules
 module_LTLIBRARIES = im-cyrillic-translit.la im-xim.la im-viqr.la im-thai-broken.la
 
 im_cyrillic_translit_la_LDFLAGS = -rpath $(libdir) -export-dynamic -avoid-version -module
@@ -44,5 +45,9 @@ im_viqr_la_LDFLAGS = -rpath $(libdir) -export-dynamic -avoid-version -module
 im_viqr_la_SOURCES = imviqr.c
 
 im_xim_la_LDFLAGS = -rpath $(libdir) -export-dynamic -avoid-version -module
-im_xim_la_SOURCES = gtkimcontextxim.c imxim.c
+im_xim_la_SOURCES = 		\
+	gtkimcontextxim.c 	\
+	gtkimcontextxim.h	\
+	imxim.c
+
 

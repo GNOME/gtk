@@ -20,4 +20,12 @@ VARIABLES=	dialog_error     	dialog_error.png    	\
 		stock_save		stock_save.png
 
 gtkstockpixbufs.h: $(top_builddir)/gdk-pixbuf/make-inline-pixbuf $(IMAGES)
-	GDK_PIXBUF_MODULEDIR=$(top_builddir)/gdk-pixbuf/.libs $(top_builddir)/gdk-pixbuf/make-inline-pixbuf gtkstockpixbufs.h $(VARIABLES)
+	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
+         cd $(top_srcdir)/gtk/stock-icons &&                 \
+            GDK_PIXBUF_MODULEDIR=$$topdir/gdk-pixbuf/.libs $$topdir/gdk-pixbuf/make-inline-pixbuf $$curdir/gtkstockpixbufs.h $(VARIABLES))
+
+EXTRA_DIST = $(IMAGES)
+
+# For some reason, rebuilding of this file doesn't happen in the make dist'ed version, so force it.
+
+all-am: gtkstockpixbufs.h

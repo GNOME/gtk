@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-10-30 22:42+0000\n"
+"POT-Creation-Date: 2000-11-13 17:00-0500\n"
 "PO-Revision-Date: 2000-10-31 00:22+03:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -78,47 +78,30 @@ msgstr "Другая палитра"
 msgid "Set Color"
 msgstr "Установить цвет"
 
-#. The OK button
-#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
-#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:968
-#: gtk/gtkfilesel.c:1077 gtk/gtkfilesel.c:1201 gtk/gtkfontsel.c:965
-#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
-msgid "Cancel"
-msgstr "Отменить"
-
-#: gtk/gtkcolorseldialog.c:116 gtk/gtkstock.c:183
-msgid "Help"
-msgstr "Справка"
-
 #. The directories clist
-#: gtk/gtkfilesel.c:512
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Каталоги"
 
 #. The files clist
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Файлы"
 
-#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Каталог не читаем: %s"
 
-#: gtk/gtkfilesel.c:635
+#: gtk/gtkfilesel.c:632
 msgid "Create Dir"
 msgstr "Создать каталог"
 
-#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1046
+#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
 msgid "Delete File"
 msgstr "Удалить файл"
 
-#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1159
+#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
 msgid "Rename File"
 msgstr "Переименовать файл"
 
@@ -127,64 +110,65 @@ msgstr "Переименовать файл"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827 gtk/gtkstock.c:171
+#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
 msgid "Error"
 msgstr "Ошибка"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "Закрыть"
 
-#: gtk/gtkfilesel.c:932
+#: gtk/gtkfilesel.c:929
 msgid "Create Directory"
 msgstr "Создать каталог"
 
-#: gtk/gtkfilesel.c:946
+#: gtk/gtkfilesel.c:943
 msgid "Directory name:"
 msgstr "Имя каталога:"
 
 #. buttons
-#: gtk/gtkfilesel.c:959
+#: gtk/gtkfilesel.c:956
 msgid "Create"
 msgstr "Создать"
 
+#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
+msgid "Cancel"
+msgstr "Отменить"
+
 #. buttons
-#: gtk/gtkfilesel.c:1068
+#: gtk/gtkfilesel.c:1065
 msgid "Delete"
 msgstr "Удалить"
 
 #. buttons
-#: gtk/gtkfilesel.c:1192
+#: gtk/gtkfilesel.c:1189
 msgid "Rename"
 msgstr "Переименовать"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1615
 msgid "Selection: "
 msgstr "Выбор: "
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:190
 msgid "Family:"
 msgstr "Семейство:"
 
-#: gtk/gtkfontsel.c:194
+#: gtk/gtkfontsel.c:195
 msgid "Style:"
 msgstr "Стиль:"
 
-#: gtk/gtkfontsel.c:199
+#: gtk/gtkfontsel.c:200
 msgid "Size:"
 msgstr "Размер:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:309
+#: gtk/gtkfontsel.c:310
 msgid "Preview:"
 msgstr "Пример:"
 
-#: gtk/gtkfontsel.c:959
-msgid "Apply"
-msgstr "Применить"
-
-#: gtk/gtkfontsel.c:981
+#: gtk/gtkfontsel.c:966
 msgid "Font Selection"
 msgstr "Выбор шрифта"
 
@@ -195,6 +179,10 @@ msgstr "Гамма"
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Гамма величина"
+
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
+msgid "OK"
+msgstr "OK"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
@@ -322,6 +310,10 @@ msgstr "Нет"
 msgid "Quit"
 msgstr "Выход"
 
+#: gtk/gtkstock.c:183
+msgid "Help"
+msgstr "Справка"
+
 #: gtk/gtkstock.c:184
 msgid "New"
 msgstr "Новый"
@@ -338,256 +330,30 @@ msgstr "Страница %u"
 #: gtk/gtkrc.c:2042
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Файл с изображением не найден в pixmap_path: \"%s\", строка %d"
+msgstr ""
+"Файл с изображением не найден в pixmap_path: "
+"\"%s\", строка %d"
 
 #: gtk/gtkrc.c:2045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Файл с изображением не найден в pixmap_path: \"%s\""
+msgstr ""
+"Файл с изображением не найден в pixmap_path: \"%s\""
 
-#: gtk/gtkthemes.c:117
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Загружаемый модуль не найден в module_path: \"%s\","
+msgstr ""
+"Загружаемый модуль не найден в module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Нет подсказки ---"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:125 gdk-pixbuf/gdk-pixbuf-io.c:598
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr ""
+#~ msgid "Apply"
+#~ msgstr "Применить"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:136 gdk-pixbuf/gdk-pixbuf-io.c:608
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:165
-#, c-format
-msgid "Don't know how to load the animation in file '%s'"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:187 gdk-pixbuf/gdk-pixbuf-io.c:653
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:225
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:126
-msgid "Image data is partially missing"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:139
-msgid ""
-"Image has an incorrect pixel rowstride, perhaps the data was corrupted "
-"somehow."
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:154
-msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:167
-msgid "Image data is partially missing, probably it was ocorrupted somehow."
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:183
-#, c-format
-msgid ""
-"Image has an unknown colorspace code (%d), perhaps the image data was "
-"corrupted"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:192
-#, c-format
-msgid ""
-"Image has an improper number of bits per sample (%d), perhaps the image data "
-"was corrupted"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:201 gdk-pixbuf/gdk-pixbuf-data.c:210
-#, c-format
-msgid ""
-"Image has an improper number of channels (%d), perhaps the image data was "
-"corrupted"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:228
-#, c-format
-msgid ""
-"Not enough memory to store a %d by %d image; try exiting some applications "
-"to free memory."
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:298
-msgid "Image contained no data."
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:308
-msgid "Image isn't in the correct format (inline GdkPixbuf format)"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:324
-#, c-format
-msgid "This version of the software is unable to read images with type code %d"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:311
-#, fuzzy, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Загружаемый модуль не найден в module_path: \"%s\","
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:508 gdk-pixbuf/gdk-pixbuf-io.c:533
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:555
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:561
-msgid "Unrecognized image file format"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:631
-#, c-format
-msgid "Don't know how to load the image in file '%s'"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:664
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:763
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:866
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:887
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: "
-"%s"
-msgstr ""
-
-#: gdk-pixbuf/io-jpeg.c:126
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
-
-#: gdk-pixbuf/io-jpeg.c:235
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-
-#: gdk-pixbuf/io-jpeg.c:647
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-
-#: gdk-pixbuf/io-jpeg.c:662
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:158
-#, c-format
-msgid "Fatal error saving PNG image file: %s"
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:242
-msgid "Insufficient memory to load PNG file"
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:526
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:600
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:706
-msgid "Insufficient memory to save PNG file"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:248
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:279
-msgid "PNM file has an incorrect initial byte"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:309
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:334
-msgid "PNM file has an image width of 0"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:355
-msgid "PNM file has an image height of 0"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:378
-msgid "Maximum color value in PNM file is 0"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:417 gdk-pixbuf/io-pnm.c:445 gdk-pixbuf/io-pnm.c:477
-msgid "Raw PNM image type is invalid"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:537 gdk-pixbuf/io-pnm.c:579
-msgid "PNM image format is invalid"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:638
-msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
-
-#: gtk/gdk-pixbuf-loader.c:358
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
-
-#: gtk/gdk-pixbuf-loader.c:383 gtk/gdk-pixbuf-loader.c:484
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to begin loading an image, "
-"but didn't give a reason for the failure"
-msgstr ""
-
-#. Remove this icon source so we don't keep trying to
-#. * load it.
-#.
-#: gtk/gtkiconfactory.c:675
-#, c-format
-msgid "Error loading icon: %s"
-msgstr ""
+#, fuzzy
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr ""
+#~ "Загружаемый модуль не найден в module_path: \"%s\","

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 2000-11-07 06:22+0100\n"
+"POT-Creation-Date: 2000-11-13 17:00-0500\n"
 "PO-Revision-Date: 2000-11-07 06:28+0100\n"
 "Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -15,7 +15,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
+msgstr ""
+"A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
 
 #: gdk-pixbuf/io-gif.c:435
 #, c-format
@@ -79,16 +80,17 @@ msgstr "Egyéni paletta"
 msgid "Set Color"
 msgstr "Szín beállítása"
 
+#. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Könyvtárak"
 
+#. The files clist
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Fájlok"
 
-#: gtk/gtkfilesel.c:600
-#: gtk/gtkfilesel.c:1636
+#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Olvashatatlan könyvtár: %s"
@@ -97,24 +99,25 @@ msgstr "Olvashatatlan könyvtár: %s"
 msgid "Create Dir"
 msgstr "Könyvtár létrehozása"
 
-#: gtk/gtkfilesel.c:643
-#: gtk/gtkfilesel.c:1043
+#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
 msgid "Delete File"
 msgstr "Fájl törlése"
 
-#: gtk/gtkfilesel.c:654
-#: gtk/gtkfilesel.c:1156
+#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
 msgid "Rename File"
 msgstr "Fájl átnevezése"
 
-#: gtk/gtkfilesel.c:824
-#: gtk/gtkstock.c:171
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
 msgid "Error"
 msgstr "Hiba"
 
-#: gtk/gtkfilesel.c:847
-#: gtk/gtkinputdialog.c:338
-#: gtk/gtkstock.c:181
+#. close button
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "Bezár"
 
@@ -126,22 +129,22 @@ msgstr "Könyvtár létrehozása"
 msgid "Directory name:"
 msgstr "Könyvtár neve:"
 
+#. buttons
 #: gtk/gtkfilesel.c:956
 msgid "Create"
 msgstr "Létrehozás"
 
-#: gtk/gtkfilesel.c:965
-#: gtk/gtkfilesel.c:1074
-#: gtk/gtkfilesel.c:1198
-#: gtk/gtkgamma.c:423
-#: gtk/gtkstock.c:176
+#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
 msgid "Cancel"
 msgstr "Mégsem"
 
+#. buttons
 #: gtk/gtkfilesel.c:1065
 msgid "Delete"
 msgstr "Törlés"
 
+#. buttons
 #: gtk/gtkfilesel.c:1189
 msgid "Rename"
 msgstr "Átnevezés"
@@ -162,6 +165,7 @@ msgstr "Stílus:"
 msgid "Size:"
 msgstr "Méret:"
 
+#. create the text entry widget
 #: gtk/gtkfontsel.c:310
 msgid "Preview:"
 msgstr "Nézet:"
@@ -178,11 +182,11 @@ msgstr "Gamma"
 msgid "Gamma value"
 msgstr "Gamma érték"
 
-#: gtk/gtkgamma.c:415
-#: gtk/gtkstock.c:175
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
 msgid "OK"
 msgstr "OK"
 
+#. shell and main vbox
 #: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "Bevitel"
@@ -211,16 +215,19 @@ msgstr "Ablak"
 msgid "Mode: "
 msgstr "Mód:"
 
+#. The axis listbox
 #: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "Szögek"
 
+#. Keys listbox
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "Billentyűk"
 
-#: gtk/gtkinputdialog.c:329
-#: gtk/gtkstock.c:186
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "Ment"
 
@@ -252,8 +259,7 @@ msgstr "Görgő"
 msgid "none"
 msgstr "nincs"
 
-#: gtk/gtkinputdialog.c:550
-#: gtk/gtkinputdialog.c:586
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(tiltva)"
 
@@ -261,14 +267,19 @@ msgstr "(tiltva)"
 msgid "(unknown)"
 msgstr "(ismeretlen)"
 
+#. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "törlés"
 
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR
+#.
 #: gtk/gtkmain.c:417
 msgid "default:LTR"
 msgstr "default:LTR"
 
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
 #: gtk/gtkstock.c:169
 msgid "Information"
 msgstr "Információ"
@@ -313,23 +324,22 @@ msgstr "Új"
 msgid "Open"
 msgstr "Megnyitás"
 
-#: gtk/gtknotebook.c:2059
-#: gtk/gtknotebook.c:4131
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "%u. lap"
 
-#: gtk/gtkrc.c:1991
+#: gtk/gtkrc.c:2042
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nem találom a képet a pixmap_path (%s) útvonalon (%d. sor)"
 
-#: gtk/gtkrc.c:1994
+#: gtk/gtkrc.c:2045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"
 
-#: gtk/gtkthemes.c:194
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "Nem találom a betölthető modult a module_path (%s) útvonalon,"
@@ -337,4 +347,3 @@ msgstr "Nem találom a betölthető modult a module_path (%s) útvonalon,"
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "-- Nincs segédszöveg --"
-

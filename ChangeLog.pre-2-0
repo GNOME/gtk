@@ -1,3 +1,22 @@
+Mon Nov 13 14:43:48 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/Makefile.am (test-inline-pixbufs.h): Fix srcdir != builddir
+
+	* gtk/Makefile.am (INCLUDES): Add -I$(builddir)/gtk
+
+	* gtk/stock-icons/Makefile.am (gtkstockpixbufs.h): Handles
+	srcdir != builddir
+
+	* modules/input/Makefile.am (INCLUDES): add $(top_srcdir)/gdk
+
+	* configure.in (GTK_VERSION): Up to 1.3.2
+
+	* modules/input/Makefile.am (im_xim_la_SOURCES): Add 
+	gtkimcontextxim.h
+
+	* gtk/gtkimcontext.c (gtk_im_context_get_preedit_string): Add
+	missing doc comment.
+
 2000-11-14  Alexander Larsson  <alexl@redhat.com>
 
 	* modules/linux-fb/basic.c:
@@ -30,6 +49,7 @@
 	attributes at once.
 
 2000-11-13 Elliot Lee <sopwith@redhat.com>
+
 	* gdk/gdk.h: Add a couple of missing G_GNUC_CONST's.
 
 Mon Nov 13 14:29:32 2000  Jonathan Blandford  <jrb@redhat.com>

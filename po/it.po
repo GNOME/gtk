@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2000-10-24 15:59+0200\n"
+"POT-Creation-Date: 2000-11-13 17:00-0500\n"
 "PO-Revision-Date: 2000-10-24 16:02+02:00\n"
 "Last-Translator: Christopher R. Gabriel <cgabriel@pluto.linux.it>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -79,47 +79,30 @@ msgstr "Tavolozza personalizzata"
 msgid "Set Color"
 msgstr "Imposta il colore"
 
-#. The OK button
-#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
-#: gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:968
-#: gtk/gtkfilesel.c:1077 gtk/gtkfilesel.c:1201 gtk/gtkfontsel.c:965
-#: gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Annulla"
-
-#: gtk/gtkcolorseldialog.c:116
-msgid "Help"
-msgstr "Aiuto"
-
 #. The directories clist
-#: gtk/gtkfilesel.c:512
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Directory"
 
 #. The files clist
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "File"
 
-#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Directory illeggibile: %s"
 
-#: gtk/gtkfilesel.c:635
+#: gtk/gtkfilesel.c:632
 msgid "Create Dir"
 msgstr "Crea directory"
 
-#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1046
+#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
 msgid "Delete File"
 msgstr "Cancella File"
 
-#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1159
+#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
 msgid "Rename File"
 msgstr "Rinomina File"
 
@@ -128,64 +111,65 @@ msgstr "Rinomina File"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
 msgid "Error"
 msgstr "Errore"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "Chiudi"
 
-#: gtk/gtkfilesel.c:932
+#: gtk/gtkfilesel.c:929
 msgid "Create Directory"
 msgstr "Crea Directory"
 
-#: gtk/gtkfilesel.c:946
+#: gtk/gtkfilesel.c:943
 msgid "Directory name:"
 msgstr "Nome cartella:"
 
 #. buttons
-#: gtk/gtkfilesel.c:959
+#: gtk/gtkfilesel.c:956
 msgid "Create"
 msgstr "Crea"
 
+#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
+msgid "Cancel"
+msgstr "Annulla"
+
 #. buttons
-#: gtk/gtkfilesel.c:1068
+#: gtk/gtkfilesel.c:1065
 msgid "Delete"
 msgstr "Cancella"
 
 #. buttons
-#: gtk/gtkfilesel.c:1192
+#: gtk/gtkfilesel.c:1189
 msgid "Rename"
 msgstr "Rinomina"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1615
 msgid "Selection: "
 msgstr "Selezione: "
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:190
 msgid "Family:"
 msgstr "Famiglia:"
 
-#: gtk/gtkfontsel.c:194
+#: gtk/gtkfontsel.c:195
 msgid "Style:"
 msgstr "Stile:"
 
-#: gtk/gtkfontsel.c:199
+#: gtk/gtkfontsel.c:200
 msgid "Size:"
 msgstr "Dimensione:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:309
+#: gtk/gtkfontsel.c:310
 msgid "Preview:"
 msgstr "Anteprima:"
 
-#: gtk/gtkfontsel.c:959
-msgid "Apply"
-msgstr "Applica"
-
-#: gtk/gtkfontsel.c:981
+#: gtk/gtkfontsel.c:966
 msgid "Font Selection"
 msgstr "Selezione Tipo del Carattere"
 
@@ -196,6 +180,10 @@ msgstr "Gamma"
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Valore di Gamma"
+
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
+msgid "OK"
+msgstr "OK"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
@@ -238,7 +226,7 @@ msgstr "Tasti"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329
+#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "Salva"
 
@@ -290,26 +278,73 @@ msgstr "cancella"
 msgid "default:LTR"
 msgstr "default:LTR"
 
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:169
+msgid "Information"
+msgstr ""
+
+#: gtk/gtkstock.c:170
+msgid "Warning"
+msgstr ""
+
+#: gtk/gtkstock.c:172
+msgid "Question"
+msgstr ""
+
+#: gtk/gtkstock.c:174
+#, fuzzy
+msgid "_Apply"
+msgstr "Applica"
+
+#: gtk/gtkstock.c:177
+#, fuzzy
+msgid "_Close"
+msgstr "Chiudi"
+
+#: gtk/gtkstock.c:178
+msgid "_Yes"
+msgstr ""
+
+#: gtk/gtkstock.c:179
+msgid "_No"
+msgstr ""
+
+#: gtk/gtkstock.c:182
+msgid "Quit"
+msgstr ""
+
+#: gtk/gtkstock.c:183
+msgid "Help"
+msgstr "Aiuto"
+
+#: gtk/gtkstock.c:184
+msgid "New"
+msgstr ""
+
+#: gtk/gtkstock.c:185
+msgid "Open"
+msgstr ""
+
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1978
+#: gtk/gtkrc.c:2042
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Impossibile trovare il file di immagine nella cartella immagini: \"%s\". "
 "Linea %d"
 
-#: gtk/gtkrc.c:1981
+#: gtk/gtkrc.c:2045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 "Impossibile trovare il file di immagine nella cartella immagini: \"%s\" "
 "nicht finden"
 
-#: gtk/gtkthemes.c:117
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "Impossibile trovare il modulo nella cartella moduli: \"%s\","

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2\n"
-"POT-Creation-Date: 2000-08-10 21:20-0400\n"
+"POT-Creation-Date: 2000-11-13 17:00-0500\n"
 "PO-Revision-Date: 2000-10-24 11:29+0800\n"
 "Last-Translator: Chih-Wei Huang <cwhuang@linux.org.tw>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -13,149 +13,163 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: gtk/gtkcolorsel.c:1420
+#: gdk-pixbuf/io-gif.c:426
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:435
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:584
+msgid "Circular table entry in GIF file"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:921
+msgid "File does not appear to be a GIF file"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:933
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:985
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1422
 msgid "Hue:"
 msgstr "色相:"
 
-#: gtk/gtkcolorsel.c:1421
+#: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
 msgstr "彩度:"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1424
 msgid "Value:"
 msgstr "明度:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1425
 msgid "Red:"
 msgstr "紅:"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1426
 msgid "Green:"
 msgstr "綠:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1427
 msgid "Blue:"
 msgstr "藍:"
 
-#: gtk/gtkcolorsel.c:1428
+#: gtk/gtkcolorsel.c:1430
 msgid "Opacity:"
 msgstr "不透明度:"
 
-#: gtk/gtkcolorsel.c:1443
+#: gtk/gtkcolorsel.c:1445
 msgid "Hex Value:"
 msgstr "十六進位值:"
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1466
 msgid "Custom Palette"
 msgstr "自訂色板"
 
-#: gtk/gtkcolorsel.c:1469
+#: gtk/gtkcolorsel.c:1471
 msgid "Set Color"
 msgstr "設定色彩"
 
-#: gtk/gtkcolorseldialog.c:105
-#: gtk/gtkfilesel.c:567
-#: gtk/gtkfontsel.c:952
-#: gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "確定"
-
-#: gtk/gtkcolorseldialog.c:111
-#: gtk/gtkfilesel.c:574
-#: gtk/gtkfilesel.c:963
-#: gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182
-#: gtk/gtkfontsel.c:965
-#: gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "取消"
-
-#: gtk/gtkcolorseldialog.c:116
-msgid "Help"
-msgstr "求助"
-
+#. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "目錄"
 
+#. The files clist
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "檔案"
 
-#: gtk/gtkfilesel.c:605
-#: gtk/gtkfilesel.c:1621
+#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "無法讀取目錄: %s"
 
-#: gtk/gtkfilesel.c:637
+#: gtk/gtkfilesel.c:632
 msgid "Create Dir"
 msgstr "新增目錄"
 
-#: gtk/gtkfilesel.c:648
-#: gtk/gtkfilesel.c:1036
+#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
 msgid "Delete File"
 msgstr "刪除檔案"
 
-#: gtk/gtkfilesel.c:659
-#: gtk/gtkfilesel.c:1140
+#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
 msgid "Rename File"
 msgstr "重新命名"
 
-#: gtk/gtkfilesel.c:828
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
 msgid "Error"
 msgstr "錯誤"
 
-#: gtk/gtkfilesel.c:851
-#: gtk/gtkinputdialog.c:338
+#. close button
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "關閉"
 
-#: gtk/gtkfilesel.c:927
+#: gtk/gtkfilesel.c:929
 msgid "Create Directory"
 msgstr "新增目錄"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:943
 msgid "Directory name:"
 msgstr "目錄名稱:"
 
-#: gtk/gtkfilesel.c:954
+#. buttons
+#: gtk/gtkfilesel.c:956
 msgid "Create"
 msgstr "新增"
 
-#: gtk/gtkfilesel.c:1058
+#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
+msgid "Cancel"
+msgstr "取消"
+
+#. buttons
+#: gtk/gtkfilesel.c:1065
 msgid "Delete"
 msgstr "刪除"
 
-#: gtk/gtkfilesel.c:1173
+#. buttons
+#: gtk/gtkfilesel.c:1189
 msgid "Rename"
 msgstr "更新"
 
-#: gtk/gtkfilesel.c:1600
+#: gtk/gtkfilesel.c:1615
 msgid "Selection: "
 msgstr "路徑選項: "
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:190
 msgid "Family:"
 msgstr "字體:"
 
-#: gtk/gtkfontsel.c:194
+#: gtk/gtkfontsel.c:195
 msgid "Style:"
 msgstr "格式:"
 
-#: gtk/gtkfontsel.c:199
+#: gtk/gtkfontsel.c:200
 msgid "Size:"
 msgstr "大小:"
 
-#: gtk/gtkfontsel.c:309
+#. create the text entry widget
+#: gtk/gtkfontsel.c:310
 msgid "Preview:"
 msgstr "預覽:"
 
-#: gtk/gtkfontsel.c:959
-msgid "Apply"
-msgstr "套用"
-
-#: gtk/gtkfontsel.c:981
+#: gtk/gtkfontsel.c:966
 msgid "Font Selection"
 msgstr "字型選擇"
 
@@ -167,6 +181,11 @@ msgstr "Gamma"
 msgid "Gamma value"
 msgstr "Gamma 值"
 
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
+msgid "OK"
+msgstr "確定"
+
+#. shell and main vbox
 #: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "輸入"
@@ -195,15 +214,19 @@ msgstr "視窗"
 msgid "Mode: "
 msgstr "模式:"
 
+#. The axis listbox
 #: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "軸"
 
+#. Keys listbox
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "按鍵"
 
-#: gtk/gtkinputdialog.c:329
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "儲存"
 
@@ -235,8 +258,7 @@ msgstr "滾輪"
 msgid "none"
 msgstr "無"
 
-#: gtk/gtkinputdialog.c:550
-#: gtk/gtkinputdialog.c:586
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(已失效)"
 
@@ -244,27 +266,81 @@ msgstr "(已失效)"
 msgid "(unknown)"
 msgstr "(未知)"
 
+#. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "清除"
 
-#: gtk/gtknotebook.c:2059
-#: gtk/gtknotebook.c:4131
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR
+#.
+#: gtk/gtkmain.c:417
+msgid "default:LTR"
+msgstr ""
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:169
+msgid "Information"
+msgstr ""
+
+#: gtk/gtkstock.c:170
+msgid "Warning"
+msgstr ""
+
+#: gtk/gtkstock.c:172
+msgid "Question"
+msgstr ""
+
+#: gtk/gtkstock.c:174
+#, fuzzy
+msgid "_Apply"
+msgstr "套用"
+
+#: gtk/gtkstock.c:177
+#, fuzzy
+msgid "_Close"
+msgstr "關閉"
+
+#: gtk/gtkstock.c:178
+msgid "_Yes"
+msgstr ""
+
+#: gtk/gtkstock.c:179
+msgid "_No"
+msgstr ""
+
+#: gtk/gtkstock.c:182
+msgid "Quit"
+msgstr ""
+
+#: gtk/gtkstock.c:183
+msgid "Help"
+msgstr "求助"
+
+#: gtk/gtkstock.c:184
+msgid "New"
+msgstr ""
+
+#: gtk/gtkstock.c:185
+msgid "Open"
+msgstr ""
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
 
-#: gtk/gtkrc.c:1872
+#: gtk/gtkrc.c:2042
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "無法由 pixmap_path 找到圖檔: \"%s\" 第 %d 行"
 
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:2045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "無法由 pixmap_path 找到圖檔: \"%s\""
 
-#: gtk/gtkthemes.c:117
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "無法由 module_path 找到可載入模組: \"%s\","
@@ -272,4 +348,3 @@ msgstr "無法由 module_path 找到可載入模組: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- 已無提示 ---"
-

@@ -85,6 +85,8 @@ TUTORIAL_IT_FILES=	html/gtk_tut_it.html     	\
 	html/gtk_tut_it-24.html		\
 	text/gtk_tut_it.txt
 
+GTKDOCS_FIX=$(top_srcdir)/docs/gtkdocs_fix
+
 .PHONY: htmldir textdir tutorial tutorial_it tutorial_fr
 
 htmldir:
@@ -101,21 +103,21 @@ $(TUTORIAL_IT_FILES): tutorial_it
 
 tutorial: htmldir textdir
 	(cd $(srcdir); sgml2html gtk_tut.sgml; \
-	perl gtkdocs_fix gtk_tut*html; \
+	perl $(GTKDOCS_FIX) gtk_tut*html; \
 	mv gtk_tut*html html/; \
 	sgml2txt gtk_tut.sgml; \
 	mv gtk_tut.txt text/)
 
 tutorial_it: htmldir textdir
 	(cd $(srcdir); sgml2html --language=it gtk_tut_it.sgml; \
-	perl gtkdocs_fix gtk_tut_it*html; \
+	perl $(GTKDOCS_FIX) gtk_tut_it*html; \
 	mv gtk_tut_it*html html/; \
 	sgml2txt --language=it gtk_tut_it.sgml; \
 	mv gtk_tut_it.txt text/)
 
 tutorial_fr: htmldir textdir
 	(cd $(srcdir); sgml2html --language=fr gtk_tut_fr.sgml; \
-	perl gtkdocs_fix gtk_tut_fr*html; \
+	perl $(GTKDOCS_FIX) gtk_tut_fr*html; \
 	mv gtk_tut_fr*html html/; \
 	sgml2txt --language=fr gtk_tut_fr.sgml; \
 	mv gtk_tut_fr.txt text/)
