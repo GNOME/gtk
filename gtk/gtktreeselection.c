@@ -241,17 +241,20 @@ gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_get_selected:
  * @selection: A #GtkTreeSelection.
+ * @model: A pointer set to the #GtkTreeModel, or NULL.
  * @iter: The #GtkTreeIter, or NULL.
  * 
  * Sets @iter to the currently selected node if @selection is set to
  * #GTK_TREE_SELECTION_SINGLE.  Otherwise, it uses the anchor.  @iter may be
- * NULL if you just want to test if @selection has any selected nodes.
+ * NULL if you just want to test if @selection has any selected nodes.  @model
+ * is filled with the current model as a convenience.
  * 
  * Return value: TRUE, if there is a selected node.
  **/
 gboolean
-gtk_tree_selection_get_selected (GtkTreeSelection *selection,
-				 GtkTreeIter      *iter)
+gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
+				 GtkTreeModel     **model,
+				 GtkTreeIter       *iter)
 {
   GtkRBTree *tree;
   GtkRBNode *node;
@@ -274,8 +277,10 @@ gtk_tree_selection_get_selected (GtkTreeSelection *selection,
       ! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
     /* We don't want to return the anchor if it isn't actually selected.
      */
-
       return FALSE;
+
+  if (model)
+    *model = selection->tree_view->priv->model;
 
   return gtk_tree_model_get_iter (selection->tree_view->priv->model,
 				  iter,

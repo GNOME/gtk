@@ -1286,6 +1286,15 @@
   gtk_text_iter_copy
   gtk_text_iter_free)
 
+;; TreeView
+(define-boxed GtkTreeIter
+  gtk_tree_iter_copy
+  gtk_tree_iter_free)
+
+(define-boxed GtkTreePath
+  gtk_tree_path_copy
+  gtk_tree_path_free)
+
 ;; Alignment
 
 (define-object GtkAlignment (GtkBin))

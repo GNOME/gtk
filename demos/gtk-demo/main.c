@@ -242,7 +242,7 @@ selection_cb (GtkTreeSelection *selection,
   GtkTreeIter iter;
   GValue value = {0, };
 
-  if (! gtk_tree_selection_get_selected (selection, &iter))
+  if (! gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
 
   gtk_tree_model_get_value (model, &iter,

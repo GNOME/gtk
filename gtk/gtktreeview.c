@@ -2037,6 +2037,8 @@ gtk_tree_view_inserted (GtkTreeModel *model,
 	}
     }
 
+  /* ref the node */
+  gtk_tree_model_ref_iter (tree_view->priv->model, iter);
   max_height = gtk_tree_view_insert_iter_height (tree_view,
 						 tree,
 						 iter,
@@ -2245,6 +2247,8 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
 						       tree,
 						       iter,
 						       depth);
+
+      gtk_tree_model_ref_iter (tree_view->priv->model, iter);
       temp = _gtk_rbtree_insert_after (tree, temp, max_height);
       if (recurse)
 	{

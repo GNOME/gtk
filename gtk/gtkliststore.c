@@ -38,6 +38,7 @@ static guint list_store_signals[LAST_SIGNAL] = { 0 };
 static void         gtk_list_store_init            (GtkListStore      *list_store);
 static void         gtk_list_store_class_init      (GtkListStoreClass *class);
 static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
+static guint        gtk_list_store_get_flags       (GtkTreeModel      *tree_model);
 static gint         gtk_list_store_get_n_columns   (GtkTreeModel      *tree_model);
 static gboolean     gtk_list_store_get_iter        (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter,
@@ -152,6 +153,7 @@ gtk_list_store_class_init (GtkListStoreClass *class)
 static void
 gtk_list_store_tree_model_init (GtkTreeModelIface *iface)
 {
+  iface->get_flags = gtk_list_store_get_flags;
   iface->get_n_columns = gtk_list_store_get_n_columns;
   iface->get_iter = gtk_list_store_get_iter;
   iface->get_path = gtk_list_store_get_path;
@@ -168,7 +170,7 @@ static void
 gtk_list_store_init (GtkListStore *list_store)
 {
   list_store->root = NULL;
-  list_store->stamp = 1;
+  list_store->stamp = g_random_int ();
 }
 
 GtkListStore *
@@ -242,6 +244,14 @@ gtk_list_store_set_column_type (GtkListStore *list_store,
 }
 
 /* Fulfill the GtkTreeModel requirements */
+static guint
+gtk_list_store_get_flags (GtkTreeModel *tree_model)
+{
+  g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), 0);
+
+  return GTK_TREE_MODEL_ITERS_PERSIST;
+}
+
 static gint
 gtk_list_store_get_n_columns (GtkTreeModel *tree_model)
 {
@@ -350,6 +360,9 @@ static gint
 gtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
+  if (iter == NULL)
+    return g_slist_length (G_SLIST (GTK_LIST_STORE (tree_model)->root));
+
   return 0;
 }
 

@@ -1,3 +1,14 @@
+Thu Nov  9 11:23:22 2000  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.h (struct _GtkTreeIter): added more fields to
+	allow more interesting iterators.  Also, made the lifecycle of
+	iterators more explicit.
+
+	* gtk/gtktreemodelsort.[ch]: New model for sorting.
+
+	* gtk/gtk-boxed.defs (GtkTreeIter, GtkTreePath): Added two boxed
+	types.
+
 2000-11-09  Alexander Larsson  <alexl@redhat.com>
 
 	* demos/testgtk/menus.c:

@@ -79,6 +79,7 @@ gpointer         gtk_tree_selection_get_user_data       (GtkTreeSelection       
 /* Only meaningful if GTK_TREE_SELECTION_SINGLE is set */
 /* Use selected_foreach for GTK_TREE_SELECTION_MULTI */
 gboolean         gtk_tree_selection_get_selected        (GtkTreeSelection            *selection,
+							 GtkTreeModel               **model,
 							 GtkTreeIter                 *iter);
 
 /* FIXME: Get a more convenient get_selection function????  one returning GSList?? */

@@ -7,8 +7,7 @@ static void
 selection_changed (GtkTreeSelection *selection,
 		   GtkWidget        *button)
 {
-  if (gtk_tree_selection_get_selected (selection,
-				       NULL))
+  if (gtk_tree_selection_get_selected (selection, NULL, NULL))
     gtk_widget_set_sensitive (button, TRUE);
   else
     gtk_widget_set_sensitive (button, FALSE);
@@ -31,6 +30,7 @@ iter_remove (GtkWidget *button, GtkTreeView *tree_view)
 {
   GtkTreeIter selected;
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				       NULL,
 				       &selected))
     {
       gtk_tree_store_remove (model, &selected);
@@ -46,6 +46,7 @@ iter_insert (GtkWidget *button, GtkTreeView *tree_view)
 
   entry = gtk_object_get_user_data (GTK_OBJECT (button));
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				       NULL,
 				       &selected))
     {
       gtk_tree_store_insert (model,
@@ -71,6 +72,7 @@ iter_insert_before  (GtkWidget *button, GtkTreeView *tree_view)
   GtkTreeIter selected;
 
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				       NULL,
 				       &selected))
     {
       gtk_tree_store_insert_before (model,
@@ -96,6 +98,7 @@ iter_insert_after (GtkWidget *button, GtkTreeView *tree_view)
   GtkTreeIter selected;
 
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				       NULL,
 				       &selected))
     {
       gtk_tree_store_insert_after (model,
@@ -121,6 +124,7 @@ iter_prepend (GtkWidget *button, GtkTreeView *tree_view)
   GtkTreeIter selected;
 
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				       NULL,
 				       &selected))
     {
       gtk_tree_store_prepend (model,
@@ -144,6 +148,7 @@ iter_append (GtkWidget *button, GtkTreeView *tree_view)
   GtkTreeIter selected;
 
   if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				       NULL,
 				       &selected))
     {
       gtk_tree_store_append (model, &iter, &selected);
@@ -159,13 +164,14 @@ iter_append (GtkWidget *button, GtkTreeView *tree_view)
 static void
 make_window ()
 {
+  GtkTreeModel *sort_model;
   GtkWidget *window;
   GtkWidget *vbox;
   GtkWidget *hbox, *entry;
   GtkWidget *button;
   GtkWidget *scrolled_window;
   GtkWidget *tree_view;
-  GtkObject *column;
+  GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
   GtkObject *selection;
 
@@ -175,7 +181,9 @@ make_window ()
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 350);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
+  sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (model),
+						   NULL, 0);
+  tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (sort_model));
   selection = GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)));
   gtk_tree_selection_set_type (GTK_TREE_SELECTION (selection), GTK_TREE_SELECTION_SINGLE);
 
@@ -237,7 +245,7 @@ make_window ()
   /* The selected column */
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("nodes", cell, "text", 0, NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), GTK_TREE_VIEW_COLUMN (column));
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   /* A few to start */
   iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
@@ -254,7 +262,7 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   model = gtk_tree_store_new_with_values (2, G_TYPE_STRING, G_TYPE_STRING);
-
+  
   make_window ();
   make_window ();
 

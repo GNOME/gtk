@@ -260,7 +260,7 @@ gtk_tree_path_free (GtkTreePath *path)
  * gtk_tree_path_copy:
  * @path: A #GtkTreePath.
  * 
- * Creates a new #GtkTreePath based upon @path.
+ * Creates a new #GtkTreePath as a copy of @path.
  * 
  * Return value: A new #GtkTreePath.
  **/
@@ -381,6 +381,69 @@ gtk_tree_path_down (GtkTreePath *path)
   gtk_tree_path_append_index (path, 0);
 }
 
+
+/**
+ * gtk_tree_iter_copy:
+ * @iter: A #GtkTreeIter.
+ * 
+ * Creates a dynamically allocated tree iterator as a copy of @iter.  This
+ * function is not intended for use in applications, because you can just copy
+ * the structs by value (<literal>GtkTreeIter new_iter = iter;</literal>).  You
+ * must free this iter with gtk_tree_iter_free ().
+ * 
+ * Return value: a newly allocated copy of @iter.
+ **/
+GtkTreeIter *
+gtk_tree_iter_copy (GtkTreeIter *iter)
+{
+  GtkTreeIter *retval;
+
+  g_return_val_if_fail (iter != NULL, NULL);
+
+  retval = g_new (GtkTreeIter, 1);
+  *retval = *iter;
+
+  return retval;
+}
+
+/**
+ * gtk_tree_iter_free:
+ * @iter: A dynamically allocated tree iterator.
+ * 
+ * Free an iterator that has been allocated on the heap.  This function is
+ * mainly used for language bindings.
+ **/
+void
+gtk_tree_iter_free (GtkTreeIter *iter)
+{
+  g_return_if_fail (iter != NULL);
+
+  g_free (iter);
+
+}
+
+/**
+ * gtk_tree_model_get_flags:
+ * @tree_model: A #GtkTreeModel.
+ * 
+ * Returns a list of flags supported by this interface.  The flags are a bitwise
+ * combination of #GtkTreeModelFlags.  It is expected that the flags supported
+ * do not change for an interface.
+ * 
+ * Return value: The flags supported by this interface.
+ **/
+guint
+gtk_tree_model_get_flags (GtkTreeModel *tree_model)
+{
+  g_return_val_if_fail (tree_model != NULL, 0);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), 0);
+
+  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_flags)
+    return (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_flags) (tree_model);
+
+  return 0;
+}
+
 /**
  * gtk_tree_model_get_n_columns:
  * @tree_model: A #GtkTreeModel.
@@ -397,6 +460,27 @@ gtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_n_columns != NULL, 0);
 
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_n_columns) (tree_model);
+}
+
+/**
+ * gtk_tree_model_get_column_type:
+ * @tree_model: A #GtkTreeModel.
+ * @index: The column index.
+ * 
+ * Returns the type of the column.
+ * 
+ * Return value: The type of the column.
+ **/
+GType
+gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
+				gint          index)
+{
+  g_return_val_if_fail (tree_model != NULL, G_TYPE_INVALID);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), G_TYPE_INVALID);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_column_type != NULL, G_TYPE_INVALID);
+  g_return_val_if_fail (index >= 0, G_TYPE_INVALID);
+
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_column_type) (tree_model, index);
 }
 
 /**
@@ -564,9 +648,10 @@ gtk_tree_model_iter_has_child (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_n_children:
  * @tree_model: A #GtkTreeModel.
- * @iter: The #GtkTreeIter.
+ * @iter: The #GtkTreeIter, or NULL.
  * 
- * Returns the number of children that @iter has.
+ * Returns the number of children that @iter has.  If @iter is NULL, then the
+ * number of toplevel nodes is returned.
  * 
  * Return value: The number of children of @iter.
  **/
@@ -576,7 +661,6 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
 {
   g_return_val_if_fail (tree_model != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), 0);
-  g_return_val_if_fail (iter != NULL, 0);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_n_children != NULL, 0);
 
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_n_children) (tree_model, iter);
@@ -589,10 +673,11 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
  * @parent: The #GtkTreeIter to get the child from, or NULL.
  * @n: Then index of the desired child.
  * 
- * Sets @iter to be the child of @parent, using the given index.  The first index
- * is 0.  If the index is too big, or @parent has no children, @iter is set to an
- * invalid iterator and FALSE is returned.  @parent will remain a valid node after
- * this function has been called.  If @parent is NULL, then the root node is assumed.
+ * Sets @iter to be the child of @parent, using the given index.  The first
+ * index is 0.  If the index is too big, or @parent has no children, @iter is
+ * set to an invalid iterator and FALSE is returned.  @parent will remain a
+ * valid node after this function has been called.  If @parent is NULL, then the
+ * root node is assumed.
  * 
  * Return value: TRUE, if @parent has an nth child.
  **/
@@ -629,8 +714,51 @@ gtk_tree_model_iter_parent (GtkTreeModel *tree_model,
 			    GtkTreeIter  *iter,
 			    GtkTreeIter  *child)
 {
+  g_return_val_if_fail (tree_model != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (child != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_parent != NULL, FALSE);
 
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_parent) (tree_model, iter, child);
 }
 
+/**
+ * gtk_tree_model_ref_iter:
+ * @tree_model: A #GtkTreeModel.
+ * @iter: The #GtkTreeIter.
+ * 
+ * Ref's the iter.  This is an optional method for models to implement.  To be
+ * more specific, models may ignore this call as it exists primarily for
+ * performance reasons.
+ **/
+void
+gtk_tree_model_ref_iter (GtkTreeModel *tree_model,
+			 GtkTreeIter  *iter)
+{
+  g_return_if_fail (tree_model != NULL);
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+
+  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->ref_iter)
+    (* GTK_TREE_MODEL_GET_IFACE (tree_model)->ref_iter) (tree_model, iter);
+}
+
+/**
+ * gtk_tree_model_unref_iter:
+ * @tree_model: A #GtkTreeModel.
+ * @iter: The #GtkTreeIter.
+ * 
+ * Unref's the iter.  This is an optional method for models to implement.  To be
+ * more specific, models may ignore this call as it exists primarily for
+ * performance reasons.
+ **/
+void
+gtk_tree_model_unref_iter (GtkTreeModel *tree_model,
+			   GtkTreeIter  *iter)
+{
+  g_return_if_fail (tree_model != NULL);
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+
+  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_iter)
+    (* GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_iter) (tree_model, iter);
+}

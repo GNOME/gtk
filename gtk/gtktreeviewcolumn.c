@@ -145,12 +145,12 @@ gtk_real_tree_column_clicked (GtkTreeViewColumn *tree_column)
  * 
  * Return value: A newly created #GtkTreeViewColumn.
  **/
-GtkObject *
+GtkTreeViewColumn *
 gtk_tree_view_column_new (void)
 {
-  GtkObject *retval;
+  GtkTreeViewColumn *retval;
 
-  retval = GTK_OBJECT (gtk_type_new (GTK_TYPE_TREE_COLUMN));
+  retval = GTK_TREE_VIEW_COLUMN (gtk_type_new (GTK_TYPE_TREE_COLUMN));
 
   return retval;
 }
@@ -168,22 +168,21 @@ gtk_tree_view_column_new (void)
  * 
  * Return value: A newly created #GtkTreeViewColumn.
  **/
-GtkObject *
+GtkTreeViewColumn *
 gtk_tree_view_column_new_with_attributes (gchar           *title,
 					  GtkCellRenderer *cell,
 					  ...)
 {
-  GtkObject *retval;
+  GtkTreeViewColumn *retval;
   va_list args;
 
   retval = gtk_tree_view_column_new ();
 
-  gtk_tree_view_column_set_title (GTK_TREE_VIEW_COLUMN (retval), title);
-  gtk_tree_view_column_set_cell_renderer (GTK_TREE_VIEW_COLUMN (retval), cell);
+  gtk_tree_view_column_set_title (retval, title);
+  gtk_tree_view_column_set_cell_renderer (retval, cell);
 
   va_start (args, cell);
-  gtk_tree_view_column_set_attributesv (GTK_TREE_VIEW_COLUMN (retval),
-					args);
+  gtk_tree_view_column_set_attributesv (retval, args);
   va_end (args);
 
   return retval;

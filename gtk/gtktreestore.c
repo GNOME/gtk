@@ -40,6 +40,7 @@ static guint tree_store_signals[LAST_SIGNAL] = { 0 };
 static void         gtk_tree_store_init            (GtkTreeStore      *tree_store);
 static void         gtk_tree_store_class_init      (GtkTreeStoreClass *tree_store_class);
 static void         gtk_tree_store_tree_model_init (GtkTreeModelIface *iface);
+static guint        gtk_tree_store_get_flags       (GtkTreeModel      *tree_model);
 static gint         gtk_tree_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GtkTreePath *gtk_tree_store_get_path        (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter);
@@ -58,11 +59,11 @@ static gint         gtk_tree_store_iter_n_children (GtkTreeModel      *tree_mode
 						    GtkTreeIter       *iter);
 static gboolean     gtk_tree_store_iter_nth_child  (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter,
-						    GtkTreeIter       *child,
+						    GtkTreeIter       *parent,
 						    gint               n);
 static gboolean     gtk_tree_store_iter_parent     (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter,
-						    GtkTreeIter       *parent);
+						    GtkTreeIter       *child);
 
 
 GtkType
@@ -150,6 +151,7 @@ gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
 static void
 gtk_tree_store_tree_model_init (GtkTreeModelIface *iface)
 {
+  iface->get_flags = gtk_tree_store_get_flags;
   iface->get_n_columns = gtk_tree_store_get_n_columns;
   iface->get_path = gtk_tree_store_get_path;
   iface->get_value = gtk_tree_store_get_value;
@@ -165,7 +167,7 @@ static void
 gtk_tree_store_init (GtkTreeStore *tree_store)
 {
   tree_store->root = g_node_new (NULL);
-  tree_store->stamp = 1;
+  tree_store->stamp = g_random_int ();
 }
 
 GtkTreeStore *
@@ -242,10 +244,19 @@ gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
  * it is not visible to the tree or to the user., and the path "1" refers to the
  * first child of GtkTreeStore::root.
  */
+
+
+static guint
+gtk_tree_store_get_flags (GtkTreeModel *tree_model)
+{
+  g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);
+
+  return GTK_TREE_MODEL_ITERS_PERSIST;
+}
+
 static gint
 gtk_tree_store_get_n_columns (GtkTreeModel *tree_model)
 {
-  g_return_val_if_fail (tree_model != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);
 
   return GTK_TREE_STORE (tree_model)->n_columns;
@@ -362,7 +373,10 @@ gtk_tree_store_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *parent)
 {
   iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
-  iter->tree_node = G_NODE (parent->tree_node)->children;
+  if (parent)
+    iter->tree_node = G_NODE (parent->tree_node)->children;
+  else
+    iter->tree_node = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
 
   return iter->tree_node != NULL;
 }
@@ -388,10 +402,13 @@ gtk_tree_store_iter_n_children (GtkTreeModel *tree_model,
 
   g_return_val_if_fail (tree_model != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);
-  g_return_val_if_fail (iter != NULL, 0);
-  g_return_val_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp, 0);
+  if (iter)
+    g_return_val_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp, 0);
 
-  node = G_NODE (iter->tree_node)->children;
+  if (iter == NULL)
+    node = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
+  else
+    node = G_NODE (iter->tree_node)->children;
   while (node)
     {
       i++;
