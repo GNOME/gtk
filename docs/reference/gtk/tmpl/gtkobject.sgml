@@ -121,8 +121,7 @@ Get the type of an object.
 Tells about the state of the object.
 </para>
 
-@GTK_DESTROYED: the GtkObject has had gtk_object_destroyed() invoked on it
-and is processing the shutdown callback.
+@GTK_IN_DESTRUCTION: 
 @GTK_FLOATING: whether the object is orphaned.  Objects that take
 strong hold of an object may gtk_object_sink() it, after obtaining
 there own references, if they believe they are nearly primary
@@ -139,14 +138,6 @@ accessing its members.
 </para>
 
 @obj: the object whose flags are returned.
-
-
-<!-- ##### MACRO GTK_OBJECT_DESTROYED ##### -->
-<para>
-Test whether a GtkObject has had gtk_object_destroy() invoked on it.
-</para>
-
-@obj: the object to examine.
 
 
 <!-- ##### MACRO GTK_OBJECT_FLOATING ##### -->

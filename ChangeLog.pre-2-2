@@ -1,3 +1,13 @@
+Tue Nov 20 14:49:59 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkvpaned.c (gtk_vpaned_size_allocate): fix
+	allocation to be relative to paned->allocation, now
+	that this is a NO_WINDOW widget.
+	* gtk/gtkhpaned.c (gtk_hpaned_size_allocate): same here.
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_class_init): ::closure
+	needs to be a boxed property.
+
 Mon Nov 19 17:34:40 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkradiobutton.c (gtk_radio_button_draw_indicator):

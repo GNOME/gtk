@@ -118,11 +118,11 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   
   g_object_class_install_property (G_OBJECT_CLASS (object_class),
                                    PROP_ACCEL_CLOSURE,
-                                   g_param_spec_object ("accel_closure",
-                                                        _("Accelerator Closure"),
-                                                        _("The closure to be monitored for accelerator changes"),
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                   g_param_spec_boxed ("accel_closure",
+						       _("Accelerator Closure"),
+						       _("The closure to be monitored for accelerator changes"),
+						       G_TYPE_CLOSURE,
+						       G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (G_OBJECT_CLASS (object_class),
                                    PROP_ACCEL_WIDGET,
                                    g_param_spec_object ("accel_widget",

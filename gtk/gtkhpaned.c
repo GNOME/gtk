@@ -199,7 +199,8 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       child2_allocation.width = MAX (1, (gint) allocation->width - child2_allocation.x - border_width);
       
       /* Now allocate the childen, making sure, when resizing not to
-       * overlap the windows */
+       * overlap the windows
+       */
       if (GTK_WIDGET_MAPPED (widget) &&
 	  paned->child1->allocation.width < child1_allocation.width)
 	{
@@ -219,8 +220,8 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       if (GTK_WIDGET_REALIZED (widget))      
 	gdk_window_hide (paned->handle);
 	  
-      child_allocation.x = border_width;
-      child_allocation.y = border_width;
+      child_allocation.x = widget->allocation.x + border_width;
+      child_allocation.y = widget->allocation.y + border_width;
       child_allocation.width = MAX (1, allocation->width - 2 * border_width);
       child_allocation.height = MAX (1, allocation->height - 2 * border_width);
       

@@ -20,7 +20,6 @@ GtkTreeViewColumn
 </para>
 
 @GTK_TREE_VIEW_COLUMN_GROW_ONLY: 
-@GTK_TREE_VIEW_COLUMN_RESIZABLE: 
 @GTK_TREE_VIEW_COLUMN_AUTOSIZE: 
 @GTK_TREE_VIEW_COLUMN_FIXED: 
 
@@ -497,6 +496,11 @@ GtkTreeViewColumn
 @treeviewcolumn: the object which received the signal.
 
 <!-- ##### ARG GtkTreeViewColumn:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:resizable ##### -->
 <para>
 
 </para>

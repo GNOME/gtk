@@ -710,9 +710,8 @@ converted to GDK events. A filter may translate the native event to a GDK
 event or handle it without translation.
 </para>
 
-
-@xevent: the native event to filter. 
-@event: the GDK event to which the X event will be translated. 
+@xevent: the native event to filter.
+@event: the GDK event to which the X event will be translated.
 @data: user data set when the filter was installed.
 @Returns: a #GdkFilterReturn value.
 
@@ -722,10 +721,9 @@ event or handle it without translation.
 Specifies the result of applying a #GdkFilterFunc to a native event.
 </para>
 
-@GDK_FILTER_CONTINUE: event not handled, continue processing. 
+@GDK_FILTER_CONTINUE: event not handled, continue processing.
 @GDK_FILTER_TRANSLATE: translated event stored.
 @GDK_FILTER_REMOVE: event handled, terminate processing.
-
 
 <!-- ##### TYPEDEF GdkXEvent ##### -->
 <para>
@@ -845,6 +843,7 @@ backend, <type>MSG</type>s for Win32).
 <para>
 Deprecated equivalent to gdk_drawable_set_colormap()
 </para>
+
 
 
 <!-- ##### FUNCTION gdk_window_get_user_data ##### -->

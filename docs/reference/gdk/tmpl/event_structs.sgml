@@ -98,7 +98,7 @@ When using <link linkend="gdk-Input-Methods">Input Methods</link> to support
 internationalized text input, the composed characters appear here after the
 pre-editing has been completed.
 @hardware_keycode: the raw code of the key that was pressed or released.
-@group: the keyboard group. 
+@group: the keyboard group.
 
 <!-- ##### STRUCT GdkEventButton ##### -->
 <para>
@@ -149,7 +149,7 @@ must also occur within 1/2 second of the first button press.
 @x: the x coordinate of the pointer relative to the window.
 @y: the y coordinate of the pointer relative to the window.
 @axes: @x, @y translated to the axes of @device, or %NULL if @device is 
-  the mouse. 
+  the mouse.
 @state: a bit-mask representing the state of the modifier keys (e.g. Control,
 Shift and Alt) and the pointer buttons. See #GdkModifierType.
 @button: the button which was pressed or released, numbered from 1 to 5.
@@ -171,6 +171,7 @@ when the wheel is turned.
 @window: the window which received the event.
 @send_event: %TRUE if the event was sent explicitly (e.g. using 
 <function>XSendEvent</function>).
+@time: 
 @x: the x coordinate of the pointer relative to the window.
 @y: the y coordinate of the pointer relative to the window.
 @state: a bit-mask representing the state of the modifier keys (e.g. Control,
@@ -194,7 +195,7 @@ Generated when the pointer moves.
 @x: the x coordinate of the pointer relative to the window.
 @y: the y coordinate of the pointer relative to the window.
 @axes: @x, @y translated to the axes of @device, or %NULL if @device is 
-  the mouse. 
+  the mouse.
 @state: a bit-mask representing the state of the modifier keys (e.g. Control,
   Shift and Alt) and the pointer buttons. See #GdkModifierType.
 @is_hint: 
@@ -240,7 +241,7 @@ Generated when the pointer enters or leaves a window.
 @window: the window which received the event.
 @send_event: %TRUE if the event was sent explicitly (e.g. using 
 <function>XSendEvent</function>).
-@subwindow: the window that was entered or left. 
+@subwindow: the window that was entered or left.
 @time: the time of the event in milliseconds.
 @x: the x coordinate of the pointer relative to the window.
 @y: the y coordinate of the pointer relative to the window.
@@ -303,7 +304,7 @@ is taken over by another client application.
 @window: the window which received the event.
 @send_event: %TRUE if the event was sent explicitly (e.g. using <function>XSendEvent</function>).
 @selection: the selection.
-@target: the target to which the selection should be converted. 
+@target: the target to which the selection should be converted.
 @property: the property in which to place the result of the conversion.
 @time: the time of the event in milliseconds.
 @requestor: the native window on which to place @property.
@@ -377,8 +378,8 @@ Generated when the state of a toplevel window changes.
 @type: the type of the event (%GDK_WINDOW_STATE).
 @window: the window which received the event.
 @send_event: %TRUE if the event was sent explicitly (e.g. using <function>XSendEvent</function>).
-@changed_mask: mask specifying what flags have changed. 
-@new_window_state: the new window state, a combination of #GdkWindowState bits. 
+@changed_mask: mask specifying what flags have changed.
+@new_window_state: the new window state, a combination of #GdkWindowState bits.
 
 <!-- ##### STRUCT GdkEventSetting ##### -->
 <para>
@@ -416,9 +417,9 @@ Specifies the visiblity status of a window for a #GdkEventVisibility.
 Specifies the crossing mode for #GdkEventCrossing.
 </para>
 
-@GDK_CROSSING_NORMAL: crossing because of pointer motion. 
+@GDK_CROSSING_NORMAL: crossing because of pointer motion.
 @GDK_CROSSING_GRAB: crossing because a grab is activated.
-@GDK_CROSSING_UNGRAB: crossing because a grab is deactivated. 
+@GDK_CROSSING_UNGRAB: crossing because a grab is deactivated.
 
 <!-- ##### ENUM GdkNotifyType ##### -->
 <para>
@@ -430,17 +431,17 @@ full details of crossing event generation.
 </para>
 
 @GDK_NOTIFY_ANCESTOR: the window is entered from an ancestor or 
-   left towards an ancestor. 
+   left towards an ancestor.
 @GDK_NOTIFY_VIRTUAL: the pointer moves between an ancestor and an 
-    inferior of the window. 
+    inferior of the window.
 @GDK_NOTIFY_INFERIOR: the window is entered from an inferior or 
-   left towards an inferior. 
+   left towards an inferior.
 @GDK_NOTIFY_NONLINEAR:  the window is entered from or left towards 
-   a window which is neither an ancestor nor an inferior. 
+   a window which is neither an ancestor nor an inferior.
 @GDK_NOTIFY_NONLINEAR_VIRTUAL: the pointer moves between two windows 
    which are not ancestors of each other and the window is part of
    the ancestor chain between one of these windows and their least
-   common ancestor. 
+   common ancestor.
 @GDK_NOTIFY_UNKNOWN: 
 
 <!-- ##### ENUM GdkPropertyState ##### -->
@@ -456,7 +457,7 @@ Specifies the type of a property change for a #GdkEventProperty.
 Specifies the state of a toplevel window.
 </para>
 
-@GDK_WINDOW_STATE_WITHDRAWN: the window is not shown. 
+@GDK_WINDOW_STATE_WITHDRAWN: the window is not shown.
 @GDK_WINDOW_STATE_ICONIFIED: the window is minimized.
 @GDK_WINDOW_STATE_MAXIMIZED: the window is maximized.
 @GDK_WINDOW_STATE_STICKY: the window is sticky.
@@ -466,7 +467,7 @@ Specifies the state of a toplevel window.
 Specifies the kind of modification applied to a setting in a #GdkEventSetting.
 </para>
 
-@GDK_SETTING_ACTION_NEW: a setting was added. 
+@GDK_SETTING_ACTION_NEW: a setting was added.
 @GDK_SETTING_ACTION_CHANGED: a setting was changed.
 @GDK_SETTING_ACTION_DELETED: a setting was deleted.
 

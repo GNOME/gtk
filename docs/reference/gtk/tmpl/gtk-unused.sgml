@@ -292,6 +292,13 @@ Test whether a GtkObject's arguments have been prepared.
 
 @obj: the object to examine.
 
+<!-- ##### MACRO GTK_OBJECT_DESTROYED ##### -->
+<para>
+Test whether a GtkObject has had gtk_object_destroy() invoked on it.
+</para>
+
+@obj: the object to examine.
+
 <!-- ##### MACRO GTK_OBJECT_NSIGNALS ##### -->
 <para>
 Get the number of signals defined by this object.
