@@ -109,10 +109,11 @@ gtk_object_debug (void)
 	  GtkObject *obj;
 	  
 	  obj = (GtkObject*) node->data;
-	  printf ("%p: %s %d %s\n",
+	  printf ("%p: %s ref_count=%d%s%s\n",
 		  obj, gtk_type_name (GTK_OBJECT_TYPE (obj)),
 		  obj->ref_count,
-		  GTK_OBJECT_FLOATING (obj)? "floating" : "");
+		  GTK_OBJECT_FLOATING (obj) ? " (floating)" : "",
+		  GTK_OBJECT_DESTROYED (obj) ? " (destroyed)" : "");
 	}
     }
   printf ("living objects count = %d\n", obj_count);
@@ -456,7 +457,7 @@ gtk_object_destroy (GtkObject *object)
  *
  * Weak refs are very similar to the old "destroy" signal.  They allow
  * one to register a callback that is called when the weakly
- * referenced object is destroyed.
+ * referenced object is finalized.
  *  
  * They are not implemented as a signal because they really are
  * special and need to be used with great care.  Unlike signals, who
@@ -703,6 +704,11 @@ gtk_object_query_args (GtkType	class_type,
 
   if (!arg_info_ht)
     return NULL;
+
+  /* make sure the types class has been initialized, because
+   * the argument setup happens in the gtk_*_class_init() functions.
+   */
+  gtk_type_class (class_type);
 
   query_data.arg_list = NULL;
   query_data.class_type = class_type;

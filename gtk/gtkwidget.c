@@ -1124,6 +1124,10 @@ void
 gtk_widget_destroyed (GtkWidget      *widget,
 		      GtkWidget      **widget_pointer)
 {
+  /* Don't make any assumptions about the
+   *  value of widget!
+   *  Even check widget_pointer.
+   */
   if (widget_pointer)
     *widget_pointer = NULL;
 }
