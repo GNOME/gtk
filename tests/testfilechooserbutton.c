@@ -134,6 +134,7 @@ main (int argc, char *argv[])
   group_box = gtk_vbox_new (FALSE, 6);
   gtk_container_add (GTK_CONTAINER (alignment), group_box);
 
+  /* open mode */
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
 
@@ -155,6 +156,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
+  /* select folder mode */
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
 
@@ -177,6 +179,8 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
+#if 0
+  /* save mode */
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
 
@@ -199,6 +203,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
+  /* create folder mode */
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
 
@@ -220,6 +225,7 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Properties...");
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+#endif
 
   g_object_unref (label_group);
 

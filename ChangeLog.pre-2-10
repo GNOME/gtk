@@ -1,5 +1,8 @@
 2004-11-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testfilechooserbutton.c (main): Disable the SAVE 
+	and CREATE_FOLDER modes.  (#157675, Christian Persch)
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_website): Hide the
 	website button if the url is unset.  (#157630, John Finlay)
 
