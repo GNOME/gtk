@@ -1,3 +1,9 @@
+Sun Aug  9 23:31:59 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (adjust_scrollbars): Fix for resize bug. Call
+ 	gtk_widget_size_allocate instead of gtk_widget_queue_resize
+	if the visibility state of a scrollbar changes.
+
 Mon Aug 10 12:49:54 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkhbbox.h: fixed an #include statement (reported by Eric Kidd).

@@ -2759,24 +2759,25 @@ gtk_clist_button_press (GtkWidget * widget,
   for (i = 0; i < clist->columns; i++)
     if (clist->column[i].window && event->window == clist->column[i].window)
       {
-	if (!GTK_WIDGET_HAS_FOCUS (widget))
-	  gtk_widget_grab_focus (widget);
-
-	GTK_CLIST_SET_FLAG (clist, CLIST_IN_DRAG);
-	gtk_widget_get_pointer (widget, &clist->x_drag, NULL);
-
 	gdk_pointer_grab (clist->column[i].window, FALSE,
 			  GDK_POINTER_MOTION_HINT_MASK |
 			  GDK_BUTTON1_MOTION_MASK |
 			  GDK_BUTTON_RELEASE_MASK,
 			  NULL, NULL, event->time);
 	gtk_grab_add (widget);
+	GTK_CLIST_SET_FLAG (clist, CLIST_IN_DRAG);
+
+	if (!GTK_WIDGET_HAS_FOCUS (widget))
+	  gtk_widget_grab_focus (widget);
+
+	clist->drag_pos = i;
+	clist->x_drag = (COLUMN_LEFT_XPIXEL(clist, i) + COLUMN_INSET +
+			 clist->column[i].area.width + CELL_SPACING);
 
 	if (GTK_CLIST_ADD_MODE (clist))
 	  gdk_gc_set_line_attributes (clist->xor_gc, 1, GDK_LINE_SOLID, 0, 0);
-
 	draw_xor_line (clist);
-	clist->drag_pos = i;
+
 	return FALSE;
       }
 
@@ -3274,9 +3275,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
   
   /* column button allocation */
   size_allocate_columns (clist);
-
-  if (GTK_WIDGET_REALIZED (widget))
-    size_allocate_title_buttons (clist);
+  size_allocate_title_buttons (clist);
 
   adjust_scrollbars (clist);
   
@@ -4287,7 +4286,8 @@ adjust_scrollbars (GtkCList * clist)
       if (GTK_WIDGET_VISIBLE (clist->vscrollbar))
 	{
 	  gtk_widget_hide (clist->vscrollbar);
-	  gtk_widget_queue_resize (GTK_WIDGET (clist));
+	  gtk_widget_size_allocate (GTK_WIDGET (clist),
+				    &GTK_WIDGET (clist)->allocation);
 	}
     }
   else
@@ -4295,7 +4295,8 @@ adjust_scrollbars (GtkCList * clist)
       if (!GTK_WIDGET_VISIBLE (clist->vscrollbar))
 	{
 	  gtk_widget_show (clist->vscrollbar);
-	  gtk_widget_queue_resize (GTK_WIDGET (clist));
+	  gtk_widget_size_allocate (GTK_WIDGET (clist),
+				    &GTK_WIDGET (clist)->allocation);
 	}
     }
 
@@ -4305,7 +4306,8 @@ adjust_scrollbars (GtkCList * clist)
       if (GTK_WIDGET_VISIBLE (clist->hscrollbar))
 	{
 	  gtk_widget_hide (clist->hscrollbar);
-	  gtk_widget_queue_resize (GTK_WIDGET (clist));
+	  gtk_widget_size_allocate (GTK_WIDGET (clist),
+				    &GTK_WIDGET (clist)->allocation);
 	}
     }
   else
@@ -4313,7 +4315,8 @@ adjust_scrollbars (GtkCList * clist)
       if (!GTK_WIDGET_VISIBLE (clist->hscrollbar))
 	{
 	  gtk_widget_show (clist->hscrollbar);
-	  gtk_widget_queue_resize (GTK_WIDGET (clist));
+	  gtk_widget_size_allocate (GTK_WIDGET (clist),
+				    &GTK_WIDGET (clist)->allocation);
 	}
     }
 
