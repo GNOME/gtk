@@ -387,6 +387,12 @@ gtk_radio_button_focus (GtkWidget         *widget,
 {
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
   GSList *tmp_slist;
+
+  /* Radio buttons with draw_indicator unset focus "normally", since
+   * they look like buttons to the user.
+   */
+  if (!GTK_TOGGLE_BUTTON (widget)->draw_indicator)
+    return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
   
   if (gtk_widget_is_focus (widget))
     {

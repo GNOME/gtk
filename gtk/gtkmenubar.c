@@ -29,6 +29,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtksettings.h"
@@ -228,13 +229,17 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
       gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
       
       requisition->width += (GTK_CONTAINER (menu_bar)->border_width +
-			     widget->style->xthickness +
                              ipadding + 
 			     BORDER_SPACING) * 2;
       requisition->height += (GTK_CONTAINER (menu_bar)->border_width +
-			      widget->style->ythickness +
                               ipadding +
 			      BORDER_SPACING) * 2;
+
+      if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
+	{
+	  requisition->width += widget->style->xthickness * 2;
+	  requisition->height += widget->style->ythickness * 2;
+	}
 
       if (nchildren > 0)
 	requisition->width += 2 * CHILD_SPACING * (nchildren - 1);
@@ -271,16 +276,21 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   if (menu_shell->children)
     {
       child_allocation.x = (GTK_CONTAINER (menu_bar)->border_width +
-			    widget->style->xthickness +
                             ipadding + 
 			    BORDER_SPACING);
-      offset = child_allocation.x; 	/* Window edge to menubar start */
-
       child_allocation.y = (GTK_CONTAINER (menu_bar)->border_width +
-			    widget->style->ythickness +
                             ipadding +
 			    BORDER_SPACING);
+
+      if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
+	{
+	  child_allocation.x += widget->style->xthickness;
+	  child_allocation.y += widget->style->ythickness;
+	}
+      
       child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
+
+      offset = child_allocation.x; 	/* Window edge to menubar start */
 
       children = menu_shell->children;
       while (children)
@@ -297,11 +307,11 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
           child_requisition.width += toggle_size;
           
 	  /* Support for the right justified help menu */
-	  if ( (children == NULL) && (GTK_IS_MENU_ITEM(child))
+	  if ((children == NULL) && (GTK_IS_MENU_ITEM(child))
 	      && (GTK_MENU_ITEM(child)->right_justify)) 
 	    {
 	      child_allocation.x = allocation->width -
-		  child_requisition.width - CHILD_SPACING - offset;
+		  child_requisition.width - offset;
 	    }
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
@@ -356,6 +366,19 @@ gtk_menu_bar_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static GList *
+get_menu_bars (GtkWindow *window)
+{
+  return g_object_get_data (G_OBJECT (window), "gtk-menu-bar-list");
+}
+
+static void
+set_menu_bars (GtkWindow *window,
+	       GList     *menubars)
+{
+  g_object_set_data (G_OBJECT (window), "gtk-menu-bar-list", menubars);
+}
+
 static gboolean
 window_key_press_handler (GtkWidget   *widget,
                           GdkEventKey *event,
@@ -387,19 +410,23 @@ window_key_press_handler (GtkWidget   *widget,
           ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
 	   (mods & gtk_accelerator_get_default_mod_mask ())))
         {
-          GtkMenuBar *menubar;
-          GtkMenuShell *menushell;
-          
-          menubar = GTK_MENU_BAR (data);
-          menushell = GTK_MENU_SHELL (menubar);
+	  GList *menubars = get_menu_bars (GTK_WINDOW (widget));
 
-          if (menushell->children)
-            {
-              gtk_signal_emit_by_name (GTK_OBJECT (menushell->children->data),
-                                       "activate_item");
-              
-              retval = TRUE;
-            }
+	  menubars = _gtk_container_focus_sort (GTK_CONTAINER (widget), menubars,
+						GTK_DIR_TAB_FORWARD, NULL);
+	  if (menubars)
+	    {
+	      GtkMenuShell *menushell = GTK_MENU_SHELL (menubars->data);
+
+	      if (menushell->children)
+		{
+		  gtk_signal_emit_by_name (GTK_OBJECT (menushell->children->data),
+					   "activate_item");
+		  retval = TRUE;
+		}
+	      
+	      g_list_free (menubars);
+	    }
         }
 
       g_free (accel);
@@ -412,34 +439,38 @@ static void
 add_to_window (GtkWindow  *window,
                GtkMenuBar *menubar)
 {
-  GtkMenuBar *old_menubar;
+  GList *menubars = get_menu_bars (window);
 
-  old_menubar = g_object_get_data (G_OBJECT (window),
-                                   "gtk-menu-bar");
-  
-  if (old_menubar)
-    return; /* ignore this case; app programmer on crack, but
-             * shouldn't spew stuff, just don't support the accel
-             * for menubar #2
-             */
+  if (!menubars)
+    {
+      g_signal_connect (G_OBJECT (window),
+			"key_press_event",
+			G_CALLBACK (window_key_press_handler),
+			NULL);
+    }
 
-  g_object_set_data (G_OBJECT (window),
-                     "gtk-menu-bar",
-                     menubar);
-
-  g_signal_connect (G_OBJECT (window),
-		    "key_press_event",
-		    G_CALLBACK (window_key_press_handler),
-		    menubar);
+  set_menu_bars (window, g_list_prepend (menubars, menubar));
 }
 
 static void
 remove_from_window (GtkWindow  *window,
                     GtkMenuBar *menubar)
 {
-  g_signal_handlers_disconnect_by_func (G_OBJECT (window),
-                                        G_CALLBACK (window_key_press_handler),
-                                        menubar);
+  GList *menubars = get_menu_bars (window);
+
+  menubars = g_object_get_data (G_OBJECT (window),
+				    "gtk-menu-bar-list");
+
+  menubars = g_list_remove (menubars, menubar);
+
+  if (!menubars)
+    {
+      g_signal_handlers_disconnect_by_func (G_OBJECT (window),
+					    G_CALLBACK (window_key_press_handler),
+					    NULL);
+    }
+
+  set_menu_bars (window, menubars);
 }
 
 static void
@@ -458,6 +489,53 @@ gtk_menu_bar_hierarchy_changed (GtkWidget *widget,
   
   if (GTK_WIDGET_TOPLEVEL (toplevel))
     add_to_window (GTK_WINDOW (toplevel), menubar);
+}
+
+/**
+ * _gtk_menu_bar_cycle_focus:
+ * @menubar: a #GtkMenuBar
+ * @dir: direction in which to cycle the focus
+ * 
+ * Move the focus between menubars in the toplevel.
+ **/
+void
+_gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
+			   GtkDirectionType  dir)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menubar));
+
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
+    {
+      GList *menubars = get_menu_bars (GTK_WINDOW (toplevel));
+      GList *current;
+      GtkMenuBar *new;
+
+      menubars = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), menubars,
+					    dir, GTK_WIDGET (menubar));
+
+      if (menubars)
+	{
+	  current = g_list_find (menubars, menubar);
+	  if (current && current->next)
+	    new = current->next->data;
+	  else
+	    new = menubars->data;
+	  
+	  if (new != menubar)
+	    {
+	      GtkMenuShell *new_menushell = GTK_MENU_SHELL (new);
+
+	      if (new_menushell->children)
+		{
+		  g_signal_emit_by_name (menubar, "cancel", 0);
+		  gtk_signal_emit_by_name (GTK_OBJECT (new_menushell->children->data),
+					   "activate_item");
+		}
+	    }
+	}
+	  
+      g_list_free (menubars);
+    }
 }
 
 static GtkShadowType

@@ -717,10 +717,6 @@ gdk_event_translate (GdkDisplay *display,
 	}
 #endif /* G_ENABLE_DEBUG */
 
-      /* bits 13 and 14 in the "state" field are the keyboard group */
-#define KEYBOARD_GROUP_SHIFT 13
-#define KEYBOARD_GROUP_MASK ((1 << 13) | (1 << 14))
-      
       event->key.type = GDK_KEY_PRESS;
       event->key.window = window;
       event->key.time = xevent->xkey.time;
@@ -728,8 +724,12 @@ gdk_event_translate (GdkDisplay *display,
       event->key.string = g_strdup (buf);
       event->key.length = charcount;
 
-      event->key.group = 
-	(xevent->xkey.state & KEYBOARD_GROUP_MASK) >> KEYBOARD_GROUP_SHIFT;
+      /* bits 13 and 14 in the "state" field are the keyboard group */
+#define KEYBOARD_GROUP_SHIFT 13
+#define KEYBOARD_GROUP_MASK ((1 << 13) | (1 << 14))
+      
+      event->key.group = _gdk_x11_get_group_for_state (display,
+						       xevent->xkey.state);
       
       break;
       
@@ -1367,9 +1367,8 @@ gdk_event_translate (GdkDisplay *display,
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_ICONIFIED);
-      
-      if (display_impl->gdk_xgrab_window == window_private)
-	display_impl->gdk_xgrab_window = NULL;
+
+      _gdk_xgrab_check_unmap (window, xevent->xany.serial);
       
       break;
       
@@ -1658,6 +1657,7 @@ gdk_event_translate (GdkDisplay *display,
 	    {
 	    case XkbMapNotify:
 	      ++display_impl->keymap_serial;
+
 	      return_val = FALSE;
 	      break;
 	      
@@ -2487,7 +2487,7 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
   if (data)
     screen = GDK_SCREEN_IMPL_X11 (data);
   else
-    screen = gdk_get_default_screen ();
+    screen = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen ());
     
   if (xsettings_client_process_event (screen->xsettings_client, 
 				      (XEvent *)xevent))

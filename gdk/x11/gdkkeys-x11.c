@@ -56,7 +56,6 @@ struct _GdkKeymapX11
   
   gint min_keycode;
   gint max_keycode;
-
   KeySym* keymap;
   gint keysyms_per_keycode;
   XModifierKeymap* mod_keymap;
@@ -198,6 +197,11 @@ gdk_keymap_get_default (void)
 }
 #endif
 
+/* Find the index of the group/level pair within the keysyms for a key.
+ */
+#define KEYSYM_INDEX(keymap_impl, group, level) \
+  (2 * ((group) % (keymap_impl->keysyms_per_keycode / 2)) + (level))
+
 static void
 update_keymaps (GdkKeymapX11 *keymap_x11)
 {
@@ -214,6 +218,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
     {
       gint i;
       gint map_size;
+      gint keycode;
 
       keymap_x11->current_serial = display_impl->keymap_serial;
       
@@ -229,6 +234,26 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 	XGetKeyboardMapping (xdisplay, keymap_x11->min_keycode,
 			     keymap_x11->max_keycode - keymap_x11->min_keycode,
 			     &keymap_x11->keysyms_per_keycode);
+
+
+      /* GDK_ISO_Left_Tab, as usually configured through XKB, really messes
+       * up the whole idea of "consumed modifiers" because shift is consumed.
+       * However, <shift>Tab is not usually GDK_ISO_Left_Tab without XKB,
+       * we we fudge the map here.
+       */
+      keycode = keymap_x11->min_keycode;
+      while (keycode < keymap_x11->max_keycode)
+        {
+          KeySym *syms = keymap_x11->keymap + (keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
+	  /* Check both groups */
+	  for (i = 0 ; i < 2 ; i++)
+	    {
+	      if (syms[KEYSYM_INDEX (keymap_x11, i, 0)] == GDK_Tab)
+		syms[KEYSYM_INDEX (keymap_x11, i, 1)] = GDK_ISO_Left_Tab;
+	    }
+          
+          ++keycode;
+        }
 
       keymap_x11->mod_keymap = XGetModifierMapping (xdisplay);
 
@@ -758,12 +783,9 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   else
 #endif
     {
-      update_keymaps (keymap_x11);
-      
-      return XKeycodeToKeysym (GDK_DISPLAY_XDISPLAY (keymap->display), 
-			       key->keycode,
-                               key->group * keymap_x11->keysyms_per_keycode 
-			       + key->level);
+      const KeySym *map = get_keymap (keymap_x11);
+      const KeySym *syms = map + (key->keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
+      return syms [KEYSYM_INDEX (keymap_x11, key->group, key->level)];
     }
 }
 
@@ -970,42 +992,68 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   else
 #endif
     {
+      const KeySym *map = get_keymap (keymap_x11);
+      const KeySym *syms;
       gint shift_level;
+      gboolean ignore_shift = FALSE;
+      gboolean ignore_group = FALSE;
       
-      update_keymaps (keymap_x11);
-
       if ((state & GDK_SHIFT_MASK) &&
           (state & GDK_LOCK_MASK))
-        shift_level = 0; /* shift disables shift lock */
+	shift_level = 0; /* shift disables shift lock */
       else if ((state & GDK_SHIFT_MASK) ||
                (state & GDK_LOCK_MASK))
-        shift_level = 1;
+	shift_level = 1;
       else
-        shift_level = 0;
+	shift_level = 0;
 
-      tmp_keyval = 
-	XKeycodeToKeysym (GDK_DISPLAY_XDISPLAY (keymap->display), 
-			  hardware_keycode,
-			  group * keymap_x11->keysyms_per_keycode+ shift_level);
-      
-      tmp_modifiers = GDK_SHIFT_MASK | GDK_LOCK_MASK | keymap_x11->group_switch_mask;
-      
+      syms = map + (hardware_keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
+
+#define SYM(k,g,l) syms[KEYSYM_INDEX (k,g,l)]
+
+      /* Drop group and shift if there are no keysymbols on
+       * the specified key.
+       */
+      if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, group, 0))
+	{
+	  shift_level = 0;
+	  ignore_shift = TRUE;
+	}
+      if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, 0, shift_level))
+	{
+	  group = 0;
+	  ignore_group = TRUE;
+	}
+      if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, 0, 0))
+	{
+	  shift_level = 0;
+	  group = 0;
+	  ignore_group = TRUE;
+	  ignore_shift = TRUE;
+	}
+
+      /* See whether the group and shift level actually mattered
+       * to know what to put in consumed_modifiers
+       */
+      if (!SYM (keymap_x11, group, 1) ||
+	  SYM (keymap_x11, group, 0) == SYM (keymap_x11, group, 1))
+	ignore_shift = TRUE;
+
+      if (!SYM (keymap_x11, 1, shift_level) ||
+	  SYM (keymap_x11, 0, shift_level) == SYM (keymap_x11, 1, shift_level))
+	ignore_group = TRUE;
+
+      tmp_keyval = SYM (keymap_x11, group, shift_level);
+
+      tmp_modifiers = ignore_group ? 0 : keymap_x11->group_switch_mask;
+      tmp_modifiers |= ignore_shift ? 0 : (GDK_SHIFT_MASK | GDK_LOCK_MASK);
+
       if (effective_group)
-        *effective_group = (state & keymap_x11->group_switch_mask) ? 1 : 0;
+        *effective_group = group;
 
       if (level)
         *level = shift_level;
-    }
-
-  /* GDK_ISO_Left_Tab, as usually configured through XKB, really messes
-   * up the whole idea of "consumed modifiers" because shift is consumed.
-   * However, <shift>Tab is not _consistently_ GDK_ISO_Left_Tab, so people
-   * can't bind to GDK_ISO_Left_Tab instead. So, we force consistency here.
-   */
-  if (tmp_keyval == GDK_Tab && (tmp_modifiers & GDK_SHIFT_MASK) == 0)
-    {
-      tmp_keyval = GDK_ISO_Left_Tab;
-      tmp_modifiers |= GDK_SHIFT_MASK;
+#undef SYM	  
     }
 
   if (consumed_modifiers)
@@ -1023,6 +1071,18 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 gchar*
 gdk_keyval_name (guint	      keyval)
 {
+  switch (keyval)
+    {
+    case GDK_Page_Up:
+      return "Page_Up";
+    case GDK_Page_Down:
+      return "Page_Down";
+    case GDK_KP_Page_Up:
+      return "KP_Page_Up";
+    case GDK_KP_Page_Down:
+      return "KP_Page_Down";
+    }
+  
   return XKeysymToString (keyval);
 }
 
@@ -1043,6 +1103,16 @@ gdk_keyval_convert_case (guint symbol,
   KeySym xlower = 0;
   KeySym xupper = 0;
 
+  /* Check for directly encoded 24-bit UCS characters: */
+  if ((symbol & 0xff000000) == 0x01000000)
+    {
+      if (lower)
+	*lower = gdk_unicode_to_keyval (g_unichar_tolower (symbol & 0x00ffffff));
+      if (upper)
+	*upper = gdk_unicode_to_keyval (g_unichar_toupper (symbol & 0x00ffffff));
+      return;
+    }
+  
   if (symbol)
     XConvertCase (symbol, &xlower, &xupper);
 
@@ -1052,3 +1122,23 @@ gdk_keyval_convert_case (guint symbol,
     *upper = xupper;
 }  
 #endif /* HAVE_XCONVERTCASE */
+
+gint
+_gdk_x11_get_group_for_state (GdkDisplay *display,
+			      GdkModifierType state)
+{
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+#ifdef HAVE_XKB
+  if (dpy_impl->use_xkb)
+    {
+      return XkbGroupForCoreState (state);
+    }
+  else
+#endif
+    {
+      GdkKeymapX11 *keymap_impl = 
+	GDK_KEYMAP_X11 (gdk_keymap_get_for_display (display));
+      update_keymaps (keymap_impl);
+      return (state & keymap_impl->group_switch_mask) ? 1 : 0;
+    }
+}

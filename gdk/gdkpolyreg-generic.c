@@ -538,6 +538,7 @@ gdk_region_polygon(GdkPoint *Pts, gint Count, GdkFillRule rule)
                  */
                 if (iPts == NUMPTSTOBUFFER) {
                     tmpPtBlock = (POINTBLOCK *)g_malloc(sizeof(POINTBLOCK));
+		    tmpPtBlock->next = NULL;
                     curPtBlock->next = tmpPtBlock;
                     curPtBlock = tmpPtBlock;
                     pts = curPtBlock->pts;
@@ -584,6 +585,7 @@ gdk_region_polygon(GdkPoint *Pts, gint Count, GdkFillRule rule)
                      */
                     if (iPts == NUMPTSTOBUFFER) {
                         tmpPtBlock = (POINTBLOCK *)g_malloc(sizeof(POINTBLOCK));
+			tmpPtBlock->next = NULL;
                         curPtBlock->next = tmpPtBlock;
                         curPtBlock = tmpPtBlock;
                         pts = curPtBlock->pts;

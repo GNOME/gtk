@@ -184,10 +184,16 @@ gboolean _gdk_moveresize_configure_done (GdkDisplay *display,
 				     GdkWindow  *window);
 
 void _gdk_keymap_state_changed      (GdkDisplay *display);
+gint _gdk_x11_get_group_for_state   (GdkDisplay *display,
+				     GdkModifierType state);
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
 
 void _gdk_x11_initialize_locale (void);
+
+void _gdk_xgrab_check_unmap   (GdkWindow *window,
+			       gulong     serial);
+void _gdk_xgrab_check_destroy (GdkWindow *window);
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         _gdk_use_xshm;

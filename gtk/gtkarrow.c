@@ -241,13 +241,13 @@ gtk_arrow_expose (GtkWidget      *widget,
 
       width = widget->allocation.width - misc->xpad * 2;
       height = widget->allocation.height - misc->ypad * 2;
-      extent = MIN (width, height);
+      extent = MIN (width, height) * 0.7;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	xalign = misc->xalign;
       else
 	xalign = 1.0 - misc->xalign;
-  
+
       x = floor (widget->allocation.x + misc->xpad
 		 + ((widget->allocation.width - extent) * xalign)
 		 + 0.5);

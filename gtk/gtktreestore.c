@@ -450,8 +450,10 @@ gtk_tree_store_finalize (GObject *object)
 
   if (tree_store->default_sort_destroy)
     {
-      (* tree_store->default_sort_destroy) (tree_store->default_sort_data);
+      GtkDestroyNotify d = tree_store->default_sort_destroy;
+
       tree_store->default_sort_destroy = NULL;
+      d (tree_store->default_sort_data);
       tree_store->default_sort_data = NULL;
     }
 
@@ -2195,12 +2197,16 @@ gtk_tree_store_set_sort_func (GtkTreeSortable        *sortable,
     }
 
   if (header->destroy)
-    (* header->destroy) (header->data);
+    {
+      GtkDestroyNotify d = header->destroy;
+
+      header->destroy = NULL;
+      d (header->data);
+    }
 
   header->func = func;
   header->data = data;
   header->destroy = destroy;
-
 }
 
 static void
@@ -2214,7 +2220,12 @@ gtk_tree_store_set_default_sort_func (GtkTreeSortable        *sortable,
   g_return_if_fail (GTK_IS_TREE_STORE (sortable));
 
   if (tree_store->default_sort_destroy)
-    (* tree_store->default_sort_destroy) (tree_store->default_sort_data);
+    {
+      GtkDestroyNotify d = tree_store->default_sort_destroy;
+
+      tree_store->default_sort_destroy = NULL;
+      d (tree_store->default_sort_data);
+    }
 
   tree_store->default_sort_func = func;
   tree_store->default_sort_data = data;

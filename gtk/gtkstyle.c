@@ -314,6 +314,7 @@ static void hls_to_rgb			(gdouble	 *h,
 					 gdouble	 *l,
 					 gdouble	 *s);
 
+static void style_unrealize_cursor_gcs (GtkStyle *style);
 
 /*
  * Data for default check and radio buttons
@@ -1782,6 +1783,8 @@ gtk_style_real_unrealize (GtkStyle *style)
   gdk_colormap_free_colors (style->colormap, style->text, 5);
   gdk_colormap_free_colors (style->colormap, style->base, 5);
   gdk_colormap_free_colors (style->colormap, style->text_aa, 5);
+
+  style_unrealize_cursor_gcs (style);
 }
 
 static void
@@ -2812,109 +2815,112 @@ gtk_default_draw_polygon (GtkStyle      *style,
 }
 
 static void
-draw_varrow (GdkWindow     *window,
-	     GdkGC         *gc,
-	     GtkShadowType  shadow_type,
-	     GdkRectangle  *area,
-	     GtkArrowType   arrow_type,
-	     gint           x,
-	     gint           y,
-	     gint           width,
-	     gint           height)
+draw_arrow (GdkWindow     *window,
+	    GdkGC         *gc,
+	    GdkRectangle  *area,
+	    GtkArrowType   arrow_type,
+	    gint           x,
+	    gint           y,
+	    gint           width,
+	    gint           height)
 {
-  gint steps, extra;
-  gint y_start, y_increment;
-  gint i;
+  gint i, j;
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, area);
-  
-  width = width + width % 2 - 1;	/* Force odd */
-  
-  steps = 1 + width / 2;
-
-  extra = height - steps;
 
   if (arrow_type == GTK_ARROW_DOWN)
     {
-      y_start = y;
-      y_increment = 1;
+      for (i = 0, j = 0; i < height; i++, j++)
+	gdk_draw_line (window, gc, x + j, y + i, x + width - j - 1, y + i);
     }
-  else
+  else if (arrow_type == GTK_ARROW_UP)
     {
-      y_start = y + height - 1;
-      y_increment = -1;
+      for (i = height - 1, j = 0; i >= 0; i--, j++)
+	gdk_draw_line (window, gc, x + j, y + i, x + width - j - 1, y + i);
     }
-
-  for (i = 0; i < extra; i++)
+  else if (arrow_type == GTK_ARROW_LEFT)
     {
-      gdk_draw_line (window, gc,
-		     x,              y_start + i * y_increment,
-		     x + width - 1,  y_start + i * y_increment);
+      for (i = width - 1, j = 0; i >= 0; i--, j++)
+	gdk_draw_line (window, gc, x + i, y + j, x + i, y + height - j - 1);
     }
-  for (; i < height; i++)
+  else if (arrow_type == GTK_ARROW_RIGHT)
     {
-      gdk_draw_line (window, gc,
-		     x + (i - extra),              y_start + i * y_increment,
-		     x + width - (i - extra) - 1,  y_start + i * y_increment);
+      for (i = 0, j = 0; i < width; i++, j++)
+	gdk_draw_line (window, gc, x + i, y + j, x + i, y + height - j - 1);
     }
-  
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, NULL);
 }
 
 static void
-draw_harrow (GdkWindow     *window,
-	     GdkGC         *gc,
-	     GtkShadowType  shadow_type,
-	     GdkRectangle  *area,
-	     GtkArrowType   arrow_type,
-	     gint           x,
-	     gint           y,
-	     gint           width,
-	     gint           height)
+calculate_arrow_geometry (GtkArrowType  arrow_type,
+			  gint         *x,
+			  gint         *y,
+			  gint         *width,
+			  gint         *height)
 {
-  gint steps, extra;
-  gint x_start, x_increment;
-  gint i;
-
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
+  gint w = *width;
+  gint h = *height;
   
-  height = height + height % 2 - 1;	/* Force odd */
-  
-  steps = 1 + height / 2;
-
-  extra = width - steps;
-
-  if (arrow_type == GTK_ARROW_RIGHT)
+  switch (arrow_type)
     {
-      x_start = x;
-      x_increment = 1;
-    }
-  else
-    {
-      x_start = x + width - 1;
-      x_increment = -1;
+    case GTK_ARROW_UP:
+    case GTK_ARROW_DOWN:
+      w += (w % 2) - 1;
+      h = (w / 2 + 1);
+      
+      if (h > *height)
+	{
+	  h = *height;
+	  w = 2 * h - 1;
+	}
+      
+      if (arrow_type == GTK_ARROW_DOWN)
+	{
+	  if (*height % 2 == 1 || h % 2 == 0)
+	    *height += 1;
+	}
+      else
+	{
+	  if (*height % 2 == 0 || h % 2 == 0)
+	    *height -= 1;
+	}
+      break;
+
+    case GTK_ARROW_RIGHT:
+    case GTK_ARROW_LEFT:
+      h += (h % 2) - 1;
+      w = (h / 2 + 1);
+      
+      if (w > *width)
+	{
+	  w = *width;
+	  h = 2 * w - 1;
+	}
+      
+      if (arrow_type == GTK_ARROW_RIGHT)
+	{
+	  if (*width % 2 == 1 || w % 2 == 0)
+	    *width += 1;
+	}
+      else
+	{
+	  if (*width % 2 == 0 || w % 2 == 0)
+	    *width -= 1;
+	}
+      break;
+      
+    default:
+      /* should not be reached */
+      break;
     }
 
-  for (i = 0; i < extra; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x_start + i * x_increment, y,
-		     x_start + i * x_increment, y + height - 1);
-    }
-  for (; i < width; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x_start + i * x_increment, y + (i - extra),
-		     x_start + i * x_increment, y + height - (i - extra) - 1);
-    }
-  
-
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
+  *x += (*width - w) / 2;
+  *y += (*height - h) / 2;
+  *height = h;
+  *width = w;
 }
 
 static void
@@ -2932,77 +2938,23 @@ gtk_default_draw_arrow (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  sanitize_size (window, &width, &height);
+  gint original_width, original_x;
   
-  if (detail && strcmp (detail, "spinbutton") == 0)
-    {
-      int hpad, vpad;
-      int my_height = height;
-      int my_width = width;
-      int vpad_add = 0;
+  sanitize_size (window, &width, &height);
 
-      if (my_height > my_width)
-	{
-	  vpad_add = (my_height - my_width) / 2;
-	  my_height = my_width;
-	}
+  original_width = width;
+  original_x = x;
 
-      hpad = my_width / 4;
+  calculate_arrow_geometry (arrow_type, &x, &y, &width, &height);
+  
+  if (detail && strcmp (detail, "menuitem") == 0)
+    x = original_x + original_width - width;
 
-      if (hpad < 4)
-	hpad = 4;
-
-      vpad = 2 * hpad - 1;
-
-      x += hpad / 2;
-      y += vpad / 2;
-
-      y += vpad_add;
-
-      draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		   x, y, my_width - hpad, my_height - vpad);
-    }
-  else if (detail && strcmp (detail, "vscrollbar") == 0)
-    {
-      gtk_paint_box (style, window, state, shadow, area,
-		     widget, detail, x, y, width, height);
-      
-      x += (width - 7) / 2;
-      y += (height - 5) / 2;
-      
-      draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		   x, y, 7, 5);
-    }
-  else if (detail && strcmp (detail, "hscrollbar") == 0)
-    {
-      gtk_paint_box (style, window, state, shadow, area,
-		     widget, detail, x, y, width, height);
-      
-      y += (height - 7) / 2;
-      x += (width - 5) / 2;
-
-      draw_harrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		   x, y, 5, 7);
-    }
-  else
-    {
-      if (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN)
-	{
-	  x += (width - 7) / 2;
-	  y += (height - 5) / 2;
-	  
-	  draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		       x, y, 7, 5);
-	}
-      else
-	{
-	  x += (width - 5) / 2;
-	  y += (height - 7) / 2;
-	  
-	  draw_harrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		       x, y, 5, 7);
-	}
-    }
+  if (state == GTK_STATE_INSENSITIVE)
+    draw_arrow (window, style->white_gc, area, arrow_type,
+		x + 1, y + 1, width, height);
+  draw_arrow (window, style->fg_gc[state], area, arrow_type,
+	      x, y, width, height);
 }
 
 static void
@@ -3512,7 +3464,7 @@ gtk_default_draw_check (GtkStyle      *style,
 	  GdkGC *base_gc = style->base_gc[state_type];
 
 	  if (state_type == GTK_STATE_ACTIVE)
-	    base_gc = style->bg_gc[state_type];
+	    base_gc = style->bg_gc[GTK_STATE_ACTIVE];
 	  
 	  draw_part (window, base_gc, area, x, y, CHECK_BASE);
 	  draw_part (window, style->black_gc, area, x, y, CHECK_BLACK);
@@ -3592,7 +3544,7 @@ gtk_default_draw_option (GtkStyle      *style,
 	  GdkGC *base_gc = style->base_gc[state_type];
 
 	  if (state_type == GTK_STATE_ACTIVE)
-	    base_gc = style->bg_gc[state_type];
+	    base_gc = style->bg_gc[GTK_STATE_ACTIVE];
 
 	  draw_part (window, base_gc, area, x, y, RADIO_BASE);
 	  draw_part (window, style->black_gc, area, x, y, RADIO_BLACK);
@@ -3626,18 +3578,39 @@ gtk_default_draw_tab (GtkStyle      *style,
 		      gint           width,
 		      gint           height)
 {
+#define ARROW_SPACE 4
+
   GtkRequisition indicator_size;
   GtkBorder indicator_spacing;
+  gint arrow_height;
   
   option_menu_get_props (widget, &indicator_size, &indicator_spacing);
 
-  x += (width - indicator_size.width) / 2;
-  y += (height - indicator_size.height) / 2 - 1;
+  indicator_size.width += (indicator_size.width % 2) - 1;
+  arrow_height = indicator_size.width / 2 + 1;
 
-  draw_varrow (window, style->black_gc, shadow_type, area, GTK_ARROW_UP,
-	       x, y, indicator_size.width, 5);
-  draw_varrow (window, style->black_gc, shadow_type, area, GTK_ARROW_DOWN,
-	       x, y + 8, indicator_size.width, 5);
+  x += (width - indicator_size.width) / 2;
+  y += (height - (2 * arrow_height + ARROW_SPACE)) / 2;
+
+  if (state_type == GTK_STATE_INSENSITIVE)
+    {
+      draw_arrow (window, style->white_gc, area,
+		  GTK_ARROW_UP, x + 1, y + 1,
+		  indicator_size.width, arrow_height);
+      
+      draw_arrow (window, style->white_gc, area,
+		  GTK_ARROW_DOWN, x + 1, y + arrow_height + ARROW_SPACE + 1,
+		  indicator_size.width, arrow_height);
+    }
+  
+  draw_arrow (window, style->fg_gc[state_type], area,
+	      GTK_ARROW_UP, x, y,
+	      indicator_size.width, arrow_height);
+  
+  
+  draw_arrow (window, style->fg_gc[state_type], area,
+	      GTK_ARROW_DOWN, x, y + arrow_height + ARROW_SPACE,
+	      indicator_size.width, arrow_height);
 }
 
 static void 
@@ -5677,6 +5650,19 @@ gtk_style_get_font_for_display (GdkDisplay *display,
 }
 
 
+GType
+gtk_border_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeBorder",
+					     (GBoxedCopyFunc) gtk_border_copy,
+					     (GBoxedFreeFunc) gtk_border_free);
+
+  return our_type;
+}
+
 /**
  * gtk_style_get_font:
  * @style: a #GtkStyle
@@ -5767,6 +5753,136 @@ gtk_style_set_font (GtkStyle *style,
     {
       pango_font_description_free (style->private_font_desc);
       style->private_font_desc = NULL;
+    }
+}
+
+typedef struct _CursorInfo CursorInfo;
+
+struct _CursorInfo
+{
+  GType for_type;
+  GdkGC *primary_gc;
+  GdkGC *secondary_gc;
+};
+
+static void
+style_unrealize_cursor_gcs (GtkStyle *style)
+{
+  CursorInfo *
+  
+  cursor_info = g_object_get_data (G_OBJECT (style), "gtk-style-cursor-info");
+  if (cursor_info)
+    {
+      if (cursor_info->primary_gc)
+	gtk_gc_release (cursor_info->primary_gc);
+
+      if (cursor_info->secondary_gc)
+	gtk_gc_release (cursor_info->secondary_gc);
+      
+      g_free (cursor_info);
+      g_object_set_data (G_OBJECT (style), "gtk-style-cursor-info", NULL);
+    }
+}
+
+static GdkGC *
+make_cursor_gc (GtkWidget   *widget,
+		const gchar *property_name,
+		GdkColor    *fallback)
+{
+  GdkGCValues gc_values;
+  GdkGCValuesMask gc_values_mask;
+  GdkColor *cursor_color;
+
+  gtk_widget_style_get (widget, property_name, &cursor_color, NULL);
+  
+  gc_values_mask = GDK_GC_FOREGROUND;
+  if (cursor_color)
+    {
+      gc_values.foreground = *cursor_color;
+      gdk_color_free (cursor_color);
+    }
+  else
+    gc_values.foreground = *fallback;
+  
+  gdk_rgb_find_color (widget->style->colormap, &gc_values.foreground);
+  return gtk_gc_get (widget->style->depth, widget->style->colormap, &gc_values, gc_values_mask);
+}
+
+/**
+ * _gtk_get_insertion_cursor_gc:
+ * @widget: a #GtkWidget
+ * @is_primary: if the cursor should be the primary cursor color.
+ * 
+ * Get a GC suitable for drawing the primary or secondary text
+ * cursor.
+ *
+ * Note: the return value is ref'ed because calls to this function
+ *  on other widgets could result in this the GC being released
+ *  which would be an unexpected side effect. If made public,
+ *  this function should possibly be called create_insertion_cursor_gc().
+ *
+ * Return value: an appropriate #GdkGC. Call g_object_unref() on
+ *   the gc when you are done with it; this GC may be shared with
+ *   other users, so you must not modify the GC except for temporarily
+ *   setting the clip before drawing with the GC, and then unsetting the clip
+ *   again afterwards.
+ **/
+GdkGC *
+_gtk_get_insertion_cursor_gc (GtkWidget *widget,
+			      gboolean   is_primary)
+{
+  CursorInfo *cursor_info;
+
+  cursor_info = g_object_get_data (G_OBJECT (widget->style), "gtk-style-cursor-info");
+  if (!cursor_info)
+    {
+      cursor_info = g_new (CursorInfo, 1);
+      g_object_set_data (G_OBJECT (widget->style), "gtk-style-cursor-info", cursor_info);
+      cursor_info->primary_gc = NULL;
+      cursor_info->secondary_gc = NULL;
+      cursor_info->for_type = G_TYPE_INVALID;
+    }
+
+  /* We have to keep track of the type because gtk_widget_style_get()
+   * can return different results when called on the same property and
+   * same style but for different widgets. :-(. That is,
+   * GtkEntry::cursor-color = "red" in a style will modify the cursor
+   * color for entries but not for text view.
+   */
+  if (cursor_info->for_type != G_OBJECT_TYPE (widget))
+    {
+      cursor_info->for_type = G_OBJECT_TYPE (widget);
+      if (cursor_info->primary_gc)
+	{
+	  gtk_gc_release (cursor_info->primary_gc);
+	  cursor_info->primary_gc = NULL;
+	}
+      if (cursor_info->secondary_gc)
+	{
+	  gtk_gc_release (cursor_info->secondary_gc);
+	  cursor_info->secondary_gc = NULL;
+	}
+    }
+
+  if (is_primary)
+    {
+      if (!cursor_info->primary_gc)
+	cursor_info->primary_gc = make_cursor_gc (widget,
+						  "cursor-color",
+						  &widget->style->black);
+	
+      return g_object_ref (cursor_info->primary_gc);
+    }
+  else
+    {
+      static GdkColor gray = { 0, 0x8888, 0x8888, 0x8888 };
+      
+      if (!cursor_info->secondary_gc)
+	cursor_info->secondary_gc = make_cursor_gc (widget,
+						    "secondary-cursor-color",
+						    &gray);
+	
+      return g_object_ref (cursor_info->secondary_gc);
     }
 }
 

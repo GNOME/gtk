@@ -47,7 +47,6 @@ struct _GtkLabelSelectionInfo
   GdkWindow *window;
   gint selection_anchor;
   gint selection_end;
-  GdkGC *cursor_gc;
   GtkWidget *popup_menu;
 };
 
@@ -1682,8 +1681,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       GdkRectangle cursor_location;
       GtkTextDirection dir1 = GTK_TEXT_DIR_NONE;
       GtkTextDirection dir2 = GTK_TEXT_DIR_NONE;
-      GdkGC *gc1 = NULL;
-      GdkGC *gc2 = NULL;
+      GdkGC *gc;
 
       keymap_direction =
 	(gdk_keymap_get_direction (gdk_keymap_get_for_display (gtk_widget_get_display (widget))) == PANGO_DIRECTION_LTR) ?
@@ -1704,22 +1702,17 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       
       if (split_cursor)
 	{
-	  gc1 = label->select_info->cursor_gc;
 	  cursor1 = &strong_pos;
 
 	  if (strong_pos.x != weak_pos.x ||
 	      strong_pos.y != weak_pos.y)
 	    {
 	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
-	      
-	      gc2 = widget->style->black_gc;
 	      cursor2 = &weak_pos;
 	    }
 	}
       else
 	{
-	  gc1 = label->select_info->cursor_gc;
-	  
 	  if (keymap_direction == widget_direction)
 	    cursor1 = &strong_pos;
 	  else
@@ -1730,10 +1723,12 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       cursor_location.y = yoffset + PANGO_PIXELS (cursor1->y);
       cursor_location.width = 0;
       cursor_location.height = PANGO_PIXELS (cursor1->height);
-      
-      _gtk_draw_insertion_cursor (widget, widget->window, gc1,
+
+      gc = _gtk_get_insertion_cursor_gc (widget, TRUE);
+      _gtk_draw_insertion_cursor (widget, widget->window, gc,
 				  &cursor_location, dir1,
                                   dir2 != GTK_TEXT_DIR_NONE);
+      g_object_unref (gc);
       
       if (dir2 != GTK_TEXT_DIR_NONE)
 	{
@@ -1741,9 +1736,11 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  cursor_location.y = yoffset + PANGO_PIXELS (cursor2->y);
 	  cursor_location.width = 0;
 	  cursor_location.height = PANGO_PIXELS (cursor2->height);
-	  
-	  _gtk_draw_insertion_cursor (widget, widget->window, gc2,
+
+	  gc = _gtk_get_insertion_cursor_gc (widget, FALSE);
+	  _gtk_draw_insertion_cursor (widget, widget->window, gc,
 				      &cursor_location, dir2, TRUE);
+	  g_object_unref (gc);
 	}
     }
 }
@@ -1974,26 +1971,6 @@ gtk_label_set_text_with_mnemonic (GtkLabel    *label,
 }
 
 static void
-gtk_label_realize_cursor_gc (GtkLabel *label)
-{
-  GdkColor *cursor_color;
-  GdkColor red = {0, 0xffff, 0x0000, 0x0000};
-
-  if (label->select_info == NULL)
-    return;
-  
-  if (label->select_info->cursor_gc)
-    gdk_gc_unref (label->select_info->cursor_gc);
-
-  gtk_widget_style_get (GTK_WIDGET (label), "cursor-color", &cursor_color, NULL);
-  label->select_info->cursor_gc = gdk_gc_new (GTK_WIDGET (label)->window);
-  if (cursor_color)
-    gdk_gc_set_rgb_fg_color (label->select_info->cursor_gc, cursor_color);
-  else
-    gdk_gc_set_rgb_fg_color (label->select_info->cursor_gc, &red);
-}
-
-static void
 gtk_label_realize (GtkWidget *widget)
 {
   GtkLabel *label;
@@ -2003,23 +1980,7 @@ gtk_label_realize (GtkWidget *widget)
   (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);
 
   if (label->select_info)
-    {
-      gtk_label_create_window (label);
-      gtk_label_realize_cursor_gc (label);
-    }
-}
-
-static void
-gtk_label_unrealize_cursor_gc (GtkLabel *label)
-{
-  if (label->select_info == NULL)
-    return;
-  
-  if (label->select_info->cursor_gc)
-    {
-      gdk_gc_unref (label->select_info->cursor_gc);
-      label->select_info->cursor_gc = NULL;
-    }
+    gtk_label_create_window (label);
 }
 
 static void
@@ -2030,10 +1991,7 @@ gtk_label_unrealize (GtkWidget *widget)
   label = GTK_LABEL (widget);
 
   if (label->select_info)
-    {
-      gtk_label_unrealize_cursor_gc (label);
-      gtk_label_destroy_window (label);
-    }
+    gtk_label_destroy_window (label);
   
   (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
@@ -2382,10 +2340,7 @@ gtk_label_set_selectable (GtkLabel *label,
 	  GTK_WIDGET_SET_FLAGS (label, GTK_CAN_FOCUS);
       
           if (GTK_WIDGET_REALIZED (label))
-	    {
-	      gtk_label_create_window (label);
-	      gtk_label_realize_cursor_gc (label);
-	    }
+	    gtk_label_create_window (label);
 
           if (GTK_WIDGET_MAPPED (label))
             gdk_window_show (label->select_info->window);
@@ -2398,8 +2353,6 @@ gtk_label_set_selectable (GtkLabel *label,
           /* unselect, to give up the selection */
           gtk_label_select_region (label, 0, 0);
           
-	  gtk_label_unrealize_cursor_gc (label);
-	  
           if (label->select_info->window)
 	    {
 	      gtk_label_destroy_window (label);

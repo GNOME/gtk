@@ -105,6 +105,9 @@ G_END_DECLS
 
 G_BEGIN_DECLS
 
+/* urg */
+#define GTK_TYPE_IDENTIFIER (gtk_identifier_get_type ())
+GType gtk_identifier_get_type (void);
 
 /* --- typedefs --- */
 /* here we come with some necessary forward declarations for structures and
@@ -248,19 +251,6 @@ GtkEnumValue*	gtk_type_enum_find_value	(GtkType	 enum_type,
 						 const gchar	*value_name);
 GtkFlagValue*	gtk_type_flags_find_value	(GtkType	 flags_type,
 						 const gchar	*value_name);
-
-#ifdef G_OS_WIN32
-#  ifdef GTK_COMPILATION
-#    define GTKTYPEUTILS_VAR __declspec(dllexport)
-#  else
-#    define GTKTYPEUTILS_VAR extern __declspec(dllimport)
-#  endif
-#else
-#  define GTKTYPEUTILS_VAR extern
-#endif
-
-/* urg */
-GTKTYPEUTILS_VAR GType GTK_TYPE_IDENTIFIER;
 
 #endif /* GTK_DISABLE_DEPRECATED */
 

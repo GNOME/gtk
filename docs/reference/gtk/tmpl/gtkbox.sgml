@@ -326,15 +326,14 @@ were added to @box.
 A widget's position in the @box children list determines where the
 widget is packed into @box.  A child widget at some position in the
 list will be packed just after all other widgets of the same packing
-type that appear earlier in the list.  A negative value of @position is
-interpreted as position 0.
+type that appear earlier in the list.
 </para>
 
 @box: a #GtkBox.
 @child: the #GtkWidget to move.
 @position: the new position for @child in the
 <structfield>children</structfield> list of #GtkBox-struct, starting
-from 0.
+from 0. If negative, indicates the end of the list.
 
 
 <!-- ##### FUNCTION gtk_box_query_child_packing ##### -->

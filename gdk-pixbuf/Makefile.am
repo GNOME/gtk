@@ -9,6 +9,11 @@ if OS_WIN32
 gdk_pixbuf_def = gdk_pixbuf.def
 gdk_pixbuf_symbols = -export-symbols $(gdk_pixbuf_def)
 
+gdk_pixbuf_win32res_lo = gdk_pixbuf-win32res.lo
+
+gdk_pixbuf-win32res.lo : gdk_pixbuf.rc
+	$(top_srcdir)/build/win32/lt-compile-resource gdk_pixbuf.rc gdk_pixbuf-win32res.lo
+
 install-libtool-import-lib:
 	$(INSTALL) .libs/libgdk_pixbuf-1.3.dll.a $(DESTDIR)$(libdir)
 uninstall-libtool-import-lib:
@@ -262,7 +267,7 @@ libgdk_pixbuf_1_3_la_LDFLAGS = @STRIP_BEGIN@ \
 	$(gdk_pixbuf_symbols)					\
 @STRIP_END@
 
-libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
+libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_win32res_lo) $(GDK_PIXBUF_DEP_LIBS)
 libgdk_pixbuf_1_3_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def)
 
 gdk_pixbuf_headers = 			\
@@ -359,6 +364,7 @@ EXTRA_DIST =			\
 	makefile.mingw.in	\
 	makefile.msc		\
 	gdk_pixbuf.def		\
+	gdk_pixbuf.rc		\
 	gdk-pixbuf-marshal.c	\
 	gdk-pixbuf-marshal.list		\
 	pixbufloader_ico.def		\

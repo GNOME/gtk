@@ -803,8 +803,6 @@ static struct {
   /* Numeric keypad */
   
   { 0xFF80 /* Space */, ' ' },
-  { 0xFF89 /* Tab */, '\t' },
-  { 0xFF8D /* Enter */, '\n' },
   { 0xFFAA /* Multiply */, '*' },
   { 0xFFAB /* Add */, '+' },
   { 0xFFAD /* Subtract */, '-' },

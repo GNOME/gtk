@@ -4159,8 +4159,9 @@ gtk_notebook_page_num (GtkNotebook      *notebook,
  * gtk_notebook_set_current_page:
  * @notebook: a #GtkNotebook
  * @page_num: index of the page to switch to, starting from 0.
- *            If negative, or greater than the number of pages
- *            in the notebook the last page will be used.
+ *            If negative, the last page will be used. If greater
+ *            than the number of pages in the notebook, nothing
+ *            will be done.
  *                
  * Switches to the page number @page_num.
  **/
@@ -4250,7 +4251,7 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
  * @show_border: %TRUE if a bevel should be drawn around the notebook.
  * 
  * Sets whether a bevel will be drawn around the notebook pages.
- * this is only has an effect when the tabs are not shown.
+ * This is only has an effect when the tabs are not shown.
  * See gtk_notebook_set_show_tabs().
  **/
 void
@@ -5010,10 +5011,12 @@ gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
  * gtk_notebook_reorder_child:
  * @notebook: a #GtkNotebook
  * @child: the child to move
- * @position: the new position
+ * @position: the new position, or -1 to move to the end
  * 
  * Reorders the page containing @child, so that it appears in position
- * @position. Out of bounds @position will be clamped.
+ * @position. If @position is greater than or equal to the number of
+ * children in the list or negative, @child will be moved to the end
+ * of the list.
  **/
 void
 gtk_notebook_reorder_child (GtkNotebook *notebook,
@@ -5023,6 +5026,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
   GList *list, *new_list;
   GtkNotebookPage *page;
   gint old_pos;
+  gint max_pos;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -5031,6 +5035,10 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
   if (!list)
     return;
 
+  max_pos = g_list_length (notebook->children) - 1;
+  if (position < 0 || position > max_pos)
+    position = max_pos;
+
   old_pos = g_list_position (notebook->children, list);
 
   if (old_pos == position)
@@ -5038,8 +5046,6 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
   page = list->data;
   notebook->children = g_list_delete_link (notebook->children, list);
-
-  position = CLAMP (position, 0, g_list_length (notebook->children));
 
   notebook->children = g_list_insert (notebook->children, page, position);
   new_list = g_list_nth (notebook->children, position);

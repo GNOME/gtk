@@ -256,6 +256,8 @@ struct _GdkWindowObject
   guint modal_hint : 1;
   
   guint destroyed : 2;
+  
+  GdkEventMask event_mask;
 };
 
 struct _GdkWindowObjectClass

@@ -1751,6 +1751,8 @@ gdk_window_set_events (GdkWindow       *window,
   
   if (!GDK_WINDOW_DESTROYED (window))
     GDK_WINDOW_IMPL_FBDATA (window)->event_mask = event_mask;
+
+  GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
 }
 
 void

@@ -1458,7 +1458,7 @@ add_cursor (GtkTextLayout      *layout,
       cursor->y = PANGO_PIXELS (strong_pos.y);
       cursor->height = PANGO_PIXELS (strong_pos.height);
       cursor->is_strong = TRUE;
-      cursor->is_weak = FALSE;
+      cursor->is_weak = (layout->cursor_direction == GTK_TEXT_DIR_NONE) ? FALSE : TRUE;
       display->cursors = g_slist_prepend (display->cursors, cursor);
     }
   
@@ -1473,7 +1473,7 @@ add_cursor (GtkTextLayout      *layout,
 	  cursor->x = PANGO_PIXELS (weak_pos.x);
 	  cursor->y = PANGO_PIXELS (weak_pos.y);
 	  cursor->height = PANGO_PIXELS (weak_pos.height);
-	  cursor->is_strong = FALSE;
+	  cursor->is_strong = (layout->cursor_direction == GTK_TEXT_DIR_NONE) ? FALSE : TRUE;
 	  cursor->is_weak = TRUE;
 	  display->cursors = g_slist_prepend (display->cursors, cursor);
 	}

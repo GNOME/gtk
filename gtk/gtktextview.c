@@ -2416,6 +2416,9 @@ gtk_text_view_finalize (GObject *object)
       free_pending_scroll (text_view->pending_scroll);
       text_view->pending_scroll = NULL;
     }
+
+  if (text_view->tabs)
+    pango_tab_array_free (text_view->tabs);
   
   if (text_view->hadjustment)
     g_object_unref (G_OBJECT (text_view->hadjustment));
@@ -3260,24 +3263,6 @@ changed_handler (GtkTextLayout     *layout,
 }
 
 static void
-gtk_text_view_realize_cursor_gc (GtkTextView *text_view)
-{
-  GdkColor *cursor_color;
-  GdkColor red = { 0, 0xffff, 0x0000, 0x0000 };
-  
-  if (text_view->cursor_gc)
-    gdk_gc_unref (text_view->cursor_gc);
-
-  gtk_widget_style_get (GTK_WIDGET (text_view), "cursor-color", &cursor_color, NULL);
-
-  if (!cursor_color)
-    cursor_color = &red;
-
-  text_view->cursor_gc = gdk_gc_new (text_view->text_window->bin_window);
-  gdk_gc_set_rgb_fg_color (text_view->cursor_gc, cursor_color);
-}
-
-static void
 gtk_text_view_realize (GtkWidget *widget)
 {
   GtkTextView *text_view;
@@ -3328,8 +3313,6 @@ gtk_text_view_realize (GtkWidget *widget)
     text_window_realize (text_view->bottom_window,
                          widget->window);
 
-  gtk_text_view_realize_cursor_gc (text_view);
-
   gtk_text_view_ensure_layout (text_view);
 
   if (text_view->buffer)
@@ -3366,18 +3349,6 @@ gtk_text_view_unrealize (GtkWidget *widget)
       gtk_text_buffer_remove_selection_clipboard (text_view->buffer, clipboard);
     }
 
-  if (text_view->cursor_gc)
-    {
-      gdk_gc_unref (text_view->cursor_gc);
-      text_view->cursor_gc = NULL;
-    }
-
-  if (text_view->first_validate_idle)
-    {
-      g_source_remove (text_view->first_validate_idle);
-      text_view->first_validate_idle = 0;
-    }
-
   gtk_text_view_remove_validate_idles (text_view);
 
   if (text_view->popup_menu)
@@ -3401,7 +3372,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
     text_window_unrealize (text_view->bottom_window);
 
   gtk_text_view_destroy_layout (text_view);
-  
+
   (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
@@ -3433,8 +3404,6 @@ gtk_text_view_style_set (GtkWidget *widget,
       if (text_view->bottom_window)
         gdk_window_set_background (text_view->bottom_window->bin_window,
                                    &widget->style->bg[GTK_WIDGET_STATE (widget)]);
-      
-      gtk_text_view_realize_cursor_gc (text_view);
     }
 
   if (text_view->layout && previous_style)
@@ -4082,7 +4051,7 @@ gtk_text_view_paint (GtkWidget      *widget,
   gtk_text_layout_draw (text_view->layout,
                         widget,
                         text_view->text_window->bin_window,
-			text_view->cursor_gc,
+			NULL,
                         text_view->xoffset,
                         text_view->yoffset,
                         area->x, area->y,
@@ -6047,7 +6016,16 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
   else
     {
       if (!had_selection && text_view->overwrite_mode)
-        gtk_text_view_delete_from_cursor (text_view, GTK_DELETE_CHARS, 1);
+	{
+	  GtkTextIter insert;
+	  
+	  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+					    &insert,
+					    gtk_text_buffer_get_mark (get_buffer (text_view),
+								      "insert"));
+	  if (!gtk_text_iter_ends_line (&insert))
+	    gtk_text_view_delete_from_cursor (text_view, GTK_DELETE_CHARS, 1);
+	}
       gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), str, -1,
                                                     text_view->editable);
     }

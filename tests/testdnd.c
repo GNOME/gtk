@@ -555,10 +555,10 @@ source_drag_data_delete  (GtkWidget          *widget,
 void
 test_init ()
 {
-  if (g_file_test ("../gdk-pixbuf/.libs/libpixbufloader-pnm.so",
+  if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
 		   G_FILE_TEST_EXISTS))
     {
-      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/");
       putenv ("GTK_IM_MODULE_FILE=./gtk.immodules");
     }
 }

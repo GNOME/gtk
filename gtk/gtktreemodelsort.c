@@ -1287,7 +1287,12 @@ gtk_tree_model_sort_set_sort_func (GtkTreeSortable        *sortable,
     }
 
   if (header->destroy)
-    (* header->destroy) (header->data);
+    {
+      GtkDestroyNotify d = header->destroy;
+
+      header->destroy = NULL;
+      d (header->data);
+    }
 
   header->func = func;
   header->data = data;
@@ -1305,7 +1310,12 @@ gtk_tree_model_sort_set_default_sort_func (GtkTreeSortable        *sortable,
   g_return_if_fail (GTK_IS_TREE_MODEL_SORT (sortable));
 
   if (tree_model_sort->default_sort_destroy)
-    (* tree_model_sort->default_sort_destroy) (tree_model_sort->default_sort_data);
+    {
+      GtkDestroyNotify d = tree_model_sort->default_sort_destroy;
+
+      tree_model_sort->default_sort_destroy = NULL;
+      d (tree_model_sort->default_sort_data);
+    }
 
   tree_model_sort->default_sort_func = func;
   tree_model_sort->default_sort_data = data;
@@ -2187,7 +2197,12 @@ gtk_tree_model_sort_reset_default_sort_func (GtkTreeModelSort *tree_model_sort)
   g_return_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model_sort));
 
   if (tree_model_sort->default_sort_destroy)
-    (* tree_model_sort->default_sort_destroy) (tree_model_sort->default_sort_data);
+    {
+      GtkDestroyNotify d = tree_model_sort->default_sort_destroy;
+
+      tree_model_sort->default_sort_destroy = NULL;
+      d (tree_model_sort->default_sort_data);
+    }
 
   tree_model_sort->default_sort_func = NO_SORT_FUNC;
   tree_model_sort->default_sort_data = NULL;

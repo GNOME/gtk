@@ -9,6 +9,775 @@
 	(draw_with_images): Use the screen's root window when creating the pixmap.
 	(draw_with_images): Get the screen from the GdkDrawableImplX11.
 
+2002-03-04  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tutorial/gtk-tut.sgml: Make color selection and selection 
+	examples work.
+
+	* tests/testselection.c (selection_toggled, selection_clear):
+	Use selection_widget as selection owner - otherwise clearing the
+	selection doesn't work.
+
+Mon Mar  4 12:43:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+        Fixes for non XKB operation. (#73103)
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state):
+	Fix problem where GDK_Tab was converted to GDK_ISO_Left_Tab
+	always, not just if Shift was pressed.
+	
+	* gdk/x11/gdkkeys-x11.c gdk/x11/gdkprivate-x11.c 
+	gdk/x11/gdkevents-x11.c: Move determination of group
+	to _gdk_x11_get_group_for_state(), fix to handle non-XKB.
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): Only
+	add in SHIFT_MASK | LOCK_MASK to consumed_modifiers if the shifted
+	and unshifted keysyms are different. Only add in group_switch_mask
+	if the group-switched and non-group-switched keysyms are diferent.
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): 
+	When calling XKeycodeToKeysym, use group * keysyms_per_keycode / 2
+	not group * keysyms_per_keycode. (Tor Lillquist)
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state):
+	Remove the hack to fudge the return value for GDK_Tab + Shift
+	since that didn't work -- it didn't affect the reverse mapping.
+	Instead fudge the non-XKB keymap instead.
+
+Mon Mar  4 11:02:18 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_get_selections): Fix
+	memory leak. (#73370, Paolo Maggi).
+
+Mon Mar  4 10:35:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Fix docs
+	in terms of what out of range @page_num does. (#73371,
+	Vitaly Tishkov.)
+
+2002-03-02  Havoc Pennington  <hp@pobox.com>
+
+	* demos/gtk-demo/editable_cells.c (cell_edited): const fix
+
+Sun Mar  3 18:47:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkwindow.c (gtk_window_parse_geometry): Fix
+	to properly take the default window into account by
+	setting a flag and in gtk_window_compute_configure_request_size ()
+	multiplying by the increments and adding in the base
+	size. (#72393)
+
+	* tests/testgtk.c (create_gridded_geometry): Add a
+	test for gridded geometry and for gtk_window_parse_geometry().
+
+2002-03-04  Hans Breuer  <hans@breuer.org>
+
+	* gtk/makefile.msc.in : don't build gtk.defs anymore
+
+2002-03-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkrc.h: Remove obsolete Win32-only declaration of
+	gtk_win32_get_installation_directory().
+
+Sun Mar  3 17:03:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c gtk/gtkmenubar.[ch]: Back out
+	changes to propagate keys to parent menu shells, since
+	that broke stuff; rather implement ::cycle-focus as
+	a key binding on GtkMenuShell rather than on GtkMenuBar.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_class_init): Add
+	add bindings for ::cycle-focus. (In gtkmenubar.c, were 
+	mistakently bound to ::move-focus.)
+
+2002-03-03  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32: Minor edits.
+
+	* config.h.win32.in: Update to match a recent configure-generated
+	config.h
+
+Sun Mar  3 15:16:07 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktable.c: When increasing the row or column
+	requisitions to make them sufficient for spanning widgets,
+	favor rows or columns with expandable children in them.
+	(#1261, Jonathan Blandford.)
+
+Sun Mar  3 14:26:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch] (_gtk_get_insertion_cursor_gc):
+	Centralize lookup and caching of cursor GC's here.
+
+	* gtk/gtkentry.[ch] gtk/gtktextview.[ch] gtk/gtktextdisplay.c
+	gtk/gtklabel.c: Move to using _gtk_get_insertion_cursor_gc().
+
+	* gtk/gtkentry.c (gtk_entry_expose): Draw cursors
+	under the text, not over the text.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): add
+	a secondary-cursor-color property.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Decrease
+	the default aspect ratio to 1/25 (0.04).
+	
+	* tests/testgtkrc (bell_duration): Comment out
+	cursor color setting.
+	
+Sun Mar  3 20:48:12 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (gtk_menu_set_submenu_navigation_region): change
+	offset of cursor corner of navigation region from (-2, 2) to 
+	(-2, 0).
+
+2002-03-03  jacob berkman  <jacob@ximian.com>
+
+	* Makefile.am (EXTRA_DIST): add sanitize-la.sh
+
+2002-03-03  Anders Carlsson  <andersca@gnu.org>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_move_resize): Fix tyop
+	in docs.
+
+Sat Mar  2 03:49:31 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): move edit
+	ifs above _set_cursor code, don't collapse/expand row on double
+	click, only activate (#63269)
+	(validate_visible_area): add two missing lines (#73161, #73162)
+
+Sun Mar  3 12:13:56 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Fix typo where pangoxft was being
+	required instead of pangox. (Reported by Miles
+	Lane)
+
+Sun Mar  3 11:12:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (add_cursor): When in split cursor
+	mode, always add the cursor as both strong and weak
+	so that it is drawn with the correct non-split color.
+
+Sun Mar  3 11:05:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/Makefile.am (moduledir): Fix
+	install location.
+
+Sun Mar  3 10:28:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am: add missing dependency of objects on
+	gtkmarshalers.h.
+
+	* gtk/Makefile.am gtk/gtk-boxed.defs: Remove completely
+	out of date and unused gtk-boxed.defs and the accompanying
+	Makefile rule to generate the complete gtk.defs.
+
+2002-03-03  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkmain.c : make rewrite_event_for_window() static
+	* gtk/gtkrc.c : gtk_rc_clear_realized_style() static
+
+	* gtk/makefile.msc.in : adapt to makeenums build changes
+
+	* gtk.def : sorted alphabetical again
+
+2002-03-03  Sven Neumann  <sven@gimp.org>
+
+	* m4macros/gtk-2.0.m4: lowercase configure --help output.
+
+Sun Mar  3 06:39:19 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfilesel.c: added compile time switch to put the tree views
+	into a hpaned for owen to play with.
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_header_free): 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_cell_data_func),
+	(gtk_tree_view_column_finalize): 
+	* gtk/gtktreestore.c (gtk_tree_store_set_default_sort_func),
+	(gtk_tree_store_set_sort_func), (gtk_tree_store_finalize): 
+	* gtk/gtktreeselection.c (gtk_tree_selection_finalize): 
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_reset_default_sort_func),
+	(gtk_tree_model_sort_set_default_sort_func),
+	(gtk_tree_model_sort_set_sort_func):
+	* gtk/gtkliststore.c (gtk_list_store_set_default_sort_func),
+	(gtk_list_store_set_default_sort_func),
+	(gtk_list_store_set_sort_func), (gtk_list_store_finalize): 
+	add reentrancy protection around destroy() function invocation.
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_set_select_function): fix
+	destroy function invocation (which was missing).
+
+Sat Mar  2 23:08:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Fixes for uninstalled operation with module suffixes
+	other than .so and in general for platforms like AIX where
+	the module suffix isn't predictable. (#72185, problems
+	reported by Miroslaw Dobrzanski-Neumann)
+
+	* modules/input/Makefile.am (gtk.immodules): Query .la
+	files rather than shared objects in .libs when creating the
+	uninstalled gtk.immodules file.
+
+	* gtk/gtkmain.c (_gtk_find_module): Look for .la files
+	after looking for the normal soname extension to handle
+	cases where the soname extension isn't predictable,
+	like AIX.
+
+	* gtk/gtkthemes.c (gtk_theme_engine_load): Don't
+	call g_module_build_path... leave that to 
+	gtk_rc_find_module_in_path.
+
+	* demos/gtk-demo/main.c (main) demos/pixbuf-init.c (pixbuf_init):
+	tests/testgtk.c (test_init): tests/testtext.c (test_init)
+	tests/testdnd.c (test_init): Point gdk-pixbuf to .la
+	files rather than poking in .libs for .so files.
+
+	* gtk/stock-icons/Makefile.am (gtkstockpixbufs.h): Remove
+	.libs from GDK_PIXBUF_MODULEDIR.
+
+Sat Mar  2 20:58:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_reparent): Handle NO_WINDOW
+	widgets with windows that are children of widget->window.
+	(#50279)
+
+	* tests/testgtk.c: Add eventboxes to the example so that
+	we are reparenting between different GdkWindows.
+
+Sat Mar  2 20:39:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_new_from_stock): 
+	Add a note to the docs about how to use this in the 
+	context of changeable accelerators. (#72382, Mark Patton)
+
+Sat Mar  2 19:48:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Fix missing -lX11 into x_libs with pangoxft.
+
+Fri Mar  1 00:46:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add a --enable-explicit-deps option to control
+	whether dependency libraries are written into .la files and .pc
+	files.  Default is auto: if static libraries are off and shlib
+	dependencies are found, don't write deps.
+
+	* gdk/Makefile.am gtk/Makefile.am sanitize-la.sh: Shell script
+	used to strip dependencies out of .la files.
+
+	* Makefile.am: Add a slightly modified distcheck rule that passes
+	--enable-gtk-doc to the configure inside.
+	(So that 'make dist' succeeds inside.)
+
+	* configure.in: If pango was compiled with
+	--disable-explicit-deps, then repeat the checks for X and
+	freetype ourselves so we don't depend on linking to libraries
+	that pango doesn't reveal in the link line. Add some more paranoia
+	for whether what we detect ourselves matches what Pango backends
+	we found.
+	
+2002-03-03  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in: Output gdk-pixbuf/gdk_pixbuf.rc.
+
+	* gdk/gdk.def
+	* gdk/win32/gdkevents-win32.c: Add and (trivially) implement
+	gdk_pointer_grab_info_libgtk_only() and
+	gdk_keyboard_grab_info_libgtk_only().
+
+2002-03-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (build_keypress_event): Reorder
+	code, keyval should get a value in all cases now.
+	(build_keyrelease_event): Set GDK_CONTROL_MASK here, too, if it
+	was a control character produced with Alt+keypad digits.
+	(gdk_event_translate): Minor cleanups to keyboard input
+	handling. Still need more major work.
+	
+Sat Mar  2 16:12:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Don't
+	do special focus handling if draw_indicator is not set.
+	(#64723, Damon Chaplin.)
+
+Sat Mar  2 15:48:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_new_with_max_length,
+	gtk_entry_set_max_length): Clamp @max parameter passed in to 
+	[0, MAX_SIZE], improve docs. Fix default and range 
+	for ::max-length property, range for ::ncursor_position,
+	::selection_bound properties. (#55916, Vitaly Tishkov)
+
+	* gtk/gtkmain.c (rewrite_event_for_grabs): Fix typo
+
+Fri Mar  1 18:39:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/{gdkevents-x11.c,gdkmain-x11.c,gdkprivate-x11.h,
+	gdkwindow-x11.c}: Robustify tracking of pointer grab window.
+
+	* gdk/x11/gdkmain-x11.c: Keep track of current keyboard
+	grab window.
+
+	* gdk/x11/gdkmain-x11.c (gdk_pointer_grab_info_libgtk_only,
+	gdk_keyboard_grab_info_libgtk_only): Private libgtk => libgtk
+	API for finding out current grab information.
+	
+	* gtk/gtkmain.c (rewrite_event_for_grabs): Rewrite events
+	so that the effective behavior of owner_events = TRUE is changed
+	to "deliver events to same window group normally" instead
+	of "deliver events to same application normally. #69934
+
+	* gtk/gtkrange.c: Use an explicit gtk_grab_add() so that
+	it works within the GtkList combo, where there is a 
+	owner_events = FALSE gdk_pointer_grab() already in effect.
+	(#65006, reported by Damon Chaplin)
+
+Sat Mar  2 14:32:50 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * configure.in: Default to --disable-gtk-doc (avoid Jade
+	breakage) and --disable-static (static linking causes
+	problems with Xft changes.)
+
+	* autogen.sh: Add --enable-gtk-doc by default.
+
+	* Makefile.am: Add a 'mydistcheck' rule that passes
+	--enable-gtk-doc to the configure since that is needed
+	for 'make dist'.
+
+	* docs/tutorial/Makefile.am (dist-hook): Don't distribute
+	the PDF file. (Rule doesn't work on my system, plus it's
+	big.)
+
+	* gtk/Makefile.am: 'make dist' fixes.
+
+Sat Mar  2 13:26:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/Makefile.am: Switch style of stamp file usage.
+
+	* gtk/Makefile.am gtk/typeutils.[ch]: Switch all the exported
+	enumeration/fags TYPE variables over to macros for get_type() functions,
+	for lazy definition and to get rid of expensive relocations.
+
+	* gtk/gtkiconfactory.[ch] gtk/gtkselection.[ch] gtk/gtkstyle.[ch]
+	gtk/gtktextiter.[ch] gtk/gtktexttag.[ch] gtk/gtktreemodel.[ch]
+	gtk/gtktypeutils.[ch] gtk/gtkwidget.[ch]: Switch boxed type
+	definitions over manually coded get_type() functions.
+
+	* gtk/gtk.def: Updates for above
+
+	* gtk/{genmarshal.pl,makeenums.awk,makeenums.h,maketypes.awk}:
+	Remove from CVS, no longer used.
+
+	* configure.in: Remove checks for awk.
+	
+Sat Mar  2 04:44:10 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_connect_by_path): fix typo.
+
+Fri Mar  1 23:59:35 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_get_size): set
+	first_cell to FALSE after first iteration
+
+	* gtk/gtktreeview.c (validate_visible_area): reduce usage of
+	GTK_RBNODE_GET_HEIGHT, check for node != NULL,
+	(gtk_tree_view_top_row_to_dy): remove call to gtk_adjustment_changed
+	(gtk_tree_view_search_iter): select iter after scrolling
+
+2002-03-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkitemfactory.c: Remove unneeded Win32 stuff inside #ifdef
+	G_OS_WIN32. (Leftover from when gtkitemfactory.c handled files.)
+
+2002-03-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkkeys.c (gdk_keyval_convert_case)
+	* gdk/x11/gdkkeys-x11.c (gdk_keyval_convert_case): If the keyval
+	to be converted is one of those that consist of a Unicode
+	character plus our special flag bit, use the
+	g_unichar_to{lower,upper} functions (Bug#73112).
+
+	* gdk/gdkkeys.c (gdk_keyval_convert_case): Drop the #ifdefs for
+	the GDK keysym symbols. As we include gdkkeysyms.h, we know they
+	are there. And if GDK keysyms some day are added/removed, this
+	function needs changes, too, anyway.
+
+Fri Mar  1 17:00:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpolyreg-generic.c: Fix some reported (but not significant)
+	UMR's from purify. (#73160, Morten Welinder)
+
+Fri Mar  1 16:48:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c: Initialize the scrollbar spacing
+	variable in the class to -1, and then take that to mean
+	"default" (3) rather than putting 3 in the class directly.
+	This gives us some wiggle room to make it a per-instance
+	rather than a per-class property later.
+
+2002-03-01  jacob berkman  <jacob@ximian.com>
+
+	* Makefile.am (install-data-hook): 
+	(dist-hook): replace uses of test -e with more portable test -f
+
+Fri Mar  1 14:49:35 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_commit_text): Don't delete
+	forward across line boundaries when in overwrite mode.
+	(#73145, reported by Ettore Perazzoli)
+
+Fri Mar  1 14:47:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_commit_text): Don't
+	join up lines.
+
+Fri Mar  1 10:31:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_reorder_child):
+	Fix signed-unsigned error that was accidentally causing
+	negative values to append, do it intentionally. Fix docs 
+	to say that negative values append. (Alexey A. Malyshev,
+	#73108) 
+
+2002-03-01 Alexey Malyshev <maa@sparc.spb.su>
+	
+        * gtk+/gtk/gtkitemfactory.c
+	fixed a little type in docs for gtk_notebook_set_show_border()
+	
+Fri Mar  1 09:05:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_delete_entries):
+	Really make it work for paths with underline accelerators. (#69247)
+
+2002-02-28  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c (gtk_text_view_finalize): free the tab array
+	for custom tabs, reported by Paolo Maggi #72980
+	
+Thu Feb 28 19:55:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkkeys.c: include gdkkeysysms.h if
+	compiling gdk_keyval_convert_case.
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_cycle_focus): Implement
+	<Control>Tab <Control><Shift>Tab to cycle between
+	all menu bars in a toplevel once one is up.
+
+	* tests/testgtk.c: Add a second menubar, this
+	example is already full of crack anyways.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_key_press): Padd
+	unhandled events up to the parent menu shell.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_select_timeout): Only
+	pop up the menu if the parent menu shell is still active.
+
+	* gtk/gtkcontainer.[ch] (_gtk_container_focus_sort): Add a
+	old_focus argument, export privately.
+
+2002-02-28  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtkfilesel.c: (open_new_dir): Add missing NULL check.
+
+2002-03-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.h (struct _GdkWindowImplWin32): Remove
+	the event_mask, it is now in GdkWindowObject.
+
+	* gdk/win32/gdkwindow-win32.c: Change accordingly. Set the
+	GDK_STRUCTURE_MASK in gdk_window_set_events(), as it is always set
+	in gdk_window_new(), too. (Bug#72921)
+
+	* gdk/win32/gdkevents-win32.c: Change accordingly here, too.
+	(vk_from_char): New function, calculates the virtual keycode
+	corresponding to the char in a WM_CHAR message.
+	(build_keypress_event, build_keyrelease_event): Use it.
+	(build_keypress_event): Call ImmReleaseContext() after using the
+	input context. This might plug a memory or resource leak.
+	(build_key_event_state): Remove #if 0 code.
+	(gdk_event_translate): Actually, it would be preferrable to always
+	handle just the WM_KEYDOWN and WM_KEYUP messages, not WM_CHAR at
+	all, and thus drop the contorted logic with ignore_wm_char etc.
+
+	* gdk/win32/gdkkeys-win32.c: (gdk_keymap_get_entries_for_keyval):
+	Debugging output.
+	(gdk_keymap_translate_keyboard_state): Return correct value. (But
+	_gtk_key_hash_lookup() doesn't check the return value...)
+
+Thu Feb 28 14:49:08 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_foreign_new): Initialize
+	private->event_mask from attributes we retrieved for
+	the window.
+
+2002-02-22  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbuffer.c (save_range): change gravity of start/end
+	marks so that text added at either end of the range doesn't end up
+	inside the range.
+	(gtk_text_buffer_real_insert_range): fix to handle pasting a range
+	into itself.
+
+2002-02-28  Sven Neumann  <sven@gimp.org>
+
+	* configure.in: beautified configure --help output.
+
+2002-02-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/Makefile.am: Move bdfcursor.c from
+	libgdk_win32_la_SOURCES to EXTRA_DIST.
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_colormap_color_pack): In the
+	bitmap case, use just the LSB of the pixel value. Does this match
+	X11 semantics? Or should it be pixel!=0?
+
+Wed Feb 27 19:16:50 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_events): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_events): 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_events): 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): 
+	* gdk/gdkwindow.h (struct _GdkWindowObject): 
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_events):
+	Save the window's event mask in window->event_mask.
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Only
+	generate expose events if GDK_EXPOSE_MASK is included
+	window->event_mask. (#54506)
+
+Wed Feb 27 18:50:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_event): Allow focus-change
+	events to be sent to unrealized widgets; they aren't
+	really normal events in that they have anything to
+	do with widget->window. (#72914, Andreas J. Guelzow)
+
+Wed Feb 27 18:39:25 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/stock-icons/Makefile.am: Split big VARIABLES variable
+	that was causing overlong lines into 6 variables with 20
+	in each one.
+
+Wed Feb 27 18:01:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c (gtk_accelerator_name) po/POTFILES.in: 
+	Mark Ctrl, Shift, Alt for translation.
+	(#60590)
+
+	* gtk/gtkfontsel.c: Mark PREVIEW_TEXT for translation.
+	(Vlad Harchev, #53223)
+
+Wed Feb 27 17:32:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_get_props): if CAN_FOCUS
+	reserve focus_line_width + focus_line_pad extra
+	space and draw the focus in that space. #72027.
+
+Wed Feb 27 23:02:55 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_realize): minor code cleanup
+
+Wed Feb 27 14:58:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_request/allocate): 
+	Don't reserve space for border when the shadow type
+	for the menubar is "none". (#61843)
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_allocate): Fix
+	offset for right-justified menu items.
+
+Wed Feb 27 14:45:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Go
+	back to old style of drawing children over the bevel.
+	(#58615)
+
+Wed Feb 27 14:08:26 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/imxim.c: Add ko and zh to the locales
+	where this is the default.
+
+Wed Feb 27 12:34:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c: Register all stock icons
+	"unscaled" so that we don't have icons only available
+	at some sizes. (#68896)
+
+Wed Feb 27 11:59:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Some ASCII vs. locale fixes from Darin Adler (#55837)
+
+	* gtk/gtkcombo.c (gtk_combo_find): Implement real
+	case-insensitive comparison using g_utf8_casefold().
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): Fix
+	assignment of gunichar to char by replacing g_unichar_totitle
+	with g_ascii_toupper ... the contents would only be ascii
+	here anyways.
+
+	* gdk/x11/gdkim-x11.c (_gdk_x11_initialize_locale) 
+	* gtk/gtkfontsel.c (gtk_font_selection_show_available_fonts): 
+	Replace a calls to g_strcasecmp() with g_ascii_strcasecmp().
+
+2002-02-27  Hans Breuer  <hans@breuer.org>
+
+	* demos/gtk-demo/makefile.msc.in : new file
+
+	* gdk-pixbuf/gtk-pixbuf.rc.in : new file to include
+	  version resource
+	* gdk-pixbuf/makefile.msc : create and use gdk-pixbuf.res
+
+	* gdk/win32/gdkkeys-win32.c : handle undefined LANG_URDU,
+	(gdk_keyval_name) : fix endless looping
+
+	* gtk/gtkfilesel.c : translate_win32_path() static
+	* gtk/queryimmodules : print_escaped(), query_module() static
+
+	* gtk/makefile.msc.in : added gtkkeyhash, build gtk-win32.res
+
+	* gtk/stock-icons/makefile.msc : regenerated from directory
+	listing (almost all filenames changed)
+
+Wed Feb 27 10:34:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_set_range): After computing
+	the clamped value, actually set it. (#62639, Sergey Kuzminov)
+
+Tue Feb 26 22:22:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbox.c (gtk_box_reorder_child): Clean up
+	the code so < 0 == end wasn't just a side effect,
+	remove most of the manual linked list manipulation
+	code in favor of g_list_* functions.
+
+Tue Feb 26 21:44:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* config.status config.guess: Remove these files
+	from CVS so we more-or-less current versions from
+	automake --add-missing. (Reported by Finlay Dobbie,
+	#60342)
+
+	* gdk/gdkkeyuni.c: Shouldn't map KP_Enter to '\n',
+	or KP_Tab to \t' since we don't map the corresponding
+	main keyboard characters in that way. (#61561,
+	Padraig O'Briain)
+
+Tue Feb 26 19:45:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_set_popdown_strings):
+	Call gtk_combo_set_popdown_strings() in case
+	the combo is up currently. (#63535, Skip Montaro)
+
+Tue Feb 26 19:38:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init):
+	Switch control-home/end and home/end with
+	the idea that scrolled windows more typically contain
+	vertical sets of controls and to correspond to the bindings
+	in GtkTreeView.
+
+Tue Feb 26 19:32:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]vscale.c (gtk_[hv]scale_expose): Chain
+	up before drawing the scale values so that the number
+	is drawn in the right place instead of one step 
+	back. (#61743, patch from Satyajit Kanungo)
+
+Tue Feb 26 19:16:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/win32/gdkkeys-win32.c (gdk_keyval_name): 
+	* gdk/x11/gdkkeys-x11.c (gdk_keyval_name): 
+	Make sure Page_Up, Page_Down get those names, not Prior,
+	Next.
+
+Tue Feb 26 18:58:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_set_default_mod_mask):
+	OR in the three default modifiers to any value passed
+	in by the caller, so that the caller won't break the
+	the default bindings. (#70142, Jody Goldberg, though he
+	wasn't in favor of this particular way of solving it.)
+
+Tue Feb 26 18:47:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_add_mnemonic): Append
+	mnemonics rather than prepending them so that the 
+	order is typically forward rather than typically
+	backward. (Partial fix for #52395)
+
+Wed Feb 27 00:45:39 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkarrow.c, gtk/gtkmenuitem.c, gtk/gtkrange.c
+	gtk/gtkspinbutton.c gtk/gtkstyle.c: Draw arrows better (without
+	extra baseline)
+
+Tue Feb 26 18:38:17 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): 
+	Display any "g_unicode_isgraph()" char literally,
+	not just latin1. (#65679)
+
+Tue Feb 26 18:01:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_grab_focus): Don't
+	focus insensitive widgets. (#68203)
+	
+	* gtk/gtkentry.c (gtk_entry_state_changed): Clear any
+	current selection if we become insensitive. (#68203)
+
+	* gtk/gtkentry.c (gtk_entry_grab_focus): Don't
+	select the text if the entry isn't editable. (#67203)
+
+	* gtk/gtkentry.c: Activate keybindings when not editable,
+	but supress keybindings that change the text. (#65848, #68203)
+
+	* gtk/gtkentry.c (gtk_entry_set_property): Reset the
+	IM context for the entry when it is made not editable.
+
+Tue Feb 26 17:04:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (update_color): Emit ::color_changed
+	every time we notify current_color. (Brute force 
+	fix for #72470, Matthias Clasen). Some fixes to improve
+	reentrancy.
+
+Tue Feb 26 15:04:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_enter_text): use
+	the cursor position _after_ deleting the text
+	as the position to insert at. (#72717, Jan Mynarik)
+
+2002-02-26 Vitaly Tishkov <tvv@sparc.spb.su>
+
+        * gtk/gtktreemodel.c
+	misprints in documentation for gtk_tree_row_reference_inserted() 
+        and gtk_tree_path_new () are fixed
+
+Tue Feb 26 19:47:16 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (validate_visible_area): take into account
+	that a path from a rowref can be NULL. (#72623 and #72650)
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_render_or_focus):
+	let focus_rectangle be the same as cell_area for empty cells (#69900)
+
+Tue Feb 26 11:51:56 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_remove_entry): Fix
+	double free.
+
+Tue Feb 26 10:38:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_lookup_keyval): Handle
+	a keyval of 0, by returning an empty list. (#72617,
+	Kevin Breit)
+
+2002-02-26  Richard Hult  <rhult@codefactory.se>
+
+	* gtk/gtktreeview.c (gtk_tree_view_expand_all): Fix
+	#72586. Silently accept empty tree.
+	(gtk_tree_view_collapse_all): Likewise.
+
 2002-02-26  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtk.def: A couple of name changes.

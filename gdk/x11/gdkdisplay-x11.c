@@ -378,7 +378,7 @@ void gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
   g_return_if_fail (GDK_IS_DISPLAY (display));
   _gdk_input_ungrab_pointer (display, time);
   XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
-  GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window = NULL;
+  GDK_DISPLAY_IMPL_X11 (display)->gdk_pointer_xgrab_window = NULL;
 }
 /**
  * gdk_display_pointer_is_grabbed :
@@ -392,7 +392,7 @@ void gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
 gboolean gdk_display_pointer_is_grabbed (GdkDisplay * display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
-  return (GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window != NULL);
+  return (GDK_DISPLAY_IMPL_X11 (display)->gdk_pointer_xgrab_window != NULL);
 }
 
 /**
@@ -408,6 +408,7 @@ void
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time);
+  GDK_DISPLAY_IMPL_X11 (display)->gdk_keyboard_xgrab_window = NULL;
 }
 /**
  * gdk_display_beep:

@@ -951,9 +951,15 @@ gtk_table_size_request_init (GtkTable *table)
   gint row, col;
   
   for (row = 0; row < table->nrows; row++)
-    table->rows[row].requisition = 0;
+    {
+      table->rows[row].requisition = 0;
+      table->cols[row].expand = FALSE;
+    }
   for (col = 0; col < table->ncols; col++)
-    table->cols[col].requisition = 0;
+    {
+      table->cols[col].requisition = 0;
+      table->cols[col].expand = FALSE;
+    }
   
   children = table->children;
   while (children)
@@ -963,6 +969,12 @@ gtk_table_size_request_init (GtkTable *table)
       
       if (GTK_WIDGET_VISIBLE (child->widget))
 	gtk_widget_size_request (child->widget, NULL);
+
+      if (child->left_attach == (child->right_attach - 1) && child->xexpand)
+	table->cols[child->left_attach].expand = TRUE;
+      
+      if (child->top_attach == (child->bottom_attach - 1) && child->yexpand)
+	table->rows[child->top_attach].expand = TRUE;
     }
 }
 
@@ -1065,19 +1077,34 @@ gtk_table_size_request_pass3 (GtkTable *table)
 		}
 	      
 	      /* If we need to request more space for this child to fill
-	       *  its requisition, then divide up the needed space evenly
-	       *  amongst the columns it spans.
+	       *  its requisition, then divide up the needed space amongst the
+	       *  columns it spans, favoring expandable columns if any.
 	       */
 	      if (width < child_requisition.width + child->xpadding * 2)
 		{
-		  width = child_requisition.width + child->xpadding * 2 - width;
+		  gint n_expand = 0;
+		  gboolean force_expand = FALSE;
 		  
+		  width = child_requisition.width + child->xpadding * 2 - width;
+
 		  for (col = child->left_attach; col < child->right_attach; col++)
+		    if (table->cols[col].expand)
+		      n_expand++;
+
+		  if (n_expand == 0)
 		    {
-		      extra = width / (child->right_attach - col);
-		      table->cols[col].requisition += extra;
-		      width -= extra;
+		      n_expand = (child->right_attach - child->left_attach);
+		      force_expand = TRUE;
 		    }
+		    
+		  for (col = child->left_attach; col < child->right_attach; col++)
+		    if (force_expand || table->cols[col].expand)
+		      {
+			extra = width / n_expand;
+			table->cols[col].requisition += extra;
+			width -= extra;
+			n_expand--;
+		      }
 		}
 	    }
 	  
@@ -1101,19 +1128,36 @@ gtk_table_size_request_pass3 (GtkTable *table)
 		}
 	      
 	      /* If we need to request more space for this child to fill
-	       *  its requisition, then divide up the needed space evenly
-	       *  amongst the columns it spans.
+	       *  its requisition, then divide up the needed space amongst the
+	       *  rows it spans, favoring expandable rows if any.
 	       */
 	      if (height < child_requisition.height + child->ypadding * 2)
 		{
+		  gint n_expand = 0;
+		  gboolean force_expand = FALSE;
+		  
 		  height = child_requisition.height + child->ypadding * 2 - height;
 		  
 		  for (row = child->top_attach; row < child->bottom_attach; row++)
 		    {
-		      extra = height / (child->bottom_attach - row);
-		      table->rows[row].requisition += extra;
-		      height -= extra;
+		      if (table->rows[row].expand)
+			n_expand++;
 		    }
+
+		  if (n_expand == 0)
+		    {
+		      n_expand = (child->bottom_attach - child->top_attach);
+		      force_expand = TRUE;
+		    }
+		    
+		  for (row = child->top_attach; row < child->bottom_attach; row++)
+		    if (force_expand || table->rows[row].expand)
+		      {
+			extra = height / n_expand;
+			table->rows[row].requisition += extra;
+			height -= extra;
+			n_expand--;
+		      }
 		}
 	    }
 	}

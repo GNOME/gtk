@@ -74,6 +74,10 @@ GtkWidget* gtk_menu_bar_new             (void);
 #define gtk_menu_bar_insert(menu,child,pos) gtk_menu_shell_insert ((GtkMenuShell *)(menu),(child),(pos))
 #endif /* GTK_DISABLE_DEPRECATED */
 
+/* Private functions */
+void _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
+				GtkDirectionType  dir);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

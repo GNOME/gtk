@@ -278,6 +278,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   Window xwindow;
   Window xconfine_to;
   Cursor xcursor;
+  unsigned long serial;
   int i;
   
   g_return_val_if_fail (window != NULL, 0);
@@ -287,6 +288,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   cursor_private = (GdkCursorPrivate*) cursor;
   
   xwindow = GDK_WINDOW_XID (window);
+  serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   
   if (!confine_to || GDK_WINDOW_DESTROYED (confine_to))
     xconfine_to = None;
@@ -335,8 +337,13 @@ gdk_pointer_grab (GdkWindow *	  window,
     }
   
   if (return_val == GrabSuccess)
-    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->gdk_xgrab_window = 
-      (GdkWindowObject *)window;
+    {
+      GdkDisplayImplX11 *dpy_impl = 
+	GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
+      dpy_impl->gdk_pointer_xgrab_window = (GdkWindowObject *)window;
+      dpy_impl->gdk_pointer_xgrab_serial = serial;
+      dpy_impl->gdk_pointer_xgrab_owner_events = owner_events;
+    }
 
   return gdk_x11_convert_grab_status (return_val);
 }
@@ -360,8 +367,13 @@ gdk_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
+  GdkDisplay *display = gdk_get_default_display ();
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_pointer_ungrab instead\n"));
-  gdk_display_pointer_ungrab (gdk_get_default_display (), time);
+  
+  _gdk_input_ungrab_pointer (display, time);
+  
+  gdk_display_pointer_ungrab (display, time);
+  GDK_DISPLAY_IMPL_X11 (display)->gdk_pointer_xgrab_window = NULL;
 }
 #endif
 
@@ -390,6 +402,43 @@ gdk_pointer_is_grabbed (void)
 }
 #endif
 
+
+/**
+ * gdk_pointer_grab_info_libgtk_only:
+ * @display: the GdkDisplay where the grab info is located.
+ * @grab_window: location to store current grab window
+ * @owner_events: location to store boolean indicating whether
+ *   the @owner_events flag to gdk_pointer_grab() was %TRUE.
+ * 
+ * Determines information about the current pointer grab.
+ * This is not public API and must not be used by applications.
+ * 
+ * Return value: %TRUE if this application currently has the
+ *  pointer grabbed.
+ **/
+gboolean
+gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
+				   GdkWindow **grab_window,
+				   gboolean   *owner_events)
+{
+  GdkDisplayImplX11 *dpy_impl;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), False);
+
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+
+  if (dpy_impl->gdk_pointer_xgrab_window)
+    {
+      if (grab_window)
+        *grab_window = (GdkWindow *)dpy_impl->gdk_pointer_xgrab_window;
+      if (owner_events)
+        *owner_events = dpy_impl->gdk_pointer_xgrab_owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
 /*
  *--------------------------------------------------------------
  * gdk_keyboard_grab
@@ -416,10 +465,13 @@ gdk_keyboard_grab (GdkWindow *	   window,
 		   guint32	   time)
 {
   gint return_val;
+  unsigned long serial;
   
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
+  serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
+
   if (!GDK_WINDOW_DESTROYED (window))
     {
 #ifdef G_ENABLE_DEBUG
@@ -435,6 +487,15 @@ gdk_keyboard_grab (GdkWindow *	   window,
     }
   else
     return_val = AlreadyGrabbed;
+
+  if (return_val == GrabSuccess)
+    {
+      GdkDisplayImplX11 *dpy_impl = 
+	GDK_DISPLAY_IMPL_X11 (gdk_drawable_get_display (window));
+      dpy_impl->gdk_keyboard_xgrab_window = (GdkWindowObject *)window;
+      dpy_impl->gdk_keyboard_xgrab_serial = serial;
+      dpy_impl->gdk_keyboard_xgrab_owner_events = owner_events;
+    }
 
   return gdk_x11_convert_grab_status (return_val);
 }
@@ -462,6 +523,108 @@ gdk_keyboard_ungrab (guint32 time)
   gdk_display_keyboard_ungrab (gdk_get_default_display (),time);
 }
 #endif
+
+/**
+ * gdk_keyboard_grab_info_libgtk_only:
+ * @display: the display where the information is located.
+ * @grab_window: location to store current grab window
+ * @owner_events: location to store boolean indicating whether
+ *   the @owner_events flag to gdk_keyboard_grab() was %TRUE.
+ * 
+ * Determines information about the current keyboard grab.
+ * This is not public API and must not be used by applications.
+ * 
+ * Return value: %TRUE if this application currently has the
+ *  keyboard grabbed.
+ **/
+gboolean
+gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
+				    GdkWindow **grab_window,
+				    gboolean   *owner_events)
+{
+  GdkDisplayImplX11 *dpy_impl;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), False);
+
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+
+  if (dpy_impl->gdk_keyboard_xgrab_window)
+    {
+      if (grab_window)
+        *grab_window = (GdkWindow *)dpy_impl->gdk_keyboard_xgrab_window;
+      if (owner_events)
+        *owner_events = dpy_impl->gdk_keyboard_xgrab_owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+/**
+ * _gdk_xgrab_check_unmap:
+ * @window: a #GdkWindow
+ * @serial: serial from Unmap event (or from NextRequest(display)
+ *   if the unmap is being done by this client.)
+ * 
+ * Checks to see if an unmap request or event causes the current
+ * grab window to become not viewable, and if so, clear the
+ * the pointer we keep to it.
+ **/
+void
+_gdk_xgrab_check_unmap (GdkWindow *window,
+			gulong     serial)
+{
+  GdkDisplayImplX11 *dpy_impl =
+    GDK_DISPLAY_IMPL_X11 (gdk_drawable_get_display (window));
+  
+  if (dpy_impl->gdk_pointer_xgrab_window && 
+      serial >= dpy_impl->gdk_pointer_xgrab_serial)
+    {
+      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+      GdkWindowObject *tmp = dpy_impl->gdk_pointer_xgrab_window;
+      
+
+      while (tmp && tmp != private)
+	tmp = tmp->parent;
+
+      if (tmp)
+	dpy_impl->gdk_pointer_xgrab_window = NULL;  
+    }
+
+  if (dpy_impl->gdk_keyboard_xgrab_window &&
+      serial >= dpy_impl->gdk_keyboard_xgrab_serial)
+    {
+      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+      GdkWindowObject *tmp = dpy_impl->gdk_keyboard_xgrab_window;
+      
+
+      while (tmp && tmp != private)
+	tmp = tmp->parent;
+
+      if (tmp)
+	dpy_impl->gdk_keyboard_xgrab_window = NULL;  
+    }
+}
+
+/**
+ * _gdk_xgrab_check_destroy:
+ * @window: a #GdkWindow
+ * 
+ * Checks to see if window is the current grab window, and if
+ * so, clear the current grab window.
+ **/
+void
+_gdk_xgrab_check_destroy (GdkWindow *window)
+{
+  GdkDisplayImplX11 *dpy_impl =
+    GDK_DISPLAY_IMPL_X11 (gdk_drawable_get_display (window));
+  
+  if ((GdkWindowObject *)window == dpy_impl->gdk_pointer_xgrab_window)
+     dpy_impl->gdk_pointer_xgrab_window = NULL;
+
+  if ((GdkWindowObject *)window ==  dpy_impl->gdk_keyboard_xgrab_window)
+     dpy_impl->gdk_keyboard_xgrab_window = NULL;
+}
 
 /*
  *--------------------------------------------------------------

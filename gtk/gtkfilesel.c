@@ -82,6 +82,8 @@
 #include "gtkdnd.h"
 #include "gtkeventbox.h"
 
+#define WANT_HPANAED 1
+#include "gtkhpaned.h"
 
 #ifdef G_OS_WIN32
 #include <direct.h>
@@ -438,7 +440,7 @@ static gint cmpl_errno;
  * Return a boolean value concerning whether a
  * translation had to be made.
  */
-int
+static int
 translate_win32_path (GtkFileSelection *filesel)
 {
   int updated = 0;
@@ -633,7 +635,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 {
   GtkWidget *entry_vbox;
   GtkWidget *label;
-  GtkWidget *list_hbox;
+  GtkWidget *list_hbox, *list_container;
   GtkWidget *confirm_area;
   GtkWidget *pulldown_hbox;
   GtkWidget *scrolled_win;
@@ -678,6 +680,14 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   list_hbox = gtk_hbox_new (FALSE, 5);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), list_hbox, TRUE, TRUE, 0);
   gtk_widget_show (list_hbox);
+  if (WANT_HPANAED)
+    list_container = g_object_new (GTK_TYPE_HPANED,
+				   "visible", TRUE,
+				   "parent", list_hbox,
+				   "border_width", 5,
+				   NULL);
+  else
+    list_container = list_hbox;
 
   /* The directories list */
 
@@ -707,8 +717,11 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->dir_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
-  gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 0);
+  if (GTK_IS_PANED (list_container))
+    gtk_paned_pack1 (GTK_PANED (list_container), scrolled_win, TRUE, TRUE);
+  else
+    gtk_container_add (GTK_CONTAINER (list_container), scrolled_win);
   gtk_widget_show (filesel->dir_list);
   gtk_widget_show (scrolled_win);
 
@@ -741,8 +754,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->file_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
-  gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 0);
+  gtk_container_add (GTK_CONTAINER (list_container), scrolled_win);
   gtk_widget_show (filesel->file_list);
   gtk_widget_show (scrolled_win);
 
@@ -2377,6 +2390,8 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
 	  else
 	    g_free (current);
 	}
+
+      g_free (dirname);
     }
 
   selections[count] = NULL;
@@ -2965,7 +2980,8 @@ open_new_dir (gchar       *dir_name,
 	}
 
       sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
-      if (!g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
+      if (sent->entries[n_entries].entry_name == NULL
+	  || !g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
 	{
 	  g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent);
 	  continue;

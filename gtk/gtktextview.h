@@ -147,7 +147,6 @@ struct _GtkTextView
   GSList *children;
 
   GtkTextPendingScroll *pending_scroll;
-  GdkGC *cursor_gc;
 
   gint pending_place_cursor_button;
 };

@@ -1,12 +1,12 @@
 The Win32 port of GTK+ is a work in progress, and not as stable or
 correct as the Unix/X11 version. For more information about the Win32
-port, see http://www.gimp.org/win32/ .
+port, and prebuilt runtime and developer packages see
+http://www.gimp.org/win32/ .
 
-This (CVS HEAD) version of the Win32 backend does *not* necessarily
-even compile properly. There is a gtk-1-3-win32-production branch that
-was branched off from before the addition of the no-flicker and other
-recent functionality. That is what should be used by "production" code
-until the CVS HEAD version is useable. (But note, the Win32 backend
+There is a gtk-1-3-win32-production branch of GTK+ that was branched
+off from before the addition of the no-flicker and other recent
+functionality. That is what should be used by "production" code until
+this CVS HEAD (2.0) version is useable. (But note, the Win32 backend
 has never been claimed to be "production quality", although it works
 surprisingly well for the GIMP.)
 
@@ -22,11 +22,15 @@ this myself, but it might be hell to setup correctly.
 Personally I run configure with:
 CC='gcc -mpentium -fnative-struct' CPPFLAGS='-I/target/include' CFLAGS=-O2 LDFLAGS='-L/target/lib' ./configure --disable-static --prefix=/target --with-gdktarget=win32 --with-wintab=/src/wtkit126 --with-ie55=/src/workshop/ie55_lib --host=i386-pc-mingw32 --enable-maintainer-mode
 
+It might well be that in order for this to work, you will have to get
+a bleeding-edge version of libtool for Win32, run libtoolize yourself,
+and then run autoconf to generate the configure script.
+
 2) Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
 makefile.msc in gdk and gtk.
 
 Alternative 1 also generates Microsoft import libraries (.lib), if you
-have lib.exe available. It should also work for cross-compilation from
+have lib.exe available. It might also work for cross-compilation from
 Unix.
 
 There are hand-written makefiles for mingw (look for makefile.mingw in
@@ -34,20 +38,18 @@ various directories), but those haven't been kept up-to-date, and
 probably won't work without editing. Sorry. If you make them work
 again, by all means do submit patches.
 
-Note that I use mainly gcc myself, and thus the build setup for
-Microsoft's nmake and cl might be a bit rusty. Hans Breuer has been
-taking care of those makefiles. At times, we disagree a bit, and the
-msc makefiles might not produce compatible or identically named DLLs
-and import libraries as the autoconfiscated makefiles and libtool do.
+Note that I use method 1 myself. Hans Breuer has been taking care of
+the MSVC makefiles. At times, we disagree a bit about various issues,
+and the makefile.msc files might not produce identically named DLLs
+and import libraries as the "autoconfiscated" makefiles and libtool
+do.
 
 Using GTK+ on Win32
 ===================
 
 To use GTK+ on Win32, you also need either one of the above mentioned
-compilers. Other compilers might work, but don't count on it. The same
-instructions on how to set up a correct version of gcc should also be
-followed if you want to build applications that use GTk+ with gcc. For
-prebuilt developer packages (DLLs, import libraries, headers), see the
+compilers. Other compilers might work, but don't count on it. Look for
+prebuilt developer packages (DLLs, import libraries, headers) on the
 above website.
 
 Multi-threaded use of GTK+ on Win32
@@ -78,10 +80,6 @@ i18n stuff, undefine ENABLE_NLS, HAVE_GETTEXT and HAVE_LIBINTL in the
 config.h.win32 file, and remove references to the intl library from
 the makefiles.
 
-Note that while the GNU gettext package is under the GPL, the "intl"
-part of it is under the LGPL (like GTK or GLib), as of
-gettext-0.10.40.
-
 ActiveIMM
 =========
 
@@ -89,7 +87,7 @@ If you want to build a GTK+ that supports ActiveIMM (the Input Method
 Manager for non-EastAsia locales that can be used on Win9x/NT4), you
 need the dimm.h header file. That is somewhat difficult to find, but
 http://msdn.microsoft.com/downloads/samples/internet/wizard/ seems to
-be a good place to look nowadays. If you use autoconfiscated build,
+be a good place to look nowadays. If you use "autoconfiscated" build,
 pass the --with-ie55 flag to configure specifyin the location of the
 ie55_lib directory created by downloading the IE5.5 headers and libs
 from the above URL.

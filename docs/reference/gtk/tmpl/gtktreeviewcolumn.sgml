@@ -2,37 +2,46 @@
 GtkTreeViewColumn
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A visible column in a #GtkTreeView widget
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The GtkTreeViewColumn object is a visible column in a #GtkTreeView
+widget.  It determines the geometry, type 
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
+#GtkTreeView, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
 
 </para>
 
 <!-- ##### ENUM GtkTreeViewColumnSizing ##### -->
 <para>
-
+The sizing method the column uses to determine it's width.  Please note
+that @GTK_TREE_VIEW_COLUMN_AUTOSIZE are inefficient for large views, and
+can make columns appear choppy.
 </para>
 
-@GTK_TREE_VIEW_COLUMN_GROW_ONLY: 
-@GTK_TREE_VIEW_COLUMN_AUTOSIZE: 
-@GTK_TREE_VIEW_COLUMN_FIXED: 
+@GTK_TREE_VIEW_COLUMN_GROW_ONLY: Columns only get bigger in reaction to changes in the model
+@GTK_TREE_VIEW_COLUMN_AUTOSIZE: Columns resize to be the optimal size everytime the model changes.
+@GTK_TREE_VIEW_COLUMN_FIXED: Columns are a fixed numbers of pixels wide.
 
 <!-- ##### USER_FUNCTION GtkTreeCellDataFunc ##### -->
 <para>
-
+A function to set the properties of a cell instead of just using the
+straight mapping between the cell and the model.  This is useful for
+customizing the cell renderer.  For example, a function might get an
+integer from the @tree_model, and render it to the "text" attribute of
+"cell" by converting it to its written equivilent.  This is set by
+calling gtk_tree_view_column_set_cell_data_func()
 </para>
 
-@tree_column: 
-@cell: 
-@tree_model: 
-@iter: 
-@data: 
+@tree_column: A #GtkTreeColumn
+@cell: The #GtkCellRenderer that is being rendered by @tree_column
+@tree_model: The #GtkTreeModel being rendered
+@iter: A #GtkTreeIter of the current row rendered
+@data: user data
 
 
 <!-- ##### STRUCT GtkTreeViewColumn ##### -->

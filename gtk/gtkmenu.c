@@ -1905,7 +1905,6 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 
   gboolean need_enter;
 
-
   if (GTK_IS_MENU (widget))
     gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
   
@@ -2287,7 +2286,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
       /* Exiting the top or bottom? */ 
       if (event->y < 0)
         { /* top */
-	  point[0].y = event->y_root + SUBMENU_NAV_REGION_PADDING;
+	  point[0].y = event->y_root + 1;
 	  point[1].y = submenu_top;
 
 	  if (point[0].y <= point[1].y)
@@ -2295,7 +2294,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 	}
       else
         { /* bottom */
-	  point[0].y = event->y_root - SUBMENU_NAV_REGION_PADDING; 
+	  point[0].y = event->y_root;
 	  point[1].y = submenu_bottom;
 
 	  if (point[0].y >= point[1].y)

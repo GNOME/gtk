@@ -41,20 +41,10 @@ Creates a new #GtkEntry widget.
 
 <!-- ##### FUNCTION gtk_entry_new_with_max_length ##### -->
 <para>
-Creates a new #GtkEntry widget with the given maximum
-length.
-</para>
-<para>
-Note: the existance of this function is inconsistent
-with the rest of the GTK+ API. The normal setup would
-be to just require the user to make an extra call
-to gtk_entry_set_max_length() instead. It is not
-expected that this function will be removed, but
-it would be better practice not to use it.
 </para>
 
-@max: the new maximum length or 0 if the maximum length should be infinite..
-@Returns: a new #GtkEntry.
+@max:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_text ##### -->
@@ -173,14 +163,10 @@ use gtk_editable_set_editable() instead.
 
 <!-- ##### FUNCTION gtk_entry_set_max_length ##### -->
 <para>
-Sets the maximum allowed length of the contents 
-of the widget. If the current contents are longer
-than the given length, then they will be truncated
-to fit.
 </para>
 
-@entry: a #GtkEntry.
-@max: the new maximum length or 0 if the maximum length should be infinite.
+@entry:
+@max:
 
 
 <!-- ##### FUNCTION gtk_entry_get_activates_default ##### -->

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
-"POT-Creation-Date: 2002-02-24 17:28+0800\n"
+"POT-Creation-Date: 2002-02-27 18:10-0500\n"
 "PO-Revision-Date: 2002-02-24 17:27+0800\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -585,19 +585,46 @@ msgstr "Data piksel imej rosak"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "Gagal memperuntukkan buffer imej sebanyak %u byte"
 
-#: gtk/gtkaccellabel.c:121
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:116
+msgid "Shift"
+msgstr ""
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:122
+msgid "Ctrl"
+msgstr ""
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:128
+msgid "Alt"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
 msgstr "Penutupan Pemecut"
 
-#: gtk/gtkaccellabel.c:122
+#: gtk/gtkaccellabel.c:137
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Penutupan untuk monitor perubahan pemecut"
 
-#: gtk/gtkaccellabel.c:128
+#: gtk/gtkaccellabel.c:143
 msgid "Accelerator Widget"
 msgstr "Widget Pemecut"
 
-#: gtk/gtkaccellabel.c:129
+#: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget akan diperhati untuk perubahan pemecut"
 
@@ -951,7 +978,7 @@ msgstr ""
 msgid "Pixbuf for closed expander."
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:521 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
 msgstr "Teks"
 
@@ -1007,7 +1034,7 @@ msgstr "Warna latardepan"
 msgid "Foreground color as a GdkColor"
 msgstr "Warna latardepan sebagai GdkColor"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:453 gtk/gtktexttag.c:277
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:566
 msgid "Editable"
 msgstr "boleh diedit"
@@ -1292,47 +1319,47 @@ msgstr ""
 "kemasukan ini, heret warna ke sini atau klik-kanan dan pilih \"Simpan warna "
 "di sini.\""
 
-#: gtk/gtkcolorsel.c:1698
+#: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
 msgstr "Mempunyai Kawalan Opacity"
 
-#: gtk/gtkcolorsel.c:1699
+#: gtk/gtkcolorsel.c:1705
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Samada pemiin warna boleh menetapkan opacity"
 
-#: gtk/gtkcolorsel.c:1705
+#: gtk/gtkcolorsel.c:1711
 msgid "Has palette"
 msgstr "Mempunyai palet"
 
-#: gtk/gtkcolorsel.c:1706
+#: gtk/gtkcolorsel.c:1712
 msgid "Whether a palette should be used"
 msgstr "Samada palet patut digunakan"
 
-#: gtk/gtkcolorsel.c:1712
+#: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
 msgstr "Warna Semasa"
 
-#: gtk/gtkcolorsel.c:1713
+#: gtk/gtkcolorsel.c:1719
 msgid "The current color"
 msgstr "Warna semasa"
 
-#: gtk/gtkcolorsel.c:1719
+#: gtk/gtkcolorsel.c:1725
 msgid "Current Alpha"
 msgstr "Alfa semasa"
 
-#: gtk/gtkcolorsel.c:1720
+#: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Nilai opacity semasa (0 telus sepenuhnya, 65535 opaque sepenuhnya)"
 
-#: gtk/gtkcolorsel.c:1733
+#: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
 msgstr "Pelet sendiri"
 
-#: gtk/gtkcolorsel.c:1734
+#: gtk/gtkcolorsel.c:1740
 msgid "Palette to use in the color selector"
 msgstr "Palet untuk digunakan sebagai pemilih warna"
 
-#: gtk/gtkcolorsel.c:1778
+#: gtk/gtkcolorsel.c:1784
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1340,7 +1367,7 @@ msgstr ""
 "Pilih warna yang anda ingin daripada bulatan luaran. Pilih kegelapan atau "
 "kecerahan warna mnggunakan segitiga dalaman."
 
-#: gtk/gtkcolorsel.c:1806
+#: gtk/gtkcolorsel.c:1812
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1348,67 +1375,67 @@ msgstr ""
 "Klik eyedropper, kemudian klik warna di mana-mana pada layar supaya warna "
 "dipilih."
 
-#: gtk/gtkcolorsel.c:1815
+#: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
 msgstr "_Hue:"
 
-#: gtk/gtkcolorsel.c:1816
+#: gtk/gtkcolorsel.c:1822
 msgid "Position on the color wheel."
 msgstr "Posisi roda warna."
 
-#: gtk/gtkcolorsel.c:1817
+#: gtk/gtkcolorsel.c:1823
 msgid "_Saturation:"
 msgstr "Ke_tepuan:"
 
-#: gtk/gtkcolorsel.c:1818
+#: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
 msgstr "\"Deepness\" warna."
 
-#: gtk/gtkcolorsel.c:1819
+#: gtk/gtkcolorsel.c:1825
 msgid "_Value:"
 msgstr "_Nilai:"
 
-#: gtk/gtkcolorsel.c:1820
+#: gtk/gtkcolorsel.c:1826
 msgid "Brightness of the color."
 msgstr "Kecerahan warna."
 
-#: gtk/gtkcolorsel.c:1821
+#: gtk/gtkcolorsel.c:1827
 msgid "_Red:"
 msgstr "Me_rah:"
 
-#: gtk/gtkcolorsel.c:1822
+#: gtk/gtkcolorsel.c:1828
 msgid "Amount of red light in the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1823
+#: gtk/gtkcolorsel.c:1829
 msgid "_Green:"
 msgstr "_Hijau:"
 
-#: gtk/gtkcolorsel.c:1824
+#: gtk/gtkcolorsel.c:1830
 msgid "Amount of green light in the color."
 msgstr "Jumlah cahaya hijau pada warna."
 
-#: gtk/gtkcolorsel.c:1825
+#: gtk/gtkcolorsel.c:1831
 msgid "_Blue:"
 msgstr "_Biru:"
 
-#: gtk/gtkcolorsel.c:1826
+#: gtk/gtkcolorsel.c:1832
 msgid "Amount of blue light in the color."
 msgstr "Jumlah cahaya biru pada warna."
 
-#: gtk/gtkcolorsel.c:1829
+#: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
 msgstr "_Opacity:"
 
-#: gtk/gtkcolorsel.c:1837
+#: gtk/gtkcolorsel.c:1843
 msgid "Transparency of the currently-selected color."
 msgstr "Ketelusan warna yang sedang dipilih."
 
-#: gtk/gtkcolorsel.c:1852
+#: gtk/gtkcolorsel.c:1858
 msgid "Color _Name:"
 msgstr "_Nama Warna:"
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1870
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1416,7 +1443,7 @@ msgstr ""
 "Anda boleh masukan nilai heksadesimal gaya-HTML, atau masukkan nama warna "
 "seperti 'orange' pada kemasukan ini."
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
 msgstr "_Palet"
 
@@ -1559,40 +1586,40 @@ msgstr "Sempadan kawasan aksi"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Lebar sempadan sekeliling kawasan butang di bawah dialog"
 
-#: gtk/gtkentry.c:433 gtk/gtklabel.c:359
+#: gtk/gtkentry.c:435 gtk/gtklabel.c:359
 msgid "Cursor Position"
 msgstr "Posisi Kursor"
 
-#: gtk/gtkentry.c:434 gtk/gtklabel.c:360
+#: gtk/gtkentry.c:436 gtk/gtklabel.c:360
 msgid "The current position of the insertion cursor in chars."
 msgstr "Posisi semasa kursor penyelitan dalam aksara"
 
-#: gtk/gtkentry.c:443 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:445 gtk/gtklabel.c:369
 msgid "Selection Bound"
 msgstr "Sempadan Pilihan"
 
-#: gtk/gtkentry.c:444 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:370
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr "Posisi hujung bertentangan pada pilihan daripada kursor dalam aksara."
 
-#: gtk/gtkentry.c:454
+#: gtk/gtkentry.c:456
 msgid "Whether the entry contents can be edited"
 msgstr "Samada kandungan kemasukan boleh diedit atau tidak"
 
-#: gtk/gtkentry.c:461
+#: gtk/gtkentry.c:463
 msgid "Maximum length"
 msgstr "Panjang maksima"
 
-#: gtk/gtkentry.c:462
+#: gtk/gtkentry.c:464
 msgid "Maximum number of characters for this entry"
 msgstr "Bilangan maksima aksara untuk kemasukan ini"
 
-#: gtk/gtkentry.c:470
+#: gtk/gtkentry.c:472
 msgid "Visibility"
 msgstr "Kebolehlihatan"
 
-#: gtk/gtkentry.c:471
+#: gtk/gtkentry.c:473
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1600,28 +1627,28 @@ msgstr ""
 "PALSU memaparkan \"Aksara ghaib\" selain daripada aksata sebenar (mod "
 "katalaluan)"
 
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:480
 msgid "Has Frame"
 msgstr "Mempunyai Bingkai"
 
-#: gtk/gtkentry.c:479
+#: gtk/gtkentry.c:481
 msgid "FALSE removes outside bevel from entry."
 msgstr "PALSU membuang bevel luaran daripada kemasukan."
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:488
 msgid "Invisible character"
 msgstr "Aksara ghaib"
 
-#: gtk/gtkentry.c:487
+#: gtk/gtkentry.c:489
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Aksara digunakan bila menopeng kandungan kemasukan (pada \"mod katalaluan\")"
 
-#: gtk/gtkentry.c:494
+#: gtk/gtkentry.c:496
 msgid "Activates default"
 msgstr "Aktifkan default"
 
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:497
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
@@ -1629,43 +1656,43 @@ msgstr ""
 "Samada mengaktifkan widget default (seperti butang default pada dialog) bila "
 "Enter ditekan."
 
-#: gtk/gtkentry.c:501
+#: gtk/gtkentry.c:503
 msgid "Width in chars"
 msgstr "Lebar dalam aksara"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:504
 msgid "Number of characters to leave space for in the entry."
 msgstr "Bilangan aksara supaya ruang ditinggalkan untuk kemasukan."
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:513
 msgid "Scroll offset"
 msgstr "Offset skrol"
 
-#: gtk/gtkentry.c:512
+#: gtk/gtkentry.c:514
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Bilangan piksel kemasukan diskrolkan ke kiri skrin"
 
-#: gtk/gtkentry.c:522
+#: gtk/gtkentry.c:524
 msgid "The contents of the entry"
 msgstr "Kandungan kemasukan"
 
-#: gtk/gtkentry.c:726
+#: gtk/gtkentry.c:728
 msgid "Select on focus"
 msgstr "Pilih pada fokus"
 
-#: gtk/gtkentry.c:727
+#: gtk/gtkentry.c:729
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Samada untuk memilih kandungan kemasukan bila ianya difokus."
 
-#: gtk/gtkentry.c:3806 gtk/gtklabel.c:3163
+#: gtk/gtkentry.c:3834 gtk/gtklabel.c:3211
 msgid "Select All"
 msgstr "Pilih Semua"
 
-#: gtk/gtkentry.c:3816 gtk/gtklabel.c:3173
+#: gtk/gtkentry.c:3844 gtk/gtklabel.c:3221
 msgid "Input Methods"
 msgstr "Method input"
 
-#: gtk/gtkentry.c:3826 gtk/gtktextview.c:6299
+#: gtk/gtkentry.c:3854 gtk/gtktextview.c:6360
 msgid "_Insert Unicode control character"
 msgstr "Sel_itkan aksara kawalan Unicode"
 
@@ -1884,6 +1911,12 @@ msgstr "Posisi Y"
 msgid "Y position of child widget"
 msgstr "Posisi Y widget anak"
 
+#. This is the default text shown in the preview entry, though the user
+#. can set it. Remember that some fonts only have capital letters.
+#: gtk/gtkfontsel.c:61
+msgid "abcdefghijk ABCDEFGHIJK"
+msgstr ""
+
 #: gtk/gtkfontsel.c:194
 msgid "Font name"
 msgstr "Nama Font"
@@ -2003,7 +2036,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1282
+#: gtk/gtkiconfactory.c:1290
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Ralat memuatkan ikon: %s"
@@ -2575,7 +2608,7 @@ msgstr ""
 "Nombor di antara 0.0 dan 1.0 menyatakan jajaran menegak teks pada widget "
 "progres"
 
-#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:280 gtk/gtkspinbutton.c:237
+#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
 msgstr "Penyesuaian"
 
@@ -2650,57 +2683,79 @@ msgstr "Pecahan jumlah progres untuk menggerakkan blok bila didenyutkan"
 msgid "Text to be displayed in the progress bar"
 msgstr "teks untuk dipaparkan pada bar progres"
 
-#: gtk/gtkrange.c:271
+#: gtk/gtkrange.c:273
 msgid "Update policy"
 msgstr "Kemaskini polisi"
 
-#: gtk/gtkrange.c:272
+#: gtk/gtkrange.c:274
 msgid "How the range should be updated on the screen"
 msgstr "bagaimana julat patut dikemaskini pada layar"
 
-#: gtk/gtkrange.c:281
+#: gtk/gtkrange.c:283
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment yang mengandungi nilai semasa julat objek ini"
 
-#: gtk/gtkrange.c:288
+#: gtk/gtkrange.c:290
 msgid "Inverted"
 msgstr "Disongsangkan"
 
-#: gtk/gtkrange.c:289
+#: gtk/gtkrange.c:291
 msgid "Invert direction slider moves to increase range value"
 msgstr "Songsangkan hala pergerakan peluncur untuk menaikkan julat nilai"
 
-#: gtk/gtkrange.c:295
+#: gtk/gtkrange.c:297
 msgid "Slider Width"
 msgstr "Lebar Peluncur"
 
-#: gtk/gtkrange.c:296
+#: gtk/gtkrange.c:298
 msgid "Width of scrollbar or scale thumb"
 msgstr "Lebar skrolbar atau sekala ibujari"
 
-#: gtk/gtkrange.c:303
+#: gtk/gtkrange.c:305
 msgid "Trough Border"
 msgstr "Sempadan Palung"
 
-#: gtk/gtkrange.c:304
+#: gtk/gtkrange.c:306
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 
-#: gtk/gtkrange.c:311
+#: gtk/gtkrange.c:313
 msgid "Stepper Size"
 msgstr ""
 
-#: gtk/gtkrange.c:312
+#: gtk/gtkrange.c:314
 msgid "Length of step buttons at ends"
 msgstr ""
 
-#: gtk/gtkrange.c:319
+#: gtk/gtkrange.c:321
 msgid "Stepper Spacing"
 msgstr ""
 
-#: gtk/gtkrange.c:320
+#: gtk/gtkrange.c:322
 msgid "Spacing between step buttons and thumb"
 msgstr ""
+
+#: gtk/gtkrange.c:329
+#, fuzzy
+msgid "Arrow X Displacement"
+msgstr "Sesaran X anak"
+
+#: gtk/gtkrange.c:330
+#, fuzzy
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
+msgstr "Betapa jauh pada hala x anak digerakkan bila butang ditekan"
+
+#: gtk/gtkrange.c:337
+#, fuzzy
+msgid "Arrow Y Displacement"
+msgstr "Sesaran Y anak"
+
+#: gtk/gtkrange.c:338
+#, fuzzy
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
+msgstr "Betapa jauh pada hala y anak digerakkan bila butang ditekan"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3650,7 +3705,7 @@ msgstr "Kursor boleh dilihat"
 msgid "If the insertion cursor is shown"
 msgstr "Kursor penyelitan dipaparkan"
 
-#: gtk/gtktextview.c:6290
+#: gtk/gtktextview.c:6351
 msgid "Input _Methods"
 msgstr "_Method input"
 

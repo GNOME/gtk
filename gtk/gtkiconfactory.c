@@ -318,6 +318,7 @@ gtk_icon_factory_lookup_default (const gchar *stock_id)
   return gtk_icon_factory_lookup (gtk_default_icons, stock_id);
 }
 
+#if 0
 static GtkIconSet *
 sized_icon_set_from_inline (const guchar *inline_data,
                             GtkIconSize   size)
@@ -341,7 +342,7 @@ sized_icon_set_from_inline (const guchar *inline_data,
   
   return set;
 }
-
+#endif
 
 static GtkIconSet *
 sized_with_fallback_icon_set_from_inline (const guchar *fallback_data,
@@ -400,6 +401,7 @@ unsized_icon_set_from_inline (const guchar *inline_data)
   return set;
 }
 
+#if 0
 static void
 add_sized (GtkIconFactory *factory,
            const guchar   *inline_data,
@@ -414,6 +416,7 @@ add_sized (GtkIconFactory *factory,
 
   gtk_icon_set_unref (set);
 }
+#endif
 
 static void
 add_sized_with_fallback (GtkIconFactory *factory,
@@ -449,22 +452,27 @@ static void
 get_default_icons (GtkIconFactory *factory)
 {
   /* KEEP IN SYNC with gtkstock.c */
+
+  /* We add all stock icons unsized, since it's confusing if icons only
+   * can be loaded at certain sizes.
+   */
+
+  /* Have dialog size */
+  add_unsized (factory, stock_dialog_error_48, GTK_STOCK_DIALOG_ERROR);
+  add_unsized (factory, stock_dialog_info_48, GTK_STOCK_DIALOG_INFO);
+  add_unsized (factory, stock_dialog_question_48, GTK_STOCK_DIALOG_QUESTION);
+  add_unsized (factory, stock_dialog_warning_48,GTK_STOCK_DIALOG_WARNING);
   
-  add_sized (factory, stock_dialog_error_48, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_ERROR);
-  add_sized (factory, stock_dialog_info_48, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_INFO);
-  add_sized (factory, stock_dialog_question_48, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_QUESTION);
-  add_sized (factory, stock_dialog_warning_48, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_WARNING);
+  /* Have dnd size */
+  add_unsized (factory, stock_dnd_32, GTK_STOCK_DND);
+  add_unsized (factory, stock_dnd_multiple_32, GTK_STOCK_DND_MULTIPLE);
   
-  /* dnd size only */
-  add_sized (factory, stock_dnd_32, GTK_ICON_SIZE_DND, GTK_STOCK_DND);
-  add_sized (factory, stock_dnd_multiple_32, GTK_ICON_SIZE_DND, GTK_STOCK_DND_MULTIPLE);
-  
-  /* Only have button sizes */
-  add_sized (factory, stock_apply_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_APPLY);
-  add_sized (factory, stock_cancel_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_CANCEL);
-  add_sized (factory, stock_no_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_NO);
-  add_sized (factory, stock_ok_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_OK);
-  add_sized (factory, stock_yes_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_YES);
+  /* Have button sizes */
+  add_unsized (factory, stock_apply_20, GTK_STOCK_APPLY);
+  add_unsized (factory, stock_cancel_20, GTK_STOCK_CANCEL);
+  add_unsized (factory, stock_no_20, GTK_STOCK_NO);
+  add_unsized (factory, stock_ok_20, GTK_STOCK_OK);
+  add_unsized (factory, stock_yes_20, GTK_STOCK_YES);
 
   /* Generic + button sizes */
   add_sized_with_fallback (factory,
@@ -1182,6 +1190,19 @@ gtk_icon_set_unref (GtkIconSet *icon_set)
     }
 }
 
+GType
+gtk_icon_set_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeIconSet",
+					     (GBoxedCopyFunc) gtk_icon_set_ref,
+					     (GBoxedFreeFunc) gtk_icon_set_unref);
+
+  return our_type;
+}
+
 /**
  * gtk_icon_set_copy:
  * @icon_set: a #GtkIconSet
@@ -1650,6 +1671,19 @@ gtk_icon_source_free (GtkIconSource *source)
     g_object_unref (G_OBJECT (source->pixbuf));
 
   g_free (source);
+}
+
+GType
+gtk_icon_source_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeIconSource",
+					     (GBoxedCopyFunc) gtk_icon_source_copy,
+					     (GBoxedFreeFunc) gtk_icon_source_free);
+
+  return our_type;
 }
 
 /**

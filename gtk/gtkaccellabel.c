@@ -108,9 +108,24 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
   class->signal_quote1 = g_strdup ("<:");
   class->signal_quote2 = g_strdup (":>");
-  class->mod_name_shift = g_strdup ("Shift");
-  class->mod_name_control = g_strdup ("Ctrl");
-  class->mod_name_alt = g_strdup ("Alt");
+  /* This is the text that should appear next to menu accelerators
+   * that use the shift key. If the text on this key isn't typically
+   * translated on keyboards used for your language, don't translate
+   * this.
+   */
+  class->mod_name_shift = g_strdup (_("Shift"));
+  /* This is the text that should appear next to menu accelerators
+   * that use the control key. If the text on this key isn't typically
+   * translated on keyboards used for your language, don't translate
+   * this.
+   */
+  class->mod_name_control = g_strdup (_("Ctrl"));
+  /* This is the text that should appear next to menu accelerators
+   * that use the alt key. If the text on this key isn't typically
+   * translated on keyboards used for your language, don't translate
+   * this.
+   */
+  class->mod_name_alt = g_strdup (_("Alt"));
   class->mod_separator = g_strdup ("+");
   class->accel_seperator = g_strdup (" / ");
   class->latin1_to_char = TRUE;
@@ -492,6 +507,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	{
 	  GString *gstring;
 	  gboolean seen_mod = FALSE;
+	  gunichar ch;
 	  
 	  gstring = g_string_new (accel_label->accel_string);
 	  g_string_append (gstring, gstring->len ? class->accel_seperator : "   ");
@@ -517,12 +533,12 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	    }
 	  if (seen_mod)
 	    g_string_append (gstring, class->mod_separator);
-	  if (key->accel_key < 0x80 ||
-	      (key->accel_key > 0x80 &&
-	       key->accel_key <= 0xff &&
-	       class->latin1_to_char))
+
+	  ch = gdk_keyval_to_unicode (key->accel_key);
+	  if (ch && (g_unichar_isgraph (ch) || ch == ' ') &&
+	      (ch < 0x80 || class->latin1_to_char))
 	    {
-	      switch (key->accel_key)
+	      switch (ch)
 		{
 		case ' ':
 		  g_string_append (gstring, "Space");
@@ -531,7 +547,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 		  g_string_append (gstring, "Backslash");
 		  break;
 		default:
-		  g_string_append_unichar (gstring, g_unichar_toupper (key->accel_key));
+		  g_string_append_unichar (gstring, g_unichar_toupper (ch));
 		  break;
 		}
 	    }
@@ -541,7 +557,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	      
 	      tmp = gtk_accelerator_name (key->accel_key, 0);
 	      if (tmp[0] != 0 && tmp[1] == 0)
-		tmp[0] = g_unichar_totitle (tmp[0]);
+		tmp[0] = g_ascii_toupper (tmp[0]);
 	      g_string_append (gstring, tmp);
 	      g_free (tmp);
 	    }

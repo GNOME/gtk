@@ -1,3 +1,29 @@
+2002-03-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Move GtkOldEditable to the "Deprecated" 
+	section.  (#68408)
+
+	* gtk/tmpl/gtktreeview.sgml: Close linkend attribute.  (#73364)
+
+Sun Mar  3 01:36:21 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtktreeviewcolumn.sgml: Write documentation
+	* gtk/tmpl/gtktreeview.sgml: Write documentation
+
+Sat Mar  2 15:46:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkentry.sgml: Move a couple of function
+	docs into the C file.
+
+Fri Mar  1 10:35:15 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/changes-2.0.sgml: Add note about gtk_notebook_reorder_child().
+
+Tue Feb 26 22:01:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkbox.sgml: Fix docs to correspond to the code -
+	negative @position indicates the end of the list.
+
 2002-02-26  Matthias Clasen  <maclas@gmx.de>
 
 	Fixes for #72478:

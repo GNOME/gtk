@@ -162,6 +162,12 @@ gtk_vscale_expose (GtkWidget      *widget,
   scale = GTK_SCALE (widget);
   vscale = GTK_VSCALE (widget);
   
+  /* We need to chain up _first_ so the various geometry members of
+   * GtkRange struct are updated.
+   */
+  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
+    GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+
   if (scale->draw_value)
     {
       PangoLayout *layout;
@@ -232,5 +238,5 @@ gtk_vscale_expose (GtkWidget      *widget,
       g_object_unref (G_OBJECT (layout));
     }
   
-  return (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+  return FALSE;
 }

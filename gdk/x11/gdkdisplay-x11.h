@@ -55,21 +55,31 @@ struct _GdkDisplayImplX11
   /* Keyboard related information */
 
   gint xkb_event_type;
-  guint keymap_serial;
   gboolean use_xkb;
+  
   /* Whether we were able to turn on detectable-autorepeat using
    * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
    * to checking the next event with XPending(). */
+  gboolean have_xkb_autorepeat;
 
   GdkKeymap *keymap;
+  guint	    keymap_serial;
 
-  gboolean have_xkb_autorepeat;
   gboolean gdk_use_xshm;
   gboolean have_shm_pixmaps;
   
-  /* Window that currently holds the x pointer grab */
+  /* Information about current pointer and keyboard grabs held by this
+   * client. If gdk_pointer_xgrab_window or gdk_keyboard_xgrab_window
+   * window is NULL, then the other associated fields are ignored
+   */
 
-  GdkWindowObject *gdk_xgrab_window;
+  GdkWindowObject *gdk_pointer_xgrab_window;
+  gulong gdk_pointer_xgrab_serial;
+  gboolean gdk_pointer_xgrab_owner_events;
+
+  GdkWindowObject *gdk_keyboard_xgrab_window;
+  gulong gdk_keyboard_xgrab_serial;
+  gboolean gdk_keyboard_xgrab_owner_events;
 
   /* drag and drop information */
   /* I assume each display needs only info on a default  display */

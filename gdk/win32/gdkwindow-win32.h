@@ -75,9 +75,6 @@ struct _GdkWindowImplWin32
   
   GdkWin32PositionInfo position_info;
 
-  /* We must keep the event mask here to filter them ourselves */
-  gint event_mask;
-
   HCURSOR hcursor;
 
   /* Window size hints */

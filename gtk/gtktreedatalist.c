@@ -409,7 +409,12 @@ _gtk_tree_data_list_header_free (GList *list)
       GtkTreeDataSortHeader *header = (GtkTreeDataSortHeader *) tmp->data;
 
       if (header->destroy)
-	(* header->destroy) (header->data);
+	{
+	  GtkDestroyNotify d = header->destroy;
+
+	  header->destroy = NULL;
+	  d (header->data);
+	}
 
       g_free (header);
     }

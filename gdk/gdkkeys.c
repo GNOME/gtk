@@ -88,6 +88,8 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
  */
 
 #ifndef HAVE_XCONVERTCASE
+#include "gdkkeysyms.h"
+
 /* compatibility function from X11R6.3, since XConvertCase is not
  * supplied by X11R5.
  */
@@ -109,9 +111,18 @@ gdk_keyval_convert_case (guint symbol,
   guint xlower = symbol;
   guint xupper = symbol;
 
+  /* Check for directly encoded 24-bit UCS characters: */
+  if ((symbol & 0xff000000) == 0x01000000)
+    {
+      if (lower)
+	*lower = gdk_unicode_to_keyval (g_unichar_tolower (symbol & 0x00ffffff));
+      if (upper)
+	*upper = gdk_unicode_to_keyval (g_unichar_toupper (symbol & 0x00ffffff));
+      return;
+    }
+
   switch (symbol >> 8)
     {
-#if	defined (GDK_A) && defined (GDK_Ooblique)
     case 0: /* Latin 1 */
       if ((symbol >= GDK_A) && (symbol <= GDK_Z))
 	xlower += (GDK_a - GDK_A);
@@ -126,9 +137,7 @@ gdk_keyval_convert_case (guint symbol,
       else if ((symbol >= GDK_oslash) && (symbol <= GDK_thorn))
 	xupper -= (GDK_oslash - GDK_Ooblique);
       break;
-#endif	/* LATIN1 */
       
-#if	defined (GDK_Aogonek) && defined (GDK_tcedilla)
     case 1: /* Latin 2 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (symbol == GDK_Aogonek)
@@ -152,9 +161,7 @@ gdk_keyval_convert_case (guint symbol,
       else if (symbol >= GDK_racute && symbol <= GDK_tcedilla)
 	xupper -= (GDK_racute - GDK_Racute);
       break;
-#endif	/* LATIN2 */
       
-#if	defined (GDK_Hstroke) && defined (GDK_Cabovedot)
     case 2: /* Latin 3 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (symbol >= GDK_Hstroke && symbol <= GDK_Hcircumflex)
@@ -170,9 +177,7 @@ gdk_keyval_convert_case (guint symbol,
       else if (symbol >= GDK_cabovedot && symbol <= GDK_scircumflex)
 	xupper -= (GDK_cabovedot - GDK_Cabovedot);
       break;
-#endif	/* LATIN3 */
       
-#if	defined (GDK_Rcedilla) && defined (GDK_Amacron)
     case 3: /* Latin 4 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (symbol >= GDK_Rcedilla && symbol <= GDK_Tslash)
@@ -188,9 +193,7 @@ gdk_keyval_convert_case (guint symbol,
       else if (symbol >= GDK_amacron && symbol <= GDK_umacron)
 	xupper -= (GDK_amacron - GDK_Amacron);
       break;
-#endif	/* LATIN4 */
       
-#if	defined (GDK_Serbian_DJE) && defined (GDK_Cyrillic_yu)
     case 6: /* Cyrillic */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (symbol >= GDK_Serbian_DJE && symbol <= GDK_Serbian_DZE)
@@ -202,9 +205,7 @@ gdk_keyval_convert_case (guint symbol,
       else if (symbol >= GDK_Cyrillic_yu && symbol <= GDK_Cyrillic_hardsign)
 	xupper += (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
       break;
-#endif	/* CYRILLIC */
       
-#if	defined (GDK_Greek_ALPHAaccent) && defined (GDK_Greek_finalsmallsigma)
     case 7: /* Greek */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
       if (symbol >= GDK_Greek_ALPHAaccent && symbol <= GDK_Greek_OMEGAaccent)
@@ -219,7 +220,6 @@ gdk_keyval_convert_case (guint symbol,
 	       symbol != GDK_Greek_finalsmallsigma)
 	xupper -= (GDK_Greek_alpha - GDK_Greek_ALPHA);
       break;
-#endif	/* GREEK */
     }
 
   if (lower)

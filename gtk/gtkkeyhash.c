@@ -239,7 +239,6 @@ _gtk_key_hash_remove_entry (GtkKeyHash *key_hash,
       g_hash_table_remove (key_hash->reverse_hash, value);
 
       key_hash_free_entry (key_hash, entry);
-      g_free (entry);
     }
 }
 
@@ -352,7 +351,10 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
   GdkKeymapKey *keys;
   gint n_keys;
   GSList *results = NULL;
-  
+
+  if (!keyval)			/* Key without symbol */
+    return NULL;
+
   /* Find some random keycode for this keycode
    */
   gdk_keymap_get_entries_for_keyval (key_hash->keymap, keyval,

@@ -299,7 +299,9 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
     case LANG_HEBREW:
     case LANG_ARABIC:
       /* Not 100% sure about these */
+#ifdef LANG_URDU
     case LANG_URDU:
+#endif
     case LANG_FARSI:
       /* Others? */
       return PANGO_DIRECTION_RTL;
@@ -373,6 +375,22 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 	    }
 	}
     }
+
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
+    {
+      gint i;
+
+      g_print ("gdk_keymap_get_entries_for_keyval: %#.04x (%s):",
+	       keyval, gdk_keyval_name (keyval));
+      for (i = 0; i < retval->len; i++)
+	{
+	  GdkKeymapKey *entry = (GdkKeymapKey *) retval->data + i;
+	  g_print ("  %#.02x %d %d", entry->keycode, entry->group, entry->level);
+	}
+      g_print ("\n");
+    }
+#endif
 
   if (retval->len > 0)
     {
@@ -636,7 +654,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   if (keyval)
     *keyval = tmp_keyval;
 
-  return FALSE;
+  return tmp_keyval != GDK_VoidSymbol;
 }
 
 /* Key handling not part of the keymap */
@@ -1836,8 +1854,8 @@ static struct gdk_key {
   { 0x00ff54, "Down" },
   { 0x00ff55, "Page_Up" },
   { 0x00ff55, "Prior" },
-  { 0x00ff56, "Next" },
   { 0x00ff56, "Page_Down" },
+  { 0x00ff56, "Next" },
   { 0x00ff57, "End" },
   { 0x00ff58, "Begin" },
   { 0x00ff60, "Select" },
@@ -1874,8 +1892,8 @@ static struct gdk_key {
   { 0x00ff99, "KP_Down" },
   { 0x00ff9a, "KP_Page_Up" },
   { 0x00ff9a, "KP_Prior" },
-  { 0x00ff9b, "KP_Next" },
   { 0x00ff9b, "KP_Page_Down" },
+  { 0x00ff9b, "KP_Next" },
   { 0x00ff9c, "KP_End" },
   { 0x00ff9d, "KP_Begin" },
   { 0x00ff9e, "KP_Insert" },
@@ -1963,12 +1981,20 @@ gdk_keys_keyval_compare (const void *pkey, const void *pbase)
 gchar*
 gdk_keyval_name (guint	      keyval)
 {
-  struct gdk_key *found =
-    bsearch (&keyval, gdk_keys_by_keyval,
-	     GDK_NUM_KEYS, sizeof (struct gdk_key),
-	     gdk_keys_keyval_compare);
+  struct gdk_key *found;
+
+  found = bsearch (&keyval, gdk_keys_by_keyval,
+		   GDK_NUM_KEYS, sizeof (struct gdk_key),
+		   gdk_keys_keyval_compare);
+
   if (found != NULL)
-    return (gchar *) found->name;
+    {
+      while ((found > gdk_keys_by_keyval) &&
+             ((found - 1)->keyval == keyval))
+        found--;
+	    
+      return (gchar *) found->name;
+    }
   else
     return NULL;
 }

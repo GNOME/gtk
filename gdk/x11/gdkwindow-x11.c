@@ -172,6 +172,8 @@ gdk_window_impl_x11_finalize (GObject *object)
   
   wrapper = (GdkWindowObject*) draw_impl->wrapper;
 
+  _gdk_xgrab_check_destroy (GDK_WINDOW (wrapper));
+
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
       gdk_xid_table_remove_for_display (GDK_WINDOW_DISPLAY (object),
@@ -445,6 +447,7 @@ gdk_window_new (GdkWindow     *parent,
       if (attributes->event_mask & (1 << (i + 1)))
 	xattributes.event_mask |= _gdk_event_mask_table[i];
     }
+  private->event_mask = attributes->event_mask;
   
   if (xattributes.event_mask)
     xattributes_mask |= CWEventMask;
@@ -684,6 +687,21 @@ gdk_window_new (GdkWindow     *parent,
   return window;
 }
 
+static GdkEventMask
+x_event_mask_to_gdk_event_mask (long mask)
+{
+  GdkEventMask event_mask = 0;
+  int i;
+
+  for (i = 0; i < _gdk_nenvent_masks; i++)
+    {
+      if (mask & _gdk_event_mask_table[i])
+	event_mask |= 1 << (i + 1);
+    }
+
+  return event_mask;
+}
+
 /**
  * gdk_window_foreign_new_for_display:
  * @display: the #GdkDisplay where the window handle comes from.
@@ -758,6 +776,8 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   impl->height = attrs.height;
   private->window_type = GDK_WINDOW_FOREIGN;
   private->destroyed = FALSE;
+
+  private->event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
 
   if (attrs.map_state == IsUnmapped)
     private->state = GDK_WINDOW_STATE_WITHDRAWN;
@@ -875,7 +895,9 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	}
     }
   else if (!recursing && !foreign_destroy)
-    XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+    {
+      XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+    }
 }
 
 /* This function is called when the XWindow is really gone.
@@ -903,6 +925,8 @@ gdk_window_destroy_notify (GdkWindow *window)
   if (window_impl->focus_window)
     gdk_xid_table_remove_for_display (GDK_WINDOW_DISPLAY (window),
 				      window_impl->focus_window);
+
+  _gdk_xgrab_check_destroy (window);
   
   gdk_drawable_unref (window);
 }
@@ -1085,6 +1109,13 @@ gdk_window_hide (GdkWindow *window)
 
   private = (GdkWindowObject*) window;
 
+  /* We'll get the unmap notify eventually, and handle it then,
+   * but checking here makes things more consistent if we are
+   * just doing stuff ourself.
+   */
+  _gdk_xgrab_check_unmap (window,
+			  NextRequest (GDK_WINDOW_XDISPLAY (window)));
+
   /* You can't simply unmap toplevel windows. */
   switch (private->window_type)
     {
@@ -1253,7 +1284,7 @@ gdk_window_resize (GdkWindow *window,
  * Equivalent to calling gdk_window_move() and gdk_window_resize(),
  * except that both operations are performed at once, avoiding strange
  * visual effects. (i.e. the user may be able to see the window first
- * move, then resize, if youu don't use gdk_window_move_resize().)
+ * move, then resize, if you don't use gdk_window_move_resize().)
  * 
  **/
 void
@@ -2600,7 +2631,6 @@ gdk_window_get_events (GdkWindow *window)
 {
   XWindowAttributes attrs;
   GdkEventMask event_mask;
-  int i;
   
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
@@ -2613,12 +2643,8 @@ gdk_window_get_events (GdkWindow *window)
 			    GDK_WINDOW_XID (window), 
 			    &attrs);
       
-      event_mask = 0;
-      for (i = 0; i < _gdk_nenvent_masks; i++)
-	{
-	  if (attrs.your_event_mask & _gdk_event_mask_table[i])
-	    event_mask |= 1 << (i + 1);
-	}
+      event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
+      GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
   
       return event_mask;
     }
@@ -2647,6 +2673,7 @@ gdk_window_set_events (GdkWindow       *window,
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
+      GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
       xevent_mask = StructureNotifyMask;
       for (i = 0; i < _gdk_nenvent_masks; i++)
 	{

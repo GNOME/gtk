@@ -1826,6 +1826,160 @@ create_tree_mode_window(GtkWidget *widget)
 }
 
 /*
+ * Gridded geometry
+ */
+#define GRID_SIZE 20
+#define DEFAULT_GEOMETRY "10x10"
+
+static gboolean
+gridded_geometry_expose (GtkWidget      *widget,
+			 GdkEventExpose *event)
+{
+  int i, j;
+
+  gdk_draw_rectangle (widget->window, widget->style->base_gc[widget->state], TRUE,
+		      0, 0, widget->allocation.width, widget->allocation.height);
+  
+  for (i = 0 ; i * GRID_SIZE < widget->allocation.width; i++)
+    for (j = 0 ; j * GRID_SIZE < widget->allocation.height; j++)
+      {
+	if ((i + j) % 2 == 0)
+	  gdk_draw_rectangle (widget->window, widget->style->text_gc[widget->state], TRUE,
+			      i * GRID_SIZE, j * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+      }
+
+  return FALSE;
+}
+
+static void
+gridded_geometry_subresponse (GtkDialog *dialog,
+			      gint       response_id,
+			      gchar     *geometry_string)
+{
+  if (response_id == GTK_RESPONSE_NONE)
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+    }
+  else
+    {
+      if (!gtk_window_parse_geometry (GTK_WINDOW (dialog), geometry_string))
+	{
+	  g_print ("Can't parse geometry string %s\n", geometry_string);
+	  gtk_window_parse_geometry (GTK_WINDOW (dialog), DEFAULT_GEOMETRY);
+	}
+    }
+}
+
+static void
+gridded_geometry_response (GtkDialog *dialog,
+			   gint       response_id,
+			   GtkEntry  *entry)
+{
+  if (response_id == GTK_RESPONSE_NONE)
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+    }
+  else
+    {
+      gchar *geometry_string = g_strdup (gtk_entry_get_text (entry));
+      gchar *title = g_strdup_printf ("Gridded window at: %s", geometry_string);
+      GtkWidget *window;
+      GtkWidget *drawing_area;
+      GtkWidget *box;
+      GdkGeometry geometry;
+      
+      window = gtk_dialog_new_with_buttons (title,
+                                            NULL, 0,
+                                            "Reset", 1,
+                                            GTK_STOCK_CLOSE, GTK_RESPONSE_NONE,
+                                            NULL);
+
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (GTK_WIDGET (dialog)));
+      g_free (title);
+      g_signal_connect (window, "response",
+			G_CALLBACK (gridded_geometry_subresponse), geometry_string);
+
+      box = gtk_vbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), box, TRUE, TRUE, 0);
+      
+      gtk_container_set_border_width (GTK_CONTAINER (box), 7);
+      
+      drawing_area = gtk_drawing_area_new ();
+      g_signal_connect (drawing_area, "expose_event",
+			G_CALLBACK (gridded_geometry_expose), NULL);
+      gtk_box_pack_start (GTK_BOX (box), drawing_area, TRUE, TRUE, 0);
+
+      /* Gross hack to work around bug 68668... if we set the size request
+       * large enough, then  the current
+       *
+       *   request_of_window - request_of_geometry_widget
+       *
+       * method of getting the base size works more or less works.
+       */
+      gtk_widget_set_size_request (drawing_area, 2000, 2000);
+
+      geometry.base_width = 0;
+      geometry.base_height = 0;
+      geometry.min_width = 2 * GRID_SIZE;
+      geometry.min_height = 2 * GRID_SIZE;
+      geometry.width_inc = GRID_SIZE;
+      geometry.height_inc = GRID_SIZE;
+
+      gtk_window_set_geometry_hints (GTK_WINDOW (window), drawing_area,
+				     &geometry,
+				     GDK_HINT_BASE_SIZE | GDK_HINT_MIN_SIZE | GDK_HINT_RESIZE_INC);
+
+      if (!gtk_window_parse_geometry (GTK_WINDOW (window), geometry_string))
+	{
+	  g_print ("Can't parse geometry string %s\n", geometry_string);
+	  gtk_window_parse_geometry (GTK_WINDOW (window), DEFAULT_GEOMETRY);
+	}
+
+      gtk_widget_show_all (window);
+    }
+}
+
+static void 
+create_gridded_geometry (GtkWidget *widget)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *entry;
+  GtkWidget *label;
+
+  if (window &&
+      (gtk_widget_get_screen (window) != gtk_widget_get_screen (widget)))
+   gtk_widget_destroy (window);
+
+  if (!window)
+    {
+      window = gtk_dialog_new_with_buttons ("Gridded Geometry",
+                                            NULL, 0,
+					    "Create", 1,
+                                            GTK_STOCK_CLOSE, GTK_RESPONSE_NONE,
+                                            NULL);
+      
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (widget));
+
+      label = gtk_label_new ("Geometry string:");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), label, FALSE, FALSE, 0);
+
+      entry = gtk_entry_new ();
+      gtk_entry_set_text (GTK_ENTRY (entry), DEFAULT_GEOMETRY);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), entry, FALSE, FALSE, 0);
+
+      g_signal_connect (window, "response",
+			G_CALLBACK (gridded_geometry_response), entry);
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+
+      gtk_widget_show_all (window);
+    }
+  else
+    gtk_widget_destroy (window);
+}
+
+/*
  * GtkHandleBox
  */
 
@@ -2551,6 +2705,7 @@ create_reparent (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *separator;
+  GtkWidget *event_box;
 
   if (window && 
      (gtk_widget_get_screen (window) != gtk_widget_get_screen (widget)))
@@ -2587,17 +2742,22 @@ create_reparent (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (frame), box3);
 
       button = gtk_button_new_with_label ("switch");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC(reparent_label),
-			  box3);
       gtk_object_set_user_data (GTK_OBJECT (button), label);
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
 
-      gtk_box_pack_start (GTK_BOX (box3), label, FALSE, TRUE, 0);
+      event_box = gtk_event_box_new ();
+      gtk_box_pack_start (GTK_BOX (box3), event_box, FALSE, TRUE, 0);
+      gtk_container_add (GTK_CONTAINER (event_box), label);
+			 
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(reparent_label),
+			  event_box);
+      
       gtk_signal_connect (GTK_OBJECT (label),
 			  "parent_set",
 			  GTK_SIGNAL_FUNC (set_parent_signal),
 			  GINT_TO_POINTER (42));
+
 
       frame = gtk_frame_new ("Frame 2");
       gtk_box_pack_start (GTK_BOX (box2), frame, TRUE, TRUE, 0);
@@ -2607,11 +2767,15 @@ create_reparent (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (frame), box3);
 
       button = gtk_button_new_with_label ("switch");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC(reparent_label),
-			  box3);
       gtk_object_set_user_data (GTK_OBJECT (button), label);
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
+      
+      event_box = gtk_event_box_new ();
+      gtk_box_pack_start (GTK_BOX (box3), event_box, FALSE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(reparent_label),
+			  event_box);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
@@ -3237,6 +3401,17 @@ create_menus (GtkWidget *widget)
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu 
 				 (gtk_widget_get_screen (widget), 4, 5, TRUE));
       gtk_menu_item_set_right_justified (GTK_MENU_ITEM (menuitem), TRUE);
+      gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+      gtk_widget_show (menuitem);
+      
+      menubar = gtk_menu_bar_new ();
+      gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
+      gtk_widget_show (menubar);
+      
+      menu = create_menu (gtk_widget_get_screen (widget), 2, 10, TRUE);
+      
+      menuitem = gtk_menu_item_new_with_label ("Second menu bar");
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
       
@@ -12142,6 +12317,7 @@ struct {
   { "focus", create_focus },
   { "font selection", create_font_selection },
   { "gamma curve", create_gamma_curve, TRUE },
+  { "gridded geometry", create_gridded_geometry, TRUE },
   { "handle box", create_handle_box },
   { "image from drawable", create_get_image },
   { "image", create_image },
@@ -12290,9 +12466,9 @@ create_main_window (void)
 static void
 test_init ()
 {
-  if (file_exists ("../gdk-pixbuf/.libs/libpixbufloader-pnm.so"))
+  if (file_exists ("../gdk-pixbuf/libpixbufloader-pnm.la"))
     {
-      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf");
       putenv ("GTK_IM_MODULE_FILE=../modules/input/gtk.immodules");
     }
 }

@@ -200,8 +200,6 @@ static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
-static void		gtk_widget_reparent_container_child	(GtkWidget	  *widget,
-								 gpointer          client_data);
 static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
 								 GtkStateData 	  *data);
 static void             gtk_widget_reset_rc_style               (GtkWidget        *widget);
@@ -1084,10 +1082,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       GDK_TYPE_COLOR,
 							       G_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
+					   g_param_spec_boxed ("secondary-cursor-color",
+							       _("Secondary cursor color"),
+							       _("Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text."),
+							       GDK_TYPE_COLOR,
+							       G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
                                            g_param_spec_float ("cursor-aspect-ratio",
                                                                _("Cursor line aspect ratio"),
                                                                _("Aspect ratio with which to draw insertion cursor"),
-                                                               0.0, 1.0, 0.033,
+                                                               0.0, 1.0, 0.04,
                                                                G_PARAM_READABLE));
 }
 
@@ -2899,6 +2903,9 @@ gtk_widget_real_focus_out_event (GtkWidget     *widget,
   return FALSE;
 }
 
+#define WIDGET_REALIZED_FOR_EVENT(widget, event) \
+     (event->type == GDK_FOCUS_CHANGE || GTK_WIDGET_REALIZED(widget))
+
 /**
  * gtk_widget_event:
  * @widget: a #GtkWidget
@@ -2920,7 +2927,7 @@ gtk_widget_event (GtkWidget *widget,
 		  GdkEvent  *event)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), TRUE);
+  g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
 
   if (event->type == GDK_EXPOSE)
     {
@@ -2976,7 +2983,7 @@ gtk_widget_event_internal (GtkWidget *widget,
   gtk_widget_ref (widget);
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event, &return_val);
-  return_val |= !GTK_WIDGET_REALIZED (widget);
+  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
     {
       gint signal_num;
@@ -3071,7 +3078,7 @@ gtk_widget_event_internal (GtkWidget *widget,
       if (signal_num != -1)
 	gtk_signal_emit (GTK_OBJECT (widget), widget_signals[signal_num], event, &return_val);
     }
-  if (GTK_WIDGET_REALIZED (widget))
+  if (WIDGET_REALIZED_FOR_EVENT (widget, event))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT_AFTER], event);
   else
     return_val = TRUE;
@@ -3146,37 +3153,53 @@ gtk_widget_set_scroll_adjustments (GtkWidget     *widget,
     return FALSE;
 }
 
-/*****************************************
- * gtk_widget_reparent_container_child:
- *   assistent function to gtk_widget_reparent
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+static void
+gtk_widget_reparent_subwindows (GtkWidget *widget,
+				GdkWindow *new_window)
+{
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    {
+      GList *children = gdk_window_get_children (widget->window);
+      GList *tmp_list;
+
+      for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+	{
+	  GtkWidget *child;
+	  GdkWindow *window = tmp_list->data;
+
+	  gdk_window_get_user_data (window, (void **)&child);
+	  while (child && child != widget)
+	    child = child->parent;
+
+	  if (child)
+	    gdk_window_reparent (window, new_window, 0, 0);
+	}
+
+      g_list_free (children);
+    }
+  else
+    gdk_window_reparent (widget->window, new_window, 0, 0);
+}
 
 static void
-gtk_widget_reparent_container_child (GtkWidget *widget,
-				     gpointer   client_data)
+gtk_widget_reparent_fixup_child (GtkWidget *widget,
+				 gpointer   client_data)
 {
   g_return_if_fail (client_data != NULL);
   
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
       if (widget->window)
-	gdk_window_unref (widget->window);
+        gdk_window_unref (widget->window);
       widget->window = (GdkWindow*) client_data;
       if (widget->window)
-	gdk_window_ref (widget->window);
+        gdk_window_ref (widget->window);
 
       if (GTK_IS_CONTAINER (widget))
-	gtk_container_forall (GTK_CONTAINER (widget),
-			      gtk_widget_reparent_container_child,
-			      client_data);
+        gtk_container_forall (GTK_CONTAINER (widget),
+                              gtk_widget_reparent_fixup_child,
+                              client_data);
     }
-  else
-    gdk_window_reparent (widget->window, 
-			 (GdkWindow*) client_data, 0, 0);
 }
 
 /**
@@ -3213,9 +3236,10 @@ gtk_widget_reparent (GtkWidget *widget,
       if (GTK_WIDGET_IN_REPARENT (widget))
 	{
 	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IN_REPARENT);
-	  
-	  gtk_widget_reparent_container_child (widget,
-					       gtk_widget_get_parent_window (widget));
+
+	  gtk_widget_reparent_subwindows (widget, gtk_widget_get_parent_window (widget));
+	  gtk_widget_reparent_fixup_child (widget,
+					   gtk_widget_get_parent_window (widget));
 	}
 
       g_object_notify (G_OBJECT (widget), "parent");
@@ -3311,6 +3335,9 @@ gtk_widget_grab_focus (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    return;
+  
   g_object_ref (G_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[GRAB_FOCUS]);
   g_object_notify (G_OBJECT (widget), "has_focus");
@@ -6507,6 +6534,19 @@ void
 gtk_requisition_free (GtkRequisition *requisition)
 {
   g_free (requisition);
+}
+
+GType
+gtk_requisition_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeRequisition",
+					     (GBoxedCopyFunc) gtk_requisition_copy,
+					     (GBoxedFreeFunc) gtk_requisition_free);
+
+  return our_type;
 }
 
 AtkObject* 

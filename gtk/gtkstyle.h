@@ -43,6 +43,8 @@ extern "C" {
 #define GTK_IS_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STYLE))
 #define GTK_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STYLE, GtkStyleClass))
 
+#define GTK_TYPE_BORDER             (gtk_border_get_type ())
+
 /* Some forward declarations needed to rationalize the header
  * files.
  */
@@ -853,8 +855,9 @@ void gtk_paint_resize_grip (GtkStyle		*style,
                             gint           	 height);
 
 
-GtkBorder *gtk_border_copy (const GtkBorder *border);
-void       gtk_border_free (GtkBorder       *border);
+GType      gtk_border_get_type (void);
+GtkBorder *gtk_border_copy     (const GtkBorder *border);
+void       gtk_border_free (   GtkBorder       *border);
 
 /* --- private API --- */
 const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
@@ -883,12 +886,14 @@ void gtk_paint_string     (GtkStyle        *style,
 			   const gchar     *string);
 #endif /* GTK_DISABLE_DEPRECATED */
 
-void _gtk_draw_insertion_cursor (GtkWidget        *widget,
-				 GdkDrawable      *drawable,
-				 GdkGC            *gc,
-				 GdkRectangle     *location,
-                                 GtkTextDirection  direction,
-                                 gboolean          draw_arrow);
+GdkGC *_gtk_get_insertion_cursor_gc (GtkWidget        *widget,
+				     gboolean          is_primary);
+void   _gtk_draw_insertion_cursor   (GtkWidget        *widget,
+				     GdkDrawable      *drawable,
+				     GdkGC            *gc,
+				     GdkRectangle     *location,
+				     GtkTextDirection  direction,
+				     gboolean          draw_arrow);
 
 #ifdef __cplusplus
 }

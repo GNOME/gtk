@@ -3,6 +3,7 @@
 <!entity % local.notation.class "| PNG">
 
 <!entity hash "#">
+<!entity percent "%">
 <!entity GtkAccelLabel SYSTEM "sgml/gtkaccellabel.sgml">
 <!entity GtkAdjustment SYSTEM "sgml/gtkadjustment.sgml">
 <!entity GtkAlignment SYSTEM "sgml/gtkalignment.sgml">
@@ -435,7 +436,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkButtonBox;
         &GtkContainer;
         &GtkEditable;
-        &GtkOldEditable;
         &GtkItem;
         &GtkMisc;
         &GtkObject;
@@ -470,6 +470,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkPixmap;
         &GtkProgress;
         &GtkPreview;
+        &GtkOldEditable;
         &GtkText;
         &GtkTipsQuery;
         &GtkTree;

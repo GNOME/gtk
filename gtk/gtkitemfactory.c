@@ -52,15 +52,6 @@
 #endif
 #include	<stdio.h>
 
-#ifdef G_OS_WIN32
-#include	<io.h>		/* For _open and _close */
-
-#ifndef S_ISREG
-#define S_ISREG(mode) ((mode)&_S_IFREG)
-#endif
-#endif
-
-
 /* --- defines --- */
 #define		ITEM_FACTORY_STRING	((gchar*) item_factory_string)
 #define		ITEM_BLOCK_SIZE		(128)
@@ -1389,7 +1380,7 @@ gtk_item_factory_delete_entries (GtkItemFactory         *ifactory,
     g_return_if_fail (entries != NULL);
 
   for (i = 0; i < n_entries; i++)
-    gtk_item_factory_delete_item (ifactory, (entries + i)->path);
+    gtk_item_factory_delete_entry (ifactory, entries + i);
 }
 
 typedef struct
