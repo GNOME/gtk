@@ -1957,10 +1957,16 @@ static void
 gtk_entry_move_word (GtkEditable *editable,
 		     gint         n)
 {
-  while (n-- > 0)
-    gtk_move_forward_word (GTK_ENTRY (editable));
-  while (n++ < 0)
-    gtk_move_backward_word (GTK_ENTRY (editable));
+  while (n > 0)
+    {
+      gtk_move_forward_word (GTK_ENTRY (editable));
+      n--;
+    }
+  while (n < 0)
+    {
+      gtk_move_backward_word (GTK_ENTRY (editable));
+      n++;
+    }
 }
 
 static void
