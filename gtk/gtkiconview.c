@@ -124,6 +124,7 @@ enum
   SELECT_CURSOR_ITEM,
   TOGGLE_CURSOR_ITEM,
   MOVE_CURSOR,
+  ACTIVATE_CURSOR_ITEM,
   LAST_SIGNAL
 };
 
@@ -171,13 +172,14 @@ static gboolean gtk_icon_view_button_release (GtkWidget      *widget,
 					      GdkEventButton *event);
 
 /* GtkIconView signals */
-static void     gtk_icon_view_set_adjustments             (GtkIconView             *icon_view,
-							   GtkAdjustment           *hadj,
-							   GtkAdjustment           *vadj);
-static void     gtk_icon_view_real_select_all             (GtkIconView             *icon_view);
-static void     gtk_icon_view_real_unselect_all           (GtkIconView             *icon_view);
-static void     gtk_icon_view_real_select_cursor_item     (GtkIconView             *icon_view);
-static void     gtk_icon_view_real_toggle_cursor_item     (GtkIconView             *icon_view);
+static void     gtk_icon_view_set_adjustments           (GtkIconView   *icon_view,
+							 GtkAdjustment *hadj,
+							 GtkAdjustment *vadj);
+static void     gtk_icon_view_real_select_all           (GtkIconView   *icon_view);
+static void     gtk_icon_view_real_unselect_all         (GtkIconView   *icon_view);
+static void     gtk_icon_view_real_select_cursor_item   (GtkIconView   *icon_view);
+static void     gtk_icon_view_real_toggle_cursor_item   (GtkIconView   *icon_view);
+static gboolean gtk_icon_view_real_activate_cursor_item (GtkIconView   *icon_view);
 
 /* Internal functions */
 static void       gtk_icon_view_adjustment_changed          (GtkAdjustment   *adjustment,
@@ -294,6 +296,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   klass->unselect_all = gtk_icon_view_real_unselect_all;
   klass->select_cursor_item = gtk_icon_view_real_select_cursor_item;
   klass->toggle_cursor_item = gtk_icon_view_real_toggle_cursor_item;
+  klass->activate_cursor_item = gtk_icon_view_real_activate_cursor_item;  
   klass->move_cursor = gtk_icon_view_real_move_cursor;
   
   /* Properties */
@@ -412,7 +415,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
-  icon_view_signals[SELECT_CURSOR_ITEM] =
+  icon_view_signals[TOGGLE_CURSOR_ITEM] =
     g_signal_new ("toggle_cursor_item",
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -421,6 +424,15 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  icon_view_signals[ACTIVATE_CURSOR_ITEM] =
+    g_signal_new ("activate_cursor_item",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkIconViewClass, activate_cursor_item),
+		  NULL, NULL,
+		  _gtk_marshal_BOOLEAN__VOID,
+		  G_TYPE_BOOLEAN, 0);
+  
   icon_view_signals[MOVE_CURSOR] =
     g_signal_new ("move_cursor",
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -437,6 +449,10 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "unselect_all", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_space, 0, "select_cursor_item", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK, "toggle_cursor_item", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0, "activate_cursor_item", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0, "activate_cursor_item", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0, "activate_cursor_item", 0);
 
   gtk_icon_view_add_move_binding (binding_set, GDK_Up, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
@@ -1306,6 +1322,23 @@ gtk_icon_view_real_select_cursor_item (GtkIconView *icon_view)
   
   if (icon_view->priv->cursor_item != NULL)
     gtk_icon_view_select_item (icon_view, icon_view->priv->cursor_item);
+}
+
+static gboolean
+gtk_icon_view_real_activate_cursor_item (GtkIconView *icon_view)
+{
+  GtkTreePath *path;
+  
+  if (!icon_view->priv->cursor_item)
+    return FALSE;
+
+  path = gtk_tree_path_new_from_indices (icon_view->priv->cursor_item->index, -1);
+  
+  gtk_icon_view_item_activated (icon_view, path);
+
+  gtk_tree_path_free (path);
+
+  return TRUE;
 }
 
 static void

@@ -1,3 +1,12 @@
+2004-07-05  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkiconview.c: (gtk_icon_view_class_init),
+	(gtk_icon_view_real_select_cursor_item),
+	(gtk_icon_view_real_activate_cursor_item):
+	* gtk/gtkiconview.h:
+	Add an "activate_cursor_item" action signal
+	and bind it to the return key.
+	
 2004-07-04  Anders Carlsson  <andersca@gnome.org>
 
 	* demos/gtk-demo/Makefile.am:
