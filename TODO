@@ -182,6 +182,23 @@ TODO AFTER GTK 1.0
     appearance on exposes. But this would require using another
     window to get the origins.
 
+  - In word wrap mode, break:
+
+aaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+as:
+                       | Maximum column
+aaaaaaaaaaa bbbbbbbbbbb|
+bbbbbbbbbbbbbbbbbbbbbbb|
+bbbbbbbbb              |
+
+Instead of:
+                       | 
+aaaaaaaaaaa            |
+bbbbbbbbbbbbbbbbbbbbbbb|
+bbbbbbbbbbbbbbbbbbbb   |
+
+
  ? Allow moving the separator for paned widgets by dragging 
    it directly instead of using the handle. 
 
