@@ -711,9 +711,10 @@ gtk_rc_parse_string (const gchar *rc_string)
   rc_file->is_string = TRUE;
   rc_file->name = g_strdup (rc_string);
   rc_file->canonical_name = NULL;
+  rc_file->directory = NULL;
   rc_file->mtime = 0;
   rc_file->reload = TRUE;
-
+  
   global_rc_files = g_slist_append (global_rc_files, rc_file);
 
   for (tmp_list = rc_contexts; tmp_list; tmp_list = tmp_list->next)
@@ -742,6 +743,7 @@ add_to_rc_file_list (GSList     **rc_file_list,
   rc_file->is_string = FALSE;
   rc_file->name = g_strdup (filename);
   rc_file->canonical_name = NULL;
+  rc_file->directory = NULL;
   rc_file->mtime = 0;
   rc_file->reload = reload;
   

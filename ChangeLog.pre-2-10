@@ -1,3 +1,8 @@
+Sun Aug 24 17:00:03 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c: Fix some missing initializations of
+	rc_file->directory.
+
 2003-08-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.[ch]: 
