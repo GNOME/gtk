@@ -2946,7 +2946,7 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
     return;
 
   if (size < (gint64)1024)
-    str = g_strdup_printf (_("%d bytes"), (gint)size);
+    str = g_strdup_printf (ngettext ("%d byte", "%d bytes", (gint)size), (gint)size);
   else if (size < (gint64)1024*1024)
     str = g_strdup_printf (_("%.1f K"), size / (1024.));
   else if (size < (gint64)1024*1024*1024)

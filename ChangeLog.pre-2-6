@@ -1,3 +1,9 @@
+2003-12-31  Christian Neumair  <chris@gnome-de.org>
+
+	* gdk-pixbuf/gdk-pixdata.c: (gdk_pixbuf_from_pixdata):
+	* gtk/gtkfilechooserdefault.c: (list_size_data_func): Use ngettext for
+	plurals (#123847).
+
 Wed Dec 31 02:05:39 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.c (gtk_action_group_add_actions_full): 
