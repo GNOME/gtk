@@ -1,4 +1,11 @@
-Thu Nov 20 15:11:18 2003  Jonathan Blandford  <jrb@redhat.com>
+Sat Nov 29 00:55:28 2003  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_new_column_width): 
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_realize_button):
+	Patch from <chinen@jp.ibm.com> to handle RTL support for column
+	resizers.
+
+u Nov 20 15:11:18 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreedatalist.c (gtk_tree_data_list_compare_func): Patch
 	from David Hampton to fix sorting on booleans.
