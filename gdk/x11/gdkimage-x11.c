@@ -183,7 +183,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint width, gint height)
       xvisual = ((GdkVisualPrivate*) visual)->xvisual;
       private->ximage = XCreateImage (GDK_SCREEN_XDISPLAY (private->screen),
 				      xvisual, 1, XYBitmap,
-				      0, 0, width, height, 8, 0);
+				      0, NULL, width, height, 8, 0);
     }
   
   private->ximage->data = data;
@@ -318,7 +318,7 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
 		}
 
 	      x_shm_info->readOnly = False;
-	      x_shm_info->shmaddr = shmat (x_shm_info->shmid, 0, 0);
+	      x_shm_info->shmaddr = shmat (x_shm_info->shmid, NULL, 0);
 	      private->ximage->data = x_shm_info->shmaddr;
 
 	      if (x_shm_info->shmaddr == (char*) -1)
@@ -350,7 +350,7 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
 	       * we die in XShmAttach. In theory, a signal handler
 	       * could be set up.
 	       */
-	      shmctl (x_shm_info->shmid, IPC_RMID, 0);		      
+	      shmctl (x_shm_info->shmid, IPC_RMID, NULL);		      
 
 	      if (image)
 		image_list = g_list_prepend (image_list, image);
@@ -361,7 +361,7 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
 	  break;
 	case GDK_IMAGE_NORMAL:
 	  private->ximage = XCreateImage (screen_x11->xdisplay, xvisual, depth,
-					  ZPixmap, 0, 0, width, height, 32, 0);
+					  ZPixmap, 0, NULL, width, height, 32, 0);
 
 	  /* Use malloc, not g_malloc here, because X will call free()
 	   * on this data
@@ -402,7 +402,7 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
       if (x_shm_info->shmaddr != (char *)-1)
 	shmdt (x_shm_info->shmaddr);
       if (x_shm_info->shmid != -1) 
-	shmctl (x_shm_info->shmid, IPC_RMID, 0);
+	shmctl (x_shm_info->shmid, IPC_RMID, NULL);
       
       g_free (x_shm_info);
       private->x_shm_info = NULL;

@@ -163,7 +163,7 @@ void calendar_set_flags( CalendarData *calendar )
 	options=options + (1<<i);
       }
   if (calendar->window)
-    gtk_calendar_display_options (GTK_CALENDAR (calendar->window), options);
+    gtk_calendar_set_display_options (GTK_CALENDAR (calendar->window), options);
 }
 
 void calendar_toggle_flag( GtkWidget    *toggle,
@@ -234,7 +234,7 @@ void calendar_select_font( GtkWidget    *button,
 
 }
 
-void create_calendar()
+void create_calendar(void)
 {
   GtkWidget *window;
   GtkWidget *vbox, *vbox2, *vbox3;

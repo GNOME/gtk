@@ -189,7 +189,7 @@ gtk_curve_init (GtkCurve *curve)
   curve->grab_point = -1;
 
   curve->num_points = 0;
-  curve->point = 0;
+  curve->point = NULL;
 
   curve->num_ctlpoints = 0;
   curve->ctlpoint = NULL;

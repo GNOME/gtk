@@ -386,7 +386,7 @@ parse_chars (gchar     *text,
 
 /* While not as cool as c-mode, this will do as a quick attempt at highlighting */
 static void
-fontify ()
+fontify (void)
 {
   GtkTextIter start_iter, next_iter, tmp_iter;
   gint state;

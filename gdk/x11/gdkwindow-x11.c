@@ -2262,7 +2262,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (modal, window,
 			     gdk_atom_intern ("_NET_WM_STATE_MODAL", FALSE), 
-			     0);
+			     NULL);
 }
 
 /**
@@ -2298,7 +2298,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_taskbar, window,
 			     gdk_atom_intern ("_NET_WM_STATE_SKIP_TASKBAR", FALSE), 
-			     0);
+			     NULL);
 }
 
 /**
@@ -2335,7 +2335,7 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_pager, window,
 			     gdk_atom_intern ("_NET_WM_STATE_SKIP_PAGER", FALSE), 
-			     0);
+			     NULL);
 }
 
 /**
@@ -4064,7 +4064,7 @@ gdk_window_stick (GdkWindow *window)
       /* Request stick during viewport scroll */
       gdk_wmspec_change_state (TRUE, window,
 			       gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE),
-			       0);
+			       NULL);
 
       /* Request desktop 0xFFFFFFFF */
       xev.xclient.type = ClientMessage;
@@ -4124,7 +4124,7 @@ gdk_window_unstick (GdkWindow *window)
       /* Request unstick from viewport */
       gdk_wmspec_change_state (FALSE, window,
 			       gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE),
-			       0);
+			       NULL);
 
       /* Get current desktop, then set it; this is a race, but not
        * one that matters much in practice.

@@ -109,7 +109,7 @@ gdk_set_locale (void)
 }
 
 static GdkDisplay *
-find_a_display ()
+find_a_display (void)
 {
   GdkDisplay *display = gdk_display_get_default ();
 

@@ -335,7 +335,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   gtk_widget_show (inputd->axis_listbox);
 
-  inputd->axis_list = 0;
+  inputd->axis_list = NULL;
 
   /* Keys listbox */
 
@@ -351,7 +351,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   gtk_widget_show (inputd->keys_listbox);
 
-  inputd->keys_list = 0;
+  inputd->keys_list = NULL;
 
   inputd->save_button = gtk_button_new_from_stock (GTK_STOCK_SAVE);
   GTK_WIDGET_SET_FLAGS (inputd->save_button, GTK_CAN_DEFAULT);

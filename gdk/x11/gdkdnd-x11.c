@@ -853,7 +853,7 @@ motif_find_drag_window (GdkDisplay *display,
 		XCreateWindow (persistant_xdisplay, 
 			       RootWindow (persistant_xdisplay, 0),
 			      -100, -100, 10, 10, 0, 0,
-			      InputOnly, CopyFromParent,
+			      InputOnly, (Visual *)CopyFromParent,
 			      (CWOverrideRedirect | CWEventMask), &attr);
 	      
 	      GDK_NOTE (DND,

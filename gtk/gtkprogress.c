@@ -713,7 +713,7 @@ gtk_progress_set_format_string (GtkProgress *progress,
 gchar *
 gtk_progress_get_current_text (GtkProgress *progress)
 {
-  g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
+  g_return_val_if_fail (GTK_IS_PROGRESS (progress), NULL);
 
   if (!progress->adjustment)
     gtk_progress_set_adjustment (progress, NULL);
@@ -726,7 +726,7 @@ gchar *
 gtk_progress_get_text_from_value (GtkProgress *progress,
 				  gdouble      value)
 {
-  g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
+  g_return_val_if_fail (GTK_IS_PROGRESS (progress), NULL);
 
   if (!progress->adjustment)
     gtk_progress_set_adjustment (progress, NULL);

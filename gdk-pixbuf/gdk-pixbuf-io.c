@@ -81,7 +81,7 @@ static GSList *file_formats = NULL;
 static void gdk_pixbuf_io_init ();
 
 static GSList *
-get_file_formats ()
+get_file_formats (void)
 {
 	if (file_formats == NULL)
 		gdk_pixbuf_io_init ();
@@ -236,7 +236,7 @@ gdk_pixbuf_get_module_file (void)
 }
 
 static void 
-gdk_pixbuf_io_init ()
+gdk_pixbuf_io_init (void)
 {
 	GIOChannel *channel;
 	gchar *line_buf;
@@ -334,7 +334,7 @@ gdk_pixbuf_io_init ()
 					module->info->mime_types =
 						g_realloc (module->info->mime_types, (n + 1) * sizeof (gchar*));
 					module->info->mime_types[n - 1] = g_strdup (tmp_buf->str);
-					module->info->mime_types[n] = 0;
+					module->info->mime_types[n] = NULL;
 					n++;
 				}
 			}
@@ -347,7 +347,7 @@ gdk_pixbuf_io_init ()
 					module->info->extensions =
 						g_realloc (module->info->extensions, (n + 1) * sizeof (gchar*));
 					module->info->extensions[n - 1] = g_strdup (tmp_buf->str);
-					module->info->extensions[n] = 0;
+					module->info->extensions[n] = NULL;
 					n++;
 				}
 			}
@@ -1952,7 +1952,7 @@ gdk_pixbuf_format_set_disabled (GdkPixbufFormat *format,
 gchar*
 gdk_pixbuf_format_get_license (GdkPixbufFormat *format)
 {
-	g_return_val_if_fail (format != NULL, FALSE);
+	g_return_val_if_fail (format != NULL, NULL);
 
 	return g_strdup (format->license);
 }

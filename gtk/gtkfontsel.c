@@ -577,7 +577,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 }
 
 GtkWidget *
-gtk_font_selection_new ()
+gtk_font_selection_new (void)
 {
   GtkFontSelection *fontsel;
   
@@ -644,7 +644,7 @@ set_cursor_to_iter (GtkTreeView *view,
   GtkTreeModel *model = gtk_tree_view_get_model (view);
   GtkTreePath *path = gtk_tree_model_get_path (model, iter);
   
-  gtk_tree_view_set_cursor (view, path, 0, FALSE);
+  gtk_tree_view_set_cursor (view, path, NULL, FALSE);
 
   gtk_tree_path_free (path);
 }

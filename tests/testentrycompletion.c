@@ -217,7 +217,7 @@ animation_timer (GtkEntryCompletion *completion)
 	{
 	  g_print ("readding model!\n");
 	  
-	  gtk_entry_completion_set_model (completion, old_store);
+	  gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(old_store));
 	  g_object_unref (old_store);
 	  old_store = NULL;
 	}
@@ -342,7 +342,7 @@ main (int argc, char *argv[])
 
   gtk_entry_completion_insert_action_text (completion, 100, "action!");
   gtk_entry_completion_insert_action_text (completion, 101, "'nother action!");
-  g_signal_connect (completion, "action_activated", G_CALLBACK (activated_cb), 0);
+  g_signal_connect (completion, "action_activated", G_CALLBACK (activated_cb), NULL);
 
   /* Create our third entry */
   entry = gtk_entry_new ();

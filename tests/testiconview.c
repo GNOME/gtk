@@ -201,7 +201,7 @@ do_popup_menu (GtkWidget      *icon_list,
   data = g_new0 (ItemData, 1);
   data->icon_list = GTK_ICON_VIEW (icon_list);
   data->path = path;
-  g_object_set_data_full (G_OBJECT (menu), "item-path", data, free_item_data);
+  g_object_set_data_full (G_OBJECT (menu), "item-path", data, (GDestroyNotify)free_item_data);
 
   menuitem = gtk_menu_item_new_with_label ("Activate");
   gtk_widget_show (menuitem);

@@ -266,7 +266,7 @@ correct_libdir_prefix (gchar **path)
 
 
 static void
-gtk_im_module_init ()
+gtk_im_module_init (void)
 {
   GString *line_buf = g_string_new (NULL);
   GString *tmp_buf = g_string_new (NULL);

@@ -30,6 +30,8 @@ gtk_about_dialog_get_translator_credits
 gtk_about_dialog_set_translator_credits
 gtk_about_dialog_get_logo
 gtk_about_dialog_set_logo
+gtk_about_dialog_get_logo_icon_name
+gtk_about_dialog_set_logo_icon_name
 GtkAboutDialogActivateLinkFunc
 gtk_about_dialog_set_email_hook
 gtk_about_dialog_set_url_hook
@@ -5113,6 +5115,8 @@ gtk_drag_source_unset
 gtk_drag_source_set_target_list
 gtk_drag_source_get_target_list
 gtk_drag_source_add_text_targets
+gtk_drag_source_add_image_targets
+gtk_drag_source_add_uri_targets
 </SECTION>
 
 

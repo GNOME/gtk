@@ -230,7 +230,7 @@ row_inserted_marshal (GClosure          *closure,
 
   void (* row_inserted_callback) (GtkTreeModel *tree_model,
                                   GtkTreePath *path,
-                                  GtkTreeIter *iter) = 0;
+                                  GtkTreeIter *iter) = NULL;
             
   GObject *model = g_value_get_object (param_values + 0);
   GtkTreePath *path = (GtkTreePath *)g_value_get_boxed (param_values + 1);
@@ -261,7 +261,7 @@ row_deleted_marshal (GClosure          *closure,
 {
   GtkTreeModelIface *iface;
   void (* row_deleted_callback) (GtkTreeModel *tree_model,
-                                 GtkTreePath  *path) = 0;                                 
+                                 GtkTreePath  *path) = NULL;                                 
   GObject *model = g_value_get_object (param_values + 0);
   GtkTreePath *path = (GtkTreePath *)g_value_get_boxed (param_values + 1);
  

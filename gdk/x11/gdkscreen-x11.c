@@ -61,7 +61,7 @@ static gpointer parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
-_gdk_screen_x11_get_type ()
+_gdk_screen_x11_get_type (void)
 {
   static GType object_type = 0;
 

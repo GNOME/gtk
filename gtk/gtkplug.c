@@ -79,7 +79,7 @@ enum {
 static guint plug_signals[LAST_SIGNAL] = { 0 };
 
 GType
-gtk_plug_get_type ()
+gtk_plug_get_type (void)
 {
   static GType plug_type = 0;
 

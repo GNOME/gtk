@@ -44,7 +44,7 @@ create_color_pixbuf (const char *color)
 }
 
 static GtkWidget *
-create_combo_box_grid_demo ()
+create_combo_box_grid_demo (void)
 {
         GtkWidget *combo;
         GtkTreeIter iter;
@@ -118,7 +118,7 @@ create_combo_box_grid_demo ()
 
 /* blaat */
 static GtkTreeModel *
-create_tree_blaat ()
+create_tree_blaat (void)
 {
         GdkPixbuf *pixbuf;
         GtkWidget *cellview;
@@ -189,7 +189,7 @@ create_tree_blaat ()
 }
 
 static GtkTreeModel *
-create_list_blaat ()
+create_list_blaat (void)
 {
         GdkPixbuf *pixbuf;
         GtkWidget *cellview;
@@ -253,7 +253,7 @@ create_list_blaat ()
 
 /* blaat */
 static GtkTreeModel *
-create_phylogenetic_tree ()
+create_phylogenetic_tree (void)
 {
         GtkTreeIter iter, iter2, iter3;
         GtkTreeStore *store;
@@ -506,7 +506,7 @@ create_phylogenetic_tree ()
 
 /* blaat */
 static GtkTreeModel *
-create_capital_tree ()
+create_capital_tree (void)
 {
         GtkTreeIter iter, iter2;
         GtkTreeStore *store;

@@ -1,5 +1,7 @@
 2004-10-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* *: Clean up many sparse warnings.  (#156698, Kjartan Maraas)
+	
 	* gtk/gtktreeview.c (gtk_tree_view_remove_widget): Disconnect
 	from the remove-widget signal after removing the signal.
 

@@ -353,13 +353,13 @@ gdk_exit (gint errorcode)
 }
 
 void
-gdk_threads_enter ()
+gdk_threads_enter (void)
 {
   GDK_THREADS_ENTER ();
 }
 
 void
-gdk_threads_leave ()
+gdk_threads_leave (void)
 {
   GDK_THREADS_LEAVE ();
 }
@@ -389,7 +389,7 @@ gdk_threads_impl_unlock (void)
  * GTK+; to be safe, call it before gtk_init().
  **/
 void
-gdk_threads_init ()
+gdk_threads_init (void)
 {
   if (!g_thread_supported ())
     g_error ("g_thread_init() must be called before gdk_threads_init()");

@@ -9,7 +9,7 @@ GArray *contents;
 static char next_value = 'A';
 
 static void
-test_init ()
+test_init (void)
 {
   if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
 		   G_FILE_TEST_EXISTS))
@@ -20,7 +20,7 @@ test_init ()
 }
 
 static void
-log (const char *fmt,
+combochange_log (const char *fmt,
      ...)
 {
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
@@ -120,7 +120,7 @@ on_insert (void)
 
   g_array_insert_val (contents, insert_pos, new_value);
 
-  log ("Inserted '%c' at position %d", new_value[0], insert_pos);
+  combochange_log ("Inserted '%c' at position %d", new_value[0], insert_pos);
 }
 
 static void
@@ -141,7 +141,7 @@ on_delete (void)
 
   old_val = g_array_index (contents, char, delete_pos);
   g_array_remove_index (contents, delete_pos);
-  log ("Deleted '%c' from position %d", old_val, delete_pos);
+  combochange_log ("Deleted '%c' from position %d", old_val, delete_pos);
 }
 
 static void
@@ -175,7 +175,7 @@ on_reorder (void)
   g_array_free (contents, TRUE);
   contents = new_contents;
 
-  log ("Reordered array");
+  combochange_log ("Reordered array");
     
   g_free (shuffle_array);
 }

@@ -60,7 +60,7 @@ blink_cb (gpointer data)
   GtkWidget *widget = data;
 
   gtk_widget_show (widget);
-  g_object_set_data (G_OBJECT (widget), "blink", GPOINTER_TO_UINT (0));
+  g_object_set_data (G_OBJECT (widget), "blink", NULL);
 
   return FALSE;
 }

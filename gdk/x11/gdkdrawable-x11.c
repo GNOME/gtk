@@ -853,7 +853,7 @@ static GdkDrawable * get_impl_drawable (GdkDrawable *drawable)
   else
     {
       g_warning (G_STRLOC " drawable is not a pixmap or window");
-      return None;
+      return (GdkDrawable *)None;
     }
   return impl;
 }

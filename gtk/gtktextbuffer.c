@@ -3453,7 +3453,7 @@ cut_or_copy (GtkTextBuffer *buffer,
 					contents))
 	g_object_unref (contents);
       else
-	gtk_clipboard_set_can_store (clipboard, targets, G_N_ELEMENTS (targets) -1);
+	gtk_clipboard_set_can_store (clipboard, (GtkTargetEntry *)targets, G_N_ELEMENTS (targets) -1);
 				     
       if (delete_region_after)
         {

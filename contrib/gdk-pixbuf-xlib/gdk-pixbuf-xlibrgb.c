@@ -821,7 +821,7 @@ xlib_rgb_init_with_depth (Display *display, Screen *screen, int prefDepth)
 
       image_info->stage_buf = NULL;
 
-      image_info->own_gc = 0;
+      image_info->own_gc = NULL;
       
       image_info->red_shift = 0;
       image_info->red_prec = 0;
@@ -908,7 +908,7 @@ xlib_rgb_init_with_depth (Display *display, Screen *screen, int prefDepth)
 					 image_info->x_visual_info->visual,
 					 1,
 					 XYBitmap,
-					 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT,
+					 0, NULL, IMAGE_WIDTH, IMAGE_HEIGHT,
 					 8,
 					 0);
 	  static_image[i]->data = malloc(IMAGE_WIDTH * IMAGE_HEIGHT >> 3);
@@ -920,7 +920,7 @@ xlib_rgb_init_with_depth (Display *display, Screen *screen, int prefDepth)
 					 image_info->x_visual_info->visual,
 					 (unsigned int)image_info->x_visual_info->depth,
 					 ZPixmap,
-					 0, 0,
+					 0, NULL,
 					 IMAGE_WIDTH,
 					 IMAGE_HEIGHT,
 					 32, 0);
@@ -3651,7 +3651,7 @@ xlib_rgb_get_visual (void)
   if (image_info)
     return image_info->x_visual_info->visual;
   else
-    return 0;
+    return NULL;
 }
 
 /**
@@ -3668,7 +3668,7 @@ xlib_rgb_get_visual_info (void)
   if (image_info)
     return image_info->x_visual_info;
   else
-    return 0;
+    return NULL;
 }
 
 /**

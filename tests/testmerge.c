@@ -121,7 +121,7 @@ static void
 toggle_dynamic (GtkWidget    *button, 
 		GtkUIManager *merge)
 {
-  g_timeout_add (2000, delayed_toggle_dynamic, merge);
+  g_timeout_add (2000, (GSourceFunc)delayed_toggle_dynamic, merge);
 }
 
 static void
@@ -557,8 +557,8 @@ connect_proxy (GtkUIManager *merge,
 	  g_object_set_data_full (G_OBJECT (proxy), "action-status", 
 				  data, action_status_destroy);
 	  
-	  g_signal_connect (proxy, "select",  G_CALLBACK (set_tip), 0);
-	  g_signal_connect (proxy, "deselect", G_CALLBACK (unset_tip), 0);
+	  g_signal_connect (proxy, "select",  G_CALLBACK (set_tip), NULL);
+	  g_signal_connect (proxy, "deselect", G_CALLBACK (unset_tip), NULL);
 	}
     }
 }

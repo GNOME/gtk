@@ -1042,7 +1042,7 @@ _gdk_event_button_generate (GdkDisplay *display,
       display->button_click_time[1] = 0;
       display->button_click_time[0] = 0;
       display->button_window[1] = NULL;
-      display->button_window[0] = 0;
+      display->button_window[0] = NULL;
       display->button_number[1] = -1;
       display->button_number[0] = -1;
       display->button_x[0] = display->button_x[1] = 0;

@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include <string.h>
 #include "gtkalias.h"
 #include "gtktreeselection.h"
 #include "gtktreeprivate.h"

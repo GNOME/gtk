@@ -43,7 +43,7 @@ quit_cb (gpointer        callback_data,
 
 static GtkItemFactoryEntry menu_items[] =
 {
-  { "/_File",            NULL,         0,                     0, "<Branch>" },
+  { "/_File",            NULL,         NULL,                  0, "<Branch>" },
   { "/File/_Quit",       "<control>Q", quit_cb,               0 },
 };
 

@@ -355,7 +355,7 @@ static struct {
   const guchar *mask;
   GdkCursor    *cursor;
 } drag_cursors[] = {
-  { GDK_ACTION_DEFAULT, 0 },
+  { GDK_ACTION_DEFAULT, NULL },
   { GDK_ACTION_ASK,   action_ask_bits,  action_ask_mask_bits,  NULL },
   { GDK_ACTION_COPY,  action_copy_bits, action_copy_mask_bits, NULL },
   { GDK_ACTION_MOVE,  action_move_bits, action_move_mask_bits, NULL },

@@ -411,7 +411,7 @@ gtk_ui_manager_finalize (GObject *object)
   
   g_node_traverse (self->private_data->root_node, 
 		   G_POST_ORDER, G_TRAVERSE_ALL, -1,
-		   (GNodeTraverseFunc)free_node, 0);
+		   (GNodeTraverseFunc)free_node, NULL);
   g_node_destroy (self->private_data->root_node);
   self->private_data->root_node = NULL;
   
@@ -2197,7 +2197,7 @@ update_node (GtkUIManager *self,
 		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
 		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
 		    g_signal_connect (info->proxy, "notify::visible",
-				      G_CALLBACK (update_smart_separators), 0);
+				      G_CALLBACK (update_smart_separators), NULL);
 		  }
 	      }
 	    else
@@ -2341,7 +2341,7 @@ update_node (GtkUIManager *self,
 	    {
 	      g_signal_handlers_disconnect_by_func (info->proxy,
 						    G_CALLBACK (update_smart_separators),
-						    0);  
+						    NULL);  
 	      gtk_action_disconnect_proxy (info->action, info->proxy);
 	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				    info->proxy);
@@ -2369,12 +2369,12 @@ update_node (GtkUIManager *self,
 	    {
 	      g_signal_handlers_disconnect_by_func (info->proxy,
 						    G_CALLBACK (update_smart_separators),
-						    0);
+						    NULL);
 	      gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
 	      gtk_action_connect_proxy (action, info->proxy);
 	    }
 	  g_signal_connect (info->proxy, "notify::visible",
-			    G_CALLBACK (update_smart_separators), 0);
+			    G_CALLBACK (update_smart_separators), NULL);
 	  if (in_popup) 
 	    {
 	      /* don't show accels in popups */
@@ -2392,7 +2392,7 @@ update_node (GtkUIManager *self,
 	    {
 	      g_signal_handlers_disconnect_by_func (info->proxy,
 						    G_CALLBACK (update_smart_separators),
-						    0);
+						    NULL);
 	      gtk_action_disconnect_proxy (info->action, info->proxy);
 	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				    info->proxy);
@@ -2428,11 +2428,11 @@ update_node (GtkUIManager *self,
 	    {
 	      g_signal_handlers_disconnect_by_func (info->proxy,
 						    G_CALLBACK (update_smart_separators),
-						    0);
+						    NULL);
 	      gtk_action_connect_proxy (action, info->proxy);
 	    }
 	  g_signal_connect (info->proxy, "notify::visible",
-			    G_CALLBACK (update_smart_separators), 0);
+			    G_CALLBACK (update_smart_separators), NULL);
 	  break;
 	case NODE_TYPE_SEPARATOR:
 	  if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLBAR ||

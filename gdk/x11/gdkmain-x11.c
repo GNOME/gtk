@@ -736,7 +736,7 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
  * gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.
  **/ 
 void
-gdk_x11_grab_server ()
+gdk_x11_grab_server (void)
 {
   gdk_x11_display_grab (gdk_display_get_default ());
 }
@@ -748,7 +748,7 @@ gdk_x11_grab_server ()
  * gdk_x11_grab_server(). 
  **/
 void
-gdk_x11_ungrab_server ()
+gdk_x11_ungrab_server (void)
 {
   gdk_x11_display_ungrab (gdk_display_get_default ());
 }

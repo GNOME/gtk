@@ -513,7 +513,7 @@ gtk_icon_theme_set_screen (GtkIconTheme *icon_theme,
  * with GdkPixbuf.
  */
 static gboolean
-pixbuf_supports_svg ()
+pixbuf_supports_svg (void)
 {
   GSList *formats = gdk_pixbuf_get_formats ();
   GSList *tmp_list;
@@ -1434,7 +1434,7 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
   
   GtkIconThemePrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), FALSE);
+  g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   
   priv = icon_theme->priv;
 
@@ -1544,7 +1544,7 @@ gtk_icon_theme_list_icons (GtkIconTheme *icon_theme,
 			  add_key_to_hash,
 			  icons);
 
-  list = 0;
+  list = NULL;
   
   g_hash_table_foreach (icons,
 			add_key_to_list,

@@ -556,7 +556,7 @@ source_drag_data_delete  (GtkWidget          *widget,
 }
   
 void
-test_init ()
+test_init (void)
 {
   if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
 		   G_FILE_TEST_EXISTS))

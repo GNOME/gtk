@@ -1354,7 +1354,7 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
       gchar *result;
       gsize length;
       
-      list = g_string_new (0);
+      list = g_string_new (NULL);
       for (i = 0; uris[i]; i++)
 	{
 	  g_string_append (list, uris[i]);

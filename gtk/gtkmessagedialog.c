@@ -393,7 +393,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
 {
   GtkWidget *widget;
   GtkDialog *dialog;
-  gchar* msg = 0;
+  gchar* msg = NULL;
   va_list args;
 
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);

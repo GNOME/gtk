@@ -65,8 +65,8 @@ struct _ButtonData
   GtkFilePath *path;
   GtkWidget *image;
   GtkWidget *label;
-  gint ignore_changes : 1;
-  gint file_is_hidden : 1;
+  guint ignore_changes : 1;
+  guint file_is_hidden : 1;
 };
 
 G_DEFINE_TYPE (GtkPathBar,

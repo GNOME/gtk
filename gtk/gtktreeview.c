@@ -3700,7 +3700,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      if ((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT)
 		{
 		  gint x, y;
-		  gdk_window_get_pointer (tree_view->priv->bin_window, &x, &y, 0);
+		  gdk_window_get_pointer (tree_view->priv->bin_window, &x, &y, NULL);
 		  gtk_tree_view_draw_arrow (GTK_TREE_VIEW (widget),
                                             tree,
 					    node,

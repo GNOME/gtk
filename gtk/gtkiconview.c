@@ -5433,7 +5433,7 @@ gtk_icon_view_accessible_ref_selection (AtkSelection *selection,
 
   widget = GTK_ACCESSIBLE (selection)->widget;
   if (widget == NULL)
-    return FALSE;
+    return NULL;
 
   icon_view = GTK_ICON_VIEW (widget);
 

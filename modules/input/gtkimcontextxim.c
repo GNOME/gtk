@@ -1379,7 +1379,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
       const char *name2 = NULL;
       XVaNestedList list2 = NULL;
       XIMStyle im_style = 0;
-      XIC xic = 0;
+      XIC xic = NULL;
 
       if (context_xim->use_preedit &&
 	  (context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)

@@ -45,7 +45,7 @@ gtk_signal_newv (const gchar         *name,
   
   g_return_val_if_fail (n_params < SIGNAL_MAX_PARAMS, 0);
   
-  closure = function_offset ? g_signal_type_cclosure_new (object_type, function_offset) : 0;
+  closure = function_offset ? g_signal_type_cclosure_new (object_type, function_offset) : NULL;
   
   return g_signal_newv (name, object_type, (GSignalFlags)signal_flags, closure,
 			NULL, NULL, marshaller, return_val, n_params, params);

@@ -4,6 +4,8 @@
 
 2004-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Additions.
+
 	* gdk-pixbuf/tmpl/scaling.sgml: Document GdkPixbufRotation. 
 
 	* gtk/gtk-update-icon-cache.1: Regenerated.

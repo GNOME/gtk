@@ -1499,42 +1499,42 @@ view_init_menus (View *view)
 
 static GtkItemFactoryEntry menu_items[] =
 {
-  { "/_File",            NULL,         0,           0, "<Branch>" },
+  { "/_File",            NULL,         NULL,        0, "<Branch>" },
   { "/File/_New",        "<control>N", do_new,      0, NULL },
   { "/File/New _View",   NULL,         do_new_view, 0, NULL },
   { "/File/_Open",       "<control>O", do_open,     0, NULL },
   { "/File/_Save",       "<control>S", do_save,     0, NULL },
   { "/File/Save _As...", NULL,         do_save_as,  0, NULL },
-  { "/File/sep1",        NULL,         0,           0, "<Separator>" },
+  { "/File/sep1",        NULL,         NULL,        0, "<Separator>" },
   { "/File/_Close",     "<control>W" , do_close,    0, NULL },
   { "/File/E_xit",      "<control>Q" , do_exit,     0, NULL },
 
   { "/_Edit", NULL, 0, 0, "<Branch>" },
   { "/Edit/Find...", NULL, do_search, 0, NULL },
 
-  { "/_Settings",   	  NULL,         0,                0, "<Branch>" },
+  { "/_Settings",   	  NULL,         NULL,             0, "<Branch>" },
   { "/Settings/Wrap _Off",   NULL,      do_wrap_changed,  GTK_WRAP_NONE, "<RadioItem>" },
   { "/Settings/Wrap _Words", NULL,      do_wrap_changed,  GTK_WRAP_WORD, "/Settings/Wrap Off" },
   { "/Settings/Wrap _Chars", NULL,      do_wrap_changed,  GTK_WRAP_CHAR, "/Settings/Wrap Off" },
-  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/sep1",        NULL,      NULL,             0, "<Separator>" },
   { "/Settings/Editable", NULL,      do_editable_changed,  TRUE, "<RadioItem>" },
   { "/Settings/Not editable",    NULL,      do_editable_changed,  FALSE, "/Settings/Editable" },
-  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/sep1",        NULL,      NULL,             0, "<Separator>" },
 
   { "/Settings/Cursor visible",    NULL,      do_cursor_visible_changed,  TRUE, "<RadioItem>" },
   { "/Settings/Cursor not visible", NULL,      do_cursor_visible_changed,  FALSE, "/Settings/Cursor visible" },
-  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/sep1",        NULL,      NULL,          0, "<Separator>" },
   
   { "/Settings/Left-to-Right", NULL,    do_direction_changed,  GTK_TEXT_DIR_LTR, "<RadioItem>" },
   { "/Settings/Right-to-Left", NULL,    do_direction_changed,  GTK_TEXT_DIR_RTL, "/Settings/Left-to-Right" },
 
-  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/sep1",        NULL,      NULL,                0, "<Separator>" },
   { "/Settings/Sane spacing", NULL,    do_spacing_changed,  FALSE, "<RadioItem>" },
   { "/Settings/Funky spacing", NULL,    do_spacing_changed,  TRUE, "/Settings/Sane spacing" },
-  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/sep1",        NULL,      NULL,                0, "<Separator>" },
   { "/Settings/Don't cycle color tags", NULL,    do_color_cycle_changed,  FALSE, "<RadioItem>" },
   { "/Settings/Cycle colors", NULL,    do_color_cycle_changed,  TRUE, "/Settings/Don't cycle color tags" },
-  { "/_Attributes",   	  NULL,         0,                0, "<Branch>" },
+  { "/_Attributes",   	  NULL,         NULL,                0, "<Branch>" },
   { "/Attributes/Editable",   	  NULL,         do_apply_editable, TRUE, NULL },
   { "/Attributes/Not editable",   	  NULL,         do_apply_editable, FALSE, NULL },
   { "/Attributes/Invisible",   	  NULL,         do_apply_invisible, FALSE, NULL },
@@ -1545,7 +1545,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Attributes/No colors",   	          NULL,         do_apply_colors, FALSE, NULL },
   { "/Attributes/Remove all tags",       NULL, do_remove_tags, 0, NULL },
   { "/Attributes/Properties",       NULL, do_properties, 0, NULL },
-  { "/_Test",   	 NULL,         0,           0, "<Branch>" },
+  { "/_Test",   	 NULL,         NULL,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
   { "/Test/_Insert and scroll", NULL,         do_insert_and_scroll,  0, NULL },
   { "/Test/_Add fixed children", NULL,         do_add_children,  0, NULL },
@@ -2542,7 +2542,7 @@ view_add_example_widgets (View *view)
 }
 
 void
-test_init ()
+test_init (void)
 {
   if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
 		   G_FILE_TEST_EXISTS))

@@ -917,7 +917,7 @@ broadcast_xmessage   (GdkDisplay   *display,
                      0,
                      CopyFromParent,
                      CopyFromParent,
-                     CopyFromParent,
+                     (Visual *)CopyFromParent,
                      CWOverrideRedirect | CWEventMask,
                      &attrs);
   }

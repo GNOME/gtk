@@ -3931,7 +3931,7 @@ dump_accels (gpointer             callback_data,
     
 static GtkItemFactoryEntry menu_items[] =
 {
-  { "/_File",                  NULL,         0,                     0, "<Branch>" },
+  { "/_File",                  NULL,         NULL,                  0, "<Branch>" },
   { "/File/tearoff1",          NULL,         gtk_ifactory_cb,       0, "<Tearoff>" },
   { "/File/_New",              NULL,         gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_NEW },
   { "/File/_Open",             NULL,         gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_OPEN },
@@ -7537,7 +7537,7 @@ create_flipping (GtkWidget *widget)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
 
       g_signal_connect (check_button, "toggled",
-			G_CALLBACK (flipping_toggled_cb), FALSE);
+			G_CALLBACK (flipping_toggled_cb), NULL);
 
       gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
       
@@ -12794,7 +12794,7 @@ create_main_window (void)
 }
 
 static void
-test_init ()
+test_init (void)
 {
   if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
 		   G_FILE_TEST_EXISTS))
