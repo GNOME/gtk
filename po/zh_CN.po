@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 11:34-0500\n"
+"POT-Creation-Date: 2005-03-04 06:24+0100\n"
 "PO-Revision-Date: 2005-01-14 23:13+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -195,7 +195,7 @@ msgstr "BMP 图像格式"
 msgid "Failure reading GIF: %s"
 msgstr "无法读入 GIF：%s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1435 gdk-pixbuf/io-gif.c:1596
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 文件缺少了某些数据(可能文件被截短了？)"
 
@@ -220,35 +220,39 @@ msgstr "遇到了错误的代码"
 msgid "Circular table entry in GIF file"
 msgstr "GIF 文件中的表项循环"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1423 gdk-pixbuf/io-gif.c:1469
-#: gdk-pixbuf/io-gif.c:1584
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "内存不足以载入 GIF 文件"
 
-#: gdk-pixbuf/io-gif.c:1088
+#: gdk-pixbuf/io-gif.c:947
+msgid "Not enough memory to composite a frame in GIF file"
+msgstr "内存不足以构建 GIF 文件中的一帧"
+
+#: gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF 图像已损坏(不正确的 LZW 压缩数据)"
 
-#: gdk-pixbuf/io-gif.c:1138
+#: gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
 msgstr "文件好像不是 GIF 文件"
 
-#: gdk-pixbuf/io-gif.c:1150
+#: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "不支持 %s 版本的 GIF 文件格式"
 
-#: gdk-pixbuf/io-gif.c:1259
+#: gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF 图像没有全局色彩表表，它其中的一帧也没有局部色彩表表。"
 
-#: gdk-pixbuf/io-gif.c:1491
+#: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 文件被截断或是不完整。"
 
-#: gdk-pixbuf/io-gif.c:1643
+#: gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
 msgstr "GIF 图像格式"
 
@@ -675,35 +679,39 @@ msgstr "XBM 图像格式"
 msgid "No XPM header found"
 msgstr "找不到 XPM 头"
 
-#: gdk-pixbuf/io-xpm.c:1237
+#: gdk-pixbuf/io-xpm.c:1238
+msgid "Invalid XPM header"
+msgstr "无效的 XBM 头"
+
+#: gdk-pixbuf/io-xpm.c:1246
 msgid "XPM file has image width <= 0"
 msgstr "XPM 文件图像宽度 <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1245
+#: gdk-pixbuf/io-xpm.c:1254
 msgid "XPM file has image height <= 0"
 msgstr "XPM 文件图像高度 <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1253
+#: gdk-pixbuf/io-xpm.c:1262
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM 每个像素占用的字节数目无效"
 
-#: gdk-pixbuf/io-xpm.c:1260
+#: gdk-pixbuf/io-xpm.c:1269
 msgid "XPM file has invalid number of colors"
 msgstr "XPM 文件图像颜色数目不正确"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+#: gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1290 gdk-pixbuf/io-xpm.c:1342
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "无法分配内存来载入 XPM 图像"
 
-#: gdk-pixbuf/io-xpm.c:1295
+#: gdk-pixbuf/io-xpm.c:1304
 msgid "Cannot read XPM colormap"
 msgstr "无法读入 XPM 色彩表"
 
-#: gdk-pixbuf/io-xpm.c:1524
+#: gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "载入 XPM 图像时写入临时文件失败"
 
-#: gdk-pixbuf/io-xpm.c:1559
+#: gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
 msgstr "XPM 图像格式"
 
