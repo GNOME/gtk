@@ -45,6 +45,8 @@ struct _GtkTreeItem
   GtkWidget *pixmaps_box;
   GtkWidget *plus_pix_widget, *minus_pix_widget;
 
+  GList *pixmaps;		/* pixmap node for this items color depth */
+
   guint expanded : 1;
 };
 

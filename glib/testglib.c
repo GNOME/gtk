@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
 #include <stdio.h>
 #include <string.h>
 #include "glib.h"
@@ -49,7 +50,7 @@ my_list_compare_one (gpointer a, gpointer b)
   gint one = *((gint*)a);
   gint two = *((gint*)b);
   return one-two;
-};
+}
 
 gint 
 my_list_compare_two (gpointer a, gpointer b)
@@ -57,7 +58,7 @@ my_list_compare_two (gpointer a, gpointer b)
   gint one = *((gint*)a);
   gint two = *((gint*)b);
   return two-one;
-};
+}
 
 /* void
 my_list_print (gpointer a, gpointer b)
@@ -84,6 +85,14 @@ my_traverse (gpointer key,
   char *ch = key;
   g_print ("%c ", *ch);
   return FALSE;
+}
+
+void
+print_compare (gchar *a, 
+	       gchar *b)
+{
+  g_print ("%s <=> %s : %d\n", a, b, g_strcasecmp(a,b));
+  g_print ("%s <=> %s : %d\n", b, a, g_strcasecmp(b,a));
 }
 
 int
@@ -385,6 +394,10 @@ main (int   argc,
   g_timer_destroy (timer);
 
   g_print ("ok\n");
+
+  g_print ("checking g_strcasecmp...\n");
+  print_compare ("SchloÅﬂ", "Schlo");
+  print_compare ("Åƒffchen", "Å÷fchen");
 
   /* g_debug (argv[0]); */
 
