@@ -208,13 +208,13 @@ gtk_arrow_set (GtkArrow      *arrow,
       if ((GtkArrowType) arrow->arrow_type != arrow_type)
         {
           arrow->arrow_type = arrow_type;
-          g_object_notify (G_OBJECT (arrow), "arrow_type");
+          g_object_notify (G_OBJECT (arrow), "arrow-type");
         }
 
       if ((GtkShadowType) arrow->shadow_type != shadow_type)
         {
           arrow->shadow_type = shadow_type;
-          g_object_notify (G_OBJECT (arrow), "shadow_type");
+          g_object_notify (G_OBJECT (arrow), "shadow-type");
         }
 
       g_object_thaw_notify (G_OBJECT (arrow));

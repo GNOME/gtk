@@ -1,3 +1,9 @@
+2005-03-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/*.c: 
+	* gdk/gdkdisplaymanager.c: 
+	Use canonical names for g_object_notify() as well. 
+
 2005-03-24  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in (GTK_EXTRA_CFLAGS): Include the -mms-bitfields flag

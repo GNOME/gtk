@@ -934,7 +934,7 @@ gtk_progress_bar_set_bar_style_internal (GtkProgressBar     *pbar,
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
-      g_object_notify (G_OBJECT (pbar), "bar_style");
+      g_object_notify (G_OBJECT (pbar), "bar-style");
     }
 }
 
@@ -952,7 +952,7 @@ gtk_progress_bar_set_discrete_blocks_internal (GtkProgressBar *pbar,
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
-      g_object_notify (G_OBJECT (pbar), "discrete_blocks");
+      g_object_notify (G_OBJECT (pbar), "discrete-blocks");
     }
 }
 
@@ -965,7 +965,7 @@ gtk_progress_bar_set_activity_step_internal (GtkProgressBar *pbar,
   if (pbar->activity_step != step)
     {
       pbar->activity_step = step;
-      g_object_notify (G_OBJECT (pbar), "activity_step");
+      g_object_notify (G_OBJECT (pbar), "activity-step");
     }
 }
 
@@ -979,7 +979,7 @@ gtk_progress_bar_set_activity_blocks_internal (GtkProgressBar *pbar,
   if (pbar->activity_blocks != blocks)
     {
       pbar->activity_blocks = blocks;
-      g_object_notify (G_OBJECT (pbar), "activity_blocks");
+      g_object_notify (G_OBJECT (pbar), "activity-blocks");
     }
 }
 
@@ -1076,7 +1076,7 @@ gtk_progress_bar_set_pulse_step   (GtkProgressBar *pbar,
   
   pbar->pulse_fraction = fraction;
 
-  g_object_notify (G_OBJECT (pbar), "pulse_step");
+  g_object_notify (G_OBJECT (pbar), "pulse-step");
 }
 
 void

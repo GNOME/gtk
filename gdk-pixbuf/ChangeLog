@@ -1,3 +1,8 @@
+2005-03-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-data.c (gdk_pixbuf_new_from_data): Use canonical
+	property names.
+
 2005-03-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf.c (gdk_pixbuf_class_init): Mark param spec strings

@@ -222,7 +222,7 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 	{
 	  guint toggle_spacing;
 	  gtk_widget_style_get (GTK_WIDGET (menu_item),
-				"toggle_spacing", &toggle_spacing,
+				"toggle-spacing", &toggle_spacing,
 				NULL);
 
 	  *requisition = image_requisition.width + toggle_spacing;
@@ -283,8 +283,8 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       guint horizontal_padding, toggle_spacing;
 
       gtk_widget_style_get (widget,
-			    "horizontal_padding", &horizontal_padding,
-			    "toggle_spacing", &toggle_spacing,
+			    "horizontal-padding", &horizontal_padding,
+			    "toggle-spacing", &toggle_spacing,
 			    NULL);
       
       /* Man this is lame hardcoding action, but I can't
@@ -492,7 +492,7 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
   gtk_widget_set_parent (image, GTK_WIDGET (image_menu_item));
   g_object_set (image, 
 		"visible", show_image (image_menu_item),
-		"no_show_all", TRUE,
+		"no-show-all", TRUE,
 		NULL);
 
   g_object_notify (G_OBJECT (image_menu_item), "image");

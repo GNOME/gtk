@@ -795,7 +795,7 @@ update_drag (GtkPaned *paned)
   if (is_rtl (paned))
     {
       gtk_widget_style_get (GTK_WIDGET (paned),
-			    "handle_size", &handle_size,
+			    "handle-size", &handle_size,
 			    NULL);
       
       size = GTK_WIDGET (paned)->allocation.width - pos - handle_size;
@@ -1110,7 +1110,7 @@ gtk_paned_set_position (GtkPaned *paned,
 
   g_object_freeze_notify (object);
   g_object_notify (object, "position");
-  g_object_notify (object, "position_set");
+  g_object_notify (object, "position-set");
   g_object_thaw_notify (object);
 
   gtk_widget_queue_resize (GTK_WIDGET (paned));
@@ -1211,9 +1211,9 @@ gtk_paned_compute_position (GtkPaned *paned,
   if (paned->child1_size != old_position)
     g_object_notify (G_OBJECT (paned), "position");
   if (paned->min_position != old_min_position)
-    g_object_notify (G_OBJECT (paned), "min_position");
+    g_object_notify (G_OBJECT (paned), "min-position");
   if (paned->max_position != old_max_position)
-    g_object_notify (G_OBJECT (paned), "max_position");
+    g_object_notify (G_OBJECT (paned), "max-position");
   g_object_thaw_notify (G_OBJECT (paned));
 
   paned->last_allocation = allocation;

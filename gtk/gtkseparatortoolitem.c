@@ -102,7 +102,7 @@ get_space_size (GtkToolItem *tool_item)
   if (GTK_IS_TOOLBAR (parent))
     {
       gtk_widget_style_get (parent,
-			    "space_size", &space_size,
+			    "space-size", &space_size,
 			    NULL);
     }
   

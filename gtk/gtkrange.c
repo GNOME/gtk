@@ -520,7 +520,7 @@ gtk_range_set_update_policy (GtkRange      *range,
   if (range->update_policy != policy)
     {
       range->update_policy = policy;
-      g_object_notify (G_OBJECT (range), "update_policy");
+      g_object_notify (G_OBJECT (range), "update-policy");
     }
 }
 
@@ -1783,12 +1783,12 @@ gtk_range_get_props (GtkRange  *range,
   gint tmp_arrow_displacement_x, tmp_arrow_displacement_y;
   
   gtk_widget_style_get (widget,
-                        "slider_width", &tmp_slider_width,
-                        "trough_border", &tmp_trough_border,
-                        "stepper_size", &tmp_stepper_size,
-                        "stepper_spacing", &tmp_stepper_spacing,
-			"arrow_displacement_x", &tmp_arrow_displacement_x,
-			"arrow_displacement_y", &tmp_arrow_displacement_y,
+                        "slider-width", &tmp_slider_width,
+                        "trough-border", &tmp_trough_border,
+                        "stepper-size", &tmp_stepper_size,
+                        "stepper-spacing", &tmp_stepper_spacing,
+			"arrow-displacement-x", &tmp_arrow_displacement_x,
+			"arrow-displacement-y", &tmp_arrow_displacement_y,
                         NULL);
   
   if (GTK_WIDGET_CAN_FOCUS (range))

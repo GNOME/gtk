@@ -222,7 +222,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 
   statusbar->has_resize_grip = TRUE;
 
-  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow_type", &shadow_type, NULL);
+  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type", &shadow_type, NULL);
   
   statusbar->frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), shadow_type);
@@ -429,7 +429,7 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
             gtk_statusbar_destroy_window (statusbar);
         }
       
-      g_object_notify (G_OBJECT (statusbar), "has_resize_grip");
+      g_object_notify (G_OBJECT (statusbar), "has-resize-grip");
     }
 }
 
@@ -759,7 +759,7 @@ gtk_statusbar_size_request   (GtkWidget      *widget,
   
   statusbar = GTK_STATUSBAR (widget);
 
-  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow_type", &shadow_type, NULL);  
+  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type", &shadow_type, NULL);  
   gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), shadow_type);
   
   GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);

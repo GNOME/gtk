@@ -2086,8 +2086,7 @@ dialog_notify_cb (GObject    *dialog,
   if (g_object_interface_find_property (iface, pspec->name))
     g_object_notify (user_data, pspec->name);
 
-  if (g_ascii_strcasecmp (pspec->name, "local-only") == 0 ||
-      g_ascii_strcasecmp (pspec->name, "local_only") == 0)
+  if (g_ascii_strcasecmp (pspec->name, "local-only") == 0)
     {
       GtkFileChooserButtonPrivate *priv;
 

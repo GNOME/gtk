@@ -447,7 +447,7 @@ gtk_cell_renderer_set_property (GObject      *object,
 	else
 	  g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-	g_object_notify (object, "cell_background_gdk");
+	g_object_notify (object, "cell-background-gdk");
       }
       break;
     case PROP_CELL_BACKGROUND_GDK:
@@ -473,7 +473,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
       if (!cell->cell_background_set)
         {
 	  cell->cell_background_set = TRUE;
-	  g_object_notify (G_OBJECT (cell), "cell_background_set");
+	  g_object_notify (G_OBJECT (cell), "cell-background-set");
 	}
 
       priv->cell_background.red = color->red;
@@ -485,7 +485,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
       if (cell->cell_background_set)
         {
 	  cell->cell_background_set = FALSE;
-	  g_object_notify (G_OBJECT (cell), "cell_background_set");
+	  g_object_notify (G_OBJECT (cell), "cell-background-set");
 	}
     }
 }

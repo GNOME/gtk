@@ -1026,7 +1026,7 @@ gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
     {
       completion->priv->minimum_key_length = length;
      
-      g_object_notify (G_OBJECT (completion), "minimum_key_length");
+      g_object_notify (G_OBJECT (completion), "minimum-key-length");
     }
 }
 
@@ -1209,7 +1209,7 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
                                  cell,
                                  "text", column);
 
-  g_object_notify (G_OBJECT (completion), "text_column");
+  g_object_notify (G_OBJECT (completion), "text-column");
 }
 
 /**
@@ -1358,7 +1358,7 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
   renderers = gtk_tree_view_column_get_cell_renderers (column);
   gtk_widget_ensure_style (completion->priv->tree_view);
-  g_object_set (GTK_CELL_RENDERER (renderers->data), "cell_background_gdk",
+  g_object_set (GTK_CELL_RENDERER (renderers->data), "cell-background-gdk",
                 &completion->priv->tree_view->style->bg[GTK_STATE_NORMAL],
                 NULL);
   g_list_free (renderers);
@@ -1542,7 +1542,7 @@ gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion,
     {
       completion->priv->inline_completion = inline_completion;
 
-      g_object_notify (G_OBJECT (completion), "inline_completion");
+      g_object_notify (G_OBJECT (completion), "inline-completion");
     }
 }
 
@@ -1587,7 +1587,7 @@ gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion,
     {
       completion->priv->popup_completion = popup_completion;
 
-      g_object_notify (G_OBJECT (completion), "popup_completion");
+      g_object_notify (G_OBJECT (completion), "popup-completion");
     }
 }
 

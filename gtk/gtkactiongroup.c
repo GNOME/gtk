@@ -251,7 +251,7 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 static void 
 remove_action (GtkAction *action) 
 {
-  g_object_set (action, "action_group", NULL, NULL);
+  g_object_set (action, "action-group", NULL, NULL);
   g_object_unref (action);
 }
 
@@ -546,7 +546,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
   g_hash_table_insert (action_group->private_data->actions, 
 		       g_strdup (gtk_action_get_name (action)),
                        g_object_ref (action));
-  g_object_set (action, "action_group", action_group, NULL);
+  g_object_set (action, "action-group", action_group, NULL);
 }
 
 /**
@@ -579,7 +579,7 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
   gchar *name;
   gchar *stock_id;
   
-  g_object_get (action, "name", &name, "stock_id", &stock_id, NULL);
+  g_object_get (action, "name", &name, "stock-id", &stock_id, NULL);
 
   accel_path = g_strconcat ("<Actions>/",
 			    action_group->private_data->name, "/", name, NULL);

@@ -213,12 +213,9 @@ update_spacings (GtkDialog *dialog)
   widget = GTK_WIDGET (dialog);
 
   gtk_widget_style_get (widget,
-                        "content_area_border",
-                        &content_area_border,
-                        "button_spacing",
-                        &button_spacing,
-                        "action_area_border",
-                        &action_area_border,
+                        "content-area-border", &content_area_border,
+                        "button-spacing", &button_spacing,
+                        "action-area-border", &action_area_border,
                         NULL);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox),
@@ -823,7 +820,7 @@ gtk_dialog_set_has_separator (GtkDialog *dialog,
       dialog->separator = NULL;
     }
 
-  g_object_notify (G_OBJECT (dialog), "has_separator");
+  g_object_notify (G_OBJECT (dialog), "has-separator");
 }
 
 /**

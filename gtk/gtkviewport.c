@@ -559,7 +559,7 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 	  gtk_widget_queue_draw (GTK_WIDGET (viewport));
 	}
 
-      g_object_notify (G_OBJECT (viewport), "shadow_type");
+      g_object_notify (G_OBJECT (viewport), "shadow-type");
     }
 }
 

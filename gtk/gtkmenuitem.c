@@ -506,7 +506,7 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   g_return_if_fail (requisition != NULL);
 
   gtk_widget_style_get (widget,
- 			"horizontal_padding", &horizontal_padding,
+ 			"horizontal-padding", &horizontal_padding,
 			NULL);
   
   bin = GTK_BIN (widget);
@@ -549,7 +549,7 @@ gtk_menu_item_size_request (GtkWidget      *widget,
 	  guint arrow_spacing;
 	  
 	  gtk_widget_style_get (widget,
-				"arrow_spacing", &arrow_spacing,
+				"arrow-spacing", &arrow_spacing,
 				NULL);
 
 	  requisition->width += child_requisition.height;
@@ -609,7 +609,7 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       guint horizontal_padding;
 
       gtk_widget_style_get (widget,
-			    "horizontal_padding", &horizontal_padding,
+			    "horizontal-padding", &horizontal_padding,
 			    NULL);
 
       child_allocation.x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
@@ -756,7 +756,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
 	  (GTK_BIN (menu_item)->child))
 	{
 	  gtk_widget_style_get (widget,
-				"selected_shadow_type", &selected_shadow_type,
+				"selected-shadow-type", &selected_shadow_type,
 				NULL);
 	  gtk_paint_box (widget->style,
 			 widget->window,
@@ -781,7 +781,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
 	  direction = gtk_widget_get_direction (widget);
       
  	  gtk_widget_style_get (widget,
- 				"horizontal_padding", &horizontal_padding,
+ 				"horizontal-padding", &horizontal_padding,
  				NULL);
  	  
 	  context = gtk_widget_get_pango_context (GTK_BIN (menu_item)->child);
@@ -826,7 +826,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
 	  guint horizontal_padding;
 
 	  gtk_widget_style_get (widget,
-				"horizontal_padding", &horizontal_padding,
+				"horizontal-padding", &horizontal_padding,
 				NULL);
 	  
 	  gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
@@ -1071,9 +1071,9 @@ get_offsets (GtkMenu *menu,
   gint vertical_padding;
   
   gtk_widget_style_get (GTK_WIDGET (menu),
-			"horizontal_offset", horizontal_offset,
-			"vertical_offset", vertical_offset,
-			"vertical_padding", &vertical_padding,
+			"horizontal-offset", horizontal_offset,
+			"vertical-offset", vertical_offset,
+			"vertical-padding", &vertical_padding,
 			NULL);
 
   *vertical_offset -= GTK_WIDGET (menu)->style->ythickness;

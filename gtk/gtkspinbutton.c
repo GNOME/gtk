@@ -1563,7 +1563,7 @@ gtk_spin_button_configure (GtkSpinButton  *spin_button,
   if (spin_button->climb_rate != climb_rate)
     {
       spin_button->climb_rate = climb_rate;
-      g_object_notify (G_OBJECT (spin_button), "climb_rate");
+      g_object_notify (G_OBJECT (spin_button), "climb-rate");
     }
   g_object_thaw_notify (G_OBJECT (spin_button));
 
@@ -1921,7 +1921,7 @@ gtk_spin_button_set_update_policy (GtkSpinButton             *spin_button,
   if (spin_button->update_policy != policy)
     {
       spin_button->update_policy = policy;
-      g_object_notify (G_OBJECT (spin_button), "update_policy");
+      g_object_notify (G_OBJECT (spin_button), "update-policy");
     }
 }
 
@@ -2049,7 +2049,7 @@ spin_button_get_shadow_type (GtkSpinButton *spin_button)
 {
   GtkShadowType rc_shadow_type;
 
-  gtk_widget_style_get (GTK_WIDGET (spin_button), "shadow_type", &rc_shadow_type, NULL);
+  gtk_widget_style_get (GTK_WIDGET (spin_button), "shadow-type", &rc_shadow_type, NULL);
 
   return rc_shadow_type;
 }
@@ -2078,7 +2078,7 @@ gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
       if (new_val && GTK_ENTRY (spin_button)->editable)
 	gtk_spin_button_update (spin_button);
       
-      g_object_notify (G_OBJECT (spin_button), "snap_to_ticks");
+      g_object_notify (G_OBJECT (spin_button), "snap-to-ticks");
     }
 }
 

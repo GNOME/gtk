@@ -2500,7 +2500,7 @@ gtk_toolbar_real_style_changed (GtkToolbar     *toolbar,
       gtk_toolbar_reconfigured (toolbar);
       
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
-      g_object_notify (G_OBJECT (toolbar), "toolbar_style");
+      g_object_notify (G_OBJECT (toolbar), "toolbar-style");
     }
 }
 
@@ -2975,7 +2975,7 @@ gtk_toolbar_set_show_arrow (GtkToolbar *toolbar,
 	gtk_widget_hide (priv->arrow_button);
       
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));      
-      g_object_notify (G_OBJECT (toolbar), "show_arrow");
+      g_object_notify (G_OBJECT (toolbar), "show-arrow");
     }
 }
 
@@ -4594,7 +4594,7 @@ get_space_size (GtkToolbar *toolbar)
   if (toolbar)
     {
       gtk_widget_style_get (GTK_WIDGET (toolbar),
-			    "space_size", &space_size,
+			    "space-size", &space_size,
 			    NULL);
     }
   
@@ -4609,7 +4609,7 @@ get_space_style (GtkToolbar *toolbar)
   if (toolbar)
     {
       gtk_widget_style_get (GTK_WIDGET (toolbar),
-			    "space_style", &space_style,
+			    "space-style", &space_style,
 			    NULL);
     }
   
@@ -4624,7 +4624,7 @@ get_button_relief (GtkToolbar *toolbar)
   gtk_widget_ensure_style (GTK_WIDGET (toolbar));
   
   gtk_widget_style_get (GTK_WIDGET (toolbar),
-                        "button_relief", &button_relief,
+                        "button-relief", &button_relief,
                         NULL);
   
   return button_relief;
@@ -4636,7 +4636,7 @@ get_internal_padding (GtkToolbar *toolbar)
   gint ipadding = 0;
   
   gtk_widget_style_get (GTK_WIDGET (toolbar),
-			"internal_padding", &ipadding,
+			"internal-padding", &ipadding,
 			NULL);
   
   return ipadding;
@@ -4648,7 +4648,7 @@ get_shadow_type (GtkToolbar *toolbar)
   GtkShadowType shadow_type;
   
   gtk_widget_style_get (GTK_WIDGET (toolbar),
-			"shadow_type", &shadow_type,
+			"shadow-type", &shadow_type,
 			NULL);
   
   return shadow_type;

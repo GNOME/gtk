@@ -220,7 +220,7 @@ gtk_vscale_get_layout_offsets (GtkScale *scale,
   range = GTK_RANGE (widget);
   scale = GTK_SCALE (widget);
 
-  gtk_widget_style_get (widget, "value_spacing", &value_spacing, NULL);
+  gtk_widget_style_get (widget, "value-spacing", &value_spacing, NULL);
       
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
     

@@ -179,7 +179,7 @@ gtk_radio_tool_button_new_from_stock (GSList      *group,
   g_return_val_if_fail (stock_id != NULL, NULL);
   
   button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON,
-			 "stock_id", stock_id,
+			 "stock-id", stock_id,
 			 NULL);
 
 

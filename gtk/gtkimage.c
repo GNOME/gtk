@@ -950,7 +950,7 @@ gtk_image_set_from_stock  (GtkImage       *image,
     }
 
   g_object_notify (G_OBJECT (image), "stock");
-  g_object_notify (G_OBJECT (image), "icon_size");
+  g_object_notify (G_OBJECT (image), "icon-size");
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -990,8 +990,8 @@ gtk_image_set_from_icon_set  (GtkImage       *image,
        */
     }
   
-  g_object_notify (G_OBJECT (image), "icon_set");
-  g_object_notify (G_OBJECT (image), "icon_size");
+  g_object_notify (G_OBJECT (image), "icon-set");
+  g_object_notify (G_OBJECT (image), "icon-size");
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1032,7 +1032,7 @@ gtk_image_set_from_animation (GtkImage           *image,
                              gdk_pixbuf_animation_get_height (animation));
     }
 
-  g_object_notify (G_OBJECT (image), "pixbuf_animation");
+  g_object_notify (G_OBJECT (image), "pixbuf-animation");
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1076,8 +1076,8 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
        */
     }
 
-  g_object_notify (G_OBJECT (image), "icon_name");
-  g_object_notify (G_OBJECT (image), "icon_size");
+  g_object_notify (G_OBJECT (image), "icon-name");
+  g_object_notify (G_OBJECT (image), "icon-size");
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1839,7 +1839,7 @@ gtk_image_clear (GtkImage *image)
   g_object_freeze_notify (G_OBJECT (image));
   
   if (image->storage_type != GTK_IMAGE_EMPTY)
-    g_object_notify (G_OBJECT (image), "storage_type");
+    g_object_notify (G_OBJECT (image), "storage-type");
 
   if (image->mask)
     {
@@ -1851,7 +1851,7 @@ gtk_image_clear (GtkImage *image)
   if (image->icon_size != DEFAULT_ICON_SIZE)
     {
       image->icon_size = DEFAULT_ICON_SIZE;
-      g_object_notify (G_OBJECT (image), "icon_size");
+      g_object_notify (G_OBJECT (image), "icon-size");
     }
   
   switch (image->storage_type)
@@ -1899,7 +1899,7 @@ gtk_image_clear (GtkImage *image)
         gtk_icon_set_unref (image->data.icon_set.icon_set);
       image->data.icon_set.icon_set = NULL;
       
-      g_object_notify (G_OBJECT (image), "icon_set");      
+      g_object_notify (G_OBJECT (image), "icon-set");      
       break;
 
     case GTK_IMAGE_ANIMATION:
@@ -1909,7 +1909,7 @@ gtk_image_clear (GtkImage *image)
         g_object_unref (image->data.anim.anim);
       image->data.anim.anim = NULL;
       
-      g_object_notify (G_OBJECT (image), "pixbuf_animation");
+      g_object_notify (G_OBJECT (image), "pixbuf-animation");
       
       break;
 
@@ -1921,7 +1921,7 @@ gtk_image_clear (GtkImage *image)
 	g_object_unref (image->data.name.pixbuf);
       image->data.name.pixbuf = NULL;
 
-      g_object_notify (G_OBJECT (image), "icon_name");
+      g_object_notify (G_OBJECT (image), "icon-name");
 
       break;
       

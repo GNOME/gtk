@@ -461,7 +461,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
 
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
-      g_object_notify (G_OBJECT (scale), "draw_value");
+      g_object_notify (G_OBJECT (scale), "draw-value");
     }
 }
 
@@ -487,7 +487,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
       if (GTK_WIDGET_VISIBLE (scale) && GTK_WIDGET_MAPPED (scale))
 	gtk_widget_queue_resize (GTK_WIDGET (scale));
 
-      g_object_notify (G_OBJECT (scale), "value_pos");
+      g_object_notify (G_OBJECT (scale), "value-pos");
     }
 }
 
@@ -520,7 +520,7 @@ gtk_scale_get_range_border (GtkRange  *range,
   if (scale->draw_value)
     {
       gint value_spacing;
-      gtk_widget_style_get (widget, "value_spacing", &value_spacing, NULL);
+      gtk_widget_style_get (widget, "value-spacing", &value_spacing, NULL);
 
       switch (scale->value_pos)
         {
@@ -604,7 +604,7 @@ gtk_scale_style_set (GtkWidget *widget,
   range = GTK_RANGE (widget);
   
   gtk_widget_style_get (widget,
-                        "slider_length", &slider_length,
+                        "slider-length", &slider_length,
                         NULL);
   
   range->min_slider_size = slider_length;

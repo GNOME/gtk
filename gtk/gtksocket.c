@@ -817,7 +817,7 @@ static void
 gtk_socket_notify (GObject    *object,
 		   GParamSpec *pspec)
 {
-  if (!strcmp (pspec->name, "is_focus"))
+  if (!strcmp (pspec->name, "is-focus"))
     return;
 
   socket_update_focus_in (GTK_SOCKET (object));

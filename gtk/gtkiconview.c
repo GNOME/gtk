@@ -2117,8 +2117,8 @@ gtk_icon_view_paint_rubberband (GtkIconView     *icon_view,
     return;
 
   gtk_widget_style_get (GTK_WIDGET (icon_view),
-                        "selection_box_color", &fill_color_gdk,
-                        "selection_box_alpha", &fill_color_alpha,
+                        "selection-box-color", &fill_color_gdk,
+                        "selection-box-alpha", &fill_color_alpha,
                         NULL);
 
   if (!fill_color_gdk)
@@ -3132,7 +3132,7 @@ gtk_icon_view_set_selection_mode (GtkIconView      *icon_view,
   
   icon_view->priv->selection_mode = mode;
 
-  g_object_notify (G_OBJECT (icon_view), "selection_mode");
+  g_object_notify (G_OBJECT (icon_view), "selection-mode");
 }
 
 /**
@@ -3322,7 +3322,7 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
   gtk_icon_view_invalidate_sizes (icon_view);
   gtk_icon_view_queue_layout (icon_view);
   
-  g_object_notify (G_OBJECT (icon_view), "text_column");
+  g_object_notify (G_OBJECT (icon_view), "text-column");
 }
 
 /**
@@ -3381,7 +3381,7 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
   gtk_icon_view_invalidate_sizes (icon_view);
   gtk_icon_view_queue_layout (icon_view);
   
-  g_object_notify (G_OBJECT (icon_view), "markup_column");
+  g_object_notify (G_OBJECT (icon_view), "markup-column");
 }
 
 /**
@@ -3438,7 +3438,7 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
   gtk_icon_view_invalidate_sizes (icon_view);
   gtk_icon_view_queue_layout (icon_view);
   
-  g_object_notify (G_OBJECT (icon_view), "pixbuf_column");
+  g_object_notify (G_OBJECT (icon_view), "pixbuf-column");
   
 }
 

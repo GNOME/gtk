@@ -227,7 +227,7 @@ has_frame_changed (GtkComboBoxEntry *entry_box,
 {
   gboolean has_frame;
   
-  g_object_get (entry_box, "has_frame", &has_frame, NULL);
+  g_object_get (entry_box, "has-frame", &has_frame, NULL);
 
   gtk_entry_set_has_frame (GTK_ENTRY (entry_box->priv->entry), has_frame);
 }
@@ -293,7 +293,7 @@ gtk_combo_box_entry_new_with_model (GtkTreeModel *model,
 
   ret = g_object_new (gtk_combo_box_entry_get_type (),
                       "model", model,
-                      "text_column", text_column,
+                      "text-column", text_column,
                       NULL);
 
   return ret;

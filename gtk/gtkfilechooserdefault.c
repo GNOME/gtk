@@ -6694,8 +6694,8 @@ shortcuts_model_filter_new (GtkFileChooserDefault *impl,
   ShortcutsModelFilter *model;
 
   model = g_object_new (SHORTCUTS_MODEL_FILTER_TYPE,
-			"child_model", child_model,
-			"virtual_root", root,
+			"child-model", child_model,
+			"virtual-root", root,
 			NULL);
 
   model->impl = impl;

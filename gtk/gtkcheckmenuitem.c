@@ -257,8 +257,8 @@ gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
   
   gtk_widget_style_get (GTK_WIDGET (menu_item),
-			"toggle_spacing", &toggle_spacing,
-			"indicator_size", &indicator_size,
+			"toggle-spacing", &toggle_spacing,
+			"indicator-size", &indicator_size,
 			NULL);
 
   *requisition = indicator_size + toggle_spacing;
@@ -351,7 +351,7 @@ gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
 
       gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
 
-      g_object_notify (G_OBJECT (check_menu_item), "draw_as_radio");
+      g_object_notify (G_OBJECT (check_menu_item), "draw-as-radio");
     }
 }
 
@@ -432,9 +432,9 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       widget = GTK_WIDGET (check_menu_item);
 
       gtk_widget_style_get (GTK_WIDGET (check_menu_item),
- 			    "toggle_spacing", &toggle_spacing,
- 			    "horizontal_padding", &horizontal_padding,
-			    "indicator_size", &indicator_size,
+ 			    "toggle-spacing", &toggle_spacing,
+ 			    "horizontal-padding", &horizontal_padding,
+			    "indicator-size", &indicator_size,
  			    NULL);
 
       toggle_size = GTK_MENU_ITEM (check_menu_item)->toggle_size;

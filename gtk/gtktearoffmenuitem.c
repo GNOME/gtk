@@ -157,7 +157,7 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 	  gint selected_shadow_type;
 	  
 	  gtk_widget_style_get (widget,
-				"selected_shadow_type", &selected_shadow_type,
+				"selected-shadow-type", &selected_shadow_type,
 				NULL);
 	  gtk_paint_box (widget->style,
 			 widget->window,

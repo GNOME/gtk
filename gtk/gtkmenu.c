@@ -1809,7 +1809,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      menu->tearoff_window = gtk_widget_new (GTK_TYPE_WINDOW,
 						     "type", GTK_WINDOW_TOPLEVEL,
 						     "screen", gtk_widget_get_screen (menu->toplevel),
-						     "app_paintable", TRUE,
+						     "app-paintable", TRUE,
 						     NULL);
 
 	      
@@ -1889,7 +1889,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	  menu->tearoff_adjustment = NULL;
 	}
 
-      g_object_notify (G_OBJECT (menu), "tearoff_state");
+      g_object_notify (G_OBJECT (menu), "tearoff-state");
     }
 }
 
@@ -1931,7 +1931,7 @@ gtk_menu_set_title (GtkMenu     *menu,
     g_object_set_data (G_OBJECT (menu), "gtk-menu-title", NULL);
     
   gtk_menu_update_title (menu);
-  g_object_notify (G_OBJECT (menu), "tearoff_title");
+  g_object_notify (G_OBJECT (menu), "tearoff-title");
 }
 
 /**
@@ -2574,7 +2574,7 @@ get_accel_path (GtkWidget *menu_item,
 	  if (GTK_IS_ACCEL_LABEL (label))
 	    {
 	      g_object_get (label, 
-			    "accel_closure", &accel_closure, 
+			    "accel-closure", &accel_closure, 
 			    NULL);
 	      if (accel_closure)
 		{
@@ -4014,10 +4014,10 @@ gtk_menu_attach (GtkMenu   *menu,
   else
     {
       gtk_container_child_set (GTK_CONTAINER (child->parent), child,
-			       "left_attach",   left_attach,
-			       "right_attach",  right_attach,
-			       "top_attach",    top_attach,
-			       "bottom_attach", bottom_attach,
+			       "left-attach",   left_attach,
+			       "right-attach",  right_attach,
+			       "top-attach",    top_attach,
+			       "bottom-attach", bottom_attach,
 			       NULL);
     }
 }

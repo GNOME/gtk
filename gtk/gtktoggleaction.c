@@ -180,7 +180,7 @@ gtk_toggle_action_new (const gchar *name,
 			 "name", name,
 			 "label", label,
 			 "tooltip", tooltip,
-			 "stock_id", stock_id,
+			 "stock-id", stock_id,
 			 NULL);
 
   return action;
@@ -380,7 +380,7 @@ gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action,
     {
       action->private_data->draw_as_radio = draw_as_radio;
       
-      g_object_notify (G_OBJECT (action), "draw_as_radio");      
+      g_object_notify (G_OBJECT (action), "draw-as-radio");      
     }
 }
 
@@ -408,7 +408,7 @@ create_menu_item (GtkAction *action)
   GtkToggleAction *toggle_action = GTK_TOGGLE_ACTION (action);
 
   return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, 
-		       "draw_as_radio", toggle_action->private_data->draw_as_radio,
+		       "draw-as-radio", toggle_action->private_data->draw_as_radio,
 		       NULL);
 }
 

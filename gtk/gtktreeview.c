@@ -2175,8 +2175,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   gtk_tree_view_stop_editing (tree_view, FALSE);
   gtk_widget_style_get (widget,
-			"vertical_separator", &vertical_separator,
-			"horizontal_separator", &horizontal_separator,
+			"vertical-separator", &vertical_separator,
+			"horizontal-separator", &horizontal_separator,
 			NULL);
 
 
@@ -3452,9 +3452,9 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   tree_view = GTK_TREE_VIEW (widget);
 
   gtk_widget_style_get (widget,
-			"horizontal_separator", &horizontal_separator,
-			"vertical_separator", &vertical_separator,
-			"allow_rules", &allow_rules,
+			"horizontal-separator", &horizontal_separator,
+			"vertical-separator", &vertical_separator,
+			"allow-rules", &allow_rules,
 			"focus-line-width", &focus_line_width,
 			NULL);
 
@@ -4551,7 +4551,7 @@ validate_row (GtkTreeView *tree_view,
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
 			"focus-padding", &focus_pad,
-			"horizontal_separator", &horizontal_separator,
+			"horizontal-separator", &horizontal_separator,
 			NULL);
   
   for (list = tree_view->priv->columns; list; list = list->next)
@@ -6463,7 +6463,7 @@ column_sizing_notify (GObject    *object,
 
   if (gtk_tree_view_column_get_sizing (c) != GTK_TREE_VIEW_COLUMN_FIXED)
     /* disable fixed height mode */
-    g_object_set (data, "fixed_height_mode", FALSE, NULL);
+    g_object_set (data, "fixed-height-mode", FALSE, NULL);
 }
 
 /**
@@ -6798,7 +6798,7 @@ gtk_tree_view_style_set (GtkWidget *widget,
     }
 
   gtk_widget_style_get (widget,
-			"expander_size", &tree_view->priv->expander_size,
+			"expander-size", &tree_view->priv->expander_size,
 			NULL);
   tree_view->priv->expander_size += EXPANDER_EXTRA_PADDING;
 
@@ -7046,7 +7046,7 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
   if (tree_view->priv->edited_column)
     gtk_tree_view_stop_editing (tree_view, TRUE);
 
-  gtk_widget_style_get (GTK_WIDGET (data), "vertical_separator", &vertical_separator, NULL);
+  gtk_widget_style_get (GTK_WIDGET (data), "vertical-separator", &vertical_separator, NULL);
 
   if (path == NULL)
     {
@@ -7535,7 +7535,7 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
     }
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"indent_expanders", &indent_expanders,
+			"indent-expanders", &indent_expanders,
 			NULL);
 
   if (indent_expanders)
@@ -7620,7 +7620,7 @@ gtk_tree_view_discover_dirty_iter (GtkTreeView *tree_view,
   gint horizontal_separator;
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"horizontal_separator", &horizontal_separator,
+			"horizontal-separator", &horizontal_separator,
 			NULL);
 
   if (height)
@@ -8278,7 +8278,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   GtkExpanderStyle expander_style;
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"vertical_separator", &vertical_separator,
+			"vertical-separator", &vertical_separator,
 			NULL);
   expander_size = tree_view->priv->expander_size - EXPANDER_EXTRA_PADDING;
 
@@ -8481,7 +8481,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
     /* This is sorta weird.  Focus in should give us a cursor */
     return;
 
-  gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);
+  gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical-separator", &vertical_separator, NULL);
   _gtk_tree_view_find_node (tree_view, cursor_path,
 			    &cursor_tree, &cursor_node);
 
@@ -8890,7 +8890,7 @@ send_focus_change (GtkWidget *widget,
   
   gtk_widget_event (widget, fevent);
   
-  g_object_notify (G_OBJECT (widget), "has_focus");
+  g_object_notify (G_OBJECT (widget), "has-focus");
 
   g_object_unref (widget);
   gdk_event_free (fevent);
@@ -9581,7 +9581,7 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 
-  g_object_notify (G_OBJECT (tree_view), "headers_visible");
+  g_object_notify (G_OBJECT (tree_view), "headers-visible");
 }
 
 /**
@@ -9631,7 +9631,7 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
   for (list = tree_view->priv->columns; list; list = list->next)
     gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (list->data), setting);
 
-  g_object_notify (G_OBJECT (tree_view), "headers_clickable");
+  g_object_notify (G_OBJECT (tree_view), "headers-clickable");
 }
 
 
@@ -9668,7 +9668,7 @@ gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
     }
 
-  g_object_notify (G_OBJECT (tree_view), "rules_hint");
+  g_object_notify (G_OBJECT (tree_view), "rules-hint");
 }
 
 /**
@@ -10068,7 +10068,7 @@ gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
 	}
 
       tree_view->priv->expander_column = column;
-      g_object_notify (G_OBJECT (tree_view), "expander_column");
+      g_object_notify (G_OBJECT (tree_view), "expander-column");
     }
 }
 
@@ -11423,8 +11423,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
   g_return_if_fail (GTK_WIDGET_REALIZED (tree_view));
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"vertical_separator", &vertical_separator,
-			"horizontal_separator", &horizontal_separator,
+			"vertical-separator", &vertical_separator,
+			"horizontal-separator", &horizontal_separator,
 			NULL);
 
   rect->x = 0;
@@ -12071,7 +12071,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 
       cell_area = background_area;
 
-      gtk_widget_style_get (widget, "vertical_separator", &vertical_separator, NULL);
+      gtk_widget_style_get (widget, "vertical-separator", &vertical_separator, NULL);
       cell_area.y += vertical_separator / 2;
       cell_area.height -= vertical_separator;
 
@@ -12167,7 +12167,7 @@ gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
   if (tree_view->priv->enable_search != enable_search)
     {
        tree_view->priv->enable_search = enable_search;
-       g_object_notify (G_OBJECT (tree_view), "enable_search");
+       g_object_notify (G_OBJECT (tree_view), "enable-search");
     }
 }
 
@@ -12224,7 +12224,7 @@ gtk_tree_view_set_search_column (GtkTreeView *tree_view,
     return;
 
   tree_view->priv->search_column = column;
-  g_object_notify (G_OBJECT (tree_view), "search_column");
+  g_object_notify (G_OBJECT (tree_view), "search-column");
 }
 
 /**

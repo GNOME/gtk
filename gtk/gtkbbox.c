@@ -287,7 +287,7 @@ gtk_button_box_set_layout (GtkButtonBox      *widget,
   if (widget->layout_style != layout_style)
     {
       widget->layout_style = layout_style;
-      g_object_notify (G_OBJECT (widget), "layout_style");
+      g_object_notify (G_OBJECT (widget), "layout-style");
       gtk_widget_queue_resize (GTK_WIDGET (widget));
     }
 }
@@ -449,14 +449,11 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   bbox = GTK_BUTTON_BOX (widget);
 
   gtk_widget_style_get (widget,
-                        "child_min_width",
-                        &width_default,
-                        "child_min_height",
-                        &height_default,
-                        "child_internal_pad_x",
-                        &ipad_x_default,
-                        "child_internal_pad_y",
-                        &ipad_y_default, NULL);
+                        "child-min-width", &width_default,
+                        "child-min-height", &height_default,
+                        "child-internal-pad-x", &ipad_x_default,
+                        "child-internal-pad-y", &ipad_y_default, 
+			NULL);
   
   child_min_width = bbox->child_min_width   != GTK_BUTTONBOX_DEFAULT
 	  ? bbox->child_min_width : width_default;

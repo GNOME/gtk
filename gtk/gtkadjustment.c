@@ -339,7 +339,7 @@ gtk_adjustment_new (gdouble value,
 		       "upper", upper,
 		       "step-increment", step_increment,
 		       "page-increment", page_increment,
-		       "page_size", page_size,
+		       "page-size", page_size,
 		       "value", value,
 		       NULL);
 }

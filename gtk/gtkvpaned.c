@@ -134,7 +134,7 @@ gtk_vpaned_size_request (GtkWidget      *widget,
     {
       gint handle_size;
 
-      gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
+      gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
       requisition->height += handle_size;
     }
 }
@@ -157,7 +157,7 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
       GtkAllocation child2_allocation;
       gint handle_size;
       
-      gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
+      gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
 
       gtk_widget_get_child_requisition (paned->child1, &child1_requisition);
       gtk_widget_get_child_requisition (paned->child2, &child2_requisition);

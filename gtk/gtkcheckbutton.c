@@ -208,10 +208,10 @@ _gtk_check_button_get_props (GtkCheckButton *check_button,
   GtkWidget *widget =  GTK_WIDGET (check_button);
 
   if (indicator_size)
-    gtk_widget_style_get (widget, "indicator_size", indicator_size, NULL);
+    gtk_widget_style_get (widget, "indicator-size", indicator_size, NULL);
 
   if (indicator_spacing)
-    gtk_widget_style_get (widget, "indicator_spacing", indicator_spacing, NULL);
+    gtk_widget_style_get (widget, "indicator-spacing", indicator_spacing, NULL);
 }
 
 static void
@@ -394,9 +394,11 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
       button = GTK_BUTTON (check_button);
       toggle_button = GTK_TOGGLE_BUTTON (check_button);
   
-      gtk_widget_style_get (widget, "interior_focus", &interior_focus,
+      gtk_widget_style_get (widget, 
+			    "interior-focus", &interior_focus,
 			    "focus-line-width", &focus_width, 
-			    "focus-padding", &focus_pad, NULL);
+			    "focus-padding", &focus_pad, 
+			    NULL);
 
       _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
 

@@ -148,12 +148,12 @@ gtk_scrollbar_style_set  (GtkWidget *widget,
   range = GTK_RANGE (widget);
   
   gtk_widget_style_get (widget,
-                        "min_slider_length", &slider_length,
-                        "fixed_slider_length", &fixed_size,
-                        "has_backward_stepper", &has_a,
-                        "has_secondary_forward_stepper", &has_b,
-                        "has_secondary_backward_stepper", &has_c,
-                        "has_forward_stepper", &has_d,
+                        "min-slider-length", &slider_length,
+                        "fixed-slider-length", &fixed_size,
+                        "has-backward-stepper", &has_a,
+                        "has-secondary-forward-stepper", &has_b,
+                        "has-secondary-backward-stepper", &has_c,
+                        "has-forward-stepper", &has_d,
                         NULL);
   
   range->min_slider_size = slider_length;

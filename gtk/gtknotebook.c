@@ -2054,10 +2054,10 @@ gtk_notebook_style_set  (GtkWidget *widget,
   notebook = GTK_NOTEBOOK (widget);
   
   gtk_widget_style_get (widget,
-                        "has_backward_stepper", &has_before_previous,
-                        "has_secondary_forward_stepper", &has_before_next,
-                        "has_secondary_backward_stepper", &has_after_previous,
-                        "has_forward_stepper", &has_after_next,
+                        "has-backward-stepper", &has_before_previous,
+                        "has-secondary-forward-stepper", &has_before_next,
+                        "has-secondary-backward-stepper", &has_after_previous,
+                        "has-forward-stepper", &has_after_next,
                         NULL);
   
   notebook->has_before_previous = has_before_previous;
@@ -4061,8 +4061,8 @@ gtk_notebook_set_tab_border_internal (GtkNotebook *notebook,
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
   g_object_freeze_notify (G_OBJECT (notebook));
-  g_object_notify (G_OBJECT (notebook), "tab_hborder");
-  g_object_notify (G_OBJECT (notebook), "tab_vborder");
+  g_object_notify (G_OBJECT (notebook), "tab-hborder");
+  g_object_notify (G_OBJECT (notebook), "tab-vborder");
   g_object_thaw_notify (G_OBJECT (notebook));
 }
 
@@ -4080,7 +4080,7 @@ gtk_notebook_set_tab_hborder_internal (GtkNotebook *notebook,
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
-  g_object_notify (G_OBJECT (notebook), "tab_hborder");
+  g_object_notify (G_OBJECT (notebook), "tab-hborder");
 }
 
 static void
@@ -4097,7 +4097,7 @@ gtk_notebook_set_tab_vborder_internal (GtkNotebook *notebook,
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
-  g_object_notify (G_OBJECT (notebook), "tab_vborder");
+  g_object_notify (G_OBJECT (notebook), "tab-vborder");
 }
 
 /* Public GtkNotebook Page Insert/Remove Methods :
@@ -4399,11 +4399,11 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 			G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
 			notebook);
 
-  gtk_widget_child_notify (child, "tab_expand");
-  gtk_widget_child_notify (child, "tab_fill");
-  gtk_widget_child_notify (child, "tab_pack");
-  gtk_widget_child_notify (child, "tab_label");
-  gtk_widget_child_notify (child, "menu_label");
+  gtk_widget_child_notify (child, "tab-expand");
+  gtk_widget_child_notify (child, "tab-fill");
+  gtk_widget_child_notify (child, "tab-pack");
+  gtk_widget_child_notify (child, "tab-label");
+  gtk_widget_child_notify (child, "menu-label");
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
 
@@ -4670,7 +4670,7 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
       if (GTK_WIDGET_VISIBLE (notebook))
 	gtk_widget_queue_resize (GTK_WIDGET (notebook));
       
-      g_object_notify (G_OBJECT (notebook), "show_border");
+      g_object_notify (G_OBJECT (notebook), "show-border");
     }
 }
 
@@ -4739,7 +4739,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
     }
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
-  g_object_notify (G_OBJECT (notebook), "show_tabs");
+  g_object_notify (G_OBJECT (notebook), "show-tabs");
 }
 
 /**
@@ -4780,7 +4780,7 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
 	gtk_widget_queue_resize (GTK_WIDGET (notebook));
     }
 
-  g_object_notify (G_OBJECT (notebook), "tab_pos");
+  g_object_notify (G_OBJECT (notebook), "tab-pos");
 }
 
 /**
@@ -4946,7 +4946,7 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
 			     GTK_WIDGET (notebook),
 			     gtk_notebook_menu_detacher);
 
-  g_object_notify (G_OBJECT (notebook), "enable_popup");
+  g_object_notify (G_OBJECT (notebook), "enable-popup");
 }
 
 /**
@@ -4967,7 +4967,7 @@ gtk_notebook_popup_disable  (GtkNotebook *notebook)
 			 (GtkCallback) gtk_notebook_menu_label_unparent, NULL);
   gtk_widget_destroy (notebook->menu);
 
-  g_object_notify (G_OBJECT (notebook), "enable_popup");
+  g_object_notify (G_OBJECT (notebook), "enable-popup");
 }
 
 /* Public GtkNotebook Page Properties Functions:
@@ -5084,7 +5084,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
     }
 
   gtk_notebook_update_tab_states (notebook);
-  gtk_widget_child_notify (child, "tab_label");
+  gtk_widget_child_notify (child, "tab-label");
 }
 
 /**
@@ -5108,7 +5108,7 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
   if (tab_text)
     tab_label = gtk_label_new (tab_text);
   gtk_notebook_set_tab_label (notebook, child, tab_label);
-  gtk_widget_child_notify (child, "tab_label");
+  gtk_widget_child_notify (child, "tab-label");
 }
 
 /**
@@ -5217,7 +5217,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
 
   if (notebook->menu)
     gtk_notebook_menu_item_create (notebook, list);
-  gtk_widget_child_notify (child, "menu_label");
+  gtk_widget_child_notify (child, "menu-label");
 }
 
 /**
@@ -5240,7 +5240,7 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
   if (menu_text)
     menu_label = gtk_label_new (menu_text);
   gtk_notebook_set_menu_label (notebook, child, menu_label);
-  gtk_widget_child_notify (child, "menu_label");
+  gtk_widget_child_notify (child, "menu-label");
 }
 
 /**
@@ -5331,15 +5331,15 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
 
   gtk_widget_freeze_child_notify (child);
   page->expand = expand;
-  gtk_widget_child_notify (child, "tab_expand");
+  gtk_widget_child_notify (child, "tab-expand");
   page->fill = fill;
-  gtk_widget_child_notify (child, "tab_fill");
+  gtk_widget_child_notify (child, "tab-fill");
   if (page->pack != pack_type)
     {
       page->pack = pack_type;
       gtk_notebook_child_reordered (notebook, page);
     }
-  gtk_widget_child_notify (child, "tab_pack");
+  gtk_widget_child_notify (child, "tab-pack");
   gtk_widget_child_notify (child, "position");
   if (notebook->show_tabs)
     gtk_notebook_pages_allocate (notebook);
@@ -5434,7 +5434,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
   /* Move around the menu items if necessary */
   gtk_notebook_child_reordered (notebook, page);
-  gtk_widget_child_notify (child, "tab_pack");
+  gtk_widget_child_notify (child, "tab-pack");
   gtk_widget_child_notify (child, "position");
   
   if (notebook->show_tabs)

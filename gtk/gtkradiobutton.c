@@ -321,7 +321,10 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
 {
   GtkWidget *radio_button;
 
-  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, "label", label, "use_underline", TRUE, NULL);
+  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, 
+			       "label", label, 
+			       "use-underline", TRUE, 
+			       NULL);
 
   if (group)
     gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_button), group);
@@ -682,7 +685,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       toggle_button = GTK_TOGGLE_BUTTON (check_button);
 
       gtk_widget_style_get (widget,
-			    "interior_focus", &interior_focus,
+			    "interior-focus", &interior_focus,
 			    "focus-line-width", &focus_width,
 			    "focus-padding", &focus_pad,
 			    NULL);

@@ -197,7 +197,10 @@ gtk_toggle_button_new_with_label (const gchar *label)
 GtkWidget*
 gtk_toggle_button_new_with_mnemonic (const gchar *label)
 {
-  return g_object_new (GTK_TYPE_TOGGLE_BUTTON, "label", label, "use_underline", TRUE, NULL);
+  return g_object_new (GTK_TYPE_TOGGLE_BUTTON, 
+		       "label", label, 
+		       "use-underline", TRUE, 
+		       NULL);
 }
 
 static void
@@ -287,7 +290,7 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
       if (GTK_WIDGET_VISIBLE (toggle_button))
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
 
-      g_object_notify (G_OBJECT (toggle_button), "draw_indicator");
+      g_object_notify (G_OBJECT (toggle_button), "draw-indicator");
     }
 }
 

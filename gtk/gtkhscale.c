@@ -215,7 +215,7 @@ gtk_hscale_get_layout_offsets (GtkScale *scale,
       return;
     }
 
-  gtk_widget_style_get (widget, "value_spacing", &value_spacing, NULL);
+  gtk_widget_style_get (widget, "value-spacing", &value_spacing, NULL);
 
   range = GTK_RANGE (widget);
   scale = GTK_SCALE (widget);

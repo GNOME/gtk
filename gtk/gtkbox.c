@@ -392,7 +392,7 @@ gtk_box_pack_start (GtkBox    *box,
   gtk_widget_child_notify (child, "expand");
   gtk_widget_child_notify (child, "fill");
   gtk_widget_child_notify (child, "padding");
-  gtk_widget_child_notify (child, "pack_type");
+  gtk_widget_child_notify (child, "pack-type");
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
 }
@@ -427,7 +427,7 @@ gtk_box_pack_end (GtkBox    *box,
   gtk_widget_child_notify (child, "expand");
   gtk_widget_child_notify (child, "fill");
   gtk_widget_child_notify (child, "padding");
-  gtk_widget_child_notify (child, "pack_type");
+  gtk_widget_child_notify (child, "pack-type");
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
 }
@@ -625,7 +625,7 @@ gtk_box_set_child_packing (GtkBox               *box,
 	child_info->pack = GTK_PACK_END;
       else
 	child_info->pack = GTK_PACK_START;
-      gtk_widget_child_notify (child, "pack_type");
+      gtk_widget_child_notify (child, "pack-type");
 
       if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
 	gtk_widget_queue_resize (child);

@@ -2772,7 +2772,7 @@ gtk_entry_set_positions (GtkEntry *entry,
       entry->current_pos = current_pos;
       changed = TRUE;
 
-      g_object_notify (G_OBJECT (entry), "cursor_position");
+      g_object_notify (G_OBJECT (entry), "cursor-position");
     }
 
   if (selection_bound != -1 &&
@@ -2781,7 +2781,7 @@ gtk_entry_set_positions (GtkEntry *entry,
       entry->selection_bound = selection_bound;
       changed = TRUE;
       
-      g_object_notify (G_OBJECT (entry), "selection_bound");
+      g_object_notify (G_OBJECT (entry), "selection-bound");
     }
 
   g_object_thaw_notify (G_OBJECT (entry));
@@ -3431,7 +3431,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
       entry->scroll_offset += weak_xoffset - text_area_width;
     }
 
-  g_object_notify (G_OBJECT (entry), "scroll_offset");
+  g_object_notify (G_OBJECT (entry), "scroll-offset");
 }
 
 static gint
@@ -3935,7 +3935,7 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
     return;
 
   entry->invisible_char = ch;
-  g_object_notify (G_OBJECT (entry), "invisible_char");
+  g_object_notify (G_OBJECT (entry), "invisible-char");
   gtk_entry_recompute (entry);  
 }
 
@@ -4017,7 +4017,7 @@ gtk_entry_set_max_length (GtkEntry     *entry,
     gtk_editable_delete_text (GTK_EDITABLE (entry), max, -1);
   
   entry->text_max_length = max;
-  g_object_notify (G_OBJECT (entry), "max_length");
+  g_object_notify (G_OBJECT (entry), "max-length");
 }
 
 /**
@@ -4063,7 +4063,7 @@ gtk_entry_set_activates_default (GtkEntry *entry,
   if (setting != entry->activates_default)
     {
       entry->activates_default = setting;
-      g_object_notify (G_OBJECT (entry), "activates_default");
+      g_object_notify (G_OBJECT (entry), "activates-default");
     }
 }
 
@@ -4104,7 +4104,7 @@ gtk_entry_set_width_chars (GtkEntry *entry,
   if (entry->width_chars != n_chars)
     {
       entry->width_chars = n_chars;
-      g_object_notify (G_OBJECT (entry), "width_chars");
+      g_object_notify (G_OBJECT (entry), "width-chars");
       gtk_widget_queue_resize (GTK_WIDGET (entry));
     }
 }
@@ -4145,7 +4145,7 @@ gtk_entry_set_has_frame (GtkEntry *entry,
 
   gtk_widget_queue_resize (GTK_WIDGET (entry));
   entry->has_frame = setting;
-  g_object_notify (G_OBJECT (entry), "has_frame");
+  g_object_notify (G_OBJECT (entry), "has-frame");
 }
 
 /**

@@ -3936,7 +3936,7 @@ gtk_widget_grab_focus (GtkWidget *widget)
   
   g_object_ref (widget);
   g_signal_emit (widget, widget_signals[GRAB_FOCUS], 0);
-  g_object_notify (G_OBJECT (widget), "has_focus");
+  g_object_notify (G_OBJECT (widget), "has-focus");
   g_object_unref (widget);
 }
 
@@ -4212,7 +4212,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
       if (GTK_WIDGET_DRAWABLE (widget))
 	gtk_widget_queue_draw (widget);
 
-      g_object_notify (G_OBJECT (widget), "app_paintable");
+      g_object_notify (G_OBJECT (widget), "app-paintable");
     }
 }
 
@@ -5591,13 +5591,13 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
   
   if (width > -2 && aux_info->width != width)
     {
-      g_object_notify (G_OBJECT (widget), "width_request");
+      g_object_notify (G_OBJECT (widget), "width-request");
       aux_info->width = width;
       changed = TRUE;
     }
   if (height > -2 && aux_info->height != height)
     {
-      g_object_notify (G_OBJECT (widget), "height_request");  
+      g_object_notify (G_OBJECT (widget), "height-request");  
       aux_info->height = height;
       changed = TRUE;
     }
@@ -5866,7 +5866,7 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   
   *modep = mode;
   g_object_set_qdata (G_OBJECT (widget), quark_extension_event_mode, modep);
-  g_object_notify (G_OBJECT (widget), "extension_events");
+  g_object_notify (G_OBJECT (widget), "extension-events");
 }
 
 /**
@@ -7607,7 +7607,7 @@ gtk_widget_set_no_show_all (GtkWidget *widget,
   else
     GTK_WIDGET_UNSET_FLAGS (widget, GTK_NO_SHOW_ALL);
   
-  g_object_notify (G_OBJECT (widget), "no_show_all");
+  g_object_notify (G_OBJECT (widget), "no-show-all");
 }
 
 #define __GTK_WIDGET_C__

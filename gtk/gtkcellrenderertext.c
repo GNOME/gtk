@@ -821,7 +821,7 @@ set_bg_color (GtkCellRendererText *celltext,
       if (!celltext->background_set)
         {
           celltext->background_set = TRUE;
-          g_object_notify (G_OBJECT (celltext), "background_set");
+          g_object_notify (G_OBJECT (celltext), "background-set");
         }
       
       celltext->background.red = color->red;
@@ -833,7 +833,7 @@ set_bg_color (GtkCellRendererText *celltext,
       if (celltext->background_set)
         {
           celltext->background_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "background_set");
+          g_object_notify (G_OBJECT (celltext), "background-set");
         }
     }
 }
@@ -848,7 +848,7 @@ set_fg_color (GtkCellRendererText *celltext,
       if (!celltext->foreground_set)
         {
           celltext->foreground_set = TRUE;
-          g_object_notify (G_OBJECT (celltext), "foreground_set");
+          g_object_notify (G_OBJECT (celltext), "foreground-set");
         }
       
       celltext->foreground.red = color->red;
@@ -860,7 +860,7 @@ set_fg_color (GtkCellRendererText *celltext,
       if (celltext->foreground_set)
         {
           celltext->foreground_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "foreground_set");
+          g_object_notify (G_OBJECT (celltext), "foreground-set");
         }
     }
 }
@@ -910,17 +910,17 @@ notify_set_changed (GObject       *object,
 		    PangoFontMask  changed_mask)
 {
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
-    g_object_notify (object, "family_set");
+    g_object_notify (object, "family-set");
   if (changed_mask & PANGO_FONT_MASK_STYLE)
-    g_object_notify (object, "style_set");
+    g_object_notify (object, "style-set");
   if (changed_mask & PANGO_FONT_MASK_VARIANT)
-    g_object_notify (object, "variant_set");
+    g_object_notify (object, "variant-set");
   if (changed_mask & PANGO_FONT_MASK_WEIGHT)
-    g_object_notify (object, "weight_set");
+    g_object_notify (object, "weight-set");
   if (changed_mask & PANGO_FONT_MASK_STRETCH)
-    g_object_notify (object, "stretch_set");
+    g_object_notify (object, "stretch-set");
   if (changed_mask & PANGO_FONT_MASK_SIZE)
-    g_object_notify (object, "size_set");
+    g_object_notify (object, "size-set");
 }
 
 static void
@@ -965,7 +965,7 @@ set_font_description (GtkCellRendererText  *celltext,
   
   g_object_freeze_notify (object);
 
-  g_object_notify (object, "font_desc");
+  g_object_notify (object, "font-desc");
   g_object_notify (object, "font");
   
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
@@ -981,7 +981,7 @@ set_font_description (GtkCellRendererText  *celltext,
   if (changed_mask & PANGO_FONT_MASK_SIZE)
     {
       g_object_notify (object, "size");
-      g_object_notify (object, "size_points");
+      g_object_notify (object, "size-points");
     }
 
   notify_set_changed (object, set_changed_mask);
@@ -1075,7 +1075,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (object, "background_gdk");
+        g_object_notify (object, "background-gdk");
       }
       break;
       
@@ -1090,7 +1090,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (object, "foreground_gdk");
+        g_object_notify (object, "foreground-gdk");
       }
       break;
 
@@ -1165,7 +1165,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	  case PROP_SIZE:
 	    pango_font_description_set_size (celltext->font,
 					     g_value_get_int (value));
-	    g_object_notify (object, "size_points");
+	    g_object_notify (object, "size-points");
 	    break;
 	  case PROP_SIZE_POINTS:
 	    pango_font_description_set_size (celltext->font,
@@ -1178,7 +1178,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	  celltext->calc_fixed_height = TRUE;
 	
 	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (celltext->font));
-	g_object_notify (object, "font_desc");
+	g_object_notify (object, "font-desc");
 	g_object_notify (object, "font");
 
 	break;
@@ -1189,7 +1189,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       celltext->scale_set = TRUE;
       if (celltext->fixed_height_rows != -1)
 	celltext->calc_fixed_height = TRUE;
-      g_object_notify (object, "scale_set");
+      g_object_notify (object, "scale-set");
       break;
       
     case PROP_EDITABLE:
@@ -1199,26 +1199,26 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         GTK_CELL_RENDERER (celltext)->mode = GTK_CELL_RENDERER_MODE_EDITABLE;
       else
         GTK_CELL_RENDERER (celltext)->mode = GTK_CELL_RENDERER_MODE_INERT;
-      g_object_notify (object, "editable_set");
+      g_object_notify (object, "editable-set");
       break;
 
     case PROP_STRIKETHROUGH:
       celltext->strikethrough = g_value_get_boolean (value);
       celltext->strikethrough_set = TRUE;
-      g_object_notify (object, "strikethrough_set");
+      g_object_notify (object, "strikethrough-set");
       break;
 
     case PROP_UNDERLINE:
       celltext->underline_style = g_value_get_enum (value);
       celltext->underline_set = TRUE;
-      g_object_notify (object, "underline_set");
+      g_object_notify (object, "underline-set");
             
       break;
 
     case PROP_RISE:
       celltext->rise = g_value_get_int (value);
       celltext->rise_set = TRUE;
-      g_object_notify (object, "rise_set");
+      g_object_notify (object, "rise-set");
       if (celltext->fixed_height_rows != -1)
 	celltext->calc_fixed_height = TRUE;
       break;  
@@ -1228,13 +1228,13 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       if (priv->language)
         g_object_unref (priv->language);
       priv->language = pango_language_from_string (g_value_get_string (value));
-      g_object_notify (object, "language_set");
+      g_object_notify (object, "language-set");
       break;
 
     case PROP_ELLIPSIZE:
       priv->ellipsize = g_value_get_enum (value);
       priv->ellipsize_set = TRUE;
-      g_object_notify (object, "ellipsize_set");
+      g_object_notify (object, "ellipsize-set");
       break;
       
     case PROP_WRAP_MODE:
@@ -1808,7 +1808,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
     return NULL;
 
   priv->entry = g_object_new (GTK_TYPE_ENTRY,
-			      "has_frame", FALSE,
+			      "has-frame", FALSE,
 			      "xalign", cell->xalign,
 			      NULL);
 

@@ -1999,7 +1999,7 @@ gtk_text_view_set_wrap_mode (GtkTextView *text_view,
         }
     }
 
-  g_object_notify (G_OBJECT (text_view), "wrap_mode");
+  g_object_notify (G_OBJECT (text_view), "wrap-mode");
 }
 
 /**
@@ -2090,7 +2090,7 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "pixels_above_lines");
+      g_object_notify (G_OBJECT (text_view), "pixels-above-lines");
     }
 }
 
@@ -2136,7 +2136,7 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "pixels_below_lines");
+      g_object_notify (G_OBJECT (text_view), "pixels-below-lines");
     }
 }
 
@@ -2182,7 +2182,7 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "pixels_inside_wrap");
+      g_object_notify (G_OBJECT (text_view), "pixels-inside-wrap");
     }
 }
 
@@ -2273,7 +2273,7 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "left_margin");
+      g_object_notify (G_OBJECT (text_view), "left-margin");
     }
 }
 
@@ -2319,7 +2319,7 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "right_margin");
+      g_object_notify (G_OBJECT (text_view), "right-margin");
     }
 }
 
@@ -2471,7 +2471,7 @@ gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
             }
         }
 
-      g_object_notify (G_OBJECT (text_view), "cursor_visible");
+      g_object_notify (G_OBJECT (text_view), "cursor-visible");
     }
 }
 
@@ -2757,8 +2757,8 @@ gtk_text_view_size_request (GtkWidget      *widget,
   text_view = GTK_TEXT_VIEW (widget);
 
   gtk_widget_style_get (widget,
-			"interior_focus", &interior_focus,
-			"focus_line_width", &focus_width,
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
 			NULL);
 
   if (interior_focus)
@@ -3003,8 +3003,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    */
 
   gtk_widget_style_get (widget,
-			"interior_focus", &interior_focus,
-			"focus_line_width", &focus_width,
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
 			NULL);
 
   if (interior_focus)
@@ -4291,7 +4291,7 @@ gtk_text_view_draw_focus (GtkWidget *widget)
 
   /* We clear the focus if we are in interior focus mode. */
   gtk_widget_style_get (widget,
-			"interior_focus", &interior_focus,
+			"interior-focus", &interior_focus,
 			NULL);
   
   if (GTK_WIDGET_DRAWABLE (widget))
@@ -5338,7 +5338,7 @@ gtk_text_view_set_accepts_tab (GtkTextView *text_view,
     {
       text_view->accepts_tab = accepts_tab;
 
-      g_object_notify (G_OBJECT (text_view), "accepts_tab");
+      g_object_notify (G_OBJECT (text_view), "accepts-tab");
     }
 }
 

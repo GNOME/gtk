@@ -426,7 +426,7 @@ gtk_text_buffer_new (GtkTextTagTable *table)
 {
   GtkTextBuffer *text_buffer;
 
-  text_buffer = g_object_new (GTK_TYPE_TEXT_BUFFER, "tag_table", table, NULL);
+  text_buffer = g_object_new (GTK_TYPE_TEXT_BUFFER, "tag-table", table, NULL);
 
   return text_buffer;
 }

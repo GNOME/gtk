@@ -688,7 +688,7 @@ set_bg_color (GtkTextTag *tag, GdkColor *color)
       if (!tag->bg_color_set)
         {
           tag->bg_color_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "background_set");
+          g_object_notify (G_OBJECT (tag), "background-set");
         }
       
       tag->values->appearance.bg_color = *color;
@@ -698,7 +698,7 @@ set_bg_color (GtkTextTag *tag, GdkColor *color)
       if (tag->bg_color_set)
         {
           tag->bg_color_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "background_set");
+          g_object_notify (G_OBJECT (tag), "background-set");
         }
     }
 }
@@ -711,7 +711,7 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
       if (!tag->fg_color_set)
         {
           tag->fg_color_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "foreground_set");
+          g_object_notify (G_OBJECT (tag), "foreground-set");
         }
       tag->values->appearance.fg_color = *color;
     }
@@ -720,7 +720,7 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
       if (tag->fg_color_set)
         {
           tag->fg_color_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "foreground_set");
+          g_object_notify (G_OBJECT (tag), "foreground-set");
         }
     }
 }
@@ -792,17 +792,17 @@ notify_set_changed (GObject       *object,
 		    PangoFontMask  changed_mask)
 {
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
-    g_object_notify (object, "family_set");
+    g_object_notify (object, "family-set");
   if (changed_mask & PANGO_FONT_MASK_STYLE)
-    g_object_notify (object, "style_set");
+    g_object_notify (object, "style-set");
   if (changed_mask & PANGO_FONT_MASK_VARIANT)
-    g_object_notify (object, "variant_set");
+    g_object_notify (object, "variant-set");
   if (changed_mask & PANGO_FONT_MASK_WEIGHT)
-    g_object_notify (object, "weight_set");
+    g_object_notify (object, "weight-set");
   if (changed_mask & PANGO_FONT_MASK_STRETCH)
-    g_object_notify (object, "stretch_set");
+    g_object_notify (object, "stretch-set");
   if (changed_mask & PANGO_FONT_MASK_SIZE)
-    g_object_notify (object, "size_set");
+    g_object_notify (object, "size-set");
 }
 
 static void
@@ -852,7 +852,7 @@ set_font_description (GtkTextTag           *text_tag,
   
   g_object_freeze_notify (object);
 
-  g_object_notify (object, "font_desc");
+  g_object_notify (object, "font-desc");
   g_object_notify (object, "font");
   
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
@@ -868,7 +868,7 @@ set_font_description (GtkTextTag           *text_tag,
   if (changed_mask & PANGO_FONT_MASK_SIZE)
     {
       g_object_notify (object, "size");
-      g_object_notify (object, "size_points");
+      g_object_notify (object, "size-points");
     }
 
   notify_set_changed (object, set_changed_mask);
@@ -912,7 +912,7 @@ gtk_text_tag_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (object, "background_gdk");
+        g_object_notify (object, "background-gdk");
       }
       break;
 
@@ -925,7 +925,7 @@ gtk_text_tag_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (object, "foreground_gdk");
+        g_object_notify (object, "foreground-gdk");
       }
       break;
 
@@ -950,7 +950,7 @@ gtk_text_tag_set_property (GObject      *object,
         GdkBitmap *bitmap = g_value_get_object (value);
 
         text_tag->bg_stipple_set = TRUE;
-        g_object_notify (object, "background_stipple_set");
+        g_object_notify (object, "background-stipple-set");
         
         if (text_tag->values->appearance.bg_stipple != bitmap)
           {
@@ -970,7 +970,7 @@ gtk_text_tag_set_property (GObject      *object,
         GdkBitmap *bitmap = g_value_get_object (value);
 
         text_tag->fg_stipple_set = TRUE;
-        g_object_notify (object, "foreground_stipple_set");
+        g_object_notify (object, "foreground-stipple-set");
 
         if (text_tag->values->appearance.fg_stipple != bitmap)
           {
@@ -1053,7 +1053,7 @@ gtk_text_tag_set_property (GObject      *object,
 	  case PROP_SIZE:
 	    pango_font_description_set_size (text_tag->values->font,
 					     g_value_get_int (value));
-	    g_object_notify (object, "size_points");
+	    g_object_notify (object, "size-points");
 	    break;
 	  case PROP_SIZE_POINTS:
 	    pango_font_description_set_size (text_tag->values->font,
@@ -1064,7 +1064,7 @@ gtk_text_tag_set_property (GObject      *object,
 
 	size_changed = TRUE;
 	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (text_tag->values->font));
-	g_object_notify (object, "font_desc");
+	g_object_notify (object, "font-desc");
 	g_object_notify (object, "font");
 
 	break;
@@ -1073,48 +1073,48 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_SCALE:
       text_tag->values->font_scale = g_value_get_double (value);
       text_tag->scale_set = TRUE;
-      g_object_notify (object, "scale_set");
+      g_object_notify (object, "scale-set");
       size_changed = TRUE;
       break;
       
     case PROP_PIXELS_ABOVE_LINES:
       text_tag->pixels_above_lines_set = TRUE;
       text_tag->values->pixels_above_lines = g_value_get_int (value);
-      g_object_notify (object, "pixels_above_lines_set");
+      g_object_notify (object, "pixels-above-lines-set");
       size_changed = TRUE;
       break;
 
     case PROP_PIXELS_BELOW_LINES:
       text_tag->pixels_below_lines_set = TRUE;
       text_tag->values->pixels_below_lines = g_value_get_int (value);
-      g_object_notify (object, "pixels_below_lines_set");
+      g_object_notify (object, "pixels-below-lines-set");
       size_changed = TRUE;
       break;
 
     case PROP_PIXELS_INSIDE_WRAP:
       text_tag->pixels_inside_wrap_set = TRUE;
       text_tag->values->pixels_inside_wrap = g_value_get_int (value);
-      g_object_notify (object, "pixels_inside_wrap_set");
+      g_object_notify (object, "pixels-inside-wrap-set");
       size_changed = TRUE;
       break;
 
     case PROP_EDITABLE:
       text_tag->editable_set = TRUE;
       text_tag->values->editable = g_value_get_boolean (value);
-      g_object_notify (object, "editable_set");
+      g_object_notify (object, "editable-set");
       break;
 
     case PROP_WRAP_MODE:
       text_tag->wrap_mode_set = TRUE;
       text_tag->values->wrap_mode = g_value_get_enum (value);
-      g_object_notify (object, "wrap_mode_set");
+      g_object_notify (object, "wrap-mode-set");
       size_changed = TRUE;
       break;
 
     case PROP_JUSTIFICATION:
       text_tag->justification_set = TRUE;
       text_tag->values->justification = g_value_get_enum (value);
-      g_object_notify (object, "justification_set");
+      g_object_notify (object, "justification-set");
       size_changed = TRUE;
       break;
 
@@ -1125,53 +1125,53 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_LEFT_MARGIN:
       text_tag->left_margin_set = TRUE;
       text_tag->values->left_margin = g_value_get_int (value);
-      g_object_notify (object, "left_margin_set");
+      g_object_notify (object, "left-margin-set");
       size_changed = TRUE;
       break;
 
     case PROP_INDENT:
       text_tag->indent_set = TRUE;
       text_tag->values->indent = g_value_get_int (value);
-      g_object_notify (object, "indent_set");
+      g_object_notify (object, "indent-set");
       size_changed = TRUE;
       break;
 
     case PROP_STRIKETHROUGH:
       text_tag->strikethrough_set = TRUE;
       text_tag->values->appearance.strikethrough = g_value_get_boolean (value);
-      g_object_notify (object, "strikethrough_set");
+      g_object_notify (object, "strikethrough-set");
       break;
 
     case PROP_RIGHT_MARGIN:
       text_tag->right_margin_set = TRUE;
       text_tag->values->right_margin = g_value_get_int (value);
-      g_object_notify (object, "right_margin_set");
+      g_object_notify (object, "right-margin-set");
       size_changed = TRUE;
       break;
 
     case PROP_UNDERLINE:
       text_tag->underline_set = TRUE;
       text_tag->values->appearance.underline = g_value_get_enum (value);
-      g_object_notify (object, "underline_set");
+      g_object_notify (object, "underline-set");
       break;
 
     case PROP_RISE:
       text_tag->rise_set = TRUE;
       text_tag->values->appearance.rise = g_value_get_int (value);
-      g_object_notify (object, "rise_set");
+      g_object_notify (object, "rise-set");
       size_changed = TRUE;      
       break;
 
     case PROP_BACKGROUND_FULL_HEIGHT:
       text_tag->bg_full_height_set = TRUE;
       text_tag->values->bg_full_height = g_value_get_boolean (value);
-      g_object_notify (object, "background_full_height_set");
+      g_object_notify (object, "background-full-height-set");
       break;
 
     case PROP_LANGUAGE:
       text_tag->language_set = TRUE;
       text_tag->values->language = pango_language_from_string (g_value_get_string (value));
-      g_object_notify (object, "language_set");
+      g_object_notify (object, "language-set");
       break;
 
     case PROP_TABS:
@@ -1184,7 +1184,7 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->values->tabs =
         pango_tab_array_copy (g_value_get_boxed (value));
 
-      g_object_notify (object, "tabs_set");
+      g_object_notify (object, "tabs-set");
       
       size_changed = TRUE;
       break;
@@ -1193,7 +1193,7 @@ gtk_text_tag_set_property (GObject      *object,
       g_warning ("The \"invisible\" property on GtkTextTag is not supported for GTK 2.0, it will be added in a future release. see http://bugzilla.gnome.org bug #66194 for status.");
       text_tag->invisible_set = TRUE;
       text_tag->values->invisible = g_value_get_boolean (value);
-      g_object_notify (object, "invisible_set");
+      g_object_notify (object, "invisible-set");
       size_changed = TRUE;
       break;
       

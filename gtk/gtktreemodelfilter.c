@@ -2422,8 +2422,8 @@ gtk_tree_model_filter_new (GtkTreeModel *child_model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL (child_model), NULL);
 
   retval = g_object_new (GTK_TYPE_TREE_MODEL_FILTER, 
-			 "child_model", child_model,
-			 "virtual_root", root,
+			 "child-model", child_model,
+			 "virtual-root", root,
 			 NULL);
 
   return retval;

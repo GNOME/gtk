@@ -788,7 +788,7 @@ gtk_tool_item_set_is_important (GtkToolItem *tool_item, gboolean is_important)
 
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
 
-      g_object_notify (G_OBJECT (tool_item), "is_important");
+      g_object_notify (G_OBJECT (tool_item), "is-important");
     }
 }
 
@@ -915,7 +915,7 @@ gtk_tool_item_set_visible_horizontal (GtkToolItem *toolitem,
     {
       toolitem->priv->visible_horizontal = visible_horizontal;
 
-      g_object_notify (G_OBJECT (toolitem), "visible_horizontal");
+      g_object_notify (G_OBJECT (toolitem), "visible-horizontal");
 
       gtk_widget_queue_resize (GTK_WIDGET (toolitem));
     }
@@ -966,7 +966,7 @@ gtk_tool_item_set_visible_vertical (GtkToolItem *toolitem,
     {
       toolitem->priv->visible_vertical = visible_vertical;
 
-      g_object_notify (G_OBJECT (toolitem), "visible_vertical");
+      g_object_notify (G_OBJECT (toolitem), "visible-vertical");
 
       gtk_widget_queue_resize (GTK_WIDGET (toolitem));
     }

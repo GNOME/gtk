@@ -219,7 +219,7 @@ gtk_radio_action_new (const gchar *name,
 			 "name", name,
 			 "label", label,
 			 "tooltip", tooltip,
-			 "stock_id", stock_id,
+			 "stock-id", stock_id,
 			 "value", value,
 			 NULL);
 
@@ -233,8 +233,6 @@ gtk_radio_action_finalize (GObject *object)
   GSList *tmp_list;
 
   action = GTK_RADIO_ACTION (object);
-
-  g_print ("finalize %p\n", action);
 
   action->private_data->group = g_slist_remove (action->private_data->group, action);
 
@@ -368,7 +366,7 @@ static GtkWidget *
 create_menu_item (GtkAction *action)
 {
   return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, 
-		       "draw_as_radio", TRUE,
+		       "draw-as-radio", TRUE,
 		       NULL);
 }
 

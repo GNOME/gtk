@@ -64,9 +64,9 @@ gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean
 
 	pixbuf = g_object_new (GDK_TYPE_PIXBUF, 
 			       "colorspace", colorspace,
-			       "n_channels", has_alpha ? 4 : 3,
-			       "bits_per_sample", bits_per_sample,
-			       "has_alpha", has_alpha ? TRUE : FALSE,
+			       "n-channels", has_alpha ? 4 : 3,
+			       "bits-per-sample", bits_per_sample,
+			       "has-alpha", has_alpha ? TRUE : FALSE,
 			       "width", width,
 			       "height", height,
 			       "rowstride", rowstride,

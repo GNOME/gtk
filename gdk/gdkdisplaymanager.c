@@ -260,7 +260,7 @@ gdk_display_manager_set_default_display (GdkDisplayManager *display_manager,
 
   _gdk_windowing_set_default_display (display);
 
-  g_object_notify (G_OBJECT (display_manager), "default_display");
+  g_object_notify (G_OBJECT (display_manager), "default-display");
 }
 
 /**

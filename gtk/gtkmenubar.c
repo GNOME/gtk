@@ -363,7 +363,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	    }
 	}
 
-      gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
+      gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
       
       requisition->width += (GTK_CONTAINER (menu_bar)->border_width +
                              ipadding + 
@@ -411,7 +411,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
 
-  gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
+  gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
   
   if (menu_shell->children)
     {
@@ -775,7 +775,7 @@ get_shadow_type (GtkMenuBar *menubar)
   GtkShadowType shadow_type = GTK_SHADOW_OUT;
   
   gtk_widget_style_get (GTK_WIDGET (menubar),
-			"shadow_type", &shadow_type,
+			"shadow-type", &shadow_type,
 			NULL);
 
   return shadow_type;

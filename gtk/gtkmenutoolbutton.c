@@ -511,7 +511,7 @@ gtk_menu_tool_button_new_from_stock (const gchar *stock_id)
   g_return_val_if_fail (stock_id != NULL, NULL);
 
   button = g_object_new (GTK_TYPE_MENU_TOOL_BUTTON,
-			 "stock_id", stock_id,
+			 "stock-id", stock_id,
 			 NULL);
 
   return GTK_TOOL_ITEM (button);

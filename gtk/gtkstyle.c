@@ -3235,8 +3235,8 @@ option_menu_get_props (GtkWidget      *widget,
   
   if (widget)
     gtk_widget_style_get (widget, 
-			  "indicator_size", &tmp_size,
-			  "indicator_spacing", &tmp_spacing,
+			  "indicator-size", &tmp_size,
+			  "indicator-spacing", &tmp_spacing,
 			  NULL);
 
   if (tmp_size)
@@ -3466,7 +3466,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	      GdkColor *color = NULL;
 
 	      gtk_widget_style_get (widget,
-		                    "even_row_color", &color,
+		                    "even-row-color", &color,
 				    NULL);
 
 	      if (color)
@@ -3484,7 +3484,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	      GdkColor *color;
 
 	      gtk_widget_style_get (widget,
-		                    "odd_row_color", &color,
+		                    "odd-row-color", &color,
 				    NULL);
 
 	      if (color)
@@ -3497,7 +3497,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	      else
 	        {
 		  gtk_widget_style_get (widget,
-		                        "even_row_color", &color,
+		                        "even-row-color", &color,
 					NULL);
 
 		  if (color)
@@ -3518,11 +3518,11 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 
 	      if (!strcmp ("cell_odd_sorted", detail))
 	        gtk_widget_style_get (widget,
-		                      "odd_row_color", &color,
+		                      "odd-row-color", &color,
 				      NULL);
 	      else
 	        gtk_widget_style_get (widget,
-		                      "even_row_color", &color,
+		                      "even-row-color", &color,
 				      NULL);
 
 	      if (color)
@@ -3543,7 +3543,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	      GdkColor *color = NULL;
 
 	      gtk_widget_style_get (widget,
-		                    "odd_row_color", &color,
+		                    "odd-row-color", &color,
 				    NULL);
 
 	      if (color)
@@ -3556,7 +3556,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	      else
 	        {
 		  gtk_widget_style_get (widget,
-		                        "even_row_color", &color,
+		                        "even-row-color", &color,
 					NULL);
 
 		  if (color)

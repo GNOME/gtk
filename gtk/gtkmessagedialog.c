@@ -403,7 +403,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
   widget = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
-			 "message_type", type,
+			 "message-type", type,
 			 "buttons", buttons,
 			 NULL);
   dialog = GTK_DIALOG (widget);
@@ -712,7 +712,7 @@ gtk_message_dialog_style_set (GtkWidget *widget,
 
   if (parent)
     {
-      gtk_widget_style_get (widget, "message_border",
+      gtk_widget_style_get (widget, "message-border",
                             &border_width, NULL);
       
       gtk_container_set_border_width (GTK_CONTAINER (parent),
@@ -720,7 +720,7 @@ gtk_message_dialog_style_set (GtkWidget *widget,
     }
 
   gtk_widget_style_get (widget,
-			"use_separator", &use_separator,
+			"use-separator", &use_separator,
 			NULL);
   _gtk_dialog_set_ignore_separator (GTK_DIALOG (widget), FALSE);
   gtk_dialog_set_has_separator (GTK_DIALOG (widget), use_separator);

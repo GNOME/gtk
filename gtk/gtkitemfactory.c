@@ -1125,7 +1125,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       label = gtk_widget_new (GTK_TYPE_ACCEL_LABEL,
 			      "visible", TRUE,
 			      "parent", widget,
-			      "accel_widget", widget,
+			      "accel-widget", widget,
 			      "xalign", 0.0,
 			      NULL);
       gtk_label_set_text_with_mnemonic (GTK_LABEL (label), name);

@@ -944,7 +944,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
   GtkLabel *label = data;
 
   label->mnemonic_widget = NULL;
-  g_object_notify (G_OBJECT (label), "mnemonic_widget");
+  g_object_notify (G_OBJECT (label), "mnemonic-widget");
 }
 
 /**
@@ -990,7 +990,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
       gtk_widget_add_mnemonic_label (label->mnemonic_widget, GTK_WIDGET (label));
     }
   
-  g_object_notify (G_OBJECT (label), "mnemonic_widget");
+  g_object_notify (G_OBJECT (label), "mnemonic-widget");
 }
 
 /**
@@ -1058,7 +1058,7 @@ gtk_label_set_use_markup_internal (GtkLabel *label,
   val = val != FALSE;
   if (label->use_markup != val)
     {
-      g_object_notify (G_OBJECT (label), "use_markup");
+      g_object_notify (G_OBJECT (label), "use-markup");
       label->use_markup = val;
     }
 }
@@ -1070,7 +1070,7 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
   val = val != FALSE;
   if (label->use_underline != val)
     {
-      g_object_notify (G_OBJECT (label), "use_underline");
+      g_object_notify (G_OBJECT (label), "use-underline");
       label->use_underline = val;
     }
 }
@@ -2997,8 +2997,8 @@ gtk_label_set_selectable (GtkLabel *label,
     {
       g_object_freeze_notify (G_OBJECT (label));
       g_object_notify (G_OBJECT (label), "selectable");
-      g_object_notify (G_OBJECT (label), "cursor_position");
-      g_object_notify (G_OBJECT (label), "selection_bound");
+      g_object_notify (G_OBJECT (label), "cursor-position");
+      g_object_notify (G_OBJECT (label), "selection-bound");
       g_object_thaw_notify (G_OBJECT (label));
       gtk_widget_queue_draw (GTK_WIDGET (label));
     }
@@ -3195,8 +3195,8 @@ gtk_label_select_region_index (GtkLabel *label,
       gtk_widget_queue_draw (GTK_WIDGET (label));
 
       g_object_freeze_notify (G_OBJECT (label));
-      g_object_notify (G_OBJECT (label), "cursor_position");
-      g_object_notify (G_OBJECT (label), "selection_bound");
+      g_object_notify (G_OBJECT (label), "cursor-position");
+      g_object_notify (G_OBJECT (label), "selection-bound");
       g_object_thaw_notify (G_OBJECT (label));
     }
 }

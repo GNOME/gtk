@@ -673,7 +673,7 @@ gtk_button_construct_child (GtkButton *button)
 
       g_object_set (priv->image, 
 		    "visible", show_image (button),
-		    "no_show_all", TRUE,
+		    "no-show-all", TRUE,
 		    NULL);
       hbox = gtk_hbox_new (FALSE, 2);
 
@@ -734,8 +734,8 @@ gtk_button_new_from_stock (const gchar *stock_id)
 {
   return g_object_new (GTK_TYPE_BUTTON,
                        "label", stock_id,
-                       "use_stock", TRUE,
-                       "use_underline", TRUE,
+                       "use-stock", TRUE,
+                       "use-underline", TRUE,
                        NULL);
 }
 
@@ -755,7 +755,7 @@ gtk_button_new_from_stock (const gchar *stock_id)
 GtkWidget*
 gtk_button_new_with_mnemonic (const gchar *label)
 {
-  return g_object_new (GTK_TYPE_BUTTON, "label", label, "use_underline", TRUE,  NULL);
+  return g_object_new (GTK_TYPE_BUTTON, "label", label, "use-underline", TRUE,  NULL);
 }
 
 void
@@ -909,7 +909,7 @@ gtk_button_get_props (GtkButton *button,
 
   if (default_border)
     {
-      gtk_widget_style_get (widget, "default_border", &tmp_border, NULL);
+      gtk_widget_style_get (widget, "default-border", &tmp_border, NULL);
 
       if (tmp_border)
 	{
@@ -922,7 +922,7 @@ gtk_button_get_props (GtkButton *button,
 
   if (default_outside_border)
     {
-      gtk_widget_style_get (widget, "default_outside_border", &tmp_border, NULL);
+      gtk_widget_style_get (widget, "default-outside-border", &tmp_border, NULL);
 
       if (tmp_border)
 	{
@@ -934,7 +934,7 @@ gtk_button_get_props (GtkButton *button,
     }
 
   if (interior_focus)
-    gtk_widget_style_get (widget, "interior_focus", interior_focus, NULL);
+    gtk_widget_style_get (widget, "interior-focus", interior_focus, NULL);
 }
 	
 static void
@@ -1039,8 +1039,8 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  gint child_displacement_y;
 	  
 	  gtk_widget_style_get (widget,
-				"child_displacement_x", &child_displacement_x, 
-				"child_displacement_y", &child_displacement_y,
+				"child-displacement-x", &child_displacement_x, 
+				"child-displacement-y", &child_displacement_y,
 				NULL);
 	  child_allocation.x += child_displacement_x;
 	  child_allocation.y += child_displacement_y;
@@ -1127,9 +1127,9 @@ _gtk_button_paint (GtkButton    *button,
 	  gboolean displace_focus;
 	  
 	  gtk_widget_style_get (GTK_WIDGET (widget),
-				"child_displacement_y", &child_displacement_y,
-				"child_displacement_x", &child_displacement_x,
-				"displace_focus", &displace_focus,
+				"child-displacement-y", &child_displacement_y,
+				"child-displacement-x", &child_displacement_x,
+				"displace-focus", &displace_focus,
 				NULL);
 
 	  if (interior_focus)
@@ -1425,7 +1425,7 @@ gtk_button_set_use_underline (GtkButton *button,
   
       gtk_button_construct_child (button);
       
-      g_object_notify (G_OBJECT (button), "use_underline");
+      g_object_notify (G_OBJECT (button), "use-underline");
     }
 }
 
@@ -1469,7 +1469,7 @@ gtk_button_set_use_stock (GtkButton *button,
   
       gtk_button_construct_child (button);
       
-      g_object_notify (G_OBJECT (button), "use_stock");
+      g_object_notify (G_OBJECT (button), "use-stock");
     }
 }
 
@@ -1515,7 +1515,7 @@ gtk_button_set_focus_on_click (GtkButton *button,
     {
       button->focus_on_click = focus_on_click;
       
-      g_object_notify (G_OBJECT (button), "focus_on_click");
+      g_object_notify (G_OBJECT (button), "focus-on-click");
     }
 }
 

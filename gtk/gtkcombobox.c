@@ -2598,10 +2598,10 @@ menu_occupied (GtkMenu   *menu,
 
       gtk_container_child_get (GTK_CONTAINER (menu), 
 			       i->data,
-                               "left_attach", &l,
-                               "right_attach", &r,
-                               "bottom_attach", &b,
-                               "top_attach", &t,
+                               "left-attach", &l,
+                               "right-attach", &r,
+                               "bottom-attach", &b,
+                               "top-attach", &t,
                                NULL);
 
       /* look if this item intersects with the given coordinates */
@@ -3129,10 +3129,10 @@ gtk_combo_box_menu_row_changed (GtkTreeModel *model,
          move it */
       gtk_container_child_set (GTK_CONTAINER (combo_box->priv->popup_widget),
                                item, 
-			       "left_attach", -1, 
-			       "right_attach", -1,
-                               "top_attach", -1, 
-			       "bottom_attach", -1, 
+			       "left-attach", -1, 
+			       "right-attach", -1,
+                               "top-attach", -1, 
+			       "bottom-attach", -1, 
 			       NULL);
 
       gtk_combo_box_relayout_item (combo_box, item, iter, pitem);
@@ -3307,7 +3307,7 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
   if (combo_box->priv->cell_view)
     {
       g_object_set (combo_box->priv->cell_view,
-                    "background_set", FALSE,
+                    "background-set", FALSE,
                     NULL);
     }
 
@@ -4208,7 +4208,7 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
       gtk_combo_box_check_appearance (combo_box);
       gtk_combo_box_relayout (combo_box);
       
-      g_object_notify (G_OBJECT (combo_box), "wrap_width");
+      g_object_notify (G_OBJECT (combo_box), "wrap-width");
     }
 }
 
@@ -4258,7 +4258,7 @@ gtk_combo_box_set_row_span_column (GtkComboBox *combo_box,
       
       gtk_combo_box_relayout (combo_box);
  
-      g_object_notify (G_OBJECT (combo_box), "row_span_column");
+      g_object_notify (G_OBJECT (combo_box), "row-span-column");
     }
 }
 
@@ -4308,7 +4308,7 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
       
       gtk_combo_box_relayout (combo_box);
 
-      g_object_notify (G_OBJECT (combo_box), "column_span_column");
+      g_object_notify (G_OBJECT (combo_box), "column-span-column");
     }
 }
 
@@ -4996,7 +4996,7 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
       combo_box->priv->add_tearoffs = add_tearoffs;
       gtk_combo_box_check_appearance (combo_box);
       gtk_combo_box_relayout (combo_box);
-      g_object_notify (G_OBJECT (combo_box), "add_tearoffs");
+      g_object_notify (G_OBJECT (combo_box), "add-tearoffs");
     }
 }
 
@@ -5118,7 +5118,7 @@ gtk_combo_box_set_focus_on_click (GtkComboBox *combo,
     {
       combo->priv->focus_on_click = focus_on_click;
       
-      g_object_notify (G_OBJECT (combo), "focus_on_click");
+      g_object_notify (G_OBJECT (combo), "focus-on-click");
     }
 }
 
