@@ -1,5 +1,9 @@
 2004-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates.
+
+2004-07-09  Matthias Clasen  <mclasen@redhat.com>
+	
  	Make GtkEntry work harder to protect passwords:  (#143955,
 	Morten Welinder)
 	
@@ -279,11 +283,7 @@ Fri Jun 25 23:35:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_model):
 	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Allow passing
-	NULL to unset th	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_model):
-	* gtk/gtkcombobox.c (gtk_combo_box_set_model): 
-Sat Jun 26 00:04:36 2004  Matthias Clasen  <maclas@gmx.de>
-
-e model.  (#137211, patch by  Mariano Suárez-Alvarez)
+	NULL to unset the model.  (#137211, patch by  Mariano Suárez-Alvarez)
 
 Fri Jun 25 23:33:05 2004  Matthias Clasen  <maclas@gmx.de>
 

@@ -1,3 +1,39 @@
+Overview of Changes from GTK+ 2.4.3 to GTK+ 2.4.4
+=================================================
+* GtkFileChooser
+ - Use Save button in save mode. [Federico Mena Quintero]
+ - Check for errors when opening folders [Federico]
+ - Bug fixes [Federico, Alex Roitman, Owen Taylor]
+* GtkComboBox
+ - Make it work without a model [Mariano Suarez-Alvarez, Christian Persch]
+ - Improve placement of popup [David A. Knight]
+* GtkImage
+ - Fix issues with partial redrawing [John Ehresman, Felipe Heidrich, 
+   Billy Biggs]
+* GtkEntry
+ - Fix cursor movement with combining marks [Theppitak Karoonboonyanan]
+ - Protect passwords better [Morten Welinder]
+* Win32 fixes
+ - Fix build without wintab [J. Ali Harlow]
+ - Improve Clipboard handling [Tor Lillqvist, John Ehresman]
+* Gdk 
+ - Make RGBA cursors work [Michael Natterer]
+ - Work with odd XServers [Bastien Nocera]
+ - Handle _NET_WM_STATE_ABOVE/_BELOW better [Billy Biggs]
+ - Don't leak DND contexts [Alex Larsson]
+* gdk-pixbuf
+ - Make tiff loader work with libtiff 3.6.1 [Marco Ghirlanda]
+ - Fix math for GDK_INTERP_HYPER [Brian Cameron]
+ - Fix Win32 exported symbols [Tor Lillqvist]
+* Documentation improvements [Billy Biggs, Matthias Clasen,
+  Oliver Andrieu]
+* Other bug fixes [Federico, Michael, Matthias, Philip Kendall, 
+  Jean-François Wauthy, John Finlay, Jeff Franks, Tim Janik,  
+  Nickolay V. Shmyrev, Sampo Nurmentaus, William Jon McCann, 
+  Jan-Marek Glogowski, Yevgen Muntyan, Pawel Salek, 
+  Jonathan Blandford, Sunil, Dimitiry. M Shatrov]
+* Updated translations (bg,he,hu,ne,sq)
+
 Overview of Changes from GTK+ 2.4.2 to GTK+ 2.4.3
 =================================================
 * GtkButton
