@@ -14,14 +14,6 @@ Tue Jul 21 12:42:01 1998  Owen Taylor  <otaylor@redhat.com>
 	  check and radio buttons to be changed with <Space> without
 	  hiding the menu.
 
-	* gtk/gtkaccellabel.[ch]: Added new capabilities to set
-	  a underline_group and underline_mods for the label - 
-	  accelerators added in the underline group matching
-	  underline_mods will be displayed as an underline character.
-
-	  This doesn't work - Save As needs to be underlined 
-	  as Save _As.
-	 
 	* gtk/gtkitemfactory.c: 
 	  - Create a AccelGroup for each MenuShell we create.
 	  - If an '&' appears before a  character 'c' in the path,
