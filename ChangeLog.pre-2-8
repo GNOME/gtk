@@ -1,3 +1,10 @@
+Sat Jul 25 05:16:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_params_get): collect floats as doubles.
+	(gtk_signal_real_emit): pass the signal by id, and keep it on
+	the stack after the lookup, so to get around the reallocation
+	problem.
+
 Wed Jul 15 17:44:47 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (new_text_property): We free things from

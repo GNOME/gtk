@@ -128,7 +128,7 @@ static void	    gtk_signal_handler_unref   (GtkHandler    *handler,
 static void	    gtk_signal_handler_insert  (GtkObject     *object,
 						GtkHandler    *handler);
 static void	    gtk_signal_real_emit       (GtkObject     *object,
-						GtkSignal     *signal,
+						guint          signal_id,
 						GtkArg	      *params);
 static GtkHandler*  gtk_signal_get_handlers    (GtkObject     *object,
 						guint	       signal_type);
@@ -480,7 +480,7 @@ gtk_signal_emitv (GtkObject           *object,
   g_return_if_fail (signal != NULL);
   g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
 
-  gtk_signal_real_emit (object, signal, params);
+  gtk_signal_real_emit (object, signal_id, params);
 }
 
 void
@@ -507,7 +507,7 @@ gtk_signal_emit (GtkObject *object,
 		  args);
   va_end (args);
 
-  gtk_signal_real_emit (object, signal, params);
+  gtk_signal_real_emit (object, signal_id, params);
 }
 
 void
@@ -531,7 +531,7 @@ gtk_signal_emitv_by_name (GtkObject           *object,
       g_return_if_fail (signal != NULL);
       g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
 
-      gtk_signal_real_emit (object, signal, params);
+      gtk_signal_real_emit (object, signal_id, params);
     }
   else
     {
@@ -571,7 +571,7 @@ gtk_signal_emit_by_name (GtkObject	 *object,
 		      args);
       va_end (args);
 
-      gtk_signal_real_emit (object, signal, params);
+      gtk_signal_real_emit (object, signal_id, params);
     }
   else
     {
@@ -1342,13 +1342,20 @@ gtk_signal_handler_insert (GtkObject  *object,
 
 static void
 gtk_signal_real_emit (GtkObject *object,
-		      GtkSignal *signal,
+		      guint      signal_id,
 		      GtkArg	*params)
 {
   GtkHandler	*handlers;
   GtkHandlerInfo info;
   guchar       **signal_func_offset;
-  register guint signal_id = signal->signal_id;
+  GtkSignal     *signal;
+  GtkSignal	stack_signal;
+
+  /* clutch around the reallocation problem */
+  signal = LOOKUP_SIGNAL_ID (signal_id);
+  g_return_if_fail (signal != NULL);
+  stack_signal = *signal;
+  signal = &stack_signal;
   
   if ((signal->run_type & GTK_RUN_NO_RECURSE) &&
       gtk_emission_check (current_emissions, object, signal_id))
@@ -1783,7 +1790,7 @@ gtk_params_get (GtkArg	       *params,
 	  GTK_VALUE_ULONG(params[i]) = va_arg (args, gulong);
 	  break;
 	case GTK_TYPE_FLOAT:
-	  GTK_VALUE_FLOAT(params[i]) = va_arg (args, gfloat);
+	  GTK_VALUE_FLOAT(params[i]) = va_arg (args, gdouble);
 	  break;
 	case GTK_TYPE_DOUBLE:
 	  GTK_VALUE_DOUBLE(params[i]) = va_arg (args, gdouble);
