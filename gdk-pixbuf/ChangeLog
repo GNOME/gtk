@@ -1,3 +1,7 @@
+1999-11-09  Federico Mena Quintero  <federico@redhat.com>
+
+	* configure.in: Bumped version number to 0.4.
+
 1999-11-09  Michael Fulbright  <drmike@redhat.com>
 
 	* src/io-pnm.c : Finished progressive PNM loading code. Should handle
