@@ -11,7 +11,7 @@ Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
 Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
 			      name="&lt;imain@gtk.org&gt;"></tt>,
-<date>January 27th, 1999
+<date>January 28th, 1999
 
 <!-- ***************************************************************** -->
 <sect>Introduction
@@ -4782,314 +4782,92 @@ int main (int argc, char *argv[])
 <sect> Container Widgets
 <!-- ***************************************************************** -->
 
-<!-- ----------------------------------------------------------------- -->
-<sect1> Notebooks
-<p>
-The NoteBook Widget is a collection of 'pages' that overlap each
-other, each page contains different information. This widget has
-become more common lately in GUI programming, and it is a good way to
-show blocks of similar information that warrant separation in their
-display.
+<!-- ----------------------------------------------------------------- -->   
+<sect1>The EventBox <label id="sec_EventBox">
+<p> 
+Some GTK widgets don't have associated X windows, so they just draw on
+their parents. Because of this, they cannot receive events and if they
+are incorrectly sized, they don't clip so you can get messy
+overwriting etc. If you require more from these widgets, the EventBox
+is for you.
 
-The first function call you will need to know, as you can probably
-guess by now, is used to create a new notebook widget.
+At first glance, the EventBox widget might appear to be totally
+useless. It draws nothing on the screen and responds to no
+events. However, it does serve a function - it provides an X window
+for its child widget. This is important as many GTK widgets do not
+have an associated X window. Not having an X window saves memory and
+improves performance, but also has some drawbacks. A widget without an
+X window cannot receive events, and does not perform any clipping on
+its contents. Although the name <em/EventBox/ emphasizes the
+event-handling function, the widget can also be used for clipping.
+(and more, see the example below).
+
+To create a new EventBox widget, use:
 
 <tscreen><verb>
-GtkWidget *gtk_notebook_new( void );
+GtkWidget *gtk_event_box_new( void );
 </verb></tscreen>
 
-Once the notebook has been created, there are a number of functions
-that operate on the notebook widget. Let's look at them individually.
-
-The first one we will look at is how to position the page indicators.
-These page indicators or 'tabs' as they are referred to, can be
-positioned in four ways: top, bottom, left, or right.
+A child widget can then be added to this EventBox:
 
 <tscreen><verb>
-void gtk_notebook_set_tab_pos( GtkNotebook     *notebook,
-                               GtkPositionType  pos );
+gtk_container_add( GTK_CONTAINER(event_box), widget );
 </verb></tscreen>
 
-GtkPostionType will be one of the following, and they are pretty self explanatory:
-<itemize>
-<item> GTK_POS_LEFT
-<item> GTK_POS_RIGHT
-<item> GTK_POS_TOP
-<item> GTK_POS_BOTTOM
-</itemize>
-
-GTK_POS_TOP is the default.
-
-Next we will look at how to add pages to the notebook. There are three
-ways to add pages to the NoteBook. Let's look at the first two
-together as they are quite similar.
+The following example demonstrates both uses of an EventBox - a label
+is created that is clipped to a small box, and set up so that a
+mouse-click on the label causes the program to exit. Resizing the
+window reveals varying amounts of the label.
 
 <tscreen><verb>
-void gtk_notebook_append_page( GtkNotebook *notebook,
-                               GtkWidget   *child,
-                               GtkWidget   *tab_label );
-
-void gtk_notebook_prepend_page( GtkNotebook *notebook,
-                                GtkWidget   *child,
-                                GtkWidget   *tab_label );
-</verb></tscreen>
-
-These functions add pages to the notebook by inserting them from the
-back of the notebook (append), or the front of the notebook (prepend).
-<tt/child/ is the widget that is placed within the notebook page, and
-<tt/tab_label/ is the label for the page being added. The <tt/child/
-widget must be created separately, and is typically a set of options
-setout witin one of the other container widgets, such as a table.
-
-The final function for adding a page to the notebook contains all of
-the properties of the previous two, but it allows you to specify what
-position you want the page to be in the notebook.
-
-<tscreen><verb>
-void gtk_notebook_insert_page( GtkNotebook *notebook,
-                               GtkWidget   *child,
-                               GtkWidget   *tab_label,
-                               gint         position );
-</verb></tscreen>
-
-The parameters are the same as _append_ and _prepend_ except it
-contains an extra parameter, <tt/position/.  This parameter is used to
-specify what place this page will be inserted into.
-
-Now that we know how to add a page, lets see how we can remove a page
-from the notebook.
-
-<tscreen><verb>
-void gtk_notebook_remove_page( GtkNotebook *notebook,
-                               gint         page_num );
-</verb></tscreen>
-
-This function takes the page specified by <tt/page_num/ and removes it
-from the widget pointed to by <tt/notebook/.
-
-To find out what the current page is in a notebook use the function:
-
-<tscreen><verb>
-gint gtk_notebook_get_current_page( GtkNotebook *notebook );
-</verb></tscreen>
-
-These next two functions are simple calls to move the notebook page
-forward or backward. Simply provide the respective function call with
-the notebook widget you wish to operate on. Note: when the NoteBook is
-currently on the last page, and gtk_notebook_next_page is called, the
-notebook will wrap back to the first page. Likewise, if the NoteBook
-is on the first page, and gtk_notebook_prev_page is called, the
-notebook will wrap to the last page.
-
-<tscreen><verb>
-void gtk_notebook_next_page( GtkNoteBook *notebook );
-
-void gtk_notebook_prev_page( GtkNoteBook *notebook );
-</verb></tscreen>
-
-This next function sets the 'active' page. If you wish the notebook to
-be opened to page 5 for example, you would use this function.  Without
-using this function, the notebook defaults to the first page.
-
-<tscreen><verb>
-void gtk_notebook_set_page( GtkNotebook *notebook,
-                            gint         page_num );
-</verb></tscreen>
-
-The next two functions add or remove the notebook page tabs and the
-notebook border respectively.
-
-<tscreen><verb>
-void gtk_notebook_set_show_tabs( GtkNotebook *notebook,
-                                 gboolean     show_tabs);
-
-void gtk_notebook_set_show_border( GtkNotebook *notebook,
-                                   gboolean     show_border );
-</verb></tscreen>
-
-The next function is useful when the you have a large number of pages,
-and the tabs don't fit on the page. It allows the tabs to be scrolled
-through using two arrow buttons.
-
-<tscreen><verb>
-void gtk_notebook_set_scrollable( GtkNotebook *notebook,
-                                  gboolean     scrollable );
-</verb></tscreen>
-
-<tt/show_tabs/, <tt/show_border/ and <tt/scrollable/ can be either
-TRUE or FALSE.
-
-Now lets look at an example, it is expanded from the testgtk.c code
-that comes with the GTK distribution. This small program creates a
-window with a notebook and six buttons. The notebook contains 11
-pages, added in three different ways, appended, inserted, and
-prepended. The buttons allow you rotate the tab positions, add/remove
-the tabs and border, remove a page, change pages in both a forward and
-backward manner, and exit the program.
-
-<tscreen><verb>
-/* example-start notebook notebook.c */
+/* example-start eventbox eventbox.c */
 
 #include <gtk/gtk.h>
 
-/* This function rotates the position of the tabs */
-void rotate_book (GtkButton *button, GtkNotebook *notebook)
-{
-    gtk_notebook_set_tab_pos (notebook, (notebook->tab_pos +1) %4);
-}
-
-/* Add/Remove the page tabs and the borders */
-void tabsborder_book (GtkButton *button, GtkNotebook *notebook)
-{
-    gint tval = FALSE;
-    gint bval = FALSE;
-    if (notebook->show_tabs == 0)
-	    tval = TRUE; 
-    if (notebook->show_border == 0)
-	    bval = TRUE;
-    
-    gtk_notebook_set_show_tabs (notebook, tval);
-    gtk_notebook_set_show_border (notebook, bval);
-}
-
-/* Remove a page from the notebook */
-void remove_book (GtkButton *button, GtkNotebook *notebook)
-{
-    gint page;
-    
-    page = gtk_notebook_get_current_page(notebook);
-    gtk_notebook_remove_page (notebook, page);
-    /* Need to refresh the widget -- 
-     This forces the widget to redraw itself. */
-    gtk_widget_draw(GTK_WIDGET(notebook), NULL);
-}
-
-void delete (GtkWidget *widget, GtkWidget *event, gpointer data)
-{
-    gtk_main_quit ();
-}
-
-int main (int argc, char *argv[])
+int 
+main (int argc, char *argv[])
 {
     GtkWidget *window;
-    GtkWidget *button;
-    GtkWidget *table;
-    GtkWidget *notebook;
-    GtkWidget *frame;
+    GtkWidget *event_box;
     GtkWidget *label;
-    GtkWidget *checkbutton;
-    int i;
-    char bufferf[32];
-    char bufferl[32];
     
     gtk_init (&amp;argc, &amp;argv);
     
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			GTK_SIGNAL_FUNC (delete), NULL);
+    gtk_window_set_title (GTK_WINDOW (window), "Event Box");
+    
+    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			GTK_SIGNAL_FUNC (gtk_exit), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-
-    table = gtk_table_new(3,6,FALSE);
-    gtk_container_add (GTK_CONTAINER (window), table);
     
-    /* Create a new notebook, place the position of the tabs */
-    notebook = gtk_notebook_new ();
-    gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_TOP);
-    gtk_table_attach_defaults(GTK_TABLE(table), notebook, 0,6,0,1);
-    gtk_widget_show(notebook);
+    /* Create an EventBox and add it to our toplevel window */
     
-    /* Lets append a bunch of pages to the notebook */
-    for (i=0; i < 5; i++) {
-	sprintf(bufferf, "Append Frame %d", i+1);
-	sprintf(bufferl, "Page %d", i+1);
-	
-	frame = gtk_frame_new (bufferf);
-	gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-	gtk_widget_set_usize (frame, 100, 75);
-	gtk_widget_show (frame);
-	
-	label = gtk_label_new (bufferf);
-	gtk_container_add (GTK_CONTAINER (frame), label);
-	gtk_widget_show (label);
-	
-	label = gtk_label_new (bufferl);
-	gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-    }
-      
-    /* Now lets add a page to a specific spot */
-    checkbutton = gtk_check_button_new_with_label ("Check me please!");
-    gtk_widget_set_usize(checkbutton, 100, 75);
-    gtk_widget_show (checkbutton);
-   
-    label = gtk_label_new ("Add page");
-    gtk_notebook_insert_page (GTK_NOTEBOOK (notebook), checkbutton, label, 2);
+    event_box = gtk_event_box_new ();
+    gtk_container_add (GTK_CONTAINER(window), event_box);
+    gtk_widget_show (event_box);
     
-    /* Now finally lets prepend pages to the notebook */
-    for (i=0; i < 5; i++) {
-	sprintf(bufferf, "Prepend Frame %d", i+1);
-	sprintf(bufferl, "PPage %d", i+1);
-	
-	frame = gtk_frame_new (bufferf);
-	gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-	gtk_widget_set_usize (frame, 100, 75);
-	gtk_widget_show (frame);
-	
-	label = gtk_label_new (bufferf);
-	gtk_container_add (GTK_CONTAINER (frame), label);
-	gtk_widget_show (label);
-	
-	label = gtk_label_new (bufferl);
-	gtk_notebook_prepend_page (GTK_NOTEBOOK(notebook), frame, label);
-    }
+    /* Create a long label */
     
-    /* Set what page to start at (page 4) */
-    gtk_notebook_set_page (GTK_NOTEBOOK(notebook), 3);
-
-    /* Create a bunch of buttons */
-    button = gtk_button_new_with_label ("close");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       GTK_SIGNAL_FUNC (delete), NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), button, 0,1,1,2);
-    gtk_widget_show(button);
+    label = gtk_label_new ("Click here to quit, quit, quit, quit, quit");
+    gtk_container_add (GTK_CONTAINER (event_box), label);
+    gtk_widget_show (label);
     
-    button = gtk_button_new_with_label ("next page");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       (GtkSignalFunc) gtk_notebook_next_page,
-			       GTK_OBJECT (notebook));
-    gtk_table_attach_defaults(GTK_TABLE(table), button, 1,2,1,2);
-    gtk_widget_show(button);
+    /* Clip it short. */
+    gtk_widget_set_usize (label, 110, 20);
     
-    button = gtk_button_new_with_label ("prev page");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       (GtkSignalFunc) gtk_notebook_prev_page,
-			       GTK_OBJECT (notebook));
-    gtk_table_attach_defaults(GTK_TABLE(table), button, 2,3,1,2);
-    gtk_widget_show(button);
+    /* And bind an action to it */
+    gtk_widget_set_events (event_box, GDK_BUTTON_PRESS_MASK);
+    gtk_signal_connect (GTK_OBJECT(event_box), "button_press_event",
+			GTK_SIGNAL_FUNC (gtk_exit), NULL);
     
-    button = gtk_button_new_with_label ("tab position");
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        (GtkSignalFunc) rotate_book, GTK_OBJECT(notebook));
-    gtk_table_attach_defaults(GTK_TABLE(table), button, 3,4,1,2);
-    gtk_widget_show(button);
+    /* Yet one more thing you need an X window for ... */
     
-    button = gtk_button_new_with_label ("tabs/border on/off");
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        (GtkSignalFunc) tabsborder_book,
-                        GTK_OBJECT (notebook));
-    gtk_table_attach_defaults(GTK_TABLE(table), button, 4,5,1,2);
-    gtk_widget_show(button);
+    gtk_widget_realize (event_box);
+    gdk_window_set_cursor (event_box->window, gdk_cursor_new (GDK_HAND1));
     
-    button = gtk_button_new_with_label ("remove page");
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        (GtkSignalFunc) remove_book,
-                        GTK_OBJECT(notebook));
-    gtk_table_attach_defaults(GTK_TABLE(table), button, 5,6,1,2);
-    gtk_widget_show(button);
-    
-    gtk_widget_show(table);
-    gtk_widget_show(window);
+    gtk_widget_show (window);
     
     gtk_main ();
     
@@ -5098,154 +4876,314 @@ int main (int argc, char *argv[])
 /* example-end */
 </verb></tscreen>
 
-Hopefully this helps you on your way with creating notebooks for your
-GTK applications.
-
 <!-- ----------------------------------------------------------------- -->
-<sect1>Scrolled Windows
+<sect1> Fixed Container
 <p>
-Scrolled windows are used to create a scrollable area inside a real
-window.  You may insert any type of widget into a scrolled window, and
-it will be accessible regardless of the size by using the scrollbars.
+The Fixed container allows you to place widgets at a fixed position
+within it's window, relative to it's upper left hand corner. The
+position of the widgets can be changed dynamically.
 
-The following function is used to create a new scrolled window.
+There are only three functions associated with the fixed widget:
 
 <tscreen><verb>
-GtkWidget *gtk_scrolled_window_new( GtkAdjustment *hadjustment,
-                                    GtkAdjustment *vadjustment );
+GtkWidget* gtk_fixed_new( void );
+
+void gtk_fixed_put( GtkFixed  *fixed,
+                    GtkWidget *widget,
+                    gint16     x,
+                    gint16     y );
+
+void gtk_fixed_move( GtkFixed  *fixed,
+                     GtkWidget *widget,
+                     gint16     x,
+                     gint16     y );
 </verb></tscreen>
 
-Where the first argument is the adjustment for the horizontal
-direction, and the second, the adjustment for the vertical direction.
-These are almost always set to NULL.
+The function <tt/gtk_fixed_new/ allows you to create a new Fixed
+container.
+
+<tt/gtk_fixed_put/ places <tt/widget/ in the container <tt/fixed/ at
+the position specified by <tt/x/ and <tt/y/.
+
+<tt/gtk_fixed_move/ allows the specified widget to be moved to a new
+position.
+
+The following example illustrates how to use the Fixed Container.
 
 <tscreen><verb>
-void gtk_scrolled_window_set_policy( GtkScrolledWindow *scrolled_window,
-                                     GtkPolicyType      hscrollbar_policy,
-                                     GtkPolicyType      vscrollbar_policy );
-</verb></tscreen>
-
-This sets the policy to be used with respect to the scrollbars.
-The first argument is the scrolled window you wish to change. The second
-sets the policy for the horizontal scrollbar, and the third the policy for 
-the vertical scrollbar.
-
-The policy may be one of GTK_POLICY_AUTOMATIC, or GTK_POLICY_ALWAYS.
-GTK_POLICY_AUTOMATIC will automatically decide whether you need
-scrollbars, whereas GTK_POLICY_ALWAYS will always leave the scrollbars
-there.
-
-You can then place your object into the scrolled window using the
-following function.
-
-<tscreen><verb>
-void gtk_scrolled_window_add_with_viewport( GtkScrolledWindow *scrolled_window,
-                                            GtkWidget         *child);
-</verb></tscreen>
-
-Here is a simple example that packs 100 toggle buttons into a scrolled
-window.  I've only commented on the parts that may be new to you.
-
-<tscreen><verb>
-/* example-start scrolledwin scrolledwin.c */
+/* example-start fixed fixed.c */
 
 #include <gtk/gtk.h>
 
-void destroy(GtkWidget *widget, gpointer data)
+/* I'm going to be lazy and use some global variables to
+ * store the position of the widget within the fixed
+ * container */
+gint x=50;
+gint y=50;
+
+/* This callback function moves the button to a new position
+ * in the Fixed container. */
+void move_button( GtkWidget *widget,
+                  GtkWidget *fixed )
 {
-    gtk_main_quit();
+  x = (x+30)%300;
+  y = (y+50)%300;
+  gtk_fixed_move( GTK_FIXED(fixed), widget, x, y); 
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
-    static GtkWidget *window;
-    GtkWidget *scrolled_window;
-    GtkWidget *table;
-    GtkWidget *button;
-    char buffer[32];
-    int i, j;
+  /* GtkWidget is the storage type for widgets */
+  GtkWidget *window;
+  GtkWidget *fixed;
+  GtkWidget *button;
+  gint i;
+
+  /* Initialise GTK */
+  gtk_init(&amp;argc, &amp;argv);
     
-    gtk_init (&amp;argc, &amp;argv);
-    
-    /* Create a new dialog window for the scrolled window to be
-     * packed into. A dialog is just like a normal window except it has a 
-     * vbox and a horizontal separator packed into it. It's just a shortcut
-     * for creating dialogs */
-    window = gtk_dialog_new ();
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			(GtkSignalFunc) destroy, NULL);
-    gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
-    gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-    gtk_widget_set_usize(window, 300, 300);
-    
-    /* create a new scrolled window. */
-    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-    
-    gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
-    
-    /* the policy is one of GTK_POLICY AUTOMATIC, or GTK_POLICY_ALWAYS.
-     * GTK_POLICY_AUTOMATIC will automatically decide whether you need
-     * scrollbars, whereas GTK_POLICY_ALWAYS will always leave the scrollbars
-     * there.  The first one is the horizontal scrollbar, the second, 
-     * the vertical. */
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-    /* The dialog window is created with a vbox packed into it. */								
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG(window)->vbox), scrolled_window, 
-			TRUE, TRUE, 0);
-    gtk_widget_show (scrolled_window);
-    
-    /* create a table of 10 by 10 squares. */
-    table = gtk_table_new (10, 10, FALSE);
-    
-    /* set the spacing to 10 on x and 10 on y */
-    gtk_table_set_row_spacings (GTK_TABLE (table), 10);
-    gtk_table_set_col_spacings (GTK_TABLE (table), 10);
-    
-    /* pack the table into the scrolled window */
-    gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window),
-                                           table);
-    gtk_widget_show (table);
-    
-    /* this simply creates a grid of toggle buttons on the table
-     * to demonstrate the scrolled window. */
-    for (i = 0; i < 10; i++)
-       for (j = 0; j < 10; j++) {
-          sprintf (buffer, "button (%d,%d)\n", i, j);
-	  button = gtk_toggle_button_new_with_label (buffer);
-	  gtk_table_attach_defaults (GTK_TABLE (table), button,
-	                             i, i+1, j, j+1);
-          gtk_widget_show (button);
-       }
-    
-    /* Add a "close" button to the bottom of the dialog */
-    button = gtk_button_new_with_label ("close");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       (GtkSignalFunc) gtk_widget_destroy,
-			       GTK_OBJECT (window));
-    
-    /* this makes it so the button is the default. */
-    
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), button, TRUE, TRUE, 0);
-    
-    /* This grabs this button to be the default button. Simply hitting
-     * the "Enter" key will cause this button to activate. */
-    gtk_widget_grab_default (button);
+  /* Create a new window */
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title(GTK_WINDOW(window), "Fixed Container");
+
+  /* Here we connect the "destroy" event to a signal handler */ 
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+ 
+  /* Sets the border width of the window. */
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+
+  /* Create a Fixed Container */
+  fixed = gtk_fixed_new();
+  gtk_container_add(GTK_CONTAINER(window), fixed);
+  gtk_widget_show(fixed);
+  
+  for (i = 1 ; i <= 3 ; i++) {
+    /* Creates a new button with the label "Press me" */
+    button = gtk_button_new_with_label ("Press me");
+  
+    /* When the button receives the "clicked" signal, it will call the
+     * function move_button() passing it the Fixed Containter as its
+     * argument. */
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			GTK_SIGNAL_FUNC (move_button), fixed);
+  
+    /* This packs the button into the fixed containers window. */
+    gtk_fixed_put (GTK_FIXED (fixed), button, i*50, i*50);
+  
+    /* The final step is to display this newly created widget. */
     gtk_widget_show (button);
+  }
+
+  /* Display the window */
+  gtk_widget_show (window);
     
-    gtk_widget_show (window);
+  /* Enter the event loop */
+  gtk_main ();
     
-    gtk_main();
-    
-    return(0);
+  return(0);
 }
 /* example-end */
 </verb></tscreen>
 
-Try playing with resizing the window. You'll notice how the scrollbars
-react. You may also wish to use the gtk_widget_set_usize() call to set
-the default size of the window or other widgets.
+<!-- ----------------------------------------------------------------- -->
+<sect1> Frames
+<p>
+Frames can be used to enclose one or a group of widgets with a box
+which can optionally be labelled. The position of the label and the
+style of the box can be altered to suit.
+
+A Frame can be created with the following function:
+
+<tscreen><verb>
+GtkWidget *gtk_frame_new( const gchar *label );
+</verb></tscreen>
+
+The label is by default placed in the upper left hand corner of the
+frame. A value of NULL for the <tt/label/ argument will result in no
+label being displayed. The text of the label can be changed using the
+next function.
+
+<tscreen><verb>
+void gtk_frame_set_label( GtkFrame    *frame,
+                          const gchar *label );
+</verb></tscreen>
+
+The position of the label can be changed using this function:
+
+<tscreen><verb>
+void gtk_frame_set_label_align( GtkFrame *frame,
+                                gfloat    xalign,
+                                gfloat    yalign );
+</verb></tscreen>
+
+<tt/xalign/ and <tt/yalign/ take values between 0.0 and 1.0. <tt/xalign/
+indicates the position of the label along the top horizontal of the
+frame. <tt/yalign/ is not currently used. The default value of xalign
+is 0.0 which places the label at the left hand end of the frame.
+
+The next function alters the style of the box that is used to outline
+the frame.
+
+<tscreen><verb>
+void gtk_frame_set_shadow_type( GtkFrame      *frame,
+                                GtkShadowType  type);
+</verb></tscreen>
+
+The <tt/type/ argument can take one of the following values:
+<itemize>
+<item> GTK_SHADOW_NONE
+<item> GTK_SHADOW_IN
+<item> GTK_SHADOW_OUT
+<item> GTK_SHADOW_ETCHED_IN (the default)
+<item> GTK_SHADOW_ETCHED_OUT
+</itemize>
+
+The following code example illustrates the use of the Frame widget.
+
+<tscreen><verb>
+/* example-start frame frame.c */
+
+#include <gtk/gtk.h>
+
+int main( int   argc,
+          char *argv[] )
+{
+  /* GtkWidget is the storage type for widgets */
+  GtkWidget *window;
+  GtkWidget *frame;
+  GtkWidget *button;
+  gint i;
+
+  /* Initialise GTK */
+  gtk_init(&amp;argc, &amp;argv);
+    
+  /* Create a new window */
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title(GTK_WINDOW(window), "Frame Example");
+
+  /* Here we connect the "destroy" event to a signal handler */ 
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+
+  gtk_widget_set_usize(window, 300, 300);
+  /* Sets the border width of the window. */
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+
+  /* Create a Frame */
+  frame = gtk_frame_new(NULL);
+  gtk_container_add(GTK_CONTAINER(window), frame);
+
+  /* Set the frames label */
+  gtk_frame_set_label( GTK_FRAME(frame), "GTK Frame Widget" );
+
+  /* Align the label at the right of the frame */
+  gtk_frame_set_label_align( GTK_FRAME(frame), 1.0, 0.0);
+
+  /* Set the style of the frame */
+  gtk_frame_set_shadow_type( GTK_FRAME(frame), GTK_SHADOW_ETCHED_OUT);
+
+  gtk_widget_show(frame);
+  
+  /* Display the window */
+  gtk_widget_show (window);
+    
+  /* Enter the event loop */
+  gtk_main ();
+    
+  return(0);
+}
+/* example-end */
+
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->   
+<sect1> Aspect Frames
+<p>
+The aspect frame widget is like a frame widget, except that it also
+enforces the aspect ratio (that is, the ratio of the width to the
+height) of the child widget to have a certain value, adding extra
+space if necessary. This is useful, for instance, if you want to
+preview a larger image. The size of the preview should vary when the
+user resizes the window, but the aspect ratio needs to always match
+the original image.
+  
+To create a new aspect frame use:
+   
+<tscreen><verb>
+GtkWidget *gtk_aspect_frame_new( const gchar *label,
+                                 gfloat       xalign,
+                                 gfloat       yalign,
+                                 gfloat       ratio,
+                                 gint         obey_child);
+</verb></tscreen>
+   
+<tt/xalign/ and <tt/yalign/ specify alignment as with Alignment
+widgets. If <tt/obey_child/ is true, the aspect ratio of a child
+widget will match the aspect ratio of the ideal size it requests.
+Otherwise, it is given by <tt/ratio/.
+   
+To change the options of an existing aspect frame, you can use:
+   
+<tscreen><verb>
+void gtk_aspect_frame_set( GtkAspectFrame *aspect_frame,
+                           gfloat          xalign,
+                           gfloat          yalign,
+                           gfloat          ratio,
+                           gint            obey_child);
+</verb></tscreen>
+   
+As an example, the following program uses an AspectFrame to present a
+drawing area whose aspect ratio will always be 2:1, no matter how the
+user resizes the top-level window.
+   
+<tscreen><verb>
+/* example-start aspectframe aspectframe.c */
+
+#include <gtk/gtk.h>
+   
+int
+main (int argc, char *argv[])
+{
+    GtkWidget *window;
+    GtkWidget *aspect_frame;
+    GtkWidget *drawing_area;
+    gtk_init (&amp;argc, &amp;argv);
+   
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
+    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+                        GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+   
+    /* Create an aspect_frame and add it to our toplevel window */
+   
+    aspect_frame = gtk_aspect_frame_new ("2x1", /* label */
+                                         0.5, /* center x */
+                                         0.5, /* center y */
+                                         2, /* xsize/ysize = 2 */
+                                         FALSE /* ignore child's aspect */);
+   
+    gtk_container_add (GTK_CONTAINER(window), aspect_frame);
+    gtk_widget_show (aspect_frame);
+   
+    /* Now add a child widget to the aspect frame */
+   
+    drawing_area = gtk_drawing_area_new ();
+   
+    /* Ask for a 200x200 window, but the AspectFrame will give us a 200x100
+     * window since we are forcing a 2x1 aspect ratio */
+    gtk_widget_set_usize (drawing_area, 200, 200);
+    gtk_container_add (GTK_CONTAINER(aspect_frame), drawing_area);
+    gtk_widget_show (drawing_area);
+   
+    gtk_widget_show (window);
+    gtk_main ();
+    return 0;
+}
+/* example-end */
+</verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->   
 <sect1> Paned Window Widgets
@@ -5450,6 +5388,152 @@ main (int argc, char *argv[])
 }
 /* example-end */
 </verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Scrolled Windows
+<p>
+Scrolled windows are used to create a scrollable area inside a real
+window.  You may insert any type of widget into a scrolled window, and
+it will be accessible regardless of the size by using the scrollbars.
+
+The following function is used to create a new scrolled window.
+
+<tscreen><verb>
+GtkWidget *gtk_scrolled_window_new( GtkAdjustment *hadjustment,
+                                    GtkAdjustment *vadjustment );
+</verb></tscreen>
+
+Where the first argument is the adjustment for the horizontal
+direction, and the second, the adjustment for the vertical direction.
+These are almost always set to NULL.
+
+<tscreen><verb>
+void gtk_scrolled_window_set_policy( GtkScrolledWindow *scrolled_window,
+                                     GtkPolicyType      hscrollbar_policy,
+                                     GtkPolicyType      vscrollbar_policy );
+</verb></tscreen>
+
+This sets the policy to be used with respect to the scrollbars.
+The first argument is the scrolled window you wish to change. The second
+sets the policy for the horizontal scrollbar, and the third the policy for 
+the vertical scrollbar.
+
+The policy may be one of GTK_POLICY_AUTOMATIC, or GTK_POLICY_ALWAYS.
+GTK_POLICY_AUTOMATIC will automatically decide whether you need
+scrollbars, whereas GTK_POLICY_ALWAYS will always leave the scrollbars
+there.
+
+You can then place your object into the scrolled window using the
+following function.
+
+<tscreen><verb>
+void gtk_scrolled_window_add_with_viewport( GtkScrolledWindow *scrolled_window,
+                                            GtkWidget         *child);
+</verb></tscreen>
+
+Here is a simple example that packs 100 toggle buttons into a scrolled
+window.  I've only commented on the parts that may be new to you.
+
+<tscreen><verb>
+/* example-start scrolledwin scrolledwin.c */
+
+#include <gtk/gtk.h>
+
+void destroy(GtkWidget *widget, gpointer data)
+{
+    gtk_main_quit();
+}
+
+int main (int argc, char *argv[])
+{
+    static GtkWidget *window;
+    GtkWidget *scrolled_window;
+    GtkWidget *table;
+    GtkWidget *button;
+    char buffer[32];
+    int i, j;
+    
+    gtk_init (&amp;argc, &amp;argv);
+    
+    /* Create a new dialog window for the scrolled window to be
+     * packed into. A dialog is just like a normal window except it has a 
+     * vbox and a horizontal separator packed into it. It's just a shortcut
+     * for creating dialogs */
+    window = gtk_dialog_new ();
+    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			(GtkSignalFunc) destroy, NULL);
+    gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
+    gtk_container_set_border_width (GTK_CONTAINER (window), 0);
+    gtk_widget_set_usize(window, 300, 300);
+    
+    /* create a new scrolled window. */
+    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    
+    gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
+    
+    /* the policy is one of GTK_POLICY AUTOMATIC, or GTK_POLICY_ALWAYS.
+     * GTK_POLICY_AUTOMATIC will automatically decide whether you need
+     * scrollbars, whereas GTK_POLICY_ALWAYS will always leave the scrollbars
+     * there.  The first one is the horizontal scrollbar, the second, 
+     * the vertical. */
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+    /* The dialog window is created with a vbox packed into it. */								
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG(window)->vbox), scrolled_window, 
+			TRUE, TRUE, 0);
+    gtk_widget_show (scrolled_window);
+    
+    /* create a table of 10 by 10 squares. */
+    table = gtk_table_new (10, 10, FALSE);
+    
+    /* set the spacing to 10 on x and 10 on y */
+    gtk_table_set_row_spacings (GTK_TABLE (table), 10);
+    gtk_table_set_col_spacings (GTK_TABLE (table), 10);
+    
+    /* pack the table into the scrolled window */
+    gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window),
+                                           table);
+    gtk_widget_show (table);
+    
+    /* this simply creates a grid of toggle buttons on the table
+     * to demonstrate the scrolled window. */
+    for (i = 0; i < 10; i++)
+       for (j = 0; j < 10; j++) {
+          sprintf (buffer, "button (%d,%d)\n", i, j);
+	  button = gtk_toggle_button_new_with_label (buffer);
+	  gtk_table_attach_defaults (GTK_TABLE (table), button,
+	                             i, i+1, j, j+1);
+          gtk_widget_show (button);
+       }
+    
+    /* Add a "close" button to the bottom of the dialog */
+    button = gtk_button_new_with_label ("close");
+    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			       (GtkSignalFunc) gtk_widget_destroy,
+			       GTK_OBJECT (window));
+    
+    /* this makes it so the button is the default. */
+    
+    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), button, TRUE, TRUE, 0);
+    
+    /* This grabs this button to be the default button. Simply hitting
+     * the "Enter" key will cause this button to activate. */
+    gtk_widget_grab_default (button);
+    gtk_widget_show (button);
+    
+    gtk_widget_show (window);
+    
+    gtk_main();
+    
+    return(0);
+}
+/* example-end */
+</verb></tscreen>
+
+Try playing with resizing the window. You'll notice how the scrollbars
+react. You may also wish to use the gtk_widget_set_usize() call to set
+the default size of the window or other widgets.
 
 <!-- ----------------------------------------------------------------- -->   
 <sect1>Toolbar
@@ -5884,179 +5968,314 @@ static char * gtk_xpm[] = {
 ".............++++..............."};
 </verb></tscreen>
 
-<!-- ----------------------------------------------------------------- -->   
-<sect1> Aspect Frames
+<!-- ----------------------------------------------------------------- -->
+<sect1> Notebooks
 <p>
-The aspect frame widget is like a frame widget, except that it also
-enforces the aspect ratio (that is, the ratio of the width to the
-height) of the child widget to have a certain value, adding extra
-space if necessary. This is useful, for instance, if you want to
-preview a larger image. The size of the preview should vary when the
-user resizes the window, but the aspect ratio needs to always match
-the original image.
-  
-To create a new aspect frame use:
-   
+The NoteBook Widget is a collection of 'pages' that overlap each
+other, each page contains different information. This widget has
+become more common lately in GUI programming, and it is a good way to
+show blocks of similar information that warrant separation in their
+display.
+
+The first function call you will need to know, as you can probably
+guess by now, is used to create a new notebook widget.
+
 <tscreen><verb>
-GtkWidget *gtk_aspect_frame_new( const gchar *label,
-                                 gfloat       xalign,
-                                 gfloat       yalign,
-                                 gfloat       ratio,
-                                 gint         obey_child);
+GtkWidget *gtk_notebook_new( void );
 </verb></tscreen>
-   
-<tt/xalign/ and <tt/yalign/ specify alignment as with Alignment
-widgets. If <tt/obey_child/ is true, the aspect ratio of a child
-widget will match the aspect ratio of the ideal size it requests.
-Otherwise, it is given by <tt/ratio/.
-   
-To change the options of an existing aspect frame, you can use:
-   
+
+Once the notebook has been created, there are a number of functions
+that operate on the notebook widget. Let's look at them individually.
+
+The first one we will look at is how to position the page indicators.
+These page indicators or 'tabs' as they are referred to, can be
+positioned in four ways: top, bottom, left, or right.
+
 <tscreen><verb>
-void gtk_aspect_frame_set( GtkAspectFrame *aspect_frame,
-                           gfloat          xalign,
-                           gfloat          yalign,
-                           gfloat          ratio,
-                           gint            obey_child);
+void gtk_notebook_set_tab_pos( GtkNotebook     *notebook,
+                               GtkPositionType  pos );
 </verb></tscreen>
-   
-As an example, the following program uses an AspectFrame to present a
-drawing area whose aspect ratio will always be 2:1, no matter how the
-user resizes the top-level window.
-   
+
+GtkPostionType will be one of the following, and they are pretty self explanatory:
+<itemize>
+<item> GTK_POS_LEFT
+<item> GTK_POS_RIGHT
+<item> GTK_POS_TOP
+<item> GTK_POS_BOTTOM
+</itemize>
+
+GTK_POS_TOP is the default.
+
+Next we will look at how to add pages to the notebook. There are three
+ways to add pages to the NoteBook. Let's look at the first two
+together as they are quite similar.
+
 <tscreen><verb>
-/* example-start aspectframe aspectframe.c */
+void gtk_notebook_append_page( GtkNotebook *notebook,
+                               GtkWidget   *child,
+                               GtkWidget   *tab_label );
+
+void gtk_notebook_prepend_page( GtkNotebook *notebook,
+                                GtkWidget   *child,
+                                GtkWidget   *tab_label );
+</verb></tscreen>
+
+These functions add pages to the notebook by inserting them from the
+back of the notebook (append), or the front of the notebook (prepend).
+<tt/child/ is the widget that is placed within the notebook page, and
+<tt/tab_label/ is the label for the page being added. The <tt/child/
+widget must be created separately, and is typically a set of options
+setout witin one of the other container widgets, such as a table.
+
+The final function for adding a page to the notebook contains all of
+the properties of the previous two, but it allows you to specify what
+position you want the page to be in the notebook.
+
+<tscreen><verb>
+void gtk_notebook_insert_page( GtkNotebook *notebook,
+                               GtkWidget   *child,
+                               GtkWidget   *tab_label,
+                               gint         position );
+</verb></tscreen>
+
+The parameters are the same as _append_ and _prepend_ except it
+contains an extra parameter, <tt/position/.  This parameter is used to
+specify what place this page will be inserted into.
+
+Now that we know how to add a page, lets see how we can remove a page
+from the notebook.
+
+<tscreen><verb>
+void gtk_notebook_remove_page( GtkNotebook *notebook,
+                               gint         page_num );
+</verb></tscreen>
+
+This function takes the page specified by <tt/page_num/ and removes it
+from the widget pointed to by <tt/notebook/.
+
+To find out what the current page is in a notebook use the function:
+
+<tscreen><verb>
+gint gtk_notebook_get_current_page( GtkNotebook *notebook );
+</verb></tscreen>
+
+These next two functions are simple calls to move the notebook page
+forward or backward. Simply provide the respective function call with
+the notebook widget you wish to operate on. Note: when the NoteBook is
+currently on the last page, and gtk_notebook_next_page is called, the
+notebook will wrap back to the first page. Likewise, if the NoteBook
+is on the first page, and gtk_notebook_prev_page is called, the
+notebook will wrap to the last page.
+
+<tscreen><verb>
+void gtk_notebook_next_page( GtkNoteBook *notebook );
+
+void gtk_notebook_prev_page( GtkNoteBook *notebook );
+</verb></tscreen>
+
+This next function sets the 'active' page. If you wish the notebook to
+be opened to page 5 for example, you would use this function.  Without
+using this function, the notebook defaults to the first page.
+
+<tscreen><verb>
+void gtk_notebook_set_page( GtkNotebook *notebook,
+                            gint         page_num );
+</verb></tscreen>
+
+The next two functions add or remove the notebook page tabs and the
+notebook border respectively.
+
+<tscreen><verb>
+void gtk_notebook_set_show_tabs( GtkNotebook *notebook,
+                                 gboolean     show_tabs);
+
+void gtk_notebook_set_show_border( GtkNotebook *notebook,
+                                   gboolean     show_border );
+</verb></tscreen>
+
+The next function is useful when the you have a large number of pages,
+and the tabs don't fit on the page. It allows the tabs to be scrolled
+through using two arrow buttons.
+
+<tscreen><verb>
+void gtk_notebook_set_scrollable( GtkNotebook *notebook,
+                                  gboolean     scrollable );
+</verb></tscreen>
+
+<tt/show_tabs/, <tt/show_border/ and <tt/scrollable/ can be either
+TRUE or FALSE.
+
+Now lets look at an example, it is expanded from the testgtk.c code
+that comes with the GTK distribution. This small program creates a
+window with a notebook and six buttons. The notebook contains 11
+pages, added in three different ways, appended, inserted, and
+prepended. The buttons allow you rotate the tab positions, add/remove
+the tabs and border, remove a page, change pages in both a forward and
+backward manner, and exit the program.
+
+<tscreen><verb>
+/* example-start notebook notebook.c */
 
 #include <gtk/gtk.h>
-   
-int
-main (int argc, char *argv[])
+
+/* This function rotates the position of the tabs */
+void rotate_book (GtkButton *button, GtkNotebook *notebook)
 {
-    GtkWidget *window;
-    GtkWidget *aspect_frame;
-    GtkWidget *drawing_area;
-    gtk_init (&amp;argc, &amp;argv);
-   
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
-                        GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
-    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-   
-    /* Create an aspect_frame and add it to our toplevel window */
-   
-    aspect_frame = gtk_aspect_frame_new ("2x1", /* label */
-                                         0.5, /* center x */
-                                         0.5, /* center y */
-                                         2, /* xsize/ysize = 2 */
-                                         FALSE /* ignore child's aspect */);
-   
-    gtk_container_add (GTK_CONTAINER(window), aspect_frame);
-    gtk_widget_show (aspect_frame);
-   
-    /* Now add a child widget to the aspect frame */
-   
-    drawing_area = gtk_drawing_area_new ();
-   
-    /* Ask for a 200x200 window, but the AspectFrame will give us a 200x100
-     * window since we are forcing a 2x1 aspect ratio */
-    gtk_widget_set_usize (drawing_area, 200, 200);
-    gtk_container_add (GTK_CONTAINER(aspect_frame), drawing_area);
-    gtk_widget_show (drawing_area);
-   
-    gtk_widget_show (window);
-    gtk_main ();
-    return 0;
+    gtk_notebook_set_tab_pos (notebook, (notebook->tab_pos +1) %4);
 }
-/* example-end */
-</verb></tscreen>
 
-<!-- ----------------------------------------------------------------- -->   
-<sect1>The EventBox <label id="sec_EventBox">
-<p> 
-Some gtk widgets don't have associated X windows, so they just draw on
-their parents. Because of this, they cannot receive events and if they
-are incorrectly sized, they don't clip so you can get messy
-overwriting etc. If you require more from these widgets, the EventBox
-is for you.
+/* Add/Remove the page tabs and the borders */
+void tabsborder_book (GtkButton *button, GtkNotebook *notebook)
+{
+    gint tval = FALSE;
+    gint bval = FALSE;
+    if (notebook->show_tabs == 0)
+	    tval = TRUE; 
+    if (notebook->show_border == 0)
+	    bval = TRUE;
+    
+    gtk_notebook_set_show_tabs (notebook, tval);
+    gtk_notebook_set_show_border (notebook, bval);
+}
 
-At first glance, the EventBox widget might appear to be totally
-useless. It draws nothing on the screen and responds to no
-events. However, it does serve a function - it provides an X window
-for its child widget. This is important as many GTK widgets do not
-have an associated X window. Not having an X window saves memory and
-improves performance, but also has some drawbacks. A widget without an
-X window cannot receive events, and does not perform any clipping on
-its contents. Although the name <em/EventBox/ emphasizes the
-event-handling function, the widget can also be used for clipping.
-(and more, see the example below).
+/* Remove a page from the notebook */
+void remove_book (GtkButton *button, GtkNotebook *notebook)
+{
+    gint page;
+    
+    page = gtk_notebook_get_current_page(notebook);
+    gtk_notebook_remove_page (notebook, page);
+    /* Need to refresh the widget -- 
+     This forces the widget to redraw itself. */
+    gtk_widget_draw(GTK_WIDGET(notebook), NULL);
+}
 
-To create a new EventBox widget, use:
+void delete (GtkWidget *widget, GtkWidget *event, gpointer data)
+{
+    gtk_main_quit ();
+}
 
-<tscreen><verb>
-GtkWidget *gtk_event_box_new( void );
-</verb></tscreen>
-
-A child widget can then be added to this EventBox:
-
-<tscreen><verb>
-gtk_container_add( GTK_CONTAINER(event_box), widget );
-</verb></tscreen>
-
-The following example demonstrates both uses of an EventBox - a label
-is created that is clipped to a small box, and set up so that a
-mouse-click on the label causes the program to exit. Resizing the
-window reveals varying amounts of the label.
-
-<tscreen><verb>
-/* example-start eventbox eventbox.c */
-
-#include <gtk/gtk.h>
-
-int 
-main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
     GtkWidget *window;
-    GtkWidget *event_box;
+    GtkWidget *button;
+    GtkWidget *table;
+    GtkWidget *notebook;
+    GtkWidget *frame;
     GtkWidget *label;
+    GtkWidget *checkbutton;
+    int i;
+    char bufferf[32];
+    char bufferl[32];
     
     gtk_init (&amp;argc, &amp;argv);
     
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    gtk_window_set_title (GTK_WINDOW (window), "Event Box");
-    
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			GTK_SIGNAL_FUNC (gtk_exit), NULL);
+    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			GTK_SIGNAL_FUNC (delete), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+
+    table = gtk_table_new(3,6,FALSE);
+    gtk_container_add (GTK_CONTAINER (window), table);
     
-    /* Create an EventBox and add it to our toplevel window */
+    /* Create a new notebook, place the position of the tabs */
+    notebook = gtk_notebook_new ();
+    gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_TOP);
+    gtk_table_attach_defaults(GTK_TABLE(table), notebook, 0,6,0,1);
+    gtk_widget_show(notebook);
     
-    event_box = gtk_event_box_new ();
-    gtk_container_add (GTK_CONTAINER(window), event_box);
-    gtk_widget_show (event_box);
+    /* Lets append a bunch of pages to the notebook */
+    for (i=0; i < 5; i++) {
+	sprintf(bufferf, "Append Frame %d", i+1);
+	sprintf(bufferl, "Page %d", i+1);
+	
+	frame = gtk_frame_new (bufferf);
+	gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
+	gtk_widget_set_usize (frame, 100, 75);
+	gtk_widget_show (frame);
+	
+	label = gtk_label_new (bufferf);
+	gtk_container_add (GTK_CONTAINER (frame), label);
+	gtk_widget_show (label);
+	
+	label = gtk_label_new (bufferl);
+	gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
+    }
+      
+    /* Now lets add a page to a specific spot */
+    checkbutton = gtk_check_button_new_with_label ("Check me please!");
+    gtk_widget_set_usize(checkbutton, 100, 75);
+    gtk_widget_show (checkbutton);
+   
+    label = gtk_label_new ("Add page");
+    gtk_notebook_insert_page (GTK_NOTEBOOK (notebook), checkbutton, label, 2);
     
-    /* Create a long label */
+    /* Now finally lets prepend pages to the notebook */
+    for (i=0; i < 5; i++) {
+	sprintf(bufferf, "Prepend Frame %d", i+1);
+	sprintf(bufferl, "PPage %d", i+1);
+	
+	frame = gtk_frame_new (bufferf);
+	gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
+	gtk_widget_set_usize (frame, 100, 75);
+	gtk_widget_show (frame);
+	
+	label = gtk_label_new (bufferf);
+	gtk_container_add (GTK_CONTAINER (frame), label);
+	gtk_widget_show (label);
+	
+	label = gtk_label_new (bufferl);
+	gtk_notebook_prepend_page (GTK_NOTEBOOK(notebook), frame, label);
+    }
     
-    label = gtk_label_new ("Click here to quit, quit, quit, quit, quit");
-    gtk_container_add (GTK_CONTAINER (event_box), label);
-    gtk_widget_show (label);
+    /* Set what page to start at (page 4) */
+    gtk_notebook_set_page (GTK_NOTEBOOK(notebook), 3);
+
+    /* Create a bunch of buttons */
+    button = gtk_button_new_with_label ("close");
+    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			       GTK_SIGNAL_FUNC (delete), NULL);
+    gtk_table_attach_defaults(GTK_TABLE(table), button, 0,1,1,2);
+    gtk_widget_show(button);
     
-    /* Clip it short. */
-    gtk_widget_set_usize (label, 110, 20);
+    button = gtk_button_new_with_label ("next page");
+    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			       (GtkSignalFunc) gtk_notebook_next_page,
+			       GTK_OBJECT (notebook));
+    gtk_table_attach_defaults(GTK_TABLE(table), button, 1,2,1,2);
+    gtk_widget_show(button);
     
-    /* And bind an action to it */
-    gtk_widget_set_events (event_box, GDK_BUTTON_PRESS_MASK);
-    gtk_signal_connect (GTK_OBJECT(event_box), "button_press_event",
-			GTK_SIGNAL_FUNC (gtk_exit), NULL);
+    button = gtk_button_new_with_label ("prev page");
+    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			       (GtkSignalFunc) gtk_notebook_prev_page,
+			       GTK_OBJECT (notebook));
+    gtk_table_attach_defaults(GTK_TABLE(table), button, 2,3,1,2);
+    gtk_widget_show(button);
     
-    /* Yet one more thing you need an X window for ... */
+    button = gtk_button_new_with_label ("tab position");
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        (GtkSignalFunc) rotate_book, GTK_OBJECT(notebook));
+    gtk_table_attach_defaults(GTK_TABLE(table), button, 3,4,1,2);
+    gtk_widget_show(button);
     
-    gtk_widget_realize (event_box);
-    gdk_window_set_cursor (event_box->window, gdk_cursor_new (GDK_HAND1));
+    button = gtk_button_new_with_label ("tabs/border on/off");
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        (GtkSignalFunc) tabsborder_book,
+                        GTK_OBJECT (notebook));
+    gtk_table_attach_defaults(GTK_TABLE(table), button, 4,5,1,2);
+    gtk_widget_show(button);
     
-    gtk_widget_show (window);
+    button = gtk_button_new_with_label ("remove page");
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        (GtkSignalFunc) remove_book,
+                        GTK_OBJECT(notebook));
+    gtk_table_attach_defaults(GTK_TABLE(table), button, 5,6,1,2);
+    gtk_widget_show(button);
+    
+    gtk_widget_show(table);
+    gtk_widget_show(window);
     
     gtk_main ();
     
@@ -6064,6 +6283,9 @@ main (int argc, char *argv[])
 }
 /* example-end */
 </verb></tscreen>
+
+Hopefully this helps you on your way with creating notebooks for your
+GTK applications.
 
 <!-- ***************************************************************** -->
 <sect>CList Widget
@@ -6780,619 +7002,6 @@ void selection_made( GtkWidget *clist, gint row, gint column,
 /* example-end */
 </verb></tscreen>
                     
-<!-- ***************************************************************** -->
-<sect> List Widget
-<!-- ***************************************************************** -->
-<p>
-NOTE: The GtkList widget has been superseded by the GtkCList widget.
-
-The GtkList widget is designed to act as a vertical container for
-widgets that should be of the type GtkListItem.
-
-A GtkList widget has its own window to receive events and its own
-background color which is usually white. As it is directly derived
-from a GtkContainer it can be treated as such by using the
-GTK_CONTAINER(List) macro, see the GtkContainer widget for more on
-this. One should already be familiar with the usage of a GList and
-its related functions g_list_*() to be able to use the GtkList widget
-to it full extent.
-
-There is one field inside the structure definition of the GtkList
-widget that will be of greater interest to us, this is:
-
-<tscreen><verb>
-struct _GtkList
-{
-  ...
-  GList *selection;
-  guint selection_mode;
-  ...
-}; 
-</verb></tscreen>
-
-The selection field of a GtkList points to a linked list of all items
-that are currently selected, or NULL if the selection is empty.  So to
-learn about the current selection we read the GTK_LIST()->selection
-field, but do not modify it since the internal fields are maintained
-by the gtk_list_*() functions.
-
-The selection_mode of the GtkList determines the selection facilities
-of a GtkList and therefore the contents of the GTK_LIST()->selection
-field. The selection_mode may be one of the following:
-
-<itemize>
-<item> GTK_SELECTION_SINGLE - The selection is either NULL
-                        or contains a GList pointer
-                        for a single selected item.
-
-<item> GTK_SELECTION_BROWSE -  The selection is NULL if the list
-                        contains no widgets or insensitive
-                        ones only, otherwise it contains
-                        a GList pointer for one GList
-                        structure, and therefore exactly
-                        one list item.
-
-<item> GTK_SELECTION_MULTIPLE -  The selection is NULL if no list
-                        items are selected or a GList pointer
-                        for the first selected item. That
-                        in turn points to a GList structure
-                        for the second selected item and so
-                        on.
-
-<item> GTK_SELECTION_EXTENDED - The selection is always NULL.
-</itemize>
-
-The default is GTK_SELECTION_MULTIPLE.
-
-<!-- ----------------------------------------------------------------- -->
-<sect1> Signals
-<p>
-<tscreen><verb>
-void selection_changed( GtkList *list );
-</verb></tscreen>
-
-This signal will be invoked whenever the selection field of a GtkList
-has changed. This happens when a child of the GtkList got selected or
-deselected.
-
-<tscreen><verb>
-void select_child( GtkList   *list,
-                   GtkWidget *child);
-</verb></tscreen>
-
-This signal is invoked when a child of the GtkList is about to get
-selected. This happens mainly on calls to gtk_list_select_item(),
-gtk_list_select_child(), button presses and sometimes indirectly
-triggered on some else occasions where children get added to or
-removed from the GtkList.
-
-<tscreen><verb>
-void unselect_child( GtkList   *list,
-                     GtkWidget *child );
-</verb></tscreen>
-
-This signal is invoked when a child of the GtkList is about to get
-deselected. This happens mainly on calls to gtk_list_unselect_item(),
-gtk_list_unselect_child(), button presses and sometimes indirectly
-triggered on some else occasions where children get added to or
-removed from the GtkList.
-
-<!-- ----------------------------------------------------------------- -->
-<sect1> Functions
-<p>
-<tscreen><verb>
-guint gtk_list_get_type( void );
-</verb></tscreen>
-
-Returns the `GtkList' type identifier.
-
-<tscreen><verb>
-GtkWidget *gtk_list_new( void );
-</verb></tscreen>
-
-Create a new GtkList object. The new widget is returned as a pointer
-to a GtkWidget object. NULL is returned on failure.
-
-<tscreen><verb>
-void gtk_list_insert_items( GtkList *list,
-                            GList   *items,
-                            gint     position );
-</verb></tscreen>
-
-Insert list items into the list, starting at <tt/position/.
-<tt/items/ is a doubly linked list where each nodes data pointer is
-expected to point to a newly created GtkListItem.  The GList nodes of
-<tt/items/ are taken over by the list.
-
-<tscreen><verb>
-void gtk_list_append_items( GtkList *list,
-                            GList   *items);
-</verb></tscreen>
-
-Insert list items just like gtk_list_insert_items() at the end of the
-list. The GList nodes of <tt/items/ are taken over by the list.
-
-<tscreen><verb>
-void gtk_list_prepend_items( GtkList *list,
-                             GList   *items);
-</verb></tscreen>
-
-Insert list items just like gtk_list_insert_items() at the very
-beginning of the list. The GList nodes of <tt/items/ are taken over by
-the list.
-
-<tscreen><verb>
-void gtk_list_remove_items( GtkList *list,
-                            GList   *items);
-</verb></tscreen>
-
-Remove list items from the list. <tt/items/ is a doubly linked list
-where each nodes data pointer is expected to point to a direct child
-of list. It is the callers responsibility to make a call to
-g_list_free(items) afterwards. Also the caller has to destroy the list
-items himself.
-
-<tscreen><verb>
-void gtk_list_clear_items( GtkList *list,
-                           gint start,
-                           gint end );
-</verb></tscreen>
-
-Remove and destroy list items from the list. A widget is affected if
-its current position within the list is in the range specified by
-<tt/start/ and <tt/end/.
-
-<tscreen><verb>
-void gtk_list_select_item( GtkList *list,
-                           gint     item );
-</verb></tscreen>
-
-Invoke the select_child signal for a list item specified through its
-current position within the list.
-
-<tscreen><verb>
-void gtk_list_unselect_item( GtkList *list,
-                             gint     item);
-</verb></tscreen>
-
-Invoke the unselect_child signal for a list item specified through its
-current position within the list.
-
-<tscreen><verb>
-void gtk_list_select_child( GtkList *list,
-                            GtkWidget *child);
-</verb></tscreen>
-
-Invoke the select_child signal for the specified child.
-
-<tscreen><verb>
-void gtk_list_unselect_child( GtkList   *list,
-                              GtkWidget *child);
-</verb></tscreen>
-
-Invoke the unselect_child signal for the specified child.
-
-<tscreen><verb>
-gint gtk_list_child_position( GtkList *list,
-                              GtkWidget *child);
-</verb></tscreen>
-
-Return the position of <tt/child/ within the list. "-1" is returned on
-failure.
-
-<tscreen><verb>
-void gtk_list_set_selection_mode( GtkList         *list,
-                                  GtkSelectionMode mode );
-</verb></tscreen>
-
-Set the selection mode MODE which can be of GTK_SELECTION_SINGLE,
-GTK_SELECTION_BROWSE, GTK_SELECTION_MULTIPLE or
-GTK_SELECTION_EXTENDED.
-
-<tscreen><verb>
-GtkList *GTK_LIST( gpointer obj );
-</verb></tscreen>
-
-Cast a generic pointer to `GtkList *'. *Note Standard Macros::, for
-more info.
-
-<tscreen><verb>
-GtkListClass *GTK_LIST_CLASS( gpointer class);
-</verb></tscreen>
-
-Cast a generic pointer to `GtkListClass*'. *Note Standard Macros::,
-for more info.
-
-<tscreen><verb>
-gint GTK_IS_LIST( gpointer obj);
-</verb></tscreen>
-
-Determine if a generic pointer refers to a `GtkList' object. *Note
-Standard Macros::, for more info.
-
-<!-- ----------------------------------------------------------------- -->
-<sect1> Example
-<p>
-Following is an example program that will print out the changes of the
-selection of a GtkList, and lets you "arrest" list items into a prison
-by selecting them with the rightmost mouse button.
-
-<tscreen><verb>
-/* example-start list list.c */
-
-/* Include the gtk+ header files
- * Include stdio.h, we need that for the printf() function
- */
-#include        <gtk/gtk.h>
-#include        <stdio.h>
-
-/* This is our data identification string to store
- * data in list items
- */
-const gchar *list_item_data_key="list_item_data";
-
-
-/* prototypes for signal handler that we are going to connect
- * to the GtkList widget
- */
-static void  sigh_print_selection( GtkWidget *gtklist,
-                                   gpointer   func_data);
-
-static void  sigh_button_event( GtkWidget      *gtklist,
-                                GdkEventButton *event,
-                                GtkWidget      *frame );
-
-
-/* Main function to set up the user interface */
-
-gint main (int    argc,
-           gchar *argv[])
-{                                  
-    GtkWidget *separator;
-    GtkWidget *window;
-    GtkWidget *vbox;
-    GtkWidget *scrolled_window;
-    GtkWidget *frame;
-    GtkWidget *gtklist;
-    GtkWidget *button;
-    GtkWidget *list_item;
-    GList *dlist;
-    guint i;
-    gchar buffer[64];
-    
-    
-    /* Initialize gtk+ (and subsequently gdk) */
-
-    gtk_init(&amp;argc, &amp;argv);
-    
-    
-    /* Create a window to put all the widgets in
-     * connect gtk_main_quit() to the "destroy" event of
-     * the window to handle window manager close-window-events
-     */
-    window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "GtkList Example");
-    gtk_signal_connect(GTK_OBJECT(window),
-		       "destroy",
-		       GTK_SIGNAL_FUNC(gtk_main_quit),
-		       NULL);
-    
-    
-    /* Inside the window we need a box to arrange the widgets
-     * vertically */
-    vbox=gtk_vbox_new(FALSE, 5);
-    gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
-    gtk_container_add(GTK_CONTAINER(window), vbox);
-    gtk_widget_show(vbox);
-    
-    /* This is the scrolled window to put the GtkList widget inside */
-    scrolled_window=gtk_scrolled_window_new(NULL, NULL);
-    gtk_widget_set_usize(scrolled_window, 250, 150);
-    gtk_container_add(GTK_CONTAINER(vbox), scrolled_window);
-    gtk_widget_show(scrolled_window);
-    
-    /* Create the GtkList widget.
-     * Connect the sigh_print_selection() signal handler
-     * function to the "selection_changed" signal of the GtkList
-     * to print out the selected items each time the selection
-     * has changed */
-    gtklist=gtk_list_new();
-    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(scrolled_window),
-                                           gtklist);
-    gtk_widget_show(gtklist);
-    gtk_signal_connect(GTK_OBJECT(gtklist),
-		       "selection_changed",
-		       GTK_SIGNAL_FUNC(sigh_print_selection),
-		       NULL);
-    
-    /* We create a "Prison" to put a list item in ;) */
-    frame=gtk_frame_new("Prison");
-    gtk_widget_set_usize(frame, 200, 50);
-    gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-    gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
-    gtk_container_add(GTK_CONTAINER(vbox), frame);
-    gtk_widget_show(frame);
-    
-    /* Connect the sigh_button_event() signal handler to the GtkList
-     * which will handle the "arresting" of list items
-     */
-    gtk_signal_connect(GTK_OBJECT(gtklist),
-		       "button_release_event",
-		       GTK_SIGNAL_FUNC(sigh_button_event),
-		       frame);
-    
-    /* Create a separator */
-    separator=gtk_hseparator_new();
-    gtk_container_add(GTK_CONTAINER(vbox), separator);
-    gtk_widget_show(separator);
-    
-    /* Finally create a button and connect it's "clicked" signal
-     * to the destruction of the window */
-    button=gtk_button_new_with_label("Close");
-    gtk_container_add(GTK_CONTAINER(vbox), button);
-    gtk_widget_show(button);
-    gtk_signal_connect_object(GTK_OBJECT(button),
-			      "clicked",
-			      GTK_SIGNAL_FUNC(gtk_widget_destroy),
-			      GTK_OBJECT(window));
-    
-    
-    /* Now we create 5 list items, each having it's own
-     * label and add them to the GtkList using gtk_container_add()
-     * Also we query the text string from the label and
-     * associate it with the list_item_data_key for each list item
-     */
-    for (i=0; i<5; i++) {
-	GtkWidget       *label;
-	gchar           *string;
-	
-	sprintf(buffer, "ListItemContainer with Label #%d", i);
-	label=gtk_label_new(buffer);
-	list_item=gtk_list_item_new();
-	gtk_container_add(GTK_CONTAINER(list_item), label);
-	gtk_widget_show(label);
-	gtk_container_add(GTK_CONTAINER(gtklist), list_item);
-	gtk_widget_show(list_item);
-	gtk_label_get(GTK_LABEL(label), &amp;string);
-	gtk_object_set_data(GTK_OBJECT(list_item),
-			    list_item_data_key,
-			    string);
-    }
-    /* Here, we are creating another 5 labels, this time
-     * we use gtk_list_item_new_with_label() for the creation
-     * we can't query the text string from the label because
-     * we don't have the labels pointer and therefore
-     * we just associate the list_item_data_key of each
-     * list item with the same text string.
-     * For adding of the list items we put them all into a doubly
-     * linked list (GList), and then add them by a single call to
-     * gtk_list_append_items().
-     * Because we use g_list_prepend() to put the items into the
-     * doubly linked list, their order will be descending (instead
-     * of ascending when using g_list_append())
-     */
-    dlist=NULL;
-    for (; i<10; i++) {
-	sprintf(buffer, "List Item with Label %d", i);
-	list_item=gtk_list_item_new_with_label(buffer);
-	dlist=g_list_prepend(dlist, list_item);
-	gtk_widget_show(list_item);
-	gtk_object_set_data(GTK_OBJECT(list_item),
-			    list_item_data_key,
-			    "ListItem with integrated Label");
-    }
-    gtk_list_append_items(GTK_LIST(gtklist), dlist);
-    
-    /* Finally we want to see the window, don't we? ;) */
-    gtk_widget_show(window);
-    
-    /* Fire up the main event loop of gtk */
-    gtk_main();
-    
-    /* We get here after gtk_main_quit() has been called which
-     * happens if the main window gets destroyed
-     */
-    return(0);
-}
-
-/* This is the signal handler that got connected to button
- * press/release events of the GtkList
- */
-void sigh_button_event( GtkWidget      *gtklist,
-                        GdkEventButton *event,
-                        GtkWidget      *frame )
-{
-    /* We only do something if the third (rightmost mouse button
-     * was released
-     */
-    if (event->type==GDK_BUTTON_RELEASE &amp;&amp;
-	event->button==3) {
-	GList           *dlist, *free_list;
-	GtkWidget       *new_prisoner;
-	
-	/* Fetch the currently selected list item which
-	 * will be our next prisoner ;)
-	 */
-	dlist=GTK_LIST(gtklist)->selection;
-	if (dlist)
-		new_prisoner=GTK_WIDGET(dlist->data);
-	else
-		new_prisoner=NULL;
-	
-	/* Look for already imprisoned list items, we
-	 * will put them back into the list.
-	 * Remember to free the doubly linked list that
-	 * gtk_container_children() returns
-	 */
-	dlist=gtk_container_children(GTK_CONTAINER(frame));
-	free_list=dlist;
-	while (dlist) {
-	    GtkWidget       *list_item;
-	    
-	    list_item=dlist->data;
-	    
-	    gtk_widget_reparent(list_item, gtklist);
-	    
-	    dlist=dlist->next;
-	}
-	g_list_free(free_list);
-	
-	/* If we have a new prisoner, remove him from the
-	 * GtkList and put him into the frame "Prison".
-	 * We need to unselect the item first.
-	 */
-	if (new_prisoner) {
-	    GList   static_dlist;
-	    
-	    static_dlist.data=new_prisoner;
-	    static_dlist.next=NULL;
-	    static_dlist.prev=NULL;
-	    
-	    gtk_list_unselect_child(GTK_LIST(gtklist),
-				    new_prisoner);
-	    gtk_widget_reparent(new_prisoner, frame);
-	}
-    }
-}
-
-/* This is the signal handler that gets called if GtkList
- * emits the "selection_changed" signal
- */
-void sigh_print_selection( GtkWidget *gtklist,
-                           gpointer   func_data)
-{
-    GList   *dlist;
-    
-    /* Fetch the doubly linked list of selected items
-     * of the GtkList, remember to treat this as read-only!
-     */
-    dlist=GTK_LIST(gtklist)->selection;
-    
-    /* If there are no selected items there is nothing more
-     * to do than just telling the user so
-     */
-    if (!dlist) {
-	g_print("Selection cleared\n");
-	return;
-    }
-    /* Ok, we got a selection and so we print it
-     */
-    g_print("The selection is a ");
-    
-    /* Get the list item from the doubly linked list
-     * and then query the data associated with list_item_data_key.
-     * We then just print it */
-    while (dlist) {
-	GtkObject       *list_item;
-	gchar           *item_data_string;
-	
-	list_item=GTK_OBJECT(dlist->data);
-	item_data_string=gtk_object_get_data(list_item,
-					     list_item_data_key);
-	g_print("%s ", item_data_string);
-	
-	dlist=dlist->next;
-    }
-    g_print("\n");
-}
-/* example-end */
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1> List Item Widget
-<p>
-The GtkListItem widget is designed to act as a container holding up to
-one child, providing functions for selection/deselection just like the
-GtkList widget requires them for its children.
-
-A GtkListItem has its own window to receive events and has its own
-background color which is usually white.
-
-As it is directly derived from a GtkItem it can be treated as such by
-using the GTK_ITEM(ListItem) macro, see the GtkItem widget for more on
-this. Usually a GtkListItem just holds a label to identify e.g. a
-filename within a GtkList -- therefore the convenience function
-gtk_list_item_new_with_label() is provided. The same effect can be
-achieved by creating a GtkLabel on its own, setting its alignment to
-xalign=0 and yalign=0.5 with a subsequent container addition to the
-GtkListItem.
-
-As one is not forced to add a GtkLabel to a GtkListItem, you could
-also add a GtkVBox or a GtkArrow etc. to the GtkListItem.
-
-<!-- ----------------------------------------------------------------- -->
-<sect1> Signals
-<p>
-A GtkListItem does not create new signals on its own, but inherits
-the signals of a GtkItem. *Note GtkItem::, for more info.
-
-<!-- ----------------------------------------------------------------- -->
-<sect1> Functions
-<p>
-<tscreen><verb>
-guint gtk_list_item_get_type( void );
-</verb></tscreen>
-
-Returns the `GtkListItem' type identifier.
-
-<tscreen><verb>
-GtkWidget *gtk_list_item_new( void );
-</verb></tscreen>
-
-Create a new GtkListItem object. The new widget is returned as a
-pointer to a GtkWidget object. NULL is returned on failure.
-
-<tscreen><verb>
-GtkWidget *gtk_list_item_new_with_label( gchar *label );
-</verb></tscreen>
-
-Create a new GtkListItem object, having a single GtkLabel as the sole
-child. The new widget is returned as a pointer to a GtkWidget
-object. NULL is returned on failure.
-
-<tscreen><verb>
-void gtk_list_item_select( GtkListItem *list_item );
-</verb></tscreen>
-
-This function is basically a wrapper around a call to gtk_item_select
-(GTK_ITEM (list_item)) which will emit the select signal.  *Note
-GtkItem::, for more info.
-
-<tscreen><verb>
-void gtk_list_item_deselect( GtkListItem *list_item );
-</verb></tscreen>
-
-This function is basically a wrapper around a call to
-gtk_item_deselect (GTK_ITEM (list_item)) which will emit the deselect
-signal.  *Note GtkItem::, for more info.
-
-<tscreen><verb>
-GtkListItem *GTK_LIST_ITEM( gpointer obj );
-</verb></tscreen>
-
-Cast a generic pointer to `GtkListItem*'. *Note Standard Macros::, for
-more info.
-
-<tscreen><verb>
-GtkListItemClass *GTK_LIST_ITEM_CLASS( gpointer class );
-</verb></tscreen>
-
-Cast a generic pointer to GtkListItemClass*. *Note Standard Macros::,
-for more info.
-
-<tscreen><verb>
-gint GTK_IS_LIST_ITEM( gpointer obj );
-</verb></tscreen>
-
-Determine if a generic pointer refers to a `GtkListItem' object.
-*Note Standard Macros::, for more info.
- 
-<!-- ----------------------------------------------------------------- -->
-<sect1> Example
-<p>
-Please see the GtkList example on this, which covers the usage of a
-GtkListItem as well.
-
 <!-- ***************************************************************** -->
 <sect> Tree Widget<label id="sec_Tree_Widgets">
 <!-- ***************************************************************** -->
@@ -9137,12 +8746,6 @@ from your time.
 <p>
 <!-- ----------------------------------------------------------------- -->
 <sect1> Drawing Area
-<p>
-<!-- ----------------------------------------------------------------- -->
-<sect1> Fixed Container
-<p>
-<!-- ----------------------------------------------------------------- -->
-<sect1> Frame
 <p>
 <!-- ----------------------------------------------------------------- -->
 <sect1> Font Selection Dialog
@@ -15632,5 +15235,620 @@ main (int argc, char *argv[])
 }
 /* example-end */
 </verb></tscreen>
+
+<!-- ***************************************************************** -->
+<sect> List Widget
+<!-- ***************************************************************** -->
+<p>
+NOTE: The GtkList widget has been superseded by the GtkCList
+widget. It is detailed here just for completeness.
+
+The GtkList widget is designed to act as a vertical container for
+widgets that should be of the type GtkListItem.
+
+A GtkList widget has its own window to receive events and its own
+background color which is usually white. As it is directly derived
+from a GtkContainer it can be treated as such by using the
+GTK_CONTAINER(List) macro, see the GtkContainer widget for more on
+this. One should already be familiar with the usage of a GList and
+its related functions g_list_*() to be able to use the GtkList widget
+to it full extent.
+
+There is one field inside the structure definition of the GtkList
+widget that will be of greater interest to us, this is:
+
+<tscreen><verb>
+struct _GtkList
+{
+  ...
+  GList *selection;
+  guint selection_mode;
+  ...
+}; 
+</verb></tscreen>
+
+The selection field of a GtkList points to a linked list of all items
+that are currently selected, or NULL if the selection is empty.  So to
+learn about the current selection we read the GTK_LIST()->selection
+field, but do not modify it since the internal fields are maintained
+by the gtk_list_*() functions.
+
+The selection_mode of the GtkList determines the selection facilities
+of a GtkList and therefore the contents of the GTK_LIST()->selection
+field. The selection_mode may be one of the following:
+
+<itemize>
+<item> GTK_SELECTION_SINGLE - The selection is either NULL
+                        or contains a GList pointer
+                        for a single selected item.
+
+<item> GTK_SELECTION_BROWSE -  The selection is NULL if the list
+                        contains no widgets or insensitive
+                        ones only, otherwise it contains
+                        a GList pointer for one GList
+                        structure, and therefore exactly
+                        one list item.
+
+<item> GTK_SELECTION_MULTIPLE -  The selection is NULL if no list
+                        items are selected or a GList pointer
+                        for the first selected item. That
+                        in turn points to a GList structure
+                        for the second selected item and so
+                        on.
+
+<item> GTK_SELECTION_EXTENDED - The selection is always NULL.
+</itemize>
+
+The default is GTK_SELECTION_MULTIPLE.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Signals
+<p>
+<tscreen><verb>
+void selection_changed( GtkList *list );
+</verb></tscreen>
+
+This signal will be invoked whenever the selection field of a GtkList
+has changed. This happens when a child of the GtkList got selected or
+deselected.
+
+<tscreen><verb>
+void select_child( GtkList   *list,
+                   GtkWidget *child);
+</verb></tscreen>
+
+This signal is invoked when a child of the GtkList is about to get
+selected. This happens mainly on calls to gtk_list_select_item(),
+gtk_list_select_child(), button presses and sometimes indirectly
+triggered on some else occasions where children get added to or
+removed from the GtkList.
+
+<tscreen><verb>
+void unselect_child( GtkList   *list,
+                     GtkWidget *child );
+</verb></tscreen>
+
+This signal is invoked when a child of the GtkList is about to get
+deselected. This happens mainly on calls to gtk_list_unselect_item(),
+gtk_list_unselect_child(), button presses and sometimes indirectly
+triggered on some else occasions where children get added to or
+removed from the GtkList.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Functions
+<p>
+<tscreen><verb>
+guint gtk_list_get_type( void );
+</verb></tscreen>
+
+Returns the `GtkList' type identifier.
+
+<tscreen><verb>
+GtkWidget *gtk_list_new( void );
+</verb></tscreen>
+
+Create a new GtkList object. The new widget is returned as a pointer
+to a GtkWidget object. NULL is returned on failure.
+
+<tscreen><verb>
+void gtk_list_insert_items( GtkList *list,
+                            GList   *items,
+                            gint     position );
+</verb></tscreen>
+
+Insert list items into the list, starting at <tt/position/.
+<tt/items/ is a doubly linked list where each nodes data pointer is
+expected to point to a newly created GtkListItem.  The GList nodes of
+<tt/items/ are taken over by the list.
+
+<tscreen><verb>
+void gtk_list_append_items( GtkList *list,
+                            GList   *items);
+</verb></tscreen>
+
+Insert list items just like gtk_list_insert_items() at the end of the
+list. The GList nodes of <tt/items/ are taken over by the list.
+
+<tscreen><verb>
+void gtk_list_prepend_items( GtkList *list,
+                             GList   *items);
+</verb></tscreen>
+
+Insert list items just like gtk_list_insert_items() at the very
+beginning of the list. The GList nodes of <tt/items/ are taken over by
+the list.
+
+<tscreen><verb>
+void gtk_list_remove_items( GtkList *list,
+                            GList   *items);
+</verb></tscreen>
+
+Remove list items from the list. <tt/items/ is a doubly linked list
+where each nodes data pointer is expected to point to a direct child
+of list. It is the callers responsibility to make a call to
+g_list_free(items) afterwards. Also the caller has to destroy the list
+items himself.
+
+<tscreen><verb>
+void gtk_list_clear_items( GtkList *list,
+                           gint start,
+                           gint end );
+</verb></tscreen>
+
+Remove and destroy list items from the list. A widget is affected if
+its current position within the list is in the range specified by
+<tt/start/ and <tt/end/.
+
+<tscreen><verb>
+void gtk_list_select_item( GtkList *list,
+                           gint     item );
+</verb></tscreen>
+
+Invoke the select_child signal for a list item specified through its
+current position within the list.
+
+<tscreen><verb>
+void gtk_list_unselect_item( GtkList *list,
+                             gint     item);
+</verb></tscreen>
+
+Invoke the unselect_child signal for a list item specified through its
+current position within the list.
+
+<tscreen><verb>
+void gtk_list_select_child( GtkList *list,
+                            GtkWidget *child);
+</verb></tscreen>
+
+Invoke the select_child signal for the specified child.
+
+<tscreen><verb>
+void gtk_list_unselect_child( GtkList   *list,
+                              GtkWidget *child);
+</verb></tscreen>
+
+Invoke the unselect_child signal for the specified child.
+
+<tscreen><verb>
+gint gtk_list_child_position( GtkList *list,
+                              GtkWidget *child);
+</verb></tscreen>
+
+Return the position of <tt/child/ within the list. "-1" is returned on
+failure.
+
+<tscreen><verb>
+void gtk_list_set_selection_mode( GtkList         *list,
+                                  GtkSelectionMode mode );
+</verb></tscreen>
+
+Set the selection mode MODE which can be of GTK_SELECTION_SINGLE,
+GTK_SELECTION_BROWSE, GTK_SELECTION_MULTIPLE or
+GTK_SELECTION_EXTENDED.
+
+<tscreen><verb>
+GtkList *GTK_LIST( gpointer obj );
+</verb></tscreen>
+
+Cast a generic pointer to `GtkList *'. *Note Standard Macros::, for
+more info.
+
+<tscreen><verb>
+GtkListClass *GTK_LIST_CLASS( gpointer class);
+</verb></tscreen>
+
+Cast a generic pointer to `GtkListClass*'. *Note Standard Macros::,
+for more info.
+
+<tscreen><verb>
+gint GTK_IS_LIST( gpointer obj);
+</verb></tscreen>
+
+Determine if a generic pointer refers to a `GtkList' object. *Note
+Standard Macros::, for more info.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Example
+<p>
+Following is an example program that will print out the changes of the
+selection of a GtkList, and lets you "arrest" list items into a prison
+by selecting them with the rightmost mouse button.
+
+<tscreen><verb>
+/* example-start list list.c */
+
+/* Include the gtk+ header files
+ * Include stdio.h, we need that for the printf() function
+ */
+#include        <gtk/gtk.h>
+#include        <stdio.h>
+
+/* This is our data identification string to store
+ * data in list items
+ */
+const gchar *list_item_data_key="list_item_data";
+
+
+/* prototypes for signal handler that we are going to connect
+ * to the GtkList widget
+ */
+static void  sigh_print_selection( GtkWidget *gtklist,
+                                   gpointer   func_data);
+
+static void  sigh_button_event( GtkWidget      *gtklist,
+                                GdkEventButton *event,
+                                GtkWidget      *frame );
+
+
+/* Main function to set up the user interface */
+
+gint main (int    argc,
+           gchar *argv[])
+{                                  
+    GtkWidget *separator;
+    GtkWidget *window;
+    GtkWidget *vbox;
+    GtkWidget *scrolled_window;
+    GtkWidget *frame;
+    GtkWidget *gtklist;
+    GtkWidget *button;
+    GtkWidget *list_item;
+    GList *dlist;
+    guint i;
+    gchar buffer[64];
+    
+    
+    /* Initialize gtk+ (and subsequently gdk) */
+
+    gtk_init(&amp;argc, &amp;argv);
+    
+    
+    /* Create a window to put all the widgets in
+     * connect gtk_main_quit() to the "destroy" event of
+     * the window to handle window manager close-window-events
+     */
+    window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "GtkList Example");
+    gtk_signal_connect(GTK_OBJECT(window),
+		       "destroy",
+		       GTK_SIGNAL_FUNC(gtk_main_quit),
+		       NULL);
+    
+    
+    /* Inside the window we need a box to arrange the widgets
+     * vertically */
+    vbox=gtk_vbox_new(FALSE, 5);
+    gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+    gtk_widget_show(vbox);
+    
+    /* This is the scrolled window to put the GtkList widget inside */
+    scrolled_window=gtk_scrolled_window_new(NULL, NULL);
+    gtk_widget_set_usize(scrolled_window, 250, 150);
+    gtk_container_add(GTK_CONTAINER(vbox), scrolled_window);
+    gtk_widget_show(scrolled_window);
+    
+    /* Create the GtkList widget.
+     * Connect the sigh_print_selection() signal handler
+     * function to the "selection_changed" signal of the GtkList
+     * to print out the selected items each time the selection
+     * has changed */
+    gtklist=gtk_list_new();
+    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(scrolled_window),
+                                           gtklist);
+    gtk_widget_show(gtklist);
+    gtk_signal_connect(GTK_OBJECT(gtklist),
+		       "selection_changed",
+		       GTK_SIGNAL_FUNC(sigh_print_selection),
+		       NULL);
+    
+    /* We create a "Prison" to put a list item in ;) */
+    frame=gtk_frame_new("Prison");
+    gtk_widget_set_usize(frame, 200, 50);
+    gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+    gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
+    gtk_container_add(GTK_CONTAINER(vbox), frame);
+    gtk_widget_show(frame);
+    
+    /* Connect the sigh_button_event() signal handler to the GtkList
+     * which will handle the "arresting" of list items
+     */
+    gtk_signal_connect(GTK_OBJECT(gtklist),
+		       "button_release_event",
+		       GTK_SIGNAL_FUNC(sigh_button_event),
+		       frame);
+    
+    /* Create a separator */
+    separator=gtk_hseparator_new();
+    gtk_container_add(GTK_CONTAINER(vbox), separator);
+    gtk_widget_show(separator);
+    
+    /* Finally create a button and connect it's "clicked" signal
+     * to the destruction of the window */
+    button=gtk_button_new_with_label("Close");
+    gtk_container_add(GTK_CONTAINER(vbox), button);
+    gtk_widget_show(button);
+    gtk_signal_connect_object(GTK_OBJECT(button),
+			      "clicked",
+			      GTK_SIGNAL_FUNC(gtk_widget_destroy),
+			      GTK_OBJECT(window));
+    
+    
+    /* Now we create 5 list items, each having it's own
+     * label and add them to the GtkList using gtk_container_add()
+     * Also we query the text string from the label and
+     * associate it with the list_item_data_key for each list item
+     */
+    for (i=0; i<5; i++) {
+	GtkWidget       *label;
+	gchar           *string;
+	
+	sprintf(buffer, "ListItemContainer with Label #%d", i);
+	label=gtk_label_new(buffer);
+	list_item=gtk_list_item_new();
+	gtk_container_add(GTK_CONTAINER(list_item), label);
+	gtk_widget_show(label);
+	gtk_container_add(GTK_CONTAINER(gtklist), list_item);
+	gtk_widget_show(list_item);
+	gtk_label_get(GTK_LABEL(label), &amp;string);
+	gtk_object_set_data(GTK_OBJECT(list_item),
+			    list_item_data_key,
+			    string);
+    }
+    /* Here, we are creating another 5 labels, this time
+     * we use gtk_list_item_new_with_label() for the creation
+     * we can't query the text string from the label because
+     * we don't have the labels pointer and therefore
+     * we just associate the list_item_data_key of each
+     * list item with the same text string.
+     * For adding of the list items we put them all into a doubly
+     * linked list (GList), and then add them by a single call to
+     * gtk_list_append_items().
+     * Because we use g_list_prepend() to put the items into the
+     * doubly linked list, their order will be descending (instead
+     * of ascending when using g_list_append())
+     */
+    dlist=NULL;
+    for (; i<10; i++) {
+	sprintf(buffer, "List Item with Label %d", i);
+	list_item=gtk_list_item_new_with_label(buffer);
+	dlist=g_list_prepend(dlist, list_item);
+	gtk_widget_show(list_item);
+	gtk_object_set_data(GTK_OBJECT(list_item),
+			    list_item_data_key,
+			    "ListItem with integrated Label");
+    }
+    gtk_list_append_items(GTK_LIST(gtklist), dlist);
+    
+    /* Finally we want to see the window, don't we? ;) */
+    gtk_widget_show(window);
+    
+    /* Fire up the main event loop of gtk */
+    gtk_main();
+    
+    /* We get here after gtk_main_quit() has been called which
+     * happens if the main window gets destroyed
+     */
+    return(0);
+}
+
+/* This is the signal handler that got connected to button
+ * press/release events of the GtkList
+ */
+void sigh_button_event( GtkWidget      *gtklist,
+                        GdkEventButton *event,
+                        GtkWidget      *frame )
+{
+    /* We only do something if the third (rightmost mouse button
+     * was released
+     */
+    if (event->type==GDK_BUTTON_RELEASE &amp;&amp;
+	event->button==3) {
+	GList           *dlist, *free_list;
+	GtkWidget       *new_prisoner;
+	
+	/* Fetch the currently selected list item which
+	 * will be our next prisoner ;)
+	 */
+	dlist=GTK_LIST(gtklist)->selection;
+	if (dlist)
+		new_prisoner=GTK_WIDGET(dlist->data);
+	else
+		new_prisoner=NULL;
+	
+	/* Look for already imprisoned list items, we
+	 * will put them back into the list.
+	 * Remember to free the doubly linked list that
+	 * gtk_container_children() returns
+	 */
+	dlist=gtk_container_children(GTK_CONTAINER(frame));
+	free_list=dlist;
+	while (dlist) {
+	    GtkWidget       *list_item;
+	    
+	    list_item=dlist->data;
+	    
+	    gtk_widget_reparent(list_item, gtklist);
+	    
+	    dlist=dlist->next;
+	}
+	g_list_free(free_list);
+	
+	/* If we have a new prisoner, remove him from the
+	 * GtkList and put him into the frame "Prison".
+	 * We need to unselect the item first.
+	 */
+	if (new_prisoner) {
+	    GList   static_dlist;
+	    
+	    static_dlist.data=new_prisoner;
+	    static_dlist.next=NULL;
+	    static_dlist.prev=NULL;
+	    
+	    gtk_list_unselect_child(GTK_LIST(gtklist),
+				    new_prisoner);
+	    gtk_widget_reparent(new_prisoner, frame);
+	}
+    }
+}
+
+/* This is the signal handler that gets called if GtkList
+ * emits the "selection_changed" signal
+ */
+void sigh_print_selection( GtkWidget *gtklist,
+                           gpointer   func_data)
+{
+    GList   *dlist;
+    
+    /* Fetch the doubly linked list of selected items
+     * of the GtkList, remember to treat this as read-only!
+     */
+    dlist=GTK_LIST(gtklist)->selection;
+    
+    /* If there are no selected items there is nothing more
+     * to do than just telling the user so
+     */
+    if (!dlist) {
+	g_print("Selection cleared\n");
+	return;
+    }
+    /* Ok, we got a selection and so we print it
+     */
+    g_print("The selection is a ");
+    
+    /* Get the list item from the doubly linked list
+     * and then query the data associated with list_item_data_key.
+     * We then just print it */
+    while (dlist) {
+	GtkObject       *list_item;
+	gchar           *item_data_string;
+	
+	list_item=GTK_OBJECT(dlist->data);
+	item_data_string=gtk_object_get_data(list_item,
+					     list_item_data_key);
+	g_print("%s ", item_data_string);
+	
+	dlist=dlist->next;
+    }
+    g_print("\n");
+}
+/* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> List Item Widget
+<p>
+The GtkListItem widget is designed to act as a container holding up to
+one child, providing functions for selection/deselection just like the
+GtkList widget requires them for its children.
+
+A GtkListItem has its own window to receive events and has its own
+background color which is usually white.
+
+As it is directly derived from a GtkItem it can be treated as such by
+using the GTK_ITEM(ListItem) macro, see the GtkItem widget for more on
+this. Usually a GtkListItem just holds a label to identify e.g. a
+filename within a GtkList -- therefore the convenience function
+gtk_list_item_new_with_label() is provided. The same effect can be
+achieved by creating a GtkLabel on its own, setting its alignment to
+xalign=0 and yalign=0.5 with a subsequent container addition to the
+GtkListItem.
+
+As one is not forced to add a GtkLabel to a GtkListItem, you could
+also add a GtkVBox or a GtkArrow etc. to the GtkListItem.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Signals
+<p>
+A GtkListItem does not create new signals on its own, but inherits
+the signals of a GtkItem. *Note GtkItem::, for more info.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Functions
+<p>
+<tscreen><verb>
+guint gtk_list_item_get_type( void );
+</verb></tscreen>
+
+Returns the `GtkListItem' type identifier.
+
+<tscreen><verb>
+GtkWidget *gtk_list_item_new( void );
+</verb></tscreen>
+
+Create a new GtkListItem object. The new widget is returned as a
+pointer to a GtkWidget object. NULL is returned on failure.
+
+<tscreen><verb>
+GtkWidget *gtk_list_item_new_with_label( gchar *label );
+</verb></tscreen>
+
+Create a new GtkListItem object, having a single GtkLabel as the sole
+child. The new widget is returned as a pointer to a GtkWidget
+object. NULL is returned on failure.
+
+<tscreen><verb>
+void gtk_list_item_select( GtkListItem *list_item );
+</verb></tscreen>
+
+This function is basically a wrapper around a call to gtk_item_select
+(GTK_ITEM (list_item)) which will emit the select signal.  *Note
+GtkItem::, for more info.
+
+<tscreen><verb>
+void gtk_list_item_deselect( GtkListItem *list_item );
+</verb></tscreen>
+
+This function is basically a wrapper around a call to
+gtk_item_deselect (GTK_ITEM (list_item)) which will emit the deselect
+signal.  *Note GtkItem::, for more info.
+
+<tscreen><verb>
+GtkListItem *GTK_LIST_ITEM( gpointer obj );
+</verb></tscreen>
+
+Cast a generic pointer to `GtkListItem*'. *Note Standard Macros::, for
+more info.
+
+<tscreen><verb>
+GtkListItemClass *GTK_LIST_ITEM_CLASS( gpointer class );
+</verb></tscreen>
+
+Cast a generic pointer to GtkListItemClass*. *Note Standard Macros::,
+for more info.
+
+<tscreen><verb>
+gint GTK_IS_LIST_ITEM( gpointer obj );
+</verb></tscreen>
+
+Determine if a generic pointer refers to a `GtkListItem' object.
+*Note Standard Macros::, for more info.
+ 
+<!-- ----------------------------------------------------------------- -->
+<sect1> Example
+<p>
+Please see the GtkList example on this, which covers the usage of a
+GtkListItem as well.
+
 
 </article>
