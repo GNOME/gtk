@@ -1,3 +1,7 @@
+Sun Mar  1 15:08:13 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/*.texi changes from Greg Mclean.
+
 Sun Mar  1 18:41:07 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkwidget.c (gtk_widget_restore_default_style): hm if we save the
@@ -261,11 +265,6 @@ Sat Feb 21 14:49:17 1998  Tim Janik  <timj@gimp.org>
 	gtk_toolbar_prepend_widget, gtk_toolbar_insert_widget: take an additional
  	gchar *tooltip_private_text as argument to fully support the underlying
 	call to gtk_tooltip_set_tip.
-
-Fri Feb 20 16:44:57 GMT 1998 Tony Gale <gale@gimp.org>
-
-	* docs/gtkfaq.sgml: added to list of GTK apps, added permissions notice
-		new GDK section - needs some Q&A's added
 
 Fri Feb 20 06:40:00 1998  Tim Janik  <timj@gimp.org>
 

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-info_TEXINFOS = gdk.texi gtk.texi
+info_TEXINFOS = gdk.texi gtk.texi glib.texi
 
 EXTRA_DIST =	\
 	texinfo.tex	\
