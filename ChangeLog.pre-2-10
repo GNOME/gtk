@@ -1,3 +1,25 @@
+2000-11-30 Hidetoshi Tajima  <tajima@eng.sun.com>
+
+	* modules/input/gtkimcontextxim.c (setup_im): Add NULL argument to
+	XGetIMValues to properly terminate variable argument list, and do
+	NULL return check for ic_values and xim_styles.
+
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_reset):
+	Restore preedit state after XmbResetIC().
+	
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_get_ic):
+	XvaCreateNestedList() should take XvaNestedList, but not
+	XvaNestedList*.
+
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_reset,
+	preedit_draw_callback, preedit_caret_callback): Match
+	"preedit-changed" signal name to "preedit_changed" to be
+	consistent to the spec.
+
+	* gtk/gtkimcontextsimple.c (check_table):
+	Match "preedit-changed" to "preedit_changed" to be consistent
+	to the spec.
+
 Thu Nov 30 23:03:04 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgc-x11.c (gdk_gc_copy): Properly handle
