@@ -42,8 +42,9 @@
 	</p>
 	<p>
 	  There are some difficulties with performance in this
-	  approach, but in general, this seems possible to achieve
-	  without all that much pain.
+	  approach - mostly because scrolling can involve mapping and
+	  unmapping lots of widgets, but in general, current
+	  trials in this area seem to work pretty well.  
 	</p>
       </description>
       <url>http://www.gtk.org/~otaylor/gtk/1.4/gdk-drawing.html</url>
