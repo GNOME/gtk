@@ -429,15 +429,21 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
 	      gc = NULL;
 	      if (mask)
 		{
+		  /* The pixmap mask is just a bits pattern.
+		   * Color 0 is used for background and 1 for foreground.
+		   * We don't care about the colormap, we just need 0 and 1.
+		   */
+		  GdkColor mask_pattern;
+		  
 		  *mask = gdk_pixmap_new (window, width, height, 1);
 		  gc = gdk_gc_new (*mask);
-
-		  gdk_color_black (colormap, &tmp_color);
-		  gdk_gc_set_foreground (gc, &tmp_color);
+		  
+		  mask_pattern.pixel = 0;
+		  gdk_gc_set_foreground (gc, &mask_pattern);
 		  gdk_draw_rectangle (*mask, gc, TRUE, 0, 0, -1, -1);
-
-		  gdk_color_white (colormap, &tmp_color);
-		  gdk_gc_set_foreground (gc, &tmp_color);
+		  
+		  mask_pattern.pixel = 1;
+		  gdk_gc_set_foreground (gc, &mask_pattern);
 		}
 
               for (ycnt = 0; ycnt < height; ycnt++)
@@ -573,15 +579,21 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
   gc = NULL;
   if (mask)
     {
+      /* The pixmap mask is just a bits pattern.
+       * Color 0 is used for background and 1 for foreground.
+       * We don't care about the colormap, we just need 0 and 1.
+       */
+      GdkColor mask_pattern;
+
       *mask = gdk_pixmap_new (window, width, height, 1);
       gc = gdk_gc_new (*mask);
 
-      gdk_color_black (colormap, &tmp_color);
-      gdk_gc_set_foreground (gc, &tmp_color);
+      mask_pattern.pixel = 0;
+      gdk_gc_set_foreground (gc, &mask_pattern);
       gdk_draw_rectangle (*mask, gc, TRUE, 0, 0, -1, -1);
 
-      gdk_color_white (colormap, &tmp_color);
-      gdk_gc_set_foreground (gc, &tmp_color);
+      mask_pattern.pixel = 1;
+      gdk_gc_set_foreground (gc, &mask_pattern);
     }
 
   for (ycnt = 0; ycnt < height; ycnt++)
