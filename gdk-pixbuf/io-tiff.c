@@ -146,6 +146,7 @@ image_begin_load (ModulePreparedNotifyFunc prepare_func,
 
 	context = g_new (TiffData, 1);
 	context->prepare_func = prepare_func;
+	context->update_func = update_func;
 	context->user_data = user_data;
 	context->all_okay = TRUE;
 	context->tempname = g_strdup ("/tmp/gdkpixbuf-tif-tmp.XXXXXX");

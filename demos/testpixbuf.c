@@ -445,6 +445,14 @@ progressive_prepared_callback(GdkPixbufLoader* loader, gpointer data)
         return;
 }
 
+
+static void
+progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint width, guint height, gpointer data)
+{
+	g_print ("progressive_updated_callback:\n\t%d\t%d\t%d\t%d\n", x, y, width, height);
+        return;
+}
+
 static int readlen = 1;
 
 int
@@ -514,6 +522,11 @@ main (int argc, char **argv)
                         gtk_signal_connect(GTK_OBJECT(pixbuf_loader),
                                            "area_prepared",
                                            GTK_SIGNAL_FUNC(progressive_prepared_callback),
+                                           &rgb_window);
+
+                        gtk_signal_connect(GTK_OBJECT(pixbuf_loader),
+                                           "area_updated",
+                                           GTK_SIGNAL_FUNC(progressive_updated_callback),
                                            &rgb_window);
 
                         timeout = gtk_timeout_add(1000, update_timeout, &rgb_window);
