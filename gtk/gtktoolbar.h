@@ -151,7 +151,6 @@ void            gtk_toolbar_set_orientation  (GtkToolbar      *toolbar,
 					      GtkOrientation   orientation);
 void            gtk_toolbar_set_tooltips     (GtkToolbar      *toolbar,
 					      gboolean         enable);
-void            gtk_toolbar_unset_icon_size  (GtkToolbar      *toolbar);
 gboolean        gtk_toolbar_get_show_arrow   (GtkToolbar      *toolbar);
 GtkOrientation  gtk_toolbar_get_orientation  (GtkToolbar      *toolbar);
 GtkToolbarStyle gtk_toolbar_get_style        (GtkToolbar      *toolbar);
@@ -163,12 +162,14 @@ GtkReliefStyle  gtk_toolbar_get_relief_style (GtkToolbar      *toolbar);
 gchar *	_gtk_toolbar_elide_underscores (const gchar *original);
 
 #ifndef GTK_DISABLE_DEPRECATED
+void       gtk_toolbar_set_style       (GtkToolbar      *toolbar,
+				        GtkToolbarStyle  style);
+void       gtk_toolbar_set_icon_size   (GtkToolbar      *toolbar,
+				        GtkIconSize      icon_size);
+void       gtk_toolbar_unset_style     (GtkToolbar      *toolbar);
+void       gtk_toolbar_unset_icon_size (GtkToolbar      *toolbar);
+
 /* Simple button items */
-void       gtk_toolbar_set_style     (GtkToolbar      *toolbar,
-				      GtkToolbarStyle  style);
-void       gtk_toolbar_set_icon_size (GtkToolbar      *toolbar,
-				      GtkIconSize      icon_size);
-void       gtk_toolbar_unset_style   (GtkToolbar      *toolbar);
 GtkWidget* gtk_toolbar_append_item   (GtkToolbar      *toolbar,
 				      const char      *text,
 				      const char      *tooltip_text,

@@ -73,7 +73,7 @@ to a #GtkToolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_new ##### -->
 <para>
-Creates a new toolbar. 
+
 </para>
 
 @Returns: the newly-created toolbar.
@@ -140,20 +140,20 @@ Creates a new toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_set_orientation ##### -->
 <para>
-Sets whether a toolbar should appear horizontally or vertically.
+
 </para>
 
-@toolbar: a #GtkToolbar.
-@orientation: a new #GtkOrientation.
+@toolbar:
+@orientation:
 
 
 <!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
 <para>
-Sets if the tooltips of a toolbar should be active or not.
+
 </para>
 
-@toolbar: a #GtkToolbar.
-@enable: set to %FALSE to disable the tooltips, or %TRUE to enable them.
+@toolbar:
+@enable:
 
 
 <!-- ##### FUNCTION gtk_toolbar_unset_icon_size ##### -->
@@ -220,119 +220,113 @@ Sets if the tooltips of a toolbar should be active or not.
 
 <!-- ##### FUNCTION gtk_toolbar_append_item ##### -->
 <para>
-Adds a new button to the end (right or bottom edges) of the given toolbar.
+
 </para>
 
-@toolbar: a #GtkToolbar.
-@text: give your toolbar button a label.
-@tooltip_text: a string that appears when the user holds the mouse over this item.
-@tooltip_private_text: use with #GtkTipsQuery.
-@icon: a #GtkWidget that should be used as the button's icon.
-@callback: the function to be executed when the button is pressed.
-@user_data: a pointer to any data you wish to be passed to the callback.
-@Returns: the new toolbar item as a #GtkWidget.
+@toolbar:
+@text:
+@tooltip_text:
+@tooltip_private_text:
+@icon:
+@callback:
+@user_data:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_item ##### -->
 <para>
-Adds a new button to the beginning (top or left edges) of the given toolbar.
+
 </para>
 
-@toolbar: a #GtkToolbar.
-@text: give your toolbar button a label.
-@tooltip_text: a string that appears when the user holds the mouse over this item.
-@tooltip_private_text: use with #GtkTipsQuery.
-@icon: a #GtkWidget that should be used as the button's icon.
-@callback: the function to be executed when the button is pressed.
-@user_data: a pointer to any data you wish to be passed to the callback.
-@Returns: the new toolbar item as a #GtkWidget.
+@toolbar:
+@text:
+@tooltip_text:
+@tooltip_private_text:
+@icon:
+@callback:
+@user_data:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_item ##### -->
 <para>
-Inserts a new item into the toolbar. You must specify the position in the toolbar where it will be inserted.
+
 </para>
 
-@toolbar: a #GtkToolbar.
-@text: give your toolbar button a label.
-@tooltip_text: a string that appears when the user holds the mouse over this item.
-@tooltip_private_text: use with #GtkTipsQuery.
-@icon: a #GtkWidget that should be used as the button's icon.
-@callback: the function to be executed when the button is pressed.
-@user_data: a pointer to any data you wish to be passed to the callback.
-@position: the number of widgets to insert this item after.
-@Returns: the new toolbar item as a #GtkWidget.
+@toolbar:
+@text:
+@tooltip_text:
+@tooltip_private_text:
+@icon:
+@callback:
+@user_data:
+@position:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_toolbar_append_space ##### -->
 <para>
-Adds a new space to the end of the toolbar.
+
 </para>
 
-@toolbar: a #GtkToolbar.
+@toolbar:
 
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_space ##### -->
 <para>
-Adds a new space to the beginning of the toolbar.
+
 </para>
 
-@toolbar: a #GtkToolbar.
+@toolbar:
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_space ##### -->
 <para>
-Inserts a new space in the toolbar at the specified position.
+
 </para>
 
-@toolbar: a #GtkToolbar
-@position: the number of widgets after which a space should be inserted.
+@toolbar:
+@position:
 
 
 <!-- ##### FUNCTION gtk_toolbar_append_element ##### -->
 <para>
-Adds a new element to the end of a toolbar.
+
 </para>
 <para>
-If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
-If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
-the radio group for the new element. In all other cases, @widget must
-be %NULL.
+
 </para>
 
-@toolbar: a #GtkToolbar.
-@type: a value of type #GtkToolbarChildType that determines what @widget will be.
-@widget: a #GtkWidget, or %NULL.
-@text: the element's label.
-@tooltip_text: the element's tooltip.
-@tooltip_private_text: used for context-sensitive help about this toolbar element.
-@icon: a #GtkWidget that provides pictorial representation of the element's function.
-@callback: the function to be executed when the button is pressed.
-@user_data: any data you wish to pass to the callback.
-@Returns: the new toolbar element as a #GtkWidget.
+@toolbar:
+@type:
+@widget:
+@text:
+@tooltip_text:
+@tooltip_private_text:
+@icon:
+@callback:
+@user_data:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_element ##### -->
 <para>
-Adds a new element to the beginning of a toolbar.
+
 </para>
-<para>
-If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
-If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
-the radio group for the new element. In all other cases, @widget must
-be %NULL.
+:<para>
+I
 </para>
 
-@toolbar: a #GtkToolbar.
-@type: a value of type #GtkToolbarChildType that determines what @widget will be.
-@widget: a #GtkWidget, or %NULL
-@text: the element's label.
-@tooltip_text: the element's tooltip.
-@tooltip_private_text: used for context-sensitive help about this toolbar element.
-@icon: a #GtkWidget that provides pictorial representation of the element's function.
-@callback: the function to be executed when the button is pressed.
-@user_data: any data you wish to pass to the callback.
-@Returns: the new toolbar element as a #GtkWidget.
+@toolbar:
+@type:
+@widget:
+@text:
+@tooltip_text:
+@tooltip_private_text:
+@icon:
+@callback:
+@user_data:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_element ##### -->
@@ -389,11 +383,11 @@ be %NULL.
 
 <!-- ##### FUNCTION gtk_toolbar_set_style ##### -->
 <para>
-Alters the view of @toolbar to display either icons only, text only, or both.
+
 </para>
 
-@toolbar: a #GtkToolbar.
-@style: the new style for @toolbar.
+@toolbar:
+@style:
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
@@ -457,7 +451,7 @@ Alters the view of @toolbar to display either icons only, text only, or both.
 
 <!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
 <para>
-Should be used if you wish to perform an action when the orientation of a toolbar is changed.
+
 </para>
 
 @toolbar: the object which received the signal.
@@ -469,21 +463,15 @@ Should be used if you wish to perform an action when the orientation of a toolba
 </para>
 
 @toolbar: the object which received the signal.
-@: 
-@: 
-@:
-@Returns: 
-@: 
-@: 
 @Returns: 
 
 <!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
 <para>
-Should be used if you wish to perform an action when ever the style of a toolbar is adjusted. For example, this would be a useful signal to connect to if you want to display more items on the toolbar when it is in icon-only mode; each item takes less space on the bar.
+
 </para>
 
-@toolbar: the object which received the signal.
-@style: the new #GtkToolbarStyle of @toolbar.
+@toolbar:
+@style:
 
 <!-- ##### ARG GtkToolbar:orientation ##### -->
 <para>

@@ -2145,6 +2145,13 @@ gtk_toolbar_remove_tool_item (GtkToolbar  *toolbar,
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 }
 
+/**
+ * gtk_toolbar_new:
+ * 
+ * Creates a new toolbar. 
+
+ * Return Value: the newly-created toolbar.
+ **/
 GtkWidget *
 gtk_toolbar_new (void)
 {
@@ -2187,6 +2194,13 @@ gtk_toolbar_get_item_index (GtkToolbar  *toolbar,
   return g_list_index (priv->items, item);
 }
 
+/**
+ * gtk_toolbar_set_orientation:
+ * @toolbar: a #GtkToolbar.
+ * @orientation: a new #GtkOrientation.
+ * 
+ * Sets whether a toolbar should appear horizontally or vertically.
+ **/
 void
 gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
 			     GtkOrientation  orientation)
@@ -2196,6 +2210,15 @@ gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
   g_signal_emit (toolbar, toolbar_signals[ORIENTATION_CHANGED], 0, orientation);
 }
 
+/**
+ * gtk_toolbar_get_orientation:
+ * @toolbar: a #GtkToolbar
+ * 
+ * Retrieves the current orientation of the toolbar. See
+ * gtk_toolbar_set_orientation().
+ *
+ * Return value: the orientation
+ **/
 GtkOrientation
 gtk_toolbar_get_orientation (GtkToolbar *toolbar)
 {
@@ -2204,6 +2227,13 @@ gtk_toolbar_get_orientation (GtkToolbar *toolbar)
   return toolbar->orientation;
 }
 
+/**
+ * gtk_toolbar_set_style:
+ * @toolbar: a #GtkToolbar.
+ * @style: the new style for @toolbar.
+ * 
+ * Alters the view of @toolbar to display either icons only, text only, or both.
+ **/
 void
 gtk_toolbar_set_style (GtkToolbar      *toolbar,
 		       GtkToolbarStyle  style)
@@ -2216,6 +2246,15 @@ gtk_toolbar_set_style (GtkToolbar      *toolbar,
   
 }
 
+/**
+ * gtk_toolbar_get_style:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves whether the toolbar has text, icons, or both . See
+ * gtk_toolbar_set_style().
+ 
+ * Return value: the current style of @toolbar
+ **/
 GtkToolbarStyle
 gtk_toolbar_get_style (GtkToolbar *toolbar)
 {
@@ -2224,6 +2263,13 @@ gtk_toolbar_get_style (GtkToolbar *toolbar)
   return toolbar->style;
 }
 
+/**
+ * gtk_toolbar_unset_style:
+ * @toolbar: a #GtkToolbar
+ * 
+ * Unsets a toolbar style set with gtk_toolbar_set_style(), so that
+ * user preferences will be used to determine the toolbar style.
+ **/
 void
 gtk_toolbar_unset_style (GtkToolbar *toolbar)
 {
@@ -2249,6 +2295,13 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
     }
 }
 
+/**
+ * gtk_toolbar_set_tooltips:
+ * @toolbar: a #GtkToolbar.
+ * @enable: set to %FALSE to disable the tooltips, or %TRUE to enable them.
+ * 
+ * Sets if the tooltips of a toolbar should be active or not.
+ **/
 void
 gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
 			  gboolean    enable)
@@ -2261,6 +2314,15 @@ gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
     gtk_tooltips_disable (toolbar->tooltips);
 }
 
+/**
+ * gtk_toolbar_get_tooltips:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves whether tooltips are enabled. See
+ * gtk_toolbar_set_tooltips().
+ *
+ * Return value: %TRUE if tooltips are enabled
+ **/
 gboolean
 gtk_toolbar_get_tooltips (GtkToolbar *toolbar)
 {
@@ -2303,6 +2365,16 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
   return g_list_nth_data (priv->items, n);
 }
 
+/**
+ * gtk_toolbar_set_icon_size:
+ * @toolbar: A #GtkToolbar
+ * @icon_size: The #GtkIconSize that stock icons in the toolbar shall have.
+ *
+ * This function sets the size of stock icons in the toolbar. You
+ * can call it both before you add the icons and after they've been
+ * added. The size you set will override user preferences for the default
+ * icon size.
+ **/
 void
 gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
 			   GtkIconSize  icon_size)
@@ -2321,6 +2393,14 @@ gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 }
 
+/**
+ * gtk_toolbar_get_icon_size:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves the icon size fo the toolbar. See gtk_toolbar_set_icon_size().
+ *
+ * Return value: the current icon size for the icons on the toolbar.
+ **/
 GtkIconSize
 gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
 {
@@ -2337,6 +2417,13 @@ gtk_toolbar_get_relief_style (GtkToolbar *toolbar)
   return get_button_relief (toolbar);
 }
 
+/**
+ * gtk_toolbar_unset_icon_size:
+ * @toolbar: a #GtkToolbar
+ * 
+ * Unsets toolbar icon size set with gtk_toolbar_set_icon_size(), so that
+ * user preferences will be used to determine the icon size.
+ **/
 void
 gtk_toolbar_unset_icon_size (GtkToolbar *toolbar)
 {
@@ -2419,6 +2506,21 @@ gtk_toolbar_get_drop_index (GtkToolbar *toolbar,
   return drop_index;
 }
 
+/**
+ * gtk_toolbar_append_item:
+ * @toolbar: a #GtkToolbar.
+ * @text: give your toolbar button a label.
+ * @tooltip_text: a string that appears when the user holds the mouse over this item.
+ * @tooltip_private_text: use with #GtkTipsQuery.
+ * @icon: a #GtkWidget that should be used as the button's icon.
+ * @callback: the function to be executed when the button is pressed.
+ * @user_data: a pointer to any data you wish to be passed to the callback.
+ * 
+ * Inserts a new item into the toolbar. You must specify the position
+ * in the toolbar where it will be inserted.
+ * 
+ * Return value: the new toolbar item as a #GtkWidget.
+ **/
 GtkWidget *
 gtk_toolbar_append_item (GtkToolbar    *toolbar,
 			 const char    *text,
@@ -2435,6 +2537,20 @@ gtk_toolbar_append_item (GtkToolbar    *toolbar,
 				     toolbar->num_children);
 }
 
+/**
+ * gtk_toolbar_prepend_item:
+ * @toolbar: a #GtkToolbar.
+ * @text: give your toolbar button a label.
+ * @tooltip_text: a string that appears when the user holds the mouse over this item.
+ * @tooltip_private_text: use with #GtkTipsQuery.
+ * @icon: a #GtkWidget that should be used as the button's icon.
+ * @callback: the function to be executed when the button is pressed.
+ * @user_data: a pointer to any data you wish to be passed to the callback.
+ * 
+ * Adds a new button to the beginning (top or left edges) of the given toolbar.
+ *
+ * Return value: the new toolbar item as a #GtkWidget.
+ **/
 GtkWidget *
 gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
 			  const char    *text,
@@ -2451,6 +2567,22 @@ gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
 				     0);
 }
 
+/**
+ * gtk_toolbar_insert_item:
+ * @toolbar: a #GtkToolbar.
+ * @text: give your toolbar button a label.
+ * @tooltip_text: a string that appears when the user holds the mouse over this item.
+ * @tooltip_private_text: use with #GtkTipsQuery.
+ * @icon: a #GtkWidget that should be used as the button's icon.
+ * @callback: the function to be executed when the button is pressed.
+ * @user_data: a pointer to any data you wish to be passed to the callback.
+ * @position: the number of widgets to insert this item after.
+ * 
+ * Inserts a new item into the toolbar. You must specify the position in the
+ * toolbar where it will be inserted.
+ *
+ * Return value: the new toolbar item as a #GtkWidget.
+ **/
 GtkWidget *
 gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 			 const char    *text,
@@ -2468,6 +2600,23 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 				     position);
 }
 
+/**
+ * gtk_toolbar_insert_stock:
+ * @toolbar: A #GtkToolbar
+ * @stock_id: The id of the stock item you want to insert
+ * @tooltip_text: The text in the tooltip of the toolbar button
+ * @tooltip_private_text: The private text of the tooltip
+ * @callback: The callback called when the toolbar button is clicked.
+ * @user_data: user data passed to callback
+ * @position: The position the button shall be inserted at.
+ *            -1 means at the end.
+ *
+ * Inserts a stock item at the specified position of the toolbar.  If
+ * @stock_id is not a known stock item ID, it's inserted verbatim,
+ * except that underscores used to mark mnemonics are removed.
+ *
+ * Returns: the inserted widget
+ */
 GtkWidget*
 gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
 			  const gchar     *stock_id,
@@ -2484,6 +2633,12 @@ gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
 					      position, TRUE);
 }
 
+/**
+ * gtk_toolbar_append_space:
+ * @toolbar: a #GtkToolbar.
+ * 
+ * Adds a new space to the end of the toolbar.
+ **/
 void
 gtk_toolbar_append_space (GtkToolbar *toolbar)
 {
@@ -2494,6 +2649,12 @@ gtk_toolbar_append_space (GtkToolbar *toolbar)
 			      toolbar->num_children);
 }
 
+/**
+ * gtk_toolbar_prepend_space:
+ * @toolbar: a #GtkToolbar.
+ * 
+ * Adds a new space to the beginning of the toolbar.
+ **/
 void
 gtk_toolbar_prepend_space (GtkToolbar *toolbar)
 {
@@ -2504,6 +2665,13 @@ gtk_toolbar_prepend_space (GtkToolbar *toolbar)
 			      0);
 }
 
+/**
+ * gtk_toolbar_insert_space:
+ * @toolbar: a #GtkToolbar
+ * @position: the number of widgets after which a space should be inserted.
+ * 
+ * Inserts a new space in the toolbar at the specified position.
+ **/
 void
 gtk_toolbar_insert_space (GtkToolbar *toolbar,
 			  gint        position)
@@ -2515,6 +2683,13 @@ gtk_toolbar_insert_space (GtkToolbar *toolbar,
 			      position);
 }
 
+/**
+ * gtk_toolbar_remove_space:
+ * @toolbar: a #GtkToolbar.
+ * @position: the index of the space to remove.
+ * 
+ * Removes a space from the specified position.
+ **/
 void
 gtk_toolbar_remove_space (GtkToolbar *toolbar,
 			  gint        position)
@@ -2543,6 +2718,15 @@ gtk_toolbar_remove_space (GtkToolbar *toolbar,
   gtk_toolbar_remove_tool_item (toolbar, item);
 }
 
+/**
+ * gtk_toolbar_append_widget:
+ * @toolbar: a #GtkToolbar.
+ * @widget: a #GtkWidget to add to the toolbar. 
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * 
+ * Adds a widget to the end of the given toolbar.
+ **/ 
 void
 gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 			   GtkWidget   *widget,
@@ -2556,6 +2740,15 @@ gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 			      toolbar->num_children);
 }
 
+/**
+ * gtk_toolbar_prepend_widget:
+ * @toolbar: a #GtkToolbar.
+ * @widget: a #GtkWidget to add to the toolbar. 
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * 
+ * Adds a widget to the beginning of the given toolbar.
+ **/ 
 void
 gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 			    GtkWidget   *widget,
@@ -2569,6 +2762,16 @@ gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 			      0);
 }
 
+/**
+ * gtk_toolbar_insert_widget:
+ * @toolbar: a #GtkToolbar.
+ * @widget: a #GtkWidget to add to the toolbar. 
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @position: the number of widgets to insert this widget after.
+ * 
+ * Inserts a widget in the toolbar at the given position.
+ **/ 
 void
 gtk_toolbar_insert_widget (GtkToolbar *toolbar,
 			   GtkWidget  *widget,
@@ -2583,6 +2786,27 @@ gtk_toolbar_insert_widget (GtkToolbar *toolbar,
 			      position);
 }
 
+/**
+ * gtk_toolbar_append_element:
+ * @toolbar: a #GtkToolbar.
+ * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
+ * @widget: a #GtkWidget, or %NULL.
+ * @text: the element's label.
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @icon: a #GtkWidget that provides pictorial representation of the element's function.
+ * @callback: the function to be executed when the button is pressed.
+ * @user_data: any data you wish to pass to the callback.
+ * 
+ * Adds a new element to the end of a toolbar.
+ * 
+ * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
+ * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
+ * the radio group for the new element. In all other cases, @widget must
+ * be %NULL.
+ * 
+ * Return value: the new toolbar element as a #GtkWidget.
+ **/
 GtkWidget*
 gtk_toolbar_append_element (GtkToolbar          *toolbar,
 			    GtkToolbarChildType  type,
@@ -2600,6 +2824,28 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
 				     toolbar->num_children);
 }
 
+/**
+ * gtk_toolbar_prepend_element:
+ * 
+ * @toolbar: a #GtkToolbar.
+ * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
+ * @widget: a #GtkWidget, or %NULL
+ * @text: the element's label.
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @icon: a #GtkWidget that provides pictorial representation of the element's function.
+ * @callback: the function to be executed when the button is pressed.
+ * @user_data: any data you wish to pass to the callback.
+ *  
+ * Adds a new element to the beginning of a toolbar.
+ * 
+ * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
+ * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
+ * the radio group for the new element. In all other cases, @widget must
+ * *be %NULL.
+ * 
+ * Return value: the new toolbar element as a #GtkWidget.
+ **/
 GtkWidget *
 gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
 			     GtkToolbarChildType  type,
@@ -2616,6 +2862,29 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
 				     icon, callback, user_data, 0);
 }
 
+/**
+ * gtk_toolbar_insert_element:
+ * @toolbar: a #GtkToolbar.
+ * @type: a value of type #GtkToolbarChildType that determines what @widget
+ *   will be.
+ * @widget: a #GtkWidget, or %NULL. 
+ * @text: the element's label.
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @icon: a #GtkWidget that provides pictorial representation of the element's function.
+ * @callback: the function to be executed when the button is pressed.
+ * @user_data: any data you wish to pass to the callback.
+ * @position: the number of widgets to insert this element after.
+ *
+ * Inserts a new element in the toolbar at the given position. 
+ *
+ * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
+ * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
+ * the radio group for the new element. In all other cases, @widget must
+ * be %NULL.
+ *
+ * Return value: the new toolbar element as a #GtkWidget.
+ **/
 GtkWidget *
 gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 			    GtkToolbarChildType  type,
