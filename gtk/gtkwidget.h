@@ -697,6 +697,10 @@ void gtk_widget_class_install_style_property        (GtkWidgetClass     *klass,
 void gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
 						     GParamSpec         *pspec,
 						     GtkRcPropertyParser parser);
+GParamSpec*  gtk_widget_class_find_style_property   (GtkWidgetClass     *klass,
+						     const gchar        *property_name);
+GParamSpec** gtk_widget_class_list_style_properties (GtkWidgetClass     *klass,
+						     guint              *n_properties);
 void gtk_widget_style_get_property (GtkWidget	     *widget,
 				    const gchar    *property_name,
 				    GValue	     *value);

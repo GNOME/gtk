@@ -3591,6 +3591,8 @@ gtk_widget_set_scroll_adjustments
 gtk_widget_mnemonic_activate
 gtk_widget_class_install_style_property
 gtk_widget_class_install_style_property_parser
+gtk_widget_class_find_style_property
+gtk_widget_class_list_style_properties
 gtk_widget_region_intersect
 gtk_widget_send_expose
 gtk_widget_style_get
@@ -3867,6 +3869,7 @@ gtk_style_apply_default_pixmap
 gtk_style_lookup_icon_set
 gtk_style_render_icon
 gtk_style_get_font
+gtk_style_get_font_for_display
 gtk_style_set_font
 gtk_draw_hline
 gtk_draw_vline

@@ -1,3 +1,8 @@
+2002-05-05  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_widget_class_find_style_property,
+	gtk_widget_class_list_style_properties and gtk_style_get_font_for_display.
+
 2002-05-03  Matthias Clasen  <maclas@gmx.de>
 
  	* gdk/gdk-sections.txt: Remove gdk_screen_use_virtual_screen.

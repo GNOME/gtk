@@ -28,10 +28,10 @@ GLIB_AC_DIVERT_BEFORE_HELP([
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 #
 GTK_MAJOR_VERSION=2
-GTK_MINOR_VERSION=0
-GTK_MICRO_VERSION=2
-GTK_INTERFACE_AGE=2
-GTK_BINARY_AGE=2
+GTK_MINOR_VERSION=1
+GTK_MICRO_VERSION=0
+GTK_INTERFACE_AGE=0
+GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 dnl This is the X.Y used in -lgtk-FOO-X.Y
 GTK_API_VERSION=2.0
@@ -633,6 +633,7 @@ dnl We allow people to disable image loaders explicitely, but if they don't we e
 dnl out so that people don't accidentally build without them.
 
 AC_ARG_WITH(libpng,  [  --without-libpng	  disable PNG loader for gdk-pixbuf])
+AC_ARG_WITH(libmng,  [  --without-libmng	  disable MNG loader for gdk-pixbuf])
 AC_ARG_WITH(libjpeg, [  --without-libjpeg	  disable JPEG loader for gdk-pixbuf])
 AC_ARG_WITH(libtiff, [  --without-libtiff	  disable TIFF loader for gdk-pixbuf])
 
@@ -736,9 +737,25 @@ dnl Test for libpng
 *** from CVS.])
   fi
 
+dnl Test for libmng
+  if test x$with_libmng != xno && test -z "$LIBMNG"; then
+     AC_CHECK_LIB(mng, mng_initialize,
+       [AC_CHECK_HEADER(libmng.h,
+          mng_ok=yes,
+          mng_ok=no)],
+        AC_MSG_WARN(*** MNG loader will not be built (MNG library not found) ***), -lz -lm)
+     AC_MSG_RESULT($mng_ok)
+     if test "$mng_ok" = yes; then
+       MNG='mng'; LIBMNG='-lmng -lz'
+     else
+        AC_MSG_WARN(*** MNG loader will not be built (MNG header file not found) ***)
+     fi
+  fi
+
 AC_SUBST(LIBTIFF)
 AC_SUBST(LIBJPEG)
 AC_SUBST(LIBPNG)
+AC_SUBST(LIBMNG)
 
 AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
 
@@ -758,7 +775,7 @@ else
    fi
 fi
 
-all_loaders="png,bmp,wbmp,gif,ico,jpeg,pnm,ras,tiff,xpm,tga"
+all_loaders="png,mng,bmp,wbmp,gif,ico,jpeg,pnm,ras,tiff,xpm,tga"
 included_loaders=""
 # If no loaders specified, include all
 if test "x$with_included_loaders" = xyes ; then
@@ -793,6 +810,7 @@ AC_TYPE_SIGNAL
 
 AM_CONDITIONAL(HAVE_TIFF, test "x$LIBTIFF" != x)
 AM_CONDITIONAL(HAVE_PNG, test "x$LIBPNG" != x)
+AM_CONDITIONAL(HAVE_MNG, test "x$LIBMNG" != x)
 AM_CONDITIONAL(HAVE_JPEG, test "x$LIBJPEG" != x)
 
 if $dynworks ; then
@@ -806,8 +824,11 @@ if $dynworks ; then
   if echo "$included_loaders" | grep "\(^\|\,\)png\(\$\|\,\)" > /dev/null; then
     STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBPNG"
   fi
+  if echo "$included_loaders" | grep "\(^\|\,\)mng\(\$\|\,\)" > /dev/null; then
+    STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBMNG"
+  fi
 else
-  STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG"
+  STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG $LIBMNG"
 fi
 
 # Checks to see if we should compile in MMX support (there will be

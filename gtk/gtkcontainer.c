@@ -653,6 +653,15 @@ gtk_container_class_install_child_property (GtkContainerClass *class,
   g_param_spec_pool_insert (_gtk_widget_child_property_pool, pspec, G_OBJECT_CLASS_TYPE (class));
 }
 
+/**
+ * gtk_container_class_find_child_property:
+ * @class: a #GtkContainerClass
+ * @property_name: the name of the child property to find
+ * @returns: the #GParamSpec of the child property or %NULL if @class has ho
+ *   child property with that name.
+ *
+ * Finds a child property of a container class by name.
+ */
 GParamSpec*
 gtk_container_class_find_child_property (GObjectClass *class,
 					 const gchar  *property_name)
@@ -666,7 +675,15 @@ gtk_container_class_find_child_property (GObjectClass *class,
 				   TRUE);
 }
 
-GParamSpec** /* free result */
+/**
+ * gtk_container_class_list_child_properties:
+ * @class: a #GtkContainerClass
+ * @n_properties: location to return the number of child properties found
+ * @returns: an newly allocated array of #GParamSpec*. The array must be freed with g_free().
+ *
+ * Returns all child properties of a container class.
+ */
+GParamSpec**
 gtk_container_class_list_child_properties (GObjectClass *class,
 					   guint        *n_properties)
 {

@@ -395,7 +395,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_PARENT,
 				   g_param_spec_object ("parent",
-							_("Parent widget"),
+							_("Parent widget"), 
 							_("The parent widget of this widget. Must be a Container widget."),
 							GTK_TYPE_CONTAINER,
 							G_PARAM_READWRITE));
@@ -6242,6 +6242,51 @@ gtk_widget_class_install_style_property (GtkWidgetClass *class,
   parser = _gtk_rc_property_parser_from_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
 
   gtk_widget_class_install_style_property_parser (class, pspec, parser);
+}
+
+/**
+ * gtk_widget_class_find_style_property:
+ * @class: a #GtkWidgetClass
+ * @property_name: the name of the style property to find
+ * @returns: the #GParamSpec of the style property or %NULL if @class has ho
+ *   style property with that name.
+ *
+ * Finds a style property of a widget class by name.
+ */
+GParamSpec*
+gtk_widget_class_find_style_property (GtkWidgetClass *class,
+				      const gchar    *property_name)
+{
+  g_return_val_if_fail (property_name != NULL, NULL);
+
+  return g_param_spec_pool_lookup (style_property_spec_pool,
+				   property_name,
+				   G_OBJECT_CLASS_TYPE (class),
+				   TRUE);
+}
+
+/**
+ * gtk_widget_class_list_style_properties:
+ * @class: a #GtkWidgetClass
+ * @n_properties: location to return the number of style properties found
+ * @returns: an newly allocated array of #GParamSpec*. The array must be freed with g_free().
+ *
+ * Returns all style properties of a widget class.
+ */
+GParamSpec**
+gtk_widget_class_list_style_properties (GtkWidgetClass *class,
+					guint          *n_properties)
+{
+  GParamSpec **pspecs;
+  guint n;
+
+  pspecs = g_param_spec_pool_list (style_property_spec_pool,
+				   G_OBJECT_CLASS_TYPE (class),
+				   &n);
+  if (n_properties)
+    *n_properties = n;
+
+  return pspecs;
 }
 
 /**

@@ -1,3 +1,14 @@
+2002-05-05  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Bump version to 2.1.0, binary, interface age 0.
+
+	* gtk/gtkcontainer.c (gtk_container_class_list_child_properties): 
+	(gtk_container_class_find_child_property): Document.
+
+	* gtk/gtkwidget.c: 
+	* gtk/gtkwidget.h: New functions gtk_widget_class_list_child_properties
+	and gtk_widget_class_find_child_property.  (#80652)
+	
 Sun May  5 15:56:50 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Fix problem with == in test argument.
