@@ -20,7 +20,7 @@
  * Carsten Haitzler <raster@rasterman.com>
  */
 
-#include "pixmap_theme.h"
+#include "pixbuf.h"
 #include <gmodule.h>
 
 /* Theme functions to export */

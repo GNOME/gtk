@@ -1,3 +1,14 @@
+Mon Mar  6 11:44:58 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * docs/gap-geometry.fig: Moved into docs/ subdir
+	
+        * Makefile.am configure.in autogen.sh src/Makefile.am: 
+	automakify
+	 
+	* src/pixbuf.h src/pixbuf-render.c src/pixbuf-draw.c
+	src/pixbuf-main.c: Move sources into subdir and
+	rename.
+
 Mon Mar  6 11:02:07 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* pixmap_theme_pixbuf.c: Handle drawing transparency without a

@@ -20,7 +20,7 @@
  * Carsten Haitzler <raster@rasterman.com>
  */
 
-#include "pixmap_theme.h"
+#include "pixbuf.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 GCache *pixbuf_cache = NULL;
