@@ -12585,6 +12585,7 @@ check_expander_max (gint height,
   if (height < expander_size)
     {
       gboolean is_separator = FALSE;
+      gboolean invalid = FALSE;
 
       if (tree_view->priv->row_separator_func)
 	{
@@ -12600,10 +12601,11 @@ check_expander_max (gint height,
 								  tree_view->priv->row_separator_data);
 	}
       
-      if (!is_separator)
-	g_warning ("height less than expander size (%d < %d);\n"
-		   "please report this in http://bugzilla.gnome.org/show_bug.cgi?id=145528\n",
-		   height, expander_size);
+      invalid = GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID);
+      if (!is_separator && (height > 0 || invalid))
+	  g_warning ("height less than expander size (%d < %d); %s\n"
+		     "please report this in http://bugzilla.gnome.org/show_bug.cgi?id=145528\n",
+		     height, expander_size, invalid ? "node invalid" : "");
     }
   
   return height ? height : expander_size;
