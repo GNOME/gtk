@@ -1072,7 +1072,8 @@ gtk_handle_box_motion (GtkWidget      *widget,
    */
   new_x = 0;
   new_y = 0;
-  gdk_window_get_pointer (widget->window, &new_x, &new_y, NULL);
+  gdk_window_get_pointer (gdk_screen_get_root_window (gtk_widget_get_screen (widget)), 
+			  &new_x, &new_y, NULL);
   new_x += hb->float_allocation.x;
   new_y += hb->float_allocation.y;
 
