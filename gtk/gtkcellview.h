@@ -58,22 +58,6 @@ GtkWidget        *gtk_cell_view_new_with_markup        (const gchar     *markup)
 GtkWidget        *gtk_cell_view_new_with_pixbuf        (GdkPixbuf       *pixbuf);
 
 
-void              gtk_cell_view_pack_start              (GtkCellView     *cell_view,
-                                                         GtkCellRenderer *renderer,
-                                                         gboolean         expand);
-void              gtk_cell_view_pack_end                (GtkCellView     *cell_view,
-                                                         GtkCellRenderer *renderer,
-                                                         gboolean         expand);
-void              gtk_cell_view_clear                   (GtkCellView     *cell_view);
-void              gtk_cell_view_add_attribute           (GtkCellView     *cell_view,
-                                                         GtkCellRenderer *renderer,
-                                                         const gchar     *attribute,
-                                                         gint             column);
-void              gtk_cell_view_clear_attributes        (GtkCellView     *cell_view,
-                                                         GtkCellRenderer *attribute);
-void              gtk_cell_view_set_attributes          (GtkCellView     *cell_view,
-                                                         GtkCellRenderer *renderer,
-                                                         ...);
 void              gtk_cell_view_set_value               (GtkCellView     *cell_view,
                                                          GtkCellRenderer *renderer,
                                                          gchar           *property,

@@ -1,3 +1,18 @@
+Wed Oct  1 22:43:40 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellview.[ch]: implement the GtkCellLayout interface, drop
+	packing/attribute/cell data functions from the header,
+	(gtk_cell_view_set_cell_data): added support for cell data funcs.
+
+	* gtk/gtkcombobox.[ch]: implement the GtkCellLayout interface, drop
+	packing/attribute/cell data functions from the header, implemented
+	cell data func support.
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_new): updated
+	for the move to GtkCellLayout.
+
+	* tests/testcombo.c (create_combo_box_grid_demo), (main): ditto.
+
 2003-10-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.c (gtk_action_class_init): 

@@ -18,6 +18,7 @@
  */
 
 #include <gtk/gtkcomboboxentry.h>
+#include <gtk/gtkcelllayout.h>
 
 #include <gtk/gtkentry.h>
 #include <gtk/gtkcellrenderertext.h>
@@ -156,10 +157,10 @@ gtk_combo_box_entry_new (GtkTreeModel *model,
 
   GTK_COMBO_BOX_ENTRY (ret)->priv->text_column = text_column;
   renderer = gtk_cell_renderer_text_new ();
-  gtk_combo_box_pack_start (GTK_COMBO_BOX (ret), renderer, TRUE);
-  gtk_combo_box_set_attributes (GTK_COMBO_BOX (ret), renderer,
-                                "text", text_column,
-                                NULL);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (ret), renderer, TRUE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (ret), renderer,
+                                  "text", text_column,
+                                  NULL);
 
   g_signal_connect (GTK_COMBO_BOX_ENTRY (ret)->priv->entry, "changed",
                     G_CALLBACK (gtk_combo_box_entry_contents_changed), ret);

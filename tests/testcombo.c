@@ -55,10 +55,10 @@ create_combo_box_grid_demo ()
         store = gtk_list_store_new (1, GDK_TYPE_PIXBUF);
 
         combo = gtk_combo_box_new (GTK_TREE_MODEL (store));
-        gtk_combo_box_pack_start (GTK_COMBO_BOX (combo),
-                                  cell, TRUE);
-        gtk_combo_box_set_attributes (GTK_COMBO_BOX (combo),
-                                      cell, "pixbuf", 0, NULL);
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo),
+                                    cell, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo),
+                                        cell, "pixbuf", 0, NULL);
         gtk_combo_box_set_wrap_width (GTK_COMBO_BOX (combo),
                                       3);
 
@@ -227,9 +227,9 @@ main (int argc, char **argv)
         pixbuf = gtk_widget_render_icon (cellview, GTK_STOCK_DIALOG_WARNING,
                                          GTK_ICON_SIZE_BUTTON, NULL);
 
-        gtk_cell_view_pack_start (GTK_CELL_VIEW (cellview),
-                                  renderer,
-                                  FALSE);
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+                                    renderer,
+                                    FALSE);
         g_value_init (&value, GDK_TYPE_PIXBUF);
         g_value_set_instance (&value, pixbuf);
         gtk_cell_view_set_values (GTK_CELL_VIEW (cellview),
@@ -239,9 +239,9 @@ main (int argc, char **argv)
         g_value_unset (&value);
 
         renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_view_pack_start (GTK_CELL_VIEW (cellview),
-                                  renderer,
-                                  TRUE);
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+                                    renderer,
+                                    TRUE);
         g_value_init (&value, G_TYPE_STRING);
         g_value_set_string (&value, "la la la");
         gtk_cell_view_set_values (GTK_CELL_VIEW (cellview),
@@ -264,16 +264,20 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (boom), combobox);
 
         renderer = gtk_cell_renderer_pixbuf_new ();
-        gtk_combo_box_pack_start (GTK_COMBO_BOX (combobox),
-                                  renderer,
-                                  FALSE);
-        gtk_combo_box_set_attributes (GTK_COMBO_BOX (combobox), renderer, "pixbuf", 0, NULL);
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
+                                    renderer,
+                                    FALSE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
+                                        "pixbuf", 0,
+                                        NULL);
 
         renderer = gtk_cell_renderer_text_new ();
-        gtk_combo_box_pack_start (GTK_COMBO_BOX (combobox),
-                                  renderer,
-                                  TRUE);
-        gtk_combo_box_set_attributes (GTK_COMBO_BOX (combobox), renderer, "text", 1, NULL);
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
+                                    renderer,
+                                    TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
+                                        "text", 1,
+                                        NULL);
 
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 1);
 
