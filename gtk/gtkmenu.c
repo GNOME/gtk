@@ -696,11 +696,8 @@ gtk_menu_window_size_request (GtkWidget      *window,
     {
       GdkScreen *screen = gtk_widget_get_screen (window);
       GdkRectangle monitor;
-      gint monitor_num;
       
-      monitor_num = gdk_screen_get_monitor_at_point (screen,
-						     private->x, private->y);
-      gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+      gdk_screen_get_monitor_geometry (screen, private->monitor_num, &monitor);
 
       if (private->y + requisition->height > monitor.y + monitor.height)
 	requisition->height = monitor.y + monitor.height - private->y;
@@ -819,6 +816,8 @@ static void
 menu_change_screen (GtkMenu   *menu,
 		    GdkScreen *new_screen)
 {
+  GtkMenuPrivate *private = gtk_menu_get_private (menu);
+
   if (menu->torn_off)
     {
       gtk_window_set_screen (GTK_WINDOW (menu->tearoff_window), new_screen);
@@ -826,6 +825,7 @@ menu_change_screen (GtkMenu   *menu,
     }
 
   gtk_window_set_screen (GTK_WINDOW (menu->toplevel), new_screen);
+  private->monitor_num = -1;
 }
 
 static void

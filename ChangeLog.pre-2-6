@@ -1,3 +1,13 @@
+Tue Jan 27 01:46:54 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Make menus work better on Xinerama (#126150):
+	
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): Calculate the 
+	monitor_num on the screen of the menu, not of the attach widget.
+
+	* gtk/gtkmenu.c (menu_change_screen): Forget the stored monitor_num. 
+	(gtk_menu_window_size_request): Remember the monitor_num.
+
 2004-01-26  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #105497; constify uses of GdkColor.
