@@ -11,12 +11,12 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-08-18 00:22+0300\n"
-"PO-Revision-Date: 2004-08-18 00:10+0300\n"
+"PO-Revision-Date: 2004-08-18 00:49+0300\n"
 "Last-Translator: Sami Pesonen <sampeson@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
@@ -788,7 +788,7 @@ msgstr "Solun taustaväri asetettu"
 
 #: gtk/gtkcellrenderer.c:274
 msgid "Whether this tag affects the cell background color"
-msgstr "Vaikuttaako tämä lappu solun taustaväriin"
+msgstr "Vaikuttaako tämä merkkaus solun taustaväriin"
 
 #: gtk/gtkcellrendererpixbuf.c:134
 msgid "Pixbuf Object"
@@ -1019,7 +1019,7 @@ msgstr "Taustaväri asetettu"
 
 #: gtk/gtkcellrenderertext.c:399 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
 msgid "Whether this tag affects the background color"
-msgstr "Vaikuttaako tämä lappu taustaväriin"
+msgstr "Vaikuttaako tämä merkkaus taustaväriin"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:521
 msgid "Foreground set"
@@ -1027,7 +1027,7 @@ msgstr "Edustaväri asetettu"
 
 #: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:522
 msgid "Whether this tag affects the foreground color"
-msgstr "Vaikuttaako tämä lappu edustaväriin"
+msgstr "Vaikuttaako tämä merkkaus edustaväriin"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:529
 msgid "Editability set"
@@ -1035,7 +1035,7 @@ msgstr "Muokattavuus asetettu"
 
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:530
 msgid "Whether this tag affects text editability"
-msgstr "Vaikuttaako tämä lappu tekstin muokattavuuteen"
+msgstr "Vaikuttaako tämä merkkaus tekstin muokattavuuteen"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:533
 msgid "Font family set"
@@ -1043,7 +1043,7 @@ msgstr "Kirjasinperhe asetettu"
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:534
 msgid "Whether this tag affects the font family"
-msgstr "Vaikuttaako tämä lappu kirjasinperheeseen"
+msgstr "Vaikuttaako tämä merkkaus kirjasinperheeseen"
 
 #: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
 msgid "Font style set"
@@ -1051,7 +1051,7 @@ msgstr "Kirjasintyyli asetettu"
 
 #: gtk/gtkcellrenderertext.c:415 gtk/gtktexttag.c:538
 msgid "Whether this tag affects the font style"
-msgstr "Vaikuttaako tämä lappu kirjasintyyliin"
+msgstr "Vaikuttaako tämä merkkaus kirjasintyyliin"
 
 #: gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:541
 msgid "Font variant set"
@@ -1059,7 +1059,7 @@ msgstr "Kirjasinmuunnelma asetettu"
 
 #: gtk/gtkcellrenderertext.c:419 gtk/gtktexttag.c:542
 msgid "Whether this tag affects the font variant"
-msgstr "Vaikuttaako tämä lappu kirjasinmuunnelmaan"
+msgstr "Vaikuttaako tämä merkkaus kirjasinmuunnelmaan"
 
 #: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:545
 msgid "Font weight set"
@@ -1067,7 +1067,7 @@ msgstr "Kirjasinvahvuus asetettu"
 
 #: gtk/gtkcellrenderertext.c:423 gtk/gtktexttag.c:546
 msgid "Whether this tag affects the font weight"
-msgstr "Vaikuttaako tämä lappu kirjasinvahvuuteen"
+msgstr "Vaikuttaako tämä merkkaus kirjasinvahvuuteen"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:549
 msgid "Font stretch set"
@@ -1075,7 +1075,7 @@ msgstr "Kirjasinvenytys asetettu"
 
 #: gtk/gtkcellrenderertext.c:427 gtk/gtktexttag.c:550
 msgid "Whether this tag affects the font stretch"
-msgstr "Vaikuttaako tämä lappu kirjasimen venymiseen"
+msgstr "Vaikuttaako tämä merkkaus kirjasimen venymiseen"
 
 #: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:553
 msgid "Font size set"
@@ -1083,7 +1083,7 @@ msgstr "Kirjasinkoko asetettu"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtktexttag.c:554
 msgid "Whether this tag affects the font size"
-msgstr "Vaikuttaako tämä lappu kirjasinkokoon"
+msgstr "Vaikuttaako tämä merkkaus kirjasinkokoon"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:557
 msgid "Font scale set"
@@ -1091,7 +1091,7 @@ msgstr "Kirjasinskaala asetettu"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtktexttag.c:558
 msgid "Whether this tag scales the font size by a factor"
-msgstr "Muuttaako tämä lappu kirjasinkoon jollakin kertoimella"
+msgstr "Muuttaako tämä merkkaus kirjasinkoon jollakin kertoimella"
 
 #: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:577
 msgid "Rise set"
@@ -1099,7 +1099,7 @@ msgstr "Nosto asetettu"
 
 #: gtk/gtkcellrenderertext.c:439 gtk/gtktexttag.c:578
 msgid "Whether this tag affects the rise"
-msgstr "Vaikuttaako tämä lappu nostoon"
+msgstr "Vaikuttaako tämä merkkaus nostoon"
 
 #: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:593
 msgid "Strikethrough set"
@@ -1107,7 +1107,7 @@ msgstr "Yliviivaus asetettu"
 
 #: gtk/gtkcellrenderertext.c:443 gtk/gtktexttag.c:594
 msgid "Whether this tag affects strikethrough"
-msgstr "Vaikuttaako tämä lappu yliviivaukseen"
+msgstr "Vaikuttaako tämä merkkaus yliviivaukseen"
 
 #: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:601
 msgid "Underline set"
@@ -1115,7 +1115,7 @@ msgstr "Alleviivaus asetettu"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:602
 msgid "Whether this tag affects underlining"
-msgstr "Vaikuttaako tämä lappu alleviivaukseen"
+msgstr "Vaikuttaako tämä merkkaus alleviivaukseen"
 
 #: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
 msgid "Language set"
@@ -1123,7 +1123,7 @@ msgstr "Kieli asetettu"
 
 #: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:566
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr "Vaikuttaako tämä lappu tekstin piirtokieleen"
+msgstr "Vaikuttaako tämä merkkaus tekstin piirtokieleen"
 
 #: gtk/gtkcellrenderertoggle.c:141
 msgid "Toggle state"
@@ -3252,20 +3252,20 @@ msgstr "Rivittyvätkö sanat säätimen reunoilla"
 
 #: gtk/gtktextbuffer.c:181
 msgid "Tag Table"
-msgstr "Lapputaulukko"
+msgstr "Merkkaustaulukko"
 
 #: gtk/gtktextbuffer.c:182
 msgid "Text Tag Table"
-msgstr "Tekstin lapputaulukko"
+msgstr "Tekstin merkkaustaulukko"
 
 #: gtk/gtktexttag.c:196
 msgid "Tag name"
-msgstr "Lapun nimi"
+msgstr "Merkkauksen nimi"
 
 #: gtk/gtktexttag.c:197
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr ""
-"Nimi, jota käytetään seuraavaan lappuun viittaamiseen. NULL, jos lappu "
+"Nimi, jota käytetään seuraavaan merkkaukseen viittaamiseen. NULL, jos merkkaus "
 "nimetön"
 
 #: gtk/gtktexttag.c:215
@@ -3281,7 +3281,7 @@ msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
 msgstr ""
-"Täyttääkö taustaväri koko rivin korkeuden vaiko vain lapullisten merkkien "
+"Täyttääkö taustaväri koko rivin korkeuden vaiko vain merkattujen merkkien "
 "korkeuden"
 
 #: gtk/gtktexttag.c:231
@@ -3442,7 +3442,7 @@ msgstr "Taustaväri koko korkeudelle asetettu"
 
 #: gtk/gtktexttag.c:514
 msgid "Whether this tag affects background height"
-msgstr "Vaikuttaako tämä lappu taustan korkeuteen"
+msgstr "Vaikuttaako tämä merkkaus taustan korkeuteen"
 
 #: gtk/gtktexttag.c:517
 msgid "Background stipple set"
@@ -3450,7 +3450,7 @@ msgstr "Taustan kuviopeite asetettu"
 
 #: gtk/gtktexttag.c:518
 msgid "Whether this tag affects the background stipple"
-msgstr "Vaikuttaako tämä lappu taustan kuviopeitteeseen"
+msgstr "Vaikuttaako tämä merkkaus taustan kuviopeitteeseen"
 
 #: gtk/gtktexttag.c:525
 msgid "Foreground stipple set"
@@ -3458,7 +3458,7 @@ msgstr "Edustan kuviopeite asetettu"
 
 #: gtk/gtktexttag.c:526
 msgid "Whether this tag affects the foreground stipple"
-msgstr "Vaikuttaako tämä lappu edustan kuviopeitteeseen"
+msgstr "Vaikuttaako tämä merkkaus edustan kuviopeitteeseen"
 
 #: gtk/gtktexttag.c:561
 msgid "Justification set"
@@ -3466,7 +3466,7 @@ msgstr "Tasaus asetettu"
 
 #: gtk/gtktexttag.c:562
 msgid "Whether this tag affects paragraph justification"
-msgstr "Vaikuttaako tämä lappu kappaleen tasaukseen"
+msgstr "Vaikuttaako tämä merkkaus kappaleen tasaukseen"
 
 #: gtk/gtktexttag.c:569
 msgid "Left margin set"
@@ -3474,7 +3474,7 @@ msgstr "Vasen reunus asetettu"
 
 #: gtk/gtktexttag.c:570
 msgid "Whether this tag affects the left margin"
-msgstr "Vaikuttaako tämä lappu vasempaan reunukseen"
+msgstr "Vaikuttaako tämä merkkaus vasempaan reunukseen"
 
 #: gtk/gtktexttag.c:573
 msgid "Indent set"
@@ -3482,7 +3482,7 @@ msgstr "Sisennys asetettu"
 
 #: gtk/gtktexttag.c:574
 msgid "Whether this tag affects indentation"
-msgstr "Vaikuttaako tämä lappu sisennykseen"
+msgstr "Vaikuttaako tämä merkkaus sisennykseen"
 
 #: gtk/gtktexttag.c:581
 msgid "Pixels above lines set"
@@ -3490,7 +3490,7 @@ msgstr "Kuvapisteitä rivin yllä asetettu"
 
 #: gtk/gtktexttag.c:582 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr "Vaikuttaako tämä lippu rivien yllä olevien kuvapisteiden määrään"
+msgstr "Vaikuttaako tämä merkkaus rivien yllä olevien kuvapisteiden määrään"
 
 #: gtk/gtktexttag.c:585
 msgid "Pixels below lines set"
@@ -3503,7 +3503,7 @@ msgstr "Kuvapisteet rivityksessä asetettu"
 #: gtk/gtktexttag.c:590
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
-"Vaikuttaako tämä lappu rivittyneiden rivien välisten kuvapisteiden määrään"
+"Vaikuttaako tämä merkkaus rivittyneiden rivien välisten kuvapisteiden määrään"
 
 #: gtk/gtktexttag.c:597
 msgid "Right margin set"
@@ -3511,7 +3511,7 @@ msgstr "Oikea reunus asetettu"
 
 #: gtk/gtktexttag.c:598
 msgid "Whether this tag affects the right margin"
-msgstr "Vaikuttaako tämä lappu oikeaan reunukseen"
+msgstr "Vaikuttaako tämä merkkaus oikeaan reunukseen"
 
 #: gtk/gtktexttag.c:605
 msgid "Wrap mode set"
@@ -3519,7 +3519,7 @@ msgstr "Rivitystila asetettu"
 
 #: gtk/gtktexttag.c:606
 msgid "Whether this tag affects line wrap mode"
-msgstr "Vaikuttaako tämä lappu rivitystilaan"
+msgstr "Vaikuttaako tämä merkkaus rivitystilaan"
 
 #: gtk/gtktexttag.c:609
 msgid "Tabs set"
@@ -3527,7 +3527,7 @@ msgstr "Sarkaimet asetettu"
 
 #: gtk/gtktexttag.c:610
 msgid "Whether this tag affects tabs"
-msgstr "Vaikottaako tämä lappu sarkaimiin"
+msgstr "Vaikottaako tämä merkkaus sarkaimiin"
 
 #: gtk/gtktexttag.c:613
 msgid "Invisible set"
@@ -3535,7 +3535,7 @@ msgstr "Näkymätön asetettu"
 
 #: gtk/gtktexttag.c:614
 msgid "Whether this tag affects text visibility"
-msgstr "Vaikuttaako tämä lappu näkyvyyteen"
+msgstr "Vaikuttaako tämä merkkaus näkyvyyteen"
 
 #: gtk/gtktextview.c:557
 msgid "Pixels Above Lines"
