@@ -2621,6 +2621,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   GList *list;
   GdkRectangle real_cell_area;
   GdkRectangle real_background_area;
+  GdkRectangle real_expose_area = *cell_area;
   gint expand_cell_count = 0;
   gint full_requested_width = 0;
   gint extra_space;
@@ -2737,7 +2738,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 				    tree_column->tree_view,
 				    &rtl_background_area,
 				    &rtl_cell_area,
-				    expose_area,
+				    &real_expose_area, 
 				    flags);
 	}
 
@@ -2892,7 +2893,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 				    tree_column->tree_view,
 				    &rtl_background_area,
 				    &rtl_cell_area,
-				    expose_area,
+				    &real_expose_area,
 				    flags);
 	}
       /* FOCUS */
@@ -3350,7 +3351,7 @@ _gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn       *tree_column,
       gtk_paint_focus (tree_column->tree_view->style,
 		       window,
 		       cell_state,
-		       NULL,
+		       cell_area,
 		       tree_column->tree_view,
 		       "treeview",
 		       focus_rectangle.x,

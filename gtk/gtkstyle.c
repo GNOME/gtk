@@ -3681,16 +3681,25 @@ gtk_default_draw_check (GtkStyle      *style,
 {
   if (detail && strcmp (detail, "cellcheck") == 0)
     {
+      if (area)               
+      	gdk_gc_set_clip_rectangle (widget->style->base_gc[state_type], area);
       gdk_draw_rectangle (window,
 			  widget->style->base_gc[state_type],
 			  TRUE,
                           x, y,
 			  width, height);
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (widget->style->base_gc[state_type], NULL);
+	  gdk_gc_set_clip_rectangle (widget->style->text_gc[state_type], area);
+	}
       gdk_draw_rectangle (window,
 			  widget->style->text_gc[state_type],
 			  FALSE,
                           x, y,
 			  width, height);
+      if (area)               
+      	gdk_gc_set_clip_rectangle (widget->style->text_gc[state_type], NULL);
 
       x -= (1 + INDICATOR_PART_SIZE - width) / 2;
       y -= (((1 + INDICATOR_PART_SIZE - height) / 2) - 1);
@@ -3773,6 +3782,8 @@ gtk_default_draw_option (GtkStyle      *style,
 {
   if (detail && strcmp (detail, "cellradio") == 0)
     {
+      if (area)               
+	gdk_gc_set_clip_rectangle (widget->style->fg_gc[state_type], area);
       gdk_draw_arc (window,
 		    widget->style->fg_gc[state_type],
 		    FALSE,
@@ -3797,6 +3808,8 @@ gtk_default_draw_option (GtkStyle      *style,
           draw_part (window, widget->style->fg_gc[state_type],
 	             area, x, y, CHECK_INCONSISTENT_TEXT);
 	}
+      if (area)               
+	gdk_gc_set_clip_rectangle (widget->style->fg_gc[state_type], NULL);
     }
   else
     {

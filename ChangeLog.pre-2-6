@@ -1,3 +1,22 @@
+Tue Feb  3 01:38:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Clip narrow columns in rtl-oriented tree views (#128089,  
+	chinen@jp.ibm.com):
+	
+	* gtk/gtkstyle.c (gtk_default_draw_option): 
+	* gtk/gtkstyle.c (gtk_default_draw_check): Clip to the 
+	given area.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action): 
+	Use the right clip area when calling gtk_cell_renderer_render().
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_cell_draw_focus): 
+	Use the right clip area when calling gtk_paint_focus().
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render): 
+	Use the right clip area when calling gtk_paint_toggle() or
+	gtk_paint_check().
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): 
+	Clip to the expose_area when drawing the background rectangle.
+	
 Tue Feb  3 00:14:36 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/x11/gdkgeometry-x11.c (queue_item_free, gdk_window_queue):

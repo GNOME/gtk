@@ -1371,6 +1371,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 
   gtk_cell_renderer_text_get_size (cell, widget, cell_area, &x_offset, &y_offset, NULL, NULL);
 
+
   if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
     {
       if (GTK_WIDGET_HAS_FOCUS (widget))
@@ -1398,7 +1399,9 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
       gc = gdk_gc_new (window);
 
       gdk_gc_set_rgb_fg_color (gc, &color);
-      
+
+      if (expose_area)               
+        gdk_gc_set_clip_rectangle (gc, expose_area);
       gdk_draw_rectangle (window,
                           gc,
                           TRUE,
@@ -1406,7 +1409,8 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
                           background_area->y,
                           background_area->width,
                           background_area->height);
-
+      if (expose_area)               
+        gdk_gc_set_clip_rectangle (gc, NULL);
       g_object_unref (gc);
     }
 
@@ -1414,7 +1418,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
                     window,
                     state,
 		    TRUE,
-                    cell_area,
+                    expose_area,
                     widget,
                     "cellrenderertext",
                     cell_area->x + x_offset + cell->xpad,
