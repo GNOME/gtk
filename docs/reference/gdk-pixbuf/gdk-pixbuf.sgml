@@ -113,6 +113,8 @@
     &gdk-pixbuf-gdk-pixbuf-xlib-from-drawables;
     &gdk-pixbuf-gdk-pixbuf-xlib-rgb;
   </reference>
+ 
+  <index/>
 
   &Porting-From-Imlib;
 
