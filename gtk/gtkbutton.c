@@ -586,8 +586,11 @@ gtk_button_construct_child (GtkButton *button)
     return;
 
   if (GTK_BIN (button)->child)
-    gtk_container_remove (GTK_CONTAINER (button),
-			  GTK_BIN (button)->child);
+    {
+      gtk_container_remove (GTK_CONTAINER (button),
+  			    GTK_BIN (button)->child);
+      priv->image = NULL;
+    }
   
   if (button->use_stock &&
       gtk_stock_lookup (button->label_text, &item))

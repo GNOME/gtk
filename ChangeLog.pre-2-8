@@ -1,3 +1,8 @@
+Fri Mar  5 22:37:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkbutton.c (gtk_button_construct_child): Don't let
+	the priv->image pointer dangle.  (#136259, Padraig O'Briain)
+
 2004-03-05  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserIface): Add
