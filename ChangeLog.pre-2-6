@@ -1,3 +1,9 @@
+2001-03-12  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gtk/gtkclist.c:
+	Scroll using gdk_window_scroll(). Don't wait for exposes.
+	Move the column headers in an order that makes them flash less.
+
 2001-03-10  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.def : updated

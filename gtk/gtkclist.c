@@ -358,7 +358,6 @@ static void column_button_clicked     (GtkWidget      *widget,
 /* Adjustments */
 static void adjust_adjustments        (GtkCList       *clist,
 				       gboolean        block_resize);
-static void check_exposures           (GtkCList       *clist);
 static void vadjustment_changed       (GtkAdjustment  *adjustment,
 				       gpointer        data);
 static void vadjustment_value_changed (GtkAdjustment  *adjustment,
@@ -6101,8 +6100,7 @@ vadjustment_value_changed (GtkAdjustment *adjustment,
 			   gpointer       data)
 {
   GtkCList *clist;
-  GdkRectangle area;
-  gint diff, value;
+  gint dy, value;
 
   g_return_if_fail (adjustment != NULL);
   g_return_if_fail (data != NULL);
@@ -6113,62 +6111,13 @@ vadjustment_value_changed (GtkAdjustment *adjustment,
   if (!GTK_WIDGET_DRAWABLE (clist) || adjustment != clist->vadjustment)
     return;
 
-  value = adjustment->value;
-
-  if (value > -clist->voffset)
-    {
-      /* scroll down */
-      diff = value + clist->voffset;
-
-      /* we have to re-draw the whole screen here... */
-      if (diff >= clist->clist_window_height)
-	{
-	  clist->voffset = -value;
-	  draw_rows (clist, NULL);
-	  return;
-	}
-
-      if ((diff != 0) && (diff != clist->clist_window_height))
-	gdk_window_copy_area (clist->clist_window, clist->fg_gc,
-			      0, 0, clist->clist_window, 0, diff,
-			      clist->clist_window_width,
-			      clist->clist_window_height - diff);
-
-      area.x = 0;
-      area.y = clist->clist_window_height - diff;
-      area.width = clist->clist_window_width;
-      area.height = diff;
-    }
-  else
-    {
-      /* scroll up */
-      diff = -clist->voffset - value;
-
-      /* we have to re-draw the whole screen here... */
-      if (diff >= clist->clist_window_height)
-	{
-	  clist->voffset = -value;
-	  draw_rows (clist, NULL);
-	  return;
-	}
-
-      if ((diff != 0) && (diff != clist->clist_window_height))
-	gdk_window_copy_area (clist->clist_window, clist->fg_gc,
-			      0, diff, clist->clist_window, 0, 0,
-			      clist->clist_window_width,
-			      clist->clist_window_height - diff);
-
-      area.x = 0;
-      area.y = 0;
-      area.width = clist->clist_window_width;
-      area.height = diff;
-    }
-
-  clist->voffset = -value;
-  if ((diff != 0) && (diff != clist->clist_window_height))
-    check_exposures (clist);
-
-  draw_rows (clist, &area);
+  value = -adjustment->value;
+  dy = value - clist->voffset;
+  clist->voffset = value;
+  gdk_window_scroll (clist->clist_window, 0, dy);
+  gdk_window_process_updates (clist->clist_window, FALSE);
+  
+  return;
 }
 
 static void
@@ -6180,8 +6129,8 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
   GdkRectangle area;
   gint i;
   gint y = 0;
-  gint diff = 0;
   gint value;
+  gint dx;
 
   g_return_if_fail (adjustment != NULL);
   g_return_if_fail (data != NULL);
@@ -6195,8 +6144,10 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 
   value = adjustment->value;
 
+  dx = -value - clist->hoffset;
+  
   /* move the column buttons and resize windows */
-  for (i = 0; i < clist->columns; i++)
+  for (i = (dx<0)? 0 : clist->columns-1; i >= 0 && i < clist->columns; i += (dx<0)? 1 : -1)
     {
       if (clist->column[i].button)
 	{
@@ -6217,82 +6168,21 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 	}
     }
 
-  if (value > -clist->hoffset)
+
+  clist->hoffset = -value;
+
+  if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
+      !container->focus_child && GTK_CLIST_ADD_MODE(clist))
     {
-      /* scroll right */
-      diff = value + clist->hoffset;
+      y = ROW_TOP_YPIXEL (clist, clist->focus_row);
       
-      clist->hoffset = -value;
-      
-      /* we have to re-draw the whole screen here... */
-      if (diff >= clist->clist_window_width)
-	{
-	  draw_rows (clist, NULL);
-	  return;
-	}
-
-      if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
-	  !container->focus_child && GTK_CLIST_ADD_MODE(clist))
-	{
-	  y = ROW_TOP_YPIXEL (clist, clist->focus_row);
-	      
-	  gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE, 0, y,
-			      clist->clist_window_width - 1,
-			      clist->row_height - 1);
-	}
-      gdk_window_copy_area (clist->clist_window,
-			    clist->fg_gc,
-			    0, 0,
-			    clist->clist_window,
-			    diff,
-			    0,
-			    clist->clist_window_width - diff,
-			    clist->clist_window_height);
-
-      area.x = clist->clist_window_width - diff;
+      gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE, 0, y,
+			  clist->clist_window_width - 1,
+			  clist->row_height - 1);
     }
-  else
-    {
-      /* scroll left */
-      if (!(diff = -clist->hoffset - value))
-	return;
-
-      clist->hoffset = -value;
-      
-      /* we have to re-draw the whole screen here... */
-      if (diff >= clist->clist_window_width)
-	{
-	  draw_rows (clist, NULL);
-	  return;
-	}
-      
-      if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
-	  !container->focus_child && GTK_CLIST_ADD_MODE(clist))
-	{
-	  y = ROW_TOP_YPIXEL (clist, clist->focus_row);
-	  
-	  gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE, 0, y,
-			      clist->clist_window_width - 1,
-			      clist->row_height - 1);
-	}
-
-      gdk_window_copy_area (clist->clist_window,
-			    clist->fg_gc,
-			    diff, 0,
-			    clist->clist_window,
-			    0,
-			    0,
-			    clist->clist_window_width - diff,
-			    clist->clist_window_height);
-	  
-      area.x = 0;
-    }
-
-  area.y = 0;
-  area.width = diff;
-  area.height = clist->clist_window_height;
-
-  check_exposures (clist);
+ 
+  gdk_window_scroll (clist->clist_window, dx, 0);
+  gdk_window_process_updates (clist->clist_window, FALSE);
 
   if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
       !container->focus_child)
@@ -6311,52 +6201,28 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 			      clist->row_height - 1);
 	  return;
 	}
-      else
+      else if (ABS(dx) < clist->clist_window_width - 1)
 	{
 	  gint x0;
 	  gint x1;
 	  
-	  if (area.x == 0)
+	  if (dx > 0)
 	    {
 	      x0 = clist->clist_window_width - 1;
-	      x1 = diff;
+	      x1 = dx;
 	    }
 	  else
 	    {
 	      x0 = 0;
-	      x1 = area.x - 1;
+	      x1 = clist->clist_window_width - 1 + dx;
 	    }
-	  
+
 	  y = ROW_TOP_YPIXEL (clist, clist->focus_row);
 	  gdk_draw_line (clist->clist_window, clist->xor_gc,
 			 x0, y + 1, x0, y + clist->row_height - 2);
 	  gdk_draw_line (clist->clist_window, clist->xor_gc,
 			 x1, y + 1, x1, y + clist->row_height - 2);
-	  
 	}
-    }
-  draw_rows (clist, &area);
-}
-
-static void
-check_exposures (GtkCList *clist)
-{
-  GdkEvent *event;
-
-  if (!GTK_WIDGET_REALIZED (clist))
-    return;
-
-  /* Make sure graphics expose events are processed before scrolling
-   * again */
-  while ((event = gdk_event_get_graphics_expose (clist->clist_window)) != NULL)
-    {
-      gtk_widget_send_expose (GTK_WIDGET (clist), event);
-      if (event->expose.count == 0)
-	{
-	  gdk_event_free (event);
-	  break;
-	}
-      gdk_event_free (event);
     }
 }
 
