@@ -330,7 +330,7 @@ gtk_init (int	 *argc,
 		   module_name[2] == 'b'))
 		module_name = g_strdup (module_name);
 	      else
-		module_name = g_strconcat ("lib", module_name, ".so");
+		module_name = g_strconcat ("lib", module_name, ".so", NULL);
 	      (*argv)[i] = NULL;
 	      
 	      if (g_module_supported ())
