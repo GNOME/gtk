@@ -258,32 +258,31 @@ button_state_changed_cb (GtkWidget         *widget,
                          GtkMenuToolButton *button)
 {
   GtkMenuToolButtonPrivate *priv;
-  GtkWidget *b;
+  GtkWidget *other;
   GtkStateType state = GTK_WIDGET_STATE (widget);
 
   priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
 
-  b = (widget == priv->arrow_button) ? priv->button : priv->arrow_button;
+  other = (widget == priv->arrow_button) ? priv->button : priv->arrow_button;
 
-  g_signal_handlers_block_by_func (G_OBJECT (b),
+  g_signal_handlers_block_by_func (G_OBJECT (other),
                                    G_CALLBACK (button_state_changed_cb),
                                    button);
 
-  if (state == GTK_STATE_PRELIGHT &&
-      previous_state != GTK_STATE_ACTIVE)
+  if (state == GTK_STATE_PRELIGHT)
     {
-      gtk_widget_set_state (b, state);
+      gtk_widget_set_state (other, state);
     }
   else if (state == GTK_STATE_NORMAL)
     {
-      gtk_widget_set_state (b, state);
+      gtk_widget_set_state (other, state);
     }
   else if (state == GTK_STATE_ACTIVE)
     {
-      gtk_widget_set_state (b, GTK_STATE_NORMAL);
+      gtk_widget_set_state (other, GTK_STATE_NORMAL);
     }
 
-  g_signal_handlers_unblock_by_func (G_OBJECT (b),
+  g_signal_handlers_unblock_by_func (G_OBJECT (other),
                                      G_CALLBACK (button_state_changed_cb),
                                      button);
 }

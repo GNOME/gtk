@@ -1,3 +1,8 @@
+Sat Oct 23 15:17:55 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtkmenutoolbutton.c (button_state_changed_cb): Remove check
+	for previous state being ACTIVE. Bug 153876.
+
 2004-10-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_drag_data_received) 
