@@ -49,7 +49,6 @@
 #include "gtknotebook.h"
 #include "gtkoptionmenu.h"
 #include "gtkscrolledwindow.h"
-#include "gtksignal.h"
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtkvbox.h"
@@ -75,6 +74,8 @@ enum
 
 #define KEYS_LIST_WIDTH 200
 #define KEYS_LIST_HEIGHT 175
+
+#define GTK_INPUT_DIALOG_KEY "gtk-input-dialog-key"
 
 /* Forward declarations */
 
@@ -104,27 +105,29 @@ static void gtk_input_dialog_fill_keys        (GtkInputDialog      *inputd,
 static GtkObjectClass *parent_class = NULL;
 static guint input_dialog_signals[LAST_SIGNAL] = { 0 };
 
-GtkType
+GType
 gtk_input_dialog_get_type (void)
 {
-  static GtkType input_dialog_type = 0;
+  static GType input_dialog_type = 0;
 
   if (!input_dialog_type)
     {
-      static const GtkTypeInfo input_dialog_info =
+      static const GTypeInfo input_dialog_info =
       {
-	"GtkInputDialog",
-	sizeof (GtkInputDialog),
 	sizeof (GtkInputDialogClass),
-	(GtkClassInitFunc) gtk_input_dialog_class_init,
-	(GtkObjectInitFunc) gtk_input_dialog_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_input_dialog_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkInputDialog),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_input_dialog_init,
       };
 
-      input_dialog_type = gtk_type_unique (GTK_TYPE_DIALOG,
-					   &input_dialog_info);
+      input_dialog_type =
+	g_type_register_static (GTK_TYPE_DIALOG, "GtkInputDialog",
+				&input_dialog_info, 0);
     }
 
   return input_dialog_type;
@@ -133,30 +136,30 @@ gtk_input_dialog_get_type (void)
 static void
 gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 {
-  GtkObjectClass *object_class;
-
-  object_class = (GtkObjectClass*) klass;
-
-  parent_class = gtk_type_class (GTK_TYPE_DIALOG);
+  parent_class = g_type_class_peek_parent (klass);
 
   klass->enable_device = NULL;
   klass->disable_device = NULL;
 
   input_dialog_signals[ENABLE_DEVICE] =
-    gtk_signal_new ("enable_device",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, enable_device),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1, GDK_TYPE_DEVICE);
+    g_signal_new ("enable_device",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkInputDialogClass, enable_device),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_DEVICE);
 
   input_dialog_signals[DISABLE_DEVICE] =
-    gtk_signal_new ("disable_device",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, disable_device),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1, GDK_TYPE_DEVICE);
+    g_signal_new ("disable_device",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkInputDialogClass, disable_device),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_DEVICE);
 }
 
 static void
@@ -204,14 +207,15 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 	GdkDevice *info = (GdkDevice *)(tmp_list->data);
 	if (info != gdk_device_get_core_pointer ())
 	  {
-	    menuitem = gtk_menu_item_new_with_label(info->name);
+	    menuitem = gtk_menu_item_new_with_label (info->name);
 
 	    gtk_menu_shell_append (GTK_MENU_SHELL (device_menu), menuitem);
 	    gtk_widget_show (menuitem);
-	    gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
-	    gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-				(GtkSignalFunc) gtk_input_dialog_set_device,
-				info);
+	    g_object_set_data (G_OBJECT (menuitem), GTK_INPUT_DIALOG_KEY,
+			       inputd);
+	    g_signal_connect (menuitem, "activate",
+			      G_CALLBACK (gtk_input_dialog_set_device),
+			      info);
 	  }
       }
 
@@ -237,27 +241,27 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
       menuitem = gtk_menu_item_new_with_label(_("Disabled"));
       gtk_menu_shell_append (GTK_MENU_SHELL (mapping_menu), menuitem);
-      gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
+      g_object_set_data (G_OBJECT (menuitem), GTK_INPUT_DIALOG_KEY, inputd);
       gtk_widget_show (menuitem);
-      gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
-			  GINT_TO_POINTER (GDK_MODE_DISABLED));
+      g_signal_connect (menuitem, "activate",
+			G_CALLBACK (gtk_input_dialog_set_mapping_mode),
+			GINT_TO_POINTER (GDK_MODE_DISABLED));
 
       menuitem = gtk_menu_item_new_with_label(_("Screen"));
       gtk_menu_shell_append (GTK_MENU_SHELL (mapping_menu), menuitem);
-      gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
+      g_object_set_data (G_OBJECT (menuitem), GTK_INPUT_DIALOG_KEY, inputd);
       gtk_widget_show (menuitem);
-      gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
-			  GINT_TO_POINTER (GDK_MODE_SCREEN));
+      g_signal_connect (menuitem, "activate",
+			G_CALLBACK (gtk_input_dialog_set_mapping_mode),
+			GINT_TO_POINTER (GDK_MODE_SCREEN));
 
       menuitem = gtk_menu_item_new_with_label(_("Window"));
       gtk_menu_shell_append (GTK_MENU_SHELL (mapping_menu), menuitem);
-      gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
+      g_object_set_data (G_OBJECT (menuitem), GTK_INPUT_DIALOG_KEY, inputd);
       gtk_widget_show (menuitem);
-      gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
-			  GINT_TO_POINTER (GDK_MODE_WINDOW));
+      g_signal_connect (menuitem, "activate",
+			G_CALLBACK (gtk_input_dialog_set_mapping_mode),
+			GINT_TO_POINTER (GDK_MODE_WINDOW));
 
       label = gtk_label_new_with_mnemonic (_("_Mode: "));
       gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 2);
@@ -296,7 +300,8 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(inputd->axis_listbox),
 				      GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
       
-      gtk_widget_set_usize (inputd->axis_listbox, AXIS_LIST_WIDTH, AXIS_LIST_HEIGHT);
+      gtk_widget_set_size_request (inputd->axis_listbox,
+				   AXIS_LIST_WIDTH, AXIS_LIST_HEIGHT);
       gtk_notebook_append_page (GTK_NOTEBOOK(notebook), 
 				inputd->axis_listbox, label);
 
@@ -309,10 +314,11 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       label = gtk_label_new_with_mnemonic (_("_Keys"));
 
       inputd->keys_listbox = gtk_scrolled_window_new (NULL, NULL);
-      gtk_widget_set_usize (inputd->keys_listbox, KEYS_LIST_WIDTH, KEYS_LIST_HEIGHT);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(inputd->keys_listbox),
+      gtk_widget_set_size_request (inputd->keys_listbox,
+				   KEYS_LIST_WIDTH, KEYS_LIST_HEIGHT);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (inputd->keys_listbox),
 				      GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-      gtk_notebook_append_page (GTK_NOTEBOOK(notebook), 
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), 
 				inputd->keys_listbox, label);
 
       gtk_widget_show (inputd->keys_listbox);
@@ -320,7 +326,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       inputd->keys_list = 0;
 
       /* ...set_device expects to get input dialog from widget user data */
-      gtk_object_set_user_data (GTK_OBJECT (inputd), inputd);
+      g_object_set_data (G_OBJECT (inputd), GTK_INPUT_DIALOG_KEY, inputd);
       gtk_input_dialog_set_device (GTK_WIDGET(inputd), device_info->data);
 
     }
@@ -355,34 +361,34 @@ gtk_input_dialog_new (void)
 {
   GtkInputDialog *inputd;
 
-  inputd = gtk_type_new (GTK_TYPE_INPUT_DIALOG);
+  inputd = g_object_new (GTK_TYPE_INPUT_DIALOG, NULL);
 
   return GTK_WIDGET (inputd);
 }
 
 static void
-gtk_input_dialog_set_device(GtkWidget *widget, gpointer data)
+gtk_input_dialog_set_device (GtkWidget *w,
+			     gpointer   data)
 {
   GdkDevice *device = data;
-
-  GtkInputDialog *inputd = GTK_INPUT_DIALOG(
-                gtk_object_get_user_data(GTK_OBJECT(widget)));
+  GtkInputDialog *inputd =
+    GTK_INPUT_DIALOG (g_object_get_data (G_OBJECT (w), GTK_INPUT_DIALOG_KEY));
 
   inputd->current_device = device;
 
-  gtk_input_dialog_fill_axes(inputd, device);
-  gtk_input_dialog_fill_keys(inputd, device);
+  gtk_input_dialog_fill_axes (inputd, device);
+  gtk_input_dialog_fill_keys (inputd, device);
 
-  gtk_option_menu_set_history(GTK_OPTION_MENU(inputd->mode_optionmenu),
-			      device->mode);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (inputd->mode_optionmenu),
+			       device->mode);
 }
 
 static void
 gtk_input_dialog_set_mapping_mode (GtkWidget *w,
 				   gpointer   data)
 {
-  GtkInputDialog *inputd = GTK_INPUT_DIALOG(
-                gtk_object_get_user_data(GTK_OBJECT(w)));
+  GtkInputDialog *inputd =
+    GTK_INPUT_DIALOG (g_object_get_data (G_OBJECT (w), GTK_INPUT_DIALOG_KEY));
   GdkDevice *info = inputd->current_device;
   GdkInputMode old_mode = info->mode;
   GdkInputMode mode = GPOINTER_TO_INT (data);
@@ -392,13 +398,15 @@ gtk_input_dialog_set_mapping_mode (GtkWidget *w,
       if (gdk_device_set_mode (inputd->current_device, mode))
 	{
 	  if (mode == GDK_MODE_DISABLED)
-	    gtk_signal_emit (GTK_OBJECT (inputd),
-			     input_dialog_signals[DISABLE_DEVICE],
-			     info);
+	    g_signal_emit (inputd,
+			   input_dialog_signals[DISABLE_DEVICE],
+			   0,
+			   info);
 	  else
-	    gtk_signal_emit (GTK_OBJECT (inputd),
-			     input_dialog_signals[ENABLE_DEVICE],
-			     info);
+	    g_signal_emit (inputd,
+			   input_dialog_signals[ENABLE_DEVICE],
+			   0,
+			   info);
 	}
       else
 	gtk_option_menu_set_history (GTK_OPTION_MENU (inputd->mode_optionmenu),
@@ -409,12 +417,14 @@ gtk_input_dialog_set_mapping_mode (GtkWidget *w,
 }
 
 static void
-gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data)
+gtk_input_dialog_set_axis (GtkWidget *w,
+			   gpointer   data)
 {
   GdkAxisUse use = GPOINTER_TO_INT(data) & 0xFFFF;
   GdkAxisUse old_use;
   GdkAxisUse *new_axes;
-  GtkInputDialog *inputd = GTK_INPUT_DIALOG (gtk_object_get_user_data (GTK_OBJECT (widget)));
+  GtkInputDialog *inputd =
+    GTK_INPUT_DIALOG (g_object_get_data (G_OBJECT (w), GTK_INPUT_DIALOG_KEY));
   GdkDevice *info = inputd->current_device;
 
   gint axis = (GPOINTER_TO_INT(data) >> 16) - 1;
@@ -522,10 +532,11 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
 	      sprintf (buffer,"%d",j+1);
 	      menu_item = gtk_menu_item_new_with_label (buffer);
 	    }
-	  gtk_object_set_user_data (GTK_OBJECT (menu_item), inputd);
-	  gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			      (GtkSignalFunc) gtk_input_dialog_set_axis,
-			      GINT_TO_POINTER (0x10000 * (j + 1) + i));
+	  g_object_set_data (G_OBJECT (menu_item), GTK_INPUT_DIALOG_KEY,
+			     inputd);
+	  g_signal_connect (menu_item, "activate",
+			    G_CALLBACK (gtk_input_dialog_set_axis),
+			    GINT_TO_POINTER (0x10000 * (j + 1) + i));
 	  gtk_widget_show (menu_item);
 	  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	}
@@ -599,7 +610,7 @@ gtk_input_dialog_key_press (GtkWidget *widget,
   gdk_device_set_key (key->inputd->current_device, key->index, 
 		      event->keyval, event->state & 0xFF);
 
-  gtk_signal_emit_stop_by_name (GTK_OBJECT(widget), "key_press_event");
+  g_signal_stop_emission_by_name (widget, "key_press_event");
   
   return TRUE;
 }
@@ -656,11 +667,10 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
 			GTK_EXPAND | GTK_FILL , 0, 2, 2);
       gtk_widget_show (key->entry);
 
-      gtk_signal_connect (GTK_OBJECT(key->entry), "key_press_event",
-			  GTK_SIGNAL_FUNC (gtk_input_dialog_key_press), key);
-      gtk_signal_connect (GTK_OBJECT(key->entry), "destroy",
-			  GTK_SIGNAL_FUNC (gtk_input_dialog_destroy_key), 
-			  key);
+      g_signal_connect (key->entry, "key_press_event",
+			G_CALLBACK (gtk_input_dialog_key_press), key);
+      g_signal_connect (key->entry, "destroy",
+			G_CALLBACK (gtk_input_dialog_destroy_key), key);
       
       /* and clear button */
 
@@ -669,8 +679,8 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
 			0, 0, 2, 2);
       gtk_widget_show (button);
 
-      gtk_signal_connect (GTK_OBJECT(button), "clicked",
-			  GTK_SIGNAL_FUNC (gtk_input_dialog_clear_key), key);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (gtk_input_dialog_clear_key), key);
 
       gtk_input_dialog_set_key (key, info->keys[i].keyval,
 				info->keys[i].modifiers);

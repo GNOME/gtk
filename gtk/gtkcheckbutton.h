@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_CHECK_BUTTON                  (gtk_check_button_get_type ())
-#define GTK_CHECK_BUTTON(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_CHECK_BUTTON, GtkCheckButton))
-#define GTK_CHECK_BUTTON_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CHECK_BUTTON, GtkCheckButtonClass))
-#define GTK_IS_CHECK_BUTTON(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_CHECK_BUTTON))
-#define GTK_IS_CHECK_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CHECK_BUTTON))
-#define GTK_CHECK_BUTTON_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CHECK_BUTTON, GtkCheckButtonClass))
+#define GTK_CHECK_BUTTON(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CHECK_BUTTON, GtkCheckButton))
+#define GTK_CHECK_BUTTON_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CHECK_BUTTON, GtkCheckButtonClass))
+#define GTK_IS_CHECK_BUTTON(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CHECK_BUTTON))
+#define GTK_IS_CHECK_BUTTON_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CHECK_BUTTON))
+#define GTK_CHECK_BUTTON_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CHECK_BUTTON, GtkCheckButtonClass))
 
 
 typedef struct _GtkCheckButton       GtkCheckButton;
@@ -68,7 +68,7 @@ struct _GtkCheckButtonClass
 };
 
 
-GtkType    gtk_check_button_get_type       (void) G_GNUC_CONST;
+GType      gtk_check_button_get_type       (void) G_GNUC_CONST;
 GtkWidget* gtk_check_button_new               (void);
 GtkWidget* gtk_check_button_new_with_label    (const gchar *label);
 GtkWidget* gtk_check_button_new_with_mnemonic (const gchar *label);

@@ -42,26 +42,29 @@ static GtkWindowClass *color_selection_dialog_parent_class = NULL;
 /* GtkColorSelectionDialog */
 /***************************/
 
-GtkType
+GType
 gtk_color_selection_dialog_get_type (void)
 {
-  static GtkType color_selection_dialog_type = 0;
+  static GType color_selection_dialog_type = 0;
   
   if (!color_selection_dialog_type)
     {
-      GtkTypeInfo colorsel_diag_info =
+      static const GTypeInfo colorsel_diag_info =
       {
-	"GtkColorSelectionDialog",
-	sizeof (GtkColorSelectionDialog),
 	sizeof (GtkColorSelectionDialogClass),
-	(GtkClassInitFunc) gtk_color_selection_dialog_class_init,
-	(GtkObjectInitFunc) gtk_color_selection_dialog_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_color_selection_dialog_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkColorSelectionDialog),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_color_selection_dialog_init,
       };
       
-      color_selection_dialog_type = gtk_type_unique (GTK_TYPE_DIALOG, &colorsel_diag_info);
+      color_selection_dialog_type =
+	g_type_register_static (GTK_TYPE_DIALOG, "GtkColorSelectionDialog",
+				&colorsel_diag_info, 0);
     }
   
   return color_selection_dialog_type;
@@ -70,11 +73,7 @@ gtk_color_selection_dialog_get_type (void)
 static void
 gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 {
-  GtkObjectClass *object_class;
-  
-  object_class = (GtkObjectClass*) klass;
-  
-  color_selection_dialog_parent_class = gtk_type_class (GTK_TYPE_DIALOG);
+  color_selection_dialog_parent_class = g_type_class_peek_parent (klass);
 }
 
 static void
@@ -118,9 +117,8 @@ gtk_color_selection_dialog_new (const gchar *title)
 {
   GtkColorSelectionDialog *colorseldiag;
   
-  colorseldiag = gtk_type_new (GTK_TYPE_COLOR_SELECTION_DIALOG);
+  colorseldiag = g_object_new (GTK_TYPE_COLOR_SELECTION_DIALOG, NULL);
   gtk_window_set_title (GTK_WINDOW (colorseldiag), title);
-  gtk_window_set_policy(GTK_WINDOW (colorseldiag), FALSE, FALSE, TRUE);
   
   return GTK_WIDGET (colorseldiag);
 }

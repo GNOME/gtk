@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_TOGGLE_BUTTON                  (gtk_toggle_button_get_type ())
-#define GTK_TOGGLE_BUTTON(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButton))
-#define GTK_TOGGLE_BUTTON_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
-#define GTK_IS_TOGGLE_BUTTON(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOGGLE_BUTTON))
-#define GTK_IS_TOGGLE_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOGGLE_BUTTON))
-#define GTK_TOGGLE_BUTTON_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
+#define GTK_TOGGLE_BUTTON(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButton))
+#define GTK_TOGGLE_BUTTON_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
+#define GTK_IS_TOGGLE_BUTTON(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TOGGLE_BUTTON))
+#define GTK_IS_TOGGLE_BUTTON_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOGGLE_BUTTON))
+#define GTK_TOGGLE_BUTTON_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
 
 
 typedef struct _GtkToggleButton       GtkToggleButton;
@@ -71,7 +71,7 @@ struct _GtkToggleButtonClass
 };
 
 
-GtkType    gtk_toggle_button_get_type          (void) G_GNUC_CONST;
+GType      gtk_toggle_button_get_type          (void) G_GNUC_CONST;
 
 GtkWidget* gtk_toggle_button_new               (void);
 GtkWidget* gtk_toggle_button_new_with_label    (const gchar     *label);

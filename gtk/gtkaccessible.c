@@ -18,18 +18,18 @@
  */
 
 #include <string.h>
-#include <gtk/gtkwidget.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkaccessible.h>
+
+#include "gtkwidget.h"
+#include "gtkaccessible.h"
 
 static void gtk_accessible_class_init (GtkAccessibleClass *klass);
 
 static void gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible);
 
-GtkType
+GType
 gtk_accessible_get_type (void)
 {
-  static GtkType accessible_type = 0;
+  static GType accessible_type = 0;
 
   if (!accessible_type)
     {
@@ -46,7 +46,9 @@ gtk_accessible_get_type (void)
 	(GInstanceInitFunc) NULL,
       };
 
-      accessible_type = g_type_register_static (ATK_TYPE_OBJECT, "GtkAccessible", &accessible_info, 0);
+      accessible_type =
+	g_type_register_static (ATK_TYPE_OBJECT, "GtkAccessible",
+				&accessible_info, 0);
     }
 
   return accessible_type;
@@ -56,7 +58,6 @@ static void
 gtk_accessible_class_init (GtkAccessibleClass *klass)
 {
   klass->connect_widget_destroyed = gtk_accessible_real_connect_widget_destroyed;
-
 }
 
 /**
@@ -84,9 +85,9 @@ gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
 {
   if (accessible->widget)
   {
-    gtk_signal_connect (GTK_OBJECT (accessible->widget),
-                        "destroy",
-                        GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-                        &accessible->widget);
+    g_signal_connect (accessible->widget,
+                      "destroy",
+                      G_CALLBACK (gtk_widget_destroyed),
+                      &accessible->widget);
   }
 }

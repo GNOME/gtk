@@ -30,7 +30,6 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gtkimage.h"
 #include "gtkhbox.h"
 #include "gtkstock.h"
@@ -98,9 +97,9 @@ static gint gtk_button_leave_notify   (GtkWidget        *widget,
 				       GdkEventCrossing *event);
 static void gtk_real_button_pressed   (GtkButton        *button);
 static void gtk_real_button_released  (GtkButton        *button);
-static void gtk_real_button_activate (GtkButton         *button);
+static void gtk_real_button_activate  (GtkButton         *button);
 static void gtk_button_update_state   (GtkButton        *button);
-static GtkType gtk_button_child_type  (GtkContainer     *container);
+static GType gtk_button_child_type    (GtkContainer     *container);
 static void gtk_button_finish_activate (GtkButton *button,
 					gboolean   do_it);
 
@@ -114,10 +113,10 @@ static GtkBinClass *parent_class = NULL;
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
 
-GtkType
+GType
 gtk_button_get_type (void)
 {
-  static GtkType button_type = 0;
+  static GType button_type = 0;
 
   if (!button_type)
     {
@@ -134,7 +133,8 @@ gtk_button_get_type (void)
 	(GInstanceInitFunc) gtk_button_init,
       };
 
-      button_type = g_type_register_static (GTK_TYPE_BIN, "GtkButton", &button_info, 0);
+      button_type = g_type_register_static (GTK_TYPE_BIN, "GtkButton",
+					    &button_info, 0);
     }
 
   return button_type;
@@ -143,21 +143,21 @@ gtk_button_get_type (void)
 static void
 gtk_button_class_init (GtkButtonClass *klass)
 {
-  GObjectClass *g_object_class;
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
-  g_object_class = G_OBJECT_CLASS (klass);
+  gobject_class = G_OBJECT_CLASS (klass);
   object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
   parent_class = g_type_class_peek_parent (klass);
 
-  g_object_class->constructor = gtk_button_constructor;
-  g_object_class->set_property = gtk_button_set_property;
-  g_object_class->get_property = gtk_button_get_property;
+  gobject_class->constructor = gtk_button_constructor;
+  gobject_class->set_property = gtk_button_set_property;
+  gobject_class->get_property = gtk_button_get_property;
 
   object_class->destroy = gtk_button_destroy;
 
@@ -183,7 +183,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->leave = gtk_button_update_state;
   klass->activate = gtk_real_button_activate;
 
-  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_LABEL,
                                    g_param_spec_string ("label",
                                                         _("Label"),
@@ -191,7 +191,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   
-  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_USE_UNDERLINE,
                                    g_param_spec_boolean ("use_underline",
 							 _("Use underline"),
@@ -199,7 +199,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         FALSE,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   
-  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_USE_STOCK,
                                    g_param_spec_boolean ("use_stock",
 							 _("Use stock"),
@@ -207,7 +207,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         FALSE,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   
-  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_RELIEF,
                                    g_param_spec_enum ("relief",
                                                       _("Border relief"),
@@ -217,47 +217,53 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   button_signals[PRESSED] =
-    gtk_signal_new ("pressed",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, pressed),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("pressed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkButtonClass, pressed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   button_signals[RELEASED] =
-    gtk_signal_new ("released",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, released),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("released",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkButtonClass, released),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   button_signals[CLICKED] =
-    gtk_signal_new ("clicked",
-                    GTK_RUN_FIRST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("clicked",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkButtonClass, clicked),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   button_signals[ENTER] =
-    gtk_signal_new ("enter",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, enter),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("enter",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkButtonClass, enter),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   button_signals[LEAVE] =
-    gtk_signal_new ("leave",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("leave",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkButtonClass, leave),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   button_signals[ACTIVATE] =
-    gtk_signal_new ("activate",
-                    GTK_RUN_FIRST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, activate),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("activate",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkButtonClass, activate),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_class->activate_signal = button_signals[ACTIVATE];
 
   gtk_widget_class_install_style_property (widget_class,
@@ -345,13 +351,13 @@ gtk_button_constructor (GType                  type,
 }
 
 
-static GtkType
+static GType
 gtk_button_child_type  (GtkContainer     *container)
 {
   if (!GTK_BIN (container)->child)
     return GTK_TYPE_WIDGET;
   else
-    return GTK_TYPE_NONE;
+    return G_TYPE_NONE;
 }
 
 static void
@@ -417,7 +423,7 @@ gtk_button_get_property (GObject         *object,
 GtkWidget*
 gtk_button_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_button_get_type ()));
+  return g_object_new (GTK_TYPE_BUTTON, NULL);
 }
 
 static void
@@ -530,7 +536,7 @@ gtk_button_pressed (GtkButton *button)
 {
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gtk_signal_emit (GTK_OBJECT (button), button_signals[PRESSED]);
+  g_signal_emit (button, button_signals[PRESSED], 0);
 }
 
 void
@@ -538,7 +544,7 @@ gtk_button_released (GtkButton *button)
 {
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gtk_signal_emit (GTK_OBJECT (button), button_signals[RELEASED]);
+  g_signal_emit (button, button_signals[RELEASED], 0);
 }
 
 void
@@ -546,7 +552,7 @@ gtk_button_clicked (GtkButton *button)
 {
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gtk_signal_emit (GTK_OBJECT (button), button_signals[CLICKED]);
+  g_signal_emit (button, button_signals[CLICKED], 0);
 }
 
 void
@@ -554,7 +560,7 @@ gtk_button_enter (GtkButton *button)
 {
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gtk_signal_emit (GTK_OBJECT (button), button_signals[ENTER]);
+  g_signal_emit (button, button_signals[ENTER], 0);
 }
 
 void
@@ -562,7 +568,7 @@ gtk_button_leave (GtkButton *button)
 {
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gtk_signal_emit (GTK_OBJECT (button), button_signals[LEAVE]);
+  g_signal_emit (button, button_signals[LEAVE], 0);
 }
 
 void
@@ -617,7 +623,7 @@ gtk_button_realize (GtkWidget *widget)
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   widget->window = gtk_widget_get_parent_window (widget);
-  gdk_window_ref (widget->window);
+  g_object_ref (widget->window);
   
   button->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 					 &attributes, attributes_mask);

@@ -26,13 +26,13 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
+
+#include <string.h>
+
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkmain.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
-
-#include <string.h>
 
 enum {
   PROP_0,
@@ -58,30 +58,32 @@ static gboolean gtk_accel_label_expose_event (GtkWidget          *widget,
 					      GdkEventExpose     *event);
 static gboolean gtk_accel_label_refetch_idle (GtkAccelLabel      *accel_label);
 
-static GtkAccelLabelClass *accel_label_class = NULL;
 static GtkLabelClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_accel_label_get_type (void)
 {
-  static GtkType accel_label_type = 0;
+  static GType accel_label_type = 0;
   
   if (!accel_label_type)
     {
-      static const GtkTypeInfo accel_label_info =
+      static const GTypeInfo accel_label_info =
       {
-	"GtkAccelLabel",
-	sizeof (GtkAccelLabel),
 	sizeof (GtkAccelLabelClass),
-	(GtkClassInitFunc) gtk_accel_label_class_init,
-	(GtkObjectInitFunc) gtk_accel_label_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_accel_label_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkAccelLabel),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_accel_label_init,
       };
       
-      accel_label_type = gtk_type_unique (GTK_TYPE_LABEL, &accel_label_info);
+      accel_label_type =
+	g_type_register_static (GTK_TYPE_LABEL, "GtkAccelLabel",
+				&accel_label_info, 0);
     }
   
   return accel_label_type;
@@ -94,7 +96,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   
-  accel_label_class = class;
   parent_class = g_type_class_peek_parent (class);
   
   gobject_class->finalize = gtk_accel_label_finalize;
@@ -130,14 +131,14 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   class->accel_seperator = g_strdup (" / ");
   class->latin1_to_char = TRUE;
   
-  g_object_class_install_property (G_OBJECT_CLASS (object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_CLOSURE,
                                    g_param_spec_boxed ("accel_closure",
 						       _("Accelerator Closure"),
 						       _("The closure to be monitored for accelerator changes"),
 						       G_TYPE_CLOSURE,
 						       G_PARAM_READABLE | G_PARAM_WRITABLE));
-  g_object_class_install_property (G_OBJECT_CLASS (object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_WIDGET,
                                    g_param_spec_object ("accel_widget",
                                                         _("Accelerator Widget"),
@@ -214,7 +215,7 @@ gtk_accel_label_new (const gchar *string)
   
   g_return_val_if_fail (string != NULL, NULL);
   
-  accel_label = gtk_type_new (GTK_TYPE_ACCEL_LABEL);
+  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
   
   gtk_label_set_text (GTK_LABEL (accel_label), string);
   
@@ -289,7 +290,7 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   pango_layout_get_pixel_size (layout, &width, NULL);
   accel_label->accel_string_width = width;
   
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 static gboolean 
@@ -335,7 +336,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
                             x, y,
                             layout);                            
 
-          g_object_unref (G_OBJECT (layout));
+          g_object_unref (layout);
 	}
       else
 	{
@@ -388,7 +389,7 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 	{
 	  gtk_accel_label_set_accel_closure (accel_label, NULL);
 	  g_signal_handlers_disconnect_by_func (accel_label->accel_widget,
-						(gpointer) refetch_widget_accel_closure,
+						refetch_widget_accel_closure,
 						accel_label);
 	  g_object_unref (accel_label->accel_widget);
 	}
@@ -448,7 +449,7 @@ gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
       if (accel_label->accel_closure)
 	{
 	  g_signal_handlers_disconnect_by_func (accel_label->accel_group,
-						(gpointer) check_accel_changed,
+						check_accel_changed,
 						accel_label);
 	  accel_label->accel_group = NULL;
 	  g_closure_unref (accel_label->accel_closure);

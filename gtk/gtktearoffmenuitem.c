@@ -25,7 +25,6 @@
  */
 
 #include "gtkmenu.h"
-#include "gtksignal.h"
 #include "gtktearoffmenuitem.h"
 
 #define ARROW_SIZE 10
@@ -42,26 +41,29 @@ static void gtk_tearoff_menu_item_activate   (GtkMenuItem           *menu_item);
 static gint gtk_tearoff_menu_item_delete_cb  (GtkMenuItem           *menu_item,
 					      GdkEventAny           *event);
 
-GtkType
+GType
 gtk_tearoff_menu_item_get_type (void)
 {
-  static GtkType tearoff_menu_item_type = 0;
+  static GType tearoff_menu_item_type = 0;
 
   if (!tearoff_menu_item_type)
     {
-      static const GtkTypeInfo tearoff_menu_item_info =
+      static const GTypeInfo tearoff_menu_item_info =
       {
-        "GtkTearoffMenuItem",
-        sizeof (GtkTearoffMenuItem),
         sizeof (GtkTearoffMenuItemClass),
-        (GtkClassInitFunc) gtk_tearoff_menu_item_class_init,
-        (GtkObjectInitFunc) gtk_tearoff_menu_item_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_tearoff_menu_item_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkTearoffMenuItem),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_tearoff_menu_item_init,
       };
 
-      tearoff_menu_item_type = gtk_type_unique (gtk_menu_item_get_type (), &tearoff_menu_item_info);
+      tearoff_menu_item_type =
+	g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkTearoffMenuItem",
+			        &tearoff_menu_item_info, 0);
     }
 
   return tearoff_menu_item_type;
@@ -70,7 +72,7 @@ gtk_tearoff_menu_item_get_type (void)
 GtkWidget*
 gtk_tearoff_menu_item_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_tearoff_menu_item_get_type ()));
+  return g_object_new (GTK_TYPE_TEAROFF_MENU_ITEM, NULL);
 }
 
 static void
@@ -172,17 +174,20 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 	      x += 2 * ARROW_SIZE;
 	    }
 	  
-	  gtk_draw_arrow (widget->style, widget->window,
-			  widget->state, shadow_type, GTK_ARROW_LEFT, FALSE,
-			  arrow_x, y + height / 2 - 5, 
-			  ARROW_SIZE, ARROW_SIZE);
+	  gtk_paint_arrow (widget->style, widget->window,
+			   widget->state, shadow_type,
+			   NULL, widget, "tearoffmenuitem",
+			   GTK_ARROW_LEFT, FALSE,
+			   arrow_x, y + height / 2 - 5, 
+			   ARROW_SIZE, ARROW_SIZE);
 	}
 
       while (x < right_max)
 	{
-	  gtk_draw_hline (widget->style, widget->window, GTK_STATE_NORMAL,
-			  x, MIN (x+TEAR_LENGTH, right_max),
-			  y + (height - widget->style->ythickness)/2);
+	  gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
+			   NULL, widget, "tearoffmenuitem",
+			   x, MIN (x + TEAR_LENGTH, right_max),
+			   y + (height - widget->style->ythickness) / 2);
 	  x += 2 * TEAR_LENGTH;
 	}
     }
@@ -223,10 +228,10 @@ gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 				    tearoff_menu_item->torn_off);
 
 	if (need_connect)
-	  gtk_signal_connect_object (GTK_OBJECT (menu->tearoff_window),  
-				     "delete_event",
-				     GTK_SIGNAL_FUNC (gtk_tearoff_menu_item_delete_cb),
-				     GTK_OBJECT (menu_item));
+	  g_signal_connect_swapped (menu->tearoff_window,
+				    "delete_event",
+				    G_CALLBACK (gtk_tearoff_menu_item_delete_cb),
+				    menu_item);
     }
 }
 

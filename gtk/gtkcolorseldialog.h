@@ -35,11 +35,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_COLOR_SELECTION_DIALOG            (gtk_color_selection_dialog_get_type ())
-#define GTK_COLOR_SELECTION_DIALOG(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialog))
-#define GTK_COLOR_SELECTION_DIALOG_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialogClass))
-#define GTK_IS_COLOR_SELECTION_DIALOG(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG))
-#define GTK_IS_COLOR_SELECTION_DIALOG_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SELECTION_DIALOG))
-#define GTK_COLOR_SELECTION_DIALOG_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialogClass))
+#define GTK_COLOR_SELECTION_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialog))
+#define GTK_COLOR_SELECTION_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialogClass))
+#define GTK_IS_COLOR_SELECTION_DIALOG(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG))
+#define GTK_IS_COLOR_SELECTION_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SELECTION_DIALOG))
+#define GTK_COLOR_SELECTION_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialogClass))
 
 
 typedef struct _GtkColorSelectionDialog       GtkColorSelectionDialog;
@@ -69,7 +69,7 @@ struct _GtkColorSelectionDialogClass
 
 
 /* ColorSelectionDialog */ 
-GtkType    gtk_color_selection_dialog_get_type (void) G_GNUC_CONST;
+GType      gtk_color_selection_dialog_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_color_selection_dialog_new      (const gchar *title); 
 
 

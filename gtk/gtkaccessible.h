@@ -28,11 +28,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_ACCESSIBLE                  (gtk_accessible_get_type ())
-#define GTK_ACCESSIBLE(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessible))
-#define GTK_ACCESSIBLE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
-#define GTK_IS_ACCESSIBLE(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ACCESSIBLE))
-#define GTK_IS_ACCESSIBLE_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ACCESSIBLE))
-#define GTK_ACCESSIBLE_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
+#define GTK_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessible))
+#define GTK_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
+#define GTK_IS_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ACCESSIBLE))
+#define GTK_IS_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ACCESSIBLE))
+#define GTK_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
 
 typedef struct _GtkAccessible                GtkAccessible;
 typedef struct _GtkAccessibleClass           GtkAccessibleClass;
@@ -50,10 +50,7 @@ struct _GtkAccessible
    * accessible instance.
    */
   GtkWidget *widget;
-
 };
-
-GtkType gtk_accessible_get_type (void);
 
 struct _GtkAccessibleClass
 {
@@ -68,7 +65,10 @@ struct _GtkAccessibleClass
   void (*_gtk_reserved4) (void);
 };
 
+GType gtk_accessible_get_type (void);
+
 void gtk_accessible_connect_widget_destroyed    (GtkAccessible     *accessible);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -38,11 +38,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_BUTTON                 (gtk_button_get_type ())
-#define GTK_BUTTON(obj)                 (GTK_CHECK_CAST ((obj), GTK_TYPE_BUTTON, GtkButton))
-#define GTK_BUTTON_CLASS(klass)         (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BUTTON, GtkButtonClass))
-#define GTK_IS_BUTTON(obj)              (GTK_CHECK_TYPE ((obj), GTK_TYPE_BUTTON))
-#define GTK_IS_BUTTON_CLASS(klass)      (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BUTTON))
-#define GTK_BUTTON_GET_CLASS(obj)       (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_BUTTON, GtkButtonClass))
+#define GTK_BUTTON(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BUTTON, GtkButton))
+#define GTK_BUTTON_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_BUTTON, GtkButtonClass))
+#define GTK_IS_BUTTON(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_BUTTON))
+#define GTK_IS_BUTTON_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BUTTON))
+#define GTK_BUTTON_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BUTTON, GtkButtonClass))
 
 
 typedef struct _GtkButton       GtkButton;
@@ -87,7 +87,7 @@ struct _GtkButtonClass
 };
 
 
-GtkType        gtk_button_get_type          (void) G_GNUC_CONST;
+GType          gtk_button_get_type          (void) G_GNUC_CONST;
 GtkWidget*     gtk_button_new               (void);
 GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
 GtkWidget*     gtk_button_new_from_stock    (const gchar    *stock_id);

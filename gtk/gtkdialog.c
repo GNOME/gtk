@@ -30,7 +30,6 @@
 #include "gtkhseparator.h"
 #include "gtkmarshalers.h"
 #include "gtkvbox.h"
-#include "gtksignal.h"
 #include "gdkkeysyms.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
@@ -75,26 +74,28 @@ enum {
 static gpointer parent_class;
 static guint dialog_signals[LAST_SIGNAL];
 
-GtkType
+GType
 gtk_dialog_get_type (void)
 {
-  static GtkType dialog_type = 0;
+  static GType dialog_type = 0;
 
   if (!dialog_type)
     {
-      static const GtkTypeInfo dialog_info =
+      static const GTypeInfo dialog_info =
       {
-	"GtkDialog",
-	sizeof (GtkDialog),
 	sizeof (GtkDialogClass),
-	(GtkClassInitFunc) gtk_dialog_class_init,
-	(GtkObjectInitFunc) gtk_dialog_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_dialog_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkDialog),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_dialog_init,
       };
 
-      dialog_type = gtk_type_unique (GTK_TYPE_WINDOW, &dialog_info);
+      dialog_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkDialog",
+					    &dialog_info, 0);
     }
 
   return dialog_type;
@@ -104,12 +105,10 @@ static void
 gtk_dialog_class_init (GtkDialogClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkBindingSet *binding_set;
   
   gobject_class = G_OBJECT_CLASS (class);
-  object_class = GTK_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
   
   parent_class = g_type_class_peek_parent (class);
@@ -131,21 +130,23 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                          G_PARAM_READWRITE));
   
   dialog_signals[RESPONSE] =
-    gtk_signal_new ("response",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkDialogClass, response),
-                    _gtk_marshal_NONE__INT,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_INT);
+    g_signal_new ("response",
+		  G_OBJECT_CLASS_TYPE (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkDialogClass, response),
+		  NULL, NULL,
+		  _gtk_marshal_NONE__INT,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_INT);
 
   dialog_signals[CLOSE] =
-    gtk_signal_new ("close",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkDialogClass, close),
-                    _gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("close",
+		  G_OBJECT_CLASS_TYPE (class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkDialogClass, close),
+		  NULL, NULL,
+		  _gtk_marshal_NONE__NONE,
+		  G_TYPE_NONE, 0);
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("content_area_border",
@@ -213,10 +214,10 @@ gtk_dialog_init (GtkDialog *dialog)
    * by connecting a handler, we have to have the FIRST signal
    * connection on the dialog.
    */
-  gtk_signal_connect (GTK_OBJECT (dialog),
-                      "delete_event",
-                      GTK_SIGNAL_FUNC (gtk_dialog_delete_event_handler),
-                      NULL);
+  g_signal_connect (dialog,
+                    "delete_event",
+                    G_CALLBACK (gtk_dialog_delete_event_handler),
+                    NULL);
   
   dialog->vbox = gtk_vbox_new (FALSE, 0);
   
@@ -364,7 +365,7 @@ gtk_dialog_close (GtkDialog *dialog)
 GtkWidget*
 gtk_dialog_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_DIALOG));
+  return g_object_new (GTK_TYPE_DIALOG, NULL);
 }
 
 static GtkWidget*
@@ -374,7 +375,7 @@ gtk_dialog_new_empty (const gchar     *title,
 {
   GtkDialog *dialog;
 
-  dialog = GTK_DIALOG (g_object_new (GTK_TYPE_DIALOG, NULL));
+  dialog = g_object_new (GTK_TYPE_DIALOG, NULL);
 
   if (title)
     gtk_window_set_title (GTK_WINDOW (dialog), title);
@@ -468,17 +469,17 @@ struct _ResponseData
 static ResponseData*
 get_response_data (GtkWidget *widget)
 {
-  ResponseData *ad = gtk_object_get_data (GTK_OBJECT (widget),
-                                          "gtk-dialog-response-data");
+  ResponseData *ad = g_object_get_data (G_OBJECT (widget),
+                                        "gtk-dialog-response-data");
 
   if (ad == NULL)
     {
       ad = g_new (ResponseData, 1);
       
-      gtk_object_set_data_full (GTK_OBJECT (widget),
-                                "gtk-dialog-response-data",
-                                ad,
-                                g_free);
+      g_object_set_data_full (G_OBJECT (widget),
+                              "gtk-dialog-response-data",
+                              ad,
+                              g_free);
     }
 
   return ad;
@@ -502,6 +503,7 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
 
   gtk_dialog_response (dialog, response_id);
 }
+
 /**
  * gtk_dialog_add_action_widget:
  * @dialog: a #GtkDialog
@@ -516,9 +518,9 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
  * <literal>action_area</literal> field of the #GtkDialog struct.
  **/
 void
-gtk_dialog_add_action_widget  (GtkDialog *dialog,
-                               GtkWidget *child,
-                               gint       response_id)
+gtk_dialog_add_action_widget (GtkDialog *dialog,
+                              GtkWidget *child,
+                              gint       response_id)
 {
   ResponseData *ad;
   gint signal_id = 0;
@@ -531,21 +533,21 @@ gtk_dialog_add_action_widget  (GtkDialog *dialog,
   ad->response_id = response_id;
 
   if (GTK_IS_BUTTON (child))
-    {
-      signal_id = g_signal_lookup ("clicked", GTK_TYPE_BUTTON);
-    }
+    signal_id = g_signal_lookup ("clicked", GTK_TYPE_BUTTON);
   else
     signal_id = GTK_WIDGET_GET_CLASS (child)->activate_signal != 0;
 
   if (signal_id)
     {
-      const gchar* name = gtk_signal_name (signal_id);
+      GClosure *closure;
 
-      gtk_signal_connect_while_alive (GTK_OBJECT (child),
-                                      name,
-                                      GTK_SIGNAL_FUNC (action_widget_activated),
-                                      dialog,
-                                      GTK_OBJECT (dialog));
+      closure = g_cclosure_new_object (G_CALLBACK (action_widget_activated),
+				       G_OBJECT (dialog));
+      g_signal_connect_closure_by_id (child,
+				      signal_id,
+				      0,
+				      closure,
+				      FALSE);
     }
   else
     g_warning ("Only 'activatable' widgets can be packed into the action area of a GtkDialog");
@@ -797,9 +799,10 @@ gtk_dialog_response (GtkDialog *dialog,
 {
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
-  gtk_signal_emit (GTK_OBJECT (dialog),
-                   dialog_signals[RESPONSE],
-                   response_id);
+  g_signal_emit (dialog,
+		 dialog_signals[RESPONSE],
+		 0,
+		 response_id);
 }
 
 typedef struct
@@ -915,7 +918,7 @@ gtk_dialog_run (GtkDialog *dialog)
   
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), -1);
 
-  gtk_object_ref (GTK_OBJECT (dialog));
+  g_object_ref (dialog);
 
   if (!GTK_WIDGET_VISIBLE (dialog))
     gtk_widget_show (GTK_WIDGET (dialog));
@@ -925,30 +928,30 @@ gtk_dialog_run (GtkDialog *dialog)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
   response_handler =
-    gtk_signal_connect (GTK_OBJECT (dialog),
-                        "response",
-                        GTK_SIGNAL_FUNC (run_response_handler),
-                        &ri);
+    g_signal_connect (dialog,
+                      "response",
+                      G_CALLBACK (run_response_handler),
+                      &ri);
   
   unmap_handler =
-    gtk_signal_connect (GTK_OBJECT (dialog),
-                        "unmap",
-                        GTK_SIGNAL_FUNC (run_unmap_handler),
-                        &ri);
+    g_signal_connect (dialog,
+                      "unmap",
+                      G_CALLBACK (run_unmap_handler),
+                      &ri);
   
   delete_handler =
-    gtk_signal_connect (GTK_OBJECT (dialog),
-                        "delete_event",
-                        GTK_SIGNAL_FUNC (run_delete_handler),
-                        &ri);
+    g_signal_connect (dialog,
+                      "delete_event",
+                      G_CALLBACK (run_delete_handler),
+                      &ri);
   
   destroy_handler =
-    gtk_signal_connect (GTK_OBJECT (dialog),
-                        "destroy",
-                        GTK_SIGNAL_FUNC (run_destroy_handler),
-                        &ri);
+    g_signal_connect (dialog,
+                      "destroy",
+                      G_CALLBACK (run_destroy_handler),
+                      &ri);
   
-  ri.loop = g_main_new (FALSE);
+  ri.loop = g_main_loop_new (NULL, FALSE);
 
   GDK_THREADS_LEAVE ();  
   g_main_loop_run (ri.loop);
@@ -964,13 +967,13 @@ gtk_dialog_run (GtkDialog *dialog)
       if (!was_modal)
         gtk_window_set_modal (GTK_WINDOW(dialog), FALSE);
       
-      gtk_signal_disconnect (GTK_OBJECT (dialog), response_handler);
-      gtk_signal_disconnect (GTK_OBJECT (dialog), unmap_handler);
-      gtk_signal_disconnect (GTK_OBJECT (dialog), delete_handler);
-      gtk_signal_disconnect (GTK_OBJECT (dialog), destroy_handler);
+      g_signal_handler_disconnect (dialog, response_handler);
+      g_signal_handler_disconnect (dialog, unmap_handler);
+      g_signal_handler_disconnect (dialog, delete_handler);
+      g_signal_handler_disconnect (dialog, destroy_handler);
     }
 
-  gtk_object_unref (GTK_OBJECT (dialog));
+  g_object_unref (dialog);
 
   return ri.response_id;
 }

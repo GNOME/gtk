@@ -58,26 +58,28 @@ enum {
 
 static gpointer parent_class;
 
-GtkType
+GType
 gtk_message_dialog_get_type (void)
 {
-  static GtkType dialog_type = 0;
+  static GType dialog_type = 0;
 
   if (!dialog_type)
     {
-      static const GtkTypeInfo dialog_info =
+      static const GTypeInfo dialog_info =
       {
-	"GtkMessageDialog",
-	sizeof (GtkMessageDialog),
 	sizeof (GtkMessageDialogClass),
-	(GtkClassInitFunc) gtk_message_dialog_class_init,
-	(GtkObjectInitFunc) gtk_message_dialog_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_message_dialog_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkMessageDialog),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_message_dialog_init,
       };
 
-      dialog_type = gtk_type_unique (GTK_TYPE_DIALOG, &dialog_info);
+      dialog_type = g_type_register_static (GTK_TYPE_DIALOG, "GtkMessageDialog",
+					    &dialog_info, 0);
     }
 
   return dialog_type;
@@ -301,9 +303,10 @@ gtk_message_dialog_new (GtkWindow     *parent,
   gchar* msg = 0;
   va_list args;
   
-  widget = GTK_WIDGET (g_object_new (GTK_TYPE_MESSAGE_DIALOG,
-				     "message_type", type,
-				     "buttons", buttons, 0));
+  widget = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
+			 "message_type", type,
+			 "buttons", buttons,
+			 NULL);
   dialog = GTK_DIALOG (widget);
 
   if (flags & GTK_DIALOG_NO_SEPARATOR)
@@ -315,7 +318,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
   if (message_format)
     {
       va_start (args, message_format);
-      msg = g_strdup_vprintf(message_format, args);
+      msg = g_strdup_vprintf (message_format, args);
       va_end (args);
       
       

@@ -29,7 +29,6 @@
 #include "gtkhandlebox.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
 
@@ -136,26 +135,28 @@ static GtkBinClass *parent_class;
 static guint        handle_box_signals[SIGNAL_LAST] = { 0 };
 
 
-GtkType
+GType
 gtk_handle_box_get_type (void)
 {
-  static GtkType handle_box_type = 0;
+  static GType handle_box_type = 0;
 
   if (!handle_box_type)
     {
-      static const GtkTypeInfo handle_box_info =
+      static const GTypeInfo handle_box_info =
       {
-	"GtkHandleBox",
-	sizeof (GtkHandleBox),
 	sizeof (GtkHandleBoxClass),
-	(GtkClassInitFunc) gtk_handle_box_class_init,
-	(GtkObjectInitFunc) gtk_handle_box_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_handle_box_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkHandleBox),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_handle_box_init,
       };
 
-      handle_box_type = gtk_type_unique (GTK_TYPE_BIN, &handle_box_info);
+      handle_box_type = g_type_register_static (GTK_TYPE_BIN, "GtkHandleBox",
+						&handle_box_info, 0);
     }
 
   return handle_box_type;
@@ -174,7 +175,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_BIN);
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_handle_box_set_property;
   gobject_class->get_property = gtk_handle_box_get_property;
@@ -212,6 +213,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 						      GTK_TYPE_POSITION_TYPE,
 						      GTK_POS_TOP,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
+
   object_class->destroy = gtk_handle_box_destroy;
 
   widget_class->map = gtk_handle_box_map;
@@ -234,21 +236,23 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   class->child_detached = NULL;
 
   handle_box_signals[SIGNAL_CHILD_ATTACHED] =
-    gtk_signal_new ("child_attached",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_attached),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
+    g_signal_new ("child_attached",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkHandleBoxClass, child_attached),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_WIDGET);
   handle_box_signals[SIGNAL_CHILD_DETACHED] =
-    gtk_signal_new ("child_detached",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_detached),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
+    g_signal_new ("child_detached",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkHandleBoxClass, child_detached),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_WIDGET);
 }
 
 static void
@@ -322,7 +326,7 @@ gtk_handle_box_get_property (GObject         *object,
 GtkWidget*
 gtk_handle_box_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_handle_box_get_type ()));
+  return g_object_new (GTK_TYPE_HANDLE_BOX, NULL);
 }
 
 static void
@@ -818,7 +822,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
 
-  gdk_window_get_size (hb->bin_window, &width, &height);
+  gdk_drawable_get_size (hb->bin_window, &width, &height);
   
   if (!event)
     gtk_paint_box (widget->style,
@@ -961,7 +965,7 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	      
 	      gdk_window_get_deskrelative_origin (hb->bin_window, &desk_x, &desk_y);
 	      gdk_window_get_origin (hb->bin_window, &root_x, &root_y);
-	      gdk_window_get_size (hb->bin_window, &width, &height);
+	      gdk_drawable_get_size (hb->bin_window, &width, &height);
 	      
 	      hb->float_allocation.x = root_x - event->x_root;
 	      hb->float_allocation.y = root_y - event->y_root;
@@ -972,7 +976,7 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	      hb->deskoff_y = desk_y - root_y;
 	      
 	      gdk_window_get_origin (widget->window, &root_x, &root_y);
-	      gdk_window_get_size (widget->window, &width, &height);
+	      gdk_drawable_get_size (widget->window, &width, &height);
 	      
 	      hb->attach_allocation.x = root_x;
 	      hb->attach_allocation.y = root_y;
@@ -994,7 +998,7 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 		  hb->in_drag = FALSE;
 		}
 	      
-	      gdk_cursor_destroy (fleur);
+	      gdk_cursor_unref (fleur);
 	      event_handled = TRUE;
 	    }
 	  else if (hb->child_detached) /* Double click */
@@ -1112,9 +1116,10 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  gdk_window_hide (hb->float_window);
 	  gdk_window_reparent (hb->bin_window, widget->window, 0, 0);
 	  hb->float_window_mapped = FALSE;
-	  gtk_signal_emit (GTK_OBJECT (hb),
-			   handle_box_signals[SIGNAL_CHILD_ATTACHED],
-			   GTK_BIN (hb)->child);
+	  g_signal_emit (hb,
+			 handle_box_signals[SIGNAL_CHILD_ATTACHED],
+			 0,
+			 GTK_BIN (hb)->child);
 	  
 	  gtk_widget_queue_resize (widget);
 	}
@@ -1123,7 +1128,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
     {
       gint width, height;
 
-      gdk_window_get_size (hb->float_window, &width, &height);
+      gdk_drawable_get_size (hb->float_window, &width, &height);
       new_x += hb->deskoff_x;
       new_y += hb->deskoff_y;
 
@@ -1187,9 +1192,10 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  gdk_window_move (hb->float_window, new_x, new_y);
 	  gdk_display_sync (gtk_widget_get_display (widget));
 #endif	/* 0 */
-	  gtk_signal_emit (GTK_OBJECT (hb),
-			   handle_box_signals[SIGNAL_CHILD_DETACHED],
-			   GTK_BIN (hb)->child);
+	  g_signal_emit (hb,
+			 handle_box_signals[SIGNAL_CHILD_DETACHED],
+			 0,
+			 GTK_BIN (hb)->child);
 	  gtk_handle_box_draw_ghost (hb);
 	  
 	  gtk_widget_queue_resize (widget);
@@ -1246,9 +1252,10 @@ gtk_handle_box_reattach (GtkHandleBox *hb)
 	  gdk_window_reparent (hb->bin_window, widget->window, 0, 0);
 
 	  if (GTK_BIN (hb)->child)
-	    gtk_signal_emit (GTK_OBJECT (hb),
-			     handle_box_signals[SIGNAL_CHILD_ATTACHED],
-			     GTK_BIN (hb)->child);
+	    g_signal_emit (hb,
+			   handle_box_signals[SIGNAL_CHILD_ATTACHED],
+			   0,
+			   GTK_BIN (hb)->child);
 
 	}
       hb->float_window_mapped = FALSE;

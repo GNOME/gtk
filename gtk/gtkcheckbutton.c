@@ -51,26 +51,29 @@ static void gtk_real_check_button_draw_indicator (GtkCheckButton      *check_but
 static GtkToggleButtonClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_check_button_get_type (void)
 {
-  static GtkType check_button_type = 0;
+  static GType check_button_type = 0;
   
   if (!check_button_type)
     {
-      static const GtkTypeInfo check_button_info =
+      static const GTypeInfo check_button_info =
       {
-	"GtkCheckButton",
-	sizeof (GtkCheckButton),
 	sizeof (GtkCheckButtonClass),
-	(GtkClassInitFunc) gtk_check_button_class_init,
-	(GtkObjectInitFunc) gtk_check_button_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_check_button_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkCheckButton),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_check_button_init,
       };
       
-      check_button_type = gtk_type_unique (GTK_TYPE_TOGGLE_BUTTON, &check_button_info);
+      check_button_type =
+	g_type_register_static (GTK_TYPE_TOGGLE_BUTTON, "GtkCheckButton",
+				&check_button_info, 0);
     }
   
   return check_button_type;
@@ -82,7 +85,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   GtkWidgetClass *widget_class;
   
   widget_class = (GtkWidgetClass*) class;
-  parent_class = gtk_type_class (gtk_toggle_button_get_type ());
+  parent_class = g_type_class_peek_parent (class);
   
   widget_class->size_request = gtk_check_button_size_request;
   widget_class->size_allocate = gtk_check_button_size_allocate;
@@ -120,7 +123,7 @@ gtk_check_button_init (GtkCheckButton *check_button)
 GtkWidget*
 gtk_check_button_new (void)
 {
-  return gtk_widget_new (GTK_TYPE_CHECK_BUTTON, NULL);
+  return g_object_new (GTK_TYPE_CHECK_BUTTON, NULL);
 }
 
 

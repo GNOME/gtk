@@ -27,7 +27,6 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gtktogglebutton.h"
 #include "gtkintl.h"
 
@@ -70,26 +69,29 @@ static void gtk_toggle_button_update_state  (GtkButton            *button);
 static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 static GtkContainerClass *parent_class = NULL;
 
-GtkType
+GType
 gtk_toggle_button_get_type (void)
 {
-  static GtkType toggle_button_type = 0;
+  static GType toggle_button_type = 0;
 
   if (!toggle_button_type)
     {
-      static const GtkTypeInfo toggle_button_info =
+      static const GTypeInfo toggle_button_info =
       {
-	"GtkToggleButton",
-	sizeof (GtkToggleButton),
 	sizeof (GtkToggleButtonClass),
-	(GtkClassInitFunc) gtk_toggle_button_class_init,
-	(GtkObjectInitFunc) gtk_toggle_button_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_toggle_button_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkToggleButton),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_toggle_button_init,
       };
 
-      toggle_button_type = gtk_type_unique (GTK_TYPE_BUTTON, &toggle_button_info);
+      toggle_button_type =
+	g_type_register_static (GTK_TYPE_BUTTON, "GtkToggleButton",
+				&toggle_button_info, 0);
     }
 
   return toggle_button_type;
@@ -98,20 +100,17 @@ gtk_toggle_button_get_type (void)
 static void
 gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 {
-  GtkObjectClass *object_class;
-  GObjectClass   *gobject_class;
+  GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkButtonClass *button_class;
 
-  object_class = (GtkObjectClass*) class;
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   button_class = (GtkButtonClass*) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_BUTTON);
-
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_toggle_button_set_property;
   gobject_class->get_property = gtk_toggle_button_get_property;
@@ -152,12 +151,13 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 							 G_PARAM_READWRITE));
 
   toggle_button_signals[TOGGLED] =
-    gtk_signal_new ("toggled",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkToggleButtonClass, toggled),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("toggled",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkToggleButtonClass, toggled),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 }
 
 static void
@@ -172,7 +172,7 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
 GtkWidget*
 gtk_toggle_button_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_toggle_button_get_type ()));
+  return g_object_new (GTK_TYPE_TOGGLE_BUTTON, NULL);
 }
 
 GtkWidget*
@@ -333,7 +333,7 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
 {
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
-  gtk_signal_emit (GTK_OBJECT (toggle_button), toggle_button_signals[TOGGLED]);
+  g_signal_emit (toggle_button, toggle_button_signals[TOGGLED], 0);
 }
 
 /**
