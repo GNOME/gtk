@@ -1,3 +1,8 @@
+Sat Dec 20 22:06:03 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): do not invalidate
+	all of treeview when resizing (#110074, patch from Soeren Sandmann).
+
 Fri Dec 19 23:36:00 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #108458.

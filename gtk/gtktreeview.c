@@ -1933,9 +1933,11 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
   if (tree_view->priv->vadjustment->value + allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view) > tree_view->priv->height)
     {
-      dy_changed = TRUE;
+      double before = tree_view->priv->vadjustment->value;
       gtk_adjustment_set_value (tree_view->priv->vadjustment,
 			        MAX (tree_view->priv->height - tree_view->priv->vadjustment->page_size, 0));
+      if (before != tree_view->priv->vadjustment->value)
+        dy_changed = TRUE;
     }
 
   gtk_adjustment_changed (tree_view->priv->vadjustment);
