@@ -233,6 +233,8 @@ gtk_radio_action_finalize (GObject *object)
 
   action = GTK_RADIO_ACTION (object);
 
+  g_print ("finalize %p\n", action);
+
   action->private_data->group = g_slist_remove (action->private_data->group, action);
 
   tmp_list = action->private_data->group;
@@ -373,7 +375,23 @@ create_menu_item (GtkAction *action)
  * gtk_radio_action_get_group:
  * @action: the action object
  *
- * Returns the list representing the radio group for this object
+ * Returns the list representing the radio group for this object.
+ * Note that the returned list is only valid until the next change
+ * to the group. 
+ *
+ * A common way to set up a group of radio group is the following:
+ * <informalexample><programlisting>
+ *   GSList *group = NULL;
+ *   GtkRadioAction *action;
+ *  
+ *   while (/<!-- -->* more actions to add *<!-- -->/)
+ *     {
+ *        action = gtk_radio_action_new (...);
+ *
+ *        gtk_radio_action_set_group (action, group);
+ *        group = gtk_radio_action_get_group (action);
+ *     }
+ * </programlisting></informalexample>
  *
  * Returns: the list representing the radio group for this object
  *

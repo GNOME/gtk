@@ -1,5 +1,8 @@
 2005-03-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkradioaction.c (gtk_radio_action_get_group): Add an
+	example for manually setting up a group of actions.
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
 	Document that inline completion requires text-column to be set.
 	(gtk_entry_completion_compute_prefix): Return NULL if text-column
