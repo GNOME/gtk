@@ -84,7 +84,7 @@ simply passes them to the window manager; in contrast,
 gtk_window_set_geometry_hints() performs some interpretation. For example,
 #GtkWindow will apply the hints to the geometry widget instead of the toplevel
 window, if you set a geometry widget. Also, the
-min_width/min_height/max_width/max_height fields may be set to -1, and
+@min_width/@min_height/@max_width/@max_height fields may be set to -1, and
 #GtkWindow will substitute the size request of the window or geometry widget. If
 the minimum size hint is not provided, #GtkWindow will use its requisition as
 the minimum size.  If the minimum size is provided and a geometry widget is set,
@@ -97,7 +97,7 @@ The canonical use-case for gtk_window_set_geometry_hints() is to get a terminal
 widget to resize properly. Here, the terminal text area should be the geometry
 widget; #GtkWindow will then automatically set the base size to the size of
 other widgets in the terminal window, such as the menubar and scrollbar.  Then,
-the width_inc and height_inc fields should be set to the size of one character
+the @width_inc and @height_inc fields should be set to the size of one character
 in the terminal. Finally, the base size should be set to the size of one
 character. The net effect is that the minimum size of the terminal 
 will have a 1x1 character terminal area, and only terminal sizes on 
@@ -140,8 +140,8 @@ ratio.
 @min_height: 
 @max_width: maximum width of window (or -1 to use requisition, with #GtkWindow only)
 @max_height: maximum height of window (or -1 to use requisition, with #GtkWindow only)
-@base_width: allowed window widths are base_width + width_inc * N where N is any integer (-1 allowed with #GtkWindow)
-@base_height: allowed window widths are base_height + height_inc * N where N is any integer (-1 allowed with #GtkWindow)
+@base_width: allowed window widths are @base_width + @width_inc * N where N is any integer (-1 allowed with #GtkWindow)
+@base_height: allowed window widths are @base_height + @height_inc * N where N is any integer (-1 allowed with #GtkWindow)
 @width_inc: width resize increment
 @height_inc: height resize increment
 @min_aspect: minimum width/height ratio
@@ -214,7 +214,7 @@ Used to indicate which fields in the #GdkWindowAttr struct should be
 honored. For example, if you filled in the "cursor" and "x" fields of
 #GdkWindowAttr, pass "@GDK_WA_X | @GDK_WA_CURSOR" to gdk_window_new().  Fields
 in #GdkWindowAttr not covered by a bit in this enum are required; for example,
-the width/height, wclass, and window_type fields are required, they have no
+the @width/@height, @wclass, and @window_type fields are required, they have no
 corresponding flag in #GdkWindowAttributesType.
 </para>
 
@@ -252,8 +252,6 @@ Deprecated equivalent of g_object_ref()
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@window: 
 
 
 <!-- ##### MACRO gdk_window_unref ##### -->
@@ -261,8 +259,6 @@ Deprecated equivalent of g_object_ref()
 Deprecated equivalent of g_object_unref()
 </para>
 
-<!-- # Unused Parameters # -->
-@window: 
 
 
 <!-- ##### FUNCTION gdk_window_get_window_type ##### -->
@@ -709,27 +705,32 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 
 <!-- ##### USER_FUNCTION GdkFilterFunc ##### -->
 <para>
-
+Specifies the type of function used to filter native events before they are
+converted to GDK events. A filter may translate the native event to a GDK
+event or handle it without translation.
 </para>
 
-@xevent: 
-@event: 
-@data: 
-@Returns: 
+
+@xevent: the native event to filter. 
+@event: the GDK event to which the X event will be translated. 
+@data: user data set when the filter was installed.
+@Returns: a #GdkFilterReturn value.
 
 
 <!-- ##### ENUM GdkFilterReturn ##### -->
 <para>
-
+Specifies the result of applying a #GdkFilterFunc to a native event.
 </para>
 
-@GDK_FILTER_CONTINUE: 
-@GDK_FILTER_TRANSLATE: 
-@GDK_FILTER_REMOVE: 
+@GDK_FILTER_CONTINUE: event not handled, continue processing. 
+@GDK_FILTER_TRANSLATE: translated event stored.
+@GDK_FILTER_REMOVE: event handled, terminate processing.
+
 
 <!-- ##### TYPEDEF GdkXEvent ##### -->
 <para>
-
+Used to represent native events (<type>XEvent</type>s for the X11 
+backend, <type>MSG</type>s for Win32).
 </para>
 
 
@@ -845,10 +846,6 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 Deprecated equivalent to gdk_drawable_set_colormap()
 </para>
 
-<!-- # Unused Parameters # -->
-@window: 
-@colormap: 
-
 
 <!-- ##### FUNCTION gdk_window_get_user_data ##### -->
 <para>
@@ -953,8 +950,6 @@ Deprecated equivalent of gdk_drawable_get_visual().
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@window: 
 
 
 <!-- ##### MACRO gdk_window_get_colormap ##### -->
@@ -1145,7 +1140,7 @@ Deprecated equivalent of gdk_drawable_get_type().
 
 @window: The window to get the decorations from
 @decorations: The window decorations will be written here
-@Returns: TRUE if the window has decorations set, FALSE otherwise.
+@Returns: %TRUE if the window has decorations set, %FALSE otherwise.
 
 
 <!-- ##### ENUM GdkWMDecoration ##### -->

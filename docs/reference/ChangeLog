@@ -1,3 +1,10 @@
+2001-11-16  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/event_structs.sgml: Updates. 
+
+	* gdk/tmpl/windows.sgml: Document GdkFilterFunction, GdkFilterReturn
+	and GdkXEvent, add markup.
+
 2001-11-15  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtk-docs.sgml: Go back to DocBook 3.0 to get the
