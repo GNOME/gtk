@@ -30,8 +30,10 @@ GtkTreeViewColumn
 @tree_view: 
 @button: 
 @child: 
+@arrow: 
+@alignment: 
 @window: 
-@justification: 
+@xalign: 
 @id: 
 @width: 
 @min_width: 
@@ -42,9 +44,11 @@ GtkTreeViewColumn
 @cell: 
 @attributes: 
 @column_type: 
+@sort_order: 
 @visible: 
 @button_active: 
 @dirty: 
+@show_sort_indicator: 
 
 <!-- ##### ENUM GtkTreeViewColumnSizing ##### -->
 <para>
@@ -223,15 +227,6 @@ GtkTreeViewColumn
 @title: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_get_title ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_tree_view_column_set_clickable ##### -->
 <para>
 
@@ -251,24 +246,6 @@ GtkTreeViewColumn
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_get_widget ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_set_justification ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@justification: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_get_justification ##### -->
 <para>
 
 </para>

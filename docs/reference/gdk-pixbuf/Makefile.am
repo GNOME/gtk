@@ -6,46 +6,64 @@ DOC_MODULE=gdk-pixbuf
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gdk-pixbuf.sgml
 
-# The directory containing the source code (if it contains documentation).
-DOC_SOURCE_DIR=$(GDK_PIXBUF_DIR)/gdk-pixbuf
-SECOND_DOC_SOURCE_DIR=$(top_srcdir)/contrib/gdk-pixbuf-xlib
+# The directory containing the source code. Relative to $(srcdir)
+DOC_SOURCE_DIR=../../../gdk-pixbuf
+
+# Extra options to supply to gtkdoc-scan
+SCAN_OPTIONS=--source-dir=../../../contrib/gdk-pixbuf-xlib
+
+# Extra options to supply to gtkdoc-mkdb
+MKDB_OPTIONS=--source-dir=../../../contrib/gdk-pixbuf-xlib
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=
 
+# Used for dependencies
+HFILE_GLOB=$(top_srcdir)/gdk-pixbuf/*.h $(top_srcdir)/contrib/gdk-pixbuf-xlib/*.h
+CFILE_GLOB=$(top_srcdir)/gdk-pixbuf/*.c $(top_srcdir)/contrib/gdk-pixbuf-xlib/*.c
+
 # Header files to ignore when scanning
-IGNORE_HFILES=pixops.h pixops-internal.h gdk-pixbuf-xlib-private.h gdk-pixbuf-i18n.h gdk-pixbuf-private.h
+IGNORE_HFILES=				\
+	pixops				\
+	gdk-pixbuf-xlib-private.h 	\
+	gdk-pixbuf-i18n.h 		\
+	gdk-pixbuf-private.h
 
 # Extra files to add when scanning
-EXTRA_HFILES=			\
-	$(top_srcdir)/gtk/gdk-pixbuf-loader.h
+EXTRA_HFILES=
 
-# CFLAGS and LDFLAGS for compiling scan program
-CFLAGS=
-LDFLAGS=
-
-tmpl_sources =					\
-	tmpl/animation.sgml			\
-	tmpl/creating.sgml			\
-	tmpl/file-loading.sgml			\
-	tmpl/gdk-pixbuf-loader.sgml		\
-	tmpl/gdk-pixbuf-unused.sgml		\
-	tmpl/gdk-pixbuf.sgml			\
-	tmpl/initialization_versions.sgml	\
-	tmpl/module_interface.sgml		\
-	tmpl/refcounting.sgml			\
-	tmpl/scaling.sgml			\
-	tmpl/util.sgml				\
-        tmpl/gdk-pixbuf-xlib-from-drawables.sgml        \
-        tmpl/gdk-pixbuf-xlib-init.sgml                  \
-        tmpl/gdk-pixbuf-xlib-rendering.sgml             \
-        tmpl/gdk-pixbuf-xlib-rgb.sgml
+# Images to copy into HTML directory
+HTML_IMAGES = 
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files =				\
 	compiling.sgml			\
 	gdk-pixbuf.sgml			\
 	porting-from-imlib.sgml
+
+# Other files to distribute
+extra_files =
+
+# CFLAGS and LDFLAGS for compiling scan program. Only needed
+# if $(DOC_MODULE).types is non-empty.
+GTKDOC_CFLAGS = @STRIP_BEGIN@ 				\
+	@CFLAGS@					\
+	-I$(top_srcdir) 				\
+	@GLIB_CFLAGS@					\
+	@more_cflags@					\
+@STRIP_END@
+
+GTKDOC_LIBS = @STRIP_BEGIN@ 				\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
+	@more_ldflags@					\
+	@more_libs@					\
+	@GLIB_LIBS@					\
+	-lm						\
+@STRIP_END@
+
+GTKDOC_CC=$(LIBTOOL) --mode=compile $(CC)
+GTKDOC_LD=$(LIBTOOL) --mode=link $(CC)
+
 
 ####################################
 # Everything below here is generic #
@@ -54,47 +72,76 @@ content_files =				\
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 EXTRA_DIST = 				\
-	$(DOC_MODULE).types		\
-	$(DOC_MAIN_SGML_FILE)		\
 	$(content_files)		\
+	$(extra_files)			\
+	$(HTML_IMAGES)			\
+	$(DOC_MAIN_SGML_FILE)		\
+	$(DOC_MODULE).types		\
 	$(DOC_MODULE)-sections.txt	\
 	$(DOC_MODULE)-overrides.txt
 
+DOC_STAMPS=scan-build.stamp tmpl-build.stamp sgml-build.stamp html-build.stamp
+
 if ENABLE_GTK_DOC
-all-local: html/index.html
+all-local: html-build.stamp
 
-$(DOC_MODULE)-decl.txt: 
-	$(MAKE) scan
+SCANOBJ_FILES = 		\
+	$(DOC_MODULE).args 	\
+	$(DOC_MODULE).hierarchy \
+	$(DOC_MODULE).signal
 
-$(tmpl_sources): $(DOC_MODULE)-decl.txt $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
-	$(MAKE) templates
+scan-build.stamp: $(HFILE_GLOB)
+	@echo '*** Scanning header files ***'
+	cd $(srcdir) && ( \
+	if grep -l '^.+$$' $(DOC_MODULE).types > /dev/null ; then \
+	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj --module=$(DOC_MODULE) ; \
+	else \
+	    for i in $(SCANOBJ_FILES) ; do \
+               test -f $$i || touch $$i ; \
+	    done \
+	fi )
+	cd $(srcdir) && \
+	  gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(SCAN_OPTIONS) $(EXTRA_HFILES)
+	touch scan-build.stamp
 
-sgml/$(DOC_MODULE)-doc.bottom: $(tmpl_sources) $(DOC_MODULE)-decl.txt
-	$(MAKE) sgml
+check_scan:
+	$(MAKE) scan-build.stamp
 
-html/index.html: sgml/$(DOC_MODULE)-doc.bottom $(DOC_MAIN_SGML_FILE) $(content_files)
-	$(MAKE) html
-endif
+$(DOC_MODULE)-decl.txt $(SCANOBJ_FILES): check_scan
 
-scan:
-	-(cd $(srcdir) \
-	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --source-dir=$(SECOND_DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(EXTRA_HFILES))
-
-templates: 
+tmpl-build.stamp: $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
+	@echo '*** Rebuilding template files ***'
 	cd $(srcdir) && gtkdoc-mktmpl --module=$(DOC_MODULE)
+	touch tmpl-build.stamp
 
-sgml:
-	cd $(srcdir) \
-	&& gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --source-dir=$(SECOND_DOC_SOURCE_DIR)
+check_templates: 
+	$(MAKE) tmpl-build.stamp
 
-html:
+tmpl.stamp: check_templates
+
+sgml-build.stamp: tmpl.stamp $(CFILE_GLOB)
+	@echo '*** Building SGML ***'
+	cd $(srcdir) && \
+	gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) $(MKDB_OPTIONS)
+	touch sgml-build.stamp
+
+check_sgml:
+	$(MAKE) sgml-build.stamp
+
+sgml.stamp: check_sgml
+
+html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE)
+	@echo '*** Building HTML ***'
 	test -d $(srcdir)/html || mkdir $(srcdir)/html
-	-cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
+	cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
+	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
 	@echo '-- Fixing Crossreferences' 
 	cd $(srcdir) && gtkdoc-fixxref --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
+	touch html-build.stamp
+endif
 
 clean-local:
-	rm -f *~ *.bak *.signals *-unused.txt
+	rm -f *~ *.bak $(SCANOBJ_FILES) *-unused.txt $(DOC_STAMPS) $(srcdir)/sgml.stamp 
 
 maintainer-clean-local: clean
 	cd $(srcdir) && rm -rf sgml html $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
@@ -120,17 +167,22 @@ if ENABLE_GTK_DOC
 dist-check-gtkdoc:
 else
 dist-check-gtkdoc:
-	@echo "*** gtk-doc must be installed and enabled in order to make dist
+	@echo "*** gtk-doc must be installed and enabled in order to make dist"
 	@false
 endif
 
-dist-hook: dist-check-gtkdoc
-	mkdir $(distdir)/html
-	mkdir $(distdir)/sgml
+dist-hook: dist-check-gtkdoc dist-hook-local
 	mkdir $(distdir)/tmpl
-	-cp $(srcdir)/html/*.html $(srcdir)/html/*.css $(srcdir)/html/index.sgml $(distdir)/html
+	mkdir $(distdir)/sgml
+	mkdir $(distdir)/html
 	-cp $(srcdir)/tmpl/*.sgml $(distdir)/tmpl
 	-cp $(srcdir)/sgml/*.sgml $(distdir)/sgml
 	-cp $(srcdir)/sgml/*.bottom $(srcdir)/sgml/*.top $(distdir)/sgml
+	-cp $(srcdir)/html/index.sgml $(distdir)/html
+	-cp $(srcdir)/html/*.html $(srcdir)/html/*.css $(distdir)/html
+	for i in $(HTML_IMAGES) ; do          \
+	  cp $(srcdir)/$$i $(distdir)/html ;  \
+        done
 
-.PHONY : html sgml templates scan
+.PHONY : check_sgml check_templates check_scan dist-hook-local
+

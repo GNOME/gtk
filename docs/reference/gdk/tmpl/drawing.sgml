@@ -2,11 +2,22 @@
 Drawing Primitives
 
 <!-- ##### SECTION Short_Description ##### -->
-
+functions for drawing points, lines, arcs, and text.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+These functions provide support for drawing points, lines, arcs and text
+onto what are called 'drawables'. Drawables, as the name suggests, are things
+which support drawing onto them, and are either #GdkWindow or #GdkPixmap
+objects.
+</para>
+<para>
+Many of the drawing operations take a #GdkGC argument, which represents a
+graphics context. This #GdkGC contains a number of drawing attributes such
+as foreground color, background color and line width, and is used to reduce
+the number of arguments needed for each drawing operation. See the
+<link linkend="gdk-Graphics-Contexts">Graphics Contexts</link> section for
+more information.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -113,111 +124,134 @@ Drawing Primitives
 
 <!-- ##### FUNCTION gdk_draw_point ##### -->
 <para>
-
+Draws a point, using the foreground color and other attributes of the #GdkGC.
 </para>
 
-@drawable: 
-@gc: 
-@x: 
-@y: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@x: the x coordinate of the point.
+@y: the y coordinate of the point.
 
 
 <!-- ##### FUNCTION gdk_draw_points ##### -->
 <para>
-
+Draws a number of points, using the foreground color and other attributes of
+the #GdkGC.
 </para>
 
-@drawable: 
-@gc: 
-@points: 
-@npoints: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@points: an array of #GdkPoint structures.
+@npoints: the number of points to be drawn.
 
 
 <!-- ##### FUNCTION gdk_draw_line ##### -->
 <para>
-
+Draws a line, using the foreground color and other attributes of the #GdkGC.
 </para>
 
-@drawable: 
-@gc: 
-@x1: 
-@y1: 
-@x2: 
-@y2: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@x1: the x coordinate of the start point.
+@y1: the y coordinate of the start point.
+@x2: the x coordinate of the end point.
+@y2: the y coordinate of the end point.
 
 
 <!-- ##### FUNCTION gdk_draw_lines ##### -->
 <para>
-
+Draws a series of lines connecting the given points.
+The way in which joins between lines are draw is determined by the
+#GdkCapStyle value in the #GdkGC. This can be set with
+gdk_gc_set_line_attributes().
 </para>
 
-@drawable: 
-@gc: 
-@points: 
-@npoints: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@points: an array of #GdkPoint structures specifying the endpoints of the
+lines.
+@npoints: the size of the @points array.
 
 
 <!-- ##### FUNCTION gdk_draw_segments ##### -->
 <para>
-
+Draws a number of unconnected lines.
 </para>
 
-@drawable: 
-@gc: 
-@segs: 
-@nsegs: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@segs: an array of #GdkSegment structures specifying the start and end points
+of the lines to be drawn,
+@nsegs: the number of line segments to draw, i.e. the size of the @segs array.
 
 
 <!-- ##### STRUCT GdkSegment ##### -->
 <para>
-
+Specifies the start and end point of a line for use by the gdk_draw_segments()
+function.
 </para>
 
-@x1: 
-@y1: 
-@x2: 
-@y2: 
+@x1: the x coordinate of the start point.
+@y1: the y coordinate of the start point.
+@x2: the x coordinate of the end point.
+@y2: the y coordinate of the end point.
 
 <!-- ##### FUNCTION gdk_draw_rectangle ##### -->
 <para>
-
+Draws a rectangular outline or filled rectangle, using the foreground color
+and other attributes of the #GdkGC.
 </para>
+<note>
+<para>
+A rectangle drawn filled is 1 pixel smaller in both dimensions than a rectangle
+outlined. Calling gdk_draw_rectangle (window, gc, TRUE, 0, 0, 20, 20) results
+in a filled rectangle 20 pixels wide and 20 pixels high. Calling
+gdk_draw_rectangle (window, gc, FALSE, 0, 0, 20, 20) results in an outlined
+rectangle with corners at (0, 0), (0, 20), (20, 20), and (20, 0), which
+makes it 21 pixels wide and 21 pixels high.
+</para>
+</note>
 
-@drawable: 
-@gc: 
-@filled: 
-@x: 
-@y: 
-@width: 
-@height: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@filled: TRUE if the rectangle should be filled.
+@x: the x coordinate of the left edge of the rectangle.
+@y: the y coordinate of the top edge of the rectangle.
+@width: the width of the rectangle.
+@height: the height of the rectangle.
 
 
 <!-- ##### FUNCTION gdk_draw_arc ##### -->
 <para>
-
+Draws an arc or a filled 'pie slice'. The arc is defined by the bounding
+rectangle of the entire ellipse, and the start and end angles of the part of
+the ellipse to be drawn.
 </para>
 
-@drawable: 
-@gc: 
-@filled: 
-@x: 
-@y: 
-@width: 
-@height: 
-@angle1: 
-@angle2: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@filled: TRUE if the arc should be filled, producing a 'pie slice'.
+@x: the x coordinate of the left edge of the bounding rectangle.
+@y: the y coordinate of the top edge of the bounding rectangle.
+@width: the width of the bounding rectangle.
+@height: the height of the bounding rectangle.
+@angle1: the start angle of the arc, relative to the 3 o'clock position,
+counter-clockwise, in 1/64ths of a degree.
+@angle2: the end angle of the arc, relative to @angle1, in 1/64ths of a degree.
 
 
 <!-- ##### FUNCTION gdk_draw_polygon ##### -->
 <para>
-
+Draws an outlined or filled polygon.
 </para>
 
-@drawable: 
-@gc: 
-@filled: 
-@points: 
-@npoints: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@filled: TRUE if the polygon should be filled. The polygon is closed
+automatically, connecting the last point to the first point if necessary.
+@points: an array of #GdkPoint structures specifying the points making up the
+polygon.
+@npoints: the number of points.
 
 
 <!-- ##### FUNCTION gdk_draw_glyphs ##### -->
@@ -259,50 +293,64 @@ Drawing Primitives
 
 <!-- ##### FUNCTION gdk_draw_string ##### -->
 <para>
-
+Draws a string of characters in the given font or fontset.
 </para>
 
-@drawable: 
-@font: 
-@gc: 
-@x: 
-@y: 
-@string: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@font: a #GdkFont.
+@gc: a #GdkGC.
+@x: the x coordinate of the left edge of the text.
+@y: the y coordinate of the baseline of the text.
+@string: the string of characters to draw.
 
 
 <!-- ##### FUNCTION gdk_draw_text ##### -->
 <para>
-
+Draws a number of characters in the given font or fontset.
 </para>
 
-@drawable: 
-@font: 
-@gc: 
-@x: 
-@y: 
-@text: 
-@text_length: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@font: a #GdkFont.
+@gc: a #GdkGC.
+@x: the x coordinate of the left edge of the text.
+@y: the y coordinate of the baseline of the text.
+@text: the characters to draw.
+@text_length: the number of characters of @text to draw.
 
 
 <!-- ##### FUNCTION gdk_draw_text_wc ##### -->
 <para>
-
+Draws a number of wide characters using the given font of fontset.
+If the font is a 1-byte font, the string is converted into 1-byte characters
+(discarding the high bytes) before output.
 </para>
 
-@drawable: 
-@font: 
-@gc: 
-@x: 
-@y: 
-@text: 
-@text_length: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@font: a #GdkFont.
+@gc: a #GdkGC.
+@x: the x coordinate of the left edge of the text.
+@y: the y coordinate of the baseline of the text.
+@text: the wide characters to draw.
+@text_length: the number of characters to draw.
 
 
 <!-- ##### MACRO gdk_draw_pixmap ##### -->
 <para>
-
+Draws a pixmap, or a part of a pixmap, onto another drawable.
 </para>
 
+<!-- # Unused Parameters # -->
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@src: the source #GdkPixmap to draw.
+@xsrc: the left edge of the source rectangle within @src.
+@ysrc: the top of the source rectangle within @src.
+@xdest: the x coordinate of the destination within @drawable.
+@ydest: the y coordinate of the destination within @drawable.
+@width: the width of the area to be copied, or -1 to make the area extend to
+the right edge of the source pixmap.
+@height: the height of the area to be copied, or -1 to make the area extend
+to the bottom edge of the source pixmap.
 
 
 <!-- ##### FUNCTION gdk_draw_drawable ##### -->
@@ -323,18 +371,21 @@ Drawing Primitives
 
 <!-- ##### FUNCTION gdk_draw_image ##### -->
 <para>
-
+Draws a #GdkImage onto a drawable.
+The depth of the #GdkImage must match the depth of the #GdkDrawable.
 </para>
 
-@drawable: 
-@gc: 
-@image: 
-@xsrc: 
-@ysrc: 
-@xdest: 
-@ydest: 
-@width: 
-@height: 
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@image: the #GdkImage to draw.
+@xsrc: the left edge of the source rectangle within @image.
+@ysrc: the top of the source rectangle within @image.
+@xdest: the x coordinate of the destination within @drawable.
+@ydest: the y coordinate of the destination within @drawable.
+@width: the width of the area to be copied, or -1 to make the area extend to
+the right edge of @image.
+@height: the height of the area to be copied, or -1 to make the area extend
+to the bottom edge of @image.
 
 
 <!-- ##### FUNCTION gdk_drawable_get_image ##### -->

@@ -35,41 +35,45 @@ It can be intersected to regions by using gdk_region_spans_intersect_foreach().
 
 <!-- ##### STRUCT GdkPoint ##### -->
 <para>
-
+Defines the x and y coordinates of a point.
+Note that both are defined as #gint16 values, so the coordinates are limited
+to between -32,768 and 32,767.
 </para>
 
-@x: 
-@y: 
+@x: the x coordinate of the point.
+@y: the y coordinate of the point.
 
 <!-- ##### STRUCT GdkRectangle ##### -->
 <para>
-
+Defines the position and size of a rectangle.
 </para>
 
-@x: 
-@y: 
-@width: 
-@height: 
+@x: the x coordinate of the left edge of the rectangle.
+@y: the y coordinate of the top of the rectangle.
+@width: the width of the rectangle.
+@height: the height of the rectangle.
 
 <!-- ##### FUNCTION gdk_rectangle_intersect ##### -->
 <para>
-
+Calculates the intersection of two rectangles.
 </para>
 
-@src1: 
-@src2: 
-@dest: 
-@Returns: 
+@src1: a #GdkRectangle.
+@src2: a #GdkRectangle.
+@dest: the intersection of @src1 and @src2.
+@Returns: TRUE if the rectangles intersect.
 
 
 <!-- ##### FUNCTION gdk_rectangle_union ##### -->
 <para>
-
+Calculates the union of two rectangles.
+The union of rectangles @src1 and @src2 is the smallest rectangle which
+includes both @src1 and @src2 within it.
 </para>
 
-@src1: 
-@src2: 
-@dest: 
+@src1: a #GdkRectangle.
+@src2: a #GdkRectangle.
+@dest: the union of @src1 and @src2.
 
 
 <!-- ##### STRUCT GdkRegion ##### -->

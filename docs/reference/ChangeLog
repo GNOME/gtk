@@ -1,3 +1,10 @@
+Sun Feb 11 22:16:34 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* */Makefile.am: Use the new snazzy mother-of-all-gtk-doc-makefiles.
+
+	* gdk/tmpl/* gdk-pixbuf/tmpl/*: Recover a bunch of docs that were 
+	lost at one point.
+
 2001-02-08  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/windows.sgml: windows (file is blank)

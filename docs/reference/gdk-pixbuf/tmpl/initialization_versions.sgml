@@ -14,31 +14,6 @@ Initialization and Versions
 
 </para>
 
-<!-- ##### FUNCTION gdk_pixbuf_init ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### FUNCTION gdk_pixbuf_preinit ##### -->
-<para>
-
-</para>
-
-@app: 
-@modinfo: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_postinit ##### -->
-<para>
-
-</para>
-
-@app: 
-@modinfo: 
-
-
 <!-- ##### VARIABLE gdk_pixbuf_version ##### -->
 <para>
 

@@ -2,11 +2,27 @@
 Graphics Contexts
 
 <!-- ##### SECTION Short_Description ##### -->
-
+objects to encapsulate drawing properties.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+All drawing operations in GDK take a 
+<firstterm>graphics context</firstterm> (GC) argument. 
+A graphics context encapsulates information about
+the way things are drawn, such as the foreground
+color or line width. By using graphics contexts, 
+the number of arguments to each drawing call is
+greatly reduced, and communication overhead is
+minimized, since identical arguments do not need
+to be passed repeatedly.
+</para>
+<para>
+Most values of a graphics context can be set at
+creation time by using gdk_gc_new_with_values(),
+or can be set one-by-one using functions such
+as gdk_gc_set_foreground(). A few of the values
+in the GC, such as the dash pattern, can only
+be set by the latter method.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,7 +32,9 @@ Graphics Contexts
 
 <!-- ##### STRUCT GdkGC ##### -->
 <para>
-
+The #GdkGC structure represents a graphics context.
+It is an opaque structure with no user-visible
+elements.
 </para>
 
 @parent_instance: 
@@ -34,7 +52,104 @@ Graphics Contexts
 
 <!-- ##### STRUCT GdkGCValues ##### -->
 <para>
+The #GdkGCValues structure holds a set of values used
+to create or modify a graphics context.
 
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>#GdkColor	foreground;</entry>
+<entry>the foreground color.</entry>
+</row>
+
+<row>
+<entry>#GdkColor	background;</entry>
+<entry>the background color.</entry>
+</row>
+
+<row>
+<entry>#GdkFont *font;</entry>
+<entry>the default font..</entry>
+</row>
+
+<row>
+<entry>#GdkFunction function;</entry>
+<entry>the bitwise operation used when drawing.</entry>
+</row>
+
+<row>
+<entry>#GdkFill fill;</entry>
+<entry>the fill style.</entry>
+</row>
+
+<row>
+<entry>#GdkPixmap *tile;</entry>
+<entry>the tile pixmap.</entry>
+</row>
+
+<row>
+<entry>#GdkPixmap *stipple;</entry>
+<entry>the stipple bitmap.</entry>
+</row>
+
+<row>
+<entry>#GdkPixmap *clip_mask;</entry>
+<entry>the clip mask bitmap.</entry>
+</row>
+
+<row>
+<entry>#GdkSubwindowMode subwindow_mode;</entry>
+<entry>the subwindow mode.</entry>
+</row>
+
+<row>
+<entry>#gint ts_x_origin;</entry>
+<entry>the x origin of the tile or stipple.</entry>
+</row>
+
+<row>
+<entry>#gint ts_y_origin;</entry>
+<entry>the y origin of the tile or stipple.</entry>
+</row>
+
+<row>
+<entry>#gint clip_x_origin;</entry>
+<entry>the x origin of the clip mask.</entry>
+</row>
+
+<row>
+<entry>#gint clip_y_origin;</entry>
+<entry>the y origin of the clip mask.</entry>
+</row>
+
+<row>
+<entry>#gint graphics_exposures;</entry>
+<entry>whether graphics exposures are enabled.</entry>
+</row>
+
+<row>
+<entry>#gint line_width;</entry>
+<entry>the line width</entry>
+</row>
+
+<row>
+<entry>#GdkLineStyle line_style;</entry>
+<entry>the way dashed lines are drawn</entry>
+</row>
+
+<row>
+<entry>#GdkCapStyle cap_style;</entry>
+<entry>the way the ends of lines are drawn</entry>
+</row>
+
+<row>
+<entry>#GdkJoinStyle join_style;</entry>
+<entry>the way joins between lines are drawn</entry>
+</row>
+
+</tbody></tgroup></informaltable>
 </para>
 
 @foreground: 
@@ -58,7 +173,8 @@ Graphics Contexts
 
 <!-- ##### ENUM GdkGCValuesMask ##### -->
 <para>
-
+A set of bit flags used to indicate which fields
+#GdkGCValues structure are set.
 </para>
 
 @GDK_GC_FOREGROUND: 
@@ -82,7 +198,12 @@ Graphics Contexts
 
 <!-- ##### ENUM GdkFunction ##### -->
 <para>
-
+Determines how the bit values for the source pixels are combined with
+the bit values for destination pixels to produce the final result. The
+sixteen values here correspond to the 16 different possible 2x2 truth
+tables.  Only a couple of these values are usually useful; for colored
+images, only %GDK_COPY, %GDK_XOR and %GDK_INVERT are generally
+useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 </para>
 
 @GDK_COPY: 
@@ -104,46 +225,58 @@ Graphics Contexts
 
 <!-- ##### FUNCTION gdk_gc_new ##### -->
 <para>
-
+Create a new graphics context with default values. 
 </para>
 
 @drawable: 
-@Returns: 
+@Returns: the new graphics context.
+<!-- # Unused Parameters # -->
+@window: a #GdkDrawable. The created GC must always be used
+ with drawables of the same depth as this one.
 
 
 <!-- ##### FUNCTION gdk_gc_new_with_values ##### -->
 <para>
-
+Create a new GC with the given initial values.
 </para>
 
 @drawable: 
-@values: 
-@values_mask: 
-@Returns: 
+@values: a structure containing initial values for the GC.
+@values_mask: a bit mask indicating which fields in @values
+   are set.
+@Returns: the new graphics context.
+<!-- # Unused Parameters # -->
+@window: a #GdkDrawable. The created GC must always be used
+ with drawables of the same depth as this one.
 
 
 <!-- ##### FUNCTION gdk_gc_ref ##### -->
 <para>
-
+Increase the reference count on a graphics context.
 </para>
 
-@gc: 
-@Returns: 
+@gc: a #GdkGC.
+@Returns: @gc.
 
 
 <!-- ##### FUNCTION gdk_gc_unref ##### -->
 <para>
-
+Decrease the reference count on a graphics context. If
+the resulting reference count is zero, the graphics
+context will be destroyed.
 </para>
 
-@gc: 
+@gc: a #GdkGC.
 
 
 <!-- ##### MACRO gdk_gc_destroy ##### -->
 <para>
-
+Identical to gdk_gc_unref(). This function is obsolete
+and should not be used.
 </para>
 
+<!-- # Unused Parameters # -->
+@gc: a #GdkGC.
 
 
 <!-- ##### FUNCTION gdk_gc_set_values ##### -->
@@ -158,29 +291,29 @@ Graphics Contexts
 
 <!-- ##### FUNCTION gdk_gc_get_values ##### -->
 <para>
-
+Retrieves the current values from a graphics context.
 </para>
 
-@gc: 
-@values: 
+@gc: a #GdkGC.
+@values: the #GdkGCValues structure in which to store the results.
 
 
 <!-- ##### FUNCTION gdk_gc_set_foreground ##### -->
 <para>
-
+Sets the foreground color for a graphics context.
 </para>
 
-@gc: 
-@color: 
+@gc: a #GdkGC.
+@color: the new foreground color.
 
 
 <!-- ##### FUNCTION gdk_gc_set_background ##### -->
 <para>
-
+Sets the background color for a graphics context.
 </para>
 
-@gc: 
-@color: 
+@gc: a #GdkGC.
+@color: the new background color.
 
 
 <!-- ##### FUNCTION gdk_gc_set_rgb_fg_color ##### -->
@@ -203,34 +336,71 @@ Graphics Contexts
 
 <!-- ##### FUNCTION gdk_gc_set_font ##### -->
 <para>
-
+Sets the font for a graphics context. (Note that
+all text-drawing functions in GDK take a @font
+argument; the value set here is used when that
+argument is %NULL.)
 </para>
 
-@gc: 
-@font: 
+@gc: a #GdkGC.
+@font: the new font.
 
 
 <!-- ##### FUNCTION gdk_gc_set_function ##### -->
 <para>
-
+Determines how the current pixel values and the
+pixel values being drawn are combined to produce
+the final pixel values.
 </para>
 
-@gc: 
+@gc: a #GdkGC.
 @function: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_fill ##### -->
 <para>
-
+Set the fill mode for a graphics context.
 </para>
 
-@gc: 
-@fill: 
+@gc: a #GdkGC.
+@fill: the new fill mode.
 
 
 <!-- ##### ENUM GdkFill ##### -->
 <para>
+Determines how primitives are drawn.
 
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_SOLID</entry>
+<entry>draw with the foreground color.</entry>
+</row>
+
+<row>
+<entry>GDK_TILED</entry>
+<entry>draw with a tiled pixmap.</entry>
+</row>
+
+<row>
+<entry>GDK_STIPPLED</entry>
+<entry>draw using the stipple bitmap. Pixels corresponding
+to bits in the stipple bitmap that are set will be drawn in the 
+foreground color; pixels corresponding to bits that are
+not set will be left untouched.</entry>
+</row>
+
+<row>
+<entry>GDK_OPAQUE_STIPPLED</entry>
+<entry>draw using the stipple bitmap. Pixels corresponding
+to bits in the stipple bitmap that are set will be drawn in the 
+foreground color; pixels corresponding to bits that are
+not set will be drawn with the background color.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
 </para>
 
 @GDK_SOLID: 
@@ -240,81 +410,116 @@ Graphics Contexts
 
 <!-- ##### FUNCTION gdk_gc_set_tile ##### -->
 <para>
-
+Set a tile pixmap for a graphics context.
+This will only be used if the fill mode
+is %GDK_TILED.
 </para>
 
-@gc: 
-@tile: 
+@gc: a #GdkGC.
+@tile: the new tile pixmap.
 
 
 <!-- ##### FUNCTION gdk_gc_set_stipple ##### -->
 <para>
-
+Set the stipple bitmap for a graphics context. The
+stipple will only be used if the fill mode is
+%GDK_STIPPLED or %GDK_OPAQUE_STIPPLED.
 </para>
 
-@gc: 
-@stipple: 
+@gc: a #GdkGC.
+@stipple: the new stipple bitmap.
 
 
 <!-- ##### FUNCTION gdk_gc_set_ts_origin ##### -->
 <para>
-
+Set the origin when using tiles or stipples with
+the GC. The tile or stipple will be aligned such
+that the upper left corner of the tile or stipple
+will coincide with this point.
 </para>
 
-@gc: 
-@x: 
-@y: 
+@gc: a #GdkGC.
+@x: the x-coordinate of the origin.
+@y: the y-coordinate of the origin.
 
 
 <!-- ##### FUNCTION gdk_gc_set_clip_origin ##### -->
 <para>
-
+Sets the origin of the clip mask. The coordinates are
+interpreted relative to the upper-left corner of
+the destination drawable of the current operation.
 </para>
 
-@gc: 
-@x: 
-@y: 
+@gc: a #GdkGC.
+@x: the x-coordinate of the origin.
+@y: the y-coordinate of the origin.
 
 
 <!-- ##### FUNCTION gdk_gc_set_clip_mask ##### -->
 <para>
-
+Sets the clip mask for a graphics context from a bitmap.
+The clip mask is interpreted relative to the clip
+origin. (See gdk_gc_set_clip_origin()).
 </para>
 
-@gc: 
-@mask: 
+@gc: the #GdkGC.
+@mask: a bitmap.
 
 
 <!-- ##### FUNCTION gdk_gc_set_clip_rectangle ##### -->
 <para>
+Sets the clip mask for a graphics context from a
+rectangle. The clip mask is interpreted relative to the clip
+origin. (See gdk_gc_set_clip_origin()).
 
 </para>
 
-@gc: 
-@rectangle: 
+@gc: a #GdkGC.
+@rectangle: the rectangle to clip to.
 
 
 <!-- ##### FUNCTION gdk_gc_set_clip_region ##### -->
 <para>
-
+Sets the clip mask for a graphics context from a region structure.
+The clip mask is interpreted relative to the clip origin. (See
+gdk_gc_set_clip_origin()).
 </para>
 
-@gc: 
-@region: 
+@gc: a #GdkGC.
+@region: the #GdkRegion.
 
 
 <!-- ##### FUNCTION gdk_gc_set_subwindow ##### -->
 <para>
-
+Sets how drawing with this GC on a window will affect child
+windows of that window. 
 </para>
 
-@gc: 
-@mode: 
+@gc: a #GdkGC.
+@mode: the subwindow mode.
 
 
 <!-- ##### ENUM GdkSubwindowMode ##### -->
 <para>
 
+Determines how drawing onto a window will affect child
+windows of that window. 
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="3*"><colspec colwidth="7*">
+<tbody>
+
+<row>
+<entry>GDK_CLIP_BY_CHILDREN</entry>
+<entry>only draw onto the window itself.</entry>
+</row>
+
+<row>
+<entry>GDK_INCLUDE_INFERIORS</entry>
+<entry>Draw onto the window and child windows.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
 </para>
 
 @GDK_CLIP_BY_CHILDREN: 
@@ -322,28 +527,57 @@ Graphics Contexts
 
 <!-- ##### FUNCTION gdk_gc_set_exposures ##### -->
 <para>
-
+Sets whether copying non-visible portions of a drawable
+using this graphics context generate exposure events
+for the corresponding regions of the destination
+drawable. (See gdk_draw_pixmap()).
 </para>
 
-@gc: 
-@exposures: 
+@gc: a #GdkGC.
+@exposures: if %TRUE, exposure events will be generated.
 
 
 <!-- ##### FUNCTION gdk_gc_set_line_attributes ##### -->
 <para>
-
+Sets various attributes of how lines are drawn. See
+the corresponding members of GdkGCValues for full
+explanations of the arguments.
 </para>
 
-@gc: 
-@line_width: 
-@line_style: 
-@cap_style: 
-@join_style: 
+@gc: a #GdkGC.
+@line_width: the width of lines.
+@line_style: the dash-style for lines.
+@cap_style: the manner in which the ends of lines are drawn.
+@join_style: the in which lines are joined together.
 
 
 <!-- ##### ENUM GdkLineStyle ##### -->
 <para>
+Determines how lines are drawn.
 
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_LINE_SOLID</entry>
+<entry>lines are drawn solid.</entry>
+</row>
+
+<row>
+<entry>GDK_LINE_ON_OFF_DASH</entry>
+<entry>even segments are drawn; odd segments are not drawn.</entry>
+</row>
+
+<row>
+<entry>GDK_LINE_DOUBLE_DASH</entry>
+<entry>even segments are normally. Odd segments are drawn 
+in the background color if the fill style is %GDK_SOLID,
+or in the background color masked by the stipple if the
+fill style is %GDK_STIPPLED.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
 </para>
 
 @GDK_LINE_SOLID: 
@@ -352,7 +586,38 @@ Graphics Contexts
 
 <!-- ##### ENUM GdkCapStyle ##### -->
 <para>
+Determines how the end of lines are drawn.
 
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_CAP_NOT_LAST</entry>
+<entry>the same as %GDK_CAP_BUTT for lines of non-zero width.
+       for zero width lines, the final point on the line
+       will not be drawn.</entry>
+</row>
+
+<row>
+<entry>GDK_CAP_BUTT</entry>
+<entry>the ends of the lines are drawn squared off and extending
+       to the coordinates of the end point.</entry>
+</row>
+
+<row>
+<entry>GDK_CAP_ROUND</entry>
+<entry>the ends of the lines are drawn as semicircles with the
+       diameter equal to the line width and centered at the
+       end point.</entry>
+</row>
+
+<row>
+<entry>GDK_CAP_PROJECTING</entry>
+<entry>the ends of the lines are drawn squared off and extending
+       half the width of the line beyond the end point.</entry>
+</row>
+</tbody></tgroup></informaltable>
 </para>
 
 @GDK_CAP_NOT_LAST: 
@@ -362,7 +627,29 @@ Graphics Contexts
 
 <!-- ##### ENUM GdkJoinStyle ##### -->
 <para>
+Determines how the joins between segments of a polygon are drawn.
 
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_JOIN_MITER</entry>
+<entry>the sides of each line are extended to meet at an angle.</entry>
+</row>
+
+<row>
+<entry>GDK_JOIN_ROUND</entry>
+<entry>the sides of the two lines are joined by a circular arc.</entry>
+</row>
+
+<row>
+<entry>GDK_JOIN_BEVEL</entry>
+<entry>the sides of the two lines are joined by a straight line which
+       makes an equal angle with each line.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
 </para>
 
 @GDK_JOIN_MITER: 
@@ -371,22 +658,28 @@ Graphics Contexts
 
 <!-- ##### FUNCTION gdk_gc_set_dashes ##### -->
 <para>
-
+Sets the way dashed-lines are drawn. Lines will be
+drawn with alternating on and off segments of the
+lengths specified in @dash_list. The manner in
+which the on and off segments are drawn is determined
+by the @line_style value of the GC. (This can
+be changed with gdk_gc_set_line_attributes)
 </para>
 
-@gc: 
-@dash_offset: 
-@dash_list: 
-@n: 
+@gc: a #GdkGC.
+@dash_offset: the
+@dash_list: an array of dash lengths.
+@n: the number of elements in @dash_list.
 
 
 <!-- ##### FUNCTION gdk_gc_copy ##### -->
 <para>
-
+Copy the set of values from one graphics context
+onto another graphics context.
 </para>
 
-@dst_gc: 
-@src_gc: 
+@dst_gc: the destination graphics context.
+@src_gc: the source graphics context.
 
 
 <!-- ##### FUNCTION gdk_gc_set_colormap ##### -->
