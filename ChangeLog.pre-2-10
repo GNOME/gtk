@@ -1,3 +1,54 @@
+2005-01-24  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	Fix #147785 and clean up the loading code:
+
+	* gtk/gtkfilechooserdefault.c (LoadState): Make the set of states
+	be EMPTY, PRELOAD, LOADING, FINISHED.
+	(gtk_file_chooser_default_init): Start in the LOAD_EMPTY state.
+	(struct _GtkFileChooserDefault): Added a pending_select_paths
+	field.
+	(load_remove_timer): Add the new states.
+	(load_setup_timer): Likewise.
+	(load_timeout_cb): Likewise.  Switch to the LOAD_LOADING state.
+	(browse_files_model_finished_loading_cb): Switch to the
+	LOAD_FINISHED state.
+	(enum PendingOp): Removed.
+	(struct _GtkFileChooserDefault): Removed the pending_op and
+	pending_select_path fields.
+	(pending_select_paths_free): New utility function.
+	(pending_select_paths_add): New utility function.
+	(gtk_file_chooser_default_finalize): Call
+	pending_select_paths_free().
+	(pending_op_queue): Removed.
+	(pending_op_process): Removed.
+	(pending_select_paths_process): New function.
+	(browse_files_model_finished_loading_cb): Call
+	pending_select_paths_process().
+	(center_selected_row_foreach_cb): Handle multiple selection by
+	only centering the first row.
+	(get_is_file_filtered): Constify.
+	(gtk_file_chooser_default_select_path): Queue into a list of paths
+	to select if we are not finished loading.
+	(show_and_select_paths): New utility function.
+	(up_folder_handler): Use pending_select_paths_add().
+	(gtk_file_chooser_default_should_respond): Do not call
+	pending_op_queue(); free the pending_selected_paths instead.
+	(gtk_file_chooser_default_initial_focus): Don't queue a pending
+	operation, and don't select the first row unconditionally --- this
+	will happen when the folder is done loading.
+	(shortcuts_row_activated_cb): Free the pending_select_paths.
+	(pending_select_paths_store_selection): New utility function.
+	(gtk_file_chooser_default_map): Call
+	pending_select_paths_store_selection() to save the selection
+	before reloading the folder.
+	(select_func): Umm?  Call gtk_tree_selection_select_iter().  Don't
+	move the cursor here; it will be done when processing the pending paths.
+
+	* tests/testfilechooser.c (main): Add a button to the command
+	window to unmap and remap the file chooser.
+
 2005-01-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* docs/tutorial/gtk-tut.sgml:
