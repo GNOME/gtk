@@ -437,7 +437,7 @@ rgb565lsb (GdkImage    *image,
 	    | (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
 #else
 	  /* swap endianness first */
-	  data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
+	  data = s[1] | s[0] << 8 | s[3] << 16 | s[2] << 24;
 	  s += 4;
 	  *o++ = (data & 0xf800) | (data & 0xe000) >> 5
 	    | (data & 0x7e0) >> 3 | (data & 0x600) >> 9;
@@ -534,7 +534,7 @@ rgb565msb (GdkImage    *image,
 	  register guint32 data;
 #ifdef LITTLE
 	  /* swap endianness first */
-	  data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
+	  data = s[1] | s[0] << 8 | s[3] << 16 | s[2] << 24;
 	  s += 4;
 	  *o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
 	    | (data & 0x7e0) << 5 | (data & 0x600) >> 1;
@@ -768,7 +768,7 @@ rgb555lsb (GdkImage     *image,
 	    | (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
 #else
 	  /* swap endianness first */
-	  data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
+	  data = s[1] | s[0] << 8 | s[3] << 16 | s[2] << 24;
 	  s += 4;
 	  *o++ = (data & 0x7c00) << 1 | (data & 0x7000) >> 4
 	    | (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
@@ -860,7 +860,7 @@ rgb555msb (GdkImage    *image,
 	  register guint32 data;
 #ifdef LITTLE
 	  /* swap endianness first */
-	  data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
+	  data = s[1] | s[0] << 8 | s[3] << 16 | s[2] << 24;
 	  s += 4;
 	  *o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
 	    | (data & 0x3e0) << 6 | (data & 0x380) << 1;

@@ -1,3 +1,14 @@
+2002-01-25  Federico Mena Quintero  <federico@ximian.com>
+
+	Merge from gdk-pixbuf stable.
+
+	* gdk/gdkpixbuf-drawable.c (rgb565msb): Fixed the endianness
+	conversion --- swap the individual 16 bit values instead of taking
+	everying as a 32 bit value.
+	(rgb565lsb): Likewise.
+	(rgb555lsb): Likewise.
+	(rgb555msb): Likewise.
+
 2002-01-25  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_drawable_impl_fb_class_init):
