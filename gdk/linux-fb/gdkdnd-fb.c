@@ -63,7 +63,7 @@ GdkDragContext *current_dest_drag = NULL;
 static void
 gdk_drag_context_init (GdkDragContext *dragcontext)
 {
-  dragcontext->windowing_data = g_new (GdkDragContextPrivate, 1);
+  dragcontext->windowing_data = g_new0 (GdkDragContextPrivate, 1);
 
   contexts = g_list_prepend (contexts, dragcontext);
 }
@@ -395,6 +395,54 @@ gdk_drag_get_protocol (guint32          xid,
   return GDK_NONE;
 }
 
+static GdkWindow *
+get_toplevel_window_at (GdkWindow *ignore,
+			gint       x_root,
+			gint       y_root)
+{
+
+  GdkWindowObject *private;
+  GdkWindowObject *sub;
+  GdkWindowObject *child;
+  GList *ltmp, *ltmp2;
+  
+  private = (GdkWindowObject *)gdk_parent_root;
+
+  for (ltmp = private->children; ltmp; ltmp = ltmp->next)
+    {
+      sub = ltmp->data;
+	  
+      if ((GDK_WINDOW (sub) != ignore) &&
+	  (GDK_WINDOW_IS_MAPPED (sub)) &&
+	  (x_root >= sub->x) &&
+	  (x_root < sub->x + GDK_DRAWABLE_IMPL_FBDATA (sub)->width) &&
+	  (y_root >= sub->y) &&
+	  (y_root < sub->y + GDK_DRAWABLE_IMPL_FBDATA (sub)->height))
+	{
+	  if (g_object_get_data (G_OBJECT (sub), "gdk-window-child-handler"))
+	    {
+	      /* Managed window, check children */
+	      for (ltmp2 = sub->children; ltmp2; ltmp2 = ltmp2->next)
+		{
+		  child = ltmp2->data;
+		  
+		  if ((GDK_WINDOW (child) != ignore) &&
+		      (GDK_WINDOW_IS_MAPPED (child)) &&
+		      (x_root >= sub->x + child->x) &&
+		      (x_root < sub->x + child->x + GDK_DRAWABLE_IMPL_FBDATA (child)->width) &&
+		      (y_root >= sub->y + child->y) &&
+		      (y_root < sub->y + child->y + GDK_DRAWABLE_IMPL_FBDATA (child)->height))
+		    return GDK_WINDOW (child);
+		}
+	    }
+	  else
+	    return GDK_WINDOW (sub);
+	}
+    }
+  return NULL;
+}
+
+
 void
 gdk_drag_find_window (GdkDragContext  *context,
 		      GdkWindow       *drag_window,
@@ -407,8 +455,10 @@ gdk_drag_find_window (GdkDragContext  *context,
 
   g_return_if_fail (context != NULL);
 
-  dest = gdk_window_get_pointer (NULL, &x_root, &y_root, NULL);
-
+  dest = get_toplevel_window_at (drag_window, x_root, y_root);
+  if (dest == NULL)
+    dest = gdk_parent_root;
+  
   if (context->dest_window != dest)
     {
       guint32 recipient;
@@ -589,13 +639,13 @@ gdk_drag_status (GdkDragContext   *context,
 	private->drag_status = GDK_DRAG_STATUS_DRAG;
 
       tmp_event.dnd.type = GDK_DRAG_STATUS;
-      tmp_event.dnd.window = src_context->source_window;
+      tmp_event.dnd.window = context->source_window;
       tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.context = src_context;
       gdk_drag_context_ref (src_context);
 
       tmp_event.dnd.time = GDK_CURRENT_TIME; /* FIXME? */
-      
+
       src_context->action = action;
 
       gdk_event_put (&tmp_event);

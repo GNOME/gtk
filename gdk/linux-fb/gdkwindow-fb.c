@@ -1586,7 +1586,7 @@ gdk_window_fb_get_visible_region (GdkDrawable *drawable)
   return gdk_region_rectangle (&result_rect);
 }
 
-GdkWindow*
+GdkWindow *
 gdk_window_get_pointer (GdkWindow       *window,
 			gint            *x,
 			gint            *y,

@@ -44,7 +44,7 @@ gdk_atom_intern (const gchar *atom_name,
 gchar*
 gdk_atom_name (GdkAtom atom)
 {
-  return g_quark_to_string (atom);
+  return g_strdup (g_quark_to_string (atom));
 }
 
 static void

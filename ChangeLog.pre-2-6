@@ -1,3 +1,21 @@
+2001-05-07  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkdnd-fb.c (get_toplevel_window_at):
+	New function for getting toplevel window at position.
+	(gdk_drag_find_window): Use get_toplevel_window () instead
+	of gdk_window_get_pointer(). (gdk_drag_status): Use
+	correct context for getting window.
+
+	* gdk/linux-fb/gdkproperty-fb.c (gdk_atom_name):
+	g_strdup the atom name.
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Costmetic fix.
+
+	* gtk/gtkdnd.c (gtk_drag_source_handle_event):
+	Add code for changing cursor on linux-fb backend (same as
+	win32).
+
 2001-05-07  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkwindow.c (gtk_window_focus): Test for bin->child being

@@ -509,7 +509,7 @@ gtk_drag_get_event_actions (GdkEvent *event,
 	default:
 	  break;
 	}
-      
+
       if ((button == 2 || button == 3) && (actions & GDK_ACTION_ASK))
 	{
 	  *suggested_action = GDK_ACTION_ASK;
@@ -1789,7 +1789,7 @@ gtk_drag_begin (GtkWidget         *widget,
 
   gtk_drag_get_event_actions (event, info->button, actions,
 			      &suggested_action, &possible_actions);
-  
+
   info->cursor = gtk_drag_get_cursor (suggested_action);
 
   /* Set cur_x, cur_y here so if the "drag_begin" signal shows
@@ -2242,13 +2242,13 @@ gtk_drag_source_handle_event (GtkWidget *widget,
 					  PointerMotionMask | PointerMotionHintMask | ButtonReleaseMask,
 					  ((GdkCursorPrivate *)cursor)->xcursor,
 					  event->dnd.time);
-#elif defined (GDK_WINDOWING_WIN32)
+#elif defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_FB)
 		gdk_pointer_grab (widget->window, FALSE,
 				  GDK_POINTER_MOTION_MASK |
 				  GDK_POINTER_MOTION_HINT_MASK |
 				  GDK_BUTTON_RELEASE_MASK,
 				  NULL,
-				  info->cursor, event->dnd.time);
+				  cursor, event->dnd.time);
 #endif
 		info->cursor = cursor;
 	      }
@@ -2741,7 +2741,7 @@ gtk_drag_update (GtkDragSourceInfo *info,
   gdk_drag_find_window (info->context,
 			window, x_root, y_root,
 			&dest_window, &protocol);
-
+  
   if (gdk_drag_motion (info->context, dest_window, protocol,
 		       x_root, y_root, action, 
 		       possible_actions,
