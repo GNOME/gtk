@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.5\n"
-"POT-Creation-Date: 2002-07-09 19:58+0900\n"
-"PO-Revision-Date: 2002-07-09 19:59+0900\n"
+"POT-Creation-Date: 2002-07-21 21:35+0900\n"
+"PO-Revision-Date: 2002-07-21 21:36+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr-translation@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -54,14 +54,12 @@ msgstr "그림 읽기 모듈을 읽을 수 없습니다: %s: %s"
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr ""
-"그림 읽기 모듈 %s가 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버전"
-"의 모듈일 것입니다"
+msgstr "그림 읽기 모듈 %s이(가) 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버전의 모듈일 것입니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "그림 형식 '%s'를 지원하지 않습니다"
+msgstr "그림 형식 '%s'을(를) 지원하지 않습니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
@@ -97,9 +95,7 @@ msgstr "쓰기용 '%s' 열기 실패: %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"그림을 저장하는 동안 '%s'를 닫는데 실패하였습니다, 모든 데이타가 저장되지 않"
-"았을 것입니다: %s"
+msgstr "그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 저장되지 않았을 것입니다: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
@@ -420,7 +416,11 @@ msgstr "RAS 그림이 잘못된 헤더 데이타를 가지고 있습니다"
 msgid "RAS image has unknown type"
 msgstr "RAS 그림의 형식을 알 수 없습니다"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+msgid "unsupported RAS image variation"
+msgstr "지원하지 않는 RAS 그림 종류"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "RAS 그림을 읽어들이는데 메모리가 충분하지 않습니다"
 
@@ -1907,7 +1907,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:1647
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "파일 \"%s\"를 \"%s\"로 이름바꾸는 중 오류: %s"
+msgstr "파일 \"%s\"을(를) \"%s\"(으)로 이름바꾸는 중 오류: %s"
 
 #: gtk/gtkfilesel.c:1694
 msgid "Rename File"
@@ -3169,7 +3169,7 @@ msgstr "복사(_C)"
 
 #: gtk/gtkstock.c:284
 msgid "C_ut"
-msgstr "잘라내기(_u)"
+msgstr "잘라내기(_U)"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
