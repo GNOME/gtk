@@ -103,7 +103,19 @@ add_widget (GtkUIManager *merge,
 	    GtkWidget    *widget, 
 	    GtkBox       *box)
 {
-  gtk_box_pack_start (box, widget, FALSE, FALSE, 0);
+  GtkWidget *handle_box;
+
+  if (GTK_IS_TOOLBAR (widget))
+    {
+      handle_box = gtk_handle_box_new ();
+      gtk_widget_show (handle_box);
+      gtk_container_add (GTK_CONTAINER (handle_box), widget);
+      gtk_box_pack_start (box, handle_box, FALSE, FALSE, 0);
+      g_signal_connect (handle_box, "remove", gtk_widget_destroy, 0);
+    }
+  else
+    gtk_box_pack_start (box, widget, FALSE, FALSE, 0);
+    
   gtk_widget_show (widget);
 }
 
