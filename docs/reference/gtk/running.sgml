@@ -20,8 +20,9 @@ How to run and debug your GTK+ application
 
 <para>
 All GTK+ applications support a number of standard commandline
-options. These are removed from <literal>argv</literal> by 
-gtk_init(). Modules may parse and remove further options.
+options. These are removed from <literal>argv</literal> by <link
+linkend="gtk-init">gtk_init()</link>. Modules may parse and remove
+further options.
 </para>
 
 <formalpara>
@@ -37,7 +38,10 @@ A list of modules to load in addition to those specified in the
 <title><systemitem>--g-fatal-warnings</systemitem></title>
 
 <para>
-Make GTK+ abort on all warnings.
+Make GTK+ abort on all warnings. This is useful to stop on the first
+warning in a debugger, if your application is printing multiple
+warnings.  It's almost always best to start debugging with the first
+warning that occurs.
 </para>
 </formalpara>
 
@@ -188,7 +192,7 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
       <listitem><para>Visual feedback about window updates</para></listitem>
     </varlistentry>
   </variablelist>
-  The special value <term>all</term> can be used to turn on all debug options.
+  The special value <literal>all</literal> can be used to turn on all debug options.
   </para>
 </formalpara>
 
@@ -209,7 +213,7 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
     (If <envar>GTK_EXE_PREFIX</envar> is defined, &lt;libdir&gt; is 
     <filename>$GTK_EXE_PREFIX/lib</filename>. Otherwise it is the libdir
     specified when GTK+ was configured, usually 
-    <filename>/usr/local/lib</libdir>.) 
+    <filename>/usr/local/lib</filename>.) 
     For each directory in the list, GTK+ actually looks first in 
     a subdirectory named after the version number of GTK+, then in the 
     directory itself and finally in the system-specific library path.
@@ -247,9 +251,9 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
     the RC files, which in turn overwrites the default value 
     <filename>&lt;sysconfdir&gt;/gtk-2.0/gtk.immodules</filename>
     (&lt;sysconfdir&gt; is the sysconfdir specified when GTK+ was configured, 
-     usually <filename>/usr/local/etc</libdir>.)
+     usually <filename>/usr/local/etc</filename>.)
   </para>
-<formalpara>
+</formalpara>
 
 <formalpara>
   <title><envar>GTK_RC_FILES</envar></title>
@@ -257,6 +261,7 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
   <para>
     Specifies a list of RC files to parse instead of the default ones;
     see <link linkend="gtk-Resource-Files">Resource Files</link>.
+  </para>
 </formalpara>
 
 <formalpara>
@@ -272,7 +277,7 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
   <title><envar>GTK_DATA_PREFIX</envar></title>
 
   <para>
-    If set, makes GTK+ use <filename>$GTK_DATA_PREFIX<filename>
+    If set, makes GTK+ use <filename>$GTK_DATA_PREFIX</filename>
     instead of the prefix configured when GTK+ was compiled.
   </para>
 </formalpara>
@@ -318,7 +323,7 @@ nevertheless.
       <listitem><para>Information about XIM support</para></listitem>
     </varlistentry>
   </variablelist>
-  The special value <term>all</term> can be used to turn on all debug options.
+  The special value <literal>all</literal> can be used to turn on all debug options.
   </para>
 </formalpara>
 

@@ -118,7 +118,7 @@ Creates a new #GtkAccelLabel.
 </para>
 
 @accel_label: 
-@accel_widget:
+@accel_widget: 
 
 
 <!-- ##### FUNCTION gtk_accel_label_get_accel_width ##### -->

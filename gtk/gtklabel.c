@@ -1054,7 +1054,7 @@ set_markup (GtkLabel    *label,
  * @label: a #GtkLabel
  * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
  * 
- * Parses @str which is marked up with the Pango text markup language,
+ * Parses @str which is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>,
  * setting the label's text and attribute list based on the parse results.
  **/
 void
@@ -1075,7 +1075,7 @@ gtk_label_set_markup (GtkLabel    *label,
  * @label: a #GtkLabel
  * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
  * 
- * Parses @str which is marked up with the Pango text markup language,
+ * Parses @str which is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>,
  * setting the label's text and attribute list based on the parse results.
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
@@ -1192,7 +1192,10 @@ gtk_label_set_pattern (GtkLabel	   *label,
  *
  * Sets the alignment of the lines in the text of the label relative to
  * each other.  %GTK_JUSTIFY_LEFT is the default value when the
- * widget is first created with gtk_label_new().
+ * widget is first created with gtk_label_new(). If you instead want
+ * to set the alignment of the label as a whole, use
+ * gtk_misc_set_alignment() instead. gtk_label_set_justify() has no
+ * effect on labels containing only a single line.
  **/
 void
 gtk_label_set_justify (GtkLabel        *label,
@@ -2640,8 +2643,9 @@ gtk_label_get_layout_offsets (GtkLabel *label,
  * @label: a #GtkLabel
  * @setting: %TRUE if the label's text should be parsed for markup.
  *
- * Sets whether the text of the label contains markup in Pango's
- * text markup lango. See gtk_label_set_markup().
+ * Sets whether the text of the label contains markup in <link
+ * linkend="PangoMarkupFormat">Pango's text markup
+ * language</link>. See gtk_label_set_markup().
  **/
 void
 gtk_label_set_use_markup (GtkLabel *label,
@@ -2657,8 +2661,9 @@ gtk_label_set_use_markup (GtkLabel *label,
  * gtk_label_get_use_markup:
  * @label: a #GtkLabel
  *
- * Returns whether the label's text is interpreted as marked up with the
- * Pango text markup language. See gtk_label_set_use_markup ().
+ * Returns whether the label's text is interpreted as marked up with
+ * the <link linkend="PangoMarkupFormat">Pango text markup
+ * language</link>. See gtk_label_set_use_markup ().
  *
  * Return value: %TRUE if the label's text will be parsed for markup.
  **/

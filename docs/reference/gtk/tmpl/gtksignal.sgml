@@ -7,7 +7,7 @@ Object methods and callbacks.
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 The GTK+ signal system merely proxies the GLib signal system now. For future 
-usage, direct use of the <link linkend="gobject-Signals">GSignal</linkend> API is recommended, this avoids significant 
+usage, direct use of the <link linkend="gobject-Signals">GSignal</link> API is recommended, this avoids significant 
 performance hits where #GtkArg structures have to be converted into #GValue<!>s.
 </para>
 

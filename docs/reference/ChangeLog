@@ -1,3 +1,11 @@
+2002-01-11  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/running.sgml: sgml fixes
+
+	* gtk/tmpl/gtksignal.sgml: sgml fixes
+
+	* gtk/tmpl/gtklabel.sgml: do the intro section
+
 2002-01-09  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtkaccellabel.sgml: Remove duplicate docs.

@@ -6,11 +6,132 @@ A widget that displays a small to medium amount of text.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The #GtkLabel widget is usually used directly by the programmer to display
-word(s) describing an adjacent widget or its use.  It is also used internally
-by Gtk+ as #GtkButton labels, #GtkMenu items, and many other widgets which
-use text.
+The #GtkLabel widget displays a small amount of text. As the name
+implies, most labels are used to label another widget such as a
+#GtkButton, a #GtkMenuItem, or a #GtkOptionMenu.
 </para>
+
+<refsect2>
+<title>Mnemonics</title>
+
+<para>
+Labels may contain <firstterm>mnemonics</firstterm>. Mnemonics are
+underlined characters in the label, used for keyboard navigation.
+Mnemonics are created by providing a string with an underscore before
+the mnemonic character, such as <literal>"_File"</literal>, to the
+functions gtk_label_new_with_mnemonic() or
+gtk_label_set_text_with_mnemonic().
+</para>
+
+<para>
+Mnemonics automatically activate any activatable widget the label is
+inside, such as a #GtkButton; if the label is not inside the
+mnemonic's target widget, you have to tell the label about the target
+using gtk_label_set_mnemonic_widget(). Here's a simple example where
+the label is inside a button:
+
+<informalexample>
+<programlisting>
+  /* Pressing Alt+H will activate this button */
+  button = gtk_button_new ();
+  label = gtk_label_new_with_mnemonic ("_Hello");
+  gtk_container_add (GTK_CONTAINER (button), label);
+</programlisting>
+</informalexample>
+There's a convenience function to create buttons with a mnemonic label 
+already inside:
+
+<informalexample>
+<programlisting>
+  /* Pressing Alt+H will activate this button */
+  button = gtk_button_new_with_mnemonic ("_Hello");
+</programlisting>
+</informalexample>
+
+To create a mnemonic for a widget alongside the label, such as a 
+#GtkEntry, you have to point the label at the entry with 
+gtk_label_set_mnemonic_widget():
+<informalexample>
+<programlisting>
+  /* Pressing Alt+H will focus the entry */
+  entry = gtk_entry_new ();
+  label = gtk_label_new_with_mnemonic ("_Hello");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+</programlisting>
+</informalexample>
+
+</para>
+
+</refsect2>
+
+<refsect2>
+<title>Markup (styled text)</title>
+
+<para>
+To make it easy to format text in a label (changing colors, fonts,
+etc.), label text can be provided in a simple <link
+linkend="PangoMarkupFormat">markup format</link>.
+Here's how to create a label with a small font:
+<informalexample>
+<programlisting>
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), "&lt;small&gt;Small text&lt;/small&gt;");
+</programlisting>
+</informalexample>
+(See <link
+linkend="PangoMarkupFormat">complete documentation</link> of available
+tags in the Pango manual.)
+</para>
+<para>
+The markup passed to gtk_label_set_markup() must be valid; for
+example, literal &lt;/&gt;/&amp; characters must be escaped as 
+&amp;lt;, &amp;gt;, and &amp;amp;. If you pass text obtained from 
+the user, file, or a network to gtk_label_set_markup(), 
+you'll want to escape it with g_markup_escape_text().
+</para>
+<para>
+Markup strings are just a convenient way to set the #PangoAttrList on
+a label; gtk_label_set_attributes() may be a simpler way to set
+attributes in some cases. Be careful though; #PangoAttrList tends to
+cause internationalization problems, unless you're applying attributes
+to the entire string (i.e. unless you set the range of each attribute
+to [0, G_MAXINT)). The reason is that specifying the start_index and
+end_index for a #PangoAttribute requires knowledge of the exact string
+being displayed, so translations will cause problems.
+</para>
+</refsect2>
+
+<refsect2>
+<title>Selectable labels</title>
+
+<para>
+Labels can be made selectable with gtk_label_set_selectable(). 
+Selectable labels allow the user to copy the label contents to 
+the clipboard. Only labels that contain useful-to-copy information
+&mdash; such as error messages &mdash; should be made selectable.
+</para>
+</refsect2>
+
+<refsect2>
+<title>Text layout</title>
+
+<para>
+A label can contain any number of paragraphs, but will have
+performance problems if it contains more than a small number.
+Paragraphs are separated by newlines or other paragraph separators
+understood by Pango.
+</para>
+<para>
+Labels can automatically wrap text if you call
+gtk_label_set_line_wrap().
+</para>
+<para>
+gtk_label_set_justify() sets how the lines in a label align 
+with one another. If you want to set how the label as a whole 
+aligns in its available space, see gtk_misc_set_alignment().
+</para>
+
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

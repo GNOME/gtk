@@ -1,3 +1,8 @@
+2002-01-11  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtklabel.c: put in more links to Pango markup format docs
+	(gtk_label_set_justify): mention gtk_misc_set_alignment
+
 2002-01-12  Tor Lillqvist  <tml@iki.fi>
 
 	Fixes contributed by Archaeopteryx Software: This is a first small
