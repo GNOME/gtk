@@ -1,5 +1,11 @@
 2005-02-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: Consistently use gtk_tree_row_reference_valid().
+	(gtk_combo_box_model_row_deleted): Update the displayed row in 
+	the cell_view.  (#167842, Gustavo Carneiro)
+
+2005-02-24  Matthias Clasen  <mclasen@redhat.com>
+
         Fix #167259, reported by  Christian Persch:
 	
 	* gtk/gtkwidget.c (gtk_widget_unparent): Unmap the reparented 

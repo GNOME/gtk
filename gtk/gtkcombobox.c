@@ -1020,7 +1020,7 @@ gtk_combo_box_remove (GtkContainer *container,
   else
     gtk_combo_box_menu_setup (combo_box, TRUE);
 
-  if (combo_box->priv->active_row)
+  if (gtk_tree_row_reference_valid (combo_box->priv->active_row))
     {
       path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
       gtk_combo_box_set_active_internal (combo_box, path);
@@ -1540,17 +1540,14 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
   update_menu_sensitivity (combo_box, combo_box->priv->popup_widget);
 
   active_item = -1;
-  if (combo_box->priv->active_row)
+  if (gtk_tree_row_reference_valid (combo_box->priv->active_row))
     {
       path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
-      if (path)
-	{
-	  active_item = gtk_tree_path_get_indices (path)[0];
-	  gtk_tree_path_free (path);
-
-	  if (combo_box->priv->add_tearoffs)
-	    active_item++;
-	}
+      active_item = gtk_tree_path_get_indices (path)[0];
+      gtk_tree_path_free (path);
+      
+      if (combo_box->priv->add_tearoffs)
+	active_item++;
     }
 
   /* FIXME handle nested menus better */
@@ -1612,7 +1609,7 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
   gtk_widget_set_size_request (combo_box->priv->popup_window, width, height);  
   gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window), x, y);
 
-  if (combo_box->priv->active_row)
+  if (gtk_tree_row_reference_valid (combo_box->priv->active_row))
     {
       path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
       ppath = gtk_tree_path_copy (path);
@@ -2766,12 +2763,26 @@ gtk_combo_box_model_row_deleted (GtkTreeModel     *model,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
 
-  gtk_tree_row_reference_deleted (G_OBJECT (user_data), path);
+  gtk_tree_row_reference_deleted (G_OBJECT (combo_box), path);
 
+  if (combo_box->priv->cell_view)
+    {
+      if (gtk_tree_row_reference_valid (combo_box->priv->active_row))
+	{
+	  GtkTreePath *path;
+
+	  path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
+	  gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->cell_view), path);	  
+	  gtk_tree_path_free (path);
+	}
+      else
+	gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->cell_view), NULL);
+    }
+  
   if (combo_box->priv->tree_view)
     gtk_combo_box_list_popup_resize (combo_box);
   else
-    gtk_combo_box_menu_row_deleted (model, path, user_data);
+    gtk_combo_box_menu_row_deleted (model, path, user_data);  
 }
 
 static void
@@ -2799,16 +2810,13 @@ gtk_combo_box_model_row_changed (GtkTreeModel     *model,
   GtkTreePath *active_path;
 
   /* FIXME this belongs to GtkCellView */
-  if (combo_box->priv->active_row)
+  if (gtk_tree_row_reference_valid (combo_box->priv->active_row))
     {
       active_path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
-      if (active_path)
-	{
-	  if (gtk_tree_path_compare (path, active_path) == 0 &&
-	      combo_box->priv->cell_view)
-	    gtk_widget_queue_resize (GTK_WIDGET (combo_box->priv->cell_view));
-	  gtk_tree_path_free (active_path);
-	}
+      if (gtk_tree_path_compare (path, active_path) == 0 &&
+	  combo_box->priv->cell_view)
+	gtk_widget_queue_resize (GTK_WIDGET (combo_box->priv->cell_view));
+      gtk_tree_path_free (active_path);
     }
       
   if (combo_box->priv->tree_view)
@@ -3223,7 +3231,7 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   gtk_combo_box_sync_cells (combo_box, 
 			    GTK_CELL_LAYOUT (combo_box->priv->column));
 
-  if (combo_box->priv->active_row)
+  if (gtk_tree_row_reference_valid (combo_box->priv->active_row))
     {
       GtkTreePath *path;
 
@@ -4323,17 +4331,13 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
   gint result;
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), 0);
 
-  if (combo_box->priv->active_row)
+  if (gtk_tree_row_reference_valid (combo_box->priv->active_row))
     {
       GtkTreePath *path;
-      path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
-      if (path == NULL)
-	result = -1;
-      else
-	{
-	  result = gtk_tree_path_get_indices (path)[0];
-	  gtk_tree_path_free (path);
-	}
+
+      path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);      
+      result = gtk_tree_path_get_indices (path)[0];
+      gtk_tree_path_free (path);
     }
   else
     result = -1;
@@ -4375,16 +4379,13 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
   GtkTreePath *active_path;
   gint path_cmp;
 
-  if (path && combo_box->priv->active_row)
+  if (path && gtk_tree_row_reference_valid (combo_box->priv->active_row))
     {
       active_path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
-      if (active_path)
-	{
-	  path_cmp = gtk_tree_path_compare (path, active_path);
-	  gtk_tree_path_free (active_path);
-	  if (path_cmp == 0)
-	    return;
-	}
+      path_cmp = gtk_tree_path_compare (path, active_path);
+      gtk_tree_path_free (active_path);
+      if (path_cmp == 0)
+	return;
     }
 
   if (combo_box->priv->active_row)
@@ -4454,11 +4455,10 @@ gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
 
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
 
-  if (!combo_box->priv->active_row)
+  if (!gtk_tree_row_reference_valid (combo_box->priv->active_row))
     return FALSE;
+
   path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
-  if (!path)
-    return FALSE;
   result = gtk_tree_model_get_iter (combo_box->priv->model, iter, path);
   gtk_tree_path_free (path);
 
