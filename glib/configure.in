@@ -24,7 +24,7 @@ AC_ARG_ENABLE(ansi, [  --enable-ansi           turn on strict ansi [default=no]]
 		    , enable_ansi=no)
 
 if test -n "$DEBUGFLAG"; then
-  test "${CFLAGS+set}" = set || CFLAGS="$DEBUGFLAG"
+  test "$cflags_set" = set || CFLAGS="$DEBUGFLAG"
 fi
 
 # Checks for programs.
@@ -116,21 +116,18 @@ fi
 # (under some other name?) then the definitions would
 # belong there. (They are only used in GDK)
 
-# Look for wide string functions in wchar.h or wcstr.h
+# Check for wchar.h
 
-AC_MSG_CHECKING(for <wchar.h> or <wcstr.h>)
+AC_MSG_CHECKING(for wchar.h)
 AC_TRY_CPP([#include <wchar.h>], gtk_ok=yes, gtk_ok=no)
 if test $gtk_ok = yes; then
    AC_DEFINE(HAVE_WCHAR_H)
-else
-   AC_TRY_CPP([#include <wcstr.h>], gtk_ok=yes, gtk_ok=no)
-   if test $gtk_ok = yes; then
-       AC_DEFINE(HAVE_WCSTR_H)
-   fi
 fi
+AC_MSG_RESULT($gtk_ok)
 
 # Check for wctype.h (for iswalnum)
-AC_MSG_CHECKING(for <wctype.h>)
+
+AC_MSG_CHECKING(for wctype.h)
 AC_TRY_CPP([#include <wctype.h>], gtk_ok=yes, gtk_ok=no)
 if test $gtk_ok = yes; then
    AC_DEFINE(HAVE_WCTYPE_H)

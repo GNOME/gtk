@@ -319,6 +319,7 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
 		    name?name:"<unknown>",
 		    data->type);
 	    position = data->length;
+	    continue;
 	  }
 	}
       gtk_text_insert (GTK_TEXT (selection_text), NULL, 

@@ -31,6 +31,11 @@ typedef struct _GdkInputWindow GdkInputWindow;
 struct _GdkInputVTable {
   gint (*set_mode) (guint32 deviceid, GdkInputMode mode);
   void (*set_axes) (guint32 deviceid, GdkAxisUse *axes);
+  void (*set_key)  (guint32 deviceid,
+		    guint   index,
+		    guint   keyval,
+		    GdkModifierType modifiers);
+	
   GdkTimeCoord* (*motion_events) (GdkWindow *window,
 				  guint32 deviceid,
 				  guint32 start,
@@ -93,8 +98,12 @@ struct _GdkDevicePrivate {
   /* Information about XInput device */
   XDevice       *xdevice;
 
-  int buttonpress_type, buttonrelease_type, motionnotify_type,
-      proximityin_type, proximityout_type, changenotify_type;
+  /* minimum key code for device */
+  gint min_keycode;	       
+
+  int buttonpress_type, buttonrelease_type, keypress_type,
+      keyrelease_type, motionnotify_type, proximityin_type, 
+      proximityout_type, changenotify_type;
 
   /* true if we need to select a different set of events, but
      can't because this is the core pointer */

@@ -59,6 +59,8 @@ static void  gdk_input_common_get_pointer     (GdkWindow       *window,
 					       gdouble         *ytilt,
 					       GdkModifierType *mask);
 
+#define GDK_MAX_DEVICE_CLASSES 13
+
 /* Global variables */
 
 static gint gdk_input_root_width;
@@ -156,6 +158,8 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
   /* step through the classes */
 
   gdkdev->info.num_axes = 0;
+  gdkdev->info.num_keys = 0;
+  gdkdev->info.keys = NULL;
   gdkdev->axes = 0;
   gdkdev->info.has_cursor = 0;
   gdkdev->needs_update = FALSE;
@@ -168,6 +172,21 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
       switch (class->class) {
       case ButtonClass:
 	{
+	  break;
+	}
+      case KeyClass:
+	{
+	  XKeyInfo *xki = (XKeyInfo *)class;
+	  gdkdev->info.num_keys = xki->max_keycode - xki->min_keycode + 1;
+	  gdkdev->min_keycode = xki->min_keycode;
+	  gdkdev->info.keys = g_new (GdkDeviceKey, gdkdev->info.num_keys);
+
+	  for (j=0; j<gdkdev->info.num_keys; j++)
+	    {
+	      gdkdev->info.keys[j].keyval = 0;
+	      gdkdev->info.keys[j].modifiers = 0;
+	    }
+
 	  break;
 	}
       case ValuatorClass:
@@ -218,12 +237,23 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
       g_free(gdkdev->info.name);
       if (gdkdev->axes)
 	g_free(gdkdev->axes);
+      if (gdkdev->info.keys)
+	g_free(gdkdev->info.keys);
       g_free(gdkdev);
       return NULL;
     }
 
   if (device->use != IsXPointer)
       gdkdev->xdevice = XOpenDevice(gdk_display, gdkdev->info.deviceid);
+
+  gdkdev->buttonpress_type = 0;
+  gdkdev->buttonrelease_type = 0;
+  gdkdev->keypress_type = 0;
+  gdkdev->keyrelease_type = 0;
+  gdkdev->motionnotify_type = 0;
+  gdkdev->proximityin_type = 0;
+  gdkdev->proximityout_type = 0;
+  gdkdev->changenotify_type = 0;
 
   return gdkdev;
 }
@@ -240,11 +270,15 @@ gdk_input_common_find_events(GdkWindow *window,
   
   i = 0;
   /* We have to track press and release events in pairs to keep
-     track of button state correctly and implement grabbing */
+     track of button state correctly and implement grabbing for
+     the gxi support */
   if (mask & GDK_BUTTON_PRESS_MASK || mask & GDK_BUTTON_RELEASE_MASK)
     {
-      DeviceButtonPress   (gdkdev->xdevice, gdkdev->buttonpress_type,
-			   class);
+      DeviceButtonPress (gdkdev->xdevice, gdkdev->buttonpress_type,
+			     class);
+      if (class != 0)
+	  classes[i++] = class;
+      DeviceButtonPressGrab (gdkdev->xdevice, 0, class);
       if (class != 0)
 	  classes[i++] = class;
       DeviceButtonRelease (gdkdev->xdevice, gdkdev->buttonrelease_type,
@@ -258,11 +292,55 @@ gdk_input_common_find_events(GdkWindow *window,
       if (class != 0)
 	  classes[i++] = class;
     }
+  else
+    if (mask & (GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK |
+		GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_MOTION_MASK |
+		GDK_POINTER_MOTION_HINT_MASK))
+      {
+	/* Make sure gdkdev->motionnotify_type is set */
+	DeviceMotionNotify  (gdkdev->xdevice, gdkdev->motionnotify_type, class);
+      }
+  if (mask & GDK_BUTTON1_MOTION_MASK)
+    {
+      DeviceButton1Motion  (gdkdev->xdevice, 0, class);
+      if (class != 0)
+	  classes[i++] = class;
+    }
+  if (mask & GDK_BUTTON2_MOTION_MASK)
+    {
+      DeviceButton2Motion  (gdkdev->xdevice, 0, class);
+      if (class != 0)
+	  classes[i++] = class;
+    }
+  if (mask & GDK_BUTTON3_MOTION_MASK)
+    {
+      DeviceButton3Motion  (gdkdev->xdevice, 0, class);
+      if (class != 0)
+	  classes[i++] = class;
+    }
+  if (mask & GDK_BUTTON_MOTION_MASK)
+    {
+      DeviceButtonMotion  (gdkdev->xdevice, 0, class);
+      if (class != 0)
+	  classes[i++] = class;
+    }
   if (mask & GDK_POINTER_MOTION_HINT_MASK)
     {
       /* We'll get into trouble if the macros change, but at least we'll
 	 know about it, and we avoid warnings now */
       DevicePointerMotionHint (gdkdev->xdevice, 0, class);
+      if (class != 0)
+	  classes[i++] = class;
+    }
+  if (mask & GDK_KEY_PRESS_MASK)
+    {
+      DeviceKeyPress (gdkdev->xdevice, gdkdev->keypress_type, class);
+      if (class != 0)
+	  classes[i++] = class;
+    }
+  if (mask & GDK_KEY_RELEASE_MASK)
+    {
+      DeviceKeyRelease (gdkdev->xdevice, gdkdev->keyrelease_type, class);
       if (class != 0)
 	  classes[i++] = class;
     }
@@ -286,7 +364,7 @@ static void
 gdk_input_common_select_events(GdkWindow *window,
 			       GdkDevicePrivate *gdkdev)
 {
-  XEventClass classes[6];
+  XEventClass classes[GDK_MAX_DEVICE_CLASSES];
   gint num_classes;
 
   if (gdkdev->info.mode == GDK_MODE_DISABLED)
@@ -492,8 +570,54 @@ gdk_input_common_other_event (GdkEvent *event,
       event->button.state = gdk_input_translate_state(xdbe->state,xdbe->device_state);
       event->button.button = xdbe->button;
 
+      if (gdk_show_events)
+	g_print ("button %s:\t\twindow: %ld  device: %ld  x,y: %f %f  button: %d\n",
+		 (event->button.type == GDK_BUTTON_PRESS) ? "press" : "release",
+		 xdbe->window,
+		 xdbe->deviceid,
+		 event->button.x, event->button.y,
+		 xdbe->button);
+
       return TRUE;
   }
+
+  if ((xevent->type == gdkdev->keypress_type) ||
+      (xevent->type == gdkdev->keyrelease_type))
+    {
+      XDeviceKeyEvent *xdke = (XDeviceKeyEvent *)(xevent);
+      event->key.keyval = gdkdev->info.keys[xdke->keycode - gdkdev->min_keycode].keyval;
+
+      if (gdk_show_events)
+	g_print ("device key %s:\twindow: %ld  device: %ld  keycode: %d\n",
+		 (event->key.type == GDK_KEY_PRESS) ? "press" : "release",
+		 xdke->window,
+		 xdke->deviceid,
+		 xdke->keycode);
+
+      if (event->key.keyval == 0) 
+	{
+	  if (gdk_show_events)
+	    g_print ("\t\ttranslation - NONE\n");
+	  
+	  return FALSE;
+	}
+
+      event->key.type = (xdke->type == gdkdev->keypress_type) ?
+	GDK_KEY_PRESS : GDK_KEY_RELEASE;
+
+      event->key.window = input_window->window;
+      event->key.time = xdke->time;
+
+      event->key.state = gdk_input_translate_state(xdke->state, xdke->device_state)
+	| gdkdev->info.keys[xdke->keycode - gdkdev->min_keycode].modifiers;
+
+      if (gdk_show_events)
+	g_print ("\t\ttranslation - keyval: %d modifiers: %#x\n",
+		 event->key.keyval,
+		 event->key.state);
+
+      return TRUE;
+    }
 
   if (xevent->type == gdkdev->motionnotify_type) 
     {
@@ -511,15 +635,17 @@ gdk_input_common_other_event (GdkEvent *event,
       event->motion.deviceid = xdme->deviceid;
       event->motion.state = gdk_input_translate_state(xdme->state,
 						      xdme->device_state);
+      event->motion.is_hint = xdme->is_hint;
       event->motion.source = gdkdev->info.source;
       event->motion.deviceid = xdme->deviceid;
 
       if (gdk_show_events)
-	g_print ("motion notify:\t\twindow: %ld  device: %ld  x,y: %f %f  hint: %s\n",
+	g_print ("motion notify:\t\twindow: %ld  device: %ld  x,y: %f %f  state %#4x  hint: %s\n",
 		 xdme->window,
 		 xdme->deviceid,
 		 event->motion.x, event->motion.y,
-		 (xevent->xmotion.is_hint) ? "true" : "false");
+		 event->motion.state,
+		 (xdme->is_hint) ? "true" : "false");
       
       
       return TRUE;
@@ -560,6 +686,21 @@ gdk_input_common_set_axes (guint32 deviceid, GdkAxisUse *axes)
       gdkdev->info.axes[i] = axes[i];
       gdkdev->axis_for_use[axes[i]] = i;
     }
+}
+
+void gdk_input_common_set_key (guint32 deviceid,
+			       guint   index,
+			       guint   keyval,
+			       GdkModifierType modifiers)
+{
+  GdkDevicePrivate *gdkdev = gdk_input_find_device(deviceid);
+  
+  gdkdev = gdk_input_find_device (deviceid);
+  g_return_if_fail (gdkdev != NULL);
+  g_return_if_fail (index < gdkdev->info.num_keys);
+
+  gdkdev->info.keys[index].keyval = keyval;
+  gdkdev->info.keys[index].modifiers = modifiers;
 }
 
 static GdkTimeCoord *
@@ -658,24 +799,21 @@ gdk_input_common_get_pointer     (GdkWindow       *window,
 	  switch (input_class->class)
 	    {
 	    case ValuatorClass:
-	      gdk_input_translate_coordinates(gdkdev, input_window,
-					      ((XValuatorState *)input_class)->valuators,
-					      x, y, pressure,
-					      xtilt, ytilt);
+	      gdk_input_translate_coordinates (gdkdev, input_window,
+					       ((XValuatorState *)input_class)->valuators,
+					       x, y, pressure,
+					       xtilt, ytilt);
 						       
 						       
 		break;
 	    case ButtonClass:
 	      if (mask)
 		{
-		  *mask &= ~(GDK_BUTTON1_MASK | GDK_BUTTON2_MASK |
-			     GDK_BUTTON3_MASK | GDK_BUTTON4_MASK |
-			     GDK_BUTTON5_MASK);
-		  for (i=0; i < ((XButtonState *)input_class)->num_buttons; i++)
-		    {
-		      if (((XButtonState *)input_class)->buttons[i])
-			*mask |= GDK_BUTTON1_MASK << i;
-		    }
+		  *mask &= 0xFF;
+		  if (((XButtonState *)input_class)->num_buttons > 0)
+		    *mask |= ((XButtonState *)input_class)->buttons[0] << 7;
+		  /* GDK_BUTTON1_MASK = 1 << 8, and button n is stored
+		   * in bit 1<<(n%8) in byte n/8. n = 1,2,... */
 		}
 	      break;
 	    }

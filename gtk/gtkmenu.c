@@ -247,12 +247,14 @@ gtk_menu_set_accelerator_table (GtkMenu             *menu,
   g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  if (menu->accelerator_table)
-    gtk_accelerator_table_unref (menu->accelerator_table);
-
-  menu->accelerator_table = table;
-  if (menu->accelerator_table)
-    gtk_accelerator_table_ref (menu->accelerator_table);
+  if (menu->accelerator_table != table)
+    {
+      if (menu->accelerator_table)
+	gtk_accelerator_table_unref (menu->accelerator_table);
+      menu->accelerator_table = table;
+      if (menu->accelerator_table)
+	gtk_accelerator_table_ref (menu->accelerator_table);
+    }
 }
 
 

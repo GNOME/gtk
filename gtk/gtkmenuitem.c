@@ -207,19 +207,20 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  if (menu_item->submenu)
+  if (menu_item->submenu != submenu)
     {
-      g_return_if_fail (!GTK_WIDGET_VISIBLE (menu_item->submenu));
-      gtk_object_unref (GTK_OBJECT (menu_item->submenu));
+      if (menu_item->submenu)
+	{
+	  g_return_if_fail (!GTK_WIDGET_VISIBLE (menu_item->submenu));
+	  gtk_object_unref (GTK_OBJECT (menu_item->submenu));
+	}
+      menu_item->submenu = submenu;
+      if (menu_item->submenu)
+	gtk_object_ref (GTK_OBJECT (menu_item->submenu));
+
+      if (GTK_WIDGET (menu_item)->parent)
+	gtk_widget_queue_resize (GTK_WIDGET (menu_item));
     }
-
-  menu_item->submenu = submenu;
-
-  if (menu_item->submenu)
-    gtk_object_ref (GTK_OBJECT (menu_item->submenu));
-
-  if (GTK_WIDGET (menu_item)->parent)
-    gtk_widget_queue_resize (GTK_WIDGET (menu_item));
 }
 
 void

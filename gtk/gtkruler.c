@@ -200,7 +200,7 @@ gtk_ruler_unrealize (GtkWidget *widget)
   widget->window = NULL;
 
   if (ruler->backing_store)
-    gdk_pixmap_destroy (ruler->backing_store);
+    gdk_pixmap_unref (ruler->backing_store);
   if (ruler->non_gr_exp_gc)
     gdk_gc_destroy (ruler->non_gr_exp_gc);
 
@@ -286,7 +286,7 @@ gtk_ruler_make_pixmap (GtkRuler *ruler)
 	  (height == widget->allocation.height))
 	return;
 
-      gdk_pixmap_destroy (ruler->backing_store);
+      gdk_pixmap_unref (ruler->backing_store);
     }
 
   ruler->backing_store = gdk_pixmap_new (widget->window,

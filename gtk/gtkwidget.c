@@ -135,6 +135,8 @@ static GdkColormap* gtk_widget_peek_colormap (void);
 static GdkVisual*   gtk_widget_peek_visual   (void);
 static GtkStyle*    gtk_widget_peek_style    (void);
 
+static void gtk_widget_reparent_container_child  (GtkWidget     *widget,
+						  gpointer       client_data);
 static void gtk_widget_set_parent_sensitive  (GtkWidget *widget,
 					      gpointer	 client_data);
 static void gtk_widget_propagate_restore     (GtkWidget *widget,
@@ -730,11 +732,19 @@ gtk_widget_init (GtkWidget *widget)
   colormap = gtk_widget_peek_colormap ();
   visual = gtk_widget_peek_visual ();
   
+  /* XXX - should we ref the colormap and visual, too? */
+
   if (colormap != gtk_widget_get_default_colormap ())
-    gtk_object_set_data (GTK_OBJECT (widget), colormap_key, colormap);
-  
+    {
+      /* gdk_colormap_ref (colormap); */
+      gtk_object_set_data (GTK_OBJECT (widget), colormap_key, colormap);
+    }
+
   if (visual != gtk_widget_get_default_visual ())
-    gtk_object_set_data (GTK_OBJECT (widget), visual_key, visual);
+    {
+      /* gdk_visual_ref (visual); */
+      gtk_object_set_data (GTK_OBJECT (widget), visual_key, visual);
+    }
 }
 
 /*****************************************
@@ -1549,6 +1559,26 @@ gtk_widget_activate (GtkWidget *widget)
  *   results:
  *****************************************/
 
+static void
+gtk_widget_reparent_container_child(GtkWidget *widget,
+                                   gpointer   client_data)
+{
+  GtkWidget *new_parent = GTK_WIDGET (client_data);
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (client_data != NULL);
+
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    gdk_window_reparent (widget->window, new_parent->window, 0, 0);
+  else if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+			   gtk_widget_reparent_container_child,
+			   new_parent);
+  else
+    widget->window = new_parent->window;
+}
+
+
 void
 gtk_widget_reparent (GtkWidget *widget,
 		     GtkWidget *new_parent)
@@ -1559,32 +1589,35 @@ gtk_widget_reparent (GtkWidget *widget,
   
   if (widget->parent != new_parent)
     {
+      gtk_object_ref (GTK_OBJECT (widget));
       gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
       gtk_container_add (GTK_CONTAINER (new_parent), widget);
-      
+      gtk_object_unref (GTK_OBJECT (widget));
+
       if (GTK_WIDGET_REALIZED (widget))
 	{
-	  if (GTK_WIDGET_REALIZED (new_parent) && !GTK_WIDGET_NO_WINDOW (widget))
+	  if (GTK_WIDGET_REALIZED (new_parent))
 	    {
-	      gdk_window_reparent (widget->window, widget->parent->window, 0, 0);
+	      if (GTK_WIDGET_NO_WINDOW (widget))
+		{
+		  if (GTK_IS_CONTAINER (widget))
+		    gtk_container_foreach (GTK_CONTAINER(widget),
+					   gtk_widget_reparent_container_child,
+					   new_parent);
+		  else
+		    widget->window = widget->parent->window;
+		}
+	      else
+		gdk_window_reparent (widget->window, widget->parent->window, 0, 0);
 	    }
 	  else
-	    {
-	      GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
-	      if (!GTK_WIDGET_NO_WINDOW (widget))
-		gdk_window_destroy (widget->window);
-	      widget->window = NULL;
-	      
-	      if (GTK_WIDGET_REALIZED (new_parent))
-		gtk_widget_realize (widget);
-	      if (GTK_WIDGET_MAPPED (new_parent))
-		gtk_widget_map (widget);
-	    }
+	    gtk_widget_unrealize (widget);
 	}
       
       if (!GTK_WIDGET_REALIZED (widget) && GTK_WIDGET_REALIZED (new_parent))
 	gtk_widget_realize (widget);
-      if (!GTK_WIDGET_MAPPED (widget) && GTK_WIDGET_MAPPED (new_parent))
+      if (GTK_WIDGET_VISIBLE (widget) &&
+	  !GTK_WIDGET_MAPPED (widget) && GTK_WIDGET_MAPPED (new_parent))
 	gtk_widget_map (widget);
       
       gtk_widget_queue_resize (widget);
@@ -2446,9 +2479,14 @@ gtk_widget_pop_style ()
 void
 gtk_widget_set_default_colormap (GdkColormap *colormap)
 {
-  if (default_colormap && (default_colormap != colormap))
-    gdk_colormap_destroy (default_colormap);
-  default_colormap = colormap;
+  if (default_colormap != colormap)
+    {
+      if (default_colormap)
+	gdk_colormap_unref (default_colormap);
+      default_colormap = colormap;
+      if (default_colormap)
+	gdk_colormap_ref (default_colormap);
+    }
 }
 
 /*****************************************
@@ -2476,11 +2514,14 @@ gtk_widget_set_default_visual (GdkVisual *visual)
 void
 gtk_widget_set_default_style (GtkStyle *style)
 {
-  if (default_style)
-    gtk_style_unref (default_style);
-  
-  default_style = style;
-  gtk_style_ref (default_style);
+   if (style != default_style)
+     {
+       if (default_style)
+	 gtk_style_unref (default_style);
+       default_style = style;
+       if (default_style)
+	 gtk_style_ref (default_style);
+     }
 }
 
 /* Basically, send a message to all toplevel windows telling them
@@ -2854,7 +2895,7 @@ gtk_real_widget_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED | GTK_VISIBLE);
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
 
   gtk_style_detach (widget->style);
   if (!GTK_WIDGET_NO_WINDOW (widget))
@@ -3177,7 +3218,6 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 	gtk_style_detach (widget->style);
       
       gtk_style_unref (widget->style);
-      
       widget->style = style;
       gtk_style_ref (widget->style);
       

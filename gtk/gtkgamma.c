@@ -252,8 +252,8 @@ button_realize_callback (GtkWidget *w)
   gtk_container_add (GTK_CONTAINER (w), pixmap);
   gtk_widget_show (pixmap);
 
-  gdk_pixmap_destroy (pm);
-  gdk_pixmap_destroy (mask);	/* a bitmap is really just a special pixmap */
+  gdk_pixmap_unref (pm);
+  gdk_bitmap_unref (mask);   /* a bitmap is really just a special pixmap */
 }
 
 static void

@@ -75,7 +75,8 @@ gdk_input_init(void)
   GList *tmp_list;
   
   gdk_input_vtable.set_mode           = gdk_input_gxi_set_mode;
-  gdk_input_vtable.set_axes        = gdk_input_common_set_axes;
+  gdk_input_vtable.set_axes           = gdk_input_common_set_axes;
+  gdk_input_vtable.set_key            = gdk_input_common_set_key;
   gdk_input_vtable.motion_events      = gdk_input_gxi_motion_events;
   gdk_input_vtable.get_pointer	      = gdk_input_gxi_get_pointer;
   gdk_input_vtable.grab_pointer	      = gdk_input_gxi_grab_pointer;

@@ -1173,11 +1173,8 @@ gtk_params_get (GtkArg         *params,
 
   for (i = 0; i < nparams; i++)
     {
-      if (param_types[i] != GTK_TYPE_NONE)
-	{
-	  params[i].type = param_types[i];
-	  params[i].name = NULL;
-	}
+      params[i].type = param_types[i];
+      params[i].name = NULL;
 
       switch (GTK_FUNDAMENTAL_TYPE (param_types[i]))
 	{
@@ -1258,11 +1255,8 @@ gtk_params_get (GtkArg         *params,
 	}
     }
 
-  if (return_val != GTK_TYPE_NONE)
-    {
-      params[i].type = return_val;
-      params[i].name = NULL;
-    }
+  params[i].type = return_val;
+  params[i].name = NULL;
 
   switch (GTK_FUNDAMENTAL_TYPE (return_val))
     {

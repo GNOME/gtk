@@ -65,7 +65,7 @@ gint	   gtk_idle_add_interp	   (GtkCallbackMarshal function,
 void	   gtk_idle_remove	   (gint	   tag);
 void	   gtk_idle_remove_by_data (gpointer	 data);
 
-void	   gtk_get_current_event (GdkEvent	*event);
+GdkEvent*  gtk_get_current_event   (void);
 GtkWidget* gtk_get_event_widget	 (GdkEvent	*event);
 
 

@@ -38,6 +38,7 @@
 typedef struct _GtkInitFunction	    GtkInitFunction;
 typedef struct _GtkTimeoutFunction  GtkTimeoutFunction;
 typedef struct _GtkIdleFunction	    GtkIdleFunction;
+typedef struct _GtkInputFunction    GtkInputFunction;
 
 struct _GtkInitFunction
 {
@@ -66,6 +67,12 @@ struct _GtkIdleFunction
   GtkDestroyNotify destroy;
 };
 
+struct _GtkInputFunction
+{
+  GtkCallbackMarshal callback;
+  gpointer data;
+  GtkDestroyNotify destroy;
+};
 
 static void  gtk_exit_func		 (void);
 static void  gtk_timeout_insert		 (GtkTimeoutFunction *timeoutf);
@@ -85,10 +92,9 @@ static void  gtk_print			 (gchar		     *str);
 static gint done;
 static guint main_level = 0;
 static gint initialized = FALSE;
-static GdkEvent next_event;
-static GdkEvent current_event;
-static gint have_event = FALSE;
-static gint have_next_event = FALSE;
+static GdkEvent *next_event = NULL;
+static GdkEvent *current_event = NULL;
+static GList *current_events = NULL;
 
 static GList *grabs = NULL;		   /* A list of grabs. The grabbing widget
 					    *  is the first one on the list.
@@ -219,9 +225,10 @@ gtk_main_quit ()
 gint
 gtk_main_iteration ()
 {
-  GdkEvent event_copy;
   GtkWidget *event_widget;
   GtkWidget *grab_widget;
+  GdkEvent *event = NULL;
+  GList *tmp_list;
   
   done = FALSE;
   
@@ -240,19 +247,17 @@ gtk_main_iteration ()
       return done;
     }
   
-  /* If there is a valid event in 'next_event' then copy
-   *  it to 'event' and unset the flag.
+  /* If there is a valid event in 'next_event' then move it to 'event'
    */
-  if (have_next_event)
+  if (next_event)
     {
-      have_next_event = FALSE;
-      have_event = TRUE;
-      current_event = next_event;
+      event = next_event;
+      next_event = NULL;
     }
   
   /* If we don't have an event then get one.
    */
-  if (!have_event)
+  if (!event)
     {
       /* Handle setting of the "gdk" timer. If there are no
        *  timeout functions, then the timer is turned off.
@@ -262,21 +267,19 @@ gtk_main_iteration ()
        */
       gtk_handle_timer ();
       
-      have_event = gdk_event_get (&current_event, NULL, NULL);
+      event = gdk_event_get ();
     }
   
   /* "gdk_event_get" can return FALSE if the timer goes off
    *  and no events are pending. Therefore, we should make
    *  sure that we got an event before continuing.
    */
-  if (have_event)
+  if (event)
     {
-      have_event = FALSE;
-      
       /* If there are any events pending then get the next one.
        */
       if (gdk_events_pending () > 0)
-	have_next_event = gdk_event_get (&next_event, NULL, NULL);
+	next_event = gdk_event_get ();
       
       /* Try to compress enter/leave notify events. These event
        *  pairs occur when the mouse is dragged quickly across
@@ -286,19 +289,32 @@ gtk_main_iteration ()
        *  which contained the mouse initially and highlight the
        *  widget which ends up containing the mouse.
        */
-      if (have_next_event)
-	if (((current_event.type == GDK_ENTER_NOTIFY) ||
-	     (current_event.type == GDK_LEAVE_NOTIFY)) &&
-	    ((next_event.type == GDK_ENTER_NOTIFY) ||
-	     (next_event.type == GDK_LEAVE_NOTIFY)) &&
-	    (next_event.type != current_event.type) &&
-	    (next_event.any.window == current_event.any.window))
-	  return done;
+      if (next_event)
+	if (((event->type == GDK_ENTER_NOTIFY) ||
+	     (event->type == GDK_LEAVE_NOTIFY)) &&
+	    ((next_event->type == GDK_ENTER_NOTIFY) ||
+	     (next_event->type == GDK_LEAVE_NOTIFY)) &&
+	    (next_event->type != event->type) &&
+	    (next_event->any.window == event->any.window))
+	  {
+	    tmp_list = current_events;
+	    current_events = g_list_remove_link (current_events, tmp_list);
+	    g_list_free_1 (tmp_list);
+
+	    gdk_event_free (event);
+
+	    return done;
+	  }
+
+      /* Push the event onto a stack of current events for
+       * gdk_current_event_get */
+
+      current_events = g_list_prepend (current_events, event);
       
       /* Find the widget which got the event. We store the widget
        *  in the user_data field of GdkWindow's.
        */
-      event_widget = gtk_get_event_widget (&current_event);
+      event_widget = gtk_get_event_widget (event);
       
       /* If there is a grab in effect...
        */
@@ -325,20 +341,23 @@ gtk_main_iteration ()
        *  and 2) redirecting these events to the grabbing widget
        *  could cause the display to be messed up.
        */
-      event_copy = current_event;
-      switch (event_copy.type)
+      switch (event->type)
 	{
 	case GDK_NOTHING:
 	  break;
 	  
 	case GDK_DELETE:
-	  if (gtk_widget_event (event_widget, &event_copy))
+ 	  gtk_object_ref (GTK_OBJECT (event_widget));
+	  if (gtk_widget_event (event_widget, event))
 	    gtk_widget_destroy (event_widget);
+ 	  gtk_object_unref (GTK_OBJECT (event_widget));
 	  break;
 	  
 	case GDK_DESTROY:
-	  gtk_widget_event (event_widget, &event_copy);
+ 	  gtk_object_ref (GTK_OBJECT (event_widget));
+	  gtk_widget_event (event_widget, event);
 	  gtk_widget_destroy (event_widget);
+ 	  gtk_object_unref (GTK_OBJECT (event_widget));
 	  break;
 	  
 	case GDK_PROPERTY_NOTIFY:
@@ -351,8 +370,8 @@ gtk_main_iteration ()
 	  
 	  if (event_widget == NULL)
 	    {
-	      gtk_selection_incr_event (event_copy.any.window,
-					&event_copy.property);
+	      gtk_selection_incr_event (event->any.window,
+					&event->property);
 	      break;
 	    }
 	  /* otherwise fall through */
@@ -371,7 +390,7 @@ gtk_main_iteration ()
 	case GDK_DROP_ENTER:
 	case GDK_DROP_LEAVE:
 	case GDK_DROP_DATA_AVAIL:
-	  gtk_widget_event (event_widget, &event_copy);
+	  gtk_widget_event (event_widget, event);
 	  break;
 	  
 	case GDK_MOTION_NOTIFY:
@@ -384,15 +403,23 @@ gtk_main_iteration ()
 	case GDK_PROXIMITY_IN:
 	case GDK_PROXIMITY_OUT:
 	case GDK_OTHER_EVENT:
-	  gtk_propagate_event (grab_widget, &event_copy);
+	  gtk_propagate_event (grab_widget, event);
 	  break;
 	  
 	case GDK_ENTER_NOTIFY:
 	case GDK_LEAVE_NOTIFY:
 	  if (grab_widget && GTK_WIDGET_IS_SENSITIVE (grab_widget))
-	    gtk_widget_event (grab_widget, &event_copy);
+	    gtk_widget_event (grab_widget, event);
 	  break;
 	}
+      
+      tmp_list = current_events;
+      current_events = g_list_remove_link (current_events, tmp_list);
+      g_list_free_1 (tmp_list);
+
+      gdk_event_free (event);
+      
+      current_event = NULL;
     }
   else
     {
@@ -686,12 +713,63 @@ gtk_idle_remove_by_data (gpointer data)
     }
 }
 
-void
-gtk_get_current_event (GdkEvent *event)
+static void
+gtk_invoke_input_function (GtkInputFunction *input,
+			   gint source,
+			   GdkInputCondition condition)
 {
-  g_assert (event != NULL);
-  
-  *event = current_event;
+  GtkArg args[3];
+  args[0].type = GTK_TYPE_INT;
+  args[0].name = NULL;
+  GTK_VALUE_INT(args[0]) = source;
+  args[1].type = GTK_TYPE_GDK_INPUT_CONDITION;
+  args[1].name = NULL;
+  GTK_VALUE_FLAGS(args[1]) = condition;
+  args[2].type = GTK_TYPE_NONE;
+  args[2].name = NULL;
+
+  input->callback (NULL, input->data, 2, args);
+}
+
+static void
+gtk_destroy_input_function (GtkInputFunction *input)
+{
+  if (input->destroy)
+    (input->destroy) (input->data);
+  g_free (input);
+}
+
+gint
+gtk_input_add_interp (gint source,
+		      GdkInputCondition condition,
+		      GtkCallbackMarshal callback,
+		      gpointer data,
+		      GtkDestroyNotify destroy)
+{
+  GtkInputFunction *input = g_new (GtkInputFunction, 1);
+  input->callback = callback;
+  input->data = data;
+  input->destroy = destroy;
+  return gdk_input_add_interp (source,
+			       condition,
+			       (GdkInputFunction) gtk_invoke_input_function,
+			       input,
+			       (GdkDestroyNotify) gtk_destroy_input_function);
+}
+
+void
+gtk_input_remove (gint tag)
+{
+  gdk_input_remove (tag);
+}
+
+GdkEvent *
+gtk_get_current_event ()
+{
+  if (current_events)
+    return gdk_event_copy ((GdkEvent *)current_events->data);
+  else
+    return NULL;
 }
 
 GtkWidget*

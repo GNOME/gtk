@@ -53,13 +53,10 @@ typedef struct
   gint timer_active;
 
   gint ref_count;
-  gint pending_destroy;
 } GtkTooltips;
 
 
 GtkTooltips* gtk_tooltips_new        (void);
-
-void         gtk_tooltips_destroy    (GtkTooltips *tooltips);
 GtkTooltips* gtk_tooltips_ref        (GtkTooltips *tooltips);
 void         gtk_tooltips_unref      (GtkTooltips *tooltips);
 

@@ -168,12 +168,13 @@ gtk_style_new ()
   style = g_new (GtkStyle, 1);
 
   if (!default_font)
-    default_font = gdk_font_load ("-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*");
+    default_font =
+      gdk_font_load ("-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*");
 
   style->font = default_font;
   gdk_font_ref (style->font);
 
-  style->ref_count = 0;
+  style->ref_count = 1;
   style->attach_count = 0;
   style->colormap = NULL;
   style->depth = -1;
@@ -587,7 +588,7 @@ gtk_styles_init ()
       initialize = FALSE;
 
       style_cache = g_cache_new ((GCacheNewFunc) gtk_style_new_from_key,
-				 (GCacheDestroyFunc) gtk_style_destroy,
+				 (GCacheDestroyFunc) gtk_style_unref,
 				 (GCacheDupFunc) gtk_style_key_dup,
 				 (GCacheDestroyFunc) gtk_style_key_destroy,
 				 (GHashFunc) gtk_style_key_hash,
@@ -712,14 +713,17 @@ gtk_style_new_from_key (GtkStyleKey *key)
 	}
 
       if (style)
-	break;
+	{
+	  gtk_style_ref (style);
+	  break;
+	}
     }
 
   if (!style)
     {
       style = g_new (GtkStyle, 1);
 
-      style->ref_count = 0;
+      style->ref_count = 1;
       style->attach_count = 0;
 
       style->font = key->font;
@@ -794,9 +798,6 @@ gtk_style_destroy (GtkStyle *style)
 {
   gint i;
 
-  if (style->ref_count != 0)
-    return;
-
   if (style->attach_count > 0)
     {
       gtk_gc_release (style->black_gc);
@@ -816,13 +817,7 @@ gtk_style_destroy (GtkStyle *style)
 
   unattached_styles = g_slist_remove (unattached_styles, style);
 
-  if (style->font->type == GDK_FONT_FONT)
-    gdk_font_free (style->font);
-  else if (style->font->type == GDK_FONT_FONTSET)
-    gdk_fontset_free (style->font);
-  else
-    g_error("undefined font type\n");
-
+  gdk_font_unref (style->font);
   g_free (style);
 }
 

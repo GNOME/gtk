@@ -51,7 +51,7 @@ gdk_font_load (const gchar *font_name)
 }
 
 GdkFont*
-gdk_fontset_load(gchar *fontset_name)
+gdk_fontset_load (gchar *fontset_name)
 {
   GdkFont *font;
   GdkFontPrivate *private;
@@ -93,40 +93,6 @@ gdk_fontset_load(gchar *fontset_name)
     }
   return font;
 }
-void
-gdk_font_free (GdkFont *font)
-{
-  GdkFontPrivate *private;
-
-  g_return_if_fail (font != NULL);
-
-  private = (GdkFontPrivate*) font;
-
-  private->ref_count -= 1;
-  if (private->ref_count == 0)
-    {
-      gdk_xid_table_remove (((XFontStruct *) private->xfont)->fid);
-      XFreeFont (private->xdisplay, (XFontStruct *) private->xfont);
-      g_free (font);
-    }
-}
-
-void
-gdk_fontset_free (GdkFont *font)
-{
-  GdkFontPrivate *private;
-
-  g_return_if_fail (font != NULL);
-
-  private = (GdkFontPrivate*) font;
-
-  private->ref_count -= 1;
-  if (private->ref_count == 0)
-    {
-      XFreeFontSet (private->xdisplay, (XFontSet) private->xfont);
-      g_free (font);
-    }
-}
 
 GdkFont*
 gdk_font_ref (GdkFont *font)
@@ -138,6 +104,35 @@ gdk_font_ref (GdkFont *font)
   private = (GdkFontPrivate*) font;
   private->ref_count += 1;
   return font;
+}
+
+void
+gdk_font_unref (GdkFont *font)
+{
+  GdkFontPrivate *private;
+
+  g_return_if_fail (font != NULL);
+
+  private = (GdkFontPrivate*) font;
+
+  private->ref_count -= 1;
+  if (private->ref_count == 0)
+    {
+      switch (font->type)
+	{
+	case GDK_FONT_FONT:
+	  gdk_xid_table_remove (((XFontStruct *) private->xfont)->fid);
+	  XFreeFont (private->xdisplay, (XFontStruct *) private->xfont);
+	  break;
+	case GDK_FONT_FONTSET:
+	  XFreeFontSet (private->xdisplay, (XFontSet) private->xfont);
+	  break;
+	default:
+	  g_error ("unknown font type.");
+	  break;
+	}
+      g_free (font);
+    }
 }
 
 gint

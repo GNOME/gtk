@@ -650,22 +650,39 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
   return pixmap;
 }
 
-void
-gdk_pixmap_destroy (GdkPixmap *pixmap)
+GdkPixmap*
+gdk_pixmap_ref (GdkPixmap *pixmap)
 {
-  GdkWindowPrivate *private;
+  GdkWindowPrivate *private = (GdkWindowPrivate *)pixmap;
+  g_return_val_if_fail (pixmap != NULL, NULL);
 
-  g_return_if_fail (pixmap != NULL);
+  private->ref_count += 1;
+  return pixmap;
+}
 
-  private = (GdkPixmapPrivate*) pixmap;
-  if (private->ref_count <= 0)
+void
+gdk_pixmap_unref (GdkPixmap *pixmap)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)pixmap;
+  g_return_if_fail(pixmap != NULL);
+
+  private->ref_count -= 1;
+  if (private->ref_count == 0)
     {
       XFreePixmap (private->xdisplay, private->xwindow);
       gdk_xid_table_remove (private->xwindow);
-      g_free (pixmap);
+      g_free (private);
     }
-  else
-    {
-      private->ref_count -= 1;
-    }
+}
+
+GdkBitmap *
+gdk_bitmap_ref (GdkBitmap *bitmap)
+{
+  return (GdkBitmap *)gdk_pixmap_ref ((GdkPixmap *)bitmap);
+}
+
+void
+gdk_bitmap_unref (GdkBitmap *bitmap)
+{
+  gdk_pixmap_unref ((GdkPixmap *)bitmap);
 }

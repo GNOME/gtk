@@ -195,28 +195,33 @@ gtk_range_set_adjustment (GtkRange      *range,
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
 
-  if (range->adjustment)
+  if (range->adjustment != adjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (range->adjustment), (gpointer) range);
-      gtk_object_unref (GTK_OBJECT (range->adjustment));
+      if (range->adjustment)
+	{
+	  gtk_signal_disconnect_by_data (GTK_OBJECT (range->adjustment),
+					 (gpointer) range);
+	  gtk_object_unref (GTK_OBJECT (range->adjustment));
+	}
+      range->adjustment = adjustment;
+      if (adjustment)
+	{
+	  gtk_object_ref (GTK_OBJECT (adjustment));
+	  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
+			      (GtkSignalFunc) gtk_range_adjustment_changed,
+			      (gpointer) range);
+	  gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
+			      (GtkSignalFunc) gtk_range_adjustment_value_changed,
+			      (gpointer) range);
+
+	  range->old_value = adjustment->value;
+	  range->old_lower = adjustment->lower;
+	  range->old_upper = adjustment->upper;
+	  range->old_page_size = adjustment->page_size;
+	  
+	  gtk_range_adjustment_changed (adjustment, (gpointer) range);
+	}
     }
-
-  range->adjustment = adjustment;
-  gtk_object_ref (GTK_OBJECT (range->adjustment));
-
-  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-		      (GtkSignalFunc) gtk_range_adjustment_changed,
-		      (gpointer) range);
-  gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		      (GtkSignalFunc) gtk_range_adjustment_value_changed,
-		      (gpointer) range);
-
-  range->old_value = adjustment->value;
-  range->old_lower = adjustment->lower;
-  range->old_upper = adjustment->upper;
-  range->old_page_size = adjustment->page_size;
-
-  gtk_range_adjustment_changed (range->adjustment, (gpointer) range);
 }
 
 void

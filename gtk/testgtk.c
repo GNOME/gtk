@@ -2763,6 +2763,194 @@ create_gamma_curve ()
   ++count;
 }
 
+static int scroll_test_pos = 0.0;
+static GdkGC *scroll_test_gc = NULL;
+
+static gint
+scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
+		    GtkAdjustment *adj)
+{
+  gint i,j;
+  gint imin, imax, jmin, jmax;
+  
+  imin = (event->area.x) / 10;
+  imax = (event->area.x + event->area.width + 9) / 10;
+
+  jmin = ((int)adj->value + event->area.y) / 10;
+  jmax = ((int)adj->value + event->area.y + event->area.height + 9) / 10;
+
+  gdk_window_clear_area (widget->window,
+			 event->area.x, event->area.y,
+			 event->area.width, event->area.height);
+
+  for (i=imin; i<imax; i++)
+    for (j=jmin; j<jmax; j++)
+      if ((i+j) % 2)
+	gdk_draw_rectangle (widget->window, 
+			    widget->style->black_gc,
+			    TRUE,
+			    10*i, 10*j - (int)adj->value, 1+i%10, 1+j%10);
+
+  return TRUE;
+}
+
+static void
+scroll_test_configure (GtkWidget *widget, GdkEventConfigure *event,
+		       GtkAdjustment *adj)
+{
+  adj->page_increment = 0.9 * widget->allocation.height;
+  adj->page_size = widget->allocation.height;
+
+  gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
+}
+
+static void
+scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
+{
+  gint source_min = (int)adj->value - scroll_test_pos;
+  gint source_max = source_min + widget->allocation.height;
+  gint dest_min = 0;
+  gint dest_max = widget->allocation.height;
+  GdkRectangle rect;
+  GdkEvent *event;
+
+  scroll_test_pos = adj->value;
+
+  if (!GTK_WIDGET_DRAWABLE (widget))
+    return;
+
+  if (source_min < 0)
+    {
+      rect.x = 0; 
+      rect.y = 0;
+      rect.width = widget->allocation.width;
+      rect.height = -source_min;
+      if (rect.height > widget->allocation.height)
+	rect.height = widget->allocation.height;
+
+      source_min = 0;
+      dest_min = rect.height;
+    }
+  else
+    {
+      rect.x = 0;
+      rect.y = 2*widget->allocation.height - source_max;
+      if (rect.y < 0)
+	rect.y = 0;
+      rect.width = widget->allocation.width;
+      rect.height = widget->allocation.height - rect.y;
+
+      source_max = widget->allocation.height;
+      dest_max = rect.y;
+    }
+
+  if (source_min != source_max)
+    {
+      if (scroll_test_gc == NULL)
+	{
+	  scroll_test_gc = gdk_gc_new (widget->window);
+	  gdk_gc_set_exposures (scroll_test_gc, TRUE);
+	}
+
+      gdk_draw_pixmap (widget->window,
+		       scroll_test_gc,
+		       widget->window,
+		       0, source_min,
+		       0, dest_min,
+		       widget->allocation.width,
+		       source_max - source_min);
+
+      /* Make sure graphics expose events are processed before scrolling
+       * again */
+      
+      while ((event = gdk_event_get_graphics_expose (widget->window)) != NULL)
+	{
+	  gtk_widget_event (widget, event);
+	  if (event->expose.count == 0)
+	    {
+	      gdk_event_free (event);
+	      break;
+	    }
+	  gdk_event_free (event);
+	}
+    }
+
+
+  if (rect.height != 0)
+    gtk_widget_draw (widget, &rect);
+}
+
+
+void
+create_scroll_test ()
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *hbox;
+  GtkWidget *drawing_area;
+  GtkWidget *scrollbar;
+  GtkWidget *button;
+  GtkAdjustment *adj;
+  
+  if (!window)
+    {
+      window = gtk_dialog_new ();
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(destroy_window),
+			  &window);
+      gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			  GTK_SIGNAL_FUNC(destroy_window),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Scroll Test");
+      gtk_container_border_width (GTK_CONTAINER (window), 0);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), hbox,
+			  TRUE, TRUE, 0);
+      gtk_widget_show (hbox);
+
+      drawing_area = gtk_drawing_area_new ();
+      gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area), 200, 200);
+      gtk_box_pack_start (GTK_BOX (hbox), drawing_area, TRUE, TRUE, 0);
+      gtk_widget_show (drawing_area);
+
+      gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK);
+
+      adj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0));
+      scroll_test_pos = 0.0;
+
+      scrollbar = gtk_vscrollbar_new (adj);
+      gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
+      gtk_widget_show (scrollbar);
+
+      gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
+			  GTK_SIGNAL_FUNC (scroll_test_expose), adj);
+      gtk_signal_connect (GTK_OBJECT (drawing_area), "configure_event",
+			  GTK_SIGNAL_FUNC (scroll_test_configure), adj);
+
+      
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (scroll_test_adjustment_changed),
+			  drawing_area);
+      
+      /* .. And create some buttons */
+
+      button = gtk_button_new_with_label ("Quit");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area),
+			  button, TRUE, TRUE, 0);
+
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      gtk_widget_show (button);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
 
 /*
  * Timeout Test
@@ -3069,6 +3257,7 @@ create_main_window ()
       { "preview color", create_color_preview },
       { "preview gray", create_gray_preview },
       { "gamma curve", create_gamma_curve },
+      { "test scrolling", create_scroll_test },
       { "test selection", create_selection_test },
       { "test timeout", create_timeout_test },
       { "test idle", create_idle_test },

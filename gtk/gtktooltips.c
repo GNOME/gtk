@@ -17,6 +17,7 @@
  */
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "gtkmain.h"
 #include "gtkwidget.h"
@@ -41,7 +42,7 @@ static gint gtk_tooltips_widget_visible    (GtkWidget   *widget);
 static gint gtk_tooltips_timeout           (gpointer     data);
 static void gtk_tooltips_create_window     (GtkTooltips *tooltips);
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
-
+static void gtk_tooltips_real_destroy      (GtkTooltips *tooltips);
 
 GtkTooltips *
 gtk_tooltips_new ()
@@ -52,8 +53,7 @@ gtk_tooltips_new ()
 
   if (tooltips != NULL)
     {
-      tooltips->ref_count = 0;
-      tooltips->pending_destroy = 0;
+      tooltips->ref_count = 1;
 
       tooltips->enabled = TRUE;
       tooltips->numwidgets = 0;
@@ -81,8 +81,8 @@ gtk_tooltips_unref (GtkTooltips *tooltips)
 {
   g_return_if_fail (tooltips != NULL);
   tooltips->ref_count -= 1;
-  if (tooltips->ref_count == 0 && tooltips->pending_destroy)
-    gtk_tooltips_destroy (tooltips);
+  if (tooltips->ref_count == 0)
+    gtk_tooltips_real_destroy (tooltips);
 }
 
 void
@@ -105,19 +105,13 @@ gtk_tooltips_destroy_data (GtkTooltips     *tooltips,
   g_free (tooltipsdata);
 }
 
-void
-gtk_tooltips_destroy (GtkTooltips *tooltips)
+static void
+gtk_tooltips_real_destroy (GtkTooltips *tooltips)
 {
   GList *current;
   GtkTooltipsData *tooltipsdata;
 
   g_return_if_fail (tooltips != NULL);
-
-  if (tooltips->ref_count > 0)
-    {
-      tooltips->pending_destroy = 1;
-      return;
-    }
 
   if (tooltips->timer_active == TRUE)
     {
@@ -627,14 +621,9 @@ gtk_tooltips_widget_remove (GtkWidget *widget,
   if (list)
     {
       tooltipsdata = (GtkTooltipsData*) list->data;
-
-      g_free (tooltipsdata->tips_text);
-      g_list_foreach (tooltipsdata->row, gtk_tooltips_free_string, 0);
-      g_list_free (tooltipsdata->row);
-      gtk_signal_disconnect_by_data (GTK_OBJECT (tooltipsdata->widget), (gpointer) tooltips);
-      g_free (tooltipsdata);
-
-      tooltips->widget_list = g_list_remove (tooltips->widget_list, tooltipsdata);
+      tooltips->widget_list = g_list_remove (tooltips->widget_list,
+					     tooltipsdata);
+      gtk_tooltips_destroy_data (tooltips, tooltipsdata);
     }
 
   gtk_object_set_data (GTK_OBJECT (widget), "_GtkTooltips", NULL);

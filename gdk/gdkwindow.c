@@ -25,6 +25,7 @@
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 int nevent_masks = 16;
 int event_mask_table[18] =
@@ -137,6 +138,8 @@ gdk_window_new (GdkWindow     *parent,
     private->dnd_drag_data_numtypesavail = 0;
   private->dnd_drag_eventmask = private->dnd_drag_savedeventmask = 0;
 
+  private->filters = NULL;
+
   window->user_data = NULL;
 
   if (attributes_mask & GDK_WA_VISUAL)
@@ -227,6 +230,7 @@ gdk_window_new (GdkWindow     *parent,
 				    x, y, private->width, private->height,
 				    0, depth, class, xvisual,
 				    xattributes_mask, &xattributes);
+  gdk_window_ref (window);
   gdk_xid_table_insert (&private->xwindow, window);
 
   switch (private->window_type)
@@ -320,16 +324,24 @@ gdk_window_foreign_new (guint32 anid)
     
   private->destroyed = FALSE;
   private->extension_events = 0;
+  private->filters = NULL;
 
   window->user_data = NULL;
 
+  gdk_window_ref (window);
   gdk_xid_table_insert (&private->xwindow, window);
 
   return window;
 }
 
-void
-gdk_window_destroy (GdkWindow *window)
+/* Call this function when you want a window and all its children to
+   disappear.  When xdestroy is true, a request to destroy the XWindow
+   is sent out.  When it is false, it is assumed that the XWindow has
+   been or will be destroyed by destroying some ancestor of this
+   window.  */
+
+static void
+gdk_window_internal_destroy (GdkWindow *window, int xdestroy)
 {
   GdkWindowPrivate *private;
   GdkWindowPrivate *temp_private;
@@ -340,27 +352,14 @@ gdk_window_destroy (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  if(private->dnd_drag_data_numtypesavail > 0) 
-    {
-      free(private->dnd_drag_data_typesavail);
-      private->dnd_drag_data_typesavail = NULL;
-    }
-  if(private->dnd_drop_data_numtypesavail > 0) 
-    {
-      free(private->dnd_drop_data_typesavail);
-      private->dnd_drop_data_typesavail = NULL;
-    }
-  
+
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
-      if (private->ref_count >= 1)
-	private->ref_count -= 1;
-
-      if (!private->destroyed || (private->destroyed == 2))
+      if (!private->destroyed)
 	{
 	  children = gdk_window_get_children (window);
 	  tmp = children;
@@ -371,18 +370,24 @@ gdk_window_destroy (GdkWindow *window)
 	      tmp = tmp->next;
 
 	      temp_private = (GdkWindowPrivate*) temp_window;
-	      if (temp_private && !temp_private->destroyed)
-		/* Removes some nice coredumps... /David */
-		{
-		  temp_private->destroyed = 2;
-		  temp_private->ref_count += 1;
-		  gdk_window_destroy (temp_window);
-		}
+	      if (temp_private)
+		gdk_window_internal_destroy (temp_window, FALSE);
 	    }
 
 	  g_list_free (children);
 
-	  if (!private->destroyed)
+	  if(private->dnd_drag_data_numtypesavail > 0) 
+	    {
+	      g_free (private->dnd_drag_data_typesavail);
+	      private->dnd_drag_data_typesavail = NULL;
+	    }
+	  if(private->dnd_drop_data_numtypesavail > 0) 
+	    {
+	      g_free (private->dnd_drop_data_typesavail);
+	      private->dnd_drop_data_typesavail = NULL;
+	    }
+
+	  if (xdestroy)
 	    XDestroyWindow (private->xdisplay, private->xwindow);
 	  private->destroyed = TRUE;
 	}
@@ -393,14 +398,25 @@ gdk_window_destroy (GdkWindow *window)
       break;
 
     case GDK_WINDOW_PIXMAP:
-      g_warning ("called gdk_window_destroy on a pixmap (use gdk_pixmap_destroy)");
-      gdk_pixmap_destroy (window);
+      g_error ("called gdk_window_destroy on a pixmap (use gdk_pixmap_unref)");
       break;
     }
 }
 
+/* Like internal_destroy, but also destroys the reference created by
+   gdk_window_new. */
+
 void
-gdk_window_real_destroy (GdkWindow *window)
+gdk_window_destroy (GdkWindow *window)
+{
+  gdk_window_internal_destroy (window, TRUE);
+  gdk_window_unref (window);
+}
+
+/* This function is called when the XWindow is really gone.  */
+
+void
+gdk_window_destroy_notify (GdkWindow *window)
 {
   GdkWindowPrivate *private;
 
@@ -411,11 +427,8 @@ gdk_window_real_destroy (GdkWindow *window)
   if (private->extension_events != 0)
     gdk_input_window_destroy (window);
 
-  if (private->ref_count == 0)
-    {
-      gdk_xid_table_remove (private->xwindow);
-      g_free (window);
-    }
+  gdk_xid_table_remove (private->xwindow);
+  gdk_window_unref (window);
 }
 
 GdkWindow*
@@ -436,7 +449,11 @@ gdk_window_unref (GdkWindow *window)
 
   private->ref_count -= 1;
   if (private->ref_count == 0)
-    gdk_window_real_destroy (window);
+    {
+      if (!private->destroyed)
+	g_warning ("losing last reference to undestroyed window\n");
+      g_free (window);
+    }
 }
 
 void
@@ -1362,6 +1379,60 @@ gdk_window_dnd_data_set (GdkWindow       *window,
   
   XSendEvent (gdk_display, event->dragrequest.requestor, False,
 	      NoEventMask, &sev);
+}
+
+void          
+gdk_window_add_filter     (GdkWindow     *window,
+			   GdkFilterFunc  function,
+			   gpointer       data)
+{
+  GdkWindowPrivate *private;
+  GList *tmp_list;
+  GdkEventFilter *filter;
+
+  private = (GdkWindowPrivate *)window;
+
+  tmp_list = private->filters;
+  while (tmp_list)
+    {
+      filter = (GdkEventFilter *)tmp_list->data;
+      if ((filter->function == function) && (filter->data == data))
+	return;
+      tmp_list = tmp_list->next;
+    }
+
+  filter = g_new (GdkEventFilter, 1);
+  filter->function = function;
+  filter->data = data;
+  
+  private->filters = g_list_append (private->filters, filter);
+}
+
+void
+gdk_window_remove_filter  (GdkWindow     *window,
+			   GdkFilterFunc  function,
+			   gpointer       data)
+{
+  GdkWindowPrivate *private;
+  GList *tmp_list;
+  GdkEventFilter *filter;
+
+  private = (GdkWindowPrivate *)window;
+
+  tmp_list = private->filters;
+  while (tmp_list)
+    {
+      filter = (GdkEventFilter *)tmp_list->data;
+      tmp_list = tmp_list->next;
+
+      if ((filter->function == function) && (filter->data == data))
+	{
+	  private->filters = g_list_remove_link (private->filters, tmp_list);
+	  g_list_free_1 (tmp_list);
+	  
+	  return;
+	}
+    }
 }
 
 void

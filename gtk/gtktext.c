@@ -244,6 +244,8 @@ static void scroll_up   (GtkText* text, gint diff);
 static void scroll_down (GtkText* text, gint diff);
 static void scroll_int  (GtkText* text, gint diff);
 
+static void process_exposes (GtkText *text);
+
 /* Cache Management. */
 static GList* remove_cache_line (GtkText* text, GList* list);
 
@@ -1548,6 +1550,9 @@ delete_char_line_expose (GtkText* text, gchar key, guint old_pixels)
 
   draw_cursor (text, FALSE);
 
+  if (old_pixels != new_pixels)
+    process_exposes (text);
+  
   TEXT_ASSERT (text);
   TEXT_SHOW(text);
 }
@@ -1650,6 +1655,9 @@ insert_char_line_expose (GtkText* text, gchar key, guint old_pixels)
 
   draw_cursor (text, FALSE);
 
+  if (old_pixels != new_pixels)
+    process_exposes (text);
+    
   TEXT_SHOW_ADJ (text, text->vadj, "vadj");
   TEXT_ASSERT (text);
   TEXT_SHOW(text);
@@ -2564,6 +2572,26 @@ scroll_int (GtkText* text, gint diff)
   gtk_signal_emit_by_name (GTK_OBJECT (text->vadj), "value_changed");
 }
 
+static void 
+process_exposes (GtkText *text)
+{
+  GdkEvent *event;
+
+  /* Make sure graphics expose events are processed before scrolling
+   * again */
+
+  while ((event = gdk_event_get_graphics_expose (text->text_area)) != NULL)
+    {
+      gtk_widget_event (GTK_WIDGET (text), event);
+      if (event->expose.count == 0)
+	{
+	  gdk_event_free (event);
+	  break;
+	}
+      gdk_event_free (event);
+    }
+}
+
 static gint last_visible_line_height (GtkText* text)
 {
   GList *cache = text->line_start_cache;
@@ -2660,6 +2688,9 @@ scroll_down (GtkText* text, gint diff0)
 	  mouse_click_1 (text, &button);
 	}
     }
+
+  if (height > real_diff)
+    process_exposes (text);
 }
 
 static void
@@ -2734,6 +2765,9 @@ scroll_up (GtkText* text, gint diff0)
 	  mouse_click_1 (text, &button);
 	}
     }
+
+  if (height > real_diff)
+    process_exposes (text);
 }
 
 /**********************************************************************/

@@ -85,6 +85,9 @@ gtk_menu_factory_destroy (GtkMenuFactory *factory)
 
       gtk_menu_factory_destroy (subfactory);
     }
+
+  if (factory->table)
+    gtk_accelerator_table_unref (factory->table);
 }
 
 void
@@ -237,11 +240,8 @@ gtk_menu_factory_create (GtkMenuFactory *factory,
 						  &accelerator_key,
 						  &accelerator_mods);
 	      if (!factory->table)
-		{
-		  factory->table = gtk_accelerator_table_new ();
-		  gtk_accelerator_table_ref (factory->table);
-		}
-
+		factory->table = gtk_accelerator_table_new ();
+	      
 	      gtk_widget_install_accelerator (menu_path->widget,
 					      factory->table,
 					      "activate",
@@ -291,10 +291,7 @@ gtk_menu_factory_create (GtkMenuFactory *factory,
 	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_path->widget), menu);
 
 	  if (!factory->table)
-	    {
-	      factory->table = gtk_accelerator_table_new ();
-	      gtk_accelerator_table_ref (factory->table);
-	    }
+	    factory->table = gtk_accelerator_table_new ();
 	  gtk_menu_set_accelerator_table (GTK_MENU (menu), factory->table);
 	}
 
@@ -369,10 +366,7 @@ gtk_menu_factory_make_widget (GtkMenuFactory *factory)
       widget = gtk_menu_new ();
 
       if (!factory->table)
-	{
-	  factory->table = gtk_accelerator_table_new ();
-	  gtk_accelerator_table_ref (factory->table);
-	}
+	factory->table = gtk_accelerator_table_new ();
       gtk_menu_set_accelerator_table (GTK_MENU (widget), factory->table);
       return widget;
     case GTK_MENU_FACTORY_MENU_BAR:

@@ -31,7 +31,6 @@
 #undef NO_SYS_SIGLIST
 
 #undef HAVE_WCHAR_H
-#undef HAVE_WCSTR_H
 #undef HAVE_WCTYPE_H
 
 /* #undef PACKAGE */

@@ -43,6 +43,7 @@ typedef struct _GdkColormapPrivate     GdkColormapPrivate;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 typedef struct _GdkFontPrivate         GdkFontPrivate;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
+typedef struct _GdkEventFilter         GdkEventFilter;
 typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
 
 
@@ -76,6 +77,8 @@ struct _GdkWindowPrivate
   /* need to allow custom drag/drop cursors */
 
   gint extension_events;
+
+  GList *filters;
 };
 
 struct _GdkImagePrivate
@@ -149,6 +152,10 @@ struct _GdkDndGlobals {
 };
 typedef struct _GdkDndGlobals GdkDndGlobals;
 
+struct _GdkEventFilter {
+  GdkFilterFunc function;
+  gpointer data;
+};
 
 #ifdef USE_XIM
 
@@ -157,6 +164,7 @@ struct _GdkICPrivate
   XIC xic;
   GdkIMStyle style;
 };
+
 typedef struct _GdkICPrivate GdkICPrivate;
 
 #endif /* USE_XIM */
@@ -179,8 +187,8 @@ void gdk_image_exit (void);
 GdkColormap* gdk_colormap_lookup (Colormap  xcolormap);
 GdkVisual*   gdk_visual_lookup   (Visual   *xvisual);
 
-void gdk_window_real_destroy         (GdkWindow *window);
 void gdk_window_add_colormap_windows (GdkWindow *window);
+void gdk_window_destroy_notify       (GdkWindow *window);
 
 void     gdk_xid_table_insert (XID      *xid,
 			       gpointer  data);

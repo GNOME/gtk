@@ -230,7 +230,7 @@ gtk_object_ref (GtkObject *object)
 }
 
 /*****************************************
- * gtk_object_new:
+ * gtk_object_unref:
  *
  *   arguments:
  *

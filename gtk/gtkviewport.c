@@ -145,23 +145,27 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
   g_return_if_fail (adjustment != NULL);
 
-  if (viewport->hadjustment)
+  if (viewport->hadjustment != adjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->hadjustment), (gpointer) viewport);
-      gtk_object_unref (GTK_OBJECT (viewport->hadjustment));
+      if (viewport->hadjustment)
+	{
+	  gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->hadjustment),
+					 (gpointer) viewport);
+	  gtk_object_unref (GTK_OBJECT (viewport->hadjustment));
+	}
+
+      viewport->hadjustment = adjustment;
+      gtk_object_ref (GTK_OBJECT (viewport->hadjustment));
+
+      gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
+			  (GtkSignalFunc) gtk_viewport_adjustment_changed,
+			  (gpointer) viewport);
+      gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
+			  (GtkSignalFunc)gtk_viewport_adjustment_value_changed,
+			  (gpointer) viewport);
+
+      gtk_viewport_adjustment_changed (adjustment, (gpointer) viewport);
     }
-
-  viewport->hadjustment = adjustment;
-  gtk_object_ref (GTK_OBJECT (viewport->hadjustment));
-
-  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-		      (GtkSignalFunc) gtk_viewport_adjustment_changed,
-		      (gpointer) viewport);
-  gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		      (GtkSignalFunc) gtk_viewport_adjustment_value_changed,
-		      (gpointer) viewport);
-
-  gtk_viewport_adjustment_changed (adjustment, (gpointer) viewport);
 }
 
 void
@@ -172,23 +176,27 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
   g_return_if_fail (adjustment != NULL);
 
-  if (viewport->vadjustment)
+  if (viewport->vadjustment != adjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->vadjustment), (gpointer) viewport);
-      gtk_object_unref (GTK_OBJECT (viewport->vadjustment));
+      if (viewport->vadjustment)
+	{
+	  gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->vadjustment),
+					 (gpointer) viewport);
+	  gtk_object_unref (GTK_OBJECT (viewport->vadjustment));
+	}
+
+      viewport->vadjustment = adjustment;
+      gtk_object_ref (GTK_OBJECT (viewport->vadjustment));
+      
+      gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
+			  (GtkSignalFunc) gtk_viewport_adjustment_changed,
+			  (gpointer) viewport);
+      gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
+			  (GtkSignalFunc)gtk_viewport_adjustment_value_changed,
+			  (gpointer) viewport);
+
+      gtk_viewport_adjustment_changed (adjustment, (gpointer) viewport);
     }
-
-  viewport->vadjustment = adjustment;
-  gtk_object_ref (GTK_OBJECT (viewport->vadjustment));
-
-  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-		      (GtkSignalFunc) gtk_viewport_adjustment_changed,
-		      (gpointer) viewport);
-  gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		      (GtkSignalFunc) gtk_viewport_adjustment_value_changed,
-		      (gpointer) viewport);
-
-  gtk_viewport_adjustment_changed (adjustment, (gpointer) viewport);
 }
 
 void

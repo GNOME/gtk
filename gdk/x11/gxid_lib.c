@@ -5,6 +5,7 @@
 */
 
 #include "../config.h"
+#include "gxid_lib.h"
 
 #ifdef XINPUT_GXI
 
@@ -15,8 +16,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-
-#include "gxid_lib.h"
 
 /* handles mechanics of communicating with a client */
 static int 
@@ -110,6 +109,16 @@ gxid_release_device(char *host, int port, GxidU32 device, GxidU32 window)
   msg.window = htonl(window);
 
   return gxid_send_message(host,port,(GxidMessage *)&msg);
+}
+
+#else /* !XINPUT_GXI */
+
+/* Some compilers don't like empty source files */
+int 
+gxid_claim_device(char *host, int port, GxidU32 device, GxidU32 window,
+		  int exclusive)
+{
+  return 0;
 }
 
 #endif /* XINPUT_GXI */

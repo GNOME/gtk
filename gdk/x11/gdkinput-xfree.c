@@ -44,7 +44,8 @@ void
 gdk_input_init(void)
 {
   gdk_input_vtable.set_mode           = gdk_input_xfree_set_mode;
-  gdk_input_vtable.set_axes        = gdk_input_common_set_axes;
+  gdk_input_vtable.set_axes           = gdk_input_common_set_axes;
+  gdk_input_vtable.set_key            = gdk_input_common_set_key;
   gdk_input_vtable.motion_events      = gdk_input_common_motion_events;
   gdk_input_vtable.get_pointer	      = gdk_input_common_get_pointer;
   gdk_input_vtable.grab_pointer	      = gdk_input_xfree_grab_pointer;
@@ -229,33 +230,6 @@ gdk_input_xfree_other_event (GdkEvent *event,
       gdk_input_ignore_core)
     gdk_input_check_proximity();
 
-  /* Do a passive button grab. We have to be careful not to release
-     an explicit grab, if any. Doubling the grab should be harmless,
-     but we check anyways. */
-
-  /* FIXME, finding the proper events here is going to be SLOW - but
-     we might have different sets for each window/device combination */
-  
-  if (return_val> 0 && !input_window->grabbed)
-    {
-      if (event->type == GDK_BUTTON_PRESS)
-	{
-	  XEventClass event_classes[6];
-	  gint num_classes;
-	  
-	  gdk_input_common_find_events (window, gdkdev, 
-					((GdkWindowPrivate *)window)->extension_events, 
-					event_classes, &num_classes);
-	  
-	XGrabDevice( GDK_DISPLAY(), gdkdev->xdevice,
-		     GDK_WINDOW_XWINDOW (window),
-		     TRUE, num_classes, event_classes,
-		     GrabModeAsync, GrabModeAsync, event->button.time);
-	}
-      else if (event->type == GDK_BUTTON_RELEASE)
-	XUngrabDevice( GDK_DISPLAY(), gdkdev->xdevice, event->button.time);
-    }
-
   return return_val;
 }
 
@@ -284,8 +258,9 @@ gdk_input_xfree_grab_pointer (GdkWindow *     window,
   GdkInputWindow *input_window, *new_window;
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
-  XEventClass event_classes[6];
+  XEventClass event_classes[GDK_MAX_DEVICE_CLASSES];
   gint num_classes;
+  gint result;
 
   tmp_list = gdk_input_windows;
   new_window = NULL;
@@ -296,15 +271,12 @@ gdk_input_xfree_grab_pointer (GdkWindow *     window,
 	return AlreadyGrabbed;
 
       if (input_window->window == window)
-	{
-	  new_window = input_window;
-	  break;
-	}
+	new_window = input_window;
       
       tmp_list = tmp_list->next;
     }
   
-  g_return_if_fail (new_window == NULL);
+  g_return_val_if_fail (new_window != NULL, Success); /* shouldn't happen */
   
   new_window->grabbed = TRUE;
 
@@ -313,17 +285,21 @@ gdk_input_xfree_grab_pointer (GdkWindow *     window,
     {
       gdkdev = (GdkDevicePrivate *)tmp_list->data;
       if (gdkdev->info.deviceid != GDK_CORE_POINTER &&
-	  gdkdev->xdevice && !gdkdev->button_state)
+	  gdkdev->xdevice)
 	{
-	  gdk_input_common_find_events (window, gdkdev, 
-					((GdkWindowPrivate *)window)->extension_events, 
+	  gdk_input_common_find_events (window, gdkdev,
+					event_mask,
 					event_classes, &num_classes);
 
-	  /* FIXME: we should do something on failure */
-	  XGrabDevice( GDK_DISPLAY(), gdkdev->xdevice,
-		       GDK_WINDOW_XWINDOW (window),
-		       TRUE, num_classes, event_classes,
-		       GrabModeAsync, GrabModeAsync, time);
+	  result = XGrabDevice( GDK_DISPLAY(), gdkdev->xdevice,
+				GDK_WINDOW_XWINDOW (window),
+				owner_events, num_classes, event_classes,
+				GrabModeAsync, GrabModeAsync, time);
+
+	  /* FIXME: if failure occurs on something other than the first
+	     device, things will be badly inconsistent */
+	  if (result != Success)
+	    return result;
 	}
       tmp_list = tmp_list->next;
     }
@@ -355,11 +331,9 @@ gdk_input_xfree_ungrab_pointer (guint32 time)
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
-	  if (gdkdev->info.deviceid != GDK_CORE_POINTER &&
-	      gdkdev->xdevice && !gdkdev->button_state)
-	    {
-	      XUngrabDevice( gdk_display, gdkdev->xdevice, time);
-	    }
+	  if (gdkdev->info.deviceid != GDK_CORE_POINTER && gdkdev->xdevice)
+	    XUngrabDevice( gdk_display, gdkdev->xdevice, time);
+
 	  tmp_list = tmp_list->next;
 	}
     }

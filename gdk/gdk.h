@@ -35,9 +35,8 @@ void   gdk_exit            (int     error_code);
 gchar* gdk_set_locale      (void);
 
 gint gdk_events_pending  (void);
-gint gdk_event_get       (GdkEvent     *event,
-			  GdkEventFunc  pred,
-			  gpointer      data);
+GdkEvent *gdk_event_get  (void);
+GdkEvent *gdk_event_get_graphics_expose (GdkWindow *window);
 void gdk_event_put       (GdkEvent     *event);
 
 GdkEvent *gdk_event_copy (GdkEvent *event);
@@ -58,11 +57,16 @@ void    gdk_timer_set     (guint32 milliseconds);
 void    gdk_timer_enable  (void);
 void    gdk_timer_disable (void);
 
-gint gdk_input_add    (gint              source,
-		       GdkInputCondition condition,
-		       GdkInputFunction  function,
-		       gpointer          data);
-void gdk_input_remove (gint              tag);
+gint gdk_input_add_interp (gint              source,
+			   GdkInputCondition condition,
+			   GdkInputFunction  function,
+			   gpointer          data,
+			   GdkDestroyNotify  destroy);
+gint gdk_input_add        (gint              source,
+			   GdkInputCondition condition,
+			   GdkInputFunction  function,
+			   gpointer          data);
+void gdk_input_remove     (gint              tag);
 
 gint gdk_pointer_grab   (GdkWindow *     window,
 			 gint            owner_events,
@@ -166,6 +170,12 @@ void          gdk_window_set_user_data   (GdkWindow       *window,
 void          gdk_window_set_override_redirect(GdkWindow  *window,
 					       gboolean override_redirect);
 
+void          gdk_window_add_filter     (GdkWindow     *window,
+				         GdkFilterFunc  function,
+				         gpointer       data);
+void          gdk_window_remove_filter  (GdkWindow     *window,
+				         GdkFilterFunc  function,
+				         gpointer       data);
 
 /* 
  * This allows for making shaped (partially transparent) windows
@@ -350,8 +360,11 @@ GdkPixmap* gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 					 GdkBitmap **mask,
 					 GdkColor   *transparent_color,
 					 gchar     **data);
-void       gdk_pixmap_destroy           (GdkPixmap  *pixmap);
+GdkPixmap *gdk_pixmap_ref               (GdkPixmap  *pixmap);
+void       gdk_pixmap_unref             (GdkPixmap  *pixmap);
 
+GdkBitmap *gdk_bitmap_ref               (GdkBitmap  *pixmap);
+void       gdk_bitmap_unref             (GdkBitmap  *pixmap);
 
 
 /* Images
@@ -383,10 +396,8 @@ void       gdk_image_destroy   (GdkImage     *image);
  */
 GdkColormap* gdk_colormap_new     (GdkVisual   *visual,
 				   gint         allocate);
-void         gdk_colormap_destroy (GdkColormap *colormap);
-
-GdkColormap* gdk_colormap_ref (GdkColormap *cmap);
-void         gdk_colormap_unref (GdkColormap *cmap);
+GdkColormap* gdk_colormap_ref     (GdkColormap *cmap);
+void         gdk_colormap_unref   (GdkColormap *cmap);
 
 GdkColormap* gdk_colormap_get_system       (void);
 gint         gdk_colormap_get_system_size  (void);
@@ -424,9 +435,8 @@ gint gdk_color_equal     (GdkColor      *colora,
  */
 GdkFont* gdk_font_load      (const gchar    *font_name);
 GdkFont* gdk_fontset_load   (gchar    *fontset_name);
-void     gdk_font_free      (GdkFont  *font);
-void     gdk_fontset_free   (GdkFont  *font);
 GdkFont* gdk_font_ref       (GdkFont  *font);
+void     gdk_font_unref     (GdkFont  *font);
 gint     gdk_font_id        (GdkFont  *font);
 gint     gdk_font_equal     (GdkFont  *fonta,
 			     GdkFont  *fontb);

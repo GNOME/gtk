@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include "gdkprivate.h"
-
+#include <stdio.h>
 
 static guint gdk_xid_hash    (XID *xid);
 static gint  gdk_xid_compare (XID *a,

@@ -95,17 +95,6 @@ gtk_accelerator_table_find (GtkObject   *object,
   return NULL;
 }
 
-void
-gtk_accelerator_table_destroy (GtkAcceleratorTable *table)
-{
-  g_return_if_fail (table != NULL);
-  g_return_if_fail (table->ref_count <= 0);
-
-  tables = g_slist_remove (tables, table);
-  gtk_accelerator_table_clean (table);
-  g_free (table);
-}
-
 GtkAcceleratorTable*
 gtk_accelerator_table_ref (GtkAcceleratorTable *table)
 {
@@ -122,7 +111,11 @@ gtk_accelerator_table_unref (GtkAcceleratorTable *table)
 
   table->ref_count -= 1;
   if (table->ref_count <= 0)
-    gtk_accelerator_table_destroy (table);
+    {
+      tables = g_slist_remove (tables, table);
+      gtk_accelerator_table_clean (table);
+      g_free (table);
+    }
 }
 
 void
@@ -322,7 +315,7 @@ gtk_accelerator_table_init (GtkAcceleratorTable *table)
   for (i = 0; i < 256; i++)
     table->entries[i] = NULL;
 
-  table->ref_count = 0;
+  table->ref_count = 1;
   table->modifier_mask = gtk_accelerator_table_default_mod_mask;
 }
 

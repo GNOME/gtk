@@ -147,7 +147,9 @@ gtk_hscrollbar_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
   widget->window = gdk_window_new (widget->parent->window, &attributes, attributes_mask);
+
   range->trough = widget->window;
+  gdk_window_ref (range->trough);
 
   attributes.x = widget->style->klass->xthickness;
   attributes.y = widget->style->klass->ythickness;

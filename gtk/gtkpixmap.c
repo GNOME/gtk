@@ -23,7 +23,9 @@ static void gtk_pixmap_class_init (GtkPixmapClass  *klass);
 static void gtk_pixmap_init       (GtkPixmap       *pixmap);
 static gint gtk_pixmap_expose     (GtkWidget       *widget,
 				   GdkEventExpose  *event);
+static void gtk_pixmap_destroy    (GtkObject       *object);
 
+static GtkWidgetClass *parent_class;
 
 guint
 gtk_pixmap_get_type ()
@@ -51,10 +53,14 @@ gtk_pixmap_get_type ()
 static void
 gtk_pixmap_class_init (GtkPixmapClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
+  parent_class = gtk_type_class (gtk_widget_get_type ());
 
+  object_class->destroy = gtk_pixmap_destroy;
   widget_class->expose_event = gtk_pixmap_expose;
 }
 
@@ -82,6 +88,14 @@ gtk_pixmap_new (GdkPixmap *val,
   return GTK_WIDGET (pixmap);
 }
 
+static void
+gtk_pixmap_destroy (GtkObject *object)
+{
+  gtk_pixmap_set (GTK_PIXMAP (object), NULL, NULL);
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
 void
 gtk_pixmap_set (GtkPixmap *pixmap,
 		GdkPixmap *val,
@@ -92,25 +106,38 @@ gtk_pixmap_set (GtkPixmap *pixmap,
 
   g_return_if_fail (pixmap != NULL);
   g_return_if_fail (GTK_IS_PIXMAP (pixmap));
-  g_return_if_fail (val != NULL);
 
-  pixmap->pixmap = val;
-  pixmap->mask = mask;
-
-  if (pixmap->pixmap)
+  if (pixmap->pixmap != val)
     {
-      gdk_window_get_size (pixmap->pixmap, &width, &height);
-      GTK_WIDGET (pixmap)->requisition.width = width + GTK_MISC (pixmap)->xpad * 2;
-      GTK_WIDGET (pixmap)->requisition.height = height + GTK_MISC (pixmap)->ypad * 2;
-    }
-  else
-    {
-      GTK_WIDGET (pixmap)->requisition.width = 0;
-      GTK_WIDGET (pixmap)->requisition.height = 0;
+      if (pixmap->pixmap)
+	gdk_pixmap_unref (pixmap->pixmap);
+      pixmap->pixmap = val;
+      if (pixmap->pixmap)
+	{
+	  gdk_pixmap_ref (pixmap->pixmap);
+	  gdk_window_get_size (pixmap->pixmap, &width, &height);
+	  GTK_WIDGET (pixmap)->requisition.width =
+	    width + GTK_MISC (pixmap)->xpad * 2;
+	  GTK_WIDGET (pixmap)->requisition.height =
+	    height + GTK_MISC (pixmap)->ypad * 2;
+	}
+      else
+	{
+	  GTK_WIDGET (pixmap)->requisition.width = 0;
+	  GTK_WIDGET (pixmap)->requisition.height = 0;
+	}
+      if (GTK_WIDGET_VISIBLE (pixmap))
+	gtk_widget_queue_resize (GTK_WIDGET (pixmap));
     }
 
-  if (GTK_WIDGET_VISIBLE (pixmap))
-    gtk_widget_queue_resize (GTK_WIDGET (pixmap));
+  if (pixmap->mask != mask)
+    {
+      if (pixmap->mask)
+	gdk_bitmap_unref (pixmap->mask);
+      pixmap->mask = mask;
+      if (pixmap->mask)
+	gdk_bitmap_ref (pixmap->mask);
+    }
 }
 
 void

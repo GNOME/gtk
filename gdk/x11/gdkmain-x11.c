@@ -88,6 +88,7 @@ struct _GdkInput
   GdkInputCondition condition;
   GdkInputFunction function;
   gpointer data;
+  GdkDestroyNotify destroy;
 };
 
 struct _GdkPredicate
@@ -99,12 +100,19 @@ struct _GdkPredicate
 /* 
  * Private function declarations
  */
+
+static GdkEvent *gdk_event_new          (void);
 static gint      gdk_event_wait         (void);
+static gint      gdk_event_apply_filters (XEvent *xevent,
+					  GdkEvent *event,
+					  GList *filters);
 static gint      gdk_event_translate    (GdkEvent     *event, 
 				         XEvent       *xevent);
+#if 0
 static Bool      gdk_event_get_type     (Display      *display, 
 					 XEvent       *xevent, 
 					 XPointer      arg);
+#endif
 static void      gdk_synthesize_click   (GdkEvent     *event, 
 					 gint          nclicks);
 
@@ -157,15 +165,6 @@ static int connection_number = 0;                   /* The file descriptor numbe
 						     *  the "select" system call.
 						     */
 
-static gint received_destroy_notify = FALSE;        /* Did we just receive a destroy notify
-						     *  event? If so, we need to actually
-						     *  destroy the window which received
-						     *  it now.
-						     */
-static GdkWindow *window_to_destroy = NULL;         /* If we previously received a destroy
-						     *  notify event then this is the window
-						     *  which received that event.
-						     */
 
 static struct timeval start;                        /* The time at which the library was
 						     *  last initialized.
@@ -603,19 +602,68 @@ gdk_events_pending ()
 
 /*
  *--------------------------------------------------------------
+ * gdk_event_get_graphics_expose
+ *
+ *   Waits for a GraphicsExpose or NoExpose event
+ *
+ * Arguments:
+ *
+ * Results: 
+ *   For GraphicsExpose events, returns a pointer to the event
+ *   converted into a GdkEvent Otherwise, returns NULL.
+ *
+ * Side effects:
+ *
+ *-------------------------------------------------------------- */
+
+static Bool
+graphics_expose_predicate  (Display  *display,
+			    XEvent   *xevent,
+			    XPointer  arg)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)arg;
+
+  if ((xevent->xany.window == private->xwindow) &&
+      ((xevent->xany.type == GraphicsExpose) ||
+       (xevent->xany.type == NoExpose)))
+    return True;
+  else
+    return False;
+}
+
+GdkEvent *
+gdk_event_get_graphics_expose (GdkWindow *window)
+{
+  XEvent xevent;
+  GdkEvent *event;
+
+  XIfEvent (gdk_display, &xevent, graphics_expose_predicate, (XPointer)window);
+
+  if (xevent.xany.type == GraphicsExpose)
+    {
+      event = gdk_event_new ();
+
+      if (gdk_event_translate (event, &xevent))
+	return event;
+      else
+	gdk_event_free (event);
+    }
+  
+  return NULL;  
+}
+
+/*
+ *--------------------------------------------------------------
  * gdk_event_get
  *
  *   Gets the next event.
  *
  * Arguments:
- *   "event" is used to hold the received event.
- *   If "event" is NULL an event is received as normal
- *   however it is not placed in "event" (and thus no
- *   error occurs).
  *
  * Results:
- *   Returns TRUE if an event was received that we care about
- *   and FALSE otherwise. This function will also return
+ *   If an event was received that we care about, returns 
+ *   a pointer to that event, to be freed with gdk_event_free.
+ *   Otherwise, returns NULL. This function will also return
  *   before an event is received if the timeout interval
  *   runs out.
  *
@@ -624,45 +672,14 @@ gdk_events_pending ()
  *--------------------------------------------------------------
  */
 
-gint
-gdk_event_get (GdkEvent     *event,
-	       GdkEventFunc  pred,
-	       gpointer      data)
+GdkEvent *
+gdk_event_get (void)
 {
-  GdkEvent *temp_event;
-  GdkPredicate event_pred;
+  GdkEvent *event;
   GList *temp_list;
   XEvent xevent;
 
-  /* If the last event we received was a destroy notify
-   *  event then we will actually destroy the "gdk" data
-   *  structures now. We don't want to destroy them at the
-   *  time of receiving the event since the main program
-   *  may try to access them and may need to destroy user
-   *  data that has been attached to the window
-   */
-  if (received_destroy_notify)
-    {
-      if (gdk_show_events)
-	g_print ("destroying window:\twindow: %ld\n",
-		 ((GdkWindowPrivate*) window_to_destroy)->xwindow - base_id);
-
-      gdk_window_real_destroy (window_to_destroy);
-      received_destroy_notify = FALSE;
-      window_to_destroy = NULL;
-    }
-
-  /* Initially we haven't received an event and want to
-   *  return FALSE. If "event" is non-NULL, then initialize
-   *  it to the nothing event.
-   */
-  if (event)
-    {
-      event->any.type = GDK_NOTHING;
-      event->any.window = NULL;
-      event->any.send_event = FALSE;
-    }
-
+#if 0
   if (pred)
     {
       temp_list = putback_events;
@@ -685,65 +702,61 @@ gdk_event_get (GdkEvent     *event,
       event_pred.func = pred;
       event_pred.data = data;
 
-      if (XCheckIfEvent (gdk_display, &xevent, gdk_event_get_type, (XPointer) &event_pred))
+      if (XCheckIfEvent (gdk_display, &xevent, gdk_event_get_type, (XPointer) & event_pred))
 	if (event)
 	  return gdk_event_translate (event, &xevent);
     }
   else
-    {
-      if (putback_events)
-	{
-	  temp_event = putback_events->data;
-	  *event = *temp_event;
-
-	  temp_list = putback_events;
-	  putback_events = putback_events->next;
-	  if (putback_events)
-	    putback_events->prev = NULL;
-
-	  temp_list->next = NULL;
-	  temp_list->prev = NULL;
-	  g_list_free (temp_list);
-	  g_free (temp_event);
-
-	  return TRUE;
-	}
-
-      /* Wait for an event to occur or the timeout to elapse.
-       * If an event occurs "gdk_event_wait" will return TRUE.
-       *  If the timeout elapses "gdk_event_wait" will return
-       *  FALSE.
-       */
-      if (gdk_event_wait ())
-	{
-	  /* If we get here we can rest assurred that an event
-	   *  has occurred. Read it.
-	   */
-#ifdef USE_XIM
-          gint filter_status;
-	  if (xim_using && xim_window)
-	    do
-	      {		/* dont dispatch events used by IM */
-	        XNextEvent (gdk_display, &xevent);
-		filter_status = XFilterEvent (&xevent, 
-					      GDK_WINDOW_XWINDOW (xim_window));
-	      } while (filter_status == True);
-	  else
-	    XNextEvent (gdk_display, &xevent);
-#else
-	  XNextEvent (gdk_display, &xevent);
 #endif
+  if (putback_events)
+    {
+      event = putback_events->data;
+      
+      temp_list = putback_events;
+      putback_events = g_list_remove_link (putback_events, temp_list);
+      g_list_free_1 (temp_list);
+      
+      return event;
+    }
+  
+  /* Wait for an event to occur or the timeout to elapse.
+   * If an event occurs "gdk_event_wait" will return TRUE.
+   *  If the timeout elapses "gdk_event_wait" will return
+   *  FALSE.
+   */
+  if (gdk_event_wait ())
+    {
+      /* If we get here we can rest assurred that an event
+       *  has occurred. Read it.
+       */
+#ifdef USE_XIM
+      gint filter_status;
+      if (xim_using && xim_window)
+	do
+	  {		/* don't dispatch events used by IM */
+	    XNextEvent (gdk_display, &xevent);
+	    filter_status = XFilterEvent (&xevent, 
+					  GDK_WINDOW_XWINDOW (xim_window));
+	  } while (filter_status == True);
+      else
+	XNextEvent (gdk_display, &xevent);
+#else
+      XNextEvent (gdk_display, &xevent);
+#endif
+      event = gdk_event_new ();
 
-	  event->any.send_event = xevent.xany.send_event;
-
-	  /* If "event" non-NULL.
-	   */
-	  if (event)
-	    return gdk_event_translate (event, &xevent);
-	}
+      event->any.type = GDK_NOTHING;
+      event->any.window = NULL;
+      event->any.send_event = FALSE;
+      event->any.send_event = xevent.xany.send_event;
+      
+      if (gdk_event_translate (event, &xevent))
+	return event;
+      else
+	gdk_event_free (event);
     }
 
-  return FALSE;
+  return NULL;
 }
 
 void
@@ -753,8 +766,7 @@ gdk_event_put (GdkEvent *event)
 
   g_return_if_fail (event != NULL);
 
-  new_event = g_new (GdkEvent, 1);
-  *new_event = *event;
+  new_event = gdk_event_copy (event);
 
   putback_events = g_list_prepend (putback_events, new_event);
 }
@@ -779,13 +791,11 @@ gdk_event_put (GdkEvent *event)
 
 static GMemChunk *event_chunk;
 
-GdkEvent*
-gdk_event_copy (GdkEvent *event)
+static GdkEvent*
+gdk_event_new (void)
 {
   GdkEvent *new_event;
   
-  g_return_val_if_fail (event != NULL, NULL);
-
   if (event_chunk == NULL)
     event_chunk = g_mem_chunk_new ("events",
 				   sizeof (GdkEvent),
@@ -793,8 +803,31 @@ gdk_event_copy (GdkEvent *event)
 				   G_ALLOC_AND_FREE);
 
   new_event = g_chunk_new (GdkEvent, event_chunk);
+
+  return new_event;
+}
+
+GdkEvent*
+gdk_event_copy (GdkEvent *event)
+{
+  GdkEvent *new_event;
+  
+  g_return_val_if_fail (event != NULL, NULL);
+
+  new_event = gdk_event_new ();
+
   *new_event = *event;
   gdk_window_ref (new_event->any.window);
+
+  if ((event->any.type == GDK_KEY_PRESS) ||
+      (event->any.type == GDK_KEY_RELEASE))
+    new_event->key.string = g_strdup (event->key.string);
+
+  if (((event->any.type == GDK_ENTER_NOTIFY) ||
+       (event->any.type == GDK_LEAVE_NOTIFY)) &&
+      (event->crossing.subwindow != NULL))
+    gdk_window_ref (event->crossing.subwindow);
+
   return new_event;
 }
 
@@ -822,7 +855,18 @@ gdk_event_free (GdkEvent *event)
   g_assert (event_chunk != NULL);
   g_return_if_fail (event != NULL);
 
-  gdk_window_unref (event->any.window);
+  if ((event->any.type == GDK_KEY_PRESS) ||
+      (event->any.type == GDK_KEY_RELEASE))
+    g_free (event->key.string);
+
+  if (event->any.window)
+    gdk_window_unref (event->any.window);
+
+  if (((event->any.type == GDK_ENTER_NOTIFY) ||
+       (event->any.type == GDK_LEAVE_NOTIFY)) &&
+      (event->crossing.subwindow != NULL))
+    gdk_window_unref (event->crossing.subwindow);
+
   g_mem_chunk_free (event_chunk, event);
 }
 
@@ -1008,10 +1052,11 @@ gdk_timer_disable ()
 }
 
 gint
-gdk_input_add (gint              source,
-	       GdkInputCondition condition,
-	       GdkInputFunction  function,
-	       gpointer          data)
+gdk_input_add_interp (gint              source,
+		      GdkInputCondition condition,
+		      GdkInputFunction  function,
+		      gpointer          data,
+		      GdkDestroyNotify  destroy)
 {
   static gint next_tag = 1;
   GList *list;
@@ -1028,8 +1073,11 @@ gdk_input_add (gint              source,
 
       if ((input->source == source) && (input->condition == condition))
 	{
+	  if (input->destroy)
+	    (input->destroy) (input->data);
 	  input->function = function;
 	  input->data = data;
+	  input->destroy = destroy;
 	  tag = input->tag;
 	}
     }
@@ -1042,12 +1090,22 @@ gdk_input_add (gint              source,
       input->condition = condition;
       input->function = function;
       input->data = data;
+      input->destroy = destroy;
       tag = input->tag;
 
       inputs = g_list_prepend (inputs, input);
     }
 
   return tag;
+}
+
+gint
+gdk_input_add (gint              source,
+	       GdkInputCondition condition,
+	       GdkInputFunction  function,
+	       gpointer          data)
+{
+  return gdk_input_add_interp (source, condition, function, data, NULL);
 }
 
 void
@@ -1064,6 +1122,9 @@ gdk_input_remove (gint tag)
 
       if (input->tag == tag)
 	{
+	  if (input->destroy)
+	    (input->destroy) (input->data);
+
 	  temp_list = list;
 
 	  if (list->next)
@@ -1471,6 +1532,31 @@ gdk_event_wait ()
 }
 
 static gint
+gdk_event_apply_filters (XEvent *xevent,
+			 GdkEvent *event,
+			 GList *filters)
+{
+  GdkEventFilter *filter;
+  GList *tmp_list;
+  GdkFilterReturn result;
+
+  tmp_list = filters;
+  
+  while (tmp_list)
+    {
+      filter = (GdkEventFilter *)tmp_list->data;
+
+      result = (*filter->function)(xevent, event, filter->data);
+      if (result !=  GDK_FILTER_CONTINUE)
+	return result;
+	
+      tmp_list = tmp_list->next;
+    }
+
+  return GDK_FILTER_CONTINUE;
+}
+
+static gint
 gdk_event_translate (GdkEvent *event,
 		     XEvent   *xevent)
 {
@@ -1520,6 +1606,25 @@ gdk_event_translate (GdkEvent *event,
   window = gdk_window_lookup (xevent->xany.window);
   window_private = (GdkWindowPrivate *) window;
 
+  if (window == NULL)
+    g_warning ("%#lx -> NULL\n", xevent->xany.window);
+  else
+    gdk_window_ref (window);
+
+
+  /* Check for filters for this window */
+
+  if (window_private)
+    {
+      GdkFilterReturn result;
+      result = gdk_event_apply_filters (xevent, event, window_private->filters);
+
+      if (result != GDK_FILTER_CONTINUE)
+	{
+	  return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	}
+    }
+
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so
    *  the conversion is fairly straightforward. We also
@@ -1555,7 +1660,7 @@ gdk_event_translate (GdkEvent *event,
 	    {                     /* retry */
 	      /* alloc adequate size of buffer */
 	      if (gdk_debug_level >= 1)
-		g_print("XIM: overflow(required %i)\n", charcount);
+		g_print("XIM: overflow (required %i)\n", charcount);
 
 	      while (buf_len <= charcount)
 		buf_len *= 2;
@@ -1603,10 +1708,14 @@ gdk_event_translate (GdkEvent *event,
       event->key.window = window;
       event->key.time = xevent->xkey.time;
       event->key.state = (GdkModifierType) xevent->xkey.state;
-      event->key.string = buf;
+      event->key.string = g_strdup (buf);
       event->key.length = charcount;
 
       return_val = window_private && !window_private->destroyed;
+      
+      if (!return_val)
+	g_free (event->key.string);
+      
       break;
 
     case KeyRelease:
@@ -2012,6 +2121,14 @@ gdk_event_translate (GdkEvent *event,
       event->crossing.type = GDK_LEAVE_NOTIFY;
       event->crossing.window = window;
 
+      /* If the subwindow field of the XEvent is non-NULL, then
+       *  lookup the corresponding GdkWindow.
+       */
+      if (xevent->xcrossing.subwindow != None)
+	event->crossing.subwindow = gdk_window_lookup (xevent->xcrossing.subwindow);
+      else
+	event->crossing.subwindow = NULL;
+
       /* Translate the crossing detail into Gdk terms.
        */
       switch (xevent->xcrossing.detail)
@@ -2073,31 +2190,30 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case FocusIn:
-      /* Print debugging info.
-       */
-      if (gdk_show_events)
-	g_print ("focus in:\t\twindow: %ld\n",
-		 xevent->xfocus.window - base_id);
-
-      event->focus_change.type = GDK_FOCUS_CHANGE;
-      event->focus_change.window = window;
-      event->focus_change.in = TRUE;
-
-      return_val = window_private && !window_private->destroyed;
-      break;
-
     case FocusOut:
-      /* Print debugging info.
+      /* We only care about focus events that indicate that _this_
+       * window (not a ancestor or child) got or lost the focus
        */
-      if (gdk_show_events)
-	g_print ("focus out:\t\twindow: %ld\n",
-		 xevent->xfocus.window - base_id);
-
-      event->focus_change.type = GDK_FOCUS_CHANGE;
-      event->focus_change.window = window;
-      event->focus_change.in = FALSE;
-
-      return_val = window_private && !window_private->destroyed;
+      switch (xevent->xfocus.detail)
+	{
+	case NotifyAncestor:
+	case NotifyInferior:
+	case NotifyNonlinear:
+	  /* Print debugging info.
+	   */
+	  if (gdk_show_events)
+	    g_print ("focus %s:\t\twindow: %ld\n",
+		     (xevent->xany.type == FocusIn) ? "in" : "out",
+		     xevent->xfocus.window - base_id);
+	  
+	  event->focus_change.type = GDK_FOCUS_CHANGE;
+	  event->focus_change.window = window;
+	  event->focus_change.in = (xevent->xany.type == FocusIn);
+	  
+	  return_val = window_private && !window_private->destroyed;
+	  break;
+	default:
+	}
       break;
 
     case KeymapNotify:
@@ -2194,15 +2310,9 @@ gdk_event_translate (GdkEvent *event,
       event->any.type = GDK_DESTROY;
       event->any.window = window;
 
-      /* Remeber which window received the destroy notify
-       *  event so that we can destroy our associated
-       *  data structures the next time the user asks
-       *  us for an event.
-       */
-      received_destroy_notify = TRUE;
-      window_to_destroy = window;
-
       return_val = window_private && !window_private->destroyed;
+
+      gdk_window_destroy_notify (window);
       break;
 
     case UnmapNotify:
@@ -2618,9 +2728,29 @@ gdk_event_translate (GdkEvent *event,
       break;
     }
 
+  if (return_val)
+    {
+      if (event->any.window)
+	gdk_window_ref (event->any.window);
+      if (((event->any.type == GDK_ENTER_NOTIFY) ||
+	   (event->any.type == GDK_LEAVE_NOTIFY)) &&
+	  (event->crossing.subwindow != NULL))
+	gdk_window_ref (event->crossing.subwindow);
+    }
+  else
+    {
+      /* Mark this event as having no resources to be freed */
+      event->any.window = NULL;
+      event->any.type = GDK_NOTHING;
+    }
+
+  if (window)
+    gdk_window_unref (window);
+
   return return_val;
 }
 
+#if 0
 static Bool
 gdk_event_get_type (Display  *display,
 		    XEvent   *xevent,
@@ -2637,6 +2767,7 @@ gdk_event_get_type (Display  *display,
 
   return FALSE;
 }
+#endif
 
 static void
 gdk_synthesize_click (GdkEvent *event,

@@ -27,23 +27,8 @@
 
 #include <stdlib.h>
 
-#if defined(HAVE_WCTYPE_H) && !defined(X_LOCALE)
-#  include <wctype.h>
-#else 
-#  define iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
-#endif /* HAVE_WCTYPE_H || !X_LOCALE */
+#ifdef X_LOCALE
 
-#ifndef X_LOCALE
-
-#ifdef HAVE_WCHAR_H
-#  include <wchar.h>
-#else 
-#  ifdef HAVE_WCSTR_H
-#    include <wcstr.h>
-#  endif 
-#endif 
-
-#else  /* X_LOCALE */
 #include <X11/Xfuncproto.h>
 #include <X11/Xosdefs.h>
 
@@ -159,5 +144,17 @@ extern int _g_mbtowc (wchar_t *wstr, const char *str, size_t len);
 #endif
 
 #endif /* X_LOCALE */
+
+#if (defined(HAVE_WCTYPE_H) || defined(HAVE_WCHAR_H)) && !defined(X_LOCALE)
+#  ifdef HAVE_WCTYPE_H
+#    include <wctype.h>
+#  else
+#    ifdef HAVE_WCHAR_H
+#      include <wchar.h>
+#    endif
+#  endif
+#else
+#  define iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
+#endif
 
 #endif /* __GDK_I18N_H__ */

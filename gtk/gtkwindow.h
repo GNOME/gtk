@@ -66,6 +66,8 @@ struct _GtkWindowClass
 			gint      *y,
 			gint       width,
 			gint       height);
+  void (* set_focus)   (GtkWindow *window,
+			GtkWidget *focus);
 };
 
 

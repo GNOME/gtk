@@ -49,6 +49,9 @@ struct _GtkInputDialog
   
   GtkWidget *axis_items[GDK_AXIS_LAST];
   guint32    current_device;
+
+  GtkWidget *keys_list;
+  GtkWidget *keys_listbox;
 };
 
 struct _GtkInputDialogClass

@@ -28,6 +28,7 @@ static void  gdk_colormap_remove      (GdkColormap *cmap);
 static guint gdk_colormap_hash        (Colormap    *cmap);
 static gint  gdk_colormap_cmp         (Colormap    *a,
 				       Colormap    *b);
+static void gdk_colormap_real_destroy (GdkColormap *colormap);
 
 static GHashTable *colormap_hash = NULL;
 
@@ -117,7 +118,7 @@ gdk_colormap_new (GdkVisual *visual,
   return colormap;
 }
 
-void
+static void
 gdk_colormap_real_destroy (GdkColormap *colormap)
 {
   GdkColormapPrivate *private = (GdkColormapPrivate*) colormap;
@@ -130,12 +131,6 @@ gdk_colormap_real_destroy (GdkColormap *colormap)
   gdk_colormap_remove (colormap);
   XFreeColormap (private->xdisplay, private->xcolormap);
   g_free (colormap);
-}
-
-void
-gdk_colormap_destroy (GdkColormap *colormap)
-{
-  gdk_colormap_unref (colormap);
 }
 
 GdkColormap*

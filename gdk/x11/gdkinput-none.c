@@ -32,6 +32,7 @@ gdk_input_init ()
 {
   gdk_input_vtable.set_mode           = NULL;
   gdk_input_vtable.set_axes           = NULL;
+  gdk_input_vtable.set_key            = NULL;
   gdk_input_vtable.motion_events      = NULL;
   gdk_input_vtable.get_pointer        = gdk_input_none_get_pointer;
   gdk_input_vtable.grab_pointer       = NULL;

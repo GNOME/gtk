@@ -199,7 +199,7 @@ gtk_progress_bar_make_pixmap (GtkProgressBar *pbar)
       widget = GTK_WIDGET (pbar);
 
       if (pbar->offscreen_pixmap)
-	gdk_pixmap_destroy (pbar->offscreen_pixmap);
+	gdk_pixmap_unref (pbar->offscreen_pixmap);
 
       pbar->offscreen_pixmap = gdk_pixmap_new (widget->window,
 					       widget->allocation.width,

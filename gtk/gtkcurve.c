@@ -296,7 +296,7 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
     {
     case GDK_CONFIGURE:
       if (c->pixmap)
-	gdk_pixmap_destroy (c->pixmap);
+	gdk_pixmap_unref (c->pixmap);
       c->pixmap = 0;
       /* fall through */
     case GDK_EXPOSE:
@@ -849,7 +849,7 @@ gtk_curve_destroy (GtkObject *object)
 
   curve = GTK_CURVE (object);
   if (curve->pixmap)
-    gdk_pixmap_destroy (curve->pixmap);
+    gdk_pixmap_unref (curve->pixmap);
   if (curve->point)
     g_free (curve->point);
   if (curve->ctlpoint)

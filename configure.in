@@ -1,6 +1,9 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT(gdk/gdktypes.h)
 
+# Save this value here, since automake will set cflags later
+cflags_set=${CFLAGS+set}
+
 GTK_MAJOR_VERSION=0
 GTK_MINOR_VERSION=99
 GTK_MICRO_VERSION=0
@@ -12,6 +15,9 @@ PACKAGE=gtk+
 
 # Configure glib
 AC_CONFIG_SUBDIRS(glib)
+
+# Save this value here, since automake will set cflags later
+cflags_set=${CFLAGS+set}
 
 dnl Initialize automake stuff
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
@@ -42,7 +48,7 @@ AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 AC_ARG_WITH(xinput, [  --with-xinput[=no/gxi/xfree] support XInput ])
 
 if test -n "$DEBUGFLAG"; then
-  test "${CFLAGS+set}" = set || CFLAGS="$DEBUGFLAG"
+  test "$cflags_set" = set || CFLAGS="$DEBUGFLAG"
 else
   CFLAGS="$CFLAGS -DNDEBUG"
 fi
@@ -104,7 +110,7 @@ x_ldflags="$X_LDFLAGS $X_LIBS"
 
 # set up things for XInput
 
-if test "x$with_xinput" = "xgxi -o x$with_xinput" = "xyes"; then
+if test "x$with_xinput" = "xgxi" -o "x$with_xinput" = "xyes"; then
   AC_DEFINE(XINPUT_GXI)
   xinput_progs=gxid
   x_libs="-lXi $x_libs"
@@ -199,38 +205,23 @@ gtk_cv_display_resource_base="private3")])
 AC_MSG_RESULT($gtk_cv_display_resource_base)
 AC_DEFINE_UNQUOTED(RESOURCE_BASE, gdk_display->$gtk_cv_display_resource_base)
 
-# Look for wide string functions in wchar.h or wcstr.h
-
-AC_MSG_CHECKING(for <wchar.h> or <wcstr.h>)
-AC_TRY_CPP([#include <wchar.h>], gtk_ok=yes, gtk_ok=no)
-if test $gtk_ok = no; then
-   AC_TRY_CPP([#include <wcstr.h>], gtk_ok=yes, gtk_ok=no)
-   if test $gtk_ok = no; then
-       need_x_locale=yes
-   fi
-fi
-   
-AC_MSG_RESULT($gtk_ok)
-
 # Check if X_LOCALE definition is necessary
 
 AC_MSG_CHECKING(need -DX_LOCALE)
-if test x$need_x_locale = xyes; then
-  AC_MSG_RESULT([yes (C library doesn't include wide string functions)])
-else
-  AC_TRY_RUN([
-  #include <stdio.h>
-  #include <locale.h>
 
-  int
-  main ()
-  {
-    return setlocale (LC_ALL, "${with_locale}") == NULL;
-  }],
-  need_x_locale=no,
-  need_x_locale=yes)
-  AC_MSG_RESULT($need_x_locale)
-fi
+AC_TRY_RUN([
+#include <stdio.h>
+#include <locale.h>
+
+int
+main ()
+{
+  return setlocale (LC_ALL, "${with_locale}") == NULL;
+}],
+need_x_locale=no,
+need_x_locale=yes)
+AC_MSG_RESULT($need_x_locale)
+
 if test $need_x_locale = yes; then
   CFLAGS="$CFLAGS -DX_LOCALE"
 fi

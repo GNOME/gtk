@@ -96,9 +96,7 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-    {
-      gdk_pixmap_destroy(pixmap);
-    }
+    gdk_pixmap_unref (pixmap);
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
 			  widget->allocation.height,
@@ -182,6 +180,17 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
     }
 
   update_cursor (widget, event->x, event->y);
+
+  return TRUE;
+}
+
+static gint
+key_press_event (GtkWidget *widget, GdkEventKey *event)
+{
+  if ((event->keyval >= 0x20) && (event->keyval <= 0xFF))
+    printf("I got a %c\n", event->keyval);
+  else
+    printf("I got some other key\n");
 
   return TRUE;
 }
@@ -338,6 +347,8 @@ main (int argc, char *argv[])
 		      (GtkSignalFunc) motion_notify_event, NULL);
   gtk_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
 		      (GtkSignalFunc) button_press_event, NULL);
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "key_press_event",
+		      (GtkSignalFunc) key_press_event, NULL);
 
   gtk_signal_connect (GTK_OBJECT (drawing_area), "leave_notify_event",
 		      (GtkSignalFunc) leave_notify_event, NULL);
@@ -347,6 +358,7 @@ main (int argc, char *argv[])
   gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
 			 | GDK_LEAVE_NOTIFY_MASK
 			 | GDK_BUTTON_PRESS_MASK
+			 | GDK_KEY_PRESS_MASK
 			 | GDK_POINTER_MOTION_MASK
 			 | GDK_POINTER_MOTION_HINT_MASK
 			 | GDK_PROXIMITY_OUT_MASK);
@@ -354,6 +366,8 @@ main (int argc, char *argv[])
   /* The following call enables tracking and processing of extension
      events for the drawing area */
   gtk_widget_set_extension_events (drawing_area, GDK_EXTENSION_EVENTS_ALL);
+
+  gtk_widget_grab_focus (drawing_area);
 
   /* .. And create some buttons */
   button = gtk_button_new_with_label ("Input Dialog");

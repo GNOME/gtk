@@ -102,6 +102,15 @@ gdk_input_set_axes (guint32 deviceid, GdkAxisUse *axes)
     gdk_input_vtable.set_axes (deviceid, axes);
 }
 
+void gdk_input_set_key (guint32 deviceid,
+			guint   index,
+			guint   keyval,
+			GdkModifierType modifiers)
+{
+  if (deviceid != GDK_CORE_POINTER && gdk_input_vtable.set_key)
+    gdk_input_vtable.set_key (deviceid, index, keyval, modifiers);
+}
+
 GdkTimeCoord *
 gdk_input_motion_events (GdkWindow *window,
 			 guint32 deviceid,
@@ -258,7 +267,7 @@ gdk_input_window_destroy (GdkWindow *window)
   input_window = gdk_input_window_find (window);
   g_return_if_fail (input_window != NULL);
 
-  gdk_input_windows = g_list_remove(gdk_input_windows,input_window);
+  gdk_input_windows = g_list_remove (gdk_input_windows,input_window);
   g_free(input_window);
 }
 
@@ -280,6 +289,7 @@ gdk_input_exit (void)
 	  g_free(gdkdev->axes);
 #endif	  
 	  g_free(gdkdev->info.axes);
+	  g_free(gdkdev->info.keys);
 	  g_free(gdkdev);
 	}
     }

@@ -46,7 +46,6 @@ GtkAcceleratorTable* gtk_accelerator_table_find (GtkObject	*object,
 						 guchar		accelerator_key,
 						 guint8		accelerator_mods);
 
-void gtk_accelerator_table_destroy (GtkAcceleratorTable *table);
 GtkAcceleratorTable *gtk_accelerator_table_ref (GtkAcceleratorTable *table);
 void gtk_accelerator_table_unref   (GtkAcceleratorTable *table);
 void gtk_accelerator_table_install (GtkAcceleratorTable *table,

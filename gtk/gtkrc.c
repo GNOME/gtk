@@ -441,7 +441,7 @@ gtk_rc_style_init (GtkRcStyle *rc_style)
 	  old_font = rc_style->style->font;
 	  rc_style->style->font = gdk_fontset_load (rc_style->fontset_name);
 	  if (rc_style->style->font)
-	    gdk_fontset_free (old_font);
+	    gdk_font_unref (old_font);
 	  else
 	    rc_style->style->font = old_font;
 	}
@@ -450,7 +450,7 @@ gtk_rc_style_init (GtkRcStyle *rc_style)
 	  old_font = rc_style->style->font;
 	  rc_style->style->font = gdk_font_load (rc_style->font_name);
 	  if (rc_style->style->font)
-	    gdk_font_free (old_font);
+	    gdk_font_unref (old_font);
 	  else
 	    rc_style->style->font = old_font;
 	}

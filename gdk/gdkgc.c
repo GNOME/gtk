@@ -141,11 +141,13 @@ gdk_gc_new_with_values (GdkWindow       *window,
       xvalues.clip_y_origin = values->clip_y_origin;
       xvalues_mask |= GCClipYOrigin;
     }
+ 
   if (values_mask & GDK_GC_EXPOSURES)
-    {
-      xvalues.graphics_exposures = values->graphics_exposures;
-      xvalues_mask |= GCGraphicsExposures;
-    }
+    xvalues.graphics_exposures = values->graphics_exposures;
+  else
+    xvalues.graphics_exposures = False;
+  xvalues_mask |= GCGraphicsExposures;
+
   if (values_mask & GDK_GC_LINE_WIDTH)
     {
       xvalues.line_width = values->line_width;

@@ -79,6 +79,7 @@ typedef struct _GdkEventDropDataAvailable GdkEventDropDataAvailable;
 typedef struct _GdkEventDropLeave GdkEventDropLeave;
 typedef struct _GdkEventClient    GdkEventClient;
 typedef union  _GdkEvent          GdkEvent;
+typedef struct _GdkDeviceKey      GdkDeviceKey;
 typedef struct _GdkDeviceInfo     GdkDeviceInfo;
 typedef struct _GdkTimeCoord      GdkTimeCoord;
 typedef gint (*GdkEventFunc) (GdkEvent *event,
@@ -278,6 +279,12 @@ typedef enum
   GDK_LAST_CURSOR,
   GDK_CURSOR_IS_PIXMAP = -1
 } GdkCursorType;
+
+typedef enum {
+  GDK_FILTER_CONTINUE,    /* Event not handled, continue processesing */
+  GDK_FILTER_TRANSLATE,   /* Translated event stored */
+  GDK_FILTER_REMOVE       /* Terminate processing, removing event */
+} GdkFilterReturn;
 
 /* Event types.
  *   Nothing: No event occurred.
@@ -568,6 +575,7 @@ typedef void (*GdkInputFunction) (gpointer          data,
 				  gint              source,
 				  GdkInputCondition condition);
 
+typedef void (*GdkDestroyNotify) (gpointer data);
 
 /* Color Context modes.
  *
@@ -588,7 +596,6 @@ typedef enum
   GDK_CC_MODE_MY_GRAY,
   GDK_CC_MODE_PALETTE
 } GdkColorContextMode;
-
 
 /* The color type.
  *   A color consists of red, green and blue values in the
@@ -801,6 +808,12 @@ struct _GdkColorContext
 
 /* Types for XInput support */
 
+struct _GdkDeviceKey
+{
+  guint keyval;
+  GdkModifierType modifiers;
+};
+
 struct _GdkDeviceInfo
 {
   guint32 deviceid;
@@ -810,6 +823,8 @@ struct _GdkDeviceInfo
   gint has_cursor;	/* TRUE if the X pointer follows device motion */
   gint num_axes;
   GdkAxisUse *axes;    /* Specifies use for each axis */
+  gint num_keys;
+  GdkDeviceKey *keys;
 };
 
 struct _GdkTimeCoord
@@ -821,6 +836,14 @@ struct _GdkTimeCoord
   gdouble xtilt;
   gdouble ytilt;
 };
+
+/* Event filtering */
+
+typedef void GdkXEvent;   /* Can be cast to XEvent */
+
+typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
+					  GdkEvent *event,
+					  gpointer  data);
 
 struct _GdkEventAny
 {
@@ -1036,8 +1059,6 @@ struct _GdkEventClient
     long l[5];
   } data;
 };
-
-typedef void GdkXEvent;   /* Can be cast to XEvent */
 
 struct _GdkEventOther
 {

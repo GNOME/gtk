@@ -25,6 +25,7 @@
 
 enum {
   MOVE_RESIZE,
+  SET_FOCUS,
   LAST_SIGNAL
 };
 
@@ -35,13 +36,18 @@ typedef gint (*GtkWindowSignal1) (GtkObject *object,
 				  gint       arg3,
 				  gint       arg4,
 				  gpointer   data);
-
+typedef void (*GtkWindowSignal2) (GtkObject *object,
+				  gpointer   arg1,
+				  gpointer   data);
 
 static void gtk_window_marshal_signal_1 (GtkObject      *object,
 					 GtkSignalFunc   func,
 					 gpointer        func_data,
 					 GtkArg         *args);
-
+static void gtk_window_marshal_signal_2 (GtkObject      *object,
+					 GtkSignalFunc   func,
+					 gpointer        func_data,
+					 GtkArg         *args);
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_arg                (GtkWindow         *window,
@@ -80,6 +86,8 @@ static gint gtk_real_window_move_resize   (GtkWindow         *window,
 					   gint              *y,
 					   gint               width,
 					   gint               height);
+static void gtk_real_window_set_focus     (GtkWindow         *window,
+					   GtkWidget         *focus);
 static gint gtk_window_move_resize        (GtkWidget         *widget);
 static void gtk_window_set_hints          (GtkWidget         *widget,
 					   GtkRequisition    *requisition);
@@ -144,6 +152,15 @@ gtk_window_class_init (GtkWindowClass *klass)
                     GTK_TYPE_POINTER, GTK_TYPE_POINTER,
                     GTK_TYPE_INT, GTK_TYPE_INT);
 
+  window_signals[SET_FOCUS] =
+    gtk_signal_new ("set_focus",
+                    GTK_RUN_LAST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkWindowClass, set_focus),
+                    gtk_window_marshal_signal_2,
+		    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_POINTER);
+
   gtk_object_class_add_signals (object_class, window_signals, LAST_SIGNAL);
 
   object_class->destroy = gtk_window_destroy;
@@ -168,6 +185,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->need_resize = gtk_window_need_resize;
 
   klass->move_resize = gtk_real_window_move_resize;
+  klass->set_focus = gtk_real_window_set_focus;
 }
 
 static void
@@ -270,36 +288,7 @@ void
 gtk_window_set_focus (GtkWindow *window,
 		      GtkWidget *focus)
 {
-  GdkEventFocus event;
-
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  if (focus && !GTK_WIDGET_CAN_FOCUS (focus))
-    return;
-
-  if (window->focus_widget != focus)
-    {
-      if (window->focus_widget)
-	{
-	  event.type = GDK_FOCUS_CHANGE;
-	  event.window = window->focus_widget->window;
-	  event.in = FALSE;
-
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-	}
-
-      window->focus_widget = focus;
-
-      if (window->focus_widget)
-	{
-	  event.type = GDK_FOCUS_CHANGE;
-	  event.window = window->focus_widget->window;
-	  event.in = TRUE;
-
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-	}
-    }
+  gtk_signal_emit (GTK_OBJECT (window), window_signals[SET_FOCUS], focus);
 }
 
 void
@@ -350,7 +339,8 @@ gtk_window_add_accelerator_table (GtkWindow           *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   gtk_accelerator_table_ref (table);
-  window->accelerator_tables = g_list_prepend (window->accelerator_tables, table);
+  window->accelerator_tables = g_list_prepend (window->accelerator_tables,
+					       table);
 }
 
 void
@@ -360,7 +350,8 @@ gtk_window_remove_accelerator_table (GtkWindow           *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  window->accelerator_tables = g_list_remove (window->accelerator_tables, table);
+  window->accelerator_tables = g_list_remove (window->accelerator_tables,
+					      table);
   gtk_accelerator_table_unref (table);
 }
 
@@ -392,6 +383,19 @@ gtk_window_marshal_signal_1 (GtkObject      *object,
 			   GTK_VALUE_INT (args[2]),
 			   GTK_VALUE_INT (args[3]),
 			   func_data);
+}
+
+static void
+gtk_window_marshal_signal_2 (GtkObject      *object,
+			     GtkSignalFunc   func,
+			     gpointer        func_data,
+			     GtkArg         *args)
+{
+  GtkWindowSignal2 rfunc;
+
+  rfunc = (GtkWindowSignal2) func;
+
+  (* rfunc) (object, GTK_VALUE_POINTER (args[0]), func_data);
 }
 
 static void
@@ -1125,6 +1129,42 @@ gtk_window_move_resize (GtkWidget *widget)
     }
 
   return return_val;
+}
+
+static void
+gtk_real_window_set_focus (GtkWindow *window,
+			   GtkWidget *focus)
+{
+  GdkEventFocus event;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (focus && !GTK_WIDGET_CAN_FOCUS (focus))
+    return;
+
+  if (window->focus_widget != focus)
+    {
+      if (window->focus_widget)
+	{
+	  event.type = GDK_FOCUS_CHANGE;
+	  event.window = window->focus_widget->window;
+	  event.in = FALSE;
+
+	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
+	}
+
+      window->focus_widget = focus;
+
+      if (window->focus_widget)
+	{
+	  event.type = GDK_FOCUS_CHANGE;
+	  event.window = window->focus_widget->window;
+	  event.in = TRUE;
+
+	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
+	}
+    }
 }
 
 static void
