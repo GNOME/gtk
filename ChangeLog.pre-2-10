@@ -1,3 +1,8 @@
+Fri Aug 21 22:40:00  Raph Levien  <raph@gtk.org>
+
+	* gdk/gdkrgb.c: added calls to gdk_rgb_init in the get_cmap and
+	get_visual calls, so that it gets implicitly initialized.
+
 Fri Aug 21 13:06:04 1998  Stuart Parmenter  <pavlov@gimp.org>
 	* gtk/gtkfeatures.h.in:  added GTK_HAVE_FEATURES_1_1_2 for changes
 	such as GtkCTree function name changes

@@ -2821,11 +2821,13 @@ gdk_rgb_ditherable (void)
 GdkColormap *
 gdk_rgb_get_cmap (void)
 {
+  gdk_rgb_init ();
   return image_info->cmap;
 }
 
 GdkVisual *
 gdk_rgb_get_visual (void)
 {
+  gdk_rgb_init ();
   return image_info->visual;
 }
