@@ -3281,7 +3281,7 @@ gtk_default_draw_shadow_gap (GtkStyle       *style,
               gdk_draw_line (window, gc1,
                              x + gap_x + gap_width, y, x + width - 2, y);
               gdk_draw_line (window, gc2,
-                             x + gap_x + gap_width, y + 1, x + width - 2, y + 1);
+                             x + gap_x + gap_width, y + 1, x + width - 3, y + 1);
               gdk_draw_line (window, gc2,
                              x + gap_x + gap_width - 1, y, x + gap_x + gap_width - 1, y);
             }
