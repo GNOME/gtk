@@ -1509,7 +1509,7 @@ gtk_clist_realize (GtkWidget * widget)
   clist->clist_window = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (clist->clist_window, clist);
 
-  gdk_window_set_background (clist->clist_window, &widget->style->white);
+  gdk_window_set_background (clist->clist_window, &widget->style->bg[GTK_STATE_PRELIGHT]);
   gdk_window_show (clist->clist_window);
   gdk_window_get_size (clist->clist_window, &clist->clist_window_width,
 		       &clist->clist_window_height);
@@ -2188,15 +2188,17 @@ draw_row (GtkCList * clist,
 	bg_gc = widget->style->bg_gc[GTK_STATE_PRELIGHT];
     }
 
-
+  /* draw the cell borders and background */
   if (area)
     {
       if (gdk_rectangle_intersect (area, &cell_rectangle, &intersect_rectangle))
-	gdk_window_clear_area (clist->clist_window,
-			       intersect_rectangle.x,
-			       intersect_rectangle.y,
-			       intersect_rectangle.width,
-			       intersect_rectangle.height);
+	gdk_draw_rectangle (clist->clist_window,
+			    widget->style->white_gc,
+			    TRUE,
+			    intersect_rectangle.x,
+			    intersect_rectangle.y,
+			    intersect_rectangle.width,
+			    intersect_rectangle.height);
 
       /* the last row has to clear it's bottom cell spacing too */
       if (clist_row == clist->row_list_end->data)
@@ -2204,48 +2206,72 @@ draw_row (GtkCList * clist,
 	  cell_rectangle.y += clist->row_height + CELL_SPACING;
 
 	  if (gdk_rectangle_intersect (area, &cell_rectangle, &intersect_rectangle))
-	    gdk_window_clear_area (clist->clist_window,
-				   intersect_rectangle.x,
-				   intersect_rectangle.y,
-				   intersect_rectangle.width,
-				   intersect_rectangle.height);
+	    gdk_draw_rectangle (clist->clist_window,
+				widget->style->white_gc,
+				TRUE,
+				intersect_rectangle.x,
+				intersect_rectangle.y,
+				intersect_rectangle.width,
+				intersect_rectangle.height);
 	}	  
 
       if (!gdk_rectangle_intersect (area, &row_rectangle, &intersect_rectangle))
 	return;
 
-      gdk_draw_rectangle (clist->clist_window,
-			  bg_gc,
-			  TRUE,
-			  intersect_rectangle.x,
-			  intersect_rectangle.y,
-			  intersect_rectangle.width,
-			  intersect_rectangle.height);
+      if (clist_row->state == GTK_STATE_SELECTED || clist_row->fg_set)
+	gdk_draw_rectangle (clist->clist_window,
+			    bg_gc,
+			    TRUE,
+			    intersect_rectangle.x,
+			    intersect_rectangle.y,
+			    intersect_rectangle.width,
+			    intersect_rectangle.height);
+      else
+	gdk_window_clear_area (clist->clist_window,
+			       intersect_rectangle.x,
+			       intersect_rectangle.y,
+			       intersect_rectangle.width,
+			       intersect_rectangle.height);
     }
   else
     {
-      gdk_window_clear_area (clist->clist_window,
-			     cell_rectangle.x,
-			     cell_rectangle.y,
-			     cell_rectangle.width,
-			     cell_rectangle.height);
-
-      cell_rectangle.y += clist->row_height + CELL_SPACING;
-      gdk_window_clear_area (clist->clist_window,
-			     cell_rectangle.x,
-			     cell_rectangle.y,
-			     cell_rectangle.width,
-			     cell_rectangle.height);
-      
       gdk_draw_rectangle (clist->clist_window,
-			  bg_gc,
+			  widget->style->white_gc,
 			  TRUE,
-			  row_rectangle.x,
-			  row_rectangle.y,
-			  row_rectangle.width,
-			  row_rectangle.height);
-    }
+			  cell_rectangle.x,
+			  cell_rectangle.y,
+			  cell_rectangle.width,
+			  cell_rectangle.height);
 
+      /* the last row has to clear it's bottom cell spacing too */
+      if (clist_row == clist->row_list_end->data)
+	{
+	  cell_rectangle.y += clist->row_height + CELL_SPACING;
+
+	  gdk_draw_rectangle (clist->clist_window,
+			      widget->style->white_gc,
+			      TRUE,
+			      cell_rectangle.x,
+			      cell_rectangle.y,
+			      cell_rectangle.width,
+			      cell_rectangle.height);     
+	}	  
+
+      if (clist_row->state == GTK_STATE_SELECTED || clist_row->fg_set)
+	gdk_draw_rectangle (clist->clist_window,
+			    bg_gc,
+			    TRUE,
+			    row_rectangle.x,
+			    row_rectangle.y,
+			    row_rectangle.width,
+			    row_rectangle.height);
+      else
+	gdk_window_clear_area (clist->clist_window,
+			       row_rectangle.x,
+			       row_rectangle.y,
+			       row_rectangle.width,
+			       row_rectangle.height);
+    }
 
   /* iterate and draw all the columns (row cells) and draw their contents */
   for (i = 0; i < clist->columns; i++)
@@ -2441,6 +2467,12 @@ draw_rows (GtkCList * clist,
       last_row = ROW_FROM_YPIXEL (clist, clist->clist_window_height);
     }
 
+  /* this is a small special case which exposes the bottom cell line
+   * on the last row -- it might go away if I change the wall the cell spacings
+   * are drawn */
+  if (clist->rows == first_row)
+    first_row--;
+
   list = g_list_nth (clist->row_list, first_row);
   i = first_row;
   while (list)
@@ -2456,9 +2488,7 @@ draw_rows (GtkCList * clist,
     }
 
   if (!area)
-    gdk_window_clear_area (clist->clist_window,
-			   0, ROW_TOP_YPIXEL (clist, i) - CELL_SPACING,
-			   -1, -1);
+    gdk_window_clear_area (clist->clist_window, 0, ROW_TOP_YPIXEL (clist, i), -1, -1);
 }
 
 /*
