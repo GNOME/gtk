@@ -2650,7 +2650,6 @@ gtk_text_view_realize (GtkWidget *widget)
   GtkTextView *text_view;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  GSList *tmp_list;
   
   text_view = GTK_TEXT_VIEW (widget);
   GTK_WIDGET_SET_FLAGS (text_view, GTK_REALIZED);
@@ -2702,7 +2701,6 @@ static void
 gtk_text_view_unrealize (GtkWidget *widget)
 {
   GtkTextView *text_view;
-  GSList *tmp_list;
   
   text_view = GTK_TEXT_VIEW (widget);
 
@@ -4874,7 +4872,7 @@ append_action_signal (GtkTextView  *text_view,
 
   g_object_set_data (G_OBJECT (menuitem), "gtk-signal", (char *)signal);
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-		      activate_cb, text_view);
+		      GTK_SIGNAL_FUNC (activate_cb), text_view);
 
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);

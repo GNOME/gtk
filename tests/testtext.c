@@ -394,7 +394,7 @@ setup_tag (GtkTextTag *tag)
                          NULL, NULL, FALSE, FALSE);
 }
 
-static char  *book_closed_xpm[] = {
+static const char  *book_closed_xpm[] = {
 "16 16 6 1",
 "       c None s None",
 ".      c black",
@@ -701,8 +701,6 @@ get_empty_view (View *view)
 static View *
 view_from_widget (GtkWidget *widget)
 {
-  GtkWidget *app;
-
   if (GTK_IS_MENU_ITEM (widget))
     {
       GtkItemFactory *item_factory = gtk_item_factory_from_widget (widget);

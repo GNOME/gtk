@@ -353,7 +353,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
       gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-context-id",
 			   (char *)contexts[i]->context_id);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			  activate_cb, context);
+			  GTK_SIGNAL_FUNC (activate_cb), context);
 
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (menushell, menuitem);

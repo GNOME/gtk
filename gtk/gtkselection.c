@@ -1365,7 +1365,9 @@ gtk_selection_notify (GtkWidget	       *widget,
   if (event->property != GDK_NONE)
     length = gdk_selection_property_get (widget->window, &buffer, 
 					 &type, &format);
-
+  else
+    length = 0; /* silence gcc */
+  
   if (event->property == GDK_NONE || buffer == NULL)
     {
       current_retrievals = g_list_remove_link (current_retrievals, tmp_list);

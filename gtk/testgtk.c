@@ -2380,9 +2380,9 @@ uposition_stop_configure (GtkToggleButton *toggle,
 			  GtkObject       *window)
 {
   if (toggle->active)
-    gtk_signal_handler_block_by_func (window, uposition_configure, NULL);
+    gtk_signal_handler_block_by_func (window, GTK_SIGNAL_FUNC (uposition_configure), NULL);
   else
-    gtk_signal_handler_unblock_by_func (window, uposition_configure, NULL);
+    gtk_signal_handler_unblock_by_func (window, GTK_SIGNAL_FUNC (uposition_configure), NULL);
 }
 
 static void
@@ -3137,7 +3137,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
   { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
-  { "/_Preferences/Shape/_Image",       NULL, gtk_ifactory_cb, 0, "<ImageItem>", apple, sizeof(apple) },
+  { "/_Preferences/Shape/_Image",       NULL, gtk_ifactory_cb, 0, "<ImageItem>", (gchar**) apple, sizeof(apple) },
 
   /* For testing deletion of menus */
   { "/_Preferences/Should_NotAppear",          NULL, 0,               0, "<Branch>" },
@@ -4382,10 +4382,10 @@ create_list (void)
 
   static OptionMenuItem items[] =
   {
-    { "Single",   list_toggle_sel_mode },
-    { "Browse",   list_toggle_sel_mode },
-    { "Multiple", list_toggle_sel_mode },
-    { "Extended", list_toggle_sel_mode }
+    { "Single",   GTK_SIGNAL_FUNC (list_toggle_sel_mode) },
+    { "Browse",   GTK_SIGNAL_FUNC (list_toggle_sel_mode) },
+    { "Multiple", GTK_SIGNAL_FUNC (list_toggle_sel_mode) },
+    { "Extended", GTK_SIGNAL_FUNC (list_toggle_sel_mode) }
   };
 
   if (!window)
@@ -4872,10 +4872,10 @@ create_clist (void)
 
   static OptionMenuItem items[] =
   {
-    { "Single",   clist_toggle_sel_mode },
-    { "Browse",   clist_toggle_sel_mode },
-    { "Multiple", clist_toggle_sel_mode },
-    { "Extended", clist_toggle_sel_mode }
+    { "Single",   GTK_SIGNAL_FUNC (clist_toggle_sel_mode) },
+    { "Browse",   GTK_SIGNAL_FUNC (clist_toggle_sel_mode) },
+    { "Multiple", GTK_SIGNAL_FUNC (clist_toggle_sel_mode) },
+    { "Extended", GTK_SIGNAL_FUNC (clist_toggle_sel_mode) }
   };
 
   char text[TESTGTK_CLIST_COLUMNS][50];
@@ -5659,32 +5659,32 @@ void create_ctree (void)
 
   static OptionMenuItem items1[] =
   {
-    { "No lines", ctree_toggle_line_style },
-    { "Solid",    ctree_toggle_line_style },
-    { "Dotted",   ctree_toggle_line_style },
-    { "Tabbed",   ctree_toggle_line_style }
+    { "No lines", GTK_SIGNAL_FUNC (ctree_toggle_line_style) },
+    { "Solid",    GTK_SIGNAL_FUNC (ctree_toggle_line_style) },
+    { "Dotted",   GTK_SIGNAL_FUNC (ctree_toggle_line_style) },
+    { "Tabbed",   GTK_SIGNAL_FUNC (ctree_toggle_line_style) }
   };
 
   static OptionMenuItem items2[] =
   {
-    { "None",     ctree_toggle_expander_style },
-    { "Square",   ctree_toggle_expander_style },
-    { "Triangle", ctree_toggle_expander_style },
-    { "Circular", ctree_toggle_expander_style }
+    { "None",     GTK_SIGNAL_FUNC (ctree_toggle_expander_style) },
+    { "Square",   GTK_SIGNAL_FUNC (ctree_toggle_expander_style) },
+    { "Triangle", GTK_SIGNAL_FUNC (ctree_toggle_expander_style) },
+    { "Circular", GTK_SIGNAL_FUNC (ctree_toggle_expander_style) }
   };
 
   static OptionMenuItem items3[] =
   {
-    { "Left",  ctree_toggle_justify },
-    { "Right", ctree_toggle_justify }
+    { "Left",  GTK_SIGNAL_FUNC (ctree_toggle_justify) },
+    { "Right", GTK_SIGNAL_FUNC (ctree_toggle_justify) }
   };
 
   static OptionMenuItem items4[] =
   {
-    { "Single",   ctree_toggle_sel_mode },
-    { "Browse",   ctree_toggle_sel_mode },
-    { "Multiple", ctree_toggle_sel_mode },
-    { "Extended", ctree_toggle_sel_mode }
+    { "Single",   GTK_SIGNAL_FUNC (ctree_toggle_sel_mode) },
+    { "Browse",   GTK_SIGNAL_FUNC (ctree_toggle_sel_mode) },
+    { "Multiple", GTK_SIGNAL_FUNC (ctree_toggle_sel_mode) },
+    { "Extended", GTK_SIGNAL_FUNC (ctree_toggle_sel_mode) }
   };
 
   if (!window)
@@ -6198,7 +6198,7 @@ create_flipping (void)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
 
       gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
-			  flipping_toggled_cb, FALSE);
+			  GTK_SIGNAL_FUNC (flipping_toggled_cb), FALSE);
 
       gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
       
@@ -6273,8 +6273,6 @@ create_focus (void)
       GtkWidget *table;
       GtkWidget *frame;
       GList *list = NULL;
-      GList *first = NULL, *second = NULL, *tmp_list = NULL;
-      gint i;
       
       window = gtk_dialog_new_with_buttons ("Keyboard focus navigation",
                                             NULL, 0,
@@ -7196,10 +7194,10 @@ create_notebook (void)
 
   static OptionMenuItem items[] =
   {
-    { "Standard",   standard_notebook },
-    { "No tabs",    notabs_notebook },
-    { "Borderless", borderless_notebook },
-    { "Scrollable", scrollable_notebook },
+    { "Standard",   GTK_SIGNAL_FUNC (standard_notebook) },
+    { "No tabs",    GTK_SIGNAL_FUNC (notabs_notebook) },
+    { "Borderless", GTK_SIGNAL_FUNC (borderless_notebook) },
+    { "Scrollable", GTK_SIGNAL_FUNC (scrollable_notebook) },
   };
 
   if (!window)
@@ -8070,28 +8068,28 @@ tracking_label (GtkWidget *window)
                       label);
 
   button = gtk_button_new_with_label ("Deiconify");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_deiconify),
                              GTK_OBJECT (window));
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Iconify");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_iconify),
                              GTK_OBJECT (window));
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   
   button = gtk_button_new_with_label ("Present");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_present),
                              GTK_OBJECT (window));
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Show");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_widget_show),
                              GTK_OBJECT (window));
@@ -8111,42 +8109,42 @@ get_state_controls (GtkWidget *window)
   vbox = gtk_vbox_new (FALSE, 0);
   
   button = gtk_button_new_with_label ("Stick");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_stick),
                              GTK_OBJECT (window));
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Unstick");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_unstick),
                              GTK_OBJECT (window));
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   
   button = gtk_button_new_with_label ("Maximize");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_maximize),
                              GTK_OBJECT (window));
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Unmaximize");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_unmaximize),
                              GTK_OBJECT (window));
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Iconify");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_iconify),
                              GTK_OBJECT (window));
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Hide (withdraw)");
-  gtk_signal_connect_object (GTK_WIDGET (button),
+  gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_widget_hide),
                              GTK_OBJECT (window));
@@ -8181,7 +8179,7 @@ create_window_states (void)
       gtk_container_add (GTK_CONTAINER (window), box1);
 
       iconified = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_iconify (iconified);
+      gtk_window_iconify (GTK_WINDOW (iconified));
       gtk_window_set_title (GTK_WINDOW (iconified), "Iconified initially");
       controls = get_state_controls (iconified);
       gtk_container_add (GTK_CONTAINER (iconified), controls);
@@ -8385,16 +8383,16 @@ create_progress_bar (void)
 
   static OptionMenuItem items1[] =
   {
-    { "Left-Right", progressbar_toggle_orientation },
-    { "Right-Left", progressbar_toggle_orientation },
-    { "Bottom-Top", progressbar_toggle_orientation },
-    { "Top-Bottom", progressbar_toggle_orientation }
+    { "Left-Right", GTK_SIGNAL_FUNC (progressbar_toggle_orientation) },
+    { "Right-Left", GTK_SIGNAL_FUNC (progressbar_toggle_orientation) },
+    { "Bottom-Top", GTK_SIGNAL_FUNC (progressbar_toggle_orientation) },
+    { "Top-Bottom", GTK_SIGNAL_FUNC (progressbar_toggle_orientation) }
   };
 
   static OptionMenuItem items2[] =
   {
-    { "Continuous", progressbar_toggle_bar_style },
-    { "Discrete",   progressbar_toggle_bar_style }
+    { "Continuous", GTK_SIGNAL_FUNC (progressbar_toggle_bar_style) },
+    { "Discrete",   GTK_SIGNAL_FUNC (progressbar_toggle_bar_style) }
   };
 
   if (!pdata)
@@ -8962,7 +8960,6 @@ create_gamma_curve (void)
  */
 
 static int scroll_test_pos = 0.0;
-static GdkGC *scroll_test_gc = NULL;
 
 static gint
 scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
@@ -9019,11 +9016,6 @@ static void
 scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
 {
   gint source_min = (int)adj->value - scroll_test_pos;
-  gint source_max = source_min + widget->allocation.height;
-  gint dest_min = 0;
-  gint dest_max = widget->allocation.height;
-  GdkRectangle rect;
-  GdkEvent *event;
   gint dy;
 
   dy = scroll_test_pos - (int)adj->value;

@@ -1027,10 +1027,10 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
   else if (type != GTK_TOOLBAR_CHILD_RADIOBUTTON)
     g_return_val_if_fail (widget == NULL, NULL);
   
-  gtk_toolbar_internal_insert_element (toolbar, type, widget, text,
-                                       tooltip_text, tooltip_private_text,
-                                       icon, callback, user_data,
-                                       position, FALSE);
+  return gtk_toolbar_internal_insert_element (toolbar, type, widget, text,
+                                              tooltip_text, tooltip_private_text,
+                                              icon, callback, user_data,
+                                              position, FALSE);
 }
 
 static GtkWidget *

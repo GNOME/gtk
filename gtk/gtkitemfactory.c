@@ -1503,6 +1503,7 @@ static void
 gtk_item_factory_menu_pos (GtkMenu  *menu,
 			   gint     *x,
 			   gint     *y,
+                           gboolean *push_in,
 			   gpointer  func_data)
 {
   MenuPos *mpos = func_data;

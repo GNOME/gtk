@@ -192,7 +192,7 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
 
       gtk_signal_connect (GTK_OBJECT (tooltips->tip_window),
 			  "destroy",
-			  gtk_widget_destroyed,
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
 			  &tooltips->tip_window);
     }
 }

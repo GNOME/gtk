@@ -1,5 +1,29 @@
 2001-03-23  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/testgtk.c: fix warnings
+
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): fix return value
+
+	* gtk/gtktextview.c: fix warnings
+
+	* gtk/gtktext.c (find_cursor_at_line): fix warning
+
+	* gtk/gtkselection.c (gtk_selection_notify): fix warning 
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_menu_pos): fix signature
+	of this function
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_append_menuitems):
+	fix warning
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_style_set): fix warning
+
+	* gtk/gtkfontsel.c: fix warning
+
+	* gtk/gtkcolorsel.c: fix warnings
+
+2001-03-23  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkhandlebox.c: Apply property patch from Lee Mallabone
 
 	* gtk/gtkbox.c: Apply property patch from Lee Mallabone

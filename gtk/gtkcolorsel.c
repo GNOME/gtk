@@ -811,8 +811,10 @@ palette_new (GtkColorSelection *colorsel)
   gtk_object_set_data (GTK_OBJECT (retval), "color_set", GINT_TO_POINTER (0)); 
   gtk_widget_set_events (retval, GDK_BUTTON_PRESS_MASK | GDK_EXPOSURE_MASK);
   
-  gtk_signal_connect (GTK_OBJECT (retval), "expose_event", palette_expose, colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "button_press_event", palette_press, colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "expose_event",
+                      GTK_SIGNAL_FUNC (palette_expose), colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "button_press_event",
+                      GTK_SIGNAL_FUNC (palette_press), colorsel);
   
   gtk_drag_dest_set (retval,
 		     GTK_DEST_DEFAULT_HIGHLIGHT |
@@ -821,9 +823,12 @@ palette_new (GtkColorSelection *colorsel)
 		     targets, 1,
 		     GDK_ACTION_COPY);
   
-  gtk_signal_connect (GTK_OBJECT (retval), "drag_end", palette_drag_end, NULL);
-  gtk_signal_connect (GTK_OBJECT (retval), "drag_data_received", palette_drop_handle, colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "key_press_event", GTK_SIGNAL_FUNC (palette_activate), colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "drag_end",
+                      GTK_SIGNAL_FUNC (palette_drag_end), NULL);
+  gtk_signal_connect (GTK_OBJECT (retval), "drag_data_received",
+                      GTK_SIGNAL_FUNC (palette_drop_handle), colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "key_press_event",
+                      GTK_SIGNAL_FUNC (palette_activate), colorsel);
   
   return retval;
 }
@@ -911,8 +916,10 @@ mouse_release (GtkWidget      *button,
   ColorSelectionPrivate *priv;
   priv = colorsel->private_data;
   
-  gtk_signal_disconnect_by_func (GTK_OBJECT (button), mouse_motion, data);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (button), mouse_release, data);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (button),
+                                 GTK_SIGNAL_FUNC (mouse_motion), data);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (button),
+                                 GTK_SIGNAL_FUNC (mouse_release), data);
   
   grab_color_at_mouse (button, event->x_root, event->y_root, data);
   gdk_pointer_ungrab (0);
@@ -928,9 +935,15 @@ mouse_press (GtkWidget      *button,
   ColorSelectionPrivate *priv;
   priv = colorsel->private_data;
   
-  gtk_signal_connect (GTK_OBJECT (button), "motion_notify_event", mouse_motion, data);
-  gtk_signal_connect (GTK_OBJECT (button), "button_release_event", mouse_release, data);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (button), mouse_press, data); 
+  gtk_signal_connect (GTK_OBJECT (button), "motion_notify_event",
+                      GTK_SIGNAL_FUNC (mouse_motion),
+                      data);
+  gtk_signal_connect (GTK_OBJECT (button), "button_release_event",
+                      GTK_SIGNAL_FUNC (mouse_release),
+                      data);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (button),
+                                 GTK_SIGNAL_FUNC (mouse_press),
+                                 data); 
 }
 
 /* when the button is clicked */
@@ -953,7 +966,8 @@ get_screen_color (GtkWidget *button)
   if (priv->moving_dropper == FALSE)
     {
       priv->moving_dropper = TRUE;
-      gtk_signal_connect (GTK_OBJECT (button), "button_press_event", mouse_press, colorsel); 
+      gtk_signal_connect (GTK_OBJECT (button), "button_press_event",
+                          GTK_SIGNAL_FUNC (mouse_press), colorsel); 
       
       gdk_pointer_grab (button->window,
 			FALSE,
@@ -1141,8 +1155,11 @@ make_label_spinbutton (GtkColorSelection *colorsel,
     }
   gtk_object_set_data (GTK_OBJECT (adjust), "COLORSEL", colorsel);
   *spinbutton = gtk_spin_button_new (adjust, 10.0, 0);
-  gtk_signal_connect (GTK_OBJECT (*spinbutton), "focus_in_event", widget_focus_in, colorsel);
-  gtk_signal_connect (GTK_OBJECT (adjust), "value_changed", adjustment_changed, GINT_TO_POINTER (channel_type));
+  gtk_signal_connect (GTK_OBJECT (*spinbutton), "focus_in_event",
+                      GTK_SIGNAL_FUNC (widget_focus_in), colorsel);
+  gtk_signal_connect (GTK_OBJECT (adjust), "value_changed",
+                      GTK_SIGNAL_FUNC (adjustment_changed),
+                      GINT_TO_POINTER (channel_type));
   label = gtk_label_new (text);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   gtk_table_attach_defaults (GTK_TABLE (table), label, i, i+1, j, j+1);
@@ -1347,7 +1364,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   
   vbox = gtk_vbox_new (FALSE, 4);
   priv->triangle_colorsel = gtk_hsv_new ();
-  gtk_signal_connect (GTK_OBJECT (priv->triangle_colorsel), "changed", hsv_changed, colorsel);
+  gtk_signal_connect (GTK_OBJECT (priv->triangle_colorsel), "changed",
+                      GTK_SIGNAL_FUNC (hsv_changed), colorsel);
   gtk_hsv_set_metrics (GTK_HSV (priv->triangle_colorsel), 174, 15);
   gtk_box_pack_start (GTK_BOX (top_hbox), vbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), priv->triangle_colorsel, FALSE, FALSE, 0);
@@ -1363,10 +1381,12 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   
   button = gtk_button_new ();
-  gtk_signal_connect (GTK_OBJECT (button), "focus_in_event", widget_focus_in, colorsel);
+  gtk_signal_connect (GTK_OBJECT (button), "focus_in_event",
+                      GTK_SIGNAL_FUNC (widget_focus_in), colorsel);
   gtk_widget_set_events (button, GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
   gtk_object_set_data (GTK_OBJECT (button), "COLORSEL", colorsel); 
-  gtk_signal_connect (GTK_OBJECT (button), "clicked", get_screen_color, NULL);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                      GTK_SIGNAL_FUNC (get_screen_color), NULL);
   dropper_pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL, gtk_widget_get_colormap (button), &mask, NULL, picker);
   dropper_image = gtk_pixmap_new (dropper_pixmap, mask);
   gdk_pixmap_unref (dropper_pixmap);
@@ -1397,19 +1417,24 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_object_set_data (GTK_OBJECT (adjust), "COLORSEL", colorsel); 
   priv->opacity_slider = gtk_hscale_new (adjust); 
   gtk_scale_set_draw_value (GTK_SCALE (priv->opacity_slider), FALSE);
-  gtk_signal_connect (GTK_OBJECT(adjust), "value_changed", adjustment_changed, GINT_TO_POINTER (COLORSEL_OPACITY));
+  gtk_signal_connect (GTK_OBJECT(adjust), "value_changed",
+                      GTK_SIGNAL_FUNC (adjustment_changed),
+                      GINT_TO_POINTER (COLORSEL_OPACITY));
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_slider, 1, 7, 4, 5); 
   priv->opacity_entry = gtk_entry_new (); 
   gtk_widget_set_usize (priv->opacity_entry, 40, 0); 
-  gtk_signal_connect (GTK_OBJECT (priv->opacity_entry), "focus_in_event", widget_focus_in, colorsel);
-  gtk_signal_connect (GTK_OBJECT (priv->opacity_entry), "activate", opacity_entry_changed, colorsel);
+  gtk_signal_connect (GTK_OBJECT (priv->opacity_entry), "focus_in_event",
+                      GTK_SIGNAL_FUNC (widget_focus_in), colorsel);
+  gtk_signal_connect (GTK_OBJECT (priv->opacity_entry), "activate",
+                      GTK_SIGNAL_FUNC (opacity_entry_changed), colorsel);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_entry, 7, 8, 4, 5);
   
   label = gtk_label_new (_("Hex Value:"));
   gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   priv->hex_entry = gtk_entry_new ();
-  gtk_signal_connect (GTK_OBJECT (priv->hex_entry), "activate", hex_changed, colorsel);
+  gtk_signal_connect (GTK_OBJECT (priv->hex_entry), "activate",
+                      GTK_SIGNAL_FUNC (hex_changed), colorsel);
   gtk_widget_set_usize (priv->hex_entry, 75, -1);  
   gtk_table_set_col_spacing (GTK_TABLE (table), 3, 15);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->hex_entry, 1, 5, 5, 6);
@@ -1432,7 +1457,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_container_add (GTK_CONTAINER (priv->palette_frame), vbox);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
   button = gtk_button_new_with_label (_("Set Color"));
-  gtk_signal_connect (GTK_OBJECT (button), "clicked", add_button_pressed, colorsel);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_button_pressed), colorsel);
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);
   

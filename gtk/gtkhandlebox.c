@@ -475,7 +475,6 @@ gtk_handle_box_style_set (GtkWidget *widget,
 			  GtkStyle  *previous_style)
 {
   GtkHandleBox *hb;
-  GdkRectangle new_area;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (widget));

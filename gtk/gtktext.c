@@ -3615,7 +3615,6 @@ static void
 find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_height)
 {
   GdkWChar ch;
-  GtkOldEditable *old_editable = (GtkOldEditable *)text;
   
   GtkPropertyMark mark        = start_line->start;
   TabStopMark  tab_mark    = start_line->tab_cont.tab_start;
