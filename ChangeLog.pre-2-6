@@ -1,3 +1,9 @@
+Mon Sep 30 14:46:49 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkbindings.c (gtk_binding_set_new): Initialize
+ 	->parsed field. (#94536, patch from Sebastian Ritau. Maybe 
+ 	fixes #87411?)
+ 
 Mon Sep 30 14:28:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.[ch]: Add gtk_window_set_icon_from_file(),
