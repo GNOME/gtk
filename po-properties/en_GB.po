@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-03 22:54+0100\n"
-"PO-Revision-Date: 2004-10-03 22:56+0100\n"
+"POT-Creation-Date: 2004-10-17 12:51+0100\n"
+"PO-Revision-Date: 2004-10-17 12:53+0100\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -89,6 +89,102 @@ msgstr "Default Display"
 #: gdk/gdkdisplaymanager.c:128
 msgid "The default display for GDK"
 msgstr "The default display for GDK"
+
+#: gtk/gtkaboutdialog.c:186
+msgid "Program name"
+msgstr "Program name"
+
+#: gtk/gtkaboutdialog.c:187
+msgid "The name of the program. If this is not set, it defaults to g_get_application_name()"
+msgstr "The name of the program. If this is not set, it defaults to g_get_application_name()"
+
+#: gtk/gtkaboutdialog.c:194
+msgid "Program version"
+msgstr "Program version"
+
+#: gtk/gtkaboutdialog.c:195
+msgid "The version of the program"
+msgstr "The version of the program"
+
+#: gtk/gtkaboutdialog.c:201
+msgid "Copyright string"
+msgstr "Copyright string"
+
+#: gtk/gtkaboutdialog.c:202
+msgid "Copyright information for the program"
+msgstr "Copyright information for the program"
+
+#: gtk/gtkaboutdialog.c:209
+msgid "Comments string"
+msgstr "Comments string"
+
+#: gtk/gtkaboutdialog.c:210
+msgid "Comments about the program"
+msgstr "Comments about the program"
+
+#: gtk/gtkaboutdialog.c:224
+msgid "Website URL"
+msgstr "Website URL"
+
+#: gtk/gtkaboutdialog.c:225
+msgid "The URL for the link to the website of the program"
+msgstr "The URL for the link to the website of the program"
+
+#: gtk/gtkaboutdialog.c:232
+msgid "Website label"
+msgstr "Website label"
+
+#: gtk/gtkaboutdialog.c:233
+msgid "The label for the link to the website of the program. If this is not set, it defaults to the URL"
+msgstr "The label for the link to the website of the program. If this is not set, it defaults to the URL"
+
+#: gtk/gtkaboutdialog.c:240
+msgid "Authors"
+msgstr "Authors"
+
+#: gtk/gtkaboutdialog.c:241
+msgid "List of authors of the programs"
+msgstr "List of authors of the programs"
+
+#: gtk/gtkaboutdialog.c:247
+msgid "Documenters"
+msgstr "Documenters"
+
+#: gtk/gtkaboutdialog.c:248
+msgid "List of people documenting the program"
+msgstr "List of people documenting the program"
+
+#: gtk/gtkaboutdialog.c:255
+msgid "Artists"
+msgstr "Artists"
+
+#: gtk/gtkaboutdialog.c:256
+msgid "List of people who have contributed artwork to the program"
+msgstr "List of people who have contributed artwork to the program"
+
+#: gtk/gtkaboutdialog.c:263
+msgid "Translator credits"
+msgstr "Translator credits"
+
+#: gtk/gtkaboutdialog.c:264
+msgid "Credits to the translators. This string should be marked as translatable"
+msgstr "Credits to the translators. This string should be marked as translatable"
+
+#: gtk/gtkaboutdialog.c:271
+msgid "Logo"
+msgstr "Logo"
+
+#: gtk/gtkaboutdialog.c:272
+msgid "A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"
+msgstr "A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"
+
+#: gtk/gtkaboutdialog.c:279
+msgid "Link Color"
+msgstr "Link Colour"
+
+#: gtk/gtkaboutdialog.c:280
+msgid "Color of hyperlinks"
+msgstr "Colour of hyperlinks"
 
 #: gtk/gtkaccellabel.c:139
 msgid "Accelerator Closure"
@@ -210,7 +306,7 @@ msgstr "Whether the action is enabled."
 
 #: gtk/gtkaction.c:289
 #: gtk/gtkactiongroup.c:149
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:582
 #: gtk/gtktreeviewcolumn.c:225
 #: gtk/gtkwidget.c:443
 msgid "Visible"
@@ -241,6 +337,7 @@ msgid "Whether the action group is visible."
 msgstr "Whether the action group is visible."
 
 #: gtk/gtkadjustment.c:108
+#: gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Value"
@@ -781,6 +878,33 @@ msgstr "Cell background set"
 msgid "Whether this tag affects the cell background color"
 msgstr "Whether this tag affects the cell background colour"
 
+#: gtk/gtkcellrenderercombo.c:117
+msgid "Model"
+msgstr "Model"
+
+#: gtk/gtkcellrenderercombo.c:118
+msgid "The model containing the possible values for the combo box"
+msgstr "The model containing the possible values for the combo box"
+
+#: gtk/gtkcellrenderercombo.c:136
+#: gtk/gtkcomboboxentry.c:114
+msgid "Text Column"
+msgstr "Text Column"
+
+#: gtk/gtkcellrenderercombo.c:137
+#: gtk/gtkcomboboxentry.c:115
+msgid "A column in the data source model to get the strings from"
+msgstr "A column in the data source model to get the strings from"
+
+#: gtk/gtkcellrenderercombo.c:155
+msgid "Has Entry"
+msgstr "Has Entry"
+
+#: gtk/gtkcellrenderercombo.c:156
+#, c-format
+msgid "If %FALSE, don't allow to enter strings other than the chosen ones"
+msgstr "If %FALSE, don't allow to enter strings other than the chosen ones"
+
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
 msgstr "Pixbuf Object"
@@ -830,11 +954,20 @@ msgstr "Detail"
 msgid "Render detail to pass to the theme engine"
 msgstr "Render detail to pass to the theme engine"
 
+#: gtk/gtkcellrendererprogress.c:116
+msgid "Value of the progress bar"
+msgstr "Value of the progress bar"
+
+#: gtk/gtkcellrendererprogress.c:133
 #: gtk/gtkcellrenderertext.c:204
 #: gtk/gtkentry.c:573
 #: gtk/gtkprogressbar.c:219
 msgid "Text"
 msgstr "Text"
+
+#: gtk/gtkcellrendererprogress.c:134
+msgid "Text on the progress bar"
+msgstr "Text on the progress bar"
 
 #: gtk/gtkcellrenderertext.c:205
 msgid "Text to render"
@@ -1244,6 +1377,7 @@ msgid "Spacing around check or radio indicator"
 msgstr "Spacing around check or radio indicator"
 
 #: gtk/gtkcheckmenuitem.c:118
+#: gtk/gtkfilechooserbutton.c:232
 #: gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "Active"
@@ -1278,6 +1412,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Whether or not to give the colour an alpha value"
 
 #: gtk/gtkcolorbutton.c:218
+#: gtk/gtkfilechooserbutton.c:226
 #: gtk/gtkfontbutton.c:176
 #: gtk/gtktreeviewcolumn.c:298
 msgid "Title"
@@ -1446,14 +1581,6 @@ msgstr "Appears as list"
 #: gtk/gtkcombobox.c:620
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Whether dropdowns should look like lists rather than menus"
-
-#: gtk/gtkcomboboxentry.c:114
-msgid "Text Column"
-msgstr "Text Column"
-
-#: gtk/gtkcomboboxentry.c:115
-msgid "A column in the data source model to get the strings from"
-msgstr "A column in the data source model to get the strings from"
 
 #: gtk/gtkcontainer.c:205
 msgid "Resize mode"
@@ -1666,6 +1793,7 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum length of the search key in order to look up matches"
 
 #: gtk/gtkentrycompletion.c:296
+#: gtk/gtkiconview.c:361
 msgid "Text column"
 msgstr "Text column"
 
@@ -1742,12 +1870,12 @@ msgid "A widget to display in place of the usual expander label"
 msgstr "A widget to display in place of the usual expander label"
 
 #: gtk/gtkexpander.c:247
-#: gtk/gtktreeview.c:701
+#: gtk/gtktreeview.c:704
 msgid "Expander Size"
 msgstr "Expander Size"
 
 #: gtk/gtkexpander.c:248
-#: gtk/gtktreeview.c:702
+#: gtk/gtktreeview.c:705
 msgid "Size of the expander arrow"
 msgstr "Size of the expander arrow"
 
@@ -1836,11 +1964,27 @@ msgstr "Show Hidden"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Whether the hidden files and folders should be displayed"
 
-#: gtk/gtkfilechooserdefault.c:587
+#: gtk/gtkfilechooserbutton.c:219
+msgid "Dialog"
+msgstr "Dialogue"
+
+#: gtk/gtkfilechooserbutton.c:220
+msgid "The file chooser dialog to use."
+msgstr "The file chooser dialogue to use."
+
+#: gtk/gtkfilechooserbutton.c:227
+msgid "The title of the file chooser dialog."
+msgstr "The title of the file chooser dialogue."
+
+#: gtk/gtkfilechooserbutton.c:233
+msgid "Whether the browse dialog is visible or not."
+msgstr "Whether the browse dialogue is visible or not."
+
+#: gtk/gtkfilechooserdefault.c:588
 msgid "Default file chooser backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtkfilechooserdefault.c:588
+#: gtk/gtkfilechooserdefault.c:589
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
@@ -2022,6 +2166,68 @@ msgstr "Snap edge set"
 #: gtk/gtkhandlebox.c:235
 msgid "Whether to use the value from the snap_edge property or a value derived from handle_position"
 msgstr "Whether to use the value from the snap_edge property or a value derived from handle_position"
+
+#: gtk/gtkiconview.c:324
+msgid "Selection mode"
+msgstr "Selection mode"
+
+#: gtk/gtkiconview.c:325
+msgid "The selection mode"
+msgstr "The selection mode"
+
+#: gtk/gtkiconview.c:343
+msgid "Pixbuf column"
+msgstr "Pixbuf column"
+
+#: gtk/gtkiconview.c:344
+msgid "Model column used to retrieve the icon pixbuf from"
+msgstr "Model column used to retrieve the icon pixbuf from"
+
+#: gtk/gtkiconview.c:362
+msgid "Model column used to retrieve the text from"
+msgstr "Model column used to retrieve the text from"
+
+#: gtk/gtkiconview.c:381
+msgid "Markup column"
+msgstr "Markup column"
+
+#: gtk/gtkiconview.c:382
+msgid "Model column used to retrieve the text if using Pango markup"
+msgstr "Model column used to retrieve the text if using Pango markup"
+
+#: gtk/gtkiconview.c:389
+msgid "Icon View Model"
+msgstr "Icon View Model"
+
+#: gtk/gtkiconview.c:390
+msgid "The model for the icon view"
+msgstr "The model for the icon view"
+
+#: gtk/gtkiconview.c:397
+#: gtk/gtkprogressbar.c:151
+#: gtk/gtktoolbar.c:507
+msgid "Orientation"
+msgstr "Orientation"
+
+#: gtk/gtkiconview.c:398
+msgid "How the text and icon of each item are positioned relative to each other"
+msgstr "How the text and icon of each item are positioned relative to each other"
+
+#: gtk/gtkiconview.c:406
+msgid "Selection Box Color"
+msgstr "Selection Box Colour"
+
+#: gtk/gtkiconview.c:407
+msgid "Color of the selection box"
+msgstr "Colour of the selection box"
+
+#: gtk/gtkiconview.c:413
+msgid "Selection Box Alpha"
+msgstr "Selection Box Alpha"
+
+#: gtk/gtkiconview.c:414
+msgid "Opacity of the selection box"
+msgstr "Opacity of the selection box"
 
 #: gtk/gtkimage.c:139
 msgid "Pixbuf"
@@ -2330,6 +2536,15 @@ msgstr "Delay before drop down menus appear"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Delay before the submenus of a menu bar appear"
 
+#: gtk/gtkmenutoolbutton.c:247
+#: gtk/gtkoptionmenu.c:194
+msgid "Menu"
+msgstr "Menu"
+
+#: gtk/gtkmenutoolbutton.c:248
+msgid "The dropdown menu"
+msgstr "The dropdown menu"
+
 #: gtk/gtkmessagedialog.c:108
 msgid "Image/label border"
 msgstr "Image/label border"
@@ -2536,10 +2751,6 @@ msgstr "Forward stepper"
 msgid "Display the standard forward arrow button"
 msgstr "Display the standard forward arrow button"
 
-#: gtk/gtkoptionmenu.c:194
-msgid "Menu"
-msgstr "Menu"
-
 #: gtk/gtkoptionmenu.c:195
 msgid "The menu of options"
 msgstr "The menu of options"
@@ -2649,11 +2860,6 @@ msgstr "Adjustment"
 #: gtk/gtkprogressbar.c:144
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "The GtkAdjustment connected to the progress bar (Deprecated)"
-
-#: gtk/gtkprogressbar.c:151
-#: gtk/gtktoolbar.c:507
-msgid "Orientation"
-msgstr "Orientation"
 
 #: gtk/gtkprogressbar.c:152
 msgid "Orientation and growth direction of the progress bar"
@@ -2895,13 +3101,13 @@ msgstr "Display a secondary forward arrow button on the opposite end of the scro
 
 #: gtk/gtkscrolledwindow.c:238
 #: gtk/gtktext.c:603
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:566
 msgid "Horizontal Adjustment"
 msgstr "Horizontal Adjustment"
 
 #: gtk/gtkscrolledwindow.c:245
 #: gtk/gtktext.c:611
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:574
 msgid "Vertical Adjustment"
 msgstr "Vertical Adjustment"
 
@@ -3777,144 +3983,144 @@ msgstr "TreeModelSort Model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "The model for the TreeModelSort to sort"
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:558
 msgid "TreeView Model"
 msgstr "TreeView Model"
 
-#: gtk/gtktreeview.c:556
+#: gtk/gtktreeview.c:559
 msgid "The model for the tree view"
 msgstr "The model for the tree view"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:567
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horizontal Adjustment for the widget"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:575
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertical Adjustment for the widget"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:583
 msgid "Show the column header buttons"
 msgstr "Show the column header buttons"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:590
 msgid "Headers Clickable"
 msgstr "Headers Clickable"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:591
 msgid "Column headers respond to click events"
 msgstr "Column headers respond to click events"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:598
 msgid "Expander Column"
 msgstr "Expander Column"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:599
 msgid "Set the column for the expander column"
 msgstr "Set the column for the expander column"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:606
 #: gtk/gtktreeviewcolumn.c:341
 msgid "Reorderable"
 msgstr "Reorderable"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:607
 msgid "View is reorderable"
 msgstr "View is reorderable"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:614
 msgid "Rules Hint"
 msgstr "Rules Hint"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:615
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Set a hint to the theme engine to draw rows in alternating colours"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:622
 msgid "Enable Search"
 msgstr "Enable Search"
 
-#: gtk/gtktreeview.c:620
+#: gtk/gtktreeview.c:623
 msgid "View allows user to search through columns interactively"
 msgstr "View allows user to search through columns interactively"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:630
 msgid "Search Column"
 msgstr "Search Column"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:631
 msgid "Model column to search through when searching through code"
 msgstr "Model column to search through when searching through code"
 
-#: gtk/gtktreeview.c:648
+#: gtk/gtktreeview.c:651
 msgid "Fixed Height Mode"
 msgstr "Fixed Height Mode"
 
-#: gtk/gtktreeview.c:649
+#: gtk/gtktreeview.c:652
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Speeds up GtkTreeView by assuming that all rows have the same height"
 
-#: gtk/gtktreeview.c:669
+#: gtk/gtktreeview.c:672
 msgid "Hover Selection"
 msgstr "Hover Selection"
 
-#: gtk/gtktreeview.c:670
+#: gtk/gtktreeview.c:673
 msgid "Whether the selection should follow the pointer"
 msgstr "Whether the selection should follow the pointer"
 
-#: gtk/gtktreeview.c:689
+#: gtk/gtktreeview.c:692
 msgid "Hover Expand"
 msgstr "Hover Expand"
 
-#: gtk/gtktreeview.c:690
+#: gtk/gtktreeview.c:693
 msgid "Whether rows should be expanded/collaped when the pointer moves over them"
 msgstr "Whether rows should be expanded/collaped when the pointer moves over them"
 
-#: gtk/gtktreeview.c:710
+#: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
 msgstr "Vertical Separator Width"
 
-#: gtk/gtktreeview.c:711
+#: gtk/gtktreeview.c:714
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertical space between cells.  Must be an even number"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:722
 msgid "Horizontal Separator Width"
 msgstr "Horizontal Separator Width"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:723
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontal space between cells.  Must be an even number"
 
-#: gtk/gtktreeview.c:728
+#: gtk/gtktreeview.c:731
 msgid "Allow Rules"
 msgstr "Allow Rules"
 
-#: gtk/gtktreeview.c:729
+#: gtk/gtktreeview.c:732
 msgid "Allow drawing of alternating color rows"
 msgstr "Allow drawing of alternating colour rows"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:738
 msgid "Indent Expanders"
 msgstr "Indent Expanders"
 
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:739
 msgid "Make the expanders indented"
 msgstr "Make the expanders indented"
 
-#: gtk/gtktreeview.c:742
+#: gtk/gtktreeview.c:745
 msgid "Even Row Color"
 msgstr "Even Row Colour"
 
-#: gtk/gtktreeview.c:743
+#: gtk/gtktreeview.c:746
 msgid "Color to use for even rows"
 msgstr "Colour to use for even rows"
 
-#: gtk/gtktreeview.c:749
+#: gtk/gtktreeview.c:752
 msgid "Odd Row Color"
 msgstr "Odd Row Colour"
 
-#: gtk/gtktreeview.c:750
+#: gtk/gtktreeview.c:753
 msgid "Color to use for odd rows"
 msgstr "Colour to use for odd rows"
 
