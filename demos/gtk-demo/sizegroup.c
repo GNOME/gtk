@@ -17,29 +17,22 @@
 
 static GtkWidget *window = NULL;
 
-/* Convenience function to create an option menu holding a number of strings
+/* Convenience function to create a combo box holding a number of strings
  */
 GtkWidget *
-create_option_menu (const char **strings)
+create_combo_box (const char **strings)
 {
-  GtkWidget *menu;
-  GtkWidget *option_menu;
+  GtkWidget *combo_box;
   const char **str;
 
-  menu = gtk_menu_new ();
+  combo_box = gtk_combo_box_new_text ();
   
   for (str = strings; *str; str++)
-    {
-      GtkWidget *menu_item = gtk_menu_item_new_with_label (*str);
-      gtk_widget_show (menu_item);
+    gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), *str);
 
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    }
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
-  option_menu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
-
-  return option_menu;
+  return combo_box;
 }
 
 static void
@@ -49,7 +42,7 @@ add_row (GtkTable     *table,
 	 const char   *label_text,
 	 const char  **options)
 {
-  GtkWidget *option_menu;
+  GtkWidget *combo_box;
   GtkWidget *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
@@ -59,10 +52,10 @@ add_row (GtkTable     *table,
 		    GTK_EXPAND | GTK_FILL, 0,
 		    0,                     0);
   
-  option_menu = create_option_menu (options);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), option_menu);
-  gtk_size_group_add_widget (size_group, option_menu);
-  gtk_table_attach (GTK_TABLE (table), option_menu,
+  combo_box = create_combo_box (options);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
+  gtk_size_group_add_widget (size_group, combo_box);
+  gtk_table_attach (GTK_TABLE (table), combo_box,
 		    1, 2,                  row, row + 1,
 		    0,                     0,
 		    0,                     0);

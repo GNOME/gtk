@@ -27,10 +27,12 @@
 #include "gtkintl.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
-#include "gtkoptionmenu.h"
 #include "gtkmarshalers.h"
 #include "gdk/gdkkeysyms.h"
 
+#undef GTK_DISABLE_DEPRECATED
+#include "gtkoptionmenu.h"
+#define GTK_DISABLE_DEPRECATED
 
 #define CHILD_LEFT_SPACING        4
 #define CHILD_RIGHT_SPACING       1

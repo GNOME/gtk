@@ -399,21 +399,11 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 1)
         {
-          GtkWidget *menu_item;
-          GtkWidget *menu;
+          widget = gtk_combo_box_new_text ();
 
-          menu = gtk_menu_new ();
-          
-          widget = gtk_option_menu_new ();
-
-          menu_item = gtk_menu_item_new_with_label ("Option 1");
-          gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-          menu_item = gtk_menu_item_new_with_label ("Option 2");
-          gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-          menu_item = gtk_menu_item_new_with_label ("Option 3");
-          gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-
-          gtk_option_menu_set_menu (GTK_OPTION_MENU (widget), menu);
+          gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Option 1");
+          gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Option 2");
+          gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Option 3");
         }
       else if (i == 2)
         {

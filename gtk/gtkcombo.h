@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_SMART_COMBO_H__
 #define __GTK_SMART_COMBO_H__
 
@@ -117,4 +119,4 @@ void       gtk_combo_disable_activate      (GtkCombo*    combo);
 
 #endif /* __GTK_SMART_COMBO_H__ */
 
-
+#endif /* GTK_DISABLE_DEPRECATED */

@@ -73,11 +73,14 @@
 #include "gtkvbox.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
-#include "gtkoptionmenu.h"
 #include "gtkdialog.h"
 #include "gtkmessagedialog.h"
 #include "gtkdnd.h"
 #include "gtkeventbox.h"
+
+#undef GTK_DISABLE_DEPRECATED
+#include "gtkoptionmenu.h"
+#define GTK_DISABLE_DEPRECATED
 
 #define WANT_HPANED 1
 #include "gtkhpaned.h"

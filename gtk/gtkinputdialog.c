@@ -47,11 +47,14 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtknotebook.h"
-#include "gtkoptionmenu.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtkvbox.h"
+
+#undef GTK_DISABLE_DEPRECATED
+#include "gtkoptionmenu.h"
+#define GTK_DISABLE_DEPRECATED
 
 #include "gtkintl.h"
 

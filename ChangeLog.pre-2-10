@@ -1,3 +1,25 @@
+Fri Oct 10 19:10:12 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombo.h: Deprecate.
+	* gtk/gtkoptionmenu.h: Ditto.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_size_request),
+	(gtk_combo_box_size_allocate): Rework, things behave better now. Still
+	needs some work on requesting enough size when taking the items in
+	the list into account.
+
+	* gtk/gtkfilesel.c: put gtkoptionmenu.h include inside "enable
+	deprecated" guards.
+	* gtk/gtkinputdialog.c: ditto.
+	* gtk/gtkitemfactory.c: ditto.
+	* gtk/gtkoptionmenu.c: ditto.
+
+	* demos/gtk-demo/menus.c: remove the option menu.
+	* demos/gtk-demo/sizegroup.c: replace the option menus with
+	GtkComboBox.
+	* demos/gtk-demo/textview.c: ditto.
+	(A general GtkComboBox demo will be added later on).
+
 Wed Oct  8 00:06:17 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/ui_manager.c (activate_radio_action): New

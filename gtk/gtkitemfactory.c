@@ -30,7 +30,6 @@
 #include	"config.h"
 
 #include	"gtkitemfactory.h"
-#include	"gtk/gtkoptionmenu.h"
 #include	"gtk/gtkmenubar.h"
 #include	"gtk/gtkmenu.h"
 #include	"gtk/gtkmenuitem.h"
@@ -50,6 +49,10 @@
 #include	<unistd.h>
 #endif
 #include	<stdio.h>
+
+#undef GTK_DISABLE_DEPRECATED
+#include	"gtk/gtkoptionmenu.h"
+#define GTK_DISABLE_DEPRECATED
 
 /* --- defines --- */
 #define		ITEM_FACTORY_STRING	((gchar*) item_factory_string)

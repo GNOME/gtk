@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_OPTION_MENU_H__
 #define __GTK_OPTION_MENU_H__
 
@@ -90,3 +92,5 @@ void       gtk_option_menu_set_history (GtkOptionMenu *option_menu,
 
 
 #endif /* __GTK_OPTION_MENU_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */
