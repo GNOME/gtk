@@ -1,6 +1,7 @@
 # translation of gtk+.gtk-2-0.he.po to Hebrew
 # translation of gtk+.gtk-2-0.he.po to Hebrew
 # translation of gtk+.gtk-2-0.he.po to Hebrew
+# translation of gtk+.gtk-2-0.he.po to Hebrew
 # Hebrew Translation for GTK+ - תרגום עברי ל-
 # Copyright (C) 2000,2002 Free Software Foundation, Inc.
 # Tzafrir Cohen <tzafrir@technion.ac.il>, 2000.
@@ -10,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-0.he\n"
 "POT-Creation-Date: 2002-09-17 05:07+0200\n"
-"PO-Revision-Date: 2002-09-17 15:24+0300\n"
+"PO-Revision-Date: 2002-09-18 20:28+0300\n"
 "Last-Translator: Gil Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3053,7 +3054,7 @@ msgstr "_מודגש"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "_בטל"
+msgstr "_ביטול"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
