@@ -103,11 +103,8 @@ image_load (FILE *f)
 	/* ...and if we're interlaced... */
 	passes = png_set_interlace_handling (png_ptr);
 
-	/* Update our info structs */
 	png_read_update_info (png_ptr, info_ptr);
 
-	/* Allocate some memory and set up row array */
-	/* This "inhales vigorously"... */
 	if (ctype & PNG_COLOR_MASK_ALPHA)
 		bpp = 4;
 	else
