@@ -21,9 +21,7 @@ EXTRA_DIST =			\
 	gtk-zip.sh		\
 	sanitize-la.sh		\
 	po/README.translators	\
-	po/desk.pl		\
 	po/makefile.mingw	\
-	po/update.pl		\
 	po/po2tbl.sed.in	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
