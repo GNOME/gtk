@@ -8,14 +8,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.1.x\n"
-"POT-Creation-Date: 2002-12-02 20:45-0500\n"
-"PO-Revision-Date: 2002-11-28 15:11GMT\n"
-"Last-Translator: Michal Bukovjan <bukm@centrum.cz>\n"
+"POT-Creation-Date: 2002-12-06 06:14+0100\n"
+"PO-Revision-Date: 2002-12-06 11:51+0100\n"
+"Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:703
 #, c-format
@@ -130,32 +129,28 @@ msgstr "nepodařilo se alokovat paměť pro obrázek o velikosti %u bajtů"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
-msgstr ""
+msgstr "Neočekávaný kus ikona v animaci"
 
 #: gdk-pixbuf/io-ani.c:337
-#, fuzzy
 msgid "Unsupported animation type"
-msgstr "Nepodporovaný typ ikony"
+msgstr "Nepodporovaný typ animace"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
-#, fuzzy
 msgid "Invalid header in animation"
-msgstr "Neplatná hlavička ikony"
+msgstr "Neplatná hlavička animace"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
-#, fuzzy
 msgid "Not enough memory to load animation"
-msgstr "Nedostatek paměti pro načtení ikony"
+msgstr "Nedostatek paměti pro načtení animace"
 
 #: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
-msgstr ""
+msgstr "Špatně vytvořený kus v animaci"
 
 #: gdk-pixbuf/io-ani.c:676
-#, fuzzy
 msgid "The ANI image format"
-msgstr "Formát obrázku GIF"
+msgstr "Formát obrázku ANI"
 
 #: gdk-pixbuf/io-bmp.c:223 gdk-pixbuf/io-bmp.c:339
 msgid "Not enough memory to load bitmap image"
@@ -1489,14 +1484,12 @@ msgid "The toggle state of the button"
 msgstr "Přepne stav tlačítka"
 
 #: gtk/gtkcellrenderertoggle.c:141
-#, fuzzy
 msgid "Inconsistent state"
-msgstr "Nekonzistentní"
+msgstr "Nekonzistentní stav"
 
 #: gtk/gtkcellrenderertoggle.c:142
-#, fuzzy
-msgid "The inconsistent stae of the button"
-msgstr "Přepne stav tlačítka"
+msgid "The inconsistent state of the button"
+msgstr "Nekonzistentní stav tlačítka"
 
 #: gtk/gtkcellrenderertoggle.c:150
 msgid "Activatable"
@@ -1720,7 +1713,7 @@ msgstr "Vždy povolit šipky"
 
 #: gtk/gtkcombo.c:151
 msgid "Obsolete property, ignored"
-msgstr ""
+msgstr "Zastaralá vlastnost, ignorována"
 
 #: gtk/gtkcombo.c:157
 msgid "Case sensitive"
@@ -3002,11 +2995,11 @@ msgstr "Text zobrazený v prvku průběhu"
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
-msgstr ""
+msgstr "Skupina"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr ""
+msgstr "Přepínací tlačíto, do jejíž skupiny patří tento widget."
 
 #: gtk/gtkrange.c:275
 msgid "Update policy"
@@ -3840,14 +3833,12 @@ msgid "Whether words are wrapped at widget edges"
 msgstr "Zda jsou slova zalamovaná na okraji prvku"
 
 #: gtk/gtktextbuffer.c:180
-#, fuzzy
 msgid "Tag Table"
-msgstr "Název značky"
+msgstr "Tabulka značek"
 
 #: gtk/gtktextbuffer.c:181
-#, fuzzy
 msgid "Text Tag Table"
-msgstr "Zarovnání textu Y"
+msgstr "Tabulka textů značek"
 
 #: gtk/gtktexttag.c:195
 msgid "Tag name"
@@ -4980,20 +4971,6 @@ msgstr "Jak kreslit stavovou lištu vstupní metody"
 #~ "Whether the arrow keys work, even if the entry contents are not in the "
 #~ "list"
 #~ msgstr "Zda mají šipky fungovat, i když obsah položky není v seznamu"
-
-#~ msgid "Don't know how to load the animation in file '%s'"
-#~ msgstr "Není znám způsob, jak nahrát animaci ze souboru '%s'"
-
-#~ msgid "Don't know how to load the image in file '%s'"
-#~ msgstr "Není znám způsob, jak načíst obrázek v souboru '%s'"
-
-#~ msgid "Failure reading ICO: %s"
-#~ msgstr "Chyba při čtení formátu ICO: %s"
-
-#~ msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr ""
-#~ "Soubor ve formátu ICO neobsahuje některá data (možná byla jeho část "
-#~ "odříznuta?)"
 
 #~ msgid "Language engine code to use for rendering the text"
 #~ msgstr "Kód jazyka použitý pro vykreslení textu"
