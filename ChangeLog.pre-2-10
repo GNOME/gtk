@@ -1,3 +1,16 @@
+2001-09-24  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkmarshal.list (VOID): add marshal function types.
+
+	* gtk/gtkctree.c (gtk_ctree_class_init): make arguments have type
+	GTK_TYPE_CTREE_NODE|G_SIGNAL_TYPE_STATIC_SCOPE rather than
+	GTK_TYPE_POINTER.
+	(gtk_ctree_node_get_type): implement boxed type for GtkCTreeNodes
+	with no-op copy/free functions.
+
+	* gtk/gtkctree.h (gtk_ctree_node_get_type): add prototype for
+	GtkCTreeNode get_type function.
+
 2001-09-24  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c, gtk/gtktextbuffer.c, gtk/gtktextbtree.c,
