@@ -26,11 +26,12 @@
 #include <windows.h>
 #include <math.h>
 #include <string.h>
-#include <gtk/gtk.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkwin32.h>
-
 #include <stdio.h>
+
+#include "gtk/gtk.h"
+#include "gtk/gtk.h"
+#include "gdk/win32/gdkwin32.h"
+
 
 /* Default values, not normally used
  */
@@ -798,12 +799,12 @@ sanitize_size (GdkWindow *window,
   if ((*width == -1) && (*height == -1))
     {
       set_bg = GDK_IS_WINDOW (window);
-      gdk_window_get_size (window, width, height);
+      gdk_drawable_get_size (window, width, height);
     }
   else if (*width == -1)
-    gdk_window_get_size (window, width, NULL);
+    gdk_drawable_get_size (window, width, NULL);
   else if (*height == -1)
-    gdk_window_get_size (window, NULL, height);
+    gdk_drawable_get_size (window, NULL, height);
 
   return set_bg;
 }
@@ -1499,7 +1500,7 @@ draw_box (GtkStyle      *style,
               gdk_draw_rectangle (window, gc, TRUE, x, y, width, height);
 
               gdk_gc_unref (gc);
-              gdk_pixmap_unref (pixmap);
+              gdk_drawable_unref (pixmap);
 
               return;
             }

@@ -18,20 +18,33 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#define _WIN32_WINNT 0x0501
+
 #include "xp_theme.h"
 
 #include <windows.h>
 #include <math.h>
 #include <string.h>
-#include <gdk/gdkwin32.h>
-
 #include <stdio.h>
+
+#include "gdk/win32/gdkwin32.h"
+
 
 #ifdef DONT_HAVE_UXTHEME_H
 #include "xp_theme_defs.h"
 #else
 #include <uxtheme.h>
 #include <tmschema.h>
+#endif
+
+#ifndef TMT_CAPTIONFONT
+/* These aren't in mingw's "w32api" headers, nor in the Platform SDK
+ * headers.
+ */
+#define TMT_CAPTIONFONT 801
+#define TMT_MENUFONT 803
+#define TMT_STATUSFONT 804
+#define TMT_MSGBOXFONT 805
 #endif
 
 static const LPCWSTR class_descriptors[] =

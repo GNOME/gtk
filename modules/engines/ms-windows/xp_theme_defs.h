@@ -154,9 +154,4 @@ typedef HANDLE HTHEME;
 #define SP_PANE 1
 #define SP_GRIPPER 2
 
-#define TMT_CAPTIONFONT 801
-#define TMT_MENUFONT 803
-#define TMT_STATUSFONT 804
-#define TMT_MSGBOXFONT 805
-
 #endif /* XP_THEME_DFNS_H */

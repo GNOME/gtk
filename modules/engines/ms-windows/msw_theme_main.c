@@ -21,8 +21,10 @@
  */
 
 #include <windows.h>
+
 #include <gmodule.h>
-#include <gtk/gtk.h>
+
+#include "gtk/gtk.h"
 
 #include "msw_style.h"
 #include "msw_rc_style.h"

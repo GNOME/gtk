@@ -22,7 +22,8 @@
 #define XP_THEME_H
 
 #include <windows.h>
-#include <gtk/gtk.h>
+
+#include "gtk/gtk.h"
 
 typedef enum
 {

@@ -2,9 +2,22 @@ SUBDIRS=Theme
 
 EXTRA_DIST=Makefile.msc
 
-INCLUDES=$(MSW_CFLAGS)
+INCLUDES = \
+	-I$(top_srcdir) 				\
+	-I$(top_srcdir)/gdk				\
+	-I$(top_builddir)/gdk				\
+	-DG_DISABLE_DEPRECATED	 			\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
+	-DGDK_DISABLE_DEPRECATED			\
+	$(GTK_DEP_CFLAGS)
 
-enginedir=$(libdir)/gtk-2.0/$(GTK_VERSION)/engines
+
+LDADDS = \
+	$(top_builddir)/gdk/$(gdktargetlib)		\
+	$(top_builddir)/gtk/$(gtktargetlib)		\
+	$(GTK_DEP_LIBS)
+
+enginedir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/engines
 
 engine_LTLIBRARIES = libwimp.la
 
@@ -21,5 +34,4 @@ libwimp_la_SOURCES = \
 libwimp_la_LDFLAGS = \
 	-avoid-version -module -no-undefined -export-dynamic
 
-libwimp_la_LIBADD= $(MSW_LIBS)
-
+libwimp_la_LIBADD = $(LDADDS)

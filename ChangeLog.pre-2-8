@@ -1,3 +1,27 @@
+2004-08-30  Tor Lillqvist  <tml@iki.fi>
+
+	Make the ms-windows theme engine build with mingw.
+
+	* configure.in: Expand also modules/engines/ms-windows/Theme/
+	Makefile and .../Theme/gtk-2.0/Makefile.
+
+	* modules/engines/ms-windows/Makefile.am: Adapt for building
+	inside the GTK sources.
+
+	* modules/engines/ms-windows/*.c: Use "foo.h" style includes for
+	GTK and GDK headers. Use correct path for gdkwin32.h header.
+
+	* modules/engines/ms-windows/msw_style.c: Don't use deprecated GDK
+	API.
+
+	* modules/engines/ms-windows/xp_theme_defs.h
+	* modules/engines/ms-windows/xp_theme.c: Move definitions of TMT_*
+	to xp_theme.c, as they are neither in mingw's nor Platform
+	SDK's tmschema.h.
+
+	* modules/engines/ms-windows/xp_theme.c: Define _WIN32_WINNT as
+	0x0501 to get the necesssary stuff from mingw's uxtheme.h.
+
 2004-08-30  Matthias Clasen  <mclasen@redhat.com>
 
 	Integrate the ms-windows theme engine (better known as Wimp)
@@ -16,7 +40,8 @@
 
 2004-08-30  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtktextview.c (gtk_text_view_delete_surrounding_handler): Make it compile.
+	* gtk/gtktextview.c (gtk_text_view_delete_surrounding_handler):
+	Make it compile.
 
 2004-08-27  Matthias Clasen  <mclasen@redhat.com>
 
@@ -95,7 +120,6 @@ Thu Aug 26 22:44:12 2004  Matthias Clasen  <maclas@gmx.de>
 	* gtk/gtkrange.h (struct _GtkRangeClass): Declare change_value
 	function.
 
->>>>>>> 1.5765
 2004-08-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/input/Makefile.am: Build imime.la on Windows.
