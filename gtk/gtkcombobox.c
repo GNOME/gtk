@@ -1140,7 +1140,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 	  
           combo_box->priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
 
-	  toplevel = gtk_widget_get_toplevel (combo_box);
+	  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (combo_box));
 	  if (GTK_IS_WINDOW (toplevel))
 	    gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
 					 GTK_WINDOW (combo_box->priv->popup_window));
@@ -1601,7 +1601,7 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
       return;
     }
 
-  toplevel = gtk_widget_get_toplevel (combo_box);
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (combo_box));
   if (GTK_IS_WINDOW (toplevel))
     gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
 				 GTK_WINDOW (combo_box->priv->popup_window));
