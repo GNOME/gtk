@@ -195,7 +195,7 @@ xpm_extract_color (const gchar *buffer)
 
 	counter = 0;
 	while (ptr == NULL) {
-		if (buffer[counter] == 'c') {
+		if ((buffer[counter] == 'c') || (buffer[counter] == 'g')) {
 			ch = buffer[counter + 1];
 			if (ch == 0x20 || ch == 0x09)
 				ptr = &buffer[counter + 1];

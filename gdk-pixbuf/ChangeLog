@@ -1,3 +1,8 @@
+2000-02-14  Mark Crichton  <crichton@gimp.org>
+
+	* gdk-pixbuf/io-xpm.c (xpm_extract_color): Added check for "g" color type.
+	Imlib/libXpm handle this, but we didn't.
+
 2000-02-14  Darin Adler  <darin@eazel.com>
 
 	* gdk-pixbuf/testpixbuf.c: Remove now-unnecessary cast.
