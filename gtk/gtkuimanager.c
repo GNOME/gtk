@@ -2673,12 +2673,15 @@ print_node (GtkUIManager *self,
   g_string_append_printf (buffer, open_tag_format[mnode->type],
 			  indent_level, "");
 
-  if (mnode->name)
-    g_string_append_printf (buffer, " name=\"%s\"", mnode->name);
-
-  if (mnode->action_name)
-    g_string_append_printf (buffer, " action=\"%s\"",
-                            g_quark_to_string (mnode->action_name));
+  if (mnode->type != NODE_TYPE_ROOT)
+    {
+      if (mnode->name)
+	g_string_append_printf (buffer, " name=\"%s\"", mnode->name);
+      
+      if (mnode->action_name)
+	g_string_append_printf (buffer, " action=\"%s\"",
+				g_quark_to_string (mnode->action_name));
+    }
 
   g_string_append (buffer,
                    close_tag_format[mnode->type] ? ">\n" : "/>\n");

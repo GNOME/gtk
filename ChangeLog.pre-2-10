@@ -1,3 +1,8 @@
+Fri Sep  3 22:45:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (print_node): Don't print out attributes
+	for the <ui> root node.  (#151752, Lorenzo Gil Sánchez)
+
 Sat Sep  4 02:38:57 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtktoolbar.c (position): Accelerate the animation when it
