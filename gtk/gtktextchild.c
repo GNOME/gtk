@@ -450,7 +450,7 @@ gtk_text_child_anchor_queue_resize (GtkTextChildAnchor *anchor,
   gtk_text_buffer_get_iter_at_child_anchor (layout->buffer,
                                             &start, anchor);
   end = start;
-  gtk_text_iter_next_char (&end);
+  gtk_text_iter_forward_char (&end);
   
   gtk_text_layout_invalidate (layout, &start, &end);
 }

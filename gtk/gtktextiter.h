@@ -143,8 +143,8 @@ gboolean gtk_text_iter_is_first          (const GtkTextIter    *iter);
  * Moving around the buffer
  */
 
-gboolean gtk_text_iter_next_char            (GtkTextIter *iter);
-gboolean gtk_text_iter_prev_char            (GtkTextIter *iter);
+gboolean gtk_text_iter_forward_char            (GtkTextIter *iter);
+gboolean gtk_text_iter_backward_char            (GtkTextIter *iter);
 gboolean gtk_text_iter_forward_chars        (GtkTextIter *iter,
                                              gint         count);
 gboolean gtk_text_iter_backward_chars       (GtkTextIter *iter,

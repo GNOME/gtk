@@ -114,7 +114,7 @@ count_toggles_in_buffer (GtkTextBuffer *buffer,
     {
       count += count_toggles_at_iter (&iter, of_tag);
     }
-  while (gtk_text_iter_next_char (&iter));
+  while (gtk_text_iter_forward_char (&iter));
 
   /* Do the end iterator, because forward_char won't return TRUE
    * on it.
@@ -296,7 +296,7 @@ run_tests (GtkTextBuffer *buffer)
         g_error ("iterators ran out before chars (offset %d of %d)",
                  i, num_chars);
 
-      gtk_text_iter_next_char (&iter);
+      gtk_text_iter_forward_char (&iter);
 
       gtk_text_buffer_move_mark (buffer, bar_mark, &iter);
 
@@ -359,14 +359,14 @@ run_tests (GtkTextBuffer *buffer)
 
       if (i > 0)
         {
-          if (!gtk_text_iter_prev_char (&iter))
+          if (!gtk_text_iter_backward_char (&iter))
             g_error ("iterators ran out before char indexes");
 
           gtk_text_buffer_move_mark (buffer, bar_mark, &iter);
         }
       else
         {
-          if (gtk_text_iter_prev_char (&iter))
+          if (gtk_text_iter_backward_char (&iter))
             g_error ("went backward from 0?");
         }
 

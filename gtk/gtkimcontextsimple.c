@@ -945,6 +945,7 @@ check_hex (GtkIMContextSimple *context_simple,
   GString *str;
   gulong n;
   gchar *nptr = NULL;
+  gchar buf[7];
   
   str = g_string_new (NULL);
   
@@ -952,7 +953,6 @@ check_hex (GtkIMContextSimple *context_simple,
   while (i < n_compose)
     {
       gunichar ch;
-      gchar buf[7];
       
       ch = gdk_keyval_to_unicode (context_simple->compose_buffer[i]);
       
@@ -1223,8 +1223,12 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
           len = g_unichar_to_utf8 (context_simple->tentative_match, outbuf);
         }
       
-      g_assert (len <= 25);
+      g_assert (len < 25);
       outbuf[len] = '\0';      
+    }
+  else
+    {
+      outbuf[0] = '\0';
     }
   
   if (str)

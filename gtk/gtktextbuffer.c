@@ -710,7 +710,7 @@ insert_range_untagged (GtkTextBuffer     *buffer,
                   restore_range (r);
                   r = NULL;
                   
-                  gtk_text_iter_next_char (&range_end);
+                  gtk_text_iter_forward_char (&range_end);
                   
                   range_start = range_end;
                 }
@@ -718,7 +718,7 @@ insert_range_untagged (GtkTextBuffer     *buffer,
                 {
                   /* Just skip anchors */
 
-                  gtk_text_iter_next_char (&range_end);
+                  gtk_text_iter_forward_char (&range_end);
                   range_start = range_end;
                 }
               else
@@ -1726,7 +1726,7 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
   real = *where;
 
   if (gtk_text_iter_is_last (&real))
-    gtk_text_iter_prev_char (&real);
+    gtk_text_iter_backward_char (&real);
 
   gtk_text_btree_place_cursor (get_btree (buffer), &real);
   gtk_text_buffer_mark_set (buffer, &real,
@@ -2116,7 +2116,7 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
           
           gtk_text_buffer_get_bounds (contents, &start, &end);
           /* strip off the trailing newline, it isn't part of the text that was cut */
-          gtk_text_iter_prev_char (&end);
+          gtk_text_iter_backward_char (&end);
           
           str = gtk_text_iter_get_visible_text (&start, &end);
           gtk_selection_data_set_text (selection_data, str);
@@ -2347,7 +2347,7 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
 
       gtk_text_buffer_get_bounds (src_buffer, &start, &end);
       /* There's an extra newline on clipboard_contents */
-      gtk_text_iter_prev_char (&end);
+      gtk_text_iter_backward_char (&end);
       
       paste_from_buffer (request_data, src_buffer,
                          &start, &end);

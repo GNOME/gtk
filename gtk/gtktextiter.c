@@ -1362,7 +1362,7 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
        * we aren't the end of the line
        */
       GtkTextIter tmp = *iter;
-      if (!gtk_text_iter_prev_char (&tmp))
+      if (!gtk_text_iter_backward_char (&tmp))
         return FALSE;
 
       return gtk_text_iter_get_char (&tmp) != '\r';
@@ -1924,21 +1924,21 @@ gtk_text_iter_backward_indexable_segment (GtkTextIter *iter)
 }
 
 /**
- * gtk_text_iter_next_char:
+ * gtk_text_iter_forward_char:
  * @iter: an iterator
  *
  * Moves @iter forward by one character offset. Note that images
  * embedded in the buffer occupy 1 character slot, so
- * gtk_text_iter_next_char () may actually move onto an image instead
+ * gtk_text_iter_forward_char () may actually move onto an image instead
  * of a character, if you have images in your buffer.  If @iter is the
  * end iterator or one character before it, @iter will now point at
- * the end iterator, and gtk_text_iter_next_char () returns FALSE for
+ * the end iterator, and gtk_text_iter_forward_char () returns FALSE for
  * convenience when writing loops.
  *
  * Return value: whether the new position is the end iterator
  **/
 gboolean
-gtk_text_iter_next_char (GtkTextIter *iter)
+gtk_text_iter_forward_char (GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
@@ -1956,18 +1956,18 @@ gtk_text_iter_next_char (GtkTextIter *iter)
 }
 
 /**
- * gtk_text_iter_prev_char:
+ * gtk_text_iter_backward_char:
  * @iter: an iterator
  *
  * Moves backward by one character offset. Returns TRUE if movement
  * was possible; if @iter was the first in the buffer (character
- * offset 0), gtk_text_iter_prev_char () returns FALSE for convenience when
+ * offset 0), gtk_text_iter_backward_char () returns FALSE for convenience when
  * writing loops.
  *
  * Return value: whether movement was possible
  **/
 gboolean
-gtk_text_iter_prev_char (GtkTextIter *iter)
+gtk_text_iter_backward_char (GtkTextIter *iter)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -2990,7 +2990,7 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
   
   while ((limit == NULL ||
           !gtk_text_iter_equal (limit, iter)) &&
-         gtk_text_iter_next_char (iter))
+         gtk_text_iter_forward_char (iter))
     {      
       if (matches_pred (iter, pred, user_data))
         return TRUE;
@@ -3014,7 +3014,7 @@ gtk_text_iter_backward_find_char (GtkTextIter         *iter,
   
   while ((limit == NULL ||
           !gtk_text_iter_equal (limit, iter)) &&
-         gtk_text_iter_prev_char (iter))
+         gtk_text_iter_backward_char (iter))
     {
       if (matches_pred (iter, pred, user_data))
         return TRUE;
@@ -3049,7 +3049,7 @@ forward_chars_with_skipping (GtkTextIter *iter,
           gtk_text_btree_char_is_invisible (iter))
         ignored = TRUE;
 
-      gtk_text_iter_next_char (iter);
+      gtk_text_iter_forward_char (iter);
 
       if (!ignored)
         --i;
@@ -3253,7 +3253,7 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
       /* If we can move one char, return the empty string there */
       match = *iter;
       
-      if (gtk_text_iter_next_char (&match))
+      if (gtk_text_iter_forward_char (&match))
         {
           if (limit &&
               gtk_text_iter_equal (&match, limit))
@@ -3575,7 +3575,7 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
       if (limit && gtk_text_iter_equal (limit, &match))
         return FALSE;
       
-      if (gtk_text_iter_prev_char (&match))
+      if (gtk_text_iter_backward_char (&match))
         {
           if (match_start)
             *match_start = match;

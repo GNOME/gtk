@@ -1683,7 +1683,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                    * if there are toggles in-between
                    */
 
-                  gint byte_count = 0;
+                  gint bytes = 0;
  		  GtkTextLineSegment *prev_seg = NULL;
   
  		  while (seg)
@@ -1692,7 +1692,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                         {
                           memcpy (text + byte_offset, seg->body.chars, seg->byte_count);
                           byte_offset += seg->byte_count;
-                          byte_count += seg->byte_count;
+                          bytes += seg->byte_count;
                         }
  		      else if (seg->type == &gtk_text_right_mark_type ||
  			       seg->type == &gtk_text_left_mark_type)
@@ -1721,11 +1721,11 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
  		  seg = prev_seg; /* Back up one */
                   add_generic_attrs (layout, &style->appearance,
-                                     byte_count,
-                                     attrs, byte_offset - byte_count,
+                                     bytes,
+                                     attrs, byte_offset - bytes,
                                      size_only, TRUE);
-                  add_text_attrs (layout, style, byte_count, attrs,
-                                  byte_offset - byte_count, size_only);
+                  add_text_attrs (layout, style, bytes, attrs,
+                                  byte_offset - bytes, size_only);
                 }
               else if (seg->type == &gtk_text_pixbuf_type)
                 {
@@ -1793,7 +1793,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 		  style = get_style (layout, &iter);
 		  add_preedit_attrs (layout, style, attrs, byte_offset, size_only);
 		  release_style (layout, style);
-	  
+                  
 		  memcpy (text + byte_offset, layout->preedit_string, layout->preedit_len);
 		  byte_offset += layout->preedit_len;
 
@@ -1817,7 +1817,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
       seg = seg->next;
     }
-
+  
   if (!para_values_set)
     {
       style = get_style (layout, &iter);
@@ -1825,10 +1825,34 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       release_style (layout, style);
     }
 
-  /* Pango doesn't want the trailing new line */
-  if (byte_offset > 0 && text[byte_offset - 1] == '\n')
-    byte_offset--;
+  g_assert (byte_offset == byte_count);
+  
+  /* Pango doesn't want the trailing paragraph delimiters */
 
+  {
+    /* Only one character has type G_UNICODE_PARAGRAPH_SEPARATOR in
+     * Unicode 3.0; update this if that changes.
+     */
+#define PARAGRAPH_SEPARATOR 0x2029
+    gunichar ch = 0;
+
+    if (byte_offset > 0)
+      {
+        const char *prev = g_utf8_prev_char (text + byte_offset);
+        ch = g_utf8_get_char (prev);
+        if (ch == PARAGRAPH_SEPARATOR || ch == '\r' || ch == '\n')
+          byte_offset = prev - text; /* chop off */
+
+        if (ch == '\n' && byte_offset > 0)
+          {
+            /* Possibly chop a CR as well */
+            prev = g_utf8_prev_char (text + byte_offset);
+            if (*prev == '\r')
+              --byte_offset;
+          }
+      }
+  }
+  
   pango_layout_set_text (display->layout, text, byte_offset);
   pango_layout_set_attributes (display->layout, attrs);
 
@@ -2565,7 +2589,7 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
 	   * forced break not at whitespace. Real fix is to keep track
 	   * of whether marks are at leading or trailing edge?  */
           if (direction > 0 && layout_line->length > 0 && !gtk_text_iter_ends_line (iter))
-            gtk_text_iter_prev_char (iter);
+            gtk_text_iter_backward_char (iter);
 
           break;
         }
@@ -2790,7 +2814,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
       
        line_display_index_to_iter (layout, display, iter, new_index, new_trailing);
        if (extra_back)
-	 gtk_text_iter_prev_char (iter);
+	 gtk_text_iter_backward_char (iter);
     }
 
   gtk_text_layout_free_line_display (layout, display);

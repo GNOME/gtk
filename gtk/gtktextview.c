@@ -3290,7 +3290,7 @@ find_whitepace_region (const GtkTextIter *center,
   *end = *center;
 
   if (gtk_text_iter_backward_find_char (start, not_whitespace, NULL, NULL))
-    gtk_text_iter_next_char (start); /* we want the first whitespace... */
+    gtk_text_iter_forward_char (start); /* we want the first whitespace... */
   if (whitespace (gtk_text_iter_get_char (end), NULL))
     gtk_text_iter_forward_find_char (end, not_whitespace, NULL, NULL);
 
@@ -3362,7 +3362,7 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
        */
       if (gtk_text_iter_get_char (&end) == '\n')
         {
-          gtk_text_iter_next_char (&end);
+          gtk_text_iter_forward_char (&end);
           --count;
         }
 

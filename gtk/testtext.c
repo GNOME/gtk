@@ -1053,8 +1053,8 @@ do_apply_colors (gpointer callback_data,
               gboolean done = FALSE;
               
               next = start;
-              gtk_text_iter_next_char (&next);
-              gtk_text_iter_next_char (&next);
+              gtk_text_iter_forward_char (&next);
+              gtk_text_iter_forward_char (&next);
 
               if (gtk_text_iter_compare (&next, &end) > 0)
                 {
@@ -1105,7 +1105,7 @@ dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
   gtk_text_buffer_get_bounds (buffer, &start, &end);
 
   /* Remove trailing newline */
-  gtk_text_iter_prev_char (&end);
+  gtk_text_iter_backward_char (&end);
   
   search_string = gtk_text_iter_get_text (&start, &end);
 

@@ -1,3 +1,20 @@
+2000-12-11  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display): 
+	Handle chopping off \r\n and 0x2029 in addition to \n before
+	passing to PangoLayout
+
+	* gtk/gtkimcontextsimple.c
+	(gtk_im_context_simple_get_preedit_string): 
+	return an empty string if no match is pending
+
+	* gtk/gtkimcontext.c (gtk_im_context_get_preedit_string): add
+	assertion that the returned preedit string was sane
+
+	* gtk/gtktext*.[hc], gtk/testtext.c, gtk/testtextbuffer.c:
+	s/gtk_text_iter_next_char/gtk_text_iter_forward_char/g;
+	s/gtk_text_iter_prev_char/gtk_text_iter_backward_char/g;
+
 Mon Dec 11 10:02:26 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_finalize): 

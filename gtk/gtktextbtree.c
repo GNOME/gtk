@@ -598,14 +598,14 @@ gtk_text_btree_delete (GtkTextIter *start,
         GtkTextIter orig_end;
 
         orig_end = *end;
-        gtk_text_iter_prev_char (end);
+        gtk_text_iter_backward_char (end);
 
         --line2;
 
         if (gtk_text_iter_get_line_offset (start) == 0 &&
             line1 != 0)
           {
-            gtk_text_iter_prev_char (start);
+            gtk_text_iter_backward_char (start);
             --line1;
           }
 
@@ -981,7 +981,7 @@ gtk_text_btree_insert (GtkTextIter *iter,
       eol += sol;
       
       chunk_len = eol - sol;
-
+      
       seg = _gtk_char_segment_new (&text[sol], chunk_len);
 
       char_count_delta += seg->char_count;
@@ -1096,7 +1096,7 @@ insert_pixbuf_or_widget_segment (GtkTextIter        *iter,
   gtk_text_btree_get_iter_at_line (tree, &start, line, start_byte_offset);
 
   *iter = start;
-  gtk_text_iter_next_char (iter); /* skip forward past the segment */
+  gtk_text_iter_forward_char (iter); /* skip forward past the segment */
 
   gtk_text_btree_invalidate_region (tree, &start, iter);
 }
@@ -1595,7 +1595,7 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
   stack = iter_stack_new ();
   iter = start;
   /* We don't want to delete a toggle that's at the start iterator. */
-  gtk_text_iter_next_char (&iter);
+  gtk_text_iter_forward_char (&iter);
   while (gtk_text_iter_forward_to_tag_toggle (&iter, tag))
     {
       if (gtk_text_iter_compare (&iter, &end) >= 0)
@@ -2412,7 +2412,7 @@ redisplay_mark (GtkTextLineSegment *mark)
                                    mark->body.mark.obj);
 
   end = iter;
-  gtk_text_iter_next_char (&end);
+  gtk_text_iter_forward_char (&end);
 
   gtk_text_btree_invalidate_region (mark->body.mark.tree,
                                     &iter, &end);
@@ -2434,7 +2434,7 @@ ensure_not_off_end (GtkTextBTree *tree,
 {
   if (gtk_text_iter_get_line (iter) ==
       gtk_text_btree_line_count (tree))
-    gtk_text_iter_prev_char (iter);
+    gtk_text_iter_backward_char (iter);
 }
 
 static GtkTextLineSegment*
