@@ -537,7 +537,7 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
 				    event->state))
     return TRUE;
   
-  if (gtk_accel_groups_activate (GTK_OBJECT (widget), event->keyval, event->state))
+  if (gtk_accel_groups_activate (G_OBJECT (widget), event->keyval, event->state))
     return TRUE;
 
   return FALSE;

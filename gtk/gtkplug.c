@@ -700,7 +700,7 @@ gtk_plug_accel_entries_changed (GtkWindow *window)
 
   new_grabbed_keys = g_hash_table_new (grabbed_key_hash, grabbed_key_equal);
 
-  accel_groups = gtk_accel_groups_from_object (GTK_OBJECT (window));
+  accel_groups = gtk_accel_groups_from_object (G_OBJECT (window));
   
   tmp_list = accel_groups;
 

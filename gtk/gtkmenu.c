@@ -1500,7 +1500,7 @@ gtk_menu_key_press (GtkWidget	*widget,
 	{
 	  GSList *slist;
 	  
-	  slist = gtk_accel_group_entries_from_object (GTK_OBJECT (menu_item));
+	  slist = gtk_accel_group_entries_from_object (G_OBJECT (menu_item));
 	  while (slist)
 	    {
 	      GtkAccelEntry *ac_entry;

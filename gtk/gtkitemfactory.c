@@ -335,7 +335,7 @@ gtk_item_factory_propagate_accelerator (GtkItemFactoryItem *item,
 	    {
 	      GSList *work;
 	      
-	      work = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
+	      work = gtk_accel_group_entries_from_object (G_OBJECT (widget));
 	      while (work)
 		{
 		  GtkAccelEntry *ac_entry;
@@ -1266,7 +1266,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       label = gtk_widget_new (GTK_TYPE_ACCEL_LABEL,
 			      "GtkWidget::visible", TRUE,
 			      "GtkWidget::parent", widget,
-			      "GtkAccelLabel::accel_widget", widget,
+			      "GtkAccelLabel::accel_object", widget,
 			      "GtkMisc::xalign", 0.0,
 			      NULL);
       

@@ -56,7 +56,7 @@ struct _GtkAccelLabel
 
   guint	     queue_id;
   guint	     accel_padding;
-  GtkWidget *accel_widget;
+  GObject   *accel_object;
   gchar     *accel_string;
   guint16     accel_string_width;
 };
@@ -77,13 +77,19 @@ struct _GtkAccelLabelClass
 
 
 GtkType	   gtk_accel_label_get_type	     (void) G_GNUC_CONST;
-GtkWidget* gtk_accel_label_new		     (const gchar   *string);
-GtkWidget* gtk_accel_label_get_accel_widget  (GtkAccelLabel *accel_label);
+GtkWidget *gtk_accel_label_new		     (const gchar   *string);
+GObject   *gtk_accel_label_get_accel_object  (GtkAccelLabel *accel_label);
 guint	   gtk_accel_label_get_accel_width   (GtkAccelLabel *accel_label);
-void	   gtk_accel_label_set_accel_widget  (GtkAccelLabel *accel_label,
-					      GtkWidget	    *accel_widget);
+void	   gtk_accel_label_set_accel_object  (GtkAccelLabel *accel_label,
+					      GObject	    *accel_object);
 gboolean   gtk_accel_label_refetch           (GtkAccelLabel *accel_label);
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_accel_label_get_accel_widget(accel_label) \
+  GTK_WIDGET(gtk_accel_label_get_accel_object(acel_label))
+#define gtk_accel_label_set_accel_widget(accel_label, accel_widget) \
+  gtk_accel_label_set_accel_object((accel_label), G_OBJECT(accel_widget))
+#endif
 
 #ifdef __cplusplus
 }

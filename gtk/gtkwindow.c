@@ -967,7 +967,7 @@ gtk_window_add_accel_group (GtkWindow        *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (accel_group != NULL);
 
-  gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+  gtk_accel_group_attach (accel_group, G_OBJECT (window));
 }
 
 void
@@ -977,7 +977,7 @@ gtk_window_remove_accel_group (GtkWindow       *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (accel_group != NULL);
 
-  gtk_accel_group_detach (accel_group, GTK_OBJECT (window));
+  gtk_accel_group_detach (accel_group, G_OBJECT (window));
 }
 
 void
@@ -2343,7 +2343,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
 					    event->state);
 
   if (!handled)
-    handled = gtk_accel_groups_activate (GTK_OBJECT (window), event->keyval, event->state);
+    handled = gtk_accel_groups_activate (G_OBJECT (window), event->keyval, event->state);
 
   /* Chain up, invokes binding set */
   if (!handled && GTK_WIDGET_CLASS (parent_class)->key_press_event)

@@ -2454,7 +2454,7 @@ gtk_widget_add_accelerator (GtkWidget           *widget,
 		       accel_key,
 		       accel_mods,
 		       accel_flags,
-		       (GtkObject*) widget,
+		       (GObject*) widget,
 		       accel_signal);
 }
 
@@ -2470,7 +2470,7 @@ gtk_widget_remove_accelerator (GtkWidget           *widget,
   gtk_accel_group_remove (accel_group,
 			  accel_key,
 			  accel_mods,
-			  (GtkObject*) widget);
+			  (GObject*) widget);
 }
 
 void
@@ -2487,7 +2487,7 @@ gtk_widget_remove_accelerators (GtkWidget           *widget,
   signal_id = gtk_signal_lookup (accel_signal, GTK_OBJECT_TYPE (widget));
   g_return_if_fail (signal_id != 0);
   
-  slist = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
+  slist = gtk_accel_group_entries_from_object (G_OBJECT (widget));
   while (slist)
     {
       GtkAccelEntry *ac_entry;
@@ -2516,7 +2516,7 @@ gtk_widget_accelerator_signal (GtkWidget           *widget,
 
   ac_entry = gtk_accel_group_get_entry (accel_group, accel_key, accel_mods);
 
-  if (ac_entry && ac_entry->object == (GtkObject*) widget)
+  if (ac_entry && ac_entry->object == (GObject*) widget)
     return ac_entry->signal_id;
   return 0;
 }

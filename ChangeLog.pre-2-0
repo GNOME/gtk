@@ -1,3 +1,41 @@
+2001-07-15  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkwindow.c (gtk_window_add_accel_group): cast to GObject.
+	(gtk_window_remove_accel_group): same here.
+	(gtk_window_key_press_event): same here.
+
+	* gtk/gtkwidget.c (gtk_widget_add_accelerator): cast to GObject.
+	(gtk_widget_remove_accelerator): same here.
+	(gtk_widget_remove_accelerators): same here.
+
+	* gtk/gtkplug.c (gtk_plug_accel_entries_changed): same here.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_key_press): cast to GObject
+	instead of GtkObject.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): update since GtkAccelGroup
+	now takes GObjects.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_propagate_accelerator):
+	pass a GObject to gtk_accel_group_entries_from_object.
+	(gtk_item_factory_create_item): s/accel_widget/accel_object/
+
+	* gtk/gtk-boxed.defs: remove GtkAccelGroup boxed def.
+
+	* gtk/gtkaccellabel.c: convert to handle GObject accel objects.
+
+	* gtk/gtkaccellabel.h: fix header to reflect that arbitrary
+	GObjects can have accelerators set now.  Add compatibility
+	defines.
+
+	* gtk/gtkmarshal.list: add missing marshallers.
+
+	* gtk/gtkaccelgroup.[ch]: convert to a GObject, and allow setting
+	accelerators on plain GObjects.  gtk_accel_group_object_destroy
+	has been converted into a weak reference, and
+	gtk_accel_group_delete_entries is now a destroy notify for that
+	piece of data.
+
 2001-07-23  Ron Steinke  <rsteinke@w-link.net>
 
 	* gdk/gdkdraw.c: Added a check on the colormap depth to
