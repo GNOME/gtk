@@ -96,6 +96,7 @@ struct _GtkFileChooserImplDefault
   guint select_multiple : 1;
   guint show_hidden : 1;
   guint changing_folder : 1;
+  guint list_sort_ascending : 1;
 };
 
 /* Column numbers for the shortcuts tree */
@@ -104,6 +105,14 @@ enum {
   SHORTCUTS_COL_NAME,
   SHORTCUTS_COL_PATH,
   SHORTCUTS_COL_NUM_COLUMNS
+};
+
+/* Column numbers for the file list */
+enum {
+  FILE_LIST_COL_NAME,
+  FILE_LIST_COL_SIZE,
+  FILE_LIST_COL_MTIME,
+  FILE_LIST_COL_NUM_COLUMNS
 };
 
 /* Standard icon size */
@@ -629,7 +638,7 @@ create_file_list (GtkFileChooserImplDefault *impl)
 
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (column, "File name");
-  gtk_tree_view_column_set_sort_column_id (column, 0);
+  gtk_tree_view_column_set_sort_column_id (column, FILE_LIST_COL_NAME);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
@@ -652,7 +661,7 @@ create_file_list (GtkFileChooserImplDefault *impl)
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_size_data_func, impl, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, 1);
+  gtk_tree_view_column_set_sort_column_id (column, FILE_LIST_COL_SIZE);
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
 #endif
   /* Modification time column */
@@ -664,7 +673,7 @@ create_file_list (GtkFileChooserImplDefault *impl)
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_mtime_data_func, impl, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, 2);
+  gtk_tree_view_column_set_sort_column_id (column, FILE_LIST_COL_MTIME);
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
 
   return impl->list_scrollwin;
@@ -1389,6 +1398,75 @@ set_current_filter (GtkFileChooserImplDefault *impl,
     }
 }
 
+typedef gint (* FileCompareFunc) (const GtkFileInfo *info_a, const GtkFileInfo *info_b);
+
+/* Helper function for comparers.  Makes sure that directories always go first,
+ * regardless of the sort order of the list.
+ */
+static gint
+compare_with_folders_first (GtkFileChooserImplDefault *impl,
+			    GtkTreeIter               *a,
+			    GtkTreeIter               *b,
+			    FileCompareFunc            func)
+{
+  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
+  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
+  gboolean dir_a = gtk_file_info_get_is_folder (info_a);
+  gboolean dir_b = gtk_file_info_get_is_folder (info_b);
+
+  /* You know why we should *not* be programming in C?
+   *
+   * (set-sort-func sortable NAME_COLUMN
+   *   (make-comparer impl (lambda (a b) (strcmp (get-name a) (get-name b)))))
+   * (set-sort-func sortable SIZE_COLUMN
+   *   (make-comparer impl (lambda (a b) (compare (get-size a) (get-size b)))))
+   * ... etc ...
+   *
+   * (define (make-comparer impl f)
+   *   (lambda (a b)
+   *      (if (eq (is-dir? a) (is-dir? b))
+   *          (f a b)
+   *          (if (sort-ascending? impl)
+   *              (if (is-dir? a) -1 1)
+   *              (if (is-dir? a) 1 -1)))))
+   *
+   * Rather than all this callback mess.
+   */
+
+  if (dir_a == dir_b)
+    return (* func) (info_a, info_b);
+  else
+    return impl->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1); /* Directories *always* go first */
+}
+
+static gint
+compare_names (const GtkFileInfo *info_a,
+	       const GtkFileInfo *info_b)
+{
+  return strcmp (gtk_file_info_get_display_key (info_a), gtk_file_info_get_display_key (info_b));
+}
+
+static gint
+compare_sizes (const GtkFileInfo *info_a,
+	       const GtkFileInfo *info_b)
+{
+  gint64 size_a = gtk_file_info_get_size (info_a);
+  gint64 size_b = gtk_file_info_get_size (info_b);
+
+  return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
+}
+
+static gint
+compare_mtime (const GtkFileInfo *info_a,
+	       const GtkFileInfo *info_b)
+{
+  GtkFileTime ta = gtk_file_info_get_modification_time (info_a);
+  GtkFileTime tb = gtk_file_info_get_modification_time (info_b);
+
+  return ta > tb ? -1 : (ta == tb ? 0 : 1);
+}
+	       
+/* Sort callback for the filename column */
 static gint
 name_sort_func (GtkTreeModel *model,
 		GtkTreeIter  *a,
@@ -1396,12 +1474,11 @@ name_sort_func (GtkTreeModel *model,
 		gpointer      user_data)
 {
   GtkFileChooserImplDefault *impl = user_data;
-  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
-  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
 
-  return strcmp (gtk_file_info_get_display_key (info_a), gtk_file_info_get_display_key (info_b));
+  return compare_with_folders_first (impl, a, b, compare_names);
 }
 
+/* Sort callback for the size column */
 static gint
 size_sort_func (GtkTreeModel *model,
 		GtkTreeIter  *a,
@@ -1409,12 +1486,8 @@ size_sort_func (GtkTreeModel *model,
 		gpointer      user_data)
 {
   GtkFileChooserImplDefault *impl = user_data;
-  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
-  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
-  gint64 size_a = gtk_file_info_get_size (info_a);
-  gint64 size_b = gtk_file_info_get_size (info_b);
 
-  return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
+  return compare_with_folders_first (impl, a, b, compare_sizes);
 }
 
 /* Sort callback for the mtime column */
@@ -1425,12 +1498,8 @@ mtime_sort_func (GtkTreeModel *model,
 		 gpointer      user_data)
 {
   GtkFileChooserImplDefault *impl = user_data;
-  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
-  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
-  GtkFileTime ta = gtk_file_info_get_modification_time (info_a);
-  GtkFileTime tb = gtk_file_info_get_modification_time (info_b);
 
-  return ta > tb ? -1 : (ta == tb ? 0 : 1);
+  return compare_with_folders_first (impl, a, b, compare_mtime);
 }
 
 static void
@@ -1570,6 +1639,19 @@ check_preview_change (GtkFileChooserImplDefault *impl)
     }
 }
 
+/* Callback used when the sort column changes.  We cache the sort order for use
+ * in name_sort_func().
+ */
+static void
+list_sort_column_changed_cb (GtkTreeSortable           *sortable,
+			     GtkFileChooserImplDefault *impl)
+{
+  GtkSortType sort_type;
+
+  if (gtk_tree_sortable_get_sort_column_id (sortable, NULL, &sort_type))
+    impl->list_sort_ascending = (sort_type == GTK_SORT_ASCENDING);
+}
+
 static void
 tree_selection_changed (GtkTreeSelection          *selection,
 			GtkFileChooserImplDefault *impl)
@@ -1617,17 +1699,18 @@ tree_selection_changed (GtkTreeSelection          *selection,
 						 GTK_FILE_INFO_IS_FOLDER |
 						 GTK_FILE_INFO_SIZE |
 						 GTK_FILE_INFO_MODIFICATION_TIME);
-#if 0
-  _gtk_file_system_model_set_show_folders (impl->list_model, TRUE);
-#endif
   install_list_model_filter (impl);
 
   impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 0, name_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 1, size_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 2, mtime_sort_func, impl, NULL);
-  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model),
-					   name_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, name_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_SIZE, size_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_MTIME, mtime_sort_func, impl, NULL);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model), NULL, NULL, NULL);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, GTK_SORT_ASCENDING);
+  impl->list_sort_ascending = TRUE;
+
+  g_signal_connect (impl->sort_model, "sort_column_changed",
+		    G_CALLBACK (list_sort_column_changed_cb), impl);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->list),
 			   GTK_TREE_MODEL (impl->sort_model));
