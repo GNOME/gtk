@@ -836,6 +836,8 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
     pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
 
   gtk_widget_modify_font (font_button->priv->font_label, desc);
+
+  pango_font_description_free (desc);
 }
 
 static gboolean
