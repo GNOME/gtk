@@ -1,3 +1,8 @@
+Tue Feb 24 17:35:59 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* m4macros/gtk-2.0.m4: Add some quotes around ***. (#130073,
+	Uwe Zeisberger)
+
 Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.3 ===
