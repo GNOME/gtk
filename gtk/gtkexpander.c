@@ -801,7 +801,7 @@ gtk_expander_button_release (GtkWidget      *widget,
 
   if (event->button == 1 && expander->priv->button_down)
     {
-      gtk_expander_activate (expander);
+      gtk_widget_activate (widget);
       expander->priv->button_down = FALSE;
       return TRUE;
     }
@@ -1163,7 +1163,8 @@ gtk_expander_animation_timeout (GtkExpander *expander)
   if (finish)
     {
       priv->animation_timeout = 0;
-      gtk_widget_set_child_visible (GTK_BIN (expander)->child, priv->expanded);
+      if (GTK_BIN (expander)->child)
+	gtk_widget_set_child_visible (GTK_BIN (expander)->child, priv->expanded);
       gtk_widget_queue_resize (GTK_WIDGET (expander));
     }
 

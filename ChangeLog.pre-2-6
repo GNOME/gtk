@@ -1,3 +1,11 @@
+Mon Oct  6 14:18:47 2003  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkexpander.c (gtk_expander_animation_timeout): only show
+	the child if we have one.
+
+	(gtk_expander_button_release): use
+	gtk_widget_activate instead.
+
 Mon Oct  6 21:05:46 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktable.c (gtk_table_class_init): Start the blurb for 
