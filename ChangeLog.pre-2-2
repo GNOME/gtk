@@ -1,3 +1,8 @@
+Thu Apr 30 02:42:11 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkfilesel.c: don't die when naughty people remove parts of
+	the filesystem under you (fix from Josh)
+
 Thu Apr 30 09:49:14 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_foreach): check
