@@ -114,6 +114,7 @@ gdk_colormap_finalize (GObject *object)
   
   g_free (private->info);
   g_free (colormap->colors);
+  g_free (private);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

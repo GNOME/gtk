@@ -228,7 +228,7 @@ gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
   impl = GDK_WINDOW_IMPL_X11 (drawable);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
-  if (GDK_WINDOW_DESTROYED (draw_impl->wrapper))
+  if (cmap && GDK_WINDOW_DESTROYED (draw_impl->wrapper))
     return;
 
   /* chain up */
@@ -294,7 +294,8 @@ _gdk_windowing_window_init (GdkScreen * screen)
 
   g_assert (screen_x11->root_window == NULL);
 
-  screen_x11->default_colormap = gdk_screen_get_system_colormap (screen);
+  gdk_screen_set_default_colormap (screen,
+				   gdk_screen_get_system_colormap (screen));
 
   XGetGeometry (screen_x11->xdisplay, screen_x11->xroot_window,
 		&screen_x11->xroot_window, &x, &y, &width, &height, &border_width, &depth);
@@ -309,6 +310,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
   draw_impl->xid = screen_x11->xroot_window;
   draw_impl->wrapper = GDK_DRAWABLE (private);
   draw_impl->colormap = gdk_screen_get_system_colormap (screen);
+  g_object_ref (draw_impl->colormap);
   
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = depth;

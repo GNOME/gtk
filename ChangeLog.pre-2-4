@@ -1,3 +1,24 @@
+Mon Nov 25 17:44:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Fixes from #98358, Havoc Pennington.
+
+	* gdk/{x11,win32,linux-fb}/gdkcolor-*.c (gdk_colormap_finalize): 
+	Free the private structure.
+
+	* gdk/x11,win32,linxu-fb}/gdkscreen-*.c (gdk_screen_set_default_colormap):
+	  gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_init): 
+	Keep a ref to the default colormap.
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_x11_dispose): Unref
+	the default colormap.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_set_colormap):
+	Handle the CMAP == NULL case even when the window is
+	destroyed.
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_init):
+	Add a missing ref for the system colormap. 
+
 Mon Nov 25 17:10:54 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_set_property_value): 

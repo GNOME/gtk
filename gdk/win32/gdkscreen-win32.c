@@ -44,7 +44,17 @@ void
 gdk_screen_set_default_colormap (GdkScreen   *screen,
 				 GdkColormap *colormap)
 {
-  default_colormap = colormap;
+  GdkColormap *old_colormap;
+  
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+
+  old_colormap = default_colormap;
+
+  default_colormap = g_object_ref (colormap);
+  
+  if (old_colormap)
+    g_object_unref (old_colormap);
 }
 
 gint

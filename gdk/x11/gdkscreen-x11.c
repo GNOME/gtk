@@ -244,10 +244,17 @@ void
 gdk_screen_set_default_colormap (GdkScreen   *screen,
 				 GdkColormap *colormap)
 {
+  GdkColormap *old_colormap;
+  
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
+
+  old_colormap = GDK_SCREEN_X11 (screen)->default_colormap;
+
+  GDK_SCREEN_X11 (screen)->default_colormap = g_object_ref (colormap);
   
-  GDK_SCREEN_X11 (screen)->default_colormap = colormap;
+  if (old_colormap)
+    g_object_unref (old_colormap);
 }
 
 static void
@@ -256,6 +263,9 @@ gdk_screen_x11_dispose (GObject *object)
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
 
   _gdk_x11_events_uninit_screen (GDK_SCREEN (object));
+
+  g_object_unref (screen_x11->default_colormap);
+  screen_x11->default_colormap = NULL;
   
   screen_x11->root_window = NULL;
 
