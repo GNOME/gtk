@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>September 3rd 2003</date>
+  <date>October 28th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -369,10 +369,76 @@ them).</para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>What do I need to run GTK+?</title>
+<title>What do I need to compile GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>To compile GTK+, all you need is a C compiler (gcc) and
-the X Window System and associated libraries on your system.</para>
+<para>GTK+ is a large package that is dependent on a number of other
+tools and libraries. It is recommended that you use precompiled
+binary packages for your system if possible</para>
+
+<para>To compile GTK+ from source you need a C compiler (gcc) and
+the X Window System and associated development libraries and packages
+on your system.</para>
+
+<para>You will also need to have installed the tools
+and libraries that GTK+ depends upon. These are listed below in the order
+in which they need to be installed:</para>
+
+<itemizedlist spacing=compact>
+<listitem><simpara> pkg-config
+(<ulink url="http://www.freedesktop.org/software/pkgconfig/">
+pkg-config Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GNU make
+(<ulink url="http://www.gnu.org/software/make/">
+GNU make Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> JPEG, PNG and TIFF image libraries
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/dependencies/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> FreeType
+(<ulink url="http://www.freetype.org/">
+FreeType Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> fontconfig
+(<ulink url="http://www.fontconfig.org/">
+fontconfig Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GNU libiconv library (if your system doesn't have iconv())
+(<ulink url="http://www.gnu.org/software/libiconv/">
+GNU libiconv Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GNU gettext (if your system doesn't have gettext())
+(<ulink url="http://www.gnu.org/software/gettext/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GLib
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> Pango
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> ATK
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GTK+
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+</itemizedlist>
 
 </sect1>
 
