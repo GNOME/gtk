@@ -1,3 +1,20 @@
+Thu Jan 29 18:08:06 2004  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtktextlayout.c (line_display_iter_to_index)
+ 	* gtk/gtktextlayout.c (line_display_index_to_iter): Only
+ 	adjust the preedit position for lines that include the
+ 	preedit string. (#132353, Yao Zhang). How the heck
+ 	did this work as well as it did?!?!
+ 
+ 	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_get_ic): 
+ 	Reverse change to change of XNFilterEvents event mask from
+ 	#110493 -- it's documented and in the Xlib code an
+	unsigned long. 
+ 	
+ 	* modules/input/gtkimcontextxim.c (preedit_start_callback): 
+ 	Return -1 rather than void to indicate no length limit.
+ 	(#129548)
+ 
 Tue Jan 27 18:45:47 2004  Manish Singh  <yosh@gimp.org>
 
         * m4macros/gtk-2.0.m4: quote AC_DEFUN macro names so automake

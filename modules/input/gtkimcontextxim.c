@@ -962,7 +962,7 @@ gtk_im_context_xim_get_preedit_string (GtkIMContext   *context,
     *cursor_pos = context_xim->preedit_cursor;
 }
 
-static void
+static int
 preedit_start_callback (XIC      xic,
 			XPointer client_data,
 			XPointer call_data)
@@ -972,6 +972,8 @@ preedit_start_callback (XIC      xic,
   
   if (!context_xim->finalizing)
     g_signal_emit_by_name (context, "preedit_start");
+
+  return -1;			/* No length limit */
 }		     
 
 static void
@@ -1272,7 +1274,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 	   * stroke if both key pressed and released events are filtered.
 	   * (bugzilla #81759)
 	   */
-	  guint32 mask = 0;
+	  gulong mask = 0;
 	  XGetICValues (xic,
 			XNFilterEvents, &mask,
 			NULL);
