@@ -125,7 +125,7 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
    *
    * Since: 2.8
    */
-  g_object_class_install_property (gobject_class,
+  g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active",
 							 P_("Active"),
