@@ -1,3 +1,10 @@
+2002-02-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkinternals.h: Add some more GdkDebugFlags, for more
+	fine-grained debugging output (mainly used in the Win32 backend).
+
+	* gdk/gdk.c: Corresponding additions to the gdk_debug_keys table.
+
 Wed Feb 13 15:42:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.[ch] gtkwidget.c: Implement Control-F1
@@ -1706,7 +1713,7 @@ Sat Jan 12 16:57:31 2002  Kristian Rietveld  <kris@gtk.org>
 	cursor, set the Windows cursor to none first.
 
 	* gdk/win32/gdkgc-win32.c (predraw_set_foreground): Delete the old
-	brush that was in the DC, like the win32-procution branch does. I
+	brush that was in the DC, like the win32-production branch does. I
 	guess this plugs a resource leak? With the HDC cache, the old
 	brush might be something we created ourselves, and not a stock
 	brush. And it doesn't do any harm to call DeleteObject on stock

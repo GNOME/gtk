@@ -59,9 +59,16 @@ static const GDebugKey gdk_debug_keys[] = {
   {"dnd",	    GDK_DEBUG_DND},
   {"xim",	    GDK_DEBUG_XIM},
   {"nograbs",       GDK_DEBUG_NOGRABS},
+  {"colormap",	    GDK_DEBUG_COLORMAP},
+  {"gdkrgb",	    GDK_DEBUG_GDKRGB},
+  {"gc",	    GDK_DEBUG_GC},
+  {"pixmap",	    GDK_DEBUG_PIXMAP},
+  {"image",	    GDK_DEBUG_IMAGE},
+  {"input",	    GDK_DEBUG_INPUT},
+  {"cursor",	    GDK_DEBUG_CURSOR},
 };
 
-static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
+static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
 
 #endif /* G_ENABLE_DEBUG */
 
