@@ -557,7 +557,9 @@ gdk_window_new (GdkWindow     *parent,
       break;
 
     case GDK_WINDOW_TEMP:
-      dwStyle = WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+      dwStyle = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+      /* a temp window is not necessarily a top level window */
+      dwStyle |= (gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
       dwExStyle |= WS_EX_TOOLWINDOW;
       break;
 
@@ -837,8 +839,16 @@ gdk_window_show (GdkWindow *window)
             {
 	      GdkWindow *parent = GDK_WINDOW (private->parent);
 
-	      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
-	      ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+	      /* Todo: GDK_WINDOW_STATE_STICKY */
+	      if (private->state & GDK_WINDOW_STATE_ICONIFIED)
+	        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMINIMIZED);
+	      else if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
+	        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
+	      else
+	        {
+	          ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+	          ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+	        }
               if (parent == gdk_parent_root)
                 SetForegroundWindow (GDK_WINDOW_HWND (window));
 	      BringWindowToTop (GDK_WINDOW_HWND (window));
@@ -1330,7 +1340,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   impl->hint_flags = geom_mask;
 
   if (geom_mask & GDK_HINT_POS)
-    ; /* XXX */
+    ; /* even the X11 mplementation doesn't care */
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
@@ -1469,13 +1479,38 @@ void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
+  HWND window_id, parent_id;
+  LONG style;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   GDK_NOTE (MISC, g_print ("gdk_window_set_transient_for: %#x %#x\n",
 			   (guint) GDK_WINDOW_HWND (window),
 			   (guint) GDK_WINDOW_HWND (parent)));
-  /* XXX */
+
+  if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (parent))
+    return;
+
+  window_id = GDK_WINDOW_HWND (window);
+  parent_id = GDK_WINDOW_HWND (parent);
+
+  if ((style = GetWindowLong (window_id, GWL_STYLE)) == 0)
+    WIN32_API_FAILED ("GetWindowLong");
+
+  style |= WS_POPUP;
+#if 0 /* not sure if we want to do this */
+  style &= ~(WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
+#endif
+
+  if (!SetWindowLong (window_id, GWL_STYLE, style))
+    WIN32_API_FAILED ("SetWindowLong");
+  if (!SetParent (window_id, parent_id))
+	WIN32_API_FAILED ("SetParent");
+
+  if (!RedrawWindow (window_id, NULL, NULL, 
+                     RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW))
+    WIN32_API_FAILED ("RedrawWindow");
 }
 
 void

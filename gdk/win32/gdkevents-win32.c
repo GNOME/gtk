@@ -1354,6 +1354,8 @@ propagate (GdkWindow  **window,
 	   gboolean   (*doesnt_want_it) (gint mask,
 					 MSG *msg))
 {
+  gboolean in_propagation = FALSE;
+
   if (grab_window != NULL && !grab_owner_events)
     {
       /* Event source is grabbed with owner_events FALSE */
@@ -1414,9 +1416,11 @@ propagate (GdkWindow  **window,
 	      gdk_drawable_unref (*window);
 	      *window = GDK_WINDOW (GDK_WINDOW_OBJECT (*window)->parent);
 	      gdk_drawable_ref (*window);
-	      GDK_NOTE (EVENTS, g_print ("...propagating to %#lx\n",
+	      GDK_NOTE (EVENTS, g_print ("%s %#lx",
+					 (in_propagation ? "," : " ...propagating to"),
 					 (gulong) GDK_WINDOW_HWND (*window)));
 	      /* The only branch where we actually continue the loop */
+	      in_propagation = TRUE;
 	    }
 	}
       else

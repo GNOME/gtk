@@ -38,7 +38,6 @@
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
 
-
 /* --- typedefs & structures --- */
 typedef struct {
   GType       widget_type;
@@ -4005,8 +4004,8 @@ create_expander_affine (gdouble affine[6],
   width = expander_size / 4;
   height = expander_size / 2;
   
-  s = sin (degrees * M_PI / 180.0);
-  c = cos (degrees * M_PI / 180.0);
+  s = sin (degrees * G_PI / 180.0);
+  c = cos (degrees * G_PI / 180.0);
   
   affine[0] = c;
   affine[1] = s;

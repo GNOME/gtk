@@ -1,6 +1,5 @@
 EXPORTS
 	GTK_TYPE_ACCEL_FLAGS
-	GTK_TYPE_ACCEL_GROUP
 	GTK_TYPE_ANCHOR_TYPE
 	GTK_TYPE_ARG_FLAGS
 	GTK_TYPE_ARROW_TYPE
@@ -94,6 +93,7 @@ EXPORTS
 	gtk_accel_group_entries_from_object
 	gtk_accel_group_get_default
 	gtk_accel_group_get_entry
+	gtk_accel_group_get_type
 	gtk_accel_group_handle_add
 	gtk_accel_group_handle_remove
 	gtk_accel_group_lock
@@ -106,12 +106,12 @@ EXPORTS
 	gtk_accel_group_unref
 	gtk_accel_groups_activate
 	gtk_accel_groups_from_object
-	gtk_accel_label_get_accel_widget
+	gtk_accel_label_get_accel_object
 	gtk_accel_label_get_accel_width
 	gtk_accel_label_get_type
 	gtk_accel_label_new
 	gtk_accel_label_refetch
-	gtk_accel_label_set_accel_widget
+	gtk_accel_label_set_accel_object
 	gtk_accelerator_get_default_mod_mask
 	gtk_accelerator_name
 	gtk_accelerator_parse

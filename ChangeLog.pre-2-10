@@ -1,3 +1,27 @@
+2001-08-04  Hans Breuer  <hans@breuer.org>
+
+	* gtk/stocks-icons/makefile.msc : new file
+	* gtk/makefile.msc.in : use it
+
+	* gtk/gtkstyle.c : not all platforms do provide M_PI and
+	friends, but luckily there is G_PI
+
+	* gtk/gtk.def : updated
+
+	* gdk/win32/gdkwindow.c (gdk_window_new) : don't make all TEMP 
+	windows WS_POPUP, but only those without a parent. This fixes the 
+	mis-alignment between the selectable (temp, input only) window and 
+	the window text of GtkLabel.
+
+	(gdk_window_show) : respect private->state when actually showing
+	the window.
+
+	(gdk_window_set_transient_for) : Implementation from Wolfgang 
+	Sourdeau <wolfgang@contre.com> ported to 2.0 and added some 
+	error handling. Should fix #50586.
+
+	* gdk/win32/gdkevents-win32.c : beautify log output
+
 2001-08-04  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_create_item):
