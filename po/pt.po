@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
-"POT-Creation-Date: 2002-08-05 02:24+0100\n"
-"PO-Revision-Date: 2002-08-05 02:25+0100\n"
+"POT-Creation-Date: 2002-10-16 00:46+0100\n"
+"PO-Revision-Date: 2002-10-16 00:45+0100\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -251,16 +251,16 @@ msgstr "Ícones comprimidos não são suportados"
 msgid "Unsupported icon type"
 msgstr "Tipo de ícone não suportado"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "Memória insuficiente para carregar ficheiro ICO"
 
-#: gdk-pixbuf/io-jpeg.c:126
+#: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Erro ao interpretar ficheiro de imagem JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:307
+#: gdk-pixbuf/io-jpeg.c:346
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -268,11 +268,16 @@ msgstr ""
 "Memória insuficiente para carregar imagem, tente fechar algumas aplicações "
 "para libertar memória"
 
-#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
+#: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "Tipo de espaço de cor JPEG não suportado (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:476 gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Incapaz de alocar memória para carregar ficheiro JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:721
+#: gdk-pixbuf/io-jpeg.c:798
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -281,7 +286,7 @@ msgstr ""
 "Qualidade JPEG tem de ser um valor entre 0 e 100; valor '%s' não pode ser "
 "parseado."
 
-#: gdk-pixbuf/io-jpeg.c:736
+#: gdk-pixbuf/io-jpeg.c:813
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -1760,65 +1765,65 @@ msgstr "Seleccionar no focus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Se os conteudos da entrada são ou não seleccionados ao terem o focus."
 
-#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Seleccionar Tudo"
 
-#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Métodos de Entrada"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "_Inserir caracter de controlo Unicode"
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "Nome ficheiro"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
 msgstr "O nome do ficheiro actualmente seleccionado."
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "Mostrar operações de ficheiros"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 "Se os botões para criar/manipular ficheiros deverão ou não ser mostrados."
 
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "Seleccionar múltiplos"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
 msgstr "Permitir ou não a selecção de múltiplos ficheiros."
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "Pastas"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "Pas_tas"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Ficheiros"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Ficheiros"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Pasta ilegível: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1829,19 +1834,19 @@ msgstr ""
 "disponível para esta aplicação.\n"
 "Tem a certeza que o deseja seleccionar?"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "_Nova Pasta"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "Apa_gar Ficheiro"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "_Renomear Ficheiro"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -1849,7 +1854,7 @@ msgstr ""
 "O nome de pasta \"%s\" contém símbolos que não são permitidos em nomes de "
 "ficheiros"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1858,36 +1863,36 @@ msgstr ""
 "Erro ao criar pasta \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Provavelmente você utilizou símbolos não permitidos em nomes de ficheiros."
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Erro ao criar pasta \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
 msgstr "Nova Pasta"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
 msgstr "Nome _pasta:"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "Criar"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "O nome de ficheiro \"%s\" contém símbolos que não são permitidos em nomes de "
 "ficheiros"
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1896,33 +1901,33 @@ msgstr ""
 "Erro ao apagar ficheiro \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Provavelmente você utilizou símbolos não permitidos em nomes de ficheiros."
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Erro ao apagar ficheiro \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Apagar mesmo o ficheiro \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "Apagar Ficheiro"
 
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "O nome de ficheiro \"%s\" contém símbolos que não são permitidos em nomes de "
 "ficheiros"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1931,7 +1936,7 @@ msgstr ""
 "Erro ao renomear ficheiro para \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1940,29 +1945,29 @@ msgstr ""
 "Erro ao renomear ficheiro \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Erro ao renomear ficheiro \"%s\" para \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "Renomear Ficheiro"
 
-#: gtk/gtkfilesel.c:1709
+#: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Renomear ficheiro \"%s\" para:"
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "Renomear"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "Selecção: "
 
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:3004
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1971,15 +1976,15 @@ msgstr ""
 "O nome de ficheiro \"%s\" não pode ser convertido em UTF-8 (tente definir a "
 "variável de ambiente G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
 msgstr "Utf-8 inválido"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3873
 msgid "Name too long"
 msgstr "Nome demasiado longo"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
 msgstr "Incapaz de converter nome de ficheiro"
 
@@ -2131,79 +2136,79 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Erro ao ler o ícone: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "Um GdkPixbuf para mostrar."
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr "Um GdkPixmap para mostrar."
 
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "Imagem"
 
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "Uma GdkImage para mostrar."
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "Máscara"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Bitmap de máscara a utilizar com o GdkImage ou GdkPixmap"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "Nome de ficheiro a carregar e mostrar."
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "ID Base"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr "ID Base para uma imagem base a mostrar."
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "Conjunto ícones"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "Conjunto de ícones a mostrar."
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "Tamanho ícone"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "Tamanho a utilizar para ícone base ou conjunto de ícones."
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "Animação"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "GdkPixbufAnimation a mostrar."
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "Tipo armazenamento"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "A representação a ser utilizada para dados de imagem."
 
@@ -2373,7 +2378,7 @@ msgstr "O widget a ser activado quando a tecla menmónica é primida."
 msgid "Horizontal adjustment"
 msgstr "Ajustamento horizontal"
 
-#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "O GtkAdjustment para a posição horizontal."
 
@@ -2381,7 +2386,7 @@ msgstr "O GtkAdjustment para a posição horizontal."
 msgid "Vertical adjustment"
 msgstr "Ajustamento vertical"
 
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
 msgstr "O GtkAdjustment para a posição vertical."
 
@@ -2588,7 +2593,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Se os separadores deverão ou não ter um tamanho homogéneo"
 
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2981,43 +2986,43 @@ msgstr ""
 "Mostrar um segundo botão de seta de avanço no extremo oposto da barra de "
 "rolamento"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
+#: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "Ajustamento Horizontal"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "Ajustamento Vertical"
 
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
 msgstr "Política Barra Rolamento Horizontal"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:247
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Quando é a barra de rolamento horizontal mostrada"
 
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:254
 msgid "Vertical Scrollbar Policy"
 msgstr "Política Barra Rolamento Vertical"
 
-#: gtk/gtkscrolledwindow.c:259
+#: gtk/gtkscrolledwindow.c:255
 msgid "When the vertical scrollbar is displayed"
 msgstr "Quando é a barra de rolamento vertical mostrada"
 
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
 msgstr "Colocação Janela"
 
-#: gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Onde estão os conteudos localizados em relação às barras de rolamento"
 
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
 msgstr "Tipo Sombra"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
 msgstr "Estilo de relevo à volta dos conteudos"
 
@@ -3238,8 +3243,8 @@ msgid "_Copy"
 msgstr "_Copiar"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
-msgstr "C_ortar"
+msgid "Cu_t"
+msgstr "Cor_tar"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -3829,7 +3834,7 @@ msgstr "Cursor Visível"
 msgid "If the insertion cursor is shown"
 msgstr "Se o cursor de inserção é mostrado"
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr "_Métodos de Entrada"
 
