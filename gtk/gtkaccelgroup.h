@@ -48,10 +48,10 @@ typedef struct _GtkAccelEntry	GtkAccelEntry;
 
 struct _GtkAccelGroup
 {
-  guint	  ref_count;
-  guint	  lock_count;
-  guint	  modifier_mask;
-  GSList *attach_objects;
+  guint	          ref_count;
+  guint	          lock_count;
+  GdkModifierType modifier_mask;
+  GSList         *attach_objects;
 };
 
 struct _GtkAccelEntry
@@ -60,7 +60,7 @@ struct _GtkAccelEntry
    */
   GtkAccelGroup		*accel_group;
   guint			 accelerator_key;
-  guint			 accelerator_mods;
+  GdkModifierType	 accelerator_mods;
   
   GtkAccelFlags		 accel_flags;
   GtkObject		*object;
@@ -76,10 +76,10 @@ GtkAccelGroup*  gtk_accel_group_ref	     	(GtkAccelGroup	*accel_group);
 void	        gtk_accel_group_unref	      	(GtkAccelGroup	*accel_group);
 gboolean        gtk_accel_group_activate	(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
-						 guint		 accel_mods);
+						 GdkModifierType accel_mods);
 gboolean        gtk_accel_groups_activate      	(GtkObject	*object,
 						 guint		 accel_key,
-						 guint		 accel_mods);
+						 GdkModifierType accel_mods);
 void		gtk_accel_group_attach		(GtkAccelGroup	*accel_group,
 						 GtkObject	*object);
 void		gtk_accel_group_detach		(GtkAccelGroup	*accel_group,
@@ -91,22 +91,22 @@ void		gtk_accel_group_unlock		(GtkAccelGroup	*accel_group);
  */
 GtkAccelEntry* 	gtk_accel_group_get_entry      	(GtkAccelGroup  *accel_group,
 						 guint           accel_key,
-						 guint           accel_mods);
+						 GdkModifierType accel_mods);
 void		gtk_accel_group_lock_entry	(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
-						 guint		 accel_mods);
+						 GdkModifierType accel_mods);
 void		gtk_accel_group_unlock_entry	(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
-						 guint		 accel_mods);
+						 GdkModifierType accel_mods);
 void		gtk_accel_group_add		(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
-						 guint		 accel_mods,
+						 GdkModifierType accel_mods,
 						 GtkAccelFlags	 accel_flags,
 						 GtkObject	*object,
 						 const gchar	*accel_signal);
 void		gtk_accel_group_remove		(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
-						 guint		 accel_mods,
+						 GdkModifierType accel_mods,
 						 GtkObject	*object);
 
 /* Accelerator Signals
@@ -115,17 +115,17 @@ void		gtk_accel_group_handle_add	(GtkObject	*object,
 						 guint		 accel_signal_id,
 						 GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
-						 guint		 accel_mods,
+						 GdkModifierType accel_mods,
 						 GtkAccelFlags   accel_flags);
 void		gtk_accel_group_handle_remove	(GtkObject	*object,
 						 GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
-						 guint		 accel_mods);
+						 GdkModifierType accel_mods);
 guint		gtk_accel_group_create_add	(GtkType	 class_type,
-						 GtkSignalRunType run_type,
+						 GtkSignalRunType signal_flags,
 						 guint		 handler_offset);
 guint		gtk_accel_group_create_remove	(GtkType	 class_type,
-						 GtkSignalRunType run_type,
+						 GtkSignalRunType signal_flags,
 						 guint		 handler_offset);
 void		gtk_accel_group_marshal_add	(GtkObject	*object,
 						 GtkSignalFunc	 func,
@@ -144,15 +144,15 @@ GSList*	gtk_accel_group_entries_from_object	(GtkObject	*object);
 
 /* Accelerators
  */
-gboolean gtk_accelerator_valid			(guint	      keyval,
-						 guint	      modifiers);
-void	 gtk_accelerator_parse			(const gchar *accelerator,
-						 guint	     *accelerator_key,
-						 guint	     *accelerator_mods);
-gchar*	 gtk_accelerator_name			(guint	      accelerator_key,
-						 guint	      accelerator_mods);
-void	 gtk_accelerator_set_default_mod_mask	(guint	      default_mod_mask);
-guint	 gtk_accelerator_get_default_mod_mask	(void);
+gboolean gtk_accelerator_valid		      (guint	        keyval,
+					       GdkModifierType  modifiers);
+void	 gtk_accelerator_parse		      (const gchar     *accelerator,
+					       guint	       *accelerator_key,
+					       GdkModifierType *accelerator_mods);
+gchar*	 gtk_accelerator_name		      (guint	        accelerator_key,
+					       GdkModifierType  accelerator_mods);
+void	 gtk_accelerator_set_default_mod_mask (GdkModifierType  default_mod_mask);
+guint	 gtk_accelerator_get_default_mod_mask (void);
 
 
 

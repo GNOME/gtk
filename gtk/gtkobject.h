@@ -228,18 +228,27 @@ void	gtk_object_class_add_signals	(GtkObjectClass	*klass,
 
 /* Append a user defined signal without default handler to a class.
  */
-guint	gtk_object_class_add_user_signal (GtkObjectClass     *klass,
-					  const gchar	     *name,
-					  GtkSignalMarshaller marshaller,
-					  GtkType	      return_val,
-					  guint		      nparams,
+guint	gtk_object_class_user_signal_new  (GtkObjectClass     *klass,
+					   const gchar	      *name,
+					   GtkSignalRunType    signal_flags,
+					   GtkSignalMarshaller marshaller,
+					   GtkType	       return_val,
+					   guint	       nparams,
+					   ...);
+guint	gtk_object_class_user_signal_newv (GtkObjectClass     *klass,
+					   const gchar	      *name,
+					   GtkSignalRunType    signal_flags,
+					   GtkSignalMarshaller marshaller,
+					   GtkType	       return_val,
+					   guint	       nparams,
+					   GtkType	      *params);
+/* Outdated */
+guint	gtk_object_class_add_user_signal (GtkObjectClass     	*klass,
+					  const gchar		*name,
+					  GtkSignalMarshaller	 marshaller,
+					  GtkType	         return_val,
+					  guint		 	 nparams,
 					  ...);
-guint	gtk_object_class_add_user_signal_no_recurse (GtkObjectClass     *klass,
-						     const gchar	*name,
-						     GtkSignalMarshaller marshaller,
-						     GtkType	         return_val,
-						     guint		 nparams,
-						     ...);
 
 GtkObject*	gtk_object_new		(GtkType	type,
 					 ...);

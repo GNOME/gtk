@@ -13,6 +13,9 @@
   gtk_accel_group_ref
   gtk_accel_group_unref)
 
+(define-boxed GtkSelectionData
+)
+
 (define-boxed GtkStyle
   gtk_style_ref
   gtk_style_unref)

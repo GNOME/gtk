@@ -228,7 +228,8 @@ typedef enum
   G_NV (GTK_RUN_LAST,		last,		0x2),
   G_NV (GTK_RUN_BOTH,		both,		0x3),
   G_NV (GTK_RUN_MASK,		mask,		0xF),
-  G_NV (GTK_RUN_NO_RECURSE,	no-recurse,	0x10)
+  G_NV (GTK_RUN_NO_RECURSE,	no-recurse,	0x10),
+  G_NV (GTK_RUN_ACTION,		action,		0x20)
 } G_FLAGS (GtkSignalRunType);
 
 /* Widget states */

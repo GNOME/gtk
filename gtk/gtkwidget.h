@@ -251,7 +251,7 @@ struct _GtkWidgetClass
   void (* size_allocate)       (GtkWidget      *widget,
 				GtkAllocation  *allocation);
   void (* state_changed)       (GtkWidget      *widget,
-				guint		previous_state);
+				GtkStateType	previous_state);
   void (* parent_set)	       (GtkWidget      *widget,
 				GtkWidget      *previous_parent);
   void (* style_set)	       (GtkWidget      *widget,
@@ -262,12 +262,12 @@ struct _GtkWidgetClass
 				guint           accel_signal_id,
 				GtkAccelGroup  *accel_group,
 				guint           accel_key,
-				guint           accel_mods,
+				GdkModifierType accel_mods,
 				GtkAccelFlags   accel_flags);
   void (* remove_accelerator)  (GtkWidget      *widget,
 				GtkAccelGroup  *accel_group,
 				guint           accel_key,
-				guint           accel_mods);
+				GdkModifierType accel_mods);
   
   /* events */
   gint (* event)		   (GtkWidget	       *widget,
@@ -336,8 +336,8 @@ struct _GtkWidgetClass
 				    GdkEventOther      *event);
   
   /* selection */
-  void (* selection_received)  (GtkWidget      *widget,
-				GtkSelectionData *selection_data);
+  void (* selection_received)      (GtkWidget          *widget,
+				    GtkSelectionData   *selection_data);
 };
 
 struct _GtkWidgetAuxInfo

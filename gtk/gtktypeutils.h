@@ -67,7 +67,6 @@ typedef guint GtkType;
 
 /* Builtin Types
  */
-extern GtkType gtk_type_builtins[];
 #include <gtk/gtktypebuiltins.h>
 
 /* Macros

@@ -445,8 +445,7 @@ typedef enum
   G_NV (GDK_BUTTON3_MASK,	button3-mask,	1 << 10),
   G_NV (GDK_BUTTON4_MASK,	button4-mask,	1 << 11),
   G_NV (GDK_BUTTON5_MASK,	button5-mask,	1 << 12),
-  G_NV (GDK_AFTER_MASK,		after-mask,	1 << 13),
-  G_NV (GDK_MODIFIER_MASK,	modifier-mask,	0x3fff)
+  G_NV (GDK_MODIFIER_MASK,	modifier-mask,	0x1fff)
 } G_FLAGS (GdkModifierType);
 
 typedef enum

@@ -33,9 +33,11 @@ extern "C" {
 
 
 /* --- type macros --- */
-#define GTK_TIPS_QUERY(obj)		(GTK_CHECK_CAST (obj, gtk_tips_query_get_type (), GtkTipsQuery))
-#define GTK_TIPS_QUERY_CLASS(klass)	(GTK_CHECK_CLASS_CAST (klass, gtk_tips_query_get_type (), GtkTipsQueryClass))
-#define GTK_IS_TIPS_QUERY(obj)		(GTK_CHECK_TYPE (obj, gtk_tips_query_get_type ()))
+#define	GTK_TYPE_TIPS_QUERY		(gtk_tips_query_get_type ())
+#define GTK_TIPS_QUERY(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_TIPS_QUERY, GtkTipsQuery))
+#define GTK_TIPS_QUERY_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TIPS_QUERY, GtkTipsQueryClass))
+#define GTK_IS_TIPS_QUERY(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_TIPS_QUERY))
+#define GTK_IS_TIPS_QUERY_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TIPS_QUERY))
 
 
 /* --- typedefs --- */

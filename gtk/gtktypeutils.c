@@ -148,37 +148,34 @@ gtk_type_set_chunk_alloc (GtkType      type,
 				       G_ALLOC_AND_FREE);
 }
 
-GtkType
-gtk_type_unique (GtkType      parent_type,
+static GtkType
+gtk_type_create (GtkType      parent_type,
+		 gchar	      *type_name,
 		 GtkTypeInfo *type_info)
 {
   GtkTypeNode *new_node;
   GtkTypeNode *parent;
   guint i;
 
-  g_return_val_if_fail (type_info != NULL, 0);
-
-  if (n_type_nodes == 0)
-    gtk_type_init ();
-
-  if (g_hash_table_lookup (type_name_2_type_ht, type_info->type_name))
+  if (g_hash_table_lookup (type_name_2_type_ht, type_name))
     {
-      g_warning ("gtk_type_unique(): type `%s' already exists.", type_info->type_name);
+      g_warning ("gtk_type_create(): type `%s' already exists.", type_name);
       return 0;
     }
+  
   if (parent_type)
     {
       GtkTypeNode *tmp_node;
-
+      
       LOOKUP_TYPE_NODE (tmp_node, parent_type);
       if (!tmp_node)
 	{
-	  g_warning ("gtk_type_unique(): unknown parent type `%u'.", parent_type);
+	  g_warning ("gtk_type_create(): unknown parent type `%u'.", parent_type);
 	  return 0;
 	}
     }
 
-  /* relookup pointer afterwards.
+  /* relookup pointers afterwards.
    */
   new_node = gtk_type_node_next_and_invalidate ();
 
@@ -194,7 +191,7 @@ gtk_type_unique (GtkType      parent_type,
     }
 
   new_node->type_info = *type_info;
-  new_node->type_info.type_name = g_strdup (type_info->type_name);
+  new_node->type_info.type_name = type_name;
   new_node->n_supers = parent ? parent->n_supers + 1 : 0;
   new_node->chunk_alloc_locked = FALSE;
   new_node->supers = g_new0 (GtkType, new_node->n_supers + 1);
@@ -216,6 +213,31 @@ gtk_type_unique (GtkType      parent_type,
   g_hash_table_insert (type_name_2_type_ht, new_node->type_info.type_name, GUINT_TO_POINTER (new_node->type));
 
   return new_node->type;
+}
+
+GtkType
+gtk_type_unique (GtkType      parent_type,
+		 GtkTypeInfo *type_info)
+{
+  GtkType new_type;
+  gchar *type_name;
+
+  g_return_val_if_fail (type_info != NULL, 0);
+  g_return_val_if_fail (type_info->type_name != NULL, 0);
+  
+  if (n_type_nodes == 0)
+    gtk_type_init ();
+
+  type_name = g_strdup (type_info->type_name);
+
+  /* relookup pointers afterwards.
+   */
+  new_type = gtk_type_create (parent_type, type_name, type_info);
+
+  if (!new_type)
+    g_free (type_name);
+
+  return new_type;
 }
 
 gchar*
@@ -595,8 +617,8 @@ gtk_type_name_compare (const char *a,
   return (strcmp (a, b) == 0);
 }
 
-static GtkType
-gtk_type_register_builtin (char   *name,
+static inline GtkType
+gtk_type_register_builtin (gchar   *name,
 			   GtkType parent)
 {
   GtkTypeInfo info;
@@ -608,15 +630,18 @@ gtk_type_register_builtin (char   *name,
   info.arg_set_func = NULL;
   info.arg_get_func = NULL;
 
-  return gtk_type_unique (parent, &info);
+  return gtk_type_create (parent, name, &info);
 }
 
 extern void gtk_object_init_type (void);
 
-GtkType gtk_type_builtins[GTK_TYPE_NUM_BUILTINS];
-
-#include "makeenums.h"		/* include for various places with enum definitions */
-#include "gtktypebuiltins1.c"
+#include "makeenums.h"			/* include for various places
+					 * with enum definitions
+					 */
+#include "gtktypebuiltins_vars.c"	/* type variable declarations
+					 */
+#include "gtktypebuiltins_evals.c"	/* enum value definition arrays
+					 */
 
 static void
 gtk_type_init_builtin_types (void)
@@ -651,33 +676,48 @@ gtk_type_init_builtin_types (void)
     { GTK_TYPE_C_CALLBACK,	"c_callback" }
   };
   struct {
-    gchar *name;
+    gchar *type_name;
+    GtkType *type_id;
     GtkType parent;
     GtkEnumValue *values;
-  } builtin_info[] = {
-#include "gtktypebuiltins2.c"
+  } builtin_info[GTK_TYPE_NUM_BUILTINS + 1] = {
+#include "gtktypebuiltins_ids.c"	/* type entries */
     { NULL }
   };
   guint i;
   
   for (i = 0; i < sizeof (fundamental_info) / sizeof (fundamental_info[0]); i++)
     {
-      GtkType id;
+      GtkType type_id;
 
-      id = gtk_type_register_builtin (fundamental_info[i].name,
+      type_id = gtk_type_register_builtin (fundamental_info[i].name,
 				      GTK_TYPE_INVALID);
-      g_assert (id == fundamental_info[i].type_id);
+
+      g_assert (type_id == fundamental_info[i].type_id);
     }
   
   gtk_object_init_type ();
   
-  for (i = 0; builtin_info[i].name; i++)
+  for (i = 0; i < GTK_TYPE_NUM_BUILTINS; i++)
     {
-      gtk_type_builtins[i] =
-	gtk_type_register_builtin (builtin_info[i].name,
+      GtkType type_id;
+
+      g_assert (builtin_info[i].type_name != NULL);
+
+      type_id =
+	gtk_type_register_builtin (builtin_info[i].type_name,
 				   builtin_info[i].parent);
-      if (gtk_type_is_a (gtk_type_builtins[i], GTK_TYPE_ENUM) ||
-	  gtk_type_is_a (gtk_type_builtins[i], GTK_TYPE_FLAGS))
-	gtk_enum_set_values (gtk_type_builtins[i], builtin_info[i].values);
+
+      g_assert (type_id != GTK_TYPE_INVALID);
+
+      (*builtin_info[i].type_id) = type_id;
+
+      if (builtin_info[i].values)
+	{
+	  g_assert (gtk_type_is_a (type_id, GTK_TYPE_ENUM) ||
+		    gtk_type_is_a (type_id, GTK_TYPE_FLAGS));
+
+	  gtk_enum_set_values (type_id, builtin_info[i].values);
+	}
     }
 }

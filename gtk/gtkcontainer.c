@@ -28,6 +28,7 @@ enum {
   NEED_RESIZE,
   FOREACH,
   FOCUS,
+  SET_FOCUS_CHILD,
   LAST_SIGNAL
 };
 enum {
@@ -84,9 +85,11 @@ static void gtk_container_add_unimplemented (GtkContainer      *container,
 					     GtkWidget         *widget);
 static void gtk_container_remove_unimplemented (GtkContainer   *container,
 						GtkWidget      *widget);
-static gint gtk_real_container_need_resize  (GtkContainer      *container);
-static gint gtk_real_container_focus        (GtkContainer      *container,
+static gint gtk_container_real_need_resize  (GtkContainer      *container);
+static gint gtk_container_real_focus        (GtkContainer      *container,
 					     GtkDirectionType   direction);
+static void gtk_container_real_set_focus_child (GtkContainer      *container,
+					     GtkWidget	       *widget);
 static gint gtk_container_focus_tab         (GtkContainer      *container,
 					     GList             *children,
 					     GtkDirectionType   direction);
@@ -197,7 +200,14 @@ gtk_container_class_init (GtkContainerClass *class)
                     gtk_container_marshal_signal_3,
 		    GTK_TYPE_DIRECTION_TYPE, 1,
                     GTK_TYPE_DIRECTION_TYPE);
-
+  container_signals[SET_FOCUS_CHILD] =
+    gtk_signal_new ("set-focus-child",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkContainerClass, set_focus_child),
+                    gtk_container_marshal_signal_1,
+		    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_WIDGET);
   gtk_object_class_add_signals (object_class, container_signals, LAST_SIGNAL);
   
   object_class->destroy = gtk_container_destroy;
@@ -211,9 +221,10 @@ gtk_container_class_init (GtkContainerClass *class)
 
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
-  class->need_resize = gtk_real_container_need_resize;
+  class->need_resize = gtk_container_real_need_resize;
   class->foreach = NULL;
-  class->focus = gtk_real_container_focus;
+  class->focus = gtk_container_real_focus;
+  class->set_focus_child = gtk_container_real_set_focus_child;
 }
 
 static void
@@ -430,6 +441,10 @@ gtk_container_foreach (GtkContainer *container,
 		       GtkCallback   callback,
 		       gpointer      callback_data)
 {
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (callback != NULL);
+
   gtk_signal_emit (GTK_OBJECT (container),
                    container_signals[FOREACH],
                    callback, callback_data);
@@ -479,6 +494,9 @@ gtk_container_foreach_full (GtkContainer       *container,
 			    gpointer            callback_data,
 			    GtkDestroyNotify    notify)
 {
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+
   if (marshal)
     {
       GtkForeachData fdata;
@@ -490,9 +508,14 @@ gtk_container_foreach_full (GtkContainer       *container,
       gtk_container_foreach (container, gtk_container_foreach_unmarshal, &fdata);
     }
   else
-    gtk_container_foreach (container, callback, &callback_data);
-  
-  notify (callback_data);
+    {
+      g_return_if_fail (callback != NULL);
+
+      gtk_container_foreach (container, callback, &callback_data);
+    }
+
+  if (notify)
+    notify (callback_data);
 }
 
 gint
@@ -500,12 +523,27 @@ gtk_container_focus (GtkContainer     *container,
 		     GtkDirectionType  direction)
 {
   gint return_val;
+
+  g_return_val_if_fail (container != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
   
   gtk_signal_emit (GTK_OBJECT (container),
                    container_signals[FOCUS],
                    direction, &return_val);
 
   return return_val;
+}
+
+void
+gtk_container_set_focus_child (GtkContainer     *container,
+			       GtkWidget 	  *widget)
+{
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  if (widget)
+    g_return_if_fail (GTK_IS_WIDGET (container));
+
+  gtk_signal_emit (GTK_OBJECT (container), container_signals[SET_FOCUS_CHILD], widget);
 }
 
 GList*
@@ -536,8 +574,8 @@ gtk_container_unregister_toplevel (GtkContainer *container)
 }
 
 void
-gtk_container_set_focus_child (GtkContainer     *container,
-			       GtkWidget        *child)
+gtk_container_real_set_focus_child (GtkContainer     *container,
+				    GtkWidget        *child)
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
@@ -636,7 +674,7 @@ gtk_container_marshal_signal_4 (GtkObject      *object,
 }
 
 static gint
-gtk_real_container_need_resize (GtkContainer *container)
+gtk_container_real_need_resize (GtkContainer *container)
 {
   g_return_val_if_fail (container != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
@@ -648,7 +686,7 @@ gtk_real_container_need_resize (GtkContainer *container)
 }
 
 static gint
-gtk_real_container_focus (GtkContainer     *container,
+gtk_container_real_focus (GtkContainer     *container,
 			  GtkDirectionType  direction)
 {
   GList *children;

@@ -54,7 +54,7 @@ struct	_GtkSignalQuery
   guint		   signal_id;
   const gchar	  *signal_name;
   guint		   is_user_signal : 1;
-  GtkSignalRunType run_type;
+  GtkSignalRunType signal_flags;
   GtkType	   return_val;
   guint		   nparams;
   const GtkType	  *params;
@@ -62,7 +62,7 @@ struct	_GtkSignalQuery
 
 void   gtk_signal_init			  (void);
 guint  gtk_signal_new			  (const gchar	       *name,
-					   GtkSignalRunType	run_type,
+					   GtkSignalRunType	signal_flags,
 					   GtkType		object_type,
 					   guint		function_offset,
 					   GtkSignalMarshaller	marshaller,
@@ -70,7 +70,7 @@ guint  gtk_signal_new			  (const gchar	       *name,
 					   guint		nparams,
 					   ...);
 guint  gtk_signal_newv			  (const gchar	       *name,
-					   GtkSignalRunType	run_type,
+					   GtkSignalRunType	signal_flags,
 					   GtkType		object_type,
 					   guint		function_offset,
 					   GtkSignalMarshaller	marshaller,

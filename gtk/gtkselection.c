@@ -1412,3 +1412,25 @@ gtk_selection_default_handler (GtkWidget        *widget,
       data->length = -1;
     }
 }
+
+
+GtkSelectioData*
+gtk_selection_data_copy (GtkSelectionData *data)
+{
+  GtkSelectionData *new_data;
+
+  g_return_val_if_fail (data != NULL, NULL);
+
+  new_data = g_new (GtkSelectionData, 1);
+  *new_data = *data;
+
+  return new_data;
+}
+
+void
+gtk_selection_data_free (GtkSelectionData *data)
+{
+  g_return_if_fail (data != NULL);
+
+  g_free (data);
+}

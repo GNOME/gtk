@@ -412,12 +412,13 @@ gtk_object_class_add_user_signal (GtkObjectClass     *class,
 }
 
 guint
-gtk_object_class_add_user_signal_no_recurse (GtkObjectClass     *class,
-					     const gchar        *name,
-					     GtkSignalMarshaller marshaller,
-					     GtkType             return_val,
-					     guint               nparams,
-					     ...)
+gtk_object_class_user_signal_new (GtkObjectClass     *class,
+				  const gchar        *name,
+				  GtkSignalRunType    signal_flags,
+				  GtkSignalMarshaller marshaller,
+				  GtkType             return_val,
+				  guint               nparams,
+				  ...)
 {
   GtkType *params;
   guint i;
@@ -441,7 +442,7 @@ gtk_object_class_add_user_signal_no_recurse (GtkObjectClass     *class,
     params = NULL;
 
   signal_id = gtk_signal_newv (name,
-			       GTK_RUN_NO_RECURSE,
+			       signal_flags,
 			       class->type,
 			       0,
 			       marshaller,
@@ -450,6 +451,37 @@ gtk_object_class_add_user_signal_no_recurse (GtkObjectClass     *class,
 			       params);
 
   g_free (params);
+
+  if (signal_id)
+    gtk_object_class_add_signals (class, &signal_id, 1);
+
+  return signal_id;
+}
+
+guint
+gtk_object_class_user_signal_newv (GtkObjectClass     *class,
+				   const gchar        *name,
+				   GtkSignalRunType    signal_flags,
+				   GtkSignalMarshaller marshaller,
+				   GtkType             return_val,
+				   guint               nparams,
+				   GtkType	      *params)
+{
+  guint signal_id;
+
+  g_return_val_if_fail (class != NULL, 0);
+
+  if (nparams > 0)
+    g_return_val_if_fail (params != NULL, 0);
+
+  signal_id = gtk_signal_newv (name,
+			       signal_flags,
+			       class->type,
+			       0,
+			       marshaller,
+			       return_val,
+			       nparams,
+			       params);
 
   if (signal_id)
     gtk_object_class_add_signals (class, &signal_id, 1);

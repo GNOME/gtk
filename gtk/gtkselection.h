@@ -26,6 +26,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 typedef struct _GtkSelectionData GtkSelectioData;
@@ -87,6 +88,8 @@ gint gtk_selection_notify          (GtkWidget         *widget,
 				    GdkEventSelection *event);
 gint gtk_selection_property_notify (GtkWidget         *widget,
 				    GdkEventProperty  *event);
+GtkSelectioData *gtk_selection_data_copy (GtkSelectionData *data);
+void		 gtk_selection_data_free (GtkSelectionData *data);
 
 
 

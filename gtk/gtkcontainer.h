@@ -63,16 +63,18 @@ struct _GtkContainerClass
 {
   GtkWidgetClass parent_class;
   
-  void (* add)	       (GtkContainer	 *container,
-			GtkWidget	 *widget);
-  void (* remove)      (GtkContainer	 *container,
-			GtkWidget	 *widget);
-  gint (* need_resize) (GtkContainer	 *container);
-  void (* foreach)     (GtkContainer	 *container,
-			GtkCallback	  callback,
-			gpointer	  callbabck_data);
-  gint (* focus)       (GtkContainer	 *container,
-			GtkDirectionType  direction);
+  void (* add)	       		(GtkContainer	 *container,
+				 GtkWidget	 *widget);
+  void (* remove)      		(GtkContainer	 *container,
+				 GtkWidget	 *widget);
+  gint (* need_resize) 		(GtkContainer	 *container);
+  void (* foreach)     		(GtkContainer	 *container,
+				 GtkCallback	  callback,
+				 gpointer	  callbabck_data);
+  gint (* focus)       		(GtkContainer	 *container,
+				 GtkDirectionType  direction);
+  void (* set_focus_child)	(GtkContainer	 *container,
+				 GtkWidget	 *widget);
 };
 
 
@@ -112,6 +114,7 @@ void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+   
 
 
 

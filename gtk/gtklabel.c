@@ -86,7 +86,7 @@ gtk_label_class_init (GtkLabelClass *class)
   parent_class = gtk_type_class (gtk_misc_get_type ());
   
   gtk_object_add_arg_type ("GtkLabel::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
-  gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_ENUM, GTK_ARG_READWRITE, ARG_JUSTIFY);
+  gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_JUSTIFICATION, GTK_ARG_READWRITE, ARG_JUSTIFY);
   
   object_class->finalize = gtk_label_finalize;
   

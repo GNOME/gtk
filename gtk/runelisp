@@ -1,6 +1,0 @@
-#! /bin/sh
-if test $# -lt 1; then
-  echo >&2 "usage: $0 file.el"
-  exit 1
-fi
-exec emacs --no-init-file --no-site-file --batch --load $*

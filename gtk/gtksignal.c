@@ -55,7 +55,7 @@ struct _GtkSignal
   GtkType	      object_type;
   gchar		     *name;
   guint		      function_offset;
-  GtkSignalRunType    run_type;
+  GtkSignalRunType    signal_flags;
   GtkSignalMarshaller marshaller;
   GtkType	      return_val;
   GtkType	     *params;
@@ -92,7 +92,7 @@ struct _GtkHandlerInfo
   GtkArg	     *params;
   GtkType	     *param_types;
   GtkType	      return_val;
-  GtkSignalRunType    run_type;
+  GtkSignalRunType    signal_flags;
   guint		      nparams;
   guint		      signal_id;
 };
@@ -260,7 +260,7 @@ gtk_signal_init (void)
 
 guint
 gtk_signal_newv (const gchar	     *r_name,
-		 GtkSignalRunType     run_type,
+		 GtkSignalRunType     signal_flags,
 		 GtkType	      object_type,
 		 guint		      function_offset,
 		 GtkSignalMarshaller  marshaller,
@@ -298,7 +298,7 @@ gtk_signal_newv (const gchar	     *r_name,
     }
   
   if (return_val != GTK_TYPE_NONE &&
-      (run_type & GTK_RUN_BOTH) == GTK_RUN_FIRST)
+      (signal_flags & GTK_RUN_BOTH) == GTK_RUN_FIRST)
     {
       g_warning ("gtk_signal_newv(): signal \"%s\" with return value `%s' excludes GTK_RUN_LAST",
 		 name, gtk_type_name (return_val));
@@ -312,7 +312,7 @@ gtk_signal_newv (const gchar	     *r_name,
   signal->object_type = object_type;
   signal->name = name;
   signal->function_offset = function_offset;
-  signal->run_type = run_type;
+  signal->signal_flags = signal_flags;
   signal->marshaller = marshaller;
   signal->return_val = return_val;
   signal->nparams = nparams;
@@ -353,7 +353,7 @@ gtk_signal_newv (const gchar	     *r_name,
 
 guint
 gtk_signal_new (const gchar	    *name,
-		GtkSignalRunType     run_type,
+		GtkSignalRunType     signal_flags,
 		GtkType		     object_type,
 		guint		     function_offset,
 		GtkSignalMarshaller  marshaller,
@@ -383,7 +383,7 @@ gtk_signal_new (const gchar	    *name,
     params = NULL;
   
   signal_id = gtk_signal_newv (name,
-			       run_type,
+			       signal_flags,
 			       object_type,
 			       function_offset,
 			       marshaller,
@@ -442,7 +442,7 @@ gtk_signal_query (guint signal_id)
       query->signal_id = signal_id;
       query->signal_name = signal->name;
       query->is_user_signal = signal->function_offset == 0;
-      query->run_type = signal->run_type;
+      query->signal_flags = signal->signal_flags;
       query->return_val = signal->return_val;
       query->nparams = signal->nparams;
       query->params = signal->params;
@@ -1365,7 +1365,7 @@ gtk_signal_real_emit (GtkObject *object,
 	     object);
 #endif  /* G_ENABLE_DEBUG */
   
-  if ((signal->run_type & GTK_RUN_NO_RECURSE) &&
+  if ((signal->signal_flags & GTK_RUN_NO_RECURSE) &&
       gtk_emission_check (current_emissions, object, signal_id))
     {
       gtk_emission_add (&restart_emissions, object, signal_id);
@@ -1377,7 +1377,7 @@ gtk_signal_real_emit (GtkObject *object,
   gtk_emission_add (&current_emissions, object, signal_id);
   
  emission_restart:
-  if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_LAST && signal->function_offset != 0)
+  if (GTK_RUN_TYPE (signal->signal_flags) != GTK_RUN_LAST && signal->function_offset != 0)
     {
       signal_func_offset = (guchar**) ((guchar*) object->klass +
 				       signal->function_offset);
@@ -1397,7 +1397,7 @@ gtk_signal_real_emit (GtkObject *object,
 	  info.param_types = signal->params;
 	  info.return_val = signal->return_val;
 	  info.nparams = signal->nparams;
-	  info.run_type = signal->run_type;
+	  info.signal_flags = signal->signal_flags;
 	  info.signal_id = signal_id;
 
 	  switch (gtk_handlers_run (handlers, &info, FALSE))
@@ -1416,7 +1416,7 @@ gtk_signal_real_emit (GtkObject *object,
   else
     info.object = NULL;
   
-  if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_FIRST	&& signal->function_offset != 0)
+  if (GTK_RUN_TYPE (signal->signal_flags) != GTK_RUN_FIRST	&& signal->function_offset != 0)
     {
       signal_func_offset = (guchar**) ((guchar*) object->klass +
 				       signal->function_offset);
@@ -1438,7 +1438,7 @@ gtk_signal_real_emit (GtkObject *object,
 	      info.param_types = signal->params;
 	      info.return_val = signal->return_val;
 	      info.nparams = signal->nparams;
-	      info.run_type = signal->run_type;
+	      info.signal_flags = signal->signal_flags;
 	      info.signal_id = signal_id;
 	    }
 	  switch (gtk_handlers_run (handlers, &info, TRUE))
@@ -1457,7 +1457,7 @@ gtk_signal_real_emit (GtkObject *object,
   
   gtk_emission_remove (&current_emissions, object, signal_id);
   
-  if (signal->run_type & GTK_RUN_NO_RECURSE)
+  if (signal->signal_flags & GTK_RUN_NO_RECURSE)
     gtk_emission_remove (&restart_emissions, object, signal_id);
   
   gtk_object_unref (object);
@@ -1731,13 +1731,13 @@ gtk_handlers_run (GtkHandler	 *handlers,
 	      gtk_emission_remove (&stop_emissions, info->object,
 				   info->signal_id);
 	      
-	      if (info->run_type & GTK_RUN_NO_RECURSE)
+	      if (info->signal_flags & GTK_RUN_NO_RECURSE)
 		gtk_emission_remove (&restart_emissions, info->object,
 				     info->signal_id);
 	      gtk_signal_handler_unref (handlers, info->object);
 	      return EMISSION_DONE;
 	    }
-	  else if ((info->run_type & GTK_RUN_NO_RECURSE) &&
+	  else if ((info->signal_flags & GTK_RUN_NO_RECURSE) &&
 		   gtk_emission_check (restart_emissions, info->object,
 				       info->signal_id))
 	    {

@@ -10,6 +10,7 @@ BEGIN {
   VI = 0;
   gen_arrays = 0;
   gen_defs = 0;
+  comment_file = "";
   
   for (i = 1; i < ARGC; i++)
     {
@@ -65,7 +66,7 @@ function generate_arrays ()
 {
   if (gen_arrays)
     {
-      printf ("static GtkEnumValue enum_values_%s[] = {\n", type_name);
+      printf ("static GtkEnumValue %s_values[] = {\n", type_ident);
       for (i = 0; i < VI; i++)
 	{
 	  printf ("  { %s, \"%s\", \"%s\" },\n",
@@ -79,6 +80,12 @@ function generate_defs ()
 {
   if (gen_defs)
     {
+      if (comment_file != "")
+	{
+	  printf ("\n; enumerations from \"%s\"\n", comment_file);
+	  comment_file = "";
+	}
+      
       printf ("\n(define-%s %s",
 	      type_flags ? "flags" : "enum",
 	      type_name);
@@ -89,6 +96,15 @@ function generate_defs ()
 	}
       printf (")\n");
     }
+}
+
+function basename (basename_1)
+{
+  sub ("\"", "", basename_1);
+  while (match (basename_1, "/"))
+    sub (".*/", "", basename_1);
+  sub ("\"", "", basename_1);
+  return basename_1;
 }
 
 # parse keywords
@@ -123,6 +139,11 @@ function generate_defs ()
   else
     set_value($3, $5);
   VI += 1;
+}
+
+# feature per file comments
+/# / {
+  comment_file = basename($3);
 }
 
 END {

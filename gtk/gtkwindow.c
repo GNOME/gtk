@@ -159,7 +159,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_AUTO_SHRINK);
   gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_SHRINK);
   gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_GROW);
-  gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_ENUM, GTK_ARG_READWRITE, ARG_WIN_POS);
+  gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_WINDOW_POSITION, GTK_ARG_READWRITE, ARG_WIN_POS);
 
   window_signals[MOVE_RESIZE] =
     gtk_signal_new ("move_resize",
@@ -755,10 +755,6 @@ gtk_window_key_press_event (GtkWidget   *widget,
   if (window->focus_widget)
     {
       handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
-
-      if (!handled)
-	handled = gtk_bindings_activate (GTK_OBJECT (window->focus_widget),
-					 event->keyval, event->state);
     }
     
   if (!handled)
@@ -829,6 +825,9 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	}
     }
 
+  if (!handled && GTK_WIDGET_CLASS (parent_class)->key_press_event)
+    handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+
   return handled;
 }
 
@@ -848,12 +847,11 @@ gtk_window_key_release_event (GtkWidget   *widget,
   if (window->focus_widget)
     {
       handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
-      
-      if (!handled)
-	handled = gtk_bindings_activate (GTK_OBJECT (window->focus_widget),
-					 event->keyval, event->state | GDK_AFTER_MASK);
     }
-  
+
+  if (!handled && GTK_WIDGET_CLASS (parent_class)->key_release_event)
+    handled = GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
+
   return handled;
 }
 

@@ -203,37 +203,50 @@ gtkinclude_HEADERS = \
 	gtktypebuiltins.h
 
 auto-files:
-	make $(srcdir)/gtk.defs
-	make $(srcdir)/gtktypebuiltins1.c
-	make $(srcdir)/gtktypebuiltins2.c
+	rm -f $(srcdir)/gtk.defs
+	make $(srcdir)/gtktypebuiltins_evals.c
+	make $(srcdir)/gtktypebuiltins_ids.c
+	make $(srcdir)/gtktypebuiltins_vars.c
 	make $(srcdir)/gtktypebuiltins.h
 
+# generate gtk.defs file from gtk-boxed.defs and gcc -E
 $(srcdir)/gtk.defs: @MAINT@
 	$(COMPILE) -E -DG_CODE_GENERATION $(srcdir)/makeenums.h $(CFLAGS) | \
 	  awk -f $(srcdir)/makeenums.awk - defs > $@
 	cat $(srcdir)/gtk-boxed.defs >> $@
-	
-$(srcdir)/gtktypebuiltins1.c: @MAINT@
+
+# generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
+$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
+	awk -f $(srcdir)/maketypes.awk gtk.defs macros > $@
+
+# generate type identifier variables (GTK_TYPE_WIDGET_FLAGS)
+$(srcdir)/gtktypebuiltins_vars.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
+	awk -f $(srcdir)/maketypes.awk gtk.defs variables > $@
+
+# generate type entries for type-id registration
+$(srcdir)/gtktypebuiltins_ids.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
+	awk -f $(srcdir)/maketypes.awk gtk.defs entries > $@
+
+# generate enum value arrays from gcc -E
+$(srcdir)/gtktypebuiltins_evals.c: @MAINT@
 	$(COMPILE) -E -DG_CODE_GENERATION $(srcdir)/makeenums.h $(CFLAGS) | \
 	  awk -f $(srcdir)/makeenums.awk - arrays > $@
-
-$(srcdir)/gtktypebuiltins2.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
-	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
-
-$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
-	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el idmac $< $@
 
 # special remake rules
 $(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.awk
 $(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.h
 $(srcdir)/gtk.defs: @MAINT@ $(srcdir)/gtk-boxed.defs
-$(srcdir)/gtktypebuiltins1.c: @MAINT@ $(srcdir)/gtk.defs
-$(srcdir)/gtktypebuiltins1.c: @MAINT@ $(srcdir)/makeenums.awk
-$(srcdir)/gtktypebuiltins1.c: @MAINT@ $(srcdir)/makeenums.h
-$(srcdir)/gtktypebuiltins2.c: @MAINT@ $(srcdir)/gtk.defs
-$(srcdir)/gtktypebuiltins2.c: @MAINT@ $(srcdir)/gentypeinfo.el
+$(srcdir)/gtktypebuiltins_vars.c: @MAINT@ $(srcdir)/maketypes.awk
+$(srcdir)/gtktypebuiltins_vars.c: @MAINT@ $(srcdir)/gtk.defs
+$(srcdir)/gtktypebuiltins_ids.c: @MAINT@ $(srcdir)/maketypes.awk
+$(srcdir)/gtktypebuiltins_ids.c: @MAINT@ $(srcdir)/gtk.defs
+$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ $(srcdir)/makeenums.awk
+$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ $(srcdir)/makeenums.h
+$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ $(srcdir)/gtk.defs
+$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/maketypes.awk
 $(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs
-$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gentypeinfo.el
+$(srcdir)/makeenums.h: @MAINT@ $(srcdir)/gtk.h
+$(srcdir)/makeenums.h: @MAINT@ $(srcdir)/gtkprivate.h
 
 libgtk_1_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
@@ -244,11 +257,11 @@ EXTRA_DIST = \
 	testgtkrc2 		\
 	gtkfeatures.h.in	\
 	makeenums.awk		\
+	maketypes.awk		\
 	makeenums.h		\
-	runelisp 		\
-	gentypeinfo.el 		\
-	gtktypebuiltins1.c	\
-	gtktypebuiltins2.c	\
+	gtktypebuiltins_vars.c	\
+	gtktypebuiltins_ids.c	\
+	gtktypebuiltins_evals.c	\
 	gtk-boxed.defs		\
 	gtk.defs		\
 	test.xpm		\

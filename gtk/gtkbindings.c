@@ -28,7 +28,7 @@
 
 
 /* --- defines --- */
-#define	BINDING_MOD_MASK()	(gtk_accelerator_get_default_mod_mask () | GDK_AFTER_MASK)
+#define	BINDING_MOD_MASK()	(gtk_accelerator_get_default_mod_mask ())
 
 
 /* --- variables --- */
@@ -337,12 +337,11 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
       GtkSignalQuery *query;
       guint signal_id;
       GtkArg *params = NULL;
+      gchar *accelerator = NULL;
       
       signal_id = gtk_signal_lookup (sig->signal_name, GTK_OBJECT_TYPE (object));
       if (!signal_id)
 	{
-	  gchar *accelerator;
-	  
 	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
 	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
 		     "could not find signal \"%s\" in the `%s' class ancestry",
@@ -359,8 +358,6 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 	  query->return_val != GTK_TYPE_NONE ||
 	  !binding_compose_params (sig->args, query, &params))
 	{
-	  gchar *accelerator;
-	  
 	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
 	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
 		     "signature mismatch for signal \"%s\" in the `%s' class ancestry",
@@ -368,11 +365,21 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 		     accelerator,
 		     sig->signal_name,
 		     gtk_type_name (GTK_OBJECT_TYPE (object)));
-	  g_free (accelerator);
-	  g_free (query);
-	  continue;
 	}
+      else if (!(query->signal_flags & GTK_RUN_ACTION))
+	{
+	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
+	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
+		     "signal \"%s\" in the `%s' class ancestry cannot be used for action emissions",
+		     entry->binding_set->set_name,
+		     accelerator,
+		     sig->signal_name,
+		     gtk_type_name (GTK_OBJECT_TYPE (object)));
+	}
+      g_free (accelerator);
       g_free (query);
+      if (accelerator)
+	continue;
 
       gtk_signal_emitv (object, signal_id, params);
       g_free (params);

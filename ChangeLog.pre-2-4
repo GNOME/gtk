@@ -1,3 +1,42 @@
+Tue Jun  9 01:57:23 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkselection.h: 
+	* gtk/gtkselection.c: new functions gtk_selection_data_copy and
+	gtk_selection_data_free.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): fixed gtk_signal_new() call
+	for "selection_received", which was completely bogus.
+	* other fixups to gtk_signal_new() calls all over the place.
+
+	* gtk/gtktypebuiltins.h: types as variables (formerly macros).
+	* gtk/gtktypebuiltins_vars.c: type variable implementations.
+	* gtk/gtktypebuiltins_ids.c: array entries for builtin type
+ 	declarations.
+	* gtk/gtktypebuiltins_evals.c: enum value arrays.
+	* gtk/gtk-boxed.defs: gtk and gdk structure definitions, used to build
+	gtk.defs.
+	* gtk/gtk.defs: generated file with scheme syntax for type definitions
+	of gtk and gdk structures and enums.
+	* gtk/gtktypeutils.h: 
+	* gtk/gtktypeutils.c: reworked type ids, so they are variables not
+ 	macros anymore (this fixes binary incompatibility with new enum
+ 	definitions).
+
+	* gtk/gtkwidget.c (gtk_widget_real_key_press_event): proccess possible
+	key bindings for this widget.
+	* gtk/gtkwindow.c (gtk_window_key_press_event): chain parent class'
+ 	handler.
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c: removed gtk_object_class_new_user_signal_no_recurse()
+	again. new functions gtk_object_class_user_signal_new () and
+	gtk_object_class_user_signal_newv (), to feature the GtkSignalRunType
+ 	flag on the signal creation.
+
+Mon Jun  8 20:52:21 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.h: new signal GtkContainer::set_focus_child.
+
 Mon Jun  8 02:52:37 1998  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdkprivate.h: 

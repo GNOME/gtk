@@ -92,7 +92,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   gtk_object_add_arg_type ("GtkFrame::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
   gtk_object_add_arg_type ("GtkFrame::label_xalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_LABEL_XALIGN);
   gtk_object_add_arg_type ("GtkFrame::label_yalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_LABEL_YALIGN);
-  gtk_object_add_arg_type ("GtkFrame::shadow", GTK_TYPE_ENUM, GTK_ARG_READWRITE, ARG_SHADOW);
+  gtk_object_add_arg_type ("GtkFrame::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
 
   object_class->finalize = gtk_frame_finalize;
 

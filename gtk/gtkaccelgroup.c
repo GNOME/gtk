@@ -32,13 +32,13 @@ typedef void (*GtkSignalAddAccelerator)	   (GtkObject	    *object,
 					    guint	     accel_signal_id,
 					    GtkAccelGroup   *accel_group,
 					    guint	     accel_key,
-					    guint	     accel_mods,
+					    GdkModifierType  accel_mods,
 					    GtkAccelFlags    accel_flags,
 					    gpointer	     func_data);
 typedef void (*GtkSignalRemoveAccelerator) (GtkObject	    *object,
 					    GtkAccelGroup   *accel_group,
 					    guint	     accel_key,
-					    guint	     accel_mods,
+					    GdkModifierType  accel_mods,
 					    gpointer	     func_data);
 
 /* --- variables --- */
@@ -233,7 +233,7 @@ gtk_accel_group_unlock (GtkAccelGroup  *accel_group)
 static GtkAccelEntry*
 gtk_accel_group_lookup (GtkAccelGroup	*accel_group,
 			guint		 accel_key,
-			guint		 accel_mods)
+			GdkModifierType	 accel_mods)
 {
   GtkAccelEntry key_entry = { 0 };
   
@@ -247,7 +247,7 @@ gtk_accel_group_lookup (GtkAccelGroup	*accel_group,
 gboolean
 gtk_accel_group_activate (GtkAccelGroup	 *accel_group,
 			  guint		  accel_key,
-			  guint		  accel_mods)
+			  GdkModifierType accel_mods)
 {
   GtkAccelEntry *entry;
   
@@ -265,7 +265,7 @@ gtk_accel_group_activate (GtkAccelGroup	 *accel_group,
 gboolean
 gtk_accel_groups_activate (GtkObject	    *object,
 			   guint	     accel_key,
-			   guint	     accel_mods)
+			   GdkModifierType   accel_mods)
 {
   g_return_val_if_fail (object != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
@@ -286,7 +286,7 @@ gtk_accel_groups_activate (GtkObject	    *object,
 void
 gtk_accel_group_lock_entry (GtkAccelGroup	 *accel_group,
 			    guint		  accel_key,
-			    guint		  accel_mods)
+			    GdkModifierType	  accel_mods)
 {
   GtkAccelEntry *entry;
   
@@ -300,7 +300,7 @@ gtk_accel_group_lock_entry (GtkAccelGroup	 *accel_group,
 void
 gtk_accel_group_unlock_entry (GtkAccelGroup	*accel_group,
 			      guint		 accel_key,
-			      guint		 accel_mods)
+			      GdkModifierType	 accel_mods)
 {
   GtkAccelEntry *entry;
   
@@ -314,7 +314,7 @@ gtk_accel_group_unlock_entry (GtkAccelGroup	*accel_group,
 GtkAccelEntry*
 gtk_accel_group_get_entry (GtkAccelGroup    *accel_group,
 			   guint             accel_key,
-			   guint             accel_mods)
+			   GdkModifierType   accel_mods)
 {
   g_return_val_if_fail (accel_group != NULL, 0);
   
@@ -324,7 +324,7 @@ gtk_accel_group_get_entry (GtkAccelGroup    *accel_group,
 void
 gtk_accel_group_add (GtkAccelGroup	*accel_group,
 		     guint		 accel_key,
-		     guint		 accel_mods,
+		     GdkModifierType	 accel_mods,
 		     GtkAccelFlags	 accel_flags,
 		     GtkObject		*object,
 		     const gchar	*accel_signal)
@@ -497,7 +497,7 @@ gtk_accel_group_handle_add (GtkObject	      *object,
 			    guint	       accel_signal_id,
 			    GtkAccelGroup     *accel_group,
 			    guint	       accel_key,
-			    guint	       accel_mods,
+			    GdkModifierType    accel_mods,
 			    GtkAccelFlags      accel_flags)
 {
   GtkAccelEntry *entry;
@@ -541,7 +541,7 @@ gtk_accel_group_handle_add (GtkObject	      *object,
 void
 gtk_accel_group_remove (GtkAccelGroup	  *accel_group,
 			guint		   accel_key,
-			guint		   accel_mods,
+			GdkModifierType	   accel_mods,
 			GtkObject	  *object)
 {
   GtkAccelEntry *entry;
@@ -599,7 +599,7 @@ void
 gtk_accel_group_handle_remove (GtkObject	 *object,
 			       GtkAccelGroup	 *accel_group,
 			       guint		  accel_key,
-			       guint		  accel_mods)
+			       GdkModifierType	  accel_mods)
 {
   GtkAccelEntry *entry;
   
@@ -640,40 +640,40 @@ gtk_accel_group_handle_remove (GtkObject	 *object,
 
 guint
 gtk_accel_group_create_add (GtkType          class_type,
-			    GtkSignalRunType run_type,
+			    GtkSignalRunType signal_flags,
 			    guint            handler_offset)
 {
   g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_OBJECT), 0);
 
   return gtk_signal_new ("add-accelerator",
-			 run_type,
+			 signal_flags,
 			 class_type,
 			 handler_offset,
 			 gtk_accel_group_marshal_add,
 			 GTK_TYPE_NONE, 5,
 			 GTK_TYPE_UINT,
-			 GTK_TYPE_BOXED,
+			 GTK_TYPE_ACCEL_GROUP,
 			 GTK_TYPE_UINT,
-			 GTK_TYPE_UINT,
-			 GTK_TYPE_ENUM);
+			 GTK_TYPE_GDK_MODIFIER_TYPE,
+			 GTK_TYPE_ACCEL_FLAGS);
 }
 
 guint
 gtk_accel_group_create_remove (GtkType          class_type,
-			       GtkSignalRunType run_type,
+			       GtkSignalRunType signal_flags,
 			       guint            handler_offset)
 {
   g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_OBJECT), 0);
 
   return gtk_signal_new ("remove-accelerator",
-			 run_type,
+			 signal_flags,
 			 class_type,
 			 handler_offset,
 			 gtk_accel_group_marshal_remove,
 			 GTK_TYPE_NONE, 3,
-			 GTK_TYPE_BOXED,
+			 GTK_TYPE_ACCEL_GROUP,
 			 GTK_TYPE_UINT,
-			 GTK_TYPE_UINT);
+			 GTK_TYPE_GDK_MODIFIER_TYPE);
 }
 
 void
@@ -831,18 +831,6 @@ is_shift (const gchar *string)
 }
 
 static inline gboolean
-is_after (const gchar *string)
-{
-  return ((string[0] == '<') &&
-	  (string[1] == 'a' || string[1] == 'A') &&
-	  (string[2] == 'f' || string[2] == 'F') &&
-	  (string[3] == 't' || string[3] == 'T') &&
-	  (string[4] == 'e' || string[4] == 'E') &&
-	  (string[5] == 'r' || string[5] == 'R') &&
-	  (string[6] == '>'));
-}
-
-static inline gboolean
 is_control (const gchar *string)
 {
   return ((string[0] == '<') &&
@@ -859,10 +847,10 @@ is_control (const gchar *string)
 void
 gtk_accelerator_parse (const gchar    *accelerator,
 		       guint          *accelerator_key,
-		       guint          *accelerator_mods)
+		       GdkModifierType*accelerator_mods)
 {
   guint keyval;
-  guint mods;
+  GdkModifierType mods;
   gint len;
   
   if (accelerator_key)
@@ -889,12 +877,6 @@ gtk_accelerator_parse (const gchar    *accelerator,
 	      accelerator += 7;
 	      len -= 7;
 	      mods |= GDK_SHIFT_MASK;
-	    }
-	  else if (len >= 7 && is_after (accelerator))
-	    {
-	      accelerator += 7;
-	      len -= 7;
-	      mods |= GDK_AFTER_MASK;
 	    }
 	  else if (len >= 6 && is_shft (accelerator))
 	    {
@@ -961,7 +943,7 @@ gtk_accelerator_parse (const gchar    *accelerator,
 
 gchar*
 gtk_accelerator_name (guint           accelerator_key,
-		      guint           accelerator_mods)
+		      GdkModifierType accelerator_mods)
 {
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
@@ -970,7 +952,6 @@ gtk_accelerator_name (guint           accelerator_key,
   static const gchar text_mod3[] = "<Mod3>";
   static const gchar text_mod4[] = "<Mod4>";
   static const gchar text_mod5[] = "<Mod5>";
-  static const gchar text_after[] = "<After>";
   guint l;
   gchar *keyval_name;
   gchar *accelerator;
@@ -996,8 +977,6 @@ gtk_accelerator_name (guint           accelerator_key,
     l += sizeof (text_mod4) - 1;
   if (accelerator_mods & GDK_MOD5_MASK)
     l += sizeof (text_mod5) - 1;
-  if (accelerator_mods & GDK_AFTER_MASK)
-    l += sizeof (text_after) - 1;
   l += strlen (keyval_name);
 
   accelerator = g_new (gchar, l + 1);
@@ -1038,11 +1017,6 @@ gtk_accelerator_name (guint           accelerator_key,
     {
       strcpy (accelerator + l, text_mod5);
       l += sizeof (text_mod5) - 1;
-    }
-  if (accelerator_mods & GDK_AFTER_MASK)
-    {
-      strcpy (accelerator + l, text_after);
-      l += sizeof (text_after) - 1;
     }
   strcpy (accelerator + l, keyval_name);
 

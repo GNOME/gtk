@@ -192,7 +192,7 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_TYPE_WIDGET,
 		    GTK_TYPE_STRING,
 		    GTK_TYPE_STRING,
-		    GTK_TYPE_BOXED);
+		    GTK_TYPE_GDK_EVENT);
   gtk_object_class_add_signals (object_class, tips_query_signals, SIGNAL_LAST);
 
   object_class->destroy = gtk_tips_query_destroy;

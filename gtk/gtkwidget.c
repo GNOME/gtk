@@ -184,6 +184,8 @@ static void gtk_widget_real_draw		 (GtkWidget	    *widget,
 						  GdkRectangle	    *area);
 static void gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
 						  GtkAllocation	    *allocation);
+static gint gtk_widget_real_key_press_event      (GtkWidget         *widget,
+						  GdkEventKey       *event);
 static void gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
      
@@ -394,7 +396,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, state_changed),
 		    gtk_widget_marshal_signal_5,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_UINT);
+		    GTK_TYPE_STATE_TYPE);
   widget_signals[PARENT_SET] =
     gtk_signal_new ("parent_set",
 		    GTK_RUN_FIRST,
@@ -410,7 +412,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, style_set),
 		    gtk_widget_marshal_signal_7,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_BOXED);
+		    GTK_TYPE_STYLE);
   widget_signals[ADD_ACCELERATOR] =
     gtk_accel_group_create_add (object_class->type, GTK_RUN_LAST,
 				GTK_SIGNAL_OFFSET (GtkWidgetClass, add_accelerator));
@@ -583,8 +585,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_received),
 		    gtk_widget_marshal_signal_1,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_SELECTION_DATA);
   widget_signals[PROXIMITY_IN_EVENT] =
     gtk_signal_new ("proximity_in_event",
 		    GTK_RUN_LAST,
@@ -714,7 +716,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->delete_event = NULL;
   klass->destroy_event = NULL;
   klass->expose_event = NULL;
-  klass->key_press_event = NULL;
+  klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = NULL;
   klass->enter_notify_event = NULL;
   klass->leave_notify_event = NULL;
@@ -1939,6 +1941,23 @@ gtk_widget_accelerator_signal (GtkWidget           *widget,
   if (ac_entry && ac_entry->object == (GtkObject*) widget)
     return ac_entry->signal_id;
   return 0;
+}
+
+static gint
+gtk_widget_real_key_press_event (GtkWidget         *widget,
+				 GdkEventKey       *event)
+{
+  gboolean handled = FALSE;
+
+  g_return_val_if_fail (widget != NULL, handled);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), handled);
+  g_return_val_if_fail (event != NULL, handled);
+
+  if (!handled)
+    handled = gtk_bindings_activate (GTK_OBJECT (widget),
+				     event->keyval, event->state);
+
+  return handled;
 }
 
 /*****************************************
