@@ -483,31 +483,25 @@ to the GNOME 2.0 platform</ulink>.
 <qandaentry>
 <question>
 <para>
-How do I make a text view scroll to the end of the buffer automatically ?
+Why are types not registered if I use their <literal>GTK_TYPE_BLAH;</literal> macro ?
 </para>
 </question>
 
 <answer>
 <para>
-The "insert" <link linkend="GtkTextMark">mark</link> marks the insertion point
-where <link linkend="gtk-text-buffer-insert">gtk_text_buffer_insert()</link>
-inserts new text into the buffer. The text is inserted 
-<emphasis>before</emphasis> the "insert" mark, so that it generally stays 
-at the end of the buffer. If it gets explicitly moved to some other position, 
-e.g. when the user selects some text, 
-use <link linkend="gtk-text-buffer-move-mark">gtk_text_buffer_move_mark()</link>
-to set it to the desired location before inserting more text. 
-The "insert" mark of a buffer can be obtained with <link
-linkend="gtk-text-buffer-get-insert">gtk_text_buffer_get_insert()</link>.
+The <literal>GTK_TYPE_BLAH</literal> macros are defined as calls to 
+<literal>gtk_blah_get_type()</literal>, and the <literal>_get_type()</literal> functions
+are declared as <literal>G_GNUC_CONST</literal> which allows the compiler to optimize
+the call away if it appears that the value is not being used.
 </para>
 
-<para> 
-To ensure that the end of the buffer remains visible, use
-<link
-		linkend="gtk-text-view-scroll-to-mark">gtk_text_view_scroll_to_mark()</link> to scroll to the "insert" mark after inserting new text.
+<para>
+A common workaround for this problem is to store the result in a volatile variable,
+which keeps the compiler from optimizing the call away.
+<informalexample><programlisting>
+volatile GType dummy = GTK_TYPE_BLAH;
+</programlisting></informalexample>
 </para>
-</answer>
-</qandaentry>
 </qandadiv>
 
 <qandadiv><title>Which widget should I use...</title>
@@ -731,6 +725,35 @@ If you use <link
 To ensure that all text has the desired appearance, use <link
 		linkend="gtk-widget-modify-font">gtk_widget_modify_font()</link> to change the default font for the widget.
 </para></answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>
+How do I make a text view scroll to the end of the buffer automatically ?
+</para>
+</question>
+
+<answer>
+<para>
+The "insert" <link linkend="GtkTextMark">mark</link> marks the insertion point
+where <link linkend="gtk-text-buffer-insert">gtk_text_buffer_insert()</link>
+inserts new text into the buffer. The text is inserted 
+<emphasis>before</emphasis> the "insert" mark, so that it generally stays 
+at the end of the buffer. If it gets explicitly moved to some other position, 
+e.g. when the user selects some text, 
+use <link linkend="gtk-text-buffer-move-mark">gtk_text_buffer_move_mark()</link>
+to set it to the desired location before inserting more text. 
+The "insert" mark of a buffer can be obtained with <link
+linkend="gtk-text-buffer-get-insert">gtk_text_buffer_get_insert()</link>.
+</para>
+
+<para> 
+To ensure that the end of the buffer remains visible, use
+<link
+		linkend="gtk-text-view-scroll-to-mark">gtk_text_view_scroll_to_mark()</link> to scroll to the "insert" mark after inserting new text.
+</para>
+</answer>
 </qandaentry>
 </qandadiv>
 
