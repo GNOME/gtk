@@ -513,7 +513,7 @@ gtk_tree_selection_select_iter (GtkTreeSelection *selection,
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->tree_view->priv->model != NULL);
-  g_return_if_fail (iter == NULL);
+  g_return_if_fail (iter != NULL);
 
   path = gtk_tree_model_get_path (selection->tree_view->priv->model,
 				  iter);
@@ -543,7 +543,7 @@ gtk_tree_selection_unselect_iter (GtkTreeSelection *selection,
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->tree_view->priv->model != NULL);
-  g_return_if_fail (iter == NULL);
+  g_return_if_fail (iter != NULL);
 
   path = gtk_tree_model_get_path (selection->tree_view->priv->model,
 				  iter);
