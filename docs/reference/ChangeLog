@@ -1,5 +1,7 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add gtk_action_get_accel_path.
+
 	* gtk/migrating-GtkAction.sgml: Explain how to migrate
 	non-stock icons.
 
