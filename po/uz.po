@@ -1,16 +1,15 @@
-# translation of gtk20.po to Uzbek
-# Copyright (C) 1998-2003 Free Software Foundation, Inc.
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003.
+# translation of gtk+.gtk-2-4.po to Uzbek
+# Copyright (C) 1998-2003, 2004 Free Software Foundation, Inc.
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk20\n"
+"Project-Id-Version: gtk+.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2003-09-06 00:29+0200\n"
+"POT-Creation-Date: 2004-07-19 13:56+0200\n"
+"PO-Revision-Date: 2004-07-19 18:54+0200\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
-"Language-Team: Uzbek <uz-li@yahoogroups.com>\n"
+"Language-Team: Uzbek <kmashrab@uni-bremen.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,8 +29,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:239
@@ -321,8 +319,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1069
@@ -420,8 +417,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:821
@@ -430,8 +426,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:994
@@ -792,9 +787,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1880
-#, fuzzy
 msgid "_Hue:"
-msgstr "_Yordam"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1881
 msgid "Position on the color wheel."
@@ -859,9 +853,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1955
-#, fuzzy
 msgid "_Palette"
-msgstr "_O'chirish"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1987
 msgid "Color Wheel"
@@ -871,15 +864,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr ""
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr ""
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -903,7 +896,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5351
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -918,9 +911,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:1072 gtk/gtkpathbar.c:842
-#, fuzzy
 msgid "Home"
-msgstr "_Uy"
+msgstr "Уй"
 
 #: gtk/gtkfilechooserdefault.c:1090 gtk/gtkpathbar.c:844
 msgid "Desktop"
@@ -950,156 +942,152 @@ msgstr ""
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2578
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:2525
+msgid "Shortcuts"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2579
 msgid "Folder"
-msgstr "Fayllar"
+msgstr "Жилд"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2625 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2626 gtk/gtkstock.c:293
 msgid "_Add"
-msgstr "_Qo'shish"
+msgstr "Қў_шиш"
 
-#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:341
 msgid "_Remove"
-msgstr "Olib _tashlash"
+msgstr "Олиб _ташлаш"
 
-#: gtk/gtkfilechooserdefault.c:2714
+#: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2855
-#, fuzzy
-msgid "Name"
-msgstr "Fayl nomi"
+#: gtk/gtkfilechooserdefault.c:2830 gtk/gtkfilesel.c:766
+msgid "Files"
+msgstr "Файллар"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2857
+msgid "Name"
+msgstr "Номи"
+
+#: gtk/gtkfilechooserdefault.c:2879
 msgid "Size"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2889
+#: gtk/gtkfilechooserdefault.c:2891
 msgid "Modified"
 msgstr ""
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2934
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:2936
 msgid "Create Fo_lder"
-msgstr "Fayllar"
+msgstr "_Жилд яратиш"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3044
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:3046
 msgid "_Name:"
-msgstr "Fayl nomi"
+msgstr "_Номи:"
 
-#: gtk/gtkfilechooserdefault.c:3086
+#: gtk/gtkfilechooserdefault.c:3088
 msgid "_Browse for other folders"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3323
-#, fuzzy
-msgid "Save in _folder:"
-msgstr "Fayllar"
-
 #: gtk/gtkfilechooserdefault.c:3325
-#, fuzzy
-msgid "Create in _folder:"
-msgstr "Fayllar"
+msgid "Save in _folder:"
+msgstr "Ж_илдга сақлаш:"
 
-#: gtk/gtkfilechooserdefault.c:3969
+#: gtk/gtkfilechooserdefault.c:3327
+msgid "Create in _folder:"
+msgstr "Ж_илдда яратиш:"
+
+#: gtk/gtkfilechooserdefault.c:3971
 msgid "Can't change to folder because it isn't local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4109
 msgid "Could not find the path"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4458
+#: gtk/gtkfilechooserdefault.c:4460
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5105
+#: gtk/gtkfilechooserdefault.c:5124
 msgid "Type name of new folder"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5134
+#: gtk/gtkfilechooserdefault.c:5153
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:5136
+#: gtk/gtkfilechooserdefault.c:5155
 #, c-format
 msgid "%.1f K"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5138
+#: gtk/gtkfilechooserdefault.c:5157
 #, c-format
 msgid "%.1f M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5140
+#: gtk/gtkfilechooserdefault.c:5159
 #, c-format
 msgid "%.1f G"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5185
+#: gtk/gtkfilechooserdefault.c:5204
 msgid "Today"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5187
+#: gtk/gtkfilechooserdefault.c:5206
 msgid "Yesterday"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5198
+#: gtk/gtkfilechooserdefault.c:5217
 msgid "Unknown"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5293
+#: gtk/gtkfilechooserdefault.c:5312
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5370
+#: gtk/gtkfilechooserdefault.c:5389
 #, c-format
 msgid ""
 "Could not select %s:\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5428
 msgid "Open Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5416
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "Save in Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5435
+#: gtk/gtkfilechooserdefault.c:5454
 msgid "_Location:"
 msgstr ""
 
 #: gtk/gtkfilesel.c:730
-#, fuzzy
 msgid "Folders"
-msgstr "Fayllar"
+msgstr "Жилдлар"
 
 #: gtk/gtkfilesel.c:734
-#, fuzzy
 msgid "Fol_ders"
-msgstr "Fayllar"
-
-#: gtk/gtkfilesel.c:766
-msgid "Files"
-msgstr "Fayllar"
+msgstr "Жи_лдлар"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
-msgstr "_Fayllar"
+msgstr "_Файллар"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
@@ -1120,16 +1108,15 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
-msgstr "Fayllni _o'chirish"
+msgstr "Файллни _ўчириш"
 
 #: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
-msgstr "Faylning no_mini o'zgartirish"
+msgstr "Файлнинг но_мини ўзгартириш"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1441
@@ -1153,9 +1140,8 @@ msgid "New Folder"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1499
-#, fuzzy
 msgid "_Folder name:"
-msgstr "_Nomini o'zgartirish"
+msgstr "_Жилднинг номи:"
 
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
@@ -1189,7 +1175,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr "Fayllni o'chirish"
+msgstr "Файллни ўчириш"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
@@ -1217,7 +1203,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
-msgstr "Faylning nomini o'zgartirish"
+msgstr "Файлнинг номини ўзгартириш"
 
 #: gtk/gtkfilesel.c:1762
 #, c-format
@@ -1226,7 +1212,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
-msgstr "_Nomini o'zgartirish"
+msgstr "_Номини ўзгартириш"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
@@ -1276,9 +1262,8 @@ msgid "This file system does not support mounting"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:578
-#, fuzzy
 msgid "Filesystem"
-msgstr "Fayllar"
+msgstr "Файл тизими"
 
 #: gtk/gtkfilesystemunix.c:731
 #, c-format
@@ -1410,15 +1395,13 @@ msgstr ""
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:324
-#, fuzzy
 msgid "_Axes"
-msgstr "H_a"
+msgstr ""
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:341
-#, fuzzy
 msgid "_Keys"
-msgstr "H_a"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:561
 msgid "X"
@@ -1458,9 +1441,8 @@ msgstr ""
 
 #. and clear button
 #: gtk/gtkinputdialog.c:758
-#, fuzzy
 msgid "clear"
-msgstr "_Tozalash"
+msgstr "тозалаш"
 
 #: gtk/gtklabel.c:3297
 msgid "Select All"
@@ -1492,17 +1474,17 @@ msgstr ""
 msgid "The radio tool button whose group this button belongs to."
 msgstr ""
 
-#: gtk/gtkrc.c:2390
+#: gtk/gtkrc.c:2391
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
+#: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:3467
+#: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -1510,75 +1492,75 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:285
 msgid "Information"
-msgstr "Ma'lumot"
+msgstr "Маълумот"
 
 #: gtk/gtkstock.c:286
 msgid "Warning"
-msgstr "Diqqat"
+msgstr "Диққат"
 
 #: gtk/gtkstock.c:287
 msgid "Error"
-msgstr "Xato"
+msgstr "Хато"
 
 #: gtk/gtkstock.c:288
 msgid "Question"
-msgstr "So'roq"
+msgstr "Сўроқ"
 
 #: gtk/gtkstock.c:294
 msgid "_Apply"
-msgstr "Qo'_llash"
+msgstr "Қў_ллаш"
 
 #: gtk/gtkstock.c:295
 msgid "_Bold"
-msgstr "Qal_in"
+msgstr "Қал_ин"
 
 #: gtk/gtkstock.c:296
 msgid "_Cancel"
-msgstr "_Bekor qilish"
+msgstr "_Бекор қилиш"
 
 #: gtk/gtkstock.c:297
 msgid "_CD-Rom"
-msgstr "K_ompakt-disk"
+msgstr "К_омпакт-диск"
 
 #: gtk/gtkstock.c:298
 msgid "_Clear"
-msgstr "_Tozalash"
+msgstr "_Тозалаш"
 
 #: gtk/gtkstock.c:299
 msgid "_Close"
-msgstr "_Yopish"
+msgstr "_Ёпиш"
 
 #: gtk/gtkstock.c:300
 msgid "_Convert"
-msgstr "Ay_lantirish"
+msgstr "Ай_лантириш"
 
 #: gtk/gtkstock.c:301
 msgid "_Copy"
-msgstr "_Nusxa ko'chirish"
+msgstr "_Нусха кўчириш"
 
 #: gtk/gtkstock.c:302
 msgid "Cu_t"
-msgstr "_Kesish"
+msgstr "_Кесиш"
 
 #: gtk/gtkstock.c:303
 msgid "_Delete"
-msgstr "_O'chirish"
+msgstr "Ў_чириш"
 
 #: gtk/gtkstock.c:304
 msgid "_Execute"
-msgstr "Ba_jarish"
+msgstr "Ба_жариш"
 
 #: gtk/gtkstock.c:305
 msgid "_Find"
-msgstr "Q_idirish"
+msgstr "Қ_идириш"
 
 #: gtk/gtkstock.c:306
 msgid "Find and _Replace"
-msgstr "Qidirish va a_lmashtirish"
+msgstr "Қидириш ва а_лмаштириш"
 
 #: gtk/gtkstock.c:307
 msgid "_Floppy"
-msgstr "_Disket"
+msgstr "_Дискет"
 
 #: gtk/gtkstock.c:308
 msgid "_Bottom"
@@ -1586,31 +1568,31 @@ msgstr ""
 
 #: gtk/gtkstock.c:309
 msgid "_First"
-msgstr "_Birinchi"
+msgstr "_Биринчи"
 
 #: gtk/gtkstock.c:310
 msgid "_Last"
-msgstr "_Oxirgi"
+msgstr "_Охирги"
 
 #: gtk/gtkstock.c:311
 msgid "_Top"
-msgstr "_Yuqoriga"
+msgstr "_Юқорига"
 
 #: gtk/gtkstock.c:312
 msgid "_Back"
-msgstr "_Orqaga"
+msgstr "_Орқага"
 
 #: gtk/gtkstock.c:313
 msgid "_Down"
-msgstr "_Pastga"
+msgstr "_Пастга"
 
 #: gtk/gtkstock.c:314
 msgid "_Forward"
-msgstr "_Oldinga"
+msgstr "_Олдинга"
 
 #: gtk/gtkstock.c:315
 msgid "_Up"
-msgstr "_Yuqoriga"
+msgstr "_Юқорига"
 
 #: gtk/gtkstock.c:316
 msgid "_Harddisk"
@@ -1618,11 +1600,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:317
 msgid "_Help"
-msgstr "_Yordam"
+msgstr "_Ёрдам"
 
 #: gtk/gtkstock.c:318
 msgid "_Home"
-msgstr "_Uy"
+msgstr "_Уй"
 
 #: gtk/gtkstock.c:319
 msgid "Increase Indent"
@@ -1634,19 +1616,19 @@ msgstr ""
 
 #: gtk/gtkstock.c:321
 msgid "_Index"
-msgstr "_Indeks"
+msgstr "_Индекс"
 
 #: gtk/gtkstock.c:322
 msgid "_Italic"
-msgstr "Q_iya"
+msgstr "Қ_ия"
 
 #: gtk/gtkstock.c:323
 msgid "_Jump to"
-msgstr "O'_tish"
+msgstr "Ў_тиш"
 
 #: gtk/gtkstock.c:324
 msgid "_Center"
-msgstr "_Markaz"
+msgstr "_Марказ"
 
 #: gtk/gtkstock.c:325
 msgid "_Fill"
@@ -1654,45 +1636,43 @@ msgstr ""
 
 #: gtk/gtkstock.c:326
 msgid "_Left"
-msgstr "_Chap"
+msgstr "_Чап"
 
 #: gtk/gtkstock.c:327
 msgid "_Right"
-msgstr "O'_ng"
+msgstr "Ў_нг"
 
 #: gtk/gtkstock.c:328
-#, fuzzy
 msgid "_Network"
-msgstr "_Yangi"
+msgstr "_Тармоқ"
 
 #: gtk/gtkstock.c:329
 msgid "_New"
-msgstr "_Yangi"
+msgstr "_Янги"
 
 #: gtk/gtkstock.c:330
 msgid "_No"
-msgstr "_Yo'q"
+msgstr "_Йўқ"
 
 #: gtk/gtkstock.c:331
 msgid "_OK"
-msgstr "_Ok"
+msgstr "_Ок"
 
 #: gtk/gtkstock.c:332
 msgid "_Open"
-msgstr "_Ochish"
+msgstr "_Очиш"
 
 #: gtk/gtkstock.c:333
 msgid "_Paste"
-msgstr "Qo'y_ish"
+msgstr "Қўй_иш"
 
 #: gtk/gtkstock.c:334
-#, fuzzy
 msgid "_Preferences"
-msgstr "_Yangilash"
+msgstr "_Мослаш"
 
 #: gtk/gtkstock.c:335
 msgid "_Print"
-msgstr "_Bosib chiqarish"
+msgstr "_Босиб чиқариш"
 
 #: gtk/gtkstock.c:336
 msgid "Print Pre_view"
@@ -1700,41 +1680,39 @@ msgstr ""
 
 #: gtk/gtkstock.c:337
 msgid "_Properties"
-msgstr "Ho_ssalari"
+msgstr "Хо_ссалари"
 
 #: gtk/gtkstock.c:338
 msgid "_Quit"
-msgstr "_Chiqish"
+msgstr "_Чиқиш"
 
 #: gtk/gtkstock.c:339
-#, fuzzy
 msgid "_Redo"
-msgstr "Olib _tashlash"
+msgstr "Қ_айтариш"
 
 #: gtk/gtkstock.c:340
 msgid "_Refresh"
-msgstr "_Yangilash"
+msgstr "_Янгилаш"
 
 #: gtk/gtkstock.c:342
-#, fuzzy
 msgid "_Revert"
-msgstr "Olib _tashlash"
+msgstr ""
 
 #: gtk/gtkstock.c:343
 msgid "_Save"
-msgstr "_Saqlash"
+msgstr "_Сақлаш"
 
 #: gtk/gtkstock.c:344
 msgid "Save _As"
-msgstr "...sif_atida saqlash"
+msgstr "...сиф_атида сақлаш"
 
 #: gtk/gtkstock.c:345
 msgid "_Color"
-msgstr "_Rang"
+msgstr "_Ранг"
 
 #: gtk/gtkstock.c:346
 msgid "_Font"
-msgstr "_Shrift"
+msgstr "_Шрифт"
 
 #: gtk/gtkstock.c:347
 msgid "_Ascending"
@@ -1746,33 +1724,31 @@ msgstr ""
 
 #: gtk/gtkstock.c:349
 msgid "_Spell Check"
-msgstr "Imloni _tekshirish"
+msgstr "Имлони _текшириш"
 
 #: gtk/gtkstock.c:350
 msgid "_Stop"
-msgstr "_To'xtatish"
+msgstr "_Тўхтатиш"
 
 #: gtk/gtkstock.c:351
 msgid "_Strikethrough"
 msgstr ""
 
 #: gtk/gtkstock.c:352
-#, fuzzy
 msgid "_Undelete"
-msgstr "_O'chirish"
+msgstr ""
 
 #: gtk/gtkstock.c:353
 msgid "_Underline"
 msgstr ""
 
 #: gtk/gtkstock.c:354
-#, fuzzy
 msgid "_Undo"
-msgstr "Q_idirish"
+msgstr "_Бекор қилиш"
 
 #: gtk/gtkstock.c:355
 msgid "_Yes"
-msgstr "H_a"
+msgstr "Ҳ_а"
 
 #: gtk/gtkstock.c:356
 msgid "_Normal Size"
@@ -1784,11 +1760,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:358
 msgid "Zoom _In"
-msgstr "K_attalashtirish"
+msgstr "К_атталаштириш"
 
 #: gtk/gtkstock.c:359
 msgid "Zoom _Out"
-msgstr "K_ichiklashtirish"
+msgstr "К_ичиклаштириш"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
@@ -1928,3 +1904,4 @@ msgstr ""
 #, fuzzy
 #~ msgid "Up"
 #~ msgstr "_Yuqoriga"
+
