@@ -1,3 +1,11 @@
+Sun Oct 12 01:10:29 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkalignment.[hc]: 
+	* gtk/gtkcombobox.[hc]: 
+	* gtk/gtkcomboboxentry.[hc]: 
+	* gtk/gtktreemodelfilter.[hc]: Move GET_PRIVATE macros
+	from header to implementation.
+
 Sun Oct 12 00:18:02 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testtreeview.c: 

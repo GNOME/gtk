@@ -63,6 +63,8 @@ struct _ComboCellInfo
   guint pack : 1;
 };
 
+#define GTK_COMBO_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_COMBO_BOX, GtkComboBoxPrivate))
+
 struct _GtkComboBoxPrivate
 {
   GtkTreeModel *model;

@@ -25,6 +25,8 @@
 
 #include "gtkintl.h"
 
+#define GTK_COMBO_BOX_ENTRY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_COMBO_BOX_ENTRY, GtkComboBoxEntryPrivate))
+
 struct _GtkComboBoxEntryPrivate
 {
   GtkWidget *entry;
