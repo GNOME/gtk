@@ -1,3 +1,10 @@
+Wed Aug  2 14:57:38 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Move
+	is_viewable() test further inside the function, since removing the 
+	window from the redraw list without clearing ->update_area
+	was also very broken.
+
 2000-08-02  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Check for <unistd.h>.

@@ -1416,9 +1416,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
   GdkWindowObject *private = (GdkWindowObject *)window;
   gboolean save_region = FALSE;
 
-  if (!gdk_window_is_viewable (window))
-    return;
-
   /* If an update got queued during update processing, we can get a
    * window in the update queue that has an empty update_area.
    * just ignore it.
@@ -1428,7 +1425,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
       GdkRegion *update_area = private->update_area;
       private->update_area = NULL;
       
-      if (gdk_event_func)
+      if (gdk_event_func && gdk_window_is_viewable (window))
 	{
 	  GdkEvent event;
 	  GdkRectangle window_rect;
