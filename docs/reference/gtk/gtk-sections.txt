@@ -175,6 +175,7 @@ gtk_action_group_add_radio_actions
 gtk_action_group_add_radio_actions_full
 gtk_action_group_set_translate_func
 gtk_action_group_set_translation_domain
+gtk_action_group_translate_string
 <SUBSECTION Standard>
 GTK_TYPE_ACTION_GROUP
 GTK_ACTION_GROUP

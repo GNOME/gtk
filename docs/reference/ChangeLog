@@ -1,3 +1,7 @@
+Thu May  6 00:22:38 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_action_group_translate_string()
+
 Thu May  6 00:04:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add missing getters.

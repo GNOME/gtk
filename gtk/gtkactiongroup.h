@@ -160,6 +160,8 @@ void            gtk_action_group_set_translate_func      (GtkActionGroup       *
                                                           GtkDestroyNotify      notify);
 void            gtk_action_group_set_translation_domain  (GtkActionGroup       *action_group,
                                                           const gchar          *domain);
+gchar          *gtk_action_group_translate_string        (GtkActionGroup       *action_group,
+							  const gchar          *string);
 
 /* Protected for use by GtkAction */
 void _gtk_action_group_emit_connect_proxy    (GtkActionGroup *action_group,
