@@ -35,7 +35,7 @@ of the user for a drag destination site.
    If set for a widget, GTK+, during a drag over this
    widget will check if the drag matches this widget's
    list of possible targets and actions.
-   GTK+ will then call gtk_drag_status() as appropriate.
+   GTK+ will then call gdk_drag_status() as appropriate.
 @GTK_DEST_DEFAULT_HIGHLIGHT: 
    If set for a widget, GTK+ will draw a highlight on
    this widget as long as a drag is over this widget
@@ -44,7 +44,7 @@ of the user for a drag destination site.
    If set for a widget, when a drop occurs, GTK+ will
    will check if the drag matches this widget's
    list of possible targets and actions. If so, 
-   GTK+ will call gtk_drag_data_get() on behalf 
+   GTK+ will call gtk_drag_get_data() on behalf 
    of the widget. Whether or not the drop is successful,
    GTK+ will call gtk_drag_finish(). If the action
    was a move, then if the drag was successful, then
@@ -63,10 +63,9 @@ constraints on an entry in a #GtkTargetTable.
 @GTK_TARGET_SAME_APP: 
    If this is set, the target will only be selected
    for drags within a single application.
- @GTK_TARGET_SAME_WIDGET:
+@GTK_TARGET_SAME_WIDGET:
    If this is set, the target will only be selected
    for drags within a single widget.
-@GTK_TARGET_SAME_WIDGET: 
 
 <!-- ##### FUNCTION gtk_drag_dest_set ##### -->
 <para>
@@ -94,7 +93,7 @@ Sets this widget as a proxy for drops to another window.
 @proxy_window: the window to which to forward drag events
 @protocol: the drag protocol which the @proxy_window accepts
            (You can use gdk_drag_get_protocol() to determine this)
-@use_coordinates: If true, send the same coordinates to the
+@use_coordinates: If %TRUE, send the same coordinates to the
                   destination, because it is an embedded 
                   subwindow.
 
