@@ -82,7 +82,7 @@ counter (void *data)
   while (!flag)
     {
       sprintf(buffer, "%d", counter);
-      gtk_label_set (GTK_LABEL (label), buffer);
+      gtk_label_set_text (GTK_LABEL (label), buffer);
       gtk_threads_leave();
       counter++;
       /* Give someone else a chance to get the lock next time.

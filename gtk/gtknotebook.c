@@ -1955,7 +1955,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
 					 GTK_WIDGET (notebook));
 		}
 	      else
-		gtk_label_set (GTK_LABEL (page->tab_label), string);
+		gtk_label_set_text (GTK_LABEL (page->tab_label), string);
 	    }
 
 	  if (GTK_WIDGET_VISIBLE (page->child) &&
@@ -1968,10 +1968,10 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
       if (notebook->menu && page->default_menu)
 	{
 	  if (page->tab_label && GTK_IS_LABEL (page->tab_label))
-	    gtk_label_set (GTK_LABEL (page->menu_label),
+	    gtk_label_set_text (GTK_LABEL (page->menu_label),
 			   GTK_LABEL (page->tab_label)->label);
 	  else
-	    gtk_label_set (GTK_LABEL (page->menu_label), string);
+	    gtk_label_set_text (GTK_LABEL (page->menu_label), string);
 	}
     }  
 }

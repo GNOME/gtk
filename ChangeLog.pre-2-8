@@ -1,3 +1,20 @@
+Tue Dec 15 14:30:35 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gdk/gdkfonts.c: Added gdk_text_extents_wc()
+
+        * Patch from Jonathan Blanford <jrb@redhat.com> to add line wrapping
+	  to label. (Based on patch from Jeff Dairiki
+	  <dairiki@mac-ceope.apl.washington.edu> gtk-dairiki-971208-0)
+
+	- Adds new function gtk_label_set_line_wrap()
+	- implement GTK_JUSTIFY_FILL.
+	- rename gtk_label_set to gtk_label_set_text() add
+	   gtk_label_set() to gtkcompat.h.
+
+	* Use an internal wc representation in the label, so
+	  that we handle underlining and line breaks correctly
+	  for multi-byte strings.
+
 Tue Dec 15 13:32:28 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.h: Added GTK_USER_DRAW flag.

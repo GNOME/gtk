@@ -1752,19 +1752,19 @@ gtk_font_selection_load_font (GtkFontSelection *fontsel)
 	     it's necessary as it results in a resize of the whole window! */
 	  gtk_label_get(GTK_LABEL(fontsel->message_label), &label_text);
 	  if (strcmp(label_text, ""))
-	    gtk_label_set(GTK_LABEL(fontsel->message_label), "");
+	    gtk_label_set_text(GTK_LABEL(fontsel->message_label), "");
 	  gtk_font_selection_update_preview (fontsel);
 	  return TRUE;
 	}
       else 
 	{
-	  gtk_label_set(GTK_LABEL(fontsel->message_label),
+	  gtk_label_set_text(GTK_LABEL(fontsel->message_label),
 			"The selected font is not available.");
 	}
     }
   else
     {
-      gtk_label_set(GTK_LABEL(fontsel->message_label),
+      gtk_label_set_text(GTK_LABEL(fontsel->message_label),
 		    "The selected font is not a valid font.");
     }
   
@@ -1822,7 +1822,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
      displayed properly. */
   xfs = GDK_FONT_XFONT(fontsel->font);
   if (xfs->min_byte1 != 0 || xfs->max_byte1 != 0)
-    gtk_label_set(GTK_LABEL(fontsel->message_label),
+    gtk_label_set_text(GTK_LABEL(fontsel->message_label),
 		  "This is a 2-byte font and may not be displayed correctly.");
 }
 
@@ -2135,12 +2135,12 @@ gtk_font_selection_update_filter     (GtkFontSelection *fontsel)
   if (default_filter)
     {
       gtk_widget_set_sensitive(fontsel->filter_button, FALSE);
-      gtk_label_set(GTK_LABEL(fontsel->font_label), "Font:");
+      gtk_label_set_text(GTK_LABEL(fontsel->font_label), "Font:");
     }
   else
     {
       gtk_widget_set_sensitive(fontsel->filter_button, TRUE);
-      gtk_label_set(GTK_LABEL(fontsel->font_label), "Font: (Filter Applied)");
+      gtk_label_set_text(GTK_LABEL(fontsel->font_label), "Font: (Filter Applied)");
     }
   gtk_font_selection_show_available_fonts(fontsel);
 }  
@@ -2365,7 +2365,7 @@ gtk_font_selection_clear_filter     (GtkFontSelection *fontsel)
   
   /* Update the main notebook page. */
   gtk_widget_set_sensitive(fontsel->filter_button, FALSE);
-  gtk_label_set(GTK_LABEL(fontsel->font_label), "Font:");
+  gtk_label_set_text(GTK_LABEL(fontsel->font_label), "Font:");
   
   gtk_font_selection_show_available_fonts(fontsel);
 }

@@ -172,7 +172,7 @@ gtk_accel_label_new (const gchar *string)
   
   accel_label = gtk_type_new (GTK_TYPE_ACCEL_LABEL);
   
-  gtk_label_set (GTK_LABEL (accel_label), string);
+  gtk_label_set_text (GTK_LABEL (accel_label), string);
   
   return GTK_WIDGET (accel_label);
 }

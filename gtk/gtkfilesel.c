@@ -499,7 +499,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 
       sprintf (err_buf, _("Directory unreadable: %s"), cmpl_strerror (cmpl_errno));
 
-      gtk_label_set (GTK_LABEL (filesel->selection_text), err_buf);
+      gtk_label_set_text (GTK_LABEL (filesel->selection_text), err_buf);
     }
   else
     {
@@ -1435,7 +1435,7 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 	  strcpy (sel_text, "Selection: ");
 	  strcat (sel_text, cmpl_reference_position (cmpl_state));
 
-	  gtk_label_set (GTK_LABEL (fs->selection_text), sel_text);
+	  gtk_label_set_text (GTK_LABEL (fs->selection_text), sel_text);
 	  g_free (sel_text);
 	}
 
@@ -1457,7 +1457,7 @@ gtk_file_selection_abort (GtkFileSelection *fs)
   /*  BEEP gdk_beep();  */
 
   if (fs->selection_entry)
-    gtk_label_set (GTK_LABEL (fs->selection_text), err_buf);
+    gtk_label_set_text (GTK_LABEL (fs->selection_text), err_buf);
 }
 
 /**********************************************************************/

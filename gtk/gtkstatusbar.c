@@ -155,7 +155,7 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
   if (!text)
     text = "";
 
-  gtk_label_set (GTK_LABEL (statusbar->label), text);
+  gtk_label_set_text (GTK_LABEL (statusbar->label), text);
 }
 
 guint

@@ -1622,6 +1622,96 @@ create_handle_box (void)
     gtk_widget_destroy (window);
 }
 
+/* 
+ * Label Demo
+ */
+void create_labels (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *hbox;
+  GtkWidget *vbox;
+  GtkWidget *frame;
+  GtkWidget *label;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Label");
+      vbox = gtk_vbox_new (FALSE, 5);
+      hbox = gtk_hbox_new (FALSE, 5);
+      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
+      gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+
+      frame = gtk_frame_new ("Normal Label");
+      label = gtk_label_new ("This is a Normal label");
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Multi-line Label");
+      label = gtk_label_new ("This is a Multi-line label.\nSecond line\nThird line");
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Left Justified Label");
+      label = gtk_label_new ("This is a Left-Justified\nMulti-line label.\nThird      line");
+      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Right Justified Label");
+      label = gtk_label_new ("This is a Right-Justified\nMulti-line label.\nFourth line, (j/k)");
+      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      vbox = gtk_vbox_new (FALSE, 5);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
+      frame = gtk_frame_new ("Line wrapped label");
+      label = gtk_label_new ("This is an example of a line-wrapped label.  It should not be taking "\
+			     "up the entire             "/* big space to test spacing */\
+			     "width allocated to it, but automatically wraps the words to fit.  "\
+			     "The time has come, for all good men, to come to the aid of their party.  "\
+			     "The sixth sheik's six sheep's sick.\n"\
+			     "     It supports multiple paragraphs correctly, and  correctly   adds "\
+			     "many          extra  spaces. ");
+
+      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Filled, wrapped label");
+      label = gtk_label_new ("This is an example of a line-wrapped, filled label.  It should be taking "\
+			     "up the entire              width allocated to it.  Here is a seneance to prove "\
+			     "my point.  Here is another sentence. "\
+			     "Here comes the sun, do de do de do.\n"\
+			     "    This is a new paragraph.\n"\
+			     "    This is another newer, longer, better paragraph.  It is coming to an end, "\
+			     "unfortunately.");
+      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_FILL);
+      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Underlined label");
+      label = gtk_label_new ("This label is underlined!\n"
+			     "This one is underlined in 日本語の入用quite a funky fashion");
+      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+      gtk_label_set_pattern (GTK_LABEL (label), "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+    }
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * Reparent demo
  */
@@ -1755,9 +1845,9 @@ uposition_configure (GtkWidget *window)
 
   gdk_window_get_root_origin (window->window, &upositionx, &upositiony);
   sprintf (buffer, "%d", upositionx);
-  gtk_label_set (lx, buffer);
+  gtk_label_set_text (lx, buffer);
   sprintf (buffer, "%d", upositiony);
-  gtk_label_set (ly, buffer);
+  gtk_label_set_text (ly, buffer);
 
   return FALSE;
 }
@@ -1935,7 +2025,7 @@ tips_query_widget_entered (GtkTipsQuery   *tips_query,
 {
   if (GTK_TOGGLE_BUTTON (toggle)->active)
     {
-      gtk_label_set (GTK_LABEL (tips_query), tip_text ? "There is a Tip!" : "There is no Tip!");
+      gtk_label_set_text (GTK_LABEL (tips_query), tip_text ? "There is a Tip!" : "There is no Tip!");
       /* don't let GtkTipsQuery reset it's label */
       gtk_signal_emit_stop_by_name (GTK_OBJECT (tips_query), "widget_entered");
     }
@@ -2772,7 +2862,7 @@ get_value (GtkWidget *widget, gpointer data)
   else
     sprintf (buf, "%0.*f", spin->digits,
 	     gtk_spin_button_get_value_as_float (spin));
-  gtk_label_set (label, buf);
+  gtk_label_set_text (label, buf);
 }
 
 static void
@@ -2939,7 +3029,7 @@ create_spins (void)
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
 
       gtk_box_pack_start (GTK_BOX (vbox), val_label, TRUE, TRUE, 0);
-      gtk_label_set (GTK_LABEL (val_label), "0");
+      gtk_label_set_text (GTK_LABEL (val_label), "0");
 
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
@@ -3026,9 +3116,9 @@ set_cursor (GtkWidget *spinner,
   while (vals && vals->value != c)
     vals++;
   if (vals)
-    gtk_label_set (GTK_LABEL (label), vals->value_nick);
+    gtk_label_set_text (GTK_LABEL (label), vals->value_nick);
   else
-    gtk_label_set (GTK_LABEL (label), "<unknown>");
+    gtk_label_set_text (GTK_LABEL (label), "<unknown>");
 
   cursor = gdk_cursor_new (c);
   gdk_window_set_cursor (widget->window, cursor);
@@ -4153,16 +4243,16 @@ void after_press (GtkCTree *ctree, gpointer data)
   char buf[80];
 
   sprintf (buf, "%d", g_list_length (GTK_CLIST (ctree)->selection));
-  gtk_label_set (GTK_LABEL (sel_label), buf);
+  gtk_label_set_text (GTK_LABEL (sel_label), buf);
 
   sprintf (buf, "%d", g_list_length (GTK_CLIST (ctree)->row_list));
-  gtk_label_set (GTK_LABEL (vis_label), buf);
+  gtk_label_set_text (GTK_LABEL (vis_label), buf);
 
   sprintf (buf, "%d", books);
-  gtk_label_set (GTK_LABEL (book_label), buf);
+  gtk_label_set_text (GTK_LABEL (book_label), buf);
 
   sprintf (buf, "%d", pages);
-  gtk_label_set (GTK_LABEL (page_label), buf);
+  gtk_label_set_text (GTK_LABEL (page_label), buf);
 }
 
 void after_move (GtkCTree *ctree, GtkCTreeNode *child, GtkCTreeNode *parent, 
@@ -6930,7 +7020,7 @@ progress_value_changed (GtkAdjustment *adj, ProgressData *pdata)
   else
     sprintf (buf, "%.0f%%", 100 *
 	     gtk_progress_get_current_percentage (GTK_PROGRESS (pdata->pbar)));
-  gtk_label_set (GTK_LABEL (pdata->label), buf);
+  gtk_label_set_text (GTK_LABEL (pdata->label), buf);
 }
 
 static void
@@ -7795,7 +7885,7 @@ timeout_test (GtkWidget *label)
   static char buffer[32];
 
   sprintf (buffer, "count: %d", ++count);
-  gtk_label_set (GTK_LABEL (label), buffer);
+  gtk_label_set_text (GTK_LABEL (label), buffer);
 
   return TRUE;
 }
@@ -7902,7 +7992,7 @@ idle_test (GtkWidget *label)
   static char buffer[32];
 
   sprintf (buffer, "count: %d", ++count);
-  gtk_label_set (GTK_LABEL (label), buffer);
+  gtk_label_set_text (GTK_LABEL (label), buffer);
 
   return TRUE;
 }
@@ -8347,6 +8437,7 @@ create_main_window (void)
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },
       { "item factory", create_item_factory },
+      { "labels", create_labels },
       { "layout", create_layout },
       { "list", create_list },
       { "menus", create_menus },

@@ -173,7 +173,7 @@ gtk_tips_query_init (GtkTipsQuery *tips_query)
   tips_query->last_crossed = NULL;
   tips_query->query_cursor = NULL;
 
-  gtk_label_set (GTK_LABEL (tips_query), tips_query->label_inactive);
+  gtk_label_set_text (GTK_LABEL (tips_query), tips_query->label_inactive);
 }
 
 static void
@@ -367,7 +367,7 @@ gtk_tips_query_real_stop_query (GtkTipsQuery *tips_query)
       tips_query->last_crossed = NULL;
     }
   
-  gtk_label_set (GTK_LABEL (tips_query), tips_query->label_inactive);
+  gtk_label_set_text (GTK_LABEL (tips_query), tips_query->label_inactive);
 }
 
 static void
@@ -383,7 +383,7 @@ gtk_tips_query_widget_entered (GtkTipsQuery   *tips_query,
     tip_text = tips_query->label_no_tip;
 
   if (!g_str_equal (GTK_LABEL (tips_query)->label, (gchar*) tip_text))
-    gtk_label_set (GTK_LABEL (tips_query), tip_text);
+    gtk_label_set_text (GTK_LABEL (tips_query), tip_text);
 }
 
 static void

@@ -504,6 +504,80 @@ gdk_text_extents (GdkFont     *font,
 }
 
 void
+gdk_text_extents_wc (GdkFont        *font,
+		     const GdkWChar *text,
+		     gint            text_length,
+		     gint           *lbearing,
+		     gint           *rbearing,
+		     gint           *width,
+		     gint           *ascent,
+		     gint           *descent)
+{
+  GdkFontPrivate *private;
+  XCharStruct overall;
+  XFontStruct *xfont;
+  XFontSet    fontset;
+  XRectangle  ink, logical;
+  int direction;
+  int font_ascent;
+  int font_descent;
+  gint i;
+
+  g_return_if_fail (font != NULL);
+  g_return_if_fail (text != NULL);
+
+  private = (GdkFontPrivate*) font;
+
+  switch (font->type)
+    {
+    case GDK_FONT_FONT:
+      {
+	gchar *text_8bit;
+	gint i;
+
+	xfont = (XFontStruct *) private->xfont;
+	g_return_if_fail ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0));
+
+	text_8bit = g_new (gchar, text_length);
+	for (i=0; i<text_length; i++) 
+	  text_8bit[i] = text[i];
+
+	XTextExtents (xfont, text_8bit, text_length,
+		      &direction, &font_ascent, &font_descent,
+		      &overall);
+	g_free (text_8bit);
+	
+	if (lbearing)
+	  *lbearing = overall.lbearing;
+	if (rbearing)
+	  *rbearing = overall.rbearing;
+	if (width)
+	  *width = overall.width;
+	if (ascent)
+	  *ascent = overall.ascent;
+	if (descent)
+	  *descent = overall.descent;
+	break;
+      }
+    case GDK_FONT_FONTSET:
+      fontset = (XFontSet) private->xfont;
+      XwcTextExtents (fontset, text, text_length, &ink, &logical);
+      if (lbearing)
+	*lbearing = ink.x;
+      if (rbearing)
+	*rbearing = ink.x + ink.width;
+      if (width)
+	*width = logical.width;
+      if (ascent)
+	*ascent = -ink.y;
+      if (descent)
+	*descent = ink.y + ink.height;
+      break;
+    }
+
+}
+
+void
 gdk_string_extents (GdkFont     *font,
 		    const gchar *string,
 		    gint        *lbearing,

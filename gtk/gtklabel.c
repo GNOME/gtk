@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+ /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -8,17 +8,17 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include <string.h>
 #include "gtklabel.h"
 #include "gdk/gdkkeysyms.h"
+#include "gdk/gdki18n.h"
 
 enum {
   ARG_0,
@@ -27,16 +27,34 @@ enum {
   ARG_JUSTIFY
 };
 
-typedef struct _GtkLabelRow GtkLabelRow;
+typedef struct _GtkLabelULine GtkLabelULine;
+struct _GtkLabelWord
+{
+  GdkWChar *beginning;
+  gint length;
 
-struct _GtkLabelRow {
-  gint index;
+  /* FIXME:
+   * We need (space,width) only before we've set (x,y), so to save
+   * memory, these pairs should really be wrapped in a union.
+   * I haven't yet figured out how to do this without making the code
+   * look ugly. 
+   */
+  gint space;
   gint width;
-  gint height;
-  gint len;
+  gint x;
+  gint y;
+  GtkLabelWord *next;
+  gint uline_y;
+  GtkLabelULine *uline;
 };
 
-GMemChunk *row_mem_chunk = NULL;
+struct _GtkLabelULine
+{
+  gint x1;
+  gint x2;
+  gint y;
+  GtkLabelULine *next;
+};
 
 static void gtk_label_class_init   (GtkLabelClass  *klass);
 static void gtk_label_init	   (GtkLabel	   *label);
@@ -51,11 +69,22 @@ static void gtk_label_size_request (GtkWidget	   *widget,
 				    GtkRequisition *requisition);
 static gint gtk_label_expose	   (GtkWidget	   *widget,
 				    GdkEventExpose *event);
-static void gtk_label_free_rows    (GtkLabel       *label);
+
+static GtkLabelWord * gtk_label_word_alloc (void);
+static GtkLabelULine * gtk_label_uline_alloc (void);
+static void gtk_label_free_words   (GtkLabel       *label);
+static void gtk_label_free_ulines   (GtkLabelWord *word);
+static gint gtk_label_split_text   (GtkLabel * label);
+static void gtk_label_finalize_lines    (GtkLabel * label, gint line_width);
+static void gtk_label_finalize_lines_wrap(GtkLabel * label, gint line_width);
 
 
 static GtkMiscClass *parent_class = NULL;
 
+static GMemChunk *word_chunk = 0;
+static GtkLabelWord *free_words = 0;
+static GMemChunk *uline_chunk = 0;
+static GtkLabelULine *free_ulines = 0;
 
 GtkType
 gtk_label_get_type (void)
@@ -118,7 +147,7 @@ gtk_label_set_arg (GtkObject	  *object,
   switch (arg_id)
     {
     case ARG_LABEL:
-      gtk_label_set (label, GTK_VALUE_STRING (*arg) ? GTK_VALUE_STRING (*arg) : "");
+      gtk_label_set_text (label, GTK_VALUE_STRING (*arg) ? GTK_VALUE_STRING (*arg) : "");
       break;
     case ARG_PATTERN:
       gtk_label_set_pattern (label, GTK_VALUE_STRING (*arg));
@@ -163,64 +192,51 @@ gtk_label_init (GtkLabel *label)
   GTK_WIDGET_SET_FLAGS (label, GTK_NO_WINDOW);
   
   label->label = NULL;
-  label->row = NULL;
+  label->words = NULL;
   label->max_width = 0;
   label->jtype = GTK_JUSTIFY_CENTER;
   label->pattern = NULL;
-  
-  gtk_label_set (label, "");
+  label->wrap = FALSE;
+
+  gtk_label_set_text (label, "");
 }
 
 GtkWidget*
-gtk_label_new (const gchar *str)
+gtk_label_new (const char *str)
 {
   GtkLabel *label;
-  
+
   g_return_val_if_fail (str != NULL, NULL);
-  
+
   label = gtk_type_new (gtk_label_get_type ());
-  
-  gtk_label_set (label, str);
-  
+
+  gtk_label_set_text (label, str);
+
   return GTK_WIDGET (label);
 }
 
 void
-gtk_label_set (GtkLabel	   *label,
-	       const gchar *str)
+gtk_label_set_text (GtkLabel *label,
+		    const char *str)
 {
-  char* p;
+  guint len;
+  guint wc_len;
   
   g_return_if_fail (label != NULL);
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
 
-  if (!row_mem_chunk)
-    row_mem_chunk = g_mem_chunk_create (GtkLabelRow, 64, G_ALLOC_AND_FREE);
-  
   if (label->label)
     g_free (label->label);
   label->label = g_strdup (str);
-  
-  if (label->row)
-    gtk_label_free_rows (label);
 
-  p = label->label;
-  do {
-    GtkLabelRow *row = g_chunk_new (GtkLabelRow, row_mem_chunk);
-    label->row = g_slist_append (label->row, row);
+  /* Convert text to wide characters */
+  len = strlen (str);
+  label->label_wc = g_new (GdkWChar, len + 1);
+  wc_len = gdk_mbstowcs (label->label_wc, str, len + 1);
+  label->label_wc[wc_len] = '\0';
 
-    row->index = p - label->label;
-    
-    p = strchr(p, '\n');
-    if (p)
-      {
-	p++;
-	row->len = (p - label->label) - row->index;
-      }
-    else
-      row->len = strlen (label->label) - row->index;
-  } while (p);
+  gtk_label_free_words (label);
 
   if (GTK_WIDGET_VISIBLE (label))
     {
@@ -252,37 +268,58 @@ gtk_label_set_pattern (GtkLabel	   *label,
 }
 
 void
-gtk_label_set_justify (GtkLabel	       *label,
-		       GtkJustification jtype)
+gtk_label_set_justify (GtkLabel *label, GtkJustification jtype)
 {
   g_return_if_fail (label != NULL);
   g_return_if_fail (GTK_IS_LABEL (label));
-  
+
   if ((GtkJustification) label->jtype != jtype)
     {
+      if ((label->jtype == GTK_JUSTIFY_FILL) || 
+	  (jtype == GTK_JUSTIFY_FILL))
+	/* FIXME: think about this a little */
+	  gtk_label_free_words (label);
+	  
       label->jtype = jtype;
       
       if (GTK_WIDGET_VISIBLE (label))
-	{
-	  if (GTK_WIDGET_MAPPED (label))
+        {
+          if (GTK_WIDGET_MAPPED (label))
 	    gtk_widget_queue_clear (GTK_WIDGET (label));
-
-	  gtk_widget_queue_resize (GTK_WIDGET (label));
-	}
+          
+          gtk_widget_queue_resize (GTK_WIDGET (label));
+        }
     }
 }
 
 void
-gtk_label_get (GtkLabel	 *label,
-	       gchar	**str)
+gtk_label_set_line_wrap (GtkLabel *label, gboolean wrap)
+{
+  g_return_if_fail (label != NULL);
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  if (label->wrap != wrap) {
+    if (GTK_WIDGET_VISIBLE (label))
+      {
+	if (GTK_WIDGET_MAPPED (label))
+	  gtk_widget_queue_clear (GTK_WIDGET (label));
+	
+	gtk_widget_queue_resize (GTK_WIDGET (label));
+      }
+    label->wrap = wrap;
+  }
+}
+
+void
+gtk_label_get (GtkLabel  *label,
+	       char     **str)
 {
   g_return_if_fail (label != NULL);
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
-  
+
   *str = label->label;
 }
-
 
 static void
 gtk_label_finalize (GtkObject *object)
@@ -295,170 +332,561 @@ gtk_label_finalize (GtkObject *object)
   label = GTK_LABEL (object);
   
   g_free (label->label);
-  if (label->pattern) g_free (label->pattern);
-  gtk_label_free_rows (label);
-  
+  if (label->pattern) 
+    g_free (label->pattern);
+  gtk_label_free_words (label);
   (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
-static gint
-gtk_label_process_row (GtkLabel     *label,
-		       GtkLabelRow  *row,
-		       gint          x, gint y,
-		       gboolean      draw,
-		       GdkRectangle *area)
+static GtkLabelWord *
+gtk_label_word_alloc ()
 {
-  GtkWidget *widget = GTK_WIDGET (label);
-  
-  char lastc;
-  gint i, j;
-  gint offset;
-  gint height;
-  gint pattern_length;
+  GtkLabelWord * word;
 
-  if (label->pattern) 
-    pattern_length = strlen (label->pattern);
-  else
-    pattern_length = 0;
-
-  offset = 0;
-  height = widget->style->font->ascent + widget->style->font->descent;
-  
-  if (draw)
+  if (!word_chunk)
     {
-      if (label->jtype == GTK_JUSTIFY_CENTER)
-	offset = (label->max_width - row->width) / 2;
-      else if (label->jtype == GTK_JUSTIFY_RIGHT)
-	offset = (label->max_width - row->width);
+      word_chunk = g_mem_chunk_new ("GtkLabelWord chunk",
+				    sizeof (GtkLabelWord),
+				    32 * sizeof (GtkLabelWord),
+				    G_ALLOC_ONLY);
     }
-      
-  if (label->pattern && (row->index < pattern_length))
-    lastc = label->pattern[0];
-  else
-    lastc = ' ';
   
-  j = 0;
-  for (i=1; i<=row->len; i++)
+  if (free_words)
     {
-      char c;
-
-      if (label->pattern && (row->index + i < pattern_length))
-	c = label->pattern[row->index+i];
-      else
-	c = ' ';
-
-      if ((i == row->len) || (lastc != c))
-	{
-	  gint width = 0;
-
-	  if (lastc == '_')
-	    {
-	      gint descent;
-	      gint rbearing;
-	      gint lbearing;
-
-	      gdk_text_extents (widget->style->font,
-				&label->label[row->index+j], i - j,
-				&lbearing, &rbearing, &width, NULL, &descent);
-
-	      if (draw)
-		{
-		  gtk_paint_hline (widget->style, widget->window, 
-				   widget->state, area,
-				   widget, "label", 
-				   offset + x + lbearing - 1, 
-				   offset + x + rbearing, 
-				   y + descent + 2);
-		}
-
-	      height = MAX (height, 
-			    widget->style->font->ascent + descent + 2);
-	    }
-	  else if (i != row->len)
-	    {
-	      width = gdk_text_width (widget->style->font, 
-				      &label->label[row->index+j], 
-				      i - j);
-	    }
-
-	  if (draw)
-	    {
-	      char save = label->label[row->index + i];
-	      label->label[row->index + i] = '\0';
-	      gtk_paint_string(widget->style, widget->window, widget->state,
-			       area, widget, "label", offset + x, y, 
-			       &label->label[row->index+j]);
-	      label->label[row->index + i] = save;
-	    }
-
-		  
-	  offset += width;
-
-	  if (i != row->len)
-	    {
-	      lastc = c;
-	      j = i;
-	    }
-	}
+      word = free_words;
+      free_words = word->next;
     }
-
-  return height;
+  else
+    {
+      word = g_mem_chunk_alloc (word_chunk);
+    }
+    
+  word->next = 0;
+  word->uline = 0;
+  return word;
 }
 
+static void
+gtk_label_free_words (GtkLabel * label)
+{
+  GtkLabelWord * last;
+
+  if (label->words)
+    {
+      for (last = label->words; last->next != 0; last = last->next)
+	gtk_label_free_ulines (label->words);
+      last->next = free_words;
+      free_words = label->words;
+      label->words = 0;
+    }
+}
+static GtkLabelULine *
+gtk_label_uline_alloc ()
+{
+  GtkLabelULine * uline;
+
+  if (!uline_chunk)
+    {
+      uline_chunk = g_mem_chunk_new ("GtkLabelWord chunk",
+				     sizeof (GtkLabelULine),
+				     32 * sizeof (GtkLabelULine),
+				     G_ALLOC_ONLY);
+    }
+  
+  if (free_ulines)
+    {
+      uline = free_ulines;
+      free_ulines = uline->next;
+    }
+  else
+    {
+      uline = g_mem_chunk_alloc (uline_chunk);
+    }
+    
+  uline->next = 0;
+  return uline;
+}
+
+static void
+gtk_label_free_ulines (GtkLabelWord *word)
+{
+  GtkLabelULine *last;
+  if (word->uline)
+    {
+      for (last = word->uline; last->next != 0; last = last->next)
+	  ;
+      last->next = free_ulines;
+      free_ulines = word->uline;
+      word->uline = 0;
+    }
+}
+  
+static gint
+gtk_label_split_text (GtkLabel * label)
+{
+  GtkLabelWord *word, **tailp;
+  gint space_width, line_width, max_line_width;
+  GdkWChar *str, *p;
+  
+  g_return_val_if_fail (GTK_WIDGET (label)->style->font != 0, 0);
+
+  gtk_label_free_words (label);
+  if (label->label == 0)
+      return 0;
+  
+  /*
+   * Split text at new-lines.
+   */
+  space_width = gdk_string_width (GTK_WIDGET (label)->style->font, " ");
+
+  line_width = 0;
+  max_line_width = 0;
+  tailp = &label->words;
+  str = label->label_wc;
+  while (*str)
+    {
+      word = gtk_label_word_alloc ();
+
+      if ((str == label->label_wc) || (str[-1] == '\n'))
+	{
+	  /* Paragraph break */
+	  word->space = 0;
+
+	  max_line_width = MAX (line_width, max_line_width);
+	  line_width = 0;
+	}
+      else if (str[0] == ' ')
+	{
+	  while (str[0] == ' ')
+	    {
+	      str++;
+	      word->space += space_width;
+	    }
+	}
+      else
+	{
+	  /* Regular inter-word space */
+	  word->space = space_width;
+	}
+
+      word->beginning = str;
+      
+      word->length = 0;
+      p = word->beginning;
+      while (*p && (*p != '\n'))
+	{
+	  word->length++;
+	  p++;
+	}
+
+      word->width = gdk_text_width_wc (GTK_WIDGET (label)->style->font, str, word->length);
+
+      str += word->length;
+      if (*str)
+	  str++;
+      
+      line_width += word->space + word->width;
+
+      *tailp = word;
+      tailp = &word->next;
+    }
+
+  return MAX (line_width, max_line_width);
+}
+
+static gint
+gtk_label_split_text_wrapped (GtkLabel * label)
+{
+  /* this needs to handle white space better. */
+  GtkLabelWord *word, **tailp;
+  gint space_width, line_width, max_line_width;
+  GdkWChar *str, *p;
+  
+  g_return_val_if_fail (GTK_WIDGET (label)->style->font != 0, 0);
+
+  gtk_label_free_words (label);
+  if (label->label == 0)
+      return 0;
+  
+  /*
+   * Split text at new-lines.  (Or at spaces in the case of paragraphs).
+   */
+  space_width = gdk_string_width (GTK_WIDGET (label)->style->font, " ");
+
+  line_width = 0;
+  max_line_width = 0;
+  tailp = &label->words;
+  str = label->label_wc;
+  while (*str)
+    {
+      word = gtk_label_word_alloc ();
+
+      if (str == label->label_wc || str[-1] == '\n')
+	{
+	  /* Paragraph break */
+	  word->space = 0;
+
+	  max_line_width = MAX (line_width, max_line_width);
+	  line_width = 0;
+	}
+      else if (str[0] == ' ')
+	{
+	  gint nspaces = 0;
+
+	  while (str[0] == ' ')
+	    {
+	      nspaces++;
+	      str++;
+	    }
+
+	  if (label->jtype == GTK_JUSTIFY_FILL)
+	    word->space = (space_width * 3 + 1) / 2;
+	  else
+	    word->space += space_width * nspaces;
+	}
+      else
+	{
+	  /* Regular inter-word space */
+	  word->space = space_width;
+	}
+
+      word->beginning = str;
+      word->length = 0;
+      p = word->beginning;
+      while (*p && (!gdk_iswspace (*p)))
+	{
+	  word->length++;
+	  p++;
+	}
+      word->width = gdk_text_width_wc (GTK_WIDGET (label)->style->font, str, word->length);
+
+      str += word->length;
+      if (*str)
+	  str++;
+      
+      line_width += word->space + word->width;
+
+      *tailp = word;
+      tailp = &word->next;
+    }
+
+  return MAX (line_width, max_line_width);
+}
+
+/*
+ * gtk_label_pick_width
+ *
+ * Split paragraphs, trying to make each line at least min_width,
+ * and trying even harder to make each line no longer than max_width.
+ *
+ * Returns the length of the longest resulting line.
+ *
+ * (The reason we go to all this effort to pick a paragraph width is to
+ * try to avoid the lame look of a short paragraph with a
+ * short final line.)
+ */
+static gint
+gtk_label_pick_width (GtkLabel * label, gint min_width, gint max_width)
+{
+  GtkLabelWord *word;
+  gint width, line_width;
+  
+  g_return_val_if_fail (label->wrap, min_width);
+
+  line_width = 0;
+  width = 0;
+  for (word = label->words; word; word = word->next)
+    {
+      if (word->space == 0
+	  || (line_width
+	      && (line_width >= min_width
+		  || line_width + word->width + word->space > max_width)))
+	{
+	  /* New line */
+	  width = MAX (width, line_width);
+	  line_width = 0;
+	}
+      line_width += word->space + word->width;
+    }
+
+  return MAX (width, line_width);
+}
+
+/*
+ * Here, we finalize the lines.
+ * This is only for non-wrap labels.  Wrapped labels
+ * use gtk_label_finalize_wrap instead.
+ */
+static void
+gtk_label_finalize_lines (GtkLabel * label, gint line_width)
+{
+  GtkLabelWord * line;
+  gint y, baseline_skip, y_max;
+  gint i, j;
+  gchar *ptrn;
+  
+  g_return_if_fail (!label->wrap);
+  ptrn = label->pattern;
+
+  y = 0;
+  baseline_skip = GTK_WIDGET (label)->style->font->ascent + GTK_WIDGET (label)->style->font->descent + 2;
+  
+  for (line = label->words; line; line = line->next)
+    {
+      if (label->jtype == GTK_JUSTIFY_CENTER)
+	  line->x = (line_width - line->width) / 2;
+      else if (label->jtype == GTK_JUSTIFY_RIGHT)
+	  line->x = line_width - line->width;
+      else
+	  line->x = 0;
+
+      line->y = y + GTK_WIDGET (label)->style->font->ascent + 1;
+      y_max = 0;
+
+      /* now we deal with the underline stuff; */
+      if (ptrn && (ptrn[0] != '\0'))
+	{
+	  for (i=0;i<line->length;i++)
+	    {
+	      if (ptrn[i] == '\0')
+		break;
+	      else if (ptrn[i] == '_')
+		{
+		  gint descent;
+		  gint rbearing;
+		  gint lbearing;
+		  gint width;
+		  gint offset;
+		  GtkLabelULine *uline;
+	      
+		  for (j=i+1;j<line->length;j++)
+		    {
+		      if (ptrn[j] == '\0')
+			break;
+		      else if (ptrn[j] == ' ')
+			break;
+		    }
+		  /*
+		   * good.  Now we have an underlined segment.
+		   * let's measure it and record it.
+		   */
+		  offset = gdk_text_width_wc (GTK_WIDGET (label)->style->font,
+					      line->beginning,
+					      i);
+		  gdk_text_extents_wc (GTK_WIDGET (label)->style->font,
+				       line->beginning+i,
+				       j-i, &lbearing,
+				       &rbearing, &width, NULL,
+				       &descent);
+		  y_max = MAX (descent + 2, y_max);
+		  uline = gtk_label_uline_alloc ();
+		  uline->x1 = offset + line->x + lbearing - 1;
+		  uline->x2 = offset + line->x + rbearing;
+		  uline->y = line->y + descent + 2;
+		  uline->next = line->uline;
+		  line->uline = uline;
+		  i = j - 1;
+		}
+	    }
+	  if (strlen (ptrn) > line->length)
+	    /* the + 1 is for line breaks. */
+	    ptrn += line->length + 1;
+	  else
+	    ptrn = NULL;
+	}
+      y += (baseline_skip + y_max);
+    }
+  
+  label->max_width = line_width;
+  GTK_WIDGET (label)->requisition.width = line_width + 2 * label->misc.xpad;
+  GTK_WIDGET (label)->requisition.height = y + 2 * label->misc.ypad;
+}
+
+/* this finalizes word-wrapped words */
+static void
+gtk_label_finalize_lines_wrap (GtkLabel * label, gint line_width)
+{
+  GtkLabelWord *word, *line, *next_line;
+  GtkWidget *widget;
+  gchar *ptrn;
+  gint x, y, space, extra_width, add_space, baseline_skip;
+  
+  g_return_if_fail (label->wrap);
+
+  ptrn = label->pattern;
+  y = 0;
+  baseline_skip = GTK_WIDGET (label)->style->font->ascent + GTK_WIDGET (label)->style->font->descent + 1;
+  
+  for (line = label->words; line != 0; line = next_line)
+    {
+      space = 0;
+      extra_width = line_width - line->width;
+      
+      for (next_line = line->next; next_line; next_line = next_line->next)
+	{
+	  if (next_line->space == 0)
+	      break;		/* New paragraph */
+	  if (next_line->space + next_line->width > extra_width)
+	      break;
+	  extra_width -= next_line->space + next_line->width;
+	  space += next_line->space;
+	}
+
+      line->x = 0;
+      line->y = y + GTK_WIDGET (label)->style->font->ascent + 1;
+      x = line->width;
+      add_space = 0;
+
+      for (word = line->next; word != next_line; word = word->next)
+	{
+	  if (next_line && next_line->space)
+	    {
+	      /* Not last line of paragraph --- fill line if needed */
+	      if (label->jtype == GTK_JUSTIFY_FILL) {
+		add_space = (extra_width * word->space + space / 2) / space;
+		extra_width -= add_space;
+		space -= word->space;
+	      }
+	    }
+	  
+	  word->x = x + word->space + add_space;
+	  word->y = line->y;
+	  x = word->x + word->width;
+	}
+
+      y += (baseline_skip);
+    }
+
+  label->max_width = line_width;
+  widget = GTK_WIDGET (label);
+  widget->requisition.width = line_width + 2 * label->misc.xpad;
+  widget->requisition.height = y + 2 * label->misc.ypad + 1;
+}
+      
 static void
 gtk_label_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
   GtkLabel *label;
-  GSList *tmp_list;
-  gint width;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LABEL (widget));
   g_return_if_fail (requisition != NULL);
-  
+
   label = GTK_LABEL (widget);
-  
-  requisition->height = label->misc.ypad * 2;
 
-  tmp_list = label->row;
-  width = 0;
-  while (tmp_list)
+  /*
+   * There are a number of conditions which will necessitate re-filling
+   * our text:
+   *
+   *     1. text changed.
+   *     2. justification changed either from to to GTK_JUSTIFY_FILL.
+   *     3. font changed.
+   *
+   * These have been detected elsewhere, and label->words will be zero,
+   * if one of the above has occured.
+   *
+   * Additionally, though, if GTK_JUSTIFY_FILL, we need to re-fill if:
+   *
+   *     4. gtk_widget_set_usize has changed the requested width.
+   *     5. gtk_misc_set_padding has changed xpad.
+   *     6.  maybe others?...
+   *
+   * Too much of a pain to detect all these case, so always re-fill.  I
+   * don't think it's really that slow.
+   */
+
+  if (label->wrap)
     {
-      GtkLabelRow *row = tmp_list->data;
-
-      row->width = gdk_text_width (GTK_WIDGET (label)->style->font,
-				   &label->label [row->index],
-				   row->len);
-      width = MAX (width, row->width);
-
-      requisition->height += gtk_label_process_row (label, row, 0, 0, FALSE, NULL) + 2;
-
-      tmp_list = tmp_list->next;
+      GtkWidgetAuxInfo *aux_info;
+      gint longest_paragraph;
+      
+      longest_paragraph = gtk_label_split_text_wrapped (label);
+      
+      aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
+      if (aux_info && aux_info->width > 0)
+	{
+	  label->max_width = MAX(aux_info->width - 2 * label->misc.xpad, 1);
+	  gtk_label_split_text_wrapped (label);
+	}
+      else
+	{
+	  label->max_width = gdk_string_width (GTK_WIDGET (label)->style->font,
+					"This is a good enough length for any line to have.");
+	  label->max_width = MIN (label->max_width, (gdk_screen_width () + 1) / 2);
+	  label->max_width = MIN (label->max_width, longest_paragraph);
+	  if (longest_paragraph > 0)
+	    {
+	      gint nlines, perfect_width;
+	      
+	      nlines = (longest_paragraph + label->max_width - 1) / label->max_width;
+	      perfect_width = (longest_paragraph + nlines - 1) / nlines;
+	      label->max_width = gtk_label_pick_width (label,
+						 perfect_width,
+						 label->max_width);
+	    }
+	}
+      gtk_label_finalize_lines_wrap (label, label->max_width);
+    }
+  else if (label->words == 0)
+    {
+      label->max_width = gtk_label_split_text (label);
+      gtk_label_finalize_lines (label, label->max_width);
+      
     }
 
-  label->max_width = width;
-  requisition->width = width + label->misc.xpad * 2;
+  if (requisition != &widget->requisition)
+    *requisition = widget->requisition;
 }
+static void
+gtk_label_paint_word (GtkLabel *label,
+		      gint x,
+		      gint y,
+		      GtkLabelWord *word,
+		      GdkRectangle *area)
+{
+  GtkWidget *widget = GTK_WIDGET (label);
+  GtkLabelULine *uline;
+  gchar *tmp_str;
+
+  tmp_str = gdk_wcstombs (word->beginning);
+  gtk_paint_string (widget->style, widget->window, widget->state,
+		    area, widget, "label", 
+		    x + word->x,
+		    y + word->y,
+		    tmp_str);
+  g_free (tmp_str);
   
+  for (uline = word->uline;uline;uline = uline->next)
+    gtk_paint_hline (widget->style, widget->window, 
+		     widget->state, area,
+		     widget, "label", 
+		     x + uline->x1, x +uline->x2, y + uline->y);
+
+
+}
 static gint
-gtk_label_expose (GtkWidget	 *widget,
+gtk_label_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
   GtkLabel *label;
   GtkMisc *misc;
-  GSList *tmp_list;
+  GtkLabelWord *word;
   gint x, y;
-  
+
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LABEL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
+
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
     {
       label = GTK_LABEL (widget);
       misc = GTK_MISC (widget);
-      
+
+      g_return_val_if_fail (label->words != 0 || label->label == 0, FALSE);
+
+
       /*
        * GC Clipping
        */
@@ -466,69 +894,46 @@ gtk_label_expose (GtkWidget	 *widget,
       gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state], &event->area);
 
       x = widget->allocation.x + misc->xpad +
-	(widget->allocation.width - (label->max_width + label->misc.xpad * 2))
+	(widget->allocation.width - label->max_width) 
 	* misc->xalign + 0.5;
-      
-      y = (widget->allocation.y * (1.0 - misc->yalign) +
-	   (widget->allocation.y + widget->allocation.height -
-	    (widget->requisition.height - misc->ypad * 2)) *
-	   misc->yalign + widget->style->font->ascent) + 1.5;
 
-      /* 
-       * COMMENT: we can avoid gdk_text_width() calls here storing in label->row
-       * the widths of the rows calculated in gtk_label_set.
-       * Once we have a wrapping interface we can support GTK_JUSTIFY_FILL.
-       */
-
-      tmp_list = label->row;
-      while (tmp_list)
+      y = (widget->allocation.y
+	   + (widget->allocation.height
+	      - widget->requisition.height) * misc->yalign
+	   + misc->ypad + 0.5);
+      for (word = label->words; word; word = word->next)
 	{
-	  y += gtk_label_process_row (label, tmp_list->data, x, y, TRUE, &event->area) + 2;
-	  tmp_list = tmp_list->next;
+	  gchar save = word->beginning[word->length];
+	  word->beginning[word->length] = '\0';
+	  gtk_label_paint_word (label, x, y, word, &event->area);
+	  word->beginning[word->length] = save;
 	}
-      
+
       gdk_gc_set_clip_mask (widget->style->white_gc, NULL);
       gdk_gc_set_clip_mask (widget->style->fg_gc[widget->state], NULL);
     }
   return TRUE;
 }
-
-static void
-gtk_label_free_rows (GtkLabel *label)
-{
-  GSList *tmp_list;
-
-  tmp_list = label->row;
-  while (tmp_list)
-    {
-      g_mem_chunk_free (row_mem_chunk, tmp_list->data);
-      tmp_list = tmp_list->next;
-    }
-  g_slist_free (label->row);
-  label->row = NULL;
-}
-
 guint      
 gtk_label_parse_uline (GtkLabel         *label,
 		       const gchar      *string)
 {
   guint accel_key = GDK_VoidSymbol;
-  const gchar *p;
-  gchar *q, *r;
-  gchar *name, *pattern;
+  GdkWChar *p, *q;
+  gchar *r;
+  gchar *pattern;
 
   gint length;
   gboolean underscore;
 
   length = strlen (string);
   
-  name = g_new (gchar, length+1);
+  gtk_label_set_text (label, string);
   pattern = g_new (gchar, length+1);
 
   underscore = FALSE;
 
-  p = string;
-  q = name;
+  p = q = label->label_wc;
   r = pattern;
 
   while (*p)
@@ -562,10 +967,8 @@ gtk_label_parse_uline (GtkLabel         *label,
   *q = 0;
   *r = 0;
  
-  gtk_label_set (label, name);
   gtk_label_set_pattern (label, pattern);
   
-  g_free (name);
   g_free (pattern);
 
   return accel_key;

@@ -244,7 +244,7 @@ gtk_button_set_arg (GtkObject *object,
 				"parent", button,
 				NULL);
       if (GTK_IS_LABEL (child))
-	gtk_label_set (GTK_LABEL (child),
+	gtk_label_set_text (GTK_LABEL (child),
 		       GTK_VALUE_STRING (*arg) ? GTK_VALUE_STRING (*arg) : "");
       break;
     case ARG_RELIEF:

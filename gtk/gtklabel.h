@@ -8,13 +8,12 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #ifndef __GTK_LABEL_H__
 #define __GTK_LABEL_H__
@@ -28,6 +27,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
+
 #define GTK_TYPE_LABEL			(gtk_label_get_type ())
 #define GTK_LABEL(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_LABEL, GtkLabel))
 #define GTK_LABEL_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL, GtkLabelClass))
@@ -38,16 +38,21 @@ extern "C" {
 typedef struct _GtkLabel       GtkLabel;
 typedef struct _GtkLabelClass  GtkLabelClass;
 
+typedef struct _GtkLabelWord   GtkLabelWord;
+
 struct _GtkLabel
 {
   GtkMisc misc;
-  
-  gchar  *label;
+
+  gchar    *label;
+  GdkWChar *label_wc;
   gchar  *pattern;
 
-  GSList *row;
+  GtkLabelWord *words;
+
   guint	  max_width : 16;
   guint   jtype : 2;
+  gboolean wrap;
 };
 
 struct _GtkLabelClass
@@ -56,17 +61,18 @@ struct _GtkLabelClass
 };
 
 
-GtkType	   gtk_label_get_type	 (void);
-GtkWidget* gtk_label_new	 (const gchar	    *string);
-void	   gtk_label_set	 (GtkLabel	    *label,
-				  const gchar	    *string);
-void	   gtk_label_set_pattern (GtkLabel	    *label,
-				  const gchar	    *pattern);
-void	   gtk_label_set_justify (GtkLabel	    *label,
-				  GtkJustification   jtype);
-void	   gtk_label_get	 (GtkLabel	    *label,
-				  gchar		   **string);
-
+guint      gtk_label_get_type      (void);
+GtkWidget* gtk_label_new           (const char        *str);
+void       gtk_label_set_text      (GtkLabel          *label,
+                                    const char        *str);
+void       gtk_label_set_justify   (GtkLabel          *label,
+                                    GtkJustification   jtype);
+void	   gtk_label_set_pattern   (GtkLabel	      *label,
+				    const gchar	      *pattern);
+void	   gtk_label_set_line_wrap (GtkLabel	      *label,
+				    gboolean           wrap);
+void       gtk_label_get           (GtkLabel          *label,
+                                    char             **str);
 
 /* Convenience function to set the name and pattern by parsing
  * a string with embedded underscores, and return the appropriate
