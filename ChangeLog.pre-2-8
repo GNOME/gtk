@@ -1,3 +1,10 @@
+Fri Aug 15 21:57:34 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_adjustment_changed): stop editing
+	on vertical scrolling. (#108035, reported by Tim Janik).
+
 Fri Aug 15 20:06:42 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
