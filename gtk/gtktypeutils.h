@@ -107,9 +107,11 @@ typedef enum
 /* Determines whether `type_object' and `type_class' are a type of `otype'.
  */
 #define GTK_CHECK_TYPE(type_object, otype)       ( \
-  gtk_type_is_a (((GtkTypeObject*) (type_object))->klass->type, (otype)) \
+  ((GtkTypeObject*) (type_object)) != NULL && \
+  GTK_CHECK_CLASS_TYPE (((GtkTypeObject*) (type_object))->klass, (otype)) \
 )
 #define GTK_CHECK_CLASS_TYPE(type_class, otype)  ( \
+  ((GtkTypeClass*) (type_class)) != NULL && \
   gtk_type_is_a (((GtkTypeClass*) (type_class))->type, (otype)) \
 )
 

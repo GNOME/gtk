@@ -1295,6 +1295,7 @@ gtk_window_move_resize (GtkWindow *window)
 {
   GtkWidget    *widget;
   GtkWindowGeometryInfo *info;
+  GtkRequisition requisition;
   GtkContainer *container;
   gint x, y;
   gint width, height;
@@ -1324,33 +1325,37 @@ gtk_window_move_resize (GtkWindow *window)
   else
     height = widget->requisition.height;
 
-  gtk_widget_size_request (widget, &widget->requisition);
+  size_changed = FALSE;
+
+  gtk_widget_size_request (widget, &requisition);
+
+  size_changed |= requisition.width != widget->requisition.width;
+  size_changed |= requisition.height != widget->requisition.height;
+  widget->requisition = requisition;
 
   /* Figure out the new desired size */
 
-  size_changed = FALSE;
-
   if (info && info->width > 0)
     {
-      size_changed = size_changed || (width != info->last_width);
+      size_changed |= width != info->last_width;
       info->last_width = width;
       new_width = info->width;
     }
   else
     {
-      size_changed = size_changed || (width != widget->requisition.width);
+      size_changed |= width != widget->requisition.width;
       new_width = widget->requisition.width;
     }
 
   if (info && info->height > 0)
     {
-      size_changed = size_changed || (height != info->last_height);
+      size_changed |= height != info->last_height;
       info->last_height = height;
       new_height = info->height;
     }
   else
     {
-      size_changed = size_changed || (height != widget->requisition.height);
+      size_changed |= height != widget->requisition.height;
       new_height = widget->requisition.height;
     }
 
@@ -1493,6 +1498,9 @@ gtk_window_move_resize (GtkWindow *window)
       allocation.height = new_height;
       
       gtk_widget_size_allocate (widget, &allocation);
+      gdk_window_resize (widget->window,
+			 new_width,
+			 new_height);
     }
   else
     {

@@ -96,6 +96,15 @@ gtk_object_debug (void)
 }
 #endif	/* G_ENABLE_DEBUG */
 
+void
+gtk_object_post_arg_parsing_init (void)
+{
+#ifdef G_ENABLE_DEBUG
+  if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
+    g_atexit (gtk_object_debug);
+#endif	/* G_ENABLE_DEBUG */
+}
+
 /****************************************************
  * GtkObject type, class and instance initialization
  *
@@ -119,11 +128,6 @@ gtk_object_init_type (void)
 
   object_type = gtk_type_unique (0, &object_info);
   g_assert (object_type == GTK_TYPE_OBJECT);
-
-#ifdef G_ENABLE_DEBUG
-  if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
-    g_atexit (gtk_object_debug);
-#endif	/* G_ENABLE_DEBUG */
 }
 
 GtkType

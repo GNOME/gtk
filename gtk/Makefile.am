@@ -312,8 +312,11 @@ libgtk_la_LDFLAGS = \
 #	$(top_builddir)/gdk/libgdk.la
 
 gtkconfdir = $(sysconfdir)/gtk
-gtkconf_DATA = gtkrc.ja gtkrc.ko gtkrc.ru
+gtkconf_DATA = gtkrc gtkrc.ja gtkrc.ko gtkrc.ru
 
+gtkrc:
+	:
+	
 # We create a dummy theme for the default GTK+ theme
 
 install-data-local:

@@ -1,3 +1,29 @@
+Wed Feb 24 11:19:12 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_size_request): warn about
+	&widget->requisition, even for toplevels.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): request size into an
+	automatic variable and check if our size has changed.
+	when we decide to reallocate everything, we need to resize our
+	own GdkWindow as well.
+
+	* gtk/gtkmain.c:
+	* gtk/gtkobject.c: hack time, make --gtk-debug=objects work even
+	after gtk_type_init(), this is to "fix" gnome's arg parsing oddities.
+
+	* gtk/gtktypeutils.h: don't segfault in GTK_CHECK_CLASS_TYPE and
+	GTK_CHECK_TYPE upon NULL pointers.
+
+	* gtk/gtklayout.c: removed bogus prototypes of gtk_layout_gravity_works,
+	gtk_layout_set_static_gravity, gtk_layout_add_child_cb and
+	gtk_layout_remove_child_cb to shut up compiler.
+	
+	* gtk/Makefile.am: added an empty rule
+	gtkrc:
+		:
+	so make doesn't try to "update" gtkrc from gtkrc.c.
+
 Wed Feb 24 05:53:15 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/Makefile.am: removed gtkrc rule added by   

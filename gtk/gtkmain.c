@@ -178,6 +178,7 @@ gboolean
 gtk_init_check (int	 *argc,
 		char   ***argv)
 {
+  extern void gtk_object_post_arg_parsing_init (void);
   GSList *gtk_modules = NULL;
   GSList *slist;
   gchar *env_string = NULL;
@@ -385,6 +386,7 @@ gtk_init_check (int	 *argc,
   gtk_colormap = gdk_colormap_get_system ();
 
   gtk_type_init ();
+  gtk_object_post_arg_parsing_init ();
   gtk_signal_init ();
   gtk_rc_init ();
   

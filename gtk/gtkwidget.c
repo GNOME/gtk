@@ -2361,7 +2361,7 @@ gtk_widget_size_request (GtkWidget	*widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
 #ifdef G_ENABLE_DEBUG
-  if (!GTK_WIDGET_TOPLEVEL (widget) && (requisition == &widget->requisition))
+  if (requisition == &widget->requisition)
     g_warning ("gtk_widget_size_request() called on child widget with widget equal\n to widget->requisition. gtk_widget_set_usize() may not work properly.");
 #endif /* G_ENABLE_DEBUG */
 

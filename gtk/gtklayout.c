@@ -103,19 +103,6 @@ static GdkFilterReturn gtk_layout_main_filter (GdkXEvent      *gdk_xevent,
 					       GdkEvent       *event,
 					       gpointer        data);
 
-static gboolean gtk_layout_gravity_works      (void);
-static void     gtk_layout_set_static_gravity (GdkWindow *win,
-					       gboolean   is_parent,
-					       gboolean   on);
-
-static void     gtk_layout_add_child_cb    (GdkWindow *parent, 
-					    GdkWindow *child, 
-					    gpointer   data);
-static void     gtk_layout_remove_child_cb (GdkWindow *parent, 
-					    GdkWindow *child, 
-					    gpointer   data);
-
-
 static GtkWidgetClass *parent_class = NULL;
 static gboolean gravity_works;
 
