@@ -6,17 +6,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2002-10-19 05:05+0200\n"
-"PO-Revision-Date: 2002-10-24 15:30+0300\n"
-"Last-Translator: Ales Nyakhaychyk <i18n@infonet.by>\n"
-"Language-Team: Belarusian <be@li.org>\n"
+"PO-Revision-Date: 2002-10-29 10:41+0200\n"
+"Last-Translator: \n"
+"Language-Team:  <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.9.6\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Невыправімая амылка адчыненьня файлу '%s': %s"
+msgstr "Невыправімая памылка адчыненьня файлу '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
@@ -53,6 +54,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
+"Модуль загрузкі малюнкаў %s не экспартуе суадноснае спалучэньне; "
+"магчыма, гэты модуль ад іншае вэрсіі GTK?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
@@ -98,7 +101,7 @@ msgstr "Невыправімая памылка пры зачыненьні '%s'
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
+msgstr "Загрузка малюнку тыпу '%s' па частках не падтрымліваецца"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
@@ -106,6 +109,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
+"Унутраная памылка. Невыправімая памылка на пачатку загрузкі ў "
+"модулі загрузкі малюнку '%s', але няма зьветак аб прычыне памылкі."
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -401,7 +406,7 @@ msgstr "Немагыма атрымаць памяць для загрузкі P
 
 #: gdk-pixbuf/io-pnm.c:817
 msgid "Insufficient memory to load PNM context struct"
-msgstr ""
+msgstr "Нехапае памяці для загрузкі структуры зьместу PNM"
 
 #: gdk-pixbuf/io-pnm.c:867
 msgid "Unexpected end of PNM image data"
@@ -465,7 +470,7 @@ msgstr "Немагчыма разьмеркаваць запісы colormap"
 
 #: gdk-pixbuf/io-tga.c:667
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "Нечаканая глыбіня колеру для запісаў мапы колераў"
 
 #: gdk-pixbuf/io-tga.c:685
 msgid "Can't allocate TGA header memory"
@@ -486,11 +491,11 @@ msgstr "Непадтрымліваемы тып TGA файла"
 
 #: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
-msgstr ""
+msgstr "Немагчыма разьмеркаваць памяць для структуры TGA"
 
 #: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
-msgstr ""
+msgstr "Лішак даньняў у файле"
 
 #: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
@@ -502,27 +507,27 @@ msgstr "Вельмі вялікае значэньне ў поле infolen у з
 
 #: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr ""
+msgstr "Немагчыма разьмеркаваць памяць для часовага буфэру для мапы колераў TGA"
 
 #: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr ""
+msgstr "Немагчыма разьмеркаваць памяць для структуры мапы колераў TGA"
 
 #: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr ""
+msgstr "Немагчыма разьмеркаваць памяць для запісаў мапы колераў TGA"
 
 #: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr ""
+msgstr "Нечаканая глыбіня колеру для мапы колераў TGA"
 
 #: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
-msgstr ""
+msgstr "Падманліва-каляровы малюнак бяз мапы колераў"
 
 #: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr ""
+msgstr "Немагчыма пасунуцца на адлегласьць малюнку -- магчыма дайшлі да канца файлу"
 
 #: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
@@ -586,7 +591,7 @@ msgstr "Нехапае памяці для загрузкі малюнка"
 
 #: gdk-pixbuf/io-wbmp.c:366
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "Не атрымалась захаваць астатняе"
 
 #: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
@@ -661,19 +666,19 @@ msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
-msgstr ""
+msgstr "Пераменная для \"гарачай клявішы\""
 
 #: gtk/gtkaccellabel.c:137
 msgid "The closure to be monitored for accelerator changes"
-msgstr ""
+msgstr "Пераменная, якая будзе сачыць за зьменамі \"гарачай клявішы\"."
 
 #: gtk/gtkaccellabel.c:143
 msgid "Accelerator Widget"
-msgstr ""
+msgstr "Віджэт паскаральнік"
 
 #: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
-msgstr ""
+msgstr "Віджэжт, які сочыць за зьменамі паскаральніку"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
@@ -737,7 +742,7 @@ msgstr "Цень стрэлачкі"
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "Выгляд ценю, вакол стрэлкі"
 
 #: gtk/gtkaspectframe.c:107
 msgid "Horizontal Alignment"
@@ -765,11 +770,11 @@ msgstr ""
 
 #: gtk/gtkaspectframe.c:128
 msgid "Obey child"
-msgstr ""
+msgstr "Падпарадкаваны нашчадак"
 
 #: gtk/gtkaspectframe.c:129
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
+msgstr "Дапасаваць значэньне прапарцыянальнасьці суадносна з межамі нашчадку"
 
 #: gtk/gtkbbox.c:115
 msgid "Minimum child width"
@@ -789,19 +794,19 @@ msgstr "Найменьшая вышыня кнопачак у нутры кар�
 
 #: gtk/gtkbbox.c:133
 msgid "Child internal width padding"
-msgstr ""
+msgstr "Унутранае запаўненьне нашчадку па шырыні"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
-msgstr ""
+msgstr "Ступень павелічэньня памераў нашчадку з абодвух бакоў"
 
 #: gtk/gtkbbox.c:142
 msgid "Child internal height padding"
-msgstr ""
+msgstr "Унутранае запаўненьне нашчадку па вышыні"
 
 #: gtk/gtkbbox.c:143
 msgid "Amount to increase child's size on the top and bottom"
-msgstr ""
+msgstr "Ступень павелічэньня памераў нашчадку зь верху й зь нізу"
 
 #: gtk/gtkbbox.c:151
 msgid "Layout style"
@@ -812,6 +817,8 @@ msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
+"Як разьмяркоўваюцца кнопачкі ў каробке. Магчымыя значэньні: як ёсьць, "
+"запоўняючы ўсю прастору, па баках, спачатку, напрыканцы."
 
 #: gtk/gtkbbox.c:160
 msgid "Secondary"
@@ -822,6 +829,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons."
 msgstr ""
+"Калі ІСЬЦІНА (TRUE), нашчадак зьяўляецца ў другой супоцы нашчадкаў; "
+"выкарыстоўвываецца, напрыклад, для кнопачак дапамогі."
 
 #: gtk/gtkbox.c:125
 msgid "Spacing"
@@ -829,7 +838,7 @@ msgstr "Адлегласьць"
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
-msgstr ""
+msgstr "Адлегласьць паміж нашчадкамі"
 
 #: gtk/gtkbox.c:135 gtk/gtknotebook.c:434
 msgid "Homogeneous"
@@ -837,7 +846,7 @@ msgstr "Аднародны"
 
 #: gtk/gtkbox.c:136
 msgid "Whether the children should all be the same size."
-msgstr ""
+msgstr "Ці павінны нашчадкі мець аднолькавыя памеры."
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
 msgid "Label"
@@ -847,7 +856,7 @@ msgstr "Адмеціна"
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
-msgstr ""
+msgstr "Тэкст адмеціны на кнопачцы, калі кнопачка зьмяшчае віджэт адмеціну."
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
@@ -858,14 +867,18 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
+"Калі ўключана, сымбаль падкрэсьліваньня ў тэксьце азначае, што "
+"наступны сымбаль павінен выкарыстоўвывацца як \"гарачая клявіша\"."
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
-msgstr ""
+msgstr "Выкарыстоўваць убудаванае"
 
 #: gtk/gtkbutton.c:206
 msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
+"Калі ўключана, адмеціна будзе выкарыставана для выбару ўбудаваных "
+"кнопачак замест адлюстраваньня."
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -877,37 +890,39 @@ msgstr "Выгляд выпукласьці меж вокнаў."
 
 #: gtk/gtkbutton.c:265
 msgid "Default Spacing"
-msgstr "Звычайная адлегласьць"
+msgstr "Пачатковая адлегласьць"
 
 #: gtk/gtkbutton.c:266
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
+msgstr "Дадатковая прастора для CAN_DEFAULT кнопачак"
 
 #: gtk/gtkbutton.c:272
 msgid "Default Outside Spacing"
-msgstr ""
+msgstr "Пачатковая зьнешняя прастора"
 
 #: gtk/gtkbutton.c:273
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
+"Дадатковая прастора для CAN_DEFAULT кнопачак, якая заўсёды дадаецца "
+"да зьнешніх межаў кнопачак"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
-msgstr ""
+msgstr "Перамяшчэньне нашчадку па X"
 
 #: gtk/gtkbutton.c:279
 msgid "How far in the x direction to move the child when the button is depressed"
-msgstr ""
+msgstr "Як далёка перамясьціць нашчадак па X, калі націснута гэтая кнопачка"
 
 #: gtk/gtkbutton.c:286
 msgid "Child Y Displacement"
-msgstr ""
+msgstr "Перамяшчэньне нашчадку па Y"
 
 #: gtk/gtkbutton.c:287
 msgid "How far in the y direction to move the child when the button is depressed"
-msgstr ""
+msgstr "Як далёка перамясьціць нашчадак па Y, калі націснута гэтая кнопачка"
 
 #: gtk/gtkcellrenderer.c:103
 msgid "mode"
@@ -915,7 +930,7 @@ msgstr "рэжым"
 
 #: gtk/gtkcellrenderer.c:104
 msgid "Editable mode of the CellRenderer"
-msgstr ""
+msgstr "Рэжым рэдагаваньня для CellRenderer"
 
 #: gtk/gtkcellrenderer.c:113
 msgid "visible"
@@ -927,35 +942,35 @@ msgstr "Адлюстроўваць ячэйку"
 
 #: gtk/gtkcellrenderer.c:122
 msgid "xalign"
-msgstr "x-выроўніваньне"
+msgstr "выроўніваньне па x"
 
 #: gtk/gtkcellrenderer.c:123
 msgid "The x-align."
-msgstr "Выроўніваньне па X."
+msgstr "Гарызантальнае выроўніваньне."
 
 #: gtk/gtkcellrenderer.c:133
 msgid "yalign"
-msgstr "y-выроўніваньне"
+msgstr "выроўніваньне па y"
 
 #: gtk/gtkcellrenderer.c:134
 msgid "The y-align."
-msgstr "Выроўніваньне па Y/"
+msgstr "Вэртыкальнае выроўніваньне"
 
 #: gtk/gtkcellrenderer.c:144
 msgid "xpad"
-msgstr ""
+msgstr "запаўненьне па x"
 
 #: gtk/gtkcellrenderer.c:145
 msgid "The xpad."
-msgstr ""
+msgstr "Гарызантальнае запаўненьне."
 
 #: gtk/gtkcellrenderer.c:155
 msgid "ypad"
-msgstr ""
+msgstr "запаўненьне па y"
 
 #: gtk/gtkcellrenderer.c:156
 msgid "The ypad."
-msgstr ""
+msgstr "Вэртыкальнае запаўненьне."
 
 #: gtk/gtkcellrenderer.c:166
 msgid "width"
@@ -975,7 +990,7 @@ msgstr "Нязьменная вышыня."
 
 #: gtk/gtkcellrenderer.c:188
 msgid "Is Expander"
-msgstr ""
+msgstr "Пашыраемы"
 
 #: gtk/gtkcellrenderer.c:189
 msgid "Row has children."
@@ -983,11 +998,11 @@ msgstr "Радок мае нашчадка."
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
-msgstr ""
+msgstr "Пашыраны"
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "Радок зьяўляецца пашыраемым, і ен пашыраны."
 
 #: gtk/gtkcellrendererpixbuf.c:104
 msgid "Pixbuf Object"
@@ -995,15 +1010,15 @@ msgstr "Pixbuf-аб'ект"
 
 #: gtk/gtkcellrendererpixbuf.c:105
 msgid "The pixbuf to render."
-msgstr ""
+msgstr "Аб'ект pixbuf для адлюстраваньня."
 
 #: gtk/gtkcellrendererpixbuf.c:113
 msgid "Pixbuf Expander Open"
-msgstr ""
+msgstr "Адчынены пашыраемы аб'ект pixbuf"
 
 #: gtk/gtkcellrendererpixbuf.c:114
 msgid "Pixbuf for open expander."
-msgstr ""
+msgstr "Pixbuf для адчыненага пашыральніка."
 
 #: gtk/gtkcellrendererpixbuf.c:122
 msgid "Pixbuf Expander Closed"
@@ -3069,7 +3084,7 @@ msgstr "_Дадаць"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr "_Прымяніць"
+msgstr "У_жыць"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
@@ -3097,7 +3112,7 @@ msgstr "_Пераўтварыць"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr "_Капіраваць"
+msgstr "_Капіяваць"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
@@ -3387,7 +3402,7 @@ msgstr "Назоў ярлыку"
 
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
-msgstr ""
+msgstr "Назоў выкарыстоўвываецца для спасылкі на тэкставую лычку"
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
@@ -3750,7 +3765,7 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:269
 msgid "Button relief"
-msgstr ""
+msgstr "Выпукласьць кнопкі"
 
 #: gtk/gtktoolbar.c:270
 msgid "Type of bevel around toolbar buttons"
@@ -3762,7 +3777,7 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:284
 msgid "Toolbar style"
-msgstr ""
+msgstr "Стыль панэлі прылад"
 
 #: gtk/gtktoolbar.c:285
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
@@ -3770,11 +3785,11 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:291
 msgid "Toolbar icon size"
-msgstr ""
+msgstr "Памер значак панэлі прылад"
 
 #: gtk/gtktoolbar.c:292
 msgid "Size of icons in default toolbars"
-msgstr ""
+msgstr "Памер значак паэлі прылад пры адсутнасьці абумоўленасьці"
 
 #: gtk/gtktreemodelsort.c:303
 msgid "TreeModelSort Model"
@@ -3794,11 +3809,11 @@ msgstr ""
 
 #: gtk/gtktreeview.c:524
 msgid "Horizontal Adjustment for the widget"
-msgstr ""
+msgstr "Гарызантальнае выроўніваньне віджэту"
 
 #: gtk/gtktreeview.c:532
 msgid "Vertical Adjustment for the widget"
-msgstr ""
+msgstr "Вэртыкальнае выроўніваньне віджэту"
 
 #: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
@@ -3806,15 +3821,15 @@ msgstr "Бачны"
 
 #: gtk/gtktreeview.c:540
 msgid "Show the column header buttons"
-msgstr ""
+msgstr "Паказаць кнопкі загалоўку стаўбцоў"
 
 #: gtk/gtktreeview.c:547
 msgid "Headers Clickable"
-msgstr ""
+msgstr "Націскальныя загалоўкі"
 
 #: gtk/gtktreeview.c:548
 msgid "Column headers respond to click events"
-msgstr ""
+msgstr "Загалоўкі стаўбцоў рэагуюць на націск"
 
 #: gtk/gtktreeview.c:555
 msgid "Expander Column"
@@ -3866,19 +3881,19 @@ msgstr ""
 
 #: gtk/gtktreeview.c:610
 msgid "Vertical Separator Width"
-msgstr ""
+msgstr "Шырыня вэртыкальнага падзяляльніку"
 
 #: gtk/gtktreeview.c:611
 msgid "Vertical space between cells.  Must be an even number."
-msgstr ""
+msgstr "Вэртыкальная прастора паміж ячэйкамі.  Павінна быць лікам."
 
 #: gtk/gtktreeview.c:619
 msgid "Horizontal Separator Width"
-msgstr ""
+msgstr "Шырыня гарызантальнага падзяляльніку"
 
 #: gtk/gtktreeview.c:620
 msgid "Horizontal space between cells.  Must be an even number."
-msgstr ""
+msgstr "Гарызантальная прастора паміж ячэйкамі.  Павінна быць лікам."
 
 #: gtk/gtktreeview.c:628
 msgid "Allow Rules"
@@ -3902,11 +3917,11 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:184 gtk/gtkwindow.c:446
 msgid "Resizable"
-msgstr ""
+msgstr "Зьменная шырыня"
 
 #: gtk/gtktreeviewcolumn.c:185
 msgid "Column is user-resizable"
-msgstr ""
+msgstr "Стаўбцы могуць быць зьменены карыстальнікам"
 
 #: gtk/gtktreeviewcolumn.c:193
 msgid "Current width of the column"
@@ -3954,11 +3969,11 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:248
 msgid "Clickable"
-msgstr ""
+msgstr "Націскальны"
 
 #: gtk/gtktreeviewcolumn.c:249
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "Ці зьяўляецца загаловак націскальным"
 
 #: gtk/gtktreeviewcolumn.c:257
 msgid "Widget"
@@ -3982,19 +3997,19 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:283
 msgid "Sort indicator"
-msgstr ""
+msgstr "Паказальнік упарадкаваньня"
 
 #: gtk/gtktreeviewcolumn.c:284
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "Ці павінен адлюстроўвацца паказальнік упарадкаваньня"
 
 #: gtk/gtktreeviewcolumn.c:291
 msgid "Sort order"
-msgstr ""
+msgstr "Парадак упарадкаваньня"
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "Ці павінен адлюстроўвацца парадак упарадкаваньня ў паказальніку"
 
 #: gtk/gtkviewport.c:133
 msgid ""
@@ -4014,11 +4029,11 @@ msgstr ""
 
 #: gtk/gtkwidget.c:390
 msgid "Widget name"
-msgstr "Назва выіджэта"
+msgstr "Назоў выіджэту"
 
 #: gtk/gtkwidget.c:391
 msgid "The name of the widget"
-msgstr "Назва віджэта"
+msgstr "Назоў віджэту"
 
 #: gtk/gtkwidget.c:397
 msgid "Parent widget"
@@ -4032,7 +4047,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:405
 msgid "Width request"
-msgstr ""
+msgstr "Запыт шырыні"
 
 #: gtk/gtkwidget.c:406
 msgid ""
@@ -4042,7 +4057,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:414
 msgid "Height request"
-msgstr ""
+msgstr "Запыт вышыні"
 
 #: gtk/gtkwidget.c:415
 msgid ""
@@ -4052,23 +4067,23 @@ msgstr ""
 
 #: gtk/gtkwidget.c:424
 msgid "Whether the widget is visible"
-msgstr ""
+msgstr "Ці будзе віджэт бачны"
 
 #: gtk/gtkwidget.c:430
 msgid "Sensitive"
-msgstr ""
+msgstr "Адчувальны"
 
 #: gtk/gtkwidget.c:431
 msgid "Whether the widget responds to input"
-msgstr ""
+msgstr "Ці будзе віджэт адказваць на ўвод"
 
 #: gtk/gtkwidget.c:437
 msgid "Application paintable"
-msgstr ""
+msgstr "Адлюстроўвываемы дастасаваньнем"
 
 #: gtk/gtkwidget.c:438
 msgid "Whether the application will paint directly on the widget"
-msgstr ""
+msgstr "Ці будзе дастасаваньне напрамую маляваць на віджэце"
 
 #: gtk/gtkwidget.c:444
 msgid "Can focus"
@@ -4088,23 +4103,23 @@ msgstr "Ці мае гэты віджэт засяроджаньне для ўв
 
 #: gtk/gtkwidget.c:458
 msgid "Can default"
-msgstr ""
+msgstr "Можа быць неабумоўленым"
 
 #: gtk/gtkwidget.c:459
 msgid "Whether the widget can be the default widget"
-msgstr ""
+msgstr "Ці можа гэты віджэт быць неабумоўленым /"
 
 #: gtk/gtkwidget.c:465
 msgid "Has default"
-msgstr ""
+msgstr "Мае неабумоўленасьць"
 
 #: gtk/gtkwidget.c:466
 msgid "Whether the widget is the default widget"
-msgstr ""
+msgstr "Ці зьяўляецца гэты віджэт неабумоўленым"
 
 #: gtk/gtkwidget.c:472
 msgid "Receives default"
-msgstr ""
+msgstr "Прымае неабумоўленасьць"
 
 #: gtk/gtkwidget.c:473
 msgid "If TRUE, the widget will receive the default action when it is focused."
@@ -4170,7 +4185,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1071
 msgid "Focus padding"
-msgstr ""
+msgstr "Спад засяроджаньня"
 
 #: gtk/gtkwidget.c:1072
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
@@ -4182,25 +4197,27 @@ msgstr "Колер курсору"
 
 #: gtk/gtkwidget.c:1078
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "Колер, выкарыстоўвываемы для адлюстраваньня курсору"
 
 #: gtk/gtkwidget.c:1083
 msgid "Secondary cursor color"
-msgstr ""
+msgstr "Колер другога курсору"
 
 #: gtk/gtkwidget.c:1084
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
+"Колер для адлюстраваньня другога курсору, калі выкарыстоўвываецца "
+"зьмешаны (зьлева направа й справа налева) ўвод сэксту."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "Прапорцыі курсору"
 
 #: gtk/gtkwidget.c:1090
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr ""
+msgstr "Прапорцыі курсору"
 
 #: gtk/gtkwindow.c:411
 msgid "Window Type"
@@ -4220,7 +4237,7 @@ msgstr "Назоў гэтага акна"
 
 #: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
-msgstr ""
+msgstr "Дазваляць сьцісканьне"
 
 #: gtk/gtkwindow.c:431
 #, no-c-format
@@ -4228,6 +4245,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
+"Калі ІСЬЦІНА (TRUE), акно ня мае найменьшага памеру. Усталяваньне "
+"гэтага значэньня ў ІСЬЦІНА ў 99% выпадках вельмі дрэнная ідэя."
 
 #: gtk/gtkwindow.c:438
 msgid "Allow Grow"
@@ -4236,8 +4255,8 @@ msgstr "Дазваляць рост"
 #: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
-"Калі ІСЬЦІНА (TRUE), карыстальнікі могуць разьвярнуць акно замест яго найменьшага "
-"памеру."
+"Калі ІСЬЦІНА (TRUE), карыстальнікі могуць разьвярнуць акно "
+"замест яго найменьшага памеру."
 
 #: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
@@ -4245,17 +4264,19 @@ msgstr "Калі ІСЬЦІНА (TRUE), карыстальнікі могуць 
 
 #: gtk/gtkwindow.c:454
 msgid "Modal"
-msgstr "Мадальны"
+msgstr "Мадалнае"
 
 #: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
+"Калі ІСЬЦІНА (TRUE) - акно зьяўляецца мадальным (іншыя вокны ня могуць "
+"быць выкарыстаны, покуль гэтае акно ня будзе зачынена)."
 
 #: gtk/gtkwindow.c:462
 msgid "Window Position"
-msgstr "Пазіцыя акна"
+msgstr "Становішча акна"
 
 #: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
@@ -4263,19 +4284,23 @@ msgstr "Пачатковае становішча акна."
 
 #: gtk/gtkwindow.c:471
 msgid "Default Width"
-msgstr "Звычайная шырыня:"
+msgstr "Першапачатковая шырыня"
 
 #: gtk/gtkwindow.c:472
 msgid "The default width of the window, used when initially showing the window."
 msgstr ""
+"Пачатковая шырыня акна; выкарыстоўвываецца пры "
+"першапачатковым адлюстраваньні акна."
 
 #: gtk/gtkwindow.c:481
 msgid "Default Height"
-msgstr "Звычайная вышыня"
+msgstr "Першапачатковая вышыня"
 
 #: gtk/gtkwindow.c:482
 msgid "The default height of the window, used when initially showing the window."
 msgstr ""
+"Пачатковая вышыня акна; выкарыстоўвываецца пры "
+"першапачатковым адлюстраваньні акна."
 
 #: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
@@ -4296,17 +4321,17 @@ msgstr "Значка для гэтага акна"
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Амхарская (EZ+)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr "Кірыліца (трансліт)"
+msgstr "Кірыліца (Транслітырацыя)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "Інукітут (Транслітэрацыя)"
 
 #. ID
 #: modules/input/imipa.c:144
@@ -4316,22 +4341,22 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Тайскя (Зламаная)"
 
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Тыгрынья (Эрытрэя EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Тыгрынья (Эфіёпія EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Уэтнамская (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
