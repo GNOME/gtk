@@ -1,3 +1,9 @@
+Wed Mar  6 00:38:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_real_insert_text): Fix various problems
+	when truncating the inserted text to fit into the GtkEntry
+	size limit of 65kb. (#73119)
+
 Wed Mar  6 00:20:59 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c

@@ -1862,7 +1862,12 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 	      else
 		{
 		  entry->text_size = MAX_SIZE;
-		  new_text_length = entry->text_size - entry->n_bytes - 1;
+		  if (new_text_length > (gint)entry->text_size - (gint)entry->n_bytes - 1)
+		    {
+		      new_text_length = (gint)entry->text_size - (gint)entry->n_bytes - 1;
+		      new_text_length = g_utf8_find_prev_char (new_text, new_text + new_text_length + 1) - new_text;
+		      n_chars = g_utf8_strlen (new_text, new_text_length);
+		    }
 		  break;
 		}
 	    }
