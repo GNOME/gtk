@@ -488,8 +488,10 @@ test_gc_function (GdkFunction function,
       QTEST (newpixel == ((oldpixel | (~foreground)) & mask)); break;
     case GDK_NAND:
       QTEST (newpixel == (((~oldpixel) | (~foreground)) & mask)); break;
+#ifdef GDK_NOR
     case GDK_NOR:
       QTEST (newpixel == (~oldpixel & ~mask)); break;
+#endif
     case GDK_SET:
       QTEST (newpixel == ((~0) & mask)); break;
     default:

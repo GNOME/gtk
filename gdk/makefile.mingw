@@ -1,5 +1,5 @@
 ## Makefile for building the GDK DLL with gcc-2.95 or later on cygwin
-## Use: make -f makefile.cygwin
+## Use: make -f makefile.mingw
 
 ## You must first build the Win32-dependent sources in the win32 subdirectory.
 

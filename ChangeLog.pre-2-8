@@ -6,11 +6,22 @@
 	
 	* README.win32: Update.
 
+	* gdk/makefile.cygwin
+	* gdk/win32/makefile.cygwin
+	* gtk/makefile.cygwin: Remove, i.e. rename to:
+
+	* gdk/makefile.mingw
+	* gdk/win32/makefile.mingw
+	* gtk/makefile.mingw: Renamed from makefile.cygwin.
+	
 	* gdk/gdk.def
 	* gdk/win32/gdkim-win32.c: Add gdk_ic_attr_{destroy,new}. 
 
 	* gdk/gdkdraw.c (gdk_drawable_unref): Remove silly leftover
 	debugging printout.
+
+	* gdk/testgdk.c: New file (from HEAD). Maybe some day GDK will
+	pass all tests on Win32.
 
 	* gdk/win32/gdkfont-win32.c
 	* gtk/gtkfilesel.c
@@ -40,6 +51,13 @@
 	(gtk_rc_add_initial_default_files): Use
 	g_win32_get_package_installation_directory().
 
+	* gtk/testdnd.c
+	* gtk/testgtk.c
+	* gtk/testinput.c
+	* gtk/testrgb.c
+	* gtk/testselection.c
+	* gtk/simple.c: Undefine GTK_COMPILATION (from the makefile).
+	
 	Optimisations by jpe@archaeopteryx.com:
 
 	* gdk/win32/gdkevents-win32.c: Implement better mouse
