@@ -1,3 +1,8 @@
+Fri Oct 19 12:49:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testsocket.c: Remove now useless include of unistd.h,
+	fix wrong argument gtk_socket_steal. (Hans Breuer, #58541)
+	
 Fri Oct 19 12:24:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/linux-fb/gdkfont-fb.c: Fix up for change to 

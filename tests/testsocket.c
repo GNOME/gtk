@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 
 int n_children = 0;
 
@@ -131,7 +130,7 @@ steal (GtkWidget *window, GtkEntry *entry)
   gtk_box_pack_start (GTK_BOX (vbox), socket->box, TRUE, TRUE, 0);
   gtk_widget_show (socket->box);
 
-  gtk_socket_steal (GTK_SOCKET (socket), xid);
+  gtk_socket_steal (GTK_SOCKET (socket->socket), xid);
 }
 
 void
