@@ -2526,7 +2526,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
   gtk_widget_style_get (GTK_WIDGET (tree_column->tree_view),
 			"focus-line-width", &focus_line_width,
-			"horizontal-seperator", &horizontal_separator,
+			"horizontal-separator", &horizontal_separator,
 			NULL);
 
   real_cell_area = *cell_area;

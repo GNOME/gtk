@@ -1,3 +1,9 @@
+Thu Jan 12 01:01:19 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	silly typo fix. s/seperator/separator/. This gets rid of the
+	assert spam when using TreeView.
+
 Tue Jun 10 11:23:48 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c (xim_instantiate_callback): New
