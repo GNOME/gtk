@@ -1033,6 +1033,7 @@ gdk_window_end_paint (GdkWindow *window)
                      clip_box.x - x_offset, clip_box.y - y_offset,
                      clip_box.width, clip_box.height);
 
+  /* Reset clip region of the cached GdkGC */
   gdk_gc_set_clip_region (tmp_gc, NULL);
   
   g_object_unref (paint->pixmap);
@@ -1423,6 +1424,9 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
 			 y - paint->y_offset,
 			 0, 0, width, height);
     }
+
+  /* Reset clip region of the cached GdkGC */
+  gdk_gc_set_clip_region (tmp_gc, NULL);
 
   /* Set these to location of tmp_pixmap within the window */
   *composite_x_offset = x;

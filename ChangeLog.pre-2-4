@@ -1,6 +1,11 @@
+Wed Feb 18 14:27:08 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/gdkwindow.c (gdk_window_get_composite_drawable): Reset clip
+	region back to NULL on cached GC (rest of #134728)
+
 Wed Feb 18 13:28:57 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
-	Fix bug reported by Nam SungHyun.
+	Fix bug reported by Nam SungHyun (#134728)
 	
 	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_threshold_alpha):
 	Don't use a cached GC here since the function needs to modify the
