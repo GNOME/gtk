@@ -1,5 +1,29 @@
 1999-10-27  Havoc Pennington  <hp@pobox.com>
 
+	* src/testpixbuf.c (main): Display the progressive load
+
+	* src/io-png.c (setup_png_transformations): Break transformation 
+	code into separate function
+	(png_info_callback): Use setup_png_transformations
+	
+
+1999-10-27  Havoc Pennington  <hp@pobox.com>
+
+	* src/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Check
+	properly whether the XPM module has already been loaded
+	(gdk_pixbuf_new_from_file): Check properly if loader module 
+	was already loaded (was checking if load symbol was present
+	in order to decide whether to re-load; should check module !=
+	NULL, then load != NULL)	
+	(image_handler_load): Check in present working directory, 
+	makes it easier to debug for now
+	(file_formats): This array initializer was seriously on crack, 
+	was assigning a function pointer to a GModule*
+
+	* src/testpixbuf.c (main): Change type of pixbuf_loader to GdkPixbufLoader*
+	
+1999-10-27  Havoc Pennington  <hp@pobox.com>
+
 	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_finalize): 
 	Fix typo that prevented compilation
 	(gdk_pixbuf_loader_destroy): ditto

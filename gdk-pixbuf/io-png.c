@@ -30,6 +30,115 @@
 
 
 
+static void
+setup_png_transformations(png_structp png_read_ptr, png_infop png_info_ptr,
+                          gboolean *fatal_error_occurred,
+                          png_uint_32* width_p, png_uint_32* height_p,
+                          int* color_type_p)
+{
+        png_uint_32 width, height;
+        int bit_depth, color_type, interlace_type, compression_type, filter_type;
+        int channels;
+        
+        /* Get the image info */
+
+        png_get_IHDR (png_read_ptr, png_info_ptr,
+                      &width, &height,
+                      &bit_depth,
+                      &color_type,
+                      &interlace_type,
+                      &compression_type,
+                      &filter_type);
+
+        /* set_expand() basically needs to be called unless
+           we are already in RGB/RGBA mode
+        */
+        if (color_type == PNG_COLOR_TYPE_PALETTE &&
+            bit_depth <= 8) {
+
+                /* Convert indexed images to RGB */
+                png_set_expand (png_read_ptr);
+
+        } else if (color_type == PNG_COLOR_TYPE_GRAY &&
+                   bit_depth < 8) {
+
+                /* Convert grayscale to RGB */
+                png_set_expand (png_read_ptr);
+
+        } else if (png_get_valid (png_read_ptr, 
+                                  png_info_ptr, PNG_INFO_tRNS)) {
+
+                /* If we have transparency header, convert it to alpha
+                   channel */
+                png_set_expand(png_read_ptr);
+                
+        } else if (bit_depth < 8) {
+
+                /* If we have < 8 scale it up to 8 */
+                png_set_expand(png_read_ptr);
+
+
+                /* Conceivably, png_set_packing() is a better idea;
+                 * God only knows how libpng works
+                 */
+        }
+
+        /* If we are 16-bit, convert to 8-bit */
+        if (bit_depth == 16) {
+                png_set_strip_16(png_read_ptr);
+        }
+
+        /* If gray scale, convert to RGB */
+        if (color_type == PNG_COLOR_TYPE_GRAY ||
+            color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
+                png_set_gray_to_rgb(png_read_ptr);
+        }
+        
+        /* If interlaced, handle that */
+        if (interlace_type != PNG_INTERLACE_NONE) {
+                png_set_interlace_handling(png_read_ptr);
+        }
+        
+        /* Update the info the reflect our transformations */
+        png_read_update_info(png_read_ptr, png_info_ptr);
+        
+        png_get_IHDR (png_read_ptr, png_info_ptr,
+                      &width, &height,
+                      &bit_depth,
+                      &color_type,
+                      &interlace_type,
+                      &compression_type,
+                      &filter_type);
+
+        *width_p = width;
+        *height_p = height;
+        *color_type_p = color_type;
+        
+#ifndef G_DISABLE_CHECKS
+        /* Check that the new info is what we want */
+        
+        if (bit_depth != 8) {
+                g_warning("Bits per channel of transformed PNG is %d, not 8.", bit_depth);
+                *fatal_error_occurred = TRUE;
+                return;
+        }
+
+        if ( ! (color_type == PNG_COLOR_TYPE_RGB ||
+                color_type == PNG_COLOR_TYPE_RGB_ALPHA) ) {
+                g_warning("Transformed PNG not RGB or RGBA.");
+                *fatal_error_occurred = TRUE;
+                return;
+        }
+
+        channels = png_get_channels(png_read_ptr, png_info_ptr);
+        if ( ! (channels == 3 || channels == 4) ) {
+                g_warning("Transformed PNG has %d channels, must be 3 or 4.", channels);
+                *fatal_error_occurred = TRUE;
+                return;
+        }
+#endif
+}
+
 /* Destroy notification function for the libart pixbuf */
 static void
 free_buffer (gpointer user_data, gpointer data)
@@ -43,6 +152,7 @@ image_load (FILE *f)
 {
 	png_structp png_ptr;
 	png_infop info_ptr, end_info;
+        gboolean failed = FALSE;
 	gint i, depth, ctype, inttype, passes, bpp;
 	png_uint_32 w, h;
 	png_bytepp rows;
@@ -71,41 +181,14 @@ image_load (FILE *f)
 
 	png_init_io (png_ptr, f);
 	png_read_info (png_ptr, info_ptr);
-	png_get_IHDR (png_ptr, info_ptr, &w, &h, &depth, &ctype, &inttype, NULL, NULL);
 
-	/* Ok, we want to work with 24 bit images.
-	 * However, PNG can vary depth per channel.
-	 * So, we use the png_set_expand function to expand
-	 * everything into a format libart expects.
-	 * We also use png_set_strip_16 to reduce down to 8 bit/chan.
-	 */
-	if (ctype == PNG_COLOR_TYPE_PALETTE && depth <= 8)
-		png_set_expand (png_ptr);
+        setup_png_transformations(png_ptr, info_ptr, &failed, &w, &h, &ctype);
 
-	if (ctype == PNG_COLOR_TYPE_GRAY && depth < 8)
-		png_set_expand (png_ptr);
-
-	if (png_get_valid (png_ptr, info_ptr, PNG_INFO_tRNS)) {
-		png_set_expand (png_ptr);
-		g_warning ("FIXME: We are going to crash");
-	}
-
-	if (depth == 16)
-		png_set_strip_16 (png_ptr);
-
-	/* We also have png "packing" bits into bytes if < 8 */
-	if (depth < 8)
-		png_set_packing (png_ptr);
-
-	/* Lastly, if the PNG is greyscale, convert to RGB */
-	if (ctype == PNG_COLOR_TYPE_GRAY || ctype == PNG_COLOR_TYPE_GRAY_ALPHA)
-		png_set_gray_to_rgb (png_ptr);
-
-	/* ...and if we're interlaced... */
-	passes = png_set_interlace_handling (png_ptr);
-
-	png_read_update_info (png_ptr, info_ptr);
-
+        if (failed) {
+                png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+                return NULL;
+        }
+        
 	if (ctype & PNG_COLOR_MASK_ALPHA)
 		bpp = 4;
 	else
@@ -197,7 +280,7 @@ image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
                 return NULL;
         }
 
-        /* Create the two auxiliary context structs */
+        /* Create the auxiliary context struct */
 
         lc->png_info_ptr = png_create_info_struct(lc->png_read_ptr);
 
@@ -253,108 +336,30 @@ png_info_callback   (png_structp png_read_ptr,
 {
         LoadContext* lc;
         png_uint_32 width, height;
-        int bit_depth, color_type, filter_type,
-          compression_type, interlace_type, channels;
+        int color_type;
         gboolean have_alpha = FALSE;
+        gboolean failed = FALSE;
         
         lc = png_get_progressive_ptr(png_read_ptr);
 
         if (lc->fatal_error_occurred)
                 return;
         
-        /* Get the image info */
 
-        png_get_IHDR (lc->png_read_ptr, lc->png_info_ptr,
-                      &width, &height,
-                      &bit_depth,
-                      &color_type,
-                      &interlace_type,
-                      &compression_type,
-                      &filter_type);
+        setup_png_transformations(lc->png_read_ptr,
+                                  lc->png_info_ptr,
+                                  &failed,
+                                  &width, &height, &color_type);
 
-        /* set_expand() basically needs to be called unless
-           we are already in RGB/RGBA mode
-        */
-        if (color_type == PNG_COLOR_TYPE_PALETTE &&
-            bit_depth <= 8) {
-
-                /* Convert indexed images to RGB */
-                png_set_expand (lc->png_read_ptr);
-
-        } else if (color_type == PNG_COLOR_TYPE_GRAY &&
-                   bit_depth < 8) {
-
-                /* Convert grayscale to RGB */
-                png_set_expand (lc->png_read_ptr);
-
-        } else if (png_get_valid (lc->png_read_ptr, 
-                                  lc->png_info_ptr, PNG_INFO_tRNS)) {
-
-                /* If we have transparency header, convert it to alpha
-                   channel */
-                png_set_expand(lc->png_read_ptr);
-                
-        } else if (bit_depth < 8) {
-
-                /* If we have < 8 scale it up to 8 */
-                png_set_expand(lc->png_read_ptr);
-
-
-                /* Conceivably, png_set_packing() is a better idea;
-                 * God only knows how libpng works
-                 */
+        if (failed) {
+                lc->fatal_error_occurred = TRUE;
+                return;
         }
 
-        /* If we are 16-bit, convert to 8-bit */
-        if (bit_depth == 16) {
-                png_set_strip_16(lc->png_read_ptr);
-        }
-
-        /* If gray scale, convert to RGB */
-        if (color_type == PNG_COLOR_TYPE_GRAY ||
-            color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
-                png_set_gray_to_rgb(lc->png_read_ptr);
-        }
-        
         /* If we have alpha, set a flag */
         if (color_type & PNG_COLOR_MASK_ALPHA)
-          have_alpha = TRUE;
-
-        /* Update the info the reflect our transformations */
-        png_read_update_info(lc->png_read_ptr, lc->png_info_ptr);
+                have_alpha = TRUE;
         
-        png_get_IHDR (lc->png_read_ptr, lc->png_info_ptr,
-                      &width, &height,
-                      &bit_depth,
-                      &color_type,
-                      &interlace_type,
-                      &compression_type,
-                      &filter_type);
-
-#ifndef G_DISABLE_CHECKS
-        /* Check that the new info is what we want */
-        
-        if (bit_depth != 8) {
-                g_warning("Bits per channel of transformed PNG is %d, not 8.", bit_depth);
-                lc->fatal_error_occurred = TRUE;
-                return;
-        }
-
-        if ( ! (color_type == PNG_COLOR_TYPE_RGB ||
-                color_type == PNG_COLOR_TYPE_RGB_ALPHA) ) {
-                g_warning("Transformed PNG not RGB or RGBA.");
-                lc->fatal_error_occurred = TRUE;
-                return;
-        }
-
-        channels = png_get_channels(lc->png_read_ptr, lc->png_info_ptr);
-        if ( ! (channels == 3 || channels == 4) ) {
-                g_warning("Transformed PNG has %d channels, must be 3 or 4.", channels);
-                lc->fatal_error_occurred = TRUE;
-                return;
-        }
-#endif
-
         lc->pixbuf = gdk_pixbuf_new(have_alpha, width, height);
 
         if (lc->pixbuf == NULL) {
@@ -388,7 +393,7 @@ png_row_callback   (png_structp png_read_ptr,
                 return;
                 
         old_row = lc->pixbuf->art_pixbuf->pixels + (row_num * lc->pixbuf->art_pixbuf->rowstride);
-        
+
         png_progressive_combine_row(lc->png_read_ptr, old_row, new_row);
 }
 

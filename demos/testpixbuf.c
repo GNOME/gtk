@@ -351,7 +351,7 @@ config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)
 #endif
 }
 
-static void
+static GtkWidget*
 new_testrgb_window (GdkPixbuf *pixbuf)
 {
 	GtkWidget *window;
@@ -400,6 +400,33 @@ new_testrgb_window (GdkPixbuf *pixbuf)
 	gtk_widget_show (vbox);
 
 	gtk_widget_show (window);
+
+        return window;
+}
+
+static gint
+update_timeout(gpointer data)
+{
+        GtkWidget** window_loc = data;
+
+        if (*window_loc != NULL) {
+                gtk_widget_queue_draw(*window_loc);
+        }
+}
+
+static void
+progressive_prepared_callback(GdkPixbufLoader* loader, gpointer data)
+{
+        GtkWidget** retloc = data;
+        GdkPixbuf* pixbuf;
+
+        pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
+        g_assert(pixbuf != NULL);
+
+        gdk_pixbuf_ref(pixbuf); /* for the RGB window */
+        *retloc = new_testrgb_window(pixbuf);
+
+        return;
 }
 
 int
@@ -453,21 +480,48 @@ main (int argc, char **argv)
 			}
 		}
 
-		pixbuf_loader = gdk_pixbuf_loader_new ();
-		file = fopen (argv[1], "r");
-		g_assert (file != NULL);
-		
-		while (TRUE) {
-			val = fgetc (file);
-			if (val == EOF)
-				break;
-			buf = (guint) val;
-			if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), &buf, 1) == FALSE)
-				break;
-		}
-		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (pixbuf_loader));
-		gtk_object_destroy (pixbuf_loader);
-		fclose (file);
+                {
+                        GtkWidget* rgb_window = NULL;
+                        guint timeout;
+                        
+                        pixbuf_loader = gdk_pixbuf_loader_new ();
+
+                        gtk_signal_connect(GTK_OBJECT(pixbuf_loader),
+                                           "area_prepared",
+                                           GTK_SIGNAL_FUNC(progressive_prepared_callback),
+                                           &rgb_window);
+
+                        timeout = gtk_timeout_add(1000, update_timeout, &rgb_window);
+                        
+                        file = fopen (argv[1], "r");
+                        g_assert (file != NULL);
+                        
+                        while (TRUE) {
+                                val = fgetc (file);
+                                if (val == EOF)
+                                        break;
+                                buf = (guint) val;
+
+                                fflush(stdout);
+
+                                printf(".");
+                                fflush(stdout);
+                                
+                                if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), &buf, 1) == FALSE)
+                                        break;
+
+                                while (gtk_events_pending())
+                                        gtk_main_iteration();
+
+                        }
+                        gtk_timeout_remove(timeout);
+                        gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (pixbuf_loader));
+                        gtk_object_destroy (GTK_OBJECT(pixbuf_loader));
+                        fclose (file);
+
+                        if (rgb_window != NULL)
+                                gtk_widget_queue_draw(rgb_window);
+                }
 		
 	}
 
