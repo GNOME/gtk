@@ -41,7 +41,10 @@ libexec_LTLIBRARIES =		\
 noinst_PROGRAMS = testpixbuf testpixbuf-drawable
 
 DEPS = libgdk_pixbuf.la
-INCLUDES = -I$(top_builddir)/gdk-pixbuf $(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
+INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
+	-I$(top_srcdir)/gdk-pixbuf \
+	-I$(top_builddir)/gdk-pixbuf \
+	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
