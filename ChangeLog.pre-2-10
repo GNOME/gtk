@@ -1,3 +1,22 @@
+Sat Mar 16 23:54:56 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_static_bit_gravity): just
+	return when we have an input_only window (fix by Owen Taylor)
+
+	* gtk/gtktreeprivate.h (struct _GtkTreeViewPrivate): add
+	scroll_sync_timer
+
+	* gtk/gtktreeview.c (install_scroll_sync_handler): new function,
+	(scroll_sync_handler): ditto,
+	(gtk_tree_view_unrealize): take scroll_sync_timer into account
+	(gtk_tree_view_row_deleted): install scroll_sync_timer instead of
+	calling top_row_to_dy/dy_to_top_row directly
+	-- this greatly speeds up clearing the model (#73199)
+
+	* gtk/gtktreemodelsort.c
+	(gtk_tree_model_sort_convert_path_to_child_path): fix up this function,
+	for some reason I really screwed it up (fixes #74663)
+
 2002-03-16  Sven Neumann  <sven@gimp.org>
 
 	* configure.in (GDK_PIXBUF_DEP_CFLAGS) (GDK_PIXBUF_XLIB_DEP_CFLAGS) 

@@ -42,6 +42,7 @@
 
 #define GTK_TREE_VIEW_SEARCH_DIALOG_KEY "gtk-tree-view-search-dialog"
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
+#define GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC (GTK_TREE_VIEW_PRIORITY_VALIDATE + 2)
 #define GTK_TREE_VIEW_NUM_ROWS_PER_IDLE 500
 #define SCROLL_EDGE_SIZE 15
 #define EXPANDER_EXTRA_PADDING 4
@@ -263,6 +264,7 @@ static void     validate_visible_area    (GtkTreeView *tree_view);
 static gboolean validate_rows_handler    (GtkTreeView *tree_view);
 static gboolean presize_handler_callback (gpointer     data);
 static void     install_presize_handler  (GtkTreeView *tree_view);
+static void     install_scroll_sync_handler (GtkTreeView *tree_view);
 static void	gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view);
 static void     gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view);
 
@@ -1355,6 +1357,12 @@ gtk_tree_view_unrealize (GtkWidget *widget)
     {
       gtk_timeout_remove (tree_view->priv->validate_rows_timer);
       tree_view->priv->validate_rows_timer = 0;
+    }
+
+  if (tree_view->priv->scroll_sync_timer != 0)
+    {
+      gtk_timeout_remove (tree_view->priv->scroll_sync_timer);
+      tree_view->priv->scroll_sync_timer = 0;
     }
 
   for (list = tree_view->priv->columns; list; list = list->next)
@@ -4048,6 +4056,34 @@ install_presize_handler (GtkTreeView *tree_view)
     }
 }
 
+static gboolean
+scroll_sync_handler (GtkTreeView *tree_view)
+{
+
+  GDK_THREADS_ENTER ();
+
+  if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
+    gtk_tree_view_top_row_to_dy (tree_view);
+  else
+    gtk_tree_view_dy_to_top_row (tree_view);
+
+  tree_view->priv->scroll_sync_timer = 0;
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
+install_scroll_sync_handler (GtkTreeView *tree_view)
+{
+  if (!tree_view->priv->scroll_sync_timer)
+    {
+      tree_view->priv->scroll_sync_timer =
+	g_idle_add_full (GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC, (GSourceFunc) scroll_sync_handler, tree_view, NULL);
+    }
+}
+
 /* Always call this iff dy is in the visible range.  If the tree is empty, then
  * it's set to be NULL, and top_row_dy is 0;
  */
@@ -4103,6 +4139,7 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
       gtk_tree_row_reference_free (tree_view->priv->top_row);
       tree_view->priv->top_row = NULL;
       tree_view->priv->top_row_dy = 0;
+      /* DO NOT install the idle handler */
       gtk_tree_view_dy_to_top_row (tree_view);
       return;
     }
@@ -4110,7 +4147,7 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
   if (MAX (BACKGROUND_HEIGHT (node), tree_view->priv->expander_size)
       < tree_view->priv->top_row_dy)
     {
-      /* new top row */
+      /* new top row -- do NOT install the idle handler */
       gtk_tree_view_dy_to_top_row (tree_view);
       return;
     }
@@ -5835,10 +5872,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       _gtk_rbtree_remove_node (tree, node);
     }
 
-  if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
-    gtk_tree_view_top_row_to_dy (tree_view);
-  else
-    gtk_tree_view_dy_to_top_row (tree_view);
+  install_scroll_sync_handler (tree_view);
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 

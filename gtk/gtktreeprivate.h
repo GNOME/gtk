@@ -116,6 +116,7 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumn *edited_column;
   guint presize_handler_timer;
   guint validate_rows_timer;
+  guint scroll_sync_timer;
 
   /* Focus code */
   GtkTreeViewColumn *focus_column;
