@@ -91,6 +91,13 @@ functions below.
 </para>
 
 
+<!-- ##### SIGNAL GtkRadioButton::group-changed ##### -->
+<para>
+
+</para>
+
+@radiobutton: the object which received the signal.
+
 <!-- ##### ARG GtkRadioButton:group ##### -->
 <para>
 Sets a new group for a radio button.

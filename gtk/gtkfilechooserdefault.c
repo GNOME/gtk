@@ -142,7 +142,6 @@ struct _GtkFileChooserDefault
 
   /* Flags */
 
-  guint folder_mode : 1;
   guint local_only : 1;
   guint preview_widget_active : 1;
   guint select_multiple : 1;
@@ -452,7 +451,6 @@ gtk_file_chooser_default_iface_init (GtkFileChooserIface *iface)
 static void
 gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 {
-  impl->folder_mode = FALSE;
   impl->local_only = TRUE;
   impl->preview_widget_active = TRUE;
   impl->select_multiple = FALSE;
@@ -1112,9 +1110,6 @@ create_folder_tree (GtkFileChooserDefault *impl)
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->browse_directories_swin),
 				       GTK_SHADOW_IN);
-  if (impl->folder_mode)
-    gtk_widget_show (impl->browse_directories_swin);
-
   /* Tree */
 
   impl->browse_directories_tree_view = gtk_tree_view_new ();
@@ -1255,7 +1250,8 @@ add_bookmark_foreach_cb (GtkTreeModel *model,
 
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
 
-  if (impl->folder_mode)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
       fs_model = impl->browse_directories_model;
       child_iter = *iter;
@@ -1278,7 +1274,8 @@ add_bookmark_button_clicked_cb (GtkButton *button,
   GtkWidget *tree_view;
   GtkTreeSelection *selection;
 
-  if (impl->folder_mode)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     tree_view = impl->browse_directories_tree_view;
   else
     tree_view = impl->browse_files_tree_view;
@@ -1357,8 +1354,6 @@ selection_is_folders (GtkFileChooserDefault *impl)
   struct is_folders_foreach_closure closure;
   GtkTreeSelection *selection;
 
-  g_assert (!impl->folder_mode);
-
   closure.impl = impl;
   closure.all_folders = TRUE;
 
@@ -1383,7 +1378,8 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 
   /* Check selection */
 
-  if (impl->folder_mode)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     tree_view = impl->browse_directories_tree_view;
   else
     tree_view = impl->browse_files_tree_view;
@@ -1393,7 +1389,9 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
   if (gtk_tree_selection_count_selected_rows (selection) == 0)
     active = !shortcut_exists (impl, impl->current_folder);
   else
-    active = (impl->folder_mode || selection_is_folders (impl));
+    active = (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+	      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER ||
+	      selection_is_folders (impl));
 
   gtk_widget_set_sensitive (impl->browse_shortcuts_add_button, active);
 }
@@ -1637,8 +1635,6 @@ create_file_list (GtkFileChooserDefault *impl)
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->browse_files_swin),
 				       GTK_SHADOW_IN);
-  if (!impl->folder_mode)
-    gtk_widget_show (impl->browse_files_swin);
 
   /* Tree/list view */
 
@@ -2037,34 +2033,22 @@ update_appearance (GtkFileChooserDefault *impl)
 {
   GtkWidget *child;
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      GtkWidget *top_level;
-
       gtk_widget_show (impl->save_widgets);
-
-      top_level = gtk_widget_get_toplevel (GTK_WIDGET (impl));
 
       if (gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
 	{
 	  gtk_widget_set_sensitive (impl->save_folder_label, FALSE);
 	  /*gtk_widget_set_sensitive (impl->save_folder_combo, FALSE);*/
 	  gtk_widget_show (impl->browse_widgets);
-	  if (GTK_IS_WINDOW (top_level))
-	    gtk_window_set_resizable (GTK_WINDOW (top_level), TRUE);
 	}
       else
 	{
 	  gtk_widget_set_sensitive (impl->save_folder_label, TRUE);
 	  /*gtk_widget_set_sensitive (impl->save_folder_combo, TRUE);*/
 	  gtk_widget_hide (impl->browse_widgets);
-	  gtk_widget_queue_resize (top_level);
-#if 0
-	  if (GTK_IS_WINDOW (top_level))
-	    gtk_window_set_resizable (GTK_WINDOW (top_level), FALSE);
-	  if (GTK_IS_WINDOW (top_level))
-	    gtk_window_set_resizable (GTK_WINDOW (top_level), TRUE);
-#endif
 	}
 
       gtk_widget_show (impl->browse_new_folder_button);
@@ -2076,24 +2060,23 @@ update_appearance (GtkFileChooserDefault *impl)
 	  set_select_multiple (impl, FALSE, TRUE);
 	}
     }
-  else /* GTK_FILE_CHOOSER_ACTION_OPEN */
+  else if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+	   impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       gtk_widget_hide (impl->save_widgets);
       gtk_widget_show (impl->browse_widgets);
-
-      if (impl->folder_mode)
-	gtk_widget_show (impl->browse_new_folder_button);
-      else
-	gtk_widget_hide (impl->browse_new_folder_button);
     }
-
-  if (impl->folder_mode)
+  /* FIXME: */
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
+      gtk_widget_show (impl->browse_new_folder_button);
       gtk_widget_hide (impl->browse_files_swin);
       gtk_widget_show (impl->browse_directories_swin);
     }
   else
     {
+      gtk_widget_hide (impl->browse_new_folder_button);
       gtk_widget_hide (impl->browse_directories_swin);
       gtk_widget_show (impl->browse_files_swin);
     }
@@ -2181,16 +2164,6 @@ gtk_file_chooser_default_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_FILTER:
       set_current_filter (impl, g_value_get_object (value));
       break;
-    case GTK_FILE_CHOOSER_PROP_FOLDER_MODE:
-      {
-	gboolean folder_mode = g_value_get_boolean (value);
-	if (folder_mode != impl->folder_mode)
-	  {
-	    impl->folder_mode = folder_mode;
-	    update_appearance (impl);
-	  }
-      }
-      break;
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
       impl->local_only = g_value_get_boolean (value);
       break;
@@ -2251,9 +2224,6 @@ gtk_file_chooser_default_get_property (GObject    *object,
       break;
     case GTK_FILE_CHOOSER_PROP_FILTER:
       g_value_set_object (value, impl->current_filter);
-      break;
-    case GTK_FILE_CHOOSER_PROP_FOLDER_MODE:
-      g_value_set_boolean (value, impl->folder_mode);
       break;
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
       g_value_set_boolean (value, impl->local_only);
@@ -2748,7 +2718,8 @@ get_paths_foreach (GtkTreeModel *model,
 
   info = data;
 
-  if (info->impl->folder_mode)
+  if (info->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+      info->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
       fs_model = info->impl->browse_directories_model;
       sel_iter = *iter;
@@ -2805,7 +2776,8 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
 
       selection = NULL;
 
-      if (impl->folder_mode)
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+	  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
 	{
 	  if (impl->browse_directories_model)
 	    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_directories_tree_view));
@@ -3541,6 +3513,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
       if (days_diff > 1 && days_diff < 7)
 	format = "%A"; /* Days from last week */
       else
+	/* FIXME: Get the right format for the locale */
 	format = _("%d/%b/%Y"); /* Any other date */
 
       if (g_date_strftime (buf, sizeof (buf), format, &mtime) == 0)

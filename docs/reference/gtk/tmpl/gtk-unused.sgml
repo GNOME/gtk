@@ -2094,6 +2094,22 @@ Claim or disclaim ownership of the PRIMARY X selection.
 @claim: if %TRUE, claim the selection, otherwise, disclaim it.
 @time: the timestamp for claiming the selection.
 
+<!-- ##### FUNCTION gtk_file_chooser_get_folder_mode ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_chooser_set_folder_mode ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@folder_mode: 
+
 <!-- ##### FUNCTION gtk_font_selection_dialog_set_filter ##### -->
 <para>
 Sets one of the two font filters, to limit the fonts shown.

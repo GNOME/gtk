@@ -721,6 +721,14 @@ Parses resource information directly from a string.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_rc_reset_styles ##### -->
+<para>
+
+</para>
+
+@settings: 
+
+
 <!-- ##### FUNCTION gtk_rc_add_default_file ##### -->
 <para>
 </para>

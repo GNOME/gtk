@@ -52,6 +52,20 @@ Returns whether the style is attached to a window.
 @white_gc: 
 @bg_pixmap: 
 
+<!-- ##### SIGNAL GtkStyle::realize ##### -->
+<para>
+
+</para>
+
+@style: the object which received the signal.
+
+<!-- ##### SIGNAL GtkStyle::unrealize ##### -->
+<para>
+
+</para>
+
+@style: the object which received the signal.
+
 <!-- ##### FUNCTION gtk_style_new ##### -->
 <para>
 
@@ -882,6 +896,20 @@ Deprecated alias for gtk_style_apply_default_background().
 @y: 
 @width: 
 @height: 
+
+
+<!-- ##### FUNCTION gtk_draw_insertion_cursor ##### -->
+<para>
+
+</para>
+
+@widget: 
+@drawable: 
+@area: 
+@location: 
+@is_primary: 
+@direction: 
+@draw_arrow: 
 
 
 <!-- ##### STRUCT GtkBorder ##### -->

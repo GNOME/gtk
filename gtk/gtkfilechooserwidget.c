@@ -131,7 +131,6 @@ gtk_file_chooser_widget_constructor (GType                  type,
   GtkFileChooserWidgetPrivate *priv;
   GObject *object;
   gchar *current_folder;
-  gchar *current_folder_uri;
   
   object = parent_class->constructor (type,
 				      n_construct_properties,

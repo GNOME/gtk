@@ -1,3 +1,11 @@
+Thu Feb 26 18:25:57 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooser.h (GtkFileChooserAction): Add two more folder
+	modes to the enum.
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_set_folder_mode): Remove.
+	(gtk_file_chooser_get_folder_mode): Remove
+
 Thu Feb 26 17:29:04 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Return

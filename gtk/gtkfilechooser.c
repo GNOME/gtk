@@ -215,53 +215,6 @@ gtk_file_chooser_get_action (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_set_folder_mode:
- * @chooser: a #GtkFileChooser
- * @folder_mode: %TRUE if the file chooser is used to select folders
- *               rather than files.
- * 
- * Sets whether the file chooser is used to select folders
- * rather than files. If in folder mode, only folders are displayed
- * to the use, and not the individual files inside the folders
- * and the user selects a single folder rather than one or
- * more files.
- *
- * Since: 2.4
- **/
-void
-gtk_file_chooser_set_folder_mode (GtkFileChooser *chooser,
-				  gboolean        folder_mode)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-
-  g_object_set (chooser, "folder-mode", folder_mode, NULL);
-}
-
-/**
- * gtk_file_chooser_get_folder_mode:
- * @chooser: a #GtkFileChooser
- * 
- * Gets whether the file chooser is used to select folders
- * rather than files. See gtk_file_chooser_set_folder_mode()
- * 
- * Return value: %TRUE if the file chooser is used to select
- *               folders rather than files.
- *
- * Since: 2.4
- **/
-gboolean
-gtk_file_chooser_get_folder_mode (GtkFileChooser *chooser)
-{
-  gboolean folder_mode;
-  
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-
-  g_object_get (chooser, "folder-mode", &folder_mode, NULL);
-
-  return folder_mode;
-}
-
-/**
  * gtk_file_chooser_set_local_only:
  * @chooser: a #GtkFileChooser
  * @local_only: %TRUE if only local files can be selected
@@ -315,10 +268,10 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
  * @chooser: a #GtkFileChooser
  * @select_multiple: %TRUE if multiple files can be selected.
  * 
- * Sets whether multiple files can be selected in the file
- * selector. If the file selector if in folder mode (see
- * gtk_file_selector_set_folder_mode()) then only one folder
- * can be selected, without regard to this setting.
+ * Sets whether multiple files can be selected in the file selector.  This is
+ * only relevant if the action is set to be GTK_FILE_CHOOSER_ACTION_OPEN or
+ * GTK_FILE_CHOOSER_ACTION_SAVE.  It cannot be set with either of the folder
+ * actions.
  *
  * Since: 2.4
  **/

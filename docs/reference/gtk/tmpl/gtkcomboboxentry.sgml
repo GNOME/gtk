@@ -46,6 +46,14 @@ a text entry field with a dropdown list
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_combo_box_entry_new_text ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_combo_box_entry_set_text_column ##### -->
 <para>
 
