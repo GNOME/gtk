@@ -387,7 +387,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							_("The name of the widget"),
 							NULL,
 							G_PARAM_READWRITE));
-  
   g_object_class_install_property (gobject_class,
 				   PROP_PARENT,
 				   g_param_spec_object ("parent",
@@ -395,7 +394,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							_("The parent widget of this widget. Must be a Container widget."),
 							GTK_TYPE_CONTAINER,
 							G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_X,
 				   g_param_spec_int ("x",
@@ -405,7 +403,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						     G_MAXINT,
  						     -1,
  						     G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_Y,
 				   g_param_spec_int ("y",
@@ -415,7 +412,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						     G_MAXINT,
  						     -1,
  						     G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_WIDTH,
 				   g_param_spec_int ("width",
@@ -425,7 +421,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						     G_MAXINT,
  						     -1,
  						     G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_HEIGHT,
 				   g_param_spec_int ("height",
@@ -435,7 +430,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						     G_MAXINT,
  						     -1,
  						     G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
@@ -443,7 +437,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 _("Whether the widget is visible"),
  							 FALSE,
  							 G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
@@ -451,7 +444,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 _("Whether the widget responds to input"),
  							 TRUE,
  							 G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_APP_PAINTABLE,
 				   g_param_spec_boolean ("app_paintable",
@@ -459,7 +451,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 _("Whether the application will paint directly on the widget"),
  							 FALSE,
  							 G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_CAN_FOCUS,
 				   g_param_spec_boolean ("can_focus",
@@ -467,7 +458,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 _("Whether the widget can accept the input focus"),
  							 FALSE,
  							 G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_FOCUS,
 				   g_param_spec_boolean ("has_focus",
@@ -475,7 +465,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 _("Whether the widget has the input focus"),
  							 FALSE,
  							 G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_CAN_DEFAULT,
 				   g_param_spec_boolean ("can_default",
@@ -483,7 +472,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 _("Whether the widget can be the default widget"),
  							 FALSE,
  							 G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_DEFAULT,
 				   g_param_spec_boolean ("has_default",
@@ -491,7 +479,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 _("Whether the widget is the default widget"),
  							 FALSE,
  							 G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_RECEIVES_DEFAULT,
 				   g_param_spec_boolean ("receives_default",
@@ -499,16 +486,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 _("If TRUE, the widget will receive the default action when it is focused."),
  							 FALSE,
  							 G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_COMPOSITE_CHILD,
 				   g_param_spec_boolean ("composite_child",
  							 _("Composite child"),
  							 _("Whether the widget is composed of other widgets"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
- 
- 
+ 							 G_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_STYLE,
 				   g_param_spec_object ("style",
@@ -516,7 +500,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							_("The style of the widget, which contains information about how it will look (colors etc)."),
  							GTK_TYPE_STYLE,
  							G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_EVENTS,
 				   g_param_spec_flags ("events",
@@ -525,7 +508,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						       GDK_TYPE_EVENT_MASK,
  						       GDK_STRUCTURE_MASK,
  						       G_PARAM_READWRITE));
- 
   g_object_class_install_property (gobject_class,
 				   PROP_EXTENSION_EVENTS,
 				   g_param_spec_enum ("extension_events",
@@ -1137,12 +1119,6 @@ gtk_widget_set_property (GObject         *object,
 	GTK_WIDGET_SET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
-      break;
-    case PROP_COMPOSITE_CHILD:
-      if (g_value_get_boolean (value))
-	GTK_WIDGET_SET_FLAGS (widget, GTK_COMPOSITE_CHILD);
-      else
-	GTK_WIDGET_UNSET_FLAGS (widget, GTK_COMPOSITE_CHILD);
       break;
     case PROP_STYLE:
       gtk_widget_set_style (widget, g_value_get_object (value));

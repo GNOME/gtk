@@ -260,7 +260,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							_("Adjustment"),
 							_("The GtkAdjustment that contains the current value of this range object"),
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE));
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVERTED,
