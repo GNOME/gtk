@@ -2321,12 +2321,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
     {
       gint image_size = MAX (image_width, image_height);
       if (image_size > 0)
-	icon_info->scale = icon_info->desired_size / image_size;
+	icon_info->scale = icon_info->desired_size / (gdouble)image_size;
       else
 	icon_info->scale = 1.0;
       
       if (icon_info->dir_type == ICON_THEME_DIR_UNTHEMED)
-	icon_info->scale = MAX (icon_info->scale, 1.0);
+	icon_info->scale = MIN (icon_info->scale, 1.5);
     }
 
   /* We don't short-circuit out here for scale_only, since, now
@@ -2362,7 +2362,8 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
  * pixbuf may not be exactly this size; an icon theme may have icons
  * that differ slightly from their nominal sizes, and in addition GTK+
  * will avoid scaling icons that it considers sufficiently close to the
- * requested size. (This maintains sharpness.)
+ * requested size or for which the source image would have to be scaled
+ * up too far. (This maintains sharpness.) 
  * 
  * Return value: the rendered icon; this may be a newly created icon
  *  or a new reference to an internal icon, so you must not modify
