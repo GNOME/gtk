@@ -1,3 +1,8 @@
+2004-11-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkselection-x11.c (gdk_text_property_to_utf8_list_for_display): 
+	Don't crash if Xlib fails to return UTF-8. (#159373, Kristian Høgsberg) 
+
 Thu Nov 25 14:32:35 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk/abicheck.sh

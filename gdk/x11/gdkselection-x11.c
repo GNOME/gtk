@@ -643,14 +643,20 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
 	  else
 	    {
 	      if (list)
-		(*list)[count++] = g_strdup (local_list[i]);
+		{
+		  if (g_utf8_validate (local_list[i], -1, NULL))
+		    (*list)[count++] = g_strdup (local_list[i]);
+		  else
+		    g_warning ("Error converting selection");
+		}
 	    }
 	}
 
       if (local_count)
 	gdk_free_text_list (local_list);
       
-      (*list)[count] = NULL;
+      if (list)
+	(*list)[count] = NULL;
 
       return count;
     }
