@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-09-08 23:13+0200\n"
+"POT-Creation-Date: 2003-11-13 15:10+0100\n"
 "PO-Revision-Date: 2003-09-08 23:31+0200\n"
 "Last-Translator: Mireia Farrús <mifarrus@hotmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -396,7 +396,7 @@ msgstr "El fitxer PNM no és en un subformat reconegut"
 
 #: gdk-pixbuf/io-pnm.c:335
 msgid "PNM file has an image width of 0"
-msgstr "El fitxer PNM te una amplada d'imatge de 0"
+msgstr "El fitxer PNM té una amplada d'imatge de 0"
 
 #: gdk-pixbuf/io-pnm.c:356
 msgid "PNM file has an image height of 0"
@@ -538,7 +538,7 @@ msgstr "El tipus d'imatge TGA no està permès"
 
 #: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
-msgstr "No es pot obtenir memòria per al context de la estructura TGA"
+msgstr "No es pot obtenir memòria per al context de l'estructura TGA"
 
 #: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
@@ -574,7 +574,9 @@ msgstr "Imatge de Pseudo-Color sense mapa de color"
 
 #: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr "No es pot moure al desplaçament de la imatge -- probablement s'ha trobat el final del fitxer"
+msgstr ""
+"No es pot moure al desplaçament de la imatge -- probablement s'ha trobat el "
+"final del fitxer"
 
 #: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
@@ -757,7 +759,7 @@ msgstr "El giny a monitoritzar per a canvis en l'accelerador"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
-msgstr "Aliniació horitzontal"
+msgstr "Alineació horitzontal"
 
 #: gtk/gtkalignment.c:103
 msgid ""
@@ -769,7 +771,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
-msgstr "Aliniació vertical"
+msgstr "Alineació vertical"
 
 #: gtk/gtkalignment.c:113
 msgid ""
@@ -929,7 +931,7 @@ msgstr "Expandeix"
 
 #: gtk/gtkbox.c:147
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "Si els fill ha de rebre espai extra quan el pare creix"
+msgstr "Si el fill ha de rebre espai extra quan el pare creix"
 
 #: gtk/gtkbox.c:153
 msgid "Fill"
@@ -1008,7 +1010,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
-msgstr "Relleu del cantò"
+msgstr "Relleu del cantó"
 
 #: gtk/gtkbutton.c:214
 msgid "The border relief style"
@@ -1471,7 +1473,7 @@ msgstr "Estat commutat"
 
 #: gtk/gtkcellrenderertoggle.c:133
 msgid "The toggle state of the button"
-msgstr "L'estat conmutat del botò"
+msgstr "L'estat commutat del botó"
 
 #: gtk/gtkcellrenderertoggle.c:141
 msgid "Inconsistent state"
@@ -1479,7 +1481,7 @@ msgstr "Estat inconsistent"
 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "The inconsistent state of the button"
-msgstr "L'estat inconsistent del botò"
+msgstr "L'estat inconsistent del botó"
 
 #: gtk/gtkcellrenderertoggle.c:150
 msgid "Activatable"
@@ -1487,7 +1489,7 @@ msgstr "Activable"
 
 #: gtk/gtkcellrenderertoggle.c:151
 msgid "The toggle button can be activated"
-msgstr "El botò conmutat pot trobar-se activat"
+msgstr "El botó commutat pot trobar-se activat"
 
 #: gtk/gtkcellrenderertoggle.c:159
 msgid "Radio state"
@@ -1495,7 +1497,7 @@ msgstr "Estat ràdio"
 
 #: gtk/gtkcellrenderertoggle.c:160
 msgid "Draw the toggle button as a radio button"
-msgstr "Dibuixa el botò de conmutació com un botò de ràdio"
+msgstr "Dibuixa el botó de commutació com un botó de ràdio"
 
 #: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
 msgid "Indicator Size"
@@ -1672,7 +1674,7 @@ msgstr "_Opacitat:"
 
 #: gtk/gtkcolorsel.c:1890
 msgid "Transparency of the currently-selected color."
-msgstr "Tranparència del color actualment escollit."
+msgstr "Transparència del color actualment escollit."
 
 #: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
@@ -1720,7 +1722,7 @@ msgstr "Permetre el buidat"
 
 #: gtk/gtkcombo.c:166
 msgid "Whether an empty value may be entered in this field"
-msgstr "Com un valor buit pot ésser introduit en aquest camp"
+msgstr "Com un valor buit pot ésser introduït en aquest camp"
 
 #: gtk/gtkcombo.c:173
 msgid "Value in list"
@@ -1760,7 +1762,7 @@ msgstr "Tipus de corba"
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr "És aquesta corva linear, de tira interpolada, o de lliure-forma"
+msgstr "És aquesta corba lineal, de tira interpolada, o de lliure-forma"
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum X"
@@ -1808,11 +1810,11 @@ msgstr "Contorn de l'àrea de contingut"
 
 #: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
-msgstr "Amplada del contorn al voltant de l'area de diàleg principal"
+msgstr "Amplada del contorn al voltant de l'àrea de diàleg principal"
 
 #: gtk/gtkdialog.c:170
 msgid "Button spacing"
-msgstr "Espaiament del botò"
+msgstr "Espaiament del botó"
 
 #: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
@@ -1820,11 +1822,11 @@ msgstr "Espaiat entre botons"
 
 #: gtk/gtkdialog.c:179
 msgid "Action area border"
-msgstr "Contorn d'area d'acció"
+msgstr "Contorn d'àrea d'acció"
 
 #: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr "Amplada del contorn al voltant l'area de botons per sota del diàleg"
+msgstr "Amplada del contorn al voltant l'àrea de botons per sota del diàleg"
 
 #: gtk/gtkentry.c:439 gtk/gtklabel.c:368
 msgid "Cursor Position"
@@ -1933,7 +1935,7 @@ msgstr "Mètodes d'entrada"
 
 #: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
-msgstr "_Inserta caràcters de control Unicode"
+msgstr "_Insereix caràcters de control Unicode"
 
 #: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
@@ -2535,7 +2537,7 @@ msgstr "Clau nemotècnica"
 
 #: gtk/gtklabel.c:351
 msgid "The mnemonic accelerator key for this label"
-msgstr "La clau acceleradora nemotècnica per aquesta etiqueta"
+msgstr "La clau acceleradora mnemotècnica per aquesta etiqueta"
 
 #: gtk/gtklabel.c:359
 msgid "Mnemonic widget"
@@ -2543,7 +2545,7 @@ msgstr "Giny nemotècnic"
 
 #: gtk/gtklabel.c:360
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "El giny a activar quan la clau nemotècnica sigui premuda"
+msgstr "El giny a activar quan la clau mnemotècnica sigui premuda"
 
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
 msgid "Horizontal adjustment"
@@ -2671,7 +2673,7 @@ msgstr "Tipus de missatge"
 
 #: gtk/gtkmessagedialog.c:116
 msgid "The type of message"
-msgstr "El tipus de misstage"
+msgstr "El tipus de missatage"
 
 #: gtk/gtkmessagedialog.c:123
 msgid "Message Buttons"
@@ -2713,7 +2715,7 @@ msgstr "Y pad"
 #: gtk/gtkmisc.c:129
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr "La alineació d'espai a afegir de dalt a baix del giny, en punts"
+msgstr "L'alineació d'espai a afegir de dalt a baix del giny, en punts"
 
 #: gtk/gtknotebook.c:378
 msgid "Page"
@@ -2857,7 +2859,9 @@ msgstr "Espaiat al voltant de l'indicador"
 #: gtk/gtkpaned.c:219
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr "La posició del separador enmarcat en píxels (0 significa de tot el trajecte fins l'esquerra/part superior)"
+msgstr ""
+"La posició del separador enmarcat en píxels (0 significa de tot el trajecte "
+"fins l'esquerra/part superior)"
 
 #: gtk/gtkpaned.c:227
 msgid "Position Set"
@@ -2990,7 +2994,7 @@ msgstr "Fracció"
 
 #: gtk/gtkprogressbar.c:199
 msgid "The fraction of total work that has been completed"
-msgstr "La fracció de treball total que ha estat complertada"
+msgstr "La fracció de treball total que ha estat completada"
 
 #: gtk/gtkprogressbar.c:208
 msgid "Pulse Step"
@@ -3022,7 +3026,7 @@ msgstr "Com s'ha d'actualitzar el rang a la pantalla"
 
 #: gtk/gtkrange.c:291
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr "El GtkAdjustment que contè el valor actual d'aquest rang d'objectes"
+msgstr "El GtkAdjustment que conté el valor actual d'aquest rang d'objectes"
 
 #: gtk/gtkrange.c:298
 msgid "Inverted"
@@ -3043,7 +3047,7 @@ msgstr "Amplada de la barra de desplaçament o del polze de l'escala"
 
 #: gtk/gtkrange.c:313
 msgid "Trough Border"
-msgstr "Cantò del canal"
+msgstr "Cantó del canal"
 
 #: gtk/gtkrange.c:314
 msgid "Spacing between thumb/steppers and outer trough bevel"
@@ -3085,7 +3089,7 @@ msgstr "Fletxa Y de desplaçament"
 #: gtk/gtkrange.c:346
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
-msgstr "Com de lluny es mou la fletxa en la direcció y quan el botò és premut"
+msgstr "Com de lluny es mou la fletxa en la direcció y quan el botó és premut"
 
 #: gtk/gtkrc.c:2382
 #, c-format
@@ -3170,7 +3174,7 @@ msgstr "Espaiat del valor"
 
 #: gtk/gtkscale.c:192
 msgid "Space between value text and the slider/trough area"
-msgstr "Espai entre el text valor i l'area del lliscador/canal"
+msgstr "Espai entre el text valor i l'àrea del lliscador/canal"
 
 #: gtk/gtkscrollbar.c:80
 msgid "Minimum Slider Length"
@@ -3194,7 +3198,7 @@ msgstr "Caminador posterior"
 
 #: gtk/gtkscrollbar.c:98
 msgid "Display the standard backward arrow button"
-msgstr "Visualitza el botò de retrocés estàndar"
+msgstr "Visualitza el botó de retrocés estàndard"
 
 #: gtk/gtkscrollbar.c:105
 msgid "Forward stepper"
@@ -3202,7 +3206,7 @@ msgstr "Caminador anterior"
 
 #: gtk/gtkscrollbar.c:106
 msgid "Display the standard forward arrow button"
-msgstr "Visualitza el botò d'avenç estàndar"
+msgstr "Visualitza el botó d'avanç estàndard"
 
 #: gtk/gtkscrollbar.c:113
 msgid "Secondary backward stepper"
@@ -3256,7 +3260,7 @@ msgstr "Emplaçament de la finestra"
 
 #: gtk/gtkscrolledwindow.c:267
 msgid "Where the contents are located with respect to the scrollbars"
-msgstr "On els continguts es situen respecte a la barra de desplaçament"
+msgstr "On els continguts se situen respecte a la barra de desplaçament"
 
 #: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
@@ -3341,11 +3345,11 @@ msgstr "Keybinding per activar la barra de menú"
 
 #: gtk/gtksettings.c:226
 msgid "Drag threshold"
-msgstr "Límit de l'arrosegament"
+msgstr "Límit de l'arrossegament"
 
 #: gtk/gtksettings.c:227
 msgid "Number of pixels the cursor can move before dragging"
-msgstr "Nom de punts que el cursor pot moure's abans d'avençar"
+msgstr "Nom de punts que el cursor pot moure's abans d'avançar"
 
 #: gtk/gtksettings.c:235
 msgid "Font Name"
@@ -3385,7 +3389,7 @@ msgstr "Taxa de pujada"
 
 #: gtk/gtkspinbutton.c:249
 msgid "The acceleration rate when you hold down a button"
-msgstr "La taxa d'acceleració quan es manté polsat un botò"
+msgstr "La taxa d'acceleració quan es manté polsat un botó"
 
 #: gtk/gtkspinbutton.c:259
 msgid "The number of decimal places to display"
@@ -3436,7 +3440,7 @@ msgstr "Valor"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
-msgstr "Llegeix el valors actual, o fixa un nou valor"
+msgstr "Llegeix el valor actual, o fixa un nou valor"
 
 #: gtk/gtkstatusbar.c:162
 msgid "Style of bevel around the statusbar text"
@@ -3797,7 +3801,7 @@ msgstr "Opcions horitzontals"
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr "Opcions que especifiquen el comportament horitzonal del fill"
+msgstr "Opcions que especifiquen el comportament horitzontal del fill"
 
 #: gtk/gtktable.c:237
 msgid "Vertical options"
@@ -3879,7 +3883,7 @@ msgstr "Color de fons com a (possiblement no assignat) GdkColor"
 
 #: gtk/gtktexttag.c:221
 msgid "Background full height"
-msgstr "Alçada complerta del fons"
+msgstr "Alçada completa del fons"
 
 #: gtk/gtktexttag.c:222
 msgid ""
@@ -4057,11 +4061,11 @@ msgstr "Si aquest text és ocult. No està implementat en GTK 2.0"
 
 #: gtk/gtktexttag.c:512
 msgid "Background full height set"
-msgstr "Alçada complerta de fons fixada"
+msgstr "Alçada completa de fons fixada"
 
 #: gtk/gtktexttag.c:513
 msgid "Whether this tag affects background height"
-msgstr "Si aquesta etiqueta efecta l'alçada del fons"
+msgstr "Si aquesta etiqueta afecta l'alçada del fons"
 
 #: gtk/gtktexttag.c:516
 msgid "Background stipple set"
@@ -4251,7 +4255,7 @@ msgstr "-- Sense pista --"
 
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
-msgstr "Si el botò de conmutació estigués o no premut"
+msgstr "Si el botó de commutació estigués o no premut"
 
 #: gtk/gtktogglebutton.c:141
 msgid "If the toggle button is in an \"in between\" state"
@@ -4263,7 +4267,7 @@ msgstr "Indicador de dibuix"
 
 #: gtk/gtktogglebutton.c:149
 msgid "If the toggle part of the button is displayed"
-msgstr "Si la part de conmutació del botò es visualitza"
+msgstr "Si la part de commutació del botó es visualitza"
 
 #: gtk/gtktoolbar.c:232
 msgid "The orientation of the toolbar"
@@ -4436,7 +4440,7 @@ msgstr "Amplada del separador horitzontal"
 
 #: gtk/gtktreeview.c:625
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr "Espai hotitzontal entre cel·les. Ha de ser un número parell"
+msgstr "Espai horitzontal entre cel·les. Ha de ser un número parell"
 
 #: gtk/gtktreeview.c:633
 msgid "Allow Rules"
