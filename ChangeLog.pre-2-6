@@ -1,3 +1,17 @@
+Fri Jun 25 23:35:42 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_model):
+	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Allow passing
+	NULL to unset the model.  (#137211, patch by  Mariano Suárez-Alvarez)
+
+Fri Jun 25 23:33:05 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_position_below): Fix the
+	placement policy for GtkComboBoxEntry to be: if it fits below, 
+	place below, if it fits above place above, else place in the 
+	larger space and scroll so that the scroll arrow appear at the
+	far end.  (#144362, David A. Knight)
+
 Fri Jun 25 22:49:58 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreestore.c (gtk_tree_store_move): Avoid uninitialized
