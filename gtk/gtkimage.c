@@ -27,16 +27,18 @@
 #include "gtkcontainer.h"
 #include "gtkimage.h"
 
+static void gtk_image_class_init   (GtkImageClass  *klass);
+static void gtk_image_init         (GtkImage       *image);
+static gint gtk_image_expose       (GtkWidget      *widget,
+                                    GdkEventExpose *event);
+static void gtk_image_size_request (GtkWidget      *widget,
+                                    GtkRequisition *requisition);
+static void gtk_image_clear        (GtkImage       *image);
+static void gtk_image_update_size  (GtkImage       *image,
+                                    gint            image_width,
+                                    gint            image_height);
 
-static void gtk_image_class_init (GtkImageClass  *klass);
-static void gtk_image_init       (GtkImage       *image);
-static gint gtk_image_expose     (GtkWidget      *widget,
-				  GdkEventExpose *event);
-
-static void gtk_image_clear       (GtkImage       *image);
-static void gtk_image_update_size (GtkImage       *image,
-                                   gint            image_width,
-                                   gint            image_height);
+static gpointer parent_class;
 
 GtkType
 gtk_image_get_type (void)
@@ -68,9 +70,12 @@ gtk_image_class_init (GtkImageClass *class)
 {
   GtkWidgetClass *widget_class;
 
+  parent_class = g_type_class_peek_parent (class);
+  
   widget_class = (GtkWidgetClass*) class;
 
   widget_class->expose_event = gtk_image_expose;
+  widget_class->size_request = gtk_image_size_request;
 }
 
 static void
@@ -269,11 +274,16 @@ gtk_image_set_from_stock  (GtkImage       *image,
   gtk_image_clear (image);
 
   if (stock_id)
-    {
+    {      
       image->representation_type = GTK_IMAGE_STOCK;
       
       image->data.stock.stock_id = g_strdup (stock_id);
       image->data.stock.size = size;
+
+      /* Size is demand-computed in size request method
+       * if we're a stock image, since changing the
+       * style impacts the size request
+       */
     }
 }
 
@@ -484,7 +494,7 @@ gtk_image_expose (GtkWidget      *widget,
             case GTK_IMAGE_STOCK:
               if (stock_pixbuf)
                 {
-                  gdk_pixbuf_render_to_drawable_alpha (image->data.pixbuf.pixbuf,
+                  gdk_pixbuf_render_to_drawable_alpha (stock_pixbuf,
                                                        widget->window,
                                                        image_bound.x - x, image_bound.y - y,
                                                        image_bound.x, image_bound.y,
@@ -574,6 +584,36 @@ gtk_image_clear (GtkImage *image)
   
   if (GTK_WIDGET_VISIBLE (image))
     gtk_widget_queue_resize (GTK_WIDGET (image));
+}
+
+static void
+gtk_image_size_request (GtkWidget      *widget,
+                        GtkRequisition *requisition)
+{
+  GtkImage *image;
+
+  image = GTK_IMAGE (widget);
+
+  if (image->representation_type == GTK_IMAGE_STOCK)
+    {
+      GdkPixbuf *pixbuf;
+      
+      pixbuf = gtk_widget_get_icon (GTK_WIDGET (image),
+                                    image->data.stock.stock_id,
+                                    image->data.stock.size,
+                                    NULL);
+
+      if (pixbuf)
+        {
+          gtk_image_update_size (image,
+                                 gdk_pixbuf_get_width (pixbuf),
+                                 gdk_pixbuf_get_height (pixbuf));
+          g_object_unref (G_OBJECT (pixbuf));
+        }
+    }
+
+  /* Chain up to default that simply reads current requisition */
+  GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
 }
 
 static void

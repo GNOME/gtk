@@ -1208,11 +1208,17 @@ gtk_style_render_icon (GtkStyle            *style,
                        GtkWidget           *widget,
                        const gchar         *detail)
 {
+  GdkPixbuf *pixbuf;
+  
   g_return_val_if_fail (style != NULL, NULL);
   g_return_val_if_fail (GTK_STYLE_GET_CLASS (style)->render_icon != NULL, NULL);
   
-  return GTK_STYLE_GET_CLASS (style)->render_icon (style, source, direction, state,
-                                                   size, widget, detail);
+  pixbuf = GTK_STYLE_GET_CLASS (style)->render_icon (style, source, direction, state,
+                                                     size, widget, detail);
+
+  g_return_val_if_fail (pixbuf != NULL, NULL);
+
+  return pixbuf;
 }
 
 /* Default functions */

@@ -238,7 +238,7 @@ add_sized (GtkIconFactory *factory,
   
   gtk_icon_factory_add (factory, stock_id, set);
 
-  g_object_unref (G_OBJECT (set));
+  gtk_icon_set_unref (set);
 }
 
 static void
@@ -252,7 +252,7 @@ add_unsized (GtkIconFactory *factory,
   
   gtk_icon_factory_add (factory, stock_id, set);
 
-  g_object_unref (G_OBJECT (set));
+  gtk_icon_set_unref (set);
 }
 
 static void

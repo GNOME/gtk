@@ -2227,6 +2227,65 @@ create_tooltips (void)
 }
 
 /*
+ * GtkImage
+ */
+
+static void
+pack_image (GtkWidget *box,
+            const gchar *text,
+            GtkWidget *image)
+{
+  gtk_box_pack_start (GTK_BOX (box),
+                      gtk_label_new (text),
+                      FALSE, FALSE, 0);
+
+  gtk_box_pack_start (GTK_BOX (box),
+                      image,
+                      TRUE, TRUE, 0);  
+}
+
+static void
+create_image (void)
+{
+  static GtkWidget *window = NULL;
+  
+  if (window == NULL)
+    {
+      GtkWidget *vbox;
+      GdkPixmap *pixmap;
+      GdkBitmap *mask;
+        
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      vbox = gtk_vbox_new (FALSE, 5);
+
+      gtk_container_add (GTK_CONTAINER (window), vbox);
+
+      pack_image (vbox, "Stock Warning Dialog",
+                  gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+                                            GTK_ICON_DIALOG));
+
+      pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
+                                                      gtk_widget_get_colormap (window),
+                                                      &mask,
+                                                      NULL,
+                                                      openfile);
+      
+      pack_image (vbox, "Pixmap",
+                  gtk_image_new_from_pixmap (pixmap, mask));
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+     
+/*
  * Menu demo
  */
 
@@ -8526,6 +8585,7 @@ create_main_window (void)
       { "font selection", create_font_selection },
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },
+      { "image", create_image },
       { "item factory", create_item_factory },
       { "labels", create_labels },
       { "layout", create_layout },
