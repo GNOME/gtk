@@ -1,3 +1,8 @@
+2002-03-12  Sven Neumann  <sven@gimp.org>
+
+	* gdk-pixbuf.c (gdk_pixbuf_fill): use sequential writes instead of
+	calling memcpy(). Simpler and potentially faster. (#70332)
+
 2002-03-12  Matthias Clasen  <maclas@gmx.de>
 
 	* io-bmp.c (DecodeHeader): Replace a g_assert_not_reached ()
