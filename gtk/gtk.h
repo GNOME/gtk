@@ -81,6 +81,7 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkimagemenuitem.h>
 #include <gtk/gtkimcontext.h>
+#include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinputdialog.h>
 #include <gtk/gtkinvisible.h>

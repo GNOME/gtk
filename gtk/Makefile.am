@@ -100,6 +100,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkimage.h		\
 	gtkimagemenuitem.h	\
 	gtkimcontext.h		\
+	gtkimcontextsimple.h	\
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\
 	gtkinputdialog.h	\
@@ -257,7 +258,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkimagemenuitem.c	\
 	gtkimcontext.c		\
 	gtkimcontextsimple.c	\
-	gtkimcontextsimple.h	\
 	gtkimmodule.c		\
 	gtkimmulticontext.c	\
 	gtkinputdialog.c	\
