@@ -915,9 +915,10 @@ _gtk_file_chooser_get_file_system (GtkFileChooser *chooser)
  * and set the preview active using gtk_file_chooser_set_preview_widget_active().
  * Otherwise, set the preview inactive.
  *
- * When there is application-supplied preview widget, or the application-supplied
- * preview widget is not active, the file chooser may display an internally
- * generated preview of the current file or it may display no preview at all.
+ * When there is no application-supplied preview widget, or the
+ * application-supplied preview widget is not active, the file chooser
+ * may display an internally generated preview of the current file or
+ * it may display no preview at all.
  **/
 void
 gtk_file_chooser_set_preview_widget (GtkFileChooser *chooser,
