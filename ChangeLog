@@ -1,5 +1,11 @@
 2004-11-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (update_node): Remove two more places
+	where we were unconditionally setting "visible", causing
+	unnecessary notifications.
+
+2004-11-11  Matthias Clasen  <mclasen@redhat.com>
+
 	Considerably speed up GtkUIManager, by changing the semantics
 	of the dirty flag. It is now propagated up the tree, and
 	update_node() doesn't descend into clean subtrees.  (#143668,
