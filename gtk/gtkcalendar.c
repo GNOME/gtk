@@ -600,17 +600,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  G_TYPE_NONE, 0);
 }
 
-enum
-{
-  TARGET_TEXT
-};
-
-static const GtkTargetEntry target_table[] = {
-  { "TEXT",               0, TARGET_TEXT },
-  { "STRING",             0, TARGET_TEXT },
-  { "UTF8_STRING",        0, TARGET_TEXT }
-};
-
 static void
 gtk_calendar_init (GtkCalendar *calendar)
 {
@@ -693,10 +682,8 @@ gtk_calendar_init (GtkCalendar *calendar)
   private_data->in_drag = 0;
   private_data->drag_highlight = 0;
 
-  gtk_drag_dest_set (widget,
-		     0,
-                     target_table, G_N_ELEMENTS (target_table),
-                     GDK_ACTION_COPY);
+  gtk_drag_dest_set (widget, 0, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_dest_add_text_targets (widget);
 
   private_data->year_before = 0;
 
@@ -2824,7 +2811,8 @@ gtk_calendar_motion_notify (GtkWidget	   *widget,
 					event->x, event->y))
 	    {
 	      GdkDragContext *context;
-	      GtkTargetList *target_list = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
+	      GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
+	      gtk_target_list_add_text_targets (target_list);
 	      context = gtk_drag_begin (widget, target_list, GDK_ACTION_COPY,
 					1, (GdkEvent *)event);
 

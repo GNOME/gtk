@@ -1,3 +1,8 @@
+2004-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcalendar.c: Use the new text target functionality
+	in GtkTargetList instead of hardcoding a subset of text targets.
+
 Tue Jul 20 23:11:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkevents-x11.c: Hook up gtk-menu-bar-accel to
