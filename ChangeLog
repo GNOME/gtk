@@ -1,3 +1,27 @@
+Mon Nov 17 00:11:21 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #124373, Murray Cumming.
+
+	* gtk/gtkcombobox.[ch] (gtk_combo_box_class_init): the model property
+	is no longer construct only,
+	(gtk_combo_box_unset_model), (gtk_combo_box_set_model_internal),
+	(gtk_combo_box_menu_fill): new functions,
+	(gtk_combo_box_menu_setup), (gtk_combo_box_menu_destroy),
+	(gtk_combo_box_menu_row_*), (gtk_combo_box_list_setup),
+	(gtk_combo_box_list_destroy): updated,
+	(gtk_combo_box_new), (gtk_combo_box_new_with_model): new/changed
+	functions,
+	(gtk_combo_box_set_model): is now public, updated,
+	(gtk_combo_box_get_model): small update.
+
+	* gtk/gtkcomboboxentry.[ch] (gtk_combo_box_entry_class_init): the
+	text_column property is no longer construct only,
+	(gtk_combo_box_entry_set_text_column): now public,
+	(gtk_combo_box_entry_new), (gtk_combo_box_entry_new_with_model):
+	new/changed functions.
+
+	* tests/testcombo.c: updated.
+
 Sun Nov 16 22:50:58 2003  Matthias Clasen  <maclas@gmx.de>
 
 	Reinstate fixes for (#124212, Marco Pesenti Gritti):

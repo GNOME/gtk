@@ -51,8 +51,6 @@ static void gtk_combo_box_entry_active_changed   (GtkComboBox           *combo_b
                                                   gpointer               user_data);
 static void gtk_combo_box_entry_contents_changed (GtkEntry              *entry,
                                                   gpointer               user_data);
-static void gtk_combo_box_entry_set_text_column  (GtkComboBoxEntry      *entry_box,
-                                                  gint                   text_column);
 
 
 enum
@@ -108,7 +106,7 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                     G_PARAM_READWRITE));
 
   g_type_class_add_private ((GObjectClass *) klass,
                             sizeof (GtkComboBoxEntryPrivate));
@@ -228,33 +226,34 @@ gtk_combo_box_entry_contents_changed (GtkEntry *entry,
                                      NULL);
 }
 
-static void
-gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,
-                                     gint              text_column)
-{
-  g_return_if_fail (text_column >= 0);
-  g_return_if_fail (text_column < gtk_tree_model_get_n_columns (gtk_combo_box_get_model (GTK_COMBO_BOX (entry_box))));
-  g_return_if_fail (entry_box->priv->text_column == -1);
-
-  entry_box->priv->text_column = text_column;
-
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (entry_box),
-                                  entry_box->priv->text_renderer,
-                                  "text", text_column,
-                                  NULL);
-}
-
 /* public API */
 
 /**
  * gtk_combo_box_entry_new:
+ *
+ * Creates a new #GtkComboBoxEntry which has a #GtkEntry as child. After
+ * construction, you should set a model using gtk_combo_box_set_model() and a
+ * text_column * using gtk_combo_box_entry_set_text_column().
+ *
+ * Return value: A new #GtkComboBoxEntry.
+ *
+ * Since: 2.4
+ */
+GtkWidget *
+gtk_combo_box_entry_new (void)
+{
+  return GTK_WIDGET (g_object_new (gtk_combo_box_entry_get_type (), NULL));
+}
+
+/**
+ * gtk_combo_box_entry_new_with_model:
  * @model: A #GtkTreeModel.
  * @text_column: A column in @model to get the strings from.
  *
  * Creates a new #GtkComboBoxEntry which has a #GtkEntry as child and a list
  * of strings as popup. You can get the #GtkEntry from a #GtkComboBoxEntry
  * using GTK_ENTRY (GTK_BIN (combo_box_entry)->child). To add and remove
- * strings from the list, just modify @model using it's data manipulation
+ * strings from the list, just modify @model using its data manipulation
  * API.
  *
  * Return value: A new #GtkComboBoxEntry.
@@ -262,8 +261,8 @@ gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,
  * Since: 2.4
  */
 GtkWidget *
-gtk_combo_box_entry_new (GtkTreeModel *model,
-                         gint          text_column)
+gtk_combo_box_entry_new_with_model (GtkTreeModel *model,
+                                    gint          text_column)
 {
   GtkWidget *ret;
 
@@ -280,11 +279,36 @@ gtk_combo_box_entry_new (GtkTreeModel *model,
 }
 
 /**
+ * gtk_combo_box_entry_set_text_column:
+ * @entry_box: A #GtkComboBoxEntry.
+ * @text_column: A column in @model to get the strings from.
+ *
+ * Sets the model column which @entry_box should use to get strings from
+ * to be @text_column.
+ *
+ * Since: 2.4.
+ */
+void
+gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,
+                                     gint              text_column)
+{
+  g_return_if_fail (text_column >= 0);
+  g_return_if_fail (text_column < gtk_tree_model_get_n_columns (gtk_combo_box_get_model (GTK_COMBO_BOX (entry_box))));
+  g_return_if_fail (entry_box->priv->text_column == -1);
+
+  entry_box->priv->text_column = text_column;
+
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (entry_box),
+                                  entry_box->priv->text_renderer,
+                                  "text", text_column,
+                                  NULL);
+}
+
+/**
  * gtk_combo_box_entry_get_text_column:
  * @entry_box: A #GtkComboBoxEntry.
  *
  * Returns the column which @entry_box is using to get the strings from.
- * This is the same column which got passed during construction.
  *
  * Return value: A column in the data source model of @entry_box.
  *
