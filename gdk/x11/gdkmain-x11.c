@@ -90,18 +90,6 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 static gint autorepeat;
 static gboolean gdk_synchronize = FALSE;
 
-#ifdef G_ENABLE_DEBUG
-static const GDebugKey gdk_debug_keys[] = {
-  {"events",	    GDK_DEBUG_EVENTS},
-  {"misc",	    GDK_DEBUG_MISC},
-  {"dnd",	    GDK_DEBUG_DND},
-  {"xim",	    GDK_DEBUG_XIM}
-};
-
-static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
-
-#endif /* G_ENABLE_DEBUG */
-
 GdkArgDesc _gdk_windowing_args[] = {
   { "display",     GDK_ARG_STRING,   &_gdk_display_name,    (GdkArgFunc)NULL   },
   { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,     (GdkArgFunc)NULL   },
@@ -298,14 +286,21 @@ gdk_pointer_grab (GdkWindow *	  window,
   if (return_val == GrabSuccess)
     {
       if (!GDK_WINDOW_DESTROYED (window))
-	return_val = XGrabPointer (GDK_WINDOW_XDISPLAY (window),
-				   xwindow,
-				   owner_events,
-				   xevent_mask,
-				   GrabModeAsync, GrabModeAsync,
-				   xconfine_to,
-				   xcursor,
-				   time);
+	{
+#ifdef G_ENABLE_DEBUG
+	  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+	    return_val = GrabSuccess;
+	  else
+#endif
+	    return_val = XGrabPointer (GDK_WINDOW_XDISPLAY (window),
+				       xwindow,
+				       owner_events,
+				       xevent_mask,
+				       GrabModeAsync, GrabModeAsync,
+				       xconfine_to,
+				       xcursor,
+				       time);
+	}
       else
 	return_val = AlreadyGrabbed;
     }
@@ -392,11 +387,18 @@ gdk_keyboard_grab (GdkWindow *	   window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
   if (!GDK_WINDOW_DESTROYED (window))
-    return_val = XGrabKeyboard (GDK_WINDOW_XDISPLAY (window),
-				GDK_WINDOW_XID (window),
-				owner_events,
-				GrabModeAsync, GrabModeAsync,
-				time);
+    {
+#ifdef G_ENABLE_DEBUG
+      if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+	return_val = GrabSuccess;
+      else
+#endif
+	return_val = XGrabKeyboard (GDK_WINDOW_XDISPLAY (window),
+				    GDK_WINDOW_XID (window),
+				    owner_events,
+				    GrabModeAsync, GrabModeAsync,
+				    time);
+    }
   else
     return_val = AlreadyGrabbed;
 

@@ -67,7 +67,8 @@ static const GDebugKey gdk_debug_keys[] = {
   {"events",	    GDK_DEBUG_EVENTS},
   {"misc",	    GDK_DEBUG_MISC},
   {"dnd",	    GDK_DEBUG_DND},
-  {"xim",	    GDK_DEBUG_XIM}
+  {"xim",	    GDK_DEBUG_XIM},
+  {"nograbs",       GDK_DEBUG_NOGRABS},
 };
 
 static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);

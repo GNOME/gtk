@@ -277,11 +277,15 @@ _gdk_input_grab_pointer (GdkWindow *     window,
 	      gdk_input_common_find_events (window, gdkdev,
 					    event_mask,
 					    event_classes, &num_classes);
-	      
-	      result = XGrabDevice( GDK_DISPLAY(), gdkdev->xdevice,
-				    GDK_WINDOW_XWINDOW (window),
-				    owner_events, num_classes, event_classes,
-				    GrabModeAsync, GrabModeAsync, time);
+#ifdef G_ENABLE_DEBUG
+	      if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+		result = GrabSuccess;
+	      else
+#endif
+		result = XGrabDevice( GDK_DISPLAY(), gdkdev->xdevice,
+				      GDK_WINDOW_XWINDOW (window),
+				      owner_events, num_classes, event_classes,
+				      GrabModeAsync, GrabModeAsync, time);
 	      
 	      /* FIXME: if failure occurs on something other than the first
 		 device, things will be badly inconsistent */
