@@ -6,3 +6,5 @@ makefile.msc
 .libs
 testtreeview
 testtreecolumns
+testsocket
+testsocket_child

@@ -1,3 +1,10 @@
+Sat Mar  3 13:21:27 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/Makefile.am tests/testsocket.c tests/testsocket_child.c:
+	Add plug-socket tests. (Won't work worth a darn until I commit
+	the rest of the plug-socket changes, but no reason these
+	can't go into CVS now.)
+
 2001-03-02  Havoc Pennington  <hp@redhat.com>
 
 	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_flush): use

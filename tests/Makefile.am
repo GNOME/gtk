@@ -31,11 +31,17 @@ LDADDS = @STRIP_BEGIN@ 					\
 @STRIP_END@
 
 noinst_PROGRAMS = 		\
+	testsocket		\
+	testsocket_child	\
 	testtreeview		\
 	testtreecolumns
 
+testsocket_DEPENDENCIES = $(DEPS)
+testsocket_child_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
 
+testsocket_LDADD = $(LDADDS)
+testsocket_child_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 
 testtreeview_SOURCES = testtreeview.c
