@@ -79,7 +79,13 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-util.c	\
 	$(CANVAS_SOURCEFILES)
 
-libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0
+if INSIDE_GNOME_LIBS
+EXTRA_GNOME_LIBS = ""
+else
+EXTRA_GNOME_LIBS = $(GNOME_LIBS)
+endif
+
+libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0 $(EXTRA_GNOME_LIBS)
 
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
