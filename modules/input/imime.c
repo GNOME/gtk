@@ -60,7 +60,7 @@ im_module_create (const gchar * context_id)
 {
   g_return_val_if_fail (context_id, NULL);
 
-  if (!strcmp (context_id, "win32ime"))
+  if (!strcmp (context_id, "ime"))
     return g_object_new (GTK_TYPE_IM_CONTEXT_IME, NULL);
   else
     return NULL;
