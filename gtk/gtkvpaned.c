@@ -144,17 +144,12 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
   paned = GTK_PANED (widget);
   border_width = GTK_CONTAINER (widget)->border_width;
 
-  if (!paned->position_set)
-    {
-      if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1))
-	paned->child1_size = paned->child1->requisition.height;
-      else
-	paned->child1_size = 0;
-    }
-  else
-    paned->child1_size = CLAMP (paned->child1_size, 0,
-				allocation->height - paned->gutter_size
-				- 2 * GTK_CONTAINER (paned)->border_width);
+  gtk_paned_compute_position (paned,
+			      widget->allocation.height
+			        - paned->gutter_size
+			        - 2 * border_width,
+			      paned->child1->requisition.height,
+			      paned->child2->requisition.height);
 
   /* Move the handle before the children so we don't get extra expose events */
 
@@ -347,12 +342,12 @@ gtk_vpaned_motion (GtkWidget *widget, GdkEventMotion *event)
 
   if (paned->in_drag)
     {
+      gint size = y - GTK_CONTAINER (paned)->border_width - paned->gutter_size/2;
+      
       gtk_vpaned_xor_line (paned);
-      paned->child1_size = y - GTK_CONTAINER (paned)->border_width -
-	paned->gutter_size/2;
-      paned->child1_size = CLAMP (paned->child1_size, 0,
-                                  widget->allocation.height - paned->gutter_size
-                                  - 2 * GTK_CONTAINER (paned)->border_width);
+      paned->child1_size = CLAMP (size,
+				  paned->min_position,
+				  paned->max_position);
       gtk_vpaned_xor_line (paned);
     }
 

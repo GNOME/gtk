@@ -202,7 +202,7 @@ gtk_init (int	 *argc,
    */
   gdk_init (argc, argv);
 
-  gdk_event_handler_set ((GdkEventFunc *)gtk_main_do_event, NULL, NULL);
+  gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
 #ifdef G_ENABLE_DEBUG
   env_string = getenv ("GTK_DEBUG");
@@ -538,7 +538,7 @@ gtk_main_iteration_do (gboolean blocking)
   return g_main_iteration (blocking);
 }
 
-static void 
+void 
 gtk_main_do_event (GdkEvent *event)
 {
   GtkWidget *event_widget;

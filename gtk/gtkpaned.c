@@ -113,6 +113,7 @@ gtk_paned_init (GtkPaned *paned)
   paned->handle_size = 10;
   paned->gutter_size = 6;
   paned->position_set = FALSE;
+  paned->last_allocation = -1;
   paned->in_drag = FALSE;
   
   paned->handle_xpos = -1;
@@ -287,6 +288,24 @@ void
 gtk_paned_add1 (GtkPaned     *paned,
 		GtkWidget    *widget)
 {
+  gtk_paned_pack1 (paned, widget, FALSE, TRUE);
+}
+
+void
+gtk_paned_add2 (GtkPaned  *paned,
+		GtkWidget *widget)
+{
+  gtk_paned_pack2 (paned, widget, TRUE, TRUE);
+}
+
+void
+gtk_paned_pack1 (GtkPaned     *paned,
+		 GtkWidget    *widget,
+		 gboolean      resize,
+		 gboolean      shrink)
+{
+  g_return_if_fail (paned != NULL);
+  g_return_if_fail (GTK_IS_PANED (paned));
   g_return_if_fail (widget != NULL);
   
   if (!paned->child1)
@@ -305,6 +324,8 @@ gtk_paned_add1 (GtkPaned     *paned,
 	}
       
       paned->child1 = widget;
+      paned->child1_resize = resize;
+      paned->child1_shrink = shrink;
       
       if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (paned))
         gtk_widget_queue_resize (widget);
@@ -312,9 +333,13 @@ gtk_paned_add1 (GtkPaned     *paned,
 }
 
 void
-gtk_paned_add2 (GtkPaned  *paned,
-		GtkWidget *widget)
+gtk_paned_pack2 (GtkPaned  *paned,
+		 GtkWidget *widget,
+		 gboolean   resize,
+		 gboolean   shrink)
 {
+  g_return_if_fail (paned != NULL);
+  g_return_if_fail (GTK_IS_PANED (paned));
   g_return_if_fail (widget != NULL);
   
   if (!paned->child2)
@@ -333,6 +358,8 @@ gtk_paned_add2 (GtkPaned  *paned,
 	}
       
       paned->child2 = widget;
+      paned->child2_resize = resize;
+      paned->child2_shrink = shrink;
       
       if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (paned))
         gtk_widget_queue_resize (widget);
@@ -412,6 +439,26 @@ gtk_paned_forall (GtkContainer *container,
 }
 
 void
+gtk_paned_set_position    (GtkPaned  *paned,
+			   gint       position)
+{
+  g_return_if_fail (paned != NULL);
+  g_return_if_fail (GTK_IS_PANED (paned));
+
+  if (position >= 0)
+    {
+      paned->child1_size = CLAMP (position,
+				  paned->min_position,
+				  paned->max_position);
+      paned->position_set = TRUE;
+    }
+  else
+    paned->position_set = FALSE;
+
+  gtk_widget_queue_resize (GTK_WIDGET (paned));
+}
+
+void
 gtk_paned_set_handle_size (GtkPaned *paned,
 			   guint16   size)
 {
@@ -442,4 +489,47 @@ gtk_paned_set_gutter_size (GtkPaned *paned,
   
   if (GTK_WIDGET_VISIBLE (GTK_WIDGET (paned)))
     gtk_widget_queue_resize (GTK_WIDGET (paned));
+}
+
+void
+gtk_paned_compute_position (GtkPaned *paned,
+			    gint      allocation,
+			    gint      child1_req,
+			    gint      child2_req)
+{
+  g_return_if_fail (paned != NULL);
+  g_return_if_fail (GTK_IS_PANED (paned));
+
+  paned->min_position = paned->child1_shrink ? 0 : child1_req;
+
+  paned->max_position = allocation;
+  if (!paned->child2_shrink)
+    paned->max_position -= child2_req;
+
+  if (!paned->position_set)
+    {
+      if (paned->child1_resize && !paned->child2_resize)
+	paned->child1_size = allocation - child2_req;
+      else if (!paned->child1_resize && paned->child2_resize)
+	paned->child1_size = child1_req;
+      else
+	paned->child1_size = allocation * ((gdouble)child1_req / (child1_req + child2_req));
+    }
+  else
+    {
+      if (paned->last_allocation < 0)
+	paned->last_allocation = allocation;
+      
+      if (paned->child1_resize && !paned->child2_resize)
+	paned->child1_size += (allocation - paned->last_allocation);
+      else if (!(!paned->child1_resize && paned->child2_resize))
+	paned->child1_size = allocation * ((gdouble)paned->child1_size / (paned->last_allocation));
+    }
+
+  paned->child1_size = CLAMP (paned->child1_size,
+			      paned->min_position,
+			      paned->max_position);
+
+  paned->last_allocation = allocation;
+  
 }

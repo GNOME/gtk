@@ -54,8 +54,16 @@ struct _GtkPaned
   guint16 gutter_size;
   
   gint child1_size;
+  gint last_allocation;
+  gint min_position;
+  gint max_position;
+  
   guint position_set : 1;
   guint in_drag : 1;
+  guint child1_shrink : 1;
+  guint child1_resize : 1;
+  guint child2_shrink : 1;
+  guint child2_resize : 1;
   
   gint16 handle_xpos;
   gint16 handle_ypos;
@@ -72,10 +80,26 @@ void    gtk_paned_add1            (GtkPaned  *paned,
 				   GtkWidget *child);
 void    gtk_paned_add2            (GtkPaned  *paned,
 				   GtkWidget *child);
+void    gtk_paned_pack1           (GtkPaned  *paned,
+				   GtkWidget *child,
+				   gboolean   resize,
+				   gboolean   shrink);
+void    gtk_paned_pack2           (GtkPaned  *paned,
+				   GtkWidget *child,
+				   gboolean   resize,
+				   gboolean   shrink);
+void    gtk_paned_set_position    (GtkPaned  *paned,
+				   gint       position);
 void    gtk_paned_set_handle_size (GtkPaned *paned,
 				   guint16   size);
 void    gtk_paned_set_gutter_size (GtkPaned *paned,
 				   guint16   size);
+
+/* Internal function */
+void    gtk_paned_compute_position (GtkPaned *paned,
+				    gint      allocation,
+				    gint      child1_req,
+				    gint      child2_req);
 
 #ifdef __cplusplus
 }

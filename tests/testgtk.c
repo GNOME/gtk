@@ -6174,6 +6174,106 @@ create_notebook (void)
  */
 
 void
+toggle_resize (GtkWidget *widget, GtkWidget *child)
+{
+  GtkPaned *paned = GTK_PANED (child->parent);
+  gboolean is_child1 = (child == paned->child1);
+  gboolean resize, shrink;
+
+  resize = is_child1 ? paned->child1_resize : paned->child2_resize;
+  shrink = is_child1 ? paned->child1_shrink : paned->child2_shrink;
+
+  gtk_widget_ref (child);
+  gtk_container_remove (GTK_CONTAINER (child->parent), child);
+  if (is_child1)
+    gtk_paned_pack1 (paned, child, !resize, shrink);
+  else
+    gtk_paned_pack2 (paned, child, !resize, shrink);
+  gtk_widget_unref (child);
+}
+
+void
+toggle_shrink (GtkWidget *widget, GtkWidget *child)
+{
+  GtkPaned *paned = GTK_PANED (child->parent);
+  gboolean is_child1 = (child == paned->child1);
+  gboolean resize, shrink;
+
+  resize = is_child1 ? paned->child1_resize : paned->child2_resize;
+  shrink = is_child1 ? paned->child1_shrink : paned->child2_shrink;
+
+  gtk_widget_ref (child);
+  gtk_container_remove (GTK_CONTAINER (child->parent), child);
+  if (is_child1)
+    gtk_paned_pack1 (paned, child, resize, !shrink);
+  else
+    gtk_paned_pack2 (paned, child, resize, !shrink);
+  gtk_widget_unref (child);
+}
+
+GtkWidget *
+create_pane_options (GtkPaned *paned,
+		     const gchar *frame_label,
+		     const gchar *label1,
+		     const gchar *label2)
+{
+  GtkWidget *frame;
+  GtkWidget *table;
+  GtkWidget *label;
+  GtkWidget *check_button;
+  
+  frame = gtk_frame_new (frame_label);
+  gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
+  
+  table = gtk_table_new (3, 2, 4);
+  gtk_container_add (GTK_CONTAINER (frame), table);
+  
+  label = gtk_label_new (label1);
+  gtk_table_attach_defaults (GTK_TABLE (table), label,
+			     0, 1, 0, 1);
+  
+  check_button = gtk_check_button_new_with_label ("Resize");
+  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
+			     0, 1, 1, 2);
+  gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
+		      GTK_SIGNAL_FUNC (toggle_resize),
+		      paned->child1);
+  
+  check_button = gtk_check_button_new_with_label ("Shrink");
+  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
+			     0, 1, 2, 3);
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check_button),
+			       TRUE);
+  gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
+		      GTK_SIGNAL_FUNC (toggle_shrink),
+		      paned->child1);
+  
+  label = gtk_label_new (label2);
+  gtk_table_attach_defaults (GTK_TABLE (table), label,
+			     1, 2, 0, 1);
+  
+  check_button = gtk_check_button_new_with_label ("Resize");
+  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
+			     1, 2, 1, 2);
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check_button),
+			       TRUE);
+  gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
+		      GTK_SIGNAL_FUNC (toggle_resize),
+		      paned->child2);
+  
+  check_button = gtk_check_button_new_with_label ("Shrink");
+  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
+			     1, 2, 2, 3);
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check_button),
+			       TRUE);
+  gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
+		      GTK_SIGNAL_FUNC (toggle_shrink),
+		      paned->child2);
+
+  return frame;
+}
+
+void
 create_panes (void)
 {
   static GtkWidget *window = NULL;
@@ -6181,6 +6281,7 @@ create_panes (void)
   GtkWidget *hpaned;
   GtkWidget *vpaned;
   GtkWidget *button;
+  GtkWidget *vbox;
 
   if (!window)
     {
@@ -6193,10 +6294,12 @@ create_panes (void)
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
+      vbox = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
+      
       vpaned = gtk_vpaned_new ();
-      gtk_container_add (GTK_CONTAINER (window), vpaned);
+      gtk_box_pack_start (GTK_BOX (vbox), vpaned, TRUE, TRUE, 0);
       gtk_container_set_border_width (GTK_CONTAINER(vpaned), 5);
-      gtk_widget_show (vpaned);
 
       hpaned = gtk_hpaned_new ();
       gtk_paned_add1 (GTK_PANED (vpaned), hpaned);
@@ -6205,25 +6308,37 @@ create_panes (void)
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_usize (frame, 60, 60);
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
-      gtk_widget_show (frame);
       
       button = gtk_button_new_with_label ("Hi there");
       gtk_container_add (GTK_CONTAINER(frame), button);
-      gtk_widget_show (button);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_usize (frame, 80, 60);
       gtk_paned_add2 (GTK_PANED (hpaned), frame);
-      gtk_widget_show (frame);
-
-      gtk_widget_show (hpaned);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
       gtk_widget_set_usize (frame, 60, 80);
       gtk_paned_add2 (GTK_PANED (vpaned), frame);
-      gtk_widget_show (frame);
+
+      /* Now create toggle buttons to control sizing */
+
+      gtk_box_pack_start (GTK_BOX (vbox),
+			  create_pane_options (GTK_PANED (hpaned),
+					       "Horizontal",
+					       "Left",
+					       "Right"),
+			  FALSE, FALSE, 0);
+
+      gtk_box_pack_start (GTK_BOX (vbox),
+			  create_pane_options (GTK_PANED (vpaned),
+					       "Vertical",
+					       "Top",
+					       "Bottom"),
+			  FALSE, FALSE, 0);
+
+      gtk_widget_show_all (vbox);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

@@ -1,3 +1,15 @@
+Tue Dec 15 11:37:05 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c: Fixed up some warnings.
+
+Tue Dec 15 10:32:01 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkpaned.[ch]: Add new functions 
+	gtk_paned_set_position(),
+	gtk_paned_pack1/2(). The latter take a
+	shrink and resize parameters, that allows setting
+	minimum sizes and getting 'relative' resizing.
+
 Tue Dec 15 10:26:23 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkevents.c: Keep separate putback_events and 
