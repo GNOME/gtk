@@ -1,3 +1,8 @@
+Thu Nov 20 14:51:41 2003  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreedatalist.c (gtk_tree_data_list_compare_func): Patch
+	from David Hampton to fix sorting on booleans.
+
 Thu Nov 20 15:48:03 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtksocket.c (gtk_socket_focus): Use gtk_widget_is_focus()
