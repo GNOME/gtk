@@ -1,3 +1,7 @@
+2001-12-12  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/text_widget.sgml: add another example
+
 2001-12-09  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtkmain.sgml: Markup fixes.

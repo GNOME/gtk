@@ -127,7 +127,7 @@ might look like this:
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-  gtk_text_buffer_set_text (buffer, "Hello, this is some text");
+  gtk_text_buffer_set_text (buffer, "Hello, this is some text", -1);
 
   /* Now you might put the view in a container and display it on the
    * screen; when the user edits the text, signals on the buffer
@@ -139,6 +139,70 @@ gtk_text_buffer_new(), then create a widget for that buffer with
 gtk_text_view_new_with_buffer(). Or you can change the buffer the
 widget displays after the widget is created with
 gtk_text_view_set_buffer().
+</para>
+
+</refsect1>
+
+<refsect1>
+<title>Example of Changing Text Attributes</title>
+
+<para>
+
+There are two ways to affect text attributes in 
+<link linkend="GtkTextView">GtkTextView</link>.
+You can change the default attributes for a given 
+<link linkend="GtkTextView">GtkTextView</link>, and you can 
+apply tags that change the attributes for a region of text.
+For text features that come from the theme &mdash; such as 
+font and foreground color &mdash use standard 
+<link linkend="GtkWidget">GtkWidget</link>
+functions such as 
+<link linkend="gtk_widget_modify_font">gtk_widget_modify_font()</link>
+or 
+<link linkend="gtk_widget_modify_fg">gtk_widget_modify_fg()</link>.
+For other attributes there are dedicated methods on 
+<link linkend="GtkTextView">GtkTextView</link> such as 
+<link linkend="gtk_text_view_set_tabs">gtk_text_view_set_tabs()</link>.
+
+<programlisting>
+  GtkWidget *view;
+  GtkTextBuffer *buffer;
+  PangoFontDescription *font_desc;
+  GdkColor color;
+  GtkTextTag *tag;
+
+  view = gtk_text_view_new ();
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+
+  gtk_text_buffer_set_text (buffer, "Hello, this is some text", -1);
+
+  /* Change default font throughout the widget */
+  font_desc = pango_font_description_from_string ("Serif 15");
+  gtk_widget_modify_font (view, font_desc);
+  pango_font_description_free (font_desc);
+
+  /* Change default color throughout the widget */
+  gdk_color_parse ("green", &color);
+  gtk_widget_modify_fg (view, GTK_STATE_NORMAL, &color);
+
+  /* Change left margin throughout the widget */
+  gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 30);
+
+  /* Use a tag to change the color for just one part of the widget */
+  tag = gtk_text_buffer_create_tag (buffer, "blue_foreground",
+	   		            "foreground", "blue", NULL);  
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 7);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 12);
+  gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
+</programlisting>
+
+</para>
+
+<para>
+The <application>gtk-demo</application> application that comes with
+GTK+ contains more example code for <link
+linkend="GtkTextView">GtkTextView</link>.
 </para>
 
 </refsect1>
