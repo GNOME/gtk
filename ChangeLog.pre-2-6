@@ -1,3 +1,7 @@
+2004-12-01  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: use MS Windows button order, not Gnome HIG order
+
 2004-11-30  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: MS Windows menus should not have tearoffs

@@ -1,6 +1,7 @@
 gtk-icon-sizes="gtk-menu=14,14:gtk-small-toolbar=16,16:gtk-large-toolbar=24,24:gtk-dnd=32,32"
 gtk-toolbar-icon-size=large-toolbar
 gtk-button-images=0
+gtk-alternative-button-order=1
 
 style "msw-default"
 {
