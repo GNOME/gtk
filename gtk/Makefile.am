@@ -301,9 +301,9 @@ $(srcdir)/gtkmarshal.c $(srcdir)/gtkmarshal.h: @REBUILD@ stamp-m
 
 stamp-m: @REBUILD@ $(srcdir)/gtkmarshal.list $(srcdir)/genmarshal.pl
 	(srcdir=$(srcdir) INDENT=$(INDENT) $(PERL) $(srcdir)/genmarshal.pl \
-	&& (cmp -s s-gmc $(srcdir)/gtkmarshal.c || mv s-gmc $(srcdir)/gtkmarshal.c) \
+	&& (cmp -s s-gmc $(srcdir)/gtkmarshal.c || cp s-gmc $(srcdir)/gtkmarshal.c) \
 	&& rm -f s-gmc \
-	&& (cmp -s s-gmh $(srcdir)/gtkmarshal.h || mv s-gmh $(srcdir)/gtkmarshal.h) \
+	&& (cmp -s s-gmh $(srcdir)/gtkmarshal.h || cp s-gmh $(srcdir)/gtkmarshal.h) \
 	&& rm -f s-gmh) \
 	&& echo timestamp > stamp-m
 

@@ -1,11 +1,17 @@
+1999-07-30  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (stamp-m): Don't `mv' from builddir to srcdir,
+	use `cp' followed by `rm' (the `rm' was already there).
+
 July 30, 1999 Elliot Lee <sopwith@redhat.com>
-	. configure.in: Fix autoconf warnings about cross compilation by trying to
-	  provide sane defaults for AC_TRY_RUN.
-	. docs/Makefile.am: Tell distcheck how to generate the .gif files.
-	. gtk/Makefile.am: If we refer to gtkmarshal.[ch] in $(srcdir), put them into
-	  $(srcdir) when generated. Also add a dependency of gtksignal.h on gtkmarshal.h
-	  for -j builds.
-	. gtk/gtk(dnd,style,gamma).c: Minor warning fixes.
+	
+	* configure.in: Fix autoconf warnings about cross compilation by
+	trying to provide sane defaults for AC_TRY_RUN.
+	* docs/Makefile.am: Tell distcheck how to generate the .gif files.
+	* gtk/Makefile.am: If we refer to gtkmarshal.[ch] in $(srcdir),
+	put them into $(srcdir) when generated. Also add a dependency of
+	gtksignal.h on gtkmarshal.h for -j builds. 
+	* gtk/gtk(dnd,style,gamma).c: Minor warning fixes.
 
 Wed Jul 28 09:29:19 1999  Owen Taylor  <otaylor@redhat.com>
 
