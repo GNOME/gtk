@@ -1,3 +1,9 @@
+2004-04-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_line_previous_could_contain_tag): 
+	Don't stop the iteration up to the tag_root too 
+	early.  (#109945, Dongho Shin)
+
 Sun Apr 18 17:06:03 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/x11/gdkkeys-x11.c (get_effective_keymap): Make
