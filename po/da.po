@@ -8,6 +8,7 @@
 # Konventioner:
 #
 #   attribute -> egenskab
+#   colormap -> farvetabel
 #   directory -> mappe 
 #   entry -> indtastningsfelt, indtastningsboks
 #   frame (i animation) -> billede
@@ -30,8 +31,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 16:36-0400\n"
-"PO-Revision-Date: 2004-04-15 20:02+0200\n"
+"POT-Creation-Date: 2004-11-04 23:13+0100\n"
+"PO-Revision-Date: 2004-11-04 23:13+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -236,7 +237,6 @@ msgid "Stack overflow"
 msgstr "Stakoverløb"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF-billedindlæseren forstår ikke dette billede."
 
@@ -271,8 +271,8 @@ msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"GIF-animation har ikke globalt farvekort, og et billede i den har ikke "
-"lokalt farvekort."
+"GIF-animation har ikke globalt farvetabel, og et billede i den har ikke "
+"lokalt farvetabel."
 
 #: gdk-pixbuf/io-gif.c:1491
 msgid "GIF image was truncated or incomplete."
@@ -476,11 +476,10 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Nøgler til PNG-tekstblokke skal være ASCII-tegn."
 
 #: gdk-pixbuf/io-png.c:854
-#, fuzzy, c-format
+#, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
-"Værdien for PNG-tekstblokken %s kan ikke konverteres til ISO-8859-1-"
-"kodningen."
+"Værdi for PNG-tekstblokken %s kan ikke konverteres til ISO-8859-1-kodningen."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -515,9 +514,8 @@ msgid "Maximum color value in PNM file is too large"
 msgstr "Største farveværdi i PNM-fil er for stor"
 
 #: gdk-pixbuf/io-pnm.c:396
-#, fuzzy
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr "Kan ikke håndtere PNM-filer med flere farveværdier end 255"
+msgstr "Kan ikke håndtere PNM-filer med maksimale farveværdier større end 255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -540,9 +538,8 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Rå PNM-formater kræver præcist ét blankt felt før eksempeldata"
 
 #: gdk-pixbuf/io-pnm.c:770
-#, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
-msgstr "Kan ikke allokere hukommelse til indlæsning af PNM-fil"
+msgstr "Kan ikke allokere hukommelse til indlæsning af PNM-billede"
 
 #: gdk-pixbuf/io-pnm.c:820
 msgid "Insufficient memory to load PNM context struct"
@@ -581,37 +578,30 @@ msgid "The Sun raster image format"
 msgstr "Sun raster-billedformatet"
 
 #: gdk-pixbuf/io-tga.c:159
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Kan ikke allokere hukommelse til IOBuffer-struktur"
 
 #: gdk-pixbuf/io-tga.c:178
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Kan ikke allokere hukommelse til IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:189
-#, fuzzy
 msgid "Cannot realloc IOBuffer data"
 msgstr "Kan ikke omallokere IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:219
-#, fuzzy
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Kan ikke allokere midlertidige IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:353
-#, fuzzy
 msgid "Cannot allocate new pixbuf"
 msgstr "Kan ikke allokere ny pixbuf"
 
 #: gdk-pixbuf/io-tga.c:692
-#, fuzzy
 msgid "Cannot allocate colormap structure"
 msgstr "Kan ikke allokere farvetabelsstruktur"
 
 #: gdk-pixbuf/io-tga.c:699
-#, fuzzy
 msgid "Cannot allocate colormap entries"
 msgstr "Kan ikke allokere farvetabelselementer"
 
@@ -620,7 +610,6 @@ msgid "Unexpected bitdepth for colormap entries"
 msgstr "Uventet bitdybde for farvetabelselementer"
 
 #: gdk-pixbuf/io-tga.c:739
-#, fuzzy
 msgid "Cannot allocate TGA header memory"
 msgstr "Kan ikke allokere hukommelse til TGA-hoved"
 
@@ -634,7 +623,6 @@ msgid "TGA image type not supported"
 msgstr "TGA-billedtype ikke understøttet"
 
 #: gdk-pixbuf/io-tga.c:861
-#, fuzzy
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Kan ikke allokere hukommelse til TGA-kontekststruktur"
 
@@ -744,14 +732,12 @@ msgid "XPM file has invalid number of colors"
 msgstr "XPM-filen har et ugyldig antal farver"
 
 #: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
-#, fuzzy
 msgid "Cannot allocate memory for loading XPM image"
-msgstr "Ikke nok hukommelse til indlæsning af XPM-billede"
+msgstr "Kan ikke allokere hukommelse til indlæsning af XPM-billede"
 
 #: gdk-pixbuf/io-xpm.c:1295
-#, fuzzy
 msgid "Cannot read XPM colormap"
-msgstr "Kan ikke læse XPM-farvekort"
+msgstr "Kan ikke læse XPM-farvetabel"
 
 #: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
@@ -764,48 +750,47 @@ msgstr "XPM-billedformatet"
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:115
 msgid "Program class as used by the window manager"
-msgstr ""
+msgstr "Programklasse, benyttet af vindueshåndteringen"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:116
 msgid "CLASS"
-msgstr ""
+msgstr "KLASSE"
 
 #. Description of --name=NAME in --help output
 #: gdk/gdk.c:118
 msgid "Program name as used by the window manager"
-msgstr ""
+msgstr "Programnavn, benyttet af vindueshåndteringen"
 
 #. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:119
 msgid "NAME"
-msgstr ""
+msgstr "NAVN"
 
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:121
 msgid "X display to use"
-msgstr ""
+msgstr "X-terminal der skal bruges"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:122
-#, fuzzy
 msgid "DISPLAY"
-msgstr "IPA"
+msgstr "TERMINAL"
 
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:124
 msgid "X screen to use"
-msgstr ""
+msgstr "X-skærm der skal bruges"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: gdk/gdk.c:125
 msgid "SCREEN"
-msgstr ""
+msgstr "SKÆRM"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:128
 msgid "Gdk debugging flags to set"
-msgstr ""
+msgstr "GDK-fejlretningsflag der skal angives"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -813,90 +798,90 @@ msgstr ""
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:404 gtk/gtkmain.c:407
 msgid "FLAGS"
-msgstr ""
+msgstr "FLAG"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:131
 msgid "Gdk debugging flags to unset"
-msgstr ""
+msgstr "GDK-fejlretningsflag der skal fjernes"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:60
 msgid "Don't batch GDI requests"
-msgstr ""
+msgstr "Saml ikke GDI-forespørgsmler"
 
 #. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr ""
+msgstr "Benyt ikke Wintab API'et til tablet-understøttelse"
 
 #. Description of --ignore-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:64
 msgid "Same as --no-wintab"
-msgstr ""
+msgstr "Samme som --no-wintab"
 
 #. Description of --use-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
-msgstr ""
+msgstr "Benyt ikke Wintab API'et [standard]"
 
 #. Description of --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:68
 msgid "Size of the palette in 8 bit mode"
-msgstr ""
+msgstr "STørrelse af paletten i 8 bit-tilstand"
 
 #. Placeholder in --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:69
 msgid "COLORS"
-msgstr ""
+msgstr "FARVER"
 
 #. Description of --sync in --help output
 #: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "Gør X-kald synkrone"
 
-#: gtk/gtkaboutdialog.c:217 gtk/gtkaboutdialog.c:1823
+#: gtk/gtkaboutdialog.c:260 gtk/gtkaboutdialog.c:1937
 msgid "License"
-msgstr ""
+msgstr "Licens"
 
-#: gtk/gtkaboutdialog.c:218
+#: gtk/gtkaboutdialog.c:261
 msgid "The license of the program"
-msgstr ""
+msgstr "Vis licensen for programmet"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:481
 msgid "_Credits"
-msgstr ""
+msgstr "_Bidragydere"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:376
+#: gtk/gtkaboutdialog.c:490
 msgid "_License"
-msgstr ""
+msgstr "_Licens"
 
-#: gtk/gtkaboutdialog.c:567
+#: gtk/gtkaboutdialog.c:681
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "Om %s"
 
-#: gtk/gtkaboutdialog.c:1760
+#: gtk/gtkaboutdialog.c:1874
 msgid "Credits"
-msgstr ""
+msgstr "Bidragydere"
 
-#: gtk/gtkaboutdialog.c:1785
+#: gtk/gtkaboutdialog.c:1899
 msgid "Written by"
-msgstr ""
+msgstr "Skrevet af"
 
-#: gtk/gtkaboutdialog.c:1788
+#: gtk/gtkaboutdialog.c:1902
 msgid "Documented by"
-msgstr ""
+msgstr "Dokumenteret af"
 
-#: gtk/gtkaboutdialog.c:1800
+#: gtk/gtkaboutdialog.c:1914
 msgid "Translated by"
-msgstr ""
+msgstr "Oversat af"
 
-#: gtk/gtkaboutdialog.c:1804
+#: gtk/gtkaboutdialog.c:1918
 msgid "Artwork by"
-msgstr ""
+msgstr "Grafik af"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -945,11 +930,6 @@ msgstr "calendar:MY"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
-
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
-#, c-format
-msgid "progress bar label|%d %%"
-msgstr ""
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1087,15 +1067,15 @@ msgstr "Farvehjul"
 msgid "Color Selection"
 msgstr "Farvevælger"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:6979
+#: gtk/gtkentry.c:4507 gtk/gtktextview.c:6978
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:6989
+#: gtk/gtkentry.c:4517 gtk/gtktextview.c:6988
 msgid "Input _Methods"
 msgstr "Indtastnings_metoder"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7000
+#: gtk/gtkentry.c:4528 gtk/gtktextview.c:6999
 msgid "_Insert Unicode Control Character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
@@ -1106,21 +1086,19 @@ msgid "Invalid filename: %s"
 msgstr "Ugyldigt filnavn: %s"
 
 #: gtk/gtkfilechooserbutton.c:59
-#, fuzzy
 msgid "(None)"
-msgstr "ingen"
+msgstr "(ingen)"
 
-#: gtk/gtkfilechooserbutton.c:253
-#, fuzzy
+#: gtk/gtkfilechooserbutton.c:268
 msgid "Select a File"
-msgstr "Slet fil"
+msgstr "Vælg en fil"
 
-#: gtk/gtkfilechooserbutton.c:1230 gtk/gtkfilechooserdefault.c:1165
+#: gtk/gtkfilechooserbutton.c:1263 gtk/gtkfilechooserdefault.c:1165
 #: gtk/gtkpathbar.c:981
 msgid "Home"
 msgstr "Hjem"
 
-#: gtk/gtkfilechooserbutton.c:1237 gtk/gtkfilechooserdefault.c:1188
+#: gtk/gtkfilechooserbutton.c:1270 gtk/gtkfilechooserdefault.c:1188
 #: gtk/gtkpathbar.c:983
 msgid "Desktop"
 msgstr "Skrivebord"
@@ -1143,7 +1121,7 @@ msgstr ""
 "Kunne ikke tilføje et bogmærke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:842 gtk/gtkfilechooserdefault.c:5690
+#: gtk/gtkfilechooserdefault.c:842 gtk/gtkfilechooserdefault.c:5692
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1161,7 +1139,7 @@ msgstr ""
 "Kunne ikke skifte den aktuelle mappe til %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1589
+#: gtk/gtkfilechooserdefault.c:1591
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -1170,12 +1148,12 @@ msgstr ""
 "Kunne ikke oprette mappen %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1775
+#: gtk/gtkfilechooserdefault.c:1777
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Kunne ikke tilføje bogmærke for %s fordi det ikke er en mappe."
 
-#: gtk/gtkfilechooserdefault.c:1887
+#: gtk/gtkfilechooserdefault.c:1889
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1184,161 +1162,160 @@ msgstr ""
 "Kunne ikke fjerne bogmærke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2024
+#: gtk/gtkfilechooserdefault.c:2026
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr ""
-
-#: gtk/gtkfilechooserdefault.c:2065
-msgid "Add the current folder to the bookmarks"
-msgstr ""
+msgstr "Tilføj mappen \"%s\" til bogmærkerne"
 
 #: gtk/gtkfilechooserdefault.c:2067
-msgid "Add the selected folders to the bookmarks"
-msgstr ""
+msgid "Add the current folder to the bookmarks"
+msgstr "Tilføj den aktuelle mappe til bogmærkerne"
 
-#: gtk/gtkfilechooserdefault.c:2107
+#: gtk/gtkfilechooserdefault.c:2069
+msgid "Add the selected folders to the bookmarks"
+msgstr "Tilføj de markerede mapper til bogmærkerne"
+
+#: gtk/gtkfilechooserdefault.c:2109
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr ""
+msgstr "Fjern bogmærket \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:2512
+#: gtk/gtkfilechooserdefault.c:2514
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
-"Kunne ikke tilføje et bogmærke for %s fordi det er et ugyldigt stinavn."
+"Kunne ikke tilføje et bogmærke for \"%s\" fordi det er et ugyldigt stinavn."
 
-#: gtk/gtkfilechooserdefault.c:2690
+#: gtk/gtkfilechooserdefault.c:2692
 msgid "Shortcuts"
-msgstr ""
+msgstr "Genveje"
 
-#: gtk/gtkfilechooserdefault.c:2744
+#: gtk/gtkfilechooserdefault.c:2746
 msgid "Folder"
 msgstr "Mappe"
 
-#: gtk/gtkfilechooserdefault.c:2796 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2798 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Tilføj"
 
-#: gtk/gtkfilechooserdefault.c:2803
+#: gtk/gtkfilechooserdefault.c:2805
 msgid "Add the selected folder to the bookmarks"
-msgstr ""
+msgstr "Tilføj den markerede mappe til bogmærkerne"
 
-#: gtk/gtkfilechooserdefault.c:2808 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2810 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Fjern"
 
-#: gtk/gtkfilechooserdefault.c:2815
+#: gtk/gtkfilechooserdefault.c:2817
 msgid "Remove the selected bookmark"
-msgstr ""
+msgstr "Fjern det markerede bogmærke"
 
-#: gtk/gtkfilechooserdefault.c:2908
+#: gtk/gtkfilechooserdefault.c:2910
 msgid "_Add to Shortcuts"
-msgstr ""
+msgstr "_Tilføj til genveje"
 
-#: gtk/gtkfilechooserdefault.c:2922
+#: gtk/gtkfilechooserdefault.c:2924
 msgid "Show _Hidden Files"
 msgstr "Vis _skjulte filer"
 
-#: gtk/gtkfilechooserdefault.c:3046 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3048 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilechooserdefault.c:3074
+#: gtk/gtkfilechooserdefault.c:3076
 msgid "Name"
 msgstr "Navn"
 
-#: gtk/gtkfilechooserdefault.c:3099
+#: gtk/gtkfilechooserdefault.c:3101
 msgid "Size"
 msgstr "Størrelse"
 
-#: gtk/gtkfilechooserdefault.c:3112
+#: gtk/gtkfilechooserdefault.c:3114
 msgid "Modified"
 msgstr "Ændret"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3158
+#: gtk/gtkfilechooserdefault.c:3160
 msgid "Create Fo_lder"
 msgstr "Opret _mappe"
 
-#: gtk/gtkfilechooserdefault.c:3192
+#: gtk/gtkfilechooserdefault.c:3194
 msgid "Select which types of files are shown"
-msgstr ""
+msgstr "Vælg hvilke typer filer der vises"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3281
+#: gtk/gtkfilechooserdefault.c:3283
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: gtk/gtkfilechooserdefault.c:3325
+#: gtk/gtkfilechooserdefault.c:3327
 msgid "_Browse for other folders"
 msgstr "_Se efter andre mapper"
 
-#: gtk/gtkfilechooserdefault.c:3567
+#: gtk/gtkfilechooserdefault.c:3569
 msgid "Save in _folder:"
 msgstr "Gem i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:3569
+#: gtk/gtkfilechooserdefault.c:3571
 msgid "Create in _folder:"
 msgstr "Opret i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:4260
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:4262
 msgid "Cannot change to folder because it is not local"
-msgstr "Kan ikke skifte til den mappe fordi den ikke er lokal"
+msgstr "Kan ikke skifte til mappe fordi den ikke er lokal"
 
-#: gtk/gtkfilechooserdefault.c:4404
+#: gtk/gtkfilechooserdefault.c:4406
 msgid "Could not find the path"
 msgstr "Kunne ikke finde stien"
 
-#: gtk/gtkfilechooserdefault.c:4788
+#: gtk/gtkfilechooserdefault.c:4790
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "genvej %s eksisterer ikke"
 
-#: gtk/gtkfilechooserdefault.c:5493
+#: gtk/gtkfilechooserdefault.c:5495
 msgid "Type name of new folder"
 msgstr "Indtast navn på ny mappe"
 
-#: gtk/gtkfilechooserdefault.c:5522
+#: gtk/gtkfilechooserdefault.c:5524
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:5524
+#: gtk/gtkfilechooserdefault.c:5526
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f k"
 
-#: gtk/gtkfilechooserdefault.c:5526
+#: gtk/gtkfilechooserdefault.c:5528
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5528
+#: gtk/gtkfilechooserdefault.c:5530
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5573
+#: gtk/gtkfilechooserdefault.c:5575
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:5575
+#: gtk/gtkfilechooserdefault.c:5577
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:5586
+#: gtk/gtkfilechooserdefault.c:5588
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: gtk/gtkfilechooserdefault.c:5651
+#: gtk/gtkfilechooserdefault.c:5653
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Kan ikke skifte til den mappe du angav da det er en ugyldig sti."
 
-#: gtk/gtkfilechooserdefault.c:5728
+#: gtk/gtkfilechooserdefault.c:5730
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1347,15 +1324,15 @@ msgstr ""
 "Kunne ikke vælge %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5768
+#: gtk/gtkfilechooserdefault.c:5770
 msgid "Open Location"
 msgstr "Åbn placering"
 
-#: gtk/gtkfilechooserdefault.c:5775
+#: gtk/gtkfilechooserdefault.c:5777
 msgid "Save in Location"
 msgstr "Åbn i placering"
 
-#: gtk/gtkfilechooserdefault.c:5799
+#: gtk/gtkfilechooserdefault.c:5801
 msgid "_Location:"
 msgstr "_Sted:"
 
@@ -1514,13 +1491,13 @@ msgid "_Selection: "
 msgstr "_Valg: "
 
 #: gtk/gtkfilesel.c:3145
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
 "Filnavnet \"%s\" kunne ikke konverteres til UTF-8 (prøv at sætte "
-"miljøvariablen G_BROKEN_FILENAMES): %s"
+"miljøvariablen G_FILENAME_ENCODING): %s"
 
 #: gtk/gtkfilesel.c:3148
 msgid "Invalid UTF-8"
@@ -1563,9 +1540,9 @@ msgid "Filesystem"
 msgstr "Filsystemer"
 
 #: gtk/gtkfilesystemunix.c:738
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Kunne ikke indhente oplysninger om filen \"%s\": %s"
+msgstr "Kunne ikke indhente et lagerikon for %s"
 
 #: gtk/gtkfilesystemunix.c:833
 #, c-format
@@ -1647,7 +1624,7 @@ msgstr "_Gammaværdi"
 msgid "Error loading icon: %s"
 msgstr "Fejl ved indlæsning af ikon: %s"
 
-#: gtk/gtkicontheme.c:1243
+#: gtk/gtkicontheme.c:1244
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1660,7 +1637,7 @@ msgstr ""
 "installere det. Du kan få en kopi fra:\n"
 "           %s"
 
-#: gtk/gtkicontheme.c:1308
+#: gtk/gtkicontheme.c:1309
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonet \"%s\" er ikke tilgængeligt i tema"
@@ -1748,38 +1725,38 @@ msgstr "(ukendt)"
 msgid "clear"
 msgstr "ryd"
 
-#: gtk/gtklabel.c:3479
+#: gtk/gtklabel.c:3482
 msgid "Select All"
 msgstr "Markér alt"
 
-#: gtk/gtklabel.c:3489
+#: gtk/gtklabel.c:3492
 msgid "Input Methods"
 msgstr "Indtastningsmetoder"
 
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:397
 msgid "Load additional GTK+ modules"
-msgstr ""
+msgstr "Indlæs yderligere GTK+-moduler"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:398
 msgid "MODULES"
-msgstr ""
+msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
 #: gtk/gtkmain.c:400
 msgid "Make all warnings fatal"
-msgstr ""
+msgstr "Gør alle advarsler fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:403
 msgid "GTK+ debugging flags to set"
-msgstr ""
+msgstr "GTK+-fejlretningsflag der skal angives"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:406
 msgid "GTK+ debugging flags to unset"
-msgstr ""
+msgstr "GTK+-fejlretningsflag der skal fjernes"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1792,11 +1769,11 @@ msgstr "default:LTR"
 
 #: gtk/gtkmain.c:549
 msgid "GTK+ Options"
-msgstr ""
+msgstr "GTK+-tilvalg"
 
 #: gtk/gtkmain.c:549
 msgid "Show GTK+ Options"
-msgstr ""
+msgstr "Vis GTK+-tilvalg"
 
 #: gtk/gtknotebook.c:2712 gtk/gtknotebook.c:5060
 #, c-format
@@ -1848,7 +1825,7 @@ msgstr "Spørgsmål"
 #.
 #: gtk/gtkstock.c:294
 msgid "_About"
-msgstr ""
+msgstr "_Om"
 
 #: gtk/gtkstock.c:296
 msgid "_Apply"
@@ -1896,7 +1873,7 @@ msgstr "_Udfør"
 
 #: gtk/gtkstock.c:307
 msgid "_Edit"
-msgstr ""
+msgstr "_Redigér"
 
 #: gtk/gtkstock.c:308
 msgid "_Find"
@@ -1991,34 +1968,28 @@ msgid "_Right"
 msgstr "_Højre"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgid "_Next"
-msgstr "_Ny"
+msgstr "_Næste"
 
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgid "P_ause"
-msgstr "_Indsæt"
+msgstr "_Pause"
 
 #: gtk/gtkstock.c:334
 msgid "_Play"
-msgstr ""
+msgstr "_Afspil"
 
-# passer godt her
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgid "Pre_vious"
-msgstr "Udseende"
+msgstr "_Forrige"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgid "_Record"
-msgstr "_Rød:"
+msgstr "_Optag"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgid "R_ewind"
-msgstr "_Find"
+msgstr "_Tilbage"
 
 #: gtk/gtkstock.c:338 gtk/gtkstock.c:361
 msgid "_Stop"
@@ -2230,9 +2201,8 @@ msgstr "Kyrillisk (transskriberet)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
-#, fuzzy
 msgid "Inuktitut (Transliterated)"
-msgstr "Inukitut (transskriberet)"
+msgstr "Inuktitut (transskriberet)"
 
 #. ID
 #: modules/input/imipa.c:145
@@ -2274,13 +2244,6 @@ msgstr "Kunne ikke indhente oplysninger om filen \"%s\": %s"
 
 #~ msgid "%d/%b/%Y"
 #~ msgstr "%d %b %Y"
-
-#~ msgid ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Kunne ikke gå til den overliggende mappe til %s:\n"
-#~ "%s"
 
 #~ msgid "Could not set current folder: %s"
 #~ msgstr "Kunne ikke angive aktuel mappe: %s"
