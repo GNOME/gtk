@@ -1,3 +1,10 @@
+Mon Mar 29 17:31:52 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkim.c (gdk_mbstowcs): Free the value of the
+	intermediate text property - prevents major memory
+        leak when gdk_use_mb.
+	gtk-d3august-990311-0: Bj|rn Augustsson <d3august@dtek.chalmers.se>
+
 Mon Mar 29 17:02:58 1999  Owen Taylor  <otaylor@redhat.com>
 
         Patches from Akira Higuchi <a-higuti@math.sci.hokudai.ac.jp>

@@ -1571,8 +1571,10 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 	  != Success)
 	{
 	  /* InvalidChar */
+	  XFree(tpr.value);
 	  return -1;
 	}
+      XFree(tpr.value);
       if (num_wstrs == 0)
 	return 0;
       wstr_src = wstrs[0];
