@@ -2391,8 +2391,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	  needs_draw = TRUE;
 	}
     }
-  else if ((widget->allocation.width != real_allocation.width ||
-	    widget->allocation.height != real_allocation.height))
+  else if (widget->allocation.width != real_allocation.width ||
+	   widget->allocation.height != real_allocation.height)
     {
       needs_draw = TRUE;
     }
@@ -2724,12 +2724,8 @@ gtk_widget_event (GtkWidget *widget,
       break;
     case GDK_EXPOSE:
       /* there is no sense in providing a widget with bogus expose events.
-       * Widgets that are going to be resized don't need to be
-       * exposed, since they will be redrawn anyways.
        */
-      if (!event->any.window ||
-	  GTK_WIDGET_RESIZE_NEEDED (widget) ||
-	  (widget->parent && GTK_WIDGET_RESIZE_NEEDED (widget->parent)))
+      if (!event->any.window)
 	{
 	  gtk_widget_unref (widget);
 	  return TRUE;

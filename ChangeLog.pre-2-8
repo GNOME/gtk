@@ -1,3 +1,34 @@
+Fri Jan 15 19:16:42 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: define GTK_DISABLE_COMPAT_H for compilation of gtk
+	code.
+
+	* gtk/gtkrc.c (gtk_rc_style_unref): added an assertment.
+
+	* gtk/gtkcompat.h:
+	* gtk/gtklabel.h: 
+	don't provide compatibility defines if GTK_DISABLE_COMPAT_H is defined.
+
+	* gtk/gtkstyle.h:
+	* gtk/gtkstyle.c: coding style, indentation and alignment fixups.
+	(gtk_draw_string): 
+	(gtk_paint_string): 
+	(gtk_draw_polygon):
+	(gtk_style_set_background): fixed assertments.
+	(gtk_default_draw_ramp): 
+	(gtk_default_draw_cross): 
+	(gtk_default_draw_oval): issue warnings since these functions aren't
+	yet implemented.
+
+	* gdk/gdkwindow.c:
+	(gdk_window_hide): only unmap window if already mapped.
+	(gdk_window_show): only map window if !mapped.
+	(gdk_window_internal_destroy): destroyed windows can't be mapped.
+
+	* gtk/gtkwidget.c (gtk_widget_event): don't ignore expose events just
+	because a resize is queued on a widget, we rely on the expose events
+	now.
+
 Fri Jan 15 10:22:21 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): 

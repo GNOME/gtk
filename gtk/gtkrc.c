@@ -560,6 +560,7 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
   gint i;
 
   g_return_if_fail (rc_style != NULL);
+  g_return_if_fail (rc_style->ref_count > 0);
 
   rc_style->ref_count--;
 

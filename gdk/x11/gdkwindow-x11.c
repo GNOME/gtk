@@ -529,14 +529,15 @@ gdk_window_foreign_new (guint32 anid)
 }
 
 /* Call this function when you want a window and all its children to
-   disappear.  When xdestroy is true, a request to destroy the XWindow
-   is sent out.  When it is false, it is assumed that the XWindow has
-   been or will be destroyed by destroying some ancestor of this
-   window.  */
-
+ * disappear.  When xdestroy is true, a request to destroy the XWindow
+ * is sent out.  When it is false, it is assumed that the XWindow has
+ * been or will be destroyed by destroying some ancestor of this
+ * window.
+ */
 static void
-gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
-			     gboolean our_destroy)
+gdk_window_internal_destroy (GdkWindow *window,
+			     gboolean   xdestroy,
+			     gboolean   our_destroy)
 {
   GdkWindowPrivate *private;
   GdkWindowPrivate *temp_private;
@@ -630,6 +631,7 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
 	  if (private->colormap)
 	    gdk_colormap_unref (private->colormap);
 
+	  private->mapped = FALSE;
 	  private->destroyed = TRUE;
 	}
       break;
@@ -716,7 +718,7 @@ gdk_window_show (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  if (!private->destroyed)
+  if (!private->destroyed && !private->mapped)
     {
       private->mapped = TRUE;
       XRaiseWindow (private->xdisplay, private->xwindow);
@@ -732,7 +734,7 @@ gdk_window_hide (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  if (!private->destroyed)
+  if (!private->destroyed && private->mapped)
     {
       private->mapped = FALSE;
       XUnmapWindow (private->xdisplay, private->xwindow);
@@ -2533,5 +2535,3 @@ gdk_drawable_set_data (GdkDrawable   *drawable,
 {
   g_dataset_set_data_full (drawable, key, data, destroy_func);
 }
-
-

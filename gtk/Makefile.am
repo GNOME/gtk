@@ -355,6 +355,7 @@ EXTRA_DIST = \
         circles.xbm
 
 INCLUDES = \
+	-DGTK_DISABLE_COMPAT_H				\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"		\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\

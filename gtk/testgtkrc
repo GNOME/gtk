@@ -13,6 +13,8 @@
 # testgtkrc2 sets all the buttons in the main window to blue by default
 include "testgtkrc2"
 
+#include "/usr/local/share/themes/Pixmap/gtk/gtkrc"
+
 pixmap_path "."
 
 style "defaultfont"

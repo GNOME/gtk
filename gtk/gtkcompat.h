@@ -28,6 +28,9 @@ extern "C" {
 /* this file contains aliases that have to be kept for historical
  * reasons, because a wide code base depends on them.
  */
+
+#ifndef	GTK_DISABLE_COMPAT_H
+
 #define	gtk_accel_label_accelerator_width	gtk_accel_label_get_accel_width
 #define	gtk_container_border_width		gtk_container_set_border_width
 #define	gtk_notebook_current_page               gtk_notebook_get_current_page
@@ -37,6 +40,8 @@ extern "C" {
 #define	gtk_scale_value_width                   gtk_scale_get_value_width
 #define	gtk_window_position			gtk_window_set_position
 #define	gtk_toggle_button_set_state		gtk_toggle_button_set_active
+
+#endif	/* GTK_DISABLE_COMPAT_H */
 
 #ifdef __cplusplus
 }
