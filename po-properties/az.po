@@ -1,33 +1,4 @@
 # translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
-# translation of gtk+-properties.HEAD.az.po to Azerbaijani Turkish
 # Copyright (C) 2003, 2004 Free Software Foundation, Inc.
 # Vasif Ismailoglu MD <azerb_linux@hotmail.com>, 2000.
 # Mətin Əmirov <metin@karegen.com>, 2003, 2004.
@@ -36,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.az\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
+"POT-Creation-Date: 2004-03-05 15:17+0100\n"
 "PO-Revision-Date: 2004-02-05 18:28+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
-"Language-Team: Azerbaijani Turkish <gnome@azitt.com>\n"
+"Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1341,57 +1312,57 @@ msgstr "Siyahıdakı qiymət"
 msgid "Whether entered values must already be present in the list"
 msgstr "Girilən qiymətin hazırda da siyahıda olması lazımdırsa"
 
-#: gtk/gtkcombobox.c:430
+#: gtk/gtkcombobox.c:451
 msgid "ComboBox model"
 msgstr "ComboBox modeli"
 
-#: gtk/gtkcombobox.c:431
+#: gtk/gtkcombobox.c:452
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "Ağac görünüşü modeli"
 
-#: gtk/gtkcombobox.c:438
+#: gtk/gtkcombobox.c:459
 #, fuzzy
 msgid "Wrap width"
 msgstr "En"
 
-#: gtk/gtkcombobox.c:439
+#: gtk/gtkcombobox.c:460
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:448
+#: gtk/gtkcombobox.c:469
 #, fuzzy
 msgid "Row span column"
 msgstr "Sətir aralığı"
 
-#: gtk/gtkcombobox.c:449
+#: gtk/gtkcombobox.c:470
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:458
+#: gtk/gtkcombobox.c:479
 #, fuzzy
 msgid "Column span column"
 msgstr "Sütünlar arası boşluq"
 
-#: gtk/gtkcombobox.c:459
+#: gtk/gtkcombobox.c:480
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:468
+#: gtk/gtkcombobox.c:489
 #, fuzzy
 msgid "Active item"
 msgstr "Fəal"
 
-#: gtk/gtkcombobox.c:469
+#: gtk/gtkcombobox.c:490
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "Hazırda seçili olan GdkFont"
 
-#: gtk/gtkcombobox.c:477
+#: gtk/gtkcombobox.c:498
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:478
+#: gtk/gtkcombobox.c:499
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 
@@ -1771,11 +1742,11 @@ msgstr "Gizliləri Göstər"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:473
+#: gtk/gtkfilechooserdefault.c:475
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:474
+#: gtk/gtkfilechooserdefault.c:476
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "İşlədiləcək fayl sistemi üzvü"
