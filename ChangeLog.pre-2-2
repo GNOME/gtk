@@ -1,3 +1,11 @@
+Tue Nov 12 17:10:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c: Fix up grabs to be robust; grab
+	the keyboard as well as the pointer so we won't
+	leave the window behind if the user switches desktops
+	with a keyboard combination. (Based on a patch
+	from Matthias Clasen, #82525)
+
 Wed Nov 13 14:01:44 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkstyle.c: 

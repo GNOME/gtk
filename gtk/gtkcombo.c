@@ -297,6 +297,8 @@ gtk_combo_window_key_press (GtkWidget   *window,
 	      gtk_grab_remove (combo->popwin);
 	      gdk_display_pointer_ungrab (gtk_widget_get_display (window),
 					  event->time);
+	      gdk_display_keyboard_ungrab (gtk_widget_get_display (window),
+					   event->time);
 	    }
 	}
 
@@ -561,27 +563,56 @@ gtk_combo_popdown_list (GtkCombo *combo)
     {
       gtk_grab_remove (combo->popwin);
       gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (combo)),
-				  GDK_CURRENT_TIME);
+				  gtk_get_current_event_time ());
+      gdk_display_keyboard_ungrab (gtk_widget_get_display (GTK_WIDGET (combo)),
+				   gtk_get_current_event_time ());
     }
   
   gtk_widget_hide (combo->popwin);
+}
+
+static gboolean
+popup_grab_on_window (GdkWindow *window,
+		      guint32    activate_time)
+{
+  if ((gdk_pointer_grab (window, TRUE,
+			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			 GDK_POINTER_MOTION_MASK,
+			 NULL, NULL, activate_time) == 0))
+    {
+      if (gdk_keyboard_grab (window, TRUE,
+			     activate_time) == 0)
+	return TRUE;
+      else
+	{
+	  gdk_display_pointer_ungrab (gdk_drawable_get_display (window),
+				      activate_time);
+	  return FALSE;
+	}
+    }
+
+  return FALSE;
 }
 
 static void        
 gtk_combo_activate (GtkWidget        *widget,
 		    GtkCombo         *combo)
 {
+  if (!combo->button->window ||
+      !popup_grab_on_window (combo->button->window,
+			     gtk_get_current_event_time ()))
+    return FALSE;
+
   gtk_combo_popup_list (combo);
+
+  /* This must succeed since we already have the grab */
+  popup_grab_on_window (combo->popwin->window,
+			gtk_get_current_event_time ());
 
   if (!GTK_WIDGET_HAS_FOCUS (combo->entry))
     gtk_widget_grab_focus (combo->entry);
 
   gtk_grab_add (combo->popwin);
-  gdk_pointer_grab (combo->popwin->window, TRUE,
-		    GDK_BUTTON_PRESS_MASK | 
-		    GDK_BUTTON_RELEASE_MASK |
-		    GDK_POINTER_MOTION_MASK, 
-		    NULL, NULL, GDK_CURRENT_TIME);
 }
 
 static gboolean
@@ -595,18 +626,21 @@ gtk_combo_popup_button_press (GtkWidget        *button,
   if (event->button != 1)
     return FALSE;
 
+  if (!popup_grab_on_window (combo->button->window,
+			     gtk_get_current_event_time ()))
+    return FALSE;
+
   combo->current_button = event->button;
 
   gtk_combo_popup_list (combo);
+
+  /* This must succeed since we already have the grab */
+  popup_grab_on_window (combo->popwin->window,
+			gtk_get_current_event_time ());
+
   gtk_button_pressed (GTK_BUTTON (button));
 
   gtk_grab_add (combo->popwin);
-  gdk_pointer_grab (combo->popwin->window, TRUE,
-		    GDK_BUTTON_PRESS_MASK | 
-		    GDK_BUTTON_RELEASE_MASK |
-		    GDK_POINTER_MOTION_MASK, 
-		    NULL, NULL, GDK_CURRENT_TIME);
-
   GTK_LIST (combo->list)->drag_selection = TRUE;
   gtk_grab_add (combo->list);
 
