@@ -1,3 +1,8 @@
+2004-09-25  Matthias Clasen  <mclasen@x1-6-00-50-fc-70-9f-e0>
+
+	* gtk/gtktextiter.c (inside_word_func): Don't access 
+	attr[-1].  (#153628, Padraig O'Briain)
+
 2004-09-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c: Add some tooltips.
