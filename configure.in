@@ -1553,6 +1553,7 @@ fi
 
 AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)
 
+
 ##################################################
 # Output commands
 ##################################################
@@ -1685,3 +1686,12 @@ contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc
 ])
 
 AC_OUTPUT
+
+echo "configuration:
+        target: $gdktarget"
+
+if test "x$gdktarget" = "xlinux-fb"; then
+  echo "Warning: The linux-fb GDK target is unmaintained"
+  echo "         and may not work or even compile"
+fi
+

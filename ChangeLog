@@ -1,5 +1,8 @@
 2004-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Add a warning about the linux-fb 
+	target.  (#155488, Zeeshan Ali)
+
 	* gtk/gtkmain.c (gtk_init_with_args): Typo fix.  (#162278,
 	Torsten Schoenfeld)
 
