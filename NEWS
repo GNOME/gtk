@@ -1,28 +1,28 @@
 Overview of Changes from GTK+-2.2.x to GTK+-2.3.0
 =================================================
-* New action-based menu API: GtkUIManager, GtkActionGroup, 
-  GtkAction, etc. [James Henstridge, Soeren Sandmann, Matthias Clasen]
 * New combo box widgets: GtkComboBox, GtkComboBoxEntry [Kristian Rietveld]
 * Autocompletion for entries: GtkEntryCompletion [Kristian]
 * New "disclosure triangle" widget: GtkExpander [Marc McLoughlin]
 * New "picker button" widgets: GtkFontButton, GtkColorButton [Matthias]
 * Support icon themes for stock icons [Owen Taylor]
 * Support for RGBA cursors [Matthias]
-* Support tabular menus [Kristian]
-* Support RTL flipping for GtkHPaned and GtkTreeView [Soeren, 
-  Matthias, Jonathan Blandford]
+* Support RTL flipping for GtkHPaned [Soeren]
 * Support up to four scroll arrows on GtkNotebook and make them
   themeable. [Matthias]
-* Add a filtering tree model: GtkTreeModelFilter [Kristian]
 * GtkCalendar improvements: make the arrows spin, support RTL flipping,
   automatic week start selection, DND support. [Matthias]
 * Add gtk_widget_queue_resize_no_redraw() [Soeren]
-* New positioning algoritm for menus [Soeren]
 * Theme improvements [Soeren]
 * Fix gdk_window_begin_paint() bug [Soeren]
 * New "focus_on_click" property for GtkButton [Soeren]
 * New "accepts_tab" property for GtkTextView [Soeren]
 * Deprecate GtkCombo and GtkOptionMenu [Kristian]
+
+Menus:
+  - New action-based menu API: GtkUIManager, GtkActionGroup, 
+    GtkAction, etc. [James Henstridge, Soeren Sandmann, Matthias Clasen]
+  - Support for tabular menus [Kristian]
+  - New positioning algorithm for popup menus [Soeren]
 
 GtkToolbar: [Soeren]
   - New toolbar API [James, Anders Carlsson, Owen]
@@ -40,6 +40,7 @@ GtkTreeView: [Kristian Rietveld]
   - Move row reference updating code to closures
   - Fix TreeView DnD: make TreeStore DnD work, make drops on empty views work,
     get rid of gtk-tree-model-drop-append.
+  - Add a filtering tree model: GtkTreeModelFilter [Kristian]
 
 Other contributors: Krasimir Angelov, Mariano Suarez-Alvarez, David
    Bordoley, Christian Persch, Morten Welinder, Marco Pesenti Gritti
