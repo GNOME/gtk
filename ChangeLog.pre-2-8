@@ -1,3 +1,23 @@
+2004-04-07  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #132500.
+
+	* gtk/gtkfilesystem.c (gtk_file_system_parse): Ensure that the
+	passed-in 'str' is not NULL.
+
+	* gtk/gtkfilesystemunix.c (expand_tilde): New helper function;
+	expands "~/" or "~foo/" at the beginning of a filename.
+	(gtk_file_system_unix_parse): Use expand_tilde() before doing
+	anything else.
+
+	* gtk/gtkfilechooserentry.c
+	(gtk_file_chooser_entry_maybe_update_directory): Take in a
+	force_reload argument.
+	(gtk_file_chooser_entry_changed): If gtk_file_system_parse()
+	returns an error, set the file_part_pos to -1.
+	(load_directory_callback): Only populate the model if the
+	file_part_pos is not -1.
+
 2004-04-06  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* configure.in: Added Icelandic (is) to ALL_LINGUAS

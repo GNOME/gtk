@@ -32,6 +32,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <pwd.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <time.h>
@@ -876,6 +877,48 @@ canonicalize_filename (gchar *filename)
   *q = '\0';
 }
 
+/* Takes a user-typed filename and expands a tilde at the beginning of the string */
+static char *
+expand_tilde (const char *filename)
+{
+  const char *notilde;
+  const char *slash;
+  const char *home;
+
+  if (filename[0] != '~')
+    return g_strdup (filename);
+
+  notilde = filename + 1;
+
+  slash = strchr (notilde, G_DIR_SEPARATOR);
+  if (!slash)
+    return NULL;
+
+  if (slash == notilde)
+    {
+      home = g_get_home_dir ();
+
+      if (!home)
+	return g_strdup (filename);
+    }
+  else
+    {
+      char *username;
+      struct passwd *passwd;
+
+      username = g_strndup (notilde, slash - notilde);
+      passwd = getpwnam (username);
+      g_free (username);
+
+      if (!passwd)
+	return g_strdup (filename);
+
+      home = passwd->pw_dir;
+    }
+
+  return g_build_filename (home, G_DIR_SEPARATOR_S, slash + 1, NULL);
+}
+
 static gboolean
 gtk_file_system_unix_parse (GtkFileSystem     *file_system,
 			    const GtkFilePath *base_path,
@@ -885,6 +928,7 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
 			    GError           **error)
 {
   const char *base_filename;
+  gchar *filename;
   gchar *last_slash;
   gboolean result = FALSE;
 
@@ -892,11 +936,21 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
   g_return_val_if_fail (base_filename != NULL, FALSE);
   g_return_val_if_fail (g_path_is_absolute (base_filename), FALSE);
 
-  last_slash = strrchr (str, G_DIR_SEPARATOR);
+  filename = expand_tilde (str);
+  if (!filename)
+    {
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
+		   "%s", ""); /* nothing for now, as we are string-frozen */
+      return FALSE;
+    }
+
+  last_slash = strrchr (filename, G_DIR_SEPARATOR);
   if (!last_slash)
     {
       *folder = gtk_file_path_copy (base_path);
-      *file_part = g_strdup (str);
+      *file_part = g_strdup (filename);
       result = TRUE;
     }
   else
@@ -905,10 +959,10 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
       gchar *folder_path;
       GError *tmp_error = NULL;
 
-      if (last_slash == str)
+      if (last_slash == filename)
 	folder_part = g_strdup ("/");
       else
-	folder_part = g_filename_from_utf8 (str, last_slash - str,
+	folder_part = g_filename_from_utf8 (filename, last_slash - filename,
 					    NULL, NULL, &tmp_error);
 
       if (!folder_part)
@@ -940,6 +994,8 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
 	  result = TRUE;
 	}
     }
+
+  g_free (filename);
 
   return result;
 }

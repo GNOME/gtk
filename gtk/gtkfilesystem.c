@@ -592,8 +592,8 @@ gtk_file_system_parse (GtkFileSystem     *file_system,
 
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
   g_return_val_if_fail (base_path != NULL, FALSE);
+  g_return_val_if_fail (str != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
 
   result = GTK_FILE_SYSTEM_GET_IFACE (file_system)->parse (file_system, base_path, str,
 							   &tmp_folder, &tmp_file_part,

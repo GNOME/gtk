@@ -574,19 +574,22 @@ load_directory_callback (GtkFileChooserEntry *chooser_entry)
   g_signal_connect (chooser_entry->current_folder, "files-removed",
 		    G_CALLBACK (files_deleted_cb), chooser_entry);
   
-  gtk_file_folder_list_children (chooser_entry->current_folder,
-				 &child_paths,
-				 NULL); /* NULL-GError */
   chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
 							G_TYPE_STRING,
 							GTK_TYPE_FILE_PATH);
 
-  if (child_paths)
+  if (chooser_entry->file_part_pos != -1)
     {
-      update_current_folder_files (chooser_entry, child_paths);
-      add_completion_idle (chooser_entry);
-      gtk_file_paths_free (child_paths);
-  }
+      gtk_file_folder_list_children (chooser_entry->current_folder,
+				     &child_paths,
+				     NULL); /* NULL-GError */
+      if (child_paths)
+	{
+	  update_current_folder_files (chooser_entry, child_paths);
+	  add_completion_idle (chooser_entry);
+	  gtk_file_paths_free (child_paths);
+	}
+    }
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
 				  GTK_TREE_MODEL (chooser_entry->completion_store));
@@ -657,13 +660,14 @@ gtk_file_chooser_entry_activate (GtkEntry *entry)
  */
 static void
 gtk_file_chooser_entry_maybe_update_directory (GtkFileChooserEntry *chooser_entry,
-					       GtkFilePath         *folder_path)
+					       GtkFilePath         *folder_path,
+					       gboolean             force_reload)
 {
   gboolean queue_idle = FALSE;
 
   if (chooser_entry->current_folder_path)
     {
-      if (gtk_file_path_compare (folder_path, chooser_entry->current_folder_path) != 0)
+      if (gtk_file_path_compare (folder_path, chooser_entry->current_folder_path) != 0 || force_reload)
 	{
 	  /* We changed our current directory.  We need to clear out the old
 	   * directory information.
@@ -736,22 +740,25 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
     {
       folder_path = gtk_file_path_copy (chooser_entry->base_folder);
       file_part = g_strdup ("");
+      file_part_pos = -1;
     }
-
-  file_part_len = strlen (file_part);
-  total_len = strlen (text);
-  if (total_len > file_part_len)
-    file_part_pos = g_utf8_strlen (text, total_len - file_part_len);
   else
-    file_part_pos = 0;
-
-  gtk_file_chooser_entry_maybe_update_directory (chooser_entry, folder_path);
+    {
+      file_part_len = strlen (file_part);
+      total_len = strlen (text);
+      if (total_len > file_part_len)
+	file_part_pos = g_utf8_strlen (text, total_len - file_part_len);
+      else
+	file_part_pos = 0;
+    }
 
   if (chooser_entry->file_part)
     g_free (chooser_entry->file_part);
 
   chooser_entry->file_part = file_part;
   chooser_entry->file_part_pos = file_part_pos;
+
+  gtk_file_chooser_entry_maybe_update_directory (chooser_entry, folder_path, file_part_pos == -1);
 }
 
 static void
