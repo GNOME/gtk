@@ -714,10 +714,10 @@ gtk_table_size_request_pass3 (GtkTable *table)
               if (width < child->widget->requisition.width)
                 {
                   width = child->widget->requisition.width - width;
-                  extra = width / (child->right_attach - child->left_attach);
 
                   for (col = child->left_attach; col < child->right_attach; col++)
                     {
+                      extra = width / (child->right_attach - child->left_attach - col);
                       if ((col + 1) < child->right_attach)
                         table->cols[col].requisition += extra;
                       else
@@ -749,10 +749,10 @@ gtk_table_size_request_pass3 (GtkTable *table)
               if (height < child->widget->requisition.height)
                 {
                   height = child->widget->requisition.height - height;
-                  extra = height / (child->bottom_attach - child->top_attach);
 
                   for (row = child->top_attach; row < child->bottom_attach; row++)
                     {
+                      extra = height / (child->bottom_attach - child->top_attach - row);
                       if ((row + 1) < child->bottom_attach)
                         table->rows[row].requisition += extra;
                       else
@@ -967,10 +967,10 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
           for (col = 0; col < table->ncols - 1; col++)
             width -= table->cols[col].spacing;
 
-          extra = width / table->ncols;
-
           for (col = 0; col < table->ncols; col++)
             {
+              extra = width / (table->ncols - col);
+
               if ((col + 1) == table->ncols)
                 table->cols[col].allocation = width;
               else
@@ -1002,11 +1002,11 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       if ((width < real_width) && (nexpand >= 1))
         {
           width = real_width - width;
-          extra = width / nexpand;
 
           for (col = 0; col < table->ncols; col++)
             if (table->cols[col].expand)
               {
+                extra = width / nexpand;
                 if (nexpand == 1)
                   table->cols[col].allocation += width;
                 else
@@ -1022,11 +1022,11 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       if ((width > real_width) && (nshrink >= 1))
         {
           width = width - real_width;
-          extra = width / nshrink;
 
           for (col = 0; col < table->ncols; col++)
             if (table->cols[col].shrink)
               {
+                extra = width / nshrink;
                 if (nshrink == 1)
                   table->cols[col].allocation -= width;
                 else
@@ -1055,10 +1055,10 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
           for (row = 0; row < table->nrows - 1; row++)
             height -= table->rows[row].spacing;
 
-          extra = height / table->nrows;
 
           for (row = 0; row < table->nrows; row++)
             {
+              extra = height / (table->nrows - row);
               if ((row + 1) == table->nrows)
                 table->rows[row].allocation = height;
               else
@@ -1090,11 +1090,11 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       if ((height < real_height) && (nexpand >= 1))
         {
           height = real_height - height;
-          extra = height / nexpand;
 
           for (row = 0; row < table->nrows; row++)
             if (table->rows[row].expand)
               {
+                extra = height / nexpand;
                 if (nexpand == 1)
                   table->rows[row].allocation += height;
                 else
@@ -1110,11 +1110,11 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
       if ((height > real_height) && (nshrink >= 1))
         {
           height = height - real_height;
-          extra = height / nshrink;
 
           for (row = 0; row < table->nrows; row++)
             if (table->rows[row].shrink)
               {
+                extra = height / nshrink;
                 if (nshrink == 1)
                   table->rows[row].allocation -= height;
                 else

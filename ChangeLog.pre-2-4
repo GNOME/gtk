@@ -1,3 +1,8 @@
+Fri Jan 30 17:41:06 1998  George Lebl  <jirka@5z.com>
+
+	* gtk/gtktable.c: fixed round-off error in calculation
+	  of tabels with a lot of cells
+
 Fri Jan 30 08:51:16 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 	* gdk/gdkcc.c (gdk_color_context_get_pixel): red/green/blue
