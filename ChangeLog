@@ -1,3 +1,9 @@
+Tue Oct 15 17:25:47 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c (get_im): Don't use 
+	connect_swapped() when the function being connected
+	has a non-swapped signature.
+
 Tue Oct 15 09:54:54 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c (get_im): Initialize

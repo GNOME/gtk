@@ -374,8 +374,8 @@ get_im (GdkWindow *client_window,
 
 	  setup_im (info);
 
-	  g_signal_connect_swapped (display, "closed",
-				    G_CALLBACK (xim_info_display_closed), info);
+	  g_signal_connect (display, "closed",
+			    G_CALLBACK (xim_info_display_closed), info);
 	}
     }
 
