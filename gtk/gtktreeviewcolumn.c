@@ -1597,9 +1597,10 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
  * @fixed_width: The size to set @tree_column to. Must be greater than 0.
  * 
  * Sets the size of the column in pixels.  This is meaningful only if the sizing
- * type is #GTK_TREE_VIEW_COLUMN_FIXED.  In this case, the value is discarded
- * as the size of the column is based on the calculated width of the column. The
- * width is clamped to the min/max width for the column.
+ * type is #GTK_TREE_VIEW_COLUMN_FIXED.  The size of the column is clamped to
+ * the min/max width for the column.  Please note that the min/max width of the
+ * column doesn't actually affect the "fixed_width" property of the widget, just
+ * the actual size when displayed.
  **/
 void
 gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
@@ -1607,9 +1608,6 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   g_return_if_fail (fixed_width > 0);
-
-  if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
-    return;
 
   tree_column->fixed_width = fixed_width;
 
