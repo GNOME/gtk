@@ -1420,7 +1420,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 
   widget = GTK_WIDGET (label);
 
-  rtl = gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL;
+  rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   rwidth = label->misc.xpad * 2;
   rheight = label->misc.ypad * 2;
 
