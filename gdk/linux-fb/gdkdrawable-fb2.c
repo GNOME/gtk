@@ -1071,12 +1071,14 @@ gdk_fb_draw_polygon (GdkDrawable    *drawable,
   else
     {
       gint tmp_npoints;
+      gboolean free_points = FALSE;
       GdkPoint *tmp_points;
 
       if (points[0].x != points[npoints-1].x || points[0].y != points[npoints-1].y)
 	{
 	  tmp_npoints = npoints + 1;
 	  tmp_points = g_new (GdkPoint, tmp_npoints);
+	  free_points = TRUE;
 	  memcpy (tmp_points, points, sizeof(GdkPoint) * npoints);
 	  tmp_points[npoints].x = points[0].x;
 	  tmp_points[npoints].y = points[0].y;
@@ -1088,6 +1090,9 @@ gdk_fb_draw_polygon (GdkDrawable    *drawable,
 	}
 
       gdk_fb_draw_lines (drawable, gc, tmp_points, tmp_npoints);
+      
+      if (free_points)
+	g_free (tmp_points);
     }
 }
 

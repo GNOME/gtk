@@ -33,7 +33,7 @@
 static struct {
   const guchar *bits;
   int width, height, hotx, hoty;
-  GdkPixmap *pm;
+  GdkCursor *cursor;
 } stock_cursors[] = {
 {X_cursor_bits, X_cursor_width, X_cursor_height, X_cursor_x_hot, X_cursor_y_hot},
 {X_cursor_mask_bits, X_cursor_mask_width, X_cursor_mask_height, X_cursor_mask_x_hot, X_cursor_mask_y_hot},
@@ -194,21 +194,24 @@ static struct {
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
-  GdkPixmap *tmp_pm, *pm, *mask;
-
+  GdkCursor *cursor;
+  
   if (cursor_type >= sizeof(stock_cursors)/sizeof(stock_cursors[0]))
     return NULL;
 
-  pm = stock_cursors[cursor_type].pm;
-  if (!pm)
+  cursor = stock_cursors[cursor_type].cursor;
+  if (!cursor)
     {
+      GdkPixmap *tmp_pm, *pm, *mask;
       GdkGC *copy_gc;
       char *data;
+     
       tmp_pm = gdk_bitmap_create_from_data (gdk_parent_root,
 					    stock_cursors[cursor_type].bits,
 					    stock_cursors[cursor_type].width,
 					    stock_cursors[cursor_type].height);
 
+      /* Create an empty bitmap the size of the mask */
       data = g_malloc0 (((stock_cursors[cursor_type+1].width+7)/8) * stock_cursors[cursor_type+1].height);
       pm = gdk_bitmap_create_from_data (gdk_parent_root,
 					data,
@@ -227,24 +230,18 @@ gdk_cursor_new (GdkCursorType cursor_type)
       g_free (data);
       gdk_gc_unref (copy_gc);
 
-      stock_cursors[cursor_type].pm = pm;
-      gdk_pixmap_ref (pm);
-    }
-  
-  mask = stock_cursors[cursor_type+1].pm;
-  if (!mask)
-    {
-      mask = stock_cursors[cursor_type+1].pm = gdk_bitmap_create_from_data (gdk_parent_root,
-									    stock_cursors[cursor_type+1].bits,
-									    stock_cursors[cursor_type+1].width,
-									    stock_cursors[cursor_type+1].height);
-      gdk_pixmap_ref (mask);
-    }
+      mask =  gdk_bitmap_create_from_data (gdk_parent_root,
+					   stock_cursors[cursor_type+1].bits,
+					   stock_cursors[cursor_type+1].width,
+					   stock_cursors[cursor_type+1].height);
 
-  
-  return gdk_cursor_new_from_pixmap (pm, mask, NULL, NULL,
+      cursor = gdk_cursor_new_from_pixmap (pm, mask, NULL, NULL,
 				     stock_cursors[cursor_type+1].hotx,
 				     stock_cursors[cursor_type+1].hoty);
+
+      stock_cursors[cursor_type].cursor = cursor;
+    }
+  return gdk_cursor_ref (cursor);
 }
 
 GdkCursor*
@@ -282,6 +279,10 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 
   private = (GdkCursorPrivateFB *) cursor;
 
+  if (private->mask)
+    gdk_pixmap_unref (private->mask);
+  gdk_pixmap_unref (private->cursor);
+  
   g_free (private);
 }
 

@@ -111,6 +111,8 @@ gdk_fb_gc_finalize (GObject *obj)
   if (private->values.tile)
     gdk_pixmap_unref (private->values.tile);
 
+  g_free (private->dash_list);
+
   G_OBJECT_CLASS (parent_class)->finalize (obj);
 }
 

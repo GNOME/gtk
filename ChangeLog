@@ -1,3 +1,21 @@
+2001-01-23    <alexl@redhat.com>
+
+        * linux-fb/gdkcursor-fb.c:
+	Don't leak built-in cursors.
+
+	* linux-fb/gdkdrawable-fb2.c (gdk_fb_draw_polygon):
+	Don't leak tmp_points.
+
+	* linux-fb/gdkfont-fb.c (gdk_font_from_description):
+	Don't modify desc. Don't leak font if the PangoFont
+	isn't found.
+	
+	* linux-fb/gdkgc-fb.c (gdk_fb_gc_finalize):
+	Free dash_list.
+
+	* linux-fb/gdkkeyboard-fb.c (gdk_fb_handle_key):
+	Don't leak string.
+	
 2001-01-20  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktexttag.h (enum GtkWrapMode): rename member fields

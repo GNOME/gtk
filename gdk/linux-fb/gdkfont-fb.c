@@ -109,6 +109,7 @@ gdk_font_from_description (PangoFontDescription *desc)
   pango_font = pango_context_load_font (context, desc);
   if (!pango_font)
     {
+      desc = pango_font_description_copy (desc);
       g_free (desc->family_name);
       desc->family_name = g_strdup ("sans");
       pango_font = pango_context_load_font (context, desc);
@@ -120,12 +121,16 @@ gdk_font_from_description (PangoFontDescription *desc)
 	  desc->stretch = PANGO_STRETCH_NORMAL;
 	  pango_font = pango_context_load_font (context, desc);
 	}
+      pango_font_description_free (desc);
     }
   
   g_assert (pango_font != NULL);
 
   if (pango_font == NULL)
-    return NULL;
+    {
+      g_free (private);
+      return NULL;
+    }
   
   metrics.ascent = 0;
   metrics.descent = 0;

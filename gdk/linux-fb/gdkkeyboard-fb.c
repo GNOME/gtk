@@ -386,6 +386,8 @@ gdk_fb_handle_key (guint hw_keycode,
       event->key.hardware_keycode = hw_keycode;
       event->key.group = group;
     }
+  else
+    g_free (string);
 }
 
 /******************************************************
