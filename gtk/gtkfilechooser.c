@@ -1167,7 +1167,7 @@ gtk_file_chooser_get_preview_widget (GtkFileChooser *chooser)
  * @active: whether to display the user-specified preview widget
  * 
  * Sets whether the preview widget set by
- * gtk_file_chooser_set_preview_widget_active() should be shown for the
+ * gtk_file_chooser_set_preview_widget() should be shown for the
  * current filename. When @active is set to false, the file chooser
  * may display an internally generated preview of the current file
  * or it may display no preview at all. See

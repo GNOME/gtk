@@ -2,6 +2,8 @@
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_set_action): 
 	Typo fix.  (#162219, Masao Mutoh)
+	(gtk_file_chooser_set_preview_widget_active): 
+	Another typo.  (#162218, Masao Mutoh)
 
 2004-12-23  Matthias Clasen  <mclasen@redhat.com>
 
