@@ -1868,7 +1868,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:2117
 msgid "Selection: "
-msgstr "ምርጫ፦"
+msgstr "ምርጫ፦ "
 
 #: gtk/gtkfilesel.c:3004
 #, c-format
@@ -1950,7 +1950,7 @@ msgstr "ቅድመ _ዕይታ፦"
 
 #: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
-msgstr "የፊደል ቅርጽ ተመረጠው"
+msgstr "የፊደል ቅርጽ ምርጫ"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label."
@@ -3058,7 +3058,7 @@ msgstr "ጥያቄ"
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "_ተጨማሪ"
+msgstr "ተጨማሪ (_A)"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
@@ -3070,7 +3070,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "ተወው"
+msgstr "ተወው (_C)"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
@@ -3078,27 +3078,27 @@ msgstr ""
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "_ሰርዝ"
+msgstr "ሰርዝ (_C)"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "_ዝጋ"
+msgstr "ዝጋ (_C)"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "_ለዋጭ"
+msgstr "ለዋጭ (_C)"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr "ቅጂ"
+msgstr "ቅጂ (_C)"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr "_ቁረጥ"
+msgstr "ቁረጥ (_t)"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "_መሰረዣ"
+msgstr "መሰረዣ (_D)"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
@@ -3106,11 +3106,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr "_ፈልግ"
+msgstr "ፈልግ (_F)"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr "ፈልግ እና ተካ"
+msgstr "ፈልግ እና ተካ (_R)"
 
 #: gtk/gtkstock.c:289
 msgid "_Floppy"
@@ -3170,7 +3170,7 @@ msgstr "ይለፉ ወደ (_J)"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
-msgstr "መሐከል"
+msgstr "መሐከል (_C)"
 
 #: gtk/gtkstock.c:304
 msgid "_Fill"
@@ -4282,7 +4282,7 @@ msgstr "ምልክት"
 
 #: gtk/gtkwindow.c:500
 msgid "Icon for this window"
-msgstr ""
+msgstr "ምልክት ለዚህን መስኮት"
 
 #. ID
 #: modules/input/imam-et.c:454
@@ -4307,7 +4307,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "ታይኛ (Broken)"
 
 #. ID
 #: modules/input/imti-er.c:453
@@ -4322,7 +4322,7 @@ msgstr "ትግርኛ-ናይ ኢትዮጵያ (EZ+)"
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "ቪትናምኛ (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
