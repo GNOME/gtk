@@ -1,3 +1,8 @@
+Thu Dec 12 15:08:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* acinclude.m4: Remove unneeded bits of AM_GTK_GNU_TEXT
+	macros.
+
 Thu Dec 12 18:25:17 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktextview.c (gtk_text_view_button_press_event): 
