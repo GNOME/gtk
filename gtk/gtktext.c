@@ -3232,17 +3232,6 @@ move_mark_n (GtkPropertyMark* mark, gint n)
 }
 
 static void
-advance_mark_n (GtkPropertyMark* mark, gint n)
-{
-  gint i;
-  
-  g_assert (n > 0);
-  
-  for (i = 0; i < n; i += 1)
-    advance_mark (mark);
-}
-
-static void
 advance_mark (GtkPropertyMark* mark)
 {
   TextProperty* prop = MARK_CURRENT_PROPERTY (mark);
@@ -3256,6 +3245,37 @@ advance_mark (GtkPropertyMark* mark)
       mark->property = MARK_NEXT_LIST_PTR (mark);
       mark->offset   = 0;
     }
+}
+
+static void
+advance_mark_n (GtkPropertyMark* mark, gint n)
+{
+  gint i;
+  TextProperty* prop;
+
+  g_assert (n > 0);
+
+  i = 0;			/* otherwise it migth not be init. */
+  prop = MARK_CURRENT_PROPERTY(mark);
+
+  if ((prop->length - mark->offset - 1) < n) { /* if we need to change prop. */
+    /* to make it easier */
+    n += (mark->offset);
+    mark->index -= mark->offset;
+    mark->offset = 0;
+    /* first we take seven-mile-leaps to get to the right text
+     * property. */
+    while ((n-i) > prop->length - 1) {
+      i += prop->length;
+      mark->index += prop->length;
+      mark->property = MARK_NEXT_LIST_PTR (mark);
+      prop = MARK_CURRENT_PROPERTY (mark);
+    }
+  }
+
+  /* and then the rest */
+  mark->index += n - i;
+  mark->offset += n - i;
 }
 
 static void
@@ -3275,25 +3295,28 @@ decrement_mark (GtkPropertyMark* mark)
 static void
 decrement_mark_n (GtkPropertyMark* mark, gint n)
 {
-  gint i;
-  
   g_assert (n > 0);
-  
-  for (i = 0; i < n; i += 1)
-    decrement_mark (mark);
-}
 
+  while (mark->offset < n) {
+    /* jump to end of prev */
+    n -= mark->offset + 1;
+    mark->index -= mark->offset + 1;
+    mark->property = MARK_PREV_LIST_PTR (mark);
+    mark->offset = MARK_CURRENT_PROPERTY (mark)->length - 1;
+  }
+
+  /* and the rest */
+  mark->index -= n;
+  mark->offset -= n;
+}
+ 
 static GtkPropertyMark
 find_mark (GtkText* text, guint mark_position)
 {
   return find_mark_near (text, mark_position, &text->point);
 }
 
-/* This can be optimized in two ways.
- * First, advances can be made in units of the current TextProperty
- * length, when possible.  This will reduce computation and function
- * call overhead.
- *
+/*
  * You can also start from the end, what a drag.
  */
 static GtkPropertyMark
@@ -3324,18 +3347,9 @@ find_mark_near (GtkText* text, guint mark_position, const GtkPropertyMark* near)
       mark.property = text->text_properties;
       mark.offset = 0;
     }
-  
-  if (mark.index > mark_position)
-    {
-      while (mark.index > mark_position)
-	decrement_mark (&mark);
-    }
-  else
-    {
-      while (mark_position > mark.index)
-	advance_mark (&mark);
-    }
-  
+
+  move_mark_n (&mark, mark_position - mark.index);
+   
   return mark;
 }
 

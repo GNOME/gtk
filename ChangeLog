@@ -1,3 +1,13 @@
+Mon Nov 16 15:10:33 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: Optimizations for moving point n
+	places. 
+	(gtk-mailund-980718-0, Thomas Mailund Jensen <mailund@daimi.aau.dk>)
+
+	* gtk/gtkfixed.c: Removed gtk_fixed_umap, which was 
+	broken. (GtkWidget's default unmap handler should work fine).
+	Pointed out by Patrice Fortier <Patrice.Fortier@aquarel.fr>
+
 Mon Nov 16 00:59:26 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkmenubar.[ch]: added shadow_type setting and

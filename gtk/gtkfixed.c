@@ -22,7 +22,6 @@
 static void gtk_fixed_class_init    (GtkFixedClass    *klass);
 static void gtk_fixed_init          (GtkFixed         *fixed);
 static void gtk_fixed_map           (GtkWidget        *widget);
-static void gtk_fixed_unmap         (GtkWidget        *widget);
 static void gtk_fixed_realize       (GtkWidget        *widget);
 static void gtk_fixed_size_request  (GtkWidget        *widget,
 				     GtkRequisition   *requisition);
@@ -87,7 +86,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   widget_class->map = gtk_fixed_map;
-  widget_class->unmap = gtk_fixed_unmap;
   widget_class->realize = gtk_fixed_realize;
   widget_class->size_request = gtk_fixed_size_request;
   widget_class->size_allocate = gtk_fixed_size_allocate;
@@ -212,15 +210,6 @@ gtk_fixed_map (GtkWidget *widget)
 	  !GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_map (child->widget);
     }
-}
-
-static void
-gtk_fixed_unmap (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_FIXED (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 }
 
 static void
