@@ -19,7 +19,7 @@
  */
 
 #include "gtktreemodelfilter.h"
-#include <gtk/gtkintl.h>
+#include "gtkintl.h"
 #include <string.h>
 
 /* ITER FORMAT:

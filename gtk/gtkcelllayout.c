@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtkcelllayout.h>
+#include "gtkcelllayout.h"
 
 GType
 gtk_cell_layout_get_type (void)

@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtkcellview.h>
-#include <gtk/gtkcelllayout.h>
-#include <gtk/gtkintl.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcellrendererpixbuf.h>
+#include "gtkcellview.h"
+#include "gtkcelllayout.h"
+#include "gtkintl.h"
+#include "gtksignal.h"
+#include "gtkcellrenderertext.h"
+#include "gtkcellrendererpixbuf.h"
 #include <gobject/gmarshal.h>
 
 typedef struct _GtkCellViewCellInfo GtkCellViewCellInfo;

@@ -17,29 +17,29 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtkcombobox.h>
-#include <gtk/gtkcelllayout.h>
-#include <gtk/gtkcellview.h>
-#include <gtk/gtkcellviewmenuitem.h>
+#include "gtkcombobox.h"
+#include "gtkcelllayout.h"
+#include "gtkcellview.h"
+#include "gtkcellviewmenuitem.h"
 
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtktogglebutton.h>
-#include <gtk/gtkvseparator.h>
-#include <gtk/gtkarrow.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtkeventbox.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkbindings.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkwindow.h>
+#include "gtktreeselection.h"
+#include "gtkframe.h"
+#include "gtktogglebutton.h"
+#include "gtkvseparator.h"
+#include "gtkarrow.h"
+#include "gtkmenu.h"
+#include "gtkmain.h"
+#include "gtkeventbox.h"
+#include "gtkcellrenderertext.h"
+#include "gtkbindings.h"
+#include "gtkliststore.h"
+#include "gtkwindow.h"
 
 #include <gdk/gdkkeysyms.h>
 
-#include <string.h>
 #include <gobject/gvaluecollector.h>
 
+#include <string.h>
 #include <stdarg.h>
 
 #include "gtkmarshalers.h"

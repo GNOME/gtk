@@ -1,3 +1,9 @@
+Thu Oct 23 20:21:16 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcelllayout.c, gtk/gtkcellview.c gtk/gtkcellviewmenuitem.c,
+	gtk/gtkcombobox.c, gtk/gtkcomboboxentry.c, gtk/gtkentrycompletion.c,
+	gtk/gtktreemodelfilter.c, gtk/gtkcellrenderertoggle.c: Fix includes.
+
 Thu Oct 23 15:13:56 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* NEWS: Partial update for 2.3.0.

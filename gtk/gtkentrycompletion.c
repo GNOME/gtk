@@ -17,21 +17,21 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtkentrycompletion.h>
-#include <gtk/gtkentryprivate.h>
-#include <gtk/gtkcelllayout.h>
+#include "gtkentrycompletion.h"
+#include "gtkentryprivate.h"
+#include "gtkcelllayout.h"
 
-#include <gtk/gtkintl.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkwindow.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmarshalers.h>
+#include "gtkintl.h"
+#include "gtkcellrenderertext.h"
+#include "gtktreeselection.h"
+#include "gtktreeview.h"
+#include "gtkscrolledwindow.h"
+#include "gtkvbox.h"
+#include "gtkwindow.h"
+#include "gtkentry.h"
+#include "gtkmain.h"
+#include "gtksignal.h"
+#include "gtkmarshalers.h"
 
 #include <string.h>
 

@@ -18,7 +18,7 @@
  */
 
 #include <stdlib.h>
-#include <gtk/gtkcellrenderertoggle.h>
+#include "gtkcellrenderertoggle.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktreeprivate.h"

@@ -17,11 +17,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtkcomboboxentry.h>
-#include <gtk/gtkcelllayout.h>
+#include "gtkcomboboxentry.h"
+#include "gtkcelllayout.h"
 
-#include <gtk/gtkentry.h>
-#include <gtk/gtkcellrenderertext.h>
+#include "gtkentry.h"
+#include "gtkcellrenderertext.h"
 
 #include "gtkintl.h"
 

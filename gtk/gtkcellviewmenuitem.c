@@ -17,8 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtkcellviewmenuitem.h>
-#include <gtk/gtkcellview.h>
+#include "gtkcellviewmenuitem.h"
+#include "gtkcellview.h"
 
 struct _GtkCellViewMenuItemPrivate
 {
