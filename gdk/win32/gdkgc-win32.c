@@ -338,9 +338,6 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	  win32_gc->hcliprgn =
 	    BitmapToRegion ((HBITMAP) GDK_PIXMAP_HBITMAP (values->clip_mask));
 	  win32_gc->values_mask |= GDK_GC_CLIP_MASK;
-	  OffsetRgn (win32_gc->hcliprgn,
-		     win32_gc->parent_instance.clip_x_origin,
-		     win32_gc->parent_instance.clip_y_origin);
 	}
       else
 	{
@@ -385,8 +382,8 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       win32_gc->values_mask |= GDK_GC_CLIP_Y_ORIGIN;
       GDK_NOTE (MISC, (g_print ("%sclip_y=%d", s, values->clip_y_origin),
 		       s = ","));
-   }
- 
+    }
+
   if (mask & GDK_GC_EXPOSURES)
     {
       win32_gc->graphics_exposures = values->graphics_exposures;
@@ -1082,6 +1079,10 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
     {
       if (SelectClipRgn (win32_gc->hdc, win32_gc->hcliprgn) == ERROR)
 	WIN32_API_FAILED ("SelectClipRgn"), ok = FALSE;
+      if (ok && !OffsetClipRgn (win32_gc->hdc,
+		 win32_gc->values_mask & GDK_GC_CLIP_X_ORIGIN ? gc->clip_x_origin : 0,
+		 win32_gc->values_mask & GDK_GC_CLIP_Y_ORIGIN ? gc->clip_y_origin : 0))
+	WIN32_API_FAILED ("OffsetClipRgn"), ok = FALSE;
     }
 
   if (gdk_debug_flags & GDK_DEBUG_MISC)

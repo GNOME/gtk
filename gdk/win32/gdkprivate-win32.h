@@ -39,6 +39,9 @@ _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       y,
 			       gint       width,
 			       gint       height);
+void _gdk_window_process_expose    (GdkWindow     *window,
+                                    gulong         serial,
+                                    GdkRectangle  *area);
 
 void gdk_win32_selection_init (void);
 void gdk_win32_dnd_exit (void);

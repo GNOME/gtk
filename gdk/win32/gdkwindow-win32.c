@@ -329,10 +329,15 @@ RegisterGdkClass (GdkWindowType wtype)
   wcl.hIconSm = 0;
 
   /* initialize once per class */
+  /*
+   * HB: Setting the background brush leads to flicker, because we
+   * don't get asked how to clear the background. This is not what
+   * we want, at least not for input_only windows ...
+   */
 #define ONCE_PER_CLASS() \
   wcl.hIcon = CopyIcon (hAppIcon); \
   wcl.hIconSm = CopyIcon (hAppIcon); \
-  wcl.hbrBackground = CreateSolidBrush (RGB (0,0,0)); \
+  wcl.hbrBackground = NULL; /* CreateSolidBrush (RGB (0,0,0)); */ \
   wcl.hCursor = LoadCursor (NULL, IDC_ARROW); 
   
   switch (wtype)

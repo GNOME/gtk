@@ -96,7 +96,8 @@ static GdkFilterReturn
 static gboolean  gdk_event_translate	(GdkEvent *event, 
 					 MSG      *msg,
 					 gboolean *ret_val_flagp,
-					 gint     *ret_valp);
+					 gint     *ret_valp,
+					 gboolean  return_exposes);
 
 static gboolean gdk_event_prepare  (GSource     *source,
 				    gint        *timeout);
@@ -172,7 +173,7 @@ real_window_procedure (HWND   hwnd,
   msg.pt.y = HIWORD (pos);
 
   event.flags = GDK_EVENT_PENDING;
-  if (gdk_event_translate (&event.event, &msg, &ret_val_flag, &ret_val))
+  if (gdk_event_translate (&event.event, &msg, &ret_val_flag, &ret_val, FALSE))
     {
       event.flags &= ~GDK_EVENT_PENDING;
 #if 1
@@ -417,7 +418,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
     {
       event = gdk_event_new ();
       
-      if (gdk_event_translate (event, &msg, NULL, NULL))
+      if (gdk_event_translate (event, &msg, NULL, NULL, TRUE))
 	return event;
       else
 	gdk_event_free (event);
@@ -1596,7 +1597,8 @@ static gboolean
 gdk_event_translate (GdkEvent *event,
 		     MSG      *msg,
 		     gboolean *ret_val_flagp,
-		     gint     *ret_valp)
+		     gint     *ret_valp,
+		     gboolean  return_exposes)
 {
   DWORD pidActWin;
   DWORD pidThis;
@@ -2764,28 +2766,45 @@ gdk_event_translate (GdkEvent *event,
           || (paintstruct.rcPaint.bottom == paintstruct.rcPaint.top))
         break;
 
-      event->expose.type = GDK_EXPOSE;
-      event->expose.window = window;
-      event->expose.area.x = paintstruct.rcPaint.left;
-      event->expose.area.y = paintstruct.rcPaint.top;
-      event->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
-      event->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
-      event->expose.count = 0;
+      if (return_exposes)
+        {
+          event->expose.type = GDK_EXPOSE;
+          event->expose.window = window;
+          event->expose.area.x = paintstruct.rcPaint.left;
+          event->expose.area.y = paintstruct.rcPaint.top;
+          event->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
+          event->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
+          event->expose.region = gdk_region_rectangle (&(event->expose.area));
+          event->expose.count = 0;
 
-      return_val = !GDK_WINDOW_DESTROYED (window);
-      if (return_val)
-	{
-	  GList *list = gdk_queued_events;
-	  while (list != NULL )
-	    {
-	      if ((((GdkEvent *)list->data)->any.type == GDK_EXPOSE) &&
-		  (((GdkEvent *)list->data)->any.window == window) &&
-		  !(((GdkEventPrivate *)list->data)->flags & GDK_EVENT_PENDING))
-		((GdkEvent *)list->data)->expose.count++;
-	      
-	      list = list->next;
-	    }
-	}
+          return_val = !GDK_WINDOW_DESTROYED (window);
+          if (return_val)
+            {
+              GList *list = gdk_queued_events;
+              while (list != NULL )
+                {
+                  if ((((GdkEvent *)list->data)->any.type == GDK_EXPOSE) &&
+    	                (((GdkEvent *)list->data)->any.window == window) &&
+    	                !(((GdkEventPrivate *)list->data)->flags & GDK_EVENT_PENDING))
+    	                ((GdkEvent *)list->data)->expose.count++;
+
+                    list = list->next;
+                }
+            }
+        }
+      else
+        {
+          GdkRectangle expose_rect;
+
+          expose_rect.x = paintstruct.rcPaint.left;
+          expose_rect.y = paintstruct.rcPaint.top;
+          expose_rect.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
+          expose_rect.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
+
+	    _gdk_window_process_expose (window, GetMessageTime (), &expose_rect);
+
+	    return_val = FALSE;
+        }
       break;
 
     case WM_SETCURSOR:

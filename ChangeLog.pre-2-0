@@ -1,3 +1,23 @@
+2001-03-10  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.def : updated
+
+	* gdk/win32/gdkgc-win32.c : pixmaps are visible again, due
+	to offseting the clip_mask at the right place
+
+	* gdk/win32/gdkwindow-win32.c : don't create background brushes
+	for all the gdkClasses, especially not for the input_only case.
+	Otherwise flickering wont be avoidable, because we don't get
+	WM_ERASEBKGND message for these windows.
+
+	* gdk/win32/gdkevents-win32.c : initialize event->expose.region
+	and fixed massive redraw problems apparently triggered by Alexanders 
+	recent change. Not fully understood the GDK_EXPOSE / WM_PAINT handling
+	but it seems to work quite well :-)
+
+	* gdk/win32/gdkprivate-win32.h : added _gdk_window_process_expose
+	prototype
+
 Sat Mar 10 12:15:31 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_set_cell): Fix a stupid typo.

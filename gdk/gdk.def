@@ -159,21 +159,6 @@ EXPORTS
 	gdk_get_display
 	gdk_get_show_events
 	gdk_get_use_xshm
-	gdk_ic_attr_destroy
-	gdk_ic_attr_new
-	gdk_ic_destroy
-	gdk_ic_get_attr
-	gdk_ic_get_events
-	gdk_ic_get_style
-	gdk_ic_get_values
-	gdk_ic_new
-	gdk_ic_set_attr
-	gdk_ic_set_values
-	gdk_im_begin
-	gdk_im_decide_style
-	gdk_im_end
-	gdk_im_ready
-	gdk_im_set_best_style
 	gdk_image_get
 	gdk_image_get_pixel
 	gdk_image_get_type
@@ -320,6 +305,7 @@ EXPORTS
 	gdk_window_add_filter
 	gdk_window_at_pointer
 	gdk_window_begin_paint_rect
+	gdk_window_begin_paint_region
 	gdk_window_clear
 	gdk_window_clear_area
 	gdk_window_clear_area_e
