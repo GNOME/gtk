@@ -8,7 +8,7 @@
 
 $VERSION = "1.2.5 beta 2";
 $LANG    = $ARGV[0];
-$PACKAGE  = "gnumeric";
+$PACKAGE  = "gtk+";
 
 if (! $LANG){
     print "update.pl:  missing file arguments\n";
