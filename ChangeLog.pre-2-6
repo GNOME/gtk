@@ -1,3 +1,7 @@
+Fri Nov 28 00:09:10 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilechooserentry.c: Remove debug g_print()s. 
+
 Thu Nov 27 22:17:50 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c: Remove debug define.

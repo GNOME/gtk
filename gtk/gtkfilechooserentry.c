@@ -244,8 +244,6 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
   gchar *common_prefix = NULL;
   GtkFilePath *unique_path = NULL;
 
-  g_print ("completion_idle_callback()\n");
-
   chooser_entry->completion_idle = NULL;
 
   if (strcmp (chooser_entry->file_part, "") == 0)
@@ -264,7 +262,6 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 				   NULL); /* NULL-GError */
 
   chooser_entry->in_change = TRUE;
-  g_print ("Clearing list and filling it\n");
   gtk_list_store_clear (chooser_entry->completion_store);
 
   for (tmp_list = child_paths; tmp_list; tmp_list = tmp_list->next)
@@ -315,7 +312,6 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 	  gtk_file_info_free (info);
 	}
     }
-  g_print ("List filled\n");
   chooser_entry->in_change = FALSE;
 
   if (unique_path)
@@ -387,10 +383,6 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
   char *tmp;
 
-  tmp = g_strndup (new_text, new_text_length);
-  g_print ("gtk_file_chooser_entry_do_insert_text (%s)\n", tmp);
-  g_free (tmp);
-  
   parent_editable_iface->do_insert_text (editable, new_text, new_text_length, position);
 
   if (!chooser_entry->in_change &&
@@ -431,8 +423,6 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
   const gchar *text;
   GtkFilePath *folder_path;
   gchar *file_part;
-
-  g_print ("gtk_file_chooser_entry_changed ()\n");
 
   text = gtk_entry_get_text (GTK_ENTRY (editable));
 
