@@ -1,3 +1,7 @@
+Thu Oct  3 22:38:12 2002  Manish Singh  <yosh@gimp.org>
+
+	* gdk-pixbuf/queryloaders.c: make it legal C
+
 Thu Oct  3 16:40:18 2002 Eric Warmenhoven <eric@warmenhoven.org>
 
 	* gdk/gdkevents.c, gdk/linux-fb/gdkwindow-fb.c,

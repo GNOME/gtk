@@ -119,6 +119,7 @@ int main (int argc, char **argv)
 	if (argc == 1) {
 #ifdef USE_GMODULE
 		const char *path;
+		GDir *dir;
     
 		path = g_getenv ("GDK_PIXBUF_MODULEDIR");
 		if (path == NULL || *path == '\0')
@@ -126,7 +127,7 @@ int main (int argc, char **argv)
 
 		printf ("# LoaderDir = %s\n#\n", path);
 
-		GDir *dir = g_dir_open (path, 0, NULL);
+		dir = g_dir_open (path, 0, NULL);
 		if (dir) {
 			const char *dent;
 
