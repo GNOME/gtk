@@ -1,3 +1,11 @@
+2002-09-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkselection-win32.c (sanitize_utf8): Copy from X11
+	backend. The old version mishandled consecutive newlines.
+
+	* tests/testgtkrc: Remove obsolete mention of gtk-engines and
+	Pixmap theme engine on Win32.
+
 Fri Sep 20 18:01:26 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkentry.c (gtk_entry_unrealize): Set the IM
