@@ -35,6 +35,7 @@ G_BEGIN_DECLS
 /* --- typedefs --- */
 typedef struct    _GtkSettingsClass GtkSettingsClass;
 typedef struct    _GtkSettingsValue GtkSettingsValue;
+typedef struct    _GtkSettingsPropertyValue GtkSettingsPropertyValue; /* Internal */
 
 
 /* --- structures --- */
@@ -43,7 +44,7 @@ struct _GtkSettings
   GObject parent_instance;
 
   GData  *queued_settings;	/* of type GtkSettingsValue* */
-  GValue *property_values;
+  GtkSettingsPropertyValue *property_values;
 
   GtkRcContext *rc_context;
   GdkScreen    *screen;
@@ -114,6 +115,11 @@ void		gtk_settings_set_double_property (GtkSettings	*settings,
 
 
 /* implementation details */
+void _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
+					       const gchar            *name,
+					       const GtkSettingsValue *svalue);
+void _gtk_settings_reset_rc_values            (GtkSettings            *settings);
+
 void                _gtk_settings_handle_event        (GdkEventSetting    *event);
 GtkRcPropertyParser _gtk_rc_property_parser_from_type (GType               type);
 gboolean	    _gtk_settings_parse_convert       (GtkRcPropertyParser parser,

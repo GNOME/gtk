@@ -21,6 +21,20 @@
 #include "gtkintl.h"
 #include "gtkwidget.h"
 
+typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
+
+struct _GtkSettingsValuePrivate
+{
+  GtkSettingsValue public;
+  guint from_rc : 1;
+};
+
+struct _GtkSettingsPropertyValue
+{
+  GValue value;
+  guint from_rc : 1;
+};
+
 enum {
   PROP_0,
   PROP_DOUBLE_CLICK_TIME,
@@ -106,7 +120,7 @@ gtk_settings_init (GtkSettings *settings)
   for (p = pspecs; *p; p++)
     if ((*p)->owner_type == G_OBJECT_TYPE (settings))
       i++;
-  settings->property_values = g_new0 (GValue, i);
+  settings->property_values = g_new0 (GtkSettingsPropertyValue, i);
   i = 0;
   g_object_freeze_notify (G_OBJECT (settings));
   for (p = pspecs; *p; p++)
@@ -115,9 +129,10 @@ gtk_settings_init (GtkSettings *settings)
 
       if (pspec->owner_type != G_OBJECT_TYPE (settings))
 	continue;
-      g_value_init (settings->property_values + i, G_PARAM_SPEC_VALUE_TYPE (pspec));
-      g_param_value_set_default (pspec, settings->property_values + i);
+      g_value_init (&settings->property_values[i].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      g_param_value_set_default (pspec, &settings->property_values[i].value);
       g_object_notify (G_OBJECT (settings), pspec->name);
+      settings->property_values[i].from_rc = FALSE;
       i++;
     }
   g_object_thaw_notify (G_OBJECT (settings));
@@ -234,7 +249,7 @@ gtk_settings_finalize (GObject *object)
   object_list = g_slist_remove (object_list, settings);
 
   for (i = 0; i < class_n_properties; i++)
-    g_value_unset (settings->property_values + i);
+    g_value_unset (&settings->property_values[i].value);
   g_free (settings->property_values);
 
   g_datalist_clear (&settings->queued_settings);
@@ -297,7 +312,7 @@ gtk_settings_set_property (GObject      *object,
 {
   GtkSettings *settings = GTK_SETTINGS (object);
   
-  g_value_copy (value, settings->property_values + property_id - 1);
+  g_value_copy (value, &settings->property_values[property_id - 1].value);
 }
 
 static void
@@ -322,7 +337,7 @@ gtk_settings_get_property (GObject     *object,
       if (gdk_screen_get_setting (settings->screen, pspec->name, value))
         g_param_value_validate (pspec, value);
       else
-        g_value_copy (settings->property_values + property_id - 1, value);
+        g_value_copy (&settings->property_values[property_id - 1].value, value);
     }
   else
     {
@@ -334,7 +349,7 @@ gtk_settings_get_property (GObject     *object,
 
       if (!gdk_screen_get_setting (settings->screen, pspec->name, &val))
         {
-          g_value_copy (settings->property_values + property_id - 1, value);
+          g_value_copy (&settings->property_values[property_id - 1].value, value);
         }
       else
         {
@@ -357,7 +372,7 @@ gtk_settings_get_property (GObject     *object,
             }
           else
             {
-              g_value_copy (settings->property_values + property_id - 1, value);
+              g_value_copy (&settings->property_values[property_id - 1].value, value);
             }
 
           g_value_unset (&gstring_value);
@@ -375,7 +390,6 @@ gtk_settings_notify (GObject    *object,
   GtkSettings *settings = GTK_SETTINGS (object);
   guint property_id = pspec->param_id;
   gint double_click_time;
-  gchar *icon_sizes;
 
   if (settings->screen == NULL) /* initialization */
     return;
@@ -463,23 +477,26 @@ _gtk_settings_parse_convert (GtkRcPropertyParser parser,
 }
 
 static void
-apply_queued_setting (GtkSettings      *data,
-		      GParamSpec       *pspec,
-		      GtkSettingsValue *qvalue)
+apply_queued_setting (GtkSettings             *data,
+		      GParamSpec              *pspec,
+		      GtkSettingsValuePrivate *qvalue)
 {
   GValue tmp_value = { 0, };
   GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
 
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-  if (_gtk_settings_parse_convert (parser, &qvalue->value,
+  if (_gtk_settings_parse_convert (parser, &qvalue->public.value,
 				   pspec, &tmp_value))
-    g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
+    {
+      data->property_values[pspec->param_id - 1].from_rc = qvalue->from_rc;
+      g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
+    }
   else
     {
-      gchar *debug = g_strdup_value_contents (&qvalue->value);
+      gchar *debug = g_strdup_value_contents (&qvalue->public.value);
       
       g_message ("%s: failed to retrieve property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
-		 qvalue->origin,
+		 qvalue->public.origin,
 		 pspec->name,
 		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
 		 debug,
@@ -533,12 +550,13 @@ settings_install_property_parser (GtkSettingsClass   *class,
   for (node = object_list; node; node = node->next)
     {
       GtkSettings *settings = node->data;
-      GtkSettingsValue *qvalue;
+      GtkSettingsValuePrivate *qvalue;
       
-      settings->property_values = g_renew (GValue, settings->property_values, class_n_properties);
-      settings->property_values[class_n_properties - 1].g_type = 0;
-      g_value_init (settings->property_values + class_n_properties - 1, G_PARAM_SPEC_VALUE_TYPE (pspec));
-      g_param_value_set_default (pspec, settings->property_values + class_n_properties - 1);
+      settings->property_values = g_renew (GtkSettingsPropertyValue, settings->property_values, class_n_properties);
+      settings->property_values[class_n_properties - 1].value.g_type = 0;
+      g_value_init (&settings->property_values[class_n_properties - 1].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      g_param_value_set_default (pspec, &settings->property_values[class_n_properties - 1].value);
+      settings->property_values[class_n_properties - 1].from_rc = FALSE;
       g_object_notify (G_OBJECT (settings), pspec->name);
       
       qvalue = g_datalist_get_data (&settings->queued_settings, pspec->name);
@@ -597,27 +615,23 @@ gtk_settings_install_property_parser (GParamSpec         *pspec,
 static void
 free_value (gpointer data)
 {
-  GtkSettingsValue *qvalue = data;
+  GtkSettingsValuePrivate *qvalue = data;
   
-  g_value_unset (&qvalue->value);
-  g_free (qvalue->origin);
+  g_value_unset (&qvalue->public.value);
+  g_free (qvalue->public.origin);
   g_free (qvalue);
 }
 
-void
-gtk_settings_set_property_value (GtkSettings            *settings,
-				 const gchar            *prop_name,
-				 const GtkSettingsValue *new_value)
+static void
+gtk_settings_set_property_value_internal (GtkSettings            *settings,
+					  const gchar            *prop_name,
+					  const GtkSettingsValue *new_value,
+					  gboolean                from_rc)
 {
-  GtkSettingsValue *qvalue;
+  GtkSettingsValuePrivate *qvalue;
   GParamSpec *pspec;
   gchar *name;
   GQuark name_quark;
-
-  g_return_if_fail (GTK_SETTINGS (settings));
-  g_return_if_fail (prop_name != NULL);
-  g_return_if_fail (new_value != NULL);
-  g_return_if_fail (new_value->origin != NULL);
 
   if (!G_VALUE_HOLDS_LONG (&new_value->value) &&
       !G_VALUE_HOLDS_DOUBLE (&new_value->value) &&
@@ -636,20 +650,47 @@ gtk_settings_set_property_value (GtkSettings            *settings,
   qvalue = g_datalist_id_get_data (&settings->queued_settings, name_quark);
   if (!qvalue)
     {
-      qvalue = g_new0 (GtkSettingsValue, 1);
+      qvalue = g_new0 (GtkSettingsValuePrivate, 1);
       g_datalist_id_set_data_full (&settings->queued_settings, name_quark, qvalue, free_value);
     }
   else
     {
-      g_free (qvalue->origin);
-      g_value_unset (&qvalue->value);
+      g_free (qvalue->public.origin);
+      g_value_unset (&qvalue->public.value);
     }
-  qvalue->origin = g_strdup (new_value->origin);
-  g_value_init (&qvalue->value, G_VALUE_TYPE (&new_value->value));
-  g_value_copy (&new_value->value, &qvalue->value);
+  qvalue->public.origin = g_strdup (new_value->origin);
+  g_value_init (&qvalue->public.value, G_VALUE_TYPE (&new_value->value));
+  g_value_copy (&new_value->value, &qvalue->public.value);
+  qvalue->from_rc = from_rc;
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), g_quark_to_string (name_quark));
   if (pspec)
     apply_queued_setting (settings, pspec, qvalue);
+}
+
+void
+gtk_settings_set_property_value (GtkSettings            *settings,
+				 const gchar            *prop_name,
+				 const GtkSettingsValue *new_value)
+{
+  g_return_if_fail (GTK_SETTINGS (settings));
+  g_return_if_fail (prop_name != NULL);
+  g_return_if_fail (new_value != NULL);
+  g_return_if_fail (new_value->origin != NULL);
+
+  gtk_settings_set_property_value_internal (settings, prop_name, new_value, FALSE);
+}
+
+void
+_gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
+					  const gchar            *prop_name,
+					  const GtkSettingsValue *new_value)
+{
+  g_return_if_fail (GTK_SETTINGS (settings));
+  g_return_if_fail (prop_name != NULL);
+  g_return_if_fail (new_value != NULL);
+  g_return_if_fail (new_value->origin != NULL);
+
+  gtk_settings_set_property_value_internal (settings, prop_name, new_value, TRUE);
 }
 
 void
@@ -970,3 +1011,57 @@ _gtk_settings_handle_event (GdkEventSetting *event)
   if (g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name))
     g_object_notify (G_OBJECT (settings), event->name);
 }
+
+static void
+reset_rc_values_foreach (GQuark    key_id,
+			 gpointer  data,
+			 gpointer  user_data)
+{
+  GtkSettingsValuePrivate *qvalue = data;
+  GSList **to_reset = user_data;
+
+  if (qvalue->from_rc)
+    *to_reset = g_slist_prepend (*to_reset, GUINT_TO_POINTER (key_id));
+}
+
+void
+_gtk_settings_reset_rc_values (GtkSettings *settings)
+{
+  GSList *to_reset = NULL;
+  GSList *tmp_list;
+  GParamSpec **pspecs, **p;
+  gint i;
+
+  /* Remove any queued settings
+   */
+  g_datalist_foreach (&settings->queued_settings,
+		      reset_rc_values_foreach,
+		      &to_reset);
+
+  for (tmp_list = to_reset; tmp_list; tmp_list = tmp_list->next)
+    {
+      GQuark key_id = GPOINTER_TO_UINT (tmp_list->data);
+      g_datalist_id_remove_data (&settings->queued_settings, key_id);
+    }
+
+  /* Now reset the active settings
+   */
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), NULL);
+  i = 0;
+
+  g_object_freeze_notify (G_OBJECT (settings));
+  for (p = pspecs; *p; p++)
+    {
+      if (settings->property_values[i].from_rc)
+	{
+	  GParamSpec *pspec = *p;
+
+	  g_param_value_set_default (pspec, &settings->property_values[i].value);
+	  g_object_notify (G_OBJECT (settings), pspec->name);
+	}
+      i++;
+    }
+  g_object_thaw_notify (G_OBJECT (settings));
+  g_free (pspecs);
+}
+

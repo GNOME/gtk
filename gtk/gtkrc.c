@@ -1436,6 +1436,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       gtk_rc_clear_styles (context);
       g_object_freeze_notify (G_OBJECT (context->settings));
 
+      _gtk_settings_reset_rc_values (context->settings);
       tmp_list = context->rc_files;
       while (tmp_list)
 	{
@@ -2416,9 +2417,9 @@ gtk_rc_parse_statement (GtkRcContext *context,
 	      svalue.origin = prop.origin;
 	      memcpy (&svalue.value, &prop.value, sizeof (prop.value));
 	      g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
-	      gtk_settings_set_property_value (context->settings,
-					       name,
-					       &svalue);
+	      _gtk_settings_set_property_value_from_rc (context->settings,
+							name,
+							&svalue);
 	    }
 	  g_free (prop.origin);
 	  if (G_VALUE_TYPE (&prop.value))

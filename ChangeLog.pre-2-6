@@ -1,3 +1,13 @@
+Wed Oct  2 08:47:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.[ch]: Privately export:
+	_gtk_settings_set_property_value_from_rc()
+	_gtk_settings_reset_rc_values() so that we can reset
+	settings set from RC files when reloading RC files.
+	(#94610)
+
+	* gtk/gtkrc.c: Hook up RC file setting resetting.
+
 Tue Oct  1 12:53:44 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkwindow-decorate.c gtkwindow.[ch]: Deprecation cleanup
