@@ -26,11 +26,25 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkChildInfoX11 GdkChildInfoX11;
+
 typedef void (*GdkSendXEventCallback) (Window   window,
 				       gboolean success,
 				       gpointer data);
 
-void _gdk_send_xevent_async        (GdkDisplay            *display,
+struct _GdkChildInfoX11
+{
+  Window window;
+  gint x;
+  gint y;
+  gint width;
+  gint height;
+  guint is_mapped : 1;
+  guint has_wm_state : 1;
+  guint window_class : 2;
+};
+
+void _gdk_x11_send_xevent_async    (GdkDisplay            *display,
 				    Window                 window,
 				    gboolean               propagate,
 				    glong                  event_mask,
@@ -41,6 +55,12 @@ void _gdk_x11_set_input_focus_safe (GdkDisplay            *display,
 				    Window                 window,
 				    int                    revert_to,
 				    Time                   time);
+
+gboolean _gdk_x11_get_window_child_info (GdkDisplay       *display,
+					 Window            window,
+					 gboolean          get_wm_state,
+					 GdkChildInfoX11 **children,
+					 guint            *nchildren);
 
 G_END_DECLS
 

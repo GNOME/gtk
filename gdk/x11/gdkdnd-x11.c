@@ -449,11 +449,10 @@ static GdkWindowCache *
 gdk_window_cache_new (GdkScreen *screen)
 {
   XWindowAttributes xwa;
-  Window root, parent, *children;
-  unsigned int nchildren;
-  int i;
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
   GdkWindow *root_window = gdk_screen_get_root_window (screen);
+  GdkChildInfoX11 *children;
+  guint nchildren, i;
   
   GdkWindowCache *result = g_new (GdkWindowCache, 1);
 
@@ -467,25 +466,19 @@ gdk_window_cache_new (GdkScreen *screen)
 		result->old_event_mask | SubstructureNotifyMask);
   gdk_window_add_filter (root_window, gdk_window_cache_filter, result);
 
-  gdk_error_trap_push ();
+  if (!_gdk_x11_get_window_child_info (gdk_screen_get_display (screen),
+				       GDK_WINDOW_XWINDOW (root_window),
+				       FALSE, &children, &nchildren))
+    return result;
 
-  if (!XQueryTree(xdisplay, GDK_WINDOW_XWINDOW (root_window),
-		  &root, &parent, &children, &nchildren))
-    {
-      gdk_error_trap_pop ();
-      return result;
-    }
-  
   for (i = 0; i < nchildren ; i++)
     {
-      if (XGetWindowAttributes (xdisplay, children[i], &xwa))
-	gdk_window_cache_add (result, children[i],
-			      xwa.x, xwa.y, xwa.width, xwa.height,
-			      xwa.map_state != IsUnmapped);
+      gdk_window_cache_add (result, children[i].window,
+			    children[i].x, children[i].y, children[i].width, children[i].height,
+			    children[i].is_mapped);
     }
 
-  XFree (children);
-  gdk_error_trap_pop ();
+  g_free (children);
 
   return result;
 }
@@ -507,67 +500,70 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
   g_free (cache);
 }
 
+static gboolean
+window_has_wm_state (GdkDisplay *display,
+		     Window      win)
+{
+  Atom type = None;
+  int format;
+  unsigned long nitems, after;
+  unsigned char *data;
+
+  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(display), win,
+			  gdk_x11_get_xatom_by_name_for_display (display, "WM_STATE"),
+			  0, 0, False, AnyPropertyType,
+			  &type, &format, &nitems, &after, &data) != Success)
+    return FALSE;
+     
+  if (type != None)
+    {
+      XFree (data);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static Window
 get_client_window_at_coords_recurse (GdkDisplay *display,
 				     Window      win,
 				     gint        x,
 				     gint        y)
 {
-  Window root, tmp_parent, *children;
+  GdkChildInfoX11 *children;
   unsigned int nchildren;
   int i;
-  Window child = None;
-  Atom type = None;
-  int format;
-  unsigned long nitems, after;
-  unsigned char *data;
-  
-  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(display), win,
-			  gdk_x11_get_xatom_by_name_for_display (display, "WM_STATE"),
-			  0, 0, False, AnyPropertyType,
-			  &type, &format, &nitems, &after, &data) != Success)
+  gboolean found_child = FALSE;
+  GdkChildInfoX11 child;
+
+  if (!_gdk_x11_get_window_child_info (display, win, TRUE,
+				       &children, &nchildren))
     return None;
 
-  if (type != None)
+  for (i = nchildren - 1; (i >= 0) && !found_child; i--)
     {
-      XFree (data);
-      return win;
+      GdkChildInfoX11 *cur_child = &children[i];
+       
+      if ((cur_child->is_mapped) && (cur_child->window_class == InputOutput) &&
+	  (x >= cur_child->x) && (x < cur_child->x + cur_child->width) &&
+	  (y >= cur_child->y) && (y < cur_child->y + cur_child->height))
+ 	{
+	  x -= cur_child->x;
+	  y -= cur_child->y;
+	  child = *cur_child;
+	  found_child = TRUE;
+ 	}
     }
-
-#if 0
-  /* This is beautiful! Damn Enlightenment and click-to-focus */
-  if (!XTranslateCoordinates (gdk_display, _gdk_root_window, win,
-			      x_root, y_root, &dest_x, &dest_y, &child))
-    return None;
-  
-#else
-  if (!XQueryTree (GDK_DISPLAY_XDISPLAY (display), win,
-		   &root, &tmp_parent, &children, &nchildren))
-    return 0;
-  
-  for (i = nchildren - 1; (i >= 0) && (child == None); i--)
+   
+  g_free (children);
+ 
+  if (found_child)
     {
-      XWindowAttributes xwa;
-      
-      if (XGetWindowAttributes (GDK_DISPLAY_XDISPLAY (display),
-				children[i], &xwa))
-	{
-	  if ((xwa.map_state == IsViewable) && (xwa.class == InputOutput) &&
-	      (x >= xwa.x) && (x < xwa.x + (gint)xwa.width) &&
-	      (y >= xwa.y) && (y < xwa.y + (gint)xwa.height))
-	    {
-	      x -= xwa.x;
-	      y -= xwa.y;
-	      child = children[i];
-	    }
-	}
+      if (child.has_wm_state)
+	return child.window;
+      else
+	return get_client_window_at_coords_recurse (display, child.window, x, y);
     }
-  
-  XFree (children);
-#endif  
-
-  if (child)
-    return get_client_window_at_coords_recurse (display, child, x, y);
   else
     return None;
 }
@@ -594,10 +590,13 @@ get_client_window_at_coords (GdkWindowCache *cache,
 	  if ((x_root >= child->x) && (x_root < child->x + child->width) &&
 	      (y_root >= child->y) && (y_root < child->y + child->height))
 	    {
-	      retval = get_client_window_at_coords_recurse (gdk_screen_get_display (cache->screen),
-							    child->xid,
-							    x_root - child->x,
-							    y_root - child->y);
+	      if (window_has_wm_state (gdk_screen_get_display (cache->screen), child->xid))
+		retval = child->xid;
+	      else
+		retval = get_client_window_at_coords_recurse (gdk_screen_get_display (cache->screen),
+							      child->xid,
+							      x_root - child->x,
+							      y_root - child->y);
 	      if (!retval)
 		retval = child->xid;
 	    }
@@ -2160,8 +2159,9 @@ send_xevent_async (GdkDragContext *context,
   
   g_object_ref (context);
 
-  _gdk_send_xevent_async (display, window, propagate, event_mask, event_send,
-			  send_xevent_async_cb, context);
+  _gdk_x11_send_xevent_async (display, window,
+			      propagate, event_mask, event_send,
+			      send_xevent_async_cb, context);
 }
 
 static gboolean

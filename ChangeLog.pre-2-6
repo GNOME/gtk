@@ -1,3 +1,14 @@
+Fri Jul  4 23:49:22 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkasync.[ch] (_gdk_x11_get_window_child_info): 
+	Function to get a range of information about all the
+	children of a window in a single pass.
+
+	* gdk/x11/gdkdnd-x11.c (get_client_window_at_coords_recurse)
+	gdk/x11/gdkdnd-x11.c (gdk_window_cache_new): Use
+	_gdk_x11_get_window_child_info() to greatly reduce
+	the number of roundtrips.
+
 Fri Jul  4 22:57:18 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkasync.[ch] (_gdk_send_xevent_async): Add
