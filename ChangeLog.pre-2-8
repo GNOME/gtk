@@ -1,3 +1,8 @@
+Tue Oct 22 15:03:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/fnmatch.h: When compiling our on fnmatch.c, 
+	#define fnmatch _gtk_fnmatch (#92890, Jacob Berkman)
+
 Fri Oct 18 16:47:02 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (translate_key_event): Produce

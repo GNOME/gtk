@@ -27,8 +27,14 @@
 
 #define	_FNMATCH_H	1
 
+#include <stdlib.h>		/* Something to pull in features.h */
+
 #ifdef	__cplusplus
 extern "C" {
+#endif
+
+#if !defined (__GNU_LIBRARY__)
+#define fnmatch _gtk_fnmatch
 #endif
 
 #if defined (__cplusplus) || (defined (__STDC__) && __STDC__)
