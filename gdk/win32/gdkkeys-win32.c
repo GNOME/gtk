@@ -667,16 +667,19 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   if (group < 0 || group >= 2)
     return FALSE;
 
-  if ((state & GDK_SHIFT_MASK) && (state & GDK_LOCK_MASK))
-    shift_level = 0;		/* shift disables caps lock */
+  update_keymap ();
+
+  keyvals = keysym_tab + hardware_keycode*4;
+
+  if ((state & GDK_SHIFT_MASK) &&
+      (state & GDK_LOCK_MASK) &&
+      keyvals[group*2 + 1] == gdk_keyval_to_upper (keyvals[group*2 + 0]))
+    /* Shift disables caps lock */
+    shift_level = 0;		
   else if (state & GDK_SHIFT_MASK)
     shift_level = 1;
   else
     shift_level = 0;
-
-  update_keymap ();
-
-  keyvals = keysym_tab + hardware_keycode*4;
 
   /* Drop group and shift if there are no keysymbols on
    * the key for those.

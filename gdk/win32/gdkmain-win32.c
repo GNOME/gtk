@@ -58,6 +58,8 @@ GdkArgDesc _gdk_windowing_args[] = {
 						     (GdkArgFunc) NULL},
   { "ignore-wintab", GDK_ARG_BOOL, &_gdk_input_ignore_wintab,
 						     (GdkArgFunc) NULL},
+  { "use-wintab",    GDK_ARG_NOBOOL, &_gdk_input_ignore_wintab,
+						     (GdkArgFunc) NULL},
   { "max-colors",    GDK_ARG_INT,  &_gdk_max_colors,  (GdkArgFunc) NULL},
   { NULL }
 };
@@ -81,6 +83,8 @@ _gdk_windowing_init (gint    *argc,
 #ifdef HAVE_WINTAB
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     _gdk_input_ignore_wintab = TRUE;
+  else if (getenv ("GDK_USE_WINTAB") != NULL)
+    _gdk_input_ignore_wintab = FALSE;
 #endif
 
   if (gdk_synchronize)

@@ -1,3 +1,16 @@
+2004-04-10  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkkeys-win32.c (gdk_keymap_translate_keyboard_state):
+	If both Shift and CapsLock pressed, ignore the shift only for
+	letters (that would have been affected by the CapsLock). (#139095)
+
+	* gdk/win32/gdkglobals-win32.c: Disable tablet support by default,
+	seems to be even buggier now than it used to be. (#138341)
+	Initialize _gdk_input_ignore_wintab to TRUE.
+
+	* gdk/win32/gdkmain-win32.c: Add --use-wintab switch and
+	GDK_USE_WINTAB environment variable to turn on tablet support.
+
 2004-04-09  Christian Persch  <chpe@cvs.gnome.org>
 
 	* gtk/gtkuimanager.c: (gtk_ui_manager_insert_action_group),
