@@ -376,6 +376,14 @@ set_filename_existing_nonexistent_cb (GtkButton      *button,
 }
 
 static void
+unmap_and_remap_cb (GtkButton *button,
+		    GtkFileChooser *chooser)
+{
+  gtk_widget_hide (GTK_WIDGET (chooser));
+  gtk_widget_show (GTK_WIDGET (chooser));
+}
+
+static void
 kill_dependent (GtkWindow *win, GtkObject *dep)
 {
   gtk_object_destroy (dep);
@@ -568,6 +576,11 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (set_filename_existing_nonexistent_cb), dialog);
+
+  button = gtk_button_new_with_label ("Unmap and remap");
+  gtk_container_add (GTK_CONTAINER (vbbox), button);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (unmap_and_remap_cb), dialog);
 
   gtk_widget_show_all (control_window);
 
