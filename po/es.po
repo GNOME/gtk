@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-03-26 16:33+0100\n"
-"PO-Revision-Date: 2005-03-26 16:47+0100\n"
+"PO-Revision-Date: 2005-03-26 22:30+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -79,12 +79,11 @@ msgstr "El tipo de imagen «%s» no está soportado"
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:720
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
-"No se ha podido reconocer el formato del archivo de imagen del archivo «%s»"
+msgstr "No se ha podido reconocer el formato de imagen del archivo «%s»"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:728
 msgid "Unrecognized image file format"
-msgstr "El formato del archivo de imagen no es conocido"
+msgstr "No se ha reconocido el formato de imagen del archivo"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:896
 #, c-format
@@ -105,7 +104,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1416
 msgid "Insufficient memory to save image to callback"
-msgstr "No hay memoria suficiente para guardar la imagen al callback"
+msgstr "No hay memoria suficiente para guardar la imagen a la que retrollamar"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1428
 msgid "Failed to open temporary file"
@@ -113,12 +112,12 @@ msgstr "Falló al abrir el archivo temporal"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1453
 msgid "Failed to read from temporary file"
-msgstr "Fallo al leer del archivo temporal"
+msgstr "Falló al leer del archivo temporal"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1683
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr "Fallo al abrir «%s» para escritura: %s"
+msgstr "Falló al abrir «%s» para escritura: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1707
 #, c-format
@@ -172,7 +171,7 @@ msgstr "Porción de icono inesperada en la animación"
 
 #: ../gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
-msgstr "Tipo de animación no soportada"
+msgstr "Tipo de animación no soportado"
 
 #: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:538
 msgid "Invalid header in animation"
@@ -225,7 +224,7 @@ msgstr "El formato de imagen BMP"
 #: ../gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr "Fallo leyendo el GIF: %s"
+msgstr "Fallo durante la lectura del GIF: %s"
 
 #: ../gdk-pixbuf/io-gif.c:492 ../gdk-pixbuf/io-gif.c:1463
 #: ../gdk-pixbuf/io-gif.c:1624
@@ -368,9 +367,7 @@ msgstr "No se puede asignar memoria para cargar el archivo JPG"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no "
-"puede ser analizado."
+msgstr "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no puede ser interpretado."
 
 #: ../gdk-pixbuf/io-jpeg.c:909
 #, c-format
@@ -435,7 +432,7 @@ msgstr "Los bits por canal de la imagen PNG son inválidos."
 
 #: ../gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr "El PNG transformado tiene cero ancho o alto."
+msgstr "El PNG transformado tiene anchura o altura cero."
 
 #: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
@@ -481,20 +478,16 @@ msgstr "Error fatal leyendo el archivo gráfico PNG: %s"
 #: ../gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Las claves para los bloques text de PNG debe tener al menos entre 1 y un "
-"máximo de 79 caracteres."
+msgstr "Las claves para las porciones de texto PNG deben tener al menos entre 1 y un máximo de 79 caracteres."
 
 #: ../gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Las claves para los bloques text de PNG deben ser caracteres ASCII."
+msgstr "Las claves para las porciones de texto PNG deben ser caracteres ASCII."
 
 #: ../gdk-pixbuf/io-png.c:854
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"El valor del bloque texto %s de PNG no puede ser convertido a la "
-"codificación ISO-8859-1."
+msgstr "El valor la porción de texto PNG %s no puede convertirse a la codificación ISO-8859-1."
 
 #: ../gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -834,7 +827,7 @@ msgstr "FLAGS"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:131
 msgid "Gdk debugging flags to unset"
-msgstr "Flags de depuración Gdk+ a quitar"
+msgstr "Flags de depuración Gdk a quitar"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:60
@@ -930,7 +923,7 @@ msgstr "Mayús."
 #.
 #: ../gtk/gtkaccellabel.c:126
 msgid "Ctrl"
-msgstr "Control"
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -991,13 +984,11 @@ msgstr ""
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr ""
-"El que color elegido.  Puede arrastrar este color a la paleta y guardarla "
-"para usarla en el futuro."
+msgstr "El que color elegido. Puede arrastrar este color a la paleta y guardarla para usarla en el futuro."
 
 #: ../gtk/gtkcolorsel.c:958
 msgid "_Save color here"
-msgstr "G_uardar color aquí"
+msgstr "_Guardar color aquí"
 
 #: ../gtk/gtkcolorsel.c:1163
 msgid ""
@@ -1012,9 +1003,7 @@ msgstr ""
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr ""
-"Seleccione el color que desea desde el anillo exterior. Seleccione la mezcla "
-"mas oscura o mas luminosa usando el triángulo interior."
+msgstr "Seleccione el color que desea desde el anillo exterior. Seleccione la oscuridad o luminosidad de ese color usando el triángulo interior."
 
 #: ../gtk/gtkcolorsel.c:1945
 msgid ""
@@ -1070,7 +1059,7 @@ msgstr "_Azul:"
 
 #: ../gtk/gtkcolorsel.c:1966
 msgid "Amount of blue light in the color."
-msgstr "Cantidad de luz azul en en color."
+msgstr "Cantidad de luz azul en el color."
 
 #: ../gtk/gtkcolorsel.c:1969
 msgid "_Opacity:"
@@ -1114,7 +1103,7 @@ msgstr "_Métodos de entrada"
 
 #: ../gtk/gtkentry.c:4532 ../gtk/gtktextview.c:7051
 msgid "_Insert Unicode Control Character"
-msgstr "_Insertar carácter de control Unicode"
+msgstr "_Insertar un carácter de control Unicode"
 
 #: ../gtk/gtkfilechooser.c:1588 ../gtk/gtkfilechooser.c:1632
 #: ../gtk/gtkfilechooser.c:1707 ../gtk/gtkfilechooser.c:1751
@@ -1168,12 +1157,12 @@ msgstr "Nombre de archivo inválido"
 
 #: ../gtk/gtkfilechooserdefault.c:972
 msgid "The folder contents could not be displayed"
-msgstr "El contenido de la carpeta no se pudo mostrar"
+msgstr "No se pudo mostrar el contenido de la carpeta"
 
 #: ../gtk/gtkfilechooserdefault.c:1177
 #, c-format
 msgid "Could not get information about '%s': %s"
-msgstr "No se ha podido obtener información acerca del archivo «%s» : %s"
+msgstr "No se ha podido obtener información acerca de «%s» : %s"
 
 #: ../gtk/gtkfilechooserdefault.c:2208
 #, c-format
@@ -1283,7 +1272,7 @@ msgstr "Guardar en una _carpeta:"
 
 #: ../gtk/gtkfilechooserdefault.c:3998
 msgid "Create in _folder:"
-msgstr "Crear en _carpeta:"
+msgstr "Crear en la _carpeta:"
 
 #: ../gtk/gtkfilechooserdefault.c:4938
 msgid "Cannot change to folder because it is not local"
@@ -1348,7 +1337,7 @@ msgstr "La carpeta que especificó es una ruta inválida."
 #: ../gtk/gtkfilechooserdefault.c:6434
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
-msgstr "No se pudo construir el nombre del archivo de «%s» y «%s»"
+msgstr "No se pudo construir un nombre de archivo de «%s» y «%s»"
 
 #: ../gtk/gtkfilechooserdefault.c:6470
 msgid "Could not select item"
@@ -1360,7 +1349,7 @@ msgstr "Abrir dirección"
 
 #: ../gtk/gtkfilechooserdefault.c:6517
 msgid "Save in Location"
-msgstr "Guardar en ubicación"
+msgstr "Guardar en dirección"
 
 #: ../gtk/gtkfilechooserdefault.c:6541
 msgid "_Location:"
@@ -1381,7 +1370,7 @@ msgstr "_Archivos"
 #: ../gtk/gtkfilesel.c:858 ../gtk/gtkfilesel.c:2248
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr "Directorio ilegible: %s"
+msgstr "Carpeta ilegible: %s"
 
 #: ../gtk/gtkfilesel.c:989
 #, c-format
@@ -1396,7 +1385,7 @@ msgstr ""
 
 #: ../gtk/gtkfilesel.c:1120
 msgid "_New Folder"
-msgstr "_Nueva carpeta"
+msgstr "Carpeta _nueva"
 
 #: ../gtk/gtkfilesel.c:1131
 msgid "De_lete File"
@@ -1435,11 +1424,11 @@ msgstr "Error al crear la carpeta «%s» : %s\n"
 
 #: ../gtk/gtkfilesel.c:1489
 msgid "New Folder"
-msgstr "Nueva carpeta"
+msgstr "Carpeta nueva"
 
 #: ../gtk/gtkfilesel.c:1504
 msgid "_Folder name:"
-msgstr "_Nombre del la carpeta:"
+msgstr "_Nombre de la carpeta:"
 
 #: ../gtk/gtkfilesel.c:1528
 msgid "C_reate"
@@ -1543,7 +1532,7 @@ msgstr "UTF-8 inválido"
 
 #: ../gtk/gtkfilesel.c:4031
 msgid "Name too long"
-msgstr "El nombre es muy largo"
+msgstr "El nombre es demasiado largo"
 
 #: ../gtk/gtkfilesel.c:4033
 msgid "Couldn't convert filename"
@@ -1551,7 +1540,7 @@ msgstr "No se ha podido convertir el nombre del archivo"
 
 #: ../gtk/gtkfilesystemmodel.c:1267
 msgid "(Empty)"
-msgstr "(vacío)"
+msgstr "(Vacío)"
 
 #: ../gtk/gtkfilesystemunix.c:446 ../gtk/gtkfilesystemunix.c:638
 #: ../gtk/gtkfilesystemunix.c:1878 ../gtk/gtkfilesystemwin32.c:482
@@ -1567,7 +1556,7 @@ msgstr "Error al crear la carpeta «%s» : %s"
 
 #: ../gtk/gtkfilesystemunix.c:587 ../gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
-msgstr "Este sistema de archivo no soporta montaje"
+msgstr "Este sistema de archivos no soporta montaje"
 
 #: ../gtk/gtkfilesystemunix.c:595
 msgid "Filesystem"
@@ -1825,7 +1814,7 @@ msgstr "Opciones GTK+"
 
 #: ../gtk/gtkmain.c:565
 msgid "Show GTK+ Options"
-msgstr "Mostrar opciones GTL+"
+msgstr "Mostrar opciones GTK+"
 
 #: ../gtk/gtknotebook.c:2718 ../gtk/gtknotebook.c:5066
 #, c-format
@@ -1893,7 +1882,7 @@ msgstr "_Cancelar"
 
 #: ../gtk/gtkstock.c:321
 msgid "_CD-Rom"
-msgstr "_CD-ROM"
+msgstr "_CD-Rom"
 
 #: ../gtk/gtkstock.c:322
 msgid "_Clear"
@@ -1917,7 +1906,7 @@ msgstr "Cor_tar"
 
 #: ../gtk/gtkstock.c:327
 msgid "_Delete"
-msgstr "B_orrar"
+msgstr "_Borrar"
 
 #: ../gtk/gtkstock.c:328
 msgid "_Execute"
@@ -1938,7 +1927,7 @@ msgstr "Buscar y _reemplazar"
 
 #: ../gtk/gtkstock.c:332
 msgid "_Floppy"
-msgstr "_Disquetera"
+msgstr "_Disquete"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:334
@@ -2002,7 +1991,7 @@ msgstr "Disminuir sangría"
 
 #: ../gtk/gtkstock.c:354
 msgid "_Index"
-msgstr "Ín_dice"
+msgstr "_Índice"
 
 #: ../gtk/gtkstock.c:355
 msgid "_Italic"
@@ -2010,7 +1999,7 @@ msgstr "_Itálica"
 
 #: ../gtk/gtkstock.c:356
 msgid "_Jump to"
-msgstr "I_r a"
+msgstr "_Ir a"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:358
@@ -2107,7 +2096,7 @@ msgstr "Im_primir"
 
 #: ../gtk/gtkstock.c:390
 msgid "Print Pre_view"
-msgstr "Vista pre_via"
+msgstr "Vista pre_via de impresión"
 
 #: ../gtk/gtkstock.c:391
 msgid "_Properties"
@@ -2313,7 +2302,7 @@ msgstr "Vietnamita (VIQR)"
 #. ID
 #: ../modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr "Método de la entrada X"
+msgstr "Método de entrada X"
 
 #: ../tests/testfilechooser.c:186
 #, c-format
