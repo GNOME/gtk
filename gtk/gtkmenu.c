@@ -566,7 +566,6 @@ void
 gtk_menu_set_accel_group (GtkMenu	*menu,
 			  GtkAccelGroup *accel_group)
 {
-  g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
   
   if (menu->accel_group != accel_group)
@@ -579,6 +578,38 @@ gtk_menu_set_accel_group (GtkMenu	*menu,
     }
 }
 
+GtkAccelGroup*
+gtk_menu_get_accel_group (GtkMenu *menu)
+{
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+
+  return menu->accel_group;
+}
+
+GtkAccelGroup*
+gtk_menu_get_uline_accel_group (GtkMenu *menu)
+{
+  static GQuark quark_uline_accel_group = 0;
+  GtkAccelGroup *accel_group;
+
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+
+  if (!quark_uline_accel_group)
+    quark_uline_accel_group = g_quark_from_static_string ("GtkMenu-uline-accel-group");
+
+  accel_group = gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_uline_accel_group);
+  if (!accel_group)
+    {
+      accel_group = gtk_accel_group_new ();
+      gtk_accel_group_attach (accel_group, GTK_OBJECT (menu));
+      gtk_object_set_data_by_id_full (GTK_OBJECT (menu),
+				      quark_uline_accel_group,
+				      accel_group,
+				      (GtkDestroyNotify) gtk_accel_group_unref);
+    }
+
+  return accel_group;
+}
 
 void
 gtk_menu_reposition (GtkMenu *menu)

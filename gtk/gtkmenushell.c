@@ -831,10 +831,13 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
        */
       gdk_flush ();
     }
+
+  gtk_widget_ref (GTK_WIDGET (menu_shell));
   gtk_widget_activate (menu_item);
 
   if (deactivate)
     gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
+  gtk_widget_unref (GTK_WIDGET (menu_shell));
 }
 
 /* Distance should be +/- 1 */

@@ -69,7 +69,7 @@ struct _GtkItemFactory
   gchar			*path;
   GtkAccelGroup		*accel_group;
   GtkWidget		*widget;
-  GSList		*widgets_by_action;
+  GSList		*items;
 
   GtkTranslateFunc       translate_func;
   gpointer               translate_data;
@@ -146,9 +146,13 @@ void		gtk_item_factory_parse_rc_scanner   (GScanner	    *scanner);
 GtkItemFactory*	gtk_item_factory_from_widget	    (GtkWidget	      *widget);
 gchar*		gtk_item_factory_path_from_widget   (GtkWidget	      *widget);
 
-GtkWidget*	gtk_item_factory_get_widget	    (GtkItemFactory   *ifactory,
-						     const gchar      *path);
+GtkWidget*	gtk_item_factory_get_item	      (GtkItemFactory *ifactory,
+						       const gchar    *path);
+GtkWidget*	gtk_item_factory_get_widget	      (GtkItemFactory *ifactory,
+						       const gchar    *path);
 GtkWidget*	gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
+						       guint	       action);
+GtkWidget*	gtk_item_factory_get_item_by_action   (GtkItemFactory *ifactory,
 						       guint	       action);
 
 /* If `path_pspec' is passed as `NULL', this function will iterate over
