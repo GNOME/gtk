@@ -1,3 +1,11 @@
+Tue Aug  4 16:18:26 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: version bump to 1.1.1, binary age 0, interface age 0.
+	GLib version 1.1.1 is now required at minimum.
+
+	* docs/Makefile.am: added gtk_tut_fr.sgml to EXTRA_DIST (french version
+	of the Gtk+ tutorial, contributed by Eric Jacoboni <jaco@dotcom.fr>.
+
 Mon Aug  3 19:24:48 1998  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtktext.c (gtk_text_forward_delete): Undraw the
@@ -211,7 +219,6 @@ Fri, 24 Jul 1998 10:56:22 +0200 Paolo Molaro <lupus@debian.org>
 
 	* gtk/gtkfeatures.h.in: added GTK_HAVE_ENUM_VALUE_STRUCT.
 
->>>>>>> 1.560
 Thu Jul 23 00:11:39 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtkrc: introduce testbindings on C-1 for buttons,

@@ -1,3 +1,12 @@
+What is new in GTK+ 1.1.1:
+
+* Tutorial updates and additions.
+* Key binding support for GtkListItems and GtkList.
+* Extended selection mode and autoscrolling for GtkLists.
+* A GtkCtree now operates on GtkCTreeNode* structures rather than GList*.
+* Bug fixes for GtkNotebook, GtkCList, GtkCombo and GdkWindow reparentation.
+
+
 What is new in GTK+ 1.1.0:
 
 * New widget GtkFontSelector.

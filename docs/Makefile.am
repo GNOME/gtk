@@ -13,6 +13,7 @@ EXTRA_DIST =	\
         gtk-config.txt          \
 	gtk_tut.sgml		\
 	gtk_tut_it.sgml		\
+	gtk_tut_fr.sgml		\
 	debugging.txt		\
 	developers.txt		\
 	refcounting.txt		\
