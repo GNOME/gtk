@@ -47,6 +47,7 @@
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkiconfactory.h"
+#include "gtkintl.h"
 
 /* TODO: remove this define and assorted code in 1.3 and fix up the
  * real culprits.
@@ -60,17 +61,23 @@ enum {
 };
 
 enum {
-  ARG_0,
-  ARG_TYPE,
-  ARG_TITLE,
-  ARG_AUTO_SHRINK,
-  ARG_ALLOW_SHRINK,
-  ARG_ALLOW_GROW,
-  ARG_MODAL,
-  ARG_WIN_POS,
-  ARG_DEFAULT_WIDTH,
-  ARG_DEFAULT_HEIGHT,
-  ARG_DESTROY_WITH_PARENT
+  PROP_0,
+
+  /* Construct */
+  PROP_TYPE,
+
+  /* Style Props */
+  PROP_TITLE,
+  PROP_AUTO_SHRINK,
+  PROP_ALLOW_SHRINK,
+  PROP_ALLOW_GROW,
+  PROP_MODAL,
+  PROP_WIN_POS,
+  PROP_DEFAULT_WIDTH,
+  PROP_DEFAULT_HEIGHT,
+  PROP_DESTROY_WITH_PARENT,
+
+  LAST_ARG
 };
 
 typedef struct {
@@ -94,12 +101,6 @@ typedef struct {
 
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
-static void gtk_window_set_arg            (GtkObject         *object,
-					   GtkArg            *arg,
-					   guint	      arg_id);
-static void gtk_window_get_arg            (GtkObject         *object,
-					   GtkArg            *arg,
-					   guint	      arg_id);
 static void gtk_window_shutdown           (GObject           *object);
 static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_finalize           (GObject           *object);
@@ -184,6 +185,14 @@ static GSList      *toplevel_list = NULL;
 static GtkBinClass *parent_class = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 
+static void gtk_window_set_property (GObject         *object,
+				     guint            prop_id,
+				     const GValue    *value,
+				     GParamSpec      *pspec);
+static void gtk_window_get_property (GObject         *object,
+				     guint            prop_id,
+				     GValue          *value,
+				     GParamSpec      *pspec);
 
 GtkType
 gtk_window_get_type (void)
@@ -227,8 +236,9 @@ gtk_window_class_init (GtkWindowClass *klass)
   gobject_class->shutdown = gtk_window_shutdown;
   gobject_class->finalize = gtk_window_finalize;
 
-  object_class->set_arg = gtk_window_set_arg;
-  object_class->get_arg = gtk_window_get_arg;
+  gobject_class->set_property = gtk_window_set_property;
+  gobject_class->get_property = gtk_window_get_property;
+  
   object_class->destroy = gtk_window_destroy;
 
   widget_class->show = gtk_window_show;
@@ -256,17 +266,96 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->set_focus = gtk_window_real_set_focus;
   klass->frame_event = gtk_window_frame_event;
 
-  gtk_object_add_arg_type ("GtkWindow::type", GTK_TYPE_WINDOW_TYPE, GTK_ARG_READWRITE, ARG_TYPE);
-  gtk_object_add_arg_type ("GtkWindow::title", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_TITLE);
-  gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_AUTO_SHRINK);
-  gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_SHRINK);
-  gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_GROW);
-  gtk_object_add_arg_type ("GtkWindow::modal", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_MODAL);
-  gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_WINDOW_POSITION, GTK_ARG_READWRITE, ARG_WIN_POS);
-  gtk_object_add_arg_type ("GtkWindow::default_width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_WIDTH);
-  gtk_object_add_arg_type ("GtkWindow::default_height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_HEIGHT);
-  gtk_object_add_arg_type ("GtkWindow::destroy_with_parent", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DESTROY_WITH_PARENT);
-  
+  /* Construct */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TYPE,
+                                   g_param_spec_enum ("type",
+						      _("Window Type"),
+						      _("The type of the window"),
+						      GTK_TYPE_WINDOW_TYPE,
+						      GTK_WINDOW_TOPLEVEL,
+						      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  /* Style Props */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TITLE,
+                                   g_param_spec_string ("title",
+                                                        _("Window Title"),
+                                                        _("The title of the window"),
+                                                        NULL,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_AUTO_SHRINK,
+                                   g_param_spec_boolean ("auto_shrink",
+							 _("Auto Shrink"),
+							 _("If TRUE, the window automatically shrinks to its size request anytime a resize occurs. Don't use this feature, it makes no sense."),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ALLOW_SHRINK,
+                                   g_param_spec_boolean ("allow_shrink",
+							 _("Allow Shrink"),
+							 _("If TRUE, the window has no mimimum size. Don't use this feature, it makes no sense."),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ALLOW_GROW,
+                                   g_param_spec_boolean ("allow_grow",
+							 _("Allow Grow"),
+							 _("If TRUE, users can expand the window beyond its minimum size."),
+							 TRUE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_MODAL,
+                                   g_param_spec_boolean ("modal",
+							 _("Modal"),
+							 _("If TRUE, the window is modal (other windows are not usable while this one is up)."),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_WIN_POS,
+                                   g_param_spec_enum ("window_position",
+						      _("Window Position"),
+						      _("The initial position of the window."),
+						      GTK_TYPE_WINDOW_POSITION,
+						      GTK_WIN_POS_NONE,
+						      G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+                                   PROP_DEFAULT_WIDTH,
+                                   g_param_spec_int ("default_width",
+						     _("Default Width"),
+						     _("The default width of the window, or 0 to use the size request."),
+						     0,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+                                   PROP_DEFAULT_HEIGHT,
+                                   g_param_spec_int ("default_height",
+						     _("Default Height"),
+						     _("The default height of the windo, or 0 to use the size request."),
+						     0,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+                                   PROP_DESTROY_WITH_PARENT,
+                                   g_param_spec_boolean ("destroy_with_parent",
+							 _("Destroy with Parent"),
+							 _("If this window should be destroyed when the parent is destroyed,"),
+                                                         FALSE,
+							 G_PARAM_READWRITE));
+
+  /* Style props are set or not */
+
   window_signals[SET_FOCUS] =
     gtk_signal_new ("set_focus",
                     GTK_RUN_LAST,
@@ -333,48 +422,49 @@ gtk_window_init (GtkWindow *window)
 }
 
 static void
-gtk_window_set_arg (GtkObject  *object,
-		    GtkArg     *arg,
-		    guint	arg_id)
+gtk_window_set_property (GObject      *object,
+			 guint         prop_id,
+			 const GValue *value,
+			 GParamSpec   *pspec)
 {
   GtkWindow  *window;
 
   window = GTK_WINDOW (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_TYPE:
-      window->type = GTK_VALUE_ENUM (*arg);
+    case PROP_TYPE:
+      window->type = g_value_get_enum (value);
       break;
-    case ARG_TITLE:
-      gtk_window_set_title (window, GTK_VALUE_STRING (*arg));
+    case PROP_TITLE:
+      gtk_window_set_title (window, g_value_get_string (value));
       break;
-    case ARG_AUTO_SHRINK:
-      window->auto_shrink = (GTK_VALUE_BOOL (*arg) != FALSE);
+    case PROP_AUTO_SHRINK:
+      window->auto_shrink = g_value_get_boolean (value);
       gtk_widget_queue_resize (GTK_WIDGET (window));
       break;
-    case ARG_ALLOW_SHRINK:
-      window->allow_shrink = (GTK_VALUE_BOOL (*arg) != FALSE);
+    case PROP_ALLOW_SHRINK:
+      window->allow_shrink = g_value_get_boolean (value);
       gtk_widget_queue_resize (GTK_WIDGET (window));
       break;
-    case ARG_ALLOW_GROW:
-      window->allow_grow = (GTK_VALUE_BOOL (*arg) != FALSE);
+    case PROP_ALLOW_GROW:
+      window->allow_grow = g_value_get_boolean (value);
       gtk_widget_queue_resize (GTK_WIDGET (window));
       break;
-    case ARG_MODAL:
-      gtk_window_set_modal (window, GTK_VALUE_BOOL (*arg));
+    case PROP_MODAL:
+      gtk_window_set_modal (window, g_value_get_boolean (value));
       break;
-    case ARG_WIN_POS:
-      gtk_window_set_position (window, GTK_VALUE_ENUM (*arg));
+    case PROP_WIN_POS:
+      gtk_window_set_position (window, g_value_get_enum (value));
       break;
-    case ARG_DEFAULT_WIDTH:
-      gtk_window_set_default_size (window, GTK_VALUE_INT (*arg), -2);
+    case PROP_DEFAULT_WIDTH:
+      gtk_window_set_default_size (window, g_value_get_int (value), -1);
       break;
-    case ARG_DEFAULT_HEIGHT:
-      gtk_window_set_default_size (window, -2, GTK_VALUE_INT (*arg));
+    case PROP_DEFAULT_HEIGHT:
+      gtk_window_set_default_size (window, -1, g_value_get_int (value));
       break;
-    case ARG_DESTROY_WITH_PARENT:
-      gtk_window_set_destroy_with_parent (window, GTK_VALUE_BOOL (*arg));
+    case PROP_DESTROY_WITH_PARENT:
+      gtk_window_set_destroy_with_parent (window, g_value_get_boolean (value));
       break;
     default:
       break;
@@ -382,57 +472,58 @@ gtk_window_set_arg (GtkObject  *object,
 }
 
 static void
-gtk_window_get_arg (GtkObject  *object,
-		    GtkArg     *arg,
-		    guint	arg_id)
+gtk_window_get_property (GObject      *object,
+			 guint         prop_id,
+			 GValue       *value,
+			 GParamSpec   *pspec)
 {
   GtkWindow  *window;
 
   window = GTK_WINDOW (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
       GtkWindowGeometryInfo *info;
-    case ARG_TYPE:
-      GTK_VALUE_ENUM (*arg) = window->type;
+    case PROP_TYPE:
+      g_value_set_enum (value, window->type);
       break;
-    case ARG_TITLE:
-      GTK_VALUE_STRING (*arg) = g_strdup (window->title);
+    case PROP_TITLE:
+      g_value_set_string (value, window->title);
       break;
-    case ARG_AUTO_SHRINK:
-      GTK_VALUE_BOOL (*arg) = window->auto_shrink;
+    case PROP_AUTO_SHRINK:
+      g_value_set_boolean (value, window->auto_shrink);
       break;
-    case ARG_ALLOW_SHRINK:
-      GTK_VALUE_BOOL (*arg) = window->allow_shrink;
+    case PROP_ALLOW_SHRINK:
+      g_value_set_boolean (value, window->allow_shrink);
       break;
-    case ARG_ALLOW_GROW:
-      GTK_VALUE_BOOL (*arg) = window->allow_grow;
+    case PROP_ALLOW_GROW:
+      g_value_set_boolean (value, window->allow_grow);
       break;
-    case ARG_MODAL:
-      GTK_VALUE_BOOL (*arg) = window->modal;
+    case PROP_MODAL:
+      g_value_set_boolean (value, window->modal);
       break;
-    case ARG_WIN_POS:
-      GTK_VALUE_ENUM (*arg) = window->position;
+    case PROP_WIN_POS:
+      g_value_set_enum (value, window->position);
       break;
-    case ARG_DEFAULT_WIDTH:
+    case PROP_DEFAULT_WIDTH:
       info = gtk_window_get_geometry_info (window, FALSE);
       if (!info)
-	GTK_VALUE_INT (*arg) = -1;
+	g_value_set_int (value, 0);
       else
-	GTK_VALUE_INT (*arg) = info->width;
+	g_value_set_int (value, info->width);
       break;
-    case ARG_DEFAULT_HEIGHT:
+    case PROP_DEFAULT_HEIGHT:
       info = gtk_window_get_geometry_info (window, FALSE);
       if (!info)
-	GTK_VALUE_INT (*arg) = -1;
+	g_value_set_int (value, 0);
       else
-	GTK_VALUE_INT (*arg) = info->height;
+	g_value_set_int (value, info->height);
       break;
-    case ARG_DESTROY_WITH_PARENT:
-      GTK_VALUE_BOOL (*arg) = window->destroy_with_parent;
+    case PROP_DESTROY_WITH_PARENT:
+      g_value_set_boolean (value, window->destroy_with_parent);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -499,6 +590,8 @@ gtk_window_set_title (GtkWindow   *window,
 
       gtk_decorated_window_set_title (window, title);
     }
+
+  g_object_notify (G_OBJECT (window), "title");
 }
 
 /**
@@ -655,6 +748,10 @@ gtk_window_set_policy (GtkWindow *window,
   window->allow_grow = (allow_grow != FALSE);
   window->auto_shrink = (auto_shrink != FALSE);
 
+  g_object_notify (G_OBJECT (window), "allow_shrink");
+  g_object_notify (G_OBJECT (window), "allow_grow");
+  g_object_notify (G_OBJECT (window), "auto_shrink");
+  
   gtk_widget_queue_resize (GTK_WIDGET (window));
 }
 
@@ -711,6 +808,8 @@ gtk_window_set_position (GtkWindow         *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   window->position = position;
+
+  g_object_notify (G_OBJECT (window), "window_position");
 }
 
 gint
@@ -766,12 +865,14 @@ gtk_window_set_modal (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   window->modal = modal != FALSE;
-
+  
   /* adjust desired modality state */
   if (GTK_WIDGET_VISIBLE (window) && window->modal)
     gtk_grab_add (GTK_WIDGET (window));
   else
     gtk_grab_remove (GTK_WIDGET (window));
+
+  g_object_notify (G_OBJECT (window), "modal");
 }
 
 /**
@@ -1067,6 +1168,8 @@ gtk_window_set_destroy_with_parent  (GtkWindow *window,
     }
   
   window->destroy_with_parent = setting;
+
+  g_object_notify (G_OBJECT (window), "destroy_with_parent");
 }
 
 static void
@@ -1188,8 +1291,8 @@ gtk_window_set_decorated (GtkWindow *window,
 /**
  * gtk_window_set_default_size:
  * @window: a #GtkWindow
- * @width: width in pixels, or -1 to leave the default width unchanged
- * @height: height in pixels, or -1 to leave the default height unchanged
+ * @width: width in pixels, 0 to unset, or -1 to leave the width unchanged
+ * @height: height in pixels, 0 to unset, or -1 to leave the height unchanged
  *
  * Sets the default size of a window. If the window's "natural" size
  * (its size request) is larger than the default, the default will be
@@ -1198,7 +1301,8 @@ gtk_window_set_decorated (GtkWindow *window,
  * thus would keep users from shrinking the window, this function only
  * sets the initial size, just as if the user had resized the window
  * themselves. Users can still shrink the window again as they
- * normally would.
+ * normally would. Setting a default size of 0 means to use the
+ * "natural" default size (the size request of the window).
  *
  * For more control over a window's initial size and how resizing works,
  * investigate gtk_window_set_geometry_hints().
@@ -1225,6 +1329,11 @@ gtk_window_set_default_size (GtkWindow   *window,
   if (height >= 0)
     info->height = height;
 
+  if (width >= 0)
+    g_object_notify (G_OBJECT (window), "width");
+  if (height >= 0)
+    g_object_notify (G_OBJECT (window), "height");
+  
   gtk_widget_queue_resize (GTK_WIDGET (window));
 }
   

@@ -1,5 +1,12 @@
 2001-03-12  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_class_init): Patch from John Margaglione 
+	to convert to new property API. Also, change default_width and
+	default_height get_property to return 0 as the flag value for
+	"unset"; -1 is not a valid value for these fields.
+
+2001-03-12  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkiconfactory.h, gtk/gtkiconfactory.c: Switch to using an
 	enum with registration for icon sizes, instead of strings.
 
