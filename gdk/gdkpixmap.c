@@ -26,6 +26,7 @@
 
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
+#include "gdkpixbuf.h"
 
 static GdkGC *gdk_pixmap_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
@@ -409,3 +410,124 @@ gdk_pixmap_real_get_colormap (GdkDrawable *drawable)
   
   return gdk_drawable_get_colormap (((GdkPixmapObject*)drawable)->impl);
 }
+
+#define PACKED_COLOR(c) ((((c)->red & 0xff) << 8) | ((c)->green & 0xff) | ((c)->blue >> 8))
+
+static GdkPixmap *
+gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
+				     GdkBitmap  **mask,
+				     GdkColor    *transparent_color,
+				     GdkPixbuf   *pixbuf)
+{
+  GdkPixmap *pixmap;
+  GdkPixbuf *render_pixbuf;
+  GdkGC *tmp_gc;
+  
+  pixmap = gdk_pixmap_new (NULL,
+			   gdk_pixbuf_get_width (pixbuf),
+			   gdk_pixbuf_get_height (pixbuf),
+			   gdk_colormap_get_visual (colormap)->depth);
+  gdk_drawable_set_colormap (pixmap, colormap);
+  
+  if (transparent_color)
+    {
+      guint32 packed_color = PACKED_COLOR (transparent_color);
+      render_pixbuf = gdk_pixbuf_composite_color_simple (pixbuf,
+							 gdk_pixbuf_get_width (pixbuf),
+							 gdk_pixbuf_get_height (pixbuf),
+							 GDK_INTERP_NEAREST,
+							 255, 16, packed_color, packed_color);
+    }
+  else
+    render_pixbuf = pixbuf;
+
+  tmp_gc = gdk_gc_new (pixmap);
+  gdk_pixbuf_render_to_drawable (render_pixbuf, pixmap, tmp_gc, 0, 0, 0, 0,
+				 gdk_pixbuf_get_width (render_pixbuf),
+				 gdk_pixbuf_get_height (render_pixbuf),
+				 GDK_RGB_DITHER_NORMAL, 0, 0);
+  gdk_gc_unref (tmp_gc);
+
+  if (render_pixbuf != pixbuf)
+    gdk_pixbuf_unref (render_pixbuf);
+
+  if (mask)
+    gdk_pixbuf_render_pixmap_and_mask (pixbuf, NULL, mask, 128);
+
+  return pixmap;
+}
+
+GdkPixmap*
+gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
+				     GdkColormap *colormap,
+				     GdkBitmap  **mask,
+				     GdkColor    *transparent_color,
+				     const gchar *filename)
+{
+  GdkPixbuf *pixbuf;
+  GdkPixmap *pixmap;
+
+  g_return_val_if_fail (window != NULL || colormap != NULL, NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (colormap == NULL || GDK_IS_COLORMAP (colormap), NULL);
+
+  if (colormap == NULL)
+    colormap = gdk_drawable_get_colormap (window);
+  
+  pixbuf = gdk_pixbuf_new_from_file (filename);
+  if (!pixbuf)
+    return NULL;
+
+  pixmap = gdk_pixmap_colormap_new_from_pixbuf (colormap, mask, transparent_color, pixbuf);
+  gdk_pixbuf_unref (pixbuf);
+
+  return pixmap;
+}
+
+GdkPixmap*
+gdk_pixmap_create_from_xpm (GdkWindow  *window,
+			    GdkBitmap **mask,
+			    GdkColor   *transparent_color,
+			    const gchar *filename)
+{
+  return gdk_pixmap_colormap_create_from_xpm (window, NULL, mask,
+					      transparent_color, filename);
+}
+
+GdkPixmap*
+gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
+				       GdkColormap *colormap,
+				       GdkBitmap **mask,
+				       GdkColor   *transparent_color,
+				       gchar     **data)
+{
+  GdkPixbuf *pixbuf;
+  GdkPixmap *pixmap;
+
+  g_return_val_if_fail (window != NULL || colormap != NULL, NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (colormap == NULL || GDK_IS_COLORMAP (colormap), NULL);
+
+  if (colormap == NULL)
+    colormap = gdk_drawable_get_colormap (window);
+  
+  pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **)data);
+  if (!pixbuf)
+    return NULL;
+
+  pixmap = gdk_pixmap_colormap_new_from_pixbuf (colormap, mask, transparent_color, pixbuf);
+  gdk_pixbuf_unref (pixbuf);
+
+  return pixmap;
+}
+
+GdkPixmap*
+gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
+			      GdkBitmap **mask,
+			      GdkColor   *transparent_color,
+			      gchar     **data)
+{
+  return gdk_pixmap_colormap_create_from_xpm_d (window, NULL, mask,
+						transparent_color, data);
+}
+

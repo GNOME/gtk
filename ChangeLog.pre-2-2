@@ -1,3 +1,46 @@
+Sun Jul  2 12:45:50 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.[ch]: Add gdk_rgb_find_color() to get a pixel
+	value using GdkRGB functionality given GdkColormap and GdkColor.
+	(name not final, waiting for inspiration.)
+	
+	* gdk/gdkgc.[ch] (gdk_gc_set_rgb_fg/bg_color): New functions to
+	set the foreground/background of a GC using the GC's colormap
+	and GdkRGB. (name not final, waiting for inspiration.)
+
+	* gdk/gdkcompat.h gdk/gdkrgb.c (gdk_rgb_get_colormap): Rename from 
+	gdk_rgb_get_cmap(), put #define in gdkcompat.h.
+
+	* gtk/gtkwidget.[ch] gtkcompat.h: Make visuals for
+	gtk_widget_get_visual(), gtk_widget_get_default_visual, etc,
+	purely a function of the corresponding colormap. Make
+	gtk_widget_set_visual(), etc, noop macros in gtkcompat.h.
+
+	* gdk/gdkpixmap.c gdk/x11/gdkpixmap-c11.c: Rewrite
+	gdk_pixbuf_*create_from_xpm_* in terms of
+	gdk_pixbuf_new_from_xpm_data(), move into platform independent
+	code.
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable): Take
+	advantage of the new draw_rgb_32_image_dithalign.
+
+	* gdk/gdkrgb.c (gdk_draw_rgb_32_image_dithalign): Added.
+
+	* gtk/gtkgc.c (gtk_gc_new): Set the appropriate colormap
+	on each created GC.
+
+	* gdk/gdkgc.[ch]: Add gdk_gc_get/set_colormap.
+
+	* gdk/gdkgc.[ch]: Add a colormap field to the GdkGC structure
+	which we initialize from the drawable when the GC is created,
+	if the drawable has a colormap.
+
+	* gdk/x11/gdkgc-x11.c: include string.h for memset.
+
+	* gdk/x11/gdkinput-x11.c: include string.h for strlen, etc.
+
+	* gtk/gtklayout.[ch]: Remove unsed configure serial member.
+
 Sat Jul  1 16:28:32 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): When

@@ -27,7 +27,13 @@
 #include <string.h>
 
 #include "gdkgc.h"
+#include "gdkrgb.h"
 #include "gdkprivate.h"
+
+static void gdk_gc_class_init (GObjectClass *class);
+static void gdk_gc_finalize   (GObject      *object);
+
+GObjectClass *parent_class;
 
 GType
 gdk_gc_get_type (void)
@@ -41,7 +47,7 @@ gdk_gc_get_type (void)
         sizeof (GdkGCClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) NULL,
+        (GClassInitFunc) gdk_gc_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
         sizeof (GdkGC),
@@ -55,6 +61,14 @@ gdk_gc_get_type (void)
     }
   
   return object_type;
+}
+
+static void
+gdk_gc_class_init (GObjectClass *class)
+{
+  parent_class = g_type_class_peek_parent (class);
+  
+  class->finalize = gdk_gc_finalize;
 }
 
 GdkGC*
@@ -90,7 +104,22 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
   if (values_mask & GDK_GC_TS_Y_ORIGIN)
     gc->ts_y_origin = values->ts_y_origin;
 
+  gc->colormap = gdk_drawable_get_colormap (drawable);
+  if (gc->colormap)
+    g_object_ref (G_OBJECT (gc->colormap));
+  
   return gc;
+}
+
+static void
+gdk_gc_finalize (GObject *object)
+{
+  GdkGC *gc = GDK_GC (object);
+  
+  if (gc->colormap)
+    g_object_unref (G_OBJECT (gc->colormap));
+
+  parent_class->finalize (object);
 }
 
 GdkGC *
@@ -322,4 +351,128 @@ gdk_gc_set_dashes (GdkGC *gc,
   g_return_if_fail (dash_list != NULL);
 
   GDK_GC_GET_CLASS (gc)->set_dashes (gc, dash_offset, dash_list, n);
+}
+
+/**
+ * gdk_gc_set_colormap:
+ * @gc: a #GdkGC
+ * @colormap: a #GdkColormap
+ * 
+ * Sets the colormap for the GC to the given colormap. The depth
+ * of the colormap's visual must match the depth of the drawable
+ * for which the GC was created.
+ **/
+void
+gdk_gc_set_colormap (GdkGC       *gc,
+		     GdkColormap *colormap)
+{
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+
+  if (gc->colormap != colormap)
+    {
+      if (gc->colormap)
+	g_object_unref (G_OBJECT (gc->colormap));
+
+      gc->colormap = colormap;
+      g_object_ref (G_OBJECT (gc->colormap));
+    }
+    
+}
+
+/**
+ * gdk_gc_get_colormap:
+ * @gc: a #GdkGC
+ * 
+ * Retrieves the colormap for a given GC, if it exists.
+ * A GC will have a colormap if the drawable for which it was created
+ * has a colormap, or if a colormap was set explicitely with
+ * gdk_gc_set_colormap.
+ * 
+ * Return value: 
+ **/
+GdkColormap *
+gdk_gc_get_colormap (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), NULL);
+
+  return gc->colormap;
+}
+
+static GdkColormap *
+gdk_gc_get_colormap_warn (GdkGC *gc)
+{
+  GdkColormap *colormap = gdk_gc_get_colormap (gc);
+  if (!colormap)
+    {
+      g_warning ("gdk_gc_set_rgb_fg_color() and gdk_gc_set_rgb_bg_color() can\n"
+		 "only be used on GC's with a colormap. A GC will have a colormap\n"
+		 "if it is created for a drawable with a colormap, or if a\n"
+		 "colormap has been set explicitly with gdk_gc_set_colormap.\n");
+      return NULL;
+    }
+
+  return colormap;
+}
+
+/**
+ * gdk_gc_set_rgb_fg_color:
+ * @gc: a #GdkGC
+ * @color: an unallocated #GdkColor.
+ * 
+ * Set the foreground color of a GC using an unallocated color. The
+ * pixel value for the color will be determined using GdkRGB. If the
+ * colormap for the GC has not previously been initialized for GdkRGB,
+ * then for pseudo-color colormaps (colormaps with a small modifiable
+ * number of colors), a colorcube will be allocated in the colormap.
+ * 
+ * Calling this function for a GC without a colormap is an error.
+ **/
+void
+gdk_gc_set_rgb_fg_color (GdkGC *gc, GdkColor *color)
+{
+  GdkColormap *cmap;
+  GdkColor tmp_color;
+
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (color != NULL);
+
+  cmap = gdk_gc_get_colormap_warn (gc);
+  if (!cmap)
+    return;
+
+  tmp_color = *color;
+  gdk_rgb_find_color (cmap, &tmp_color);
+  gdk_gc_set_foreground (cmap, &tmp_color);
+}
+
+/**
+ * gdk_gc_set_rgb_bg_color:
+ * @gc: a #GdkGC
+ * @color: an unallocated #GdkColor.
+ * 
+ * Set the background color of a GC using an unallocated color. The
+ * pixel value for the color will be determined using GdkRGB. If the
+ * colormap for the GC has not previously been initialized for GdkRGB,
+ * then for pseudo-color colormaps (colormaps with a small modifiable
+ * number of colors), a colorcube will be allocated in the colormap.
+ * 
+ * Calling this function for a GC without a colormap is an error.
+ **/
+void
+gdk_gc_set_rgb_bg_color (GdkGC *gc, GdkColor *color)
+{
+  GdkColormap *cmap;
+  GdkColor tmp_color;
+
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (color != NULL);
+
+  cmap = gdk_gc_get_colormap_warn (gc);
+  if (!cmap)
+    return;
+
+  tmp_color = *color;
+  gdk_rgb_find_color (cmap, &tmp_color);
+  gdk_gc_set_foreground (cmap, &tmp_color);
 }

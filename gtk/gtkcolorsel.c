@@ -488,9 +488,6 @@ color_sample_new (GtkColorSelection *colorsel)
   
   priv = colorsel->private_data;
   
-  gtk_widget_push_visual(gdk_rgb_get_visual());
-  gtk_widget_push_colormap(gdk_rgb_get_cmap());
-  
   priv->sample_area = gtk_hbox_new (FALSE, 0);
   priv->old_sample = gtk_drawing_area_new ();
   priv->cur_sample = gtk_drawing_area_new ();
@@ -499,8 +496,6 @@ color_sample_new (GtkColorSelection *colorsel)
 		      TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->cur_sample,
 		      TRUE, TRUE, 0);
-  gtk_widget_pop_visual();
-  gtk_widget_pop_colormap();
   
   gtk_signal_connect(GTK_OBJECT (priv->old_sample), "expose_event",
 		     GTK_SIGNAL_FUNC (color_old_sample_expose),

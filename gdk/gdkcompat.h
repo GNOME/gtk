@@ -6,7 +6,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* use -DGDK_DISABLE_COMPAT_H to compile your code and asure that it
+/* use -DGDK_DISABLE_COMPAT_H to compile your code and assure that it
  * works with future GTK+ versions as well.
  */
 #ifndef	GDK_DISABLE_COMPAT_H
@@ -34,6 +34,7 @@ extern "C" {
 #define gdk_image_destroy              gdk_image_unref
 #define gdk_cursor_destroy             gdk_cursor_unref
 
+#define gdk_rgb_get_cmap               gdk_rgb_get_colormap
 
 #endif	/* GDK_DISABLE_COMPAT_H */
 

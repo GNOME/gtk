@@ -166,6 +166,8 @@ struct _GdkGC
   gint clip_y_origin;
   gint ts_x_origin;
   gint ts_y_origin;
+
+  GdkColormap *colormap;
 };
 
 struct _GdkGCClass 
@@ -235,8 +237,17 @@ void   gdk_gc_set_dashes          (GdkGC            *gc,
 				   gint	             dash_offset,
 				   gint8             dash_list[],
 				   gint              n);
-void   gdk_gc_copy		  (GdkGC	     *dst_gc,
-				   GdkGC	     *src_gc);
+void   gdk_gc_copy		  (GdkGC	    *dst_gc,
+				   GdkGC	    *src_gc);
+
+
+void         gdk_gc_set_colormap     (GdkGC       *gc,
+				      GdkColormap *colormap);
+GdkColormap *gdk_gc_get_colormap     (GdkGC       *gc);
+void         gdk_gc_set_rgb_fg_color (GdkGC       *gc,
+				      GdkColor    *color);
+void         gdk_gc_set_rgb_bg_color (GdkGC       *gc,
+				      GdkColor    *color);
 
 #ifdef __cplusplus
 }

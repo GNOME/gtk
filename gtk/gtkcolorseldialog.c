@@ -81,10 +81,7 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
 {
   GtkWidget *action_area_button_box, *frame;
   
-  gtk_widget_set_visual (GTK_WIDGET (colorseldiag), gdk_rgb_get_visual ());
   gtk_widget_set_colormap (GTK_WIDGET (colorseldiag), gdk_rgb_get_cmap ());
-  
-  gtk_widget_push_visual (gdk_rgb_get_visual ());
   gtk_widget_push_colormap (gdk_rgb_get_cmap ());
   
   frame = gtk_frame_new (NULL);
@@ -122,7 +119,6 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_widget_show (colorseldiag->help_button);
   
   gtk_widget_pop_colormap ();
-  gtk_widget_pop_visual ();
 }
 
 GtkWidget*

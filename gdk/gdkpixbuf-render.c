@@ -130,44 +130,6 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 
 
 
-/* Creates a buffer by stripping the alpha channel of a pixbuf */
-static guchar *
-remove_alpha (GdkPixbuf *pixbuf,
-	      int x,     int y,
-	      int width, int height,
-	      int *rowstride)
-{
-  guchar *buf;
-  int xx, yy;
-  guchar *src, *dest;
-
-  g_assert (pixbuf->n_channels == 4);
-  g_assert (pixbuf->has_alpha);
-  g_assert (width > 0 && height > 0);
-  g_assert (x >= 0 && x + width <= pixbuf->width);
-  g_assert (y >= 0 && y + height <= pixbuf->height);
-
-  *rowstride = 4 * ((width * 3 + 3) / 4);
-
-  buf = g_new (guchar, *rowstride * height);
-
-  for (yy = 0; yy < height; yy++)
-    {
-      src = pixbuf->pixels + pixbuf->rowstride * (yy + y) + x * pixbuf->n_channels;
-      dest = buf + *rowstride * yy;
-      
-      for (xx = 0; xx < width; xx++)
-	{
-	  *dest++ = *src++;
-	  *dest++ = *src++;
-	  *dest++ = *src++;
-	  src++;
-	}
-    }
-  
-  return buf;
-}
-
 /**
  * gdk_pixbuf_render_to_drawable:
  * @pixbuf: A pixbuf.
@@ -206,8 +168,8 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
 			       GdkRgbDither dither,
 			       int x_dither, int y_dither)
 {
-  guchar *buf;
   int rowstride;
+  guchar *buf;
 
   g_return_if_fail (pixbuf != NULL);
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
@@ -225,27 +187,32 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
     return;
 
   /* This will have to be modified once we support other image types.
-   * Also, GdkRGB does not have gdk_draw_rgb_32_image_dithalign(), so we
-   * have to pack the buffer first.  Sigh.
    */
 
-  if (pixbuf->has_alpha)
-    buf = remove_alpha (pixbuf, src_x, src_y, width, height, &rowstride);
-  else
+  if (pixbuf->n_channels == 4)
     {
       buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
       rowstride = pixbuf->rowstride;
+
+      gdk_draw_rgb_32_image_dithalign (drawable, gc,
+				       dest_x, dest_y,
+				       width, height,
+				       dither,
+				       buf, rowstride,
+				       x_dither, y_dither);
     }
+  else				/* n_channels == 3 */
+    {
+      buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
+      rowstride = pixbuf->rowstride;
 
-  gdk_draw_rgb_image_dithalign (drawable, gc,
-				dest_x, dest_y,
-				width, height,
-				dither,
-				buf, rowstride,
-				x_dither, y_dither);
-
-  if (pixbuf->has_alpha)
-    g_free (buf);
+      gdk_draw_rgb_image_dithalign (drawable, gc,
+				    dest_x, dest_y,
+				    width, height,
+				    dither,
+				    buf, rowstride,
+				    x_dither, y_dither);
+    }
 }
 
 

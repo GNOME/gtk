@@ -7437,11 +7437,9 @@ create_color_preview (void)
 
   if (!window)
     {
-      gtk_widget_push_visual (gdk_rgb_get_visual ());
       gtk_widget_push_colormap (gdk_rgb_get_cmap ());
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_widget_pop_colormap ();
-      gtk_widget_pop_visual ();
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(color_preview_destroy),
@@ -8647,6 +8645,13 @@ create_main_window (void)
   gtk_widget_show_all (window);
 }
 
+void
+pixbuf_init ()
+{
+  if (file_exists ("../gdk-pixbuf/.libs/libpixbufloader-pnm.so"))
+    putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -8654,6 +8659,7 @@ main (int argc, char *argv[])
 
   srand (time (NULL));
 
+  pixbuf_init ();
   gtk_set_locale ();
 
   /* Check to see if we are being run from the correct

@@ -46,8 +46,8 @@ quit_func (GtkWidget *widget, gpointer dummy)
   gtk_main_quit ();
 }
 
-#define WIDTH 320
-#define HEIGHT 200
+#define WIDTH 640
+#define HEIGHT 400
 #define NUM_ITERS 100
 
 static void
@@ -284,7 +284,6 @@ main (int argc, char **argv)
   gdk_rgb_init ();
 
   gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
-  gtk_widget_set_default_visual (gdk_rgb_get_visual ());
   new_testrgb_window ();
 
   gtk_main ();

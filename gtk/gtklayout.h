@@ -68,7 +68,6 @@ struct _GtkLayout {
   GdkWindow *bin_window;
 
   GdkVisibilityState visibility;
-  gulong configure_serial;
   gint scroll_x;
   gint scroll_y;
 

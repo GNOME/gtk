@@ -417,7 +417,6 @@ gtk_layout_init (GtkLayout *layout)
 
   layout->bin_window = NULL;
 
-  layout->configure_serial = 0;
   layout->scroll_x = 0;
   layout->scroll_y = 0;
   layout->visibility = GDK_VISIBILITY_PARTIAL;

@@ -548,9 +548,6 @@ GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
  */
 void         gtk_widget_set_colormap    (GtkWidget      *widget,
 					 GdkColormap    *colormap);
-void         gtk_widget_set_visual      (GtkWidget      *widget, 
-					 GdkVisual      *visual);
-
 
 gint	     gtk_widget_get_events	(GtkWidget	*widget);
 void	     gtk_widget_get_pointer	(GtkWidget	*widget,
@@ -595,18 +592,15 @@ void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
  */
 void	     gtk_widget_push_style	     (GtkStyle	 *style);
 void	     gtk_widget_push_colormap	     (GdkColormap *cmap);
-void	     gtk_widget_push_visual	     (GdkVisual	 *visual);
 void	     gtk_widget_push_composite_child (void);
 void	     gtk_widget_pop_composite_child  (void);
 void	     gtk_widget_pop_style	     (void);
 void	     gtk_widget_pop_colormap	     (void);
-void	     gtk_widget_pop_visual	     (void);
 
 /* Set certain default values to be used at widget creation time.
  */
 void	     gtk_widget_set_default_style    (GtkStyle	  *style);
 void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
-void	     gtk_widget_set_default_visual   (GdkVisual	  *visual);
 GtkStyle*    gtk_widget_get_default_style    (void);
 GdkColormap* gtk_widget_get_default_colormap (void);
 GdkVisual*   gtk_widget_get_default_visual   (void);

@@ -188,11 +188,9 @@ static guint widget_signals[LAST_SIGNAL] = { 0 };
 static GMemChunk *aux_info_mem_chunk = NULL;
 
 static GdkColormap *default_colormap = NULL;
-static GdkVisual *default_visual = NULL;
 static GtkStyle *gtk_default_style = NULL;
 
 static GSList *colormap_stack = NULL;
-static GSList *visual_stack = NULL;
 static GSList *style_stack = NULL;
 static guint   composite_child_stack = 0;
 
@@ -208,7 +206,6 @@ static const gchar *saved_default_style_key = "gtk-saved-default-style";
 static guint        saved_default_style_key_id = 0;
 static const gchar *shape_info_key = "gtk-shape-info";
 static const gchar *colormap_key = "gtk-colormap";
-static const gchar *visual_key = "gtk-visual";
 
 static const gchar *rc_style_key = "gtk-rc-style";
 static guint        rc_style_key_id = 0;
@@ -1005,7 +1002,6 @@ static void
 gtk_widget_init (GtkWidget *widget)
 {
   GdkColormap *colormap;
-  GdkVisual *visual;
   
   GTK_PRIVATE_FLAGS (widget) = 0;
   widget->state = GTK_STATE_NORMAL;
@@ -1030,13 +1026,9 @@ gtk_widget_init (GtkWidget *widget)
   gtk_style_ref (widget->style);
   
   colormap = gtk_widget_peek_colormap ();
-  visual = gtk_widget_peek_visual ();
   
   if (colormap != gtk_widget_get_default_colormap ())
     gtk_widget_set_colormap (widget, colormap);
-
-  if (visual != gtk_widget_get_default_visual ())
-    gtk_widget_set_visual (widget, visual);
 }
 
 /*****************************************
@@ -3585,24 +3577,9 @@ gtk_widget_get_colormap (GtkWidget *widget)
 GdkVisual*
 gtk_widget_get_visual (GtkWidget *widget)
 {
-  GdkVisual *visual;
-  
-  g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  
-  if (widget->window)
-    {
-      visual = gdk_window_get_visual (widget->window);
-      /* If window was destroyed previously, we'll get NULL here */
-      if (visual)
-	return visual;
-    }
-  
-  visual = gtk_object_get_data (GTK_OBJECT (widget), visual_key);
-  if (visual)
-    return visual;
 
-  return gtk_widget_get_default_visual ();
+  return gdk_colormap_get_visual (gtk_widget_get_colormap (widget));
 }
 
 /*****************************************
@@ -3631,31 +3608,6 @@ gtk_widget_set_colormap (GtkWidget *widget, GdkColormap *colormap)
   gtk_object_set_data (GTK_OBJECT (widget), 
 		       colormap_key,
 		       colormap);
-}
-
-/*****************************************
- * gtk_widget_set_visual:
- *    Set the colormap for the widget to the given
- *    value. Widget must not have been previously
- *    realized. This probably should only be used
- *    from an init() function.
- *   arguments:
- *    widget:
- *    visual:
- *   results:
- *****************************************/
-
-void
-gtk_widget_set_visual (GtkWidget *widget, GdkVisual *visual)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
-  g_return_if_fail (visual != NULL);
-  
-  gtk_object_set_data (GTK_OBJECT (widget), 
-		       visual_key,
-		       visual);
 }
 
 /*****************************************
@@ -3828,22 +3780,6 @@ gtk_widget_push_colormap (GdkColormap *cmap)
 }
 
 /*****************************************
- * gtk_widget_push_visual:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_push_visual (GdkVisual *visual)
-{
-  g_return_if_fail (visual != NULL);
-
-  visual_stack = g_slist_prepend (visual_stack, visual);
-}
-
-/*****************************************
  * gtk_widget_pop_colormap:
  *
  *   arguments:
@@ -3860,27 +3796,6 @@ gtk_widget_pop_colormap (void)
     {
       tmp = colormap_stack;
       colormap_stack = colormap_stack->next;
-      g_slist_free_1 (tmp);
-    }
-}
-
-/*****************************************
- * gtk_widget_pop_visual:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_pop_visual (void)
-{
-  GSList *tmp;
-  
-  if (visual_stack)
-    {
-      tmp = visual_stack;
-      visual_stack = visual_stack->next;
       g_slist_free_1 (tmp);
     }
 }
@@ -3904,20 +3819,6 @@ gtk_widget_set_default_colormap (GdkColormap *colormap)
       if (default_colormap)
 	gdk_colormap_ref (default_colormap);
     }
-}
-
-/*****************************************
- * gtk_widget_set_default_visual:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_set_default_visual (GdkVisual *visual)
-{
-  default_visual = visual;
 }
 
 /*****************************************
@@ -3948,10 +3849,7 @@ gtk_widget_get_default_colormap (void)
 GdkVisual*
 gtk_widget_get_default_visual (void)
 {
-  if (!default_visual)
-    default_visual = gdk_visual_get_system ();
-  
-  return default_visual;
+  return gdk_colormap_get_visual (gtk_widget_get_default_colormap ());
 }
 
 /**
@@ -4304,9 +4202,7 @@ gtk_widget_peek_colormap (void)
 static GdkVisual*
 gtk_widget_peek_visual (void)
 {
-  if (visual_stack)
-    return (GdkVisual*) visual_stack->data;
-  return gtk_widget_get_default_visual ();
+  return gdk_colormap_get_visual (gtk_widget_peek_colormap ());
 }
 
 static void

@@ -1993,14 +1993,12 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
 
   gdk_window_get_size (pixmap, &width, &height);
 
-  gtk_widget_push_visual (gdk_colormap_get_visual (colormap));
   gtk_widget_push_colormap (colormap);
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
 
-  gtk_widget_pop_visual ();
   gtk_widget_pop_colormap ();
 
   gtk_widget_set_usize (window, width, height);

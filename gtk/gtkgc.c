@@ -157,6 +157,7 @@ gtk_gc_new (gpointer key)
     }
 
   gc = gdk_gc_new_with_values (drawable->drawable, &keyval->values, keyval->mask);
+  gdk_gc_set_colormap (gc, keyval->colormap);
 
   return (gpointer) gc;
 }

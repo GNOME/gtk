@@ -28,6 +28,8 @@
 #include "gdkinternals.h"
 #include "gdkx.h"
 
+#include <string.h>
+
 /* Forward declarations */
 static GdkDevicePrivate *gdk_input_device_new(XDeviceInfo *device, 
 					      gint include_core);
