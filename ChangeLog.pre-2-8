@@ -1,3 +1,9 @@
+Thu Jan 28 12:14:12 GMT 1999 Tony Gale  <gale@gtk.org>
+
+	* docs/package_tutorial.sh: script to convert and
+	  package up the tutorial - stick it here so I don't lose
+	  it when I accidentally delete it again.
+ 
 Thu Jan 28 10:16:28 GMT 1999 Tony Gale  <gale@gtk.org>
 
         * docs/gtk_tut.sgml:
