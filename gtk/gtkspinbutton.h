@@ -89,7 +89,7 @@ struct _GtkSpinButton
   GtkSpinButtonUpdatePolicy update_policy;
   
   guint in_child : 2;
-  guint click_child : 2;
+  guint click_child : 2; /* valid: GTK_ARROW_UP=0, GTK_ARROW_DOWN=1 or 2=NONE/BOTH */
   guint button : 2;
   guint need_timer : 1;
   guint timer_calls : 3;

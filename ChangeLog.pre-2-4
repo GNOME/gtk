@@ -1,3 +1,16 @@
+Fri Jan 25 14:03:36 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_draw_arrow): assert
+	that the passed in arrow is always _UP or _DOWN, this catches
+	false invocations which lead to drawing artefacts.
+	(start_spinning): likewise, i.e. sanity check the passed in arrow.
+	(gtk_spin_button_button_release): fix arrow redrawing.
+	(gtk_spin_button_button_press): must set click_child for
+	button3 even if we don't take spinning action right away.
+
+	* gtk/gtkspinbutton.h (struct _GtkSpinButton): document
+	valid values for click_child.
+
 Thu Jan 24 23:03:24 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): update docs,

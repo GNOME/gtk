@@ -757,6 +757,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
   gint arrow_size;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+  g_return_if_fail (arrow == GTK_ARROW_UP || arrow == GTK_ARROW_DOWN);
   
   widget = GTK_WIDGET (spin_button);
   spin_shadow_type = spin_button_get_shadow_type (spin_button);
@@ -974,6 +975,8 @@ start_spinning (GtkSpinButton *spin,
 		GtkArrowType   click_child,
 		gfloat         step)
 {
+  g_return_if_fail (click_child == GTK_ARROW_UP || click_child == GTK_ARROW_DOWN);
+  
   spin->click_child = click_child;
   gtk_spin_button_real_spin (spin, click_child == GTK_ARROW_UP ? step : -step);
   
@@ -1016,6 +1019,8 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 		start_spinning (spin, GTK_ARROW_UP, spin->adjustment->step_increment);
 	      else if (event->button == 2)
 		start_spinning (spin, GTK_ARROW_UP, spin->adjustment->page_increment);
+	      else
+		spin->click_child = GTK_ARROW_UP;
 	    }
 	  else 
 	    {
@@ -1023,6 +1028,8 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 		start_spinning (spin, GTK_ARROW_DOWN, spin->adjustment->step_increment);
 	      else if (event->button == 2)
 		start_spinning (spin, GTK_ARROW_DOWN, spin->adjustment->page_increment);
+	      else
+		spin->click_child = GTK_ARROW_DOWN;
 	    }
 	  return TRUE;
 	}
@@ -1080,6 +1087,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
       click_child = spin->click_child;
       spin->click_child = 2;
       gtk_spin_button_draw_arrow (spin, click_child);
+
       return TRUE;
     }
   else
