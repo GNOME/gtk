@@ -2106,8 +2106,9 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
   info = _gtk_file_system_model_get_info (impl->list_model, &child_iter);
 
-  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->entry),
-					 gtk_file_info_get_display_name (info));
+  if (!gtk_file_info_get_is_folder (info))
+    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->entry),
+					   gtk_file_info_get_display_name (info));
 }
 
 static void

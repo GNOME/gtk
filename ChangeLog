@@ -1,5 +1,12 @@
 2004-02-10  Federico Mena Quintero  <federico@ximian.com>
 
+	Fixes the entry-related part of #133852.
+
+	* gtk/gtkfilechooserdefault.c (update_chooser_entry): Don't change
+	the file part of the entry if the selected item is a folder.
+
+2004-02-10  Federico Mena Quintero  <federico@ximian.com>
+
 	Fixes #133995, patch by Morten Welinder <mortenw@gnome.org>.
 
 	* tests/prop-editor.c (create_prop_editor): Free the title.
