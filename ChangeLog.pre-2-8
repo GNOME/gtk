@@ -1,3 +1,10 @@
+Mon Dec  9 18:50:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkinput-x11.c (_gdk_input_common_find_events):
+	Remove selection for DeviceButtonRelease, we no longer need
+	it now that gxi is gone. (#32617, reported by Garry
+	Osgood)
+
 Tue Dec 10 00:49:35 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gdk/gdkpixmap.h (gdk_pixmap_new), (gdk_bitmap_create_from_data),
@@ -2978,7 +2985,7 @@ Fri Sep 27 16:15:11 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_get_event_window_position):
 	Handle the case where the first page isn't visible.
-	(#90336, bug tracked down by Chema Celorio)
+	(#81600, bug tracked down by Chema Celorio)
 
 Fri Sep 27 15:57:15 2002  Owen Taylor  <otaylor@redhat.com>
 
