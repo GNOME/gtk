@@ -67,7 +67,7 @@ fnmatch (pattern, string, flags)
   register char c;
 
 /* Note that this evalutes C many times.  */
-#if !defined(G_OS_WIN32) && !defined(G_HAVE_CYGWIN)
+#if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
 #define FOLD(c)	((flags & FNM_CASEFOLD) && isupper (c) ? tolower (c) : (c))
 #else
 #define FOLD(c)	(tolower (c))
