@@ -178,6 +178,8 @@ static gint     gtk_tree_view_focus                (GtkWidget        *widget,
 static void     gtk_tree_view_grab_focus           (GtkWidget        *widget);
 static void     gtk_tree_view_style_set            (GtkWidget        *widget,
 						    GtkStyle         *previous_style);
+static void     gtk_tree_view_grab_notify          (GtkWidget        *widget,
+						    gboolean          was_grabbed);
 
 /* container signals */
 static void     gtk_tree_view_remove               (GtkContainer     *container,
@@ -513,6 +515,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->focus = gtk_tree_view_focus;
   widget_class->grab_focus = gtk_tree_view_grab_focus;
   widget_class->style_set = gtk_tree_view_style_set;
+  widget_class->grab_notify = gtk_tree_view_grab_notify;
 
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
@@ -12328,3 +12331,13 @@ _gtk_tree_view_set_hover_selection (GtkTreeView *tree_view,
   tree_view->priv->hover_selection = hover;
 }
 
+
+static void
+gtk_tree_view_grab_notify (GtkWidget *widget,
+			   gboolean   was_grabbed)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+
+  if (!was_grabbed)
+    tree_view->priv->pressed_button = -1;
+}
