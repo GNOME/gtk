@@ -1,3 +1,8 @@
+2002-05-18  Matthias Clasen  <maclas@gmx.de>
+
+	* io-tiff.c (tiff_image_parse): fix packing order on bigendian 
+	systems.  (#81702)
+
 Thu May 16 15:17:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c: Patch from Matthias Clasen to fix some typos 

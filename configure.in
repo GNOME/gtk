@@ -500,6 +500,8 @@ AM_CONDITIONAL(HAVE_WINTAB, test x$have_wintab = xyes)
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 
+# check for bytesex stuff
+AC_C_BIGENDIAN
 
 # Checks for header files.
 AC_HEADER_STDC
