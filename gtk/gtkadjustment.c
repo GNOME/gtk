@@ -25,8 +25,19 @@
  */
 
 #include "gtkadjustment.h"
+#include "gtkintl.h"
 #include "gtkmarshalers.h"
 
+enum
+{
+  PROP_0,
+  PROP_VALUE,
+  PROP_LOWER,
+  PROP_UPPER,
+  PROP_STEP_INCREMENT,
+  PROP_PAGE_INCREMENT,
+  PROP_PAGE_SIZE
+};
 
 enum {
   CHANGED,
@@ -38,6 +49,14 @@ enum {
 static void gtk_adjustment_class_init (GtkAdjustmentClass *klass);
 static void gtk_adjustment_init       (GtkAdjustment      *adjustment);
 
+static void gtk_adjustment_get_property (GObject      *object,
+                                         guint         prop_id,
+                                         GValue       *value,
+                                         GParamSpec   *pspec);
+static void gtk_adjustment_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec);
 
 static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
@@ -73,8 +92,74 @@ gtk_adjustment_get_type (void)
 static void
 gtk_adjustment_class_init (GtkAdjustmentClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  gobject_class->set_property = gtk_adjustment_set_property;
+  gobject_class->get_property = gtk_adjustment_get_property;
+
   class->changed = NULL;
   class->value_changed = NULL;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_VALUE,
+                                   g_param_spec_double ("value",
+							P_("Value"),
+							P_("The value of the adjustment"),
+							-G_MAXDOUBLE, 
+							G_MAXDOUBLE, 
+							0.0, 
+							G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_LOWER,
+                                   g_param_spec_double ("lower",
+							P_("Minimum Value"),
+							P_("The minimum value of the adjustment"),
+							-G_MAXDOUBLE, 
+							G_MAXDOUBLE, 
+							0.0,
+							G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_UPPER,
+                                   g_param_spec_double ("upper",
+							P_("Maximum Value"),
+							P_("The maximum value of the adjustment"),
+							-G_MAXDOUBLE, 
+							G_MAXDOUBLE, 
+							0.0, 
+							G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_STEP_INCREMENT,
+                                   g_param_spec_double ("step-increment",
+							P_("Step Increment"),
+							P_("The step increment of the adjustment"),
+							-G_MAXDOUBLE, 
+							G_MAXDOUBLE, 
+							0.0, 
+							G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_PAGE_INCREMENT,
+                                   g_param_spec_double ("page-increment",
+							P_("Page Increment"),
+							P_("The page increment of the adjustment"),
+							-G_MAXDOUBLE, 
+							G_MAXDOUBLE, 
+							0.0, 
+							G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_PAGE_SIZE,
+                                   g_param_spec_double ("page-size",
+							P_("Page Size"),
+							P_("The page size of the adjustment"),
+							-G_MAXDOUBLE, 
+							G_MAXDOUBLE, 
+							0.0, 
+							G_PARAM_READWRITE));
+  
 
   adjustment_signals[CHANGED] =
     g_signal_new ("changed",
@@ -105,6 +190,91 @@ gtk_adjustment_init (GtkAdjustment *adjustment)
   adjustment->page_size = 0.0;
 }
 
+static void
+gtk_adjustment_get_property (GObject *object, guint prop_id, GValue *value, 
+	                     GParamSpec *pspec)
+{
+  GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
+
+  switch (prop_id)
+    {
+    case PROP_VALUE:
+      g_value_set_double (value, adjustment->value);
+      break;
+    case PROP_LOWER:
+      g_value_set_double (value, adjustment->lower);
+      break;
+    case PROP_UPPER:
+      g_value_set_double (value, adjustment->upper);
+      break;
+    case PROP_STEP_INCREMENT:
+      g_value_set_double (value, adjustment->step_increment);
+      break;
+    case PROP_PAGE_INCREMENT:
+      g_value_set_double (value, adjustment->page_increment);
+      break;
+    case PROP_PAGE_SIZE:
+      g_value_set_double (value, adjustment->page_size);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_adjustment_set_property (GObject * object, guint prop_id, 
+	                     const GValue * value, GParamSpec * pspec)
+{
+  GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
+  gdouble double_value = g_value_get_double (value);
+
+  switch (prop_id)
+    {
+    case PROP_VALUE:
+      gtk_adjustment_set_value (GTK_ADJUSTMENT (object), double_value);
+      break;
+    case PROP_LOWER:
+      if (adjustment->lower != double_value)
+        {
+          adjustment->lower = double_value;
+          g_object_notify (G_OBJECT (adjustment), "lower");
+        }
+      break;
+    case PROP_UPPER:
+      if (adjustment->upper != double_value)
+        {
+          adjustment->upper = double_value;
+          g_object_notify (G_OBJECT (adjustment), "upper");
+        }
+      break;
+    case PROP_STEP_INCREMENT:
+      if (adjustment->step_increment != double_value)
+        {
+          adjustment->step_increment = double_value;
+          g_object_notify (G_OBJECT (adjustment), "step-increment");
+        }
+      break;
+    case PROP_PAGE_INCREMENT:
+      if (adjustment->page_increment != double_value)
+        {
+          adjustment->page_increment = double_value;
+          g_object_notify (G_OBJECT (adjustment), "page-increment");
+        }
+      break;
+    case PROP_PAGE_SIZE:
+      if (adjustment->page_size != double_value)
+        {
+          adjustment->page_size = double_value;
+          g_object_notify (G_OBJECT (adjustment), "page-size");
+        }
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 GtkObject*
 gtk_adjustment_new (gdouble value,
 		    gdouble lower,
@@ -113,18 +283,14 @@ gtk_adjustment_new (gdouble value,
 		    gdouble page_increment,
 		    gdouble page_size)
 {
-  GtkAdjustment *adjustment;
-
-  adjustment = g_object_new (GTK_TYPE_ADJUSTMENT, NULL);
-
-  adjustment->value = value;
-  adjustment->lower = lower;
-  adjustment->upper = upper;
-  adjustment->step_increment = step_increment;
-  adjustment->page_increment = page_increment;
-  adjustment->page_size = page_size;
-
-  return GTK_OBJECT (adjustment);
+  return g_object_new (GTK_TYPE_ADJUSTMENT, 
+		       "value", value,
+		       "lower", lower,
+		       "upper", upper,
+		       "step-increment", step_increment,
+		       "page-increment", page_increment,
+		       "page_size", page_size,
+		       NULL);
 }
 
 /**
@@ -174,6 +340,7 @@ gtk_adjustment_value_changed (GtkAdjustment        *adjustment)
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   g_signal_emit (adjustment, adjustment_signals[VALUE_CHANGED], 0);
+  g_object_notify (G_OBJECT (adjustment), "value");
 }
 
 void
