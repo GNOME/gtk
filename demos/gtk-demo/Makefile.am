@@ -52,7 +52,6 @@ bin_PROGRAMS = gtk-demo
 BUILT_SOURCES = demos.h
 
 EXTRA_DIST = 		\
-	geninclude.pl	\
 	$(IMAGEFILES)
 
 demos.h: $(demos) geninclude.pl
