@@ -1,3 +1,12 @@
+2003-02-20  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextbtree.c (_gtk_text_line_previous_could_contain_tag): 
+	Check if line_ancestor_parent is NULL.  (#102711, Manuel Clos)
+
+	* gtk/gtktextview.c (gtk_text_view_scroll_to_iter): 
+	(gtk_text_view_update_adjustments): Make sure cursor stays visible
+	during horizontal scrolling.  (#75270)
+
 2003-02-19  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testdnd.c: Replace gtk_timeout_* by their GLib

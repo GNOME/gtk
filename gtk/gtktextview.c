@@ -1426,7 +1426,10 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   if (screen.height < 1)
     screen.height = 1;
   
-  screen_right = screen.x + screen.width;
+  /* The -1 here ensures that we leave enough space to draw the cursor
+   * when this function is used for horizontal scrolling. 
+   */
+  screen_right = screen.x + screen.width - 1;
   screen_bottom = screen.y + screen.height;
   
   /* The alignment affects the point in the target character that we
@@ -1663,6 +1666,9 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
 
   if (text_view->layout)
     gtk_text_layout_get_size (text_view->layout, &width, &height);
+
+  /* Make room for the cursor after the last character in the widest line */
+  width++;
 
   if (text_view->width != width || text_view->height != height)
     {

@@ -4356,7 +4356,10 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
           line_ancestor = line_ancestor_parent;
           line_ancestor_parent = line_ancestor->parent;
 
-          node = line_ancestor_parent->children.node;
+          if (line_ancestor_parent != NULL)
+            {
+              node = line_ancestor_parent->children.node;
+            }
         }
 
       /* No dice. */
