@@ -1,3 +1,13 @@
+2004-12-01  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkuimanager.[ch]: added virtual functions
+	GtkUIManager::get_widget() and ::get_action(). Moved the code from
+	gtk_ui_manager_get_widget() and get_action() to the default
+	implementations. Fixes bug #160096.
+
+	(gtk_ui_manager_get_toplevels): added missing precondition check
+	for GTK_IS_UI_MANAGER(self).
+
 2004-12-01  Dom Lachowicz <cinamod@hotmail.com>
 
 	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: use MS Windows button order, not Gnome HIG order

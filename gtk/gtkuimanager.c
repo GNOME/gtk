@@ -104,37 +104,41 @@ struct _NodeUIReference
   GQuark action_quark;
 };
 
-static void     gtk_ui_manager_class_init   (GtkUIManagerClass *class);
-static void     gtk_ui_manager_init         (GtkUIManager      *self);
-static void     gtk_ui_manager_finalize     (GObject           *object);
-static void     gtk_ui_manager_set_property (GObject           *object,
-					     guint              prop_id,
-					     const GValue      *value,
-					     GParamSpec        *pspec);
-static void     gtk_ui_manager_get_property (GObject           *object,
-					     guint              prop_id,
-					     GValue            *value,
-					     GParamSpec        *pspec);
-static void     queue_update                (GtkUIManager      *self);
-static void     dirty_all_nodes             (GtkUIManager      *self);
-static void     mark_node_dirty             (GNode             *node);
-static GNode *  get_child_node              (GtkUIManager      *self,
-					     GNode             *parent,
-					     const gchar       *childname,
-					     gint               childname_length,
-					     NodeType           node_type,
-					     gboolean           create,
-					     gboolean           top);
-static GNode *  get_node                    (GtkUIManager      *self,
-					     const gchar       *path,
-					     NodeType           node_type,
-					     gboolean           create);
-static gboolean free_node                   (GNode             *node);
-static void     node_prepend_ui_reference   (GNode             *node,
-					     guint              merge_id,
-					     GQuark             action_quark);
-static void     node_remove_ui_reference    (GNode             *node,
-					     guint              merge_id);
+static void        gtk_ui_manager_class_init      (GtkUIManagerClass *class);
+static void        gtk_ui_manager_init            (GtkUIManager      *self);
+static void        gtk_ui_manager_finalize        (GObject           *object);
+static void        gtk_ui_manager_set_property    (GObject           *object,
+                                                   guint              prop_id,
+                                                   const GValue      *value,
+                                                   GParamSpec        *pspec);
+static void        gtk_ui_manager_get_property    (GObject           *object,
+                                                   guint              prop_id,
+                                                   GValue            *value,
+                                                   GParamSpec        *pspec);
+static GtkWidget * gtk_ui_manager_real_get_widget (GtkUIManager      *manager,
+                                                   const gchar       *path);
+static GtkAction * gtk_ui_manager_real_get_action (GtkUIManager      *manager,
+                                                   const gchar       *path);
+static void        queue_update                   (GtkUIManager      *self);
+static void        dirty_all_nodes                (GtkUIManager      *self);
+static void        mark_node_dirty                (GNode             *node);
+static GNode     * get_child_node                 (GtkUIManager      *self,
+                                                   GNode             *parent,
+                                                   const gchar       *childname,
+                                                   gint               childname_length,
+                                                   NodeType           node_type,
+                                                   gboolean           create,
+                                                   gboolean           top);
+static GNode     * get_node                       (GtkUIManager      *self,
+                                                   const gchar       *path,
+                                                   NodeType           node_type,
+                                                   gboolean           create);
+static gboolean    free_node                      (GNode             *node);
+static void        node_prepend_ui_reference      (GNode             *node,
+                                                   guint              merge_id,
+                                                   GQuark             action_quark);
+static void        node_remove_ui_reference       (GNode             *node,
+                                                   guint              merge_id);
 
 
 enum 
@@ -204,7 +208,9 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   gobject_class->finalize = gtk_ui_manager_finalize;
   gobject_class->set_property = gtk_ui_manager_set_property;
   gobject_class->get_property = gtk_ui_manager_get_property;
-  
+  klass->get_widget = gtk_ui_manager_real_get_widget;
+  klass->get_action = gtk_ui_manager_real_get_action;
+
   /**
    * GtkUIManager:add-tearoffs:
    *
@@ -468,6 +474,42 @@ gtk_ui_manager_get_property (GObject         *object,
     }
 }
 
+static GtkWidget *
+gtk_ui_manager_real_get_widget (GtkUIManager *self,
+                                const gchar  *path)
+{
+  GNode *node;
+
+  /* ensure that there are no pending updates before we get the
+   * widget */
+  gtk_ui_manager_ensure_update (self);
+
+  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
+
+  if (node == NULL)
+    return NULL;
+
+  return NODE_INFO (node)->proxy;
+}
+
+static GtkAction *
+gtk_ui_manager_real_get_action (GtkUIManager *self,
+                                const gchar  *path)
+{
+  GNode *node;
+
+  /* ensure that there are no pending updates before we get
+   * the action */
+  gtk_ui_manager_ensure_update (self);
+
+  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
+
+  if (node == NULL)
+    return NULL;
+
+  return NODE_INFO (node)->action;
+}
+
 
 /**
  * gtk_ui_manager_new:
@@ -701,24 +743,13 @@ gtk_ui_manager_get_accel_group (GtkUIManager *self)
  * Since: 2.4
  **/
 GtkWidget *
-gtk_ui_manager_get_widget (GtkUIManager *self, 
+gtk_ui_manager_get_widget (GtkUIManager *self,
 			   const gchar  *path)
 {
-  GNode *node;
-
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 
-  /* ensure that there are no pending updates before we get the
-   * widget */
-  gtk_ui_manager_ensure_update (self);
-
-  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
-
-  if (node == NULL)
-    return NULL;
-
-  return NODE_INFO (node)->proxy;
+  return GTK_UI_MANAGER_GET_CLASS (self)->get_widget (self, path);
 }
 
 static void
@@ -770,6 +801,7 @@ gtk_ui_manager_get_toplevels (GtkUIManager         *self,
     GSList *list;
   } data;
 
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
   g_return_val_if_fail ((~(GTK_UI_MANAGER_MENUBAR | 
 			   GTK_UI_MANAGER_TOOLBAR |
 			   GTK_UI_MANAGER_POPUP) & types) == 0, NULL);
@@ -799,25 +831,14 @@ gtk_ui_manager_get_toplevels (GtkUIManager         *self,
  *
  * Since: 2.4
  **/
-GtkAction *           
+GtkAction *
 gtk_ui_manager_get_action (GtkUIManager *self,
 			   const gchar  *path)
 {
-  GNode *node;
-
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
   g_return_val_if_fail (path != NULL, NULL);
-  
-  /* ensure that there are no pending updates before we get
-   * the action */
-  gtk_ui_manager_ensure_update (self);
-  
-  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
 
-  if (node == NULL)
-    return NULL;
-
-  return NODE_INFO (node)->action;
+  return GTK_UI_MANAGER_GET_CLASS (self)->get_action (self, path);
 }
 
 static GNode *

@@ -78,11 +78,15 @@ struct _GtkUIManagerClass {
   void (* post_activate)    (GtkUIManager *merge,
 			     GtkAction    *action);
 
+  /* Virtual functions */
+  GtkWidget * (* get_widget) (GtkUIManager *manager,
+                              const gchar  *path);
+  GtkAction * (* get_action) (GtkUIManager *manager,
+                              const gchar  *path);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 typedef enum {
