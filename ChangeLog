@@ -1,3 +1,11 @@
+Sun Jul 12 06:18:10 1998  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtktypeutils.c (gtk_type_new): call the base classes'
+        object_init_func for derived objects with the object's ->klass field
+        still pointing to the corresponding base class, otherwise overridden
+        class functions could get called with partly-initialized objects.
+        (change from Tero Pulkkinen <terop@modeemi.cs.tut.fi>).
+
 Wed Jul  1 09:56:25 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* ltconfig: fix for properly detecting shared lib support on

@@ -274,25 +274,33 @@ gtk_type_new (GtkType type)
   GtkObject *object;
   gpointer klass;
   guint i;
-
+  
   LOOKUP_TYPE_NODE (node, type);
   g_return_val_if_fail (node != NULL, NULL);
-
+  
   klass = gtk_type_class (type);
   object = g_malloc0 (node->type_info.object_size);
-  object->klass = klass;
-
+  
+  /* we need to call the base classes' object_init_func for derived
+   * objects with the object's ->klass field still pointing to the
+   * corresponding base class, otherwise overridden class functions
+   * could get called with partly-initialized objects.
+   */
   for (i = node->n_supers; i > 0; i--)
     {
       GtkTypeNode *pnode;
-
+      
       LOOKUP_TYPE_NODE (pnode, node->supers[i]);
       if (pnode->type_info.object_init_func)
-	(* pnode->type_info.object_init_func) (object);
+	{
+	  object->klass = pnode->klass;
+	  pnode->type_info.object_init_func (object);
+	}
     }
+  object->klass = klass;
   if (node->type_info.object_init_func)
-    (* node->type_info.object_init_func) (object);
-
+    node->type_info.object_init_func (object);
+  
   return object;
 }
 
