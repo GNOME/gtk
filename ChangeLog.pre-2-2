@@ -1,3 +1,11 @@
+2002-01-08  Mike Kestner  <mkestner@speakeasy.net>
+
+	* gtk/gtkcelleditable.h : Use G_TYPE_INSTANCE_GET_INTERFACE.
+	* gtk/gtktreednd.h : ditto.
+	* gtk/gtktreemodel.h : ditto.
+	* gtk/gtktreesortable.h : ditto.
+	* gtk/gtkwidget.h : Don't reference incomplete _GdkRectangle type.
+
 2002-01-08  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkplug.c, gtk/gtksocket.c: Speak of window IDs rather 
