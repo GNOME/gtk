@@ -1,5 +1,8 @@
 2004-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkadjustment.c (gtk_adjustment_class_init): Document
+	properties as new since 2.4.  (#156101, Billy Biggs)
+
 	* configure.in: Add a warning about the linux-fb 
 	target.  (#155488, Zeeshan Ali)
 

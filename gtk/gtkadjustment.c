@@ -102,6 +102,13 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
   class->changed = NULL;
   class->value_changed = NULL;
 
+  /**
+   * GtkAdjustment:value:
+   * 
+   * The value of the adjustment.
+   * 
+   * Since: 2.4
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_VALUE,
                                    g_param_spec_double ("value",
@@ -112,6 +119,13 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							0.0, 
 							G_PARAM_READWRITE));
   
+  /**
+   * GtkAdjustment:lower:
+   * 
+   * The minimum value of the adjustment.
+   * 
+   * Since: 2.4
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_LOWER,
                                    g_param_spec_double ("lower",
@@ -122,6 +136,16 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							0.0,
 							G_PARAM_READWRITE));
   
+  /**
+   * GtkAdjustment:upper:
+   * 
+   * The maximum value of the adjustment. 
+   * Note that values will be restricted by 
+   * <literal>upper - page-size</literal> if the page-size 
+   * property is nonzero.
+   *
+   * Since: 2.4
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_UPPER,
                                    g_param_spec_double ("upper",
@@ -132,6 +156,13 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							0.0, 
 							G_PARAM_READWRITE));
   
+  /**
+   * GtkAdjustment:step-increment:
+   * 
+   * The step increment of the adjustment.
+   * 
+   * Since: 2.4
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_STEP_INCREMENT,
                                    g_param_spec_double ("step-increment",
@@ -142,6 +173,13 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							0.0, 
 							G_PARAM_READWRITE));
   
+  /**
+   * GtkAdjustment:page-increment:
+   * 
+   * The page increment of the adjustment.
+   * 
+   * Since: 2.4
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_PAGE_INCREMENT,
                                    g_param_spec_double ("page-increment",
@@ -152,6 +190,16 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							0.0, 
 							G_PARAM_READWRITE));
   
+  /**
+   * GtkAdjustment:page-size:
+   * 
+   * The page size of the adjustment. 
+   * Note that the page-size is irrelevant and should be set to zero
+   * if the adjustment is used for a simple scalar value, e.g. in a 
+   * #GtkSpinButton.
+   * 
+   * Since: 2.4
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_PAGE_SIZE,
                                    g_param_spec_double ("page-size",
