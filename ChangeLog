@@ -1,3 +1,8 @@
+2000-08-01  Martin Baulig  <baulig@suse.de>
+
+	* gtk/gtkmain.c (gtk_init_check): Use g_message() and not g_warning()
+	to display the message that this is a development version of GTK+.
+
 Mon Jul 31 18:37:36 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (entry_adjust_scroll): Fix problem where computation

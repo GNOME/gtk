@@ -450,7 +450,7 @@ gtk_init_check (int	 *argc,
   
 #ifndef G_OS_WIN32
   /* No use warning on Win32, there aren't any non-devel versions anyhow... */
-  g_warning (""              "YOU ARE USING THE DEVEL BRANCH 1.3.x OF GTK+ WHICH IS CURRENTLY\n"
+  g_message (""              "YOU ARE USING THE DEVEL BRANCH 1.3.x OF GTK+ WHICH IS CURRENTLY\n"
 	     "                UNDER HEAVY DEVELOPMENT AND FREQUENTLY INTRODUCES INSTABILITIES.\n"
 	     "                if you don't know why you are getting this, you probably want to\n"
 	     "                use the stable branch which can be retrived from\n"
