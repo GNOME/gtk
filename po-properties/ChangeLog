@@ -1,3 +1,7 @@
+2005-03-31  Michael Natterer  <mitch@gimp.org>
+
+	* POTFILES.in: added gtk/gtkmenushell.c
+
 2005-03-30  Steve Murphy <murf@e-tools.com>
 
 	* rw.po: Updated Kinyarwanda translations.

@@ -86,6 +86,7 @@ gtk/gtklayout.c
 gtk/gtkmain.c
 gtk/gtkmenu.c
 gtk/gtkmenubar.c
+gtk/gtkmenushell.c
 gtk/gtkmenutoolbutton.c
 gtk/gtkmessagedialog.c
 gtk/gtkmisc.c
