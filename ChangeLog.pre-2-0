@@ -1,3 +1,8 @@
+Mon Mar  2 12:26:59 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c: Changed 'entry != NULL' to 'editable != NULL'
+	  in three spots.
+
 Sun Mar  1 18:29:58 PST 1998 Shawn T. amundson <amundson@gimp.org>
 
         * Released GTK 0.99.4.

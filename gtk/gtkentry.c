@@ -1395,7 +1395,7 @@ gtk_entry_insert_text (GtkEditable *editable,
 
   GtkEntry *entry;
   
-  g_return_if_fail (entry != NULL);
+  g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_ENTRY (editable));
 
   entry = GTK_ENTRY (editable);
@@ -1444,7 +1444,7 @@ gtk_entry_delete_text (GtkEditable *editable,
 
   GtkEntry *entry;
   
-  g_return_if_fail (entry != NULL);
+  g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_ENTRY (editable));
 
   entry = GTK_ENTRY (editable);
@@ -1494,7 +1494,7 @@ gtk_entry_get_chars      (GtkEditable   *editable,
   GtkEntry *entry;
   gchar c;
   
-  g_return_val_if_fail (entry != NULL, NULL);
+  g_return_val_if_fail (editable != NULL, NULL);
   g_return_val_if_fail (GTK_IS_ENTRY (editable), NULL);
 
   entry = GTK_ENTRY (editable);
