@@ -928,16 +928,17 @@ egg_icon_list_button_press (GtkWidget      *widget,
   if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
     {
 
-      if (icon_list->priv->selection_mode == GTK_SELECTION_NONE)
-	return TRUE;
-      
       item = egg_icon_list_get_item_at_pos (icon_list,
 					    event->x, event->y);
       
       if (item != NULL)
 	{
-	  if (icon_list->priv->selection_mode == GTK_SELECTION_MULTIPLE &&
-	      (event->state & GDK_SHIFT_MASK))
+	  if (icon_list->priv->selection_mode == GTK_SELECTION_NONE)
+	    {
+	      egg_icon_list_set_cursor_item (icon_list, item);
+	    }
+	  else if (icon_list->priv->selection_mode == GTK_SELECTION_MULTIPLE &&
+		   (event->state & GDK_SHIFT_MASK))
 	    {
 	      egg_icon_list_unselect_all_internal (icon_list, FALSE);
 
@@ -966,6 +967,7 @@ egg_icon_list_button_press (GtkWidget      *widget,
 		      egg_icon_list_unselect_all_internal (icon_list, FALSE);
 		      
 		      item->selected = TRUE;
+		      egg_icon_list_queue_draw_item (icon_list, item);
 		      dirty = TRUE;
 		    }
 		}
@@ -2898,16 +2900,23 @@ egg_icon_list_move_cursor_up_down (EggIconList *icon_list,
   if (!item)
     return;
 
-  if (!icon_list->priv->shift_pressed ||
+  if (icon_list->priv->ctrl_pressed ||
+      !icon_list->priv->shift_pressed ||
       !icon_list->priv->anchor_item ||
       icon_list->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_list->priv->anchor_item = item;
 
-  icon_list->priv->cursor_item = item;
-  egg_icon_list_unselect_all (icon_list);
-  egg_icon_list_select_all_between (icon_list, 
-				    icon_list->priv->anchor_item,
-				    item, TRUE);
+  egg_icon_list_set_cursor_item (icon_list, item);
+
+  if (!icon_list->priv->ctrl_pressed &&
+      icon_list->priv->selection_mode != GTK_SELECTION_NONE)
+    {
+      egg_icon_list_unselect_all (icon_list);
+      egg_icon_list_select_all_between (icon_list, 
+					icon_list->priv->anchor_item,
+					item, TRUE);
+    }
+
   egg_icon_list_scroll_to_item (icon_list, item);
 }
 
@@ -2939,16 +2948,23 @@ egg_icon_list_move_cursor_page_up_down (EggIconList *icon_list,
   if (!item)
     return;
 
-  if (!icon_list->priv->shift_pressed ||
+  if (icon_list->priv->ctrl_pressed ||
+      !icon_list->priv->shift_pressed ||
       !icon_list->priv->anchor_item ||
       icon_list->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_list->priv->anchor_item = item;
 
-  icon_list->priv->cursor_item = item;
-  egg_icon_list_unselect_all (icon_list);
-  egg_icon_list_select_all_between (icon_list, 
-				    icon_list->priv->anchor_item,
-				    item, TRUE);
+  egg_icon_list_set_cursor_item (icon_list, item);
+
+  if (!icon_list->priv->ctrl_pressed &&
+      icon_list->priv->selection_mode != GTK_SELECTION_NONE)
+    {
+      egg_icon_list_unselect_all (icon_list);
+      egg_icon_list_select_all_between (icon_list, 
+					icon_list->priv->anchor_item,
+					item, TRUE);
+    }
+
   egg_icon_list_scroll_to_item (icon_list, item);
 }
 
@@ -2980,16 +2996,23 @@ egg_icon_list_move_cursor_left_right (EggIconList *icon_list,
   if (!item)
     return;
 
-  if (!icon_list->priv->shift_pressed ||
+  if (icon_list->priv->ctrl_pressed ||
+      !icon_list->priv->shift_pressed ||
       !icon_list->priv->anchor_item ||
       icon_list->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_list->priv->anchor_item = item;
 
-  icon_list->priv->cursor_item = item;
-  egg_icon_list_unselect_all (icon_list);
-  egg_icon_list_select_all_between (icon_list, 
-				    icon_list->priv->anchor_item,
-				    item, TRUE);
+  egg_icon_list_set_cursor_item (icon_list, item);
+
+  if (!icon_list->priv->ctrl_pressed &&
+      icon_list->priv->selection_mode != GTK_SELECTION_NONE)
+    {
+      egg_icon_list_unselect_all (icon_list);
+      egg_icon_list_select_all_between (icon_list, 
+					icon_list->priv->anchor_item,
+					item, TRUE);
+    }
+
   egg_icon_list_scroll_to_item (icon_list, item);
 }
 
@@ -3013,16 +3036,23 @@ egg_icon_list_move_cursor_start_end (EggIconList *icon_list,
   if (!item)
     return;
 
-  if (!icon_list->priv->shift_pressed ||
+  if (icon_list->priv->ctrl_pressed ||
+      !icon_list->priv->shift_pressed ||
       !icon_list->priv->anchor_item ||
       icon_list->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_list->priv->anchor_item = item;
 
-  icon_list->priv->cursor_item = item;
-  egg_icon_list_unselect_all (icon_list);
-  egg_icon_list_select_all_between (icon_list, 
-				    icon_list->priv->anchor_item,
-				    item, TRUE);
+  egg_icon_list_set_cursor_item (icon_list, item);
+
+  if (!icon_list->priv->ctrl_pressed &&
+      icon_list->priv->selection_mode != GTK_SELECTION_NONE)
+    {
+      egg_icon_list_unselect_all (icon_list);
+      egg_icon_list_select_all_between (icon_list, 
+					icon_list->priv->anchor_item,
+					item, TRUE);
+    }
+
   egg_icon_list_scroll_to_item (icon_list, item);
 }
 
