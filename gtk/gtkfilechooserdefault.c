@@ -867,6 +867,10 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
   gpointer data;
   GtkTreeIter iter;
 
+  /* Note: currently this function cannot fail.  If you ever change
+   * it so it can, go check callers and their callers.
+   */
+
   if (is_volume)
     {
       data = volume;
