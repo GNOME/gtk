@@ -50,6 +50,7 @@ libgdk_linux_fb_la_SOURCES =    \
 	gdkprivate-fb.h   	\
 	gdkinputprivate.h	\
 	gdkinput-ps2.c		\
+	gdkmouse-fb.c		\
 	gdkevents-fb.c		\
 	gdkrender-fb.c		\
 	mi.h			\

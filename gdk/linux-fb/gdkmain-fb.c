@@ -966,10 +966,9 @@ gdk_event_make (GdkWindow *window,
 
   if (evmask & (GDK_BUTTON1_MOTION_MASK|GDK_BUTTON2_MOTION_MASK|GDK_BUTTON3_MOTION_MASK))
     {
-      gint x, y;
       GdkModifierType mask;
 
-      gdk_input_get_mouseinfo (&x, &y, &mask);
+      gdk_mouse_get_info (NULL, NULL, &mask);
 
       if (((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK)) ||
 	  ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK)) ||

@@ -264,8 +264,6 @@ void      gdk_window_invalidate_region_clear (GdkWindow       *window,
 					      GdkRegion       *region);
 void      gdk_window_invalidate_rect_clear   (GdkWindow       *window,
 					      GdkRectangle    *rect);
-GdkWindow *gdk_fb_find_common_ancestor       (GdkWindow       *win1,
-					      GdkWindow       *win2);
 
 GdkGC *   _gdk_fb_gc_new                     (GdkDrawable     *drawable,
 					      GdkGCValues     *values,
@@ -386,12 +384,17 @@ void gdk_fb_cursor_unhide(void);
 void gdk_fb_cursor_reset(void);
 void gdk_fb_cursor_hide(void);
 void gdk_fb_redraw_all(void);
+void gdk_fb_cursor_move (gint x, gint y, GdkWindow *in_window);
 
-void gdk_input_get_mouseinfo            (gint *x, 
-					 gint *y, 
-					 GdkModifierType *mask);
 void gdk_fb_window_send_crossing_events (GdkWindow *dest,
 					 GdkCrossingMode mode);
+
+gboolean gdk_fb_mouse_open  (void);
+void     gdk_fb_mouse_close (void);
+void     gdk_mouse_get_info (gint *x, 
+			     gint *y, 
+			     GdkModifierType *mask);
+
 
 #define PANGO_TYPE_FB_FONT              (pango_fb_font_get_type ())
 #define PANGO_FB_FONT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_FB_FONT, PangoFBFont))

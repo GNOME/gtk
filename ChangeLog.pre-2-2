@@ -1,5 +1,35 @@
 2000-12-06  Alexander Larsson  <alexl@redhat.com>
 
+	* gdk/linux-fb/Makefile.am:
+	Add gdkmouse-fb.c
+	
+	* gdk/linux-fb/gdkmouse-fb.c:
+	New file. Abstracted the mouse drivers a bit.
+
+	* gdk/linux-fb/gdkcursor-fb.c:
+	The cursor hide/show functions was moved here from gdkinput-ps2.c.
+
+	* gdk/linux-fb/gdkinput-ps2.c:
+	Removed old mouse handling code. Moved cursor handling code
+	to gdkcursor-fb.c, moved gdk_fb_window_send_crossing_events() to
+	gdkwindow-fb.c. gdk_input_get_mouseinfo was renamed to
+	gdk_mouse_get_info.
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	Pass NULL pointers for x,y in gdk_mouse_get_info call.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Removed public gdk_fb_find_common_ancestor, added and renamed
+	functions for the new mouse handling code.
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Moved gdk_fb_window_send_crossing_events here. added global
+	variable gdk_fb_window_containing_pointer. made
+	gdk_fb_find_common_ancestor static. gdk_input_get_mouseinfo was
+	renamed to gdk_mouse_get_info.
+
+2000-12-06  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkevents-fb.c:
 	Update to match latest gmain/gsource changes.
 

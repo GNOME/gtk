@@ -284,3 +284,239 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 
   g_free (private);
 }
+
+/* Global data to keep track of cursor */
+static GdkPixmap *last_contents = NULL;
+static GdkPoint last_location, last_contents_size;
+static GdkCursor *last_cursor = NULL;
+static GdkFBDrawingContext *gdk_fb_cursor_dc = NULL;
+static GdkFBDrawingContext cursor_dc_dat;
+static GdkGC *cursor_gc;
+static gint cursor_visibility_count = 1;
+
+static GdkFBDrawingContext *
+gdk_fb_cursor_dc_reset (void)
+{
+  if (gdk_fb_cursor_dc)
+    gdk_fb_drawing_context_finalize (gdk_fb_cursor_dc);
+
+  gdk_fb_cursor_dc = &cursor_dc_dat;
+  gdk_fb_drawing_context_init (gdk_fb_cursor_dc,
+			       GDK_DRAWABLE_IMPL(gdk_parent_root),
+			       cursor_gc,
+			       TRUE,
+			       FALSE);
+
+  return gdk_fb_cursor_dc;
+}
+
+void
+gdk_fb_cursor_hide (void)
+{
+  GdkFBDrawingContext *mydc = gdk_fb_cursor_dc;
+
+  cursor_visibility_count--;
+  g_assert (cursor_visibility_count <= 0);
+  
+  if (cursor_visibility_count < 0)
+    return;
+
+  if (!mydc)
+    mydc = gdk_fb_cursor_dc_reset ();
+
+  if (last_contents)
+    {
+      gdk_gc_set_clip_mask (cursor_gc, NULL);
+      /* Restore old picture */
+      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL(gdk_parent_root),
+			      cursor_gc,
+			      GDK_DRAWABLE_IMPL(last_contents),
+			      mydc,
+			      0, 0,
+			      last_location.x,
+			      last_location.y,
+			      last_contents_size.x,
+			      last_contents_size.y);
+    }
+}
+
+void
+gdk_fb_cursor_invalidate (void)
+{
+  if (last_contents)
+    {
+      gdk_pixmap_unref (last_contents);
+      last_contents = NULL;
+    }
+}
+
+void
+gdk_fb_cursor_unhide()
+{
+  GdkFBDrawingContext *mydc = gdk_fb_cursor_dc;
+  GdkCursorPrivateFB *last_private;
+  GdkDrawableFBData *pixmap_last;
+  
+  last_private = GDK_CURSOR_FB (last_cursor);
+  pixmap_last = GDK_DRAWABLE_IMPL_FBDATA (last_private->cursor);
+  cursor_visibility_count++;
+  g_assert (cursor_visibility_count <= 1);
+  if (cursor_visibility_count < 1)
+    return;
+
+  if (!mydc)
+    mydc = gdk_fb_cursor_dc_reset ();
+
+  if (last_cursor)
+    {
+      if (!last_contents ||
+	  pixmap_last->width > GDK_DRAWABLE_IMPL_FBDATA (last_contents)->width ||
+	  pixmap_last->height > GDK_DRAWABLE_IMPL_FBDATA (last_contents)->height)
+	{
+	  if (last_contents)
+	    gdk_pixmap_unref (last_contents);
+
+	  last_contents = gdk_pixmap_new (gdk_parent_root,
+					  pixmap_last->width,
+					  pixmap_last->height,
+					  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->depth);
+	}
+
+      gdk_gc_set_clip_mask (cursor_gc, NULL);
+      gdk_fb_draw_drawable_2 (GDK_DRAWABLE_IMPL (last_contents),
+			      cursor_gc,
+			      GDK_DRAWABLE_IMPL (gdk_parent_root),
+			      last_location.x,
+			      last_location.y,
+			      0, 0,
+			      pixmap_last->width,
+			      pixmap_last->height,
+			      TRUE, FALSE);
+      last_contents_size.x = pixmap_last->width;
+      last_contents_size.y = pixmap_last->height;
+      
+      gdk_gc_set_clip_mask (cursor_gc, last_private->mask);
+      gdk_gc_set_clip_origin (cursor_gc,
+			      last_location.x,
+			      last_location.y);
+
+      gdk_fb_cursor_dc_reset ();
+      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL (gdk_parent_root),
+			      cursor_gc,
+			      GDK_DRAWABLE_IMPL (last_private->cursor),
+			      mydc,
+			      0, 0,
+			      last_location.x, last_location.y,
+			      pixmap_last->width,
+			      pixmap_last->height);
+    }
+  else
+    gdk_fb_cursor_invalidate ();
+}
+
+gboolean
+gdk_fb_cursor_region_need_hide (GdkRegion *region)
+{
+  GdkRectangle testme;
+
+  if (!last_cursor)
+    return FALSE;
+
+  testme.x = last_location.x;
+  testme.y = last_location.y;
+  testme.width = GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->width;
+  testme.height = GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->height;
+
+  return (gdk_region_rect_in (region, &testme) != GDK_OVERLAP_RECTANGLE_OUT);
+}
+
+gboolean
+gdk_fb_cursor_need_hide (GdkRectangle *rect)
+{
+  GdkRectangle testme;
+
+  if (!last_cursor)
+    return FALSE;
+
+  testme.x = last_location.x;
+  testme.y = last_location.y;
+  testme.width = GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->width;
+  testme.height = GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->height;
+
+  return gdk_rectangle_intersect (rect, &testme, &testme);
+}
+
+void
+gdk_fb_get_cursor_rect (GdkRectangle *rect)
+{
+  if (last_cursor)
+    {
+      rect->x = last_location.x;
+      rect->y = last_location.y;
+      rect->width = GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->width;
+      rect->height = GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->height;
+    }
+  else
+    {
+      rect->x = rect->y = -1;
+      rect->width = rect->height = 0;
+    }
+}
+
+void
+gdk_fb_cursor_move (gint x, gint y, GdkWindow *in_window)
+{
+  GdkCursor *the_cursor;
+
+  if (!cursor_gc)
+    {
+      GdkColor white, black;
+      cursor_gc = gdk_gc_new (gdk_parent_root);
+      gdk_color_black (gdk_colormap_get_system (), &black);
+      gdk_color_white (gdk_colormap_get_system (), &white);
+      gdk_gc_set_foreground (cursor_gc, &black);
+      gdk_gc_set_background (cursor_gc, &white);
+    }
+
+  gdk_fb_cursor_hide ();
+
+  if (_gdk_fb_pointer_grab_window)
+    {
+      if (_gdk_fb_pointer_grab_cursor)
+	the_cursor = _gdk_fb_pointer_grab_cursor;
+      else
+	{
+	  GdkWindow *win = _gdk_fb_pointer_grab_window;
+	  while (!GDK_WINDOW_IMPL_FBDATA (win)->cursor && GDK_WINDOW_OBJECT (win)->parent)
+	    win = (GdkWindow *)GDK_WINDOW_OBJECT (win)->parent;
+	  the_cursor = GDK_WINDOW_IMPL_FBDATA (win)->cursor;
+	}
+    }
+  else
+    {
+      while (!GDK_WINDOW_IMPL_FBDATA (in_window)->cursor && GDK_WINDOW_P (in_window)->parent)
+	in_window = (GdkWindow *)GDK_WINDOW_P (in_window)->parent;
+      the_cursor = GDK_WINDOW_IMPL_FBDATA (in_window)->cursor;
+    }
+
+  last_location.x = x - GDK_CURSOR_FB (the_cursor)->hot_x;
+  last_location.y = y - GDK_CURSOR_FB (the_cursor)->hot_y;
+
+  if (the_cursor)
+    gdk_cursor_ref (the_cursor);
+  if (last_cursor)
+    gdk_cursor_unref (last_cursor);
+  last_cursor = the_cursor;
+
+  gdk_fb_cursor_unhide ();
+}
+
+void
+gdk_fb_cursor_reset(void)
+{
+  GdkWindow *win = gdk_window_at_pointer (NULL, NULL);
+  gint x, y;
+
+  gdk_mouse_get_info (&x, &y, NULL);
+  gdk_fb_cursor_move (x, y, win);
+}
