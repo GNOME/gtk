@@ -1,3 +1,14 @@
+2004-07-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_position): Make sure 
+	private->monitor_num is a valid monitor number before 
+	using it.  (#139187, Michael Natterer)
+
+2004-06-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfontbutton.c (gtk_font_button_update_font_info): Avoid
+	a crash if the font doesn't exist.  (#144967, Yevgen Muntyan) 
+
 Tue Jul  6 02:00:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilechooserdefault.c (popup_position_func): 
@@ -146,6 +157,7 @@ Fri Jun 25 00:32:15 2004  Matthias Clasen  <maclas@gmx.de>
 	(gtk_file_system_unix_uri_to_path): Likewise.
 	(filename_to_path): Use remove_trailing_slash().
 
+>>>>>>> 1.5367.2.82
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccelmap.c (_gtk_accel_path_is_valid): Accept
