@@ -2,26 +2,36 @@ How to do a GTK+ release?
 =========================
 
 Make sure you have Owen's special autoconf and libtool RPMs, available at:
-http://people.redhat.com/otaylor/gtk/autotools/
+http://people.redhat.com/otaylor/gtk/autotools/.
+
+Also make sure you have the following packages installed (I used the RPM
+package names from RedHat 8.0):
+* gtk-doc
+* linuxdoc-tools
+* docbook-utils
+
+Without those packages make distcheck will *not* pass.
 
 
 0) Blow away your gtk+ directory, check a new version out
-1) Update NEWS based on ChangeLog
-2) Update version in configure.in, increase MICRO, interface and binary
+1) autogen and build it, make sure to enable docs.
+2) Update NEWS based on ChangeLog
+3) Update version in configure.in, increase MICRO, interface and binary
 age by 1. (Note that this is critical, a slip-up here will cause the soname
 to change).
-3) Add === Released 2.0.9 === at the top of the ChangeLog
-4) make distcheck
-5) Fix broken stuff found by 4) repeat
-6) cvs commit; you'll have a bunch of po file changes, and maybe some
-doc changes too
-7) If 6) fails because someone else committed inbetween, curse, cvs up
-fix conflicts and go to 4)
-8) type 'cvs tag GTK_2_0_9' in the toplevel directory
-9) You now have the tarball, and the CVS tag, now upload the tarball to
+4) Add === Released 2.0.x === at the top of the ChangeLog
+5) make mydistcheck
+6) Fix broken stuff found by 4) repeat
+7) cvs commit; you'll have a bunch of po file changes, and maybe some
+doc changes too (NOTE: be sure to use cvs with compression, else you'll
+end up waiting for a long time :).
+8) If 7) fails because someone else committed inbetween, curse, cvs up
+fix conflicts and go to 5)
+9) type 'cvs tag GTK_2_0_9' in the toplevel directory
+10) You now have the tarball, and the CVS tag, now upload the tarball to
 gnome.org and gtk.org
-10) Go to the gnome-announce list archives, find the last announce message,
+11) Go to the gnome-announce list archives, find the last announce message,
 create a new message in the same form, replacing version numbers, commentary
 at the top about "what this release is about" and the Summary of changes.
-11) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
-gtk-devel-list.
+12) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
+gtk-devel-list. Set reply-to to gnome-hackers.
