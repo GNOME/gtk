@@ -1,3 +1,10 @@
+2002-02-16  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/rc/Makefile.am (gdk-win32res.lo): Depend on gtk.ico.
+
+	* gdk/win32/rc/gtk.ico: Use the real GTK logo. Thanks to Jernej
+	Simoncic for providing the nice multi-resolution .ico file.
+
 2002-02-15            Alexey Malyshev       <maa@sparc.spb.su>
         * gtk/tmpl/gtkimage.sgml
 	removed wrong sentence from gtk_image_new() docs
