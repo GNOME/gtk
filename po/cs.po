@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-05 12:05+0200\n"
-"PO-Revision-Date: 2004-09-05 16:09+0200\n"
+"POT-Creation-Date: 2004-09-16 12:07+0200\n"
+"PO-Revision-Date: 2004-09-16 17:21+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -263,12 +263,12 @@ msgstr "Obrázek GIF byl zkrácen nebo není úplný."
 msgid "The GIF image format"
 msgstr "Formát obrázku GIF"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "Nedostatek paměti pro načtení ikony"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "Neplatná hlavička ikony"
 
@@ -280,32 +280,32 @@ msgstr "Ikona má nulovou šířku"
 msgid "Icon has zero height"
 msgstr "Ikona má nulovou výšku"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "Komprimované ikony nejsou podporovány"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "Nepodporovaný typ ikony"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "Nedostatek paměti pro načtení souboru ICO"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "Obrázek je příliš velký, aby mohl být uložen jako ICO"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "Aktivní bod kurzoru mimo obrázek"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Nepodporovaná hloubka souboru ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "Formát obrázku ICO"
 
@@ -327,12 +327,12 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nepodporovaný prostor barev JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nemohu alokovat paměť pro načtení souboru JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -341,14 +341,14 @@ msgstr ""
 "Kvalita JPEG musí být hodnota mezi 0 a 100; hodnotu '%s' nebylo možné "
 "zpracovat."
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Kvalita JPEG musí být hodnota mezi 0 a 100; hodnota '%d' není povolena."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "Formát obrázku JPEG"
 
@@ -704,26 +704,30 @@ msgid "XPM file has image height <= 0"
 msgstr "Soubor XPM má výšku obrázku <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "Soubor XPM má neplatný počet barev"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM obsahuje neplatný počet znaků na pixel"
 
-#: gdk-pixbuf/io-xpm.c:1279
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "Soubor XPM má neplatný počet barev"
+
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281
+msgid "Cannot allocate memory for loading XPM image"
+msgstr "Nemohu alokovat paměť pro načtení obrázku XPM"
+
+#: gdk-pixbuf/io-xpm.c:1295
 msgid "Can't read XPM colormap"
 msgstr "Nemohu načíst mapu barev XPM"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Nemohu alokovat paměť pro načtení obrázku XPM"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Nemohu psát do dočasného souboru při načítání obrázku XPM"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "Formát obrázku XPM"
 
