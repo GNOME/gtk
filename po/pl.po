@@ -1,6 +1,8 @@
 # Polish translation
 # Copyright (C) 1998 Free Software Foundation, Inc.
 # Krzysztof Krzy¿aniak <eloy@venco.com.pl>, 1998.
+# Pre-translation has bean done using PePeSza v0.7[C
+# get your own copy of PePeSza from http://www.ids.pl/~pkollegu/pepesza.html
 #
 #, fuzzy
 msgid ""
@@ -16,31 +18,31 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:213
 msgid "Hue:"
-msgstr ""
+msgstr "Odcieñ:"
 
 #: gtk/gtkcolorsel.c:214
 msgid "Saturation:"
-msgstr ""
+msgstr "Nasycenie:"
 
 #: gtk/gtkcolorsel.c:215
 msgid "Value:"
-msgstr ""
+msgstr "Warto¶æ:"
 
 #: gtk/gtkcolorsel.c:216
 msgid "Red:"
-msgstr ""
+msgstr "Czerwony:"
 
 #: gtk/gtkcolorsel.c:217
 msgid "Green:"
-msgstr ""
+msgstr "Zielony:"
 
 #: gtk/gtkcolorsel.c:218
 msgid "Blue:"
-msgstr ""
+msgstr "Niebieski:"
 
 #: gtk/gtkcolorsel.c:219
 msgid "Opacity:"
-msgstr ""
+msgstr "Krycie:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3475
@@ -57,7 +59,7 @@ msgstr "Anuluj"
 
 #: gtk/gtkcolorsel.c:1679
 msgid "Help"
-msgstr ""
+msgstr "Pomoc"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:418
@@ -125,7 +127,7 @@ msgstr "Zmieñ nazwê"
 
 #: gtk/gtkfilesel.c:1440
 msgid "Selection: "
-msgstr ""
+msgstr "Zaznaczenie: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
@@ -145,7 +147,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr ""
+msgstr "Ustaw szeroko¶æ:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
@@ -173,7 +175,7 @@ msgstr "Odstêp:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr ""
+msgstr "¦rednia szeroko¶æ:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -195,11 +197,11 @@ msgstr "Warto¶æ bierz±ca"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
-msgstr ""
+msgstr "Font"
 
 #: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2156 gtk/gtkfontsel.c:2386
 msgid "Font:"
-msgstr ""
+msgstr "Font:"
 
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
@@ -224,12 +226,12 @@ msgstr "Punktów"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr ""
+msgstr "Piksele"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
 msgid "Preview:"
-msgstr ""
+msgstr "Podgl±d:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
@@ -304,11 +306,11 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1780
 msgid "The selected font is not available."
-msgstr ""
+msgstr "Wybrany font nie jest dostêpny."
 
 #: gtk/gtkfontsel.c:1786
 msgid "The selected font is not a valid font."
-msgstr ""
+msgstr "Wybrany font nie jest prawid³owym fontem."
 
 #: gtk/gtkfontsel.c:1844
 msgid "This is a 2-byte font and may not be displayed correctly."
@@ -344,7 +346,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:3482
 msgid "Apply"
-msgstr "Zatwierd¼"
+msgstr "Zastosuj"
 
 #: gtk/gtkfontsel.c:3504
 msgid "Font Selection"
@@ -352,11 +354,11 @@ msgstr ""
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
-msgstr ""
+msgstr "Wart¶æ gamma"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
@@ -365,19 +367,19 @@ msgstr "Wej¶cie"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr ""
+msgstr "Brak urz±dzeñ wej¶ciowych"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "Urz±dz±nie"
+msgstr "Urz±dzenie:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr ""
+msgstr "Wy³±czone"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
-msgstr ""
+msgstr "Ekran"
 
 #: gtk/gtkinputdialog.c:269
 msgid "Window"
@@ -385,7 +387,7 @@ msgstr "Okno"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr ""
+msgstr "Tryb: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
@@ -395,7 +397,7 @@ msgstr "Stra³ki"
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
 msgid "Keys"
-msgstr ""
+msgstr "Klawisze"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -413,7 +415,7 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
-msgstr ""
+msgstr "Ci¶nienie"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
@@ -425,11 +427,11 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr ""
+msgstr "brak"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr ""
+msgstr "(wy³±czone)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:692
@@ -444,18 +446,19 @@ msgstr "Strona %u"
 #: gtk/gtkrc.c:1529
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
+msgstr "Nie znaleziono pliku obrazka w pixmap_path: \"%s\" linia %d"
 
 #: gtk/gtkrc.c:1532
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr ""
+msgstr "Nie znaleziono pliku obrazka w pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr ""
+msgstr "Nie znaleziono pliku ³adowalnego modu³u w module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr ""
+
