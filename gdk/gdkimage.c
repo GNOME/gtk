@@ -34,6 +34,7 @@
 #  define _XOPEN_SOURCE 1
 #endif
 
+#include <errno.h>
 #include <stdlib.h>
 #include <sys/types.h>
 
@@ -226,11 +227,21 @@ gdk_image_new (GdkImageType  type,
 		{
 		  g_warning ("shmget failed!");
 
+		  /* EINVAL indicates, most likely, that the segment we asked for
+		   * is bigger than SHMMAX, so we don't treat it as a permanently
+		   * fatal error. ENOSPC and ENOMEM may also indicate this, but
+		   * more likely are permanent errors.
+		   */
+		  if (errno != EINVAL)
+		    {
+		      g_warning ("shmget failed!");
+		      gdk_use_xshm = False;
+		    }
+
 		  XDestroyImage (private->ximage);
 		  g_free (private->x_shm_info);
 		  g_free (image);
 
-		  gdk_use_xshm = False;
 		  return NULL;
 		}
 

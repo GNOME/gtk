@@ -127,14 +127,29 @@ static gboolean gdk_rgb_install_cmap = FALSE;
 static gint gdk_rgb_min_colors = 5 * 5 * 5;
 static gboolean gdk_rgb_verbose = FALSE;
 
-#define IMAGE_WIDTH 256
-#define STAGE_ROWSTRIDE (IMAGE_WIDTH * 3)
-#define IMAGE_HEIGHT 64
-#define N_IMAGES 6
+#define REGION_WIDTH 256
+#define STAGE_ROWSTRIDE (REGION_WIDTH * 3)
+#define REGION_HEIGHT 64
+
+/* We have N_REGION REGION_WIDTH x REGION_HEIGHT regions divided
+ * up between n_images different images. possible_n_images gives
+ * various divisors of N_REGIONS. The reason for allowing this
+ * flexibility is that we want to create as few images as possible,
+ * but we want to deal with the abberant systems that have a SHMMAX
+ * limit less than
+ *
+ * REGION_WIDTH * REGION_HEIGHT * N_REGIONS * 4 (384k)
+ *
+ * (Are there any such?)
+ */
+#define N_REGIONS 6
+static const int possible_n_images[] = { 1, 2, 3, 6 };
 
 static GdkRgbInfo *image_info = NULL;
-static GdkImage *static_image[N_IMAGES];
+static GdkImage *static_image[N_REGIONS];
 static gint static_image_idx;
+static gint static_n_images;
+  
 
 static guchar *colorcube;
 static guchar *colorcube_d;
@@ -552,6 +567,39 @@ gdk_rgb_set_gray_cmap (GdkColormap *cmap)
     }
 }
 
+static gboolean
+gdk_rgb_allocate_images (gint        n_images,
+			 gboolean    shared)
+{
+  gint i;
+  static const gint byte_order[1] = { 1 };
+  
+  for (i = 0; i < n_images; i++)
+    {
+      if (image_info->bitmap)
+	/* Use malloc() instead of g_malloc since X will free() this mem */
+	static_image[i] = gdk_image_new_bitmap (image_info->visual,
+						(gpointer) malloc (REGION_WIDTH * REGION_HEIGHT >> 3),
+						REGION_WIDTH * (N_REGIONS / n_images), REGION_HEIGHT);
+      else
+	static_image[i] = gdk_image_new (shared ? GDK_IMAGE_SHARED : GDK_IMAGE_NORMAL,
+					 image_info->visual,
+					 REGION_WIDTH * (N_REGIONS / n_images), REGION_HEIGHT);
+      
+      if (!static_image[i])
+	{
+	  gint j;
+	  
+	  for (j = 0; j < i; j++)
+	    gdk_image_destroy (static_image[j]);
+	  
+	  return FALSE;
+	}
+    }
+  
+  return TRUE;
+}
+
 void
 gdk_rgb_init (void)
 {
@@ -648,16 +696,22 @@ gdk_rgb_init (void)
 
       image_info->bitmap = (image_info->visual->depth == 1);
 
-      for (i = 0; i < N_IMAGES; i++)
-	if (image_info->bitmap)
-	  /* Use malloc() instead of g_malloc since X will free() this mem */
-	  static_image[i] = gdk_image_new_bitmap (image_info->visual,
-						  (gpointer) malloc (IMAGE_WIDTH * IMAGE_HEIGHT >> 3),
-						  IMAGE_WIDTH, IMAGE_HEIGHT);
-	else
-	  static_image[i] = gdk_image_new (GDK_IMAGE_FASTEST,
-					   image_info->visual,
-					   IMAGE_WIDTH, IMAGE_HEIGHT);
+      /* Try to allocate as few possible shared images */
+      for (i=0; i < sizeof (possible_n_images) / sizeof (possible_n_images[0]); i++)
+	{
+	  if (gdk_rgb_allocate_images (possible_n_images[i], TRUE))
+	    {
+	      static_n_images = possible_n_images[i];
+	      break;
+	    }
+	}
+      
+      /* If that fails, just allocate N_REGIONS normal images */
+      if (i == sizeof (possible_n_images) / sizeof (possible_n_images[0]))
+	{
+	  gdk_rgb_allocate_images (N_REGIONS, FALSE);
+	  static_n_images = N_REGIONS;
+	}
 
       image_info->bpp = static_image[0]->bpp;
 
@@ -2468,7 +2522,7 @@ static guchar *
 gdk_rgb_ensure_stage (void)
 {
   if (image_info->stage_buf == NULL)
-    image_info->stage_buf = g_malloc (IMAGE_HEIGHT * STAGE_ROWSTRIDE);
+    image_info->stage_buf = g_malloc (REGION_HEIGHT * STAGE_ROWSTRIDE);
   return image_info->stage_buf;
 }
 
@@ -2851,13 +2905,13 @@ gdk_rgb_select_conv (GdkImage *image)
 }
 
 static gint horiz_idx;
-static gint horiz_y = IMAGE_HEIGHT;
+static gint horiz_y = REGION_HEIGHT;
 static gint vert_idx;
-static gint vert_x = IMAGE_WIDTH;
+static gint vert_x = REGION_WIDTH;
 static gint tile_idx;
-static gint tile_x = IMAGE_WIDTH;
-static gint tile_y1 = IMAGE_HEIGHT;
-static gint tile_y2 = IMAGE_HEIGHT;
+static gint tile_x = REGION_WIDTH;
+static gint tile_y1 = REGION_HEIGHT;
+static gint tile_y2 = REGION_HEIGHT;
 
 #ifdef VERBOSE
 static gint sincelast;
@@ -2869,9 +2923,9 @@ static gint sincelast;
 #undef NO_FLUSH
 
 static gint
-gdk_rgb_alloc_scratch_image (void)
+gdk_rgb_alloc_scratch_image ()
 {
-  if (static_image_idx == N_IMAGES)
+  if (static_image_idx == N_REGIONS)
     {
 #ifndef NO_FLUSH
       gdk_flush ();
@@ -2881,10 +2935,15 @@ gdk_rgb_alloc_scratch_image (void)
       sincelast = 0;
 #endif
       static_image_idx = 0;
-      horiz_y = IMAGE_HEIGHT;
-      vert_x = IMAGE_WIDTH;
-      tile_x = IMAGE_WIDTH;
-      tile_y1 = tile_y2 = IMAGE_HEIGHT;
+
+      /* Mark all regions that we might be filling in as completely
+       * full, to force new tiles to be allocated for subsequent
+       * images
+       */
+      horiz_y = REGION_HEIGHT;
+      vert_x = REGION_WIDTH;
+      tile_x = REGION_WIDTH;
+      tile_y1 = tile_y2 = REGION_HEIGHT;
     }
   return static_image_idx++;
 }
@@ -2895,9 +2954,9 @@ gdk_rgb_alloc_scratch (gint width, gint height, gint *x0, gint *y0)
   GdkImage *image;
   gint idx;
 
-  if (width >= (IMAGE_WIDTH >> 1))
+  if (width >= (REGION_WIDTH >> 1))
     {
-      if (height >= (IMAGE_HEIGHT >> 1))
+      if (height >= (REGION_HEIGHT >> 1))
 	{
 	  idx = gdk_rgb_alloc_scratch_image ();
 	  *x0 = 0;
@@ -2905,7 +2964,7 @@ gdk_rgb_alloc_scratch (gint width, gint height, gint *x0, gint *y0)
 	}
       else
 	{
-	  if (height + horiz_y > IMAGE_HEIGHT)
+	  if (height + horiz_y > REGION_HEIGHT)
 	    {
 	      horiz_idx = gdk_rgb_alloc_scratch_image ();
 	      horiz_y = 0;
@@ -2918,9 +2977,9 @@ gdk_rgb_alloc_scratch (gint width, gint height, gint *x0, gint *y0)
     }
   else
     {
-      if (height >= (IMAGE_HEIGHT >> 1))
+      if (height >= (REGION_HEIGHT >> 1))
 	{
-	  if (width + vert_x > IMAGE_WIDTH)
+	  if (width + vert_x > REGION_WIDTH)
 	    {
 	      vert_idx = gdk_rgb_alloc_scratch_image ();
 	      vert_x = 0;
@@ -2934,12 +2993,12 @@ gdk_rgb_alloc_scratch (gint width, gint height, gint *x0, gint *y0)
 	}
       else
 	{
-	  if (width + tile_x > IMAGE_WIDTH)
+	  if (width + tile_x > REGION_WIDTH)
 	    {
 	      tile_y1 = tile_y2;
 	      tile_x = 0;
 	    }
-	  if (height + tile_y1 > IMAGE_HEIGHT)
+	  if (height + tile_y1 > REGION_HEIGHT)
 	    {
 	      tile_idx = gdk_rgb_alloc_scratch_image ();
 	      tile_x = 0;
@@ -2954,7 +3013,8 @@ gdk_rgb_alloc_scratch (gint width, gint height, gint *x0, gint *y0)
 	  tile_x += (width + 7) & -8;
 	}
     }
-  image = static_image[idx];
+  image = static_image[idx * static_n_images / N_REGIONS];
+  *x0 += REGION_WIDTH * (idx % (N_REGIONS / static_n_images));
 #ifdef VERBOSE
   g_print ("index %d, x %d, y %d (%d x %d)\n", idx, *x0, *y0, width, height);
   sincelast++;
@@ -2997,12 +3057,12 @@ gdk_draw_rgb_image_core (GdkDrawable *drawable,
 	}
       gc = image_info->own_gc;
     }
-  for (y0 = 0; y0 < height; y0 += IMAGE_HEIGHT)
+  for (y0 = 0; y0 < height; y0 += REGION_HEIGHT)
     {
-      height1 = MIN (height - y0, IMAGE_HEIGHT);
-      for (x0 = 0; x0 < width; x0 += IMAGE_WIDTH)
+      height1 = MIN (height - y0, REGION_HEIGHT);
+      for (x0 = 0; x0 < width; x0 += REGION_WIDTH)
 	{
-	  width1 = MIN (width - x0, IMAGE_WIDTH);
+	  width1 = MIN (width - x0, REGION_WIDTH);
 	  buf_ptr = buf + y0 * rowstride + x0 * pixstride;
 
 	  image = gdk_rgb_alloc_scratch (width1, height1, &xs0, &ys0);

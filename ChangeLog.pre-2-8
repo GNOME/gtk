@@ -1,6 +1,26 @@
+Sat Nov 18 11:56:39 2000  Owen Taylor  <otaylor@redhat.com>
+
+	[ backport from 1.3.x ] 
+
+	* gdk/gdkrgb.c: If possible, create only a single shm segment and
+	use multiple parts of it instead of creating a bunch of separate
+	segments, since the maximum number of segments per system is not
+	large.
+
+	* gdk/x11/gdkimage-x11.c (gdk_image_new): Don't set gdk_use_xshm
+	to False when we get EINVAL from shmget so that the caller of
+	gdk_image_new can retry with a smaller segment size.
+
+Sat Nov 18 11:45:09 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c: Patch from ChiDeok Hwang to fix
+	memleaks found by Evan Martin.
+
 2000-11-10 Elliot Lee <sopwith@redhat.com>
-	* gtk/gtksocket.c: To handle a really weird error case (race condition),
-	check if socket->plug_window is there before doing things with it.
+	
+	* gtk/gtksocket.c: To handle a really weird error case (race
+	condition), check if socket->plug_window is there before doing
+	things with it.
 
 Fri Nov 03  Pablo Saratxaga <pablo@mandrakesoft.com>
 
