@@ -2285,7 +2285,10 @@ gdk_event_translate (GdkEvent *event,
 	g_print ("no expose:\t\tdrawable: %ld\n",
 		 xevent->xnoexpose.drawable - base_id);
 
-      /* Not currently handled */
+      event->no_expose.type = GDK_NO_EXPOSE;
+      event->no_expose.window = window;
+
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case VisibilityNotify:
@@ -2308,7 +2311,25 @@ gdk_event_translate (GdkEvent *event,
 	    break;
 	  }
 
-      /* Not currently handled */
+      event->visibility.type = GDK_VISIBILITY_NOTIFY;
+      event->visibility.window = window;
+
+      switch (xevent->xvisibility.state)
+	{
+	case VisibilityFullyObscured:
+	  event->visibility.state = GDK_VISIBILITY_FULLY_OBSCURED;
+	  break;
+
+	case VisibilityPartiallyObscured:
+	  event->visibility.state = GDK_VISIBILITY_PARTIAL;
+	  break;
+
+	case VisibilityUnobscured:
+	  event->visibility.state = GDK_VISIBILITY_UNOBSCURED;
+	  break;
+	}
+      
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case CreateNotify:

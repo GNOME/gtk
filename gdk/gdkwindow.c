@@ -27,8 +27,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int nevent_masks = 16;
-int event_mask_table[18] =
+int nevent_masks = 17;
+int event_mask_table[19] =
 {
   ExposureMask,
   PointerMotionMask,
@@ -47,7 +47,8 @@ int event_mask_table[18] =
   StructureNotifyMask,
   PropertyChangeMask,
   0,				/* PROXIMITY_IN */
-  0				/* PROXIMTY_OUT */
+  0,				/* PROXIMTY_OUT */
+  VisibilityChangeMask
 };
 
 

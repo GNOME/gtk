@@ -60,28 +60,30 @@ typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkColorContextDither GdkColorContextDither;
 typedef struct _GdkColorContext       GdkColorContext;
 
-typedef struct _GdkEventAny       GdkEventAny;
-typedef struct _GdkEventExpose    GdkEventExpose;
-typedef struct _GdkEventMotion    GdkEventMotion;
-typedef struct _GdkEventButton    GdkEventButton;
-typedef struct _GdkEventKey       GdkEventKey;
-typedef struct _GdkEventFocus     GdkEventFocus;
-typedef struct _GdkEventCrossing  GdkEventCrossing;
-typedef struct _GdkEventConfigure GdkEventConfigure;
-typedef struct _GdkEventProperty  GdkEventProperty;
-typedef struct _GdkEventSelection GdkEventSelection;
-typedef struct _GdkEventProximity GdkEventProximity;
-typedef struct _GdkEventOther     GdkEventOther;
-typedef struct _GdkEventDragBegin GdkEventDragBegin;
+typedef struct _GdkEventAny         GdkEventAny;
+typedef struct _GdkEventExpose      GdkEventExpose;
+typedef struct _GdkEventNoExpose    GdkEventNoExpose;
+typedef struct _GdkEventVisibility  GdkEventVisibility;
+typedef struct _GdkEventMotion      GdkEventMotion;
+typedef struct _GdkEventButton      GdkEventButton;
+typedef struct _GdkEventKey         GdkEventKey;
+typedef struct _GdkEventFocus       GdkEventFocus;
+typedef struct _GdkEventCrossing    GdkEventCrossing;
+typedef struct _GdkEventConfigure   GdkEventConfigure;
+typedef struct _GdkEventProperty    GdkEventProperty;
+typedef struct _GdkEventSelection   GdkEventSelection;
+typedef struct _GdkEventProximity   GdkEventProximity;
+typedef struct _GdkEventOther       GdkEventOther;
+typedef struct _GdkEventDragBegin   GdkEventDragBegin;
 typedef struct _GdkEventDragRequest GdkEventDragRequest;
-typedef struct _GdkEventDropEnter GdkEventDropEnter;
+typedef struct _GdkEventDropEnter   GdkEventDropEnter;
 typedef struct _GdkEventDropDataAvailable GdkEventDropDataAvailable;
-typedef struct _GdkEventDropLeave GdkEventDropLeave;
-typedef struct _GdkEventClient    GdkEventClient;
-typedef union  _GdkEvent          GdkEvent;
-typedef struct _GdkDeviceKey      GdkDeviceKey;
-typedef struct _GdkDeviceInfo     GdkDeviceInfo;
-typedef struct _GdkTimeCoord      GdkTimeCoord;
+typedef struct _GdkEventDropLeave   GdkEventDropLeave;
+typedef struct _GdkEventClient      GdkEventClient;
+typedef union  _GdkEvent            GdkEvent;
+typedef struct _GdkDeviceKey        GdkDeviceKey;
+typedef struct _GdkDeviceInfo       GdkDeviceInfo;
+typedef struct _GdkTimeCoord        GdkTimeCoord;
 typedef gint (*GdkEventFunc) (GdkEvent *event,
 			      gpointer  data);
 
@@ -286,12 +288,20 @@ typedef enum {
   GDK_FILTER_REMOVE       /* Terminate processing, removing event */
 } GdkFilterReturn;
 
+typedef enum {
+  GDK_VISIBILITY_UNOBSCURED,
+  GDK_VISIBILITY_PARTIAL,
+  GDK_VISIBILITY_FULLY_OBSCURED
+} GdkVisibilityState;
+
 /* Event types.
  *   Nothing: No event occurred.
  *   Delete: A window delete event was sent by the window manager.
  *           The specified window should be deleted.
  *   Destroy: A window has been destroyed.
  *   Expose: Part of a window has been uncovered.
+ *   NoExpose: Same as expose, but no expose event was generated.
+ *   VisibilityNotify: A window has become fully/partially/not obscured.
  *   MotionNotify: The mouse has moved.
  *   ButtonPress: A mouse button was pressed.
  *   ButtonRelease: A mouse button was release.
@@ -337,6 +347,8 @@ typedef enum
   GDK_DROP_LEAVE        = 25,
   GDK_DROP_DATA_AVAIL   = 26,
   GDK_CLIENT_EVENT      = 27,
+  GDK_VISIBILITY_NOTIFY = 28,
+  GDK_NO_EXPOSE         = 29,
   GDK_OTHER_EVENT       = 9999
 } GdkEventType;
 
@@ -363,6 +375,7 @@ typedef enum
   GDK_PROPERTY_CHANGE_MASK      = 1 << 16,
   GDK_PROXIMITY_IN_MASK         = 1 << 17,
   GDK_PROXIMITY_OUT_MASK        = 1 << 18,
+  GDK_VISIBILITY_NOTIFY_MASK    = 1 << 19,
   GDK_ALL_EVENTS_MASK           = 0x07FFFF
 } GdkEventMask;
 
@@ -860,6 +873,20 @@ struct _GdkEventExpose
   gint count; /* If non-zero, how many more events follow. */
 };
 
+struct _GdkEventNoExpose
+{
+  GdkEventType type;
+  GdkWindow *window;
+  /* XXX: does anyone need the X major_code or minor_code fields? */
+};
+
+struct _GdkEventVisibility
+{
+  GdkEventType type;
+  GdkWindow *window;
+  GdkVisibilityState state;
+};
+
 struct _GdkEventMotion
 {
   GdkEventType type;
@@ -1069,25 +1096,27 @@ struct _GdkEventOther
 
 union _GdkEvent
 {
-  GdkEventType      type;
-  GdkEventAny       any;
-  GdkEventExpose    expose;
-  GdkEventMotion    motion;
-  GdkEventButton    button;
-  GdkEventKey       key;
-  GdkEventCrossing  crossing;
-  GdkEventFocus     focus_change;
-  GdkEventConfigure configure;
-  GdkEventProperty  property;
-  GdkEventSelection selection;
-  GdkEventProximity proximity;
-  GdkEventDragBegin dragbegin;
-  GdkEventDragRequest dragrequest;
-  GdkEventDropEnter dropenter;
-  GdkEventDropLeave dropleave;
+  GdkEventType              type;
+  GdkEventAny               any;
+  GdkEventExpose            expose;
+  GdkEventNoExpose          no_expose;
+  GdkEventVisibility        visibility;
+  GdkEventMotion            motion;
+  GdkEventButton            button;
+  GdkEventKey               key;
+  GdkEventCrossing          crossing;
+  GdkEventFocus             focus_change;
+  GdkEventConfigure         configure;
+  GdkEventProperty          property;
+  GdkEventSelection         selection;
+  GdkEventProximity         proximity;
+  GdkEventDragBegin         dragbegin;
+  GdkEventDragRequest       dragrequest;
+  GdkEventDropEnter         dropenter;
+  GdkEventDropLeave         dropleave;
   GdkEventDropDataAvailable dropdataavailable;
-  GdkEventClient    client;
-  GdkEventOther     other;
+  GdkEventClient            client;
+  GdkEventOther             other;
 };
 
 
