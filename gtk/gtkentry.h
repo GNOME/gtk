@@ -42,6 +42,7 @@ struct _GtkEntry
 
   GdkWindow *text_area;
   GdkPixmap *backing_pixmap;
+  GdkCursor *cursor;
   gchar *text;
 
   guint16 text_size;

@@ -591,6 +591,8 @@ gtk_entry_realize (GtkWidget *widget)
   attributes.y = widget->style->klass->ythickness + INNER_BORDER;
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = widget->allocation.height - attributes.y * 2;
+  attributes.cursor = entry->cursor = gdk_cursor_new (GDK_XTERM);
+  attributes_mask |= GDK_WA_CURSOR;
 
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (entry->text_area, entry);
@@ -688,6 +690,7 @@ gtk_entry_unrealize (GtkWidget *widget)
     {
       gdk_window_set_user_data (entry->text_area, NULL);
       gdk_window_destroy (entry->text_area);
+      gdk_cursor_destroy (entry->cursor);
     }
   if (widget->window)
     {

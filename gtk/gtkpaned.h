@@ -44,6 +44,7 @@ struct _GtkPaned
   GtkWidget *child2;
 
   GdkWindow *handle;
+  GdkCursor *cursor;
   GdkRectangle groove_rectangle;
   GdkGC *xor_gc;
 

@@ -156,7 +156,7 @@ gtk_paned_realize (GtkWidget *widget)
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
-  attributes.cursor = gdk_cursor_new(GDK_CROSS);
+  attributes.cursor = paned->cursor = gdk_cursor_new (GDK_CROSS);
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_BUTTON_PRESS_MASK |
@@ -245,10 +245,15 @@ gtk_paned_unrealize (GtkWidget *widget)
 
   if (paned->xor_gc)
     gdk_gc_destroy (paned->xor_gc);
+
   if (paned->handle)
-    gdk_window_destroy (paned->handle);
+    {
+      gdk_window_destroy (paned->handle);
+      gdk_cursor_destroy (paned->cursor);
+    }
 
   paned->handle = NULL;
+  paned->cursor = NULL;
   widget->window = NULL;
 }
 
