@@ -1,3 +1,11 @@
+2001-12-02  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/dnd.sgml: Updates.
+
+2001-11-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/keys.sgml: Updates.
+
 2001-12-01  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/tmpl/gtkoptionmenu.sgml: add brief explanation of how to use
