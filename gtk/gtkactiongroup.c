@@ -456,7 +456,7 @@ gtk_action_group_set_sensitive (GtkActionGroup *action_group, gboolean sensitive
  * they are visible (see gtk_action_get_visible()) and their group
  * is visible.
  * 
- * Return value: %TRUE if the group is sensitive.
+ * Return value: %TRUE if the group is visible.
  * 
  * Since: 2.4
  */
