@@ -1,3 +1,9 @@
+Sat Oct  5 18:30:50 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/stock-icons/Makefile.am (pixbuf_csource): Use
+	$(top_builddir) instead of here-undefined $$topdir.
+	(Problem reported by Jacob Berkman)
+
 Sat Oct  5 18:25:11 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_draw_tab): Fix 
