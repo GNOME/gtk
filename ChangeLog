@@ -1,3 +1,7 @@
+2004-05-29  Christian Rose  <menthos@menthos.com>
+ 
+        * configure.in: Added "tk" to ALL_LINGUAS.
+ 
 Fri May 28 15:00:01 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c (gtk_widget_set_parent): Add informative
