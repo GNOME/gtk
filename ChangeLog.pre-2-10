@@ -1,5 +1,13 @@
 2001-11-14  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_move_cursor): fix Control-E so
+	it doesn't move to a new line each time you press it
+
+	* gtk/gtktextiter.c (gtk_text_iter_forward_to_line_end): fix
+	return value, #62987
+
+2001-11-14  Havoc Pennington  <hp@redhat.com>
+
 	* tests/testtextbuffer.c (main): bulk of the tests were commented
 	out, oops.
 

@@ -4116,9 +4116,14 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 
     case GTK_MOVEMENT_PARAGRAPH_ENDS:
       if (count > 0)
-        gtk_text_iter_forward_to_line_end (&newplace);
+        {
+          if (!gtk_text_iter_ends_line (&newplace))
+            gtk_text_iter_forward_to_line_end (&newplace);
+        }
       else if (count < 0)
-        gtk_text_iter_set_line_offset (&newplace, 0);
+        {
+          gtk_text_iter_set_line_offset (&newplace, 0);
+        }
       break;
 
     case GTK_MOVEMENT_BUFFER_ENDS:

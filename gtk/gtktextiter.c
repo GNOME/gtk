@@ -3816,7 +3816,7 @@ gtk_text_iter_forward_to_line_end (GtkTextIter *iter)
     {
       /* Move to end of this line. */
       gtk_text_iter_set_line_offset (iter, new_offset);
-      return TRUE;
+      return !gtk_text_iter_is_end (iter);
     }
   else
     {
@@ -3828,7 +3828,7 @@ gtk_text_iter_forward_to_line_end (GtkTextIter *iter)
            */
           if (!gtk_text_iter_ends_line (iter))
             gtk_text_iter_forward_to_line_end (iter);
-          return TRUE;
+          return !gtk_text_iter_is_end (iter);
         }
       else
         return FALSE;
