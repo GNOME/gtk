@@ -598,6 +598,12 @@ after other user handlers and the default handler.
 </para>
 
 
+<!-- ##### ARG GtkPaned:handle-size ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GtkPrivateFlags ##### -->
 <para>
 
@@ -755,14 +761,6 @@ produce superscript and subscript.
 </para>
 
 @widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::size-request ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@requisition: 
 
 <!-- ##### FUNCTION gtk_button_box_child_requisition ##### -->
 <para>
@@ -1165,6 +1163,14 @@ Internal function used by #GtkHPaned and #GtkVPaned
 @allocation: 
 @child1_req: 
 @child2_req: 
+
+<!-- ##### FUNCTION gtk_paned_set_handle_size ##### -->
+<para>
+Set the the handle size to @size x @size pixels.
+</para>
+
+@paned: a paned widget
+@size: the size in pixels
 
 <!-- ##### FUNCTION gtk_rc_init ##### -->
 <para>

@@ -1,3 +1,10 @@
+Tue Apr  3 05:09:07 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (_gtk_boolean_handled_accumulator): use more elaborate
+	variable names.
+	
+	* gtk/makeenums.pl: touch this so enum files get remade.
+
 Mon Apr  2 19:36:57 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_init):  Bug fix to make trees

@@ -83,6 +83,7 @@ has changed.
 when parts of a drawable were copied. This is not very useful.
 @GDK_SCROLL: 
 @GDK_WINDOW_STATE: 
+@GDK_SETTING: 
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>

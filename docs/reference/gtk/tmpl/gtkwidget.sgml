@@ -1736,6 +1736,14 @@ a widget changes from un-anchored to anchored or vice-versa.
 @widget: the object which received the signal.
 @allocation: 
 
+<!-- ##### SIGNAL GtkWidget::size-request ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@requisition: 
+
 <!-- ##### SIGNAL GtkWidget::state-changed ##### -->
 <para>
 

@@ -72,7 +72,6 @@ gtk_widget_set_usize (frame1, 50, -1);
 <para>
 </para>
 
-@handle_size: 
 
 <!-- ##### FUNCTION gtk_paned_add1 ##### -->
 <para>
@@ -151,15 +150,6 @@ Set the width of the gutter. (The area between the two panes).
 @size: the width of the widget in pixels
 
 
-<!-- ##### FUNCTION gtk_paned_set_handle_size ##### -->
-<para>
-Set the the handle size to @size x @size pixels.
-</para>
-
-@paned: a paned widget
-@size: the size in pixels
-
-
 <!-- ##### FUNCTION gtk_paned_set_position ##### -->
 <para>
 
@@ -177,9 +167,4 @@ Set the the handle size to @size x @size pixels.
 @paned: 
 @Returns: 
 
-
-<!-- ##### ARG GtkPaned:handle-size ##### -->
-<para>
-
-</para>
 

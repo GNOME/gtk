@@ -3,7 +3,7 @@
 # Information about the current enumeration
 
 my $flags;			# Is enumeration a bitmask
-my $seenbitshift;			# Have we seen bitshift operators?
+my $seenbitshift;		# Have we seen bitshift operators?
 my $prefix;			# Prefix for this enumeration
 my $enumname;			# Name for this enumeration
 my $firstenum = 1;		# Is this the first enumeration in file?

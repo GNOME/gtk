@@ -50,7 +50,7 @@ gtktreemodel
 </para>
 
 @g_iface: 
-@changed: 
+@range_changed: 
 @inserted: 
 @has_child_toggled: 
 @deleted: 
