@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_ITEM                  (gtk_item_get_type ())
-#define GTK_ITEM(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_ITEM, GtkItem))
-#define GTK_ITEM_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ITEM, GtkItemClass))
-#define GTK_IS_ITEM(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ITEM))
-#define GTK_IS_ITEM_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ITEM))
-#define GTK_ITEM_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ITEM, GtkItemClass))
+#define GTK_ITEM(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ITEM, GtkItem))
+#define GTK_ITEM_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ITEM, GtkItemClass))
+#define GTK_IS_ITEM(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ITEM))
+#define GTK_IS_ITEM_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ITEM))
+#define GTK_ITEM_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ITEM, GtkItemClass))
 
 
 typedef struct _GtkItem       GtkItem;
@@ -69,10 +69,10 @@ struct _GtkItemClass
 };
 
 
-GtkType gtk_item_get_type (void) G_GNUC_CONST;
-void    gtk_item_select   (GtkItem *item);
-void    gtk_item_deselect (GtkItem *item);
-void    gtk_item_toggle   (GtkItem *item);
+GType gtk_item_get_type (void) G_GNUC_CONST;
+void  gtk_item_select   (GtkItem *item);
+void  gtk_item_deselect (GtkItem *item);
+void  gtk_item_toggle   (GtkItem *item);
 
 
 #ifdef __cplusplus

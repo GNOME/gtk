@@ -54,11 +54,11 @@ typedef	void	(*GtkItemFactoryCallback1) (gpointer		 callback_data,
 					    GtkWidget		*widget);
 
 #define GTK_TYPE_ITEM_FACTORY            (gtk_item_factory_get_type ())
-#define GTK_ITEM_FACTORY(object)         (GTK_CHECK_CAST ((object), GTK_TYPE_ITEM_FACTORY, GtkItemFactory))
-#define GTK_ITEM_FACTORY_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ITEM_FACTORY, GtkItemFactoryClass))
-#define GTK_IS_ITEM_FACTORY(object)      (GTK_CHECK_TYPE ((object), GTK_TYPE_ITEM_FACTORY))
-#define GTK_IS_ITEM_FACTORY_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ITEM_FACTORY))
-#define GTK_ITEM_FACTORY_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ITEM_FACTORY, GtkItemFactoryClass))
+#define GTK_ITEM_FACTORY(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_ITEM_FACTORY, GtkItemFactory))
+#define GTK_ITEM_FACTORY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ITEM_FACTORY, GtkItemFactoryClass))
+#define GTK_IS_ITEM_FACTORY(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_ITEM_FACTORY))
+#define GTK_IS_ITEM_FACTORY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ITEM_FACTORY))
+#define GTK_ITEM_FACTORY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ITEM_FACTORY, GtkItemFactoryClass))
 
 
 typedef	struct	_GtkItemFactory			GtkItemFactory;
@@ -133,16 +133,16 @@ struct _GtkItemFactoryItem
 };
 
 
-GtkType		gtk_item_factory_get_type	    (void) G_GNUC_CONST;
+GType		gtk_item_factory_get_type	    (void) G_GNUC_CONST;
 
 /* `container_type' must be of GTK_TYPE_MENU_BAR, GTK_TYPE_MENU,
  * or GTK_TYPE_OPTION_MENU.
  */
-GtkItemFactory*	gtk_item_factory_new	   (GtkType		 container_type,
+GtkItemFactory*	gtk_item_factory_new	   (GType		 container_type,
 					    const gchar		*path,
 					    GtkAccelGroup       *accel_group);
 void		gtk_item_factory_construct (GtkItemFactory	*ifactory,
-					    GtkType		 container_type,
+					    GType		 container_type,
 					    const gchar		*path,
 					    GtkAccelGroup       *accel_group);
      

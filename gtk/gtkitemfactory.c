@@ -30,7 +30,6 @@
 #include	"config.h"
 
 #include	"gtkitemfactory.h"
-#include	"gtk/gtksignal.h"
 #include	"gtk/gtkoptionmenu.h"
 #include	"gtk/gtkmenubar.h"
 #include	"gtk/gtkmenu.h"
@@ -102,26 +101,29 @@ static GQuark		 quark_type_last_branch = 0;
 
 
 /* --- functions --- */
-GtkType
+GType
 gtk_item_factory_get_type (void)
 {
-  static GtkType item_factory_type = 0;
+  static GType item_factory_type = 0;
   
   if (!item_factory_type)
     {
-      static const GtkTypeInfo item_factory_info =
+      static const GTypeInfo item_factory_info =
       {
-	"GtkItemFactory",
-	sizeof (GtkItemFactory),
 	sizeof (GtkItemFactoryClass),
-	(GtkClassInitFunc) gtk_item_factory_class_init,
-	(GtkObjectInitFunc) gtk_item_factory_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_item_factory_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkItemFactory),
+	0,
+	(GInstanceInitFunc) gtk_item_factory_init,
       };
       
-      item_factory_type = gtk_type_unique (GTK_TYPE_OBJECT, &item_factory_info);
+      item_factory_type =
+	g_type_register_static (GTK_TYPE_OBJECT, "GtkItemFactory",
+				&item_factory_info, 0);
     }
   
   return item_factory_type;
@@ -200,7 +202,7 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
  * Creates a new #GtkItemFactory.
  */
 GtkItemFactory*
-gtk_item_factory_new (GtkType	     container_type,
+gtk_item_factory_new (GType	     container_type,
 		      const gchar   *path,
 		      GtkAccelGroup *accel_group)
 {
@@ -208,7 +210,7 @@ gtk_item_factory_new (GtkType	     container_type,
 
   g_return_val_if_fail (path != NULL, NULL);
 
-  ifactory = gtk_type_new (GTK_TYPE_ITEM_FACTORY);
+  ifactory = g_object_new (GTK_TYPE_ITEM_FACTORY, NULL);
   gtk_item_factory_construct (ifactory, container_type, path, accel_group);
 
   return ifactory;
@@ -239,8 +241,8 @@ gtk_item_factory_item_remove_widget (GtkWidget		*widget,
 				     GtkItemFactoryItem *item)
 {
   item->widgets = g_slist_remove (item->widgets, widget);
-  gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_item_factory);
-  gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_item_path);
+  g_object_set_qdata (G_OBJECT (widget), quark_item_factory, NULL);
+  g_object_set_qdata (G_OBJECT (widget), quark_item_path, NULL);
 }
 
 /**
@@ -291,31 +293,29 @@ gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
     }
 
   item->widgets = g_slist_prepend (item->widgets, accel_widget);
-  gtk_signal_connect (GTK_OBJECT (accel_widget),
-		      "destroy",
-		      GTK_SIGNAL_FUNC (gtk_item_factory_item_remove_widget),
-		      item);
+  g_signal_connect (accel_widget,
+		    "destroy",
+		    G_CALLBACK (gtk_item_factory_item_remove_widget),
+		    item);
 
   /* set the item path for the widget
    */
-  gtk_object_set_data_by_id (GTK_OBJECT (accel_widget), 
-                             quark_item_path, item->path);
+  g_object_set_qdata (G_OBJECT (accel_widget), quark_item_path, item->path);
   gtk_widget_set_name (accel_widget, item->path);
   if (accel_group)
     {
-      gtk_accel_group_ref (accel_group);
-      gtk_object_set_data_by_id_full (GTK_OBJECT (accel_widget),
-				      quark_accel_group,
-				      accel_group,
-				      (GtkDestroyNotify) gtk_accel_group_unref);
+      g_object_ref (accel_group);
+      g_object_set_qdata_full (G_OBJECT (accel_widget),
+			       quark_accel_group,
+			       accel_group,
+			       g_object_unref);
     }
   else
-    gtk_object_set_data_by_id (GTK_OBJECT (accel_widget), 
-                               quark_accel_group, NULL);
+    g_object_set_qdata (G_OBJECT (accel_widget), quark_accel_group, NULL);
 
   /* install defined accelerators
    */
-  if (gtk_signal_lookup ("activate", GTK_OBJECT_TYPE (accel_widget)))
+  if (g_signal_lookup ("activate", G_TYPE_FROM_INSTANCE (accel_widget)))
     {
       if (accel_group)
 	{
@@ -370,20 +370,20 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
       data->func_data = callback_data;
       data->callback_action = callback_action;
 
-      gtk_object_weakref (GTK_OBJECT (widget),
-			  ifactory_cb_data_free,
-			  data);
-      gtk_signal_connect (GTK_OBJECT (widget),
-			  "activate",
-			  GTK_SIGNAL_FUNC (gtk_item_factory_callback_marshal),
-			  data);
+      g_object_weak_ref (G_OBJECT (widget),
+			 (GWeakNotify) ifactory_cb_data_free,
+			 data);
+      g_signal_connect (widget,
+			"activate",
+			G_CALLBACK (gtk_item_factory_callback_marshal),
+			data);
     }
 
   /* link the widget into its item-entry
    * and keep back pointer on both the item factory and the widget
    */
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_action, GUINT_TO_POINTER (callback_action));
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_item_factory, ifactory);
+  g_object_set_qdata (G_OBJECT (widget), quark_action, GUINT_TO_POINTER (callback_action));
+  g_object_set_qdata (G_OBJECT (widget), quark_item_factory, ifactory);
   if (accelerator)
     gtk_accelerator_parse (accelerator, &keyval, &mods);
   else
@@ -416,7 +416,7 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
  */  
 void
 gtk_item_factory_construct (GtkItemFactory	*ifactory,
-			    GtkType		 container_type,
+			    GType		 container_type,
 			    const gchar		*path,
 			    GtkAccelGroup	*accel_group)
 {
@@ -425,8 +425,8 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (ifactory->accel_group == NULL);
   g_return_if_fail (path != NULL);
-  if (!gtk_type_is_a (container_type, GTK_TYPE_OPTION_MENU))
-    g_return_if_fail (gtk_type_is_a (container_type, GTK_TYPE_MENU_SHELL));
+  if (!g_type_is_a (container_type, GTK_TYPE_OPTION_MENU))
+    g_return_if_fail (g_type_is_a (container_type, GTK_TYPE_MENU_SHELL));
 
   len = strlen (path);
 
@@ -439,7 +439,7 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
   if (accel_group)
     {
       ifactory->accel_group = accel_group;
-      gtk_accel_group_ref (ifactory->accel_group);
+      g_object_ref (ifactory->accel_group);
     }
   else
     ifactory->accel_group = gtk_accel_group_new ();
@@ -448,7 +448,7 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
   ifactory->widget = g_object_connect (gtk_widget_new (container_type, NULL),
 				       "signal::destroy", gtk_widget_destroyed, &ifactory->widget,
 				       NULL);
-  gtk_object_ref (GTK_OBJECT (ifactory));
+  g_object_ref (ifactory);
   gtk_object_sink (GTK_OBJECT (ifactory));
 
   gtk_item_factory_add_item (ifactory,
@@ -520,10 +520,10 @@ gtk_item_factory_destroy (GtkObject *object)
 
       dobj = GTK_OBJECT (ifactory->widget);
 
-      gtk_object_ref (dobj);
+      g_object_ref (dobj);
       gtk_object_sink (dobj);
       gtk_object_destroy (dobj);
-      gtk_object_unref (dobj);
+      g_object_unref (dobj);
 
       ifactory->widget = NULL;
     }
@@ -534,8 +534,8 @@ gtk_item_factory_destroy (GtkObject *object)
       GSList *link;
       
       for (link = item->widgets; link; link = link->next)
-	if (gtk_object_get_data_by_id (link->data, quark_item_factory) == ifactory)
-	  gtk_object_remove_data_by_id (link->data, quark_item_factory);
+	if (g_object_get_qdata (link->data, quark_item_factory) == ifactory)
+	  g_object_set_qdata (link->data, quark_item_factory, NULL);
     }
   g_slist_free (ifactory->items);
   ifactory->items = NULL;
@@ -552,7 +552,7 @@ gtk_item_factory_finalize (GObject *object)
 
   ifactory = GTK_ITEM_FACTORY (object);
 
-  gtk_accel_group_unref (ifactory->accel_group);
+  g_object_unref (ifactory->accel_group);
   g_free (ifactory->path);
   g_assert (ifactory->widget == NULL);
 
@@ -576,12 +576,13 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  ifactory = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_factory);
+  ifactory = g_object_get_qdata (G_OBJECT (widget), quark_item_factory);
+
   if (ifactory == NULL && GTK_IS_MENU_ITEM (widget) &&
       GTK_MENU_ITEM (widget)->submenu != NULL) 
     {
       GtkWidget *menu = GTK_MENU_ITEM (widget)->submenu;
-      ifactory = gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_item_factory);
+      ifactory = g_object_get_qdata (G_OBJECT (menu), quark_item_factory);
     }
 
   return ifactory;
@@ -606,13 +607,13 @@ gtk_item_factory_path_from_widget (GtkWidget	    *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  path = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_path);
+  path = g_object_get_qdata (G_OBJECT (widget), quark_item_path);
 
   if (path == NULL && GTK_IS_MENU_ITEM (widget) &&
       GTK_MENU_ITEM (widget)->submenu != NULL) 
     {
       GtkWidget *menu = GTK_MENU_ITEM (widget)->submenu;
-      path = gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_item_path);
+      path = g_object_get_qdata (G_OBJECT (menu), quark_item_path);
     }
 
   return path;
@@ -747,8 +748,8 @@ gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
       GSList *link;
 
       for (link = item->widgets; link; link = link->next)
-	if (gtk_object_get_data_by_id (link->data, quark_item_factory) == ifactory &&
-	    gtk_object_get_data_by_id (link->data, quark_action) == GUINT_TO_POINTER (action))
+	if (g_object_get_qdata (link->data, quark_item_factory) == ifactory &&
+	    g_object_get_qdata (link->data, quark_action) == GUINT_TO_POINTER (action))
 	  return link->data;
     }
 
@@ -949,7 +950,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   gchar *path;
   gchar *accelerator;
   guint type_id;
-  GtkType type;
+  GType type;
   gchar *item_type_path;
   GtkStockItem stock_item;
       
@@ -968,7 +969,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   else
     {
       item_type_path = entry->item_type;
-      type_id = gtk_object_data_try_key (item_type_path);
+      type_id = g_quark_try_string (item_type_path);
     }
 
   radio_group = NULL;
@@ -1002,7 +1003,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       if (radio_link && GTK_IS_RADIO_MENU_ITEM (radio_link))
 	{
 	  type = GTK_TYPE_RADIO_MENU_ITEM;
-	  radio_group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (radio_link));
+	  radio_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (radio_link));
 	}
       else
 	{
@@ -1090,7 +1091,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	  gtk_widget_show (image);
 	}
       if (pixbuf)
-	g_object_unref (G_OBJECT (pixbuf));
+	g_object_unref (pixbuf);
     }
   if (type_id == quark_type_stock_item)
     {
@@ -1285,7 +1286,7 @@ gtk_item_factories_path_delete (const gchar *ifactory_path,
 
 	  widget = slist->data;
 	  widget_list = g_slist_prepend (widget_list, widget);
-	  gtk_widget_ref (widget);
+	  g_object_ref (widget);
 	}
 
       for (slist = widget_list; slist; slist = slist->next)
@@ -1294,7 +1295,7 @@ gtk_item_factories_path_delete (const gchar *ifactory_path,
 
 	  widget = slist->data;
 	  gtk_widget_destroy (widget);
-	  gtk_widget_unref (widget);
+	  g_object_unref (widget);
 	}
       g_slist_free (widget_list);
     }
@@ -1426,7 +1427,7 @@ gtk_item_factory_popup_data_from_widget (GtkWidget *widget)
 
   ifactory = gtk_item_factory_from_widget (widget);
   if (ifactory)
-    return gtk_object_get_data_by_id (GTK_OBJECT (ifactory), quark_popup_data);
+    return g_object_get_qdata (G_OBJECT (ifactory), quark_popup_data);
 
   return NULL;
 }
@@ -1445,17 +1446,17 @@ gtk_item_factory_popup_data (GtkItemFactory *ifactory)
 {
   g_return_val_if_fail (GTK_IS_ITEM_FACTORY (ifactory), NULL);
 
-  return gtk_object_get_data_by_id (GTK_OBJECT (ifactory), quark_popup_data);
+  return g_object_get_qdata (G_OBJECT (ifactory), quark_popup_data);
 }
 
 static void
 ifactory_delete_popup_data (GtkObject	   *object,
 			    GtkItemFactory *ifactory)
 {
-  gtk_signal_disconnect_by_func (object,
-				 GTK_SIGNAL_FUNC (ifactory_delete_popup_data),
-				 ifactory);
-  gtk_object_remove_data_by_id (GTK_OBJECT (ifactory), quark_popup_data);
+  g_signal_handlers_disconnect_by_func (object,
+					ifactory_delete_popup_data,
+					ifactory);
+  g_object_set_qdata (G_OBJECT (ifactory), quark_popup_data, NULL);
 }
 
 /**
@@ -1507,15 +1508,15 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (GTK_IS_MENU (ifactory->widget));
   
-  mpos = gtk_object_get_data_by_id (GTK_OBJECT (ifactory->widget), quark_if_menu_pos);
+  mpos = g_object_get_qdata (G_OBJECT (ifactory->widget), quark_if_menu_pos);
   
   if (!mpos)
     {
       mpos = g_new0 (MenuPos, 1);
-      gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory->widget),
-				      quark_if_menu_pos,
-				      mpos,
-				      g_free);
+      g_object_set_qdata_full (G_OBJECT (ifactory->widget),
+			       quark_if_menu_pos,
+			       mpos,
+			       g_free);
     }
   
   mpos->x = x;
@@ -1523,14 +1524,14 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
   
   if (popup_data != NULL)
     {
-      gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory),
-				      quark_popup_data,
-				      popup_data,
-				      destroy);
-      gtk_signal_connect (GTK_OBJECT (ifactory->widget),
-			  "selection-done",
-			  GTK_SIGNAL_FUNC (ifactory_delete_popup_data),
-			  ifactory);
+      g_object_set_qdata_full (G_OBJECT (ifactory),
+			       quark_popup_data,
+			       popup_data,
+			       destroy);
+      g_signal_connect (ifactory->widget,
+			"selection-done",
+			G_CALLBACK (ifactory_delete_popup_data),
+			ifactory);
     }
   
   gtk_menu_popup (GTK_MENU (ifactory->widget),

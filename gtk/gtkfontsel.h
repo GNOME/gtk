@@ -41,19 +41,19 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_FONT_SELECTION              (gtk_font_selection_get_type ())
-#define GTK_FONT_SELECTION(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelection))
-#define GTK_FONT_SELECTION_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
-#define GTK_IS_FONT_SELECTION(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_FONT_SELECTION))
-#define GTK_IS_FONT_SELECTION_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_SELECTION))
-#define GTK_FONT_SELECTION_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
+#define GTK_FONT_SELECTION(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelection))
+#define GTK_FONT_SELECTION_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
+#define GTK_IS_FONT_SELECTION(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_SELECTION))
+#define GTK_IS_FONT_SELECTION_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_SELECTION))
+#define GTK_FONT_SELECTION_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
 
 
 #define GTK_TYPE_FONT_SELECTION_DIALOG              (gtk_font_selection_dialog_get_type ())
-#define GTK_FONT_SELECTION_DIALOG(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialog))
-#define GTK_FONT_SELECTION_DIALOG_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
-#define GTK_IS_FONT_SELECTION_DIALOG(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_FONT_SELECTION_DIALOG))
-#define GTK_IS_FONT_SELECTION_DIALOG_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_SELECTION_DIALOG))
-#define GTK_FONT_SELECTION_DIALOG_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
+#define GTK_FONT_SELECTION_DIALOG(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialog))
+#define GTK_FONT_SELECTION_DIALOG_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
+#define GTK_IS_FONT_SELECTION_DIALOG(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_SELECTION_DIALOG))
+#define GTK_IS_FONT_SELECTION_DIALOG_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_SELECTION_DIALOG))
+#define GTK_FONT_SELECTION_DIALOG_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
 
 
 typedef struct _GtkFontSelection	     GtkFontSelection;
@@ -114,7 +114,10 @@ struct _GtkFontSelectionDialog
   GtkWidget *cancel_button;
 
   /*< private >*/
-  /* If the user changes the width of the dialog, we turn auto-shrink off. */
+
+  /* If the user changes the width of the dialog, we turn auto-shrink off.
+   * (Unused now, autoshrink doesn't mean anything anymore -Yosh)
+   */
   gint dialog_width;
   gboolean auto_resize;
 };
@@ -137,7 +140,7 @@ struct _GtkFontSelectionDialogClass
  *   see the comments in the GtkFontSelectionDialog functions.
  *****************************************************************************/
 
-GtkType	   gtk_font_selection_get_type		(void) G_GNUC_CONST;
+GType	   gtk_font_selection_get_type		(void) G_GNUC_CONST;
 GtkWidget* gtk_font_selection_new		(void);
 gchar*	   gtk_font_selection_get_font_name	(GtkFontSelection *fontsel);
 
@@ -157,7 +160,7 @@ void                  gtk_font_selection_set_preview_text (GtkFontSelection *fon
  *   GtkFontSelection.
  *****************************************************************************/
 
-GtkType	   gtk_font_selection_dialog_get_type	(void) G_GNUC_CONST;
+GType	   gtk_font_selection_dialog_get_type	(void) G_GNUC_CONST;
 GtkWidget* gtk_font_selection_dialog_new	(const gchar	  *title);
 
 /* This returns the X Logical Font Description fontname, or NULL if no font

@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_FILE_SELECTION            (gtk_file_selection_get_type ())
-#define GTK_FILE_SELECTION(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_FILE_SELECTION, GtkFileSelection))
-#define GTK_FILE_SELECTION_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SELECTION, GtkFileSelectionClass))
-#define GTK_IS_FILE_SELECTION(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_FILE_SELECTION))
-#define GTK_IS_FILE_SELECTION_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_SELECTION))
-#define GTK_FILE_SELECTION_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FILE_SELECTION, GtkFileSelectionClass))
+#define GTK_FILE_SELECTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_SELECTION, GtkFileSelection))
+#define GTK_FILE_SELECTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SELECTION, GtkFileSelectionClass))
+#define GTK_IS_FILE_SELECTION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_SELECTION))
+#define GTK_IS_FILE_SELECTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_SELECTION))
+#define GTK_FILE_SELECTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_SELECTION, GtkFileSelectionClass))
 
 
 typedef struct _GtkFileSelection       GtkFileSelection;
@@ -91,7 +91,7 @@ struct _GtkFileSelectionClass
 };
 
 
-GtkType    gtk_file_selection_get_type            (void) G_GNUC_CONST;
+GType      gtk_file_selection_get_type            (void) G_GNUC_CONST;
 GtkWidget* gtk_file_selection_new                 (const gchar      *title);
 void       gtk_file_selection_set_filename        (GtkFileSelection *filesel,
 						   const gchar      *filename);

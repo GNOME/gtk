@@ -86,7 +86,7 @@ struct _GtkBindingSignal
 
 struct _GtkBindingArg
 {
-  GtkType	arg_type;
+  GType		 arg_type;
   union {
     glong	 long_data;
     gdouble	 double_data;

@@ -38,7 +38,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+
 #include "gtkcalendar.h"
+#include "gtkmarshalers.h"
 #include "gdk/gdkkeysyms.h"
 
 /***************************************************************************/
@@ -307,27 +309,28 @@ static gint top_y_for_row		(GtkCalendar  *calendar,
 static char    *default_abbreviated_dayname[7];
 static char    *default_monthname[12];
 
-GtkType
+GType
 gtk_calendar_get_type (void)
 {
-  static GtkType calendar_type = 0;
+  static GType calendar_type = 0;
   
   if (!calendar_type)
     {
       static const GTypeInfo calendar_info =
       {
 	sizeof (GtkCalendarClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_calendar_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkCalendar),
-	16,             /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_calendar_init,
       };
 
-      calendar_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkCalendar", &calendar_info, 0);
+      calendar_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkCalendar",
+					      &calendar_info, 0);
     }
   
   return calendar_type;
@@ -337,14 +340,12 @@ static void
 gtk_calendar_class_init (GtkCalendarClass *class)
 {
   GObjectClass   *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass*)  class;
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   
-  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->finalize = gtk_calendar_finalize;
 
@@ -370,40 +371,61 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   class->next_year = NULL;
 
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
-    gtk_signal_new ("month_changed",
-		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCalendarClass, month_changed),
-		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+    g_signal_new ("month_changed",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCalendarClass, month_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   gtk_calendar_signals[DAY_SELECTED_SIGNAL] =
-    gtk_signal_new ("day_selected",
-		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCalendarClass, day_selected),
-		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+    g_signal_new ("day_selected",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCalendarClass, day_selected),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL] =
-    gtk_signal_new ("day_selected_double_click",
-		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCalendarClass, day_selected_double_click),
-		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+    g_signal_new ("day_selected_double_click",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCalendarClass, day_selected_double_click),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   gtk_calendar_signals[PREV_MONTH_SIGNAL] =
-    gtk_signal_new ("prev_month",
-		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCalendarClass, prev_month),
-		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+    g_signal_new ("prev_month",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCalendarClass, prev_month),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   gtk_calendar_signals[NEXT_MONTH_SIGNAL] =
-    gtk_signal_new ("next_month",
-		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCalendarClass, next_month),
-		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+    g_signal_new ("next_month",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCalendarClass, next_month),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   gtk_calendar_signals[PREV_YEAR_SIGNAL] =
-    gtk_signal_new ("prev_year",
-		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCalendarClass, prev_year),
-		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+    g_signal_new ("prev_year",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCalendarClass, prev_year),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   gtk_calendar_signals[NEXT_YEAR_SIGNAL] =
-    gtk_signal_new ("next_year",
-		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCalendarClass, next_year),
-		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+    g_signal_new ("next_year",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCalendarClass, next_year),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 }
 
 static void
@@ -420,7 +442,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   widget = GTK_WIDGET (calendar);
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
   
-  calendar->private_data = (gpointer) g_malloc (sizeof (GtkCalendarPrivateData));
+  calendar->private_data = g_malloc (sizeof (GtkCalendarPrivateData));
   private_data = GTK_CALENDAR_PRIVATE_DATA (calendar);
 
   if (!default_abbreviated_dayname[0])
@@ -483,7 +505,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 GtkWidget*
 gtk_calendar_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_CALENDAR));
+  return g_object_new (GTK_TYPE_CALENDAR, NULL);
 }
 
 /* column_from_x: returns the column 0-6 that the
@@ -645,10 +667,12 @@ gtk_calendar_set_month_prev (GtkCalendar *calendar)
   gtk_calendar_freeze (calendar);
   gtk_calendar_compute_days (calendar);
   
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[PREV_MONTH_SIGNAL]);
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[MONTH_CHANGED_SIGNAL]);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[PREV_MONTH_SIGNAL],
+		 0);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
+		 0);
   
   if (month_len < calendar->selected_day)
     {
@@ -688,10 +712,12 @@ gtk_calendar_set_month_next (GtkCalendar *calendar)
   
   gtk_calendar_freeze (calendar);
   gtk_calendar_compute_days (calendar);
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[NEXT_MONTH_SIGNAL]);
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[MONTH_CHANGED_SIGNAL]);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[NEXT_MONTH_SIGNAL],
+		 0);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
+		 0);
   
   month_len = month_length[leap (calendar->year)][calendar->month + 1];
   
@@ -717,10 +743,12 @@ gtk_calendar_set_year_prev (GtkCalendar *calendar)
   calendar->year--;
   gtk_calendar_freeze (calendar);
   gtk_calendar_compute_days (calendar);
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[PREV_YEAR_SIGNAL]);
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[MONTH_CHANGED_SIGNAL]);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[PREV_YEAR_SIGNAL],
+		 0);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
+		 0);
   
   month_len = month_length[leap (calendar->year)][calendar->month + 1];
   
@@ -750,10 +778,12 @@ gtk_calendar_set_year_next (GtkCalendar *calendar)
   
   calendar->year++;
   gtk_calendar_compute_days (calendar);
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[NEXT_YEAR_SIGNAL]);
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[MONTH_CHANGED_SIGNAL]);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[NEXT_YEAR_SIGNAL],
+		 0);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
+		 0);
   
   month_len = month_length[leap (calendar->year)][calendar->month + 1];
   
@@ -811,8 +841,9 @@ gtk_calendar_main_button (GtkWidget	 *widget,
   else if (event->type == GDK_2BUTTON_PRESS)
     {
       if (day_month == MONTH_CURRENT)
-	gtk_signal_emit (GTK_OBJECT (calendar),
-			 gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL]);
+	g_signal_emit (calendar,
+		       gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL],
+		       0);
     }
 }
 
@@ -1125,9 +1156,9 @@ gtk_calendar_unrealize (GtkWidget *widget)
       private_data->day_name_win = NULL;      
     }
   if (calendar->xor_gc)
-    gdk_gc_unref (calendar->xor_gc);
+    g_object_unref (calendar->xor_gc);
   if (calendar->gc)
-    gdk_gc_unref (calendar->gc);
+    g_object_unref (calendar->gc);
   
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
@@ -1294,7 +1325,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   
   requisition->height = height + (widget->style->ythickness + INNER_BORDER) * 2;
 
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 static void
@@ -1459,9 +1490,10 @@ gtk_calendar_paint_header (GtkWidget *widget)
   max_year_width = private_data->max_year_width;
   
   gdk_gc_set_foreground (gc, BACKGROUND_COLOR (GTK_WIDGET (calendar)));
-  gtk_draw_shadow (widget->style, private_data->header_win,
-		   GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		   0, 0, header_width, private_data->header_h);
+  gtk_paint_shadow (widget->style, private_data->header_win,
+		    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+		    NULL, widget, "calendar",
+		    0, 0, header_width, private_data->header_h);
   
   
   sprintf (buffer, "%d", calendar->year);
@@ -1503,7 +1535,7 @@ gtk_calendar_paint_header (GtkWidget *widget)
   gtk_calendar_paint_arrow (widget, ARROW_YEAR_LEFT);
   gtk_calendar_paint_arrow (widget, ARROW_YEAR_RIGHT);
 
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 static void
@@ -1600,7 +1632,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 		       layout);
     }
   
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 static void
@@ -1695,7 +1727,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
       gdk_draw_layout (private_data->week_win, gc, x_loc, y_loc, layout);
     }
   
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 static void
@@ -1852,7 +1884,7 @@ gtk_calendar_paint_day (GtkWidget *widget,
 		       day_height);
     }
 
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 
@@ -2110,8 +2142,9 @@ gtk_calendar_select_month (GtkCalendar *calendar,
   gtk_calendar_compute_days (calendar);
   
   gtk_widget_queue_draw (GTK_WIDGET (calendar));
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[MONTH_CHANGED_SIGNAL]);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
+		 0);
   return TRUE;
 }
 
@@ -2144,8 +2177,9 @@ gtk_calendar_select_day (GtkCalendar *calendar,
 	gtk_calendar_paint_day_num (GTK_WIDGET (calendar), day);
     }
   
-  gtk_signal_emit (GTK_OBJECT (calendar),
-		   gtk_calendar_signals[DAY_SELECTED_SIGNAL]);
+  g_signal_emit (calendar,
+		 gtk_calendar_signals[DAY_SELECTED_SIGNAL],
+		 0);
 }
 
 static void
@@ -2442,7 +2476,7 @@ gtk_calendar_paint_arrow (GtkWidget *widget,
       
       gdk_window_clear (window);
       gdk_window_set_background (window, &(widget)->style->bg[state]);
-      gdk_window_get_size (window, &width, &height);
+      gdk_drawable_get_size (window, &width, &height);
       gdk_window_clear_area (window,
 			     0,0,
 			     width,height);

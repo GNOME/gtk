@@ -26,7 +26,6 @@
 
 #include "gtkitem.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 
 
 enum {
@@ -49,25 +48,25 @@ static gint gtk_item_leave      (GtkWidget        *widget,
 static guint item_signals[LAST_SIGNAL] = { 0 };
 
 
-GtkType
+GType
 gtk_item_get_type (void)
 {
-  static GtkType item_type = 0;
+  static GType item_type = 0;
 
   if (!item_type)
     {
       static const GTypeInfo item_info =
       {
 	sizeof (GtkItemClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_item_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkItem),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_item_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
       item_type = g_type_register_static (GTK_TYPE_BIN, "GtkItem",
@@ -80,12 +79,11 @@ gtk_item_get_type (void)
 static void
 gtk_item_class_init (GtkItemClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
-  object_class = (GtkObjectClass*) class;
+  object_class = (GObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-
 
   widget_class->realize = gtk_item_realize;
   widget_class->enter_notify_event = gtk_item_enter;
@@ -96,26 +94,29 @@ gtk_item_class_init (GtkItemClass *class)
   class->toggle = NULL;
 
   item_signals[SELECT] =
-    gtk_signal_new ("select",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkItemClass, select),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("select",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkItemClass, select),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   item_signals[DESELECT] =
-    gtk_signal_new ("deselect",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkItemClass, deselect),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("deselect",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkItemClass, deselect),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   item_signals[TOGGLE] =
-    gtk_signal_new ("toggle",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkItemClass, toggle),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("toggle",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkItemClass, toggle),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_class->activate_signal = item_signals[TOGGLE];
 }
 
@@ -128,19 +129,19 @@ gtk_item_init (GtkItem *item)
 void
 gtk_item_select (GtkItem *item)
 {
-  gtk_signal_emit (GTK_OBJECT (item), item_signals[SELECT]);
+  g_signal_emit (item, item_signals[SELECT], 0);
 }
 
 void
 gtk_item_deselect (GtkItem *item)
 {
-  gtk_signal_emit (GTK_OBJECT (item), item_signals[DESELECT]);
+  g_signal_emit (item, item_signals[DESELECT], 0);
 }
 
 void
 gtk_item_toggle (GtkItem *item)
 {
-  gtk_signal_emit (GTK_OBJECT (item), item_signals[TOGGLE]);
+  g_signal_emit (item, item_signals[TOGGLE], 0);
 }
 
 
@@ -176,7 +177,7 @@ gtk_item_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
 }
 
 static gint
