@@ -2540,6 +2540,8 @@ gtk_clist_draw (GtkWidget * widget,
 {
   GtkCList *clist;
   gint border_width;
+  GdkRectangle child_area;
+  int i;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CLIST (widget));
@@ -2562,7 +2564,13 @@ gtk_clist_draw (GtkWidget * widget,
       gdk_window_clear_area (clist->clist_window,
 			     0, 0, -1, -1);
 
-       draw_rows (clist, NULL);
+      draw_rows (clist, NULL);
+
+      for (i = 0; i < clist->columns; i++)
+	{
+	  if (gtk_widget_intersect (clist->column[i].button, area, &child_area))
+	    gtk_widget_draw (clist->column[i].button, &child_area);
+	}
     }
 }
 
@@ -2760,6 +2768,9 @@ gtk_clist_button_press (GtkWidget * widget,
   for (i = 0; i < clist->columns; i++)
     if (clist->column[i].window && event->window == clist->column[i].window)
       {
+	if (!GTK_WIDGET_HAS_FOCUS (widget))
+	  gtk_widget_grab_focus (widget);
+
 	GTK_CLIST_SET_FLAG (clist, CLIST_IN_DRAG);
 	gtk_widget_get_pointer (widget, &clist->x_drag, NULL);
 
@@ -2774,6 +2785,7 @@ gtk_clist_button_press (GtkWidget * widget,
 	  gdk_gc_set_line_attributes (clist->xor_gc, 1, GDK_LINE_SOLID, 0, 0);
 
 	draw_xor_line (clist);
+	clist->drag_pos = i;
 	return FALSE;
       }
 
@@ -2784,7 +2796,6 @@ static gint
 gtk_clist_button_release (GtkWidget * widget,
 			  GdkEventButton * event)
 {
-  gint i, x, width, visible;
   GtkCList *clist;
 
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -2799,29 +2810,31 @@ gtk_clist_button_release (GtkWidget * widget,
 
   /* release on resize windows */
   if (GTK_CLIST_IN_DRAG (clist))
-    for (i = 0; i < clist->columns; i++)
-      if (clist->column[i].window && event->window == clist->column[i].window)
+    {
+      gint i, x, width, visible;
+
+      i = clist->drag_pos;
+      clist->drag_pos = -1;
+      GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
+      gtk_widget_get_pointer (widget, &x, NULL);
+
+      width = new_column_width (clist, i, &x, &visible);
+      gtk_grab_remove (widget);
+      gdk_pointer_ungrab (event->time);
+
+      if (visible)
+	draw_xor_line (clist);
+
+      if (GTK_CLIST_ADD_MODE (clist))
 	{
-	  GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
-	  gtk_widget_get_pointer (widget, &x, NULL);
-	  width = new_column_width (clist, i, &x, &visible);
-
-	  gtk_grab_remove (widget);
-	  gdk_pointer_ungrab (event->time);
-
-	  if (visible)
-	    draw_xor_line (clist);
-
-	  if (GTK_CLIST_ADD_MODE (clist))
-	    {
-	      gdk_gc_set_line_attributes (clist->xor_gc, 1, 
-					  GDK_LINE_ON_OFF_DASH, 0, 0);
-	      gdk_gc_set_dashes (clist->xor_gc, 0, "\4\4", 2);
-	    }
-
-	  resize_column (clist, i, width);
-	  return FALSE;
+	  gdk_gc_set_line_attributes (clist->xor_gc, 1,
+				      GDK_LINE_ON_OFF_DASH, 0, 0);
+	  gdk_gc_set_dashes (clist->xor_gc, 0, "\4\4", 2);
 	}
+
+      resize_column (clist, i, width);
+      return FALSE;
+    }
 
   if (GTK_CLIST_DRAG_SELECTION (clist))
     {
@@ -2959,44 +2972,52 @@ gtk_clist_motion (GtkWidget * widget,
 		  GdkEventMotion * event)
 {
   GtkCList *clist;
-  gint i, x, y, visible;
+  gint x, y, visible;
   gint row;
+  gint new_width;
+  static gint cc =0;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
 
   clist = GTK_CLIST (widget);
-
+  cc++;
   if (!(gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)))
     return FALSE;
 
   if (GTK_CLIST_IN_DRAG (clist))
-    for (i = 0; i < clist->columns; i++)
-      if (clist->column[i].window && event->window == clist->column[i].window)
+    {
+      if (event->is_hint || event->window != widget->window)
+	gtk_widget_get_pointer (widget, &x, NULL);
+      else
+	x = event->x;
+
+      new_width = new_column_width (clist, clist->drag_pos, &x, &visible);
+      /* Welcome to my hack! I'm going to use a value of x_drag = -99999
+       * to indicate that the xor line is already invisible */
+      
+      if (!visible && clist->x_drag != -99999)
 	{
-	  if (event->is_hint || event->window != widget->window)
-	    gtk_widget_get_pointer (widget, &x, NULL);
-	  else
-	    x = event->x;
-
-	  new_column_width (clist, i, &x, &visible);
-	  /* Welcome to my hack! I'm going to use a value of x_drag = -99999
-	   * to indicate that the xor line is already invisible */
-	  if (!visible && clist->x_drag != -99999)
-	    {
-	      draw_xor_line (clist);
-	      clist->x_drag = -99999;
-	    }
-
-	  if (x != clist->x_drag && visible)
-	    {
-	      if (clist->x_drag != -99999)
-		draw_xor_line (clist);
-
-	      clist->x_drag = x;
-	      draw_xor_line (clist);
-	    }
+	  draw_xor_line (clist);
+	  clist->x_drag = -99999;
 	}
+
+      if (x != clist->x_drag && visible)
+	{
+	  if (clist->x_drag != -99999)
+	    draw_xor_line (clist);
+
+	  clist->x_drag = x;
+	  draw_xor_line (clist);
+	}
+
+      if (new_width <= COLUMN_MIN_WIDTH + 1)
+	{
+	  if (COLUMN_LEFT_XPIXEL (clist, clist->drag_pos) && x < 0)
+	    gtk_clist_moveto (clist, -1, clist->drag_pos, 0, 0);
+	  return FALSE;
+	}
+    }
 
       
   if (event->is_hint || event->window != clist->clist_window)
@@ -3847,6 +3868,7 @@ size_allocate_title_buttons (GtkCList * clist)
 				  button_allocation.x - (DRAG_WIDTH / 2), 
 				  0, DRAG_WIDTH, clist->column_title_area.height);
 	  
+
 	  last_button = i + 1;
 	}
       else
@@ -4142,7 +4164,7 @@ new_column_width (GtkCList * clist,
       rx = cx - clist->hoffset;
     }
 
-  if (cx > clist->clist_window_width)
+  if (cx < 0 || cx > clist->clist_window_width)
     *visible = 0;
   else
     *visible = 1;
@@ -5536,7 +5558,8 @@ abort_column_resize (GtkCList *clist)
 
   GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
   gtk_grab_remove (GTK_WIDGET (clist));
-  gdk_pointer_ungrab (gdk_time_get());
+  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+  clist->drag_pos = -1;
 
   if (clist->x_drag >= 0 && clist->x_drag <= clist->clist_window_width - 1)
     draw_xor_line (clist);
@@ -5552,39 +5575,13 @@ static gint
 gtk_clist_key_press (GtkWidget   * widget,
 		     GdkEventKey * event)
 {
-  GtkCList *clist;
-  gboolean handled = FALSE;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  clist = GTK_CLIST (widget);
-
-
-  if (event->keyval == GDK_Escape && GTK_CLIST_IN_DRAG (clist))
-    {
-      GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
-      gtk_grab_remove (widget);
-      gdk_pointer_ungrab (event->time);
-
-      if (clist->x_drag >= 0 && clist->x_drag <= clist->clist_window_width - 1)
-	draw_xor_line (clist);
-
-      if (GTK_CLIST_ADD_MODE (clist))
-	{
-	  gdk_gc_set_line_attributes (clist->xor_gc, 1, GDK_LINE_ON_OFF_DASH,
-				      0, 0);
-	  gdk_gc_set_dashes (clist->xor_gc, 0, "\4\4", 2);
-	}
-      return TRUE;
-    }
-
-  if (GTK_WIDGET_CLASS (parent_class)->key_press_event)
-    handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
-
-  if (handled)
-    return handled;
+  if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
+      GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+    return TRUE;
 
   switch (event->keyval)
     {

@@ -2495,9 +2495,23 @@ static void gtk_default_draw_focus   (GtkStyle      *style,
      {
 	gdk_gc_set_clip_rectangle (style->black_gc, area);
      }
-   gdk_draw_rectangle (window,
-		       style->black_gc, FALSE,
-		       x, y, width, height);
+   if (detail && !strcmp (detail, "add-mode"))
+     {
+       gdk_gc_set_line_attributes (style->black_gc, 1, GDK_LINE_ON_OFF_DASH, 0, 0);
+       gdk_gc_set_dashes (style->black_gc, 0, "\4\4", 2);
+       
+       gdk_draw_rectangle (window,
+			   style->black_gc, FALSE,
+			   x, y, width, height);
+       
+       gdk_gc_set_line_attributes (style->black_gc, 1, GDK_LINE_SOLID, 0, 0);
+     }
+   else
+     {
+       gdk_draw_rectangle (window,
+			   style->black_gc, FALSE,
+			   x, y, width, height);
+     }
    if (area)
      {
 	gdk_gc_set_clip_rectangle (style->black_gc, NULL);

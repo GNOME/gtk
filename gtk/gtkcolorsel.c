@@ -1147,7 +1147,7 @@ gtk_color_selection_draw_value_bar (GtkColorSelection *colorsel,
       v -= sv;
     }
 
-  gtk_widget_draw (colorsel->value_area, NULL);
+  gtk_widget_queue_draw (colorsel->value_area);
 }
 
 static void
@@ -1253,7 +1253,6 @@ gtk_color_selection_draw_wheel (GtkColorSelection *colorsel,
 	gdk_pixmap_unref(pm);
 	gdk_gc_destroy(pmgc);
      }
-  gtk_widget_draw (colorsel->wheel_area, NULL);
 }
 
 static void
@@ -1318,7 +1317,7 @@ gtk_color_selection_draw_sample (GtkColorSelection *colorsel,
       gtk_preview_draw_row (GTK_PREVIEW (colorsel->sample_area), colorsel->sample_buf, 0, y, wid);
     }
 
-  gtk_widget_draw (colorsel->sample_area, NULL);
+  gtk_widget_queue_draw (colorsel->sample_area);
 }
 
 static gint

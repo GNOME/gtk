@@ -38,6 +38,10 @@ and GTK is a widget set for creating user interfaces.
 
 %changelog
 
+* Tue Aug 04 1998 Michael Fulbright <msf@redhat.com>
+
+- change %postun to %preun
+
 * Mon Jun 27 1998 Shawn T. Amundson
 
 - Changed version to 1.1.0
@@ -128,7 +132,7 @@ rm -rf $RPM_BUILD_ROOT
 /sbin/install-info %{prefix}/info/gdk.info.gz %{prefix}/info/dir
 /sbin/install-info %{prefix}/info/gtk.info.gz %{prefix}/info/dir
 
-%postun devel
+%preun devel
 if [ $1 = 0 ]; then
     /sbin/install-info --delete %{prefix}/info/gdk.info.gz %{prefix}/info/dir
     /sbin/install-info --delete %{prefix}/info/gtk.info.gz %{prefix}/info/dir

@@ -23,7 +23,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkcontainer.h>
-
+#include <gtk/gtklistitem.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,13 +48,22 @@ struct _GtkList
   GList *children;
   GList *selection;
 
-  guint32 timer;
-  guint16 selection_start_pos;
-  guint16 selection_end_pos;
+  GList *undo_selection;
+  GList *undo_unselection;
+
+  GtkWidget *last_focus_child;
+  GtkWidget *undo_focus_child;
+
+  guint htimer;
+  guint vtimer;
+
+  gint anchor;
+  gint drag_pos;
+  GtkStateType anchor_state;
+
   guint selection_mode : 2;
-  guint scroll_direction : 1;
-  guint have_grab : 1;		/* unused */
-  guint16 button;		/* read by GtkCombo */
+  guint drag_selection:1;
+  guint add_mode:1;
 };
 
 struct _GtkListClass
@@ -98,6 +107,26 @@ gint	   gtk_list_child_position	  (GtkList	    *list,
 void	   gtk_list_set_selection_mode	  (GtkList	    *list,
 					   GtkSelectionMode  mode);
 
+void       gtk_list_extend_selection      (GtkList          *list,
+					   GtkScrollType     scroll_type,
+					   gfloat            position,
+					   gboolean          auto_start_selection);
+void       gtk_list_start_selection       (GtkList          *list);
+void       gtk_list_end_selection         (GtkList          *list);
+void       gtk_list_select_all            (GtkList          *list);
+void       gtk_list_unselect_all          (GtkList          *list);
+void       gtk_list_scroll_horizontal     (GtkList          *list,
+					   GtkScrollType     scroll_type,
+					   gfloat            position);
+void       gtk_list_scroll_vertical       (GtkList          *list,
+					   GtkScrollType     scroll_type,
+					   gfloat            position);
+void       gtk_list_toggle_add_mode       (GtkList          *list);
+void       gtk_list_toggle_focus_row      (GtkList          *list);
+void       gtk_list_toggle_row            (GtkList          *list,
+					   GtkWidget        *item);
+void       gtk_list_undo_selection        (GtkList          *list);
+void       gtk_list_end_drag_selection    (GtkList          *list);
 
 #ifdef __cplusplus
 }

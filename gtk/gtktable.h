@@ -87,6 +87,7 @@ struct _GtkTableRowCol
   guint need_shrink : 1;
   guint expand : 1;
   guint shrink : 1;
+  guint empty : 1;
 };
 
 

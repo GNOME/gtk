@@ -1787,7 +1787,9 @@ gtk_widget_draw_data_combine (GtkDrawData *parent, GtkDrawData *child)
 static void
 gtk_widget_clip_rect (GtkWidget *widget,
 		      GdkWindow *window,
-		      GdkRectangle *rect)
+		      GdkRectangle *rect,
+		      gint      *x_offset,
+		      gint      *y_offset)
 {
   gint x,y, width, height;
 
@@ -1795,7 +1797,11 @@ gtk_widget_clip_rect (GtkWidget *widget,
     {
       gdk_window_get_position (window, &x, &y);
       rect->x += x;
+      if (x_offset)
+	*x_offset += x;
       rect->y += y;
+      if (y_offset)
+	*y_offset += y;
       
       window = gdk_window_get_parent (window);
       
@@ -1823,7 +1829,11 @@ gtk_widget_clip_rect (GtkWidget *widget,
 	{
 	  gdk_window_get_position (window, &x, &y);
 	  rect->x += x - widget->allocation.x;
+	  if (x_offset)
+	    *x_offset += x - widget->allocation.x;
 	  rect->y += y - widget->allocation.y;
+	  if (x_offset)
+	    *x_offset += y - widget->allocation.y;
 	}
     }
 }
@@ -1849,7 +1859,8 @@ gtk_widget_idle_draw (gpointer data)
 
 	  if (data->window)
 	    {
-	      gtk_widget_clip_rect (widget, data->window, &data->rect);
+	      gtk_widget_clip_rect (widget, data->window, &data->rect,
+				    NULL, NULL);
 	      data->window = NULL;
 	    }
 	  else
@@ -1889,14 +1900,14 @@ gtk_widget_idle_draw (gpointer data)
 
       while (draw_data_list)
 	{
-	  gint tmp_x, tmp_y;
+	  gint x_offset, y_offset;
 	  GtkDrawData *data = draw_data_list->data;
 	  GSList *parent_list = draw_data_list->next;
 	  GtkWidget *parent;
 	  GdkWindow *window;
 
-	  tmp_x = data->rect.x;
-	  tmp_y = data->rect.y;
+	  x_offset = 0;
+	  y_offset = 0;
 	  
 	  parent = widget;
 	  while (parent)
@@ -1932,10 +1943,13 @@ gtk_widget_idle_draw (gpointer data)
 		    {
 		      gint x, y;
 		      gdk_window_get_position (window, &x, &y);
-		      data->rect.x -= x - widget->allocation.x;
-		      data->rect.y -= y - widget->allocation.y;
+		      data->rect.x -= x - parent->allocation.x;
+		      x_offset -=  x - parent->allocation.x;
+		      data->rect.y -= y - parent->allocation.y;
+		      y_offset -=  y - parent->allocation.y;
 		    }
-		  gtk_widget_clip_rect (parent->parent, window, &data->rect);
+		  gtk_widget_clip_rect (parent->parent, window, &data->rect,
+					&x_offset, &y_offset);
 		}
 
 	      parent = parent->parent;
@@ -1947,8 +1961,14 @@ gtk_widget_idle_draw (gpointer data)
 		parent_list = NULL;
 	    }
 
-	  data->rect.x = tmp_x;
-	  data->rect.y = tmp_y;
+	  /* OK, this rectangle stays around. But take advantage
+	   * of the work we've done to clip it to the visible area -
+	   * rect.width/height have already been appropriately 
+	   * decreased
+	   */
+	  data->rect.x -= x_offset;
+	  data->rect.y -= y_offset;
+
 
 	  prev_node = draw_data_list;
 

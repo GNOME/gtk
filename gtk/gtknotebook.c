@@ -1665,6 +1665,8 @@ gtk_notebook_paint (GtkWidget    *widget,
 		}
 	      else
 		{
+		  gint i = 0;
+
 		  switch (notebook->tab_pos)
 		    {
 		    case GTK_POS_TOP:
