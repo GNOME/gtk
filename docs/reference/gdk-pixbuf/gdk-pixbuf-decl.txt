@@ -6,7 +6,9 @@ GdkPixbuf *pixbuf, gpointer user_data
 <USER_FUNCTION>
 <NAME>ModuleUpdatedNotifyFunc</NAME>
 <RETURNS>void </RETURNS>
-GdkPixbuf *pixbuf, gpointer user_data, guint x, guint y, guint width, guint height
+GdkPixbuf *pixbuf, gpointer user_data,
+					  guint x, guint y,
+					  guint width, guint height
 </USER_FUNCTION>
 <STRUCT>
 <NAME>GdkPixbufModule</NAME>
@@ -18,12 +20,15 @@ struct GdkPixbufModule {
 	gboolean (* format_check) (guchar *buffer, int size);
 	GModule *module;
 	GdkPixbuf *(* load) (FILE *f);
-        GdkPixbuf *(* load_xpm_data) (const gchar **data);
+        GdkPixbuf *(* load_xpm_data) (const char **data);
 
         /* Incremental loading */
-        gpointer   (* begin_load)    (ModulePreparedNotifyFunc prepare_func, ModuleUpdatedNotifyFunc update_func, gpointer user_data);
-        void       (* stop_load)     (gpointer context);
-        gboolean   (* load_increment)(gpointer context, const gchar *buf, guint size);
+
+        gpointer (* begin_load) (ModulePreparedNotifyFunc prepare_func,
+				 ModuleUpdatedNotifyFunc update_func,
+				 gpointer user_data);
+        void (* stop_load) (gpointer context);
+        gboolean (* load_increment) (gpointer context, const guchar *buf, guint size);
 
 	/* Animation loading */
 	GdkPixbufAnimation *(* load_animation) (FILE *f);
@@ -32,7 +37,7 @@ struct GdkPixbufModule {
 <FUNCTION>
 <NAME>gdk_pixbuf_get_module</NAME>
 <RETURNS>GdkPixbufModule  *</RETURNS>
-gchar           *buffer,gint             size
+guchar *buffer, guint size
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_load_module</NAME>
@@ -88,7 +93,7 @@ void
 <FUNCTION>
 <NAME>gdk_pixbuf_loader_write</NAME>
 <RETURNS>gboolean  </RETURNS>
-GdkPixbufLoader *loader,const gchar     *buf,size_t           count
+GdkPixbufLoader *loader,const guchar    *buf,size_t           count
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_loader_get_pixbuf</NAME>
@@ -114,19 +119,9 @@ GdkPixbufLoader *loader
 <STRUCT>
 <NAME>GdkPixbufAnimation</NAME>
 </STRUCT>
-<ENUM>
-<NAME>GdkPixbufFrameAction</NAME>
-typedef enum
-{
-	GDK_PIXBUF_FRAME_RETAIN,
-	GDK_PIXBUF_FRAME_DISPOSE,
-	GDK_PIXBUF_FRAME_REVERT
-} GdkPixbufFrameAction;
-</ENUM>
 <STRUCT>
 <NAME>GdkPixbuf</NAME>
-struct GdkPixbuf
-{
+struct GdkPixbuf {
 	/* Reference count */
 	int ref_count;
 
@@ -134,23 +129,41 @@ struct GdkPixbuf
 	ArtPixBuf *art_pixbuf;
 };
 </STRUCT>
+<ENUM>
+<NAME>GdkPixbufFrameAction</NAME>
+typedef enum {
+	GDK_PIXBUF_FRAME_RETAIN,
+	GDK_PIXBUF_FRAME_DISPOSE,
+	GDK_PIXBUF_FRAME_REVERT
+} GdkPixbufFrameAction;
+</ENUM>
 <STRUCT>
 <NAME>GdkPixbufFrame</NAME>
-struct GdkPixbufFrame
-{
+struct GdkPixbufFrame {
+	/* The pixbuf with this frame's image data */
 	GdkPixbuf *pixbuf;
 
-	gushort x_offset;
-	gushort y_offset;
-	guint delaytime;
+	/* Offsets for overlaying onto the animation's area */
+	int x_offset;
+	int y_offset;
+
+	/* Frame duration in ms */
+	int delay_time;
+
+	/* Overlay mode */
 	GdkPixbufFrameAction action;
 };
 </STRUCT>
 <STRUCT>
 <NAME>GdkPixbufAnimation</NAME>
-struct GdkPixbufAnimation
-{
+struct GdkPixbufAnimation {
+	/* Reference count */
+	int ref_count;
+
+	/* Number of frames */
         int n_frames;
+
+	/* List of GdkPixbufFrame structures */
         GList *frames;
 };
 </STRUCT>
@@ -217,7 +230,7 @@ ArtPixFormat format, gboolean has_alpha, int bits_per_sample,int width, int heig
 <FUNCTION>
 <NAME>gdk_pixbuf_new_from_file</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
-const char        *filename
+const char *filename
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_new_from_data</NAME>
@@ -227,7 +240,7 @@ guchar *data,ArtPixFormat format,gboolean has_alpha,int width, int height,int ro
 <FUNCTION>
 <NAME>gdk_pixbuf_new_from_xpm_data</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
-const gchar      **data
+const char **data
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_add_alpha</NAME>
@@ -264,12 +277,17 @@ GdkPixbuf *dest,GdkDrawable *src, GdkColormap *cmap,int src_x, int src_y,int des
 <FUNCTION>
 <NAME>gdk_pixbuf_animation_new_from_file</NAME>
 <RETURNS>GdkPixbufAnimation  *</RETURNS>
-const char         *filename
+const char *filename
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_pixbuf_animation_destroy</NAME>
+<NAME>gdk_pixbuf_animation_ref</NAME>
 <RETURNS>void  </RETURNS>
-GdkPixbufAnimation *animation,gboolean            free_frames
+GdkPixbufAnimation *animation
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_animation_unref</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbufAnimation *animation
 </FUNCTION>
 <MACRO>
 <NAME>GNOME_TYPE_CANVAS_PIXBUF</NAME>

@@ -6,8 +6,9 @@
 <!entity gdk-pixbuf-rendering SYSTEM "sgml/rendering.sgml">
 <!entity gdk-pixbuf-from-drawables SYSTEM "sgml/from-drawables.sgml">
 <!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
-<!entity GnomeCanvasPixbuf SYSTEM "sgml/gnome-canvas-pixbuf.sgml">
+<!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
 <!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
+<!entity GnomeCanvasPixbuf SYSTEM "sgml/gnome-canvas-pixbuf.sgml">
 ]>
 
 <book>
@@ -50,7 +51,8 @@
     &gdk-pixbuf-rendering;
     &gdk-pixbuf-from-drawables;
     &gdk-pixbuf-util;
-    &GnomeCanvasPixbuf;
+    &gdk-pixbuf-animation;
     &GdkPixbufLoader;
+    &GnomeCanvasPixbuf;
   </reference>
 </book>

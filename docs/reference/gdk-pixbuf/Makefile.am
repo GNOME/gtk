@@ -17,6 +17,7 @@ HTML_DIR=$(datadir)/gnome/html
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 tmpl_sources =					\
+	tmpl/animation.sgml
 	tmpl/creating.sgml			\
 	tmpl/file-loading.sgml			\
 	tmpl/from-drawables.sgml		\

@@ -52,17 +52,11 @@ LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 if INSIDE_GNOME_LIBS
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule
 testpixbuf_drawable_LDADD = $(LDADDS)
+testanimation_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule
 else
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
 testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
-endif
-
-if INSIDE_GNOME_LIBS
-testanimation_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule
-testanimation_drawable_LDADD = $(LDADDS)
-else
 testanimation_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
-testanimation_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
 endif
 
 
@@ -83,6 +77,7 @@ libgdk_pixbufincludedir = $(includedir)/gdk-pixbuf
 
 libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf.c		\
+	gdk-pixbuf-animation.c	\
 	gdk-pixbuf-data.c	\
 	gdk-pixbuf-drawable.c	\
 	gdk-pixbuf-io.c		\

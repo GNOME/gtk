@@ -54,6 +54,15 @@ Application-driven image loading.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_loader_get_animation ##### -->
+<para>
+
+</para>
+
+@loader: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_loader_close ##### -->
 <para>
 

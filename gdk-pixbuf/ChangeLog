@@ -1,3 +1,46 @@
+2000-01-01  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf.h (GdkPixbufAnimation): Added reference
+	counting to animations.  A web browser may want to share a single
+	copy of an animated GIF if it appears multiple times in a web
+	page, for example.
+
+	* gdk-pixbuf/gdk-pixbuf-animation.c: New file.  Moved the
+	animation functions here.
+	(gdk_pixbuf_animation_new_from_file): Prettified.  Return a NULL
+	animation if the loader does not support multiframe loading and
+	the single-frame load returned NULL.  Check that the filename is
+	not NULL.  Updated inline documentation.
+	(gdk_pixbuf_animation_ref): New function.
+	(gdk_pixbuf_animation_unref): New function.
+	Removed gdk_pixbuf_animation_destroy() in favor of reference
+	counting.
+
+	* gdk-pixbuf/gdk-pixbuf-io.c (gdk_pixbuf_new_from_file):
+	Prettified.  Made ref_count assertion more paranoid.  Check that
+	the filename is not NULL.
+	(gdk_pixbuf_get_module): Use guchar * and guint for buffer and
+	size, respectively.
+	(gdk_pixbuf_new_from_xpm_data): Changed the "data" argument to
+	const char **.
+
+	* gdk-pixbuf/io-gif.c (image_load_animation): Create the animation
+	with a reference count of 1.
+
+	* gdk-pixbuf/Makefile.am (libgdk_pixbuf_la_SOURCES): Added
+	gdk-pixbuf-animation.c.
+
+	* doc/tmpl/animation.sgml: Populated.  It is still missing a
+	description of the overlay modes.
+
+	* doc/gdk-pixbuf-sections.txt: Added the animation section.  Moved
+	the canvas item section to the end, as it will be moved later to
+	gnome-libs.
+
+	* doc/gdk-pixbuf.sgml: Added the animation section.
+
+	* doc/Makefile.am (tmpl_sources): Added tmpl/animation.sgml.
+
 1999-12-26  Peter Teichman  <pat@gnu.org>
 
 	* gdk-pixbuf/Makefile.am (libpixbuf_tiff_la_LIBADD): add
@@ -88,9 +131,9 @@
 
 1999-12-08  Arjan van de Ven <arjan@fenrus.demon.nl>
 
-	* gdk-pixbuf/gdk-pixbuf-drawable.c : Fixed the red/green/red 
+	* gdk-pixbuf/gdk-pixbuf-drawable.c : Fixed the red/green/red
 	bug on two occasions.
-	* gdk-pixbuf/io-ras.c: Changed from the custom be32_to_cpu 
+	* gdk-pixbuf/io-ras.c: Changed from the custom be32_to_cpu
 	function to the generic glib one.
 
 1999-12-08  Federico Mena Quintero  <federico@redhat.com>

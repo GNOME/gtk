@@ -13,12 +13,10 @@ Getting parts of a drawable's image data into a pixbuf.
     transferred from the X server to the client program and converted.
   </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
   <para>
     #GdkPixbuf, gdk_image_get()
   </para>
-
 
 <!-- ##### FUNCTION gdk_pixbuf_get_from_drawable ##### -->
 <para>
@@ -36,10 +34,11 @@ Getting parts of a drawable's image data into a pixbuf.
 @height: 
 @Returns: 
 
-
 <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

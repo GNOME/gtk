@@ -167,11 +167,10 @@ gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,
 ArtPixFormat
 gdk_pixbuf_get_format (GdkPixbuf *pixbuf)
 {
-	/* Unfortunately, there's nothing else to return */
 	g_return_val_if_fail (pixbuf != NULL, ART_PIX_RGB);
 	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return (pixbuf->art_pixbuf->format);
+	return pixbuf->art_pixbuf->format;
 }
 
 /**
@@ -188,7 +187,7 @@ gdk_pixbuf_get_n_channels (GdkPixbuf *pixbuf)
 	g_return_val_if_fail (pixbuf != NULL, -1);
 	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return (pixbuf->art_pixbuf->n_channels);
+	return pixbuf->art_pixbuf->n_channels;
 }
 
 /**
@@ -205,7 +204,7 @@ gdk_pixbuf_get_has_alpha (GdkPixbuf *pixbuf)
 	g_return_val_if_fail (pixbuf != NULL, -1);
 	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return (pixbuf->art_pixbuf->has_alpha);
+	return pixbuf->art_pixbuf->has_alpha;
 }
 
 /**
@@ -222,7 +221,7 @@ gdk_pixbuf_get_bits_per_sample (GdkPixbuf *pixbuf)
 	g_return_val_if_fail (pixbuf != NULL, -1);
 	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return (pixbuf->art_pixbuf->bits_per_sample);
+	return pixbuf->art_pixbuf->bits_per_sample;
 }
 
 /**
@@ -239,7 +238,7 @@ gdk_pixbuf_get_pixels (GdkPixbuf *pixbuf)
 	g_return_val_if_fail (pixbuf != NULL, NULL);
 	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return (pixbuf->art_pixbuf->pixels);
+	return pixbuf->art_pixbuf->pixels;
 }
 
 /**
@@ -256,7 +255,7 @@ gdk_pixbuf_get_width (GdkPixbuf *pixbuf)
 	g_return_val_if_fail (pixbuf != NULL, -1);
 	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return (pixbuf->art_pixbuf->width);
+	return pixbuf->art_pixbuf->width;
 }
 
 /**
@@ -273,7 +272,7 @@ gdk_pixbuf_get_height (GdkPixbuf *pixbuf)
 	g_return_val_if_fail (pixbuf != NULL, -1);
 	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return (pixbuf->art_pixbuf->height);
+	return pixbuf->art_pixbuf->height;
 }
 
 /**
@@ -290,33 +289,5 @@ gdk_pixbuf_get_rowstride (GdkPixbuf *pixbuf)
 	g_return_val_if_fail (pixbuf != NULL, -1);
 	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return (pixbuf->art_pixbuf->rowstride);
+	return pixbuf->art_pixbuf->rowstride;
 }
-
-/**
- * gdk_pixbuf_animation_destroy:
- * @animation: An animation.
- * @free_frames: Keep the frames.
- * 
- * Destroys the animation.  If @free_frames is set, then the actual image data
- * will be free'd as well.
- *
- **/
-void
-gdk_pixbuf_animation_destroy (GdkPixbufAnimation *animation,
-			      gboolean free_frames)
-{
-	GList *ptr;
-
-	g_return_if_fail (animation != NULL);
-
-	for (ptr = animation->frames; ptr; ptr = g_list_next (ptr)) {
-		if (free_frames)
-			gdk_pixbuf_unref (((GdkPixbufFrame *)ptr->data)->pixbuf);
-		g_free (ptr->data);
-	}
-	g_list_free (animation->frames);
-
-	g_free (animation);
-}
-

@@ -210,7 +210,7 @@ gif_read (GifContext *context, guchar *buffer, size_t len)
 		return retval;
 	} else {
 #ifdef IO_GIFDEBUG
-//		g_print ("\tlooking for %d bytes.  size == %d, ptr == %d\n", len, context->size, context->ptr);
+/*  		g_print ("\tlooking for %d bytes.  size == %d, ptr == %d\n", len, context->size, context->ptr); */
 #endif
 		if ((context->size - context->ptr) >= len) {
 #ifdef IO_GIFDEBUG
@@ -378,7 +378,7 @@ static int
 GetDataBlock (GifContext *context,
 	      unsigned char *buf)
 {
-//	unsigned char count;
+/*  	unsigned char count; */
 
 	if (!gif_read (context, &context->block_count, 1)) {
 		/*g_message (_("GIF: error in getting DataBlock size\n"));*/
@@ -1107,9 +1107,11 @@ image_stop_load (gpointer data)
 {
 	GifContext *context = (GifContext *) data;
 
+	/* FIXME: free the animation data */
+
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
-//	g_free (context->buf);
+/*  	g_free (context->buf); */
 	g_free (context);
 }
 
@@ -1180,6 +1182,7 @@ image_load_animation (FILE *file)
 
 	context = new_context ();
 	context->animation = g_new (GdkPixbufAnimation, 1);
+	context->animation->ref_count = 1;
 	context->animation->n_frames = 0;
 	context->animation->frames = NULL;
 	context->file = file;

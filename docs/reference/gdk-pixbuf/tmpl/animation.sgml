@@ -1,0 +1,86 @@
+<!-- ##### SECTION Title ##### -->
+Animations
+
+<!-- ##### SECTION Short_Description ##### -->
+Animations as multi-frame structures.
+
+<!-- ##### SECTION Long_Description ##### -->
+  <para>
+    The GdkPixbuf library provides a simple mechanism to load and
+    represent animations, primarily animated GIF files.  Animations
+    are represented as lists of #GdkPixbufFrame structures.  Each
+    frame structure contains a #GdkPixbuf structure and information
+    about the frame's overlay mode and duration.
+  </para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+    #GdkPixbufLoader
+  </para>
+
+
+<!-- ##### ENUM GdkPixbufFrameAction ##### -->
+  <para>
+    
+  </para>
+
+@GDK_PIXBUF_FRAME_RETAIN: 
+@GDK_PIXBUF_FRAME_DISPOSE: 
+@GDK_PIXBUF_FRAME_REVERT: 
+
+<!-- ##### STRUCT GdkPixbufFrame ##### -->
+  <para>
+    This structure describes a frame in a #GdkPixbufAnimation.  Each
+    frame consists of a #GdkPixbuf, an offset of the frame within the
+    animation's bounding box, a duration, and an overlay mode or
+    action.
+  </para>
+
+@pixbuf: The frame's image contents.
+@x_offset: X offset of the frame inside the animation's bounding box.
+@y_offset: Y offset of the frame inside the animation's bounding box.
+@delay_time: Duration of the frame in milliseconds.
+@action: Overlay mode.
+
+<!-- ##### STRUCT GdkPixbufAnimation ##### -->
+  <para>
+    This structure describes an animation, which is represented as a
+    list of #GdkPixbufFrame structures.
+  </para>
+
+@ref_count: Reference count.
+@n_frames: Number of frames in the animation.
+@frames: List of #GdkPixbufFrame structures.
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_new_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_ref ##### -->
+<para>
+
+</para>
+
+@animation: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_unref ##### -->
+<para>
+
+</para>
+
+@animation: 
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

@@ -38,7 +38,9 @@ extern "C" {
 
 
 typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data);
-typedef void (* ModuleUpdatedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data, guint x, guint y, guint width, guint height);
+typedef void (* ModuleUpdatedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data,
+					  guint x, guint y,
+					  guint width, guint height);
 
 typedef struct _GdkPixbufModule GdkPixbufModule;
 struct _GdkPixbufModule {
@@ -46,22 +48,23 @@ struct _GdkPixbufModule {
 	gboolean (* format_check) (guchar *buffer, int size);
 	GModule *module;
 	GdkPixbuf *(* load) (FILE *f);
-        GdkPixbuf *(* load_xpm_data) (const gchar **data);
+        GdkPixbuf *(* load_xpm_data) (const char **data);
 
         /* Incremental loading */
-        gpointer   (* begin_load)    (ModulePreparedNotifyFunc prepare_func, ModuleUpdatedNotifyFunc update_func, gpointer user_data);
-        void       (* stop_load)     (gpointer context);
-        gboolean   (* load_increment)(gpointer context, const gchar *buf, guint size);
+
+        gpointer (* begin_load) (ModulePreparedNotifyFunc prepare_func,
+				 ModuleUpdatedNotifyFunc update_func,
+				 gpointer user_data);
+        void (* stop_load) (gpointer context);
+        gboolean (* load_increment) (gpointer context, const guchar *buf, guint size);
 
 	/* Animation loading */
 	GdkPixbufAnimation *(* load_animation) (FILE *f);
 };
 
 
-GdkPixbufModule *gdk_pixbuf_get_module  (gchar           *buffer,
-					 gint             size);
-void             gdk_pixbuf_load_module (GdkPixbufModule *image_module);
-
+GdkPixbufModule *gdk_pixbuf_get_module (guchar *buffer, guint size);
+void gdk_pixbuf_load_module (GdkPixbufModule *image_module);
 
 
 

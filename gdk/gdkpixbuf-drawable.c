@@ -5,7 +5,7 @@
  *
  * Authors: Michael Zucchi <zucchi@zedzone.mmc.com.au>
  *          Cody Russell <bratsche@dfw.net>
- * 	    Federico
+ * 	    Federico Mena-Quintero <federico@gimp.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -952,7 +952,7 @@ rgbconvert (GdkImage *image, art_u8 *pixels, int rowstride, int alpha, GdkColorm
 			if (v->red_mask == 0xf800 && v->green_mask == 0x7e0 && v->blue_mask == 0x1f
 			    && image->bpp == 16)
 				bank = 3;
-			break;			
+			break;
 		case 24:
 		case 32:
 			if (v->red_mask == 0xff0000 && v->green_mask == 0xff00 && v->blue_mask == 0xff
@@ -1030,7 +1030,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 			      int width, int height)
 {
 	GdkWindowType window_type;
-	gint src_width, src_height;
+	int src_width, src_height;
 	ArtPixBuf *apb = NULL;
 	GdkImage *image;
 	int rowstride, bpp, alpha;
@@ -1076,7 +1076,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 
 	if (window_type != GDK_WINDOW_PIXMAP) {
 		int ret;
-		gint src_xorigin, src_yorigin;
+		int src_xorigin, src_yorigin;
 		int screen_width, screen_height;
 		int screen_srcx, screen_srcy;
 

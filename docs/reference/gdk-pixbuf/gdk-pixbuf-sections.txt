@@ -51,6 +51,35 @@ gdk_pixbuf_add_alpha
 </SECTION>
 
 <SECTION>
+<FILE>animation</FILE>
+GdkPixbufFrameAction
+GdkPixbufFrame
+GdkPixbufAnimation
+gdk_pixbuf_animation_new_from_file
+gdk_pixbuf_animation_ref
+gdk_pixbuf_animation_unref
+</SECTION>
+
+<SECTION>
+<FILE>gdk-pixbuf-loader</FILE>
+GDK_PIXBUF_LOADER
+<TITLE>GdkPixbufLoader</TITLE>
+gdk_pixbuf_loader_new
+gdk_pixbuf_loader_write
+gdk_pixbuf_loader_get_pixbuf
+gdk_pixbuf_loader_get_animation
+gdk_pixbuf_loader_close
+<SUBSECTION Standard>
+GDK_TYPE_PIXBUF_LOADER
+GDK_IS_PIXBUF_LOADER
+gdk_pixbuf_loader_get_type
+GDK_PIXBUF_LOADER_CLASS
+GDK_IS_PIXBUF_LOADER_CLASS
+<SUBSECTION Private>
+GdkPixbufLoader
+</SECTION>
+
+<SECTION>
 <FILE>gnome-canvas-pixbuf</FILE>
 GNOME_CANVAS_PIXBUF
 <TITLE>GnomeCanvasPixbuf</TITLE>
@@ -62,22 +91,4 @@ GNOME_CANVAS_PIXBUF_CLASS
 GNOME_IS_CANVAS_PIXBUF_CLASS
 <SUBSECTION Private>
 GnomeCanvasPixbuf
-</SECTION>
-
-<SECTION>
-<FILE>gdk-pixbuf-loader</FILE>
-GDK_PIXBUF_LOADER
-<TITLE>GdkPixbufLoader</TITLE>
-gdk_pixbuf_loader_new
-gdk_pixbuf_loader_write
-gdk_pixbuf_loader_get_pixbuf
-gdk_pixbuf_loader_close
-<SUBSECTION Standard>
-GDK_TYPE_PIXBUF_LOADER
-GDK_IS_PIXBUF_LOADER
-gdk_pixbuf_loader_get_type
-GDK_PIXBUF_LOADER_CLASS
-GDK_IS_PIXBUF_LOADER_CLASS
-<SUBSECTION Private>
-GdkPixbufLoader
 </SECTION>

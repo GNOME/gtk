@@ -58,7 +58,7 @@ typedef struct {
 	GdkPixbuf *pixbuf;
 	GdkPixbufAnimation *animation;
 	gboolean closed;
-	gchar header_buf[LOADER_HEADER_SIZE];
+	guchar header_buf[LOADER_HEADER_SIZE];
 	gint header_buf_offset;
 	GdkPixbufModule *image_module;
 	gpointer context;
@@ -290,7 +290,7 @@ gdk_pixbuf_loader_load_module(GdkPixbufLoader *loader)
 }
 
 static int
-gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, const gchar *buf, size_t count)
+gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, const guchar *buf, size_t count)
 {
 	int nbytes;
 	GdkPixbufLoaderPrivate *priv = loader->private;
@@ -321,7 +321,7 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, const gchar *buf, s
  * cannot parse the buffer.
  **/
 gboolean
-gdk_pixbuf_loader_write (GdkPixbufLoader *loader, const gchar *buf, size_t count)
+gdk_pixbuf_loader_write (GdkPixbufLoader *loader, const guchar *buf, size_t count)
 {
 	GdkPixbufLoaderPrivate *priv;
 

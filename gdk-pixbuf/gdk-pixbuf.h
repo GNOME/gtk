@@ -40,15 +40,7 @@ typedef struct _GdkPixbuf GdkPixbuf;
 typedef struct _GdkPixbufFrame GdkPixbufFrame;
 typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
 
-typedef enum
-{
-	GDK_PIXBUF_FRAME_RETAIN,
-	GDK_PIXBUF_FRAME_DISPOSE,
-	GDK_PIXBUF_FRAME_REVERT
-} GdkPixbufFrameAction;
-
-struct _GdkPixbuf
-{
+struct _GdkPixbuf {
 	/* Reference count */
 	int ref_count;
 
@@ -56,21 +48,36 @@ struct _GdkPixbuf
 	ArtPixBuf *art_pixbuf;
 };
 
+/* GIF-like animation overlay modes for frames */
+typedef enum {
+	GDK_PIXBUF_FRAME_RETAIN,
+	GDK_PIXBUF_FRAME_DISPOSE,
+	GDK_PIXBUF_FRAME_REVERT
+} GdkPixbufFrameAction;
 
-struct _GdkPixbufFrame
-{
+struct _GdkPixbufFrame {
+	/* The pixbuf with this frame's image data */
 	GdkPixbuf *pixbuf;
 
-	gushort x_offset;
-	gushort y_offset;
-	gint delay_time;
+	/* Offsets for overlaying onto the animation's area */
+	int x_offset;
+	int y_offset;
+
+	/* Frame duration in ms */
+	int delay_time;
+
+	/* Overlay mode */
 	GdkPixbufFrameAction action;
 };
 
+struct _GdkPixbufAnimation {
+	/* Reference count */
+	int ref_count;
 
-struct _GdkPixbufAnimation
-{
+	/* Number of frames */
         int n_frames;
+
+	/* List of GdkPixbufFrame structures */
         GList *frames;
 };
 
@@ -92,35 +99,34 @@ int          gdk_pixbuf_get_rowstride       (GdkPixbuf *pixbuf);
 void gdk_pixbuf_ref (GdkPixbuf *pixbuf);
 void gdk_pixbuf_unref (GdkPixbuf *pixbuf);
 
-/* Constructors */
 /* Wrap a libart pixbuf */
-
 GdkPixbuf *gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf);
 
 /* Create a blank pixbuf with an optimal rowstride and a new buffer */
-
 GdkPixbuf *gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,
 			   int width, int height);
 
 /* Simple loading */
 
-GdkPixbuf *gdk_pixbuf_new_from_file     (const char        *filename);
-GdkPixbuf *gdk_pixbuf_new_from_data     (guchar *data,
-					 ArtPixFormat format,
-					 gboolean has_alpha,
-					 int width, int height,
-					 int rowstride,
-					 ArtDestroyNotify dfunc,
-					 gpointer dfunc_data);
-GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const gchar      **data);
+GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename);
 
-/* Adding or removing alpha */
+GdkPixbuf *gdk_pixbuf_new_from_data (guchar *data,
+				     ArtPixFormat format,
+				     gboolean has_alpha,
+				     int width, int height,
+				     int rowstride,
+				     ArtDestroyNotify dfunc,
+				     gpointer dfunc_data);
 
+GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data);
+
+/* Adding an alpha channel */
 GdkPixbuf *gdk_pixbuf_add_alpha (GdkPixbuf *pixbuf, gboolean substitute_color,
 				 guchar r, guchar g, guchar b);
 
 /* Rendering to a drawable */
 
+/* Alpha compositing mode */
 typedef enum {
 	GDK_PIXBUF_ALPHA_BILEVEL,
 	GDK_PIXBUF_ALPHA_FULL
@@ -149,7 +155,6 @@ void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawab
 					  GdkRgbDither dither,
 					  int x_dither, int y_dither);
 
-
 /* Fetching a region from a drawable */
 GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 					 GdkDrawable *src, GdkColormap *cmap,
@@ -157,14 +162,12 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 					 int dest_x, int dest_y,
 					 int width, int height);
 
-
+/* Animation support */
 
-/* Animation loading */
+GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char *filename);
 
-GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char         *filename);
-void                gdk_pixbuf_animation_destroy       (GdkPixbufAnimation *animation,
-							gboolean            free_frames);
-
+void gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation);
+void gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation);
 
 
 
