@@ -39,7 +39,6 @@ Thu Feb 21 16:51:17 2002  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkmenushell.c (gtk_menu_shell_key_press): Use
 	_gtk_window_activate_key(), gtk_bindings_activate_event().
 
->>>>>>> 1.3066
 Thu Feb 21 12:24:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c (gtk_ctree_class_init): Remove some workarounds
