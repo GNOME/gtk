@@ -1682,8 +1682,8 @@ gtk_grab_notify_foreach (GtkWidget *child,
   if (was_grabbed != is_grabbed)
     {
       g_object_ref (child);
-      
-      g_signal_emit_by_name (child, "grab_notify", was_grabbed);
+
+      _gtk_widget_grab_notify (child, was_grabbed);
       
       if (GTK_IS_CONTAINER (child))
 	gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);

@@ -3804,6 +3804,22 @@ gtk_widget_region_intersect (GtkWidget *widget,
 }
 
 /**
+ * _gtk_widget_grab_notify:
+ * @widget: a #GtkWidget
+ * @was_grabbed: whether a grab is now in effect
+ * 
+ * Emits the signal "grab_notify" on @widget.
+ * 
+ * Since: 2.6
+ **/
+void
+_gtk_widget_grab_notify (GtkWidget *widget,
+			 gboolean   was_grabbed)
+{
+  g_signal_emit (widget, widget_signals[GRAB_NOTIFY], 0, was_grabbed);
+}
+
+/**
  * gtk_widget_grab_focus:
  * @widget: a #GtkWidget
  * 

@@ -1,3 +1,10 @@
+Mon May 10 15:03:50 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkwidget.c (_gtk_widget_grab_notify): New internal function
+	that emits the grab notify signal.
+	
+	* gtk/gtkmain.c (gtk_grab_notify_foreach): Use it here.
+
 Mon May 10 00:48:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenu.c: Make destruction of a torn off menu work 
