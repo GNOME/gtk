@@ -1,5 +1,8 @@
 2003-01-04  Tor Lillqvist  <tml@iki.fi>
 
+	* Makefile.am (EXTRA_DIST): Don't distribute gtk-zip.sh, but do
+	distribute gtk-zip.sh.in.
+
 	* gtk-zip.sh.in (DEVZIP): Add gdk-pixbuf-csource.exe and .1.
 
 2003-01-03  Havoc Pennington  <hp@pobox.com>
