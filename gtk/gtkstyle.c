@@ -23,6 +23,7 @@
 #include "gtkthemes.h"
 #include "gtkwidget.h"
 #include "gtkthemes.h"
+#include "gtkprivate.h"
 #include "gdk/gdkprivate.h"
 
 
@@ -373,8 +374,9 @@ void
 gtk_reset_widget_shapes(GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-  
-  gtk_reset_window_and_children(widget, widget->window);
+
+  if (!GTK_WIDGET_HAS_SHAPE_MASK(GTK_OBJECT(widget)))
+    gtk_reset_window_and_children(widget, widget->window);
 }
 
 GtkStyle*

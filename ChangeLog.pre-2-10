@@ -1,3 +1,8 @@
+Mon Sep 28 21:07:01 EDT 1998 The Rasterman <raster@redhat.com>
+	* gtk/gtkstyle.c: added check to see if the widget has been shaped
+	byt the app via gtk_widget_shape_combine_mask and if it has does
+	not reset the shape on theme change.
+	
 Tue Sep 15 11:30:03 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c: Keep a list of directories in which we never
