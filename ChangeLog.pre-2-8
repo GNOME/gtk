@@ -1,3 +1,10 @@
+2003-09-17  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (text_handler): Report unexpected character
+	data as error from the GMarkup parser, otherwise things like
+	gtk_ui_manager_add_ui_from_string (ui, "Hi there!", -1, &error) 
+	pass unexpectedly.
+
 Wed Sep 17 02:38:53 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_class_init): revert accidentally

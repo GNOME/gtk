@@ -1087,20 +1087,50 @@ cleanup (GMarkupParseContext *context,
   gtk_ui_manager_remove_ui (ctx->self, ctx->merge_id);
 }
 
-static GMarkupParser ui_parser = {
-  start_element_handler,
-  end_element_handler,
-  NULL,
-  NULL,
-  cleanup
-};
-
-
 static gboolean
 xml_isspace (char c)
 {
   return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 }
+
+static void 
+text_handler (GMarkupParseContext *context,
+	      const gchar         *text,
+	      gsize                text_len,  
+	      gpointer             user_data,
+	      GError             **error)
+{
+  const gchar *p;
+  const gchar *end;
+
+  p = text;
+  end = text + text_len;
+  while (p != end && xml_isspace (*p))
+    ++p;
+  
+  if (p != end)
+    {
+      gint line_number, char_number;
+      
+      g_markup_parse_context_get_position (context,
+					   &line_number, &char_number);
+      g_set_error (error,
+		   G_MARKUP_ERROR,
+		   G_MARKUP_ERROR_INVALID_CONTENT,
+		   _("Unexpected character data on line %d char %d"),
+		   line_number, char_number);
+    }
+}
+
+
+static GMarkupParser ui_parser = {
+  start_element_handler,
+  end_element_handler,
+  text_handler,
+  NULL,
+  cleanup
+};
+
 
 static guint
 add_ui_from_string (GtkUIManager *self,
