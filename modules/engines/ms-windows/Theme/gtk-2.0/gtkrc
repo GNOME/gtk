@@ -16,13 +16,3 @@ style "wimp-default"
 }
 
 class "GtkWidget" style "wimp-default"
-
-style "wimp-scrollbar"
-{
-  GtkRange::trough_border = 0
-  GtkRange::slider_width = 15
-  GtkRange::stepper_size = 15
-  GtkRange::stepper_spacing = 0
-}
-
-class "GtkScrollbar" style "wimp-scrollbar"
