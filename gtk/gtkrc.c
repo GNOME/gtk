@@ -2717,7 +2717,7 @@ gtk_rc_parse_style (GtkRcContext *context,
 	      name = g_strdup (scanner->value.v_identifier);
 	      g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
 	      prop.property_name = g_quark_from_string (name);
-	      g_free (name)
+	      g_free (name);
 
 	      token = gtk_rc_parse_assignment (scanner, &prop);
 	      if (token == G_TOKEN_NONE)
