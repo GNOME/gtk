@@ -1,3 +1,7 @@
+2003-01-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in (DEVZIP): Add gdk-pixbuf-source.exe and .1.
+
 2002-12-21  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Move the code that
