@@ -375,8 +375,14 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	} else if (State->Compressed == BI_BITFIELDS) {
 		State->read_state = READ_STATE_BITMASKS;
 		State->BufferSize = 12;
-	} else
-		g_assert_not_reached ();
+	} else {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("BMP image has bogus header data"));
+		State->read_state = READ_STATE_ERROR;
+		return FALSE;
+	}
 
 	State->buff = g_realloc (State->buff, State->BufferSize);
 
