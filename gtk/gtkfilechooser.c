@@ -361,6 +361,9 @@ gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
  * Gets the filename for the currently selected file in
  * the file selector. If multiple files are selected,
  * one of the filenames will be returned at random.
+ *
+ * If the file chooser is in folder mode, this function returns the selected
+ * folder.
  * 
  * Return value: The currently selected filename, or %NULL
  *  if no file is selected, or the selected file can't
@@ -628,6 +631,9 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
  * Gets the URI for the currently selected file in
  * the file selector. If multiple files are selected,
  * one of the filenames will be returned at random.
+ * 
+ * If the file chooser is in folder mode, this function returns the selected
+ * folder.
  * 
  * Return value: The currently selected URI, or %NULL
  *  if no file is selected. Free with g_free()

@@ -1,5 +1,19 @@
 2004-01-16  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_set_property): Do not allow setting
+	select_multiple when in Save mode.
+	(set_list_model): No need to nullify the list_model and
+	sort_model.
+	(gtk_file_chooser_default_get_paths): Handle folder mode as well.
+	(get_paths_foreach): Likewise.
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_get_filename): Clarify
+	documentation about folder mode.
+	(gtk_file_chooser_get_uri): Likewise.
+
+2004-01-16  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilesystem.h (struct _GtkFileSystemIface): New
 	get_volume_for_path() method.
 	(struct _GtkFileSystemIface): Finally removed the list_roots() and

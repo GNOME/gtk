@@ -1615,6 +1615,12 @@ gtk_file_chooser_default_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       {
 	gboolean select_multiple = g_value_get_boolean (value);
+	if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE && select_multiple)
+	  {
+	    g_warning ("Multiple selection mode is not allowed in Save mode");
+	    return;
+	  }
+
 	if (select_multiple != impl->select_multiple)
 	  {
 	    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
@@ -1855,10 +1861,7 @@ set_list_model (GtkFileChooserDefault *impl)
   if (impl->list_model)
     {
       g_object_unref (impl->list_model);
-      impl->list_model = NULL;
-
       g_object_unref (impl->sort_model);
-      impl->sort_model = NULL;
     }
 
   impl->list_model = _gtk_file_system_model_new (impl->file_system,
@@ -2117,22 +2120,29 @@ struct get_paths_closure {
 
 static void
 get_paths_foreach (GtkTreeModel *model,
-		   GtkTreePath   *path,
-		   GtkTreeIter   *iter,
-		   gpointer       data)
+		   GtkTreePath  *path,
+		   GtkTreeIter  *iter,
+		   gpointer      data)
 {
-  GtkTreePath *child_path;
-  GtkTreeIter child_iter;
-  const GtkFilePath *file_path;
   struct get_paths_closure *info;
+  const GtkFilePath *file_path;
+  GtkFileSystemModel *fs_model;
+  GtkTreeIter sel_iter;
 
   info = data;
 
-  child_path = gtk_tree_model_sort_convert_path_to_child_path (info->impl->sort_model, path);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (info->impl->list_model), &child_iter, child_path);
-  gtk_tree_path_free (child_path);
+  if (info->impl->folder_mode)
+    {
+      fs_model = info->impl->tree_model;
+      sel_iter = *iter;
+    }
+  else
+    {
+      fs_model = info->impl->list_model;
+      gtk_tree_model_sort_convert_iter_to_child_iter (info->impl->sort_model, &sel_iter, iter);
+    }
 
-  file_path = _gtk_file_system_model_get_path (info->impl->list_model, &child_iter);
+  file_path = _gtk_file_system_model_get_path (fs_model, &sel_iter);
   info->result = g_slist_prepend (info->result, gtk_file_path_copy (file_path));
 }
 
@@ -2145,41 +2155,48 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
 
   if (gtk_file_chooser_get_action (chooser) == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
-      if (!gtk_file_chooser_get_select_multiple (chooser))
+      GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (impl->entry);
+      const GtkFilePath *folder_path = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
+      const gchar *file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
+
+      if (file_part != NULL && file_part[0] != '\0')
 	{
-	  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (impl->entry);
-	  const GtkFilePath *folder_path = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
-	  const gchar *file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
+	  GtkFilePath *selected;
+	  GError *error = NULL;
 
-	  if (file_part != NULL && file_part[0] != '\0')
+	  selected = gtk_file_system_make_path (impl->file_system, folder_path, file_part, &error);
+
+	  if (!selected)
 	    {
-	      GtkFilePath *selected;
-	      GError *error = NULL;
+	      char *msg;
 
-	      selected = gtk_file_system_make_path (impl->file_system, folder_path, file_part, &error);
-
-	      if (!selected)
-		{
-		  char *msg;
-
-		  msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
- 					 gtk_file_path_get_string (folder_path),
-					 file_part,
-					 error->message);
-		  error_message (impl, msg);
-		  g_free (msg);
-		  return NULL;
-		}
-
-	      return g_slist_append (NULL, selected);
+	      msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
+				     gtk_file_path_get_string (folder_path),
+				     file_part,
+				     error->message);
+	      error_message (impl, msg);
+	      g_free (msg);
+	      return NULL;
 	    }
+
+	  return g_slist_append (NULL, selected);
 	}
     }
 
-  if (!impl->sort_model)
-    return NULL;
+  if (impl->folder_mode)
+    {
+      if (!impl->tree_model)
+	return NULL;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->tree));
+    }
+  else
+    {
+      if (!impl->sort_model)
+	return NULL;
+
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+    }
 
   info.result = NULL;
   info.impl = impl;
