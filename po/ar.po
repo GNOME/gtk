@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-02-29 11:12+0100\n"
+"POT-Creation-Date: 2004-03-17 04:08+0100\n"
+"PO-Revision-Date: 2004-03-17 12:00+0100\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:769
 #: gdk-pixbuf/gdk-pixbuf-io.c:902 tests/testfilechooser.c:192
@@ -141,11 +141,9 @@ msgid "Image pixel data corrupt"
 msgstr "البيانات البكسلية للصورة تالفة"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "فشل تخصيص ذاكرة وسيطة للصورة بحجم %u بايتا"
-msgstr[1] "فشل تخصيص ذاكرة وسيطة للصورة بحجم %u بايتا"
+msgstr "فشل تخصيص ذاكرة وسيطة للصورة بحجم %u بايتا"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -938,12 +936,12 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not change the current folder to %s:\n"
 "%s"
 msgstr ""
-"لم يمكن الذهاب للدليل الاب لـ %s:\n"
+"لم يمكن تغيير المجلد الحالي لـ %s:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:809
@@ -998,9 +996,8 @@ msgid "_Remove"
 msgstr "_حذف"
 
 #: gtk/gtkfilechooserdefault.c:2628
-#, fuzzy
 msgid "Name"
-msgstr "الإ_سم:"
+msgstr "الإ_سم"
 
 #: gtk/gtkfilechooserdefault.c:2650
 msgid "Size"
@@ -1025,19 +1022,16 @@ msgid "_Browse for other folders"
 msgstr "_تصفح لمجلدات أخرى"
 
 #: gtk/gtkfilechooserdefault.c:3111
-#, fuzzy
 msgid "Save in _folder:"
 msgstr "حفظ في ال_مجلد:"
 
 #: gtk/gtkfilechooserdefault.c:3113
-#, fuzzy
 msgid "Create in _folder:"
-msgstr "إنشاء _مجلد"
+msgstr "إنشاء في ال _مجلد:"
 
 #: gtk/gtkfilechooserdefault.c:3701
-#, fuzzy
 msgid "Can't change to folder because it isn't local"
-msgstr "لا يمكن تغيير المجلد الذي حددته لأنه مسار غير سليم."
+msgstr "لا يمكن التحول إلى المجلد لأنه غير محلي."
 
 #: gtk/gtkfilechooserdefault.c:4148
 #, c-format
@@ -1049,11 +1043,9 @@ msgid "Type name of new folder"
 msgstr "إسم نوع المجلد الجديد"
 
 #: gtk/gtkfilechooserdefault.c:4794
-#, fuzzy, c-format
+#, c-format
 msgid "%d byte"
-msgid_plural "%d bytes"
-msgstr[0] "%d بايتا"
-msgstr[1] "%d بايتا"
+msgstr "%d بايتا"
 
 #: gtk/gtkfilechooserdefault.c:4796
 #, c-format
@@ -1087,12 +1079,12 @@ msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "لا يمكن تغيير المجلد الذي حددته لأنه مسار غير سليم."
 
 #: gtk/gtkfilechooserdefault.c:4980
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not select %s:\n"
 "%s"
 msgstr ""
-"لم يمكن إنشاء المجلد %s:\n"
+"لم يمكن إنتقاء %s:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:5020
@@ -1287,7 +1279,7 @@ msgstr "(فارغ)"
 #: gtk/gtkfilesystemunix.c:415
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s:·%s"
 
 #: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
 #: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
@@ -1314,9 +1306,9 @@ msgid "Bookmark saving failed (%s)"
 msgstr "فشل حفظ علامة الموقع (%s)"
 
 #: gtk/gtkfilesystemunix.c:1553
-#, fuzzy, c-format
+#, c-format
 msgid "error getting information for '%s'"
-msgstr "خطأ تلقي معلومات لـ '%s': %s"
+msgstr "خطأ تلقي معلومات لـ '%s'"
 
 #: gtk/gtkfilesystemwin32.c:950
 msgid "This file system does not support icons for everything"
