@@ -1,3 +1,9 @@
+Fri Aug  1 15:06:25 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_parse_args): g_set_prgname("<unknown>")
+	if argc is 0 as well, instead of leaving it unset.
+	(#116023, Michael Meeks)
+
 2003-07-29  Tor Lillqvist  <tml@iki.fi>
 
 	Fix for #108007, #112402, #117042: There was confusion in
