@@ -1,3 +1,10 @@
+2004-08-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkkeys-win32.c (update_keymap): Don't hardcode
+	mapping of VK_DECIMAL to GDK_KP_Decimal. Instead, let ToAsciiEx()
+	map it to what's printed on the keypad decimal key for the current
+	input locale (keyboard layout). (#149404)
+
 Sat Aug  7 18:19:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilechooserdefault.c (save_folder_combo_create): 

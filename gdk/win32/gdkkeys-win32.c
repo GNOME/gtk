@@ -203,8 +203,6 @@ update_keymap (void)
 		  *ksymp = GDK_KP_Separator; break;
 		case VK_SUBTRACT:
 		  *ksymp = GDK_KP_Subtract; break;
-		case VK_DECIMAL:
-		  *ksymp = GDK_KP_Decimal; break;
 		case VK_DIVIDE:
 		  *ksymp = GDK_KP_Divide; break;
 		case VK_F1:
