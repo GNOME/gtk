@@ -28,7 +28,7 @@
  */
 
 #include <ctype.h>
-#include <strings.h>
+#include <string.h>
 #include "gtkaccelgroup.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtksignal.h"
