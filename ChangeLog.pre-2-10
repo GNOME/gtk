@@ -1,3 +1,8 @@
+2003-11-17  Noah Levitt  <nlevitt@columbia.edu>
+
+	* configure.in: Check for freetype headers the way freetype
+	wants us to.
+
 2003-11-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_focus): If the window is
