@@ -284,7 +284,11 @@ void
 gtk_tree_path_prepend_index (GtkTreePath *path,
 			     gint       index)
 {
-  gint *new_indices = g_new (gint, ++path->depth);
+  gint *new_indices;
+
+  (path->depth)++;
+  new_indices = g_new (gint, path->depth);
+
   if (path->indices == NULL)
     {
       path->indices = new_indices;

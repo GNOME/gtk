@@ -35,7 +35,7 @@ static void         gtk_tree_store_drag_source_init(GtkTreeDragSourceIface *ifac
 static void         gtk_tree_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static void         gtk_tree_store_sortable_init   (GtkTreeSortableIface   *iface);
 static void         gtk_tree_store_finalize        (GObject           *object);
-static guint        gtk_tree_store_get_flags       (GtkTreeModel      *tree_model);
+static GtkTreeModelFlags gtk_tree_store_get_flags  (GtkTreeModel      *tree_model);
 static gint         gtk_tree_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GType        gtk_tree_store_get_column_type (GtkTreeModel      *tree_model,
 						    gint               index);
@@ -467,7 +467,7 @@ gtk_tree_store_finalize (GObject *object)
  */
 
 
-static guint
+static GtkTreeModelFlags
 gtk_tree_store_get_flags (GtkTreeModel *tree_model)
 {
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);

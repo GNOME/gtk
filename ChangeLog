@@ -1,3 +1,17 @@
+Fri Jul  5 02:50:24 2002  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_collapse_all): fix warning.
+	(gtk_tree_view_search_iter): fix warning, #85884
+
+	* gtk/gtktreestore.c (gtk_tree_store_get_flags): change return
+	value to GtkTreeModelFlags to fix compiler warning, #85883
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_get_flags): change
+	return value to GtkTreeModelFlags to fix compiler warning, #85882
+
+	* gtk/gtktreemodel.c (gtk_tree_path_prepend_index): fix compiler
+	warning, #85881
+
 Fri Jul  5 12:51:39 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
