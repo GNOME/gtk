@@ -1,3 +1,9 @@
+Tue Oct  5 21:00:54 2004  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): reverted my last change 
+	and applied owen's leaner conditional flag update which should be good
+	enough to preserve resizing flag invariants.
+
 2004-10-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
