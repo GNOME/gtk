@@ -425,7 +425,6 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
   guint i;
   GtkTranslateFunc translate_func;
   gpointer translate_data;
-  GtkRadioAction *radio_action;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
@@ -437,8 +436,8 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
       GtkAction *action;
       gchar *accel_path;
       gchar *label;
-      gchar *tooltip;
-      
+      gchar *tooltip; 
+
       if (translate_func)
 	{
 	  label = translate_func (entries[i].label, translate_data);
@@ -457,19 +456,17 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 			     "stock_id", entries[i].stock_id,
 			     "value", entries[i].value,
 			     NULL);
-
+      
       if (i == 0) 
 	{
-	  radio_action = GTK_RADIO_ACTION (action);
-
 	  if (on_change)
-	    g_signal_connect_data (radio_action, "changed",
+	    g_signal_connect_data (action, "changed",
 				   on_change, user_data, 
 				   (GClosureNotify)destroy, 0);
 	}
       else
 	{
-	  GSList *group = gtk_radio_action_get_group (radio_action);
+	  GSList *group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
 	  gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
 	}
 
