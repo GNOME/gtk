@@ -1784,7 +1784,7 @@ draw_resize_grip (GtkStyle      *style,
                        gint           height)
 {
 	if (detail && !strcmp(detail, "statusbar")) {
-		if (!xp_theme_draw(window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width, height,
+		if (xp_theme_draw(window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width, height,
                            state_type, area))
 			return;
 	}
@@ -1807,7 +1807,7 @@ draw_handle (GtkStyle        *style,
 	     gint             height,
 	     GtkOrientation   orientation)
 {
-  if (GTK_IS_HANDLE_BOX (widget))
+  if (is_toolbar_child (widget))
     {
       XpThemeElement hndl;
 
