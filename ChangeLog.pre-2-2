@@ -1,3 +1,9 @@
+2002-02-18  Manish Singh  <yosh@gimp.org>
+
+	* Makefile.am: don't comment out the lines to dist the packer
+	example, just simply remove it. (the continuation line confused
+	make even though it was in the comment, barf)
+
 Mon Feb 18 14:40:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_popdown_list): Fix problems
@@ -5,6 +11,7 @@ Mon Feb 18 14:40:22 2002  Owen Taylor  <otaylor@redhat.com>
 	stuck prelighting combine some common code for button release
 	and pressing Escape.
 
+>>>>>>> 1.3038
 Mon Feb 18 14:17:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (adjust_adjustments) 
