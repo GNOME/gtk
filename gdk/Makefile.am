@@ -90,7 +90,6 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdk.h		\
 	gdkcolor.h	\
 	gdkcursor.h     \
-	gdkcursors.h	\
 	gdkdnd.h	\
 	gdkdrawable.h	\
 	gdkevents.h	\

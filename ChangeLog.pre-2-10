@@ -1,3 +1,8 @@
+Wed Nov 28 14:12:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/Makefile.am (gdk_public_h_sources): Remove reference
+	to gdkcursors.h.
+
 2001-11-28  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkwindow.c (gtk_window_move): Add markup to docs.
