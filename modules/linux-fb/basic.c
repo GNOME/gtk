@@ -26,73 +26,30 @@
 #include "gdkprivate-fb.h"
 #include <string.h>
 
-PangoGlyph
-pango_fb_get_unknown_glyph(PangoFont *font)
-{
-  return FT_Get_Char_Index (PANGO_FB_FONT (font)->ftf, '~');
-}
-
-typedef struct _CharRange CharRange;
-typedef struct _Charset Charset;
 typedef struct _CharCache CharCache;
-typedef struct _MaskTable MaskTable;
-
-#define MAX_CHARSETS 32
-
-typedef PangoGlyph (*ConvFunc) (CharCache *cache,
-				Charset *charset,
-				const gchar *input);
-struct _CharRange
-{
-  guint16 start;
-  guint16 end;
-  guint16 charsets;
-};
-
-struct _MaskTable 
-{
-  int n_subfonts;
-
-  Charset **charsets;
-};
-
-#define MAX_CHARSETS 32
 
 struct _CharCache 
 {
-#if 0
-  MaskTable *mask_tables[256];
-#endif
-  GIConv converters[MAX_CHARSETS];
 };
 
-struct _Charset
-{
-  int   index;
-  char *id;
-  char *x_charset;
-  ConvFunc conv_func;
+static PangoEngineRange basic_ranges[] = {
+  /* Language characters */
+  { 0x0000, 0x02af, "*" },
+  { 0x02b0, 0x02ff, "" },
+  { 0x0380, 0x058f, "*" },
+  { 0x0591, 0x05f4, "*" }, /* Hebrew */
+  { 0x060c, 0x06f9, "" }, /* Arabic */
+  { 0x0e01, 0x0e5b, "" },  /* Thai */
+  { 0x10a0, 0x10ff, "*" }, /* Georgian */
+  { 0x1200, 0x16ff, "*" }, /* Ethiopic,Cherokee,Canadian,Ogham,Runic */
+  { 0x1e00, 0x1fff, "*" },
+  { 0x2000, 0x9fff, "*" },
+  { 0xac00, 0xd7a3, "kr" },
+  { 0xf900, 0xfa0b, "kr" },
+  { 0xff00, 0xffe3, "*" }
 };
-
-static PangoGlyph conv_8bit (CharCache  *cache,
-			     Charset    *charset,
-			     const char *input);
-static PangoGlyph conv_euc (CharCache  *cache,
-			    Charset    *charset,
-			    const char *input);
-static PangoGlyph conv_ucs4 (CharCache  *cache,
-			     Charset    *charset,
-			     const char *input);
-
-#include "tables-big.i"
 
 static PangoEngineInfo script_engines[] = {
-  {
-    "BasicScriptEngineLang",
-    PANGO_ENGINE_TYPE_LANG,
-    PANGO_RENDER_TYPE_NONE,
-    basic_ranges, G_N_ELEMENTS(basic_ranges)
-  },
   {
     "BasicScriptEngineFB",
     PANGO_ENGINE_TYPE_SHAPE,
@@ -104,33 +61,6 @@ static PangoEngineInfo script_engines[] = {
 static gint n_script_engines = G_N_ELEMENTS (script_engines);
 
 /*
- * Language script engine
- */
-
-static void 
-basic_engine_break (const char     *text,
-		    gint            len,
-		    PangoAnalysis  *analysis,
-		    PangoLogAttr   *attrs)
-{
-}
-
-static PangoEngine *
-basic_engine_lang_new ()
-{
-  PangoEngineLang *result;
-  
-  result = g_new (PangoEngineLang, 1);
-
-  result->engine.id = "BasicScriptEngine";
-  result->engine.type = PANGO_ENGINE_TYPE_LANG;
-  result->engine.length = sizeof (result);
-  result->script_break = basic_engine_break;
-
-  return (PangoEngine *)result;
-}
-
-/*
  * FB window system script engine portion
  */
 
@@ -138,12 +68,8 @@ static CharCache *
 char_cache_new (void)
 {
   CharCache *result;
-  int i;
 
   result = g_new0 (CharCache, 1);
-
-  for (i=0; i < MAX_CHARSETS; i++)
-    result->converters[i] = (GIConv)-1;
 
   return result;
 }
@@ -151,23 +77,6 @@ char_cache_new (void)
 static void
 char_cache_free (CharCache *cache)
 {
-  int i;
-
-#if 0
-  for (i=0; i < 256; i++)
-    if (cache->mask_tables[i])
-      {
-	g_free (cache->mask_tables[i]->subfonts);
-	g_free (cache->mask_tables[i]->charsets);
-	
-	g_free (cache->mask_tables[i]);
-      }
-#endif
-
-  for (i=0; i<MAX_CHARSETS; i++)
-    if (cache->converters[i] != (GIConv)-1)
-      g_iconv_close (cache->converters[i]);
-  
   g_free (cache);
 }
 
@@ -193,74 +102,6 @@ set_glyph (PangoFont *font, PangoGlyphString *glyphs, int i, int offset, PangoGl
   glyphs->glyphs[i].geometry.width = logical_rect.width;
 }
 
-static GIConv
-find_converter (CharCache *cache, Charset *charset)
-{
-  GIConv cd = cache->converters[charset->index];
-  if (cd == (GIConv)-1)
-    {
-      cd = g_iconv_open  (charset->id, "UTF-8");
-      g_assert (cd != (GIConv)-1);
-      cache->converters[charset->index] = cd;
-    }
-
-  return cd;
-}
-
-static PangoGlyph
-conv_8bit (CharCache  *cache,
-	   Charset *charset,
-	   const char *input)
-{
-  GIConv cd;
-  char outbuf;
-  
-  const char *inptr = input;
-  size_t inbytesleft;
-  char *outptr = &outbuf;
-  size_t outbytesleft = 1;
-
-  inbytesleft = g_utf8_next_char(input) - input;
-  
-  cd = find_converter (cache, charset);
-
-  g_iconv (cd, (gchar **)&inptr, &inbytesleft, &outptr, &outbytesleft);
-
-  return (guchar)outbuf;
-}
-
-static PangoGlyph
-conv_euc (CharCache  *cache,
-	  Charset     *charset,
-	  const char *input)
-{
-  GIConv cd;
-  char outbuf[2];
-
-  const char *inptr = input;
-  size_t inbytesleft;
-  char *outptr = outbuf;
-  size_t outbytesleft = 2;
-
-  inbytesleft = g_utf8_next_char(input) - input;
-  
-  cd = find_converter (cache, charset);
-
-  g_iconv (cd, (gchar **)&inptr, &inbytesleft, &outptr, &outbytesleft);
-
-  if ((guchar)outbuf[0] < 128)
-    return outbuf[0];
-  else
-    return ((guchar)outbuf[0] & 0x7f) * 256 + ((guchar)outbuf[1] & 0x7f);
-}
-
-static PangoGlyph
-conv_ucs4 (CharCache  *cache,
-	   Charset     *charset,
-	   const char *input)
-{
-  return g_utf8_get_char (input);
-}
 
 static void
 swap_range (PangoGlyphString *glyphs, int start, int end)
@@ -280,6 +121,12 @@ swap_range (PangoGlyphString *glyphs, int start, int end)
       glyphs->log_clusters[i] = glyphs->log_clusters[j];
       glyphs->log_clusters[j] = log_cluster;
     }
+}
+
+static PangoGlyph
+pango_fb_get_unknown_glyph(PangoFont *font)
+{
+  return FT_Get_Char_Index (PANGO_FB_FONT (font)->ftf, '~');
 }
 
 static CharCache *
@@ -330,7 +177,7 @@ basic_engine_shape (PangoFont        *font,
       char buf[6];
       const char *input;
 
-      wc = g_utf8_get_char(p);
+      wc = g_utf8_get_char (p);
 
       input = p;
       if (analysis->level % 2)
@@ -377,7 +224,7 @@ basic_engine_shape (PangoFont        *font,
 	    set_glyph (font, glyphs, i, p - text, pango_fb_get_unknown_glyph (font));
 	}
       
-      p = g_utf8_next_char(p);
+      p = g_utf8_next_char (p);
     }
 
   /* Simple bidi support... may have separate modules later */
@@ -460,8 +307,6 @@ MODULE_ENTRY(script_engine_load) (const char *id)
 {
   if (!strcmp (id, "BasicScriptEngineFB"))
     return basic_engine_fb_new ();
-  else if (!strcmp (id, "BasicScriptEngineLang"))
-    return basic_engine_lang_new ();
   else
     return NULL;
 }

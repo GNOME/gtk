@@ -1,3 +1,25 @@
+2000-12-04  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkfont-fb.c (gdk_text_width): Divide size by 2, not
+	multiply.
+
+	* gdk/linux-fb/gdkpango-fb.c:
+	Copied some 26.6 scaling macros from pango to clean up the rounding.
+	(pango_fb_font_get_glyph_info): Correct sign on x value.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Removed unreferenced external functions.
+
+	* modules/linux-fb/Makefile.am: Use ` instead of '.
+
+	* modules/linux-fb/basic.c:
+	Remove dead code. In particular the dummy lang engine which broke all
+	pango layouts in GtkFB. Don't include tables-big.i anymore.
+
+	* modules/linux-fb/tables-big.i:
+	Upgrade to latest version from pango. Left for reference, basic_ranges
+	moved to basic.c.
+	
 2000-12-04  Havoc Pennington  <hp@redhat.com>
 
         Fix bugs Alex found:

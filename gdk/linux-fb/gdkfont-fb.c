@@ -299,8 +299,8 @@ gdk_text_width (GdkFont      *font,
   GdkFontPrivateFB *private;
 
   private = (GdkFontPrivateFB*) font;
-  
-  return text_length * private->size / (PANGO_SCALE/2);
+
+  return text_length * private->size / (2*PANGO_SCALE);
 #endif
 }
 

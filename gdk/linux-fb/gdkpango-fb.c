@@ -17,6 +17,13 @@
 
 #define PANGO_RENDER_TYPE_FB "PangoRenderTypeFB"
 
+#define PANGO_SCALE_26_6 (PANGO_SCALE / (1<<6))
+#define PANGO_PIXELS_26_6(d)				\
+  (((d) >= 0) ?						\
+   ((d) + PANGO_SCALE_26_6 / 2) / PANGO_SCALE_26_6 :	\
+   ((d) - PANGO_SCALE_26_6 / 2) / PANGO_SCALE_26_6)
+#define PANGO_UNITS_26_6(d) (PANGO_SCALE_26_6 * (d))
+
 typedef struct {
   PangoFontMap parent_instance;
 
@@ -668,20 +675,16 @@ pango_fb_font_get_glyph_info (PangoFont *font, PangoGlyph glyph)
   my_ink_rect = &pgi->extents[0];
   my_logical_rect = &pgi->extents[1];
 
-  {
-    my_ink_rect->width = (PANGO_SCALE * g->metrics.width + 32) >> 6;
-    my_ink_rect->height = (PANGO_SCALE * g->metrics.height + 32) >> 6;
-    my_ink_rect->x = - ((PANGO_SCALE * g->metrics.horiBearingX + 32) >> 6);
-    my_ink_rect->y = - ((PANGO_SCALE * g->metrics.horiBearingY + 32) >> 6);
-  }
-
-  {
-    my_logical_rect->width = (PANGO_SCALE * g->metrics.horiAdvance + 32) >> 6;
-    my_logical_rect->height = (PANGO_SCALE * ftf->size->metrics.height + 32) >> 6;
-    my_logical_rect->x = - ((PANGO_SCALE * g->metrics.horiBearingX + 32) >> 6);
-    my_logical_rect->y = - ((PANGO_SCALE * ftf->size->metrics.ascender + 32) >> 6);
-  }
-
+  my_ink_rect->x = PANGO_UNITS_26_6 (g->metrics.horiBearingX);
+  my_ink_rect->width = PANGO_UNITS_26_6 (g->metrics.width);
+  my_ink_rect->y = -PANGO_UNITS_26_6 (g->metrics.horiBearingY);
+  my_ink_rect->height = PANGO_UNITS_26_6 (g->metrics.height);
+  
+  my_logical_rect->x = 0;
+  my_logical_rect->width = PANGO_UNITS_26_6 (g->metrics.horiAdvance);
+  my_logical_rect->y = -PANGO_UNITS_26_6 (ftf->size->metrics.ascender + 64);
+  my_logical_rect->height = PANGO_UNITS_26_6 (ftf->size->metrics.height + 128);
+  
   g_hash_table_insert (fbf->glyph_info, GUINT_TO_POINTER(glyph), pgi);
 
   return pgi;
@@ -795,11 +798,13 @@ void
 pango_fb_font_set_size (PangoFont *font)
 {
   PangoFBFont *fbf = (PangoFBFont *)font;
+  gint height;
 
   if (PANGO_FB_FONT (font)->desc.size != GPOINTER_TO_UINT (fbf->ftf->generic.data))
     {
-      fbf->ftf->generic.data = GUINT_TO_POINTER (PANGO_FB_FONT (font)->desc.size);
-      FT_Set_Char_Size (fbf->ftf, 0, PANGO_PIXELS (PANGO_FB_FONT (font)->desc.size << 6), 72, 72);
+      height = PANGO_FB_FONT (font)->desc.size;
+      fbf->ftf->generic.data = GUINT_TO_POINTER (height);
+      FT_Set_Char_Size (fbf->ftf, 0, PANGO_PIXELS_26_6 (height), 72, 72);
     }
 }
 
@@ -814,8 +819,6 @@ pango_fb_font_get_glyph_extents (PangoFont        *font,
   PangoFBGlyphInfo *gi;
 
   fbf = PANGO_FB_FONT (font);
-
-  pango_fb_font_set_size (font);
 
   gi = pango_fb_font_get_glyph_info (font, glyph);
   my_extents = gi->extents;
@@ -840,8 +843,8 @@ pango_fb_font_get_metrics (PangoFont        *font,
 
   if (metrics)
     {
-      metrics->ascent = (ftf->size->metrics.ascender * PANGO_SCALE + 32) >> 6;
-      metrics->descent = ((-ftf->size->metrics.descender) * PANGO_SCALE + 32) >> 6;
+      metrics->ascent = PANGO_UNITS_26_6 (ftf->size->metrics.ascender);
+      metrics->descent = PANGO_UNITS_26_6 (-ftf->size->metrics.descender);
     }
 }
 

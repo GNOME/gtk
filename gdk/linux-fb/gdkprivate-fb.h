@@ -392,7 +392,9 @@ void gdk_fb_window_send_crossing_events (GdkWindow *dest,
 
 #define PANGO_TYPE_FB_FONT              (pango_fb_font_get_type ())
 #define PANGO_FB_FONT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_FB_FONT, PangoFBFont))
+
 typedef struct _PangoFBFont        PangoFBFont;
+
 struct _PangoFBFont
 {
   PangoFont parent;
@@ -402,16 +404,16 @@ struct _PangoFBFont
   PangoCoverage *coverage;
   GHashTable *glyph_info;
 };
+
 typedef struct {
   PangoRectangle extents[2];
   GdkPixmapFBData fbd;
   int top, left;
 } PangoFBGlyphInfo;
 
-GType pango_fb_font_get_type (void) G_GNUC_CONST;
-gboolean pango_fb_has_glyph(PangoFont *font, PangoGlyph glyph);
-PangoGlyph pango_fb_get_unknown_glyph(PangoFont *font);
-PangoFBGlyphInfo *pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph);
+GType             pango_fb_font_get_type       (void) G_GNUC_CONST;
+PangoFBGlyphInfo *pango_fb_font_get_glyph_info (PangoFont  *font,
+						PangoGlyph  glyph);
 
 void gdk_fb_window_move_resize (GdkWindow *window,
 				gint       x,

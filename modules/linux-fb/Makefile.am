@@ -6,7 +6,7 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
 	-I$(top_srcdir)/gdk/linux-fb \
-	`freetype-config --cflags'\
+	`freetype-config --cflags`\
 	@GTK_DEBUG_FLAGS@ 	\
 	@GTK_XIM_FLAGS@		\
 	@GTK_LOCALE_FLAGS@	\
