@@ -118,6 +118,7 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmisc.h>
+#include <gtk/gtkmodules.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
 #include <gtk/gtkoldeditable.h>

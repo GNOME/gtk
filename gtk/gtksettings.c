@@ -63,6 +63,7 @@ enum {
   PROP_DND_DRAG_THRESHOLD,
   PROP_FONT_NAME,
   PROP_ICON_SIZES,
+  PROP_MODULES,
   PROP_XFT_ANTIALIAS,
   PROP_XFT_HINTING,
   PROP_XFT_HINTSTYLE,
@@ -89,6 +90,8 @@ static guint	settings_install_property_parser (GtkSettingsClass      *class,
 						  GParamSpec            *pspec,
 						  GtkRcPropertyParser    parser);
 static void    settings_update_double_click      (GtkSettings           *settings);
+static void    settings_update_modules           (GtkSettings           *settings);
+
 
 
 /* --- variables --- */
@@ -360,6 +363,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_ICON_SIZES);
 
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-modules",
+								  P_("GTK Modules"),
+								  P_("List of currently active GTK modules"),
+								  NULL,
+								  G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MODULES);
+
 #ifdef GDK_WINDOWING_X11
   result = settings_install_property_parser (class,
 					     g_param_spec_int ("gtk-xft-antialias",
@@ -584,6 +596,9 @@ gtk_settings_notify (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_MODULES:
+      settings_update_modules (settings);
+      break;
     case PROP_DOUBLE_CLICK_TIME:
     case PROP_DOUBLE_CLICK_DISTANCE:
       settings_update_double_click (settings);
@@ -1362,4 +1377,19 @@ settings_update_double_click (GtkSettings *settings)
       gdk_display_set_double_click_time (display, double_click_time);
       gdk_display_set_double_click_distance (display, double_click_distance);
     }
+}
+
+static void
+settings_update_modules (GtkSettings *settings)
+{
+  GdkDisplay *display = gdk_screen_get_display (settings->screen);
+  gchar *modules;
+  
+  g_object_get (settings, 
+		"gtk-modules", &modules,
+		NULL);
+  
+  _gtk_modules_settings_changed (settings, modules);
+  
+  g_free (modules);
 }

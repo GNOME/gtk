@@ -1,3 +1,28 @@
+2004-09-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Make it possible to specify additional modules to load
+	via a setting.  (#117236, Alex Graveley)
+	
+	* gtk/gtkmodules.h: 
+	* gtk/gtkmodules.c: New files which contain the module
+	handling code which was previously in gtkmain.[hc]. 
+	Additionally, the code now looks for the gtk-modules 
+	setting, which can specify additional modules to load.
+
+	* gtk/gtkmain.c: 
+	* gtk/gtkmain.h: Remove all the module handling code.
+
+	* gtk/gtkdebug.h: Add a debug flag for modules.
+
+	* gtk/gtk.h: Include gtkmodules.h
+
+	* gtk/Makefile.am (gtk_public_h_sources): Add gtkmodules.h
+	(gtk_c_sources): Add gtkmodules.c
+
+	* gtk/gtksettings.c: Add the gtk-modules setting.
+
+	* gdk/x11/gdkevents-x11.c: Add the Gtk/Modules XSetting.
+
 Wed Sep  1 19:11:44 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Make sure

@@ -2710,6 +2710,7 @@ static struct
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
   { "Gtk/IMPreeditStyle", "gtk-im-preedit-style" },
   { "Gtk/IMStatusStyle", "gtk-im-status-style" },
+  { "Gtk/Modules", "gtk-modules" },
   { "Gtk/FileChooserBackend", "gtk-file-chooser-backend" },
   { "Gtk/ButtonImages", "gtk-button-images" },
   { "Gtk/MenuImages", "gtk-menu-images" },

@@ -37,18 +37,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <gmodule.h>
-#ifdef G_OS_UNIX
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#include <sys/types.h>		/* For uid_t, gid_t */
 #endif
+#include <sys/types.h>		/* For uid_t, gid_t */
+
 #ifdef G_OS_WIN32
 #define STRICT
 #include <windows.h>
 #undef STRICT
 #endif
 
-#include <pango/pango-utils.h>	/* For pango_split_file_list */
+#include <pango/pango-types.h>	/* For pango_language_from_string */
 
 #include "gtkalias.h"
 #include "gtkintl.h"
@@ -59,6 +59,7 @@
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmain.h"
+#include "gtkmodules.h"
 #include "gtkrc.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
@@ -73,7 +74,6 @@ typedef struct _GtkInitFunction		 GtkInitFunction;
 typedef struct _GtkQuitFunction		 GtkQuitFunction;
 typedef struct _GtkClosure	         GtkClosure;
 typedef struct _GtkKeySnooperData	 GtkKeySnooperData;
-typedef struct _GtkModuleInfo            GtkModuleInfo;
 
 struct _GtkInitFunction
 {
@@ -105,12 +105,6 @@ struct _GtkKeySnooperData
   guint id;
 };
 
-struct _GtkModuleInfo
-{
-  GtkModuleInitFunc init_func;
-  GtkModuleDisplayInitFunc display_init_func;
-};
-
 static gint  gtk_quit_invoke_function	 (GtkQuitFunction    *quitf);
 static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
@@ -137,13 +131,6 @@ const guint gtk_micro_version = GTK_MICRO_VERSION;
 const guint gtk_binary_age = GTK_BINARY_AGE;
 const guint gtk_interface_age = GTK_INTERFACE_AGE;
 
-static GSList *gtk_modules;
-
-/* Saved argc,argv for delayed module initialization
- */
-static gint    gtk_argc = 0;
-static gchar **gtk_argv = NULL;
-
 static guint gtk_main_loop_level = 0;
 static gint gtk_initialized = FALSE;
 static GList *current_events = NULL;
@@ -168,7 +155,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"tree", GTK_DEBUG_TREE},
   {"updates", GTK_DEBUG_UPDATES},
   {"keybindings", GTK_DEBUG_KEYBINDINGS},
-  {"multihead", GTK_DEBUG_MULTIHEAD}
+  {"multihead", GTK_DEBUG_MULTIHEAD},
+  {"modules", GTK_DEBUG_MODULES}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
@@ -334,260 +322,6 @@ _gtk_get_data_prefix (void)
 
 #endif /* G_OS_WIN32 */
 
-static gchar **
-get_module_path (void)
-{
-  const gchar *module_path_env;
-  const gchar *exe_prefix;
-  const gchar *home_dir;
-  gchar *home_gtk_dir = NULL;
-  gchar *module_path;
-  gchar *default_dir;
-  static gchar **result = NULL;
-
-  if (result)
-    return result;
-
-  home_dir = g_get_home_dir();
-  if (home_dir)
-    home_gtk_dir = g_build_filename (home_dir, ".gtk-2.0", NULL);
-
-  module_path_env = g_getenv ("GTK_PATH");
-  exe_prefix = g_getenv ("GTK_EXE_PREFIX");
-
-  if (exe_prefix)
-    default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", NULL);
-  else
-    default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", NULL);
-
-  if (module_path_env && home_gtk_dir)
-    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
-				module_path_env, home_gtk_dir, default_dir, NULL);
-  else if (module_path_env)
-    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
-				module_path_env, default_dir, NULL);
-  else if (home_gtk_dir)
-    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
-				home_gtk_dir, default_dir, NULL);
-  else
-    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
-				default_dir, NULL);
-
-  g_free (home_gtk_dir);
-  g_free (default_dir);
-
-  result = pango_split_file_list (module_path);
-  g_free (module_path);
-
-  return result;
-}
-
-/**
- * _gtk_get_module_path:
- * @type: the type of the module, for instance 'modules', 'engines', immodules'
- * 
- * Determines the search path for a particular type of module.
- * 
- * Return value: the search path for the module type. Free with g_strfreev().
- **/
-gchar **
-_gtk_get_module_path (const gchar *type)
-{
-  gchar **paths = get_module_path();
-  gchar **path;
-  gchar **result;
-  gint count = 0;
-
-  for (path = paths; *path; path++)
-    count++;
-
-  result = g_new (gchar *, count * 4 + 1);
-
-  count = 0;
-  for (path = get_module_path (); *path; path++)
-    {
-      gint use_version, use_host;
-      
-      for (use_version = TRUE; use_version >= FALSE; use_version--)
-	for (use_host = TRUE; use_host >= FALSE; use_host--)
-	  {
-	    gchar *tmp_dir;
-	    
-	    if (use_version && use_host)
-	      tmp_dir = g_build_filename (*path, GTK_BINARY_VERSION, GTK_HOST, type, NULL);
-	    else if (use_version)
-	      tmp_dir = g_build_filename (*path, GTK_BINARY_VERSION, type, NULL);
-	    else if (use_host)
-	      tmp_dir = g_build_filename (*path, GTK_HOST, type, NULL);
-	    else
-	      tmp_dir = g_build_filename (*path, type, NULL);
-
-	    result[count++] = tmp_dir;
-	  }
-    }
-
-  result[count++] = NULL;
-
-  return result;
-}
-
-/* Like g_module_path, but use .la as the suffix
- */
-static gchar*
-module_build_la_path (const gchar *directory,
-		      const gchar *module_name)
-{
-	gchar *filename;
-	gchar *result;
-	
-	if (strncmp (module_name, "lib", 3) == 0)
-		filename = (gchar *)module_name;
-	else
-		filename =  g_strconcat ("lib", module_name, ".la", NULL);
-
-	if (directory && *directory)
-		result = g_build_filename (directory, filename, NULL);
-	else
-		result = g_strdup (filename);
-
-	if (filename != module_name)
-		g_free (filename);
-
-	return result;
-}
-
-/**
- * _gtk_find_module:
- * @name: the name of the module
- * @type: the type of the module, for instance 'modules', 'engines', immodules'
- * 
- * Looks for a dynamically loadable module named @name of type @type in the
- * standard GTK+ module search path.
- * 
- * Return value: the pathname to the found module, or %NULL if it wasn't found.
- *  Free with g_free().
- **/
-gchar *
-_gtk_find_module (const gchar *name,
-		  const gchar *type)
-{
-  gchar **paths;
-  gchar **path;
-  gchar *module_name = NULL;
-
-  if (g_path_is_absolute (name))
-    return g_strdup (name);
-
-  paths = _gtk_get_module_path (type);
-  for (path = paths; *path; path++)
-    {
-      gchar *tmp_name;
-
-      tmp_name = g_module_build_path (*path, name);
-      if (g_file_test (tmp_name, G_FILE_TEST_EXISTS))
-	{
-	  module_name = tmp_name;
-	  goto found;
-	}
-      g_free(tmp_name);
-
-      tmp_name = module_build_la_path (*path, name);
-      if (g_file_test (tmp_name, G_FILE_TEST_EXISTS))
-	{
-	  module_name = tmp_name;
-	  goto found;
-	}
-      g_free(tmp_name);
-    }
-
- found:
-  g_strfreev (paths);
-  return module_name;
-}
-
-static GModule *
-find_module (const gchar *name)
-{
-  GModule *module;
-  gchar *module_name;
-
-  module_name = _gtk_find_module (name, "modules");
-  if (!module_name)
-    {
-      /* As last resort, try loading without an absolute path (using system
-       * library path)
-       */
-      module_name = g_module_build_path (NULL, name);
-    }
-  
-  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
-  g_free(module_name);
-
-  return module;
-}
-
-static GSList *
-load_module (GSList      *module_list,
-	     const gchar *name)
-{
-  GtkModuleInitFunc modinit_func = NULL;
-  GtkModuleInfo *info;
-  GModule *module = NULL;
-  
-  if (g_module_supported ())
-    {
-      module = find_module (name);
-      if (module &&
-	  g_module_symbol (module, "gtk_module_init", (gpointer *) &modinit_func) &&
-	  modinit_func)
-	{
-	  if (!g_slist_find (module_list, (gconstpointer) modinit_func))
-	    {
-	      g_module_make_resident (module);
-	      info = g_new (GtkModuleInfo, 1);
-
-	      info->init_func = modinit_func;
-	      g_module_symbol (module, "gtk_module_display_init",
-			       (gpointer *) &info->display_init_func);
-	      
-	      module_list = g_slist_prepend (module_list, info);
-	    }
-	  else
-	    {
-	      g_module_close (module);
-	      module = NULL;
-	    }
-	}
-    }
-  if (!modinit_func)
-    {
-      g_message ("Failed to load module \"%s\": %s",
-		 module ? g_module_name (module) : name,
-		 g_module_error ());
-      if (module)
-	g_module_close (module);
-    }
-  
-  return module_list;
-}
-
-static GSList *
-load_modules (const char *module_str)
-{
-  gchar **module_names = pango_split_file_list (module_str);
-  GSList *module_list = NULL;
-  gint i;
-  
-  for (i = 0; module_names[i]; i++)
-    module_list = load_module (module_list, module_names[i]);
-  
-  module_list = g_slist_reverse (module_list);
-  
-  g_strfreev (module_names);
-
-  return module_list;
-}
-
 static gboolean do_setlocale = TRUE;
 
 /**
@@ -614,51 +348,6 @@ gtk_disable_setlocale (void)
 #undef gtk_init_check
 #endif
 
-static void
-default_display_notify_cb (GdkDisplayManager *display_manager)
-{
-  GSList *slist;
-
-  /* Initialize non-multihead-aware modules when the
-   * default display is first set to a non-NULL value.
-   */
-  static gboolean initialized = FALSE;
-
-  if (!gdk_display_get_default () || initialized)
-    return;
-
-  initialized = TRUE;
-
-  for (slist = gtk_modules; slist; slist = slist->next)
-    {
-      if (slist->data)
-	{
-	  GtkModuleInfo *info = slist->data;
-
-	  if (!info->display_init_func)
-	    info->init_func (&gtk_argc, &gtk_argv);
-	}
-    }
-}
-
-static void
-display_opened_cb (GdkDisplayManager *display_manager,
-		   GdkDisplay        *display)
-{
-  GSList *slist;
-  
-  for (slist = gtk_modules; slist; slist = slist->next)
-    {
-      if (slist->data)
-	{
-	  GtkModuleInfo *info = slist->data;
-
-	  if (info->display_init_func)
-	    info->display_init_func (display);
-	}
-    }
-}
-
 /**
  * gtk_parse_args:
  * @argc: a pointer to the number of command line arguments.
@@ -681,8 +370,6 @@ gtk_parse_args (int    *argc,
 		char ***argv)
 {
   GString *gtk_modules_string = NULL;
-  GSList *slist;
-  GdkDisplayManager *display_manager;
   const gchar *env_string;
 
   if (gtk_initialized)
@@ -747,8 +434,8 @@ gtk_parse_args (int    *argc,
 		{
 		  if (gtk_modules_string)
 		    g_string_append_c (gtk_modules_string, G_SEARCHPATH_SEPARATOR);
-		  else
-		    gtk_modules_string = g_string_new (NULL);
+ 		  else
+ 		    gtk_modules_string = g_string_new (NULL);
 
 		  g_string_append (gtk_modules_string, module_name);
 		}
@@ -823,22 +510,10 @@ gtk_parse_args (int    *argc,
 	      *argc -= k;
 	    }
 	}
-
-      gtk_argv = g_malloc ((gtk_argc + 1) * sizeof (char*));
-      for (i = 0; i < gtk_argc; i++)
-	gtk_argv[i] = g_strdup ((*argv)[i]);
-      gtk_argv[gtk_argc] = NULL;
     }
 
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
-
-  /* load gtk modules */
-  if (gtk_modules_string)
-    {
-      gtk_modules = load_modules (gtk_modules_string->str);
-      g_string_free (gtk_modules_string, TRUE);
-    }
 
 #ifdef ENABLE_NLS
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
@@ -866,30 +541,19 @@ gtk_parse_args (int    *argc,
   gtk_type_init (0);
   _gtk_accel_map_init ();  
   _gtk_rc_init ();
-  
+
   /* Set the 'initialized' flag.
    */
   gtk_initialized = TRUE;
 
-  display_manager = gdk_display_manager_get ();
-  g_signal_connect (display_manager, "notify::default-display",
-		    G_CALLBACK (default_display_notify_cb), NULL);
-  g_signal_connect (display_manager, "display-opened",
-		    G_CALLBACK (display_opened_cb), NULL);
-
-  /* initialize multhead aware gtk modules; for other modules,
-   * we wait until we have a display open;
-   */
-  for (slist = gtk_modules; slist; slist = slist->next)
+  /* load gtk modules */
+  if (gtk_modules_string)
     {
-      if (slist->data)
-	{
-	  GtkModuleInfo *info = slist->data;
-
-	  if (info->display_init_func)
-	    info->init_func (argc, argv);
-	}
+      _gtk_modules_init (argc, argv, gtk_modules_string->str);
+      g_string_free (gtk_modules_string, TRUE);
     }
+  else
+    _gtk_modules_init (argc, argv, "");
   
   return TRUE;
 }

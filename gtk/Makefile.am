@@ -203,6 +203,7 @@ gtk_public_h_sources =          \
 	gtkmenushell.h		\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
+	gtkmodules.h		\
 	gtknotebook.h		\
 	gtkobject.h		\
 	gtkoldeditable.h	\
@@ -422,6 +423,7 @@ gtk_c_sources =                 \
 	gtkmenushell.c		\
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
+	gtkmodules.c		\
 	gtknotebook.c		\
 	gtkobject.c		\
 	gtkoldeditable.c	\

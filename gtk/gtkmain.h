@@ -57,9 +57,6 @@ extern "C" {
 
 #endif /* GTK_DISABLE_DEPRECATED */
 
-typedef void	(*GtkModuleInitFunc)        (gint	  *argc,
-				             gchar      ***argv);
-typedef void	(*GtkModuleDisplayInitFunc) (GdkDisplay   *display);
 typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
 					     GdkEventKey  *event,
 					     gpointer	   func_data);
@@ -213,10 +210,6 @@ gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
                                    GValue                *return_accu,
                                    const GValue          *handler_return,
                                    gpointer               dummy);
-
-gchar * _gtk_find_module     (const gchar *name,
-			      const gchar *type);
-gchar **_gtk_get_module_path (const gchar *type);
 
 gchar *_gtk_get_lc_ctype (void);
 

@@ -38,7 +38,8 @@ typedef enum {
   GTK_DEBUG_TREE        = 1 << 3,
   GTK_DEBUG_UPDATES     = 1 << 4,
   GTK_DEBUG_KEYBINDINGS = 1 << 5,
-  GTK_DEBUG_MULTIHEAD   = 1 << 6
+  GTK_DEBUG_MULTIHEAD   = 1 << 6,
+  GTK_DEBUG_MODULES     = 1 << 7
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG
