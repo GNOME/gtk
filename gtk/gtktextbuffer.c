@@ -264,29 +264,26 @@ gtk_text_buffer_init (GtkTextBuffer *buffer)
 GtkTextBuffer*
 gtk_text_buffer_new (GtkTextTagTable *table)
 {
-  GtkTextBuffer *tkxt_buffer;
+  GtkTextBuffer *text_buffer;
 
   /* This is broken, need construct_only argument for the tag table
      so language bindings can set it.
   */
   
-  tkxt_buffer = GTK_TEXT_BUFFER (gtk_type_new (gtk_text_buffer_get_type ()));
+  text_buffer = GTK_TEXT_BUFFER (gtk_type_new (gtk_text_buffer_get_type ()));
 
   if (table)
-    {
-      tkxt_buffer->tag_table = table;
-      gtk_object_ref(GTK_OBJECT(table));
-      gtk_object_sink(GTK_OBJECT(table));
-    }
+    text_buffer->tag_table = table;
   else
-    {
-      tkxt_buffer->tag_table = gtk_text_tag_table_new();
-    }
+    text_buffer->tag_table = gtk_text_tag_table_new();
+
+  gtk_object_ref (GTK_OBJECT(text_buffer->tag_table));
+  gtk_object_sink (GTK_OBJECT(text_buffer->tag_table));
   
-  tkxt_buffer->tree = gtk_text_btree_new(tkxt_buffer->tag_table,
-                                         tkxt_buffer);  
+  text_buffer->tree = gtk_text_btree_new(text_buffer->tag_table,
+                                         text_buffer);  
   
-  return tkxt_buffer;
+  return text_buffer;
 }
 
 static void

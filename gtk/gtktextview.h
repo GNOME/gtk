@@ -73,6 +73,8 @@ struct _GtkTextView {
 
   GtkTextMark *dnd_mark;
   guint blink_timeout;
+
+  GtkIMContext *im_context;
 };
 
 struct _GtkTextViewClass {

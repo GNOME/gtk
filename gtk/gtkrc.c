@@ -1256,10 +1256,11 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
     }
 
   if (rc_style->font_desc)
-    style->font_desc = pango_font_description_copy (rc_style->font_desc);
-  else
-    style->font_desc = pango_font_description_from_string ("Sans 10");
-  
+    {
+      pango_font_description_free (style->font_desc);
+      style->font_desc = pango_font_description_copy (rc_style->font_desc);
+    }
+    
   for (i = 0; i < 5; i++)
     {
       if (rc_style->color_flags[i] & GTK_RC_FG)

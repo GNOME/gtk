@@ -415,6 +415,8 @@ gtk_style_new (void)
   style->font = default_font;
   gdk_font_ref (style->font);
   
+  style->font_desc = pango_font_description_from_string ("Sans 10");
+    
   style->ref_count = 1;
   style->attach_count = 0;
   style->colormap = NULL;

@@ -51,6 +51,7 @@
 #include "gtktext.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
+#include "gtkimmulticontext.h"
 #include <gdk/gdkkeysyms.h>
 
 enum {
@@ -115,6 +116,7 @@ static void gtk_text_view_draw                 (GtkWidget        *widget,
 						GdkRectangle     *area);
 static gint gtk_text_view_expose_event         (GtkWidget        *widget,
 						GdkEventExpose   *expose);
+
 
 /* Source side drag signals */
 static void gtk_text_view_drag_begin       (GtkWidget        *widget,
@@ -183,6 +185,10 @@ static void     gtk_text_view_start_selection_dnd   (GtkTextView        *text_vi
 						     GdkEventButton     *event);
 static void     gtk_text_view_start_cursor_blink    (GtkTextView        *text_view);
 static void     gtk_text_view_stop_cursor_blink     (GtkTextView        *text_view);
+
+static void gtk_text_view_commit_handler       (GtkIMContext     *context,
+						const gchar      *str,
+						GtkTextView      *text_view);
 
 static void gtk_text_view_mark_set_handler       (GtkTextBuffer     *buffer,
 						  const GtkTextIter *location,
@@ -578,6 +584,14 @@ gtk_text_view_init (GtkTextView *text_view)
 
   text_view->virtual_cursor_x = -1;
   text_view->virtual_cursor_y = -1;
+
+  /* This object is completely private. No external entity can gain a reference
+   * to it; so we create it here and destroy it in finalize().
+   */
+  text_view->im_context = gtk_im_multicontext_new ();
+  
+  gtk_signal_connect (GTK_OBJECT (text_view->im_context), "commit",
+		      GTK_SIGNAL_FUNC (gtk_text_view_commit_handler), text_view);
 }
 
 GtkWidget*
@@ -912,6 +926,8 @@ gtk_text_view_finalize (GtkObject *object)
 
   text_view = GTK_TEXT_VIEW (object);  
 
+  gtk_object_unref (GTK_OBJECT (text_view->im_context));
+
   (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
@@ -1089,6 +1105,8 @@ gtk_text_view_realize (GtkWidget *widget)
   cursor = gdk_cursor_new (GDK_XTERM);
   gdk_window_set_cursor (GTK_LAYOUT (widget)->bin_window, cursor);
   gdk_cursor_destroy (cursor);
+
+  gtk_im_context_set_client_window (text_view->im_context, widget->window);
 }
 
 static void
@@ -1100,6 +1118,8 @@ gtk_text_view_unrealize (GtkWidget *widget)
 
   gtk_text_view_destroy_layout (text_view);
   
+  gtk_im_context_set_client_window (text_view->im_context, NULL);
+
   (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
@@ -1242,41 +1262,20 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     return TRUE;
 
-  if (event->length > 0)
+  if (gtk_im_context_filter_keypress (text_view->im_context, event))
+    return TRUE;
+  else if (event->keyval == GDK_Return)
     {
-      if ((event->state & GDK_MOD1_MASK) ||
-          (event->state & GDK_CONTROL_MASK))
-        {
-          return FALSE;
-        }
-      
-      gtk_text_buffer_delete_selection (text_view->buffer);
-
-      switch (event->keyval)
-        {
-        case GDK_Return:
-          gtk_text_buffer_insert_at_cursor (text_view->buffer, "\n", 1);
-          break;
-          
-        default:
-          if (text_view->overwrite_mode)
-            gtk_text_view_delete_text (text_view, GTK_TEXT_DELETE_CHAR, 1);
-          gtk_text_buffer_insert_at_cursor (text_view->buffer,
-                                            event->string, event->length);
-          break;
-        }
-      
-      gtk_text_view_scroll_to_mark (text_view, "insert", 0);
-      return TRUE;
+      gtk_text_buffer_insert_at_cursor (text_view->buffer, "\n", 1);
+      return FALSE;
     }
-      
-  return FALSE;
+  else
+    return FALSE;
 }
 
 static gint
 gtk_text_view_key_release_event (GtkWidget *widget, GdkEventKey *event)
 {
-
   return FALSE;
 }
 
@@ -1372,6 +1371,8 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
   gtk_text_mark_set_visible (insert, TRUE);
 
   gtk_text_view_start_cursor_blink (GTK_TEXT_VIEW (widget));
+
+  gtk_im_context_focus_in (GTK_TEXT_VIEW (widget)->im_context);
   
   return FALSE;
 }
@@ -1388,6 +1389,8 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
   gtk_text_mark_set_visible (insert, FALSE);
 
   gtk_text_view_stop_cursor_blink (GTK_TEXT_VIEW (widget));
+
+  gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
   
   return FALSE;
 }
@@ -2441,6 +2444,27 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     case INVALID:		/* quiet compiler */
       break;
     }
+}
+
+static void
+gtk_text_view_commit_handler (GtkIMContext  *context,
+			      const gchar   *str,
+			      GtkTextView   *text_view)
+{
+  gtk_text_buffer_delete_selection (text_view->buffer);
+
+  if (!strcmp (str, "\n"))
+    {
+      gtk_text_buffer_insert_at_cursor (text_view->buffer, "\n", 1);
+    }
+  else
+    {
+      if (text_view->overwrite_mode)
+	gtk_text_view_delete_text (text_view, GTK_TEXT_DELETE_CHAR, 1);
+      gtk_text_buffer_insert_at_cursor (text_view->buffer, str, strlen (str));
+    }
+  
+  gtk_text_view_scroll_to_mark (text_view, "insert", 0);
 }
 
 static void
