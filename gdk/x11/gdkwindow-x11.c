@@ -977,31 +977,31 @@ set_initial_hints (GdkWindow *window)
 
   if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
     {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_MAXIMIZED_VERT");
       ++i;
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_MAXIMIZED_HORZ");
       ++i;
     }
 
   if (private->state & GDK_WINDOW_STATE_STICKY)
     {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_STICKY");
       ++i;
     }
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
     {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_FULLSCREEN");
       ++i;
     }
   
   if (private->modal_hint)
     {
-      atoms[i] = gdk_x11_get_xatom_by_name_for_display (xdisplay,
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_MODAL");
       ++i;
     }
@@ -1010,7 +1010,7 @@ set_initial_hints (GdkWindow *window)
     {
       XChangeProperty (xdisplay,
                        xwindow,
-		       gdk_x11_get_xatom_by_name_for_display (xdisplay, "_NET_WM_STATE"),
+		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
                        XA_ATOM, 32, PropModeReplace,
                        (guchar*) atoms, i);
     }
@@ -1018,7 +1018,7 @@ set_initial_hints (GdkWindow *window)
     {
       XDeleteProperty (xdisplay,
                        xwindow,
-		       gdk_x11_get_xatom_by_name_for_display (xdisplay, "_NET_WM_STATE"));
+		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"));
     }
 
   if (private->state & GDK_WINDOW_STATE_STICKY)
@@ -1026,7 +1026,7 @@ set_initial_hints (GdkWindow *window)
       atoms[0] = 0xFFFFFFFF;
       XChangeProperty (xdisplay,
                        xwindow,
-		       gdk_x11_get_xatom_by_name_for_display (xdisplay, "_NET_WM_DESKTOP"),
+		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
                        XA_CARDINAL, 32, PropModeReplace,
                        (guchar*) atoms, 1);
     }
@@ -1034,7 +1034,7 @@ set_initial_hints (GdkWindow *window)
     {
       XDeleteProperty (xdisplay,
                        xwindow,
-		       gdk_x11_get_xatom_by_name_for_display (xdisplay, "_NET_WM_DESKTOP"));
+		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"));
     }
 }
 
