@@ -1,3 +1,8 @@
+2003-05-13  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_get_position):
+	fixed parameter name in inline docs.
+
 2003-05-11  Anders Carlsson  <andersca@codefactory.se>
 
 	* gtk/gtkdnd.c (gtk_drag_source_unset_icon): Don't cast a gchar to
