@@ -1,0 +1,187 @@
+Prerequisites
+=============
+
+GTK+ requires the GLIB library, available at the same location as
+you got this package.
+
+Simple install procedure
+========================
+
+  % gzip -cd gtk+-@GTK_VERSION@.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-@GTK_VERSION@			   # change to the toplevel directory
+  % ./configure				   # run the `configure' script
+  % make				   # build GTK
+  [ Become root if necessary ]
+  % make install			   # install GTK
+
+The Nitty-Gritty
+================
+
+The 'configure' script can be given a number of options to enable
+and disable various features. For a complete list, type:
+
+  ./configure --help
+
+A few of the more important ones:
+
+*  --prefix=PREFIX         install architecture-independent files in PREFIX
+                           [ Defaults to /usr/local ]
+
+*  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+                           [ Defaults to the value given to --prefix ]
+
+*  --with-xinput=[no/gxi/xfree] support XInput [default=no]
+
+The --with-xinput flag specifies whether to compile with support
+for the XInput extension (mainly used for graphics tablets), and
+which form of support to use:
+
+  no    : no support 
+  gxi   : Use generic XInput support
+  xfree : Use special features in the Wacom drivers in XFree86 3.3.1
+          and later.
+
+For more information, follow the link from http://www.gtk.org
+
+*  --disable-nls           do not use Native Language Support
+
+If this flag is not specified, GTK+ will try to find
+and use the gettext() set of functions to provide translations
+of the strings in the standard dialogs into the
+user's native language.
+
+*  --enable-xim            support XIM [default=yes]
+
+Specifying --disable-xim will disable support for entering
+internationalized text using X Input Methods. This will give some
+slight savings in speed and memory use and might be necessary
+with older versions of X.
+
+*  --with-locale=LOCALE    locale name you want to use
+
+The --with-locale options is used to determine if your operating
+system has support for the locale you will be using. If not, X's
+built in locale support will be used.
+
+Because of bugs in autoconf, it is necessary to specify this
+option even if your LANG environment variable is correctly set.
+
+This option does not determine which locale GTK will use at
+runtime. That will be determined from the usual environment
+variables.  If you will be using multiple locales with GTK,
+specify the one for which your operating system has the worst
+support for the --with-locale option.
+
+
+Options can be given to the compiler and linker by setting
+environment variables before running configure. A few of the more
+important ones:
+
+ CC       : The C compiler to use
+ CPPFLAGS : Flags for the C preprocesser such as -I and -D
+ CFLAGS   : C compiler flags
+
+The most important use of this is to set the
+optimization/debugging flags. For instance, to compile with no
+debugging information at all, run configure as:
+
+ CFLAGS=-O2 ./configure           # Bourne compatible shells (sh/bash/zsh)
+
+or,
+
+ setenv CFLAGS -O2 ; ./configure  # csh and variants
+
+Native-Language Support and gettext()
+=====================================
+
+To provide native-language support (NLS) GTK+ uses the
+gettext() set of functions. These functions are found
+in the C library on many systems, such as the Solaris
+C library and the GNU C Library, version 2.
+
+If your C library does not provide the necessary functionality,
+you may wish to install the GNU gettext package. You'll
+need version 0.10.35 or better. Version 0.10.35 is
+available from ftp://alpha.gnu.org/pub/gnu
+
+Generally, GTK+ will properly detect what is installed
+on your system and enable or disable NLS as appropriate.
+However, in rare cases, it may be necessary to disable
+NLS manually to get GTK+ to compile. You can do this
+by specifying the --disable-nls flag when configuring
+GTK+.
+
+Using an uninstalled copy of GLIB [ Unsupported ]
+=================================================
+
+You can compile GTK+ against a copy of GLIB that you have not
+yet installed. To do this, give the --with-glib=DIR options
+to ./configure. For instance:
+
+ ./configure --with-glib=../glib-@GTK_VERSION@
+
+This, however, will not work if you built GLIB with different
+source and build directories.
+
+It is recommended that you install GLIB before compiling
+GTK+. The --with-glib option is not regularly tested
+and may not function correctly. In addition, 
+inter-library dependencies won't be generated when
+using --with-glib=.
+
+Installation directories
+========================
+
+The location of the installed files is determined by the --prefix
+and --exec-prefix options given to configure. There are also more
+detailed flags to control individual directories. However, the
+use of these flags is not tested.
+
+One particular detail to note, is that the architecture-dependent
+include file glibconfig.h is installed in:
+
+  $exec_pref/lib/glib/include/
+
+if you have a version in $prefix/include, this is out of date
+and should be deleted.
+
+A shell script gtk-config is created during the configure
+process, and installed in the bin/ directory
+($exec_prefix/bin). This is used to determine the location of GTK
+when building applications.  If you move GTK after installation,
+it will be necessary to edit this file.
+
+For complete details, see the file docs/gtk-config.txt
+
+
+Notes for using XIM support for Japanese input
+==============================================
+
+* There is a bug in older versions of kinput2 that will cause GTK+
+to hang when destroying a text entry. The latest versions of
+kinput is available from:
+
+  ftp://ftp.sra.co.jp/pub/x11/kinput2
+
+* The locale information file for the ja_JP EUC locale
+distributed with some recent versions of X11 specifies to use the
+C library multibyte functions. Unless your C library has support
+for Japanese locales, this is incorrect, and will cause problems
+for GTK's internationalization.
+
+(In particular, this occurs with GNU libc 2.0 in which
+the multibyte functions always translate to and from UTF-8; but
+the problem may occur for other C libraries, and other operating
+systems as well.)
+
+To fix this, change the line:
+
+use_stdc_env		True
+
+to 
+
+use_stdc_env		False
+
+in the file /usr/X11R6/lib/X11/locale/ja_JP/XLC_LOCALE.
+
+

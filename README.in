@@ -1,0 +1,101 @@
+General Information
+===================
+
+This is GTK+ version @GTK_VERSION@. GTK+, which stands for the Gimp ToolKit, 
+is a library for creating graphical user interfaces for the X Window 
+System. It is designed to be small, efficient, and flexible. GTK+ is 
+written in C with a very object-oriented approach.
+
+The official ftp site is:
+  ftp://ftp.gtk.org/pub/gtk
+
+The official web site is:
+  http://www.gtk.org/
+
+A mailing list is located at:
+  gtk-list@redhat.com
+
+To subscribe: mail -s subscribe gtk-list-request@redhat.com < /dev/null
+(Send mail to gtk-list-request@redhat.com with the subject "subscribe")
+
+Installation
+============
+
+See the file 'INSTALL'
+
+How to report bugs
+==================
+
+Bugs should be reported to the GNOME bug tracking
+system. (http://bugs.gnome.org). To report a problem
+about GTK+, send mail to submit@bugs.gnome.org.
+
+The subject of the mail should describe your problem.
+In the body of the mail, you should first include
+a "pseudo-header" that gives the package and 
+version number. This should be separated by a blank
+line from the actual headers.
+
+ Package: gtk+
+ Version: @GTK_VERSION@
+
+[ Please substitute @GTK_VERSION@ with the version of GTK+ that
+  you have installed ]
+
+Then describe the bug. Include:
+
+* Information about your system. For instance:
+
+   - What operating system and version
+   - What version of X
+   - For Linux, what version of the C library
+
+  And anything else you think is relevant.
+
+* How to reproduce the bug. 
+
+  If you can reproduce it with the testgtk program that is built 
+  in the gtk/ subdirectory, that will be most convenient.  Otherwise, 
+  please include a short test program that exhibits the behavior. 
+  As a last resort, you can also provide a pointer to a larger piece 
+  of software that can be downloaded.
+
+  (Bugs that can be reproduced within the  GIMP are almost as good 
+  as bugs that can be reproduced in testgtk. If you are reporting a 
+  bug found with the GIMP, please include the version number of the GIMP 
+  you are using)
+
+* If the bug was a crash, the exact text that was printed out
+  when the crash occured.
+
+* Further information such as stack traces may be useful, but
+  is not necessary. If you do send a stack trace, and the error
+  is an X error, it will be more useful if the stacktrace
+  is produced running the test program with the --sync command
+  line option.
+
+An example of a bug report:
+
+====
+To: submit@bugs.gnome.org
+From: yourname@your.address.org
+Subject: handlebox test in testgtk is misnamed.
+
+Package: gtk+
+Version: @GTK_VERSION@
+
+When I run gtk/testgtk, the button "handle box"
+is misnamed. There are multiple handle boxes in
+the demo, so it should be "handle boxes", to
+be like "buttons" or "check buttons".
+===
+
+Patches
+=======
+
+Patches can be uploaded to the incoming/ directory on
+ftp.gtk.org.  Please follow the instructions there, and include
+your name and email address in the README file.
+
+If the patch fixes a bug, it is usually a good idea to include
+all the information described in "How to Report Bugs".
