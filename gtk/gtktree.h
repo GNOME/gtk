@@ -34,7 +34,7 @@ extern "C" {
 #define GTK_TREE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tree_get_type (), GtkTreeClass)
 #define GTK_IS_TREE(obj)       GTK_CHECK_TYPE (obj, gtk_tree_get_type ())
 
-#define GTK_IS_ROOT_TREE(obj)   (GTK_TREE(obj)->root_tree == obj)
+#define GTK_IS_ROOT_TREE(obj)   ((GtkObject*) GTK_TREE(obj)->root_tree == (GtkObject*)obj)
 #define GTK_TREE_ROOT_TREE(obj) (GTK_TREE(obj)->root_tree ? GTK_TREE(obj)->root_tree : GTK_TREE(obj))
 #define GTK_TREE_SELECTION(obj) (GTK_TREE_ROOT_TREE(obj)->selection)
 
