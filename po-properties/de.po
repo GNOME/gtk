@@ -5,21 +5,23 @@
 # Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
 # Christian Neumair <chris@gnome-de.org>, 2002-2004.
 # Hendrik Richter <hendrik@gnome-de.org>, 2004.
-#
+# Hendrik Brandt <heb@gnome-de.org>
 # IM = Input method => Eingabemethode
-#
+# Hendrik Richter <hendrik@gnome-de.org>, 2004.
+# 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-11-15 16:25+0100\n"
-"Last-Translator: Hendrik Richter <hendrik@gnome-de.org>\n"
+"POT-Creation-Date: 2004-12-18 14:56+0100\n"
+"PO-Revision-Date: 2004-12-18 15:04+0100\n"
+"Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);"
 
 #: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Number of Channels"
@@ -102,9 +104,8 @@ msgid "Screen"
 msgstr "Bildschirm"
 
 #: gdk/gdkpango.c:575
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "Das Modell für die Baumansicht"
+msgstr "Der GdkScreen für den Renderer"
 
 #: gtk/gtkaboutdialog.c:195
 msgid "Program name"
@@ -754,9 +755,8 @@ msgid "Image widget"
 msgstr "Bild-Widget"
 
 #: gtk/gtkbutton.c:307
-#, fuzzy
 msgid "Child widget to appear next to the button text"
-msgstr "Das Kind-Widget, das neben dem Menütext erscheint"
+msgstr "Das Kind-Widget, das neben dem Button-Text erscheint"
 
 #: gtk/gtkbutton.c:373
 msgid "Default Spacing"
@@ -2302,58 +2302,48 @@ msgid "The model for the icon view"
 msgstr "Das Modell für die Icon View"
 
 #: gtk/gtkiconview.c:413
-#, fuzzy
 msgid "Number of columns"
-msgstr "Kanalanzahl"
+msgstr "Spaltenanzahl"
 
 #: gtk/gtkiconview.c:414
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "Die Anzahl der anzuzeigenden Nachkommastellen"
+msgstr "Die Anzahl der anzuzeigenden Spalten"
 
 #: gtk/gtkiconview.c:431
-#, fuzzy
 msgid "Width for each item"
-msgstr "Als Objektbeschriftung zu verwendendes Widget"
+msgstr "Die Breite für jeden Eintrag"
 
 #: gtk/gtkiconview.c:432
 msgid "The width used for each item"
-msgstr ""
+msgstr "Die verwendete Breite für jeden Eintrag"
 
 #: gtk/gtkiconview.c:448
-#, fuzzy
 msgid "Space which is inserted between cells of an item"
-msgstr "Zwischen Zellen eingefügter Platz"
+msgstr "Der Platz der zwischen den Zellen eines Eintrags eingefügt wird"
 
 #: gtk/gtkiconview.c:463
-#, fuzzy
 msgid "Row Spacing"
 msgstr "Zeilenabstand"
 
 #: gtk/gtkiconview.c:464
-#, fuzzy
 msgid "Space which is inserted between grid rows"
-msgstr "Zwischen Zellen eingefügter Platz"
+msgstr "Zwischen den Gitterzeilen eingefügter Platz"
 
 #: gtk/gtkiconview.c:479
-#, fuzzy
 msgid "Column Spacing"
 msgstr "Spaltenabstand"
 
 #: gtk/gtkiconview.c:480
-#, fuzzy
 msgid "Space which is inserted between grid column"
-msgstr "Zwischen Zellen eingefügter Platz"
+msgstr "Zwischen den Gitterspalten eingefügter Platz"
 
 #: gtk/gtkiconview.c:495
-#, fuzzy
 msgid "Margin"
-msgstr "Linker Rand"
+msgstr "Rand"
 
 #: gtk/gtkiconview.c:496
-#, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "Zwischen Zellen eingefügter Platz"
+msgstr "Der Platz der an den Rändern der Symbolansicht eingefügt wird"
 
 #: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2576,21 +2566,19 @@ msgstr "Soll der Beschriftungstext im Einzelzeilen-Modus dargestellt werden?"
 
 #: gtk/gtklabel.c:492
 msgid "Angle"
-msgstr ""
+msgstr "Winkel"
 
 #: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "Der Winkel um den die Beschriftung rotiert wird"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "Breite in Zeichen"
+msgstr "Maximale Breite in Zeichen"
 
 #: gtk/gtklabel.c:514
-#, fuzzy
 msgid "The desired maximum width of the label, in characters"
-msgstr "Die gewünschte Breite der Beschriftung, in Zeichen"
+msgstr "Die gewünschte maximale Breite der Beschriftung, in Zeichen"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -5078,8 +5066,3 @@ msgstr "EM-Statusstil"
 msgid "How to draw the input method statusbar"
 msgstr "Wie die Eingabemethoden-Statusleiste gezeichnet werden soll"
 
-#~ msgid "Width In Chararacters"
-#~ msgstr "Breite in Zeichen"
-
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr "Soll der Ordner-Browser sichtbar sein?"
