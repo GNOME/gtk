@@ -699,7 +699,7 @@ gtk_text_iter_get_line_index (const GtkTextIter *iter)
  * Returns the Unicode character at this iterator.  (Equivalent to
  * operator* on a C++ iterator.)  If the iterator points at a
  * non-character element, such as an image embedded in the buffer, the
- * Unicode "unknown" character 0xFFFD is returned. If invoked on
+ * Unicode "unknown" character 0xFFFC is returned. If invoked on
  * the end iterator, zero is returned; zero is not a valid Unicode character.
  * So you can write a loop which ends when gtk_text_iter_get_char ()
  * returns 0.
@@ -731,8 +731,8 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
     }
   else
     {
-      /* Unicode "unknown character" 0xFFFD */
-      return gtk_text_unknown_char;
+      /* Unicode "unknown character" 0xFFFC */
+      return GTK_TEXT_UNKNOWN_CHAR;
     }
 }
 
@@ -743,10 +743,10 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
  *
  * Returns the text in the given range. A "slice" is an array of
  * characters encoded in UTF-8 format, including the Unicode "unknown"
- * character 0xFFFD for iterable non-character elements in the buffer,
+ * character 0xFFFC for iterable non-character elements in the buffer,
  * such as images.  Because images are encoded in the slice, byte and
  * character offsets in the returned array will correspond to byte
- * offsets in the text buffer. Note that 0xFFFD can occur in normal
+ * offsets in the text buffer. Note that 0xFFFC can occur in normal
  * text as well, so it is not a reliable indicator that a pixbuf or
  * widget is in the buffer.
  *
@@ -2975,7 +2975,7 @@ forward_chars_with_skipping (GtkTextIter *iter,
       gboolean ignored = FALSE;
 
       if (skip_nontext &&
-          gtk_text_iter_get_char (iter) == gtk_text_unknown_char)
+          gtk_text_iter_get_char (iter) == GTK_TEXT_UNKNOWN_CHAR)
         ignored = TRUE;
 
       if (!ignored &&
@@ -3152,7 +3152,7 @@ strbreakup (const char *string,
  * @iter: start of search
  * @str: a search string
  * @visible_only: if %TRUE, search only visible text
- * @slice: if %TRUE, @str contains 0xFFFD when we want to match widgets, pixbufs
+ * @slice: if %TRUE, @str contains 0xFFFC when we want to match widgets, pixbufs
  * @match_start: return location for start of match, or %NULL
  * @match_end: return location for end of match, or %NULL
  * @limit: bound for the search, or %NULL for the end of the buffer
@@ -3470,7 +3470,7 @@ my_strrstr (const gchar *haystack,
  * @iter: a #GtkTextIter where the search begins
  * @str: search string
  * @visible_only: if %TRUE search only visible text
- * @slice: if %TRUE the search string contains 0xFFFD to match pixbufs, widgets
+ * @slice: if %TRUE the search string contains 0xFFFC to match pixbufs, widgets
  * @match_start: return location for start of match, or %NULL
  * @match_end: return location for end of match, or %NULL
  * @limit: location of last possible @match_start, or %NULL for start of buffer

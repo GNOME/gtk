@@ -112,8 +112,9 @@ _gtk_pixbuf_segment_new (GdkPixbuf *pixbuf)
 
   seg->next = NULL;
 
-  seg->byte_count = 3; /* We convert to the 0xFFFD "unknown character",
-                          a 3-byte sequence in UTF-8 */
+  seg->byte_count = 3; /* We convert to the 0xFFFC "unknown character",
+                        * a 3-byte sequence in UTF-8
+                        */
   seg->char_count = 1;
 
   seg->body.pixbuf.pixbuf = pixbuf;
@@ -208,7 +209,7 @@ _gtk_widget_segment_new (void)
 
   seg->next = NULL;
 
-  seg->byte_count = 3; /* We convert to the 0xFFFD "unknown character",
+  seg->byte_count = 3; /* We convert to the 0xFFFC "unknown character",
                         * a 3-byte sequence in UTF-8
                         */
   seg->char_count = 1;

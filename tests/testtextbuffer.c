@@ -22,7 +22,7 @@ main (int argc, char** argv)
   /* Check UTF8 unknown char thing */
   g_assert (g_utf8_strlen (gtk_text_unknown_char_utf8, 3) == 1);
   ch = g_utf8_get_char (gtk_text_unknown_char_utf8);
-  g_assert (ch == gtk_text_unknown_char);
+  g_assert (ch == GTK_TEXT_UNKNOWN_CHAR);
 
   /* First, we turn on btree debugging. */
   gtk_debug_flags |= GTK_DEBUG_TEXT;
@@ -603,7 +603,7 @@ fill_buffer (GtkTextBuffer *buffer)
   color.blue = color.green = 0;
   color.red = 0xffff;
   gtk_object_set (GTK_OBJECT (tag),
-                 "offset", -4,
+                 "rise", -4,
                  "foreground_gdk", &color,
                  NULL);
 

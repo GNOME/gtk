@@ -557,7 +557,7 @@ static gboolean
 possibly_not_text (gunichar ch,
                    gpointer user_data)
 {
-  return ch == 0xFFFD;
+  return ch == GTK_TEXT_UNKNOWN_CHAR;
 }
 
 static void
@@ -684,7 +684,7 @@ insert_range_untagged (GtkTextBuffer     *buffer,
               /* nothing left to do */
               break;
             }
-          else if (gtk_text_iter_get_char (&range_end) == 0xFFFD)
+          else if (gtk_text_iter_get_char (&range_end) == GTK_TEXT_UNKNOWN_CHAR)
             {
               GdkPixbuf *pixbuf = NULL;
               GtkTextChildAnchor *anchor = NULL;
@@ -717,7 +717,7 @@ insert_range_untagged (GtkTextBuffer     *buffer,
                 }
               else
                 {
-                  /* The 0xFFFD was in a text segment, so
+                  /* The GTK_TEXT_UNKNOWN_CHAR was in a text segment, so
                    * keep going. 
                    */
                   gtk_text_iter_forward_find_char (&range_end,
@@ -1287,11 +1287,11 @@ gtk_text_buffer_get_text (GtkTextBuffer      *buffer,
  * Returns the text in the range [@start,@end). Excludes undisplayed
  * text (text marked with tags that set the invisibility attribute) if
  * @include_hidden_chars is FALSE. The returned string includes a
- * 0xFFFD character whenever the buffer contains
+ * 0xFFFC character whenever the buffer contains
  * embedded images, so byte and character indexes into
  * the returned string <emphasis>do</emphasis> correspond to byte
  * and character indexes into the buffer. Contrast with
- * gtk_text_buffer_get_text (). Note that 0xFFFD can occur in normal
+ * gtk_text_buffer_get_text (). Note that 0xFFFC can occur in normal
  * text as well, so it is not a reliable indicator that a pixbuf or
  * widget is in the buffer.
  *

@@ -38,7 +38,7 @@ extern GtkTextLineSegmentClass gtk_text_child_type;
  * UTF 8 Stubs
  */
 
-extern const gunichar gtk_text_unknown_char;
+#define GTK_TEXT_UNKNOWN_CHAR 0xFFFC
 extern const gchar gtk_text_unknown_char_utf8[];
 
 gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);

@@ -1,3 +1,16 @@
+2000-11-14  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/testtextbuffer.c (fill_buffer): change "offset" to "rise"
+
+	* gtk/gtktexttypes.h (GTK_TEXT_UNKNOWN_CHAR): Add macro for
+	unknown char, no real reason we were using a variable. 
+	Remove gtk_text_unknown_char variable. Fix all the text widget
+	files accordingly.
+
+	* gtk/gtktexttypes.c: Change "unknown character" to 0xFFFC, 
+	since the Unicode spec seems to prefer that character for our
+	purposes.
+
 Wed Nov 15 02:18:01 2000  Robert Brady  <robert@suse.co.uk>
 
 	* gtk/gtkrc.c (gtk_rc_get_im_module_file): The return 
