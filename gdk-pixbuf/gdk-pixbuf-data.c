@@ -36,7 +36,7 @@
  * @bits_per_sample: Number of bits per sample.
  * @width: Width of the image in pixels.
  * @height: Height of the image in pixels.
- * @rowstride: Distance in bytes between rows.
+ * @rowstride: Distance in bytes between row starts.
  * @destroy_fn: Function used to free the data when the pixbuf's reference count
  * drops to zero, or %NULL if the data should not be freed.
  * @destroy_fn_data: Closure data to pass to the destroy notification function.
@@ -44,8 +44,7 @@
  * Creates a new #GdkPixbuf out of in-memory image data.  Currently only RGB
  * images with 8 bits per sample are supported.
  * 
- * Return value: A newly-created #GdkPixbuf structure with a reference count of
- * 1.
+ * Return value: A newly-created #GdkPixbuf structure with a reference count of 1.
  **/
 GdkPixbuf *
 gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean has_alpha,

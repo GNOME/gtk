@@ -1,3 +1,7 @@
+2003-08-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Clarify misleading explanation of rowstride. (#119000)
+
 Tue Jul 29 14:21:48 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/tmpl/gtktoolbar.sgml: Move documentation inline

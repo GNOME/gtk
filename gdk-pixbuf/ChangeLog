@@ -1,3 +1,9 @@
+2003-08-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf.c (gdk_pixbuf_get_rowstride): 
+	* gdk-pixbuf-data.c (gdk_pixbuf_new_from_data): Clarify misleading explanation of 
+	rowstride.  (#119000)
+
 2003-07-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): Preserve the aspect ratio.  (#118145, 
