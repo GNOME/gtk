@@ -125,27 +125,37 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
     gchar* nprefix = NULL;
     gint pos;
 
-    if ( !GTK_LIST(combo->list)->children )
+    if ( !GTK_LIST (combo->list)->children )
       return FALSE;
     
     gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "key_press_event");
-    cmpl = g_completion_new((GCompletionFunc)gtk_combo_func);
-    g_completion_add_items(cmpl, GTK_LIST(combo->list)->children);
-    pos = GTK_EDITABLE(entry)->current_pos;
-    prefix = gtk_editable_get_chars(GTK_EDITABLE(entry), 0, pos);
+
+    cmpl = g_completion_new ((GCompletionFunc)gtk_combo_func);
+    g_completion_add_items (cmpl, GTK_LIST (combo->list)->children);
+
+    pos = GTK_EDITABLE (entry)->current_pos;
+    prefix = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, pos);
+
     g_completion_complete(cmpl, prefix, &nprefix);
-    if (nprefix && strlen(nprefix) > strlen(prefix)) 
+
+    if (nprefix && strlen (nprefix) > strlen (prefix)) 
       {
-    	gtk_editable_insert_text(GTK_EDITABLE(entry), nprefix+pos, 
-				 strlen(nprefix)-strlen(prefix), &pos);
-    	GTK_EDITABLE(entry)->current_pos = pos;
+    	gtk_editable_insert_text (GTK_EDITABLE (entry), nprefix + pos, 
+				 strlen (nprefix) - strlen (prefix), &pos);
+    	GTK_EDITABLE (entry)->current_pos = pos;
     }
-    g_free(prefix);
-    g_completion_free(cmpl);
+
+    if (nprefix)
+      g_free (nprefix);
+    g_free (prefix);
+    g_completion_free (cmpl);
+
     return TRUE;
   }
+
   if (!combo->use_arrows || !GTK_LIST (combo->list)->children)
     return FALSE;
+
   li = g_list_find (GTK_LIST (combo->list)->children, gtk_combo_find (combo));
 
   if ((event->keyval == GDK_Up)

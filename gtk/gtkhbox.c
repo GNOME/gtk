@@ -69,7 +69,7 @@ gtk_hbox_init (GtkHBox *hbox)
 }
 
 GtkWidget*
-gtk_hbox_new (gint homogeneous,
+gtk_hbox_new (gboolean homogeneous,
 	      gint spacing)
 {
   GtkHBox *hbox;

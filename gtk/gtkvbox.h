@@ -51,7 +51,7 @@ struct _GtkVBoxClass
 
 
 GtkType	   gtk_vbox_get_type (void);
-GtkWidget* gtk_vbox_new	     (gint homogeneous,
+GtkWidget* gtk_vbox_new	     (gboolean homogeneous,
 			      gint spacing);
 
 

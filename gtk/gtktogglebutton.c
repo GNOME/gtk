@@ -267,6 +267,7 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
     }
 }
 
+
 void
 gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
 			      gboolean         is_active)
@@ -279,6 +280,17 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
   if (toggle_button->active != is_active)
     gtk_button_clicked (GTK_BUTTON (toggle_button));
 }
+
+
+gboolean
+gtk_toggle_button_get_active (GtkToggleButton *toggle_button)
+{
+  g_return_val_if_fail (toggle_button != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button), FALSE);
+
+  return (toggle_button->active) ? TRUE : FALSE;
+}
+
 
 void
 gtk_toggle_button_toggled (GtkToggleButton *toggle_button)

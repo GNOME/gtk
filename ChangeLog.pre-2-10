@@ -1,3 +1,16 @@
+1999-01-20  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gtk/gtkcombo.c (gtk_combo_entry_key_press):
+	Free 'nprefix', closing a memory leak.
+	Spaced out the code a bit to make it more readable.
+
+	* gtk/gtkhbox.[ch] (gtk_hbox_new),
+	  gtk/gtkvbox.[ch] (gtk_vbox_new):
+	Change 'homogenous' arg from gint to gboolean.
+
+	* gtk/gtktogglebutton.[ch]:
+	New function gtk_toggle_button_get_active().
+
 1999-01-20  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkdnd.c (gtk_drag_get_event_action): Allow button 2 to act

@@ -51,7 +51,7 @@ struct _GtkHBoxClass
 
 
 GtkType	   gtk_hbox_get_type (void);
-GtkWidget* gtk_hbox_new	     (gint homogeneous,
+GtkWidget* gtk_hbox_new	     (gboolean homogeneous,
 			      gint spacing);
 
 
