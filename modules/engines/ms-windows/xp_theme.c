@@ -97,12 +97,6 @@ static const short element_part_map[]=
   MP_SEPARATOR,
   SP_GRIPPER,
   SP_PANE
-
-#if UXTHEME_HAS_LINES
-  ,
-  GP_LINEHORZ,
-  GP_LINEVERT
-#endif
 };
 
 static HINSTANCE uxtheme_dll = NULL;
@@ -242,11 +236,6 @@ xp_theme_get_handle_by_element (XpThemeElement element)
 
 	case XP_THEME_ELEMENT_TOOLBAR_BUTTON:
       klazz = XP_THEME_CLASS_TOOLBAR;
-      break;
-
-    case XP_THEME_ELEMENT_HLINE:
-    case XP_THEME_ELEMENT_VLINE:
-      klazz = XP_THEME_CLASS_GLOBALS;
       break;
 
     case XP_THEME_ELEMENT_MENU_ITEM:
@@ -603,36 +592,6 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
     case XP_THEME_ELEMENT_PROGRESS_TROUGH_V:
       ret = 1;
       break;
-
-#if UXTHEME_HAS_LINES
-
-    case XP_THEME_ELEMENT_HLINE:
-      switch(state) {
-      case GTK_STATE_ACTIVE:
-	ret = LHS_RAISED;
-	break;
-      case GTK_STATE_INSENSITIVE:
-	ret = LHS_SUNKEN;
-	break;
-      default:
-	ret = LHS_FLAT;
-      }
-      break;
-
-    case XP_THEME_ELEMENT_VLINE:
-      switch(state) {
-      case GTK_STATE_ACTIVE:
-	ret = LVS_RAISED;
-	break;
-      case GTK_STATE_INSENSITIVE:
-	ret = LVS_SUNKEN;
-	break;
-      default:
-	ret = LHS_FLAT;
-      }
-      break;
-
-#endif
 
 	case XP_THEME_ELEMENT_MENU_ITEM:
 	case XP_THEME_ELEMENT_MENU_SEPARATOR:

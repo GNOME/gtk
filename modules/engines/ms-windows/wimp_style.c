@@ -534,7 +534,9 @@ setup_wimp_rc_style(void)
 	     "fg[NORMAL] = { %d, %d, %d }\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
 	     "%s = \"%s\"\n"
-	     "}widget_class \"*MenuItem*\" style \"wimp-menu\"\n",
+	     "}widget_class \"*MenuItem*\" style \"wimp-menu\"\n"
+	     "widget_class \"*GtkMenu\" style \"wimp-menu\"\n"
+	     "widget_class \"*GtkMenuShell*\" style \"wimp-menu\"\n",
 	     fg_prelight.red,
 	     fg_prelight.green,
 	     fg_prelight.blue,
@@ -1683,17 +1685,9 @@ draw_hline (GtkStyle		*style,
 			return;
 	  }
   }
-#if UXTHEME_HAS_LINES
-  if (xp_theme_draw(window, XP_THEME_ELEMENT_HLINE, style, x1, y, x2,
-		    style->ythickness, state_type, area))
-    {
-    }
-  else
-#endif
-    {
-      parent_class->draw_hline (style, window, state_type, area, widget,
-				detail, x1, x2, y);
-    }
+
+  parent_class->draw_hline (style, window, state_type, area, widget,
+			    detail, x1, x2, y);
 }
 
 static void
@@ -1707,17 +1701,8 @@ draw_vline (GtkStyle		*style,
 	    gint		 y2,
 	    gint		 x)
 {
-#if UXTHEME_HAS_LINES
-  if (xp_theme_draw(window, XP_THEME_ELEMENT_VLINE, style, x, y1,
-		    style->xthickness, y2, state_type, area))
-    {
-    }
-  else
-#endif
-    {
-      parent_class->draw_vline (style, window, state_type, area, widget,
-				detail, y1, y2, x);
-    }
+  parent_class->draw_vline (style, window, state_type, area, widget,
+			    detail, y1, y2, x);
 }
 
 static void

@@ -1,3 +1,15 @@
+2004-01-20  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix disappearing text in Gimp option menus.
+	Fix background color on XP menus.
+	
+2004-01-20  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/xp_theme.h
+	* src/xp_theme.c
+	* src/wimp_style.c: Remove UXTHEME_HAS_LINES stuff. I played around
+	with line drawing, and the results were absolutely dreadful.
+	
 2003-12-30  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c
