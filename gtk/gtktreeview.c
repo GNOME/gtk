@@ -6434,9 +6434,9 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
 
   /* position window */
 
-  gtk_object_set_data_full (GTK_OBJECT (window), "gtk-tree-view-text",
-			    g_strdup (gtk_entry_get_text (GTK_ENTRY (entry))),
-			    (GDestroyNotify) g_free);
+  /* yes, we point to the entry's private text thing here, a bit evil */
+  gtk_object_set_data (GTK_OBJECT (window), "gtk-tree-view-text",
+		       gtk_entry_get_text (GTK_ENTRY (entry)));
   gtk_object_set_data (GTK_OBJECT (tree_view),
 		       GTK_TREE_VIEW_SEARCH_DIALOG_KEY, window);
 

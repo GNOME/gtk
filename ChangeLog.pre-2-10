@@ -1,3 +1,9 @@
+Sat Jan 12 16:57:31 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search):
+	revert Owen's change (using a strdupped string as object data), so
+	the interactive search works again
+
 2002-01-11  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtklabel.c: put in more links to Pango markup format docs
@@ -11,7 +17,7 @@
 	* gdk/win32/*.c: Add some more checks for failed GDI calls. If a
 	call fails, don't use bogus values.
 
-	* gdk/win32/gdkcursor-win32.c (_gdk_win32_data_to_wcursor): Plug
+	 gdk/win32/gdkcursor-win32.c (_gdk_win32_data_to_wcursor): Plug
 	memory leak: g_free() the AND and XOR bitmaps after use.
 	(_gdk_cursor_destroy): If we are destroying the current Windows
 	cursor, set the Windows cursor to none first.
