@@ -1,3 +1,138 @@
+Fri Feb  2 12:26:50 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_add_initial_default_files): Get rid of
+	a bunch of g_strdup_printf("%s%s") in favor of g_strconcat().
+
+	* gtk/gtkrc.c Makefile.am: Use $(libdir), not $(exe_prefix),
+	since some people set $(libdir) separately. (#1290, David Kaelbling)
+
+Thu Feb  1 18:25:46 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c: If PATH_MAX and MAXPATHLEN are not
+	defined, define MAXPATHLEN to 2048. (The Hurd doesn't have
+	MAXPATHLEN, but the code here depends on a fixed value.)
+	(#4524)
+
+Wed Jan 31 22:01:04 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_button_changed): Handle the case
+	where child == NULL and handle_position == RIGHT or BOTTOM. (#8041g)
+
+Wed Jan 31 21:20:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (real_tree_move): If the node being moved isn't
+	viewable there is no way that moving the node will cause the 
+	focus row to become not viewable, so omit check on the visibility
+	of new_sibling, which is irrelevant. (Fixes #8002, David Helder)
+
+Wed Jan 31 20:38:17 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_commit_cb): Delete the current
+	selection before inserting new text.
+
+Wed Jan 31 18:49:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_item_state_changed_cb):
+	Make the sensitivity of the reparented child track that of
+	the original parent menu item. (#34218, David Hodson)
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_item_destroy_cb): Handle
+	the case where the current item is destroyed properly.
+
+	* gtk/gtkoptionmenu.c: Some additional code cleanups and fix
+	some edge cases with child-less menuitems.
+	
+Wed Jan 31 17:16:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_window_key_press): Make Return
+	key pop down window. (#12074, Jon K Hellan)
+
+Wed Jan 31 16:21:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklist.c (gtk_list_signal_item_toggle): Don't allow
+	toggling of rows off in BROWSE or EXTENDED mode. (#12072, Jon K Hellan) 
+	The solution here isn't perfect - you get an extraneous
+	emission of "toggle", which could conceivably confuse an app,
+	but better than the current situation. LXR search seems to
+	indicate that no apps in GNOME CVS connect to "toggle".
+
+Wed Jan 31 15:46:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/Makefile.am (libgtkinclude_HEADERS): Move gtkcompat.h from
+        gtk_public_h_sources to directly here to avoid warning when
+        building srcdir != builddir. (#9656)
+
+Tue Jan 30 19:49:02 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c: Patch from Kipp Hickman to make the event
+	handlers in gtkrange.c return the proper values (TRUE == handled)
+	(#10316).
+
+	This is just the tip of the iceberg, but gtkrange.c is the
+	most common place where the propagation is problematical,
+	and also a place where it is almost certainly safe to change
+	this in the stable branch.
+
+	(You don't want right click popups on a range control or anything...)
+
+Tue Jan 30 18:57:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (clear_focus_area): We need to clear the focus
+	area on focus out, even if a background pixmap isn't set.
+	(#13941)
+	
+Tue Jan 30 18:24:10 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_shape): Fix from Sean Cunningham
+	to deal with setting the shape properly when scrolling arrows are
+	turned on, but not visible because there is sufficient space.
+	(#13432)
+
+Tue Jan 30 16:39:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_delete_item): For menu
+	items with submenus, destroy the item along with the submenu.
+	(#7841, Brian Masney(?)) Also, handle paths of the form '<foo>/abcd...' 
+	properly.
+
+	* gtk/testgtk.c (menu_items): Add a dummy branch that we delete
+	later.
+
+Tue Jan 30 15:51:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_real_set_focus): Fix a problem where
+	the focus widget sometimes wasn't drawn with the default if there
+	was no default widget.
+
+	* gtk/gtkstyle.c (gtk_style_real_unrealize): free colors,
+	unreference pixmaps. 
+
+	* gtk/gtkstyle.c (gtk_style_realize): Reference colormap
+	for some extra safety.
+
+Mon Jan 29 19:00:01 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk{ctree.c,clist.c} (set_cell_contents): Handle setting
+	the text of a cell to the old pointer value better, by
+	copying the new text before freeing the old text. Some code
+	cleanup. (#8079, Karl Nelson)
+
+Mon Jan 29 16:50:19 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.[ch] gtk/gtkframe.[ch]: Make gtk_label_get_text()
+	gtk_frame_get_label() non strdup'ing, and G_CONST_RETURN.
+
+Mon Jan 29 15:22:51 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_remove): When removing an
+	item from a menu, check to see if it matches 
+	menu->old_active_menu_item, and if so, unref and clear
+	old_active_menu_item (Patch from Pavel Cisler)
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_remove): Unset 
+	menu_shell->active_menu_item, if it is the child being
+	removed. (Patch based on that of Gene Ragan, #50337)
+
 2001-01-31  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkselection-fb.c: 
