@@ -1905,13 +1905,15 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	}
 
       GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
-      gtk_tree_path_free (path);
 
       if (emit_row_activated)
 	{
 	  gtk_grab_remove (widget);
 	  gtk_tree_view_row_activated (tree_view, path, column);
 	}
+
+      gtk_tree_path_free (path);
+
       return TRUE;
     }
 

@@ -1,3 +1,8 @@
+2002-03-26  Dave Camp  <dave@ximian.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Free the path
+	after calling gtk_tree_view_row_activated() rather than before.
+
 2002-03-25  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkrc.c (gtk_rc_parse_font_name): free the style's
