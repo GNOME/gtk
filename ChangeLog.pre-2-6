@@ -1,3 +1,7 @@
+1998-02-17  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkcc.c: Added some missing newlines on debug messages.
+
 Tue Feb 17 05:41:31 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkentry.c (gtk_entry_init): invoke gtk_entry_grow_text already
