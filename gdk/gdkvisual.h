@@ -7,7 +7,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GDK_TYPE_VISUAL gdk_visual_get_type
+#define GDK_TYPE_VISUAL gdk_visual_get_type ()
 
 /* Types of visuals.
  *   StaticGray:

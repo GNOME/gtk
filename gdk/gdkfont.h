@@ -10,7 +10,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GDK_TYPE_FONT gdk_font_get_type
+#define GDK_TYPE_FONT gdk_font_get_type ()
 
 /* Types of font.
  *   GDK_FONT_FONT: the font is an XFontStruct.

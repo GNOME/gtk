@@ -1,3 +1,14 @@
+2001-04-16  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.def :
+	* gtk/gtk.def : added all exports required to link PyGtk 0.7.1
+
+	* gdk/gdkfont.h : #define GDK_TYPE gdk_font_get_type ()
+	we are interested in the functions return value not the function address
+	* gdk/gdkvisual.h : same for GDK_TYPE_VISUAL
+
+	* gtk/makefile.msc.in : reflect movement of GDK_TYPEs from gtk to gdk
+
 2001-04-14  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.def :

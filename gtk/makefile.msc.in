@@ -120,7 +120,6 @@ gtk_OBJECTS = 					\
 	gtkmain.obj				\
 	gtkmenu.obj				\
 	gtkmenubar.obj				\
-	gtkmenufactory.obj			\
 	gtkmenuitem.obj				\
 	gtkmenushell.obj			\
 	gtkmessagedialog.obj			\
@@ -273,7 +272,6 @@ gtk_public_h_sources =		\
 	gtkmain.h		\
 	gtkmenu.h		\
 	gtkmenubar.h		\
-	gtkmenufactory.h	\
 	gtkmenuitem.h		\
 	gtkmenushell.h		\
 	gtkmessagedialog.h	\
@@ -345,26 +343,6 @@ gtk_public_h_sources =		\
 	gtkwidget.h		\
 	gtkwindow.h
 
-# More headers to use when autogenerating.
-gdk_headers =			\
-	..\gdk\gdkcolor.h	\
-	..\gdk\gdkcursor.h     	\
-	..\gdk\gdkdnd.h		\
-	..\gdk\gdkdrawable.h	\
-	..\gdk\gdkevents.h	\
-	..\gdk\gdkfont.h	\
-	..\gdk\gdkgc.h		\
-	..\gdk\gdkimage.h	\
-	..\gdk\gdkinput.h	\
-	..\gdk\gdkpixmap.h	\
-	..\gdk\gdkproperty.h	\
-	..\gdk\gdkregion.h	\
-	..\gdk\gdkrgb.h		\
-	..\gdk\gdkselection.h	\
-	..\gdk\gdktypes.h	\
-	..\gdk\gdkvisual.h	\
-	..\gdk\gdkwindow.h
-
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h
 
@@ -376,8 +354,8 @@ GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_id
 generated : $(GENERATED)
 	$(TOUCH) generated
 
-gtk.defs : makeenums.pl gtk-boxed.defs $(gtk_public_h_sources) $(gdk_headers)
-	$(PERL) makeenums.pl defs $(gtk_public_h_sources) $(gdk_headers) >gd.tmp
+gtk.defs : makeenums.pl gtk-boxed.defs $(gtk_public_h_sources)
+	$(PERL) makeenums.pl defs $(gtk_public_h_sources) >gd.tmp
 	copy gd.tmp+gtk-boxed.defs gtk.defs
 	@erase gd.tmp
 
