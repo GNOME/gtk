@@ -51,7 +51,7 @@ typedef enum
   G_SV (GTK_ARROW_UP,	 up),
   G_SV (GTK_ARROW_DOWN,	 down),
   G_SV (GTK_ARROW_LEFT,	 left),
-  G_SV (GTK_ARROW_RIGHT, right),
+  G_SV (GTK_ARROW_RIGHT, right)
 } G_ENUM (GtkArrowType);
 
 /* Attach options (for tables) */
@@ -69,7 +69,7 @@ typedef enum
   G_SV (GTK_BUTTONBOX_SPREAD,		spread),
   G_SV (GTK_BUTTONBOX_EDGE,		edge),
   G_SV (GTK_BUTTONBOX_START,		start),
-  G_SV (GTK_BUTTONBOX_END,		end),
+  G_SV (GTK_BUTTONBOX_END,		end)
 } G_ENUM (GtkButtonBoxStyle);
 
 /* curve types */
@@ -97,7 +97,7 @@ typedef enum
   G_SV (GTK_JUSTIFY_LEFT,	left),
   G_SV (GTK_JUSTIFY_RIGHT,	right),
   G_SV (GTK_JUSTIFY_CENTER,	center),
-  G_SV (GTK_JUSTIFY_FILL,	fill),
+  G_SV (GTK_JUSTIFY_FILL,	fill)
 } G_ENUM (GtkJustification);
 
 /* GtkPatternSpec match types */
