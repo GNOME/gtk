@@ -31,12 +31,12 @@ LDADDS = @STRIP_BEGIN@ 					\
 	-lm						\
 @STRIP_END@
 
-bin_PROGRAMS = 			\
-	gtk-query-immodules-2.0
-
 moduledir = $(libdir)/gtk+/gtk-2.0/$(GTK_VERSION)/immodules
-module_LTLIBRARIES = im-cyrillic-translit.la
+module_LTLIBRARIES = im-cyrillic-translit.la im-xim.la
 
 im_cyrillic_translit_la_LDFLAGS = -rpath $(libdir) -export-dynamic -avoid-version -module
 im_cyrillic_translit_la_SOURCES = imcyrillic-translit.c
+
+im_xim_la_LDFLAGS = -rpath $(libdir) -export-dynamic -avoid-version -module
+im_xim_la_SOURCES = gtkimcontextxim.c imxim.c
 

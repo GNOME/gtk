@@ -1,3 +1,14 @@
+Sun Sep 17 10:08:16 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/queryimmodules.c (main): Return non-zero exit
+	status if errors were encountered querying any
+	modules.
+
+	* modules/input/Makefile.am (moduledir): remove
+	leftover bin program target.
+
+	* docs/make-todo: Fix typo in error message.
+
 Sat Sep 16 14:04:30 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Add modules/input/Makefile

@@ -52,7 +52,7 @@ print_escaped (const char *str)
   g_free (tmp);
 }
 
-void 
+gboolean
 query_module (const char *dir, const char *name)
 {
   void          (*list)   (const GtkIMContextInfo ***contexts,
@@ -63,6 +63,7 @@ query_module (const char *dir, const char *name)
 
   GModule *module;
   gchar *path;
+  gboolean error = FALSE;
 
   if (name[0] == G_DIR_SEPARATOR)
     path = g_strdup (name);
@@ -74,6 +75,7 @@ query_module (const char *dir, const char *name)
   if (!module)
     {
       fprintf(stderr, "Cannot load module %s: %s\n", path, g_module_error());
+      error = TRUE;
     }
 	  
   if (module &&
@@ -106,11 +108,14 @@ query_module (const char *dir, const char *name)
     {
       fprintf (stderr, "%s does not export GTK+ IM module API: %s\n", path,
 	       g_module_error());
+      error = TRUE;
     }
 
   g_free (path);
   if (module)
     g_module_close (module);
+
+  return error;
 }		       
 
 int main (int argc, char **argv)
@@ -118,6 +123,7 @@ int main (int argc, char **argv)
   char cwd[PATH_MAX];
   int i;
   char *path;
+  gboolean error = FALSE;
 
   printf ("# GTK+ Input Method Modules file\n"
 	  "# Automatically generated file, do not edit\n"
@@ -145,7 +151,7 @@ int main (int argc, char **argv)
 		{
 		  int len = strlen (dent->d_name);
 		  if (len > 3 && strcmp (dent->d_name + len - strlen (SOEXT), SOEXT) == 0)
-		    query_module (dirs[i], dent->d_name);
+		    error |= query_module (dirs[i], dent->d_name);
 		}
 	      
 	      closedir (dir);
@@ -157,8 +163,8 @@ int main (int argc, char **argv)
       getcwd (cwd, PATH_MAX);
       
       for (i=1; i<argc; i++)
-	query_module (cwd, argv[i]);
+	error |= query_module (cwd, argv[i]);
     }
   
-  return 0;
+  return error ? 1 : 0;
 }

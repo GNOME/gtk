@@ -196,7 +196,7 @@ class TodoParser (xmllib.XMLParser):
             
     def start_contact(self,attributes):
         if not self.entry:
-            raise ParseError, "<contact> tag must be in <contact>"
+            raise ParseError, "<contact> tag must be in <entry>"
         if self.in_data:
             raise ParseError, "Unexpected <contact> tag in content"
         self.in_data = 1
