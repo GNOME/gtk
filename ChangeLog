@@ -1,4 +1,4 @@
-2004-04-24  Theppitak Karoonboonyanan  <thep@linux.thainet>
+2004-04-24  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	Patch to add support for string conversion callbacks to
 	GtkIMContextXIM (#101814)
