@@ -1,3 +1,14 @@
+Mon Oct  1 16:08:23 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_list_store_class_init): add a finalize
+	and destroy handler.
+
+	* gtk/gtktreestore.c (gtk_list_store_class_init): ditto, #59963
+
+	* gtk/gtktreeview.h (struct _GtkTreeViewClass): Add
+	'start_editing' flag to select_cursor_row.  Bug spotted by Manish
+	Singh <yosh@gimp.org>.
+
 2001-10-01  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc_scanner): replace
