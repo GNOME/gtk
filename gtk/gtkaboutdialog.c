@@ -396,6 +396,9 @@ gtk_about_dialog_finalize (GObject *object)
   g_strfreev (priv->documenters);
   g_strfreev (priv->artists);
 
+  gdk_cursor_unref (priv->hand_cursor);
+  gdk_cursor_unref (priv->regular_cursor);
+
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
 

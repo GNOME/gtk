@@ -1,5 +1,8 @@
 2004-09-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_finalize): Don't leak
+	cursors.  (#153468, Christian Persch)
+
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Don't leak old_text.
 	(#153467, Christian Persch)
 
