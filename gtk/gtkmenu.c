@@ -688,7 +688,7 @@ gtk_menu_popup (GtkMenu		    *menu,
    * probably could just leave the grab on the other window, with a
    * little reorganization of the code in gtkmenu*).
    */
-  if (xgrab_shell == widget)
+  if (xgrab_shell && xgrab_shell != widget)
     {
       if (popup_grab_on_window (xgrab_shell->window, activate_time))
 	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;

@@ -1,3 +1,8 @@
+Sat Feb  2 19:15:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Fix some bugs in
+	the determination of xgrab_shell.
+
 Sat Feb  2 17:43:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_grab_focus): Add a GtkSetting
