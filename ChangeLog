@@ -1,3 +1,9 @@
+Wed Mar 10 00:10:47 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_insert_path): Always
+	check to see if the shortcuts exists.  We don't want to put
+	invalid dirs in the shortcuts pane.
+
 Tue Mar  9 16:40:34 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):

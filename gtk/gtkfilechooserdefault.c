@@ -869,16 +869,17 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
     }
   else
     {
+      /* Always check to make sure that the directory exists. */
+      GtkFileInfo *info = get_file_info (impl->file_system, path, FALSE, error);
+      if (info == NULL)
+	return FALSE;
+
       if (label)
 	label_copy = g_strdup (label);
       else
-	{
-	  GtkFileInfo *info = get_file_info (impl->file_system, path, TRUE, error);
-	  if (!info)
-	    return FALSE;
-	  label_copy = g_strdup (gtk_file_info_get_display_name (info));
-	  gtk_file_info_free (info);
-	}
+	label_copy = g_strdup (gtk_file_info_get_display_name (info));
+
+      gtk_file_info_free (info);
 
       data = gtk_file_path_copy (path);
       pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
