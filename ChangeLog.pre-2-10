@@ -1,3 +1,8 @@
+Fri Jul 26 17:59:06 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* configure.in: Replace uses of grep \(A\|B\) ... with
+ 	egrep (A|B). (#84872, Arnaud Charlet)
+ 
 Fri Jul 26 22:53:37 2002  Kristian Rietveld  <kris@gtk.org>
 
 	API additions: _move, _reorder and _swap for stores, path

@@ -789,7 +789,7 @@ INCLUDED_LOADER_DEFINE=
 
 IFS="${IFS= 	}"; gtk_save_ifs="$IFS"; IFS=","
 for loader in $included_loaders; do
- if echo "$all_loaders" | grep "\(^\|\,\)$loader\(\$\|\,\)" > /dev/null; then
+ if echo "$all_loaders" | egrep "(^|,)$loader(\$|,)" > /dev/null; then
    :
  else
    AC_MSG_ERROR([the specified loader $loader does not exist])
@@ -812,13 +812,13 @@ AM_CONDITIONAL(HAVE_JPEG, test "x$LIBJPEG" != x)
 
 if $dynworks ; then
   STATIC_LIB_DEPS=
-  if echo "$included_loaders" | grep "\(^\|\,\)tiff\(\$\|\,\)" > /dev/null; then
+  if echo "$included_loaders" | egrep '(^|,)tiff($|,)' > /dev/null; then
     STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBTIFF"
   fi
-  if echo "$included_loaders" | grep "\(^\|\,\)jpeg\(\$\|\,\)" > /dev/null; then
+  if echo "$included_loaders" | egrep '(^|,)jpeg($|,)' > /dev/null; then
     STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBJPEG"
   fi
-  if echo "$included_loaders" | grep "\(^\|\,\)png\(\$\|\,\)" > /dev/null; then
+  if echo "$included_loaders" | egrep '(^|,)png($|,)' > /dev/null; then
     STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBPNG"
   fi
 else
