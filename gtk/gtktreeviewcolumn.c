@@ -1475,14 +1475,14 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
 				      gint               fixed_width)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-  g_return_if_fail (width > 0);
+  g_return_if_fail (fixed_width > 0);
 
   if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
     return;
 
-  tree_column->fixed_width = width;
-  tree_column->requested_width = width;
-  _gtk_tree_view_column_set_width (tree_column, width);
+  tree_column->fixed_width = fixed_width;
+  tree_column->requested_width = fixed_width;
+  _gtk_tree_view_column_set_width (tree_column, fixed_width);
 }
 
 /**

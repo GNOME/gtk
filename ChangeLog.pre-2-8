@@ -1,3 +1,8 @@
+2001-10-03  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_fixed_width):
+	s/width/fixed_width/ in order to get things to compile.
+
 Wed Oct  3 00:37:09 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcelleditable.c: docs
