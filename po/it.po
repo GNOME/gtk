@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2002-07-07 01:25+0200\n"
+"POT-Creation-Date: 2002-09-29 23:06-0400\n"
 "PO-Revision-Date: 2000-12-18 16:29+01:00\n"
 "Last-Translator: Christopher R. Gabriel <cgabriel@gnu.org>\n"
 "Language-Team: Italiano <tp@lists.linux.it>\n"
@@ -13,93 +13,83 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:586
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:662
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:596
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:672
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:183
-#, c-format
-msgid "Don't know how to load the animation in file '%s'"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:641
+#: gdk-pixbuf/gdk-pixbuf-animation.c:195 gdk-pixbuf/gdk-pixbuf-io.c:706
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:233
+#: gdk-pixbuf/gdk-pixbuf-animation.c:223
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:359
+#: gdk-pixbuf/gdk-pixbuf-io.c:379
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Impossibile aprire il modulo per il caricamento delle immagini: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:378
+#: gdk-pixbuf/gdk-pixbuf-io.c:398
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:495 gdk-pixbuf/gdk-pixbuf-io.c:521
+#: gdk-pixbuf/gdk-pixbuf-io.c:522 gdk-pixbuf/gdk-pixbuf-io.c:548
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:543
+#: gdk-pixbuf/gdk-pixbuf-io.c:570
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:549
+#: gdk-pixbuf/gdk-pixbuf-io.c:576
 msgid "Unrecognized image file format"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:619
-#, c-format
-msgid "Don't know how to load the image in file '%s'"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:652
+#: gdk-pixbuf/gdk-pixbuf-io.c:717
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:757
+#: gdk-pixbuf/gdk-pixbuf-io.c:822
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:862
+#: gdk-pixbuf/gdk-pixbuf-io.c:927
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:883
+#: gdk-pixbuf/gdk-pixbuf-io.c:948
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:250
+#: gdk-pixbuf/gdk-pixbuf-loader.c:325
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
+#: gdk-pixbuf/gdk-pixbuf-loader.c:349 gdk-pixbuf/gdk-pixbuf-loader.c:450
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -123,15 +113,15 @@ msgstr ""
 msgid "failed to allocate image buffer of %u bytes"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:260 gdk-pixbuf/io-bmp.c:375
+#: gdk-pixbuf/io-bmp.c:222 gdk-pixbuf/io-bmp.c:338
 msgid "Not enough memory to load bitmap image"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:299
+#: gdk-pixbuf/io-bmp.c:262
 msgid "BMP image has unsupported header size"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:324 gdk-pixbuf/io-bmp.c:347 gdk-pixbuf/io-bmp.c:407
+#: gdk-pixbuf/io-bmp.c:287 gdk-pixbuf/io-bmp.c:310 gdk-pixbuf/io-bmp.c:370
 msgid "BMP image has bogus header data"
 msgstr ""
 
@@ -140,7 +130,7 @@ msgstr ""
 msgid "Failure reading GIF: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1543
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Il file GIF manca di alcuni dati (forse è stato troncato?)"
 
@@ -161,8 +151,8 @@ msgstr ""
 msgid "Circular table entry in GIF file"
 msgstr "Trovata occorrenza di tabella circolare nel file GIF"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1416
+#: gdk-pixbuf/io-gif.c:1531
 msgid "Not enough memory to load GIF file"
 msgstr ""
 
@@ -181,7 +171,8 @@ msgstr "La versione %s del formato GIF non è supportata"
 
 #: gdk-pixbuf/io-gif.c:1144
 msgid "GIF image contained a frame with height or width 0."
-msgstr "L'immagine GIF contiene un fotogramma con altezza e larghezza pari a 0."
+msgstr ""
+"L'immagine GIF contiene un fotogramma con altezza e larghezza pari a 0."
 
 #: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
@@ -197,76 +188,67 @@ msgid ""
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1438
 msgid "GIF image was truncated or incomplete."
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Il file ICO manca di dati fondamentali (forse è troncato?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:276 gdk-pixbuf/io-ico.c:337
+#: gdk-pixbuf/io-ico.c:400 gdk-pixbuf/io-ico.c:417
 msgid "Not enough memory to load icon"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:303
+#: gdk-pixbuf/io-ico.c:261
 msgid "Invalid header in icon"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:298
 msgid "Icon has zero width"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:350
+#: gdk-pixbuf/io-ico.c:308
 msgid "Icon has zero height"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:395
+#: gdk-pixbuf/io-ico.c:352
 msgid "Compressed icons are not supported"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:428
+#: gdk-pixbuf/io-ico.c:385
 msgid "Unsupported icon type"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:465
 msgid "Not enough memory to load ICO file"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:111
+#: gdk-pixbuf/io-jpeg.c:114
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:346
+#: gdk-pixbuf/io-jpeg.c:349
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:379 gdk-pixbuf/io-jpeg.c:730
+#: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:744
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:475 gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:844
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:798
+#: gdk-pixbuf/io-jpeg.c:812
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:813
+#: gdk-pixbuf/io-jpeg.c:827
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -301,118 +283,118 @@ msgstr ""
 msgid "Insufficient memory to load PNG file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:604
+#: gdk-pixbuf/io-png.c:605
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:655
+#: gdk-pixbuf/io-png.c:656
 msgid "Fatal error reading PNG image file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:704
+#: gdk-pixbuf/io-png.c:705
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:770
+#: gdk-pixbuf/io-png.c:771
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:778
+#: gdk-pixbuf/io-png.c:779
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:811
+#: gdk-pixbuf/io-png.c:812
 #, c-format
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:247
+#: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:279
+#: gdk-pixbuf/io-pnm.c:280
 msgid "PNM file has an incorrect initial byte"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:309
+#: gdk-pixbuf/io-pnm.c:310
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:334
+#: gdk-pixbuf/io-pnm.c:335
 msgid "PNM file has an image width of 0"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:355
+#: gdk-pixbuf/io-pnm.c:356
 msgid "PNM file has an image height of 0"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:378
+#: gdk-pixbuf/io-pnm.c:379
 msgid "Maximum color value in PNM file is 0"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:386
+#: gdk-pixbuf/io-pnm.c:387
 msgid "Maximum color value in PNM file is too large"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:394
+#: gdk-pixbuf/io-pnm.c:395
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:433 gdk-pixbuf/io-pnm.c:461 gdk-pixbuf/io-pnm.c:493
+#: gdk-pixbuf/io-pnm.c:434 gdk-pixbuf/io-pnm.c:462 gdk-pixbuf/io-pnm.c:494
 msgid "Raw PNM image type is invalid"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:553 gdk-pixbuf/io-pnm.c:595
+#: gdk-pixbuf/io-pnm.c:554 gdk-pixbuf/io-pnm.c:596
 msgid "PNM image format is invalid"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:654
+#: gdk-pixbuf/io-pnm.c:655
 msgid "PNM image loader does not support this PNM subformat"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:709
+#: gdk-pixbuf/io-pnm.c:710
 msgid "Premature end-of-file encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:960
+#: gdk-pixbuf/io-pnm.c:742 gdk-pixbuf/io-pnm.c:962
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:768
+#: gdk-pixbuf/io-pnm.c:769
 msgid "Can't allocate memory for loading PNM image"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:817
+#: gdk-pixbuf/io-pnm.c:819
 msgid "Insufficient memory to load PNM context struct"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:867
+#: gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:989
+#: gdk-pixbuf/io-pnm.c:991
 msgid "Insufficient memory to load PNM file"
 msgstr ""
 
-#: gdk-pixbuf/io-ras.c:158
+#: gdk-pixbuf/io-ras.c:124
 msgid "RAS image has bogus header data"
 msgstr ""
 
-#: gdk-pixbuf/io-ras.c:180
+#: gdk-pixbuf/io-ras.c:146
 msgid "RAS image has unknown type"
 msgstr ""
 
-#: gdk-pixbuf/io-ras.c:188
+#: gdk-pixbuf/io-ras.c:154
 msgid "unsupported RAS image variation"
 msgstr ""
 
-#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
+#: gdk-pixbuf/io-ras.c:169 gdk-pixbuf/io-ras.c:189
 msgid "Not enough memory to load RAS image"
 msgstr ""
 
@@ -428,96 +410,96 @@ msgstr ""
 msgid "Can't realloc IOBuffer data"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:218
+#: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:282
+#: gdk-pixbuf/io-tga.c:283
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:292
+#: gdk-pixbuf/io-tga.c:293
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:325
+#: gdk-pixbuf/io-tga.c:326
 msgid "Can't allocate new pixbuf"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:638
+#: gdk-pixbuf/io-tga.c:639
 msgid "Can't allocate colormap structure"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:645
+#: gdk-pixbuf/io-tga.c:646
 msgid "Can't allocate colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:667
+#: gdk-pixbuf/io-tga.c:668
 msgid "Unexpected bitdepth for colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:685
+#: gdk-pixbuf/io-tga.c:686
 msgid "Can't allocate TGA header memory"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:718
+#: gdk-pixbuf/io-tga.c:719
 msgid "TGA image has invalid dimensions"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:724
+#: gdk-pixbuf/io-tga.c:725
 msgid "TGA image comment length is too long"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:733 gdk-pixbuf/io-tga.c:742 gdk-pixbuf/io-tga.c:752
-#: gdk-pixbuf/io-tga.c:762 gdk-pixbuf/io-tga.c:769
+#: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
+#: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
 msgid "TGA image type not supported"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:814
+#: gdk-pixbuf/io-tga.c:816
 msgid "Can't allocate memory for TGA context struct"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:878
+#: gdk-pixbuf/io-tga.c:880
 msgid "Excess data in file"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:924
+#: gdk-pixbuf/io-tga.c:926
 msgid "Can't allocate memory for TGA header"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:934
+#: gdk-pixbuf/io-tga.c:936
 msgid "Too big value in the infolen field of TGA header."
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:958
+#: gdk-pixbuf/io-tga.c:960
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:970
+#: gdk-pixbuf/io-tga.c:972
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:979
+#: gdk-pixbuf/io-tga.c:981
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:989
+#: gdk-pixbuf/io-tga.c:991
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1030
+#: gdk-pixbuf/io-tga.c:1032
 msgid "Pseudo-Color image without colormap"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1037
+#: gdk-pixbuf/io-tga.c:1039
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
+#: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
 msgid "Can't allocate pixbuf"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
+#: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
 msgid "Unsupported TGA image type"
 msgstr ""
 
@@ -537,7 +519,7 @@ msgstr ""
 msgid "Dimensions of TIFF image too large"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:553
 msgid "Insufficient memory to open TIFF file"
 msgstr ""
 
@@ -557,23 +539,23 @@ msgstr ""
 msgid "TIFFClose operation failed"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:482 gdk-pixbuf/io-tiff.c:495
+#: gdk-pixbuf/io-tiff.c:483 gdk-pixbuf/io-tiff.c:496
 msgid "Failed to load TIFF image"
 msgstr ""
 
-#: gdk-pixbuf/io-wbmp.c:278
+#: gdk-pixbuf/io-wbmp.c:245
 msgid "Image has zero width"
 msgstr ""
 
-#: gdk-pixbuf/io-wbmp.c:296
+#: gdk-pixbuf/io-wbmp.c:263
 msgid "Image has zero height"
 msgstr ""
 
-#: gdk-pixbuf/io-wbmp.c:307
+#: gdk-pixbuf/io-wbmp.c:274
 msgid "Not enough memory to load image"
 msgstr ""
 
-#: gdk-pixbuf/io-wbmp.c:366
+#: gdk-pixbuf/io-wbmp.c:333
 msgid "Couldn't save the rest"
 msgstr ""
 
@@ -585,7 +567,7 @@ msgstr ""
 msgid "Insufficient memory to load XBM image file"
 msgstr ""
 
-#: gdk-pixbuf/io-xbm.c:429
+#: gdk-pixbuf/io-xbm.c:438
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 
@@ -617,7 +599,7 @@ msgstr ""
 msgid "Can't allocate memory for loading XPM image"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1498
+#: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 
@@ -760,116 +742,118 @@ msgstr ""
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr ""
 
-#: gtk/gtkbbox.c:115
+#: gtk/gtkbbox.c:118
 msgid "Minimum child width"
 msgstr ""
 
-#: gtk/gtkbbox.c:116
+#: gtk/gtkbbox.c:119
 msgid "Minimum width of buttons inside the box"
 msgstr ""
 
-#: gtk/gtkbbox.c:124
+#: gtk/gtkbbox.c:127
 msgid "Minimum child height"
 msgstr ""
 
-#: gtk/gtkbbox.c:125
+#: gtk/gtkbbox.c:128
 msgid "Minimum height of buttons inside the box"
 msgstr ""
 
-#: gtk/gtkbbox.c:133
+#: gtk/gtkbbox.c:136
 msgid "Child internal width padding"
 msgstr ""
 
-#: gtk/gtkbbox.c:134
+#: gtk/gtkbbox.c:137
 msgid "Amount to increase child's size on either side"
 msgstr ""
 
-#: gtk/gtkbbox.c:142
+#: gtk/gtkbbox.c:145
 msgid "Child internal height padding"
 msgstr ""
 
-#: gtk/gtkbbox.c:143
+#: gtk/gtkbbox.c:146
 msgid "Amount to increase child's size on the top and bottom"
 msgstr ""
 
-#: gtk/gtkbbox.c:151
+#: gtk/gtkbbox.c:154
 msgid "Layout style"
 msgstr ""
 
-#: gtk/gtkbbox.c:152
+#: gtk/gtkbbox.c:155
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
 
-#: gtk/gtkbbox.c:160
+#: gtk/gtkbbox.c:163
 msgid "Secondary"
 msgstr ""
 
-#: gtk/gtkbbox.c:161
+#: gtk/gtkbbox.c:164
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
-"g., help buttons."
+"g., help buttons"
 msgstr ""
 
-#: gtk/gtkbox.c:125
+#: gtk/gtkbox.c:128
 msgid "Spacing"
 msgstr ""
 
-#: gtk/gtkbox.c:126
-msgid "The amount of space between children."
-msgstr ""
+#: gtk/gtkbox.c:129
+#, fuzzy
+msgid "The amount of space between children"
+msgstr "Lo spazio tra due righe consecutive"
 
-#: gtk/gtkbox.c:135 gtk/gtknotebook.c:434
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:434
 msgid "Homogeneous"
 msgstr ""
 
-#: gtk/gtkbox.c:136
-msgid "Whether the children should all be the same size."
-msgstr ""
+#: gtk/gtkbox.c:139
+#, fuzzy
+msgid "Whether the children should all be the same size"
+msgstr "Se il cursore deve lampeggiare o meno"
 
-#: gtk/gtkbox.c:143 gtk/gtkpreview.c:129
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr ""
 
-#: gtk/gtkbox.c:144
+#: gtk/gtkbox.c:147
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr ""
 
-#: gtk/gtkbox.c:150
+#: gtk/gtkbox.c:153
 msgid "Fill"
 msgstr "Riempi"
 
-#: gtk/gtkbox.c:151
+#: gtk/gtkbox.c:154
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
 
-#: gtk/gtkbox.c:157
+#: gtk/gtkbox.c:160
 msgid "Padding"
 msgstr ""
 
-#: gtk/gtkbox.c:158
+#: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
 
-#: gtk/gtkbox.c:164
+#: gtk/gtkbox.c:167
 msgid "Pack type"
 msgstr ""
 
-#: gtk/gtkbox.c:165 gtk/gtknotebook.c:478
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:478
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
 
-#: gtk/gtkbox.c:171 gtk/gtknotebook.c:456 gtk/gtkpaned.c:208
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:456 gtk/gtkpaned.c:211
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Posizione"
 
-#: gtk/gtkbox.c:172 gtk/gtknotebook.c:457
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:457
 msgid "The index of the child in the parent"
 msgstr ""
 
@@ -880,7 +864,7 @@ msgstr ""
 #: gtk/gtkbutton.c:190
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
-"widget."
+"widget"
 msgstr ""
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
@@ -907,7 +891,7 @@ msgid "Border relief"
 msgstr ""
 
 #: gtk/gtkbutton.c:214
-msgid "The border relief style."
+msgid "The border relief style"
 msgstr ""
 
 #: gtk/gtkbutton.c:265
@@ -946,107 +930,109 @@ msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:120
+#: gtk/gtkcellrenderer.c:122
 msgid "mode"
 msgstr "modalità"
 
-#: gtk/gtkcellrenderer.c:121
+#: gtk/gtkcellrenderer.c:123
 msgid "Editable mode of the CellRenderer"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:130
+#: gtk/gtkcellrenderer.c:132
 msgid "visible"
 msgstr "visibile"
 
-#: gtk/gtkcellrenderer.c:131
+#: gtk/gtkcellrenderer.c:133
 msgid "Display the cell"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:139
+#: gtk/gtkcellrenderer.c:141
 msgid "xalign"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:140
-msgid "The x-align."
-msgstr ""
+#: gtk/gtkcellrenderer.c:142
+#, fuzzy
+msgid "The x-align"
+msgstr "Allineamento X del testo"
 
-#: gtk/gtkcellrenderer.c:150
+#: gtk/gtkcellrenderer.c:152
 msgid "yalign"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:151
-msgid "The y-align."
-msgstr ""
+#: gtk/gtkcellrenderer.c:153
+#, fuzzy
+msgid "The y-align"
+msgstr "Allineamento y del testo"
 
-#: gtk/gtkcellrenderer.c:161
+#: gtk/gtkcellrenderer.c:163
 msgid "xpad"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:162
-msgid "The xpad."
+#: gtk/gtkcellrenderer.c:164
+msgid "The xpad"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:172
+#: gtk/gtkcellrenderer.c:174
 msgid "ypad"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:173
-msgid "The ypad."
+#: gtk/gtkcellrenderer.c:175
+msgid "The ypad"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:183
+#: gtk/gtkcellrenderer.c:185
 msgid "width"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:184
-msgid "The fixed width."
+#: gtk/gtkcellrenderer.c:186
+msgid "The fixed width"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:194
+#: gtk/gtkcellrenderer.c:196
 msgid "height"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:195
-msgid "The fixed height."
+#: gtk/gtkcellrenderer.c:197
+msgid "The fixed height"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:205
+#: gtk/gtkcellrenderer.c:207
 msgid "Is Expander"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:206
-msgid "Row has children."
+#: gtk/gtkcellrenderer.c:208
+msgid "Row has children"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:215
+#: gtk/gtkcellrenderer.c:217
 msgid "Is Expanded"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:216
+#: gtk/gtkcellrenderer.c:218
 msgid "Row is an expander row, and is expanded"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:224
+#: gtk/gtkcellrenderer.c:226
 msgid "Cell background color name"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:225
+#: gtk/gtkcellrenderer.c:227
 msgid "Cell background color as a string"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:232
+#: gtk/gtkcellrenderer.c:234
 msgid "Cell background color"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:233
+#: gtk/gtkcellrenderer.c:235
 msgid "Cell background color as a GdkColor"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:241
+#: gtk/gtkcellrenderer.c:243
 msgid "Cell background set"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:242
+#: gtk/gtkcellrenderer.c:244
 msgid "Whether this tag affects the cell background color"
 msgstr ""
 
@@ -1055,7 +1041,7 @@ msgid "Pixbuf Object"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:131
-msgid "The pixbuf to render."
+msgid "The pixbuf to render"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:139
@@ -1063,7 +1049,7 @@ msgid "Pixbuf Expander Open"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:140
-msgid "Pixbuf for open expander."
+msgid "Pixbuf for open expander"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:148
@@ -1071,10 +1057,10 @@ msgid "Pixbuf Expander Closed"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:149
-msgid "Pixbuf for closed expander."
+msgid "Pixbuf for closed expander"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:157 gtk/gtkimage.c:170
+#: gtk/gtkcellrendererpixbuf.c:157 gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr ""
 
@@ -1119,7 +1105,7 @@ msgid "Attributes"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:190
-msgid "A list of style attributes to apply to the text of the renderer."
+msgid "A list of style attributes to apply to the text of the renderer"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:209
@@ -1394,165 +1380,165 @@ msgstr ""
 msgid "Spacing around check or radio indicator"
 msgstr ""
 
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:116
-msgid "Whether the menu item is checked."
+msgid "Whether the menu item is checked"
 msgstr ""
 
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:124
-msgid "Whether to display an \"inconsistent\" state."
+msgid "Whether to display an \"inconsistent\" state"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:586
+#: gtk/gtkcolorsel.c:546
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:591
+#: gtk/gtkcolorsel.c:551
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:975
+#: gtk/gtkcolorsel.c:935
 msgid "_Save color here"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1144
+#: gtk/gtkcolorsel.c:1104
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1755
+#: gtk/gtkcolorsel.c:1715
 msgid "Has Opacity Control"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1756
+#: gtk/gtkcolorsel.c:1716
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1762
+#: gtk/gtkcolorsel.c:1722
 #, fuzzy
 msgid "Has palette"
 msgstr "Tavolozza personalizzata"
 
-#: gtk/gtkcolorsel.c:1763
+#: gtk/gtkcolorsel.c:1723
 msgid "Whether a palette should be used"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1769
+#: gtk/gtkcolorsel.c:1729
 msgid "Current Color"
 msgstr "Colore corrente"
 
-#: gtk/gtkcolorsel.c:1770
+#: gtk/gtkcolorsel.c:1730
 msgid "The current color"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1776
+#: gtk/gtkcolorsel.c:1736
 msgid "Current Alpha"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1777
+#: gtk/gtkcolorsel.c:1737
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1790
+#: gtk/gtkcolorsel.c:1750
 msgid "Custom palette"
 msgstr "Tavolozza personalizzata"
 
-#: gtk/gtkcolorsel.c:1791
+#: gtk/gtkcolorsel.c:1751
 msgid "Palette to use in the color selector"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1833
+#: gtk/gtkcolorsel.c:1792
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1859
+#: gtk/gtkcolorsel.c:1817
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1826
 msgid "_Hue:"
 msgstr "_Tonalità:"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1827
 msgid "Position on the color wheel."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1828
 msgid "_Saturation:"
 msgstr "_Saturazione:"
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1829
 msgid "\"Deepness\" of the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1830
 msgid "_Value:"
 msgstr "_Valore:"
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1831
 msgid "Brightness of the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1832
 msgid "_Red:"
 msgstr "_Rosso:"
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1833
 msgid "Amount of red light in the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1876
+#: gtk/gtkcolorsel.c:1834
 msgid "_Green:"
 msgstr "_Verde:"
 
-#: gtk/gtkcolorsel.c:1877
+#: gtk/gtkcolorsel.c:1835
 msgid "Amount of green light in the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1836
 msgid "_Blue:"
 msgstr "_Blu:"
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1837
 msgid "Amount of blue light in the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1840
 msgid "_Opacity:"
 msgstr "_Opacità:"
 
-#: gtk/gtkcolorsel.c:1890
+#: gtk/gtkcolorsel.c:1848
 msgid "Transparency of the currently-selected color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1905
+#: gtk/gtkcolorsel.c:1863
 msgid "Color _Name:"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1917
+#: gtk/gtkcolorsel.c:1875
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1936
+#: gtk/gtkcolorsel.c:1894
 msgid "_Palette"
 msgstr "_Tavolozza"
 
@@ -1597,28 +1583,28 @@ msgstr ""
 msgid "Whether entered values must already be present in the list"
 msgstr ""
 
-#: gtk/gtkcontainer.c:200
+#: gtk/gtkcontainer.c:201
 msgid "Resize mode"
 msgstr ""
 
-#: gtk/gtkcontainer.c:201
+#: gtk/gtkcontainer.c:202
 msgid "Specify how resize events are handled"
 msgstr ""
 
-#: gtk/gtkcontainer.c:208
+#: gtk/gtkcontainer.c:209
 msgid "Border width"
 msgstr ""
 
-#: gtk/gtkcontainer.c:209
-msgid "The width of the empty border outside the containers children."
-msgstr ""
-
-#: gtk/gtkcontainer.c:217
-msgid "Child"
+#: gtk/gtkcontainer.c:210
+msgid "The width of the empty border outside the containers children"
 msgstr ""
 
 #: gtk/gtkcontainer.c:218
-msgid "Can be used to add a new child to the container."
+msgid "Child"
+msgstr ""
+
+#: gtk/gtkcontainer.c:219
+msgid "Can be used to add a new child to the container"
 msgstr ""
 
 #: gtk/gtkcurve.c:121
@@ -1642,7 +1628,7 @@ msgid "Maximum X"
 msgstr ""
 
 #: gtk/gtkcurve.c:141
-msgid "Maximum possible X value."
+msgid "Maximum possible X value"
 msgstr ""
 
 #: gtk/gtkcurve.c:150
@@ -1698,7 +1684,7 @@ msgid "Cursor Position"
 msgstr "Posizione cursore"
 
 #: gtk/gtkentry.c:436 gtk/gtklabel.c:359
-msgid "The current position of the insertion cursor in chars."
+msgid "The current position of the insertion cursor in chars"
 msgstr ""
 
 #: gtk/gtkentry.c:445 gtk/gtklabel.c:368
@@ -1708,7 +1694,7 @@ msgstr "Selezione: "
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
 msgid ""
-"The position of the opposite end of the selection from the cursor in chars."
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
 #: gtk/gtkentry.c:456
@@ -1720,7 +1706,7 @@ msgid "Maximum length"
 msgstr ""
 
 #: gtk/gtkentry.c:464
-msgid "Maximum number of characters for this entry. Zero if no maximum."
+msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 
 #: gtk/gtkentry.c:472
@@ -1739,7 +1725,7 @@ msgid "Has Frame"
 msgstr "Tavolozza personalizzata"
 
 #: gtk/gtkentry.c:481
-msgid "FALSE removes outside bevel from entry."
+msgid "FALSE removes outside bevel from entry"
 msgstr ""
 
 #: gtk/gtkentry.c:488
@@ -1757,7 +1743,7 @@ msgstr ""
 #: gtk/gtkentry.c:497
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed."
+"dialog) when Enter is pressed"
 msgstr ""
 
 #: gtk/gtkentry.c:503
@@ -1765,7 +1751,7 @@ msgid "Width in chars"
 msgstr "Largehzza in caratteri"
 
 #: gtk/gtkentry.c:504
-msgid "Number of characters to leave space for in the entry."
+msgid "Number of characters to leave space for in the entry"
 msgstr ""
 
 #: gtk/gtkentry.c:513
@@ -1785,67 +1771,68 @@ msgid "Select on focus"
 msgstr "Seleziona con focus"
 
 #: gtk/gtkentry.c:740
-msgid "Whether to select the contents of an entry when it is focused."
+msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
-#: gtk/gtkentry.c:3878 gtk/gtklabel.c:3188
+#: gtk/gtkentry.c:3906 gtk/gtklabel.c:3197
 msgid "Select All"
 msgstr "Seleziona tutto"
 
-#: gtk/gtkentry.c:3888 gtk/gtklabel.c:3198
+#: gtk/gtkentry.c:3916 gtk/gtklabel.c:3207
 msgid "Input Methods"
 msgstr "Metodi di inserimento"
 
-#: gtk/gtkentry.c:3898 gtk/gtktextview.c:6425
+#: gtk/gtkentry.c:3926 gtk/gtktextview.c:6456
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "Nome file"
 
-#: gtk/gtkfilesel.c:537
-msgid "The currently selected filename."
+#: gtk/gtkfilesel.c:514
+#, fuzzy
+msgid "The currently selected filename"
 msgstr "Il nome del file correntemente selezionato."
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "Mostra operazioni sul file"
 
-#: gtk/gtkfilesel.c:544
-msgid "Whether buttons for creating/manipulating files should be displayed."
+#: gtk/gtkfilesel.c:521
+msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "Selezione multipla"
 
-#: gtk/gtkfilesel.c:552
-msgid "Whether to allow multiple files to be selected."
+#: gtk/gtkfilesel.c:529
+msgid "Whether to allow multiple files to be selected"
 msgstr ""
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "Cartelle"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "_Cartelle"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "File"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_File"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2154
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2140
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Cartella illeggibile: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1853,25 +1840,25 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "_Nuova Cartella"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "Elimina File"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "_Rinomina File"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1367
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1880,33 +1867,33 @@ msgstr ""
 "Errore durante la creazione della cartella \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1391 gtk/gtkfilesel.c:1627
+#: gtk/gtkfilesel.c:1368 gtk/gtkfilesel.c:1604
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1399
+#: gtk/gtkfilesel.c:1376
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1433
+#: gtk/gtkfilesel.c:1410
 msgid "New Folder"
 msgstr "Nuova Cartella"
 
-#: gtk/gtkfilesel.c:1448
+#: gtk/gtkfilesel.c:1425
 msgid "_Folder name:"
 msgstr "Nome _Cartella:"
 
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1451
 msgid "Create"
 msgstr "Crea"
 
-#: gtk/gtkfilesel.c:1515
+#: gtk/gtkfilesel.c:1492
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Il nome del file \"%s\" contiene caratteri non permessi"
 
-#: gtk/gtkfilesel.c:1518
+#: gtk/gtkfilesel.c:1495
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1915,81 +1902,81 @@ msgstr ""
 "Errore durante la rimozione del file \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1520 gtk/gtkfilesel.c:1641
+#: gtk/gtkfilesel.c:1497 gtk/gtkfilesel.c:1618
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1529
+#: gtk/gtkfilesel.c:1506
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Errore durante la rimozione del file \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1572
+#: gtk/gtkfilesel.c:1549
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Eliminare veramente il file \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1577
+#: gtk/gtkfilesel.c:1554
 msgid "Delete File"
 msgstr "Cancella File"
 
-#: gtk/gtkfilesel.c:1623 gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1600 gtk/gtkfilesel.c:1614
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1602
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1616
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1649
+#: gtk/gtkfilesel.c:1626
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1696
+#: gtk/gtkfilesel.c:1673
 msgid "Rename File"
 msgstr "Rinomina File"
 
-#: gtk/gtkfilesel.c:1711
+#: gtk/gtkfilesel.c:1688
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Rinominafile \"%s\" in:"
 
-#: gtk/gtkfilesel.c:1742
+#: gtk/gtkfilesel.c:1719
 msgid "Rename"
 msgstr "Rinomina"
 
-#: gtk/gtkfilesel.c:2133
+#: gtk/gtkfilesel.c:2119
 msgid "Selection: "
 msgstr "Selezione: "
 
-#: gtk/gtkfilesel.c:3013
+#: gtk/gtkfilesel.c:3006
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3016
+#: gtk/gtkfilesel.c:3009
 msgid "Invalid Utf-8"
 msgstr "UTF-8 non valido"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "Nome troppo lungo"
 
-#: gtk/gtkfilesel.c:3884
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr ""
 
@@ -2020,19 +2007,20 @@ msgid "Font name"
 msgstr "Nome Carattere"
 
 #: gtk/gtkfontsel.c:211
-msgid "The X string that represents this font."
+msgid "The X string that represents this font"
 msgstr ""
 
 #: gtk/gtkfontsel.c:218
-msgid "The GdkFont that is currently selected."
-msgstr ""
+#, fuzzy
+msgid "The GdkFont that is currently selected"
+msgstr "Il nome del file correntemente selezionato."
 
 #: gtk/gtkfontsel.c:224
 msgid "Preview text"
 msgstr "Testo di anteprima"
 
 #: gtk/gtkfontsel.c:225
-msgid "The text to display in order to demonstrate the selected font."
+msgid "The text to display in order to demonstrate the selected font"
 msgstr ""
 
 #: gtk/gtkfontsel.c:332
@@ -2057,7 +2045,8 @@ msgid "Font Selection"
 msgstr "Selezione Tipo del Carattere"
 
 #: gtk/gtkframe.c:126
-msgid "Text of the frame's label."
+#, fuzzy
+msgid "Text of the frame's label"
 msgstr "Testo per l'etichetta della cornice"
 
 #: gtk/gtkframe.c:133
@@ -2065,19 +2054,22 @@ msgid "Label xalign"
 msgstr ""
 
 #: gtk/gtkframe.c:134
-msgid "The horizontal alignment of the label."
-msgstr ""
+#, fuzzy
+msgid "The horizontal alignment of the label"
+msgstr "Il testo dell'etichetta."
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
 msgstr ""
 
 #: gtk/gtkframe.c:144
-msgid "The vertical alignment of the label."
-msgstr ""
+#, fuzzy
+msgid "The vertical alignment of the label"
+msgstr "Il testo dell'etichetta."
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:185
-msgid "Deprecated property, use shadow_type instead."
+#, fuzzy
+msgid "Deprecated property, use shadow_type instead"
 msgstr "Proprietà deprecata, utilizzare invece shadow_type."
 
 #: gtk/gtkframe.c:160
@@ -2085,7 +2077,8 @@ msgid "Frame shadow"
 msgstr "Ombra della cornice"
 
 #: gtk/gtkframe.c:161
-msgid "Appearance of the frame border."
+#, fuzzy
+msgid "Appearance of the frame border"
 msgstr "Aspetto del bordo della cornice."
 
 #: gtk/gtkframe.c:169
@@ -2093,7 +2086,7 @@ msgid "Label widget"
 msgstr ""
 
 #: gtk/gtkframe.c:170
-msgid "A widget to display in place of the usual frame label."
+msgid "A widget to display in place of the usual frame label"
 msgstr ""
 
 #: gtk/gtkgamma.c:398
@@ -2110,7 +2103,7 @@ msgid "Shadow type"
 msgstr "Tipo di ombra"
 
 #: gtk/gtkhandlebox.c:193
-msgid "Appearance of the shadow that surrounds the container."
+msgid "Appearance of the shadow that surrounds the container"
 msgstr ""
 
 #: gtk/gtkhandlebox.c:201
@@ -2118,7 +2111,7 @@ msgid "Handle position"
 msgstr ""
 
 #: gtk/gtkhandlebox.c:202
-msgid "Position of the handle relative to the child widget."
+msgid "Position of the handle relative to the child widget"
 msgstr ""
 
 #: gtk/gtkhandlebox.c:210
@@ -2128,87 +2121,93 @@ msgstr ""
 #: gtk/gtkhandlebox.c:211
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
-"handlebox."
+"handlebox"
 msgstr ""
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1318
+#: gtk/gtkiconfactory.c:1656
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Errore caricamento icona: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
-msgid "A GdkPixbuf to display."
+#: gtk/gtkimage.c:132
+#, fuzzy
+msgid "A GdkPixbuf to display"
 msgstr "Il GdkPixbuf da visualizzare."
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:138
-msgid "A GdkPixmap to display."
+#: gtk/gtkimage.c:140
+#, fuzzy
+msgid "A GdkPixmap to display"
 msgstr "Il GdkPixmap da visualizzare."
 
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "Immagine"
 
-#: gtk/gtkimage.c:146
-msgid "A GdkImage to display."
+#: gtk/gtkimage.c:148
+#, fuzzy
+msgid "A GdkImage to display"
 msgstr "Il GdkImage da visualizzare."
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "Maschera"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr ""
 
-#: gtk/gtkimage.c:162
-msgid "Filename to load and display."
+#: gtk/gtkimage.c:164
+#, fuzzy
+msgid "Filename to load and display"
 msgstr "Nome del file da caricare e visualizzare."
 
-#: gtk/gtkimage.c:171
-msgid "Stock ID for a stock image to display."
+#: gtk/gtkimage.c:173
+msgid "Stock ID for a stock image to display"
 msgstr ""
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "Set di icone"
 
-#: gtk/gtkimage.c:179
-msgid "Icon set to display."
+#: gtk/gtkimage.c:181
+#, fuzzy
+msgid "Icon set to display"
 msgstr "Set di icone da visualizzare."
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "Dimensione icone"
 
-#: gtk/gtkimage.c:187
-msgid "Size to use for stock icon or icon set."
+#: gtk/gtkimage.c:189
+msgid "Size to use for stock icon or icon set"
 msgstr ""
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "Animazione"
 
-#: gtk/gtkimage.c:196
-msgid "GdkPixbufAnimation to display."
+#: gtk/gtkimage.c:198
+#, fuzzy
+msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation da visualizzare."
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "Tipo di storage"
 
-#: gtk/gtkimage.c:204
-msgid "The representation being used for image data."
+#: gtk/gtkimage.c:206
+msgid "The representation being used for image data"
 msgstr ""
 
 #: gtk/gtkimagemenuitem.c:124
@@ -2236,7 +2235,7 @@ msgstr "_Dispositivo:"
 msgid "Disabled"
 msgstr "Disabilitato"
 
-#: gtk/gtkinputdialog.c:246 gtk/gtkinvisible.c:113 gtk/gtkwindow.c:506
+#: gtk/gtkinputdialog.c:246 gtk/gtkinvisible.c:113 gtk/gtkwindow.c:547
 msgid "Screen"
 msgstr "Schermo"
 
@@ -2299,16 +2298,18 @@ msgstr "(sconosciuto)"
 msgid "clear"
 msgstr "cancella"
 
-#: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:507
-msgid "The screen where this window will be displayed."
+#: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:548
+#, fuzzy
+msgid "The screen where this window will be displayed"
 msgstr "Lo schermo dove questa finestra verrà visualizzata."
 
 #: gtk/gtklabel.c:281
-msgid "The text of the label."
+#, fuzzy
+msgid "The text of the label"
 msgstr "Il testo dell'etichetta."
 
 #: gtk/gtklabel.c:288
-msgid "A list of style attributes to apply to the text of the label."
+msgid "A list of style attributes to apply to the text of the label"
 msgstr ""
 
 #: gtk/gtklabel.c:294
@@ -2316,8 +2317,10 @@ msgid "Use markup"
 msgstr ""
 
 #: gtk/gtklabel.c:295
-msgid "The text of the label includes XML markup. See pango_parse_markup()."
-msgstr "Il testo dell'etichetta include marcatori XML. Vedi pango_parse_markup()."
+#, fuzzy
+msgid "The text of the label includes XML markup. See pango_parse_markup()"
+msgstr ""
+"Il testo dell'etichetta include marcatori XML. Vedi pango_parse_markup()."
 
 #: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
 msgid "Justification"
@@ -2327,7 +2330,7 @@ msgstr "Giustificazione"
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
-"GtkMisc::xalign for that."
+"GtkMisc::xalign for that"
 msgstr ""
 
 #: gtk/gtklabel.c:318
@@ -2337,7 +2340,7 @@ msgstr "Motivo"
 #: gtk/gtklabel.c:319
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
-"to underline."
+"to underline"
 msgstr ""
 
 #: gtk/gtklabel.c:326
@@ -2345,7 +2348,7 @@ msgid "Line wrap"
 msgstr ""
 
 #: gtk/gtklabel.c:327
-msgid "If set, wrap lines if the text becomes too wide."
+msgid "If set, wrap lines if the text becomes too wide"
 msgstr ""
 
 #: gtk/gtklabel.c:333
@@ -2353,7 +2356,7 @@ msgid "Selectable"
 msgstr "Selezionabile"
 
 #: gtk/gtklabel.c:334
-msgid "Whether the label text can be selected with the mouse."
+msgid "Whether the label text can be selected with the mouse"
 msgstr ""
 
 #: gtk/gtklabel.c:340
@@ -2361,7 +2364,7 @@ msgid "Mnemonic key"
 msgstr ""
 
 #: gtk/gtklabel.c:341
-msgid "The mnemonic accelerator key for this label."
+msgid "The mnemonic accelerator key for this label"
 msgstr ""
 
 #: gtk/gtklabel.c:349
@@ -2369,7 +2372,7 @@ msgid "Mnemonic widget"
 msgstr ""
 
 #: gtk/gtklabel.c:350
-msgid "The widget to be activated when the label's mnemonic key is pressed."
+msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 
 #: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
@@ -2377,7 +2380,7 @@ msgid "Horizontal adjustment"
 msgstr ""
 
 #: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
-msgid "The GtkAdjustment for the horizontal position."
+msgid "The GtkAdjustment for the horizontal position"
 msgstr ""
 
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:140
@@ -2385,7 +2388,7 @@ msgid "Vertical adjustment"
 msgstr ""
 
 #: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
-msgid "The GtkAdjustment for the vertical position."
+msgid "The GtkAdjustment for the vertical position"
 msgstr ""
 
 #: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:200
@@ -2393,7 +2396,8 @@ msgid "Width"
 msgstr "Larghezza"
 
 #: gtk/gtklayout.c:640
-msgid "The width of the layout."
+#, fuzzy
+msgid "The width of the layout"
 msgstr "La larghezza del layoyt."
 
 #: gtk/gtklayout.c:648
@@ -2401,7 +2405,8 @@ msgid "Height"
 msgstr "Altezza"
 
 #: gtk/gtklayout.c:649
-msgid "The height of the layout."
+#, fuzzy
+msgid "The height of the layout"
 msgstr "L'altezza del layout."
 
 #. Translate to default:RTL if you want your widgets
@@ -2409,28 +2414,27 @@ msgstr "L'altezza del layout."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:807
+#: gtk/gtkmain.c:806
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:194
+#: gtk/gtkmenu.c:225
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:195
+#: gtk/gtkmenu.c:226
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
-"off."
+"off"
 msgstr ""
 
-#: gtk/gtkmenu.c:264
+#: gtk/gtkmenu.c:295
 msgid "Can change accelerators"
 msgstr ""
 
-#: gtk/gtkmenu.c:265
+#: gtk/gtkmenu.c:296
 msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu "
-"item."
+"Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
 #: gtk/gtkmenubar.c:152
@@ -2469,36 +2473,36 @@ msgstr ""
 msgid "The buttons shown in the message dialog"
 msgstr ""
 
-#: gtk/gtkmisc.c:97
+#: gtk/gtkmisc.c:100
 msgid "X align"
 msgstr "Allineamento X"
 
-#: gtk/gtkmisc.c:98
+#: gtk/gtkmisc.c:101
 msgid "The horizontal alignment, from 0 (left) to 1 (right)"
 msgstr "L'allineamento orizzontale, da 0 (sinistra) a 1 (destra)"
 
-#: gtk/gtkmisc.c:107
+#: gtk/gtkmisc.c:110
 msgid "Y align"
 msgstr "Allineamento Y"
 
-#: gtk/gtkmisc.c:108
+#: gtk/gtkmisc.c:111
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr "L'allineamento verticale, da 0 (alto) a 1 (basso)"
 
-#: gtk/gtkmisc.c:117
+#: gtk/gtkmisc.c:120
 msgid "X pad"
 msgstr ""
 
-#: gtk/gtkmisc.c:118
+#: gtk/gtkmisc.c:121
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
-#: gtk/gtkmisc.c:127
+#: gtk/gtkmisc.c:130
 msgid "Y pad"
 msgstr ""
 
-#: gtk/gtkmisc.c:128
+#: gtk/gtkmisc.c:131
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
@@ -2617,7 +2621,7 @@ msgstr ""
 msgid "Tab pack type"
 msgstr ""
 
-#: gtk/gtknotebook.c:2452 gtk/gtknotebook.c:4708
+#: gtk/gtknotebook.c:2462 gtk/gtknotebook.c:4742
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2638,24 +2642,24 @@ msgstr ""
 msgid "Spacing around indicator"
 msgstr ""
 
-#: gtk/gtkpaned.c:209
+#: gtk/gtkpaned.c:212
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
-#: gtk/gtkpaned.c:217
+#: gtk/gtkpaned.c:220
 msgid "Position Set"
 msgstr ""
 
-#: gtk/gtkpaned.c:218
+#: gtk/gtkpaned.c:221
 msgid "TRUE if the Position property should be used"
 msgstr ""
 
-#: gtk/gtkpaned.c:224
+#: gtk/gtkpaned.c:227
 msgid "Handle Size"
 msgstr ""
 
-#: gtk/gtkpaned.c:225
+#: gtk/gtkpaned.c:228
 msgid "Width of handle"
 msgstr ""
 
@@ -2664,47 +2668,50 @@ msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
-#: gtk/gtkprogress.c:122
+#: gtk/gtkprogress.c:123
 msgid "Activity mode"
 msgstr "Modo di attività"
 
-#: gtk/gtkprogress.c:123
+#: gtk/gtkprogress.c:124
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
-"is used when you're doing something that you don't know how long it will "
-"take."
+"is used when you're doing something that you don't know how long it will take"
 msgstr ""
 
-#: gtk/gtkprogress.c:130
+#: gtk/gtkprogress.c:131
 msgid "Show text"
 msgstr "Mostra il testo"
 
-#: gtk/gtkprogress.c:131
+#: gtk/gtkprogress.c:132
 msgid "Whether the progress is shown as text"
 msgstr ""
 
-#: gtk/gtkprogress.c:138
+#: gtk/gtkprogress.c:139
 msgid "Text x alignment"
 msgstr "Allineamento X del testo"
 
-#: gtk/gtkprogress.c:139
+#: gtk/gtkprogress.c:140
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
-msgstr "Un numero tra 0.0 e 1.0 per specificare l'allineamento orizzontale del testo nel widget di progressione"
+msgstr ""
+"Un numero tra 0.0 e 1.0 per specificare l'allineamento orizzontale del testo "
+"nel widget di progressione"
 
-#: gtk/gtkprogress.c:147
+#: gtk/gtkprogress.c:148
 msgid "Text y alignment"
 msgstr "Allineamento y del testo"
 
-#: gtk/gtkprogress.c:148
+#: gtk/gtkprogress.c:149
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
-msgstr "Un numero tra 0.0 e 1.0 per specificare l'allineamento verticale del testo nel widget di progressione"
+msgstr ""
+"Un numero tra 0.0 e 1.0 per specificare l'allineamento verticale del testo "
+"nel widget di progressione"
 
-#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
+#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:285 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
 msgstr ""
 
@@ -2776,91 +2783,91 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr ""
 
-#: gtk/gtkrange.c:273
+#: gtk/gtkrange.c:276
 msgid "Update policy"
 msgstr "Politica di aggiornamento"
 
-#: gtk/gtkrange.c:274
+#: gtk/gtkrange.c:277
 msgid "How the range should be updated on the screen"
 msgstr ""
 
-#: gtk/gtkrange.c:283
+#: gtk/gtkrange.c:286
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 
-#: gtk/gtkrange.c:290
+#: gtk/gtkrange.c:293
 msgid "Inverted"
 msgstr "Invertito"
 
-#: gtk/gtkrange.c:291
+#: gtk/gtkrange.c:294
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 
-#: gtk/gtkrange.c:297
+#: gtk/gtkrange.c:300
 msgid "Slider Width"
 msgstr ""
 
-#: gtk/gtkrange.c:298
+#: gtk/gtkrange.c:301
 msgid "Width of scrollbar or scale thumb"
 msgstr ""
 
-#: gtk/gtkrange.c:305
+#: gtk/gtkrange.c:308
 msgid "Trough Border"
 msgstr ""
 
-#: gtk/gtkrange.c:306
+#: gtk/gtkrange.c:309
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 
-#: gtk/gtkrange.c:313
+#: gtk/gtkrange.c:316
 msgid "Stepper Size"
 msgstr ""
 
-#: gtk/gtkrange.c:314
+#: gtk/gtkrange.c:317
 msgid "Length of step buttons at ends"
 msgstr ""
 
-#: gtk/gtkrange.c:321
+#: gtk/gtkrange.c:324
 msgid "Stepper Spacing"
 msgstr ""
 
-#: gtk/gtkrange.c:322
+#: gtk/gtkrange.c:325
 msgid "Spacing between step buttons and thumb"
 msgstr ""
 
-#: gtk/gtkrange.c:329
+#: gtk/gtkrange.c:332
 #, fuzzy
 msgid "Arrow X Displacement"
 msgstr "Finestra"
 
-#: gtk/gtkrange.c:330
+#: gtk/gtkrange.c:333
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:340
 #, fuzzy
 msgid "Arrow Y Displacement"
 msgstr "Finestra"
 
-#: gtk/gtkrange.c:338
+#: gtk/gtkrange.c:341
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
-#: gtk/gtkrc.c:2317
+#: gtk/gtkrc.c:2353
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Impossibile trovare il file da includere: \"%s\""
 
-#: gtk/gtkrc.c:2959 gtk/gtkrc.c:2962
+#: gtk/gtkrc.c:2995 gtk/gtkrc.c:2998
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 "Impossibile trovare il file di immagine nella cartella immagini: \"%s\" "
 "nicht finden"
 
-#: gtk/gtkrc.c:3397
+#: gtk/gtkrc.c:3433
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -2893,92 +2900,92 @@ msgstr ""
 msgid "Maximum size of the ruler"
 msgstr ""
 
-#: gtk/gtkscale.c:155 gtk/gtkspinbutton.c:255
+#: gtk/gtkscale.c:158 gtk/gtkspinbutton.c:255
 msgid "Digits"
 msgstr ""
 
-#: gtk/gtkscale.c:156
+#: gtk/gtkscale.c:159
 msgid "The number of decimal places that are displayed in the value"
 msgstr ""
 
-#: gtk/gtkscale.c:165
+#: gtk/gtkscale.c:168
 msgid "Draw Value"
 msgstr ""
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:169
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 
-#: gtk/gtkscale.c:173
+#: gtk/gtkscale.c:176
 msgid "Value Position"
 msgstr "Posizione Valore"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:177
 msgid "The position in which the current value is displayed"
 msgstr ""
 
-#: gtk/gtkscale.c:181
+#: gtk/gtkscale.c:184
 msgid "Slider Length"
 msgstr ""
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:185
 msgid "Length of scale's slider"
 msgstr ""
 
-#: gtk/gtkscale.c:190
+#: gtk/gtkscale.c:193
 msgid "Value spacing"
 msgstr ""
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:194
 msgid "Space between value text and the slider/trough area"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:76
+#: gtk/gtkscrollbar.c:79
 msgid "Minimum Slider Length"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:77
+#: gtk/gtkscrollbar.c:80
 msgid "Minimum length of scrollbar slider"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:85
+#: gtk/gtkscrollbar.c:88
 msgid "Fixed slider size"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:86
+#: gtk/gtkscrollbar.c:89
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:93
+#: gtk/gtkscrollbar.c:96
 msgid "Backward stepper"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:94
+#: gtk/gtkscrollbar.c:97
 msgid "Display the standard backward arrow button"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:101
+#: gtk/gtkscrollbar.c:104
 msgid "Forward stepper"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:102
+#: gtk/gtkscrollbar.c:105
 msgid "Display the standard forward arrow button"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:109
+#: gtk/gtkscrollbar.c:112
 msgid "Secondary backward stepper"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:110
+#: gtk/gtkscrollbar.c:113
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:117
+#: gtk/gtkscrollbar.c:120
 msgid "Secondary forward stepper"
 msgstr ""
 
-#: gtk/gtkscrollbar.c:118
+#: gtk/gtkscrollbar.c:121
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
@@ -3023,81 +3030,90 @@ msgstr "Tipo ombra"
 msgid "Style of bevel around the contents"
 msgstr ""
 
-#: gtk/gtksettings.c:143
+#: gtk/gtksettings.c:144
 msgid "Double Click Time"
 msgstr "Durata doppio click"
 
-#: gtk/gtksettings.c:144
+#: gtk/gtksettings.c:145
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
 
-#: gtk/gtksettings.c:151
+#: gtk/gtksettings.c:152
 msgid "Cursor Blink"
 msgstr "Cursore lampeggiante"
 
-#: gtk/gtksettings.c:152
+#: gtk/gtksettings.c:153
 msgid "Whether the cursor should blink"
 msgstr "Se il cursore deve lampeggiare o meno"
 
-#: gtk/gtksettings.c:159
+#: gtk/gtksettings.c:160
 msgid "Cursor Blink Time"
 msgstr "Velocità cursore lampeggiante"
 
-#: gtk/gtksettings.c:160
+#: gtk/gtksettings.c:161
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Durante del lampeggiamento del cursore, in millisecondi"
 
-#: gtk/gtksettings.c:167
+#: gtk/gtksettings.c:168
 msgid "Split Cursor"
 msgstr ""
 
-#: gtk/gtksettings.c:168
+#: gtk/gtksettings.c:169
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
 
-#: gtk/gtksettings.c:175
+#: gtk/gtksettings.c:176
 msgid "Theme Name"
 msgstr "Nome del tema"
 
-#: gtk/gtksettings.c:176
+#: gtk/gtksettings.c:177
 msgid "Name of theme RC file to load"
 msgstr "Nome del file RC con il tema da caricare"
 
-#: gtk/gtksettings.c:183
+#: gtk/gtksettings.c:184
 msgid "Key Theme Name"
 msgstr ""
 
-#: gtk/gtksettings.c:184
+#: gtk/gtksettings.c:185
 msgid "Name of key theme RC file to load"
 msgstr ""
 
-#: gtk/gtksettings.c:192
+#: gtk/gtksettings.c:193
 msgid "Menu bar accelerator"
 msgstr ""
 
-#: gtk/gtksettings.c:193
+#: gtk/gtksettings.c:194
 msgid "Keybinding to activate the menu bar"
 msgstr ""
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:202
 msgid "Drag threshold"
 msgstr ""
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:203
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
-#: gtk/gtksettings.c:210
+#: gtk/gtksettings.c:211
 msgid "Font Name"
 msgstr "Nome Carattere"
 
-#: gtk/gtksettings.c:211
+#: gtk/gtksettings.c:212
 msgid "Name of default font to use"
 msgstr "Nome del carattere predefinito da utilizzare"
+
+#: gtk/gtksettings.c:220
+#, fuzzy
+msgid "Icon Sizes"
+msgstr "Dimensione icone"
+
+#: gtk/gtksettings.c:221
+msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+msgstr ""
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
@@ -3106,7 +3122,7 @@ msgstr "Modalità"
 #: gtk/gtksizegroup.c:243
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
-"component widgets."
+"component widgets"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:238
@@ -3229,7 +3245,8 @@ msgid "_Copy"
 msgstr "_Copia"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
+#, fuzzy
+msgid "Cu_t"
 msgstr "_Taglia"
 
 #: gtk/gtkstock.c:285
@@ -3429,7 +3446,6 @@ msgid "_Yes"
 msgstr "_Si"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "Zoome _100%"
 
@@ -3483,7 +3499,9 @@ msgstr "Omogeneo"
 
 #: gtk/gtktable.c:193
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Se uguale a TRUE le celle della tabella hanno tutte la stessa larghezza/altezza"
+msgstr ""
+"Se uguale a TRUE le celle della tabella hanno tutte la stessa larghezza/"
+"altezza"
 
 #: gtk/gtktable.c:200
 msgid "Left attachment"
@@ -3522,7 +3540,7 @@ msgid "Horizontal options"
 msgstr "Opzioni orizzontali"
 
 #: gtk/gtktable.c:229
-msgid "Options specifying the horizontal behaviour of the child."
+msgid "Options specifying the horizontal behaviour of the child"
 msgstr ""
 
 #: gtk/gtktable.c:235
@@ -3582,7 +3600,7 @@ msgid "Tag name"
 msgstr ""
 
 #: gtk/gtktexttag.c:200
-msgid "Name used to refer to the text tag. NULL for anonymous tags."
+msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr ""
 
 #: gtk/gtktexttag.c:218
@@ -3632,32 +3650,32 @@ msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr ""
 
 #: gtk/gtktexttag.c:311
-msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC."
+msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr ""
 
 #: gtk/gtktexttag.c:320
-msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS."
+msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr ""
 
 #: gtk/gtktexttag.c:329
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
-"example, PANGO_WEIGHT_BOLD."
+"example, PANGO_WEIGHT_BOLD"
 msgstr ""
 
 #: gtk/gtktexttag.c:340
-msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED."
+msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr ""
 
 #: gtk/gtktexttag.c:349
-msgid "Font size in Pango units."
+msgid "Font size in Pango units"
 msgstr ""
 
 #: gtk/gtktexttag.c:359
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
-"such as PANGO_SCALE_X_LARGE."
+"such as PANGO_SCALE_X_LARGE"
 msgstr ""
 
 #: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
@@ -3672,7 +3690,7 @@ msgstr ""
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
-"probably don't need it."
+"probably don't need it"
 msgstr ""
 
 #: gtk/gtktexttag.c:395
@@ -3934,7 +3952,7 @@ msgstr "Cursore visibile"
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:6416
+#: gtk/gtktextview.c:6447
 msgid "Input _Methods"
 msgstr ""
 
@@ -3947,19 +3965,19 @@ msgstr "Impossibile trovare il modulo nella cartella moduli: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Nessun aiuto ---"
 
-#: gtk/gtktogglebutton.c:131
+#: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:139
-msgid "If the toggle button is in an \"in between\" state."
+#: gtk/gtktogglebutton.c:142
+msgid "If the toggle button is in an \"in between\" state"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:146
+#: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:147
+#: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
 msgstr ""
 
@@ -4048,7 +4066,7 @@ msgstr ""
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:540 gtk/gtktreeviewcolumn.c:184 gtk/gtkwidget.c:425
+#: gtk/gtktreeview.c:540 gtk/gtktreeviewcolumn.c:184 gtk/gtkwidget.c:427
 msgid "Visible"
 msgstr "Visibile"
 
@@ -4109,7 +4127,7 @@ msgid "Expander Size"
 msgstr ""
 
 #: gtk/gtktreeview.c:603
-msgid "Size of the expander arrow."
+msgid "Size of the expander arrow"
 msgstr ""
 
 #: gtk/gtktreeview.c:611
@@ -4117,7 +4135,7 @@ msgid "Vertical Separator Width"
 msgstr ""
 
 #: gtk/gtktreeview.c:612
-msgid "Vertical space between cells.  Must be an even number."
+msgid "Vertical space between cells.  Must be an even number"
 msgstr ""
 
 #: gtk/gtktreeview.c:620
@@ -4125,7 +4143,7 @@ msgid "Horizontal Separator Width"
 msgstr ""
 
 #: gtk/gtktreeview.c:621
-msgid "Horizontal space between cells.  Must be an even number."
+msgid "Horizontal space between cells.  Must be an even number"
 msgstr ""
 
 #: gtk/gtktreeview.c:629
@@ -4133,7 +4151,7 @@ msgid "Allow Rules"
 msgstr ""
 
 #: gtk/gtktreeview.c:630
-msgid "Allow drawing of alternating color rows."
+msgid "Allow drawing of alternating color rows"
 msgstr ""
 
 #: gtk/gtktreeview.c:636
@@ -4141,14 +4159,14 @@ msgid "Indent Expanders"
 msgstr ""
 
 #: gtk/gtktreeview.c:637
-msgid "Make the expanders indented."
+msgid "Make the expanders indented"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:185
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwindow.c:445
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwindow.c:486
 msgid "Resizable"
 msgstr "Redimensionabile"
 
@@ -4247,322 +4265,348 @@ msgstr ""
 #: gtk/gtkviewport.c:133
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
-"this viewport."
+"this viewport"
 msgstr ""
 
 #: gtk/gtkviewport.c:141
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
-"this viewport."
+"this viewport"
 msgstr ""
 
 #: gtk/gtkviewport.c:149
-msgid "Determines how the shadowed box around the viewport is drawn."
+msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 
-#: gtk/gtkwidget.c:392
+#: gtk/gtkwidget.c:394
 msgid "Widget name"
 msgstr "Nome widget"
 
-#: gtk/gtkwidget.c:393
+#: gtk/gtkwidget.c:395
 msgid "The name of the widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:399
+#: gtk/gtkwidget.c:401
 msgid "Parent widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:400
-msgid "The parent widget of this widget. Must be a Container widget."
+#: gtk/gtkwidget.c:402
+msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:409
 msgid "Width request"
 msgstr ""
 
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:410
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
-"used."
+"used"
 msgstr ""
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:418
 msgid "Height request"
 msgstr ""
 
-#: gtk/gtkwidget.c:417
+#: gtk/gtkwidget.c:419
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
-"be used."
+"be used"
 msgstr ""
 
-#: gtk/gtkwidget.c:426
+#: gtk/gtkwidget.c:428
 msgid "Whether the widget is visible"
 msgstr ""
 
-#: gtk/gtkwidget.c:432
+#: gtk/gtkwidget.c:434
 msgid "Sensitive"
 msgstr ""
 
-#: gtk/gtkwidget.c:433
+#: gtk/gtkwidget.c:435
 msgid "Whether the widget responds to input"
 msgstr ""
 
-#: gtk/gtkwidget.c:439
+#: gtk/gtkwidget.c:441
 msgid "Application paintable"
 msgstr ""
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:442
 msgid "Whether the application will paint directly on the widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:446
+#: gtk/gtkwidget.c:448
 msgid "Can focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:449
 msgid "Whether the widget can accept the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:453
+#: gtk/gtkwidget.c:455
 msgid "Has focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:456
 msgid "Whether the widget has the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:460
+#: gtk/gtkwidget.c:462
 msgid "Is focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:463
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 
-#: gtk/gtkwidget.c:467
+#: gtk/gtkwidget.c:469
 #, fuzzy
 msgid "Can default"
 msgstr "default:LTR"
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:470
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:474
+#: gtk/gtkwidget.c:476
 #, fuzzy
 msgid "Has default"
 msgstr "default:LTR"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:477
 msgid "Whether the widget is the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:481
+#: gtk/gtkwidget.c:483
 msgid "Receives default"
 msgstr ""
 
-#: gtk/gtkwidget.c:482
-msgid "If TRUE, the widget will receive the default action when it is focused."
+#: gtk/gtkwidget.c:484
+msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 
-#: gtk/gtkwidget.c:488
+#: gtk/gtkwidget.c:490
 msgid "Composite child"
 msgstr ""
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:491
 msgid "Whether the widget is part of a composite widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:495
+#: gtk/gtkwidget.c:497
 msgid "Style"
 msgstr "Stile"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:498
 msgid ""
 "The style of the widget, which contains information about how it will look "
-"(colors etc)."
+"(colors etc)"
 msgstr ""
 
-#: gtk/gtkwidget.c:502
+#: gtk/gtkwidget.c:504
 msgid "Events"
 msgstr ""
 
-#: gtk/gtkwidget.c:503
-msgid "The event mask that decides what kind of GdkEvents this widget gets."
+#: gtk/gtkwidget.c:505
+msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:512
 msgid "Extension events"
 msgstr ""
 
-#: gtk/gtkwidget.c:511
-msgid "The mask that decides what kind of extension events this widget gets."
+#: gtk/gtkwidget.c:513
+msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 
-#: gtk/gtkwidget.c:1060
+#: gtk/gtkwidget.c:1062
 msgid "Interior Focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:1061
-msgid "Whether to draw the focus indicator inside widgets."
+#: gtk/gtkwidget.c:1063
+msgid "Whether to draw the focus indicator inside widgets"
 msgstr ""
 
-#: gtk/gtkwidget.c:1067
+#: gtk/gtkwidget.c:1069
 msgid "Focus linewidth"
 msgstr ""
 
-#: gtk/gtkwidget.c:1068
-msgid "Width, in pixels, of the focus indicator line."
+#: gtk/gtkwidget.c:1070
+msgid "Width, in pixels, of the focus indicator line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1074
+#: gtk/gtkwidget.c:1076
 msgid "Focus line dash pattern"
 msgstr ""
 
-#: gtk/gtkwidget.c:1075
-msgid "Dash pattern used to draw the focus indicator."
+#: gtk/gtkwidget.c:1077
+msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 
-#: gtk/gtkwidget.c:1080
+#: gtk/gtkwidget.c:1082
 msgid "Focus padding"
 msgstr ""
 
-#: gtk/gtkwidget.c:1081
-msgid "Width, in pixels, between focus indicator and the widget 'box'."
+#: gtk/gtkwidget.c:1083
+msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 
-#: gtk/gtkwidget.c:1086
+#: gtk/gtkwidget.c:1088
 msgid "Cursor color"
 msgstr ""
 
-#: gtk/gtkwidget.c:1087
+#: gtk/gtkwidget.c:1089
 msgid "Color with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwidget.c:1092
+#: gtk/gtkwidget.c:1094
 msgid "Secondary cursor color"
 msgstr ""
 
-#: gtk/gtkwidget.c:1093
+#: gtk/gtkwidget.c:1095
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
-"right-to-left and left-to-right text."
+"right-to-left and left-to-right text"
 msgstr ""
 
-#: gtk/gtkwidget.c:1098
+#: gtk/gtkwidget.c:1100
 msgid "Cursor line aspect ratio"
 msgstr ""
 
-#: gtk/gtkwidget.c:1099
+#: gtk/gtkwidget.c:1101
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwindow.c:410
+#: gtk/gtkwindow.c:451
 msgid "Window Type"
 msgstr "Tipo finestra"
 
-#: gtk/gtkwindow.c:411
+#: gtk/gtkwindow.c:452
 msgid "The type of the window"
 msgstr "Il tipo di finestra"
 
-#: gtk/gtkwindow.c:420
+#: gtk/gtkwindow.c:461
 msgid "Window Title"
 msgstr "Titolo della finestra"
 
-#: gtk/gtkwindow.c:421
+#: gtk/gtkwindow.c:462
 msgid "The title of the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:428
+#: gtk/gtkwindow.c:469
 msgid "Allow Shrink"
 msgstr ""
 
-#: gtk/gtkwindow.c:430
+#: gtk/gtkwindow.c:471
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
-"time a bad idea."
+"time a bad idea"
 msgstr ""
 
-#: gtk/gtkwindow.c:437
+#: gtk/gtkwindow.c:478
 msgid "Allow Grow"
 msgstr ""
 
-#: gtk/gtkwindow.c:438
-msgid "If TRUE, users can expand the window beyond its minimum size."
+#: gtk/gtkwindow.c:479
+msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 
-#: gtk/gtkwindow.c:446
-msgid "If TRUE, users can resize the window."
+#: gtk/gtkwindow.c:487
+msgid "If TRUE, users can resize the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:494
 msgid "Modal"
 msgstr ""
 
-#: gtk/gtkwindow.c:454
+#: gtk/gtkwindow.c:495
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
-"up)."
+"up)"
 msgstr ""
 
-#: gtk/gtkwindow.c:461
+#: gtk/gtkwindow.c:502
 msgid "Window Position"
 msgstr ""
 
-#: gtk/gtkwindow.c:462
-msgid "The initial position of the window."
-msgstr ""
+#: gtk/gtkwindow.c:503
+#, fuzzy
+msgid "The initial position of the window"
+msgstr "Il tipo di finestra"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:511
 msgid "Default Width"
 msgstr ""
 
-#: gtk/gtkwindow.c:471
-msgid ""
-"The default width of the window, used when initially showing the window."
+#: gtk/gtkwindow.c:512
+msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:521
 msgid "Default Height"
 msgstr ""
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:522
 msgid ""
-"The default height of the window, used when initially showing the window."
+"The default height of the window, used when initially showing the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:490
+#: gtk/gtkwindow.c:531
 msgid "Destroy with Parent"
 msgstr ""
 
-#: gtk/gtkwindow.c:491
+#: gtk/gtkwindow.c:532
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 
-#: gtk/gtkwindow.c:498
+#: gtk/gtkwindow.c:539
 msgid "Icon"
 msgstr ""
 
-#: gtk/gtkwindow.c:499
+#: gtk/gtkwindow.c:540
 msgid "Icon for this window"
 msgstr ""
 
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:555
 msgid "Is Active"
 msgstr "E' attivo"
 
-#: gtk/gtkwindow.c:515
+#: gtk/gtkwindow.c:556
 msgid "Whether the toplevel is the current active window"
 msgstr ""
 
-#: gtk/gtkwindow.c:522
+#: gtk/gtkwindow.c:563
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:523
+#: gtk/gtkwindow.c:564
 msgid "Whether the input focus is within this GtkWindow"
+msgstr ""
+
+#: gtk/gtkwindow.c:571
+msgid "Type hint"
+msgstr ""
+
+#: gtk/gtkwindow.c:572
+msgid ""
+"Hint to help the desktop environment understand what kind of window this is "
+"and how to treat it."
+msgstr ""
+
+#: gtk/gtkwindow.c:580
+msgid "Skip taskbar"
+msgstr ""
+
+#: gtk/gtkwindow.c:581
+msgid "TRUE if the window should not be in the task bar."
+msgstr ""
+
+#: gtk/gtkwindow.c:588
+msgid "Skip pager"
+msgstr ""
+
+#: gtk/gtkwindow.c:589
+msgid "TRUE if the window should not be in the pager."
 msgstr ""
 
 #. ID
@@ -4610,3 +4654,21 @@ msgstr ""
 msgid "X Input Method"
 msgstr ""
 
+#: modules/input/gtkimcontextxim.c:257
+msgid "IM Preedit style"
+msgstr ""
+
+#: modules/input/gtkimcontextxim.c:258
+msgid "How to draw the input method preedit string"
+msgstr ""
+
+#: modules/input/gtkimcontextxim.c:266
+msgid "IM Status style"
+msgstr ""
+
+#: modules/input/gtkimcontextxim.c:267
+msgid "How to draw the input method statusbar"
+msgstr ""
+
+#~ msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "Il file ICO manca di dati fondamentali (forse è troncato?)"

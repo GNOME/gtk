@@ -1,3 +1,154 @@
+Overview of Changes from GTK+-2.0.x to GTK+-2.1.0
+=================================================
+
+Multihead support: [Erwann Chenede, Owen Taylor]
+* Multihead support 
+* Add GdkDisplay, GdkScreen structures
+* Add _for_display(), _for_screen() variants where needed in GDK and GTK+
+  (In other cases, make the variants methods on GdkDisplay/GdkScreen
+* Adapt GTK+ widgets to be multihead safe
+* Allow initialization of GTK+ without opening a display with gtk_parse_args()
+* Add multihead support to demos/tests.
+
+GDK:
+* Adapt win32 code to multihead reorganization [Hans Breuer, Tor Lillqvist]
+* Adapt linux-fb code to multihead reorganization [Eric Warmenhoven]
+* Miscellaneous linux-fb improvements [Eric]
+* Xinerama support [Erwann Chenede, Matthias Clasen]
+* Allow GDK backends to add custom argument parsing [Sven Neumann]
+* Add support for some addition NET window manager spec hints [Havoc Pennington]
+* Add ::keys-changed signal to GdkKeymap, handle keymap changes for keybindings [Owen]
+
+GtkTreeView: [Kristian Rietveld]
+* Support stock pixbufs in GtkCellRendererPixbuf 
+* Allow setting the cell background for cell renderers
+* Support focusing individual cell renderers and other focus fixes
+* Make resizing tree views more efficient [Soeren Sandmann]
+* Add gtk_tree_model_get_string_from_iter
+* Improve gtk_list_store_remove API
+* API additions:
+  gtk_tree_model_sort_iter_is_valid(), gtk_tree_view_expand_to_path() 
+  Add gtk_tree_selection_get_selected_rows(),
+  gtk_tree_selection_count_selected_rows() 
+  gtk_tree_path_new_from_indices(),  gtk_{list,tree}_store_{reorder,swap,_move} 
+
+GTK+:
+* Add style property for drawing menu items without shadow [Soeren]
+* gtk_widget_modify_color_component/font(): Allow clearing
+  current modifications. [Owen]
+* Add GtkWidget::is_focus, GtkWindow::is_active properties [Owen]
+* Some XEMBED changes for standards compliance and Qt compatibility [Owen]
+* Fix menus resizing when popped up or torn off [Owen]
+* Improve label behavior when it gets a too small allocation [Soeren]
+* Add support for depth 8 StaticColor visuals to gdkrgb [Matthias]
+* Theme drawing improvements [Soeren]
+* Add types for GtkRowReference, GtkClipboard [Jonathan Blandford, James Henstridge, Owen]
+* Use G_TYPE_FLAG_ABSTRACT for abstract types [Matthias]
+* Add gtk_menu_shell_select_first() [Owen]
+* Add gtk_notebook_get_n_pages() [Havoc Pennington]
+* Allow accel_path = NULL for gtk_menu_item_set_accel_path().
+* Allow icon sizes to be changed via a GtkSetting [Bill Haneman, Brian Cameron, Owen]
+
+GdkPixbuf:
+* Improve gdk-pixbuf loader tests [Soeren Sandmann]
+* Use iTXT chunks when necessary in PNG image saver [Matthias]
+* Add incremental loading for progressive jpegs [Matthias]
+* Add load-at-size functionality [Matthias]
+* Add a loader for .ANI animations [Matthias]
+* Load hotspot for .ICO files [Matthias]
+
+Docs:
+* Convert docs to Docbook XML [Matthias]
+* Doc improvements and fixes [Matthias, Soeren, 
+  Dennis Bj"orklund, Ross Burton, Manuel Clos, Alexey A. Malyshev, Brett Nash,
+  Brian Tarricone, Owen, Vitaly Tishkov, Yao Zhang]
+* Tutorial improvements [Tony Gale]
+
+General:
+* Add gtk-im-preedit-style/gtk-im-status-style XSETTINGS [Hidetoshi Tajima]
+* Clean up GDK and demos for deprecated functions [Manish Singh]
+* Misc fixes [Olexiy Avramchenko, Jacob Berkman, Anders Carlsson, David L. Cooper II, Robin Lu, 
+  Eric Mader, Mark McLoughlin, Padraig O'Briain, Laszlo Peter, Hidetoshi, Vitaly Tishkov, 
+  Shivaram Upadhyayula]
+
+Overview of Changes in GTK+ 2.0.6
+=================================
+
+* GtkTreeView bug fixes [Jonathan Blandford, Kristian Rietveld, 
+  Josh Green, Matthias Clasen]
+* Fix problem with keynav and insensitive menu items [Owen Taylor]
+* Fix pixbuf_from_drawable() for LSB -> MSB [Federico Mena Quintero]
+* Use GTK2_RC_FILES envvar instead of GTK_RC_FILES [Owen]
+* Focus check/radio buttons when activating with a mnemonic [Padraig O'Briain]
+* Cycle between multiple menubars with F10, not control-tab 
+  [Calum Benson, Padraig]
+* Misc bug fixes [Jacob Berkman, Matthias Clasen, Manuel Op de Coul,
+  Bill Haneman, Norihiro UMEDA, Shivaram Upadhyayula, Yao Zhang]
+* Build fixes for cross-compiling and portability [Arnaud Charlet, 
+  J. Ali Harlow]
+* Updated translations (bg,ca,da,fr,ja,ko,lv,no,pl,ru,sk,sv,vi)
+
+Overview of Changes in GTK+ 2.0.5
+=================================
+
+* Fix a wrong assertion that broke gtk_file_selection_set_filename();
+  also another fix from testing this function with non-UTF-8 filenames.
+* Fix incorrect property notification in GtkTextView. [James M. Cape]
+
+Overview of Changes in GTK+ 2.0.4
+=================================
+
+* Fix a number of types which were registered with the 
+  type system with the wrong names [James Henstridge, Jonathan Blandford]
+* Support missing data types in GtkList/TreeStore [Daniel Elstner]
+* Misc GtkTreeView bug fixes [Dave Camp, Jonathan, Daniel Elstner, 
+  Josh Parsons]
+* Drag and drop fixes, including a stuck grab. [Dave, Thomas Leonard, 
+  Owen Taylor]
+* Calculate screen size on win32 from the "logical DPI" 
+  [Joaquin Cuenca Abela, Tor Lillqvist]
+* Misc Win32 bug fixes. [Florent Duguet, Torn]
+* Fix theme changes for GtkMenu [Soeren Sandmann]
+* Fix gdk_pixbuf_from_drawable() for big endian. [Federico Mena Quintero]
+* Fix encoding handling for gtk_file_selection_set_filename()
+  [Sebastian Ritau, Owen]
+* Fix crash with DND, Qt and Metacity [Cha Young-Ho, Havoc, Owen]
+* Fixes for DirectColor visuals [Shivaram Upadhyayula]
+* Memory leak and UMR fixes [Michael Meeks, Matthias Clasen, Valgrind]
+* Misc bug fixes
+* Updated translations (ca,cs,da,es,et,fr,ms,nl,pl,pt,pt_BR,ru,sv)
+
+Other contributors: Nicholas Allen, Jacob Berkman, Remus Draica, 
+  Nano Golveia, Tim Janik, Sergey Kuzminov, George Lebl, Garrett Lesage, 
+  Robin Lu, Timo Meinen, Michel Selten, Boris Shingarov, Jeff Waugh
+
+Overview of Changes in GTK+ 2.0.3
+=================================
+
+* GtkTreeView fixes (Jonathan Blandford, Kristian Rietveld, Daniel Elstner)
+* Improve GdkRGB support for low color depths (Tor Lillqvist).
+* Tweak F10 behavior to focus GtkMenuBar. (Owen Taylor)
+* Include internal children when focusing. (Jonathan)
+* Win32 fixes (Tor Lillqvist, David Sterba)
+* Allow use of a pixmap as the drawable in gdk_pixmap_new(). (Kristian)
+* GdkPixbuf fixes (Matthias Clasen, Michael Natterer, Federico Mena Quintero)
+* GtkMenu fixes. (Soeren Sandmann)
+* Find gdk-pixbuf-csource when cross-compiling. (Michael Natterer)
+* Misc input-method related fixes (Yao Zhang, Federico)
+* Fix stuck grab during DND. (Dave Camp, Owen)
+* Remove in-bevel from scrolled-offscreen menus. (Ettore Perazzoli)
+* Various plug/socket fixes (Owen, Padraig O'Briain, Dave Camp, 
+  Michael Meeks)
+* Handle Xlib internal connections (HideToshi Tajima)
+* Many miscellaneous bug fixes.
+
+Other contributors: Jacob Berkman, Abigail Brady, Rich Burridge, 
+Anders Carlsson, Murray Cumming, Nalin Dahyabhai, James Henstridge, 
+David Highley, Ben Liblitt, Tim Janik, Bill Jannsen, Lauris Kaplinski, 
+Sergey Kuzminov, Alex Larsson, Sven Neumann, Havoc Pennington, Gareth Pearce, 
+Simon Floery, Thomas Leonard, Detlef Reichl, Martin Schulze, Christophe Saout,
+Timo Sirainen, Graham Swallow.
+
 Overview of Changes in GTK+ 2.0.2
 =================================
 

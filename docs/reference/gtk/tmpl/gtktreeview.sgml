@@ -901,6 +901,11 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
+<!-- ##### ARG GtkTreeView:vertical-separator ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
 <para>
 
@@ -911,17 +916,12 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:allow-rules ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTreeView:expander-size ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTreeView:vertical-separator ##### -->
+<!-- ##### ARG GtkTreeView:allow-rules ##### -->
 <para>
 
 </para>

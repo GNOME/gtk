@@ -1,3 +1,9 @@
+Sun Sep 29 23:52:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* ===== Released 2.1.0 ======
+
+	* NEWS: Updated
+
 Sun Sep 29 20:20:26 2002  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtktooltips.c (gtk_tooltips_event_handler): Disable

@@ -248,17 +248,17 @@ mouse cursor is.
 
 </para>
 
-<!-- ##### ARG GtkButton:default-border ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkButton:child-displacement-y ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkButton:child-displacement-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:default-border ##### -->
 <para>
 
 </para>
