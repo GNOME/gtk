@@ -2367,6 +2367,8 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
   GdkWindow *parent_window;
 
   g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (widget->parent != NULL, NULL);
   
   parent_window = gtk_object_get_data (GTK_OBJECT (widget),
 				       parent_window_key);

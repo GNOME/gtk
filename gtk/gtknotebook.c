@@ -2233,27 +2233,29 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
   gint n = 1;
   gint old_fill = 0;
   gint new_fill = 0;
-
+  
   if (!notebook->show_tabs || !notebook->children)
     return;
-
+  
   widget = GTK_WIDGET (notebook);
   container = GTK_CONTAINER (notebook);
-
+  
   child_allocation.x = container->border_width;
   child_allocation.y = container->border_width;
-
+  
   switch (notebook->tab_pos)
     {
     case GTK_POS_BOTTOM:
-      child_allocation.y = allocation->height 
-	- notebook->cur_page->requisition.height - container->border_width;
+      child_allocation.y = (allocation->height -
+			    notebook->cur_page->requisition.height -
+			    container->border_width);
     case GTK_POS_TOP:
       child_allocation.height = notebook->cur_page->requisition.height;
       break;
     case GTK_POS_RIGHT:
-      child_allocation.x = allocation->width 
-	- notebook->cur_page->requisition.width - container->border_width;
+      child_allocation.x = (allocation->width -
+			    notebook->cur_page->requisition.width -
+			    container->border_width);
     case GTK_POS_LEFT:
       child_allocation.width = notebook->cur_page->requisition.width;
       break;
@@ -2272,23 +2274,21 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	      children = children->next;
 	      tab_space += page->requisition.width;
 	    }
-	  if (tab_space > allocation->width - 2 * container->border_width 
-	      - TAB_OVERLAP) 
+	  if (tab_space > allocation->width - 2 * container->border_width - TAB_OVERLAP) 
 	    {
 	      showarrow = TRUE;
 	      page = notebook->focus_tab->data; 
-	      tab_space = allocation->width - TAB_OVERLAP 
-		- page->requisition.width -
-		2 * (container->border_width + ARROW_SPACING + ARROW_SIZE);
-	      x = allocation->width - 2 * ARROW_SIZE - ARROW_SPACING 
-		- container->border_width;  
+	      
+	      tab_space = (allocation->width - TAB_OVERLAP - page->requisition.width -
+			   2 * (container->border_width + ARROW_SPACING + ARROW_SIZE));
+	      x = allocation->width - 2 * ARROW_SIZE - ARROW_SPACING - container->border_width;
+	      
 	      page = notebook->children->data;
 	      if (notebook->tab_pos == GTK_POS_TOP)
-		y = container->border_width + 
-		  (page->requisition.height - ARROW_SIZE) / 2;
+		y = container->border_width + (page->requisition.height - ARROW_SIZE) / 2;
 	      else
-		y = allocation->height - container->border_width - 
-		  ARROW_SIZE - (page->requisition.height - ARROW_SIZE) / 2;
+		y = (allocation->height - container->border_width - 
+		     ARROW_SIZE - (page->requisition.height - ARROW_SIZE) / 2);
 	    }
 	  break;
 	case GTK_POS_LEFT:
@@ -2299,26 +2299,23 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	      children = children->next;
 	      tab_space += page->requisition.height;
 	    }
-	  if (tab_space > allocation->height - 2 * container->border_width
-	      - TAB_OVERLAP) 
+	  if (tab_space > (allocation->height - 2 * container->border_width - TAB_OVERLAP))
 	    {
 	      showarrow = TRUE;
 	      page = notebook->focus_tab->data; 
-	      tab_space = allocation->height 
-		- ARROW_SIZE - ARROW_SPACING - TAB_OVERLAP
-		- 2 * container->border_width - page->requisition.height;
-	      y = allocation->height - container->border_width 
-		- ARROW_SIZE;  
+	      tab_space = (allocation->height -
+			   ARROW_SIZE - ARROW_SPACING - TAB_OVERLAP -
+			   2 * container->border_width - page->requisition.height);
+	      y = allocation->height - container->border_width - ARROW_SIZE;  
+	      
 	      page = notebook->children->data;
 	      if (notebook->tab_pos == GTK_POS_LEFT)
-		x = container->border_width 
-		  + (page->requisition.width 
-		     - (2 * ARROW_SIZE - ARROW_SPACING)) / 2; 
+		x = (container->border_width +
+		     (page->requisition.width - (2 * ARROW_SIZE - ARROW_SPACING)) / 2); 
 	      else
-		x = allocation->width - container->border_width 
-		  - (2 * ARROW_SIZE -  ARROW_SPACING) 
-		  - (page->requisition.width 
-		   - (2 * ARROW_SIZE - ARROW_SPACING)) / 2;
+		x = (allocation->width - container->border_width -
+		     (2 * ARROW_SIZE -  ARROW_SPACING) -
+		     (page->requisition.width - (2 * ARROW_SIZE - ARROW_SPACING)) / 2);
 	    }
 	  break;
 	}
@@ -2365,8 +2362,12 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 		  notebook->first_tab = children->next;
 		}
 	    }
-	  gdk_window_move (notebook->panel, x, y);
-	  gdk_window_show (notebook->panel);
+	  
+	  if (GTK_WIDGET_REALIZED (notebook))
+	    {
+	      gdk_window_move (notebook->panel, x, y);
+	      gdk_window_show (notebook->panel);
+	    }
 	  
 	  if (tab_space < 0) 
 	    {
@@ -2381,7 +2382,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	    }
 	  else 
 	    tab_space = 0;
-
+	  
 	  children = notebook->children;
 	  while (children != notebook->first_tab)
 	    {
@@ -2390,23 +2391,24 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	      
 	      if (GTK_WIDGET_MAPPED (page->tab_label))
 		gtk_widget_unmap (page->tab_label);
-	  
+	      
 	    }
 	  children = last_child;
 	  while (children)
 	    {
 	      page = children->data;
 	      children = children->next;
-	  
+	      
 	      if (GTK_WIDGET_MAPPED (page->tab_label))
 		gtk_widget_unmap (page->tab_label);
 	    }
 	}
       else /* !showarrow */
 	{
-	  gdk_window_hide (notebook->panel);
 	  notebook->first_tab = notebook->children;
 	  tab_space = 0;
+	  if (GTK_WIDGET_REALIZED (notebook))
+	    gdk_window_hide (notebook->panel);
 	}
       children = notebook->first_tab;
     }
@@ -2426,13 +2428,11 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	    {
 	    case GTK_POS_TOP:
 	    case GTK_POS_BOTTOM:
-	      child_allocation.width = page->requisition.width
-		+ TAB_OVERLAP + new_fill - old_fill;
+	      child_allocation.width = page->requisition.width + TAB_OVERLAP + new_fill - old_fill;
 	      break;
 	    case GTK_POS_LEFT:
 	    case GTK_POS_RIGHT:
-	      child_allocation.height = page->requisition.height
-		+ TAB_OVERLAP + new_fill - old_fill;
+	      child_allocation.height = page->requisition.height + TAB_OVERLAP + new_fill - old_fill;
 	      break;
 	    }
 	  old_fill = new_fill;
@@ -2450,7 +2450,8 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	      break;
 	    }
 	  
-	  if (!GTK_WIDGET_MAPPED (page->tab_label))
+	  if (GTK_WIDGET_REALIZED (notebook) &&
+	      !GTK_WIDGET_MAPPED (page->tab_label))
 	    gtk_widget_map (page->tab_label);
 	}
     }
@@ -2494,37 +2495,29 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
     {
     case GTK_POS_TOP:
       child_allocation.x = xthickness + notebook->tab_border;
-      child_allocation.y = ythickness + notebook->tab_border
-	+ page->allocation.y;
+      child_allocation.y = ythickness + notebook->tab_border + page->allocation.y;
       child_allocation.width = page->allocation.width - child_allocation.x * 2;
-      child_allocation.height = page->allocation.height - ythickness 
-	- 2 * notebook->tab_border;
+      child_allocation.height = page->allocation.height - ythickness - 2 * notebook->tab_border;
       child_allocation.x += page->allocation.x;
       break;
     case GTK_POS_BOTTOM:
       child_allocation.x = xthickness + notebook->tab_border;
       child_allocation.width = page->allocation.width - child_allocation.x * 2;
-      child_allocation.height = page->allocation.height - ythickness 
-	- 2 * notebook->tab_border;
+      child_allocation.height = page->allocation.height - ythickness - 2 * notebook->tab_border;
       child_allocation.x += page->allocation.x;
       child_allocation.y = page->allocation.y + notebook->tab_border;
       break;
     case GTK_POS_LEFT:
-      child_allocation.x = xthickness + notebook->tab_border 
-	+ page->allocation.x;
+      child_allocation.x = xthickness + notebook->tab_border + page->allocation.x;
       child_allocation.y = ythickness + notebook->tab_border;
-      child_allocation.width = page->allocation.width - xthickness 
-	- 2 * notebook->tab_border;
-      child_allocation.height = page->allocation.height 
-	- child_allocation.y * 2;
+      child_allocation.width = page->allocation.width - xthickness - 2 * notebook->tab_border;
+      child_allocation.height = page->allocation.height - child_allocation.y * 2;
       child_allocation.y += page->allocation.y;
       break;
     case GTK_POS_RIGHT:
       child_allocation.y = ythickness + notebook->tab_border;
-      child_allocation.width = page->allocation.width - xthickness 
-	- 2 * notebook->tab_border;
-      child_allocation.height = page->allocation.height 
-	- child_allocation.y * 2;
+      child_allocation.width = page->allocation.width - xthickness - 2 * notebook->tab_border;
+      child_allocation.height = page->allocation.height - child_allocation.y * 2;
       child_allocation.x = page->allocation.x + notebook->tab_border;
       child_allocation.y += page->allocation.y;
       break;
