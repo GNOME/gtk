@@ -63,24 +63,6 @@ static void gtk_real_list_item_deselect     (GtkItem          *item);
 static void gtk_real_list_item_toggle       (GtkItem          *item);
 
 
-static void gtk_list_item_toggle_focus_row  (GtkListItem      *list_item);
-static void gtk_list_item_select_all        (GtkListItem      *list_item);
-static void gtk_list_item_unselect_all      (GtkListItem      *list_item);
-static void gtk_list_item_undo_selection    (GtkListItem      *list_item);
-static void gtk_list_item_start_selection   (GtkListItem      *list_item);
-static void gtk_list_item_end_selection     (GtkListItem      *list_item);
-static void gtk_list_item_extend_selection  (GtkListItem      *list_item,
-					     GtkScrollType      scroll_type,
-					     gfloat            position,
-					     gboolean          auto_start_selection);
-static void gtk_list_item_scroll_horizontal (GtkListItem      *list_item,
-					     GtkScrollType     scroll_type,
-					     gfloat            position);
-static void gtk_list_item_scroll_vertical   (GtkListItem      *list_item,
-					     GtkScrollType     scroll_type,
-					     gfloat            position);
-static void gtk_list_item_toggle_add_mode   (GtkListItem      *list_item);
-
 static GtkItemClass *parent_class = NULL;
 static guint list_item_signals[LAST_SIGNAL] = {0};
 
@@ -195,6 +177,7 @@ gtk_list_item_class_init (GtkListItemClass *class)
                     gtk_marshal_NONE__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);
 
+  gtk_object_class_add_signals (object_class, list_item_signals, LAST_SIGNAL);
 
   widget_class->realize = gtk_list_item_realize;
   widget_class->size_request = gtk_list_item_size_request;
@@ -210,16 +193,16 @@ gtk_list_item_class_init (GtkListItemClass *class)
   item_class->deselect = gtk_real_list_item_deselect;
   item_class->toggle = gtk_real_list_item_toggle;
 
-  class->toggle_focus_row = gtk_list_item_toggle_focus_row;
-  class->select_all = gtk_list_item_select_all;
-  class->unselect_all = gtk_list_item_unselect_all;
-  class->undo_selection = gtk_list_item_undo_selection;
-  class->start_selection = gtk_list_item_start_selection;
-  class->end_selection = gtk_list_item_end_selection;
-  class->extend_selection = gtk_list_item_extend_selection;
-  class->scroll_horizontal = gtk_list_item_scroll_horizontal;
-  class->scroll_vertical = gtk_list_item_scroll_vertical;
-  class->toggle_add_mode = gtk_list_item_toggle_add_mode;
+  class->toggle_focus_row = NULL;
+  class->select_all = NULL;
+  class->unselect_all = NULL;
+  class->undo_selection = NULL;
+  class->start_selection = NULL;
+  class->end_selection = NULL;
+  class->extend_selection = NULL;
+  class->scroll_horizontal = NULL;
+  class->scroll_vertical = NULL;
+  class->toggle_add_mode = NULL;
 
   {
     GtkBindingSet *binding_set;
@@ -619,7 +602,15 @@ gtk_real_list_item_select (GtkItem *item)
   g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
-  gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
+  switch (GTK_WIDGET (item)->state)
+    {
+    case GTK_STATE_SELECTED:
+    case GTK_STATE_INSENSITIVE:
+      break;
+    default:
+      gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
+      break;
+    }
 }
 
 static void
@@ -628,10 +619,8 @@ gtk_real_list_item_deselect (GtkItem *item)
   g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
-  if (GTK_WIDGET (item)->state == GTK_STATE_NORMAL)
-    return;
-
-  gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_NORMAL);
+  if (GTK_WIDGET (item)->state == GTK_STATE_SELECTED)
+    gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_NORMAL);
 }
 
 static void
@@ -640,129 +629,15 @@ gtk_real_list_item_toggle (GtkItem *item)
   g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
   
-  if (GTK_WIDGET (item)->parent && GTK_IS_LIST (GTK_WIDGET (item)->parent))
-    gtk_list_select_child (GTK_LIST (GTK_WIDGET (item)->parent),
-			   GTK_WIDGET (item));
-  else
+  switch (GTK_WIDGET (item)->state)
     {
-      /* Should we really bother with this bit? A listitem not in a list?
-       * -Johannes Keukelaar
-       * yes, always be on the save side!
-       * -timj
-       */
-      if (GTK_WIDGET (item)->state == GTK_STATE_SELECTED)
-	gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_NORMAL);
-      else
-	gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
+    case GTK_STATE_SELECTED:
+      gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_NORMAL);
+      break;
+    case GTK_STATE_INSENSITIVE:
+      break;
+    default:
+      gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
+      break;
     }
-}
-
-static void
-gtk_list_item_toggle_focus_row (GtkListItem *list_item)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_toggle_focus_row (GTK_LIST (GTK_WIDGET (list_item)->parent));
-}
-
-static void
-gtk_list_item_select_all (GtkListItem *list_item)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_select_all (GTK_LIST (GTK_WIDGET (list_item)->parent));
-}
-
-static void
-gtk_list_item_unselect_all (GtkListItem *list_item)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_unselect_all (GTK_LIST (GTK_WIDGET (list_item)->parent));
-}
-
-static void
-gtk_list_item_undo_selection (GtkListItem *list_item)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_undo_selection (GTK_LIST (GTK_WIDGET (list_item)->parent));
-}
-
-static void
-gtk_list_item_start_selection (GtkListItem *list_item)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_start_selection (GTK_LIST (GTK_WIDGET (list_item)->parent));
-}
-
-static void
-gtk_list_item_end_selection (GtkListItem *list_item)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_end_selection (GTK_LIST (GTK_WIDGET (list_item)->parent));
-}
-
-static void
-gtk_list_item_extend_selection (GtkListItem   *list_item,
-				GtkScrollType  scroll_type,
-				gfloat         position,
-				gboolean       auto_start_selection)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_extend_selection (GTK_LIST (GTK_WIDGET (list_item)->parent),
-			       scroll_type, position, auto_start_selection);
-}
-
-static void
-gtk_list_item_scroll_horizontal (GtkListItem   *list_item,
-				 GtkScrollType  scroll_type,
-				 gfloat         position)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_scroll_horizontal (GTK_LIST (GTK_WIDGET (list_item)->parent),
-				scroll_type, position);
-}
-
-static void
-gtk_list_item_scroll_vertical (GtkListItem   *list_item,
-			       GtkScrollType  scroll_type,
-			       gfloat         position)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_scroll_vertical (GTK_LIST (GTK_WIDGET (list_item)->parent),
-			      scroll_type, position);
-}
-
-static void
-gtk_list_item_toggle_add_mode (GtkListItem *list_item)
-{
-  g_return_if_fail (list_item != 0);
-  g_return_if_fail (GTK_IS_LIST_ITEM (list_item));
-
-  if (GTK_IS_LIST (GTK_WIDGET (list_item)->parent))
-    gtk_list_toggle_add_mode (GTK_LIST (GTK_WIDGET (list_item)->parent));
 }

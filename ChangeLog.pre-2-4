@@ -1,3 +1,31 @@
+Fri Oct 30 20:02:36 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtklist.c (gtk_list_remove_items_internal): 
+	free undo_un/selection, unselect list_item before disconnect
+	signal functions
+	(gtk_list_destroy): removed. gtk_list_shutdown clears the list
+	already
+	(gtk_list_signal_item_select) (gtk_list_signal_item_deselect)
+	(gtk_list_signal_item_toggle)	(gtk_list_signal_scroll_horizontal)
+ 	(gtk_list_signal_toggle_focus_row) (gtk_list_signal_select_all)
+ 	(gtk_list_signal_unselect_all) (gtk_list_signal_undo_selection)
+ 	(gtk_list_signal_start_selection) (gtk_list_signal_end_selection)
+ 	(gtk_list_signal_toggle_add_mode) (gtk_list_signal_scroll_vertical)
+ 	(gtk_list_signal_extend_selection) (gtk_list_signal_focus_lost):
+ 	new functions. These functions are signal connected to inserted
+ 	list_items, to handle key bindings and GtkItem::de/select/toggle
+ 	signals.
+
+	* gtk/gtklistitem.c (gtk_list_item_class_init): added missing
+	gtk_object_class_add_signals call.
+	(gtk_list_item_toggle_focus_row) (gtk_list_item_select_all)
+	(gtk_list_item_unselect_all) (gtk_list_item_undo_selection)
+	(gtk_list_item_start_selection) (gtk_list_item_end_selection)
+	(gtk_list_item_extend_selection) (gtk_list_item_scroll_horizontal)
+	(gtk_list_item_scroll_vertical) (gtk_list_item_toggle_add_mode):
+ 	removed. These functions are handled via connected
+ 	gtk_list_signal_* functions now
+
 Fri Oct 30 05:24:43 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am: cause the built sources to be rebuild when possible,
