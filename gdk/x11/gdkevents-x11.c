@@ -127,7 +127,7 @@ gdk_events_init (void)
   event_poll_fd.fd = connection_number;
   event_poll_fd.events = G_IO_IN;
   
-  g_main_add_poll (&event_poll_fd, -10);
+  g_main_add_poll (&event_poll_fd, GDK_PRIORITY_EVENTS);
 
   /* This is really crappy. We have to look into the display structure
    *  to find the base resource id. This is only needed for recording
@@ -160,7 +160,7 @@ gdk_events_init (void)
  *--------------------------------------------------------------
  */
 
-gint
+gboolean
 gdk_events_pending (void)
 {
   return (queued_events || putback_events);

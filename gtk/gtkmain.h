@@ -138,14 +138,6 @@ void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
 GdkEvent*  gtk_get_current_event   (void);
 GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 
-/* deprecated */
-guint	   gtk_idle_add_interp	   (GtkCallbackMarshal marshal,
-				    gpointer	       data,
-				    GtkDestroyNotify   destroy);
-guint	   gtk_timeout_add_interp  (guint32	       interval,
-				    GtkCallbackMarshal function,
-				    gpointer	       data,
-				    GtkDestroyNotify   notify);
 
 #ifdef __cplusplus
 }

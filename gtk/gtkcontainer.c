@@ -1153,17 +1153,6 @@ gtk_container_foreach_unmarshal (GtkWidget *child,
 }
 
 void
-gtk_container_foreach_interp (GtkContainer       *container,
-			      GtkCallbackMarshal  marshal,
-			      gpointer            callback_data,
-			      GtkDestroyNotify    notify)
-{
-  g_message ("gtk_container_foreach_interp() is deprecated");
-  gtk_container_foreach_full (container, NULL, marshal, 
-			      callback_data, notify);
-}
-
-void
 gtk_container_foreach_full (GtkContainer       *container,
 			    GtkCallback         callback,
 			    GtkCallbackMarshal  marshal,

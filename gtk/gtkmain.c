@@ -1006,15 +1006,6 @@ gtk_timeout_add (guint32     interval,
   return g_timeout_add_full (0, interval, function, data, NULL);
 }
 
-guint
-gtk_timeout_add_interp (guint32		   interval,
-			GtkCallbackMarshal function,
-			gpointer	   data,
-			GtkDestroyNotify   destroy)
-{
-  return gtk_timeout_add_full (interval, NULL, function, data, destroy);
-}
-
 void
 gtk_timeout_remove (guint tag)
 {
@@ -1059,14 +1050,6 @@ gtk_idle_add_priority	(gint		    priority,
 			 gpointer	    data)
 {
   return g_idle_add_full (priority, function, data, NULL);
-}
-
-guint
-gtk_idle_add_interp  (GtkCallbackMarshal   marshal,
-		      gpointer		   data,
-		      GtkDestroyNotify	   destroy)
-{
-  return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, NULL, marshal, data, destroy);
 }
 
 void

@@ -761,20 +761,6 @@ gtk_signal_connect_full (GtkObject	     *object,
 }
 
 guint
-gtk_signal_connect_interp (GtkObject	     *object,
-			   const gchar	     *name,
-			   GtkCallbackMarshal func,
-			   gpointer	      func_data,
-			   GtkDestroyNotify   destroy_func,
-			   gint		      after)
-{
-  g_message ("gtk_signal_connect_interp() is deprecated");
-
-  return gtk_signal_connect_full (object, name, NULL, func,
-				  func_data, destroy_func, FALSE, after);
-}
-
-guint
 gtk_signal_connect_object (GtkObject	 *object,
 			   const gchar	 *name,
 			   GtkSignalFunc  func,

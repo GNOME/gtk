@@ -185,13 +185,6 @@ void   gtk_signal_set_funcs		  (GtkSignalMarshal	marshal_func,
  */
 GtkSignalQuery* gtk_signal_query	  (guint		signal_id);
 
-/* deprecated */
-guint  gtk_signal_connect_interp	  (GtkObject	       *object,
-					   const gchar	       *name,
-					   GtkCallbackMarshal	func,
-					   gpointer		data,
-					   GtkDestroyNotify	destroy_func,
-					   gint			after);
 
 #ifdef __cplusplus
 }

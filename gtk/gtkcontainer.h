@@ -221,11 +221,6 @@ void    gtk_container_unblock_resize	 (GtkContainer	   *container);
 
 /* Use gtk_container_check_resize() instead */
 gint    gtk_container_need_resize        (GtkContainer     *container);
-/* use gtk_container_foreach_full() inistead */
-void    gtk_container_foreach_interp	 (GtkContainer	   *container,
-					  GtkCallbackMarshal marshal,
-					  gpointer	    callback_data,
-					  GtkDestroyNotify  notify);
 
 #ifdef __cplusplus
 }

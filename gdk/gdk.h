@@ -29,30 +29,31 @@ extern "C" {
 
 /* Initialization, exit and events
  */
-void   gdk_init		   (int	   *argc,
-			    char ***argv);
-void   gdk_exit		   (int	    error_code);
-gchar* gdk_set_locale	   (void);
+#define	  GDK_PRIORITY_EVENTS		(-10)
+void 	  gdk_init		   	(gint	   	*argc,
+					 gchar        ***argv);
+void  	  gdk_exit		   	(gint	    	 error_code);
+gchar*	  gdk_set_locale	   	(void);
 
-gint gdk_events_pending	 (void);
-GdkEvent *gdk_event_get	 (void);
-GdkEvent *gdk_event_get_graphics_expose (GdkWindow *window);
-void      gdk_event_put	 (GdkEvent     *event);
+gboolean  gdk_events_pending	 	(void);
+GdkEvent* gdk_event_get			(void);
+GdkEvent* gdk_event_get_graphics_expose (GdkWindow 	*window);
+void      gdk_event_put	 		(GdkEvent  	*event);
 
-GdkEvent *gdk_event_copy     (GdkEvent *event);
-void	  gdk_event_free     (GdkEvent *event);
-guint32   gdk_event_get_time (GdkEvent *event);
+GdkEvent* gdk_event_copy     		(GdkEvent 	*event);
+void	  gdk_event_free     		(GdkEvent 	*event);
+guint32   gdk_event_get_time 		(GdkEvent 	*event);
 
-void gdk_event_handler_set (GdkEventFunc   func,
-			    gpointer       data,
-			    GDestroyNotify notify);
+void	  gdk_event_handler_set 	(GdkEventFunc    func,
+					 gpointer        data,
+					 GDestroyNotify  notify);
 
-void gdk_set_show_events (gint	show_events);
-void gdk_set_use_xshm	 (gint	use_xshm);
+void	  gdk_set_show_events		(gint		 show_events);
+void	  gdk_set_use_xshm		(gint		 use_xshm);
 
-gint gdk_get_show_events (void);
-gint gdk_get_use_xshm	 (void);
-gchar *gdk_get_display (void);
+gint	  gdk_get_show_events		(void);
+gint	  gdk_get_use_xshm		(void);
+gchar*	  gdk_get_display		(void);
 
 guint32 gdk_time_get	  (void);
 guint32 gdk_timer_get	  (void);
@@ -65,7 +66,6 @@ gint gdk_input_add_full	  (gint		     source,
 			   GdkInputFunction  function,
 			   gpointer	     data,
 			   GdkDestroyNotify  destroy);
-#define gdk_input_add_interp gdk_input_add_full	 
 gint gdk_input_add	  (gint		     source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,
