@@ -21,6 +21,16 @@ Bugs:
    GtkLabels sometimes redraw without clearing up the underlying background on
    window resizes.
  
+ * Are there still some GtkCList changes outstanding? (Jay Painter)
+   GtkCList is derived from GtkContainer but doesn't implement the
+   need_resize, focus, add and remove methods from containers.
+   it should at least issue a warning upon invokation of not supported
+   member functions.
+
+ * GtkTree and GtkList should express in their *_add implementations,
+   that they expect GtkListItems/GtkTreeItems as children. Similar
+   things might apply to other containers.
+
  * delay dnd settings to take effect once a widget is realized, this is
    to avoid force realizations. i think this goes along with owens dnd
    changes?
@@ -66,16 +76,6 @@ Additions:
 
  * Implementation of owens widget style proposal.
  
- * Are there still some GtkCList changes outstanding? (Jay Painter)
-   GtkCList is derived from GtkContainer but doesn't implement the
-   need_resize, focus, add and remove methods from containers.
-   it should at least issue a warning upon invokation of not supported
-   member functions.
-
- * GtkTree and GtkList should express in their *_add implementations,
-   that they expect GtkListItems/GtkTreeItems as children. Similar
-   things might apply to other containers.
-
 
 TODO AFTER GTK 1.0
 ------------------
