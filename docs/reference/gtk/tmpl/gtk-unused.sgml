@@ -1471,6 +1471,13 @@ If the window shrinks automatically when widgets within it shrink.
 @accel_mods: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_accel_group_get_type ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### FUNCTION gtk_accel_group_handle_add ##### -->
 <para>
 
@@ -2526,6 +2533,12 @@ Internal function used by #GtkHPaned and #GtkVPaned
 @allocation: 
 @child1_req: 
 @child2_req: 
+
+<!-- ##### MACRO gtk_paned_handle_size ##### -->
+<para>
+Old name for gtk_paned_set_handle_size().
+</para>
+
 
 <!-- ##### FUNCTION gtk_paned_set_handle_size ##### -->
 <para>

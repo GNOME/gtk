@@ -146,6 +146,7 @@ Determines whether @type_class is a type of @otype.
 Gets the class of @tobj.
 </para>
 
+<!-- # Unused Parameters # -->
 @tobj: a #GtkObject.
 
 

@@ -212,6 +212,10 @@ g_hash_table_slist_values (GHashTable *hash_table)
   return slist;
 }
 
+/* if simulate==TRUE, return whether accel_path can be changed to
+ * accel_key && accel_mods. otherwise, return whether accel_path
+ * was actually changed.
+ */
 static gboolean
 internal_change_entry (const gchar    *accel_path,
 		       guint           accel_key,
@@ -220,7 +224,7 @@ internal_change_entry (const gchar    *accel_path,
 		       gboolean	       simulate)
 {
   GSList *node, *slist, *win_list, *group_list, *replace_list = NULL;
-  GHashTable *group_hm, *win_hm;
+  GHashTable *group_hm, *window_hm;
   gboolean change_accel, removable, can_change = TRUE, seen_accel = FALSE;
   GQuark entry_quark;
   AccelEntry *entry = accel_path_lookup (accel_path);
@@ -241,7 +245,11 @@ internal_change_entry (const gchar    *accel_path,
 
   /* if there's nothing to change, not much todo either */
   if (entry->accel_key == accel_key && entry->accel_mods == accel_mods)
-    return FALSE;
+    {
+      if (!simulate)
+	entry->changed = TRUE;
+      return simulate ? TRUE : FALSE;
+    }
 
   /* nobody's interested, easy going */
   if (!entry->groups)
@@ -258,7 +266,7 @@ internal_change_entry (const gchar    *accel_path,
   /* 1) fetch all accel groups affected by this entry */
   entry_quark = g_quark_try_string (entry->accel_path);
   group_hm = g_hash_table_new (NULL, NULL);
-  win_hm = g_hash_table_new (NULL, NULL);
+  window_hm = g_hash_table_new (NULL, NULL);
   for (slist = entry->groups; slist; slist = slist->next)
     g_hash_table_insert (group_hm, slist->data, slist->data);
 
@@ -269,13 +277,13 @@ internal_change_entry (const gchar    *accel_path,
       GtkAccelGroup *group = slist->data;
 
       for (node = group->acceleratables; node; node = node->next)
-	g_hash_table_insert (win_hm, node->data, node->data);
+	g_hash_table_insert (window_hm, node->data, node->data);
     }
   g_slist_free (group_list);
 
   /* 3) include all accel groups used by acceleratables */
-  win_list = g_hash_table_slist_values (win_hm);
-  g_hash_table_destroy (win_hm);
+  win_list = g_hash_table_slist_values (window_hm);
+  g_hash_table_destroy (window_hm);
   for (slist = win_list; slist; slist = slist->next)
     for (node = gtk_accel_groups_from_object (slist->data); node; node = node->next)
       g_hash_table_insert (group_hm, node->data, node->data);

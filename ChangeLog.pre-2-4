@@ -1,3 +1,13 @@
+Mon Jan  7 08:48:23 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): don't forget to offset
+	the pointer by x/y_offset into the new window when we found
+	the drag destination.
+
+	* gtk/gtkaccelmap.c (internal_change_entry): fix return code
+	for simulation when the entry already contains the required
+	accel key and mod.
+
 2002-01-06  Matthias Clasen  <matthiasc@poet.de>
  
 	* docs/debugging.txt: Replace GTK_NO_CHECK_CASTS by 

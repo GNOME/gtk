@@ -1266,7 +1266,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
           new_allocation.x -= tx;
 	  new_allocation.y -= ty;
 	}
-      
+
       while (window && window != widget->parent->window)
 	{	
 	  gdk_window_get_size (window, &twidth, &theight);
@@ -1342,8 +1342,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  data->found = data->callback (widget,
 					data->context,
-					data->x - new_allocation.x,
-					data->y - new_allocation.y,
+					data->x - new_allocation.x - x_offset,
+					data->y - new_allocation.y - y_offset,
 					data->time);
 	  /* If so, send a "drag_leave" to the last widget */
 	  if (data->found)

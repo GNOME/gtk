@@ -38,14 +38,6 @@ An object representing and maintaining a group of accelerators.
 </para>
 
 
-<!-- ##### FUNCTION gtk_accel_group_get_type ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_accel_group_new ##### -->
 <para>
 
@@ -66,6 +58,7 @@ Deprecated equivalent of g_object_ref().
 <para>
 Deprecated equivalent of g_object_unref().
 </para>
+
 
 
 <!-- ##### FUNCTION gtk_accel_group_connect ##### -->
