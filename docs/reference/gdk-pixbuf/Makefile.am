@@ -30,6 +30,7 @@ IGNORE_HFILES=				\
 	gdk-pixbuf-i18n.h 		\
 	gdk-pixbuf-private.h		\
 	io-gif-animation.h		\
+	io-ani-animation.h		\
 	test-images.h
 
 # Extra files to add when scanning
@@ -40,9 +41,16 @@ HTML_IMAGES =
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files =				\
+	version.xml			\
 	gdk-pixbuf-from-drawables.sgml	\
 	gdk-pixbuf.sgml			\
 	porting-from-imlib.sgml
+
+version.xml: FORCE
+	@date +'<!ENTITY builddate "%Y-%m-%d">' > version.xml
+	@echo "<!ENTITY srcversion \"@GTK_VERSION@\">" >> version.xml
+
+FORCE:
 
 # Other files to distribute
 extra_files =
@@ -94,9 +102,10 @@ EXTRA_DIST = 				\
 DOC_STAMPS=scan-build.stamp tmpl-build.stamp sgml-build.stamp html-build.stamp \
 	   $(srcdir)/tmpl.stamp $(srcdir)/sgml.stamp $(srcdir)/html.stamp
 
-SCANOBJ_FILES = 		\
-	$(DOC_MODULE).args 	\
-	$(DOC_MODULE).hierarchy \
+SCANOBJ_FILES = 		 \
+	$(DOC_MODULE).args 	 \
+	$(DOC_MODULE).hierarchy  \
+	$(DOC_MODULE).interfaces \
 	$(DOC_MODULE).signals
 
 if ENABLE_GTK_DOC

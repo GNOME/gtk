@@ -1,3 +1,9 @@
+2002-10-14  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/Makefile.am (SCANOBJ_FILES): 
+	* gdk-pixbuf/Makefile.am (SCANOBJ_FILES): 
+	* gdk/Makefile.am (SCANOBJ_FILES): Add $(DOC_MODULE).interfaces.
+
 2002-10-11  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkimagemenuitem.sgml: Add a bit.
