@@ -1,0 +1,12 @@
+#$(gtkconfigdir)/gtkrc.iso88595
+#
+# This file defines the fontsets for iso-8859-5 encoding
+# make symliks or hardlinks to gtkrc.$LANG if your language uses iso-8859-5
+# and a gtkrc.$LANG doesn't exist yet.
+
+style "default" {
+       fontset = "-*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-1,\
+		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-5"
+}
+class "GtkWidget" style "default"
+

@@ -1,0 +1,14 @@
+# $(gtkconfigdir)/gtkrc.uk
+#
+# This file defines the fontsets for Ukrainian language (uk) using
+# the KOI8-U charset encoding.
+#
+# 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+#
+
+style "default" {
+       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
+		  -*-helvetica-medium-r-normal--14-*-*-*-*-*-koi8-u"
+}
+class "GtkWidget" style "default"
+

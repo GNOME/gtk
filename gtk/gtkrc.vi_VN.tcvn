@@ -1,0 +1,19 @@
+# $(gtkconfigdir)/gtkrc.vi_VN.tcvn
+#
+#
+# This file defines the fontsets for Vietnamese language (vi) using
+# the Vietnam's official tcvn-5712 charset encoding.
+#
+# You can find links for tcvn True Type fonts following the
+# links at my page on vietnamese localisation at
+# http://www.ping.be/linux/viet/
+#
+# 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+#
+
+style "default" {
+       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
+		  -*-verdana-medium-r-normal--14-*-*-*-*-*-tcvn-5712"
+}
+class "GtkWidget" style "default"
+

@@ -314,9 +314,11 @@ libgtk_la_LDFLAGS = \
 #	$(top_builddir)/gdk/libgdk.la
 
 gtkconfdir = $(sysconfdir)/gtk
-gtkconf_DATA = gtkrc gtkrc.cs gtkrc.el gtkrc.eo gtkrc.he gtkrc.hr gtkrc.hu \
-	gtkrc.hy gtkrc.ja gtkrc.ko gtkrc.pl gtkrc.ru gtkrc.sk gtkrc.sl \
-	gtkrc.sr gtkrc.tr gtkrc.th
+gtkconf_DATA = gtkrc gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
+	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk \
+	gtkrc.iso88592 gtkrc.iso88595 gtkrc.zh_CN gtkrc.zh_TW \
+	gtkrc.ka_GE.georgianacademy gtkrc.ka_GE.georgianps \
+	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii
 
 gtkrc:
 	:
@@ -327,11 +329,31 @@ install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk
 	echo "# Empty gtkrc for default theme" > \
 	    $(DESTDIR)$(datadir)/themes/Default/gtk/gtkrc
+	cd $(DESTDIR)$(gtkconfdir) ; \
+	    ln gtkrc.iso88592 gtkrc.cs ; \
+	    ln gtkrc.iso88592 gtkrc.hr ; \
+	    ln gtkrc.iso88592 gtkrc.hu ; \
+	    ln gtkrc.iso88592 gtkrc.pl ; \
+	    ln gtkrc.iso88592 gtkrc.ro ; \
+	    ln gtkrc.iso88592 gtkrc.sk ; \
+	    ln gtkrc.iso88592 gtkrc.sl ; \
+	    ln gtkrc.iso88592 gtkrc.sq ; \
+	    ln gtkrc.iso88592 gtkrc.sr_YU.iso88592 ; \
+	    ln gtkrc.iso88595 gtkrc.bg ; \
+	    ln gtkrc.iso88595 gtkrc.mk ; \
+	    ln gtkrc.iso88595 gtkrc.sr ; \
+	    ln gtkrc.iso88595 gtkrc.ru_RU.iso88595 ; \
+	    $(LN_S) gtkrc.ka_GE.georgianacademy gtkrc.ka ; \
+	    ln gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 ; \
+	    ln gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
+	    $(LN_S) gtkrc.vi_VN.tcvn5712 gtkrc.vi
+
 
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtkrc
 
 EXTRA_DIST = \
+	$(gtkconf_DATA)		\
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	testgtk.1 		\
@@ -362,22 +384,6 @@ EXTRA_DIST = \
 	tree_plus.xbm		\
 	tree_minus.xbm          \
         circles.xbm		\
-	gtkrc.cs		\
-	gtkrc.el		\
-	gtkrc.eo		\
-	gtkrc.he		\
-	gtkrc.hr		\
-	gtkrc.hu		\
-	gtkrc.hy		\
-	gtkrc.ja		\
-	gtkrc.ko		\
-	gtkrc.pl		\
-	gtkrc.ru		\
-	gtkrc.sk		\
-	gtkrc.sl		\
-	gtkrc.sr		\
-	gtkrc.tr		\
-	gtkrc.th		\
 	gtk.def			\
 	makefile.msc
 

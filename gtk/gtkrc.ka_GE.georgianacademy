@@ -1,0 +1,18 @@
+# $(gtkconfigdir)/gtkrc.ka_GE.georgianacademy
+#
+# This file defines the fontsets for Georgian language (ka) using
+# the GEORGIAN-ACADEMY charset encoding.
+#
+# You can find links for georgian-academy True Type fonts following the
+# links at my page on georgian localisation at 
+# http://www.ping.be/linux/georgian/
+#
+# 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+#
+
+style "default" {
+       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
+		  -*-*-medium-r-normal--14-*-*-*-*-*-georgian-academy"
+}
+class "GtkWidget" style "default"
+
