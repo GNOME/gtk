@@ -1,5 +1,9 @@
 2004-04-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected_rows): 
+	Don't recommend gtk_tree_row_reference_new_proxy().  (#138309,
+	Tim-Philipp Müller)
+
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_set_cell_data): 
 	Remove an excessive g_return_if_fail().
 
