@@ -2661,7 +2661,7 @@ gdk_window_constrain_size (GdkGeometry *geometry,
 
       if (geometry->min_aspect * height > width)
 	{
-	  delta = FLOOR (height - width * geometry->min_aspect, yinc);
+	  delta = FLOOR (height - width / geometry->min_aspect, yinc);
 	  if (height - delta >= min_height)
 	    height -= delta;
 	  else

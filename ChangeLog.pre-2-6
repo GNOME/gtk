@@ -1,3 +1,8 @@
+Fri Apr 18 15:06:00 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_constrain_size): Fix
+	'/' vs. '*' problem in aspect ration computations. (#108237)
+
 Fri Apr 18 14:15:09 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): 
