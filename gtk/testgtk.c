@@ -548,6 +548,81 @@ create_button_box ()
     gtk_widget_destroy (window);
 }
 
+GtkWidget *
+new_pixmap (char *filename, GdkWindow *window, GdkColor *background)
+{
+  GtkWidget *wpixmap;
+  GdkPixmap *pixmap;
+  GdkBitmap *mask;
+
+  pixmap = gdk_pixmap_create_from_xpm (window, &mask,
+				       background,
+				       "test.xpm");
+  wpixmap = gtk_pixmap_new (pixmap, mask);
+
+  return wpixmap;
+}
+
+void
+create_toolbar (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *toolbar;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "Toolbar test");
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC (destroy_window),
+			  &window);
+      gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			  GTK_SIGNAL_FUNC (destroy_window),
+			  &window);
+
+      gtk_container_border_width (GTK_CONTAINER (window), 0);
+      gtk_widget_realize (window);
+
+      toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "New", "New document",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       NULL, NULL);
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Open", "Open existing",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       NULL, NULL);
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Close", "Close current document",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       NULL, NULL);
+      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Undo", "Undo screw-up",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       NULL, NULL);
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Redo", "Redo not-screwup-after-all",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       NULL, NULL);
+
+      gtk_container_add (GTK_CONTAINER (window), toolbar);
+      gtk_widget_show (toolbar);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 void
 create_handle_box ()
 {
@@ -3278,6 +3353,7 @@ create_main_window ()
       { "check buttons", create_check_buttons },
       { "radio buttons", create_radio_buttons },
       { "button box", create_button_box },
+      { "toolbar", create_toolbar },
       { "handle box", create_handle_box },
       { "reparent", create_reparent },
       { "pixmap", create_pixmap },

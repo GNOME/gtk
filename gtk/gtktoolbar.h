@@ -25,6 +25,8 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkpixmap.h>
+#include <gtk/gtksignal.h>
+#include <gtk/gtktooltips.h>
 
 
 #ifdef __cplusplus
@@ -50,6 +52,8 @@ struct _GtkToolbar
   GtkToolbarStyle  style;
   gint             space_size; /* big optional space between buttons */
 
+  GtkTooltips     *tooltips;
+
   gint             child_maxw;
   gint             child_maxh;
 };
@@ -67,15 +71,21 @@ GtkWidget *gtk_toolbar_new           (GtkOrientation   orientation,
 void       gtk_toolbar_append_item   (GtkToolbar      *toolbar,
 				      const char      *text,
 				      const char      *tooltip_text,
-				      GtkPixmap       *icon);
+				      GtkPixmap       *icon,
+				      GtkSignalFunc    callback,
+				      gpointer         user_data);
 void       gtk_toolbar_prepend_item  (GtkToolbar      *toolbar,
 				      const char      *text,
 				      const char      *tooltip_text,
-				      GtkPixmap       *icon);
+				      GtkPixmap       *icon,
+				      GtkSignalFunc    callback,
+				      gpointer         user_data);
 void       gtk_toolbar_insert_item   (GtkToolbar      *toolbar,
 				      const char      *text,
 				      const char      *tooltip_text,
 				      GtkPixmap       *icon,
+				      GtkSignalFunc    callback,
+				      gpointer         user_data,
 				      gint             position);
 void       gtk_toolbar_append_space  (GtkToolbar      *toolbar);
 void       gtk_toolbar_prepend_space (GtkToolbar      *toolbar);

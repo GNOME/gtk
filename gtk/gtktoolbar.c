@@ -46,6 +46,9 @@ static void gtk_toolbar_size_allocate (GtkWidget       *widget,
 				       GtkAllocation   *allocation);
 static void gtk_toolbar_add           (GtkContainer    *container,
 				       GtkWidget       *widget);
+static void gtk_toolbar_foreach       (GtkContainer    *container,
+				       GtkCallback      callback,
+				       gpointer         callback_data);
 
 static GtkContainerClass *parent_class;
 
@@ -93,6 +96,7 @@ gtk_toolbar_class_init(GtkToolbarClass *class)
 	widget_class->size_allocate = gtk_toolbar_size_allocate;
 
 	container_class->add = gtk_toolbar_add;
+	container_class->foreach = gtk_toolbar_foreach;
 }
 
 static void
@@ -105,6 +109,7 @@ gtk_toolbar_init(GtkToolbar *toolbar)
 	toolbar->orientation  = GTK_ORIENTATION_HORIZONTAL;
 	toolbar->style        = GTK_TOOLBAR_ICONS;
 	toolbar->space_size   = DEFAULT_SPACE_SIZE;
+	toolbar->tooltips     = gtk_tooltips_new();
 }
 
 GtkWidget *
@@ -133,6 +138,8 @@ gtk_toolbar_destroy(GtkObject *object)
 	g_return_if_fail(GTK_IS_TOOLBAR(object));
 
 	toolbar = GTK_TOOLBAR(object);
+
+	gtk_tooltips_unref(toolbar->tooltips); /* XXX: do I have to unref the tooltips? */
 
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
@@ -313,22 +320,51 @@ gtk_toolbar_add(GtkContainer *container,
 	g_warning("gtk_toolbar_add: use gtk_toolbar_add_item() instead!");
 }
 
+static void
+gtk_toolbar_foreach(GtkContainer    *container,
+		    GtkCallback      callback,
+		    gpointer         callback_data)
+{
+	GtkToolbar *toolbar;
+	GList      *children;
+	Child      *child;
+
+	g_return_if_fail(container != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(container));
+	g_return_if_fail(callback != NULL);
+
+	toolbar = GTK_TOOLBAR(container);
+
+	for (children = toolbar->children; children; children = children->next) {
+		child = children->data;
+
+		if (child)
+			(*callback) (child->button, callback_data);
+	}
+}
+
 void
 gtk_toolbar_append_item(GtkToolbar      *toolbar,
 			const char      *text,
 			const char      *tooltip_text,
-			GtkPixmap       *icon)
+			GtkPixmap       *icon,
+			GtkSignalFunc    callback,
+			gpointer         user_data)
 {
-	gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon, toolbar->num_children);
+	gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon,
+				callback, user_data, toolbar->num_children);
 }
 
 void
 gtk_toolbar_prepend_item(GtkToolbar      *toolbar,
 			 const char      *text,
 			 const char      *tooltip_text,
-			 GtkPixmap       *icon)
+			 GtkPixmap       *icon,
+			 GtkSignalFunc    callback,
+			 gpointer         user_data)
 {
-	gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon, 0);
+	gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon,
+				callback, user_data, 0);
 }
 
 void
@@ -336,6 +372,8 @@ gtk_toolbar_insert_item(GtkToolbar      *toolbar,
 			const char      *text,
 			const char      *tooltip_text,
 			GtkPixmap       *icon,
+			GtkSignalFunc    callback,
+			gpointer         user_data,
 			gint             position)
 {
 	Child     *child;
@@ -347,6 +385,10 @@ gtk_toolbar_insert_item(GtkToolbar      *toolbar,
 	child = g_new(Child, 1);
 
 	child->button = gtk_button_new();
+
+	if (callback)
+		gtk_signal_connect(GTK_OBJECT(child->button), "clicked",
+				   callback, user_data);
 
 	if (text)
 		child->label = gtk_label_new(text);
@@ -432,6 +474,7 @@ gtk_toolbar_insert_space(GtkToolbar *toolbar,
 	/* NULL child means it is a space in the toolbar, rather than a button */
 
 	toolbar->children = g_list_insert(toolbar->children, NULL, position);
+	toolbar->num_children++;
 
 	if (GTK_WIDGET_VISIBLE(toolbar))
 		gtk_widget_queue_resize(GTK_WIDGET(toolbar));
