@@ -1,3 +1,8 @@
+Tue Dec 18 16:15:55 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkgc.h: Explicitely deprecate gdk_gc_set_font()
+	(reported by Jeff Franks.)
+
 Tue Dec 18 16:07:28 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkkeys.h (struct _GdkKeymapClass): Fix 

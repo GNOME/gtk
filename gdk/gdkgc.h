@@ -206,8 +206,10 @@ void   gdk_gc_set_foreground	  (GdkGC	    *gc,
 				   GdkColor	    *color);
 void   gdk_gc_set_background	  (GdkGC	    *gc,
 				   GdkColor	    *color);
+#ifndef GDK_DISABLE_DEPRECATED
 void   gdk_gc_set_font		  (GdkGC	    *gc,
 				   GdkFont	    *font);
+#endif /* GDK_DISABLE_DEPRECATED */
 void   gdk_gc_set_function	  (GdkGC	    *gc,
 				   GdkFunction	     function);
 void   gdk_gc_set_fill		  (GdkGC	    *gc,
