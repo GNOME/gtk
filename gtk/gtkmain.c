@@ -379,7 +379,6 @@ gtk_init (int	 *argc,
    gtk_initialized = TRUE;
    /* Initialize themes 
     */
-   gtk_themes_init (argc,argv);
 }
 
 void

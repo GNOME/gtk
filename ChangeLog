@@ -1,3 +1,42 @@
+Tue Jul 28 22:49:16 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* themes/th_main.c themes/th_draw.c gtk/testgtkrc: 
+	  Set up the demo theme so it is loaded from the RC file.
+
+	* themes/th_draw.c: Alleviate the hardcoded paths a wee
+	  bit. (use $HOME/themes/)
+
+	* gtk/gtkthemes.[ch] gtk/gtkmain.c: Load engines specified in 
+	  the RC file via dlopen()
+
+Tue Jul 28 20:30:56 1998  Owen Taylor  <otaylor@redhat.com>
+
+	Internal handling of styles and RC styles pretty much
+	completely reworked for Theme work.
+
+	* gtkthemes.[ch]: 
+	 - Added routines for virtualization of RcStyle and Style handling.
+	 - Temporary "sample" inline theme-engine. (Does nothing
+	   but print out a few messages.
+	
+	* gtkrc.[ch]
+	 - Made GtkRcStyle public, added flags to tell if particular
+	   colors have been set.
+	 - RC Styles are "transparent", and the final style for
+	   a widget is the composition of all matching styles
+	 - Added pointer to GtkThemeEngine, and gpointer engine_data
+	   to RC style and style.
+	 - Parse "engine" keyword, load the appropriate theme engine
+	   and call the engine's parser.
+	
+	*  gtkstyle.[ch]
+	 - Keep a GtkRcStyle * in styles created from Rc Styles.
+	 - Load up images from RC file at style attachment time.
+         - Call ->engine->foo() at appropriate times.
+	 - Don't use a GCache. All incarnations for a style are
+	   just linked together in a list, depend on the RC style 
+	   code to find the existing copy.
+
 Tue Jul 28 14:41:54 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.[ch]: Added the concept of queued redraws

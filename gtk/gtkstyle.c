@@ -28,8 +28,6 @@
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
 
-extern GtkThemesData th_dat;
-
 static void         gtk_style_init         (GtkStyle    *style,
 					    GdkColormap *colormap,
 					    gint         depth);
@@ -371,9 +369,6 @@ gtk_style_new (void)
   GtkStyle *style;
   gint i;
 
-   if (th_dat.functions.gtk_style_new)
-     return (*th_dat.functions.gtk_style_new)();
-
   style = g_new0 (GtkStyle, 1);
 
   if (!default_font)
@@ -658,9 +653,9 @@ gtk_style_set_background (GtkStyle     *style,
   GdkPixmap *pixmap;
   gint parent_relative;
 
-   if (th_dat.functions.gtk_style_set_background)
+   if (style->engine)
      {
-        (*th_dat.functions.gtk_style_set_background)(style, window, state_type);
+        (*style->engine->set_background) (style, window, state_type);
 	return;
      }
    

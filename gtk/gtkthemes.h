@@ -68,29 +68,15 @@ struct _GtkThemeEngine {
 
   /* Clean up style->engine_data before style is destroyed */
   void (*destroy_style)     (GtkStyle   *style);
+
+  void (*set_background) (GtkStyle     *style,
+			  GdkWindow    *window,
+			  GtkStateType  state_type);
 };
 
 GtkThemeEngine *gtk_theme_engine_get   (gchar          *name);
 void            gtk_theme_engine_ref   (GtkThemeEngine *engine);
 void            gtk_theme_engine_unref (GtkThemeEngine *engine);
-
-struct _GtkThemesData
-{
-   gchar *theme_name;
-   void  *theme_lib;
-   void (*init)(int     *argc, char ***argv);
-   void (*exit)(void);
-   struct
-     {
-	GtkStyle *(*gtk_style_new) (void);
-	void (*gtk_style_set_background) (GtkStyle     *style,
-					  GdkWindow    *window,
-					  GtkStateType  state_type);
-     } functions;
-   void *data;
-};
-
-typedef struct _GtkThemesData          GtkThemesData;
 
 #ifdef __cplusplus
 extern "C" {

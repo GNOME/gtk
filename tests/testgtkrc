@@ -19,6 +19,9 @@ style "default"
 {
 #  fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
   font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+   engine "th" { 
+     name = "Sssaample"
+   }
 }
 
 style "window"
@@ -38,9 +41,6 @@ style "button"
 #  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
 #  bg[PRELIGHT] = { 0, 0, 0.75 }
 #  bg[PRELIGHT] = { 0.75, 0, 0x00 }
-   engine "sample" { 
-     name = "Sssaample"
-   }
 }
 
 style "toggle_button" = "button"

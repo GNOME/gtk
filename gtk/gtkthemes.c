@@ -32,105 +32,16 @@ typedef struct _GtkThemeEnginePrivate GtkThemeEnginePrivate;
 struct _GtkThemeEnginePrivate {
   GtkThemeEngine engine;
   
-  void *theme_lib;
+  void *library;
+  void *name;
+
+  void (*init) (GtkThemeEngine *);
+  void (*exit) (void);
+
   guint refcount;
 };
 
-GtkThemesData th_dat;
-
-void
-gtk_themes_init (int	 *argc,
-		 char ***argv)
-{
-   int i;
-   char *s,ss[1024];
-   char *thenv;
-   
-   /* Reset info */
-   th_dat.theme_lib=NULL;
-   th_dat.theme_name=NULL;
-   th_dat.data=NULL;
-   
-   printf("init theme\n");
-   /* get the library name for the theme */
-   
-   thenv=getenv("THEME");
-   if (thenv)
-     {
-	snprintf(ss,1024,"%s/themes/lib%s.so",getenv("HOME"),thenv);
-	th_dat.theme_name=strdup(ss);
-     }
-   else
-     {
-	if ((argc)&&(argv))
-	  {
-	     for(i=1;i<*argc;i++)
-	       {
-		  if ((*argv)[i]==NULL)
-		    {
-		       i+=1;continue;
-		    }
-/* If the program is run wiht a --theme THEME_NAME parameter it loads that */
-/* theme currently hard-coded as ".lib/libTHEME_NAME.so" jsut so it will */
-/* work for me for the moment */	     
-		  if (strcmp("--theme",(*argv)[i])==0)
-		    {
-		       (*argv)[i]=NULL;
-		       if (((i+1)<*argc)&&((*argv)[i+1]))
-			 {
-			    s=(*argv)[i+1];
-			    if (s)
-			      {
-				 snprintf(ss,1024,"%s/themes/lib%s.so",getenv("HOME"),s);
-				 th_dat.theme_name=strdup(ss);
-			      }
-			    (*argv)[i+1]=NULL;
-			    i+=1;
-			 }
-		    }
-	       }
-	  }
-     }
-   /* load the lib */
-   th_dat.theme_lib=NULL;
-   if (th_dat.theme_name)
-     {
-	printf("Loading Theme %s\n",th_dat.theme_name);
-	th_dat.theme_lib=dlopen(th_dat.theme_name,RTLD_NOW);
-	if (!th_dat.theme_lib) 
-	  fputs(dlerror(),stderr);
-     }
-   if (!th_dat.theme_lib) 
-     {
-	th_dat.init=NULL;
-	th_dat.exit=NULL;
-	th_dat.functions.gtk_style_new=NULL;
-	th_dat.functions.gtk_style_set_background=NULL;
-	return;
-     }
-   /* extract symbols from the lib */   
-   th_dat.init=dlsym(th_dat.theme_lib,"theme_init");
-   th_dat.exit=dlsym(th_dat.theme_lib,"theme_exit");
-   th_dat.functions.gtk_style_new=dlsym(th_dat.theme_lib,"gtk_style_new");
-   th_dat.functions.gtk_style_set_background=dlsym(th_dat.theme_lib,"gtk_style_set_background");
-
-/* call the theme's init (theme_init) function to let it setup anything */   
-   th_dat.init(argc,argv);
-}
-
-void
-gtk_themes_exit (int errorcode)
-{
-   if (th_dat.exit);
-   th_dat.exit();
-/* free the theme library name and unload the lib */
-   if (th_dat.theme_name) free(th_dat.theme_name);
-   if (th_dat.theme_lib) dlclose(th_dat.theme_lib);
-/* reset pointers to NULL */   
-   th_dat.theme_name=NULL;
-   th_dat.theme_lib=NULL;
-   th_dat.data=NULL;
-}
+static GHashTable *engine_hash = NULL;
 
 static GtkThemeEngine sample_engine;
 
@@ -139,15 +50,60 @@ gtk_theme_engine_get (gchar          *name)
 {
   GtkThemeEnginePrivate *result;
   
-  if (!strcmp (name, "sample"))
+  if (!engine_hash)
+    engine_hash = g_hash_table_new (g_str_hash, g_str_equal);
+   
+  printf("init theme\n");
+  /* get the library name for the theme */
+  
+  result = g_hash_table_lookup (engine_hash, name);
+
+  if (!result)
     {
-      result = g_new (GtkThemeEnginePrivate, 1);
-      result->engine = sample_engine;
-      result->refcount = 1;
-      return (GtkThemeEngine *)result;
+      gchar fullname[1024];
+      void *library;
+      
+      g_snprintf(fullname,1024,"%s/themes/lib%s.so",getenv("HOME"),name);
+  
+      /* load the lib */
+
+      printf ("Loading Theme %s\n", fullname);
+
+      library = dlopen(fullname, RTLD_NOW);
+      if (!library) 
+	fputs(dlerror(),stderr);
+      else
+	{
+	  result = g_new (GtkThemeEnginePrivate, 1);
+	  
+	  result->refcount = 1;
+	  result->name = g_strdup (name);
+	  result->library = library;
+	  
+	  /* extract symbols from the lib */   
+	  result->init=dlsym(library, "theme_init");
+	  result->exit=dlsym(library ,"theme_exit");
+
+	  /* call the theme's init (theme_init) function to let it setup anything */   
+	  result->init((GtkThemeEngine *)result);
+	  
+	  g_hash_table_insert (engine_hash, name, result);
+      
+	  return (GtkThemeEngine *)result;
+	}
+      
+      if (!strcmp (name, "sample"))
+	{
+	  result = g_new (GtkThemeEnginePrivate, 1);
+	  result->engine = sample_engine;
+	  result->refcount = 1;
+	  return (GtkThemeEngine *)result;
+	}
+      else
+	return NULL;
     }
-  else
-    return NULL;
+
+  return (GtkThemeEngine *)result;
 }
 
 void
@@ -169,7 +125,13 @@ gtk_theme_engine_unref (GtkThemeEngine *engine)
   private->refcount--;
 
   if (private->refcount == 0)
-    g_free (private);
+    {
+      g_hash_table_remove (engine_hash, private);
+      
+      dlclose (private->library);
+      g_free (private->name);
+      g_free (private);
+    }
 }
 
 typedef struct {
