@@ -1,3 +1,8 @@
+Wed Feb 13 11:27:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testtreeview.c (typesystem_recurse): Cast GType
+	to long and use %ld to fix warning. (#71318, Morten Welinder)
+
 Wed Feb 13 13:26:39 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmenu.c: fix figuring accel path and changing behaviour.
