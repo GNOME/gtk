@@ -27,6 +27,7 @@
 #include "gdkvisual.h"
 #include "gdkprivate-fb.h"
 #include "gdkinternals.h"
+#include <sys/ioctl.h>
 
 static GdkVisual *system_visual = NULL;
 
@@ -46,10 +47,6 @@ gdk_visual_init (void)
       system_visual->type = GDK_VISUAL_PSEUDO_COLOR;
       break;
     case FB_VISUAL_DIRECTCOLOR:
-      /* TODO: Should load the colormap to ramps here, as they might be initialized to
-	 some other garbage */
-      
-      /* Fall through */
     case FB_VISUAL_TRUECOLOR:
       system_visual->type = GDK_VISUAL_TRUE_COLOR;
 
@@ -64,6 +61,35 @@ gdk_visual_init (void)
       system_visual->blue_prec = gdk_display->modeinfo.blue.length;
       system_visual->blue_shift = gdk_display->modeinfo.blue.offset;
       system_visual->blue_mask = ((1 << (system_visual->blue_prec)) - 1) << system_visual->blue_shift;
+
+      if (gdk_display->sinfo.visual == FB_VISUAL_DIRECTCOLOR) 
+	{
+	  guint16 red[256], green[256], blue[256];
+	  struct fb_cmap fbc = {0,0};
+	  int size, i;
+	  /* Load the colormap to ramps here, as they might be initialized to
+	     some other garbage */
+	  
+	  g_warning ("Directcolor visual, not very well tested\n");
+	  fbc.red = red;
+	  fbc.green = green;
+	  fbc.blue = blue;
+	  
+	  size = 1 << system_visual->red_prec;
+	  for (i = 0; i < size; i++)
+	    red[i] = i * 65535 / (size - 1);
+	  
+	  size = 1 << system_visual->green_prec;
+	  fbc.len = size;
+	  for (i = 0; i < size; i++)
+	    green[i] = i * 65535 / (size - 1);
+	  
+	  size = 1 << system_visual->blue_prec;
+	  for (i = 0; i < size; i++)
+	    blue[i] = i * 65535 / (size - 1);
+	  
+	  ioctl (gdk_display->fb_fd, FBIOPUTCMAP, &fbc);
+	}
       break;
     case FB_VISUAL_STATIC_PSEUDOCOLOR:
       system_visual->type = GDK_VISUAL_STATIC_COLOR;
