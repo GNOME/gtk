@@ -42,15 +42,14 @@
 #include <pwd.h>
 #endif
 
-#include <glib.h>		/* Include early to get G_OS_WIN32 and
-				 * G_WITH_CYGWIN */
+#include <glib.h>		/* Include early to get G_OS_WIN32 etc */
 
-#if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
+#if defined(G_PLATFORM_WIN32)
 #include <ctype.h>
 #define STRICT
 #include <windows.h>
 #undef STRICT
-#endif /* G_OS_WIN32 || G_WITH_CYGWIN */
+#endif /* G_PLATFORM_WIN32 */
 #ifdef G_OS_WIN32
 #include <winsock.h>		/* For gethostname */
 #endif
@@ -62,6 +61,7 @@
 #include "gtkfilesel.h"
 #include "gtkhbox.h"
 #include "gtkhbbox.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
@@ -76,7 +76,6 @@
 #include "gtkoptionmenu.h"
 #include "gtkdialog.h"
 #include "gtkmessagedialog.h"
-#include "gtkintl.h"
 #include "gtkdnd.h"
 #include "gtkeventbox.h"
 
@@ -150,9 +149,11 @@ typedef struct _PossibleCompletion PossibleCompletion;
  */
 struct _CompletionDirSent
 {
+#ifndef G_PLATFORM_WIN32
   ino_t inode;
   time_t mtime;
   dev_t device;
+#endif
 
   gint entry_count;
   struct _CompletionDirEntry *entries;
@@ -315,7 +316,7 @@ static const gchar*        cmpl_completion_fullname (const gchar*, CompletionSta
 static CompletionDir* open_ref_dir         (gchar* text_to_complete,
 					    gchar** remaining_text,
 					    CompletionState* cmpl_state);
-#if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
+#ifndef G_PLATFORM_WIN32
 static gboolean       check_dir            (gchar *dir_name, 
 					    struct stat *result, 
 					    gboolean *stat_subdirs);
@@ -334,7 +335,7 @@ static CompletionDirSent* open_new_dir     (gchar* dir_name,
 static gint           correct_dir_fullname (CompletionDir* cmpl_dir);
 static gint           correct_parent       (CompletionDir* cmpl_dir,
 					    struct stat *sbuf);
-#ifndef G_OS_WIN32
+#ifndef G_PLATFORM_WIN32
 static gchar*         find_parent_dir_fullname    (gchar* dirname);
 #endif
 static CompletionDir* attach_dir           (CompletionDirSent* sent,
@@ -413,12 +414,50 @@ static void gtk_file_selection_rename_file (GtkWidget *widget, gpointer data);
 
 static void free_selected_names (GPtrArray *names);
 
-#if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
-#define compare_filenames(a, b) strcmp(a, b)
-#else
-#define compare_filenames(a, b) g_ascii_strcasecmp(a, b)
-#endif
+#ifndef G_PLATFORM_WIN32
 
+#define compare_utf8_filenames(a, b) strcmp(a, b)
+#define compare_sys_filenames(a, b) strcmp(a, b)
+
+#else
+
+static gint
+compare_utf8_filenames (const gchar *a,
+			const gchar *b)
+{
+  gchar *a_folded, *b_folded;
+  gint retval;
+
+  a_folded = g_utf8_strdown (a, -1);
+  b_folded = g_utf8_strdown (b, -1);
+
+  retval = strcmp (a_folded, b_folded);
+
+  g_free (a_folded);
+  g_free (b_folded);
+
+  return retval;
+}
+
+static gint
+compare_sys_filenames (const gchar *a,
+		       const gchar *b)
+{
+  gchar *a_utf8, *b_utf8;
+  gint retval;
+
+  a_utf8 = g_filename_to_utf8 (a, -1, NULL, NULL, NULL);
+  b_utf8 = g_filename_to_utf8 (b, -1, NULL, NULL, NULL);
+
+  retval = compare_utf8_filenames (a_utf8, b_utf8);
+
+  g_free (a_utf8);
+  g_free (b_utf8);
+
+  return retval;
+}
+
+#endif
 
 static GtkWindowClass *parent_class = NULL;
 
@@ -429,7 +468,7 @@ static gint cmpl_errno;
 /*
  * Take the path currently in the file selection
  * entry field and translate as necessary from
- * a WIN32 style to CYGWIN32 style path.  For
+ * a Win32 style to Cygwin style path.  For
  * instance translate:
  * x:\somepath\file.jpg
  * to:
@@ -2002,7 +2041,7 @@ gtk_file_selection_dir_activate (GtkTreeView       *tree_view,
   g_free (filename);
 }
 
-#if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
+#ifdef G_PLATFORM_WIN32
 
 static void
 win32_gtk_add_drives_to_dir_list (GtkListStore *model)
@@ -2121,7 +2160,7 @@ gtk_file_selection_populate (GtkFileSelection *fs,
       poss = cmpl_next_completion (cmpl_state);
     }
 
-#if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
+#ifdef G_PLATFORM_WIN32
   /* For Windows, add drives as potential selections */
   win32_gtk_add_drives_to_dir_list (dir_model);
 #endif
@@ -2324,8 +2363,8 @@ gtk_file_selection_file_changed (GtkTreeSelection *selection,
 	  /* A common case is selecting a range of files from top to bottom,
 	   * so quickly check for that to avoid looping over the entire list
 	   */
-	  if (compare_filenames (g_ptr_array_index (old_names, old_names->len - 1),
-				 g_ptr_array_index (new_names, new_names->len - 1)) != 0)
+	  if (compare_utf8_filenames (g_ptr_array_index (old_names, old_names->len - 1),
+				      g_ptr_array_index (new_names, new_names->len - 1)) != 0)
 	    index = new_names->len - 1;
 	  else
 	    {
@@ -2336,8 +2375,8 @@ gtk_file_selection_file_changed (GtkTreeSelection *selection,
 	       */
 	      while (i < old_names->len && j < new_names->len)
 		{
-		  cmp = compare_filenames (g_ptr_array_index (old_names, i),
-					   g_ptr_array_index (new_names, j));
+		  cmp = compare_utf8_filenames (g_ptr_array_index (old_names, i),
+						g_ptr_array_index (new_names, j));
 		  if (cmp < 0)
 		    {
 		      i++;
@@ -2366,8 +2405,8 @@ gtk_file_selection_file_changed (GtkTreeSelection *selection,
 	   * So search up from there.
 	   */
 	  if (fs->last_selected &&
-	      compare_filenames (fs->last_selected,
-				 g_ptr_array_index (new_names, 0)) == 0)
+	      compare_utf8_filenames (fs->last_selected,
+				      g_ptr_array_index (new_names, 0)) == 0)
 	    index = new_names->len - 1;
 	  else
 	    index = 0;
@@ -2401,7 +2440,7 @@ maybe_clear_entry:
 
   entry = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
   if ((entry != NULL) && (fs->last_selected != NULL) &&
-      (compare_filenames (entry, fs->last_selected) == 0))
+      (compare_utf8_filenames (entry, fs->last_selected) == 0))
     gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), "");
 }
 
@@ -2464,7 +2503,7 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
 
 	  selections[count++] = current;
 
-	  if (unselected_entry && compare_filenames (current, filename) == 0)
+	  if (unselected_entry && compare_sys_filenames (current, filename) == 0)
 	    unselected_entry = FALSE;
 	}
 
@@ -2736,7 +2775,9 @@ cmpl_completion_matches (gchar           *text_to_complete,
 			 gchar          **remaining_text,
 			 CompletionState *cmpl_state)
 {
+#ifdef HAVE_PWD_H
   gchar* first_slash;
+#endif
   PossibleCompletion *poss;
 
   prune_memory_usage (cmpl_state);
@@ -2878,16 +2919,15 @@ open_ref_dir (gchar           *text_to_complete,
       p = strrchr (tmp, G_DIR_SEPARATOR);
       if (p)
 	{
-	  if (p == tmp)
+	  if (p + 1 == g_path_skip_root (tmp))
 	    p++;
       
 	  *p = '\0';
-
 	  new_dir = open_dir (tmp, cmpl_state);
 
 	  if (new_dir)
 	    *remaining_text = text_to_complete + 
-	      ((p == tmp + 1) ? (p - tmp) : (p + 1 - tmp));
+	      ((p == g_path_skip_root (tmp)) ? (p - tmp) : (p + 1 - tmp));
 	}
       else
 	{
@@ -3023,10 +3063,11 @@ open_new_dir (gchar       *dir_name,
   gchar *sys_dir_name;
 
   sent = g_new (CompletionDirSent, 1);
+#ifndef G_PLATFORM_WIN32
   sent->mtime = sbuf->st_mtime;
   sent->inode = sbuf->st_ino;
   sent->device = sbuf->st_dev;
-
+#endif
   path = g_string_sized_new (2*MAXPATHLEN + 10);
 
   sys_dir_name = g_filename_from_utf8 (dir_name, -1, NULL, NULL, NULL);
@@ -3046,7 +3087,6 @@ open_new_dir (gchar       *dir_name,
 
   while ((dirent = g_dir_read_name (directory)) != NULL)
     entry_count++;
-
   entry_count += 2;		/* For ".",".." */
 
   sent->entries = g_new (CompletionDirEntry, entry_count);
@@ -3119,7 +3159,7 @@ open_new_dir (gchar       *dir_name,
   return sent;
 }
 
-#if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
+#ifndef G_PLATFORM_WIN32
 
 static gboolean
 check_dir (gchar       *dir_name,
@@ -3192,12 +3232,14 @@ static CompletionDir*
 open_dir (gchar           *dir_name,
 	  CompletionState *cmpl_state)
 {
+#ifndef G_PLATFORM_WIN32
   struct stat sbuf;
   gboolean stat_subdirs;
-  CompletionDirSent *sent;
   GList* cdsl;
+#endif
+  CompletionDirSent *sent;
 
-#if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
+#ifndef G_PLATFORM_WIN32
   if (!check_dir (dir_name, &sbuf, &stat_subdirs))
     return NULL;
 
@@ -3214,11 +3256,11 @@ open_dir (gchar           *dir_name,
 
       cdsl = cdsl->next;
     }
-#else
-  stat_subdirs = TRUE;
-#endif
 
   sent = open_new_dir (dir_name, &sbuf, stat_subdirs);
+#else
+  sent = open_new_dir (dir_name, NULL, TRUE);
+#endif
 
   if (sent)
     {
@@ -3362,7 +3404,9 @@ correct_parent (CompletionDir *cmpl_dir,
   struct stat parbuf;
   gchar *last_slash;
   gchar *first_slash;
+#ifndef G_PLATFORM_WIN32
   gchar *new_name;
+#endif
   gchar *sys_filename;
   gchar c = 0;
 
@@ -3402,7 +3446,7 @@ correct_parent (CompletionDir *cmpl_dir,
     }
   g_free (sys_filename);
 
-#ifndef G_OS_WIN32		/* No inode numbers on Win32 */
+#ifndef G_PLATFORM_WIN32	/* No inode numbers on Win32 */
   if (parbuf.st_ino == sbuf->st_ino && parbuf.st_dev == sbuf->st_dev)
     /* it wasn't a link */
     return TRUE;
@@ -3427,7 +3471,7 @@ correct_parent (CompletionDir *cmpl_dir,
   return TRUE;
 }
 
-#ifndef G_OS_WIN32
+#ifndef G_PLATFORM_WIN32
 
 static gchar*
 find_parent_dir_fullname (gchar* dirname)
@@ -3539,7 +3583,12 @@ attempt_homedir_completion (gchar           *text_to_complete,
 
 #endif
 
-#if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
+#ifdef G_PLATFORM_WIN32
+/* FIXME: determine whether we should casefold all Unicode letters
+ * here, too (and in in first_diff_index() walk through the strings with
+ * g_utf8_next_char()), or if this folding isn't actually needed at
+ * all.
+ */
 #define FOLD(c) (tolower(c))
 #else
 #define FOLD(c) (c)
