@@ -2990,7 +2990,7 @@ gtk_menu_scroll_to (GtkMenu *menu,
   if (!menu->tearoff_active)
     {
       last_visible = menu->upper_arrow_visible;
-      menu->upper_arrow_visible = (view_height < menu_height && offset > 0);
+      menu->upper_arrow_visible = offset > 0;
       
       if (menu->upper_arrow_visible)
 	view_height -= MENU_SCROLL_ARROW_HEIGHT;
@@ -3009,7 +3009,7 @@ gtk_menu_scroll_to (GtkMenu *menu,
 	}
 
       last_visible = menu->lower_arrow_visible;
-      menu->lower_arrow_visible = (view_height < menu_height && offset < menu_height - view_height);
+      menu->lower_arrow_visible = offset < menu_height - view_height;
       
       if (menu->lower_arrow_visible)
 	view_height -= MENU_SCROLL_ARROW_HEIGHT;
@@ -3030,8 +3030,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
       if (menu->upper_arrow_visible)
 	y += MENU_SCROLL_ARROW_HEIGHT;
     }
-
-  offset = CLAMP (offset, 0, menu_height - view_height);
 
   /* Scroll the menu: */
   if (GTK_WIDGET_REALIZED (menu))
@@ -3356,6 +3354,24 @@ child_at (GtkMenu *menu,
   return child;
 }
 
+static gint
+get_menu_height (GtkMenu *menu)
+{
+  gint height;
+  GtkWidget *widget = GTK_WIDGET (menu);
+
+  height = widget->requisition.height;
+  height -= (GTK_CONTAINER (widget)->border_width + widget->style->ythickness) * 2;
+
+  if (menu->upper_arrow_visible && !menu->tearoff_active)
+    height -= MENU_SCROLL_ARROW_HEIGHT;
+
+  if (menu->lower_arrow_visible && !menu->tearoff_active)
+    height -= MENU_SCROLL_ARROW_HEIGHT;
+
+  return height;
+}
+
 static void
 gtk_menu_real_move_scroll (GtkMenu       *menu,
 			   GtkScrollType  type)
@@ -3369,6 +3385,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
       {
 	gint page_size = get_visible_size (menu);
 	gint old_offset;
+        gint new_offset;
 	gint child_offset = 0;
 	gboolean old_upper_arrow_visible;
 	gint step;
@@ -3390,7 +3407,11 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
 	menu_shell->ignore_enter = TRUE;
 	old_upper_arrow_visible = menu->upper_arrow_visible && !menu->tearoff_active;
 	old_offset = menu->scroll_offset;
-	gtk_menu_scroll_to (menu, menu->scroll_offset + step);
+
+        new_offset = menu->scroll_offset + step;
+        new_offset = CLAMP (new_offset, 0, get_menu_height (menu) - page_size);
+
+        gtk_menu_scroll_to (menu, new_offset);
 	
 	if (menu_shell->active_menu_item)
 	  {

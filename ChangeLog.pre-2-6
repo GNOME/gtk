@@ -1,3 +1,15 @@
+Thu Aug 21 21:27:45 2003  Kristian Rietveld  <kris@gtk.org>A
+
+	Merge from stable.
+
+	Fix option menu scrolling (#119821, Owen Taylor).
+
+	* gtk/gtkmenu.c (gtk_menu_scroll_to): remove logic introduced
+	by #80484 and the CLAMP,
+	(get_menu_height): new function,
+	(gtk_menu_real_move_scroll): sort of moved the CLAMP here to correct
+	new_offset to handle page up/down right.
+
 Thu Aug 21 15:17:42 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c: Change the interpretation
