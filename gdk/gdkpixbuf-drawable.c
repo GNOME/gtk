@@ -1078,7 +1078,7 @@ rgbconvert (GdkImage    *image,
   GdkVisual *v = gdk_colormap_get_visual(cmap);
 
   d(printf("masks = %x:%x:%x\n", v->red_mask, v->green_mask, v->blue_mask));
-  d(printf("image depth = %d, bpp = %d\n", image->depth, image->bpp));
+  d(printf("image depth = %d, bits per pixel = %d\n", image->depth, image->bits_per_pixel));
 
   switch (v->type)
     {
@@ -1087,13 +1087,14 @@ rgbconvert (GdkImage    *image,
     case GDK_VISUAL_GRAYSCALE:
     case GDK_VISUAL_STATIC_COLOR:
     case GDK_VISUAL_PSEUDO_COLOR:
-      switch (image->bpp)
+      switch (image->bits_per_pixel)
 	{
 	case 1:
 	  bank = 0;
 	  break;
 	case 8:
-	  bank = 1;
+	  if (image->depth == 8)
+	    bank = 1;
 	  break;
 	}
       break;
@@ -1102,18 +1103,18 @@ rgbconvert (GdkImage    *image,
 	{
 	case 15:
 	  if (v->red_mask == 0x7c00 && v->green_mask == 0x3e0 && v->blue_mask == 0x1f
-	      && image->bpp == 16)
+	      && image->bits_per_pixel == 16)
 	    bank = 2;
 	  break;
 	case 16:
 	  if (v->red_mask == 0xf800 && v->green_mask == 0x7e0 && v->blue_mask == 0x1f
-	      && image->bpp == 16)
+	      && image->bits_per_pixel == 16)
 	    bank = 3;
 	  break;
 	case 24:
 	case 32:
 	  if (v->red_mask == 0xff0000 && v->green_mask == 0xff00 && v->blue_mask == 0xff
-	      && image->bpp == 32)
+	      && image->bits_per_pixel == 32)
 	    bank = 4;
 	  break;
 	}

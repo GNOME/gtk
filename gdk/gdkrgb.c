@@ -2872,13 +2872,7 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info, GdkImage *image)
 
   depth = image_info->visual->depth;
 
-  /* FIXME: save the bpp in the image; this is hack that works for
-   *        common visuals, not otherwise.
-   */
-  if (depth <= 8)
-    bpp = depth;
-  else
-    bpp = 8 * image->bpp;
+  bpp = image->bits_per_pixel;
 
   byte_order = image->byte_order;
   if (gdk_rgb_verbose)
@@ -3031,6 +3025,16 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info, GdkImage *image)
       conv_d = gdk_rgb_convert_gray4_d_pack;
     }
 
+  if (!conv)
+    {
+      g_warning ("Visual type=%s depth=%d, image bpp=%d, %s first\n"
+		 "is not supported by GdkRGB. Please submit a bug report\n"
+		 "with the above values to bugzilla.gnome.org",
+		 visual_names[vtype], depth, bpp,
+		 byte_order == GDK_LSB_FIRST ? "lsb" : "msb");
+      exit (1);
+    }
+  
   if (conv_d == NULL)
     conv_d = conv;
 

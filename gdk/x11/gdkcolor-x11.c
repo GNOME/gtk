@@ -212,6 +212,14 @@ gdk_colormap_new (GdkVisual *visual,
 
     case GDK_VISUAL_STATIC_GRAY:
     case GDK_VISUAL_STATIC_COLOR:
+      private->private_val = FALSE;
+      private->xcolormap = XCreateColormap (private->xdisplay, gdk_root_window,
+					    xvisual, AllocNone);
+      
+      colormap->colors = g_new (GdkColor, colormap->size);
+      gdk_colormap_sync (colormap);
+      break;
+      
     case GDK_VISUAL_TRUE_COLOR:
       private->private_val = FALSE;
       private->xcolormap = XCreateColormap (private->xdisplay, gdk_root_window,
@@ -226,7 +234,7 @@ gdk_colormap_new (GdkVisual *visual,
 
 #define MIN_SYNC_TIME 2
 
-void
+static void
 gdk_colormap_sync (GdkColormap *colormap,
 		   gboolean     force)
 {
@@ -249,7 +257,7 @@ gdk_colormap_sync (GdkColormap *colormap,
   
   for (i = 0; i < colormap->size; i++)
     {
-      if (private->info[i].ref_count == 0)
+      if (!private->info || private->info[i].ref_count == 0)
 	{
 	  xpalette[nlookup].pixel = i;
 	  xpalette[nlookup].red = 0;
@@ -297,16 +305,22 @@ gdk_colormap_get_system (void)
       colormap->colors = NULL;
       colormap->size = colormap->visual->colormap_size;
 
-      if ((colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-	  (colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
+      switch (colormap->visual->type)
 	{
+	case GDK_VISUAL_GRAYSCALE:
+	case GDK_VISUAL_PSEUDO_COLOR:
 	  private->info = g_new0 (GdkColorInfo, colormap->size);
-	  colormap->colors = g_new (GdkColor, colormap->size);
-	  
 	  private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
 					    (GEqualFunc) gdk_color_equal);
-          
+	  /* Fall through */
+	case GDK_VISUAL_STATIC_GRAY:
+	case GDK_VISUAL_STATIC_COLOR:
+	  colormap->colors = g_new (GdkColor, colormap->size);
 	  gdk_colormap_sync (colormap, TRUE);
+	  
+	case GDK_VISUAL_DIRECT_COLOR:
+	case GDK_VISUAL_TRUE_COLOR:
+	  break;
 	}
 
       gdk_colormap_add (colormap);

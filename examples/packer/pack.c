@@ -159,10 +159,10 @@ main (int argv, char **argc)
     button_left = gtk_toggle_button_new_with_label("Left");
     button_right = gtk_toggle_button_new_with_label("Right");
 
-    gtk_object_set_data(GTK_OBJECT(button_top), "side", (gpointer) GTK_SIDE_TOP);
-    gtk_object_set_data(GTK_OBJECT(button_bottom), "side", (gpointer) GTK_SIDE_BOTTOM);
-    gtk_object_set_data(GTK_OBJECT(button_left), "side", (gpointer) GTK_SIDE_LEFT);
-    gtk_object_set_data(GTK_OBJECT(button_right), "side", (gpointer) GTK_SIDE_RIGHT);
+    gtk_object_set_data(GTK_OBJECT(button_top), "side", GINT_TO_POINTER (GTK_SIDE_TOP));
+    gtk_object_set_data(GTK_OBJECT(button_bottom), "side", GINT_TO_POINTER (GTK_SIDE_BOTTOM));
+    gtk_object_set_data(GTK_OBJECT(button_left), "side", GINT_TO_POINTER (GTK_SIDE_LEFT));
+    gtk_object_set_data(GTK_OBJECT(button_right), "side", GINT_TO_POINTER (GTK_SIDE_RIGHT));
 
     gtk_widget_set_usize(button_top, 50, -1);
     gtk_widget_set_usize(button_bottom, 50, -1);
@@ -230,15 +230,15 @@ main (int argv, char **argc)
     button_sw = gtk_toggle_button_new_with_label("SW");
     button_center = gtk_toggle_button_new_with_label("");
 
-    gtk_object_set_data(GTK_OBJECT(button_n), "anchor", (gpointer) GTK_ANCHOR_N);
-    gtk_object_set_data(GTK_OBJECT(button_nw), "anchor", (gpointer) GTK_ANCHOR_NW);
-    gtk_object_set_data(GTK_OBJECT(button_ne), "anchor", (gpointer) GTK_ANCHOR_NE);
-    gtk_object_set_data(GTK_OBJECT(button_s), "anchor", (gpointer) GTK_ANCHOR_S);
-    gtk_object_set_data(GTK_OBJECT(button_sw), "anchor", (gpointer) GTK_ANCHOR_SW);
-    gtk_object_set_data(GTK_OBJECT(button_se), "anchor", (gpointer) GTK_ANCHOR_SE);
-    gtk_object_set_data(GTK_OBJECT(button_w), "anchor", (gpointer) GTK_ANCHOR_W);
-    gtk_object_set_data(GTK_OBJECT(button_e), "anchor", (gpointer) GTK_ANCHOR_E);
-    gtk_object_set_data(GTK_OBJECT(button_center), "anchor", (gpointer) GTK_ANCHOR_CENTER);
+    gtk_object_set_data(GTK_OBJECT(button_n), "anchor", GINT_TO_POINTER (GTK_ANCHOR_N));
+    gtk_object_set_data(GTK_OBJECT(button_nw), "anchor", GINT_TO_POINTER (GTK_ANCHOR_NW));
+    gtk_object_set_data(GTK_OBJECT(button_ne), "anchor", GINT_TO_POINTER (GTK_ANCHOR_NE));
+    gtk_object_set_data(GTK_OBJECT(button_s), "anchor", GINT_TO_POINTER (GTK_ANCHOR_S));
+    gtk_object_set_data(GTK_OBJECT(button_sw), "anchor", GINT_TO_POINTER (GTK_ANCHOR_SW));
+    gtk_object_set_data(GTK_OBJECT(button_se), "anchor", GINT_TO_POINTER (GTK_ANCHOR_SE));
+    gtk_object_set_data(GTK_OBJECT(button_w), "anchor", GINT_TO_POINTER (GTK_ANCHOR_W));
+    gtk_object_set_data(GTK_OBJECT(button_e), "anchor", GINT_TO_POINTER (GTK_ANCHOR_E));
+    gtk_object_set_data(GTK_OBJECT(button_center), "anchor", GINT_TO_POINTER (GTK_ANCHOR_CENTER));
 
     gtk_signal_connect (GTK_OBJECT (button_n), "toggled",
                         GTK_SIGNAL_FUNC (toggle_anchor), (gpointer) info);
@@ -321,9 +321,9 @@ main (int argv, char **argc)
                    GTK_FILL_X | GTK_PACK_EXPAND,
                    0, 10, 5, 0, 0);
 
-    gtk_object_set_data(GTK_OBJECT(button_fillx), "option", (gpointer) GTK_FILL_X);
-    gtk_object_set_data(GTK_OBJECT(button_filly), "option", (gpointer) GTK_FILL_Y);
-    gtk_object_set_data(GTK_OBJECT(button_expand), "option", (gpointer) GTK_PACK_EXPAND);
+    gtk_object_set_data(GTK_OBJECT(button_fillx), "option", GINT_TO_POINTER (GTK_FILL_X));
+    gtk_object_set_data(GTK_OBJECT(button_filly), "option", GINT_TO_POINTER (GTK_FILL_Y));
+    gtk_object_set_data(GTK_OBJECT(button_expand), "option", GINT_TO_POINTER (GTK_PACK_EXPAND));
 
     gtk_signal_connect (GTK_OBJECT (button_fillx), "toggled",
                         GTK_SIGNAL_FUNC (toggle_options), (gpointer) info);
@@ -373,7 +373,7 @@ toggle_options (GtkWidget *widget, gpointer data)
 
    info = (Info*) data;
  
-   option = (gint) gtk_object_get_data(GTK_OBJECT(widget), "option");
+   option = GPOINTER_TO_INT (gtk_object_get_data(GTK_OBJECT(widget), "option"));
 
    pchild = info->pchild;
    if (pchild == NULL) {
@@ -412,7 +412,7 @@ toggle_anchor (GtkWidget *widget, gpointer data)
    info = (Info*) data;
  
    if (GTK_TOGGLE_BUTTON(widget)->active) {
-       anchor = (gint) gtk_object_get_data(GTK_OBJECT(widget), "anchor");
+       anchor = GPOINTER_TO_INT (gtk_object_get_data(GTK_OBJECT(widget), "anchor"));
 
        pchild = info->pchild;
        if (pchild == NULL) {
@@ -483,7 +483,7 @@ toggle_side (GtkWidget *widget, gpointer data)
  
    if (GTK_TOGGLE_BUTTON(widget)->active) {
 
-       side = (gint) gtk_object_get_data(GTK_OBJECT(widget), "side");
+       side = GPOINTER_TO_INT (gtk_object_get_data(GTK_OBJECT(widget), "side"));
 
        pchild = info->pchild;
        if (pchild == NULL) {

@@ -44,8 +44,9 @@ struct _GdkImage
   gint		width;
   gint		height;
   guint16	depth;
-  guint16	bpp;	    /* bytes per pixel */
-  guint16	bpl;	    /* bytes per line */
+  guint16	bpp;	        /* bytes per pixel */
+  guint16	bpl;	        /* bytes per line */
+  guint16       bits_per_pixel; /* bits per pixel */
   gpointer	mem;
 
   gpointer windowing_data;

@@ -68,9 +68,9 @@ fnmatch (pattern, string, flags)
 
 /* Note that this evalutes C many times.  */
 #if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
-#define FOLD(c)	((flags & FNM_CASEFOLD) && isupper (c) ? tolower (c) : (c))
+#define FOLD(c)	((flags & FNM_CASEFOLD) && isupper ((unsigned char )(c)) ? tolower ((unsigned char)(c)) : (c))
 #else
-#define FOLD(c)	(tolower (c))
+#define FOLD(c)	(tolower ((unsigned char)(c)))
 #endif
 
   while ((c = *p++) != '\0')

@@ -1,3 +1,36 @@
+Fri Feb  2 17:16:09 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_sync): Make
+	gdk_colormap_sync private since it was never exported
+	in a header file.
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_new): Fill in
+	colormap->colors[] for StaticGray, StaticColor colormaps.
+
+	* gdk/gdkpixbuf-drawable.c: Fix problems where image->bpp
+	was being used as if it was image->bits_per_pixel.
+
+	* gdk/gdkimage.h, gdk/x11/gdkimage-x11.c: Save the bits-per-pixel
+	for the image in the GdkImage structure since it isn't
+	reconstructable, and we need it to handle packed types
+
+	* gdk/win32/gdkimage-win32.c: Set image->bits_per_pixel. (I'm making
+	the assumption that on Win32 image->bits_per_pixel == image->depth,
+	always.
+
+	* gdk/linux-fb/gdkimage-fb.c: Set image->bits_per_pixel.
+
+	* gdk/gdkrgb.c (gdk_rgb_select_conv): Exit with an informative
+	warning message if no converter can be found. 
+
+Fri Feb  2 15:09:51 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/fnmatch.c (FOLD): Fix problem with passing signed
+	chars to isupper() / tolower(). (#567)
+
+	* examples/packer/pack.c: Add GINT_TO_POINTER, GPOINTER_TO_INT
+	to clear up 64-bit warnings. (#567)
+
 Fri Feb  2 12:26:50 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_add_initial_default_files): Get rid of

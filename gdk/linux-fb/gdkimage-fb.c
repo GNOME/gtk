@@ -122,6 +122,7 @@ gdk_image_new_bitmap(GdkVisual *visual,
   image->depth = 1;
 
   image->byte_order = 1 /* MSBFirst */;
+  image->bits_per_pixel = 1;
   image->bpp = 1;
   image->bpl = (w+7)/8;
   image->mem = g_malloc (image->bpl * h / 8);
@@ -148,6 +149,7 @@ gdk_image_new (GdkImageType  type,
   image->depth = visual->depth;
   
   image->byte_order = 0;
+  image->bits_per_pixel = image->depth;
   image->bpp = image->depth/8;
   image->bpl = (width * image->depth + 7) / 8;
   image->mem = g_malloc (image->bpl * height);
@@ -164,7 +166,7 @@ _gdk_fb_get_image (GdkDrawable *drawable,
 {
   GdkImage *image;
   GdkImagePrivateFB *private;
-  gint bits_per_pixel = GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->depth;
+  gint bits_per_pixel = 
   GdkPixmapFBData fbd;
 
   g_return_val_if_fail (drawable != NULL, NULL);
@@ -176,13 +178,14 @@ _gdk_fb_get_image (GdkDrawable *drawable,
   image->visual = gdk_drawable_get_visual (drawable);
   image->width = width;
   image->height = height;
-  image->depth = bits_per_pixel;
+  image->bits_per_pixel = GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->depth;
+  image->depth = image->bits_per_pixel;
 
-  if (bits_per_pixel <= 8)
+  if (image->bits_per_pixel <= 8)
     image->bpp = 1;
-  else if (bits_per_pixel <= 16)
+  else if (image->bits_per_pixel <= 16)
     image->bpp = 2;
-  else if (bits_per_pixel <= 24)
+  else if (image->bits_per_pixel <= 24)
     image->bpp = 3;
   else
     image->bpp = 4;

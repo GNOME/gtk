@@ -155,6 +155,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   image->width = w;
   image->height = h;
   image->depth = 1;
+  image->bits_per_pixel = 1;
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
   private->ximage = XCreateImage(private->xdisplay, xvisual, 1, XYBitmap,
 				 0, 0, w ,h, 8, 0);
@@ -364,6 +365,7 @@ gdk_image_new (GdkImageType  type,
 	  image->mem = private->ximage->data;
 	  image->bpl = private->ximage->bytes_per_line;
 	  image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
+	  image->bits_per_pixel = private->ximage->bits_per_pixel;
 	}
     }
 
@@ -415,14 +417,8 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
 
   image->mem = private->ximage->data;
   image->bpl = private->ximage->bytes_per_line;
-  if (private->ximage->bits_per_pixel <= 8)
-    image->bpp = 1;
-  else if (private->ximage->bits_per_pixel <= 16)
-    image->bpp = 2;
-  else if (private->ximage->bits_per_pixel <= 24)
-    image->bpp = 3;
-  else
-    image->bpp = 4;
+  image->bits_per_pixel = private->ximage->bits_per_pixel;
+  image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
   image->byte_order = private->ximage->byte_order;
 
   return image;

@@ -180,6 +180,7 @@ gdk_image_new_bitmap (GdkVisual *visual,
   image->bpl = bpl32;
   image->byte_order = GDK_MSB_FIRST;
 
+  image->bits_per_pixel = 1;
   image->bpp = 1;
   return(image);
 } /* gdk_image_new_bitmap() */
@@ -307,6 +308,7 @@ gdk_image_new (GdkImageType  type,
       g_warning ("gdk_image_new: depth = %d", image->depth);
       g_assert_not_reached ();
     }
+  image->bits_per_pixel = image->depth;
   image->byte_order = GDK_LSB_FIRST;
   if (image->depth == 1)
     image->bpl = ((width-1)/32 + 1)*4;
@@ -547,6 +549,7 @@ _gdk_win32_get_image (GdkDrawable *drawable,
       g_warning ("gdk_image_get: image->depth = %d", image->depth);
       g_assert_not_reached ();
     }
+  image->bits_per_pixel = image->depth;
   image->byte_order = GDK_LSB_FIRST;
   if (image->depth == 1)
     image->bpl = ((width - 1)/32 + 1)*4;
