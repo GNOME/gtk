@@ -250,7 +250,7 @@ render_layout_line (GdkDrawable        *drawable,
       
       if (selected)
         {
-          fg_gc = render_state->widget->style->fg_gc[GTK_STATE_SELECTED];
+          fg_gc = render_state->widget->style->text_gc[GTK_STATE_SELECTED];
         }
       else
         {
@@ -517,7 +517,7 @@ render_para (GdkDrawable        *drawable,
           selection_end_index > line->length + byte_offset) /* All selected */
         {
           gdk_draw_rectangle (drawable,
-                              render_state->widget->style->bg_gc[GTK_STATE_SELECTED],
+                              render_state->widget->style->base_gc[GTK_STATE_SELECTED],
                               TRUE,
                               x + line_display->left_margin,
                               selection_y,
@@ -548,11 +548,11 @@ render_para (GdkDrawable        *drawable,
                                                           selection_height,
                                                           selection_start_index, selection_end_index);
 
-              gdk_gc_set_clip_region (render_state->widget->style->fg_gc [GTK_STATE_SELECTED], clip_region);
-              gdk_gc_set_clip_region (render_state->widget->style->bg_gc [GTK_STATE_SELECTED], clip_region);
+              gdk_gc_set_clip_region (render_state->widget->style->text_gc [GTK_STATE_SELECTED], clip_region);
+              gdk_gc_set_clip_region (render_state->widget->style->base_gc [GTK_STATE_SELECTED], clip_region);
 
               gdk_draw_rectangle (drawable,
-                                  render_state->widget->style->bg_gc[GTK_STATE_SELECTED],
+                                  render_state->widget->style->base_gc[GTK_STATE_SELECTED],
                                   TRUE,
                                   x + PANGO_PIXELS (line_rect.x),
                                   selection_y,
@@ -564,8 +564,8 @@ render_para (GdkDrawable        *drawable,
                                   y + PANGO_PIXELS (baseline),
                                   TRUE);
 
-              gdk_gc_set_clip_region (render_state->widget->style->fg_gc [GTK_STATE_SELECTED], NULL);
-              gdk_gc_set_clip_region (render_state->widget->style->bg_gc [GTK_STATE_SELECTED], NULL);
+              gdk_gc_set_clip_region (render_state->widget->style->text_gc [GTK_STATE_SELECTED], NULL);
+              gdk_gc_set_clip_region (render_state->widget->style->base_gc [GTK_STATE_SELECTED], NULL);
 
               gdk_region_destroy (clip_region);
 
@@ -575,7 +575,7 @@ render_para (GdkDrawable        *drawable,
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
                 {
                   gdk_draw_rectangle (drawable,
-                                      render_state->widget->style->bg_gc[GTK_STATE_SELECTED],
+                                      render_state->widget->style->base_gc[GTK_STATE_SELECTED],
                                       TRUE,
                                       x + line_display->left_margin,
                                       selection_y,
@@ -595,7 +595,7 @@ render_para (GdkDrawable        *drawable,
                     PANGO_PIXELS (line_rect.x) - PANGO_PIXELS (line_rect.width);
 
                   gdk_draw_rectangle (drawable,
-                                      render_state->widget->style->bg_gc[GTK_STATE_SELECTED],
+                                      render_state->widget->style->base_gc[GTK_STATE_SELECTED],
                                       TRUE,
                                       x + PANGO_PIXELS (line_rect.x) + PANGO_PIXELS (line_rect.width),
                                       selection_y,
@@ -786,9 +786,9 @@ gtk_text_layout_draw (GtkTextLayout *layout,
           GdkGC *gc;
 
           if (cursor->is_strong)
-            gc = widget->style->bg_gc[GTK_STATE_SELECTED];
+            gc = widget->style->base_gc[GTK_STATE_SELECTED];
           else
-            gc = widget->style->fg_gc[GTK_STATE_NORMAL];
+            gc = widget->style->text_gc[GTK_STATE_NORMAL];
 
           gdk_draw_line (drawable, gc,
                          line_display->x_offset + cursor->x - x_offset,

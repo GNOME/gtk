@@ -846,7 +846,7 @@ gtk_entry_realize_cursor_gc (GtkEntry *entry)
       gdk_gc_set_rgb_fg_color (entry->cursor_gc, cursor_color);
     }
   else
-    entry->cursor_gc = gdk_gc_ref (GTK_WIDGET (entry)->style->bg_gc[GTK_STATE_SELECTED]);
+    entry->cursor_gc = gdk_gc_ref (GTK_WIDGET (entry)->style->base_gc[GTK_STATE_SELECTED]);
 }
 
 static void
@@ -2372,17 +2372,17 @@ gtk_entry_draw_text (GtkEntry *entry)
 	      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
 	      rect.height = logical_rect.height / PANGO_SCALE;
 	      
-	      gdk_draw_rectangle (entry->text_area, widget->style->bg_gc [GTK_STATE_SELECTED], TRUE,
+	      gdk_draw_rectangle (entry->text_area, widget->style->base_gc [GTK_STATE_SELECTED], TRUE,
 				  rect.x, rect.y, rect.width, rect.height);
 
 	      gdk_region_union_with_rect (clip_region, &rect);
 	    }
 
-	  gdk_gc_set_clip_region (widget->style->fg_gc [GTK_STATE_SELECTED], clip_region);
-	  gdk_draw_layout (entry->text_area, widget->style->fg_gc [GTK_STATE_SELECTED], 
+	  gdk_gc_set_clip_region (widget->style->text_gc [GTK_STATE_SELECTED], clip_region);
+	  gdk_draw_layout (entry->text_area, widget->style->text_gc [GTK_STATE_SELECTED], 
 			   x, y,
 			   layout);
-	  gdk_gc_set_clip_region (widget->style->fg_gc [GTK_STATE_SELECTED], NULL);
+	  gdk_gc_set_clip_region (widget->style->text_gc [GTK_STATE_SELECTED], NULL);
 	  
 	  gdk_region_destroy (clip_region);
 	  g_free (ranges);
@@ -2416,7 +2416,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 		     xoffset + strong_x, text_area_height - INNER_BORDER);
       
       if (weak_x != strong_x)
-	gdk_draw_line (entry->text_area, widget->style->fg_gc[GTK_STATE_NORMAL], 
+	gdk_draw_line (entry->text_area, widget->style->text_gc[GTK_STATE_NORMAL], 
 		       xoffset + weak_x, INNER_BORDER,
 		       xoffset + weak_x, text_area_height - INNER_BORDER);
     }

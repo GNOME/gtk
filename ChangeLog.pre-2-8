@@ -1,5 +1,21 @@
 2001-04-18  Havoc Pennington  <hp@redhat.com>
 
+        Close bug #50615:
+	
+	* gtk/gtkstyle.c (gtk_default_draw_layout): Use text_gc to draw
+	the layout
+
+	* gtk/gtktext.c: Use base/text instead of bg/fg throughout
+
+	* gtk/gtkentry.c: Use base/text instead of bg/fg throughout
+
+	* gtk/gtktextdisplay.c: Use base/text instead of bg/fg throughout
+	
+	* gtk/gtkstyle.c (gtk_style_init): make GTK_STATE_SELECTED default
+	to blue for base, in addition to bg
+	
+2001-04-18  Havoc Pennington  <hp@redhat.com>
+
 	* tests/testgtk.c (create_image): allow shrinking the image window
 	to test that we clip to allocation.
 

@@ -409,7 +409,8 @@ gtk_style_init (GtkStyle *style)
       style->text[i] = style->fg[i];
       style->base[i] = style->white;
     }
-  
+
+  style->base[GTK_STATE_SELECTED] = gtk_default_selected_bg;
   style->base[GTK_STATE_INSENSITIVE] = gtk_default_prelight_bg;
   style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
   
@@ -3913,7 +3914,7 @@ gtk_default_draw_layout (GtkStyle        *style,
   g_return_if_fail (window != NULL);
   
   if (area)
-    gdk_gc_set_clip_rectangle (style->fg_gc[state_type], area);
+    gdk_gc_set_clip_rectangle (style->text_gc[state_type], area);
 
   if (state_type == GTK_STATE_INSENSITIVE)
     {
@@ -3921,17 +3922,17 @@ gtk_default_draw_layout (GtkStyle        *style,
 
       ins = get_insensitive_layout (layout);
       
-      gdk_draw_layout (window, style->fg_gc[state_type], x, y, ins);
+      gdk_draw_layout (window, style->text_gc[state_type], x, y, ins);
 
       g_object_unref (G_OBJECT (ins));
     }
   else
     {
-      gdk_draw_layout (window, style->fg_gc[state_type], x, y, layout);
+      gdk_draw_layout (window, style->text_gc[state_type], x, y, layout);
     }
 
   if (area)
-    gdk_gc_set_clip_rectangle (style->fg_gc[state_type], NULL);
+    gdk_gc_set_clip_rectangle (style->text_gc[state_type], NULL);
 }
 
 static void

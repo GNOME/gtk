@@ -1452,7 +1452,7 @@ clear_focus_area (GtkText *text, gint area_x, gint area_y, gint area_width, gint
        gc = text->bg_gc;
     }
   else
-    gc = widget->style->bg_gc[widget->state];
+    gc = widget->style->base_gc[widget->state];
 
   gdk_draw_rectangle (GTK_WIDGET (text)->window, gc, TRUE,
 		      area_x, area_y, area_width, area_height);
@@ -4896,9 +4896,9 @@ draw_line (GtkText* text,
 	      (mark.index < selection_end_pos))
 	    {
 	      if (old_editable->has_selection)
-		fg_gc = GTK_WIDGET(text)->style->fg_gc[GTK_STATE_SELECTED];
+		fg_gc = GTK_WIDGET(text)->style->text_gc[GTK_STATE_SELECTED];
 	      else
-		fg_gc = GTK_WIDGET(text)->style->fg_gc[GTK_STATE_ACTIVE];
+		fg_gc = GTK_WIDGET(text)->style->text_gc[GTK_STATE_ACTIVE];
 	    }
 	  else
 	    {
