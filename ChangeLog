@@ -1,3 +1,9 @@
+Mon Sep 21 01:12:44 1998  Jay Cox  (jaycox@earthlink.net)
+
+	* gtk/Makefile.am: use $(PERL) instead of perl
+	* gtk/gtkcolorsel.c: render properly in non-square aspect ratios.
+	also much faster to render.
+
 Mon Sep 21 07:44:30 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkobject.c (gtk_object_class_add_signals): reallocate

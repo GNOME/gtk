@@ -233,7 +233,7 @@ gdk_headers = \
 # generate gtk.defs file from gtk-boxed.defs and *.h
 gtk.defs: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
 	cd $(srcdir) \
-	&& perl makeenums.pl defs $(source_headers) $(gdk_headers) > s-gd \
+	&& $(PERL) makeenums.pl defs $(source_headers) $(gdk_headers) > s-gd \
 	&& cat gtk-boxed.defs >> s-gd \
 	&& mv s-gd gtk.defs
 
@@ -258,11 +258,12 @@ gtktypebuiltins_ids.c: @REBUILD@ gtk.defs maketypes.awk
 # generate enum value arrays
 gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl gtk.defs
 	cd $(srcdir) \
-	&& perl makeenums.pl arrays $(source_headers) $(gdk_headers) > s-gtbe \
+	&& $(PERL) makeenums.pl arrays $(source_headers) $(gdk_headers) > \
+	s-gtbe \
 	&& mv s-gtbe gtktypebuiltins_evals.c
 
 gtkmarshal.c gtkmarshal.h: @REBUILD@ gtkmarshal.list genmarshal.pl
-	srcdir=$(srcdir) INDENT=$(INDENT) perl $(srcdir)/genmarshal.pl
+	srcdir=$(srcdir) INDENT=$(INDENT) $(PERL) $(srcdir)/genmarshal.pl
 
 # ???
 # special remake rules
