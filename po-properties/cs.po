@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-06 04:22+0100\n"
-"PO-Revision-Date: 2004-02-06 17:55+0100\n"
+"POT-Creation-Date: 2004-02-12 04:14+0100\n"
+"PO-Revision-Date: 2004-02-12 15:41+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -235,6 +235,54 @@ msgstr "Jestli je skupina akcí povolena."
 #: gtk/gtkactiongroup.c:149
 msgid "Whether the action group is visible."
 msgstr "Jestli je skupina akcí viditelná."
+
+#: gtk/gtkadjustment.c:106 gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "Hodnota"
+
+#: gtk/gtkadjustment.c:107
+msgid "The value of the adjustment"
+msgstr "Hodnota zarovnání"
+
+#: gtk/gtkadjustment.c:116
+msgid "Minimum Value"
+msgstr "Minimální hodnota"
+
+#: gtk/gtkadjustment.c:117
+msgid "The minimum value of the adjustment"
+msgstr "Minimální hodnota zarovnání"
+
+#: gtk/gtkadjustment.c:126
+msgid "Maximum Value"
+msgstr "Maximální hodnota"
+
+#: gtk/gtkadjustment.c:127
+msgid "The maximum value of the adjustment"
+msgstr "Maximální hodnota zarovnání"
+
+#: gtk/gtkadjustment.c:136
+msgid "Step Increment"
+msgstr "Přírůstek o krok"
+
+#: gtk/gtkadjustment.c:137
+msgid "The step increment of the adjustment"
+msgstr "Přírůstek zarovnání o krok"
+
+#: gtk/gtkadjustment.c:146
+msgid "Page Increment"
+msgstr "Přírůstek o stránku"
+
+#: gtk/gtkadjustment.c:147
+msgid "The page increment of the adjustment"
+msgstr "Přírůstek zarovnání o stránku"
+
+#: gtk/gtkadjustment.c:156
+msgid "Page Size"
+msgstr "Velikost stránky"
+
+#: gtk/gtkadjustment.c:157
+msgid "The page size of the adjustment"
+msgstr "Velikost stránky zarovnání"
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -2140,36 +2188,36 @@ msgstr "Prodleva před zobrazením rozbalovacího menu"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Prodleva před zobrazením podmenu lišty menu"
 
-#: gtk/gtkmessagedialog.c:106
+#: gtk/gtkmessagedialog.c:109
 msgid "Image/label border"
 msgstr "Okraj obrázku/popisu"
 
-#: gtk/gtkmessagedialog.c:107
+#: gtk/gtkmessagedialog.c:110
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Šířka okraje okolo popisu a obrázku v dialogu zprávy"
 
-#: gtk/gtkmessagedialog.c:122
+#: gtk/gtkmessagedialog.c:125
 msgid "Use separator"
 msgstr "Používat oddělovač"
 
-#: gtk/gtkmessagedialog.c:123
+#: gtk/gtkmessagedialog.c:126
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr "Jestli vložit oddělovač mezi text a tlačítka dialogu zprávy"
 
-#: gtk/gtkmessagedialog.c:129
+#: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
 msgstr "Typ zprávy"
 
-#: gtk/gtkmessagedialog.c:130
+#: gtk/gtkmessagedialog.c:133
 msgid "The type of message"
 msgstr "Typ zprávy"
 
-#: gtk/gtkmessagedialog.c:137
+#: gtk/gtkmessagedialog.c:140
 msgid "Message Buttons"
 msgstr "Tlačítka zprávy"
 
-#: gtk/gtkmessagedialog.c:138
+#: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "Tlačítka zobrazovaná v dialogu zprávy"
 
@@ -2968,10 +3016,6 @@ msgid ""
 msgstr ""
 "Jestli má být točivé tlačítko vždy aktualizováno, nebo pouze pokud je "
 "hodnota přípustná"
-
-#: gtk/gtkspinbutton.c:301
-msgid "Value"
-msgstr "Hodnota"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
