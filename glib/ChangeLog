@@ -1,3 +1,9 @@
+Mon May 11 01:44:10 1998  Tim Janik  <timj@gtk.org>
+
+	* gdataset.c: new file, gdatasets implement the object data
+	mechanism from GtkObject. a generic data pointer is associated with
+	a certain location and a key id.
+
 Sat May  9 20:08:12 1998  Owen Taylor  <otaylor@gtk.org>
 
         * glib/gmem.c: Experimentally restore GMemChunk

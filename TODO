@@ -1,3 +1,7 @@
+For 1.1.0 release:
+-	remove gtk_object_data_force_id and gtk_object_data_try_key from
+	gtkobject.c
+	
 Bugs:
  * Scrolled windows (GtkList?) get cought in an endless reallocation loop
    under certain (rare) circumstances.

@@ -74,8 +74,6 @@ static void           gtk_object_real_destroy  (GtkObject      *object);
 static void           gtk_object_finalize      (GtkObject      *object);
 static void           gtk_object_notify_weaks  (GtkObject      *object);
 
-static guint*         gtk_object_data_id_alloc (void);
-
 GtkArg*               gtk_object_collect_args  (guint   *nargs,
 						va_list  args1,
 						va_list  args2);
@@ -89,9 +87,6 @@ static guint user_data_key_id = 0;
 static const gchar *weakrefs_key = "gtk-weakrefs";
 static guint weakrefs_key_id = 0;
 
-static GHashTable *object_data_ht = NULL;
-static GSList *object_data_id_list = NULL;
-static guint object_data_id_index = 0;
 static GtkObjectData *gtk_object_data_free_list = NULL;
 
 #define GTK_OBJECT_DATA_DESTROY( odata )	{ \
@@ -1094,26 +1089,6 @@ gtk_object_set_data_full (GtkObject        *object,
   gtk_object_set_data_by_id_full (object, gtk_object_data_force_id (key), data, destroy);
 }
 
-guint
-gtk_object_data_force_id (const gchar     *key)
-{
-  guint *id;
-
-  g_return_val_if_fail (key != NULL, 0);
-
-  if (!object_data_ht)
-    object_data_ht = g_hash_table_new (g_str_hash, g_str_equal);
-
-  id = g_hash_table_lookup (object_data_ht, (gpointer) key);
-  if (!id)
-    {
-      id = gtk_object_data_id_alloc ();
-      g_hash_table_insert (object_data_ht, g_strdup (key), id);
-    }
-
-  return *id;
-}
-
 gpointer
 gtk_object_get_data_by_id (GtkObject   *object,
 			   guint        data_id)
@@ -1152,23 +1127,6 @@ gtk_object_get_data (GtkObject   *object,
   return NULL;
 }
 
-guint
-gtk_object_data_try_key (const gchar     *key)
-{
-  g_return_val_if_fail (key != NULL, 0);
-
-  if (object_data_ht)
-    {
-      guint *id;
-
-      id = g_hash_table_lookup (object_data_ht, (gpointer) key);
-      if (id)
-	return *id;
-    }
-
-  return 0;
-}
-
 void
 gtk_object_remove_data_by_id (GtkObject   *object,
 			      guint        data_id)
@@ -1188,28 +1146,6 @@ gtk_object_remove_data (GtkObject   *object,
   id = gtk_object_data_try_key (key);
   if (id)
     gtk_object_set_data_by_id_full (object, id, NULL, NULL);
-}
-
-static guint*
-gtk_object_data_id_alloc (void)
-{
-  static guint next_id = 1;
-  guint *ids;
-
-  if (!object_data_id_list ||
-      (object_data_id_index == GTK_OBJECT_DATA_ID_BLOCK_SIZE))
-    {
-      ids = g_new (guint, GTK_OBJECT_DATA_ID_BLOCK_SIZE);
-      object_data_id_index = 0;
-      object_data_id_list = g_slist_prepend (object_data_id_list, ids);
-    }
-  else
-    {
-      ids = object_data_id_list->data;
-    }
-
-  ids[object_data_id_index] = next_id++;
-  return &ids[object_data_id_index++];
 }
 
 /*****************************************
@@ -1625,3 +1561,18 @@ gtk_trace_referencing (gpointer    *o,
 }
 #endif /* G_ENABLE_DEBUG */
 
+/* these functions are just in place to preserve binary compatibility,
+ * they should be removed when releasing 1.1.0
+ */
+#undef gtk_object_data_force_id
+#undef gtk_object_data_try_key
+guint
+gtk_object_data_force_id (const gchar     *key)
+{
+  return g_dataset_force_id (key);
+}
+guint
+gtk_object_data_try_key (const gchar     *key)
+{
+  return g_dataset_try_key (key);
+}

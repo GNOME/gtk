@@ -397,7 +397,8 @@ typedef void		(*GPrintFunc)		(gchar    *str);
 typedef void		(*GScannerMsgFunc)	(GScanner *scanner,
 						 gchar	  *message,
 						 gint	   error);
-  
+typedef void		(*GDestroyNotify)	(gpointer  data);
+
 
 struct _GList
 {
@@ -815,6 +816,30 @@ guint g_str_hash  (const gpointer v);
  * simple integer values.
  */
 guint g_direct_hash (gpointer key);
+
+
+/* Associated Data
+ */
+void	  g_dataset_destroy		(const gpointer	 dataset_location);
+guint	  g_dataset_try_key		(const gchar    *key);
+guint	  g_dataset_force_id		(const gchar    *key);
+gpointer  g_dataset_id_get_data		(const gpointer	 dataset_location,
+					 guint		 key_id);
+void	  g_dataset_id_set_data_full	(const gpointer	 dataset_location,
+					 guint		 key_id,
+					 gpointer        data,
+					 GDestroyNotify	 destroy_func);
+void	  g_dataset_id_set_destroy	(const gpointer	 dataset_location,
+					 guint		 key_id,
+					 GDestroyNotify	 destroy_func);
+
+#define	  g_dataset_id_set_data(l,k,d)	G_STMT_START{g_dataset_id_set_data_full((l),(k),(d),NULL);}G_STMT_END
+#define	  g_dataset_id_remove_data(l,k)	G_STMT_START{g_dataset_id_set_data((l),(k),NULL);}G_STMT_END
+#define	  g_dataset_get_data(l,k)	(g_dataset_id_get_data((l),g_dataset_try_key(k)))
+#define	  g_dataset_set_data_full(l,k,d,f) G_STMT_START{g_dataset_id_set_data_full((l),g_dataset_force_id(k),(d),(f));}G_STMT_END
+#define	  g_dataset_set_destroy(l,k,f)  G_STMT_START{g_dataset_id_set_destroy((l),g_dataset_force_id(k),(f));}G_STMT_END
+#define	  g_dataset_set_data(l,k,d)	G_STMT_START{g_dataset_set_data_full((l),(k),(d),NULL);}G_STMT_END
+#define	  g_dataset_remove_data(l,k)	G_STMT_START{g_dataset_set_data((l),(k),NULL);}G_STMT_END
 
 
 /* GScanner: Flexible lexical scanner for general purpose.

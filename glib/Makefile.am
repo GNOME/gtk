@@ -7,6 +7,7 @@ lib_LTLIBRARIES = libglib.la
 libglib_la_SOURCES = \
 		garray.c	\
 		gcache.c	\
+		gdataset.c	\
 		gerror.c	\
 		ghash.c		\
 		glist.c		\

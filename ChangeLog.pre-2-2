@@ -1,3 +1,12 @@
+Mon May 11 02:31:19 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c:
+	(gtk_object_data_try_key):
+ 	(gtk_object_data_force_id): these are now macros substituting the old
+ 	functions. we just use the corresponding g_dataset_* functions for
+	key->id associations. (this is to assure unique key<->id associations).
+
 1998-05-10  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_is_visible): Changed return value
