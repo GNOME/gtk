@@ -10,7 +10,7 @@
 			      name="&lt;imain@gtk.org&gt;"></tt>,
 Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
-<date>June 24th, 1998
+<date>July 25th, 1998
 
 <!-- ***************************************************************** -->
 <sect>Introduction
@@ -69,6 +69,9 @@ You can also view other sources of GTK information on http://www.gtk.org/
 <htmlurl url="http://www.gtk.org/" name="http://www.gtk.org/">.
 GTK uses GNU autoconf for
 configuration.  Once untar'd, type ./configure --help to see a list of options.
+
+Th GTK source distribution also contains the complete source to all of the
+examples used in this tutorial, along with Makefiles to aid compilation.
 
 To begin our introduction to GTK, we'll start with the simplest program 
 possible.  This program will
@@ -271,6 +274,9 @@ that use gtk. <tt>gtk-config --cflags</> will output a list of include
 directories for the compiler to look in, and <tt>gtk-config --libs</>
 will output the list of libraries for the compiler to link with and
 the directories to find them in.
+
+Note that the type of single quote used in the compile command above
+is significant.
 
 The libraries that are usually linked in are:
 <itemize>
@@ -985,6 +991,7 @@ yourself and play with it.
 <tscreen><verb>
 /* example-start packbox packbox.c */
 
+#include <stdio.h>
 #include "gtk/gtk.h"
 
 void
@@ -5705,7 +5712,804 @@ Please see the GtkList example on this, which covers the usage of a
 GtkListItem as well.
 
 <!-- ***************************************************************** -->
-<sect>Menu Widgets
+<sect> Tree Widget<label id="sec_Tree_Widgets">
+<!-- ***************************************************************** -->
+<p>
+
+The purpose of tree widgets is to display hierarchically-organized
+data. The GtkTree widget itself is a vertical container for widgets
+of type GtkTreeItem. GtkTree itself is not terribly different from
+GtkList - both are derived directly from GtkContainer, and the
+GtkContainer methods work in the same way on GtkTree widgets as on
+GtkList widgets. The difference is that GtkTree widgets can be nested
+within other GtkTree widgets. We'll see how to do this shortly.
+
+The GtkTree widget has its own window, and defaults to a white
+background, as does GtkList. Also, most of the GtkTree methods work
+in the same way as the corresponding GtkList ones. However, GtkTree
+is not derived from GtkList, so you cannot use them interchangeably.
+
+<sect1> Creating a Tree
+<p>
+A GtkTree is created in the usual way, using:
+
+<tscreen><verb>
+GtkWidget* gtk_tree_new( void );
+</verb></tscreen>
+
+Like the GtkList widget, a GtkTree will simply keep growing as more
+items are added to it, as well as when subtrees are expanded.
+For this reason, they are almost always packed into a
+GtkScrolledWindow. You might want to use gtk_widget_set_usize() on
+the scrolled window to ensure that it is big enough to see the tree's
+items, as the default size for GtkScrolledWindow is quite small.
+
+Now that you have a tree, you'll probably want to add some items to
+it.  <ref id="sec_Tree_Item_Widget" name="The Tree Item Widget"> below
+explains the gory details of GtkTreeItem. For now, it'll suffice to
+create one, using:
+
+<tscreen><verb>
+GtkWidget* gtk_tree_item_new_with_label( gchar *label );
+</verb></tscreen>
+
+You can then add it to the tree using one of the following (see
+<ref id="sec_GtkTree_Functions" name="Functions and Macros">
+below for more options):
+
+<tscreen><verb>
+void gtk_tree_append( GtkTree    *tree,
+                       GtkWidget *tree_item );
+
+void gtk_tree_prepend( GtkTree   *tree,
+                       GtkWidget *tree_item );
+</verb></tscreen>
+
+Note that you must add items to a GtkTree one at a time - there is no
+equivalent to gtk_list_*_items().
+
+<sect1> Adding a Subtree
+<p>
+A subtree is created like any other GtkTree widget. A subtree is added
+to another tree beneath a tree item, using:
+
+<tscreen><verb>
+void gtk_tree_item_set_subtree( GtkTreeItem *tree_item,
+                                GtkWidget   *subtree );
+</verb></tscreen>
+
+You do not need to call gtk_widget_show() on a subtree before or after
+adding it to a GtkTreeItem. However, you <em>must</em> have added the
+GtkTreeItem in question to a parent tree before calling
+gtk_tree_item_set_subtree(). This is because, technically, the parent
+of the subtree is <em>not</em> the GtkTreeItem which "owns" it, but
+rather the GtkTree which holds that GtkTreeItem.
+
+When you add a subtree to a GtkTreeItem, a plus or minus sign appears
+beside it, which the user can click on to "expand" or "collapse" it,
+meaning, to show or hide its subtree. GtkTreeItems are collapsed by
+default. Note that when you collapse a GtkTreeItem, any selected
+items in its subtree remain selected, which may not be what the user
+expects.
+
+<sect1> Handling the Selection List
+<p>
+As with GtkList, the GtkTree type has a <tt>selection</tt> field, and
+it is possible to control the behaviour of the tree (somewhat) by
+setting the selection type using:
+
+<tscreen><verb>
+void gtk_tree_set_selection_mode( GtkTree          *tree,
+                                  GtkSelectionMode  mode );
+</verb></tscreen>
+
+The semantics associated with the various selection modes are
+described in the section on the GtkList widget.  As with the GtkList
+widget, the "select_child", "unselect_child" (not really - see <ref
+id="sec_GtkTree_Signals" name="Signals"> below for an explanation),
+and "selection_changed" signals are emitted when list items are
+selected or unselected.  However, in order to take advantage of these
+signals, you need to know <em>which</em> GtkTree widget they will be
+emitted by, and where to find the list of selected items.
+
+This is a source of potential confusion. The best way to explain this
+is that though all GtkTree widgets are created equal, some are more
+equal than others. All GtkTree widgets have their own X window, and
+can therefore receive events such as mouse clicks (if their
+GtkTreeItems or their children don't catch them first!). However, to
+make GTK_SELECTION_SINGLE and GTK_SELECTION_BROWSE selection types
+behave in a sane manner, the list of selected items is specific to the
+topmost GtkTree widget in a hierarchy, known as the "root tree".
+
+Thus, accessing the <tt>selection</tt>field directly in an arbitrary
+GtkTree widget is not a good idea unless you <em>know</em> it's the
+root tree.  Instead, use the GTK_TREE_SELECTION (Tree) macro, which
+gives the root tree's selection list as a GList pointer. Of course,
+this list can include items that are not in the subtree in question if 
+the selection type is GTK_SELECTION_MULTIPLE.
+
+Finally, the "select_child" (and "unselect_child", in theory) signals
+are emitted by all trees, but the "selection_changed" signal is only
+emitted by the root tree. Consequently, if you want to handle the
+"select_child" signal for a tree and all its subtrees, you will have
+to call gtk_signal_connect() for every subtree.
+
+<sect1> Tree Widget Internals
+<p>
+The GtkTree's struct definition looks like this:
+
+<tscreen><verb>
+struct _GtkTree
+{
+  GtkContainer container;
+
+  GList *children;
+  
+  GtkTree* root_tree; /* owner of selection list */
+  GtkWidget* tree_owner;
+  GList *selection;
+  guint level;
+  guint indent_value;
+  guint current_indent;
+  guint selection_mode : 2;
+  guint view_mode : 1;
+  guint view_line : 1;
+};
+</verb></tscreen>
+
+The perils associated with accessing the <tt>selection</tt> field
+directly have already been mentioned.  The other important fields of
+the struct can also be accessed with handy macros or class functions.
+GTK_TREE_IS_ROOT_TREE (Tree) returns a boolean value which indicates
+whether a tree is the root tree in a GtkTree hierarchy, while
+GTK_TREE_ROOT_TREE (Tree) returns the root tree, an object of type
+GtkTree (so, remember to cast it using GTK_WIDGET (Tree) if you want
+to use one of the gtk_widget_*() functions on it).
+
+Instead of directly accessing the children field of a GtkTree widget,
+it's probably best to cast it using GTK_CONTAINER (Tree), and pass it
+to the gtk_container_children() function. This creates a duplicate of
+the original list, so it's advisable to free it up using g_list_free() 
+after you're done with it, or to iterate on it destructively, like
+this:
+
+<tscreen><verb>
+children = gtk_container_children (GTK_CONTAINER (tree));
+while (children) {
+  do_something_nice (GTK_TREE_ITEM (children->data));
+  children = g_list_remove_link (children, children);
+}
+</verb></tscreen>
+
+The <tt>tree_owner</tt> field is defined only in subtrees, where it
+points to the GtkTreeItem widget which holds the tree in question.
+The <tt>level</tt> field indicates how deeply nested a particular tree
+is; root trees have level 0, and each successive level of subtrees has
+a level one greater than the parent level.  This field is set only
+after a GtkTree widget is actually mapped (i.e. drawn on the screen).
+
+<sect2> Signals<label id="sec_GtkTree_Signals">
+<p>
+<tscreen><verb>
+void selection_changed( GtkTree *tree );
+</verb></tscreen>
+
+This signal will be emitted whenever the <tt>selection</tt> field of a
+GtkTree has changed. This happens when a child of the GtkTree is
+selected or deselected.
+
+<tscreen><verb>
+void select_child( GtkTree   *tree,
+                   GtkWidget *child );
+</verb></tscreen>
+
+This signal is emitted when a child of the GtkTree is about to get
+selected. This happens on calls to gtk_tree_select_item(),
+gtk_tree_select_child(), on <em>all</em> button presses and calls to
+gtk_tree_item_toggle() and gtk_item_toggle().  It may sometimes be
+indirectly triggered on other occasions where children get added to or
+removed from the GtkTree.
+
+<tscreen><verb>
+void unselect_child (GtkTree   *tree,
+                     GtkWidget *child);
+</verb></tscreen>
+
+This signal is emitted when a child of the GtkTree is about to get
+deselected. As of GTK+ 1.0.4, this seems to only occur on calls to
+gtk_tree_unselect_item() or gtk_tree_unselect_child(), and perhaps on
+other occasions, but <em>not</em> when a button press deselects a
+child, nor on emission of the "toggle" signal by gtk_item_toggle().
+
+<sect2> Functions and Macros<label id="sec_GtkTree_Functions">
+<p>
+<tscreen><verb>
+guint gtk_tree_get_type( void );
+</verb></tscreen>
+
+Returns the `GtkTree' type identifier.
+
+<tscreen><verb>
+GtkWidget* gtk_tree_new( void );
+</verb></tscreen>
+
+Create a new GtkTree object. The new widget is returned as a pointer to a
+GtkWidget object. NULL is returned on failure.
+
+<tscreen><verb>
+void gtk_tree_append( GtkTree   *tree,
+                      GtkWidget *tree_item );
+</verb></tscreen>
+
+Append a tree item to a GtkTree.
+
+<tscreen><verb>
+void gtk_tree_prepend( GtkTree   *tree,
+                       GtkWidget *tree_item );
+</verb></tscreen>
+
+Prepend a tree item to a GtkTree.
+
+<tscreen><verb>
+void gtk_tree_insert( GtkTree   *tree,
+                      GtkWidget *tree_item,
+                      gint       position );
+</verb></tscreen>
+
+Insert a tree item into a GtkTree at the position in the list
+specified by <tt>position.</tt>
+
+<tscreen><verb>
+void gtk_tree_remove_items( GtkTree *tree,
+                            GList   *items );
+</verb></tscreen>
+
+Remove a list of items (in the form of a GList *) from a GtkTree.
+Note that removing an item from a tree dereferences (and thus usually)
+destroys it <em>and</em> its subtree, if it has one, <em>and</em> all
+subtrees in that subtree.  If you want to remove only one item, you
+can use gtk_container_remove().
+
+<tscreen><verb>
+void gtk_tree_clear_items( GtkTree *tree,
+                           gint     start,
+                           gint     end );
+</verb></tscreen>
+
+Remove the items from position <tt>start</tt> to position <tt>end</tt>
+from a GtkTree.  The same warning about dereferencing applies here, as
+gtk_tree_clear_items() simply constructs a list and passes it to
+gtk_tree_remove_items().
+
+<tscreen><verb>
+void gtk_tree_select_item( GtkTree *tree,
+                           gint     item );
+</verb></tscreen>
+
+Emits the "select_item" signal for the child at position
+<tt>item</tt>, thus selecting the child (unless you unselect it in a
+signal handler...)
+
+<tscreen><verb>
+void gtk_tree_unselect_item( GtkTree *tree,
+                             gint     item );
+</verb></tscreen>
+
+Emits the "unselect_item" signal for the child at position
+<tt>item</tt>, thus unselecting the child.
+
+<tscreen><verb>
+void gtk_tree_select_child( GtkTree   *tree,
+                            GtkWidget *tree_item );
+</verb></tscreen>
+
+Emits the "select_item" signal for the child <tt>tree_item</tt>, thus
+selecting it.
+
+<tscreen><verb>
+void gtk_tree_unselect_child( GtkTree   *tree,
+                              GtkWidget *tree_item );
+</verb></tscreen>
+
+Emits the "unselect_item" signal for the child <tt>tree_item</tt>,
+thus unselecting it.
+
+<tscreen><verb>
+gint gtk_tree_child_position( GtkTree   *tree,
+                              GtkWidget *child );
+</verb></tscreen>
+
+Returns the position in the tree of <tt>child</tt>, unless
+<tt>child</tt> is not in the tree, in which case it returns -1.
+
+<tscreen><verb>
+void gtk_tree_set_selection_mode( GtkTree          *tree,
+                                  GtkSelectionMode  mode );
+</verb></tscreen>
+
+Sets the selection mode, which can be one of GTK_SELECTION_SINGLE (the
+default), GTK_SELECTION_BROWSE, GTK_SELECTION_MULTIPLE, or
+GTK_SELECTION_EXTENDED. This is only defined for root trees, which
+makes sense, since the root tree "owns" the selection. Setting it for
+subtrees has no effect at all; the value is simply ignored.
+
+<tscreen><verb>
+void gtk_tree_set_view_mode( GtkTree         *tree,
+                             GtkTreeViewMode  mode ); 
+</verb></tscreen>
+
+Sets the "view mode", which can be either GTK_TREE_VIEW_LINE (the
+default) or GTK_TREE_VIEW_ITEM.  The view mode propagates from a tree
+to its subtrees, and can't be set exclusively to a subtree (this is
+not exactly true - see the example code comments).
+
+The term "view mode" is rather ambiguous - basically, it controls the
+way the hilight is drawn when one of a tree's children is selected.
+If it's GTK_TREE_VIEW_LINE, the entire GtkTreeItem widget is
+hilighted, while for GTK_TREE_VIEW_ITEM, only the child widget
+(i.e. usually the label) is hilighted.
+
+<tscreen><verb>
+void gtk_tree_set_view_lines( GtkTree *tree,
+                              guint    flag );
+</verb></tscreen>
+
+Controls whether connecting lines between tree items are drawn.
+<tt>flag</tt> is either TRUE, in which case they are, or FALSE, in
+which case they aren't.
+
+<tscreen><verb>
+GtkTree *GTK_TREE (gpointer obj);
+</verb></tscreen>
+
+Cast a generic pointer to `GtkTree *'.
+
+<tscreen><verb>
+GtkTreeClass *GTK_TREE_CLASS (gpointer class);
+</verb></tscreen>
+
+Cast a generic pointer to `GtkTreeClass*'.
+
+<tscreen><verb>
+gint GTK_IS_TREE (gpointer obj);
+</verb></tscreen>
+
+Determine if a generic pointer refers to a `GtkTree' object.
+
+<tscreen><verb>
+gint GTK_IS_ROOT_TREE (gpointer obj)
+</verb></tscreen>
+
+Determine if a generic pointer refers to a `GtkTree' object
+<em>and</em> is a root tree. Though this will accept any pointer, the
+results of passing it a pointer that does not refer to a GtkTree are
+undefined and possibly harmful.
+
+<tscreen><verb>
+GtkTree *GTK_TREE_ROOT_TREE (gpointer obj)
+</verb></tscreen>
+
+Return the root tree of a pointer to a `GtkTree' object. The above
+warning applies.
+
+<tscreen><verb>
+GList *GTK_TREE_SELECTION( gpointer obj)
+</verb></tscreen>
+
+Return the selection list of the root tree of a `GtkTree' object. The 
+above warning applies here, too.
+
+<sect1> Tree Item Widget<label id="sec_Tree_Item_Widget">
+<p>
+The GtkTreeItem widget, like GtkListItem, is derived from GtkItem,
+which in turn is derived from GtkBin.  Therefore, the item itself is a
+generic container holding exactly one child widget, which can be of
+any type.  The GtkTreeItem widget has a number of extra fields, but
+the only one we need be concerned with is the <tt>subtree</tt> field.
+
+The definition for the GtkTreeItem struct looks like this:
+
+<tscreen><verb>
+struct _GtkTreeItem
+{
+  GtkItem item;
+
+  GtkWidget *subtree;
+  GtkWidget *pixmaps_box;
+  GtkWidget *plus_pix_widget, *minus_pix_widget;
+
+  GList *pixmaps;		/* pixmap node for this items color depth */
+
+  guint expanded : 1;
+};
+</verb></tscreen>
+
+The <tt>pixmaps_box</tt> field is a GtkEventBox which catches clicks
+on the plus/minus symbol which controls expansion and collapsing.  The
+<tt>pixmaps</tt> field points to an internal data structure.  Since
+you can always obtain the subtree of a GtkTreeItem in a (relatively)
+type-safe manner with the GTK_TREE_ITEM_SUBTREE (Item) macro, it's
+probably advisable never to touch the insides of a GtkTreeItem unless
+you <em>really</em> know what you're doing.
+
+Since it is directly derived from a GtkItem it can be treated as such
+by using the GTK_ITEM (TreeItem) macro. A GtkTreeItem usually holds a
+label, so the convenience function gtk_list_item_new_with_label() is
+provided. The same effect can be achieved using code like the
+following, which is actually copied verbatim from
+gtk_tree_item_new_with_label():
+
+<tscreen><verb>
+tree_item = gtk_tree_item_new ();
+label_widget = gtk_label_new (label);
+gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+
+gtk_container_add (GTK_CONTAINER (tree_item), label_widget);
+gtk_widget_show (label_widget);
+</verb></tscreen>
+
+As one is not forced to add a GtkLabel to a GtkTreeItem, you could
+also add a GtkHBox or a GtkArrow, or even a GtkNotebook (though your
+app will likely be quite unpopular in this case) to the GtkTreeItem.
+
+If you remove all the items from a subtree, it will be destroyed and
+unparented, unless you reference it beforehand, and the GtkTreeItem
+which owns it will be collapsed.  So, if you want it to stick around,
+do something like the following:
+
+<tscreen><verb>
+gtk_widget_ref (tree);
+owner = GTK_TREE(tree)->tree_owner;
+gtk_container_remove (GTK_CONTAINER(tree), item);
+if (tree->parent == NULL){
+  gtk_tree_item_expand (GTK_TREE_ITEM(owner));
+  gtk_tree_item_set_subtree (GTK_TREE_ITEM(owner), tree);
+}
+else
+  gtk_widget_unref (tree);
+</verb></tscreen>
+
+Finally, drag-n-drop <em>does</em> work with GtkTreeItems.  You just
+have to make sure that the GtkTreeItem you want to make into a drag
+item or a drop site has not only been added to a GtkTree, but that
+each successive parent widget has a parent itself, all the way back to
+a toplevel or dialog window, when you call gtk_widget_dnd_drag_set()
+or gtk_widget_dnd_drop_set().  Otherwise, strange things will happen.
+
+<sect2> Signals
+<p>
+GtkTreeItem inherits the "select", "deselect", and "toggle" signals
+from GtkItem.  In addition, it adds two signals of its own, "expand"
+and "collapse".
+
+<tscreen><verb>
+void select( GtkItem *tree_item );
+</verb></tscreen>
+
+This signal is emitted when an item is about to be selected, either
+after it has been clicked on by the user, or when the program calls
+gtk_tree_item_select(), gtk_item_select(), or gtk_tree_select_child().
+
+<tscreen><verb>
+void deselect( GtkItem *tree_item );
+</verb></tscreen>
+
+This signal is emitted when an item is about to be unselected, either
+after it has been clicked on by the user, or when the program calls
+gtk_tree_item_deselect() or gtk_item_deselect(). In the case of
+GtkTreeItems, it is also emitted by gtk_tree_unselect_child(), and
+sometimes gtk_tree_select_child().
+
+<tscreen><verb>
+void toggle( GtkItem *tree_item );
+</verb></tscreen>
+
+This signal is emitted when the program calls gtk_item_toggle().  The
+effect it has when emitted on a GtkTreeItem is to call
+gtk_tree_select_child() (and never gtk_tree_unselect_child()) on the
+item's parent tree, if the item has a parent tree.  If it doesn't,
+then the highlight is reversed on the item.
+
+<tscreen><verb>
+void expand( GtkTreeItem *tree_item );
+</verb></tscreen>
+
+This signal is emitted when the tree item's subtree is about to be
+expanded, that is, when the user clicks on the plus sign next to the
+item, or when the program calls gtk_tree_item_expand().
+
+<tscreen><verb>
+void collapse( GtkTreeItem *tree_item );
+</verb></tscreen>
+
+This signal is emitted when the tree item's subtree is about to be
+collapsed, that is, when the user clicks on the minus sign next to the
+item, or when the program calls gtk_tree_item_collapse().
+
+<sect2> Functions and Macros
+<p>
+<tscreen><verb>
+guint gtk_tree_item_get_type( void );
+</verb></tscreen>
+
+Returns the `GtkTreeItem' type identifier.
+
+<tscreen><verb>
+GtkWidget* gtk_tree_item_new( void );
+</verb></tscreen>
+
+Create a new GtkTreeItem object. The new widget is returned as a pointer
+to a GtkWidget object. NULL is returned on failure.
+
+<tscreen><verb>
+GtkWidget* gtk_tree_item_new_with_label (gchar       *label);
+</verb></tscreen>
+
+Create a new GtkTreeItem object, having a single GtkLabel as
+the sole child. The new widget is returned as a pointer to a
+GtkWidget object. NULL is returned on failure.
+
+<tscreen><verb>
+void gtk_tree_item_select( GtkTreeItem *tree_item );
+</verb></tscreen>
+
+This function is basicaly a wrapper around a call to
+gtk_item_select (GTK_ITEM (tree_item)) which will emit the
+select signal.
+
+<tscreen><verb>
+void gtk_tree_item_deselect( GtkTreeItem *tree_item );
+</verb></tscreen>
+
+This function is basicaly a wrapper around a call to
+gtk_item_deselect (GTK_ITEM (tree_item)) which will emit the
+deselect signal.
+
+<tscreen><verb>
+void gtk_tree_item_set_subtree( GtkTreeItem *tree_item,
+                                GtkWidget   *subtree );
+</verb></tscreen>
+
+This function adds subtree to tree_item, showing it if tree_item is
+expanded, or hiding it if tree_item is collapsed. Again, remember
+that the tree_item must have already been added to a tree for this to
+work.
+
+<tscreen><verb>
+void gtk_tree_item_remove_subtree( GtkTreeItem *tree_item );
+</verb></tscreen>
+
+This removes all of tree_item's subtree's children (thus unreferencing
+and destroying it, any of its children's subtrees, and so on...), then
+removes the subtree itself, and hides the plus/minus sign.
+
+<tscreen><verb>
+void gtk_tree_item_expand( GtkTreeItem *tree_item );
+</verb></tscreen>
+
+This emits the "expand" signal on tree_item, which expands it.
+
+<tscreen><verb>
+void gtk_tree_item_collapse( GtkTreeItem *tree_item );
+</verb></tscreen>
+
+This emits the "collapse" signal on tree_item, which collapses it.
+
+<tscreen><verb>
+GtkTreeItem *GTK_TREE_ITEM (gpointer obj)
+</verb></tscreen>
+
+Cast a generic pointer to `GtkTreeItem*'.
+
+<tscreen><verb>
+GtkTreeItemClass *GTK_TREE_ITEM_CLASS (gpointer obj)
+</verb></tscreen>
+
+Cast a generic pointer to `GtkTreeItemClass'.
+
+<tscreen><verb>
+gint GTK_IS_TREE_ITEM (gpointer obj)
+</verb></tscreen>
+
+Determine if a generic pointer refers to a `GtkTreeItem' object.
+ 
+<tscreen><verb>
+GtkWidget GTK_TREE_ITEM_SUBTREE (gpointer obj)
+</verb></tscreen>
+
+Return's a tree item's subtree (obj should point to a `GtkTreeItem'
+object).
+
+<sect1> Tree Example
+<p>
+This is somewhat like the tree example in testgtk.c, but a lot less
+complete (although much better commented).  It puts up a window with a
+tree, and connects all the signals for the relevant objects, so you
+can see when they are emitted.
+
+<tscreen><verb>
+/* example-start tree tree.c */
+
+#include <gtk/gtk.h>
+
+/* for all the GtkItem:: and GtkTreeItem:: signals */
+static void cb_itemsignal (GtkWidget *item, gchar *signame)
+{
+  gchar *name;
+  GtkLabel *label;
+
+  /* It's a GtkBin, so it has one child, which we know to be a
+     label, so get that */
+  label = GTK_LABEL (GTK_BIN (item)->child);
+  /* Get the text of the label */
+  gtk_label_get (label, &amp;name);
+  /* Get the level of the tree which the item is in */
+  g_print ("%s called for item %s->%p, level %d\n", signame, name,
+	   item, GTK_TREE (item->parent)->level);
+}
+
+/* Note that this is never called */
+static void cb_unselect_child (GtkWidget *root_tree, GtkWidget *child,
+			       GtkWidget *subtree)
+{
+  g_print ("unselect_child called for root tree %p, subtree %p, child %p\n",
+	   root_tree, subtree, child);
+}
+
+/* Note that this is called every time the user clicks on an item,
+   whether it is already selected or not. */
+static void cb_select_child (GtkWidget *root_tree, GtkWidget *child,
+			     GtkWidget *subtree)
+{
+  g_print ("select_child called for root tree %p, subtree %p, child %p\n",
+	   root_tree, subtree, child);
+}
+
+static void cb_selection_changed (GtkWidget *tree)
+{
+  GList *i;
+  
+  g_print ("selection_change called for tree %p\n", tree);
+  g_print ("selected objects are:\n");
+
+  i = GTK_TREE_SELECTION(tree);
+  while (i){
+    gchar *name;
+    GtkLabel *label;
+    GtkWidget *item;
+
+    /* Get a GtkWidget pointer from the list node */
+    item = GTK_WIDGET (i->data);
+    label = GTK_LABEL (GTK_BIN (item)->child);
+    gtk_label_get (label, &amp;name);
+    g_print ("\t%s on level %d\n", name, GTK_TREE
+	     (item->parent)->level);
+    i = i->next;
+  }
+}
+
+int main (int argc, char *argv[])
+{
+  GtkWidget *window, *scrolled_win, *tree;
+  static gchar *itemnames[] = {"Foo", "Bar", "Baz", "Quux",
+			       "Maurice"};
+  gint i;
+
+  gtk_init (&amp;argc, &amp;argv);
+
+  /* a generic toplevel window */
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_signal_connect (GTK_OBJECT(window), "delete_event",
+		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  gtk_container_border_width (GTK_CONTAINER(window), 5);
+
+  /* A generic scrolled window */
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+				  GTK_POLICY_AUTOMATIC,
+				  GTK_POLICY_AUTOMATIC);
+  gtk_widget_set_usize (scrolled_win, 150, 200);
+  gtk_container_add (GTK_CONTAINER(window), scrolled_win);
+  gtk_widget_show (scrolled_win);
+  
+  /* Create the root tree */
+  tree = gtk_tree_new();
+  g_print ("root tree is %p\n", tree);
+  /* connect all GtkTree:: signals */
+  gtk_signal_connect (GTK_OBJECT(tree), "select_child",
+		      GTK_SIGNAL_FUNC(cb_select_child), tree);
+  gtk_signal_connect (GTK_OBJECT(tree), "unselect_child",
+		      GTK_SIGNAL_FUNC(cb_unselect_child), tree);
+  gtk_signal_connect (GTK_OBJECT(tree), "selection_changed",
+		      GTK_SIGNAL_FUNC(cb_selection_changed), tree);
+  /* Add it to the scrolled window */
+  gtk_container_add (GTK_CONTAINER(scrolled_win), tree);
+  /* Set the selection mode */
+  gtk_tree_set_selection_mode (GTK_TREE(tree),
+			       GTK_SELECTION_MULTIPLE);
+  /* Show it */
+  gtk_widget_show (tree);
+
+  for (i = 0; i < 5; i++){
+    GtkWidget *subtree, *item;
+    gint j;
+
+    /* Create a tree item */
+    item = gtk_tree_item_new_with_label (itemnames[i]);
+    /* Connect all GtkItem:: and GtkTreeItem:: signals */
+    gtk_signal_connect (GTK_OBJECT(item), "select",
+			GTK_SIGNAL_FUNC(cb_itemsignal), "select");
+    gtk_signal_connect (GTK_OBJECT(item), "deselect",
+			GTK_SIGNAL_FUNC(cb_itemsignal), "deselect");
+    gtk_signal_connect (GTK_OBJECT(item), "toggle",
+			GTK_SIGNAL_FUNC(cb_itemsignal), "toggle");
+    gtk_signal_connect (GTK_OBJECT(item), "expand",
+			GTK_SIGNAL_FUNC(cb_itemsignal), "expand");
+    gtk_signal_connect (GTK_OBJECT(item), "collapse",
+			GTK_SIGNAL_FUNC(cb_itemsignal), "collapse");
+    /* Add it to the parent tree */
+    gtk_tree_append (GTK_TREE(tree), item);
+    /* Show it - this can be done at any time */
+    gtk_widget_show (item);
+    /* Create this item's subtree */
+    subtree = gtk_tree_new();
+    g_print ("-> item %s->%p, subtree %p\n", itemnames[i], item,
+	     subtree);
+
+    /* This is still necesary if you want these signals to be called
+       for the subtree's children.  Note that selection_change will be 
+       signalled for the root tree regardless. */
+    gtk_signal_connect (GTK_OBJECT(subtree), "select_child",
+			GTK_SIGNAL_FUNC(cb_select_child), subtree);
+    gtk_signal_connect (GTK_OBJECT(subtree), "unselect_child",
+			GTK_SIGNAL_FUNC(cb_unselect_child), subtree);
+    /* This has absolutely no effect, because it is completely ignored 
+       in subtrees */
+    gtk_tree_set_selection_mode (GTK_TREE(subtree),
+				 GTK_SELECTION_SINGLE);
+    /* Neither does this, but for a rather different reason - the
+       view_mode and view_line values of a tree are propagated to
+       subtrees when they are mapped.  So, setting it later on would
+       actually have a (somewhat unpredictable) effect */
+    gtk_tree_set_view_mode (GTK_TREE(subtree), GTK_TREE_VIEW_ITEM);
+    /* Set this item's subtree - note that you cannot do this until
+       AFTER the item has been added to its parent tree! */
+    gtk_tree_item_set_subtree (GTK_TREE_ITEM(item), subtree);
+
+    for (j = 0; j < 5; j++){
+      GtkWidget *subitem;
+
+      /* Create a subtree item, in much the same way */
+      subitem = gtk_tree_item_new_with_label (itemnames[j]);
+      /* Connect all GtkItem:: and GtkTreeItem:: signals */
+      gtk_signal_connect (GTK_OBJECT(subitem), "select",
+			  GTK_SIGNAL_FUNC(cb_itemsignal), "select");
+      gtk_signal_connect (GTK_OBJECT(subitem), "deselect",
+			  GTK_SIGNAL_FUNC(cb_itemsignal), "deselect");
+      gtk_signal_connect (GTK_OBJECT(subitem), "toggle",
+			  GTK_SIGNAL_FUNC(cb_itemsignal), "toggle");
+      gtk_signal_connect (GTK_OBJECT(subitem), "expand",
+			  GTK_SIGNAL_FUNC(cb_itemsignal), "expand");
+      gtk_signal_connect (GTK_OBJECT(subitem), "collapse",
+			  GTK_SIGNAL_FUNC(cb_itemsignal), "collapse");
+      g_print ("-> -> item %s->%p\n", itemnames[j], subitem);
+      /* Add it to its parent tree */
+      gtk_tree_append (GTK_TREE(subtree), subitem);
+      /* Show it */
+      gtk_widget_show (subitem);
+    }
+  }
+
+  /* Show the window and loop endlessly */
+  gtk_widget_show (window);
+  gtk_main();
+  return 0;
+}
+/* example-end */
+</verb></tscreen>
+
+<!-- ***************************************************************** -->
+<sect>Menu Widget
 <!-- ***************************************************************** -->
 <p>
 There are two ways to create menus, there's the easy way, and there's the
@@ -6561,6 +7365,194 @@ Shift whilst using cursor movement will extend the selection.
 <item> Ctrl-C   Copy to clipboard
 <item> Ctrl-V   Paste from clipboard
 </itemize>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>A GtkText Example
+<p>
+<tscreen><verb>
+/* example-start text text.c */
+
+/* text.c */
+
+#include <stdio.h>
+#include <gtk/gtk.h>
+
+void text_toggle_editable (GtkWidget *checkbutton,
+			   GtkWidget *text)
+{
+  gtk_text_set_editable(GTK_TEXT(text),
+			GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+void text_toggle_word_wrap (GtkWidget *checkbutton,
+			    GtkWidget *text)
+{
+  gtk_text_set_word_wrap(GTK_TEXT(text),
+			 GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+void close_application( GtkWidget *widget, gpointer data )
+{
+       gtk_main_quit();
+}
+
+int main (int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *box1;
+  GtkWidget *box2;
+  GtkWidget *hbox;
+  GtkWidget *button;
+  GtkWidget *check;
+  GtkWidget *separator;
+  GtkWidget *table;
+  GtkWidget *vscrollbar;
+  GtkWidget *text;
+  GdkColormap *cmap;
+  GdkColor colour;
+  GdkFont *fixed_font;
+
+  FILE *infile;
+
+  gtk_init (&amp;argc, &amp;argv);
+ 
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_usize (window, 600, 500);
+  gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, FALSE);  
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC(close_application),
+		      NULL);
+  gtk_window_set_title (GTK_WINDOW (window), "Text Widget Example");
+  gtk_container_border_width (GTK_CONTAINER (window), 0);
+  
+  
+  box1 = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_widget_show (box1);
+  
+  
+  box2 = gtk_vbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+  gtk_widget_show (box2);
+  
+  
+  table = gtk_table_new (2, 2, FALSE);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 2);
+  gtk_box_pack_start (GTK_BOX (box2), table, TRUE, TRUE, 0);
+  gtk_widget_show (table);
+  
+  /* Create the GtkText widget */
+  text = gtk_text_new (NULL, NULL);
+  gtk_text_set_editable (GTK_TEXT (text), TRUE);
+  gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
+		    GTK_EXPAND | GTK_SHRINK | GTK_FILL,
+		    GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
+  gtk_widget_show (text);
+
+  /* Add a vertical scrollbar to the GtkText widget */
+  vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
+  gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
+		    GTK_FILL, GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
+  gtk_widget_show (vscrollbar);
+
+  /* Get the system colour map and allocate the colour red */
+  cmap = gdk_colormap_get_system();
+  colour.red = 0xffff;
+  colour.green = 0;
+  colour.blue = 0;
+  if (!gdk_color_alloc(cmap, &amp;colour)) {
+    g_error("couldn't allocate colour");
+  }
+
+  /* Load a fixed font */
+  fixed_font = gdk_font_load ("-misc-fixed-medium-r-*-*-*-140-*-*-*-*-*-*");
+
+  /* Realizing a widget creates a window for it, ready for us to insert some text */
+  gtk_widget_realize (text);
+
+  /* Freeze the text widget, ready for multiple updates */
+  gtk_text_freeze (GTK_TEXT (text));
+  
+  /* Insert some coloured text */
+  gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
+		   "Supports ", -1);
+  gtk_text_insert (GTK_TEXT (text), NULL, &amp;colour, NULL,
+		   "colored ", -1);
+  gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
+		   "text and different ", -1);
+  gtk_text_insert (GTK_TEXT (text), fixed_font, &amp;text->style->black, NULL,
+		   "fonts\n\n", -1);
+  
+  /* Load the file text.c into the text window */
+
+  infile = fopen("text.c", "r");
+  
+  if (infile) {
+    char buffer[1024];
+    int nchars;
+    
+    while (1)
+      {
+	nchars = fread(buffer, 1, 1024, infile);
+	gtk_text_insert (GTK_TEXT (text), fixed_font, NULL,
+			 NULL, buffer, nchars);
+	
+	if (nchars < 1024)
+	  break;
+      }
+    
+    fclose (infile);
+  }
+
+  /* Thaw the text widget, allowing the updates to become visible */  
+  gtk_text_thaw (GTK_TEXT (text));
+  
+  hbox = gtk_hbutton_box_new ();
+  gtk_box_pack_start (GTK_BOX (box2), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (hbox);
+
+  check = gtk_check_button_new_with_label("Editable");
+  gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, FALSE, 0);
+  gtk_signal_connect (GTK_OBJECT(check), "toggled",
+		      GTK_SIGNAL_FUNC(text_toggle_editable), text);
+  gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), TRUE);
+  gtk_widget_show (check);
+  check = gtk_check_button_new_with_label("Wrap Words");
+  gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
+  gtk_signal_connect (GTK_OBJECT(check), "toggled",
+		      GTK_SIGNAL_FUNC(text_toggle_word_wrap), text);
+  gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), FALSE);
+  gtk_widget_show (check);
+
+  separator = gtk_hseparator_new ();
+  gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+  gtk_widget_show (separator);
+
+  box2 = gtk_vbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+  gtk_widget_show (box2);
+  
+  button = gtk_button_new_with_label ("close");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC(close_application),
+		      NULL);
+  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button);
+  gtk_widget_show (button);
+
+  gtk_widget_show (window);
+
+  gtk_main ();
+  
+  return 0;       
+}
+/* example-end */
+</verb></tscreen>
+
 
 <!-- ***************************************************************** -->
 <sect> Undocumented Widgets
@@ -10027,9 +11019,8 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-    {
-      gdk_pixmap_destroy(pixmap);
-    }
+    gdk_pixmap_unref(pixmap);
+
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
 			  widget->allocation.height,
@@ -10054,7 +11045,7 @@ of the pixmap onto the screen (we determine the area we need
 to redraw by using the event->area field of the exposure event):
 
 <tscreen><verb>
-/* Refill the screen from the backing pixmap */
+/* Redraw the screen from the backing pixmap */
 static gint
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
@@ -10678,4 +11669,900 @@ to ensure that you have the most up to date information available.
 purpose.  This is simply provided as a free resource.  As such,
 the authors and maintainers of the information provided within can
 not make any guarentee that the information is even accurate.
+
+<!-- ***************************************************************** -->
+<appendix>
+<!-- ***************************************************************** -->
+
+<!-- ***************************************************************** -->
+<sect> Code Examples
+<!-- ***************************************************************** -->
+<p>
+Below are the code examples that are used in the above text
+which are not included in complete form elsewhere.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Scribble
+<p>
+<tscreen><verb>
+/* example-start scribble-simple scribble-simple.c */
+
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include <gtk/gtk.h>
+
+/* Backing pixmap for drawing area */
+static GdkPixmap *pixmap = NULL;
+
+/* Create a new backing pixmap of the appropriate size */
+static gint
+configure_event (GtkWidget *widget, GdkEventConfigure *event)
+{
+  if (pixmap)
+    gdk_pixmap_unref(pixmap);
+
+  pixmap = gdk_pixmap_new(widget->window,
+			  widget->allocation.width,
+			  widget->allocation.height,
+			  -1);
+  gdk_draw_rectangle (pixmap,
+		      widget->style->white_gc,
+		      TRUE,
+		      0, 0,
+		      widget->allocation.width,
+		      widget->allocation.height);
+
+  return TRUE;
+}
+
+/* Redraw the screen from the backing pixmap */
+static gint
+expose_event (GtkWidget *widget, GdkEventExpose *event)
+{
+  gdk_draw_pixmap(widget->window,
+		  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+		  pixmap,
+		  event->area.x, event->area.y,
+		  event->area.x, event->area.y,
+		  event->area.width, event->area.height);
+
+  return FALSE;
+}
+
+/* Draw a rectangle on the screen */
+static void
+draw_brush (GtkWidget *widget, gdouble x, gdouble y)
+{
+  GdkRectangle update_rect;
+
+  update_rect.x = x - 5;
+  update_rect.y = y - 5;
+  update_rect.width = 10;
+  update_rect.height = 10;
+  gdk_draw_rectangle (pixmap,
+		      widget->style->black_gc,
+		      TRUE,
+		      update_rect.x, update_rect.y,
+		      update_rect.width, update_rect.height);
+  gtk_widget_draw (widget, &amp;update_rect);
+}
+
+static gint
+button_press_event (GtkWidget *widget, GdkEventButton *event)
+{
+  if (event->button == 1 &amp;&amp; pixmap != NULL)
+    draw_brush (widget, event->x, event->y);
+
+  return TRUE;
+}
+
+static gint
+motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
+{
+  int x, y;
+  GdkModifierType state;
+
+  if (event->is_hint)
+    gdk_window_get_pointer (event->window, &amp;x, &amp;y, &amp;state);
+  else
+    {
+      x = event->x;
+      y = event->y;
+      state = event->state;
+    }
+    
+  if (state &amp; GDK_BUTTON1_MASK &amp;&amp; pixmap != NULL)
+    draw_brush (widget, x, y);
+  
+  return TRUE;
+}
+
+void
+quit ()
+{
+  gtk_exit (0);
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *drawing_area;
+  GtkWidget *vbox;
+
+  GtkWidget *button;
+
+  gtk_init (&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (window, "Test Input");
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_widget_show (vbox);
+
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (quit), NULL);
+
+  /* Create the drawing area */
+
+  drawing_area = gtk_drawing_area_new ();
+  gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area), 200, 200);
+  gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
+
+  gtk_widget_show (drawing_area);
+
+  /* Signals used to handle backing pixmap */
+
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
+		      (GtkSignalFunc) expose_event, NULL);
+  gtk_signal_connect (GTK_OBJECT(drawing_area),"configure_event",
+		      (GtkSignalFunc) configure_event, NULL);
+
+  /* Event signals */
+
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
+		      (GtkSignalFunc) motion_notify_event, NULL);
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
+		      (GtkSignalFunc) button_press_event, NULL);
+
+  gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
+			 | GDK_LEAVE_NOTIFY_MASK
+			 | GDK_BUTTON_PRESS_MASK
+			 | GDK_POINTER_MOTION_MASK
+			 | GDK_POINTER_MOTION_HINT_MASK);
+
+  /* .. And a quit button */
+  button = gtk_button_new_with_label ("Quit");
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			     GTK_OBJECT (window));
+  gtk_widget_show (button);
+
+  gtk_widget_show (window);
+
+  gtk_main ();
+
+  return 0;
+}
+/* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> GtkDial
+
+<!-- ----------------------------------------------------------------- -->
+<sect2> gtkdial.h
+<p>
+<tscreen><verb>
+/* example-start gtkdial gtkdial.h */
+
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+#ifndef __GTK_DIAL_H__
+#define __GTK_DIAL_H__
+
+
+#include <gdk/gdk.h>
+#include <gtk/gtkadjustment.h>
+#include <gtk/gtkwidget.h>
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
+#define GTK_DIAL(obj)          GTK_CHECK_CAST (obj, gtk_dial_get_type (), GtkDial)
+#define GTK_DIAL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_dial_get_type (), GtkDialClass)
+#define GTK_IS_DIAL(obj)       GTK_CHECK_TYPE (obj, gtk_dial_get_type ())
+
+
+typedef struct _GtkDial        GtkDial;
+typedef struct _GtkDialClass   GtkDialClass;
+
+struct _GtkDial
+{
+  GtkWidget widget;
+
+  /* update policy (GTK_UPDATE_[CONTINUOUS/DELAYED/DISCONTINUOUS]) */
+  guint policy : 2;
+
+  /* Button currently pressed or 0 if none */
+  guint8 button;
+
+  /* Dimensions of dial components */
+  gint radius;
+  gint pointer_width;
+
+  /* ID of update timer, or 0 if none */
+  guint32 timer;
+
+  /* Current angle */
+  gfloat angle;
+
+  /* Old values from adjustment stored so we know when something changes */
+  gfloat old_value;
+  gfloat old_lower;
+  gfloat old_upper;
+
+  /* The adjustment object that stores the data for this dial */
+  GtkAdjustment *adjustment;
+};
+
+struct _GtkDialClass
+{
+  GtkWidgetClass parent_class;
+};
+
+
+GtkWidget*     gtk_dial_new                    (GtkAdjustment *adjustment);
+guint          gtk_dial_get_type               (void);
+GtkAdjustment* gtk_dial_get_adjustment         (GtkDial      *dial);
+void           gtk_dial_set_update_policy      (GtkDial      *dial,
+						GtkUpdateType  policy);
+
+void           gtk_dial_set_adjustment         (GtkDial      *dial,
+						GtkAdjustment *adjustment);
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
+#endif /* __GTK_DIAL_H__ */
+/* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2> gtkdial.c
+<p>
+<tscreen><verb>
+/* example-start gtkdial gtkdial.c */
+
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+#include <math.h>
+#include <stdio.h>
+#include <gtk/gtkmain.h>
+#include <gtk/gtksignal.h>
+
+#include "gtkdial.h"
+
+#define SCROLL_DELAY_LENGTH  300
+#define DIAL_DEFAULT_SIZE 100
+
+/* Forward declararations */
+
+static void gtk_dial_class_init               (GtkDialClass    *klass);
+static void gtk_dial_init                     (GtkDial         *dial);
+static void gtk_dial_destroy                  (GtkObject        *object);
+static void gtk_dial_realize                  (GtkWidget        *widget);
+static void gtk_dial_size_request             (GtkWidget      *widget,
+					       GtkRequisition *requisition);
+static void gtk_dial_size_allocate            (GtkWidget     *widget,
+					       GtkAllocation *allocation);
+static gint gtk_dial_expose                   (GtkWidget        *widget,
+						GdkEventExpose   *event);
+static gint gtk_dial_button_press             (GtkWidget        *widget,
+						GdkEventButton   *event);
+static gint gtk_dial_button_release           (GtkWidget        *widget,
+						GdkEventButton   *event);
+static gint gtk_dial_motion_notify            (GtkWidget        *widget,
+						GdkEventMotion   *event);
+static gint gtk_dial_timer                    (GtkDial         *dial);
+
+static void gtk_dial_update_mouse             (GtkDial *dial, gint x, gint y);
+static void gtk_dial_update                   (GtkDial *dial);
+static void gtk_dial_adjustment_changed       (GtkAdjustment    *adjustment,
+						gpointer          data);
+static void gtk_dial_adjustment_value_changed (GtkAdjustment    *adjustment,
+						gpointer          data);
+
+/* Local data */
+
+static GtkWidgetClass *parent_class = NULL;
+
+guint
+gtk_dial_get_type ()
+{
+  static guint dial_type = 0;
+
+  if (!dial_type)
+    {
+      GtkTypeInfo dial_info =
+      {
+	"GtkDial",
+	sizeof (GtkDial),
+	sizeof (GtkDialClass),
+	(GtkClassInitFunc) gtk_dial_class_init,
+	(GtkObjectInitFunc) gtk_dial_init,
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL,
+      };
+
+      dial_type = gtk_type_unique (gtk_widget_get_type (), &amp;dial_info);
+    }
+
+  return dial_type;
+}
+
+static void
+gtk_dial_class_init (GtkDialClass *class)
+{
+  GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+
+  object_class = (GtkObjectClass*) class;
+  widget_class = (GtkWidgetClass*) class;
+
+  parent_class = gtk_type_class (gtk_widget_get_type ());
+
+  object_class->destroy = gtk_dial_destroy;
+
+  widget_class->realize = gtk_dial_realize;
+  widget_class->expose_event = gtk_dial_expose;
+  widget_class->size_request = gtk_dial_size_request;
+  widget_class->size_allocate = gtk_dial_size_allocate;
+  widget_class->button_press_event = gtk_dial_button_press;
+  widget_class->button_release_event = gtk_dial_button_release;
+  widget_class->motion_notify_event = gtk_dial_motion_notify;
+}
+
+static void
+gtk_dial_init (GtkDial *dial)
+{
+  dial->button = 0;
+  dial->policy = GTK_UPDATE_CONTINUOUS;
+  dial->timer = 0;
+  dial->radius = 0;
+  dial->pointer_width = 0;
+  dial->angle = 0.0;
+  dial->old_value = 0.0;
+  dial->old_lower = 0.0;
+  dial->old_upper = 0.0;
+  dial->adjustment = NULL;
+}
+
+GtkWidget*
+gtk_dial_new (GtkAdjustment *adjustment)
+{
+  GtkDial *dial;
+
+  dial = gtk_type_new (gtk_dial_get_type ());
+
+  if (!adjustment)
+    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+  gtk_dial_set_adjustment (dial, adjustment);
+
+  return GTK_WIDGET (dial);
+}
+
+static void
+gtk_dial_destroy (GtkObject *object)
+{
+  GtkDial *dial;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_DIAL (object));
+
+  dial = GTK_DIAL (object);
+
+  if (dial->adjustment)
+    gtk_object_unref (GTK_OBJECT (dial->adjustment));
+
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+GtkAdjustment*
+gtk_dial_get_adjustment (GtkDial *dial)
+{
+  g_return_val_if_fail (dial != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_DIAL (dial), NULL);
+
+  return dial->adjustment;
+}
+
+void
+gtk_dial_set_update_policy (GtkDial      *dial,
+			     GtkUpdateType  policy)
+{
+  g_return_if_fail (dial != NULL);
+  g_return_if_fail (GTK_IS_DIAL (dial));
+
+  dial->policy = policy;
+}
+
+void
+gtk_dial_set_adjustment (GtkDial      *dial,
+			  GtkAdjustment *adjustment)
+{
+  g_return_if_fail (dial != NULL);
+  g_return_if_fail (GTK_IS_DIAL (dial));
+
+  if (dial->adjustment)
+    {
+      gtk_signal_disconnect_by_data (GTK_OBJECT (dial->adjustment), (gpointer) dial);
+      gtk_object_unref (GTK_OBJECT (dial->adjustment));
+    }
+
+  dial->adjustment = adjustment;
+  gtk_object_ref (GTK_OBJECT (dial->adjustment));
+
+  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
+		      (GtkSignalFunc) gtk_dial_adjustment_changed,
+		      (gpointer) dial);
+  gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
+		      (GtkSignalFunc) gtk_dial_adjustment_value_changed,
+		      (gpointer) dial);
+
+  dial->old_value = adjustment->value;
+  dial->old_lower = adjustment->lower;
+  dial->old_upper = adjustment->upper;
+
+  gtk_dial_update (dial);
+}
+
+static void
+gtk_dial_realize (GtkWidget *widget)
+{
+  GtkDial *dial;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_DIAL (widget));
+
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  dial = GTK_DIAL (widget);
+
+  attributes.x = widget->allocation.x;
+  attributes.y = widget->allocation.y;
+  attributes.width = widget->allocation.width;
+  attributes.height = widget->allocation.height;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.event_mask = gtk_widget_get_events (widget) | 
+    GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK | 
+    GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK |
+    GDK_POINTER_MOTION_HINT_MASK;
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.colormap = gtk_widget_get_colormap (widget);
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  widget->window = gdk_window_new (widget->parent->window, &amp;attributes, attributes_mask);
+
+  widget->style = gtk_style_attach (widget->style, widget->window);
+
+  gdk_window_set_user_data (widget->window, widget);
+
+  gtk_style_set_background (widget->style, widget->window, GTK_STATE_ACTIVE);
+}
+
+static void 
+gtk_dial_size_request (GtkWidget      *widget,
+		       GtkRequisition *requisition)
+{
+  requisition->width = DIAL_DEFAULT_SIZE;
+  requisition->height = DIAL_DEFAULT_SIZE;
+}
+
+static void
+gtk_dial_size_allocate (GtkWidget     *widget,
+			GtkAllocation *allocation)
+{
+  GtkDial *dial;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_DIAL (widget));
+  g_return_if_fail (allocation != NULL);
+
+  widget->allocation = *allocation;
+  dial = GTK_DIAL (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+
+      gdk_window_move_resize (widget->window,
+			      allocation->x, allocation->y,
+			      allocation->width, allocation->height);
+
+    }
+  dial->radius = MIN(allocation->width,allocation->height) * 0.45;
+  dial->pointer_width = dial->radius / 5;
+}
+
+static gint
+gtk_dial_expose (GtkWidget      *widget,
+		 GdkEventExpose *event)
+{
+  GtkDial *dial;
+  GdkPoint points[3];
+  gdouble s,c;
+  gdouble theta;
+  gint xc, yc;
+  gint tick_length;
+  gint i;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  if (event->count > 0)
+    return FALSE;
+  
+  dial = GTK_DIAL (widget);
+
+  gdk_window_clear_area (widget->window,
+			 0, 0,
+			 widget->allocation.width,
+			 widget->allocation.height);
+
+  xc = widget->allocation.width/2;
+  yc = widget->allocation.height/2;
+
+  /* Draw ticks */
+
+  for (i=0; i<25; i++)
+    {
+      theta = (i*M_PI/18. - M_PI/6.);
+      s = sin(theta);
+      c = cos(theta);
+
+      tick_length = (i%6 == 0) ? dial->pointer_width : dial->pointer_width/2;
+      
+      gdk_draw_line (widget->window,
+		     widget->style->fg_gc[widget->state],
+		     xc + c*(dial->radius - tick_length),
+		     yc - s*(dial->radius - tick_length),
+		     xc + c*dial->radius,
+		     yc - s*dial->radius);
+    }
+
+  /* Draw pointer */
+
+  s = sin(dial->angle);
+  c = cos(dial->angle);
+
+
+  points[0].x = xc + s*dial->pointer_width/2;
+  points[0].y = yc + c*dial->pointer_width/2;
+  points[1].x = xc + c*dial->radius;
+  points[1].y = yc - s*dial->radius;
+  points[2].x = xc - s*dial->pointer_width/2;
+  points[2].y = yc - c*dial->pointer_width/2;
+
+  gtk_draw_polygon (widget->style,
+		    widget->window,
+		    GTK_STATE_NORMAL,
+		    GTK_SHADOW_OUT,
+		    points, 3,
+		    TRUE);
+  
+  return FALSE;
+}
+
+static gint
+gtk_dial_button_press (GtkWidget      *widget,
+		       GdkEventButton *event)
+{
+  GtkDial *dial;
+  gint dx, dy;
+  double s, c;
+  double d_parallel;
+  double d_perpendicular;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  dial = GTK_DIAL (widget);
+
+  /* Determine if button press was within pointer region - we 
+     do this by computing the parallel and perpendicular distance of
+     the point where the mouse was pressed from the line passing through
+     the pointer */
+  
+  dx = event->x - widget->allocation.width / 2;
+  dy = widget->allocation.height / 2 - event->y;
+  
+  s = sin(dial->angle);
+  c = cos(dial->angle);
+  
+  d_parallel = s*dy + c*dx;
+  d_perpendicular = fabs(s*dx - c*dy);
+  
+  if (!dial->button &amp;&amp;
+      (d_perpendicular < dial->pointer_width/2) &amp;&amp;
+      (d_parallel > - dial->pointer_width))
+    {
+      gtk_grab_add (widget);
+
+      dial->button = event->button;
+
+      gtk_dial_update_mouse (dial, event->x, event->y);
+    }
+
+  return FALSE;
+}
+
+static gint
+gtk_dial_button_release (GtkWidget      *widget,
+			  GdkEventButton *event)
+{
+  GtkDial *dial;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  dial = GTK_DIAL (widget);
+
+  if (dial->button == event->button)
+    {
+      gtk_grab_remove (widget);
+
+      dial->button = 0;
+
+      if (dial->policy == GTK_UPDATE_DELAYED)
+	gtk_timeout_remove (dial->timer);
+      
+      if ((dial->policy != GTK_UPDATE_CONTINUOUS) &amp;&amp;
+	  (dial->old_value != dial->adjustment->value))
+	gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
+    }
+
+  return FALSE;
+}
+
+static gint
+gtk_dial_motion_notify (GtkWidget      *widget,
+			 GdkEventMotion *event)
+{
+  GtkDial *dial;
+  GdkModifierType mods;
+  gint x, y, mask;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  dial = GTK_DIAL (widget);
+
+  if (dial->button != 0)
+    {
+      x = event->x;
+      y = event->y;
+
+      if (event->is_hint || (event->window != widget->window))
+	gdk_window_get_pointer (widget->window, &amp;x, &amp;y, &amp;mods);
+
+      switch (dial->button)
+	{
+	case 1:
+	  mask = GDK_BUTTON1_MASK;
+	  break;
+	case 2:
+	  mask = GDK_BUTTON2_MASK;
+	  break;
+	case 3:
+	  mask = GDK_BUTTON3_MASK;
+	  break;
+	default:
+	  mask = 0;
+	  break;
+	}
+
+      if (mods &amp; mask)
+	gtk_dial_update_mouse (dial, x,y);
+    }
+
+  return FALSE;
+}
+
+static gint
+gtk_dial_timer (GtkDial *dial)
+{
+  g_return_val_if_fail (dial != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_DIAL (dial), FALSE);
+
+  if (dial->policy == GTK_UPDATE_DELAYED)
+    gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
+
+  return FALSE;
+}
+
+static void
+gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
+{
+  gint xc, yc;
+  gfloat old_value;
+
+  g_return_if_fail (dial != NULL);
+  g_return_if_fail (GTK_IS_DIAL (dial));
+
+  xc = GTK_WIDGET(dial)->allocation.width / 2;
+  yc = GTK_WIDGET(dial)->allocation.height / 2;
+
+  old_value = dial->adjustment->value;
+  dial->angle = atan2(yc-y, x-xc);
+
+  if (dial->angle < -M_PI/2.)
+    dial->angle += 2*M_PI;
+
+  if (dial->angle < -M_PI/6)
+    dial->angle = -M_PI/6;
+
+  if (dial->angle > 7.*M_PI/6.)
+    dial->angle = 7.*M_PI/6.;
+
+  dial->adjustment->value = dial->adjustment->lower + (7.*M_PI/6 - dial->angle) *
+    (dial->adjustment->upper - dial->adjustment->lower) / (4.*M_PI/3.);
+
+  if (dial->adjustment->value != old_value)
+    {
+      if (dial->policy == GTK_UPDATE_CONTINUOUS)
+	{
+	  gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
+	}
+      else
+	{
+	  gtk_widget_draw (GTK_WIDGET(dial), NULL);
+
+	  if (dial->policy == GTK_UPDATE_DELAYED)
+	    {
+	      if (dial->timer)
+		gtk_timeout_remove (dial->timer);
+
+	      dial->timer = gtk_timeout_add (SCROLL_DELAY_LENGTH,
+					     (GtkFunction) gtk_dial_timer,
+					     (gpointer) dial);
+	    }
+	}
+    }
+}
+
+static void
+gtk_dial_update (GtkDial *dial)
+{
+  gfloat new_value;
+  
+  g_return_if_fail (dial != NULL);
+  g_return_if_fail (GTK_IS_DIAL (dial));
+
+  new_value = dial->adjustment->value;
+  
+  if (new_value < dial->adjustment->lower)
+    new_value = dial->adjustment->lower;
+
+  if (new_value > dial->adjustment->upper)
+    new_value = dial->adjustment->upper;
+
+  if (new_value != dial->adjustment->value)
+    {
+      dial->adjustment->value = new_value;
+      gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
+    }
+
+  dial->angle = 7.*M_PI/6. - (new_value - dial->adjustment->lower) * 4.*M_PI/3. /
+    (dial->adjustment->upper - dial->adjustment->lower);
+
+  gtk_widget_draw (GTK_WIDGET(dial), NULL);
+}
+
+static void
+gtk_dial_adjustment_changed (GtkAdjustment *adjustment,
+			      gpointer       data)
+{
+  GtkDial *dial;
+
+  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (data != NULL);
+
+  dial = GTK_DIAL (data);
+
+  if ((dial->old_value != adjustment->value) ||
+      (dial->old_lower != adjustment->lower) ||
+      (dial->old_upper != adjustment->upper))
+    {
+      gtk_dial_update (dial);
+
+      dial->old_value = adjustment->value;
+      dial->old_lower = adjustment->lower;
+      dial->old_upper = adjustment->upper;
+    }
+}
+
+static void
+gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
+				    gpointer       data)
+{
+  GtkDial *dial;
+
+  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (data != NULL);
+
+  dial = GTK_DIAL (data);
+
+  if (dial->old_value != adjustment->value)
+    {
+      gtk_dial_update (dial);
+
+      dial->old_value = adjustment->value;
+    }
+}
+/* example-end */
+</verb></tscreen>
 </article>
