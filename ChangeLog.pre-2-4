@@ -1,3 +1,8 @@
+2003-12-02  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate_columns): added
+	missing code to make it compile again.
+
 Sat Nov 29 00:55:28 2003  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_new_column_width): 

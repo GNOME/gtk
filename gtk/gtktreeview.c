@@ -1675,8 +1675,10 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
   GtkTreeViewColumn *column;
   GtkAllocation allocation;
   gint width = 0;
+  gboolean rtl;
 
   tree_view = GTK_TREE_VIEW (widget);
+  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   for (last_column = g_list_last (tree_view->priv->columns);
        last_column && !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible);
