@@ -1,3 +1,9 @@
+Mon Oct 22 15:17:05 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_iter_depth): Realized
+	g_node_depth is broken, and that it's not worth being consistent
+	with it.
+
 2001-10-22  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c (gtk_text_iter_set_line): Clarify behavior in

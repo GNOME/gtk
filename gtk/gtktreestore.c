@@ -1316,7 +1316,7 @@ gtk_tree_store_is_ancestor (GtkTreeStore *tree_store,
  * @tree_store: A #GtkTreeStore
  * @iter: A valid #GtkTreeIter
  * 
- * Returns the depth of @iter.  This will be 1 for anything on the root level, 2
+ * Returns the depth of @iter.  This will be 0 for anything on the root level, 1
  * for anything down a level, etc.
  * 
  * Return value: The depth of @iter
@@ -1328,9 +1328,8 @@ gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_store), 0);
   g_return_val_if_fail (VALID_ITER (iter, tree_store), 0);
 
-  return g_node_depth (G_NODE (iter->user_data)) - 1;
+  return g_node_depth (G_NODE (iter->user_data)) - 2;
 }
-
 
 /**
  * gtk_tree_store_clear:
