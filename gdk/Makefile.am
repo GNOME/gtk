@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/gdk
 
 SUBDIRS=$(gdktarget)
-DIST_SUBDIRS=linux-fb nanox directfb win32 x11
+DIST_SUBDIRS=linux-fb nanox win32 x11
 
 EXTRA_DIST =			\
 	gdkconfig.h.win32 	\
@@ -124,16 +124,6 @@ libgdk_x11_include_HEADERS = $(gdk_headers)
 libgdk_x11_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
 endif
 
-if USE_DIRECTFB
-libgdk_directfb_includedir = $(includedir)/gtk-2.0/gdk
-
-libgdk_directfb_1_3_la_LIBADD = \
-	$(gtarget)/libgdk-$(gtarget).la	
-
-libgdk_directfb_include_HEADERS = $(gdk_headers)
-libgdk_directfb_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
-endif
-
 if USE_NANOX
 libgdk_nanox_includedir = $(includedir)/gtk-2.0/gdk
 
@@ -157,7 +147,7 @@ endif
 # now define the real one to workaround automake's mishandling
 lib_LTLIBRARIES = $(extra)
 
-EXTRA_LTLIBRARIES = libgdk-x11-1.3.la libgdk-nanox-1.3.la libgdk-directfb-1.3.la libgdk-linux-fb-1.3.la
+EXTRA_LTLIBRARIES = libgdk-x11-1.3.la libgdk-nanox-1.3.la libgdk-linux-fb-1.3.la
 
 MAINTAINERCLEANFILES +=
 EXTRA_HEADERS +=

@@ -68,8 +68,7 @@ typedef enum
   GDK_WA_COLORMAP = 1 << 5,
   GDK_WA_VISUAL	  = 1 << 6,
   GDK_WA_WMCLASS  = 1 << 7,
-  GDK_WA_NOREDIR  = 1 << 8,
-  GDK_WA_ALPHACHANNEL  = 1 << 23  
+  GDK_WA_NOREDIR  = 1 << 8
 } GdkWindowAttributesType;
 
 /* Size restriction enumeration.
@@ -456,9 +455,6 @@ void          gdk_window_stick           (GdkWindow       *window);
 void          gdk_window_unstick         (GdkWindow       *window);
 void          gdk_window_maximize        (GdkWindow       *window);
 void          gdk_window_unmaximize      (GdkWindow       *window);
-
-void          gdk_window_set_opacity     (GdkWindow       *window,
-					  gdouble          opacity);
 
 void          gdk_window_register_dnd    (GdkWindow       *window);
 

@@ -710,8 +710,6 @@ gdk_window_paint_init_bg (GdkWindow      *window,
 #include "x11/gdkx.h"
 #endif
 
-#ifndef GDK_WINDOWING_DIRECTFB
-
 /**
  * gdk_window_begin_paint_region:
  * @window: a #GdkWindow
@@ -928,8 +926,6 @@ gdk_window_end_paint (GdkWindow *window)
   g_free (paint);
 #endif /* USE_BACKING_STORE */
 }
-
-#endif
 
 static void
 gdk_window_free_paint_stack (GdkWindow *window)
