@@ -1,3 +1,8 @@
+Thu Nov  7 14:59:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testcalendar.c: Back out last change, should have gone in
+	on HEAD.
+
 Thu Nov  7 14:51:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testcalendar.c (calendar_date_to_string): 
