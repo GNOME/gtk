@@ -1413,21 +1413,27 @@ gtk_list_store_reorder (GtkListStore *store,
   GtkTreePath *path;
   GHashTable *new_positions;
   GtkSequencePtr ptr;
-
+  gint *order;
+  
   g_return_if_fail (GTK_IS_LIST_STORE (store));
   g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
   g_return_if_fail (new_order != NULL);
 
+  order = g_new (gint, _gtk_sequence_get_length (store->seq));
+  for (i = 0; i < _gtk_sequence_get_length (store->seq); i++)
+    order[new_order[i]] = i;
+  
   new_positions = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   ptr = _gtk_sequence_get_begin_ptr (store->seq);
   i = 0;
   while (!_gtk_sequence_ptr_is_end (ptr))
     {
-      g_hash_table_insert (new_positions, ptr, GINT_TO_POINTER (new_order[i++]));
+      g_hash_table_insert (new_positions, ptr, GINT_TO_POINTER (order[i++]));
 
       ptr = _gtk_sequence_ptr_next (ptr);
     }
+  g_free (order);
   
   _gtk_sequence_sort (store->seq, gtk_list_store_reorder_func, new_positions);
 
@@ -1470,7 +1476,7 @@ generate_order (GtkSequence *seq,
   while (!_gtk_sequence_ptr_is_end (ptr))
     {
       int old_pos = GPOINTER_TO_INT (g_hash_table_lookup (old_positions, ptr));
-      order[old_pos] = i++;
+      order[i++] = old_pos;
       ptr = _gtk_sequence_ptr_next (ptr);
     }
 

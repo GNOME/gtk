@@ -1,3 +1,14 @@
+2004-12-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix sorting of list stores.  (#161886, Marcin Krzyzanowski)
+
+	* gtk/gtkliststore.c (generate_order): Generate the order the
+	way it is supposed to be, order[new_pos] == old_pos.
+	(gtk_list_store_reorder): Invert the order before using it.
+
+	* gtk/gtkiconview.c (gtk_icon_view_rows_reordered): Adapt to the
+	list store fix.
+
 Wed Dec 22 01:24:01 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/queryimmodules.c (main): print out the version and binary

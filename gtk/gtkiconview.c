@@ -2497,14 +2497,20 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   GtkIconView *icon_view;
   GList *items = NULL, *list;
   GtkIconViewItem **item_array;
+  gint *order;
   
   icon_view = GTK_ICON_VIEW (data);
 
   length = gtk_tree_model_iter_n_children (model, NULL);
 
+  order = g_new (gint, length);
+  for (i = 0; i < length; i++)
+    order [new_order[i]] = i;
+
   item_array = g_new (GtkIconViewItem *, length);
   for (i = 0, list = icon_view->priv->items; list != NULL; list = list->next, i++)
-    item_array[new_order[i]] = list->data;
+    item_array[order[i]] = list->data;
+  g_free (order);
 
   for (i = length - 1; i >= 0; i--)
     {
