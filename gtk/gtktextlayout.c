@@ -101,6 +101,10 @@ static void gtk_text_layout_invalidate_cursor_line (GtkTextLayout     *layout);
 static void gtk_text_layout_real_free_line_data    (GtkTextLayout     *layout,
 						    GtkTextLine       *line,
 						    GtkTextLineData   *line_data);
+static void gtk_text_layout_emit_changed           (GtkTextLayout     *layout,
+						    gint               y,
+						    gint               old_height,
+						    gint               new_height);
 
 static void gtk_text_layout_invalidate_all (GtkTextLayout *layout);
 
@@ -430,7 +434,7 @@ gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
                                         gtk_text_buffer_get_mark (layout->buffer, "insert"));
 
       gtk_text_layout_get_line_yrange (layout, &iter, &y, &height);
-      gtk_text_layout_changed (layout, y, height, height);
+      gtk_text_layout_emit_changed (layout, y, height, height);
 
       gtk_text_layout_invalidate_cache (layout, _gtk_text_iter_get_text_line (&iter));
     }
@@ -518,13 +522,36 @@ gtk_text_layout_invalidated (GtkTextLayout *layout)
   g_signal_emit (layout, signals[INVALIDATED], 0);
 }
 
+static void
+gtk_text_layout_emit_changed (GtkTextLayout *layout,
+			      gint           y,
+			      gint           old_height,
+			      gint           new_height)
+{
+  g_signal_emit (layout, signals[CHANGED], 0, y, old_height, new_height);
+}
+
 void
 gtk_text_layout_changed (GtkTextLayout *layout,
                          gint           y,
                          gint           old_height,
                          gint           new_height)
 {
-  g_signal_emit (layout, signals[CHANGED], 0, y, old_height, new_height);
+  /* Check if the range intersects our cached line display,
+   * and invalidate the cached line if so.
+   */
+  if (layout->one_display_cache)
+    {
+      GtkTextLine *line = layout->one_display_cache->line;
+      gint cache_y = _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
+						    line, layout);
+      gint cache_height = layout->one_display_cache->height;
+
+      if (cache_y + cache_height > y && cache_y < y + old_height)
+	gtk_text_layout_invalidate_cache (layout, line);
+    }
+  
+  gtk_text_layout_emit_changed (layout, y, old_height, new_height);
 }
 
 void
@@ -881,10 +908,10 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
       line_top = _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
                                                 first_line, layout);
 
-      gtk_text_layout_changed (layout,
-                               line_top,
-                               last_line_y - first_line_y - delta_height,
-                               last_line_y - first_line_y);
+      gtk_text_layout_emit_changed (layout,
+				    line_top,
+				    last_line_y - first_line_y - delta_height,
+				    last_line_y - first_line_y);
     }
 }
 
@@ -913,7 +940,7 @@ gtk_text_layout_validate (GtkTextLayout *layout,
       max_pixels -= new_height;
 
       update_layout_size (layout);
-      gtk_text_layout_changed (layout, y, old_height, new_height);
+      gtk_text_layout_emit_changed (layout, y, old_height, new_height);
     }
 }
 
