@@ -115,6 +115,9 @@ static void gtk_expander_forall (GtkContainer *container,
 
 static void gtk_expander_activate (GtkExpander *expander);
 
+static void get_expander_bounds (GtkExpander  *expander,
+				 GdkRectangle *rect);
+
 static GtkBinClass *parent_class = NULL;
 
 GType
@@ -382,17 +385,20 @@ gtk_expander_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint border_width;
+  GdkRectangle expander_rect;
 
   priv = GTK_EXPANDER (widget)->priv;
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   border_width = GTK_CONTAINER (widget)->border_width;
-                                                                                                             
+
+  get_expander_bounds (GTK_EXPANDER (widget), &expander_rect);
+  
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x + border_width;
-  attributes.y = widget->allocation.y + border_width;
-  attributes.width = widget->allocation.width - 2 * border_width;
-  attributes.height = widget->allocation.height - 2 * border_width;
+  attributes.y = expander_rect.y;
+  attributes.width = MAX (widget->allocation.width - 2 * border_width, 1);
+  attributes.height = expander_rect.width;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget)     |
 				GDK_BUTTON_PRESS_MASK        |

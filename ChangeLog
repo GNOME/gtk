@@ -1,3 +1,9 @@
+Fri Mar 12 15:06:44 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkexpander.c (gtk_expander_realize): Create the
+	event_window at the right size using the same logic as
+	in size_allocate. (#136994, Niklas Knuttson)
+
 2004-03-12  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkwindow.c (gtk_window_activate_focus): Don't ignore the
