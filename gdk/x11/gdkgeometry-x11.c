@@ -714,7 +714,7 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkRegion *clip_region;
   GSList *tmp_list = translate_queue;
-  GdkDisplay *display = gdk_window_get_display(window);
+  GdkDisplay *display = gdk_drawable_get_display (window);
 
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   

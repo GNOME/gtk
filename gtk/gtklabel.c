@@ -468,7 +468,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 
   /* barf if there was nothing to activate */
   g_warning ("Couldn't find a target for a mnemonic activation.");
-  gdk_display_beep (gdk_window_get_display(widget->window));
+  gdk_display_beep (gtk_widget_get_display (widget));
   
   return FALSE;
 }

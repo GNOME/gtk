@@ -96,7 +96,7 @@ int
 configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
-        GdkScreen *scr = gdk_window_get_screen (drawing_area->window);                   
+        GdkScreen *scr = gdk_drawable_get_screen (drawing_area->window);                   
         pixbuf = (GdkPixbuf *) gtk_object_get_data (GTK_OBJECT (drawing_area),   
                                                     "pixbuf");
     

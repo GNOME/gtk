@@ -1564,7 +1564,7 @@ set_text_property (GdkWindow   *window,
     }
   else
     {
-      gdk_utf8_to_compound_text_for_display (gdk_window_get_display(window),
+      gdk_utf8_to_compound_text_for_display (gdk_drawable_get_display (window),
       	      utf8_str, &prop_type, &prop_format, &prop_text, &prop_length);
     }
 
@@ -3927,15 +3927,4 @@ void gdk_window_set_screen (GdkWindow *window, GdkScreen *screen)
   draw_impl->screen = screen;
 }
 
-GdkScreen*
-gdk_window_get_screen (GdkWindow *window)
-{
-    return GDK_WINDOW_SCREEN (window);
-}
-
-GdkDisplay* 
-gdk_window_get_display (GdkWindow *window)
-{
-    return GDK_WINDOW_DISPLAY (window);
-}
 

@@ -415,9 +415,10 @@ gtk_plug_accel_entries_changed (GtkWindow *window)
 	  GdkKeymapKey *keys;
 	  gint n_keys;
 	  
-	  if (gdk_keymap_get_entries_for_keyval (gdk_keymap_new(gdk_window_get_display(window->window)),
-				      		 entries[i].accelerator_key, 
-				      		 &keys, &n_keys))
+	  if (gdk_keymap_get_entries_for_keyval (
+		  gdk_keymap_get_for_display (gtk_widget_get_display  (window)),
+					      entries[i].accelerator_key, 
+					      &keys, &n_keys))
 	    {
 	      GrabbedKey *key = g_new (GrabbedKey, 1);
 	      
@@ -553,7 +554,7 @@ send_xembed_message (GtkPlug *plug,
 
       xevent.xclient.window = GDK_WINDOW_XWINDOW (plug->socket_window);
       xevent.xclient.type = ClientMessage;
-      xevent.xclient.message_type = gdk_display_atom (gdk_window_get_display(plug->socket_window), "_XEMBED", FALSE);
+      xevent.xclient.message_type = gdk_display_atom (gdk_drawable_get_display (plug->socket_window), "_XEMBED", FALSE);
 
       xevent.xclient.format = 32;
       xevent.xclient.data.l[0] = time;
@@ -706,7 +707,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
     {
     case ClientMessage:
       if (xevent->xclient.message_type == 
-	  gdk_display_atom (gdk_window_get_display(plug->socket_window), "_XEMBED", FALSE))
+	  gdk_display_atom (gdk_drawable_get_display (plug->socket_window), "_XEMBED", FALSE))
 
 	{
 	  handle_xembed_message (plug,

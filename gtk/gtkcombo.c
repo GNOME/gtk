@@ -269,9 +269,8 @@ gtk_combo_window_key_press (GtkWidget   *window,
 	  if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	    {
 	      gtk_grab_remove (combo->popwin);
-	      gdk_display_pointer_ungrab (
-			gdk_window_get_display(window->window),
-			event->time);
+	      gdk_display_pointer_ungrab (gtk_widget_get_display(window),
+					  event->time);
 	    }
 	}
 
@@ -593,8 +592,8 @@ gtk_combo_button_press (GtkWidget * widget, GdkEvent * event, GtkCombo * combo)
 
   gtk_widget_hide (combo->popwin);
   gtk_grab_remove (combo->popwin);
-  gdk_display_pointer_ungrab (gdk_window_get_display(widget->window),
-				  event->button.time);
+  gdk_display_pointer_ungrab (gtk_widget_get_display(widget),
+			      event->button.time);
 
   return TRUE;
 }
@@ -662,9 +661,8 @@ gtk_combo_button_release (GtkWidget *widget,
       if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	{
 	  gtk_grab_remove (combo->popwin);
-	  gdk_display_pointer_ungrab (
-		gdk_window_get_display(combo->button->window),
-		event->button.time);
+	  gdk_display_pointer_ungrab (gtk_widget_get_display(combo),
+				      event->button.time);
 	}
     }
   
@@ -723,8 +721,8 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
       if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	{
 	  gtk_grab_remove (combo->popwin);
-	  gdk_display_pointer_ungrab (gdk_window_get_display(widget->window),
-					  GDK_CURRENT_TIME);
+	  gdk_display_pointer_ungrab (gtk_widget_get_display(widget),
+				      GDK_CURRENT_TIME);
 	}
       else if (GTK_WIDGET_HAS_GRAB (combo->list))
 	gtk_list_end_drag_selection (GTK_LIST (combo->list));

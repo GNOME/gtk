@@ -999,7 +999,7 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
       if (event->window != widget->window)
 	return FALSE;
       
-      gdk_display_pointer_ungrab (gdk_window_get_display(event->window),
+      gdk_display_pointer_ungrab (gdk_drawable_get_display (event->window),
 				      GDK_CURRENT_TIME);
       hb->in_drag = FALSE;
       event_handled = TRUE;
@@ -1170,9 +1170,9 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  /* this extra move is neccessary if we use decorations, or our
 	   * window manager insists on decorations.
 	   */
-	  gdk_display_sync (gdk_window_get_display(hb->float_window));
+	  gdk_display_sync (gtk_widget_get_display (hb));
 	  gdk_window_move (hb->float_window, new_x, new_y);
-	  gdk_display_sync (gdk_window_get_display(hb->float_window));
+	  gdk_display_sync (gtk_widget_get_display (hb));
 #endif	/* 0 */
 	  gtk_signal_emit (GTK_OBJECT (hb),
 			   handle_box_signals[SIGNAL_CHILD_DETACHED],
@@ -1253,9 +1253,8 @@ gtk_handle_box_reattach (GtkHandleBox *hb)
     }
   if (hb->in_drag)
     {
-      gdk_display_pointer_ungrab (
-		      gdk_window_get_display(GTK_WIDGET(hb)->window),
-		      GDK_CURRENT_TIME);
+      gdk_display_pointer_ungrab (gtk_widget_get_display (hb), 
+				  GDK_CURRENT_TIME);
       hb->in_drag = FALSE;
     }
 

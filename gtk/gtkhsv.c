@@ -856,7 +856,7 @@ gtk_hsv_button_release (GtkWidget      *widget,
   } else
     g_assert_not_reached ();
   
-  gdk_display_pointer_ungrab (gdk_window_get_display(event->window),
+  gdk_display_pointer_ungrab (gdk_drawable_get_display (event->window),
 				  event->time);
   return TRUE;
 }

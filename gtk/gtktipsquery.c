@@ -372,9 +372,8 @@ gtk_tips_query_real_stop_query (GtkTipsQuery *tips_query)
   gtk_grab_remove (GTK_WIDGET (tips_query));
   if (tips_query->query_cursor)
     {
-      gdk_display_pointer_ungrab (
-		     gdk_window_get_display(GTK_WIDGET (tips_query)->window),
-		     GDK_CURRENT_TIME);
+      gdk_display_pointer_ungrab (gtk_widget_get_display (tips_query),
+				  GDK_CURRENT_TIME);
       gdk_cursor_destroy (tips_query->query_cursor);
       tips_query->query_cursor = NULL;
     }

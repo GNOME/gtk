@@ -2705,7 +2705,7 @@ selection_data_get_buffer (GtkSelectionData *selection_data,
     return NULL;
   
   if (selection_data->type != 
-      gdk_display_atom (gdk_window_get_display(owner), "GTK_TEXT_BUFFER_CONTENTS", FALSE))
+      gdk_display_atom (gdk_drawable_get_display (owner), "GTK_TEXT_BUFFER_CONTENTS", FALSE))
 
     return NULL;
 

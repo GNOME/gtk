@@ -134,7 +134,7 @@ static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
 static GdkVisual*   gdk_window_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
 static GdkScreen *  gdk_window_real_get_screen   (GdkDrawable *drawable);
-static GdkDisplay * gdk_window_real_get_display   (GdkDrawable *drawable);
+static GdkDisplay * gdk_window_real_get_display  (GdkDrawable *drawable);
 static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
                                              GdkColormap *cmap);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
@@ -607,7 +607,7 @@ gboolean
 gdk_window_is_viewable (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkScreen * scr = gdk_window_get_screen (window);
+  GdkScreen * scr = gdk_drawable_get_screen (window);
   GdkWindow * root_window = GDK_SCREEN_GET_CLASS (scr)->get_root_window (scr);
   
   g_return_val_if_fail (window != NULL, FALSE);
@@ -1690,16 +1690,16 @@ static GdkScreen*
 gdk_window_real_get_screen (GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
-  return gdk_window_get_screen(GDK_WINDOW (drawable));
+  return gdk_drawable_get_screen(GDK_WINDOW_OBJECT (drawable)->impl);
 }
 
 static GdkDisplay*
 gdk_window_real_get_display (GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
-  return gdk_window_get_display(GDK_WINDOW (drawable));
+  return gdk_drawable_get_display(GDK_WINDOW_OBJECT (drawable)->impl);
 }
-	
+
 
 static void
 gdk_window_real_set_colormap (GdkDrawable *drawable,
@@ -1783,7 +1783,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
           if (debug_updates)
             {
               /* Make sure we see the red invalid area before redrawing. */
-              gdk_display_sync (gdk_window_get_display(window));
+              gdk_display_sync (gdk_drawable_get_display (window));
               g_usleep (70000);
             }
           
@@ -2307,14 +2307,4 @@ gdk_window_constrain_size (GdkGeometry *geometry,
   *new_width = width;
   *new_height = height;
 }
-/**
- * gdk_window_get_display:
- * @window: a #GdkWindow
- *
- * retrieve the GdkDisplay associated with #GdkWindow
- * 
- * 
- * Return value: the #GdkDisplay associated with @window
- **/
-
 

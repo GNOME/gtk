@@ -1264,7 +1264,7 @@ gtk_selection_incr_event (GdkWindow	   *window,
   GtkIncrInfo *info = NULL;
   gint num_bytes;
   guchar *buffer;
-  GtkSelectionDisplayCache *cache = gtk_selection_get_cache (gdk_window_get_display (window));
+  GtkSelectionDisplayCache *cache = gtk_selection_get_cache (gdk_drawable_get_display  (window));
   int i;
   
   if (event->state != GDK_PROPERTY_DELETE)

@@ -1253,8 +1253,8 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       ret = gdk_window_get_origin (src, &src_xorigin, &src_yorigin);
       g_return_val_if_fail (ret != FALSE, NULL);
 
-      screen_width = gdk_screen_get_width (gdk_window_get_screen(src));
-      screen_height = gdk_screen_get_height (gdk_window_get_screen(src));
+      screen_width = gdk_screen_get_width (gdk_drawable_get_screen(src));
+      screen_height = gdk_screen_get_height (gdk_drawable_get_screen(src));
 
       screen_srcx = src_xorigin + src_x;
       screen_srcy = src_yorigin + src_y;

@@ -505,9 +505,6 @@ void       gdk_window_constrain_size      (GdkGeometry  *geometry,
                                            gint         *new_height);
 void	    gdk_window_set_screen	  (GdkWindow	*window,
 					   GdkScreen	*screen);
-GdkScreen * gdk_window_get_screen	  (GdkWindow	*window);
-GdkDisplay* gdk_window_get_display	  (GdkWindow	*window);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

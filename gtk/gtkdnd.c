@@ -703,7 +703,7 @@ gtk_drag_finish (GdkDragContext *context,
 		 guint32         time)
 {
   GdkAtom target = GDK_NONE;
-  GdkDisplay *display = gdk_window_get_display (context->source_window);
+  GdkDisplay *display = gdk_drawable_get_display  (context->source_window);
 
   g_return_if_fail (context != NULL);
 
@@ -2128,7 +2128,7 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
   if (!default_icon_pixmap)
     {
       default_icon_colormap = gdk_colormap_get_system_for_screen (
-			      gdk_window_get_screen(context->source_window));
+			      gdk_drawable_get_screen(context->source_window));
       default_icon_pixmap = 
 	gdk_pixmap_colormap_create_from_xpm_d (NULL,
 					       default_icon_colormap,
@@ -2412,8 +2412,8 @@ gtk_drag_source_release_selections (GtkDragSourceInfo *info,
   while (tmp_list)
     {
       GdkAtom selection = GPOINTER_TO_UINT (tmp_list->data);
-      if (gdk_selection_owner_get_for_display (gdk_window_get_display(info->ipc_widget->window), selection) == info->ipc_widget->window)
-	gtk_selection_owner_set_for_display (gdk_window_get_display(info->ipc_widget->window), NULL, selection, time);
+      if (gdk_selection_owner_get_for_display (gtk_widget_get_display (info->widget), selection) == info->ipc_widget->window)
+	gtk_selection_owner_set_for_display (gtk_widget_get_display (info->widget), NULL, selection, time);
 
       tmp_list = tmp_list->next;
     }
@@ -2809,12 +2809,12 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 {
   GdkEvent send_event;
   GtkWidget *source_widget = info->widget;
-  GdkWindow *root_window = gdk_screen_get_root_window (source_widget->screen);
+  GdkWindow *root_window = gdk_screen_get_root_window (source_widget);
 
-  gdk_display_pointer_ungrab (gdk_window_get_display(source_widget->window),
-				  time);
-  gdk_display_keyboard_ungrab (gdk_window_get_display (source_widget->window),
-				  time);
+  gdk_display_pointer_ungrab (gtk_widget_get_display (source_widget),
+			      time);
+  gdk_display_keyboard_ungrab (gtk_widget_get_display (source_widget),
+			       time);
   gtk_grab_remove (info->ipc_widget);
 
   gtk_signal_disconnect_by_func (GTK_OBJECT (info->ipc_widget), 

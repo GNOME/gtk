@@ -2576,7 +2576,7 @@ xdnd_manage_source_filter (GdkDragContext *context,
 	}
     }
 
-  gdk_display_sync (gdk_window_get_display(window));
+  gdk_display_sync (gdk_drawable_get_display (window));
   gdk_error_trap_pop ();  
 }
 

@@ -1112,10 +1112,10 @@ shutdown_eyedropper (GtkWidget *widget)
   colorsel = GTK_COLOR_SELECTION (widget);
   priv = colorsel->private_data;    
 
-  gdk_display_keyboard_ungrab (gdk_window_get_display(widget->window),
-				   gtk_get_current_event_time ());
-  gdk_display_pointer_ungrab (gdk_window_get_display(widget->window),
-				  gtk_get_current_event_time ());
+  gdk_display_keyboard_ungrab (gtk_widget_get_display(widget),
+			       gtk_get_current_event_time ());
+  gdk_display_pointer_ungrab (gtk_widget_get_display(widget),
+			      gtk_get_current_event_time ());
   gtk_grab_remove (priv->dropper_grab_widget);
 }
 
@@ -1246,7 +1246,7 @@ get_screen_color (GtkWidget *button)
                         picker_cursor,
                         gtk_get_current_event_time ()) != GDK_GRAB_SUCCESS)
     {
-      gdk_display_keyboard_ungrab (gdk_window_get_display (button->window),GDK_CURRENT_TIME);
+      gdk_display_keyboard_ungrab (gtk_widget_get_display (button),GDK_CURRENT_TIME);
       g_warning ("Failed to grab pointer to do eyedropper");
       return;
     }

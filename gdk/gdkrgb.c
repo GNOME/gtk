@@ -891,20 +891,14 @@ gdk_rgb_xpixel_from_rgb_internal (GdkColormap *colormap,
 
 /* convert an rgb value into an X pixel code */
 gulong
-gdk_rgb_xpixel_from_rgb_for_screen (GdkScreen *screen, guint32 rgb)
+gdk_rgb_xpixel_from_rgb (guint32 rgb)
 {
   guint32 r = rgb & 0xff0000;
   guint32 g = rgb & 0xff00;
   guint32 b = rgb & 0xff;
 
-  return gdk_rgb_xpixel_from_rgb_internal (gdk_rgb_get_colormap_for_screen(screen),
+  return gdk_rgb_xpixel_from_rgb_internal (gdk_rgb_get_colormap_for_screen(gdk_get_default_screen ()),
 					   (r >> 8) + (r >> 16), g + (g >> 8), b + (b << 8));
-}
-gulong
-gdk_rgb_xpixel_from_rgb (guint32 rgb)
-{
-  GDK_NOTE (MULTIHEAD,g_message (" Use gdk_rgb_xpixel_from_rgb_for_screen instead\n"));
-  return gdk_rgb_xpixel_from_rgb_for_screen (gdk_get_default_screen (),rgb);
 }
 
 void

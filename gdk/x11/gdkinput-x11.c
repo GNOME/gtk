@@ -448,8 +448,8 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 
   if (gdkdev->info.mode == GDK_MODE_SCREEN) 
     {
-      x_scale = gdk_screen_get_width (gdk_window_get_screen (input_window->window)) / device_width;
-      y_scale = gdk_screen_get_height (gdk_window_get_screen (input_window->window)) / device_height;
+      x_scale = gdk_screen_get_width (gdk_drawable_get_screen (input_window->window)) / device_width;
+      y_scale = gdk_screen_get_height (gdk_drawable_get_screen (input_window->window)) / device_height;
 
       x_offset = - input_window->root_x;
       y_offset = - input_window->root_y;

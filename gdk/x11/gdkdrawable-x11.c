@@ -130,6 +130,8 @@ static gint         gdk_x11_get_depth      (GdkDrawable    *drawable);
 
 static GdkScreen *  gdk_x11_get_screen	   (GdkDrawable    *drawable);
 
+static GdkDisplay*  gdk_x11_get_display	   (GdkDrawable    *drawable);
+
 static GdkVisual*   gdk_x11_get_visual     (GdkDrawable    *drawable);
 
 static void gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass);
@@ -194,6 +196,7 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 
   drawable_class->get_depth = gdk_x11_get_depth;
   drawable_class->get_screen = gdk_x11_get_screen;
+  drawable_class->get_display = gdk_x11_get_display;
   drawable_class->get_visual = gdk_x11_get_visual;
   
   drawable_class->get_image = _gdk_x11_get_image;
@@ -710,8 +713,15 @@ gdk_x11_get_depth (GdkDrawable *drawable)
 }
 
 static GdkScreen*
-gdk_x11_get_screen(GdkDrawable *drawable){
+gdk_x11_get_screen (GdkDrawable *drawable)
+{
   return GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
+}
+
+static GdkDisplay*
+gdk_x11_get_display (GdkDrawable *drawable)
+{
+  return gdk_screen_get_display(GDK_DRAWABLE_IMPL_X11 (drawable)->screen);
 }
 
 static GdkVisual*

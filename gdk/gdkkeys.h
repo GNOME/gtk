@@ -76,7 +76,7 @@ struct _GdkKeymapClass
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
 GdkKeymap* gdk_keymap_get_default (void);
-GdkKeymap* gdk_keymap_new (GdkDisplay * display);
+GdkKeymap* gdk_keymap_get_for_display (GdkDisplay * display);
 
 
 guint    gdk_keymap_lookup_key               (GdkKeymap           *keymap,

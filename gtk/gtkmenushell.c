@@ -757,12 +757,10 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
       if (menu_shell->have_xgrab)
 	{
 	  menu_shell->have_xgrab = FALSE;
-	  gdk_display_pointer_ungrab (
-		    gdk_window_get_display(GTK_WIDGET (menu_shell)->window),
-		    GDK_CURRENT_TIME);
-	  gdk_display_keyboard_ungrab (
-		    gdk_window_get_display(GTK_WIDGET (menu_shell)->window),
-		    GDK_CURRENT_TIME);
+	  gdk_display_pointer_ungrab (gtk_widget_get_display (menu_shell),
+				      GDK_CURRENT_TIME);
+	  gdk_display_keyboard_ungrab (gtk_widget_get_display (menu_shell),
+				       GDK_CURRENT_TIME);
 	}
     }
 }

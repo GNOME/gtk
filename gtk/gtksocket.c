@@ -895,7 +895,7 @@ send_xembed_message (GtkSocket *socket,
 
       xevent.xclient.window = GDK_WINDOW_XWINDOW (socket->plug_window);
       xevent.xclient.type = ClientMessage;
-      xevent.xclient.message_type = gdk_display_atom (gdk_window_get_display(socket->plug_window), "_XEMBED", FALSE);
+      xevent.xclient.message_type = gdk_display_atom (gdk_drawable_get_display (socket->plug_window), "_XEMBED", FALSE);
 
       xevent.xclient.format = 32;
       xevent.xclient.data.l[0] = time;
@@ -1123,7 +1123,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	  GDK_WINDOW_XWINDOW (socket->plug_window))
 	{
 	  GdkDragProtocol protocol;
-	  GdkDisplay *display = gdk_window_get_display(socket->plug_window);
+	  GdkDisplay *display = gdk_drawable_get_display (socket->plug_window);
 
 	  if ((xevent->xproperty.atom == 
 	       gdk_display_atom (display, "XdndAware", FALSE)) ||
@@ -1145,7 +1145,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	}
       break;
     case ClientMessage:
-      if (xevent->xclient.message_type == gdk_display_atom (gdk_window_get_display(socket->plug_window), "_XEMBED", FALSE))
+      if (xevent->xclient.message_type == gdk_display_atom (gdk_drawable_get_display (socket->plug_window), "_XEMBED", FALSE))
 
 	{
 	  handle_xembed_message (socket,

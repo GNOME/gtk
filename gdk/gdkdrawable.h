@@ -104,8 +104,6 @@ struct _GdkDrawableClass
                           gint	       height);
   
   gint (*get_depth)      (GdkDrawable  *drawable);
-  GdkScreen*	(*get_screen)	(GdkDrawable  *drawable);
-  GdkDisplay*	(*get_display)	(GdkDrawable *drawable);
   void (*get_size)       (GdkDrawable  *drawable,
                           gint         *width,
                           gint         *height);
@@ -113,8 +111,10 @@ struct _GdkDrawableClass
   void (*set_colormap)   (GdkDrawable  *drawable,
                           GdkColormap  *cmap);
 
-  GdkColormap* (*get_colormap) (GdkDrawable *drawable);
-  GdkVisual*   (*get_visual) (GdkDrawable  *drawable);
+  GdkColormap* (*get_colormap)  (GdkDrawable  *drawable);
+  GdkVisual*   (*get_visual)    (GdkDrawable  *drawable);
+  GdkScreen*   (*get_screen)	(GdkDrawable  *drawable);
+  GdkDisplay*  (*get_display)	(GdkDrawable  *drawable);
 
   GdkImage*    (*get_image)  (GdkDrawable  *drawable,
                               gint          x,

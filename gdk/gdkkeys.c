@@ -87,7 +87,7 @@ gdk_keymap_finalize (GObject *object)
 }
 
 GdkKeymap*
-gdk_keymap_new (GdkDisplay *display)
+gdk_keymap_get_for_display (GdkDisplay *display)
 {
  GdkKeymap *keymap = g_object_new (gdk_keymap_get_type (), NULL);
  keymap->display = display;
@@ -100,7 +100,7 @@ gdk_keymap_get_default (void)
   static GdkKeymap *keymap = NULL;
 
   if (keymap == NULL)
-    keymap = gdk_keymap_new (gdk_get_default_display ());
+    keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
 
   return keymap;
 }
