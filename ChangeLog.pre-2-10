@@ -1,3 +1,9 @@
+Tue Oct 21 22:07:12 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_move_cursor): set
+	ctrl_pressed and shift_pressed according to the current event
+	state (if there is one). (Fixes #125063, reported by Sebastien Bacher).
+
 Mon Oct 20 23:24:27 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_key_press): remove the completion

@@ -6264,6 +6264,8 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
 				GtkMovementStep    step,
 				gint               count)
 {
+  GdkModifierType state;
+
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
   g_return_val_if_fail (step == GTK_MOVEMENT_LOGICAL_POSITIONS ||
 			step == GTK_MOVEMENT_VISUAL_POSITIONS ||
@@ -6279,6 +6281,15 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
   gtk_tree_view_stop_editing (tree_view, FALSE);
   GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+
+  if (gtk_get_current_event_state (&state))
+    {
+      if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+        tree_view->priv->ctrl_pressed = TRUE;
+      if ((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
+        tree_view->priv->shift_pressed = TRUE;
+    }
+  /* else we assume not pressed */
 
   switch (step)
     {
@@ -6299,6 +6310,9 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
     default:
       g_assert_not_reached ();
     }
+
+  tree_view->priv->ctrl_pressed = FALSE;
+  tree_view->priv->shift_pressed = FALSE;
 
   return TRUE;
 }
