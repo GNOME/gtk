@@ -29,12 +29,12 @@ libexec_LTLIBRARIES =		\
 	$(XPM_LIB)	\
 	$(TIFF_LIB)
 
-noinst_PROGRAMS = testpixbuf
+noinst_PROGRAMS = # testpixbuf
 DEPS = libgdk_pixbuf.la
-INCLUDES = $(GNOME_INCLUDEDIR)
+INCLUDES = $(GLIB_CFLAGS) $(LIBART_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
-LDADDS = libgdk_pixbuf.la @GNOME_LIBDIR@ @GNOMEUI_LIBS@
+LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS)
 
 testpixbuf_LDADD = $(LDADDS)
 

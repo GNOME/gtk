@@ -1,3 +1,13 @@
+1999-10-18  Havoc Pennington  <hp@pobox.com>
+
+	* Makefile.am (SUBDIRS): Remove "macros"
+
+	* configure.in: Don't use GNOME_INIT, handle case where we are
+	inside gnome-libs
+
+	* src/Makefile.am: Change flags to work without libgnomeui,
+	comment out testpixbuf for now
+
 1999-10-18  Federico Mena Quintero  <federico@redhat.com>
 
 	* configure.in: Use $GTK_LIBS as the extra libs when checking for
