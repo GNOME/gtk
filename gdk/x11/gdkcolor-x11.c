@@ -174,7 +174,7 @@ gdk_colormap_new (GdkVisual *visual,
    * kind of default construction (and construct-only arguments)
    */
   
-  g_return_val_if_fail (visual != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
 
   colormap = g_object_new (GDK_TYPE_COLORMAP, NULL);
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
@@ -581,7 +581,7 @@ gdk_colors_alloc (GdkColormap   *colormap,
   gint return_val;
   gint i;
 
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), 0);
+  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
@@ -593,7 +593,7 @@ gdk_colors_alloc (GdkColormap   *colormap,
 				 nplanes, pixels, npixels);
   if (return_val)
     {
-      for (i=0; i<npixels; i++)
+      for (i = 0; i < npixels; i++)
 	{
 	  private->info[pixels[i]].ref_count++;
 	  private->info[pixels[i]].flags |= GDK_COLOR_WRITEABLE;
@@ -640,7 +640,7 @@ gdk_colors_free (GdkColormap *colormap,
   
   pixels_to_free = g_new (gulong, npixels);
 
-  for (i=0; i<npixels; i++)
+  for (i = 0; i < npixels; i++)
     {
       gulong pixel = pixels[i];
       
@@ -697,7 +697,7 @@ gdk_colormap_free_colors (GdkColormap *colormap,
 
   pixels = g_new (gulong, ncolors);
 
-  for (i=0; i<ncolors; i++)
+  for (i = 0; i < ncolors; i++)
     {
       gulong pixel = colors[i].pixel;
       
@@ -797,7 +797,7 @@ gdk_colormap_alloc_colors_writeable (GdkColormap *colormap,
   if (private->private_val)
     {
       index = 0;
-      for (i=0; i<ncolors; i++)
+      for (i = 0; i < ncolors; i++)
 	{
 	  while ((index < colormap->size) && (private->info[index].ref_count != 0))
 	    index++;
@@ -823,7 +823,7 @@ gdk_colormap_alloc_colors_writeable (GdkColormap *colormap,
 				  FALSE, NULL, 0, pixels, ncolors);
       if (status)
 	{
-	  for (i=0; i<ncolors; i++)
+	  for (i = 0; i < ncolors; i++)
 	    {
 	      colors[i].pixel = pixels[i];
 	      success[i] = TRUE;
@@ -857,7 +857,7 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
   /* First, store the colors we have room for */
 
   index = 0;
-  for (i=0; i<ncolors; i++)
+  for (i = 0; i < ncolors; i++)
     {
       if (!success[i])
 	{
@@ -900,7 +900,7 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
       for (i = 0; i < colormap->size; i++)
 	available[i] = !(private->info[i].flags & GDK_COLOR_WRITEABLE);
 
-      for (i=0; i<ncolors; i++)
+      for (i = 0; i < ncolors; i++)
 	{
 	  if (!success[i])
 	    {
@@ -938,7 +938,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
-  for (i=0; i<ncolors; i++)
+  for (i = 0; i < ncolors; i++)
     {
       if (!success[i])
 	{
@@ -960,7 +960,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
       
       while (nremaining > 0)
 	{
-	  for (i=0; i<ncolors; i++)
+	  for (i = 0; i < ncolors; i++)
 	    {
 	      if (!success[i])
 		{
@@ -1005,7 +1005,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
   /* Change back the values we flagged as permanent failures */
   if (nfailed > 0)
     {
-      for (i=0; i<ncolors; i++)
+      for (i = 0; i < ncolors; i++)
 	if (success[i] == 2)
 	  success[i] = FALSE;
       nremaining = nfailed;
@@ -1031,7 +1031,7 @@ gdk_colormap_alloc_colors_pseudocolor (GdkColormap *colormap,
 
   /* Check for an exact match among previously allocated colors */
 
-  for (i=0; i<ncolors; i++)
+  for (i = 0; i < ncolors; i++)
     {
       if (!success[i])
 	{
@@ -1097,16 +1097,15 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 
   g_return_val_if_fail (GDK_IS_COLORMAP (colormap), ncolors);
   g_return_val_if_fail (colors != NULL, ncolors);
+  g_return_val_if_fail (success != NULL, ncolors);
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
   if (private->screen->closed)
     return ncolors;
 
-  for (i=0; i<ncolors; i++)
-    {
-      success[i] = FALSE;
-    }
+  for (i = 0; i < ncolors; i++)
+    success[i] = FALSE;
 
   switch (colormap->visual->type)
     {
@@ -1124,7 +1123,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
     case GDK_VISUAL_TRUE_COLOR:
       visual = colormap->visual;
 
-      for (i=0; i<ncolors; i++)
+      for (i = 0; i < ncolors; i++)
 	{
 	  colors[i].pixel = (((colors[i].red >> (16 - visual->red_prec)) << visual->red_shift) +
 			     ((colors[i].green >> (16 - visual->green_prec)) << visual->green_shift) +
@@ -1134,7 +1133,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
       break;
     case GDK_VISUAL_STATIC_GRAY:
     case GDK_VISUAL_STATIC_COLOR:
-      for (i=0; i<ncolors; i++)
+      for (i = 0; i < ncolors; i++)
 	{
 	  xcolor.red = colors[i].red;
 	  xcolor.green = colors[i].green;
@@ -1378,9 +1377,6 @@ gdk_colormap_match_color (GdkColormap *cmap,
   guint sum, max;
   gint rdiff, gdiff, bdiff;
   gint i, index;
-
-  g_return_val_if_fail (cmap != NULL, 0);
-  g_return_val_if_fail (color != NULL, 0);
 
   colors = cmap->colors;
   max = 3 * (65536);

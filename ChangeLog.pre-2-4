@@ -1,3 +1,11 @@
+Sun Dec  8 21:43:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkcolor-x11.c: Fix spacing in a bunch of 
+	for (i=0; i<ncolors; i++).
+
+	* gdk/x11/gdkcolor-x11.c: Various g_return_if_fail()
+	cleanup.
+
 Sun Dec  8 21:29:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc1): Fix
