@@ -63,7 +63,7 @@
 #include "x11/gdkx.h"
 #endif
 
-#define DEBUG_SELECTION
+#undef DEBUG_SELECTION
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
    our buffers */
