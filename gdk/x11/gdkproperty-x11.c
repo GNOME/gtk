@@ -263,7 +263,7 @@ get_atom_name (GdkAtom atom)
   virtual_atom_check_init ();
 
   if (ATOM_TO_INDEX (atom) < virtual_atom_array->len)
-    return g_strdup (g_ptr_array_index (virtual_atom_array, ATOM_TO_INDEX (atom)));
+    return g_ptr_array_index (virtual_atom_array, ATOM_TO_INDEX (atom));
   else
     return NULL;
 }

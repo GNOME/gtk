@@ -1,3 +1,9 @@
+Mon Nov 19 11:30:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkproperty-x11.c (get_atom_name): Fix a 
+	memory leak when retrieving atom names. (Michael Meeks,
+	#64508)
+
 2001-11-18  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/x11/gdkfont-x11.c (gdk_font_from_description):
