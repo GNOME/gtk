@@ -1,7 +1,13 @@
 2004-04-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: 
+	* gtk/gtkwidget.c: 
+	Make all style properties readonly.
+
+2004-04-14  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcolorsel.c: Add a11y relations between the color
-	wheel and the spin buttons.  (#132745)
+	wheel and the spin buttons.  (#132745, Padraig, O'Briain)
 
 	* gtk/gtkiconfactory.c (gtk_icon_set_render_icon): Document
 	the meaning of size == -1.

@@ -509,7 +509,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                                  P_("Appears as list"),
                                                                  P_("Whether combobox dropdowns should look like lists rather than menus"),
                                                                  FALSE,
-                                                                 G_PARAM_READWRITE));
+                                                                 G_PARAM_READABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkComboBoxPrivate));
 }
