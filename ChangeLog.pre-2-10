@@ -1,5 +1,7 @@
 2003-06-06  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkprivate-win32.h: Fix typo.
+
 	* gdk/win32/gdkgc-win32.c (_gdk_win32_gc_new): Set
 	graphics_exposures and subwindow_mode, too, even if they aren't
 	currently used.

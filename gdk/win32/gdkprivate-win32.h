@@ -60,7 +60,7 @@
 #endif
 
 /* Some virtual keycodes are missing */
-#ifndef VM_OEM_PLUS
+#ifndef VK_OEM_PLUS
 #define VK_OEM_PLUS 0xBB
 #endif
 
