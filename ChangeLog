@@ -1,3 +1,7 @@
+2005-02-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2005-02-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_init): Look for icons
