@@ -1,3 +1,7 @@
+2001-10-04  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkimage.sgml: fix GtkImage overview
+
 Wed Oct  3 15:09:18 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtk.types: remove gtk_cell_editable_get_type

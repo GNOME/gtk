@@ -191,12 +191,12 @@ GtkSettings
 
 </para>
 
-<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
+<!-- ##### ARG GtkSettings:gtk-menu-bar-accel ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkSettings:gtk-menu-bar-accel ##### -->
+<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
 <para>
 
 </para>
