@@ -1,3 +1,9 @@
+2004-06-16  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystemmodel.c (do_files_added): When inserting a
+	visible node, free the old path before creating the new one.
+	Fixes #144356.
+
 Tue Jun 15 01:10:32 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c: Make GtkComboBox work without model.  
