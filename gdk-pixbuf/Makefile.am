@@ -40,10 +40,10 @@ uninstall-ms-lib:
 endif
 
 gdk_pixbuf.def: gdk-pixbuf.symbols
-	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES $(srcdir)/gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gdk_pixbuf.def
+	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES $(srcdir)/gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gdk_pixbuf.def
 
 gdk-pixbuf-alias.h: gdk-pixbuf.symbols
-	 $(srcdir)/makegdkpixbufalias.pl < $(srcdir)/gdk-pixbuf.symbols > gdk-pixbuf-alias.h
+	 $(PERL) $(srcdir)/makegdkpixbufalias.pl < $(srcdir)/gdk-pixbuf.symbols > gdk-pixbuf-alias.h
 
 if OS_UNIX
 TESTS = abicheck.sh
