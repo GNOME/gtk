@@ -87,13 +87,13 @@ struct _GtkCList
   
   guint8 flags;
 
+  /* mem chunks */
+  GMemChunk *row_mem_chunk;
+  GMemChunk *cell_mem_chunk;
+
   /* allocation rectangle after the conatiner_border_width
    * and the width of the shadow border */
   GdkRectangle internal_allocation;
-  
-  /* memory chunks */
-  GMemChunk *row_mem_chunk;
-  GMemChunk *cell_mem_chunk;
 
   /* rows */
   gint rows;
@@ -340,6 +340,10 @@ void gtk_clist_moveto (GtkCList * clist,
 		       gint column,
 		       gfloat row_align,
 		       gfloat col_align);
+
+/* returns true if the row is visible */
+gint gtk_clist_row_isvisable (GtkCList * clist,
+			      gint row);
 
 /* sets a given cell's text, replacing it's current contents */
 void gtk_clist_set_text (GtkCList * clist,
