@@ -1,3 +1,9 @@
+2001-09-25  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkwindow.c: Put notes in gtk_window_set_has_frame(),
+	etc. docs about how these are not going to do what you want for 
+	the X/win32 ports. Futile attempt to avoid a FAQ...
+
 2001-09-24  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkmarshal.list (VOID): add marshal function types.

@@ -4496,6 +4496,11 @@ gtk_window_expose (GtkWidget      *widget,
  * gtk_window_set_has_frame:
  * @window: a #GtkWindow
  * @setting: a boolean
+ *
+ * (Note: this is a special-purpose function for the framebuffer port,
+ *  that causes GTK+ to draw its own window border. For most applications,
+ *  you want gtk_window_set_decorated() instead, which tells the window
+ *  manager whether to draw the window border.)
  * 
  * If this function is called on a window with setting of TRUE, before
  * it is realized or showed, it will have a "frame" window around
@@ -4505,6 +4510,7 @@ gtk_window_expose (GtkWidget      *widget,
  * This function is used by the linux-fb port to implement managed
  * windows, but it could concievably be used by X-programs that
  * want to do their own window decorations.
+ *
  **/
 void
 gtk_window_set_has_frame (GtkWindow *window, 
@@ -4521,7 +4527,7 @@ gtk_window_set_has_frame (GtkWindow *window,
  * @window: a #GtkWindow
  * 
  * Accessor for whether the window has a frame window exterior to
- * widget->window. See gtk_window_set_has_frame ().
+ * widget->window. Gets the value set by gtk_window_set_has_frame ().
  *
  * Return value: %TRUE if a frame has been added to the window
  *   via gtk_widow_has_frame
@@ -4541,6 +4547,11 @@ gtk_window_get_has_frame (GtkWindow *window)
  * @top: The height of the top border
  * @right: The width of the right border
  * @bottom: The height of the bottom border
+ *
+ * (Note: this is a special-purpose function intended for the framebuffer
+ *  port; see gtk_window_set_has_frame(). It will have no effect on the
+ *  window border drawn by the window manager, which is the normal
+ *  case when using the X Window system.)
  *
  * For windows with frames (see #gtk_window_set_has_frame) this function
  * can be used to change the size of the frame border.
@@ -4982,6 +4993,13 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
  * @right: location to store the width of the frame at the returns, or %NULL
  * @bottom: location to store the height of the frame at the bottom, or %NULL
  *
+ * (Note: this is a special-purpose function intended for the
+ *  framebuffer port; see gtk_window_set_has_frame(). It will not
+ *  return the size of the window border drawn by the window manager,
+ *  which is the normal case when using a windowing system.
+ *  See gdk_window_get_frame_extents() to get the standard
+ *  window border extents.)
+ * 
  * Retrieves the dimensions of the frame window for this toplevel.
  * See gtk_window_set_has_frame(), gtk_window_set_frame_dimensions().
  **/
