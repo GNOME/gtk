@@ -1,3 +1,11 @@
+Sat Jul 12 16:01:03 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_set_property):
+	free the old text and extra_attrs *after* we parsed the new
+	markup string. (Fixes #114485, reported by Owen Taylor).
+
 Sat Jul 12 15:51:33 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

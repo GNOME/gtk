@@ -825,12 +825,6 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	gchar *text = NULL;
 	GError *error = NULL;
 	PangoAttrList *attrs = NULL;
-	
-	if (celltext->text)
-	  g_free (celltext->text);
-
-	if (celltext->extra_attrs)
-	  pango_attr_list_unref (celltext->extra_attrs);
 
 	str = g_value_get_string (value);
 	if (str && !pango_parse_markup (str,
@@ -846,7 +840,13 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	    g_error_free (error);
 	    return;
 	  }
-	
+
+	if (celltext->text)
+	  g_free (celltext->text);
+
+	if (celltext->extra_attrs)
+	  pango_attr_list_unref (celltext->extra_attrs);
+
 	celltext->text = text;
 	celltext->extra_attrs = attrs;
       }
