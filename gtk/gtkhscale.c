@@ -552,16 +552,16 @@ gtk_hscale_trough_keys (GtkRange *range,
     case GDK_Left:
       return_val = TRUE;
       if (key->state & GDK_CONTROL_MASK)
-        *scroll = GTK_SCROLL_PAGE_BACKWARD;
+        *scroll = GTK_SCROLL_PAGE_LEFT;
       else
-        *scroll = GTK_SCROLL_STEP_BACKWARD;
+        *scroll = GTK_SCROLL_STEP_LEFT;
       break;
     case GDK_Right:
       return_val = TRUE;
       if (key->state & GDK_CONTROL_MASK)
-        *scroll = GTK_SCROLL_PAGE_FORWARD;
+        *scroll = GTK_SCROLL_PAGE_RIGHT;
       else
-        *scroll = GTK_SCROLL_STEP_FORWARD;
+        *scroll = GTK_SCROLL_STEP_RIGHT;
       break;
     case GDK_Home:
       return_val = TRUE;

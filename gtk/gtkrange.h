@@ -64,7 +64,7 @@ struct _GtkRange
   guint8 button;
   gint8 digits;
   guint policy : 2;
-  guint scroll_type : 3;
+  guint scroll_type : 5;
   guint in_child : 3;
   guint click_child : 3;
   guint need_timer : 1;

@@ -2217,18 +2217,22 @@ gtk_list_scroll_horizontal (GtkList       *list,
 
   switch (scroll_type)
     {
+    case GTK_SCROLL_STEP_UP:
     case GTK_SCROLL_STEP_BACKWARD:
       adj->value = CLAMP (adj->value - adj->step_increment, adj->lower,
 			  adj->upper - adj->page_size);
       break;
+    case GTK_SCROLL_STEP_DOWN:
     case GTK_SCROLL_STEP_FORWARD:
       adj->value = CLAMP (adj->value + adj->step_increment, adj->lower,
 			  adj->upper - adj->page_size);
       break;
+    case GTK_SCROLL_PAGE_UP:
     case GTK_SCROLL_PAGE_BACKWARD:
       adj->value = CLAMP (adj->value - adj->page_increment, adj->lower,
 			  adj->upper - adj->page_size);
       break;
+    case GTK_SCROLL_PAGE_DOWN:
     case GTK_SCROLL_PAGE_FORWARD:
       adj->value = CLAMP (adj->value + adj->page_increment, adj->lower,
 			  adj->upper - adj->page_size);

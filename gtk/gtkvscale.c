@@ -554,11 +554,17 @@ gtk_vscale_trough_keys (GtkRange *range,
     {
     case GDK_Up:
       return_val = TRUE;
-      *scroll = GTK_SCROLL_STEP_BACKWARD;
+      if (key->state & GDK_CONTROL_MASK)
+        *scroll = GTK_SCROLL_PAGE_UP;
+      else
+        *scroll = GTK_SCROLL_STEP_UP;
       break;
     case GDK_Down:
       return_val = TRUE;
-      *scroll = GTK_SCROLL_STEP_FORWARD;
+      if (key->state & GDK_CONTROL_MASK)
+        *scroll = GTK_SCROLL_PAGE_DOWN;
+      else
+        *scroll = GTK_SCROLL_STEP_DOWN;
       break;
     case GDK_Page_Up:
       return_val = TRUE;

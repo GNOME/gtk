@@ -1,3 +1,28 @@
+2001-02-16  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkvscrollbar.c (gtk_vscrollbar_trough_keys): use the visual
+	scroll steps.
+
+	* gtk/gtkvscale.c (gtk_vscale_trough_keys): use the visual scroll
+	steps, and add Ctrl-arrow shortcuts for paging visually as with
+	HScale, since Page Up and Page Down move logically.
+
+	* gtk/gtkenums.h (GtkScrollType): add GTK_SCROLL_STEP_UP,
+	GTK_SCROLL_STEP_DOWN, etc. for visual scroll directions
+	
+	* gtk/gtkrange.c (gtk_range_key_press): handle the visual scroll
+	steps
+	(gtk_range_scroll): handle the visual steps
+
+	* gtk/gtklist.c (gtk_list_scroll_horizontal): handle the up/down
+	scroll steps
+
+	* gtk/gtkhscale.c (gtk_hscale_trough_keys): use the visual scroll
+	steps, not the logical ones.
+
+	* gtk/gtkclist.c (move_focus_row): handle the up/down scroll steps
+	(scroll_vertical): handle up/down steps
+
 2001-02-19 Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkimage-fb.c (gdk_image_new_bitmap):
@@ -82,6 +107,7 @@ Sat Feb 17 06:47:27 2001  Tim Janik  <timj@gtk.org>
 	* gtk/gtkliststore.c (gtk_list_store_set_valist): 
 	fix G_VALUE_COLLECT() and G_VALUE_LCOPY() calls.
 	
+>>>>>>> 1.1728
 Fri Feb 16 17:49:59 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.[hc], gtk/gtkliststore.[ch]: removed

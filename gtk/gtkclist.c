@@ -6861,6 +6861,7 @@ move_focus_row (GtkCList      *clist,
 
   switch (scroll_type)
     {
+    case GTK_SCROLL_STEP_UP:
     case GTK_SCROLL_STEP_BACKWARD:
       if (clist->focus_row <= 0)
 	return;
@@ -6868,6 +6869,8 @@ move_focus_row (GtkCList      *clist,
       clist->focus_row--;
       gtk_clist_draw_focus (widget);
       break;
+
+    case GTK_SCROLL_STEP_DOWN:
     case GTK_SCROLL_STEP_FORWARD:
       if (clist->focus_row >= clist->rows - 1)
 	return;
@@ -6875,6 +6878,7 @@ move_focus_row (GtkCList      *clist,
       clist->focus_row++;
       gtk_clist_draw_focus (widget);
       break;
+    case GTK_SCROLL_PAGE_UP:
     case GTK_SCROLL_PAGE_BACKWARD:
       if (clist->focus_row <= 0)
 	return;
@@ -6885,6 +6889,7 @@ move_focus_row (GtkCList      *clist,
 			      (2 * (clist->row_height + CELL_SPACING)));
       gtk_clist_draw_focus (widget);
       break;
+    case GTK_SCROLL_PAGE_DOWN:
     case GTK_SCROLL_PAGE_FORWARD:
       if (clist->focus_row >= clist->rows - 1)
 	return;
@@ -7029,10 +7034,14 @@ scroll_vertical (GtkCList      *clist,
 			     clist->focus_row, -1, NULL);
 	  switch (scroll_type)
 	    {
+            case GTK_SCROLL_PAGE_UP:
+            case GTK_SCROLL_STEP_UP:
 	    case GTK_SCROLL_STEP_BACKWARD:
 	    case GTK_SCROLL_PAGE_BACKWARD:
 	      gtk_clist_moveto (clist, clist->focus_row, -1, 0, 0);
 	      break;
+            case GTK_SCROLL_PAGE_DOWN:
+            case GTK_SCROLL_STEP_DOWN:
 	    case GTK_SCROLL_STEP_FORWARD:
 	    case GTK_SCROLL_PAGE_FORWARD:
 	      gtk_clist_moveto (clist, clist->focus_row, -1, 1, 0);

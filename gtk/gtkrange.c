@@ -1116,7 +1116,7 @@ gtk_range_key_press (GtkWidget   *widget,
 
   range = GTK_RANGE (widget);
   return_val = FALSE;
-
+  
   if (RANGE_CLASS (range)->trough_keys)
     return_val = (* RANGE_CLASS (range)->trough_keys) (range, event, &scroll, &pos);
 
@@ -1125,15 +1125,45 @@ gtk_range_key_press (GtkWidget   *widget,
       if (scroll != GTK_SCROLL_NONE)
 	{
 	  range->scroll_type = scroll;
+
 	  gtk_range_scroll (range, -1);
 	  if (range->old_value != range->adjustment->value)
 	    {
 	      gtk_signal_emit_by_name (GTK_OBJECT (range->adjustment), "value_changed");
 	      switch (range->scroll_type)
 		{
+                case GTK_SCROLL_STEP_LEFT:
+                  if (should_invert (range, TRUE))
+                    gtk_range_draw_step_forw (range);
+                  else
+                    gtk_range_draw_step_back (range);
+                  break;
+                    
+                case GTK_SCROLL_STEP_UP:
+                  if (should_invert (range, FALSE))
+                    gtk_range_draw_step_forw (range);
+                  else
+                    gtk_range_draw_step_back (range);
+                  break;
+
+                case GTK_SCROLL_STEP_RIGHT:
+                  if (should_invert (range, TRUE))
+                    gtk_range_draw_step_back (range);
+                  else
+                    gtk_range_draw_step_forw (range);
+                  break;
+                    
+                case GTK_SCROLL_STEP_DOWN:
+                  if (should_invert (range, FALSE))
+                    gtk_range_draw_step_back (range);
+                  else
+                    gtk_range_draw_step_forw (range);
+                  break;
+                  
 		case GTK_SCROLL_STEP_BACKWARD:
 		  gtk_range_draw_step_back (range);
 		  break;
+                  
 		case GTK_SCROLL_STEP_FORWARD:
 		  gtk_range_draw_step_forw (range);
 		  break;
@@ -1374,13 +1404,79 @@ gtk_range_scroll (GtkRange *range,
 {
   gfloat new_value;
   gint return_val;
-
+  GtkScrollType scroll_type;
+  
   g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
 
   new_value = range->adjustment->value;
   return_val = TRUE;
 
-  switch (range->scroll_type)
+  /* Translate visual to logical */
+
+  scroll_type = range->scroll_type;
+  switch (scroll_type)
+    {
+    case GTK_SCROLL_STEP_UP:
+      if (should_invert (range, FALSE))
+        scroll_type = GTK_SCROLL_STEP_FORWARD;
+      else
+        scroll_type = GTK_SCROLL_STEP_BACKWARD;
+      break;
+
+    case GTK_SCROLL_STEP_DOWN:
+      if (should_invert (range, FALSE))
+        scroll_type = GTK_SCROLL_STEP_BACKWARD;
+      else
+        scroll_type = GTK_SCROLL_STEP_FORWARD;
+      break;
+
+    case GTK_SCROLL_PAGE_UP:
+      if (should_invert (range, FALSE))
+        scroll_type = GTK_SCROLL_PAGE_FORWARD;
+      else
+        scroll_type = GTK_SCROLL_PAGE_BACKWARD;
+      break;
+
+    case GTK_SCROLL_PAGE_DOWN:
+      if (should_invert (range, FALSE))
+        scroll_type = GTK_SCROLL_PAGE_BACKWARD;
+      else
+        scroll_type = GTK_SCROLL_PAGE_FORWARD;
+      break;
+
+    case GTK_SCROLL_STEP_LEFT:
+      if (should_invert (range, TRUE))
+        scroll_type = GTK_SCROLL_STEP_FORWARD;
+      else
+        scroll_type = GTK_SCROLL_STEP_BACKWARD;
+      break;
+
+    case GTK_SCROLL_STEP_RIGHT:
+      if (should_invert (range, TRUE))
+        scroll_type = GTK_SCROLL_STEP_BACKWARD;
+      else
+        scroll_type = GTK_SCROLL_STEP_FORWARD;
+      break;
+
+    case GTK_SCROLL_PAGE_LEFT:
+      if (should_invert (range, TRUE))
+        scroll_type = GTK_SCROLL_PAGE_FORWARD;
+      else
+        scroll_type = GTK_SCROLL_PAGE_BACKWARD;
+      break;
+
+    case GTK_SCROLL_PAGE_RIGHT:
+      if (should_invert (range, TRUE))
+        scroll_type = GTK_SCROLL_PAGE_BACKWARD;
+      else
+        scroll_type = GTK_SCROLL_PAGE_FORWARD;
+      break;
+
+    default:
+      break;
+    }
+  
+  switch (scroll_type)
     {
     case GTK_SCROLL_NONE:
       break;
@@ -1433,8 +1529,20 @@ gtk_range_scroll (GtkRange *range,
 	  range->timer = 0;
 	}
       break;
-    }
 
+    case GTK_SCROLL_STEP_UP:
+    case GTK_SCROLL_STEP_DOWN:
+    case GTK_SCROLL_PAGE_UP:
+    case GTK_SCROLL_PAGE_DOWN:
+    case GTK_SCROLL_STEP_LEFT:
+    case GTK_SCROLL_STEP_RIGHT:
+    case GTK_SCROLL_PAGE_LEFT:
+    case GTK_SCROLL_PAGE_RIGHT:
+      g_assert_not_reached ();
+      break;
+
+    }
+  
   if (new_value != range->adjustment->value)
     {
       range->adjustment->value = new_value;
