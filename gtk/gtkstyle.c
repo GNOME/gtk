@@ -2558,15 +2558,31 @@ gtk_default_draw_arrow (GtkStyle      *style,
   
   if (detail && strcmp (detail, "spinbutton") == 0)
     {
-      x += (width - 7) / 2;
+      int hpad, vpad;
+      int my_height = height;
+      int my_width = width;
+      int vpad_add = 0;
 
-      if (arrow_type == GTK_ARROW_UP)
-	y += (height - 4) / 2;
-      else
-	y += (1 + height - 4) / 2;
+      if (my_height > my_width)
+	{
+	  vpad_add = (my_height - my_width) / 2;
+	  my_height = my_width;
+	}
+
+      hpad = my_width / 4;
+
+      if (hpad < 4)
+	hpad = 4;
+
+      vpad = 2 * hpad - 1;
+
+      x += hpad / 2;
+      y += vpad / 2;
+
+      y += vpad_add;
 
       draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		   x, y, 7, 4);
+		   x, y, my_width - hpad, my_height - vpad);
     }
   else if (detail && strcmp (detail, "vscrollbar") == 0)
     {
@@ -2575,10 +2591,9 @@ gtk_default_draw_arrow (GtkStyle      *style,
       
       x += (width - 7) / 2;
       y += (height - 5) / 2;
-
+      
       draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
 		   x, y, 7, 5);
-      
     }
   else if (detail && strcmp (detail, "hscrollbar") == 0)
     {

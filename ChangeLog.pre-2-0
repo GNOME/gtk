@@ -1,3 +1,13 @@
+Mon Oct 22 00:26:46 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtkspinbutton.c: remove ARROW_SIZE constant, use
+	new function spin_button_get_arrow_size() instead.
+
+	* gtk/gtkstyle.c (gtk_default_draw_arrow): actual size of
+	arrow was hardcoded, it's now variable.
+
+	Fixes bug #50200
+
 Sat Oct 20 18:16:04 2001  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtktreeview.c (gtk_treeview_get_property): PROP_MODEL and
