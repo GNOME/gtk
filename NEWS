@@ -1,3 +1,9 @@
+Overview of Changes in GTK+ 1.0.4:
+
+* Documentation changes (Thanks to Tony Gale!)
+* autoconf fix for x_lib variable
+* fixed pixmap clipping in gtkclist
+
 Overview of Changes in GTK+ 1.0.3:
 
 * Bug fixes, including fix for visuals on SGI machines

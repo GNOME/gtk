@@ -1,5 +1,5 @@
 # Note that this is NOT a relocatable package
-%define ver      1.0.3
+%define ver      1.0.4
 %define rel      SNAP
 %define prefix   /usr
 
@@ -45,6 +45,10 @@ Handy library of utility functions.  Development libs and headers
 are in gtk+-devel.
 
 %changelog
+
+* Mon Jun  1 1998 Shawn T. Amundson <amundson@gtk.org>
+
+-Changed version to 1.0.4
 
 * Sat May 23 1998 Shawn T. Amundson <amundson@gtk.org>
 

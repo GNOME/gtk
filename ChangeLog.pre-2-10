@@ -1,3 +1,7 @@
+Mon Jun  1 22:14:33 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.0.4
+
 Mon Jun  1 20:24:42 PDT 1998  Jay Painter <jpaint@serv.net>
 	* gtk/gtkclist.c: fixed clipping for pixmaps within rows...
 	finally.
