@@ -69,7 +69,7 @@ int main( int   argc,
 
     /* Now we specify that we want our newly created "menu" to be the menu
      * for the "root menu" */
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), h);
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
 
     /* A vbox to put a menu and a button in: */
     vbox = gtk_vbox_new (FALSE, 0);

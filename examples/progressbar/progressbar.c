@@ -10,7 +10,7 @@ typedef struct _ProgressData {
 
 /* Update the value of the progress bar so that we get
  * some movement */
-gint progress_timeout( gpointer data )
+gboolean progress_timeout( gpointer data )
 {
   ProgressData *pdata = (ProgressData *)data;
   gdouble new_val;
@@ -74,8 +74,8 @@ void toggle_orientation( GtkWidget    *widget,
     gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata->pbar), 
 				      GTK_PROGRESS_LEFT_TO_RIGHT);
     break;
-  default:
-    // do nothing	
+  default: ;
+    /* do nothing */
   }
 }
 
@@ -84,7 +84,7 @@ void toggle_orientation( GtkWidget    *widget,
 void destroy_progress( GtkWidget     *widget,
 		       ProgressData *pdata)
 {
-    gtk_timeout_remove (pdata->timer);
+    g_source_remove (pdata->timer);
     pdata->timer = 0;
     pdata->window = NULL;
     g_free (pdata);
@@ -133,7 +133,7 @@ int main( int   argc,
     gtk_widget_show (pdata->pbar);
 
     /* Add a timer callback to update the value of the progress bar */
-    pdata->timer = gtk_timeout_add (100, progress_timeout, pdata);
+    pdata->timer = g_timeout_add (100, progress_timeout, pdata);
 
     separator = gtk_hseparator_new ();
     gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);

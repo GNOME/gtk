@@ -176,12 +176,6 @@ create_input_dialog ()
     }
 }
 
-void
-quit ()
-{
-  exit (0);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -201,7 +195,7 @@ main (int argc, char *argv[])
   gtk_widget_show (vbox);
 
   g_signal_connect (G_OBJECT (window), "destroy",
-                    G_CALLBACK (quit), NULL);
+                    G_CALLBACK (gtk_main_quit), NULL);
 
   /* Create the drawing area */
 

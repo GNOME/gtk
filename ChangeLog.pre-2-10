@@ -1,3 +1,16 @@
+Fri Dec 12 01:13:34 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* examples/gtkdial/gtkdial.c:
+	* examples/menu/menu.c:
+	* examples/scribble-xinput/scribble-xinput.c:
+	* examples/progressbar/progressbar.c:
+	* docs/tutorial/gtk-tut.sgml: Remove deprecated functions
+	in examples. (#129074, Olexiy Avramchenko)
+	* examples/calendar/Makefile:
+	* examples/rangewidgets/Makefile:
+	* examples/menu/Makefile: Allow deprecated functions in
+	examples which use deprecated widgets.
+
 Fri Dec 12 00:43:16 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk.c (gdk_threads_set_lock_functions): 

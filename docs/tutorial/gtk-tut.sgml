@@ -3993,8 +3993,8 @@ static void toggle_orientation( GtkWidget    *widget,
     gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata-&gt;pbar), 
 				      GTK_PROGRESS_LEFT_TO_RIGHT);
     break;
-  default:
-    // do nothing	
+  default:;
+    /* do nothing */
   }
 }
 
@@ -4003,7 +4003,7 @@ static void toggle_orientation( GtkWidget    *widget,
 static void destroy_progress( GtkWidget    *widget,
                               ProgressData *pdata)
 {
-    gtk_timeout_remove (pdata-&gt;timer);
+    g_source_remove (pdata-&gt;timer);
     pdata-&gt;timer = 0;
     pdata-&gt;window = NULL;
     g_free (pdata);
@@ -4052,7 +4052,7 @@ int main( int   argc,
     gtk_widget_show (pdata-&gt;pbar);
 
     /* Add a timer callback to update the value of the progress bar */
-    pdata-&gt;timer = gtk_timeout_add (100, progress_timeout, pdata);
+    pdata-&gt;timer = g_timeout_add (100, progress_timeout, pdata);
 
     separator = gtk_hseparator_new ();
     gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
@@ -9309,9 +9309,9 @@ create a timeout function that will be called every "interval"
 milliseconds.</para>
 
 <programlisting role="C">
-gint gtk_timeout_add( guint32     interval,
-                      GtkFunction function,
-                      gpointer    data );
+gint g_timeout_add (guint32     interval,
+                    GtkFunction function,
+                    gpointer    data);
 </programlisting>
 
 <para>The first argument is the number of milliseconds between calls to your
@@ -9321,7 +9321,7 @@ value is an integer "tag" which may be used to stop the timeout by
 calling:</para>
 
 <programlisting role="C">
-void gtk_timeout_remove( gint tag );
+void g_source_remove (gint tag);
 </programlisting>
 
 <para>You may also stop the timeout function by returning zero or FALSE from
@@ -9332,7 +9332,7 @@ i.e., TRUE.</para>
 <para>The declaration of your callback should look something like this:</para>
 
 <programlisting role="C">
-gint timeout_callback( gpointer data );
+gint timeout_callback (gpointer data);
 </programlisting>
 
 </sect1>
@@ -12141,7 +12141,7 @@ value of the control to be recomputed (by the function
 <literal>gtk_dial_update_mouse</literal>). Depending on the policy that has been
 set, "value_changed" events are either generated instantly
 (<literal>GTK_UPDATE_CONTINUOUS</literal>), after a delay in a timer added with
-<literal>gtk_timeout_add()</literal> (<literal>GTK_UPDATE_DELAYED</literal>), or only when the
+<literal>g_timeout_add()</literal> (<literal>GTK_UPDATE_DELAYED</literal>), or only when the
 button is released (<literal>GTK_UPDATE_DISCONTINUOUS</literal>).</para>
 
 <programlisting role="C">
@@ -12208,7 +12208,7 @@ gtk_dial_button_release( GtkWidget      *widget,
       dial->button = 0;
 
       if (dial->policy == GTK_UPDATE_DELAYED)
-	gtk_timeout_remove (dial->timer);
+	g_source_remove (dial->timer);
       
       if ((dial->policy != GTK_UPDATE_CONTINUOUS) &&
 	  (dial->old_value != dial->adjustment->value))
@@ -12315,11 +12315,11 @@ gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
 	  if (dial->policy == GTK_UPDATE_DELAYED)
 	    {
 	      if (dial->timer)
-		gtk_timeout_remove (dial->timer);
+		g_source_remove (dial->timer);
 
-	      dial->timer = gtk_timeout_add (SCROLL_DELAY_LENGTH,
-					     (GtkFunction) gtk_dial_timer,
-					     (gpointer) dial);
+	      dial->timer = g_timeout_add (SCROLL_DELAY_LENGTH,
+				           (GtkFunction) gtk_dial_timer,
+					   (gpointer) dial);
 	    }
 	}
     }
@@ -15384,7 +15384,7 @@ gtk_dial_button_release( GtkWidget      *widget,
       dial-&gt;button = 0;
 
       if (dial-&gt;policy == GTK_UPDATE_DELAYED)
-	gtk_timeout_remove (dial-&gt;timer);
+	g_source_remove (dial-&gt;timer);
       
       if ((dial-&gt;policy != GTK_UPDATE_CONTINUOUS) &amp;&amp;
 	  (dial-&gt;old_value != dial-&gt;adjustment-&gt;value))
@@ -15491,11 +15491,11 @@ gtk_dial_update_mouse( GtkDial *dial, gint x, gint y )
 	  if (dial-&gt;policy == GTK_UPDATE_DELAYED)
 	    {
 	      if (dial-&gt;timer)
-		gtk_timeout_remove (dial-&gt;timer);
+		g_source_remove (dial-&gt;timer);
 
-	      dial-&gt;timer = gtk_timeout_add (SCROLL_DELAY_LENGTH,
-					     (GtkFunction) gtk_dial_timer,
-					     (gpointer) dial);
+	      dial-&gt;timer = g_timeout_add (SCROLL_DELAY_LENGTH,
+					   (GtkFunction) gtk_dial_timer,
+					   (gpointer) dial);
 	    }
 	}
     }
@@ -16035,11 +16035,6 @@ create_input_dialog ()
 }
 
 void
-quit ()
-{
-  exit (0);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -16059,7 +16054,7 @@ main (int argc, char *argv[])
   gtk_widget_show (vbox);
 
   g_signal_connect (G_OBJECT (window), "destroy",
-                    G_CALLBACK (quit), NULL);
+                    G_CALLBACK (gtk_main_quit), NULL);
 
   /* Create the drawing area */
 

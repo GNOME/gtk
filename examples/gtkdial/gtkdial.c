@@ -45,7 +45,7 @@ static gint gtk_dial_button_release           (GtkWidget        *widget,
 						GdkEventButton   *event);
 static gint gtk_dial_motion_notify            (GtkWidget        *widget,
 						GdkEventMotion   *event);
-static gint gtk_dial_timer                    (GtkDial         *dial);
+static gboolean gtk_dial_timer                (GtkDial         *dial);
 
 static void gtk_dial_update_mouse             (GtkDial *dial, gint x, gint y);
 static void gtk_dial_update                   (GtkDial *dial);
@@ -476,7 +476,7 @@ gtk_dial_button_release (GtkWidget      *widget,
       dial->button = 0;
 
       if (dial->policy == GTK_UPDATE_DELAYED)
-	gtk_timeout_remove (dial->timer);
+	g_source_remove (dial->timer);
       
       if ((dial->policy != GTK_UPDATE_CONTINUOUS) &&
 	  (dial->old_value != dial->adjustment->value))
@@ -531,7 +531,7 @@ gtk_dial_motion_notify (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
+static gboolean
 gtk_dial_timer (GtkDial *dial)
 {
   g_return_val_if_fail (dial != NULL, FALSE);
@@ -583,11 +583,11 @@ gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
 	  if (dial->policy == GTK_UPDATE_DELAYED)
 	    {
 	      if (dial->timer)
-		gtk_timeout_remove (dial->timer);
+		g_source_remove (dial->timer);
 
-	      dial->timer = gtk_timeout_add (SCROLL_DELAY_LENGTH,
-					     (GtkFunction) gtk_dial_timer,
-					     (gpointer) dial);
+	      dial->timer = g_timeout_add (SCROLL_DELAY_LENGTH,
+					   (GtkFunction) gtk_dial_timer,
+					   (gpointer) dial);
 	    }
 	}
     }
