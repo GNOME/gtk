@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "gtkcellrendererseptext.h"
 #include "gtkfilechooserimpldefault.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserenums.h"
@@ -106,7 +107,7 @@ struct _GtkFileChooserImplDefault
   guint bookmarks_set : 1;
 };
 
-/* Column numbers for the shortcuts tree */
+/* Column numbers for the shortcuts tree.  Keep these in sync with create_shortcuts_model() */
 enum {
   SHORTCUTS_COL_PIXBUF,
   SHORTCUTS_COL_NAME,
@@ -525,8 +526,8 @@ shortcuts_append_bookmarks (GtkFileChooserImplDefault *impl)
 
   gtk_tree_store_append (impl->shortcuts_model, &impl->bookmarks_iter, NULL);
   gtk_tree_store_set (impl->shortcuts_model, &impl->bookmarks_iter,
-		      SHORTCUTS_COL_PIXBUF, NULL, /* FIXME: use a nice icon */
-		      SHORTCUTS_COL_NAME, "Bookmarks",
+		      SHORTCUTS_COL_PIXBUF, NULL,
+		      SHORTCUTS_COL_NAME, NULL,
 		      SHORTCUTS_COL_PATH, NULL,
 		      -1);
   impl->bookmarks_set = TRUE;
@@ -538,7 +539,7 @@ shortcuts_append_bookmarks (GtkFileChooserImplDefault *impl)
       GtkFilePath *path;
 
       path = l->data;
-      shortcuts_append_path (impl, &impl->bookmarks_iter, path, FALSE, NULL);
+      shortcuts_append_path (impl, NULL, path, FALSE, NULL);
     }
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (impl->shortcuts_tree));
@@ -553,6 +554,7 @@ create_shortcuts_model (GtkFileChooserImplDefault *impl)
   if (impl->shortcuts_model)
     g_object_unref (impl->shortcuts_model);
 
+  /* Keep this order in sync with the SHORCUTS_COL_* enum values */
   impl->shortcuts_model = gtk_tree_store_new (SHORTCUTS_COL_NUM_COLUMNS,
 					      GDK_TYPE_PIXBUF,	/* pixbuf */
 					      G_TYPE_STRING,	/* name */
@@ -717,13 +719,13 @@ create_shortcuts_tree (GtkFileChooserImplDefault *impl)
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "pixbuf", 0,
+				       "pixbuf", SHORTCUTS_COL_PIXBUF,
 				       NULL);
 
-  renderer = gtk_cell_renderer_text_new ();
+  renderer = _gtk_cell_renderer_sep_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "text", 1,
+				       "text", SHORTCUTS_COL_NAME,
 				       NULL);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->shortcuts_tree), column);
@@ -1809,6 +1811,7 @@ tree_selection_changed (GtkTreeSelection          *selection,
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->list),
 			   GTK_TREE_MODEL (impl->sort_model));
+  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->list));
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->list),
 				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
 
@@ -1843,7 +1846,12 @@ shortcuts_selection_changed (GtkTreeSelection          *selection,
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &path, -1);
 
   if (!path)
-    return; /* The "Bookmarks" node does not have a path set --- we can't change to it */
+    {
+      /* We are on the bookmarks separator node, so unselect it */
+      gtk_tree_selection_unselect_iter (selection, &iter);
+      /* FIXME: how to make this row unselectable? */
+      return;
+    }
 
   impl->changing_folder = TRUE;
   _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), path);
