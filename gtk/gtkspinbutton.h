@@ -107,6 +107,10 @@ struct _GtkSpinButtonClass
 		  gdouble       *new_value);
   gint (*output) (GtkSpinButton *spin_button);
   void (*value_changed) (GtkSpinButton *spin_button);
+
+  /* Action signals for keybindings, do not connect to these */
+  void (*change_value) (GtkSpinButton *spin_button,
+			GtkScrollType  scroll);
 };
 
 

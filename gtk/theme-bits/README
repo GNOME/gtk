@@ -1,0 +1,29 @@
+This directory contains bits and pieces used in the default theme.
+Right now, it contains a tool for extracting individual part 
+bitmaps from a composed image, and source images for the default
+check and radio buttons.
+
+The decompose-bits tools takes an image where the first line contains
+the colors for each part, and the rest of the image is the actual
+image.
+
+The colors on the first line are:
+
+ pixel 0: black
+ pixel 1: dark
+ pixel 2: mid
+ pixel 3: light
+ pixel 4: text
+ pixel 5: text_aa
+ pixel 6: base
+
+The generated XBM bits for the base part include the bits for text and
+text_aa as well; this is so that the result can be drawn either
+with or without the text/text_aa indicator. 
+
+Make sure that any PNG images added to this directory are added with
+'cvs add -kb'.
+
+Owen Taylor
+9 February 2002
+

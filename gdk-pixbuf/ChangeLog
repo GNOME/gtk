@@ -1,3 +1,33 @@
+2002-02-10  Matthias Clasen  <matthias@local>
+
+	* test-loaders.c (main): Enable some tests which should work
+	now.
+
+	* io-wbmp.c (gdk_pixbuf__wbmp_image_load_increment): Detect
+	invalid image dimensions and insufficient memory.
+
+	* io-tga.c (try_preload): Detect invalid image dimensions.
+	(gdk_pixbuf__tga_stop_load): Don't try to unref NULL pointers.
+
+	* io-ico.c (DecodeHeader): Detect some invalid headers and
+	don't segfault.
+
+Fri Feb  8 23:11:15 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c: Force all weight arrays to sum exactly
+	to 65535. (Fixes #70971, reported by Federico Mena Quintero)
+
+	* Makefile.am (libgdk_pixbuf_1_3_la_DEPENDENCIES): Add
+	libpixops.la.
+
+2002-02-08  Federico Mena Quintero  <federico@ximian.com>
+
+	* pixops/pixops.h: Fix comment; PixopsInterpType -> GdkInterpType.
+
+2002-02-08  Darin Adler  <darin@bentspoon.com>
+
+	* io-xbm.c: (next_int): Wean this from <ctype.h>.
+
 2002-02-01  Matthias Clasen  <matthiasc@poet.de>
 
 	* Makefile.am: Build the tga loader as a static library. (#70157)

@@ -1026,13 +1026,14 @@ palette_activate (GtkWidget   *widget,
   return FALSE;
 }
 
-static void
+static gboolean
 palette_popup (GtkWidget *widget,
                gpointer   data)
 {
   GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
 
   do_popup (colorsel, widget, GDK_CURRENT_TIME);
+  return TRUE;
 }
                
 

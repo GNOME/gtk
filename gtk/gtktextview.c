@@ -222,7 +222,7 @@ static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
 static void gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
                                                   GtkAdjustment *hadj,
                                                   GtkAdjustment *vadj);
-static void gtk_text_view_popup_menu             (GtkWidget     *widget);
+static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
 
 static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
                                              GtkMovementStep        step,
@@ -764,12 +764,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_KP_Left, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, -1);
   
-  add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
-
-  add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_LOGICAL_POSITIONS, -1);
-
   add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, 1);
 
@@ -782,7 +776,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, 1);
   
-  /* Eventually we want to move by display lines, not paragraphs */
   add_move_binding (binding_set, GDK_Up, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, -1);
 
@@ -795,12 +788,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_KP_Down, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, 1);
   
-  add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_DISPLAY_LINES, -1);
-
-  add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_DISPLAY_LINES, 1);
-
   add_move_binding (binding_set, GDK_Up, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_PARAGRAPHS, -1);
 
@@ -813,18 +800,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_KP_Down, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_PARAGRAPHS, 1);
   
-  add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_PARAGRAPH_ENDS, -1);
-
-  add_move_binding (binding_set, GDK_e, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_PARAGRAPH_ENDS, 1);
-
-  add_move_binding (binding_set, GDK_f, GDK_MOD1_MASK,
-                    GTK_MOVEMENT_WORDS, 1);
-
-  add_move_binding (binding_set, GDK_b, GDK_MOD1_MASK,
-                    GTK_MOVEMENT_WORDS, -1);
-
   add_move_binding (binding_set, GDK_Home, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
@@ -861,6 +836,20 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_KP_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
 
+  /* Select all
+   */
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+                                GTK_TYPE_INT, -1,
+				GTK_TYPE_BOOL, FALSE);
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+                                GTK_TYPE_INT, 1,
+				GTK_TYPE_BOOL, TRUE);
+
+  
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, GDK_CONTROL_MASK,
                                 "page_horizontally", 2,
                                 GTK_TYPE_INT, -1,
@@ -901,12 +890,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 GTK_TYPE_INT, 1,
                                 GTK_TYPE_BOOL, TRUE);
   
-  /* Setting the cut/paste/copy anchor */
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK,
-                                "set_anchor", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_CONTROL_MASK,
-                                "set_anchor", 0);
-  
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
                                 "delete_from_cursor", 2,
@@ -918,11 +901,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 GTK_TYPE_ENUM, GTK_DELETE_CHARS,
                                 GTK_TYPE_INT, 1);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_CONTROL_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-                                GTK_TYPE_INT, 1);
-
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
                                 "delete_from_cursor", 2,
                                 GTK_TYPE_ENUM, GTK_DELETE_CHARS,
@@ -938,61 +916,20 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
                                 GTK_TYPE_INT, 1);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_MOD1_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-                                GTK_TYPE_INT, 1);
-
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK,
                                 "delete_from_cursor", 2,
                                 GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
                                 GTK_TYPE_INT, -1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_k, GDK_CONTROL_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
-                                GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_u, GDK_CONTROL_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPHS,
-                                GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
-                                GTK_TYPE_INT, 1);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_MOD1_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
-                                GTK_TYPE_INT, 1);
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-                                "insert_at_cursor", 1,
-                                GTK_TYPE_STRING, " ");
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_MOD1_MASK,
-                                "insert_at_cursor", 1,
-                                GTK_TYPE_STRING, " ");
-  
-  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_MOD1_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
-                                GTK_TYPE_INT, 1);
 
   /* Cut/copy/paste */
 
   gtk_binding_entry_add_signal (binding_set, GDK_x, GDK_CONTROL_MASK,
                                 "cut_clipboard", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_w, GDK_CONTROL_MASK,
-                                "cut_clipboard", 0);
-
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
                                 "copy_clipboard", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_v, GDK_CONTROL_MASK,
-                                "paste_clipboard", 0);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_y, GDK_CONTROL_MASK,
                                 "paste_clipboard", 0);
 
   /* Overwrite */
@@ -4729,7 +4666,6 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
   gint cursor_x_pos, cursor_y_pos;
   GtkTextIter new_insert;
   gint y, height;
-  gint x, width;
   
   g_return_if_fail (text_view->hadjustment != NULL);
 
@@ -5003,17 +4939,13 @@ static void
 gtk_text_view_move_focus (GtkTextView     *text_view,
                           GtkDirectionType direction_type)
 {
-  GtkWidget *toplevel;
+  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (text_view));
 
-  toplevel =
-    gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_WINDOW);
-
-  if (toplevel == NULL)
+  if (!GTK_WIDGET_TOPLEVEL (toplevel))
     return;
 
   /* Propagate to toplevel */
-  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus",
-                         direction_type);
+  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus", direction_type);
 }
 
 /*
@@ -6448,10 +6380,11 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 				  info);
 }
 
-static void
+static gboolean
 gtk_text_view_popup_menu (GtkWidget *widget)
 {
   gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), NULL);  
+  return TRUE;
 }
 
 /* Child GdkWindows */
@@ -6748,11 +6681,14 @@ gtk_text_view_get_window (GtkTextView *text_view,
         return NULL;
       break;
 
-    default:
-      g_warning ("%s: Unknown GtkTextWindowType", G_STRLOC);
+    case GTK_TEXT_WINDOW_PRIVATE:
+      g_warning ("%s: You can't get GTK_TEXT_WINDOW_PRIVATE, it has \"PRIVATE\" in the name because it is private.", G_GNUC_FUNCTION);
       return NULL;
       break;
     }
+
+  g_warning ("%s: Unknown GtkTextWindowType", G_GNUC_FUNCTION);
+  return NULL;
 }
 
 /**

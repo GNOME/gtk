@@ -577,9 +577,19 @@ gtk_item_factory_finalize (GObject *object)
 GtkItemFactory*
 gtk_item_factory_from_widget (GtkWidget	       *widget)
 {
+  GtkItemFactory *ifactory;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_factory);
+  ifactory = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_factory);
+  if (ifactory == NULL && GTK_IS_MENU_ITEM (widget) &&
+      GTK_MENU_ITEM (widget)->submenu != NULL) 
+    {
+      GtkWidget *menu = GTK_MENU_ITEM (widget)->submenu;
+      ifactory = gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_item_factory);
+    }
+
+  return ifactory;
 }
 
 /**
@@ -597,9 +607,20 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
 G_CONST_RETURN gchar*
 gtk_item_factory_path_from_widget (GtkWidget	    *widget)
 {
+  gchar* path;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_path);
+  path = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_path);
+
+  if (path == NULL && GTK_IS_MENU_ITEM (widget) &&
+      GTK_MENU_ITEM (widget)->submenu != NULL) 
+    {
+      GtkWidget *menu = GTK_MENU_ITEM (widget)->submenu;
+      path = gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_item_path);
+    }
+
+  return path;
 }
 
 /**

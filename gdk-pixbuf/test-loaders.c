@@ -401,10 +401,7 @@ main (int argc, char **argv)
   TEST (png_test_2, FALSE);
 
 
-#if 0
   TEST (valid_ico_test, TRUE);
-#endif
-  
   TEST (ico_test_1, FALSE);
   
   TEST (valid_jpeg_test, TRUE);
@@ -417,6 +414,11 @@ main (int argc, char **argv)
   TEST (tga_test_1, FALSE);
 
   TEST (xpm_test_1, FALSE);
+
+#if 0
+  TEST (wbmp_test_1, FALSE); 
+  TEST (wbmp_test_2, FALSE);
+#endif
   
   TEST_RANDOM (GIF_HEADER, 150, FALSE);
   TEST_RANDOM (PNG_HEADER, 1100, FALSE);
@@ -431,17 +433,11 @@ main (int argc, char **argv)
   TEST_RANDOMLY_MODIFIED (valid_png_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_tga_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);  /* The jpeg loader does not break */
-#if 0
-  TEST_RANDOMLY_MODIFIED (valid_ico_test, TRUE);    /* The ico loader does not seem to
+  TEST_RANDOMLY_MODIFIED (valid_ico_test, FALSE);    /* The ico loader does not seem to
 						     * break, but the image tend to 
 						     * mutate into a wbmp image, and
 						     * the wbmp loader is broken
 						     */
-#endif
-#if 0
-  TEST (wbmp_test_1, FALSE); 
-  TEST (wbmp_test_2, FALSE);
-#endif
   /* memory tests */
 
   /* How do the loaders behave when memory is low?

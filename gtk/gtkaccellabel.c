@@ -33,7 +33,6 @@
 #include "gtkintl.h"
 
 #include <string.h>
-#include <ctype.h>
 
 enum {
   PROP_0,
@@ -532,7 +531,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 		  g_string_append (gstring, "Backslash");
 		  break;
 		default:
-		  g_string_append_unichar (gstring, toupper (key->accel_key));
+		  g_string_append_unichar (gstring, g_unichar_toupper (key->accel_key));
 		  break;
 		}
 	    }
@@ -542,7 +541,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	      
 	      tmp = gtk_accelerator_name (key->accel_key, 0);
 	      if (tmp[0] != 0 && tmp[1] == 0)
-		tmp[0] = toupper (tmp[0]);
+		tmp[0] = g_unichar_totitle (tmp[0]);
 	      g_string_append (gstring, tmp);
 	      g_free (tmp);
 	    }

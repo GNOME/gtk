@@ -94,7 +94,7 @@ GtkTooltipsData* gtk_tooltips_data_get	   (GtkWidget	  *widget);
 void             gtk_tooltips_force_window (GtkTooltips   *tooltips);
 
 
-void             _gtk_tooltips_show_tip    (GtkWidget    *widget);
+gboolean         _gtk_tooltips_show_tip    (GtkWidget    *widget);
 
 #ifdef __cplusplus
 }

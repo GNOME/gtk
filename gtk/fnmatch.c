@@ -28,6 +28,7 @@
 #endif
 
 #include <errno.h>
+#include <ctype.h> /* tolower */
 
 /* Added for GTK. We need to make sure that all constants are defined
  * to properly compile this file */
@@ -38,7 +39,6 @@
 
 /* We need glib.h for G_DIR_SEPARATOR and G_OS_WIN32 */
 #include <glib.h>
-#include <ctype.h>
 
 
 /* Comment out all this code if we are using the GNU C Library, and are not

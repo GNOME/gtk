@@ -27,7 +27,6 @@
 #include "config.h"
 
 #include <locale.h>
-#include <ctype.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -457,7 +456,8 @@ gtk_rc_add_initial_default_files (void)
 
 /**
  * gtk_rc_add_default_file:
- * @filename: the pathname to the file.
+ * @filename: the pathname to the file. If @filename is not absolute, it
+ *    is searched in the current directory.
  * 
  * Adds a file to the list of files to be parsed at the
  * end of gtk_init().
@@ -663,6 +663,15 @@ _gtk_rc_init (void)
     }
   
   gtk_rc_reparse_all_for_settings (gtk_settings_get_for_screen (gdk_get_default_screen ()), TRUE);
+
+  /* Default RC string */
+  gtk_rc_parse_string_for_screen (gdk_get_default_screen (),
+		       "style \"gtk-default-tooltips-style\" {\n"
+		       "  bg[NORMAL] = \"#ffffc0\"\n"
+		       "  fg[NORMAL] = \"#000000\"\n"
+		       "}\n"
+		       "\n"
+		       "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
 }
 /** gtk_rc_parse_string_for_screen:
  * @screen: a #GdkScreen.
@@ -824,11 +833,7 @@ gtk_rc_parse_file (GtkRcContext *context,
 
   if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
     {
-      /* Determine locale-specific suffixes for RC files
-       *
-       * We normalize the charset into a standard form,
-       * which has all '-' and '_' characters removed,
-       * and is lowercase.
+      /* Determine locale-specific suffixes for RC files.
        */
       length = strlen (locale);
       
@@ -1358,7 +1363,8 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
   if (force_load || mtime_modified)
     {
       GSList *old_files;
-      
+
+      _gtk_binding_reset_parsed ();
       gtk_rc_clear_styles (context);
       g_object_freeze_notify (G_OBJECT (context->settings));
 

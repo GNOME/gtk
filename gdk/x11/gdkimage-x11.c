@@ -521,9 +521,13 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
       if (shm_pixmap)
 	{
 	  Display *xdisplay = GDK_SCREEN_XDISPLAY (impl->screen);
+	  GC xgc;
+	  XGCValues values;
+
 	  /* Again easy, we can just XCopyArea, and don't have to worry about clipping
 	   */
-	  GC xgc = XCreateGC (xdisplay, impl->xid, 0, NULL);
+	  values.subwindow_mode = IncludeInferiors;
+	  xgc = XCreateGC (xdisplay, impl->xid, GCSubwindowMode, &values);
 	  
 	  XCopyArea (xdisplay, impl->xid, shm_pixmap, xgc,
 		     src_x, src_y, width, height, dest_x, dest_y);

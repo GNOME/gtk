@@ -70,6 +70,9 @@ GtkTreeStore *gtk_tree_store_newv             (gint          n_columns,
 void          gtk_tree_store_set_column_types (GtkTreeStore *tree_store,
 					       gint          n_columns,
 					       GType        *types);
+
+/* NOTE: use gtk_tree_model_get to get values from a GtkTreeStore */
+
 void          gtk_tree_store_set_value        (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter,
 					       gint          column,

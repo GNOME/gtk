@@ -1,3 +1,8 @@
+2002-02-05  Matthias Clasen  <matthias@local>
+
+	* gtk/tmpl/gtkrc.sgml: Update the description of RC file loading
+	to match recent code changes. Also document font_name and engine. 
+
 Tue Jan 29 23:41:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (content_files): Add x11.sgml.

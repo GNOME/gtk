@@ -9,6 +9,366 @@
 	(draw_with_images): Use the screen's root window when creating the pixmap.
 	(draw_with_images): Get the screen from the GdkDrawableImplX11.
 
+Sun Feb 10 22:20:46 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): increase
+	value of new_location by one if cmp_a > 0 and we hit the end of
+	the list and pass NULL instead of a 'NULL-iter' with
+	_rows_reordered (#71060)
+
+Sun Feb 10 12:32:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/Makefile.am modules/input/{imam-et.c, imti-er.c,
+	imti-et.c} po/POTFILES.in: Add three Ethiopic input methods from
+	Daniel Yacob.
+
+2002-02-10  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkcalendar.c (gtk_calendar_class_init): Set finalize handler;
+	(gtk_calendar_finalize): Rename gtk_calendar_destroy to gtk_calendar_finalize
+	since ::destroy can be called multiple times, resulting in double-freeing memory.
+
+2002-02-10  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkgeometry-win32.c : don't reduce the scroll
+	rect size by the scroll amount
+
+	* gdk/win32/gdkwindow-win32.c
+	* gdk/win32/gdkselection-win32.c : added some casts to
+	make it compile with msvc's strict type checking
+
+	* gtk/fnmatch.c : #include <ctype.h> again for tolower
+	prototype. The fnmatch() code assumes to be in the crt 
+	locale though it is feeded by utf8 strings from gtkfilesel.c
+
+	* gtk/gtkfilesel.c : let ->cmpl_text be a strdup managed by
+	_CompletionDir instead of referencing already freed memory
+
+	* gtk/gtktooltips.c (gtk_tooltips_init) : fix typo to
+	gtk_rc_parse_string (theDefaultTooltipColor) once as it
+	was intended
+
+	* tests/makefile.msc : added more tests
+
+	* tests/testgtk.c (create_list) : don't try to load gtkenums.h
+	from the current directory use ../gtk/gtkenums.h instead
+
+2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtksizegroup.c: Fix a double «The» typo in a string.
+	
+2002-02-09  Matthias Clasen  <matthias@local>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_focus_child): Avoid segfault
+	for selectable tab labels (even without a segfault, they make the
+	notebook almost unusable, though).  (#69985)
+
+2002-02-08  Matthias Clasen  <matthias@local>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_set_accel_path): Silently do 
+	nothing if the parent is not a menu.  (#66492)
+
+2002-02-06  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_from_widget,
+	gtk_item_factory_path_from_widget): Try fetching the return value 
+	from menu_item->submenu as a fallback.  (#69020)
+	
+Sat Feb  9 22:57:43 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_build_level): convert
+	the iter to a child iter again, after doing _iter_children. It's
+	possible that _iter_children added some rows and updated the stamp.
+
+2002-02-09  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtktextchild.c: Use == rather than = in sanity
+	checks.  Ouch!
+
+2002-02-09  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtktextchild.c (CHECK_IN_BUFFER_RETURN): Add missing
+	curled braces so that it doesn't always return.  Also indent
+	both CHECK_IN_BUFFER* macros properly, and make use of
+	G_STMT_START/G_STMT_END.
+
+Sat Feb  9 13:27:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbindings.h: Add prototype for
+	_gtk_binding_reset_parsed().
+
+Sat Feb  9 13:19:20 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in gtk/Makefile.am gtk/theme-bits/*: Add
+	tools and images used for creating the check/radio
+	button images in the default theme.
+
+Sat Feb  9 13:58:41 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.[ch]: Keyboard navigation for GtkPaned
+	F6: cycle between panes.
+	F8: focus handle (#53584)
+	
+	* tests/testgtk.c: Add test cases for GtkPaned keyboard 
+	navigation.
+	
+Sat Feb  9 00:16:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkimage-x11.c (_gdk_x11_copy_to_image): 
+	XCopyArea with subwindow_mode = IncludeInferiors.
+	(#70999)
+
+	* demos/testpixbuf-save.c (configure_cb): Fix a minor
+	memory management problem.
+
+Fri Feb  8 20:24:58 2002  Owen Taylor  <otaylor@redhat.com>
+	
+	* gtk/gtkbindings.c (binding_compose_params): Fix problem
+	with string-valued parameters (#70012, Johan Dahlin.)
+
+	* gtk/gtkentry.c (gtk_entry_delete_whitespace): Fix 
+	white space deletion.
+
+Fri Feb  8 21:25:56 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): fix
+	evil ref bug where the wrong row and a deleted row was unreffed.
+	Found by Darin Adler <darin@bentspoon.com>
+
+Fri Feb  8 18:46:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbindings.[ch] (_gtk_binding_reset_parsed): Add
+	a function to delete all bindings add by
+	gtk_binding_parse_binding() when rereading RC files.
+
+	* gtk/gtkrc.c (gtk_rc_reparse_all_for_settings): Reset
+	binding set content as well as RC content.
+
+	* gtk/gtkbindings.c (binding_compose_params): Fix 
+	various GValue handling problems.
+
+	* gtk/gtkentry.c (gtk_entry_class_init): Remove bindings 
+	for C-b, C-f, M-b, M-f, C-a, C-e, C-w, C-y, M-space, C-u,
+	C-k, M-\, M-d, C-d.
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): Remove
+	same bindings as GtkEntry, plus C-n, C-p, C-space
+
+        * gtk/gtkrc.key.default gtk/gtkrc.key.emacs gtk/Makefile.am:
+	Add Emacs and Default key themes.
+	
+2002-02-08  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtktreeview.c: (gtk_tree_view_map_expanded_rows_helper):
+	Remove a tiny bit more dead code.
+
+2002-02-08  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtktreeview.c: (gtk_tree_view_map_expanded_rows_helper):
+	Fix stale pointer bug.
+
+Fri Feb  8 14:30:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (title_focus_in): Return FALSE if
+	not showing the titles. (#70959, Thomas Leonard)
+
+2002-02-08  Darin Adler  <darin@bentspoon.com>
+
+	* demos/gtk-demo/main.c: (load_file): isspace -> g_ascii_isspace
+	* gdk/x11/gdkim-x11.c: Remove gdki8n.h include.
+	* gdk/x11/gdkkeys-x11.c: Remove <ctype.h> include.
+	* gdk/x11/gdkmain-x11.c: Remove <ctype.h> include.
+	* gtk/fnmatch.c: Remove <ctype.h> include.
+	* gtk/gtkaccelgroup.c: Remove <ctype.h> include.
+	* gtk/gtkaccellabel.c: (gtk_accel_label_refetch): toupper ->
+	g_unichar_toupper, toupper -> g_unichar_totile
+	* gtk/gtkbindings.c: Remove <ctype.h> include.
+	* gtk/gtkfontsel.c: Remove <ctype.h> include.
+	* gtk/gtkiconfactory.c: Remove <ctype.h> include.
+	* gtk/gtkinputdialog.c: Remove <ctype.h> include.
+	* gtk/gtklabel.c: Remove <ctype.h> include.
+	* gtk/gtkmain.c: Remove <ctype.h> include.
+	* gtk/gtkmenu.c: Remove <ctype.h> include.
+	* gtk/gtkoldeditable.c: Remove <ctype.h> include.
+	* gtk/gtkrc.c: Remove <ctype.h> include.
+	* gtk/gtktextbtree.c: Remove <ctype.h> include.
+	* gtk/gtktextiter.c: Remove <ctype.h> include.
+	* gtk/gtktextsegment.c: Remove <ctype.h> include.
+
+2002-02-08  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkfilesel.c
+	* gtk/gtkgamma.c
+	* gtk/gtkinputdialog.c: use stock labels for dialog action buttons.
+
+2002-02-08  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_ref_node),
+	(gtk_tree_model_sort_unref_node): Pass the ref_node and
+	unref_node calls through to the child model.
+
+2002-02-08  Laszlo Peter  <laca@ireland.sun.com>
+
+	* gtk/gtktextchild.c: s/__FUNCTION__/G_GNUC_FUNCTION/
+	* gtk/gtktextview.c: ditto
+
+2002-02-07  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkspinbutton.h (struct _GtkSpinButtonClass): add
+	change_value virtual function, to fix build
+
+	* gtk/gtkpixmap.c (gtk_pixmap_class_init): parent_class was 
+	from GtkWidget not GtkMisc. Not that it ever mattered.
+
+Thu Feb  7 19:52:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtknotebook.[ch]: Add ::move-focus-out signal
+	to handle Control[-Shift]-Tab and Control-arrow
+	bindings and implement bindings as per #53612.
+
+	* gtk/gtktextview.c (gtk_text_view_move_focus): Fix 
+	fetching the toplevel for plug-socket.
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): Remove
+	bindings for Return/Enter to select the page.
+
+	* gtk/gtknotebook.c (gtk_notebook_change_current_page):
+	Beep at ends.
+
+	* gtk/gtknotebook.c (focus_tabs_move): Don't wrap around
+	and beep at ends.
+
+	* gtk/gtknotebook.c (gtk_notebook_focus): When focusing into
+	the page with the arrow keys, focus the first widget,
+	not the directionally closest widget.
+
+Thu Feb  7 19:00:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_key_release): Convert
+	to using  binding set for doing key bindings. (#62622,
+	Requested by Skip Montaro)
+
+	* gtk/gtkwindow.c (gtk_window_class_init): Add control-arrow
+	bindings as overrides along with control-tab bindings.
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): Fix return
+	type for ::focus_tab signal.
+
+Thu Feb  7 19:39:27 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #70782 and some drag dest rectangle/line issues
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): set
+	GTK_TREE_VIEW_IS_LIST flag (we can switch from a TreeStore to a
+	ListStore for example)
+	(gtk_tree_view_get_path_at_pos): revert previous change, we
+	shouldn't correct for the header, because we are taking bin_window
+	coordinates here
+	(gtk_tree_view_set_drag_dest_row): queue old drag_dest row and
+	upper/lower neighbors for draw, so the drag dest rectangle/line will
+	be cleared correctly
+	(gtk_tree_view_get_dest_row_at_pos): correct for treeview header
+	here, as drag_y is relative to the widget and _get_path_at_pos wants
+	coords relative to bin_window, draw black outline rectangle after
+	drawing the cells
+
+Thu Feb  7 10:53:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_text): Use layout text
+	(which may be affected by invisible char) to compute
+	selection bounds, not entry text. (#70733, Alex Larsson)
+
+2002-02-07 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkwidget.[ch]:
+	Change show_help signal to return gboolean instead of void. This
+	allows the keypress which invokes the signal to be propagated to the
+	focus widgets ancestors if not handled by the focus widget.
+	
+	* gtk/gtktoolips.[ch]
+	Change _gtk_tooltips_show_tip () to return a gboolean indicating
+	whether widget has tooltip to display.
+	
+2002-02-07 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkwidget.[ch]:
+	Change popup_menu signal to return gboolean instead of void. This
+	allows the keypress which invokes the signal to be propagated to the
+	focus widgets ancestors if not handled by the focus widget.
+
+	* gtk/gtkcolorsel.c gtk/gtkentry.c gtk/gtktextview.c:
+	Change signature of popup_menu signal handler to return gboolean
+	instead of void and return TRUE in the signal handler
+
+2002-02-07  Anders Carlsson  <andersca@gnu.org>
+
+	* gdk/x11/xsettings-common.c (xsettings_setting_free): Free 
+	the setting name.
+
+Wed Feb  6 23:28:39 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #70708
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): we're dealing
+	with widget coordinates here, so take the header height into
+	account while converting
+	(gtk_tree_view_widget_to_tree_coords): take header height into
+	account
+	(gtk_tree_view_tree_to_widget_coords): ditto
+	(gtk_tree_view_get_dest_row_at_pos): we were passing coords
+	relative to the tree with _get_path_at_pos, while that function
+	wants coords relative to the widget
+
+2002-02-06  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_scroll_hpages): remove unused variable
+	(gtk_text_view_get_window): add warning about how you
+	can't get the private window. #70683, and avoid default: in the
+	switch so we get "enum value unhandled" warnings
+
+2002-02-06  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextchild.c: Add warnings if you try to use a child
+	anchor that isn't inside a buffer. Really kind of lame; 
+	we should separate the anchor from the buffer. But not worth 
+	fixing for now. #70601
+
+Wed Feb  6 18:25:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c: rip out all the debugging ifdefs, as
+	modelsort seems to be stable (and nobody complained :)
+
+Tue Feb  5 19:13:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_queue): Keep
+	the length of the anti-expose queue finite, by if
+	it gets too long, first doing a XSync() and checking
+	the event queue, and if that doesn't work, simply
+	discarding all anti-expose items in the queue.
+
+	* gdk/x11/gdkdnd-x11.c (gdk_window_cache_filter): Fix ordering
+	on ConfigureNotify (#56349, Thomas Leonard)
+
+2002-02-05  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_expose): offset area being gotten from
+	pixmap by the align/padding offsets, so we don't get warnings
+	in gdk_pixbuf_get_from_drawable (and so it works, of course)
+
+2002-02-05  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkrc.c (gtk_rc_parse_file): Remove a (now) misleading comment.
+
+2002-02-05  Federico Mena Quintero  <federico@ximian.com>
+
+	* gdk/gdkwindow.h: Do not #include <gdk/gdkwindow.h>.
+
+Tue Feb  5 22:54:16 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_insert_after): let's set the
+	path, which we're going to pass with the emission of row_inserted, to
+	the iter we inserted and not its sibling.
+
 2002-02-04 Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup):
@@ -1507,7 +1867,6 @@ Tue Jan  8 14:19:43 2002  Owen Taylor  <otaylor@redhat.com>
 	directly instead of calling get_child_requisition()
 	(#68199, Damon Chaplin)
 
->>>>>>> 1.2786
 2001-01-08  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkstyle.c: add trailing */ on doc comment.

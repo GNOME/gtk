@@ -295,7 +295,15 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		
 		Ptr += 16;	
 	} 
-		
+
+	if (State->DIBoffset < 0) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Invalid header in icon"));
+		return;
+	}
+
 	/* We now have a winner, pointed to in State->DIBoffset,
 	   so we know how many bytes are in the "header" part. */
 	      

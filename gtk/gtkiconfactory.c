@@ -30,7 +30,6 @@
 #include "gtkintl.h"
 #include <stdlib.h>
 #include <errno.h>
-#include <ctype.h>
 #include <string.h>
 
 static GSList *all_icon_factories = NULL;

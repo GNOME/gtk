@@ -1377,7 +1377,7 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   gtk_widget_show (fs->fileop_entry);
   
   /* buttons */
-  button = gtk_button_new_with_label (_("Cancel"));
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -1506,7 +1506,7 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   g_free (buf);
   
   /* buttons */
-  button = gtk_button_new_with_label (_("Cancel"));
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -1516,7 +1516,7 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   gtk_widget_grab_default (button);
   gtk_widget_show (button);
 
-  button = gtk_button_new_with_label (_("Delete"));
+  button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) gtk_file_selection_delete_file_confirmed, 
 		      (gpointer) fs);
@@ -1664,7 +1664,7 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 			      0, strlen (fs->fileop_file));
 
   /* buttons */
-  button = gtk_button_new_with_label (_("Cancel"));
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -2325,6 +2325,7 @@ cmpl_free_state (CompletionState* cmpl_state)
 static void
 free_dir (CompletionDir* dir)
 {
+  g_free (dir->cmpl_text);
   g_free (dir->fullname);
   g_free (dir);
 }
@@ -2424,7 +2425,7 @@ cmpl_completion_matches (gchar           *text_to_complete,
 
   cmpl_state->completion_dir->cmpl_index = -1;
   cmpl_state->completion_dir->cmpl_parent = NULL;
-  cmpl_state->completion_dir->cmpl_text = *remaining_text;
+  cmpl_state->completion_dir->cmpl_text = g_strdup (*remaining_text);
 
   cmpl_state->active_completion_dir = cmpl_state->completion_dir;
 
@@ -2873,6 +2874,7 @@ attach_dir (CompletionDirSent *sent,
   new_dir->sent = sent;
   new_dir->fullname = g_strdup (dir_name);
   new_dir->fullname_len = strlen (dir_name);
+  new_dir->cmpl_text = NULL;
 
   return new_dir;
 }
@@ -3416,7 +3418,7 @@ attempt_file_completion (CompletionState *cmpl_state)
 	      new_dir->cmpl_parent = dir;
 
 	      new_dir->cmpl_index = -1;
-	      new_dir->cmpl_text = first_slash + 1;
+	      new_dir->cmpl_text = g_strdup (first_slash + 1);
 
 	      cmpl_state->active_completion_dir = new_dir;
 

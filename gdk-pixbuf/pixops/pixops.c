@@ -1098,6 +1098,7 @@ tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double 
 	double x = (double)j_offset / SUBSAMPLE;
 	double y = (double)i_offset / SUBSAMPLE;
 	int i,j;
+	int total = 0;
 	  
 	for (i = 0; i < n_y; i++)
 	  {
@@ -1105,6 +1106,7 @@ tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double 
 		
 	    if (i < y)
 	      {
+
 		if (i + 1 > y)
 		  th = MIN(i+1, y + 1/y_scale) - y;
 		else
@@ -1120,6 +1122,8 @@ tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double 
 		
 	    for (j = 0; j < n_x; j++)
 	      {
+		int weight;
+		
 		if (j < x)
 		  {
 		    if (j + 1 > x)
@@ -1135,8 +1139,12 @@ tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double 
 		      tw = 0;
 		  }
 
-		*(pixel_weights + n_x * i + j) = 65536 * tw * x_scale * th * y_scale * overall_alpha;
+		weight = 65536 * tw * x_scale * th * y_scale * overall_alpha + 0.5;
+		total += weight;
+		*(pixel_weights + n_x * i + j) = weight;
 	      }
+
+	    *(pixel_weights + n_x * n_y - 1) += 65536 - total;
 	  }
       }
 }
@@ -1184,7 +1192,8 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
 	double x = (double)j_offset / SUBSAMPLE;
 	double y = (double)i_offset / SUBSAMPLE;
 	int i,j;
-
+	int total = 0;
+	
 	if (x_scale > 1.0)	/* Bilinear */
 	  {
 	    for (i = 0; i < n_x; i++)
@@ -1251,7 +1260,13 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
 
 	for (i = 0; i < n_y; i++)
 	  for (j = 0; j < n_x; j++)
-	    *(pixel_weights + n_x * i + j) = 65536 * x_weights[j] * x_scale * y_weights[i] * y_scale * overall_alpha + 0.5;
+	    {
+	      int weight = 65536 * x_weights[j] * x_scale * y_weights[i] * y_scale * overall_alpha + 0.5;
+	      *(pixel_weights + n_x * i + j) = weight;
+	      total += weight;
+	    }
+
+	*(pixel_weights + n_x * n_y - 1) += 65536 - total;
       }
 
   g_free (x_weights);
@@ -1336,19 +1351,24 @@ bilinear_make_weights (PixopsFilter *filter, double x_scale, double y_scale, dou
 	double x = (double)j_offset / SUBSAMPLE;
 	double y = (double)i_offset / SUBSAMPLE;
 	int i,j;
-	  
+	int total = 0;
+	
 	for (i = 0; i < n_y; i++)
 	  for (j = 0; j < n_x; j++)
 	    {
 	      double w;
+	      int weight;
 
 	      w = bilinear_quadrant  (0.5 + j - (x + 1 / x_scale), 0.5 + j - x, 0.5 + i - (y + 1 / y_scale), 0.5 + i - y);
 	      w += bilinear_quadrant (1.5 + x - j, 1.5 + (x + 1 / x_scale) - j, 0.5 + i - (y + 1 / y_scale), 0.5 + i - y);
 	      w += bilinear_quadrant (0.5 + j - (x + 1 / x_scale), 0.5 + j - x, 1.5 + y - i, 1.5 + (y + 1 / y_scale) - i);
 	      w += bilinear_quadrant (1.5 + x - j, 1.5 + (x + 1 / x_scale) - j, 1.5 + y - i, 1.5 + (y + 1 / y_scale) - i);
-	      
-	      *(pixel_weights + n_x * i + j) = 65536 * w * x_scale * y_scale * overall_alpha;
+	      weight = 65536 * w * x_scale * y_scale * overall_alpha + 0.5;
+	      *(pixel_weights + n_x * i + j) = weight;
+	      total += weight;
 	    }
+
+	*(pixel_weights + n_x * n_y - 1) += 65536 - total;
       }
 }
 

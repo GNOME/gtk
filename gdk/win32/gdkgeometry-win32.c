@@ -127,8 +127,8 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
   if (dest_rect->width > 0 && dest_rect->height > 0)
     {
       RECT clipRect;
-      clipRect.left   = dest_rect->x - dx;
-      clipRect.top    = dest_rect->y - dy;
+      clipRect.left   = dest_rect->x;
+      clipRect.top    = dest_rect->y;
       clipRect.right  = clipRect.left + dest_rect->width;
       clipRect.bottom = clipRect.top + dest_rect->height;
 
@@ -137,7 +137,7 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
       if (!ScrollWindowEx (GDK_WINDOW_HWND (window),
                            dx, dy, /* in: scroll offsets */
                            NULL, /* in: scroll rect, NULL == entire client area */
-                           &clipRect, /* in: restrict to, XXX: really want this ?? */
+                           &clipRect, /* in: restrict to */
                            NULL, /* out: update region */
                            NULL, /* out: update rect */
                            SW_INVALIDATE))

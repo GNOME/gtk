@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 #include <gtk/gtk.h>
 
@@ -518,7 +517,7 @@ load_file (const gchar *filename)
 	{
 	case 0:
 	  /* Reading title */
-	  while (*p == '/' || *p == '*' || isspace (*p))
+	  while (*p == '/' || *p == '*' || g_ascii_isspace (*p))
 	    p++;
 	  r = p;
 	  while (*r != '/' && strlen (r))
@@ -526,7 +525,7 @@ load_file (const gchar *filename)
 	  if (strlen (r) > 0)
 	    p = r + 1;
 	  q = p + strlen (p);
-	  while (q > p && isspace (*(q - 1)))
+	  while (q > p && g_ascii_isspace (*(q - 1)))
 	    q--;
 
 	  if (q > p)
@@ -550,7 +549,7 @@ load_file (const gchar *filename)
 	    
 	case 1:
 	  /* Reading body of info section */
-	  while (isspace (*p))
+	  while (g_ascii_isspace (*p))
 	    p++;
 	  if (*p == '*' && *(p + 1) == '/')
 	    {
@@ -561,11 +560,11 @@ load_file (const gchar *filename)
 	    {
 	      int len;
 	      
-	      while (*p == '*' || isspace (*p))
+	      while (*p == '*' || g_ascii_isspace (*p))
 		p++;
 
 	      len = strlen (p);
-	      while (isspace (*(p + len - 1)))
+	      while (g_ascii_isspace (*(p + len - 1)))
 		len--;
 	      
 	      if (len > 0)
@@ -587,7 +586,7 @@ load_file (const gchar *filename)
 
 	case 2:
 	  /* Skipping blank lines */
-	  while (isspace (*p))
+	  while (g_ascii_isspace (*p))
 	    p++;
 	  if (*p)
 	    {

@@ -407,9 +407,19 @@ gtk_notebook_set_current_page() instead.
 
 @notebook: the object which received the signal.
 @arg1: 
+<!-- # Unused Parameters # -->
 @Returns: 
 
 <!-- ##### SIGNAL GtkNotebook::focus-tab ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkNotebook::move-focus-out ##### -->
 <para>
 
 </para>

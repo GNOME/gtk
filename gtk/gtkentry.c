@@ -231,7 +231,7 @@ static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
-static void gtk_entry_popup_menu         (GtkWidget      *widget);
+static gboolean gtk_entry_popup_menu     (GtkWidget      *widget);
 
 static void gtk_entry_keymap_direction_changed (GdkKeymap *keymap,
 						GtkEntry  *entry);
@@ -626,12 +626,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   add_move_binding (binding_set, GDK_KP_Left, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
   
-  add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
-  
-  add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_LOGICAL_POSITIONS, -1);
-  
   add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
 
@@ -644,18 +638,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
   
-  add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_PARAGRAPH_ENDS, -1);
-
-  add_move_binding (binding_set, GDK_e, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_PARAGRAPH_ENDS, 1);
-
-  add_move_binding (binding_set, GDK_f, GDK_MOD1_MASK,
-		    GTK_MOVEMENT_WORDS, 1);
-
-  add_move_binding (binding_set, GDK_b, GDK_MOD1_MASK,
-		    GTK_MOVEMENT_WORDS, -1);
-
   add_move_binding (binding_set, GDK_Home, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
@@ -680,11 +662,24 @@ gtk_entry_class_init (GtkEntryClass *class)
   add_move_binding (binding_set, GDK_KP_End, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  /* Activate */
+  /* Select all
+   */
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+                                GTK_TYPE_INT, -1,
+				GTK_TYPE_BOOL, FALSE);
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+                                GTK_TYPE_INT, 1,
+				GTK_TYPE_BOOL, TRUE);
 
+
+  /* Activate
+   */
   gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
 				"activate", 0);
-
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
 				"activate", 0);
   
@@ -699,11 +694,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, 1);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-				GTK_TYPE_INT, 1);
-
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
 				"delete_from_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
@@ -719,61 +709,20 @@ gtk_entry_class_init (GtkEntryClass *class)
 				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				GTK_TYPE_INT, 1);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_MOD1_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-				GTK_TYPE_INT, 1);
-
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK,
 				"delete_from_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				GTK_TYPE_INT, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_k, GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_u, GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPHS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
-				GTK_TYPE_INT, 1);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_MOD1_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
-				GTK_TYPE_INT, 1);
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-				"insert_at_cursor", 1,
-				GTK_TYPE_STRING, " ");
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_MOD1_MASK,
-				"insert_at_cursor", 1,
-				GTK_TYPE_STRING, " ");
-  
-  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_MOD1_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
-				GTK_TYPE_INT, 1);
-  
   /* Cut/copy/paste */
 
   gtk_binding_entry_add_signal (binding_set, GDK_x, GDK_CONTROL_MASK,
 				"cut_clipboard", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_w, GDK_CONTROL_MASK,
-				"cut_clipboard", 0);
-  
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
 				"copy_clipboard", 0);
   
   gtk_binding_entry_add_signal (binding_set, GDK_v, GDK_CONTROL_MASK,
-				"paste_clipboard", 0);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_y, GDK_CONTROL_MASK,
 				"paste_clipboard", 0);
 
   /* Overwrite */
@@ -2688,8 +2637,9 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gint *ranges;
 	  gint n_ranges, i;
           PangoRectangle logical_rect;
-	  gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
-	  gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
+	  const gchar *text = pango_layout_get_text (layout);
+	  gint start_index = g_utf8_offset_to_pointer (text, start_pos) - text;
+	  gint end_index = g_utf8_offset_to_pointer (text, end_pos) - text;
 	  GdkRegion *clip_region = gdk_region_new ();
 	  GdkGC *text_gc;
 	  GdkGC *selection_gc;
@@ -3155,7 +3105,7 @@ gtk_entry_delete_whitespace (GtkEntry *entry)
   while (start > 0 && log_attrs[start-1].is_white)
     start--;
 
-  while (end < n_attrs && log_attrs[start-1].is_white)
+  while (end < n_attrs && log_attrs[end].is_white)
     end++;
 
   g_free (log_attrs);
@@ -3963,10 +3913,11 @@ gtk_entry_do_popup (GtkEntry       *entry,
 				  info);
 }
 
-static void
+static gboolean
 gtk_entry_popup_menu (GtkWidget *widget)
 {
   gtk_entry_do_popup (GTK_ENTRY (widget), NULL);
+  return TRUE;
 }
 
 static void

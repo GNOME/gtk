@@ -1,15 +1,17 @@
-# This is the Finnish locale definition for Gtk+.
-# Copyright (C) 1998-2000 Free Software Foundation, Inc.
-# Mikko Rauhala <mjr@iki.fi>, 1999.
-# Minor changes: Pauli Virtanen, 2000
+# gtk+ Finnish translation
+# Suomennos: http://gnome-fi.sourceforge.net/
 #
-# GNOME Finnish Translation Team: http://gnome-fi.sourceforge.net/
+# Copyright (C) 2002 Free Software Foundation, Inc.
+# Mikko Rauhala <mjr@iki.fi>, 1999
+# Minor changes: Pauli Virtanen, 2000-2002
+#
+# widget == säädin
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2002-01-31 09:59-0500\n"
-"PO-Revision-Date: 2000-11-06 21:43+02:00\n"
+"Project-Id-Version: gtk+ 1.3.12\n"
+"POT-Creation-Date: 2002-01-29 23:15+0200\n"
+"PO-Revision-Date: 2002-02-09 22:10+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@saunalahti.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,23 +21,24 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:551
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr "Tiedoston \"%s\" avaus epäonnistui: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:561
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "Kuvatiedostossa \"%s\" ei ole sisältöä"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr ""
+msgstr "Ei tiedä, miten ladata animaatio tiedostosta \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:606
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
+"Kuvan \"%s\" lataus epäonnistui: syy tuntematon, ehkä vioittunut kuvatiedosto"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
@@ -43,12 +46,14 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
+"Animaation \"%s\" lataus epäonnistui: syy tuntematon, ehkä vioittunut "
+"animaatiotiedosto"
 
 # , c-format
 #: gdk-pixbuf/gdk-pixbuf-io.c:324
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Ladattavaa moduulia ei löytynyt module_path:sta:\"%s\","
+msgstr "Ei voi ladata kuvanlatausmoduulia: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:343
 #, c-format
@@ -56,40 +61,42 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
+"Kuvanlatausmoduuli %s ei vienyt oikeaa rajapintaa. Ehkäpä se on toisesta GTK:"
+"n versiosta?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:460 gdk-pixbuf/gdk-pixbuf-io.c:486
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Kuvatyyppiä \"%s\" ei tueta"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:508
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "Ei voitu tunnistaa tiedoston \"%s\" kuvatyyppiä"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:514
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "Tuntematon kuvatiedostomuoto"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:584
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
-msgstr ""
+msgstr "Ei tiedä, miten ladata kuva tiedostosta \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:617
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "Kuvan \"%s\" lataus epäonnistui: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:722
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
+msgstr "Tämä käännetty versio gdk-pixbufista ei voi tallentaa muodossa: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:829
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "Tiedoston \"%s\" avaaminen kirjoitusta varten epäonnistui: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:850
 #, c-format
@@ -97,11 +104,13 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
+"Tiedoston \"%s\" sulkeminen epäonnistui kirjoittaessa kuvaa, joten kaikki "
+"data ei ole välttämättä tallentunut: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
+msgstr "Kuvatyypin \"%s\" kasvavaa latausta ei tueta."
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
@@ -109,55 +118,25 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
+"Sisäinen virhe: Kuvanlatainmoduuli \"%s\" ei onnistunut aloittamaan kuvan "
+"latausta mutta ei ilmoittanut virheen syytä"
 
 #: gdk-pixbuf/io-bmp.c:267
 msgid "BMP image has unsupported header size"
-msgstr ""
+msgstr "BMP-kuvan otsakkeen tätä kokoa ei tueta"
 
 #: gdk-pixbuf/io-bmp.c:292 gdk-pixbuf/io-bmp.c:315
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "BMP-kuvan otsake on viallinen"
 
 #: gdk-pixbuf/io-bmp.c:341
 msgid "Not enough memory to load bitmap image"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:204
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:221
-#, fuzzy
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF-tiedostosta puuttuu joitakin osia (ehkä se on typistynyt jotenkin?)"
-
-#: gdk-pixbuf/io-ico.c:259 gdk-pixbuf/io-ico.c:307 gdk-pixbuf/io-ico.c:370
-#: gdk-pixbuf/io-ico.c:423
-msgid "Not enough memory to load icon"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:329
-msgid "Icon has zero width"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:339
-msgid "Icon has zero height"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:472
-msgid "Not enough memory to load ICO file"
-msgstr ""
+msgstr "Ei tarpeeksi muistia bittikarttakuvan lataamiseen"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "GIF:n luku epäonnistui: %s"
 
 #: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1360 gdk-pixbuf/io-gif.c:1519
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
@@ -171,11 +150,11 @@ msgstr "Sisäinen virhe GIF-lataimessa (%s)"
 
 #: gdk-pixbuf/io-gif.c:592
 msgid "GIF image loader can't understand this image."
-msgstr ""
+msgstr "GIF-kuvanlukija ei ymmärrä tätä kuvaa."
 
 #: gdk-pixbuf/io-gif.c:621
 msgid "Bad code encountered"
-msgstr ""
+msgstr "Havaitsi virheellisen koodin"
 
 #: gdk-pixbuf/io-gif.c:630
 msgid "Circular table entry in GIF file"
@@ -184,11 +163,11 @@ msgstr "GIF-tiedostossa on taulukkokehämerkintä"
 #: gdk-pixbuf/io-gif.c:754 gdk-pixbuf/io-gif.c:1348 gdk-pixbuf/io-gif.c:1393
 #: gdk-pixbuf/io-gif.c:1507
 msgid "Not enough memory to load GIF file"
-msgstr ""
+msgstr "Ei tarpeeksi muistia GIF-kuvan lataamiseksi"
 
 #: gdk-pixbuf/io-gif.c:998
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "GIF-kuva on vioittunut (viallinen LZW-pakkaus)"
 
 #: gdk-pixbuf/io-gif.c:1048
 msgid "File does not appear to be a GIF file"
@@ -201,58 +180,62 @@ msgstr "GIF-tiedostomuodon versiota %s ei tueta"
 
 #: gdk-pixbuf/io-gif.c:1135
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr ""
+msgstr "GIF-kuva sisälsi kehyksen, joka oli kuvan reunojen ulkopuolella."
 
 #: gdk-pixbuf/io-gif.c:1151
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
+msgstr "GIF-kuvan ensimmäisen kehyksen saantitapa oli \"palauta edellinen\"."
 
 #: gdk-pixbuf/io-gif.c:1186
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
+"GIF-kuvalla ei ole yleistä värikarttaa, ja sen kehyksellä ei ole paikallista "
+"värikarttaa."
 
 #: gdk-pixbuf/io-gif.c:1415
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "GIF-kuva oli typistynyt tai vaillinainen."
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "Virhe tulkatessa JPEG-kuvaa (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:234
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
+"Liian vähän muistia kuvan lataamiseksi. Sulje joitakin sovelluksia "
+"vapauttaaksesi muistia."
 
 #: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
+msgstr "Ei voinut varata muistia JPEG-kuvan lataamiseksi"
 
 #: gdk-pixbuf/io-jpeg.c:664
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
+msgstr "JPEG-laadun täytyy olla välillä 0-100. Arvoa \"%s\" ei voitu tulkita."
 
 #: gdk-pixbuf/io-jpeg.c:679
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
+msgstr "JPEG-laadun täytyy olla välillä 0-100. Arvo \"%d\" ei käy."
 
 #: gdk-pixbuf/io-png.c:161
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
+msgstr "Vakava virhe ladatessa PNG-kuvatiedostoa: %s"
 
 #: gdk-pixbuf/io-png.c:273
 msgid "Insufficient memory to load PNG file"
-msgstr ""
+msgstr "Liian vähän muistia PNG-tiedoston lataamiseksi"
 
 #: gdk-pixbuf/io-png.c:591
 #, c-format
@@ -260,289 +243,195 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
+"Liian vähän muistia %ldx%ld-kokoisen kuvan säilytykseen. Sulje joitakin "
+"sovelluksia vähentääksesi muistin käyttöä."
 
 #: gdk-pixbuf/io-png.c:642
 msgid "Fatal error reading PNG image file"
-msgstr ""
+msgstr "Vakava virhe lukiessa PNG-kuvatiedostoa"
 
 #: gdk-pixbuf/io-png.c:691
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
+msgstr "Vakava virhe ladatessa PNG-kuvatiedostoa: %s"
 
 #: gdk-pixbuf/io-png.c:757
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
+"PNG tEXt -lohkojen avainten täytyy sisältää vähintään 1 ja enintään 79 "
+"merkkiä."
 
 #: gdk-pixbuf/io-png.c:765
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
-msgstr ""
+msgstr "PNG tEXt -lohkojen avainten täytyy olla ASCII-merkkejä."
 
 #: gdk-pixbuf/io-png.c:786
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
-msgstr ""
+msgstr "PNG tEXt -lohkon arvoa ei voi muuntaa ISO-8859-1 -merkistöön."
 
 #: gdk-pixbuf/io-pnm.c:254
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
+msgstr "PNM-latain oletti saavansa kokonaisluvun, muttei saanut"
 
 #: gdk-pixbuf/io-pnm.c:286
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "PNM-tiedoston alkubitti on väärä"
 
 #: gdk-pixbuf/io-pnm.c:316
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "PNM-tiedosto ei ole tunnettua PNM-alimuotoa"
 
 #: gdk-pixbuf/io-pnm.c:341
 msgid "PNM file has an image width of 0"
-msgstr ""
+msgstr "PNM-tiedoston kuvan leveys on 0"
 
 #: gdk-pixbuf/io-pnm.c:362
 msgid "PNM file has an image height of 0"
-msgstr ""
+msgstr "PNM-tiedoston kuvan korkeus on 0"
 
 #: gdk-pixbuf/io-pnm.c:385
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "Suurin väriarvo PNM-tiedostossa on 0"
 
 #: gdk-pixbuf/io-pnm.c:393
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "Suurin väriarvo PNM-tiedostossa on liian suuri"
 
 #: gdk-pixbuf/io-pnm.c:401
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
+"Ei voi käsitellä PNM-tiedostoja joissa suurin väriarvo on suurempi kuin 255."
 
 #: gdk-pixbuf/io-pnm.c:440 gdk-pixbuf/io-pnm.c:468 gdk-pixbuf/io-pnm.c:500
 msgid "Raw PNM image type is invalid"
-msgstr ""
+msgstr "Raaka PNM -kuvatyyppi on väärä"
 
 #: gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
 msgid "PNM image format is invalid"
-msgstr ""
+msgstr "PNM-kuvamuoto on väärä"
 
 #: gdk-pixbuf/io-pnm.c:661
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
+msgstr "PNM-kuvanlatain ei tue tätä PNM-alimuotoa"
 
 #: gdk-pixbuf/io-pnm.c:716
 msgid "Premature end-of-file encountered"
-msgstr ""
+msgstr "Havaitsi ennenaikaisen tiedoston lopun"
 
 #: gdk-pixbuf/io-pnm.c:748 gdk-pixbuf/io-pnm.c:967
+#, fuzzy
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
+msgstr "Raa'at PNM-muodot vaativat täsmälleen yhden välin ennen otostietoja"
 
 #: gdk-pixbuf/io-pnm.c:775
 msgid "Can't allocate memory for loading PNM image"
-msgstr ""
+msgstr "Ei voi varata muistia PNM-kuvan lataamiseksi"
 
 #: gdk-pixbuf/io-pnm.c:824
 msgid "Insufficient memory to load PNM context struct"
-msgstr ""
+msgstr "Liian vähän muistia PNM-kontekstirakenteen lataamiseksi"
 
 #: gdk-pixbuf/io-pnm.c:874
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "Odottamaton PNM-kuvadatan loppu"
 
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:157
-msgid "Can't allocate memory for IOBuffer struct"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:176
-msgid "Can't allocate memory for IOBuffer data"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:187
-msgid "Can't realloc IOBuffer data"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:216
-msgid "Can't allocate temporary IOBuffer data"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:249
-msgid "fread() failed -- premature end-of-file probably encountered"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:259
-msgid "fseek() failed -- premature end-of-file probably encountered"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:288
-msgid "Can't allocate new pixbuf"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:557
-msgid "Can't allocate colormap structure"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:564
-msgid "Can't allocate colormap entries"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:587
-msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:607
-msgid "Can't allocate TGA header memory"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:619
-msgid "TGA image comment length is too long"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:628
-msgid "TGA image type not supported"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:671
-msgid "Can't allocate memory for TGA context struct"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:735
-msgid "Excess data in file"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:776
-msgid "Can't allocate memory for TGA header"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:786
-msgid "Too big value in the infolen field of TGA header."
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:810
-msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:822
-msgid "Can't allocate memory for TGA colormap struct"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:831
-msgid "Can't allocate memory for TGA colormap entries"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:841
-msgid "Unexpected bitdepth for TGA colormap"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:881
-msgid "Pseudo-Color image without colormap"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:888
-msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:897 gdk-pixbuf/io-tga.c:993 gdk-pixbuf/io-tga.c:1059
-msgid "Can't allocate pixbuf"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:1125 gdk-pixbuf/io-tga.c:1154
-msgid "Unsupported TGA image type"
-msgstr ""
+msgstr "Liian vähän muistia PNM-tiedoston lataamiseksi"
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "Ei voinut hakea kuvan leveyttä (viallinen TIFF-tiedosto)"
 
 #: gdk-pixbuf/io-tiff.c:159
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "Ei voinut hakea kuvan korkeutta (viallinen TIFF-tiedosto)"
 
 #: gdk-pixbuf/io-tiff.c:169
 msgid "Width or height of TIFF image is zero"
-msgstr ""
+msgstr "TIFF-kuvan korkeus tai leveys on nolla"
 
 #: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
+msgstr "Liian vähän muistia TIFF-tiedoston avaamiseksi"
 
 #: gdk-pixbuf/io-tiff.c:201
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "RGB-datan lataus TIFF-tiedostosta epäonnistui"
 
 #: gdk-pixbuf/io-tiff.c:270
 msgid "Failed to open TIFF image"
-msgstr ""
+msgstr "TIFF-tiedoston avaus epäonnistui"
 
 #: gdk-pixbuf/io-tiff.c:283
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "TIFFClose-toiminto epäonnistui"
 
 #: gdk-pixbuf/io-tiff.c:416 gdk-pixbuf/io-tiff.c:430
 msgid "Failed to load TIFF image"
-msgstr ""
+msgstr "TIFF-tiedoston lataus epäonnistui"
 
 #: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
-msgstr ""
+msgstr "Virheellinen XBM-tiedosto"
 
 #: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
-msgstr ""
+msgstr "Liian vähän muistia XBM-tiedoston lataamiseksi"
 
 #: gdk-pixbuf/io-xbm.c:428
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
+msgstr "Väliaikaistiedoston kirjoittaminen epäonnistui XBM-kuvaa ladatessa"
 
 #: gdk-pixbuf/io-xpm.c:1235
 msgid "No XPM header found"
-msgstr ""
+msgstr "XPM-otsikkoa ei löytynyt"
 
 #: gdk-pixbuf/io-xpm.c:1243
 msgid "XPM file has image width <= 0"
-msgstr ""
+msgstr "XPM-tiedoston kuvan leveys on <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1251
 msgid "XPM file has image height <= 0"
-msgstr ""
+msgstr "XPM-tiedoston kuvan korkeus on <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1259
 msgid "XPM file has invalid number of colors"
-msgstr ""
+msgstr "XPM-tiedostossa on väärä määrä värejä"
 
 #: gdk-pixbuf/io-xpm.c:1267
 msgid "XPM has invalid number of chars per pixel"
-msgstr ""
+msgstr "XPM:ssä on väärä määrä merkkejä kuvapistettä kohden"
 
 #: gdk-pixbuf/io-xpm.c:1285
 msgid "Can't read XPM colormap"
-msgstr ""
+msgstr "Ei voi lukea XPM-värikarttaa"
 
 #: gdk-pixbuf/io-xpm.c:1326
 msgid "Can't allocate memory for loading XPM image"
-msgstr ""
+msgstr "Ei voi varata muistia XPM-kuvan lataamiseksi"
 
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
+msgstr "Väliaikaistiedoston kirjoittaminen epäonnistui XPM-kuvaa ladatessa"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
-msgstr ""
+msgstr "Kuvan otsikko vioittunut"
 
 #: gdk-pixbuf/gdk-pixdata.c:151
 msgid "Image format unknown"
-msgstr ""
+msgstr "Tuntematon kuvamuoto"
 
 #: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
 msgid "Image pixel data corrupt"
-msgstr ""
+msgstr "Kuvapistetiedot viallisia"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
-msgstr ""
+msgstr "%u tavun kokoisen kuvapuskurin varaaminen epäonnistui"
 
 #: gtk/gtkaccellabel.c:122
 msgid "Accelerator Closure"
@@ -581,9 +470,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkalignment.c:121
-#, fuzzy
 msgid "Horizontal scale"
-msgstr "Perhe:"
+msgstr "Vaakaskaalaus"
 
 #: gtk/gtkalignment.c:122
 msgid ""
@@ -593,7 +481,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
-msgstr ""
+msgstr "Pystyskaalaus"
 
 #: gtk/gtkalignment.c:131
 msgid ""
@@ -602,37 +490,38 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkarrow.c:98
-#, fuzzy
 msgid "Arrow direction"
-msgstr "Luo hakemisto"
+msgstr "Nuolen suunta"
 
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
-msgstr ""
+msgstr "Suunta, johon nuoli osoittaa"
 
 #: gtk/gtkarrow.c:106
 msgid "Arrow shadow"
-msgstr ""
+msgstr "Nuolen varjo"
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "Nuolta ympäröivän varjo ulkonäkö"
 
 #: gtk/gtkaspectframe.c:107
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "Vaakatasaus"
 
 #: gtk/gtkaspectframe.c:108
+#, fuzzy
 msgid "X alignment of the child"
-msgstr ""
+msgstr "Sarakkeen otsikon tekstin tai säätimen tasaus"
 
 #: gtk/gtkaspectframe.c:114
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "Pystytasaus"
 
 #: gtk/gtkaspectframe.c:115
+#, fuzzy
 msgid "Y alignment of the child"
-msgstr ""
+msgstr "Pixbufin pystytasaus."
 
 #: gtk/gtkaspectframe.c:121
 msgid "Ratio"
@@ -651,16 +540,18 @@ msgid "Force aspect ratio to match that of the frame's child"
 msgstr ""
 
 #: gtk/gtkbbox.c:115
+#, fuzzy
 msgid "Minimum child width"
-msgstr ""
+msgstr "Pienin leveys"
 
 #: gtk/gtkbbox.c:116
 msgid "Minimum width of buttons inside the box"
 msgstr ""
 
 #: gtk/gtkbbox.c:124
+#, fuzzy
 msgid "Minimum child height"
-msgstr ""
+msgstr "Pienin leveys"
 
 #: gtk/gtkbbox.c:125
 msgid "Minimum height of buttons inside the box"
@@ -683,8 +574,9 @@ msgid "Amount to increase child's size on the top and bottom"
 msgstr ""
 
 #: gtk/gtkbbox.c:151
+#, fuzzy
 msgid "Layout style"
-msgstr ""
+msgstr "Kirjasintyyli"
 
 #: gtk/gtkbbox.c:152
 msgid ""
@@ -703,8 +595,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkbox.c:125
+#, fuzzy
 msgid "Spacing"
-msgstr ""
+msgstr "Koon muutto"
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
@@ -715,28 +608,31 @@ msgid "Homogeneous"
 msgstr ""
 
 #: gtk/gtkbox.c:136
+#, fuzzy
 msgid "Whether the children should all be the same size."
-msgstr ""
+msgstr "Näkyykö järjestysilmaisin"
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:282
 msgid "Label"
-msgstr ""
+msgstr "Nimiö"
 
 #: gtk/gtkbutton.c:190
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
-msgstr ""
+msgstr "Painikkeen sisällä olevan nimiön teksti, jos painike sisältää nimiön."
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:303
 msgid "Use underline"
-msgstr ""
+msgstr "Käytä alleviivausta"
 
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:304
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
+"Jos asetettu, alaviiva tekstissä merkitsee, että seuraavaa merkkiä pitäisi "
+"käyttää muistettavana pikanäppäimenä"
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
@@ -794,68 +690,67 @@ msgstr ""
 #: gtk/gtkcellrenderer.c:103
 #, fuzzy
 msgid "mode"
-msgstr "Tila:"
+msgstr "Tila"
 
 #: gtk/gtkcellrenderer.c:104
 msgid "Editable mode of the CellRenderer"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:113
-#, fuzzy
 msgid "visible"
-msgstr "Poistettu"
+msgstr "näkyvä"
 
 #: gtk/gtkcellrenderer.c:114
 msgid "Display the cell"
-msgstr ""
+msgstr "Näytä solu"
 
 #: gtk/gtkcellrenderer.c:122
 msgid "xalign"
-msgstr ""
+msgstr "x-tasaus"
 
 #: gtk/gtkcellrenderer.c:123
 msgid "The x-align."
-msgstr ""
+msgstr "Vaakatasaus."
 
 #: gtk/gtkcellrenderer.c:133
 msgid "yalign"
-msgstr ""
+msgstr "y-tasaus"
 
 #: gtk/gtkcellrenderer.c:134
 msgid "The y-align."
-msgstr ""
+msgstr "Pystytasaus."
 
 #: gtk/gtkcellrenderer.c:144
 msgid "xpad"
-msgstr ""
+msgstr "x-väli"
 
 #: gtk/gtkcellrenderer.c:145
 msgid "The xpad."
-msgstr ""
+msgstr "Vaakaväli."
 
 #: gtk/gtkcellrenderer.c:155
 msgid "ypad"
-msgstr ""
+msgstr "y-väli"
 
 #: gtk/gtkcellrenderer.c:156
 msgid "The ypad."
-msgstr ""
+msgstr "Pystyväli."
 
 #: gtk/gtkcellrenderer.c:166
 msgid "width"
-msgstr ""
+msgstr "leveys"
 
 #: gtk/gtkcellrenderer.c:167
 msgid "The fixed width."
-msgstr ""
+msgstr "Vakioleveys."
 
 #: gtk/gtkcellrenderer.c:177
 msgid "height"
-msgstr ""
+msgstr "korkeus"
 
 #: gtk/gtkcellrenderer.c:178
 msgid "The fixed height."
-msgstr ""
+msgstr "Vakiokorkeus."
 
 #: gtk/gtkcellrenderer.c:188
 msgid "Is Expander"
@@ -863,11 +758,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:189
 msgid "Row has children."
-msgstr ""
+msgstr "Rivillä on lapsia."
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
-msgstr ""
+msgstr "On laajennettu"
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
@@ -875,23 +770,26 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:104
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "Pixbuf-olio"
 
 #: gtk/gtkcellrendererpixbuf.c:105
 msgid "The pixbuf to render."
-msgstr ""
+msgstr "Piirtyvä pixbuf."
 
 #: gtk/gtkcellrendererpixbuf.c:113
+#, fuzzy
 msgid "Pixbuf Expander Open"
-msgstr ""
+msgstr "pixbuf x-väli"
 
 #: gtk/gtkcellrendererpixbuf.c:114
+#, fuzzy
 msgid "Pixbuf for open expander."
-msgstr ""
+msgstr "Piirtyvä pixbuf."
 
 #: gtk/gtkcellrendererpixbuf.c:122
+#, fuzzy
 msgid "Pixbuf Expander Closed"
-msgstr ""
+msgstr "pixbuf x-väli"
 
 #: gtk/gtkcellrendererpixbuf.c:123
 msgid "Pixbuf for closed expander."
@@ -899,262 +797,261 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:522 gtk/gtkprogressbar.c:207
 msgid "Text"
-msgstr ""
+msgstr "Teksti"
 
 #: gtk/gtkcellrenderertext.c:175
 msgid "Text to render"
-msgstr ""
+msgstr "Piirtyvä teksti"
 
 #: gtk/gtkcellrenderertext.c:182
 msgid "Markup"
-msgstr ""
+msgstr "Merkinnät"
 
 #: gtk/gtkcellrenderertext.c:183
 msgid "Marked up text to render"
-msgstr ""
+msgstr "Merkitty piirtyvä teksti"
 
 #: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:289
 msgid "Attributes"
-msgstr ""
+msgstr "Määreet"
 
 #: gtk/gtkcellrenderertext.c:191
 msgid "A list of style attributes to apply to the text of the renderer."
-msgstr ""
+msgstr "Luettelo piirtimen tekstiin sovellettavista tyylimääreistä."
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
 msgid "Background color name"
-msgstr ""
+msgstr "Taustavärin nimi"
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
 msgid "Background color as a string"
-msgstr ""
+msgstr "Taustaväri merkkijonona"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
 msgid "Background color"
-msgstr ""
+msgstr "Taustaväri"
 
 #: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Taustaväri GdkColor:na"
 
 #: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
 msgid "Foreground color name"
-msgstr ""
+msgstr "Edustavärin nimi"
 
 #: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "Edustaväri merkkijonona"
 
 #: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
 msgid "Foreground color"
-msgstr ""
+msgstr "Edustaväri"
 
 #: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "Edustaväri GdkColor:na"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:454 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:565
-#, fuzzy
 msgid "Editable"
-msgstr "(ei käytössä)"
+msgstr "Muokattava"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:566
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "Voiko käyttäjä muuttaa tekstiä"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
-#: gtk/gtkfontsel.c:202 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:192 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
-msgstr ""
+msgstr "Kirjasin"
 
 #: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:286
 msgid "Font description as a string"
-msgstr ""
+msgstr "Kirjasimen kuvaus merkkijonona"
 
 #: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:294
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "Kirjasimen kuvaus PangoFontDescription-rakenteena"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
-#, fuzzy
 msgid "Font family"
-msgstr "Perhe:"
+msgstr "Kirjasinperhe"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "Kirjasinperheen nimi, esimerkiksi sans, helvetica, times tai monospace"
 
 #: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
-msgstr ""
+msgstr "Kirjasintyyli"
 
 #: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
-msgstr ""
+msgstr "Kirjasinmuunnelma"
 
 #: gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
-msgstr ""
+msgstr "Kirjasinvahvuus"
 
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
-msgstr ""
+msgstr "Kirjasimen venytys"
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
-msgstr ""
+msgstr "Kirjasinkoko"
 
 #: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:368
 msgid "Font points"
-msgstr ""
+msgstr "Kirjasinpisteitä"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:369
 msgid "Font size in points"
-msgstr ""
+msgstr "Kirjasinkoko pisteinä"
 
 #: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
-#, fuzzy
 msgid "Font scale"
-msgstr "Perhe:"
+msgstr "Kirjasinskaala"
 
 #: gtk/gtkcellrenderertext.c:322
 msgid "Font scaling factor"
-msgstr ""
+msgstr "Kirjasimen skaalauskerroin"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:427
 msgid "Rise"
-msgstr ""
+msgstr "Nosto"
 
 #: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
+"Tekstin sijainti perustason yläpuolella (tai alapuolella jos nosto "
+"negatiivinen)"
 
 #: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
 msgid "Strikethrough"
-msgstr ""
+msgstr "Yliviivaus"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "Piirtyykö tekstin yli viiva"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
 msgid "Underline"
-msgstr ""
+msgstr "Alleviivaus"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "Tekstin alleviivaustyyli"
 
 #: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
 msgid "Background set"
-msgstr ""
+msgstr "Taustaväri asetettu"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu taustaväriin"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
 msgid "Foreground set"
-msgstr ""
+msgstr "Edustaväri asetettu"
 
 #: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu edustaväriin"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
 msgid "Editability set"
-msgstr ""
+msgstr "Muokattavuus asetettu"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu tekstin muokattavuuteen"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
 msgid "Font family set"
-msgstr ""
+msgstr "Kirjasinperhe asetettu"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu kirjasinperheeseen"
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
 msgid "Font style set"
-msgstr ""
+msgstr "Kirjasintyyli asetettu"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu kirjasintyyliin"
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
 msgid "Font variant set"
-msgstr ""
+msgstr "Kirjasinmuunnelma asetettu"
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu kirjasinmuunnelmaan"
 
 #: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
 msgid "Font weight set"
-msgstr ""
+msgstr "Kirjasinvahvuus asetettu"
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu kirjasinvahvuuteen"
 
 #: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
 msgid "Font stretch set"
-msgstr ""
+msgstr "Kirjasinvenytys asetettu"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu kirjasimen venymiseen"
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
 msgid "Font size set"
-msgstr ""
+msgstr "Kirjasinkoko asetettu"
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu kirjasinkokoon"
 
 #: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
 msgid "Font scale set"
-msgstr ""
+msgstr "Kirjasinskaala asetettu"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Muuttaako tämä lappu kirjasinkoon jollakin kertoimella"
 
 #: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
 msgid "Rise set"
-msgstr ""
+msgstr "Nosto asetettu"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu nostoon"
 
 #: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Yliviivaus asetettu"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:597
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu yliviivaukseen"
 
 #: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
 msgid "Underline set"
-msgstr ""
+msgstr "Alleviivaus asetettu"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:605
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu alleviivaukseen"
 
 #: gtk/gtkcellrenderertoggle.c:130
 msgid "Toggle state"
@@ -1165,9 +1062,8 @@ msgid "The toggle state of the button"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:139
-#, fuzzy
 msgid "Activatable"
-msgstr "(ei käytössä)"
+msgstr "Aktivoitavissa"
 
 #: gtk/gtkcellrenderertoggle.c:140
 msgid "The toggle button can be activated"
@@ -1199,19 +1095,21 @@ msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
 msgid "Active"
-msgstr ""
+msgstr "Aktiivinen"
 
 #: gtk/gtkcheckmenuitem.c:116
+#, fuzzy
 msgid "Whether the menu item is checked."
-msgstr ""
+msgstr "Onko otsikko napsautettava"
 
 #: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
 msgid "Inconsistent"
 msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:124
+#, fuzzy
 msgid "Whether to display an \"inconsistent\" state."
-msgstr ""
+msgstr "Onko sarake näkyvä"
 
 #: gtk/gtkcolorsel.c:582
 msgid ""
@@ -1219,48 +1117,54 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"Viimeksi valittu väri, verrattavaksi nyt valittavaan väriin. Voit vetää "
+"tämän värin paletin kohtaan tai valita sen nykyiseksi vetämällä sen vieressä "
+"olevaan värilaikkuun."
 
 #: gtk/gtkcolorsel.c:587
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"Valitsemasi väri. Voit vetää tämän värin paletin kohtaan tallentaaksesi sen "
+"myöhempää käyttöä varten."
 
 #: gtk/gtkcolorsel.c:909
 msgid "_Save color here"
-msgstr ""
+msgstr "_Tallenna väri tähän"
 
 #: gtk/gtkcolorsel.c:1077
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"Napsauta tätä paletin kohtaa tehdäksesi siitä nykyisen värin. Vaihtaaksesi "
+"kohdan vedä väri tähän tai napsauta oikealla painikkeella ja valitse "
+"\"Tallenna väri tähän\"."
 
 #: gtk/gtkcolorsel.c:1696
 msgid "Has Opacity Control"
-msgstr ""
+msgstr "Peittävyyssäädin on"
 
 #: gtk/gtkcolorsel.c:1697
 msgid "Whether the color selector should allow setting opacity"
-msgstr ""
+msgstr "Pitääkö värivalitsimen sallia peittävyyden asettaminen"
 
 #: gtk/gtkcolorsel.c:1703
-#, fuzzy
 msgid "Has palette"
-msgstr "Mukautettu paletti"
+msgstr "Paletti on"
 
 #: gtk/gtkcolorsel.c:1704
 msgid "Whether a palette should be used"
-msgstr ""
+msgstr "Käytetäänkö palettia"
 
 #: gtk/gtkcolorsel.c:1710
-#, fuzzy
 msgid "Current Color"
-msgstr "Aseta väri"
+msgstr "Nykyinen väri"
 
 #: gtk/gtkcolorsel.c:1711
 msgid "The current color"
-msgstr ""
+msgstr "Nykyinen väri"
 
 #: gtk/gtkcolorsel.c:1717
 msgid "Current Alpha"
@@ -1268,127 +1172,125 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1718
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
+msgstr "Nykyinen peittoarvo (0=kokonaan läpinäkyvä, 65535=täysin peittävä)"
 
 #: gtk/gtkcolorsel.c:1731
-#, fuzzy
 msgid "Custom palette"
-msgstr "Mukautettu paletti"
+msgstr "Oma paletti"
 
 #: gtk/gtkcolorsel.c:1732
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "Värivalitsimessa käytettävä paletti"
 
 #: gtk/gtkcolorsel.c:1776
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
+"Valitse haluamasi väri ulkorenkaasta, ja värin kylläisyys ja tummuus\n"
+"sisäkolmiosta."
 
 #: gtk/gtkcolorsel.c:1804
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"Napsauta pipettiä ja sen jälkeen mitä tahansa ruudun kohtaa valitaksesi "
+"kyseisen kohdan värin."
 
 #: gtk/gtkcolorsel.c:1813
-#, fuzzy
 msgid "_Hue:"
-msgstr "Sävy:"
+msgstr "_Sävy:"
 
 #: gtk/gtkcolorsel.c:1814
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "Sijainti väripyörällä."
 
 #: gtk/gtkcolorsel.c:1815
-#, fuzzy
 msgid "_Saturation:"
-msgstr "Kylläisyys:"
+msgstr "_Kylläisyys:"
 
 #: gtk/gtkcolorsel.c:1816
 msgid "\"Deepness\" of the color."
-msgstr ""
+msgstr "Värin \"syvyys\"."
 
 #: gtk/gtkcolorsel.c:1817
-#, fuzzy
 msgid "_Value:"
-msgstr "Arvo:"
+msgstr "_Arvo:"
 
 #: gtk/gtkcolorsel.c:1818
 msgid "Brightness of the color."
-msgstr ""
+msgstr "Värin kirkkaus."
 
 #: gtk/gtkcolorsel.c:1819
-#, fuzzy
 msgid "_Red:"
-msgstr "Punainen:"
+msgstr "_Punainen:"
 
 #: gtk/gtkcolorsel.c:1820
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "Punaisen määrä värissä."
 
 #: gtk/gtkcolorsel.c:1821
-#, fuzzy
 msgid "_Green:"
-msgstr "Vihreä:"
+msgstr "_Vihreä:"
 
 #: gtk/gtkcolorsel.c:1822
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "Virheän määrä värissä."
 
 #: gtk/gtkcolorsel.c:1823
-#, fuzzy
 msgid "_Blue:"
-msgstr "Sininen:"
+msgstr "S_ininen:"
 
 #: gtk/gtkcolorsel.c:1824
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "Sinisen määrä värissä."
 
 #: gtk/gtkcolorsel.c:1827
-#, fuzzy
 msgid "_Opacity:"
-msgstr "Peitto:"
+msgstr "P_eitto:"
 
 #: gtk/gtkcolorsel.c:1835
 msgid "Transparency of the currently-selected color."
-msgstr ""
+msgstr "Valitun värin läpinäkyvyys."
 
 #: gtk/gtkcolorsel.c:1850
 msgid "Color _Name:"
-msgstr ""
+msgstr "Värin _nimi:"
 
 #: gtk/gtkcolorsel.c:1862
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"Voit kirjoittaa tähän kenttään HTML-tyylisen heksadesimaaliväriarvon, tai "
+"pelkästään värin nimen, esimerkiksi \"orange\"."
 
 #: gtk/gtkcolorsel.c:1881
-#, fuzzy
 msgid "_Palette"
-msgstr "Mukautettu paletti"
+msgstr "Pa_letti"
 
 #: gtk/gtkcombo.c:135
 msgid "Enable arrow keys"
-msgstr ""
+msgstr "Käytä nuolinäppäimiä"
 
 #: gtk/gtkcombo.c:136
 msgid "Whether the arrow keys move through the list of items"
-msgstr ""
+msgstr "Voiko nuolinäppäimillä käydä luettelon kohdat läpi"
 
 #: gtk/gtkcombo.c:142
 msgid "Always enable arrows"
-msgstr ""
+msgstr "Käytä aina nuolinäppäimiä"
 
 #: gtk/gtkcombo.c:143
 msgid ""
 "Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr ""
+"Toimivatko nuolinäppäimet, vaikka tekstikentän sisältö ei olisi luettelossa"
 
 #: gtk/gtkcombo.c:149
 msgid "Case sensitive"
-msgstr ""
+msgstr "Sama kirjainkoko"
 
 #: gtk/gtkcombo.c:150
 msgid "Whether list item matching is case sensitive"
@@ -1396,15 +1298,15 @@ msgstr ""
 
 #: gtk/gtkcombo.c:157
 msgid "Allow empty"
-msgstr ""
+msgstr "Salli tyhjä"
 
 #: gtk/gtkcombo.c:158
 msgid "Whether an empty value may be entered in this field"
-msgstr ""
+msgstr "Voiko tähän kenttään kirjoittaa tyhjän arvon"
 
 #: gtk/gtkcombo.c:165
 msgid "Value in list"
-msgstr ""
+msgstr "Arvo listassa"
 
 #: gtk/gtkcombo.c:166
 msgid "Whether entered values must already be present in the list"
@@ -1412,146 +1314,145 @@ msgstr ""
 
 #: gtk/gtkcontainer.c:203
 msgid "Resize mode"
-msgstr ""
+msgstr "Koonmuutostila"
 
 #: gtk/gtkcontainer.c:204
 msgid "Specify how resize events are handled"
-msgstr ""
+msgstr "Määritä, miten koonmuutostapahtumat käsitellään"
 
 #: gtk/gtkcontainer.c:211
 msgid "Border width"
-msgstr ""
+msgstr "Reunan leveys"
 
 #: gtk/gtkcontainer.c:212
 msgid "The width of the empty border outside the containers children."
-msgstr ""
+msgstr "Lapsien ympärillä olevan tyhjän reunuksen leveys"
 
 #: gtk/gtkcontainer.c:220
 msgid "Child"
-msgstr ""
+msgstr "Lapsi"
 
 #: gtk/gtkcontainer.c:221
 msgid "Can be used to add a new child to the container."
-msgstr ""
+msgstr "Voi käyttää uuden lapsen säilöön lisäämiseksi."
 
 #: gtk/gtkcurve.c:121
-#, fuzzy
 msgid "Curve type"
-msgstr "Luo"
+msgstr "Käyrätyyppi"
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr ""
+msgstr "Onko käyrä suora, interpoloitu splini vai vapaamuotoinen"
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum X"
-msgstr ""
+msgstr "Pienin X"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "Pienin mahdollinen X:n arvo"
 
 #: gtk/gtkcurve.c:140
 msgid "Maximum X"
-msgstr ""
+msgstr "Suurin X"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum possible X value."
-msgstr ""
+msgstr "Suurin mahdollinen X:n arvo."
 
 #: gtk/gtkcurve.c:150
 msgid "Minimum Y"
-msgstr ""
+msgstr "Pienin Y"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr ""
+msgstr "Pienin mahdollinen Y:n arvo"
 
 #: gtk/gtkcurve.c:160
 msgid "Maximum Y"
-msgstr ""
+msgstr "Suurin Y"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
-msgstr ""
+msgstr "Suurin mahdollinen Y:n arvo"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:126
 msgid "Has separator"
-msgstr ""
+msgstr "Erotin on"
 
-#: gtk/gtkdialog.c:129
+#: gtk/gtkdialog.c:127
 msgid "The dialog has a separator bar above its buttons"
-msgstr ""
+msgstr "Valintaikkunassa on erotinviiva painikkeiden yläpuolella"
 
-#: gtk/gtkdialog.c:152
+#: gtk/gtkdialog.c:150
 msgid "Content area border"
-msgstr ""
+msgstr "Sisältöalueen reunus"
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:151
 msgid "Width of border around the main dialog area"
-msgstr ""
+msgstr "Valintaikkunan pääalueen ympärillä olevan reunuksen leveys"
 
-#: gtk/gtkdialog.c:160
+#: gtk/gtkdialog.c:158
 msgid "Button spacing"
-msgstr ""
+msgstr "Painikkeiden välit"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:159
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "Painikkeiden väliset välit"
 
-#: gtk/gtkdialog.c:169
+#: gtk/gtkdialog.c:167
 msgid "Action area border"
-msgstr ""
+msgstr "Toimintoalueen reuna"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:168
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr ""
+msgstr "Valintaikkunan alaosan painikealueen ympärillä olevan reunuksen leveys"
 
 #: gtk/gtkentry.c:434 gtk/gtklabel.c:360
-#, fuzzy
 msgid "Cursor Position"
-msgstr "Kysymys"
+msgstr "Kohdistimen sijainti"
 
 #: gtk/gtkentry.c:435 gtk/gtklabel.c:361
 msgid "The current position of the insertion cursor in chars."
-msgstr ""
+msgstr "Lisäyskohdan nykyinen sijainti tekstissä."
 
 #: gtk/gtkentry.c:444 gtk/gtklabel.c:370
 #, fuzzy
 msgid "Selection Bound"
-msgstr "Valinta: "
+msgstr "Valinnan raja"
 
 #: gtk/gtkentry.c:445 gtk/gtklabel.c:371
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
-msgstr ""
+msgstr "Valinnan kohdistimesta nähden vastakkaisen pään sijainti (merkkeinä)"
 
 #: gtk/gtkentry.c:455
 msgid "Whether the entry contents can be edited"
-msgstr ""
+msgstr "Voidaanko tekstikentän sisältöä muokata"
 
 #: gtk/gtkentry.c:462
 msgid "Maximum length"
-msgstr ""
+msgstr "Suurin pituus"
 
 #: gtk/gtkentry.c:463
 msgid "Maximum number of characters for this entry"
-msgstr ""
+msgstr "Tämän tekstikentän suurin merkkien määrä"
 
 #: gtk/gtkentry.c:471
 msgid "Visibility"
-msgstr ""
+msgstr "Näkyvyys"
 
 #: gtk/gtkentry.c:472
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
+"EPÄTOSI näyttää \"näkymättömän merkin\" todellisen tekstin sijaan "
+"(salasanatila)"
 
 #: gtk/gtkentry.c:479
-#, fuzzy
 msgid "Has Frame"
-msgstr "Mukautettu paletti"
+msgstr "Kehys on"
 
 #: gtk/gtkentry.c:480
 msgid "FALSE removes outside bevel from entry."
@@ -1559,25 +1460,25 @@ msgstr ""
 
 #: gtk/gtkentry.c:487
 msgid "Invisible character"
-msgstr ""
+msgstr "Näkymätön merkki"
 
 #: gtk/gtkentry.c:488
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr ""
+msgstr "Merkki, joka peittää syötetyn tekstin (salasanatilassa)"
 
 #: gtk/gtkentry.c:495
 msgid "Activates default"
-msgstr ""
+msgstr "Aktivoi oletuksen"
 
 #: gtk/gtkentry.c:496
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
-msgstr ""
+msgstr "Aktivoituuko oletussäädin (esimerkiksi valintaikkunan oletuspainike) enteriä painettaessa."
 
 #: gtk/gtkentry.c:502
 msgid "Width in chars"
-msgstr ""
+msgstr "Leveys merkkeinä"
 
 #: gtk/gtkentry.c:503
 msgid "Number of characters to leave space for in the entry."
@@ -1592,8 +1493,9 @@ msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
 #: gtk/gtkentry.c:523
+#, fuzzy
 msgid "The contents of the entry"
-msgstr ""
+msgstr "Piirtimen teksti."
 
 #: gtk/gtkentry.c:529 gtk/gtklabel.c:379 gtk/gtktextview.c:641
 msgid "Cursor color"
@@ -1604,335 +1506,306 @@ msgid "Color with which to draw insertion cursor"
 msgstr ""
 
 #: gtk/gtkentry.c:3852 gtk/gtklabel.c:3171
-#, fuzzy
 msgid "Select All"
-msgstr "Poista"
+msgstr "Valitse kaikki"
 
 #: gtk/gtkentry.c:3862 gtk/gtklabel.c:3181
 msgid "Input Methods"
-msgstr ""
+msgstr "Syöttötavat"
 
 #: gtk/gtkentry.c:3872 gtk/gtktextview.c:6337
 msgid "_Insert Unicode control character"
-msgstr ""
+msgstr "_Lisää Unicode-kontrollimerkki"
 
-#: gtk/gtkfilesel.c:518 gtk/gtkimage.c:161
-#, fuzzy
+#: gtk/gtkfilesel.c:510
 msgid "Filename"
-msgstr "Nimeä uudelleen"
+msgstr "Tiedostonimi"
 
-#: gtk/gtkfilesel.c:519
+#: gtk/gtkfilesel.c:511
 msgid "The currently selected filename."
-msgstr ""
+msgstr "Valittu tiedostonimi."
 
-#: gtk/gtkfilesel.c:525
+#: gtk/gtkfilesel.c:517
 msgid "Show file operations"
-msgstr ""
+msgstr "Näytä tiedostotoiminnot"
 
-#: gtk/gtkfilesel.c:526
+#: gtk/gtkfilesel.c:518
 msgid "Whether buttons for creating/manipulating files should be displayed."
-msgstr ""
+msgstr "Näkyvätkö tiedostojen luonti- ja muokkauspainikkeet"
 
-#: gtk/gtkfilesel.c:656
+#. The directories clist
+#: gtk/gtkfilesel.c:643
 msgid "Directories"
 msgstr "Hakemistot"
 
-#: gtk/gtkfilesel.c:660
-#, fuzzy
-msgid "_Directories"
-msgstr "Hakemistot"
-
-#: gtk/gtkfilesel.c:688
+#. The files clist
+#: gtk/gtkfilesel.c:663
 msgid "Files"
 msgstr "Tiedostot"
 
-#: gtk/gtkfilesel.c:692
-#, fuzzy
-msgid "_Files"
-msgstr "Tiedostot"
-
 # , c-format
-#: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:2105
+#: gtk/gtkfilesel.c:733 gtk/gtkfilesel.c:2063
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Hakemistoa ei voi lukea: %s"
 
-#: gtk/gtkfilesel.c:892
+#: gtk/gtkfilesel.c:857
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "availible to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
+"Tiedosto \"%s\" on toisella koneella (nimeltään %s) ja tämä ohjelma ei "
+"välttämättä löydä sitä.\n"
+"Oletko varma, että haluat avata sen?"
 
-#: gtk/gtkfilesel.c:1022
-#, fuzzy
-msgid "Crea_te Dir"
+#: gtk/gtkfilesel.c:987
+msgid "Create Dir"
 msgstr "Luo hakemisto"
 
-#: gtk/gtkfilesel.c:1033
-#, fuzzy
-msgid "De_lete File"
+#: gtk/gtkfilesel.c:998 gtk/gtkfilesel.c:1436
+msgid "Delete File"
 msgstr "Poista tiedosto"
 
-#: gtk/gtkfilesel.c:1044
-#, fuzzy
-msgid "_Rename File"
+#: gtk/gtkfilesel.c:1009 gtk/gtkfilesel.c:1582
+msgid "Rename File"
 msgstr "Nimeä tiedosto uudelleen"
 
-#: gtk/gtkfilesel.c:1292
+#: gtk/gtkfilesel.c:1257
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"Hakemistonimi \"%s\" sisältää merkkejä, joita ei voi olla tiedostonimissä"
 
-#: gtk/gtkfilesel.c:1294
+#: gtk/gtkfilesel.c:1259
 #, c-format
 msgid ""
 "Error creating directory \"%s\": %s\n"
 "%s"
 msgstr ""
+"Virhe luodessa hakemistoa \"%s\": %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1295 gtk/gtkfilesel.c:1550
+#: gtk/gtkfilesel.c:1260 gtk/gtkfilesel.c:1513
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1303
+#: gtk/gtkfilesel.c:1268
 #, c-format
 msgid "Error creating directory \"%s\": %s\n"
-msgstr ""
+msgstr "Virhe luodessa hakemistoa \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1337
+#: gtk/gtkfilesel.c:1302
 msgid "Create Directory"
 msgstr "Luo hakemisto"
 
-#: gtk/gtkfilesel.c:1352
-#, fuzzy
+#: gtk/gtkfilesel.c:1316
 msgid "_Directory name:"
-msgstr "Hakemiston nimi:"
+msgstr "_Hakemiston nimi:"
 
 #. buttons
-#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1653
-#: gtk/gtkgamma.c:419
+#: gtk/gtkfilesel.c:1330 gtk/gtkfilesel.c:1458 gtk/gtkfilesel.c:1615
+#: gtk/gtkgamma.c:417
 msgid "Cancel"
 msgstr "Peruuta"
 
-#: gtk/gtkfilesel.c:1378
+#: gtk/gtkfilesel.c:1342
 msgid "Create"
 msgstr "Luo"
 
-#: gtk/gtkfilesel.c:1412
+#: gtk/gtkfilesel.c:1376
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"Tiedostonimi \"%s\" sisältää merkkejä, joita ei voi olla tiedostonimissä"
 
-#: gtk/gtkfilesel.c:1415
+#: gtk/gtkfilesel.c:1379
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
+"Virhe poistaessa tiedostoa \"%s\": %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1417 gtk/gtkfilesel.c:1564
+#: gtk/gtkfilesel.c:1381 gtk/gtkfilesel.c:1527
 msgid "It probably contains symbols not allowed in filenames."
-msgstr ""
+msgstr "Se luultavasti sisältää merkkejä, jotka eivät kelpaa tiedostonimiin."
 
-#: gtk/gtkfilesel.c:1426
+#: gtk/gtkfilesel.c:1390
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "Virhe poistaessa tiedostoa \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1472
-msgid "Delete File"
-msgstr "Poista tiedosto"
-
-#: gtk/gtkfilesel.c:1505
+#: gtk/gtkfilesel.c:1468
 msgid "Delete"
 msgstr "Poista"
 
-#: gtk/gtkfilesel.c:1546 gtk/gtkfilesel.c:1560
+#: gtk/gtkfilesel.c:1509 gtk/gtkfilesel.c:1523
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"Tiedostonimi \"%s\" sisältää merkkejä, joita ei voi olla tiedostonimissä"
 
-#: gtk/gtkfilesel.c:1548
+#: gtk/gtkfilesel.c:1511
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
+"Virhe nimetessä tiedostoa nimelle \"%s\": %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1562
+#: gtk/gtkfilesel.c:1525
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
+"Virhe nimetessä tiedostoa nimelle \"%s\": %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1572
+#: gtk/gtkfilesel.c:1535
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "Virhe nimetessä tiedostoa \"%s\" nimelle \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1619
-msgid "Rename File"
-msgstr "Nimeä tiedosto uudelleen"
-
-#: gtk/gtkfilesel.c:1665
+#: gtk/gtkfilesel.c:1627
 msgid "Rename"
 msgstr "Nimeä uudelleen"
 
-#: gtk/gtkfilesel.c:2084
+#: gtk/gtkfilesel.c:2042
 msgid "Selection: "
 msgstr "Valinta: "
 
-#: gtk/gtkfilesel.c:2695
+#: gtk/gtkfilesel.c:2653
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
 msgstr ""
+"Ei voinut muuntaa tiedostonimeä %s UTF-8:ksi. Kokeile ympäristömuuttujan "
+"G_BROKEN_FILENAMES asettamista."
 
-#: gtk/gtkfilesel.c:3563
+#: gtk/gtkfilesel.c:3521
 msgid "Name too long"
-msgstr ""
+msgstr "Nimi on liian pitkä"
 
-#: gtk/gtkfilesel.c:3565
+#: gtk/gtkfilesel.c:3523
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "Ei voinut muuntaa tiedostonimeä"
 
-#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
-msgid "X position"
-msgstr ""
-
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
-msgid "X position of child widget"
-msgstr ""
-
-#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
-msgid "Y position"
-msgstr ""
-
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
-msgid "Y position of child widget"
-msgstr ""
-
-#: gtk/gtkfontsel.c:195
-#, fuzzy
+#: gtk/gtkfontsel.c:185
 msgid "Font name"
-msgstr "Perhe:"
+msgstr "Kirjasimen nimi"
 
-#: gtk/gtkfontsel.c:196
+#: gtk/gtkfontsel.c:186
 msgid "The X string that represents this font."
-msgstr ""
+msgstr "X-merkkijono, joka vastaa tätä kirjasinta."
 
-#: gtk/gtkfontsel.c:203
+#: gtk/gtkfontsel.c:193
 msgid "The GdkFont that is currently selected."
-msgstr ""
+msgstr "Tällä hetkellä valittu GdkFont."
 
-#: gtk/gtkfontsel.c:209
-#, fuzzy
+#: gtk/gtkfontsel.c:199
 msgid "Preview text"
-msgstr "Esikatselu:"
+msgstr "Esikatseluteksti"
 
-#: gtk/gtkfontsel.c:210
+#: gtk/gtkfontsel.c:200
 msgid "The text to display in order to demonstrate the selected font."
-msgstr ""
+msgstr "Kirjasinlajin esittelemiseksi näytettävä teksti."
+
+#: gtk/gtkfontsel.c:298
+msgid "_Family:"
+msgstr "_Perhe:"
+
+#: gtk/gtkfontsel.c:305
+msgid "_Style:"
+msgstr "_Tyyli:"
 
 #: gtk/gtkfontsel.c:312
-#, fuzzy
-msgid "_Family:"
-msgstr "Perhe:"
-
-#: gtk/gtkfontsel.c:318
-#, fuzzy
-msgid "_Style:"
-msgstr "Tyyli:"
-
-#: gtk/gtkfontsel.c:324
-#, fuzzy
 msgid "Si_ze:"
-msgstr "Koko:"
+msgstr "K_oko:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:453
-#, fuzzy
-msgid "_Preview:"
+#: gtk/gtkfontsel.c:393
+msgid "Preview:"
 msgstr "Esikatselu:"
 
-#: gtk/gtkfontsel.c:1204
+#: gtk/gtkfontsel.c:1065
 msgid "Font Selection"
 msgstr "Kirjasinlajin valinta"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label."
-msgstr ""
+msgstr "Kehyksen nimiön teksti."
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
-msgstr ""
+msgstr "Nimiön x-tasaus"
 
 #: gtk/gtkframe.c:134
 msgid "The horizontal alignment of the label."
-msgstr ""
+msgstr "Nimiön vaakatasaus."
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
-msgstr ""
+msgstr "Nimiön y-tasaus"
 
 #: gtk/gtkframe.c:144
 msgid "The vertical alignment of the label."
-msgstr ""
+msgstr "Nimiön pystytasaus."
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:185
 msgid "Deprecated property, use shadow_type instead."
-msgstr ""
+msgstr "Vanhentunut ominaisuus, käytä shadow_type:ä."
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
-msgstr ""
+msgstr "Kehyksen varjo"
 
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border."
-msgstr ""
+msgstr "Kehyksen varjon ulkonäkö"
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr ""
+msgstr "Nimiösäädin"
 
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label."
 msgstr ""
 
-#: gtk/gtkgamma.c:395
+#: gtk/gtkgamma.c:396
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:405
-#, fuzzy
+#: gtk/gtkgamma.c:403
 msgid "_Gamma value"
-msgstr "Gamma-arvo"
+msgstr "_Gamma-arvo"
 
-#: gtk/gtkgamma.c:425
+#: gtk/gtkgamma.c:423
 msgid "OK"
 msgstr "OK"
 
-#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:150 gtk/gtkstatusbar.c:158
+#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:148 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
-msgstr ""
+msgstr "Varjotyyppi"
 
 #: gtk/gtkhandlebox.c:193
 msgid "Appearance of the shadow that surrounds the container."
-msgstr ""
+msgstr "Säilöä ympäröivän varjon ulkonäkö."
 
 #: gtk/gtkhandlebox.c:201
 msgid "Handle position"
-msgstr ""
+msgstr "Kahvan sijainti"
 
 #: gtk/gtkhandlebox.c:202
 msgid "Position of the handle relative to the child widget."
-msgstr ""
+msgstr "Kahvan sijainti suhteessa lapsisäätimeen."
 
 #: gtk/gtkhandlebox.c:210
 msgid "Snap edge"
@@ -1950,95 +1823,15 @@ msgstr ""
 #: gtk/gtkiconfactory.c:1061
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
-
-#: gtk/gtkimage.c:129
-msgid "Pixbuf"
-msgstr ""
-
-#: gtk/gtkimage.c:130
-msgid "A GdkPixbuf to display."
-msgstr ""
-
-#: gtk/gtkimage.c:137
-msgid "Pixmap"
-msgstr ""
-
-#: gtk/gtkimage.c:138
-msgid "A GdkPixmap to display."
-msgstr ""
-
-# , c-format
-#: gtk/gtkimage.c:145
-#, fuzzy
-msgid "Image"
-msgstr "Sivu %u"
-
-#: gtk/gtkimage.c:146
-msgid "A GdkImage to display."
-msgstr ""
-
-#: gtk/gtkimage.c:153
-msgid "Mask"
-msgstr ""
-
-#: gtk/gtkimage.c:154
-msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
-
-#: gtk/gtkimage.c:162
-msgid "Filename to load and siplay."
-msgstr ""
-
-#: gtk/gtkimage.c:170
-msgid "Stock ID"
-msgstr ""
-
-#: gtk/gtkimage.c:171
-msgid "Stock ID for a stock image to display."
-msgstr ""
-
-#: gtk/gtkimage.c:178
-msgid "Icon set"
-msgstr ""
-
-#: gtk/gtkimage.c:179
-msgid "Icon set to display."
-msgstr ""
-
-#: gtk/gtkimage.c:186
-msgid "Icon size"
-msgstr ""
-
-#: gtk/gtkimage.c:187
-msgid "Size to use for stock icon or icon set."
-msgstr ""
-
-#: gtk/gtkimage.c:195
-#, fuzzy
-msgid "Animation"
-msgstr "Tietoja"
-
-#: gtk/gtkimage.c:196
-msgid "GdkPixbufAnimation to display."
-msgstr ""
-
-#: gtk/gtkimage.c:203
-#, fuzzy
-msgid "Storage type"
-msgstr "Luo"
-
-#: gtk/gtkimage.c:204
-msgid "The representation being used for image data."
-msgstr ""
+msgstr "Virhe ladatessa kuvaketta: %s"
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
-msgstr ""
+msgstr "Kuvasäädin"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
-msgstr ""
+msgstr "Lapsisäädin, joka näkyy valikon tekstin vieressä"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:184
@@ -2050,9 +1843,8 @@ msgid "No input devices"
 msgstr "Ei syöttölaitteita"
 
 #: gtk/gtkinputdialog.c:221
-#, fuzzy
 msgid "_Device:"
-msgstr "Laite:"
+msgstr "_Laite:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
@@ -2067,21 +1859,18 @@ msgid "Window"
 msgstr "Ikkuna"
 
 #: gtk/gtkinputdialog.c:262
-#, fuzzy
 msgid "_Mode: "
-msgstr "Tila:"
+msgstr "_Tila:"
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:293
-#, fuzzy
 msgid "_Axes"
-msgstr "Akselit"
+msgstr "_Akselit"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:309
-#, fuzzy
 msgid "_Keys"
-msgstr "Avaimet"
+msgstr "_Avaimet"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -2136,11 +1925,11 @@ msgstr "tyhjennä"
 
 #: gtk/gtklabel.c:283
 msgid "The text of the label."
-msgstr ""
+msgstr "Nimiön teksti."
 
 #: gtk/gtklabel.c:290
 msgid "A list of style attributes to apply to the text of the label."
-msgstr ""
+msgstr "Luettelo nimiön tekstiin sovellettavista tyylimääreistä."
 
 #: gtk/gtklabel.c:296
 msgid "Use markup"
@@ -2152,7 +1941,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:311 gtk/gtktexttag.c:378 gtk/gtktextview.c:582
 msgid "Justification"
-msgstr ""
+msgstr "Reunojen tasaus"
 
 #: gtk/gtklabel.c:312
 msgid ""
@@ -2162,32 +1951,32 @@ msgid ""
 msgstr ""
 
 #: gtk/gtklabel.c:320
-#, fuzzy
 msgid "Pattern"
-msgstr "Mukautettu paletti"
+msgstr "Kuvio"
 
 #: gtk/gtklabel.c:321
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline."
 msgstr ""
+"Merkkijono, jossa _-merkit vastaavat tekstissä olevia alleviivattavia "
+"merkkejä."
 
 #: gtk/gtklabel.c:328
 msgid "Line wrap"
-msgstr ""
+msgstr "Rivitys"
 
 #: gtk/gtklabel.c:329
 msgid "If set, wrap lines if the text becomes too wide."
 msgstr ""
 
 #: gtk/gtklabel.c:335
-#, fuzzy
 msgid "Selectable"
-msgstr "Poista"
+msgstr "Valittavissa"
 
 #: gtk/gtklabel.c:336
 msgid "Whether the label text can be selected with the mouse."
-msgstr ""
+msgstr "Voiko käyttäjä valita tekstiä hiirellä."
 
 #: gtk/gtklabel.c:342
 msgid "Mnemonic key"
@@ -2205,37 +1994,55 @@ msgstr ""
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr ""
 
-#: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
+#: gtk/gtklayout.c:578
+msgid "X position"
+msgstr "X-sijainti"
+
+#: gtk/gtklayout.c:579
+msgid "X position of child widget"
+msgstr ""
+
+#: gtk/gtklayout.c:588
+msgid "Y position"
+msgstr "Y-sijainti"
+
+#: gtk/gtklayout.c:589
+msgid "Y position of child widget"
+msgstr ""
+
+#: gtk/gtklayout.c:598 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr ""
 
-#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:178
+#: gtk/gtklayout.c:599
 msgid "The GtkAdjustment for the horizontal position."
 msgstr ""
 
-#: gtk/gtklayout.c:625 gtk/gtkviewport.c:140
+#: gtk/gtklayout.c:606 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr ""
 
-#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:185
+#: gtk/gtklayout.c:607
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:187
+#: gtk/gtklayout.c:614 gtk/gtktreeviewcolumn.c:187
 msgid "Width"
-msgstr ""
+msgstr "Leveys"
 
-#: gtk/gtklayout.c:634
+#: gtk/gtklayout.c:615
+#, fuzzy
 msgid "The width of the layout."
-msgstr ""
+msgstr "Sarakkeen nykyinen leveys"
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:623
 msgid "Height"
-msgstr ""
+msgstr "Korkeus"
 
-#: gtk/gtklayout.c:643
+#: gtk/gtklayout.c:624
+#, fuzzy
 msgid "The height of the layout."
-msgstr ""
+msgstr "Pixbufin pystytasaus."
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2246,25 +2053,15 @@ msgstr ""
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:189
-msgid "Tearoff Title"
-msgstr ""
-
-#: gtk/gtkmenu.c:190
-msgid ""
-"A title that may be displayed by the window manager when this menu is torn-"
-"off."
-msgstr ""
-
-#: gtk/gtkmenubar.c:151
+#: gtk/gtkmenubar.c:149
 msgid "Style of bevel around the menubar"
 msgstr ""
 
-#: gtk/gtkmenubar.c:158 gtk/gtktoolbar.c:251
+#: gtk/gtkmenubar.c:156 gtk/gtktoolbar.c:251
 msgid "Internal padding"
 msgstr ""
 
-#: gtk/gtkmenubar.c:159
+#: gtk/gtkmenubar.c:157
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr ""
 
@@ -2273,28 +2070,29 @@ msgid "Image/label border"
 msgstr ""
 
 #: gtk/gtkmessagedialog.c:105
+#, fuzzy
 msgid "Width of border around the label and image in the message dialog"
-msgstr ""
+msgstr "Vasemman reunuksen leveys kuvapisteinä"
 
 #: gtk/gtkmessagedialog.c:113
 msgid "Message Type"
-msgstr ""
+msgstr "Viestin tyyppi"
 
 #: gtk/gtkmessagedialog.c:114
 msgid "The type of message"
-msgstr ""
+msgstr "Viestin tyyppi"
 
 #: gtk/gtkmessagedialog.c:121
 msgid "Message Buttons"
-msgstr ""
+msgstr "Viestipainikkeet"
 
 #: gtk/gtkmessagedialog.c:122
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "Viesti-ikkunassa näkyvät painikkeet"
 
 #: gtk/gtkmisc.c:97
 msgid "X align"
-msgstr ""
+msgstr "X-tasaus"
 
 #: gtk/gtkmisc.c:98
 msgid "The horizontal alignment, from 0 (left) to 1 (right)"
@@ -2302,7 +2100,7 @@ msgstr ""
 
 #: gtk/gtkmisc.c:107
 msgid "Y align"
-msgstr ""
+msgstr "Y-tasaus"
 
 #: gtk/gtkmisc.c:108
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
@@ -2310,7 +2108,7 @@ msgstr ""
 
 #: gtk/gtkmisc.c:117
 msgid "X pad"
-msgstr ""
+msgstr "X-väli"
 
 #: gtk/gtkmisc.c:118
 msgid ""
@@ -2319,7 +2117,7 @@ msgstr ""
 
 #: gtk/gtkmisc.c:127
 msgid "Y pad"
-msgstr ""
+msgstr "Y-väli"
 
 #: gtk/gtkmisc.c:128
 msgid ""
@@ -2328,29 +2126,30 @@ msgstr ""
 
 # , c-format
 #: gtk/gtknotebook.c:328
-#, fuzzy
 msgid "Page"
-msgstr "Sivu %u"
+msgstr "Sivu"
 
 #: gtk/gtknotebook.c:329
 msgid "The index of the current page"
-msgstr ""
+msgstr "Nykyisen sivun indeksi"
 
 #: gtk/gtknotebook.c:337
 msgid "Tab Position"
-msgstr ""
+msgstr "Välilehtien sijainti"
 
 #: gtk/gtknotebook.c:338
 msgid "Which side of the notebook holds the tabs"
-msgstr ""
+msgstr "Millä muistion sivulla välilehdet ovat."
 
 #: gtk/gtknotebook.c:345
+#, fuzzy
 msgid "Tab Border"
-msgstr ""
+msgstr "Järjestystapa"
 
 #: gtk/gtknotebook.c:346
+#, fuzzy
 msgid "Width of the border around the tab labels"
-msgstr ""
+msgstr "Vasemman reunuksen leveys kuvapisteinä"
 
 #: gtk/gtknotebook.c:354
 msgid "Horizontal Tab Border"
@@ -2369,24 +2168,28 @@ msgid "Width of the vertical border of tab labels"
 msgstr ""
 
 #: gtk/gtknotebook.c:372
+#, fuzzy
 msgid "Show Tabs"
-msgstr ""
+msgstr "Sarkaimet"
 
 #: gtk/gtknotebook.c:373
+#, fuzzy
 msgid "Whether tabs should be shown or not"
-msgstr ""
+msgstr "Näkyykö järjestysilmaisin"
 
 #: gtk/gtknotebook.c:379
+#, fuzzy
 msgid "Show Border"
-msgstr ""
+msgstr "Järjestystapa"
 
 #: gtk/gtknotebook.c:380
+#, fuzzy
 msgid "Whether the border should be shown or not"
-msgstr ""
+msgstr "Näkyykö järjestysilmaisin"
 
 #: gtk/gtknotebook.c:386
 msgid "Scrollable"
-msgstr ""
+msgstr "Vieritettävissä"
 
 #: gtk/gtknotebook.c:387
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
@@ -2414,24 +2217,25 @@ msgstr "Sivu %u"
 
 #: gtk/gtkoptionmenu.c:188
 msgid "Menu"
-msgstr ""
+msgstr "Valikko"
 
 #: gtk/gtkoptionmenu.c:189
 msgid "The menu of options"
 msgstr ""
 
 #: gtk/gtkoptionmenu.c:196
+#, fuzzy
 msgid "Size of dropdown indicator"
-msgstr ""
+msgstr "Järjestysilmaisin"
 
 #: gtk/gtkoptionmenu.c:202
+#, fuzzy
 msgid "Spacing around indicator"
-msgstr ""
+msgstr "Järjestysilmaisin"
 
 #: gtk/gtkpaned.c:120 gtk/gtkruler.c:138
-#, fuzzy
 msgid "Position"
-msgstr "Kysymys"
+msgstr "Sijainti"
 
 #: gtk/gtkpaned.c:121
 msgid ""
@@ -2440,7 +2244,7 @@ msgstr ""
 
 #: gtk/gtkpaned.c:129
 msgid "Position Set"
-msgstr ""
+msgstr "Sijainti on"
 
 #: gtk/gtkpaned.c:130
 msgid "TRUE if the Position property should be used"
@@ -2452,31 +2256,37 @@ msgstr ""
 
 #: gtk/gtkpaned.c:137
 msgid "Width of handle"
-msgstr ""
+msgstr "Kahvan leveys"
 
 # , c-format
-#: gtk/gtkrc.c:2773 gtk/gtkrc.c:2776
+#: gtk/gtkrc.c:2772
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\" rivi %d"
+
+# , c-format
+#: gtk/gtkrc.c:2775
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""
 
-#: gtk/gtkrc.c:3185
+#: gtk/gtkrc.c:3184
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
-msgstr ""
+msgstr "Laajenna"
 
 #: gtk/gtkpreview.c:130
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
-msgstr ""
+msgstr "Täyttääkö esikatselusäädin koko sille varatun tilan"
 
 #: gtk/gtkprogress.c:122
 msgid "Activity mode"
-msgstr ""
+msgstr "Aktiivisuustila"
 
 #: gtk/gtkprogress.c:123
 msgid ""
@@ -2488,25 +2298,25 @@ msgstr ""
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
-msgstr ""
+msgstr "Näytä teksti"
 
 #: gtk/gtkprogress.c:131
 msgid "Whether the progress is shown as text"
-msgstr ""
+msgstr "Näkyykö edistyminen tekstinä"
 
 #: gtk/gtkprogress.c:138
 msgid "Text x alignment"
-msgstr ""
+msgstr "Tekstin vaakatasaus"
 
 #: gtk/gtkprogress.c:139
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
-msgstr ""
+msgstr "Numero välillä 0.0 - 1.0, joka määrittää tekstin vaakatasauksen edistymissäätimessä"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
-msgstr ""
+msgstr "Tekstin pystytasaus"
 
 #: gtk/gtkprogress.c:148
 msgid ""
@@ -2524,15 +2334,15 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
 msgid "Orientation"
-msgstr ""
+msgstr "Asento"
 
 #: gtk/gtkprogressbar.c:140
 msgid "Orientation and growth of the progress bar"
-msgstr ""
+msgstr "Edistymispalkin asento ja eteneminen"
 
 #: gtk/gtkprogressbar.c:148
 msgid "Bar style"
-msgstr ""
+msgstr "Palkin tyyli"
 
 #: gtk/gtkprogressbar.c:149
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
@@ -2585,11 +2395,11 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:208
 msgid "Text to be displayed in the progress bar"
-msgstr ""
+msgstr "Edistymispalkissa näkyvä teksti"
 
 #: gtk/gtkrange.c:261
 msgid "Update policy"
-msgstr ""
+msgstr "Päivitystapa"
 
 #: gtk/gtkrange.c:262
 msgid "How the range should be updated on the screen"
@@ -2601,23 +2411,24 @@ msgstr ""
 
 #: gtk/gtkrange.c:278
 msgid "Inverted"
-msgstr ""
+msgstr "Käänteinen"
 
 #: gtk/gtkrange.c:279
 msgid "Invert direction slider moves to increase range value"
-msgstr ""
+msgstr "Käännä suunta, jossa liukusäädin kasvattaa arvoa"
 
 #: gtk/gtkrange.c:285
 msgid "Slider Width"
-msgstr ""
+msgstr "Liukusäätimen leveys"
 
 #: gtk/gtkrange.c:286
 msgid "Width of scrollbar or scale thumb"
 msgstr ""
 
 #: gtk/gtkrange.c:293
+#, fuzzy
 msgid "Trough Border"
-msgstr ""
+msgstr "Järjestystapa"
 
 #: gtk/gtkrange.c:294
 msgid "Spacing between thumb/steppers and outer trough bevel"
@@ -2625,7 +2436,7 @@ msgstr ""
 
 #: gtk/gtkrange.c:301
 msgid "Stepper Size"
-msgstr ""
+msgstr "Askeltimen koko"
 
 #: gtk/gtkrange.c:302
 msgid "Length of step buttons at ends"
@@ -2641,80 +2452,79 @@ msgstr ""
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr ""
+msgstr "Ala"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
-msgstr ""
+msgstr "Viivaimen alaraja"
 
 #: gtk/gtkruler.c:128
 msgid "Upper"
-msgstr ""
+msgstr "Ylä"
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
-msgstr ""
+msgstr "Viivaimen yläraja"
 
 #: gtk/gtkruler.c:139
 msgid "Position of mark on the ruler"
-msgstr ""
+msgstr "Merkin sijainti viivaimessa"
 
 #: gtk/gtkruler.c:148
 msgid "Max Size"
-msgstr ""
+msgstr "Suurin koko"
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
-msgstr ""
+msgstr "Viivaimen suurin koko"
 
-#: gtk/gtkscale.c:155 gtk/gtkspinbutton.c:242
+#: gtk/gtkscale.c:148 gtk/gtkspinbutton.c:242
 msgid "Digits"
-msgstr ""
+msgstr "Numeroja"
 
-#: gtk/gtkscale.c:156
+#: gtk/gtkscale.c:149
 msgid "The number of decimal places that are displayed in the value"
-msgstr ""
+msgstr "Näkyvien desimaalien määrä arvossa"
 
-#: gtk/gtkscale.c:165
+#: gtk/gtkscale.c:158
 msgid "Draw Value"
-msgstr ""
+msgstr "Piirrä arvo"
+
+#: gtk/gtkscale.c:159
+msgid "Whether the current value is displayed as a string next to the slider"
+msgstr "Näkyykö nykyinen arvo merkkijonona liukusäätimen vieressä"
 
 #: gtk/gtkscale.c:166
-msgid "Whether the current value is displayed as a string next to the slider"
-msgstr ""
-
-#: gtk/gtkscale.c:173
-#, fuzzy
 msgid "Value Position"
-msgstr "Kysymys"
+msgstr "Arvon sijainti"
+
+#: gtk/gtkscale.c:167
+msgid "The position in which the current value is displayed"
+msgstr "Paikka, jossa nykyinen arvo näkyy"
 
 #: gtk/gtkscale.c:174
-msgid "The position in which the current value is displayed"
-msgstr ""
-
-#: gtk/gtkscale.c:181
 msgid "Slider Length"
-msgstr ""
+msgstr "Liukusäätimen pituus"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:175
 msgid "Length of scale's slider"
 msgstr ""
 
-#: gtk/gtkscale.c:190
+#: gtk/gtkscale.c:183
 msgid "Value spacing"
-msgstr ""
+msgstr "Arvon välit"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:184
 msgid "Space between value text and the slider/trough area"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:76
 msgid "Minimum Slider Length"
-msgstr ""
+msgstr "Pienin liukusäätimen pituus"
 
 #: gtk/gtkscrollbar.c:77
 msgid "Minimum length of scrollbar slider"
-msgstr ""
+msgstr "Pienin vierityspalkin pituus"
 
 #: gtk/gtkscrollbar.c:85
 msgid "Fixed slider size"
@@ -2725,8 +2535,9 @@ msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:93
+#, fuzzy
 msgid "Backward stepper"
-msgstr ""
+msgstr "Taustaväri asetettu"
 
 #: gtk/gtkscrollbar.c:94
 msgid "Display the standard backward arrow button"
@@ -2758,76 +2569,31 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:177 gtk/gtktext.c:604 gtk/gtktreeview.c:507
-msgid "Horizontal Adjustment"
-msgstr ""
-
-#: gtk/gtkscrolledwindow.c:184 gtk/gtktext.c:612 gtk/gtktreeview.c:515
-msgid "Vertical Adjustment"
-msgstr ""
-
-#: gtk/gtkscrolledwindow.c:191
-#, fuzzy
-msgid "Horizontal Scrollbar Policy"
-msgstr "Perhe:"
-
-#: gtk/gtkscrolledwindow.c:192
-msgid "When the horizontal scrollbar is displayed"
-msgstr ""
-
-#: gtk/gtkscrolledwindow.c:199
-msgid "Vertical Scrollbar Policy"
-msgstr ""
-
-#: gtk/gtkscrolledwindow.c:200
-msgid "When the vertical scrollbar is displayed"
-msgstr ""
-
-#: gtk/gtkscrolledwindow.c:208
-#, fuzzy
-msgid "Window Placement"
-msgstr "Ikkuna"
-
-#: gtk/gtkscrolledwindow.c:209
-msgid "Where the contents are located with respect to the scrollbars"
-msgstr ""
-
-#: gtk/gtkscrolledwindow.c:216
-#, fuzzy
-msgid "Shadow Type"
-msgstr "Ikkuna"
-
-#: gtk/gtkscrolledwindow.c:217
-msgid "Style of bevel around the contents"
-msgstr ""
-
 #: gtk/gtksettings.c:147
 msgid "Double Click Time"
-msgstr ""
+msgstr "Kaksoisnapsautuksen aika"
 
 #: gtk/gtksettings.c:148
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr ""
+msgstr "Suurin aika (millisekunteina), joka voi olla kahden napsautuksen välillä, jotta niitä pidettäisiin kaksoisnapsautuksena"
 
 #: gtk/gtksettings.c:155
-#, fuzzy
 msgid "Cursor Blink"
-msgstr "Poistettu"
+msgstr "Vilkkuva kohdistin"
 
 #: gtk/gtksettings.c:156
 msgid "Whether the cursor should blink"
-msgstr ""
+msgstr "Vilkkuuko kohdistin"
 
 #: gtk/gtksettings.c:163
-#, fuzzy
 msgid "Cursor Blink Time"
-msgstr "Poistettu"
+msgstr "Kohdistimen vilkkumisaika"
 
 #: gtk/gtksettings.c:164
 msgid "Length of the cursor blink cycle, in milleseconds"
-msgstr ""
+msgstr "Kohdistimen vilkkumisjakson pituus millisekunteina"
 
 #: gtk/gtksettings.c:171
 msgid "Split Cursor"
@@ -2841,7 +2607,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:179
 msgid "Theme Name"
-msgstr ""
+msgstr "Teeman nimi"
 
 #: gtk/gtksettings.c:180
 msgid "Name of theme RC file to load"
@@ -2902,12 +2668,14 @@ msgid "Numeric"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:261
+#, fuzzy
 msgid "Whether non-numeric characters should be ignored"
-msgstr ""
+msgstr "Näkyykö järjestysilmaisin"
 
 #: gtk/gtkspinbutton.c:268
+#, fuzzy
 msgid "Wrap"
-msgstr ""
+msgstr "Rivitystapa"
 
 #: gtk/gtkspinbutton.c:269
 msgid "Whether a spin button should wrap upon reaching its limits"
@@ -2915,7 +2683,7 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:276
 msgid "Update Policy"
-msgstr ""
+msgstr "Päivitystapa"
 
 #: gtk/gtkspinbutton.c:277
 msgid ""
@@ -2923,17 +2691,17 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkspinbutton.c:285
-#, fuzzy
 msgid "Value"
-msgstr "Arvo:"
+msgstr "Arvo"
 
 #: gtk/gtkspinbutton.c:286
 msgid "Reads the current value, or sets a new value"
 msgstr ""
 
 #: gtk/gtkstatusbar.c:159
+#, fuzzy
 msgid "Style of bevel around the statusbar text"
-msgstr ""
+msgstr "Tekstin alleviivaustyyli"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
@@ -2957,7 +2725,7 @@ msgstr "Kysymys"
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr ""
+msgstr "_Lisää"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
@@ -2965,250 +2733,227 @@ msgstr "_Toteuta"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr ""
+msgstr "_Lihavoitu"
 
 #: gtk/gtkstock.c:278
-#, fuzzy
 msgid "_Cancel"
-msgstr "Peruuta"
+msgstr "_Peru"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr ""
+msgstr "_CD"
 
 #: gtk/gtkstock.c:280
-#, fuzzy
 msgid "_Clear"
-msgstr "tyhjennä"
+msgstr "_Tyhjennä"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
 msgstr "_Sulje"
 
 #: gtk/gtkstock.c:282
-#, fuzzy
 msgid "_Convert"
-msgstr "Luo"
+msgstr "_Muunna"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr ""
+msgstr "_Kopioi"
 
 #: gtk/gtkstock.c:284
-#, fuzzy
 msgid "C_ut"
-msgstr "Lopeta"
+msgstr "_Leikkaa"
 
 #: gtk/gtkstock.c:285
-#, fuzzy
 msgid "_Delete"
-msgstr "Poista"
+msgstr "_Poista"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "_Suorita"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr ""
+msgstr "_Etsi"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Etsi ja _korvaa"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgid "_Floppy"
-msgstr "_Toteuta"
+msgstr "_Levyke"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr ""
+msgstr "_Alle"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr ""
+msgstr "_Ensimmäinen"
 
 #: gtk/gtkstock.c:292
-#, fuzzy
 msgid "_Last"
-msgstr "Mukautettu paletti"
+msgstr "_Viimeinen"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr ""
+msgstr "_Ylle"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr ""
+msgstr "_Taaksepäin"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "_Alas"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr ""
+msgstr "_Eteenpäin"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "_Ylös"
 
 #: gtk/gtkstock.c:298
-#, fuzzy
 msgid "_Help"
-msgstr "Ohje"
+msgstr "_Ohje"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgid "_Home"
-msgstr "Ohje"
+msgstr "_Koti"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr ""
+msgstr "_Hakemisto"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr ""
+msgstr "_Kursiivi"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr ""
+msgstr "_Siirry"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgid "_Center"
-msgstr "Luo"
+msgstr "_Keskitä"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "_Fill"
-msgstr "Perhe:"
+msgstr "_Täytä"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr ""
+msgstr "_Vasen"
 
 #: gtk/gtkstock.c:306
 msgid "_Right"
-msgstr ""
+msgstr "_Oikea"
 
 #: gtk/gtkstock.c:307
-#, fuzzy
 msgid "_New"
-msgstr "Uusi"
+msgstr "_Uusi"
 
 #: gtk/gtkstock.c:308
 msgid "_No"
 msgstr "_Ei"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_OK"
-msgstr "OK"
+msgstr "_Hyväksy"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgid "_Open"
-msgstr "Avaa"
+msgstr "_Avaa"
 
 #: gtk/gtkstock.c:311
-#, fuzzy
 msgid "_Paste"
-msgstr "Mukautettu paletti"
+msgstr "L_iitä"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr ""
+msgstr "_Asetukset"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr ""
+msgstr "Tul_osta"
 
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgid "Print Pre_view"
-msgstr "Esikatselu:"
+msgstr "_Esikatselu"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr ""
+msgstr "_Ominaisuudet"
 
 #: gtk/gtkstock.c:316
-#, fuzzy
 msgid "_Quit"
-msgstr "Lopeta"
+msgstr "_Lopeta"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgid "_Redo"
-msgstr "Punainen:"
+msgstr "_Tee uudelleen"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr ""
+msgstr "_Päivitä"
 
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgid "_Remove"
-msgstr "Punainen:"
+msgstr "_Poista"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr ""
+msgstr "_Hylkää muutokset"
 
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgid "_Save"
-msgstr "Tallenna"
+msgstr "_Tallenna"
 
 #: gtk/gtkstock.c:322
-#, fuzzy
 msgid "Save _As"
-msgstr "Tallenna"
+msgstr "Tallenna _nimellä"
 
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgid "_Color"
-msgstr "_Sulje"
+msgstr "_Väri"
 
 #: gtk/gtkstock.c:324
 msgid "_Font"
-msgstr ""
+msgstr "_Kirjasin"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr ""
+msgstr "_Nouseva"
 
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr ""
+msgstr "_Laskeva"
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr ""
+msgstr "_Oikoluku"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr ""
+msgstr "_Pysäytä"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
-msgstr ""
+msgstr "_Yliviivaus"
 
 #: gtk/gtkstock.c:330
-#, fuzzy
 msgid "_Undelete"
-msgstr "Poista"
+msgstr "_Peru poisto"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr ""
+msgstr "_Alleviivaus"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr ""
+msgstr "_Kumoa"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
@@ -3217,51 +2962,51 @@ msgstr "_Kyllä"
 #: gtk/gtkstock.c:334
 #, c-format
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Suurennos _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "Suurenna _sopivaksi"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "_Lähennä"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr ""
+msgstr "L_oitonna"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
-msgstr ""
+msgstr "Rivejä"
 
 #: gtk/gtktable.c:157
 msgid "The number of rows in the table"
-msgstr ""
+msgstr "Taulukon rivimäärä"
 
 #: gtk/gtktable.c:165
 msgid "Columns"
-msgstr ""
+msgstr "Sarakkeita"
 
 #: gtk/gtktable.c:166
 msgid "The number of columns in the table"
-msgstr ""
+msgstr "Taulukon sarakkeiden määrä"
 
 #: gtk/gtktable.c:174
 msgid "Row spacing"
-msgstr ""
+msgstr "Rivivälit"
 
 #: gtk/gtktable.c:175
 msgid "The amount of space between two consecutive rows"
-msgstr ""
+msgstr "Kahden peräkkäisen rivin väli"
 
 #: gtk/gtktable.c:183
 msgid "Column spacing"
-msgstr ""
+msgstr "Sarakeväli"
 
 #: gtk/gtktable.c:184
 msgid "The amount of space between two consecutive columns"
-msgstr ""
+msgstr "Kahden peräkkäisen sarakkeen väli"
 
 #: gtk/gtktable.c:192
 msgid "Homogenous"
@@ -3271,8 +3016,16 @@ msgstr ""
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr ""
 
+#: gtk/gtktext.c:604 gtk/gtktreeview.c:508
+msgid "Horizontal Adjustment"
+msgstr ""
+
 #: gtk/gtktext.c:605
 msgid "Horizontal adjustment for the text widget"
+msgstr ""
+
+#: gtk/gtktext.c:612 gtk/gtktreeview.c:516
+msgid "Vertical Adjustment"
 msgstr ""
 
 #: gtk/gtktext.c:613
@@ -3281,7 +3034,7 @@ msgstr ""
 
 #: gtk/gtktext.c:620
 msgid "Line Wrap"
-msgstr ""
+msgstr "Rivitys"
 
 #: gtk/gtktext.c:621
 msgid "Whether lines are wrapped at widget edges"
@@ -3289,7 +3042,7 @@ msgstr ""
 
 #: gtk/gtktext.c:628
 msgid "Word Wrap"
-msgstr ""
+msgstr "Sanarivitys"
 
 #: gtk/gtktext.c:629
 msgid "Whether words are wrapped at widget edges"
@@ -3297,54 +3050,57 @@ msgstr ""
 
 #: gtk/gtktexttag.c:199
 msgid "Tag name"
-msgstr ""
+msgstr "Lapun nimi"
 
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
-msgstr ""
+msgstr "Nimi, jota käytetään lappuun viittaamiseen"
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
-msgstr ""
+msgstr "Taustan koko korkeus"
 
 #: gtk/gtktexttag.c:226
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
 msgstr ""
+"Täyttääkö taustaväri koko rivin korkeuden vaiko vain lapullisten merkkien "
+"korkeuden"
 
 #: gtk/gtktexttag.c:234
+#, fuzzy
 msgid "Background stipple mask"
-msgstr ""
+msgstr "Taustaväri asetettu"
 
 #: gtk/gtktexttag.c:235
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr ""
+msgstr "Taustan piirtämisessä peitteenä käytettävä bittikartta"
 
 #: gtk/gtktexttag.c:260
+#, fuzzy
 msgid "Foreground stipple mask"
-msgstr ""
+msgstr "Edustaväri asetettu"
 
 #: gtk/gtktexttag.c:261
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
+msgstr "Edustan piirtämisessä peitteenä käytettävä bittikartta"
 
 #: gtk/gtktexttag.c:268
-#, fuzzy
 msgid "Text direction"
-msgstr "Luo hakemisto"
+msgstr "Tekstin suunta"
 
 #: gtk/gtktexttag.c:269
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr ""
+msgstr "Tekstin suunta (oikealta vasemmalle tai vasemmalta oikealle)"
 
 #: gtk/gtktexttag.c:379 gtk/gtktextview.c:583
 msgid "Left, right, or center justification"
-msgstr ""
+msgstr "Vasen-, oikea- tai keskitasaus"
 
 #: gtk/gtktexttag.c:387
 msgid "Language"
-msgstr ""
+msgstr "Kieli"
 
 #: gtk/gtktexttag.c:388
 msgid "Language engine code to use for rendering the text"
@@ -3352,43 +3108,43 @@ msgstr ""
 
 #: gtk/gtktexttag.c:395
 msgid "Left margin"
-msgstr ""
+msgstr "Vasen reunus"
 
 #: gtk/gtktexttag.c:396 gtk/gtktextview.c:592
 msgid "Width of the left margin in pixels"
-msgstr ""
+msgstr "Vasemman reunuksen leveys kuvapisteinä"
 
 #: gtk/gtktexttag.c:405
 msgid "Right margin"
-msgstr ""
+msgstr "Oikea reunus"
 
 #: gtk/gtktexttag.c:406 gtk/gtktextview.c:602
 msgid "Width of the right margin in pixels"
-msgstr ""
+msgstr "Oikean reunuksen leveys kuvapisteinä"
 
 #: gtk/gtktexttag.c:416 gtk/gtktextview.c:611
 msgid "Indent"
-msgstr ""
+msgstr "Sisennys"
 
 #: gtk/gtktexttag.c:417 gtk/gtktextview.c:612
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "Kappaleen sisennys kuvapisteinä"
 
 #: gtk/gtktexttag.c:437
 msgid "Pixels above lines"
-msgstr ""
+msgstr "Pikseleitä rivien yllä"
 
 #: gtk/gtktexttag.c:438 gtk/gtktextview.c:536
 msgid "Pixels of blank space above paragraphs"
-msgstr ""
+msgstr "Kappaleiden yllä olevan tyhjän tilan määrä pikseleinä"
 
 #: gtk/gtktexttag.c:447
 msgid "Pixels below lines"
-msgstr ""
+msgstr "Pikseleitä rivien alla"
 
 #: gtk/gtktexttag.c:448 gtk/gtktextview.c:546
 msgid "Pixels of blank space below paragraphs"
-msgstr ""
+msgstr "Kappaleiden alla olevan tyhjän tilan määrä pikseleinä"
 
 #: gtk/gtktexttag.c:457
 msgid "Pixels inside wrap"
@@ -3400,48 +3156,50 @@ msgstr ""
 
 #: gtk/gtktexttag.c:484
 msgid "Wrap mode"
-msgstr ""
+msgstr "Rivitystapa"
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:574
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr ""
+msgstr "Rivittyvätkö rivit ollenkaan, sanojen välistä vai merkkien välistä"
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:621
 msgid "Tabs"
-msgstr ""
+msgstr "Sarkaimet"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:622
 msgid "Custom tabs for this text"
-msgstr ""
+msgstr "Muokkaa tämän tekstin sarkaimia"
 
 #: gtk/gtktexttag.c:502
 msgid "Invisible"
-msgstr ""
+msgstr "Näkymätön"
 
 #: gtk/gtktexttag.c:503
 msgid "Whether this text is hidden"
-msgstr ""
+msgstr "Onko tämä teksti näkymätön"
 
 #: gtk/gtktexttag.c:516
 msgid "Background full height set"
-msgstr ""
+msgstr "Taustaväri koko korkeudelle asetettu"
 
 #: gtk/gtktexttag.c:517
 msgid "Whether this tag affects background height"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu taustan korkeuteen"
 
 #: gtk/gtktexttag.c:520
+#, fuzzy
 msgid "Background stipple set"
-msgstr ""
+msgstr "Taustaväri asetettu"
 
 #: gtk/gtktexttag.c:521
 msgid "Whether this tag affects the background stipple"
 msgstr ""
 
 #: gtk/gtktexttag.c:528
+#, fuzzy
 msgid "Foreground stipple set"
-msgstr ""
+msgstr "Edustaväri asetettu"
 
 #: gtk/gtktexttag.c:529
 msgid "Whether this tag affects the foreground stipple"
@@ -3449,39 +3207,39 @@ msgstr ""
 
 #: gtk/gtktexttag.c:564
 msgid "Justification set"
-msgstr ""
+msgstr "Tasaus asetettu"
 
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects paragraph justification"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu kappaleen tasaukseen"
 
 #: gtk/gtktexttag.c:568
 msgid "Language set"
-msgstr ""
+msgstr "Kieli asetettu"
 
 #: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu tekstin piirtokieleen"
 
 #: gtk/gtktexttag.c:572
 msgid "Left margin set"
-msgstr ""
+msgstr "Vasen reunus asetettu"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects the left margin"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu vasempaan reunukseen"
 
 #: gtk/gtktexttag.c:576
 msgid "Indent set"
-msgstr ""
+msgstr "Sisennys asetettu"
 
 #: gtk/gtktexttag.c:577
 msgid "Whether this tag affects indentation"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu sisennykseen"
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels above lines set"
-msgstr ""
+msgstr "Kuvapisteitä rivin yllä asetettu"
 
 #: gtk/gtktexttag.c:585 gtk/gtktexttag.c:589
 msgid "Whether this tag affects the number of pixels above lines"
@@ -3489,7 +3247,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:588
 msgid "Pixels below lines set"
-msgstr ""
+msgstr "Kuvapisteitä rivin alla asetettu"
 
 #: gtk/gtktexttag.c:592
 msgid "Pixels inside wrap set"
@@ -3509,75 +3267,35 @@ msgstr ""
 
 #: gtk/gtktexttag.c:608
 msgid "Wrap mode set"
-msgstr ""
+msgstr "Rivitystila asetettu"
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects line wrap mode"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu rivitystilaan"
 
 #: gtk/gtktexttag.c:612
 msgid "Tabs set"
-msgstr ""
+msgstr "Sarkaimet asetettu"
 
 #: gtk/gtktexttag.c:613
 msgid "Whether this tag affects tabs"
-msgstr ""
+msgstr "Vaikottaako tämä lappu sarkaimiin"
 
 #: gtk/gtktexttag.c:616
 msgid "Invisible set"
-msgstr ""
+msgstr "Näkymätön asetettu"
 
 #: gtk/gtktexttag.c:617
 msgid "Whether this tag affects text visibility"
-msgstr ""
-
-#: gtk/gtktextutil.c:46
-msgid "LRM _Left-to-right mark"
-msgstr ""
-
-#: gtk/gtktextutil.c:47
-msgid "RLM _Right-to-left mark"
-msgstr ""
-
-#: gtk/gtktextutil.c:48
-msgid "LRE Left-to-right _embedding"
-msgstr ""
-
-#: gtk/gtktextutil.c:49
-msgid "RLE Right-to-left e_mbedding"
-msgstr ""
-
-#: gtk/gtktextutil.c:50
-msgid "LRO Left-to-right _override"
-msgstr ""
-
-#: gtk/gtktextutil.c:51
-msgid "RLO Right-to-left o_verride"
-msgstr ""
-
-#: gtk/gtktextutil.c:52
-msgid "PDF _Pop directional formatting"
-msgstr ""
-
-#: gtk/gtktextutil.c:53
-msgid "ZWS _Zero width space"
-msgstr ""
-
-#: gtk/gtktextutil.c:54
-msgid "ZWN Zero width _joiner"
-msgstr ""
-
-#: gtk/gtktextutil.c:55
-msgid "ZWNJ Zero width _non-joiner"
-msgstr ""
+msgstr "Vaikuttaako tämä lappu näkyvyyteen"
 
 #: gtk/gtktextview.c:535
 msgid "Pixels Above Lines"
-msgstr ""
+msgstr "Pikseliä rivien yllä"
 
 #: gtk/gtktextview.c:545
 msgid "Pixels Below Lines"
-msgstr ""
+msgstr "Pikseliä rivien alla"
 
 #: gtk/gtktextview.c:555
 msgid "Pixels Inside Wrap"
@@ -3585,28 +3303,27 @@ msgstr ""
 
 #: gtk/gtktextview.c:573
 msgid "Wrap Mode"
-msgstr ""
+msgstr "Rivitystapa"
 
 #: gtk/gtktextview.c:591
 msgid "Left Margin"
-msgstr ""
+msgstr "Vasen reunus"
 
 #: gtk/gtktextview.c:601
 msgid "Right Margin"
-msgstr ""
+msgstr "Oikea reunus"
 
 #: gtk/gtktextview.c:629
-#, fuzzy
 msgid "Cursor Visible"
-msgstr "Poistettu"
+msgstr "Kohdistin näkyy"
 
 #: gtk/gtktextview.c:630
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "Näkyykö tekstikohdistin"
 
 #: gtk/gtktextview.c:6328
 msgid "Input _Methods"
-msgstr ""
+msgstr "Syöttö_tavat"
 
 # , c-format
 #: gtk/gtkthemes.c:71
@@ -3619,24 +3336,27 @@ msgid "--- No Tip ---"
 msgstr "--- Ei vinkkiä ---"
 
 #: gtk/gtktogglebutton.c:131
+#, fuzzy
 msgid "If the toggle button should be pressed in or not"
-msgstr ""
+msgstr "Näkyykö järjestysilmaisin"
 
 #: gtk/gtktogglebutton.c:139
 msgid "If the toggle button is in an \"in between\" state."
 msgstr ""
 
 #: gtk/gtktogglebutton.c:146
+#, fuzzy
 msgid "Draw Indicator"
-msgstr ""
+msgstr "Järjestysilmaisin"
 
 #: gtk/gtktogglebutton.c:147
 msgid "If the toggle part of the button is displayed"
 msgstr ""
 
 #: gtk/gtktoolbar.c:225
+#, fuzzy
 msgid "The orientation of the toolbar"
-msgstr ""
+msgstr "Lisäyskohdan nykyinen sijainti"
 
 #: gtk/gtktoolbar.c:233
 msgid "Toolbar Style"
@@ -3679,8 +3399,9 @@ msgid "Style of bevel around the toolbar"
 msgstr ""
 
 #: gtk/gtktoolbar.c:284
+#, fuzzy
 msgid "Toolbar style"
-msgstr ""
+msgstr "Kirjasintyyli"
 
 #: gtk/gtktoolbar.c:285
 msgid ""
@@ -3695,135 +3416,132 @@ msgstr ""
 msgid "Size of icons in default toolbars"
 msgstr ""
 
-#: gtk/gtktreemodelsort.c:298
-msgid "TreeModelSort Model"
-msgstr ""
-
-#: gtk/gtktreemodelsort.c:299
-msgid "The model for the TreeModelSort to sort"
-msgstr ""
-
-#: gtk/gtktreeview.c:499
+#: gtk/gtktreeview.c:500
 msgid "TreeView Model"
 msgstr ""
 
-#: gtk/gtktreeview.c:500
+#: gtk/gtktreeview.c:501
+#, fuzzy
 msgid "The model for the tree view"
-msgstr ""
+msgstr "Piirtimen teksti."
 
-#: gtk/gtktreeview.c:508
+#: gtk/gtktreeview.c:509
 msgid "Horizontal Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:516
+#: gtk/gtktreeview.c:517
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:523 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:425
-#, fuzzy
+#: gtk/gtktreeview.c:524 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:425
 msgid "Visible"
-msgstr "Poistettu"
+msgstr "Näkyvä"
 
-#: gtk/gtktreeview.c:524
+#: gtk/gtktreeview.c:525
 msgid "Show the column header buttons"
 msgstr ""
 
-#: gtk/gtktreeview.c:531
-msgid "Headers Clickable"
-msgstr ""
-
 #: gtk/gtktreeview.c:532
+#, fuzzy
+msgid "Headers Clickable"
+msgstr "Napsautettava"
+
+#: gtk/gtktreeview.c:533
 msgid "Column headers respond to click events"
 msgstr ""
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:540
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:540
+#: gtk/gtktreeview.c:541
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:547 gtk/gtktreeviewcolumn.c:270
+#: gtk/gtktreeview.c:548 gtk/gtktreeviewcolumn.c:270
 msgid "Reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:548
+#: gtk/gtktreeview.c:549
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:556
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:556
+#: gtk/gtktreeview.c:557
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:564
 msgid "Enable Search"
 msgstr ""
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:565
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:571
-msgid "Search Column"
-msgstr ""
-
 #: gtk/gtktreeview.c:572
+#, fuzzy
+msgid "Search Column"
+msgstr "Pienin leveys"
+
+#: gtk/gtktreeview.c:573
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:585
-msgid "Expander Size"
-msgstr ""
-
 #: gtk/gtktreeview.c:586
+#, fuzzy
+msgid "Expander Size"
+msgstr "Kirjasinvahvuus"
+
+#: gtk/gtktreeview.c:587
 msgid "Size of the expander arrow."
 msgstr ""
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:595
 msgid "Vertical Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 msgid "Vertical space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Horizontal Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:605
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:613
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:613
+#: gtk/gtktreeview.c:614
 msgid "Allow drawing of alternating color rows."
 msgstr ""
 
-#: gtk/gtktreeview.c:619
-msgid "Indent Expanders"
-msgstr ""
-
 #: gtk/gtktreeview.c:620
+#, fuzzy
+msgid "Indent Expanders"
+msgstr "On laajennettu"
+
+#: gtk/gtktreeview.c:621
+#, fuzzy
 msgid "Make the expanders indented."
-msgstr ""
+msgstr "Tee teksti muokattavaksi."
 
 #: gtk/gtktreeviewcolumn.c:172
-msgid "Whether to display the column"
-msgstr ""
-
-#: gtk/gtktreeviewcolumn.c:179 gtk/gtkwindow.c:410
 #, fuzzy
+msgid "Whether to display the column"
+msgstr "Onko sarake näkyvä"
+
+#: gtk/gtktreeviewcolumn.c:179 gtk/gtkwindow.c:394
 msgid "Resizable"
-msgstr "Poistettu"
+msgstr "Muuttuvakokoinen"
 
 #: gtk/gtktreeviewcolumn.c:180
 msgid "Column is user-resizable"
@@ -3831,92 +3549,95 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:188
 msgid "Current width of the column"
-msgstr ""
+msgstr "Sarakkeen nykyinen leveys"
 
 #: gtk/gtktreeviewcolumn.c:196
 msgid "Sizing"
-msgstr ""
+msgstr "Koon muutto"
 
 #: gtk/gtktreeviewcolumn.c:197
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "Sarakkeen koonmuuttotapa"
 
 #: gtk/gtktreeviewcolumn.c:205
+#, fuzzy
 msgid "Fixed Width"
-msgstr ""
+msgstr "Vakioleveys."
 
 #: gtk/gtktreeviewcolumn.c:206
+#, fuzzy
 msgid "Current fixed width of the column"
-msgstr ""
+msgstr "Sarakkeen nykyinen leveys"
 
 #: gtk/gtktreeviewcolumn.c:215
 msgid "Minimum Width"
-msgstr ""
+msgstr "Pienin leveys"
 
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "Sarakkeen pienin sallittu leveys"
 
 #: gtk/gtktreeviewcolumn.c:225
 msgid "Maximum Width"
-msgstr ""
+msgstr "Suurin leveys"
 
 #: gtk/gtktreeviewcolumn.c:226
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "Sarakkeen suurin sallittu leveys"
 
 #: gtk/gtktreeviewcolumn.c:235
-#, fuzzy
 msgid "Title"
-msgstr "Tiedostot"
+msgstr "Otsikko"
 
 #: gtk/gtktreeviewcolumn.c:236
 msgid "Title to appear in column header"
-msgstr ""
+msgstr "Sarakkeen otsikon teksti"
 
 #: gtk/gtktreeviewcolumn.c:243
 msgid "Clickable"
-msgstr ""
+msgstr "Napsautettava"
 
 #: gtk/gtktreeviewcolumn.c:244
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "Onko otsikko napsautettava"
 
 #: gtk/gtktreeviewcolumn.c:252
 msgid "Widget"
-msgstr ""
+msgstr "Säädin"
 
 #: gtk/gtktreeviewcolumn.c:253
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "Sarakkeen otsikkoon tekstin sijaan tuleva säädin"
 
 #: gtk/gtktreeviewcolumn.c:260
 msgid "Alignment"
-msgstr ""
+msgstr "Tasaus"
 
 #: gtk/gtktreeviewcolumn.c:261
+#, fuzzy
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "Sarakkeen otsikon tekstin tai säätimen tasaus"
 
 #: gtk/gtktreeviewcolumn.c:271
+#, fuzzy
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "Voiko käyttäjä muuttaa tekstiä"
 
 #: gtk/gtktreeviewcolumn.c:278
 msgid "Sort indicator"
-msgstr ""
+msgstr "Järjestysilmaisin"
 
 #: gtk/gtktreeviewcolumn.c:279
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "Näkyykö järjestysilmaisin"
 
 #: gtk/gtktreeviewcolumn.c:286
 msgid "Sort order"
-msgstr ""
+msgstr "Järjestystapa"
 
 #: gtk/gtktreeviewcolumn.c:287
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "Järjestyssuunta, jonka järjestysilmaisin näyttää"
 
 #: gtk/gtkviewport.c:133
 msgid ""
@@ -3937,11 +3658,12 @@ msgstr ""
 #: gtk/gtkwidget.c:392
 #, fuzzy
 msgid "Widget name"
-msgstr "Nimeä uudelleen"
+msgstr "Säätimen nimi"
 
 #: gtk/gtkwidget.c:393
+#, fuzzy
 msgid "The name of the widget"
-msgstr ""
+msgstr "Piirtimen teksti."
 
 #: gtk/gtkwidget.c:399
 msgid "Parent widget"
@@ -3962,8 +3684,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkwidget.c:416
+#, fuzzy
 msgid "Height request"
-msgstr ""
+msgstr "Kirjasinvahvuus"
 
 #: gtk/gtkwidget.c:417
 msgid ""
@@ -3972,62 +3695,63 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkwidget.c:426
+#, fuzzy
 msgid "Whether the widget is visible"
-msgstr ""
+msgstr "Onko tämä teksti näkymätön"
 
 #: gtk/gtkwidget.c:432
 msgid "Sensitive"
 msgstr ""
 
 #: gtk/gtkwidget.c:433
+#, fuzzy
 msgid "Whether the widget responds to input"
-msgstr ""
+msgstr "Näkyykö järjestysilmaisin"
 
 #: gtk/gtkwidget.c:439
 msgid "Application paintable"
-msgstr ""
+msgstr "Sovellus voi piirtää"
 
 #: gtk/gtkwidget.c:440
 msgid "Whether the application will paint directly on the widget"
-msgstr ""
+msgstr "Voiko sovellus piirtää itse tälle säätimelle"
 
 #: gtk/gtkwidget.c:446
 msgid "Can focus"
-msgstr ""
+msgstr "Voi kohdistua"
 
 #: gtk/gtkwidget.c:447
 msgid "Whether the widget can accept the input focus"
-msgstr ""
+msgstr "Voiko tällä säätimellä olla syöttökohdistus"
 
 #: gtk/gtkwidget.c:453
 msgid "Has focus"
-msgstr ""
+msgstr "Kohdistus on"
 
 #: gtk/gtkwidget.c:454
 msgid "Whether the widget has the input focus"
-msgstr ""
+msgstr "Onko tällä ikkunalla syöttökohdistus"
 
 #: gtk/gtkwidget.c:460
-#, fuzzy
 msgid "Can default"
-msgstr "default:LTR"
+msgstr "Voi olla oletus"
 
 #: gtk/gtkwidget.c:461
 msgid "Whether the widget can be the default widget"
-msgstr ""
+msgstr "Voiko säädin olla oletussäädin"
 
 #: gtk/gtkwidget.c:467
-#, fuzzy
 msgid "Has default"
-msgstr "default:LTR"
+msgstr "On oletus"
 
 #: gtk/gtkwidget.c:468
 msgid "Whether the widget is the default widget"
-msgstr ""
+msgstr "Onko tämä säädin oletussäädin"
 
 #: gtk/gtkwidget.c:474
+#, fuzzy
 msgid "Receives default"
-msgstr ""
+msgstr "Aktivoi oletuksen"
 
 #: gtk/gtkwidget.c:475
 msgid "If TRUE, the widget will receive the default action when it is focused."
@@ -4042,19 +3766,18 @@ msgid "Whether the widget is composed of other widgets"
 msgstr ""
 
 #: gtk/gtkwidget.c:488
-#, fuzzy
 msgid "Style"
-msgstr "Tyyli:"
+msgstr "Tyyli"
 
 #: gtk/gtkwidget.c:489
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)."
-msgstr ""
+msgstr "Säätimen tyyli, joka sisältää tietoa sen ulkonäöstä (värit yms.)"
 
 #: gtk/gtkwidget.c:495
 msgid "Events"
-msgstr ""
+msgstr "Tapahtumat"
 
 #: gtk/gtkwidget.c:496
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
@@ -4070,149 +3793,158 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1051
 msgid "Interior Focus"
-msgstr ""
+msgstr "Kohdistus sisällä"
 
 #: gtk/gtkwidget.c:1052
 msgid "Whether to draw the focus indicator inside widgets."
-msgstr ""
+msgstr "Piirtyykö kohdistusilmaisin ikkunan säätimiin."
 
 #: gtk/gtkwidget.c:1058
 msgid "Focus linewidth"
 msgstr ""
 
 #: gtk/gtkwidget.c:1059
+#, fuzzy
 msgid "Width, in pixels, of the focus indicator line."
-msgstr ""
+msgstr "Piirtyykö kohdistusilmaisin ikkunan säätimiin."
 
 #: gtk/gtkwidget.c:1065
 msgid "Focus line dash pattern"
 msgstr ""
 
 #: gtk/gtkwidget.c:1066
+#, fuzzy
 msgid "Dash pattern used to draw the focus indicator."
-msgstr ""
+msgstr "Piirtyykö kohdistusilmaisin ikkunan säätimiin."
 
 #: gtk/gtkwidget.c:1071
 msgid "Focus padding"
 msgstr ""
 
 #: gtk/gtkwidget.c:1072
+#, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
-msgstr ""
+msgstr "Piirtyykö kohdistusilmaisin ikkunan säätimiin."
 
-#: gtk/gtkwindow.c:375
-#, fuzzy
+#: gtk/gtkwindow.c:359
 msgid "Window Type"
-msgstr "Ikkuna"
+msgstr "Ikkunatyyppi"
 
-#: gtk/gtkwindow.c:376
+#: gtk/gtkwindow.c:360
 msgid "The type of the window"
-msgstr ""
+msgstr "Ikkunan tyyppi"
 
-#: gtk/gtkwindow.c:385
-#, fuzzy
+#: gtk/gtkwindow.c:369
 msgid "Window Title"
-msgstr "Ikkuna"
+msgstr "Ikkunan otsikko"
 
-#: gtk/gtkwindow.c:386
+#: gtk/gtkwindow.c:370
 msgid "The title of the window"
-msgstr ""
+msgstr "Ikkunan otsikko"
 
-#: gtk/gtkwindow.c:393
+#: gtk/gtkwindow.c:377
 msgid "Allow Shrink"
-msgstr ""
+msgstr "Salli kutistuminen"
 
-#: gtk/gtkwindow.c:395
-#, no-c-format
+#: gtk/gtkwindow.c:379
+#, fuzzy, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
+"Jos TOSI, ikkunalla ei ole minimikokoa. Älä käytä tätä ominaisuutta, sillä "
+"se on järjetöntä."
 
-#: gtk/gtkwindow.c:402
+#: gtk/gtkwindow.c:386
 msgid "Allow Grow"
-msgstr ""
+msgstr "Salli kasvu"
 
-#: gtk/gtkwindow.c:403
+#: gtk/gtkwindow.c:387
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
+"Jos TOSI, käyttäjät voivat kasvattaa ikkunaa sen pienintä kokoa suuremmaksi."
 
-#: gtk/gtkwindow.c:411
+#: gtk/gtkwindow.c:395
 msgid "If TRUE, users can resize the window."
-msgstr ""
+msgstr "Jos TOSI, niin käyttäjä voi muuttaa ikkunan kokoa."
 
-#: gtk/gtkwindow.c:418
+#: gtk/gtkwindow.c:402
 msgid "Modal"
-msgstr ""
+msgstr "Modaalinen"
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:403
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
+"Jos TOSI, niin ikkuna on modaalinen (muita ikkunoita ei voi käyttää tämän "
+"näkyessä)."
 
-#: gtk/gtkwindow.c:426
+#: gtk/gtkwindow.c:410
 msgid "Window Position"
-msgstr ""
+msgstr "Ikkunan sijainti"
 
-#: gtk/gtkwindow.c:427
+#: gtk/gtkwindow.c:411
 msgid "The initial position of the window."
-msgstr ""
+msgstr "Ikkunan alkusijainti"
 
-#: gtk/gtkwindow.c:435
+#: gtk/gtkwindow.c:419
 msgid "Default Width"
-msgstr ""
+msgstr "Oletusleveys"
 
-#: gtk/gtkwindow.c:436
+#: gtk/gtkwindow.c:420
+#, fuzzy
 msgid ""
 "The default width of the window, used when initially showing the window."
-msgstr ""
+msgstr "Ikkunan oletusleveys tai 0, joka merkitsee sen vaatimaa leveyttä."
 
-#: gtk/gtkwindow.c:445
+#: gtk/gtkwindow.c:429
 msgid "Default Height"
-msgstr ""
+msgstr "Oletuskorkeus"
 
-#: gtk/gtkwindow.c:446
+#: gtk/gtkwindow.c:430
+#, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window."
-msgstr ""
+msgstr "Ikkunan oletuskorkeus tai 0, joka merkitsee sen vaatimaa korkeutta."
 
-#: gtk/gtkwindow.c:455
+#: gtk/gtkwindow.c:439
 msgid "Destroy with Parent"
-msgstr ""
+msgstr "Tuhoudu emon kanssa"
 
-#: gtk/gtkwindow.c:456
+#: gtk/gtkwindow.c:440
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr ""
+msgstr "Pitääkö tämän ikkunan tuhoutua, kun sen emoikkuna tuhoutuu"
 
-#: gtk/gtkwindow.c:463
+#: gtk/gtkwindow.c:447
 msgid "Icon"
-msgstr ""
+msgstr "Kuvake"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:448
 msgid "Icon for this window"
-msgstr ""
+msgstr "Tämän ikkunan kuvake"
 
 #: gtk/gtksizegroup.c:242
-#, fuzzy
 msgid "Mode"
-msgstr "Tila:"
+msgstr "Tila"
 
 #: gtk/gtksizegroup.c:243
 msgid ""
 "The the directions in which the size group effects the requested sizes of "
 "its component widgets."
 msgstr ""
+"Suunnat, joissa kokoryhmä vaikuttaa komponenttisäädintensä vaatimiin "
+"kokoihin."
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "Kyrillinen (translitteroitu)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "Inukitut (translitteroitu)"
 
 #. ID
 #: modules/input/imipa.c:144
@@ -4222,27 +3954,147 @@ msgstr ""
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Thai (murre)"
 
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Vietnam (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
+msgstr "X-syöttötapa"
 
-# , c-format
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-#~ msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\" rivi %d"
+#~ msgid "Insufficient memory to save PNG file"
+#~ msgstr "Liian vähän muistia PNG-tiedoston tallentamiseen"
+
+#~ msgid "can_activate"
+#~ msgstr "voi_aktivoitua"
+
+#~ msgid "Cell can get activate events."
+#~ msgstr "Solu voi saada aktivointitapahtumia."
+
+#~ msgid "Pixbuf location"
+#~ msgstr "Pixbufin sijainti"
+
+#~ msgid "The relative location of the pixbuf to the text."
+#~ msgstr "Pixbufin sijainti suhteessa tekstiin."
+
+#~ msgid "pixbuf xalign"
+#~ msgstr "pixbuf x-tasaus"
+
+#~ msgid "The x-align of the pixbuf."
+#~ msgstr "Pixbufin vaakatasaus."
+
+#~ msgid "pixbuf yalign"
+#~ msgstr "pixbuf y-tasaus"
+
+#~ msgid "The y-align of the pixbuf."
+#~ msgstr "Pixbufin pystytasaus."
+
+#~ msgid "The xpad of the pixbuf."
+#~ msgstr "Pixbufin vaakaväli."
+
+#~ msgid "pixbuf ypad"
+#~ msgstr "pixbuf y-väli"
+
+#~ msgid "The ypad of the pixbuf."
+#~ msgstr "Pixbufin pystyväli."
+
+#~ msgid "Text Position"
+#~ msgstr "Tekstin sijainti"
+
+#~ msgid "Cut"
+#~ msgstr "Leikkaa"
+
+#~ msgid "Copy"
+#~ msgstr "Kopioi"
+
+#~ msgid "Paste"
+#~ msgstr "Liitä"
 
 #, fuzzy
+#~ msgid "Line Height"
+#~ msgstr "Kirjasinvahvuus"
+
+#, fuzzy
+#~ msgid "Column Width"
+#~ msgstr "Pienin leveys"
+
+#, fuzzy
+#~ msgid "The width of a column"
+#~ msgstr "Sarakkeen nykyinen leveys"
+
+#, fuzzy
+#~ msgid "Default Border"
+#~ msgstr "Järjestystapa"
+
+#~ msgid "Auto Shrink"
+#~ msgstr "Kutistuu itsestään"
+
+#~ msgid ""
+#~ "If TRUE, the window automatically shrinks to its size request anytime a "
+#~ "resize occurs. Don't use this feature, it makes no sense."
+#~ msgstr ""
+#~ "Jos TOSI, ikkuna pienenee vaatimaansa kokoon aina kokoa muutettaessa. Älä "
+#~ "käytä tätä ominaisuutta, sillä se on järjetöntä."
+
+#~ msgid "Image data is partially missing"
+#~ msgstr "Kuvan data puuttuu osittain"
+
 #~ msgid ""
 #~ "Image size is impossibly large, perhaps the data was corrupted somehow"
+#~ msgstr "Kuva on mahdottoman suuri, joten se saattaa olla viallinen."
+
+#~ msgid "Image data is partially missing, probably it was corrupted somehow."
+#~ msgstr "Kuvan data puuttuu osittain, joten se saattaa olla viallinen."
+
+#~ msgid ""
+#~ "Image has an unknown colorspace code (%d), perhaps the image data was "
+#~ "corrupted"
 #~ msgstr ""
-#~ "GIF-tiedostosta puuttuu joitakin osia (ehkä se on typistynyt jotenkin?)"
+#~ "Kuvassa on väärä väriavaruuskoodi (%d), joten se saattaa olla viallinen."
+
+#~ msgid ""
+#~ "Image has an improper number of bits per sample (%d), perhaps the image "
+#~ "data was corrupted"
+#~ msgstr ""
+#~ "Kuvassa on väärä määrä (%d) bittejä pistettä kohden, joten se saattaa "
+#~ "olla viallinen."
+
+#~ msgid ""
+#~ "Image has an improper number of channels (%d), perhaps the image data was "
+#~ "corrupted"
+#~ msgstr ""
+#~ "Kuvassa on väärä määrä (%d) kanavia, joten se saattaa olla viallinen."
+
+#~ msgid ""
+#~ "Not enough memory to store a %d by %d image; try exiting some "
+#~ "applications to free memory."
+#~ msgstr ""
+#~ "Ei tarpeeksi muistia %dx%d kuvan säilyttämiseen. Suljepa muutamia "
+#~ "sovelluksia muistia vapauttaaksesi."
+
+#~ msgid "Image contained no data."
+#~ msgstr "Kuva ei sisältänyt dataa."
+
+#~ msgid "Image isn't in the correct format (inline GdkPixbuf format)"
+#~ msgstr "Kuva ei ole oikeassa muodossa (inline GdkPixbuf -muoto)"
+
+#~ msgid ""
+#~ "This version of the software is unable to read images with type code %d"
+#~ msgstr ""
+#~ "Tämä versio ohjelmasta ei voi lukea kuvia, joiden tyypin koodi on %d"
+
+#~ msgid "Cell renderer"
+#~ msgstr "Solupiirrin"
+
+#~ msgid "Cell renderer object to use for rendering the cell"
+#~ msgstr "Solupiirrinolio solun piirtämiseen"
+
+#~ msgid "Failed to write to temporary file when loading TIFF image"
+#~ msgstr "Väliaikaistiedoston kirjoittaminen epäonnistui TIFF-kuvaa ladatessa"
 
 #~ msgid "GIF animation contained a frame with an incorrect size"
 #~ msgstr "GIF-animaatio sisälsi väärän kokoisen kuvan"
@@ -4251,5 +4103,11 @@ msgstr ""
 #~ msgid "He_x Value:"
 #~ msgstr "Heksa-arvo:"
 
-#~ msgid "Apply"
-#~ msgstr "Toteuta"
+#~ msgid "The color for the background of the text."
+#~ msgstr "Tekstin taustan väri."
+
+#~ msgid "Make the text italic."
+#~ msgstr "Kursivoi teksti."
+
+#~ msgid "Make the text bold."
+#~ msgstr "Lihavoi teksti."

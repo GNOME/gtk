@@ -388,14 +388,14 @@ struct _GtkWidgetClass
 				    guint               time);
 
   /* Signals used only for keybindings */
-  void (* popup_menu)              (GtkWidget          *widget);
+  gboolean (* popup_menu)          (GtkWidget          *widget);
 
   /* If a widget has multiple tooltips/whatsthis, it should show the
    * one for the current focus location, or if that doesn't make
    * sense, should cycle through them showing each tip alongside
    * whatever piece of the widget it applies to.
    */
-  void (* show_help)               (GtkWidget          *widget,
+  gboolean (* show_help)           (GtkWidget          *widget,
                                     GtkWidgetHelpType   help_type);
   
   /* accessibility support 

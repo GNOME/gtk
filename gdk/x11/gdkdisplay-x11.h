@@ -99,7 +99,7 @@ struct _GdkDisplayImplX11
   GHashTable *xid_ht;
 
   /* translation queue */
-  GSList *translate_queue;
+  GQueue *translate_queue;
 
   /* Input device */
   /* input GdkDevice list */

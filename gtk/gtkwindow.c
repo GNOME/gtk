@@ -311,6 +311,28 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 }
 
 static void
+add_arrow_bindings (GtkBindingSet    *binding_set,
+		    guint             keysym,
+		    GtkDirectionType  direction)
+{
+  guint keypad_keysym = keysym - GDK_Left + GDK_KP_Left;
+  
+  gtk_binding_entry_add_signal (binding_set, keysym, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+}
+
+
+static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -548,19 +570,10 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
                                 "activate_default", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_UP);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
+  add_arrow_bindings (binding_set, GDK_Up, GTK_DIR_UP);
+  add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (binding_set, GDK_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (binding_set, GDK_Right, GTK_DIR_RIGHT);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Left, 0,
                                 "move_focus", 1,

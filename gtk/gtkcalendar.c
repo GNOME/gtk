@@ -258,7 +258,7 @@ typedef void (*GtkCalendarSignalDate) (GtkObject *object, guint arg1, guint arg2
 
 static void gtk_calendar_class_init	(GtkCalendarClass *class);
 static void gtk_calendar_init		(GtkCalendar *calendar);
-static void gtk_calendar_destroy	(GtkObject *calendar);
+static void gtk_calendar_finalize	(GObject *calendar);
 static void gtk_calendar_realize	(GtkWidget *widget);
 static void gtk_calendar_unrealize	(GtkWidget *widget);
 static void gtk_calendar_size_request	(GtkWidget *widget,
@@ -334,15 +334,17 @@ gtk_calendar_get_type (void)
 static void
 gtk_calendar_class_init (GtkCalendarClass *class)
 {
+  GObjectClass   *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  
+
+  gobject_class = (GObjectClass*)  class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
   
-  object_class->destroy = gtk_calendar_destroy;
+  gobject_class->finalize = gtk_calendar_finalize;
 
   widget_class->realize = gtk_calendar_realize;
   widget_class->unrealize = gtk_calendar_unrealize;
@@ -2495,13 +2497,15 @@ gtk_calendar_state_changed (GtkWidget	   *widget,
 }
 
 static void
-gtk_calendar_destroy (GtkObject *object)
+gtk_calendar_finalize (GObject *object)
 {
   GtkCalendarPrivateData *private_data;
   private_data = GTK_CALENDAR_PRIVATE_DATA (object);
+  
   g_free (private_data);
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  
+  if (G_OBJECT_CLASS (parent_class)->finalize)
+    (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static gboolean

@@ -268,8 +268,19 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 	    else if(context->need_width)
 	      {
 		bv = get_mbi(context, &buf, &size, &context->width);
-		if(bv)
+		if(bv) {
 		  context->need_width = FALSE;
+
+                  if (context->width <= 0) {
+		    g_set_error (error,
+				 GDK_PIXBUF_ERROR,
+				 GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				 _("Image has zero width"));
+
+		    return FALSE;
+		  }
+                }
+		
 	      }
 	    else if(context->need_height)
 	      {
@@ -277,8 +288,26 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 		if(bv)
 		  {
 		    context->need_height = FALSE;
+
+		    if (context->height <= 0) {
+		      g_set_error (error,
+				   GDK_PIXBUF_ERROR,
+				   GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				   _("Image has zero height"));
+		      
+		      return FALSE;
+		    }
+
 		    context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, context->width, context->height);
-		    g_assert(context->pixbuf);
+		    
+		    if (!context->pixbuf) {
+		      g_set_error (error,
+				   GDK_PIXBUF_ERROR,
+				   GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				   _("Not enough memory to load image"));
+		      return FALSE;
+		    }
+
 
 		    if(context->prepared_func)
 		      context->prepared_func(context->pixbuf, NULL, context->user_data);
@@ -324,10 +353,18 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 
 	  } while(bv);
 
-	if(size)
-	  return save_rest(context, buf, size);
-	else
-	  return context->needmore;
+	if(size) {
+	  bv = save_rest(context, buf, size);
+	  if (!bv) {
+	      g_set_error (error,
+			   GDK_PIXBUF_ERROR,
+			   GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			   _("Couldn't save the rest"));
+
+	      return FALSE;
+	  }
+	}
+	return TRUE;
 }
 
 void

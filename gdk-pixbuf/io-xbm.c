@@ -33,7 +33,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <ctype.h>
 #include <errno.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
@@ -129,8 +128,8 @@ next_int (FILE *fstream)
 		} else {
 			/* trim high bits, check type and accumulate */
 			ch &= 0xff;
-			if (isascii (ch) && isxdigit (ch)) {
-				value = (value << 4) + hex_table[ch];
+			if (g_ascii_isxdigit (ch)) {
+				value = (value << 4) + g_ascii_xdigit_value (ch);
 				gotone++;
 			} else if ((hex_table[ch]) < 0 && gotone) {
 				done++;

@@ -41,6 +41,7 @@ all :	\
 #
 TESTAPPS = testcalendar testdnd testgtk testinput testrgb testselection \
 		testtext testtextbuffer testsocket testsocket_child \
+		testtreeedit testtreeflow \
 		testtreecolumns testtreefocus testtreesort testtreeview treestoretest \
 		testthreads simple
 

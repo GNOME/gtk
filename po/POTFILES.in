@@ -84,10 +84,13 @@ gtk/gtkviewport.c
 gtk/gtkwidget.c
 gtk/gtkwindow.c
 gtk/gtksizegroup.c
+modules/input/imam-et.c
 modules/input/imcyrillic-translit.c
 modules/input/iminuktitut.c
 modules/input/imipa.c
 modules/input/imthai-broken.c
+modules/input/imti-er.c
+modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imxim.c
 modules/input/imhangul.c

@@ -29,7 +29,6 @@
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
 
-#include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
 

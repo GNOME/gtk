@@ -1252,7 +1252,7 @@ gtk_image_expose (GtkWidget      *widget,
               pixbuf = gdk_pixbuf_get_from_drawable (NULL,
                                                      image->data.pixmap.pixmap,
                                                      gtk_widget_get_colormap (widget),
-                                                     image_bound.x, image_bound.y,
+                                                     image_bound.x - x, image_bound.y - y,
 						     0, 0,
                                                      image_bound.width,
                                                      image_bound.height);
