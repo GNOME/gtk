@@ -1,5 +1,8 @@
 Sun Nov 29 06:12:01 1998  Tim Janik  <timj@gtk.org>
 
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_set_[hv]adjustment): 
+	set composite names.
+
 	* gtk/gtktypeutils.c (gtk_type_unique): removed default initialization
 	check, people must use gtk_type_init().
 	fixed up type allocation for foreign fundamentals.
