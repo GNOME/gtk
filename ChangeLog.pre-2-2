@@ -1,3 +1,7 @@
+Thu Jun 28 22:53:18 2001  Owen Taylor  <otaylor@redhat.com>
+
+	*  gdk/gdk.c gtk/gtktypeutils.c: Fix args to g_type_init(). 
+
 2001-06-28  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/x11/gdkimage-x11.c (_gdk_x11_get_image): Clip the retrieved

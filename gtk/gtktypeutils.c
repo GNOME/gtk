@@ -147,7 +147,7 @@ gtk_type_init (GTypeDebugFlags debug_flags)
 
       /* initialize GLib type system
        */
-      g_type_init (debug_flags);
+      g_type_init_with_debug_flags (debug_flags);
       
       /* GTK_TYPE_OBJECT
        */
