@@ -1,3 +1,8 @@
+Mon May 13 23:19:20 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	PACK_END cells support CELL_ACTION_EVENT too now ...
+
 2002-05-10  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	* gtk/gtktreemodel.c: #define INITIALIZE_TREE_ITER(),

@@ -2428,7 +2428,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	    {
 	      if (_gtk_tree_view_column_count_special_cells (tree_column) == 1)
 	        {
-		  /* only 1 activatably cell -> whole column can activate */
+		  /* only 1 activatable cell -> whole column can activate */
 		  if (cell_area->x <= ((GdkEventButton *)event)->x &&
 		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
 		    try_event = TRUE;
@@ -2441,7 +2441,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 		try_event = TRUE;
 	    }
 	  else /* if (info->has_focus)*/
-	    /* FIXME 73676: allow focusing individual cells */
+	    /* FIXME 73676: allow focusing individual cells (fixed on HEAD) */
 	    {
 	      try_event = TRUE;
 	    }
@@ -2527,6 +2527,70 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	    min_y = real_cell_area.y + y_offset;
 	  if (max_y < real_cell_area.y + y_offset + height)
 	    max_y = real_cell_area.y + y_offset + height;
+	}
+      else if (action == CELL_ACTION_EVENT)
+        {
+	  gboolean try_event = FALSE;
+
+	  if (event)
+	    {
+	      if (_gtk_tree_view_column_count_special_cells (tree_column) == 1)
+	        {
+		  /* only 1 activatable cell -> whole column can activate */
+		  if (cell_area->x <= ((GdkEventButton *)event)->x &&
+		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
+		    try_event = TRUE;
+		}
+	      else if (real_cell_area.x <= ((GdkEventButton *)event)->x &&
+		  real_cell_area.x + real_cell_area.width > ((GdkEventButton *)event)->x)
+		/* only activate cell if the user clicked on an individual
+		 * cell
+		 */
+		try_event = TRUE;
+	    }
+	  else /* if (info->has_focus) */
+	    /* FIXME 73676: allow focusing individual cells (fixed on HEAD) */
+	    {
+	      try_event = TRUE;
+	    }
+	  if (try_event)
+	    {
+	      gboolean visible, mode;
+
+	      g_object_get (G_OBJECT (info->cell),
+			    "visible", &visible,
+			    "mode", &mode,
+			    NULL);
+	      if (visible && mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+	        {
+		  if (gtk_cell_renderer_activate (info->cell,
+						  event,
+						  tree_column->tree_view,
+						  path_string,
+						  background_area,
+						  cell_area,
+						  flags))
+		    return TRUE;
+		}
+	      else if (visible && mode == GTK_CELL_RENDERER_MODE_EDITABLE)
+	        {
+		  *editable_widget =
+		    gtk_cell_renderer_start_editing (info->cell,
+						     event,
+						     tree_column->tree_view,
+						     path_string,
+						     background_area,
+						     cell_area,
+						     flags);
+
+		  if (*editable_widget != NULL)
+		    {
+		      g_return_val_if_fail (GTK_IS_CELL_EDITABLE (*editable_widget), FALSE);
+
+		      return TRUE;
+		    }
+		}
+	    }
 	}
       real_cell_area.x += (info->requested_width + tree_column->spacing);
     }
