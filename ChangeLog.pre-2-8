@@ -1,3 +1,21 @@
+Tue Jul 31 22:59:33 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_get_child_property): 
+	(gtk_notebook_set_child_property): fix finding of child's page,
+	since we have to validly deal with labels and menus here as well.
+	(gtk_notebook_get_child_property): fix warning.
+	(gtk_notebook_class_init): property tab_pack is of type
+	GTK_TYPE_PACK_TYPE (enum) not boolean.
+	(gtk_notebook_find_child): don't always warn, we might be looking
+	for a label or menu child.
+	(gtk_notebook_map): fix mapping of panel.
+
+	* gtk/gtkwidget.c (gtk_widget_set_child_visible): always constrain
+	widget's mapped state, regardless of the value being set equals
+	old settings, since things like REALIZED(parent) or MAPPED(parent)
+	may have changed since the old value was set. make it an error to
+	invoke this function on a toplevel widget.
+
 2001-07-31  Darin Adler  <darin@bentspoon.com>
 
 	* gdk/gdkprivate.h:
@@ -19,6 +37,7 @@ Tue Jul 31 15:34:57 2001  Jonathan Blandford  <jrb@redhat.com>
 	* tests/testgtk.c: gtk_accel_group_attach() takes a GObject.
 
 Mon Jul 30 10:49:16 PDT 2001 Suresh Chandrasekharan <suresh.chandrasekharan@sun.com>
+
 	* gtk/gtksignal.h (gtk_signal_handler_pending): corrected the wrong
 	argument order for g_signal_has_handler_pending.
 

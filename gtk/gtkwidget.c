@@ -4182,34 +4182,21 @@ void
 gtk_widget_set_child_visible (GtkWidget *widget,
 			      gboolean   is_visible)
 {
-  gboolean was_visible;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (!GTK_WIDGET_TOPLEVEL (widget));
 
-  was_visible = GTK_WIDGET_CHILD_VISIBLE (widget);
-  is_visible = is_visible != FALSE;
-
-  if (is_visible != was_visible)
+  if (is_visible)
+    GTK_PRIVATE_SET_FLAG (widget, GTK_CHILD_VISIBLE);
+  else
+    GTK_PRIVATE_UNSET_FLAG (widget, GTK_CHILD_VISIBLE);
+  if (GTK_WIDGET_REALIZED (widget->parent))
     {
-      if (is_visible)
-	{
-	  GTK_PRIVATE_SET_FLAG (widget, GTK_CHILD_VISIBLE);
-
-	  if (widget->parent &&
-	      GTK_WIDGET_VISIBLE (widget->parent) &&
-	      GTK_WIDGET_VISIBLE (widget))
-	    {
-	      if (GTK_WIDGET_MAPPED (widget->parent))
-		gtk_widget_map (widget);
-	    }
-	}
+      if (GTK_WIDGET_MAPPED (widget->parent) &&
+	  GTK_WIDGET_CHILD_VISIBLE (widget) &&
+	  GTK_WIDGET_VISIBLE (widget))
+	gtk_widget_map (widget);
       else
-	{
-	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_CHILD_VISIBLE);
-	  
-	  if (GTK_WIDGET_MAPPED (widget))
-	    gtk_widget_unmap (widget);
-	}
+	gtk_widget_unmap (widget);
     }
 }
 
