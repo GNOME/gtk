@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2003-02-02 10:11-0500\n"
+"POT-Creation-Date: 2003-05-26 04:43+0200\n"
 "PO-Revision-Date: 2002-12-18 19:14+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -21,17 +21,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Openen van bestand '%s' mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:746
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Afbeelding '%s' bevat geen data"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:780
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:781
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -39,7 +39,7 @@ msgstr ""
 "Laden van afbeelding '%s' mislukt: reden onbekend, waarschijnlijk een "
 "beschadigde afbeelding"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:225
+#: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -76,24 +76,24 @@ msgstr "Afbeeldingstype van bestand '%s' niet herkend"
 msgid "Unrecognized image file format"
 msgstr "Onbekend afbeeldingstype"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:791
+#: gdk-pixbuf/gdk-pixbuf-io.c:792
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Laden van afbeelding '%s' mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:899
+#: gdk-pixbuf/gdk-pixbuf-io.c:900
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van het "
 "bestandsformaat: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1004
+#: gdk-pixbuf/gdk-pixbuf-io.c:1008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Openen van '%s' om te schrijven is mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1025
+#: gdk-pixbuf/gdk-pixbuf-io.c:1029
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Incrementeel laden van afbeeldingstype '%s' wordt niet ondersteund"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:356 gdk-pixbuf/gdk-pixbuf-loader.c:457
+#: gdk-pixbuf/gdk-pixbuf-loader.c:356 gdk-pixbuf/gdk-pixbuf-loader.c:458
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -282,7 +282,7 @@ msgstr "Niet ondersteund pictogramtype"
 msgid "Not enough memory to load ICO file"
 msgstr "Onvoldoende geheugen om ICO-bestand te laden"
 
-#: gdk-pixbuf/io-ico.c:871
+#: gdk-pixbuf/io-ico.c:872
 msgid "The ICO image format"
 msgstr "Het ICO-bestandsformaat"
 
@@ -493,114 +493,114 @@ msgstr "Onvoldoende geheugen voor het laden van de RAS-afbeelding"
 msgid "The Sun raster image format"
 msgstr "Het Sun raster-bestandsformaat"
 
-#: gdk-pixbuf/io-tga.c:159
+#: gdk-pixbuf/io-tga.c:157
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Allocatie van geheugen voor IOBuffer struct niet gelukt"
 
-#: gdk-pixbuf/io-tga.c:178
+#: gdk-pixbuf/io-tga.c:176
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "Allocatie van geheugen voor IOBUFFER gegevens niet gelukt"
 
-#: gdk-pixbuf/io-tga.c:189
+#: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
 msgstr "Kan IOBuffer gegevens niet heralloceren"
 
-#: gdk-pixbuf/io-tga.c:219
+#: gdk-pixbuf/io-tga.c:217
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Kan tijdelijke IOBuffer gegevens niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:283
+#: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "fread() gefaald -- waarschijnlijk voortijdig bestandseinde gevonden"
 
-#: gdk-pixbuf/io-tga.c:293
+#: gdk-pixbuf/io-tga.c:291
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() faalde -- waarschijnlijk voortijdig bestandseinde gevonden"
 
-#: gdk-pixbuf/io-tga.c:326
+#: gdk-pixbuf/io-tga.c:324
 msgid "Can't allocate new pixbuf"
 msgstr "Kan nieuwe pixbuf niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:639
+#: gdk-pixbuf/io-tga.c:637
 msgid "Can't allocate colormap structure"
 msgstr "Kan strctuur van kleurenkaart niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:646
+#: gdk-pixbuf/io-tga.c:644
 msgid "Can't allocate colormap entries"
 msgstr "Kan ingangen van kleurenkaart niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:668
+#: gdk-pixbuf/io-tga.c:666
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Onverwachte bitdiepte voor ingangen van kleurenkaart"
 
-#: gdk-pixbuf/io-tga.c:686
+#: gdk-pixbuf/io-tga.c:684
 msgid "Can't allocate TGA header memory"
 msgstr "Kan geheugen voor TGA-kop niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:719
+#: gdk-pixbuf/io-tga.c:717
 msgid "TGA image has invalid dimensions"
 msgstr "TGA afbeelding heeft ongeldige afmetingen"
 
-#: gdk-pixbuf/io-tga.c:725
+#: gdk-pixbuf/io-tga.c:723
 msgid "TGA image comment length is too long"
 msgstr "TGA afbeeldingscommentaar is te lang"
 
-#: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
-#: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
+#: gdk-pixbuf/io-tga.c:732 gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:751
+#: gdk-pixbuf/io-tga.c:761 gdk-pixbuf/io-tga.c:768
 msgid "TGA image type not supported"
 msgstr "TGA bestandstype wordt niet ondersteund"
 
-#: gdk-pixbuf/io-tga.c:816
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Allocatie van geheugen voor TGA-context struct mislukt"
 
-#: gdk-pixbuf/io-tga.c:880
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "Overbodige data in bestand"
 
-#: gdk-pixbuf/io-tga.c:926
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr "Allocatie van geheugen voor TGA-header is mislukt"
 
-#: gdk-pixbuf/io-tga.c:936
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr "Te grote waarde in het infolen-veld van TGA-header."
 
-#: gdk-pixbuf/io-tga.c:960
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "Allocatie van geheugen voor tijdelijke buffer voor TGA cmap is mislukt"
 
-#: gdk-pixbuf/io-tga.c:972
+#: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "Allocatie van geheugen voor TGA kleurenmap is mislukt"
 
-#: gdk-pixbuf/io-tga.c:981
+#: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "Allocatie van geheugen voor TGA kleurenmap items is mislukt"
 
-#: gdk-pixbuf/io-tga.c:991
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Onverwachte bitdiepte voor TGA kleurenkaart"
 
-#: gdk-pixbuf/io-tga.c:1032
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr "Pseudo-Kleuren afbeelding zonder kleurenkaart"
 
-#: gdk-pixbuf/io-tga.c:1039
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 "Kan niet zoeken naar plaats in afbeelding -- waarschijnlijk voortijdig "
 "bestandseinde gevonden"
 
-#: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr "Kan pixbuf niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr "Niet ondersteund TGA afbeeldingstype"
 
-#: gdk-pixbuf/io-tga.c:1370
+#: gdk-pixbuf/io-tga.c:1368
 msgid "The Targa image format"
 msgstr "Het Targa-bestandsformaat"
 
@@ -937,7 +937,7 @@ msgstr "Spatiëring"
 msgid "The amount of space between children"
 msgstr "De hoeveelheid ruimte tussen dochters"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:444
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:450
 msgid "Homogeneous"
 msgstr "Homogeen"
 
@@ -977,7 +977,7 @@ msgstr "Extra ruimte tussen de dochter en haar buren, in pixels"
 msgid "Pack type"
 msgstr "Verpakkingsstijl"
 
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:488
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:494
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -985,12 +985,12 @@ msgstr ""
 "Een GtkPackType welke aangeeft of de dochter verpakt is met het begin of met "
 "het einde van de ouder"
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:472 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Positie"
 
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:467
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:473
 msgid "The index of the child in the parent"
 msgstr "De index van de dochter in de ouder"
 
@@ -1586,49 +1586,49 @@ msgstr ""
 "kleur te veranderen sleept u een kleurenstaal naar deze plek of klikt u met "
 "de rechter muisknop en selecteert \"Bewaar kleur hier\""
 
-#: gtk/gtkcolorsel.c:1742
+#: gtk/gtkcolorsel.c:1752
 msgid "Has Opacity Control"
 msgstr "Heeft een regelpaneel voor doorzichtigheid"
 
-#: gtk/gtkcolorsel.c:1743
+#: gtk/gtkcolorsel.c:1753
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Of de kleurenkiezer ook de doorzichtigheid kan instellen"
 
-#: gtk/gtkcolorsel.c:1749
+#: gtk/gtkcolorsel.c:1759
 msgid "Has palette"
 msgstr "Heeft palet"
 
-#: gtk/gtkcolorsel.c:1750
+#: gtk/gtkcolorsel.c:1760
 msgid "Whether a palette should be used"
 msgstr "Of een kleurenpalet gebruikt moet worden"
 
-#: gtk/gtkcolorsel.c:1756
+#: gtk/gtkcolorsel.c:1766
 msgid "Current Color"
 msgstr "Huidige Kleur"
 
-#: gtk/gtkcolorsel.c:1757
+#: gtk/gtkcolorsel.c:1767
 msgid "The current color"
 msgstr "De huidige kleur"
 
-#: gtk/gtkcolorsel.c:1763
+#: gtk/gtkcolorsel.c:1773
 msgid "Current Alpha"
 msgstr "Huidig Alpha"
 
-#: gtk/gtkcolorsel.c:1764
+#: gtk/gtkcolorsel.c:1774
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "De huidige waarde van doorzichtigheid (0 is volledig transparant, 65535 is "
 "volledig dekkend)"
 
-#: gtk/gtkcolorsel.c:1778
+#: gtk/gtkcolorsel.c:1788
 msgid "Custom palette"
 msgstr "Eigen palet"
 
-#: gtk/gtkcolorsel.c:1779
+#: gtk/gtkcolorsel.c:1789
 msgid "Palette to use in the color selector"
 msgstr "Te grbuiken kleurenkaart in de kleurenselectie"
 
-#: gtk/gtkcolorsel.c:1820
+#: gtk/gtkcolorsel.c:1830
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1636,7 +1636,7 @@ msgstr ""
 "Selecteer uw kleur in de buitenste ring. Stel de helderheid van de kleur in "
 "met de binnen-driehoek."
 
-#: gtk/gtkcolorsel.c:1845
+#: gtk/gtkcolorsel.c:1855
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1644,67 +1644,67 @@ msgstr ""
 "Klik op de pipet, klik dan een kleur ergens op je scherm om die kleur te "
 "selecteren."
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1864
 msgid "_Hue:"
 msgstr "_Tint:"
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1865
 msgid "Position on the color wheel."
 msgstr "Positie op het kleurenwiel"
 
-#: gtk/gtkcolorsel.c:1856
+#: gtk/gtkcolorsel.c:1866
 msgid "_Saturation:"
 msgstr "_Verzadiging:"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1867
 msgid "\"Deepness\" of the color."
 msgstr "\"Diepte\" van de kleur."
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1868
 msgid "_Value:"
 msgstr "_Waarde:"
 
-#: gtk/gtkcolorsel.c:1859
+#: gtk/gtkcolorsel.c:1869
 msgid "Brightness of the color."
 msgstr "Helderheid van de kleur."
 
-#: gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorsel.c:1870
 msgid "_Red:"
 msgstr "_Rood:"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1871
 msgid "Amount of red light in the color."
 msgstr "Hoeveelheid rood licht in de kleur."
 
-#: gtk/gtkcolorsel.c:1862
+#: gtk/gtkcolorsel.c:1872
 msgid "_Green:"
 msgstr "_Groen:"
 
-#: gtk/gtkcolorsel.c:1863
+#: gtk/gtkcolorsel.c:1873
 msgid "Amount of green light in the color."
 msgstr "Hoeveelheid groen licht in de kleur."
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1874
 msgid "_Blue:"
 msgstr "_Blauw:"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of blue light in the color."
 msgstr "Hoeveelheid blauw licht in de kleur."
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1878
 msgid "_Opacity:"
 msgstr "_Doorzichtig:"
 
-#: gtk/gtkcolorsel.c:1876
+#: gtk/gtkcolorsel.c:1886
 msgid "Transparency of the currently-selected color."
 msgstr "Transparantie van de nu geselecteerde kleur."
 
-#: gtk/gtkcolorsel.c:1891
+#: gtk/gtkcolorsel.c:1901
 msgid "Color _Name:"
 msgstr "Kleur_naam:"
 
-#: gtk/gtkcolorsel.c:1903
+#: gtk/gtkcolorsel.c:1916
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1712,7 +1712,7 @@ msgstr ""
 "Je kunt in dit veld een hexadecimale kleurwaarde in HTML-stijl geven, of "
 "gewoon een kleur als 'orange' invoeren"
 
-#: gtk/gtkcolorsel.c:1922
+#: gtk/gtkcolorsel.c:1935
 msgid "_Palette"
 msgstr "_Palet"
 
@@ -1958,15 +1958,15 @@ msgstr "Selecteren bij focus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Of de inhoud van een veld wordt geselecteerd als het veld focus krijgt"
 
-#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3980 gtk/gtklabel.c:3222 gtk/gtktextview.c:6574
 msgid "Select All"
 msgstr "Alles selecteren"
 
-#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3990 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Invoermethodes"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6543
+#: gtk/gtkentry.c:4000 gtk/gtktextview.c:6593
 msgid "_Insert Unicode control character"
 msgstr "Unicode controleteken _Invoegen "
 
@@ -2011,7 +2011,7 @@ msgstr "Bestanden"
 msgid "_Files"
 msgstr "_Bestanden"
 
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2243
+#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2237
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Map onleesbaar: %s"
@@ -2039,14 +2039,14 @@ msgstr "_Verwijder Bestand"
 msgid "_Rename File"
 msgstr "Bestand _Hernoemen"
 
-#: gtk/gtkfilesel.c:1425
+#: gtk/gtkfilesel.c:1429
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De mapnaam \"%s\" bevat symbolen die niet toegestaan zijn in bestandsnamen"
 
-#: gtk/gtkfilesel.c:1427
+#: gtk/gtkfilesel.c:1431
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2055,38 +2055,38 @@ msgstr ""
 "Fout bij maken van map \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1428 gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1432 gtk/gtkfilesel.c:1668
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Je hebt waarschijnlijk symbolen gebruikt die niet toegestaan zijn in "
 "bestandsnamen."
 
-#: gtk/gtkfilesel.c:1436
+#: gtk/gtkfilesel.c:1440
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fout bij maken van map \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1470
+#: gtk/gtkfilesel.c:1474
 msgid "New Folder"
 msgstr "Nieuwe map"
 
-#: gtk/gtkfilesel.c:1485
+#: gtk/gtkfilesel.c:1489
 msgid "_Folder name:"
 msgstr "_Mapnaam:"
 
 # misschien moet dit creeeren zijn
-#: gtk/gtkfilesel.c:1511
+#: gtk/gtkfilesel.c:1513
 msgid "C_reate"
 msgstr "_Aanmaken"
 
-#: gtk/gtkfilesel.c:1557
+#: gtk/gtkfilesel.c:1556
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De bestandsnaam \"%s\" bevat symbolen die niet toegestaan zijn in "
 "bestandsnamen"
 
-#: gtk/gtkfilesel.c:1560
+#: gtk/gtkfilesel.c:1559
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2095,32 +2095,32 @@ msgstr ""
 "Fout bij verwijderen van bestand \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1562 gtk/gtkfilesel.c:1683
+#: gtk/gtkfilesel.c:1561 gtk/gtkfilesel.c:1682
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Het bevat waarschijnlijk symbolen niet toegestaan in bestandsnamen."
 
-#: gtk/gtkfilesel.c:1571
+#: gtk/gtkfilesel.c:1570
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Fout bij verwijderen van bestand \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1614
+#: gtk/gtkfilesel.c:1613
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Weet u zeker dat u \"%s\" wilt verwijderen?"
 
-#: gtk/gtkfilesel.c:1619
+#: gtk/gtkfilesel.c:1618
 msgid "Delete File"
 msgstr "Bestand verwijderen"
 
-#: gtk/gtkfilesel.c:1665 gtk/gtkfilesel.c:1679
+#: gtk/gtkfilesel.c:1664 gtk/gtkfilesel.c:1678
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De bestandsnaam \"%s\" bevat symbolen die niet toegestaan zijn in "
 "bestandsnamen"
 
-#: gtk/gtkfilesel.c:1667
+#: gtk/gtkfilesel.c:1666
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2129,7 +2129,7 @@ msgstr ""
 "Fout bij hernoemen van bestand naar \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1680
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2138,29 +2138,29 @@ msgstr ""
 "Fout bij hernoemen van bestand \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1691
+#: gtk/gtkfilesel.c:1690
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fout bij hernoemen van bestand \"%s\" naar \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1738
+#: gtk/gtkfilesel.c:1737
 msgid "Rename File"
 msgstr "Bestandsnaam wijzigen"
 
-#: gtk/gtkfilesel.c:1753
+#: gtk/gtkfilesel.c:1752
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Bestand \"%s\" wijzigen naar:"
 
-#: gtk/gtkfilesel.c:1784
+#: gtk/gtkfilesel.c:1781
 msgid "_Rename"
 msgstr "_Hernoemen"
 
-#: gtk/gtkfilesel.c:2223
+#: gtk/gtkfilesel.c:2217
 msgid "_Selection: "
 msgstr "_Selectie: "
 
-#: gtk/gtkfilesel.c:3117
+#: gtk/gtkfilesel.c:3111
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2169,15 +2169,15 @@ msgstr ""
 "De bestandsnaam \"%s\" kon niet geconverteerd worden naar UTF-8. (Probeer de "
 "omgevingsvariabele G_BROKEN_FILENAMES aan te zetten): %s"
 
-#: gtk/gtkfilesel.c:3120
+#: gtk/gtkfilesel.c:3114
 msgid "Invalid Utf-8"
 msgstr "Ongeldige Utf-8"
 
-#: gtk/gtkfilesel.c:3997
+#: gtk/gtkfilesel.c:3991
 msgid "Name too long"
 msgstr "Naam is te lang"
 
-#: gtk/gtkfilesel.c:3999
+#: gtk/gtkfilesel.c:3993
 msgid "Couldn't convert filename"
 msgstr "Kon bestandsnaam niet converteren"
 
@@ -2337,7 +2337,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1692
+#: gtk/gtkiconfactory.c:1693
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van pictogram: %s"
@@ -2747,77 +2747,77 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "De toe te voegen ruimte boven en onder een widget, in pixels"
 
-#: gtk/gtknotebook.c:372
+#: gtk/gtknotebook.c:378
 msgid "Page"
 msgstr "Pagina"
 
-#: gtk/gtknotebook.c:373
+#: gtk/gtknotebook.c:379
 msgid "The index of the current page"
 msgstr "De index van de huidige pagina"
 
-#: gtk/gtknotebook.c:381
+#: gtk/gtknotebook.c:387
 msgid "Tab Position"
 msgstr "Tab-positie"
 
-#: gtk/gtknotebook.c:382
+#: gtk/gtknotebook.c:388
 msgid "Which side of the notebook holds the tabs"
 msgstr "Aan welke kant de tabbladen komen te zitten"
 
-#: gtk/gtknotebook.c:389
+#: gtk/gtknotebook.c:395
 msgid "Tab Border"
 msgstr "Tab-kader"
 
-#: gtk/gtknotebook.c:390
+#: gtk/gtknotebook.c:396
 msgid "Width of the border around the tab labels"
 msgstr "Breedte van het kader rondom de tab-labels"
 
-#: gtk/gtknotebook.c:398
+#: gtk/gtknotebook.c:404
 msgid "Horizontal Tab Border"
 msgstr "Horizontaal tab-kader"
 
-#: gtk/gtknotebook.c:399
+#: gtk/gtknotebook.c:405
 msgid "Width of the horizontal border of tab labels"
 msgstr "Breedte van het horizontale kader van tab-labels"
 
-#: gtk/gtknotebook.c:407
+#: gtk/gtknotebook.c:413
 msgid "Vertical Tab Border"
 msgstr "Vertikaal tab-kader"
 
-#: gtk/gtknotebook.c:408
+#: gtk/gtknotebook.c:414
 msgid "Width of the vertical border of tab labels"
 msgstr "Breedte van het verticale kader van tab-labels"
 
-#: gtk/gtknotebook.c:416
+#: gtk/gtknotebook.c:422
 msgid "Show Tabs"
 msgstr "Tabs weergeven"
 
-#: gtk/gtknotebook.c:417
+#: gtk/gtknotebook.c:423
 msgid "Whether tabs should be shown or not"
 msgstr "Of tabs weergegeven worden of niet"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:429
 msgid "Show Border"
 msgstr "Kader weergeven"
 
-#: gtk/gtknotebook.c:424
+#: gtk/gtknotebook.c:430
 msgid "Whether the border should be shown or not"
 msgstr "Of het kader weergegeven wordt of niet"
 
-#: gtk/gtknotebook.c:430
+#: gtk/gtknotebook.c:436
 msgid "Scrollable"
 msgstr "Schuifbaar"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:437
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Indien WAAR (TRUE), worden schuifpijlen weergegeven als er meer tabs zijn "
 "dan er plaats is"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:443
 msgid "Enable Popup"
 msgstr "Zet Popup aan"
 
-#: gtk/gtknotebook.c:438
+#: gtk/gtknotebook.c:444
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2825,47 +2825,47 @@ msgstr ""
 "Indien WAAR (TRUE), wordt met een rechter muisklik op het kladblok een menu "
 "weergegeven waarmee je direkt naar een pagina kunt gaan"
 
-#: gtk/gtknotebook.c:445
+#: gtk/gtknotebook.c:451
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Of tabs gelijke afmetingen moeten hebben"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:458
 msgid "Tab label"
 msgstr "Tab-label"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:459
 msgid "The string displayed on the childs tab label"
 msgstr "De weergegeven tekst op het tab-label van de dochter"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:465
 msgid "Menu label"
 msgstr "Menu-label"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:466
 msgid "The string displayed in the childs menu entry"
 msgstr "De weergegeven tekst op het menu-item van de dochter"
 
-#: gtk/gtknotebook.c:473
+#: gtk/gtknotebook.c:479
 msgid "Tab expand"
 msgstr "Tab-verlenging"
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:480
 msgid "Whether to expand the childs tab or not"
 msgstr "Of de tab van de dochter verlengd wordt of niet"
 
-#: gtk/gtknotebook.c:480
+#: gtk/gtknotebook.c:486
 msgid "Tab fill"
 msgstr "Tab-opvulling"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:487
 msgid "Wheather the childs tab should fill the allocated area or not"
 msgstr "Of de tab van de dochter de beschikbare ruimte moet opvullen of niet"
 
-#: gtk/gtknotebook.c:487
+#: gtk/gtknotebook.c:493
 msgid "Tab pack type"
 msgstr "Tab-verpakkingsstijl"
 
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4787
+#: gtk/gtknotebook.c:2474 gtk/gtknotebook.c:4821
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2915,11 +2915,11 @@ msgstr ""
 "Of het voorbeeldwidget de volledige ruimte moet gebruiken die het is "
 "toebedeeld"
 
-#: gtk/gtkprogress.c:127
+#: gtk/gtkprogress.c:129
 msgid "Activity mode"
 msgstr "Activiteitsmodus"
 
-#: gtk/gtkprogress.c:128
+#: gtk/gtkprogress.c:130
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -2929,19 +2929,19 @@ msgstr ""
 "*dat* iets gebeurt, maar niet hoeveel er al gedaan is. Deze modus wordt "
 "gebruikt als je iets doet waarvan je niet weet hoe lang het zal duren"
 
-#: gtk/gtkprogress.c:135
+#: gtk/gtkprogress.c:137
 msgid "Show text"
 msgstr "Tekst tonen"
 
-#: gtk/gtkprogress.c:136
+#: gtk/gtkprogress.c:138
 msgid "Whether the progress is shown as text"
 msgstr "Of de voortgang weergegeven wordt als tekst"
 
-#: gtk/gtkprogress.c:143
+#: gtk/gtkprogress.c:145
 msgid "Text x alignment"
 msgstr "Tekst x-uitlijning"
 
-#: gtk/gtkprogress.c:144
+#: gtk/gtkprogress.c:146
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
@@ -2949,11 +2949,11 @@ msgstr ""
 "Een getal tussen 0.0 en 1.0 dat de horizontale uitlijning van de tekst in "
 "een voortgangswidget weergeeft"
 
-#: gtk/gtkprogress.c:152
+#: gtk/gtkprogress.c:154
 msgid "Text y alignment"
 msgstr "Tekst y-uitlijning"
 
-#: gtk/gtkprogress.c:153
+#: gtk/gtkprogress.c:155
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
@@ -2961,7 +2961,7 @@ msgstr ""
 "Een getal tussen 0.0 en 1.0 dat de vertikale uitlijning van de tekst in een "
 "voortgangswidget weergeeft"
 
-#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:284 gtk/gtkspinbutton.c:240
+#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
 msgid "Adjustment"
 msgstr "Aanpassing"
 
@@ -3047,76 +3047,76 @@ msgstr "Groep"
 msgid "The radio button whose group this widget belongs."
 msgstr "De radioknop wiens groep dit widget toebehoort."
 
-#: gtk/gtkrange.c:275
+#: gtk/gtkrange.c:281
 msgid "Update policy"
 msgstr "Vernieuwingsbeleid"
 
-#: gtk/gtkrange.c:276
+#: gtk/gtkrange.c:282
 msgid "How the range should be updated on the screen"
 msgstr "Hoe het bereik op het scherm bijgehouden moet worden"
 
-#: gtk/gtkrange.c:285
+#: gtk/gtkrange.c:291
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "De GtkAdjustment die de huidige waarde van dit bereikobject bevat"
 
-#: gtk/gtkrange.c:292
+#: gtk/gtkrange.c:298
 msgid "Inverted"
 msgstr "Geïnverteerd"
 
-#: gtk/gtkrange.c:293
+#: gtk/gtkrange.c:299
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Keer de richting om waarheen het schuifobject beweegt als de bereikwaarde "
 "toeneemt"
 
-#: gtk/gtkrange.c:299
+#: gtk/gtkrange.c:305
 msgid "Slider Width"
 msgstr "Breedte van schuifobject"
 
-#: gtk/gtkrange.c:300
+#: gtk/gtkrange.c:306
 msgid "Width of scrollbar or scale thumb"
 msgstr "Breedte van de schuifbalk of duimschaal"
 
-#: gtk/gtkrange.c:307
+#: gtk/gtkrange.c:313
 msgid "Trough Border"
 msgstr "Door het kader"
 
-#: gtk/gtkrange.c:308
+#: gtk/gtkrange.c:314
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Afstand tussen duim/stappers en buitenrand"
 
-#: gtk/gtkrange.c:315
+#: gtk/gtkrange.c:321
 msgid "Stepper Size"
 msgstr "Stapperafmeting"
 
-#: gtk/gtkrange.c:316
+#: gtk/gtkrange.c:322
 msgid "Length of step buttons at ends"
 msgstr "Lengte van de stapknoppen aan de uiteinden"
 
-#: gtk/gtkrange.c:323
+#: gtk/gtkrange.c:329
 msgid "Stepper Spacing"
 msgstr "Stapperspatiëring"
 
-#: gtk/gtkrange.c:324
+#: gtk/gtkrange.c:330
 msgid "Spacing between step buttons and thumb"
 msgstr "Spatiëring tussen stapknoppen en duim"
 
-#: gtk/gtkrange.c:331
+#: gtk/gtkrange.c:337
 msgid "Arrow X Displacement"
 msgstr "Pijl X-verplaatsing"
 
-#: gtk/gtkrange.c:332
+#: gtk/gtkrange.c:338
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Hoever de pijl in x-richting moet worden verplaatst als de knop wordt "
 "ingedrukt"
 
-#: gtk/gtkrange.c:339
+#: gtk/gtkrange.c:345
 msgid "Arrow Y Displacement"
 msgstr "Pijl Y-verplaatsing"
 
-#: gtk/gtkrange.c:340
+#: gtk/gtkrange.c:346
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
@@ -3650,7 +3650,7 @@ msgstr "_Voorkeuren"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr "_Afdrukken"
+msgstr "Af_drukken"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
@@ -4273,7 +4273,7 @@ msgstr "Cursor zichtbaar"
 msgid "If the insertion cursor is shown"
 msgstr "Of de invoegcursor weergegeven wordt"
 
-#: gtk/gtktextview.c:6534
+#: gtk/gtktextview.c:6584
 msgid "Input _Methods"
 msgstr "Invoer_methoden"
 
