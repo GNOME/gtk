@@ -1,3 +1,13 @@
+Tue Sep 24 17:49:52 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.[ch] (gtk_accel_group_find): 
+	Add a GtkAccelGroupFindFunc to clean up the
+	prototype. (#76670, Vitaly Tishkov)
+
+	* gdk/x11/gdkvisual-x11.c gdk/x11/gdkx.h: Rename
+	gdkx_visual_get_for_screen() to 
+	gdk_x11_screen_lookup_visual(). (#85702)
+
 2002-09-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate):

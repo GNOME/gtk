@@ -537,17 +537,18 @@ gdk_screen_list_visuals (GdkScreen *screen)
 }
 
 /**
- * gdkx_visual_get_for_screen:
+ * gdk_x11_screen_lookup_visual
  * @screen: a #GdkScreen.
  * @xvisualid: an X Visual ID.
  *
- * Returns a #GdkVisual from and X Visual id.
+ * Looks up the #GdkVisual for a particular screen and X Visual ID.
  *
- * Returns: a #GdkVisual.
+ * Returns: the #GdkVisual (owned by the screen object), or %NULL
+ *   if the visual ID wasn't found.
  */
 GdkVisual *
-gdkx_visual_get_for_screen (GdkScreen *screen,
-			    VisualID   xvisualid)
+gdk_x11_screen_lookup_visual (GdkScreen *screen,
+			      VisualID   xvisualid)
 {
   int i;
   GdkScreenX11 *screen_x11;

@@ -269,11 +269,9 @@ gtk_accel_groups_from_object (GObject *object)
  *
  */
 GtkAccelKey*
-gtk_accel_group_find (GtkAccelGroup  *accel_group,
-		      gboolean (*find_func) (GtkAccelKey *key,
-					     GClosure    *closure,
-					     gpointer     data),
-		      gpointer        data)
+gtk_accel_group_find (GtkAccelGroup        *accel_group,
+		      GtkAccelGroupFindFunc find_func,
+		      gpointer              data)
 {
   GtkAccelKey *key = NULL;
   guint i;

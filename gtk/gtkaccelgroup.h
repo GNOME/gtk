@@ -61,6 +61,11 @@ typedef gboolean (*GtkAccelGroupActivate) (GtkAccelGroup  *accel_group,
 					   GObject        *acceleratable,
 					   guint           keyval,
 					   GdkModifierType modifier);
+
+typedef gboolean (*GtkAccelGroupFindFunc) (GtkAccelKey    *key,
+					   GClosure       *closure,
+					   gpointer        data)
+
 struct _GtkAccelGroup
 {
   GObject             parent;
@@ -124,11 +129,9 @@ gboolean        gtk_accel_groups_activate      	(GObject	*object,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods);
 GSList*	        gtk_accel_groups_from_object    (GObject	*object);
-GtkAccelKey*	gtk_accel_group_find		(GtkAccelGroup	*accel_group,
-						 gboolean (*find_func) (GtkAccelKey *key,
-									GClosure    *closure,
-									gpointer     data),
-						 gpointer        data);
+GtkAccelKey*	gtk_accel_group_find		(GtkAccelGroup	      *accel_group,
+						 GtkAccelGroupFindFunc find_func,
+						 gpointer              data);
 GtkAccelGroup*	gtk_accel_group_from_accel_closure (GClosure    *closure);
 
 
