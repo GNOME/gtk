@@ -1,5 +1,15 @@
 Mon Feb  2 04:15:08 1998  Tim Janik  <timj@gimp.org>
 
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkcombo.c:
+	* gtk/gtkobject.c:
+	* gtk/gtkselection.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkwindow.c:
+	  cleanups with key name spaces.
+
+	* gtk/gtkcombo.c: fixed destruction bug with popwin.
+
 	* gtk/gtkcontainer.h: 
 	* gtk/gtkcontainer.c: GTK_RESIZE_NEEDED is a private flag now.
 	  (gtk_container_register_toplevel): new function.
