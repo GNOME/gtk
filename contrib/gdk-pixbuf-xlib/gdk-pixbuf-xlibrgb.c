@@ -47,8 +47,6 @@
  * Shawn T. Amundson    <amundson@gtk.org>
 */
 
-#include <math.h>
-
 #if HAVE_CONFIG_H
 #  include <config.h>
 #  if STDC_HEADERS
@@ -60,6 +58,8 @@
 #  include <stdio.h>
 #  include <stdlib.h>
 #endif
+
+#include <math.h>
 
 #define ENABLE_GRAYSCALE
 
