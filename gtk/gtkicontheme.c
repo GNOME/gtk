@@ -568,10 +568,7 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   xdg_data_dirs = g_get_system_data_dirs ();
   for (i = 0; xdg_data_dirs[i]; i++) ;
 
-  priv->search_path_len = i + 2;
-#ifdef G_OS_UNIX
-  priv->search_path_len++;
-#endif
+  priv->search_path_len = 2 * i + 2;
   
   priv->search_path = g_new (char *, priv->search_path_len);
   
@@ -582,9 +579,8 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   for (j = 0; xdg_data_dirs[j]; j++) 
     priv->search_path[i++] = g_build_filename (xdg_data_dirs[j], "icons", NULL);
 
-#ifdef G_OS_UNIX
-  priv->search_path[i++] = g_strdup ("/usr/share/pixmaps");
-#endif
+  for (j = 0; xdg_data_dirs[j]; j++) 
+    priv->search_path[i++] = g_build_filename (xdg_data_dirs[j], "pixmaps", NULL);
 
   priv->themes_valid = FALSE;
   priv->themes = NULL;
@@ -1100,6 +1096,7 @@ load_themes (GtkIconTheme *icon_theme)
 		  else
 		    unthemed_icon->no_svg_filename = abs_file;
 
+		  g_print ("found unthemed icon %s\n", abs_file); 
 		  g_hash_table_insert (priv->unthemed_icons,
 				       base_name,
 				       unthemed_icon);
