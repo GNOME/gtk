@@ -4336,6 +4336,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       const char *new_text;
       gboolean retval;
       GdkScreen *screen;
+      gboolean text_modified;
 
       gtk_tree_view_ensure_interactive_directory (tree_view);
 
@@ -4362,10 +4363,11 @@ gtk_tree_view_key_press (GtkWidget   *widget,
        * the text has changed.
        */
       new_text = gtk_entry_get_text (GTK_ENTRY (tree_view->priv->search_entry));
+      text_modified = strcmp (old_text, new_text) != 0;
+      g_free (old_text);
       if (tree_view->priv->imcontext_changed ||    /* we're in a preedit */
-	  (retval && strcmp (old_text, new_text))) /* ...or the text was modified */
+	  (retval && text_modified))               /* ...or the text was modified */
 	{
-	  g_free (old_text);
 	  if (gtk_tree_view_real_start_interactive_search (tree_view, FALSE))
 	    {
 	      gtk_widget_grab_focus (GTK_WIDGET (tree_view));

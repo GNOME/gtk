@@ -1,5 +1,8 @@
 2004-09-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): Don't leak old_text.
+	(#153467, Christian Persch)
+
 	* gtk/gtkfilechooserdefault.c (selection_check_foreach_cb): Don't use
 	bitops on booleans.
 	(gtk_file_chooser_default_should_respond): Make it easier to 
