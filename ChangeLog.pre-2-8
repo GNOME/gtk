@@ -1,3 +1,34 @@
+Tue Nov 18 19:47:59 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes based on comments from Owen Taylor, #125264.
+
+	* gtk/gtkcellview.[ch] (gtk_cell_view_finalize): remove unused
+	variable,
+	(gtk_cell_view_set_value), (gtk_cell_view_set_displayed_model): queue
+	a resize,
+	(gtk_cell_view_get_size_of_row): new function,
+	(gtk_cell_view_set_value), (gtk_cell_view_set_valuesv),
+	(gtk_cell_view_set_values), (gtk_cell_view_set_model),
+	(gtk_cell_view_set_displayed_row), (gtk_cell_view_get_displayed_row):
+	s/cellview/cell_view/ in the function definitions, so they match
+	with the header file.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_remeasure): remove the resize
+	flag again (:, and use gtk_cell_view_get_size_of_row instead of
+	the measurer, remove _set_size_request call,
+	(gtk_combo_box_calc_requested_width): use gtk_cell_view_get_size_of_row
+	instead of the measurer,
+	(gtk_combo_box_style_set): queue a resize,
+	(gtk_combo_box_size_request): update of _remeasure call,
+	(gtk_combo_box_init), (gtk_combo_box_cell_layout_pack_start),
+	(gtk_combo_box_cell_layout_pack_end),
+	(gtk_combo_box_cell_layout_clear),
+	(gtk_combo_box_set_model): get rid of the measurer,
+	(gtk_combo_box_cell_layout_add_attribute),
+	(gtk_combo_box_cell_layout_set_cell_data_func),
+	(gtk_combo_box_cell_layout_clear_attributes): ditto and queue a
+	resize instead of calling _remeasure.
+
 Mon Nov 17 16:25:04 2003  Manish Singh <yosh@gimp.org>
 
 	* gdk-pixbuf/Makefile.am

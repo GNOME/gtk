@@ -287,8 +287,6 @@ gtk_cell_view_style_set (GtkWidget *widget,
 static void
 gtk_cell_view_finalize (GObject *object)
 {
-  GtkCellView *cellview = GTK_CELL_VIEW (object);
-
   gtk_cell_view_cell_layout_clear (GTK_CELL_LAYOUT (object));
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
@@ -765,22 +763,23 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
 }
 
 void
-gtk_cell_view_set_value (GtkCellView     *cellview,
+gtk_cell_view_set_value (GtkCellView     *cell_view,
                          GtkCellRenderer *renderer,
                          gchar           *property,
                          GValue          *value)
 {
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
 
   g_object_set_property (G_OBJECT (renderer), property, value);
 
-  /* force redraw */
-  gtk_widget_queue_draw (GTK_WIDGET (cellview));
+  /* force resize and redraw */
+  gtk_widget_queue_resize (GTK_WIDGET (cell_view));
+  gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
 static void
-gtk_cell_view_set_valuesv (GtkCellView     *cellview,
+gtk_cell_view_set_valuesv (GtkCellView     *cell_view,
                            GtkCellRenderer *renderer,
                            va_list          args)
 {
@@ -792,77 +791,101 @@ gtk_cell_view_set_valuesv (GtkCellView     *cellview,
   while (attribute)
     {
       value = va_arg (args, GValue *);
-      gtk_cell_view_set_value (cellview, renderer, attribute, value);
+      gtk_cell_view_set_value (cell_view, renderer, attribute, value);
       attribute = va_arg (args, gchar *);
     }
 }
 
 void
-gtk_cell_view_set_values (GtkCellView     *cellview,
+gtk_cell_view_set_values (GtkCellView     *cell_view,
                           GtkCellRenderer *renderer,
                           ...)
 {
   va_list args;
 
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
-  g_return_if_fail (gtk_cell_view_get_cell_info (cellview, renderer));
+  g_return_if_fail (gtk_cell_view_get_cell_info (cell_view, renderer));
 
   va_start (args, renderer);
-  gtk_cell_view_set_valuesv (cellview, renderer, args);
+  gtk_cell_view_set_valuesv (cell_view, renderer, args);
   va_end (args);
 }
 
 void
-gtk_cell_view_set_model (GtkCellView  *cellview,
+gtk_cell_view_set_model (GtkCellView  *cell_view,
                          GtkTreeModel *model)
 {
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
   g_return_if_fail (GTK_IS_TREE_MODEL (model));
 
-  if (cellview->priv->model)
+  if (cell_view->priv->model)
     {
-      if (cellview->priv->displayed_row)
-        gtk_tree_row_reference_free (cellview->priv->displayed_row);
-      cellview->priv->displayed_row = NULL;
+      if (cell_view->priv->displayed_row)
+        gtk_tree_row_reference_free (cell_view->priv->displayed_row);
+      cell_view->priv->displayed_row = NULL;
 
-      g_object_unref (G_OBJECT (cellview->priv->model));
-      cellview->priv->model = NULL;
+      g_object_unref (G_OBJECT (cell_view->priv->model));
+      cell_view->priv->model = NULL;
     }
 
-  cellview->priv->model = model;
+  cell_view->priv->model = model;
 
-  if (cellview->priv->model)
-    g_object_ref (G_OBJECT (cellview->priv->model));
+  if (cell_view->priv->model)
+    g_object_ref (G_OBJECT (cell_view->priv->model));
 }
 
 void
-gtk_cell_view_set_displayed_row (GtkCellView *cellview,
+gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
                                  GtkTreePath *path)
 {
-  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
-  g_return_if_fail (GTK_IS_TREE_MODEL (cellview->priv->model));
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
+  g_return_if_fail (GTK_IS_TREE_MODEL (cell_view->priv->model));
   g_return_if_fail (path != NULL);
 
-  if (cellview->priv->displayed_row)
-    gtk_tree_row_reference_free (cellview->priv->displayed_row);
+  if (cell_view->priv->displayed_row)
+    gtk_tree_row_reference_free (cell_view->priv->displayed_row);
 
-  cellview->priv->displayed_row =
-    gtk_tree_row_reference_new (cellview->priv->model, path);
+  cell_view->priv->displayed_row =
+    gtk_tree_row_reference_new (cell_view->priv->model, path);
 
-  /* force redraw */
-  gtk_widget_queue_draw (GTK_WIDGET (cellview));
+  /* force resize and redraw */
+  gtk_widget_queue_resize (GTK_WIDGET (cell_view));
+  gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
 GtkTreePath *
-gtk_cell_view_get_displayed_row (GtkCellView *cellview)
+gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
 {
-  g_return_val_if_fail (GTK_IS_CELL_VIEW (cellview), NULL);
+  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), NULL);
 
-  if (!cellview->priv->displayed_row)
+  if (!cell_view->priv->displayed_row)
     return NULL;
 
-  return gtk_tree_row_reference_get_path (cellview->priv->displayed_row);
+  return gtk_tree_row_reference_get_path (cell_view->priv->displayed_row);
+}
+
+gboolean
+gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
+                               GtkTreePath    *path,
+                               GtkRequisition *requisition)
+{
+  GtkTreeRowReference *tmp;
+
+  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (requisition != NULL, FALSE);
+
+  tmp = cell_view->priv->displayed_row;
+  cell_view->priv->displayed_row =
+    gtk_tree_row_reference_new (cell_view->priv->model, path);
+
+  gtk_cell_view_size_request (GTK_WIDGET (cell_view), requisition);
+
+  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
+  cell_view->priv->displayed_row = tmp;
+
+  return TRUE;
 }
 
 void

@@ -80,7 +80,6 @@ struct _GtkComboBoxPrivate
   GtkTreeViewColumn *column;
 
   GtkWidget *cell_view;
-  GtkWidget *measurer;
 
   GtkWidget *hbox;
   GtkWidget *cell_view_frame;
@@ -166,8 +165,7 @@ static void     gtk_combo_box_popdown              (GtkComboBox      *combo_box)
 
 static gint     gtk_combo_box_calc_requested_width (GtkComboBox      *combo_box,
                                                     GtkTreePath      *path);
-static void     gtk_combo_box_remeasure            (GtkComboBox      *combo_box,
-                                                    gboolean          resize);
+static void     gtk_combo_box_remeasure            (GtkComboBox      *combo_box);
 
 static void     gtk_combo_box_unset_model          (GtkComboBox      *combo_box);
 static void     gtk_combo_box_set_model_internal   (GtkComboBox      *combo_box);
@@ -415,8 +413,6 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   gtk_container_add (GTK_CONTAINER (combo_box), combo_box->priv->cell_view);
   gtk_widget_show (combo_box->priv->cell_view);
 
-  combo_box->priv->measurer = gtk_cell_view_new ();
-
   combo_box->priv->width = 0;
   combo_box->priv->wrap_width = 0;
 
@@ -503,6 +499,8 @@ gtk_combo_box_style_set (GtkWidget *widget,
 {
   gboolean appearance;
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+
+  gtk_widget_queue_resize (widget);
 
   /* if wrap_width > 0, then we are in grid-mode and forced to use
    * unix style
@@ -792,25 +790,27 @@ gtk_combo_box_calc_requested_width (GtkComboBox *combo_box,
   gint padding;
   GtkRequisition req;
 
-  gtk_widget_style_get (combo_box->priv->measurer,
-                        "focus-line-width", &padding,
-                        NULL);
+  if (combo_box->priv->cell_view)
+    gtk_widget_style_get (combo_box->priv->cell_view,
+                          "focus-line-width", &padding,
+                          NULL);
+  else
+    padding = 0;
 
   /* add some pixels for good measure */
   padding += BONUS_PADDING;
 
-  gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->measurer),
-                                   path);
-
-  /* nasty trick to get around the sizegroup's size request caching */
-  (* GTK_WIDGET_GET_CLASS (combo_box->priv->measurer)->size_request) (combo_box->priv->measurer, &req);
+  if (combo_box->priv->cell_view)
+    gtk_cell_view_get_size_of_row (GTK_CELL_VIEW (combo_box->priv->cell_view),
+                                   path, &req);
+  else
+    req.width = 0;
 
   return req.width + padding;
 }
 
 static void
-gtk_combo_box_remeasure (GtkComboBox *combo_box,
-                         gboolean     resize)
+gtk_combo_box_remeasure (GtkComboBox *combo_box)
 {
   GtkTreeIter iter;
   GtkTreePath *path;
@@ -819,11 +819,16 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box,
   if (!gtk_tree_model_get_iter_first (combo_box->priv->model, &iter))
     return;
 
+  combo_box->priv->width = 0;
+
   path = gtk_tree_path_new_from_indices (0, -1);
 
-  gtk_widget_style_get (combo_box->priv->measurer,
-                        "focus-line-width", &padding,
-                        NULL);
+  if (combo_box->priv->cell_view)
+    gtk_widget_style_get (combo_box->priv->cell_view,
+                          "focus-line-width", &padding,
+                          NULL);
+  else
+    padding = 0;
 
   /* add some pixels for good measure */
   padding += BONUS_PADDING;
@@ -832,11 +837,11 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box,
     {
       GtkRequisition req;
 
-      gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->measurer),
-                                       path);
-
-      /* nasty trick to get around the sizegroup's size request caching */
-      (* GTK_WIDGET_GET_CLASS (combo_box->priv->measurer)->size_request) (combo_box->priv->measurer, &req);
+      if (combo_box->priv->cell_view)
+        gtk_cell_view_get_size_of_row (GTK_CELL_VIEW (combo_box->priv->cell_view),
+                                       path, &req);
+      else
+        req.width = 0;
 
       combo_box->priv->width = MAX (combo_box->priv->width,
                                     req.width + padding);
@@ -846,13 +851,6 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box,
   while (gtk_tree_model_iter_next (combo_box->priv->model, &iter));
 
   gtk_tree_path_free (path);
-
-  if (combo_box->priv->cell_view && resize)
-    {
-      gtk_widget_set_size_request (combo_box->priv->cell_view,
-                                   combo_box->priv->width, -1);
-      gtk_widget_queue_resize (combo_box->priv->cell_view);
-    }
 }
 
 static void
@@ -866,7 +864,7 @@ gtk_combo_box_size_request (GtkWidget      *widget,
 
   /* common */
   gtk_widget_size_request (GTK_BIN (widget)->child, &bin_req);
-  gtk_combo_box_remeasure (combo_box, FALSE);
+  gtk_combo_box_remeasure (combo_box);
   bin_req.width = MAX (bin_req.width, combo_box->priv->width);
 
   if (!combo_box->priv->tree_view)
@@ -1967,9 +1965,6 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box->priv->cell_view),
                                 cell, expand);
 
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box->priv->measurer),
-                              cell, expand);
-
   if (combo_box->priv->column)
     gtk_tree_view_column_pack_start (combo_box->priv->column, cell, expand);
 
@@ -2015,9 +2010,6 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
     gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (combo_box->priv->cell_view),
                               cell, expand);
 
-  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (combo_box->priv->measurer),
-                            cell, expand);
-
   if (combo_box->priv->column)
     gtk_tree_view_column_pack_end (combo_box->priv->column, cell, expand);
 
@@ -2052,9 +2044,6 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
 
   if (combo_box->priv->cell_view)
     gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo_box->priv->cell_view));
-
-  if (combo_box->priv->measurer)
-    gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo_box->priv->measurer));
 
   if (combo_box->priv->column)
     gtk_tree_view_column_clear (combo_box->priv->column);
@@ -2103,9 +2092,6 @@ gtk_combo_box_cell_layout_add_attribute (GtkCellLayout   *layout,
     gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo_box->priv->cell_view),
                                    cell, attribute, column);
 
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo_box->priv->measurer),
-                                 cell, attribute, column);
-
   if (combo_box->priv->column)
     gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo_box->priv->column),
                                    cell, attribute, column);
@@ -2131,7 +2117,7 @@ gtk_combo_box_cell_layout_add_attribute (GtkCellLayout   *layout,
       g_list_free (list);
     }
 
-  gtk_combo_box_remeasure (combo_box, TRUE);
+  gtk_widget_queue_resize (GTK_WIDGET (combo_box));
 }
 
 static void
@@ -2165,8 +2151,6 @@ gtk_combo_box_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
   if (combo_box->priv->cell_view)
     gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo_box->priv->cell_view), cell, func, func_data, NULL);
 
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo_box->priv->measurer), cell, func, func_data, NULL);
-
   if (combo_box->priv->column)
     gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo_box->priv->column), cell, func, func_data, NULL);
 
@@ -2191,7 +2175,7 @@ gtk_combo_box_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
       g_list_free (list);
     }
 
-  gtk_combo_box_remeasure (combo_box, TRUE);
+  gtk_widget_queue_resize (GTK_WIDGET (combo_box));
 }
 
 static void
@@ -2222,8 +2206,6 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
   if (combo_box->priv->cell_view)
     gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (combo_box->priv->cell_view), cell);
 
-  gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (combo_box->priv->measurer), cell);
-
   if (combo_box->priv->column)
     gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (combo_box->priv->column), cell);
 
@@ -2247,7 +2229,7 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
       g_list_free (list);
     }
 
-  gtk_combo_box_remeasure (combo_box, TRUE);
+  gtk_widget_queue_resize (GTK_WIDGET (combo_box));
 }
 
 /*
@@ -2545,8 +2527,6 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
   if (combo_box->priv->cell_view)
     gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->cell_view),
                              combo_box->priv->model);
-  gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->measurer),
-                           combo_box->priv->model);
 }
 
 /**
