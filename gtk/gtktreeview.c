@@ -11531,7 +11531,9 @@ gtk_tree_view_get_search_equal_func (GtkTreeView *tree_view)
  * @search_user_data: user data to pass to @search_equal_func, or %NULL
  * @search_destroy: Destroy notifier for @search_user_data, or %NULL
  *
- * Sets the compare function for the interactive search capabilities.
+ * Sets the compare function for the interactive search capabilities; note
+ * that somewhat like strcmp() returning 0 for equality
+ * #GtkTreeViewSearchEqualFunc returns %FALSE on matches.
  **/
 void
 gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
@@ -11775,13 +11777,13 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
 				 gpointer      search_data)
 {
   gboolean retval = TRUE;
+  const gchar *str;
   gchar *normalized_string;
   gchar *normalized_key;
   gchar *case_normalized_string = NULL;
   gchar *case_normalized_key = NULL;
   GValue value = {0,};
   GValue transformed = {0,};
-  gint key_len;
 
   gtk_tree_model_get_value (model, iter, column, &value);
 
@@ -11790,12 +11792,19 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
   if (!g_value_transform (&value, &transformed))
     {
       g_value_unset (&value);
-      return FALSE;
+      return TRUE;
     }
 
   g_value_unset (&value);
 
-  normalized_string = g_utf8_normalize (g_value_get_string (&transformed), -1, G_NORMALIZE_ALL);
+  str = g_value_get_string (&transformed);
+  if (!str)
+    {
+      g_value_unset (&transformed);
+      return TRUE;
+    }
+
+  normalized_string = g_utf8_normalize (str, -1, G_NORMALIZE_ALL);
   normalized_key = g_utf8_normalize (key, -1, G_NORMALIZE_ALL);
 
   if (normalized_string && normalized_key)
@@ -11803,13 +11812,9 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
       case_normalized_string = g_utf8_casefold (normalized_string, -1);
       case_normalized_key = g_utf8_casefold (normalized_key, -1);
 
-      key_len = strlen (case_normalized_key);
-
       if (strstr (case_normalized_string, case_normalized_key))
         retval = FALSE;
     }
-  else
-    retval = FALSE;
 
   g_value_unset (&transformed);
   g_free (normalized_key);

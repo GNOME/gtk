@@ -1,3 +1,13 @@
+Sun Mar 14 22:32:36 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_search_equal_func): Mention
+	GtkTreeViewSearchEqualFunc return value oddity here as well.
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_equal_func): On failure
+	to get a string to compare to, return TRUE (no match), not 
+	FALSE (match). Handle %NULL string values gracefully.
+	Remove unused variable. (#135962, Mark McLoughlin)
+
 2004-03-14  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtkfilesystemunix.c: Kill some debug g_prints.
