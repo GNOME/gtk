@@ -1357,7 +1357,7 @@ _gtk_rc_reset_styles (GtkSettings *settings)
   
   if (context->default_style)
     {
-      g_object_unref (G_OBJECT (context->default_style));
+      g_object_unref (context->default_style);
       context->default_style = NULL;
       reset = TRUE;
     }

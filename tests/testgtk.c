@@ -8421,7 +8421,7 @@ static void
 notebook_homogeneous (GtkToggleButton *button,
 		      GtkNotebook     *notebook)
 {
-  g_object_set (G_OBJECT (notebook), "homogeneous", button->active, NULL);
+  g_object_set (notebook, "homogeneous", button->active, NULL);
 }
 
 static void
@@ -9834,7 +9834,7 @@ static void
 allow_shrink_callback (GtkWidget *widget,
                        gpointer   data)
 {
-  g_object_set (G_OBJECT (g_object_get_data (data, "target")),
+  g_object_set (g_object_get_data (data, "target"),
                 "allow_shrink",
                 GTK_TOGGLE_BUTTON (widget)->active,
                 NULL);
@@ -9844,7 +9844,7 @@ static void
 allow_grow_callback (GtkWidget *widget,
                      gpointer   data)
 {
-  g_object_set (G_OBJECT (g_object_get_data (data, "target")),
+  g_object_set (g_object_get_data (data, "target"),
                 "allow_grow",
                 GTK_TOGGLE_BUTTON (widget)->active,
                 NULL);

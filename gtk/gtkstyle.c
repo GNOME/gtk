@@ -3605,7 +3605,7 @@ gtk_default_draw_check (GtkStyle      *style,
 	}
 
       if (free_me)
-	g_object_unref (G_OBJECT (free_me));
+	g_object_unref (free_me);
     }
 }
 
@@ -3706,7 +3706,7 @@ gtk_default_draw_option (GtkStyle      *style,
 	}
 
       if (free_me)
-	g_object_unref (G_OBJECT (free_me));
+	g_object_unref (free_me);
     }
 }
 

@@ -357,7 +357,7 @@ gtk_tree_view_column_finalize (GObject *object)
   g_list_free (tree_column->cell_list);
 
   if (tree_column->child)
-    g_object_unref (G_OBJECT (tree_column->child));
+    g_object_unref (tree_column->child);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -2567,7 +2567,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	    {
 	      gboolean visible, mode;
 
-	      g_object_get (G_OBJECT (info->cell),
+	      g_object_get (info->cell,
 			    "visible", &visible,
 			    "mode", &mode,
 			    NULL);
@@ -2708,7 +2708,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	    {
 	      gboolean visible, mode;
 
-	      g_object_get (G_OBJECT (info->cell),
+	      g_object_get (info->cell,
 			    "visible", &visible,
 			    "mode", &mode,
 			    NULL);

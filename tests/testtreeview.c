@@ -324,7 +324,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       /* you could also set this per-row by tying it to a column
        * in the model of course.
        */
-      g_object_set (G_OBJECT (rend), "radio", TRUE, NULL);
+      g_object_set (rend, "radio", TRUE, NULL);
       
       g_signal_connect (rend, "toggled",
 			G_CALLBACK (toggled_callback), tree_view);

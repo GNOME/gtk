@@ -722,7 +722,7 @@ get_popup_delay (GtkMenuItem *menu_item)
     {
       gint popup_delay;
       
-      g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu_item))),
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_item)),
 		    "gtk-menu-popup-delay", &popup_delay,
 		    NULL);
 

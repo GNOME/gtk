@@ -1998,7 +1998,7 @@ gtk_menu_key_press (GtkWidget	*widget,
 
   display = gtk_widget_get_display (widget);
     
-  g_object_get (G_OBJECT (gtk_widget_get_settings (widget)),
+  g_object_get (gtk_widget_get_settings (widget),
                 "gtk-menu-bar-accel", &accel,
 		"gtk-can-change-accels", &can_change_accels,
                 NULL);
@@ -2493,7 +2493,7 @@ draw_stay_up_triangle (GdkWindow *window,
                      clipbox.x, clipbox.y,
                      clipbox.width, clipbox.height);
   
-  g_object_unref (G_OBJECT (ugly_gc));
+  g_object_unref (ugly_gc);
 }
 #endif
 
@@ -2614,7 +2614,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 	  menu->navigation_region = new_region;
 	}
 
-      g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu))),
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
 		    "gtk-menu-popdown-delay", &popdown_delay,
 		    NULL);
 
@@ -3096,7 +3096,7 @@ gtk_menu_get_popup_delay (GtkMenuShell *menu_shell)
 {
   gint popup_delay;
 
-  g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu_shell))),
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
 		"gtk-menu-popup-delay", &popup_delay,
 		NULL);
 

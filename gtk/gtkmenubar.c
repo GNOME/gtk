@@ -438,7 +438,7 @@ window_key_press_handler (GtkWidget   *widget,
   gchar *accel = NULL;
   gboolean retval = FALSE;
   
-  g_object_get (G_OBJECT (gtk_widget_get_settings (widget)),
+  g_object_get (gtk_widget_get_settings (widget),
                 "gtk-menu-bar-accel",
                 &accel,
                 NULL);
@@ -605,7 +605,7 @@ gtk_menu_bar_get_popup_delay (GtkMenuShell *menu_shell)
 {
   gint popup_delay;
   
-  g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu_shell))),
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
 		"gtk-menu-bar-popup-delay", &popup_delay,
 		NULL);
 

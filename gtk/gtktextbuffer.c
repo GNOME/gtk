@@ -336,7 +336,7 @@ set_table (GtkTextBuffer *buffer, GtkTextTagTable *table)
   if (table)
     {
       buffer->tag_table = table;
-      g_object_ref (G_OBJECT (buffer->tag_table));
+      g_object_ref (buffer->tag_table);
       _gtk_text_tag_table_add_buffer (table, buffer);
     }
 }
