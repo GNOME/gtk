@@ -58,9 +58,6 @@ GdkArgDesc _gdk_windowing_args[] = {
 						     (GdkArgFunc) NULL},
   { "ignore-wintab", GDK_ARG_BOOL, &gdk_input_ignore_wintab,
 						     (GdkArgFunc) NULL},
-  { "event-func-from-window-proc",
-		     GDK_ARG_BOOL, &gdk_event_func_from_window_proc,
-						     (GdkArgFunc) NULL},
   { "max-colors",    GDK_ARG_INT,  &gdk_max_colors,  (GdkArgFunc) NULL},
   { NULL }
 };
@@ -85,16 +82,25 @@ _gdk_windowing_init_check (int    argc,
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     gdk_input_ignore_wintab = TRUE;
 #endif
-  if (getenv ("GDK_EVENT_FUNC_FROM_WINDOW_PROC") != NULL)
-    gdk_event_func_from_window_proc = TRUE;
 
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
+
+  if (!getenv ("NO_MASKBLT"))
+    {
+      mask_blt = GetProcAddress (GetModuleHandle ("gdi32.dll"), "MaskBlt");
+      GDK_NOTE (MISC, g_print ("MaskBlt found %p\n", mask_blt));
+    }
 
   gdk_app_hmodule = GetModuleHandle (NULL);
   gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   gdk_root_window = GetDesktopWindow ();
   windows_version = GetVersion ();
+
+  if (getenv ("PRETEND_WIN9X"))
+    windows_version = 0x80000004;
+
+  GDK_NOTE (MISC, g_print ("Windows version: %08x\n", windows_version));
 
   _gdk_input_locale = GetKeyboardLayout (0);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
@@ -421,7 +427,7 @@ gdk_win32_print_dc (HDC hdc)
   GetObject (obj, sizeof (LOGBRUSH), &logbrush);
   g_print ("brush: %s color=%06lx hatch=%p\n",
 	   gdk_win32_lbstyle_to_string (logbrush.lbStyle),
-	   logbrush.lbColor, logbrush.lbHatch);
+	   logbrush.lbColor, (gpointer) logbrush.lbHatch);
   obj = GetCurrentObject (hdc, OBJ_PEN);
   GetObject (obj, sizeof (EXTLOGPEN), &extlogpen);
   g_print ("pen: %s %s %s %s w=%d %s\n",

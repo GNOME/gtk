@@ -337,12 +337,6 @@ GdkImage *_gdk_win32_copy_to_image      (GdkDrawable *drawable,
 					 gint         width,
 					 gint         height);
 
-GdkPixmap *_gdk_win32_pixmap_new 	(GdkWindow *window,
-				 	 GdkVisual *visual,
-				 	 gint       width,
-				 	 gint       height,
-				 	 gint       depth);
-
 GdkImage *_gdk_win32_setup_pixmap_image (GdkPixmap *pixmap,
 					 GdkWindow *window,
 					 gint       width,
@@ -438,6 +432,8 @@ void    gdk_win32_gdi_failed        (const gchar *where,
 				     gint line,
 				     const gchar *api);
 
+/* Macros that print an warning message about failed GDI and other Win32 API calls */
+
 #ifdef __GNUC__
 #define WIN32_API_FAILED(api) gdk_win32_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
 #define WIN32_GDI_FAILED(api) gdk_win32_gdi_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
@@ -447,6 +443,15 @@ void    gdk_win32_gdi_failed        (const gchar *where,
 #define WIN32_GDI_FAILED(api) gdk_win32_gdi_failed (__FILE__, __LINE__, api)
 #define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__, __LINE__, api)
 #endif
+
+/* These two macros call a GDI or other Win32 API and if the return
+ * value is zero or NULL, print a warning message. The majority of GDI
+ * calls return zero or NULL on failure. The value of the macros is nonzero
+ * if the call succeeded, zero otherwise.
+ */
+
+#define GDI_CALL(api, arglist) (api arglist ? 1 : (WIN32_GDI_FAILED (#api), 0))
+#define API_CALL(api, arglist) (api arglist ? 1 : (WIN32_API_FAILED (#api), 0))
  
 extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
@@ -485,8 +490,10 @@ extern DWORD		 windows_version;
 
 /* Options */
 extern gboolean		 gdk_input_ignore_wintab;
-extern gboolean		 gdk_event_func_from_window_proc;
 extern gint		 gdk_max_colors;
+
+typedef BOOL (WINAPI *mask_blt_t) (HDC, int, int, int, int, HDC, int, int, HBITMAP, int, int, DWORD);
+extern mask_blt_t mask_blt;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
 

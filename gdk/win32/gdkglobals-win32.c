@@ -52,5 +52,7 @@ GdkAtom           _gdk_selection_property;
 DWORD		  windows_version;
 
 gint		  gdk_input_ignore_wintab = FALSE;
-gint              gdk_event_func_from_window_proc = FALSE;
 gint		  gdk_max_colors = 0;
+
+mask_blt_t	  mask_blt = NULL;
+

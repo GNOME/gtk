@@ -699,6 +699,7 @@ gdk_gc_copy (GdkGC *dst_gc,
     g_free (dst_win32_gc->pen_dashes);
   
   *dst_win32_gc = *src_win32_gc;
+  dst_win32_gc->hdc = NULL;
 
   if (dst_gc->colormap)
     g_object_ref (G_OBJECT (dst_gc->colormap));
