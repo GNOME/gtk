@@ -36,8 +36,10 @@
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
 #define GDK_ROOT_PARENT()             ((GdkWindow *)&gdk_root_parent)
 #define GDK_DISPLAY()                 NULL
-#define GDK_WINDOW_XDISPLAY(win)      NULL
-#define GDK_WINDOW_XWINDOW(win)       (((GdkWindowPrivate*) win)->xwindow)
+#define GDK_DRAWABLE_XDISPLAY(win)    NULL
+#define GDK_DRAWABLE_XID(win)         (((GdkDrawablePrivate*) win)->xwindow)
+#define GDK_WINDOW_XDISPLAY	      GDK_DRAWABLE_XDISPLAY
+#define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
 #define GDK_IMAGE_XDISPLAY(image)     NULL
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
 #define GDK_GC_XDISPLAY(gc)           NULL

@@ -114,13 +114,13 @@ static GdkWindow *button_window[2];	    /* The last 2 windows to receive button 
 					     */
 static guint button_number[2];		    /* The last 2 buttons to be pressed.
 					     */
-static GdkWindowPrivate *p_grab_window = NULL; /* Window that currently
-						* holds the pointer grab
-						*/
+static GdkWindow *p_grab_window = NULL; /* Window that currently
+					 * holds the pointer grab
+					 */
 
-static GdkWindowPrivate *k_grab_window = NULL; /* Window the holds the
-						* keyboard grab
-						*/
+static GdkWindow *k_grab_window = NULL; /* Window the holds the
+					 * keyboard grab
+					 */
 
 static GList *client_filters;	/* Filters for client messages */
 
@@ -772,26 +772,24 @@ gdk_pointer_grab (GdkWindow *	  window,
 		  GdkCursor *	  cursor,
 		  guint32	  time)
 {
-  GdkWindowPrivate *window_private;
   HWND xwindow;
   HWND xconfine_to;
   HCURSOR xcursor;
-  GdkWindowPrivate *confine_to_private;
   GdkCursorPrivate *cursor_private;
   gint return_val;
 
   g_return_val_if_fail (window != NULL, 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
   
-  window_private = (GdkWindowPrivate*) window;
-  confine_to_private = (GdkWindowPrivate*) confine_to;
   cursor_private = (GdkCursorPrivate*) cursor;
   
-  xwindow = window_private->xwindow;
+  xwindow = GDK_DRAWABLE_XID (window);
   
-  if (!confine_to || confine_to_private->destroyed)
+  if (!confine_to || GDK_DRAWABLE_DESTROYED (confine_to))
     xconfine_to = NULL;
   else
-    xconfine_to = confine_to_private->xwindow;
+    xconfine_to = GDK_DRAWABLE_XID (confine_to);
   
   if (!cursor)
     xcursor = NULL;
@@ -809,7 +807,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   if (return_val == Success)
     {
-      if (!window_private->destroyed)
+      if (!GDK_DRAWABLE_DESTROYED (window))
       {
 	GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %#x %s %#x\n",
 				   xwindow,
@@ -832,7 +830,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   if (return_val == GrabSuccess)
     {
-      p_grab_window = window_private;
+      p_grab_window = window;
       p_grab_cursor = xcursor;
     }
   
@@ -914,17 +912,15 @@ gdk_keyboard_grab (GdkWindow *	   window,
 		   gint		   owner_events,
 		   guint32	   time)
 {
-  GdkWindowPrivate *window_private;
   gint return_val;
   
   g_return_val_if_fail (window != NULL, 0);
-  
-  window_private = (GdkWindowPrivate*) window;
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
   GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %#x\n",
-			     window_private->xwindow));
+			     GDK_DRAWABLE_XID (window)));
 
-  if (!window_private->destroyed)
+  if (!GDK_DRAWABLE_DESTROYED (window))
     {
       k_grab_owner_events = owner_events != 0;
       return_val = GrabSuccess;
@@ -933,7 +929,7 @@ gdk_keyboard_grab (GdkWindow *	   window,
     return_val = AlreadyGrabbed;
 
   if (return_val == GrabSuccess)
-    k_grab_window = window_private;
+    k_grab_window = window;
   
   return return_val;
 }
@@ -1164,6 +1160,9 @@ gdk_event_translate (GdkEvent *event,
   MINMAXINFO *lpmmi;
   GdkWindowPrivate *curWnd_private;
   GdkEventMask mask;
+  GdkDrawablePrivate *pixmap_private;
+  HDC bgdc;
+  HGDIOBJ oldbitmap;
   int button;
   int i, j;
   gchar buf[256];
@@ -1221,7 +1220,7 @@ gdk_event_translate (GdkEvent *event,
   
   event->any.window = window;
 
-  if (window_private && window_private->destroyed)
+  if (window_private && GDK_DRAWABLE_DESTROYED (window))
     {
     }
   else
@@ -1250,7 +1249,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.property = gdk_selection_property;
       event->selection.time = xevent->time;
 
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
 
       /* Will pass through switch below without match */
     }
@@ -1267,7 +1266,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.requestor = (guint32) xevent->hwnd;
       event->selection.time = xevent->time;
 
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
 
       /* Again, will pass through switch below without match */
     }
@@ -1281,7 +1280,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.selection = xevent->wParam;
       event->selection.time = xevent->time;
 
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
 
       /* Once again, we will pass through switch below without match */
     }
@@ -1368,14 +1367,14 @@ gdk_event_translate (GdkEvent *event,
 
       ignore_WM_CHAR = TRUE;
     keyup_or_down:
-      if (k_grab_window != NULL
-	  && !k_grab_owner_events)
+      if (k_grab_window != NULL && !k_grab_owner_events)
 	{
 	  /* Keyboard is grabbed with owner_events FALSE */
 	  GDK_NOTE (EVENTS,
 		    g_print ("...grabbed, owner_events FALSE, "
-			     "sending to %#x\n", k_grab_window->xwindow));
-	  event->key.window = (GdkWindow *) k_grab_window;
+			     "sending to %#x\n",
+			     GDK_DRAWABLE_XID (k_grab_window)));
+	  event->key.window = k_grab_window;
 	}
       else if (window_private
 	       && (((xevent->message == WM_KEYUP
@@ -1386,14 +1385,14 @@ gdk_event_translate (GdkEvent *event,
 		       && !(window_private->event_mask & GDK_KEY_PRESS_MASK))))
 	{
 	  /* Owner window doesn't want it */
-	  if (k_grab_window != NULL
-	      && k_grab_owner_events)
+	  if (k_grab_window != NULL && k_grab_owner_events)
 	    {
 	      /* Keyboard is grabbed with owner_events TRUE */
 	      GDK_NOTE (EVENTS,
 			g_print ("...grabbed, owner_events TRUE, doesn't want it, "
-				 "sending to %#x\n", k_grab_window->xwindow));
-	      event->key.window = (GdkWindow *) k_grab_window;
+				 "sending to %#x\n",
+				 GDK_DRAWABLE_XID (k_grab_window)));
+	      event->key.window = k_grab_window;
 	    }
 	  else
 	    {
@@ -1407,7 +1406,7 @@ gdk_event_translate (GdkEvent *event,
 	      gdk_window_ref (window);
 	      window_private = (GdkWindowPrivate *) window;
 	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-					 window_private->xwindow));
+					 GDK_DRAWABLE_XID (window)));
 	      goto keyup_or_down;
 	    }
 	}
@@ -1619,7 +1618,7 @@ gdk_event_translate (GdkEvent *event,
 	event->key.state |= GDK_CONTROL_MASK;
       if (xevent->wParam != VK_MENU && GetKeyState (VK_MENU) < 0)
 	event->key.state |= GDK_MOD1_MASK;
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       event->key.string = NULL;
       event->key.length = 0;
       break;
@@ -1643,27 +1642,27 @@ gdk_event_translate (GdkEvent *event,
        * wants key presses but still wants releases to be propagated,
        * for instance.
        */
-      if (k_grab_window != NULL
-	  && !k_grab_owner_events)
+      if (k_grab_window != NULL && !k_grab_owner_events)
 	{
 	  /* Keyboard is grabbed with owner_events FALSE */
 	  GDK_NOTE (EVENTS,
 		    g_print ("...grabbed, owner_events FALSE, "
-			     "sending to %#x\n", k_grab_window->xwindow));
-	  event->key.window = (GdkWindow *) k_grab_window;
+			     "sending to %#x\n",
+			     GDK_DRAWABLE_XID (k_grab_window)));
+	  event->key.window = k_grab_window;
 	}
       else if (window_private
 	       && !(window_private->event_mask & (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)))
 	{
 	  /* Owner window doesn't want it */
-	  if (k_grab_window != NULL
-	      && k_grab_owner_events)
+	  if (k_grab_window != NULL && k_grab_owner_events)
 	    {
 	      /* Keyboard is grabbed with owner_events TRUE */
 	      GDK_NOTE (EVENTS,
 			g_print ("...grabbed, owner_events TRUE, doesn't want it, "
-				 "sending to %#x\n", k_grab_window->xwindow));
-	      event->key.window = (GdkWindow *) k_grab_window;
+				 "sending to %#x\n",
+				 GDK_DRAWABLE_XID (k_grab_window)));
+	      event->key.window = k_grab_window;
 	    }
 	  else
 	    {
@@ -1678,12 +1677,12 @@ gdk_event_translate (GdkEvent *event,
 	      gdk_window_ref (window);
 	      window_private = (GdkWindowPrivate *) window;
 	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-					 window_private->xwindow));
+					 GDK_DRAWABLE_XID (window)));
 	      goto wm_char;
 	    }
 	}
       
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       if (return_val && (window_private->event_mask & GDK_KEY_RELEASE_MASK))
 	{
 	  /* Return the release event, and maybe append the press
@@ -1819,8 +1818,7 @@ gdk_event_translate (GdkEvent *event,
       else
 	mask = 0;		/* ??? */
 
-      if (p_grab_window != NULL
-	   && !p_grab_owner_events)
+      if (p_grab_window != NULL && !p_grab_owner_events)
 	{
 	  /* Pointer is grabbed with owner_events FALSE */
 	  GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events FALSE\n"));
@@ -1829,16 +1827,15 @@ gdk_event_translate (GdkEvent *event,
 	    /* Grabber doesn't want it */
 	    break;
 	  else
-	    event->button.window = (GdkWindow *) p_grab_window;
+	    event->button.window = p_grab_window;
 	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-				     p_grab_window->xwindow));
+				     GDK_DRAWABLE_XID (p_grab_window)));
 	}
       else if (window_private
 	       && !(mask & GDK_BUTTON_PRESS_MASK))
 	{
 	  /* Owner window doesn't want it */
-	  if (p_grab_window != NULL
-	      && p_grab_owner_events)
+	  if (p_grab_window != NULL && p_grab_owner_events)
 	    {
 	      /* Pointer is grabbed wíth owner_events TRUE */ 
 	      GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events TRUE, doesn't want it\n"));
@@ -1847,9 +1844,9 @@ gdk_event_translate (GdkEvent *event,
 		/* Grabber doesn't want it either */
 		break;
 	      else
-		event->button.window = (GdkWindow *) p_grab_window;
+		event->button.window = p_grab_window;
 	      GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-					 p_grab_window->xwindow));
+					 GDK_DRAWABLE_XID (p_grab_window)));
 	    }
 	  else
 	    {
@@ -1861,15 +1858,15 @@ gdk_event_translate (GdkEvent *event,
 		break;
 	      pt.x = LOWORD (xevent->lParam);
 	      pt.y = HIWORD (xevent->lParam);
-	      ClientToScreen (window_private->xwindow, &pt);
+	      ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
 	      gdk_window_unref (window);
 	      window = window_private->parent;
 	      gdk_window_ref (window);
 	      window_private = (GdkWindowPrivate *) window;
-	      ScreenToClient (window_private->xwindow, &pt);
+	      ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
 	      xevent->lParam = MAKELPARAM (pt.x, pt.y);
 	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-					 window_private->xwindow));
+					 GDK_DRAWABLE_XID (window)));
 	      goto buttondown; /* What did Dijkstra say? */
 	    }
 	}
@@ -1946,17 +1943,17 @@ gdk_event_translate (GdkEvent *event,
 	  button_number[1] = -1;
 	  button_number[0] = event->button.button;
 	}
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       if (return_val
 	  && p_grab_window != NULL
-	  && event->any.window == (GdkWindow *) p_grab_window
-	  && p_grab_window != window_private)
+	  && event->any.window == p_grab_window
+	  && p_grab_window != window)
 	{
 	  /* Translate coordinates to grabber */
 	  pt.x = event->button.x;
 	  pt.y = event->button.y;
-	  ClientToScreen (window_private->xwindow, &pt);
-	  ScreenToClient (p_grab_window->xwindow, &pt);
+	  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
+	  ScreenToClient (GDK_DRAWABLE_XID (p_grab_window), &pt);
 	  event->button.x = pt.x;
 	  event->button.y = pt.y;
 	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
@@ -1999,8 +1996,7 @@ gdk_event_translate (GdkEvent *event,
       else
 	mask = 0;
 
-      if (p_grab_window != NULL
-	   && !p_grab_owner_events)
+      if (p_grab_window != NULL && !p_grab_owner_events)
 	{
 	  /* Pointer is grabbed with owner_events FALSE */
 	  GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events FALSE\n"));
@@ -2009,16 +2005,15 @@ gdk_event_translate (GdkEvent *event,
 	    /* Grabber doesn't want it */
 	    break;
 	  else
-	    event->button.window = (GdkWindow *) p_grab_window;
+	    event->button.window = p_grab_window;
 	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-				     p_grab_window->xwindow));
+				     GDK_DRAWABLE_XID (p_grab_window)));
 	}
       else if (window_private
 	       && !(mask & GDK_BUTTON_RELEASE_MASK))
 	{
 	  /* Owner window doesn't want it */
-	  if (p_grab_window != NULL
-	      && p_grab_owner_events)
+	  if (p_grab_window != NULL && p_grab_owner_events)
 	    {
 	      /* Pointer is grabbed wíth owner_events TRUE */
 	      GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events TRUE, doesn't want it\n"));
@@ -2027,9 +2022,9 @@ gdk_event_translate (GdkEvent *event,
 		/* Grabber doesn't want it */
 		break;
 	      else
-		event->button.window = (GdkWindow *) p_grab_window;
+		event->button.window = p_grab_window;
 	      GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-					 p_grab_window->xwindow));
+					 GDK_DRAWABLE_XID (p_grab_window)));
 	    }
 	  else
 	    {
@@ -2040,15 +2035,15 @@ gdk_event_translate (GdkEvent *event,
 		break;
 	      pt.x = LOWORD (xevent->lParam);
 	      pt.y = HIWORD (xevent->lParam);
-	      ClientToScreen (window_private->xwindow, &pt);
+	      ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
 	      gdk_window_unref (window);
 	      window = window_private->parent;
 	      gdk_window_ref (window);
 	      window_private = (GdkWindowPrivate *) window;
-	      ScreenToClient (window_private->xwindow, &pt);
+	      ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
 	      xevent->lParam = MAKELPARAM (pt.x, pt.y);
 	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-					 window_private->xwindow));
+					 GDK_DRAWABLE_XID (window)));
 	      goto buttonup;
 	    }
 	}
@@ -2075,17 +2070,17 @@ gdk_event_translate (GdkEvent *event,
       event->button.button = button;
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       if (return_val
 	  && p_grab_window != NULL
-	  && event->any.window == (GdkWindow *) p_grab_window
-	  && p_grab_window != window_private)
+	  && event->any.window == p_grab_window
+	  && p_grab_window != window)
 	{
 	  /* Translate coordinates to grabber */
 	  pt.x = event->button.x;
 	  pt.y = event->button.y;
-	  ClientToScreen (window_private->xwindow, &pt);
-	  ScreenToClient (p_grab_window->xwindow, &pt);
+	  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
+	  ScreenToClient (GDK_DRAWABLE_XID (p_grab_window), &pt);
 	  event->button.x = pt.x;
 	  event->button.y = pt.y;
 	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
@@ -2148,8 +2143,7 @@ gdk_event_translate (GdkEvent *event,
       else
 	mask = 0;
 
-      if (p_grab_window
-	  && !p_grab_owner_events)
+      if (p_grab_window && !p_grab_owner_events)
 	{
 	  /* Pointer is grabbed with owner_events FALSE */
 	  GDK_NOTE (EVENTS,
@@ -2166,9 +2160,9 @@ gdk_event_translate (GdkEvent *event,
 		    && (mask & GDK_BUTTON3_MOTION_MASK))))
 	    break;
 	  else
-	    event->motion.window = (GdkWindow *) p_grab_window;
+	    event->motion.window = p_grab_window;
 	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-				     p_grab_window->xwindow));
+				     GDK_DRAWABLE_XID (p_grab_window)));
 	}
       else if (window_private
 	       && !((mask & GDK_POINTER_MOTION_MASK)
@@ -2182,8 +2176,7 @@ gdk_event_translate (GdkEvent *event,
 			&& (mask & GDK_BUTTON3_MOTION_MASK))))
 	{
 	  /* Owner window doesn't want it */
-	  if (p_grab_window != NULL
-	      && p_grab_owner_events)
+	  if (p_grab_window != NULL && p_grab_owner_events)
 	    {
 	      /* Pointer is grabbed wíth owner_events TRUE */
 	      GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events TRUE, doesn't want it\n"));
@@ -2200,9 +2193,9 @@ gdk_event_translate (GdkEvent *event,
 		/* Grabber doesn't want it either */
 		break;
 	      else
-		event->motion.window = (GdkWindow *) p_grab_window;
+		event->motion.window = p_grab_window;
 	      GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-					 p_grab_window->xwindow));
+					 GDK_DRAWABLE_XID (p_grab_window)));
 	    }
 	  else
 	    {
@@ -2213,15 +2206,15 @@ gdk_event_translate (GdkEvent *event,
 		break;
 	      pt.x = LOWORD (xevent->lParam);
 	      pt.y = HIWORD (xevent->lParam);
-	      ClientToScreen (window_private->xwindow, &pt);
+	      ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
 	      gdk_window_unref (window);
 	      window = window_private->parent;
 	      gdk_window_ref (window);
 	      window_private = (GdkWindowPrivate *) window;
-	      ScreenToClient (window_private->xwindow, &pt);
+	      ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
 	      xevent->lParam = MAKELPARAM (pt.x, pt.y);
 	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-					 window_private->xwindow));
+					 GDK_DRAWABLE_XID (window)));
 	      goto mousemotion;
 	    }
 	}
@@ -2254,17 +2247,17 @@ gdk_event_translate (GdkEvent *event,
       event->motion.source = GDK_SOURCE_MOUSE;
       event->motion.deviceid = GDK_CORE_POINTER;
 
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       if (return_val
 	  && p_grab_window != NULL
-	  && event->any.window == (GdkWindow *) p_grab_window
-	  && p_grab_window != window_private)
+	  && event->any.window == p_grab_window
+	  && p_grab_window != window)
 	{
 	  /* Translate coordinates to grabber */
 	  pt.x = event->motion.x;
 	  pt.y = event->motion.y;
-	  ClientToScreen (window_private->xwindow, &pt);
-	  ScreenToClient (p_grab_window->xwindow, &pt);
+	  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
+	  ScreenToClient (GDK_DRAWABLE_XID (p_grab_window), &pt);
 	  event->motion.x = pt.x;
 	  event->motion.y = pt.y;
 	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
@@ -2319,7 +2312,7 @@ gdk_event_translate (GdkEvent *event,
       event->focus_change.type = GDK_FOCUS_CHANGE;
       event->focus_change.window = window;
       event->focus_change.in = (xevent->message == WM_SETFOCUS);
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       break;
 #if 0
     case WM_ACTIVATE:
@@ -2335,9 +2328,9 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS, g_print ("WM_ERASEBKGND: %#x  dc %#x\n",
 				 xevent->hwnd, xevent->wParam));
       
-      if (!window_private || window_private->destroyed)
+      if (!window_private || GDK_DRAWABLE_DESTROYED (window))
 	break;
-      colormap_private = (GdkColormapPrivate *) window_private->colormap;
+      colormap_private = (GdkColormapPrivate *) window_private->drawable.colormap;
       hdc = (HDC) xevent->wParam;
       if (colormap_private
 	  && colormap_private->xcolormap->rc_palette)
@@ -2393,11 +2386,7 @@ gdk_event_translate (GdkEvent *event,
 	}
       else if (window_private->bg_type == GDK_WIN32_BG_PIXMAP)
 	{
-	  GdkPixmapPrivate *pixmap_private;
-	  HDC bgdc;
-	  HGDIOBJ oldbitmap;
-
-	  pixmap_private = (GdkPixmapPrivate *) window_private->bg_pixmap;
+	  pixmap_private = (GdkDrawablePrivate*) window_private->bg_pixmap;
 	  GetClipBox (hdc, &rect);
 
 	  if (pixmap_private->width <= 8
@@ -2493,7 +2482,7 @@ gdk_event_translate (GdkEvent *event,
       event->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
       event->expose.count = 0;
 
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       if (return_val)
 	{
 	  GList *list = queued_events;
@@ -2523,7 +2512,7 @@ gdk_event_translate (GdkEvent *event,
 	  SetCursor (p_grab_cursor);
 	}
       else if (window_private
-	       && !window_private->destroyed
+	       && !GDK_DRAWABLE_DESTROYED (window)
 	       && window_private->xcursor)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n",
@@ -2548,7 +2537,7 @@ gdk_event_translate (GdkEvent *event,
       event->any.type = GDK_MAP;
       event->any.window = window;
 
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       break;
 #endif
 
@@ -2566,14 +2555,14 @@ gdk_event_translate (GdkEvent *event,
       event->any.window = window;
 
       if (event->any.type == GDK_UNMAP
-	  && p_grab_window == window_private)
+	  && p_grab_window == window)
 	gdk_pointer_ungrab (xevent->time);
 
       if (event->any.type == GDK_UNMAP
-	  && k_grab_window == window_private)
+	  && k_grab_window == window)
 	gdk_keyboard_ungrab (xevent->time);
 
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       break;
 #endif
     case WM_SIZE:
@@ -2597,20 +2586,20 @@ gdk_event_translate (GdkEvent *event,
 	  event->any.type = GDK_UNMAP;
 	  event->any.window = window;
 
-	  if (p_grab_window == window_private)
+	  if (p_grab_window == window)
 	    gdk_pointer_ungrab (xevent->time);
 
-	  if (k_grab_window == window_private)
+	  if (k_grab_window == window)
 	    gdk_keyboard_ungrab (xevent->time);
 
-	  return_val = !window_private->destroyed;
+	  return_val = !GDK_DRAWABLE_DESTROYED (window);
 #endif
 	}
       else if (window_private != NULL
 	       && (xevent->wParam == SIZE_RESTORED
 		   || xevent->wParam == SIZE_MAXIMIZED)
 #if 1
-	       && window_private->window_type != GDK_WINDOW_CHILD
+	       && GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_CHILD
 #endif
 								 )
 	{
@@ -2628,12 +2617,12 @@ gdk_event_translate (GdkEvent *event,
 	  event->configure.height = HIWORD (xevent->lParam);
 	  window_private->x = event->configure.x;
 	  window_private->y = event->configure.y;
-	  window_private->width = event->configure.width;
-	  window_private->height = event->configure.height;
+	  window_private->drawable.width = event->configure.width;
+	  window_private->drawable.height = event->configure.height;
 	  if (window_private->resize_count > 1)
 	    window_private->resize_count -= 1;
 	  
-	  return_val = !window_private->destroyed;
+	  return_val = !GDK_DRAWABLE_DESTROYED (window);
 	  if (return_val
 	      && window_private->extension_events != 0
 	      && gdk_input_vtable.configure_event)
@@ -2740,7 +2729,7 @@ gdk_event_translate (GdkEvent *event,
 	  && !(window_private->event_mask & GDK_STRUCTURE_MASK))
 	break;
       if (window_private != NULL
-	  && window_private->window_type != GDK_WINDOW_CHILD)
+	  && GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_CHILD)
 	{
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
@@ -2751,10 +2740,10 @@ gdk_event_translate (GdkEvent *event,
 	  event->configure.height = rect.bottom;
 	  window_private->x = event->configure.x;
 	  window_private->y = event->configure.y;
-	  window_private->width = event->configure.width;
-	  window_private->height = event->configure.height;
+	  window_private->drawable.width = event->configure.width;
+	  window_private->drawable.height = event->configure.height;
 	  
-	  return_val = !window_private->destroyed;
+	  return_val = !GDK_DRAWABLE_DESTROYED (window);
 	}
       break;
 
@@ -2763,7 +2752,7 @@ gdk_event_translate (GdkEvent *event,
       event->any.type = GDK_DELETE;
       event->any.window = window;
       
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       break;
 
 #if 0
@@ -2806,7 +2795,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.property = gdk_selection_property;
       event->selection.requestor = (guint32) xevent->hwnd;
       event->selection.time = xevent->time;
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
 #else
       /* Test code, to see if SetClipboardData works when called from
        * the window procedure.
@@ -2836,13 +2825,13 @@ gdk_event_translate (GdkEvent *event,
 	  curWnd = NULL;
 	}
 
-      if (p_grab_window == window_private)
+      if (p_grab_window == window)
 	gdk_pointer_ungrab (xevent->time);
 
-      if (k_grab_window == window_private)
+      if (k_grab_window == window)
 	gdk_keyboard_ungrab (xevent->time);
 
-      return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
       break;
 
 #ifdef HAVE_WINTAB

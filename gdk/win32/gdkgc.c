@@ -25,11 +25,13 @@
  */
 
 #include "config.h"
+
 #include <string.h>
 
 #include "gdkgc.h"
 #include "gdkpixmap.h"
 #include "gdkprivate.h"
+#include "gdkx.h"
 
 GdkGC*
 gdk_gc_new (GdkWindow *window)
@@ -42,7 +44,6 @@ gdk_gc_new_with_values (GdkWindow	*window,
 			GdkGCValues	*values,
 			GdkGCValuesMask	 values_mask)
 {
-  GdkWindowPrivate *window_private;
   GdkGC *gc;
   GdkGCPrivate *private;
   static GdkColor black;
@@ -58,8 +59,7 @@ gdk_gc_new_with_values (GdkWindow	*window,
 
   g_return_val_if_fail (window != NULL, NULL);
 
-  window_private = (GdkWindowPrivate*) window;
-  if (window_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
   private = g_new (GdkGCPrivate, 1);
@@ -141,7 +141,7 @@ gdk_gc_new_with_values (GdkWindow	*window,
     {
       private->tile = values->tile;
       gdk_pixmap_ref (private->tile);
-      GDK_NOTE (MISC, g_print (" tile=%#x", ((GdkPixmapPrivate *)private->tile)->xwindow));
+      GDK_NOTE (MISC, g_print (" tile=%#x", GDK_DRAWABLE_XID (private->tile)));
     }
   else
     private->tile = NULL;
@@ -150,7 +150,7 @@ gdk_gc_new_with_values (GdkWindow	*window,
     {
       private->stipple = values->stipple;
       gdk_pixmap_ref (private->stipple);
-      GDK_NOTE (MISC, g_print (" stipple=%#x", ((GdkPixmapPrivate *)private->stipple)->xwindow));
+      GDK_NOTE (MISC, g_print (" stipple=%#x", GDK_DRAWABLE_XID (private->stipple)));
     }
   else
     private->stipple = NULL;
@@ -158,7 +158,7 @@ gdk_gc_new_with_values (GdkWindow	*window,
   if (values_mask & GDK_GC_CLIP_MASK)
     {
       private->clip_region =
-	BitmapToRegion (((GdkPixmapPrivate *)values->clip_mask)->xwindow);
+	BitmapToRegion ((HBITMAP) GDK_DRAWABLE_XID (values->clip_mask));
       GDK_NOTE (MISC, g_print (" clip=%#x", private->clip_region));
     }
   else
@@ -388,7 +388,7 @@ gdk_gc_get_values (GdkGC       *gc,
       if ((hdc = CreateCompatibleDC (NULL)) == NULL)
 	g_warning ("gdk_gc_get_values: CreateCompatibleDC failed");
       if ((oldbitmap =
-	   SelectObject (hdc, ((GdkPixmapPrivate *) pixmap)->xwindow)) == NULL)
+	   SelectObject (hdc, GDK_DRAWABLE_XID (pixmap))) == NULL)
 	g_warning ("gdk_gc_get_values: SelectObject #1 failed");
       hbr = GetStockObject (BLACK_BRUSH);
       if (!FillRect (hdc, &rect, hbr))
@@ -560,7 +560,6 @@ gdk_gc_set_tile (GdkGC	   *gc,
 		 GdkPixmap *tile)
 {
   GdkGCPrivate *private;
-  GdkPixmapPrivate *pixmap_private;
   HBITMAP pixmap;
 
   g_return_if_fail (gc != NULL);
@@ -570,10 +569,7 @@ gdk_gc_set_tile (GdkGC	   *gc,
   pixmap = NULL;
 
   if (tile)
-    {
-      pixmap_private = (GdkPixmapPrivate*) tile;
-      pixmap = pixmap_private->xwindow;
-    }
+    pixmap = GDK_DRAWABLE_XID (tile);
 
   if (private->tile != NULL)
     gdk_pixmap_unref (private->tile);
@@ -591,7 +587,6 @@ gdk_gc_set_stipple (GdkGC     *gc,
 		    GdkPixmap *stipple)
 {
   GdkGCPrivate *private;
-  GdkPixmapPrivate *pixmap_private;
   HBITMAP pixmap;
 
   g_return_if_fail (gc != NULL);
@@ -601,10 +596,7 @@ gdk_gc_set_stipple (GdkGC     *gc,
   pixmap = NULL;
 
   if (stipple)
-    {
-      pixmap_private = (GdkPixmapPrivate*) stipple;
-      pixmap = pixmap_private->xwindow;
-    }
+    pixmap = GDK_DRAWABLE_XID (stipple);
 
   if (private->stipple != NULL)
     gdk_pixmap_unref (private->stipple);
@@ -663,12 +655,9 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
   
   if (mask)
     {
-      GdkWindowPrivate *mask_private;
-      
-      mask_private = (GdkWindowPrivate*) mask;
-      if (mask_private->destroyed)
+      if (GDK_DRAWABLE_DESTROYED (mask))
 	return;
-      xmask = mask_private->xwindow;
+      xmask = GDK_DRAWABLE_XID (mask);
     }
   else
     xmask = NULL;
@@ -910,11 +899,11 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 }
 
 HDC
-gdk_gc_predraw (GdkWindowPrivate *window_private,
-		GdkGCPrivate     *gc_private)
+gdk_gc_predraw (GdkDrawablePrivate *drawable_private,
+		GdkGCPrivate       *gc_private)
 {
   GdkColormapPrivate *colormap_private =
-    (GdkColormapPrivate *) window_private->colormap;
+    (GdkColormapPrivate *) drawable_private->colormap;
   COLORREF bg;
   COLORREF fg;
   LOGBRUSH logbrush;
@@ -923,7 +912,7 @@ gdk_gc_predraw (GdkWindowPrivate *window_private,
 
   g_assert (gc_private->xgc == NULL);
 
-  if (window_private->window_type == GDK_WINDOW_PIXMAP)
+  if (drawable_private->window_type == GDK_DRAWABLE_PIXMAP)
     {
       if ((gc_private->xgc = CreateCompatibleDC (NULL)) == NULL)
 	g_warning ("gdk_gc_predraw: CreateCompatibleDC failed");
@@ -931,19 +920,19 @@ gdk_gc_predraw (GdkWindowPrivate *window_private,
       if ((gc_private->saved_dc = SaveDC (gc_private->xgc)) == 0)
 	g_warning ("gdk_gc_predraw: SaveDC #1 failed");
       
-      if (SelectObject (gc_private->xgc, window_private->xwindow) == NULL)
+      if (SelectObject (gc_private->xgc, drawable_private->xwindow) == NULL)
 	g_warning ("gdk_gc_predraw: SelectObject #1 failed");
     }
   else
     {
-      if ((gc_private->xgc = GetDC (window_private->xwindow)) == NULL)
+      if ((gc_private->xgc = GetDC (drawable_private->xwindow)) == NULL)
 	g_warning ("gdk_gc_predraw: GetDC failed");
       
       if ((gc_private->saved_dc = SaveDC (gc_private->xgc)) == 0)
 	g_warning ("gdk_gc_predraw: SaveDC #2 failed");
     }
   
-  gc_private->hwnd = window_private->xwindow;
+  gc_private->hwnd = drawable_private->xwindow;
   
   if (colormap_private == NULL)
     {
@@ -1097,13 +1086,13 @@ gdk_gc_predraw (GdkWindowPrivate *window_private,
 }
 
 void
-gdk_gc_postdraw (GdkWindowPrivate *window_private,
-		 GdkGCPrivate     *gc_private)
+gdk_gc_postdraw (GdkDrawablePrivate *drawable_private,
+		 GdkGCPrivate       *gc_private)
 {
   HGDIOBJ hpen;
   HGDIOBJ hbr;
   GdkColormapPrivate *colormap_private =
-    (GdkColormapPrivate *) window_private->colormap;
+    (GdkColormapPrivate *) drawable_private->colormap;
 
   if ((hpen = GetCurrentObject (gc_private->xgc, OBJ_PEN)) == NULL)
     g_warning ("gdk_gc_postdraw: GetCurrentObject #1 failed");
@@ -1123,7 +1112,7 @@ gdk_gc_postdraw (GdkWindowPrivate *window_private,
 	g_warning ("gdk_gc_postraw: UnrealizeObject failed");
     }
 #endif
-  if (window_private->window_type == GDK_WINDOW_PIXMAP)
+  if (drawable_private->window_type == GDK_DRAWABLE_PIXMAP)
     {
       if (!DeleteDC (gc_private->xgc))
 	g_warning ("gdk_gc_postdraw: DeleteDC failed");

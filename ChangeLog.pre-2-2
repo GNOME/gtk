@@ -1,3 +1,16 @@
+1999-10-05  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/*.[ch]: Corresponding changes as in X11 backend.
+
+	* gdk/win32/gdkcompat.c: New file, actually provide an
+	implementation for the deprecated functions. (Just temporarily.)
+
+	* gtk/gtkfilesel.c: Fix an #ifdef syntax botch.
+
+	* gtk/makefile.{cygwin,msc}: Update gdk_headers.
+
+	* gdk/win32/gdk.def gtk/gtk.def: Updates.
+
 1999-10-05  Kjartan Maraas  <kmaraas@online.no>
 
 	* configure.in: Added "uk" to ALL_LINGUAS.

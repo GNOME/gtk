@@ -2586,7 +2586,7 @@ attempt_homedir_completion(gchar* text_to_complete,
 
 #endif
 
-#ifdef defined(G_OS_WIN32) || defined(G_HAVE_CYGWIN)
+#if defined(G_OS_WIN32) || defined(G_HAVE_CYGWIN)
 #define FOLD(c) (tolower(c))
 #else
 #define FOLD(c) (c)

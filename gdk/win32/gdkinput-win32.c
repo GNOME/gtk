@@ -34,6 +34,7 @@
 #include "gdk.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
+#include "gdkx.h"
 
 #ifdef HAVE_WINTAB
 #include <wintab.h>
@@ -288,7 +289,7 @@ gdk_input_init (void)
   guint32 deviceid_counter = 0;
 #ifdef HAVE_WINTAB
   GdkDevicePrivate *gdkdev;
-  GdkWindowPrivate *window_private;
+  GdkDrawablePrivate *window_private;
   GdkWindowAttr wa;
   WORD specversion;
   LOGCONTEXT defcontext;
@@ -340,7 +341,7 @@ gdk_input_init (void)
 	  return;
 	}
       gdk_window_ref (wintab_window);
-      window_private = (GdkWindowPrivate *) wintab_window;
+      window_private = (GdkDrawablePrivate *) wintab_window;
       
       for (devix = 0; devix < ndevices; devix++)
 	{
@@ -690,12 +691,12 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 				 gdouble          *xtilt,
 				 gdouble          *ytilt)
 {
-  GdkWindowPrivate *window_private;
+  GdkDrawablePrivate *window_private;
   gint x_axis, y_axis, pressure_axis, xtilt_axis, ytilt_axis;
   gdouble device_width, device_height;
   gdouble x_offset, y_offset, x_scale, y_scale;
 
-  window_private = (GdkWindowPrivate *) input_window->window;
+  window_private = (GdkDrawablePrivate *) input_window->window;
 
   x_axis = gdkdev->axis_for_use[GDK_AXIS_X];
   y_axis = gdkdev->axis_for_use[GDK_AXIS_Y];
@@ -922,7 +923,7 @@ gdk_input_win32_configure_event (GdkEventConfigure *event,
   g_return_if_fail (window != NULL);
 
   gdk_input_get_root_relative_geometry
-    ((((GdkWindowPrivate*) window)->xwindow), &root_x, &root_y);
+    (GDK_DRAWABLE_XID (window), &root_x, &root_y);
 
   input_window->root_x = root_x;
   input_window->root_y = root_y;
@@ -939,7 +940,7 @@ gdk_input_win32_enter_event (GdkEventCrossing *event,
   g_return_if_fail (window != NULL);
 
   gdk_input_get_root_relative_geometry
-    ((((GdkWindowPrivate*) window)->xwindow), &root_x, &root_y);
+    (GDK_DRAWABLE_XID (window), &root_x, &root_y);
 
   input_window->root_x = root_x;
   input_window->root_y = root_y;
@@ -1011,7 +1012,9 @@ gdk_input_win32_other_event (GdkEvent  *event,
 
   window_private = (GdkWindowPrivate *) window;
 
-  GDK_NOTE (EVENTS, g_print ("gdk_input_win32_other_event: window=%#x (%d,%d)\n", window_private->xwindow, x, y));
+  GDK_NOTE (EVENTS,
+	    g_print ("gdk_input_win32_other_event: window=%#x (%d,%d)\n",
+		     GDK_DRAWABLE_XID (window), x, y));
   
 #else
   /* ??? This code is pretty bogus */
@@ -1106,15 +1109,16 @@ gdk_input_win32_other_event (GdkEvent  *event,
 	  
 	  pt.x = x;
 	  pt.y = y;
-	  ClientToScreen (window_private->xwindow, &pt);
+	  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
 	  gdk_window_unref (window);
 	  window = window_private->parent;
 	  gdk_window_ref (window);
 	  window_private = (GdkWindowPrivate *) window;
-	  ScreenToClient (window_private->xwindow, &pt);
+	  ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
 	  x = pt.x;
 	  y = pt.y;
-	  GDK_NOTE (EVENTS, g_print ("...propagating to %#x, (%d,%d)\n", window_private->xwindow, x, y));
+	  GDK_NOTE (EVENTS, g_print ("...propagating to %#x, (%d,%d)\n",
+				     GDK_DRAWABLE_XID (window), x, y));
 	  goto dijkstra;
 	}
 
@@ -1290,11 +1294,9 @@ gdk_input_win32_grab_pointer (GdkWindow    *window,
   need_ungrab = FALSE;
 
   GDK_NOTE (MISC, g_print ("gdk_input_win32_grab_pointer: %#x %d %#x\n",
-			   ((GdkWindowPrivate *) window)->xwindow,
+			   GDK_DRAWABLE_XID (window),
 			   owner_events,
-			   (confine_to ?
-			    ((GdkWindowPrivate *) confine_to)->xwindow :
-			    0)));
+			   (confine_to ? GDK_DRAWABLE_XID (confine_to) : 0)));
 
   while (tmp_list)
     {
@@ -1434,13 +1436,8 @@ gdk_input_motion_events (GdkWindow *window,
 			 guint32    stop,
 			 gint      *nevents_return)
 {
-  GdkWindowPrivate *window_private;
-  GdkTimeCoord *coords;
-  int i;
-
   g_return_val_if_fail (window != NULL, NULL);
-  window_private = (GdkWindowPrivate *) window;
-  if (window_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
   *nevents_return = 0;
@@ -1524,9 +1521,9 @@ gdk_input_set_extension_events (GdkWindow       *window,
   GdkInputWindow *iw;
 
   g_return_if_fail (window != NULL);
-  window_private = (GdkWindowPrivate *) window;
-  if (window_private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return;
+  window_private = (GdkWindowPrivate *) window;
 
   if (mode == GDK_EXTENSION_EVENTS_NONE)
     mask = 0;

@@ -147,7 +147,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
-  GdkPixmapPrivate *source_private, *mask_private;
+  GdkDrawablePrivate *source_private, *mask_private;
   GdkImage *source_image, *mask_image;
   HCURSOR xcursor;
   guchar *p, *q, *XORmask, *ANDmask;
@@ -158,8 +158,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   g_return_val_if_fail (source != NULL, NULL);
   g_return_val_if_fail (mask != NULL, NULL);
 
-  source_private = (GdkPixmapPrivate *) source;
-  mask_private   = (GdkPixmapPrivate *) mask;
+  source_private = (GdkDrawablePrivate *) source;
+  mask_private   = (GdkDrawablePrivate *) mask;
 
   g_return_val_if_fail (source_private->width == mask_private->width
 			&& source_private->height == mask_private->height,

@@ -47,6 +47,7 @@ gdk_OBJECTS = \
 	gdk.obj		\
 	gdkcc.obj	\
 	gdkcolor.obj	\
+	gdkcompat.obj	\
 	gdkcursor.obj	\
 	gdkdnd.obj	\
 	gdkdraw.obj	\

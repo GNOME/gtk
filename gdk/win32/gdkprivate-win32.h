@@ -50,6 +50,8 @@ extern int *__imp___mb_cur_max;
 
 #include <time.h>
 
+#include <gdk/gdktypes.h>
+
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdkfont.h>
@@ -60,7 +62,11 @@ extern int *__imp___mb_cur_max;
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
 
-#include <gdk/gdktypes.h>
+#define GDK_DRAWABLE_TYPE(d) (((GdkDrawablePrivate *)d)->window_type)
+#define GDK_IS_WINDOW(d) (GDK_DRAWABLE_TYPE(d) <= GDK_WINDOW_TEMP || \
+                          GDK_DRAWABLE_TYPE(d) == GDK_WINDOW_FOREIGN)
+#define GDK_IS_PIXMAP(d) (GDK_DRAWABLE_TYPE(d) == GDK_DRAWABLE_PIXMAP)
+#define GDK_DRAWABLE_DESTROYED(d) (((GdkDrawablePrivate *)d)->destroyed)
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
@@ -134,8 +140,9 @@ typedef struct {
   unsigned long base_pixel;
 } XStandardColormap;
 
+typedef struct _GdkDrawablePrivate     GdkDrawablePrivate;
+/* typedef struct _GdkDrawablePrivate     GdkPixmapPrivate; */
 typedef struct _GdkWindowPrivate       GdkWindowPrivate;
-typedef struct _GdkWindowPrivate       GdkPixmapPrivate;
 typedef struct _GdkImagePrivate	       GdkImagePrivate;
 typedef struct _GdkGCPrivate	       GdkGCPrivate;
 typedef struct _GdkColormapPrivate     GdkColormapPrivate;
@@ -147,20 +154,30 @@ typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
 typedef struct _GdkRegionPrivate       GdkRegionPrivate;
 
+struct _GdkDrawablePrivate
+{
+  GdkDrawable drawable;
+
+  guint8 window_type;
+  guint ref_count;
+
+  guint16 width;
+  guint16 height;
+
+  HANDLE xwindow;
+  GdkColormap *colormap;
+
+  guint destroyed : 2;
+};
 
 struct _GdkWindowPrivate
 {
-  GdkWindow window;
+  GdkDrawablePrivate drawable;
+
   GdkWindow *parent;
-  HANDLE xwindow;
   gint16 x;
   gint16 y;
-  guint16 width;
-  guint16 height;
   guint8 resize_count;
-  guint8 window_type;
-  guint ref_count;
-  guint destroyed : 2;
   guint mapped : 1;
   guint guffaw_gravity : 1;
 
@@ -191,7 +208,6 @@ struct _GdkWindowPrivate
   gboolean extension_events_selected;
 
   GList *filters;
-  GdkColormap *colormap;
   GList *children;
 };
 
@@ -304,19 +320,6 @@ struct _GdkClientFilter {
   gpointer      data;
 };
 
-#ifdef USE_XIM
-
-typedef struct _GdkICPrivate GdkICPrivate;
-
-struct _GdkICPrivate
-{
-  XIC xic;
-  GdkICAttr *attr;
-  GdkICAttributesType mask;
-};
-
-#endif /* USE_XIM */
-
 struct _GdkRegionPrivate
 {
   GdkRegion region;
@@ -354,10 +357,10 @@ gpointer gdk_xid_table_lookup (XID	 xid);
 
 /* Internal functions */
 
-HDC	gdk_gc_predraw  (GdkWindowPrivate *window_private,
-			 GdkGCPrivate *gc_private);
-void	gdk_gc_postdraw (GdkWindowPrivate *window_private,
-			 GdkGCPrivate *gc_private);
+HDC	gdk_gc_predraw  (GdkDrawablePrivate *drawable_private,
+			 GdkGCPrivate       *gc_private);
+void	gdk_gc_postdraw (GdkDrawablePrivate *drawable_private,
+			 GdkGCPrivate       *gc_private);
 HRGN	BitmapToRegion  (HBITMAP hBmp);
 
 void    gdk_sel_prop_store (GdkWindow *owner,
@@ -375,7 +378,6 @@ HWND gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_chi
 extern gint		 gdk_debug_level;
 extern gint		 gdk_show_events;
 extern gint		 gdk_stack_trace;
-extern gchar		*gdk_display_name;
 extern HWND		 gdk_root_window;
 extern HWND		 gdk_leader_window;
 GDKVAR GdkWindowPrivate	 gdk_root_parent;
@@ -387,16 +389,6 @@ GDKVAR gint		 gdk_error_warnings;
 GDKVAR gint              gdk_null_window_warnings;
 extern GList            *gdk_default_filters;
 extern gint		 gdk_event_func_from_window_proc;
-
-#ifdef USE_XIM
-/* XIM support */
-gint   gdk_im_open		 (void);
-void   gdk_im_close		 (void);
-void   gdk_ic_cleanup		 (void);
-
-extern GdkICPrivate *gdk_xim_ic;		/* currently using IC */
-extern GdkWindow *gdk_xim_window;	        /* currently using Window */
-#endif /* USE_XIM */
 
 extern HDC		 gdk_DC;
 extern HINSTANCE	 gdk_DLLInstance;

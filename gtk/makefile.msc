@@ -46,7 +46,7 @@ GDKSYSDEP = ..\gdk\win32
 GLIB = ..\..\glib
 INTL = ..\..\intl
 
-CFLAGS = -I. -I.. -I$(GDKSYSDEP) -I$(GLIB) -I$(GLIB)\gmodule -I$(INTL) -DGTK_DISABLE_COMPAT_H
+CFLAGS = -I. -I.. -I$(GDKSYSDEP) -I..\gdk -I$(GLIB) -I$(GLIB)\gmodule -I$(INTL) -DGTK_DISABLE_COMPAT_H
 
 all : \
 	..\config.h	\
@@ -286,8 +286,25 @@ source_headers = \
 
 # More headers to use when autogenerating.
 gdk_headers = \
-	..\gdk\gdktypes.h \
-	..\gdk\gdkrgb.h
+	..\gdk\gdkcc.h		\
+	..\gdk\gdkcolor.h	\
+	..\gdk\gdkcursor.h     	\
+	..\gdk\gdkdnd.h		\
+	..\gdk\gdkdrawable.h	\
+	..\gdk\gdkevents.h	\
+	..\gdk\gdkfont.h	\
+	..\gdk\gdkgc.h		\
+	..\gdk\gdkim.h		\
+	..\gdk\gdkimage.h	\
+	..\gdk\gdkinput.h	\
+	..\gdk\gdkpixmap.h	\
+	..\gdk\gdkproperty.h	\
+	..\gdk\gdkregion.h	\
+	..\gdk\gdkrgb.h		\
+	..\gdk\gdkselection.h	\
+	..\gdk\gdktypes.h	\
+	..\gdk\gdkvisual.h	\
+	..\gdk\gdkwindow.h
 
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h

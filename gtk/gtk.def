@@ -35,6 +35,7 @@ EXPORTS
 	GTK_TYPE_GDK_DRAG_ACTION
 	GTK_TYPE_GDK_DRAG_CONTEXT
 	GTK_TYPE_GDK_DRAG_PROTOCOL
+	GTK_TYPE_GDK_DRAWABLE_TYPE
 	GTK_TYPE_GDK_EVENT
 	GTK_TYPE_GDK_EVENT_MASK
 	GTK_TYPE_GDK_EVENT_TYPE
@@ -72,7 +73,6 @@ EXPORTS
 	GTK_TYPE_GDK_WINDOW_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_WINDOW_CLASS
 	GTK_TYPE_GDK_WINDOW_HINTS
-	GTK_TYPE_GDK_WINDOW_TYPE
 	GTK_TYPE_GDK_WM_DECORATION
 	GTK_TYPE_GDK_WM_FUNCTION
 	GTK_TYPE_JUSTIFICATION
@@ -576,6 +576,7 @@ EXPORTS
 	gtk_invisible_new
 	gtk_item_deselect
 	gtk_item_factories_path_delete
+	gtk_item_factory_add_foreign
 	gtk_item_factory_construct
 	gtk_item_factory_create_item
 	gtk_item_factory_create_items
@@ -588,6 +589,9 @@ EXPORTS
 	gtk_item_factory_dump_rc
 	gtk_item_factory_from_path
 	gtk_item_factory_from_widget
+	gtk_item_factory_get_item
+	gtk_item_factory_get_item_by_action
+	gtk_item_factory_get_type
 	gtk_item_factory_get_widget
 	gtk_item_factory_get_widget_by_action
 	gtk_item_factory_new

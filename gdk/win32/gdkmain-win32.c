@@ -333,7 +333,7 @@ gdk_screen_width (void)
 {
   gint return_val;
   
-  return_val = gdk_root_parent.width;
+  return_val = gdk_root_parent.drawable.width;
 
   return return_val;
 }
@@ -358,7 +358,7 @@ gdk_screen_height (void)
 {
   gint return_val;
   
-  return_val = gdk_root_parent.height;
+  return_val = gdk_root_parent.drawable.height;
 
   return return_val;
 }

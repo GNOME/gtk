@@ -31,6 +31,7 @@
 #include "gdkproperty.h"
 #include "gdkselection.h"
 #include "gdkprivate.h"
+#include "gdkx.h"
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
@@ -132,21 +133,19 @@ gdk_property_change (GdkWindow   *window,
 		     guchar      *data,
 		     gint         nelements)
 {
-  GdkWindowPrivate *private;
   HGLOBAL hdata;
   gint i, length;
   gchar *prop_name, *type_name;
   guchar *ptr;
 
-  private = (GdkWindowPrivate*) window;
-  if (private->destroyed)
+  if (GDK_DRAWABLE_DESTROYED (window))
     return;
 
   GDK_NOTE (SELECTION,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
 	     g_print ("gdk_property_change: %#x %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
-		      private->xwindow, property, prop_name,
+		      GDK_DRAWABLE_XID (window), property, prop_name,
 		      type, type_name,
 		      (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
 		       (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
@@ -168,8 +167,8 @@ gdk_property_change (GdkWindow   *window,
 	  length++;
 #if 1      
       GDK_NOTE (SELECTION, g_print ("...OpenClipboard(%#x)\n",
-				    private->xwindow));
-      if (!OpenClipboard (private->xwindow))
+				    GDK_DRAWABLE_XID (window)));
+      if (!OpenClipboard (GDK_DRAWABLE_XID (window)))
 	{
 	  g_warning ("gdk_property_change: OpenClipboard failed");
 	  return;
@@ -209,20 +208,21 @@ void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
-  GdkWindowPrivate *private;
   gchar *prop_name, *type_name;
-  extern void gdk_selection_property_delete (GdkWindowPrivate *);
+  extern void gdk_selection_property_delete (GdkWindow *);
 
-  private = (GdkWindowPrivate*) window;
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return;
 
   GDK_NOTE (SELECTION,
 	    (prop_name = gdk_atom_name (property),
 	     g_print ("gdk_property_delete: %#x %#x (%s)\n",
-		      (window ? private->xwindow : 0), property, prop_name),
+		      (window ? GDK_DRAWABLE_XID (window) : 0),
+		      property, prop_name),
 	     g_free (prop_name)));
 
   if (property == gdk_selection_property)
-    gdk_selection_property_delete (private);
+    gdk_selection_property_delete (window);
   else
     g_warning ("gdk_property_delete: General case not implemented");
 }

@@ -733,7 +733,7 @@ gdk_drag_find_window (GdkDragContext  *context,
 		      GdkDragProtocol *protocol)
 {
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
-  GdkWindowPrivate *drag_window_private = (GdkWindowPrivate *) drag_window;
+  GdkDrawablePrivate *drag_window_private = (GdkDrawablePrivate*) drag_window;
   HWND recipient;
   POINT pt;
 
@@ -833,7 +833,7 @@ gdk_destroy_filter (GdkXEvent *xev,
 void
 gdk_window_register_dnd (GdkWindow      *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *) window;
+  GdkDrawablePrivate *private = (GdkDrawablePrivate *) window;
 #ifdef OLE2_DND
   target_drag_context *context;
   HRESULT hres;

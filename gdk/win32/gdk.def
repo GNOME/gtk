@@ -80,6 +80,11 @@ EXPORTS
 	gdk_draw_string
 	gdk_draw_text
 	gdk_draw_text_wc
+	gdk_drawable_get_colormap
+	gdk_drawable_get_size
+	gdk_drawable_get_type
+	gdk_drawable_get_visual
+	gdk_drawable_set_colormap
 	gdk_drawable_set_data
 	gdk_error_code
 	gdk_error_trap_pop
