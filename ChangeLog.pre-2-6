@@ -37,7 +37,6 @@ Thu Jul 16 14:16:16 PDT 1998 Manish Singh <yosh@gimp.org>
 	it; --libs strips out redundant -L<path>'s properly (there was
 	code in there to do it before, but it didn't work)
 
->>>>>>> 1.528
 Thu Jul 16 18:24:41 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtknotebook.h: 
