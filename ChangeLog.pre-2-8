@@ -1,3 +1,20 @@
+2001-04-24  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkclist.[ch]:
+	* gtk/gtkctree.c:
+	When there is a row highlighted for D'n'D it must alse
+	be painted hightlighted on exposes. Otherwise exposes from
+	the icon being dragged will mess up the hightlight.
+
+	* gtk/gtkfontsel.c:
+	Don't recenter selected font when exposing the font family
+	clist. This means you can now actually scroll the font family
+	list.
+
+	* gtk/gtknotebook.c:
+	Fix focus movement on scrolling tabs that are placed on the left
+	and right.
+
 2001-04-21  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): handle 0-height
