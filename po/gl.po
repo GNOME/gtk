@@ -1818,7 +1818,7 @@ msgstr "_Parar"
 
 #: gtk/gtkstock.c:351
 msgid "_Strikethrough"
-msgstr "_Tachado"
+msgstr "_Riscado"
 
 #: gtk/gtkstock.c:352
 msgid "_Undelete"
