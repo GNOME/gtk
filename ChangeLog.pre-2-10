@@ -1,3 +1,9 @@
+Sat Jul 31 00:42:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_keep_below): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_keep_above): Don't
+	set both states at once.  (#148789, Matthew Garret)
+
 2004-07-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c: Don't forget to destroy the row separator
@@ -174,7 +180,7 @@ Sat Jul 24 21:38:12 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 Fri Jul 23 13:04:10 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkdnd.c (gtk_drag_dest_set): Create the change to
+	* gtk/gtkdnd.c (gtk_drag_dest_set): Revert the change to
 	initialize target_list to an empty list instead of NULL,
 	since it broke tree dnd.  (#148215, Ernst Persson)
 
@@ -215,7 +221,7 @@ Thu Jul 22 01:42:16 2004  Matthias Clasen  <maclas@gmx.de>
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): 
 	Add a new :ellipsize property which controls ellipsization of the 
 	rendered text.  (#144835, Vincent Untz, patch by Jonathan Blandford
-	and Anders Carlsson
+	and Anders Carlsson)
 	
 	* gtk/gtkfilechooserdefault.c (create_file_list): Use ellipsization
 	for the name column.

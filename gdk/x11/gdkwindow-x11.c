@@ -4263,10 +4263,15 @@ gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
-    gdk_wmspec_change_state (setting, window,
-			     gdk_atom_intern ("_NET_WM_STATE_ABOVE", setting),
-			     setting ? gdk_atom_intern ("_NET_WM_STATE_BELOW", FALSE)
-			     	: GDK_NONE);
+    {
+      if (setting)
+	gdk_wmspec_change_state (FALSE, window,
+				 gdk_atom_intern ("_NET_WM_STATE_BELOW", FALSE),
+				 GDK_NONE);
+      gdk_wmspec_change_state (setting, window,
+			       gdk_atom_intern ("_NET_WM_STATE_ABOVE", FALSE),
+			       GDK_NONE);
+    }
   else
     gdk_synthesize_window_state (window,
     				 setting ? GDK_WINDOW_STATE_BELOW : GDK_WINDOW_STATE_ABOVE,
@@ -4299,10 +4304,15 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
-    gdk_wmspec_change_state (setting, window,
-			     gdk_atom_intern ("_NET_WM_STATE_BELOW", setting),
-			     setting ? gdk_atom_intern ("_NET_WM_STATE_ABOVE", FALSE)
-			         : GDK_NONE);
+    {
+      if (setting)
+	gdk_wmspec_change_state (FALSE, window,
+				 gdk_atom_intern ("_NET_WM_STATE_ABOVE", FALSE),
+				 GDK_NONE);
+      gdk_wmspec_change_state (setting, window,
+			       gdk_atom_intern ("_NET_WM_STATE_BELOW", FALSE),
+			       GDK_NONE);
+    }
   else
     gdk_synthesize_window_state (window,
 				 setting ? GDK_WINDOW_STATE_ABOVE : GDK_WINDOW_STATE_BELOW,
