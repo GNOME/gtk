@@ -407,7 +407,8 @@ gtk_accel_map_change_entry (const gchar    *accel_path,
 static guint
 accel_map_parse_accel_path (GScanner *scanner)
 {
-  guint accel_key = 0, accel_mods = 0;
+  guint accel_key = 0;
+  GdkModifierType accel_mods = 0;
   gchar *path, *accel;
   
   /* parse accel path */

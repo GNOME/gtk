@@ -257,7 +257,7 @@ gdk_font_charset_for_locale (void)
     return g_strdup (result);
   else
     return g_strdup ("iso8859-1");
-};
+}
 
 /**
  * gdk_font_from_description_for_display:

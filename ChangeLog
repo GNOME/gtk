@@ -1,3 +1,9 @@
+Mon Aug  5 15:25:40 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_pixmap_and_mask_for_colormap): 
+	Fix problem with wrong depth being used. (#89941, Jacob
+	Berkman.) Remove an unneeded 'screen' variable.
+
 Mon Aug  5 15:04:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	More fixes for warnings reported by David L. Cooper II

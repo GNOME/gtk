@@ -194,7 +194,7 @@ parse_settings (unsigned char *data,
   buffer.pos = buffer.data = data;
   buffer.len = len;
   
-  result = fetch_card8 (&buffer, &buffer.byte_order);
+  result = fetch_card8 (&buffer, (char *)&buffer.byte_order);
   if (buffer.byte_order != MSBFirst &&
       buffer.byte_order != LSBFirst)
     {
