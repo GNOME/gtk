@@ -1,3 +1,8 @@
+Sun Mar 15 07:13:34 1998  Tim Janik  <timj@gimp.org>
+
+	* gutils.c: changed *_handler variables to be named glib_*_handler,
+	so you can easily access them from gdb.
+
 Sat Mar 14 17:47:43 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* Makefile.am: Don't refer to current directory as $(top_builddir)

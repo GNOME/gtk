@@ -736,8 +736,6 @@ gtk_menu_key_press (GtkWidget   *widget,
 {
   GtkAllocation allocation;
   GtkAcceleratorTable *table;
-  GtkMenuShell *menu_shell;
-  GtkMenuItem *menu_item;
   gchar *signame;
   int delete;
 
@@ -750,11 +748,16 @@ gtk_menu_key_press (GtkWidget   *widget,
 
   if (delete || ((event->keyval >= 0x20) && (event->keyval <= 0xFF)))
     {
-      menu_shell = GTK_MENU_SHELL (widget);
-      menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item);
+      GtkMenuShell *menu_shell;
 
-      if (menu_item && GTK_BIN (menu_item)->child)
+      menu_shell = GTK_MENU_SHELL (widget);
+
+      if (menu_shell->active_menu_item && GTK_BIN (menu_shell->active_menu_item)->child)
 	{
+	  GtkMenuItem *menu_item;
+
+	  menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item);
+	  
 	  /* block resizes */
 	  gtk_container_block_resize (GTK_CONTAINER (widget));
 

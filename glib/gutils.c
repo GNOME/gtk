@@ -24,10 +24,10 @@
 #include "glib.h"
 
 
-static GErrorFunc error_func = NULL;
-static GWarningFunc warning_func = NULL;
-static GPrintFunc message_func = NULL;
-static GPrintFunc print_func = NULL;
+static GErrorFunc glib_error_func = NULL;
+static GWarningFunc glib_warning_func = NULL;
+static GPrintFunc glib_message_func = NULL;
+static GPrintFunc glib_print_func = NULL;
 
 extern char* g_vsprintf (const gchar *fmt, va_list *args, va_list *args2);
 
@@ -681,9 +681,9 @@ g_error (gchar *format, ...)
   va_end (args);
   va_end (args2);
 
-  if (error_func)
+  if (glib_error_func)
     {
-      (* error_func) (buf);
+      (* glib_error_func) (buf);
     }
   else
     {
@@ -707,9 +707,9 @@ g_warning (gchar *format, ...)
   va_end (args);
   va_end (args2);
 
-  if (warning_func)
+  if (glib_warning_func)
     {
-      (* warning_func) (buf);
+      (* glib_warning_func) (buf);
     }
   else
     {
@@ -731,9 +731,9 @@ g_message (gchar *format, ...)
   va_end (args);
   va_end (args2);
 
-  if (message_func)
+  if (glib_message_func)
     {
-      (* message_func) (buf);
+      (* glib_message_func) (buf);
     }
   else
     {
@@ -755,9 +755,9 @@ g_print (gchar *format, ...)
   va_end (args);
   va_end (args2);
 
-  if (print_func)
+  if (glib_print_func)
     {
-      (* print_func) (buf);
+      (* glib_print_func) (buf);
     }
   else
     {
@@ -770,8 +770,8 @@ g_set_error_handler (GErrorFunc func)
 {
   GErrorFunc old_error_func;
 
-  old_error_func = error_func;
-  error_func = func;
+  old_error_func = glib_error_func;
+  glib_error_func = func;
 
   return old_error_func;
 }
@@ -781,8 +781,8 @@ g_set_warning_handler (GWarningFunc func)
 {
   GWarningFunc old_warning_func;
 
-  old_warning_func = warning_func;
-  warning_func = func;
+  old_warning_func = glib_warning_func;
+  glib_warning_func = func;
 
   return old_warning_func;
 }
@@ -792,8 +792,8 @@ g_set_message_handler (GPrintFunc func)
 {
   GPrintFunc old_message_func;
 
-  old_message_func = message_func;
-  message_func = func;
+  old_message_func = glib_message_func;
+  glib_message_func = func;
 
   return old_message_func;
 }
@@ -803,8 +803,8 @@ g_set_print_handler (GPrintFunc func)
 {
   GPrintFunc old_print_func;
 
-  old_print_func = print_func;
-  print_func = func;
+  old_print_func = glib_print_func;
+  glib_print_func = func;
   
   return old_print_func;
 }

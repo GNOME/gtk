@@ -1,3 +1,7 @@
+Sun Mar 15 08:27:06 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): don't cast a NULL pointer.
+
 Sat Mar 14 19:36:16 PST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* Released 0.99.7
