@@ -1,3 +1,11 @@
+2001-10-08  Havoc Pennington  <hp@pobox.com>
+
+	* demos/gtk-demo/stock_browser.c: remove unused enum
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_select_node):
+	pass the current selection state of the node in to the user
+	selection func
+
 2001-10-06  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/x11/gdkx.h (GDK_CURSOR_XCURSOR): Replace reference to 

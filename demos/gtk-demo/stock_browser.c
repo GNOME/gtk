@@ -81,14 +81,6 @@ struct _StockItemDisplay
   GtkWidget *icon_image;
 };
 
-/* columns in the tree model */
-enum {
-  COLUMN_ICON_MACRO,
-  COLUMN_LABEL,
-  COLUMN_ACCEL,
-  COLUMN_ID
-};
-
 static gchar*
 id_to_macro (const gchar *id)
 {

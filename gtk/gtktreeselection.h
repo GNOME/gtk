@@ -37,6 +37,7 @@ extern "C" {
 typedef gboolean (* GtkTreeSelectionFunc)    (GtkTreeSelection  *selection,
 					      GtkTreeModel      *model,
 					      GtkTreePath       *path,
+                                              gboolean           path_currently_selected,
 					      gpointer           data);
 typedef void (* GtkTreeSelectionForeachFunc) (GtkTreeModel      *model,
 					      GtkTreePath       *path,

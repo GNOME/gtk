@@ -245,6 +245,8 @@ gtk_tree_selection_get_mode (GtkTreeSelection *selection)
  *
  * Sets the selection function.  If set, this function is called before any node
  * is selected or unselected, giving some control over which nodes are selected.
+ * The select function should return %TRUE if the state of the node may be toggled,
+ * and %FALSE if the state of the node should be left unchanged.
  **/
 void
 gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
@@ -1010,7 +1012,9 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
       path = _gtk_tree_view_find_path (selection->tree_view, tree, node);
       if (selection->user_func)
 	{
-	  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path, selection->user_data))
+	  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path,
+                                       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED),
+                                       selection->user_data))
 	    selected = TRUE;
 	}
       else
