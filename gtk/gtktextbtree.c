@@ -6431,9 +6431,20 @@ gtk_text_btree_node_view_check_consistency (GtkTextBTree     *tree,
   
   gtk_text_btree_node_compute_view_aggregates (node, nd->view_id,
                                                &width, &height, &valid);
+
+  /* valid aggregate not checked the same as width/height, because on
+   * btree rebalance we can have invalid nodes where all lines below
+   * them are actually valid, due to moving lines around between
+   * nodes.
+   *
+   * The guarantee is that if there are invalid lines the node is
+   * invalid - we don't guarantee that if the node is invalid there
+   * are invalid lines.
+   */
+  
   if (nd->width != width ||
       nd->height != height ||
-      !nd->valid != !valid)
+      (nd->valid && !valid))
     {
       g_error ("Node aggregates for view %p are invalid:\n"
                "Are (%d,%d,%s), should be (%d,%d,%s)",

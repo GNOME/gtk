@@ -1,5 +1,15 @@
 2001-12-31  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtktextbtree.c (gtk_text_btree_node_view_check_consistency):
+	fix an incorrect assertion that the "valid" flag is always correct
+	in a node and add explanatory comment. This keeps me from 
+	reproducing #59101, but I'm remembering that 59101 was actually 
+	about incorrect pixel totals, so I'm not sure 59101 is actually 
+	fixed. May just have stopped happening due to some change in 
+	how C-k works.
+
+2001-12-31  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtktextview.c (gtk_text_view_start_selection_drag): extend
 	selection if shift is down, bug #50939
 	(gtk_text_view_button_press_event): add double/triple click
