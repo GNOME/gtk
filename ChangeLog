@@ -1,5 +1,7 @@
 2003-01-03  Havoc Pennington  <hp@pobox.com>
 
+	* docs/Makefile.am (EXTRA_DIST): put it in EXTRA_DIST
+
 	* docs/text_widget_internals.txt: add a file documenting some of
 	the text widget internals
 
