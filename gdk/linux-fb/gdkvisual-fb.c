@@ -27,36 +27,19 @@
 #include "gdkvisual.h"
 #include "gdkprivate-fb.h"
 #include "gdkinternals.h"
-#include <endian.h>
 
 static GdkVisual *system_visual = NULL;
-
-#ifdef G_ENABLE_DEBUG
-
-#if 0
-static const gchar* visual_names[] =
-{
-  "static gray",
-  "grayscale",
-  "static color",
-  "pseudo color",
-  "true color",
-  "direct color",
-};
-#endif
-
-#endif /* G_ENABLE_DEBUG */
 
 void
 gdk_visual_init (void)
 {
-  system_visual = g_new0(GdkVisual, 1);
+  system_visual = g_new0 (GdkVisual, 1);
 
   system_visual->depth = system_visual->bits_per_rgb = gdk_display->modeinfo.bits_per_pixel;
   system_visual->byte_order = GDK_LSB_FIRST;
   system_visual->colormap_size = 0;
 
-  switch(gdk_display->sinfo.visual)
+  switch (gdk_display->sinfo.visual)
     {
     case FB_VISUAL_PSEUDOCOLOR:
       system_visual->colormap_size = 1 << gdk_display->modeinfo.bits_per_pixel;
@@ -65,8 +48,9 @@ gdk_visual_init (void)
     case FB_VISUAL_DIRECTCOLOR:
       system_visual->colormap_size = 1 << gdk_display->modeinfo.bits_per_pixel;
       system_visual->type = GDK_VISUAL_DIRECT_COLOR;
+      /* Fall through */
     case FB_VISUAL_TRUECOLOR:
-      if(gdk_display->sinfo.visual == FB_VISUAL_TRUECOLOR)
+      if (gdk_display->sinfo.visual == FB_VISUAL_TRUECOLOR)
 	system_visual->type = GDK_VISUAL_TRUE_COLOR;
 
       system_visual->red_prec = gdk_display->modeinfo.red.length;
@@ -86,7 +70,7 @@ gdk_visual_init (void)
       system_visual->colormap_size = 1 << gdk_display->modeinfo.bits_per_pixel;
       break;
     default:
-      g_assert_not_reached();
+      g_assert_not_reached ();
       break;
     }
 }
@@ -129,7 +113,7 @@ gdk_visual_get_best (void)
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
 {
-  if(system_visual->depth != depth)
+  if (system_visual->depth != depth)
     return NULL;
 
   return system_visual;
@@ -138,7 +122,7 @@ gdk_visual_get_best_with_depth (gint depth)
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
 {
-  if(system_visual->type != visual_type)
+  if (system_visual->type != visual_type)
     return NULL;
 
   return system_visual;
@@ -148,10 +132,10 @@ GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
 			       GdkVisualType visual_type)
 {
-  if(system_visual->depth != depth)
+  if (system_visual->depth != depth)
     return NULL;
 
-  if(system_visual->type != visual_type)
+  if (system_visual->type != visual_type)
     return NULL;
 
   return system_visual;
@@ -176,5 +160,5 @@ gdk_query_visual_types (GdkVisualType **visual_types,
 GList*
 gdk_list_visuals (void)
 {
-  return g_list_append(NULL, gdk_visual_get_system());
+  return g_list_append (NULL, gdk_visual_get_system ());
 }

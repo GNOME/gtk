@@ -39,10 +39,10 @@
 #include <stdio.h>
 #include <freetype/freetype.h>
 
-#define GDK_DRAWABLE_IMPL_FBDATA(win) ((GdkDrawableFBData *)((GdkWindowPrivate *)(win))->impl)
-#define GDK_DRAWABLE_IMPL(win) ((GdkDrawable *)((GdkWindowPrivate *)(win))->impl)
-#define GDK_WINDOW_IMPL_FBDATA(win) ((GdkWindowFBData *)((GdkWindowPrivate *)(win))->impl)
-#define GDK_PIXMAP_IMPL_FBDATA(win) ((GdkPixmapFBData *)((GdkWindowPrivate *)(win))->impl)
+#define GDK_DRAWABLE_IMPL_FBDATA(win) ((GdkDrawableFBData *)((GdkWindowObject *)(win))->impl)
+#define GDK_DRAWABLE_IMPL(win) ((GdkDrawable *)((GdkWindowObject *)(win))->impl)
+#define GDK_WINDOW_IMPL_FBDATA(win) ((GdkWindowFBData *)((GdkWindowObject *)(win))->impl)
+#define GDK_PIXMAP_IMPL_FBDATA(win) ((GdkPixmapFBData *)((GdkWindowObject *)(win))->impl)
 #define GDK_DRAWABLE_FBDATA(win) ((GdkDrawableFBData *)(win))
 #define GDK_PIXMAP_FBDATA(win) ((GdkPixmapFBData *)(win))
 #define GDK_WINDOW_FBDATA(win) ((GdkWindowFBData *)(win))
@@ -57,7 +57,6 @@
 typedef struct _GdkDrawableFBData GdkDrawableFBData;
 typedef struct _GdkWindowFBData GdkWindowFBData;
 typedef struct _GdkPixmapFBData GdkPixmapFBData;
-typedef GdkWindowObject GdkWindowPrivate;
 #define GDK_DRAWABLE_PIXMAP (GDK_WINDOW_FOREIGN+1)
 
 struct _GdkDrawableFBData
@@ -82,8 +81,6 @@ struct _GdkDrawableFBData
 typedef struct {
   GdkDrawableClass base_class;
 } GdkDrawableFBClass;
-
-#define GDK_DRAWABLE_P(x) ((GdkDrawableFBData *)(x))
 
 struct _GdkPixmapFBData
 {
@@ -135,16 +132,10 @@ typedef struct {
 } GdkVisualPrivateFB;
 
 typedef struct {
-  GdkColormap base;
-
   GHashTable *hash;
   GdkColorInfo *info;
   guint sync_tag;
 } GdkColormapPrivateFB;
-
-typedef struct {
-  GdkColormapClass base_class;
-} GdkColormapFBClass;
 
 typedef struct {
   GdkCursor base;
@@ -164,7 +155,7 @@ void gdk_fb_font_init(void);
 void gdk_fb_font_fini(void);
 
 typedef struct {
-  GdkImage base;
+  /* Empty */
 } GdkImagePrivateFB;
 
 #define GDK_GC_FBDATA(x) ((GdkGCFBData *)(x))

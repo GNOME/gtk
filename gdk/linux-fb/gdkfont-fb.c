@@ -44,9 +44,9 @@ gdk_font_from_description (PangoFontDescription *font_desc)
   GdkFont *font;
   GdkFontPrivateFB *private;
 
-  g_return_val_if_fail(font_desc, NULL);
+  g_return_val_if_fail (font_desc, NULL);
 
-  private = g_new0(GdkFontPrivateFB, 1);
+  private = g_new0 (GdkFontPrivateFB, 1);
   font = (GdkFont *)private;
   private->base.ref_count = 1;
 
@@ -165,6 +165,12 @@ gdk_fontset_load (const gchar *fontset_name)
   return gdk_font_load(fontset_name);
 }
 #endif
+
+GdkFont *
+gdk_font_load (const gchar *font_name)
+{
+  return NULL;
+}
 
 void
 _gdk_font_destroy (GdkFont *font)
@@ -370,10 +376,17 @@ gdk_text_extents_wc (GdkFont        *font,
   char *realstr;
   int i;
 
-  realstr = alloca(text_length + 1);
+  realstr = alloca (text_length + 1);
   for(i = 0; i < text_length; i++)
     realstr[i] = text[i];
   realstr[i] = '\0';
 
-  return gdk_text_extents(font, realstr, text_length, lbearing, rbearing, width, ascent, descent);
+  return gdk_text_extents (font,
+			   realstr,
+			   text_length,
+			   lbearing,
+			   rbearing,
+			   width,
+			   ascent,
+			   descent);
 }

@@ -57,7 +57,7 @@ gdk_pixmap_impl_fb_init (GdkPixmapFBData *impl)
   GdkDrawableFBData *private = (GdkDrawableFBData *)impl;
 
   private->window_type = GDK_DRAWABLE_PIXMAP;
-  private->colormap = gdk_colormap_ref(gdk_colormap_get_system());
+  private->colormap = gdk_colormap_ref (gdk_colormap_get_system());
   private->mem = NULL;
   private->width = 1;
   private->height = 1;
@@ -75,7 +75,7 @@ static void
 gdk_pixmap_impl_fb_class_init (GdkPixmapFBClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  //  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
+  /*  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass); */
   
   parent_class = g_type_class_peek_parent (klass);
 
@@ -130,13 +130,12 @@ gdk_pixmap_new (GdkWindow *window,
   if (depth == -1)
     depth = gdk_drawable_get_visual (window)->depth;
 
-  pixmap = (GdkPixmap *)g_object_new (gdk_pixmap_get_type(), NULL);
-  private = GDK_DRAWABLE_IMPL_FBDATA(pixmap);
-
-  GDK_DRAWABLE_IMPL_FBDATA(pixmap)->mem = g_malloc(((width * depth + 7) / 8) * height);
-  GDK_DRAWABLE_IMPL_FBDATA(pixmap)->rowstride = (width * depth + 7) / 8; /* Round up to nearest whole byte */
-  GDK_DRAWABLE_IMPL_FBDATA(pixmap)->lim_x = width;
-  GDK_DRAWABLE_IMPL_FBDATA(pixmap)->lim_y = height;
+  pixmap = (GdkPixmap *)g_object_new (gdk_pixmap_get_type (), NULL);
+  private = GDK_DRAWABLE_IMPL_FBDATA (pixmap);
+  private->rowstride = (width * depth + 7) / 8; /* Round up to nearest whole byte */
+  private->mem = g_malloc (private->rowstride * height);
+  private->lim_x = width;
+  private->lim_y = height;
   private->width = width;
   private->height = height;
   private->depth = ((GdkPixmapObject *)pixmap)->depth = depth;
@@ -159,9 +158,9 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   if (!window)
     window = gdk_parent_root;
 
-  pixmap = gdk_pixmap_new(window, width, height, 1);
+  pixmap = gdk_pixmap_new (window, width, height, 1);
 
-  memcpy(GDK_DRAWABLE_IMPL_FBDATA(pixmap)->mem, data, ((width + 7) / 8) * height);
+  memcpy (GDK_DRAWABLE_IMPL_FBDATA (pixmap)->mem, data, ((width + 7) / 8) * height);
 
   return pixmap;
 }
@@ -190,9 +189,9 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   if (depth == -1)
     depth = gdk_drawable_get_visual (window)->depth;
 
-  pixmap = gdk_pixmap_new(window, width, height, depth);
+  pixmap = gdk_pixmap_new (window, width, height, depth);
 
-  memcpy(GDK_DRAWABLE_IMPL_FBDATA(pixmap)->mem, data, height * GDK_DRAWABLE_IMPL_FBDATA(pixmap)->rowstride);
+  memcpy (GDK_DRAWABLE_IMPL_FBDATA (pixmap)->mem, data, height * GDK_DRAWABLE_IMPL_FBDATA (pixmap)->rowstride);
 
   return pixmap;
 }

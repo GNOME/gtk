@@ -42,35 +42,35 @@ FT_Library gdk_fb_ft_lib = NULL;
 #define USE_FTGRAYS
 
 void
-gdk_fb_font_init(void)
+gdk_fb_font_init (void)
 {
-  FT_Init_FreeType(&gdk_fb_ft_lib);
+  FT_Init_FreeType (&gdk_fb_ft_lib);
 #ifdef USE_FTGRAYS
-  FT_Set_Raster(gdk_fb_ft_lib, &ft_grays_raster); /* If this is removed, also turn off USE_FTGRAYS define in gdkdrawable-fb2.c */
+  FT_Set_Raster (gdk_fb_ft_lib, &ft_grays_raster); /* If this is removed, also turn off USE_FTGRAYS define in gdkdrawable-fb2.c */
 #endif
 }
 
 void
-gdk_fb_font_fini(void)
+gdk_fb_font_fini (void)
 {
-  FT_Done_FreeType(gdk_fb_ft_lib);
+  FT_Done_FreeType (gdk_fb_ft_lib);
 }
 
-void pango_fb_font_set_size(PangoFont *font);
+void              pango_fb_font_set_size          (PangoFont                    *font);
+static void       pango_fb_font_map_init          (PangoFBFontMap               *fontmap);
+static PangoFont *pango_fb_font_map_load_font     (PangoFontMap                 *fontmap,
+						   const PangoFontDescription   *desc);
+static void       pango_fb_font_map_list_fonts    (PangoFontMap                 *fontmap,
+						   const gchar                  *family,
+						   PangoFontDescription       ***descs,
+						   int                          *n_descs);
+static void       pango_fb_font_map_list_families (PangoFontMap                 *fontmap,
+						   gchar                      ***families,
+						   int                          *n_families);
 
-static void pango_fb_font_map_init(PangoFBFontMap *fontmap);
-static PangoFont *pango_fb_font_map_load_font(PangoFontMap *fontmap,
-					      const PangoFontDescription *desc);
-static void pango_fb_font_map_list_fonts(PangoFontMap *fontmap,
-					 const gchar *family,
-					 PangoFontDescription ***descs,
-					 int *n_descs);
-static void pango_fb_font_map_list_families(PangoFontMap *fontmap,
-					    gchar ***families,
-					    int *n_families);
 
 static void
-pango_fb_font_map_class_init(PangoFBFontMapClass *class)
+pango_fb_font_map_class_init (PangoFBFontMapClass *class)
 {
   class->parent_class.load_font = pango_fb_font_map_load_font;
   class->parent_class.list_fonts = pango_fb_font_map_list_fonts;
@@ -78,7 +78,7 @@ pango_fb_font_map_class_init(PangoFBFontMapClass *class)
 }
 
 GType
-pango_fb_font_map_get_type(void)
+pango_fb_font_map_get_type (void)
 {
   static GType object_type = 0;
 
@@ -107,8 +107,8 @@ pango_fb_font_map_get_type(void)
 }
 
 static PangoFont *
-pango_fb_font_map_load_font(PangoFontMap *fontmap,
-			    const PangoFontDescription *desc)
+pango_fb_font_map_load_font (PangoFontMap *fontmap,
+			     const PangoFontDescription *desc)
 {
   PangoFBFontMap *fbfm = (PangoFBFontMap *)fontmap;
   PangoFBFont *retval;
@@ -117,68 +117,70 @@ pango_fb_font_map_load_font(PangoFontMap *fontmap,
   PangoFontDescription d2;
 
   /* XXX fixme badhack */
-  if(!strcasecmp(desc->family_name, "sans"))
+  if (!strcasecmp (desc->family_name, "sans"))
     {
       d2 = *desc;
       d2.family_name = "Arial";
       desc = &d2;
     }
   /* XXX fixme badhack */
-  if(!strcasecmp(desc->family_name, "serif"))
+  if (!strcasecmp (desc->family_name, "serif"))
     {
       d2 = *desc;
       d2.family_name = "Times New Roman";
       desc = &d2;
     }
 
-  retval = g_hash_table_lookup(fbfm->all_fonts, desc);
+  retval = g_hash_table_lookup (fbfm->all_fonts, desc);
 
-  if(retval)
+  if (retval)
     {
-      g_object_ref(G_OBJECT(retval));
+      g_object_ref (G_OBJECT(retval));
       goto out;
     }
 
-  for(i = 0; i < fbfm->all_descs->len; i++)
+  for (i = 0; i < fbfm->all_descs->len; i++)
     {
-      fl = g_ptr_array_index(fbfm->all_descs, i);
+      fl = g_ptr_array_index (fbfm->all_descs, i);
 
       /* Can't use pango_font_description_equal() because it checks ->size as well */
-      if(!g_strcasecmp(desc->family_name, fl->desc.family_name)
-	 && desc->style == fl->desc.style
-	 && desc->weight == fl->desc.weight
-	 && desc->stretch == fl->desc.stretch)
+      if (!g_strcasecmp (desc->family_name, fl->desc.family_name) &&
+	  desc->style == fl->desc.style &&
+	  desc->weight == fl->desc.weight &&
+	  desc->stretch == fl->desc.stretch)
 	break;
     }
-  if(i >= fbfm->all_descs->len)
+  if (i >= fbfm->all_descs->len)
     return NULL;
 
   retval = (PangoFBFont *)g_object_new (PANGO_TYPE_FB_FONT, NULL);
 
   retval->desc = *desc;
-  retval->desc.family_name = g_strdup(desc->family_name);
+  retval->desc.family_name = g_strdup (desc->family_name);
   retval->ftf = fl->ftf;
 
-  g_hash_table_insert(fbfm->all_fonts, &retval->desc, retval);
-  g_object_ref(G_OBJECT(retval)); /* XXX FIXME: We have to keep the font in the cache forever because I'm too clueless to see
-				     signals in gobject */
+  g_hash_table_insert (fbfm->all_fonts, &retval->desc, retval);
+  g_object_ref (G_OBJECT (retval)); /* XXX FIXME: We have to keep the font in the cache forever because I'm too clueless to see
+				       signals in gobject */
 
  out:
   return (PangoFont *)retval;
 }
 
 static void
-list_fonts(PangoFBFontMap *fm, const char *family,
-	   GPtrArray *descs, const char *dir)
+list_fonts (PangoFBFontMap *fm,
+	    const char *family,
+	    GPtrArray *descs,
+	    const char *dir)
 {
   DIR *dirh;
   struct dirent *dent;
 
-  dirh = opendir(dir);
-  if(!dirh)
+  dirh = opendir (dir);
+  if (!dirh)
     return;
 
-  while((dent = readdir(dirh)))
+  while ((dent = readdir (dirh)))
     {
       PangoFBFontListing *pfd;
       char *ctmp;
@@ -187,85 +189,85 @@ list_fonts(PangoFBFontMap *fm, const char *family,
       FT_Error ec;
       int i = 0, n = 1;
 
-      ctmp = strrchr(dent->d_name, '.');
-      if(!ctmp
-	 || (strcasecmp(ctmp, ".ttf")
-	     && strcasecmp(ctmp, ".pfa")
-	     && strcasecmp(ctmp, ".pfb")))
+      ctmp = strrchr (dent->d_name, '.');
+      if (!ctmp ||
+	  (strcasecmp (ctmp, ".ttf") &&
+	   strcasecmp (ctmp, ".pfa") &&
+	   strcasecmp (ctmp, ".pfb")))
 	continue;
 
-      g_snprintf(buf, sizeof(buf), "%s/%s", dir, dent->d_name);
+      g_snprintf (buf, sizeof(buf), "%s/%s", dir, dent->d_name);
 
-      while(i < n)
+      while (i < n)
 	{
-	  ec = FT_New_Face(gdk_fb_ft_lib, buf, i, &ftf);
-	  if(ec)
+	  ec = FT_New_Face (gdk_fb_ft_lib, buf, i, &ftf);
+	  if (ec)
 	    break; /* error opening */
 
-	  FT_Select_Charmap(ftf, ft_encoding_unicode);
+	  FT_Select_Charmap (ftf, ft_encoding_unicode);
 
 	  n = ftf->num_faces;
 
-	  if(!ftf->family_name || !ftf->style_name)
+	  if (!ftf->family_name || !ftf->style_name)
 	    {
-	      g_warning("No family/style on %s", buf);
-	      FT_Done_Face(ftf);
+	      g_warning ("No family/style on %s", buf);
+	      FT_Done_Face (ftf);
 	      break;
 	    }
 
-	  pfd = g_new0(PangoFBFontListing, 1);
+	  pfd = g_new0 (PangoFBFontListing, 1);
 	  /* Now add the item */
-	  if(ftf->family_name[0] == '/')
-	    pfd->desc.family_name = g_strdup(ftf->family_name+1);
+	  if (ftf->family_name[0] == '/')
+	    pfd->desc.family_name = g_strdup (ftf->family_name+1);
 	  else
-	    pfd->desc.family_name = g_strdup(ftf->family_name);
+	    pfd->desc.family_name = g_strdup (ftf->family_name);
 
 	  pfd->desc.style = PANGO_STYLE_NORMAL;
 	  pfd->desc.variant = PANGO_VARIANT_NORMAL;
 	  pfd->desc.weight = PANGO_WEIGHT_NORMAL;
 	  pfd->desc.stretch = PANGO_STRETCH_NORMAL;
 
-	  if(ftf->style_name)
+	  if (ftf->style_name)
 	    {
 	      char lcstr[512];
-	      strcpy(lcstr, ftf->style_name);
-	      g_strdown(lcstr);
+	      strcpy (lcstr, ftf->style_name);
+	      g_strdown (lcstr);
 
-	      if(strstr(lcstr, "italic"))
+	      if (strstr (lcstr, "italic"))
 		pfd->desc.style = PANGO_STYLE_ITALIC;
-	      else if(strstr(lcstr, "oblique"))
+	      else if (strstr (lcstr, "oblique"))
 		pfd->desc.style = PANGO_STYLE_OBLIQUE;
 
-	      if(strstr(lcstr, "bold"))
+	      if (strstr (lcstr, "bold"))
 		pfd->desc.weight = PANGO_WEIGHT_BOLD;
 
-	      if(strstr(lcstr, "condensed"))
+	      if (strstr (lcstr, "condensed"))
 		pfd->desc.stretch = PANGO_STRETCH_CONDENSED;
-	      else if(strstr(lcstr, "expanded"))
+	      else if (strstr (lcstr, "expanded"))
 		pfd->desc.stretch = PANGO_STRETCH_EXPANDED;
 	    }
 
 	  pfd->ftf = ftf;
 
-	  g_ptr_array_add(descs, pfd);
+	  g_ptr_array_add (descs, pfd);
 
 	  i++;
 	}
     }
 
-  closedir(dirh);
+  closedir (dirh);
 }
 
 static guint
-pango_font_description_hash(gconstpointer a)
+pango_font_description_hash (gconstpointer a)
 {
   const PangoFontDescription *fa = a;
 
-  return g_str_hash(fa->family_name) ^ (fa->style + fa->weight + fa->stretch + fa->variant + fa->size);
+  return g_str_hash (fa->family_name) ^ (fa->style + fa->weight + fa->stretch + fa->variant + fa->size);
 }
 
 static void
-pango_fb_font_map_init(PangoFBFontMap *fontmap)
+pango_fb_font_map_init (PangoFBFontMap *fontmap)
 {
   static const char *font_dirs[] = {
     "/usr/share/fonts/default/TrueType",
@@ -276,35 +278,35 @@ pango_fb_font_map_init(PangoFBFontMap *fontmap)
   };
   int i;
 
-  fontmap->all_fonts = g_hash_table_new(pango_font_description_hash, (GEqualFunc)pango_font_description_equal);
-  fontmap->all_descs = g_ptr_array_new();
-  for(i = 0; font_dirs[i]; i++)
-    list_fonts(fontmap, NULL, fontmap->all_descs, font_dirs[i]);
+  fontmap->all_fonts = g_hash_table_new (pango_font_description_hash, (GEqualFunc)pango_font_description_equal);
+  fontmap->all_descs = g_ptr_array_new ();
+  for (i = 0; font_dirs[i]; i++)
+    list_fonts (fontmap, NULL, fontmap->all_descs, font_dirs[i]);
 }
 
 static void
-pango_fb_font_map_list_fonts(PangoFontMap *fontmap,
-			     const gchar *family,
-			     PangoFontDescription ***descs,
-			     int *n_descs)
+pango_fb_font_map_list_fonts (PangoFontMap *fontmap,
+			      const gchar *family,
+			      PangoFontDescription ***descs,
+			      int *n_descs)
 {
   PangoFBFontMap *fbfm = (PangoFBFontMap *)fontmap;
   int i, n;
 
-  *descs = g_new(PangoFontDescription *, fbfm->all_descs->len);
+  *descs = g_new (PangoFontDescription *, fbfm->all_descs->len);
   *n_descs = fbfm->all_descs->len;
 
-  for(i = n = 0; i < fbfm->all_descs->len; i++)
+  for (i = n = 0; i < fbfm->all_descs->len; i++)
     {
-      PangoFontDescription *pfd = g_ptr_array_index(fbfm->all_descs, i);
+      PangoFontDescription *pfd = g_ptr_array_index (fbfm->all_descs, i);
 
-      if(strcasecmp(family, pfd->family_name))
+      if (strcasecmp (family, pfd->family_name))
 	continue;
 
-      (*descs)[n++] = pango_font_description_copy(pfd);
+      (*descs)[n++] = pango_font_description_copy (pfd);
     }
   *n_descs = n;
-  *descs = g_realloc(*descs, n * sizeof(PangoFontDescription *));
+  *descs = g_realloc (*descs, n * sizeof(PangoFontDescription *));
 }
 
 struct famlist {
@@ -313,40 +315,40 @@ struct famlist {
 };
 
 static void
-add_entry(gpointer key, gpointer value, gpointer data)
+add_entry (gpointer key, gpointer value, gpointer data)
 {
   struct famlist *fl = data;
-  fl->families[fl->last_added++] = g_strdup(key);
+  fl->families[fl->last_added++] = g_strdup (key);
 }
 
 static void
-pango_fb_font_map_list_families(PangoFontMap *fontmap,
-				gchar ***families,
-				int *n_families)
+pango_fb_font_map_list_families (PangoFontMap *fontmap,
+				 gchar ***families,
+				 int *n_families)
 {
   PangoFBFontMap *fbfm = (PangoFBFontMap *)fontmap;
   int i;
-  GHashTable *thash = g_hash_table_new(g_str_hash, g_str_equal);
+  GHashTable *thash = g_hash_table_new (g_str_hash, g_str_equal);
   struct famlist stickittome;
 
   for(i = 0; i < fbfm->all_descs->len; i++)
     {
-      PangoFBFontListing *fl = g_ptr_array_index(fbfm->all_descs, i);
-      g_hash_table_insert(thash, fl->desc.family_name, fl);
+      PangoFBFontListing *fl = g_ptr_array_index (fbfm->all_descs, i);
+      g_hash_table_insert (thash, fl->desc.family_name, fl);
     }
-  *n_families = g_hash_table_size(thash);
-  *families = g_new(gchar *, *n_families);
+  *n_families = g_hash_table_size (thash);
+  *families = g_new (gchar *, *n_families);
 
   stickittome.families = *families;
   stickittome.last_added = 0;
-  g_hash_table_foreach(thash, add_entry, &stickittome);
-  g_hash_table_destroy(thash);
+  g_hash_table_foreach (thash, add_entry, &stickittome);
+  g_hash_table_destroy (thash);
 }
 
 static PangoFontMap *
-pango_fb_font_map(void)
+pango_fb_font_map (void)
 {
-  return g_object_new(pango_fb_font_map_get_type(), NULL);
+  return g_object_new (pango_fb_font_map_get_type (), NULL);
 }
 
 PangoMap *
@@ -357,8 +359,8 @@ pango_fb_get_shaper_map (const char *lang)
   
   if (engine_type_id == 0)
     {
-      engine_type_id = g_quark_try_string(PANGO_ENGINE_TYPE_SHAPE);
-      render_type_id = g_quark_try_string(PANGO_RENDER_TYPE_FB);
+      engine_type_id = g_quark_try_string (PANGO_ENGINE_TYPE_SHAPE);
+      render_type_id = g_quark_try_string (PANGO_RENDER_TYPE_FB);
     }
 
   if (engine_type_id == 0)
@@ -396,23 +398,23 @@ struct _PangoFBFontClass
   PangoFontClass parent_class;
 };
 
-static void pango_fb_font_class_init (PangoFBFontClass *class);
-static void pango_fb_font_init       (PangoFBFont      *font);
-static void pango_fb_font_finalize   (GObject         *object);
+static void                  pango_fb_font_class_init        (PangoFBFontClass *class);
+static void                  pango_fb_font_init              (PangoFBFont      *font);
+static void                  pango_fb_font_finalize          (GObject          *object);
 
 static PangoFontDescription *pango_fb_font_describe          (PangoFont        *font);
 static PangoCoverage *       pango_fb_font_get_coverage      (PangoFont        *font,
-							     const char       *lang);
+							      const char       *lang);
 static PangoEngineShape *    pango_fb_font_find_shaper       (PangoFont        *font,
-							     const char       *lang,
-							     guint32           ch);
+							      const char       *lang,
+							      guint32           ch);
 static void                  pango_fb_font_get_glyph_extents (PangoFont        *font,
-							     PangoGlyph        glyph,
-							     PangoRectangle   *ink_rect,
-							     PangoRectangle   *logical_rect);
+							      PangoGlyph        glyph,
+							      PangoRectangle   *ink_rect,
+							      PangoRectangle   *logical_rect);
 static void                  pango_fb_font_get_metrics       (PangoFont        *font,
-							     const gchar      *lang,
-							     PangoFontMetrics *metrics);
+							      const gchar      *lang,
+							      PangoFontMetrics *metrics);
 
 GType
 pango_fb_font_get_type (void)
@@ -447,29 +449,29 @@ static void
 pango_fb_font_init (PangoFBFont *font)
 {
   font->desc.size = -1;
-  font->glyph_info = g_hash_table_new(NULL, NULL);
+  font->glyph_info = g_hash_table_new (NULL, NULL);
 }
 
 static gboolean
 g_free_2(gpointer key, gpointer value, gpointer data)
 {
   PangoFBGlyphInfo *pgi = value;
-  g_free(pgi->fbd.drawable_data.mem);
-  g_free(value);
+  g_free (pgi->fbd.drawable_data.mem);
+  g_free (value);
   return TRUE;
 }
 
 static void
 pango_fb_font_clear_extent_cache(PangoFBFont *fbf)
 {
-  g_hash_table_foreach_remove(fbf->glyph_info, g_free_2, NULL);
+  g_hash_table_foreach_remove (fbf->glyph_info, g_free_2, NULL);
 }
 
 PangoFBGlyphInfo *
-pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
+pango_fb_font_get_glyph_info (PangoFont *font, PangoGlyph glyph)
 {
   PangoFBGlyphInfo *pgi;
-  PangoFBFont *fbf = PANGO_FB_FONT(font);
+  PangoFBFont *fbf = PANGO_FB_FONT (font);
   FT_Bitmap *renderme;
   FT_GlyphSlot g;
   PangoRectangle *my_logical_rect, *my_ink_rect;
@@ -478,19 +480,19 @@ pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
 
   ftf = fbf->ftf;
 
-  pango_fb_font_set_size(font);
+  pango_fb_font_set_size (font);
 
-  pgi = g_hash_table_lookup(fbf->glyph_info, GUINT_TO_POINTER(glyph));
-  if(pgi)
+  pgi = g_hash_table_lookup (fbf->glyph_info, GUINT_TO_POINTER (glyph));
+  if (pgi)
     return pgi;
 
-  pgi = g_new0(PangoFBGlyphInfo, 1);
+  pgi = g_new0 (PangoFBGlyphInfo, 1);
 
-  FT_Load_Glyph(ftf, glyph, FT_LOAD_DEFAULT);
+  FT_Load_Glyph (ftf, glyph, FT_LOAD_DEFAULT);
 
   g = ftf->glyph;
 
-  if(g->format != ft_glyph_format_bitmap)
+  if (g->format != ft_glyph_format_bitmap)
     {
       FT_BitmapGlyph bgy;
       int bdepth;
@@ -505,8 +507,8 @@ pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
       bdepth = 0;
 #endif
 
-      if(FT_Get_Glyph_Bitmap(ftf, glyph, 0, bdepth, NULL, &bgy))
-	g_error("Glyph render failed");
+      if (FT_Get_Glyph_Bitmap(ftf, glyph, 0, bdepth, NULL, &bgy))
+	g_error ("Glyph render failed");
 
       renderme = &bgy->bitmap;
       free_buffer = TRUE;
@@ -514,12 +516,12 @@ pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
   else
     renderme = &g->bitmap;
 
-  pgi->fbd.drawable_data.mem = g_memdup(renderme->buffer, renderme->pitch * renderme->rows);
+  pgi->fbd.drawable_data.mem = g_memdup (renderme->buffer, renderme->pitch * renderme->rows);
   pgi->fbd.drawable_data.rowstride = renderme->pitch;
   pgi->fbd.drawable_data.width = pgi->fbd.drawable_data.lim_x = renderme->width;
   pgi->fbd.drawable_data.height = pgi->fbd.drawable_data.lim_y = renderme->rows;
 
-  switch(renderme->pixel_mode)
+  switch (renderme->pixel_mode)
     {
     case ft_pixel_mode_mono:
       pgi->fbd.drawable_data.depth = 1;
@@ -532,7 +534,7 @@ pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
 #endif
       break;
     default:
-      g_assert_not_reached();
+      g_assert_not_reached ();
       break;
     }
 
@@ -555,20 +557,20 @@ pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
 
   pgi->hbearing = ((-g->metrics.horiBearingY) >> 6);
       
-  g_hash_table_insert(fbf->glyph_info, GUINT_TO_POINTER(glyph), pgi);
+  g_hash_table_insert (fbf->glyph_info, GUINT_TO_POINTER(glyph), pgi);
 
   return pgi;
 }
 
-static void pango_fb_font_finalize   (GObject         *object)
+static void pango_fb_font_finalize (GObject         *object)
 {
-  PangoFBFont *fbf = PANGO_FB_FONT(object);
+  PangoFBFont *fbf = PANGO_FB_FONT (object);
 
   /* XXX FIXME g_hash_table_remove(ourfontmap, &fbf->desc); */
-  pango_coverage_unref(fbf->coverage);
-  g_free(fbf->desc.family_name);
-  pango_fb_font_clear_extent_cache(fbf);
-  g_hash_table_destroy(fbf->glyph_info);
+  pango_coverage_unref (fbf->coverage);
+  g_free (fbf->desc.family_name);
+  pango_fb_font_clear_extent_cache (fbf);
+  g_hash_table_destroy (fbf->glyph_info);
 }
 
 static void
@@ -586,9 +588,9 @@ pango_fb_font_class_init (PangoFBFontClass *class)
 }
 
 static PangoFontDescription *
-pango_fb_font_describe(PangoFont *font)
+pango_fb_font_describe (PangoFont *font)
 {
-  return pango_font_description_copy(&PANGO_FB_FONT(font)->desc);
+  return pango_font_description_copy (&PANGO_FB_FONT(font)->desc);
 }
 
 static void
@@ -600,23 +602,23 @@ free_coverages_foreach (gpointer key,
 }
 
 static PangoCoverage *
-pango_fb_font_get_coverage      (PangoFont        *font,
-				 const char       *lang)
+pango_fb_font_get_coverage (PangoFont        *font,
+			    const char       *lang)
 {
   int i, n;
   PangoCoverage *retval;
   PangoMap *shape_map;
   GHashTable *coverage_hash;
 
-  if(PANGO_FB_FONT(font)->coverage)
-    return pango_coverage_ref(PANGO_FB_FONT(font)->coverage);
+  if (PANGO_FB_FONT (font)->coverage)
+    return pango_coverage_ref (PANGO_FB_FONT (font)->coverage);
 
-  shape_map = pango_fb_get_shaper_map(lang);
+  shape_map = pango_fb_get_shaper_map (lang);
 
   coverage_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
-  retval = pango_coverage_new();
-  n = MIN(65536,PANGO_FB_FONT(font)->ftf->num_glyphs);
+  retval = pango_coverage_new ();
+  n = MIN( 65536, PANGO_FB_FONT (font)->ftf->num_glyphs);
   for(i = 0; i < n; i++)
     {
       PangoCoverageLevel font_level;
@@ -648,15 +650,15 @@ pango_fb_font_get_coverage      (PangoFont        *font,
   g_hash_table_foreach (coverage_hash, free_coverages_foreach, NULL);
   g_hash_table_destroy (coverage_hash);
 
-  PANGO_FB_FONT(font)->coverage = pango_coverage_ref(retval);
+  PANGO_FB_FONT (font)->coverage = pango_coverage_ref (retval);
 
   return retval;
 }
 
 static PangoEngineShape *
-pango_fb_font_find_shaper       (PangoFont        *font,
-				 const char       *lang,
-				 guint32           ch)
+pango_fb_font_find_shaper (PangoFont        *font,
+			   const char       *lang,
+			   guint32           ch)
 {
   PangoMap *shape_map = NULL;
 
@@ -671,14 +673,14 @@ EXPORT_FUNC(FT_Error) FT_New_GlyphSlot( FT_Face        face,
 #endif
 
 void
-pango_fb_font_set_size(PangoFont *font)
+pango_fb_font_set_size (PangoFont *font)
 {
   PangoFBFont *fbf = (PangoFBFont *)font;
 
-  if(PANGO_FB_FONT(font)->desc.size != GPOINTER_TO_UINT(fbf->ftf->generic.data))
+  if (PANGO_FB_FONT (font)->desc.size != GPOINTER_TO_UINT (fbf->ftf->generic.data))
     {
-      fbf->ftf->generic.data = GUINT_TO_POINTER(PANGO_FB_FONT(font)->desc.size);
-      FT_Set_Char_Size(fbf->ftf, 0, (PANGO_FB_FONT(font)->desc.size << 6)/PANGO_SCALE, 72, 72);
+      fbf->ftf->generic.data = GUINT_TO_POINTER (PANGO_FB_FONT (font)->desc.size);
+      FT_Set_Char_Size (fbf->ftf, 0, (PANGO_FB_FONT (font)->desc.size << 6)/PANGO_SCALE, 72, 72);
     }
 }
 
@@ -692,30 +694,30 @@ pango_fb_font_get_glyph_extents (PangoFont        *font,
   PangoRectangle *my_extents;
   PangoFBGlyphInfo *gi;
 
-  fbf = PANGO_FB_FONT(font);
+  fbf = PANGO_FB_FONT (font);
 
-  pango_fb_font_set_size(font);
+  pango_fb_font_set_size (font);
 
-  gi = pango_fb_font_get_glyph_info(font, glyph);
+  gi = pango_fb_font_get_glyph_info (font, glyph);
   my_extents = gi->extents;
 
-  if(ink_rect)
+  if (ink_rect)
     *ink_rect = my_extents[0];
 
-  if(logical_rect)
+  if (logical_rect)
     *logical_rect = my_extents[1];
 }
 
 static void
-pango_fb_font_get_metrics       (PangoFont        *font,
-				 const gchar      *lang,
-				 PangoFontMetrics *metrics)
+pango_fb_font_get_metrics (PangoFont        *font,
+			   const gchar      *lang,
+			   PangoFontMetrics *metrics)
 {
   FT_Face ftf;
 
-  ftf = PANGO_FB_FONT(font)->ftf;
+  ftf = PANGO_FB_FONT (font)->ftf;
 
-  if(metrics)
+  if (metrics)
     {
       metrics->ascent = ftf->ascender * PANGO_SCALE >> 6;
       metrics->descent = ftf->descender * PANGO_SCALE >> 6;
@@ -763,10 +765,10 @@ gdk_pango_context_get (void)
   PangoContext *retval;
   static PangoFontMap *font_map = NULL;
 
-  if(!font_map)
+  if (!font_map)
     font_map = pango_fb_font_map ();
 
-  retval = pango_context_new();
+  retval = pango_context_new ();
 
   pango_context_add_font_map (retval, font_map);
 

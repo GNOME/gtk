@@ -38,13 +38,13 @@ gdk_atom_intern (const gchar *atom_name,
 {
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
 
-  return g_quark_from_string(atom_name);
+  return g_quark_from_string (atom_name);
 }
 
 gchar*
 gdk_atom_name (GdkAtom atom)
 {
-  return g_quark_to_string(atom);
+  return g_quark_to_string (atom);
 }
 
 static void
@@ -55,11 +55,11 @@ gdk_property_delete_2 (GdkWindow *window,
   GdkWindowFBData *fbd = GDK_WINDOW_IMPL_FBDATA(window);
   GdkEvent *event;
   
-  g_hash_table_remove(fbd->properties, GUINT_TO_POINTER(property));
-  g_free(prop);
+  g_hash_table_remove (fbd->properties, GUINT_TO_POINTER (property));
+  g_free (prop);
 
-  event = gdk_event_make(window, GDK_PROPERTY_NOTIFY, TRUE);
-  if(event)
+  event = gdk_event_make (window, GDK_PROPERTY_NOTIFY, TRUE);
+  if (event)
     {
       event->property.atom = property;
       event->property.state = GDK_PROPERTY_DELETE;
@@ -70,20 +70,20 @@ void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
-  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA(window);
+  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA (window);
   GdkWindowProperty *prop;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if(!fbd->properties)
+  if (!fbd->properties)
     return;
 
-  prop = g_hash_table_lookup(fbd->properties, GUINT_TO_POINTER(property));
-  if(!prop)
+  prop = g_hash_table_lookup (fbd->properties, GUINT_TO_POINTER(property));
+  if (!prop)
     return;
 
-  gdk_property_delete_2(window, property, prop);
+  gdk_property_delete_2 (window, property, prop);
 }
 
 gint
@@ -98,7 +98,7 @@ gdk_property_get (GdkWindow   *window,
 		  gint        *actual_length,
 		  guchar     **data)
 {
-  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA(window);
+  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA (window);
   GdkWindowProperty *prop;
   int nbytes;
 
@@ -107,19 +107,19 @@ gdk_property_get (GdkWindow   *window,
   g_return_val_if_fail (actual_length != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  if(!fbd->properties)
+  if (!fbd->properties)
     return FALSE;
 
-  prop = g_hash_table_lookup(fbd->properties, GUINT_TO_POINTER(property));
-  if(!prop)
+  prop = g_hash_table_lookup (fbd->properties, GUINT_TO_POINTER (property));
+  if (!prop)
     return FALSE;
 
   nbytes = (offset + length * (prop->format >> 3)) - prop->length;
-  nbytes = MAX(nbytes, 0);
-  if(nbytes > 0)
+  nbytes = MAX (nbytes, 0);
+  if (nbytes > 0)
     {
-      *data = g_malloc(nbytes+1);
-      memcpy(data, prop->data + offset, nbytes);
+      *data = g_malloc (nbytes+1);
+      memcpy (data, prop->data + offset, nbytes);
       (*data)[nbytes] = 0;
     }
   else
@@ -128,8 +128,8 @@ gdk_property_get (GdkWindow   *window,
   *actual_property_type = prop->type;
   *actual_format_type = prop->format;
 
-  if(pdelete)
-    gdk_property_delete_2(window, property, prop);
+  if (pdelete)
+    gdk_property_delete_2 (window, property, prop);
 
   return TRUE;
 }
@@ -143,7 +143,7 @@ gdk_property_change (GdkWindow   *window,
 		     const guchar *data,
 		     gint         nelements)
 {
-  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA(window);
+  GdkWindowFBData *fbd = GDK_WINDOW_FBDATA (window);
   GdkWindowProperty *prop, *new_prop;
   int new_size = 0;
   GdkEvent *event;
@@ -151,10 +151,10 @@ gdk_property_change (GdkWindow   *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if(!fbd->properties)
-    fbd->properties = g_hash_table_new(NULL, NULL);
+  if (!fbd->properties)
+    fbd->properties = g_hash_table_new (NULL, NULL);
 
-  prop = g_hash_table_lookup(fbd->properties, GUINT_TO_POINTER(property));
+  prop = g_hash_table_lookup (fbd->properties, GUINT_TO_POINTER (property));
 
   switch(mode)
     {
@@ -164,39 +164,39 @@ gdk_property_change (GdkWindow   *window,
     case GDK_PROP_MODE_PREPEND:
     case GDK_PROP_MODE_APPEND:
       new_size = nelements * (format >> 3);
-      if(prop)
+      if (prop)
 	new_size += prop->length;
     default:
       break;
     }
 
-  new_prop = g_malloc(G_STRUCT_OFFSET(GdkWindowProperty, data) + new_size);
+  new_prop = g_malloc (G_STRUCT_OFFSET (GdkWindowProperty, data) + new_size);
   new_prop->length = new_size;
   new_prop->type = type;
   new_prop->format = format;
 
-  switch(mode)
+  switch (mode)
     {
     case GDK_PROP_MODE_REPLACE:
-      memcpy(new_prop->data, data, new_size);
+      memcpy (new_prop->data, data, new_size);
       break;
     case GDK_PROP_MODE_APPEND:
-      if(prop)
-	memcpy(new_prop->data, prop->data, prop->length);
-      memcpy(new_prop->data + prop->length, data, (nelements * (format >> 3)));
+      if (prop)
+	memcpy (new_prop->data, prop->data, prop->length);
+      memcpy (new_prop->data + prop->length, data, (nelements * (format >> 3)));
       break;
     case GDK_PROP_MODE_PREPEND:
-      memcpy(new_prop->data, data, (nelements * (format >> 3)));
-      if(prop)
-	memcpy(new_prop->data + (nelements * (format >> 3)), prop->data, prop->length);
+      memcpy (new_prop->data, data, (nelements * (format >> 3)));
+      if (prop)
+	memcpy (new_prop->data + (nelements * (format >> 3)), prop->data, prop->length);
       break;
     }
 
-  g_hash_table_insert(fbd->properties, GUINT_TO_POINTER(property), new_prop);
-  g_free(prop);
+  g_hash_table_insert (fbd->properties, GUINT_TO_POINTER (property), new_prop);
+  g_free (prop);
 
-  event = gdk_event_make(window, GDK_PROPERTY_NOTIFY, TRUE);
-  if(event)
+  event = gdk_event_make (window, GDK_PROPERTY_NOTIFY, TRUE);
+  if (event)
     {
       event->property.atom = property;
       event->property.state = GDK_PROPERTY_NEW_VALUE;

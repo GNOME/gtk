@@ -45,8 +45,6 @@ typedef enum {
  * this is used on both source and destination sides.
  */
 struct _GdkDragContextPrivate {
-  GdkDragContext context;
-
   guint   ref_count;
 };
 
@@ -55,11 +53,12 @@ struct _GdkDragContextPrivate {
 static GList *contexts;
 static gpointer parent_class = NULL;
 
+#define GDK_DRAG_CONTEXT_PRIVATE_DATA(ctx) ((GdkDragContextPrivate *) GDK_DRAG_CONTEXT (ctx)->windowing_data)
 
 static void
 gdk_drag_context_init (GdkDragContext *dragcontext)
 {
-  dragcontext->windowing_data = NULL;
+  dragcontext->windowing_data = g_new (GdkDragContextPrivate, 1);
 
   contexts = g_list_prepend (contexts, dragcontext);
 }
@@ -68,16 +67,22 @@ static void
 gdk_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkDragContextPrivate *private = GDK_DRAG_CONTEXT_PRIVATE_DATA (object);
   
   g_list_free (context->targets);
 
   if (context->source_window)
-    {
-      gdk_window_unref (context->source_window);
-    }
+    gdk_window_unref (context->source_window);
   
   if (context->dest_window)
     gdk_window_unref (context->dest_window);
+
+  
+  if (private)
+    {
+      g_free (private);
+      context->windowing_data = NULL;
+    }
   
   contexts = g_list_remove (contexts, context);
 
@@ -127,19 +132,19 @@ gdk_drag_context_get_type (void)
 GdkDragContext *
 gdk_drag_context_new        (void)
 {
-  return (GdkDragContext *)g_object_new(gdk_drag_context_get_type (), NULL);
+  return (GdkDragContext *)g_object_new (gdk_drag_context_get_type (), NULL);
 }
 
 void            
 gdk_drag_context_ref (GdkDragContext *context)
 {
-  g_object_ref(G_OBJECT(context));
+  g_object_ref (G_OBJECT (context));
 }
 
 void            
 gdk_drag_context_unref (GdkDragContext *context)
 {
-  g_object_unref(G_OBJECT(context));
+  g_object_unref (G_OBJECT (context));
 }
 
 /*************************************************************
@@ -207,9 +212,9 @@ gdk_drag_find_window (GdkDragContext  *context,
 {
   g_return_if_fail (context != NULL);
 
-  *dest_window = gdk_window_get_pointer(NULL, &x_root, &y_root, NULL);
-  if(*dest_window)
-    gdk_window_ref(*dest_window);
+  *dest_window = gdk_window_get_pointer (NULL, &x_root, &y_root, NULL);
+  if (*dest_window)
+    gdk_window_ref (*dest_window);
 }
 
 gboolean        

@@ -143,35 +143,35 @@ fb_modes_parse_mode (GScanner *scanner,
   int found_geometry = 0;
   int found_timings = 0;
     
-  token = g_scanner_get_next_token(scanner);
+  token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_SYMBOL)
     return -1;
   
-  keyword = GPOINTER_TO_INT(scanner->value.v_symbol);
+  keyword = GPOINTER_TO_INT (scanner->value.v_symbol);
   if (keyword != FB_MODE)
     return -1;
 
-  token = g_scanner_get_next_token(scanner);
+  token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
     return -1;
 
-  modename = g_strdup(scanner->value.v_string);
+  modename = g_strdup (scanner->value.v_string);
   
-  token = g_scanner_get_next_token(scanner);
+  token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_SYMBOL)
     {
       g_free (modename);
       return -1; /* Not a valid keyword */
     }
-  keyword = GPOINTER_TO_INT(scanner->value.v_symbol);
+  keyword = GPOINTER_TO_INT (scanner->value.v_symbol);
   while ( keyword != FB_ENDMODE )
     {
 
-      switch (GPOINTER_TO_INT(scanner->value.v_symbol))
+      switch (GPOINTER_TO_INT (scanner->value.v_symbol))
 	{
 	case FB_GEOMETRY:
 	  for (i=0;i<5;i++) {
-	    token = g_scanner_get_next_token(scanner);
+	    token = g_scanner_get_next_token (scanner);
 	    if (token != G_TOKEN_INT)
 	      {
 		g_free (modename);
@@ -183,7 +183,7 @@ fb_modes_parse_mode (GScanner *scanner,
 	  break;
 	case FB_TIMINGS:
 	  for (i=0;i<7;i++) {
-	    token = g_scanner_get_next_token(scanner);
+	    token = g_scanner_get_next_token (scanner);
 	    if (token != G_TOKEN_INT)
 	      {
 		g_free (modename);
@@ -194,15 +194,15 @@ fb_modes_parse_mode (GScanner *scanner,
 	  found_timings = TRUE;
 	  break;
 	case FB_LACED:
-	  token = g_scanner_get_next_token(scanner);
+	  token = g_scanner_get_next_token (scanner);
 	  if (token != G_TOKEN_IDENTIFIER)
 	      {
 		g_free (modename);
 		return -1;
 	      }
-	  if (g_strcasecmp(scanner->value.v_identifier, "true")==0)
+	  if (g_strcasecmp (scanner->value.v_identifier, "true")==0)
 	    laced = 1;
-	  else if (g_strcasecmp(scanner->value.v_identifier, "false")==0)
+	  else if (g_strcasecmp (scanner->value.v_identifier, "false")==0)
 	    laced = 0;
 	  else
 	    {
@@ -211,15 +211,15 @@ fb_modes_parse_mode (GScanner *scanner,
 	    }
 	  break;
 	case FB_EXTSYNC:
-	  token = g_scanner_get_next_token(scanner);
+	  token = g_scanner_get_next_token (scanner);
 	  if (token != G_TOKEN_IDENTIFIER)
 	      {
 		g_free (modename);
 		return -1;
 	      }
-	  if (g_strcasecmp(scanner->value.v_identifier, "true")==0)
+	  if (g_strcasecmp (scanner->value.v_identifier, "true")==0)
 	    extsync = 1;
-	  else if (g_strcasecmp(scanner->value.v_identifier, "false")==0)
+	  else if (g_strcasecmp (scanner->value.v_identifier, "false")==0)
 	    extsync = 0;
 	  else
 	    {
@@ -228,15 +228,15 @@ fb_modes_parse_mode (GScanner *scanner,
 	    }
 	  break;
 	case FB_DOUBLE:
-	  token = g_scanner_get_next_token(scanner);
+	  token = g_scanner_get_next_token (scanner);
 	  if (token != G_TOKEN_IDENTIFIER)
 	      {
 		g_free (modename);
 		return -1;
 	      }
-	  if (g_strcasecmp(scanner->value.v_identifier, "true")==0)
+	  if (g_strcasecmp (scanner->value.v_identifier, "true")==0)
 	    doublescan = 1;
-	  else if (g_strcasecmp(scanner->value.v_identifier, "false")==0)
+	  else if (g_strcasecmp (scanner->value.v_identifier, "false")==0)
 	    doublescan = 0;
 	  else
 	    {
@@ -245,15 +245,15 @@ fb_modes_parse_mode (GScanner *scanner,
 	    }
 	  break;
 	case FB_VSYNC:
-	  token = g_scanner_get_next_token(scanner);
+	  token = g_scanner_get_next_token (scanner);
 	  if (token != G_TOKEN_IDENTIFIER)
 	      {
 		g_free (modename);
 		return -1;
 	      }
-	  if (g_strcasecmp(scanner->value.v_identifier, "high")==0)
+	  if (g_strcasecmp (scanner->value.v_identifier, "high")==0)
 	    vsync = 1;
-	  else if (g_strcasecmp(scanner->value.v_identifier, "low")==0)
+	  else if (g_strcasecmp (scanner->value.v_identifier, "low")==0)
 	    vsync = 0;
 	  else
 	    {
@@ -262,15 +262,15 @@ fb_modes_parse_mode (GScanner *scanner,
 	    }
 	  break;
 	case FB_HSYNC:
-	  token = g_scanner_get_next_token(scanner);
+	  token = g_scanner_get_next_token (scanner);
 	  if (token != G_TOKEN_IDENTIFIER)
 	    {
 	      g_free (modename);
 	      return -1;
 	    }
-	  if (g_strcasecmp(scanner->value.v_identifier, "high")==0)
+	  if (g_strcasecmp (scanner->value.v_identifier, "high")==0)
 	    hsync = 1;
-	  else if (g_strcasecmp(scanner->value.v_identifier, "low")==0)
+	  else if (g_strcasecmp (scanner->value.v_identifier, "low")==0)
 	    hsync = 0;
 	  else
 	    {
@@ -279,15 +279,15 @@ fb_modes_parse_mode (GScanner *scanner,
 	    }
 	  break;
 	case FB_CSYNC:
-	  token = g_scanner_get_next_token(scanner);
+	  token = g_scanner_get_next_token (scanner);
 	  if (token != G_TOKEN_IDENTIFIER)
 	    {
 	      g_free (modename);
 	      return -1;
 	    }
-	  if (g_strcasecmp(scanner->value.v_identifier, "high")==0)
+	  if (g_strcasecmp (scanner->value.v_identifier, "high")==0)
 	    csync = 1;
-	  else if (g_strcasecmp(scanner->value.v_identifier, "low")==0)
+	  else if (g_strcasecmp (scanner->value.v_identifier, "low")==0)
 	    csync = 0;
 	  else
 	    {
@@ -297,18 +297,18 @@ fb_modes_parse_mode (GScanner *scanner,
 	  break;
 	}
       
-      token = g_scanner_get_next_token(scanner);
+      token = g_scanner_get_next_token (scanner);
       if (token != G_TOKEN_SYMBOL)
 	{
 	  g_free (modename);
 	  return -1; /* Not a valid keyword */
 	}
-      keyword = GPOINTER_TO_INT(scanner->value.v_symbol);
+      keyword = GPOINTER_TO_INT (scanner->value.v_symbol);
     }
 
-  if (strcmp(modename, specified_modename)== 0) {
+  if (strcmp (modename, specified_modename)== 0) {
     if (!found_geometry)
-      g_warning("Geometry not specified\n");
+      g_warning ("Geometry not specified\n");
 
     if (found_geometry)
       {
@@ -320,7 +320,7 @@ fb_modes_parse_mode (GScanner *scanner,
       }
     
     if (!found_timings)
-      g_warning("Timing not specified\n");
+      g_warning ("Timing not specified\n");
     
     if (found_timings)
       {
@@ -345,17 +345,18 @@ fb_modes_parse_mode (GScanner *scanner,
 	  modeinfo->sync |= FB_SYNC_VERT_HIGH_ACT;
       }
 
-    g_free(modename);
+    g_free (modename);
     return 1;
   }
   
-  g_free(modename);
+  g_free (modename);
 
   return 0;
 }
 
 static int
-gdk_fb_setup_mode_from_name(struct fb_var_screeninfo *modeinfo, char *modename)
+gdk_fb_setup_mode_from_name (struct fb_var_screeninfo *modeinfo,
+			     char *modename)
 {
   GScanner *scanner;
   char *filename;
@@ -378,18 +379,18 @@ gdk_fb_setup_mode_from_name(struct fb_var_screeninfo *modeinfo, char *modename)
   scanner->input_name = filename;
 
   for (i=0;i<sizeof(fb_modes_keywords)/sizeof(fb_modes_keywords[0]);i++)
-    g_scanner_add_symbol(scanner, fb_modes_keywords[i], GINT_TO_POINTER(i));
+    g_scanner_add_symbol (scanner, fb_modes_keywords[i], GINT_TO_POINTER (i));
 
   g_scanner_input_file (scanner, fd);
   
   while (1) {
-    if (g_scanner_peek_next_token(scanner) == G_TOKEN_EOF) {
+    if (g_scanner_peek_next_token (scanner) == G_TOKEN_EOF) {
       break;
     } 
-    result = fb_modes_parse_mode(scanner, modeinfo, modename);
+    result = fb_modes_parse_mode (scanner, modeinfo, modename);
       
     if (result < 0) {
-      g_warning("parse error in %s at line %d\n", filename, scanner->line);
+      g_warning ("parse error in %s at line %d\n", filename, scanner->line);
       break;
     }
     if (result > 0)
@@ -401,14 +402,14 @@ gdk_fb_setup_mode_from_name(struct fb_var_screeninfo *modeinfo, char *modename)
   
   g_scanner_destroy (scanner);
   
-  close(fd);
+  close (fd);
   
   return retval;
 }
   
 
 static int
-gdk_fb_set_mode(GdkFBDisplay *display)
+gdk_fb_set_mode (GdkFBDisplay *display)
 {
   char *env, *end;
   int depth, height, width;
@@ -416,25 +417,25 @@ gdk_fb_set_mode(GdkFBDisplay *display)
   if (ioctl (display->fd, FBIOGET_VSCREENINFO, &display->modeinfo) < 0)
     return -1;
   
-  env = getenv("GDK_DISPLAY_MODE");
+  env = getenv ("GDK_DISPLAY_MODE");
   if (env)
     {
-      if (!gdk_fb_setup_mode_from_name(&display->modeinfo, env))
-	g_warning("Couldn't find mode named '%s'\n", env);
+      if (!gdk_fb_setup_mode_from_name (&display->modeinfo, env))
+	g_warning ("Couldn't find mode named '%s'\n", env);
     }
 
-  env = getenv("GDK_DISPLAY_DEPTH");
+  env = getenv ("GDK_DISPLAY_DEPTH");
   if (env)
     {
-      depth = strtol(env, &end, 10);
+      depth = strtol (env, &end, 10);
       if (env != end)
 	display->modeinfo.bits_per_pixel = depth;
     }
   
-  env = getenv("GDK_DISPLAY_WIDTH");
+  env = getenv ("GDK_DISPLAY_WIDTH");
   if (env)
     {
-      width = strtol(env, &end, 10);
+      width = strtol (env, &end, 10);
       if (env != end)
 	{
 	  display->modeinfo.xres = width;
@@ -442,10 +443,10 @@ gdk_fb_set_mode(GdkFBDisplay *display)
 	}
     }
     
-  env = getenv("GDK_DISPLAY_HEIGHT");
+  env = getenv ("GDK_DISPLAY_HEIGHT");
   if (env)
     {
-      height = strtol(env, &end, 10);
+      height = strtol (env, &end, 10);
       if (env != end)
 	{
 	  display->modeinfo.yres = height;
@@ -455,46 +456,50 @@ gdk_fb_set_mode(GdkFBDisplay *display)
 
   if (ioctl (display->fd, FBIOPUT_VSCREENINFO, &display->modeinfo) < 0)
     {
-      g_warning("Couldn't set specified mode\n");
+      g_warning ("Couldn't set specified mode\n");
       return -1;
     }
   
   if (ioctl (display->fd, FBIOGET_FSCREENINFO, &display->sinfo) < 0)
     {
-      g_warning("Error getting fixed screen info\n");
+      g_warning ("Error getting fixed screen info\n");
       return -1;
     }
   return 0;
 }
 
 static GdkFBDisplay *
-gdk_fb_display_new(const char *filename)
+gdk_fb_display_new (const char *filename)
 {
   int fd, n;
   GdkFBDisplay *retval;
 
-  fd = open(filename, O_RDWR);
-  if(fd < 0)
+  fd = open (filename, O_RDWR);
+  if (fd < 0)
     return NULL;
 
-  retval = g_new0(GdkFBDisplay, 1);
+  retval = g_new0 (GdkFBDisplay, 1);
   retval->fd = fd;
 
-  if (gdk_fb_set_mode(retval) < 0)
+  if (gdk_fb_set_mode (retval) < 0)
     {
       g_free (retval);
       return NULL;
     }
 
-  ioctl(retval->fd, FBIOBLANK, 0);
+  ioctl (retval->fd, FBIOBLANK, 0);
 
   /* We used to use sinfo.smem_len, but that seemed to be broken in many cases */
-  retval->fbmem = mmap(NULL, retval->modeinfo.yres * retval->sinfo.line_length,
-		       PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-  g_assert(retval->fbmem != MAP_FAILED);
+  retval->fbmem = mmap (NULL,
+			retval->modeinfo.yres * retval->sinfo.line_length,
+			PROT_READ|PROT_WRITE,
+			MAP_SHARED,
+			fd,
+			0);
+  g_assert (retval->fbmem != MAP_FAILED);
 
   
-  if(retval->sinfo.visual == FB_VISUAL_PSEUDOCOLOR)
+  if (retval->sinfo.visual == FB_VISUAL_PSEUDOCOLOR)
     {
       guint16 red[256], green[256], blue[256];
       struct fb_cmap cmap;
@@ -503,10 +508,10 @@ gdk_fb_display_new(const char *filename)
       for(n = 16; n < 256; n++)
 	red[n] = green[n] = blue[n] = n << 8;
       cmap.red = red; cmap.green = green; cmap.blue = blue; cmap.len = 256; cmap.start = 0;
-      ioctl(fd, FBIOPUTCMAP, &cmap);
+      ioctl (fd, FBIOPUTCMAP, &cmap);
     }
 
-  if(retval->sinfo.visual == FB_VISUAL_TRUECOLOR)
+  if (retval->sinfo.visual == FB_VISUAL_TRUECOLOR)
     {
       retval->red_byte = retval->modeinfo.red.offset >> 3;
       retval->green_byte = retval->modeinfo.green.offset >> 3;
@@ -517,11 +522,11 @@ gdk_fb_display_new(const char *filename)
 }
 
 static void
-gdk_fb_display_destroy(GdkFBDisplay *fbd)
+gdk_fb_display_destroy (GdkFBDisplay *fbd)
 {
-  munmap(fbd->fbmem, fbd->modeinfo.yres * fbd->sinfo.line_length);
-  close(fbd->fd);
-  g_free(fbd);
+  munmap (fbd->fbmem, fbd->modeinfo.yres * fbd->sinfo.line_length);
+  close (fbd->fd);
+  g_free (fbd);
 }
 
 extern void keyboard_init(void);
@@ -529,16 +534,16 @@ extern void keyboard_init(void);
 gboolean
 _gdk_windowing_init_check (int argc, char **argv)
 {
-  if(gdk_initialized)
+  if (gdk_initialized)
     return TRUE;
 
-  keyboard_init();
-  gdk_display = gdk_fb_display_new("/dev/fb");
+  keyboard_init ();
+  gdk_display = gdk_fb_display_new ("/dev/fb");
 
-  if(!gdk_display)
+  if (!gdk_display)
     return FALSE;
 
-  gdk_fb_font_init();
+  gdk_fb_font_init ();
 
   gdk_initialized = TRUE;
 
@@ -592,34 +597,34 @@ gdk_fb_pointer_grab (GdkWindow *	  window,
 		     GdkEventMask	  event_mask,
 		     GdkWindow *	  confine_to,
 		     GdkCursor *	  cursor,
-		     guint32	  time,
-		     gboolean implicit_grab)
+		     guint32	          time,
+		     gboolean             implicit_grab)
 {
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  if(_gdk_fb_pointer_grab_window)
+  if (_gdk_fb_pointer_grab_window)
     {
-      if(implicit_grab && !_gdk_fb_pointer_implicit_grab)
+      if (implicit_grab && !_gdk_fb_pointer_implicit_grab)
 	return GDK_GRAB_ALREADY_GRABBED;
 
-      gdk_pointer_ungrab(time);
+      gdk_pointer_ungrab (time);
     }
 
   _gdk_fb_pointer_implicit_grab = implicit_grab;
 
-  _gdk_fb_pointer_grab_window = gdk_window_ref(window);
-  _gdk_fb_pointer_grab_window_events = owner_events?NULL:_gdk_fb_pointer_grab_window;
+  _gdk_fb_pointer_grab_window = gdk_window_ref (window);
+  _gdk_fb_pointer_grab_window_events = owner_events ? NULL : _gdk_fb_pointer_grab_window;
 
-  _gdk_fb_pointer_grab_confine = confine_to?gdk_window_ref(confine_to):NULL;
+  _gdk_fb_pointer_grab_confine = confine_to ? gdk_window_ref (confine_to) : NULL;
   _gdk_fb_pointer_grab_events = event_mask;
-  _gdk_fb_pointer_grab_cursor = cursor?gdk_cursor_ref(cursor):NULL;
+  _gdk_fb_pointer_grab_cursor = cursor ? gdk_cursor_ref (cursor) : NULL;
 
-  if(cursor)
-    gdk_fb_cursor_reset();
+  if (cursor)
+    gdk_fb_cursor_reset ();
 
-  gdk_fb_window_visibility_crossing(window, TRUE, TRUE);
+  gdk_fb_window_visibility_crossing (window, TRUE, TRUE);
   
   return GDK_GRAB_SUCCESS;
 }
@@ -642,7 +647,7 @@ gdk_fb_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
-  gdk_fb_pointer_ungrab(time, FALSE);
+  gdk_fb_pointer_ungrab (time, FALSE);
 }
 
 void
@@ -650,27 +655,27 @@ gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab)
 {
   gboolean have_grab_cursor = _gdk_fb_pointer_grab_cursor && 1;
 
-  if(!_gdk_fb_pointer_grab_window)
+  if (!_gdk_fb_pointer_grab_window)
     return;
 
-  if(implicit_grab && !_gdk_fb_pointer_implicit_grab)
+  if (implicit_grab && !_gdk_fb_pointer_implicit_grab)
     return;
 
-  if(_gdk_fb_pointer_grab_confine)
-    gdk_window_unref(_gdk_fb_pointer_grab_confine);
+  if (_gdk_fb_pointer_grab_confine)
+    gdk_window_unref (_gdk_fb_pointer_grab_confine);
   _gdk_fb_pointer_grab_confine = NULL;
 
-  if(_gdk_fb_pointer_grab_cursor)
-    gdk_cursor_unref(_gdk_fb_pointer_grab_cursor);
+  if (_gdk_fb_pointer_grab_cursor)
+    gdk_cursor_unref (_gdk_fb_pointer_grab_cursor);
   _gdk_fb_pointer_grab_cursor = NULL;
 
-  if(have_grab_cursor)
-    gdk_fb_cursor_reset();
+  if (have_grab_cursor)
+    gdk_fb_cursor_reset ();
 
-  gdk_fb_window_visibility_crossing(_gdk_fb_pointer_grab_window, FALSE, TRUE);
+  gdk_fb_window_visibility_crossing (_gdk_fb_pointer_grab_window, FALSE, TRUE);
   
-  if(_gdk_fb_pointer_grab_window)
-    gdk_window_unref(_gdk_fb_pointer_grab_window);
+  if (_gdk_fb_pointer_grab_window)
+    gdk_window_unref (_gdk_fb_pointer_grab_window);
   _gdk_fb_pointer_grab_window = NULL;
   _gdk_fb_pointer_grab_window_events = NULL;
 
@@ -726,11 +731,11 @@ gdk_keyboard_grab (GdkWindow *	   window,
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
-  if(_gdk_fb_pointer_grab_window)
-    gdk_keyboard_ungrab(time);
+  if (_gdk_fb_pointer_grab_window)
+    gdk_keyboard_ungrab (time);
 
-  if(!owner_events)
-    _gdk_fb_keyboard_grab_window = gdk_window_ref(window);
+  if (!owner_events)
+    _gdk_fb_keyboard_grab_window = gdk_window_ref (window);
   
   return GDK_GRAB_SUCCESS;
 }
@@ -753,8 +758,8 @@ gdk_keyboard_grab (GdkWindow *	   window,
 void
 gdk_keyboard_ungrab (guint32 time)
 {
-  if(_gdk_fb_keyboard_grab_window)
-    gdk_window_unref(_gdk_fb_keyboard_grab_window);
+  if (_gdk_fb_keyboard_grab_window)
+    gdk_window_unref (_gdk_fb_keyboard_grab_window);
   _gdk_fb_keyboard_grab_window = NULL;
 }
 
@@ -885,11 +890,12 @@ extern void keyboard_shutdown(void);
 void
 gdk_windowing_exit (void)
 {
-  gdk_fb_display_destroy(gdk_display); gdk_display = NULL;
+  gdk_fb_display_destroy (gdk_display);
+  gdk_display = NULL;
 
-  gdk_fb_font_fini();
+  gdk_fb_font_fini ();
 
-  keyboard_shutdown();
+  keyboard_shutdown ();
 }
 
 gchar*
@@ -907,12 +913,14 @@ gdk_keyval_from_name (const gchar *keyval_name)
 gchar *
 gdk_get_display(void)
 {
-  return g_strdup("/dev/fb0");
+  return g_strdup ("/dev/fb0");
 }
 
 /* utils */
 GdkEvent *
-gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
+gdk_event_make (GdkWindow *window,
+		GdkEventType type,
+		gboolean append_to_queue)
 {
   static const guint type_masks[] = {
     GDK_SUBSTRUCTURE_MASK, /* GDK_DELETE		= 0, */
@@ -953,46 +961,46 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
   evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
 
   /* Bad hack to make sure that things work semi-properly with owner_events */
-  if(_gdk_fb_pointer_grab_window)
+  if (_gdk_fb_pointer_grab_window)
     evmask |= _gdk_fb_pointer_grab_events;
-  if(_gdk_fb_keyboard_grab_window)
+  if (_gdk_fb_keyboard_grab_window)
     evmask |= _gdk_fb_keyboard_grab_events;
 
-  if(evmask & GDK_BUTTON_MOTION_MASK)
+  if (evmask & GDK_BUTTON_MOTION_MASK)
     {
       evmask |= GDK_BUTTON1_MOTION_MASK|GDK_BUTTON2_MOTION_MASK|GDK_BUTTON3_MOTION_MASK;
     }
 
-  if(evmask & (GDK_BUTTON1_MOTION_MASK|GDK_BUTTON2_MOTION_MASK|GDK_BUTTON3_MOTION_MASK))
+  if (evmask & (GDK_BUTTON1_MOTION_MASK|GDK_BUTTON2_MOTION_MASK|GDK_BUTTON3_MOTION_MASK))
     {
       gint x, y;
       GdkModifierType mask;
 
-      gdk_input_get_mouseinfo(&x, &y, &mask);
+      gdk_input_get_mouseinfo (&x, &y, &mask);
 
-      if(((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK))
-	 || ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK))
-	 || ((mask & GDK_BUTTON3_MASK) && (evmask & GDK_BUTTON3_MOTION_MASK)))
+      if (((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK)) ||
+	  ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK)) ||
+	  ((mask & GDK_BUTTON3_MASK) && (evmask & GDK_BUTTON3_MOTION_MASK)))
 	evmask |= GDK_POINTER_MOTION_MASK;
     }
 
-  if(evmask & type_masks[type])
+  if (evmask & type_masks[type])
     {
-      GdkEvent *event = gdk_event_new();
+      GdkEvent *event = gdk_event_new ();
 #if 0
       guint32 the_time = g_latest_time.tv_sec * 1000 + g_latest_time.tv_usec / 1000;
 #else
       guint32 the_time;
       GTimeVal gcurtime;
 
-	g_get_current_time(&gcurtime);
+	g_get_current_time (&gcurtime);
 	the_time = gcurtime.tv_sec * 1000 + gcurtime.tv_usec / 1000;
 #endif
 
       event->any.type = type;
-      event->any.window = gdk_window_ref(window);
+      event->any.window = gdk_window_ref (window);
       event->any.send_event = FALSE;
-      switch(type)
+      switch (type)
 	{
 	case GDK_MOTION_NOTIFY:
 	  event->motion.time = the_time;
@@ -1051,8 +1059,8 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
 	  break;
 	}
 
-      if(append_to_queue)
-	gdk_event_queue_append(event);
+      if (append_to_queue)
+	gdk_event_queue_append (event);
 
       return event;
     }
@@ -1060,7 +1068,8 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
   return NULL;
 }
 
-void CM(void)
+/* Debug hack. Call to find malloc area overwrites: */
+void CM (void)
 {
   static gpointer mymem = NULL;
   gpointer arry[256];
@@ -1068,14 +1077,14 @@ void CM(void)
 
   return;
 
-  free(mymem);
+  free (mymem);
 
   for(i = 0; i < sizeof(arry)/sizeof(arry[0]); i++)
-    arry[i] = malloc(i+1);
+    arry[i] = malloc (i+1);
   for(i = 0; i < sizeof(arry)/sizeof(arry[0]); i++)
-    free(arry[i]);
+    free (arry[i]);
 
-  mymem = malloc(256);
+  mymem = malloc (256);
 }
 
 /* XXX badhack */
@@ -1089,12 +1098,12 @@ struct _GdkWindowPaint
   gint y_offset;
 };
 
-void RP(GdkDrawable *d)
+void RP (GdkDrawable *d)
 {
 #if 0
-  if(GDK_DRAWABLE_TYPE(d) == GDK_DRAWABLE_PIXMAP)
+  if (GDK_DRAWABLE_TYPE(d) == GDK_DRAWABLE_PIXMAP)
     {
-      if(!GDK_PIXMAP_FBDATA(d)->no_free_mem)
+      if (!GDK_PIXMAP_FBDATA(d)->no_free_mem)
 	{
 	  guchar *oldmem = GDK_DRAWABLE_FBDATA(d)->mem;
 	  guint len = ((GDK_DRAWABLE_IMPL_FBDATA(d)->width * GDK_DRAWABLE_IMPL_FBDATA(d)->depth + 7) / 8) * GDK_DRAWABLE_IMPL_FBDATA(d)->height;

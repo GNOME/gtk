@@ -26,11 +26,6 @@
 
 #include <config.h>
 
-#include <endian.h>
-#ifndef __BYTE_ORDER
-#error "endian.h needs to #define __BYTE_ORDER"
-#endif
-
 #include <stdlib.h>
 #include <sys/types.h>
 #include <string.h>
@@ -42,13 +37,17 @@
 
 static gpointer parent_class = NULL;
 
-void _gdk_windowing_image_init(void)
+#define GDK_IMAGE_PRIVATE_DATA(image) ((GdkImagePrivateFB *) GDK_IMAGE (image)->windowing_data)
+
+void
+_gdk_windowing_image_init (void)
 {
 }
 
 static void
 gdk_image_init (GdkImage *image)
 {
+  image->windowing_data = g_new0 (GdkImagePrivateFB, 1);
 }
 
 static void
@@ -56,11 +55,11 @@ gdk_image_finalize (GObject *object)
 {
   GdkImage *image = GDK_IMAGE (object);
 
-  GdkImagePrivateFB *private;
-
-  private = (GdkImagePrivateFB*) image;
-
-  g_free(image->mem); image->mem = NULL;
+  g_free (image->windowing_data);
+  image->windowing_data = NULL;
+  
+  g_free (image->mem);
+  image->mem = NULL;
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -105,12 +104,17 @@ gdk_image_get_type (void)
 }
 
 GdkImage *
-gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
+gdk_image_new_bitmap(GdkVisual *visual,
+		     gpointer data,
+		     gint w,
+		     gint h)
 {
   GdkImage *image;
   GdkImagePrivateFB *private;
   
-  image = (GdkImage *)private = (GdkImagePrivateFB *)g_object_new (gdk_image_get_type (), NULL);
+  image = g_object_new (gdk_image_get_type (), NULL);
+  private = GDK_IMAGE_PRIVATE_DATA (image);
+  
   image->type = GDK_IMAGE_NORMAL;
   image->visual = visual;
   image->width = w;
@@ -118,9 +122,9 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   image->depth = 1;
 
   image->byte_order = 1 /* MSBFirst */;
-  image->mem = g_malloc(w * h / 8);
   image->bpp = 1;
   image->bpl = (w+7)/8;
+  image->mem = g_malloc (image->bpl * h / 8);
 
   return image;
 }
@@ -134,7 +138,8 @@ gdk_image_new (GdkImageType  type,
   GdkImage *image;
   GdkImagePrivateFB *private;
 
-  image = (GdkImage *)private = (GdkImagePrivateFB *)g_object_new (gdk_image_get_type(), NULL);
+  image = g_object_new (gdk_image_get_type (), NULL);
+  private = GDK_IMAGE_PRIVATE_DATA (image);
 
   image->type = 0;
   image->visual = visual;
@@ -143,9 +148,9 @@ gdk_image_new (GdkImageType  type,
   image->depth = visual->depth;
   
   image->byte_order = 0;
-  image->mem = g_malloc(width * height * (image->depth >> 3));
   image->bpp = image->depth/8;
-  image->bpl = (width * image->depth + 7)/8;
+  image->bpl = (width * image->depth + 7) / 8;
+  image->mem = g_malloc (image->bpl * height);
 
   return image;
 }
@@ -159,12 +164,13 @@ _gdk_fb_get_image (GdkDrawable *drawable,
 {
   GdkImage *image;
   GdkImagePrivateFB *private;
-  gint bits_per_pixel = GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->depth;
+  gint bits_per_pixel = GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->depth;
   GdkPixmapFBData fbd;
 
   g_return_val_if_fail (drawable != NULL, NULL);
 
-  image = (GdkImage *)private = (GdkImagePrivateFB *)g_object_new (gdk_image_get_type(), NULL);
+  image = g_object_new (gdk_image_get_type (), NULL);
+  private = GDK_IMAGE_PRIVATE_DATA (image);
 
   image->type = GDK_IMAGE_NORMAL;
   image->visual = gdk_drawable_get_visual (drawable);
@@ -181,11 +187,12 @@ _gdk_fb_get_image (GdkDrawable *drawable,
   else
     image->bpp = 4;
   image->byte_order = 1;
-  image->bpl = (image->width * image->depth + 7)/8;
-  image->mem = g_malloc(image->bpl * image->height);
+
+  image->bpl = (image->width * image->depth + 7) / 8; /* Packed pixels */
+  image->mem = g_malloc (image->bpl * image->height);
   
   /* Fake its existence as a pixmap */
-  memset(&fbd, 0, sizeof(fbd));
+  memset (&fbd, 0, sizeof(fbd));
   fbd.drawable_data.mem = image->mem;
   fbd.drawable_data.rowstride = image->bpl;
   fbd.drawable_data.width = fbd.drawable_data.lim_x = image->width;
@@ -193,7 +200,13 @@ _gdk_fb_get_image (GdkDrawable *drawable,
   fbd.drawable_data.depth = image->depth;
   fbd.drawable_data.window_type = GDK_DRAWABLE_PIXMAP;
 
-  gdk_fb_draw_drawable_2((GdkPixmap *)&fbd, NULL, drawable, x, y, 0, 0, width, height, TRUE, TRUE);
+  gdk_fb_draw_drawable_2 ((GdkPixmap *)&fbd,
+			  NULL,
+			  drawable,
+			  x, y,
+			  0, 0,
+			  width, height,
+			  TRUE, TRUE);
 
   return image;
 }
@@ -207,9 +220,9 @@ gdk_image_get_pixel (GdkImage *image,
 
   g_return_val_if_fail (image != NULL, 0);
 
-  private = (GdkImagePrivateFB *) image;
+  private = GDK_IMAGE_PRIVATE_DATA (image);
 
-  switch(image->depth)
+  switch (image->depth)
     {
     case 8:
       return ((guchar *)image->mem)[x + y * image->bpl];
@@ -239,7 +252,7 @@ gdk_image_put_pixel (GdkImage *image,
 
   g_return_if_fail (image != NULL);
 
-  switch(image->depth)
+  switch (image->depth)
     {
     case 8:
       ptr[x + y * image->bpl] = pixel;
@@ -265,7 +278,7 @@ gdk_image_put_pixel (GdkImage *image,
       }
       break;
     default:
-      g_assert_not_reached();
+      g_assert_not_reached ();
       break;
     }
 }

@@ -90,16 +90,17 @@ static GSourceFuncs event_funcs = {
  * Functions for maintaining the event queue *
  *********************************************/
 
-static gboolean fb_events_prepare(gpointer  source_data, 
-				  GTimeVal *current_time,
-				  gint     *timeout,
-				  gpointer  user_data);
-static gboolean fb_events_check(gpointer  source_data,
-				GTimeVal *current_time,
-				gpointer  user_data);
-static gboolean fb_events_dispatch(gpointer  source_data, 
-				   GTimeVal *dispatch_time,
-				   gpointer  user_data);
+static gboolean fb_events_prepare  (gpointer  source_data,
+				    GTimeVal *current_time,
+				    gint     *timeout,
+				    gpointer  user_data);
+static gboolean fb_events_check    (gpointer  source_data,
+				    GTimeVal *current_time,
+				    gpointer  user_data);
+static gboolean fb_events_dispatch (gpointer  source_data,
+				    GTimeVal *dispatch_time,
+				    gpointer  user_data);
+
 void 
 gdk_events_init (void)
 {
@@ -110,7 +111,7 @@ gdk_events_init (void)
     NULL
   };
 
-  g_source_add(GDK_PRIORITY_EVENTS, TRUE, &fb_events_funcs, NULL, NULL, NULL);
+  g_source_add (GDK_PRIORITY_EVENTS, TRUE, &fb_events_funcs, NULL, NULL, NULL);
 }
 
 /*
@@ -132,7 +133,7 @@ gdk_events_init (void)
 gboolean
 gdk_events_pending (void)
 {
-  return gdk_event_queue_find_first()?TRUE:FALSE;
+  return gdk_event_queue_find_first () ? TRUE : FALSE;
 }
 
 GdkEvent*
@@ -141,20 +142,20 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   GList *ltmp;
   g_return_val_if_fail (window != NULL, NULL);
   
-  for(ltmp = gdk_queued_events; ltmp; ltmp = ltmp->next)
+  for (ltmp = gdk_queued_events; ltmp; ltmp = ltmp->next)
     {
       GdkEvent *event = ltmp->data;
-      if(event->type == GDK_EXPOSE
-	 && event->expose.window == window)
+      if (event->type == GDK_EXPOSE &&
+	  event->expose.window == window)
 	break;
     }
 
-  if(ltmp)
+  if (ltmp)
     {
       GdkEvent *retval = ltmp->data;
 
-      gdk_event_queue_remove_link(ltmp);
-      g_list_free_1(ltmp);
+      gdk_event_queue_remove_link (ltmp);
+      g_list_free_1 (ltmp);
 
       return retval;
     }
@@ -168,53 +169,58 @@ gdk_events_queue (void)
 }
 
 static gboolean
-fb_events_prepare(gpointer  source_data, 
-		  GTimeVal *current_time,
-		  gint     *timeout,
-		  gpointer  user_data)
+fb_events_prepare (gpointer  source_data, 
+		   GTimeVal *current_time,
+		   gint     *timeout,
+		   gpointer  user_data)
 {
   *timeout = -1;
 
-  return fb_events_check(source_data, current_time, user_data);
+  return fb_events_check (source_data, current_time, user_data);
 }
 
 static gboolean
-fb_events_check(gpointer  source_data,
-		GTimeVal *current_time,
-		gpointer  user_data)
+fb_events_check (gpointer  source_data,
+		 GTimeVal *current_time,
+		 gpointer  user_data)
 {
   gboolean retval;
 
-  GDK_THREADS_ENTER();
+  GDK_THREADS_ENTER ();
 
   retval = (gdk_event_queue_find_first () != NULL);
 
-  GDK_THREADS_LEAVE();
+  GDK_THREADS_LEAVE ();
 
   return retval;
 }
 
 static gboolean
-fb_events_dispatch(gpointer source_data, GTimeVal *dispatch_time, gpointer user_data)
+fb_events_dispatch (gpointer source_data,
+		    GTimeVal *dispatch_time,
+		    gpointer user_data)
 {
   GdkEvent *event;
 
-  GDK_THREADS_ENTER();
+  GDK_THREADS_ENTER ();
 
-  while((event = gdk_event_unqueue()))
+  while (event = gdk_event_unqueue ())
     {
-      if(event->type == GDK_EXPOSE
-	 && event->expose.window == gdk_parent_root)
-	gdk_window_clear_area(event->expose.window, event->expose.area.x, event->expose.area.y, event->expose.area.width,
-			      event->expose.area.height);
+      if (event->type == GDK_EXPOSE &&
+	  event->expose.window == gdk_parent_root)
+	gdk_window_clear_area (event->expose.window,
+			       event->expose.area.x,
+			       event->expose.area.y,
+			       event->expose.area.width,
+			       event->expose.area.height);
 
-      else if(gdk_event_func)
-	(*gdk_event_func)(event, gdk_event_data);
+      else if (gdk_event_func)
+	(*gdk_event_func) (event, gdk_event_data);
 
-      gdk_event_free(event);
+      gdk_event_free (event);
     }
 
-  GDK_THREADS_LEAVE();
+  GDK_THREADS_LEAVE ();
 
   return TRUE;
 }
@@ -248,6 +254,7 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
   return FALSE;
 }
 
-void gdk_event_send_clientmessage_toall (GdkEvent *sev)
+void
+gdk_event_send_clientmessage_toall (GdkEvent *sev)
 {
 }

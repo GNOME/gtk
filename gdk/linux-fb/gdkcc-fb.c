@@ -127,7 +127,7 @@ my_x_query_colors (GdkColormap *colormap,
   for (i = 0; i < ncolors; i++)
     {
       pixel = colors[i].pixel;
-      switch(colormap->visual->depth)
+      switch (colormap->visual->depth)
 	{
 	case 8:
 	  colors[i] = colormap->colors[pixel];
@@ -143,7 +143,7 @@ my_x_query_colors (GdkColormap *colormap,
 	    << (16 - colormap->visual->blue_prec - colormap->visual->blue_shift);
 	  break;
 	default:
-	  g_assert_not_reached();
+	  g_assert_not_reached ();
 	  break;
 	}
     }
@@ -243,10 +243,10 @@ init_gray (GdkColorContext *cc)
   {
     GdkColor colr;
 
-    gdk_color_white(cc->colormap, &colr);
+    gdk_color_white (cc->colormap, &colr);
     cc->white_pixel = colr.pixel;
 
-    gdk_color_black(cc->colormap, &colr);
+    gdk_color_black (cc->colormap, &colr);
     cc->black_pixel = colr.pixel;
   }
   
@@ -277,9 +277,9 @@ init_color (GdkColorContext *cc)
   ccp->blue_mult  = 1;
   ccp->base_pixel = 0;
 
-  gdk_color_white(cc->colormap, &colr);
+  gdk_color_white (cc->colormap, &colr);
   cc->white_pixel = colr.pixel;
-  gdk_color_black(cc->colormap, &colr);
+  gdk_color_black (cc->colormap, &colr);
   cc->black_pixel = colr.pixel; 
   cc->num_colors = cc->visual->colormap_size;
   
@@ -1503,7 +1503,7 @@ gdk_color_context_add_palette (GdkColorContext *cc,
   
   /* copy incoming palette */
   
-  cc->palette = g_new0(GdkColor, num_palette);
+  cc->palette = g_new0 (GdkColor, num_palette);
   
   j = 0;
   

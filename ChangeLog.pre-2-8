@@ -1,3 +1,55 @@
+2000-11-13  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/*.[ch]:
+	Massive reindent to gtk+ standard. My hands hurt.
+
+	* gdk/linux-fb/gdkcolor-fb.c:
+	Move GdkColorPrivateFB from inherited to windowing_data
+
+	* gdk/linux-fb/gdkcursor-fb.c:
+	_gdk_cursor_new_from_pixmap made static
+
+	* gdk/linux-fb/gdkdnd-fb.c:
+	GdkDragContextPrivate moved to windowing_data
+
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	Removed endian.h, use glib endianness macros instead
+	Some cleanups in the usage of GDK_DRAWABLE_FBDATA
+	and GDK_DRAWABLE_IMPL_FBDATA
+
+	* gdk/linux-fb/gdkfont-fb.c:
+	Add empty gdk_font_load(). Needed for linking of Gtk+.
+
+	* gdk/linux-fb/gdkimage-fb.c:
+	Removed endian.h, use glib endianness macros instead
+	Moved GdkImagePrivateFB to windowing_data
+	gdk_image_new_bitmap didn't always allocate enough
+	memory.
+
+	* gdk/linux-fb/gdkinput-ps2.c:
+	Added semi-working support for MS serial mice.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	s/GdkWindowPrivate/GdkWindowObject/
+	Removed GdkWindowPrivate typedef
+	s/GDK_DRAWABLE_P/GDK_DRAWABLE_FBDATA/
+	Removed GDK_DRAWABLE_P
+	Move GdkColorPrivateFB from inherited to windowing_data
+	Moved GdkImagePrivateFB to windowing_data
+
+	* gdk/linux-fb/gdkvisual-fb.c:
+	Removed some unused debug code.
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Use stock cursors instead of including X headers.
+	s/GdkWindowPrivate/GdkWindowObject/
+
+	* gdk/linux-fb/mitypes.h:
+	Removed unused types.
+
+	* modules/linux-fb/basic.c:
+	Use the pango fribidi wrappers.
+
 2000-11-13  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* gdk/linux-fb/gdkcolor-fb.c, gdk/nanox/gdkmain-nanox.c,
