@@ -166,8 +166,7 @@ pixbuf_check_bmp (guchar *buffer, int size)
 	return TRUE;
 }
 
-
-GdkPixbufModule file_formats [] = {
+static GdkPixbufModule file_formats [] = {
 	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL, NULL },
@@ -181,6 +180,18 @@ GdkPixbufModule file_formats [] = {
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
+#ifdef USE_GMODULE 
+static gboolean
+pixbuf_module_symbol (GModule *module, const char *module_name, const char *symbol_name, gpointer *symbol)
+{
+	char *full_symbol_name = g_strconcat ("gdk_pixbuf__", module_name, "_", symbol_name, NULL);
+	gboolean return_value;
+
+	return_value = g_module_symbol (module, full_symbol_name, symbol);
+	g_free (full_symbol_name);
+	
+	return return_value;
+}
 
 /* actually load the image handler - gdk_pixbuf_get_module only get a */
 /* reference to the module to load, it doesn't actually load it       */
@@ -192,10 +203,13 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 	char *path;
 	GModule *module;
 	gpointer load_sym;
-
+	char *name;
+	
         g_return_if_fail (image_module->module == NULL);
 
-	module_name = g_strconcat ("pixbuf-", image_module->module_name, NULL);
+	name = image_module->module_name;
+	
+	module_name = g_strconcat ("pixbuf-", name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
 
 	module = g_module_open (path, G_MODULE_BIND_LAZY);
@@ -220,24 +234,150 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 
 	image_module->module = module;
 
-	if (g_module_symbol (module, "image_load", &load_sym))
+	if (pixbuf_module_symbol (module, name, "image_load", &load_sym))
 		image_module->load = load_sym;
 
-        if (g_module_symbol (module, "image_load_xpm_data", &load_sym))
+        if (pixbuf_module_symbol (module, name, "image_load_xpm_data", &load_sym))
 		image_module->load_xpm_data = load_sym;
 
-        if (g_module_symbol (module, "image_begin_load", &load_sym))
+        if (pixbuf_module_symbol (module, name, "image_begin_load", &load_sym))
 		image_module->begin_load = load_sym;
 
-        if (g_module_symbol (module, "image_stop_load", &load_sym))
+        if (pixbuf_module_symbol (module, name, "image_stop_load", &load_sym))
 		image_module->stop_load = load_sym;
 
-        if (g_module_symbol (module, "image_load_increment", &load_sym))
+        if (pixbuf_module_symbol (module, name, "image_load_increment", &load_sym))
 		image_module->load_increment = load_sym;
 
-        if (g_module_symbol (module, "image_load_animation", &load_sym))
+        if (pixbuf_module_symbol (module, name, "image_load_animation", &load_sym))
 		image_module->load_animation = load_sym;
 }
+#else
+
+#define mname(type,fn) gdk_pixbuf__ ## type ## _image_ ##fn
+#define m_load(type)  extern GdkPixbuf * mname(type,load) (FILE *f);
+#define m_load_xpm_data(type)  extern GdkPixbuf * mname(type,load_xpm_data) (const char **data);
+#define m_begin_load(type)  \
+   extern gpointer mname(type,begin_load) (ModulePreparedNotifyFunc prepare_func, \
+				 ModuleUpdatedNotifyFunc update_func, \
+				 ModuleFrameDoneNotifyFunc frame_done_func,\
+				 ModuleAnimationDoneNotifyFunc anim_done_func,\
+				 gpointer user_data);
+#define m_stop_load(type)  extern void mname(type,stop_load) (gpointer context);
+#define m_load_increment(type)  extern gboolean mname(type,load_increment) (gpointer context, const guchar *buf, guint size);
+#define m_load_animation(type)  extern GdkPixbufAnimation * mname(type,load_animation) (FILE *f);
+
+m_load (png);
+m_begin_load (png);
+m_load_increment (png);
+m_stop_load (png);
+m_load (bmp);
+m_begin_load (bmp);
+m_load_increment (bmp);
+m_stop_load (bmp);
+m_load (gif);
+m_begin_load (gif);
+m_load_increment (gif);
+m_stop_load (gif);
+m_load_animation (gif);
+m_load (ico);
+m_begin_load (ico);
+m_load_increment (ico);
+m_stop_load (ico);
+m_load (jpeg);
+m_begin_load (jpeg);
+m_load_increment (jpeg);
+m_stop_load (jpeg);
+m_load (pnm);
+m_begin_load (pnm);
+m_load_increment (pnm);
+m_stop_load (pnm);
+m_load (ras);
+m_begin_load (ras);
+m_load_increment (ras);
+m_stop_load (ras);
+m_load (tiff);
+m_begin_load (tiff);
+m_load_increment (tiff);
+m_stop_load (tiff);
+m_load (xpm);
+m_load_xpm_data (xpm);
+
+void
+gdk_pixbuf_load_module (GdkPixbufModule *image_module)
+{
+	image_module->module = (void *) 1;
+	
+	if (strcmp (image_module->module_name, "png") == 0){
+		image_module->load           = mname (png,load);
+		image_module->begin_load     = mname (png,begin_load);
+		image_module->load_increment = mname (png,load_increment);
+		image_module->stop_load      = mname (png,stop_load);
+		return;
+	}
+
+	if (strcmp (image_module->module_name, "bmp") == 0){
+		image_module->load           = mname (bmp,load);
+		image_module->begin_load     = mname (bmp,begin_load);
+		image_module->load_increment = mname (bmp,load_increment);
+		image_module->stop_load      = mname (bmp,stop_load);
+		return;
+	}
+
+	if (strcmp (image_module->module_name, "gif") == 0){
+		image_module->load           = mname (gif,load);
+		image_module->begin_load     = mname (gif,begin_load);
+		image_module->load_increment = mname (gif,load_increment);
+		image_module->stop_load      = mname (gif,stop_load);
+		image_module->load_animation = mname (gif,load_animation);
+		return;
+	}
+
+	if (strcmp (image_module->module_name, "ico") == 0){
+		image_module->load           = mname (ico,load);
+		image_module->begin_load     = mname (ico,begin_load);
+		image_module->load_increment = mname (ico,load_increment);
+		image_module->stop_load      = mname (ico,stop_load);
+		return;
+	}
+
+	if (strcmp (image_module->module_name, "jpeg") == 0){
+		image_module->load           = mname (jpeg,load);
+		image_module->begin_load     = mname (jpeg,begin_load);
+		image_module->load_increment = mname (jpeg,load_increment);
+		image_module->stop_load      = mname (jpeg,stop_load);
+		return;
+	}
+	if (strcmp (image_module->module_name, "pnm") == 0){
+		image_module->load           = mname (pnm,load);
+		image_module->begin_load     = mname (pnm,begin_load);
+		image_module->load_increment = mname (pnm,load_increment);
+		image_module->stop_load      = mname (pnm,stop_load);
+		return;
+	}
+	if (strcmp (image_module->module_name, "ras") == 0){
+		image_module->load           = mname (ras,load);
+		image_module->begin_load     = mname (ras,begin_load);
+		image_module->load_increment = mname (ras,load_increment);
+		image_module->stop_load      = mname (ras,stop_load);
+		return;
+	}
+	if (strcmp (image_module->module_name, "tiff") == 0){
+		image_module->load           = mname (tiff,load);
+		image_module->begin_load     = mname (tiff,begin_load);
+		image_module->load_increment = mname (tiff,load_increment);
+		image_module->stop_load      = mname (tiff,stop_load);
+		return;
+	}
+	if (strcmp (image_module->module_name, "xpm") == 0){
+		image_module->load           = mname (xpm,load);
+		image_module->load_xpm_data  = mname (xpm,load_xpm_data);
+		return;
+	}
+}
+
+
+#endif
 
 
 

@@ -10,6 +10,7 @@
 <!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
 <!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
 <!entity GnomeCanvasPixbuf SYSTEM "sgml/gnome-canvas-pixbuf.sgml">
+<!entity Compiling SYSTEM "compiling.sgml">
 ]>
 
 <book>
@@ -57,4 +58,6 @@
     &GdkPixbufLoader;
     &GnomeCanvasPixbuf;
   </reference>
+
+  &Compiling;
 </book>

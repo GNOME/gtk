@@ -1,0 +1,103 @@
+  <appendix id="compiling">
+    <title>Compiling the gdk-pixbuf library</title>
+
+    <para>
+      This appendix describes the special options you can use while
+      compiling the gdk-pixbuf library.
+    </para>
+
+    <sect1 id="building">
+      <title>Building the Library</title>
+      <para>
+	The gdk-pixbuf library uses the standard GNU build system,
+	using <productname>autoconf</productname> for package
+	configuration and resolving portability issues,
+	<productname>automake</productname> for building makefiles
+	that comply with the GNU Coding Standards, and
+	<productname>libtool</productname> for building shared
+	libraries on multiple platforms.  The normal sequence for
+	compiling and installing the gdk-pixbuf library is thus:
+
+	<literallayout>
+	  <userinput>./configure</userinput>
+	  <userinput>make</userinput>
+	  <userinput>make install</userinput>
+	</literallayout>
+      </para>
+
+      <para>
+	The standard options provided by <productname>GNU
+	autoconf</productname> may be passed to the
+	<command>configure</command> script.  Please see the
+	<productname>autoconf</productname> documentation or run
+	<command>./configure --help</command> for information about
+	the standard options.
+      </para>
+    </sect1>
+
+    <sect1 id="extra-configuration-options">
+      <title>Extra Configuration Options</title>
+
+      <para>
+	In addition to the normal options, the
+	<command>configure</command> script in the gdk-pixbuf library
+	supports these additional arguments:
+
+	<cmdsynopsis>
+	  <command>configure</command>
+
+	  <group>
+	    <arg>--disable-modules</arg>
+	    <arg>--enable-modules</arg>
+	  </group>
+
+	  <group>
+	    <arg>--disable-gtk-doc</arg>
+	    <arg>--enable-gtk-doc</arg>
+	  </group>
+	</cmdsynopsis>
+      </para>
+
+      <formalpara>
+	<title><systemitem>--disable-modules</systemitem> and
+	  <systemitem>--enable-modules</systemitem></title>
+
+	<para>
+	  Normally gdk-pixbuf will try to build the image file format
+	  loaders as little shared libraries that are loaded on
+	  demand.  The <systemitem>--disable-modules</systemitem>
+	  argument indicates that they should all be built statically
+	  into the gdk-pixbuf library instead.  This is useful for
+	  people who need to produce statically-linked binaries.  If
+	  neither <systemitem>--disable-modules</systemitem> nor
+	  <systemitem>--enable-modules</systemitem> is specified, then
+	  the <command>configure</command> script will try to
+	  auto-detect whether shared modules work on your system.
+	</para>
+      </formalpara>
+
+      <formalpara>
+	<title><systemitem>--disable-gtk-doc</systemitem> and
+	  <systemitem>--enable-gtk-doc</systemitem></title>
+
+	<para>
+	  By default the <command>configure</command> script will try
+	  to auto-detect whether the
+	  <productname>gtk-doc</productname> package is installed.  If
+	  it is, then it will use it to extract and build the
+	  documentation for the gdk-pixbuf library.  These options can
+	  be used to explicitly control whether gtk-doc should be used
+	  or not.  If it is not used, the distributed, pre-generated
+	  HTML files will be installed instead of building them on
+	  your machine.
+	</para>
+      </formalpara>
+    </sect1>
+  </appendix>
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("gdk-pixbuf.sgml" "book" "book" "")
+End:
+-->

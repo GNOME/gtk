@@ -93,18 +93,18 @@ struct ras_progressive_state {
 };
 
 gpointer
-image_begin_load(ModulePreparedNotifyFunc prepared_func,
-		 ModuleUpdatedNotifyFunc updated_func,
-		 ModuleFrameDoneNotifyFunc frame_done_func,
-		 ModuleAnimationDoneNotifyFunc anim_done_func,
-		 gpointer user_data);
-void image_stop_load(gpointer data);
-gboolean image_load_increment(gpointer data, guchar * buf, guint size);
+gdk_pixbuf__ras_image_begin_load(ModulePreparedNotifyFunc prepared_func,
+				 ModuleUpdatedNotifyFunc updated_func,
+				 ModuleFrameDoneNotifyFunc frame_done_func,
+				 ModuleAnimationDoneNotifyFunc anim_done_func,
+				 gpointer user_data);
+void gdk_pixbuf__ras_image_stop_load(gpointer data);
+gboolean gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size);
 
 
 
 /* Shared library entry point */
-GdkPixbuf *image_load(FILE * f)
+GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f)
 {
 	guchar *membuf;
 	size_t length;
@@ -112,7 +112,7 @@ GdkPixbuf *image_load(FILE * f)
 	
 	GdkPixbuf *pb;
 	
-	State = image_begin_load(NULL, NULL, NULL, NULL, NULL);
+	State = gdk_pixbuf__ras_image_begin_load(NULL, NULL, NULL, NULL, NULL);
 	
 	membuf = g_malloc(4096);
 	
@@ -120,7 +120,7 @@ GdkPixbuf *image_load(FILE * f)
 	
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
-		(void)image_load_increment(State, membuf, length);
+		(void)gdk_pixbuf__ras_image_load_increment(State, membuf, length);
 	} 
 	g_free(membuf);
 	if (State->pixbuf != NULL)
@@ -128,7 +128,7 @@ GdkPixbuf *image_load(FILE * f)
 
 	pb = State->pixbuf;
 
-	image_stop_load(State);
+	gdk_pixbuf__ras_image_stop_load(State);
 	return pb;
 }
 
@@ -208,11 +208,11 @@ static void RAS2State(struct rasterfile *RAS,
  */
 
 gpointer
-image_begin_load(ModulePreparedNotifyFunc prepared_func,
-		 ModuleUpdatedNotifyFunc updated_func,
-		 ModuleFrameDoneNotifyFunc frame_done_func,
-		 ModuleAnimationDoneNotifyFunc anim_done_func,
-		 gpointer user_data)
+gdk_pixbuf__ras_image_begin_load(ModulePreparedNotifyFunc prepared_func,
+				 ModuleUpdatedNotifyFunc updated_func,
+				 ModuleFrameDoneNotifyFunc frame_done_func,
+				 ModuleAnimationDoneNotifyFunc anim_done_func,
+				 gpointer user_data)
 {
 	struct ras_progressive_state *context;
 
@@ -247,7 +247,8 @@ image_begin_load(ModulePreparedNotifyFunc prepared_func,
  *
  * free context, unref gdk_pixbuf
  */
-void image_stop_load(gpointer data)
+void
+gdk_pixbuf__ras_image_stop_load(gpointer data)
 {
 	struct ras_progressive_state *context =
 	    (struct ras_progressive_state *) data;
@@ -386,7 +387,8 @@ static void OneLine(struct ras_progressive_state *context)
  *
  * append image data onto inrecrementally built output image
  */
-gboolean image_load_increment(gpointer data, guchar * buf, guint size)
+gboolean
+gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size)
 {
 	struct ras_progressive_state *context =
 	    (struct ras_progressive_state *) data;

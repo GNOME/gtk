@@ -436,7 +436,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 
 /* Shared library entry point for file loading */
 GdkPixbuf *
-image_load (FILE *f)
+gdk_pixbuf__xpm_image_load (FILE *f)
 {
 	GdkPixbuf *pixbuf;
 	struct file_handle h;
@@ -451,7 +451,7 @@ image_load (FILE *f)
 
 /* Shared library entry point for memory loading */
 GdkPixbuf *
-image_load_xpm_data (const gchar **data)
+gdk_pixbuf__xpm_image_load_xpm_data (const gchar **data)
 {
         GdkPixbuf *pixbuf;
         struct mem_handle h;

@@ -87,14 +87,14 @@ typedef struct {
 	struct error_handler_data     jerr;
 } JpegProgContext;
 
-GdkPixbuf *image_load (FILE *f);
-gpointer image_begin_load (ModulePreparedNotifyFunc func, 
-			   ModuleUpdatedNotifyFunc func2,
-			   ModuleFrameDoneNotifyFunc func3,
-			   ModuleAnimationDoneNotifyFunc func4,
-			   gpointer user_data);
-void image_stop_load (gpointer context);
-gboolean image_load_increment(gpointer context, guchar *buf, guint size);
+GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f);
+gpointer gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc func, 
+					    ModuleUpdatedNotifyFunc func2,
+					    ModuleFrameDoneNotifyFunc func3,
+					    ModuleAnimationDoneNotifyFunc func4,
+					    gpointer user_data);
+void gdk_pixbuf__jpeg_image_stop_load (gpointer context);
+gboolean gdk_pixbuf__jpeg_image_load_increment(gpointer context, guchar *buf, guint size);
 
 
 static void
@@ -151,7 +151,7 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 
 /* Shared library entry point */
 GdkPixbuf *
-image_load (FILE *f)
+gdk_pixbuf__jpeg_image_load (FILE *f)
 {
 	gint w, h, i;
 	guchar *pixels = NULL;
@@ -275,11 +275,11 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  */
 
 gpointer
-image_begin_load (ModulePreparedNotifyFunc prepared_func, 
-		  ModuleUpdatedNotifyFunc  updated_func,
-		  ModuleFrameDoneNotifyFunc frame_func,
-		  ModuleAnimationDoneNotifyFunc anim_done_func,
-		  gpointer user_data)
+gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func, 
+				   ModuleUpdatedNotifyFunc  updated_func,
+				   ModuleFrameDoneNotifyFunc frame_func,
+				   ModuleAnimationDoneNotifyFunc anim_done_func,
+				   gpointer user_data)
 {
 	JpegProgContext *context;
 	my_source_mgr   *src;
@@ -319,7 +319,7 @@ image_begin_load (ModulePreparedNotifyFunc prepared_func,
  * free context, unref gdk_pixbuf
  */
 void
-image_stop_load (gpointer data)
+gdk_pixbuf__jpeg_image_stop_load (gpointer data)
 {
 	JpegProgContext *context = (JpegProgContext *) data;
 
@@ -351,7 +351,7 @@ image_stop_load (gpointer data)
  * append image data onto inrecrementally built output image
  */
 gboolean
-image_load_increment (gpointer data, guchar *buf, guint size)
+gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
 {
 	JpegProgContext *context = (JpegProgContext *)data;
 	struct jpeg_decompress_struct *cinfo;

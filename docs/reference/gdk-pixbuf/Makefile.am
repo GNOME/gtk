@@ -38,7 +38,12 @@ gdk_pixbuf_doc_DATA =			\
 	gdk-pixbuf-decl.txt		\
 	gdk-pixbuf-sections.txt
 
-EXTRA_DIST = $(gdk_pixbuf_doc_DATA)
+content_files =				\
+	compiling.sgml
+
+EXTRA_DIST = 				\
+	$(gdk_pixbuf_doc_DATA)		\
+	$(content_files)
 
 if ENABLE_GTK_DOC
 gdk-pixbuf.html: html/book1.html
@@ -47,7 +52,7 @@ else
 gdk-pixbuf.html:
 endif
 
-html/book1.html: sgml/gdk-pixbuf-doc.bottom
+html/book1.html: sgml/gdk-pixbuf-doc.bottom $(content_files)
 	$(MAKE) html
 
 sgml/gdk-pixbuf-doc.bottom: $(tmpl_sources)

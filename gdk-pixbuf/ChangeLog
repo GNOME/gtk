@@ -1,3 +1,94 @@
+2000-02-21  Federico Mena Quintero  <federico@helixcode.com>
+
+	* configure.in (GDK_PIXBUF_MINOR): Bumped version number to 0.6.0.
+
+	* doc/compiling.sgml: New appendix documenting the gdk-pixbuf
+	library's particular options to configure.in.
+
+	* doc/gdk-pixbuf.sgml: Include compiling.sgml appendix via an
+	entity.
+
+	* doc/Makefile.am (gdk-pixbuf.html): Added compiling.sgml.
+
+	* gdk-pixbuf/io-ico.c (gdk_pixbuf__ico_image_load_increment):
+	Fixed typo in prototype name.
+
+	* configure.in: Changed duplicated AC_MSG_CHECKING message to
+	something more meaningful; now it is "checking whether dynamic
+	modules work".
+
+	* gdk-pixbuf/pixops/Makefile.am (noinst_PROGRAMS): Do not install
+	the timescale program.
+
+	Integrated Miguel de Icaza's <miguel@gnu.org> patch for optionally
+	creating a single static library with all the image format modules
+	in it.
+
+2000-02-20  Miguel de Icaza  <miguel@gnu.org>
+
+	* gdk-pixbuf/io-xpm.c (gdk_pixbuf__xpm_image_load): Add prefix.
+	(gdk_pixbuf__xpm_image_load_xpm_data): Add prefix.
+
+	* gdk-pixbuf/io-tiff.c (gdk_pixbuf__tiff_image_load_real): Add prefix.
+	(gdk_pixbuf__tiff_image_stop_load): Add prefix.
+	(gdk_pixbuf__tiff_image_load_increment): Add prefix.
+	(gdk_pixbuf__tiff_image_load): Add prefix.
+	(gdk_pixbuf__tiff_image_stop_load): Update invocation.
+	(gdk_pixbuf__tiff_image_begin_load): Add prefix.
+
+	* gdk-pixbuf/io-ras.c (gdk_pixbuf__ras_image_load): Add prefix.
+	(gdk_pixbuf__ras_image_load): Updated invocation.
+	(gdk_pixbuf__ras_image_begin_load): Add prefix.
+	(gdk_pixbuf__ras_image_stop_load): Add prefix.
+	(gdk_pixbuf__ras_image_load_increment): Add prefix.
+
+	* gdk-pixbuf/io-pnm.c (gdk_pixbuf__pnm_image_begin_load): Add prefix.
+	(gdk_pixbuf__pnm_image_stop_load): Add prefix.
+	(gdk_pixbuf__pnm_image_load_increment): Add prefix
+	(gdk_pixbuf__pnm_image_load): Add prefix.
+
+	* gdk-pixbuf/io-jpeg.c (gdk_pixbuf__jpeg_image_load): Add prefix.
+	(gdk_pixbuf__jpeg_image_load_increment): Add prefix.
+	(gdk_pixbuf__jpeg_image_begin_load): Add prefix.
+	(gdk_pixbuf__jpeg_image_stop_load): Add prefix.
+
+	* gdk-pixbuf/io-ico.c (gdk_pixbuf__ico_image_load): Add prefix.
+	(gdk_pixbuf__ico_image_load): update invocation.
+	(gdk_pixbuf__ico_image_load_increment): Add prefix.
+	(gdk_pixbuf__ico_image_load): update invocation.
+	(gdk_pixbuf__ico_image_begin_load): Add prefix.
+	(gdk_pixbuf__ico_image_load): update invocation.
+	(gdk_pixbuf__ico_image_stop_load): Add prefix.
+
+	* gdk-pixbuf/io-gif.c (gdk_pixbuf__gif_image_load_animation): Add prefix.
+	(gdk_pixbuf__gif_image_load): Add prefix.
+	(gdk_pixbuf__gif_image_begin_load): Add prefix.
+	(gdk_pixbuf__gif_image_load_increment): Add prefix.
+	(gdk_pixbuf__gif_image_load_animation): Add prefix.
+	(gdk_pixbuf__gif_image_stop_load): Add prefix.
+
+	* gdk-pixbuf/io-bmp.c (gdk_pixbuf__bmp_image_load): Add prefix.
+	(gdk_pixbuf__bmp_image_load): Rename function called.
+	(gdk_pixbuf__bmp_image_load_increment): Add prefix
+
+	* gdk-pixbuf/io-png.c (gdk_pixbuf__png_image_load): Add prefix.
+	(gdk_pixbuf__png_image_begin_load): Add prefix.
+	(gdk_pixbuf__png_image_stop_load): Add prefix.
+	(gdk_pixbuf__png_image_load_increment): Add prefix.
+
+	* gdk-pixbuf/gdk-pixbuf-io.c (file_formats): Make this static.
+	(gdk_pixbuf_load_module): Load the shared library entry points
+	using a "gdk_pixbuf__$module_name" prefix.
+	(pixbuf_module_symbol): Wrapper routine that uses the module
+	prefix for the modules to load the information.
+
+	* configure.in (GDK_PIXBUF_VERSION): New option --disable-modules
+	lets the user specify that gdk-pixbuf should link all image loader
+	code into the library instaed of creating shared library modules.
+	
+	(dynworks): Renamed the automake conditional DYNAMIC_MODULES_WORK
+	to BUILD_DYNAMIC_MODULES.
+
 2000-02-19  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/io-gif.c (new_context): fix case where initial

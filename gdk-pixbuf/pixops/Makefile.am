@@ -2,7 +2,7 @@ noinst_LTLIBRARIES = libpixops.la
 
 INCLUDES = $(GLIB_CFLAGS) $(LIBART_CFLAGS)
 
-bin_PROGRAMS = timescale
+noinst_PROGRAMS = timescale
 
 timescale_SOURCES = timescale.c
 timescale_LDADD = libpixops.la $(GLIB_LIBS) -lm

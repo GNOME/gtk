@@ -1084,7 +1084,7 @@ new_context (void)
 }
 /* Shared library entry point */
 GdkPixbuf *
-image_load (FILE *file)
+gdk_pixbuf__gif_image_load (FILE *file)
 {
 	GifContext *context;
 
@@ -1099,11 +1099,11 @@ image_load (FILE *file)
 }
 
 gpointer
-image_begin_load (ModulePreparedNotifyFunc prepare_func,
-		  ModuleUpdatedNotifyFunc update_func,
-		  ModuleFrameDoneNotifyFunc frame_done_func,
-		  ModuleAnimationDoneNotifyFunc anim_done_func,
-		  gpointer user_data)
+gdk_pixbuf__gif_image_begin_load (ModulePreparedNotifyFunc prepare_func,
+				  ModuleUpdatedNotifyFunc update_func,
+				  ModuleFrameDoneNotifyFunc frame_done_func,
+				  ModuleAnimationDoneNotifyFunc anim_done_func,
+				  gpointer user_data)
 {
 	GifContext *context;
 
@@ -1121,7 +1121,7 @@ image_begin_load (ModulePreparedNotifyFunc prepare_func,
 }
 
 void
-image_stop_load (gpointer data)
+gdk_pixbuf__gif_image_stop_load (gpointer data)
 {
 	GifContext *context = (GifContext *) data;
 
@@ -1136,7 +1136,7 @@ image_stop_load (gpointer data)
 }
 
 gboolean
-image_load_increment (gpointer data, guchar *buf, guint size)
+gdk_pixbuf__gif_image_load_increment (gpointer data, guchar *buf, guint size)
 {
 	gint retval;
 	GifContext *context = (GifContext *) data;
@@ -1194,7 +1194,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 }
 
 GdkPixbufAnimation *
-image_load_animation (FILE *file)
+gdk_pixbuf__gif_image_load_animation (FILE *file)
 {
 	GifContext *context;
 

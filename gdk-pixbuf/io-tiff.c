@@ -50,7 +50,7 @@ struct _TiffData
 
 
 GdkPixbuf *
-image_load_real (FILE *f, TiffData *context)
+gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context)
 {
 	TIFF *tiff;
 	guchar *pixels = NULL;
@@ -123,9 +123,9 @@ image_load_real (FILE *f, TiffData *context)
 /* Static loader */
 
 GdkPixbuf *
-image_load (FILE *f)
+gdk_pixbuf__tiff_image_load (FILE *f)
 {
-	return image_load_real (f, NULL);
+	return gdk_pixbuf__tiff_image_load_real (f, NULL);
 }
 
 
@@ -138,11 +138,11 @@ image_load (FILE *f)
 
 
 gpointer
-image_begin_load (ModulePreparedNotifyFunc prepare_func,
-		  ModuleUpdatedNotifyFunc update_func,
-		  ModuleFrameDoneNotifyFunc frame_done_func,
-		  ModuleAnimationDoneNotifyFunc anim_done_func,
-		  gpointer user_data)
+gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
+				   ModuleUpdatedNotifyFunc update_func,
+				   ModuleFrameDoneNotifyFunc frame_done_func,
+				   ModuleAnimationDoneNotifyFunc anim_done_func,
+				   gpointer user_data)
 {
 	TiffData *context;
 	gint fd;
@@ -169,7 +169,7 @@ image_begin_load (ModulePreparedNotifyFunc prepare_func,
 }
 
 void
-image_stop_load (gpointer data)
+gdk_pixbuf__tiff_image_stop_load (gpointer data)
 {
 	TiffData *context = (TiffData*) data;
 
@@ -178,7 +178,7 @@ image_stop_load (gpointer data)
 	fflush (context->file);
 	rewind (context->file);
 	if (context->all_okay)
-		image_load_real (context->file, context);
+		gdk_pixbuf__tiff_image_load_real (context->file, context);
 
 	fclose (context->file);
 	unlink (context->tempname);
@@ -186,7 +186,7 @@ image_stop_load (gpointer data)
 }
 
 gboolean
-image_load_increment (gpointer data, guchar *buf, guint size)
+gdk_pixbuf__tiff_image_load_increment (gpointer data, guchar *buf, guint size)
 {
 	TiffData *context = (TiffData *) data;
 

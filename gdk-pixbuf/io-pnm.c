@@ -75,14 +75,14 @@ typedef struct {
 	gboolean                 got_header;  /* have we loaded jpeg header? */
 } PnmLoaderContext;
 
-GdkPixbuf *image_load (FILE *f);
-gpointer image_begin_load (ModulePreparedNotifyFunc func, 
-			   ModuleUpdatedNotifyFunc func2,
-			   ModuleFrameDoneNotifyFunc frame_done_func,
-			   ModuleAnimationDoneNotifyFunc anim_done_func,
-			   gpointer user_data);
-void image_stop_load (gpointer context);
-gboolean image_load_increment(gpointer context, guchar *buf, guint size);
+GdkPixbuf *gdk_pixbuf__pnm_image_load (FILE *f);
+gpointer gdk_pixbuf__pnm_image_begin_load (ModulePreparedNotifyFunc func, 
+					   ModuleUpdatedNotifyFunc func2,
+					   ModuleFrameDoneNotifyFunc frame_done_func,
+					   ModuleAnimationDoneNotifyFunc anim_done_func,
+					   gpointer user_data);
+void gdk_pixbuf__pnm_image_stop_load (gpointer context);
+gboolean gdk_pixbuf__pnm_image_load_increment(gpointer context, guchar *buf, guint size);
 
 static void explode_bitmap_into_buf (PnmLoaderContext *context);
 static void explode_gray_into_buf (PnmLoaderContext *context);
@@ -580,7 +580,7 @@ pnm_read_scanline (PnmLoaderContext *context)
 
 /* Shared library entry point */
 GdkPixbuf *
-image_load (FILE *f)
+gdk_pixbuf__pnm_image_load (FILE *f)
 {
 	gint  nbytes;
 	gint   rc;
@@ -688,11 +688,11 @@ image_load (FILE *f)
  */
 
 gpointer
-image_begin_load (ModulePreparedNotifyFunc prepared_func, 
-		  ModuleUpdatedNotifyFunc  updated_func,
-		  ModuleFrameDoneNotifyFunc frame_done_func,
-		  ModuleAnimationDoneNotifyFunc anim_done_func,
-		  gpointer user_data)
+gdk_pixbuf__pnm_image_begin_load (ModulePreparedNotifyFunc prepared_func, 
+				  ModuleUpdatedNotifyFunc  updated_func,
+				  ModuleFrameDoneNotifyFunc frame_done_func,
+				  ModuleAnimationDoneNotifyFunc anim_done_func,
+				  gpointer user_data)
 {
 	PnmLoaderContext *context;
 
@@ -717,7 +717,7 @@ image_begin_load (ModulePreparedNotifyFunc prepared_func,
  * free context, unref gdk_pixbuf
  */
 void
-image_stop_load (gpointer data)
+gdk_pixbuf__pnm_image_stop_load (gpointer data)
 {
 	PnmLoaderContext *context = (PnmLoaderContext *) data;
 
@@ -740,7 +740,7 @@ image_stop_load (gpointer data)
  * append image data onto inrecrementally built output image
  */
 gboolean
-image_load_increment (gpointer data, guchar *buf, guint size)
+gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size)
 {
 	PnmLoaderContext *context = (PnmLoaderContext *)data;
 	PnmIOBuffer      *inbuf;
