@@ -31,6 +31,8 @@ struct _GtkTreeDataList
 
   union {
     gint	   v_int;
+    gint8          v_char;
+    guint8         v_uchar;
     guint	   v_uint;
     gfloat	   v_float;
     gpointer	   v_pointer;

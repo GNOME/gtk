@@ -136,8 +136,29 @@ gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
 
   switch (type)
     {
+    case G_TYPE_BOOLEAN:
+      g_value_set_boolean (value, (gboolean) list->data.v_int);
+      break;
+    case G_TYPE_CHAR:
+      g_value_set_char (value, list->data.v_char);
+      break;
+    case G_TYPE_UCHAR:
+      g_value_set_uchar (value, list->data.v_uchar);
+      break;
+    case G_TYPE_INT:
+      g_value_set_int (value, list->data.v_int);
+      break;
+    case G_TYPE_UINT:
+      g_value_set_uint (value, list->data.v_uint);
+      break;
+    case G_TYPE_FLOAT:
+      g_value_set_float (value, list->data.v_float);
+      break;
     case G_TYPE_STRING:
       g_value_set_string (value, (gchar *) list->data.v_pointer);
+      break;
+    case G_TYPE_OBJECT:
+      g_value_set_object (value, (GObject *) list->data.v_pointer);
       break;
     }
 }
@@ -148,12 +169,34 @@ gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
 {
   switch (value->g_type)
     {
+    case G_TYPE_BOOLEAN:
+      list->data.v_int = g_value_get_boolean (value);
+      break;
+    case G_TYPE_CHAR:
+      list->data.v_char = g_value_get_char (value);
+      break;
+    case G_TYPE_UCHAR:
+      list->data.v_uchar = g_value_get_uchar (value);
+      break;
+    case G_TYPE_INT:
+      list->data.v_int = g_value_get_int (value);
+      break;
+    case G_TYPE_UINT:
+      list->data.v_uint = g_value_get_uint (value);
+      break;
+    case G_TYPE_FLOAT:
+      list->data.v_float = g_value_get_float (value);
+      break;
     case G_TYPE_STRING:
       list->data.v_pointer = g_value_dup_string (value);
+      break;
+    case G_TYPE_OBJECT:
+      list->data.v_pointer = g_value_dup_object (value);
       break;
     default:
       g_warning ("Unsupported type (%s) stored.", g_type_name (value->g_type));
       return;
     }
 }
+
 

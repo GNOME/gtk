@@ -726,6 +726,8 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
     gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
 }
 
+/* NOTE: Any {un,}selection ever done _MUST_ be done through this function!
+ */
 static gint
 gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 				     GtkRBTree        *tree,
