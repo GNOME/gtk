@@ -1,3 +1,13 @@
+2001-10-24  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextiter.c (gtk_text_iter_backward_chars): if we move to
+	the front of a segment, use the "slow" technique for moving
+	backward, so we don't mess up the any_segment field in the iter. 
+	Fixes #57707
+
+	* tests/testtextbuffer.c: add code to detect #57707, to avoid
+	regression
+
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (popup_targets_received): only sensitize Cut

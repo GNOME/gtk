@@ -92,10 +92,10 @@ main (int argc, char** argv)
   /* Put stuff in the buffer */
 
   fill_buffer (buffer);
-
+#if 0
   /* Subject stuff-bloated buffer to further torment */
   run_tests (buffer);
-
+#endif
   /* Delete all stuff from the buffer */
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   gtk_text_buffer_delete (buffer, &start, &end);
@@ -112,6 +112,13 @@ main (int argc, char** argv)
 
   run_tests (buffer);
 
+  gtk_text_buffer_set_text (buffer, "adcdef", -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 3);
+  gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &start, &end);
+  
+  run_tests (buffer);
+  
   g_object_unref (G_OBJECT (buffer));
   
   g_print ("All tests passed.\n");
@@ -203,32 +210,48 @@ count_toggles_at_iter (GtkTextIter *iter,
 
   return count;
 }
-     
+
 static gint
-count_toggles_in_buffer (GtkTextBuffer *buffer,
-                         GtkTextTag    *of_tag)
+count_toggles_in_range_by_char (GtkTextBuffer     *buffer,
+                                GtkTextTag        *of_tag,
+                                const GtkTextIter *start,
+                                const GtkTextIter *end)
 {
   GtkTextIter iter;
   gint count = 0;
   
-  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+  iter = *start;
   do
     {
       count += count_toggles_at_iter (&iter, of_tag);
+      if (!gtk_text_iter_forward_char (&iter))
+        {
+          /* end iterator */
+          count += count_toggles_at_iter (&iter, of_tag);
+          break;
+        }
     }
-  while (gtk_text_iter_forward_char (&iter));
-
-  /* Do the end iterator, because forward_char won't return TRUE
-   * on it.
-   */
-  count += count_toggles_at_iter (&iter, of_tag);
+  while (gtk_text_iter_compare (&iter, end) <= 0);
   
   return count;
 }
 
+static gint
+count_toggles_in_buffer (GtkTextBuffer *buffer,
+                         GtkTextTag    *of_tag)
+{
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+
+  return count_toggles_in_range_by_char (buffer, of_tag, &start, &end);
+}
+
 static void
-check_specific_tag (GtkTextBuffer *buffer,
-                    const gchar   *tag_name)
+check_specific_tag_in_range (GtkTextBuffer     *buffer,
+                             const gchar       *tag_name,
+                             const GtkTextIter *start,
+                             const GtkTextIter *end)
 {
   GtkTextIter iter;
   GtkTextTag *tag;
@@ -236,17 +259,23 @@ check_specific_tag (GtkTextBuffer *buffer,
   gint count;
   gint buffer_count;
   gint last_offset;
+
+  if (gtk_text_iter_compare (start, end) > 0)
+    {
+      g_print ("  (inverted range for checking tags, skipping)\n");
+      return;
+    }
   
   tag = gtk_text_tag_table_lookup (gtk_text_buffer_get_tag_table (buffer),
                                    tag_name);
 
-  buffer_count = count_toggles_in_buffer (buffer, tag);
+  buffer_count = count_toggles_in_range_by_char (buffer, tag, start, end);
   
   state = FALSE;
   count = 0;
 
   last_offset = -1;
-  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+  iter = *start;
   if (gtk_text_iter_toggles_tag (&iter, tag) ||
       gtk_text_iter_forward_to_tag_toggle (&iter, tag))
     {
@@ -278,17 +307,18 @@ check_specific_tag (GtkTextBuffer *buffer,
           else
             g_error ("forward_to_tag_toggle went to a location without a toggle");
         }
-      while (gtk_text_iter_forward_to_tag_toggle (&iter, tag));
+      while (gtk_text_iter_forward_to_tag_toggle (&iter, tag) &&
+             gtk_text_iter_compare (&iter, end) <= 0);
     }
 
   if (count != buffer_count)
-    g_error ("Counted %d tags iterating by char, %d iterating by tag toggle\n",
+    g_error ("Counted %d tags iterating by char, %d iterating forward by tag toggle\n",
              buffer_count, count);
   
   state = FALSE;
   count = 0;
   
-  gtk_text_buffer_get_end_iter (buffer, &iter);
+  iter = *end;
   last_offset = gtk_text_iter_get_offset (&iter);
   if (gtk_text_iter_toggles_tag (&iter, tag) ||
       gtk_text_iter_backward_to_tag_toggle (&iter, tag))
@@ -321,13 +351,27 @@ check_specific_tag (GtkTextBuffer *buffer,
           else
             g_error ("backward_to_tag_toggle went to a location without a toggle");
         }
-      while (gtk_text_iter_backward_to_tag_toggle (&iter, tag));
+      while (gtk_text_iter_backward_to_tag_toggle (&iter, tag) &&
+             gtk_text_iter_compare (&iter, start) >= 0);
     }
 
   if (count != buffer_count)
-    g_error ("Counted %d tags iterating by char, %d iterating by tag toggle\n",
+    g_error ("Counted %d tags iterating by char, %d iterating backward by tag toggle\n",
              buffer_count, count);
+}
 
+static void
+check_specific_tag (GtkTextBuffer *buffer,
+                    const gchar   *tag_name)
+{
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  check_specific_tag_in_range (buffer, tag_name, &start, &end);
+  gtk_text_iter_forward_chars (&start, 2);
+  gtk_text_iter_backward_chars (&end, 2);
+  if (gtk_text_iter_compare (&start, &end) < 0)
+    check_specific_tag_in_range (buffer, tag_name, &start, &end);
 }
 
 static void

@@ -2347,7 +2347,11 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
   ensure_char_offsets (real);
   check_invariants (iter);
 
-  if (count <= real->segment_char_offset)
+  /* <, not <=, because if count == segment_char_offset
+   * we're going to the front of the segment and the any_segment
+   * might change
+   */
+  if (count < real->segment_char_offset)
     {
       /* Optimize the within-segment case */
       g_assert (real->segment->char_count > 0);
@@ -2402,6 +2406,7 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
           new_char_index = current_char_index - count;
           if (new_char_index < 0)
             new_char_index = 0;
+
           gtk_text_iter_set_offset (iter, new_char_index);
 
           check_invariants (iter);
