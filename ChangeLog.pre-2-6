@@ -1,3 +1,8 @@
+Wed Nov 12 21:00:10 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkinputdialog.c (gtk_input_dialog_init): Clarify the
+	label for the empty list. String change.  (#95446, Tomas Ögren)
+
 Wed Nov 12 20:57:50 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkicontheme.h (enum GtkIconLookupFlags): Correct

@@ -239,7 +239,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (inputd)->vbox), private->main_vbox,
 		      TRUE, TRUE, 0);
 
-  private->no_devices_label = gtk_label_new (_("No input devices"));
+  private->no_devices_label = gtk_label_new (_("No extended input devices"));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (inputd)->vbox),
 		      private->no_devices_label,
 		      TRUE, TRUE, 0);
