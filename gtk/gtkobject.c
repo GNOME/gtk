@@ -310,7 +310,7 @@ gtk_object_set_arg (GtkObject *object,
 	{
 	  gtk_signal_connect_full (object,
 				   arg_name + n + 2,
-				   (GtkSignalFunc) GTK_VALUE_SIGNAL (*arg).f, NULL,
+				   GTK_VALUE_SIGNAL (*arg).f, NULL,
 				   GTK_VALUE_SIGNAL (*arg).d,
 				   NULL,
 				   (arg_id == ARG_OBJECT_SIGNAL ||

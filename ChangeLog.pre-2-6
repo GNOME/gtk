@@ -1,3 +1,23 @@
+Tue Jul 14 06:25:46 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c (create_cursors): display the current cursor name.
+
+	* gtk/gtktypeutils.h: 
+	* gtk/gtktypeutils.c (gtk_type_init_builtin_types): cleanups to
+	the fundamental type definition. the GtkArg union now only covers
+	the required storage types for argument values. adapted the GTK_VALUE_*
+	macro set. handle GTK_TYPE_UCHAR. definiton of type set bounds macros.
+
+	* gtk/gtkargcollector.c (gtk_arg_collect_value): clean ups of the
+	code, fixed int/float collection. fixed a bug in the sanity checking
+	code for GtkObjects.
+
+	* gtk/gtkbindings.c (gtk_binding_entry_add_signal): fixups of the
+	argument collection code.
+
+	* gtk/gtksignal.c (gtk_signal_collect_params): use the type set bounds
+	macros when distinguishing the return type.
+
 Mon Jul 13 12:42:51 1998  George Lebl  <jirka@5z.com>
 
 	* gdk/gdkwindow.h: (gdk_window_reparent) check if old_parent_private

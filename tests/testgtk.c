@@ -2710,9 +2710,20 @@ set_cursor (GtkWidget *spinner,
 {
   guint c;
   GdkCursor *cursor;
+  GtkWidget *label;
+  GtkFlagValue *vals;
 
   c = CLAMP (gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spinner)), 0, 152);
   c &= 0xfe;
+
+  label = gtk_object_get_user_data (GTK_OBJECT (spinner));
+  vals = gtk_type_enum_get_values (GTK_TYPE_GDK_CURSOR_TYPE);
+  while (vals && vals->value != c)
+    vals++;
+  if (vals)
+    gtk_label_set (GTK_LABEL (label), vals->value_nick);
+  else
+    gtk_label_set (GTK_LABEL (label), "<unknown>");
 
   cursor = gdk_cursor_new (c);
   gdk_window_set_cursor (widget->window, cursor);
@@ -2816,6 +2827,16 @@ create_cursors (void)
       gtk_signal_connect (GTK_OBJECT (spinner), "changed",
 			  GTK_SIGNAL_FUNC (set_cursor),
 			  darea);
+
+      label = gtk_widget_new (GTK_TYPE_LABEL,
+			      "visible", TRUE,
+			      "label", "XXX",
+			      "parent", vbox,
+			      NULL);
+      gtk_container_child_set (GTK_CONTAINER (vbox), label,
+			       "expand", FALSE,
+			       NULL);
+      gtk_object_set_user_data (GTK_OBJECT (spinner), label);
 
       any =
 	gtk_widget_new (gtk_hseparator_get_type (),

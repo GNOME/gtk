@@ -32,14 +32,27 @@ gtk_arg_collect_value (GtkType  fundamental_type,
     case GTK_TYPE_INVALID:
       error_msg = g_strdup ("invalid untyped argument");
       break;
+
     case GTK_TYPE_NONE:
-      /* error_msg = g_strdup ("invalid argument type `void'"); */
+      /* we just ignore this type, since it arithmetically just requires
+       * us to not move the var_args pointer any further. callers need to
+       * check for the validity of GTK_TYPE_NONE themselves.
+       *
+       * error_msg = g_strdup ("invalid argument type `void'");
+       */
       break;
+
+      /* everything smaller than an int is guarranteed to be
+       * passed as an int
+       */
     case GTK_TYPE_CHAR:
-      GTK_VALUE_CHAR (*arg) = va_arg (*var_args, gchar);
+      GTK_VALUE_CHAR (*arg) = va_arg (*var_args, gint);
+      break;
+    case GTK_TYPE_UCHAR:
+      GTK_VALUE_UCHAR (*arg) = va_arg (*var_args, guint);
       break;
     case GTK_TYPE_BOOL:
-      GTK_VALUE_BOOL (*arg) = va_arg (*var_args, gboolean);
+      GTK_VALUE_BOOL (*arg) = va_arg (*var_args, gint);
       break;
     case GTK_TYPE_INT:
       GTK_VALUE_INT (*arg) = va_arg (*var_args, gint);
@@ -51,14 +64,21 @@ gtk_arg_collect_value (GtkType  fundamental_type,
       GTK_VALUE_ENUM (*arg) = va_arg (*var_args, gint);
       break;
     case GTK_TYPE_FLAGS:
-      GTK_VALUE_FLAGS (*arg) = va_arg (*var_args, gint);
+      GTK_VALUE_FLAGS (*arg) = va_arg (*var_args, guint);
       break;
+
+      /* we collect longs as glongs since they differ in size with
+       * integers on some platforms
+       */
     case GTK_TYPE_LONG:
       GTK_VALUE_LONG (*arg) = va_arg (*var_args, glong);
       break;
     case GTK_TYPE_ULONG:
       GTK_VALUE_ULONG (*arg) = va_arg (*var_args, gulong);
       break;
+
+      /* floats are always passed as doubles
+       */
     case GTK_TYPE_FLOAT:
       /* GTK_VALUE_FLOAT (*arg) = va_arg (*var_args, gfloat); */
       GTK_VALUE_FLOAT (*arg) = va_arg (*var_args, gdouble);
@@ -66,6 +86,9 @@ gtk_arg_collect_value (GtkType  fundamental_type,
     case GTK_TYPE_DOUBLE:
       GTK_VALUE_DOUBLE (*arg) = va_arg (*var_args, gdouble);
       break;
+
+      /* collect pointer values
+       */
     case GTK_TYPE_STRING:
       GTK_VALUE_STRING (*arg) = va_arg (*var_args, gchar*);
       break;
@@ -75,9 +98,16 @@ gtk_arg_collect_value (GtkType  fundamental_type,
     case GTK_TYPE_BOXED:
       GTK_VALUE_BOXED (*arg) = va_arg (*var_args, gpointer);
       break;
+
+      /* structured types
+       */
     case GTK_TYPE_SIGNAL:
-      GTK_VALUE_SIGNAL (*arg).f = va_arg (*var_args, GtkFunction);
+      GTK_VALUE_SIGNAL (*arg).f = va_arg (*var_args, GtkSignalFunc);
       GTK_VALUE_SIGNAL (*arg).d = va_arg (*var_args, gpointer);
+      break;
+    case GTK_TYPE_ARGS:
+      GTK_VALUE_ARGS (*arg).n_args = va_arg (*var_args, gint);
+      GTK_VALUE_ARGS (*arg).args = va_arg (*var_args, GtkArg*);
       break;
     case GTK_TYPE_FOREIGN:
       GTK_VALUE_FOREIGN (*arg).data = va_arg (*var_args, gpointer);
@@ -92,18 +122,23 @@ gtk_arg_collect_value (GtkType  fundamental_type,
       GTK_VALUE_C_CALLBACK (*arg).func = va_arg (*var_args, GtkFunction);
       GTK_VALUE_C_CALLBACK (*arg).func_data = va_arg (*var_args, gpointer);
       break;
-    case GTK_TYPE_ARGS:
-      GTK_VALUE_ARGS (*arg).n_args = va_arg (*var_args, gint);
-      GTK_VALUE_ARGS (*arg).args = va_arg (*var_args, GtkArg*);
-      break;
+
+      /* we do some extra sanity checking when collecting objects,
+       * i.e. if the object pointer is not NULL, we check whether we
+       * actually got an object pointer within the desired class branch.
+       */
     case GTK_TYPE_OBJECT:
       GTK_VALUE_OBJECT (*arg) = va_arg (*var_args, GtkObject*);
       if (GTK_VALUE_OBJECT (*arg) != NULL)
 	{
 	  register GtkObject *object = GTK_VALUE_OBJECT (*arg);
-
-	  if (object->klass == NULL ||
-	      !gtk_type_is_a (GTK_OBJECT_TYPE (object), arg->type))
+	  
+	  if (object->klass == NULL)
+	    error_msg = g_strconcat ("invalid unclassed object pointer for argument type `",
+				     gtk_type_name (arg->type),
+				     "'",
+				     NULL);
+	  else if (!gtk_type_is_a (GTK_OBJECT_TYPE (object), arg->type))
 	    error_msg = g_strconcat ("invalid object `",
 				     gtk_type_name (GTK_OBJECT_TYPE (object)),
 				     "' for argument type `",
@@ -112,6 +147,7 @@ gtk_arg_collect_value (GtkType  fundamental_type,
 				     NULL);
 	}
       break;
+
     default:
       error_msg = g_strconcat ("unsupported argument type `",
 			       gtk_type_name (arg->type),
@@ -119,6 +155,6 @@ gtk_arg_collect_value (GtkType  fundamental_type,
 			       NULL);
       break;
     }
-
+  
   return error_msg;
 }

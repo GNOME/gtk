@@ -315,6 +315,7 @@
    (invalid GTK_TYPE_INVALID)
    (none GTK_TYPE_NONE)
    (char GTK_TYPE_CHAR)
+   (uchar GTK_TYPE_UCHAR)
    (bool GTK_TYPE_BOOL)
    (int GTK_TYPE_INT)
    (uint GTK_TYPE_UINT)
@@ -326,12 +327,12 @@
    (enum GTK_TYPE_ENUM)
    (flags GTK_TYPE_FLAGS)
    (boxed GTK_TYPE_BOXED)
-   (foreign GTK_TYPE_FOREIGN)
-   (callback GTK_TYPE_CALLBACK)
-   (args GTK_TYPE_ARGS)
    (pointer GTK_TYPE_POINTER)
    (signal GTK_TYPE_SIGNAL)
+   (args GTK_TYPE_ARGS)
+   (callback GTK_TYPE_CALLBACK)
    (c-callback GTK_TYPE_C_CALLBACK)
+   (foreign GTK_TYPE_FOREIGN)
    (object GTK_TYPE_OBJECT))
 
 ; enumerations from "./gtkwidget.h"

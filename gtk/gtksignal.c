@@ -1832,9 +1832,8 @@ gtk_signal_collect_params (GtkArg	       *params,
   return_type = GTK_FUNDAMENTAL_TYPE (return_type);
   if (return_type != GTK_TYPE_NONE)
     {
-      if ((return_type >= GTK_TYPE_CHAR &&
-	   return_type <= GTK_TYPE_BOXED) ||
-	  (return_type == GTK_TYPE_POINTER) ||
+      if ((return_type >= GTK_TYPE_FLAT_FIRST &&
+	   return_type <= GTK_TYPE_FLAT_LAST) ||
 	  (return_type == GTK_TYPE_OBJECT))
 	{
 	  GTK_VALUE_POINTER (*params) = va_arg (var_args, gpointer);

@@ -643,16 +643,16 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
       arg->arg_type = va_arg (args, GtkType);
       switch (GTK_FUNDAMENTAL_TYPE (arg->arg_type))
 	{
+	  /* for elaborated commenting about var args collection, take a look
+	   * at gtk_arg_collect_value() in gtkargcollector.c
+	   */
 	case GTK_TYPE_CHAR:
-	  arg->arg_type = GTK_TYPE_LONG;
-	  arg->d.long_data = va_arg (args, gchar);
-	  break;
-	case GTK_TYPE_BOOL:
-	  arg->arg_type = GTK_TYPE_LONG;
-	  arg->d.long_data = va_arg (args, gboolean) != 0;
-	  break;
+	case GTK_TYPE_UCHAR:
 	case GTK_TYPE_INT:
 	case GTK_TYPE_UINT:
+	case GTK_TYPE_BOOL:
+	case GTK_TYPE_ENUM:
+	case GTK_TYPE_FLAGS:
 	  arg->arg_type = GTK_TYPE_LONG;
 	  arg->d.long_data = va_arg (args, gint);
 	  break;
@@ -662,9 +662,6 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
 	  arg->d.long_data = va_arg (args, glong);
 	  break;
 	case GTK_TYPE_FLOAT:
-	  arg->arg_type = GTK_TYPE_DOUBLE;
-	  arg->d.double_data = va_arg (args, gfloat);
-	  break;
 	case GTK_TYPE_DOUBLE:
 	  arg->arg_type = GTK_TYPE_DOUBLE;
 	  arg->d.double_data = va_arg (args, gdouble);
@@ -680,11 +677,6 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
 			 i);
 	      i += n_args + 1;
 	    }
-	  break;
-	case GTK_TYPE_ENUM:
-	case GTK_TYPE_FLAGS:
-	  arg->arg_type = GTK_TYPE_LONG;
-	  arg->d.long_data = va_arg (args, gint);
 	  break;
 	default:
 	  g_warning ("gtk_binding_entry_add_signal(): unsupported type `%s' for arg[%u]",

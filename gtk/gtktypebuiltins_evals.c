@@ -337,6 +337,7 @@ static GtkEnumValue _gtk_fundamental_type_values[] = {
   { GTK_TYPE_INVALID, "GTK_TYPE_INVALID", "invalid" },
   { GTK_TYPE_NONE, "GTK_TYPE_NONE", "none" },
   { GTK_TYPE_CHAR, "GTK_TYPE_CHAR", "char" },
+  { GTK_TYPE_UCHAR, "GTK_TYPE_UCHAR", "uchar" },
   { GTK_TYPE_BOOL, "GTK_TYPE_BOOL", "bool" },
   { GTK_TYPE_INT, "GTK_TYPE_INT", "int" },
   { GTK_TYPE_UINT, "GTK_TYPE_UINT", "uint" },
@@ -348,12 +349,12 @@ static GtkEnumValue _gtk_fundamental_type_values[] = {
   { GTK_TYPE_ENUM, "GTK_TYPE_ENUM", "enum" },
   { GTK_TYPE_FLAGS, "GTK_TYPE_FLAGS", "flags" },
   { GTK_TYPE_BOXED, "GTK_TYPE_BOXED", "boxed" },
-  { GTK_TYPE_FOREIGN, "GTK_TYPE_FOREIGN", "foreign" },
-  { GTK_TYPE_CALLBACK, "GTK_TYPE_CALLBACK", "callback" },
-  { GTK_TYPE_ARGS, "GTK_TYPE_ARGS", "args" },
   { GTK_TYPE_POINTER, "GTK_TYPE_POINTER", "pointer" },
   { GTK_TYPE_SIGNAL, "GTK_TYPE_SIGNAL", "signal" },
+  { GTK_TYPE_ARGS, "GTK_TYPE_ARGS", "args" },
+  { GTK_TYPE_CALLBACK, "GTK_TYPE_CALLBACK", "callback" },
   { GTK_TYPE_C_CALLBACK, "GTK_TYPE_C_CALLBACK", "c-callback" },
+  { GTK_TYPE_FOREIGN, "GTK_TYPE_FOREIGN", "foreign" },
   { GTK_TYPE_OBJECT, "GTK_TYPE_OBJECT", "object" },
   { 0, NULL, NULL }
 };

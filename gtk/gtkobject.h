@@ -221,18 +221,6 @@ struct _GtkObjectClass
 };
 
 
-/* For the purpose of user signals we need the signal function
- * and signal marshaller signatures already in this place.
- */
-#define GTK_SIGNAL_FUNC(f)  ((GtkSignalFunc) f)
-
-typedef void (*GtkSignalFunc)	    (void);
-typedef void (*GtkSignalMarshaller) (GtkObject	    *object,
-				     GtkSignalFunc   func,
-				     gpointer	     func_data,
-				     GtkArg	    *args);
-
-
 
 /* Application-level methods */
 
