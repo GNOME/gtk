@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-30 04:18+0100\n"
-"PO-Revision-Date: 2004-01-30 12:29+0100\n"
+"POT-Creation-Date: 2004-02-03 04:29+0100\n"
+"PO-Revision-Date: 2004-02-03 16:44+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1275,30 +1275,26 @@ msgstr "Nemohu převést název souboru"
 msgid "(Empty)"
 msgstr "(Prázdný)"
 
-#: gtk/gtkfilesystemunix.c:346 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "chyba při vytváření adresáře '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:389 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Tento systém souborů nepodporuje připojování"
 
-#: gtk/gtkfilesystemunix.c:397
+#: gtk/gtkfilesystemunix.c:400
 msgid "Filesystem"
 msgstr "Systém souborů"
 
-#: gtk/gtkfilesystemunix.c:416 gtk/gtkfilesystemunix.c:1051
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "chyba při získávání informací o '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:868 gtk/gtkfilesystemunix.c:881
-msgid "This file system does not support bookmarks"
-msgstr "Tento systém souborů nepodporuje záložky"
-
-#: gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Ukládání záložek selhalo (%s)"
@@ -1464,11 +1460,11 @@ msgstr "(neznámá)"
 msgid "clear"
 msgstr "vyčistit"
 
-#: gtk/gtklabel.c:3225
+#: gtk/gtklabel.c:3227
 msgid "Select All"
 msgstr "Vybrat vše"
 
-#: gtk/gtklabel.c:3235
+#: gtk/gtklabel.c:3237
 msgid "Input Methods"
 msgstr "Vstupní metody"
 
@@ -1485,6 +1481,14 @@ msgstr "default:LTR"
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
+
+#: gtk/gtkradiotoolbutton.c:89
+msgid "Group"
+msgstr "Skupina"
+
+#: gtk/gtkradiotoolbutton.c:90
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Přepínací tlačíko, do jehož skupiny patří toto tlačítko."
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -1911,6 +1915,9 @@ msgstr "Vstupní metoda X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nemohu získat informace o souboru '%s': %s"
+
+#~ msgid "This file system does not support bookmarks"
+#~ msgstr "Tento systém souborů nepodporuje záložky"
 
 #~ msgid "This file system does not support icons"
 #~ msgstr "Tento systém souborů nepodporuje ikony"
