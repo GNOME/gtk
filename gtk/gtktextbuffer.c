@@ -55,6 +55,8 @@ enum {
   MARK_DELETED,
   APPLY_TAG,
   REMOVE_TAG,
+  BEGIN_USER_ACTION,
+  END_USER_ACTION,
   LAST_SIGNAL
 };
 
@@ -80,12 +82,10 @@ static void gtk_text_buffer_update_primary_selection   (GtkTextBuffer     *buffe
 static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
                                                         const gchar       *text,
-                                                        gint               len,
-                                                        gboolean           interactive);
+                                                        gint               len);
 static void gtk_text_buffer_real_delete_text           (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *start,
-                                                        GtkTextIter       *end,
-                                                        gboolean           interactive);
+                                                        GtkTextIter       *end);
 static void gtk_text_buffer_real_apply_tag             (GtkTextBuffer     *buffer,
                                                         GtkTextTag        *tag,
                                                         const GtkTextIter *start_char,
@@ -152,9 +152,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, insert_text),
                    NULL,
-                   gtk_marshal_VOID__BOXED_STRING_INT_BOOLEAN,
+                   gtk_marshal_VOID__BOXED_STRING_INT,
                    GTK_TYPE_NONE,
-                   4,
+                   3,
 #if 0
                    /* FIXME */
                    GTK_TYPE_TEXT_ITER,
@@ -162,8 +162,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 #endif
                    GTK_TYPE_POINTER,
                    GTK_TYPE_POINTER,
-                   GTK_TYPE_INT,
-                   GTK_TYPE_BOOL);
+                   GTK_TYPE_INT);
 
   signals[DELETE_TEXT] =
     g_signal_newc ("delete_text",
@@ -171,17 +170,16 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, delete_text),
                    NULL,
-                   gtk_marshal_VOID__BOXED_BOXED_BOOLEAN,
+                   gtk_marshal_VOID__BOXED_BOXED,
                    GTK_TYPE_NONE,
-                   3,
+                   2,
 #if 0
                    /* FIXME */
                    GTK_TYPE_TEXT_ITER,
                    GTK_TYPE_TEXT_ITER,
 #endif
                    GTK_TYPE_POINTER,
-                   GTK_TYPE_POINTER,
-                   GTK_TYPE_BOOL);
+                   GTK_TYPE_POINTER);
 
   signals[CHANGED] =
     g_signal_newc ("changed",
@@ -251,6 +249,26 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    G_TYPE_OBJECT,
                    GTK_TYPE_TEXT_ITER,
                    GTK_TYPE_TEXT_ITER);
+
+  signals[BEGIN_USER_ACTION] =
+    g_signal_newc ("begin_user_action",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,                   
+                   G_STRUCT_OFFSET (GtkTextBufferClass, begin_user_action),
+                   NULL,
+                   gtk_marshal_VOID__VOID,
+                   GTK_TYPE_NONE,
+                   0);
+
+  signals[END_USER_ACTION] =
+    g_signal_newc ("end_user_action",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,                   
+                   G_STRUCT_OFFSET (GtkTextBufferClass, end_user_action),
+                   NULL,
+                   gtk_marshal_VOID__VOID,
+                   GTK_TYPE_NONE,
+                   0);  
 }
 
 void
@@ -411,8 +429,7 @@ static void
 gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
                                   GtkTextIter *iter,
                                   const gchar *text,
-                                  gint len,
-                                  gboolean interactive)
+                                  gint len)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
@@ -426,8 +443,7 @@ static void
 gtk_text_buffer_emit_insert (GtkTextBuffer *buffer,
                              GtkTextIter   *iter,
                              const gchar   *text,
-                             gint           len,
-                             gboolean       interactive)
+                             gint           len)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
@@ -441,7 +457,7 @@ gtk_text_buffer_emit_insert (GtkTextBuffer *buffer,
   if (len > 0)
     {
       g_signal_emit (G_OBJECT (buffer), signals[INSERT_TEXT], 0,
-                     iter, text, len, interactive);
+                     iter, text, len);
     }
 }
 
@@ -471,7 +487,7 @@ gtk_text_buffer_insert (GtkTextBuffer *buffer,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (text != NULL);
 
-  gtk_text_buffer_emit_insert (buffer, iter, text, len, FALSE);
+  gtk_text_buffer_emit_insert (buffer, iter, text, len);
 }
 
 /**
@@ -531,7 +547,9 @@ gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
 
   if (gtk_text_iter_editable (iter, default_editable))
     {
-      gtk_text_buffer_emit_insert (buffer, iter, text, len, TRUE);
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_buffer_emit_insert (buffer, iter, text, len);
+      gtk_text_buffer_end_user_action (buffer);
       return TRUE;
     }
   else
@@ -591,7 +609,7 @@ insert_text_range (GtkTextBuffer     *buffer,
 
   text = gtk_text_iter_get_text (orig_start, orig_end);
 
-  gtk_text_buffer_emit_insert (buffer, iter, text, -1, interactive);
+  gtk_text_buffer_emit_insert (buffer, iter, text, -1);
 
   g_free (text);
 }
@@ -799,6 +817,9 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
   if (gtk_text_iter_equal (orig_start, orig_end))
     return;
 
+  if (interactive)
+    gtk_text_buffer_begin_user_action (buffer);
+  
   src_buffer = gtk_text_iter_get_buffer (orig_start);
   
   gtk_text_iter_reorder (&start, &end);
@@ -855,6 +876,9 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
 
       range_start = range_end;
     }
+
+  if (interactive)
+    gtk_text_buffer_end_user_action (buffer);
 }
 
 /**
@@ -1055,8 +1079,7 @@ gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer *buffer,
 static void
 gtk_text_buffer_real_delete_text (GtkTextBuffer *buffer,
                                   GtkTextIter *start,
-                                  GtkTextIter *end,
-                                  gboolean interactive)
+                                  GtkTextIter *end)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (start != NULL);
@@ -1073,8 +1096,7 @@ gtk_text_buffer_real_delete_text (GtkTextBuffer *buffer,
 static void
 gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
                              GtkTextIter *start,
-                             GtkTextIter *end,
-                             gboolean interactive)
+                             GtkTextIter *end)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (start != NULL);
@@ -1096,8 +1118,7 @@ gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
   g_signal_emit (G_OBJECT (buffer),
                  signals[DELETE_TEXT],
                  0,
-                 start, end,
-                 interactive);
+                 start, end);
 }
 
 /**
@@ -1129,7 +1150,7 @@ gtk_text_buffer_delete (GtkTextBuffer *buffer,
   g_return_if_fail (start != NULL);
   g_return_if_fail (end != NULL);
 
-  gtk_text_buffer_emit_delete (buffer, start, end, FALSE);
+  gtk_text_buffer_emit_delete (buffer, start, end);
 }
 
 /**
@@ -1165,6 +1186,8 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
   g_return_val_if_fail (start_iter != NULL, FALSE);
   g_return_val_if_fail (end_iter != NULL, FALSE);
 
+  gtk_text_buffer_begin_user_action (buffer);
+  
   gtk_text_iter_reorder (start_iter, end_iter);
 
   start_mark = gtk_text_buffer_create_mark (buffer, NULL,
@@ -1204,7 +1227,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
 
                   gtk_text_buffer_get_iter_at_mark (buffer, &start, start_mark);
 
-                  gtk_text_buffer_emit_delete (buffer, &start, &iter, TRUE);
+                  gtk_text_buffer_emit_delete (buffer, &start, &iter);
 
                   deleted_stuff = TRUE;
 
@@ -1226,7 +1249,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
 
           gtk_text_buffer_get_iter_at_mark (buffer, &start, start_mark);
 
-          gtk_text_buffer_emit_delete (buffer, &start, &iter, TRUE);
+          gtk_text_buffer_emit_delete (buffer, &start, &iter);
 
           current_state = FALSE;
           deleted_stuff = TRUE;
@@ -1258,6 +1281,8 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
   gtk_text_buffer_delete_mark (buffer, start_mark);
   gtk_text_buffer_delete_mark (buffer, end_mark);
 
+  gtk_text_buffer_end_user_action (buffer);
+  
   return deleted_stuff;
 }
 
@@ -2521,7 +2546,11 @@ gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
   else
     {
       if (interactive)
-        gtk_text_buffer_delete_interactive (buffer, &start, &end, default_editable);
+        {
+          gtk_text_buffer_begin_user_action (buffer);
+          gtk_text_buffer_delete_interactive (buffer, &start, &end, default_editable);
+          gtk_text_buffer_end_user_action (buffer);
+        }
       else
         gtk_text_buffer_delete (buffer, &start, &end);
 
@@ -2544,7 +2573,7 @@ cut_or_copy (GtkTextBuffer *buffer,
    */
   GtkTextIter start;
   GtkTextIter end;
-
+  
   if (buffer->clipboard_contents)
     {
       g_object_unref (G_OBJECT (buffer->clipboard_contents));
@@ -2602,13 +2631,17 @@ void
 gtk_text_buffer_cut_clipboard (GtkTextBuffer *buffer,
                                gboolean       default_editable)
 {
+  gtk_text_buffer_begin_user_action (buffer);
   cut_or_copy (buffer, TRUE, TRUE, default_editable);
+  gtk_text_buffer_end_user_action (buffer);
 }
 
 void
 gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer)
 {
+  gtk_text_buffer_begin_user_action (buffer);
   cut_or_copy (buffer, FALSE, TRUE, TRUE);
+  gtk_text_buffer_end_user_action (buffer);
 }
 
 
@@ -2635,6 +2668,63 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
 
   return _gtk_text_btree_get_selection_bounds (get_btree (buffer), start, end);
+}
+
+/**
+ * gtk_text_buffer_begin_user_action:
+ * @buffer: a #GtkTextBuffer
+ * 
+ * Called to indicate that the buffer operations between here and a
+ * call to gtk_text_buffer_end_user_action() are part of a single
+ * user-visible operation. The operations between
+ * gtk_text_buffer_begin_user_action() and
+ * gtk_text_buffer_end_user_action() can then be grouped when creating
+ * an undo stack. #GtkTextBuffer maintains a count of calls to
+ * gtk_text_buffer_begin_user_action() that have not been closed with
+ * a call to gtk_text_buffer_end_user_action(), and emits the "begin_user_action"
+ * and "end_user_action" signals only for the outermost pair of calls.
+ * This allows you to build user actions from other user actions.
+ *
+ * The "interactive" buffer mutation functions, such as
+ * gtk_text_buffer_insert_interactive(), automatically call begin/end
+ * user action around the buffer operations they perform, so there's no
+ * need to add extra calls if you user action consists solely of those
+ * functions.
+ **/
+void
+gtk_text_buffer_begin_user_action (GtkTextBuffer *buffer)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  buffer->user_action_count += 1;
+  
+  if (buffer->user_action_count == 1)
+    {
+      /* Outermost nested user action begin emits the signal */
+      g_signal_emit (G_OBJECT (buffer), signals[BEGIN_USER_ACTION], 0);
+    }
+}
+
+/**
+ * gtk_text_buffer_end_user_action:
+ * @buffer: a #GtkTextBuffer
+ * 
+ * Should be paired with a call to gtk_text_buffer_begin_user_action().
+ * See that function for a full explanation.
+ **/
+void
+gtk_text_buffer_end_user_action (GtkTextBuffer *buffer)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (buffer->user_action_count > 0);
+  
+  buffer->user_action_count -= 1;
+  
+  if (buffer->user_action_count == 0)
+    {
+      /* Ended the outermost-nested user action end, so emit the signal */
+      g_signal_emit (G_OBJECT (buffer), signals[END_USER_ACTION], 0);
+    }
 }
 
 /*

@@ -1,5 +1,24 @@
 2000-12-18  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_delete_from_cursor): do
+	begin/end user action where appropriate
+	(gtk_text_view_commit_handler): add begin/end user action
+
+	* gtk/gtktextbuffer.c: add begin/end user action signals, and
+	bracket interactive operations with begin/end user action pair.
+	
+	* gtk/gtktextbuffer.h (struct _GtkTextBufferClass): remove
+	"interactive" arg from insert_text and delete_text signals.
+	Add begin_user_action, end_user_action signals
+	(gtk_text_buffer_begin_user_action): 
+	(gtk_text_buffer_end_user_action): New functions to delimit 
+	a user-visible action
+
+	* gtk/gtkmarshal.list: update to reflect changes to gtktextbuffer
+	signals.
+	
+2000-12-18  Havoc Pennington  <hp@redhat.com>
+
 	* gdk/gdkevents.c (gdk_event_get_state): wow, that implementation
 	was pretty non-working.
 

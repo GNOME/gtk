@@ -65,6 +65,8 @@ struct _GtkTextBuffer
   GtkTextBuffer *clipboard_contents;
 
   GtkTextLogAttrCache *log_attr_cache;
+
+  guint user_action_count;
   
   /* Whether the buffer has been modified since last save */
   guint modified : 1;
@@ -77,14 +79,12 @@ struct _GtkTextBufferClass
   void (* insert_text)     (GtkTextBuffer *buffer,
                             GtkTextIter *pos,
                             const gchar *text,
-                            gint length,
-                            gboolean interactive);
+                            gint length);
 
 
   void (* delete_text)     (GtkTextBuffer *buffer,
                             GtkTextIter *start,
-                            GtkTextIter *end,
-                            gboolean interactive);
+                            GtkTextIter *end);
 
   /* Only for text/widgets/pixbuf changed, marks/tags don't cause this
    * to be emitted
@@ -113,6 +113,9 @@ struct _GtkTextBufferClass
                                const GtkTextIter *start_char,
                                const GtkTextIter *end_char);
 
+  /* Called at the start and end of an atomic user action */
+  void (* begin_user_action)  (GtkTextBuffer *buffer);
+  void (* end_user_action)    (GtkTextBuffer *buffer);
 };
 
 GType        gtk_text_buffer_get_type       (void) G_GNUC_CONST;
@@ -317,7 +320,11 @@ gboolean        gtk_text_buffer_get_selection_bounds    (GtkTextBuffer *buffer,
 gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
                                                          gboolean       interactive,
                                                          gboolean       default_editable);                                                    
-                                                    
+
+/* Called to specify atomic user actions, used to implement undo */
+void            gtk_text_buffer_begin_user_action       (GtkTextBuffer *buffer);
+void            gtk_text_buffer_end_user_action         (GtkTextBuffer *buffer);
+
 /* INTERNAL private stuff */
 void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);
 

@@ -3410,6 +3410,8 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
 
   if (!gtk_text_iter_equal (&start, &end))
     {
+      gtk_text_buffer_begin_user_action (get_buffer (text_view));
+
       if (gtk_text_buffer_delete_interactive (get_buffer (text_view), &start, &end,
                                               text_view->editable))
         {
@@ -3419,6 +3421,8 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
                                                           text_view->editable);
         }
 
+      gtk_text_buffer_end_user_action (get_buffer (text_view));
+      
       gtk_text_view_scroll_to_mark (text_view,
                                     gtk_text_buffer_get_mark (get_buffer (text_view), "insert"),
                                     0);
@@ -4336,6 +4340,8 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
                               const gchar   *str,
                               GtkTextView   *text_view)
 {
+  gtk_text_buffer_begin_user_action (get_buffer (text_view));
+
   gtk_text_buffer_delete_selection (get_buffer (text_view), TRUE,
                                     text_view->editable);
 
@@ -4352,6 +4358,8 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
                                                     text_view->editable);
     }
 
+  gtk_text_buffer_end_user_action (get_buffer (text_view));
+  
   gtk_text_view_scroll_to_mark (text_view,
                                 gtk_text_buffer_get_mark (get_buffer (text_view),
                                                           "insert"),
