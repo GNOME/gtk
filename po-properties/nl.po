@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-09 04:25+0100\n"
-"PO-Revision-Date: 2004-02-09 13:28+0100\n"
+"POT-Creation-Date: 2004-02-16 02:09+0100\n"
+"PO-Revision-Date: 2004-02-16 17:40+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -248,6 +248,56 @@ msgstr "Of de actiegroep wordt gebruikt."
 #: gtk/gtkactiongroup.c:149
 msgid "Whether the action group is visible."
 msgstr "Of de actiegroep zichtbaar is."
+
+#: gtk/gtkadjustment.c:106 gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "Waarde"
+
+# beter? de hoeveelheid verandering/aanpassing
+#: gtk/gtkadjustment.c:107
+msgid "The value of the adjustment"
+msgstr "De waarde van de aanpassing"
+
+#: gtk/gtkadjustment.c:116
+msgid "Minimum Value"
+msgstr "Minimumwaarde"
+
+#: gtk/gtkadjustment.c:117
+msgid "The minimum value of the adjustment"
+msgstr "De minimumwaarde van de aanpassing"
+
+#: gtk/gtkadjustment.c:126
+msgid "Maximum Value"
+msgstr "Maximumwaarde"
+
+#: gtk/gtkadjustment.c:127
+msgid "The maximum value of the adjustment"
+msgstr "De maximumwaarde van de aanpassing"
+
+#: gtk/gtkadjustment.c:136
+msgid "Step Increment"
+msgstr "Stapgrootte"
+
+#: gtk/gtkadjustment.c:137
+msgid "The step increment of the adjustment"
+msgstr "De stapgrootte van de aanpassing"
+
+# Dit is waarschijnlijk de stapgrootte als je op page-up of page-down drukt
+#: gtk/gtkadjustment.c:146
+msgid "Page Increment"
+msgstr "De paginagrootte"
+
+#: gtk/gtkadjustment.c:147
+msgid "The page increment of the adjustment"
+msgstr "De paginagrootte van de aanpassing"
+
+#: gtk/gtkadjustment.c:156
+msgid "Page Size"
+msgstr "Pagina-afmeting"
+
+#: gtk/gtkadjustment.c:157
+msgid "The page size of the adjustment"
+msgstr "De pagina-afmeting van de aanpassing"
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -799,14 +849,14 @@ msgid "Size"
 msgstr "Afmeting"
 
 #: gtk/gtkcellrendererpixbuf.c:169
-msgid "The size of the rendered icon"
-msgstr "De grootte van het gebruikte pictogram"
+msgid "The GtkIconSize value that specifies the size of the rendered icon"
+msgstr "De GtkIconSize waarde die de afmeting van het gebruikte pictogram geeft"
 
-#: gtk/gtkcellrendererpixbuf.c:177
+#: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
 msgstr "Detail"
 
-#: gtk/gtkcellrendererpixbuf.c:178
+#: gtk/gtkcellrendererpixbuf.c:179
 msgid "Render detail to pass to the theme engine"
 msgstr "Weergavedetail door te geven aan de thema-motor"
 
@@ -2210,36 +2260,38 @@ msgstr "Vertraging voordat drop-down-menus verschijnen"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Vertraging voordat submenus van een menubalk verschijnen"
 
-#: gtk/gtkmessagedialog.c:106
+#: gtk/gtkmessagedialog.c:109
 msgid "Image/label border"
 msgstr "Afbeeldings/label -kader"
 
-#: gtk/gtkmessagedialog.c:107
+#: gtk/gtkmessagedialog.c:110
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Breedte van het kader rondom label en afbeelding in het dialoogvenster"
 
-#: gtk/gtkmessagedialog.c:122
+#: gtk/gtkmessagedialog.c:125
 msgid "Use separator"
 msgstr "Scheiding gebruiken"
 
-#: gtk/gtkmessagedialog.c:123
+#: gtk/gtkmessagedialog.c:126
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
-msgstr "Of een scheiding moet worden aangebracht tussen de tekst van het dialoogvenster en de knoppen"
+msgstr ""
+"Of een scheiding moet worden aangebracht tussen de tekst van het "
+"dialoogvenster en de knoppen"
 
-#: gtk/gtkmessagedialog.c:129
+#: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
 msgstr "Berichttype"
 
-#: gtk/gtkmessagedialog.c:130
+#: gtk/gtkmessagedialog.c:133
 msgid "The type of message"
 msgstr "Het type van het bericht"
 
-#: gtk/gtkmessagedialog.c:137
+#: gtk/gtkmessagedialog.c:140
 msgid "Message Buttons"
 msgstr "Berichtknoppen"
 
-#: gtk/gtkmessagedialog.c:138
+#: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "De weer te geven knoppen in het berichten dialoogvenster"
 
@@ -2763,44 +2815,44 @@ msgstr "Max Afmeting"
 msgid "Maximum size of the ruler"
 msgstr "Maximale grootte van de liniaal"
 
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+#: gtk/gtkscale.c:170 gtk/gtkspinbutton.c:258
 msgid "Digits"
 msgstr "Cijfers"
 
-#: gtk/gtkscale.c:157
+#: gtk/gtkscale.c:171
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Het aantal decimale plaatsen dat weergegeven wordt in de waarde"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:180
 msgid "Draw Value"
 msgstr "Toon Waarde"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:181
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Of de huidige waarde als tekst weergegeven wordt naast het schuifobject"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:188
 msgid "Value Position"
 msgstr "Positie van Waarde"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:189
 msgid "The position in which the current value is displayed"
 msgstr "De positie waar de huidige waarde weergegeven wordt"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:196
 msgid "Slider Length"
 msgstr "Schuifobjectlengte"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:197
 msgid "Length of scale's slider"
 msgstr "Lengte van het schuifobject"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:205
 msgid "Value spacing"
 msgstr "Waardespatiëring"
 
-#: gtk/gtkscale.c:192
+#: gtk/gtkscale.c:206
 msgid "Space between value text and the slider/trough area"
 msgstr "Afstand tussen de waarde-tekst en het schuifobject"
 
@@ -3067,10 +3119,6 @@ msgstr "Update-beleid"
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr "Of de spinknop altijd moet updaten, of alleen als de waarde legaal is"
-
-#: gtk/gtkspinbutton.c:301
-msgid "Value"
-msgstr "Waarde"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
