@@ -1299,7 +1299,7 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
  * be %NULL.
  *
  * Return value: the new toolbar element as a #GtkWidget.
-
+ **/
 GtkWidget *
 gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 			    GtkToolbarChildType  type,
