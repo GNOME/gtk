@@ -717,7 +717,7 @@ gtk_container_destroy (GtkObject *object)
   container = GTK_CONTAINER (object);
   
   if (GTK_CONTAINER_RESIZE_PENDING (container))
-    gtk_container_dequeue_resize_handler (container);
+    _gtk_container_dequeue_resize_handler (container);
   if (container->resize_widgets)
     gtk_container_clear_resize_widgets (container);
 
@@ -894,7 +894,7 @@ gtk_container_remove (GtkContainer *container,
 }
 
 void
-gtk_container_dequeue_resize_handler (GtkContainer *container)
+_gtk_container_dequeue_resize_handler (GtkContainer *container)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_CONTAINER_RESIZE_PENDING (container));

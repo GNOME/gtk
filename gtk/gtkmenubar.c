@@ -48,7 +48,8 @@ static void gtk_menu_bar_paint         (GtkWidget       *widget,
 					GdkRectangle    *area);
 static gint gtk_menu_bar_expose        (GtkWidget       *widget,
 					GdkEventExpose  *event);
-static void gtk_menu_bar_hierarchy_changed (GtkWidget   *widget);                                            
+static void gtk_menu_bar_hierarchy_changed (GtkWidget   *widget,
+					    GtkWidget   *old_toplevel);
 static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
 static GtkMenuShellClass *parent_class = NULL;
@@ -460,30 +461,20 @@ add_to_window (GtkWindow  *window,
 		    "key_press_event",
 		    G_CALLBACK (window_key_press_handler),
 		    menubar);
-
-  menubar->toplevel = GTK_WIDGET (window);
 }
 
 static void
 remove_from_window (GtkWindow  *window,
                     GtkMenuBar *menubar)
 {
-  g_return_if_fail (menubar->toplevel == GTK_WIDGET (window));
-
   g_signal_handlers_disconnect_by_func (G_OBJECT (window),
                                         G_CALLBACK (window_key_press_handler),
                                         menubar);
-
-  /* dnotify zeroes menubar->toplevel */
-  g_object_set_data (G_OBJECT (window),
-                     "gtk-menu-bar",
-                     NULL);
-
-  menubar->toplevel = NULL;
 }
 
 static void
-gtk_menu_bar_hierarchy_changed (GtkWidget *widget)
+gtk_menu_bar_hierarchy_changed (GtkWidget *widget,
+				GtkWidget *old_toplevel)
 {
   GtkWidget *toplevel;  
   GtkMenuBar *menubar;
@@ -492,19 +483,11 @@ gtk_menu_bar_hierarchy_changed (GtkWidget *widget)
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (menubar->toplevel &&
-      toplevel != menubar->toplevel)
-    {
-      remove_from_window (GTK_WINDOW (menubar->toplevel),
-                          menubar);
-    }
+  if (old_toplevel && GTK_IS_WINDOW (old_toplevel))
+    remove_from_window (old_toplevel, menubar);
   
-  if (toplevel &&
-      GTK_IS_WINDOW (toplevel))
-    {
-      add_to_window (GTK_WINDOW (toplevel),
-                     menubar);
-    }
+  if (toplevel && GTK_IS_WINDOW (toplevel))
+    add_to_window (GTK_WINDOW (toplevel), menubar);
 }
 
 static GtkShadowType

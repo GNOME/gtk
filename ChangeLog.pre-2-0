@@ -1,3 +1,20 @@
+Sat Jun 30 20:44:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktypeutils.c (gtk_type_class): Remove
+	change check for GTK_TYPE_OBJECT derivation to
+	G_TYPE_OBJECTS - it's Tim-approved to use this 
+	for arbitary objects.
+
+	* gtk/gtkwindow.c gtk/gtkcontainer.[ch]: underscore
+	prefix gtk_container_dequeue_resize_handler().
+
+	* gtk/gtkwidget.[ch]: Add a previous_toplevel argument
+	to the hierarachy_changed signal, since you otherwise
+	have to always keep that around.
+
+	* gtk/gtkmenubar.c gtk/gtklabel.c gtk/gtksocket.c: Adapt
+	for extra argument to hierarchy_changed.
+
 Tue Jun 26 19:39:03 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_set_style): Allow %NULL

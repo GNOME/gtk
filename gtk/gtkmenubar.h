@@ -51,8 +51,6 @@ typedef struct _GtkMenuBarClass  GtkMenuBarClass;
 struct _GtkMenuBar
 {
   GtkMenuShell menu_shell;
-
-  GtkWidget *toplevel;
 };
 
 struct _GtkMenuBarClass

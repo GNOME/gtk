@@ -2898,7 +2898,7 @@ gtk_window_move_resize (GtkWindow *window)
        */
       gtk_widget_queue_resize (GTK_WIDGET (container));
       if (container->resize_mode == GTK_RESIZE_QUEUE)
-	gtk_container_dequeue_resize_handler (container);
+	_gtk_container_dequeue_resize_handler (container);
     }
   else
     {

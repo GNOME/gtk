@@ -266,7 +266,8 @@ struct _GtkWidgetClass
 				GtkStateType   	  previous_state);
   void (* parent_set)	       (GtkWidget        *widget,
 				GtkWidget        *previous_parent);
-  void (* hierarchy_changed)   (GtkWidget        *widget);
+  void (* hierarchy_changed)   (GtkWidget        *widget,
+				GtkWidget        *previous_toplevel);
   void (* style_set)	       (GtkWidget        *widget,
 				GtkStyle         *previous_style);
   void (* direction_changed)   (GtkWidget        *widget,

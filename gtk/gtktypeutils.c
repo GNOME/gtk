@@ -62,7 +62,7 @@ gtk_type_class (GtkType type)
   gpointer class;
 
   if (!G_TYPE_IS_ENUM (type) && !G_TYPE_IS_FLAGS (type))
-    g_return_val_if_fail (GTK_TYPE_IS_OBJECT (type), NULL);
+    g_return_val_if_fail (G_TYPE_IS_OBJECT (type), NULL);
 
   /* ok, this is a bit ugly, GLib reference counts classes,
    * and gtk_type_class() used to always return static classes.

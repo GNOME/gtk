@@ -46,7 +46,8 @@ static void            gtk_socket_size_request         (GtkWidget        *widget
 							GtkRequisition   *requisition);
 static void            gtk_socket_size_allocate        (GtkWidget        *widget,
 							GtkAllocation    *allocation);
-static void            gtk_socket_hierarchy_changed    (GtkWidget        *widget);
+static void            gtk_socket_hierarchy_changed    (GtkWidget        *widget,
+							GtkWidget        *old_toplevel);
 static void            gtk_socket_grab_notify          (GtkWidget        *widget,
 							gboolean          was_grabbed);
 static gboolean        gtk_socket_key_press_event      (GtkWidget        *widget,
@@ -541,7 +542,8 @@ toplevel_focus_out_handler (GtkWidget     *toplevel,
 }
 
 static void
-gtk_socket_hierarchy_changed (GtkWidget *widget)
+gtk_socket_hierarchy_changed (GtkWidget *widget,
+			      GtkWidget *old_toplevel)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);

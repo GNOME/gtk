@@ -205,7 +205,7 @@ void    gtk_container_forall		     (GtkContainer *container,
 					      gpointer	    callback_data);
 gchar*	gtk_container_child_composite_name   (GtkContainer *container,
 					      GtkWidget	   *child);
-void    gtk_container_dequeue_resize_handler (GtkContainer *container);
+void   _gtk_container_dequeue_resize_handler (GtkContainer *container);
 
 #ifdef __cplusplus
 }

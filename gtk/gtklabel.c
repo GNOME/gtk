@@ -113,7 +113,8 @@ static void set_markup                           (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *label);
-static void gtk_label_hierarchy_changed          (GtkWidget     *widget);
+static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
+						  GtkWidget     *old_toplevel);
 
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
@@ -502,7 +503,8 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 }
 
 static void
-gtk_label_hierarchy_changed (GtkWidget *widget)
+gtk_label_hierarchy_changed (GtkWidget *widget,
+			     GtkWidget *old_toplevel)
 {
   GtkLabel *label = GTK_LABEL (widget);
   

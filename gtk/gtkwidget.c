@@ -604,8 +604,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, hierarchy_changed),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
+		    gtk_marshal_VOID__OBJECT,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
   widget_signals[STYLE_SET] =
     gtk_signal_new ("style_set",
 		    GTK_RUN_FIRST,
@@ -1475,6 +1476,7 @@ gtk_widget_unparent (GtkWidget *widget)
 {
   GObjectNotifyQueue *nqueue;
   GtkWidget *toplevel;
+  GtkWidget *ancestor;
   GtkWidget *old_parent;
   
   g_return_if_fail (widget != NULL);
@@ -1524,6 +1526,14 @@ gtk_widget_unparent (GtkWidget *widget)
 	gtk_window_set_default (GTK_WINDOW (toplevel), NULL);
     }
 
+  /* If we are unanchoring the child, we save around the toplevel
+   * to emit hierarchy changed
+   */
+  if (GTK_WIDGET_ANCHORED (widget->parent))
+    g_object_ref (toplevel);
+  else
+    toplevel = NULL;
+
   if (GTK_IS_RESIZE_CONTAINER (widget))
     gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
   
@@ -1536,20 +1546,20 @@ gtk_widget_unparent (GtkWidget *widget)
    *   Write a g_slist_conditional_remove (GSList, gboolean (*)(gpointer))
    *   Change resize_widgets to a GList
    */
-  toplevel = widget->parent;
-  while (toplevel)
+  ancestor = widget->parent;
+  while (ancestor)
     {
       GSList *slist;
       GSList *prev;
 
-      if (!GTK_CONTAINER (toplevel)->resize_widgets)
+      if (!GTK_CONTAINER (ancestor)->resize_widgets)
 	{
-	  toplevel = toplevel->parent;
+	  ancestor = ancestor->parent;
 	  continue;
 	}
 
       prev = NULL;
-      slist = GTK_CONTAINER (toplevel)->resize_widgets;
+      slist = GTK_CONTAINER (ancestor)->resize_widgets;
       while (slist)
 	{
 	  GtkWidget *child;
@@ -1571,7 +1581,7 @@ gtk_widget_unparent (GtkWidget *widget)
 	      if (prev)
 		prev->next = slist;
 	      else
-		GTK_CONTAINER (toplevel)->resize_widgets = slist;
+		GTK_CONTAINER (ancestor)->resize_widgets = slist;
 	      
 	      g_slist_free_1 (last);
 	    }
@@ -1579,7 +1589,7 @@ gtk_widget_unparent (GtkWidget *widget)
 	    prev = last;
 	}
 
-      toplevel = toplevel->parent;
+      ancestor = ancestor->parent;
     }
 
   gtk_widget_queue_clear_child (widget);
@@ -1599,7 +1609,12 @@ gtk_widget_unparent (GtkWidget *widget)
   widget->parent = NULL;
   gtk_widget_set_parent_window (widget, NULL);
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], old_parent);
-  gtk_widget_propagate_hierarchy_changed (widget, NULL);
+  if (toplevel)
+    {
+      gtk_widget_propagate_hierarchy_changed (widget, toplevel);
+      g_object_unref (toplevel);
+    }
+      
   g_object_notify (G_OBJECT (widget), "parent");
   g_object_thaw_notify (G_OBJECT (widget));
   if (!widget->parent)
@@ -3455,7 +3470,8 @@ gtk_widget_set_parent (GtkWidget *widget,
   gtk_widget_set_style_recurse (widget, NULL);
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
-  gtk_widget_propagate_hierarchy_changed (widget, NULL);
+  if (GTK_WIDGET_ANCHORED (widget->parent))
+    gtk_widget_propagate_hierarchy_changed (widget, NULL);
   g_object_notify (G_OBJECT (widget), "parent");
 }
 
@@ -3928,7 +3944,8 @@ gtk_widget_propagate_hierarchy_changed (GtkWidget	*widget,
       else
 	GTK_PRIVATE_UNSET_FLAG (widget, GTK_ANCHORED);
       
-      g_signal_emit (GTK_OBJECT (widget), widget_signals[HIERARCHY_CHANGED], 0);
+      g_signal_emit (GTK_OBJECT (widget), widget_signals[HIERARCHY_CHANGED],
+		     0, client_data);
   
       if (GTK_IS_CONTAINER (widget))
 	gtk_container_forall (GTK_CONTAINER (widget),
