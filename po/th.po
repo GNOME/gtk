@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-05 15:19+0100\n"
-"PO-Revision-Date: 2003-12-05 21:07-0600\n"
+"PO-Revision-Date: 2003-12-07 16:55-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=TIS-620\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
@@ -1727,25 +1727,25 @@ msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
-msgstr "เธชเธตเน€เธเนเธฒเธ—เธตเนเน€เธฅเธทเธญเธเนเธงเน เนเธชเธ”เธเนเธงเนเน€เธ—เธตเธขเธเธเธฑเธเธชเธตเธ—เธตเนเธเธฐเน€เธฅเธทเธญเธเนเธซเธกเน  เธเธธเธ“เธชเธฒเธกเธฒเธฃเธ–เธฅเธฒเธเธชเธตเธเธตเนเนเธเนเธเนเนเธเธเธฒเธเธชเธต"
+msgstr "สีเก่าที่เลือกไว้ แสดงไว้เทียบกับสีที่จะเลือกใหม่  คุณสามารถลากสีนี้ไปใช้ในจานสี"
 
 #: gtk/gtkcolorsel.c:566
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr "เธชเธตเธ—เธตเนเน€เธฅเธทเธญเธเธญเธขเธนเน เธเธธเธ“เธชเธฒเธกเธฒเธฃเธ–เธฅเธฒเธเธชเธตเธเธตเนเนเธเน€เธเนเธเนเธงเนเนเธเธเธฒเธเธชเธตเน€เธเธทเนเธญเนเธเนเนเธเธญเธเธฒเธเธ•"
+msgstr "สีที่เลือกอยู่ คุณสามารถลากสีนี้ไปเก็บใว้ในจานสีเพื่อใช้ในอนาคต"
 
 #: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
-msgstr "เธเธฑเธเธ—เธถเธเธชเธตเธฅเธเธ—เธตเนเธเธตเน (_S)"
+msgstr "บันทึกสีลงที่นี่ (_S)"
 
 #: gtk/gtkcolorsel.c:1132
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"เธเธฅเธดเธเธ–เนเธฒเธเธฐเนเธเนเธชเธตเธเธตเน  เธเธธเธ“เธชเธฒเธกเธฒเธฃเธ–เธเธฑเธเธ—เธถเธเธชเธตเธเธฑเธเธเธธเธเธฑเธเธฅเธเนเธเธเธฒเธเธเธตเนเนเธ”เธขเธเธฅเธดเธเธเธงเธฒเนเธฅเนเธงเน€เธฅเธทเธญเธ \"เธเธฑเธเธ—เธถเธเธชเธตเธฅเธเธ—เธตเนเธเธตเน\" "
-"เธซเธฃเธทเธญเธฅเธฒเธเธชเธตเธเธฒเธเธเธฃเธญเธเธชเธตเธเธฑเธเธเธธเธเธฑเธเธ—เธฒเธเธ”เนเธฒเธเธเนเธฒเธขเธกเธฒเธฅเธเธ—เธตเนเธเธตเน"
+"คลิกถ้าจะใช้สีนี้  คุณสามารถบันทึกสีปัจจุบันลงในจานนี้โดยคลิกขวาแล้วเลือก \"บันทึกสีลงที่นี่\" "
+"หรือลากสีจากกรอบสีปัจจุบันทางด้านซ้ายมาลงที่นี่"
 
 #: gtk/gtkcolorsel.c:1761
 msgid "Has Opacity Control"
@@ -1765,11 +1765,11 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1776
 msgid "The current color"
-msgstr "เธชเธตเธเธฑเธเธเธธเธเธฑเธ"
+msgstr "สีปัจจุบัน"
 
 #: gtk/gtkcolorsel.c:1783
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "เธเธงเธฒเธกเธ—เธถเธเนเธชเธเธเธฑเธเธเธธเธเธฑเธ (0 เนเธช, 65535 เธ—เธถเธ)"
+msgstr "ความทึบแสงปัจจุบัน (0 ใส, 65535 ทึบ)"
 
 #: gtk/gtkcolorsel.c:1797
 msgid "Custom palette"
@@ -1783,87 +1783,87 @@ msgstr ""
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr "เน€เธฅเธทเธญเธเธชเธตเนเธ—เธตเนเธ•เนเธญเธเธเธฒเธฃเธเธฒเธเธงเธเนเธซเธงเธ เนเธฅเนเธงเน€เธฅเธทเธญเธเธเธงเธฒเธกเธกเธทเธ”เธซเธฃเธทเธญเธชเธงเนเธฒเธเธเธฒเธเธชเธฒเธกเน€เธซเธฅเธตเนเธขเธก"
+msgstr "เลือกสี่ที่ต้องการจากวงแหวน แล้วเลือกความมืดหรือสว่างจากสามเหลี่ยม"
 
 #: gtk/gtkcolorsel.c:1864
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "เธเธฅเธดเธเธ—เธตเนเธซเธฅเธญเธ”เธ•เธฒ เนเธฅเนเธงเธเธฅเธดเธเธชเธตเธ—เธตเนเนเธซเธเธเนเนเธ”เนเธเธเธเธญเน€เธเธทเนเธญเธเธฑเธ”เธฅเธญเธเธกเธฒเน€เธเนเธเธชเธตเธเธฑเธเธเธธเธเธฑเธ"
+msgstr "คลิกที่หลอดตา แล้วคลิกสีที่ใหนก็ได้บนจอเพื่อคัดลอกมาเป็นสีปัจจุบัน"
 
 #: gtk/gtkcolorsel.c:1873
 msgid "_Hue:"
-msgstr "เธชเธต (_H):"
+msgstr "สี (_H):"
 
 #: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
-msgstr "เธ•เธณเนเธซเธเนเธเธเธเธงเธเนเธซเธงเธเธชเธต"
+msgstr "ตำแหน่งบนวงแหวนสี"
 
 #: gtk/gtkcolorsel.c:1876
 msgid "_Saturation:"
-msgstr "เธเธงเธฒเธกเธญเธดเนเธกเธชเธต (_S):"
+msgstr "ความอิ่มสี (_S):"
 
 #: gtk/gtkcolorsel.c:1877
 msgid "\"Deepness\" of the color."
-msgstr "เธชเธตเธเธฒเธเธซเธฃเธทเธญเธญเธดเนเธกเธ•เธฑเธง"
+msgstr "สีจางหรืออิ่มตัว"
 
 #: gtk/gtkcolorsel.c:1878
 msgid "_Value:"
-msgstr "เธเธงเธฒเธกเธชเธงเนเธฒเธ (_V):"
+msgstr "ความสว่าง (_V):"
 
 #: gtk/gtkcolorsel.c:1879
 msgid "Brightness of the color."
-msgstr "เธชเธงเนเธฒเธเธซเธฃเธทเธญเธกเธทเธ”"
+msgstr "สว่างหรือมืด"
 
 #: gtk/gtkcolorsel.c:1880
 msgid "_Red:"
-msgstr "เนเธ”เธ (_R):"
+msgstr "แดง (_R):"
 
 #: gtk/gtkcolorsel.c:1881
 msgid "Amount of red light in the color."
-msgstr "เธเธงเธฒเธกเธชเธงเนเธฒเธเธเธญเธเนเธกเนเธชเธตเนเธ”เธ"
+msgstr "ความสว่างของแม่สีแดง"
 
 #: gtk/gtkcolorsel.c:1882
 msgid "_Green:"
-msgstr "เน€เธเธตเธขเธง (_G):"
+msgstr "เขียว (_G):"
 
 #: gtk/gtkcolorsel.c:1883
 msgid "Amount of green light in the color."
-msgstr "เธเธงเธฒเธกเธชเธงเนเธฒเธเธเธญเธเนเธกเนเธชเธตเน€เธเธตเธขเธง"
+msgstr "ความสว่างของแม่สีเขียว"
 
 #: gtk/gtkcolorsel.c:1884
 msgid "_Blue:"
-msgstr "เธเนเธณเน€เธเธดเธ (_B):"
+msgstr "น้ำเงิน (_B):"
 
 #: gtk/gtkcolorsel.c:1885
 msgid "Amount of blue light in the color."
-msgstr "เธเธงเธฒเธกเธชเธงเนเธฒเธเธเธญเธเนเธกเนเธชเธตเธเนเธณเน€เธเธดเธ"
+msgstr "ความสว่างของแม่สีน้ำเงิน"
 
 #: gtk/gtkcolorsel.c:1888
 msgid "_Opacity:"
-msgstr "เธเธงเธฒเธกเธ—เธถเธเนเธชเธ (_O):"
+msgstr "ความทึบแสง (_O):"
 
 #: gtk/gtkcolorsel.c:1896 gtk/gtkcolorsel.c:1907
 msgid "Transparency of the color."
-msgstr "เธกเธญเธเธเนเธฒเธเนเธ”เนเธซเธฃเธทเธญเธ—เธถเธเนเธชเธ"
+msgstr "มองผ่านได้หรือทึบแสง"
 
 #: gtk/gtkcolorsel.c:1914
 msgid "Color _Name:"
-msgstr "เธเธทเนเธญเธชเธต (_N):"
+msgstr "ชื่อสี (_N):"
 
 #: gtk/gtkcolorsel.c:1929
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
-msgstr "เธเนเธฒเธชเธตเธเธฒเธ 16 (เน€เธเนเธ #FFA500) เธซเธฃเธทเธญเธเธทเนเธญเธชเธต (เน€เธเนเธ orange)"
+msgstr "ค่าสีฐาน 16 (เช่น #FFA500) หรือชื่อสี (เช่น orange)"
 
 #: gtk/gtkcolorsel.c:1948
 msgid "_Palette"
-msgstr "เธเธฒเธเธชเธต (_P)"
+msgstr "จานสี (_P)"
 
 #: gtk/gtkcolorseldialog.c:115
 msgid "Color Selection"
-msgstr "เน€เธฅเธทเธญเธเธชเธต"
+msgstr "เลือกสี"
 
 #: gtk/gtkcombo.c:143
 msgid "Enable arrow keys"
@@ -2252,7 +2252,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:99
 msgid "File System"
-msgstr ""
+msgstr "ระบบแฟ้ม"
 
 #: gtk/gtkfilechooser.c:100
 msgid "File system object to use"
@@ -2362,11 +2362,11 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:798
 msgid "Files of _type:"
-msgstr ""
+msgstr "แฟ้มชนิด (_T):"
 
 #: gtk/gtkfilechooserdefault.c:854 gtk/gtkfilechooserdefault.c:1209
 msgid "File name"
-msgstr ""
+msgstr "ชื่อแฟ้ม"
 
 #: gtk/gtkfilechooserdefault.c:880
 #, c-format
@@ -2387,7 +2387,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:1113
 msgid "Folder"
-msgstr ""
+msgstr "โฟลเดอร์"
 
 #: gtk/gtkfilechooserdefault.c:1151
 msgid "Add bookmark"
@@ -2452,11 +2452,11 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:2738
 msgid "%d/%b/%Y"
-msgstr ""
+msgstr "%d/%b/%Y"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
-msgstr ""
+msgstr "ชื่อแฟ้ม"
 
 #: gtk/gtkfilesel.c:560
 msgid "The currently selected filename"
@@ -2476,24 +2476,24 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:730
 msgid "Folders"
-msgstr ""
+msgstr "โฟลเดอร์"
 
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
-msgstr ""
+msgstr "โฟลเดอร์ (_D)"
 
 #: gtk/gtkfilesel.c:766
 msgid "Files"
-msgstr ""
+msgstr "แฟ้ม"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
-msgstr ""
+msgstr "แฟ้ม (_F)"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr ""
+msgstr "โฟลเดอร์อ่านไม่ได้: %s"
 
 #: gtk/gtkfilesel.c:984
 #, c-format
@@ -2505,21 +2505,21 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
-msgstr ""
+msgstr "โฟลเดอร์ใหม่ (_N)"
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
-msgstr ""
+msgstr "ลบแฟ้ม (_L)"
 
 #: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
-msgstr ""
+msgstr "เปลี่ยนชื่อแฟ้ม (_R)"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "ชื่อโฟลเดอร์ \"%s\" มีเครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
 
 #: gtk/gtkfilesel.c:1441
 #, c-format
@@ -2527,32 +2527,34 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
+"เกิดข้อผิดพลาดขณะสร้างโฟลเดอร์ \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
+msgstr "คุณคงจะใช้เครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขณะสร้างโฟลเดอร์ \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1484
 msgid "New Folder"
-msgstr ""
+msgstr "โฟลเดอร์ใหม่"
 
 #: gtk/gtkfilesel.c:1499
 msgid "_Folder name:"
-msgstr ""
+msgstr "ชื่อโฟลเดอร์ (_F)"
 
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
-msgstr ""
+msgstr "สร้าง (_R)"
 
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "ชื่อแฟ้ม \"%s\" มีเครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
@@ -2560,29 +2562,31 @@ msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
+"เกิดข้อผิดพลาดขณะลบแฟ้ม \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
-msgstr ""
+msgstr "มันคงมีเครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
 
 #: gtk/gtkfilesel.c:1580
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขณะลบแฟ้ม \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1623
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr ""
+msgstr "ยืนยันว่าจะลบแฟ้ม \"%s\" ?"
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr ""
+msgstr "ลบแฟ้ม"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "ชื่อแฟ้ม \"%s\" มีเครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
 
 #: gtk/gtkfilesel.c:1676
 #, c-format
@@ -2590,6 +2594,8 @@ msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
+"เกิดข้อผิดพลาดขณะเปลี่ยนชื่อแฟ้มไปเป็น \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1690
 #, c-format
@@ -2597,24 +2603,26 @@ msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
+"เกิดข้อผิดพลาดขณะเปลี่ยนชื่อของแฟ้ม \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1700
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขณะเปลี่ยนชื่อแฟ้ม \"%s\" ไปเป็น \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
-msgstr ""
+msgstr "เปลี่ยนชื่อแฟ้ม"
 
 #: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr ""
+msgstr "เปลี่ยนชื่อแฟ้ม \"%s\" ไปเป็น:"
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
-msgstr ""
+msgstr "เปลี่ยนชื่อ (_R)"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
@@ -2626,35 +2634,37 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
+"แปลงแฟ้ม \"%s\" ไปเป็น UTF-8 ไม่สำเร็จ (ลองตั้งตัวแปลสภาพแวดล้อม "
+"G_BROKEN_FILENAMES): %s"
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
-msgstr ""
+msgstr "นี่ไม่ใช่ UTF-8"
 
 #: gtk/gtkfilesel.c:4019
 msgid "Name too long"
-msgstr ""
+msgstr "ชื่อยาวเกินไป"
 
 #: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "แปลงชื่อแฟ้มไม่สำเร็จ"
 
 #: gtk/gtkfilesystemmodel.c:1018
 msgid "(Empty)"
-msgstr ""
+msgstr "(ว่าง)"
 
 #: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:377
 #, c-format
 msgid "error creating directory '%s': %s"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขณะสร้างโฟลเดอร์ '%s': %s"
 
 #: gtk/gtkfilesystemunix.c:566
 msgid "This file system does not support icons"
-msgstr ""
+msgstr "ระบบแฟ้มนี้ไม่รองรับสัญลักษณ์"
 
 #: gtk/gtkfilesystemunix.c:579 gtk/gtkfilesystemunix.c:592
 msgid "This file system does not support bookmarks"
-msgstr ""
+msgstr "ระบบแฟ้มนี้ไม่รองรับที่คั่นหน้า"
 
 #: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:900
 #, c-format
@@ -2692,16 +2702,16 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:210
 msgid "Font name"
-msgstr ""
+msgstr "ชื่อแบบอักษร"
 
 #: gtk/gtkfontbutton.c:192
 msgid "The name of the selected font"
-msgstr ""
+msgstr "ชื่อของแบบอักษรที่เลือก"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:193 gtk/gtkfontbutton.c:288
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:207
 msgid "Use font in label"
@@ -2739,7 +2749,7 @@ msgstr ""
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:68
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "เธเธนเนเนเธซเธเนเธฅเธตเธฃเธนเนเธ—เธคเธฉเธเธตเธเนเธณเนเธเนเธ L10n@OpenTLE.org"
+msgstr "ผู้ใหญ่ลีรู้ทฤษฎีน้ำแข็ง L10n@OpenTLE.org"
 
 #: gtk/gtkfontsel.c:211
 msgid "The X string that represents this font"
@@ -2759,24 +2769,24 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
-msgstr "เธ•เธฃเธฐเธเธนเธฅ (_F):"
+msgstr "ตระกูล (_F):"
 
 #: gtk/gtkfontsel.c:338
 msgid "_Style:"
-msgstr "เธฃเธนเธเนเธเธ (_S):"
+msgstr "รูปแบบ (_S):"
 
 #: gtk/gtkfontsel.c:344
 msgid "Si_ze:"
-msgstr "เธเธเธฒเธ (_Z):"
+msgstr "ขนาก (_Z):"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
 msgid "_Preview:"
-msgstr "เธ•เธฑเธงเธญเธขเนเธฒเธ (_P):"
+msgstr "ตัวอย่าง (_P):"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
-msgstr "เน€เธฅเธทเธญเธเนเธเธเธญเธฑเธเธฉเธฃ"
+msgstr "เลือกแบบอักษร"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label"
@@ -4096,274 +4106,274 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
-msgstr "เธเนเธญเธกเธนเธฅ"
+msgstr "ข้อมูล"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr "เธเธณเน€เธ•เธทเธญเธ"
+msgstr "คำเตือน"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
-msgstr "เธเธดเธ”เธเธฅเธฒเธ”"
+msgstr "ผิดพลาด"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr "เธเธณเธ–เธฒเธก"
+msgstr "คำถาม"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "เน€เธเธดเนเธก (_A)"
+msgstr "เพิ่ม (_A)"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr "เน€เธฃเธดเนเธกเนเธเน (_A)"
+msgstr "เริ่มใช้ (_A)"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr "เธซเธเธฒ (_B)"
+msgstr "หนา (_B)"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "เธขเธเน€เธฅเธดเธ (_C)"
+msgstr "ยกเลิก (_C)"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr "เธเธตเธ”เธต (_C)"
+msgstr "ซีดี (_C)"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "เธฅเธ (_C)"
+msgstr "ลบ (_C)"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "เธเธดเธ” (_C)"
+msgstr "ปิด (_C)"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "เนเธเธฅเธ (_C)"
+msgstr "แปลง (_C)"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr "เธเธฑเธ”เธฅเธญเธ (_C)"
+msgstr "คัดลอก (_C)"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr "เธ•เธฑเธ” (_T)"
+msgstr "ตัด (_T)"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "เธฅเธ (_D)"
+msgstr "ลบ (_D)"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr "เน€เธฃเธตเธขเธเนเธเน (_E)"
+msgstr "เรียกใช้ (_E)"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr "เธซเธฒ (_F)"
+msgstr "หา (_F)"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr "เธซเธฒเนเธฅเธฐเนเธ—เธเธ—เธตเน (_R)"
+msgstr "หาและแทนที่ (_R)"
 
 #: gtk/gtkstock.c:289
 msgid "_Floppy"
-msgstr "เธเธฅเธญเธเธเธต (_F)"
+msgstr "ฟลอปปี (_F)"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr "เธฅเนเธฒเธเธชเธธเธ” (_B)"
+msgstr "ล่างสุด (_B)"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr "เนเธฃเธเธชเธธเธ” (_F)"
+msgstr "แรกสุด (_F)"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr "เธซเธฅเธฑเธเธชเธธเธ” (_L)"
+msgstr "หลังสุด (_L)"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr "เธเธเธชเธธเธ” (_T)"
+msgstr "บนสุด (_T)"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr "เธ–เธญเธขเธเธฅเธฑเธ (_B)"
+msgstr "ถอยกลับ (_B)"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "เธฅเธ (_D)"
+msgstr "ลง (_D)"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr "เธ–เธฑเธ”เนเธ (_F)"
+msgstr "ถัดไป (_F)"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "เธเธถเนเธ (_U)"
+msgstr "ขึ้น (_U)"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "เธงเธดเธเธตเนเธเน (_H)"
+msgstr "วิธีใช้ (_H)"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
-msgstr "เธเนเธฒเธ (_H)"
+msgstr "บ้าน (_H)"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr "เธ”เธฑเธเธเธต (_I)"
+msgstr "ดัชนี (_I)"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr "เธ•เธฑเธงเน€เธญเธตเธขเธ (_I)"
+msgstr "ตัวเอียง (_I)"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr "เธเธฃเธฐเนเธ”เธ”เนเธ (_J)"
+msgstr "กระโดดไป (_J)"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
-msgstr "เธเธฅเธฒเธ (_C)"
+msgstr "กลาง (_C)"
 
 #: gtk/gtkstock.c:304
 msgid "_Fill"
-msgstr "เน€เธ•เธดเธกเน€เธ•เนเธก (_F)"
+msgstr "เติมเต็ม (_F)"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr "เธเนเธฒเธข (_L)"
+msgstr "ซ้าย (_L)"
 
 #: gtk/gtkstock.c:306
 msgid "_Right"
-msgstr "เธเธงเธฒ (_R)"
+msgstr "ขวา (_R)"
 
 #: gtk/gtkstock.c:307
 msgid "_New"
-msgstr "เนเธซเธกเน (_N)"
+msgstr "ใหม่ (_N)"
 
 #: gtk/gtkstock.c:308
 msgid "_No"
-msgstr "เนเธกเน (_N)"
+msgstr "ไม่ (_N)"
 
 #: gtk/gtkstock.c:309
 msgid "_OK"
-msgstr "เธ•เธเธฅเธ (_O)"
+msgstr "ตกลง (_O)"
 
 #: gtk/gtkstock.c:310
 msgid "_Open"
-msgstr "เน€เธเธดเธ” (_O)"
+msgstr "เปิด (_O)"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr "เนเธเธฐ (_P)"
+msgstr "แปะ (_P)"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr "เธเธฃเธฑเธเนเธ•เนเธ (_P)"
+msgstr "ปรับแต่ง (_P)"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr "เธเธดเธกเธเน (_P)"
+msgstr "พิมพ์ (_P)"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "เธ•เธฑเธงเธญเธขเนเธฒเธเธเธดเธกเธเน (_V)"
+msgstr "ตัวอย่างพิมพ์ (_V)"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr "เธเธธเธ“เธชเธกเธเธฑเธ•เธด (_P)"
+msgstr "คุณสมบัติ (_P)"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr "เธญเธญเธ (_Q)"
+msgstr "ออก (_Q)"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
-msgstr "เธ—เธณเธเนเธณ (_R)"
+msgstr "ทำซ้ำ (_R)"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr "เน€เธฃเธตเธขเธเนเธซเธกเน (_R)"
+msgstr "เรียกใหม่ (_R)"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "เน€เธญเธฒเธญเธญเธ (_R)"
+msgstr "เอาออก (_R)"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr "เธเธทเธเธเธฅเธฑเธ (_R)"
+msgstr "คืนกลับ (_R)"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "เธเธฑเธเธ—เธถเธ (_S)"
+msgstr "บันทึก (_S)"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "เธเธฑเธเธ—เธถเธเน€เธเนเธ (_A)"
+msgstr "บันทึกเป็น (_A)"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
-msgstr "เธชเธต (_C)"
+msgstr "สี (_C)"
 
 #: gtk/gtkstock.c:324
 msgid "_Font"
-msgstr "เนเธเธเธญเธฑเธเธฉเธฃ (_F)"
+msgstr "แบบอักษร (_F)"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr "เธเนเธญเธขเนเธเธกเธฒเธ (_A)"
+msgstr "น้อยไปมาก (_A)"
 
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr "เธกเธฒเธเนเธเธเนเธญเธข (_D)"
+msgstr "มากไปน้อย (_D)"
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr "เธ•เธฃเธงเธเธ•เธฑเธงเธชเธเธ” (_S)"
+msgstr "ตรวจตัวสกด (_S)"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr "เธซเธขเธธเธ” (_S)"
+msgstr "หยุด (_S)"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
-msgstr "เธเธตเธ”เธ—เธฑเธ (_S)"
+msgstr "ขีดทับ (_S)"
 
 #: gtk/gtkstock.c:330
 msgid "_Undelete"
-msgstr "เนเธกเนเธฅเธ (_U)"
+msgstr "ไม่ลบ (_U)"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr "เธเธตเธ”เน€เธชเนเธเนเธ•เน (_U)"
+msgstr "ขีดเส้นใต้ (_U)"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr "เน€เธฃเธตเธขเธเธเธทเธ (_U)"
+msgstr "เรียกคืน (_U)"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
-msgstr "เนเธเน (_Y)"
+msgstr "ใช่ (_Y)"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr "เธเธเธฒเธ”เธเธเธ•เธด (_1)"
+msgstr "ขนาดปกติ (_1)"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr "เธเธขเธฒเธขเนเธซเนเธเธญเธ”เธต (_F)"
+msgstr "ขยายให้พอดี (_F)"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr "เธเธขเธฒเธข (_I)"
+msgstr "ขยาย (_I)"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr "เธขเนเธญ (_O)"
+msgstr "ย่อ (_O)"
 
 #: gtk/gtktable.c:158
 msgid "Rows"
@@ -5719,7 +5729,7 @@ msgstr ""
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr "เนเธ—เธข (เน€เธชเธตเธขเธญเธขเธนเน)"
+msgstr "ไทย (เสียอยู่)"
 
 #. ID
 #: modules/input/imti-er.c:452
