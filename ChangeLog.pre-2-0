@@ -1,3 +1,160 @@
+2002-01-24  Tor Lillqvist  <tml@iki.fi>
+
+	Committing now to get all huge amount of changes checked in. There
+	might be some silly debugging printouts left, or stuff like
+	that. But everything does seem to work as well as before. Much
+	cleanup and refactoring still do to.
+
+	* acconfig.h: Add USE_OLE2_DND.
+
+	* configure.in: Add option --disable-ole2-dnd.
+
+	* autogen.sh: Check for glib-2.0.m4 and glib-gettext.m4.
+
+	* gdk/gdkprivate.h: There is no gdk_debug_level variable.
+
+	* gdk/gdkimage.h (enum GdkImageType): Remove GDK_IMAGE_SHARED_PIXMAP.
+	Was used by the long abandoned gdk-imlib port.
+
+	* gdk/gdk.def
+	* gdk/win32/gdkimage-win32.c
+	* gdk/win32/gdkpixmap-win32.c: Remove gdk_image_bitmap_new() and
+	gdk_pixmap_create_on_shared_image() which also were used only by
+	the gdk-imlib port.
+
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new_from_pixmap): Add
+	verbose debugging output of the source and mask images.
+
+	* gtk/Makefile.am: Let gtk-win32res.lo depend on gtk.def and the
+	libgtk_la_OBJECTS.
+
+	* gtk/gtk.def: Export the private (but still used by some apps)
+	_gtk_private_signals and _gtk_private_n_signals. Re-sort the file.
+
+	* gtk/gtkfilesel.c: Silence some gcc -Wall warnings.
+
+	* gtk/gtkmain.c: If we HAVE_BIND_TEXTDOMAIN_CODESET, tell libintl
+	to use UTF-8.
+
+2002-01-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_colormap_color): For (single-bit
+	depth) bitmaps (recognized by having a null colormap), use
+	DIBINDEX.
+
+	* gdk/win32/*.c: Always use format %p instead of %#x in debugging
+	output of GDI HANDLEs.
+
+2002-01-21  Tor Lillqvist  <tml@iki.fi>
+
+	Big cleanups and fixes to 256-colour mode: Too many changes to
+	list here in detail, partial list below. All GIMP features now
+	seem to work as previously in 16- and 32-bit colour mode, plus
+	also in 256-colour mode.
+
+	The Win32 pixmap and image code is still very ugly. Lots of
+	duplicated code snippets that create DIB sections, select and
+	realize palettes, etc. Now when I finally got 256-colour mode
+	working, I really need to go through the code and factorize out
+	such common snippets.
+
+	Probably it would be a good idea to keep the pointer to the DIB
+	section's bits also for GdkPixmaps, and not just GdkImages (where
+	it of course is visible to the application, even). Maybe even have
+	a GdkImage struct as such as a part of the private data for Win32
+	GdkPixmaps? Having the pixel data accessible would simplify
+	gdk_win32_bitmap_to_region() a lot. Perhaps gdk_image_get() and
+	_put() between pixmaps and images, too, and maybe even
+	gdk_win32_draw_drawable(). We could skip all the HDC and palette
+	setup and the BitBlt, and just copy the bits ourselves. Hmm.
+
+	* gdk/win32/gdkprivate-win32.h: Remove definitions of the X11
+	structs ColormapStruct, Visual and XStandardColormap.
+
+	(GdkGCWin32Data): Add field holdpal to hold the previous palette
+	selected into the DC.
+
+	(GdkVisualPrivate): No need for a poiner to an X11 Visual
+	emulating struct.
+
+	(GdkWin32PalEntryState): New enum, describing the state of logical
+	palette entries: static (the 20 static colours), available or in
+	use.
+
+	(GdkColormapPrivateWin32): Instead of the X11 emulation Colormap
+	struct pointer, store the Windows logical palette HPALETTE
+	directly here, plus its current size and the state of its entries.
+
+	* gdk/win32/gdkcc-win32.c: Don't use the removed XStandardColormap
+	or Visual structs.
+	
+	* gdk/win32/gdkcolor-win32.c: Rename static functions to shorter
+	names. Add much debugging output.
+
+	(create_colormap): As we implement both "shared" and "private"
+ 	colormaps identically on Win32, always allocate a Windows logical
+ 	palette containing the (presumably 20) static colours from the
+ 	system palette, marked as such.
+
+	(gdk_win32_print_paletteentries, gdk_win32_print_system_palette,
+ 	gdk_win32_print_hpalette): New debugging functions.
+
+	(gdk_colormap_free_colors): Instead of keeping two essentially
+	identical functions "in sync" (this and gdk_colors_free()), build
+	a table of the pixel values and call gdk_colors_free from here...
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_drawable): In
+	256-colour mode, when blitting from a window, select and realize
+	palette.
+	
+	* gdk/win32/gdkevents-win32.c (update_colors): New function. Call
+	UpdateColors() on a window and all its descendants.
+
+	(synthesize_expose_events_children): New function: Synthesize
+	expose events for a window and all its descendants, in order to
+	realize our palettes and redraw everything.
+
+	(gdk_event_translate): Handle WM_QUERYNEWPALETTE: Call
+	synthesize_expose_events_children().
+
+	Handle WM_PALETTECHANGED: Call update_colors(), or if we have done
+	that three times already (a randomly chosen limit), generate
+	expose events.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_get_children):
+	Implement, using EnumChildWindows().
+
+2002-01-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkprivate.h: Add new flags to GdkDebugFlag:
+ 	GDK_DEBUG_COLORMAP, GDKRGB, GC, PIXMAP, IMAGE, INPUT and CURSOR.
+
+	* gdk/gdk.c: Handle them.
+	(gdk_init_check): Check also for '/'-delimited argv[0].
+
+	* gdk/gdkrgb.c: Indentation fixups. Add some logging messages
+ 	using GDK_NOTE (GDKRGB, ...). Seg gdk_rgb_verbose if
+ 	GDK_DEBUG_GDKRGB is turned on.
+
+	* gdk/win32/gdkcursor-win32.c
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkinput-win32.c
+	* gdk/win32/gdkimage-win32.c
+	* gdk/win32/gdkpixmap-win32.c: Use the new flags instead of MISC.
+
+2002-01-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (get_bw_palette): New function, factored
+	out from:
+	(predraw_set_foreground, BitmapToRegion): Use it.
+	
+	* gtk/Makefile.am (gtk-win32res.lo): Depend on gtk.def and
+	libgtk_la_OBJECTS.
+
+	* gtk/gtk.def: Add _gtk_private_signals and _gtk_private_n_signals
+	to really export them. Some applications apparently use these
+	private variables.
+
 2002-01-12  Tor Lillqvist  <tml@iki.fi>
 
 	Palettized mode improvements by Stephan R.A. Deibel

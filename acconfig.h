@@ -51,6 +51,9 @@
 /* Most machines will be happy with int or void.  IRIX requires '...' */
 #undef SIGNAL_ARG_TYPE
 
+/* Define to support OLE2 DND */
+#undef USE_OLE2_DND
+
 /* #undef PACKAGE */
 /* #undef VERSION */
 

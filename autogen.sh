@@ -49,7 +49,7 @@ esac
 if test -z "$ACLOCAL_FLAGS"; then
 
 	acdir=`aclocal --print-ac-dir`
-        m4list="glib.m4 gettext.m4"
+        m4list="glib-2.0.m4 glib-gettext.m4"
 
 	for file in $m4list
 	do
@@ -65,11 +65,11 @@ if test -z "$ACLOCAL_FLAGS"; then
 	done
 fi
 
-echo "Running gettextize...  Ignore non-fatal messages."
+echo "Running glib-gettextize...  Ignore non-fatal messages."
 # Hmm, we specify --force here, since otherwise things dont'
 # get added reliably, but we don't want to overwrite intl
 # while making dist.
-echo "no" | gettextize --copy --force
+echo "no" | glib-gettextize --copy --force
 
 aclocal $ACLOCAL_FLAGS
 
