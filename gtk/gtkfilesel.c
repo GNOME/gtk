@@ -159,7 +159,6 @@ struct _CompletionState
 
   gchar *user_dir_name_buffer;
   gint user_directories_len;
-  gchar *user_home_dir;
 
   gchar *last_completion_text;
 
@@ -1588,13 +1587,6 @@ tryagain:
   new_state->reference_dir = NULL;
   new_state->completion_dir = NULL;
   new_state->active_completion_dir = NULL;
-
-  if ((new_state->user_home_dir = getenv("HOME")) != NULL)
-    {
-      /* if this fails, get_pwdb will fill it in. */
-      new_state->user_home_dir = g_strdup(new_state->user_home_dir);
-    }
-
   new_state->directory_storage = NULL;
   new_state->directory_sent_storage = NULL;
   new_state->last_valid_char = 0;
@@ -1651,8 +1643,6 @@ cmpl_free_state (CompletionState* cmpl_state)
 
   if (cmpl_state->user_dir_name_buffer)
     g_free (cmpl_state->user_dir_name_buffer);
-  if (cmpl_state->user_home_dir)
-    g_free (cmpl_state->user_home_dir);
   if (cmpl_state->user_directories)
     g_free (cmpl_state->user_directories);
   if (cmpl_state->the_completion.text)
@@ -1864,10 +1854,12 @@ open_user_dir(gchar* text_to_complete,
   if(!cmp_len)
     {
       /* ~/ */
-      if (!cmpl_state->user_home_dir &&
-	  !get_pwdb(cmpl_state))
+      gchar *homedir = g_get_home_dir ();
+
+      if (homedir)
+	return open_dir(homedir, cmpl_state);
+      else
 	return NULL;
-      return open_dir(cmpl_state->user_home_dir, cmpl_state);
     }
   else
     {
@@ -2643,21 +2635,6 @@ get_pwdb(CompletionState* cmpl_state)
       len += strlen(pwd_ptr->pw_dir);
       len += 2;
       count += 1;
-    }
-
-  if (!cmpl_state->user_home_dir)
-    {
-      /* the loser doesn't have $HOME set */
-      setpwent ();
-
-      pwd_ptr = getpwuid(getuid());
-      if(!pwd_ptr)
-	{
-	  cmpl_errno = errno;
-	  goto error;
-	}
-      /* Allocate this separately, since it might be filled in elsewhere */
-      cmpl_state->user_home_dir = g_strdup (pwd_ptr->pw_dir);
     }
 
   setpwent ();
