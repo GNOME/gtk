@@ -22,6 +22,7 @@ gdk-pixbuf/io-xbm.c
 gdk-pixbuf/io-xpm.c
 gdk/gdk.c
 gdk/gdkdisplaymanager.c
+gdk/gdkpango.c
 gdk/win32/gdkmain-win32.c
 gdk/x11/gdkmain-x11.c
 gtk/gtkaboutdialog.c

@@ -1,3 +1,8 @@
+2004-11-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* POTFILES.in: Add gdk/gdkpango.c.  (pointed out by
+	Marcel Telka)
+
 2004-11-22  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
 	* es.po: Updated Spanish transalation.

@@ -1,3 +1,8 @@
+2004-11-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* POTFILES.in: Add gdk/gdkpango.c.  (pointed out by
+	Marcel Telka)
+
 2004-11-25  Martin Willemoes Hansen  <mwh@sysrq.dk>
 
 	* da.po: Updated Danish translation.
