@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -120,7 +120,7 @@ msgstr "שריפֿט נאָמען"
 msgid "A unique name for the action."
 msgstr ""
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "עטיקעט"
@@ -299,7 +299,7 @@ msgstr "פֿאַרקער דעם מצבֿ פֿונעם קנעפּל"
 msgid "Horizontal alignment"
 msgstr "האָריזאָנטאַלישע אױסגלײַכונג"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -311,7 +311,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "װערטיקאַלישע אױסגלײַכונג"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -552,7 +552,7 @@ msgstr "פּאָזיציע"
 msgid "The index of the child in the parent"
 msgstr "דער אינדעקס פֿונעם קינד אין זײַן טאַטע־מאַמע"
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -560,12 +560,12 @@ msgstr ""
 "טעקסט פֿון עטיקעט־צעפּיכעסל אין דרינען פֿון קנעפּל, אױב דאָס קנעפּל האָט אַן "
 "עטיקעט־צעפּיכעסל"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "שטריך אונטער"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -573,55 +573,55 @@ msgstr ""
 "אױב יאָ, װעט אַן אונטערשטריך אין טעקסט באַדײַטן אַז דעם קומעדיקן שריפֿטצײכן ניצט "
 "מען װי אַ מנעמאָנישער פֿאַרגיכערער־קלאַװיש"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "ניצט הורט"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "אױב באַשטעטיקט, װעט דער עטיקעט קלײַבן אַ הורטזאַך אַנשטאָט זיך לאָזן װײַזן"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr ""
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 #, fuzzy
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "צי דער עטיקעט־טעקסט לאָזט זיך סעלעקטירן מיט דעם מײַזל"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "צאַמרינע רעליִעף"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "דער סטיל פֿון צאַמרינע רעליִעף"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 #, fuzzy
 msgid "Horizontal alignment for child"
 msgstr "האָריזאָנטאַלישע אױסגלײַכונג"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 #, fuzzy
 msgid "Vertical alignment for child"
 msgstr "װערטיקאַלישע אױסגלײַכונג"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "געװײנטלעכע אָפּרוקונג"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "איבעריקע אָפּרוקונג צוצולײגן פֿאַר CAN_DEFAULT קנעפּלעך"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "געװײנטלעכע אױסערלעכע אָפּרוקונג"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -629,29 +629,29 @@ msgstr ""
 "איבעריקע אָפּרוקונג צוצולײגן פֿאַר CAN_DEFAULT קנעפּלעך װאָס װײַזט זיך אַלע מאָל אין "
 "דרױסן פֿון צאַמרינע"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "קינדס ה' פֿונאַנדעררוקונג"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "װי װײַט אין ה' ריכטונג איבערצורוקן דאָס קינד װען מען דריקט דאָס קנעפּל"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "קינדס װ' פֿונאַנדעררוקונג"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "װי װײַט אין װ' ריכטונג איבערצורוקן דאָס קינד װען מען דריקט דאָס קנעפּל"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr ""
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 #, fuzzy
 msgid "Whether stock icons should be shown in buttons"
 msgstr "אױב מען װיל אַז די הענטלעך זאָלן זיך װײַזן"
@@ -1800,11 +1800,11 @@ msgstr "װײַז טעקסט"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "צי די קנעפּלעך װאָס שאַפֿן און אָפּערירן אױף טעקעס זאָלן זיך לאָזן װײַזן"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
@@ -2066,20 +2066,20 @@ msgstr "מאַגאַזין־סאָרט"
 msgid "The representation being used for image data"
 msgstr "די רעפּרעזענטאַציע פֿאַר בילדדאַטן"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "בילד־צעפּיכעסל"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "קינד צעפּיכעסל װאָס װײַזט זיך לעבן דעם מעניו־טעקסט"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 #, fuzzy
 msgid "Show menu images"
 msgstr "װײַז הענטלעך"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "אױב מען װיל אַז די הענטלעך זאָלן זיך װײַזן"
@@ -4085,20 +4085,20 @@ msgstr "סאָרטירונג־סדר"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "סאָרטירונג־ריכטונג װאָס דער סאָרטיר סימן זאָל װײַזן"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 #, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "צי די מעניו־אײנס האָט אַ פֿײגעלע"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr ""
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr ""
 

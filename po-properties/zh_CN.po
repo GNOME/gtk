@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-03-12 23:09+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -116,7 +116,7 @@ msgstr "名称"
 msgid "A unique name for the action."
 msgstr "动作的唯一名称。"
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "标签"
@@ -280,7 +280,7 @@ msgstr "调整的页面大小"
 msgid "Horizontal alignment"
 msgstr "水平排列"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -290,7 +290,7 @@ msgstr "在可用空间内子部件的水平位置。0.0 表示左对齐，1.0 �
 msgid "Vertical alignment"
 msgstr "垂直排列"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -514,97 +514,97 @@ msgstr "位置"
 msgid "The index of the child in the parent"
 msgstr "子部件在父部件中的索引"
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "按钮中的文字标签，如果该按钮包含一个标签的话"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "使用下划线"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr "如果设置的话，文本中下划线的后续字符将被用于可记忆的加速键"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "使用后备"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "如果设置的话，标签将用于拾取后备项目，而不是显示的项目"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr "点击获得焦点"
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "用鼠标点击该按钮时是否要获得焦点"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "边框浮雕"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "边框浮雕样式"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 msgid "Horizontal alignment for child"
 msgstr "子项水平排列"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 msgid "Vertical alignment for child"
 msgstr "子项垂直排列"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "默认间距"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "为“可默认”按钮添加的额外间距"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "默认按钮外围间距"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "在“可默认”按钮边框外侧总是绘制的额外间距"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "子部件水平位移"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "当按钮被按下时，它的子部件在水平方向的移动距离"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "子部件垂直位移"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "当按钮被按下时，它的子部件在垂直方向的移动距离"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "显示按钮图像"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr "是否要在按钮中显示备选图标"
 
@@ -1696,11 +1696,11 @@ msgstr "显示隐藏文件"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "是否显示隐藏的文件或文件夹。"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr "默认文件选择器后端"
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "默认要使用的 GtkFileChooser 后端名称"
 
@@ -1949,19 +1949,19 @@ msgstr "存储类型"
 msgid "The representation being used for image data"
 msgstr "用于图像数据的表示法"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "图像部件"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "菜单文字旁出现的子部件"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 msgid "Show menu images"
 msgstr "显示菜单图像"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Whether images should be shown in menus"
 msgstr "是否要在菜单中显示图像"
 
@@ -3875,19 +3875,19 @@ msgstr "排序方向"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "排序指示器应显示的排序方向"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "在菜单上添加撕下标志"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "是否要将撕下的菜单项添加到菜单中"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr "合并的界面定义"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr "描述合并的界面的 XML 字符串"
 

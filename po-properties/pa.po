@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-08-17 14:25+0530\n"
 "Last-Translator: Amanpreet Singh Alam <aalam@redhat.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -117,7 +117,7 @@ msgstr "ਨਾਂ"
 msgid "A unique name for the action."
 msgstr "ਕਾਰਵਾਈ ਲਈ ਸ਼ਨਾਖਤੀ ਨਾਂ ੤"
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "ਲੇਬਲ"
@@ -281,7 +281,7 @@ msgstr "ਸਮਰੂਪ ਕਰਨ ਦਾ ਸਫਾ ਅਕਾਰ ਹੈ"
 msgid "Horizontal alignment"
 msgstr "ਲੇਟਵਾਂ ਸਫਬੰਦੀ ਕਰੋ"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -291,7 +291,7 @@ msgstr "ਉਪਲੱਬਧ ਥਾਂ ਵਿੱਚ ਚਲਾਇਡ ਲਈ ਲੇ�
 msgid "Vertical alignment"
 msgstr "ਲੰਬਰੂਪੀ ਸਫਬੰਦੀ ਕਰੋ"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -517,18 +517,18 @@ msgstr "ਸਥਿਤੀ"
 msgid "The index of the child in the parent"
 msgstr "ਪੇਰੈਟ ਵਿੱਚ ਚਾਇਲਡ ਦੀ ਸਥਿਤੀ ਦਾ ਤਤਕਰਾ"
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "ਬਟਨ ਵਿੱਚ ਲੇਬਲ ਵਿਦਗਿਟ ਦੇ ਸ਼ਬਦ, ਜੇਕਰ ਬਟਨ ਵਿੱਚ ਲੇਬਲ ਵਿਦਗਿਟ ਹੈ ੤"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "ਹੇਠਾਂ-ਰੇਖਾ ਵਰਤੋ"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -536,80 +536,80 @@ msgstr ""
 "ਜੇਕਰ, ਸ਼ਬਦ ਵਿੱਚ ਹੇਠਾਂ ਰੇਖਾ ਖਿੱਚੀ ਗਈ ਹੈ ਤਾਂ ਇਹ ਅਗਲੇ ਅੱਖਰ ਨੂੰ ਵੇਖਾਵੇਗਾ ਕਿ ਉਹ ਕੀ-ਬੋਰਡ ਤੋ ਵਰਤਿਆ "
 "ਜਾ ਸਕਦਾ ਹੈ ੤"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "ਸਟਾਕ ਵਰਤੋ"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "ਜੇਕਰ ਨਿਰਧਾਰਿਤ ਕੀਤਾ ਤਾਂ, ਲੇਬਲ ਸਟਾਕ ਚੀਜ਼ ਨੂੰ ਚੁੱਕੇਗਾ ਨਾਕਿ ਉਸ ਨੂੰ ਵੇਖਾਵੇਗਾ "
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr "ਦਬਾਉਣ ਤੇ ਕੇਂਦਰਿਤ ਕਰੋ"
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "ਕੀ ਬਟਨ ਕੇਂਦਰਿਤ ਹੋ ਜਾਵੇ, ਜਦੋ ਕਿ ਇਹ ਮਾਊਸ ਨਾਲ ਦਬਾਇਆ ਜਾਵੇ "
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "ਹਾਸ਼ੀਏ ਦੀ ਛੋਟ"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "ਹਾਸ਼ੀਏ ਦੀ ਛੋਟ ਦੀ ਸ਼ੈਲੀ"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 msgid "Horizontal alignment for child"
 msgstr "ਚਾਇਲਡ ਲਈ ਲੇਟਵੀ ਸਫ਼ਬੰਦੀ"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 msgid "Vertical alignment for child"
 msgstr "ਚਾਇਲਡ ਲਈ ਲੰਬਕਾਰੀ ਸਫ਼ਬੰਦੀ"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "ਮੂਲ ਖਾਲੀ ਥਾਂ"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "ਬਟਨਾਂ CAN_DEFAULT ਲਈ ਵੱਖਰੀ ਥਾਂ ਜੋੜੋ"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "ਮੂਲ ਬਾਹਰੀ ਖਾਲ਼ੀ ਥਾਂ"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "ਬਟਨਾਂ CAN_DEFAULT ਲਈ ਵੱਖਰੀ ਥਾਂ ਜੋੜੋ, ਹੋ ਕਿ ਹਾਸ਼ੀਏ ਤੋ ਹਮੇਸ਼ਾ ਬਾਹਰ ਖਿੱਚੀ ਜਾਵੇ "
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "ਚਾਇਲਡ ਦਾ X ਵਿਸਥਾਪਨ"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "ਜਦੋ ਬਟਨ ਨੂੰ ਦਬਾਇਆ ਜਾਵੇ ਤਾਂ ਚਾਇਲਡ ਨੂੰ X ਦਿਸ਼ਾ ਵਿੱਚ ਕਿੰਨਾ ਹਿਲਾਇਆ ਜਾਵੇ"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "ਚਾਇਲਡ ਦਾ Y ਵਿਸਥਾਪਨ"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "ਜਦੋ ਬਟਨ ਨੂੰ ਦਬਾਇਆ ਜਾਵੇ ਤਾਂ ਚਾਇਲਡ ਨੂੰ Y ਦਿਸ਼ਾ ਵਿੱਚ ਕਿੰਨਾ ਹਿਲਾਇਆ ਜਾਵੇ"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "ਬਟਨ-ਚਿੱਤਰ ਵੇਖਾਉ"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr "ਕੀ ਸਟਾਕ ਆਈਕਾਨ ਬਟਨਾਂ ਵਿੱਚ ਵੇਖਿਆ ਜਾਵੇ ੤"
 
@@ -1703,11 +1703,11 @@ msgstr "ਲੁਕਵੀਆਂ ਵੇਖਾਉ"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "ਕੀ ਲੁਕਵੀਆ ਫਾਇਲਾਂ ਅਤੇ ਫੋਲਡਰਾਂ ਨੂੰ ਵੇਖਾਉਣੇ ਹਨ ੤"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr "ਮੂਲ ਫਾਇਲ ਚੋਣ ਬੈਕਐਡ"
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "GtkFileChooser ਦਾ ਨਾਂ ਜੋ ਕਿ ਮੂਲ ਰੂਪ ਵਿੱਚ ਵਰਤਣਾ ਹੈ"
 
@@ -1956,19 +1956,19 @@ msgstr "ਸੰਭਾਲਣ ਦੀ ਕਿਸਮ"
 msgid "The representation being used for image data"
 msgstr "ਚਿੱਤਰ ਡੈਟਾ ਲਈ ਪੇਸ਼ਕਾਰੀ"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "ਚਿੱਤਰ ਵਿਦਗਿਟ"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "ਚਲਾਇਡ ਵਿਦਗਿਟ, ਮੇਨੂ-ਸੂਚੀ ਪਾਠ ਤੋ ਅੱਗੇ ਦਿੱਸਣ ਲਈ"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 msgid "Show menu images"
 msgstr "ਮੇਨੂ-ਸੂਚੀ ਵਿੱਚ ਚਿੱਤਰ ਵੇਖਾਉ"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Whether images should be shown in menus"
 msgstr "ਕੀ ਮੇਨੂ-ਸੂਚੀ ਵਿੱਚ ਚਿੱਤਰ ਵੇਖਾਏ ਜਾਣ"
 
@@ -3892,19 +3892,19 @@ msgstr "ਕ੍ਮ ਤਰਤੀਬ"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "ਕ੍ਮ ਦਿਸ਼ਾ, ਜੋ ਕਿ ਕ੍ਮ ਸੰਕੇਤਕ ਵੇਖਾਵੇ"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "ਵੱਖ-ਕਰਨ ਨੂੰ ਸੂਚੀ ਵਿੱਚ ਜੋੜੋ"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "ਸੂਚੀ ਚੀਜ਼ ਨੂੰ ਵੱਖ-ਕਰਨ ਵਾਲਾ ਨੂੰ ਸੂਚੀ ਵਿੱਚ ਜੋੜਨਾ ਹੈ "
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr "ਰੱਲਗੱਡ UI ਪਰੀਭਾਸ਼ਾ"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr "ਰੱਲਗੱਡ UI ਪਰੀਭਾਸ਼ਾ ਨੂੰ ਦਰਸਾੳੇਣ ਲਈ XML ਦੀ ਸਤਰ"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-08-29 14:00+0300\n"
 "Last-Translator: Mişu Moldovan <dumol@go.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -115,7 +115,7 @@ msgstr "Nume"
 msgid "A unique name for the action."
 msgstr "Un nume unic pentru acţiune."
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Etichetă"
@@ -287,7 +287,7 @@ msgstr "Mărimea paginii la ajustare"
 msgid "Horizontal alignment"
 msgstr "Aliniere orizontală"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -299,7 +299,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Aliniere verticală"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -536,7 +536,7 @@ msgstr "Poziţie"
 msgid "The index of the child in the parent"
 msgstr "Indexul copilului în părinte"
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -544,12 +544,12 @@ msgstr ""
 "Textul unui widget etichetă dinăuntrul unui buton, în caz că butonul conţine "
 "un widget etichetă"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Utilizează sublinieri"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -557,54 +557,54 @@ msgstr ""
 "Dacă e setat, o linie de subliniere în text indică faptul că următorul "
 "caracter ar trebui să fie utilizat ca tasta de accelerare"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "Implicit"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Dacă e setat, eticheta este utilizată pentru a alege un element standard în "
 "loc să fie afişată"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr "Focus la click"
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Specifică dacă butonul primeşte focus la un click de mouse"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "Umbra chenarului"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "Stilul de umbrire al chenarului"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 msgid "Horizontal alignment for child"
 msgstr "Aliniere orizontală pentru copil"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 msgid "Vertical alignment for child"
 msgstr "Aliniere verticală pentru copil"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Spaţiere implicită"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Spaţiere de adăugat în plus pentru butoanele CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Spaţiere externă implicită"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -612,31 +612,31 @@ msgstr ""
 "Spaţiu în plus de adăugat pentru butoanele CAN_DEFAULT şi care este "
 "întotdeauna desenat în afara chenarului"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Deplasare X copil"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Cât de mult să fie mutat copilul în direcţia X cand butonul este apăsat"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Deplasare Y copil"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Cât de mult să fie mutat copilul în direcţia Y cand butonul este apăsat"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "Arată imaginea butonului"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Specifică dacă iconiţele standard ar trebui afişate în butoane"
 
@@ -1761,11 +1761,11 @@ msgstr "Arată fişierele ascunse"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Specifică dacă fişierele ascunse ar trebui să fie afişate"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr "Suport implicit pentru selectorul de fişiere"
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Numele suportului GtkFileChooser de utilizat implicit"
 
@@ -2022,19 +2022,19 @@ msgstr "Tip stocare"
 msgid "The representation being used for image data"
 msgstr "Reprezentarea utilizată pentru datele imaginii"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "Widget imagine"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "Widget copil care să apară lângă textul meniului"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 msgid "Show menu images"
 msgstr "Arată imagini în meniu"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Whether images should be shown in menus"
 msgstr "Specifică dacă ar trebui afişate imaginile în meniu"
 
@@ -4049,19 +4049,19 @@ msgstr "Ordine sortare"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Direcţie de sortare sugerată de indicatorul de sortare"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "Adaugă tearoff-uri meniurilor"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Specifică dacă itemii „tearoff” vor fi adăugaţi în meniu"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr "Definiţie UI reunit"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr "Un şir XML care descrie un UI reunit"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2002-12-19 16:10+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -120,7 +120,7 @@ msgstr "Fonta Nosaukums"
 msgid "A unique name for the action."
 msgstr ""
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "iezīme"
@@ -299,7 +299,7 @@ msgstr "Slēgt pogas stāvokli"
 msgid "Horizontal alignment"
 msgstr "Horizontālā centrēšana"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -311,7 +311,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Vertikālā centrāšana"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -554,18 +554,18 @@ msgstr "Pozīcija"
 msgid "The index of the child in the parent"
 msgstr "Bērna indekss vecākā"
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Iezīmes logdaļas teksts pogā, ja poga satur iezīmes logdaļu"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Lietot pasvītrošanu"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -573,57 +573,57 @@ msgstr ""
 "Ja iestādīts, zemsvītra tekstā nozīmē, ka nākamā rakstzīme būtu jālieto kā "
 "piekļuves paātrinātāja taustiņš"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "Lietot krajumu"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Ja iestatīts, iezīme tiek lietota, lai izvēlētos krājuma priekšmetu tā "
 "vietā, lai parādītu"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr ""
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 #, fuzzy
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Vai iezīmes teksts var tikt izvēlēts ar peli"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "Robežas reljefs"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "Robežas reljefa stils"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 #, fuzzy
 msgid "Horizontal alignment for child"
 msgstr "Horizontālā centrēšana"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 #, fuzzy
 msgid "Vertical alignment for child"
 msgstr "Vertikālā centrāšana"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Noklusētā Atstarpe"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Papildus atstarpe, ko pievienot CAN_DEFAULT pogām"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Noklusētā Ārējā Atstarpe"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -631,29 +631,29 @@ msgstr ""
 "Papildus vieta, ko atvēlēt CAN_DEFAULT pogām, kas vienmēr tiek zīmētas ārpus "
 "robežas"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Bērna X Pārvietošana"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "Cik tālu x virzienā pārvietot bērnu, kad poga tiek nospiesta"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Bērna Y Pārvietošana"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Cik tālu y virzienā pārvietot bērnu, kad poga tiek nospiesta"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr ""
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 #, fuzzy
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Vai sadaļām ir vai nav jābūt parādītām"
@@ -1796,11 +1796,11 @@ msgstr "Parādīt tekstu"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Vai pogas failu izveidošanai/manipulācijai būtu jāparāda"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Noklusētā fonta nosaukums"
@@ -2062,20 +2062,20 @@ msgstr "Glabātuves tips"
 msgid "The representation being used for image data"
 msgstr "Attēla datiem lietotais attēlojums"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "Attēla logdaļa"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "Bērna logdaļa, kurai jāparādās blakus izvēlnes tekstam"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 #, fuzzy
 msgid "Show menu images"
 msgstr "Parādīt Sadaļas"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "Vai sadaļām ir vai nav jābūt parādītām"
@@ -4081,20 +4081,20 @@ msgstr "Kārtošanas secība"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Kārtošanas virziens, kurā kārtošanas indikātoram būtu jārāda"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 #, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Vai izvēlnes priekšmets ir atķeksēts"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr ""
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr ""
 

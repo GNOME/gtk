@@ -23,9 +23,8 @@ Overview of Changes from GTK+ 2.4.13 to GTK+ 2.4.14
   Anders Carlsson, Philip Langdale, Christian Persch,
   John Finlay, Carlos Garnacho Parro, Tim Janik, Gavin Romig-Koch,
   Jonathan Blandford, Billy Biggs, Federico, Christian Neumair,
-  Kristian Høgsberg]
-Updated translations (ca,id,nb,no,pa,zh_CN)
-Bugs fixed 155400,154945,155658,155881,156863,143285,156573,155545,157301,157528,152035,143668,137551,143668,154615,154611,155744,158477,141077,158475,159373
+  Kristian Høgsberg, Sven, Dennis Cranston]
+Updated translations (ca,id,nb,no,nso,pa,zh_CN)
 
 Overview of Changes from GTK+ 2.4.11 to GTK+ 2.4.13
 ===================================================

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -114,7 +114,7 @@ msgstr "Naam"
 msgid "A unique name for the action."
 msgstr "n  Unieke naam vir die aksie."
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Etiket"
@@ -283,7 +283,7 @@ msgstr "Die bladsygrootte van die aanpassing"
 msgid "Horizontal alignment"
 msgstr "Horisontale gerigtheid"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -295,7 +295,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Vertikale gerigtheid"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -530,7 +530,7 @@ msgstr "Posisie"
 msgid "The index of the child in the parent"
 msgstr "Die indeks van die kind in die ouer"
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -538,12 +538,12 @@ msgstr ""
 "Teks van die etiketdingesie binne-in die knoppie, indien die knoppie 'n "
 "etiketdingesie bevat"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Gebruik onderstreep"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -551,54 +551,54 @@ msgstr ""
 "Indien gestel beteken 'n onderstreepkarakter in die teks dat die volgende "
 "karakter as mnemoniese snelsleutel gebruik moet word"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "Gebruik stapel"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Indien gestel, word die etiket gebruik om 'n stapelitem te kies in plaas "
 "daarvan om vertoon te word"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr "Fokus op kliek"
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Of 'n knoppie die fokus gryp wanneer dit met die muis gekliek word"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "Grensreliëf"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "Die grensreliëf-styl"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 msgid "Horizontal alignment for child"
 msgstr "Horisontale gerigtheid vir kind"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 msgid "Vertical alignment for child"
 msgstr "Vertikale gerigtheid vir kind"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Verstekspasiëring"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Ekstra spasie vir byvoeg by CAN_DEFAULT-knoppies"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Verstekbuitespasiëring"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -606,31 +606,31 @@ msgstr ""
 "Ekstra spasie vir byvoeg by CAN_DEFAULT-knoppies wat altyd buite die grens "
 "getrek word"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Kind-X-verplasing"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Hoe ver in die x-rigting die kind moet skuif wanneer die knoppie gedruk word"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Kind-Y-verplasing"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Hoe ver in die y-rigting die kind moet skuif wanneer die knoppie gedruk word"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "Toon knoppiebeelde"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Of stapelikons in knoppies vertoon moet word"
 
@@ -1756,11 +1756,11 @@ msgstr "Vertoon verskuil"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Of die verskuilde lêers en gidse vertoon moet word"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van die lêerstelsel-rugstelsel om te gebruik"
@@ -2014,19 +2014,19 @@ msgstr "Bergsoort"
 msgid "The representation being used for image data"
 msgstr "Die voorstelling wat vir die beelddata gebruik word"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "Beelddingesie"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "Kinddingesie wat langs die kieslysteks moet verskyn"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 msgid "Show menu images"
 msgstr "Vertoon kieslysbeelde"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Whether images should be shown in menus"
 msgstr "Of beelde in kieslyste vertoon moet word"
 
@@ -4037,19 +4037,19 @@ msgstr "Sorteervolgorde"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sorteerrigting wat die sorteeraanwyser moet aandui"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "Voeg afskeuritems by die kieslyste"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Of afskeurkieslysitems by kieslyste gevoeg moet word"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr "Definisie van saamgesmelte UI"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr "'n XML-string wat die saamgesmelte UI beskryf"
 

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -131,7 +131,7 @@ msgid "A unique name for the action."
 msgstr "Үйлдлийн давтагдашгүй нэр."
 
 # gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Бичээс"
@@ -316,7 +316,7 @@ msgid "Horizontal alignment"
 msgstr "Хэвтээ зэрэгцүүлэлт "
 
 # gtk/gtkalignment.c:103
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -330,7 +330,7 @@ msgid "Vertical alignment"
 msgstr "Босоо зэрэгцүүлэлт "
 
 # gtk/gtkalignment.c:113
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -594,20 +594,20 @@ msgid "The index of the child in the parent"
 msgstr "Эцэг дэх хүүгийн индекс"
 
 # gtk/gtkbutton.c:190
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Товч нь бичээстэй бол бичээс текст товчин дотор (дээр) байрлана."
 
 # gtk/gtkbutton.c:197 gtk/gtklabel.c:301
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Доогуур зураасыг ашиглах"
 
 # gtk/gtkbutton.c:198 gtk/gtklabel.c:302
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -616,95 +616,95 @@ msgstr ""
 "зориулалтаар ашиглана."
 
 # gtk/gtkbutton.c:205
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "Нөөц хэрэглэх"
 
 # gtk/gtkbutton.c:206
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Хэрвээ идэвхитэй бол бичээс харагдахгүй харин стандарт эмблемийг хөтөлбөрөөс "
 "сонгоход хэрэглэгдэнэ."
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr "Товшиход хараалах"
 
 # gtk/gtklabel.c:334
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Хулганаар товшиход товчинд харааг шилжүүлж чадах эсэх"
 
 # gtk/gtkbutton.c:213
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "Хүрээний гүдгэр"
 
 # gtk/gtkbutton.c:214
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "Хүрээний гадаргын хэлбэр"
 
 # gtk/gtkalignment.c:102
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 msgid "Horizontal alignment for child"
 msgstr "Хүүгийн хэвтээ зэрэгцүүлэлт "
 
 # gtk/gtkalignment.c:112
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 msgid "Vertical alignment for child"
 msgstr "Хүүгийн босоо зэрэгцүүлэлт "
 
 # gtk/gtkbutton.c:265
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Анхдагч зай"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT товчнуудад зориулсан нэмэлт зай."
 
 # gtk/gtkbutton.c:272
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Анхдагч гадаад зай"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "CAN_DEFAULT товчнуудад зориулсан товчнуудыг хүрээлэх нэмэлт зай"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Дэд элементийн хэвтээ тэнхлэгийн дагуух шилжилт"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Хэрэв товч дарагдсан бол дэд элемтентийг хэвтээ тэнхлэгийн дагуу хэр зэрэг "
 "шилжүүлэх"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Дэд элементийн босоо тэнхлэгийн дагуух шилжилт"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Хэрэв товч дарагдсан бол дэд элемтентийг босоо тэнхлэгийн дагуу хэр зэрэг "
 "шилжүүлэх"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "Товчны зургууд харуулах"
 
 # gtk/gtknotebook.c:407
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Товчинд эмблем зураг харуулах эсэх"
 
@@ -1982,12 +1982,12 @@ msgstr "Далдласанг харуулах"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Далдласан файл эсвэл лавлахуудыг харуулах эсэх"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr "Стандарт файл сонгогч"
 
 # gtk/gtksettings.c:216
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Стандартаар хэрэглэх GtkFileChooser· бакэндын нэр"
 
@@ -2281,20 +2281,20 @@ msgid "The representation being used for image data"
 msgstr "Зургийн өгөгдөлд хэрэглэгдэж байгаа дүрслэл."
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "Зурган элемент"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "Цэсийн текстийн хажууд гарах удирдлагын дэд элемент."
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 msgid "Show menu images"
 msgstr "Цэсний зургуудыг харуулах"
 
 # gtk/gtknotebook.c:407
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Whether images should be shown in menus"
 msgstr "Зургууд товчинд харуулах эсэх"
 
@@ -4447,20 +4447,20 @@ msgstr "Эрэмбэлэлтийн дараалал"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Заагчийн эрэмбэлэлтийн чиглэл"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "Цэс рүү тасалбар нэмэх"
 
 # gtk/gtkcheckmenuitem.c:116
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Тасалбар цэсний элемент цэс рүү нэмэгдэх эсэх"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr "Нийлмэл ХГ-тодорхойлолт"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr "Нийлмэл ХГ-тодорхойлох XML тэмдэгт мөр"
 

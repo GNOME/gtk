@@ -44,7 +44,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-07-19 21:37+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -167,7 +167,7 @@ msgstr "नाम"
 msgid "A unique name for the action."
 msgstr "इस एसएमएस खाता के लिए विशिष्ट नाम."
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "लेबल "
@@ -348,7 +348,7 @@ msgstr "फॉन्ट आकार समायोजनः (&F)"
 msgid "Horizontal alignment"
 msgstr "छैतिज समरेखण"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -358,7 +358,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "उर्ध्वाधर समरेखण"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -603,111 +603,111 @@ msgstr "स्थिति"
 msgid "The index of the child in the parent"
 msgstr "मूल वस्तु %1 ट्री में नहीं मिला. आंतरिक त्रुटि."
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr ""
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "अन्डरलाइन का प्रयोग करें"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "भण्डार का प्रयोग करें"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "यदि समायोजित किया गया है तो लेबल का प्रयोग भंडार वस्तु को चुनने हेतु किया जाएगा, "
 "प्रदर्शित करने के स्थान पर"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 #, fuzzy
 msgid "Focus on click"
 msgstr "मुझपर क्लिक करें"
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 #, fuzzy
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "क्या लेबल के पाठ को माउस से चयनित किया जा सकता है?"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 #, fuzzy
 msgid "Border relief"
 msgstr "विंडो किनारा"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 #, fuzzy
 msgid "The border relief style"
 msgstr "पूर्वनिर्धारित थ्रेडिंग का तरीका"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 #, fuzzy
 msgid "Horizontal alignment for child"
 msgstr "विज़ेट हेतु छैितज समायोजन"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 #, fuzzy
 msgid "Vertical alignment for child"
 msgstr "विज़ेट हेतु उर्ध्वाधर समायोजन"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 #, fuzzy
 msgid "Default Spacing"
 msgstr "कुंजी दूरी"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 #, fuzzy
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "--add और --extract कमान्ड में उपयोग हेतु डिफ़ॉल्ट फ़ोल्डर"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 #, fuzzy
 msgid "Default Outside Spacing"
 msgstr "बटनों के बीच की दूरी"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 #, fuzzy
 msgid "Child X Displacement"
 msgstr "शिशु वस्तु 1"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 #, fuzzy
 msgid "Child Y Displacement"
 msgstr "शिशु वस्तु 1"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 #, fuzzy
 msgid "Show button images"
 msgstr "एनिमेटेड छवि दिखाएँ"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 #, fuzzy
 msgid "Whether stock icons should be shown in buttons"
 msgstr "एक अंतहीन लूप में छवियों के अनुक्रम दिखाया जाए या नहीं."
@@ -1879,12 +1879,12 @@ msgstr "छुपा दिखाएँ"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "क्या फ़ाइलों के निर्माण/हस्तांतरण करने हेतु बटन प्रदर्शित किए जाएँ"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 #, fuzzy
 msgid "Default file chooser backend"
 msgstr "इस फ़ाइल हेतु डिफ़ॉल्ट"
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
@@ -2143,20 +2143,20 @@ msgstr "भंडारण प्रकार"
 msgid "The representation being used for image data"
 msgstr "इमेज डेटा हेतु प्रयुक्त प्रस्तुतिकरण"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "इमेज विज़ेट"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "मेनू पाठ के आगे प्रस्तुत होने वाला चाइल्ड विज़ेट"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 #, fuzzy
 msgid "Show menu images"
 msgstr "एनिमेटेड छवि दिखाएँ"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "एक अंतहीन लूप में छवियों के अनुक्रम दिखाया जाए या नहीं."
@@ -4184,22 +4184,22 @@ msgstr "अनुक्रम क्रम"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "अनुक्रम सूचक यह अवश्य बताए कि अनुक्रम दिशा क्या है?"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 #, fuzzy
 msgid "Add tearoffs to menus"
 msgstr "फ़ाइल कॉन्टेक्स्ट मेनू में जोड़ें"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 #, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "क्या यह मेनू विकल्प चिन्हित है"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 #, fuzzy
 msgid "Merged UI definition"
 msgstr "दस्ताबेज प्रकार परिभाषा"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 #, fuzzy
 msgid "An XML string describing the merged UI"
 msgstr "सम्पूर्ण यूआई का एक्सएमएल वर्णन कंसोल में फेंकें"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
@@ -119,7 +119,7 @@ msgstr "Booksjtaaftiepnaam"
 msgid "A unique name for the action."
 msgstr ""
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Label"
@@ -298,7 +298,7 @@ msgstr "De sjtandj van de sjakelknóp"
 msgid "Horizontal alignment"
 msgstr "Horizontale oetliening"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -310,7 +310,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Vertikale oetliening"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -555,18 +555,18 @@ msgstr "Posisie"
 msgid "The index of the child in the parent"
 msgstr "De indeks van de dochter in de auwer"
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Teks van 't labelwidget op de knóp, wen de knóp ein labelwidget haet"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Gebroek óngersjtrieping"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -574,57 +574,57 @@ msgstr ""
 "Wen aangevink beteikent ein óngersjtrieping in de teks det 't teike gebroekt "
 "moot waere veur de sjnaktósj"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "Gebroek veurraod"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Wen aangevink, weurt 't label gebroek veur ein veurraod-item te keze in "
 "plaats van getuind te waere"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr ""
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 #, fuzzy
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Of de labelteks geselekteerd kèn waere mit de moes"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "Randjreliëf"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "De sjtiel van 't randjreliëf"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 #, fuzzy
 msgid "Horizontal alignment for child"
 msgstr "Horizontale oetliening"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 #, fuzzy
 msgid "Vertical alignment for child"
 msgstr "Vertikale oetliening"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Sjtanderd sjpasiëring"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Ekstra spasiëring toe te veuge veur CAN_DEFAULT knóppe"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Normale randjspasiëring"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -632,33 +632,33 @@ msgstr ""
 "Ekstra spasiëring toe te veuge veur CAN_DEFAULT knóppe die ummer boete de "
 "randj geteikend waere"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Dochter X-Verplaatsing"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Wiewied de dochter in de x-richting moot waere verplaats wen de knóp "
 "ingedrök weurt"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Dochter Y-Verplaatsing"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Wiewied de dochter in de y-richting moot waere verplaatst wen de knóp "
 "ingedrök weurt"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr ""
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 #, fuzzy
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Of tabs getuind waere of neet"
@@ -1813,11 +1813,11 @@ msgstr "Teks tuine"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Of knóppe veur 't make/verangere van besjtenj getuind mote waere"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van 't sjtanderd booksjtaaftiep"
@@ -2081,20 +2081,20 @@ msgstr "Opsjlaagtiep"
 msgid "The representation being used for image data"
 msgstr "De te gebroeke representasie veur aafbiljingsdata"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "Aafbiljingswidget"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "Dochterwidget det naeve de menuteks versjient"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 #, fuzzy
 msgid "Show menu images"
 msgstr "Tabs tuine"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "Of tabs getuind waere of neet"
@@ -4119,20 +4119,20 @@ msgstr "Sorteerrichting"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "De richting woehaer de sorteerindikator moot wieze"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 #, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Of 't menu-item aangevink is"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr ""
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr ""
 

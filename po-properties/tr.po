@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-04-09 17:26+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -135,7 +135,7 @@ msgid "A unique name for the action."
 msgstr "Bu eylem için tek olan bir isim."
 
 # gtk/gtkbutton.c:179 gtk/gtkframe.c:124 gtk/gtklabel.c:198
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Etiket"
@@ -318,7 +318,7 @@ msgstr "Ayarlamanın sayfa boyutu"
 msgid "Horizontal alignment"
 msgstr "Yatay hizalama"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -329,7 +329,7 @@ msgstr "Mevcut alanda altın yatay konumu. 0.0 ise sola, 1.0 ise sağa hizalıd�
 msgid "Vertical alignment"
 msgstr "Dikey hizalama"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -599,7 +599,7 @@ msgid "The index of the child in the parent"
 msgstr "Üstteki altların indeksi"
 
 # gtk/gtkbutton.c:180
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -607,13 +607,13 @@ msgstr ""
 "Eğer düğme bir etiket parçası içeriyorsa düğmedeki etiket parçasının metni"
 
 # gtk/gtklabel.c:219
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Altçizgi kullan"
 
 # gtk/gtklabel.c:220
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -621,63 +621,63 @@ msgstr ""
 "Eğer seçiliyse, altçizgiden sonra gelen karakter hafızada kalıcı "
 "hızlandırıcı tuş olarak kullanılacak"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "Depo kullan"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Eğer seçiliyse, etiket gösterilen yerine bir depo öğesini seçmekte "
 "kullanılacak"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr "Tıklama ile odaklama"
 
 # gtk/gtklabel.c:252
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Düğmenin fare ile tıklandığında odağı yakalaması"
 
 # gtk/gtkbutton.c:187
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "Kenarlık süsü"
 
 # gtk/gtkbutton.c:188
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "Kenarlık süsleme biçemi"
 
 # gtk/gtkalignment.c:102
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 msgid "Horizontal alignment for child"
 msgstr "Alt için yatay hizalama"
 
 # gtk/gtkalignment.c:112
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 msgid "Vertical alignment for child"
 msgstr "Alt için düşey hizalama"
 
 # gtk/gtkbutton.c:239
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Öntanımlı Aralık"
 
 # gtk/gtkbutton.c:240
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT düğmeleri için eklenecek fazladan alan"
 
 # gtk/gtkbutton.c:246
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Öntanımlı Dış Aralık"
 
 # gtk/gtkbutton.c:247
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -685,30 +685,30 @@ msgstr ""
 "Kenarlığı daima dışına çizilen CAN_DEFAULT düğmeler için eklenecek fazladan "
 "alan"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Altın X Kayması"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "Düğmeye basıldığında altın x yönünde ne kadar hareket edeceği"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Altın Y Kayması"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Düğmeye basıldığında altın y yönünde ne kadar hareket edeceği"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "Düğme resimlerini göster"
 
 # gtk/gtknotebook.c:369
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Depo simgelerinin düğmeler için gösterilmesi"
 
@@ -2033,11 +2033,11 @@ msgstr "Gizlileri Göster"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Gizli dosya ve klasörlerin gösterilmesi"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr "Öntanımlı dosya seçici temeli"
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Öntanımlı olarak kullanılacak GtkFileChooser temelinin adı"
 
@@ -2334,21 +2334,21 @@ msgid "The representation being used for image data"
 msgstr "Resim verisi için kullanılan sunum"
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "Resim parçacığı"
 
 # gtk/gtkimagemenuitem.c:125
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr "Menü metninden sonra görünecek alt parçaçığı"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 msgid "Show menu images"
 msgstr "Menü resimlerini göster"
 
 # gtk/gtknotebook.c:369
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Whether images should be shown in menus"
 msgstr "Menüleride resimlerin gösterilmesi"
 
@@ -4666,20 +4666,20 @@ msgstr "Sıralama düzeni"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sıralama belirtecinin gösterdiği sıralama yönü"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "Menülere ayraçları ekle"
 
 # gtk/gtkcheckmenuitem.c:115
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Menülere ayrılmış menü öğelerinin eklenmesi"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr "Birleşik arayüz tanımı"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr "Birleşik arayüzün XML dizgesi tanımı"
 

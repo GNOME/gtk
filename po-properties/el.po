@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-12 16:19-0400\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-09-10 11:44-0300\n"
 "Last-Translator: Nikos Charonitakis <frolix68@yahoo.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -135,7 +135,7 @@ msgstr "Όνομα"
 msgid "A unique name for the action."
 msgstr "Ένα μοναδικό όνομα για αυτή την ενέργεια"
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:210 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Ετικέτα"
@@ -313,7 +313,7 @@ msgstr "Το μέγεθος σελίδας της στοίχισης"
 msgid "Horizontal alignment"
 msgstr "Οριζόντια στοίχιση"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:261
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -325,7 +325,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Κάθετη στοίχιση"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:280
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -568,7 +568,7 @@ msgstr "Θέση"
 msgid "The index of the child in the parent"
 msgstr "Ο δείκτης του θυγατρικού στο μητρικό"
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:211
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -576,12 +576,12 @@ msgstr ""
 "Κείμενο της ετικέτας γραφικού συστατικού μέσα στο κουμπί, αν το κουμπί "
 "περιέχει ετικέτα γραφικού συστατικού."
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Χρήση υπογράμμισης"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -589,54 +589,54 @@ msgstr ""
 "Αν ορισθεί, μια υπογράμμιση στο κείμενο θα επισημαίνει τον επόμενο χαρακτήρα "
 "που πρέπει να χρησιμοποιηθεί για το μνημονικό κλειδί συντόμευσης"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:226
 msgid "Use stock"
 msgstr "Χρήση αποθέματος"
 
-#: gtk/gtkbutton.c:229
+#: gtk/gtkbutton.c:227
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Άν ορίζεται, η ετικέτα χρησιμοποιείται στην επιλογή αποθέματος αντί της "
 "εμφάνισης της"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:234
 msgid "Focus on click"
 msgstr "Εστίαση στο κλικ"
 
-#: gtk/gtkbutton.c:237
+#: gtk/gtkbutton.c:235
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Αν το κουμπί θα εστιάζεται όταν γίνεται κλικ με με το ποντίκι"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:242
 msgid "Border relief"
 msgstr "Ανάγλυφο περιγράμματος"
 
-#: gtk/gtkbutton.c:245
+#: gtk/gtkbutton.c:243
 msgid "The border relief style"
 msgstr "Το στυλ του ανάγλυφου περιγράμματος"
 
-#: gtk/gtkbutton.c:262
+#: gtk/gtkbutton.c:260
 msgid "Horizontal alignment for child"
 msgstr "Οριζόντια στοίχιση του θυγατρικού"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:279
 msgid "Vertical alignment for child"
 msgstr "Κάθετη στοίχιση του θυγατρικού"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:348
 msgid "Default Spacing"
 msgstr "Προεπιλεγμένο διάστιχο"
 
-#: gtk/gtkbutton.c:351
+#: gtk/gtkbutton.c:349
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Επιπλέον διάστημα για να προστεθεί στα κουμπιά CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:355
 msgid "Default Outside Spacing"
 msgstr "Προεπιλεγμένα εξωτερικά διαστήματα"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:356
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -644,33 +644,33 @@ msgstr ""
 "Επιπλέον διάστημα για να προστεθεί στα κουμπιά CAN_DEFAULT τα οποία "
 "σχεδιάζονται πάντα έξω από το όριο"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:361
 msgid "Child X Displacement"
 msgstr "Μετατόπιση θυγατρικού Χ"
 
-#: gtk/gtkbutton.c:364
+#: gtk/gtkbutton.c:362
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Πόσο μακριά στην κατεύθυνση x θα μετακινείται το θυγατρικό όταν "
 "απελευθερώνεται το κουμπί"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:369
 msgid "Child Y Displacement"
 msgstr "Μετατόπιση θυγατρικού Υ"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:370
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Πόσο μακριά στην κατεύθυνση y θα μετακινείται το θυγατρικό όταν "
 "απελευθερώνεται το κουμπί"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:377
 msgid "Show button images"
 msgstr "Εμφάνιση εικόνων κουμπιών"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:378
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Αν τα εικονίδια stock θα εμφανίζονται σε κουμπιά"
 
@@ -1807,11 +1807,11 @@ msgstr "Προβολή κρυφών"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Αν θα εμφανίζονται τα κρυφά αρχεία και φάκελοι"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:594
 msgid "Default file chooser backend"
 msgstr "Προεπιλεγμένο backend επιλογέα αρχείων"
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:595
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Όνομα του GtkFileChooser backend για προεπιλεγμένη χρήση"
 
@@ -2067,20 +2067,20 @@ msgstr "Τύπος αποθήκευσης"
 msgid "The representation being used for image data"
 msgstr "Η αναπαράσταση που χρησιμοποιείται για δεδομένα εικόνας"
 
-#: gtk/gtkimagemenuitem.c:138
+#: gtk/gtkimagemenuitem.c:130
 msgid "Image widget"
 msgstr "Γραφικό συστατικό εικόνας"
 
-#: gtk/gtkimagemenuitem.c:139
+#: gtk/gtkimagemenuitem.c:131
 msgid "Child widget to appear next to the menu text"
 msgstr ""
 "Θυγατρικό γραφικό συστατικό που θα εμφανίζεται δίπλα από το κείμενο του μενού"
 
-#: gtk/gtkimagemenuitem.c:144
+#: gtk/gtkimagemenuitem.c:136
 msgid "Show menu images"
 msgstr "Εμφάνιση εικόνων μενού"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Whether images should be shown in menus"
 msgstr "Αν θα εμφανίζονται ή όχι οι εικόνες στα μενού"
 
@@ -4111,19 +4111,19 @@ msgstr "Σειρά ταξινόμησης"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Κατεύθυνση ταξινόμησης που δείχνει η επισήμανση ταξινόμησης"
 
-#: gtk/gtkuimanager.c:220
+#: gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "Προσθήκη αποσπώμενων στα μενού"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Αν τα αντικείμενα στα αποσπώμενα μενού θα προστίθονται στα μενού"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr "Ορισμός συγχωνευμένου UI"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr "Ένα αλφαριθμητικό XML που περιγράφει το συγχωνευμένο UI"
 

@@ -1,5 +1,11 @@
 2004-12-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.4.14 ===
+
+	* NEWS: Updates
+
+2004-12-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_should_respond):
 	Reinstate the previous behavior for clicking Ok after
 	activating a bookmark or path bar button in folder 
