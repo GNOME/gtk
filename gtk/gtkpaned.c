@@ -36,7 +36,9 @@
 enum {
   PROP_0,
   PROP_POSITION,
-  PROP_POSITION_SET
+  PROP_POSITION_SET,
+  PROP_MIN_POSITION,
+  PROP_MAX_POSITION
 };
 
 enum {
@@ -255,6 +257,41 @@ gtk_paned_class_init (GtkPanedClass *class)
 							     G_MAXINT,
 							     5,
 							     G_PARAM_READABLE));
+  /**
+   * GtkPaned:min-position:
+   *
+   * The smallest possible value for the position property. This property is derived from the
+   * size and shrinkability of the widget's children.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (object_class,
+				   PROP_MIN_POSITION,
+				   g_param_spec_int ("min_position",
+						     _("Minimal Position"),
+						     _("Smallest possible value for the \"position\" property"),
+						     0,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READABLE));
+
+  /**
+   * GtkPaned:max-position:
+   *
+   * The largest possible value for the position property. This property is derived from the
+   * size and shrinkability of the widget's children.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (object_class,
+				   PROP_MIN_POSITION,
+				   g_param_spec_int ("max_position",
+						     _("Maximal Position"),
+						     _("Largest possible value for the \"position\" property"),
+						     0,
+						     G_MAXINT,
+						     G_MAXINT,
+						     G_PARAM_READABLE));
 
 /**
  * GtkPaned:resize:
@@ -499,6 +536,12 @@ gtk_paned_get_property (GObject        *object,
       break;
     case PROP_POSITION_SET:
       g_value_set_boolean (value, paned->position_set);
+      break;
+    case PROP_MIN_POSITION:
+      g_value_set_int (value, paned->min_position);
+      break;
+    case PROP_MAX_POSITION:
+      g_value_set_int (value, paned->max_position);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1090,10 +1133,14 @@ gtk_paned_compute_position (GtkPaned *paned,
 			    gint      child2_req)
 {
   gint old_position;
+  gint old_min_position;
+  gint old_max_position;
   
   g_return_if_fail (GTK_IS_PANED (paned));
 
   old_position = paned->child1_size;
+  old_min_position = paned->min_position;
+  old_max_position = paned->max_position;
 
   paned->min_position = paned->child1_shrink ? 0 : child1_req;
 
@@ -1133,8 +1180,14 @@ gtk_paned_compute_position (GtkPaned *paned,
   gtk_widget_set_child_visible (paned->child1, paned->child1_size != 0);
   gtk_widget_set_child_visible (paned->child2, paned->child1_size != allocation);
 
+  g_object_freeze_notify (G_OBJECT (paned));
   if (paned->child1_size != old_position)
     g_object_notify (G_OBJECT (paned), "position");
+  if (paned->min_position != old_min_position)
+    g_object_notify (G_OBJECT (paned), "min_position");
+  if (paned->max_position != old_max_position)
+    g_object_notify (G_OBJECT (paned), "max_position");
+  g_object_thaw_notify (G_OBJECT (paned));
 
   paned->last_allocation = allocation;
 }
