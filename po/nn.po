@@ -32,8 +32,7 @@ msgstr "Biletefila «%s» inneheld ikkje data"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
 #: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Klarte ikkje å lasta biletet «%s». Årsaken er ukjent, men truleg ei øydelagt "
 "biletefil"
@@ -342,10 +341,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
@@ -448,8 +445,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatal feil under lesing av PNG-biletefil: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Nøklane til PNG-tekstbitar må ha mellom 1 og 79 teikn."
 
 #: gdk-pixbuf/io-png.c:821
@@ -458,8 +454,7 @@ msgstr "Nøklane til PNG-tekstbitar må vera ASCII-teikn."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "Verdien til PNG-tekstbiten %s kan ikkje konverterast til ISO-8859-1."
 
 #: gdk-pixbuf/io-png.c:994
@@ -1007,8 +1002,7 @@ msgstr "Filnamn"
 #: gtk/gtkfilechooserdefault.c:1127
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr ""
-"Klarte ikkje å leggja til bokmerke for %s, fordi det ikkje er ei mappe."
+msgstr "Klarte ikkje å leggja til bokmerke for %s, fordi det ikkje er ei mappe."
 
 #: gtk/gtkfilechooserdefault.c:1175
 #, c-format
@@ -1022,8 +1016,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1330
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr ""
-"Klarte ikkje å leggja til bokmerke for %s fordi det er eit ugyldig stinamn."
+msgstr "Klarte ikkje å leggja til bokmerke for %s fordi det er eit ugyldig stinamn."
 
 #: gtk/gtkfilechooserdefault.c:1403
 msgid "Folder"
@@ -1147,8 +1140,7 @@ msgstr "_Gje fila nytt namn"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenamnet «%s» inneheld symbol som ikkje er tillatne i filnamn"
 
 #: gtk/gtkfilesel.c:1441
@@ -1692,7 +1684,7 @@ msgstr "_Lim inn"
 
 #: gtk/gtkstock.c:315
 msgid "_Preferences"
-msgstr "_Instillingar"
+msgstr "_Innstillingar"
 
 #: gtk/gtkstock.c:316
 msgid "_Print"
@@ -1923,3 +1915,4 @@ msgstr "X-inndatametode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Klarte ikkje å henta informasjon om fila «%s»: %s"
+

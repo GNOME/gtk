@@ -1,3 +1,7 @@
+2004-01-27  Åsmund Skjæveland  <aasmunds@fys.uio.no>
+
+	* nn.po: Updated Norwegian Nynorsk translation.
+
 2004-01-26  Nikos Charonitakis  <frolix68@yahoo.gr>
 
 	* el.po: Updated Greek translation.
@@ -64,6 +68,7 @@
 	* ru.po: Updated Russian translation
 	from Russian team <gnome-cyr@gnome.org>.
 
+>>>>>>> 1.599
 2004-01-21  Artur Flinta  <aflinta@cvs.gnome.org>
 
 	* pl.po: Updated Polish translation by GNOME PL Team.
