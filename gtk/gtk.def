@@ -328,13 +328,18 @@ EXPORTS
 	gtk_container_add_child_arg_type
 	gtk_container_add_with_args
 	gtk_container_addv
+	gtk_container_arg_get
+	gtk_container_arg_set
 	gtk_container_check_resize
+	gtk_container_child_composite_name
 	gtk_container_child_getv
 	gtk_container_child_set
 	gtk_container_child_setv
 	gtk_container_child_type
 	gtk_container_children
+	gtk_container_clear_resize_widgets
 	gtk_container_focus
+	gtk_container_forall
 	gtk_container_foreach
 	gtk_container_foreach_full
 	gtk_container_get_type
@@ -358,6 +363,7 @@ EXPORTS
 	gtk_ctree_expand_to_depth
 	gtk_ctree_export_to_gnode
 	gtk_ctree_find
+	gtk_ctree_find_all_by_row_data
 	gtk_ctree_find_by_row_data
 	gtk_ctree_find_by_row_data_custom
 	gtk_ctree_find_node_ptr
@@ -485,6 +491,7 @@ EXPORTS
 	gtk_events_pending
 	gtk_exit
 	gtk_false
+	gtk_file_selection_complete
 	gtk_file_selection_get_filename
 	gtk_file_selection_get_type
 	gtk_file_selection_hide_fileop_buttons
@@ -641,6 +648,8 @@ EXPORTS
 	gtk_list_select_child
 	gtk_list_select_item
 	gtk_list_set_selection_mode
+	gtk_list_start_selection
+	gtk_list_toggle_add_mode
 	gtk_list_toggle_focus_row
 	gtk_list_toggle_row
 	gtk_list_undo_selection
@@ -726,9 +735,11 @@ EXPORTS
 	gtk_menu_set_accel_group
 	gtk_menu_set_active
 	gtk_menu_set_tearoff_state
+	gtk_menu_set_title
 	gtk_menu_shell_activate_item
 	gtk_menu_shell_append
 	gtk_menu_shell_deactivate
+	gtk_menu_shell_deselect
 	gtk_menu_shell_get_type
 	gtk_menu_shell_insert
 	gtk_menu_shell_prepend
@@ -845,6 +856,7 @@ EXPORTS
 	gtk_paint_vline
 	gtk_paned_add1
 	gtk_paned_add2
+	gtk_paned_compute_position
 	gtk_paned_get_type
 	gtk_paned_pack1
 	gtk_paned_pack2
@@ -862,6 +874,7 @@ EXPORTS
 	gtk_pixmap_set
 	gtk_pixmap_set_build_insensitive
 	gtk_plug_construct
+	gtk_plug_get_type
 	gtk_plug_new
 	gtk_preview_draw_row
 	gtk_preview_get_cmap
@@ -919,6 +932,7 @@ EXPORTS
 	gtk_radio_menu_item_new
 	gtk_radio_menu_item_new_with_label
 	gtk_radio_menu_item_set_group
+	gtk_range_clear_background
 	gtk_range_default_hmotion
 	gtk_range_default_hslider_update
 	gtk_range_default_htrough_click
@@ -1025,6 +1039,7 @@ EXPORTS
 	gtk_signal_newv
 	gtk_signal_query
 	gtk_signal_remove_emission_hook
+	gtk_socket_get_type
 	gtk_socket_new
 	gtk_socket_steal
 	gtk_spin_button_configure
@@ -1042,6 +1057,7 @@ EXPORTS
 	gtk_spin_button_set_value
 	gtk_spin_button_set_wrap
 	gtk_spin_button_spin
+	gtk_spin_button_update
 	gtk_statusbar_get_context_id
 	gtk_statusbar_get_type
 	gtk_statusbar_new
@@ -1078,6 +1094,7 @@ EXPORTS
 	gtk_text_new
 	gtk_text_set_adjustments
 	gtk_text_set_editable
+	gtk_text_set_line_wrap
 	gtk_text_set_point
 	gtk_text_set_word_wrap
 	gtk_text_thaw
@@ -1144,6 +1161,7 @@ EXPORTS
 	gtk_tree_item_set_subtree
 	gtk_tree_new
 	gtk_tree_prepend
+	gtk_tree_remove_item
 	gtk_tree_remove_items
 	gtk_tree_select_child
 	gtk_tree_select_item
@@ -1204,8 +1222,10 @@ EXPORTS
 	gtk_vseparator_get_type
 	gtk_vseparator_new
 	gtk_widget_accelerator_signal
+	gtk_widget_accelerators_locked
 	gtk_widget_activate
 	gtk_widget_add_accelerator
+	gtk_widget_add_events
 	gtk_widget_class_path
 	gtk_widget_destroy
 	gtk_widget_destroyed
@@ -1218,6 +1238,7 @@ EXPORTS
 	gtk_widget_get_ancestor
 	gtk_widget_get_child_requisition
 	gtk_widget_get_colormap
+	gtk_widget_get_composite_name
 	gtk_widget_get_default_colormap
 	gtk_widget_get_default_style
 	gtk_widget_get_default_visual
@@ -1240,6 +1261,7 @@ EXPORTS
 	gtk_widget_is_ancestor
 	gtk_widget_lock_accelerators
 	gtk_widget_map
+	gtk_widget_modify_style
 	gtk_widget_new
 	gtk_widget_newv
 	gtk_widget_path
@@ -1250,7 +1272,10 @@ EXPORTS
 	gtk_widget_push_colormap
 	gtk_widget_push_style
 	gtk_widget_push_visual
+	gtk_widget_queue_clear
+	gtk_widget_queue_clear_area
 	gtk_widget_queue_draw
+	gtk_widget_queue_draw_area
 	gtk_widget_queue_resize
 	gtk_widget_realize
 	gtk_widget_ref
@@ -1258,9 +1283,12 @@ EXPORTS
 	gtk_widget_remove_accelerators
 	gtk_widget_reparent
 	gtk_widget_reset_rc_styles
+	gtk_widget_reset_shapes
 	gtk_widget_restore_default_style
 	gtk_widget_set
+	gtk_widget_set_app_paintable
 	gtk_widget_set_colormap
+	gtk_widget_set_composite_name
 	gtk_widget_set_default_colormap
 	gtk_widget_set_default_style
 	gtk_widget_set_default_visual
@@ -1292,9 +1320,11 @@ EXPORTS
 	gtk_window_activate_default
 	gtk_window_activate_focus
 	gtk_window_add_accel_group
+	gtk_window_add_embedded_xid
 	gtk_window_get_type
 	gtk_window_new
 	gtk_window_remove_accel_group
+	gtk_window_remove_embedded_xid
 	gtk_window_set_default
 	gtk_window_set_default_size
 	gtk_window_set_focus

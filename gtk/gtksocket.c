@@ -750,6 +750,13 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
 #elif GDK_WINDOWING == GDK_WINDOWING_WIN32
 
+guint
+gtk_socket_get_type ()
+{
+  g_error ("GtkSocket not implemented");
+  return 42;
+}
+
 GtkWidget*
 gtk_socket_new ()
 {

@@ -1,3 +1,25 @@
+1999-07-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdraw.c (gdk_draw_pixmap): Less logging verbiage.
+
+	* gdk/win32/gdkevents.c: Fix long-standing bug in key
+ 	events. The key.string wasn't zero-terminated, still we strdup'ed
+ 	it in gdk_event_copy(). Synthesize crossing events for button
+ 	events before possible propagation.
+
+	* gdk/win32/gdkwindow.c: Log gdk_window_set_title.
+
+	* gdk/win32/makefile.cygwin
+	* gtk/makefile.cygwin: Use new DLL naming style for the
+ 	GCC-compiled ones.
+
+	* gdk/win32/makefile.msc
+	* gtk/makefile.msc: Cosmetics mostly.
+
+	* gtk/gtk.def: Add missing entry points.
+
+	* gtk/gtksocket.c: Add dummy gtk_socket_get_type() for Win32.
+
 1999-07-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdraw.c (gdk_draw_arc): Don't draw anything if width

@@ -8,21 +8,25 @@ BIN = C:\bin
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
 WTKIT = ..\..\..\wtkit126
 
-# Full optimization:
-OPTIMIZE = -Ox
-# Debugging:
-#OPTIMIZE = -Zi
-
 ################################################################
 
 # Nothing much configurable below
 
-# cl -? describes the options
-CC = cl -G5 -GF $(OPTIMIZE) -W3 -MD -nologo
+!IFNDEF DEBUG
+# Full optimization:
+OPTIMIZE = -Ox -MD
+LINKDEBUG =
+!ELSE
+# Debugging:
+OPTIMIZE = -Zi -MDd
+LINKDEBUG = /debug
+!ENDIF
 
-LDFLAGS = /link /machine:ix86 # /debug
+# cl -? describes the options
+CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
+
+LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
 INSTALL = copy
-TOUCH = copy makefile.msc+nul
 
 GLIB_VER=1.3
 GTK_VER=1.3
@@ -35,11 +39,9 @@ all: \
 	gdk\gdkx.h	\
 	..\..\config.h	\
 	gdk-$(GTK_VER).dll
-	$(TOUCH) all
 
 install : all
 	$(INSTALL) gdk-$(GTK_VER).dll $(BIN)
-	$(TOUCH) install
 
 gdk_OBJECTS = \
 	gdk.obj		\
@@ -103,13 +105,6 @@ gdkrgb.c : ..\gdkrgb.c
 gdkrectangle.c : ..\gdkrectangle.c
 	copy ..\gdkrectangle.c .
 
-
-testgdk.exe : testgdk.obj gdk-$(GTK_VER).dll
-	$(CC) $(CFLAGS) testgdk.obj gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
-
-testgdk.obj : testgdk.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgdk\" testgdk.c
-
 clean:
 	del *.exe
 	del *.obj
@@ -119,8 +114,6 @@ clean:
 	del *.err
 	del *.map
 	del *.sym
-	del *.lk1
-	del *.mk1
 	del *.res
 	del *.pdb
 	del *.ilk

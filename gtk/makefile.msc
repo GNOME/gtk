@@ -11,18 +11,23 @@ PTHREADS = ..\..\pthreads-snap-1999-05-30
 PTHREAD_LIB = $(PTHREADS)\pthread.lib
 PTHREAD_INC = -I $(PTHREADS)
 
-# Full optimization:
-OPTIMIZE = -Ox
-# Debugging:
-#OPTIMIZE = -Zi
-
 ################################################################
 
 # Nothing much configurable below
 
+!IFNDEF DEBUG
+# Full optimization:
+OPTIMIZE = -Ox -MD
+LINKDEBUG =
+!ELSE
+# Debugging:
+OPTIMIZE = -Zi -MDd
+LINKDEBUG = /debug
+!ENDIF
+
 # cl -? describes the options
 # Some files use near as an identifier
-CC = cl -G5 -GF $(OPTIMIZE) -W3 -MD -DHAVE_CONFIG_H -nologo -Dnear=xxnear
+CC = cl -G5 -GF $(OPTIMIZE) -W3 -DHAVE_CONFIG_H -nologo -Dnear=xxnear
 
 # Perl and awk are needed to generate some source files.
 # These generated source files are distribuyted with the Win32 GTk+ source
@@ -30,7 +35,7 @@ CC = cl -G5 -GF $(OPTIMIZE) -W3 -MD -DHAVE_CONFIG_H -nologo -Dnear=xxnear
 PERL = perl
 AWK = awk
 
-LDFLAGS = /link /machine:ix86 # /debug
+LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
 INSTALL = copy
 TOUCH = copy makefile.msc+nul
 
@@ -57,7 +62,6 @@ all : \
 
 install : all
 	$(INSTALL) gtk-$(GTK_VER).dll $(BIN)
-	$(TOUCH) install
 
 gtk_OBJECTS = \
 	fnmatch.obj	\

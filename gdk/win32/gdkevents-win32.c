@@ -523,6 +523,7 @@ GdkEvent*
 gdk_event_copy (GdkEvent *event)
 {
   GdkEvent *new_event;
+  gchar *s;
   
   g_return_val_if_fail (event != NULL, NULL);
   
@@ -535,7 +536,12 @@ gdk_event_copy (GdkEvent *event)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      new_event->key.string = g_strdup (event->key.string);
+      if (event->key.length > 0)
+	{
+	  s = event->key.string;
+	  new_event->key.string = g_malloc (event->key.length + 1);
+	  memcpy (new_event->key.string, s, event->key.length + 1);
+	}
       break;
       
     case GDK_ENTER_NOTIFY:
@@ -1578,9 +1584,9 @@ gdk_event_translate (GdkEvent *event,
 	event->key.state |= GDK_CONTROL_MASK;
       if (xevent->wParam != VK_MENU && GetKeyState (VK_MENU) < 0)
 	event->key.state |= GDK_MOD1_MASK;
-      event->key.length = 0;
       return_val = window_private && !window_private->destroyed;
       event->key.string = NULL;
+      event->key.length = 0;
       break;
 
     case WM_CHAR:
@@ -1673,9 +1679,10 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	  if (!is_AltGr_key && GetKeyState (VK_MENU) < 0)
 	    event->key.state |= GDK_MOD1_MASK;
-	  event->key.string = g_strdup (" ");
+	  event->key.string = g_malloc (2);
 	  event->key.length = 1;
 	  event->key.string[0] = xevent->wParam; /* ??? */
+	  event->key.string[1] = 0;
 
 	  if (window_private->event_mask & GDK_KEY_PRESS_MASK)
 	    {
@@ -1686,9 +1693,10 @@ gdk_event_translate (GdkEvent *event,
 	      if (charcount > sizeof (buf)- 1)
 		charcount = sizeof (buf) - 1;
 	      g_free (event2->key.string);
-	      event2->key.string = g_malloc (charcount);
+	      event2->key.string = g_malloc (charcount + 1);
 	      for (i = 0; i < charcount; i++)
 		event2->key.string[i] = event->key.keyval;
+	      event2->key.string[charcount] = 0;
 	      event2->key.length = charcount;
 
 	      gdk_event_queue_append (event2);
@@ -1724,9 +1732,10 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	  if (!is_AltGr_key && GetKeyState (VK_MENU) < 0)
 	    event->key.state |= GDK_MOD1_MASK;
-	  event->key.string = g_malloc (charcount);
+	  event->key.string = g_malloc (charcount + 1);
 	  for (i = 0; i < charcount; i++)
 	    event->key.string[i] = event->key.keyval;
+	  event->key.string[charcount] = 0;
 	  event->key.length = charcount;
 	}
       else
@@ -1758,6 +1767,9 @@ gdk_event_translate (GdkEvent *event,
 	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
 	  break;
 	}
+
+      if (window != curWnd)
+	synthesize_crossing_events (window, xevent);
 
       event->button.type = GDK_BUTTON_PRESS;
     buttondown:
@@ -1831,9 +1843,6 @@ gdk_event_translate (GdkEvent *event,
 			    NULL, NULL, 0);
 	  p_grab_automatic = TRUE;
 	}
-
-      if (window != curWnd)
-	synthesize_crossing_events (window, xevent);
 
       event->button.time = xevent->time;
       event->button.x = LOWORD (xevent->lParam);
@@ -1939,6 +1948,9 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
 
+      if (window != curWnd)
+	synthesize_crossing_events (window, xevent);
+
       event->button.type = GDK_BUTTON_RELEASE;
     buttonup:
       event->button.window = window;
@@ -2000,9 +2012,6 @@ gdk_event_translate (GdkEvent *event,
 	      goto buttonup;
 	    }
 	}
-
-      if (window != curWnd)
-	synthesize_crossing_events (window, xevent);
 
       event->button.time = xevent->time;
       event->button.x = LOWORD (xevent->lParam);

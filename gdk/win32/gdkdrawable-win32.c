@@ -446,10 +446,10 @@ gdk_draw_pixmap (GdkDrawable *drawable,
   if (height == -1)
     height = src_private->height; /* Ditto? */
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x destdc: (%d) %#x "
+  GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x "
 			   "src: %#x %dx%d@+%d+%d"
 			   " dest: %#x @+%d+%d\n",
-			   drawable_private->xwindow, gc_private, hdc,
+			   drawable_private->xwindow,
 			   src_private->xwindow,
 			   width, height, xsrc, ysrc,
 			   drawable_private->xwindow, xdest, ydest));

@@ -31,10 +31,10 @@ all: \
 	gdk/gdkprivate.h \
 	gdk/gdkx.h	\
 	../../config.h	\
-	gdk-$(GTK_VER).dll
+	gdk-$(GTK_VER).gcc.dll
 
 install : all
-	$(INSTALL) gdk-$(GTK_VER).dll $(BIN)
+	$(INSTALL) gdk-$(GTK_VER).gcc.dll $(BIN)
 
 gdk_OBJECTS = \
 	gdk.o		\
@@ -86,8 +86,8 @@ gdk/gdkx.h : gdkx.h
 gdkres.o : rc/gdk.rc
 	windres --include-dir rc rc/gdk.rc gdkres.o
 
-gdk-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def gdkres.o libwntab32x.a
-	$(GLIB)/build-dll gdk $(GTK_VER) gdk.def $(gdk_OBJECTS) -L $(GLIB) -lglib-$(GLIB_VER) -L . -lwntab32x -lgdi32 -luser32 -lshell32 -lole32 -luuid $(LDFLAGS) gdkres.o
+gdk-$(GTK_VER).gcc.dll : $(gdk_OBJECTS) gdk.def gdkres.o libwntab32x.a
+	$(GLIB)/build-dll gdk $(GTK_VER).gcc gdk.def $(gdk_OBJECTS) -L $(GLIB) -lglib-$(GLIB_VER).gcc -L . -lwntab32x -lgdi32 -luser32 -lshell32 -lole32 -luuid $(LDFLAGS) gdkres.o
 
 libwntab32x.a : $(WTKIT)/lib/i386/wntab32x.lib
 	cp $(WTKIT)/lib/i386/wntab32x.lib libwntab32x.a
@@ -100,12 +100,6 @@ gdkrgb.c : ../gdkrgb.c
 
 gdkrectangle.c : ../gdkrectangle.c
 	$(CP) ../gdkrectangle.c .
-
-testgdk.exe : testgdk.o gdk-$(GTK_VER).dll
-	$(CC) $(CFLAGS) -o $@ testgdk.o -L . -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
-
-testgdk.o : testgdk.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgdk\" testgdk.c
 
 clean:
 	-rm *.exe *.o *.dll *.a *.exp *.base

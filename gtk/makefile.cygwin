@@ -40,7 +40,7 @@ all : \
 	../config.h	\
 	gtkcompat.h	\
 	generated	\
-	gtk-$(GTK_VER).dll\
+	gtk-$(GTK_VER).gcc.dll\
 	testdnd.exe	\
 	testgtk.exe	\
 	testinput.exe	\
@@ -49,7 +49,7 @@ all : \
 	simple.exe
 
 install : all
-	$(INSTALL) gtk-$(GTK_VER).dll $(BIN)
+	$(INSTALL) gtk-$(GTK_VER).gcc.dll $(BIN)
 
 gtk_OBJECTS = \
 	fnmatch.o	\
@@ -319,8 +319,8 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 #
 # Linking:
 #
-gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def
-	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L$(GETTEXT)/intl -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER) -lgmodule-$(GLIB_VER) -lgdi32 -luser32
+gtk-$(GTK_VER).gcc.dll : generated $(gtk_OBJECTS) gtk.def
+	$(GLIB)/build-dll gtk $(GTK_VER).gcc gtk.def $(gtk_OBJECTS) -L $(GDKSYSDEP) -lgdk-$(GTK_VER).gcc -L$(GETTEXT)/intl -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER).gcc -lgmodule-$(GLIB_VER).gcc -lgdi32 -luser32
 
 # General rule for compiling the objects into the DLL
 .c.o :
@@ -330,44 +330,44 @@ gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def
 # Test programs:
 #
 testdnd.exe : testdnd.o
-	$(CC) $(CFLAGS) -o $@ testdnd.o -L . -lgtk-$(GTK_VER) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ testdnd.o -L . -lgtk-$(GTK_VER).gcc -L $(GDKSYSDEP) -lgdk-$(GTK_VER).gcc -L $(GLIB) -lglib-$(GLIB_VER).gcc $(LDFLAGS)
 
 # Must have separate rules for these objects that don't go in the DLL
 testdnd.o : testdnd.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
 
 testgtk.exe : testgtk.o
-	$(CC) $(CFLAGS) -o $@  testgtk.o -L . -lgtk-$(GTK_VER) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testgtk.o -L . -lgtk-$(GTK_VER).gcc -L $(GDKSYSDEP) -lgdk-$(GTK_VER).gcc -L $(GLIB) -lglib-$(GLIB_VER).gcc $(LDFLAGS)
 
 testgtk.o : testgtk.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgtk\" testgtk.c
 
 testinput.exe : testinput.o
-	$(CC) $(CFLAGS) -o $@  testinput.o -L . -lgtk-$(GTK_VER) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testinput.o -L . -lgtk-$(GTK_VER).gcc -L $(GDKSYSDEP) -lgdk-$(GTK_VER).gcc -L $(GLIB) -lglib-$(GLIB_VER).gcc $(LDFLAGS)
 
 testinput.o : testinput.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testinput\" testinput.c
 
 testrgb.exe : testrgb.o
-	$(CC) $(CFLAGS) -o $@  testrgb.o -L . -lgtk-$(GTK_VER) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testrgb.o -L . -lgtk-$(GTK_VER).gcc -L $(GDKSYSDEP) -lgdk-$(GTK_VER).gcc -L $(GLIB) -lglib-$(GLIB_VER).gcc $(LDFLAGS)
 
 testrgb.o : testrgb.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testrgb\" testrgb.c
 
 testselection.exe : testselection.o
-	$(CC) $(CFLAGS) -o $@  testselection.o -L . -lgtk-$(GTK_VER) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testselection.o -L . -lgtk-$(GTK_VER).gcc -L $(GDKSYSDEP) -lgdk-$(GTK_VER).gcc -L $(GLIB) -lglib-$(GLIB_VER).gcc $(LDFLAGS)
 
 testselection.o : testselection.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
 
 testthreads.exe : testthreads.o
-	$(CC) $(CFLAGS) -o $@  testthreads.o -L . -lgtk-$(GTK_VER) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -lgthread-$(GLIB_VER) $(PTHREAD_LIB) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testthreads.o -L . -lgtk-$(GTK_VER).gcc -L $(GDKSYSDEP) -lgdk-$(GTK_VER).gcc -L $(GLIB) -lglib-$(GLIB_VER).gcc -lgthread-$(GLIB_VER).gcc $(PTHREAD_LIB) $(LDFLAGS)
 
 testthreads.o : testthreads.c
 	$(CC) $(CFLAGS) -I$(PTHREAD_INC) -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
 
 simple.exe : simple.o
-	$(CC) $(CFLAGS) -o $@  simple.o -L . -lgtk-$(GTK_VER) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  simple.o -L . -lgtk-$(GTK_VER).gcc -L $(GDKSYSDEP) -lgdk-$(GTK_VER).gcc -L $(GLIB) -lglib-$(GLIB_VER).gcc $(LDFLAGS)
 
 simple.o : simple.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c

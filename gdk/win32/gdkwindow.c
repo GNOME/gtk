@@ -1383,6 +1383,8 @@ gdk_window_set_title (GdkWindow   *window,
   g_return_if_fail (window != NULL);
   
   private = (GdkWindowPrivate*) window;
+  GDK_NOTE (MISC, g_print ("gdk_window_set_title: %#x %s\n",
+			   private->xwindow, title));
   if (!private->destroyed)
     {
       if (!SetWindowText (private->xwindow, title))
