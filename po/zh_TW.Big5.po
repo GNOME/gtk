@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.7 \n"
-"POT-Creation-Date: 1999-08-30 14:10+0200\n"
+"POT-Creation-Date: 1999-08-30 19:01+0200\n"
 "PO-Revision-Date: 1999-01-31 19:33+0800\n"
 "Last-Translator: 辛立仁 <hsin@med.cgu.edu.tw>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -267,7 +267,7 @@ msgstr "可縮放點陣"
 
 #: gtk/gtkfontsel.c:903
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1228
