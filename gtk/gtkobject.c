@@ -389,6 +389,15 @@ gtk_object_finalize (GObject *gobject)
 {
   GtkObject *object = GTK_OBJECT (gobject);
 
+  if (GTK_OBJECT_FLOATING (object))
+    {
+      g_warning ("A floating object was finalized. This means that someone\n"
+		 "called g_object_unref() on an object that had only a floating\n"
+		 "reference; the initial floating reference is not owned by anyone\n"
+		 "and must be removed with gtk_object_sink() after a normal\n"
+		 "reference is obtained with g_object_ref().");
+    }
+  
   gtk_object_notify_weaks (object);
   
   G_OBJECT_CLASS (parent_class)->finalize (gobject);

@@ -242,7 +242,7 @@ _gtk_accel_group_detach (GtkAccelGroup *accel_group,
 }
 
 GSList*
-gtk_accel_groups_from_acceleratable (GObject *object)
+gtk_accel_groups_from_object (GObject *object)
 {
   g_return_val_if_fail (G_IS_OBJECT (object), NULL);
   
@@ -706,23 +706,24 @@ _gtk_accel_group_activate (GtkAccelGroup  *accel_group,
 
 /**
  * gtk_accel_groups_activate:
- * @acceleratable: usually a #GtkWindow
+ * @object:        the #Gobject, usually a #GtkWindow, on which
+ *                 to activate the accelerator.
  * @accel_key:     accelerator keyval from a key event
  * @accel_mods:    keyboard state mask from a key event
  * @returns:       %TRUE if the accelerator was handled, %FALSE otherwise
  * 
  * Finds the first accelerator in any #GtkAccelGroup attached
- * to @acceleratable that matches @accel_key and @accel_mods, and
+ * to @object that matches @accel_key and @accel_mods, and
  * activates that accelerator.
  * If an accelerator was activated and handled this keypress, %TRUE
  * is returned.
  */
 gboolean
-gtk_accel_groups_activate (GObject	  *acceleratable,
+gtk_accel_groups_activate (GObject	  *object,
 			   guint	   accel_key,
 			   GdkModifierType accel_mods)
 {
-  g_return_val_if_fail (G_IS_OBJECT (acceleratable), FALSE);
+  g_return_val_if_fail (G_IS_OBJECT (object), FALSE);
   
   if (gtk_accelerator_valid (accel_key, accel_mods))
     {
@@ -734,8 +735,8 @@ gtk_accel_groups_activate (GObject	  *acceleratable,
       accel_quark = g_quark_from_string (accel_name);
       g_free (accel_name);
       
-      for (slist = gtk_accel_groups_from_acceleratable (acceleratable); slist; slist = slist->next)
-	if (_gtk_accel_group_activate (slist->data, accel_quark, acceleratable, accel_key, accel_mods))
+      for (slist = gtk_accel_groups_from_object (object); slist; slist = slist->next)
+	if (_gtk_accel_group_activate (slist->data, accel_quark, object, accel_key, accel_mods))
 	  return TRUE;
     }
   

@@ -169,9 +169,7 @@ gtk_accel_map_add_entry (const gchar *accel_path,
  * @key:         accelerator key to be filled in (optional)
  * @returns:     %TRUE if @accel_path is known, %FALSE otherwise
  *
- * Lookup the accelerator entry for @accel_path and fill in @key.
- * If the lookup revealed no results, (0) is returned, the entry's
- * #GQuark otherwise.
+ * Looks up the accelerator entry for @accel_path and fills in @key.
  */
 gboolean
 gtk_accel_map_lookup_entry (const gchar *accel_path,
@@ -279,7 +277,7 @@ internal_change_entry (const gchar    *accel_path,
   win_list = g_hash_table_slist_values (win_hm);
   g_hash_table_destroy (win_hm);
   for (slist = win_list; slist; slist = slist->next)
-    for (node = gtk_accel_groups_from_acceleratable (slist->data); node; node = node->next)
+    for (node = gtk_accel_groups_from_object (slist->data); node; node = node->next)
       g_hash_table_insert (group_hm, node->data, node->data);
   group_list = g_hash_table_slist_values (group_hm);
   g_hash_table_destroy (group_hm);

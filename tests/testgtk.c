@@ -2823,6 +2823,8 @@ create_tooltips (void)
                           &window);
 
       tooltips=gtk_tooltips_new();
+      g_object_ref (tooltips);
+      gtk_object_sink (GTK_OBJECT (tooltips));
       gtk_object_set_data (GTK_OBJECT (window), "tooltips", tooltips);
       
       box1 = gtk_vbox_new (FALSE, 0);

@@ -1,3 +1,26 @@
+Wed Nov 21 11:41:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testgtk.c (create_tooltips): Ref-sink the tooltips object.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_init): Ref-sink the tooltips object.
+
+	* gtk/gtkfilesel.c (open_new_dir): Fix some constness warnings.
+
+	* gtk/gtkaccelgroup.c: Rename gtk_accel_groups_from_acceleratable()
+	back to gtk_accel_groups_from_object(), change @acceleratable
+	parameter to gtk_accel_groups_activate() accordingly.
+
+	* gtk/gtkaccelmap.c (gtk_accel_map_lookup_entry): Remove
+	left-over comment about quark return.
+
+	* gtk/gtkaccelmap.h: Fix spelling of gtk_accel_map_foreach_unfiltered().
+
+ 	* gtk/gtk-boxed.defs (GtkIconSource): added as a boxed type.
+        (Patch from Matt Wilson)
+
+	* gtk/gtkobject.c (gtk_object_finalize): Warn if a floating
+	object is finalized.
+
 Tue Nov 20 21:25:08 2001  Tim Janik  <timj@gtk.org>
 
 	* applied patch from owen to get rid of accel map notifiers.

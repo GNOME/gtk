@@ -53,9 +53,9 @@ void	   gtk_accel_map_save_fd	(gint			 fd);
 
 
 /* --- filter functions --- */
-void	gtk_accel_map_add_filter	(const gchar		*filter_pattern);
-void	gtk_accel_map_foreach_unfilterd	(gpointer		 data,
-					 GtkAccelMapForeach	 foreach_func);
+void	gtk_accel_map_add_filter	 (const gchar		*filter_pattern);
+void	gtk_accel_map_foreach_unfiltered (gpointer		 data,
+					  GtkAccelMapForeach	 foreach_func);
 
 
 /* --- internal API --- */

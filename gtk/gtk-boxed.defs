@@ -28,6 +28,11 @@
   gtk_icon_set_unref
   "sizeof(GtkIconSet)")
 
+(define-boxed GtkIconSource
+  gtk_icon_source_copy
+  gtk_icon_source_free
+  "sizeof(GtkIconSource)")
+
 ;; TextView
 
 (define-boxed GtkTextIter

@@ -112,10 +112,10 @@ void		_gtk_accel_group_attach		(GtkAccelGroup	*accel_group,
 						 GObject	*object);
 void		_gtk_accel_group_detach		(GtkAccelGroup	*accel_group,
 						 GObject	*object);
-gboolean        gtk_accel_groups_activate      	(GObject	*acceleratable,
+gboolean        gtk_accel_groups_activate      	(GObject	*object,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods);
-GSList*	    gtk_accel_groups_from_acceleratable (GObject	*object);
+GSList*	        gtk_accel_groups_from_object    (GObject	*object);
 GtkAccelKey*	gtk_accel_group_find		(GtkAccelGroup	*accel_group,
 						 gboolean (*find_func) (GtkAccelKey *key,
 									GClosure    *closure,

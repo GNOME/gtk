@@ -2590,7 +2590,7 @@ open_new_dir (gchar       *dir_name,
 {
   CompletionDirSent *sent;
   GDir *directory;
-  char *dirent;
+  const char *dirent;
   GError *error;
   gint entry_count = 0;
   gint n_entries = 0;
