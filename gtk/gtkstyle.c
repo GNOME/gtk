@@ -742,6 +742,12 @@ gtk_style_attach (GtkStyle  *style,
   if (!new_style)
     {
       new_style = gtk_style_duplicate (style);
+      if (style->colormap->screen != colormap->screen)
+      {
+	if (new_style->font)
+	    gdk_font_unref (new_style->font);
+	new_style->font = NULL;
+      }
       gtk_style_realize (new_style, colormap);
     }
 
