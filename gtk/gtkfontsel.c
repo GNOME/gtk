@@ -670,7 +670,7 @@ cmp_families (const void *a, const void *b)
   const char *a_name = pango_font_family_get_name (*(PangoFontFamily **)a);
   const char *b_name = pango_font_family_get_name (*(PangoFontFamily **)b);
   
-  return strcmp (a_name, b_name);
+  return g_utf8_collate (a_name, b_name);
 }
 
 static void

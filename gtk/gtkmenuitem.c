@@ -515,6 +515,9 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	child_allocation.width -= child_requisition.height;
 
+      if (child_allocation.width < 1)
+	child_allocation.width = 1;
+
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
 

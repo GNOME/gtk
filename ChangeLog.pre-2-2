@@ -1,3 +1,16 @@
+Tue May 14 11:21:19 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): 
+ 	Discard configure events from SubstructureNotify.
+ 	(#81760, Rich Burridge)
+ 
+ 	* gtk/gtkfontsel.c (cmp_families): Use g_utf8_strcoll(), not
+ 	strcmp().
+ 
+ 	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate): Clamp 
+ 	width of child allocation to >= 1. (Fixes warnings from
+ 	#77639, Martin Schulze)
+ 	
 2002-05-14  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcontainer.c (gtk_container_class_install_child_property): 
