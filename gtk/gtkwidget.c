@@ -7350,7 +7350,7 @@ gtk_widget_list_mnemonic_labels (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_remove_mnemonic_label:
+ * gtk_widget_add_mnemonic_label:
  * @widget: a #GtkWidget
  * @label: a #GtkWidget that acts as a mnemonic label for @widget.
  * 

@@ -1,3 +1,13 @@
+Thu Feb 26 16:36:38 2004  Owen Taylor  <otaylor@redhat.com>
+
+	Fixes from Torsten Schoenfeld.
+
+	* gtk/gtkwidget.c (gtk_widget_add_mnemonic_label): 
+	Fix name in doc comment.
+
+	* gtk/gtkwidget.h: gtk_widget_list_mnemonic_labels(),
+	not get_mnemonic_labels.
+
 Thu Feb 26 22:20:44 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcomboboxentry.h:

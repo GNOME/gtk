@@ -760,7 +760,7 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 					    gchar    **path,
 					    gchar    **path_reversed);
 
-GList* gtk_widget_get_mnemonic_labels   (GtkWidget *widget);
+GList* gtk_widget_list_mnemonic_labels  (GtkWidget *widget);
 void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
 					 GtkWidget *label);
 void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
