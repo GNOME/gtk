@@ -1,15 +1,15 @@
 # English/Canada translation of gtk+-properties
-# Copyright (C) 2004 Adam Weinberger and the GNOME Foundation
+# Copyright (C) 2004-2005 Adam Weinberger and the GNOME Foundation
 # This file is distributed under the same licence as the gtk+ package.
-# Adam Weinberger <adamw@FreeBSD.org>, 2004.
+# Adam Weinberger <adamw@gnome.org>, 2004, 2005.
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2004-12-28 22:53-0400\n"
+"POT-Creation-Date: 2005-01-18 00:50-0500\n"
+"PO-Revision-Date: 2005-01-18 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -338,8 +338,8 @@ msgstr "Sensitive"
 msgid "Whether the action is enabled."
 msgstr "Whether the action is enabled."
 
-#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:582
-#: gtk/gtktreeviewcolumn.c:225 gtk/gtkwidget.c:443
+#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeviewcolumn.c:225
+#: gtk/gtkwidget.c:443
 msgid "Visible"
 msgstr "Visible"
 
@@ -794,27 +794,27 @@ msgstr "Show button images"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Whether stock icons should be shown in buttons"
 
-#: gtk/gtkcalendar.c:468
+#: gtk/gtkcalendar.c:471
 msgid "Year"
 msgstr "Year"
 
-#: gtk/gtkcalendar.c:469
+#: gtk/gtkcalendar.c:472
 msgid "The selected year"
 msgstr "The selected year"
 
-#: gtk/gtkcalendar.c:475
+#: gtk/gtkcalendar.c:478
 msgid "Month"
 msgstr "Month"
 
-#: gtk/gtkcalendar.c:476
+#: gtk/gtkcalendar.c:479
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "The selected month (as a number between 0 and 11)"
 
-#: gtk/gtkcalendar.c:482
+#: gtk/gtkcalendar.c:485
 msgid "Day"
 msgstr "Day"
 
-#: gtk/gtkcalendar.c:483
+#: gtk/gtkcalendar.c:486
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -822,35 +822,35 @@ msgstr ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 
-#: gtk/gtkcalendar.c:497
+#: gtk/gtkcalendar.c:500
 msgid "Show Heading"
 msgstr "Show Heading"
 
-#: gtk/gtkcalendar.c:498
+#: gtk/gtkcalendar.c:501
 msgid "If TRUE, a heading is displayed"
 msgstr "If TRUE, a heading is displayed"
 
-#: gtk/gtkcalendar.c:512
+#: gtk/gtkcalendar.c:515
 msgid "Show Day Names"
 msgstr "Show Day Names"
 
-#: gtk/gtkcalendar.c:513
+#: gtk/gtkcalendar.c:516
 msgid "If TRUE, day names are displayed"
 msgstr "If TRUE, day names are displayed"
 
-#: gtk/gtkcalendar.c:526
+#: gtk/gtkcalendar.c:529
 msgid "No Month Change"
 msgstr "No Month Change"
 
-#: gtk/gtkcalendar.c:527
+#: gtk/gtkcalendar.c:530
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "If TRUE, the selected month cannot be changed"
 
-#: gtk/gtkcalendar.c:541
+#: gtk/gtkcalendar.c:544
 msgid "Show Week Numbers"
 msgstr "Show Week Numbers"
 
-#: gtk/gtkcalendar.c:542
+#: gtk/gtkcalendar.c:545
 msgid "If TRUE, week numbers are displayed"
 msgstr "If TRUE, week numbers are displayed"
 
@@ -2013,11 +2013,11 @@ msgstr "The title of the file chooser dialogue."
 msgid "The desired width of the button widget, in characters."
 msgstr "The desired width of the button widget, in characters."
 
-#: gtk/gtkfilechooserdefault.c:625
+#: gtk/gtkfilechooserdefault.c:627
 msgid "Default file chooser backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:628
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
@@ -4234,6 +4234,10 @@ msgstr "Horizontal Adjustment for the widget"
 #: gtk/gtktreeview.c:575
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertical Adjustment for the widget"
+
+#: gtk/gtktreeview.c:582
+msgid "Headers Visible"
+msgstr "Headers Visible"
 
 #: gtk/gtktreeview.c:583
 msgid "Show the column header buttons"
