@@ -1,3 +1,8 @@
+2000-12-04  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkpango-fb.c (pango_fb_font_get_metrics):
+	Return positive descent.
+
 2000-12-02  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkwidget.h (struct _GtkWidgetClass): Remove "draw" virtual

@@ -841,7 +841,7 @@ pango_fb_font_get_metrics (PangoFont        *font,
   if (metrics)
     {
       metrics->ascent = (ftf->size->metrics.ascender * PANGO_SCALE + 32) >> 6;
-      metrics->descent = (ftf->size->metrics.descender * PANGO_SCALE + 32) >> 6;
+      metrics->descent = ((-ftf->size->metrics.descender) * PANGO_SCALE + 32) >> 6;
     }
 }
 
