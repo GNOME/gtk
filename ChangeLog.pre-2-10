@@ -1,3 +1,16 @@
+2003-01-30  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtktoolbar.c (set_child_packing_and_visibility): New helper
+	function that sets the icon's and label's packing options and
+	visibility based on toolbar->style.
+
+	(gtk_toolbar_internal_insert_element):
+	(gtk_real_toolbar_style_changed): Make use of
+	set_child_packing_and_visibility() to clean up the code and get
+	the packing right for icon-only/text-only toolbars. (#104679)
+
+	(get_first_child): Remove, and use gtk_bin_get_child() instead.
+
 2003-01-30  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c: Replace PAGE_HORIZONTALLY_HACK_VALUE by
@@ -17,7 +30,7 @@ Thu Jan 30 16:01:29 2003  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkcolorsel.c (palette_paint): Explicitely draw an opaque
 	rectangle using the background color rather than relying on
 	gdk_window_clear_area(), so that the palette works properly with
-	pixmap themes.
+	pixmap themes. (#101732)
 
 	* demos/gtk-demo/colorsel.c: Install an "expose_event" handler
 	to fill the drawing area in the background color.
