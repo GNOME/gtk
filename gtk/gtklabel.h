@@ -135,6 +135,9 @@ PangoEllipsizeMode gtk_label_get_ellipsize        (GtkLabel         *label);
 void     gtk_label_set_width_chars		  (GtkLabel         *label,
 						   gint              n_chars);
 gint     gtk_label_get_width_chars                (GtkLabel         *label);
+void     gtk_label_set_max_width_chars    	  (GtkLabel         *label,
+					  	   gint              n_chars);
+gint     gtk_label_get_max_width_chars  	  (GtkLabel         *label);
 void     gtk_label_set_pattern                    (GtkLabel         *label,
 						   const gchar      *pattern);
 void     gtk_label_set_line_wrap                  (GtkLabel         *label,

@@ -1,5 +1,12 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.[hc]: Add a max-width-chars property, which can
+	be used to specify the width of the label in characters, while
+	still allowing it to fall short of this length if the text
+	is shorter.  (#155944, Christian Persch)
+
+	* gtk/gtk.symbols: Add new symbols.
+
 	* gtk/gtkuimanager.c (update_smart_separators): Don't let the
 	empty menu filler affect visibility of separators.  (#160500,
 	Christian Persch)
