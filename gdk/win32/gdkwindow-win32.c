@@ -364,7 +364,9 @@ gdk_window_new (GdkWindow     *parent,
       break;
     case GDK_WINDOW_DIALOG:
       dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+#if 0
       dwExStyle |= WS_EX_TOPMOST; /* //HB: want this? */
+#endif
       xparent = gdk_root_window;
       break;
     case GDK_WINDOW_TEMP:
@@ -1019,10 +1021,10 @@ gdk_window_clear_area (GdkWindow *window,
     {
       HDC hdc;
 
-      if (width == -1)
-	width = G_MAXSHORT/2;		/* Yeah, right */
-      if (height == -1)
-	height = G_MAXSHORT/2;
+      if (width == 0)
+	width = ((GdkDrawablePrivate *) window)->width - x;
+      if (height == 0)
+	height = ((GdkDrawablePrivate *) window)->height - y;
       GDK_NOTE (MISC, g_print ("gdk_window_clear_area: %#x %dx%d@+%d+%d\n",
 			       GDK_DRAWABLE_XID (window), width, height, x, y));
       hdc = GetDC (GDK_DRAWABLE_XID (window));
@@ -1341,7 +1343,7 @@ gdk_window_set_title (GdkWindow   *window,
 			   GDK_DRAWABLE_XID (window), title));
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
-      /* As the title most is in UTF-8 we must translate it
+      /* As the title is in UTF-8 we must translate it
        * to the system codepage.
        */
       titlelen = strlen (title);

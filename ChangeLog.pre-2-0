@@ -1,3 +1,15 @@
+2000-01-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_clear_area): The correct
+	semantics (to mimic the X11 backend, which just calls XClearArea)
+	is to check for zero width (and height), and in that case use the
+	window's width minus x (height minus y). This fixes for instance
+	some redraw problems with gtkclist, which were easily noticeable
+	in the gtk file selection widget.
+
+	(gdk_window_new): Don't set WS_EX_TOPMOST for dialog
+	windows.
+
 2000-01-13  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in
