@@ -633,7 +633,7 @@ gdk_window_new (GdkWindow     *parent,
 
     }
   }
-  gdk_drawable_ref (window);
+  g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
 #endif
 
@@ -657,7 +657,7 @@ gdk_window_new (GdkWindow     *parent,
     }
 
 #ifdef WITHOUT_WM_CREATE
-  gdk_drawable_ref (window);
+  g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
 #endif
 
@@ -718,7 +718,7 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
 
   _gdk_window_init_position (GDK_WINDOW (private));
 
-  gdk_drawable_ref (window);
+  g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
 
   return window;
@@ -794,7 +794,7 @@ gdk_window_destroy_notify (GdkWindow *window)
     }
   
   gdk_win32_handle_table_remove (GDK_WINDOW_HWND (window));
-  gdk_drawable_unref (window);
+  g_object_unref (window);
 }
 
 static void
@@ -1597,7 +1597,7 @@ gdk_window_set_background (GdkWindow *window,
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
       private->bg_pixmap != GDK_NO_BG)
     {
-      gdk_drawable_unref (private->bg_pixmap);
+      g_object_unref (private->bg_pixmap);
       private->bg_pixmap = NULL;
     }
 }
@@ -1617,7 +1617,7 @@ gdk_window_set_back_pixmap (GdkWindow *window,
   if (private->bg_pixmap &&
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
       private->bg_pixmap != GDK_NO_BG)
-    gdk_drawable_unref (private->bg_pixmap);
+    g_object_unref (private->bg_pixmap);
 
   if (parent_relative)
     {
@@ -1628,7 +1628,7 @@ gdk_window_set_back_pixmap (GdkWindow *window,
     {
       if (pixmap)
 	{
-	  gdk_drawable_ref (pixmap);
+	  g_object_ref (pixmap);
 	  private->bg_pixmap = pixmap;
 	}
       else

@@ -249,7 +249,7 @@ gdk_input_wintab_init (void)
 	  g_warning ("gdk_input_wintab_init: gdk_window_new failed");
 	  return;
 	}
-      gdk_drawable_ref (wintab_window);
+      g_object_ref (wintab_window);
       
       for (devix = 0; devix < ndevices; devix++)
 	{
@@ -719,7 +719,7 @@ _gdk_input_other_event (GdkEvent  *event,
   if (window == NULL)
     window = _gdk_parent_root;
 
-  gdk_drawable_ref (window);
+  g_object_ref (window);
   display = gdk_drawable_get_display (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
@@ -823,10 +823,10 @@ _gdk_input_other_event (GdkEvent  *event,
 	  pt.x = x;
 	  pt.y = y;
 	  ClientToScreen (GDK_WINDOW_HWND (window), &pt);
-	  gdk_drawable_unref (window);
+	  g_object_unref (window);
 	  window = (GdkWindow *) obj->parent;
 	  obj = GDK_WINDOW_OBJECT (window);
-	  gdk_drawable_ref (window);
+	  g_object_ref (window);
 	  ScreenToClient (GDK_WINDOW_HWND (window), &pt);
 	  x = pt.x;
 	  y = pt.y;

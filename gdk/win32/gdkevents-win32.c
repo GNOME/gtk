@@ -655,8 +655,8 @@ find_window_for_pointer_event (GdkWindow*  reported_window,
   GDK_NOTE (EVENTS, g_print ("...found %p for (%ld, %ld)\n",
 			     hwnd, pt.x, pt.y));
 
-  gdk_window_unref (reported_window);
-  gdk_window_ref (other_window);
+  g_object_unref (reported_window);
+  g_object_ref (other_window);
 
   return other_window;
 }
@@ -1190,7 +1190,7 @@ synthesize_enter_or_leave_event (GdkWindow    *window,
   event = gdk_event_new (type);
   event->crossing.window = window;
   event->crossing.send_event = FALSE;
-  gdk_window_ref (event->crossing.window);
+  g_object_ref (event->crossing.window);
   event->crossing.subwindow = NULL;
   event->crossing.time = _gdk_win32_get_next_tick (msg->time);
   event->crossing.x = x;
@@ -1355,10 +1355,10 @@ synthesize_crossing_events (GdkWindow *window,
     }
 
   if (current_window)
-    gdk_window_unref (current_window);
+    g_object_unref (current_window);
   current_window = window;
   if (current_window)
-    gdk_window_ref (current_window);
+    g_object_ref (current_window);
 }
 
 #if 0
@@ -1412,7 +1412,7 @@ synthesize_expose_events (GdkWindow *window)
 	{
 	  event = gdk_event_new (GDK_EXPOSE);
 	  event->expose.window = window;
-	  gdk_window_ref (window);
+	  g_object_ref (window);
 	  event->expose.area.x = r.left;
 	  event->expose.area.y = r.top;
 	  event->expose.area.width = r.right - r.left;
@@ -1523,9 +1523,9 @@ propagate (GdkWindow  **window,
 	{
 	  GDK_NOTE (EVENTS, g_print ("...sending to grabber %p\n",
 				     GDK_WINDOW_HWND (grab_window)));
-	  gdk_drawable_unref (*window);
+	  g_object_unref (*window);
 	  *window = grab_window;
-	  gdk_drawable_ref (*window);
+	  g_object_ref (*window);
 	  return TRUE;
 	}
     }
@@ -1553,9 +1553,9 @@ propagate (GdkWindow  **window,
 		      GDK_NOTE (EVENTS,
 				g_print ("...sending to grabber %p\n",
 					 GDK_WINDOW_HWND (grab_window)));
-		      gdk_drawable_unref (*window);
+		      g_object_unref (*window);
 		      *window = grab_window;
-		      gdk_drawable_ref (*window);
+		      g_object_ref (*window);
 		      return TRUE;
 		    }
 		}
@@ -1572,9 +1572,9 @@ propagate (GdkWindow  **window,
 	    }
 	  else
 	    {
-	      gdk_drawable_unref (*window);
+	      g_object_unref (*window);
 	      *window = GDK_WINDOW (GDK_WINDOW_OBJECT (*window)->parent);
-	      gdk_drawable_ref (*window);
+	      g_object_ref (*window);
 	      GDK_NOTE (EVENTS, g_print ("%s %p",
 					 (in_propagation ? "," : "...propagating to"),
 					 GDK_WINDOW_HWND (*window)));
@@ -1969,7 +1969,7 @@ gdk_event_translate (GdkDisplay *display,
 	   * CreateWindowEx call.
 	   * Don't insert xid there a second time, if it's done here. 
 	   */
-	  gdk_drawable_ref (window);
+	  g_object_ref (window);
 	  gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
 # endif
 	}
@@ -1983,7 +1983,7 @@ gdk_event_translate (GdkDisplay *display,
       return FALSE;
     }
   
-  gdk_drawable_ref (window);
+  g_object_ref (window);
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -2026,9 +2026,9 @@ gdk_event_translate (GdkDisplay *display,
 
       if (new_window != window)
 	{
-	  gdk_drawable_unref (window);
+	  g_object_unref (window);
 	  ASSIGN_WINDOW (new_window);
-	  gdk_drawable_ref (window);
+	  g_object_ref (window);
 	}
 
       if (GDK_WINDOW_OBJECT (window)->extension_events != 0
@@ -2513,7 +2513,7 @@ gdk_event_translate (GdkDisplay *display,
 	      GdkEvent *event2 = gdk_event_new (GDK_KEY_PRESS);
 	      build_keypress_event (event2, msg);
 	      event2->key.window = window;
-	      gdk_drawable_ref (window);
+	      g_object_ref (window);
 	      _gdk_event_queue_append (display, event2);
 	      GDK_NOTE (EVENTS, print_event (event2));
 	    }
@@ -2755,7 +2755,7 @@ gdk_event_translate (GdkDisplay *display,
 
       if (current_window)
 	{
-	  gdk_drawable_unref (current_window);
+	  g_object_unref (current_window);
 	  current_window = NULL;
 	}
 
@@ -2783,9 +2783,9 @@ gdk_event_translate (GdkDisplay *display,
 
       if (new_window != window)
 	{
-	  gdk_drawable_unref (window);
+	  g_object_unref (window);
 	  ASSIGN_WINDOW (new_window);
-	  gdk_drawable_ref (window);
+	  g_object_ref (window);
 	}
 
       if (GDK_WINDOW_OBJECT (window)->extension_events != 0
@@ -3304,7 +3304,7 @@ gdk_event_translate (GdkDisplay *display,
       event->any.window = window;
       if (window != NULL && window == current_window)
 	{
-	  gdk_drawable_unref (current_window);
+	  g_object_unref (current_window);
 	  current_window = NULL;
 	}
 
@@ -3359,11 +3359,11 @@ done:
   if (return_val)
     {
       if (event->any.window)
-	gdk_drawable_ref (event->any.window);
+	g_object_ref (event->any.window);
       if (((event->any.type == GDK_ENTER_NOTIFY) ||
 	   (event->any.type == GDK_LEAVE_NOTIFY)) &&
 	  (event->crossing.subwindow != NULL))
-	gdk_drawable_ref (event->crossing.subwindow);
+	g_object_ref (event->crossing.subwindow);
 
       GDK_NOTE (EVENTS, print_event (event));
     }
@@ -3375,7 +3375,7 @@ done:
     }
 
   if (window)
-    gdk_drawable_unref (window);
+    g_object_unref (window);
   
   return return_val;
 }

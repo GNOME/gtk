@@ -106,10 +106,10 @@ gdk_gc_win32_finalize (GObject *object)
     gdk_font_unref (win32_gc->font);
   
   if (win32_gc->values_mask & GDK_GC_TILE)
-    gdk_drawable_unref (win32_gc->tile);
+    g_object_unref (win32_gc->tile);
   
   if (win32_gc->values_mask & GDK_GC_STIPPLE)
-    gdk_drawable_unref (win32_gc->stipple);
+    g_object_unref (win32_gc->stipple);
 
   if (win32_gc->pen_dashes)
     g_free (win32_gc->pen_dashes);
@@ -204,11 +204,11 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
   if (mask & GDK_GC_TILE)
     {
       if (win32_gc->tile != NULL)
-	gdk_drawable_unref (win32_gc->tile);
+	g_object_unref (win32_gc->tile);
       win32_gc->tile = values->tile;
       if (win32_gc->tile != NULL)
 	{
-	  gdk_drawable_ref (win32_gc->tile);
+	  g_object_ref (win32_gc->tile);
 	  win32_gc->values_mask |= GDK_GC_TILE;
 	  GDK_NOTE (GC,
 		    (g_print ("%stile=%p", s,
@@ -226,7 +226,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
   if (mask & GDK_GC_STIPPLE)
     {
       if (win32_gc->stipple != NULL)
-	gdk_drawable_unref (win32_gc->stipple);
+	g_object_unref (win32_gc->stipple);
       win32_gc->stipple = values->stipple;
       if (win32_gc->stipple != NULL)
 	{
@@ -265,7 +265,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	    }
 	  else
 #endif
-	    gdk_drawable_ref (win32_gc->stipple);
+	    g_object_ref (win32_gc->stipple);
 	  win32_gc->values_mask |= GDK_GC_STIPPLE;
 	  GDK_NOTE (GC,
 		    (g_print ("%sstipple=%p", s,
@@ -695,10 +695,10 @@ gdk_gc_copy (GdkGC *dst_gc,
     gdk_font_unref (dst_win32_gc->font);
 
   if (dst_win32_gc->tile != NULL)
-    gdk_drawable_unref (dst_win32_gc->tile);
+    g_object_unref (dst_win32_gc->tile);
 
   if (dst_win32_gc->stipple != NULL)
-    gdk_drawable_unref (dst_win32_gc->stipple);
+    g_object_unref (dst_win32_gc->stipple);
 
   if (dst_win32_gc->pen_dashes)
     g_free (dst_win32_gc->pen_dashes);
@@ -722,10 +722,10 @@ gdk_gc_copy (GdkGC *dst_gc,
     gdk_font_ref (dst_win32_gc->font);
 
   if (dst_win32_gc->tile != NULL)
-    gdk_drawable_ref (dst_win32_gc->tile);
+    g_object_ref (dst_win32_gc->tile);
 
   if (dst_win32_gc->stipple != NULL)
-    gdk_drawable_ref (dst_win32_gc->stipple);
+    g_object_ref (dst_win32_gc->stipple);
 
   if (dst_win32_gc->pen_dashes)
     dst_win32_gc->pen_dashes = g_memdup (src_win32_gc->pen_dashes, 

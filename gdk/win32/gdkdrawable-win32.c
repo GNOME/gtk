@@ -604,7 +604,7 @@ generic_draw (GdkDrawable    *drawable,
 	  GDI_CALL (DeleteObject, (fg_brush));
 	  GDI_CALL (SelectObject, (stipple_hdc, old_stipple_hbm));
 	  GDI_CALL (DeleteDC, (stipple_hdc));
-	  gdk_drawable_unref (stipple_bitmap);
+	  g_object_unref (stipple_bitmap);
 	}
 
       /* Tile pixmap now contains the pattern that we should paint in
@@ -665,8 +665,8 @@ generic_draw (GdkDrawable    *drawable,
 	  GDI_CALL (SelectObject, (temp2_hdc, old_temp2_hbm));
 	  GDI_CALL (DeleteDC, (temp1_hdc));
 	  GDI_CALL (DeleteDC, (temp2_hdc));
-	  gdk_drawable_unref (temp1_pixmap);
-	  gdk_drawable_unref (temp2_pixmap);
+	  g_object_unref (temp1_pixmap);
+	  g_object_unref (temp2_pixmap);
 	}
       
       /* Cleanup */
@@ -674,8 +674,8 @@ generic_draw (GdkDrawable    *drawable,
       GDI_CALL (SelectObject, (tile_hdc, old_tile_hbm));
       GDI_CALL (DeleteDC, (mask_hdc));
       GDI_CALL (DeleteDC, (tile_hdc));
-      gdk_drawable_unref (mask_pixmap);
-      gdk_drawable_unref (tile_pixmap);
+      g_object_unref (mask_pixmap);
+      g_object_unref (tile_pixmap);
 
       gdk_win32_hdc_release (drawable, gc, blitting_mask);
     }
