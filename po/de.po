@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.0\n"
-"POT-Creation-Date: 2002-03-08 13:08+0100\n"
+"POT-Creation-Date: 2002-03-08 14:45-0500\n"
 "PO-Revision-Date: 2002-03-02 14:40+0100\n"
 "Last-Translator: Sven Neumann <sven@gimp.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -1765,28 +1765,28 @@ msgstr "Mehrere auswählen"
 msgid "Whether to allow multiple files to be selected."
 msgstr "Sollen mehrere Dateien ausgewählt werden können?"
 
-#: gtk/gtkfilesel.c:695
+#: gtk/gtkfilesel.c:707
 msgid "Folders"
 msgstr "Ordner"
 
-#: gtk/gtkfilesel.c:699
+#: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
 msgstr "_Ordner"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Dateien"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:746
 msgid "_Files"
 msgstr "_Dateien"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Ordner nicht lesbar: %s"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:946
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1797,26 +1797,26 @@ msgstr ""
 "dieses Programm nicht verfügbar sein.\n"
 "Sind Sie sicher, dass Sie sie auswählen wollen?"
 
-#: gtk/gtkfilesel.c:1064
+#: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
 msgstr "_Neuer Ordner"
 
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
 msgstr "Datei _löschen"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
 msgstr "Datei _umbenennen"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Der Ordnername \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt sind"
 
-#: gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1825,35 +1825,35 @@ msgstr ""
 "Fehler beim Erstellen des Ordners \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Sie haben wahrscheinlich Symboutzt, die in Dateinamen nicht erlaubt sind."
 
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fehler beim Erstellen des Ordners \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1403
 msgid "New Folder"
 msgstr "Neuer Ordner"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
 msgstr "_Ordnername:"
 
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1444
 msgid "Create"
 msgstr "Erstellen"
 
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1485
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Der Dateiname \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt sind"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1488
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1862,32 +1862,32 @@ msgstr ""
 "Fehler beim Löschen der Datei \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
+#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Sie enthält wahrscheinlich Symbole, die in Dateinamen nicht erlaubt sind."
 
-#: gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Fehler beim Löschen der Datei \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Datei \"%s\" wirklich löschen?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1547
 msgid "Delete File"
 msgstr "Datei löschen"
 
-#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Der Dateiname \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt sind"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1595
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1896,7 +1896,7 @@ msgstr ""
 "Fehler beim Umbenennen der Datei in \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1609
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1905,29 +1905,29 @@ msgstr ""
 "Fehler beim Umbenennen der Datei \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fehler beim Umbenennen der Datei \"%s\" in \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1666
 msgid "Rename File"
 msgstr "Datei umbenennen"
 
-#: gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1681
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Datei \"%s\" umbenennen in:"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1712
 msgid "Rename"
 msgstr "Umbn"
 
-#: gtk/gtkfilesel.c:2091
+#: gtk/gtkfilesel.c:2103
 msgid "Selection: "
 msgstr "Auswahl:"
 
-#: gtk/gtkfilesel.c:2969
+#: gtk/gtkfilesel.c:2981
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1936,11 +1936,11 @@ msgstr ""
 "Der Dateiname %s konnte nicht in UTF-8 umgewandelt werden. Versuchen Sie, "
 "die Umgebungsvariable G_BROKEN_FILENAMES zu setzen."
 
-#: gtk/gtkfilesel.c:3833
+#: gtk/gtkfilesel.c:3845
 msgid "Name too long"
 msgstr "Name zu lang"
 
-#: gtk/gtkfilesel.c:3835
+#: gtk/gtkfilesel.c:3847
 msgid "Couldn't convert filename"
 msgstr "Dateiname konnte nicht umgewandelt werden"
 
@@ -2951,11 +2951,11 @@ msgstr ""
 "Einen sekundären Vorwärtspfeil am gegenüberliegenden Ende des Rollbalkens "
 "anzeigen"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
 msgid "Horizontal Adjustment"
 msgstr "Horizontale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
 msgid "Vertical Adjustment"
 msgstr "Vertikale Stellgröße"
 
@@ -3886,118 +3886,118 @@ msgstr "Zu sortierendes Baumansichtsmodell"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Das durch das TreeModelSort zu sortierende Modell"
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:511
 msgid "TreeView Model"
 msgstr "Baumansichts-Modell"
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:512
 msgid "The model for the tree view"
 msgstr "Das Modell für die Baumansicht"
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:520
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horizontale Stellgröße für das Widget"
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:528
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikale Stellgröße für das Widget"
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Sichtbar"
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:536
 msgid "Show the column header buttons"
 msgstr "Die Spaltenkopf-Knöpfe anzeigen"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:543
 msgid "Headers Clickable"
 msgstr "Klickbare Köpfe"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:544
 msgid "Column headers respond to click events"
 msgstr "Spaltenköpfe reagieren auf Klick-Ereignisse"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:551
 msgid "Expander Column"
 msgstr "Ausklapper-Spalte"
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:552
 msgid "Set the column for the expander column"
 msgstr "Die Spalte für die Ausklapper einstellen"
 
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Umstellbar"
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:560
 msgid "View is reorderable"
 msgstr "Ansicht kann umgeordnet werden"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:567
 msgid "Rules Hint"
 msgstr "Streifenhinweis"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:568
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Der Themen-Engine einen Hinweis darauf geben, dass Zeilen in wechselnden "
 "Farben gezeichnet werden sollen"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:575
 msgid "Enable Search"
 msgstr "Suche aktivieren"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:576
 msgid "View allows user to search through columns interactively"
 msgstr "Ansicht erlaubt es dem Benutzer, interaktiv durch Spalten zu suchen"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:583
 msgid "Search Column"
 msgstr "Suchspalte"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:584
 msgid "Model column to search through when searching through code"
 msgstr ""
 "Modellspalte, durch die gesucht werden soll, wenn durch Code gesucht wird"
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:597
 msgid "Expander Size"
 msgstr "Ausklappergröße"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:598
 msgid "Size of the expander arrow."
 msgstr "Größe des Ausklapppfeils."
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:606
 msgid "Vertical Separator Width"
 msgstr "Breite des vertikalen Trennbalkens"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:607
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Vertikaler Abstand zwischen Zellen. Muss eine gerade Zahl sein."
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:615
 msgid "Horizontal Separator Width"
 msgstr "Breite des horizontalen Trennbalkens"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:616
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Horizontaler Abstand zwischen Zellen. Muss eine gerade Zahl sein."
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:624
 msgid "Allow Rules"
 msgstr "Lesehilfen erlauben"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:625
 msgid "Allow drawing of alternating color rows."
 msgstr "Die Darstellung von farblich abwechselnden Zeilen erlauben."
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:631
 msgid "Indent Expanders"
 msgstr "Ausklapper einrücken"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:632
 msgid "Make the expanders indented."
 msgstr "Die Ausklapper einrücken."
 
@@ -4312,7 +4312,9 @@ msgstr "Sekundäre Cursorfarbe"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
-msgstr "Farbe der sekundären Einfügemarke, wenn rechts- und linksläufiger Text gemischt bearbeitet werden."
+msgstr ""
+"Farbe der sekundären Einfügemarke, wenn rechts- und linksläufiger Text "
+"gemischt bearbeitet werden."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"

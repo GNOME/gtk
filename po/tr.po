@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ \n"
-"POT-Creation-Date: 2002-03-05 22:16-0500\n"
+"POT-Creation-Date: 2002-03-08 14:45-0500\n"
 "PO-Revision-Date: 2002-02-20 17:56+0200\n"
 "Last-Translator: Nilgün Belma Bugüner <nilgun@fide.org>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -2018,16 +2018,16 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Girdi içeriğinin odaklanma ile seçilmesi."
 
 # gtk/gtklabel.c:251
-#: gtk/gtkentry.c:3838 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "Tümünü Seç"
 
 # gtk/gtkentry.c:3653 gtk/gtktextview.c:5336
-#: gtk/gtkentry.c:3848 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "Girdi Yöntemleri"
 
-#: gtk/gtkentry.c:3858 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
 msgid "_Insert Unicode control character"
 msgstr "_Unicode denetim karakteri gir"
 
@@ -2064,32 +2064,32 @@ msgid "Whether to allow multiple files to be selected."
 msgstr "Dosyaları oluşturmak/değiştirmek için düğmelerin gösterilmekliği"
 
 # gtk/gtkfilesel.c:651
-#: gtk/gtkfilesel.c:695
+#: gtk/gtkfilesel.c:707
 msgid "Folders"
 msgstr "Dizinler"
 
 # gtk/gtkfilesel.c:651
-#: gtk/gtkfilesel.c:699
+#: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
 msgstr "Di_zinler"
 
 # gtk/gtkfilesel.c:651
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Dosyalar"
 
 # gtk/gtkfilesel.c:651
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:746
 msgid "_Files"
 msgstr "_Dosyalar"
 
 # gtk/gtkfilesel.c:719 gtk/gtkfilesel.c:1816
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Dizin okunabilir değil: %s"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:946
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2100,29 +2100,29 @@ msgstr ""
 "olmayabilir.\n"
 "Onu seçmek istediğinizden emin misiniz?"
 
-#: gtk/gtkfilesel.c:1064
+#: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
 msgstr "_Yeni Dizin"
 
 # gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
 msgstr "Dosya _Sil"
 
 # gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
 msgstr "Dosyayı İsi_mlendir"
 
 # gtk/gtkfilesel.c:1249 gtk/gtkfilesel.c:1263
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" dosya isimlerinde izin verilmeyen karakterler içeriyor"
 
 # gtk/gtkfilesel.c:1265
-#: gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2132,32 +2132,32 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1003 gtk/gtkfilesel.c:1253
-#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Dosya isimlerinde izin verilmeyen karakterler kullanmış olabilirsiniz."
 
 # gtk/gtkfilesel.c:1011
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "\"%s\" dizini oluşturulurken hata: %s\n"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1403
 msgid "New Folder"
 msgstr "Yeni Dizin"
 
 # gtk/gtkfilesel.c:502
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
 msgstr "Di_zin ismi:"
 
 # gtk/gtkfilesel.c:1073
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1444
 msgid "Create"
 msgstr "Oluştur"
 
 # gtk/gtkfilesel.c:1117
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1485
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
@@ -2165,7 +2165,7 @@ msgstr ""
 "içeriyor."
 
 # gtk/gtkfilesel.c:1120
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1488
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2175,35 +2175,35 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1122 gtk/gtkfilesel.c:1267
-#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
+#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Dosya isimlerinde izin verilmeyen karakterler kullanılmış olabilir."
 
 # gtk/gtkfilesel.c:1131
-#: gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "\"%s\" silinirken hata: %s"
 
 # gtk/gtkfilesel.c:1131
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1542
 #, fuzzy, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "\"%s\" silinirken hata: %s"
 
 # gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1547
 msgid "Delete File"
 msgstr "Dosya Sil"
 
 # gtk/gtkfilesel.c:1249 gtk/gtkfilesel.c:1263
-#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" dosya isimlerinde izin verilmeyen karakterler içeriyor"
 
 # gtk/gtkfilesel.c:1251
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1595
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2213,7 +2213,7 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1265
-#: gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1609
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2223,34 +2223,34 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1275
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Dosya ismi \"%s\", \"%s\" olarak değiştirilirken hata oluştu: %s"
 
 # gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1666
 msgid "Rename File"
 msgstr "Dosyayı İsimlendir"
 
 # gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1681
 #, fuzzy, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Dosyayı İsimlendir"
 
 # gtk/gtkfilesel.c:1351
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1712
 msgid "Rename"
 msgstr "Yeniden adlandır"
 
 # gtk/gtkfilesel.c:1795
-#: gtk/gtkfilesel.c:2091
+#: gtk/gtkfilesel.c:2103
 msgid "Selection: "
 msgstr "Seçim: "
 
 # gtk/gtkfilesel.c:2407
-#: gtk/gtkfilesel.c:2969
+#: gtk/gtkfilesel.c:2981
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -2260,12 +2260,12 @@ msgstr ""
 "kullanmayı deneyin."
 
 # gtk/gtkfilesel.c:3275
-#: gtk/gtkfilesel.c:3833
+#: gtk/gtkfilesel.c:3845
 msgid "Name too long"
 msgstr "İsim çok uzun"
 
 # gtk/gtkfilesel.c:3277
-#: gtk/gtkfilesel.c:3835
+#: gtk/gtkfilesel.c:3847
 msgid "Couldn't convert filename"
 msgstr "Dosya ismi dönüştürülemedi"
 
@@ -2441,7 +2441,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1303
+#: gtk/gtkiconfactory.c:1308
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Simge yüklenirken hata: %s"
@@ -2987,7 +2987,7 @@ msgid "Whether tabs should have homogeneous sizes"
 msgstr "Sekmelerin aynı boyutlarda olmaları"
 
 # gtk/gtknotebook.c:2125 gtk/gtknotebook.c:4517
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
+#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
 #, c-format
 msgid "Page %u"
 msgstr "Sayfa %u"
@@ -3451,12 +3451,12 @@ msgstr ""
 "gösterilecek mi"
 
 # gtk/gtktext.c:594 gtk/gtktreeview.c:465
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
 msgid "Horizontal Adjustment"
 msgstr "Yatay Hizalama"
 
 # gtk/gtktext.c:602 gtk/gtktreeview.c:473
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
 msgid "Vertical Adjustment"
 msgstr "Düşey Hizalama"
 
@@ -4584,131 +4584,131 @@ msgid "The model for the TreeModelSort to sort"
 msgstr "AğaçModeliSıralama için sıralama modeli"
 
 # gtk/gtktreeview.c:457
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:511
 msgid "TreeView Model"
 msgstr "TreeView Modeli"
 
 # gtk/gtktreeview.c:458
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:512
 msgid "The model for the tree view"
 msgstr "Ağaç görünümü için model"
 
 # gtk/gtktreeview.c:466
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:520
 msgid "Horizontal Adjustment for the widget"
 msgstr "Parça için Yatay Hizalama"
 
 # gtk/gtktreeview.c:474
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:528
 msgid "Vertical Adjustment for the widget"
 msgstr "Parça için Düşey Hizalama"
 
 # gtk/gtktreeview.c:481 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:442
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Görünür"
 
 # gtk/gtktreeview.c:482
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:536
 msgid "Show the column header buttons"
 msgstr "Sütun başlığı düğmelerini göster"
 
 # gtk/gtktreeview.c:489
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:543
 msgid "Headers Clickable"
 msgstr "Başlıklar tıklanabilir"
 
 # gtk/gtktreeview.c:490
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:544
 msgid "Column headers respond to click events"
 msgstr "Başlıklar tıklama eylemine yanıt verir"
 
 # gtk/gtktreeview.c:497
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:551
 msgid "Expander Column"
 msgstr "Genişleyen sütun"
 
 # gtk/gtktreeview.c:498
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:552
 msgid "Set the column for the expander column"
 msgstr "Sütünü genişleyen sütun yapar"
 
 # gtk/gtktreeview.c:505 gtk/gtktreeviewcolumn.c:253
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Sıralanabilir"
 
 # gtk/gtktreeview.c:506
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:560
 msgid "View is reorderable"
 msgstr "Görünüm sıralanabilir"
 
 # gtk/gtktreeview.c:513
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:567
 msgid "Rules Hint"
 msgstr "Kural İpucu"
 
 # gtk/gtktreeview.c:514
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:568
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Satırlara farklı renkler atamada dekor motoruna bir ipucu belirtilir"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:575
 msgid "Enable Search"
 msgstr "Aramayı etkinleştir"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:576
 msgid "View allows user to search through columns interactively"
 msgstr "Kullanıcıya sütunlarda etkileşimli arama yapma izni verilir"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:583
 msgid "Search Column"
 msgstr "Arama Sütunu"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:584
 msgid "Model column to search through when searching through code"
 msgstr "Arama kod üzerinden yapıldığında arama yapılacak sütun modeli"
 
 # gtk/gtktreeview.c:526
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:597
 msgid "Expander Size"
 msgstr "Genişletici Boyutu"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:598
 msgid "Size of the expander arrow."
 msgstr "Genişletici okunun boyutu"
 
 # gtk/gtktreeview.c:535
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:606
 msgid "Vertical Separator Width"
 msgstr "Düşey Ayırıcı Genişliği"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:607
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Gözeler arasındaki düşey boşluk. Bir çift sayı olmalıdır."
 
 # gtk/gtktreeview.c:544
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:615
 msgid "Horizontal Separator Width"
 msgstr "Yatay Ayırıcı Genişliği"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:616
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Gözeler arasındaki yatay boşluk. Bir çift sayı olmalıdır."
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:624
 msgid "Allow Rules"
 msgstr "İzin Kuralları"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:625
 msgid "Allow drawing of alternating color rows."
 msgstr "Renkli satırlar çizilmesi sağlanır."
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:631
 msgid "Indent Expanders"
 msgstr "Genişleticileri Girintile"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:632
 msgid "Make the expanders indented."
 msgstr "Genişleticileri girintili yapar."
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0rc1\n"
-"POT-Creation-Date: 2002-03-08 19:30+0300\n"
+"POT-Creation-Date: 2002-03-08 14:45-0500\n"
 "PO-Revision-Date: 2002-03-08 20:21+03:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -271,7 +271,9 @@ msgstr "Недостаточно памяти для загрузки файла
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
-msgstr "Недостаточно памяти для хранения %ld из %ld изображений; попробуйте закрыть некоторые приложения, чтобы уменьшить количество используемой памяти"
+msgstr ""
+"Недостаточно памяти для хранения %ld из %ld изображений; попробуйте закрыть "
+"некоторые приложения, чтобы уменьшить количество используемой памяти"
 
 #: gdk-pixbuf/io-png.c:642
 msgid "Fatal error reading PNG image file"
@@ -285,7 +287,9 @@ msgstr "Фатальная ошибка при чтении файла изоб�
 #: gdk-pixbuf/io-png.c:757
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
-msgstr "Ключи для блоков tEXt в PNG должны содержать не менее 1 и не более 79 символов."
+msgstr ""
+"Ключи для блоков tEXt в PNG должны содержать не менее 1 и не более 79 "
+"символов."
 
 #: gdk-pixbuf/io-png.c:765
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
@@ -293,7 +297,9 @@ msgstr "Ключи для блоков tEXt в PNG должны быть сим�
 
 #: gdk-pixbuf/io-png.c:786
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
-msgstr "Значение для блока tEXt в PNG не может быть преобразовано в кодировку ISO-8859-1."
+msgstr ""
+"Значение для блока tEXt в PNG не может быть преобразовано в кодировку ISO-"
+"8859-1."
 
 #: gdk-pixbuf/io-pnm.c:254
 msgid "PNM loader expected to find an integer, but didn't"
@@ -325,7 +331,9 @@ msgstr "Максимальное значение цвета в файле PNM �
 
 #: gdk-pixbuf/io-pnm.c:401
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr "Невозможно обработать файлы PNM с максимальными значениями цвета больше чем 255"
+msgstr ""
+"Невозможно обработать файлы PNM с максимальными значениями цвета больше чем "
+"255"
 
 #: gdk-pixbuf/io-pnm.c:440 gdk-pixbuf/io-pnm.c:468 gdk-pixbuf/io-pnm.c:500
 msgid "Raw PNM image type is invalid"
@@ -1323,7 +1331,9 @@ msgstr "Текущий альфа-канал"
 
 #: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "Текущее значение непрозрачности (\"0\" - абсолютно прозрачно, \"65535\" - абсолютно непрозрачно)"
+msgstr ""
+"Текущее значение непрозрачности (\"0\" - абсолютно прозрачно, \"65535\" - "
+"абсолютно непрозрачно)"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
@@ -1343,7 +1353,9 @@ msgstr ""
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "Щелкните на пипетке, затем щёлкните на цвете в любом месте экрана, чтобы выбрать этот цвет."
+msgstr ""
+"Щелкните на пипетке, затем щёлкните на цвете в любом месте экрана, чтобы "
+"выбрать этот цвет."
 
 #: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
@@ -1410,7 +1422,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"Вы можете ввести в этой строке или шестнадцатиричное значение цвета (в стиле HTML), или название цвета,\n"
+"Вы можете ввести в этой строке или шестнадцатиричное значение цвета (в стиле "
+"HTML), или название цвета,\n"
 "такое как \"orange\"."
 
 #: gtk/gtkcolorsel.c:1889
@@ -1684,28 +1697,28 @@ msgstr "Выделить несолько."
 msgid "Whether to allow multiple files to be selected."
 msgstr "Могут ли быть выделены несколько файлов."
 
-#: gtk/gtkfilesel.c:695
+#: gtk/gtkfilesel.c:707
 msgid "Folders"
 msgstr "Каталоги"
 
-#: gtk/gtkfilesel.c:699
+#: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
 msgstr "Каталоги"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Файлы"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:746
 msgid "_Files"
 msgstr "Файлы"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Каталог не читаем: %s"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:946
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1713,25 +1726,26 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1064
+#: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
 msgstr "Создать каталог"
 
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
 msgstr "Удалить файл"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
 msgstr "Переименовать файл"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Название каталога \"%s\" содержит символы недопустимые в названиях файлов"
+msgstr ""
+"Название каталога \"%s\" содержит символы недопустимые в названиях файлов"
 
-#: gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1740,33 +1754,33 @@ msgstr ""
 "Ошибка создания каталога \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Возможно вы используете символы недопустимые в названиях файлов."
 
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Ошибка  создания каталога \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1403
 msgid "New Folder"
 msgstr "Создать каталог"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
 msgstr "Название каталога:"
 
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1444
 msgid "Create"
 msgstr "Создать"
 
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1485
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Название файла \"%s\" содержит символы недопустимые в названиях файлов"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1488
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1775,30 +1789,30 @@ msgstr ""
 "Ошибка удаления файла \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
+#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Возможно содержит символы недопустимые в названиях файлов."
 
-#: gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Ошибка удаления файла \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Действительно удалить файл \"%s\"?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1547
 msgid "Delete File"
 msgstr "Удалить файл"
 
-#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Название файла \"%s\" содержит символы недопустимые в названиях файлов"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1595
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1807,7 +1821,7 @@ msgstr ""
 "Ошибка переименования файла в \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1609
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1816,40 +1830,40 @@ msgstr ""
 "Ошибка переименования файла в \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Ошибка переименования файла \"%s\" в \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1666
 msgid "Rename File"
 msgstr "Переименовать файл"
 
-#: gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1681
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Переименовать файл \"%s\" в:"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1712
 msgid "Rename"
 msgstr "Переименовать"
 
-#: gtk/gtkfilesel.c:2091
+#: gtk/gtkfilesel.c:2103
 msgid "Selection: "
 msgstr "Выбор: "
 
-#: gtk/gtkfilesel.c:2969
+#: gtk/gtkfilesel.c:2981
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
 msgstr ""
 
-#: gtk/gtkfilesel.c:3833
+#: gtk/gtkfilesel.c:3845
 msgid "Name too long"
 msgstr "Название слишком длинное"
 
-#: gtk/gtkfilesel.c:3835
+#: gtk/gtkfilesel.c:3847
 msgid "Couldn't convert filename"
 msgstr "Неудалось преобразовать название файла"
 
@@ -2441,7 +2455,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
+#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -2539,7 +2553,9 @@ msgstr "Выравнивание текста по X"
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
-msgstr "Число между 0.0 и 1.0 указывающее горизонтальное выравнивание текста в виджете продвижения"
+msgstr ""
+"Число между 0.0 и 1.0 указывающее горизонтальное выравнивание текста в "
+"виджете продвижения"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -2549,7 +2565,9 @@ msgstr "Выравнивание текста по Y"
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
-msgstr "Число между 0.0 и 1.0 указывающее вертикальное выравнивание текста в виджете продвижения"
+msgstr ""
+"Число между 0.0 и 1.0 указывающее вертикальное выравнивание текста в виджете "
+"продвижения"
 
 #: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
@@ -2811,11 +2829,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
 msgid "Horizontal Adjustment"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
 msgid "Vertical Adjustment"
 msgstr ""
 
@@ -2859,7 +2877,9 @@ msgstr "Интервал двойного щелчка"
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr "Максимальное время между двумя щелчками, при котором они считаются двойным щелчком (в милисекундах)"
+msgstr ""
+"Максимальное время между двумя щелчками, при котором они считаются двойным "
+"щелчком (в милисекундах)"
 
 #: gtk/gtksettings.c:156
 msgid "Cursor Blink"
@@ -2885,7 +2905,9 @@ msgstr "Разделить курсор"
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
-msgstr "Будут ли отображаться два курсора для смешанного справа-налево и слева-направо текста"
+msgstr ""
+"Будут ли отображаться два курсора для смешанного справа-налево и слева-"
+"направо текста"
 
 #: gtk/gtksettings.c:180
 msgid "Theme Name"
@@ -3732,115 +3754,115 @@ msgstr ""
 msgid "The model for the TreeModelSort to sort"
 msgstr ""
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:511
 msgid "TreeView Model"
 msgstr ""
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:512
 msgid "The model for the tree view"
 msgstr ""
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:520
 msgid "Horizontal Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:528
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Видимый"
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:536
 msgid "Show the column header buttons"
 msgstr ""
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:543
 msgid "Headers Clickable"
 msgstr "Заголовки чувствительны к нажатиям"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:544
 msgid "Column headers respond to click events"
 msgstr "Заголовки столбцов чувствительны к нажатиям"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:551
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:552
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:560
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:567
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:568
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:575
 msgid "Enable Search"
 msgstr "Разрешён поиск"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:576
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:583
 msgid "Search Column"
 msgstr "Найти столбец"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:584
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:597
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:598
 msgid "Size of the expander arrow."
 msgstr ""
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:606
 msgid "Vertical Separator Width"
 msgstr "Ширина вертикального разделителя"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:607
 msgid "Vertical space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:615
 msgid "Horizontal Separator Width"
 msgstr "Ширина горизонтального разделителя"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:616
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:624
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:625
 msgid "Allow drawing of alternating color rows."
 msgstr ""
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:631
 msgid "Indent Expanders"
 msgstr ""
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:632
 msgid "Make the expanders indented."
 msgstr ""
 

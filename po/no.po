@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-03-05 22:16-0500\n"
+"POT-Creation-Date: 2002-03-08 14:45-0500\n"
 "PO-Revision-Date: 2002-03-06 07:45+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
@@ -1691,15 +1691,15 @@ msgstr "Velg på fokus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Om innholdet i oppføringen skal markeres når den får fokus."
 
-#: gtk/gtkentry.c:3838 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "Velg alt"
 
-#: gtk/gtkentry.c:3848 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "Inndatametode"
 
-#: gtk/gtkentry.c:3858 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
 msgid "_Insert Unicode control character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
@@ -1727,28 +1727,28 @@ msgstr "Velg flere"
 msgid "Whether to allow multiple files to be selected."
 msgstr "Om valg av flere filer skal tillates."
 
-#: gtk/gtkfilesel.c:695
+#: gtk/gtkfilesel.c:707
 msgid "Folders"
 msgstr "Mapper"
 
-#: gtk/gtkfilesel.c:699
+#: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
 msgstr "M_apper"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:746
 msgid "_Files"
 msgstr "_Filer"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Uleselig mappe: %s"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:946
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1759,25 +1759,25 @@ msgstr ""
 "tilgjengelig for dette programmet.\n"
 "Er du sikker på at du ønsker å velge den?"
 
-#: gtk/gtkfilesel.c:1064
+#: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
 msgstr "_Ny mappe"
 
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
 msgstr "S_lett fil"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
 msgstr "End_re navn på filen"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenavn «%s» inneholder symboler som ikke er tillatt i filnavn"
 
-#: gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1786,33 +1786,33 @@ msgstr ""
 "Feil under oppretting av mappe «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Du brukte sannsynligvis symboler som ikke er tillatt i filnavn."
 
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Feil under oppretting av mappe «%s»: %s\n"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1403
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
 msgstr "_Mappenavn:"
 
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1444
 msgid "Create"
 msgstr "Lag"
 
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1485
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet «%s» inneholder symboler som ikke er tillatt i filnavn"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1488
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1821,30 +1821,30 @@ msgstr ""
 "Feil under sletting av fil «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
+#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Det inneholder sannsynligvis symboler som ikke er tillatt i filnavn."
 
-#: gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Feil under sletting av fil «%s»: %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Virkelig slette fil «%s»?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1547
 msgid "Delete File"
 msgstr "Slett fil"
 
-#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavn «%s» inneholder symboler som ikke er tillatt i filnavn"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1595
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1853,7 +1853,7 @@ msgstr ""
 "Feil under endring av navn på fil «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1609
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1862,29 +1862,29 @@ msgstr ""
 "Feil under endring av navn på fil «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Feil under endring av navn på fil «%s» til «%s»: %s"
 
-#: gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1666
 msgid "Rename File"
 msgstr "Gi filen nytt navn"
 
-#: gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1681
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Gi fil «%s» nytt navn:"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1712
 msgid "Rename"
 msgstr "Gi nytt navn"
 
-#: gtk/gtkfilesel.c:2091
+#: gtk/gtkfilesel.c:2103
 msgid "Selection: "
 msgstr "Valg:"
 
-#: gtk/gtkfilesel.c:2969
+#: gtk/gtkfilesel.c:2981
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1893,11 +1893,11 @@ msgstr ""
 "Filnavnet %s kunne ikke konverteres til UTF-8. Prøve å sette miljøvariabelen "
 "G_BROKEN_FILENAMES."
 
-#: gtk/gtkfilesel.c:3833
+#: gtk/gtkfilesel.c:3845
 msgid "Name too long"
 msgstr "Navnet er for langt"
 
-#: gtk/gtkfilesel.c:3835
+#: gtk/gtkfilesel.c:3847
 msgid "Couldn't convert filename"
 msgstr "Kunne ikke konvertere filnavnet"
 
@@ -2043,7 +2043,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1303
+#: gtk/gtkiconfactory.c:1308
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
@@ -2501,7 +2501,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Om faner skal ha ensartet størrelse"
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
+#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -2883,11 +2883,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Vis en sekundær knapp med framoverpil på motsatt side av rullefeltet"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
 msgid "Horizontal Adjustment"
 msgstr "Horisontal justering"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
 msgid "Vertical Adjustment"
 msgstr "Vertikal justering"
 
@@ -3812,115 +3812,115 @@ msgstr "TreeModelSort modell"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modell som TreeModelSort skal sortere"
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:511
 msgid "TreeView Model"
 msgstr "TreeView modell"
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:512
 msgid "The model for the tree view"
 msgstr "Modell for treevisning"
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:520
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horisontal justering for widget"
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:528
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikal justering for widget"
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Synlig"
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:536
 msgid "Show the column header buttons"
 msgstr "Vis knapper for kolonnetopptekst"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:543
 msgid "Headers Clickable"
 msgstr "Topptekster kan klikkes"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:544
 msgid "Column headers respond to click events"
 msgstr "Kolonnetitler svarer på klikk"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:551
 msgid "Expander Column"
 msgstr "Utviderkolonne"
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:552
 msgid "Set the column for the expander column"
 msgstr "Sett kolonne for utviderkolonne"
 
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Kan omorganiseres"
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:560
 msgid "View is reorderable"
 msgstr "Visningen kan omorganiseres"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:567
 msgid "Rules Hint"
 msgstr "Regelhint"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:568
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Sett et hint til temamotoren for å tegne rader i alternerende farger"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:575
 msgid "Enable Search"
 msgstr "Aktiver søk"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:576
 msgid "View allows user to search through columns interactively"
 msgstr "Visning lar bruker søke gjennom kolonner interaktivt"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:583
 msgid "Search Column"
 msgstr "Søkekolonne"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:584
 msgid "Model column to search through when searching through code"
 msgstr "Modellkolonne som skal søkes gjennom ved søk i koden"
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:597
 msgid "Expander Size"
 msgstr "Størrelse på utvider"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:598
 msgid "Size of the expander arrow."
 msgstr "Størrelse på utviderpil."
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:606
 msgid "Vertical Separator Width"
 msgstr "Bredde på vertikal separator"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:607
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Vertikalt mellomrom mellom celler. Må være et helt tall."
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:615
 msgid "Horizontal Separator Width"
 msgstr "Bredde på horisontal separator"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:616
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Horisontalt mellomrom mellom celler. Må være et heltall."
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:624
 msgid "Allow Rules"
 msgstr "Tillat linjaler"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:625
 msgid "Allow drawing of alternating color rows."
 msgstr "Tillat tegning av alternerende fargerader."
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:631
 msgid "Indent Expanders"
 msgstr "Indenter utvidere"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:632
 msgid "Make the expanders indented."
 msgstr "Gjør utvidere indentert."
 
@@ -4232,7 +4232,9 @@ msgstr "Sekundær markørfarge"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
-msgstr "Farge for sekundær innsettingsmarkør ved redigering av blandet høyre-til-venstre og venstre-til-høyre tekst."
+msgstr ""
+"Farge for sekundær innsettingsmarkør ved redigering av blandet høyre-til-"
+"venstre og venstre-til-høyre tekst."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"

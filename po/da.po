@@ -28,7 +28,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-03-07 22:00+0100\n"
+"POT-Creation-Date: 2002-03-08 14:45-0500\n"
 "PO-Revision-Date: 2002-03-07 22:01+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -1661,7 +1661,9 @@ msgstr "Maksimal længde"
 
 #: gtk/gtkentry.c:464
 msgid "Maximum number of characters for this entry. Zero if no maximum."
-msgstr "Maksimalt antal tegn i indtastningsfeltet. Nul hvis der ikke er noget maksimum."
+msgstr ""
+"Maksimalt antal tegn i indtastningsfeltet. Nul hvis der ikke er noget "
+"maksimum."
 
 #: gtk/gtkentry.c:472
 msgid "Visibility"
@@ -1770,28 +1772,28 @@ msgstr "Markér flere"
 msgid "Whether to allow multiple files to be selected."
 msgstr "Om mere end én fil kan vælges"
 
-#: gtk/gtkfilesel.c:695
+#: gtk/gtkfilesel.c:707
 msgid "Folders"
 msgstr "Mapper"
 
-#: gtk/gtkfilesel.c:699
+#: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
 msgstr "_Mapper"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:746
 msgid "_Files"
 msgstr "_Filer"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Mappen kan ikke læses: %s"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:946
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1802,25 +1804,25 @@ msgstr ""
 "tilgængelig for dette program.\n"
 "Er du sikker på at du vil vælge den?"
 
-#: gtk/gtkfilesel.c:1064
+#: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
 msgstr "_Ny mappe"
 
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
 msgstr "S_let fil"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
 msgstr "_Omdøb fil"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1829,33 +1831,33 @@ msgstr ""
 "Fejl ved oprettelse af mappen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Du har sandsynligvis brug symboler der ikke er tilladate i filnavne."
 
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fejl ved oprettelse af mappen \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1403
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
 msgstr "_Mappenavn:"
 
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1444
 msgid "Create"
 msgstr "Opret"
 
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1485
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1488
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1864,31 +1866,31 @@ msgstr ""
 "Fejl ved sletning af filen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
+#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Navnet indeholder sandsynligvis symboler der ikke er tilladate i filnavne."
 
-#: gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Fejl ved sletning af filen \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Vil du virkelig slette filen \"%s\"?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1547
 msgid "Delete File"
 msgstr "Slet fil"
 
-#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1595
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1897,7 +1899,7 @@ msgstr ""
 "Fejl ved ændring af navn til \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1609
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1906,29 +1908,29 @@ msgstr ""
 "Fejl ved omdøbelse af filen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fejl ved omdøbelse af filen \"%s\" til \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1666
 msgid "Rename File"
 msgstr "Omdøb fil"
 
-#: gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1681
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Omdøb filen \"%s\" til:"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1712
 msgid "Rename"
 msgstr "Omdøb"
 
-#: gtk/gtkfilesel.c:2091
+#: gtk/gtkfilesel.c:2103
 msgid "Selection: "
 msgstr "Valg: "
 
-#: gtk/gtkfilesel.c:2969
+#: gtk/gtkfilesel.c:2981
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1937,11 +1939,11 @@ msgstr ""
 "Filnavnet %s kunne ikke konverteres til UTF-8. Prøv at sætte miljøvariablen "
 "G_BROKEN_FILENAMES."
 
-#: gtk/gtkfilesel.c:3833
+#: gtk/gtkfilesel.c:3845
 msgid "Name too long"
 msgstr "Navnet er for langt"
 
-#: gtk/gtkfilesel.c:3835
+#: gtk/gtkfilesel.c:3847
 msgid "Couldn't convert filename"
 msgstr "Kunne ikke konvertere filnavnet"
 
@@ -2945,11 +2947,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Vis en ekstra fremadpilsknap i den modsatte ende af rulleskakten"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
 msgid "Horizontal Adjustment"
 msgstr "Vandret justering"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
 msgid "Vertical Adjustment"
 msgstr "Lodret justering"
 
@@ -3880,118 +3882,118 @@ msgstr "TreeModelSort-model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modellen som TreeModelSort skal sortere"
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:511
 msgid "TreeView Model"
 msgstr "TreeView-model"
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:512
 msgid "The model for the tree view"
 msgstr "Modellen for trævisningen"
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:520
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vandret justering for kontrollen"
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:528
 msgid "Vertical Adjustment for the widget"
 msgstr "Lodret justering for kontrollen"
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Synlig"
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:536
 msgid "Show the column header buttons"
 msgstr "Vis kolonneoverskriftsknapperne"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:543
 msgid "Headers Clickable"
 msgstr "Klikbare overskrifter"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:544
 msgid "Column headers respond to click events"
 msgstr "Kolonneoverskrifter påvirkes af klikhændelser"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:551
 msgid "Expander Column"
 msgstr "Udviderkolonne"
 
 # RETMIG: dette giver ikke mening?
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:552
 msgid "Set the column for the expander column"
 msgstr "Lad kolonnen være udviderkolonnen"
 
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Kan omsorteres"
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:560
 msgid "View is reorderable"
 msgstr "Visningen kan omsorteres"
 
 # se næste for forklaring - jeg kunne ikke finde på noget bedre
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:567
 msgid "Rules Hint"
 msgstr "Skiftende rækker"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:568
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Sæt et tip til temamotoren om at tegne rækkerne i skiftende farver"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:575
 msgid "Enable Search"
 msgstr "Aktivér søgning"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:576
 msgid "View allows user to search through columns interactively"
 msgstr "Visningen tillader brugeren at søge gennem kolonnerne interaktivt"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:583
 msgid "Search Column"
 msgstr "Søgekolonne"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:584
 msgid "Model column to search through when searching through code"
 msgstr "Modelkolonne der skal søges gennem ved søgning gennem kode"
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:597
 msgid "Expander Size"
 msgstr "Udvidelsesstørrelse"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:598
 msgid "Size of the expander arrow."
 msgstr "Størrelsen af udvidelsespilen"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:606
 msgid "Vertical Separator Width"
 msgstr "Lodret adskillelsesbredde"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:607
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Lodret mellemrum mellem celler - skal være et lige tal"
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:615
 msgid "Horizontal Separator Width"
 msgstr "Vandret adskillelsesbredde"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:616
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Vandret mellemrum mellem celler - skal være et lige tal"
 
 # se foregående "Rules Hint"
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:624
 msgid "Allow Rules"
 msgstr "Tillad skiftende rækker"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:625
 msgid "Allow drawing of alternating color rows."
 msgstr "Tillad tegning af rækker med skiftende farver"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:631
 msgid "Indent Expanders"
 msgstr "Indryk udvidere"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:632
 msgid "Make the expanders indented."
 msgstr "Ryk udviderne ind"
 
@@ -4309,7 +4311,9 @@ msgstr "Sekundær markørfarve"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
-msgstr "Farve som bruges til at tegne den sekundære indtastningsmarkør ved redigering af blandet højre-mod-venstre- og venstre-mod-højre-tekst"
+msgstr ""
+"Farve som bruges til at tegne den sekundære indtastningsmarkør ved "
+"redigering af blandet højre-mod-venstre- og venstre-mod-højre-tekst"
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"

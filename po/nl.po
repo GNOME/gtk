@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-03-06 18:05-0500\n"
+"POT-Creation-Date: 2002-03-08 14:45-0500\n"
 "PO-Revision-Date: 2002-03-07 17:21+0100\n"
 "Last-Translator: Ronald Hummelink <ronald@hummelink.xs4all.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -40,8 +40,8 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
 msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt animation "
-"file"
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
 msgstr ""
 "Laden van animatie '%s' mislukt: reden onbekend, waarschijnlijk een "
 "beschadigde animatie"
@@ -99,8 +99,8 @@ msgstr "Openen van '%s' om te schrijven is mislukt: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:880
 #, c-format
 msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: "
-"%s"
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
 msgstr ""
 "Sluiten van '%s' tijdens het schrijven is mislukt; data kan verloren zijn "
 "gegaan: %s"
@@ -219,8 +219,7 @@ msgstr ""
 "GIF-bestand bevatte een afbeelding die buiten het kader lijkt te vallen"
 
 #: gdk-pixbuf/io-gif.c:1162
-msgid ""
-"First frame of GIF image had 'revert to previous' as its disposal mode."
+msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "De eerste afbeelding in het GIF-bestand heeft 'terug naar vorige' als "
 "afsluiting"
@@ -247,8 +246,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Onvoldoende geheugen om afbeelding te laten, probeer het afsluiten van enkele "
-"applicaties om geheugen te besparen"
+"Onvoldoende geheugen om afbeelding te laten, probeer het afsluiten van "
+"enkele applicaties om geheugen te besparen"
 
 #: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -652,8 +651,8 @@ msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
-"Horizontale postitie van kind in beschikbare ruimte. 0.0 is links uitgelijnd, "
-"1.0 is rechts uitgelijnd"
+"Horizontale postitie van kind in beschikbare ruimte. 0.0 is links "
+"uitgelijnd, 1.0 is rechts uitgelijnd"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -676,8 +675,9 @@ msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"Als beschikbare horizontale ruimte groter is dan nodig voor het kind, hoeveel "
-"hiervan te gebruiken voor het kind. 0.0 betekend niets, 1.0 betekend alles"
+"Als beschikbare horizontale ruimte groter is dan nodig voor het kind, "
+"hoeveel hiervan te gebruiken voor het kind. 0.0 betekend niets, 1.0 betekend "
+"alles"
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
@@ -789,8 +789,8 @@ msgstr "Secundair"
 
 #: gtk/gtkbbox.c:161
 msgid ""
-"If TRUE, the child appears in a secondary group of children, suitable for, "
-"e.g., help buttons."
+"If TRUE, the child appears in a secondary group of children, suitable for, e."
+"g., help buttons."
 msgstr ""
 "Als WAAR, het kind laten verschijnen in een secundaire groep van kinderen, "
 "geschikt voot b.v. help knoppen."
@@ -842,8 +842,8 @@ msgstr "Gebruik voorraad"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"Als gezet, het label is gebruikt om een voorraad item te kiezen in plaats van "
-"weergegeven te worden"
+"Als gezet, het label is gebruikt om een voorraad item te kiezen in plaats "
+"van weergegeven te worden"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -870,8 +870,8 @@ msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
-"Extra spatie toe te voegen voor CAN_DEFAULT knoppen die altijd buiten de rand "
-"getekend worden"
+"Extra spatie toe te voegen voor CAN_DEFAULT knoppen die altijd buiten de "
+"rand getekend worden"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
@@ -1338,9 +1338,9 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Klik op deze kleurenmap entry om het de huidige kleur te maken. Om deze entry "
-"te veranderen sleep de kleurenstaal hier of rechts-klik het en selecteer "
-"\"Bewaar kleur hier\""
+"Klik op deze kleurenmap entry om het de huidige kleur te maken. Om deze "
+"entry te veranderen sleep de kleurenstaal hier of rechts-klik het en "
+"selecteer \"Bewaar kleur hier\""
 
 #: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
@@ -1373,8 +1373,8 @@ msgstr "Huidig Alpha"
 #: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
-"De huidige doorschijnendheid waarde (0 volledig doorschijnend, 65535 volledig "
-"dekkend)"
+"De huidige doorschijnendheid waarde (0 volledig doorschijnend, 65535 "
+"volledig dekkend)"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
@@ -1669,8 +1669,7 @@ msgid "Invisible character"
 msgstr "Onzichtbaar teken"
 
 #: gtk/gtkentry.c:489
-msgid ""
-"The character to use when masking entry contents (in \"password mode\")"
+msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Het teken om te gebruiken om de inhoud van een entry te maskeren (in "
 "\"wachtwoord modus\")"
@@ -1684,8 +1683,8 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
-"Of de standaard widget te activeren (als in de standaard knop in een dialoog) "
-"als op Enter wordt gedrukt."
+"Of de standaard widget te activeren (als in de standaard knop in een "
+"dialoog) als op Enter wordt gedrukt."
 
 #: gtk/gtkentry.c:503
 msgid "Width in chars"
@@ -1752,28 +1751,28 @@ msgstr "Verwijder meerderen"
 msgid "Whether to allow multiple files to be selected."
 msgstr "Of het mogelijk moet zijn meerdere bestanden te selecteren."
 
-#: gtk/gtkfilesel.c:695
+#: gtk/gtkfilesel.c:707
 msgid "Folders"
 msgstr "Mappen"
 
-#: gtk/gtkfilesel.c:699
+#: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
 msgstr "Mappen"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Bestanden"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:746
 msgid "_Files"
 msgstr "Bestanden"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Directory onleesbaar: %s"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:946
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1784,26 +1783,26 @@ msgstr ""
 "niet beschikbaar kunnen zijn voor dit programma.\n"
 "Weet je zeker dat je het wilt selecteren?"
 
-#: gtk/gtkfilesel.c:1064
+#: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
 msgstr "Nieuwe Map"
 
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
 msgstr "Verwijder Bestand"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
 msgstr "Bestand hernoemen"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De map naam \"%s\" bevat symbolen die niet toegestaan zijn in bestandsnamen"
 
-#: gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1812,37 +1811,37 @@ msgstr ""
 "Fout bij maken van map \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Je hebt waarschijnlijk symbolen gebruikt die niet toegestaan zijn in "
 "bestandsnamen."
 
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fout bij maken van map \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1403
 msgid "New Folder"
 msgstr "Nieuwe Map"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
 msgstr "Map naam:"
 
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1444
 msgid "Create"
 msgstr "Maak"
 
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1485
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De bestandsnaam \"%s\" bevat symbolen die niet toegestaan zijn in "
 "bestandsnamen"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1488
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1851,33 +1850,32 @@ msgstr ""
 "Fout bij verwijderen van bestand \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
+#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Het bevat waarschijnlijk symbolen niet toegestaan in bestandsnamen."
 
-#: gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Fout bij verwijderen van bestand \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Weet je zeker dat je \"%s\" wilt verwijderen?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1547
 msgid "Delete File"
 msgstr "Verwijder Bestand"
 
-#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
-msgid ""
-"The file name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De bestandsnaam \"%s\" bevat symbolen die niet toegestaan zijn in "
 "bestandsnamen"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1595
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1886,7 +1884,7 @@ msgstr ""
 "Fout bij hernoemen van bestand naar \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1609
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1895,29 +1893,29 @@ msgstr ""
 "Fout bij hernoemen van bestand \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fout bij hernoemen van bestand \"%s\" naar \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1666
 msgid "Rename File"
 msgstr "Wijzig Bestandsnaam"
 
-#: gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1681
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Wijzig Bestandsnaam \"%s\" naar:"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1712
 msgid "Rename"
 msgstr "Hernoem"
 
-#: gtk/gtkfilesel.c:2091
+#: gtk/gtkfilesel.c:2103
 msgid "Selection: "
 msgstr "Selectie: "
 
-#: gtk/gtkfilesel.c:2969
+#: gtk/gtkfilesel.c:2981
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1926,11 +1924,11 @@ msgstr ""
 "De bestandsnaam %s kon niet geconverteerd worden naar UTF-8. Probeer de "
 "omgevings variabele G_BROKEN_FILENAMES te zetten."
 
-#: gtk/gtkfilesel.c:3833
+#: gtk/gtkfilesel.c:3845
 msgid "Name too long"
 msgstr "Naam te lang"
 
-#: gtk/gtkfilesel.c:3835
+#: gtk/gtkfilesel.c:3847
 msgid "Couldn't convert filename"
 msgstr "Kon bestandsnaam niet converteren"
 
@@ -2370,8 +2368,8 @@ msgstr "Afscheur Titel"
 
 #: gtk/gtkmenu.c:192
 msgid ""
-"A title that may be displayed by the window manager when this menu is "
-"torn-off."
+"A title that may be displayed by the window manager when this menu is torn-"
+"off."
 msgstr ""
 "Een titel de weergegeven kan worden door de window manager als dit menu "
 "afgescheurd wordt."
@@ -2542,7 +2540,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Of tabs gelijke afmetingen moeten hebben"
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
+#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2624,8 +2622,9 @@ msgstr "Activiteits modus"
 #: gtk/gtkprogress.c:123
 msgid ""
 "If true the GtkProgress is in activity mode, meaning that is signals "
-"something is happening, but not how much of the activity is finished. This is "
-"used when you're doing something that you don't know how long it will take."
+"something is happening, but not how much of the activity is finished. This "
+"is used when you're doing something that you don't know how long it will "
+"take."
 msgstr ""
 "als waar de GtkProgress is in activiteits modus, dit betekend dat het "
 "waarschuwd dat iets gebeurd, maar niet hoeveel vanb de activiteit al gedaan "
@@ -2649,8 +2648,8 @@ msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
 msgstr ""
-"Een getal tussen 0.0 en 1.0 dat de horizontale uitlijning van de tekst in een "
-"voortgangs widget weergeeft"
+"Een getal tussen 0.0 en 1.0 dat de horizontale uitlijning van de tekst in "
+"een voortgangs widget weergeeft"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -2658,8 +2657,8 @@ msgstr "Tekst y uitlijning"
 
 #: gtk/gtkprogress.c:148
 msgid ""
-"A number between 0.0 and 1.0 specifying the vertical alignment of the text in "
-"the progress widget"
+"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
+"in the progress widget"
 msgstr ""
 "Een getal tussen 0.0 en 1.0 dat de vertikale uitlijning van de tekst in een "
 "voortgangs widget weergeeft"
@@ -2958,11 +2957,11 @@ msgstr ""
 "Geef een secondaire voorwaardse pijlknop weer aan de overstande kant van de "
 "scrollbalk"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
 msgid "Horizontal Adjustment"
 msgstr "Horizontale aanpassing"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
 msgid "Vertical Adjustment"
 msgstr "Vertikale aanpassing"
 
@@ -3033,8 +3032,8 @@ msgstr "Gespleten cursor"
 
 #: gtk/gtksettings.c:173
 msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and "
-"right-to-left text"
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
 msgstr ""
 "Of de twee cursors weergegeven moeten worden voor gemengd links-naar-rechts "
 "en rechts-naar-links"
@@ -3101,8 +3100,8 @@ msgstr "Kleef op tikken"
 
 #: gtk/gtkspinbutton.c:266
 msgid ""
-"Whether erroneous values are automatically changed to a spin button's nearest "
-"step increment"
+"Whether erroneous values are automatically changed to a spin button's "
+"nearest step increment"
 msgstr ""
 "Of foutieve waardes automatisch veranderd worden naar de spinknop zijn "
 "dichtsbijzijnde stap waarde"
@@ -3403,6 +3402,7 @@ msgid "_Yes"
 msgstr "Ja"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Zoom 100%"
 
@@ -3898,117 +3898,117 @@ msgstr "TreeModelSort Model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Het model voor de TreeModelSort om te sorteren"
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:511
 msgid "TreeView Model"
 msgstr "TreeView Model"
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:512
 msgid "The model for the tree view"
 msgstr "Het model van de boom structuur"
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:520
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horizontale aanpassing voor de widget"
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:528
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikale aanpassing voor de widget"
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Zichtbaar"
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:536
 msgid "Show the column header buttons"
 msgstr "Laat de kolom kop knoppen zien"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:543
 msgid "Headers Clickable"
 msgstr "Koppen klikbaar"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:544
 msgid "Column headers respond to click events"
 msgstr "Of kolom koppen naar kliks luisteren"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:551
 msgid "Expander Column"
 msgstr "Uitklapper kolom"
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:552
 msgid "Set the column for the expander column"
 msgstr "Zet de kolom voor de uitklapper kolom"
 
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Hersorteerbaar"
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:560
 msgid "View is reorderable"
 msgstr "Beeld is hersorteerbaar"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:567
 #, fuzzy
 msgid "Rules Hint"
 msgstr "Regel hint"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:568
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Vertel de thema \"engine\" om rijen in afwisselende kleuren te tekenen?"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:575
 msgid "Enable Search"
 msgstr "Zet zoeken aan"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:576
 msgid "View allows user to search through columns interactively"
 msgstr "Beeld laat gebruikers toe interactief door kolommen te zoeken"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:583
 msgid "Search Column"
 msgstr "Zoek kolom"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:584
 msgid "Model column to search through when searching through code"
 msgstr "Modeleer kolom om door te zoeken als er door code gezocht wordt"
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:597
 msgid "Expander Size"
 msgstr "Uitklapper grootte"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:598
 msgid "Size of the expander arrow."
 msgstr "Grootte van de uitklapper pijl"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:606
 msgid "Vertical Separator Width"
 msgstr "Vertikale deel"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:607
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Vertikale ruimte tussen cellen. Moet een even getal zijn"
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:615
 msgid "Horizontal Separator Width"
 msgstr "Horizontale deler breedte"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:616
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Horizontale breedte tussen cellen. Moet een even getal zijn"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:624
 msgid "Allow Rules"
 msgstr "Laat regels toe"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:625
 msgid "Allow drawing of alternating color rows."
 msgstr "Laat het tekenen van alternerende rij kleuren toe"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:631
 msgid "Indent Expanders"
 msgstr "Spring uitklappers in"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:632
 msgid "Make the expanders indented."
 msgstr "Maak de uitklappers ingesprongen"
 
@@ -4166,8 +4166,8 @@ msgstr "Hoogte verzoek"
 
 #: gtk/gtkwidget.c:415
 msgid ""
-"Override for height request of the widget, or -1 if natural request should be "
-"used."
+"Override for height request of the widget, or -1 if natural request should "
+"be used."
 msgstr ""
 "Vervang voor hoogte verzoek van de widget, of -1 als natuurlijk verzoek "
 "gebruikt moet worden"
@@ -4229,8 +4229,7 @@ msgid "Receives default"
 msgstr "Krijgt default"
 
 #: gtk/gtkwidget.c:473
-msgid ""
-"If TRUE, the widget will receive the default action when it is focused."
+msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr "Als TRUE, de widget krijgt de 'default' actie als het de focus krijgt"
 
 #: gtk/gtkwidget.c:479
@@ -4318,8 +4317,8 @@ msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
-"Kleur welke de seconddair cursor getekend wordt als er gemengde "
-"rechts-naar-links en links-naar-rechts tekst geedit wordt"
+"Kleur welke de seconddair cursor getekend wordt als er gemengde rechts-naar-"
+"links en links-naar-rechts tekst geedit wordt"
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
@@ -4355,8 +4354,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
-"Als TRUE dan heeft het window geen minimum grootte. Dit op TRUE setten is een "
-"slecht idee 99% van de tijd."
+"Als TRUE dan heeft het window geen minimum grootte. Dit op TRUE setten is "
+"een slecht idee 99% van de tijd."
 
 #: gtk/gtkwindow.c:433
 msgid "Allow Grow"
@@ -4495,153 +4494,153 @@ msgstr "Vietnamese (VIQR)"
 msgid "X Input Method"
 msgstr "X Input Method"
 
-msgid "Directories"
-msgstr "Directories"
+#~ msgid "Directories"
+#~ msgstr "Directories"
 
-msgid "_Directories"
-msgstr "Mappen"
+#~ msgid "_Directories"
+#~ msgstr "Mappen"
 
-msgid "Crea_te Dir"
-msgstr "Maak Map"
+#~ msgid "Crea_te Dir"
+#~ msgstr "Maak Map"
 
-msgid "Create Directory"
-msgstr "Maak Directory"
+#~ msgid "Create Directory"
+#~ msgstr "Maak Directory"
 
-msgid "_Directory name:"
-msgstr "Folder naam:"
+#~ msgid "_Directory name:"
+#~ msgstr "Folder naam:"
 
-msgid "Cancel"
-msgstr "Annuleren"
+#~ msgid "Cancel"
+#~ msgstr "Annuleren"
 
-msgid "Delete"
-msgstr "Verwijder"
+#~ msgid "Delete"
+#~ msgstr "Verwijder"
 
-msgid "OK"
-msgstr "OK"
+#~ msgid "OK"
+#~ msgstr "OK"
 
-msgid "Save"
-msgstr "Opslaan"
+#~ msgid "Save"
+#~ msgstr "Opslaan"
 
-msgid "Close"
-msgstr "Sluiten"
+#~ msgid "Close"
+#~ msgstr "Sluiten"
 
-msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
+#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+#~ msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
 
-msgid "He_x Value:"
-msgstr "Hex Waarde:"
+#~ msgid "He_x Value:"
+#~ msgstr "Hex Waarde:"
 
-msgid "Foundry:"
-msgstr "Oorsprong:"
+#~ msgid "Foundry:"
+#~ msgstr "Oorsprong:"
 
-msgid "Slant:"
-msgstr "Helling:"
+#~ msgid "Slant:"
+#~ msgstr "Helling:"
 
-msgid "Resolution X:"
-msgstr "Resolutie X:"
+#~ msgid "Resolution X:"
+#~ msgstr "Resolutie X:"
 
-msgid "Resolution Y:"
-msgstr "Resolutie Y:"
+#~ msgid "Resolution Y:"
+#~ msgstr "Resolutie Y:"
 
-msgid "Charset:"
-msgstr "Karakterset:"
+#~ msgid "Charset:"
+#~ msgstr "Karakterset:"
 
-msgid "Requested Value"
-msgstr "Gevraagde Waarde"
+#~ msgid "Requested Value"
+#~ msgstr "Gevraagde Waarde"
 
-msgid "Font:"
-msgstr "Lettertype:"
+#~ msgid "Font:"
+#~ msgstr "Lettertype:"
 
-msgid "Reset Filter"
-msgstr "Reset Filter"
+#~ msgid "Reset Filter"
+#~ msgstr "Reset Filter"
 
-msgid "Metric:"
-msgstr "Metriek:"
+#~ msgid "Metric:"
+#~ msgstr "Metriek:"
 
-msgid "Pixels"
-msgstr "Pixels"
+#~ msgid "Pixels"
+#~ msgstr "Pixels"
 
-msgid "Requested Font Name:"
-msgstr "Naam Gewenste Lettertype:"
+#~ msgid "Requested Font Name:"
+#~ msgstr "Naam Gewenste Lettertype:"
 
-msgid "Actual Font Name:"
-msgstr "Naam Werkelijke Lettertype:"
+#~ msgid "Actual Font Name:"
+#~ msgstr "Naam Werkelijke Lettertype:"
 
-msgid "%i fonts available with a total of %i styles."
-msgstr "%i lettertypen beschikbaar met in totaal %i stijlen."
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "%i lettertypen beschikbaar met in totaal %i stijlen."
 
-msgid "Filter"
-msgstr "Filter"
+#~ msgid "Filter"
+#~ msgstr "Filter"
 
-msgid "Scaled Bitmap"
-msgstr "Geschaalde Bitmap"
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Geschaalde Bitmap"
 
-msgid "*"
-msgstr "*"
+#~ msgid "*"
+#~ msgstr "*"
 
-msgid "(nil)"
-msgstr "(nil)"
+#~ msgid "(nil)"
+#~ msgstr "(nil)"
 
-msgid "regular"
-msgstr "gewoon"
+#~ msgid "regular"
+#~ msgstr "gewoon"
 
-msgid "oblique"
-msgstr "scheef"
+#~ msgid "oblique"
+#~ msgstr "scheef"
 
-msgid "reverse italic"
-msgstr "omgekeerd schuingedrukt"
+#~ msgid "reverse italic"
+#~ msgstr "omgekeerd schuingedrukt"
 
-msgid "reverse oblique"
-msgstr "omgekeerd scheef"
+#~ msgid "reverse oblique"
+#~ msgstr "omgekeerd scheef"
 
-msgid "[M]"
-msgstr "[M]"
+#~ msgid "[M]"
+#~ msgstr "[M]"
 
-msgid "[C]"
-msgstr "[C]"
+#~ msgid "[C]"
+#~ msgstr "[C]"
 
-msgid "The selected font is not available."
-msgstr "Het gekozen lettertype is niet beschikbaar."
+#~ msgid "The selected font is not available."
+#~ msgstr "Het gekozen lettertype is niet beschikbaar."
 
-msgid "The selected font is not a valid font."
-msgstr "Het gekozen lettertype is niet een geldig lettertype."
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Het gekozen lettertype is niet een geldig lettertype."
 
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Dit is een 2-byte lettertype en wordt mischien niet goed weergegeven."
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr ""
+#~ "Dit is een 2-byte lettertype en wordt mischien niet goed weergegeven."
 
-msgid "roman"
-msgstr "romaans"
+#~ msgid "roman"
+#~ msgstr "romaans"
 
-msgid "proportional"
-msgstr "proportioneel"
+#~ msgid "proportional"
+#~ msgstr "proportioneel"
 
-msgid "monospaced"
-msgstr "monospaced"
+#~ msgid "monospaced"
+#~ msgstr "monospaced"
 
-msgid "char cell"
-msgstr "karakter cel"
+#~ msgid "char cell"
+#~ msgstr "karakter cel"
 
-msgid "Font: (Filter Applied)"
-msgstr "Lettertype: (Filter toegepast)"
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Lettertype: (Filter toegepast)"
 
-msgid "heavy"
-msgstr "zwaar"
+#~ msgid "heavy"
+#~ msgstr "zwaar"
 
-msgid "extrabold"
-msgstr "extra dik"
+#~ msgid "extrabold"
+#~ msgstr "extra dik"
 
-msgid "demibold"
-msgstr "demi dik"
+#~ msgid "demibold"
+#~ msgstr "demi dik"
 
-msgid "medium"
-msgstr "middel"
+#~ msgid "medium"
+#~ msgstr "middel"
 
-msgid "normal"
-msgstr "normaal"
+#~ msgid "normal"
+#~ msgstr "normaal"
 
-msgid "thin"
-msgstr "dun"
+#~ msgid "thin"
+#~ msgstr "dun"
 
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS overtreden. Sommige fonts kunnen ontbreken."
-
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS overtreden. Sommige fonts kunnen ontbreken."

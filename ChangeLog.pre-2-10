@@ -1,3 +1,7 @@
+Fri Mar  8 14:45:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* ======== Released GTK+-2.0 ========
+
 Fri Mar  8 20:41:51 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreestore.c (gtk_tree_store_drag_data_received): handle
