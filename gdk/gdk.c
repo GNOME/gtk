@@ -1214,7 +1214,6 @@ void
 gdk_input_remove (gint tag)
 {
   GList *list;
-  GList *temp_list;
   GdkInput *input;
 
   list = inputs;
@@ -1227,20 +1226,9 @@ gdk_input_remove (gint tag)
 	  if (input->destroy)
 	    (input->destroy) (input->data);
 
-	  temp_list = list;
+	  input->tag = 0;             /* do not free it here */
+	  input->condition = 0;       /* it's done in gdk_event_wait */
 
-	  if (list->next)
-	    list->next->prev = list->prev;
-	  if (list->prev)
-	    list->prev->next = list->next;
-	  if (inputs == list)
-	    inputs = list->next;
-
-	  temp_list->next = NULL;
-	  temp_list->prev = NULL;
-
-	  g_free (temp_list->data);
-	  g_list_free (temp_list);
 	  break;
 	}
 
@@ -1628,6 +1616,7 @@ static gint
 gdk_event_wait (void)
 {
   GList *list;
+  GList *temp_list;
   GdkInput *input;
   GdkInputCondition condition;
   SELECT_MASK readfds;
@@ -1657,16 +1646,38 @@ gdk_event_wait (void)
       while (list)
 	{
 	  input = list->data;
-	  list = list->next;
 
-	  if (input->condition & GDK_INPUT_READ)
-	    FD_SET (input->source, &readfds);
-	  if (input->condition & GDK_INPUT_WRITE)
-	    FD_SET (input->source, &writefds);
-	  if (input->condition & GDK_INPUT_EXCEPTION)
-	    FD_SET (input->source, &exceptfds);
+	  if (input->tag) 
+	    {
+	      if (input->condition & GDK_INPUT_READ)
+		FD_SET (input->source, &readfds);
+	      if (input->condition & GDK_INPUT_WRITE)
+		FD_SET (input->source, &writefds);
+	      if (input->condition & GDK_INPUT_EXCEPTION)
+		FD_SET (input->source, &exceptfds);
 
-	  max_input = MAX (max_input, input->source);
+	      max_input = MAX (max_input, input->source);
+	      list = list->next;
+	    }
+	  else    /* free removed inputs */
+	    {
+	      temp_list = list;
+
+	      if (list->next)
+		list->next->prev = list->prev;
+	      if (list->prev)
+		list->prev->next = list->next;
+	      if (inputs == list)
+		inputs = list->next;
+	      
+	      list = list->next;
+
+	      temp_list->next = NULL;
+	      temp_list->prev = NULL;
+
+	      g_free (temp_list->data);
+	      g_list_free (temp_list);
+	    }
 	}
 
 #ifdef USE_PTHREADS
