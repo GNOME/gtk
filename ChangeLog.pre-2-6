@@ -1,3 +1,15 @@
+Tue Mar  9 02:11:50 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c Fix bug 136446.
+	(struct _GtkMenuPrivate): Add boolean destroying
+	(gtk_menu_destroy): Set priv->destroying
+	(gtk_menu_remove): don't update the table information when the
+	menu is being destroyed.
+
+	* gtk/gtkmenu.c (gtk_menu_set_monitor): Formatting fix
+
+	* gtk/gtktoolbar.[ch]: Some formatting fixes
+
 Tue Mar  9 01:25:10 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkframe.c (gtk_frame_paint): Fix a typo.

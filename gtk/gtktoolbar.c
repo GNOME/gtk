@@ -138,87 +138,87 @@ struct _GtkToolbarPrivate
   guint		is_sliding : 1;
 };
 
-static void            gtk_toolbar_init                 (GtkToolbar          *toolbar);
-static void            gtk_toolbar_class_init           (GtkToolbarClass     *klass);
-static void            gtk_toolbar_set_property         (GObject             *object,
-							 guint                prop_id,
-							 const GValue        *value,
-							 GParamSpec          *pspec);
-static void            gtk_toolbar_get_property         (GObject             *object,
-							 guint                prop_id,
-							 GValue              *value,
-							 GParamSpec          *pspec);
-static gint            gtk_toolbar_expose               (GtkWidget           *widget,
-							 GdkEventExpose      *event);
-static void            gtk_toolbar_realize              (GtkWidget           *widget);
-static void            gtk_toolbar_unrealize            (GtkWidget           *widget);
-static void            gtk_toolbar_size_request         (GtkWidget           *widget,
-							 GtkRequisition      *requisition);
-static void            gtk_toolbar_size_allocate        (GtkWidget           *widget,
-							 GtkAllocation       *allocation);
-static void            gtk_toolbar_style_set            (GtkWidget           *widget,
-							 GtkStyle            *prev_style);
-static void            gtk_toolbar_direction_changed    (GtkWidget           *widget,
-							 GtkTextDirection     previous_direction);
-static gboolean        gtk_toolbar_focus                (GtkWidget           *widget,
-							 GtkDirectionType     dir);
-static void            gtk_toolbar_screen_changed       (GtkWidget           *widget,
-							 GdkScreen           *previous_screen);
-static void            gtk_toolbar_map                  (GtkWidget           *widget);
-static void            gtk_toolbar_unmap                (GtkWidget           *widget);
-static void            gtk_toolbar_set_child_property   (GtkContainer        *container,
-							 GtkWidget           *child,
-							 guint                property_id,
-							 const GValue        *value,
-							 GParamSpec          *pspec);
-static void            gtk_toolbar_get_child_property   (GtkContainer        *container,
-							 GtkWidget           *child,
-							 guint                property_id,
-							 GValue              *value,
-							 GParamSpec          *pspec);
-static void            gtk_toolbar_finalize             (GObject             *object);
-static void            gtk_toolbar_show_all             (GtkWidget           *widget);
-static void            gtk_toolbar_hide_all             (GtkWidget           *widget);
-static void            gtk_toolbar_add                  (GtkContainer        *container,
-							 GtkWidget           *widget);
-static void            gtk_toolbar_remove               (GtkContainer        *container,
-							 GtkWidget           *widget);
-static void            gtk_toolbar_forall               (GtkContainer        *container,
-							 gboolean             include_internals,
-							 GtkCallback          callback,
-							 gpointer             callback_data);
-static GType           gtk_toolbar_child_type           (GtkContainer        *container);
-static void            gtk_toolbar_orientation_changed  (GtkToolbar          *toolbar,
-							 GtkOrientation       orientation);
-static void            gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar,
-							 GtkToolbarStyle      style);
-static gboolean        gtk_toolbar_move_focus           (GtkToolbar          *toolbar,
-							 GtkDirectionType     dir);
-static gboolean        gtk_toolbar_focus_home_or_end    (GtkToolbar          *toolbar,
-							 gboolean             focus_home);
-static gboolean        gtk_toolbar_button_press         (GtkWidget           *toolbar,
-							 GdkEventButton      *event);
-static gboolean        gtk_toolbar_arrow_button_press   (GtkWidget           *button,
-							 GdkEventButton      *event,
-							 GtkToolbar          *toolbar);
-static void            gtk_toolbar_arrow_button_clicked (GtkWidget           *button,
-							 GtkToolbar          *toolbar);
-static void            gtk_toolbar_update_button_relief (GtkToolbar          *toolbar);
-static gboolean        gtk_toolbar_popup_menu           (GtkWidget           *toolbar);
-static GtkWidget *     internal_insert_element          (GtkToolbar          *toolbar,
-							 GtkToolbarChildType  type,
-							 GtkWidget           *widget,
-							 const char          *text,
-							 const char          *tooltip_text,
-							 const char          *tooltip_private_text,
-							 GtkWidget           *icon,
-							 GtkSignalFunc        callback,
-							 gpointer             user_data,
-							 gint                 position,
-							 gboolean             use_stock);
-static void            gtk_toolbar_reconfigured         (GtkToolbar          *toolbar);
-static gboolean        gtk_toolbar_check_new_api        (GtkToolbar          *toolbar);
-static gboolean        gtk_toolbar_check_old_api        (GtkToolbar          *toolbar);
+static void       gtk_toolbar_init                 (GtkToolbar          *toolbar);
+static void       gtk_toolbar_class_init           (GtkToolbarClass     *klass);
+static void       gtk_toolbar_set_property         (GObject             *object,
+						    guint                prop_id,
+						    const GValue        *value,
+						    GParamSpec          *pspec);
+static void       gtk_toolbar_get_property         (GObject             *object,
+						    guint                prop_id,
+						    GValue              *value,
+						    GParamSpec          *pspec);
+static gint       gtk_toolbar_expose               (GtkWidget           *widget,
+						    GdkEventExpose      *event);
+static void       gtk_toolbar_realize              (GtkWidget           *widget);
+static void       gtk_toolbar_unrealize            (GtkWidget           *widget);
+static void       gtk_toolbar_size_request         (GtkWidget           *widget,
+						    GtkRequisition      *requisition);
+static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
+						    GtkAllocation       *allocation);
+static void       gtk_toolbar_style_set            (GtkWidget           *widget,
+						    GtkStyle            *prev_style);
+static void       gtk_toolbar_direction_changed    (GtkWidget           *widget,
+						    GtkTextDirection     previous_direction);
+static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
+						    GtkDirectionType     dir);
+static void       gtk_toolbar_screen_changed       (GtkWidget           *widget,
+						    GdkScreen           *previous_screen);
+static void       gtk_toolbar_map                  (GtkWidget           *widget);
+static void       gtk_toolbar_unmap                (GtkWidget           *widget);
+static void       gtk_toolbar_set_child_property   (GtkContainer        *container,
+						    GtkWidget           *child,
+						    guint                property_id,
+						    const GValue        *value,
+						    GParamSpec          *pspec);
+static void       gtk_toolbar_get_child_property   (GtkContainer        *container,
+						    GtkWidget           *child,
+						    guint                property_id,
+						    GValue              *value,
+						    GParamSpec          *pspec);
+static void       gtk_toolbar_finalize             (GObject             *object);
+static void       gtk_toolbar_show_all             (GtkWidget           *widget);
+static void       gtk_toolbar_hide_all             (GtkWidget           *widget);
+static void       gtk_toolbar_add                  (GtkContainer        *container,
+						    GtkWidget           *widget);
+static void       gtk_toolbar_remove               (GtkContainer        *container,
+						    GtkWidget           *widget);
+static void       gtk_toolbar_forall               (GtkContainer        *container,
+						    gboolean             include_internals,
+						    GtkCallback          callback,
+						    gpointer             callback_data);
+static GType      gtk_toolbar_child_type           (GtkContainer        *container);
+static void       gtk_toolbar_orientation_changed  (GtkToolbar          *toolbar,
+						    GtkOrientation       orientation);
+static void       gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar,
+						    GtkToolbarStyle      style);
+static gboolean   gtk_toolbar_move_focus           (GtkToolbar          *toolbar,
+						    GtkDirectionType     dir);
+static gboolean   gtk_toolbar_focus_home_or_end    (GtkToolbar          *toolbar,
+						    gboolean             focus_home);
+static gboolean   gtk_toolbar_button_press         (GtkWidget           *toolbar,
+						    GdkEventButton      *event);
+static gboolean   gtk_toolbar_arrow_button_press   (GtkWidget           *button,
+						    GdkEventButton      *event,
+						    GtkToolbar          *toolbar);
+static void       gtk_toolbar_arrow_button_clicked (GtkWidget           *button,
+						    GtkToolbar          *toolbar);
+static void       gtk_toolbar_update_button_relief (GtkToolbar          *toolbar);
+static gboolean   gtk_toolbar_popup_menu           (GtkWidget           *toolbar);
+static GtkWidget *internal_insert_element          (GtkToolbar          *toolbar,
+						    GtkToolbarChildType  type,
+						    GtkWidget           *widget,
+						    const char          *text,
+						    const char          *tooltip_text,
+						    const char          *tooltip_private_text,
+						    GtkWidget           *icon,
+						    GtkSignalFunc        callback,
+						    gpointer             user_data,
+						    gint                 position,
+						    gboolean             use_stock);
+static void       gtk_toolbar_reconfigured         (GtkToolbar          *toolbar);
+static gboolean   gtk_toolbar_check_new_api        (GtkToolbar          *toolbar);
+static gboolean   gtk_toolbar_check_old_api        (GtkToolbar          *toolbar);
 
 static GtkReliefStyle       get_button_relief    (GtkToolbar *toolbar);
 static gint                 get_internal_padding (GtkToolbar *toolbar);
@@ -2995,32 +2995,6 @@ gtk_toolbar_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-gchar *
-_gtk_toolbar_elide_underscores (const gchar *original)
-{
-  gchar *q, *result;
-  const gchar *p;
-  gboolean last_underscore;
-  
-  q = result = g_malloc (strlen (original) + 1);
-  last_underscore = FALSE;
-  
-  for (p = original; *p; p++)
-    {
-      if (!last_underscore && *p == '_')
-	last_underscore = TRUE;
-      else
-	{
-	  last_underscore = FALSE;
-	  *q++ = *p;
-	}
-    }
-  
-  *q = '\0';
-  
-  return result;
-}
-
 /*
  * Deprecated API
  */
@@ -3849,51 +3823,6 @@ calculate_max_homogeneous_pixels (GtkWidget *widget)
   return PANGO_PIXELS (MAX_HOMOGENEOUS_N_CHARS * char_width);
 }
 
-gint
-_gtk_toolbar_get_default_space_size (void)
-{
-  return DEFAULT_SPACE_SIZE;
-}
-
-void
-_gtk_toolbar_paint_space_line (GtkWidget       *widget,
-			       GtkToolbar      *toolbar,
-			       GdkRectangle    *area,
-			       GtkAllocation   *allocation)
-{
-  const double start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
-  const double end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);
-  
-  gint space_size;
-  GtkToolbarSpaceStyle space_style;
-  GtkOrientation orientation;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  space_size = get_space_size (toolbar);
-  space_style = get_space_style (toolbar);
-  orientation = toolbar? toolbar->orientation : GTK_ORIENTATION_HORIZONTAL;
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      gtk_paint_vline (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget), area, widget,
-		       "toolbar",
-		       allocation->y + allocation->height * start_fraction,
-		       allocation->y + allocation->height * end_fraction,
-		       allocation->x + (space_size - widget->style->xthickness) / 2);
-    }
-  else
-    {
-      gtk_paint_hline (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget), area, widget,
-		       "toolbar",
-		       allocation->x + allocation->width * start_fraction,
-		       allocation->x + allocation->width * end_fraction,
-		       allocation->y + (space_size - widget->style->ythickness) / 2);
-    }
-}
-
 static void
 toolbar_content_expose (ToolbarContent *content,
 			GtkContainer   *container,
@@ -4596,6 +4525,9 @@ get_shadow_type (GtkToolbar *toolbar)
 /*
  * API checks
  */
+#define mixed_api_warning \
+    "mixing deprecated and non-deprecated GtkToolbar API is not allowed"
+
 static gboolean
 gtk_toolbar_check_old_api (GtkToolbar *toolbar)
 {
@@ -4603,7 +4535,7 @@ gtk_toolbar_check_old_api (GtkToolbar *toolbar)
   
   if (priv->api_mode == NEW_API)
     {
-      g_warning ("mixing deprecated and non-deprecated GtkToolbar API is not allowed");
+      g_warning (mixed_api_warning);
       return FALSE;
     }
   
@@ -4618,10 +4550,83 @@ gtk_toolbar_check_new_api (GtkToolbar *toolbar)
   
   if (priv->api_mode == OLD_API)
     {
-      g_warning ("mixing deprecated and non-deprecated GtkToolbar API is not allowed");
+      g_warning (mixed_api_warning);
       return FALSE;
     }
   
   priv->api_mode = NEW_API;
   return TRUE;
+}
+
+/* GTK+ internal methods */
+
+gint
+_gtk_toolbar_get_default_space_size (void)
+{
+  return DEFAULT_SPACE_SIZE;
+}
+
+void
+_gtk_toolbar_paint_space_line (GtkWidget       *widget,
+			       GtkToolbar      *toolbar,
+			       GdkRectangle    *area,
+			       GtkAllocation   *allocation)
+{
+  const double start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
+  const double end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);
+  
+  gint space_size;
+  GtkToolbarSpaceStyle space_style;
+  GtkOrientation orientation;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  space_size = get_space_size (toolbar);
+  space_style = get_space_style (toolbar);
+  orientation = toolbar? toolbar->orientation : GTK_ORIENTATION_HORIZONTAL;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      gtk_paint_vline (widget->style, widget->window,
+		       GTK_WIDGET_STATE (widget), area, widget,
+		       "toolbar",
+		       allocation->y + allocation->height * start_fraction,
+		       allocation->y + allocation->height * end_fraction,
+		       allocation->x + (space_size - widget->style->xthickness) / 2);
+    }
+  else
+    {
+      gtk_paint_hline (widget->style, widget->window,
+		       GTK_WIDGET_STATE (widget), area, widget,
+		       "toolbar",
+		       allocation->x + allocation->width * start_fraction,
+		       allocation->x + allocation->width * end_fraction,
+		       allocation->y + (space_size - widget->style->ythickness) / 2);
+    }
+}
+
+gchar *
+_gtk_toolbar_elide_underscores (const gchar *original)
+{
+  gchar *q, *result;
+  const gchar *p;
+  gboolean last_underscore;
+  
+  q = result = g_malloc (strlen (original) + 1);
+  last_underscore = FALSE;
+  
+  for (p = original; *p; p++)
+    {
+      if (!last_underscore && *p == '_')
+	last_underscore = TRUE;
+      else
+	{
+	  last_underscore = FALSE;
+	  *q++ = *p;
+	}
+    }
+  
+  *q = '\0';
+  
+  return result;
 }

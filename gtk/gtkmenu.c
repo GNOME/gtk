@@ -87,6 +87,8 @@ struct _GtkMenuPrivate
   gint heights_length;
 
   gint monitor_num;
+
+  gboolean destroying;
 };
 
 typedef struct
@@ -767,6 +769,7 @@ gtk_menu_destroy (GtkObject *object)
 {
   GtkMenu *menu;
   GtkMenuAttachData *data;
+  GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (object));
 
@@ -804,6 +807,10 @@ gtk_menu_destroy (GtkObject *object)
   if (menu->tearoff_window)
     gtk_widget_destroy (menu->tearoff_window);
 
+  priv = gtk_menu_get_private (menu);
+
+  priv->destroying = TRUE;
+  
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -982,11 +989,13 @@ gtk_menu_remove (GtkContainer *container,
 		 GtkWidget    *widget)
 {
   GtkMenu *menu;
+  GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (container));
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
 
   menu = GTK_MENU (container);
+  priv = gtk_menu_get_private (menu);
 
   /* Clear out old_active_menu_item if it matches the item we are removing
    */
@@ -997,7 +1006,8 @@ gtk_menu_remove (GtkContainer *container,
     }
 
   GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
-  gtk_menu_do_remove (GTK_MENU_SHELL (container), widget);
+  if (!priv->destroying)
+    gtk_menu_do_remove (GTK_MENU_SHELL (container), widget);
   g_object_set_data (G_OBJECT (widget), ATTACH_INFO_KEY, NULL);
 }
 
@@ -4090,8 +4100,9 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
  *
  * Since: 2.4
  **/
-void gtk_menu_set_monitor (GtkMenu *menu,
-			   gint     monitor_num)
+void
+gtk_menu_set_monitor (GtkMenu *menu,
+		      gint     monitor_num)
 {
   GtkMenuPrivate *priv;
   g_return_if_fail (GTK_IS_MENU (menu));
