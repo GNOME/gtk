@@ -273,7 +273,7 @@ typedef enum {
 } ShortcutsIndex;
 
 /* Icon size for if we can't get it from the theme */
-#define FALLBACK_ICON_SIZE 20
+#define FALLBACK_ICON_SIZE 16
 
 #define PREVIEW_HBOX_SPACING 12
 #define NUM_LINES 40
@@ -4061,7 +4061,7 @@ change_icon_theme (GtkFileChooserDefault *impl)
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
 
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_SMALL_TOOLBAR, &width, &height))
+  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
     impl->icon_size = MAX (width, height);
   else
     impl->icon_size = FALLBACK_ICON_SIZE;

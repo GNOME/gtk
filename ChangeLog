@@ -1,3 +1,15 @@
+2005-02-01  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	Fix #165770:
+
+	* gtk/gtkfilechooserdefault.c (FALLBACK_ICON_SIZE): Make the
+	fallback size be 16, to be equal to the default for
+	GTK_ICON_SIZE_MENU (in gtkiconfactory.c:init_icon_sizes()).
+	(change_icon_theme): Use GTK_ICON_SIZE_MENU instead of
+	GTK_ICON_SIZE_SMALL_TOOLBAR.
+
 2005-02-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* */*.c: Fix many instances of "the the" in docs and
