@@ -1,3 +1,9 @@
+2003-06-02  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkprogress.c (gtk_progress_changed): added a missing cast.
+
+	* gdk/gdkrgb.c (gdk_rgb_try_colormap): removed an unused variable.
+
 2003-06-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkalignment.c (gtk_alignment_[gs]et_padding): Add 

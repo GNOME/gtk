@@ -217,7 +217,6 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
   GdkColormap *cmap;
   GdkColor color;
   gulong pixels[256];
-  gulong junk[256];
   gint i;
   gint d2;
   gint colors_needed;
