@@ -1,5 +1,8 @@
 2003-08-25  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkactiongroup.c (gtk_action_group_add_actions): Remove C99isms. (Morten 
+	Welinder)
+
 	* gtk/gtkactiongroup.[hc] (gtk_action_group_set_translate_func,
 	gtk_action_group_set_translation_domain): Hooks for translation of
 	label and tooltip in GtkActionGroupEntries.  (#120620)
