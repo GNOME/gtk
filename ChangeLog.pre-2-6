@@ -1,3 +1,14 @@
+Thu Jan 27 00:15:03 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_begin gtk_drag_get_event_actions):
+	  Finish the job of allowing event to be NULL.
+	  (Fixes bug #4283, reported by Chris Blizzard)
+
+	* gtk/gtkentry.c (entry_adjust_scroll): When calculating
+	  things so that the cursor appears on screen, properly
+	  take into account INNER_BORDER.
+	  (Fixes bug #4754, reported by Antonio Campos)
+
 Wed Jan 26 23:12:28 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_map): Don't
