@@ -2,7 +2,7 @@
 <book>
 
   <bookinfo>
-    <date>June 26th 2000</date>
+    <date>June 28th 2000</date>
     <title>GTK+ FAQ</title>
     <authorgroup>
       <author>
@@ -2091,6 +2091,414 @@ gint gtk_clist_prepend (GtkCList *clist,
   gdk_pixmap_unref (pixmap_mask);
 </programlisting>
       </sect2>
+    </sect1>
+  </chapter>
+
+  <!-- ***************************************************************** -->
+  <chapter>
+    <title>Development with GTK+: widget specific questions</title>
+    <sect1>
+      <title></title>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I find out about the selection of a GtkList?</title>
+
+	<para>Get the selection something like this:</para>
+
+<programlisting role="C">
+GList *sel;
+sel = GTK_LIST(list)->selection;
+</programlisting>
+
+	<para>This is how GList is defined (quoting glist.h):</para>
+
+<programlisting role="C">
+typedef struct _GList GList;
+
+struct _GList
+{
+  gpointer data;
+  GList *next;
+  GList *prev;
+};
+</programlisting>
+
+	<para>A GList structure is just a simple structure for doubly
+        linked lists. there exist several g_list_*() functions to
+        modify a linked list in glib.h.  However the
+        GTK_LIST(MyGtkList)->selection is maintained by the
+        gtk_list_*() functions and should not be modified.</para>
+
+
+	<para>The selection_mode of the GtkList determines the
+        selection facilities of a GtkList and therefore the contents
+        of GTK_LIST(AnyGtkList)->selection:</para>
+	<informaltable frame="all">
+	  <tgroup cols="2">
+	    <thead>
+	      <row>
+	      <entry><literal>selection_mode</literal></entry>
+		<entry><literal> GTK_LIST()->selection</literal>
+	      contents</entry>
+	      </row>
+	    </thead>
+	    <tbody>
+	      <row>
+		<entry><literal>GTK_SELECTION_SINGLE</literal></entry>
+		<entry>selection is either NULL or contains a GList*
+	                pointer for a single selected item.</entry>
+	      </row>
+	      <row>
+		<entry><literal>GTK_SELECTION_BROWSE</literal></entry>
+		<entry>selection is NULL if the list contains no
+                        widgets, otherwise it contains a GList*
+                        pointer for one GList structure.</entry>
+	      </row>
+	      <row>
+		<entry><literal>GTK_SELECTION_MULTIPLE</literal></entry>
+		<entry>selection is NULL if no listitems are selected
+                        or a a GList* pointer for the first selected
+                        item. that in turn points to a GList structure
+                        for the second selected item and so
+		        on.</entry>
+	      </row>
+	      <row>
+		<entry><literal>GTK_SELECTION_EXTENDED</literal></entry>
+		<entry>selection is NULL.</entry>
+	      </row>
+	    </tbody>
+	  </tgroup>
+	</informaltable>
+
+	<para>The data field of the GList structure
+             GTK_LIST(MyGtkList)->selection points to the first
+             GtkListItem that is selected.  So if you would like to
+             determine which listitems are selected you should go like
+             this:</para>
+
+<programlisting role="C">
+{
+        gchar           *list_items[]={
+                                "Item0",
+                                "Item1",
+                                "foo",
+                                "last Item",
+                        };
+        guint           nlist_items=sizeof(list_items)/sizeof(list_items[0]);
+        GtkWidget       *list_item;
+        guint           i;
+
+        list=gtk_list_new();
+        gtk_list_set_selection_mode(GTK_LIST(list), GTK_SELECTION_MULTIPLE);
+        gtk_container_add(GTK_CONTAINER(AnyGtkContainer), list);
+        gtk_widget_show (list);
+
+        for (i = 0; i < nlist_items; i++)
+        {
+                list_item=gtk_list_item_new_with_label(list_items[i]);
+                gtk_object_set_user_data(GTK_OBJECT(list_item), (gpointer)i);
+                gtk_container_add(GTK_CONTAINER(list), list_item);
+                gtk_widget_show(list_item);
+        }
+}
+</programlisting>
+
+	<para>To get known about the selection:</para>
+
+<programlisting role="C">
+{
+        GList   *items;
+
+        items=GTK_LIST(list)->selection;
+
+        printf("Selected Items: ");
+        while (items) {
+                if (GTK_IS_LIST_ITEM(items->data))
+                        printf("%d ", (guint) 
+                gtk_object_get_user_data(items->data));
+                items=items->next;
+        }
+        printf("\n");
+}
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I stop the column headings of a GtkCList
+	disappearing when the list is scrolled?</title>
+
+	<para>This happens when a GtkCList is packed into a
+        GtkScrolledWindow using the function
+        <literal>gtk_scroll_window_add_with_viewport()</literal>. The prefered
+        method of adding a CList to a scrolled window is to use the
+        function <literal>gtk_container_add</literal>, as in:</para>
+
+<programlisting role="C">
+    GtkWidget *scrolled, *clist;
+    char *titles[] = { "Title1" , "Title2" };
+
+    scrolled = gtk_scrolled_window_new(NULL, NULL);
+
+    clist = gtk_clist_new_with_titles(2, titles);
+    gtk_container_add(GTK_CONTAINER(scrolled), clist);
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I don't want the user of my applications to enter text
+	into a GtkCombo. Any idea?</title>
+
+	<para>A GtkCombo has an associated entry which can be accessed
+	using the following expression:</para>
+
+<programlisting role="C">
+      GTK_COMBO(combo_widget)->entry
+</programlisting>
+
+	<para>If you don't want the user to be able to modify the
+	content of this entry, you can use the
+	gtk_entry_set_editable() function:</para>
+
+
+<programlisting role="C">
+      void gtk_entry_set_editable(GtkEntry *entry, 
+                                  gboolean editable);
+</programlisting>
+
+	<para>Set the editable parameter to FALSE to disable typing
+	into the entry.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I catch a combo box change?</title>
+
+	<para>The entry which is associated to your GtkCombo send a
+	"changed" signal when:</para>
+
+	<itemizedlist>
+	  <listitem><simpara>some text is typed in</simpara>
+	  </listitem>
+	  <listitem><simpara>the selection of the combo box is changed</simpara>
+	  </listitem>
+	</itemizedlist>
+
+	<para>To catch any combo box change, simply connect your
+	signal handler with</para>
+
+<programlisting role="C">
+      gtk_signal_connect(GTK_COMBO(cb)->entry,
+                         "changed",
+                         GTK_SIGNAL_FUNC(my_cb_change_handler),
+                         NULL);
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How can I define a separation line in a menu?</title>
+
+	<para>See the <ulink
+	url="http://www.gtk.org/tutorial/">Tutorial</ulink> for
+	information on how to create menus. However, to create a
+	separation line in a menu, just insert an empty menu item:</para>
+
+<programlisting role="C">
+menuitem = gtk_menu_item_new();
+gtk_menu_append(GTK_MENU(menu), menuitem);
+gtk_widget_show(menuitem);
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How can I right justify a menu, such as Help?</title>
+
+	<para>Depending on if you use the MenuFactory or not, there
+	are two ways to proceed. With the MenuFactory, use something
+	like the following:</para>
+
+<programlisting role="C">
+menu_path = gtk_menu_factory_find (factory,  "&lt;MyApp&gt;/Help");
+gtk_menu_item_right_justify(menu_path->widget);
+</programlisting>
+
+	<para>If you do not use the MenuFactory, you should simply
+	use:</para>
+
+
+<programlisting role="C">
+gtk_menu_item_right_justify(my_menu_item);
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I add some underlined accelerators to menu
+	items?</title>
+
+	<para>Damon Chaplin, the technical force behind the Glade
+        project, provided the following code sample (this code is an
+        output from Glade). It creates a small <GUIMenu>File</guimenu> menu item
+        with only one child (<guimenu>New</guimenu>). The F in <guimenu>File</guimenu> and the N
+        in <guimenu>New</guimenu> are underlined, and the relevant accelerators are
+        created.</para>
+
+<programlisting role="C">
+  menubar1 = gtk_menu_bar_new ();
+  gtk_object_set_data (GTK_OBJECT (window1), "menubar1", menubar1);
+  gtk_widget_show (menubar1);
+  gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
+
+  file1 = gtk_menu_item_new_with_label ("");
+  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (file1)->child),
+                                   _("_File"));
+  gtk_widget_add_accelerator (file1, "activate_item", accel_group,
+                              tmp_key, GDK_MOD1_MASK, 0);
+  gtk_object_set_data (GTK_OBJECT (window1), "file1", file1);
+  gtk_widget_show (file1);
+  gtk_container_add (GTK_CONTAINER (menubar1), file1);
+
+  file1_menu = gtk_menu_new ();
+  file1_menu_accels = gtk_menu_ensure_uline_accel_group (GTK_MENU (file1_menu));
+  gtk_object_set_data (GTK_OBJECT (window1), "file1_menu", file1_menu);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (file1), file1_menu);
+
+  new1 = gtk_menu_item_new_with_label ("");
+  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (new1)->child),
+                                   _("_New"));
+  gtk_widget_add_accelerator (new1, "activate_item", file1_menu_accels,
+                              tmp_key, 0, 0);
+  gtk_object_set_data (GTK_OBJECT (window1), "new1", new1);
+  gtk_widget_show (new1);
+  gtk_container_add (GTK_CONTAINER (file1_menu), new1);
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How can I retrieve the text from a GtkMenuItem?</title>
+
+	<para>You can usually retrieve the label of a specific
+	GtkMenuItem with:</para>
+
+<programlisting role="C">
+    if (GTK_BIN (menu_item)->child)
+    {
+      GtkWidget *child = GTK_BIN (menu_item)->child;
+  
+      /* do stuff with child */
+      if (GTK_IS_LABEL (child))
+      {
+        gchar *text;
+    
+        gtk_label_get (GTK_LABEL (child), &amp;text);
+        g_print ("menu item text: %s\n", text);
+      }
+    }
+</programlisting>
+
+	<para>To get the active menu item from a GtkOptionMenu you can
+	do:</para>
+
+<programlisting role="C">
+if (GTK_OPTION_MENU (option_menu)->menu_item)
+{
+  GtkWidget *menu_item = GTK_OPTION_MENU (option_menu)->menu_item;
+}
+</programlisting>
+
+	<para>But, there's a catch. For this specific case, you can
+        <emphasis>not</emphasis> get the label widget from
+        <literal>menu_item</literal> with the above code, because the
+        option menu reparents the menu_item's child temporarily to
+        display the currently active contents. So to retrive the child
+        of the currently active menu_item of an option menu, you'll
+        have to do:</para>
+
+
+<programlisting role="C">
+    if (GTK_BIN (option_menu)->child)
+    {
+      GtkWidget *child = GTK_BIN (option_menu)->child;
+
+      /* do stuff with child */
+    }
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I right (or otherwise) justify a
+	GtkLabel?</title>
+
+	<para>Are you sure you want to <emphasis>justify</emphasis>
+        the labels? The label class contains the
+        <literal>gtk_label_set_justify()</literal> function that is
+        used to control the justification of a multi-line
+        label.</para>
+
+	<para>What you probably want is to set the <emphasis>alignment</emphasis>
+        of the label, ie right align it, center it or left align
+        it. If you want to do this, you should use:</para>
+
+<programlisting role="C">
+void gtk_misc_set_alignment (GtkMisc *misc,
+                             gfloat xalign,
+                             gfloat yalign);
+</programlisting>
+
+	<para>where the <literal>xalign</literal> and
+	<literal>yalign</literal> values are floats in
+	[0.00;1.00].</para>
+
+
+<programlisting role="C">
+GtkWidget       *label;
+
+/* horizontal : left align, vertical : top */
+gtk_misc_set_alignment(GTK_MISK(label), 0.0f, 0.0f);
+
+/* horizontal : centered, vertical : centered */
+gtk_misc_set_alignment(GTK_MISK(label), 0.5f, 0.5f);
+
+/* horizontal : right align, vertical : bottom */
+gtk_misc_set_alignment(GTK_MISK(label), 1.0f, 1.0f);
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I set the background color of a GtkLabel
+	widget?</title>
+
+	<para>The Gtklabel widget is one of a few GTK+ widgets that
+        don't create their own window to render themselves
+        into. Instead, they draw themselves directly onto their
+        parents window.</para>
+
+	<para>This means that in order to set the background color for
+        a GtkLabel widget, you need to change the background color of
+        its parent, i.e. the object that you pack it into.</para>
+      </sect2> 
 
     </sect1>
   </chapter>
