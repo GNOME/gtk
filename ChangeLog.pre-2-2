@@ -1,3 +1,8 @@
+Thu Nov 19 23:47:38 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.c: Fix for marking days from 
+	  Dan Reish <dreish@izzy.net>.
+
 Thu Nov 19 00:15:27 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_node_nth): return the nth GtkCTreeNode

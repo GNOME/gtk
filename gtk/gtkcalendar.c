@@ -1877,7 +1877,8 @@ gtk_calendar_paint_day (GtkWidget *widget,
   gdk_draw_string (private_data->main_win,
 		   DAY_FONT (widget), gc,
 		   x_loc, y_baseline, buffer);
-  if (calendar->marked_date[day-1])
+  if (calendar->marked_date[day-1]
+      && calendar->day_month[row][col] == MONTH_CURRENT)
     gdk_draw_string (private_data->main_win,
 		     DAY_FONT (widget), gc,
 		     x_loc-1, y_baseline, buffer);
