@@ -1,3 +1,7 @@
+2001-12-16  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/windows.sgml: Add something about GdkModifierType.
+
 2001-12-13  Matthias Clasen  <matthiasc@poet.de>
 	
 	* gdk-pixbuf/tmpl/scaling.sgml,	gdk/tmpl/fonts.sgml, 

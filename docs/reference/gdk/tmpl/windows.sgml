@@ -1015,22 +1015,34 @@ Deprecated equivalent of gdk_drawable_get_type().
 
 <!-- ##### ENUM GdkModifierType ##### -->
 <para>
-
+A set of bit-flags to indicate the state of modifier keys and mouse buttons 
+in various event types. Typical modifier keys are Shift, Control, Meta, Super,
+Hyper, Alt, Compose, Apple, CapsLock or ShiftLock. 
+</para>
+<para>
+Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
 </para>
 
-@GDK_SHIFT_MASK: 
-@GDK_LOCK_MASK: 
-@GDK_CONTROL_MASK: 
-@GDK_MOD1_MASK: 
-@GDK_MOD2_MASK: 
-@GDK_MOD3_MASK: 
-@GDK_MOD4_MASK: 
-@GDK_MOD5_MASK: 
-@GDK_BUTTON1_MASK: 
-@GDK_BUTTON2_MASK: 
-@GDK_BUTTON3_MASK: 
-@GDK_BUTTON4_MASK: 
-@GDK_BUTTON5_MASK: 
+@GDK_SHIFT_MASK: the Shift key. 
+@GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the 
+  X server this may either be CapsLock or ShiftLock). 
+@GDK_CONTROL_MASK: the Control key. 
+@GDK_MOD1_MASK: the fourth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier, but 
+  normally it is the Alt key).
+@GDK_MOD2_MASK: the fifth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD3_MASK: the sixth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD4_MASK: the seventh modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD5_MASK: the eighth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_BUTTON1_MASK: the first mouse button.
+@GDK_BUTTON2_MASK: the second mouse button.
+@GDK_BUTTON3_MASK: the third mouse button. 
+@GDK_BUTTON4_MASK: the fourth mouse button.
+@GDK_BUTTON5_MASK: the fifth mouse button.
 @GDK_RELEASE_MASK: 
 @GDK_MODIFIER_MASK: 
 
