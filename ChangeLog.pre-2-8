@@ -1,3 +1,14 @@
+Thu Aug 12 23:52:12 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #149547, Markus Lausser:
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate): 
+	* gtk/gtkcombobox.c (gtk_combo_box_size_request): Don't 
+	crash if size_request or size_allocate are called early.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate): Protect
+	against being allocated too small.
+
 Thu Aug 12 23:18:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkhandlebox.c: Remove an accidentally added include.
