@@ -1301,65 +1301,65 @@ add_preedit_attrs (GtkTextLayout     *layout,
 
   do
     {
+      GtkTextAppearance appearance = style->appearance;
+      PangoFontDescription font_desc;
+      PangoAttribute *insert_attr;
+      GSList *extra_attrs = NULL;
+      GSList *tmp_list;
       gint start, end;
 
       pango_attr_iterator_range (iter, &start, &end);
 
-      if (end != G_MAXINT)
+      if (end == G_MAXINT)
+	end = layout->preedit_len;
+      
+      pango_attr_iterator_get_font (iter, style->font_desc,
+				    &font_desc, size_only ? NULL : &extra_attrs);
+      
+      tmp_list = extra_attrs;
+      while (tmp_list)
 	{
-	  GtkTextAppearance appearance = style->appearance;
-	  PangoFontDescription font_desc;
-	  PangoAttribute *insert_attr;
-	  GSList *extra_attrs = NULL;
-	  GSList *tmp_list;
-
-	  pango_attr_iterator_get_font (iter, style->font_desc,
-					&font_desc, size_only ? NULL : &extra_attrs);
-
-	  tmp_list = extra_attrs;
-	  while (tmp_list)
+	  PangoAttribute *attr = tmp_list->data;
+	  
+	  switch (attr->klass->type)
 	    {
-	      PangoAttribute *attr = tmp_list->data;
-
-	      switch (attr->klass->type)
-		{
-		case PANGO_ATTR_FOREGROUND:
-		  convert_color (&appearance.fg_color, (PangoAttrColor *)attr);
-		  break;
-		case PANGO_ATTR_BACKGROUND:
-		  convert_color (&appearance.fg_color, (PangoAttrColor *)attr);
-		  break;
-		case PANGO_ATTR_UNDERLINE:
-		  appearance.underline = ((PangoAttrInt *)attr)->value;
-		  break;
-		case PANGO_ATTR_STRIKETHROUGH:
-		  appearance.strikethrough = ((PangoAttrInt *)attr)->value;
-		  break;
-		default:
-		  break;
-		}
-
-	      pango_attribute_destroy (attr);
-	      tmp_list = tmp_list->next;
+	    case PANGO_ATTR_FOREGROUND:
+	      convert_color (&appearance.fg_color, (PangoAttrColor *)attr);
+	      break;
+	    case PANGO_ATTR_BACKGROUND:
+	      convert_color (&appearance.bg_color, (PangoAttrColor *)attr);
+	      appearance.draw_bg = TRUE;
+	      break;
+	    case PANGO_ATTR_UNDERLINE:
+	      appearance.underline = ((PangoAttrInt *)attr)->value;
+	      break;
+	    case PANGO_ATTR_STRIKETHROUGH:
+	      appearance.strikethrough = ((PangoAttrInt *)attr)->value;
+	      break;
+	    default:
+	      break;
 	    }
-
-	  g_slist_free (extra_attrs);
-
-	  insert_attr = pango_attr_font_desc_new (&font_desc);
+	  
+	  pango_attribute_destroy (attr);
+	  tmp_list = tmp_list->next;
+	}
+      
+      g_slist_free (extra_attrs);
+      
+      insert_attr = pango_attr_font_desc_new (&font_desc);
+      insert_attr->start_index = start + offset;
+      insert_attr->end_index = end + offset;
+      
+      pango_attr_list_insert (attrs, insert_attr);
+      
+      if (!size_only)
+	{
+	  insert_attr = gtk_text_attr_appearance_new (&appearance);
+	  
 	  insert_attr->start_index = start + offset;
 	  insert_attr->end_index = end + offset;
-
-	  pango_attr_list_insert (attrs, insert_attr);
-
-	  if (!size_only)
-	    {
-	      insert_attr = gtk_text_attr_appearance_new (&appearance);
-	      
-	      insert_attr->start_index = start + offset;
-	      insert_attr->end_index = end + offset;
-	      
-	      pango_attr_list_insert (attrs, insert_attr); 
-	    }
+	  
+	  pango_attr_list_insert (attrs, insert_attr); 
 	}
     }
   while (pango_attr_iterator_next (iter));
