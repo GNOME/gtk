@@ -1,3 +1,8 @@
+2001-07-24  Darin Adler  <darin@bentspoon.com>
+
+	* ta.po: Placeholder empty Tamil translation to make
+	things build until the real translation is committed.
+
 2001-07-18  Zbigniew Chyla  <cyba@gnome.pl>
           
 	* pl.po: Updated Polish translation.
