@@ -618,7 +618,7 @@ gtk_clist_class_init (GtkCListClass *klass)
 		    GTK_TYPE_NONE, 3,
 		    GTK_TYPE_INT,
 		    GTK_TYPE_INT,
-		    GTK_TYPE_GDK_EVENT);
+		    GDK_TYPE_EVENT);
   clist_signals[UNSELECT_ROW] =
     gtk_signal_new ("unselect_row",
 		    GTK_RUN_FIRST,
@@ -626,7 +626,7 @@ gtk_clist_class_init (GtkCListClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkCListClass, unselect_row),
 		    gtk_marshal_VOID__INT_INT_BOXED,
 		    GTK_TYPE_NONE, 3, GTK_TYPE_INT,
-		    GTK_TYPE_INT, GTK_TYPE_GDK_EVENT);
+		    GTK_TYPE_INT, GDK_TYPE_EVENT);
   clist_signals[ROW_MOVE] =
     gtk_signal_new ("row_move",
 		    GTK_RUN_LAST,

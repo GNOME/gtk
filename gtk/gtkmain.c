@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gdkconfig.h"
+
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
 #else
@@ -43,6 +45,7 @@
 #include "gtkmain.h"
 #include "gtkrc.h"
 #include "gtkselection.h"
+#include "gtksettings.h"
 #include "gtksignal.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
@@ -802,7 +805,9 @@ gtk_main_do_event (GdkEvent *event)
       if (event->type == GDK_PROPERTY_NOTIFY)
 	gtk_selection_incr_event (event->any.window,
 				  &event->property);
-      
+      else if (event->type == GDK_SETTING)
+	_gtk_settings_handle_event (&event->setting);
+
       return;
     }
   
@@ -1352,7 +1357,7 @@ gtk_invoke_input (gpointer	    data,
   args[0].type = GTK_TYPE_INT;
   args[0].name = NULL;
   GTK_VALUE_INT(args[0]) = source;
-  args[1].type = GTK_TYPE_GDK_INPUT_CONDITION;
+  args[1].type = GDK_TYPE_INPUT_CONDITION;
   args[1].name = NULL;
   GTK_VALUE_FLAGS(args[1]) = condition;
   args[2].type = GTK_TYPE_NONE;

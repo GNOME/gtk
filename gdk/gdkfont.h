@@ -10,6 +10,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define GDK_TYPE_FONT gdk_font_get_type
+
 /* Types of font.
  *   GDK_FONT_FONT: the font is an XFontStruct.
  *   GDK_FONT_FONTSET: the font is an XFontSet used for I18N.
@@ -26,6 +28,8 @@ struct _GdkFont
   gint ascent;
   gint descent;
 };
+
+GType    gdk_font_get_type  (void);
 
 GdkFont* gdk_font_load	    (const gchar    *font_name);
 GdkFont* gdk_fontset_load   (const gchar    *fontset_name);

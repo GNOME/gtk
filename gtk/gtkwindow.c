@@ -401,14 +401,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                     GTK_TYPE_WIDGET);
   
   window_signals[FRAME_EVENT] =
-    g_signal_newc("frame_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWindowClass, frame_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GTK_TYPE_GDK_EVENT);
+    g_signal_newc ("frame_event",
+		   G_TYPE_FROM_CLASS(object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET(GtkWindowClass, frame_event),
+		   _gtk_boolean_handled_accumulator, NULL,
+		   gtk_marshal_BOOLEAN__BOXED,
+		   G_TYPE_BOOLEAN, 1,
+		   GDK_TYPE_EVENT);
 
   if (!mnemonic_hash_table)
     mnemonic_hash_table = g_hash_table_new (mnemonic_hash,

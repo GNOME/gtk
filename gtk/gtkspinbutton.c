@@ -243,13 +243,13 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		    GTK_TYPE_INT, 1, GTK_TYPE_POINTER);
 
   spinbutton_signals[OUTPUT] =
-    g_signal_newc("output",
-                  G_TYPE_FROM_CLASS(object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET(GtkSpinButtonClass, output),
-		  _gtk_boolean_handled_accumulator, NULL,
- 		  gtk_marshal_BOOLEAN__VOID,
-		  G_TYPE_BOOLEAN, 0);
+    g_signal_newc ("output",
+		   G_TYPE_FROM_CLASS(object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET(GtkSpinButtonClass, output),
+		   _gtk_boolean_handled_accumulator, NULL,
+		   gtk_marshal_BOOLEAN__VOID,
+		   G_TYPE_BOOLEAN, 0);
 
   spinbutton_signals[VALUE_CHANGED] =
     gtk_signal_new ("value_changed",

@@ -213,7 +213,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_boxed ("background_gdk",
                                                        _("Background color"),
                                                        _("Background color as a GdkColor"),
-                                                       GTK_TYPE_GDK_COLOR,
+                                                       GDK_TYPE_COLOR,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
@@ -247,7 +247,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_boxed ("foreground_gdk",
                                                        _("Foreground color"),
                                                        _("Foreground color as a GdkColor"),
-                                                       GTK_TYPE_GDK_COLOR,
+                                                       GDK_TYPE_COLOR,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   
@@ -609,7 +609,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                    GTK_TYPE_INT,
                    3,
                    G_TYPE_OBJECT,
-                   GTK_TYPE_GDK_EVENT,
+                   GDK_TYPE_EVENT,
                    GTK_TYPE_TEXT_ITER);
 }
 
@@ -1256,7 +1256,7 @@ get_color_arg (GValue *value, GdkColor *orig)
 
   color = g_new (GdkColor, 1);
   *color = *orig;
-  g_value_init (value, GTK_TYPE_GDK_COLOR);
+  g_value_init (value, GDK_TYPE_COLOR);
   g_value_set_boxed (value, color);
 }
 

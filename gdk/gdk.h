@@ -31,6 +31,7 @@
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkdrawable.h>
+#include <gdk/gdkenumtypes.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdkfont.h>
 #include <gdk/gdkgc.h>
@@ -113,6 +114,8 @@ gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
 void gdk_flush (void);
 void gdk_beep (void);
+
+void gdk_set_double_click_time (guint msec);
 
 /* Rectangle utilities
  */

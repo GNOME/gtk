@@ -172,7 +172,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                    g_param_spec_boxed ("background_gdk",
                                                        _("Background color"),
                                                        _("Background color as a GdkColor"),
-                                                       GTK_TYPE_GDK_COLOR,
+                                                       GDK_TYPE_COLOR,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));  
 
   g_object_class_install_property (object_class,
@@ -188,7 +188,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                    g_param_spec_boxed ("foreground_gdk",
                                                        _("Foreground color"),
                                                        _("Foreground color as a GdkColor"),
-                                                       GTK_TYPE_GDK_COLOR,
+                                                       GDK_TYPE_COLOR,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
 

@@ -4165,7 +4165,7 @@ set_cursor (GtkWidget *spinner,
   c &= 0xfe;
 
   label = gtk_object_get_user_data (GTK_OBJECT (spinner));
-  vals = gtk_type_enum_get_values (GTK_TYPE_GDK_CURSOR_TYPE);
+  vals = gtk_type_enum_get_values (GDK_TYPE_CURSOR_TYPE);
   while (vals && vals->value != c)
     vals++;
   if (vals)

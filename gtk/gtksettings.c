@@ -130,7 +130,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (PROP_DOUBLE_CLICK_TIMEOUT ==
 	    settings_install_property_parser (class,
 					      g_param_spec_int ("double-click-timeout", "Double Click Timeout", NULL,
-								1, G_MAXINT, 1,
+								0, G_MAXINT, 1000,
 								G_PARAM_READWRITE),
 					      NULL));
   g_assert (PROP_BELL_PITCH ==
@@ -218,8 +218,9 @@ gtk_settings_get_property (GObject     *object,
 			   GParamSpec  *pspec)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
-  
-  g_value_copy (settings->property_values + property_id - 1, value);
+
+  if (!gdk_setting_get (pspec->name, value))
+    g_value_copy (settings->property_values + property_id - 1, value);
 }
 
 static void
@@ -227,7 +228,8 @@ gtk_settings_notify (GObject    *object,
 		     GParamSpec *pspec)
 {
   guint property_id = GPOINTER_TO_UINT (g_param_spec_get_qdata ((pspec), quark_property_id));
-
+  gint double_click_time;
+  
 #if 1
   GValue tmp_value = { 0, };
   gchar *contents;
@@ -238,7 +240,8 @@ gtk_settings_notify (GObject    *object,
   switch (property_id)
     {
     case PROP_DOUBLE_CLICK_TIMEOUT:
-      g_print ("settings-notify: %s = \"%s\"\n", pspec->name, contents);
+      g_object_get (object, pspec->name, &double_click_time, NULL);
+      gdk_set_double_click_time (double_click_time);
       break;
     case PROP_BELL_PITCH:
       g_print ("settings-notify: %s = \"%s\"\n", pspec->name, contents);
@@ -378,7 +381,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
 GtkRcPropertyParser
 _gtk_rc_property_parser_for_type (GType type)
 {
-  if (type == GTK_TYPE_GDK_COLOR)
+  if (type == GDK_TYPE_COLOR)
     return gtk_rc_property_parse_color;
   else if (type == GTK_TYPE_REQUISITION)
     return gtk_rc_property_parse_requisition;
@@ -547,7 +550,7 @@ gtk_rc_property_parse_color (const GParamSpec *pspec,
   gboolean success;
 
   g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), FALSE);
-  g_return_val_if_fail (G_VALUE_HOLDS (property_value, GTK_TYPE_GDK_COLOR), FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS (property_value, GDK_TYPE_COLOR), FALSE);
 
   scanner = gtk_rc_scanner_new ();
   g_scanner_input_text (scanner, gstring->str, gstring->len);
@@ -787,4 +790,14 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
   g_scanner_destroy (scanner);
 
   return success;
+}
+
+
+void
+_gtk_settings_handle_event (GdkEventSetting *event)
+{
+  GtkSettings *settings = gtk_settings_get_global ();
+
+  if (g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name))
+    g_object_notify (G_OBJECT (settings), event->name);
 }

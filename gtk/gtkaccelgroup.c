@@ -663,7 +663,7 @@ gtk_accel_group_create_add (GtkType          class_type,
 			 GTK_TYPE_UINT,
 			 GTK_TYPE_ACCEL_GROUP,
 			 GTK_TYPE_UINT,
-			 GTK_TYPE_GDK_MODIFIER_TYPE,
+			 GDK_TYPE_MODIFIER_TYPE,
 			 GTK_TYPE_ACCEL_FLAGS);
 }
 
@@ -682,7 +682,7 @@ gtk_accel_group_create_remove (GtkType          class_type,
 			 GTK_TYPE_NONE, 3,
 			 GTK_TYPE_ACCEL_GROUP,
 			 GTK_TYPE_UINT,
-			 GTK_TYPE_GDK_MODIFIER_TYPE);
+			 GDK_TYPE_MODIFIER_TYPE);
 }
 
 GSList*

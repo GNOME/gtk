@@ -27,6 +27,20 @@
 #include "gdkfont.h"
 #include "gdkinternals.h"
 
+GType
+gdk_font_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GdkFont",
+					     NULL,
+					     (GBoxedCopyFunc)gdk_font_ref,
+					     (GBoxedFreeFunc)gdk_font_unref,
+					     TRUE);
+  return our_type;
+}
+
 GdkFont*
 gdk_font_ref (GdkFont *font)
 {

@@ -1,6 +1,7 @@
 #ifndef __GDK_EVENTS_H__
 #define __GDK_EVENTS_H__
 
+#include <gdk/gdkcolor.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkinput.h>
@@ -8,6 +9,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+#define GDK_TYPE_EVENT          (gdk_event_get_type ())
 
 #define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
 #define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
@@ -30,6 +33,7 @@ typedef struct _GdkEventProximity   GdkEventProximity;
 typedef struct _GdkEventClient	    GdkEventClient;
 typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventWindowState GdkEventWindowState;
+typedef struct _GdkEventSetting     GdkEventSetting;
 
 typedef union  _GdkEvent	    GdkEvent;
 
@@ -111,7 +115,8 @@ typedef enum
   GDK_VISIBILITY_NOTIFY = 29,
   GDK_NO_EXPOSE		= 30,
   GDK_SCROLL            = 31,
-  GDK_WINDOW_STATE      = 32
+  GDK_WINDOW_STATE      = 32,
+  GDK_SETTING           = 33
 } GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
@@ -201,6 +206,13 @@ typedef enum
   GDK_WINDOW_STATE_MAXIMIZED = 1 << 2,
   GDK_WINDOW_STATE_STICKY    = 1 << 3
 } GdkWindowState;
+
+typedef enum
+{
+  GDK_SETTING_ACTION_NEW,
+  GDK_SETTING_ACTION_CHANGED,
+  GDK_SETTING_ACTION_DELETED
+} GdkSettingAction;
 
 struct _GdkEventAny
 {
@@ -376,6 +388,14 @@ struct _GdkEventClient
   } data;
 };
 
+struct _GdkEventSetting
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkSettingAction action;
+  char *name;
+};
 
 struct _GdkEventWindowState
 {
@@ -418,7 +438,10 @@ union _GdkEvent
   GdkEventClient	    client;
   GdkEventDND               dnd;
   GdkEventWindowState       window_state;
+  GdkEventSetting           setting;
 };
+
+GType     gdk_event_get_type            (void);
 
 gboolean  gdk_events_pending	 	(void);
 GdkEvent* gdk_event_get			(void);
@@ -452,6 +475,8 @@ void gdk_add_client_message_filter (GdkAtom       message_type,
 				    GdkFilterFunc func,
 				    gpointer      data);
 
+gboolean gdk_setting_get (const gchar *name,
+			  GValue      *value); 
 
 #ifdef __cplusplus
 }

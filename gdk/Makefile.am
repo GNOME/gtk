@@ -68,7 +68,6 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkpango.h	\
 	gdkpixbuf.h	\
 	gdkpixmap.h	\
-	gdkprivate.h	\
 	gdkproperty.h	\
 	gdkregion.h	\
 	gdkrgb.h	\
@@ -76,6 +75,12 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdktypes.h	\
 	gdkvisual.h	\
 	gdkwindow.h	\
+@STRIP_END@
+
+gdk_headers = @STRIP_BEGIN@       \
+	$(gdk_public_h_sources)   \
+	gdkenumtypes.h		  \
+	gdkprivate.h		  \
 @STRIP_END@
 
 gdk_c_sources = @STRIP_BEGIN@ 	\
@@ -115,8 +120,8 @@ libgdk_x11_includedir = $(includedir)/gtk-2.0/gdk
 libgdk_x11_1_3_la_LIBADD = \
 	$(gtarget)/libgdk-$(gtarget).la	
 
-libgdk_x11_include_HEADERS = $(gdk_public_h_sources)
-libgdk_x11_1_3_la_SOURCES = $(gdk_c_sources)
+libgdk_x11_include_HEADERS = $(gdk_headers)
+libgdk_x11_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
 endif
 
 if USE_NANOX
@@ -125,8 +130,8 @@ libgdk_nanox_includedir = $(includedir)/gtk-2.0/gdk
 libgdk_nanox_1_3_la_LIBADD = \
 	$(gtarget)/libgdk-$(gtarget).la	
 
-libgdk_nanox_include_HEADERS = $(gdk_public_h_sources)
-libgdk_nanox_1_3_la_SOURCES = $(gdk_c_sources)
+libgdk_nanox_include_HEADERS = $(gdk_headers)
+libgdk_nanox_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
 endif
 
 if USE_LINUX_FB
@@ -135,8 +140,8 @@ libgdk_linux_fb_includedir = $(includedir)/gtk-2.0/gdk
 libgdk_linux_fb_1_3_la_LIBADD = \
 	$(gtarget)/libgdk-$(gtarget).la	
 
-libgdk_linux_fb_include_HEADERS = $(gdk_public_h_sources)
-libgdk_linux_fb_1_3_la_SOURCES = $(gdk_c_sources)
+libgdk_linux_fb_include_HEADERS = $(gdk_headers)
+libgdk_linux_fb_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
 endif
 
 # now define the real one to workaround automake's mishandling
@@ -173,7 +178,17 @@ install-exec-local: gdkconfig.h
 	if test -r $$file && cmp -s gdkconfig.h $$file; then :; \
 	else $(INSTALL_DATA) gdkconfig.h $$file; fi
 
-BUILT_SOURCES = stamp-gc-h #note: not gdkconfig.h
+#note: not gdkconfig.h
+BUILT_SOURCES = stamp-gc-h @REBUILD@ gdkenumtypes.c gdkenumtypes.h
+
+gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) makeenums.pl
+	cd $(srcdir) \
+	&& $(PERL) ./makeenums.pl include $(gdk_public_h_sources) > gdkenumtypes.h
+
+gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) makeenums.pl
+	cd $(srcdir) \
+	&& $(PERL) ./makeenums.pl cfile $(gdk_public_h_sources) > gdkenumtypes.c
+
 gdkconfig.h: stamp-gc-h
 	@if test -f gdkconfig.h; then :; \
 	else rm -f stamp-gc-h; $(MAKE) stamp-gc-h; fi

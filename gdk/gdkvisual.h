@@ -7,6 +7,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define GDK_TYPE_VISUAL gdk_visual_get_type
+
 /* Types of visuals.
  *   StaticGray:
  *   Grayscale:
@@ -57,6 +59,8 @@ struct _GdkVisual
   gint blue_shift;
   gint blue_prec;
 };
+
+GType         gdk_visual_get_type            (void);
 
 gint	      gdk_visual_get_best_depth	     (void);
 GdkVisualType gdk_visual_get_best_type	     (void);

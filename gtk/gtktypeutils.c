@@ -170,7 +170,7 @@ gtk_type_init (GTypeDebugFlags debug_flags)
 	  else if (builtin_info[i].parent == GTK_TYPE_BOXED)
 	    {
 	      static const gchar *copy_types[] = {
-		"GtkSelectionData", "GdkEvent", "GdkColor", "GtkBorder", "GtkTextIter", "PangoTabArray",
+		"GtkSelectionData", "GtkBorder", "GtkTextIter", "PangoTabArray",
 		"PangoFontDescription", "GtkTreeIter", "GtkTreePath", "GtkRequisition"
 	      };
 	      gboolean ref_counted = TRUE;

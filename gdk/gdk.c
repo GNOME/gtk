@@ -333,10 +333,10 @@ gdk_init_check (int    *argc,
   if (!result)
     return FALSE;
   
-  gdk_events_init ();
   gdk_visual_init ();
   _gdk_windowing_window_init ();
   _gdk_windowing_image_init ();
+  gdk_events_init ();
   gdk_input_init ();
   gdk_dnd_init ();
 

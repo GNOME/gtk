@@ -31,6 +31,8 @@
 
 #include "gdkkeysyms.h"
 
+#include "xsettings-client.h"
+
 #if HAVE_CONFIG_H
 #  include <config.h>
 #  if STDC_HEADERS
@@ -103,6 +105,15 @@ GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
 					 gpointer   data);
 
+static void gdk_xsettings_watch_cb  (Window            window,
+				     Bool              is_start,
+				     long              mask,
+				     void             *cb_data);
+static void gdk_xsettings_notify_cb (const char       *name,
+				     XSettingsAction   action,
+				     XSettingsSetting *setting,
+				     void             *data);
+
 /* Private variable declarations
  */
 
@@ -124,6 +135,8 @@ static GSourceFuncs event_funcs = {
 static GPollFD event_poll_fd;
 
 static Window wmspec_check_window = None;
+
+static XSettingsClient *xsettings_client;
 
 /*********************************************
  * Functions for maintaining the event queue *
@@ -151,6 +164,11 @@ gdk_events_init (void)
 
   gdk_add_client_message_filter (gdk_wm_protocols, 
 				 gdk_wm_protocols_filter, NULL);
+
+  xsettings_client = xsettings_client_new (gdk_display, DefaultScreen (gdk_display),
+					   gdk_xsettings_notify_cb,
+					   gdk_xsettings_watch_cb,
+					   NULL);
 }
 
 /*
@@ -1772,5 +1790,156 @@ gdk_net_wm_supports (GdkAtom property)
   return gdk_net_wm_supports (property);
 }
 
+static struct
+{
+  const char *xsettings_name;
+  const char *gdk_name;
+} settings_map[] = {
+  { "Net/DoubleClickTime", "double-click-timeout" },
+  { "Net/DragThreshold", "drag-threshold" }
+};
 
+static void
+gdk_xsettings_notify_cb (const char       *name,
+			 XSettingsAction   action,
+			 XSettingsSetting *setting,
+			 void             *data)
+{
+  GdkEvent new_event;
+  int i;
 
+  new_event.type = GDK_SETTING;
+  new_event.setting.window = NULL;
+  new_event.setting.send_event = FALSE;
+  new_event.setting.name = NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
+    if (strcmp (settings_map[i].xsettings_name, name) == 0)
+      {
+	new_event.setting.name = g_strdup (settings_map[i].gdk_name);
+	break;
+      }
+
+  if (!new_event.setting.name)
+    return;
+  
+  switch (action)
+    {
+    case XSETTINGS_ACTION_NEW:
+      new_event.setting.action = GDK_SETTING_ACTION_NEW;
+      break;
+    case XSETTINGS_ACTION_CHANGED:
+      new_event.setting.action = GDK_SETTING_ACTION_CHANGED;
+      break;
+    case XSETTINGS_ACTION_DELETED:
+      new_event.setting.action = GDK_SETTING_ACTION_DELETED;
+      break;
+    }
+
+  gdk_event_put (&new_event);
+}
+
+static gboolean
+check_transform (const gchar *xsettings_name,
+		 GType        src_type,
+		 GType        dest_type)
+{
+  if (!g_value_type_transformable (src_type, dest_type))
+    {
+      g_warning ("Cannot tranform xsetting %s of type %s to type %s\n",
+		 xsettings_name,
+		 g_type_name (src_type),
+		 g_type_name (dest_type));
+      return FALSE;
+    }
+  else
+    return TRUE;
+}
+
+gboolean
+gdk_setting_get (const gchar *name,
+		 GValue      *value)
+{
+  const char *xsettings_name = NULL;
+  XSettingsResult result;
+  XSettingsSetting *setting;
+  gboolean success = FALSE;
+  gint i;
+
+  for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
+    if (strcmp (settings_map[i].gdk_name, name) == 0)
+      {
+	xsettings_name = settings_map[i].xsettings_name;
+	break;
+      }
+
+  if (!xsettings_name)
+    return FALSE;
+
+  result = xsettings_client_get_setting (xsettings_client, xsettings_name, &setting);
+  if (result != XSETTINGS_SUCCESS)
+    return FALSE;
+
+  switch (setting->type)
+    {
+    case XSETTINGS_TYPE_INT:
+      if (check_transform (xsettings_name, G_TYPE_INT, G_VALUE_TYPE (value)))
+	{
+	  g_value_set_int (value, setting->data.v_int);
+	  success = TRUE;
+	}
+      break;
+    case XSETTINGS_TYPE_STRING:
+      if (check_transform (xsettings_name, G_TYPE_STRING, G_VALUE_TYPE (value)))
+	{
+	  g_value_set_string (value, setting->data.v_string);
+	  success = TRUE;
+	}
+      break;
+    case XSETTINGS_TYPE_COLOR:
+      if (!check_transform (xsettings_name, GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
+	{
+	  GdkColor color;
+	  
+	  color.pixel = 0;
+	  color.red = setting->data.v_color.red;
+	  color.green = setting->data.v_color.green;
+	  color.blue = setting->data.v_color.blue;
+	  
+	  g_value_set_boxed (value, &color);
+	  
+	  success = TRUE;
+	}
+      break;
+    }
+
+  xsettings_setting_free (setting);
+
+  return success;
+}
+
+GdkFilterReturn 
+gdk_xsettings_client_event_filter (GdkXEvent *xevent,
+				   GdkEvent  *event,
+				   gpointer   data)
+{
+  if (xsettings_client_process_event (xsettings_client, (XEvent *)xevent))
+    return GDK_FILTER_REMOVE;
+  else
+    return GDK_FILTER_CONTINUE;
+}
+
+static void 
+gdk_xsettings_watch_cb (Window window,
+			Bool   is_start,
+			long   mask,
+			void  *cb_data)
+{
+  GdkWindow *gdkwin;
+
+  gdkwin = gdk_window_lookup (window);
+  if (is_start)
+    gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, NULL);
+  else
+    gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, NULL);
+}

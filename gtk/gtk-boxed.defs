@@ -33,23 +33,23 @@
                                         ;  gdk_point_copy
                                         ;  gdk_point_destroy)
 
-(define-boxed GdkVisual
-  gdk_visual_ref
-  gdk_visual_unref)
+;(define-boxed GdkVisual
+;  gdk_visual_ref
+;  gdk_visual_unref)
 
-(define-boxed GdkFont
-  gdk_font_ref
-  gdk_font_unref)
+;(define-boxed GdkFont
+;  gdk_font_ref
+;  gdk_font_unref)
 
-(define-boxed GdkEvent
-  gdk_event_copy
-  gdk_event_free
-  "sizeof(GdkEvent)")
+;(define-boxed GdkEvent
+;  gdk_event_copy
+;  gdk_event_free
+;  "sizeof(GdkEvent)")
 
-(define-boxed GdkColor
-  gdk_color_copy
-  gdk_color_free
-  "sizeof(GdkColor)")
+;(define-boxed GdkColor
+;  gdk_color_copy
+;  gdk_color_free
+;  "sizeof(GdkColor)")
 
 (define-func gtk_style_get_white_interp
   GdkColor

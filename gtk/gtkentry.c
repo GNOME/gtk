@@ -430,7 +430,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 					   g_param_spec_boxed ("cursor_color",
 							       _("Cursor color"),
 							       _("Color with which to draw insertion cursor"),
-							       GTK_TYPE_GDK_COLOR,
+							       GDK_TYPE_COLOR,
 							       G_PARAM_READABLE));
 
   signals[INSERT_TEXT] =

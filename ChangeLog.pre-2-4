@@ -1,3 +1,32 @@
+Mon Apr  2 18:18:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk/gdkevents.h: Add GdkEventSetting event for notification
+	of changes to system settings, gdk_setting_get() to retrieve
+	a single system setting.
+
+	* gdk/x11/gdkevents-x11.c: Bridge gdk_setting_get() and GdkEventSetting
+	to the draft XSETTINGS mechanism.
+
+	* gdk/x11/xsettings-{common,client}.[ch]: Sample-implementation of
+	XSETTINGS.
+
+	* gtk/gtkmain.c gtk/gtksettings.[ch]: Propagate notification
+	of GDK settings changes to the GtkSettings object.
+
+	* gdk/gdkevents.[ch] gdk/gtk/gtksettings.c: Hook up the
+	double-click-timeout property to GDK.
+
+	* gdk/gdkcolor.[ch] gdk/gdkvisual.h gdk/gdkevent.[ch] gdk/gdkfont.[ch]:
+	Define GDK boxed types here.
+
+	* gdk/Makefile.am gdk/makeenums.pl: Generate source files
+	gdk/gdkenumtypes.[ch] for enum definitions.
+
+	* gtk/gtkcompat.h: Add defines for GTK_TYPE_GDK_*
+	* gtk/gtk-boxed.defs: Comment out GDK types
+	* gtk/gtktypeutils.h: Remove GDK types
+	* gtk/Makefile.am: No longer scan GDK headers for enumerataions
+
 Mon Apr  2 16:41:08 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Applied patch from Ron Steinke to add signal accumulators

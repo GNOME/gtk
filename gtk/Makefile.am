@@ -42,7 +42,6 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-lm							\
 @STRIP_END@
 
-
 #
 # setup source file variables
 #
@@ -361,26 +360,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	fnmatch.c		\
 	fnmatch.h		\
 @STRIP_END@
-# Extra headers that are used for enum type array/id generation
-gdk_headers = @STRIP_BEGIN@ 	\
-	../gdk/gdkcolor.h	\
-	../gdk/gdkcursor.h     	\
-	../gdk/gdkdnd.h		\
-	../gdk/gdkdrawable.h	\
-	../gdk/gdkevents.h	\
-	../gdk/gdkfont.h	\
-	../gdk/gdkgc.h		\
-	../gdk/gdkimage.h	\
-	../gdk/gdkinput.h	\
-	../gdk/gdkpixmap.h	\
-	../gdk/gdkproperty.h	\
-	../gdk/gdkregion.h	\
-	../gdk/gdkrgb.h		\
-	../gdk/gdkselection.h	\
-	../gdk/gdktypes.h	\
-	../gdk/gdkvisual.h	\
-	../gdk/gdkwindow.h	\
-@STRIP_END@
 
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities
@@ -448,9 +427,9 @@ gtk.defs gtkmarshal.h gtktypebuiltins.h:          # never add deps here
 # versions in the build dir. thus a development setup requires
 # srcdir to be writable, passing --disable-rebuilds to
 # ../configure will supress all autogeneration rules.
-$(srcdir)/stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_public_h_sources) $(gdk_headers)
+$(srcdir)/stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_public_h_sources)
 	cd $(srcdir) \
-	&& $(PERL) makeenums.pl defs $(gtk_public_h_sources) $(gdk_headers) > xgen-gdef \
+	&& $(PERL) makeenums.pl defs $(gtk_public_h_sources) > xgen-gdef \
 	&& cat gtk-boxed.defs >> xgen-gdef \
 	&& (cmp -s xgen-gdef gtk.defs || cp xgen-gdef gtk.defs) \
 	&& rm -f xgen-gdef \
@@ -482,9 +461,9 @@ $(srcdir)/gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic \
 	&& cp xgen-gtbic $(@F) \
 	&& rm -f xgen-gtbic
-$(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources) $(gdk_headers)
+$(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources)
 	cd $(srcdir) \
-	&& $(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) > xgen-gtbec \
+	&& $(PERL) makeenums.pl arrays $(gtk_public_h_sources) > xgen-gtbec \
 	&& cp xgen-gtbec $(@F) \
 	&& rm -f xgen-gtbec
 

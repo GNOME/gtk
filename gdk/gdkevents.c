@@ -30,11 +30,6 @@
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
 
-#define DOUBLE_CLICK_TIME      250
-#define TRIPLE_CLICK_TIME      500
-#define DOUBLE_CLICK_DIST      5
-#define TRIPLE_CLICK_DIST      5
-
 typedef enum
 {
   /* Following flag is set for events on the event queue during
@@ -83,6 +78,11 @@ gpointer       gdk_event_data = NULL;
 GDestroyNotify gdk_event_notify = NULL;
 
 GPollFD event_poll_fd;
+
+static guint double_click_time = 250;
+#define TRIPLE_CLICK_TIME      (2*double_click_time)
+#define DOUBLE_CLICK_DIST      5
+#define TRIPLE_CLICK_DIST      5
 
 /*********************************************
  * Functions for maintaining the event queue *
@@ -326,7 +326,12 @@ gdk_event_copy (GdkEvent *event)
       if (event->expose.region)
 	new_event->expose.region = gdk_region_copy (event->expose.region);
       break;
-   default:
+      
+    case GDK_SETTING:
+      new_event->setting.name = g_strdup (new_event->setting.name);
+      break;
+      
+    default:
       break;
     }
   
@@ -399,6 +404,10 @@ gdk_event_free (GdkEvent *event)
 	g_free (event->motion.axes);
       break;
       
+    case GDK_SETTING:
+      g_free (event->setting.name);
+      break;
+      
     default:
       break;
     }
@@ -464,6 +473,7 @@ gdk_event_get_time (GdkEvent *event)
       case GDK_MAP:
       case GDK_UNMAP:
       case GDK_WINDOW_STATE:
+      case GDK_SETTING:
         /* return current time */
         break;
       }
@@ -540,6 +550,7 @@ gdk_event_get_state (GdkEvent        *event,
       case GDK_MAP:
       case GDK_UNMAP:
       case GDK_WINDOW_STATE:
+      case GDK_SETTING:
         /* no state field */
         break;
       }
@@ -791,7 +802,7 @@ gdk_event_button_generate (GdkEvent *event)
       button_number[1] = -1;
       button_number[0] = -1;
     }
-  else if ((event->button.time < (button_click_time[0] + DOUBLE_CLICK_TIME)) &&
+  else if ((event->button.time < (button_click_time[0] + double_click_time)) &&
 	   (event->button.window == button_window[0]) &&
 	   (event->button.button == button_number[0]))
     {
@@ -867,3 +878,22 @@ gdk_synthesize_window_state (GdkWindow     *window,
     }
 }
 
+void
+gdk_set_double_click_time (guint msec)
+{
+  double_click_time = msec;
+}
+
+GType
+gdk_event_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GdkEvent",
+					     NULL,
+					     (GBoxedCopyFunc)gdk_event_copy,
+					     (GBoxedFreeFunc)gdk_event_free,
+					     FALSE);
+  return our_type;
+}

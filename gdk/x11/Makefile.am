@@ -70,6 +70,10 @@ libgdk_x11_la_SOURCES =    	\
 	gdkx.h		   	\
 	gdkprivate-x11.h   	\
 	gdkinputprivate.h  	\
+	xsettings-client.h	\
+	xsettings-client.c	\
+	xsettings-common.h	\
+	xsettings-common.c	\
 	$(xinput_sources)
 
 libgdkinclude_HEADERS = 	\

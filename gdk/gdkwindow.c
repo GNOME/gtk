@@ -478,8 +478,7 @@ gdk_window_add_filter (GdkWindow     *window,
   GList *tmp_list;
   GdkEventFilter *filter;
   
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
 
   private = (GdkWindowObject*) window;
   if (private && GDK_WINDOW_DESTROYED (window))
@@ -517,8 +516,7 @@ gdk_window_remove_filter (GdkWindow     *window,
   GList *tmp_list, *node;
   GdkEventFilter *filter;
   
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
 
   private = (GdkWindowObject*) window;
   
