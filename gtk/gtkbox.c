@@ -560,13 +560,16 @@ gtk_box_remove (GtkContainer *container,
 
       if (child->widget == widget)
 	{
+	  gboolean visible;
+
+	  visible = GTK_WIDGET_VISIBLE (widget);
 	  gtk_widget_unparent (widget);
 
 	  box->children = g_list_remove_link (box->children, children);
 	  g_list_free (children);
 	  g_free (child);
 
-	  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+	  if (visible && GTK_WIDGET_VISIBLE (container))
 	    gtk_widget_queue_resize (GTK_WIDGET (container));
 
 	  break;

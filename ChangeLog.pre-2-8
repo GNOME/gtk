@@ -1,3 +1,9 @@
+Tue Mar 24 03:53:18 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbox.c (gtk_box_remove): save the widgets visibility flag for
+	evaluation after the widget got destroyed, discovered by Johannes
+ 	Keukelaar <johannes@nada.kth.se>.
+
 1998-03-23  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkclist.c (gtk_clist_set_row_data_full): Select the row
