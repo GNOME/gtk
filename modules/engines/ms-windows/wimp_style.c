@@ -1113,7 +1113,6 @@ draw_box (GtkStyle      *style,
       else
         {
           gboolean is_default = !strcmp (detail, "buttondefault");
-          g_warning("BUTT");
           if (xp_theme_draw(window, is_default ? XP_THEME_ELEMENT_DEFAULT_BUTTON
                             : XP_THEME_ELEMENT_BUTTON, style, x, y,
                             width, height, state_type, area))
