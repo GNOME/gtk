@@ -1472,3 +1472,32 @@ _gtk_binding_reset_parsed (void)
       slist = next;
     }
 }
+
+guint
+_gtk_binding_signal_new (const gchar	    *signal_name,
+			 GType		     itype,
+			 GSignalFlags	     signal_flags,
+			 GCallback           handler,
+			 GSignalAccumulator  accumulator,
+			 gpointer	     accu_data,
+			 GSignalCMarshaller  c_marshaller,
+			 GType		     return_type,
+			 guint		     n_params,
+			 ...)
+{
+  va_list args;
+  guint signal_id;
+
+  g_return_val_if_fail (signal_name != NULL, 0);
+  
+  va_start (args, n_params);
+
+  signal_id = g_signal_new_valist (signal_name, itype, signal_flags,
+                                   g_cclosure_new (handler, NULL, NULL),
+				   accumulator, accu_data, c_marshaller,
+                                   return_type, n_params, args);
+
+  va_end (args);
+ 
+  return signal_id;
+}

@@ -1,3 +1,21 @@
+Sat Dec 14 14:19:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c: Add a new binding signal, "move_scroll",
+	and use it to hook up Home/End/Page_Up/Page_Down keybindings.
+	(#80484, Narayana Pattipati, Marius Andreiana)
+
+	* gtk/gtkmenu.c (gtk_menu_scroll_item_visible): Fix some
+	bugs in the computation of when an item is visible. (#99545)
+	
+	* gtk/gtkbindings.[ch] (_gtk_binding_signal_new) gtk/gtkmenushell.c:
+	Move here, export privately.
+
+	* gtk/gtkmenushell.c (_gtk_menu_shell_select_last): Export
+	privately.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_select_item): Don't
+	select the item if it is already selected.
+
 Sat Dec 14 01:51:05 2002  Chema Celorio  <chema@celorio.com>
 
 	* gtk/gtkdialog.c (gtk_dialog_add_buttons_valist): minor coding

@@ -140,6 +140,19 @@ gboolean _gtk_bindings_activate_event (GtkObject   *object,
 				       GdkEventKey *event);
 void     _gtk_binding_reset_parsed    (void);
 
+/* Creates a signal with a fixed callback instead of a class offset;
+ * useful for key binding signals
+ */
+guint _gtk_binding_signal_new (const gchar       *signal_name,
+			       GType		  itype,
+			       GSignalFlags	  signal_flags,
+			       GCallback          handler,
+			       GSignalAccumulator accumulator,
+			       gpointer		  accu_data,
+			       GSignalCMarshaller c_marshaller,
+			       GType		  return_type,
+			       guint		  n_params,
+			       ...);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

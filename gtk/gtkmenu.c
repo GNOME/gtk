@@ -32,8 +32,10 @@
 #include "gtkbindings.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
+#include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 #include "gtkhbox.h"
 #include "gtkvscrollbar.h"
@@ -72,6 +74,11 @@ struct _GtkMenuPrivate
   gboolean have_position;
   gint x;
   gint y;
+};
+
+enum {
+  MOVE_SCROLL,
+  LAST_SIGNAL
 };
 
 enum {
@@ -138,8 +145,9 @@ static void     gtk_menu_style_set         (GtkWidget        *widget,
 					    GtkStyle         *previous_style);
 static gboolean gtk_menu_focus             (GtkWidget        *widget,
 					    GtkDirectionType direction);
-static gint     gtk_menu_get_popup_delay   (GtkMenuShell    *menu_shell);
-
+static gint     gtk_menu_get_popup_delay   (GtkMenuShell     *menu_shell);
+static void     gtk_menu_real_move_scroll  (GtkMenu          *menu,
+					    GtkScrollType     type);
 
 static void     gtk_menu_stop_navigating_submenu       (GtkMenu          *menu);
 static gboolean gtk_menu_stop_navigating_submenu_cb    (gpointer          user_data);
@@ -170,6 +178,8 @@ static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 
 static GtkMenuShellClass *parent_class = NULL;
 static const gchar	 *attach_data_key = "gtk-menu-attach-data";
+
+static guint menu_signals[LAST_SIGNAL] = { 0 };
 
 GtkMenuPrivate *
 gtk_menu_get_private (GtkMenu *menu)
@@ -237,6 +247,16 @@ gtk_menu_class_init (GtkMenuClass *class)
   gobject_class->set_property = gtk_menu_set_property;
   gobject_class->get_property = gtk_menu_get_property;
 
+  menu_signals[MOVE_SCROLL] =
+    _gtk_binding_signal_new ("move_scroll",
+			     G_OBJECT_CLASS_TYPE (object_class),
+			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			     G_CALLBACK (gtk_menu_real_move_scroll),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__ENUM,
+			     G_TYPE_NONE, 1,
+			     GTK_TYPE_SCROLL_TYPE);
+  
   g_object_class_install_property (gobject_class,
                                    PROP_TEAROFF_TITLE,
                                    g_param_spec_string ("tearoff-title",
@@ -314,6 +334,46 @@ gtk_menu_class_init (GtkMenuClass *class)
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Home, 0,
+				"move_scroll", 1,
+				GTK_TYPE_SCROLL_TYPE,
+				GTK_SCROLL_START);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Home, 0,
+				"move_scroll", 1,
+				GTK_TYPE_SCROLL_TYPE,
+				GTK_SCROLL_START);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_End, 0,
+				"move_scroll", 1,
+				GTK_TYPE_SCROLL_TYPE,
+				GTK_SCROLL_END);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_End, 0,
+				"move_scroll", 1,
+				GTK_TYPE_SCROLL_TYPE,
+				GTK_SCROLL_END);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Page_Up, 0,
+				"move_scroll", 1,
+				GTK_TYPE_SCROLL_TYPE,
+				GTK_SCROLL_PAGE_UP);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Page_Up, 0,
+				"move_scroll", 1,
+				GTK_TYPE_SCROLL_TYPE,
+				GTK_SCROLL_PAGE_UP);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Page_Down, 0,
+				"move_scroll", 1,
+				GTK_TYPE_SCROLL_TYPE,
+				GTK_SCROLL_PAGE_DOWN);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Page_Down, 0,
+				"move_scroll", 1,
+				GTK_TYPE_SCROLL_TYPE,
+				GTK_SCROLL_PAGE_DOWN);
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-can-change-accels",
 						       _("Can change accelerators"),
@@ -2730,7 +2790,9 @@ gtk_menu_scroll_to (GtkMenu *menu,
       menu->tearoff_adjustment &&
       (menu->tearoff_adjustment->value != offset))
     {
-      menu->tearoff_adjustment->value = offset;
+      menu->tearoff_adjustment->value =
+	CLAMP (offset,
+	       0, menu->tearoff_adjustment->upper - menu->tearoff_adjustment->page_size);
       gtk_adjustment_value_changed (menu->tearoff_adjustment);
     }
   
@@ -2745,11 +2807,11 @@ gtk_menu_scroll_to (GtkMenu *menu,
 
   x = border_width + widget->style->xthickness;
   y = border_width + widget->style->ythickness;
-  
+
   if (!menu->tearoff_active)
     {
       last_visible = menu->upper_arrow_visible;
-      menu->upper_arrow_visible = (offset > 0);
+      menu->upper_arrow_visible = (view_height < menu_height && offset > 0);
       
       if (menu->upper_arrow_visible)
 	view_height -= MENU_SCROLL_ARROW_HEIGHT;
@@ -2763,9 +2825,9 @@ gtk_menu_scroll_to (GtkMenu *menu,
 	  if (menu->scroll_step < 0)
 	    gtk_menu_stop_scrolling (menu);
 	}
-      
+
       last_visible = menu->lower_arrow_visible;
-      menu->lower_arrow_visible = (view_height + offset < menu_height);
+      menu->lower_arrow_visible = (view_height < menu_height && offset < menu_height - view_height);
       
       if (menu->lower_arrow_visible)
 	view_height -= MENU_SCROLL_ARROW_HEIGHT;
@@ -2800,14 +2862,54 @@ gtk_menu_scroll_to (GtkMenu *menu,
   menu->scroll_offset = offset;
 }
 
+static gboolean
+compute_child_offset (GtkMenu   *menu,
+		      GtkWidget *menu_item,
+		      gint      *offset,
+		      gint      *height,
+		      gboolean  *is_last_child)
+{
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
+  GList *children;
+  gint child_offset = 0;
+
+  for (children = menu_shell->children; children; children = children->next)
+    {
+      GtkWidget *child = children->data;
+      GtkRequisition child_requisition;
+      gint child_height;
+      
+      if (GTK_WIDGET_VISIBLE (child))
+	{
+	  gtk_widget_size_request (child, &child_requisition);
+	  child_height = child_requisition.height;
+	}
+      else
+	child_height = 0;
+      
+      if (child == menu_item)
+	{
+	  if (is_last_child)
+	    *is_last_child = (children == NULL);
+	  if (offset)
+	    *offset = child_offset;
+	  if (height)
+	    *height = child_height;
+	  
+	  return TRUE;
+	}
+      
+      child_offset += child_height;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 			      GtkWidget       *menu_item)
 {
   GtkMenu *menu;
-  GtkWidget *child;
-  GList *children;
-  GtkRequisition child_requisition;
   gint child_offset, child_height;
   gint width, height;
   gint y;
@@ -2821,37 +2923,15 @@ gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
    * visible.
    */
 
-  child = NULL;
-  child_offset = 0;
-  child_height = 0;
-  children = menu_shell->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-      
-      if (GTK_WIDGET_VISIBLE (child))
-	{
-	  gtk_widget_size_request (child, &child_requisition);
-	  child_offset += child_height;
-	  child_height = child_requisition.height;
-	}
-      
-      if (child == menu_item)
-	{
-	  last_child = (children == NULL);
-	  break;
-	}
-    }
-
-  if (child == menu_item)
+  if (compute_child_offset (menu, menu_item,
+			    &child_offset, &child_height, &last_child))
     {
       y = menu->scroll_offset;
       gdk_drawable_get_size (GTK_WIDGET (menu)->window, &width, &height);
 
       height -= 2*GTK_CONTAINER (menu)->border_width + 2*GTK_WIDGET (menu)->style->ythickness;
       
-      if (child_offset + child_height <= y)
+      if (child_offset < y)
 	{
 	  /* Ignore the enter event we might get if the pointer is on the menu
 	   */
@@ -2866,7 +2946,7 @@ gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 	  if (menu->lower_arrow_visible && !menu->tearoff_active)
 	    arrow_height += MENU_SCROLL_ARROW_HEIGHT;
 	  
-	  if (child_offset >= y + height - arrow_height)
+	  if (child_offset + child_height > y + height - arrow_height)
 	    {
 	      arrow_height = 0;
 	      if (!last_child && !menu->tearoff_active)
@@ -3021,4 +3101,137 @@ gtk_menu_get_popup_delay (GtkMenuShell *menu_shell)
 		NULL);
 
   return popup_delay;
+}
+
+static gint
+get_visible_size (GtkMenu *menu)
+{
+  GtkWidget *widget = GTK_WIDGET (menu);
+  GtkContainer *container = GTK_CONTAINER (menu);
+  
+  gint menu_height = (widget->allocation.height
+		      - 2 * (container->border_width
+			     + widget->style->ythickness));
+  
+  if (menu->upper_arrow_visible && !menu->tearoff_active)
+    menu_height -= MENU_SCROLL_ARROW_HEIGHT;
+  if (menu->lower_arrow_visible && !menu->tearoff_active)
+    menu_height -= MENU_SCROLL_ARROW_HEIGHT;
+
+  return menu_height;
+}
+
+/* Find the sensitive on-screen child containing @y, or if none,
+ * the nearest selectable onscreen child. (%NULL if none)
+ */
+static GtkWidget *
+child_at (GtkMenu *menu,
+	  gint     y)
+{
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
+  GtkWidget *child = NULL;
+  gint child_offset = 0;
+  GList *children;
+  gint menu_height;
+  gint lower, upper;		/* Onscreen bounds */
+
+  menu_height = get_visible_size (menu);
+  lower = menu->scroll_offset;
+  upper = menu->scroll_offset + menu_height;
+  
+  for (children = menu_shell->children; children; children = children->next)
+    {
+      if (GTK_WIDGET_VISIBLE (children->data))
+	{
+	  GtkRequisition child_requisition;
+
+	  gtk_widget_size_request (children->data, &child_requisition);
+
+	  if (_gtk_menu_item_is_selectable (children->data) &&
+	      child_offset >= lower &&
+	      child_offset + child_requisition.height <= upper)
+	    {
+	      child = children->data;
+	      
+	      if (child_offset + child_requisition.height > y &&
+		  !GTK_IS_TEAROFF_MENU_ITEM (child))
+		return child;
+	    }
+      
+	  child_offset += child_requisition.height;
+	}
+    }
+
+  return child;
+}
+
+static void
+gtk_menu_real_move_scroll (GtkMenu       *menu,
+			   GtkScrollType  type)
+{
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
+  
+  switch (type)
+    {
+    case GTK_SCROLL_PAGE_UP:
+    case GTK_SCROLL_PAGE_DOWN:
+      {
+	gint page_size = get_visible_size (menu);
+	gint old_offset;
+	gint child_offset = 0;
+	gboolean old_upper_arrow_visible;
+	gint step;
+
+	if (type == GTK_SCROLL_PAGE_UP)
+	  step = - page_size;
+	else
+	  step = page_size;
+
+	if (menu_shell->active_menu_item)
+	  {
+	    gint child_height;
+	    
+	    compute_child_offset (menu, menu_shell->active_menu_item,
+				  &child_offset, &child_height, NULL);
+	    child_offset += child_height / 2;
+	  }
+
+	menu_shell->ignore_enter = TRUE;
+	old_upper_arrow_visible = menu->upper_arrow_visible && !menu->tearoff_active;
+	old_offset = menu->scroll_offset;
+	gtk_menu_scroll_to (menu, menu->scroll_offset + step);
+	
+	if (menu_shell->active_menu_item)
+	  {
+	    GtkWidget *new_child;
+	    gboolean new_upper_arrow_visible = menu->upper_arrow_visible && !menu->tearoff_active;
+
+	    if (menu->scroll_offset != old_offset)
+	      step = menu->scroll_offset - old_offset;
+
+	    step -= (new_upper_arrow_visible - old_upper_arrow_visible) * MENU_SCROLL_ARROW_HEIGHT;
+
+	    new_child = child_at (menu, child_offset + step);
+	    if (new_child)
+	      gtk_menu_shell_select_item (menu_shell, new_child);
+	  }
+      }
+      break;
+    case GTK_SCROLL_START:
+      /* Ignore the enter event we might get if the pointer is on the menu
+       */
+      menu_shell->ignore_enter = TRUE;
+      gtk_menu_scroll_to (menu, 0);
+      gtk_menu_shell_select_first (menu_shell, TRUE);
+      break;
+    case GTK_SCROLL_END:
+      /* Ignore the enter event we might get if the pointer is on the menu
+       */
+      menu_shell->ignore_enter = TRUE;
+      gtk_menu_scroll_to (menu, G_MAXINT);
+      _gtk_menu_shell_select_last (menu_shell, TRUE);
+      break;
+    default:
+      break;
+    }
 }

@@ -185,35 +185,6 @@ gtk_menu_shell_get_type (void)
   return menu_shell_type;
 }
 
-static guint
-binding_signal_new (const gchar	       *signal_name,
-		    GType		itype,
-		    GSignalFlags	signal_flags,
-		    GCallback           handler,
-		    GSignalAccumulator  accumulator,
-		    gpointer		accu_data,
-		    GSignalCMarshaller  c_marshaller,
-		    GType		return_type,
-		    guint		n_params,
-		    ...)
-{
-  va_list args;
-  guint signal_id;
-
-  g_return_val_if_fail (signal_name != NULL, 0);
-  
-  va_start (args, n_params);
-
-  signal_id = g_signal_new_valist (signal_name, itype, signal_flags,
-                                   g_cclosure_new (handler, NULL, NULL),
-				   accumulator, accu_data, c_marshaller,
-                                   return_type, n_params, args);
-
-  va_end (args);
- 
-  return signal_id;
-}
-
 static void
 gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 {
@@ -293,14 +264,14 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   menu_shell_signals[CYCLE_FOCUS] =
-    binding_signal_new ("cycle_focus",
-			G_OBJECT_CLASS_TYPE (object_class),
-			G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			G_CALLBACK (gtk_real_menu_shell_cycle_focus),
-			NULL, NULL,
-			_gtk_marshal_VOID__ENUM,
-			G_TYPE_NONE, 1,
-			GTK_TYPE_DIRECTION_TYPE);
+    _gtk_binding_signal_new ("cycle_focus",
+			     G_OBJECT_CLASS_TYPE (object_class),
+			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			     G_CALLBACK (gtk_real_menu_shell_cycle_focus),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__ENUM,
+			     G_TYPE_NONE, 1,
+			     GTK_TYPE_DIRECTION_TYPE);
 
 
   binding_set = gtk_binding_set_by_class (klass);
@@ -861,7 +832,9 @@ gtk_menu_shell_select_item (GtkMenuShell *menu_shell,
 
   class = GTK_MENU_SHELL_GET_CLASS (menu_shell);
 
-  if (class->select_item)
+  if (class->select_item &&
+      !(menu_shell->active &&
+	menu_shell->active_menu_item == menu_item))
     class->select_item (menu_shell, menu_item);
 }
 
@@ -1033,9 +1006,9 @@ gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
     gtk_menu_shell_select_item (menu_shell, to_select);
 }
 
-static void
-gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
-			    gboolean      search_sensitive)
+void
+_gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
+			     gboolean      search_sensitive)
 {
   GtkWidget *to_select = NULL;
   GList *tmp_list;
@@ -1134,7 +1107,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
       if (!had_selection &&
 	  !menu_shell->active_menu_item &&
 	  menu_shell->children)
-	gtk_menu_shell_select_last (menu_shell, TRUE);
+	_gtk_menu_shell_select_last (menu_shell, TRUE);
       break;
     case GTK_MENU_DIR_NEXT:
       gtk_menu_shell_move_selected (menu_shell, 1);
