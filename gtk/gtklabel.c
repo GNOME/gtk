@@ -285,7 +285,7 @@ set_markup (GtkLabel    *label,
     }
 
   if (accel_char != 0)
-    return gdk_keyval_to_lower (accel_char);
+    return gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
   else
     return GDK_VoidSymbol;
 }

@@ -2002,6 +2002,8 @@ void create_labels (void)
 
   if (!window)
     {
+      guint keyval;
+      
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
@@ -2091,21 +2093,28 @@ void create_labels (void)
       frame = gtk_frame_new ("Markup label");
       label = gtk_label_new (NULL);
 
-      gtk_label_set_markup (GTK_LABEL (label),
-                            "This <span foreground=\"blue\" background=\"orange\">label</span> has "
-                            "<b>markup</b> such as "
-                            "<big><i>Big Italics</i></big>\n"
-                            "<tt>Monospace font</tt>\n"
-                            "<u>Underline!</u>\n"
-                            "foo\n"
-                            "<span foreground=\"green\" background=\"red\">Ugly colors</span>\n"
-                            "and nothing on this line,\n"
-                            "or this.\n"
-                            "or this either\n"
-                            "or even on this one\n"
-                            "la <big>la <big>la <big>la <big>la</big></big></big></big>\n"
-                            "but this word is <span foreground=\"purple\"><big>purple</big></span>\n"
-                            "We like <sup>superscript</sup> and <sub>subscript</sub> too");
+      /* There's also a gtk_label_set_markup() without accel if you
+       * don't have an accelerator key
+       */
+      keyval =
+        gtk_label_set_markup_with_accel (GTK_LABEL (label),
+                                         "This <span foreground=\"blue\" background=\"orange\">label</span> has "
+                                         "<b>markup</b> _such as "
+                                         "<big><i>Big Italics</i></big>\n"
+                                         "<tt>Monospace font</tt>\n"
+                                         "<u>Underline!</u>\n"
+                                         "foo\n"
+                                         "<span foreground=\"green\" background=\"red\">Ugly colors</span>\n"
+                                         "and nothing on this line,\n"
+                                         "or this.\n"
+                                         "or this either\n"
+                                         "or even on this one\n"
+                                         "la <big>la <big>la <big>la <big>la</big></big></big></big>\n"
+                                         "but this _word is <span foreground=\"purple\"><big>purple</big></span>\n"
+                                         "We like <sup>superscript</sup> and <sub>subscript</sub> too");
+
+      g_return_if_fail (keyval != GDK_s);
+      
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
       
