@@ -2559,7 +2559,22 @@ void
 gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 				  gboolean   skips_taskbar)
 {
+  LONG extended_style;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  GDK_NOTE (MISC, g_print ("gdk_window_set_skip_taskbar_hint: %p %s\n",
+			   GDK_WINDOW_HWND (window),
+			   skips_taskbar ? "TRUE" : "FALSE"));
+
+  extended_style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+
+  if (skips_taskbar)
+    extended_style |= WS_EX_TOOLWINDOW;
+  else
+    extended_style &= ~WS_EX_TOOLWINDOW;
+
+  SetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE, extended_style);
 }
 
 void
@@ -2579,6 +2594,8 @@ gdk_window_set_type_hint (GdkWindow        *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  GDK_NOTE (MISC, g_print ("gdk_window_set_type_hint: %p %d\n",
+			   GDK_WINDOW_HWND (window), hint));
   switch (hint)
     {
     case GDK_WINDOW_TYPE_HINT_DIALOG:
@@ -2591,6 +2608,15 @@ gdk_window_set_type_hint (GdkWindow        *window,
 				  GDK_DECOR_MAXIMIZE);
       break;
     case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+      gdk_window_set_skip_taskbar_hint (window, TRUE);
+      break;
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+      break;
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+      break;
+    case GDK_WINDOW_TYPE_HINT_DOCK:
+      break;
+    case GDK_WINDOW_TYPE_HINT_DESKTOP:
       break;
     default:
       g_warning ("Unknown hint %d passed to gdk_window_set_type_hint", hint);
@@ -2598,11 +2624,6 @@ gdk_window_set_type_hint (GdkWindow        *window,
     case GDK_WINDOW_TYPE_HINT_NORMAL:
       break;
     }
-  /*
-   * XXX ???
-   */
-  GDK_NOTE (MISC, g_print ("gdk_window_set_type_hint: %p\n",
-			   GDK_WINDOW_HWND (window)));
 }
 
 void

@@ -1,3 +1,14 @@
+2003-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_skip_taskbar_hint):
+	Implement by setting or clearing the WS_EX_TOOLWINDOW extended
+	window style.
+	(gdk_window_set_type_hint): Add all cases to the switch (not all
+	do anything, though). Handle GDK_WINDOW_TYPE_HINT_TOOLBAR by
+	calling gdk_window_set_skip_taskbar_hint(). This means that GTK
+	won't know that the skip_taskbar hint is on for the window, is
+	this bad?
+
 Wed Jan  8 18:44:21 2003  Manish Singh  <yosh@gimp.org>
                                                                                 
 	* gdk/x11/gdkdisplay-x11.c: #include <stdlib.h> for putenv,
