@@ -107,6 +107,8 @@ GETTEXT_PACKAGE=gtk20
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
 
+AC_CANONICAL_HOST
+
 MATH_LIB=-lm
 AC_MSG_CHECKING([for native Win32])
 case "$host" in
@@ -144,8 +146,6 @@ AM_PROG_AS
 
 dnl Initialize maintainer mode
 AM_MAINTAINER_MODE
-
-AC_CANONICAL_HOST
 
 AC_MSG_CHECKING([for some Win32 platform])
 case "$host" in

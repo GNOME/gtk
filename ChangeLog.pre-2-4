@@ -1,5 +1,8 @@
 2004-03-31  Tor Lillqvist  <tml@iki.fi>
 
+	* configure.in: Move AC_CANONICAL_HOST earlier, before the check
+	for native Win32. (#136559, J. Ali Harlow)
+
 	* gdk/win32/gdkdrawable-win32.c (draw_arc): Use X11 semantics for
 	angles. Thanks to Tim Newsham.
 
