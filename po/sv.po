@@ -1,15 +1,15 @@
 # Swedish messages for GTK+.
-# Copyright (C) 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
-# Christian Rose <menthos@menthos.com>, 2000, 2001, 2002.
+# Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003.
 #
 # $Id$
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-02-02 10:11-0500\n"
-"PO-Revision-Date: 2002-12-19 00:53+0100\n"
+"POT-Creation-Date: 2003-02-05 12:15+0100\n"
+"PO-Revision-Date: 2003-02-05 12:19+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -297,7 +297,7 @@ msgstr ""
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:744
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr "JPEG-färgutrymmet stöds inte (%s)"
+msgstr "JPEG-färgrymden stöds inte (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -3754,7 +3754,7 @@ msgstr "Vänsterfäste"
 
 #: gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
-msgstr "Det kolumntal som vänster sida av barnet ska fästas vid"
+msgstr "Det kolumnnummer som vänster sida av barnet ska fästas vid"
 
 #: gtk/gtktable.c:209
 msgid "Right attachment"
@@ -3762,7 +3762,7 @@ msgstr "Högerfäste"
 
 #: gtk/gtktable.c:210
 msgid "the column number to attach the right side of a child widget to"
-msgstr "det kolumntal som höger sida av en barnwidget ska fästas vid"
+msgstr "det kolumnnummer som höger sida av en barnwidget ska fästas vid"
 
 #: gtk/gtktable.c:216
 msgid "Top attachment"
@@ -5006,7 +5006,7 @@ msgstr "Hur inmatningsmetodens statusrad ska ritas"
 #~ msgstr "Ikonstorlek"
 
 #~ msgid "The column number to attach the right side of a child widget to"
-#~ msgstr "Det kolumntal som höger sida av en barnwidget ska fästas vid"
+#~ msgstr "Det kolumnnummer som höger sida av en barnwidget ska fästas vid"
 
 #~ msgid "Whether this text is hidden."
 #~ msgstr "Huruvida denna text är dold."
