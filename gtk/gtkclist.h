@@ -473,6 +473,13 @@ void gtk_clist_unselect_row (GtkCList * clist,
  * with gtk_clist_remove */
 void gtk_clist_clear (GtkCList * clist);
 
+/* return the row column corresponding to the x and y coordinates */
+gint gtk_clist_get_selection_info (GtkCList * clist,
+			     	   gint x,
+			     	   gint y,
+			     	   gint * row,
+			     	   gint * column);
+
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */
