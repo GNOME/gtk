@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-04-13 16:43-0500\n"
+"POT-Creation-Date: 1999-05-10 22:42-0500\n"
 "PO-Revision-Date: 1999-01-31 23:04+0100\n"
 "Last-Translator: Paul Siegmann <pauls@euronet.nl>\n"
 "Language-Team: LANGUAGE <nl@li.org>\n"
@@ -43,14 +43,14 @@ msgid "Opacity:"
 msgstr "Doorschijnendheid:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3477
+#: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1678 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3490
+#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Annuleren"
@@ -342,11 +342,11 @@ msgstr "Lettertype: (Filter toegepast)"
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS overtreden. Sommige fonts kunnen ontbreken."
 
-#: gtk/gtkfontsel.c:3484
+#: gtk/gtkfontsel.c:3474
 msgid "Apply"
 msgstr "Toepassen"
 
-#: gtk/gtkfontsel.c:3506
+#: gtk/gtkfontsel.c:3496
 msgid "Font Selection"
 msgstr "Lettertype Selectie"
 
@@ -436,17 +436,17 @@ msgstr "(uitgeschakeld)"
 msgid "clear"
 msgstr "wissen"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2042 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1529
+#: gtk/gtkrc.c:1531
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
 
-#: gtk/gtkrc.c:1532
+#: gtk/gtkrc.c:1534
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan plaatjes bestand in pixmap_path: \"s\" niet vinden"

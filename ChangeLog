@@ -1,3 +1,7 @@
+Mon May 10 22:20:06 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* GTK+ is as easy as 1.2.3...
+
 Mon May 10 04:20:41 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmenushell.c (gtk_menu_shell_activate_item): propagate

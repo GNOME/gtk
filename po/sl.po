@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.2.0\n"
-"POT-Creation-Date: 1999-02-25 05:04-0600\n"
+"POT-Creation-Date: 1999-05-10 22:42-0500\n"
 "PO-Revision-Date: 1999-03-06 10:00+0100\n"
 "Last-Translator: Miha Tom¹iè <miha.tomsic@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -43,19 +43,19 @@ msgid "Opacity:"
 msgstr "Neprosojnost:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3475
+#: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "Potrdi"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3488
+#: gtk/gtkcolorsel.c:1678 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
+#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Preklièi"
 
-#: gtk/gtkcolorsel.c:1679
+#: gtk/gtkcolorsel.c:1683
 msgid "Help"
 msgstr "Pomoè"
 
@@ -197,7 +197,7 @@ msgstr "Dejanska vrednost"
 msgid "Font"
 msgstr "Pisava"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2156 gtk/gtkfontsel.c:2386
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2158 gtk/gtkfontsel.c:2388
 msgid "Font:"
 msgstr "Pisava:"
 
@@ -272,23 +272,23 @@ msgstr "Raztegnjen raster"
 msgid "regular"
 msgstr "navadno"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1948
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
 msgid "italic"
 msgstr "kurzivno"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1949
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
 msgid "oblique"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1950
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
 msgid "reverse italic"
 msgstr "obratno kurzivno"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1951
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
 msgid "reverse oblique"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1952
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
 msgid "other"
 msgstr "ostalo"
 
@@ -300,51 +300,52 @@ msgstr ""
 msgid "[C]"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1780
+#: gtk/gtkfontsel.c:1782
 msgid "The selected font is not available."
 msgstr "Izbrana pisava ni dostopna."
 
-#: gtk/gtkfontsel.c:1786
+#: gtk/gtkfontsel.c:1788
 msgid "The selected font is not a valid font."
 msgstr "Izbrana pisava je popaèena."
 
-#: gtk/gtkfontsel.c:1844
+#: gtk/gtkfontsel.c:1846
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Ta pisava uporablja dva bajtni zapis in morebiti ne bo prikazana pravilno."
+msgstr ""
+"Ta pisava uporablja dva bajtni zapis in morebiti ne bo prikazana pravilno."
 
-#: gtk/gtkfontsel.c:1936 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(neznano)"
 
-#: gtk/gtkfontsel.c:1947
+#: gtk/gtkfontsel.c:1949
 msgid "roman"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1959
+#: gtk/gtkfontsel.c:1961
 msgid "proportional"
 msgstr "proporcionalno"
 
-#: gtk/gtkfontsel.c:1960
+#: gtk/gtkfontsel.c:1962
 msgid "monospaced"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1961
+#: gtk/gtkfontsel.c:1963
 msgid "char cell"
 msgstr "celica znaka"
 
-#: gtk/gtkfontsel.c:2161
+#: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
 msgstr "Pisava: (z uporabo filtra)"
 
-#: gtk/gtkfontsel.c:2637
+#: gtk/gtkfontsel.c:2639
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS prese¾en. Nekatere pisave utegnejo manjkati."
 
-#: gtk/gtkfontsel.c:3482
+#: gtk/gtkfontsel.c:3474
 msgid "Apply"
 msgstr "Uporabi"
 
-#: gtk/gtkfontsel.c:3504
+#: gtk/gtkfontsel.c:3496
 msgid "Font Selection"
 msgstr "Izbor pisav"
 
@@ -434,17 +435,17 @@ msgstr "(onemogoèeno)"
 msgid "clear"
 msgstr "izprazni"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2042 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "%u stran"
 
-#: gtk/gtkrc.c:1529
+#: gtk/gtkrc.c:1531
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\" vrstica %d"
 
-#: gtk/gtkrc.c:1532
+#: gtk/gtkrc.c:1534
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\""

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.2\n"
-"POT-Creation-Date: 1999-04-24 23:03+0900\n"
+"POT-Creation-Date: 1999-05-10 22:42-0500\n"
 "PO-Revision-Date: 1999-04-24 23:03+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -432,7 +432,7 @@ msgstr "(사용 안함)"
 msgid "clear"
 msgstr "지움"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2042 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "페이지 %u"

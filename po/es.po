@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.14\n"
-"POT-Creation-Date: 1999-04-13 16:43-0500\n"
+"POT-Creation-Date: 1999-05-10 22:42-0500\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: \n"
@@ -44,14 +44,14 @@ msgid "Opacity:"
 msgstr "Opacidad:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3477
+#: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1678 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3490
+#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Anular"
@@ -342,11 +342,11 @@ msgstr "Fuente: (Filtro aplicado)"
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "Se excede MAX_FONTS. Algunas fuentes no serán en la lista."
 
-#: gtk/gtkfontsel.c:3484
+#: gtk/gtkfontsel.c:3474
 msgid "Apply"
 msgstr "Aplicar"
 
-#: gtk/gtkfontsel.c:3506
+#: gtk/gtkfontsel.c:3496
 msgid "Font Selection"
 msgstr "Selección de Fuentes"
 
@@ -436,18 +436,18 @@ msgstr "(desactivado)"
 msgid "clear"
 msgstr "limpiar"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2042 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
 
-#: gtk/gtkrc.c:1529
+#: gtk/gtkrc.c:1531
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\" línea %s"
 
-#: gtk/gtkrc.c:1532
+#: gtk/gtkrc.c:1534
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\""
