@@ -163,6 +163,7 @@ void       gtk_window_remove_accel_group       (GtkWindow           *window,
 void       gtk_window_set_position             (GtkWindow           *window,
 						GtkWindowPosition    position);
 gboolean   gtk_window_activate_focus	       (GtkWindow           *window);
+GtkWidget *gtk_window_get_focus                (GtkWindow           *window);
 gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 void       gtk_window_set_transient_for        (GtkWindow           *window, 

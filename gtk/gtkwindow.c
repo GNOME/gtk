@@ -1202,6 +1202,26 @@ gtk_window_activate_focus (GtkWindow *window)
   return FALSE;
 }
 
+/**
+ * gtk_window_get_focus:
+ * @window: a #GtkWindow
+ * 
+ * Retrieves the current focused widget within the window.
+ * Note that this is the widget that would have the focus
+ * if the toplevel window focused; if the toplevel window
+ * is not focused the  GTK_WIDGET_HAS_FOCUS(widget) will
+ * not be %TRUE for the widget. 
+ * 
+ * Return value: the currently focused widget.
+ **/
+GtkWidget *
+gtk_window_get_focus (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  return window->focus_widget;
+}
+
 gboolean
 gtk_window_activate_default (GtkWindow *window)
 {
