@@ -122,29 +122,39 @@ choose_better_style (XIMStyle style1, XIMStyle style2)
 static void
 setup_im (GtkXIMInfo *info)
 {
-  XIMStyles *xim_styles;
-  XIMValuesList *ic_values;
+  XIMStyles *xim_styles = NULL;
+  XIMValuesList *ic_values = NULL;
   int i;
   
   XGetIMValues (info->im,
 		XNQueryInputStyle, &xim_styles,
-		XNQueryICValuesList, &ic_values);
+		XNQueryICValuesList, &ic_values,
+		NULL);
 
   info->style = 0;
-  for (i = 0; i < xim_styles->count_styles; i++)
-    if ((xim_styles->supported_styles[i] & ALLOWED_MASK) == xim_styles->supported_styles[i])
-      info->style = choose_better_style (info->style,
-					 xim_styles->supported_styles[i]);
+  if (xim_styles)
+    {
+      for (i = 0; i < xim_styles->count_styles; i++)
+	if ((xim_styles->supported_styles[i] & ALLOWED_MASK) == xim_styles->supported_styles[i])
+	  info->style = choose_better_style (info->style,
+					     xim_styles->supported_styles[i]);
+    }
+
 
 #if 0
-  for (i = 0; i < ic_values->count_values; i++)
-    g_print ("%s\n", ic_values->supported_values[i]);
-  for (i = 0; i < xim_styles->count_styles; i++)
-    g_print ("%#x\n", xim_styles->supported_styles[i]);
+  if (ic_values)
+    {
+      for (i = 0; i < ic_values->count_values; i++)
+	g_print ("%s\n", ic_values->supported_values[i]);
+      for (i = 0; i < xim_styles->count_styles; i++)
+	g_print ("%#x\n", xim_styles->supported_styles[i]);
+    }
 #endif
 
-  XFree (xim_styles);
-  XFree (ic_values);
+  if (xim_styles)
+    XFree (xim_styles);
+  if (ic_values)
+    XFree (ic_values);
 }
 
 static GtkXIMInfo *
@@ -358,10 +368,36 @@ gtk_im_context_xim_reset (GtkIMContext *context)
   XIC ic = gtk_im_context_xim_get_ic (context_xim);
   gchar *result;
 
+  /* restore conversion state after resetting ic later */
+  XIMPreeditState preedit_state = XIMPreeditUnKnown;
+  XVaNestedList preedit_attr;
+  gboolean have_preedit_state = FALSE;
+
   if (!ic)
     return;
   
+
+  preedit_attr = XVaCreateNestedList(0,
+                                     XNPreeditState, &preedit_state,
+                                     0);
+  if (!XGetICValues(ic,
+                    XNPreeditAttributes, preedit_attr,
+                    NULL))
+    have_preedit_state = TRUE;
+
+  XFree(preedit_attr);
+
   result = XmbResetIC (ic);
+
+  preedit_attr = XVaCreateNestedList(0,
+                                     XNPreeditState, preedit_state,
+                                     0);
+  if (have_preedit_state)
+    XSetICValues(ic,
+		 XNPreeditAttributes, preedit_attr,
+		 NULL);
+
+  XFree(preedit_attr);
 
   if (result)
     {
@@ -376,7 +412,7 @@ gtk_im_context_xim_reset (GtkIMContext *context)
   if (context_xim->preedit_length)
     {
       context_xim->preedit_length = 0;
-      gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit-changed");
+      gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit_changed");
     }
 
   XFree (result);
@@ -607,7 +643,7 @@ preedit_draw_callback (XIC                           xic,
   if (new_text)
     g_free (new_text);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit-changed");
+  gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit_changed");
 }
     
 
@@ -621,7 +657,7 @@ preedit_caret_callback (XIC                            xic,
   if (call_data->direction == XIMAbsolutePosition)
     {
       context->preedit_cursor = call_data->position;
-      gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit-changed");
+      gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit_changed");
     }
   else
     {
@@ -672,9 +708,9 @@ static XIC
 gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 {
   const char *name1 = NULL;
-  XVaNestedList *list1 = NULL;
+  XVaNestedList list1 = NULL;
   const char *name2 = NULL;
-  XVaNestedList *list2 = NULL;
+  XVaNestedList list2 = NULL;
 
   if (!context_xim->ic && context_xim->client_window)
     {
@@ -700,7 +736,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 
       if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusCallbacks)
 	{
-	  XVaNestedList *status_attrs;
+	  XVaNestedList status_attrs;
 	  
 	  context_xim->status_start_callback.client_data = (XPointer)context_xim;
 	  context_xim->status_start_callback.callback = (XIMProc)status_start_callback;
