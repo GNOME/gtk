@@ -167,8 +167,8 @@ dates_difference(N_int year1, N_int mm1, N_int dd1,
 #define CALENDAR_XSEP		 4
 #define INNER_BORDER		 4
 
-#define DAY_XPAD		 2
-#define DAY_YPAD		 2
+#define DAY_XPAD		 1
+#define DAY_YPAD		 1
 #define DAY_XSEP		 0 /* not really good for small calendar */
 #define DAY_YSEP		 0 /* not really good for small calendar */
 
@@ -1150,9 +1150,12 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   gint calendar_margin = CALENDAR_MARGIN;
   gint header_width, main_width;
   gint max_header_height = 0;
+  gint focus_width;
   
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
+  gtk_widget_style_get (GTK_WIDGET (widget), "focus-line-width", 
+			&focus_width, NULL);
 
   layout = gtk_widget_create_pango_layout (widget, NULL);
   
@@ -1203,6 +1206,9 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   
   private_data->max_day_char_width = 0;
   private_data->min_day_width = 0;
+  private_data->max_label_char_ascent = 0;
+  private_data->max_label_char_descent = 0;
+
   for (i = 0; i < 9; i++)
     {
       sprintf (buffer, "%d%d", i, i);
@@ -1243,7 +1249,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 						 logical_rect.width / 2);
       }
   
-  main_width = (7 * (private_data->min_day_width + DAY_XPAD * 2) + (DAY_XSEP * 6) + CALENDAR_MARGIN * 2
+  main_width = (7 * (private_data->min_day_width + DAY_XPAD * 2 + focus_width * 2) + (DAY_XSEP * 6) + CALENDAR_MARGIN * 2
 		+ (private_data->max_week_char_width
 		   ? private_data->max_week_char_width * 2 + DAY_XPAD * 2 + CALENDAR_XSEP * 2
 		   : 0));
@@ -1268,7 +1274,8 @@ gtk_calendar_size_request (GtkWidget	  *widget,
     {
       private_data->day_name_h = (private_data->max_label_char_ascent
 				  + private_data->max_label_char_descent
-				  + 2 * DAY_YPAD + calendar_margin);
+				  + 2 * DAY_YPAD + calendar_margin 
+				  + 2 * focus_width);
       calendar_margin = CALENDAR_YSEP;
     } 
   else
@@ -1279,7 +1286,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   private_data->main_h = (CALENDAR_MARGIN + calendar_margin
 			  + 6 * (private_data->max_day_char_ascent
 				 + private_data->max_day_char_descent 
-				 + DAY_YPAD * 2)
+				 + DAY_YPAD * 2 + focus_width * 2)
 			  + DAY_YSEP * 5);
   
   /* 
@@ -1292,7 +1299,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 				  (CALENDAR_MARGIN + calendar_margin
 				   + 6 * (private_data->max_day_char_ascent 
 					  + private_data->max_day_char_descent 
-					  + DAY_YPAD * 2)
+					  + DAY_YPAD * 2 + focus_width * 2)
 				   + DAY_YSEP * 5));
     }
   
@@ -1733,6 +1740,8 @@ gtk_calendar_paint_day (GtkWidget *widget,
   gint y_top;
   gint y_loc;
   gint day_xspace;
+  gint focus_width;
+
   GtkCalendarPrivateData *private_data;
   PangoLayout *layout;
   PangoRectangle logical_rect;
@@ -1753,6 +1762,8 @@ gtk_calendar_paint_day (GtkWidget *widget,
       return;
     }
   
+  gtk_widget_style_get (widget, "focus-line-width", &focus_width, NULL);
+
   day_height = row_height (calendar);
   
   day_xspace = private_data->day_width - private_data->max_day_char_width*2;
@@ -1823,9 +1834,14 @@ gtk_calendar_paint_day (GtkWidget *widget,
   if (GTK_WIDGET_HAS_FOCUS (calendar) 
       && calendar->focus_row == row && calendar->focus_col == col)
     {
-      gdk_draw_rectangle (private_data->main_win, calendar->xor_gc, 
-			  FALSE, x_left, y_top,
-			  private_data->day_width-1, day_height-1);
+      gtk_paint_focus (widget->style, 
+		       private_data->main_win,
+		       (calendar->selected_day == day) 
+		          ? GTK_STATE_SELECTED : GTK_STATE_NORMAL, 
+		       NULL, widget, "calendar-day",
+		       x_left, y_top, 
+		       private_data->day_width, 
+		       day_height);
     }
 
   g_object_unref (G_OBJECT (layout));

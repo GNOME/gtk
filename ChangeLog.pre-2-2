@@ -1,3 +1,12 @@
+Wed Feb 13 23:01:20 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c: Patch from Bill Haneman to draw
+	to focus using gtk_paint_focus() with the focus width
+	GtkWidget::focus-width. (#63075)
+
+	* gtk/gtkcalendar.c (gtk_calendar_size_request): Initialize
+	label_char_ascent/descent to 0. (#56925)
+
 2002-02-13  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_flush_scroll): validate a
