@@ -3418,6 +3418,14 @@ paste_received (GtkClipboard *clipboard,
   if (text)
     {
       gint pos, start, end;
+      GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+
+      if (completion)
+	{
+	  g_signal_handler_block (entry, completion->priv->changed_id);
+	  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
+	    _gtk_entry_completion_popdown (completion);
+	}
       
       if (gtk_editable_get_selection_bounds (editable, &start, &end))
         gtk_editable_delete_text (editable, start, end);
@@ -3425,6 +3433,9 @@ paste_received (GtkClipboard *clipboard,
       pos = entry->current_pos;
       gtk_editable_insert_text (editable, text, -1, &pos);
       gtk_editable_set_position (editable, pos);
+
+      if (completion)
+	g_signal_handler_unblock (entry, completion->priv->changed_id);
     }
 
   g_object_unref (entry);
@@ -4632,7 +4643,7 @@ gtk_entry_completion_timeout (gpointer data)
 
   completion->priv->completion_timeout = 0;
 
-  if (strlen (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)))
+  if (g_utf8_strlen (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)), -1)
       >= completion->priv->minimum_key_length)
     {
       gint matches;
