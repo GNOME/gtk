@@ -615,9 +615,31 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 					   width, height, width * 4,
 					   NULL, NULL);
 
-	gdk_pixbuf_render_to_drawable (pixbuf, drawable, 0, 0, 0, 0, width, height,
-				       GDK_RGB_DITHER_MAX, x, y);
+	gdk_pixbuf_render_to_drawable_alpha (pixbuf, drawable,
+					     0, 0,
+					     0, 0,
+					     width, height,
+					     GDK_PIXBUF_ALPHA_BILEVEL,
+					     127,
+					     GDK_RGB_DITHER_MAX,
+					     x, y);
 
 	gdk_pixbuf_unref (pixbuf);
 	g_free (buf);
+}
+
+
+
+/* Point handler for the pixbuf canvas item */
+static double
+gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double y, int cx, int cy,
+			   GnomeCanvasItem **actual_item)
+{
+	GnomeCanvasPixbuf *gcp;
+	PixbufPrivate *priv;
+
+	gcp = GNOME_CANVAS_PIXBUF (item);
+	priv = gcp->priv;
+
+	
 }
