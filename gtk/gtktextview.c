@@ -2286,9 +2286,17 @@ gtk_text_view_size_request (GtkWidget      *widget,
     focus_edge_width = 0;
   else
     focus_edge_width = 1;
-  
-  text_view->text_window->requisition.width = text_view->layout->width;
-  text_view->text_window->requisition.height = text_view->layout->height;
+
+  if (text_view->layout)
+    {
+      text_view->text_window->requisition.width = text_view->layout->width;
+      text_view->text_window->requisition.height = text_view->layout->height;
+    }
+  else
+    {
+      text_view->text_window->requisition.width = 0;
+      text_view->text_window->requisition.height = 0;
+    }
   
   requisition->width = text_view->text_window->requisition.width + focus_edge_width * 2;
   requisition->height = text_view->text_window->requisition.height + focus_edge_width * 2;
