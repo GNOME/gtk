@@ -1,3 +1,15 @@
+Fri Feb 12 15:47:20 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalender.c gtk/gtkentry.c gtk/gtkhandlebox.c
+	  gtk/gtknotebook.c gtk/gtktext.c  gtk/gtkviewport.c 
+	  gtk/gtkwidget.c: 
+
+	 When setting styles, remove unecessary explicits draws 
+	 and clears.
+
+	* gtk/gtkrange.c: Ugly fix so the steps get the
+	 correct background.
+	 
 Mon Feb 15 22:55:50 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Updated for 1.1.16.

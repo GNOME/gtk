@@ -1396,7 +1396,6 @@ gtk_notebook_style_set (GtkWidget *widget,
 	gdk_window_clear (widget->window);
     }
 
-  gtk_widget_queue_draw (widget);
   gtk_notebook_set_shape (GTK_NOTEBOOK(widget));
 }
 

@@ -2263,9 +2263,6 @@ gtk_entry_style_set	(GtkWidget      *widget,
       gtk_entry_update_ic_attr (widget);
 #endif
     }
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_widget_queue_clear(widget);
 }
 
 static void

@@ -1427,9 +1427,6 @@ gtk_text_style_set	(GtkWidget      *widget,
   if (text->current_font)
     text_font_unref (text->current_font);
   text->current_font = get_text_font (widget->style->font);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear (widget->window);
 }
 
 static void

@@ -49,10 +49,12 @@ struct _GtkPaned
   GdkWindow *handle;
   GdkRectangle groove_rectangle;
   GdkGC *xor_gc;
-  
+
+  /*< public >*/
   guint16 handle_size;
   guint16 gutter_size;
-  
+
+  /*< private >*/
   gint child1_size;
   gint last_allocation;
   gint min_position;

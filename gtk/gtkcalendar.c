@@ -2562,8 +2562,6 @@ gtk_calendar_set_background (GtkWidget *widget)
 	gdk_window_set_background (widget->window,
 				   BACKGROUND_COLOR (widget)); 
     }
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear (widget->window);
 }
 
 static void

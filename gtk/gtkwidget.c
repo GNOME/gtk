@@ -3456,11 +3456,7 @@ gtk_widget_style_set (GtkWidget *widget,
 {
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
-    {
-      gtk_style_set_background (widget->style, widget->window, widget->state);
-      if (GTK_WIDGET_DRAWABLE (widget))
-	gdk_window_clear (widget->window);
-    }
+    gtk_style_set_background (widget->style, widget->window, widget->state);
 }
 
 static void

@@ -445,8 +445,6 @@ gtk_handle_box_style_set (GtkWidget *widget,
 widget->state);
       gtk_style_set_background (widget->style, hb->bin_window, widget->state);
       gtk_style_set_background (widget->style, hb->float_window, widget->state);
-      if (GTK_WIDGET_DRAWABLE (widget))
-	gdk_window_clear (widget->window);
     }
 }
 

@@ -838,10 +838,5 @@ gtk_viewport_style_set (GtkWidget *widget,
 	
 	gtk_style_set_background (widget->style, viewport->bin_window, GTK_STATE_NORMAL);
 	gtk_style_set_background (widget->style, widget->window, widget->state);
-	if (GTK_WIDGET_DRAWABLE (widget))
-	  {
-	     gdk_window_clear (widget->window);
-	     gdk_window_clear (viewport->bin_window);
-	  }
      }
 }

@@ -1561,10 +1561,21 @@ gtk_range_style_set (GtkWidget *widget,
       if (range->slider)
 	gtk_style_set_background (widget->style, range->slider, GTK_STATE_NORMAL);
       
+      /* The backgrounds of the step_forw and step_back never actually
+       * get drawn in draw calls, so we call gdk_window_clear() here
+       * so they get the correct colors. This is a hack. OWT.
+       */
+
       if (range->step_forw)
-	gtk_style_set_background (widget->style, range->step_forw, GTK_STATE_ACTIVE);
+	{
+	  gtk_style_set_background (widget->style, range->step_forw, GTK_STATE_ACTIVE);
+	  gdk_window_clear (range->step_forw);
+	}
 
       if (range->step_back)
-	gtk_style_set_background (widget->style, range->step_back, GTK_STATE_ACTIVE);
+	{
+	  gtk_style_set_background (widget->style, range->step_back, GTK_STATE_ACTIVE);
+	  gdk_window_clear (range->step_back);
+	}
     }
 }
