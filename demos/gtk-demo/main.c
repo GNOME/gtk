@@ -43,7 +43,7 @@ gchar *
 demo_find_file (const char *base,
 		GError    **err)
 {
-  g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
+  g_return_val_if_fail (err == NULL || *err == NULL, NULL);
   
   if (g_file_test (base, G_FILE_TEST_EXISTS))
     return g_strdup (base);

@@ -4091,8 +4091,8 @@ gtk_ctree_find_node_ptr (GtkCTree    *ctree,
 {
   GtkCTreeNode *node;
   
-  g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
-  g_return_val_if_fail (ctree_row != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
+  g_return_val_if_fail (ctree_row != NULL, NULL);
   
   if (ctree_row->parent)
     node = GTK_CTREE_ROW (ctree_row->parent)->children;

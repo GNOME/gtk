@@ -203,7 +203,7 @@ gtk_text_mark_get_buffer (GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
 
-  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), NULL);
 
   seg = mark->segment;
 

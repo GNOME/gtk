@@ -122,7 +122,7 @@ gtk_editable_get_chars (GtkEditable *editable,
 			gint         start,
 			gint         end)
 {
-  g_return_val_if_fail (GTK_IS_EDITABLE (editable), FALSE);
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), NULL);
 
   return GTK_EDITABLE_GET_CLASS (editable)->get_chars (editable, start, end);
 }
