@@ -495,6 +495,8 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
   GdkImagePrivateX11 *private;
   GdkDrawableImplX11 *impl;
   GdkVisual *visual;
+  GdkDisplay *display;
+  Display *xdisplay;
   gboolean have_grab;
   GdkRectangle req;
   GdkRectangle window_rect;
@@ -506,13 +508,16 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
 
   visual = gdk_drawable_get_visual (drawable);
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  display = gdk_drawable_get_display (drawable);
+  xdisplay = gdk_x11_display_get_xdisplay (display);
+  
   
   have_grab = FALSE;
 
 #define UNGRAB() G_STMT_START {					\
     if (have_grab) {						\
-      gdk_x11_display_ungrab (GDK_DRAWABLE_DISPLAY (drawable)); \
-      XFlush (GDK_DRAWABLE_DISPLAY (drawable)); 		\
+      gdk_x11_display_ungrab (display);				\
+      XFlush (xdisplay);					\
       have_grab = FALSE; }					\
   } G_STMT_END
 
@@ -524,7 +529,6 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
       shm_pixmap = _gdk_x11_image_get_shm_pixmap (image);
       if (shm_pixmap)
 	{
-	  Display *xdisplay = GDK_SCREEN_XDISPLAY (impl->screen);
 	  GC xgc;
 	  XGCValues values;
 
@@ -553,18 +557,18 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
       Window child;
 
       have_grab = TRUE;
-      gdk_x11_display_grab (gdk_screen_get_display (impl->screen));
+      gdk_x11_display_grab (display);
 
       /* Translate screen area into window coordinates */
-      XTranslateCoordinates (GDK_SCREEN_XDISPLAY (impl->screen),
+      XTranslateCoordinates (xdisplay,
 			     GDK_SCREEN_XROOTWIN (impl->screen),
 			     impl->xid,
 			     0, 0, 
 			     &screen_rect.x, &screen_rect.y, 
 			     &child);
 
-      screen_rect.width = gdk_screen_get_width (visual->screen);
-      screen_rect.height = gdk_screen_get_height (visual->screen);
+      screen_rect.width = gdk_screen_get_width (impl->screen);
+      screen_rect.height = gdk_screen_get_height (impl->screen);
       
       gdk_error_trap_push ();
 
@@ -633,8 +637,7 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
       /* In the ShmImage but no ShmPixmap case, we could use XShmGetImage when
        * we are getting the entire image.
        */
-      if (XGetSubImage (GDK_SCREEN_XDISPLAY (impl->screen),
-			impl->xid,
+      if (XGetSubImage (xdisplay, impl->xid,
 			req.x, req.y, req.width, req.height,
 			AllPlanes, ZPixmap,
 			private->ximage,
@@ -651,8 +654,8 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
   
   if (have_grab)
     {				
-      gdk_x11_display_ungrab (gdk_drawable_get_display (drawable));
-      XFlush (GDK_DRAWABLE_XDISPLAY (drawable));
+      gdk_x11_display_ungrab (display);
+      XFlush (xdisplay);
       have_grab = FALSE;
     }
   
