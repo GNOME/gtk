@@ -53,7 +53,7 @@ expected that this function will be removed, but
 it would be better practice not to use it.
 </para>
 
-@max: the new maximum length.
+@max: the new maximum length or 0 if the maximum length should be infinite..
 @Returns: a new #GtkEntry.
 
 
@@ -176,7 +176,7 @@ to fit.
 </para>
 
 @entry: a #GtkEntry.
-@max: the new maximum length.
+@max: the new maximum length or 0 if the maximum length should be infinite.
 
 
 <!-- ##### FUNCTION gtk_entry_get_activates_default ##### -->
