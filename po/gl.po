@@ -151,7 +151,7 @@ msgstr "Inclinación:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Ancho:"
+msgstr "Largura:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
@@ -179,7 +179,7 @@ msgstr "Espacio:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Ancho Medio:"
+msgstr "Largura Media:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
