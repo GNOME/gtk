@@ -64,6 +64,10 @@
 #include "x11/gdkx.h"
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkwin32.h"
+#endif
+
 #include "gtkalias.h"
 
 #undef DEBUG_SELECTION
@@ -750,6 +754,9 @@ gtk_selection_add_target (GtkWidget	    *widget,
 
   list = gtk_selection_target_list_get (widget, selection);
   gtk_target_list_add (list, target, 0, info);
+#ifdef GDK_WINDOWING_WIN32
+  gdk_win32_selection_add_targets (widget->window, selection, 1, &target);
+#endif
 }
 
 /**
@@ -776,6 +783,18 @@ gtk_selection_add_targets (GtkWidget            *widget,
   
   list = gtk_selection_target_list_get (widget, selection);
   gtk_target_list_add_table (list, targets, ntargets);
+
+#ifdef GDK_WINDOWING_WIN32
+  {
+    int i;
+    GdkAtom *atoms = g_new (GdkAtom, ntargets);
+
+    for (i = 0; i < ntargets; ++i)
+      atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
+    gdk_win32_selection_add_targets (widget->window, selection, ntargets, atoms);
+    g_free (atoms);
+  }
+#endif
 }
 
 

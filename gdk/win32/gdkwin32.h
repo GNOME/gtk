@@ -79,6 +79,11 @@ void          gdk_win32_hdc_release  (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkGCValuesMask usage);
 
+void          gdk_win32_selection_add_targets (GdkWindow  *owner,
+					       GdkAtom     selection,
+					       gint	   n_targets,
+					       GdkAtom    *targets);
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_H__ */

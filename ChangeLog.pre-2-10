@@ -1,3 +1,46 @@
+2005-04-04  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkmain.c (_gdk_win32_cf_to_string): New debugging
+	function, to log a clipboard format name symbolically.
+	(_gdk_win32_data_to_string): Also new, to log random data bytes.
+
+	Implement delayed rendering on Win32, specifically for transfering
+	images through the clipboard from GTK+ apps to other
+	apps (#168173, implementation by Ivan Wong):
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): 
+	Handle WM_RENDERFORMAT.
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c: Add _format_atom_table,
+	_delayed_rendering_data and _image_bmp.
+
+	* gdk/win32/gdkmain-win32.c: Initialize _image_bmp.
+
+	* gdk/win32/gdkproperty-win32.c (gdk_property_change):
+	Accept formats other than GDK_TARGET_STRING or _utf8_string, and
+	assume they are handled through delayed rendering.
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert):
+	Return all available formats (including those registered by GTK+
+	apps) on request_targets.
+	(gdk_selection_property_get): We should append a zero byte like
+	X11 does.
+	(gdk_win32_selection_add_targets): New function, for
+	gtkselection's use. Win32 requires that the clipboard owner
+	registers all valid formats even if the owner wants delayed
+	rendering.
+	(_gdk_win32_selection_convert_to_dib): New function. Convert
+	images to DIB using gdk-pixbuf.
+
+	* gdk/win32/gdkwin32.h: Declare gdk_win32_selection_add_targets().
+
+	* gtk/gtkselection.c (gtk_selection_add_target,
+	gtk_selection_add_targets): Call gdk_win32_selection_add_targets()
+	to register target formats.
+
+	* gdk/gdk.symbols: Add gdk_win32_selection_add_targets().
+
 2005-04-03  Hans Breuer  <hans@breuer.org>
 
 	[merged from gtk-2-6 branch]

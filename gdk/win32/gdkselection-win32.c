@@ -60,6 +60,7 @@ _gdk_win32_selection_init (void)
 {
   sel_prop_table = g_hash_table_new (NULL, NULL);
   sel_owner_table = g_hash_table_new (NULL, NULL);
+  _format_atom_table = g_hash_table_new (NULL, NULL);
 }
 
 /* The specifications for COMPOUND_TEXT and STRING specify that C0 and
@@ -350,52 +351,55 @@ gdk_selection_convert (GdkWindow *requestor,
 
   if (selection == GDK_SELECTION_CLIPBOARD && target == _targets)
     {
-      /* He wants to know what formats are on the clipboard.  If there
+      gint formats_cnt, i, fmt;
+      GdkAtom *data;
+      gboolean has_bmp = FALSE;
+
+      /* He wants to know what formats are on the clipboard. If there
        * is some kind of text, tell him so.
        */
       if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
 	return;
 
+      formats_cnt = CountClipboardFormats ();
+      data = g_new (GdkAtom, formats_cnt + 2);
+      i = 0;
+
       if (IsClipboardFormatAvailable (CF_UNICODETEXT) ||
 	  IsClipboardFormatAvailable (_cf_utf8_string) ||
 	  IsClipboardFormatAvailable (CF_TEXT))
 	{
-	  GdkAtom *data = g_new (GdkAtom, 1);
-	  *data = _utf8_string;
-	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
-					 32, (guchar *) data, 1 * sizeof (GdkAtom));
+	  data[i++] = _utf8_string;
 	}
-      else if (IsClipboardFormatAvailable (CF_BITMAP) ||
-               IsClipboardFormatAvailable (CF_DIB))
-	{
-	  GdkAtom *data = g_new (GdkAtom, 1);
-	  GdkAtom atom = gdk_atom_intern ("image/bmp", FALSE);
-          *data = atom;
-	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
-					 32, (guchar *) data, 1 * sizeof (GdkAtom));
-	}
-      else if (CountClipboardFormats() > 0)
+      if (formats_cnt > 0)
         {
-          /* if there is anything else in the clipboard, enum it all although we don't 
-           * offer special conversion services 
+          /* If there is anything else in the clipboard, enum it all
+           * although we don't offer special conversion services.
            */
-          int fmt = 0, i = 0;
-	  GdkAtom *data = g_new (GdkAtom, CountClipboardFormats());
-
-          for ( ; 0 != (fmt = EnumClipboardFormats (fmt)); )
+          for (fmt = 0; 0 != (fmt = EnumClipboardFormats (fmt)); )
             {
-              char sFormat[80];
+              gchar sFormat[80];
 
-              if (GetClipboardFormatName (fmt, sFormat, 80) > 0)
+              if (GetClipboardFormatName (fmt, sFormat, 80) > 0 &&
+		  strcmp (sFormat, "UTF8_STRING"))
                 {
+		  if (!has_bmp &&
+		      (!strcmp (sFormat, "image/bmp") ||
+		       !strcmp (sFormat, "image/x-bmp") ||
+		       !strcmp (sFormat, "image/x-MS-bmp")))
+		    has_bmp = TRUE;
                   GdkAtom atom = gdk_atom_intern (sFormat, FALSE);
-                  data[i] = atom;
-                  i++;
+                  data[i++] = atom;
                 }
             }
+        }
+      if (!has_bmp && (IsClipboardFormatAvailable (CF_BITMAP) ||
+		       IsClipboardFormatAvailable (CF_DIB)))
+	data[i++] = _image_bmp;
+
+      if (i > 0)
 	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
 					 32, (guchar *) data, i * sizeof (GdkAtom));
-        }
       else             
 	property = GDK_NONE;
 
@@ -542,21 +546,42 @@ gdk_selection_convert (GdkWindow *requestor,
       API_CALL (CloseClipboard, ());
     }
   else if (selection == GDK_SELECTION_CLIPBOARD &&
-           target == gdk_atom_intern ("image/bmp", TRUE))
+           target == _image_bmp)
     {
+      guchar *data;
+
       if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
 	return;
-      if ((hdata = GetClipboardData (CF_DIB)) != NULL)
+      if ((hdata = GetClipboardData (RegisterClipboardFormat ("image/bmp"))) != NULL)
+	{
+	  /* "image/bmp" is the first choice. */
+	  guchar *ptr;
+
+	  if ((ptr = GlobalLock (hdata)) != NULL)
+	    {
+	      gint length = GlobalSize (hdata);
+      
+	      GDK_NOTE (DND, g_print ("...BITMAP (from \"image/bmp\": %d bytes\n",
+				      length));
+      
+	      _gdk_selection_property_store (requestor, target, 8,
+					     g_memdup (ptr, length), length);
+	      GlobalUnlock (hdata);
+	    }
+	}
+      else if ((hdata = GetClipboardData (CF_DIB)) != NULL)
         {
+	  /* If there's CF_DIB but not "image/bmp", the clipboard
+	   * owner is probably a native Win32 application.
+	   */
           BITMAPINFOHEADER *ptr;
-          guchar *data;
 
           if ((ptr = GlobalLock (hdata)) != NULL)
             {
-              BITMAPFILEHEADER *hdr; /* need to add a file header so gdk-pixbuf can load it */
-	      gint length = GlobalSize (hdata) + sizeof(BITMAPFILEHEADER);
+              BITMAPFILEHEADER *hdr; /* Need to add a file header so gdk-pixbuf can load it */
+	      gint length = GlobalSize (hdata) + sizeof (BITMAPFILEHEADER);
 	      
-	      GDK_NOTE (DND, g_print ("... BITMAP: %d bytes\n", length));
+	      GDK_NOTE (DND, g_print ("... BITMAP (from CF_DIB): %d bytes\n", length));
 	      
               data = g_try_malloc (length);
               if (data)
@@ -564,16 +589,16 @@ gdk_selection_convert (GdkWindow *requestor,
                   hdr = (BITMAPFILEHEADER *)data;
                   hdr->bfType = 0x4d42; /* 0x42 = "B" 0x4d = "M" */
                   /* Compute the size of the entire file. */
-                  hdr->bfSize = (DWORD) (sizeof(BITMAPFILEHEADER)
+                  hdr->bfSize = (DWORD) (sizeof (BITMAPFILEHEADER)
                         + ptr->biSize + ptr->biClrUsed
-			* sizeof(RGBQUAD) + ptr->biSizeImage);
+			* sizeof (RGBQUAD) + ptr->biSizeImage);
                   hdr->bfReserved1 = 0;
                   hdr->bfReserved2 = 0;
                   /* Compute the offset to the array of color indices. */
-                  hdr->bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER)
+                  hdr->bfOffBits = (DWORD) sizeof (BITMAPFILEHEADER)
                         + ptr->biSize + ptr->biClrUsed * sizeof (RGBQUAD);
-                  /* copy the data behind it */
-                  memcpy (data + sizeof(BITMAPFILEHEADER), ptr, length - sizeof(BITMAPFILEHEADER));
+                  /* Copy the data behind it */
+                  memcpy (data + sizeof (BITMAPFILEHEADER), ptr, length - sizeof (BITMAPFILEHEADER));
 	          _gdk_selection_property_store (requestor, target, 8,
 					         data, length);
                 }
@@ -591,7 +616,12 @@ gdk_selection_convert (GdkWindow *requestor,
 
       if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
 	return;
-      /* check if its available */
+      /* Check if it's available. In fact, we can simply call
+       * GetClipboardData (RegisterClipboardFormat (targetname)), but
+       * the global custom format ID space is limited,
+       * (0xC000~0xFFFF), and we better not waste an format ID if we
+       * are just a requestor.
+       */
       for ( ; 0 != (fmt = EnumClipboardFormats (fmt)); )
         {
           char sFormat[80];
@@ -601,7 +631,7 @@ gdk_selection_convert (GdkWindow *requestor,
             {
               if ((hdata = GetClipboardData (fmt)) != NULL)
 	        {
-	          /* simply get it without conversion */
+	          /* Simply get it without conversion */
                   guchar *ptr;
                   gint length;
 
@@ -673,7 +703,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
       return 0;
     }
 
-  *data = g_malloc (prop->length);
+  *data = g_malloc (prop->length + 1);
+  (*data)[prop->length] = '\0';
   if (prop->length > 0)
     memmove (*data, prop->data, prop->length);
 
@@ -713,7 +744,6 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
                                        GdkAtom     property,
                                        guint32     time)
 {
-  GdkEvent tmp_event;
   gchar *sel_name, *tgt_name, *prop_name;
 
   g_return_if_fail (display == _gdk_display);
@@ -967,4 +997,175 @@ gdk_free_compound_text (guchar *ctext)
    * NULL returned for conversions to COMPOUND_TEXT above.
    */
   g_return_if_fail (ctext == NULL);
+}
+
+void
+gdk_win32_selection_add_targets (GdkWindow  *owner,
+				 GdkAtom     selection,
+				 gint	     n_targets,
+				 GdkAtom    *targets)
+{
+  HWND hwnd;
+  const gchar *target_name;
+  guint formatid;
+  gint i;
+  GSList *convertable_formats, *format;
+  gboolean has_set_dib = FALSE, has_real_dib = FALSE;
+
+  if (selection != GDK_SELECTION_CLIPBOARD)
+    return;
+
+  if (owner != NULL)
+    {
+      if (GDK_WINDOW_DESTROYED (owner))
+	return;
+      hwnd = GDK_WINDOW_HWND (owner);
+    }
+
+  if (!API_CALL (OpenClipboard, (hwnd)))
+    return;
+
+  convertable_formats = gdk_pixbuf_get_formats ();
+  for (i = 0; i < n_targets; ++i)
+    {
+      if (targets[i] == _utf8_string)
+	continue;
+
+      target_name = gdk_atom_name (targets[i]);
+      if (!(formatid = RegisterClipboardFormat (target_name))) {
+	WIN32_API_FAILED ("RegisterClipboardFormat");
+	API_CALL (CloseClipboard, ());
+	return;
+      }
+      g_hash_table_replace (_format_atom_table, GINT_TO_POINTER (formatid), targets[i]);
+      SetClipboardData (formatid, NULL);
+
+      /* We should replace the previous image format associated with
+       * CF_DIB with "image/bmp" if we find "image/bmp", "image/x-bmp"
+       * or "image/x-MS-bmp" is available.
+       */
+      if (!has_real_dib &&
+	  (!strcmp (target_name, "image/bmp") ||
+	   !strcmp (target_name, "image/x-bmp") ||
+	   !strcmp (target_name, "image/x-MS-bmp")))
+	{
+	  g_hash_table_replace (_format_atom_table,
+				GINT_TO_POINTER (CF_DIB),
+				targets[i]);
+	  if (!has_set_dib) {
+	    SetClipboardData (CF_DIB, NULL);
+	    has_set_dib = TRUE;
+	  }
+	  has_real_dib = TRUE;
+	  continue;
+	}
+
+      for (format = convertable_formats; !has_set_dib && format; format = format->next)
+	{
+	  gchar **mime_types =
+	    gdk_pixbuf_format_get_mime_types ((GdkPixbufFormat *) format->data);
+
+	  for (; *mime_types; ++mime_types)
+	    {
+	      if (!strcmp (target_name, *mime_types))
+	        {
+		  g_hash_table_replace (_format_atom_table,
+					GINT_TO_POINTER (CF_DIB),
+					targets[i]);
+		  SetClipboardData (CF_DIB, NULL);
+		  has_set_dib = TRUE;
+		  break;
+		}
+	    }
+	}
+    }
+  g_slist_free (convertable_formats);
+
+  API_CALL (CloseClipboard, ());
+}
+
+/* Convert from types such as "image/jpg" or "image/png" to DIB using
+ * gdk-pixbuf so that image copied from GTK+ apps can be pasted in
+ * native apps like mspaint.exe
+ */
+HGLOBAL
+_gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
+				     GdkAtom  target)
+{
+  GdkPixbufLoader *loader;
+  GdkPixbuf *pixbuf;
+  const gchar *target_name;
+  guchar *ptr;
+  gchar *bmp_buf;
+  gsize size;
+  gboolean ok;
+
+  if (!(target_name = gdk_atom_name (target)))
+    {
+      GlobalFree (hdata);
+      return NULL;
+    }
+
+  if (!strcmp (target_name, "image/bmp") ||
+      !strcmp (target_name, "image/x-bmp") ||
+      !strcmp (target_name, "image/x-MS-bmp"))
+    {
+      /* No conversion is needed, just strip the BITMAPFILEHEADER */
+      HGLOBAL hdatanew;
+
+      size = GlobalSize (hdata) - 1 - sizeof (BITMAPFILEHEADER);
+      ptr = GlobalLock (hdata);
+      memmove (ptr, ptr + sizeof (BITMAPFILEHEADER), size);
+      GlobalUnlock (hdata);
+      if (!(hdatanew = GlobalReAlloc (hdata, size, 0))) {
+	WIN32_API_FAILED ("GlobalReAlloc");
+	GlobalFree (hdata); /* the old hdata is not freed if error */
+      }
+      return hdatanew;
+    }
+
+  /* We actually provide image formats -other than- "image/bmp" etc
+   * and the requestor is either a native Win32 application or a GTK+
+   * client that requested "image/bmp".
+   */
+  if (!(loader = gdk_pixbuf_loader_new_with_mime_type (target_name, NULL)))
+    {
+      GlobalFree (hdata);
+      return NULL;
+    }
+
+  ptr = GlobalLock (hdata);
+  ok = gdk_pixbuf_loader_write (loader, ptr, GlobalSize (hdata) - 1, NULL) &&
+       gdk_pixbuf_loader_close (loader, NULL);
+
+  GlobalUnlock (hdata);
+  GlobalFree (hdata);
+  hdata = NULL;
+
+  if (ok && (pixbuf = gdk_pixbuf_loader_get_pixbuf (loader)) != NULL)
+    g_object_ref (pixbuf);
+
+  g_object_unref (loader);
+
+  if (ok && gdk_pixbuf_save_to_buffer (pixbuf, &bmp_buf, &size, "bmp", NULL, NULL))
+    {
+      size -= sizeof (BITMAPFILEHEADER);
+      if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, size)))
+	{
+	  WIN32_API_FAILED ("GlobalAlloc");
+	  ok = FALSE;
+	}
+
+      if (ok)
+	{
+	  ptr = GlobalLock (hdata);
+	  memcpy (ptr, bmp_buf + sizeof (BITMAPFILEHEADER), size);
+	  GlobalUnlock (hdata);
+	}
+
+      g_free (bmp_buf);
+      g_object_unref (pixbuf);
+    }
+
+  return hdata;
 }

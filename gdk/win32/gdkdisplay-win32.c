@@ -375,9 +375,7 @@ _win32_on_clipboard_change (HWND   hwnd,
 	    g_print ("WM_DRAWCLIPBOARD: owner:%p formats: ", hwndOwner);
 	    for (; 0 != (nFormat = EnumClipboardFormats (nFormat));)
 	      {
-		char sFormat[80];
-		if (GetClipboardFormatName (nFormat, sFormat, G_N_ELEMENTS (sFormat)) > 0)
-		  g_print ("%s ", sFormat);
+		g_print ("%s ", _gdk_win32_cf_to_string (nFormat));
 	      }
 	    g_print ("\n");
 	    CloseClipboard ();
