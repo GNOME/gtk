@@ -1582,13 +1582,30 @@ gtk_window_set_modal (GtkWindow *window,
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  window->modal = modal != FALSE;
+  modal = modal != FALSE;
+  if (window->modal == modal)
+    return;
+  
+  window->modal = modal;
   
   /* adjust desired modality state */
-  if (GTK_WIDGET_VISIBLE (window) && window->modal)
-    gtk_grab_add (GTK_WIDGET (window));
-  else
-    gtk_grab_remove (GTK_WIDGET (window));
+  if (GTK_WIDGET_REALIZED (window))
+    {
+      GtkWidget *widget = GTK_WIDGET (window);
+      
+      if (window->modal)
+	gdk_window_set_modal_hint (widget->window, TRUE);
+      else
+	gdk_window_set_modal_hint (widget->window, FALSE);
+    }
+
+  if (GTK_WIDGET_VISIBLE (window))
+    {
+      if (window->modal)
+	gtk_grab_add (GTK_WIDGET (window));
+      else
+	gtk_grab_remove (GTK_WIDGET (window));
+    }
 
   g_object_notify (G_OBJECT (window), "modal");
 }
@@ -3762,8 +3779,7 @@ gtk_window_realize (GtkWidget *widget)
   if (gtk_window_get_skip_taskbar_hint (window))
     gdk_window_set_skip_taskbar_hint (widget->window, TRUE);
   
-  /* transient_for must be set to allow the modal hint */
-  if (window->transient_parent && window->modal)
+  if (window->modal)
     gdk_window_set_modal_hint (widget->window, TRUE);
   else
     gdk_window_set_modal_hint (widget->window, FALSE);

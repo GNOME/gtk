@@ -944,13 +944,13 @@ gtk_dialog_run (GtkDialog *dialog)
 
   g_object_ref (dialog);
 
-  if (!GTK_WIDGET_VISIBLE (dialog))
-    gtk_widget_show (GTK_WIDGET (dialog));
-  
   was_modal = GTK_WINDOW (dialog)->modal;
   if (!was_modal)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
+  if (!GTK_WIDGET_VISIBLE (dialog))
+    gtk_widget_show (GTK_WIDGET (dialog));
+  
   response_handler =
     g_signal_connect (dialog,
                       "response",

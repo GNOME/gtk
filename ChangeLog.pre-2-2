@@ -1,3 +1,19 @@
+Sun Dec 15 18:47:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Some fixes for modal hint setting based on a patch
+	from Arvind Samptur (#100416)
+
+	* gtk/gtkdialog.c (gtk_dialog_run): Call gtk_window_set_modal
+	before showing the window for efficiency.
+
+	* gtk/gtkwindow.c (gtk_window_realize): Ignore the EWMH
+	constraint that the transient-for hint must always be
+	set on windows with the modal hint and just always set
+	the modal hint.
+
+	* gtk/gtkwindow.c (gtk_window_set_modal): Update the
+	modal hint on the GdkWindow when the window is realized.
+
 Sun Dec 15 18:39:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Hard-code GTK_BINARY_VERSION=2.2.0 for
