@@ -2687,8 +2687,10 @@ GTK_IS_TREE_SELECTION_CLASS
 <TITLE>GtkTreeStore</TITLE>
 GtkTreeStore
 gtk_tree_store_new
+gtk_tree_store_newv
 gtk_tree_store_set_value
 gtk_tree_store_set
+gtk_tree_store_set_valist
 gtk_tree_store_remove
 gtk_tree_store_insert
 gtk_tree_store_insert_before
@@ -2697,6 +2699,7 @@ gtk_tree_store_prepend
 gtk_tree_store_append
 gtk_tree_store_is_ancestor
 gtk_tree_store_iter_depth
+gtk_tree_store_clear
 <SUBSECTION Standard>
 GTK_TREE_STORE
 GTK_IS_TREE_STORE
@@ -2704,6 +2707,7 @@ GTK_TYPE_TREE_STORE
 gtk_tree_store_get_type
 GTK_TREE_STORE_CLASS
 GTK_IS_TREE_STORE_CLASS
+GTK_TREE_STORE_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -2714,7 +2718,6 @@ GtkTreeViewColumnSizing
 <TITLE>GtkTreeViewColumn</TITLE>
 gtk_tree_view_column_new
 gtk_tree_view_column_new_with_attributes
-gtk_tree_view_column_set_cell_renderer
 gtk_tree_view_column_add_attribute
 gtk_tree_view_column_set_attributes
 gtk_tree_view_column_set_visible
@@ -2744,10 +2747,16 @@ GTK_IS_TREE_VIEW_COLUMN_CLASS
 
 <SECTION>
 <FILE>gtktreeview</FILE>
-GtkTreeView
+GtkTreeViewDropPosition
+GtkTreeViewPrivate
 GtkTreeSelection
 GtkTreeSelectionClass
 <TITLE>GtkTreeView</TITLE>
+GtkTreeViewColumnDropFunc
+GtkTreeViewDraggableFunc
+GtkTreeViewMappingFunc
+GtkTreeViewDroppableFunc
+GtkTreeViewSearchEqualFunc
 gtk_tree_view_new
 gtk_tree_view_new_with_model
 gtk_tree_view_get_model
@@ -2761,16 +2770,53 @@ gtk_tree_view_get_headers_visible
 gtk_tree_view_set_headers_visible
 gtk_tree_view_columns_autosize
 gtk_tree_view_set_headers_clickable
+gtk_tree_view_set_rules_hint
+gtk_tree_view_get_rules_hint
 gtk_tree_view_append_column
 gtk_tree_view_remove_column
 gtk_tree_view_insert_column
+gtk_tree_view_insert_column_with_attributes
+gtk_tree_view_insert_column_with_data_func
 gtk_tree_view_get_column
+gtk_tree_view_get_columns
+gtk_tree_view_move_column_after
+gtk_tree_view_set_expander_column
+gtk_tree_view_get_expander_column
+gtk_tree_view_set_column_drag_function
+gtk_tree_view_scroll_to_point
 gtk_tree_view_scroll_to_cell
-gtk_tree_view_get_path_at_pos
+gtk_tree_view_row_activated
 gtk_tree_view_expand_all
 gtk_tree_view_collapse_all
 gtk_tree_view_expand_row
 gtk_tree_view_collapse_row
+gtk_tree_view_map_expanded_rows
+gtk_tree_view_row_expanded
+gtk_tree_view_set_reorderable
+gtk_tree_view_get_reorderable
+gtk_tree_view_set_cursor
+gtk_tree_view_get_path_at_pos
+gtk_tree_view_get_cell_area
+gtk_tree_view_get_background_area
+gtk_tree_view_get_visible_rect
+gtk_tree_view_widget_to_tree_coords
+gtk_tree_view_tree_to_widget_coords
+gtk_tree_view_set_rows_drag_source
+gtk_tree_view_set_rows_drag_dest
+gtk_tree_view_unset_rows_drag_source
+gtk_tree_view_unset_rows_drag_dest
+gtk_tree_view_set_drag_dest_row
+gtk_tree_view_get_drag_dest_row
+gtk_tree_view_get_dest_row_at_pos
+gtk_tree_view_create_row_drag_icon
+gtk_tree_view_set_enable_search
+gtk_tree_view_get_enable_search
+gtk_tree_view_get_search_column
+gtk_tree_view_set_search_column
+gtk_tree_view_get_search_equal_func
+gtk_tree_view_set_search_equal_func
+GtkTreeDestroyCountFunc
+gtk_tree_view_set_destroy_count_func
 <SUBSECTION Standard>
 GTK_TREE_VIEW
 GTK_IS_TREE_VIEW
@@ -2778,8 +2824,7 @@ GTK_TYPE_TREE_VIEW
 gtk_tree_view_get_type
 GTK_TREE_VIEW_CLASS
 GTK_IS_TREE_VIEW_CLASS
-<SUBSECTION Private>
-GtkTreeViewPrivate
+GTK_TREE_VIEW_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -2802,10 +2847,15 @@ GTK_TREE_DRAG_SOURCE_GET_IFACE
 <SECTION>
 <FILE>gtkcellrenderer</FILE>
 GtkCellRendererState
+GtkCellRendererMode
 <TITLE>GtkCellRenderer</TITLE>
 GtkCellRenderer
 gtk_cell_renderer_get_size
 gtk_cell_renderer_render
+gtk_cell_renderer_activate
+gtk_cell_renderer_start_editing
+gtk_cell_renderer_get_fixed_size
+gtk_cell_renderer_set_fixed_size
 <SUBSECTION Standard>
 GTK_CELL_RENDERER
 GTK_IS_CELL_RENDERER

@@ -1003,6 +1003,14 @@ produce superscript and subscript.
 @GTK_TREE_SELECTION_SINGLE: 
 @GTK_TREE_SELECTION_MULTI: 
 
+<!-- ##### STRUCT GtkTreeView ##### -->
+<para>
+
+</para>
+
+@parent: 
+@priv: 
+
 <!-- ##### ARG GtkVScale:adjustment ##### -->
 <para>
 the #GtkAdjustment which sets the range of the scale.

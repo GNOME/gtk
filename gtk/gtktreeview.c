@@ -4329,7 +4329,8 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
 						    &height,
 						    node);
 
-  if (GTK_RBNODE_GET_HEIGHT (node) != height + vertical_separator)
+  if (height != -1 &&
+      GTK_RBNODE_GET_HEIGHT (node) != height + vertical_separator)
     {
       _gtk_rbtree_node_set_height (tree, node, height + vertical_separator);
       gtk_widget_queue_resize (GTK_WIDGET (data));
@@ -4337,9 +4338,13 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
       goto done;
     }
   if (dirty_marked)
-    gtk_widget_queue_resize (GTK_WIDGET (data));
+    {
+      gtk_widget_queue_resize (GTK_WIDGET (data));
+    }
   else
-    gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+    {
+      gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+    }
 
  done:
   if (free_path)
@@ -4946,6 +4951,9 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
   while (gtk_tree_model_iter_next (tree_view->priv->model, iter));
 }
 
+/* If height is non-NULL, then we set it to be the new height.  if it's all
+ * dirty, then height is -1.  We know we'll remeasure dirty rows, anyways.
+ */
 static gboolean
 gtk_tree_view_discover_dirty_iter (GtkTreeView *tree_view,
 				   GtkTreeIter *iter,
@@ -4963,14 +4971,17 @@ gtk_tree_view_discover_dirty_iter (GtkTreeView *tree_view,
 			"horizontal_separator", &horizontal_separator,
 			NULL);
 
+
   if (height)
-    *height = 0;
+    *height = -1;
 
   for (list = tree_view->priv->columns; list; list = list->next)
     {
       gint width;
       column = list->data;
-      if (column->dirty == TRUE || column->column_type == GTK_TREE_VIEW_COLUMN_FIXED)
+      if (column->dirty == TRUE)
+	continue;
+      if (height == NULL && column->column_type == GTK_TREE_VIEW_COLUMN_FIXED)
 	continue;
       if (!column->visible)
 	continue;
@@ -8840,10 +8851,12 @@ gtk_tree_view_get_search_equal_func (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_set_search_equal_func:
  * @tree_view: A #GtkTreeView
- * @compare_func: the compare function to use during the search
- *
- * Sets the compare function to use to search the TreeView.
- */
+ * @search_equal_func: the compare function to use during the search
+ * @search_user_data: user data to pass to @search_equal_func, or %NULL
+ * @search_destroy: Destroy notifier for @search_user_data, or %NULL
+ * 
+ * Sets the compare function for the interactive search capabilities.
+ **/
 void
 gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
 				     GtkTreeViewSearchEqualFunc  search_equal_func,

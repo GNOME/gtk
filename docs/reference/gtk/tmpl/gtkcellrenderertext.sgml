@@ -19,7 +19,6 @@ GtkCellRendererText
 
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_cell_renderer_text_new ##### -->
 <para>
@@ -28,4 +27,183 @@ GtkCellRendererText
 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkCellRendererText::edited ##### -->
+<para>
+
+</para>
+
+@cellrenderertext: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG GtkCellRendererText:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:attributes ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:background ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:foreground ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:background-gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:foreground-gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:font ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:font-desc ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:family ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:variant ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:weight ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:stretch ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:size-points ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:scale ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:strikethrough ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:underline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:rise ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:background-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:foreground-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:family-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:style-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:variant-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:weight-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:stretch-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:size-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:scale-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:editable-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:strikethrough-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:underline-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:rise-set ##### -->
+<para>
+
+</para>
 

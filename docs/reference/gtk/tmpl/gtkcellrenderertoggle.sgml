@@ -19,7 +19,6 @@ GtkCellRendererToggle
 
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_cell_renderer_toggle_new ##### -->
 <para>
@@ -55,4 +54,27 @@ GtkCellRendererToggle
 @toggle: 
 @setting: 
 
+
+<!-- ##### SIGNAL GtkCellRendererToggle::toggled ##### -->
+<para>
+
+</para>
+
+@cellrenderertoggle: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkCellRendererToggle:activatable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererToggle:active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererToggle:radio ##### -->
+<para>
+
+</para>
 

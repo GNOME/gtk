@@ -19,10 +19,6 @@ GtkCellRendererPixbuf
 
 </para>
 
-@parent: 
-@pixbuf: 
-@pixbuf_expander_open: 
-@pixbuf_expander_closed: 
 
 <!-- ##### FUNCTION gtk_cell_renderer_pixbuf_new ##### -->
 <para>
@@ -31,4 +27,9 @@ GtkCellRendererPixbuf
 
 @Returns: 
 
+
+<!-- ##### ARG GtkCellRendererPixbuf:pixbuf ##### -->
+<para>
+
+</para>
 

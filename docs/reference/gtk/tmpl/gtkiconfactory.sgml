@@ -43,8 +43,6 @@ looking up the icon to use for a given stock ID.
 
 </para>
 
-@parent_instance: 
-@icons: 
 
 <!-- ##### STRUCT GtkIconSet ##### -->
 <para>

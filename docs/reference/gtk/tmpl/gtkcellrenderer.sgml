@@ -24,22 +24,20 @@ GtkCellRenderer
 @GTK_CELL_RENDERER_INSENSITIVE: 
 @GTK_CELL_RENDERER_SORTED: 
 
+<!-- ##### ENUM GtkCellRendererMode ##### -->
+<para>
+
+</para>
+
+@GTK_CELL_RENDERER_MODE_INERT: 
+@GTK_CELL_RENDERER_MODE_ACTIVATABLE: 
+@GTK_CELL_RENDERER_MODE_EDITABLE: 
+
 <!-- ##### STRUCT GtkCellRenderer ##### -->
 <para>
 
 </para>
 
-@parent: 
-@xalign: 
-@yalign: 
-@width: 
-@height: 
-@xpad: 
-@ypad: 
-@mode: 
-@visible: 
-@is_expander: 
-@is_expanded: 
 
 <!-- ##### FUNCTION gtk_cell_renderer_get_size ##### -->
 <para>
@@ -68,4 +66,104 @@ GtkCellRenderer
 @expose_area: 
 @flags: 
 
+
+<!-- ##### FUNCTION gtk_cell_renderer_activate ##### -->
+<para>
+
+</para>
+
+@cell: 
+@event: 
+@widget: 
+@path: 
+@background_area: 
+@cell_area: 
+@flags: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_start_editing ##### -->
+<para>
+
+</para>
+
+@cell: 
+@event: 
+@widget: 
+@path: 
+@background_area: 
+@cell_area: 
+@flags: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_fixed_size ##### -->
+<para>
+
+</para>
+
+@cell: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_set_fixed_size ##### -->
+<para>
+
+</para>
+
+@cell: 
+@width: 
+@height: 
+
+
+<!-- ##### ARG GtkCellRenderer:mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:xpad ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:ypad ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
+<para>
+
+</para>
 

@@ -1,3 +1,10 @@
+Wed Sep 26 19:48:01 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_set_valist): Stop being
+	stupid and emitting the signal every time.
+
+	* gtk/gtkliststore.c (gtk_list_store_set_valist): ditto
+
 Wed Sep 26 16:35:59 2001  Owen Taylor  <otaylor@redhat.com>
 
        Patch from Mark McLoughlin <mark@skynet.ie> (#61233)
@@ -16,7 +23,7 @@ Wed Sep 26 16:15:25 2001  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkentry.c (paste_received): Patch from 
         Damian Ivereigh to replace selection if there is 
 	one. (#61121)
-	
+
 2001-09-25  Darin Adler  <darin@bentspoon.com>
 
 	* tests/.cvsignore: Ignore new test program.

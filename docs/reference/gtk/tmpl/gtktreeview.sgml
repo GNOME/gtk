@@ -14,25 +14,93 @@ GtkTreeView
 
 </para>
 
-<!-- ##### STRUCT GtkTreeView ##### -->
+<!-- ##### ENUM GtkTreeViewDropPosition ##### -->
 <para>
 
 </para>
 
-@parent: 
-@priv: 
+@GTK_TREE_VIEW_DROP_BEFORE: 
+@GTK_TREE_VIEW_DROP_AFTER: 
+@GTK_TREE_VIEW_DROP_INTO_OR_BEFORE: 
+@GTK_TREE_VIEW_DROP_INTO_OR_AFTER: 
+
+<!-- ##### STRUCT GtkTreeViewPrivate ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### STRUCT GtkTreeSelection ##### -->
 <para>
 
 </para>
 
-@parent: 
 
 <!-- ##### STRUCT GtkTreeSelectionClass ##### -->
 <para>
 
 </para>
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewColumnDropFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+@prev_column: 
+@next_column: 
+@data: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewDraggableFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@context: 
+@path: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewMappingFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@user_data: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewDroppableFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@context: 
+@path: 
+@pos: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewSearchEqualFunc ##### -->
+<para>
+
+</para>
+
+@model: 
+@column: 
+@key: 
+@iter: 
+@search_data: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_new ##### -->
@@ -162,6 +230,24 @@ GtkTreeView
 @active: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_set_rules_hint ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_rules_hint ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_append_column ##### -->
 <para>
 
@@ -193,6 +279,34 @@ GtkTreeView
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_insert_column_with_attributes ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@position: 
+@title: 
+@cell: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_insert_column_with_data_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@position: 
+@title: 
+@cell: 
+@func: 
+@data: 
+@dnotify: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_get_column ##### -->
 <para>
 
@@ -201,6 +315,64 @@ GtkTreeView
 @tree_view: 
 @n: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_columns ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_move_column_after ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+@base_column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_expander_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_expander_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_column_drag_function ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@user_data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_scroll_to_point ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tree_x: 
+@tree_y: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_scroll_to_cell ##### -->
@@ -216,20 +388,14 @@ GtkTreeView
 @col_align: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_get_path_at_pos ##### -->
+<!-- ##### FUNCTION gtk_tree_view_row_activated ##### -->
 <para>
 
 </para>
 
 @tree_view: 
-@window: 
-@x: 
-@y: 
 @path: 
 @column: 
-@cell_x: 
-@cell_y: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_expand_all ##### -->
@@ -268,4 +434,453 @@ GtkTreeView
 @path: 
 @Returns: 
 
+
+<!-- ##### FUNCTION gtk_tree_view_map_expanded_rows ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_row_expanded ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_reorderable ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@reorderable: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_reorderable ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_cursor ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@focus_column: 
+@start_editing: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_path_at_pos ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@window: 
+@x: 
+@y: 
+@path: 
+@column: 
+@cell_x: 
+@cell_y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_cell_area ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@column: 
+@rect: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_background_area ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@column: 
+@rect: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_visible_rect ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@visible_rect: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_widget_to_tree_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@wx: 
+@wy: 
+@tx: 
+@ty: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_tree_to_widget_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tx: 
+@ty: 
+@wx: 
+@wy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_rows_drag_source ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@start_button_mask: 
+@targets: 
+@n_targets: 
+@actions: 
+@row_draggable_func: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_rows_drag_dest ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@targets: 
+@n_targets: 
+@actions: 
+@location_droppable_func: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_unset_rows_drag_source ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_unset_rows_drag_dest ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_drag_dest_row ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_drag_dest_row ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_dest_row_at_pos ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@drag_x: 
+@drag_y: 
+@path: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_create_row_drag_icon ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_enable_search ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@enable_search: 
+<!-- # Unused Parameters # -->
+@use_search: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_enable_search ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_search_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_search_column ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_search_equal_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_search_equal_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@search_equal_func: 
+@search_user_data: 
+@search_destroy: 
+<!-- # Unused Parameters # -->
+@search_compare_func: 
+@search_data: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeDestroyCountFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@children: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_destroy_count_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### SIGNAL GtkTreeView::columns-changed ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeView::expand-collapse-cursor-row ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkTreeView::move-cursor ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::row-activated ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::row-collapsed ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::row-expanded ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::select-cursor-parent ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeView::select-cursor-row ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeView::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeView::start-interactive-search ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeView::test-collapse-row ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::test-expand-row ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTreeView::toggle-cursor-row ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
+<!-- ##### ARG GtkTreeView:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:headers-visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:headers-clickable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:expander-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:reorderable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:rules-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:enable-search ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:search-column ##### -->
+<para>
+
+</para>
 

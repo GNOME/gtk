@@ -19,7 +19,6 @@ GtkListStore
 
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_list_store_new ##### -->
 <para>

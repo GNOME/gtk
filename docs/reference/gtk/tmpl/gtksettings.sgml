@@ -161,3 +161,53 @@ GtkSettings
 @origin: 
 
 
+<!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-blink ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-cursor-blink-time ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-key-theme-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-menu-bar-accel ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-toolbar-icon-size ##### -->
+<para>
+
+</para>
+

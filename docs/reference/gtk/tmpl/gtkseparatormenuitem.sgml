@@ -19,7 +19,6 @@ GtkSeparatorMenuItem
 
 </para>
 
-@menu_item: 
 
 <!-- ##### STRUCT GtkSeparatorMenuItemClass ##### -->
 <para>

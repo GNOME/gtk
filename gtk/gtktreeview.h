@@ -286,15 +286,15 @@ GdkPixmap             *gtk_tree_view_create_row_drag_icon          (GtkTreeView 
 
 /* Interactive search */
 void                       gtk_tree_view_set_enable_search     (GtkTreeView                *tree_view,
-								gboolean                    use_search);
+								gboolean                    enable_search);
 gboolean                   gtk_tree_view_get_enable_search     (GtkTreeView                *tree_view);
 gint                       gtk_tree_view_get_search_column     (GtkTreeView                *tree_view);
 void                       gtk_tree_view_set_search_column     (GtkTreeView                *tree_view,
 								gint                        column);
 GtkTreeViewSearchEqualFunc gtk_tree_view_get_search_equal_func (GtkTreeView                *tree_view);
 void                       gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
-								GtkTreeViewSearchEqualFunc  search_compare_func,
-								gpointer                    search_data,
+								GtkTreeViewSearchEqualFunc  search_equal_func,
+								gpointer                    search_user_data,
 								GtkDestroyNotify            search_destroy);
 
 /* This function should really never be used.  It is just for use by ATK.

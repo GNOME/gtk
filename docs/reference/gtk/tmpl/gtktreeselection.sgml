@@ -158,3 +158,10 @@ GtkTreeSelection
 @end_path: 
 
 
+<!-- ##### SIGNAL GtkTreeSelection::changed ##### -->
+<para>
+
+</para>
+
+@treeselection: the object which received the signal.
+

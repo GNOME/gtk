@@ -19,7 +19,6 @@ GtkTreeModelSort
 
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_tree_model_sort_new ##### -->
 <para>

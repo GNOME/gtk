@@ -26,37 +26,6 @@ GtkTreeViewColumn
 
 </para>
 
-@parent: 
-@tree_view: 
-@button: 
-@child: 
-@arrow: 
-@alignment: 
-@window: 
-@editable_widget: 
-@xalign: 
-@property_changed_signal: 
-@spacing: 
-@fixed_width: 
-@width: 
-@requested_width: 
-@min_width: 
-@max_width: 
-@drag_x: 
-@drag_y: 
-@title: 
-@cell_list: 
-@column_type: 
-@sort_clicked_signal: 
-@sort_column_changed_signal: 
-@sort_column_id: 
-@sort_order: 
-@visible: 
-@clickable: 
-@dirty: 
-@show_sort_indicator: 
-@maybe_reordered: 
-@reorderable: 
 
 <!-- ##### ENUM GtkTreeViewColumnSizing ##### -->
 <para>
@@ -261,4 +230,76 @@ GtkTreeViewColumn
 
 @tree_column: 
 
+
+<!-- ##### SIGNAL GtkTreeViewColumn::clicked ##### -->
+<para>
+
+</para>
+
+@treeviewcolumn: the object which received the signal.
+
+<!-- ##### ARG GtkTreeViewColumn:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:sizing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:fixed-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:min-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:max-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:clickable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:alignment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:reorderable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:sort-indicator ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:sort-order ##### -->
+<para>
+
+</para>
 

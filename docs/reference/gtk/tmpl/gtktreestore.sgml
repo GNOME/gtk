@@ -19,18 +19,6 @@ GtkTreeStore
 
 </para>
 
-@parent: 
-@stamp: 
-@root: 
-@last: 
-@n_columns: 
-@sort_column_id: 
-@sort_list: 
-@order: 
-@column_headers: 
-@default_sort_func: 
-@default_sort_data: 
-@default_sort_destroy: 
 
 <!-- ##### FUNCTION gtk_tree_store_new ##### -->
 <para>
@@ -39,6 +27,16 @@ GtkTreeStore
 
 @n_columns: 
 @Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_newv ##### -->
+<para>
+
+</para>
+
+@n_columns: 
+@types: 
 @Returns: 
 
 
@@ -61,6 +59,16 @@ GtkTreeStore
 @tree_store: 
 @iter: 
 @Varargs: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_set_valist ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@var_args: 
 
 
 <!-- ##### FUNCTION gtk_tree_store_remove ##### -->
@@ -144,5 +152,13 @@ GtkTreeStore
 @tree_store: 
 @iter: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_clear ##### -->
+<para>
+
+</para>
+
+@tree_store: 
 
 
