@@ -2309,10 +2309,10 @@ icon_window_realize (GtkWidget *window,
   if (mask)
     gtk_widget_shape_combine_mask (window, mask, 0, 0);
 
-  g_object_unref (G_OBJECT (pixmap));
+  g_object_unref (pixmap);
 
   if (mask)
-    g_object_unref (G_OBJECT (mask));
+    g_object_unref (mask);
 }
 
 static void

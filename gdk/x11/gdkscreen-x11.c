@@ -579,14 +579,13 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
 #endif
   
   init_xinerama_support (screen);
-  g_signal_emit_by_name (G_OBJECT (screen), "size_changed");
+  g_signal_emit_by_name (screen, "size_changed");
 }
 
 void
 _gdk_x11_screen_window_manager_changed (GdkScreen *screen)
 {
-  g_signal_emit (G_OBJECT (screen),
-                 signals[WINDOW_MANAGER_CHANGED], 0);
+  g_signal_emit (screen, signals[WINDOW_MANAGER_CHANGED], 0);
 }
 
 /**

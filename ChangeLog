@@ -1,3 +1,29 @@
+Thu Feb 27 17:44:24 2003  Manish Singh  <yosh@gimp.org>
+
+	* demos/gtk-demo/main.c
+	* demos/gtk-demo/tree_store.c
+	* gdk/x11/gdkscreen-x11.c
+	* gtk/gtkcellrenderertoggle.c
+	* gtk/gtkcolorsel.c
+	* gtk/gtkdnd.c
+	* gtk/gtkeditable.c
+	* gtk/gtkentry.c
+	* gtk/gtkmenu.c
+	* gtk/gtkmenubar.c
+	* gtk/gtkmenuitem.c
+	* gtk/gtkmenushell.c
+	* gtk/gtkrc.c
+	* gtk/gtksettings.c
+	* gtk/gtkstyle.c
+	* gtk/gtktextbuffer.c
+	* gtk/gtktextview.c
+	* gtk/gtktreeviewcolumn.c
+	* tests/testgtk.c
+	* tests/testtext.c
+	* tests/testtreeedit.c
+	* tests/testtreefocus.c
+	* tests/testtreeview.c: remove unnecessary G_OBJECT() casts.
+
 Tue Feb 25 21:55:17 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_position): account for RTL

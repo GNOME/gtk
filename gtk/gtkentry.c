@@ -1635,7 +1635,7 @@ gtk_entry_grab_focus (GtkWidget        *widget)
   
   GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
 
-  g_object_get (G_OBJECT (gtk_widget_get_settings (widget)),
+  g_object_get (gtk_widget_get_settings (widget),
 		"gtk-entry-select-on-focus",
 		&select_on_focus,
 		NULL);
@@ -4264,7 +4264,7 @@ cursor_blinks (GtkEntry *entry)
   if (GTK_WIDGET_HAS_FOCUS (entry) &&
       entry->selection_bound == entry->current_pos)
     {
-      g_object_get (G_OBJECT (settings), "gtk-cursor-blink", &blink, NULL);
+      g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
       return blink;
     }
   else
@@ -4277,7 +4277,7 @@ get_cursor_time (GtkEntry *entry)
   GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (entry));
   gint time;
 
-  g_object_get (G_OBJECT (settings), "gtk-cursor-blink-time", &time, NULL);
+  g_object_get (settings, "gtk-cursor-blink-time", &time, NULL);
 
   return time;
 }

@@ -4301,7 +4301,7 @@ cursor_blinks (GtkTextView *text_view)
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     return FALSE;
   
-  g_object_get (G_OBJECT (settings), "gtk-cursor-blink", &blink, NULL);
+  g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
   return blink;
 }
 
@@ -4311,7 +4311,7 @@ get_cursor_time (GtkTextView *text_view)
   GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
   gint time;
 
-  g_object_get (G_OBJECT (settings), "gtk-cursor-blink-time", &time, NULL);
+  g_object_get (settings, "gtk-cursor-blink-time", &time, NULL);
 
   return time;
 }
@@ -5355,7 +5355,7 @@ gtk_text_view_check_keymap_direction (GtkTextView *text_view)
       GtkTextDirection new_dir;
       GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
   
-      g_object_get (G_OBJECT (settings),
+      g_object_get (settings,
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
       if (split_cursor)

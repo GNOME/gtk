@@ -261,7 +261,7 @@ add_columns (GtkTreeView *treeview)
 
   /* column for holiday names */
   renderer = gtk_cell_renderer_text_new ();
-  g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
+  g_object_set (renderer, "xalign", 0.0, NULL);
 
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
 							    -1, "Holiday",
@@ -273,7 +273,7 @@ add_columns (GtkTreeView *treeview)
 
   /* alex column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
+  g_object_set (renderer, "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)ALEX_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
@@ -296,7 +296,7 @@ add_columns (GtkTreeView *treeview)
 
   /* havoc column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
+  g_object_set (renderer, "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)HAVOC_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
@@ -318,7 +318,7 @@ add_columns (GtkTreeView *treeview)
 
   /* tim column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
+  g_object_set (renderer, "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)TIM_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
@@ -341,7 +341,7 @@ add_columns (GtkTreeView *treeview)
 
   /* owen column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
+  g_object_set (renderer, "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)OWEN_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
@@ -363,7 +363,7 @@ add_columns (GtkTreeView *treeview)
 
   /* dave column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
+  g_object_set (renderer, "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)DAVE_COLUMN);
 
   g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);

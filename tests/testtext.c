@@ -320,7 +320,7 @@ blink_timeout (gpointer data)
   
   tag = GTK_TEXT_TAG (data);
 
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                  "foreground", flip ? "blue" : "purple",
                  NULL);
 
@@ -455,7 +455,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
   color2.red = 0xfff;
   color2.blue = 0x0;
   color2.green = 0;
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "foreground_gdk", &color,
                 "background_gdk", &color2,
                 "size_points", 24.0,
@@ -467,7 +467,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
       
   color.blue = color.green = 0;
   color.red = 0xffff;
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "rise", -4 * PANGO_SCALE,
                 "foreground_gdk", &color,
                 NULL);
@@ -478,7 +478,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
       
   color.blue = color.red = 0;
   color.green = 0xffff;
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "background_gdk", &color,
                 "size_points", 10.0,
                 NULL);
@@ -487,7 +487,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
 
   setup_tag (tag);
       
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "strikethrough", TRUE,
                 NULL);
 
@@ -496,25 +496,25 @@ fill_example_buffer (GtkTextBuffer *buffer)
 
   setup_tag (tag);
       
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "underline", PANGO_UNDERLINE_SINGLE,
                 NULL);
 
   setup_tag (tag);
       
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "underline", PANGO_UNDERLINE_SINGLE,
                 NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "centered", NULL);
       
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "justification", GTK_JUSTIFY_CENTER,
                 NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "rtl_quote", NULL);
       
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "wrap_mode", GTK_WRAP_WORD,
                 "direction", GTK_TEXT_DIR_RTL,
                 "indent", 30,
@@ -525,7 +525,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
 
   tag = gtk_text_buffer_create_tag (buffer, "negative_indent", NULL);
       
-  g_object_set (G_OBJECT (tag),
+  g_object_set (tag,
                 "indent", -25,
                 NULL);
   
@@ -2023,14 +2023,14 @@ buffer_set_colors (Buffer  *buffer,
           
           hue_to_color (hue, &color);
 
-          g_object_set (G_OBJECT (tmp->data),
-                          "foreground_gdk", &color,
-                          NULL);
+          g_object_set (tmp->data,
+                        "foreground_gdk", &color,
+                        NULL);
         }
       else
-        g_object_set (G_OBJECT (tmp->data),
-                        "foreground_set", FALSE,
-                        NULL);
+        g_object_set (tmp->data,
+                      "foreground_set", FALSE,
+                      NULL);
 
       hue += 1.0 / N_COLORS;
       
@@ -2051,7 +2051,7 @@ buffer_cycle_colors (Buffer *buffer)
       
       hue_to_color (hue, &color);
       
-      g_object_set (G_OBJECT (tmp->data),
+      g_object_set (tmp->data,
                     "foreground_gdk", &color,
                     NULL);
 

@@ -722,7 +722,7 @@ create_tree (void)
 
   cell = gtk_cell_renderer_text_new ();
 
-  g_object_set (G_OBJECT (cell),
+  g_object_set (cell,
                 "style", PANGO_STYLE_ITALIC,
                 NULL);
   

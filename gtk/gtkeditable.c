@@ -215,7 +215,7 @@ gtk_editable_set_editable (GtkEditable    *editable,
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  g_object_set (G_OBJECT (editable),
+  g_object_set (editable,
 		"editable", is_editable != FALSE,
 		NULL);
 }
@@ -236,7 +236,7 @@ gtk_editable_get_editable (GtkEditable *editable)
 
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), FALSE);
 
-  g_object_get (G_OBJECT (editable), "editable", &value, NULL);
+  g_object_get (editable, "editable", &value, NULL);
 
   return value;
 }

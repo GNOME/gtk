@@ -708,7 +708,7 @@ get_current_colors (GtkColorSelection *colorsel)
   gchar *palette;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (colorsel));
-  g_object_get (G_OBJECT (settings),
+  g_object_get (settings,
 		"gtk-color-palette", &palette,
 		NULL);
   

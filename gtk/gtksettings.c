@@ -1082,7 +1082,7 @@ settings_update_double_click_time (GtkSettings *settings)
       GdkDisplay *display = gdk_screen_get_display (settings->screen);
       gint double_click_time;
   
-      g_object_get (G_OBJECT (settings), "gtk-double-click-time",
+      g_object_get (settings, "gtk-double-click-time",
 		    &double_click_time, NULL);
       
       gdk_display_set_double_click_time (display, double_click_time);
