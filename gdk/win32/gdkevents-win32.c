@@ -36,6 +36,9 @@
  */
 /* define USE_TRACKMOUSEEVENT */
 
+/* Do use SetCapture, it works now. Thanks to jpe@archaeopteryx.com */
+#define USE_SETCAPTURE 1
+
 #include <stdio.h>
 
 #include "gdkprivate-win32.h"
@@ -531,11 +534,8 @@ gdk_pointer_grab (GdkWindow    *window,
 	  p_grab_owner_events = (owner_events != 0);
 	  p_grab_automatic = FALSE;
 	  
-#if 0 /* Menus don't work if we use mouse capture. Pity, because many other
-       * things work better with mouse capture.
-       */
+#if USE_SETCAPTURE
 	  SetCapture (GDK_WINDOW_HWND (window));
-#       pragma message("Warning: SetCapture call, menus won't work!")
 #endif
 	  return_val = GDK_GRAB_SUCCESS;
 	}
@@ -574,12 +574,69 @@ gdk_pointer_ungrab (guint32 time)
 
   _gdk_input_ungrab_pointer (time);
   
-#if 1
+#if USE_SETCAPTURE
   if (GetCapture () != NULL)
     ReleaseCapture ();
 #endif
 
   p_grab_window = NULL;
+}
+
+/*
+ *--------------------------------------------------------------
+ * find_window_for_pointer_event
+ *
+ *   Find the window a pointer event (mouse up, down, move) should
+ *   be reported to.  If the return value != reported_window then
+ *   the ref count of reported_window will be decremented and the
+ *   ref count of the return value will be incremented.
+ *
+ * Arguments:
+ *
+ *  "reported_window" is the gdk window the xevent was reported relative to
+ *  "xevent" is the win32 message
+ *
+ * Results:
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+static GdkWindow* 
+find_window_for_pointer_event (GdkWindow*  reported_window,
+                               MSG*        xevent)
+{
+  HWND hwnd;
+  POINTS points;
+  POINT pt;
+  GdkWindow* other_window;
+
+  if (p_grab_window == NULL || !p_grab_owner_events)
+    return reported_window;
+
+  points = MAKEPOINTS(xevent->lParam);
+  pt.x = points.x;
+  pt.y = points.y;
+  ClientToScreen (xevent->hwnd, &pt);
+
+  GDK_NOTE (EVENTS, g_print ("Finding window for grabbed pointer event at (%ld, %ld)\n",
+                             pt.x, pt.y));
+
+  hwnd = WindowFromPoint(pt);
+  if (hwnd == NULL)
+    return reported_window;
+  other_window = gdk_window_lookup(hwnd);
+  if (other_window == NULL)
+    return reported_window;
+
+  GDK_NOTE (EVENTS, g_print ("Found window %#x for point (%ld, %ld)\n",
+			     (guint) hwnd, pt.x, pt.y));
+
+  gdk_window_unref(reported_window);
+  gdk_window_ref(other_window);
+
+  return other_window;
 }
 
 /*
@@ -2017,6 +2074,8 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
 
+      ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
+
       if (window != current_window)
 	synthesize_crossing_events (window, msg);
 
@@ -2077,6 +2136,8 @@ gdk_event_translate (GdkEvent *event,
 			 (gulong) msg->hwnd,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
+      ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
+
       if (GDK_WINDOW_OBJECT (window)->extension_events != 0
 	  && gdk_input_ignore_core)
 	{
@@ -2121,6 +2182,8 @@ gdk_event_translate (GdkEvent *event,
 		g_print ("WM_MOUSEMOVE: %#lx  %#x (%d,%d)\n",
 			 (gulong) msg->hwnd, msg->wParam,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
+
+      ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
 
       /* If we haven't moved, don't create any event.
        * Windows sends WM_MOUSEMOVE messages after button presses

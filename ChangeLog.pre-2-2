@@ -1,3 +1,10 @@
+2001-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c: Implement better mouse
+	capturing. Do use SetCapture(). Thanks to jpe@archaeopteryx.com.
+	(find_window_for_pointer_event): New function.
+	(gdk_event_translate): Use it when handling mouse events.
+
 2001-01-09  Alexander Larsson  <alla@lysator.liu.se>
 
 	* configure.in:
