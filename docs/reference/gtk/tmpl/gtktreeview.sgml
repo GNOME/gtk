@@ -300,15 +300,19 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 <!-- ##### USER_FUNCTION GtkTreeViewSearchEqualFunc ##### -->
 <para>
-
+A function used for checking whether a row in @model matches
+a search key string entered by the user. Note the return value
+is reversed from what you would normally expect, though it
+has some similarity to strcmp() returning 0 for equal strings.
 </para>
 
-@model: 
-@column: 
-@key: 
-@iter: 
-@search_data: 
-@Returns: 
+@model: the #GtkTreeModel being searched
+@column: the search column set by gtk_tree_view_set_seach_column
+@key: the key string to compare with
+@iter: a #GtkTreeIter pointing the row of @model that should be compared
+  with @key.
+@search_data: user data from gtk_tree_view_set_search_equal_func()
+@Returns: %FALSE if the row matches, %TRUE otherwise.
 
 
 <!-- ##### FUNCTION gtk_tree_view_new ##### -->
