@@ -332,6 +332,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
   GHashTable *keycode_hash = key_hash_get_keycode_hash (key_hash);
   GSList *keys = g_hash_table_lookup (keycode_hash, GUINT_TO_POINTER ((guint)hardware_keycode));
   GSList *results = NULL;
+  GSList *l;
   gboolean have_exact = FALSE;
   guint keyval;
   gint effective_group;
@@ -375,7 +376,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 		    }
 
 		  have_exact = TRUE;
-		  results = g_slist_prepend (results, entry->value);
+		  results = g_slist_prepend (results, entry);
 		}
 
 	      if (!have_exact)
@@ -388,7 +389,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 			  GTK_NOTE (KEYBINDINGS,
 				    g_message ("  found group = %d, level = %d",
 					       entry->keys[i].group, entry->keys[i].level));
-			  results = g_slist_prepend (results, entry->value);
+			  results = g_slist_prepend (results, entry);
 			  break;
 			}
 		    }
@@ -399,7 +400,11 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 	}
     }
 
-  return sort_lookup_results (results);
+  results = sort_lookup_results (results);
+  for (l = results; l; l = l->next)
+    l->data = ((GtkKeyHashEntry *)l->data)->value;
+
+  return results;
 }
 
 /**
@@ -423,6 +428,7 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
   GdkKeymapKey *keys;
   gint n_keys;
   GSList *results = NULL;
+  GSList *l;
 
   if (!keyval)			/* Key without symbol */
     return NULL;
@@ -442,7 +448,7 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
 	  GtkKeyHashEntry *entry = entries->data;
 
 	  if (entry->keyval == keyval && entry->modifiers == modifiers)
-	    results = g_slist_prepend (results, entry->value);
+	    results = g_slist_prepend (results, entry);
 
 	  entries = entries->next;
 	}
@@ -450,5 +456,9 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
 
   g_free (keys);
 	  
-  return sort_lookup_results (results);
+  results = sort_lookup_results (results);
+  for (l = results; l; l = l->next)
+    l->data = ((GtkKeyHashEntry *)l->data)->value;
+
+  return results;
 }
