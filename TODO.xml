@@ -92,6 +92,18 @@
       <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
+    <entry size="medium" status="0%" target="1.4">
+      <title>Make GdkRGB work on any visual</title>
+      <description>
+	<p>
+          GdkRGB should be able to render to an arbitrary visual
+          (i.e. the visual shouldn't be fixed at gdk_rgb_init() 
+          time). This will break gdk_rgb_gc_set_foreground() and 
+          friends, though.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
 
   </section> <!-- GDK -->
 
