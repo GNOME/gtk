@@ -551,7 +551,7 @@ gtk_events_pending (void)
 gint 
 gtk_main_iteration (void)
 {
-  GDK_THREADS_LEAVE ();  
+  GDK_THREADS_LEAVE ();
   g_main_iteration (TRUE);
   GDK_THREADS_ENTER ();
 
@@ -564,7 +564,9 @@ gtk_main_iteration (void)
 gint 
 gtk_main_iteration_do (gboolean blocking)
 {
+  GDK_THREADS_LEAVE ();
   g_main_iteration (blocking);
+  GDK_THREADS_ENTER ();
 
   if (main_loops)
     return !g_main_is_running (main_loops->data);
