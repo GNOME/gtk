@@ -29,7 +29,7 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=3
-GTK_MICRO_VERSION=0
+GTK_MICRO_VERSION=1
 GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
@@ -1001,7 +1001,6 @@ gdk/win32/Makefile
 gdk/nanox/Makefile
 gdk/linux-fb/Makefile
 gtk/Makefile
-gtk/gtkfeatures.h
 gtk/gtkcompat.h
 modules/Makefile
 modules/linux-fb/Makefile

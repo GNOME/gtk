@@ -120,15 +120,6 @@ gtk_type_init (void)
 	GtkType type_id;
 	gchar *name;
       } fundamental_info[] = {
-	{ GTK_TYPE_CHAR,	"gchar" },
-	{ GTK_TYPE_UCHAR,	"guchar" },
-	{ GTK_TYPE_BOOL,	"gboolean" },
-	{ GTK_TYPE_INT,		"gint" },
-	{ GTK_TYPE_UINT,	"guint" },
-	{ GTK_TYPE_LONG,	"glong" },
-	{ GTK_TYPE_ULONG,	"gulong" },
-	{ GTK_TYPE_FLOAT,	"gfloat" },
-	{ GTK_TYPE_DOUBLE,	"gdouble" },
 	{ GTK_TYPE_POINTER,	"gpointer" },
 	{ GTK_TYPE_SIGNAL,	"GtkSignal" },
       };
@@ -162,22 +153,19 @@ gtk_type_init (void)
 	{
 	  type_id = g_type_register_fundamental (fundamental_info[i].type_id,
 						 fundamental_info[i].name,
-						 &finfo,
-						 &tinfo);
+						 &tinfo,
+						 &finfo);
 	  g_assert (type_id == fundamental_info[i].type_id);
 	}
 
-      /* GTK_TYPE_STRING & GTK_TYPE_IDENTIFIER
+      /* GTK_TYPE_IDENTIFIER
        */
-      finfo.type_flags = G_TYPE_FLAG_DERIVABLE;
-      type_id = g_type_register_fundamental (GTK_TYPE_STRING, "GtkString", &finfo, &tinfo);
-      g_assert (type_id == GTK_TYPE_STRING);
-      GTK_TYPE_IDENTIFIER = g_type_register_static (GTK_TYPE_STRING, "GtkIdentifier", &tinfo);
+      GTK_TYPE_IDENTIFIER = g_type_register_static (G_TYPE_STRING, "GtkIdentifier", &tinfo);
 
       /* GTK_TYPE_BOXED
        */
       finfo.type_flags = G_TYPE_FLAG_DERIVABLE;
-      type_id = g_type_register_fundamental (GTK_TYPE_BOXED, "GtkBoxed", &finfo, &tinfo);
+      type_id = g_type_register_fundamental (GTK_TYPE_BOXED, "GtkBoxed", &tinfo, &finfo);
       g_assert (type_id == GTK_TYPE_BOXED);
 
       /* enums and flags

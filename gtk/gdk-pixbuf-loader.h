@@ -26,7 +26,6 @@
 #ifndef GDK_PIXBUF_LOADER_H
 #define GDK_PIXBUF_LOADER_H
 
-#include <unistd.h>
 #include <gtk/gtkobject.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -34,52 +33,52 @@
 extern "C" {
 #endif
 
-
+
 
 #define GDK_TYPE_PIXBUF_LOADER		   (gdk_pixbuf_loader_get_type ())
 #define GDK_PIXBUF_LOADER(obj)		   (GTK_CHECK_CAST ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader))
 #define GDK_PIXBUF_LOADER_CLASS(klass)	   (GTK_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
 #define GDK_IS_PIXBUF_LOADER(obj)	   (GTK_CHECK_TYPE ((obj), GDK_TYPE_PIXBUF_LOADER))
 #define GDK_IS_PIXBUF_LOADER_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_LOADER))
+#define GDK_PIXBUF_LOADER_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
 
 
 typedef struct _GdkPixbufLoader GdkPixbufLoader;
 struct _GdkPixbufLoader
 {
-	GtkObject object;
-
-	/* < Private > */
-	gpointer private;
+  GtkObject object;
+  
+  /*< private >*/
+  gpointer private;
 };
 
 typedef struct _GdkPixbufLoaderClass GdkPixbufLoaderClass;
-struct _GdkPixbufLoaderClass {
-	GtkObjectClass parent_class;
-
-	void (* area_prepared)   (GdkPixbufLoader *loader);
-
-	void (* area_updated)    (GdkPixbufLoader *loader,
-                                  guint x, guint y, guint width, guint height);
-
-	void (* frame_done)      (GdkPixbufLoader *loader, GdkPixbufFrame *frame);
-
-	void (* animation_done)  (GdkPixbufLoader *loader);
-
-	void (* closed)          (GdkPixbufLoader *loader);
+struct _GdkPixbufLoaderClass
+{
+  GtkObjectClass parent_class;
+  
+  void (*area_prepared)   (GdkPixbufLoader *loader);
+  void (*area_updated)    (GdkPixbufLoader *loader,
+			   guint            x,
+			   guint            y,
+			   guint            width,
+			   guint            height);
+  void (*frame_done)      (GdkPixbufLoader *loader,
+			   GdkPixbufFrame  *frame);
+  void (*animation_done)  (GdkPixbufLoader *loader);
+  void (*closed)          (GdkPixbufLoader *loader);
 };
 
-
 
-GtkType             gdk_pixbuf_loader_get_type      (void);
-GdkPixbufLoader    *gdk_pixbuf_loader_new           (void);
-gboolean            gdk_pixbuf_loader_write         (GdkPixbufLoader *loader,
-						     const guchar    *buf,
-						     size_t           count);
-GdkPixbuf          *gdk_pixbuf_loader_get_pixbuf    (GdkPixbufLoader *loader);
-GdkPixbufAnimation *gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader);
-void                gdk_pixbuf_loader_close         (GdkPixbufLoader *loader);
+GtkType              gdk_pixbuf_loader_get_type      (void);
+GdkPixbufLoader *    gdk_pixbuf_loader_new           (void);
+gboolean             gdk_pixbuf_loader_write         (GdkPixbufLoader *loader,
+						      const guchar    *buf,
+						      gsize            count);
+GdkPixbuf *          gdk_pixbuf_loader_get_pixbuf    (GdkPixbufLoader *loader);
+GdkPixbufAnimation * gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader);
+void                 gdk_pixbuf_loader_close         (GdkPixbufLoader *loader);
 
-
 
 #ifdef __cplusplus
 }

@@ -8678,6 +8678,16 @@ main (int argc, char *argv[])
   create_main_window ();
 
   gtk_main ();
+  
+  if (0)
+    {
+      sleep (1);
+      while (g_main_pending ())
+	g_main_iteration (FALSE);
+      sleep (1);
+      while (g_main_pending ())
+	g_main_iteration (FALSE);
+    }
 
   return 0;
 }

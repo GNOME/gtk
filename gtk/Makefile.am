@@ -80,7 +80,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkentry.h		\
 	gtkenums.h		\
 	gtkeventbox.h		\
-	gtkfeatures.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkfontsel.h		\

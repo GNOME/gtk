@@ -120,6 +120,6 @@ if test "$echo_libs" = "yes"; then
         fi
       done
 
-      echo $libdirs @more_ldflags@ -lgtk-$target -lgdk-$target $my_glib_libs @INTLLIBS@ @PANGO_LIBS@ @more_libs@ @GDK_WLIBS@ @MATH_LIB@
+      echo $libdirs @more_ldflags@ -lgtk-$target -lgdk_pixbuf -lgdk-$target $my_glib_libs @INTLLIBS@ @PANGO_LIBS@ @more_libs@ @GDK_WLIBS@ @MATH_LIB@
 fi      
 
