@@ -1,3 +1,10 @@
+Fri Feb  4 15:54:54 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): Don't
+	ever make the scrolled-window requisition ever depend on the 
+	visibility state of the scrollbars for the AUTOMATIC policy. 
+	This breaks the	GTK+ requisition model, and causes loops.
+
 Fri Feb  4 15:09:12 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_style_new): Set the charset explicitely for
