@@ -1,3 +1,9 @@
+Fri Mar 29 20:17:35 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_rows_reordered):
+	remove call to gtk_tree_model_sort_increment_stamp
+	(gtk_tree_model_sort_sort_level): always increment the stamp
+
 Fri Mar 29 00:19:41 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Updates
