@@ -5087,21 +5087,36 @@ gtk_text_update_text    (GtkEditable       *editable,
 static void
 recompute_geometry (GtkText* text)
 {
-  GtkPropertyMark start_mark;
+  GtkPropertyMark mark, start_mark;
+  GList *new_lines;
   gint height;
   gint width;
   
   free_cache (text);
   
-  start_mark = set_vertical_scroll (text);
-  
+  mark = start_mark = set_vertical_scroll (text);
+
+  /* We need a real start of a line when calling fetch_lines().
+   * not the start of a wrapped line.
+   */
+  while (mark.index > 0 &&
+	 GTK_TEXT_INDEX (text, mark.index - 1) != LINE_DELIM)
+    decrement_mark (&mark);
+
   gdk_window_get_size (text->text_area, &width, &height);
   
-  text->line_start_cache = fetch_lines (text,
-					&start_mark,
-					NULL,
-					FetchLinesPixels,
-					height + text->first_cut_pixels);
+  new_lines = fetch_lines (text,
+			   &mark,
+			   NULL,
+			   FetchLinesPixels,
+			   height + text->first_cut_pixels);
+
+  /* Now work forward to the actual first onscreen line */
+
+  while (CACHE_DATA (new_lines).start.index < start_mark.index)
+    new_lines = new_lines->next;
+  
+  text->line_start_cache = new_lines;
   
   find_cursor (text, TRUE);
 }

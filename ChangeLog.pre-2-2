@@ -1,3 +1,9 @@
+Tue Aug 25 16:52:47 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (recompute_geometry): Make sure the
+	mark we pass to line start is the beginning of a 
+	real line, not a wrapped one.
+
 Mon Aug 24 18:37:15 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c: Reference count the fonts used in
