@@ -1,3 +1,8 @@
+Wed Jan 23 15:12:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_state_changed): 
+	Stop spinning if widget becomes insensitive. (#56248)
+
 Wed Jan 23 14:44:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c (EPSILON): Decreate value since

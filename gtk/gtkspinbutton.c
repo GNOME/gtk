@@ -105,6 +105,8 @@ static gint gtk_spin_button_focus_out      (GtkWidget          *widget,
 					    GdkEventFocus      *event);
 static void gtk_spin_button_grab_notify    (GtkWidget          *widget,
 					    gboolean            was_grabbed);
+static void gtk_spin_button_state_changed  (GtkWidget          *widget,
+					    GtkStateType        previous_state);
 static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button, 
 					    guint               arrow);
 static gint gtk_spin_button_timer          (GtkSpinButton      *spin_button);
@@ -209,6 +211,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->leave_notify_event = gtk_spin_button_leave_notify;
   widget_class->focus_out_event = gtk_spin_button_focus_out;
   widget_class->grab_notify = gtk_spin_button_grab_notify;
+  widget_class->state_changed = gtk_spin_button_state_changed;
 
   entry_class->activate = gtk_spin_button_activate;
 
@@ -912,6 +915,14 @@ gtk_spin_button_grab_notify (GtkWidget *widget,
 {
   if (!was_grabbed)
     gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));
+}
+
+static void
+gtk_spin_button_state_changed (GtkWidget    *widget,
+			       GtkStateType  previous_state)
+{
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));    
 }
 
 static gint
