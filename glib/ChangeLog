@@ -1,3 +1,37 @@
+Fri Jan  9 20:03:46 1998  Tim Janik  <timj@psynet.net>
+
+	* gutils.c (g_strerror): changed message for EAGAIN from
+	"no more processes" to "try again" since EAGAIN is used with
+	functions else than fork().
+
+	* gscanner.c (g_scanner_get_token_ll): use strtol() instead of
+	strtoul() to avoid conflicts with solaris.
+
+	* merged the glib portions from Jan 2 to Jan 7 out of gtk+/ChangeLog
+ 	into this file.
+
+Wed Jan  7 02:14:30 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* glib.h:
+	* glist.c:
+	* gslist.c:
+	* testglib.c: Added g_[s]list_insert_sorted function
+	and appropriate tests in testglib
+
+Sat Jan  3 20:23:25 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* glib.h: Changed guint32 -> guint for bitfields.
+	(Bitfields must be int or unsigned int?)
+
+Fri Jan  2 23:52 PST 1998 Jay Painter <jpaint@serv.net>
+
+	* glib_pre1.h: 
+	* glib_pre2.h: 
+	* glib.h: reverted glibconfig.h and glib.h files back to the
+	way they were before my ugly hack.
+
+	* gscanner.c: removed inlines from clist and gscanner
+
 Tue Dec 23 02:49:51 1997  Tim Janik  <timj@psynet.net>
 
 	* gscanner.c: new file for GScanner: Flexible lexical scanner for

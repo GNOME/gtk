@@ -149,7 +149,7 @@ g_strerror (gint errnum)
     case EAFNOSUPPORT: return "address family not supported by protocol family";
 #endif
 #ifdef EAGAIN
-    case EAGAIN: return "no more processes";
+    case EAGAIN: return "try again";
 #endif
 #ifdef EALIGN
     case EALIGN: return "EALIGN";

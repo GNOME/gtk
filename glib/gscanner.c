@@ -957,15 +957,15 @@ g_scanner_get_token_ll	(GScanner	*scanner,
 	switch (token)
 	  {
 	  case	G_TOKEN_BINARY:
-	    value.v_binary = strtoul (gstring->str, &endptr, 2);
+	    value.v_binary = strtol (gstring->str, &endptr, 2);
 	    break;
 	    
 	  case	G_TOKEN_OCTAL:
-	    value.v_octal = strtoul (gstring->str, &endptr, 8);
+	    value.v_octal = strtol (gstring->str, &endptr, 8);
 	    break;
 	    
 	  case	G_TOKEN_INT:
-	    value.v_int = strtoul (gstring->str, &endptr, 10);
+	    value.v_int = strtol (gstring->str, &endptr, 10);
 	    break;
 	    
 	  case	G_TOKEN_FLOAT:
@@ -973,7 +973,7 @@ g_scanner_get_token_ll	(GScanner	*scanner,
 	    break;
 	    
 	  case	G_TOKEN_HEX:
-	    value.v_hex = strtoul (gstring->str, &endptr, 16);
+	    value.v_hex = strtol (gstring->str, &endptr, 16);
 	    break;
 	    
 	  default:
