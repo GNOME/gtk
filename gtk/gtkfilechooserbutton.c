@@ -1690,7 +1690,6 @@ update_combo_box (GtkFileChooserButton *button)
 
   g_assert (gtk_tree_model_get_iter_first (priv->filter_model, &iter));
 
-  _gtk_file_chooser_get_current_folder_path (GTK_FILE_CHOOSER (priv->dialog));
   paths = _gtk_file_chooser_get_paths (GTK_FILE_CHOOSER (priv->dialog));
 
   row_found = FALSE;
