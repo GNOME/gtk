@@ -9,7 +9,7 @@
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Nathan Froyd, Tony Gale, Shawn T. Amundson, Emmanuel Deloget
 
-<date>July 14th 1999
+<date>August 10th 1999
 
 <abstract> This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just looking at 
@@ -30,7 +30,7 @@ using GTK+.
 The FAQ authors want to thank:
 <itemize>
 <item>Havoc Pennington
-<item>Eric Mouw
+<item>Erik Mouw
 <item>Owen Taylor
 <item>Tim Janik
 <item>Thomas Mailund Jensen
@@ -103,10 +103,20 @@ reference material for both GTK and GDK, this FAQ and the
 GTK Tutorial.
 
 In addition, you can find links to HTML versions of these documents 
-by going to 
-<htmlurl url="http://www.gtk.org/" 
-name="http://www.gtk.org/">.
+by going to <htmlurl url="http://www.gtk.org/" 
+name="http://www.gtk.org/">. A packaged version of the GTK Tutorial,
+with SGML, HTML, Postscript, DVI and text versions can be found in
+<htmlurl url="ftp://ftp.gtk.org/pub/gtk/tutorial"
+name="ftp://ftp.gtk.org/pub/gtk/tutorial">
 
+There is also a book available that details programming with GTK+ and
+GDK which has been written by Eric Harlow. It is entitled "Developing
+Linux Applications with GTK+ and GDK" and is available at all good
+book stores. The ISBN is 0-7357-0021-4
+
+The example code from Eric's book is available on-line at
+<htmlurl url="http://www.bcpl.net/~eharlow/book"
+name="http://www.bcpl.net/~eharlow/book">
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is there a mailing list (or mailing list archive) for GTK+?
@@ -125,9 +135,9 @@ email message to <htmlurl url="mailto:gtk-list-request@redhat.com"
 name="gtk-list-request@redhat.com">
 with <em>subscribe</em> in the <bf>subject</bf>.
 <p>
-A searchable archive of the mailing list can be found at 
-<htmlurl url="http://archive.redhat.com/gtk-list" 
-name="http://archive.redhat.com/gtk-list">
+An archive of the mailing list can be found at 
+<htmlurl url="http://www.gnome.org/mailing-lists/archives/gtk-list" 
+name="http://www.gnome.org/mailing-lists/archives/gtk-list">
 </itemize>
 <!-- ----------------------------------------------------------------- -->
 <sect1>The gtk-list hasn't had any traffic for days, is it dead?
@@ -945,6 +955,35 @@ Regardless, it's especially not a priority since relatively good
 workarounds exist. -->
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>How to I identifiy a widgets top level window or other ancestor?
+<p>
+There are a couple of ways to find the top level parent of a
+widget. The easier way is to call the <tt/gtk_widget_top_level()/
+function that returns a pointer to a GtkWidget that is the top level
+window.
+
+A more complicated way to do this (but less limited, as it allows
+the user to get the closest ancestor of a known type) is to use
+<tt/gtk_widget_get_ancestor()/ as in:
+
+<tscreen><verb>
+      GtkWidget       *widget;
+      
+      widget = gtk_widget_get_ancestor(w, GTK_TYPE_WINDOW);
+</verb></tscreen>
+
+Since virtually all the GTK_TYPEs can be used as the second parameter of
+this function, you can get any parent widget of a particular
+widget. Suppose you have an hbox which contains a vbox, which in turn contains
+some other atomic widget (entry, label, etc. To find the master hbox
+using the <tt/entry/ widget simply use:
+
+<tscreen><verb>
+      GtkWidget       *hbox;
+      hbox = gtk_widget_get_ancestor(w, GTK_TYPE_HBOX);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>How do I find out about the selection of a GtkList?
 <p>
 
@@ -1055,9 +1094,47 @@ Old versions of GTK+ used to provide the <tt/gtk_container_enable_resize()/ and
 modifying widgets.
 
 In the current version of GTK+, there is no more need for these functions, 
-since GTK+ will only resize widget during idle.
+since GTK+ will only resize a widget during idle.
 
 <!-- XXX should we get rid of this one ? -->
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>I don't want the user of my applications to enter text into a GtkCombo. Any idea?
+<p>
+A GtkCombo has an associated entry which can be accessed using the
+following expression:
+
+<tscreen><verb>
+      GTK_COMBO(combo_widget)->entry
+</verb></tscreen>
+
+If you don't want the user to be able to modify the content of this
+entry, you can use the gtk_entry_set_editable() function:
+
+<tscreen><verb>
+      void gtk_entry_set_editable(GtkEntry *entry, 
+                                  gboolean editable);
+</verb></tscreen>
+
+Set the editable parameter to FALSE to disable typing into the entry.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I catch a combo box change?
+<p>
+The entry which is associated to your GtkCombo send a "changed" signal when:
+<itemize>
+      <item>some text is typed in
+      <item>the selection of the combo box is changed
+</itemize>
+
+To catch any combo box change, simply connect your signal handler with
+
+<tscreen><verb>
+      gtk_signal_connect(GTK_COMBO(cb)->entry,
+                         "changed",
+                         GTK_SIGNAL_FUNC(my_cb_change_handler),
+                         NULL);
+</verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I catch a double click event (in a list widget, for example)?
@@ -1454,6 +1531,38 @@ function. The first parameter is you widget pointer. The second parameter
 is a boolean value: when this value is TRUE, the widget is enabled.
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>How do I use horizontal scrollbars with a GtkText widget?
+<p>
+The short answer is that you can't. The current version of the GtkText
+widget does not support horizontal scrolling. There is an intention to
+completely rewrite the GtkText widget, at which time this limitation
+will be removed.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I change the font of a GtkText widget?
+<p>
+There are a couple of ways of doing this. As GTK+ allows the
+appearance of applications to be changed at run time using resources
+you can use something like the following in the appropriate
+file:
+
+<tscreen><verb>
+style "text"
+{
+  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+}
+</verb></tscreen>
+
+Another way to do this is to load a font within your program, and then
+use this in the functions for adding text to the text widget. You can
+load a font using, for example:
+
+<tscreen><verb>
+  GdkFont *font;
+  font = gdk_font_load("-adobe-helvetica-medium-r-normal--*-140-*-*-*-*-*-*");
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>How do I set the cursor position in a GtkText object?
 <p>
 Notice that the response is valid for any object that inherits from the 
@@ -1530,7 +1639,7 @@ and the underlying X library really doesn't like this.
 
 The right function to use here is <tt/_exit()/. 
 
-Eric Mouw gave the following piece of code about the fork()/exit() problem
+Erik Mouw gave the following piece of code about the fork()/exit() problem
 (slightly modified)
 
 <tscreen><verb>
@@ -1617,6 +1726,7 @@ and safer to use on multiple platforms.
 
 <!-- Examples, anybody? I've been mulling some over. NF -->
    
+<!-- ----------------------------------------------------------------- -->
 <sect1>How do I use color allocation?
 <p>
 One of the nice things about GDK is that it's based on top of Xlib; this is 
@@ -1784,8 +1894,8 @@ This document is maintained by Nathan Froyd
 name="&lt;maestrox@geocities.com&gt;">,
 Tony Gale <htmlurl url="mailto:gale@gimp.org" 
 name="&lt;gale@gimp.org&gt;"> and 
-Emmanuel Deloget <htmlurl url="mailto:pixel@epita.fr"
-name="&lt;pixel@epita.fr&gt;">.
+Emmanuel Deloget <htmlurl url="mailto:logout@free.fr"
+name="&lt;logout@free.fr&gt;">.
 This FAQ was created by Shawn T. Amundson 
 <htmlurl url="mailto:amundson@gimp.org" 
 name="&lt;amundson@gimp.org&gt;"> who continues to provide support.
