@@ -444,6 +444,8 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
   scrollbar_spacing = _gtk_scrolled_window_get_scrollbar_spacing (popup);
 
   gdk_window_get_origin (combo->entry->window, x, y);
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+    *x -= widget->allocation.width - combo->entry->allocation.width;
   real_height = MIN (combo->entry->requisition.height, 
 		     combo->entry->allocation.height);
   *y += real_height;
