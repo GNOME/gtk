@@ -1,3 +1,7 @@
+2003-02-28  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* configure.in: Changed "by" (wrong lang code) to "be"
+
 Fri Dec 13 23:10:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c: Fix a problem with the focus row

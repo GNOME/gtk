@@ -1,3 +1,8 @@
+2003-02-28  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* by.po -> be.po: renamed po file to use correct language code
+	for Belarussian (in case there is a new release some day)
+
 2002-12-14  Christophe Merlet  <redfox@redfoxcenter.org>
 
 	* fr.po: Updated French translation.
