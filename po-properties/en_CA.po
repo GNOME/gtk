@@ -1,14 +1,15 @@
 # English/Canada translation of gtk+-properties
 # Copyright (C) 2004 Adam Weinberger and the GNOME Foundation
-# This file is distributed under the same license as the gtk+ package.
+# This file is distributed under the same licence as the gtk+ package.
 # Adam Weinberger <adamw@FreeBSD.org>, 2004.
+#
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:23-0400\n"
-"PO-Revision-Date: 2004-09-07 22:53-0400\n"
+"POT-Creation-Date: 2004-09-24 13:39-0400\n"
+"PO-Revision-Date: 2004-09-24 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -1218,7 +1219,7 @@ msgstr "Title"
 
 #: gtk/gtkcolorbutton.c:218
 msgid "The title of the color selection dialog"
-msgstr "The title of the colour selection dialog"
+msgstr "The title of the colour selection dialogue"
 
 #: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1781
 msgid "Current Color"
@@ -1434,7 +1435,7 @@ msgstr "Has separator"
 
 #: gtk/gtkdialog.c:147
 msgid "The dialog has a separator bar above its buttons"
-msgstr "The dialog has a separator bar above its buttons"
+msgstr "The dialogue has a separator bar above its buttons"
 
 #: gtk/gtkdialog.c:172
 msgid "Content area border"
@@ -1442,7 +1443,7 @@ msgstr "Content area border"
 
 #: gtk/gtkdialog.c:173
 msgid "Width of border around the main dialog area"
-msgstr "Width of border around the main dialog area"
+msgstr "Width of border around the main dialogue area"
 
 #: gtk/gtkdialog.c:180
 msgid "Button spacing"
@@ -1458,7 +1459,7 @@ msgstr "Action area border"
 
 #: gtk/gtkdialog.c:190
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr "Width of border around the button area at the bottom of the dialog"
+msgstr "Width of border around the button area at the bottom of the dialogue"
 
 #: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
@@ -1529,7 +1530,7 @@ msgid ""
 "dialog) when Enter is pressed"
 msgstr ""
 "Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed"
+"dialogue) when Enter is pressed"
 
 #: gtk/gtkentry.c:531
 msgid "Width in chars"
@@ -1783,7 +1784,7 @@ msgstr "Y position of child widget"
 
 #: gtk/gtkfontbutton.c:176
 msgid "The title of the font selection dialog"
-msgstr "The title of the font selection dialog"
+msgstr "The title of the font selection dialogue"
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
@@ -2242,7 +2243,7 @@ msgstr "Image/label border"
 
 #: gtk/gtkmessagedialog.c:108
 msgid "Width of border around the label and image in the message dialog"
-msgstr "Width of border around the label and image in the message dialog"
+msgstr "Width of border around the label and image in the message dialogue"
 
 #: gtk/gtkmessagedialog.c:123
 msgid "Use separator"
@@ -2252,7 +2253,7 @@ msgstr "Use separator"
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
-"Whether to put a separator between the message dialog's text and the buttons"
+"Whether to put a separator between the message dialogue's text and the buttons"
 
 #: gtk/gtkmessagedialog.c:130
 msgid "Message Type"
@@ -2268,7 +2269,7 @@ msgstr "Message Buttons"
 
 #: gtk/gtkmessagedialog.c:139
 msgid "The buttons shown in the message dialog"
-msgstr "The buttons shown in the message dialog"
+msgstr "The buttons shown in the message dialogue"
 
 #: gtk/gtkmisc.c:109
 msgid "Y align"
@@ -4411,15 +4412,3 @@ msgstr "IM Status style"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "How to draw the input method statusbar"
-
-#~ msgid "ComboBox appareance"
-#~ msgstr "ComboBox appareance"
-
-#~ msgid "ComboBox appearance, where TRUE means Windows-style."
-#~ msgstr "ComboBox appearance, where TRUE means Windows-style."
-
-#~ msgid "Folder Mode"
-#~ msgstr "Folder Mode"
-
-#~ msgid "Whether to select folders rather than files"
-#~ msgstr "Whether to select folders rather than files"
