@@ -1840,8 +1840,8 @@ gtk_combo_box_relayout_item (GtkComboBox *combo_box,
 {
   gint current_col = 0, current_row = 0;
   gint rows, cols;
-  GList *list;
-  GtkWidget *item;
+  GList *list, *nth;
+  GtkWidget *item, *last;
   GtkWidget *menu;
 
   menu = combo_box->priv->popup_widget;
@@ -1849,26 +1849,49 @@ gtk_combo_box_relayout_item (GtkComboBox *combo_box,
     return;
 
   list = gtk_container_get_children (GTK_CONTAINER (menu));
-  item = g_list_nth_data (list, index);
+  nth = g_list_nth (list, index);
+  item = nth->data;
+  if (nth->prev)
+    last = nth->prev->data;
+  else 
+    last = NULL;
   g_list_free (list);
 
   gtk_combo_box_item_get_size (combo_box, index, &cols, &rows);
-
-  /* look for a good spot */
-  while (1)
+      
+   if (combo_box->priv->col_column == -1 &&
+      combo_box->priv->row_column == -1 &&
+      last)
     {
+      gtk_container_child_get (GTK_CONTAINER (menu), 
+			       last,
+			       "right_attach", &current_col,
+			       "top_attach", &current_row,
+			       NULL);
       if (current_col + cols > combo_box->priv->wrap_width)
-        {
-          current_col = 0;
-          current_row++;
-        }
-
-      if (!menu_occupied (GTK_MENU (menu),
-                          current_col, current_col + cols,
-                          current_row, current_row + rows))
-        break;
-
-      current_col++;
+	{
+	  current_col = 0;
+	  current_row++;
+	}
+    }
+  else
+    {
+      /* look for a good spot */
+      while (1)
+	{
+	  if (current_col + cols > combo_box->priv->wrap_width)
+	    {
+	      current_col = 0;
+	      current_row++;
+	    }
+	  
+	  if (!menu_occupied (GTK_MENU (menu),
+			      current_col, current_col + cols,
+			      current_row, current_row + rows))
+	    break;
+	  
+	  current_col++;
+	}
     }
 
   /* set attach props */

@@ -1,3 +1,9 @@
+Tue Aug  3 01:30:40 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_relayout_item): Optimize 
+	for the case that row_column and col_column are unset.  
+	(#148868, Lorenzo Gil Sánchez)
+
 Mon Aug  2 02:07:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popdown): 
