@@ -237,6 +237,9 @@ static void         gtk_entry_adjust_scroll            (GtkEntry       *entry);
 static gint         gtk_entry_move_visually            (GtkEntry       *editable,
 							gint            start,
 							gint            count);
+static gint         gtk_entry_move_logically           (GtkEntry       *entry,
+							gint            start,
+							gint            count);
 static gint         gtk_entry_move_forward_word        (GtkEntry       *entry,
 							gint            start);
 static gint         gtk_entry_move_backward_word       (GtkEntry       *entry,
@@ -252,8 +255,8 @@ static void         gtk_entry_paste                    (GtkEntry       *entry,
 static void         gtk_entry_update_primary_selection (GtkEntry       *entry);
 static void         gtk_entry_do_popup                 (GtkEntry       *entry,
 							GdkEventButton *event);
-static gboolean     gtk_entry_mnemonic_activate        (GtkWidget     *widget,
-							gboolean       group_cycling);
+static gboolean     gtk_entry_mnemonic_activate        (GtkWidget      *widget,
+							gboolean        group_cycling);
 
 static GtkWidgetClass *parent_class = NULL;
 
@@ -1847,7 +1850,7 @@ gtk_entry_move_cursor (GtkEntry       *entry,
   switch (step)
     {
     case GTK_MOVEMENT_LOGICAL_POSITIONS:
-      new_pos = CLAMP (new_pos + count, 0, entry->text_length);
+      new_pos = gtk_entry_move_logically (entry, new_pos, count);
       break;
     case GTK_MOVEMENT_VISUAL_POSITIONS:
       new_pos = gtk_entry_move_visually (entry, new_pos, count);
@@ -1917,7 +1920,7 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
   switch (type)
     {
     case GTK_DELETE_CHARS:
-      end_pos = entry->current_pos + count;
+      end_pos = gtk_entry_move_logically (entry, entry->current_pos, count);
       gtk_editable_delete_text (editable, MIN (start_pos, end_pos), MAX (start_pos, end_pos));
       break;
     case GTK_DELETE_WORDS:
@@ -2466,9 +2469,7 @@ gtk_entry_find_position (GtkEntry *entry,
     }
 
   pos = g_utf8_pointer_to_offset (entry->text, entry->text + index);
-  
-  if (trailing)
-    pos += 1;
+  pos += trailing;
 
   return pos;
 }
@@ -2622,16 +2623,60 @@ gtk_entry_move_visually (GtkEntry *entry,
 
       if (new_index < 0 || new_index == G_MAXINT)
 	break;
+
+      index = new_index;
       
-      if (new_trailing)
+      while (new_trailing--)
 	index = g_utf8_next_char (entry->text + new_index) - entry->text;
-      else
-	index = new_index;
     }
 
   g_object_unref (G_OBJECT (layout));
   
   return g_utf8_pointer_to_offset (text, text + index);
+}
+
+static gint
+gtk_entry_move_logically (GtkEntry *entry,
+			  gint      start,
+			  gint      count)
+{
+  gint new_pos = start;
+
+  /* Prevent any leak of information */
+  if (!entry->visible)
+    {
+      new_pos = CLAMP (start + count, 0, entry->text_length);
+    }
+  else if (entry->text)
+    {
+      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+      PangoLogAttr *log_attrs;
+      gint n_attrs;
+
+      pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
+
+      while (count > 0 && new_pos < entry->text_length)
+	{
+	  do
+	    new_pos++;
+	  while (new_pos < entry->text_length && !log_attrs[new_pos].is_cursor_position);
+	  
+	  count--;
+	}
+      while (count < 0 && new_pos > 0)
+	{
+	  do
+	    new_pos--;
+	  while (new_pos > 0 && !log_attrs[new_pos].is_cursor_position);
+	  
+	  count++;
+	}
+      
+      g_free (log_attrs);
+      g_object_unref (G_OBJECT (layout));
+    }
+
+  return new_pos;
 }
 
 static gint

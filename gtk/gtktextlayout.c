@@ -1982,7 +1982,6 @@ line_display_index_to_iter (GtkTextLayout      *layout,
         gtk_text_iter_forward_to_line_end (iter);
     }
   
-  /* FIXME should this be cursor positions? */
   gtk_text_iter_forward_chars (iter, trailing);
 }
 

@@ -1,3 +1,15 @@
+Thu May 17 17:10:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c: Make logical motion and deletion by graphemes, 
+	not by characters.
+
+	* gtk/gtkentry.c: Handle "trailing" returns from Pango when they
+	are not zero or one; that is, when graphemes of multiple characters
+	are involved.
+
+	* gtk/gtktextlayout.c (line_display_index_to_iter): Remove unnecessary
+	FIXME.
+
 2001-05-17  Alexander Larsson  <alla@lysator.liu.se>
 	
 	* gtk/gtkbbox.c:
@@ -168,7 +180,6 @@ Fri May 11 01:05:00 2001  Tim Janik  <timj@gtk.org>
 	* gdk/linux-fb/gdkwindow-fb.c (_gdk_windowing_window_clear_area):
 	Handle background pixmaps.
 
->>>>>>> 1.1955
 Wed May  9 15:27:22 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_column_drag_function): New
