@@ -46,13 +46,7 @@ GdkImage*  gdk_image_new       (GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,
 				gint	      height);
-#ifdef GDK_WINDOWING_WIN32
-GdkImage*  gdk_image_bitmap_new(GdkImageType  type,
-				GdkVisual    *visual,
-				gint	      width,
-				gint	      height);
 
-#endif
 GdkImage*  gdk_image_get       (GdkDrawable  *drawable,
 				gint	      x,
 				gint	      y,

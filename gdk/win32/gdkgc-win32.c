@@ -1218,7 +1218,6 @@ gdk_win32_colormap_color_unpack (GdkColormapPrivateWin32 *colormap_private,
 				 GdkColor                *result)
 {
   GdkVisual *visual;
-  guchar r, g, b;
 
   if (colormap_private == NULL)
     {
@@ -1247,7 +1246,7 @@ gdk_win32_colormap_color_unpack (GdkColormapPrivateWin32 *colormap_private,
 
     default:
       g_assert_not_reached ();
-      return 0;
+      return;
     }
 }
 

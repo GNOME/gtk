@@ -137,14 +137,10 @@ gdk_image_get (GdkWindow *window,
 	       gint       width,
 	       gint       height)
 {
-  HDC hdc, memdc;
-  HGDIOBJ oldbitmap2;
   BITMAP bm;
-  HPALETTE holdpalw = NULL, holdpali = NULL;
   GdkVisual *visual;
   GdkPixmap *pixmap;
-  GdkImage *image;
-  GdkColormapPrivateWin32 *cmapp = NULL;
+  GdkGC *gc;
   gint depth;
 
   g_return_val_if_fail (window != NULL, NULL);
@@ -160,19 +156,8 @@ gdk_image_get (GdkWindow *window,
   /* This function is called both to blit from a window and from
    * a pixmap.
    */
-  if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
+  if (GDK_IS_PIXMAP (window))
     {
-      hdc = gdk_win32_obtain_offscreen_hdc (GDK_DRAWABLE_XID (window));
-      if (hdc == NULL)
-	{
-	  g_free (image);
-	  return NULL;
-	}
-      if (visual != NULL &&
-	  (visual->type == GDK_VISUAL_PSEUDO_COLOR ||
-	   visual->type == GDK_VISUAL_STATIC_COLOR))
-	cmapp = (GdkColormapPrivateWin32 *) gdk_drawable_get_colormap (window);
-
       GetObject (GDK_DRAWABLE_XID (window), sizeof (BITMAP), &bm);
       GDK_NOTE (IMAGE,
 		g_print ("gdk_image_get: bmWidth=%ld bmHeight=%ld "
@@ -183,97 +168,18 @@ gdk_image_get (GdkWindow *window,
     }
   else
     {
-      hdc = gdk_win32_obtain_window_hdc (GDK_DRAWABLE_XID (window));
-      if (hdc == NULL)
-	return NULL;
       depth = gdk_visual_get_system ()->depth;
-    }
-
-  if ((memdc = CreateCompatibleDC (hdc)) == NULL)
-    {
-      WIN32_GDI_FAILED ("CreateCompatibleDC");
-      if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-        gdk_win32_release_hdc (NULL, hdc);
-      else
-        gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
-      return NULL;
     }
 
   pixmap = gdk_win32_pixmap_new (NULL, visual, width, height, depth);
   if (!pixmap)
     return NULL;
 
-  image = GDK_DRAWABLE_WIN32DATA (pixmap)->image;
+  gc = gdk_gc_new (pixmap);
+  gdk_win32_draw_drawable (pixmap, gc, window, x, y, 0, 0, width, height);
+  gdk_gc_unref (gc);
 
-  if (cmapp != NULL)
-    {
-      if (!(holdpalw = SelectPalette (hdc, cmapp->hpal, FALSE)))
-	WIN32_GDI_FAILED ("SelectPalette");
-      else
-	GDK_NOTE (IMAGE, g_print ("gdk_image_get: hpal=%p hdc=%p\n",
-				  cmapp->hpal, hdc));
-    }
-  
-  if ((oldbitmap2 = SelectObject (memdc, GDK_DRAWABLE_XID (pixmap))) == NULL)
-    {
-      WIN32_GDI_FAILED ("SelectObject");
-      gdk_pixmap_unref (pixmap);
-      DeleteDC (memdc);
-      if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-        gdk_win32_release_hdc (NULL, hdc);
-      else
-        gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
-      return NULL;
-    }
-  
-  if (cmapp != NULL)
-    {
-      if (!(holdpali = SelectPalette (memdc, cmapp->hpal, FALSE)))
-	WIN32_GDI_FAILED ("SelectPalette");
-      else
-	GDK_NOTE (IMAGE, g_print ("gdk_image_get: hpal=%p memdc=%p\n",
-				  cmapp->hpal, memdc));
-    }
-  
-  if (!BitBlt (memdc, 0, 0, width, height, hdc, x, y, SRCCOPY))
-    {
-      WIN32_GDI_FAILED ("BitBlt");
-      if (holdpalw != NULL)
-	if (!SelectPalette (hdc, holdpalw, FALSE))
-	  WIN32_GDI_FAILED ("SelectPalette");
-      if (holdpali != NULL)
-	if (!SelectPalette (memdc, holdpali, FALSE))
-	  WIN32_GDI_FAILED ("SelectPalette");
-      SelectObject (memdc, oldbitmap2);
-      gdk_pixmap_unref (pixmap);
-      DeleteDC (memdc);
-      if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-        gdk_win32_release_hdc (NULL, hdc);
-      else
-        gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
-      return NULL;
-    }
-
-  if (holdpalw != NULL)
-    if (!SelectPalette (hdc, holdpalw, FALSE))
-      WIN32_GDI_FAILED ("SelectPalette");
-
-  if (holdpali != NULL)
-    if (!SelectPalette (memdc, holdpali, FALSE))
-      WIN32_GDI_FAILED ("SelectPalette");
-
-  if (SelectObject (memdc, oldbitmap2) == NULL)
-    WIN32_GDI_FAILED ("SelectObject");
-
-  if (!DeleteDC (memdc))
-    WIN32_GDI_FAILED ("DeleteDC");
-
-  if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-    gdk_win32_release_hdc (NULL, hdc);
-  else
-    gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
-
-  return image;
+  return GDK_DRAWABLE_WIN32DATA (pixmap)->image;
 }
 
 guint32
@@ -281,45 +187,38 @@ gdk_image_get_pixel (GdkImage *image,
 		     gint      x,
 		     gint      y)
 {
-  guint32 pixel;
+  guchar *pixelp;
 
   g_return_val_if_fail (image != NULL, 0);
-
   g_return_val_if_fail (x >= 0 && x < image->width &&
 			y >= 0 && y < image->height,
 			0);
 
+  GdiFlush ();
   if (image->depth == 1)
-    pixel = (((char *) image->mem)[y * image->bpl + (x >> 3)] & (1 << (7 - (x & 0x7)))) != 0;
-  else
-    {
-      guchar *pixelp = (guchar *) image->mem + y * image->bpl + x * image->bpp;
+    return (((char *) image->mem)[y * image->bpl + (x >> 3)] & (1 << (7 - (x & 0x7)))) != 0;
+
+  pixelp = (guchar *) image->mem + y * image->bpl + x * image->bpp;
       
-      switch (image->bpp)
-	{
-	case 1:
-	  pixel = *pixelp;
-	  break;
-
-	/* Windows is always LSB, no need to check image->byte_order. */
-	case 2:
-	  pixel = pixelp[0] | (pixelp[1] << 8);
-	  break;
-
-	case 3:
-	  pixel = pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
-	  break;
-
-	case 4:
-	  pixel = pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
-	  break;
-
-	default:
-	  g_assert_not_reached ();
-	}
+  switch (image->bpp)
+    {
+    case 1:
+      return *pixelp;
+      
+      /* Windows is always LSB, no need to check image->byte_order. */
+    case 2:
+      return pixelp[0] | (pixelp[1] << 8);
+      
+    case 3:
+      return pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
+      
+    case 4:
+      return pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
+      
+    default:
+      g_assert_not_reached ();
+      return 0;
     }
-
-  return pixel;
 }
 
 void
@@ -332,6 +231,7 @@ gdk_image_put_pixel (GdkImage *image,
 
   g_return_if_fail (x >= 0 && x < image->width && y >= 0 && y < image->height);
 
+  GdiFlush ();
   if (image->depth == 1)
     if (pixel & 1)
       ((guchar *) image->mem)[y * image->bpl + (x >> 3)] |= (1 << (7 - (x & 0x7)));
@@ -382,6 +282,7 @@ gdk_image_put (GdkImage    *image,
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
 
-  gdk_draw_drawable (drawable, gc, ((GdkImagePrivateWin32 *) image)->pixmap,
-		     xsrc, ysrc, xdest, ydest, width, height);
+  gdk_win32_draw_drawable (drawable, gc,
+			   ((GdkImagePrivateWin32 *) image)->pixmap,
+			   xsrc, ysrc, xdest, ydest, width, height);
 }

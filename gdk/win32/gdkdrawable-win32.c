@@ -73,15 +73,6 @@ static void gdk_win32_draw_text_wc   (GdkDrawable    *drawable,
 				      gint            y,
 				      const GdkWChar *text,
 				      gint            text_length);
-static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkPixmap      *src,
-				      gint            xsrc,
-				      gint            ysrc,
-				      gint            xdest,
-				      gint            ydest,
-				      gint            width,
-				      gint            height);
 static void gdk_win32_draw_points    (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkPoint       *points,
@@ -131,7 +122,7 @@ gdk_win32_drawable_type_to_string (GdkDrawableType type)
     }
 }
 
-static gchar *
+gchar *
 gdk_win32_drawable_description (GdkDrawable *d)
 {
   GdkDrawablePrivate *dp = (GdkDrawablePrivate *) d;
@@ -668,7 +659,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
   gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_FONT);
 }
 
-static void
+void
 gdk_win32_draw_drawable (GdkDrawable *drawable,
 			 GdkGC       *gc,
 			 GdkPixmap   *src,
@@ -706,7 +697,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
     {
       /* If we are drawing on a window, calculate the region that is
        * outside the source pixmap, and invalidate that, causing it to
-       * be cleared. XXX
+       * be cleared. Not completely sure whether this is always needed. XXX
        */
       SetRectEmpty (&r);
       outside_rgn = CreateRectRgnIndirect (&r);
@@ -729,10 +720,8 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
     g_warning ("gdk_draw_pixmap: CombineRgn returned a COMPLEXREGION");
 
   GetRgnBox (draw_rgn, &r);
-  if (r.left != xsrc
-      || r.top != ysrc
-      || r.right != xsrc + width + 1
-      || r.bottom != ysrc + height + 1)
+  if (r.left != xsrc || r.top != ysrc ||
+      r.right != xsrc + width + 1 || r.bottom != ysrc + height + 1)
     {
       xdest += r.left - xsrc;
       xsrc = r.left;

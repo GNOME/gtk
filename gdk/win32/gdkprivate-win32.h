@@ -395,6 +395,16 @@ GdkPixmap* gdk_win32_pixmap_new (GdkWindow *window,
 				 gint       height,
 				 gint       depth);
 
+void     gdk_win32_draw_drawable (GdkDrawable    *drawable,
+				  GdkGC          *gc,
+				  GdkPixmap      *src,
+				  gint            xsrc,
+				  gint            ysrc,
+				  gint            xdest,
+				  gint            ydest,
+				  gint            width,
+				  gint            height);
+
 GdkImagePrivateWin32 *gdk_win32_image_alloc (void);
 
 HRGN	gdk_win32_bitmap_to_region (GdkPixmap *pixmap);
@@ -451,12 +461,12 @@ gchar *gdk_win32_function_to_string   (GdkFunction  function);
 gchar *gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *gdk_win32_line_style_to_string (GdkLineStyle line_style);
 gchar *gdk_win32_drawable_type_to_string (GdkDrawableType type);
+gchar *gdk_win32_drawable_description (GdkDrawable *d);
 gchar *gdk_win32_message_name         (UINT msg);
 void   gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
 				       const int           nentries);
 void   gdk_win32_print_system_palette (void);
 void   gdk_win32_print_hpalette (HPALETTE hpal);
-
 #endif
 
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);

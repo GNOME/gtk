@@ -1,5 +1,28 @@
 2002-01-27  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/gdkimage.h: Remove declaration of gdk_image_bitmap_new(),
+	the fuinction was removed already earlier.
+
+	* gdk/win32/gdkdrawable-win32.c: Make gdk_win32_draw_drawable()
+	public (but not exported from DLL).
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_colormap_color_unpack):
+	Remove unused variables. Don't return value from void function.
+
+	* gdk/win32/gdkimage-win32.c: (gdk_image_get): Simplify by using
+	gdk_win32_draw_drawable.
+	(gdk_image_put): Use gdk_win32_draw_drawable() directly instead of
+	gdk_draw_drawable().
+	(gdk_image_get_pixel): Call GdiFlush(). Cosmetics.
+	(gdk_image_put_pixel): Call GdiFlush().
+
+	* gdk/win32/gdkpixmap-win32.c: (showpixmap): Improve this verbose
+	debugging function (which isn't even compiled normally, though).
+
+	* gdk/win32/gdkprivate-win32.h: Declare gdk_win32_draw_drawable().
+
+2002-01-27  Tor Lillqvist  <tml@iki.fi>
+
 	* gdk/win32/gdkprivate-win32.h: Unify GdkPixmap and GdkImage
 	implementation: For each GdkPixmap, allocate a GdkImage, and vice
 	versa. GdkDrawableWin32Data has a pointer to the GdkImage.

@@ -654,6 +654,8 @@ gdk_xpm_destroy_notify (gpointer data)
 
 #if 0
 
+/* Very verbose pixmap dumping, both to screen and with g_print() */
+
 static void
 showpixmap (GdkPixmap *pm)
 {
@@ -661,35 +663,48 @@ showpixmap (GdkPixmap *pm)
   GdkImage *im = GDK_DRAWABLE_WIN32DATA (pm)->image;
   GdkGC *gc = gdk_gc_new (pm);
   static int yoffset = 0;
+  static int xoffset = 0;
+  static int colwidth = 0;
   gint w, h;
   gint i, j;
   guchar *p;
 
   gdk_drawable_get_size (pm, &w, &h);
-  g_print ("pixmap: %p %dx%d hdc=%p\n", pm, w, h, hdc);
+  g_print ("pixmap: %p %dx%d\n", pm, w, h);
 
-  if (yoffset < 1000)
+  if (yoffset + h + 10 > gdk_screen_height ())
+    {
+      yoffset = 0;
+      xoffset += colwidth + 10;
+      colwidth = 0;
+    }
+
+  if (yoffset + h < gdk_screen_height () &&
+      xoffset + w < gdk_screen_width ())
     {
       hdc = gdk_win32_hdc_get (pm, gc, GDK_GC_FOREGROUND);      
       if (hdc != NULL)
 	{
-	  if (!BitBlt (GetDC (NULL), 10, yoffset, w, h, hdc, 0, 0, SRCCOPY))
+	  if (!BitBlt (GetDC (NULL), xoffset, yoffset, w, h, hdc, 0, 0, SRCCOPY))
 	    printf ("BitBlt failed\n");
 	  else
-	    yoffset += h + 10;
+	    {
+	      yoffset += h + 10;
+	      colwidth = MAX (colwidth, w);
+	    }
 	  gdk_win32_hdc_release  (pm, gc, GDK_GC_FOREGROUND);
 	}
     }
 
   g_print ("image: %p %dx%dx%d bpl=%d\n", im,
 	   im->width, im->height, im->depth, im->bpl);
-  for (i = 0; i < MIN (im->height, 80); i++)
+  for (i = 0; i < MIN (im->height, 40); i++)
     {
       gint maxw;
       if (im->depth == 1)
-	maxw = MIN (im->width, 79) / 8;
+	maxw = MIN (im->width, 79);
       else
-	maxw = MIN (im->width, 79) / (2*im->bpp + 1);
+	maxw = MIN (im->width, 79 / (2*im->bpp + 1));
       p = ((guchar *) im->mem) + i*im->bpl;
       for (j = 0; j < maxw; j++)
 	{
