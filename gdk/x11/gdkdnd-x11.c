@@ -3240,6 +3240,11 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   g_return_if_fail (window != NULL);
 
+  if (GPOINTER_TO_INT (gdk_drawable_get_data (window, "gdk-dnd-registered")))
+    return;
+  else
+    gdk_drawable_set_data (window, "gdk-dnd-registered", GINT_TO_POINTER(TRUE), NULL);
+  
   /* Set Motif drag receiver information property */
 
   if (!motif_drag_receiver_info_atom)

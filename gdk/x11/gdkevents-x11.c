@@ -320,7 +320,8 @@ gdk_event_translate (GdkEvent *event,
       
       if (result != GDK_FILTER_CONTINUE)
 	{
-	  return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	  return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	  goto done;
 	}
     }
 
@@ -352,7 +353,10 @@ gdk_event_translate (GdkEvent *event,
       result = gdk_event_apply_filters (xevent, event,
 	  				window_private->filters);
       if (result != GDK_FILTER_CONTINUE)
-	return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	{
+	  return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	  goto done;
+	}
     }
 #endif
 
@@ -1200,7 +1204,8 @@ gdk_event_translate (GdkEvent *event,
       
       break;
     }
-  
+
+ done:
   if (return_val)
     {
       if (event->any.window)

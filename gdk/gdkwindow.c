@@ -106,6 +106,7 @@ static void   gdk_window_draw_lines     (GdkDrawable     *drawable,
 					 GdkPoint        *points,
 					 gint             npoints);
 
+static void gdk_window_free_paint_stack (GdkWindow *window);
 
 /* All drawing operations on windows are forwarded through the following
  * class to enable the automatic-backing-store feature.
@@ -168,6 +169,142 @@ _gdk_window_alloc (void)
   private->update_freeze_count = 0;
   
   return window;
+}
+
+/**
+ * _gdk_window_destroy_heirarchy:
+ * @window: a #GdkWindow
+ * @recursing: If TRUE, then this is being called because a parent
+ *            was destroyed. This generally means that the call to the windowing system
+ *            to destroy the window can be omitted, since it will be destroyed as a result
+ *            of the parent being destroyed. Unless @foreign_destroy
+ *            
+ * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
+ *            agency. The window has already been destroyed and no windowing
+ *            system calls should be made. (This may never happen for some
+ *            windowing systems.)
+ *
+ * Internal function to destroy a window. Like gdk_window_destroy(), but does not
+ * drop the reference count created by gdk_window_new().
+ **/
+static void
+_gdk_window_destroy_heirarchy (GdkWindow *window,
+			       gboolean   recursing,
+			       gboolean   foreign_destroy)
+{
+  GdkWindowPrivate *private;
+  GdkWindowPrivate *temp_private;
+  GdkWindow *temp_window;
+  GList *children;
+  GList *tmp;
+  
+  g_return_if_fail (window != NULL);
+  
+  private = (GdkWindowPrivate*) window;
+  
+  switch (private->drawable.window_type)
+    {
+    case GDK_WINDOW_TOPLEVEL:
+    case GDK_WINDOW_CHILD:
+    case GDK_WINDOW_DIALOG:
+    case GDK_WINDOW_TEMP:
+    case GDK_WINDOW_FOREIGN:
+      if (!GDK_DRAWABLE_DESTROYED (window))
+	{
+	  private->mapped = FALSE;
+	  private->drawable.destroyed = TRUE;
+	  
+	  _gdk_windowing_window_destroy (window, recursing, foreign_destroy);
+
+	  if (private->parent)
+	    {
+	      GdkWindowPrivate *parent_private = (GdkWindowPrivate *)private->parent;
+	      if (parent_private->children)
+		parent_private->children = g_list_remove (parent_private->children, window);
+	    }
+
+	  _gdk_window_clear_update_area (window);
+	  gdk_window_free_paint_stack (window);
+	  
+	  if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG)
+	    {
+	      gdk_pixmap_unref (private->bg_pixmap);
+	      private->bg_pixmap = NULL;
+	    }
+	  
+	  if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_FOREIGN)
+	    {
+	      children = tmp = private->children;
+	      private->children = NULL;
+	      
+	      while (tmp)
+		{
+		  temp_window = tmp->data;
+		  tmp = tmp->next;
+		  
+		  temp_private = (GdkWindowPrivate*) temp_window;
+		  if (temp_private)
+		    _gdk_window_destroy_heirarchy (temp_window, TRUE, foreign_destroy);
+		}
+	      
+	      g_list_free (children);
+	    }
+	  
+	  if (private->filters)
+	    {
+	      tmp = private->filters;
+	      
+	      while (tmp)
+		{
+		  g_free (tmp->data);
+		  tmp = tmp->next;
+		}
+	      
+	      g_list_free (private->filters);
+	      private->filters = NULL;
+	    }
+	  
+	  if (private->drawable.colormap)
+	    {
+	      gdk_colormap_unref (private->drawable.colormap);
+	      private->drawable.colormap = NULL;
+	    }
+	}
+      break;
+      
+    case GDK_WINDOW_ROOT:
+      g_error ("attempted to destroy root window");
+      break;
+      
+    case GDK_WINDOW_PIXMAP:
+      g_error ("called gdk_window_destroy on a pixmap (use gdk_pixmap_unref)");
+      break;
+    }
+}
+
+/**
+ * _gdk_window_destroy:
+ * @window: a #GdkWindow
+ * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
+ *            agency. The window has already been destroyed and no windowing
+ *            system calls should be made. (This may never happen for some
+ *            windowing systems.)
+ *
+ * Internal function to destroy a window. Like gdk_window_destroy(), but does not
+ * drop the reference count created by gdk_window_new().
+ **/
+void
+_gdk_window_destroy (GdkWindow *window,
+		     gboolean   foreign_destroy)
+{
+  _gdk_window_destroy_heirarchy (window, FALSE, foreign_destroy);
+}
+
+void
+gdk_window_destroy (GdkWindow *window)
+{
+  _gdk_window_destroy_heirarchy (window, FALSE, FALSE);
+  gdk_drawable_unref (window);
 }
 
 void
@@ -451,6 +588,9 @@ gdk_window_begin_paint_region (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return;
+  
   paint = g_new (GdkWindowPaint, 1);
 
   paint->region = gdk_region_copy (region);
@@ -542,6 +682,10 @@ gdk_window_end_paint (GdkWindow *window)
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return;
+  
   g_return_if_fail (private->paint_stack != NULL);
 
   paint = private->paint_stack->data;
@@ -580,6 +724,32 @@ gdk_window_end_paint (GdkWindow *window)
   gdk_region_destroy (paint->region);
   g_free (paint);
 #endif /* USE_BACKING_STORE */
+}
+
+static void
+gdk_window_free_paint_stack (GdkWindow *window)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  
+  if (private->paint_stack)
+    {
+      GSList *tmp_list = private->paint_stack;
+
+      while (tmp_list)
+	{
+	  GdkWindowPaint *paint = tmp_list->data;
+	  if (tmp_list == private->paint_stack)
+	    gdk_drawable_unref (paint->pixmap);
+		  
+	  gdk_region_destroy (paint->region);
+	  g_free (paint);
+
+	  tmp_list = tmp_list->next;
+	}
+
+      g_slist_free (private->paint_stack);
+      private->paint_stack = NULL;
+    }
 }
 
 static void
@@ -622,7 +792,7 @@ gdk_window_get_offsets (GdkWindow *window,
      }
 
 static void
-gdk_window_draw_destroy   (GdkDrawable     *drawable)
+gdk_window_draw_destroy (GdkDrawable *drawable)
 {
   _gdk_windowing_window_class.destroy (drawable);
 }
@@ -1061,7 +1231,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
       
 	  event.expose.type = GDK_EXPOSE;
-	  event.expose.window = gdk_window_ref ((GdkWindow *)private);
+	  event.expose.window = gdk_window_ref (window);
 	  event.expose.count = 0;
       
 	  gdk_region_get_clipbox (update_area, &event.expose.area);
@@ -1069,6 +1239,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	    {
 	      (*gdk_event_func) (&event, gdk_event_data);
 	    }
+
+	  gdk_window_unref (window);
 	}
       
       if (!save_region)
@@ -1143,6 +1315,9 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return;
+  
   if (private->update_area)
     {
       gdk_region_union_with_rect (private->update_area, rect);
@@ -1201,6 +1376,9 @@ gdk_window_invalidate_region (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return;
+  
   if (private->input_only)
     return;
   
@@ -1272,6 +1450,30 @@ gdk_window_get_update_area (GdkWindow *window)
     }
   else
     return NULL;
+}
+
+/**
+ * _gdk_window_clear_update_area:
+ * @window: a #GdkWindow.
+ * 
+ * Internal function to clear the update area for a window. This
+ * is called when the window is hidden or destroyed.
+ **/
+void
+_gdk_window_clear_update_area (GdkWindow *window)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (private->update_area)
+    {
+      update_windows = g_slist_remove (update_windows, window);
+      
+      gdk_region_destroy (private->update_area);
+      private->update_area = NULL;
+    }
 }
 
 void

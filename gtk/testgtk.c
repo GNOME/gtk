@@ -5064,12 +5064,15 @@ void create_ctree (void)
 
       gtk_widget_realize (window);
 
-      pixmap1 = gdk_pixmap_create_from_xpm_d (window->window, &mask1, 
-					      &transparent, book_closed_xpm);
-      pixmap2 = gdk_pixmap_create_from_xpm_d (window->window, &mask2, 
-					      &transparent, book_open_xpm);
-      pixmap3 = gdk_pixmap_create_from_xpm_d (window->window, &mask3,
-					      &transparent, mini_page_xpm);
+      if (!pixmap1)
+	pixmap1 = gdk_pixmap_create_from_xpm_d (window->window, &mask1, 
+						&transparent, book_closed_xpm);
+      if (!pixmap2)
+	pixmap2 = gdk_pixmap_create_from_xpm_d (window->window, &mask2, 
+						&transparent, book_open_xpm);
+      if (!pixmap3)
+	pixmap3 = gdk_pixmap_create_from_xpm_d (window->window, &mask3,
+						&transparent, mini_page_xpm);
 
       gtk_widget_set_usize (GTK_WIDGET (ctree), 0, 300);
 
@@ -6157,14 +6160,16 @@ create_notebook (void)
       gtk_container_set_border_width (GTK_CONTAINER (sample_notebook), 10);
 
       gtk_widget_realize (sample_notebook);
-      book_open = gdk_pixmap_create_from_xpm_d (sample_notebook->window,
-						&book_open_mask, 
-						transparent, 
-						book_open_xpm);
-      book_closed = gdk_pixmap_create_from_xpm_d (sample_notebook->window,
-						  &book_closed_mask,
+      if (!book_open)
+	book_open = gdk_pixmap_create_from_xpm_d (sample_notebook->window,
+						  &book_open_mask, 
 						  transparent, 
-						  book_closed_xpm);
+						  book_open_xpm);
+      if (!book_closed)
+	book_closed = gdk_pixmap_create_from_xpm_d (sample_notebook->window,
+						    &book_closed_mask,
+						    transparent, 
+						    book_closed_xpm);
 
       create_pages (GTK_NOTEBOOK (sample_notebook), 1, 5);
 
@@ -6748,8 +6753,10 @@ shape_create_icon (char     *xpm_file,
   gtk_fixed_put (GTK_FIXED (fixed), pixmap, px,py);
   gtk_widget_show (pixmap);
   
-  gtk_widget_shape_combine_mask (window, gdk_pixmap_mask, px,py);
-
+  gtk_widget_shape_combine_mask (window, gdk_pixmap_mask, px, py);
+  
+  gdk_drawable_unref (gdk_pixmap_mask);
+  gdk_drawable_unref (gdk_pixmap);
 
   gtk_signal_connect (GTK_OBJECT (window), "button_press_event",
 		      GTK_SIGNAL_FUNC (shape_pressed),NULL);

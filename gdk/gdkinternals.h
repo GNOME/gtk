@@ -129,16 +129,20 @@ void   gdk_im_close		 (void);
 void   gdk_ic_cleanup		 (void);
 #endif /* USE_XIM */
 
-GdkWindow* _gdk_window_alloc (void);
-void _gdk_window_draw_image (GdkDrawable *drawable,
-			     GdkGC       *gc,
-			     GdkImage    *image,
-			     gint         xsrc,
-			     gint         ysrc,
-			     gint         xdest,
-			     gint         ydest,
-			     gint         width,
-			     gint         height);
+GdkWindow* _gdk_window_alloc             (void);
+void       _gdk_window_draw_image        (GdkDrawable *drawable,
+					  GdkGC       *gc,
+					  GdkImage    *image,
+					  gint         xsrc,
+					  gint         ysrc,
+					  gint         xdest,
+					  gint         ydest,
+					  gint         width,
+					  gint         height);
+void       _gdk_window_destroy           (GdkWindow   *window,
+					  gboolean     foreign_destroy);
+void       _gdk_window_clear_update_area (GdkWindow   *window);
+      
 
 /*****************************************
  * Interfaces provided by windowing code *
@@ -186,6 +190,23 @@ void     _gdk_windowing_window_clear_area_e     (GdkWindow  *window,
  */
 gboolean _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
 						 GdkRegion  *area);
+
+/* Called to do the windowing system specific part of gdk_window_destroy(),
+ *
+ * window: The window being destroyed
+ * recursing: If TRUE, then this is being called because a parent
+ *            was destroyed. This generally means that the call to the windowing system
+ *            to destroy the window can be omitted, since it will be destroyed as a result
+ *            of the parent being destroyed. Unless @foreign_destroy
+ *            
+ * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
+ *            agency. The window has already been destroyed and no windowing
+ *            system calls should be made. (This may never happen for some
+ *            windowing systems.)
+ */
+void _gdk_windowing_window_destroy (GdkWindow *window,
+				    gboolean   recursing,
+				    gboolean   foreign_destroy);
 
 /************************************
  * Initialization and exit routines *

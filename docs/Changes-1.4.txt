@@ -23,14 +23,17 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
 * GtkColorSelectionDialog has now been moved into it's own set of files,
   gtkcolorseldialog.c and gtkcolorseldialog.h.
 
+* gtk_widget_shape_combine_mask() now keeps a reference count on the 
+  mask pixmap that is passed in.
+
 * Type system changes:
   - GTK_TYPE_OBJECT is not a fundamental type anymore. Type checks of the
     style (GTK_FUNDAMENTAL_TYPE (some_type) == GTK_TYPE_OBJECT)
     will not work anymore. As a replacement, (GTK_TYPE_IS_OBJECT (some_type))
     can be used now.
   - The following types vanished: GTK_TYPE_ARGS, GTK_TYPE_CALLBACK,
-    GTK_TYPE_C_CALLBACK, GTK_TYPE_FOREIGN. With them, the corresponding GtkARg
-    fields and field access macros vanished as well.
+    GTK_TYPE_C_CALLBACK, GTK_TYPE_FOREIGN. The corresponding GtkArg
+    fields and field access macros are also gone.
   - The following type aliases vanished: GTK_TYPE_FLAT_FIRST,
     GTK_TYPE_FLAT_LAST, GTK_TYPE_STRUCTURED_FIRST, GTK_TYPE_STRUCTURED_LAST.
   - The type macros GTK_TYPE_MAKE() and GTK_TYPE_SEQNO() vanished, use of
@@ -60,14 +63,14 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
     over usage of gtk_type_unique().
 
 * Object system changes:
-  GtkObject derives from GObject, it is not the basic object type anymore.
+  GtkObject derives from GObject, so is not the basic object type anymore.
   This imposes the following source incompatible changes:
   - GtkObject has no klass field anymore, an object's class can be retrived
     with the object's coresponding GTK_<OBJECT>_GET_CLASS (object) macro.
   - GtkObjectClass has no type field anymore, a class's type can be retrived
     with the GTK_CLASS_TYPE (class) macro.
-  - GtkObjectClass does not introduce the finalize() or shutdown() method
-    anymore. While shutdown() is intended for Gtk internal use only, finalize()
+  - GtkObjectClass does not introduce the finalize() and shutdown() methods
+    anymore. While shutdown() is intended for GTK+ internal use only, finalize()
     is required by a variety of object implementations. GObjectClass.finalize
     should be overriden here, e.g.:
     static void gtk_label_finalize (GObject *gobject)
@@ -82,20 +85,24 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
       
       gobject_class->finalize = gtk_label_finalize;
     }
-  - the GtkObject::destroy signal can be emitted multiple times on an object
-    now. ::destroy implementations have to take this into account by
-    conditionalising freeing/release of assorted resources, e.g.:
+
+  - the GtkObject::destroy signal can now be emitted multiple times on an object.
+    ::destroy implementations should check that make sure that they take this
+    into account, by checking to make sure that resources are there before
+    freeing them. For example:
     if (object->foo_data)
-      {
+      { 
         g_free (object->foo_data);
         object->foo_data = NULL;
       }
-    Also, ::destroy implementations have to release peding object references,
-    that is, code portions commonly found in finalize implementations like:
+
+    Also, ::destroy implementations have to release object references that
+    the object holds. Code in finalize implementations such as:
     if (object->adjustment)
       {
         gtk_object_unref (object->adjustment);
         object->adjustment = NULL;
       }
-    have to be moved into the ::destroy implementations.
-    This is required to break object reference cycles at destruction time.
+    have to be moved into the ::destroy implementations. The reason for doing
+    this is that all object reference cycles should be broken at destruction 
+    time.

@@ -841,6 +841,30 @@ gtk_drag_unhighlight (GtkWidget *widget)
   gtk_widget_queue_clear (widget);
 }
 
+static void
+gtk_drag_dest_set_internal (GtkWidget       *widget,
+			    GtkDragDestSite *site)
+{
+  GtkDragDestSite *old_site;
+  
+  g_return_if_fail (widget != NULL);
+
+  /* HACK, do this in the destroy */
+  old_site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+  if (old_site)
+    gtk_signal_disconnect_by_data (GTK_OBJECT (widget), old_site);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    gtk_drag_dest_realized (widget);
+
+  gtk_signal_connect (GTK_OBJECT (widget), "realize",
+		      GTK_SIGNAL_FUNC (gtk_drag_dest_realized), site);
+
+  gtk_object_set_data_full (GTK_OBJECT (widget), "gtk-drag-dest",
+			    site, gtk_drag_dest_site_destroy);
+}
+			    
+
 /*************************************************************
  * gtk_drag_dest_set:
  *     Register a drop site, and possibly add default behaviors.
@@ -864,17 +888,6 @@ gtk_drag_dest_set   (GtkWidget            *widget,
   
   g_return_if_fail (widget != NULL);
 
-  /* HACK, do this in the destroy */
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
-  if (site)
-    gtk_signal_disconnect_by_data (GTK_OBJECT (widget), site);
-
-  if (GTK_WIDGET_REALIZED (widget))
-    gtk_drag_dest_realized (widget);
-
-  gtk_signal_connect (GTK_OBJECT (widget), "realize",
-		      GTK_SIGNAL_FUNC (gtk_drag_dest_realized), NULL);
-
   site = g_new (GtkDragDestSite, 1);
 
   site->flags = flags;
@@ -887,8 +900,7 @@ gtk_drag_dest_set   (GtkWidget            *widget,
   site->actions = actions;
   site->do_proxy = FALSE;
 
-  gtk_object_set_data_full (GTK_OBJECT (widget), "gtk-drag-dest",
-			    site, gtk_drag_dest_site_destroy);
+  gtk_drag_dest_set_internal (widget, site);
 }
 
 /*************************************************************
@@ -914,17 +926,6 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   
   g_return_if_fail (widget != NULL);
 
-  /* HACK, do this in the destroy */
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
-  if (site)
-    gtk_signal_disconnect_by_data (GTK_OBJECT (widget), site);
-
-  if (GTK_WIDGET_REALIZED (widget))
-    gtk_drag_dest_realized (widget);
-
-  gtk_signal_connect (GTK_OBJECT (widget), "realize",
-		      GTK_SIGNAL_FUNC (gtk_drag_dest_realized), NULL);
-
   site = g_new (GtkDragDestSite, 1);
 
   site->flags = 0;
@@ -938,8 +939,7 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   site->proxy_protocol = protocol;
   site->proxy_coords = use_coordinates;
 
-  gtk_object_set_data_full (GTK_OBJECT (widget), "gtk-drag-dest",
-			    site, gtk_drag_dest_site_destroy);
+  gtk_drag_dest_set_internal (widget, site);
 }
 
 /*************************************************************

@@ -4297,6 +4297,13 @@ gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info)
   g_mem_chunk_free (aux_info_mem_chunk, aux_info);
 }
 
+static void
+gtk_widget_shape_info_destroy (GtkWidgetShapeInfo *info)
+{
+  gdk_drawable_unref (info->shape_mask);
+  g_free (info);
+}
+
 /*****************************************
  * gtk_widget_shape_combine_mask: 
  *   set a shape for this widgets' gdk window, this allows for
@@ -4327,21 +4334,17 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
       if (widget->window)
 	gdk_window_shape_combine_mask (widget->window, NULL, 0, 0);
       
-      shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
       gtk_object_remove_data (GTK_OBJECT (widget), shape_info_key);
-      g_free (shape_info);
     }
   else
     {
       GTK_PRIVATE_SET_FLAG (widget, GTK_HAS_SHAPE_MASK);
       
-      shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
-      if (!shape_info)
-	{
-	  shape_info = g_new (GtkWidgetShapeInfo, 1);
-	  gtk_object_set_data (GTK_OBJECT (widget), shape_info_key, shape_info);
-	}
-      shape_info->shape_mask = shape_mask;
+      shape_info = g_new (GtkWidgetShapeInfo, 1);
+      gtk_object_set_data_full (GTK_OBJECT (widget), shape_info_key, shape_info,
+				(GDestroyNotify)gtk_widget_shape_info_destroy);
+      
+      shape_info->shape_mask = gdk_drawable_ref (shape_mask);
       shape_info->offset_x = offset_x;
       shape_info->offset_y = offset_y;
       

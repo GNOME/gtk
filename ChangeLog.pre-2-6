@@ -1,3 +1,60 @@
+Fri May 12 18:46:51 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/Changes-1.4.txt: A bit of editing.
+
+	* gdk/gdkwindow.c (_gdk_window_clear_update_area) 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_hide): Add a function
+	to clear the update area for the window, and clear it
+	when hiding a window.
+
+	* gdk/gdkwindow.c (gdk_window_begin_paint_region): Ignore
+	if window destroyed.
+
+	* gdk/gdkwindow.c (gdk_window_end_paint): Likewise.
+
+	* gdk/gdkwindow.c gdk/x11/gdkwindow-x11.c gdk/gdkinternals.h: Move 
+	gdk_window_destroy() to the generic code, since there was a lot of 
+	window-system-independent logic it in. Add a function:
+	
+	 _gdk_window_destroy() 
+
+	to the internal API to destroy a window without unreferencing it.
+	Add a function:
+
+	 _gdk_windowing_window_destroy()
+
+	That does the windowing-system-dependent part of destroying 
+	the window.
+
+Fri May 12 11:07:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c: Fix various memory leaks of pixmaps.
+
+Fri May 12 11:06:10 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c docs/Changes-1.4.txt (gtk_widget_shape_combine_mask): 
+	Make gtk_widget_shape_combine_mask() keep a reference count on
+	the pixmap since it keeps it around.
+
+Fri May 12 10:53:29 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Fix refcount
+	leak.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Fix refcount
+	leak with event filters.
+
+Thu May 11 14:29:44 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_set_internal): Remove the
+	signal handlers with the right data arguments. (Fixes
+	some warnings when a widget was repeatedly set as a drag
+	destination.)
+
+	* gdk/x11/gdkdnd-x11.c (gdk_window_register_dnd): Set data on the
+	window so we can avoid avoid setting the DND properties on the
+	toplevel window repeatedly.
+
 2000-05-13  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwin32.h: Define more message types missing from
@@ -71,7 +128,7 @@ Wed May 10 23:29:52 2000  Tim Janik  <timj@gtk.org>
 	* gtk/gtkfilesel.c (gtk_file_selection_destroy): don't free a cmpl_state
 	of NULL.
 
-	* gtk/gtkcombo.c (gtk_combo_item_destroy): don#t keep references
+	* gtk/gtkcombo.c (gtk_combo_item_destroy): don't keep references
 	to freed data.
 	(gtk_combo_destroy): don't keep a pointer to a destroyed window.
 
