@@ -1,27 +1,27 @@
 <!--*- xml -*-->
-<Root>
-  <menu>
-    <submenu name="FileMenu" verb="StockFileMenuAction">
-      <menuitem name="New" verb="NewAction" pos="top" />
+<ui>
+  <menubar>
+    <menu name="FileMenu" action="StockFileMenuAction">
+      <menuitem name="New" action="NewAction" pos="top" />
       <separator />
-      <menuitem name="Quit" verb="QuitAction" />
-    </submenu>
-    <submenu name="HelpMenu" verb="StockHelpMenuAction">
-      <menuitem name="About" verb="AboutAction" />
-    </submenu>
-  </menu>
-  <dockitem name="toolbar1">
+      <menuitem name="Quit" action="QuitAction" />
+    </menu>
+    <menu name="HelpMenu" action="StockHelpMenuAction">
+      <menuitem name="About" action="AboutAction" />
+    </menu>
+  </menubar>
+  <toolbar name="toolbar1">
     <placeholder name="ToolbarPlaceholder">
-      <toolitem name="Quit" verb="QuitAction" />
+      <toolitem name="Quit" action="QuitAction" />
       <separator />
     </placeholder>
-  </dockitem>
+  </toolbar>
   <popups>
-    <popup name="FileMenu" verb="StockFileMenuAction">
-      <menuitem name="New" verb="NewAction" pos="top" />
-      <submenu name="HelpMenu" verb="StockHelpMenuAction">
-        <menuitem name="About" verb="AboutAction" />
-      </submenu>
+    <popup name="FileMenu" action="StockFileMenuAction">
+      <menuitem name="New" action="NewAction" pos="top" />
+      <menu name="HelpMenu" action="StockHelpMenuAction">
+        <menuitem name="About" action="AboutAction" />
+      </menu>
     </popup>
   </popups>
-</Root>
+</ui>

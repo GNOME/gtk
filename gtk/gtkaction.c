@@ -428,7 +428,7 @@ gtk_action_sync_property (GtkAction  *action,
 
   property = g_param_spec_get_name (pspec);
 
-  g_value_init(&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+  g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   g_object_get_property (G_OBJECT (action), property, &value);
 
   g_object_set_property (G_OBJECT (proxy), property, &value);

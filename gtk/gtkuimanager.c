@@ -212,7 +212,7 @@ gtk_ui_manager_init (GtkUIManager *self)
 
 
   merge_id = gtk_ui_manager_next_merge_id (self);
-  node = get_child_node (self, NULL, "Root", 4,
+  node = get_child_node (self, NULL, "ui", 4,
 			GTK_UI_MANAGER_ROOT, TRUE, FALSE);
   gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
   node = get_child_node (self, self->private_data->root_node, "popups", 6,
@@ -567,7 +567,7 @@ start_element_handler (GMarkupParseContext *context,
 
   gint i;
   const gchar *node_name;
-  GQuark verb_quark;
+  GQuark action_quark;
   gboolean top;
 
   gboolean raise_error = TRUE;
@@ -576,7 +576,7 @@ start_element_handler (GMarkupParseContext *context,
   /* work out a name for this node.  Either the name attribute, or
    * element name */
   node_name = element_name;
-  verb_quark = 0;
+  action_quark = 0;
   top = FALSE;
   for (i = 0; attribute_names[i] != NULL; i++)
     {
@@ -584,34 +584,34 @@ start_element_handler (GMarkupParseContext *context,
 	{
 	  node_name = attribute_values[i];
 	}
-      else if (!strcmp (attribute_names[i], "verb"))
+      else if (!strcmp (attribute_names[i], "action"))
 	{
-	  verb_quark = g_quark_from_string (attribute_values[i]);
+	  action_quark = g_quark_from_string (attribute_values[i]);
 	}
       else if (!strcmp (attribute_names[i], "pos"))
 	{
 	  top = !strcmp (attribute_values[i], "top");
 	}
     }
-  /* if no verb, then set it to the node's name */
-  if (verb_quark == 0)
-    verb_quark = g_quark_from_string (node_name);
+  /* if no action, then set it to the node's name */
+  if (action_quark == 0)
+    action_quark = g_quark_from_string (node_name);
 
   switch (element_name[0])
     {
-    case 'R':
-      if (ctx->state == STATE_START && !strcmp (element_name, "Root"))
+    case 'u':
+      if (ctx->state == STATE_START && !strcmp (element_name, "ui"))
 	{
 	  ctx->state = STATE_ROOT;
 	  ctx->current = self->private_data->root_node;
 	  raise_error = FALSE;
 
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	}
       break;
     case 'm':
-      if (ctx->state == STATE_ROOT && !strcmp (element_name, "menu"))
+      if (ctx->state == STATE_ROOT && !strcmp (element_name, "menubar"))
 	{
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node (self, ctx->current,
@@ -619,12 +619,28 @@ start_element_handler (GMarkupParseContext *context,
 					 GTK_UI_MANAGER_MENUBAR,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
-	    NODE_INFO (ctx->current)->action_name = verb_quark;
+	    NODE_INFO (ctx->current)->action_name = action_quark;
 
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 
+	  raise_error = FALSE;
+	}
+      else if (ctx->state == STATE_MENU && !strcmp (element_name, "menu"))
+	{
+	  ctx->state = STATE_MENU;
+	  ctx->current = get_child_node (self, ctx->current,
+					 node_name, strlen (node_name),
+					 GTK_UI_MANAGER_MENU,
+					 TRUE, top);
+	  if (NODE_INFO (ctx->current)->action_name == 0)
+	    NODE_INFO (ctx->current)->action_name = action_quark;
+
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
+						    ctx->merge_id, action_quark);
+	  NODE_INFO (ctx->current)->dirty = TRUE;
+	  
 	  raise_error = FALSE;
 	}
       else if (ctx->state == STATE_MENU && !strcmp (element_name, "menuitem"))
@@ -637,29 +653,11 @@ start_element_handler (GMarkupParseContext *context,
 				 GTK_UI_MANAGER_MENUITEM,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
-	    NODE_INFO (node)->action_name = verb_quark;
+	    NODE_INFO (node)->action_name = action_quark;
 	  
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO (node)->dirty = TRUE;
-	  
-	  raise_error = FALSE;
-	}
-      break;
-    case 'd':
-      if (ctx->state == STATE_ROOT && !strcmp (element_name, "dockitem"))
-	{
-	  ctx->state = STATE_TOOLBAR;
-	  ctx->current = get_child_node (self, ctx->current,
-					 node_name, strlen (node_name),
-					 GTK_UI_MANAGER_TOOLBAR,
-					 TRUE, FALSE);
-	  if (NODE_INFO (ctx->current)->action_name == 0)
-	    NODE_INFO (ctx->current)->action_name = verb_quark;
-	  
-	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
 	  raise_error = FALSE;
 	}
@@ -674,7 +672,7 @@ start_element_handler (GMarkupParseContext *context,
 					 TRUE, FALSE);
 	  
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
 	  raise_error = FALSE;
@@ -687,10 +685,10 @@ start_element_handler (GMarkupParseContext *context,
 					 GTK_UI_MANAGER_MENU,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
-	    NODE_INFO (ctx->current)->action_name = verb_quark;
+	    NODE_INFO (ctx->current)->action_name = action_quark;
 	  
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
 	  raise_error = FALSE;
@@ -710,30 +708,14 @@ start_element_handler (GMarkupParseContext *context,
 					   TRUE, top);
 	  
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO (ctx->current)->dirty = TRUE;
 	  
 	  raise_error = FALSE;
 	}
       break;
     case 's':
-      if (ctx->state == STATE_MENU && !strcmp (element_name, "submenu"))
-	{
-	  ctx->state = STATE_MENU;
-	  ctx->current = get_child_node (self, ctx->current,
-					 node_name, strlen (node_name),
-					 GTK_UI_MANAGER_MENU,
-					 TRUE, top);
-	  if (NODE_INFO (ctx->current)->action_name == 0)
-	    NODE_INFO (ctx->current)->action_name = verb_quark;
-
-	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
-	  
-	  raise_error = FALSE;
-	}
-      else if ((ctx->state == STATE_MENU || ctx->state == STATE_TOOLBAR) &&
+      if ((ctx->state == STATE_MENU || ctx->state == STATE_TOOLBAR) &&
 	       !strcmp (element_name, "separator"))
 	{
 	  GNode *node;
@@ -747,17 +729,33 @@ start_element_handler (GMarkupParseContext *context,
 				 GTK_UI_MANAGER_SEPARATOR,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
-	    NODE_INFO (node)->action_name = verb_quark;
+	    NODE_INFO (node)->action_name = action_quark;
 
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO (node)->dirty = TRUE;
 	  
 	  raise_error = FALSE;
 	}
       break;
     case 't':
-      if (ctx->state == STATE_TOOLBAR && !strcmp (element_name, "toolitem"))
+      if (ctx->state == STATE_ROOT && !strcmp (element_name, "toolbar"))
+	{
+	  ctx->state = STATE_TOOLBAR;
+	  ctx->current = get_child_node (self, ctx->current,
+					 node_name, strlen (node_name),
+					 GTK_UI_MANAGER_TOOLBAR,
+					 TRUE, FALSE);
+	  if (NODE_INFO (ctx->current)->action_name == 0)
+	    NODE_INFO (ctx->current)->action_name = action_quark;
+	  
+	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
+						    ctx->merge_id, action_quark);
+	  NODE_INFO (ctx->current)->dirty = TRUE;
+	  
+	  raise_error = FALSE;
+	}
+      else if (ctx->state == STATE_TOOLBAR && !strcmp (element_name, "toolitem"))
 	{
 	  GNode *node;
 
@@ -767,10 +765,10 @@ start_element_handler (GMarkupParseContext *context,
 				 GTK_UI_MANAGER_TOOLITEM,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
-	    NODE_INFO (node)->action_name = verb_quark;
+	    NODE_INFO (node)->action_name = action_quark;
 	  
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO (node)->dirty = TRUE;
 
 	  raise_error = FALSE;
@@ -880,6 +878,56 @@ static GMarkupParser ui_parser = {
 };
 
 
+static gboolean
+xml_isspace (char c)
+{
+  return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+}
+
+static guint
+add_ui_from_string (GtkUIManager *self,
+		    const gchar  *buffer, 
+		    gssize        length,
+		    gboolean      needs_root,
+		    GError      **error)
+{
+  ParseContext ctx = { 0 };
+  GMarkupParseContext *context;
+
+  ctx.state = STATE_START;
+  ctx.self = self;
+  ctx.current = NULL;
+  ctx.merge_id = gtk_ui_manager_next_merge_id (self);
+
+  context = g_markup_parse_context_new (&ui_parser, 0, &ctx, NULL);
+
+  if (needs_root)
+    if (!g_markup_parse_context_parse (context, "<ui>", -1, error))
+      goto error;
+
+  if (!g_markup_parse_context_parse (context, buffer, length, error))
+    goto error;
+
+  if (needs_root)
+    if (!g_markup_parse_context_parse (context, "</ui>", -1, error))
+      goto error;
+
+  if (!g_markup_parse_context_end_parse (context, error))
+    goto error;
+
+  g_markup_parse_context_free (context);
+
+  gtk_ui_manager_queue_update (self);
+
+  return ctx.merge_id;
+
+ error:
+
+  g_markup_parse_context_free (context);
+
+  return 0;
+}
+
 /**
  * gtk_ui_manager_add_ui_from_string:
  * @self: a #GtkUIManager object
@@ -899,41 +947,28 @@ static GMarkupParser ui_parser = {
 guint
 gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
 				   const gchar  *buffer, 
-				   gsize         length,
+				   gssize        length,
 				   GError      **error)
 {
-  ParseContext ctx = { 0 };
-  GMarkupParseContext *context;
-  gboolean res = TRUE;
+  gboolean needs_root = TRUE;
+  const gchar *p;
+  const gchar *end;
 
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), FALSE);
   g_return_val_if_fail (buffer != NULL, FALSE);
 
-  ctx.state = STATE_START;
-  ctx.self = self;
-  ctx.current = NULL;
-  ctx.merge_id = gtk_ui_manager_next_merge_id (self);
-
-  context = g_markup_parse_context_new (&ui_parser, 0, &ctx, NULL);
   if (length < 0)
     length = strlen (buffer);
 
-  if (g_markup_parse_context_parse (context, buffer, length, error))
-    {
-      if (!g_markup_parse_context_end_parse (context, error))
-	res = FALSE;
-    }
-  else
-    res = FALSE;
+  p = buffer;
+  end = buffer + length;
+  while (p != end && xml_isspace (*p))
+    ++p;
 
-  g_markup_parse_context_free (context);
-
-  gtk_ui_manager_queue_update (self);
-
-  if (res)
-    return ctx.merge_id;
-
-  return 0;
+  if (end - p >= 4 && strncmp (p, "<ui>", 4) == 0)
+    needs_root = FALSE;
+  
+  return add_ui_from_string (self, buffer, length, needs_root, error);
 }
 
 /**
@@ -963,7 +998,7 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
   if (!g_file_get_contents (filename, &buffer, &length, error))
     return 0;
 
-  res = gtk_ui_manager_add_ui_from_string (self, buffer, length, error);
+  res = add_ui_from_string (self, buffer, length, FALSE, error);
   g_free (buffer);
 
   return res;
@@ -1572,25 +1607,25 @@ gtk_ui_manager_dirty_all (GtkUIManager *self)
 
 static const gchar *open_tag_format[] = {
   "%*s<UNDECIDED>\n",
-  "%*s<Root>\n",
-  "%*s<menu name=\"%s\">\n",  
-  "%*s<submenu name=\"%s\" verb=\"%s\">\n",
-  "%*s<dockitem name=\"%s\">\n",
+  "%*s<ui>\n",
+  "%*s<menubar name=\"%s\">\n",  
+  "%*s<menu name=\"%s\" action=\"%s\">\n",
+  "%*s<toolbar name=\"%s\">\n",
   "%*s<placeholder name=\"%s\">\n",
   "%*s<placeholder name=\"%s\">\n",
   "%*s<popups>\n",
-  "%*s<menuitem name=\"%s\" verb=\"%s\"/>\n", 
-  "%*s<toolitem name=\"%s\" verb=\"%s\"/>\n", 
+  "%*s<menuitem name=\"%s\" action=\"%s\"/>\n", 
+  "%*s<toolitem name=\"%s\" action=\"%s\"/>\n", 
   "%*s<separator/>\n",
   "%*s<popup name=\"%s\">\n"
 };
 
 static const gchar *close_tag_format[] = {
   "%*s</UNDECIDED>\n",
-  "%*s</Root>\n",
+  "%*s</ui>\n",
+  "%*s</menubar>\n",
   "%*s</menu>\n",
-  "%*s</submenu>\n",
-  "%*s</dockitem>\n",
+  "%*s</toolbar>\n",
   "%*s</placeholder>\n",
   "%*s</placeholder>\n",
   "%*s</popups>\n",

@@ -1,3 +1,19 @@
+2003-08-26  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.[hc] (gtk_ui_manager_add_ui_from_string): Use gssize 
+	for length, not gsize.
+
+	* gtk/gtkuimanager.c: Refactor the XML format a bit: rename <Root> to 
+	<ui> and make it optional in strings. Rename verb to action, <dockitem> 
+	to <toolbar>, <menu> to <menubar>, <submenu> to <menu>.
+
+	* demos/gtk-demo/appwindow.c: 
+	* tests/testactions.c: 
+	* tests/testmerge.c:
+	* tests/merge-1.ui:
+	* tests/merge-2.ui:
+	* tests/merge-3.ui: Adjust to the new XML format.
+
 Mon Aug 25 19:55:55 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_update_layout_width): 
@@ -21,10 +37,12 @@ Mon Aug 25 19:55:55 2003  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtk.h:
 	* tests/testmerge.c: 
 	* tests/testactions.c: 
-	* demos/gtk-demo/appwindow.c: Replace all uses of GtkMenuMerge by GtkUIManager.
+	* demos/gtk-demo/appwindow.c: Replace all uses of GtkMenuMerge by 
+	GtkUIManager.
 
-	* demos/gtk-demo/appwindow.c: Make GtkMenuMerge demo less intimidating: add comments to
-	entries array, remove newlines from ui definition. Don't use the ::add_widget signal.
+	* demos/gtk-demo/appwindow.c: Make GtkMenuMerge demo less intimidating: 
+	add comments to entries array, remove newlines from ui definition. Don't 
+	use the ::add_widget signal.
 
 Mon Aug 25 17:28:04 2003  Owen Taylor  <otaylor@redhat.com>
 

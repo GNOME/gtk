@@ -1,20 +1,22 @@
 <!--*- xml -*-->
-<Root>
-  <menu>
-    <submenu name="FileMenu" verb="StockFileMenuAction">
-      <menuitem name="Open" verb="OpenAction" />
-    </submenu>
-    <submenu name="EditMenu" verb="StockEditMenuAction">
-      <menuitem name="Cut" verb="CutAction" />
-    </submenu>
+<ui>
+  <menubar>
+    <menu name="FileMenu" action="StockFileMenuAction">
+      <menuitem name="Open" action="OpenAction" />
+    </menu>
+    <menu name="EditMenu" action="StockEditMenuAction">
+      <menuitem name="Cut" action="CutAction" />
+    </menu>
     <placeholder name="TestPlaceholder" />
-  </menu>
-  <dockitem name="toolbar1">
-    <placeholder name="ToolbarPlaceholder" />
-    <toolitem name="NewButton" verb="NewAction" />
-    <toolitem name="CutButton" verb="CutAction" />
-    <toolitem name="CopyButton" verb="CopyAction" />
-    <toolitem name="PasteButton" verb="PasteAction" />
+  </menubar>
+  <toolbar name="toolbar1">
+    <placeholder name="ToolbarPlaceholder">
+       <toolitem name="nb2" action="NewAction" />
+    </placeholder>
+    <toolitem name="NewButton" action="NewAction" />
+    <toolitem name="CutButton" action="CutAction" />
+    <toolitem name="CopyButton" action="CopyAction" />
+    <toolitem name="PasteButton" action="PasteAction" />
     <placeholder name="JustifyToolItems"/>
-  </dockitem>
-</Root>
+  </toolbar>
+</ui>

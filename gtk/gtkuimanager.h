@@ -95,7 +95,7 @@ GtkWidget     *gtk_ui_manager_get_widget          (GtkUIManager   *self,
  * interface */
 guint          gtk_ui_manager_add_ui_from_string  (GtkUIManager   *self,
 						   const gchar    *buffer,
-						   gsize           length,
+						   gssize          length,
 						   GError        **error);
 guint          gtk_ui_manager_add_ui_from_file    (GtkUIManager   *self,
 						   const gchar    *filename,
