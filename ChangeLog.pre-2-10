@@ -1,3 +1,14 @@
+Tue Apr 27 01:31:40 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (drag_dest_cell): compute destination cell
+	from drag coordinates.
+	(gtk_clist_drag_data_received) (gtk_clist_drag_motion):
+ 	use drag_dest_cell.
+
+	* gtk/gtktree (drag_dest_cell)
+	(gtk_ctree_drag_data_received) (gtk_ctree_drag_motion): likewise.
+	(Bug #1129)
+
 Wed Apr 21 21:26:11 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_init): properly initialize
