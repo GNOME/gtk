@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.0.x\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-04-06 02:30+0800\n"
+"POT-Creation-Date: 2002-09-29 01:10+0800\n"
+"PO-Revision-Date: 2002-09-29 01:09+0800\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -245,16 +245,16 @@ msgstr "Ikon termampat adalah tidak disokong"
 msgid "Unsupported icon type"
 msgstr "Jenis ikon tidak disokong"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "Tak cukup memori untuk memuatkan fail ICO"
 
-#: gdk-pixbuf/io-jpeg.c:126
+#: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Ralat mentafsirkan fail imej JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:307
+#: gdk-pixbuf/io-jpeg.c:346
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -262,11 +262,16 @@ msgstr ""
 "Tak cukup memori untuk memuatkan imej, cuba keluar aplikasi lain untuk "
 "membebaskan memori"
 
-#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
+#: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "Ruang warna JPEG tidak disokong (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:476 gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Tak dapat memperuntukkan memori bagi memuatkan fail JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:721
+#: gdk-pixbuf/io-jpeg.c:798
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -275,7 +280,7 @@ msgstr ""
 "Kualiti JPEG mestilah diantara nilai 0 dan 100; nilai '%s' tak boleh "
 "dihantar."
 
-#: gdk-pixbuf/io-jpeg.c:736
+#: gdk-pixbuf/io-jpeg.c:813
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -423,9 +428,8 @@ msgid "RAS image has unknown type"
 msgstr "Jenis  imej RAS tidak diketahui"
 
 #: gdk-pixbuf/io-ras.c:188
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Jenis imej TGA tidak disokong"
+msgstr "Variasi imej RAS tidak disokong"
 
 #: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
@@ -561,9 +565,8 @@ msgid "Failed to load RGB data from TIFF file"
 msgstr "Gagal memuatkan data RGB daripada fail TIFF"
 
 #: gdk-pixbuf/io-tiff.c:266
-#, fuzzy
 msgid "Unsupported TIFF variant"
-msgstr "Jenis imej TGA tidak disokong"
+msgstr "Variasi TIFF tidak disokong"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
@@ -1291,11 +1294,11 @@ msgstr "Samada tag ini mempengaruhi garisbawah"
 
 #: gtk/gtkcellrenderertoggle.c:130
 msgid "Toggle state"
-msgstr ""
+msgstr "Togol keadaan"
 
 #: gtk/gtkcellrenderertoggle.c:131
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "Togol keadaan bagi butang"
 
 #: gtk/gtkcellrenderertoggle.c:139
 msgid "Activatable"
@@ -1739,64 +1742,64 @@ msgstr "Pilih pada fokus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Samada untuk memilih kandungan kemasukan bila ianya difokus."
 
-#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Pilih Semua"
 
-#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Method input"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "Sel_itkan aksara kawalan Unicode"
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "Namafail"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
 msgstr "Fail yang sedang dipilih"
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "Papar operasi fail"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Samada butang untuk mencipta/menipulasi fail patut dipapatkan."
 
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "Pilih pelbagai"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
 msgstr "Samada untuk membernarkan pelbagai fail patut dipihih."
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "Folder"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "Fol_der"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Fail"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Fail"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Folder tidak boleh dibaca: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1807,26 +1810,26 @@ msgstr ""
 "untuk program ini.\n"
 "Anda pasti untuk memilihnya juga?"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "_Folder Baru"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "Pa_dam Fail"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "Tuka_rnama Fail"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Nama folder \"%s\" mengandungi simbol yang tidak diizinkan pada namafail"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1835,33 +1838,33 @@ msgstr ""
 "Ralat menukarnama folder  \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Anda mungkin menggunakan simbol yang tidak diizinkan pada namafail"
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Ralat mencipta folder \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
 msgstr "Folder Baru"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
 msgstr "Nama _folder:"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "Cipta"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Namafail \"%s\" mengandungi simbol yang tidak diizinkan pada namafail"
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1870,30 +1873,30 @@ msgstr ""
 "Ralat memadam fail \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Ia meungkin mengandungi simbol yang tidka diizinkan pada namafail"
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Ralat memadam fail \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Benar-benar  memadam fail \"%s\"i ?"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "Padam Fail"
 
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Nama fail \"%s\" mengandungi simbol yang tidka diizinkan pada namafail"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1902,7 +1905,7 @@ msgstr ""
 "Ralat menukarnama fail ke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1911,29 +1914,29 @@ msgstr ""
 "Ralat menukarnama fail  \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Ralat menukarnamai fail \"%s\" kepada \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "Tukarnama Fail"
 
-#: gtk/gtkfilesel.c:1709
+#: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Tukarnama fail \"%s\" ke:"
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "Tukarnama"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "Pilihan:"
 
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:3004
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1942,15 +1945,15 @@ msgstr ""
 "Namafail  %s tak dapat ditukar ke UTF-8 (Cuba tetapkan pembolehubah "
 "persekitaran G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
 msgstr "Utf-8 tidak sah"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3873
 msgid "Name too long"
 msgstr "Nama terlalu panjang"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
 msgstr "Tak dapat menukar namafail"
 
@@ -2100,79 +2103,79 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Ralat memuatkan ikon: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "GdkPixbuf untuk dipaparkan."
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr "GdkPixmap untuk dipaparkan."
 
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "Imej"
 
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "GdkImage untuk dipaparkan."
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "Topengan"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Bitmap topengan untuk digunakan bersama GdkImage atau GdkPixmap"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "Namafail untuk dimemuatkan dan dipaparkan."
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "ID Stok"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr "ID stok bagi imej stok untuk dipaparkan."
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "Set Ikon"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "Set ikon untuk dipaparkan."
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "Saiz ikon"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "Saiz untk digunakan untuk ikon stok dan set ikon."
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "Animasi"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "GdkPixbufAnimation untuk dipaparkan."
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "Jenis storan"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "Penyampaian digunakan oleh data imej."
 
@@ -2548,7 +2551,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Samada tab patut mempunyai saiz sama"
 
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"
@@ -2902,7 +2905,7 @@ msgstr ""
 
 #: gtk/gtkscrollbar.c:94
 msgid "Display the standard backward arrow button"
-msgstr ""
+msgstr "Papar butang panah mengundur piawai"
 
 #: gtk/gtkscrollbar.c:101
 msgid "Forward stepper"
@@ -2910,7 +2913,7 @@ msgstr ""
 
 #: gtk/gtkscrollbar.c:102
 msgid "Display the standard forward arrow button"
-msgstr ""
+msgstr "Papar butang panah maju piawai"
 
 #: gtk/gtkscrollbar.c:109
 msgid "Secondary backward stepper"
@@ -3183,7 +3186,7 @@ msgid "_Copy"
 msgstr "_Salin"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
+msgid "Cu_t"
 msgstr "_Potong"
 
 #: gtk/gtkstock.c:285
@@ -3383,6 +3386,7 @@ msgid "_Yes"
 msgstr "_Ya"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
@@ -3663,7 +3667,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:593
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr ""
+msgstr "Samada tag ini mempengaruhi bilangan piksel diantara baris dibalut"
 
 #: gtk/gtktexttag.c:600
 msgid "Right margin set"
@@ -3671,7 +3675,7 @@ msgstr "Set margin kiri"
 
 #: gtk/gtktexttag.c:601
 msgid "Whether this tag affects the right margin"
-msgstr ""
+msgstr "Samada tag ini mempengaruhi margin kanan"
 
 #: gtk/gtktexttag.c:608
 msgid "Wrap mode set"
@@ -3679,7 +3683,7 @@ msgstr "Set mod balut"
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects line wrap mode"
-msgstr ""
+msgstr "Samada tag ini mempengaruhi mod balut"
 
 #: gtk/gtktexttag.c:612
 msgid "Tabs set"
@@ -3687,7 +3691,7 @@ msgstr "Set Tab"
 
 #: gtk/gtktexttag.c:613
 msgid "Whether this tag affects tabs"
-msgstr ""
+msgstr "Samada tag ini menpengaruhi tab"
 
 #: gtk/gtktexttag.c:616
 msgid "Invisible set"
@@ -3769,7 +3773,7 @@ msgstr "Kursor boleh dilihat"
 msgid "If the insertion cursor is shown"
 msgstr "Kursor penyelitan dipaparkan"
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr "_Method input"
 
@@ -3965,7 +3969,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:628
 msgid "Allow Rules"
-msgstr ""
+msgstr "Izinkan Aturan"
 
 #: gtk/gtktreeview.c:629
 msgid "Allow drawing of alternating color rows."
@@ -4432,6 +4436,3 @@ msgstr "Vientam (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Method input X"
-
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "Tak cukup memori untuk memuatkan imej TGA"
