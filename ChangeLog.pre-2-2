@@ -1,3 +1,8 @@
+Wed Sep  1 14:26:45 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
+
+        * po/da.po,configure.in: aded danish file from
+        Birger Langkjer <birger.langkjer@image.dk>
+
 Wed Sep  1 06:54:59 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c (gtk_window_get_geometry_info): zero initialize
