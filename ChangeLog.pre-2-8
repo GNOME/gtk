@@ -1,3 +1,16 @@
+Wed Oct 24 20:29:47 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreemodelsort.c: more changes in an attempt to get
+	it right. It's not yet ready for general consumption.
+
+	* tests/treestoretest.c: add a button and entry for the new
+	iter_change function
+	(iter_change): new function, to test
+	the row_changed signal implementation of the GtkTreeModelSort
+
+	* tests/testtreesort.c: cleanups, changes to test more features
+	of the GtkTreeModelSort at once
+
 2001-10-24  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbuffer.c (clipboard_clipboard_buffer_received):
