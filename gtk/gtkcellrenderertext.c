@@ -75,6 +75,7 @@ enum {
   PROP_ATTRIBUTES,
   PROP_SINGLE_PARAGRAPH_MODE,
   PROP_WIDTH_CHARS,
+  PROP_WRAP_WIDTH,
   
   /* Style args */
   PROP_BACKGROUND,
@@ -97,6 +98,7 @@ enum {
   PROP_RISE,
   PROP_LANGUAGE,
   PROP_ELLIPSIZE,
+  PROP_WRAP_MODE,
   
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
@@ -134,12 +136,14 @@ struct _GtkCellRendererTextPrivate
   gulong focus_out_id;
   PangoLanguage *language;
   PangoEllipsizeMode ellipsize;
+  PangoWrapMode wrap_mode;
   
   gulong populate_popup_id;
   gulong entry_menu_popdown_timeout;
   gboolean in_entry_menu;
   
   gint width_chars;
+  gint wrap_width;
   
   GtkWidget *entry;
 };
@@ -188,6 +192,7 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   celltext->font = pango_font_description_new ();
 
   priv->width_chars = -1;
+  priv->wrap_width = -1;
 }
 
 static void
@@ -377,7 +382,8 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                    PROP_RISE,
                                    g_param_spec_int ("rise",
                                                      P_("Rise"),
-                                                     P_("Offset of text above the baseline (below the baseline if rise is negative)"),
+                                                     P_("Offset of text above the baseline "
+							"(below the baseline if rise is negative)"),
                                                      -G_MAXINT,
                                                      G_MAXINT,
                                                      0,
@@ -405,16 +411,30 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                    PROP_LANGUAGE,
                                    g_param_spec_string ("language",
                                                         P_("Language"),
-                                                        P_("The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"),
+                                                        P_("The language this text is in, as an ISO code. "
+							   "Pango can use this as a hint when rendering the text. "
+							   "If you don't understand this parameter, you probably don't need it"),
                                                         NULL,
                                                         G_PARAM_READWRITE));
 
 
+  /**
+   * GtkCellRendererText:ellipsize:
+   *
+   * Specifies the preferred place to ellipsize the string, if the cell renderer 
+   * does not have enough room to display the entire string. Setting it to 
+   * %PANGO_ELLIPSIZE_NONE turns off ellipsizing. See the wrap-width property
+   * for another way of making the text fit into a given width.
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (object_class,
                                    PROP_ELLIPSIZE,
                                    g_param_spec_enum ("ellipsize",
 						      P_("Ellipsize"),
-						      P_("The preferred place to ellipsize the string, if the cell renderer does not have enough room to display the entire string, if at all"),							
+						      P_("The preferred place to ellipsize the string, "
+							 "if the cell renderer does not have enough room "
+							 "to display the entire string, if at all"),
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
 						      G_PARAM_READWRITE));
@@ -438,6 +458,45 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                      -1,
                                                      G_PARAM_READWRITE));
   
+  /**
+   * GtkCellRendererText:wrap-mode:
+   *
+   * Specifies how to break the string into multiple lines, if the cell renderer 
+   * does not have enough room to display the entire string. This property has no
+   * effect unless the wrap-width property is set.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_WRAP_MODE,
+                                   g_param_spec_enum ("wrap_mode",
+						      P_("Wrap mode"),
+						      P_("How to break the string into multiple lines, "
+							 "if the cell renderer does not have enough room "
+							 "to display the entire string"),
+						      PANGO_TYPE_WRAP_MODE,
+						      PANGO_WRAP_CHAR,
+						      G_PARAM_READWRITE));
+
+  /**
+   * GtkCellRendererText:wrap-width:
+   *
+   * Specifies the width at which the text is wrapped. The wrap-mode property can 
+   * be used to influence at what character positions the line breaks can be placed.
+   * Setting wrap-width to -1 turns wrapping off.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (object_class,
+				   PROP_WRAP_WIDTH,
+				   g_param_spec_int ("wrap_width",
+						     P_("Wrap width"),
+						     P_("The width at which the text is wrapped"),
+						     -1,
+						     G_MAXINT,
+						     -1,
+						     G_PARAM_READWRITE));
+
   
   /* Style props are set or not */
 
@@ -502,7 +561,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   ADD_SET_PROP ("ellipsize_set", PROP_ELLIPSIZE_SET,
                 P_("Ellipsize set"),
                 P_("Whether this tag affects the ellipsize mode"));
-  
+
   text_cell_renderer_signals [EDITED] =
     g_signal_new ("edited",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -679,6 +738,14 @@ gtk_cell_renderer_text_get_property (GObject        *object,
 
     case PROP_ELLIPSIZE:
       g_value_set_enum (value, priv->ellipsize);
+      break;
+      
+    case PROP_WRAP_MODE:
+      g_value_set_enum (value, priv->wrap_mode);
+      break;
+
+    case PROP_WRAP_WIDTH:
+      g_value_set_int (value, priv->wrap_width);
       break;
       
     case PROP_BACKGROUND_SET:
@@ -1169,10 +1236,18 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (object, "ellipsize_set");
       break;
       
+    case PROP_WRAP_MODE:
+      priv->wrap_mode = g_value_get_enum (value);
+      break;
+      
+    case PROP_WRAP_WIDTH:
+      priv->wrap_width = g_value_get_int (value);
+      break;
+            
     case PROP_WIDTH_CHARS:
       priv->width_chars = g_value_get_int (value);
-      g_object_notify (object, "width_chars");
       break;  
+
     case PROP_BACKGROUND_SET:
       celltext->background_set = g_value_get_boolean (value);
       break;
@@ -1352,9 +1427,25 @@ get_layout (GtkCellRendererText *celltext,
     pango_layout_set_ellipsize (layout, priv->ellipsize);
   else
     pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_NONE);
-  
+
+  if (priv->wrap_width != -1)
+    {
+      pango_layout_set_width (layout, priv->wrap_width * PANGO_SCALE);
+      pango_layout_set_wrap (layout, priv->wrap_mode);
+
+      if (pango_layout_get_line_count (layout) == 1)
+	{
+	  pango_layout_set_width (layout, -1);
+	  pango_layout_set_wrap (layout, PANGO_WRAP_CHAR);
+	}
+    }
+  else
+    {
+      pango_layout_set_width (layout, -1);
+      pango_layout_set_wrap (layout, PANGO_WRAP_CHAR);
+    }
+
   pango_layout_set_attributes (layout, attr_list);
-  pango_layout_set_width (layout, -1);
 
   pango_attr_list_unref (attr_list);
   
@@ -1422,7 +1513,7 @@ get_size (GtkCellRenderer *cell,
     layout = get_layout (celltext, widget, FALSE, 0);
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
-  
+
   if (height)
     *height = GTK_CELL_RENDERER (celltext)->ypad * 2 + rect.height;
 
@@ -1458,7 +1549,7 @@ get_size (GtkCellRenderer *cell,
 	  else 
 	    *x_offset = cell->xalign * (cell_area->width - rect.width - (2 * cell->xpad));
 
-	  if (priv->ellipsize)
+	  if (priv->ellipsize_set || priv->wrap_width != -1)
 	    *x_offset = MAX(*x_offset, 0);
 	}
       if (y_offset)
@@ -1559,9 +1650,12 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
       g_object_unref (gc);
     }
 
-  if (priv->ellipsize)
+  if (priv->ellipsize_set)
     pango_layout_set_width (layout, 
 			    (cell_area->width - x_offset - 2 * cell->xpad) * PANGO_SCALE);
+  else if (priv->wrap_width != -1)
+    pango_layout_set_width (layout, 
+			    priv->wrap_width * PANGO_SCALE);      
   else
     pango_layout_set_width (layout, -1);
   

@@ -1,5 +1,16 @@
 2005-01-20  Matthias Clasen  <mclasen@redhat.com>
 
+	Support wrapping in GtkCellRendererText  (#163608):
+	
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): 
+	Add wrap-mode and wrap-width properties which cause a 
+	text cell to break to a specified width when set.
+
+	* gtk/gtkcellrenderertext.c (get_layout): Use wrap-mode
+	and wrap-width when they are set.
+
+2005-01-20  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmodules.c (load_module): Don't reverse the order
 	of modules when putting them in gtk_modules.  (#162676, Dennis
 	Cranston, patch by Remus Draica)
