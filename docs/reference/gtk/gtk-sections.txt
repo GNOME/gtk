@@ -4008,6 +4008,22 @@ gtk_cell_renderer_toggle_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcellrendererprogress</FILE>
+<TITLE>GtkCellRendererProgress</TITLE>
+GtkCellRendererProgress
+gtk_cell_renderer_progress_new
+<SUBSECTION Standard>
+GTK_CELL_RENDERER_PROGRESS
+GTK_IS_CELL_RENDERER_PROGRESS
+GTK_TYPE_CELL_RENDERER_PROGRESS
+GTK_CELL_RENDERER_PROGRESS_CLASS
+GTK_IS_CELL_RENDERER_PROGRESS_CLASS
+GTK_CELL_RENDERER_PROGRESS_GET_CLASS
+<SUBSECTION Private>
+gtk_cell_renderer_progress_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkliststore</FILE>
 <TITLE>GtkListStore</TITLE>
 GtkListStore

@@ -1,3 +1,15 @@
+2004-05-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testtreeedit.c: Add a progress column.
+
+	* gtk/Makefile.am: Add gtkcellrendererprogress.[hc] in the right
+	places.
+
+	* gtk/gtk.h: Include gtkcellrendererprogress.h.
+
+	* gtk/gtkcellrendererprogress.[hc]: A progress cell renderer,
+	based on the one found in Epiphany.
+
 2004-05-11  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_popup)

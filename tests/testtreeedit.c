@@ -4,22 +4,24 @@
 typedef struct {
   const gchar *string;
   gboolean is_editable;
+  gint progress;
 } ListEntry;
 
 enum {
   STRING_COLUMN,
   IS_EDITABLE_COLUMN,
   PIXBUF_COLUMN,
+  PROGRESS_COLUMN,
   NUM_COLUMNS
 };
 
 static ListEntry model_strings[] =
 {
-  {"A simple string", TRUE },
-  {"Another string!", TRUE },
-  {"Guess what, a third string. This one can't be edited", FALSE },
-  {"And then a fourth string. Neither can this", FALSE },
-  {"Multiline\nFun!", TRUE },
+  {"A simple string", TRUE, 0 },
+  {"Another string!", TRUE, 10 },
+  {"Guess what, a third string. This one can't be edited", FALSE, 47 },
+  {"And then a fourth string. Neither can this", FALSE, 48 },
+  {"Multiline\nFun!", TRUE, 75 },
   { NULL }
 };
 
@@ -39,7 +41,8 @@ create_model (void)
   model = gtk_tree_store_new (NUM_COLUMNS,
 			      G_TYPE_STRING,
 			      G_TYPE_BOOLEAN,
-			      GDK_TYPE_PIXBUF);
+			      GDK_TYPE_PIXBUF,
+			      G_TYPE_INT);
 
   for (i = 0; model_strings[i].string != NULL; i++)
     {
@@ -49,6 +52,7 @@ create_model (void)
 			  STRING_COLUMN, model_strings[i].string,
 			  IS_EDITABLE_COLUMN, model_strings[i].is_editable,
 			  PIXBUF_COLUMN, foo,
+			  PROGRESS_COLUMN, model_strings[i].progress,
 			  -1);
     }
   
@@ -116,6 +120,9 @@ main (gint argc, gchar **argv)
   
   gtk_init (&argc, &argv);
 
+  if (g_getenv ("RTL"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GtkTreeView editing sample");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
@@ -174,6 +181,14 @@ main (gint argc, gchar **argv)
 					       renderer,
 					       "active", IS_EDITABLE_COLUMN,
 					       NULL);
+
+  renderer = gtk_cell_renderer_progress_new ();
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
+					       -1, "Progress",
+					       renderer,
+					       "value", PROGRESS_COLUMN,
+					       NULL);
+
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
   
   gtk_window_set_default_size (GTK_WINDOW (window),
