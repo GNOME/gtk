@@ -2653,11 +2653,11 @@ icon_list_from_theme (GtkWidget    *widget,
   icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
 
   sizes = gtk_icon_theme_get_icon_sizes (icon_theme, name);
-  list = NULL;
 
+  list = NULL;
   for (i = 0; sizes[i]; i++)
     {      
-      /* FIXME 
+      /* FIXME
        * We need an EWMH extension to handle scalable icons 
        * by passing their name to the WM. For now just use a 
        * fixed size of 48.
@@ -2671,6 +2671,8 @@ icon_list_from_theme (GtkWidget    *widget,
       if (icon)
 	list = g_list_append (list, icon);
     }
+
+  g_free (sizes);
 
   return list;
 }
@@ -2852,14 +2854,15 @@ gtk_window_set_icon_list (GtkWindow  *window,
   if (info->icon_list == list) /* check for NULL mostly */
     return;
 
+  g_list_foreach (list,
+                  (GFunc) g_object_ref, NULL);
+
   g_list_foreach (info->icon_list,
                   (GFunc) g_object_unref, NULL);
 
   g_list_free (info->icon_list);
 
   info->icon_list = g_list_copy (list);
-  g_list_foreach (info->icon_list,
-                  (GFunc) g_object_ref, NULL);
 
   g_object_notify (G_OBJECT (window), "icon");
   
