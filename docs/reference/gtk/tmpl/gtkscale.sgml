@@ -69,7 +69,7 @@ slider.
 </para>
 
 @scale: a #GtkScale.
-@draw_value: a boolean. 
+@draw_value: a boolean.
 
 
 <!-- ##### FUNCTION gtk_scale_set_value_pos ##### -->

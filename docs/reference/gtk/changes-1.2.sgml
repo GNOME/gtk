@@ -1,25 +1,42 @@
+<refentry id="gtk-changes-1-2" revision="1 Jan 2002">
+<refmeta>
+<refentrytitle>Changes from 1.0 to 1.2</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>Changes from 1.0 to 1.2</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Changes from 1.0 to 1.2</refname>
+<refpurpose>
+Incompatible changes made between version 1.0 and version 1.2
+</refpurpose>
+</refnamediv>
 
 
-DON'T EDIT THIS FILE - changes are now maintained in the reference
-manual, see docs/reference/gtk/changes-*.sgml. Also, when adding a
-change to the manual, you should amend the docs for all
-newly-deprecated features to point to the replacement for that
-feature, and be sure the GTK_DISABLE_DEPRECATED guards are in place in
-the header files. Be sure to add a note to the docs for EACH
-deprecated function; don't just do the changes-*.sgml change.
+<refsect1>
+<title>Incompatible changes from 1.0 to 1.2</title>
 
+<itemizedlist>
 
+<listitem>
+<para>
+GtkAcceleratorTable has been replaced with GtkAccelGroup.
+</para>
+</listitem>
 
-Incompatible Changes from GTK+-1.0 to GTK+-1.2:
+<listitem>
+<para>
+GtkMenuFactory has been replaced with GtkItemFactory, although
+a version of GtkMenuFactory is currently still provided to ease
+the migration phase.
+</para>
+</listitem>
 
-* GtkAcceleratorTable has been replaced with GtkAccelGroup
-
-* GtkMenuFactory has been replaced with GtkItemFactory, although
-  a version of GtkMenuFactory is currently still provided to ease
-  the migration phase.
-
-* The GtkTypeInfo structures used in the gtk_*_type_init() functions have
-  changed a bit, the old format:  
+<listitem>
+<para>
+The GtkTypeInfo structures used in the gtk_*_type_init() functions have
+changed a bit, the old format:
+<programlisting>
       GtkTypeInfo bin_info =
       {
         "GtkBin",
@@ -30,9 +47,11 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
         (GtkArgSetFunc) NULL,
         (GtkArgGetFunc) NULL,
       };
+</programlisting>
 
   needs to be converted to:
 
+<programlisting>
       static const GtkTypeInfo bin_info =
       {
         "GtkBin",
@@ -44,13 +63,18 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
         /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
+</programlisting>
 
   the GtkArgSetFunc and GtkArgGetFunc functions are not supported from the
   type system anymore, and you should make sure that your code only fills
   in these fields with NULL and doesn't use the deprecated function typedefs
   (GtkArgSetFunc) and (GtkArgGetFunc) anymore.
+</para>
+</listitem>
 
-* A number of Gtk functions were renamed. For compatibility, gtkcompat.h
+<listitem>
+<para>
+A number of Gtk functions were renamed. For compatibility, gtkcompat.h
   #define's the old 1.0.x function names in terms of the new names.
   To assure your Gtk program doesn't rely on outdated function
   variants, compile your program with -DGTK_DISABLE_COMPAT_H to disable
@@ -58,6 +82,7 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
 
   Here is the list of the old names and replacements:
 
+<programlisting>
   Old:				      Replacement:
 
   gtk_accel_label_accelerator_width   gtk_accel_label_get_accel_width
@@ -77,10 +102,16 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
       argument, gboolean set_bg. This parameter should be FALSE if
       the background is being set for a NO_WINDOW widget, otherwise
       true.
+</programlisting>
+</para>
+</listitem>
 
-* During the development phase of the 1.1.x line of Gtk certain functions
+<listitem>
+<para>
+During the development phase of the 1.1.x line of Gtk certain functions
   were deprecated and later removed. Functions affected are:
 
+<programlisting>
   Removed:                          Replacement:
   gtk_clist_set_border		    gtk_clist_set_shadow_type
   gtk_container_block_resize	    gtk_container_set_resize_mode
@@ -100,55 +131,86 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
 
 (1) This function is no longer needed as GtkEntry should automatically
     keep the scroll adjusted properly.
+</programlisting>
+</para>
+</listitem>
 
-* Additionally, all gtk_*_interp functions were removed.
+
+<listitem>
+<para>
+Additionally, all gtk_*_interp functions were removed.
   gtk_*_full versions were provided as of GTK+-1.0 and should
   be used instead.
+</para>
+</listitem>
 
-* GtkButton has been changed to derive from GtkBin.
-  To access a button's child, use GTK_BIN (button)->child, instead
-  of the old GTK_BUTTON (button)->child.
+<listitem>
+<para>
+GtkButton has been changed to derive from GtkBin.
+  To access a button's child, use GTK_BIN (button)-&gt;child, instead
+  of the old GTK_BUTTON (button)-&gt;child.
+</para>
+</listitem>
 
-* The selection API has been slightly modified:
+<listitem>
+<para>
+The selection API has been slightly modified:
 
  gtk_selection_add_handler() and gtk_selection_add_handler_full() 
  have been removed. To supply the selection, one now register
  the targets one is interested in with:
 
+<programlisting>
   void gtk_selection_add_target (GtkWidget           *widget, 
 	  	                 GdkAtom              selection,
 			         GdkAtom              target,
 			         guint                info);
+</programlisting>
 
  or:
   
+<programlisting>
   void gtk_selection_add_targets (GtkWidget           *widget, 
 	  			  GdkAtom              selection,
 				  GtkTargetEntry      *targets,
 				  guint                ntargets);
+</programlisting>
 
  When a request for a selection is received, the new "selection_get"
  signal will be called:
 
+<programlisting>
    void  "selection_get"           (GtkWidget          *widget,
 				    GtkSelectionData   *selection_data,
 				    guint               info,
 				    guint               time);
+</programlisting>
 
  A "time" parameter has also been added to the "selection_received"
  signal.
 
+<programlisting>
   void  "selection_received"       (GtkWidget          *widget,
 				    GtkSelectionData   *selection_data,
 				    guint               time);
+</programlisting>
+</para>
+</listitem>
 
-* The old drag and drop API has been completely removed and replaced.
+<listitem>
+<para>
+The old drag and drop API has been completely removed and replaced.
   See the reference documentation for details on the new API.
+</para>
+</listitem>
 
-* Support for Themes has been added. In general, this does
+<listitem>
+<para>
+Support for Themes has been added. In general, this does
   not affect application code, however, a few new rules should
   be observed:
 
+<programlisting>
    - To set a shape for a window, you must use 
      gtk_widget_shape_combine_mask() instead of 
      gdk_window_shape_combine_mask(), or the shape will be
@@ -157,46 +219,73 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
    - It is no longer permissable to draw directly on an arbitrary
      widget, or to set an arbitrary widget's background pixmap.
      If you need to do that, use a GtkDrawingArea or (for a 
-     toplevel) the new GtkDrawWindow widget.
+     toplevel) a GtkWindow where gtk_widget_set_app_paintable()
+     has been called.
+</programlisting>
+</para>
+</listitem>
 
-* The ScrolledWindow widget no longer creates a Viewport
+<listitem>
+<para>
+The ScrolledWindow widget no longer creates a Viewport
   automatically. Instead, it has been generalized to accept
   any "self-scrolling" widget.
+</para>
 
+<para>
   The self-scrolling widgets in the Gtk+ core are GtkViewport,
   GtkCList, GtkCTree, GtkText, and GtkLayout. All of these widgets can
   be added to a scrolled window as normal children with
   gtk_container_add() and scrollbars will be set up automatically.
+</para>
 
+<para>
   To add scrollbars to a non self-scrolling widget, (such as a GtkList),
   first add it to a viewport, then add the viewport to a scrolled window.
   The scrolled window code provides a convenience function to do this:
 
+<programlisting>
   void gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrollwin,
 					      GtkWidget         *child);
+</programlisting>
 
   This does exactly what it says - it creates a Viewport, adds the child
   widget to it, then adds the Viewport to the scrolled window.
+</para>
 
+<para>
   The scrollbars have been removed from the GtkCList and GtkCTree,
   because they are now scrolled by simply adding them to a Scrolled
   Window. The scrollbar policy is set on the scrolled window with
   gtk_scrolled_window_set_policy() and not on the child widgets
   (e.g. GtkCList's gtk_clist_set_policy() was removed).
-  
-* The "main loop" of GTK+ has been moved to GLib. This should not
+</para>
+</listitem>  
+
+<listitem>
+<para>
+The "main loop" of GTK+ has been moved to GLib. This should not
   affect existing programs, since compatibility functions have
   been provided. However, you may want to consider migrating
   your code to use the GLib main loop directly.
+</para>
+</listitem>
 
-* the GTK_BASIC flag was removed, and with it the corresponding
+<listitem>
+<para>
+the GTK_BASIC flag was removed, and with it the corresponding
   macro and function GTK_WIDGET_BASIC() and gtk_widget_basic().
+</para>
+</listitem>
   
-* All freeze/thaw methods are now recursive - that is, if you
+<listitem>
+<para>
+All freeze/thaw methods are now recursive - that is, if you
   freeze a widget n times, you must also thaw it n times.
 
   Therefore, if you have code like:
 
+<programlisting>
   gboolean frozen;
   frozen = GTK_CLIST_FROZEN (clist);
   gtk_clist_freeze (clist);
@@ -209,15 +298,23 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
   gtk_clist_freeze (clist);
   [...]
   gtk_clist_thaw (clist);
+</programlisting>
+</para>
+</listitem>
 
-* The thread safety in GTK+ 1.2 is slightly different than
+<listitem>
+<para>
+The thread safety in GTK+ 1.2 is slightly different than
   that which appeared in early versions in the 1.1
   development track. The main difference is that it relies on 
   the thread primitives in GLib, and on the thread-safe 
   GLib main loop.
+</para>
 
+<para>
   This means:
 
+<programlisting>
    - You must call g_thread_init() before executing any
      other GTK+ or GDK functions in a threaded GTK+ program.
 
@@ -257,21 +354,29 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
      You can get these CFLAGS and LIBS by passing gthread
      as the fourth parameter to the AM_PATH_GTK automake
      macro.
+</programlisting>
+</para>
+</listitem>
 
-* Prior to GTK+-1.2, there were two conflicting interpretations
+<listitem>
+<para>
+Prior to GTK+-1.2, there were two conflicting interpretations
   of widget->requistion. It was either taken to be
   the size that the widget requested, or that size
   modified by calls to gtk_widget_set_usize(). In GTK+-1.2,
   it is always interpreted the first way.
+</para>
 
+<para>
   Container widgets are affected in two ways by this:
 
+<programlisting>
    1) Container widgets should not pass widget->requisition
       as the second parameter to gtk_widget_size_request().
       Instead they should call it like:
    
       GtkRequisition child_requisition;
-      gtk_widget_size_request (widget, &child_requisition);
+      gtk_widget_size_request (widget, &amp;child_requisition);
 
    2) Container widgets should not access child->requisition
       directly. Either they should use the values returned
@@ -283,13 +388,14 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
 
       which returns the requisition of the given widget, modified
       by calls to gtk_widget_set_usize().
+</programlisting>
+</para>
+</listitem>
 
 
+</itemizedlist>
 
-DON'T EDIT THIS FILE - changes are now maintained in the reference
-manual, see docs/reference/gtk/changes-*.sgml. Also, when adding a
-change to the manual, you should amend the docs for all
-newly-deprecated features to point to the replacement for that
-feature, and be sure the GTK_DISABLE_DEPRECATED guards are in place in
-the header files. Be sure to add a note to the docs for EACH
-deprecated function; don't just do the changes-*.sgml change.
+</refsect1>
+
+</refentry>
+

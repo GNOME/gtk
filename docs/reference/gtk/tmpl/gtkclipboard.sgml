@@ -11,9 +11,9 @@ Storing data on Clipboards.
     the same process. Each clipboard is identified by a name encoded as a
     #GdkAtom. (Conversion to and from strings can be done with
     gdk_atom_intern() and gdk_atom_name().) The default clipboard
-    corresponds to the CLIPBOARD atom; another commonly used clipboard
-    is the PRIMARY clipboard, which, in X, traditionally contains
-    the currently selected text. 
+    corresponds to the "CLIPBOARD" atom; another commonly used clipboard
+    is the "PRIMARY" clipboard, which, in X, traditionally contains
+    the currently selected text.
   </para>
   <para>
     To support having a number of different formats on the clipboard

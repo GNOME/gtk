@@ -10,8 +10,20 @@ For thread safety, GDK relies on the thread primitives in GLib,
 and on the thread-safe GLib main loop.
 </para>
 <para>
-You must call g_thread_init() before executing any other GTK+ or GDK 
-functions in a threaded GTK+ program.
+GLib is completely thread safe (all global data is automatically 
+locked), but individual data structure instances are not automatically 
+locked for performance reasons. So e.g. you must coordinate 
+accesses to the same #GHashTable from multiple threads.
+</para>
+<para>
+GTK+ is "thread aware" but not thread safe &mdash; it provides a
+global lock controlled by gdk_threads_enter()/gdk_threads_leave()
+which protects all use of GTK+. That is, only one thread can use GTK+ 
+at any given time.
+</para>
+<para>
+You must call g_thread_init() and gdk_threads_init() before executing
+any other GTK+ or GDK functions in a threaded GTK+ program.
 </para>
 <para>
 Idles, timeouts, and input functions are executed outside
@@ -31,6 +43,188 @@ As always, you must also surround any calls to GTK+ not made within
 a signal handler with a gdk_threads_enter()/gdk_threads_leave() pair.
 </para>
 
+<para>A minimal main program for a threaded GTK+ application
+looks like:</para>
+
+<para>
+<programlisting role="C">
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window;
+
+  g_thread_init (NULL);
+  gdk_threads_init ();
+  gtk_init (&amp;argc, &amp;argv);
+
+  window = create_window ();
+  gtk_widget_show (window);
+
+  gdk_threads_enter ();
+  gtk_main ();
+  gdk_threads_leave ();
+
+  return 0;
+}
+</programlisting>
+</para>
+
+<para>
+Callbacks require a bit of attention. Callbacks from GTK+ signals
+are made within the GTK+ lock. However callbacks from GLib (timeouts,
+IO callbacks, and idle functions) are made outside of the GTK+
+lock. So, within a signal handler you do not need to call
+gdk_threads_enter(), but within the other types of callbacks, you
+do.
+</para>
+
+<para>Erik Mouw contributed the following code example to
+illustrate how to use threads within GTK+ programs.
+</para>
+
+<para>
+<programlisting role="C">
+/*-------------------------------------------------------------------------
+ * Filename:      gtk-thread.c
+ * Version:       0.99.1
+ * Copyright:     Copyright (C) 1999, Erik Mouw
+ * Author:        Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
+ * Description:   GTK threads example. 
+ * Created at:    Sun Oct 17 21:27:09 1999
+ * Modified by:   Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
+ * Modified at:   Sun Oct 24 17:21:41 1999
+ *-----------------------------------------------------------------------*/
+/*
+ * Compile with:
+ *
+ * cc -o gtk-thread gtk-thread.c `gtk-config --cflags --libs gthread`
+ *
+ * Thanks to Sebastian Wilhelmi and Owen Taylor for pointing out some
+ * bugs.
+ *
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;time.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;glib.h&gt;
+#include &lt;pthread.h&gt;
+
+#define YES_IT_IS    (1)
+#define NO_IT_IS_NOT (0)
+
+typedef struct 
+{
+  GtkWidget *label;
+  int what;
+} yes_or_no_args;
+
+G_LOCK_DEFINE_STATIC (yes_or_no);
+static volatile int yes_or_no = YES_IT_IS;
+
+void destroy(GtkWidget *widget, gpointer data)
+{
+  gtk_main_quit();
+}
+
+void *argument_thread(void *args)
+{
+  yes_or_no_args *data = (yes_or_no_args *)args;
+  gboolean say_something;
+
+  for(;;)
+    {
+      /* sleep a while */
+      sleep(rand() / (RAND_MAX / 3) + 1);
+
+      /* lock the yes_or_no_variable */
+      G_LOCK(yes_or_no);
+
+      /* do we have to say something? */
+      say_something = (yes_or_no != data->what);
+
+      if(say_something)
+	{
+	  /* set the variable */
+	  yes_or_no = data->what;
+	}
+
+      /* Unlock the yes_or_no variable */
+      G_UNLOCK(yes_or_no);
+
+      if(say_something)
+	{
+	  /* get GTK thread lock */
+	  gdk_threads_enter();
+
+	  /* set label text */
+	  if(data->what == YES_IT_IS)
+	    gtk_label_set_text(GTK_LABEL(data->label), "O yes, it is!");
+	  else
+	    gtk_label_set_text(GTK_LABEL(data->label), "O no, it isn't!");
+
+	  /* release GTK thread lock */
+	  gdk_threads_leave();
+	}
+    }
+
+  return(NULL);
+}
+
+int main(int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *label;
+  yes_or_no_args yes_args, no_args;
+  pthread_t no_tid, yes_tid;
+
+  /* init threads */
+  g_thread_init(NULL);
+  gdk_threads_init ();
+
+  /* init gtk */
+  gtk_init(&amp;argc, &amp;argv);
+
+  /* init random number generator */
+  srand((unsigned int)time(NULL));
+
+  /* create a window */
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+  gtk_signal_connect(GTK_OBJECT (window), "destroy",
+		     GTK_SIGNAL_FUNC(destroy), NULL);
+
+  gtk_container_set_border_width(GTK_CONTAINER (window), 10);
+
+  /* create a label */
+  label = gtk_label_new("And now for something completely different ...");
+  gtk_container_add(GTK_CONTAINER(window), label);
+  
+  /* show everything */
+  gtk_widget_show(label);
+  gtk_widget_show (window);
+
+  /* create the threads */
+  yes_args.label = label;
+  yes_args.what = YES_IT_IS;
+  pthread_create(&amp;yes_tid, NULL, argument_thread, &amp;yes_args);
+
+  no_args.label = label;
+  no_args.what = NO_IT_IS_NOT;
+  pthread_create(&amp;no_tid, NULL, argument_thread, &amp;no_args);
+
+  /* enter the GTK main loop */
+  gdk_threads_enter();
+  gtk_main();
+  gdk_threads_leave();
+
+  return(0);
+}
+</programlisting>
+</para>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
@@ -38,10 +232,11 @@ a signal handler with a gdk_threads_enter()/gdk_threads_leave() pair.
 
 <!-- ##### MACRO GDK_THREADS_ENTER ##### -->
 <para>
-This macro marks the begin of a critical section
-in which GDK and GTK+ functions can be called.
-Only one thread at a time can be in such a critial 
-section.
+This macro marks the beginning of a critical section in which GDK and GTK+
+functions can be called.  Only one thread at a time can be in such a
+critial section. The macro expands to a no-op if #G_THREADS_ENABLED
+has not been defined. Typically gdk_threads_enter() should be used 
+instead of this macro.
 </para>
 
 
@@ -63,9 +258,11 @@ begun with #GDK_THREADS_ENTER.
 
 <!-- ##### FUNCTION gdk_threads_enter ##### -->
 <para>
-Enters a critical region like #GDK_THREADS_ENTER.
+This macro marks the beginning of a critical section
+in which GDK and GTK+ functions can be called.
+Only one thread at a time can be in such a critial 
+section.
 </para>
-
 
 
 <!-- ##### FUNCTION gdk_threads_leave ##### -->
@@ -73,12 +270,11 @@ Enters a critical region like #GDK_THREADS_ENTER.
 Leaves a critical region begun with gdk_threads_enter(). 
 </para>
 
-
-
 <!-- ##### VARIABLE gdk_threads_mutex ##### -->
 <para>
 The #GMutex used to implement the critical region for
-gdk_threads_enter()/gdk_threads_leave().
+gdk_threads_enter()/gdk_threads_leave(). This variable should not be
+used directly &mdash; consider it private.
 </para>
 
 

@@ -1,3 +1,23 @@
+2002-01-01  Havoc Pennington  <hp@pobox.com>
+
+	* docs/README.linux-fb: note that this file is obsolete
+
+	* docs/Changes-2.0.txt, docs/Changes-1.2.txt: Add notes to these
+	files that they should not be edited and look in the reference 
+	manual instead. Probably these files should just be replaced by 
+	the note, and their main contents deleted.
+
+	* gtk/gtktextview.c: docs
+
+	* gtk/gtktextmark.c: docs
+
+	* gtk/gtktextchild.c: docs
+
+	* gtk/gtktextbuffer.c: docs stuff
+
+	* gtk/gtkclipboard.c (gtk_clipboard_get): fool with docs to maybe
+	give people more leads in sorting out PRIMARY vs. CLIPBOARD
+
 2002-01-01  Tor Lillqvist  <tml@iki.fi>
 
 	* demos/Makefile.am (test-inline-pixbufs.h): Append EXEEXT to

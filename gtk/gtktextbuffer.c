@@ -1451,7 +1451,7 @@ gtk_text_buffer_real_insert_anchor (GtkTextBuffer      *buffer,
  * when obtaining the buffer contents as a string, will be represented
  * by the Unicode "object replacement character" 0xFFFC. Note that the
  * "slice" variants for obtaining portions of the buffer as a string
- * include this character for pixbufs, but the "text" variants do
+ * include this character for child anchors, but the "text" variants do
  * not. e.g. see gtk_text_buffer_get_slice() and
  * gtk_text_buffer_get_text(). Consider
  * gtk_text_buffer_create_child_anchor() as a more convenient
@@ -1481,7 +1481,9 @@ gtk_text_buffer_insert_child_anchor (GtkTextBuffer      *buffer,
  * 
  * This is a convenience function which simply creates a child anchor
  * with gtk_text_child_anchor_new() and inserts it into the buffer
- * with gtk_text_buffer_insert_child_anchor().
+ * with gtk_text_buffer_insert_child_anchor(). The new anchor is
+ * owned by the buffer; no reference count is returned to
+ * the caller of gtk_text_buffer_create_child_anchor().
  * 
  * Return value: the created child anchor
  **/
@@ -1834,6 +1836,15 @@ gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
   return gtk_text_buffer_get_mark (buffer, "selection_bound");
 }
 
+/**
+ * gtk_text_buffer_get_iter_at_child_anchor:
+ * @buffer: a #GtkTextBuffer
+ * @iter: an iterator to be initialized
+ * @anchor: a child anchor that appears in @buffer
+ *
+ * Obtains the location of @anchor within @buffer.
+ * 
+ **/
 void
 gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
                                           GtkTextIter        *iter,

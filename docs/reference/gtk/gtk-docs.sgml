@@ -1,4 +1,4 @@
-<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!doctype book PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
 <!notation PNG system "PNG">
 <!entity % local.notation.class "| PNG">
 
@@ -152,6 +152,10 @@
 <!entity gtk-Resources SYSTEM "resources.sgml">
 <!entity gtk-Windows SYSTEM "windows.sgml">
 <!entity gtk-Framebuffer SYSTEM "framebuffer.sgml">
+<!entity gtk-Questions SYSTEM "question_index.sgml">
+<!entity gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
+<!entity gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
+
 ]>
 <book id="index">
   <bookinfo>
@@ -241,9 +245,12 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 
     &gtk-Building;
     &gtk-Compiling;
-    &gtk-Resources;
     &gtk-Windows;
     &gtk-Framebuffer;
+    &gtk-Changes-1-2;
+    &gtk-Changes-2-0;
+    &gtk-Resources;
+    &gtk-Questions;
 
   </chapter>
 

@@ -2,12 +2,15 @@
 GtkPreview
 
 <!-- ##### SECTION Short_Description ##### -->
-a widget to display RGB or grayscale data.
+deprecated widget to display RGB or grayscale data.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 The #GtkPreview widget provides a simple interface 
 used to display images as RGB or grayscale data.
+It's deprecated; just use a #GdkPixbuf displayed by a #GtkImage, or
+perhaps a #GtkDrawingArea. #GtkPreview has no advantage over those 
+approaches.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

@@ -645,7 +645,7 @@ Installs a key snooper function, which will get called on all key events
 before delivering them normally.
 </para>
 
-@snooper: a #GtkKeySnoopFunc. 
+@snooper: a #GtkKeySnoopFunc.
 @func_data: data to pass to @snooper.
 @Returns: a unique id for this key snooper for use with gtk_key_snooper_remove().
 
@@ -656,7 +656,7 @@ Key snooper functions are called before normal event delivery.
 They can be used to implement custom key event handling.
 </para>
 
-@grab_widget: the widget to which the event will be delivered. 
+@grab_widget: the widget to which the event will be delivered.
 @event: the key event.
 @func_data: the @func_data supplied to gtk_key_snooper_install().
 @Returns: %TRUE to stop further processing of @event, %FALSE to continue.

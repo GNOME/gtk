@@ -1,5 +1,34 @@
 2002-01-01  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/framebuffer.sgml: move README.linux-fb in here
+
+	* gtk/tmpl/gtkpreview.sgml: explain what to use instead
+
+	* gtk/tmpl/gtkseparator.sgml: typo fix
+
+	* gtk/tmpl/gtkstock.sgml: add some overview docs
+
+	* gtk/Makefile.am (content_files): add new files
+
+	* gtk/changes-1.2.sgml: move Changes-1.2.txt in here
+
+	* gtk/changes-2.0.sgml: move Changes-2.0.txt in here
+
+	* gdk/tmpl/threads.sgml: mention gdk_threads_init() in the
+	overview docs, copy in the examples from the FAQ
+
+	* gtk/gtk-docs.sgml: change DTD to 3.1, and add
+	question_index.sgml and changes-1.2, changes-2.0
+
+	* gtk/tmpl/gtkdrawingarea.sgml: fixups to reflect 2.0 changes
+
+	* gtk/question_index.sgml: new section with question-based 
+	index of the manual
+
+	* gtk/text_widget.sgml: fix some cross-references
+
+2002-01-01  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/tmpl/gtktexttag.sgml: docs updates, mention that invisible 
 	property isn't implemented
 

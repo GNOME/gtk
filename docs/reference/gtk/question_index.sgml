@@ -1,0 +1,197 @@
+<refentry id="gtk-question-index" revision="1 Jan 2002">
+<refmeta>
+<refentrytitle>Common Questions</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>Common Questions</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Common Questions</refname>
+<refpurpose>
+Find answers to common questions in the GTK+ manual
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Questions and Answers</title>
+
+<para>
+This is an "index" of the reference manual organized by common "How do
+I..." questions. If you aren't sure which documentation to read for
+the question you have, this list is a good place to start.
+</para>
+
+<qandaset>
+
+<qandadiv><title>General</title>
+
+<qandaentry>
+<question><para>
+Where can I get help with GTK+, submit a bug report, or make a feature 
+request?
+</para></question>
+
+<answer>
+
+<para>
+See the <link linkend="gtk-resources">documentation on this topic</link>.
+</para>
+
+</answer>
+
+</qandaentry>
+
+
+<qandaentry>
+<question><para>How do I port from one GTK+
+version to another?</para></question>
+
+<answer>
+
+<para>
+See the <link linkend="gtk-changes-2-0">list of incompatible changes
+from 1.2 to 2.0</link>. Also, the <ulink
+url="http://developer.gnome.org/dotplan/porting/">GNOME 2.0 porting
+guide</ulink> on <ulink
+url="http://developer.gnome.org">http://developer.gnome.org</ulink>
+has some more detailed discussion of porting from 1.2 to 2.0.
+You may also find useful information in the documentation for 
+specific widgets and functions.
+</para>
+
+<para>
+If you have a question not covered in the manual, feel free to
+ask on the mailing lists and please <ulink
+url="http://bugzilla.gnome.org">file a bug report</ulink> against the
+documentation.
+</para>
+
+</answer>
+
+</qandaentry>
+
+
+<qandaentry>
+<question><para>
+How does memory management work in GTK+? Should I free data returned
+from functions?
+</para></question>
+
+<answer>
+
+<para>
+See the documentation for <link linkend="GObject">GObject</link> and
+<link linkend="GtkObject">GtkObject</link>. For <link
+linkend="GObject">GObject</link> note specifically <link
+linkend="g-object-ref">g_object_ref()</link> and <link
+linkend="g-object-unref">g_object_unref()</link>. <link
+linkend="GtkObject">GtkObject</link> is a subclass of <link
+linkend="GObject">GObject</link> so the same points apply, except that
+it has a "floating" state (explained in its documentation).
+</para>
+
+<para>
+For strings returned from functions, they will be declared "const"
+(using <link linkend="G-CONST-RETURN-CAPS">G_CONST_RETURN</link>) if they
+should not be freed. Non-const strings should be freed with <link
+linkend="g-free">g_free()</link>. Arrays follow the same rule.  (If
+you find an exception to the rules, please report a bug to <ulink
+url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>.)
+</para>
+
+</answer>
+
+</qandaentry>
+
+
+<qandaentry>
+<question><para>
+How do I use GTK+ with threads?
+</para></question>
+
+<answer>
+
+<para>
+This is covered in the 
+<link linkend="gdk-Threads">GDK threads documentation</link>. 
+See also the <link linkend="glib-Threads">GThread</link> documentation for portable
+threading primitives.
+</para>
+
+</answer>
+
+</qandaentry>
+
+</qandadiv>
+
+
+<qandadiv><title><link linkend="GtkWidget">GtkWidget</link></title>
+
+<qandaentry>
+<question><para>
+How do I change the color of a widget?
+</para></question>
+
+<answer><para>
+See <link linkend="gtk-widget-modify-fg">gtk_widget_modify_fg()</link>,
+<link linkend="gtk-widget-modify-bg">gtk_widget_modify_bg()</link>,
+<link linkend="gtk-widget-modify-base">gtk_widget_modify_base()</link>,
+and <link
+linkend="gtk-widget-modify-text">gtk_widget_modify_text()</link>.  See
+<link linkend="gtk-Resource-Files">GTK+ resource files</link> for more
+discussion. You can also change widget color by installing a resource
+file and parsing it with <link
+linkend="gtk-rc-add-default-file">gtk_rc_add_default_file()</link>.
+The advantage of a resource file is that users can then override the
+color you've chosen.
+</para>
+
+<para>To change the background color for widgets such as <link
+linkend="GtkLabel">GtkLabel</link> that have no background, place them
+in a <link linkend="GtkEventBox">GtkEventBox</link> and set the
+background of the event box.  
+</para></answer>
+</qandaentry>
+
+</qandadiv>
+
+
+<qandadiv><title><link linkend="GtkTextView">GtkTextView</link></title>
+
+<qandaentry>
+<question><para>
+How do I get the contents of the entire text widget as a string?
+</para></question>
+
+<answer><para>
+
+See <link
+          linkend="gtk-text-buffer-get-bounds">gtk_text_buffer_get_bounds()</link>
+          and <link
+          linkend="gtk-text-buffer-get-text">gtk_text_buffer_get_text()</link>
+or <link
+          linkend="gtk-text-iter-get-text">gtk_text_iter_get_text()</link>.
+</para>
+<para>
+<programlisting>
+  GtkTextIter start, end;
+  GtkTextBuffer *buffer;
+  char *text;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
+  gtk_text_buffer_get_bounds (buffer, &amp;start, &amp;end);
+  text = gtk_text_iter_get_text (&amp;start, &amp;end);
+  /* use text */
+  g_free (text);
+</programlisting>
+</para></answer>
+</qandaentry>
+
+</qandadiv>
+
+
+</qandaset>
+
+</refsect1>
+
+</refentry>

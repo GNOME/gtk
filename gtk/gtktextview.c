@@ -1690,6 +1690,15 @@ gtk_text_view_scroll_to_mark (GtkTextView *text_view,
     gtk_text_view_flush_scroll (text_view);
 }
 
+/**
+ * gtk_text_view_scroll_mark_onscreen:
+ * @text_view: a #GtkTextView
+ * @mark: a mark in the buffer for @text_view
+ * 
+ * Scrolls @text_view the minimum distance such that @mark is contained
+ * within the visible area of the widget.
+ * 
+ **/
 void
 gtk_text_view_scroll_mark_onscreen (GtkTextView *text_view,
                                     GtkTextMark *mark)
@@ -1864,6 +1873,15 @@ gtk_text_view_get_editable (GtkTextView *text_view)
   return text_view->editable;
 }
 
+/**
+ * gtk_text_view_set_pixels_above_lines:
+ * @text_view: a #GtkTextView
+ * @pixels_above_lines: pixels above paragraphs
+ * 
+ * Sets the default number of blank pixels above paragraphs in @text_view.
+ * Tags in the buffer for @text_view may override the defaults.
+ * 
+ **/
 void
 gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
                                       gint         pixels_above_lines)
@@ -1884,6 +1902,14 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
   g_object_notify (G_OBJECT (text_view), "pixels_above_lines");
 }
 
+/**
+ * gtk_text_view_get_pixels_above_lines:
+ * @text_view: a #GtkTextView
+ * 
+ * Gets the default number of pixels to put above paragraphs.
+ * 
+ * Return value: default number of pixels above paragraphs
+ **/
 gint
 gtk_text_view_get_pixels_above_lines (GtkTextView *text_view)
 {
@@ -1892,6 +1918,16 @@ gtk_text_view_get_pixels_above_lines (GtkTextView *text_view)
   return text_view->pixels_above_lines;
 }
 
+/**
+ * gtk_text_view_set_pixels_below_lines:
+ * @text_view: a #GtkTextView
+ * @pixels_below_lines: pixels below paragraphs 
+ *
+ * Sets the default number of pixels of blank space
+ * to put below paragraphs in @text_view. May be overridden
+ * by tags applied to @text_view's buffer. 
+ * 
+ **/
 void
 gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
                                       gint         pixels_below_lines)
@@ -1912,6 +1948,14 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
   g_object_notify (G_OBJECT (text_view), "pixels_below_lines");
 }
 
+/**
+ * gtk_text_view_get_pixels_below_lines:
+ * @text_view: a #GtkTextView
+ * 
+ * Gets the value set by gtk_text_view_set_pixels_below_lines().
+ * 
+ * Return value: default number of blank pixels below paragraphs
+ **/
 gint
 gtk_text_view_get_pixels_below_lines (GtkTextView *text_view)
 {
@@ -1920,6 +1964,16 @@ gtk_text_view_get_pixels_below_lines (GtkTextView *text_view)
   return text_view->pixels_below_lines;
 }
 
+/**
+ * gtk_text_view_set_pixels_inside_wrap:
+ * @text_view: a #GtkTextView
+ * @pixels_inside_wrap: default number of pixels between wrapped lines
+ *
+ * Sets the default number of pixels of blank space to leave between
+ * display/wrapped lines within a paragraph. May be overridden by
+ * tags in @text_view's buffer.
+ * 
+ **/
 void
 gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
                                       gint         pixels_inside_wrap)
@@ -1939,6 +1993,14 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
   g_object_notify (G_OBJECT (text_view), "pixels_inside_wrap");
 }
 
+/**
+ * gtk_text_view_get_pixels_inside_wrap:
+ * @text_view: a #GtkTextView
+ * 
+ * Gets the value set by gtk_text_view_set_pixels_inside_wrap().
+ * 
+ * Return value: default number of pixels of blank space between wrapped lines
+ **/
 gint
 gtk_text_view_get_pixels_inside_wrap (GtkTextView *text_view)
 {
@@ -1947,19 +2009,28 @@ gtk_text_view_get_pixels_inside_wrap (GtkTextView *text_view)
   return text_view->pixels_inside_wrap;
 }
 
+/**
+ * gtk_text_view_set_justification:
+ * @text_view: a #GtkTextView
+ * @justification: justification
+ *
+ * Sets the default justification of text in @text_view.
+ * Tags in the view's buffer may override the default.
+ * 
+ **/
 void
 gtk_text_view_set_justification (GtkTextView     *text_view,
-                                 GtkJustification justify)
+                                 GtkJustification justification)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
-  if (text_view->justify != justify)
+  if (text_view->justify != justification)
     {
-      text_view->justify = justify;
+      text_view->justify = justification;
 
       if (text_view->layout)
         {
-          text_view->layout->default_style->justification = justify;
+          text_view->layout->default_style->justification = justification;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
     }
@@ -1967,6 +2038,15 @@ gtk_text_view_set_justification (GtkTextView     *text_view,
   g_object_notify (G_OBJECT (text_view), "justification");
 }
 
+/**
+ * gtk_text_view_get_justification:
+ * @text_view: a #GtkTextView
+ * 
+ * Gets the default justification of paragraphs in @text_view.
+ * Tags in the buffer may override the default.
+ * 
+ * Return value: default justification
+ **/
 GtkJustification
 gtk_text_view_get_justification (GtkTextView *text_view)
 {
@@ -1975,6 +2055,15 @@ gtk_text_view_get_justification (GtkTextView *text_view)
   return text_view->justify;
 }
 
+/**
+ * gtk_text_view_set_left_margin:
+ * @text_view: a #GtkTextView
+ * @left_margin: left margin in pixels
+ * 
+ * Sets the default left margin for text in @text_view.
+ * Tags in the buffer may override the default.
+ * 
+ **/
 void
 gtk_text_view_set_left_margin (GtkTextView *text_view,
                                gint         left_margin)
@@ -1995,6 +2084,15 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
   g_object_notify (G_OBJECT (text_view), "left_margin");
 }
 
+/**
+ * gtk_text_view_get_left_margin:
+ * @text_view: a #GtkTextView
+ * 
+ * Gets the default left margin size of paragraphs in the @text_view.
+ * Tags in the buffer may override the default.
+ * 
+ * Return value: left margin in pixels
+ **/
 gint
 gtk_text_view_get_left_margin (GtkTextView *text_view)
 {
@@ -2003,6 +2101,15 @@ gtk_text_view_get_left_margin (GtkTextView *text_view)
   return text_view->left_margin;
 }
 
+/**
+ * gtk_text_view_set_right_margin:
+ * @text_view: a #GtkTextView
+ * @right_margin: right margin in pixels
+ *
+ * Sets the default right margin for text in the text view.
+ * Tags in the buffer may override the default.
+ * 
+ **/
 void
 gtk_text_view_set_right_margin (GtkTextView *text_view,
                                 gint         right_margin)
@@ -2023,6 +2130,15 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
   g_object_notify (G_OBJECT (text_view), "right_margin");
 }
 
+/**
+ * gtk_text_view_get_right_margin:
+ * @text_view: a #GtkTextView
+ * 
+ * Gets the default right margin for text in @text_view. Tags
+ * in the buffer may override the default.
+ * 
+ * Return value: right margin in pixels
+ **/
 gint
 gtk_text_view_get_right_margin (GtkTextView *text_view)
 {
@@ -2031,6 +2147,15 @@ gtk_text_view_get_right_margin (GtkTextView *text_view)
   return text_view->right_margin;
 }
 
+/**
+ * gtk_text_view_set_indent:
+ * @text_view: a #GtkTextView
+ * @indent: indentation in pixels
+ *
+ * Sets the default indentation for paragraphs in @text_view.
+ * Tags in the buffer may override the default.
+ * 
+ **/
 void
 gtk_text_view_set_indent (GtkTextView *text_view,
                           gint         indent)
@@ -2050,6 +2175,16 @@ gtk_text_view_set_indent (GtkTextView *text_view,
   g_object_notify (G_OBJECT (text_view), "indent");
 }
 
+/**
+ * gtk_text_view_get_indent:
+ * @text_view: a #GtkTextView
+ * 
+ * Gets the default indentation of paragraphs in @text_view.
+ * Tags in the view's buffer may override the default.
+ * The indentation may be negative.
+ * 
+ * Return value: number of pixels of indentation
+ **/
 gint
 gtk_text_view_get_indent (GtkTextView *text_view)
 {
@@ -2058,6 +2193,15 @@ gtk_text_view_get_indent (GtkTextView *text_view)
   return text_view->indent;
 }
 
+/**
+ * gtk_text_view_set_tabs:
+ * @text_view: a #GtkTextView
+ * @tabs: tabs as a #PangoTabArray
+ *
+ * Sets the default tab stops for paragraphs in @text_view.
+ * Tags in the buffer may override the default.
+ * 
+ **/
 void
 gtk_text_view_set_tabs (GtkTextView   *text_view,
                         PangoTabArray *tabs)
@@ -2084,6 +2228,17 @@ gtk_text_view_set_tabs (GtkTextView   *text_view,
   g_object_notify (G_OBJECT (text_view), "tabs");
 }
 
+/**
+ * gtk_text_view_get_tabs:
+ * @text_view: a #GtkTextView
+ * 
+ * Gets the default tabs for @text_view. Tags in the buffer may
+ * override the defaults. The returned array will be %NULL if
+ * "standard" (8-space) tabs are used. Free the return value
+ * with pango_tab_array_free().
+ * 
+ * Return value: copy of default tab array, or %NULL if "standard" tabs are used; must be freed with pango_tab_array_free().
+ **/
 PangoTabArray*
 gtk_text_view_get_tabs (GtkTextView *text_view)
 {
@@ -6813,6 +6968,15 @@ add_child (GtkTextView      *text_view,
   gtk_widget_set_parent (vc->widget, GTK_WIDGET (text_view));
 }
 
+/**
+ * gtk_text_view_add_child_at_anchor:
+ * @text_view: a #GtkTextView
+ * @child: a #GtkWidget
+ * @anchor: a #GtkTextChildAnchor in the #GtkTextBuffer for @text_view
+ * 
+ * Adds a child widget in the text buffer, at the given @anchor.
+ * 
+ **/
 void
 gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
                                    GtkWidget            *child,
@@ -6925,6 +7089,22 @@ gtk_text_view_move_child          (GtkTextView          *text_view,
 
 /* Iterator operations */
 
+/**
+ * gtk_text_view_forward_display_line:
+ * @text_view: a #GtkTextView
+ * @iter: a #GtkTextIter
+ * 
+ * Moves the given @iter forward by one display (wrapped) line.  A
+ * display line is different from a paragraph. Paragraphs are
+ * separated by newlines or other paragraph separator characters.
+ * Display lines are created by line-wrapping a paragraph.  If
+ * wrapping is turned off, display lines and paragraphs will be the
+ * same. Display lines are divided differently for each view, since
+ * they depend on the view's width; paragraphs are the same in all
+ * views, since they depend on the contents of the #GtkTextBuffer.
+ * 
+ * Return value: %TRUE if @iter was moved and is not on the end iterator
+ **/
 gboolean
 gtk_text_view_forward_display_line (GtkTextView *text_view,
                                     GtkTextIter *iter)
@@ -6937,6 +7117,22 @@ gtk_text_view_forward_display_line (GtkTextView *text_view,
   return gtk_text_layout_move_iter_to_next_line (text_view->layout, iter);
 }
 
+/**
+ * gtk_text_view_backward_display_line:
+ * @text_view: a #GtkTextView
+ * @iter: a #GtkTextIter
+ * 
+ * Moves the given @iter backward by one display (wrapped) line.  A
+ * display line is different from a paragraph. Paragraphs are
+ * separated by newlines or other paragraph separator characters.
+ * Display lines are created by line-wrapping a paragraph.  If
+ * wrapping is turned off, display lines and paragraphs will be the
+ * same. Display lines are divided differently for each view, since
+ * they depend on the view's width; paragraphs are the same in all
+ * views, since they depend on the contents of the #GtkTextBuffer.
+ * 
+ * Return value: %TRUE if @iter was moved and is not on the end iterator
+ **/
 gboolean
 gtk_text_view_backward_display_line (GtkTextView *text_view,
                                      GtkTextIter *iter)
@@ -6949,6 +7145,22 @@ gtk_text_view_backward_display_line (GtkTextView *text_view,
   return gtk_text_layout_move_iter_to_previous_line (text_view->layout, iter);
 }
 
+/**
+ * gtk_text_view_forward_display_line_end:
+ * @text_view: a #GtkTextView
+ * @iter: a #GtkTextIter
+ * 
+ * Moves the given @iter forward to the next display line end.  A
+ * display line is different from a paragraph. Paragraphs are
+ * separated by newlines or other paragraph separator characters.
+ * Display lines are created by line-wrapping a paragraph.  If
+ * wrapping is turned off, display lines and paragraphs will be the
+ * same. Display lines are divided differently for each view, since
+ * they depend on the view's width; paragraphs are the same in all
+ * views, since they depend on the contents of the #GtkTextBuffer.
+ * 
+ * Return value: %TRUE if @iter was moved and is not on the end iterator
+ **/
 gboolean
 gtk_text_view_forward_display_line_end (GtkTextView *text_view,
                                         GtkTextIter *iter)
@@ -6961,6 +7173,22 @@ gtk_text_view_forward_display_line_end (GtkTextView *text_view,
   return gtk_text_layout_move_iter_to_line_end (text_view->layout, iter, 1);
 }
 
+/**
+ * gtk_text_view_backward_display_line_start:
+ * @text_view: a #GtkTextView
+ * @iter: a #GtkTextIter
+ * 
+ * Moves the given @iter backward to the next display line start.  A
+ * display line is different from a paragraph. Paragraphs are
+ * separated by newlines or other paragraph separator characters.
+ * Display lines are created by line-wrapping a paragraph.  If
+ * wrapping is turned off, display lines and paragraphs will be the
+ * same. Display lines are divided differently for each view, since
+ * they depend on the view's width; paragraphs are the same in all
+ * views, since they depend on the contents of the #GtkTextBuffer.
+ * 
+ * Return value: %TRUE if @iter was moved and is not on the end iterator
+ **/
 gboolean
 gtk_text_view_backward_display_line_start (GtkTextView *text_view,
                                            GtkTextIter *iter)
@@ -6973,6 +7201,17 @@ gtk_text_view_backward_display_line_start (GtkTextView *text_view,
   return gtk_text_layout_move_iter_to_line_end (text_view->layout, iter, -1);
 }
 
+/**
+ * gtk_text_view_starts_display_line:
+ * @text_view: a #GtkTextView
+ * @iter: a #GtkTextIter
+ * 
+ * Determines whether @iter is at the start of a display line.
+ * See gtk_text_view_forward_display_line() for an explanation of
+ * display lines vs. paragraphs.
+ * 
+ * Return value: %TRUE if @iter begins a wrapped line
+ **/
 gboolean
 gtk_text_view_starts_display_line (GtkTextView       *text_view,
                                    const GtkTextIter *iter)
@@ -6985,6 +7224,18 @@ gtk_text_view_starts_display_line (GtkTextView       *text_view,
   return gtk_text_layout_iter_starts_line (text_view->layout, iter);
 }
 
+/**
+ * gtk_text_view_move_visually:
+ * @text_view: a #GtkTextView
+ * @iter: a #GtkTextIter
+ * @count: number of lines to move
+ * 
+ * Moves @iter up or down by @count display (wrapped) lines.
+ * See gtk_text_view_forward_display_line() for an explanation of
+ * display lines vs. paragraphs.
+ * 
+ * Return value: %TRUE if @iter moved and is not on the end iterator
+ **/
 gboolean
 gtk_text_view_move_visually (GtkTextView *text_view,
                              GtkTextIter *iter,

@@ -6,9 +6,12 @@ a widget for custom user interface elements.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The #GtkDrawingArea widget is used for creating custom
-user interface elements. After creating a drawing
-area, the application may want to connect to:
+
+The #GtkDrawingArea widget is used for creating custom user interface
+elements. It's essentially a blank widget; you can draw on
+<literal>widget-&gt;window</literal>. After creating a drawing area,
+the application may want to connect to:
+
 <itemizedlist>
   <listitem>
     <para>
@@ -19,12 +22,13 @@ area, the application may want to connect to:
   <listitem>
     <para>
     The "realize" signal to take any necessary actions
-    when the widget
+    when the widget is instantiated on a particular display.
+    (Create GDK resources in response to this signal.)
     </para>
   </listitem>
   <listitem>
     <para>
-    The "size_allocate" signal to take any necessary actions
+    The "configure_event" signal to take any necessary actions
     when the widget changes size.
     </para>
   </listitem>
@@ -35,45 +39,45 @@ area, the application may want to connect to:
     </para>
   </listitem>
 </itemizedlist>
-As a convenience, the #GtkDrawingArea widget synthesizes
-a "configure_event" when the widget is realized
-and any time the size of a widget changes when it
-is realized. It often suffices to connect to this
-signal instead of "realize" and "size_allocate".
 </para>
 <para>
 The following code portion demonstrates using a drawing
-area to implement a widget that draws a circle.
-As this example demonstrates, an expose handler should
-draw only the pixels within the requested area and
-should draw or clear all these pixels.
+area to display a circle in the normal widget foreground 
+color.
+Note that GDK automatically clears the exposed area
+to the background color before sending the expose event, and 
+that drawing is implicitly clipped to the exposed area.
 </para>
 <example>
 <title>Simple <structname>GtkDrawingArea</structname> usage.</title>
 <programlisting>
 gboolean
-expose_event (GdkWidget *widget, GdkEventExpose *event, gpointer data)
+expose_event_callback (GdkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-  gdk_window_clear_area (widget->window,
-                         event->area.x, event->area.y,
-                         event->area.width, event->area.height);
-  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
-                             &amp;event->area);
   gdk_draw_arc (widget->window,
-                widget->style->fg_gc[widget->state],
+                widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
                 TRUE,
                 0, 0, widget->allocation.width, widget->allocation.height,
                 0, 64 * 360);
-  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
-                             NULL);
-
+ 
   return TRUE;
 }
 [...]
   GtkWidget *drawing_area = gtk_drawing_area_new (<!>);
-  gtk_signal_connect (GTK_OBJECT (drawing_area), 
+  gtk_widget_set_size_request (drawing_area, 100, 100);
+  g_signal_connect (G_OBJECT (drawing_area), "expose_event",  
+                    G_CALLBACK (expose_event_callback), NULL);
 </programlisting>
 </example>
+
+<para>
+Expose events are normally delivered when a drawing area first comes
+onscreen, or when it's covered by another window and then uncovered
+(exposed). You can also force an expose event by adding to the "damage
+region" of the drawing area's window; gtk_widget_queue_draw_area() and
+gdk_window_invalidate_rect() are equally good ways to do this. You'll
+then get an expose event for the invalid region.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
