@@ -2268,9 +2268,6 @@ view_add_example_widgets (View *view)
   Buffer *buffer;
 
   buffer = view->buffer;
-
-  /* REMOVE to test widgets */
-  return;
   
   anchor = g_object_get_data (G_OBJECT (buffer->buffer),
                               "anchor");
