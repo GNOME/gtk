@@ -147,7 +147,7 @@ static GList *current_incrs = NULL;
 static GList *current_selections = NULL;
 
 static GdkAtom gtk_selection_atoms[LAST_ATOM];
-static const char *gtk_selection_handler_key = "selection_handlers";
+static const char *gtk_selection_handler_key = "gtk-selection-handlers";
 
 /*************************************************************
  * gtk_selection_owner_set:

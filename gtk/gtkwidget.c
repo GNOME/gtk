@@ -210,13 +210,13 @@ static GSList *style_stack = NULL;
 static GSList *gtk_widget_redraw_queue = NULL;
 static GSList *gtk_widget_resize_queue = NULL;
 
-static const gchar *aux_info_key = "aux_info";
-static const gchar *colormap_key = "colormap";
-static const gchar *visual_key = "visual";
-static const gchar *event_key = "event_mask";
-static const gchar *extension_event_key = "extension_event_mode";
-static const gchar *parent_window_key = "parent_window";
-static const gchar *shape_info_key = "shape_info";
+static const gchar *aux_info_key = "gtk-aux-info";
+static const gchar *colormap_key = "gtk-colormap";
+static const gchar *visual_key = "gtk-visual";
+static const gchar *event_key = "gtk-event-mask";
+static const gchar *extension_event_key = "gtk-extension-event-mode";
+static const gchar *parent_window_key = "gtk-parent-window";
+static const gchar *shape_info_key = "gtk-shape-info";
 
 
 
@@ -1442,7 +1442,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
     {
       if (GTK_WIDGET_VISIBLE (toplevel))
 	{
-	  if (!GTK_WIDGET_RESIZE_PENDING (toplevel))
+	  if (!GTK_CONTAINER_RESIZE_PENDING (toplevel))
 	    {
 	      GTK_PRIVATE_SET_FLAGS (toplevel, GTK_RESIZE_PENDING);
               if (gtk_widget_resize_queue == NULL)
@@ -3080,7 +3080,7 @@ gtk_widget_real_destroy (GtkObject *object)
       GTK_PRIVATE_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
     }
   
-  if (GTK_WIDGET_RESIZE_PENDING (widget))
+  if (GTK_CONTAINER_RESIZE_PENDING (widget))
     {
       gtk_widget_resize_queue = g_slist_remove (gtk_widget_resize_queue, widget);
       GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_PENDING);

@@ -100,21 +100,24 @@ static GSList *living_objs = NULL;
 static void
 gtk_object_debug (void)
 {
-  GSList *node;
-  
-  printf ("%d living objects\n", obj_count);
-  for (node = living_objs; node; node = node->next)
-    {
-      GtkObject *obj;
 
-      obj = (GtkObject*) node->data;
-      /*
-	printf ("%p: %s %d %s\n",
-	obj, gtk_type_name (GTK_OBJECT_TYPE (obj)),
-	obj->ref_count,
-	GTK_OBJECT_FLOATING (obj)? "floating" : "");
-	*/
+  if (1)
+    {
+      GSList *node;
+      
+      printf ("living objects (%d):\n", obj_count);
+      for (node = living_objs; node; node = node->next)
+	{
+	  GtkObject *obj;
+	  
+	  obj = (GtkObject*) node->data;
+	  printf ("%p: %s %d %s\n",
+		  obj, gtk_type_name (GTK_OBJECT_TYPE (obj)),
+		  obj->ref_count,
+		  GTK_OBJECT_FLOATING (obj)? "floating" : "");
+	}
     }
+  printf ("%d living objects\n", obj_count);
 }
 #endif	GTK_OBJECT_DEBUG
 
@@ -531,7 +534,7 @@ struct _GtkWeakRef
   gpointer          data;
 };
 
-static const gchar *weakrefs_key = "weakrefs";
+static const gchar *weakrefs_key = "gtk-weakrefs";
 
 void
 gtk_object_weakref (GtkObject        *object,

@@ -1275,7 +1275,7 @@ gtk_window_set_hints (GtkWidget      *widget,
       ux = 0;
       uy = 0;
 
-      aux_info = gtk_object_get_data (GTK_OBJECT (widget), "aux_info");
+      aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
       if (aux_info && (aux_info->x != -1) && (aux_info->y != -1))
 	{
 	  ux = aux_info->x;

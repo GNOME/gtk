@@ -166,6 +166,8 @@ static GtkWindowClass *color_selection_dialog_parent_class = NULL;
 
 static gint color_selection_signals[LAST_SIGNAL] = {0};
 
+static const gchar	*value_index_key = "gtk-value-index";
+
 
 #define SF GtkSignalFunc
 
@@ -392,11 +394,11 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
       gtk_signal_connect_object (GTK_OBJECT (adj), "value_changed",
                                  scale_vals[n].updater, (gpointer) colorsel->scales[n]);
       gtk_object_set_data (GTK_OBJECT (colorsel->scales[n]), "_GtkColorSelection", (gpointer) colorsel);
-      gtk_object_set_data (GTK_OBJECT (colorsel->scales[n]), "_ValueIndex", (gpointer) n);
+      gtk_object_set_data (GTK_OBJECT (colorsel->scales[n]), value_index_key, (gpointer) n);
       gtk_signal_connect_object (GTK_OBJECT (colorsel->entries[n]), "changed",
                                  scale_vals[n].updater, (gpointer) colorsel->entries[n]);
       gtk_object_set_data (GTK_OBJECT (colorsel->entries[n]), "_GtkColorSelection", (gpointer) colorsel);
-      gtk_object_set_data (GTK_OBJECT (colorsel->entries[n]), "_ValueIndex", (gpointer) n);
+      gtk_object_set_data (GTK_OBJECT (colorsel->entries[n]), value_index_key, (gpointer) n);
     }
 
   colorsel->opacity_label = label;
@@ -625,7 +627,7 @@ gtk_color_selection_hsv_updater (GtkWidget *widget,
   if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (widget)))
     {
       colorsel = (GtkColorSelection*) gtk_object_get_data (GTK_OBJECT (widget), "_GtkColorSelection");
-      i = (gint) gtk_object_get_data (GTK_OBJECT (widget), "_ValueIndex");
+      i = (gint) gtk_object_get_data (GTK_OBJECT (widget), value_index_key);
 
       if (GTK_IS_SCALE (widget))
 	{
@@ -675,7 +677,7 @@ gtk_color_selection_rgb_updater (GtkWidget *widget,
   if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (widget)))
     {
       colorsel = (GtkColorSelection*) gtk_object_get_data (GTK_OBJECT (widget), "_GtkColorSelection");
-      i = (gint) gtk_object_get_data (GTK_OBJECT (widget), "_ValueIndex");
+      i = (gint) gtk_object_get_data (GTK_OBJECT (widget), value_index_key);
 
       if (GTK_IS_SCALE (widget))
 	{

@@ -33,7 +33,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkcombo.h"
 
-const gchar *gtk_combo_string_key = "_combo_string_value";
+const gchar *gtk_combo_string_key = "gtk-combo-string-value";
 
 #define COMBO_LIST_MAX_HEIGHT 400
 
@@ -84,8 +84,8 @@ gtk_combo_class_init (GtkComboClass * klass)
 static void
 gtk_combo_destroy (GtkObject * combo)
 {
-
-  gtk_object_unref (GTK_OBJECT (GTK_COMBO (combo)->popwin));
+  gtk_widget_destroy (GTK_COMBO (combo)->popwin);
+  gtk_widget_unref (GTK_COMBO (combo)->popwin);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (*GTK_OBJECT_CLASS (parent_class)->destroy) (combo);
@@ -148,7 +148,7 @@ gtk_combo_find (GtkCombo * combo)
   if (combo->case_sensitive)
     string_compare = strcmp;
   else
-    string_compare = g_strcasecmp;
+    string_compare = (void*) g_strcasecmp;
 
   text = gtk_entry_get_text (GTK_ENTRY (combo->entry));
   clist = GTK_LIST (combo->list)->children;
@@ -386,6 +386,7 @@ gtk_combo_init (GtkCombo * combo)
      (GtkSignalFunc)prelight_bug, combo); */
 
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_widget_ref (combo->popwin);
   gtk_window_set_policy (GTK_WINDOW (combo->popwin), 1, 1, 0);
   combo->popup = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (combo->popup),
