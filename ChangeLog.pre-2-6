@@ -1,3 +1,7 @@
+Sun Sep  6 12:36:23 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/testrgb.c: #include <stdlib.h>
+
 Sat Sep  5 16:01:19 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdkinputxfree.h gdk/gdk.c gdk/gdkinputgxi.h:
