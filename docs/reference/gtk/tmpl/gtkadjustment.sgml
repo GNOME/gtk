@@ -138,7 +138,7 @@ changed any of the #GtkAdjustment fields other than the value.
 
 <!-- ##### FUNCTION gtk_adjustment_value_changed ##### -->
 <para>
-Emits a &quot;value_changed&quot; signal from the #GtkAdjusmtent.
+Emits a &quot;value_changed&quot; signal from the #GtkAdjustment.
 This is typically called by the owner of the #GtkAdjustment after it has
 changed the #GtkAdjustment value field.
 </para>

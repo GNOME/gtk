@@ -780,7 +780,7 @@ gtk_label_get_mnemonic_widget (GtkLabel *label)
  * returns the keyval used for the mnemonic accelerator. If there is no
  * mnemonic set up it returns #GDK_VoidSymbol.
  *
- * Returns: GDK keyval usable for accelerators, or GDK_VoidSymbol
+ * Returns: GDK keyval usable for accelerators, or #GDK_VoidSymbol
  **/
 guint
 gtk_label_get_mnemonic_keyval (GtkLabel *label)
@@ -1210,9 +1210,9 @@ gtk_label_set_justify (GtkLabel        *label,
  * gtk_label_get_justify:
  * @label: a #GtkLabel
  *
- * Returns the justification of the label. See gtk_label_set_justification ().
+ * Returns the justification of the label. See gtk_label_set_justify ().
  *
- * Return value: GtkJustification
+ * Return value: #GtkJustification
  **/
 GtkJustification
 gtk_label_get_justify (GtkLabel *label)

@@ -1104,13 +1104,13 @@ gtk_button_set_label (GtkButton   *button,
  * @button: a #GtkButton
  *
  * Fetches the text from the label of the button, as set by
- * gtk_button_set_label().
+ * gtk_button_set_label().  This string is owned by the widget 
+ * and must not be modified or freed.  If the label text has not 
+ * been set the return value  will be %NULL. This will be the 
+ * case if you create an empty button with gtk_button_new() to 
+ * use as a container.
  *
- * Return value: the text of the label widget. This string is
- *   owned by the widget and must not be modified or freed.
- *   If the label text has not been set the return value
- *   will be NULL. This will be the case if you create an
- *   empty button with gtk_button_new() to use as a container.
+ * Return value: the text of the label widget. 
  **/
 G_CONST_RETURN gchar *
 gtk_button_get_label (GtkButton *button)

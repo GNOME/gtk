@@ -3639,7 +3639,7 @@ gtk_notebook_append_page_menu (GtkNotebook *notebook,
  * @tab_label: the #GtkWidget to be used as the label for the page,
  *             or %NULL to use the default label, 'page N'.
  *
- * Prepends a page to @noteobook.
+ * Prepends a page to @notebook.
  **/
 void
 gtk_notebook_prepend_page (GtkNotebook *notebook,

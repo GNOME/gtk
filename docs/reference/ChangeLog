@@ -1,3 +1,19 @@
+2001-11-14  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/Makefile.am (MKDB_OPTIONS), 
+	gdk-pixbuf/Makefile.am (MKDB_OPTIONS),
+	gtk/Makefile.am (MKDB_OPTIONS): Add --sgml-mode.
+
+	* gdk-pixbuf/tmpl/file-saving.sgml,
+	gdk-pixbuf/tmpl/module_interface.sgml,
+	gdk-pixbuf/tmpl/gdk-pixbuf-xlib-rgb.sgml: Consistent short descriptions.
+
+	* gtk/tmpl/gtkprogressbar.sgml: Remove duplicate docs. (#64469)
+	
+	* gtk/gtk-sections.txt: Add missing TITLEs (#64459, #64568)
+
+	* gtk/tmpl/gtkadjustment.sgml: Typo fix. (#64448)
+
 Mon Nov 12 23:06:38 2001  Tim Janik  <timj@gtk.org>
 
 	* added gtkaccelmap.sgml. other updates.

@@ -232,14 +232,11 @@ mode.  Larger numbers make the visible block smaller.
 
 <!-- ##### FUNCTION gtk_progress_bar_set_orientation ##### -->
 <para>
-Sets the orientation of the progress bar.  This controls whether
-the bar is horizontal or vertical and the direction in which it
-grows.
+
 </para>
 
-@pbar: a #GtkProgressBar.
-@orientation: a #GtkProgressBarOrientation value which specifies the
-orientation and growth direction of the bar.
+@pbar: 
+@orientation: 
 
 
 <!-- ##### FUNCTION gtk_progress_bar_get_orientation ##### -->

@@ -1,3 +1,15 @@
+2001-11-14  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkbutton.c (gtk_button_get_label): Rearrange docs (#64566)
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_create_tag): Typo fix (#64474)
+
+	* gtk/gtkruler.c (gtk_ruler_get_metric): Typo fix (#64470)
+
+	* gtk/gtknotebook.c (gtk_notebook_prepend_page): Typo fix (#64467)
+
+	* gtk/gtklabel.c: Documentation fixes (#64452)
+
 2001-11-14  Daniel Egger  <degger@fhm.edu>
 
 	* gdk-pixbuf/io-xpm.c: 
