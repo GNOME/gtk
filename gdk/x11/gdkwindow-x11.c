@@ -1340,12 +1340,17 @@ show_window_internal (GdkWindow *window,
 
       if (impl->position_info.mapped)
 	{
+	  gboolean unset_bg = !private->input_only &&
+	    (private->window_type == GDK_WINDOW_CHILD ||
+	     impl->override_redirect) &&
+	    gdk_window_is_viewable (window);
+
+	  if (unset_bg)
+	    _gdk_x11_window_tmp_unset_bg (window, TRUE);
+	  
 	  XMapWindow (xdisplay, xwindow);
 
-	  if (!private->input_only &&
-	      (private->window_type == GDK_WINDOW_CHILD ||
-	       impl->override_redirect) &&
-	      gdk_window_is_viewable (window))
+	  if (unset_bg)
 	    {
 	      _gdk_x11_window_tmp_reset_bg (window, TRUE);
 	      gdk_window_invalidate_rect (window, NULL, TRUE);
@@ -1426,7 +1431,7 @@ post_unmap (GdkWindow *window)
     return;
 
   if (private->window_type == GDK_WINDOW_CHILD)
-    start_window = private->parent;
+    start_window = (GdkWindow *)private->parent;
   else if (private->window_type == GDK_WINDOW_TEMP)
     start_window = get_root (window);
 
