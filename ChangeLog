@@ -1,3 +1,8 @@
+Wed Sep  1 01:16:22 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): Fix
+	the default value of ::sizing.
+
 Wed Sep  1 00:55:56 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkimage.c (gtk_image_clear): Don't leak the iter

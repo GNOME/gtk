@@ -248,7 +248,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                       P_("Sizing"),
                                                       P_("Resize mode of the column"),
                                                       GTK_TYPE_TREE_VIEW_COLUMN_SIZING,
-                                                      GTK_TREE_VIEW_COLUMN_AUTOSIZE,
+                                                      GTK_TREE_VIEW_COLUMN_GROW_ONLY,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,
