@@ -1,3 +1,7 @@
+2004-07-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_parse_args.
+
 2004-07-12  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:
