@@ -252,7 +252,7 @@ connect_action_widget (GtkDialog *dialog, GtkWidget *child)
   if (GTK_WIDGET_GET_CLASS (child)->activate_signal != 0)
     {
       const gchar* name =
-        gtk_signal_name (GTK_WIDGET_GET_CLASS (child)->activate_signal != 0);
+        gtk_signal_name (GTK_WIDGET_GET_CLASS (child)->activate_signal);
 
       gtk_signal_connect_while_alive (GTK_OBJECT (child),
                                       name,
@@ -279,7 +279,7 @@ gtk_dialog_add_action_widget  (GtkDialog *dialog,
   ad->response_id = response_id;
 
   connect_action_widget (dialog, widget);
-  
+
   gtk_box_pack_end (GTK_BOX (dialog->action_area),
                     widget,
                     FALSE, TRUE, 5);  

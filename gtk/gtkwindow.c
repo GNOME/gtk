@@ -1586,10 +1586,8 @@ static void
 gtk_window_real_set_transient_for (GtkWindow *window,
                                    GtkWindow *parent)
 {
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (parent != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_WINDOW (parent));
+  g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
   g_return_if_fail (window != parent);
   
   if (window->transient_parent)

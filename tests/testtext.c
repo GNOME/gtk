@@ -21,6 +21,7 @@ struct _Buffer
   char *filename;
   gint untitled_serial;
   GtkTextTag *not_editable_tag;
+  GtkTextTag *found_text_tag;
 };
 
 struct _View
@@ -42,6 +43,9 @@ static gboolean save_buffer        (Buffer *buffer);
 static gboolean save_as_buffer     (Buffer *buffer);
 static char *   buffer_pretty_name (Buffer *buffer);
 static void     buffer_filename_set (Buffer *buffer);
+static void     buffer_search_forward (Buffer *buffer,
+                                       const char *str,
+                                       View *view);
 
 static View *view_from_widget (GtkWidget *widget);
 
@@ -313,7 +317,7 @@ tag_event_handler (GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
 {
   gint char_index;
 
-  char_index = gtk_text_buffer_get_offset (iter);
+  char_index = gtk_text_iter_get_offset (iter);
   
   switch (event->type)
     {
@@ -892,6 +896,71 @@ do_apply_editable (gpointer callback_data,
 }
 
 static void
+dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
+{
+  GtkTextBuffer *buffer;
+  View *view = data;
+  GtkTextIter start, end;
+  gchar *search_string;
+  
+  buffer = gtk_object_get_data (GTK_OBJECT (dialog), "buffer");
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+
+  /* Remove trailing newline */
+  gtk_text_iter_prev_char (&end);
+  
+  search_string = gtk_text_iter_get_text (&start, &end);
+
+  printf ("Searching for `%s'\n", search_string);
+  
+  buffer_search_forward (view->buffer, search_string, view);
+
+  g_free (search_string);
+  
+  gtk_widget_destroy (dialog);
+}
+
+static void
+do_search (gpointer callback_data,
+           guint callback_action,
+           GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkWidget *dialog;
+  GtkWidget *search_text;
+  GtkTextBuffer *buffer;
+  
+  dialog = gtk_dialog_new_with_buttons ("Search",
+                                        GTK_WINDOW (view->window),
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_STOCK_BUTTON_OK,
+                                        0, NULL);
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  /* FIXME memory leak once buffer is a GObject */
+  search_text = gtk_text_view_new_with_buffer (buffer);
+
+  gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+                    search_text,
+                    TRUE, TRUE, 0);
+
+  gtk_object_set_data (GTK_OBJECT (dialog), "buffer", buffer);
+  
+  gtk_signal_connect (GTK_OBJECT (dialog),
+                      "response",
+                      GTK_SIGNAL_FUNC (dialog_response_callback),
+                      view);
+
+  gtk_widget_show (search_text);
+
+  gtk_widget_grab_focus (search_text);
+  
+  gtk_widget_show_all (dialog);
+}
+
+static void
 view_init_menus (View *view)
 {
   GtkTextDirection direction = gtk_widget_get_direction (view->text_view);
@@ -940,6 +1009,9 @@ static GtkItemFactoryEntry menu_items[] =
   { "/File/sep1",        NULL,         0,           0, "<Separator>" },
   { "/File/_Close",     "<control>W" , do_close,    0, NULL },
   { "/File/E_xit",      "<control>Q" , do_exit,     0, NULL },
+
+  { "/_Edit", NULL, 0, 0, "<Branch>" },
+  { "/Edit/Find...", NULL, do_search, 0, NULL },
 
   { "/_Settings",   	  NULL,         0,                0, "<Branch>" },
   { "/Settings/Wrap _Off",   NULL,      do_wrap_changed,  GTK_WRAPMODE_NONE, "<RadioItem>" },
@@ -1127,6 +1199,10 @@ create_buffer (void)
   gtk_object_set (GTK_OBJECT (buffer->not_editable_tag),
                   "editable", FALSE,
                   "foreground", "purple", NULL);
+
+  buffer->found_text_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
+  gtk_object_set (GTK_OBJECT (buffer->found_text_tag),
+                  "foreground", "red", NULL);
   
   buffers = g_slist_prepend (buffers, buffer);
   
@@ -1172,6 +1248,55 @@ buffer_filename_set (Buffer *buffer)
 
       tmp_list = tmp_list->next;
     }
+}
+
+static void
+buffer_search_forward (Buffer *buffer, const char *str,
+                       View *view)
+{
+  GtkTextIter iter;
+  GtkTextIter start, end;
+  gint char_len;
+  int i = 0;
+  GtkWidget *dialog;
+  
+  /* remove tag from whole buffer */
+  gtk_text_buffer_get_bounds (buffer->buffer, &start, &end);
+  gtk_text_buffer_remove_tag (buffer->buffer,  buffer->found_text_tag,
+                              &start, &end );
+  
+  gtk_text_buffer_get_iter_at_mark (buffer->buffer, &iter,
+                                    gtk_text_buffer_get_mark (buffer->buffer,
+                                                              "insert"));
+
+
+  char_len = g_utf8_strlen (str, -1);
+  
+  while (gtk_text_iter_forward_search (&iter, str, TRUE))
+    {
+      GtkTextIter end = iter;
+      
+      gtk_text_iter_forward_chars (&end, char_len);
+
+      gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
+                                 &iter, &end);
+
+      ++i;
+    }
+  
+  dialog = gtk_message_dialog_new (GTK_WINDOW (view->window),
+                                   GTK_MESSAGE_INFO,
+                                   GTK_BUTTONS_OK,
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   "%d strings found and marked in red",
+                                   i);
+
+  gtk_signal_connect_object (GTK_OBJECT (dialog),
+                             "response",
+                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                             GTK_OBJECT (dialog));
+  
+  gtk_widget_show (dialog);
 }
 
 static void
@@ -1292,7 +1417,8 @@ main (int argc, char** argv)
   int i;
   
   gtk_init (&argc, &argv);
-
+  gdk_rgb_init (); /* FIXME remove this */
+  
   buffer = create_buffer ();
   view = create_view (buffer);
   buffer_unref (buffer);

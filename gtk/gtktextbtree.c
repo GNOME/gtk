@@ -2085,18 +2085,17 @@ gtk_text_btree_get_text (const GtkTextIter *start_orig,
   iter = start;
   seg = gtk_text_iter_get_indexable_segment(&iter);
   while (seg != end_seg)
-    {          
+    {      
       copy_segment(retval, include_hidden, include_nonchars,
                    &iter, &end);
 
-      if (!gtk_text_iter_forward_indexable_segment(&iter))
-        g_assert_not_reached(); /* must be able to go forward to
-                                   end_seg, if end_seg still exists
-                                   and was in front. */
-
+      gtk_text_iter_forward_indexable_segment(&iter);
+      
       seg = gtk_text_iter_get_indexable_segment(&iter);
     }
 
+  copy_segment(retval, include_hidden, include_nonchars, &iter, &end);
+  
   str = retval->str;
   g_string_free(retval, FALSE);
   return str;
@@ -2935,6 +2934,23 @@ gtk_text_line_byte_has_tag (GtkTextLine *line,
     return (toggle_seg->type == &gtk_text_toggle_on_type);
   else
     return find_toggle_outside_current_line(line, tree, tag);
+}
+
+gboolean
+gtk_text_line_is_last (GtkTextLine *line)
+{
+  GtkTextBTreeNode *node;
+
+  if (line->next != NULL)
+    return FALSE;
+  else
+    {
+      node = line->parent;
+      while (node != NULL && node->next == NULL)
+        node = node->parent;      
+
+      return node == NULL;
+    }
 }
 
 GtkTextLine*

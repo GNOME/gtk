@@ -96,6 +96,7 @@ struct _GtkTextTagClass {
 
 GtkType      gtk_text_tag_get_type     (void);
 GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
+gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,
 					gint               priority);
 gint         gtk_text_tag_event        (GtkTextTag        *tag,

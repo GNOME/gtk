@@ -30,7 +30,7 @@ struct _GtkTextBuffer {
   GtkObject parent_instance;
 
   GtkTextTagTable *tag_table;
-  GtkTextBTree *tree;
+  GtkTextBTree *btree;
 
   /* Text currently pasted to the clipboard */
   gchar *clipboard_text;
@@ -97,6 +97,7 @@ gint           gtk_text_buffer_get_line_count (GtkTextBuffer   *buffer);
 gint           gtk_text_buffer_get_char_count (GtkTextBuffer   *buffer);
 
 
+GtkTextTagTable* gtk_text_buffer_get_tag_table (GtkTextBuffer  *buffer);
 
 /* Insert into the buffer */
 void gtk_text_buffer_insert            (GtkTextBuffer *buffer,
@@ -277,6 +278,8 @@ gboolean gtk_text_buffer_find_regexp(GtkTextBuffer *buffer,
 
 /* INTERNAL private stuff */
 void            gtk_text_buffer_spew                   (GtkTextBuffer      *buffer);
+
+GtkTextBTree*   _gtk_text_buffer_get_btree             (GtkTextBuffer      *buffer);
 
 #ifdef __cplusplus
 }

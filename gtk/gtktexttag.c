@@ -923,6 +923,14 @@ delta_priority_foreach(GtkTextTag *tag, gpointer user_data)
     tag->priority += dd->delta;
 }
 
+gint
+gtk_text_tag_get_priority (GtkTextTag *tag)
+{
+  g_return_val_if_fail(GTK_IS_TEXT_TAG(tag), 0);
+
+  return tag->priority;
+}
+
 void
 gtk_text_tag_set_priority(GtkTextTag *tag,
                            gint priority)

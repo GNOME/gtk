@@ -28,7 +28,7 @@ struct _GtkTextIter {
   gpointer dummy8;
   gint dummy9;
   gpointer pad1;
-  gint pad2;
+  guint pad2;
 };
 
 
@@ -47,7 +47,7 @@ void         gtk_text_iter_free     (GtkTextIter       *iter);
  * Convert to different kinds of index
  */
 
-gint gtk_text_buffer_get_offset    (const GtkTextIter *iter);
+gint gtk_text_iter_get_offset      (const GtkTextIter *iter);
 gint gtk_text_iter_get_line        (const GtkTextIter *iter);
 gint gtk_text_iter_get_line_offset (const GtkTextIter *iter);
 gint gtk_text_iter_get_line_index  (const GtkTextIter *iter);
@@ -77,6 +77,8 @@ gboolean gtk_text_iter_get_pixmap        (const GtkTextIter  *iter,
                                           GdkPixmap          **pixmap,
                                           GdkBitmap          **mask);
 
+GSList  *gtk_text_iter_get_marks         (const GtkTextIter  *iter);
+
 /* Return list of tags toggled at this point (toggled_on determines
    whether the list is of on-toggles or off-toggles) */
 GSList  *gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
@@ -105,6 +107,9 @@ gint     gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter);
 gboolean gtk_text_iter_get_style_values  (const GtkTextIter    *iter,
                                           GtkTextStyleValues   *values);
 
+gboolean gtk_text_iter_is_last           (const GtkTextIter    *iter);
+gboolean gtk_text_iter_is_first          (const GtkTextIter    *iter);
+
 /*
  * Moving around the buffer
  */
@@ -129,7 +134,7 @@ gboolean gtk_text_iter_forward_word_end     (GtkTextIter *iter);
 gboolean gtk_text_iter_backward_word_start  (GtkTextIter *iter);
 
 void     gtk_text_iter_set_offset         (GtkTextIter *iter,
-                                           gint         char_index);
+                                           gint         char_offset);
 void     gtk_text_iter_set_line           (GtkTextIter *iter,
                                            gint         line_number);
 void     gtk_text_iter_set_line_offset    (GtkTextIter *iter,
@@ -157,16 +162,24 @@ gboolean gtk_text_iter_backward_find_char     (GtkTextIter *iter,
 					       GtkTextCharPredicate pred,
 					       gpointer user_data);
 
+gboolean gtk_text_iter_forward_search         (GtkTextIter *iter,
+                                               const char  *str,
+                                               gboolean visible_only);
+
+gboolean gtk_text_iter_backward_search        (GtkTextIter *iter,
+                                               const char  *str,
+                                               gboolean visible_only);
+
 /*
  * Comparisons
  */
 gboolean gtk_text_iter_equal           (const GtkTextIter *lhs,
-                                         const GtkTextIter *rhs);
+                                        const GtkTextIter *rhs);
 gint     gtk_text_iter_compare         (const GtkTextIter *lhs,
-                                         const GtkTextIter *rhs);
+                                        const GtkTextIter *rhs);
 gboolean gtk_text_iter_in_region       (const GtkTextIter *iter,
-                                         const GtkTextIter *start,
-                                         const GtkTextIter *end);
+                                        const GtkTextIter *start,
+                                        const GtkTextIter *end);
 
 /* Put these two in ascending order */
 void     gtk_text_iter_reorder         (GtkTextIter *first,

@@ -59,6 +59,7 @@ static void gtk_text_buffer_real_remove_tag            (GtkTextBuffer     *buffe
                                                         const GtkTextIter *start_char,
                                                         const GtkTextIter *end_char);
 
+static GtkTextBTree* get_btree (GtkTextBuffer *buffer);
 
 void gtk_marshal_NONE__INT_POINTER_INT (GtkObject  *object,
                                         GtkSignalFunc func,
@@ -265,23 +266,16 @@ GtkTextBuffer*
 gtk_text_buffer_new (GtkTextTagTable *table)
 {
   GtkTextBuffer *text_buffer;
-
-  /* This is broken, need construct_only argument for the tag table
-     so language bindings can set it.
-  */
   
   text_buffer = GTK_TEXT_BUFFER (gtk_type_new (gtk_text_buffer_get_type ()));
 
   if (table)
-    text_buffer->tag_table = table;
-  else
-    text_buffer->tag_table = gtk_text_tag_table_new();
-
-  gtk_object_ref (GTK_OBJECT(text_buffer->tag_table));
-  gtk_object_sink (GTK_OBJECT(text_buffer->tag_table));
-  
-  text_buffer->tree = gtk_text_btree_new(text_buffer->tag_table,
-                                         text_buffer);  
+    {
+      text_buffer->tag_table = table;
+      
+      gtk_object_ref (GTK_OBJECT(text_buffer->tag_table));
+      gtk_object_sink (GTK_OBJECT(text_buffer->tag_table));
+    } 
   
   return text_buffer;
 }
@@ -296,11 +290,17 @@ gtk_text_buffer_destroy (GtkObject *object)
   gtk_widget_destroy(buffer->selection_widget);
   buffer->selection_widget = NULL;
 
-  gtk_object_unref(GTK_OBJECT(buffer->tag_table));
-  buffer->tag_table = NULL;
-  
-  gtk_text_btree_unref(buffer->tree);
-  buffer->tree = NULL;
+  if (buffer->tag_table)
+    {
+      gtk_object_unref(GTK_OBJECT(buffer->tag_table));
+      buffer->tag_table = NULL;
+    }
+
+  if (buffer->btree)
+    {
+      gtk_text_btree_unref(buffer->btree);
+      buffer->btree = NULL;
+    }
   
   (* parent_class->destroy) (object);
 }
@@ -313,6 +313,44 @@ gtk_text_buffer_finalize (GObject *object)
   tkxt_buffer = GTK_TEXT_BUFFER (object);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static GtkTextTagTable*
+get_table (GtkTextBuffer *buffer)
+{
+  if (buffer->tag_table == NULL)
+    {
+      buffer->tag_table = gtk_text_tag_table_new ();
+
+      gtk_object_ref (GTK_OBJECT(buffer->tag_table));
+      gtk_object_sink (GTK_OBJECT(buffer->tag_table));
+    }
+
+  return buffer->tag_table;
+}
+
+static GtkTextBTree*
+get_btree (GtkTextBuffer *buffer)
+{
+  if (buffer->btree == NULL)
+    buffer->btree = gtk_text_btree_new(gtk_text_buffer_get_tag_table (buffer),
+                                       buffer);
+  
+  return buffer->btree;
+}
+
+GtkTextBTree*
+_gtk_text_buffer_get_btree (GtkTextBuffer *buffer)
+{
+  return get_btree (buffer);
+}
+
+GtkTextTagTable*
+gtk_text_buffer_get_tag_table (GtkTextBuffer  *buffer)
+{
+  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
+
+  return get_table (buffer);
 }
 
 /*
@@ -505,12 +543,14 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
   
   current_state = gtk_text_iter_editable (&iter, default_editable);
   
-  while (gtk_text_iter_forward_find_tag_toggle (&iter, NULL))
+  while (TRUE)
     {
       gboolean new_state;
       gboolean done = FALSE;
       GtkTextIter end;
 
+      gtk_text_iter_forward_find_tag_toggle (&iter, NULL);
+      
       gtk_text_buffer_get_iter_at_mark (buffer, &end, end_mark);
       
       if (gtk_text_iter_compare (&iter, &end) >= 0)
@@ -529,11 +569,11 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
                 {
                   /* We're ending an editable region. Delete said region. */
                   GtkTextIter start;
-
+                  
                   gtk_text_buffer_get_iter_at_mark (buffer, &start, start_mark);
-
+                  
                   gtk_text_buffer_delete (buffer, &start, &iter);
-
+                  
                   deleted_stuff = TRUE;
                 }
 
@@ -574,6 +614,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
         break;
     }
 
+  
   gtk_text_buffer_delete_mark (buffer, start_mark);
   gtk_text_buffer_delete_mark (buffer, end_mark);
   
@@ -689,20 +730,20 @@ gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
   GtkTextIter location;
   GtkTextMark *mark;
   
-  mark = gtk_text_btree_set_mark(buffer->tree,
+  mark = gtk_text_btree_set_mark(get_btree (buffer),
                                  existing_mark,
                                  mark_name,
                                  left_gravity,
                                  iter,
                                  should_exist);
 
-  if (gtk_text_btree_mark_is_insert(buffer->tree, mark) ||
-      gtk_text_btree_mark_is_selection_bound(buffer->tree, mark))
+  if (gtk_text_btree_mark_is_insert(get_btree (buffer), mark) ||
+      gtk_text_btree_mark_is_selection_bound(get_btree (buffer), mark))
     {
       gtk_text_buffer_update_primary_selection(buffer);
     }
   
-  gtk_text_btree_get_iter_at_mark(buffer->tree,
+  gtk_text_btree_get_iter_at_mark(get_btree (buffer),
                                   &location,
                                   mark);
   
@@ -744,7 +785,7 @@ gtk_text_buffer_get_iter_at_mark(GtkTextBuffer *buffer,
   g_return_if_fail (!gtk_text_mark_deleted (mark));
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_get_iter_at_mark(buffer->tree,
+  gtk_text_btree_get_iter_at_mark(get_btree (buffer),
                                   iter,
                                   mark);
 }
@@ -757,7 +798,7 @@ gtk_text_buffer_delete_mark(GtkTextBuffer *buffer,
   g_return_if_fail (!gtk_text_mark_deleted (mark));
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_remove_mark (buffer->tree, mark);
+  gtk_text_btree_remove_mark (get_btree (buffer), mark);
 
   /* See rationale above for MARK_SET on why we emit this after
      removing the mark, rather than removing the mark in a default
@@ -775,7 +816,7 @@ gtk_text_buffer_get_mark (GtkTextBuffer      *buffer,
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
   g_return_val_if_fail(name != NULL, NULL);
   
-  mark = gtk_text_btree_get_mark_by_name(buffer->tree, name);
+  mark = gtk_text_btree_get_mark_by_name(get_btree (buffer), name);
 
   return mark;
 }
@@ -784,13 +825,20 @@ void
 gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
                               const GtkTextIter *where)
 {
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
+  GtkTextIter real;
   
-  gtk_text_btree_place_cursor(buffer->tree, where);
-  gtk_text_buffer_mark_set (buffer, where,
+  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
+
+  real = *where;
+  
+  if (gtk_text_iter_is_last (&real))
+    gtk_text_iter_prev_char (&real);
+  
+  gtk_text_btree_place_cursor(get_btree (buffer), &real);
+  gtk_text_buffer_mark_set (buffer, &real,
                             gtk_text_buffer_get_mark (buffer,
                                                       "insert"));
-  gtk_text_buffer_mark_set (buffer, where,
+  gtk_text_buffer_mark_set (buffer, &real,
                             gtk_text_buffer_get_mark (buffer,
                                                       "selection_bound"));
 }
@@ -809,7 +857,7 @@ gtk_text_buffer_create_tag(GtkTextBuffer *buffer,
   
   tag = gtk_text_tag_new(tag_name);
 
-  gtk_text_tag_table_add(buffer->tag_table, tag);
+  gtk_text_tag_table_add(get_table (buffer), tag);
 
   return tag;
 }
@@ -894,7 +942,7 @@ gtk_text_buffer_apply_tag_by_name (GtkTextBuffer *buffer,
   g_return_if_fail(start != NULL);
   g_return_if_fail(end != NULL);
   
-  tag = gtk_text_tag_table_lookup(buffer->tag_table,
+  tag = gtk_text_tag_table_lookup(get_table (buffer),
                                   name);
 
   if (tag == NULL)
@@ -919,7 +967,7 @@ gtk_text_buffer_remove_tag_by_name (GtkTextBuffer *buffer,
   g_return_if_fail(start != NULL);
   g_return_if_fail(end != NULL);
 
-  tag = gtk_text_tag_table_lookup(buffer->tag_table,
+  tag = gtk_text_tag_table_lookup(get_table (buffer),
                                   name);
 
   if (tag == NULL)
@@ -945,7 +993,7 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer      *buffer,
   g_return_if_fail(iter != NULL);
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_get_iter_at_line_char(buffer->tree,
+  gtk_text_btree_get_iter_at_line_char(get_btree (buffer),
                                        iter, line_number, char_offset);
 }
 
@@ -968,7 +1016,7 @@ gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
   g_return_if_fail(iter != NULL);
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_get_iter_at_char(buffer->tree, iter, char_offset);
+  gtk_text_btree_get_iter_at_char(get_btree (buffer), iter, char_offset);
 }
 
 void
@@ -978,7 +1026,7 @@ gtk_text_buffer_get_last_iter         (GtkTextBuffer      *buffer,
   g_return_if_fail(iter != NULL);
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_get_last_iter(buffer->tree, iter);
+  gtk_text_btree_get_last_iter(get_btree (buffer), iter);
 }
 
 void
@@ -990,8 +1038,8 @@ gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
   g_return_if_fail(end != NULL);
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_get_iter_at_char(buffer->tree, start, 0);
-  gtk_text_btree_get_last_iter(buffer->tree, end);
+  gtk_text_btree_get_iter_at_char(get_btree (buffer), start, 0);
+  gtk_text_btree_get_last_iter(get_btree (buffer), end);
 }
 
 /*
@@ -1070,7 +1118,7 @@ gtk_text_buffer_get_line_count(GtkTextBuffer *buffer)
 {
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), 0);
   
-  return gtk_text_btree_line_count(buffer->tree);
+  return gtk_text_btree_line_count(get_btree (buffer));
 }
 
 gint
@@ -1078,7 +1126,7 @@ gtk_text_buffer_get_char_count(GtkTextBuffer *buffer)
 {
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), 0);
 
-  return gtk_text_btree_char_count(buffer->tree);
+  return gtk_text_btree_char_count(get_btree (buffer));
 }
 
 GSList*
@@ -1655,7 +1703,7 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
   g_return_val_if_fail (buffer != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
 
-  return gtk_text_btree_get_selection_bounds (buffer->tree, start, end);
+  return gtk_text_btree_get_selection_bounds (get_btree (buffer), start, end);
 }
 
 
@@ -1666,5 +1714,6 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
 void
 gtk_text_buffer_spew(GtkTextBuffer *buffer)
 {
-  gtk_text_btree_spew(buffer->tree);
+  gtk_text_btree_spew(get_btree (buffer));
 }
+

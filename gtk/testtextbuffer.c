@@ -101,7 +101,7 @@ run_tests (GtkTextBuffer *buffer)
           g_error ("get_char_index didn't return current iter");
         }
 
-      j = gtk_text_buffer_get_offset (&iter);
+      j = gtk_text_iter_get_offset (&iter);
 
       if (i != j)
         {
@@ -128,9 +128,12 @@ run_tests (GtkTextBuffer *buffer)
           gtk_text_iter_spew (&mark, "mark");
           g_error ("Mark not created in the right place.");
         }
+
+      if (gtk_text_iter_is_last (&iter))
+        g_error ("iterators ran out before chars (offset %d of %d)",
+                 i, num_chars);
       
-      if (!gtk_text_iter_next_char (&iter))
-        g_error ("iterators ran out before chars");      
+      gtk_text_iter_next_char (&iter);
 
       gtk_text_buffer_move_mark (buffer, bar_mark, &iter);
       
@@ -163,7 +166,7 @@ run_tests (GtkTextBuffer *buffer)
         {
           g_error ("get_char_index didn't return current iter while going backward");
         }
-      j = gtk_text_buffer_get_offset (&iter);
+      j = gtk_text_iter_get_offset (&iter);
 
       if (i != j)
         {
@@ -218,11 +221,10 @@ run_tests (GtkTextBuffer *buffer)
   gtk_text_buffer_get_iter_at_line (buffer, &iter, 0);
   while (gtk_text_iter_forward_line (&iter))
     ++i;
-
-  /* Add 1 to the line count, because 'i' counts the end-iterator line */
-  if (i != gtk_text_buffer_get_line_count (buffer) + 1)
+  
+  if (i != gtk_text_buffer_get_line_count (buffer))
     g_error ("Counted %d lines, buffer has %d", i,
-            gtk_text_buffer_get_line_count (buffer) + 1);
+            gtk_text_buffer_get_line_count (buffer));
 }
 
 
