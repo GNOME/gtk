@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-06 13:03+0200\n"
-"PO-Revision-Date: 2003-10-06 13:03+0200\n"
+"POT-Creation-Date: 2003-10-07 13:11+0200\n"
+"PO-Revision-Date: 2003-10-07 13:20+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -4337,7 +4337,7 @@ msgid "Right attachment"
 msgstr "Десно припајање"
 
 #: gtk/gtktable.c:210
-msgid "the column number to attach the right side of a child widget to"
+msgid "The column number to attach the right side of a child widget to"
 msgstr "Број колоне за коју прикачити десну страну садржаног елемента"
 
 #: gtk/gtktable.c:216
