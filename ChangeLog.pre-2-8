@@ -1,3 +1,9 @@
+Mon Aug  2 02:07:43 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popdown): 
+	Don't steal the pointer grab from the context menu of the 
+	entry.  (#148686, Christian Persch)
+
 Mon Aug  2 01:02:57 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): 
