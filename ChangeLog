@@ -1,3 +1,10 @@
+Mon Feb  1 13:35:14 GMT 1999 Tony Gale  <gale@gtk.org>
+
+	* examples/Makefile: update to new examples
+
+	* examples/menu/itemfactory.c: I must have forgotten to
+	  'cvs add' this file
+
 Mon Feb  1 09:16:03 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* docs/gtk_tut.sgml:

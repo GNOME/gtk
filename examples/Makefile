@@ -1,9 +1,40 @@
 
-SUBDIRS = aspectframe eventbox gtkdial notebook progressbar scrolledwin tictactoe \
-	  clist filesel list paned rulers table \
-          entry menu pixmap scribble-simple text \
-	  base  helloworld packbox radiobuttons selection tree \
-	  buttons helloworld2 packer rangewidgets  statusbar wheelbarrow 
+SUBDIRS = 	arrow \
+		aspectframe \
+		base \
+		buttonbox \
+		buttons \
+		calendar \
+		clist \
+		entry \
+		eventbox \
+		filesel \
+		fixed \
+		frame \
+		gtkdial \
+		helloworld \
+		helloworld2 \
+		label \
+		list \
+		menu \
+		notebook \
+		packbox \
+		packer \
+		paned \
+		pixmap \
+		progressbar \
+		radiobuttons \
+		rangewidgets \
+		rulers \
+		scribble-simple \
+		scrolledwin \
+		selection \
+		statusbar \
+		table \
+		text \
+		tictactoe \
+		tree \
+		wheelbarrow
 
 all:
 	list='$(SUBDIRS)'; \
