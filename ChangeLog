@@ -1,3 +1,11 @@
+Tue Jun  4 17:39:34 2002  Owen Taylor  <otaylor@redhat.com>
+
+ 	* configure.in: If we have xft .pc file, use that
+ 	when checking for Xft/Xrender. (Still need to separate
+ 	out HAVE_XFT, HAVE_RENDER)
+ 
+ 	* configure.in: Make sure Xft cflags come before X cflags.
+ 
 Tue Jun  4 21:13:57 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.[ch]: added gtk_tree_view_expand_to_path.

@@ -987,24 +987,32 @@ if test "x$gdktarget" = "xx11"; then
     #
     # Checks for Xft/XRender
     #
-    XFT_LIBS=""
-    XFT_CFLAGS=""
     if test $have_xft = true ; then
-      gtk_save_cppflags="$CPPFLAGS"
-      CPPFLAGS="$CPPFLAGS $x_cflags"
       have_xft=false
 
-      AC_CHECK_LIB(Xrender, XRenderFindFormat, 
-        [AC_CHECK_LIB(Xft, XftFontOpen,
-          [AC_CHECK_HEADER(X11/Xft/XftFreetype.h,
-            have_xft=true,:)],
-	  :,-lXrender -lXext $x_libs $FREETYPE_LIBS)]
-      ,:,-lXext $x_libs)
+      if $PKG_CONFIG --exists xft ; then
+        x_libs="`pkg-config --libs xft` -lX11 $FREETYPE_LIBS $X_EXTRA_LIBS"
+        have_xft=true
+      else
+        gtk_save_cppflags="$CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS $x_cflags"
+      
+        AC_CHECK_LIB(Xrender, XRenderFindFormat, 
+	  [AC_CHECK_LIB(Xft, XftFontOpen,
+	    [AC_CHECK_HEADER(X11/Xft/XftFreetype.h,
+	      have_xft=true,:)],
+	    :,-lXrender -lXext $x_libs $FREETYPE_LIBS)]
+	  ,:,-lXext $x_libs)
+	  
+        if $have_xft ; then
+	  x_libs="$X_LIBS -lXft -lXrender -lXext -lX11 $FREETYPE_LIBS $X_EXTRA_LIBS"
+        fi
 
-      CPPFLAGS="$gtk_save_cppflags"
+        CPPFLAGS="$gtk_save_cppflags"
+      fi
 
       if $have_xft ; then
-        x_libs="$X_LIBS -lXft -lXrender -lXext -lX11 $FREETYPE_LIBS $X_EXTRA_LIBS"
+        :
       else
         AC_MSG_ERROR([pangoxft Pango backend found, but Xft not found])
       fi
@@ -1271,7 +1279,7 @@ fi
 
 if test "x$gdktarget" = "xx11"; then
 	if $have_xft = true ; then
-            PANGO_PACKAGES="pangox pangoxft"
+            PANGO_PACKAGES="pangoxft pangox"
         else
             PANGO_PACKAGES=pangox
         fi
