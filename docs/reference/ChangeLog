@@ -1,5 +1,10 @@
 2002-10-24  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/tmpl/dnd.sgml: 
+	* gdk/tmpl/cursors.sgml: More docs moved inline.
+
+2002-10-24  Matthias Clasen  <maclas@gmx.de>
+
 	* gdk/tmpl/colors.sgml: Some docs moved inline.
 
 2002-10-22  Matthias Clasen  <maclas@gmx.de>

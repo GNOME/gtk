@@ -24,76 +24,53 @@ the GTK+ documentation for more information.
 
 <!-- ##### FUNCTION gdk_drag_get_selection ##### -->
 <para>
-Returns the selection atom for the current source window.
 </para>
 
-@context: a #GdkDragContext.
-@Returns: the selection atom.
-
+@context: 
+@Returns: 
 
 <!-- ##### FUNCTION gdk_drag_abort ##### -->
 <para>
-Aborts a drag without dropping. 
-</para>
-<para>
-This function is called by the drag source.
 </para>
 
-@context: a #GdkDragContext.
-@time: the timestamp for this operation.
+@context: 
+@time: 
 
 
 <!-- ##### FUNCTION gdk_drop_reply ##### -->
 <para>
-Accepts or rejects a drop. 
-</para>
-<para>
-This function is called by the drag destination in response
-to a drop initiated by the drag source.
 </para>
 
-@context: a #GdkDragContext.
-@ok: %TRUE if the drop is accepted.
-@time: the timestamp for this operation.
+@context: 
+@ok: 
+@time: 
 
 
 <!-- ##### FUNCTION gdk_drag_context_new ##### -->
 <para>
-Creates a new #GdkDragContext.
 </para>
 
-@Returns: the newly created #GdkDragContext.
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_drag_drop ##### -->
 <para>
-Drops on the current destination.
-</para>
-<para>
-This function is called by the drag source.
 </para>
 
-@context: a #GdkDragContext.
-@time: the timestamp for this operation.
+@context: 
+@time: 
 
 
 <!-- ##### FUNCTION gdk_drag_find_window ##### -->
 <para>
-Finds the destination window and DND protocol to use at the
-given pointer position. 
-</para>
-<para>
-This function is called by the drag source to obtain the 
-@dest_window and @protocol parameters for gdk_drag_motion().
 </para>
 
-@context: a #GdkDragContext.
-@drag_window: a window which may be at the pointer position, but
-  should be ignored, since it is put up by the drag source as an icon.
-@x_root: the x position of the pointer in root coordinates.
-@y_root: the y position of the pointer in root coordinates.
-@dest_window: location to store the destination window in.
-@protocol: location to store the DND protocol in.
+@context: 
+@drag_window: 
+@x_root: 
+@y_root: 
+@dest_window: 
+@protocol: 
 
 
 <!-- ##### FUNCTION gdk_drag_find_window_for_screen ##### -->
@@ -112,68 +89,51 @@ This function is called by the drag source to obtain the
 
 <!-- ##### FUNCTION gdk_drag_context_ref ##### -->
 <para>
-Deprecated function; use g_object_ref() instead.
 </para>
 
-@context: a #GdkDragContext.
+@context: 
 
 
 <!-- ##### FUNCTION gdk_drag_begin ##### -->
 <para>
-Starts a drag and creates a new drag context for it.
-</para>
-<para>
-This function is called by the drag source.
 </para>
 
-@window: the source window for this drag.
-@targets: the list of offered targets.
-@Returns: a newly created #GdkDragContext.
+@window: 
+@targets: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_drag_motion ##### -->
 <para>
-Updates the drag context when the pointer moves or the 
-set of actions changes.
-</para>
-<para>
-This function is called by the drag source.
 </para>
 
-@context: a #GdkDragContext.
-@dest_window: the new destination window, obtained by gdk_drag_find_window().
-@protocol: the DND protocol in use, obtained by gdk_drag_find_window().
-@x_root: the x position of the pointer in root coordinates.
-@y_root: the y position of the pointer in root coordinates.
-@suggested_action: the suggested action.
-@possible_actions: the possible actions.
-@time: the timestamp for this operation.
-@Returns: FIXME
+@context: 
+@dest_window: 
+@protocol: 
+@x_root: 
+@y_root: 
+@suggested_action: 
+@possible_actions: 
+@time: 
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_drop_finish ##### -->
 <para>
-Ends the drag operation after a drop.
-</para>
-<para>
-This function is called by the drag destination.
 </para>
 
-@context: a #GtkDragContext.
-@success: %TRUE if the data was successfully received.
-@time: the timestamp for this operation.
+@context: 
+@success: 
+@time: 
 
 
 <!-- ##### FUNCTION gdk_drag_get_protocol ##### -->
 <para>
-Finds out the DND protocol supported by a window.
 </para>
 
-@xid: the X id of the destination window.
-@protocol: location where the supported DND protocol is returned.
-@Returns: the X id of the window where the drop should happen. This 
-  may be @xid or the X id of a proxy window, or None if @xid doesn't
-  support Drag and Drop.
+@xid: 
+@protocol: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_drag_get_protocol_for_display ##### -->
@@ -204,10 +164,9 @@ which DND is done.
 
 <!-- ##### FUNCTION gdk_drag_context_unref ##### -->
 <para>
-Deprecated function; use g_object_unref() instead.
 </para>
 
-@context: a #GdkDragContext.
+@context: 
 
 
 <!-- ##### STRUCT GdkDragContext ##### -->
@@ -246,16 +205,10 @@ should do with the dropped data.
 
 <!-- ##### FUNCTION gdk_drag_status ##### -->
 <para>
-Selects one of the actions offered by the drag source.
-</para>
-<para>
-This function is called by the drag destination in response to
-gdk_drag_motion() called by the drag source.
 </para>
 
-@context: a #GdkDragContext.
-@action: the selected action which will be taken when a drop happens, 
-  or 0 to indicate that a drop will not be accepted.
-@time: the timestamp for this operation.
+@context: 
+@action: 
+@time: 
 
 

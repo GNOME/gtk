@@ -1,22 +1,10 @@
 2002-10-24  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/gdkcolor.c (gdk_colormap_alloc_color): 
-	(gdk_colormap_get_visual): 
-	(gdk_colors_store): 
-	(gdk_color_copy): 
-	(gdk_color_free): 
-	(gdk_color_white): 
-	(gdk_color_black): 
-	(gdk_color_parse): 
-	(gdk_color_alloc):
-
-	* gdk/x11/gdkcolor-x11.c (gdk_colormap_new): 
-	(gdk_colormap_get_system_size): 
-	(gdk_colormap_change): 
-	(gdk_colormap_alloc_colors): 
-	(gdk_colors_alloc): 
-	(gdk_colors_free): 
-	(gdk_color_change): 
+	* gdk/gdkdnd.c: 
+	* gdk/x11/gdkdnd-x11.c: 
+	* gdk/x11/gdkcursor-x11.c: 
+	* gdk/gdkcolor.c:
+	* gdk/x11/gdkcolor-x11.c: Some docs moved inline.
 	
 2002-10-23  Matthias Clasen  <maclas@gmx.de>
 

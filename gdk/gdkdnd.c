@@ -26,6 +26,22 @@
 
 #include <gdkdnd.h>
 
+/**
+ * gdk_drag_find_window:
+ * @context: a #GdkDragContext.
+ * @drag_window: a window which may be at the pointer position, but
+ *      should be ignored, since it is put up by the drag source as an icon.
+ * @x_root: the x position of the pointer in root coordinates.
+ * @y_root: the y position of the pointer in root coordinates.
+ * @dest_window: location to store the destination window in.
+ * @protocol: location to store the DND protocol in.
+ * 
+ * Finds the destination window and DND protocol to use at the
+ * given pointer position. 
+ *
+ * This function is called by the drag source to obtain the 
+ * @dest_window and @protocol parameters for gdk_drag_motion().
+ **/
 void
 gdk_drag_find_window (GdkDragContext  *context,
 		      GdkWindow       *drag_window,
@@ -39,6 +55,17 @@ gdk_drag_find_window (GdkDragContext  *context,
 				   x_root, y_root, dest_window, protocol);
 }
 
+/**
+ * gdk_drag_get_protocol:
+ * @xid: the X id of the destination window.
+ * @protocol: location where the supported DND protocol is returned.
+ * 
+ * Finds out the DND protocol supported by a window.
+ * 
+ * Return value: the X id of the window where the drop should happen. This 
+ *    may be @xid or the X id of a proxy window, or None if @xid doesn't
+ *    support Drag and Drop.
+ **/
 guint32
 gdk_drag_get_protocol (guint32          xid,
 		       GdkDragProtocol *protocol)
