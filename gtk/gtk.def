@@ -2479,6 +2479,7 @@ EXPORTS
 	gtk_tree_view_set_hadjustment
 	gtk_tree_view_set_headers_clickable
 	gtk_tree_view_set_headers_visible
+	gtk_tree_view_set_hover_expand
 	gtk_tree_view_set_hover_selection
 	gtk_tree_view_set_model
 	gtk_tree_view_set_reorderable
