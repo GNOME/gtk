@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.7\n"
-"POT-Creation-Date: 1999-03-24 23:06-0600\n"
+"POT-Creation-Date: 1999-04-13 16:43-0500\n"
 "PO-Revision-Date: 1998-12-16 15:18+0900\n"
 "Last-Translator: 白崎 泰弘 <yasuhiro@awa.tohoku.ac.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -43,19 +43,19 @@ msgid "Opacity:"
 msgstr "不透明度:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3475
+#: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3477
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "了解"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3488
+#: gtk/gtkcolorsel.c:1678 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
+#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3490
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "取消"
 
-#: gtk/gtkcolorsel.c:1679
+#: gtk/gtkcolorsel.c:1683
 msgid "Help"
 msgstr "ヘルプ"
 
@@ -198,7 +198,7 @@ msgstr "実際の値"
 msgid "Font"
 msgstr "フォント"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2156 gtk/gtkfontsel.c:2386
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2158 gtk/gtkfontsel.c:2388
 msgid "Font:"
 msgstr "フォント:"
 
@@ -273,23 +273,23 @@ msgstr "拡大縮小ビットマップ"
 msgid "regular"
 msgstr "通常"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1948
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
 msgid "italic"
 msgstr "イタリック"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1949
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
 msgid "oblique"
 msgstr "斜体"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1950
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
 msgid "reverse italic"
 msgstr "逆イタリック"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1951
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
 msgid "reverse oblique"
 msgstr "逆斜体"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1952
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
 msgid "other"
 msgstr "その他"
 
@@ -301,51 +301,51 @@ msgstr ""
 msgid "[C]"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1780
+#: gtk/gtkfontsel.c:1782
 msgid "The selected font is not available."
 msgstr "選択されたフォントは有効ではありません."
 
-#: gtk/gtkfontsel.c:1786
+#: gtk/gtkfontsel.c:1788
 msgid "The selected font is not a valid font."
 msgstr "選択されたフォントは正しいフォントではありません."
 
-#: gtk/gtkfontsel.c:1844
+#: gtk/gtkfontsel.c:1846
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "これは 2-byte フォントなので正しく表示されないかもしれません."
 
-#: gtk/gtkfontsel.c:1936 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(不明)"
 
-#: gtk/gtkfontsel.c:1947
+#: gtk/gtkfontsel.c:1949
 msgid "roman"
 msgstr "ローマン"
 
-#: gtk/gtkfontsel.c:1959
+#: gtk/gtkfontsel.c:1961
 msgid "proportional"
 msgstr "プロポーショナル"
 
-#: gtk/gtkfontsel.c:1960
+#: gtk/gtkfontsel.c:1962
 msgid "monospaced"
 msgstr "モノスペース"
 
-#: gtk/gtkfontsel.c:1961
+#: gtk/gtkfontsel.c:1963
 msgid "char cell"
 msgstr "文字セル"
 
-#: gtk/gtkfontsel.c:2161
+#: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
 msgstr "フォント: (フィルター適用)"
 
-#: gtk/gtkfontsel.c:2637
+#: gtk/gtkfontsel.c:2639
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS を越えました. 表示されないフォントがあります."
 
-#: gtk/gtkfontsel.c:3482
+#: gtk/gtkfontsel.c:3484
 msgid "Apply"
 msgstr "適用"
 
-#: gtk/gtkfontsel.c:3504
+#: gtk/gtkfontsel.c:3506
 msgid "Font Selection"
 msgstr "フォント選択"
 

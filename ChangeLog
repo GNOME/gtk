@@ -1,3 +1,7 @@
+Tue Apr 13 17:14:28 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.2.2
+
 Tue Apr 13 02:49:33 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c: removed some silly #ifdef HAVE_CONFIG
