@@ -1,3 +1,7 @@
+Thu Jul 31 15:33:33 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtk*tool*.h: add padding to subclasses of GtkToolItem
+
 Thu Jul 31 15:29:28 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolitem.c (struct _GtkToolItemPrivate): remove unused

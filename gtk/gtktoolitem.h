@@ -58,6 +58,12 @@ struct _GtkToolItemClass
 				       GtkTooltips *tooltips,
 				       const gchar *tip_text,
 				       const gchar *tip_private);
+
+  /* Padding for future expansion */
+  void (* _gtk_reserved1) (void);
+  void (* _gtk_reserved2) (void);
+  void (* _gtk_reserved3) (void);
+  void (* _gtk_reserved4) (void);
 };
 
 GType        gtk_tool_item_get_type (void);
