@@ -9407,7 +9407,7 @@ gtk_tree_view_row_expanded (GtkTreeView *tree_view,
   return (node->children != NULL);
 }
 
-static GtkTargetEntry row_targets[] = {
+static const GtkTargetEntry row_targets[] = {
   { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
 };
 
@@ -9560,12 +9560,12 @@ gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
  * useful when you want to focus the user's attention on a particular row.  If
- * @column is not %NULL, then focus is given to the column specified by it.
- * Additionally, if @column is specified, and @start_editing is %TRUE, then
- * editing should be started in the specified cell.  This function is often
- * followed by @gtk_widget_grab_focus (@tree_view) in order to give keyboard
- * focus to the widget.  Please note that editing can only happen when the
- * widget is realized.
+ * @focus_column is not %NULL, then focus is given to the column specified by 
+ * it. Additionally, if @focus_column is specified, and @start_editing is 
+ * %TRUE, then editing should be started in the specified cell.  
+ * This function is often followed by @gtk_widget_grab_focus (@tree_view) 
+ * in order to give keyboard focus to the widget.  Please note that editing 
+ * can only happen when the widget is realized.
  **/
 void
 gtk_tree_view_set_cursor (GtkTreeView       *tree_view,

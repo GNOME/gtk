@@ -1,5 +1,8 @@
 2002-11-21  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_cursor): Fix doc 
+	comment typos.  (#97432, Vitaly Tishkov)
+
 	* gtk/gtktreemodel.c (gtk_tree_model_iter_nth_child): Fix doc 
 	comment typos.  (#98158, Vitaly Tishkov)
 
