@@ -94,7 +94,7 @@ How to compile GTK+ itself
       a search path that <command>pkg-config</command> (see below)
       uses when looking for for file describing how to compile
       programs using different libraries. If you were installing GTK+
-      and it's dependencies into /opt/gtk, you might want to set
+      and it's dependencies into <filename>/opt/gtk</filename>, you might want to set
       these variables as:
     </para>
     <programlisting>
@@ -133,7 +133,7 @@ How to compile GTK+ itself
 	  url="http://www.freedesktop.org/software/pkgconfig/">pkg-config</ulink>
 	  is a tool for tracking the compilation flags needed for
 	  libraries that is used by the GTK+ libraries. (For each
-	  library, a small ".pc" text file is installed in a standard
+	  library, a small <literal>.pc</literal> text file is installed in a standard
 	  location that contains the compilation flags needed for that
 	  library along with version number information.)  The version
 	  of <command>pkg-config</command> needed to build GTK+ is
@@ -150,7 +150,7 @@ How to compile GTK+ itself
 	  installing <ulink url="http://www.gnu.org/software/make">GNU
 	    make</ulink> if you don't already have it on your system
 	  and using it. (It may be called <command>gmake</command>
-	  rather than <command>make</command>)
+	  rather than <command>make</command>.)
 	</para>
       </listitem>
     </itemizedlist>
@@ -163,7 +163,7 @@ How to compile GTK+ itself
       <listitem>
 	<para>
 	  The GLib library provides core non-graphical functionality
-	  such as high level data types, unicode manipulation, and
+	  such as high level data types, Unicode manipulation, and
 	  a object and type system to C programs. It is available
 	  from the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+
 	  FTP site.</ulink>
@@ -253,7 +253,7 @@ How to compile GTK+ itself
       dependencies installed: <command>pkg-config</command>, GNU make,
       the JPEG, PNG, and TIFF libraries, FreeType, and, if necessary,
       libiconv and libintl. To get detailed information about building 
-      ithese packages, see the documentation provided with the
+      these packages, see the documentation provided with the
       individual packages.
       On a Linux system, it's quite likely you'll have all of these
       installed already except for <command>pkg-config</command>.
@@ -276,7 +276,7 @@ How to compile GTK+ itself
     </programlisting>
     <para>
       If one of the <filename>configure</filename> scripts fails or running
-      <command>make</command> fails, look closely at the at the error
+      <command>make</command> fails, look closely at the error
       messages printed; these will often provide useful information
       as to what went wrong. When <filename>configure</filename>
       fails, extra information, such as errors that a test compilation
@@ -385,7 +385,7 @@ How to compile GTK+ itself
          even mostly bug-free software by changing the effect of many bugs 
          from simple warnings into fatal crashes. Thus 
          <option>--enable-debug=no</option> should <emphasis>not</emphasis> 
-         be used for stable releases of gtk+.
+         be used for stable releases of GTK+.
         </para>
       </formalpara>
 
@@ -395,7 +395,7 @@ How to compile GTK+ itself
         <para>
 	  If <systemitem>--enable-explicit-deps</systemitem> is
 	  specified then GTK+ will write the full set of libraries
-	  that GTK+ depends upon into its .pc files to be used when
+	  that GTK+ depends upon into its <literal>.pc</literal> files to be used when
 	  programs depending on GTK+ are linked. Otherwise, GTK+
 	  only will include the GTK+ libraries themselves, and
 	  will depend on system library dependency facilities to
@@ -421,7 +421,7 @@ How to compile GTK+ itself
         <para>
           These options can be used to control whether GTK+ will use shared 
           memory to communicate with the X server when possible.
-          The default is yes.
+          The default is 'yes'.
         </para>
       </formalpara>
 
@@ -443,8 +443,8 @@ How to compile GTK+ itself
         <para>
           These options determine whether GTK+ will use the 
 	  XIM instantiate callback. 
-          The default is yes, unless the host system is Solaris,
-	  where <function>XRegisterIMInstantiateCallback</function>
+          The default is 'yes', unless the host system is Solaris,
+	  where <function>XRegisterIMInstantiateCallback()</function>
 	  seems to cause a segfault.
         </para>
       </formalpara>
@@ -468,15 +468,15 @@ How to compile GTK+ itself
 
 	<para>
 	  The <application>gtk-doc</application> package is
-	  used to generate the reference documented included
-	  with GTK+. By default support for gtk-doc is disabled
-	  because it requires various extra dependencies
+	  used to generate the reference documentation included
+	  with GTK+. By default support for <application>gtk-doc</application> 
+	  is disabled because it requires various extra dependencies
 	  to be installed. If you have
 	  <application>gtk-doc</application> installed and
 	  are modifying GTK+, you may want to enable
 	  <application>gtk-doc</application> support by passing
 	  in <systemitem>--enable-gtk-doc</systemitem>. If not
-	  enabled pre-generated HTML files distributed with GTK+
+	  enabled, pre-generated HTML files distributed with GTK+
 	  will be installed.
 	</para>
       </formalpara>

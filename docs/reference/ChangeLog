@@ -1,3 +1,7 @@
+2002-03-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/building.sgml: Some typo and markup fixes.
+
 Thu Mar  7 02:58:16 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/tmpl/gtkliststore.sgml: start implementing
