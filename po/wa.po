@@ -57,7 +57,7 @@ msgstr "I Va"
 #: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3485
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Renoncî"
+msgstr "Rinoncî"
 
 #: gtk/gtkcolorsel.c:1679
 msgid "Help"
@@ -249,7 +249,7 @@ msgstr ""
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr ""
+msgstr "%i fontes avou on totå di %i stîles."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -282,7 +282,7 @@ msgstr "clintcheyes"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1946
 msgid "oblique"
-msgstr ""
+msgstr "oblikes"
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1947
 msgid "reverse italic"
@@ -317,10 +317,10 @@ msgid "bold"
 msgstr "cråsses"
 
 msgid "demibold"
-msgstr ""
+msgstr "demi cråsses"
 
 msgid "medium"
-msgstr ""
+msgstr "moyénnes"
 
 msgid "normal"
 msgstr "miernuwes"
@@ -332,7 +332,7 @@ msgid "extralight"
 msgstr "foirt ledjîres"
 
 msgid "thin"
-msgstr "tenès"
+msgstr "tenes"
 
 msgid "regular"
 msgstr "normåles"
@@ -347,7 +347,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1841
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr ""
+msgstr "Ci fonte est ecôdeye so 2 oktèts, èt mutwet pout nén esse håyneye comufåt"
 
 #: gtk/gtkfontsel.c:1933 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -371,7 +371,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:2158
 msgid "Font: (Filter Applied)"
-msgstr ""
+msgstr "Fonte: (passete eployî)"
 
 #: gtk/gtkfontsel.c:2634
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
