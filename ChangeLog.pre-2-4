@@ -1,3 +1,8 @@
+Sat Jan  3 11:39:42 2004  Manish Singh  <yosh@gimp.org>
+
+        * gtk/gtkclipboard.c: Update freedesktop.org clipboard doc link.
+        Patch from Andrew Moise (#130462).
+
 2003-12-31 13:49 Daniel Rogers <dsrogers@phasevelocity.org>
 
 	* gdk/x11/gdkinput-x11.c
