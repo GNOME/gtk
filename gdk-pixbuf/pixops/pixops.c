@@ -1144,7 +1144,7 @@ tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double 
 		*(pixel_weights + n_x * i + j) = weight;
 	      }
 
-	    *(pixel_weights + n_x * n_y - 1) += 65536 - total;
+	    *(pixel_weights + n_x * n_y - 1) += (int)(0.5 + 65536 * overall_alpha) - total;
 	  }
       }
 }
@@ -1266,7 +1266,7 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
 	      total += weight;
 	    }
 
-	*(pixel_weights + n_x * n_y - 1) += 65536 - total;
+	*(pixel_weights + n_x * n_y - 1) += (int)(0.5 + 65536 * overall_alpha) - total;
       }
 
   g_free (x_weights);
@@ -1368,7 +1368,7 @@ bilinear_make_weights (PixopsFilter *filter, double x_scale, double y_scale, dou
 	      total += weight;
 	    }
 
-	*(pixel_weights + n_x * n_y - 1) += 65536 - total;
+	*(pixel_weights + n_x * n_y - 1) += (int)(0.5 + 65536 * overall_alpha) - total;
       }
 }
 

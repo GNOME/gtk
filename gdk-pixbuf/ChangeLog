@@ -1,3 +1,8 @@
+Mon Feb 11 14:31:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c (bilinear_make_weights): Fix handing of
+	overall alpha.
+
 2002-02-10  Matthias Clasen  <matthias@local>
 
 	* test-loaders.c (main): Enable some tests which should work
