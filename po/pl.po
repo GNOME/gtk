@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-01-07 21:47+0100\n"
-"PO-Revision-Date: 2002-01-28 03:02+0100\n"
+"POT-Creation-Date: 2002-01-29 22:48+0100\n"
+"PO-Revision-Date: 2002-01-29 22:48+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -827,7 +827,7 @@ msgstr "Nazwa koloru elementu"
 msgid "Foreground color as a string"
 msgstr "Kolor elementu w postaci napisu"
 
-#: glade/property.c:1
+#: gtk/gtkcellrenderertext.c:1 gtk/gtktexttag.c:1
 msgid "Foreground color"
 msgstr "Kolor elementu"
 
@@ -923,7 +923,7 @@ msgstr ""
 msgid "Whether to strike through the text"
 msgstr ""
 
-#: glade/glade_gnome.c:1 glade/glade_gnome.c:1
+#: gtk/gtkcellrenderertext.c:1 gtk/gtktexttag.c:1
 msgid "Underline"
 msgstr "Podkreślenie"
 
@@ -1075,7 +1075,7 @@ msgstr ""
 msgid "Spacing around check or radio indicator"
 msgstr ""
 
-#: glade/glade_menu_editor.c:1 glade/property.c:1
+#: gtk/gtkcheckmenuitem.c:1 gtk/gtktogglebutton.c:1
 msgid "Active"
 msgstr "Aktywny"
 
@@ -1103,6 +1103,8 @@ msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"Aktualnie wybrany kolor. Kolor ten możesz przeciągnąć na jedną z pozycji "
+"palety, aby zachować go na przyszłość."
 
 #: gtk/gtkcolorsel.c:1
 msgid "_Save color here"
@@ -1116,7 +1118,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1
 msgid "Has Opacity Control"
-msgstr ""
+msgstr "Kontrola nieprzepuszczalności"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Whether the color selector should allow setting opacity"
@@ -1172,7 +1174,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1
 msgid "_Hue:"
-msgstr "_Odcień:"
+msgstr "O_dcień:"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Position on the color wheel."
@@ -1180,7 +1182,7 @@ msgstr "Położenie na kole kolorów."
 
 #: gtk/gtkcolorsel.c:1
 msgid "_Saturation:"
-msgstr "N_asycenie:"
+msgstr "Na_sycenie:"
 
 #: gtk/gtkcolorsel.c:1
 msgid "\"Deepness\" of the color."
@@ -1228,7 +1230,7 @@ msgstr "Przezroczystość wybranego koloru."
 
 #: gtk/gtkcolorsel.c:1
 msgid "Color _Name:"
-msgstr "Naz_wa koloru:"
+msgstr "Nazwa _koloru:"
 
 #: gtk/gtkcolorsel.c:1
 msgid ""
@@ -1259,11 +1261,13 @@ msgstr ""
 
 #: gtk/gtkcombo.c:1
 msgid "Case sensitive"
-msgstr ""
+msgstr "Rozróżnianie małych i wielkich liter"
 
 #: gtk/gtkcombo.c:1
 msgid "Whether list item matching is case sensitive"
 msgstr ""
+"Określa, czy przy dopasowywaniu elementów listy powinny być rozróżniane małe "
+"i wielkie litery"
 
 #: gtk/gtkcombo.c:1
 msgid "Allow empty"
@@ -1271,7 +1275,7 @@ msgstr "Dopuszczanie pustych"
 
 #: gtk/gtkcombo.c:1
 msgid "Whether an empty value may be entered in this field"
-msgstr ""
+msgstr "Określa, czy wartość tego pola może być pusta"
 
 #: gtk/gtkcombo.c:1
 msgid "Value in list"
@@ -1355,19 +1359,19 @@ msgstr ""
 
 #: gtk/gtkdialog.c:1
 msgid "Content area border"
-msgstr ""
+msgstr "Krawędź wokół zawartości"
 
 #: gtk/gtkdialog.c:1
 msgid "Width of border around the main dialog area"
-msgstr ""
+msgstr "Szerokość krawędzi wokół głównego obszaru okna dialogowego"
 
 #: gtk/gtkdialog.c:1
 msgid "Button spacing"
-msgstr ""
+msgstr "Odstępy pomiędzy przyciskami"
 
 #: gtk/gtkdialog.c:1
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "Odstępy pomiędzy przyciskami"
 
 #: gtk/gtkdialog.c:1
 msgid "Action area border"
@@ -1396,7 +1400,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:1
 msgid "Whether the entry contents can be edited"
-msgstr ""
+msgstr "Określa, czy treść wejścia może być redagowana"
 
 #: gtk/gtkentry.c:1
 msgid "Maximum length"
@@ -1404,7 +1408,7 @@ msgstr "Maksymalna długość"
 
 #: gtk/gtkentry.c:1
 msgid "Maximum number of characters for this entry"
-msgstr ""
+msgstr "Maksymalna liczba znaków w tym wejściu"
 
 #: gtk/gtkentry.c:1
 msgid "Visibility"
@@ -1418,7 +1422,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:1
 msgid "Has Frame"
-msgstr ""
+msgstr "Z ramką"
 
 #: gtk/gtkentry.c:1
 msgid "FALSE removes outside bevel from entry."
@@ -1444,7 +1448,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:1
 msgid "Width in chars"
-msgstr ""
+msgstr "Szerokość w znakach"
 
 #: gtk/gtkentry.c:1
 msgid "Number of characters to leave space for in the entry."
@@ -1460,7 +1464,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:1
 msgid "The contents of the entry"
-msgstr ""
+msgstr "Zawartość wejścia"
 
 #: gtk/gtkentry.c:1 gtk/gtklabel.c:1 gtk/gtktextview.c:1
 msgid "Cursor color"
@@ -1468,7 +1472,7 @@ msgstr "Kolor kursora"
 
 #: gtk/gtkentry.c:1 gtk/gtklabel.c:1 gtk/gtktextview.c:1
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "Kolor, przy użyciu którego powinien być rysowany kursor wstawiania"
 
 #: gtk/gtkentry.c:1 gtk/gtklabel.c:1
 msgid "Select All"
@@ -1667,7 +1671,7 @@ msgstr "Nazwa czcionki"
 
 #: gtk/gtkfontsel.c:1
 msgid "The X string that represents this font."
-msgstr ""
+msgstr "Napis X reprezentujący tę czcionkę."
 
 #: gtk/gtkfontsel.c:1
 msgid "The GdkFont that is currently selected."
@@ -1675,11 +1679,11 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1
 msgid "Preview text"
-msgstr ""
+msgstr "Tekst na podglądzie"
 
 #: gtk/gtkfontsel.c:1
 msgid "The text to display in order to demonstrate the selected font."
-msgstr ""
+msgstr "Tekst wyświetlany w celu wizualizacji wybranej czcionki."
 
 #: gtk/gtkfontsel.c:1
 msgid "_Family:"
@@ -1728,15 +1732,15 @@ msgstr ""
 
 #: gtk/gtkframe.c:1
 msgid "Frame shadow"
-msgstr ""
+msgstr "Cień ramki"
 
 #: gtk/gtkframe.c:1
 msgid "Appearance of the frame border."
-msgstr ""
+msgstr "Wygląd krawędzi ramki."
 
 #: gtk/gtkframe.c:1
 msgid "Label widget"
-msgstr ""
+msgstr "Widget etykiety"
 
 #: gtk/gtkframe.c:1
 msgid "A widget to display in place of the usual frame label."
@@ -1757,11 +1761,11 @@ msgstr "OK"
 #: gtk/gtkhandlebox.c:1 gtk/gtkmenubar.c:1 gtk/gtkstatusbar.c:1
 #: gtk/gtktoolbar.c:1 gtk/gtkviewport.c:1
 msgid "Shadow type"
-msgstr ""
+msgstr "Typ cienia"
 
 #: gtk/gtkhandlebox.c:1
 msgid "Appearance of the shadow that surrounds the container."
-msgstr ""
+msgstr "Wygląd cienia otaczającego kontener."
 
 #: gtk/gtkhandlebox.c:1
 msgid "Handle position"
@@ -1791,7 +1795,7 @@ msgstr "Błąd przy odczytywaniu ikony: %s"
 
 #: gtk/gtkimagemenuitem.c:1
 msgid "Image widget"
-msgstr ""
+msgstr "Widget obrazu"
 
 #: gtk/gtkimagemenuitem.c:1
 msgid "Child widget to appear next to the menu text"
@@ -1916,7 +1920,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:1
 msgid "Pattern"
-msgstr ""
+msgstr "Wzorzec"
 
 #: gtk/gtklabel.c:1
 msgid ""
@@ -1926,19 +1930,19 @@ msgstr ""
 
 #: gtk/gtklabel.c:1
 msgid "Line wrap"
-msgstr ""
+msgstr "Zawijanie wierszy"
 
 #: gtk/gtklabel.c:1
 msgid "If set, wrap lines if the text becomes too wide."
-msgstr ""
+msgstr "Określa, czy zbyt długie wiersze powinny być zawijane."
 
 #: gtk/gtklabel.c:1
 msgid "Selectable"
-msgstr ""
+msgstr "Zaznaczalny"
 
 #: gtk/gtklabel.c:1
 msgid "Whether the label text can be selected with the mouse."
-msgstr ""
+msgstr "Określa, czy tekst etykiety może być zaznaczany przy użyciu myszy."
 
 #: gtk/gtklabel.c:1
 msgid "Mnemonic key"
@@ -2027,7 +2031,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:1
 msgid "Image/label border"
-msgstr ""
+msgstr "Krawędź obrazu/etykiety"
 
 #: gtk/gtkmessagedialog.c:1
 msgid "Width of border around the label and image in the message dialog"
@@ -2063,7 +2067,7 @@ msgstr ""
 
 #: gtk/gtkmisc.c:1
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr ""
+msgstr "Wyrównanie pionowe, od 0 (góra) do 1 (dół)"
 
 #: gtk/gtkmisc.c:1
 msgid "X pad"
@@ -2072,7 +2076,7 @@ msgstr ""
 #: gtk/gtkmisc.c:1
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
-msgstr ""
+msgstr "Ilość miejsca w pikselach, dodawana na lewo i na prawo od widgetu"
 
 #: gtk/gtkmisc.c:1
 msgid "Y pad"
@@ -2081,7 +2085,7 @@ msgstr ""
 #: gtk/gtkmisc.c:1
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr ""
+msgstr "Ilość miejsca w pikselach, dodawana powyżej i poniżej widgetu"
 
 #: gtk/gtknotebook.c:1
 msgid "Page"
@@ -2133,15 +2137,15 @@ msgstr "Określa, czy przy notatniku powinny być wyświetlane zakładki"
 
 #: gtk/gtknotebook.c:1
 msgid "Show Border"
-msgstr ""
+msgstr "Wyświetlanie krawędzi"
 
 #: gtk/gtknotebook.c:1
 msgid "Whether the border should be shown or not"
-msgstr ""
+msgstr "Określa, czy krawędź powinna być widoczna"
 
 #: gtk/gtknotebook.c:1
 msgid "Scrollable"
-msgstr ""
+msgstr "Przewijalny"
 
 #: gtk/gtknotebook.c:1
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
@@ -2207,12 +2211,7 @@ msgstr "Rozmiar uchwytu"
 msgid "Width of handle"
 msgstr "Szerokość uchwytu"
 
-#: gtk/gtkrc.c:1
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Nie można odnaleźć pliku z obrazem na ścieżce: \"%s\" wiersz %d"
-
-#: gtk/gtkrc.c:1
+#: gtk/gtkrc.c:1 gtk/gtkrc.c:1
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nie można odnaleźć pliku z obrazem na ścieżce: \"%s\""
@@ -2704,7 +2703,7 @@ msgstr "S_kopiuj"
 msgid "C_ut"
 msgstr "_Wytnij"
 
-#: glade/glade_project_window.c:1
+#: gtk/gtkstock.c:1
 msgid "_Delete"
 msgstr "_Usuń"
 
@@ -2792,8 +2791,7 @@ msgstr ""
 msgid "_Right"
 msgstr ""
 
-#. 3 - see GladeStockMenuItemNew above.
-#: glade/glade_gnome.c:1
+#: gtk/gtkstock.c:1
 msgid "_New"
 msgstr "_Nowy"
 
@@ -2922,7 +2920,7 @@ msgstr ""
 msgid "Rows"
 msgstr "Wiersze"
 
-#: glade/gbwidgets/gbtable.c:1
+#: gtk/gtktable.c:1
 msgid "The number of rows in the table"
 msgstr "Liczba wierszy w tabeli"
 
@@ -3523,10 +3521,7 @@ msgstr "Klikalny"
 msgid "Whether the header can be clicked"
 msgstr "Określa, czy można klikać nagłówek"
 
-#. Create the pages of the main notebook
-#. NOTE: If you add/remove pages you need to change the GB_PAGE_SIGNALS
-#. value at the top of this file
-#: glade/property.c:1
+#: gtk/gtktreeviewcolumn.c:1
 msgid "Widget"
 msgstr "Widget"
 
@@ -3534,7 +3529,7 @@ msgstr "Widget"
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 
-#: glade/gbwidgets/gbalignment.c:1
+#: gtk/gtktreeviewcolumn.c:1
 msgid "Alignment"
 msgstr "Wyrównanie"
 
@@ -3582,7 +3577,7 @@ msgstr ""
 msgid "Widget name"
 msgstr "Nazwa widgetu"
 
-#: glade/glade_menu_editor.c:1 glade/property.c:1
+#: gtk/gtkwidget.c:1
 msgid "The name of the widget"
 msgstr "Nazwa widgetu"
 
@@ -3682,7 +3677,7 @@ msgstr ""
 msgid "Whether the widget is composed of other widgets"
 msgstr ""
 
-#: glade/property.c:1
+#: gtk/gtkwidget.c:1
 msgid "Style"
 msgstr "Styl"
 
@@ -3744,7 +3739,7 @@ msgstr ""
 msgid "Window Type"
 msgstr "Typ okna"
 
-#: glade/gbwidgets/gbwindow.c:1
+#: gtk/gtkwindow.c:1
 msgid "The type of the window"
 msgstr "Typ okna"
 
@@ -3752,7 +3747,7 @@ msgstr "Typ okna"
 msgid "Window Title"
 msgstr "Tytuł okna"
 
-#: glade/gbwidgets/gbwindow.c:1
+#: gtk/gtkwindow.c:1
 msgid "The title of the window"
 msgstr "Tytuł okna"
 
@@ -3827,7 +3822,7 @@ msgstr ""
 "Określenie czy to okno powinno być zamknięte w momencie zamknięcia okna "
 "nadrzędnego"
 
-#: glade/glade_menu_editor.c:1
+#: gtk/gtkwindow.c:1
 msgid "Icon"
 msgstr "Ikona"
 
