@@ -1,3 +1,14 @@
+Fri May 11 02:53:57 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_expose): don't
+	propagate exposes to NULL child.
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_adjustment_changed): guard
+	against not having one of the scrollbars.
+
+	* gtk/gtklabel.c (gtk_label_setup_mnemonic): clean up after us,
+	we don't keep a mnemonic window if we have no mnemonic installed.
+
 Fri May 11 01:05:00 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.h: grum, gtk_type_class() is not GNUC_CONST

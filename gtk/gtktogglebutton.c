@@ -466,11 +466,12 @@ gtk_toggle_button_expose (GtkWidget      *widget,
 {
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      GtkWidget *child = GTK_BIN (widget)->child;
+
       gtk_toggle_button_paint (widget, &event->area);
-      
-      gtk_container_propagate_expose (GTK_CONTAINER (widget),
-				      GTK_BIN (widget)->child,
-				      event);
+
+      if (child)
+	gtk_container_propagate_expose (GTK_CONTAINER (widget), child, event);
     }
   
   return TRUE;

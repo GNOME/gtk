@@ -467,9 +467,12 @@ gtk_label_setup_mnemonic (GtkLabel *label,
   GtkWidget *toplevel;
 
   if (last_key != GDK_VoidSymbol && label->mnemonic_window)
-    gtk_window_remove_mnemonic  (label->mnemonic_window,
-				 last_key,
-				 GTK_WIDGET (label));
+    {
+      gtk_window_remove_mnemonic  (label->mnemonic_window,
+				   last_key,
+				   GTK_WIDGET (label));
+      label->mnemonic_window = NULL;
+    }
   
   if (label->mnemonic_keyval == GDK_VoidSymbol)
     return;

@@ -688,6 +688,7 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
       else
 	{
 	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (bin->child, FALSE);
+
 	  if (aux_info && aux_info->height > 0)
 	    {
 	      requisition->height += aux_info->height;
@@ -968,7 +969,8 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 
   scrolled_win = GTK_SCROLLED_WINDOW (data);
 
-  if (adjustment == gtk_range_get_adjustment (GTK_RANGE (scrolled_win->hscrollbar)))
+  if (scrolled_win->hscrollbar &&
+      adjustment == gtk_range_get_adjustment (GTK_RANGE (scrolled_win->hscrollbar)))
     {
       if (scrolled_win->hscrollbar_policy == GTK_POLICY_AUTOMATIC)
 	{
@@ -981,7 +983,8 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_win));
 	}
     }
-  else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (scrolled_win->vscrollbar)))
+  else if (scrolled_win->vscrollbar &&
+	   adjustment == gtk_range_get_adjustment (GTK_RANGE (scrolled_win->vscrollbar)))
     {
       if (scrolled_win->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
 	{
