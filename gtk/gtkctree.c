@@ -2905,8 +2905,6 @@ cell_size_request (GtkCList       *clist,
       requisition->height = MAX (requisition->height, height);
       break;
     default:
-      requisition->width  = 0;
-      requisition->height = 0;
       break;
     }
 

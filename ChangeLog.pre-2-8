@@ -1,3 +1,12 @@
+Mon May 20 11:47:59 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkplug.c: Undo an accidental revert of
+ 	fixes of May 16. (Caught by Padraig O'Briain)
+ 
+	* gtk/gtkctree.c (cell_size_request): Fix bug where
+	size request for text cells was being overwritten.
+	(#82264, Graham Swallow.)
+
 2002-05-18  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Check for endianness. Sorry about REBUILD_PNGS...
