@@ -10925,6 +10925,12 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
+  gtk_drag_source_set (GTK_WIDGET (tree_view),
+		       0,
+		       NULL,
+		       0,
+		       actions);
+
   di = ensure_info (tree_view);
   clear_source_info (di);
 
