@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2005-01-06 01:15+0000\n"
+"POT-Creation-Date: 2005-01-08 08:45+0000\n"
+"PO-Revision-Date: 2005-01-08 08:46+0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
@@ -916,11 +916,6 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
-#, c-format
-msgid "progress bar label|%d %%"
-msgstr "label bar cynnydd|%d %%"
-
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
 msgstr "Dewiswch Liw"
@@ -1075,7 +1070,6 @@ msgid "Invalid filename: %s"
 msgstr "Enw ffeil annilys: %s"
 
 #: gtk/gtkfilechooserbutton.c:65
-#, fuzzy
 msgid "Select A File"
 msgstr "Dewiswch Ffeil"
 
@@ -1178,9 +1172,8 @@ msgid "_Add to Shortcuts"
 msgstr "_Ychwanegu at y Llyfrnodau"
 
 #: gtk/gtkfilechooserdefault.c:3007
-#, fuzzy
 msgid "Open _Location"
-msgstr "Agor Lleoliad"
+msgstr "Agor _Lleoliad"
 
 #: gtk/gtkfilechooserdefault.c:3019
 msgid "Show _Hidden Files"
@@ -2221,6 +2214,9 @@ msgstr "Modd Mewnbwn X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
+
+#~ msgid "progress bar label|%d %%"
+#~ msgstr "label bar cynnydd|%d %%"
 
 #~ msgid ""
 #~ "Could not change the current folder to %s:\n"
