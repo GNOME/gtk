@@ -185,7 +185,6 @@ static void
 expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 {
 	GdkPixbuf *pixbuf;
-	gint x1, y1, x2, y2;
 
 	pixbuf = (GdkPixbuf *)gtk_object_get_data(GTK_OBJECT(drawing_area), "pixbuf");
 
@@ -217,16 +216,17 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 static void
 config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)
 {
-	GdkPixbuf *pixbuf, *spb;
+	GdkPixbuf *pixbuf;
     
 	pixbuf = (GdkPixbuf *)gtk_object_get_data(GTK_OBJECT(drawing_area), "pixbuf");
 
 	g_print("X:%d Y:%d\n", event->width, event->height);
 
+#if 0
 	if (((event->width) != (pixbuf->art_pixbuf->width)) ||
 	    ((event->height) != (pixbuf->art_pixbuf->height))) 
 		gdk_pixbuf_scale(pixbuf, event->width, event->height);
-
+#endif
 }
 
 static void
@@ -299,18 +299,18 @@ main (int argc, char **argv)
 
 	i = 1;
 	if (argc == 1) {
-		pixbuf = gdk_pixbuf_load_image_from_rgb_d(default_image,
-							  DEFAULT_WIDTH,
-							  DEFAULT_HEIGHT);
-		if (pixbuf) {
-			new_testrgb_window (pixbuf);
-			found_valid = TRUE;
-		}
+		pixbuf = gdk_pixbuf_new_from_data ((guchar *) default_image, ART_PIX_RGB, FALSE,
+						   DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_WIDTH * 3,
+						   NULL, NULL);
+		new_testrgb_window (pixbuf);
+		found_valid = TRUE;
 	} else {
 		for (i = 1; i < argc; i++) {
-			pixbuf = gdk_pixbuf_load_image (argv[i]);
+			pixbuf = gdk_pixbuf_new_from_file (argv[i]);
+#if 0
 			pixbuf = gdk_pixbuf_rotate(pixbuf, 10.0);
-		  
+#endif
+
 			if (pixbuf) {
 				new_testrgb_window (pixbuf);
 				found_valid = TRUE;

@@ -1,3 +1,32 @@
+1999-10-20  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gdk-pixbuf.h (GdkPixbuf): Removed the unref_fn field.  Now
+	all memory management of the buffer is done by libart.
+
+	* src/gdk-pixbuf.c (gdk_pixbuf_unref): Do destruction here.
+	Removed gdk_pixbuf_destroy, gdk_pixbuf_duplicate.
+
+	* src/gdk-pixbuf-data.c (gdk_pixbuf_new_from_data): Implemented in
+	terms of the libart functions.  Removed the old code.
+
+	* src/gdk-pixbuf-io.c (image_handler_load): Removed the save
+	symbols.  Saving will not be implemented in GdkPixbuf.
+
+	* src/io-gif.c: Removed the saving stub.
+	(image_load): Fixed memory management to fail gracefully if we run
+	out of memory while loading the image.  Close the gif file when we
+	are done.  This still needs more error handling for the DGif
+	functions.
+
+	* src/io-jpeg.c (image_load): Some robustness fixes.
+
+	* src/io-png.c: Removed the saving stuff.
+	(image_load): Some memory management fixes.
+
+	* src/io-tiff.c (image_load): Ditto.
+
+	* src/io-xpm.c (pixbuf_create_from_xpm): Ditto.
+
 1999-10-18  Havoc Pennington  <hp@pobox.com>
 
 	* subautogen.sh: New name for macros/autogen.sh
@@ -6,7 +35,9 @@
 
 1999-10-18  Federico Mena Quintero  <federico@redhat.com>
 
-	* src/*: Reindented to use the GNOME Indentation.
+	* src/*: Reindented to use the GNOME Indentation.  Renamed
+	GdkPixBuf to GdkPixbuf, for consistency with the function names
+	(and it is also easier to type) :-)
 
 1999-10-18  Havoc Pennington  <hp@pobox.com>
 

@@ -1,7 +1,10 @@
-/*
- * io-tiff.c: GdkPixbuf I/O for TIFF files.
+/* GdkPixbuf library - JPEG image loader
+ *
  * Copyright (C) 1999 Mark Crichton
- * Author: Mark Crichton <crichton@gimp.org>
+ * Copyright (C) 1999 The Free Software Foundation
+ *
+ * Authors: Mark Crichton <crichton@gimp.org>
+ *          Federico Mena-Quintero <federico@gimp.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -14,56 +17,59 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Cambridge, MA 02139, USA.
- *
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
 
 /* Following code (almost) blatantly ripped from Imlib */
 
 #include <config.h>
 #include <stdio.h>
-#include <string.h>
-#include <glib.h>
 #include <tiffio.h>
-
 #include "gdk-pixbuf.h"
-/*#include "gdk-pixbuf-io.h" */
 
+
+
+/* Destroy notification function for the libart pixbuf */
+static void
+free_buffer (gpointer user_data, gpointer data)
+{
+	free (data);
+}
+
+/* Shared library entry point */
 GdkPixbuf *
 image_load (FILE *f)
 {
-	GdkPixbuf *pixbuf;
 	TIFF *tiff;
-	art_u8 *pixels, *tmppix;
+	guchar *pixels, *tmppix;
 	gint w, h, x, y, num_pixs, fd;
 	uint32 *rast, *tmp_rast;
 
-	g_return_val_if_fail(f != NULL, NULL);
-
-	fd = fileno(f);
-	tiff = TIFFFdOpen(fd, "libpixbuf-tiff", "r");
+	fd = fileno (f);
+	tiff = TIFFFdOpen (fd, "libpixbuf-tiff", "r");
 
 	if (!tiff)
 		return NULL;
 
-	TIFFGetField(tiff, TIFFTAG_IMAGEWIDTH, &w);
-	TIFFGetField(tiff, TIFFTAG_IMAGELENGTH, &h);
+	TIFFGetField (tiff, TIFFTAG_IMAGEWIDTH, &w);
+	TIFFGetField (tiff, TIFFTAG_IMAGELENGTH, &h);
 	num_pixs = w * h;
 
 	/* Yes, it needs to be _TIFFMalloc... */
-	rast = (uint32 *) _TIFFmalloc(num_pixs * sizeof(uint32));
+	rast = (uint32 *) _TIFFmalloc (num_pixs * sizeof (uint32));
 
 	if (!rast) {
-		TIFFClose(tiff);
+		TIFFClose (tiff);
 		return NULL;
 	}
 
-	if (TIFFReadRGBAImage(tiff, w, h, rast, 0)) {
-		pixels = art_alloc(num_pixs * 4);
+	if (TIFFReadRGBAImage (tiff, w, h, rast, 0)) {
+		pixels = malloc (num_pixs * 4);
 		if (!pixels) {
-			_TIFFfree(rast);
-			TIFFClose(tiff);
+			_TIFFfree (rast);
+			TIFFClose (tiff);
 			return NULL;
 		}
 		tmppix = pixels;
@@ -76,23 +82,19 @@ image_load (FILE *f)
 			 */
 			tmp_rast = rast + ((h - y - 1) * w);
 			for (x = 0; x < w; x++) {
-				tmppix[0] = TIFFGetR(*tmp_rast);
-				tmppix[1] = TIFFGetG(*tmp_rast);
-				tmppix[2] = TIFFGetB(*tmp_rast);
-				tmppix[3] = TIFFGetA(*tmp_rast);
+				tmppix[0] = TIFFGetR (*tmp_rast);
+				tmppix[1] = TIFFGetG (*tmp_rast);
+				tmppix[2] = TIFFGetB (*tmp_rast);
+				tmppix[3] = TIFFGetA (*tmp_rast);
 				tmp_rast++;
 				tmppix += 4;
 			}
 		}
 	}
-	_TIFFfree(rast);
-	TIFFClose(tiff);
+	_TIFFfree (rast);
+	TIFFClose (tiff);
 
-	pixbuf = gdk_pixbuf_new (art_pixbuf_new_rgba (pixels, w, h, (w * 4)),
-				 NULL);
-
-	if (!pixbuf)
-		art_free (pixels);
-
-	return pixbuf;
+	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, TRUE,
+					 w, h, w * 4,
+					 free_buffer, NULL);
 }

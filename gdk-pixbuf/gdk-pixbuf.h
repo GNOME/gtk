@@ -1,11 +1,10 @@
-/* GdkPixbuf library
+/* GdkPixbuf library - Main header file
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
  * Authors: Mark Crichton <crichton@gimp.org>
  *          Miguel de Icaza <miguel@gnu.org>
  *          Federico Mena-Quintero <federico@gimp.org>
- *          Carsten Haitzler <raster@rasterman.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,32 +35,41 @@ extern "C" {
 
 
 
+/* GdkPixbuf structure */
+
 typedef struct _GdkPixbuf GdkPixbuf;
-typedef void (* GdkPixbufUnrefFunc) (GdkPixbuf *pixbuf);
 
 struct _GdkPixbuf {
+	/* Reference count */
 	int ref_count;
+
+	/* Libart pixbuf */
 	ArtPixBuf *art_pixbuf;
-	GdkPixbufUnrefFunc *unref_fn;
 };
 
 
 
-GdkPixbuf *gdk_pixbuf_load_image (const char *file);
-void gdk_pixbuf_save_image (const char *format_id, const char *file, ...);
-
-GdkPixbuf *gdk_pixbuf_new (ArtPixBuf *art_pixbuf, GdkPixbufUnrefFunc *unref_fn);
+/* Reference counting */
 
 void gdk_pixbuf_ref (GdkPixbuf *pixbuf);
 void gdk_pixbuf_unref (GdkPixbuf *pixbuf);
 
-GdkPixbuf *gdk_pixbuf_duplicate (const GdkPixbuf *pixbuf);
+/* Wrap a libart pixbuf */
+
+GdkPixbuf *gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf);
+
+/* Simple loading */
+
+GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename);
+GdkPixbuf *gdk_pixbuf_new_from_data (guchar *data, ArtPixFormat format, gboolean has_alpha,
+				     int width, int height, int rowstride,
+				     ArtDestroyNotify dfunc, gpointer dfunc_data);
+
+/* Transformations */
+#if 0
 GdkPixbuf *gdk_pixbuf_scale (const GdkPixbuf *pixbuf, gint w, gint h);
 GdkPixbuf *gdk_pixbuf_rotate (GdkPixbuf *pixbuf, gdouble angle);
-
-void gdk_pixbuf_destroy (GdkPixbuf *pixbuf);
-
-GdkPixbuf *gdk_pixbuf_load_image_from_rgb_d (unsigned char *data, int rgb_width, int rgb_height);
+#endif
 
 
 

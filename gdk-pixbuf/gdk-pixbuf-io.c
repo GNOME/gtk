@@ -1,19 +1,36 @@
-/*
- * gdk-pixbuf-io.c: Code to load images into GdkPixbufs
+/* GdkPixbuf library - Main loading interface.
  *
- * Author:
- *    Miguel de Icaza (miguel@gnu.org)
+ * Copyright (C) 1999 The Free Software Foundation
+ *
+ * Authors: Miguel de Icaza <miguel@gnu.org>
+ *          Federico Mena-Quintero <federico@gimp.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
 
 #include <config.h>
 #include <stdio.h>
 #include <string.h>
-#include <glib.h>
 #include <gmodule.h>
 #include "gdk-pixbuf.h"
 
+
+
 static gboolean
-pixbuf_check_png (unsigned char *buffer, int size)
+pixbuf_check_png (guchar *buffer, int size)
 {
 	if (size < 28)
 		return FALSE;
@@ -32,7 +49,7 @@ pixbuf_check_png (unsigned char *buffer, int size)
 }
 
 static gboolean
-pixbuf_check_jpeg (unsigned char *buffer, int size)
+pixbuf_check_jpeg (guchar *buffer, int size)
 {
 	if (size < 10)
 		return FALSE;
@@ -44,7 +61,7 @@ pixbuf_check_jpeg (unsigned char *buffer, int size)
 }
 
 static gboolean
-pixbuf_check_tiff (unsigned char *buffer, int size)
+pixbuf_check_tiff (guchar *buffer, int size)
 {
 	if (size < 10)
 		return FALSE;
@@ -65,7 +82,7 @@ pixbuf_check_tiff (unsigned char *buffer, int size)
 }
 
 static gboolean
-pixbuf_check_gif (unsigned char *buffer, int size)
+pixbuf_check_gif (guchar *buffer, int size)
 {
 	if (size < 20)
 		return FALSE;
@@ -77,7 +94,7 @@ pixbuf_check_gif (unsigned char *buffer, int size)
 }
 
 static gboolean
-pixbuf_check_xpm (unsigned char *buffer, int size)
+pixbuf_check_xpm (guchar *buffer, int size)
 {
 	if (size < 20)
 		return FALSE;
@@ -89,7 +106,7 @@ pixbuf_check_xpm (unsigned char *buffer, int size)
 }
 
 static gboolean
-pixbuf_check_bmp (unsigned char *buffer, int size)
+pixbuf_check_bmp (guchar *buffer, int size)
 {
 	if (size < 20)
 		return FALSE;
@@ -101,7 +118,7 @@ pixbuf_check_bmp (unsigned char *buffer, int size)
 }
 
 static gboolean
-pixbuf_check_ppm (unsigned char *buffer, int size)
+pixbuf_check_ppm (guchar *buffer, int size)
 {
 	if (size < 20)
 		return FALSE;
@@ -119,20 +136,21 @@ pixbuf_check_ppm (unsigned char *buffer, int size)
 }
 
 static struct {
-	char      *module_name;
-	gboolean   (*format_check)(unsigned char *buffer, int size);
-	GModule   *module;
-	GdkPixbuf *(*load)(FILE *f);
-	int        (*save)(GdkPixbuf *p, FILE *f, ...);
+	char *module_name;
+	gboolean (* format_check) (guchar *buffer, int size);
+	GModule *module;
+	GdkPixbuf *(* load) (FILE *f);
 } file_formats [] = {
-	{ "png",  pixbuf_check_png,  NULL, NULL, NULL },
-	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL },
-	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL },
-	{ "gif",  pixbuf_check_gif,  NULL, NULL, NULL },
-	{ "xpm",  pixbuf_check_xpm,  NULL, NULL, NULL },
-/*	{ "bmp",  pixbuf_check_bmp,  NULL, NULL, NULL },
-	{ "ppm",  pixbuf_check_ppm,  NULL, NULL, NULL },*/
-	{ NULL, NULL, NULL, NULL, NULL }
+	{ "png",  pixbuf_check_png,  NULL, NULL },
+	{ "jpeg", pixbuf_check_jpeg, NULL, NULL },
+	{ "tiff", pixbuf_check_tiff, NULL, NULL },
+	{ "gif",  pixbuf_check_gif,  NULL, NULL },
+	{ "xpm",  pixbuf_check_xpm,  NULL, NULL },
+#if 0
+	{ "bmp",  pixbuf_check_bmp,  NULL, NULL },
+	{ "ppm",  pixbuf_check_ppm,  NULL, NULL },
+#endif
+	{ NULL, NULL, NULL, NULL }
 };
 
 static void
@@ -141,10 +159,9 @@ image_handler_load (int idx)
 	char *module_name;
 	char *path;
 	GModule *module;
-	void *load_sym, *save_sym;
+	void *load_sym;
 
-	module_name = g_strconcat ("pixbuf-",
-				   file_formats [idx].module_name, NULL);
+	module_name = g_strconcat ("pixbuf-", file_formats [idx].module_name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
 	g_free (module_name);
 
@@ -158,22 +175,22 @@ image_handler_load (int idx)
 
 	if (g_module_symbol (module, "image_load", &load_sym))
 		file_formats [idx].load = load_sym;
-
-	if (g_module_symbol (module, "image_save", &save_sym))
-		file_formats [idx].save = save_sym;
 }
 
+
+
 GdkPixbuf *
-gdk_pixbuf_load_image (const char *file)
+gdk_pixbuf_new_from_file (const char *filename)
 {
 	GdkPixbuf *pixbuf;
 	gint n, i;
 	FILE *f;
 	char buffer [128];
 
-	f = fopen (file, "r");
+	f = fopen (filename, "r");
 	if (!f)
 		return NULL;
+
 	n = fread (&buffer, 1, sizeof (buffer), f);
 
 	if (n == 0) {
@@ -182,7 +199,7 @@ gdk_pixbuf_load_image (const char *file)
 	}
 
 	for (i = 0; file_formats [i].module_name; i++) {
-		if ((*file_formats [i].format_check)(buffer, n)) {
+		if ((* file_formats [i].format_check) (buffer, n)) {
 			if (!file_formats [i].load)
 				image_handler_load (i);
 
@@ -191,15 +208,18 @@ gdk_pixbuf_load_image (const char *file)
 				return NULL;
 			}
 
-			fseek(f, 0, SEEK_SET);
-			pixbuf = (*file_formats [i].load)(f);
+			fseek (f, 0, SEEK_SET);
+			pixbuf = (* file_formats [i].load) (f);
 			fclose (f);
-			g_assert (pixbuf->ref_count != 0);
+
+			if (pixbuf)
+				g_assert (pixbuf->ref_count != 0);
+
 			return pixbuf;
 		}
 	}
 
 	fclose (f);
-	g_warning ("Unable to find handler for file: %s", file);
+	g_warning ("Unable to find handler for file: %s", filename);
 	return NULL;
 }
