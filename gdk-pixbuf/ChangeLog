@@ -1,3 +1,8 @@
+1999-11-09  Michael Fulbright  <drmike@redhat.com>
+
+	* src/io-pnm.c : Finished progressive PNM loading code. Should handle
+	all types of PNM files now.
+	
 1999-11-08  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/io-ras.c (image_load_increment): Final patch from Arjan.

@@ -20,16 +20,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* Notes (11/05/99):
- *
- * raw pnm, pgm, and pbm files will load now.
- *
- * ascii support coming soon.
- *
- * next will be incremental loading.
- */
- 
-
 #include <config.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -41,7 +31,6 @@
 #include "gdk-pixbuf-io.h"
 
 
-
 
 #define PNM_BUF_SIZE 4096
 
@@ -523,6 +512,7 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 			*dptr++ = value;
 		
 		context->output_col++;
+
 		if (context->output_col == context->width) {
 			if ( context->type == PNM_FORMAT_PBM )
 				explode_bitmap_into_buf(context);
@@ -567,7 +557,7 @@ pnm_read_scanline (PnmLoaderContext *context)
 		break;
 
 	default:
-		g_print ("Cannot load these image types (yet)\n");
+		g_warning ("Cannot load these image types (yet)\n");
 		return PNM_FATAL_ERR;
 	}
 
@@ -610,7 +600,6 @@ image_load (FILE *f)
 		inbuf->next_byte   = inbuf->buffer;
 		
 		/* ran out of data and we haven't exited main loop */
-		/* something is wrong                              */
 		if (inbuf->bytes_left == 0) {
 			if (context.pixbuf)
 				gdk_pixbuf_unref (context.pixbuf);
@@ -638,9 +627,6 @@ image_load (FILE *f)
 			context.did_prescan = TRUE;
 			context.output_row = 0;
 			context.output_col = 0;
-
-			context.pixels = g_malloc (context.height * 
-					   context.width * 3);
 
 			context.pixbuf = gdk_pixbuf_new(ART_PIX_RGB, 
 							 /*have_alpha*/ FALSE,
@@ -731,7 +717,6 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 }
 #endif
 
-#if 0 
 /* 
  * func - called when we have pixmap created (but no image data)
  * user_data - passed as arg 1 to func
@@ -745,7 +730,7 @@ image_begin_load (ModulePreparedNotifyFunc prepared_func,
 {
 	PnmLoaderContext *context;
 
-	context = g_new0 (JpegProgContext, 1);
+	context = g_new0 (PnmLoaderContext, 1);
 	context->prepared_func = prepared_func;
 	context->updated_func  = updated_func;
 	context->user_data = user_data;
@@ -790,197 +775,118 @@ image_stop_load (gpointer data)
 gboolean
 image_load_increment (gpointer data, guchar *buf, guint size)
 {
-	JpegProgContext *context = (JpegProgContext *)data;
-	struct jpeg_decompress_struct *cinfo;
-	my_src_ptr  src;
-	guint       num_left, num_copy;
-	guint       last_bytes_left;
-	guint       spinguard;
+	PnmLoaderContext *context = (PnmLoaderContext *)data;
+	PnmIOBuffer      *inbuf;
+
+	guchar *old_next_byte;
+	guint  old_bytes_left;
 	guchar *bufhd;
+	guint  num_left, spinguard;
+	gint   rc;
 
 	g_return_val_if_fail (context != NULL, FALSE);
 	g_return_val_if_fail (buf != NULL, FALSE);
 
-	src = (my_src_ptr) context->cinfo.src;
+	bufhd = buf;
+	inbuf = &context->inbuf;
+	old_bytes_left = inbuf->bytes_left;
+	old_next_byte  = inbuf->next_byte;
 
-	cinfo = &context->cinfo;
-
-	/* XXXXXXX (drmike) - loop(s) below need to be recoded now I
-         *                    have a grasp of what the flow needs to be!
-         */
-
-
-	/* skip over data if requested, handle unsigned int sizes cleanly */
-	/* only can happen if we've already called jpeg_get_header once   */
-	if (context->src_initialized && src->skip_next) {
-		if (src->skip_next > size) {
-			src->skip_next -= size;
-			return TRUE;
-		} else {
-			num_left = size - src->skip_next;
-			bufhd = buf + src->skip_next;
-			src->skip_next = 0;
-		}
-	} else {
-		num_left = size;
-		bufhd = buf;
-	}
-
-
-	last_bytes_left = 0;
+	num_left = size;
 	spinguard = 0;
-	while (src->pub.bytes_in_buffer != 0 || num_left != 0) {
+	while (TRUE) {
+		guint num_to_copy;
 
-		/* handle any data from caller we haven't processed yet */
-		if (num_left > 0) {
-			if(src->pub.bytes_in_buffer && 
-			   src->pub.next_input_byte != src->buffer)
-				memmove(src->buffer, src->pub.next_input_byte,
-					src->pub.bytes_in_buffer);
+		/* keep buffer as full as possible */
+		num_to_copy = MIN (PNM_BUF_SIZE - inbuf->bytes_left, num_left);
+		
+		if (num_to_copy == 0)
+			spinguard++;
 
-
-			num_copy = MIN (JPEG_PROG_BUF_SIZE - src->pub.bytes_in_buffer,
-					num_left);
-
-/*			if (num_copy == 0) 
-				g_error ("Buffer overflow!");
-*/
-			memcpy(src->buffer + src->pub.bytes_in_buffer, bufhd,num_copy);
-			src->pub.next_input_byte = src->buffer;
-			src->pub.bytes_in_buffer += num_copy;
-			bufhd += num_copy;
-			num_left -= num_copy;
-		} else {
-		/* did anything change from last pass, if not return */
-			if (last_bytes_left == 0)
-				last_bytes_left = src->pub.bytes_in_buffer;
-			else if (src->pub.bytes_in_buffer == last_bytes_left)
-				spinguard++;
-			else
-				last_bytes_left = src->pub.bytes_in_buffer;
-		}
-
-		/* should not go through twice and not pull bytes out of buf */
-		if (spinguard > 2)
+		if (spinguard > 1)
 			return TRUE;
 
-		/* try to load jpeg header */
+		if (inbuf->next_byte != NULL && inbuf->bytes_left > 0)
+			memmove (inbuf->buffer, inbuf->next_byte, 
+				 inbuf->bytes_left);
+
+		memcpy (inbuf->buffer + inbuf->bytes_left, bufhd, num_to_copy);
+		bufhd += num_to_copy;
+		inbuf->bytes_left += num_to_copy;
+		inbuf->next_byte   = inbuf->buffer;
+		num_left -= num_to_copy;
+		
+		/* ran out of data and we haven't exited main loop */
+		if (inbuf->bytes_left == 0)
+			return TRUE;
+
+		/* get header if needed */
 		if (!context->got_header) {
-			int rc;
-
-			rc = jpeg_read_header (cinfo, TRUE);
-			context->src_initialized = TRUE;
-
-			if (rc == JPEG_SUSPENDED)
+			rc = pnm_read_header (context);
+			if (rc == PNM_FATAL_ERR)
+				return FALSE;
+			else if (rc == PNM_SUSPEND)
 				continue;
 
 			context->got_header = TRUE;
+		}
 
-			if (jpeg_has_multiple_scans (cinfo)) {
-				g_print ("io-jpeg.c: Does not currently "
-					 "support progressive jpeg files.\n");
-				return FALSE;
-			}
+		/* scan until we hit image data */
+		if (!context->did_prescan) {
+			if (skip_ahead_whitespace (inbuf) == NULL)
+				continue;
+
+			context->did_prescan = TRUE;
+			context->output_row = 0;
+			context->output_col = 0;
 
 			context->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, 
 							 /*have_alpha*/ FALSE,
 							 8, 
-							 cinfo->image_width,
-							 cinfo->image_height);
+							 context->width,
+							 context->height);
 
 			if (context->pixbuf == NULL) {
 				/* Failed to allocate memory */
 				g_error ("Couldn't allocate gdkpixbuf");
 			}
 
-			/* Use pixbuf buffer to store decompressed data */
-			context->dptr = context->pixbuf->art_pixbuf->pixels;
+			context->pixels = context->pixbuf->art_pixbuf->pixels;
 
 			/* Notify the client that we are ready to go */
 			(* context->prepared_func) (context->pixbuf,
 						    context->user_data);
 
-		} else if (!context->did_prescan) {
-			int rc;
+		}
 
-			/* start decompression */
-			rc = jpeg_start_decompress (cinfo);
-			cinfo->do_fancy_upsampling = FALSE;
-			cinfo->do_block_smoothing = FALSE;
+		/* if we got here we're reading image data */
+		while (context->output_row < context->height) {
 
-			if (rc == JPEG_SUSPENDED)
-				continue;
+			rc = pnm_read_scanline (context);
 
-			context->did_prescan = TRUE;
-		} else {
-			/* we're decompressing so feed jpeg lib scanlines */
-			guchar *lines[4];
-			guchar **lptr;
-			guchar *rowptr, *p;
-			gint   nlines, i;
-			gint   start_scanline;
-
-			/* keep going until we've done all scanlines */
-			while (cinfo->output_scanline < cinfo->output_height) {
-				start_scanline = cinfo->output_scanline;
-				lptr = lines;
-				rowptr = context->dptr;
-				for (i=0; i < cinfo->rec_outbuf_height; i++) {
-					*lptr++ = rowptr;
-					rowptr += context->pixbuf->art_pixbuf->rowstride;;
-				}
-
-#ifdef IO_JPEG_DEBUG_GREY
-				for (p=lines[0],i=0; i< context->pixbuf->art_pixbuf->rowstride;i++, p++)
-					*p = 0;
-				
-#endif
-				nlines = jpeg_read_scanlines (cinfo, lines,
-							      cinfo->rec_outbuf_height);
-				if (nlines == 0)
-					break;
-
-				/* handle gray */
-				if (cinfo->output_components == 1)
-					explode_gray_into_buf (cinfo, lines);
-
-				context->dptr += nlines * context->pixbuf->art_pixbuf->rowstride;
-
+			if (rc == PNM_SUSPEND) {
+				break;
+			} else if (rc == PNM_FATAL_ERR) {
+				if (context->pixbuf)
+					gdk_pixbuf_unref (context->pixbuf);
+				g_warning ("io-pnm.c: error reading rows..\n");
+				return FALSE;
+			} else if (rc == PNM_OK) {
 				/* send updated signal */
 				(* context->updated_func) (context->pixbuf,
 						 context->user_data,
 						 0, 
-						 cinfo->output_scanline-1,
-						 cinfo->image_width, 
-						 nlines);
-
-#undef DEBUG_JPEG_PROGRESSIVE
-#ifdef DEBUG_JPEG_PROGRESSIVE
-				
-				if (start_scanline != cinfo->output_scanline)
-					g_print("jpeg: Input pass=%2d, next input scanline=%3d,"
-						" emitted %3d - %3d\n",
-						cinfo->input_scan_number, cinfo->input_iMCU_row * 16,
-						start_scanline, cinfo->output_scanline - 1);
-				
-				
-				
-				g_print ("Scanline %d of %d - ", 
-					 cinfo->output_scanline,
-					 cinfo->output_height);
-/*			g_print ("rec_height %d -", cinfo->rec_outbuf_height); */
-				g_print ("Processed %d lines - bytes left = %d\n",
-					 nlines, cinfo->src->bytes_in_buffer);
-#endif
+						 context->output_row-1,
+						 context->width, 
+						 1);
 			}
-			/* did entire image */
-			if (cinfo->output_scanline >= cinfo->output_height)
-				return TRUE;
-			else
-				continue;
 		}
+
+		if (context->output_row < context->height)
+			continue;
+		else
+			break;
 	}
 
 	return TRUE;
 }
-#endif
