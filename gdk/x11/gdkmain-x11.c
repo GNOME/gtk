@@ -1606,7 +1606,30 @@ gdk_event_wait (void)
 	  max_input = MAX (max_input, input->source);
 	}
 
+#ifdef USE_PTHREADS
+      if (gdk_using_threads)
+	{
+	  gdk_select_waiting = TRUE;
+
+	  FD_SET (gdk_threads_pipe[0], &readfds);
+	  max_input = MAX (max_input, gdk_threads_pipe[0]);
+	  gdk_threads_leave ();
+	}
+#endif
+
       nfd = select (max_input+1, &readfds, &writefds, &exceptfds, timerp);
+
+#ifdef USE_PTHREADS
+      if (gdk_using_threads)
+	{
+	  gchar c;
+	  gdk_threads_enter ();
+	  gdk_select_waiting = FALSE;
+	  
+	  if (FD_ISSET (gdk_threads_pipe[0], &readfds))
+	    read (gdk_threads_pipe[0], &c, 1);
+	}
+#endif
 
       timerp = NULL;
       timer_val = 0;

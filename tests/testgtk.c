@@ -2815,7 +2815,7 @@ static void
 list_clear (GtkWidget *widget,
 	    GtkWidget *list)
 {
-  gtk_list_clear_items (GTK_LIST (list), 3 - 1, 5 - 1);
+  gtk_list_clear_items (GTK_LIST (list), 3 - 1, 6 - 1);
 }
 
 static void

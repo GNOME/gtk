@@ -1052,7 +1052,14 @@ gtk_idle_add_full (gint			priority,
   idlef->data = data;
   idlef->destroy = destroy;
 
+  /* If we are adding the first idle function, possibly wake up
+   * the main thread out of its select().
+   */
+  if (!idle_functions)
+    gdk_threads_wake ();
+
   idle_functions = g_list_insert_sorted (idle_functions, idlef, gtk_idle_compare);
+
   
   return idlef->tag;
 }

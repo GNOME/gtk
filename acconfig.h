@@ -31,6 +31,9 @@
 
 #undef RESOURCE_BASE
 
+/* Define to enable POSIX threading awareness */
+#undef USE_PTHREADS
+
 #undef XINPUT_NONE
 #undef XINPUT_GXI
 #undef XINPUT_XFREE

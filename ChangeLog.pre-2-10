@@ -1,3 +1,22 @@
+Fri May 15 21:16:54 1998  Owen Taylor  <otaylor@gtk.org>
+
+	Basic thread-awareness:
+
+	* acconfig.h configure.in: New option --with-threads=[yes/posix/no]
+
+	* gdk/Makefile.am gdk/gdkthreads.c: Added new functions 
+	gdk_threads_[init/enter/leave] for applications, plus
+	gdk_threads_wake to wake the mainloop thread out of
+	the select().
+
+	* gtk/Makefile.am: gtk/testthreads.c: Test program for threads
+
+Fri May 15 12:08:48 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/testgtk.c (list_clear): Account for the fact
+	that gtk_list_clear_items is not inclusive. (Clears
+	[start, end))
+
 Fri May 15 12:31:27 1998  rodo  <doulik@karlin.mff.cuni.cz>
 
 	* gdk/gdk.c: include gdkkeysyms.h always

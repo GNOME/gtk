@@ -801,6 +801,14 @@ GdkRegion*    gdk_regions_subtract	  (GdkRegion	  *source1,
 GdkRegion*    gdk_regions_xor		  (GdkRegion	  *source1,
 					   GdkRegion	  *source2);
 
+gboolean      gdk_threads_init  (void);
+void          gdk_threads_enter (void);
+void          gdk_threads_leave (void);
+
+/* If the mainloop thread is in its select, wake it up. 
+ * For GTK's idle handling 
+ */
+void          gdk_threads_wake (void);
 
 #ifdef __cplusplus
 }

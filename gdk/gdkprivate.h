@@ -268,6 +268,13 @@ extern gint		 gdk_error_code;
 extern gint		 gdk_error_warnings;
 extern gint              gdk_null_window_warnings;
 extern GList            *gdk_default_filters;
+extern gboolean          gdk_using_threads;
+
+/* Threading stuff */
+#ifdef USE_PTHREADS
+extern gint              gdk_threads_pipe[2];
+extern gboolean          gdk_select_waiting;
+#endif
 
 /* Debugging support */
 

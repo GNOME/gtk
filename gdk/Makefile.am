@@ -26,6 +26,7 @@ libgdk_1_1_la_SOURCES = \
 	gdkrectangle.c	\
 	gdkregion.c	\
 	gdkselection.c	\
+	gdkthreads.c    \
 	gdkvisual.c	\
 	gdkwindow.c	\
 	gdkxid.c 	\

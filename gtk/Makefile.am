@@ -225,7 +225,7 @@ EXTRA_DIST = \
 
 INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
 
-noinst_PROGRAMS = testgtk testinput testselection simple 
+noinst_PROGRAMS = testgtk testinput testselection testthreads simple 
 
 # FIXME, we currently rely on linking against libglib-1.1
 
@@ -243,11 +243,13 @@ LDADDS = \
 
 testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)
+testthreads_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
 
 testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
+testthreads_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 
