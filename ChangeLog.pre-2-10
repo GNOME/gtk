@@ -1,3 +1,9 @@
+2005-01-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_check_keymap_direction): 
+	* gtk/gtkentry.c (gtk_entry_create_layout): Prefer LTR over RTL 
+	if the keymap is neutral.  (#164125, Phil Blundell)
+
 2005-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Add an OS_LINUX conditional.

@@ -5751,10 +5751,10 @@ gtk_text_view_check_keymap_direction (GtkTextView *text_view)
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
       
-      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR)
-	new_keyboard_dir = GTK_TEXT_DIR_LTR;
+      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_RTL)
+	new_keyboard_dir = GTK_TEXT_DIR_RTL;
       else
-	new_keyboard_dir  = GTK_TEXT_DIR_RTL;
+	new_keyboard_dir  = GTK_TEXT_DIR_LTR;
   
       if (split_cursor)
 	new_cursor_dir = GTK_TEXT_DIR_NONE;
