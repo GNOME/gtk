@@ -1,5 +1,7 @@
 
 IMAGES = \
+	stock_about_16.png		\
+	stock_about_24.png		\
 	stock_add_16.png		\
 	stock_add_24.png		\
 	stock_align_center_16.png	\
@@ -23,6 +25,8 @@ IMAGES = \
 	stock_close_24.png 		\
 	stock_colorselector_24.png 	\
 	stock_color_picker_25.png	\
+	stock_connect_16.png		\
+	stock_connect_24.png 		\
 	stock_convert_16.png		\
 	stock_convert_24.png 		\
 	stock_copy_16.png		\
@@ -36,9 +40,13 @@ IMAGES = \
 	stock_dialog_warning_48.png	\
 	stock_directory_16.png		\
 	stock_directory_24.png 		\
+	stock_disconnect_16.png		\
+	stock_disconnect_24.png		\
 	stock_dnd_multiple_32.png	\
 	stock_down_arrow_16.png		\
 	stock_down_arrow_24.png 	\
+	stock_edit_16.png		\
+	stock_edit_24.png 		\
 	stock_exec_16.png		\
 	stock_exec_24.png 		\
 	stock_exit_16.png		\
@@ -64,6 +72,22 @@ IMAGES = \
 	stock_last_24.png 		\
 	stock_left_arrow_16.png		\
 	stock_left_arrow_24.png 	\
+	stock_media_forward_16.png	\
+	stock_media_forward_24.png	\
+	stock_media_next_16.png		\
+	stock_media_next_24.png		\
+	stock_media_pause_16.png	\
+	stock_media_pause_24.png	\
+	stock_media_play_16.png		\
+	stock_media_play_24.png		\
+	stock_media_previous_16.png	\
+	stock_media_previous_24.png	\
+	stock_media_record_16.png	\
+	stock_media_record_24.png	\
+	stock_media_rewind_16.png	\
+	stock_media_rewind_24.png	\
+	stock_media_stop_16.png		\
+	stock_media_stop_24.png		\
 	stock_network_16.png		\
 	stock_network_24.png		\
 	stock_new_16.png		\
@@ -145,6 +169,8 @@ IMAGES = \
 	stock_zoom_out_24.png
 
 VARIABLES1 = \
+	stock_about_16          $(srcdir)/stock_about_16.png 		\
+	stock_about_24          $(srcdir)/stock_about_24.png 		\
 	stock_add_16          	$(srcdir)/stock_add_16.png 		\
 	stock_add_24          	$(srcdir)/stock_add_24.png 		\
 	stock_align_center_16	$(srcdir)/stock_align_center_16.png	\
@@ -170,6 +196,8 @@ VARIABLES1 = \
 VARIABLES2 = \
 	stock_convert_16	$(srcdir)/stock_convert_16.png		\
 	stock_convert_24	$(srcdir)/stock_convert_24.png		\
+	stock_connect_16	$(srcdir)/stock_connect_16.png		\
+	stock_connect_24	$(srcdir)/stock_connect_24.png		\
 	stock_copy_16		$(srcdir)/stock_copy_16.png		\
 	stock_copy_24		$(srcdir)/stock_copy_24.png            	\
 	stock_cut_16		$(srcdir)/stock_cut_16.png		\
@@ -181,9 +209,13 @@ VARIABLES2 = \
 	stock_dialog_warning_48	$(srcdir)/stock_dialog_warning_48.png	\
 	stock_directory_16	$(srcdir)/stock_directory_16.png	\
         stock_directory_24	$(srcdir)/stock_directory_24.png	\
+	stock_disconnect_16	$(srcdir)/stock_disconnect_16.png	\
+        stock_disconnect_24	$(srcdir)/stock_disconnect_24.png	\
 	stock_dnd_32		$(srcdir)/stock_dnd_32.png		\
 	stock_down_arrow_16	$(srcdir)/stock_down_arrow_16.png	\
         stock_down_arrow_24	$(srcdir)/stock_down_arrow_24.png	\
+	stock_edit_16		$(srcdir)/stock_edit_16.png		\
+        stock_edit_24		$(srcdir)/stock_edit_24.png            	\
 	stock_exec_16		$(srcdir)/stock_exec_16.png		\
         stock_exec_24		$(srcdir)/stock_exec_24.png            	\
 	stock_exit_16		$(srcdir)/stock_exit_16.png		\
@@ -212,8 +244,24 @@ VARIABLES3 = \
 	stock_left_arrow_24	$(srcdir)/stock_left_arrow_24.png	\
 	stock_missing_image_16	$(srcdir)/stock_broken_image_16.png	\
 	stock_missing_image_24	$(srcdir)/stock_broken_image_24.png	\
-	stock_network_16		$(srcdir)/stock_network_16.png		\
-	stock_network_24		$(srcdir)/stock_network_24.png		\
+	stock_media_forward_16	$(srcdir)/stock_media_forward_16.png	\
+	stock_media_forward_24	$(srcdir)/stock_media_forward_24.png	\
+	stock_media_next_16	$(srcdir)/stock_media_next_16.png	\
+	stock_media_next_24	$(srcdir)/stock_media_next_24.png	\
+	stock_media_pause_16	$(srcdir)/stock_media_pause_16.png	\
+	stock_media_pause_24	$(srcdir)/stock_media_pause_24.png	\
+	stock_media_play_16	$(srcdir)/stock_media_play_16.png	\
+	stock_media_play_24	$(srcdir)/stock_media_play_24.png	\
+	stock_media_previous_16	$(srcdir)/stock_media_previous_16.png	\
+	stock_media_previous_24	$(srcdir)/stock_media_previous_24.png	\
+	stock_media_record_16	$(srcdir)/stock_media_record_16.png	\
+	stock_media_record_24	$(srcdir)/stock_media_record_24.png	\
+	stock_media_rewind_16	$(srcdir)/stock_media_rewind_16.png	\
+	stock_media_rewind_24	$(srcdir)/stock_media_rewind_24.png	\
+	stock_media_stop_16	$(srcdir)/stock_media_stop_16.png	\
+	stock_media_stop_24	$(srcdir)/stock_media_stop_24.png	\
+	stock_network_16	$(srcdir)/stock_network_16.png		\
+	stock_network_24	$(srcdir)/stock_network_24.png		\
 	stock_new_16		$(srcdir)/stock_new_16.png		\
 	stock_new_24		$(srcdir)/stock_new_24.png		\
 	stock_no_20         	$(srcdir)/stock_no_20.png  		\

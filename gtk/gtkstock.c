@@ -290,6 +290,7 @@ static const GtkStockItem builtin_items [] =
   /*  FIXME these need accelerators when appropriate, and
    * need the mnemonics to be rationalized
    */
+  { GTK_STOCK_ABOUT, N_("_About"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_ADD, N_("_Add"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_APPLY, N_("_Apply"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_BOLD, N_("_Bold"), 0, 0, GETTEXT_PACKAGE },
@@ -302,6 +303,7 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_CUT, N_("Cu_t"), GDK_CONTROL_MASK, 'x', GETTEXT_PACKAGE },
   { GTK_STOCK_DELETE, N_("_Delete"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_EXECUTE, N_("_Execute"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_EDIT, N_("_Edit"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_FIND, N_("_Find"), GDK_CONTROL_MASK, 'f', GETTEXT_PACKAGE },
   { GTK_STOCK_FIND_AND_REPLACE, N_("Find and _Replace"), GDK_CONTROL_MASK, 'r', GETTEXT_PACKAGE },
   { GTK_STOCK_FLOPPY, N_("_Floppy"), 0, 0, GETTEXT_PACKAGE },
@@ -325,6 +327,14 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_JUSTIFY_FILL, N_("_Fill"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_JUSTIFY_LEFT, N_("_Left"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_JUSTIFY_RIGHT, N_("_Right"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_FORWARD, N_("_Forward"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_NEXT, N_("_Next"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_PAUSE, N_("P_ause"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_PLAY, N_("_Play"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_PREVIOUS, N_("Pre_vious"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_RECORD, N_("_Record"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_REWIND, N_("R_ewind"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_STOP, N_("_Stop"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_NETWORK, N_("_Network"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_NEW, N_("_New"), GDK_CONTROL_MASK, 'n', GETTEXT_PACKAGE },
   { GTK_STOCK_NO, N_("_No"), 0, 0, GETTEXT_PACKAGE },

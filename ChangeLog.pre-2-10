@@ -1,3 +1,35 @@
+Mon Jul 12 00:52:04 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/stock-icons/Makefile.am: 
+	* gtk/stock-icons/stock_about_{16,24}.png: 
+	* gtk/stock-icons/stock_connect_{16,24}.png: 
+	* gtk/stock-icons/stock_disconnect_{16,24}.png: 
+	* gtk/stock-icons/stock_edit_{16,24}.png: 
+	* gtk/stock-icons/stock_media_forward_{16,24}.png: 
+	* gtk/stock-icons/stock_media_next_{16,24}.png: 
+	* gtk/stock-icons/stock_media_pause_{16,24}.png: 
+	* gtk/stock-icons/stock_media_play_{16,24}.png: 
+	* gtk/stock-icons/stock_media_previous_{16,24}.png: 
+	* gtk/stock-icons/stock_media_record_{16,24}.png: 
+	* gtk/stock-icons/stock_media_rewind_{16,24}.png: 
+	* gtk/stock-icons/stock_media_stop_{16,24}.png: 
+	* gtk/gtkstock.h (GTK_STOCK_ABOUT): 
+	* gtk/gtkstock.h (GTK_STOCK_CONNECT): 
+	* gtk/gtkstock.h (GTK_STOCK_DISCONNECT): 
+	* gtk/gtkstock.h (GTK_STOCK_EDIT): 
+	* gtk/gtkstock.h (GTK_STOCK_MEDIA_FORWARD): 
+	* gtk/gtkstock.h (GTK_STOCK_MEDIA_NEXT): 
+	* gtk/gtkstock.h (GTK_STOCK_MEDIA_PAUSE): 
+	* gtk/gtkstock.h (GTK_STOCK_MEDIA_PLAY): 
+	* gtk/gtkstock.h (GTK_STOCK_MEDIA_PREVIOUS): 
+	* gtk/gtkstock.h (GTK_STOCK_MEDIA_RECORD): 
+	* gtk/gtkstock.h (GTK_STOCK_MEDIA_REWIND): 
+	* gtk/gtkstock.h (GTK_STOCK_MEDIA_STOP): 
+	* gtk/gtkiconfactory.c (get_default_icons): 
+	* gtk/gtkstock.c (builtin_items): Add a number of new stock 
+	items.  (#102530, #68015, #109811, Jordi Mallach, Benjamin Otte,
+	Michael Opdenacker)
+
 Sun Jul 11 15:24:03 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Bug 143330, support update counter spec.

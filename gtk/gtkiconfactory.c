@@ -703,6 +703,54 @@ get_default_icons (GtkIconFactory *factory)
 	     16, stock_directory_16,
 	     24, stock_directory_24);
 
+  add_icon2 (factory, GTK_STOCK_ABOUT,
+	     16, stock_about_16,
+	     24, stock_about_24);
+
+  add_icon2 (factory, GTK_STOCK_CONNECT,
+	     16, stock_connect_16,
+	     24, stock_connect_24);
+
+  add_icon2 (factory, GTK_STOCK_DISCONNECT,
+	     16, stock_disconnect_16,
+	     24, stock_disconnect_24);
+
+  add_icon2 (factory, GTK_STOCK_EDIT,
+	     16, stock_edit_16,
+	     24, stock_edit_24);
+
+  add_icon2 (factory, GTK_STOCK_MEDIA_FORWARD,
+	     16, stock_media_forward_16,
+	     24, stock_media_forward_24);
+
+  add_icon2 (factory, GTK_STOCK_MEDIA_NEXT,
+	     16, stock_media_next_16,
+	     24, stock_media_next_24);
+
+  add_icon2 (factory, GTK_STOCK_MEDIA_PAUSE,
+	     16, stock_media_pause_16,
+	     24, stock_media_pause_24);
+
+  add_icon2 (factory, GTK_STOCK_MEDIA_PLAY,
+	     16, stock_media_play_16,
+	     24, stock_media_play_24);
+
+  add_icon2 (factory, GTK_STOCK_MEDIA_PREVIOUS,
+	     16, stock_media_previous_16,
+	     24, stock_media_previous_24);
+
+  add_icon2 (factory, GTK_STOCK_MEDIA_RECORD,
+	     16, stock_media_record_16,
+	     24, stock_media_record_24);
+
+  add_icon2 (factory, GTK_STOCK_MEDIA_REWIND,
+	     16, stock_media_rewind_16,
+	     24, stock_media_rewind_24);
+
+  add_icon2 (factory, GTK_STOCK_MEDIA_STOP,
+	     16, stock_media_stop_16,
+	     24, stock_media_stop_24);
+
   /* Generic size only */
 
   add_icon (factory, GTK_STOCK_CLEAR, 24, stock_clear_24);
