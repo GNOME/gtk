@@ -140,7 +140,7 @@ int main( int   argc,
     gtk_widget_show (separator);
 
     /* rows, columns, homogeneous */
-    table = gtk_table_new (2, 2, FALSE);
+    table = gtk_table_new (2, 3, FALSE);
     gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
     gtk_widget_show (table);
 

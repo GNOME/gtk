@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>August 26, 2002</date>
+    <date>October 27, 2002</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -27,6 +27,26 @@
   </bookinfo>
 
 <toc></toc>
+
+<!-- ***************************************************************** -->
+<chapter id="ch-TutorialDownload">
+<title>Tutorial Availability</title>
+
+<para>A copy of this tutorial in SGML and HTML is distributed with each
+source code release of GTK+. For binary distributions, please check with
+you vendor.</para>
+
+<para>A copy is available online for reference at <ulink 
+url="http://www.gtk.org/tutorial">www.gtk.org/tutorial</ulink>.</para>
+
+<para>A packaged verion of this tutorial is available from
+<ulink url="ftp:/ftp.gtk.org/pub/gtk/tutorial">
+ftp.gtk.org/pub/gtk/tutorial</ulink> which contains the tutorial in
+various different formats. This
+package is primary for those people wanting to have the tutorial
+available for offline reference and for printing.</para>
+
+</chapter>
 
 <!-- ***************************************************************** -->
 <chapter id="ch-Introduction">
@@ -3840,7 +3860,7 @@ values to indicate the direction in which the progress bar moves:</para>
 <para>As well as indicating the amount of progress that has occured, the
 progress bar may be set to just indicate that there is some activity. 
 This can be useful in situations where progress cannot be measured against 
-a value range. To following function indicates that some progress has been 
+a value range. The following function indicates that some progress has been 
 made.</para>
 
 <programlisting role="C">
@@ -4038,7 +4058,7 @@ int main( int   argc,
     gtk_widget_show (separator);
 
     /* rows, columns, homogeneous */
-    table = gtk_table_new (2, 2, FALSE);
+    table = gtk_table_new (2, 3, FALSE);
     gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
     gtk_widget_show (table);
 
@@ -4174,7 +4194,7 @@ more of the following flags.</para>
 </para></listitem>
 </varlistentry>
 <varlistentry>
-<term><literal>GTK_DIALOG_DESTROY_WITH_PARENTS</literal></term>
+<term><literal>GTK_DIALOG_DESTROY_WITH_PARENT</literal></term>
 <listitem><para>ensures that the dialog window is destroyed together with the specified
 parent.</para></listitem>
 </varlistentry>
@@ -8269,7 +8289,7 @@ item with a label already packed into it, and the other just creates a
 blank menu item.</para>
 
 <para>Once you've created a menu item you have to put it into a menu. This
-is done using the function gtk_menu_append. In order to capture when
+is done using the function gtk_menu_shelll_append. In order to capture when
 the item is selected by the user, we need to connect to the
 <literal>activate</literal> signal in the usual way. So, if we wanted to create a
 standard <literal>File</literal> menu, with the options <literal>Open</literal>, <literal>Save</literal>, and
@@ -8284,9 +8304,9 @@ standard <literal>File</literal> menu, with the options <literal>Open</literal>,
     quit_item = gtk_menu_item_new_with_label ("Quit");
 
     /* Add them to the menu */
-    gtk_menu_append (GTK_MENU (file_menu), open_item);
-    gtk_menu_append (GTK_MENU (file_menu), save_item);
-    gtk_menu_append (GTK_MENU (file_menu), quit_item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (file_menu), open_item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (file_menu), save_item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (file_menu), quit_item);
 
     /* Attach the callback functions to the activate signal */
     g_signal_connect_swapped (G_OBJECT (open_item), "activate",
@@ -8365,7 +8385,7 @@ attached:</para>
 </listitem>
 
 <listitem><simpara> Use multiple calls to gtk_menu_item_new() for each item you
-wish to have on your menu. And use gtk_menu_append() to put each of
+wish to have on your menu. And use gtk_menu_shell_append() to put each of
 these new items on to the menu.</simpara>
 </listitem>
 
