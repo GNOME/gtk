@@ -189,7 +189,7 @@ static void     gtk_text_view_get_first_para_iter   (GtkTextView        *text_vi
 						     GtkTextIter        *iter);
 static void     gtk_text_view_scroll_calc_now       (GtkTextView        *text_view);
 static void     gtk_text_view_set_values_from_style (GtkTextView        *text_view,
-						     GtkTextStyleValues *values,
+						     GtkTextAttributes *values,
 						     GtkStyle           *style);
 static void     gtk_text_view_ensure_layout         (GtkTextView        *text_view);
 static void     gtk_text_view_destroy_layout        (GtkTextView        *text_view);
@@ -2471,7 +2471,7 @@ gtk_text_view_scroll_calc_now (GtkTextView *text_view)
 
 static void
 gtk_text_view_set_values_from_style (GtkTextView        *text_view,
-				     GtkTextStyleValues *values,
+				     GtkTextAttributes *values,
 				     GtkStyle           *style)
 {
   values->appearance.bg_color = style->base[GTK_STATE_NORMAL];
@@ -2492,7 +2492,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
   
   if (text_view->layout == NULL)
     {
-      GtkTextStyleValues *style;
+      GtkTextAttributes *style;
       PangoContext *ltr_context, *rtl_context;
       
       text_view->layout = gtk_text_layout_new ();
@@ -2520,7 +2520,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       g_object_unref (G_OBJECT (ltr_context));
       g_object_unref (G_OBJECT (rtl_context));
 
-      style = gtk_text_style_values_new ();
+      style = gtk_text_attributes_new ();
 
       gtk_widget_ensure_style (widget);
       gtk_text_view_set_values_from_style (text_view, style, widget->style);
@@ -2535,7 +2535,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       
       gtk_text_layout_set_default_style (text_view->layout, style);
       
-      gtk_text_style_values_unref (style);
+      gtk_text_attributes_unref (style);
     }
 }
 

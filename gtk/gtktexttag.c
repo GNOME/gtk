@@ -317,7 +317,7 @@ gtk_text_tag_new (const gchar *name)
 
   tag->name = g_strdup(name);
 
-  tag->values = gtk_text_style_values_new();
+  tag->values = gtk_text_attributes_new();
   
   return tag;
 }
@@ -336,7 +336,7 @@ gtk_text_tag_destroy (GtkObject *object)
 
   g_assert(tkxt_tag->table == NULL);
   
-  gtk_text_style_values_unref(tkxt_tag->values);
+  gtk_text_attributes_unref(tkxt_tag->values);
   tkxt_tag->values = NULL;
   
   (* GTK_OBJECT_CLASS(parent_class)->destroy) (object);
@@ -1045,15 +1045,15 @@ gtk_text_tag_array_sort(GtkTextTag** tag_array_p,
 }
 
 /*
- * StyleValues
+ * Attributes
  */
 
-GtkTextStyleValues*
-gtk_text_style_values_new(void)
+GtkTextAttributes*
+gtk_text_attributes_new(void)
 {
-  GtkTextStyleValues *values;
+  GtkTextAttributes *values;
 
-  values = g_new0(GtkTextStyleValues, 1);
+  values = g_new0(GtkTextAttributes, 1);
 
   /* 0 is a valid value for most of the struct */
 
@@ -1065,8 +1065,8 @@ gtk_text_style_values_new(void)
 }
 
 void
-gtk_text_style_values_copy(GtkTextStyleValues *src,
-                           GtkTextStyleValues *dest)
+gtk_text_attributes_copy(GtkTextAttributes *src,
+                           GtkTextAttributes *dest)
 {
   guint orig_refcount;
 
@@ -1110,7 +1110,7 @@ gtk_text_style_values_copy(GtkTextStyleValues *src,
 }
 
 void
-gtk_text_style_values_ref(GtkTextStyleValues *values)
+gtk_text_attributes_ref(GtkTextAttributes *values)
 {
   g_return_if_fail(values != NULL);
 
@@ -1118,7 +1118,7 @@ gtk_text_style_values_ref(GtkTextStyleValues *values)
 }
 
 void
-gtk_text_style_values_unref(GtkTextStyleValues *values)
+gtk_text_attributes_unref(GtkTextAttributes *values)
 {
   g_return_if_fail(values != NULL);
   g_return_if_fail(values->refcount > 0);
@@ -1149,7 +1149,7 @@ gtk_text_style_values_unref(GtkTextStyleValues *values)
 }
 
 void
-gtk_text_style_values_realize(GtkTextStyleValues *values,
+gtk_text_attributes_realize(GtkTextAttributes *values,
                               GdkColormap *cmap,
                               GdkVisual *visual)
 {
@@ -1170,7 +1170,7 @@ gtk_text_style_values_realize(GtkTextStyleValues *values,
 }
 
 void
-gtk_text_style_values_unrealize(GtkTextStyleValues *values,
+gtk_text_attributes_unrealize(GtkTextAttributes *values,
                                 GdkColormap *cmap,
                                 GdkVisual *visual)
 {
@@ -1192,7 +1192,7 @@ gtk_text_style_values_unrealize(GtkTextStyleValues *values,
 }
 
 void
-gtk_text_style_values_fill_from_tags(GtkTextStyleValues *dest,
+gtk_text_attributes_fill_from_tags(GtkTextAttributes *dest,
                                      GtkTextTag**        tags,
                                      guint               n_tags)
 {
@@ -1203,7 +1203,7 @@ gtk_text_style_values_fill_from_tags(GtkTextStyleValues *dest,
   while (n < n_tags)
     {
       GtkTextTag *tag = tags[n];
-      GtkTextStyleValues *vals = tag->values;
+      GtkTextAttributes *vals = tag->values;
 
       if (n > 0)
         g_assert(tags[n]->priority > tags[n-1]->priority);

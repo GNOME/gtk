@@ -49,7 +49,7 @@ struct _GtkTextLayout
   GtkTextBuffer *buffer;
 
   /* Default style used if no tags override it */
-  GtkTextStyleValues *default_style;
+  GtkTextAttributes *default_style;
 
   /* Pango contexts used for creating layouts */
   PangoContext *ltr_context;
@@ -58,7 +58,7 @@ struct _GtkTextLayout
   /* A cache of one style; this is used to ensure
    * we don't constantly regenerate the style
    * over long runs with the same style. */
-  GtkTextStyleValues *one_style_cache;
+  GtkTextAttributes *one_style_cache;
 
   /* A cache of one line display. Getting the same line
    * many times in a row is the most common case.
@@ -146,7 +146,7 @@ GtkTextLayout *gtk_text_layout_new      (void);
 void gtk_text_layout_set_buffer            (GtkTextLayout      *layout,
 					    GtkTextBuffer      *buffer);
 void gtk_text_layout_set_default_style     (GtkTextLayout      *layout,
-					    GtkTextStyleValues *values);
+					    GtkTextAttributes  *values);
 void gtk_text_layout_set_contexts          (GtkTextLayout      *layout,
 					    PangoContext       *ltr_context,
 					    PangoContext       *rtl_context);

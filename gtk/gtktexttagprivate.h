@@ -7,20 +7,20 @@
  * the defaults with settings in the given tags, which should be sorted in
  * ascending order of priority
 */
-void gtk_text_style_values_fill_from_tags (GtkTextStyleValues  *values,
+void gtk_text_attributes_fill_from_tags   (GtkTextAttributes   *values,
                                            GtkTextTag         **tags,
                                            guint                n_tags);
 void gtk_text_tag_array_sort              (GtkTextTag         **tag_array_p,
                                            guint                len);
 
 /* ensure colors are allocated, etc. for drawing */
-void                gtk_text_style_values_realize   (GtkTextStyleValues *values,
-                                                     GdkColormap        *cmap,
-                                                     GdkVisual          *visual);
+void                gtk_text_attributes_realize   (GtkTextAttributes *values,
+                                                   GdkColormap       *cmap,
+                                                   GdkVisual         *visual);
 
 /* free the stuff again */
-void                gtk_text_style_values_unrealize (GtkTextStyleValues *values,
-                                                     GdkColormap        *cmap,
-                                                     GdkVisual          *visual);
+void                gtk_text_attributes_unrealize (GtkTextAttributes *values,
+                                                   GdkColormap       *cmap,
+                                                   GdkVisual         *visual);
 
 #endif

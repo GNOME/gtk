@@ -19,7 +19,7 @@ typedef enum {
   GTK_WRAPMODE_WORD
 } GtkWrapMode;
 
-typedef struct _GtkTextStyleValues GtkTextStyleValues;
+typedef struct _GtkTextAttributes GtkTextAttributes;
 
 #define GTK_TYPE_TEXT_TAG            (gtk_text_tag_get_type())
 #define GTK_TEXT_TAG(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_TAG, GtkTextTag))
@@ -52,7 +52,7 @@ struct _GtkTextTag {
    * defaults if no tag specifies an override.
    */
 
-  GtkTextStyleValues *values;  
+  GtkTextAttributes *values;  
   
   /*
     Flags for whether a given value is set; if a value is unset, then
@@ -128,12 +128,12 @@ struct _GtkTextAppearance
 
   /* This is only used when we are actually laying out and rendering
    * a paragraph; not when a GtkTextAppearance is part of a
-   * GtkTextStyleValues.
+   * GtkTextAttributes.
    */
   guint inside_selection : 1;
 };
 
-struct _GtkTextStyleValues
+struct _GtkTextAttributes
 {
   guint refcount;
 
@@ -191,11 +191,11 @@ struct _GtkTextStyleValues
   guint pad4 : 1;
 };
 
-GtkTextStyleValues *gtk_text_style_values_new       (void);
-void                gtk_text_style_values_copy      (GtkTextStyleValues *src,
-                                                     GtkTextStyleValues *dest);
-void                gtk_text_style_values_unref     (GtkTextStyleValues *values);
-void                gtk_text_style_values_ref       (GtkTextStyleValues *values);
+GtkTextAttributes  *gtk_text_attributes_new       (void);
+void                gtk_text_attributes_copy      (GtkTextAttributes *src,
+                                                   GtkTextAttributes *dest);
+void                gtk_text_attributes_unref     (GtkTextAttributes *values);
+void                gtk_text_attributes_ref       (GtkTextAttributes *values);
 
 
 #ifdef __cplusplus

@@ -190,7 +190,7 @@ free_style_cache (GtkTextLayout *text_layout)
 {
   if (text_layout->one_style_cache)
     {
-      gtk_text_style_values_unref (text_layout->one_style_cache);
+      gtk_text_attributes_unref (text_layout->one_style_cache);
       text_layout->one_style_cache = NULL;
     }
 }
@@ -205,7 +205,7 @@ gtk_text_layout_destroy (GtkObject *object)
   gtk_text_layout_set_buffer (layout, NULL);  
 
   if (layout->default_style)
-    gtk_text_style_values_unref (layout->default_style);
+    gtk_text_attributes_unref (layout->default_style);
   layout->default_style = NULL;
 
   if (layout->ltr_context)
@@ -274,7 +274,7 @@ gtk_text_layout_default_style_changed (GtkTextLayout *layout)
 
 void
 gtk_text_layout_set_default_style (GtkTextLayout *layout,
-                                   GtkTextStyleValues *values)
+                                   GtkTextAttributes *values)
 {
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (values != NULL);
@@ -282,10 +282,10 @@ gtk_text_layout_set_default_style (GtkTextLayout *layout,
   if (values == layout->default_style)
     return;
 
-  gtk_text_style_values_ref (values);
+  gtk_text_attributes_ref (values);
   
   if (layout->default_style)
-    gtk_text_style_values_unref (layout->default_style);
+    gtk_text_attributes_unref (layout->default_style);
 
   layout->default_style = values;
 
@@ -785,13 +785,13 @@ gtk_text_layout_real_get_log_attrs (GtkTextLayout  *layout,
 
 /* If you get the style with get_style () you need to call
    release_style () to free it. */
-static GtkTextStyleValues*
+static GtkTextAttributes*
 get_style (GtkTextLayout *layout,
 	   const GtkTextIter *iter)
 {
   GtkTextTag** tags;
   gint tag_count = 0;
-  GtkTextStyleValues *style;
+  GtkTextAttributes *style;
   
   /* If we have the one-style cache, then it means
      that we haven't seen a toggle since we filled in the
@@ -799,7 +799,7 @@ get_style (GtkTextLayout *layout,
   */
   if (layout->one_style_cache != NULL)
     {
-      gtk_text_style_values_ref (layout->one_style_cache);
+      gtk_text_attributes_ref (layout->one_style_cache);
       return layout->one_style_cache;
     }
 
@@ -813,8 +813,8 @@ get_style (GtkTextLayout *layout,
     {
       /* One ref for the return value, one ref for the
          layout->one_style_cache reference */
-      gtk_text_style_values_ref (layout->default_style);
-      gtk_text_style_values_ref (layout->default_style);
+      gtk_text_attributes_ref (layout->default_style);
+      gtk_text_attributes_ref (layout->default_style);
       layout->one_style_cache = layout->default_style;
 
       if (tags)
@@ -826,12 +826,12 @@ get_style (GtkTextLayout *layout,
   /* Sort tags in ascending order of priority */
   gtk_text_tag_array_sort (tags, tag_count);
   
-  style = gtk_text_style_values_new ();
+  style = gtk_text_attributes_new ();
   
-  gtk_text_style_values_copy (layout->default_style,
+  gtk_text_attributes_copy (layout->default_style,
                               style);
 
-  gtk_text_style_values_fill_from_tags (style,
+  gtk_text_attributes_fill_from_tags (style,
                                         tags,
                                         tag_count);
 
@@ -841,7 +841,7 @@ get_style (GtkTextLayout *layout,
 
   /* Leave this style as the last one seen */
   g_assert (layout->one_style_cache == NULL);
-  gtk_text_style_values_ref (style); /* ref held by layout->one_style_cache */
+  gtk_text_attributes_ref (style); /* ref held by layout->one_style_cache */
   layout->one_style_cache = style;
   
   /* Returning yet another refcount */
@@ -850,12 +850,12 @@ get_style (GtkTextLayout *layout,
 
 static void
 release_style (GtkTextLayout *layout,
-	       GtkTextStyleValues *style)
+	       GtkTextAttributes *style)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->refcount > 0);
 
-  gtk_text_style_values_unref (style);
+  gtk_text_attributes_unref (style);
 }
 
 /*
@@ -934,7 +934,7 @@ totally_invisible_line (GtkTextLayout *layout,
 
 static void
 set_para_values (GtkTextLayout      *layout,
-		 GtkTextStyleValues *style,
+		 GtkTextAttributes *style,
 		 GtkTextLineDisplay *display,
 		 gdouble            *align)
 {
@@ -1085,7 +1085,7 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
 
 static void
 add_text_attrs (GtkTextLayout      *layout,
-		GtkTextStyleValues *style,
+		GtkTextAttributes *style,
 		gint                byte_count,
 		PangoAttrList      *attrs,
 		gint                start,
@@ -1113,7 +1113,7 @@ add_text_attrs (GtkTextLayout      *layout,
 static void
 add_pixmap_attrs (GtkTextLayout      *layout,
 		  GtkTextLineDisplay *display,
-		  GtkTextStyleValues *style,
+		  GtkTextAttributes *style,
 		  GtkTextLineSegment *seg,
 		  PangoAttrList      *attrs,
 		  gint                start)
@@ -1190,7 +1190,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   GtkTextLineDisplay *display;
   GtkTextLineSegment *seg;
   GtkTextIter iter;
-  GtkTextStyleValues *style;
+  GtkTextAttributes *style;
   gchar *text;
   PangoAttrList *attrs;
   gint byte_count, byte_offset;

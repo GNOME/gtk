@@ -1126,7 +1126,7 @@ gtk_text_iter_has_tag           (const GtkTextIter   *iter,
  * Returns whether @iter is within an editable region of text.
  * Non-editable text is "locked" and can't be changed by the user via
  * #GtkTextView. This function is simply a convenience wrapper around
- * gtk_text_iter_get_style_values(). If no tags applied to this text
+ * gtk_text_iter_get_attributes(). If no tags applied to this text
  * affect editability, @default_setting will be returned.
  * 
  * Return value: whether @iter is inside an editable range
@@ -1135,18 +1135,18 @@ gboolean
 gtk_text_iter_editable (const GtkTextIter *iter,
                         gboolean           default_setting)
 {
-  GtkTextStyleValues *values;
+  GtkTextAttributes *values;
   gboolean retval;
   
-  values = gtk_text_style_values_new ();
+  values = gtk_text_attributes_new ();
 
   values->editable = default_setting;
 
-  gtk_text_iter_get_style_values (iter, values);
+  gtk_text_iter_get_attributes (iter, values);
 
   retval = values->editable;
   
-  gtk_text_style_values_unref (values);
+  gtk_text_attributes_unref (values);
 
   return retval;
 }
@@ -1155,7 +1155,7 @@ gtk_text_iter_editable (const GtkTextIter *iter,
  * gtk_text_iter_get_language:
  * @iter: an iterator
  * 
- * A convenience wrapper around gtk_text_iter_get_style_values(),
+ * A convenience wrapper around gtk_text_iter_get_attributes(),
  * which returns the language in effect at @iter. If no tags affecting
  * language * apply to @iter, the return value is identical to that of
  * gtk_get_default_language().
@@ -1165,16 +1165,16 @@ gtk_text_iter_editable (const GtkTextIter *iter,
 static gchar*
 gtk_text_iter_get_language (const GtkTextIter *iter)
 {
-  GtkTextStyleValues *values;
+  GtkTextAttributes *values;
   gchar *retval;
   
-  values = gtk_text_style_values_new ();
+  values = gtk_text_attributes_new ();
 
-  gtk_text_iter_get_style_values (iter, values);
+  gtk_text_iter_get_attributes (iter, values);
 
   retval = g_strdup (values->language);
   
-  gtk_text_style_values_unref (values);
+  gtk_text_attributes_unref (values);
 
   return retval;
 }
@@ -1327,22 +1327,22 @@ gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter)
 }
 
 /**
- * gtk_text_iter_get_style_values:
+ * gtk_text_iter_get_attributes:
  * @iter: an iterator
- * @values: a #GtkTextStyleValues to be filled in
+ * @values: a #GtkTextAttributes to be filled in
  * 
  * Computes the effect of any tags applied to this spot in the
  * text. The @values parameter should be initialized to the default
  * settings you wish to use if no tags are in effect.
- * gtk_text_iter_get_style_values() will modify @values, applying the
+ * gtk_text_iter_get_attributes() will modify @values, applying the
  * effects of any tags present at @iter. If any tags affected @values,
  * the function returns TRUE.
  * 
  * Return value: TRUE if @values was modified
  **/
 gboolean
-gtk_text_iter_get_style_values (const GtkTextIter  *iter,
-                                GtkTextStyleValues *values)
+gtk_text_iter_get_attributes (const GtkTextIter  *iter,
+                                GtkTextAttributes *values)
 {
   GtkTextTag** tags;
   gint tag_count = 0;
@@ -1362,7 +1362,7 @@ gtk_text_iter_get_style_values (const GtkTextIter  *iter,
   /* Sort tags in ascending order of priority */
   gtk_text_tag_array_sort (tags, tag_count);
   
-  gtk_text_style_values_fill_from_tags (values,
+  gtk_text_attributes_fill_from_tags (values,
                                         tags,
                                         tag_count);
 

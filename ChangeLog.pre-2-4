@@ -1,3 +1,10 @@
+2000-08-31  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextiter.h, gtk/gtktextiter.c, gtk/gtktextlayout.h, 
+	gtk/gtktextlayout.c, gtk/gtktexttag.h, gtk/gtktexttag.c, 
+	gtk/gtktexttagprivate.h, gtk/gtktextview.c:
+	Rename GtkTextStyleValues to GtkTextAttributes
+
 2000-08-31  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextbtree.c (GtkTextBTree): cache end line, 
