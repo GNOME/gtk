@@ -305,7 +305,6 @@ void gdk_wchar_text_handle       (GdkFont       *font,
 				  void          *arg);
 
 char *gdk_color_to_string        (const GdkColor *);
-void print_bitmap                (GdkBitmap *bm);
 
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 
