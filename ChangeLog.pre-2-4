@@ -1,5 +1,12 @@
 2004-02-11  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_map): New ::map()
+	handler.  If no widget has the focus, try to give it to the
+	default widget.  If there is no default widget, give it to the
+	first button.  Fixes the cause for which #59707 was reopened.
+
+2004-02-11  Federico Mena Quintero  <federico@ximian.com>
+
 	Fixes #134051.
 
 	* gtk/gtkicontheme.c (struct _GtkIconInfo): Remove the ref_count field.
