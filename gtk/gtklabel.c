@@ -883,7 +883,6 @@ gtk_label_expose (GtkWidget      *widget,
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
       label->label && (*label->label != '\0'))
     {
-      label = GTK_LABEL (widget);
       misc = GTK_MISC (widget);
 
       g_return_val_if_fail ((label->words != NULL), FALSE);

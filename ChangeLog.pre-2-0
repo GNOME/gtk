@@ -1,3 +1,8 @@
+Wed Dec 16 23:32:05 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_expose): Remove 
+	unnecessary cast.
+
 Wed Dec 16 22:50:52 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c gdk/gdkim.c: Check for broken glibc 2.0 
