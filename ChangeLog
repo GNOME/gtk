@@ -1,5 +1,9 @@
 2005-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenutoolbutton.c (button_state_changed_cb): 
+	Fix prelighting.  (#157392, Vincent Noel, patch by
+	Christian Persch)
+
 	* gtk/gtkicontheme.c (theme_lookup_icon): Make 
 	icon data caching work again.  (#168851, Alexander Larsson)
 
