@@ -1012,25 +1012,26 @@ void
 _gtk_container_queue_resize (GtkContainer *container)
 {
   GtkContainer *resize_container;
+  GtkWidget *widget;
   
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
+  widget = GTK_WIDGET (container);
   resize_container = gtk_container_get_resize_container (container);
   
+  while (!GTK_WIDGET_ALLOC_NEEDED (widget) || !GTK_WIDGET_REQUEST_NEEDED (widget))
+    {
+      GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
+      GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
+      if ((resize_container && widget == GTK_WIDGET (resize_container)) ||
+	  !widget->parent)
+	break;
+      
+      widget = widget->parent;
+    }
+      
   if (resize_container)
     {
-      GtkWidget *widget = GTK_WIDGET (container);
-      
-      while (!GTK_WIDGET_ALLOC_NEEDED (widget) || !GTK_WIDGET_REQUEST_NEEDED (widget))
-	{
-	  GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
-	  GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
-	  if (widget == GTK_WIDGET (resize_container))
-	    break;
-	  
-	  widget = widget->parent;
-	}
-      
       if (GTK_WIDGET_VISIBLE (resize_container) &&
  	  (GTK_WIDGET_TOPLEVEL (resize_container) || GTK_WIDGET_REALIZED (resize_container)))
 	{

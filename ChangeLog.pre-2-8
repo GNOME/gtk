@@ -1,3 +1,11 @@
+Tue Apr  9 18:34:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcontainer.c (_gtk_container_queue_resize): Always
+	set the ALLOC_NEEDED and REQUEST_NEEDED flags up the hierarchy,
+	even if we aren't currently in a resize container... we need
+	this to properly handle size changes to widgets that are
+	being moved from one heirarchy to another. (#78226)
+
 Tue Apr  9 21:41:24 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #78110
