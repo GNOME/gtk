@@ -2585,7 +2585,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
                               background_area.width,
                               background_area.height);
 
-	  if (gtk_tree_view_is_expander_column(tree_view, column) &&
+	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
               TREE_VIEW_DRAW_EXPANDERS(tree_view))
 	    {
 	      cell_area.x += depth*tree_view->priv->tab_offset;
@@ -5147,17 +5147,20 @@ gtk_tree_view_is_expander_column (GtkTreeView       *tree_view,
 {
   GList *list;
 
-  if (tree_view->priv->expander_column == column)
-    return TRUE;
-
-  if (column != NULL)
-    return FALSE;
-
-  for (list = tree_view->priv->columns; list; list = list->next)
-    if (((GtkTreeViewColumn *)list->data)->visible)
-      break;
-  if (list && list->data == column)
-    return TRUE;
+  if (tree_view->priv->expander_column != NULL)
+    {
+      if (tree_view->priv->expander_column == column)
+	return TRUE;
+      return FALSE;
+    }
+  else
+    {
+      for (list = tree_view->priv->columns; list; list = list->next)
+	if (((GtkTreeViewColumn *)list->data)->visible)
+	  break;
+      if (list && list->data == column)
+	return TRUE;
+    }
   return FALSE;
 }
 
@@ -8196,8 +8199,8 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
  * @destroy: Destroy notifier for @data, or NULL
  * 
  * This function should almost never be used.  It is meant for private use by
- * ATK for determining the number of visible rows that are removed when the user
- * collapses a row, or a row is deleted.
+ * ATK for determining the number of visible children that are removed when the
+ * user collapses a row, or a row is deleted.
  **/
 void
 gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,

@@ -154,15 +154,15 @@ make_model (void)
   TreeStruct *month = toplevel;
   GtkTreeIter iter;
 
-  model = gtk_tree_store_new_with_types (NUM_COLUMNS,
-					 G_TYPE_STRING,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN);
+  model = gtk_tree_store_new (NUM_COLUMNS,
+			      G_TYPE_STRING,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN);
 
   while (month->label)
     {

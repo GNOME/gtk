@@ -60,6 +60,7 @@ struct _GtkTreeViewColumnCellInfo
   GtkTreeCellDataFunc func;
   gpointer func_data;
   GtkDestroyNotify destroy;
+  gint requested_width;
   guint16 padding;
   guint expand : 1;
   guint fill : 1;
@@ -1334,6 +1335,47 @@ gtk_tree_view_column_clear_attributes (GtkTreeViewColumn *tree_column,
     }
 }
 
+
+/**
+ * gtk_tree_view_column_set_spacing:
+ * @tree_column: A #GtkTreeViewColumn.
+ * @spacing: distance between cell renderers in pixels.
+ * 
+ * Sets the spacing field of @tree_column, which is the number of pixels to
+ * place between cell renderers packed into it.
+ **/
+void
+gtk_tree_view_column_set_spacing (GtkTreeViewColumn *tree_column,
+				  gint               spacing)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (spacing >= 0);
+
+  if (tree_column->spacing == spacing)
+    return;
+
+  tree_column->spacing = spacing;
+  if (tree_column->tree_view)
+    {
+      tree_column->dirty = TRUE;
+      gtk_widget_queue_resize (tree_column->tree_view);
+    }
+}
+
+/**
+ * gtk_tree_view_column_get_spacing:
+ * @tree_column: A #GtkTreeViewColumn.
+ * 
+ * Returns the spacing of @tree_column.
+ **/
+gint
+gtk_tree_view_column_get_spacing (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
+
+  return tree_column->spacing;
+}
+
 /* Options for manipulating the columns */
 
 /**
@@ -1347,7 +1389,6 @@ void
 gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
 				  gboolean           visible)
 {
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   visible = !! visible;

@@ -134,7 +134,7 @@ create_model (void)
   GSList *ids;
   GSList *tmp_list;
   
-  store = gtk_list_store_new_with_types (1, STOCK_ITEM_INFO_TYPE);
+  store = gtk_list_store_new (1, STOCK_ITEM_INFO_TYPE);
 
   ids = gtk_stock_list_ids ();
   ids = g_slist_sort (ids, (GCompareFunc) strcmp);

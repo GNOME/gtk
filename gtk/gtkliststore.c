@@ -65,6 +65,13 @@ static gboolean     gtk_list_store_iter_parent     (GtkTreeModel      *tree_mode
 						    GtkTreeIter       *child);
 
 
+static void gtk_list_store_set_n_columns   (GtkListStore *list_store,
+					    gint          n_columns);
+static void gtk_list_store_set_column_type (GtkListStore *list_store,
+					    gint          column,
+					    GType         type);
+
+
 /* Drag and Drop */
 static gboolean gtk_list_store_drag_data_delete   (GtkTreeDragSource *drag_source,
                                                    GtkTreePath       *path);
@@ -235,38 +242,18 @@ gtk_list_store_init (GtkListStore *list_store)
 
 /**
  * gtk_list_store_new:
- *
- * Creates a new #GtkListStore. A #GtkListStore implements the
- * #GtkTreeModel interface, and stores a linked list of
- * rows; each row can have any number of columns. Columns are of uniform type,
- * i.e. all cells in a column have the same type such as #G_TYPE_STRING or
- * #GDK_TYPE_PIXBUF. Use #GtkListStore to store data to be displayed in a
- * #GtkTreeView.
- *
- * Return value: a new #GtkListStore
- **/
-GtkListStore *
-gtk_list_store_new (void)
-{
-  return GTK_LIST_STORE (g_object_new (gtk_list_store_get_type (), NULL));
-}
-
-/**
- * gtk_list_store_new_with_types:
  * @n_columns: number of columns in the list store
  * @Varargs: all #GType types for the columns, from first to last
  *
- * Creates a new list store as with gtk_list_store_new(), simultaneously setting
- * up the columns and column types as with gtk_list_store_set_n_columns() and
- * gtk_list_store_set_column_type().  As an example,
- * gtk_tree_store_new_with_types (3, G_TYPE_INT, G_TYPE_STRING,
- * GTK_TYPE_PIXBUF); will create a new GtkListStore with three columns, of type
- * int, string and GtkPixbuf respectively.
+ * Creates a new list store as with @n_columns columns each of the types passed
+ * in.  As an example, gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * GDK_TYPE_PIXBUF); will create a new GtkListStore with three columns, of type
+ * int, string and GDkPixbuf respectively.
  *
  * Return value: a new #GtkListStore
  **/
 GtkListStore *
-gtk_list_store_new_with_types (gint n_columns,
+gtk_list_store_new (gint n_columns,
 			       ...)
 {
   GtkListStore *retval;
@@ -275,7 +262,7 @@ gtk_list_store_new_with_types (gint n_columns,
 
   g_return_val_if_fail (n_columns > 0, NULL);
 
-  retval = gtk_list_store_new ();
+  retval = GTK_LIST_STORE (g_object_new (gtk_list_store_get_type (), NULL));
   gtk_list_store_set_n_columns (retval, n_columns);
 
   va_start (args, n_columns);
@@ -298,15 +285,7 @@ gtk_list_store_new_with_types (gint n_columns,
   return retval;
 }
 
-/**
- * gtk_list_store_set_n_columns:
- * @store: a #GtkListStore
- * @n_columns: number of columns
- *
- * Sets the number of columns in the #GtkListStore.
- *
- **/
-void
+static void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
 {
@@ -340,19 +319,7 @@ gtk_list_store_set_n_columns (GtkListStore *list_store,
   list_store->n_columns = n_columns;
 }
 
-/**
- * gtk_list_store_set_column_type:
- * @store: a #GtkListStore
- * @column: column number
- * @type: type of the data stored in @column
- *
- * Supported types include: %G_TYPE_UINT, %G_TYPE_INT, %G_TYPE_UCHAR,
- * %G_TYPE_CHAR, %G_TYPE_BOOLEAN, %G_TYPE_POINTER, %G_TYPE_FLOAT,
- * %G_TYPE_DOUBLE, %G_TYPE_STRING, %G_TYPE_OBJECT, and %G_TYPE_BOXED, along with
- * subclasses of those types such as %GDK_TYPE_PIXBUF.
- *
- **/
-void
+static void
 gtk_list_store_set_column_type (GtkListStore *list_store,
 				gint          column,
 				GType         type)

@@ -64,6 +64,13 @@ static gboolean     gtk_tree_store_iter_parent     (GtkTreeModel      *tree_mode
 						    GtkTreeIter       *child);
 
 
+static void gtk_tree_store_set_n_columns   (GtkTreeStore *tree_store,
+					    gint          n_columns);
+static void gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
+					    gint          column,
+					    GType         type);
+
+
 /* DND interfaces */
 static gboolean gtk_tree_store_drag_data_delete   (GtkTreeDragSource *drag_source,
 						   GtkTreePath       *path);
@@ -236,13 +243,7 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
 }
 
 GtkTreeStore *
-gtk_tree_store_new (void)
-{
-  return GTK_TREE_STORE (g_object_new (GTK_TYPE_TREE_STORE, NULL));
-}
-
-GtkTreeStore *
-gtk_tree_store_new_with_types (gint n_columns,
+gtk_tree_store_new (gint n_columns,
 			       ...)
 {
   GtkTreeStore *retval;
@@ -251,7 +252,7 @@ gtk_tree_store_new_with_types (gint n_columns,
 
   g_return_val_if_fail (n_columns > 0, NULL);
 
-  retval = gtk_tree_store_new ();
+  retval = GTK_TREE_STORE (g_object_new (GTK_TYPE_TREE_STORE, NULL));
   gtk_tree_store_set_n_columns (retval, n_columns);
 
   va_start (args, n_columns);

@@ -1,3 +1,19 @@
+Fri Jun 29 22:13:28 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_new): changed new_with_types
+	to just plain new, fixing the number of columns, and column types
+	at creation time.
+
+	* gtk/gtkliststore.c (gtk_list_store_new): ditto.
+
+	* gtk/gtkcellrenderertext.c
+	(gtk_cell_renderer_text_set_fixed_height_from_font): FIX the
+	height to a specific font.
+
+	* gtk/gtktreeview.c (gtk_tree_view_is_expander_column): fix brokenness.
+
+	* tests/*c: change to work with new store models.
+
 2001-06-29  Havoc Pennington  <hp@redhat.com>
 
        * Throughout: fixes to compile with G_DISABLE_COMPAT

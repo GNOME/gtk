@@ -66,6 +66,7 @@ struct _GtkTreeViewColumn
   gfloat xalign;
   guint property_changed_signal;
 
+  gint spacing;
   gint width;
   gint requested_width;
   gint min_width;
@@ -135,6 +136,9 @@ void                    gtk_tree_view_column_set_cell_data_func  (GtkTreeViewCol
 								  GtkDestroyNotify         destroy);
 void                    gtk_tree_view_column_clear_attributes    (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer);
+void                    gtk_tree_view_column_set_spacing         (GtkTreeViewColumn       *tree_column,
+								  gint                     spacing);
+gint                    gtk_tree_view_column_get_spacing         (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_set_visible         (GtkTreeViewColumn       *tree_column,
 								  gboolean                 visible);
 gboolean                gtk_tree_view_column_get_visible         (GtkTreeViewColumn       *tree_column);

@@ -353,7 +353,7 @@ main (int argc, char *argv[])
 {
   gtk_init (&argc, &argv);
 
-  base_model = gtk_tree_store_new_with_types (2, G_TYPE_STRING, G_TYPE_STRING);
+  base_model = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
   /* FIXME: reverse this */
   make_window (0);

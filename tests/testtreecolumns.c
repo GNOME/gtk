@@ -549,8 +549,8 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   /* First initialize all the models for signal purposes */
-  left_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
-  sample_model = (GtkTreeModel *) gtk_list_store_new_with_types (1, G_TYPE_STRING);
+  left_tree_model = (GtkTreeModel *) gtk_list_store_new (2, G_TYPE_STRING, GTK_TYPE_POINTER);
+  sample_model = (GtkTreeModel *) gtk_list_store_new (1, G_TYPE_STRING);
   sample_tree_view_top = gtk_tree_view_new_with_model (sample_model);
   sample_tree_view_bottom = gtk_tree_view_new_with_model (sample_model);
   top_right_tree_model = (GtkTreeModel *) view_column_model_new (GTK_TREE_VIEW (sample_tree_view_top));

@@ -291,6 +291,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       NULL);
 
       setup_column (col);
+      gtk_tree_view_set_expander_column (tree_view, col);
+      
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
@@ -438,8 +440,6 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
 
 #endif
       
-      gtk_tree_view_set_expander_column (tree_view, 1);
-      
       /* FALL THRU */
       
     case COLUMNS_ONE:
@@ -505,10 +505,10 @@ create_list_model (void)
 
   t = get_model_types ();
   
-  store = gtk_list_store_new_with_types (N_COLUMNS,
-                                         t[0], t[1], t[2],
-                                         t[3], t[4], t[5],
-                                         t[6], t[7], t[8]);
+  store = gtk_list_store_new (N_COLUMNS,
+			      t[0], t[1], t[2],
+			      t[3], t[4], t[5],
+			      t[6], t[7], t[8]);
 
   i = 0;
   while (i < 200)
@@ -589,10 +589,10 @@ create_tree_model (void)
 
   t = get_model_types ();
   
-  store = gtk_tree_store_new_with_types (N_COLUMNS,
-                                         t[0], t[1], t[2],
-                                         t[3], t[4], t[5],
-                                         t[6], t[7], t[8]);
+  store = gtk_tree_store_new (N_COLUMNS,
+			      t[0], t[1], t[2],
+			      t[3], t[4], t[5],
+			      t[6], t[7], t[8]);
 
   i = 0;
   while (i < G_TYPE_RESERVED_LAST_FUNDAMENTAL)
@@ -675,8 +675,8 @@ main (int    argc,
   models[MODEL_SORTED_TREE] = gtk_tree_model_sort_new_with_model (model);
   g_object_unref (G_OBJECT (model));
 
-  models[MODEL_EMPTY_LIST] = GTK_TREE_MODEL (gtk_list_store_new ());
-  models[MODEL_EMPTY_TREE] = GTK_TREE_MODEL (gtk_tree_store_new ());
+  models[MODEL_EMPTY_LIST] = GTK_TREE_MODEL (gtk_list_store_new (0));
+  models[MODEL_EMPTY_TREE] = GTK_TREE_MODEL (gtk_tree_store_new (0));
   
   models[MODEL_NULL] = NULL;
 
@@ -1374,7 +1374,7 @@ run_automated_tests (void)
     gint i;
     GtkTreeIter iter;
     
-    store = gtk_list_store_new_with_types (1, G_TYPE_INT);
+    store = gtk_list_store_new (1, G_TYPE_INT);
 
     model = GTK_TREE_MODEL (store);
     
@@ -1443,7 +1443,7 @@ run_automated_tests (void)
     GtkTreeStore *store;
     GtkTreeIter root;
 
-    store = gtk_tree_store_new_with_types (1, G_TYPE_INT);
+    store = gtk_tree_store_new (1, G_TYPE_INT);
     gtk_tree_model_get_iter_root (GTK_TREE_MODEL (store), &root);
     treestore_torture_recurse (store, &root, 0);
     

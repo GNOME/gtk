@@ -51,14 +51,17 @@ struct _GtkCellRenderer
 {
   GtkObject parent;
 
-  gboolean can_activate;
-  gboolean visible;
-
   gfloat xalign;
   gfloat yalign;
 
+  gint width;
+  gint height;
+
   guint16 xpad;
   guint16 ypad;
+
+  guint can_activate : 1;
+  guint visible : 1;
 };
 
 struct _GtkCellRendererClass
@@ -91,28 +94,35 @@ struct _GtkCellRendererClass
                       GtkCellRendererState flags);
 };
 
-GtkType  gtk_cell_renderer_get_type (void);
-void     gtk_cell_renderer_get_size (GtkCellRenderer      *cell,
-				     GtkWidget            *widget,
-				     GdkRectangle         *cell_area,
-				     gint                 *x_offset,
-				     gint                 *y_offset,
-				     gint                 *width,
-				     gint                 *height);
-void     gtk_cell_renderer_render   (GtkCellRenderer      *cell,
-				     GdkWindow            *window,
-				     GtkWidget            *widget,
-				     GdkRectangle         *background_area,
-				     GdkRectangle         *cell_area,
-				     GdkRectangle         *expose_area,
-				     GtkCellRendererState  flags);
-gboolean gtk_cell_renderer_event    (GtkCellRenderer      *cell,
-				     GdkEvent             *event,
-				     GtkWidget            *widget,
-				     gchar                *path,
-				     GdkRectangle         *background_area,
-				     GdkRectangle         *cell_area,
-				     GtkCellRendererState  flags);
+GtkType  gtk_cell_renderer_get_type       (void);
+void     gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
+					   GtkWidget            *widget,
+					   GdkRectangle         *cell_area,
+					   gint                 *x_offset,
+					   gint                 *y_offset,
+					   gint                 *width,
+					   gint                 *height);
+void     gtk_cell_renderer_render         (GtkCellRenderer      *cell,
+					   GdkWindow            *window,
+					   GtkWidget            *widget,
+					   GdkRectangle         *background_area,
+					   GdkRectangle         *cell_area,
+					   GdkRectangle         *expose_area,
+					   GtkCellRendererState  flags);
+gboolean gtk_cell_renderer_event          (GtkCellRenderer      *cell,
+					   GdkEvent             *event,
+					   GtkWidget            *widget,
+					   gchar                *path,
+					   GdkRectangle         *background_area,
+					   GdkRectangle         *cell_area,
+					   GtkCellRendererState  flags);
+void     gtk_cell_renderer_set_fixed_size (GtkCellRenderer      *cell,
+					   gint                  width,
+					   gint                  height);
+void     gtk_cell_renderer_get_fixed_size (GtkCellRenderer      *cell,
+					   gint                 *width,
+					   gint                 *height);
+
 
 #ifdef __cplusplus
 }

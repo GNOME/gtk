@@ -127,6 +127,8 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   GTK_CELL_RENDERER (celltext)->yalign = 0.5;
   GTK_CELL_RENDERER (celltext)->xpad = 2;
   GTK_CELL_RENDERER (celltext)->ypad = 2;
+
+  celltext->fixed_height_rows = -1;
 }
 
 static void
@@ -785,11 +787,15 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         
         if (font_desc)
           pango_font_description_free (font_desc);
+	if (celltext->fixed_height_rows != -1)
+	  celltext->calc_fixed_height = TRUE;
       }
       break;
 
     case PROP_FONT_DESC:
       set_font_description (celltext, g_value_get_boxed (value));
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_FAMILY:
@@ -801,6 +807,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (G_OBJECT (celltext), "family_set");
       g_object_notify (G_OBJECT (celltext), "font_desc");
       g_object_notify (G_OBJECT (celltext), "font");
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_STYLE:
@@ -810,6 +818,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (G_OBJECT (celltext), "style_set");
       g_object_notify (G_OBJECT (celltext), "font_desc");
       g_object_notify (G_OBJECT (celltext), "font");
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_VARIANT:
@@ -819,6 +829,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (G_OBJECT (celltext), "variant_set");
       g_object_notify (G_OBJECT (celltext), "font_desc");
       g_object_notify (G_OBJECT (celltext), "font");
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_WEIGHT:
@@ -828,6 +840,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (G_OBJECT (celltext), "weight_set");
       g_object_notify (G_OBJECT (celltext), "font_desc");
       g_object_notify (G_OBJECT (celltext), "font");
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_STRETCH:
@@ -837,6 +851,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (G_OBJECT (celltext), "stretch_set");
       g_object_notify (G_OBJECT (celltext), "font_desc");
       g_object_notify (G_OBJECT (celltext), "font");
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_SIZE:
@@ -846,11 +862,15 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (G_OBJECT (celltext), "size_set");
       g_object_notify (G_OBJECT (celltext), "font_desc");
       g_object_notify (G_OBJECT (celltext), "font");
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_SCALE:
       celltext->font_scale = g_value_get_double (value);
       celltext->scale_set = TRUE;
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
       
     case PROP_SIZE_POINTS:
@@ -860,6 +880,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (G_OBJECT (celltext), "size_set");
       g_object_notify (G_OBJECT (celltext), "font_desc");
       g_object_notify (G_OBJECT (celltext), "font");
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_EDITABLE:
@@ -885,6 +907,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       celltext->rise = g_value_get_int (value);
       celltext->rise_set = TRUE;
       g_object_notify (G_OBJECT (celltext), "rise_set");
+      if (celltext->fixed_height_rows != -1)
+	celltext->calc_fixed_height = TRUE;
       break;  
 
     case PROP_BACKGROUND_SET:
@@ -1083,20 +1107,54 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 				 gint            *width,
 				 gint            *height)
 {
-  GtkCellRendererText *celltext = (GtkCellRendererText *)cell;
+  GtkCellRendererText *celltext = (GtkCellRendererText *) cell;
   PangoRectangle rect;
   PangoLayout *layout;
 
-  if (celltext->fixed_size)
+  if (celltext->calc_fixed_height)
     {
-      if (width)
-	*width = celltext->width;
-      if (height)
-	*height = celltext->height;
+      PangoContext *context;
+      PangoFontMetrics metrics;
+      PangoFontDescription font_desc;
 
-      return;
+      font_desc = (* widget->style->font_desc);
+
+      if (celltext->family_set &&
+	  celltext->font.family_name)
+	font_desc.family_name = celltext->font.family_name;
+      if (celltext->style_set)
+	font_desc.style = celltext->font.style;
+
+      if (celltext->variant_set)
+	font_desc.variant = celltext->font.variant;
+
+      if (celltext->weight_set)
+	font_desc.weight = celltext->font.weight;
+
+      if (celltext->stretch_set)
+	font_desc.stretch = celltext->font.stretch;
+
+      if (celltext->size_set &&
+	  celltext->font.size >= 0)
+	font_desc.size = celltext->font.size;
+
+      context = gtk_widget_get_pango_context (widget);
+      pango_context_get_metrics (context,
+				 &font_desc,
+				 pango_context_get_language (context),
+				 &metrics);
+      gtk_cell_renderer_set_fixed_size (cell,
+					cell->width, 2*cell->ypad +
+					celltext->fixed_height_rows*(metrics.ascent + metrics.descent)/PANGO_SCALE);
+      if (height)
+	{
+	  *height = cell->height;
+	  height = NULL;
+	}
+      celltext->calc_fixed_height = FALSE;
+      if (width == NULL)
+	return;
     }
-  
   layout = get_layout (celltext, widget, FALSE, 0);
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
@@ -1187,29 +1245,33 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
 }
 
 /**
- * gtk_cell_renderer_text_set_fixed_size:
+ * gtk_cell_renderer_text_set_fixed_height_from_font:
  * @renderer: A #GtkCellRendererText
- * @fixed_size: TRUE if the renderer should be a fixed height.
- * @width: The width of the cell
- * @height: The height it of the cell, or -1
+ * @number_of_rows: Number of rows of text each cell renderer is allocated, or -1
  * 
- * Sets the height of a renderer to explicitly be a certain size.  This
- * function is unflexible, and should really only be used if calculating the
- * size of a cell is too slow.
+ * Sets the height of a renderer to explicitly be determined by the "font" and
+ * "y_pad" property set on it.  Further changes in these properties do not
+ * affect the height, so they must be accompanied by a subsequent call to this
+ * function.  Using this function is unflexible, and should really only be used
+ * if calculating the size of a cell is too slow.  If @no_rows is -1, then the
+ * fixed height is unset, and the height is determined by the properties again.
  **/
 void
-gtk_cell_renderer_text_set_fixed_size (GtkCellRendererText *renderer,
-				       gboolean             fixed_size,
-				       gint                 width,
-				       gint                 height)
+gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer,
+						   gint                 number_of_rows)
 {
   g_return_if_fail (GTK_IS_CELL_RENDERER_TEXT (renderer));
+  g_return_if_fail (number_of_rows == -1 || number_of_rows > 0);
 
-  if (renderer->fixed_size == (fixed_size)?TRUE:FALSE)
-    return;
-
-  renderer->fixed_size = (fixed_size)?TRUE:FALSE;
-  renderer->height = height;
-  renderer->width = width;
-    
+  if (number_of_rows == -1)
+    {
+      gtk_cell_renderer_set_fixed_size (GTK_CELL_RENDERER (renderer),
+					GTK_CELL_RENDERER (renderer)->width,
+					-1);
+    }
+  else
+    {
+      renderer->fixed_height_rows = number_of_rows;
+      renderer->calc_fixed_height = TRUE;
+    }
 }
