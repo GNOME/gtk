@@ -178,7 +178,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-theme-name",
 								   _("Theme Name"),
 								   _("Name of theme RC file to load"),
-								  NULL,
+								  "Default",
 								  G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_THEME_NAME);

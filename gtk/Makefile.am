@@ -581,14 +581,13 @@ libgtk_target_ldflags = $(gtk_win32_symbols) -lwsock32
 endif
 EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la libgtk-win32-1.3.la
 
-
-# We create a dummy theme for the default GTK+ theme
+# Install a RC file for the default GTK+ theme
 install-data-local:  install-ms-lib install-libtool-import-lib
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
-	echo "# Empty gtkrc for default theme" > $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
-	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
+	$(INSTALL) gtkrc.default $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
 uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
+	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
 DEPS = $(gtktargetlib) $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la $(top_builddir)/gdk/$(gdktargetlib)
 
@@ -628,6 +627,7 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	gtk.def			\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
+	gtkrc.default		\
 	makefile.mingw		\
 	makefile.mingw.in	\
 	makefile.msc		\

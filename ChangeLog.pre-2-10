@@ -1,3 +1,11 @@
+Thu Jan 31 14:50:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.default gtk/Makefile.am: Install a Default
+	RC file that sets the tooltips color to yellow. (#58542)
+
+	* gtk/gtksettings.c (gtk_settings_class_init): make 
+	the default theme "Default", not NULL.
+
 Thu Jan 31 11:33:52 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkproperty-x11.c (insert_atom_pair): Fix 
