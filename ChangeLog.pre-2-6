@@ -1,3 +1,8 @@
+Wed Oct 31 18:53:51 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): fix
+	infinite loop noticed by yosh.
+
 2001-11-01  Michael Meeks  <michael@ximian.com>
 
 	* gtk/gtksocket.c (gtk_socket_unrealize): unset the

@@ -171,7 +171,7 @@ types that GTK+ understands.
 @GDK_AXIS_PRESSURE: the axis is used for pressure information.
 @GDK_AXIS_XTILT: the axis is used for x tilt information.
 @GDK_AXIS_YTILT: the axis is used for x tilt information.
-@GDK_AXIS_WHEEL: the axis is used for wheel information. 
+@GDK_AXIS_WHEEL: the axis is used for wheel information.
 @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
 
 <!-- ##### FUNCTION gdk_devices_list ##### -->
@@ -180,7 +180,7 @@ Returns the list of available input devices. The list is statically
 allocated and should not be freed.
 </para>
 
-@Returns: a list of #GdkDevice*. 
+@Returns: a list of #GdkDevice*.
 
 
 <!-- ##### FUNCTION gdk_device_set_source ##### -->
@@ -199,7 +199,7 @@ device is active and whether the device's range is mapped to the
 entire screen or to a single window.
 </para>
 
-@device: a #GdkDevice. 
+@device: a #GdkDevice.
 @mode: the input mode.
 @Returns: %TRUE if the mode was successfully changed.
 
@@ -211,7 +211,7 @@ is pressed.
 </para>
 
 @device: a #GdkDevice.
-@index: the index of the macro button to set. 
+@index: the index of the macro button to set.
 @keyval: the keyval to generate.
 @modifiers: the modifiers to set.
 
@@ -221,7 +221,7 @@ is pressed.
 Specifies how an axis of a device is used.
 </para>
 
-@device: a #GdkDevice. 
+@device: a #GdkDevice.
 @index: the index of the axis.
 @use: specifies how the axis is used.
 

@@ -1306,10 +1306,18 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 	  gint i;
 
 	  if (path->depth > reference->path->depth)
-	    continue;
-	  for (i = 0; i < path->depth - 1; i++)
-	    if (path->indices[i] != reference->path->indices[i])
+	    {
+	      tmp_list = g_slist_next (tmp_list);
 	      continue;
+	    }
+	  for (i = 0; i < path->depth - 1; i++)
+	    {
+	      if (path->indices[i] != reference->path->indices[i])
+		{
+		  tmp_list = g_slist_next (tmp_list);
+		  continue;
+		}
+	    }
 
 	  /* We know it affects us. */
 	  if (path->indices[i] == reference->path->indices[i])
