@@ -31,9 +31,8 @@ void gtk_text_btree_delete        (GtkTextIter *start,
 void gtk_text_btree_insert        (GtkTextIter *iter,
                                    const gchar *text,
                                    gint         len);
-void gtk_text_btree_insert_pixmap (GtkTextIter *iter,
-                                   GdkPixmap   *pixmap,
-                                   GdkBitmap   *mask);
+void gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
+                                   GdkPixbuf   *pixbuf);
 
 
 

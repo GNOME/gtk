@@ -159,7 +159,7 @@ static void
 render_layout_line (GdkDrawable        *drawable,
 		    GtkTextRenderState *render_state,
 		    PangoLayoutLine    *line,
-		    GSList            **pixmap_pointer,
+		    GSList            **pixbuf_pointer,
 		    int                 x, 
 		    int                 y,
 		    gboolean            selected)
@@ -246,37 +246,67 @@ render_layout_line (GdkDrawable        *drawable,
 
 	  x_off += logical_rect.width;
 	}
-      else			/* Pixmap segment */
+      else			/* Pixbuf segment */
 	{
-	  GtkTextPixmap *pixmap = (*pixmap_pointer)->data;
+	  GtkTextPixbuf *pixbuf = (*pixbuf_pointer)->data;
 	  gint width, height;
-	  GdkRectangle pixmap_rect, draw_rect;
-	  
-	  *pixmap_pointer = (*pixmap_pointer)->next;
+	  GdkRectangle pixbuf_rect, draw_rect;
+          GdkBitmap *mask = NULL;
+          
+	  *pixbuf_pointer = (*pixbuf_pointer)->next;
 
-	  gdk_drawable_get_size (pixmap->pixmap, &width, &height);
+          width = gdk_pixbuf_get_width (pixbuf->pixbuf);
+          height = gdk_pixbuf_get_height (pixbuf->pixbuf);
 
-	  pixmap_rect.x = x + x_off / PANGO_SCALE;
-	  pixmap_rect.y = y - height;
-	  pixmap_rect.width = width;
-	  pixmap_rect.height = height;
+	  pixbuf_rect.x = x + x_off / PANGO_SCALE;
+	  pixbuf_rect.y = y - height;
+	  pixbuf_rect.width = width;
+	  pixbuf_rect.height = height;
+          
+	  if (gdk_rectangle_intersect (&pixbuf_rect, &render_state->clip_rect,
+                                       &draw_rect))
+            {
+              if (gdk_pixbuf_get_has_alpha (pixbuf->pixbuf))
+                {
+                  mask = gdk_pixmap_new (drawable,
+                                         gdk_pixbuf_get_width (pixbuf->pixbuf),
+                                         gdk_pixbuf_get_height (pixbuf->pixbuf),
+                                         1);
 
-	  gdk_rectangle_intersect (&pixmap_rect, &render_state->clip_rect, &draw_rect);
+                  gdk_pixbuf_render_threshold_alpha (pixbuf->pixbuf, mask,
+                                                     0, 0, 0, 0,
+                                                     gdk_pixbuf_get_width (pixbuf->pixbuf),
+                                                     gdk_pixbuf_get_height (pixbuf->pixbuf),
+                                                     128);
+                                     
+                }
 
-	  if (pixmap->mask)
-	    {
-	      gdk_gc_set_clip_mask (render_state->fg_gc, pixmap->mask);
-	      gdk_gc_set_clip_origin (render_state->fg_gc,
-				      pixmap_rect.x, pixmap_rect.y);
-	    }
-	  
-	  gdk_draw_drawable (drawable, render_state->fg_gc, pixmap->pixmap,
-			     draw_rect.x - pixmap_rect.x, draw_rect.y - pixmap_rect.y,
-			     draw_rect.x, draw_rect.y, draw_rect.width, draw_rect.height);
+              if (mask)
+                {
+                  gdk_gc_set_clip_mask (render_state->fg_gc, mask);
+                  gdk_gc_set_clip_origin (render_state->fg_gc,
+                                          pixbuf_rect.x, pixbuf_rect.y);
+                }
+          
+              gdk_pixbuf_render_to_drawable (pixbuf->pixbuf,
+                                             drawable,
+                                             render_state->fg_gc,
+                                             draw_rect.x - pixbuf_rect.x,
+                                             draw_rect.y - pixbuf_rect.y,
+                                             draw_rect.x, draw_rect.y,
+                                             draw_rect.width,
+                                             draw_rect.height,
+                                             GDK_RGB_DITHER_NORMAL,
+                                             0, 0);
 
-	  if (pixmap->mask)
-	    gdk_gc_set_clip_rectangle (render_state->fg_gc, &render_state->clip_rect);
-
+              if (mask)
+                {
+                  gdk_gc_set_clip_rectangle (render_state->fg_gc,
+                                             &render_state->clip_rect);
+                  g_object_unref (G_OBJECT (mask));
+                }
+            }
+          
 	  x_off += width * PANGO_SCALE;
 	}
     }
@@ -292,7 +322,7 @@ render_para (GdkDrawable        *drawable,
 	     int                 selection_end_index)
 {
   PangoRectangle logical_rect;
-  GSList *pixmap_pointer = line_display->pixmaps;
+  GSList *pixbuf_pointer = line_display->pixbufs;
   GSList *tmp_list;
   PangoAlignment align;
   PangoLayout *layout = line_display->layout;
@@ -375,15 +405,15 @@ render_para (GdkDrawable        *drawable,
 			      TRUE,
 			      x + line_display->left_margin, selection_y,
 			      total_width / PANGO_SCALE, selection_height);
-	  render_layout_line (drawable, render_state, line, &pixmap_pointer,
+	  render_layout_line (drawable, render_state, line, &pixbuf_pointer,
 			      x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
 			      TRUE);
 	}
       else
 	{
-	  GSList *pixmap_pointer_tmp = pixmap_pointer;
+	  GSList *pixbuf_pointer_tmp = pixbuf_pointer;
 	  
-	  render_layout_line (drawable, render_state, line, &pixmap_pointer,
+	  render_layout_line (drawable, render_state, line, &pixbuf_pointer,
 			      x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
 			      FALSE);
 
@@ -405,7 +435,7 @@ render_para (GdkDrawable        *drawable,
 				  logical_rect.width / PANGO_SCALE,
 				  selection_height);
 	      
-	      render_layout_line (drawable, render_state, line, &pixmap_pointer_tmp,
+	      render_layout_line (drawable, render_state, line, &pixbuf_pointer_tmp,
 				  x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
 				  TRUE);
 

@@ -1,3 +1,26 @@
+2000-09-29  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktexttag.c (gtk_text_tag_set_priority): fix indentation
+
+        * gtk/gtktextview.c: Implement drag thresholding; change functions 
+	that set border window size to have nicer name
+	(gtk_text_view_mark_set_handler):  Fix this to have the 
+	right signature.
+
+	* gtk/testtextbuffer.c (fill_buffer): Update with pixbuf changes
+
+	* gtk/testtext.c: Update with API changes, put line numbers on 
+	both sides.
+	
+	* gtk/gtktextiter.c (gtk_text_iter_get_pixbuf): Replace get_pixmap
+	with this
+
+	* gtk/gtktextchild.h, gtk/gtktextchild.c: replace all pixmap with
+	pixbuf; delete a big block of #if 0 Tk code
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_insert_pixbuf): Replace 
+	insert_pixmap with insert_pixbuf
+
 2000-09-29  Martin Baulig  <baulig@suse.de>
 
 	* Makefile.am (pkgconfigdir): Set this to `$(libexecdir)/pkgconfig';

@@ -132,7 +132,7 @@ struct _GtkTextLineDisplay
 {
   PangoLayout *layout;
   GSList *cursors;
-  GSList *pixmaps;
+  GSList *pixbufs;
 
   GtkTextDirection direction;
 
@@ -146,7 +146,7 @@ struct _GtkTextLineDisplay
   gint bottom_margin;
 
   gboolean size_only;
-  GtkTextLine *line;
+ GtkTextLine *line;
 };
 
 extern PangoAttrType gtk_text_attr_appearance_type;

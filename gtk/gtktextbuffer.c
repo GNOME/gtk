@@ -787,22 +787,21 @@ gtk_text_buffer_get_slice (GtkTextBuffer      *buffer,
  */
 
 void
-gtk_text_buffer_insert_pixmap         (GtkTextBuffer      *buffer,
-                                       GtkTextIter *iter,
-                                       GdkPixmap           *pixmap,
-                                       GdkBitmap           *mask)
+gtk_text_buffer_insert_pixbuf         (GtkTextBuffer      *buffer,
+                                       GtkTextIter        *iter,
+                                       GdkPixbuf          *pixbuf)
 {
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
-  g_return_if_fail(iter != NULL);
-  g_return_if_fail(pixmap != NULL);
-
-  gtk_text_btree_insert_pixmap(iter, pixmap, mask);
-
-  /* FIXME pixmap-specific signal like insert_text */
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   
-  gtk_signal_emit(GTK_OBJECT(buffer), signals[CHANGED]);
+  gtk_text_btree_insert_pixbuf (iter, pixbuf);
+
+  /* FIXME pixbuf-specific signal like insert_text */
   
-  gtk_text_buffer_set_modified(buffer, TRUE);
+  gtk_signal_emit (GTK_OBJECT(buffer), signals[CHANGED]);
+  
+  gtk_text_buffer_set_modified (buffer, TRUE);
 }
 
 /*
@@ -975,6 +974,22 @@ gtk_text_buffer_get_mark (GtkTextBuffer      *buffer,
   mark = gtk_text_btree_get_mark_by_name(get_btree (buffer), name);
 
   return mark;
+}
+
+GtkTextMark*
+gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
+{
+  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
+
+  return gtk_text_buffer_get_mark (buffer, "insert");
+}
+
+GtkTextMark*
+gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
+{
+  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
+
+  return gtk_text_buffer_get_mark (buffer, "selection_bound");
 }
 
 /**

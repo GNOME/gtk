@@ -1170,7 +1170,7 @@ add_text_attrs (GtkTextLayout      *layout,
 }
 
 static void
-add_pixmap_attrs (GtkTextLayout      *layout,
+add_pixbuf_attrs (GtkTextLayout      *layout,
 		  GtkTextLineDisplay *display,
 		  GtkTextAttributes *style,
 		  GtkTextLineSegment *seg,
@@ -1179,10 +1179,12 @@ add_pixmap_attrs (GtkTextLayout      *layout,
 {
   PangoAttribute *attr;
   PangoRectangle logical_rect;
-  GtkTextPixmap *pixmap = &seg->body.pixmap;
+  GtkTextPixbuf *pixbuf = &seg->body.pixbuf;
   gint width, height;
 
-  gdk_drawable_get_size (pixmap->pixmap, &width, &height);
+  width = gdk_pixbuf_get_width (pixbuf->pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf->pixbuf);
+
   logical_rect.x = 0;
   logical_rect.y = -height * PANGO_SCALE;
   logical_rect.width = width * PANGO_SCALE;
@@ -1193,7 +1195,7 @@ add_pixmap_attrs (GtkTextLayout      *layout,
   attr->end_index = start + seg->byte_count;
   pango_attr_list_insert (attrs, attr);
 
-  display->pixmaps = g_slist_append (display->pixmaps, pixmap);
+  display->pixbufs = g_slist_append (display->pixbufs, pixbuf);
 }
 
 static void
@@ -1305,7 +1307,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
     {
       /* Displayable segments */
       if (seg->type == &gtk_text_char_type ||
-	  seg->type == &gtk_text_pixmap_type)
+	  seg->type == &gtk_text_pixbuf_type)
         {
 	  gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
 					   &iter, line,
@@ -1313,7 +1315,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 	  style = get_style (layout, &iter);
 	  
 	  /* We have to delay setting the paragraph values until we
-	   * hit the first pixmap or text segment because toggles at
+	   * hit the first pixbuf or text segment because toggles at
 	   * the beginning of the paragraph should affect the
 	   * paragraph-global values
 	   */
@@ -1367,7 +1369,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 		}
 	      else
 		{
-		  add_pixmap_attrs (layout, display, style, seg, attrs, byte_offset);
+		  add_pixbuf_attrs (layout, display, style, seg, attrs, byte_offset);
 		  memcpy (text + byte_offset, gtk_text_unknown_char_utf8, seg->byte_count);
 		  byte_offset += seg->byte_count;
 		}
@@ -1461,7 +1463,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 	{
 	  g_slist_foreach (display->cursors, (GFunc)g_free, NULL);
 	  g_slist_free (display->cursors);
-	  g_slist_free (display->pixmaps);
+	  g_slist_free (display->pixbufs);
 	}
       
       g_free (display);

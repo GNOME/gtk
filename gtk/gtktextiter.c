@@ -794,34 +794,21 @@ gtk_text_iter_get_visible_text (const GtkTextIter  *start,
 }
 
 /**
- * gtk_text_iter_get_pixmap:
+ * gtk_text_iter_get_pixbuf:
  * @iter: an iterator
- * @pixmap: return location for the pixmap
- * @mask: return location for the mask
  * 
- * If the location pointed to by @iter contains a pixmap, the pixmap
- * is placed in @pixmap, the mask is placed in @mask, and
- * gtk_text_iter_get_pixmap() returns TRUE.  If @iter points at
- * something else, FALSE will be returned and @pixmap/@mask will
- * remain unchanged. The pixmap and mask do not have their reference
- * count incremented. If the pixmap has no mask, NULL is returned for
- * the mask.
+ * If the location pointed to by @iter contains a pixbuf, the pixbuf
+ * is returned (with no new reference count added). Otherwise,
+ * NULL is returned.
  * 
- * Return value: whether the iterator pointed at a pixmap
+ * Return value: the pixbuf at @iter
  **/
-gboolean
-gtk_text_iter_get_pixmap      (const GtkTextIter *iter,
-                               GdkPixmap** pixmap,
-                               GdkBitmap** mask)
+GdkPixbuf*
+gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
   g_return_val_if_fail(iter != NULL, FALSE);
-  g_return_val_if_fail(pixmap != NULL, FALSE);
-  g_return_val_if_fail(mask != NULL, FALSE);
-
-  *pixmap = NULL;
-  *mask = NULL;
   
   real = gtk_text_iter_make_real(iter);
 
@@ -830,17 +817,10 @@ gtk_text_iter_get_pixmap      (const GtkTextIter *iter,
   
   check_invariants(iter);
   
-  if (real->segment->type != &gtk_text_pixmap_type)
+  if (real->segment->type != &gtk_text_pixbuf_type)
     return FALSE;
   else
-    {
-      if (pixmap)
-        *pixmap = real->segment->body.pixmap.pixmap;
-      if (mask)
-        *mask = real->segment->body.pixmap.pixmap;
-
-      return TRUE;
-    }
+    return real->segment->body.pixbuf.pixbuf;
 }
 
 /**

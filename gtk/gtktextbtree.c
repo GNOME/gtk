@@ -1043,9 +1043,8 @@ gtk_text_btree_insert (GtkTextIter *iter,
 }
 
 void
-gtk_text_btree_insert_pixmap (GtkTextIter *iter,
-                              GdkPixmap *pixmap,
-                              GdkBitmap *mask)
+gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
+                              GdkPixbuf   *pixbuf)
 {
   GtkTextLineSegment *seg;
   GtkTextIter start;
@@ -1058,7 +1057,7 @@ gtk_text_btree_insert_pixmap (GtkTextIter *iter,
   tree = gtk_text_iter_get_btree(iter);
   start_byte_offset = gtk_text_iter_get_line_index(iter);
   
-  seg = gtk_text_pixmap_segment_new (pixmap, mask);
+  seg = gtk_text_pixbuf_segment_new (pixbuf);
 
   prevPtr = gtk_text_line_segment_split(iter);
   if (prevPtr == NULL)
@@ -2037,7 +2036,7 @@ copy_segment(GString *string,
       
       /* printf("  :%s\n", string->str); */
     }
-  else if (seg->type == &gtk_text_pixmap_type)
+  else if (seg->type == &gtk_text_pixbuf_type)
     {
       gboolean copy = TRUE;
 
@@ -3401,7 +3400,7 @@ gtk_text_line_byte_to_char (GtkTextLine *line,
 
 gint
 gtk_text_line_char_to_byte (GtkTextLine *line,
-                            gint char_offset)
+                            gint         char_offset)
 {
   g_warning("FIXME not implemented");
 }

@@ -260,8 +260,7 @@ fill_buffer (GtkTextBuffer *buffer)
   GdkColor color, color2;
   GtkTextIter iter;
   GtkTextIter iter2;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
+  GdkPixbuf *pixbuf;
   int i;
   
   tag = gtk_text_buffer_create_tag (buffer, "fg_blue");
@@ -295,12 +294,9 @@ fill_buffer (GtkTextBuffer *buffer)
                  "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
                  NULL);
 
-  pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
-                                                  gtk_widget_get_default_colormap (),
-                                                  &mask,
-                                                  NULL, book_closed_xpm);
+  pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
   
-  g_assert (pixmap != NULL);
+  g_assert (pixbuf != NULL);
   
   i = 0;
   while (i < 10)
@@ -309,11 +305,11 @@ fill_buffer (GtkTextBuffer *buffer)
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
       
-      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
+      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 1);
       
-      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
+      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
       
       str = g_strdup_printf ("%d Hello World!\nwoo woo woo woo woo woo woo woo\n",
                             i);
@@ -329,20 +325,20 @@ fill_buffer (GtkTextBuffer *buffer)
                               "Spanish (Español) ¡Hola! / French (Français) Bonjour, Salut / German (Deutsch Süd) Grüß Gott (testing Latin-1 chars encoded in UTF8)\nThai (we can't display this, just making sure we don't crash)  (ภาษาไทย)  สวัสดีครับ, สวัสดีค่ะ\n",
                               -1);  
       
-      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
-      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
+      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
+      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
       
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 4);
       
-      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
+      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 7);
       
-      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
+      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 8);
       
-      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
+      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 8);
       iter2 = iter;
@@ -387,9 +383,5 @@ fill_buffer (GtkTextBuffer *buffer)
       ++i;
     }
 
-  gdk_pixmap_unref (pixmap);
-  if (mask)
-    gdk_bitmap_unref (mask);
+  gdk_pixbuf_unref (pixbuf);
 }
-
-

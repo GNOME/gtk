@@ -86,6 +86,9 @@ struct _GtkTextView {
   guint incremental_validate_idle;      /* Idle to revalidate offscreen portions, runs after redraw */
 
   GtkIMContext *im_context;
+
+  gint drag_start_x;
+  gint drag_start_y;
 };
 
 struct _GtkTextViewClass {
@@ -145,7 +148,15 @@ void           gtk_text_view_get_iter_at_location  (GtkTextView   *text_view,
 						    GtkTextIter   *iter,
 						    gint           x,
 						    gint           y);
+void           gtk_text_view_get_line_yrange       (GtkTextView       *text_view,
+                                                    const GtkTextIter *iter,
+                                                    gint              *y,
+                                                    gint              *height);
 
+void           gtk_text_view_get_line_at_y         (GtkTextView       *text_view,
+                                                    GtkTextIter       *target_iter,
+                                                    gint               y,
+                                                    gint              *line_top);
 
 void gtk_text_view_buffer_to_window_coords (GtkTextView       *text_view,
                                             GtkTextWindowType  win,
@@ -165,18 +176,13 @@ GdkWindow*        gtk_text_view_get_window      (GtkTextView       *text_view,
 GtkTextWindowType gtk_text_view_get_window_type (GtkTextView       *text_view,
                                                  GdkWindow         *window);
 
-void gtk_text_view_set_left_window_width    (GtkTextView *text_view,
-                                             gint         width);
-void gtk_text_view_set_right_window_width   (GtkTextView *text_view,
-                                             gint         width);
-void gtk_text_view_set_top_window_height    (GtkTextView *text_view,
-                                             gint         height);
-void gtk_text_view_set_bottom_window_height (GtkTextView *text_view,
-                                             gint         height);
+void gtk_text_view_set_border_window_size (GtkTextView       *text_view,
+                                           GtkTextWindowType  type,
+                                           gint               size);
+void gtk_text_view_set_text_window_size   (GtkTextView       *text_view,
+                                           gint               width,
+                                           gint               height);
 
-void gtk_text_view_set_text_window_size     (GtkTextView *text_view,
-                                             gint         width,
-                                             gint         height);
 
 #ifdef __cplusplus
 }

@@ -418,8 +418,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
   GtkTextTag *tag;
   GdkColor color;
   GdkColor color2;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
+  GdkPixbuf *pixbuf;
   int i;
   char *str;
   
@@ -500,13 +499,10 @@ fill_example_buffer (GtkTextBuffer *buffer)
 		 "left_margin", 20,
 		 "right_margin", 20,
 		 NULL);
+
+
   
-  pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
-						  gtk_widget_get_default_colormap (),
-						  &mask,
-						  NULL, book_closed_xpm);
-  
-  g_assert (pixmap != NULL);
+  pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
   
   i = 0;
   while (i < 100)
@@ -515,7 +511,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
       
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
           
-      gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
+      gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
           
       str = g_strdup_printf ("%d Hello World! blah blah blah blah blah blah blah blah blah blah blah blah\nwoo woo woo woo woo woo woo woo woo woo woo woo woo woo woo\n",
 			    i);
@@ -582,9 +578,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
       ++i;
     }
 
-  gdk_pixmap_unref (pixmap);
-  if (mask)
-    gdk_bitmap_unref (mask);
+  g_object_unref (G_OBJECT (pixbuf));
   
   printf ("%d lines %d chars\n",
 	 gtk_text_buffer_get_line_count (buffer),
@@ -1409,28 +1403,169 @@ view_set_title (View *view)
 }
 
 static void
+cursor_set_callback (GtkTextBuffer     *buffer,
+                     const GtkTextIter *location,
+                     GtkTextMark       *mark,
+                     gpointer           user_data)
+{
+  GtkTextView *text_view;
+
+  /* Redraw tab windows if the cursor moves
+   * on the mapped widget (windows may not exist before realization...
+   */
+  
+  text_view = GTK_TEXT_VIEW (user_data);
+  
+  if (GTK_WIDGET_MAPPED (text_view) &&
+      mark == gtk_text_buffer_get_insert (buffer))
+    {
+      GdkWindow *tab_window;
+
+      tab_window = gtk_text_view_get_window (text_view,
+                                             GTK_TEXT_WINDOW_TOP);
+
+      gdk_window_invalidate_rect (tab_window, NULL, FALSE);
+      
+      tab_window = gtk_text_view_get_window (text_view,
+                                             GTK_TEXT_WINDOW_BOTTOM);
+
+      gdk_window_invalidate_rect (tab_window, NULL, FALSE);
+    }
+}
+
+static gint
+tab_stops_expose (GtkWidget      *widget,
+                  GdkEventExpose *event,
+                  gpointer        user_data)
+{
+  gint first_x;
+  gint last_x;
+  gint i;
+  GdkWindow *top_win;
+  GdkWindow *bottom_win;
+  GtkTextView *text_view;
+  GtkTextWindowType type;
+  GdkDrawable *target;
+  gint *positions = NULL;
+  gint size;
+  GtkTextAttributes *attrs;
+  GtkTextIter insert;
+  GtkTextBuffer *buffer;
+  gboolean in_pixels;
+  
+  text_view = GTK_TEXT_VIEW (widget);
+  
+  /* See if this expose is on the tab stop window */
+  top_win = gtk_text_view_get_window (text_view,
+                                      GTK_TEXT_WINDOW_TOP);
+
+  bottom_win = gtk_text_view_get_window (text_view,
+                                         GTK_TEXT_WINDOW_BOTTOM);
+
+  if (event->window == top_win)
+    {
+      type = GTK_TEXT_WINDOW_TOP;
+      target = top_win;
+    }
+  else if (event->window == bottom_win)
+    {
+      type = GTK_TEXT_WINDOW_BOTTOM;
+      target = bottom_win;
+    }
+  else
+    return FALSE;
+  
+  first_x = event->area.x;
+  last_x = first_x + event->area.width;
+
+  gtk_text_view_window_to_buffer_coords (text_view,
+                                         type,
+                                         first_x,
+                                         0,
+                                         &first_x,
+                                         NULL);
+
+  gtk_text_view_window_to_buffer_coords (text_view,
+                                         type,
+                                         last_x,
+                                         0,
+                                         &last_x,
+                                         NULL);
+
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer,
+                                    &insert,
+                                    gtk_text_buffer_get_mark (buffer,
+                                                              "insert"));
+  
+  attrs = gtk_text_attributes_new ();
+
+  gtk_text_iter_get_attributes (&insert, attrs);
+
+  if (attrs->tabs)
+    {
+      size = pango_tab_array_get_size (attrs->tabs);
+      
+      pango_tab_array_get_tabs (attrs->tabs,
+                                NULL,
+                                &positions);
+
+      in_pixels = pango_tab_array_get_positions_in_pixels (attrs->tabs);
+    }
+  else
+    {
+      size = 0;
+      in_pixels = FALSE;
+    }
+      
+  gtk_text_attributes_unref (attrs);
+  
+  i = 0;
+  while (i < size)
+    {
+      gint pos;
+
+      if (!in_pixels)
+        positions[i] = PANGO_PIXELS (positions[i]);
+      
+      gtk_text_view_buffer_to_window_coords (text_view,
+                                             type,
+                                             positions[i],
+                                             0,
+                                             &pos,
+                                             NULL);
+      
+      gdk_draw_line (target, 
+                     widget->style->fg_gc [widget->state],
+                     pos, 0,
+                     pos, 15); 
+      
+      ++i;
+    }
+
+  g_free (positions);
+
+  return TRUE;
+}
+
+static void
 get_lines (GtkTextView  *text_view,
            gint          first_y,
            gint          last_y,
-           gint        **buffer_coords,
-           gint        **numbers,
+           GArray       *buffer_coords,
+           GArray       *numbers,
            gint         *countp)
 {
   GtkTextIter iter;
   gint count;
-  gint size;
-  
-  if (buffer_coords)
-    *buffer_coords = NULL;
+  gint size;  
 
-  if (numbers)
-    *numbers = NULL;
+  g_array_set_size (buffer_coords, 0);
+  g_array_set_size (numbers, 0);
   
   /* Get iter at first y */
-  gtk_text_view_get_iter_at_location (text_view, &iter, 0, first_y);
-
-  /* Move back to start of its paragraph */
-  gtk_text_iter_set_line_offset (&iter, 0);
+  gtk_text_view_get_line_at_y (text_view, &iter, first_y, NULL);
 
   /* For each iter, get its location and add it to the arrays.
    * Stop when we pass last_y
@@ -1440,34 +1575,20 @@ get_lines (GtkTextView  *text_view,
 
   while (!gtk_text_iter_is_last (&iter))
     {
-      GdkRectangle loc;
+      gint y, height;
+      gint line_num;
+      
+      gtk_text_view_get_line_yrange (text_view, &iter, &y, &height);
 
-      gtk_text_view_get_iter_location (text_view, &iter, &loc);
-
-      if (loc.y >= last_y)
-        break;
-
-      if (count >= size)
-        {
-          size = 2 * size + 2; /* + 2 handles size == 0 case */
-          
-          if (buffer_coords)
-            *buffer_coords = g_realloc (*buffer_coords,
-                                        size * sizeof (gint));
-
-          if (numbers)
-            *numbers = g_realloc (*numbers,
-                                  size * sizeof (gint));
-        }
-
-      if (buffer_coords)
-        (*buffer_coords)[count] = loc.y;
-
-      if (numbers)
-        (*numbers)[count] = gtk_text_iter_get_line (&iter);
+      g_array_append_val (buffer_coords, y);
+      line_num = gtk_text_iter_get_line (&iter);
+      g_array_append_val (numbers, line_num);
       
       ++count;
 
+      if ((y + height) >= last_y)
+        break;
+      
       gtk_text_iter_forward_line (&iter);
     }
 
@@ -1480,42 +1601,67 @@ line_numbers_expose (GtkWidget      *widget,
                      gpointer        user_data)
 {
   gint count;
-  gint *numbers = NULL;
-  gint *pixels = NULL;
+  GArray *numbers;
+  GArray *pixels;
   gint first_y;
   gint last_y;
   gint i;
   GdkWindow *left_win;
+  GdkWindow *right_win;
   PangoLayout *layout;
   GtkTextView *text_view;
-
+  GtkTextWindowType type;
+  GdkDrawable *target;
+  
   text_view = GTK_TEXT_VIEW (widget);
   
   /* See if this expose is on the line numbers window */
   left_win = gtk_text_view_get_window (text_view,
                                        GTK_TEXT_WINDOW_LEFT);
 
-  if (event->window != left_win)
+  right_win = gtk_text_view_get_window (text_view,
+                                        GTK_TEXT_WINDOW_RIGHT);
+
+  if (event->window == left_win)
+    {
+      type = GTK_TEXT_WINDOW_LEFT;
+      target = left_win;
+    }
+  else if (event->window == right_win)
+    {
+      type = GTK_TEXT_WINDOW_RIGHT;
+      target = right_win;
+    }
+  else
     return FALSE;
   
   first_y = event->area.y;
   last_y = first_y + event->area.height;
 
   gtk_text_view_window_to_buffer_coords (text_view,
-                                         GTK_TEXT_WINDOW_LEFT,
+                                         type,
+                                         0,
                                          first_y,
+                                         NULL,
+                                         &first_y);
+
+  gtk_text_view_window_to_buffer_coords (text_view,
+                                         type,
+                                         0,
                                          last_y,
-                                         &first_y,
+                                         NULL,
                                          &last_y);
 
+  numbers = g_array_new (FALSE, FALSE, sizeof (gint));
+  pixels = g_array_new (FALSE, FALSE, sizeof (gint));
+  
   get_lines (text_view,
              first_y,
              last_y,
-             &pixels,
-             &numbers,
+             pixels,
+             numbers,
              &count);
-
-
+  
   /* Draw fully internationalized numbers! */
   
   layout = gtk_widget_create_pango_layout (widget, "");
@@ -1527,17 +1673,18 @@ line_numbers_expose (GtkWidget      *widget,
       gchar *str;
       
       gtk_text_view_buffer_to_window_coords (text_view,
-                                             GTK_TEXT_WINDOW_LEFT,
+                                             type,
                                              0,
-                                             pixels[i],
+                                             g_array_index (pixels, gint, i),
                                              NULL,
                                              &pos);
 
-      str = g_strdup_printf ("%d", numbers[i]);
+      str = g_strdup_printf ("%d", g_array_index (numbers, gint, i));
 
       pango_layout_set_text (layout, str, -1);
-      
-      gdk_draw_layout (left_win,
+
+
+      gdk_draw_layout (target,
                        widget->style->fg_gc [widget->state],
                        /* 2 is just a random padding */
                        2, pos + 2,
@@ -1548,8 +1695,8 @@ line_numbers_expose (GtkWidget      *widget,
       ++i;
     }
 
-  g_free (pixels);
-  g_free (numbers);
+  g_array_free (pixels, TRUE);
+  g_array_free (numbers, TRUE);
   
   g_object_unref (G_OBJECT (layout));
 
@@ -1601,22 +1748,36 @@ create_view (Buffer *buffer)
                                GTK_WRAPMODE_WORD);
 
 
-  /* Set sizes on these windows, just for debugging */
+  /* Draw tab stops in the top and bottom windows. */
   
-  gtk_text_view_set_right_window_width (GTK_TEXT_VIEW (view->text_view),
-                                       30);
+  gtk_text_view_set_border_window_size (GTK_TEXT_VIEW (view->text_view),
+                                        GTK_TEXT_WINDOW_TOP,
+                                        15);
+
+  gtk_text_view_set_border_window_size (GTK_TEXT_VIEW (view->text_view),
+                                        GTK_TEXT_WINDOW_BOTTOM,
+                                        15);
+
+  gtk_signal_connect (GTK_OBJECT (view->text_view),
+                      "expose_event",
+                      GTK_SIGNAL_FUNC (tab_stops_expose),
+                      NULL);  
+
+  gtk_signal_connect (GTK_OBJECT (view->buffer->buffer),
+                      "mark_set",
+                      GTK_SIGNAL_FUNC (cursor_set_callback),
+                      view->text_view);
   
-  gtk_text_view_set_top_window_height (GTK_TEXT_VIEW (view->text_view),
-                                       15);
-
-  gtk_text_view_set_bottom_window_height (GTK_TEXT_VIEW (view->text_view),
-                                          23);
-
-  /* Draw line numbers in the left window; we should really be
-   * more scientific about what width we set it to.
+  /* Draw line numbers in the side windows; we should really be
+   * more scientific about what width we set them to.
    */
-  gtk_text_view_set_left_window_width (GTK_TEXT_VIEW (view->text_view),
-                                       30);
+  gtk_text_view_set_border_window_size (GTK_TEXT_VIEW (view->text_view),
+                                        GTK_TEXT_WINDOW_RIGHT,
+                                        30);
+  
+  gtk_text_view_set_border_window_size (GTK_TEXT_VIEW (view->text_view),
+                                        GTK_TEXT_WINDOW_LEFT,
+                                        30);
   
   gtk_signal_connect (GTK_OBJECT (view->text_view),
                       "expose_event",
@@ -1645,7 +1806,6 @@ main (int argc, char** argv)
   int i;
   
   gtk_init (&argc, &argv);
-  gdk_rgb_init (); /* FIXME remove this */
   
   buffer = create_buffer ();
   view = create_view (buffer);

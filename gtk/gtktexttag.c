@@ -945,43 +945,47 @@ delta_priority_foreach(GtkTextTag *tag, gpointer user_data)
 gint
 gtk_text_tag_get_priority (GtkTextTag *tag)
 {
-  g_return_val_if_fail(GTK_IS_TEXT_TAG(tag), 0);
+  g_return_val_if_fail (GTK_IS_TEXT_TAG(tag), 0);
 
   return tag->priority;
 }
 
 void
-gtk_text_tag_set_priority(GtkTextTag *tag,
-                           gint priority)
+gtk_text_tag_set_priority (GtkTextTag *tag,
+                           gint        priority)
 {
     DeltaData dd;
     
-    g_return_if_fail(GTK_IS_TEXT_TAG(tag));
-    g_return_if_fail(tag->table != NULL);
-    g_return_if_fail(priority >= 0);
-    g_return_if_fail(priority < gtk_text_tag_table_size(tag->table));
+    g_return_if_fail (GTK_IS_TEXT_TAG (tag));
+    g_return_if_fail (tag->table != NULL);
+    g_return_if_fail (priority >= 0);
+    g_return_if_fail (priority < gtk_text_tag_table_size (tag->table));
 
     if (priority == tag->priority)
       return;
 
-    if (priority < tag->priority) {
-      dd.low = priority;
-      dd.high = tag->priority - 1;
-      dd.delta = 1;
-    } else {
-      dd.low = tag->priority + 1;
-      dd.high = priority;
-      dd.delta = -1;
-    }
+    if (priority < tag->priority)
+      {
+        dd.low = priority;
+        dd.high = tag->priority - 1;
+        dd.delta = 1;
+      }
+    else
+      {
+        dd.low = tag->priority + 1;
+        dd.high = priority;
+        dd.delta = -1;
+      }
 
-    gtk_text_tag_table_foreach(tag->table, delta_priority_foreach,
-                               &dd);
+    gtk_text_tag_table_foreach (tag->table,
+                                delta_priority_foreach,
+                                &dd);
     
     tag->priority = priority;
 }
 
 gint
-gtk_text_tag_event(GtkTextTag *tag,
+gtk_text_tag_event (GtkTextTag *tag,
                     GtkObject *event_object,
                     GdkEvent *event,
                     const GtkTextIter *iter)
@@ -992,12 +996,12 @@ gtk_text_tag_event(GtkTextTag *tag,
   g_return_val_if_fail(GTK_IS_OBJECT(event_object), FALSE);
   g_return_val_if_fail(event != NULL, FALSE);
   
-  gtk_signal_emit(GTK_OBJECT(tag),
-                  signals[EVENT],
-                  event_object,
-                  event,
-                  iter,
-                  &retval);
+  gtk_signal_emit (GTK_OBJECT(tag),
+                   signals[EVENT],
+                   event_object,
+                   event,
+                   iter,
+                   &retval);
 
   return retval;
 }

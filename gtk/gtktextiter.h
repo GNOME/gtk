@@ -72,12 +72,8 @@ gchar   *gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
 gchar   *gtk_text_iter_get_visible_text  (const GtkTextIter  *start,
                                           const GtkTextIter  *end);
 
-/* Returns TRUE if the iterator pointed at a pixmap */
-gboolean gtk_text_iter_get_pixmap        (const GtkTextIter  *iter,
-                                          GdkPixmap          **pixmap,
-                                          GdkBitmap          **mask);
-
-GSList  *gtk_text_iter_get_marks         (const GtkTextIter  *iter);
+GdkPixbuf* gtk_text_iter_get_pixbuf (const GtkTextIter *iter);
+GSList  *  gtk_text_iter_get_marks  (const GtkTextIter *iter);
 
 /* Return list of tags toggled at this point (toggled_on determines
    whether the list is of on-toggles or off-toggles) */

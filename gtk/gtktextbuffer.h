@@ -133,11 +133,10 @@ gchar          *gtk_text_buffer_get_slice           (GtkTextBuffer     *buffer,
                                                      const GtkTextIter *end,
                                                      gboolean           include_hidden_chars);
 
-/* Insert a pixmap */
-void gtk_text_buffer_insert_pixmap         (GtkTextBuffer *buffer,
+/* Insert a pixbuf */
+void gtk_text_buffer_insert_pixbuf         (GtkTextBuffer *buffer,
                                             GtkTextIter   *iter,
-                                            GdkPixmap     *pixmap,
-                                            GdkBitmap     *mask);
+                                            GdkPixbuf     *pixbuf);
 
 /* Mark manipulation */
 GtkTextMark   *gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
@@ -149,8 +148,11 @@ void           gtk_text_buffer_move_mark   (GtkTextBuffer     *buffer,
                                             const GtkTextIter *where);
 void           gtk_text_buffer_delete_mark (GtkTextBuffer     *buffer,
                                             GtkTextMark       *mark);
-GtkTextMark   *gtk_text_buffer_get_mark    (GtkTextBuffer     *buffer,
+GtkTextMark*   gtk_text_buffer_get_mark    (GtkTextBuffer     *buffer,
                                             const gchar       *name);
+
+GtkTextMark* gtk_text_buffer_get_insert          (GtkTextBuffer *buffer);
+GtkTextMark* gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer);
 
 
 /* efficiently move insert and selection_bound to same location */

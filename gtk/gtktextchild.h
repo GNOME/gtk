@@ -7,14 +7,13 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef struct _GtkTextPixmap GtkTextPixmap;
+typedef struct _GtkTextPixbuf GtkTextPixbuf;
 
-struct _GtkTextPixmap {
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
+struct _GtkTextPixbuf {
+  GdkPixbuf *pixbuf;
 };
 
-GtkTextLineSegment *gtk_text_pixmap_segment_new(GdkPixmap *pixmap, GdkBitmap *mask);
+GtkTextLineSegment *gtk_text_pixbuf_segment_new(GdkPixbuf *pixbuf);
 
 
 #ifdef __cplusplus
