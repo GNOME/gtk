@@ -40,6 +40,7 @@
 <!entity GtkHScrollbar SYSTEM "sgml/gtkhscrollbar.sgml">
 <!entity GtkHSeparator SYSTEM "sgml/gtkhseparator.sgml">
 <!entity GtkImage SYSTEM "sgml/gtkimage.sgml">
+<!entity GtkImageMenuItem SYSTEM "sgml/gtkimagemenuitem.sgml">
 <!entity GtkIMContext SYSTEM "sgml/gtkimcontext.sgml">
 <!entity GtkIMContextSimple SYSTEM "sgml/gtkimcontextsimple.sgml">
 <!entity GtkIMMulticontext SYSTEM "sgml/gtkimmulticontext.sgml">
@@ -74,6 +75,7 @@
 <!entity GtkScrollbar SYSTEM "sgml/gtkscrollbar.sgml">
 <!entity GtkScrolledWindow SYSTEM "sgml/gtkscrolledwindow.sgml">
 <!entity GtkSeparator SYSTEM "sgml/gtkseparator.sgml">
+<!entity GtkSeparatorMenuItem SYSTEM "sgml/gtkseparatormenuitem.sgml">
 <!entity GtkSizeGroup SYSTEM "sgml/gtksizegroup.sgml">
 <!entity GtkSocket SYSTEM "sgml/gtksocket.sgml">
 <!entity GtkSpinButton SYSTEM "sgml/gtkspinbutton.sgml">
@@ -132,6 +134,7 @@
 <!entity gtk-Standard-Enumerations SYSTEM "sgml/gtkenums.sgml">
 <!entity gtk-Stock-Items SYSTEM "sgml/gtkstock.sgml">
 <!entity gtk-Themeable-Stock-Images SYSTEM "sgml/gtkiconfactory.sgml">
+<!entity gtk-Settings SYSTEM "sgml/gtksettings.sgml">
 
 <!entity index-Object-Tree SYSTEM "sgml/tree_index.sgml">
 
@@ -249,6 +252,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-Stock-Items;
     &gtk-Themeable-Stock-Images;
     &gtk-Resource-Files;   
+    &gtk-Settings;
     &gtk-Bindings;
     &gtk-Standard-Enumerations;
     &gtk-Graphics-Contexts;
@@ -333,7 +337,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     </sect1>
     <sect1 id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
-        &GtkCheckMenuItem;      
         &GtkCombo;
         &GtkItemFactory;
         &GtkMenu;
@@ -341,7 +344,10 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkMenuItem;
         &GtkMenuShell;
         &GtkOptionMenu;
+	&GtkImageMenuItem;
         &GtkRadioMenuItem;
+        &GtkCheckMenuItem;      
+        &GtkSeparatorMenuItem;
         &GtkTearoffMenuItem;
         &GtkToolbar;
     </sect1>

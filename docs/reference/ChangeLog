@@ -1,3 +1,10 @@
+2001-10-06  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/gtk-docs.sgml: add gtkimagemenuitem, 
+	gtksettings, gtkseparatormenuitem.
+	
+	* gtk/tmpl/gtktreemodelsimple.sgml: remove unused file.
+
 2001-10-05  Matthias Clasen   <matthiasc@poet.de>
 
 	* gtk/gtk-sections.sgml, gtk/objects_grouped.sgml: remove GtkPacker.
