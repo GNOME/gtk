@@ -952,6 +952,10 @@ gtk_option_menu_position (GtkMenu  *menu,
       children = children->next;
     }
 
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    menu_xpos = menu_xpos + widget->allocation.width - menu_width;
+
+  /* Clamp the position on screen */
   screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
   
   if (menu_xpos < 0)
