@@ -40,6 +40,11 @@
 	  possible to lift this restriction and present a
 	  full 32-bit space to the user.
 	</p>
+	<p>
+	  There are some difficulties with performance in this
+	  approach, but in general, this seems possible to achieve
+	  without all that much pain.
+	</p>
       </description>
       <url>http://www.gtk.org/~otaylor/gtk/1.4/gdk-drawing.html</url>
       <contact>Owen Taylor &lt;otaylor@redhat.com&gt;</contact>
