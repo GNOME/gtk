@@ -1,3 +1,7 @@
+Mon Jan 18 01:21:03 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (draw_row): fixed auto resize bug.
+
 Sun Jan 17 17:35:28 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.13

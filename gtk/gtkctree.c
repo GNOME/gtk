@@ -1791,8 +1791,7 @@ draw_row (GtkCList     *clist,
 		  (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
 		   &pixmap_width, &height);
 
-	      width = (pixmap_width +
-		       GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing);
+	      width = pixmap_width;
 
 	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->text)
 		{
@@ -1800,6 +1799,10 @@ draw_row (GtkCList     *clist,
 		    (style->font, GTK_CELL_PIXTEXT (clist_row->cell[i])->text);
 		  width += string_width;
 		}
+
+	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->text &&
+		  GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap)
+		width +=  GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
 
 	      if (i == ctree->tree_column)
 		width += (ctree->tree_indent *
@@ -1920,10 +1923,16 @@ draw_row (GtkCList     *clist,
       if (string_width)
 	{ 
 	  if (clist->column[i].justification == GTK_JUSTIFY_RIGHT)
-	    offset = (old_offset - string_width -
-		      GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing);
+	    {
+	      offset = (old_offset - string_width);
+	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap)
+		offset -= GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
+	    }
 	  else
-	    offset += GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
+	    {
+	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap)
+		offset += GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
+	    }
 
 	  if (style != GTK_WIDGET (clist)->style)
 	    row_center_offset = (((clist->row_height - style->font->ascent -
