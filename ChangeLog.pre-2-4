@@ -1,3 +1,15 @@
+2003-03-06  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (SUBDIRS): Add m4.
+	(ACLOCAL_AMFLAGS): New variable.
+	(EXTRA_DIST): Add config.rpath mkinstalldirs.
+	* configure.in (AC_OUTPUT): Add po/Makefile.in,
+
+2003-03-06  Stanislav Brabec  <sbrabec@suse.cz>
+
+	* configure.in: Added no-maintenance message, after discussion
+	with Owen Taylor.
+
 2003-03-05  Stanislav Brabec  <sbrabec@suse.cz>
 
 	* gtk/gtkrc.c: Fixed altering of glibc private locale area

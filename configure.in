@@ -582,3 +582,8 @@ gtk/gtkfeatures.h
 gdk.pc
 gtk+.pc
 ], [chmod +x gtk-config])
+
+echo ""
+echo "*** This branch of CVS no longer is maintained,    ***"
+echo "*** and can contain bugs. Use GTK+-1.2.10 instead. ***"
+echo ""
