@@ -6,6 +6,7 @@ makefile.msc
 .libs
 simple
 testcalendar
+testdnd
 testgtk
 testinput
 testrgb
@@ -15,5 +16,7 @@ testtreeview
 testtreecolumns
 testsocket
 testsocket_child
+testtextbuffer
 testtreefocus
+testtreesort
 treestoretest

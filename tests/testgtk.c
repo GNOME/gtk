@@ -10302,7 +10302,7 @@ test_init ()
   if (file_exists ("../gdk-pixbuf/.libs/libpixbufloader-pnm.so"))
     {
       putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
-      putenv ("GTK_IM_MODULE_FILE=./gtk.immodules");
+      putenv ("GTK_IM_MODULE_FILE=../modules/input/gtk.immodules");
     }
 }
 
