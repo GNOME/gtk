@@ -1,3 +1,8 @@
+2000-02-19  Havoc Pennington  <hp@pobox.com>
+
+	* docs/gtk_tut.sgml: Don't recommend the use of 
+	gtk_signal_handlers_destroy, closes bug #6390
+
 Thu Feb 17 02:19:32 2000  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdk.h:

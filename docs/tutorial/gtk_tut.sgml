@@ -839,15 +839,26 @@ So, by passing in the widget you wish to remove the handler from, and
 the tag returned by one of the signal_connect functions, you can
 disconnect a signal handler.
 
-Another function to remove all the signal handers from an object is:
+You can also temporarily disable signal handlers with the 
+gtk_signal_handler_block and gtk_signal_handler_unblock family of 
+functions.
 
 <tscreen><verb>
-void gtk_signal_handlers_destroy( GtkObject *object );
+void   gtk_signal_handler_block		  (GtkObject	       *object,
+					   guint		handler_id);
+void   gtk_signal_handler_block_by_func	  (GtkObject	       *object,
+					   GtkSignalFunc	func,
+					   gpointer		data);
+void   gtk_signal_handler_block_by_data	  (GtkObject	       *object,
+					   gpointer		data);
+void   gtk_signal_handler_unblock	  (GtkObject	       *object,
+					   guint		handler_id);
+void   gtk_signal_handler_unblock_by_func (GtkObject	       *object,
+					   GtkSignalFunc	func,
+					   gpointer		data);
+void   gtk_signal_handler_unblock_by_data (GtkObject	       *object,
+					   gpointer		data);
 </verb></tscreen>
-
-This call is fairly self explanatory. It simply removes all the
-current signal handlers from the object passed in as the first
-argument.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>An Upgraded Hello World
