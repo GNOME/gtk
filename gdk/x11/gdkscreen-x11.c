@@ -484,3 +484,31 @@ init_xinerama_support (GdkScreen * screen)
   screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen);
 }
 
+/**
+ * gdk_screen_make_display_name:
+ * @screen: a #GdkScreen
+ * 
+ * Determines the name to pass to gdk_display_open() to get
+ * a #GdkDisplay with this screen as the default screen.
+ * 
+ * Return value: a newly allocated string, free with g_free()
+ **/
+gchar *
+gdk_screen_make_display_name (GdkScreen *screen)
+{
+  GString     *str;
+  const gchar *old_display;
+  gchar       *p;
+
+  old_display = gdk_display_get_name (gdk_screen_get_display (screen));
+
+  str = g_string_new (old_display);
+        
+  p = strrchr (str->str, '.');
+  if (p && p >  strchr (str->str, ':'))
+    g_string_truncate (str, p - str->str);
+
+  g_string_append_printf (str, ".%d", gdk_screen_get_number (screen));
+
+  return g_string_free (str, FALSE);
+}

@@ -78,3 +78,9 @@ gdk_screen_get_number (GdkScreen *screen)
   
   return 0;
 }
+
+gchar *
+gdk_screen_make_display_name (GdkScreen *screen)
+{
+  return g_strdup ("");
+}

@@ -1,3 +1,11 @@
+Wed Sep 25 10:51:24 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkscreen.h gdk/{x11,win32,linux-fb}/gdkscreen-*.c:
+	Add gdk_screen_make_display_name(), which returns a
+	display name that can be used to open a display with the
+	screen as the default (Based on patch from Mark McLoughlin, 
+	#86013)
+
 Wed Sep 25 08:50:40 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from Eric Warmenhoven, #94123

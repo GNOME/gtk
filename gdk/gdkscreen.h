@@ -72,6 +72,7 @@ gint         gdk_screen_get_height_mm         (GdkScreen   *screen);
 
 GList *      gdk_screen_list_visuals          (GdkScreen   *screen);
 GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
+gchar *      gdk_screen_make_display_name     (GdkScreen   *screen);
 
 
 gint          gdk_screen_get_n_monitors        (GdkScreen *screen);
