@@ -67,18 +67,96 @@ compare_pixbufs (GdkPixbuf *pixbuf, GdkPixbuf *compare, const gchar *file_type)
         }
 }
 
+static gboolean
+save_to_loader (const gchar *buf, gsize count, GError **err, gpointer data)
+{
+        GdkPixbufLoader *loader = data;
+
+        return gdk_pixbuf_loader_write (loader, buf, count, err);
+}
+
+static GdkPixbuf *
+buffer_to_pixbuf (const gchar *buf, gsize count, GError **err)
+{
+        GdkPixbufLoader *loader;
+        GdkPixbuf *pixbuf;
+
+        loader = gdk_pixbuf_loader_new ();
+        if (gdk_pixbuf_loader_write (loader, buf, count, err) && 
+            gdk_pixbuf_loader_close (loader, err)) {
+                pixbuf = g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader));
+                g_object_unref (G_OBJECT (loader));
+                return pixbuf;
+        } else {
+                return NULL;
+        }
+}
+
+static void
+do_compare (GdkPixbuf *pixbuf, GdkPixbuf *compare, GError *err)
+{
+        if (compare == NULL) {
+                fprintf (stderr, "%s", err->message);
+                g_error_free (err);
+        } else {
+                compare_pixbufs (pixbuf, compare, "jpeg");
+                g_object_unref (compare);
+        }
+}
+
 static void
 keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
         GtkDrawingArea *da = (GtkDrawingArea*)data;
         GError *err = NULL;
-        
+        gchar *buffer;
+        gsize count;
+        GdkPixbufLoader *loader;
+
         pixbuf = (GdkPixbuf *) g_object_get_data (G_OBJECT (da), "pixbuf");
 
         if (evt->keyval == 'q')
                 gtk_main_quit ();
-        if (evt->keyval == 's') {
+
+        if (evt->keyval == 's' && (evt->state & GDK_CONTROL_MASK)) {
+                /* save to callback */
+                if (pixbuf == NULL) {
+                        fprintf (stderr, "PIXBUF NULL\n");
+                        return;
+                }	
+
+                loader = gdk_pixbuf_loader_new ();
+                if (!gdk_pixbuf_save_to_callback (pixbuf, save_to_loader, loader, "jpeg",
+                                                  &err,
+                                                  "quality", "100",
+                                                  NULL) ||
+                    !gdk_pixbuf_loader_close (loader, &err)) {
+                        fprintf (stderr, "%s", err->message);
+                        g_error_free (err);
+                } else {
+                        do_compare (pixbuf,
+                                    g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader)),
+                                    err);
+                        g_object_unref (G_OBJECT (loader));
+                }
+        }
+        else if (evt->keyval == 'S') {
+                /* save to buffer */
+                if (!gdk_pixbuf_save_to_buffer (pixbuf, &buffer, &count, "jpeg",
+                                                &err,
+                                                "quality", "100",
+                                                NULL)) {
+                        fprintf (stderr, "%s", err->message);
+                        g_error_free (err);
+                } else {
+                        do_compare (pixbuf,
+                                    buffer_to_pixbuf (buffer, count, &err),
+                                    err);
+                }
+        }
+        else if (evt->keyval == 's') {
+                /* save normally */
                 if (pixbuf == NULL) {
                         fprintf (stderr, "PIXBUF NULL\n");
                         return;
@@ -91,20 +169,49 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                         fprintf (stderr, "%s", err->message);
                         g_error_free (err);
                 } else {
-                        GdkPixbuf *compare;
-
-                        compare = gdk_pixbuf_new_from_file ("foo.jpg", &err);
-
-                        if (!compare) {
-                                fprintf (stderr, "%s", err->message);
-                                g_error_free (err);
-                        } else {
-                                compare_pixbufs (pixbuf, compare, "jpeg");
-                                g_object_unref (compare);
-                        }
-                                        
+                        do_compare (pixbuf,
+                                    gdk_pixbuf_new_from_file ("foo.jpg", &err),
+                                    err);
                 }
-        } else if (evt->keyval == 'p') {
+        }
+
+        if (evt->keyval == 'p' && (evt->state & GDK_CONTROL_MASK)) {
+                /* save to callback */
+                if (pixbuf == NULL) {
+                        fprintf (stderr, "PIXBUF NULL\n");
+                        return;
+                }
+
+                loader = gdk_pixbuf_loader_new ();
+                if (!gdk_pixbuf_save_to_callback (pixbuf, save_to_loader, loader, "png",
+                                                  &err,
+                                                  "tEXt::Software", "testpixbuf-save",
+                                                  NULL)
+                    || !gdk_pixbuf_loader_close (loader, &err)) {
+                        fprintf (stderr, "%s", err->message);
+                        g_error_free (err);
+                } else {
+                        do_compare (pixbuf,
+                                    g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader)),
+                                    err);
+                        g_object_unref (G_OBJECT (loader));
+                }
+        }
+        else if (evt->keyval == 'P') {
+                /* save to buffer */
+                if (!gdk_pixbuf_save_to_buffer (pixbuf, &buffer, &count, "png",
+                                                &err,
+                                                "tEXt::Software", "testpixbuf-save",
+                                                NULL)) {
+                        fprintf (stderr, "%s", err->message);
+                        g_error_free (err);
+                } else {
+                        do_compare (pixbuf,
+                                    buffer_to_pixbuf (buffer, count, &err),
+                                    err);
+                }
+        }
+        else if (evt->keyval == 'p') {
                 if (pixbuf == NULL) {
                         fprintf (stderr, "PIXBUF NULL\n");
                         return;
@@ -117,20 +224,65 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                         fprintf (stderr, "%s", err->message);
                         g_error_free (err);
                 } else {
-                        GdkPixbuf *compare;
-
-                        compare = gdk_pixbuf_new_from_file ("foo.png", &err);
-
-                        if (!compare) {
-                                fprintf (stderr, "%s", err->message);
-                                g_error_free (err);
-                        } else {
-                                compare_pixbufs (pixbuf, compare, "png");
-                                g_object_unref (compare);
-                        }
-                                        
+                        do_compare(pixbuf,
+                                   gdk_pixbuf_new_from_file ("foo.png", &err),
+                                   err);
                 }
-        } else if (evt->keyval == 'a') {
+        }
+
+        if (evt->keyval == 'i' && (evt->state & GDK_CONTROL_MASK)) {
+                /* save to callback */
+                if (pixbuf == NULL) {
+                        fprintf (stderr, "PIXBUF NULL\n");
+                        return;
+                }
+
+                loader = gdk_pixbuf_loader_new ();
+                if (!gdk_pixbuf_save_to_callback (pixbuf, save_to_loader, loader, "ico",
+                                                  &err,
+                                                  NULL)
+                    || !gdk_pixbuf_loader_close (loader, &err)) {
+                        fprintf (stderr, "%s", err->message);
+                        g_error_free (err);
+                } else {
+                        do_compare (pixbuf,
+                                    g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader)),
+                                    err);
+                        g_object_unref (G_OBJECT (loader));
+                }
+        }
+        else if (evt->keyval == 'I') {
+                /* save to buffer */
+                if (!gdk_pixbuf_save_to_buffer (pixbuf, &buffer, &count, "ico",
+                                                &err,
+                                                NULL)) {
+                        fprintf (stderr, "%s", err->message);
+                        g_error_free (err);
+                } else {
+                        do_compare (pixbuf,
+                                    buffer_to_pixbuf (buffer, count, &err),
+                                    err);
+                }
+        }
+        else if (evt->keyval == 'i') {
+                if (pixbuf == NULL) {
+                        fprintf (stderr, "PIXBUF NULL\n");
+                        return;
+                }
+
+                if (!gdk_pixbuf_save (pixbuf, "foo.ico", "ico", 
+                                      &err,
+                                      NULL)) {
+                        fprintf (stderr, "%s", err->message);
+                        g_error_free (err);
+                } else {
+                        do_compare(pixbuf,
+                                   gdk_pixbuf_new_from_file ("foo.ico", &err),
+                                   err);
+                }
+        }
+
+        if (evt->keyval == 'a') {
                 if (pixbuf == NULL) {
                         fprintf (stderr, "PIXBUF NULL\n");
                         return;
