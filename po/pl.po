@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-19 15:53+0100\n"
+"POT-Creation-Date: 2004-01-21 09:32+0100\n"
 "PO-Revision-Date: 2003-11-18 11:32+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -948,7 +948,7 @@ msgstr ""
 "Nie można dodać zakładki dla %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:454 gtk/gtkfilechooserdefault.c:2882
+#: gtk/gtkfilechooserdefault.c:454 gtk/gtkfilechooserdefault.c:2906
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1043,21 +1043,21 @@ msgid "Preview"
 msgstr "Podgląd"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2092
+#: gtk/gtkfilechooserdefault.c:2107
 #, c-format
 msgid "Current folder: %s"
 msgstr "Bieżący folder: %s"
 
-#: gtk/gtkfilechooserdefault.c:2495
+#: gtk/gtkfilechooserdefault.c:2510
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "skrót %s nie istnieje"
 
-#: gtk/gtkfilechooserdefault.c:3029
+#: gtk/gtkfilechooserdefault.c:3052
 msgid "Type name of new folder"
 msgstr "Podaj nazwę nowego folderu"
 
-#: gtk/gtkfilechooserdefault.c:3056
+#: gtk/gtkfilechooserdefault.c:3079
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1065,34 +1065,34 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtów"
 
-#: gtk/gtkfilechooserdefault.c:3058
+#: gtk/gtkfilechooserdefault.c:3081
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3060
+#: gtk/gtkfilechooserdefault.c:3083
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3062
+#: gtk/gtkfilechooserdefault.c:3085
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3107
+#: gtk/gtkfilechooserdefault.c:3130
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: gtk/gtkfilechooserdefault.c:3109
+#: gtk/gtkfilechooserdefault.c:3132
 msgid "Yesterday"
 msgstr "Wczoraj"
 
-#: gtk/gtkfilechooserdefault.c:3117
+#: gtk/gtkfilechooserdefault.c:3140
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3120
+#: gtk/gtkfilechooserdefault.c:3143
 msgid "Unknown"
 msgstr "Nieznany"
 
@@ -1370,12 +1370,29 @@ msgstr "Wartość g_amma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1551
+#: gtk/gtkiconfactory.c:1559
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Błąd przy odczytywaniu ikony: %s"
 
-#: gtk/gtkicontheme.c:1217
+#: gtk/gtkicontheme.c:1182
+#, c-format
+msgid "Could not find the icon '%s'.  The '"
+msgstr "Nie można odnaleźć ikony \"%s\". Motyw \""
+
+#: gtk/gtkicontheme.c:1182
+msgid ""
+"' theme\n"
+"was not found either, perhaps you need to install it.\n"
+"You can get a copy from :\n"
+"\thttp://freedesktop.org/Software/icon-theme/releases"
+msgstr ""
+"\"\n"
+"również nie został znaleziony, prawdopodobnie należy je zainstalować.\n"
+"Można pobrać kopię z :\n"
+":\thttp://freedesktop.org/Software/icon-theme/releases"
+
+#: gtk/gtkicontheme.c:1247
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikona \"%s\" jest nieobecna w motywie"
@@ -1625,154 +1642,162 @@ msgid "_Home"
 msgstr "P_oczątek"
 
 #: gtk/gtkstock.c:301
+msgid "Increase Indent"
+msgstr "Zwiększenie wcięcia"
+
+#: gtk/gtkstock.c:302
+msgid "Decrease Indent"
+msgstr "Zmniejszenie wcięcia"
+
+#: gtk/gtkstock.c:303
 msgid "_Index"
 msgstr "_Indeks"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:304
 msgid "_Italic"
 msgstr "Pochy_lenie"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:305
 msgid "_Jump to"
 msgstr "Prz_ejdź do"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:306
 msgid "_Center"
 msgstr "Śr_odek"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:307
 msgid "_Fill"
 msgstr "Wyp_ełnienie"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:308
 msgid "_Left"
 msgstr "_Lewa"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:309
 msgid "_Right"
 msgstr "_Prawa"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:310
 msgid "_New"
 msgstr "_Nowy"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:311
 msgid "_No"
 msgstr "_Nie"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:312
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:313
 msgid "_Open"
 msgstr "_Otwórz"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:314
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:315
 msgid "_Preferences"
 msgstr "P_referencje"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:316
 msgid "_Print"
 msgstr "Wy_drukuj"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:317
 msgid "Print Pre_view"
 msgstr "Podgląd _wydruku"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:318
 msgid "_Properties"
 msgstr "_Właściwości"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:319
 msgid "_Quit"
 msgstr "Za_kończ"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:320
 msgid "_Redo"
 msgstr "P_onów"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:321
 msgid "_Refresh"
 msgstr "_Odśwież"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:322
 msgid "_Remove"
 msgstr "_Usuń"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:323
 msgid "_Revert"
 msgstr "_Przywróć"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:324
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:325
 msgid "Save _As"
 msgstr "Zapisz j_ako"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:326
 msgid "_Color"
 msgstr "_Kolor"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:327
 msgid "_Font"
 msgstr "_Czcionka"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:328
 msgid "_Ascending"
 msgstr "_Rosnąco"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:329
 msgid "_Descending"
 msgstr "_Malejąco"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:330
 msgid "_Spell Check"
 msgstr "Sprawdź p_isownię"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:331
 msgid "_Stop"
 msgstr "_Zatrzymaj"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:332
 msgid "_Strikethrough"
 msgstr "Prz_ekreślenie"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:333
 msgid "_Undelete"
 msgstr "Od_twórz"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:334
 msgid "_Underline"
 msgstr "P_odkreślenie"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:335
 msgid "_Undo"
 msgstr "Cof_nij"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:336
 msgid "_Yes"
 msgstr "_Tak"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:337
 msgid "Zoom _100%"
 msgstr "Powiększenie na _100%"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:338
 msgid "Zoom to _Fit"
 msgstr "_Dopasuj powiększenie"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:339
 msgid "Zoom _In"
 msgstr "Po_większ"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:340
 msgid "Zoom _Out"
 msgstr "Po_mniejsz"
 
