@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-08 15:41-0400\n"
+"POT-Creation-Date: 2004-10-12 13:09-0400\n"
 "PO-Revision-Date: 2004-10-09 10:29+0530\n"
 "Last-Translator: Jayaradha N <jaya@pune.redhat.com>\n"
 "Language-Team: Tamil <zhakanini@yahoogroups.com>\n"
@@ -16,7 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3.1\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"\n"
 "\n"
 "\n"
 
@@ -34,7 +35,8 @@ msgstr "'%s' உருவக் கோப்பில் தரவு ஏது�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "'%s' உருவக் கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, கோப்பு சிதைந்திருக்கலாம்."
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:239
@@ -42,7 +44,8 @@ msgstr "'%s' உருவக் கோப்பை ஏற்ற முடிய�
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "'%s' அசைவூட்ட கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, கோப்பு சிதைந்திருக்கலாம்"
+msgstr ""
+"'%s' அசைவூட்ட கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, கோப்பு சிதைந்திருக்கலாம்"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:415
 #, c-format
@@ -332,8 +335,10 @@ msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இர�
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%d' மதிப்பிக்கு அனுமதி கிடையாது."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%d' மதிப்பிக்கு அனுமதி கிடையாது."
 
 #: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
@@ -432,7 +437,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG உருவக் கோப்பை ஏற்றும்போது கொல் பிழை: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG உரைக்கான விசை 1 லிருந்து 79 எழுத்துக்களுக்குள் இருக்க வேண்டும்"
 
 #: gdk-pixbuf/io-png.c:821
@@ -441,7 +447,8 @@ msgstr "PNG உரைக்கான ஆஸ்கி எழுத்துக்
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "PNG உரை %s மதிப்பை ISO-8859-1 குறியீடாக மாற்ற முடியாது "
 
 #: gdk-pixbuf/io-png.c:994
@@ -1159,7 +1166,8 @@ msgstr "கோப்பின் _பெயரை மாற்றுக"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" அடைவு பெயரில் கோப்பு பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் உள்ளன"
 
 #: gtk/gtkfilesel.c:1441
@@ -1945,4 +1953,3 @@ msgstr "X உள்ளீட்டு முறை"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' கோப்பின் தகவல் பெற முடியவில்லை: %s"
-
