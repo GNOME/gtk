@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-06 01:59-0600\n"
+"PO-Revision-Date: 2004-03-06 17:24-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -1723,7 +1723,7 @@ msgstr "ต_รวจตัวสกด"
 
 #: gtk/gtkstock.c:332
 msgid "_Stop"
-msgstr "หยุ_ด"
+msgstr "_หยุด"
 
 #: gtk/gtkstock.c:333
 msgid "_Strikethrough"
