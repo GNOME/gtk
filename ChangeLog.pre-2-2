@@ -1,3 +1,8 @@
+Fri Mar  6 13:17:58 1998  Marc Ewing  <marc@.redhat.com>
+
+	* gtk/gtkclist.c (real_select_row, real_unselect_row): 
+	  fix selection bugs
+
 Thu Mar  5 20:41:27 1998  Ian Main  <imain@gnu.org>
 
 	* gtk/gtkfilesel.c: Added

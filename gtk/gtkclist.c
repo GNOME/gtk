@@ -2948,6 +2948,7 @@ real_select_row (GtkCList * clist,
   if (clist_row->state == GTK_STATE_NORMAL)
     {
       clist_row->state = GTK_STATE_SELECTED;
+      clist->selection = g_list_append (clist->selection, clist_row);
 
       if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
 	draw_row (clist, NULL, row, clist_row);
@@ -2972,6 +2973,7 @@ real_unselect_row (GtkCList * clist,
   if (clist_row->state == GTK_STATE_SELECTED)
     {
       clist_row->state = GTK_STATE_NORMAL;
+      clist->selection = g_list_remove (clist->selection, clist_row);
 
       if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
 	draw_row (clist, NULL, row, clist_row);
