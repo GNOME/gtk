@@ -101,6 +101,7 @@ gdk_pixmap_impl_win32_finalize (GObject *object)
 {
   GdkPixmapImplWin32 *impl = GDK_PIXMAP_IMPL_WIN32 (object);
   GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_WIN32 (impl)->wrapper);
+  GdkImage *image = impl->image;
 
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_impl_win32_finalize: %p\n",
 			     GDK_PIXMAP_HBITMAP (wrapper)));
@@ -109,6 +110,9 @@ gdk_pixmap_impl_win32_finalize (GObject *object)
     WIN32_GDI_FAILED ("DeleteObject");
 
   gdk_win32_handle_table_remove (GDK_PIXMAP_HBITMAP (wrapper));
+
+  image->windowing_data = NULL;
+  g_object_unref (image);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

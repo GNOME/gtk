@@ -1,3 +1,9 @@
+2002-09-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_impl_win32_finalize):
+	Set image->windowing_data to NULL, unref the image. (Late merge
+	from stable.)
+
 Mon Sep 30 15:45:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_set_mnemonic_widget): 
