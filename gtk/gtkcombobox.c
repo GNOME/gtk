@@ -238,6 +238,8 @@ static gboolean gtk_combo_box_scroll_event         (GtkWidget        *widget,
 static void     gtk_combo_box_list_setup           (GtkComboBox      *combo_box);
 static void     gtk_combo_box_list_destroy         (GtkComboBox      *combo_box);
 
+static void     gtk_combo_box_list_remove_grabs    (GtkComboBox      *combo_box);
+
 static gboolean gtk_combo_box_list_button_released (GtkWidget        *widget,
                                                     GdkEventButton   *event,
                                                     gpointer          data);
