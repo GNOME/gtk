@@ -1,3 +1,9 @@
+Sun Jun 18 15:35:35 2000  Pablo Saratxaga <pablo@mandrakesoft.com>
+
+	* gtk/gtkrc.cp1251,gtk/Makefile.am: the cp1251 is also used by
+	Byelorussian language; changed the Makefile and file names 
+	to reflect that.
+
 Mon Jun 12 16:58:40 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_unmap): Call gdk_window_withdraw
