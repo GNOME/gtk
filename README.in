@@ -21,7 +21,8 @@ To subscribe: mail -s subscribe gtk-list-request@redhat.com < /dev/null
 Installation
 ============
 
-See the file 'INSTALL'
+This is the gtk-1-3-win32-production branch, intended only for
+Windows. See README.win32.
 
 How to report bugs
 ==================
