@@ -1497,6 +1497,56 @@ gdk_screen_height (void)
   return return_val;
 }
 
+/*
+ *--------------------------------------------------------------
+ * gdk_screen_width_mm
+ *
+ *   Return the width of the screen in millimeters.
+ *
+ * Arguments:
+ *
+ * Results:
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+gint
+gdk_screen_width_mm (void)
+{
+  gint return_val;
+
+  return_val = DisplayWidthMM (gdk_display, gdk_screen);
+
+  return return_val;
+}
+
+/*
+ *--------------------------------------------------------------
+ * gdk_screen_height
+ *
+ *   Return the height of the screen in millimeters.
+ *
+ * Arguments:
+ *
+ * Results:
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+gint
+gdk_screen_height_mm (void)
+{
+  gint return_val;
+
+  return_val = DisplayHeightMM (gdk_display, gdk_screen);
+
+  return return_val;
+}
+
 void
 gdk_key_repeat_disable (void)
 {

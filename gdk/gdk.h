@@ -86,6 +86,9 @@ gint gdk_pointer_is_grabbed (void);
 gint gdk_screen_width  (void);
 gint gdk_screen_height (void);
 
+gint gdk_screen_width_mm  (void);
+gint gdk_screen_height_mm (void);
+
 void gdk_flush (void);
 void gdk_beep (void);
 

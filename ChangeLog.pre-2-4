@@ -1,3 +1,13 @@
+Sat May 23 17:48:58 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkeventbox.c (gtk_event_box_size_allocate): 
+        Locate child at (border_width,border_width), not
+	(2*border_width,2*border_width). [ The border is _outside_
+	widget->window ]
+	
+	* gdk/gdk.[ch]: added gdk_screen_width_mm/gdk_screen_height_mm
+	  functions. [From: Alexander Larsson <alla@lysator.liu.se> ]
+
 1998-05-22  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gtk/gtkfeatures.h.in: Define GTK_HAVE_RC_SET_IMAGE_LOADER, to be
