@@ -251,14 +251,12 @@ gdk_image_new (GdkImageType  type,
 		  return NULL;
 		}
 
-	      gdk_error_code = 0;
-	      gdk_error_warnings = 0;
+	      gdk_error_trap_push ();
 
 	      XShmAttach (private->xdisplay, x_shm_info);
 	      XSync (private->xdisplay, False);
 
-	      gdk_error_warnings = 1;
-	      if (gdk_error_code)
+	      if (gdk_error_trap_pop ())
 		{
 		  /* this is the common failure case so omit warning */
 		  XDestroyImage (private->ximage);

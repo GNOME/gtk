@@ -1,3 +1,13 @@
+Wed Sep  1 14:05:30 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkimage.c (gdk_image_new): Use gdk_error_trap_push()
+	  to avoid stomping over gdk_error_warnings.
+
+	* gdk/gdkimage.c (gdk_image_new): compute image->bpp
+	  as (bits_per_pixel + 7) / 8. This gives the same
+	  result as before for multiples of 8, but actually
+	  a "reasonable" value for 1bit or 4bit displays.
+
 Wed Sep  1 12:37:44 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): Compute
