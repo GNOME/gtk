@@ -1,3 +1,9 @@
+Fri Aug 31 20:01:23 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_iter): pass in user data.
+
+	* gtk/gtktreeview.c (gtk_tree_view_destroy): destroy search_data.
+
 Wed Aug 29 20:40:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextbuffer.[ch] (gtk_text_buffer_add/remove_selection_clipboard): 

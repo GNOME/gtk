@@ -1031,6 +1031,11 @@ gtk_tree_view_destroy (GtkObject *object)
     gtk_tree_view_search_dialog_destroy (search_dialog,
 						     tree_view);
 
+  if (tree_view->priv->search_user_data)
+    {
+      (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
+      tree_view->priv->search_user_data = NULL;
+    }
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -8902,7 +8907,7 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
   GtkTreeViewColumn *column =
     gtk_tree_view_get_column (tree_view, tree_view->priv->search_column);
   
-  if (! tree_view->priv->search_equal_func (model, tree_view->priv->search_column, text, iter))
+  if (! tree_view->priv->search_equal_func (model, tree_view->priv->search_column, text, iter, tree_view->priv->search_user_data))
     {
       (*count)++;
       
@@ -8937,7 +8942,7 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
   
   while (gtk_tree_model_iter_next (model, iter))
     {
-      if (! tree_view->priv->search_equal_func (model, tree_view->priv->search_column, text, iter))
+      if (! tree_view->priv->search_equal_func (model, tree_view->priv->search_column, text, iter, tree_view->priv->search_user_data))
         {
           (*count)++;
           if (*count == n)

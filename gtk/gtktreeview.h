@@ -119,7 +119,8 @@ typedef gboolean (* GtkTreeViewDroppableFunc)  (GtkTreeView             *tree_vi
 typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 						gint                     column,
 						gchar                   *key,
-						GtkTreeIter             *iter);
+						GtkTreeIter             *iter,
+						gpointer                 search_data);
 
 
 /* Creators */
