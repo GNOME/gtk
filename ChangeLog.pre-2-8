@@ -1,3 +1,17 @@
+Fri Sep  3 12:26:33 1999  Owen Taylor  <otaylor@redhat.com>
+
+	[ Fixes pointed out by Ettore Perazzoli <ettore@comm2000.it> ]
+	
+	* gtk/gtkmenu.c (gtk_menu_position): Make
+	 sure we never position menus with negative x, y,
+	 since gtk_widget_set_uposition() can't handle that.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu):
+	 Modify the positioning code a bit so that we always
+	 put the top-left corner onscreen. (This is for
+	 UI reasons, gtk_menu_position() now takes care of
+	 gtk_widet_set_uposition() brokeness.)
+
 Fri Sep  3 16:04:41 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk-config.in (--version): don't echo @GTK_VERSION@, but
@@ -443,7 +457,6 @@ Sat Aug 21 14:07:36 1999  Lars Hamann  <lars@gtk.org>
 	show them instead. 
 	(Bug#1805 Reported by: Dave Cole <dave@dccs.com.au>)
 
->>>>>>> 1.1061.2.110
 Wed Aug 18 09:20:10 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c:
@@ -500,7 +513,6 @@ Tue Aug 17 07:43:04 1999  Tim Janik  <timj@gtk.org>
 	function from gtk_tooltips_expose, as we connect to ::expose_event
 	*and* ::draw now.
 
->>>>>>> 1.1061.2.104
 1999-08-18  Federico Mena Quintero  <federico@redhat.com>
 
 	* gtk/gtkselection.c (gtk_target_list_ref): Added missing sanity

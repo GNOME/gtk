@@ -709,12 +709,6 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
       else
 	ty += GTK_WIDGET (menu_item)->allocation.height;
 
-      if ((tx + twidth) > screen_width)
-	{
-	  tx -= ((tx + twidth) - screen_width);
-	  if (tx < 0)
-	    tx = 0;
-	}
       break;
 
     case GTK_LEFT_RIGHT:
@@ -746,19 +740,16 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 	  break;
 	}
 
-      if ((ty + GTK_WIDGET (menu_item)->allocation.height / 4 + theight) <= screen_height)
-	ty += GTK_WIDGET (menu_item)->allocation.height / 4;
-      else
-	{
-	  ty -= ((ty + theight) - screen_height);
-	  if (ty < 0)
-	    ty = 0;
-	}
+      ty += GTK_WIDGET (menu_item)->allocation.height / 4;
+
       break;
     }
 
-  *x = tx;
-  *y = ty;
+  /* If we have negative, tx, ty here it is because we can't get
+   * the menu all the way on screen. Favor the upper-left portion.
+   */
+  *x = CLAMP (tx, 0, MAX (0, screen_width - twidth));
+  *y = CLAMP (ty, 0, MAX (0, screen_height - theight));
 }
 
 void
