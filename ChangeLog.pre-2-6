@@ -1,3 +1,9 @@
+Mon Jun 28 12:08:25 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (cmpl_completion_fullname): Don't
+	add an extra "/" when concating "/" + filename.
+	(From Matt Grossman <mattg@oz.net>)
+
 Mon Jun 28 10:57:12 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c (draw_cell_pixmap): Reset clip mask

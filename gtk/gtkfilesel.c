@@ -1536,7 +1536,8 @@ cmpl_completion_fullname (gchar* text, CompletionState* cmpl_state)
   else
     {
       strcpy (cmpl_state->updated_text, cmpl_state->reference_dir->fullname);
-      strcat (cmpl_state->updated_text, "/");
+      if (strcmp (cmpl_state->reference_dir->fullname, "/") != 0)
+	strcat (cmpl_state->updated_text, "/");
       strcat (cmpl_state->updated_text, text);
     }
 
