@@ -37,7 +37,6 @@ extern "C" {
 /* Forward declarations */
 typedef struct _GtkIconFactory  GtkIconFactory;
 typedef struct _GtkRcContext    GtkRcContext;
-typedef struct _GtkSettings     GtkSettings;
 
 typedef struct _GtkRcStyleClass GtkRcStyleClass;
 

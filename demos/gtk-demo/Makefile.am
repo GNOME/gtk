@@ -7,6 +7,7 @@ democodedir=$(datadir)/gtk-2.0/demo
 demos = @STRIP_BEGIN@	\
 	appwindow.c	\
 	button_box.c	\
+	changedisplay.c	\
 	colorsel.c	\
 	dialog.c	\
 	drawingarea.c	\

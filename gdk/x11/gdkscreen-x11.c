@@ -232,6 +232,8 @@ gdk_screen_x11_dispose (GObject *object)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
 
+  _gdk_x11_events_uninit_screen (GDK_SCREEN (object));
+  
   screen_x11->root_window = NULL;
 
   screen_x11->xdisplay = NULL;
@@ -356,7 +358,6 @@ _gdk_x11_screen_new (GdkDisplay *display,
   
   _gdk_visual_init (screen);
   _gdk_windowing_window_init (screen);
-  _gdk_x11_events_init_screen (screen);
 
   return screen;
 }

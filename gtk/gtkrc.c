@@ -119,8 +119,10 @@ static GSList *    gtk_rc_styles_match               (GSList          *rc_styles
                                                       guint            path_length,
                                                       const gchar     *path,
                                                       const gchar     *path_reversed);
-static GtkStyle *  gtk_rc_style_to_style             (GtkRcStyle      *rc_style);
-static GtkStyle*   gtk_rc_init_style                 (GSList          *rc_styles);
+static GtkStyle *  gtk_rc_style_to_style             (GtkRcContext    *context,
+						      GtkRcStyle      *rc_style);
+static GtkStyle*   gtk_rc_init_style                 (GtkRcContext    *context,
+						      GSList          *rc_styles);
 static void        gtk_rc_parse_default_files        (GtkRcContext    *context);
 static void        gtk_rc_parse_named                (GtkRcContext    *context,
 						      const gchar     *name,
@@ -1635,11 +1637,14 @@ gtk_rc_get_style (GtkWidget *widget)
     rc_styles = g_slist_prepend (rc_styles, widget_rc_style);
 
   if (rc_styles)
-    return gtk_rc_init_style (rc_styles);
+    return gtk_rc_init_style (context, rc_styles);
   else
     {
       if (!context->default_style)
-        context->default_style = gtk_style_new ();
+	{
+	  context->default_style = gtk_style_new ();
+	  _gtk_style_init_for_settings (context->default_style, context->settings);
+	}
 
       return context->default_style;
     }
@@ -1741,7 +1746,7 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
   rc_styles = sort_and_dereference_sets (rc_styles);
   
   if (rc_styles)
-    return gtk_rc_init_style (rc_styles);
+    return gtk_rc_init_style (context, rc_styles);
 
   return NULL;
 }
@@ -1967,11 +1972,13 @@ gtk_rc_style_find (GtkRcContext *context,
 }
 
 static GtkStyle *
-gtk_rc_style_to_style (GtkRcStyle *rc_style)
+gtk_rc_style_to_style (GtkRcContext *context,
+		       GtkRcStyle   *rc_style)
 {
   GtkStyle *style;
 
   style = GTK_RC_STYLE_GET_CLASS (rc_style)->create_style (rc_style);
+  _gtk_style_init_for_settings (style, context->settings);
 
   style->rc_style = rc_style;
 
@@ -1984,7 +1991,8 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
 
 /* Reuses or frees rc_styles */
 static GtkStyle *
-gtk_rc_init_style (GSList *rc_styles)
+gtk_rc_init_style (GtkRcContext *context,
+		   GSList       *rc_styles)
 {
   GtkStyle *style = NULL;
   gint i;
@@ -2069,7 +2077,7 @@ gtk_rc_init_style (GSList *rc_styles)
 	    proto_style->bg_pixmap_name[i] = NULL;
 	  }
 
-      style = gtk_rc_style_to_style (proto_style);
+      style = gtk_rc_style_to_style (context, proto_style);
       gtk_rc_style_unref (proto_style);
 
       g_hash_table_insert (realized_style_ht, rc_styles, style);

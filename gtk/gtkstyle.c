@@ -481,14 +481,30 @@ gtk_style_get_type (void)
   return style_type;
 }
 
-static void
-gtk_style_init (GtkStyle *style)
+/**
+ * _gtk_style_init_for_settings:
+ * @style: a #GtkStyle
+ * @settings: a #GtkSettings
+ * 
+ * Initializes the font description in @style accoridng to the default
+ * font name of @settings. This is called for gtk_style_new() with
+ * the settings for the default screen (if any); if we are creating
+ * a style for a particular screen, we then call it again in a
+ * location where we know the correct settings.
+ * The reason for this is that gtk_rc_style_create_style() doesn't
+ * take the screen for an argument.
+ **/
+void
+_gtk_style_init_for_settings (GtkStyle    *style,
+			      GtkSettings *settings)
 {
-  gint i;
-  const gchar *font_name = _gtk_rc_context_get_default_font_name (gtk_settings_get_default ());
+  const gchar *font_name = _gtk_rc_context_get_default_font_name (settings);
 
+  if (style->font_desc)
+    pango_font_description_free (style->font_desc);
+  
   style->font_desc = pango_font_description_from_string (font_name);
-
+      
   if (!pango_font_description_get_family (style->font_desc))
     {
       g_warning ("Default font does not have a family set");
@@ -499,6 +515,19 @@ gtk_style_init (GtkStyle *style)
       g_warning ("Default font does not have a positive size");
       pango_font_description_set_size (style->font_desc, 10 * PANGO_SCALE);
     }
+}
+
+static void
+gtk_style_init (GtkStyle *style)
+{
+  gint i;
+  
+  GtkSettings *settings = gtk_settings_get_default ();
+  
+  if (settings)
+    _gtk_style_init_for_settings (style, settings);
+  else
+    style->font_desc = pango_font_description_from_string ("Sans 10");
   
   style->attach_count = 0;
   style->colormap = NULL;

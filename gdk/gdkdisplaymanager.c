@@ -214,12 +214,15 @@ gdk_display_get_default (void)
  * Gets the default screen for the default display. (See
  * gdk_display_get_default ()).
  * 
- * Returns: a #GdkScreen.
+ * Returns: a #GdkScreen, or %NULL if there is no default display.
  */
 GdkScreen *
 gdk_screen_get_default (void)
 {
-  return gdk_display_get_default_screen (default_display);
+  if (default_display)
+    return gdk_display_get_default_screen (default_display);
+  else
+    return NULL;
 }
 
 /**

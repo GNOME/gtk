@@ -70,6 +70,11 @@ struct _GdkDisplayClass
   GdkScreen *		     (*get_screen)         (GdkDisplay *display,
 						    gint        screen_num);
   GdkScreen *		     (*get_default_screen) (GdkDisplay *display);
+
+  
+  /* Signals */
+  void (*closed) (GdkDisplay *class,
+		  gboolean    is_error);
 };
 
 GType       gdk_display_get_type (void);

@@ -56,6 +56,7 @@ typedef struct _GtkRcStyle     GtkRcStyle;
 typedef struct _GtkIconSet     GtkIconSet;
 typedef struct _GtkIconSource  GtkIconSource;
 typedef struct _GtkRcProperty  GtkRcProperty;
+typedef struct _GtkSettings    GtkSettings;
 typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
 					 const GString    *rc_string,
 					 GValue           *property_value);
@@ -861,6 +862,8 @@ const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
 					      GParamSpec         *pspec,
 					      GtkRcPropertyParser parser);
 
+void _gtk_style_init_for_settings (GtkStyle    *style,
+				   GtkSettings *settings);
 
 /* deprecated */
 #ifndef GTK_DISABLE_DEPRECATED

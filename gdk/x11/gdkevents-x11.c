@@ -169,6 +169,15 @@ _gdk_x11_events_init_screen (GdkScreen *screen)
 						       screen);
 }
 
+void
+_gdk_x11_events_uninit_screen (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  xsettings_client_destroy (screen_x11->xsettings_client);
+  screen_x11->xsettings_client = NULL;
+}
+
 void 
 _gdk_events_init (GdkDisplay *display)
 {
@@ -180,7 +189,7 @@ _gdk_events_init (GdkDisplay *display)
   GDK_NOTE (MISC, g_message ("connection number: %d", connection_number));
 
 
-  source = gdk_display_source_new (display);
+  source = display_x11->event_source = gdk_display_source_new (display);
   display_source = (GdkDisplaySource*) source;
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   
@@ -198,8 +207,6 @@ _gdk_events_init (GdkDisplay *display)
 	gdk_atom_intern ("WM_PROTOCOLS", FALSE), 
 	gdk_wm_protocols_filter,   
 	NULL);
-
-  _gdk_x11_events_init_screen (display_x11->default_screen);
 }
 
 
@@ -2371,17 +2378,29 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
 
 static void 
 gdk_xsettings_watch_cb (Window   window,
-			 Bool	  is_start,
-			 long     mask,
-			 void    *cb_data)
+			Bool	 is_start,
+			long     mask,
+			void    *cb_data)
 {
   GdkWindow *gdkwin;
   GdkScreen *screen = cb_data;
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
   gdkwin = gdk_window_lookup_for_display (gdk_screen_get_display (screen), window);
-  
+
   if (is_start)
-    gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+    {
+      if (!gdkwin)
+	gdkwin = gdk_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
+      else
+	g_object_ref (gdkwin);
+      
+      gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+    }
   else
-    gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+    {
+      g_assert (gdkwin);
+      gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+      g_object_unref (gdkwin);
+    }
 }

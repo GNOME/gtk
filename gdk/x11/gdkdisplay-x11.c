@@ -132,6 +132,12 @@ gdk_display_open (const gchar *display_name)
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     display_x11->screens[i] = _gdk_x11_screen_new (display, i);
 
+  /* We need to initialize events after we have the screen
+   * structures in places
+   */
+  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
+    _gdk_x11_events_init_screen (display_x11->screens[i]);
+  
   /*set the default screen */
   display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];
   display_x11->leader_window = XCreateSimpleWindow (display_x11->xdisplay,
@@ -488,10 +494,12 @@ gdk_display_x11_dispose (GObject *object)
   GdkDisplayX11 *display_x11;
   gint i;
   
-  display_x11 = GDK_DISPLAY_X11 (object);;
+  display_x11 = GDK_DISPLAY_X11 (object);
   
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     _gdk_screen_close (display_x11->screens[i]);
+
+  g_source_destroy (display_x11->event_source);
 
   XCloseDisplay (display_x11->xdisplay);
   display_x11->xdisplay = NULL;

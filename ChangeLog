@@ -1,3 +1,42 @@
+Thu Aug  1 19:09:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/gtk-demo/changedisplay.c: New demo for
+	window migration between different displays and screens.
+
+	* gtk/gtkrc.c gtkstyle.[ch]: Add
+	_gtk_style_init_for_settings(), so that gtkrc.c
+	can initialize the styles it creates for the 
+	right display.
+
+	* gdk/gdkdisplaymanager.c (gdk_screen_get_default)
+	* gtk/gtksettings.c (gtk_settings_get_default)
+	* gtk/gtkstyle.c (gtk_style_init): Handle absence of
+	a default screen.
+
+	* gdk/x11/gdkmain-x11.c (_gdk_windowing_set_default_display):
+	Handle display == NULL.x
+
+	* gdk/gdkdisplay.c (gdk_display_dispose): Free the
+	event queue.
+
+	* gdk/x11/gdkevents-x11.c gdk/x11/gdkdisplay-x11.c:
+	Remove the event source when closing a display.
+
+	* gdk/gdkdisplay.[ch]: Add a ::closed signal, dispose()
+	isn't convenient enough by itself.
+
+	* gdk/x11/gdkevents-x11.c (gdk_xsettings_watch_cb):
+	Create foreign windows for watch windows if there isn't
+	an existing window, instead of installing a global filter.
+	
+	* gdk/x11/gdkscreen-x11.c gdk/x11/gdkprivate-x11.h
+	gdk/x11/gdkevents-x11.c (_gdk_x11_events_uninit_screen):
+	Clean up the xsettings_client when we are done with
+	it.
+
+	* gdk/x11/gdkevents-x11.c (_gdk_events_init): Remove
+	excess call to _gdk_x11_events_init_screen()
+
 2002-08-01  Sven Neumann  <sven@gimp.org>
 
 	Merge from stable:

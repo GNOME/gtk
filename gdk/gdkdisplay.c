@@ -25,12 +25,20 @@
 #include "gdk.h"		/* gdk_event_send_client_message() */
 #include "gdkdisplay.h"
 #include "gdkinternals.h"
+#include "gdkmarshalers.h"
 #include "gdkscreen.h"
+
+enum {
+  CLOSED,
+  LAST_SIGNAL
+};
 
 static void gdk_display_class_init (GdkDisplayClass *class);
 static void gdk_display_init       (GdkDisplay      *display);
 static void gdk_display_dispose    (GObject         *object);
 static void gdk_display_finalize   (GObject         *object);
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class;
 
@@ -69,6 +77,17 @@ gdk_display_class_init (GdkDisplayClass *class)
 
   object_class->finalize = gdk_display_finalize;
   object_class->dispose = gdk_display_dispose;
+
+  signals[CLOSED] =
+    g_signal_new ("closed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GdkDisplayClass, closed),
+		  NULL, NULL,
+		  gdk_marshal_VOID__BOOLEAN,
+		  G_TYPE_NONE,
+		  1,
+		  G_TYPE_BOOLEAN);
 }
 
 static void
@@ -87,18 +106,22 @@ static void
 gdk_display_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
+
+  g_list_foreach (display->queued_events, (GFunc)gdk_event_free, NULL);
+  g_list_free (display->queued_events);
+  display->queued_events = NULL;
+  display->queued_tail = NULL;
+
+  _gdk_displays = g_slist_remove (_gdk_displays, object);
+
+  if (gdk_display_get_default() == display)
+    gdk_display_manager_set_default_display (gdk_display_manager_get(), NULL);
 }
 
 static void
 gdk_display_finalize (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
-  
-  _gdk_displays = g_slist_remove (_gdk_displays, display);
-
-  if (gdk_display_get_default() == display)
-    gdk_display_manager_set_default_display (gdk_display_manager_get(),
-					     NULL);
   
   parent_class->finalize (object);
 }
@@ -118,7 +141,8 @@ gdk_display_close (GdkDisplay *display)
   if (!display->closed)
     {
       display->closed = TRUE;
-
+      
+      g_signal_emit (display, signals[CLOSED], 0, FALSE);
       g_object_run_dispose (G_OBJECT (display));
       
       g_object_unref (G_OBJECT (display));

@@ -58,6 +58,8 @@ struct _GdkDisplayX11
   GdkScreen *default_screen;
   GdkScreen **screens;
 
+  GSource *event_source;
+
   gint grab_count;
 
   /* Keyboard related information */
