@@ -52,7 +52,7 @@ typedef unsigned int   xdg_uint32_t;
 					      (((xdg_uint32_t)(val) & 0x000000FFU) << 24))
 /* UTF-8 utils
  */
-const char *const _xdg_utf8_skip;
+extern const char *const _xdg_utf8_skip;
 #define _xdg_utf8_next_char(p) (char *)((p) + _xdg_utf8_skip[*(unsigned char *)(p)])
 #define _xdg_utf8_char_size(p) (int) (_xdg_utf8_skip[*(unsigned char *)(p)])
 
