@@ -297,8 +297,38 @@ render_layout_line (GdkDrawable        *drawable,
           GObject *shaped = (*shaped_pointer)->data;
 
           *shaped_pointer = (*shaped_pointer)->next;
-          
-          if (GDK_IS_PIXBUF (shaped))
+
+          if (shaped == NULL)
+            {
+              /* This happens if we have an empty widget anchor. Draw
+               * something empty-looking.
+               */
+              GdkRectangle shape_rect, draw_rect;
+
+              shape_rect.x = x + x_off / PANGO_SCALE;
+              shape_rect.y = risen_y - PANGO_PIXELS (logical_rect.height);
+              shape_rect.width = PANGO_PIXELS (logical_rect.width);
+              shape_rect.height = PANGO_PIXELS (logical_rect.height);
+
+              if (gdk_rectangle_intersect (&shape_rect, &render_state->clip_rect,
+                                           &draw_rect))
+                {
+                  gdk_draw_rectangle (drawable, render_state->fg_gc,
+                                      FALSE, shape_rect.x, shape_rect.y,
+                                      shape_rect.width, shape_rect.height);
+
+                  gdk_draw_line (drawable, render_state->fg_gc,
+                                 shape_rect.x, shape_rect.y,
+                                 shape_rect.x + shape_rect.width,
+                                 shape_rect.y + shape_rect.height);
+
+                  gdk_draw_line (drawable, render_state->fg_gc,
+                                 shape_rect.x + shape_rect.width, shape_rect.y,
+                                 shape_rect.x,
+                                 shape_rect.y + shape_rect.height);
+                }
+            }
+          else if (GDK_IS_PIXBUF (shaped))
             {
               gint width, height;
               GdkRectangle pixbuf_rect, draw_rect;

@@ -1,5 +1,16 @@
 2001-08-30  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextdisplay.c (render_layout_line): handle NULL shaped
+	object from the empty-child-anchor case by drawing a little box.
+	
+	* gtk/gtktextlayout.c (add_child_attrs): Still set shape attribute
+	if the child anchor has no anchored widgets - fixes #59328.
+
+	Also, remove bizarre deletion of preedit string that seems to have
+	gotten in here somehow.
+
+2001-08-30  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_check_cursor_blink): apply fix
 	to #58420 from Hidetoshi Tajima and Matthias Clasen
 
