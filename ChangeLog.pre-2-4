@@ -1,3 +1,9 @@
+Tue Dec 22 15:55:39 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_button_press): 
+	Return TRUE for button press events we handle.
+	(Allows option menus in radio buttons to work...)
+
 Tue Dec 22 14:50:25 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_find_widget): Optimization -

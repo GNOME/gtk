@@ -471,6 +471,7 @@ gtk_option_menu_button_press (GtkWidget      *widget,
       gtk_menu_popup (GTK_MENU (option_menu->menu), NULL, NULL,
 		      gtk_option_menu_position, option_menu,
 		      event->button, event->time);
+      return TRUE;
     }
 
   return FALSE;
@@ -495,7 +496,7 @@ gtk_option_menu_key_press (GtkWidget   *widget,
       gtk_menu_popup (GTK_MENU (option_menu->menu), NULL, NULL,
 		      gtk_option_menu_position, option_menu,
 		      0, event->time);
-      break;
+      return TRUE;
     }
   
   return FALSE;
