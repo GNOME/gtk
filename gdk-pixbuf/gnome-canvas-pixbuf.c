@@ -589,6 +589,7 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 	double i_len, j_len;
 	double scale[6], final[6];
 	guchar *buf;
+	GdkPixbuf *pixbuf;
 
 	gcp = GNOME_CANVAS_PIXBUF (item);
 	priv = gcp->priv;
@@ -609,4 +610,14 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
 	buf = g_new0 (guchar, width * height * 4);
 	transform_pixbuf (buf, x, y, width, height, width * 4, priv->pixbuf, final);
+
+	pixbuf = gdk_pixbuf_new_from_data (buf, ART_PIX_RGB, TRUE,
+					   width, height, width * 4,
+					   NULL, NULL);
+
+	gdk_pixbuf_render_to_drawable (pixbuf, drawable, 0, 0, 0, 0, width, height,
+				       GDK_RGB_DITHER_MAX, x, y);
+
+	gdk_pixbuf_unref (pixbuf);
+	g_free (buf);
 }

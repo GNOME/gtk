@@ -46,9 +46,10 @@ libgdk_pixbufincludedir = $(includedir)/gdk-pixbuf
 
 libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf.c		\
-	gdk-pixbuf-loader.c	\
+	gdk-pixbuf-data.c	\
 	gdk-pixbuf-io.c		\
-	gdk-pixbuf-data.c
+	gdk-pixbuf-loader.c	\
+	gdk-pixbuf-render.c
 
 libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0
 

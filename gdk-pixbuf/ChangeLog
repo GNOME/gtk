@@ -1,3 +1,16 @@
+1999-10-27  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_threshold_alpha): New
+	function to threshold a pixbuf's alpha channel into a bitmap.
+
+	* src/gdk-pixbuf.c (gdk_pixbuf_new): Fixed so that it will
+	contemplate future extensions to ArtPixBuf's formats.
+
+	* src/io-png.c (png_info_callback): Use the new API of gdk_pixbuf_new().
+
+	* src/gdk-pixbuf.h (gdk_pixbuf_get_height): Added some convenience
+	macros to fetch the ArtPixBuf's fields.
+
 1999-10-27  Havoc Pennington  <hp@pobox.com>
 
 	* src/testpixbuf.c (main): Display the progressive load

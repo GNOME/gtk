@@ -100,63 +100,50 @@ gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf)
 	return pixbuf;
 }
 
-/**
- * gdk_pixbuf_new:
- * @art_pixbuf: A libart pixbuf.
- *
- * Creates a &GdkPixbuf; magically sets the ArtPixFormat, rowstride, and creates
- * the buffer. Use gdk_pixbuf_new_from_data() to do things manually.
- *
- * Return value: A newly-created &GdkPixbuf structure with a reference count of
- * 1. Somewhat oddly, returns NULL if it can't allocate the buffer; this unusual
- * behavior is needed because images can be very large.
- **/
-GdkPixbuf *
-gdk_pixbuf_new (gboolean has_alpha, int width, int height)
+/* Destroy notification function for gdk_pixbuf_new() */
+static void
+free_buffer (gpointer user_data, gpointer data)
 {
-        GdkPixbuf *pixbuf;
-
-	g_return_val_if_fail (width > 0, NULL);
-        g_return_val_if_fail (height > 0, NULL);
-
-	pixbuf = g_new (GdkPixbuf, 1);
-	pixbuf->ref_count = 1;
-        
-        if (has_alpha) {
-                art_u8* pixels;
-                int rowstride;
-
-                /* FIXME, pick an optimal stride */                
-                rowstride = 4*width;
-
-                pixels = art_alloc(rowstride*height);
-
-                if (pixels == NULL) {
-                        g_free(pixbuf);
-                        return NULL;
-                }
-                
-                pixbuf->art_pixbuf = art_pixbuf_new_rgba(pixels, width, height, rowstride);
-        } else {
-                art_u8* pixels;
-                int rowstride;
-
-                /* FIXME, pick an optimal stride */
-                rowstride = 3*width;
-
-                pixels = art_alloc(rowstride*height);
-
-                if (pixels == NULL) {
-                        g_free(pixbuf);
-                        return NULL;
-                }
-
-                pixbuf->art_pixbuf = art_pixbuf_new_rgb(pixels, width, height, rowstride);
-        }
-                
-	return pixbuf;
-
-
+	free (data);
 }
 
+/**
+ * gdk_pixbuf_new:
+ * @format: Image format.
+ * @has_alpha: Whether the image should have transparency information.
+ * @bits_per_sample: Number of bits per color sample.
+ * @width: Width of image in pixels.
+ * @height: Height of image in pixels.
+ * 
+ * Creates a new &GdkPixbuf structure and allocates a buffer for it.  The buffer
+ * has an optimal rowstride.  Note that the buffer is not cleared; you will have
+ * to fill it completely.
+ * 
+ * Return value: A newly-created &GdkPixbuf, or NULL if not enough memory
+ * could be allocated for the image buffer.
+ **/
+GdkPixbuf *
+gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,
+		int width, int height)
+{
+	guchar *buf;
+	int channels;
+	int rowstride;
 
+	g_return_val_if_fail (format == ART_PIX_RGB, NULL);
+	g_return_val_if_fail (bits_per_sample == 8, NULL);
+	g_return_val_if_fail (width > 0, NULL);
+	g_return_val_if_fail (height > 0, NULL);
+
+	/* Always align rows to 32-bit boundaries */
+
+	channels = has_alpha ? 4 : 3;
+	rowstride = 4 * ((channels * width + 3) / 4);
+
+	buf = malloc (height * rowstride);
+	if (!buf)
+		return NULL;
+
+	return gdk_pixbuf_new_from_data (buf, format, has_alpha, width, height, rowstride,
+					 free_buffer, NULL);
+}

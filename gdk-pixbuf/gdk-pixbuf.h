@@ -27,7 +27,7 @@
 
 #include <libart_lgpl/art_misc.h>
 #include <libart_lgpl/art_pixbuf.h>
-#include <glib.h>
+#include <gdk/gdk.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +50,17 @@ struct _GdkPixbuf {
 
 
 
+/* Convenience macros */
+
+#define gdk_pixbuf_get_format(pixbuf) ((pixbuf)->art_pixbuf->format)
+#define gdk_pixbuf_get_n_channels(pixbuf) ((pixbuf)->art_pixbuf->n_channels)
+#define gdk_pixbuf_get_has_alpha(pixbuf) ((pixbuf)->art_pixbuf->has_alpha)
+#define gdk_pixbuf_get_bits_per_sample(pixbuf) ((pixbuf)->art_pixbuf->bits_per_sample)
+#define gdk_pixbuf_get_pixels(pixbuf) ((pixbuf)->art_pixbuf->pixels)
+#define gdk_pixbuf_get_width(pixbuf) ((pixbuf)->art_pixbuf->width)
+#define gdk_pixbuf_get_height(pixbuf) ((pixbuf)->art_pixbuf->height)
+#define gdk_pixbuf_get_rowstride(pixbuf) ((pixbuf)->art_pixbuf->rowstride)
+
 /* Reference counting */
 
 void gdk_pixbuf_ref (GdkPixbuf *pixbuf);
@@ -59,8 +70,10 @@ void gdk_pixbuf_unref (GdkPixbuf *pixbuf);
 
 GdkPixbuf *gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf);
 
-/* Create a "blank" pixbuf with an optimal rowstride and a new buffer */
-GdkPixbuf *gdk_pixbuf_new (gboolean has_alpha, int width, int height);
+/* Create a blank pixbuf with an optimal rowstride and a new buffer */
+
+GdkPixbuf *gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,
+			   int width, int height);
 
 /* Simple loading */
 
@@ -70,7 +83,28 @@ GdkPixbuf *gdk_pixbuf_new_from_data (guchar *data, ArtPixFormat format, gboolean
 				     ArtDestroyNotify dfunc, gpointer dfunc_data);
 GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const gchar **data);
 
-	
+/* Rendering to a drawable */
+
+typedef enum {
+	GDK_PIXBUF_ALPHA_BILEVEL,
+	GDK_PIXBUF_ALPHA_FULL
+} GdkPixbufAlphaMode;
+
+void gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
+					int src_x, int src_y,
+					int dest_x, int dest_y,
+					int width, int height,
+					int alpha_threshold);
+
+void gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
+				    int src_x, int src_y,
+				    int dest_x, int dest_y,
+				    int width, int height,
+				    GdkPixbufAlphaMode alpha_mode,
+				    int alpha_threshold,
+				    GdkRgbDither dither,
+				    int x_dither, int y_dither);
+
 /* Transformations */
 #if 0
 GdkPixbuf *gdk_pixbuf_scale (const GdkPixbuf *pixbuf, gint w, gint h);

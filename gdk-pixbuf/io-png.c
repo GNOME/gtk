@@ -153,7 +153,7 @@ image_load (FILE *f)
 	png_structp png_ptr;
 	png_infop info_ptr, end_info;
         gboolean failed = FALSE;
-	gint i, depth, ctype, inttype, passes, bpp;
+	gint i, ctype, bpp;
 	png_uint_32 w, h;
 	png_bytepp rows;
 	guchar *pixels;
@@ -360,7 +360,7 @@ png_info_callback   (png_structp png_read_ptr,
         if (color_type & PNG_COLOR_MASK_ALPHA)
                 have_alpha = TRUE;
         
-        lc->pixbuf = gdk_pixbuf_new(have_alpha, width, height);
+        lc->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, have_alpha, 8, width, height);
 
         if (lc->pixbuf == NULL) {
                 /* Failed to allocate memory */
