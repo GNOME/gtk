@@ -50,6 +50,14 @@ might work, but don't count on it. Note that if you use gcc, in order
 to use the prebuilt DLLs, you *must* compile your code with gcc
 -mno-cygwin -fnative-struct.
 
+Multi-threaded use of GTK+ on Win32
+===================================
+
+Multi-threaded GTK+ programs might work in special simple cases, but
+not in general. Sorry. If you have all GTK+ and GDK calls in the same
+thread, it might work. Otherwise, probably not at all. Possible ways
+to fix this are being investigated.
+
 Wintab
 ======
 
