@@ -196,15 +196,6 @@ of an X display. All its fields are private and should not be accessed directly.
 @msec: 
 
 
-<!-- ##### FUNCTION gdk_display_set_sm_client_id ##### -->
-<para>
-
-</para>
-
-@display: 
-@sm_client_id: 
-
-
 <!-- ##### SIGNAL GdkDisplay::closed ##### -->
 <para>
 

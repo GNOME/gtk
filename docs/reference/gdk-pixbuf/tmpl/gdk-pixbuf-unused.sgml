@@ -365,6 +365,21 @@ XlibRGB
 
 @obj: A GTK+ object.
 
+<!-- ##### STRUCT GdkPixbufFormat ##### -->
+<para>
+A #GdkPixbufFormat contains information about the image format accepted by a
+module. Only modules should access the fields directly.
+</para>
+
+@name: the name of the image format
+@signature: the signature of the module
+@domain: the message domain for the @description
+@description: a description of the image format
+@mime_types: a %NULL-terminated array of MIME types for the image format.
+@extensions: a %NULL-terminated array of typical filename extensions for the
+image format.
+@flags: 
+
 <!-- ##### STRUCT GdkPixbufFrame ##### -->
 <para>
  This object describes an individual frame of an animation.
@@ -396,6 +411,92 @@ XlibRGB
 
 @pixbuf: The pixbuf that is losing its last reference.
 @data: User closure data.
+
+<!-- ##### USER_FUNCTION GdkPixbufModuleFillInfoFunc ##### -->
+<para>
+Defines the type of the function used to fill a 
+#GdkPixbufFormat structure with information about a module.
+</para>
+
+@info: a #GdkPixbufFormat.
+
+<!-- ##### USER_FUNCTION GdkPixbufModuleFillVtableFunc ##### -->
+<para>
+Defines the type of the function used to set the vtable of a 
+#GdkPixbufModule when it is loaded. 
+</para>
+
+@module: a #GdkPixbufModule.
+
+<!-- ##### STRUCT GdkPixbufModulePattern ##### -->
+<para>
+The signature of a module is a set of prefixes. Prefixes are encoded as
+pairs of ordinary strings, where the second string, if not %NULL,
+may contain ' ', '!', 'x', 'z', and 'n' to indicate bytes that must be 
+matched, not matched, "don't-care"-bytes, zeros and non-zeros.
+Each prefix has an associated integer that describes the relevance of 
+the prefix, with 0 meaning a mismatch and 100 a "perfect match".
+</para>
+
+<para>
+The signature of a module is stored as an array of 
+#GdkPixbufModulePattern<!-- -->s. 
+</para>
+
+@prefix: the prefix for this pattern
+@mask: mask containing bytes which modify how the prefix is matched against
+  test data
+@relevance: relevance of this pattern
+
+<!-- ##### USER_FUNCTION GdkPixbufModulePreparedFunc ##### -->
+<para>
+Defines the type of the function that gets called once the initial 
+setup of @pixbuf is done.
+</para>
+<para>
+#GdkPixbufLoader uses a function of this type to emit the 
+"<link linkend="GdkPixbufLoader-area-prepared">area_prepared</link>"
+signal.
+</para>
+
+@pixbuf: the #GdkPixbuf that is currently being loaded.
+@anim: if an animation is being loaded, the #GdkPixbufAnimation, else %NULL.
+@user_data: the loader.
+
+<!-- ##### USER_FUNCTION GdkPixbufModuleSizeFunc ##### -->
+<para>
+Defines the type of the function that gets called once the size 
+of the loaded image is known.
+</para>
+<para>
+The function is expected to set @width and @height to the desired
+size to which the image should be scaled. If a module has no efficient 
+way to achieve the desired scaling during the loading of the image, it may
+either ignore the size request, or only approximate it -- &gdk-pixbuf; will
+then perform the required scaling on the completely loaded image. 
+</para>
+
+@width: pointer to a location containing the current image width
+@height: pointer to a location containing the current image height
+@user_data: the loader.
+
+<!-- ##### USER_FUNCTION GdkPixbufModuleUpdatedFunc ##### -->
+<para>
+Defines the type of the function that gets called every time a region
+of @pixbuf is updated.
+</para>
+<para>
+#GdkPixbufLoader uses a function of this type to emit the 
+"<link linkend="GdkPixbufLoader-area-updated">area_updated</link>"
+signal.
+</para>
+
+@pixbuf: the #GdkPixbuf that is currently being loaded.
+@x: the X origin of the updated area.
+@y: the Y origin of the updated area.
+@width: the width of the updated area.
+@height: the height of the updated area.
+@user_data: the loader.
 
 <!-- ##### ARG GnomeCanvasPixbuf:height ##### -->
   <para>
@@ -566,6 +667,53 @@ End:
     default is %FALSE.
   </para>
 
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_description ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_extensions ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_mime_types ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_name ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_format_is_writable ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_get_formats ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 <!-- ##### FUNCTION gdk_pixbuf_new_from_stream ##### -->
 <para>

@@ -1,3 +1,11 @@
+Fri Oct  4 21:21:47 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_paint): remove unused
+	codepath.
+
+	* gtk/gtkmenuitem.c (gtk_real_menu_item_{de,}select): call 
+	gtk_widget_queue_draw() instead of gtk_widget_draw().
+
 Fri Oct  4 14:49:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from Shivram U <shivaram.upadhyayula@wipro.com>

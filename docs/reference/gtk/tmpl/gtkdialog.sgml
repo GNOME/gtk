@@ -299,12 +299,12 @@ was clicked.
 
 </para>
 
-<!-- ##### ARG GtkDialog:action-area-border ##### -->
+<!-- ##### ARG GtkDialog:content-area-border ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkDialog:content-area-border ##### -->
+<!-- ##### ARG GtkDialog:action-area-border ##### -->
 <para>
 
 </para>

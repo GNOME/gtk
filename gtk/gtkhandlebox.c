@@ -877,17 +877,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 			 event ? &event->area : area);
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
-    {
-      GdkRectangle child_area;
-
-      if (!event) /* we were called from draw() */
-	{
-	  if (gtk_widget_intersect (bin->child, area, &child_area))
-	    gtk_widget_draw (bin->child, &child_area);
-	}
-      else /* we were called from expose() */
-	(* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-    }
+    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
 }
 
 static gint

@@ -596,6 +596,14 @@ status information, so the application does not need to do anything.
 </para>
 
 
+<!-- ##### FUNCTION gdk_display_set_sm_client_id ##### -->
+<para>
+
+</para>
+
+@display: 
+@sm_client_id: 
+
 <!-- ##### FUNCTION gdk_font_full_name_free ##### -->
 <para>
 Frees a full font name obtained from gdk_font_full_name_get().

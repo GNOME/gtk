@@ -724,7 +724,7 @@ gtk_real_menu_item_select (GtkItem *item)
     }
   
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_PRELIGHT);
-  gtk_widget_draw (GTK_WIDGET (menu_item), NULL);
+  gtk_widget_queue_draw (GTK_WIDGET (menu_item));
 }
 
 static void
@@ -757,7 +757,7 @@ gtk_real_menu_item_deselect (GtkItem *item)
     }
 
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_NORMAL);
-  gtk_widget_draw (GTK_WIDGET (menu_item), NULL);
+  gtk_widget_queue_draw (GTK_WIDGET (menu_item));
 }
 
 static gboolean

@@ -722,3 +722,8 @@ types related to the text widget and how they work together.
 @arg2: 
 @arg3: 
 
+<!-- ##### ARG GtkTextBuffer:tag-table ##### -->
+<para>
+
+</para>
+
