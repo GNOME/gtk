@@ -721,6 +721,36 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
   return retval;
 }
 
+/**
+ * gtk_tree_model_get_string_from_iter:
+ * @tree_model: A #GtkTreeModel.
+ * @iter: An #GtkTreeIter.
+ *
+ * Generates a string representation of the iter. This string is a ':'
+ * separated list of numbers. For example, "4:10:0:3" would be an
+ * acceptable return value for this string.
+ *
+ * Return value: A newly-allocated string. Must be freed with g_free().
+ **/
+gchar *
+gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
+                                     GtkTreeIter  *iter)
+{
+  GtkTreePath *path;
+  gchar *ret;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), NULL);
+  g_return_val_if_fail (iter != NULL, NULL);
+
+  path = gtk_tree_model_get_path (tree_model, iter);
+
+  g_return_val_if_fail (path != NULL, NULL);
+
+  ret = gtk_tree_path_to_string (path);
+  gtk_tree_path_free (path);
+
+  return ret;
+}
 
 /**
  * gtk_tree_model_get_iter_first:

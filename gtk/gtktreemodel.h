@@ -183,6 +183,8 @@ gboolean          gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
 gboolean          gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 						       GtkTreeIter  *iter,
 						       const gchar  *path_string);
+gchar *           gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
+                                                       GtkTreeIter  *iter);
 #define gtk_tree_model_get_iter_root(tree_model, iter) gtk_tree_model_get_iter_first(tree_model, iter)
 gboolean          gtk_tree_model_get_iter_first  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
