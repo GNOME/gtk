@@ -1,3 +1,10 @@
+Wed Dec 17 12:00:48 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdkcc.c: New GdkColorContext functionality!  This should
+	eventually solve all of our color management problems.  Gdk still
+	needs to be modified to support visuals with less than 8 bpp.  Gtk
+	needs to be modified just a bit.
+
 Wed Dec 17 13:56:17 PST 1997 Manish Singh <yosh@gimp.org>
 
 	* a small patch by Lauri Alanko that allows Gimp to pass
