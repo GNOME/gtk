@@ -1,0 +1,113 @@
+#ifndef GTK_TEXT_VIEW_H
+#define GTK_TEXT_VIEW_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+#include <gtk/gtktextbuffer.h>
+
+typedef enum {
+  GTK_TEXT_MOVEMENT_CHAR,       /* move by forw/back chars */
+  GTK_TEXT_MOVEMENT_WORD,       /* move by forward/back words */
+  GTK_TEXT_MOVEMENT_LINE,       /* move up/down lines (wrapped lines) */
+  GTK_TEXT_MOVEMENT_PARAGRAPH,  /* move up/down paragraphs (newline-ended lines) */
+  GTK_TEXT_MOVEMENT_PARAGRAPH_ENDS,   /* move to either end of a paragraph */
+  GTK_TEXT_MOVEMENT_BUFFER_ENDS       /* move to ends of the buffer */
+} GtkTextViewMovementStep;
+
+typedef enum {
+  GTK_TEXT_SCROLL_TO_TOP,
+  GTK_TEXT_SCROLL_TO_BOTTOM,
+  GTK_TEXT_SCROLL_PAGE_DOWN,
+  GTK_TEXT_SCROLL_PAGE_UP
+} GtkTextViewScrollType;
+
+typedef enum {
+  GTK_TEXT_DELETE_CHAR,
+  GTK_TEXT_DELETE_HALF_WORD, /* delete only the portion of the word to the
+                                 left/right of cursor if we're in the middle
+                                 of a word */
+  GTK_TEXT_DELETE_WHOLE_WORD,
+  GTK_TEXT_DELETE_HALF_LINE,
+  GTK_TEXT_DELETE_WHOLE_LINE,
+  GTK_TEXT_DELETE_HALF_PARAGRAPH,  /* like C-k in Emacs (or its reverse) */
+  GTK_TEXT_DELETE_WHOLE_PARAGRAPH, /* C-k in pico, kill whole line */
+  GTK_TEXT_DELETE_WHITESPACE,      /* M-\ in Emacs */
+  GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE /* M-space in Emacs */
+} GtkTextViewDeleteType;
+
+#define GTK_TYPE_TEXT_VIEW (gtk_text_view_get_type())
+#define GTK_TEXT_VIEW(obj)  (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_VIEW, GtkTextView))
+#define GTK_TEXT_VIEW_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_VIEW, GtkTextViewClass))
+#define GTK_IS_TEXT_VIEW(obj)  (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT_VIEW))
+#define GTK_IS_TEXT_VIEW_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_VIEW))
+
+typedef struct _GtkTextView GtkTextView;
+typedef struct _GtkTextViewClass GtkTextViewClass;
+
+struct _GtkTextView {
+  GtkLayout parent_instance;
+
+  struct _GtkTextLayout *layout;
+  guint need_repaint_handler;
+  GtkTextBuffer *buffer;
+
+  guint selection_drag_handler;
+  guint selection_drag_scan_timeout;
+  gint scrolling_accel_factor;
+
+  gboolean overwrite_mode;
+
+  GtkTextMark *dnd_mark;
+  guint blink_timeout;
+};
+
+struct _GtkTextViewClass {
+  GtkLayoutClass parent_class;
+
+  /* These are all RUN_ACTION signals for keybindings */
+
+  /* move insertion point */
+  void (* move_insert) (GtkTextView *tkxt, GtkTextViewMovementStep step, gint count, gboolean extend_selection);
+  /* move the "anchor" (what Emacs calls the mark) to the cursor position */
+  void (* set_anchor)  (GtkTextView *tkxt);
+  /* Scroll */
+  void (* scroll_text) (GtkTextView *tkxt, GtkTextViewScrollType type);
+  /* Deletions */
+  void (* delete_text) (GtkTextView *tkxt, GtkTextViewDeleteType type, gint count);
+  /* cut copy paste */
+  void (* cut_text)    (GtkTextView *tkxt);
+  void (* copy_text)    (GtkTextView *tkxt);
+  void (* paste_text)    (GtkTextView *tkxt);
+  /* overwrite */
+  void (* toggle_overwrite) (GtkTextView *tkxt);
+};
+
+GtkType gtk_text_view_get_type(void);
+
+GtkWidget *gtk_text_view_new(void);
+GtkWidget *gtk_text_view_new_with_buffer(GtkTextBuffer *buffer);
+void       gtk_text_view_set_buffer(GtkTextView *tkxt,
+                                GtkTextBuffer *buffer);
+
+GtkTextBuffer *gtk_text_view_get_buffer(GtkTextView *tkxt);
+
+void       gtk_text_view_get_iter_at_pixel(GtkTextView *tkxt,
+                                       GtkTextIter *iter,
+                                       gint x, gint y);
+
+gboolean   gtk_text_view_scroll_to_mark (GtkTextView *tkxt,
+                                     const gchar *mark_name,
+                                     gint mark_within_margin);
+
+gboolean   gtk_text_view_move_mark_onscreen(GtkTextView *tkxt,
+                                        const gchar *mark_name);
+
+gboolean   gtk_text_view_place_cursor_onscreen(GtkTextView *tkxt);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* GTK_TEXT_VIEW_H */

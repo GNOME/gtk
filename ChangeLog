@@ -1,3 +1,8 @@
+Mon Apr 10 10:33:45 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext?*.[ch]: Check in Havoc's port of the Tk text widget,
+	in original form preparatory to Pango-ization and gdkimcontext-ization.
+
 Thu Apr  6 19:25:39 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontext.c: Move default implementations to real_* vfuncs,

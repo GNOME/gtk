@@ -139,6 +139,12 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkstatusbar.h		\
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
+	gtktextbuffer.h		\
+	gtktextiter.h		\
+	gtktextmark.h		\
+	gtktexttag.h		\
+	gtktexttagtable.h	\
+	gtktextview.h		\
 	gtktext.h		\
 	gtkthemes.h		\
 	gtktipsquery.h		\
@@ -159,6 +165,23 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkwidget.h		\
 	gtkwindow.h		\
 @STRIP_END@
+
+#
+# GTK+ header files that we install, but don't extract enums from
+# (This class is iffy; we have it for the semi-public interface
+# of the Text widget, which is useful for writing new view types
+# such as a Canvas text item, but isn't part of the clean public
+# interface)
+
+gtk_semipublic_h_sources = @STRIP_BEGIN@ \
+	gtktextbtree.h		\
+	gtktextchild.h		\
+	gtktextdisplay.h	\
+	gtktextlayout.h		\
+	gtktextsegment.h	\
+	gtktexttypes.h		\
+@STRIP_END@	
+
 # GTK+ header files that don't get installed
 gtk_private_h_sources = @STRIP_BEGIN@ \
 @STRIP_END@
@@ -256,6 +279,21 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtktable.c		\
 	gtktearoffmenuitem.c    \
 	gtktext.c		\
+	gtktextbtree.c		\
+	gtktextbuffer.c		\
+	gtktextchild.c		\
+	gtktextdisplay.c	\
+	gtktextiter.c		\
+	gtktextiterprivate.h	\
+	gtktextlayout.c		\
+	gtktextmark.c		\
+	gtktextmarkprivate.h	\
+	gtktextsegment.c	\
+	gtktexttag.c		\
+	gtktexttagprivate.h	\
+	gtktexttagtable.c	\
+	gtktexttypes.c		\
+	gtktextview.c		\
 	gtkthemes.c		\
 	gtktipsquery.c		\
 	gtktogglebutton.c	\
@@ -340,7 +378,7 @@ gdk_headers = @STRIP_BEGIN@ 	\
 #
 # setup GTK+ sources and their dependancies
 #
-libgtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_built_public_sources)
+libgtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semipublic_h_sources) $(gtk_built_public_sources)
 libgtk_la_SOURCES = $(gtk_c_sources)
 MAINTAINERCLEANFILES += $(gtk_built_public_sources) $(gtk_built_sources)
 EXTRA_HEADERS +=
@@ -444,7 +482,7 @@ uninstall-local:
 #
 # test programs, not to be installed
 #
-noinst_PROGRAMS = testgtk testinput testselection testrgb testdnd simple # testthreads
+noinst_PROGRAMS = testgtk testinput testselection testrgb testdnd testtext simple # testthreads
 DEPS = libgtk.la $(top_builddir)/gdk/libgdk.la
 LDADDS = @STRIP_BEGIN@ \
 	libgtk.la			\
@@ -461,12 +499,14 @@ testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 testrgb_DEPENDENCIES = $(DEPS)
+testtext_DEPENDENCIES = $(DEPS)
 testdnd_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
 #testthreads_DEPENDENCIES = $(DEPS)
 testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
+testtext_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
