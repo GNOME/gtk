@@ -1,5 +1,7 @@
 2001-10-28  Tor Lillqvist  <tml@iki.fi>
 
+	* makefile.mingw: Rename makefile.cygwin to makefile.mingw.
+
 	* makefile.cygwin: Change the Content-Type: header to
 	charset=UTF-8 after converting to UTF-8. Remove superfluos rules
 	for Chinese.
