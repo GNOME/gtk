@@ -40,6 +40,12 @@ enum {
 };
 
 enum {
+  CHILD_PROP_0,
+  CHILD_PROP_RESIZE,
+  CHILD_PROP_SHRINK
+};
+
+enum {
   CYCLE_CHILD_FOCUS,
   TOGGLE_HANDLE_FOCUS,
   MOVE_HANDLE,
@@ -59,6 +65,16 @@ static void     gtk_paned_get_property          (GObject          *object,
 						 guint             prop_id,
 						 GValue           *value,
 						 GParamSpec       *pspec);
+static void gtk_paned_set_child_property        (GtkContainer      *container,
+						 GtkWidget         *child,
+						 guint              property_id,
+						 const GValue      *value,
+						 GParamSpec        *pspec);
+static void gtk_paned_get_child_property        (GtkContainer      *container,
+						 GtkWidget         *child,
+						 guint              property_id,
+						 GValue            *value,
+						 GParamSpec        *pspec);
 static void     gtk_paned_finalize              (GObject          *object);
 static void     gtk_paned_realize               (GtkWidget        *widget);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
@@ -204,6 +220,8 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->forall = gtk_paned_forall;
   container_class->child_type = gtk_paned_child_type;
   container_class->set_focus_child = gtk_paned_set_focus_child;
+  container_class->set_child_property = gtk_paned_set_child_property;
+  container_class->get_child_property = gtk_paned_get_child_property;
 
   paned_class->cycle_child_focus = gtk_paned_cycle_child_focus;
   paned_class->toggle_handle_focus = gtk_paned_toggle_handle_focus;
@@ -237,6 +255,22 @@ gtk_paned_class_init (GtkPanedClass *class)
 							     G_MAXINT,
 							     5,
 							     G_PARAM_READABLE));
+
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_RESIZE,
+					      g_param_spec_boolean ("resize", 
+								    _("Resize"),
+								    _("If TRUE, the child expands and shrinks along with the paned widget"),
+								    TRUE,
+								    G_PARAM_READWRITE));
+
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_SHRINK,
+					      g_param_spec_boolean ("shrink", 
+								    _("Shrink"),
+								    _("If TRUE, the child can be made smaller than its requisition"),
+								    TRUE,
+								    G_PARAM_READWRITE));
 
   signals [CYCLE_HANDLE_FOCUS] =
     g_signal_new ("cycle_child_focus",
@@ -452,6 +486,84 @@ gtk_paned_get_property (GObject        *object,
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_paned_set_child_property (GtkContainer    *container,
+			      GtkWidget       *child,
+			      guint            property_id,
+			      const GValue    *value,
+			      GParamSpec      *pspec)
+{
+  GtkPaned *paned = GTK_PANED (container);
+  gboolean old_value, new_value;
+
+  g_assert (child == paned->child1 || child == paned->child2);
+
+  new_value = g_value_get_boolean (value);
+  switch (property_id)
+    {
+    case CHILD_PROP_RESIZE:
+      if (child == paned->child1)
+	{
+	  old_value = paned->child1_resize;
+	  paned->child1_resize = new_value;
+	}
+      else
+	{
+	  old_value = paned->child2_resize;
+	  paned->child2_resize = new_value;
+	}
+      break;
+    case CHILD_PROP_SHRINK:
+      if (child == paned->child1)
+	{
+	  old_value = paned->child1_shrink;
+	  paned->child1_shrink = new_value;
+	}
+      else
+	{
+	  old_value = paned->child2_shrink;
+	  paned->child2_shrink = new_value;
+	}
+      break;
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      break;
+    }
+  if (old_value != new_value)
+    gtk_widget_queue_resize (container);    
+}
+
+static void
+gtk_paned_get_child_property (GtkContainer *container,
+			      GtkWidget    *child,
+			      guint         property_id,
+			      GValue       *value,
+			      GParamSpec   *pspec)
+{
+  GtkPaned *paned = GTK_PANED (container);
+
+  g_assert (child == paned->child1 || child == paned->child2);
+  
+  switch (property_id)
+    {
+    case CHILD_PROP_RESIZE:
+      if (child == paned->child1)
+	g_value_set_boolean (value, paned->child1_resize);
+      else
+	g_value_set_boolean (value, paned->child2_resize);
+      break;
+    case CHILD_PROP_SHRINK:
+      if (child == paned->child1)
+	g_value_set_boolean (value, paned->child1_shrink);
+      else
+	g_value_set_boolean (value, paned->child2_shrink);
+      break;
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
     }
 }

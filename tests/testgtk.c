@@ -8559,39 +8559,23 @@ create_notebook (GtkWidget *widget)
 void
 toggle_resize (GtkWidget *widget, GtkWidget *child)
 {
-  GtkPaned *paned = GTK_PANED (child->parent);
-  gboolean is_child1 = (child == paned->child1);
-  gboolean resize, shrink;
-
-  resize = is_child1 ? paned->child1_resize : paned->child2_resize;
-  shrink = is_child1 ? paned->child1_shrink : paned->child2_shrink;
-
-  gtk_widget_ref (child);
-  gtk_container_remove (GTK_CONTAINER (child->parent), child);
-  if (is_child1)
-    gtk_paned_pack1 (paned, child, !resize, shrink);
-  else
-    gtk_paned_pack2 (paned, child, !resize, shrink);
-  gtk_widget_unref (child);
+  GValue value = { 0, };
+  g_value_init (&value, G_TYPE_BOOLEAN);
+  GtkContainer *container = GTK_CONTAINER (gtk_widget_get_parent (child));
+  gtk_container_child_get_property (container, child, "resize", &value);
+  g_value_set_boolean (&value, !g_value_get_boolean (&value));
+  gtk_container_child_set_property (container, child, "resize", &value);
 }
 
 void
 toggle_shrink (GtkWidget *widget, GtkWidget *child)
 {
-  GtkPaned *paned = GTK_PANED (child->parent);
-  gboolean is_child1 = (child == paned->child1);
-  gboolean resize, shrink;
-
-  resize = is_child1 ? paned->child1_resize : paned->child2_resize;
-  shrink = is_child1 ? paned->child1_shrink : paned->child2_shrink;
-
-  gtk_widget_ref (child);
-  gtk_container_remove (GTK_CONTAINER (child->parent), child);
-  if (is_child1)
-    gtk_paned_pack1 (paned, child, resize, !shrink);
-  else
-    gtk_paned_pack2 (paned, child, resize, !shrink);
-  gtk_widget_unref (child);
+  GValue value = { 0, };
+  g_value_init (&value, G_TYPE_BOOLEAN);
+  GtkContainer *container = GTK_CONTAINER (gtk_widget_get_parent (child));
+  gtk_container_child_get_property (container, child, "shrink", &value);
+  g_value_set_boolean (&value, !g_value_get_boolean (&value));
+  gtk_container_child_set_property (container, child, "shrink", &value);
 }
 
 static void

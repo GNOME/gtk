@@ -1,3 +1,13 @@
+2003-06-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkpaned.c (gtk_paned_class_init): Install boolean child
+	properties "resize" and "shrink".
+	(gtk_paned_[gs]et_child_property): Implementations of 
+	GtkContainer::[gs]et_child_property.  
+	* tests/testgtk.c (toggle_resize, toggle_shrink): Use the new
+	paned child properties instead of remove/add hacks.  (#114667, 
+	Soeren Sandmann) 
+
 Mon Jun  9 16:18:11 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_button_press): Back
