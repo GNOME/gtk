@@ -2854,6 +2854,7 @@ create_file_list (GtkFileChooserDefault *impl)
 
   impl->list_name_column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_expand (impl->list_name_column, TRUE);
+  gtk_tree_view_column_set_resizable (impl->list_name_column, TRUE);
   gtk_tree_view_column_set_title (impl->list_name_column, _("Name"));
   gtk_tree_view_column_set_sort_column_id (impl->list_name_column, FILE_LIST_COL_NAME);
 
@@ -2863,6 +2864,9 @@ create_file_list (GtkFileChooserDefault *impl)
 					   list_icon_data_func, impl, NULL);
 
   impl->list_name_renderer = gtk_cell_renderer_text_new ();
+  g_object_set (impl->list_name_renderer,
+		"ellipsize", PANGO_ELLIPSIZE_END,
+		NULL);
   g_signal_connect (impl->list_name_renderer, "edited",
 		    G_CALLBACK (renderer_edited_cb), impl);
   g_signal_connect (impl->list_name_renderer, "editing-canceled",
@@ -2888,6 +2892,7 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Modification time column */
 
   column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_column_set_title (column, _("Modified"));
 
   renderer = gtk_cell_renderer_text_new ();

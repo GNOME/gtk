@@ -94,6 +94,7 @@ enum {
   PROP_UNDERLINE,
   PROP_RISE,
   PROP_LANGUAGE,
+  PROP_ELLIPSIZE,
   
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
@@ -109,7 +110,8 @@ enum {
   PROP_STRIKETHROUGH_SET,
   PROP_UNDERLINE_SET,
   PROP_RISE_SET,
-  PROP_LANGUAGE_SET
+  PROP_LANGUAGE_SET,
+  PROP_ELLIPSIZE_SET
 };
 
 static gpointer parent_class;
@@ -125,10 +127,12 @@ struct _GtkCellRendererTextPrivate
   guint single_paragraph : 1;
   guint language_set : 1;
   guint markup_set : 1;
-
+  guint ellipsize_set : 1;
+  
   gulong focus_out_id;
   PangoLanguage *language;
-
+  PangoEllipsizeMode ellipsize;
+  
   gulong populate_popup_id;
   gulong entry_menu_popdown_timeout;
   gboolean in_entry_menu;
@@ -396,6 +400,15 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         G_PARAM_READWRITE));
 
 
+  g_object_class_install_property (object_class,
+                                   PROP_ELLIPSIZE,
+                                   g_param_spec_enum ("ellipsize",
+						      P_("Ellipsize"),
+						      P_("The preferred place to ellipsize the string, if the cell renderer does not have enough room to display the entire string, if at all"),							
+						      PANGO_TYPE_ELLIPSIZE_MODE,
+						      PANGO_ELLIPSIZE_NONE,
+						      G_PARAM_READWRITE));
+  
   /* Style props are set or not */
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READABLE | G_PARAM_WRITABLE))
@@ -456,6 +469,10 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 P_("Language set"),
                 P_("Whether this tag affects the language the text is rendered as"));
 
+  ADD_SET_PROP ("ellipsize_set", PROP_ELLIPSIZE_SET,
+                P_("Language set"),
+                P_("Whether this tag affects the ellipsize mode"));
+  
   text_cell_renderer_signals [EDITED] =
     g_signal_new ("edited",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -630,6 +647,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       g_value_set_string (value, pango_language_to_string (priv->language));
       break;
 
+    case PROP_ELLIPSIZE:
+      g_value_set_enum (value, priv->ellipsize);
+      break;
+      
     case PROP_BACKGROUND_SET:
       g_value_set_boolean (value, celltext->background_set);
       break;
@@ -673,6 +694,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
 
     case PROP_LANGUAGE_SET:
       g_value_set_boolean (value, priv->language_set);
+      break;
+
+    case PROP_ELLIPSIZE_SET:
+      g_value_set_boolean (value, priv->ellipsize_set);
       break;
       
     case PROP_BACKGROUND:
@@ -1104,6 +1129,12 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (object, "language_set");
       break;
 
+    case PROP_ELLIPSIZE:
+      priv->ellipsize = g_value_get_enum (value);
+      priv->ellipsize_set = TRUE;
+      g_object_notify (object, "ellipsize_set");
+      break;
+      
     case PROP_BACKGROUND_SET:
       celltext->background_set = g_value_get_boolean (value);
       break;
@@ -1157,6 +1188,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       priv->language_set = g_value_get_boolean (value);
       break;
 
+    case PROP_ELLIPSIZE_SET:
+      priv->ellipsize_set = g_value_get_enum (value);
+      break;
+      
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -1273,6 +1308,11 @@ get_layout (GtkCellRendererText *celltext,
 
   if (celltext->rise_set)
     add_attr (attr_list, pango_attr_rise_new (celltext->rise));
+
+  if (priv->ellipsize_set)
+    pango_layout_set_ellipsize (layout, priv->ellipsize);
+  else
+    pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_NONE);
   
   pango_layout_set_attributes (layout, attr_list);
   pango_layout_set_width (layout, -1);
@@ -1294,6 +1334,9 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
   GtkCellRendererText *celltext = (GtkCellRendererText *) cell;
   PangoRectangle rect;
   PangoLayout *layout;
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
 
   if (celltext->calc_fixed_height)
     {
@@ -1333,9 +1376,11 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
       if (width == NULL)
 	return;
     }
+  
   layout = get_layout (celltext, widget, FALSE, 0);
-  pango_layout_get_pixel_extents (layout, NULL, &rect);
 
+  pango_layout_get_pixel_extents (layout, NULL, &rect);
+  
   if (width)
     *width = GTK_CELL_RENDERER (celltext)->xpad * 2 + rect.width;
 
@@ -1375,6 +1420,9 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   GtkStateType state;
   gint x_offset;
   gint y_offset;
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
 
   layout = get_layout (celltext, widget, TRUE, flags);
 
@@ -1431,6 +1479,11 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
       g_object_unref (gc);
     }
 
+  if (priv->ellipsize)
+    pango_layout_set_width (layout, cell_area->width * PANGO_SCALE);
+  else
+    pango_layout_set_width (layout, -1);
+  
   gtk_paint_layout (widget->style,
                     window,
                     state,

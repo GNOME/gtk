@@ -1,3 +1,13 @@
+Thu Jul 22 01:42:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): 
+	Add a new :ellipsize property which controls ellipsization of the 
+	rendered text.  (#144835, Vincent Untz, patch by Jonathan Blandford
+	and Anders Carlsson
+	
+	* gtk/gtkfilechooserdefault.c (create_file_list): Use ellipsization
+	for the name column.
+
 Thu Jul 22 01:21:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_init): Add additional
@@ -12,11 +22,11 @@ Thu Jul 22 01:05:16 2004  Matthias Clasen  <maclas@gmx.de>
 	* configure.in: Require Pango 1.5.1 (for ellipsisation).
 
 	* gtk/gtklabel.h: 
-	* gtk/gtklabel.c (gtk_label_class_init): Add a new :ellipsise
-	property which controls ellipsisation of the label.  (#125250, 
+	* gtk/gtklabel.c (gtk_label_class_init): Add a new :ellipsize
+	property which controls ellipsization of the label.  (#125250, 
 	Tim Van Wassenhove, patch by James M. Cape)
 
-	* tests/testellipsise.c: Simple test for ellipsisation.
+	* tests/testellipsise.c: Simple test for ellipsizsation.
 
 Wed Jul 21 22:46:27 2004  Matthias Clasen  <maclas@gmx.de>
 
