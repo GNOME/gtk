@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkfilechooserimpldefault.h: Default implementation of GtkFileChooser
+ * gtkfilechooserdefault.h: Default implementation of GtkFileChooser
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,23 +18,23 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_FILE_CHOOSER_IMPL_DEFAULT_H__
-#define __GTK_FILE_CHOOSER_IMPL_DEFAULT_H__
+#ifndef __GTK_FILE_CHOOSER_DEFAULT_H__
+#define __GTK_FILE_CHOOSER_DEFAULT_H__
 
 #include "gtkfilesystem.h"
 #include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_FILE_CHOOSER_IMPL_DEFAULT    (_gtk_file_chooser_impl_default_get_type ())
-#define GTK_FILE_CHOOSER_IMPL_DEFAULT(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_CHOOSER_IMPL_DEFAULT, GtkFileChooserImplDefault))
-#define GTK_IS_FILE_CHOOSER_IMPL_DEFAULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_CHOOSER_IMPL_DEFAULT))
+#define GTK_TYPE_FILE_CHOOSER_DEFAULT    (_gtk_file_chooser_default_get_type ())
+#define GTK_FILE_CHOOSER_DEFAULT(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_CHOOSER_DEFAULT, GtkFileChooserDefault))
+#define GTK_IS_FILE_CHOOSER_DEFAULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_CHOOSER_DEFAULT))
 
-typedef struct _GtkFileChooserImplDefault      GtkFileChooserImplDefault;
+typedef struct _GtkFileChooserDefault      GtkFileChooserDefault;
 
-GType      _gtk_file_chooser_impl_default_get_type (void);
-GtkWidget *_gtk_file_chooser_impl_default_new      (GtkFileSystem *file_system);
+GType      _gtk_file_chooser_default_get_type (void);
+GtkWidget *_gtk_file_chooser_default_new      (GtkFileSystem *file_system);
 
 G_END_DECLS
 
-#endif /* __GTK_FILE_CHOOSER_IMPL_DEFAULT_H__ */
+#endif /* __GTK_FILE_CHOOSER_DEFAULT_H__ */
