@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-09-01 14:37+0200\n"
-"PO-Revision-Date: 1999-08-20 02:45+0100\n"
+"POT-Creation-Date: 1999-09-06 11:43+0200\n"
+"PO-Revision-Date: 1999-09-03 22:36+0100\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <dltp@lists.wiktor.dk>\n"
 "MIME-Version: 1.0\n"
@@ -248,7 +248,7 @@ msgstr "%i skrifttyper tilstede med ialt %s stilvarianter."
 
 #: gtk/gtkfontsel.c:799
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: gtk/gtkfontsel.c:812
 msgid "Font Types:"
@@ -256,7 +256,7 @@ msgstr "Skrifttype-typer:"
 
 #: gtk/gtkfontsel.c:820
 msgid "Bitmap"
-msgstr ""
+msgstr "Bitmap"
 
 #: gtk/gtkfontsel.c:826
 msgid "Scalable"
@@ -268,16 +268,16 @@ msgstr "Skaleret bitmap"
 
 #: gtk/gtkfontsel.c:903
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1228
 msgid "(nil)"
-msgstr ""
+msgstr "(nul)"
 
 #: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
 msgid "regular"
-msgstr "normal"
+msgstr "regulær"
 
 #: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:1994
 msgid "italic"
@@ -301,11 +301,11 @@ msgstr "andre"
 
 #: gtk/gtkfontsel.c:1244
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1245
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1793
 msgid "The selected font is not available."
@@ -345,40 +345,39 @@ msgstr "Skrifttype: (Filtreret)"
 
 #: gtk/gtkfontsel.c:2680
 msgid "heavy"
-msgstr ""
+msgstr "tung"
 
 #: gtk/gtkfontsel.c:2682
 msgid "extrabold"
-msgstr ""
+msgstr "ekstrafed"
 
 #: gtk/gtkfontsel.c:2684
 msgid "bold"
-msgstr ""
+msgstr "fed"
 
 #: gtk/gtkfontsel.c:2687
 msgid "demibold"
-msgstr ""
+msgstr "halvfed"
 
 #: gtk/gtkfontsel.c:2690
 msgid "medium"
-msgstr ""
+msgstr "medium"
 
 #: gtk/gtkfontsel.c:2692
 msgid "normal"
-msgstr ""
+msgstr "normal"
 
 #: gtk/gtkfontsel.c:2694
-#, fuzzy
 msgid "light"
-msgstr "Vægt:"
+msgstr "let"
 
 #: gtk/gtkfontsel.c:2696
 msgid "extralight"
-msgstr ""
+msgstr "ekstralet"
 
 #: gtk/gtkfontsel.c:2698
 msgid "thin"
-msgstr ""
+msgstr "tynd"
 
 #: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
@@ -447,11 +446,11 @@ msgstr "Gem"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:501
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
