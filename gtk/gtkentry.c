@@ -2968,7 +2968,10 @@ gtk_entry_create_layout (GtkEntry *entry,
 	    {
 	      GdkDisplay *display = gtk_widget_get_display (widget);
 	      GdkKeymap *keymap = gdk_keymap_get_for_display (display);
-	      pango_dir = gdk_keymap_get_direction (keymap);
+	      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_RTL)
+		pango_dir = PANGO_DIRECTION_RTL;
+	      else
+		pango_dir = PANGO_DIRECTION_LTR;
 	    }
           else
 	    {
