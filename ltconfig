@@ -793,7 +793,10 @@ else
     ;;
 
   solaris2*)
-    archive_cmds='$LD -G -z text -h $soname -o $lib$libobjs$deplibs'
+    case "$host_cpu" in
+    i386) archive_cmds='$LD -G -h $soname -o $lib$libobjs$deplibs' ;;
+    *) archive_cmds='$LD -G -z text -h $soname -o $lib$libobjs$deplibs' ;;
+    esac
     hardcode_libdir_flag_spec='-R$libdir'
     hardcode_shlibpath_var=no
     ;;

@@ -21,7 +21,7 @@ AC_CANONICAL_HOST
 AC_ARG_ENABLE(shm, [  --enable-shm            support shared memory if available [default=yes]],
 		   echo $enable_shm, enable_shm="yes")
 AC_ARG_ENABLE(debug, [  --enable-debug          turn on debugging [default=no]],
-if eval "test x$enable_debug = xyes"; then
+if test "x$enable_debug" = "xyes"; then
   DEBUGFLAG="-g"
 fi)
 AC_ARG_ENABLE(ansi, [  --enable-ansi           turn on strict ansi [default=no]],
@@ -47,23 +47,23 @@ AM_PROG_CC_STDC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
-if eval "test x$GCC = xyes"; then
-  if test -z `echo "$CFLAGS" | grep "\-Wall" 2> /dev/null` ; then
+if test "x$GCC" = "xyes"; then
+  if test -z "`echo "$CFLAGS" | grep "\-Wall" 2> /dev/null`" ; then
     CFLAGS="$CFLAGS -Wall"
   fi
 
-  if eval "test x$enable_ansi = xyes"; then
-    if test -z `echo "$CFLAGS" | grep "\-ansi" 2> /dev/null` ; then
+  if test "x$enable_ansi" = "xyes"; then
+    if test -z "`echo "$CFLAGS" | grep "\-ansi" 2> /dev/null`" ; then
       CFLAGS="$CFLAGS -ansi"
     fi
 
-    if test -z `echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null` ; then
+    if test -z "`echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null`" ; then
       CFLAGS="$CFLAGS -pedantic"
     fi
   fi
 fi
 
-if eval "test x$enable_xim = xyes"; then
+if test "x$enable_xim" = "xyes"; then
   CFLAGS="$CFLAGS -DUSE_XIM"
 fi
 
@@ -85,7 +85,7 @@ LDFLAGS="$X_LDFLAGS $X_LIBS"
 # Check for the X11 library
 AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", no_x11_lib=yes, $X_EXTRA_LIBS)
 
-if eval "test x$enable_shm = xyes"; then
+if test "x$enable_shm" = "xyes"; then
   # Check for the Xext library (needed for XShm extention)
   AC_CHECK_LIB(Xext, XShmAttach, x_libs="-lXext $x_libs", no_xext_lib=yes, $x_libs)
 fi
@@ -95,11 +95,11 @@ x_ldflags="$X_LDFLAGS $X_LIBS"
 
 # set up things for XInput
 
-if eval "test x$with_xinput = xgxi -o x$with_xinput = xyes"; then
+if test "x$with_xinput" = "xgxi -o x$with_xinput" = "xyes"; then
   AC_DEFINE(XINPUT_GXI)
   xinput_progs=gxid
   x_libs="-lXi $x_libs"
-elif eval "test x$with_xinput = xxfree"; then
+elif test "x$with_xinput" = "xxfree"; then
   AC_DEFINE(XINPUT_XFREE)
   x_libs="-lXi $x_libs"
 else
@@ -116,7 +116,7 @@ AC_SUBST(xinput_progs)
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-if eval "test x$enable_shm = xyes"; then
+if test "x$enable_shm" = "xyes"; then
   # Check for shared memory
   AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)
   AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
@@ -155,11 +155,11 @@ if eval "test x$enable_shm = xyes"; then
 
   # Check for the X shared memory extension header file
   AC_MSG_CHECKING(X11/extensions/XShm.h)
-  if eval "test x$no_ext_lib = xyes"; then
+  if test "x$no_ext_lib" = "xyes"; then
     AC_MSG_RESULT(no)
     no_xshm=yes
   else
-    if eval "test -f $x_includes/X11/extensions/XShm.h"; then
+    if test -f "$x_includes/X11/extensions/XShm.h"; then
       AC_MSG_RESULT(yes)
       AC_DEFINE(HAVE_XSHM_H)
     else

@@ -1,3 +1,8 @@
+Thu Dec 11 10:57:29 CST 1997 Shawn T. Amundson <amundson@gimp.org>
+	* Change to ltconfig to remove -z text for Solaris x86	
+	* Change to configure stuff so compile works on Solaris x86
+ 	* Added gdk/gdkkeysyms.h and gdk/gdkcursors.h back into the tree
+
 Thu Dec 11 09:44:03 1997  Tim Janik  <timj@psynet.net>
 
 	* gdk.c: added gdk_progclass==NULL patch by Oliver Graf <ograf@fga.de>.
