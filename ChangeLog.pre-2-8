@@ -1,3 +1,8 @@
+Sun Jul  2 17:43:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (_gtk_clist_create_cell_layout): Use new
+	pango_layout_set_font_description to simplify.
+
 Sun Jul  2 17:06:40 2000  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtkcalendar.c gtk/gtkclist.c gtk/gtkctree.c gtk/gtkhscale.c

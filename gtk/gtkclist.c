@@ -2522,16 +2522,12 @@ _gtk_clist_create_cell_layout (GtkCList       *clist,
       if (!text)
 	return NULL;
       
-      context = gtk_widget_create_pango_context (GTK_WIDGET (clist));
-      pango_context_set_font_description (context, style->font_desc);
-      
-      layout = pango_layout_new (context);
+      layout = gtk_widget_create_pango_layout (GTK_WIDGET (clist));
+      pango_layout_set_font_description (layout, style->font_desc);
       pango_layout_set_text (layout, ((cell->type == GTK_CELL_PIXTEXT) ?
 				      GTK_CELL_PIXTEXT (*cell)->text :
 				      GTK_CELL_TEXT (*cell)->text), -1);
       
-      g_object_unref (G_OBJECT (context));
-
       return layout;
       
     default:
