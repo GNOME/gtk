@@ -343,12 +343,11 @@ gtk_settings_get_property (GObject     *object,
       g_value_type_transformable (G_TYPE_STRING, G_VALUE_TYPE (value)) ||
       g_value_type_transformable (GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
     {
-      if (settings->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
+      if (settings->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION ||
+	  !gdk_screen_get_setting (settings->screen, pspec->name, value))
         g_value_copy (&settings->property_values[property_id - 1].value, value);
-      else if (gdk_screen_get_setting (settings->screen, pspec->name, value))
-        g_param_value_validate (pspec, value);
       else
-        g_value_copy (&settings->property_values[property_id - 1].value, value);
+        g_param_value_validate (pspec, value);
     }
   else
     {
@@ -500,8 +499,8 @@ apply_queued_setting (GtkSettings             *data,
   if (_gtk_settings_parse_convert (parser, &qvalue->public.value,
 				   pspec, &tmp_value))
     {
-      data->property_values[pspec->param_id - 1].source = qvalue->source;
       g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
+      data->property_values[pspec->param_id - 1].source = qvalue->source;
     }
   else
     {
@@ -689,7 +688,8 @@ gtk_settings_set_property_value (GtkSettings            *settings,
   g_return_if_fail (new_value != NULL);
   g_return_if_fail (new_value->origin != NULL);
 
-  gtk_settings_set_property_value_internal (settings, prop_name, new_value, FALSE);
+  gtk_settings_set_property_value_internal (settings, prop_name, new_value,
+					    GTK_SETTINGS_SOURCE_APPLICATION);
 }
 
 void
@@ -702,7 +702,8 @@ _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
   g_return_if_fail (new_value != NULL);
   g_return_if_fail (new_value->origin != NULL);
 
-  gtk_settings_set_property_value_internal (settings, prop_name, new_value, TRUE);
+  gtk_settings_set_property_value_internal (settings, prop_name, new_value,
+					    GTK_SETTINGS_SOURCE_RC_FILE);
 }
 
 void

@@ -1,3 +1,15 @@
+Mon Nov 25 17:10:54 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_set_property_value): 
+	Fix missing adjustments for new type of
+	gtk_settings_set_property_value_internal(). (#99436,
+	Iain Holmes.)
+
+	* gtk/gtksettings.c (apply_queued_setting): Set the
+	source _after_ we call g_object_set_property, or otherwise
+	we get the APPLICATION source from our setter 
+	implemenatation.
+
 2002-11-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (print_event_state,
