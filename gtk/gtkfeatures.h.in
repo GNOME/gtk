@@ -55,6 +55,8 @@ extern "C" {
 
 #define GTK_HAVE_GDK_RGB				1-1-0
 
+#define GTK_HAVE_ENUM_VALUE_STRUCT			1-1-0
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

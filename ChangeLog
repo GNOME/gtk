@@ -1,3 +1,7 @@
+Fri, 24 Jul 1998 10:56:22 +0200 Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkfeatures.h.in: added GTK_HAVE_ENUM_VALUE_STRUCT.
+
 Thu Jul 23 00:11:39 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtkrc: introduce testbindings on C-1 for buttons,
