@@ -1,3 +1,7 @@
+2005-03-31  Adam Weinberger  <adamw@gnome.org>
+
+	* en_CA.po: Updated Canadian English translation.
+
 2005-03-31  Michael Natterer  <mitch@gimp.org>
 
 	* POTFILES.in: added gtk/gtkmenushell.c
