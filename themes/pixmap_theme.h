@@ -11,4 +11,4 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtksignal.h>
-
+#include <gdk_imlib.h>

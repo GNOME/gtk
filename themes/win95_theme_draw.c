@@ -741,7 +741,7 @@ draw_arrow (GtkStyle      *style,
   gint half_height;
   gint xthik, ythik;
   GdkPoint points[3];
-  
+  gchar border = 1;
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
 
@@ -757,8 +757,10 @@ draw_arrow (GtkStyle      *style,
 
   xthik = style->klass->xthickness;
   ythik = style->klass->ythickness;
-  
-  if (fill)
+
+  if ((detail) && (!strcmp(detail,"menuitem")))
+    border = 0;
+  if ((fill) && (border))
     draw_box (style, window, state_type, shadow_type, area, widget, detail,
 	      x, y, width, height);
 
@@ -767,6 +769,11 @@ draw_arrow (GtkStyle      *style,
   if (area)
     {
       gdk_gc_set_clip_rectangle (gc, area);
+    }
+  if (!border)
+    {
+      xthik = 2;
+      ythik = 0;
     }
   
   switch (arrow_type)
@@ -778,7 +785,6 @@ draw_arrow (GtkStyle      *style,
       points[1].y = y - ythik + height - 1;
       points[2].x = x - xthik + width - 1;
       points[2].y = y - ythik + height - 1;
-      
       gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
      case GTK_ARROW_DOWN:
@@ -1023,55 +1029,69 @@ draw_box     (GtkStyle      *style,
   
   if ((detail) && (!strcmp("trough", detail)))
     {
-      GdkPixmap *pm, *bg, *m;
+      GdkPixmap *pm;
       gint depth;
-      GdkGC *gc, *mgc;
-      GdkColor col;
       
       printf("troff\n");
 
-      xthik = style->klass->xthickness;
-      ythik = style->klass->ythickness;
-     
-      gdk_window_get_geometry(window, NULL, NULL, NULL, NULL, &depth);
-      pm = gdk_pixmap_new(window, 2, 2, depth);
-      bg = gdk_pixmap_new(window, width, height, depth);
-      m = gdk_pixmap_new(window, width, height, 1);
-
-      gc = gdk_gc_new(bg);
-      mgc = gdk_gc_new(m);
-      
-      gdk_draw_point(pm, style->bg_gc[GTK_STATE_NORMAL], 0, 0);
-      gdk_draw_point(pm, style->bg_gc[GTK_STATE_NORMAL], 1, 1);
-      gdk_draw_point(pm, style->light_gc[GTK_STATE_NORMAL], 1, 0);
-      gdk_draw_point(pm, style->light_gc[GTK_STATE_NORMAL], 0, 1);
-      
-      gdk_draw_rectangle(bg, style->bg_gc[GTK_STATE_NORMAL], TRUE, x, y, 
-			 width, height);
-
-      gdk_gc_set_tile(gc, pm);
-      gdk_gc_set_fill(gc, GDK_TILED);
-      gdk_draw_rectangle(bg, gc, TRUE, x + xthik, y + ythik, 
-			 width - xthik * 2, height - ythik * 2);
-      
-      col.pixel = 0;
-      gdk_gc_set_foreground(mgc, &col);
-      gdk_draw_rectangle(m, mgc, TRUE, x, y, 
-			 width, height);
-      col.pixel = 1;
-      gdk_gc_set_foreground(mgc, &col);
-      gdk_draw_rectangle(m, mgc, TRUE, x + xthik, y + ythik, 
-			 width - xthik * 2, height - ythik * 2);
-      
-      gdk_window_shape_combine_mask(window, m, 0, 0);
-      gdk_window_set_back_pixmap(window, bg, FALSE);
-      gdk_window_clear(window);
-      
-      gdk_pixmap_unref(bg);
-      gdk_pixmap_unref(pm);
-      gdk_pixmap_unref(m);
-      gdk_gc_destroy(mgc);
-      gdk_gc_destroy(gc);
+      if (GTK_CHECK_TYPE (widget, gtk_progress_bar_get_type ()))
+	{
+          if (area)
+	    {
+	      gdk_gc_set_clip_rectangle (style->light_gc[GTK_STATE_NORMAL], area);
+	    }
+	  gdk_draw_rectangle(window, style->light_gc[GTK_STATE_NORMAL], 
+			     TRUE, x, y, width, height);
+          if (area)
+	    {
+	      gdk_gc_set_clip_rectangle (style->light_gc[GTK_STATE_NORMAL], NULL);
+	    }
+	  gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
+			    x, y, width, height);
+	}
+      else
+	{
+	  xthik = style->klass->xthickness;
+	  ythik = style->klass->ythickness;
+	  
+	  gdk_window_get_geometry(window, NULL, NULL, NULL, NULL, &depth);
+	  pm = gdk_pixmap_new(window, 2, 2, depth);
+	  
+	  gdk_draw_point(pm, style->bg_gc[GTK_STATE_NORMAL], 0, 0);
+	  gdk_draw_point(pm, style->bg_gc[GTK_STATE_NORMAL], 1, 1);
+	  gdk_draw_point(pm, style->light_gc[GTK_STATE_NORMAL], 1, 0);
+	  gdk_draw_point(pm, style->light_gc[GTK_STATE_NORMAL], 0, 1);
+	  gdk_window_set_back_pixmap(window, pm, FALSE);
+	  gdk_window_clear(window);
+	  
+	  gdk_pixmap_unref(pm);
+	}
+    }
+  else if ((detail) && (!strcmp(detail,"menuitem")))
+    {
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_SELECTED], area);
+	}
+      gdk_draw_rectangle(window, style->bg_gc[GTK_STATE_SELECTED], 
+			 TRUE, x, y, width, height);
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_SELECTED], NULL);
+	}
+    }
+  else if ((detail) && (!strcmp("bar", detail)))
+    {
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_SELECTED], area);
+	}
+      gdk_draw_rectangle(window, style->bg_gc[GTK_STATE_SELECTED], 
+			 TRUE, x + 1, y + 1, width - 2, height - 2);
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_SELECTED], NULL);
+	}
     }
   else
     {
@@ -1522,9 +1542,8 @@ draw_entry   (GtkStyle      *style,
   else if (height == -1)
     gdk_window_get_size (window, NULL, &height);
   
-  if (area)
-    gdk_gc_set_clip_rectangle (style->base_gc[state_type], area);
-  if (!strcmp("selected",detail))
+  printf("entry draw\n");
+  if ((detail) && (!strcmp("selected",detail)))
     {
       gdk_draw_rectangle (window,
 			  style->bg_gc[state_type],
