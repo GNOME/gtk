@@ -203,6 +203,8 @@ gtk_layout_put (GtkLayout     *layout,
 
   g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
+  g_return_if_fail (child_widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child_widget));
   
   child = g_new (GtkLayoutChild, 1);
 
