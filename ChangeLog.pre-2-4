@@ -1,3 +1,12 @@
+Mon Nov 17 16:25:04 2003  Manish Singh <yosh@gimp.org>
+
+	* gdk-pixbuf/Makefile.am
+	* modules/input/Makefile.am: Use install-data-hook for
+	gdk-pixbuf.loaders and gtk.immodules install generation targets.
+	Fixes #112806.
+
+	* gtk/gtkexpander.h: Apply missing declarations from #124449.
+
 Tue Nov 18 00:12:55 2003  Matthias Clasen  <maclas@gmx.de>
 
 	Fix for #119555, Peter Zelesny:

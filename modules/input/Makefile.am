@@ -87,7 +87,11 @@ endif
 
 # Running this if cross compiling or if DESTDIR is set is going to
 # not work at all, so skip it.
-install-data-local:
+# We use install-data-hook here to workaround a bug in automake and/or libtool
+# that makes the install target for the loader libraries a dependency on
+# install-data-am, and not install-exec-am. We need to ensure this gets run
+# after the libraries are installed in their final locations.
+install-data-hook:
 	@if $(RUN_QUERY_IMMODULES_TEST) ; then \
 	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
 	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
