@@ -1,3 +1,9 @@
+2002-02-10  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkcalendar.c (gtk_calendar_class_init): Set finalize handler;
+	(gtk_calendar_finalize): Rename gtk_calendar_destroy to gtk_calendar_finalize
+	since ::destroy can be called multiple times, resulting in double-freeing memory.
+
 2002-02-10  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkgeometry-win32.c : don't reduce the scroll
