@@ -1,13 +1,13 @@
 # Norwegian translation of gtk+.
 # Copyright (C) 1998,1999 Free Software Foundation, Inc.
-# Kjartan Maraas <kmaraas@fib.hl.no>, 1998,1999.
+# Kjartan Maraas <kmaraas@online.no>, 1998,1999.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.16\n"
-"POT-Creation-Date: 1999-03-24 23:06-0600\n"
-"PO-Revision-Date: 1998-02-25 00:00+0100\n"
-"Last-Translator: Kjartan Maraas <kmaraas@fib.hl.no>\n"
+"POT-Creation-Date: 1999-03-26 23:42+0100\n"
+"PO-Revision-Date: 1998-03-27 00:09+0100\n"
+"Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -325,7 +325,7 @@ msgstr "proporsjonal"
 
 #: gtk/gtkfontsel.c:1960
 msgid "monospaced"
-msgstr ""
+msgstr "av lik bredde"
 
 #: gtk/gtkfontsel.c:1961
 msgid "char cell"
