@@ -408,6 +408,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
   GList *i;
   GtkCellView *cellview;
   GdkRectangle area;
+  GtkCellRendererState state;
   gboolean rtl = (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL);
 
   cellview = GTK_CELL_VIEW (widget);
@@ -450,6 +451,11 @@ gtk_cell_view_expose (GtkWidget      *widget,
   area.x = widget->allocation.x + (rtl ? widget->allocation.width : 0); 
   area.y = widget->allocation.y;
 
+  if (GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
+    state = GTK_CELL_RENDERER_PRELIT;
+  else
+    state = 0;
+      
   /* PACK_START */
   for (i = cellview->priv->cell_list; i; i = i->next)
     {
@@ -469,7 +475,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
                                 event->window,
                                 widget,
                                 /* FIXME! */
-                                &area, &area, &event->area, 0);
+                                &area, &area, &event->area, state);
 
       if (!rtl)                                           
          area.x += info->real_width;
@@ -496,7 +502,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
                                 widget->window,
                                 widget,
                                 /* FIXME ! */
-                                &area, &area, &event->area, 0);
+                                &area, &area, &event->area, state);
       if (rtl)
          area.x += info->real_width;
     }

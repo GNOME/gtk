@@ -28,6 +28,7 @@
 #include "gtkcellviewmenuitem.h"
 #include "gtkeventbox.h"
 #include "gtkframe.h"
+#include "gtkhbox.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
@@ -83,6 +84,7 @@ struct _GtkComboBoxPrivate
   GtkWidget *cell_view_frame;
 
   GtkWidget *button;
+  GtkWidget *box;
   GtkWidget *arrow;
   GtkWidget *separator;
 
@@ -334,6 +336,9 @@ static void     gtk_combo_box_menu_row_changed     (GtkTreeModel     *model,
                                                     gpointer          data);
 static gboolean gtk_combo_box_menu_key_press       (GtkWidget        *widget,
 						    GdkEventKey      *event,
+						    gpointer          data);
+static void     gtk_combo_box_menu_state_changed   (GtkWidget        *widget,
+			                            GtkStateType      previous,
 						    gpointer          data);
 
 /* cell layout */
@@ -715,14 +720,9 @@ gtk_combo_box_add (GtkContainer *container,
 
       if (!combo_box->priv->tree_view && combo_box->priv->separator)
         {
-          gtk_widget_unparent (combo_box->priv->separator);
+	  gtk_container_remove (GTK_CONTAINER (combo_box->priv->separator->parent),
+				combo_box->priv->separator);
 	  combo_box->priv->separator = NULL;
-
-          g_object_ref (G_OBJECT (combo_box->priv->arrow));
-          gtk_widget_unparent (combo_box->priv->arrow);
-          gtk_container_add (GTK_CONTAINER (combo_box->priv->button),
-                             combo_box->priv->arrow);
-          g_object_unref (G_OBJECT (combo_box->priv->arrow));
 
           gtk_widget_queue_resize (GTK_WIDGET (container));
         }
@@ -1502,6 +1502,8 @@ gtk_combo_box_forall (GtkContainer *container,
     {
       if (combo_box->priv->button)
 	(* callback) (combo_box->priv->button, callback_data);
+      if (combo_box->priv->box)
+	(* callback) (combo_box->priv->box, callback_data);
       if (combo_box->priv->separator)
 	(* callback) (combo_box->priv->separator, callback_data);
       if (combo_box->priv->arrow)
@@ -1524,16 +1526,6 @@ gtk_combo_box_expose_event (GtkWidget      *widget,
     {
       gtk_container_propagate_expose (GTK_CONTAINER (widget),
                                       combo_box->priv->button, event);
-
-      if (combo_box->priv->separator)
-        {
-          gtk_container_propagate_expose (GTK_CONTAINER (combo_box->priv->button),
-                                          combo_box->priv->separator, event);
-
-          /* if not in this case, arrow gets its expose event from button */
-          gtk_container_propagate_expose (GTK_CONTAINER (combo_box->priv->button),
-                                          combo_box->priv->arrow, event);
-        }
     }
   else
     {
@@ -1616,7 +1608,7 @@ static void
 gtk_combo_box_menu_setup (GtkComboBox *combo_box,
                           gboolean     add_children)
 {
-  GtkWidget *box;
+  GtkWidget *menu;
 
   if (combo_box->priv->cell_view)
     {
@@ -1628,23 +1620,19 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
       gtk_widget_set_parent (combo_box->priv->button,
                              GTK_BIN (combo_box)->child->parent);
 
+      combo_box->priv->box = gtk_hbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (combo_box->priv->button), 
+			 combo_box->priv->box);
+
       combo_box->priv->separator = gtk_vseparator_new ();
-      gtk_widget_set_parent (combo_box->priv->separator,
-                             combo_box->priv->button);
-      gtk_widget_show (combo_box->priv->separator);
+      gtk_container_add (GTK_CONTAINER (combo_box->priv->box), 
+			 combo_box->priv->separator);
 
       combo_box->priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
-      gtk_widget_set_parent (combo_box->priv->arrow, combo_box->priv->button);
-      gtk_widget_show (combo_box->priv->arrow);
+      gtk_container_add (GTK_CONTAINER (combo_box->priv->box), 
+			 combo_box->priv->arrow);
 
       gtk_widget_show_all (combo_box->priv->button);
-
-      if (GTK_WIDGET_MAPPED (GTK_BIN (combo_box)->child))
-        {
-          /* I have no clue why, but we need to manually map in this case. */
-          gtk_widget_map (combo_box->priv->separator);
-          gtk_widget_map (combo_box->priv->arrow);
-        }
     }
   else
     {
@@ -1665,12 +1653,15 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   g_signal_connect (combo_box->priv->button, "button_press_event",
                     G_CALLBACK (gtk_combo_box_menu_button_press),
                     combo_box);
+  g_signal_connect (combo_box->priv->button, "state_changed",
+		    G_CALLBACK (gtk_combo_box_menu_state_changed), 
+		    combo_box);
 
   /* create our funky menu */
-  box = gtk_menu_new ();
-  g_signal_connect (box, "key_press_event",
+  menu = gtk_menu_new ();
+  g_signal_connect (menu, "key_press_event",
 		    G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);
-  gtk_combo_box_set_popup_widget (combo_box, box);
+  gtk_combo_box_set_popup_widget (combo_box, menu);
 
   /* add items */
   if (add_children)
@@ -1723,27 +1714,18 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
                                         G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL,
                                         gtk_combo_box_menu_button_press, NULL);
+  g_signal_handlers_disconnect_matched (combo_box->priv->button,
+                                        G_SIGNAL_MATCH_DATA,
+                                        0, 0, NULL,
+                                        gtk_combo_box_menu_state_changed, NULL);
 
   /* unparent will remove our latest ref */
-  if (combo_box->priv->cell_view)
-    {
-      gtk_widget_unparent (combo_box->priv->arrow);
-      combo_box->priv->arrow = NULL;
-
-      gtk_widget_unparent (combo_box->priv->separator);
-      combo_box->priv->separator = NULL;
-
-      gtk_widget_unparent (combo_box->priv->button);
-      combo_box->priv->button = NULL;
-    }
-  else
-    {
-      /* will destroy the arrow too */
-      gtk_widget_unparent (combo_box->priv->button);
-
-      combo_box->priv->button = NULL;
-      combo_box->priv->arrow = NULL;
-    }
+  gtk_widget_unparent (combo_box->priv->button);
+  
+  combo_box->priv->box = NULL;
+  combo_box->priv->button = NULL;
+  combo_box->priv->arrow = NULL;
+  combo_box->priv->separator = NULL;
 
   /* changing the popup window will unref the menu and the children */
 }
@@ -1917,6 +1899,22 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
     }
 
   return FALSE;
+}
+
+static void
+gtk_combo_box_menu_state_changed (GtkWidget    *widget,
+				  GtkStateType  previous,
+				  gpointer      user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+
+  if (combo_box->priv->cell_view)
+    {
+      gtk_widget_set_state (combo_box->priv->cell_view, 
+			    GTK_WIDGET_STATE (widget));
+      
+      gtk_widget_queue_draw (combo_box->priv->cell_view);
+    }
 }
 
 static void
@@ -2241,7 +2239,10 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
       g_object_set (G_OBJECT (combo_box->priv->cell_view),
                     "background_set", FALSE,
                     NULL);
+    }
 
+  if (combo_box->priv->cell_view_frame)
+    {
       gtk_widget_unparent (combo_box->priv->cell_view_frame);
       combo_box->priv->cell_view_frame = NULL;
     }

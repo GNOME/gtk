@@ -1382,6 +1382,11 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
       else
 	state = GTK_STATE_ACTIVE;
     }
+  else if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT &&
+	   GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
+    {
+      state = GTK_STATE_PRELIGHT;
+    }
   else
     {
       if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)

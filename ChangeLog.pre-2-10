@@ -1,5 +1,18 @@
 2004-04-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: Make the arrow and separator regular
+	children of an hbox inside the button, and propagate state
+	changes from the button to the cell view.  (part of the fix
+	for #138650, should also fix #137535)
+
+	* gtk/gtkcellview.c (gtk_cell_view_expose): Pass the PRELIT
+	state to gtk_cell_renderer_render() when prelighted. (part 
+	of the fix for #138650)
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): 
+	Use PRELIGHT state when appropriate.  (part of the fix for 
+	#138650)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_relayout): Don't spit 
 	out warnings if called before the combo box is 
 	realized.  (#139742, Philip Langdale)
