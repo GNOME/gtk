@@ -1,6 +1,6 @@
 2002-03-27  Murray Cumming  <murrayc@usa.net>
  
- 	* gtk/gtktreeview.cc: Corrected registered return type of
+ 	* gtk/gtktreeview.c: Corrected registered return type of
 	"move-cursor" signal. Had to add a marshaller to 
  	gtk/gtkmarshalers.list.
 	
