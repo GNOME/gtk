@@ -1,3 +1,7 @@
+Sun Mar  7 18:46:37 1999  ape@lrdpf.spacetec.no  (Asbjorn Pettersen)
+
+	* gtk/gtkmain.c (add_dll_suffix): Add this function (OS/2 ver.)
+
 Sun Mar  7 11:43:34 1999  ape@spacetec.no  (Asbjorn Pettersen)
 
 	* gtk/gtkthemes.c (gtk_theme_engine_get): Add OS/2 changes.

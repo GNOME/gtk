@@ -173,6 +173,21 @@ gtk_check_version (guint required_major,
   return NULL;
 }
 
+#ifdef __EMX__
+static gchar *add_dll_suffix(gchar *module_name)
+{
+    gchar *suffix = strrchr(module_name, '.');
+    
+    if (!suffix || stricmp(suffix, ".dll"))
+    {
+	gchar *old = module_name;
+	  
+	module_name = g_strconcat (module_name, ".dll", NULL);
+	g_free (old);
+    }
+    return (module_name);
+}
+#endif
 
 gboolean
 gtk_init_check (int	 *argc,
@@ -217,7 +232,11 @@ gtk_init_check (int	 *argc,
     {
       gchar **modules, **as;
 
+#ifndef __EMX__
       modules = g_strsplit (env_string, ":", -1);
+#else
+      modules = g_strsplit (env_string, ";", -1);
+#endif
       for (as = modules; *as; as++)
 	{
 	  if (**as)
@@ -334,6 +353,7 @@ gtk_init_check (int	 *argc,
       
       module_name = slist->data;
       slist->data = NULL;
+#ifndef __EMX__
       if (!(module_name[0] == '/' ||
 	    (module_name[0] == 'l' &&
 	     module_name[1] == 'i' &&
@@ -344,6 +364,9 @@ gtk_init_check (int	 *argc,
 	  module_name = g_strconcat ("lib", module_name, ".so", NULL);
 	  g_free (old);
 	}
+#else
+      module_name = add_dll_suffix(module_name);
+#endif
       if (g_module_supported ())
 	{
 	  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
