@@ -1,3 +1,13 @@
+1999-11-03  Larry Ewing  <lewing@gimp.org>
+
+	* src/gnome-canvas-pixbuf.c (compute_render_affine): adjust 
+	render_affine calculation for x,y offsets.
+	(gnome_canvas_pixbuf_set_arg): add x,y args.
+	(gnome_canvas_pixbuf_get_arg): add x,y args.
+	(recompute_bounding_box): simply code using ArtDrect and the
+	render_affine.  Removed compute_xform_vectors as it was no longer
+	needed.	
+
 1999-11-03  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_point): I'm a

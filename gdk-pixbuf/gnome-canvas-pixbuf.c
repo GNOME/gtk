@@ -41,11 +41,21 @@ typedef struct {
 	/* Height value */
 	double height;
 
+	/* X translation */
+	double x;
+
+	/* Y translation */
+	double y;
+
 	/* Whether dimensions are set and whether they are in pixels or units */
 	guint width_set : 1;
 	guint width_pixels : 1;
 	guint height_set : 1;
 	guint height_pixels : 1;
+	guint x_set : 1;
+	guint x_pixels : 1;
+	guint y_set : 1;
+	guint y_pixels : 1;
 
 	/* Whether the pixbuf has changed */
 	guint need_pixbuf_update : 1;
@@ -65,7 +75,13 @@ enum {
 	ARG_WIDTH_PIXELS,
 	ARG_HEIGHT,
 	ARG_HEIGHT_SET,
-	ARG_HEIGHT_PIXELS
+	ARG_HEIGHT_PIXELS,
+	ARG_X,
+	ARG_X_SET,
+	ARG_X_PIXELS,
+	ARG_Y,
+	ARG_Y_SET,
+	ARG_Y_PIXELS
 };
 
 static void gnome_canvas_pixbuf_class_init (GnomeCanvasPixbufClass *class);
@@ -147,6 +163,20 @@ gnome_canvas_pixbuf_class_init (GnomeCanvasPixbufClass *class)
 				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HEIGHT_SET);
 	gtk_object_add_arg_type ("GnomeCanvasPixbuf::height_pixels",
 				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HEIGHT_PIXELS);
+
+	gtk_object_add_arg_type ("GnomeCanvasPixbuf::x",
+				 GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_X);
+	gtk_object_add_arg_type ("GnomeCanvasPixbuf::x_set",
+				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_X_SET);
+	gtk_object_add_arg_type ("GnomeCanvasPixbuf::x_pixels",
+				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_X_PIXELS);
+	gtk_object_add_arg_type ("GnomeCanvasPixbuf::y",
+				 GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_Y);
+	gtk_object_add_arg_type ("GnomeCanvasPixbuf::y_set",
+				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_Y_SET);
+	gtk_object_add_arg_type ("GnomeCanvasPixbuf::y_pixels",
+				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_Y_PIXELS);
+
 
 	object_class->destroy = gnome_canvas_pixbuf_destroy;
 	object_class->set_arg = gnome_canvas_pixbuf_set_arg;
@@ -275,6 +305,44 @@ gnome_canvas_pixbuf_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		gnome_canvas_item_request_update (item);
 		break;
 
+	case ARG_X:
+		val = GTK_VALUE_DOUBLE (*arg);
+		priv->x = val;
+		priv->need_size_update = TRUE;
+		gnome_canvas_item_request_update (item);
+		break;
+
+	case ARG_X_SET:
+		priv->x_set = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
+		priv->need_size_update = TRUE;
+		gnome_canvas_item_request_update (item);
+		break;
+
+	case ARG_X_PIXELS:
+		priv->x_pixels = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
+		priv->need_size_update = TRUE;
+		gnome_canvas_item_request_update (item);
+		break;
+
+	case ARG_Y:
+		val = GTK_VALUE_DOUBLE (*arg);
+		priv->y = val;
+		priv->need_size_update = TRUE;
+		gnome_canvas_item_request_update (item);
+		break;
+
+	case ARG_Y_SET:
+		priv->y_set = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
+		priv->need_size_update = TRUE;
+		gnome_canvas_item_request_update (item);
+		break;
+
+	case ARG_Y_PIXELS:
+		priv->y_pixels = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
+		priv->need_size_update = TRUE;
+		gnome_canvas_item_request_update (item);
+		break;
+
 	default:
 		break;
 	}
@@ -320,6 +388,28 @@ gnome_canvas_pixbuf_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 	case ARG_HEIGHT_PIXELS:
 		GTK_VALUE_BOOL (*arg) = priv->height_pixels;
 		break;
+	case ARG_X:
+		GTK_VALUE_DOUBLE (*arg) = priv->x;
+		break;
+
+	case ARG_X_SET:
+		GTK_VALUE_BOOL (*arg) = priv->x_set;
+		break;
+
+	case ARG_X_PIXELS:
+		GTK_VALUE_BOOL (*arg) = priv->x_pixels;
+		break;
+	case ARG_Y:
+		GTK_VALUE_DOUBLE (*arg) = priv->y;
+		break;
+
+	case ARG_Y_SET:
+		GTK_VALUE_BOOL (*arg) = priv->y_set;
+		break;
+
+	case ARG_Y_PIXELS:
+		GTK_VALUE_BOOL (*arg) = priv->y_pixels;
+		break;
 
 	default:
 		arg->type = GTK_TYPE_INVALID;
@@ -361,47 +451,6 @@ compute_xform_scaling (double *affine, ArtPoint *i_c, ArtPoint *j_c)
 	j_c->y -= orig_c.y;
 }
 
-/* Computes horizontal and vertical scaling vectors for the final transformation
- * to canvas pixel coordinates of a pixbuf canvas item.  The horizontal and
- * vertical dimensions may be specified in units or pixels, separately, so we
- * have to compute the components individually for each dimension.
- */
-static void
-compute_xform_vectors (GnomeCanvasPixbuf *gcp, double *i2c, ArtPoint *i_c, ArtPoint *j_c)
-{
-	PixbufPrivate *priv;
-	double length;
-
-	priv = gcp->priv;
-
-	compute_xform_scaling (i2c, i_c, j_c);
-
-	/* Compute the scaling vectors.  If a dimension is specified in pixels,
-	 * we normalize the base vector first so that it will represent the size
-	 * in pixels when scaled.
-	 */
-
-	if (priv->width_pixels) {
-		length = sqrt (i_c->x * i_c->x + i_c->y * i_c->y);
-
-		if (length > GNOME_CANVAS_EPSILON) {
-			i_c->x /= length;
-			i_c->y /= length;
-		} else
-			i_c->x = i_c->y = 0.0;
-	}
-
-	if (priv->height_pixels) {
-		length = sqrt (j_c->x * j_c->x + j_c->y * j_c->y);
-
-		if (length > GNOME_CANVAS_EPSILON) {
-			j_c->x /= length;
-			j_c->y /= length;
-		} else
-			j_c->x = j_c->y = 0.0;
-	}
-}
-
 /* Computes the affine transformation with which the pixbuf needs to be
  * transformed to render it on the canvas.  This is not the same as the
  * item_to_canvas transformation because we may need to scale the pixbuf by some
@@ -413,8 +462,11 @@ compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2
 	PixbufPrivate *priv;
 	ArtPoint i_c, j_c;
 	double i_len, j_len;
-	double scale[6];
+	double si_len, sj_len;
+	double ti_len, tj_len;
+	double scale[6], translate[6], composite[6];
 	double w, h;
+	double x, y;
 
 	priv = gcp->priv;
 
@@ -435,32 +487,64 @@ compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2
 	else
 		h = priv->pixbuf->art_pixbuf->height;
 
+	if (priv->x_set)
+		x = priv->x;
+	else
+		x = 0.0;
+
+	if (priv->y_set)
+		y = priv->y;
+	else
+		y = 0.0;
+
 	/* Convert i_len and j_len into scaling factors */
 
 	if (priv->width_pixels) {
 		if (i_len > GNOME_CANVAS_EPSILON)
-			i_len = 1.0 / i_len;
+			si_len = 1.0 / i_len;
 		else
-			i_len = 0.0;
+			si_len = 0.0;
 	} else
-		i_len = 1.0;
+		si_len = 1.0;
 
-	i_len *= w / priv->pixbuf->art_pixbuf->width;
+	si_len *= w / priv->pixbuf->art_pixbuf->width;
 
 	if (priv->height_pixels) {
 		if (j_len > GNOME_CANVAS_EPSILON)
-			j_len = 1.0 / j_len;
+			sj_len = 1.0 / j_len;
 		else
-			j_len = 0.0;
+			sj_len = 0.0;
 	} else
-		j_len = 1.0;
+		sj_len = 1.0;
 
-	j_len *= h / priv->pixbuf->art_pixbuf->height;
+	sj_len *= h / priv->pixbuf->art_pixbuf->height;
+
+	if (priv->x_pixels) {
+		if (i_len > GNOME_CANVAS_EPSILON)
+			ti_len = 1.0 / i_len;
+		else
+			ti_len = 0.0;
+	} else
+		ti_len = 1.0;
+
+	ti_len *= x;
+
+	if (priv->y_pixels) {
+		if (j_len > GNOME_CANVAS_EPSILON)
+			tj_len = 1.0 / j_len;
+		else
+			tj_len = 0.0;
+	} else
+		tj_len = 1.0;
+
+	tj_len *= y;
 
 	/* Compute the final affine */
 
-	art_affine_scale (scale, i_len, j_len);
-	art_affine_multiply (render_affine, scale, i2c);
+	art_affine_scale (scale, si_len, sj_len);
+	art_affine_translate (translate, ti_len, tj_len);
+	art_affine_multiply (composite, scale, translate);
+	art_affine_multiply (render_affine, composite, i2c);
 }
 
 
@@ -473,13 +557,11 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 {
 	GnomeCanvasItem *item;
 	PixbufPrivate *priv;
-	double i2c[6];
-	ArtPoint orig, orig_c;
-	ArtPoint i_c, j_c;
+	double i2c[6], render_affine[6];
 	double w, h;
-	double x1, y1, x2, y2, x3, y3, x4, y4;
-	double min_x1, min_y1, min_x2, min_y2;
-	double max_x1, max_y1, max_x2, max_y2;
+	double x, y;
+	ArtDRect rect;
+
 
 	item = GNOME_CANVAS_ITEM (gcp);
 	priv = gcp->priv;
@@ -489,94 +571,20 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 		return;
 	}
 
+	rect.x0 = 0.0;
+	rect.x1 = priv->pixbuf->art_pixbuf->width;
+
+	rect.y0 = 0.0;
+	rect.y1 = priv->pixbuf->art_pixbuf->height;
+
 	gnome_canvas_item_i2c_affine (item, i2c);
+	compute_render_affine (gcp, render_affine, i2c);
+	art_drect_affine_transform (&rect, &rect, render_affine);
 
-	/* Our "origin" */
-
-	orig.x = 0.0;
-	orig.y = 0.0;
-	art_affine_point (&orig_c, &orig, i2c);
-
-	/* Horizontal and vertical vectors */
-
-	compute_xform_vectors (gcp, i2c, &i_c, &j_c);
-
-	/* Width vector */
-
-	if (priv->width_set)
-		w = priv->width;
-	else if (priv->pixbuf)
-		w = priv->pixbuf->art_pixbuf->width;
-	else
-		w = 0.0;
-
-	i_c.x *= w;
-	i_c.y *= w;
-
-	/* Height */
-
-	if (priv->height_set)
-		h = priv->height;
-	else if (priv->pixbuf)
-		h = priv->pixbuf->art_pixbuf->height;
-	else
-		h = 0.0;
-
-	j_c.x *= h;
-	j_c.y *= h;
-
-	/* Compute vertices */
-
-	x1 = orig_c.x;
-	y1 = orig_c.y;
-
-	x2 = orig_c.x + i_c.x;
-	y2 = orig_c.y + i_c.y;
-
-	x3 = orig_c.x + j_c.x;
-	y3 = orig_c.y + j_c.y;
-
-	x4 = orig_c.x + i_c.x + j_c.x;
-	y4 = orig_c.y + i_c.y + j_c.y;
-
-	/* Compute bounds */
-
-	if (x1 < x2) {
-		min_x1 = x1;
-		max_x1 = x2;
-	} else {
-		min_x1 = x2;
-		max_x1 = x1;
-	}
-
-	if (y1 < y2) {
-		min_y1 = y1;
-		max_y1 = y2;
-	} else {
-		min_y1 = y2;
-		max_y1 = y1;
-	}
-
-	if (x3 < x4) {
-		min_x2 = x3;
-		max_x2 = x4;
-	} else {
-		min_x2 = x4;
-		max_x2 = x3;
-	}
-
-	if (y3 < y4) {
-		min_y2 = y3;
-		max_y2 = y4;
-	} else {
-		min_y2 = y4;
-		max_y2 = y3;
-	}
-
-	item->x1 = MIN (min_x1, min_x2);
-	item->y1 = MIN (min_y1, min_y2);
-	item->x2 = MAX (max_x1, max_x2);
-	item->y2 = MAX (max_y1, max_y2);
+	item->x1 = rect.x0;
+	item->y1 = rect.y0;
+	item->x2 = rect.x1;
+	item->y2 = rect.y1;
 
 	item->x1 = floor (item->x1);
 	item->y1 = floor (item->y1);
