@@ -1180,8 +1180,8 @@ insert_rc_property (GtkRcStyle    *style,
   while (i < style->rc_properties->len)
     {
       gint cmp = gtk_rc_properties_cmp (&key, &g_array_index (style->rc_properties, GtkRcProperty, i));
+
       if (cmp == 0)
-	
 	{
 	  if (replace)
 	    {

@@ -1,3 +1,8 @@
+Mon Sep 10 06:58:56 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (insert_rc_property): Fix blank line
+	in the wrong place.
+
 Mon Sep 10 06:50:39 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (_gtk_style_peek_property_value): Don't
