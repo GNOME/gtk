@@ -223,7 +223,10 @@ struct _GtkTextLineDisplay
   gint width;                   /* Width of layout */
   gint total_width;             /* width - margins, if no width set on layout, if width set on layout, -1 */
   gint height;
-  gint x_offset;                /* Amount layout is shifted from left edge */
+  /* Amount layout is shifted from left edge - this is the left margin
+   * plus any other factors, such as alignment or indentation.
+   */
+  gint x_offset;
   gint left_margin;
   gint right_margin;
   gint top_margin;

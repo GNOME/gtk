@@ -1105,7 +1105,8 @@ set_para_values (GtkTextLayout      *layout,
     }
 
   pango_layout_set_alignment (display->layout, pango_align);
-  pango_layout_set_spacing (display->layout, style->pixels_inside_wrap * PANGO_SCALE);
+  pango_layout_set_spacing (display->layout,
+                            style->pixels_inside_wrap * PANGO_SCALE);
 
   if (style->tabs)
     pango_layout_set_tabs (display->layout, style->tabs);
@@ -1113,10 +1114,26 @@ set_para_values (GtkTextLayout      *layout,
   display->top_margin = style->pixels_above_lines;
   display->height = style->pixels_above_lines + style->pixels_below_lines;
   display->bottom_margin = style->pixels_below_lines;
-  display->x_offset = display->left_margin = MIN (style->left_margin, style->left_wrapped_line_margin);
+  display->left_margin = style->left_margin;
   display->right_margin = style->right_margin;
+  
+  if (style->indent < 0)
+    {
+      /* This means the margins can be negative. FIXME
+       * test that things work if they are.
+       */
+      
+      if (pango_align == PANGO_ALIGN_LEFT)
+        display->left_margin += style->indent;
+      else if (pango_align == PANGO_ALIGN_RIGHT)
+        display->right_margin += style->indent;
+    }
+  
+  display->x_offset = display->left_margin;
 
-  pango_layout_set_indent (display->layout, style->left_margin - style->left_wrapped_line_margin);
+
+  pango_layout_set_indent (display->layout,
+                           style->indent * PANGO_SCALE);
 
   switch (style->wrap_mode)
     {
@@ -1124,11 +1141,11 @@ set_para_values (GtkTextLayout      *layout,
       /* FIXME: Handle this; for now, fall-through */
     case GTK_WRAPMODE_WORD:
       display->total_width = -1;
-      layout_width = layout->screen_width - display->x_offset - style->right_margin;
+      layout_width = layout->screen_width - display->left_margin - display->right_margin;
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
       break;
     case GTK_WRAPMODE_NONE:
-      display->total_width = MAX (layout->screen_width, layout->width) - display->x_offset - style->right_margin;
+      display->total_width = MAX (layout->screen_width, layout->width) - display->left_margin - display->right_margin;
       break;
     }
 }
@@ -1737,10 +1754,10 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   pango_layout_get_extents (display->layout, NULL, &extents);
 
   if (display->total_width >= 0)
-    display->x_offset += (display->total_width - extents.width / PANGO_SCALE) * align;
+    display->x_offset += (display->total_width - PANGO_PIXELS (extents.width)) * align;
 
-  display->width = extents.width / PANGO_SCALE + display->left_margin + display->right_margin;
-  display->height += extents.height / PANGO_SCALE;
+  display->width = PANGO_PIXELS (extents.width) + display->x_offset + display->right_margin;
+  display->height += PANGO_PIXELS (extents.height);
 
   /* Free this if we aren't in a loop */
   if (layout->wrap_loop_count == 0)
@@ -1915,7 +1932,7 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
   /* We clamp y to the area of the actual layout so that the layouts
    * hit testing works OK on the space above and below the layout
    */
-  y = CLAMP (y, display->top_margin, display->height - display->top_margin - display->bottom_margin - 1);
+  y = CLAMP (y, 0, display->height - display->top_margin - display->bottom_margin - 1);
 
   if (!pango_layout_xy_to_index (display->layout, x * PANGO_SCALE, y * PANGO_SCALE,
                                  &byte_index, &trailing))
@@ -2040,10 +2057,7 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
   GtkTextBTree *tree;
   GtkTextLineDisplay *display;
   gint byte_index;
-  PangoRectangle whole_para;      
-  gint total_width;
   gint x_offset;
-  PangoAlignment align;
   
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (gtk_text_iter_get_btree (iter) == _gtk_text_buffer_get_btree (layout->buffer));
@@ -2056,54 +2070,16 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
 
   rect->y = gtk_text_btree_find_line_top (tree, line, layout);
 
-  pango_layout_get_extents (display->layout, NULL, &whole_para);
-  
-  total_width = pango_layout_get_width (display->layout);
-  align = pango_layout_get_alignment (display->layout);
-  
-  if (total_width < 0)
-    total_width = display->total_width * PANGO_SCALE;
-  
-  x_offset = display->left_margin * PANGO_SCALE;
-  
-  switch (align)
-    {
-    case PANGO_ALIGN_RIGHT:
-      x_offset += total_width - whole_para.width;
-      break;
-    case PANGO_ALIGN_CENTER:
-      x_offset += (total_width - whole_para.width) / 2;
-      break;
-    default:
-      break;
-    }
-  
-  /* pango_layout_index_to_pos () expects the index of a character within the layout,
-   * so we have to special case the last character. FIXME: This should be moved
-   * to Pango.
-   */
-  if (gtk_text_iter_ends_line (iter))
-    {
-      PangoLayoutLine *last_line = g_slist_last (pango_layout_get_lines (display->layout))->data;
+  x_offset = display->x_offset * PANGO_SCALE;
 
-      pango_layout_line_get_extents (last_line, NULL, &pango_rect);
-
-      rect->x = PANGO_PIXELS (x_offset + pango_rect.x + pango_rect.width);
-      rect->y += PANGO_PIXELS (whole_para.height - pango_rect.height) + display->top_margin;
-      rect->width = 0;
-      rect->height = PANGO_PIXELS (pango_rect.height);
-    }
-  else
-    {
-      byte_index = line_display_iter_to_index (layout, display, iter);
-
-      pango_layout_index_to_pos (display->layout, byte_index, &pango_rect);
-
-      rect->x = PANGO_PIXELS (x_offset + pango_rect.x);
-      rect->y += PANGO_PIXELS (pango_rect.y) + display->top_margin;
-      rect->width = PANGO_PIXELS (pango_rect.width);
-      rect->height = PANGO_PIXELS (pango_rect.height);
-    }
+  byte_index = gtk_text_iter_get_line_index (iter);
+  
+  pango_layout_index_to_pos (display->layout, byte_index, &pango_rect);
+  
+  rect->x = PANGO_PIXELS (x_offset + pango_rect.x);
+  rect->y += PANGO_PIXELS (pango_rect.y) + display->top_margin;
+  rect->width = PANGO_PIXELS (pango_rect.width);
+  rect->height = PANGO_PIXELS (pango_rect.height);
 
   gtk_text_layout_free_line_display (layout, display);
 }
@@ -2141,29 +2117,34 @@ find_display_line_below (GtkTextLayout *layout,
     {
       GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, FALSE);
       gint byte_index = 0;
-      GSList *tmp_list =  pango_layout_get_lines (display->layout);
+      PangoLayoutIter *layout_iter;
+
+      layout_iter = pango_layout_get_iter (display->layout);
 
       line_top += display->top_margin;
 
-      while (tmp_list)
+      do
         {
-          PangoRectangle logical_rect;
-          PangoLayoutLine *layout_line = tmp_list->data;
+          gint first_y, last_y;
+          PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
 
           found_byte = byte_index;
-
+          
           if (line_top >= y)
             {
               found_line = line;
               break;
             }
 
-          pango_layout_line_get_extents (layout_line, NULL, &logical_rect);
-          line_top += logical_rect.height / PANGO_SCALE;
+          pango_layout_iter_get_line_yrange (layout_iter, &first_y, &last_y);
+          line_top += (last_y - first_y) / PANGO_SCALE;
 
-          tmp_list = tmp_list->next;
+          byte_index += layout_line->length;
         }
+      while (pango_layout_iter_next_line (layout_iter));
 
+      pango_layout_iter_free (layout_iter);
+      
       line_top += display->bottom_margin;
       gtk_text_layout_free_line_display (layout, display);
 
@@ -2206,40 +2187,48 @@ find_display_line_above (GtkTextLayout *layout,
       PangoRectangle logical_rect;
 
       gint byte_index = 0;
-      GSList *tmp_list;
+      PangoLayoutIter *layout_iter;
       gint tmp_top;
 
+      layout_iter = pango_layout_get_iter (display->layout);
+      
       line_top -= display->top_margin + display->bottom_margin;
-      pango_layout_get_extents (display->layout, NULL, &logical_rect);
+      pango_layout_iter_get_layout_extents (layout_iter, NULL, &logical_rect);
       line_top -= logical_rect.height / PANGO_SCALE;
 
       tmp_top = line_top + display->top_margin;
 
-      tmp_list =  pango_layout_get_lines (display->layout);
-      while (tmp_list)
+      do
         {
-          PangoLayoutLine *layout_line = tmp_list->data;
+          gint first_y, last_y;
+          PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
 
           found_byte = byte_index;
 
-          tmp_top += logical_rect.height / PANGO_SCALE;
+          pango_layout_iter_get_line_yrange (layout_iter, &first_y, &last_y);
+          
+          tmp_top -= (last_y - first_y) / PANGO_SCALE;
 
           if (tmp_top < y)
             {
               found_line = line;
               found_byte = byte_index;
+              goto done;
             }
 
-          pango_layout_line_get_extents (layout_line, NULL, &logical_rect);
-
-          tmp_list = tmp_list->next;
+          byte_index += layout_line->length;
         }
+      while (pango_layout_iter_next_line (layout_iter));
 
+      pango_layout_iter_free (layout_iter);
+      
       gtk_text_layout_free_line_display (layout, display);
 
       line = gtk_text_line_previous (line);
     }
 
+ done:
+  
   if (found_line)
     gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                      iter, found_line, found_byte);
@@ -2512,8 +2501,8 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
   GtkTextLineDisplay *display;
   gint line_byte;
   gint byte_offset = 0;
-  GSList *tmp_list;
-
+  PangoLayoutIter *layout_iter;
+  
   g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (iter != NULL);
@@ -2523,49 +2512,36 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
   display = gtk_text_layout_get_line_display (layout, line, FALSE);
   line_byte = line_display_iter_to_index (layout, display, iter);
 
-  tmp_list = pango_layout_get_lines (display->layout);
-  while (tmp_list)
-    {
-      PangoLayoutLine *layout_line = tmp_list->data;
+  layout_iter = pango_layout_get_iter (display->layout);
 
-      if (line_byte < byte_offset + layout_line->length || !tmp_list->next)
+  do
+    {
+      PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
+
+      if (line_byte < byte_offset + layout_line->length ||
+          pango_layout_iter_at_last_line (layout_iter))
         {
           PangoRectangle logical_rect;
           gint byte_index, trailing;
-          gint align = pango_layout_get_alignment (display->layout);
-          gint x_offset = display->left_margin * PANGO_SCALE;
-          gint width = pango_layout_get_width (display->layout);
+          gint x_offset = display->x_offset * PANGO_SCALE;
 
-          if (width < 0)
-            width = display->total_width * PANGO_SCALE;
-
-          pango_layout_line_get_extents (layout_line, NULL, &logical_rect);
-
-          switch (align)
-            {
-            case PANGO_ALIGN_RIGHT:
-              x_offset += width - logical_rect.width;
-              break;
-            case PANGO_ALIGN_CENTER:
-              x_offset += (width - logical_rect.width) / 2;
-              break;
-            default:
-              break;
-            }
+          pango_layout_iter_get_line_extents (layout_iter, NULL, &logical_rect);
 
           pango_layout_line_x_to_index (layout_line,
-                                        x * PANGO_SCALE - x_offset,
+                                        x * PANGO_SCALE - x_offset - logical_rect.x,
                                         &byte_index, &trailing);
 
  	  line_display_index_to_iter (layout, display, iter, byte_index, trailing);
-	  
+
           break;
         }
 
       byte_offset += layout_line->length;
-      tmp_list = tmp_list->next;
     }
+  while (pango_layout_iter_next_line (layout_iter));
 
+  pango_layout_iter_free (layout_iter);
+  
   gtk_text_layout_free_line_display (layout, display);
 }
 

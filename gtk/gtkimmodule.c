@@ -241,6 +241,7 @@ gtk_im_module_init ()
     {
       g_warning ("Can not open Input Method module file '%s': %s",
 		 filename, g_strerror (errno));
+      /* We are leaking all kinds of memory here. */
       return;
     }
 
@@ -338,6 +339,7 @@ gtk_im_module_init ()
   fclose (file);
   g_string_free (line_buf, TRUE);
   g_string_free (tmp_buf, TRUE);
+  g_free (filename);
 }
 
 /**

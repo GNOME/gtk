@@ -1,3 +1,54 @@
+2000-11-13  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkimmodule.c (gtk_im_module_init): Free the filename of 
+	the module file.
+
+	* gtk/gtktexttag.c (gtk_text_attributes_copy): fix memory leak of
+	dest->language
+
+	* gtk/testtext.c: Test pixels above/below/inside paragraphs
+	settings
+
+	* gtk/gtktextview.c: Implement object args and setters/getters for
+	all the aspects of the GtkTextAttributes that are not set from
+	GtkWidget attributes. This is spacing, justification, margins,
+	etc.
+
+	(gtk_text_view_set_arg)
+	(gtk_text_view_get_arg): implement get/set for editable, wrap mode
+	args
+	(gtk_text_view_class_init): Add args for justify, left_margin,
+	right_margin, indent, and tabs
+	
+
+	* gtk/gtktextlayout.c (set_para_values): fix to display indent
+	attribute properly
+
+	* gtk/gtktexttag.c: Remove left_wrapped_line_margin attribute, 
+	replace with indent attribute
+
+	* gtk/gtktextlayout.c (set_para_values): multiply indent by
+	PANGO_SCALE
+
+	* gtk/gtktextdisplay.c (render_para): Use PangoLayoutIter,
+	rearranging code to do that
+	(gtk_text_layout_draw): Pass in the y for the whole LineDisplay,
+	i.e. don't subtract the top_margin first, just to keep
+	all margin-futzing in one place.
+
+	* gdk/gdkpango.c (gdk_draw_layout): Use PangoLayoutIter
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_iter_location): Remove
+	special case of last line, Pango now handles this itself.
+	(gtk_text_layout_get_iter_at_pixel): Fix incorrect clamp of the 
+	Y coordinate
+	(gtk_text_layout_move_iter_to_x): port to use PangoLayoutIter
+	(find_display_line_above): wasn't moving the byte index as it
+	iterated over lines, so always returned byte 0. Also, port to use
+	PangoLayoutIter.
+	(find_display_line_below): same problem as
+	find_display_line_above. Also, port to use PangoLayoutIter.
+
 2000-11-13  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/*.[ch]:

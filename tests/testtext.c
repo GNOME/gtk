@@ -503,12 +503,10 @@ fill_example_buffer (GtkTextBuffer *buffer)
   gtk_object_set (GTK_OBJECT (tag),
 		 "wrap_mode", GTK_WRAPMODE_WORD,
 		 "direction", GTK_TEXT_DIR_RTL,
-		 "left_wrapped_line_margin", 20,
+		 "indent", 30,
 		 "left_margin", 20,
 		 "right_margin", 20,
 		 NULL);
-
-
   
   pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
   
@@ -859,6 +857,34 @@ do_direction_changed (gpointer             callback_data,
   gtk_widget_queue_resize (view->text_view);
 }
 
+
+static void
+do_spacing_changed (gpointer             callback_data,
+                    guint                callback_action,
+                    GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+
+  if (callback_action)
+    {
+      gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (view->text_view),
+                                            23);
+      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (view->text_view),
+                                            21);
+      gtk_text_view_set_pixels_inside_wrap (GTK_TEXT_VIEW (view->text_view),
+                                            9);
+    }
+  else
+    {
+      gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (view->text_view),
+                                            0);
+      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (view->text_view),
+                                            0);
+      gtk_text_view_set_pixels_inside_wrap (GTK_TEXT_VIEW (view->text_view),
+                                            0);
+    }
+}
+
 static void
 do_editable_changed (gpointer callback_data,
                      guint callback_action,
@@ -1112,6 +1138,10 @@ static GtkItemFactoryEntry menu_items[] =
   
   { "/Settings/Left-to-Right", NULL,    do_direction_changed,  GTK_TEXT_DIR_LTR, "<RadioItem>" },
   { "/Settings/Right-to-Left", NULL,    do_direction_changed,  GTK_TEXT_DIR_RTL, "/Settings/Left-to-Right" },
+
+  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/Sane spacing", NULL,    do_spacing_changed,  FALSE, "<RadioItem>" },
+  { "/Settings/Funky spacing", NULL,    do_spacing_changed,  TRUE, "/Settings/Sane spacing" },
   { "/_Attributes",   	  NULL,         0,                0, "<Branch>" },
   { "/Attributes/Editable",   	  NULL,         do_apply_editable, TRUE, NULL },
   { "/Attributes/Not editable",   	  NULL,         do_apply_editable, FALSE, NULL },
@@ -1864,8 +1894,7 @@ create_view (Buffer *buffer)
   view->text_view = gtk_text_view_new_with_buffer (buffer->buffer);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view->text_view),
                                GTK_WRAPMODE_WORD);
-
-
+  
   /* Draw tab stops in the top and bottom windows. */
   
   gtk_text_view_set_border_window_size (GTK_TEXT_VIEW (view->text_view),

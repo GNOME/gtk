@@ -65,7 +65,7 @@ struct _GtkTextTag
   guint fg_stipple_set : 1;
   guint justify_set : 1;
   guint left_margin_set : 1;
-  guint left_wrapped_line_margin_set : 1;
+  guint indent_set : 1;
   guint offset_set : 1;
   guint strikethrough_set : 1;
   guint right_margin_set : 1;
@@ -144,12 +144,10 @@ struct _GtkTextAttributes
 
   PangoFontDescription *font_desc;
 
-  /* lMargin1 */
   gint left_margin;
 
-  /* lMargin2 */
-  gint left_wrapped_line_margin;
-
+  gint indent;
+  
   /* super/subscript offset, can be negative */
   gint offset;
 

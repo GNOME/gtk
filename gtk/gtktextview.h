@@ -70,9 +70,20 @@ struct _GtkTextView
   guint selection_drag_scan_timeout;
   gint scrolling_accel_factor;
 
-  GtkWrapMode wrap_mode;        /* Default wrap mode */
+  /* Default style settings */
+  gint pixels_above_lines;
+  gint pixels_below_lines;
+  gint pixels_inside_wrap;
+  GtkWrapMode wrap_mode;  
+  GtkJustification justify;
+  gint left_margin;
+  gint right_margin;
+  gint indent;
+  PangoTabArray *tabs;
+  guint editable : 1;
 
-  guint editable : 1;           /* default editability */
+  
+  
   guint overwrite_mode : 1;
   guint cursor_visible : 1;
   guint  need_im_reset : 1;	/* If we have reset the IM since the last character entered */
@@ -168,14 +179,6 @@ gboolean       gtk_text_view_place_cursor_onscreen (GtkTextView   *text_view);
 
 void           gtk_text_view_get_visible_rect      (GtkTextView   *text_view,
                                                     GdkRectangle  *visible_rect);
-void           gtk_text_view_set_wrap_mode         (GtkTextView   *text_view,
-                                                    GtkWrapMode    wrap_mode);
-GtkWrapMode    gtk_text_view_get_wrap_mode         (GtkTextView   *text_view);
-
-void           gtk_text_view_set_editable          (GtkTextView   *text_view,
-                                                    gboolean       setting);
-gboolean       gtk_text_view_get_editable          (GtkTextView   *text_view);
-
 void           gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
                                                     gboolean       setting);
 gboolean       gtk_text_view_get_cursor_visible    (GtkTextView   *text_view);
@@ -240,6 +243,41 @@ void gtk_text_view_move_child          (GtkTextView          *text_view,
                                         /* window coordinates */
                                         gint                  xpos,
                                         gint                  ypos);
+
+/* Default style settings (fallbacks if no tag affects the property) */
+
+void             gtk_text_view_set_wrap_mode          (GtkTextView      *text_view,
+                                                       GtkWrapMode       wrap_mode);
+GtkWrapMode      gtk_text_view_get_wrap_mode          (GtkTextView      *text_view);
+void             gtk_text_view_set_editable           (GtkTextView      *text_view,
+                                                       gboolean          setting);
+gboolean         gtk_text_view_get_editable           (GtkTextView      *text_view);
+void             gtk_text_view_set_pixels_above_lines (GtkTextView      *text_view,
+                                                       gint              pixels_above_lines);
+gint             gtk_text_view_get_pixels_above_lines (GtkTextView      *text_view);
+void             gtk_text_view_set_pixels_below_lines (GtkTextView      *text_view,
+                                                       gint              pixels_below_lines);
+gint             gtk_text_view_get_pixels_below_lines (GtkTextView      *text_view);
+void             gtk_text_view_set_pixels_inside_wrap (GtkTextView      *text_view,
+                                                       gint              pixels_inside_wrap);
+gint             gtk_text_view_get_pixels_inside_wrap (GtkTextView      *text_view);
+void             gtk_text_view_set_justification      (GtkTextView      *text_view,
+                                                       GtkJustification  justification);
+GtkJustification gtk_text_view_get_justification      (GtkTextView      *text_view);
+void             gtk_text_view_set_left_margin        (GtkTextView      *text_view,
+                                                       gint              left_margin);
+gint             gtk_text_view_get_left_margin        (GtkTextView      *text_view);
+void             gtk_text_view_set_right_margin       (GtkTextView      *text_view,
+                                                       gint              right_margin);
+gint             gtk_text_view_get_right_margin       (GtkTextView      *text_view);
+void             gtk_text_view_set_indent             (GtkTextView      *text_view,
+                                                       gint              indent);
+gint             gtk_text_view_get_indent             (GtkTextView      *text_view);
+void             gtk_text_view_set_tabs               (GtkTextView      *text_view,
+                                                       PangoTabArray    *tabs);
+PangoTabArray*   gtk_text_view_get_tabs               (GtkTextView      *text_view);
+                                       
+
 
 #ifdef __cplusplus
 }

@@ -84,7 +84,7 @@ enum {
   ARG_JUSTIFY,
   ARG_DIRECTION,
   ARG_LEFT_MARGIN,
-  ARG_LEFT_WRAPPED_LINE_MARGIN,
+  ARG_INDENT,
   ARG_STRIKETHROUGH,
   ARG_RIGHT_MARGIN,
   ARG_UNDERLINE,
@@ -109,7 +109,7 @@ enum {
   ARG_WRAP_MODE_SET,
   ARG_JUSTIFY_SET,
   ARG_LEFT_MARGIN_SET,
-  ARG_LEFT_WRAPPED_LINE_MARGIN_SET,
+  ARG_INDENT_SET,
   ARG_STRIKETHROUGH_SET,
   ARG_RIGHT_MARGIN_SET,
   ARG_UNDERLINE_SET,
@@ -205,8 +205,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_LANGUAGE);
   gtk_object_add_arg_type ("GtkTextTag::left_margin", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_LEFT_MARGIN);
-  gtk_object_add_arg_type ("GtkTextTag::left_wrapped_line_margin", GTK_TYPE_INT,
-                           GTK_ARG_READWRITE, ARG_LEFT_WRAPPED_LINE_MARGIN);
+  gtk_object_add_arg_type ("GtkTextTag::indent", GTK_TYPE_INT,
+                           GTK_ARG_READWRITE, ARG_INDENT);
   gtk_object_add_arg_type ("GtkTextTag::offset", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_OFFSET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines", GTK_TYPE_INT,
@@ -223,7 +223,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_UNDERLINE);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE);
-  gtk_object_add_arg_type ("GtkTextTag::tabs", GTK_TYPE_POINTER,
+  gtk_object_add_arg_type ("GtkTextTag::tabs", GTK_TYPE_POINTER, /* FIXME */
                            GTK_ARG_READWRITE, ARG_TABS);
   gtk_object_add_arg_type ("GtkTextTag::invisible", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_INVISIBLE);
@@ -253,8 +253,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_LANGUAGE_SET);
   gtk_object_add_arg_type ("GtkTextTag::left_margin_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_LEFT_MARGIN_SET);
-  gtk_object_add_arg_type ("GtkTextTag::left_wrapped_line_margin_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_LEFT_WRAPPED_LINE_MARGIN_SET);
+  gtk_object_add_arg_type ("GtkTextTag::indent_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_INDENT_SET);
   gtk_object_add_arg_type ("GtkTextTag::offset_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_OFFSET_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines_set", GTK_TYPE_BOOL,
@@ -566,9 +566,9 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       size_changed = TRUE;
       break;
 
-    case ARG_LEFT_WRAPPED_LINE_MARGIN:
-      text_tag->left_wrapped_line_margin_set = TRUE;
-      text_tag->values->left_wrapped_line_margin = GTK_VALUE_INT (*arg);
+    case ARG_INDENT:
+      text_tag->indent_set = TRUE;
+      text_tag->values->indent = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
@@ -681,8 +681,8 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       size_changed = TRUE;
       break;
 
-    case ARG_LEFT_WRAPPED_LINE_MARGIN_SET:
-      text_tag->left_wrapped_line_margin_set = GTK_VALUE_BOOL (*arg);
+    case ARG_INDENT_SET:
+      text_tag->indent_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
@@ -824,8 +824,8 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       GTK_VALUE_INT (*arg) = tag->values->left_margin;
       break;
 
-    case ARG_LEFT_WRAPPED_LINE_MARGIN:
-      GTK_VALUE_INT (*arg) = tag->values->left_wrapped_line_margin;
+    case ARG_INDENT:
+      GTK_VALUE_INT (*arg) = tag->values->indent;
       break;
 
     case ARG_STRIKETHROUGH:
@@ -907,8 +907,8 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       GTK_VALUE_BOOL (*arg) = tag->left_margin_set;
       break;
 
-    case ARG_LEFT_WRAPPED_LINE_MARGIN_SET:
-      GTK_VALUE_BOOL (*arg) = tag->left_wrapped_line_margin_set;
+    case ARG_INDENT_SET:
+      GTK_VALUE_BOOL (*arg) = tag->indent_set;
       break;
 
     case ARG_STRIKETHROUGH_SET:
@@ -1184,6 +1184,9 @@ gtk_text_attributes_copy (GtkTextAttributes *src,
   if (dest->appearance.fg_stipple)
     gdk_bitmap_unref (dest->appearance.fg_stipple);
 
+  if (dest->language)
+    g_free (dest->language);
+  
   /* Copy */
   orig_refcount = dest->refcount;
 
@@ -1343,8 +1346,8 @@ gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->left_margin_set)
         dest->left_margin = vals->left_margin;
 
-      if (tag->left_wrapped_line_margin_set)
-        dest->left_wrapped_line_margin = vals->left_wrapped_line_margin;
+      if (tag->indent_set)
+        dest->indent = vals->indent;
 
       if (tag->offset_set)
         dest->offset = vals->offset;
@@ -1405,7 +1408,7 @@ gtk_text_tag_affects_size (GtkTextTag *tag)
     tag->font_set ||
     tag->justify_set ||
     tag->left_margin_set ||
-    tag->left_wrapped_line_margin_set ||
+    tag->indent_set ||
     tag->offset_set ||
     tag->right_margin_set ||
     tag->pixels_above_lines_set ||
