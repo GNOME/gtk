@@ -1,3 +1,10 @@
+Mon Oct  4 16:16:53 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
+
+	* gtk/gtkrc.{bg,iso88591[345]}: add gtkrc files for some new charset
+	encodings: iso-8859-13 (for Lithuanian), iso-8859-14 (used by celtic
+	languages), iso-8859-15 (used in Estonia) and microsoft-cp1251 (used
+	by Bulgarian). 
+
 Sun Oct  3 18:13:44 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_reset_shapes_recurse): 

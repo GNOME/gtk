@@ -331,9 +331,10 @@ libgtk_la_LDFLAGS = \
 #	$(top_builddir)/gdk/libgdk.la
 
 gtkconfdir = $(sysconfdir)/gtk
-gtkconf_DATA = gtkrc gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
+gtkconf_DATA = gtkrc gtkrc.bg gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk \
-	gtkrc.iso88592 gtkrc.iso88595 gtkrc.zh_CN gtkrc.zh_TW.Big5 \
+	gtkrc.iso88592 gtkrc.iso88595 gtkrc.iso885913 gtkrc.iso885914 \
+	gtkrc.iso885915 gtkrc.zh_CN gtkrc.zh_TW.Big5 \
 	gtkrc.ka_GE.georgianacademy gtkrc.ka_GE.georgianps \
 	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii
 
@@ -356,10 +357,14 @@ install-data-local:
 	    $(LN_S) gtkrc.iso88592 gtkrc.sl ; \
 	    $(LN_S) gtkrc.iso88592 gtkrc.sq ; \
 	    $(LN_S) gtkrc.iso88592 gtkrc.sr_YU.iso88592 ; \
-	    $(LN_S) gtkrc.iso88595 gtkrc.bg ; \
+	    $(LN_S) gtkrc.iso88595 gtkrc.bg_BG.iso88595 ; \
 	    $(LN_S) gtkrc.iso88595 gtkrc.mk ; \
 	    $(LN_S) gtkrc.iso88595 gtkrc.sr ; \
 	    $(LN_S) gtkrc.iso88595 gtkrc.ru_RU.iso88595 ; \
+	    $(LN_S) gtkrc.iso885913 gtkrc.lt ; \
+	    $(LN_S) gtkrc.iso885914 gtkrc.cy ; \
+	    $(LN_S) gtkrc.iso885914 gtkrc.ga ; \
+	    $(LN_S) gtkrc.iso885915 gtkrc.et ; \
 	    $(LN_S) gtkrc.ka_GE.georgianacademy gtkrc.ka ; \
 	    $(LN_S) gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 ; \
 	    $(LN_S) gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
