@@ -6,7 +6,7 @@ SUBDIRS = $(SRC_SUBDIRS) docs
 bin_SCRIPTS = gtk-config
 
 EXTRA_DIST =	\
-	gtk+.prj	\
+	gtk+.spec	\
         gtk.m4          \
 	makecopyright	\
 	TODO		\
