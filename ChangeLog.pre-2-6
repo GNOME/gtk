@@ -1,3 +1,11 @@
+Fri Jun  1 11:31:55 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrectangle.c (gdk_rectangle_get_type): Add 
+	GDK_TYPE_RECTANGLE.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Fix type
+	of allocation argument be GDK_TYPE_RECTANGLE.
+
 Thu May 31 12:43:57 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c: Account for the fact that the border

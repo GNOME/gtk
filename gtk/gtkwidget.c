@@ -586,9 +586,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_allocate),
-		    gtk_marshal_VOID__POINTER,
+		    gtk_marshal_VOID__BOXED,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
+		    GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[STATE_CHANGED] =
     gtk_signal_new ("state_changed",
 		    GTK_RUN_FIRST,
