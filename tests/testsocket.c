@@ -225,6 +225,7 @@ add_child (GtkWidget *window,
     }
   
   g_io_add_watch (channel, G_IO_IN | G_IO_HUP, child_read_watch, NULL);
+  g_io_channel_unref (channel);
 }
 
 void
