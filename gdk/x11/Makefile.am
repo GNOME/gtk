@@ -13,6 +13,7 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	@GTK_LOCALE_FLAGS@	\
 	@PANGO_CFLAGS@		\
 	@GLIB_CFLAGS@		\
+	@FREETYPE_CFLAGS@	\
 	@x_cflags@ 		\
 @STRIP_END@
 

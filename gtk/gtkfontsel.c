@@ -429,6 +429,8 @@ gtk_font_selection_select_font (GtkWidget      *w,
 	{
 	  g_free (fontsel->font_desc->family_name);
 	  fontsel->font_desc->family_name  = g_strdup (family_name);
+
+	  gtk_entry_set_text (fontsel->font_entry, family_name);
 	  
 	  gtk_font_selection_show_available_styles (fontsel);
 	  gtk_font_selection_select_best_style (fontsel, TRUE);

@@ -28,6 +28,9 @@
 #include "gtkframe.h"
 #include "gtklabel.h"
 
+#define LABEL_PAD 1
+#define LABEL_SIDE_PAD 2
+
 enum {
   ARG_0,
   ARG_LABEL,
@@ -400,14 +403,14 @@ gtk_frame_paint (GtkWidget    *widget,
 	  y -= height_extra * (1 - frame->label_yalign);
 	  height += height_extra * (1 - frame->label_yalign);
 	  
-	  x2 = 2 + (frame->child_allocation.width - child_requisition.width) * xalign;
+	  x2 = widget->style->xthickness + (frame->child_allocation.width - child_requisition.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
 
 	  gtk_paint_shadow_gap (widget->style, widget->window,
 				GTK_STATE_NORMAL, frame->shadow_type,
 				area, widget, "frame",
 				x, y, width, height,
 				GTK_POS_TOP, 
-				x2, child_requisition.width - 4);
+				x2, child_requisition.width + 2 * LABEL_PAD);
 	}
        else
 	 gtk_paint_shadow (widget->style, widget->window,
@@ -459,7 +462,7 @@ gtk_frame_size_request (GtkWidget      *widget,
     {
       gtk_widget_size_request (frame->label_widget, &child_requisition);
 
-      requisition->width = child_requisition.width;
+      requisition->width = child_requisition.width + 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
       requisition->height =
 	MAX (0, child_requisition.height - GTK_WIDGET (widget)->style->xthickness);
     }
@@ -523,8 +526,8 @@ gtk_frame_size_allocate (GtkWidget     *widget,
       else
 	xalign = 1 - frame->label_xalign;
       
-      child_allocation.x = frame->child_allocation.x +
-	(frame->child_allocation.width - child_requisition.width) * xalign;
+      child_allocation.x = frame->child_allocation.x + LABEL_SIDE_PAD +
+	(frame->child_allocation.width - child_requisition.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_PAD;
       child_allocation.width = child_requisition.width;
 
       child_allocation.y = frame->child_allocation.y - child_requisition.height;
