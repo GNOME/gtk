@@ -255,6 +255,10 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
 						    GtkProgressBarOrientation orientation);
 
+* The GtkNotebookPage structure has been removed from the public header files;
+  this was never meant to be a public structure, and all functionality that
+  could be done by accessing the struct fields of this structure should be 
+  accesible otherwise.
 
 - GtkMenuPositionFunc has a new parameter push_in which controls how
   menus placed outside the screen is handled. If this is set to true and

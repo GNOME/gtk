@@ -2,13 +2,21 @@
 GtkNotebook
 
 <!-- ##### SECTION Short_Description ##### -->
-Set of pages with bookmarks.
+A tabbed notebook container.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 The #GtkNotebook widget is a #GtkContainer whose children are pages that
-can be accessed through bookmarks. The pages are displayed all at the same
-place. <!-- TODO: talk about the menu -->
+can be switched between using tab labels along one edge.
+</para>
+<para>
+There are many configuration options for #GtkNotebook. Among other
+things, you can choose on which edge the tabs appear
+(see gtk_notebook_set_tab_pos()), whether, if there are too many
+tabs to fit the noteobook should be made bigger or scrolling
+arrows added (see gtk_notebook_set_scrollable), and whether there
+will be a popup menu allowing the users to switch pages.
+(see gtk_notebook_enable_popup(), gtk_noteobook_disable_popup())
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -28,124 +36,83 @@ place. <!-- TODO: talk about the menu -->
 </para>
 
 
-<!-- ##### MACRO GTK_NOTEBOOK_PAGE ##### -->
-<para>
-Extracts the contents of the current element of #GList @_glist_ as a
-#GtkNotebookPage.
-</para>
-
-@_glist_: 
-
-
 <!-- ##### STRUCT GtkNotebookPage ##### -->
 <para>
-The #GtkNotebookPage structure is used to store the pages of a notebook. It
-is not an object.
+The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 </para>
-
-@child: the contents of the page
-@tab_label: the label shown in the bookmark
-@menu_label: the label shown in the popup menu
-@default_menu: 
-@default_tab: 
-@expand: 
-@fill: 
-@pack: 
-@requisition: 
-@allocation: 
 
 <!-- ##### FUNCTION gtk_notebook_new ##### -->
 <para>
-Creates a new #GtkNotebook widget
 </para>
 
-@Returns: the newly created G=#GtkNotebook
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_append_page ##### -->
 <para>
-Appends to @notebook a page whose content is @child, and whose bookmark is
-@tab_label.
 </para>
 
-@notebook: the notebook widget
-@child: the content of the new page
-@tab_label: the bookmark for the page
+@notebook:
+@child:
+@tab_label:
 
 
 <!-- ##### FUNCTION gtk_notebook_append_page_menu ##### -->
 <para>
-Appends to @notebook a page whose content is @child, whose bookmark is
-@tab_label, and whose menu label is @menu_label.
 </para>
 
-@notebook: the notebook widget
-@child: the content of the new page
-@tab_label: the bookmark of the page
-@menu_label: the menu label of the page
+@notebook:
+@child:
+@tab_label:
+@menu_label:
 
 
 <!-- ##### FUNCTION gtk_notebook_prepend_page ##### -->
 <para>
-Prepends to @notebook a page whose content is @child, whose bookmark is
-@tab_label, and whose menu label is @menu_label.
 </para>
 
-@notebook: the notebook widget
-@child: the content of the new page
-@tab_label: the bookmark of the page
+@notebook:
+@child: the 
+@tab_label:
 
 
 <!-- ##### FUNCTION gtk_notebook_prepend_page_menu ##### -->
 <para>
-Appends to @notebook a page whose content is @child, whose bookmark is
-@tab_label, and whose menu label is @menu_label.
 </para>
 
-@notebook: the notebook widget
-@child: the content of the new page
-@tab_label: the bookmark of the page
-@menu_label: the menu label of the page
+@notebook: 
+@child: 
+@tab_label:
+@menu_label:
 
 
 <!-- ##### FUNCTION gtk_notebook_insert_page ##### -->
 <para>
-Inserts in @notebook a new page whose content is @child, and whose
-bookmark is @tab_label. The page is inserted just
-before the page number @position, starting with 0. If @position is out of
-bounds, it is assumed to be the current number of pages.
 </para>
 
-@notebook: the notebook widget
-@child: the content of the new page
-@tab_label: the bookmark of the page
-@position: the position to insert the page
+@notebook:
+@child:
+@tab_label:
+@position:
 
 
 <!-- ##### FUNCTION gtk_notebook_insert_page_menu ##### -->
 <para>
-Inserts in @notebook a new page whose content is @child, whose bookmark is
-@tab_label, and whose menu label is @menu_label. The page is inserted just
-before the page number @position, starting with 0. If @position is out of
-bounds, it is assumed to be the current number of pages.
 </para>
 
-@notebook: the notebook widget
-@child: the content of the new page
-@tab_label: the bookmark of the page
-@menu_label: the menu label of the page
-@position: the position to insert the page
+@notebook:
+@child:
+@tab_label:
+@menu_label: 
+@position:
 
 
 <!-- ##### FUNCTION gtk_notebook_remove_page ##### -->
 <para>
-Removes the page @page_num form @notebook. Pages are numbered starting at
-zero. Negative values stand for the last page; too large values are
-ignored.
 </para>
 
-@notebook: the notebook widget
-@page_num: the page number
+@notebook: 
+@page_num:
 
 
 <!-- ##### MACRO gtk_notebook_current_page ##### -->
@@ -157,56 +124,45 @@ Compatibility macro; in gtkcompat.h.
 
 <!-- ##### FUNCTION gtk_notebook_page_num ##### -->
 <para>
-Returns the page number of @child in @notebook.
 </para>
 
-@notebook: the notebook widget
-@child: the child
-@Returns: the page number, or -1 if @child is not in @notebook
+@notebook:
+@child:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_page ##### -->
 <para>
-Switches to the page number @page_num. Negative values stand for the last
-page; too large values are ignored.
 </para>
 
-@notebook: the notebook widget
-@page_num: the page number
+@notebook:
+@page_num:
 
 
 <!-- ##### FUNCTION gtk_notebook_next_page ##### -->
 <para>
-Switches to the next page. Nothing happens if the current page is the last
-page.
 </para>
 
-@notebook: the notebook widget.
+@notebook:
 
 
 <!-- ##### FUNCTION gtk_notebook_prev_page ##### -->
 <para>
-Switches to the previous page. Nothing happens if the current page is the
-first page.
 </para>
 
-@notebook: the notebook widget
+@notebook:
 
 
 <!-- ##### FUNCTION gtk_notebook_reorder_child ##### -->
 <para>
-Moves the page @child, so that it appears in position @position. Out of
-bounds @position will be clamped.
 </para>
 
-@notebook: the notebook widget
-@child: the child to deplace
-@position: the new position
-
+@notebook
+@child:
+@position:
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_pos ##### -->
 <para>
-Sets the position of the bookmarks.
 </para>
 
 @notebook: the notebook widget
@@ -215,62 +171,51 @@ Sets the position of the bookmarks.
 
 <!-- ##### FUNCTION gtk_notebook_set_show_tabs ##### -->
 <para>
-Sets whether to show the bookmarks or not.
 </para>
 
-@notebook: the notebook widget
-@show_tabs: a boolean value
+@notebook:
+@show_tabs:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_show_border ##### -->
 <para>
-Sets whether to show the border of the notebook or not. Bookmarks are in the
-border.
 </para>
 
-@notebook: the notebook widget
-@show_border: a boolean value
+@notebook:
+@show_border:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_scrollable ##### -->
 <para>
-Sets whether the bookmarks area may be scrollable or not if there are too
-many bookmarks to fit in the allocated area.
 </para>
 
-@notebook: the notebook widget
-@scrollable: a boolean value
+@notebook:
+@scrollable:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_border ##### -->
 <para>
-Sets whether there should be a border around the bookmarks or not.
 </para>
 
-@notebook: the notebook widget
-@border_width: a boolean value
+@notebook:
+@border_width:
 
 
 <!-- ##### FUNCTION gtk_notebook_popup_enable ##### -->
 <para>
-Enables the popup menu: if the user clicks with the right mouse button on
-the bookmarks, a menu with all the pages will be popped up.
 </para>
 
-@notebook: the notebook widget
+@notebook:
 
 
 <!-- ##### FUNCTION gtk_notebook_popup_disable ##### -->
 <para>
-Disables the popup menu
 </para>
 
-@notebook: the notebook widget
-
+@notebook:
 
 <!-- ##### FUNCTION gtk_notebook_get_current_page ##### -->
 <para>
-Returns the page number of the current page.
 </para>
 
 @notebook: the notebook widget
@@ -279,129 +224,108 @@ Returns the page number of the current page.
 
 <!-- ##### FUNCTION gtk_notebook_get_menu_label ##### -->
 <para>
-Returns the menu label of the page @child. NULL is returned if @child is not
-in @notebook or NULL if it has the default menu label.
 </para>
 
-@notebook: the notebook widget
-@child: the page
-@Returns: the menu label
+@notebook: 
+@child: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_get_nth_page ##### -->
 <para>
-Returns the content of the page number @page_num, or NULL if @page_num is
-out of bounds.
 </para>
 
-@notebook: the notebook widget
-@page_num: the page number
-@Returns: the content of the page
+@notebook:
+@page_num:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_notebook_get_tab_label ##### -->
 <para>
-Returns the menu tab of the page @child. NULL is returned if @child is not
-in @notebook or NULL if it has the default tab label.
 </para>
 
-@notebook: the notebook widget
-@child: the page
-@Returns: the tab label
+@notebook:
+@child:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_notebook_query_tab_label_packing ##### -->
 <para>
-Looks for the packing attributes of the bookmarks of @child.
 </para>
 
-@notebook: the notebook widget
-@child: the page
-@expand: a pointer to return the expand value (or NULL)
-@fill: a pointer to return the fill value (or NULL)
-@pack_type: a pointer to return the pack_type (or NULL)
+@notebook:
+@child:
+@expand:
+@fill:
+@pack_type:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_homogeneous_tabs ##### -->
 <para>
-Sets whether the tabs must have all the same size or not.
 </para>
 
-@notebook: the notebook widget
-@homogeneous: a boolean value
+@notebook:
+@homogeneous:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_menu_label ##### -->
 <para>
-Changes the menu label of @child. Nothing happens if @child is not in
-@notebook.
 </para>
 
-@notebook: the notebook widget
-@child: the page
-@menu_label: the menu label, or NULL for default
+@notebook: 
+@child: 
+@menu_label: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_menu_label_text ##### -->
 <para>
-Creates a new label and sets it as the menu label of @child.
 </para>
 
-@notebook: the notebook widget
-@child: the page
-@menu_text: the label text
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_hborder ##### -->
 <para>
-Sets whether the tabs should have a horizontal border.
 </para>
 
-@notebook: the notebook widget
-@tab_hborder: a boolean value
+@notebook:
+@tab_hborder:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_label ##### -->
 <para>
-Changes the bookmark label of @child. Nothing happens if @child is not in
-@notebook.
 </para>
 
-@notebook: the notebook widget
-@child: the page
-@tab_label: the bookmark label, or NULL for default
+@notebook: 
+@child:
+@tab_label:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_label_packing ##### -->
 <para>
-Sets the packing parameters for the bookmark of @child. See
-#GtkBoxPackStart for the exact meanings.
 </para>
 
-@notebook: the notebook widget
-@child: the child widget
-@expand: whether to expand the bookmark or not
-@fill: whether the bookmark should fill the allocated area or not
-@pack_type: the position of the bookmark
+@notebook: 
+@child: 
+@expand:
+@fill: 
+@pack_type:
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_label_text ##### -->
 <para>
-Creates a new label and sets it as the bookmark label of @child.
 </para>
 
-@notebook: the notebook widget
-@child: the page
-@tab_text: the label text
+@notebook: 
+@child: 
+@tab_text: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_vborder ##### -->
 <para>
-Sets whether the tabs should have a vertical border.
 </para>
 
-@notebook: the notebook widget
-@tab_vborder: a boolean value
+@notebook:
+@tab_vborder:
 
 
 <!-- ##### SIGNAL GtkNotebook::switch-page ##### -->
@@ -420,46 +344,47 @@ The current page
 
 <!-- ##### ARG GtkNotebook:tab_pos ##### -->
 <para>
-The position of the bookmarks
+The edge at which the tabs for switching pages are drawn.
 </para>
 
 <!-- ##### ARG GtkNotebook:tab_border ##### -->
 <para>
-Whether the bookmarks have a border or not
+Whether the tab labels have a border on all sides.
 </para>
 
 <!-- ##### ARG GtkNotebook:tab_hborder ##### -->
 <para>
-Whether the bookmarks have a horizontal border or not
+Whether the tab labels have a horizontal border.
 </para>
 
 <!-- ##### ARG GtkNotebook:tab_vborder ##### -->
 <para>
-Whether the bookmarks have a vertical border or not
+Whether the tab labels have a vertical border.
 </para>
 
 <!-- ##### ARG GtkNotebook:show_tabs ##### -->
 <para>
-Whether to show the bookmarks or not
+Whether to show tabs for the notebook pages.
 </para>
 
 <!-- ##### ARG GtkNotebook:show_border ##### -->
 <para>
-Whether to show the border or not
+Whether to draw a bevel around the noteobook.
 </para>
 
 <!-- ##### ARG GtkNotebook:scrollable ##### -->
 <para>
-Whether the bookmarks should be scrollable or not
+Whether the tab label area will have arrows for scrolling if there
+are too many tabs to fit in the area.
 </para>
 
 <!-- ##### ARG GtkNotebook:enable_popup ##### -->
 <para>
-Whether the popup menu is enabled or not
+Whether the popup menu for switching pages is enabled.
 </para>
 
 <!-- ##### ARG GtkNotebook:homogeneous ##### -->
 <para>
-
+whether the tabs must have all the same size.
 </para>
 

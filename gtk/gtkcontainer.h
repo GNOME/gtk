@@ -83,7 +83,7 @@ struct _GtkContainerClass
 				 gboolean	  include_internals,
 				 GtkCallback	  callback,
 				 gpointer	  callbabck_data);
-  gint (* focus)       		(GtkContainer	 *container,
+  gboolean (* focus)   		(GtkContainer	 *container,
 				 GtkDirectionType  direction);
   void (* set_focus_child)	(GtkContainer	 *container,
 				 GtkWidget	 *widget);
@@ -119,17 +119,17 @@ void    gtk_container_set_resize_mode    (GtkContainer     *container,
 
 void    gtk_container_check_resize       (GtkContainer     *container);
 
-void    gtk_container_foreach		 (GtkContainer	   *container,
-					  GtkCallback	    callback,
-					  gpointer	    callback_data);
-void    gtk_container_foreach_full	 (GtkContainer	   *container,
-					  GtkCallback	    callback,
-					  GtkCallbackMarshal marshal,
-					  gpointer	    callback_data,
-					  GtkDestroyNotify  notify);
-GList* gtk_container_children		 (GtkContainer	   *container);
-gint   gtk_container_focus		   (GtkContainer     *container,
-					    GtkDirectionType  direction);
+void     gtk_container_foreach      (GtkContainer       *container,
+				     GtkCallback         callback,
+				     gpointer            callback_data);
+void     gtk_container_foreach_full (GtkContainer       *container,
+				     GtkCallback         callback,
+				     GtkCallbackMarshal  marshal,
+				     gpointer            callback_data,
+				     GtkDestroyNotify    notify);
+GList*   gtk_container_children     (GtkContainer       *container);
+gboolean gtk_container_focus        (GtkContainer       *container,
+				     GtkDirectionType    direction);
 
 /* Widget-level methods */
 

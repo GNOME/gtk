@@ -150,15 +150,6 @@ GTK_USER_STYLE:
 	wich share a global user style from the ones which got a certain
 	style assign from outside the toolkit.
 	
-GTK_REDRAW_PENDING:
-	Relies on GTK_WIDGET_MAPPED (widget).
-	[FIXME: this is not really enforced throughout the code, but should
-	 be. it only requires a few checks for GTK_WIDGET_MAPPED and
-	 minor changes to gtk_widget_unmap, we can then remove the check
-	 in gtk_widget_real_destroy]
-	Means: there is an idle handler waiting for the widget, that
-	will cause a full redraw (gtk_widget_draw (widget, NULL)).
-
 GTK_RESIZE_PENDING:
 	First, this is only valid for GtkContainers.
 	[some of the code should move to gtkcontainer.c therefore]
@@ -245,7 +236,7 @@ In the following
 Note:, the definition
 
 [  GTK_WIDGET_DRAWABLE = GTK_WIDGET_VISIBLE && GTK_WIDGET_MAPPED
-   is made in gtkwidget.c, but by 3) and 5), 
+   is made in gtkwidget.h, but by 3) and 5), 
      
       GTK_WIDGET_MAPPED => GTK_WIDGET_VISIBLE
 ]

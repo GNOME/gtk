@@ -1,3 +1,8 @@
+Wed Oct 25 15:19:40 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtknotebook.sgml: Moved function docs into .c
+	file, fairly extensive rewriting.
+
 Thu Nov 30 00:53:45 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkfilesel.sgml: Fix to say that file_selection_complete()

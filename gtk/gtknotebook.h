@@ -45,9 +45,6 @@ extern "C" {
 #define GTK_NOTEBOOK_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
 
 
-#define GTK_NOTEBOOK_PAGE(_glist_)         ((GtkNotebookPage *)((GList *)(_glist_))->data)
-
-
 typedef struct _GtkNotebook       GtkNotebook;
 typedef struct _GtkNotebookClass  GtkNotebookClass;
 typedef struct _GtkNotebookPage   GtkNotebookPage;
@@ -58,7 +55,7 @@ struct _GtkNotebook
   
   GtkNotebookPage *cur_page;
   GList *children;
-  GList *first_tab;
+  GList *first_tab;		/* The first tab visible (for scrolling notebooks) */
   GList *focus_tab;
   
   GtkWidget *menu;
@@ -89,22 +86,6 @@ struct _GtkNotebookClass
   void (* switch_page)       (GtkNotebook     *notebook,
                               GtkNotebookPage *page,
 			      guint            page_num);
-};
-
-struct _GtkNotebookPage
-{
-  GtkWidget *child;
-  GtkWidget *tab_label;
-  GtkWidget *menu_label;
-
-  guint default_menu : 1;
-  guint default_tab  : 1;
-  guint expand       : 1;
-  guint fill         : 1;
-  guint pack         : 1;
-
-  GtkRequisition requisition;
-  GtkAllocation allocation;
 };
 
 /***********************************************************
@@ -143,15 +124,15 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
  *            query, set current NoteebookPage             *
  ***********************************************************/
 
-gint gtk_notebook_get_current_page   (GtkNotebook *notebook);
-GtkWidget* gtk_notebook_get_nth_page (GtkNotebook *notebook,
-				      gint         page_num);
-gint gtk_notebook_page_num         (GtkNotebook *notebook,
-				    GtkWidget   *child);
-void gtk_notebook_set_page         (GtkNotebook *notebook,
-				    gint         page_num);
-void gtk_notebook_next_page        (GtkNotebook *notebook);
-void gtk_notebook_prev_page        (GtkNotebook *notebook);
+gint       gtk_notebook_get_current_page (GtkNotebook *notebook);
+GtkWidget* gtk_notebook_get_nth_page     (GtkNotebook *notebook,
+					  gint         page_num);
+gint       gtk_notebook_page_num         (GtkNotebook *notebook,
+					  GtkWidget   *child);
+void       gtk_notebook_set_page         (GtkNotebook *notebook,
+					  gint         page_num);
+void       gtk_notebook_next_page        (GtkNotebook *notebook);
+void       gtk_notebook_prev_page        (GtkNotebook *notebook);
 
 /***********************************************************
  *            set Notebook, NotebookTab style              *

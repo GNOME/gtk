@@ -6471,31 +6471,34 @@ GdkBitmap *book_closed_mask;
 GtkWidget *sample_notebook;
 
 static void
-page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
+set_page_pixmaps (GtkNotebook *notebook, gint page_num,
+		  GdkPixmap *pixmap, GdkPixmap *mask)
 {
-  GtkNotebookPage *oldpage;
+  GtkWidget *page_widget;
   GtkWidget *pixwid;
 
-  oldpage = GTK_NOTEBOOK (widget)->cur_page;
+  page_widget = gtk_notebook_get_nth_page (notebook, page_num);
 
-  if (page == oldpage)
+  pixwid = gtk_object_get_data (GTK_OBJECT (page_widget), "tab_pixmap");
+  gtk_pixmap_set (GTK_PIXMAP (pixwid), pixmap, mask);
+  
+  pixwid = gtk_object_get_data (GTK_OBJECT (page_widget), "menu_pixmap");
+  gtk_pixmap_set (GTK_PIXMAP (pixwid), pixmap, mask);
+}
+
+static void
+page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  gint old_page_num = gtk_notebook_get_current_page (notebook);
+ 
+  if (page_num == old_page_num)
     return;
-  pixwid = ((GtkBoxChild*)
-	    (GTK_BOX (page->tab_label)->children->data))->widget;
-  gtk_pixmap_set (GTK_PIXMAP (pixwid), book_open, book_open_mask);
-  pixwid = ((GtkBoxChild*)
-	    (GTK_BOX (page->menu_label)->children->data))->widget;
-  gtk_pixmap_set (GTK_PIXMAP (pixwid), book_open, book_open_mask);
 
-  if (oldpage)
-    {
-      pixwid = ((GtkBoxChild*)
-		(GTK_BOX (oldpage->tab_label)->children->data))->widget;
-      gtk_pixmap_set (GTK_PIXMAP (pixwid), book_closed, book_closed_mask);
-      pixwid = ((GtkBoxChild*)
-		(GTK_BOX (oldpage->menu_label)->children->data))->widget;
-      gtk_pixmap_set (GTK_PIXMAP (pixwid), book_closed, book_closed_mask);
-    }
+  set_page_pixmaps (notebook, page_num, book_open, book_open_mask);
+
+  if (old_page_num != -1)
+    set_page_pixmaps (notebook, old_page_num, book_closed, book_closed_mask);
 }
 
 static void
@@ -6589,19 +6592,25 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
 
       label_box = gtk_hbox_new (FALSE, 0);
       pixwid = gtk_pixmap_new (book_closed, book_closed_mask);
+      gtk_object_set_data (GTK_OBJECT (child), "tab_pixmap", pixwid);
+			   
       gtk_box_pack_start (GTK_BOX (label_box), pixwid, FALSE, TRUE, 0);
       gtk_misc_set_padding (GTK_MISC (pixwid), 3, 1);
       label = gtk_label_new (buffer);
       gtk_box_pack_start (GTK_BOX (label_box), label, FALSE, TRUE, 0);
       gtk_widget_show_all (label_box);
 
+				       
       menu_box = gtk_hbox_new (FALSE, 0);
       pixwid = gtk_pixmap_new (book_closed, book_closed_mask);
+      gtk_object_set_data (GTK_OBJECT (child), "menu_pixmap", pixwid);
+      
       gtk_box_pack_start (GTK_BOX (menu_box), pixwid, FALSE, TRUE, 0);
       gtk_misc_set_padding (GTK_MISC (pixwid), 3, 1);
       label = gtk_label_new (buffer);
       gtk_box_pack_start (GTK_BOX (menu_box), label, FALSE, TRUE, 0);
       gtk_widget_show_all (menu_box);
+
       gtk_notebook_append_page_menu (notebook, child, label_box, menu_box);
     }
 }
@@ -6628,6 +6637,7 @@ standard_notebook (GtkButton   *button,
   gint i;
 
   gtk_notebook_set_show_tabs (notebook, TRUE);
+  gtk_notebook_set_show_border (notebook, TRUE);
   gtk_notebook_set_scrollable (notebook, FALSE);
   if (g_list_length (notebook->children) == 15)
     for (i = 0; i < 10; i++)
@@ -6641,6 +6651,20 @@ notabs_notebook (GtkButton   *button,
   gint i;
 
   gtk_notebook_set_show_tabs (notebook, FALSE);
+  gtk_notebook_set_show_border (notebook, TRUE);
+  if (g_list_length (notebook->children) == 15)
+    for (i = 0; i < 10; i++)
+      gtk_notebook_remove_page (notebook, 5);
+}
+
+static void
+borderless_notebook (GtkButton   *button,
+		     GtkNotebook *notebook)
+{
+  gint i;
+
+  gtk_notebook_set_show_tabs (notebook, FALSE);
+  gtk_notebook_set_show_border (notebook, FALSE);
   if (g_list_length (notebook->children) == 15)
     for (i = 0; i < 10; i++)
       gtk_notebook_remove_page (notebook, 5);
@@ -6651,6 +6675,7 @@ scrollable_notebook (GtkButton   *button,
                      GtkNotebook *notebook)
 {
   gtk_notebook_set_show_tabs (notebook, TRUE);
+  gtk_notebook_set_show_border (notebook, TRUE);
   gtk_notebook_set_scrollable (notebook, TRUE);
   if (g_list_length (notebook->children) == 5)
     create_pages (notebook, 6, 15);
@@ -6689,7 +6714,8 @@ create_notebook (void)
   {
     { "Standard",   standard_notebook },
     { "No tabs",    notabs_notebook },
-    { "Scrollable", scrollable_notebook }
+    { "Borderless", borderless_notebook },
+    { "Scrollable", scrollable_notebook },
   };
 
   if (!window)
@@ -6753,7 +6779,7 @@ create_notebook (void)
       label = gtk_label_new ("Notebook Style :");
       gtk_box_pack_start (GTK_BOX (box2), label, FALSE, TRUE, 0);
 
-      omenu = build_option_menu (items, 3, 0, sample_notebook);
+      omenu = build_option_menu (items, G_N_ELEMENTS (items), 0, sample_notebook);
       gtk_box_pack_start (GTK_BOX (box2), omenu, FALSE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Show all Pages");

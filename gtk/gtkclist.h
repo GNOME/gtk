@@ -46,7 +46,7 @@ enum {
   GTK_CLIST_IN_DRAG             = 1 <<  0,
   GTK_CLIST_ROW_HEIGHT_SET      = 1 <<  1,
   GTK_CLIST_SHOW_TITLES         = 1 <<  2,
-  GTK_CLIST_CHILD_HAS_FOCUS     = 1 <<  3,
+  /* Unused */
   GTK_CLIST_ADD_MODE            = 1 <<  4,
   GTK_CLIST_AUTO_SORT           = 1 <<  5,
   GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 <<  6,
@@ -97,7 +97,6 @@ typedef enum
 #define GTK_CLIST_IN_DRAG(clist)           (GTK_CLIST_FLAGS (clist) & GTK_CLIST_IN_DRAG)
 #define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ROW_HEIGHT_SET)
 #define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_SHOW_TITLES)
-#define GTK_CLIST_CHILD_HAS_FOCUS(clist)   (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CHILD_HAS_FOCUS)
 #define GTK_CLIST_ADD_MODE(clist)          (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ADD_MODE)
 #define GTK_CLIST_AUTO_SORT(clist)         (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_SORT)
 #define GTK_CLIST_AUTO_RESIZE_BLOCKED(clist) (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_RESIZE_BLOCKED)
@@ -225,6 +224,8 @@ struct _GtkCList
   
   /* focus handling */
   gint focus_row;
+
+  gint focus_header_column;
   
   /* dragging the selection */
   gint anchor;

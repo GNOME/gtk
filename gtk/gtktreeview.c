@@ -1418,10 +1418,7 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
    * I wonder if focussable is a real word...
    */
   if (last_column == NULL)
-    {
-      gtk_container_set_focus_child (container, NULL);
-      return FALSE;
-    }
+    return FALSE;
 
   /* First thing we want to handle is entering and leaving the headers.
    */
@@ -1431,7 +1428,6 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
       if (!focus_child)
 	{
 	  focus_child = GTK_TREE_VIEW_COLUMN (last_column->data)->button;
-	  gtk_container_set_focus_child (container, focus_child);
 	  gtk_widget_grab_focus (focus_child);
 	  goto cleanup;
 	}
@@ -1446,7 +1442,6 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
       if (!focus_child)
 	{
 	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
-	  gtk_container_set_focus_child (container, focus_child);
 	  gtk_widget_grab_focus (focus_child);
 	  goto cleanup;
 	}
@@ -1461,7 +1456,6 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
       if (!focus_child)
 	{
 	  focus_child = GTK_TREE_VIEW_COLUMN (last_column->data)->button;
-	  gtk_container_set_focus_child (container, focus_child);
 	  gtk_widget_grab_focus (focus_child);
 	  goto cleanup;
 	}
@@ -1476,7 +1470,6 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
       if (!focus_child)
 	{
 	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
-	  gtk_container_set_focus_child (container, focus_child);
 	  gtk_widget_grab_focus (focus_child);
 	  goto cleanup;
 	}
@@ -1491,7 +1484,6 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
       if (!focus_child)
 	{
 	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
-	  gtk_container_set_focus_child (container, focus_child);
 	  gtk_widget_grab_focus (focus_child);
 	}
       else
@@ -1504,7 +1496,6 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
       if (!focus_child)
 	{
 	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
-	  gtk_container_set_focus_child (container, focus_child);
 	  gtk_widget_grab_focus (focus_child);
 	}
       else
@@ -1550,7 +1541,6 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
 	      GTK_WIDGET_CAN_FOCUS (column->button))
 	    {
 	      focus_child = column->button;
-	      gtk_container_set_focus_child (container, column->button);
 	      gtk_widget_grab_focus (column->button);
 	      break;
 	    }
@@ -1577,10 +1567,6 @@ gtk_tree_view_header_focus (GtkTreeView        *tree_view,
 	    gtk_adjustment_set_value (tree_view->priv->hadjustment,
 				      focus_child->allocation.x);
 	}
-    }
-  else
-    {
-      gtk_container_set_focus_child (container, NULL);
     }
 
   return (focus_child != NULL);
@@ -1619,16 +1605,11 @@ gtk_tree_view_focus (GtkContainer     *container,
 	case GTK_DIR_TAB_BACKWARD:
 	  return (gtk_tree_view_header_focus (tree_view, direction));
 	case GTK_DIR_UP:
-	  gtk_container_set_focus_child (container, NULL);
 	  return FALSE;
 	case GTK_DIR_TAB_FORWARD:
 	case GTK_DIR_RIGHT:
 	case GTK_DIR_DOWN:
-	  if (direction == GTK_DIR_DOWN)
-	    {
-	      gtk_container_set_focus_child (container, NULL);
-	    }
-	  else
+	  if (direction != GTK_DIR_DOWN)
 	    {
 	      if (gtk_tree_view_header_focus (tree_view, direction))
 		return TRUE;

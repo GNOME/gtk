@@ -2857,6 +2857,32 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 }
 
 /**
+ * gtk_widget_is_focus:
+ * @widget: a #GtkWidget
+ * 
+ * Determines if the widget is the focus widget within its
+ * toplevel. (This does not mean that the HAS_FOCUS flag is
+ * necessarily set; HAS_FOCUS will only be set if the
+ * toplevel widget additionally has the global input focus.)
+ * 
+ * Return value: %TRUE if the widget is the focus widget.
+ **/
+gboolean
+gtk_widget_is_focus (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  
+  if (GTK_IS_WINDOW (toplevel))
+    return widget == GTK_WINDOW (toplevel)->focus_widget;
+  else
+    return FALSE;
+}
+
+/**
  * gtk_widget_grab_default:
  * @widget: a #GtkWidget
  *

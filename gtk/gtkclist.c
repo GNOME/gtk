@@ -198,8 +198,6 @@ static void gtk_clist_map             (GtkWidget        *widget);
 static void gtk_clist_unmap           (GtkWidget        *widget);
 static gint gtk_clist_expose          (GtkWidget        *widget,
 			               GdkEventExpose   *event);
-static gint gtk_clist_key_press       (GtkWidget        *widget,
-				       GdkEventKey      *event);
 static gint gtk_clist_button_press    (GtkWidget        *widget,
 				       GdkEventButton   *event);
 static gint gtk_clist_button_release  (GtkWidget        *widget,
@@ -217,6 +215,8 @@ static gint gtk_clist_focus_out       (GtkWidget        *widget,
 				       GdkEventFocus    *event);
 static gint gtk_clist_focus           (GtkContainer     *container,
 				       GtkDirectionType  direction);
+static void gtk_clist_set_focus_child (GtkContainer     *container,
+				       GtkWidget        *child);
 static void gtk_clist_style_set       (GtkWidget        *widget,
 				       GtkStyle         *previous_style);
 static void gtk_clist_drag_begin      (GtkWidget        *widget,
@@ -250,8 +250,6 @@ static void gtk_clist_drag_data_received (GtkWidget        *widget,
 					  guint             time);
 
 /* GtkContainer Methods */
-static void gtk_clist_set_focus_child (GtkContainer  *container,
-				       GtkWidget     *child);
 static void gtk_clist_forall          (GtkContainer  *container,
 			               gboolean       include_internals,
 			               GtkCallback    callback,
@@ -438,8 +436,11 @@ static GList *gtk_clist_mergesort  (GtkCList      *clist,
 				    GList         *list,
 				    gint           num);
 /* Misc */
-static gboolean title_focus           (GtkCList  *clist,
-			               gint       dir);
+static gboolean title_focus_in   (GtkCList *clist,
+				  gint      dir);
+static gboolean title_focus_move (GtkCList *clist,
+				  gint      dir);
+
 static void real_row_move             (GtkCList  *clist,
 			               gint       source_row,
 			               gint       dest_row);
@@ -675,7 +676,6 @@ gtk_clist_class_init (GtkCListClass *klass)
   widget_class->expose_event = gtk_clist_expose;
   widget_class->size_request = gtk_clist_size_request;
   widget_class->size_allocate = gtk_clist_size_allocate;
-  widget_class->key_press_event = gtk_clist_key_press;
   widget_class->focus_in_event = gtk_clist_focus_in;
   widget_class->focus_out_event = gtk_clist_focus_out;
   widget_class->draw_focus = gtk_clist_draw_focus;
@@ -921,7 +921,6 @@ gtk_clist_init (GtkCList *clist)
 
   GTK_WIDGET_UNSET_FLAGS (clist, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (clist, GTK_CAN_FOCUS);
-  GTK_CLIST_SET_FLAG (clist, CLIST_CHILD_HAS_FOCUS);
   GTK_CLIST_SET_FLAG (clist, CLIST_DRAW_DRAG_LINE);
   GTK_CLIST_SET_FLAG (clist, CLIST_USE_DRAG_ICONS);
 
@@ -973,6 +972,7 @@ gtk_clist_init (GtkCList *clist)
   clist->undo_unselection = NULL;
 
   clist->focus_row = -1;
+  clist->focus_header_column = -1;
   clist->undo_anchor = -1;
 
   clist->anchor = -1;
@@ -4425,7 +4425,6 @@ gtk_clist_finalize (GObject *object)
  *   gtk_clist_unmap
  *   gtk_clist_expose
  *   gtk_clist_style_set
- *   gtk_clist_key_press
  *   gtk_clist_button_press
  *   gtk_clist_button_release
  *   gtk_clist_motion
@@ -4466,7 +4465,6 @@ gtk_clist_realize (GtkWidget *widget)
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
-			    GDK_KEY_PRESS_MASK |
 			    GDK_KEY_RELEASE_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
@@ -4524,8 +4522,7 @@ gtk_clist_realize (GtkWidget *widget)
   attributes.event_mask = (GDK_BUTTON_PRESS_MASK |
 			   GDK_BUTTON_RELEASE_MASK |
 			   GDK_POINTER_MOTION_MASK |
-			   GDK_POINTER_MOTION_HINT_MASK |
-			   GDK_KEY_PRESS_MASK);
+			   GDK_POINTER_MOTION_HINT_MASK);
   attributes_mask = GDK_WA_CURSOR;
   attributes.cursor = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
   clist->cursor_drag = attributes.cursor;
@@ -4839,34 +4836,6 @@ gtk_clist_style_set (GtkWidget *widget,
 	      gtk_clist_set_column_width (clist, i, width);
 	  }
     }
-}
-
-static gint
-gtk_clist_key_press (GtkWidget   *widget,
-		     GdkEventKey *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
-      GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
-    return TRUE;
-
-  switch (event->keyval)
-    {
-    case GDK_Tab:
-    case GDK_ISO_Left_Tab:
-      if (event->state & GDK_SHIFT_MASK)
-	return gtk_container_focus (GTK_CONTAINER (widget),
-				    GTK_DIR_TAB_BACKWARD);
-      else
-	return gtk_container_focus (GTK_CONTAINER (widget),
-				    GTK_DIR_TAB_FORWARD);
-    default:
-      break;
-    }
-  return FALSE;
 }
 
 static gint
@@ -6196,6 +6165,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 			   gpointer       data)
 {
   GtkCList *clist;
+  GtkContainer *container;
   GdkRectangle area;
   gint i;
   gint y = 0;
@@ -6207,6 +6177,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
   g_return_if_fail (GTK_IS_CLIST (data));
 
   clist = GTK_CLIST (data);
+  container = GTK_CONTAINER (data);
 
   if (!GTK_WIDGET_DRAWABLE (clist) || adjustment != clist->hadjustment)
     return;
@@ -6250,7 +6221,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 	}
 
       if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
-	  !GTK_CLIST_CHILD_HAS_FOCUS(clist) && GTK_CLIST_ADD_MODE(clist))
+	  !container->focus_child && GTK_CLIST_ADD_MODE(clist))
 	{
 	  y = ROW_TOP_YPIXEL (clist, clist->focus_row);
 	      
@@ -6285,7 +6256,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 	}
       
       if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
-	  !GTK_CLIST_CHILD_HAS_FOCUS(clist) && GTK_CLIST_ADD_MODE(clist))
+	  !container->focus_child && GTK_CLIST_ADD_MODE(clist))
 	{
 	  y = ROW_TOP_YPIXEL (clist, clist->focus_row);
 	  
@@ -6313,7 +6284,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
   check_exposures (clist);
 
   if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
-      !GTK_CLIST_CHILD_HAS_FOCUS(clist))
+      !container->focus_child)
     {
       if (GTK_CLIST_ADD_MODE(clist))
 	{
@@ -6503,106 +6474,112 @@ row_delete (GtkCList    *clist,
 }
 
 /* FOCUS FUNCTIONS
+ *   gtk_clist_focus_content_area
  *   gtk_clist_focus
  *   gtk_clist_draw_focus
  *   gtk_clist_focus_in
  *   gtk_clist_focus_out
- *   gtk_clist_set_focus_child
  *   title_focus
  */
-static gint
+static void
+gtk_clist_focus_content_area (GtkCList *clist)
+{
+  if (clist->focus_row < 0)
+    {
+      clist->focus_row = 0;
+      
+      if ((clist->selection_mode == GTK_SELECTION_BROWSE ||
+	   clist->selection_mode == GTK_SELECTION_EXTENDED) &&
+	  !clist->selection)
+	gtk_signal_emit (GTK_OBJECT (clist),
+			 clist_signals[SELECT_ROW],
+			 clist->focus_row, -1, NULL);
+    }
+  gtk_widget_grab_focus (GTK_WIDGET (clist));
+}
+
+static gboolean
 gtk_clist_focus (GtkContainer     *container,
 		 GtkDirectionType  direction)
 {
-  GtkCList *clist;
-  GtkWidget *focus_child;
-  gint old_row;
-
-  g_return_val_if_fail (container != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CLIST (container), FALSE);
+  GtkCList *clist = GTK_CLIST (container);
+  GtkWidget *focus_child = container->focus_child;
+  gboolean is_current_focus;
 
   if (!GTK_WIDGET_IS_SENSITIVE (container))
     return FALSE;
-  
-  clist = GTK_CLIST (container);
-  focus_child = container->focus_child;
-  old_row = clist->focus_row;
 
+  is_current_focus = gtk_widget_is_focus (GTK_WIDGET (clist));
+			  
+  if (focus_child &&
+      GTK_IS_CONTAINER (focus_child) &&
+      GTK_WIDGET_DRAWABLE (focus_child) &&
+      GTK_WIDGET_IS_SENSITIVE (focus_child) &&
+      gtk_container_focus (GTK_CONTAINER (focus_child), direction))
+    return TRUE;
+      
   switch (direction)
     {
     case GTK_DIR_LEFT:
     case GTK_DIR_RIGHT:
-      if (GTK_CLIST_CHILD_HAS_FOCUS(clist))
+      if (focus_child)
 	{
-	  if (title_focus (clist, direction))
+	  if (title_focus_move (clist, direction))
 	    return TRUE;
-	  gtk_container_set_focus_child (container, NULL);
-	  return FALSE;
-	 }
-      gtk_widget_grab_focus (GTK_WIDGET (container));
-      return TRUE;
+	}
+      else if (!is_current_focus)
+	{
+	  gtk_clist_focus_content_area (clist);
+	  return TRUE;
+	}
+      break;
     case GTK_DIR_DOWN:
     case GTK_DIR_TAB_FORWARD:
-      if (GTK_CLIST_CHILD_HAS_FOCUS(clist))
+      if (!focus_child && !is_current_focus)
 	{
-	  gboolean tf = FALSE;
-
-	  if (((focus_child && direction == GTK_DIR_DOWN) ||
-	       !(tf = title_focus (clist, GTK_DIR_TAB_FORWARD)))
-	      && clist->rows)
-	    {
-	      if (clist->focus_row < 0)
-		{
-		  clist->focus_row = 0;
-
-		  if ((clist->selection_mode == GTK_SELECTION_BROWSE ||
-		       clist->selection_mode == GTK_SELECTION_EXTENDED) &&
-		      !clist->selection)
-		    gtk_signal_emit (GTK_OBJECT (clist),
-				     clist_signals[SELECT_ROW],
-				     clist->focus_row, -1, NULL);
-		}
-	      gtk_widget_grab_focus (GTK_WIDGET (container));
-	      return TRUE;
-	    }
-
-	  if (tf)
+	  if (title_focus_in (clist, direction))
 	    return TRUE;
 	}
       
-      GTK_CLIST_SET_FLAG (clist, CLIST_CHILD_HAS_FOCUS);
+      if (!is_current_focus && clist->rows)
+	{
+	  gtk_clist_focus_content_area (clist);
+	  return TRUE;
+	}
       break;
     case GTK_DIR_UP:
     case GTK_DIR_TAB_BACKWARD:
-      if (!focus_child &&
-	  GTK_CLIST_CHILD_HAS_FOCUS(clist) && clist->rows)
+      if (!focus_child && is_current_focus)
 	{
-	  if (clist->focus_row < 0)
-	    {
-	      clist->focus_row = 0;
-	      if ((clist->selection_mode == GTK_SELECTION_BROWSE ||
-		   clist->selection_mode == GTK_SELECTION_EXTENDED) &&
-		  !clist->selection)
-		gtk_signal_emit (GTK_OBJECT (clist),
-				 clist_signals[SELECT_ROW],
-				 clist->focus_row, -1, NULL);
-	    }
-	  gtk_widget_grab_focus (GTK_WIDGET (container));
+	  if (title_focus_in (clist, direction))
+	    return TRUE;
+	}
+      
+      if (!is_current_focus && !focus_child && clist->rows)
+	{
+	  gtk_clist_focus_content_area (clist);
 	  return TRUE;
 	}
-
-      GTK_CLIST_SET_FLAG (clist, CLIST_CHILD_HAS_FOCUS);
-
-      if (title_focus (clist, direction))
-	return TRUE;
-
       break;
     default:
       break;
     }
 
-  gtk_container_set_focus_child (container, NULL);
   return FALSE;
+}
+
+static void
+gtk_clist_set_focus_child (GtkContainer *container,
+			   GtkWidget    *child)
+{
+  GtkCList *clist = GTK_CLIST (container);
+  gint i;
+
+  for (i = 0; i < clist->columns; i++)
+    if (clist->column[i].button == child)
+      clist->focus_header_column = i;
+  
+  parent_class->set_focus_child (container, child);
 }
 
 static void
@@ -6635,7 +6612,6 @@ gtk_clist_focus_in (GtkWidget     *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  GTK_CLIST_UNSET_FLAG (widget, CLIST_CHILD_HAS_FOCUS);
 
   clist = GTK_CLIST (widget);
 
@@ -6668,7 +6644,6 @@ gtk_clist_focus_out (GtkWidget     *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  GTK_CLIST_SET_FLAG (widget, CLIST_CHILD_HAS_FOCUS);
 
   gtk_widget_draw_focus (widget);
   
@@ -6679,123 +6654,154 @@ gtk_clist_focus_out (GtkWidget     *widget,
   return FALSE;
 }
 
-static void
-gtk_clist_set_focus_child (GtkContainer *container,
-			   GtkWidget    *child)
+static gboolean
+focus_column (GtkCList *clist, gint column, gint dir)
 {
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CLIST (container));
-
-  if (child)
+  GtkWidget *child = clist->column[column].button;
+  
+  if (GTK_IS_CONTAINER (child) &&
+      gtk_container_focus (GTK_CONTAINER (child), dir))
     {
-      g_return_if_fail (GTK_IS_WIDGET (child));
-      GTK_CLIST_SET_FLAG (container, CLIST_CHILD_HAS_FOCUS);
+      return TRUE;
+    }
+  else if (GTK_WIDGET_CAN_FOCUS (child))
+    {
+      gtk_widget_grab_focus (child);
+      return TRUE;
     }
 
-  parent_class->set_focus_child (container, child);
+  return FALSE;
 }
 
+/* Focus moved onto the headers. Focus first focusable and visible child.
+ * (FIXME: focus the last focused child if visible)
+ */
 static gboolean
-title_focus (GtkCList *clist,
-	     gint      dir)
+title_focus_in (GtkCList *clist, gint dir)
+{
+  gint i;
+  gint left, right;
+
+  /* Check last focused column */
+  if (clist->focus_header_column != -1)
+    {
+      i = clist->focus_header_column;
+      
+      left = COLUMN_LEFT_XPIXEL (clist, i);
+      right = left + clist->column[i].area.width;
+      
+      if (left >= 0 && right <= clist->clist_window_width)
+	{
+	  if (focus_column (clist, i, dir))
+	    return TRUE;
+	}
+    }
+
+  /* Check fully visible columns */
+  for (i = 0 ; i < clist->columns ; i++)
+    {
+      left = COLUMN_LEFT_XPIXEL (clist, i);
+      right = left + clist->column[i].area.width;
+      
+      if (left >= 0 && right <= clist->clist_window_width)
+	{
+	  if (focus_column (clist, i, dir))
+	    return TRUE;
+	}
+    }
+
+  /* Check partially visible columns */
+  for (i = 0 ; i < clist->columns ; i++)
+    {
+      left = COLUMN_LEFT_XPIXEL (clist, i);
+      right = left + clist->column[i].area.width;
+
+      if ((left < 0 && right > 0) ||
+	  (left < clist->clist_window_width && right > clist->clist_window_width))
+	{
+	  if (focus_column (clist, i, dir))
+	    return TRUE;
+	}
+    }
+      
+  return FALSE;
+}
+
+/* Move the focus right or left within the title buttons, scrolling
+ * as necessary to keep the focused child visible.
+ */
+static gboolean
+title_focus_move (GtkCList *clist,
+		  gint      dir)
 {
   GtkWidget *focus_child;
   gboolean return_val = FALSE;
-  gint last_column;
-  gint d = 1;
-  gint i = 0;
+  gint d = 0;
+  gint i = -1;
   gint j;
 
   if (!GTK_CLIST_SHOW_TITLES(clist))
     return FALSE;
 
   focus_child = GTK_CONTAINER (clist)->focus_child;
+  g_assert (focus_child);
 
-  for (last_column = clist->columns - 1;
-       last_column >= 0 && !clist->column[last_column].visible; last_column--)
-    ;
-  
+  /* Movement direction within headers
+   */
   switch (dir)
     {
-    case GTK_DIR_TAB_BACKWARD:
-    case GTK_DIR_UP:
-      if (!focus_child || !GTK_CLIST_CHILD_HAS_FOCUS(clist))
-	{
-	  if (dir == GTK_DIR_UP)
-	    i = COLUMN_FROM_XPIXEL (clist, 0);
-	  else
-	    i = last_column;
-	  focus_child = clist->column[i].button;
-	  dir = GTK_DIR_TAB_FORWARD;
-	}
-      else
-	d = -1;
+    case GTK_DIR_RIGHT:
+      d = 1;
       break;
     case GTK_DIR_LEFT:
       d = -1;
-      if (!focus_child)
-	{
-	  i = last_column;
-	  focus_child = clist->column[i].button;
-	}
-      break;
-    case GTK_DIR_RIGHT:
-      if (!focus_child)
-	{
-	  i = 0;
-	  focus_child = clist->column[i].button;
-	}
       break;
     }
+  
+  for (i = 0; i < clist->columns; i++)
+    if (clist->column[i].button == focus_child)
+      break;
+  
+  g_assert (i != -1);		/* Have a starting column */
+  
+  j = i + d;
+  while (!return_val && j >= 0 && j < clist->columns)
+    {
+      if (clist->column[j].button &&
+	  GTK_WIDGET_VISIBLE (clist->column[j].button))
+	{
+	  if (focus_column (clist, j, dir))
+	    {
+	      return_val = TRUE;
+	      break;
+	    }
+	}
+      j += d;
+    }
 
-  if (focus_child)
-    while (i < clist->columns)
-      {
-	if (clist->column[i].button == focus_child)
-	  {
-	    if (clist->column[i].button && 
-		GTK_WIDGET_VISIBLE (clist->column[i].button) &&
-		GTK_IS_CONTAINER (clist->column[i].button) &&
-		!GTK_WIDGET_HAS_FOCUS(clist->column[i].button))
-	      if (gtk_container_focus 
-		  (GTK_CONTAINER (clist->column[i].button), dir))
+  /* If we didn't find it, wrap around and keep looking
+   */
+  if (!return_val)
+    {
+      j = d > 0 ? 0 : clist->columns - 1;
+
+      while (!return_val && j != i)
+	{
+	  if (clist->column[j].button &&
+	      GTK_WIDGET_VISIBLE (clist->column[j].button))
+	    {
+	      if (focus_column (clist, j, dir))
 		{
 		  return_val = TRUE;
-		  i -= d;
+		  break;
 		}
-	    if (!return_val && dir == GTK_DIR_UP)
-	      return FALSE;
-	    i += d;
-	    break;
-	  }
-	i++;
-      }
+	    }
+	  j += d;
+	}
+    }
 
-  j = i;
-
-  if (!return_val)
-    while (j >= 0 && j < clist->columns)
-      {
-	if (clist->column[j].button &&
-	    GTK_WIDGET_VISIBLE (clist->column[j].button))
-	  {
-	    if (GTK_IS_CONTAINER (clist->column[j].button) &&
-		gtk_container_focus 
-		(GTK_CONTAINER (clist->column[j].button), dir))
-	      {
-		return_val = TRUE;
-		break;
-	      }
-	    else if (GTK_WIDGET_CAN_FOCUS (clist->column[j].button))
-	      {
-		gtk_widget_grab_focus (clist->column[j].button);
-		return_val = TRUE;
-		break;
-	      }
-	  }
-	j += d;
-      }
-  
+  /* Scroll horizontally so focused column is visible
+   */
   if (return_val)
     {
       if (COLUMN_LEFT_XPIXEL (clist, j) < CELL_SPACING + COLUMN_INSET)
@@ -6803,13 +6809,20 @@ title_focus (GtkCList *clist,
       else if (COLUMN_LEFT_XPIXEL(clist, j) + clist->column[j].area.width >
 	       clist->clist_window_width)
 	{
+	  gint last_column;
+	  
+	  for (last_column = clist->columns - 1;
+	       last_column >= 0 && !clist->column[last_column].visible; last_column--);
+
 	  if (j == last_column)
 	    gtk_clist_moveto (clist, -1, j, 0, 0);
 	  else
 	    gtk_clist_moveto (clist, -1, j, 0, 1);
 	}
     }
-  return return_val;
+  return TRUE;			/* Even if we didn't find a new one, we can keep the
+				 * focus in the same place.
+				 */
 }
 
 /* PRIVATE SCROLLING FUNCTIONS

@@ -1,3 +1,61 @@
+Wed Oct 25 14:17:43 2000  Owen Taylor  <otaylor@redhat.com>
+	
+	* gtk/gtkwidget.[ch] (gtk_widget_is_focus): Add a function
+	to determine if a window is the focus widget within
+	its toplevel.
+
+	* gtk/gtkcontainer.[ch]: Fix the return type of ::focus
+	to be boolean.
+
+	* gtk/gtkcontainer.c (gtk_container_real_focus): Move handling 
+	of the case where the container CAN_FOCUS to here instead
+	of having it in each individual move-the-focus place.
+
+	* gtk/gtkcontainer.c: Rewrite handling of left-right and up-down
+	focusing to be geometric in a much more obvious sense. Arrowing
+	around is still non-intuitive because it isn't perfect and
+	because entries, etc, grab the arrow keys, but it at least
+	usually will do what you expect now.
+	
+	* gtk/gtknotebook.[ch]: Many cleanups. Moved docs inline in this
+	file.
+
+	* gtk/gtknotebook.c: Change tabs to be a single item in
+	the focus chain. Make movement of focus on tabs with arrow
+	keys wrap around.
+	
+	* gtk/gtknotebook.c (gtk_notebook_find_child): Add
+	CHECK_FIND_CHILD macro to give informative error messages
+	instead of silent returns.
+
+	* gtk/gtknotebook.c (gtk_notebook_init): Set the RECEIVES_DEFAULT 
+	flag since we handle GdkReturn on the tabs.
+
+	* gtk/gtknotebook.c (gtk_notebook_expose_tabs): Invalidate
+	windows rather than sending expose events directly.
+
+	* gtk/gtknotebook.[ch] docs/Changes-2.0.txt: Move structure 
+	definition for GtkNotebookPage into .c file, since it is private.
+
+	* gtk/testgtk.c (create_notebook): Add option for 
+	testing borderless notebook.
+
+	* gtk/testgtk.c (page_switch): Removed egregious poking
+	around in GTK+ internals.
+
+	* docs/widget-system.txt: Remove references to GTK_REDRAW_PENDING.
+
+	* gtk/gtkclist.[ch]: Remove key press handler, handle focusing
+	properly through gtk_clist_focus. Make the title headers a
+	single item in the tab-focus chain, and make left-right wrap
+	around.
+
+	* gtk/gtkwindow.c (gtk_window_focus): Add a custom
+	focus method so that wrapping around works properly.
+
+	* gtk/gtktreeview.c: Remove calls to gtk_container_set_focus_child() - 
+	that is handled for the widget now. 
+
 Mon Dec 11 11:41:12 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkinvisible.c (gtk_invisible_init): Flag invisible
@@ -149,6 +207,7 @@ Mon Dec 11 10:02:26 2000  Owen Taylor  <otaylor@redhat.com>
 2000-12-06  Elliot Lee  <sopwith@redhat.com>
 
 	* configure.in: Detect freetype properly
+
 	* modules/basic/Makefile.am, gdk/linux-fb/Makefile.am: Make use of
 	above.
 

@@ -493,6 +493,7 @@ gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area,
 					   GdkRectangle	       *intersection);
 
+gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
 void	   gtk_widget_grab_focus	  (GtkWidget	       *widget);
 void	   gtk_widget_grab_default	  (GtkWidget	       *widget);
 

@@ -126,6 +126,8 @@ static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 static gint gtk_window_client_event	  (GtkWidget	     *widget,
 					   GdkEventClient    *event);
 static void gtk_window_check_resize       (GtkContainer      *container);
+static gint gtk_window_focus              (GtkContainer     *container,
+				           GtkDirectionType  direction);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
 
@@ -261,6 +263,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->expose_event = gtk_window_expose;
    
   container_class->check_resize = gtk_window_check_resize;
+  container_class->focus = gtk_window_focus;
 
   klass->set_focus = gtk_window_real_set_focus;
 }
@@ -1577,6 +1580,60 @@ gtk_window_check_resize (GtkContainer *container)
 
   if (GTK_WIDGET_VISIBLE (container))
     gtk_window_move_resize (window);
+}
+
+static gboolean
+gtk_window_focus (GtkContainer     *container,
+		  GtkDirectionType  direction)
+{
+  GtkBin *bin = GTK_BIN (container);
+  GtkWindow *window = GTK_WINDOW (container);
+  GtkWidget *old_focus_child = container->focus_child;
+  GtkWidget *parent;
+  
+  /* We need a special implementation here to deal properly with wrapping
+   * around in the tab chain without the danger of going into an
+   * infinite loop.
+   */
+  if (old_focus_child)
+    {
+      if (GTK_IS_CONTAINER (old_focus_child) &&
+	  GTK_WIDGET_DRAWABLE (old_focus_child) &&
+	  GTK_WIDGET_IS_SENSITIVE (old_focus_child) &&
+	  gtk_container_focus (GTK_CONTAINER (old_focus_child), direction))
+	return TRUE;
+    }
+
+  if (window->focus_widget)
+    {
+      /* Wrapped off the end, clear the focus setting for the toplpevel */
+      parent = window->focus_widget->parent;
+      while (parent)
+	{
+	  gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
+	  parent = GTK_WIDGET (parent)->parent;
+	}
+      
+      gtk_window_set_focus (GTK_WINDOW (container), NULL);
+    }
+
+  /* Now try to focus the first widget in the window */
+  if (GTK_WIDGET_DRAWABLE (bin->child) &&
+      GTK_WIDGET_IS_SENSITIVE (bin->child))
+    {
+      if (GTK_IS_CONTAINER (bin->child))
+	{
+	  if (gtk_container_focus (GTK_CONTAINER (bin->child), direction))
+	    return TRUE;
+	}
+      else if (GTK_WIDGET_CAN_FOCUS (bin->child))
+	{
+	  gtk_widget_grab_focus (bin->child);
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
 }
 
 static void
