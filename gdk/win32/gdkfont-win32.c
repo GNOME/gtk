@@ -1418,17 +1418,17 @@ gdk_font_equal (const GdkFont *fonta,
 	{
 	  if (((GdkWin32SingleFont *) lista->data)->hfont
 	      != ((GdkWin32SingleFont *) listb->data)->hfont)
-	    return 0;
+	    return FALSE;
 	  lista = lista->next;
 	  listb = listb->next;
 	}
       if (lista || listb)
-	return 0;
+	return FALSE;
       else
-	return 1;
+	return TRUE;
     }
   else
-    return 0;
+    return FALSE;
 }
 
 /* Return the Unicode Subset bitfield number for a Unicode character */

@@ -322,7 +322,7 @@ gdk_pixbuf_get_n_channels (const GdkPixbuf *pixbuf)
 gboolean
 gdk_pixbuf_get_has_alpha (const GdkPixbuf *pixbuf)
 {
-	g_return_val_if_fail (pixbuf != NULL, -1);
+	g_return_val_if_fail (pixbuf != NULL, FALSE);
 
 	return pixbuf->has_alpha ? TRUE : FALSE;
 }

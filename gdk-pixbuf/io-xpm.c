@@ -911,7 +911,7 @@ find_color(const char *name,
 	found = bsearch (name, xColors, numXColors, sizeof (XPMColorEntry),
 			 compare_xcolor_entries);
 	if (found == NULL)
-	  return 0;
+	  return FALSE;
 	
 	colorPtr->red = (found->red * 65535) / 255;
 	colorPtr->green = (found->green * 65535) / 255;
