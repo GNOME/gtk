@@ -1,3 +1,17 @@
+2004-05-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_menu_get_for_attach_widet,
+	gtk_tree_view_get_fixed_height_mode,
+	gtk_tree_view_set_fixed_height_mode,
+	gtk_tree_view_get_hover_selection,
+	gtk_tree_view_set_hover_selection
+
+	* gdk/gdk-sections.txt: Add gdk_window_set_user_time().
+
+	* gdk-pixbuf/gdk-pixbuf.sgml: 
+	* gtk/gtk-docs.sgml: 
+	* gdk/gdk-docs.sgml: Add an index for 2.6 additions.
+
 Fri May  7 01:21:14 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkicontheme.sgml: Fix example.  (Steffen Röcker)

@@ -1914,6 +1914,7 @@ gtk_menu_set_tearoff_state
 gtk_menu_attach_to_widget
 gtk_menu_detach
 gtk_menu_get_attach_widget
+gtk_menu_get_for_attach_widget
 GtkMenuPositionFunc
 GtkMenuDetachFunc
 gtk_menu_set_monitor
@@ -3869,6 +3870,10 @@ gtk_tree_view_get_search_column
 gtk_tree_view_set_search_column
 gtk_tree_view_get_search_equal_func
 gtk_tree_view_set_search_equal_func
+gtk_tree_view_get_fixed_height_mode
+gtk_tree_view_set_fixed_height_mode
+gtk_tree_view_get_hover_selection
+gtk_tree_view_set_hover_selection
 GtkTreeDestroyCountFunc
 gtk_tree_view_set_destroy_count_func
 <SUBSECTION Standard>
