@@ -844,7 +844,6 @@ gtk_file_folder_get_info (GtkFileFolder     *folder,
 			  GError           **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_FOLDER (folder), NULL);
-  g_return_val_if_fail (path != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   return GTK_FILE_FOLDER_GET_IFACE (folder)->get_info (folder, path, error);

@@ -923,19 +923,17 @@ get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, gboolean nam
 
   parent_folder = gtk_file_system_get_folder (file_system, parent_path ? parent_path : path,
 					      GTK_FILE_INFO_DISPLAY_NAME
-#if 0
-					      | GTK_FILE_INFO_ICON
-#endif
 					      | (name_only ? 0 : GTK_FILE_INFO_IS_FOLDER),
 					      error);
-  gtk_file_path_free (parent_path);
-
   if (!parent_folder)
-    return NULL;
+    goto out;
 
-  info = gtk_file_folder_get_info (parent_folder, path, error);
+  info = gtk_file_folder_get_info (parent_folder, parent_path ? path : NULL, error);
   g_object_unref (parent_folder);
 
+ out:
+
+  gtk_file_path_free (parent_path);
   return info;
 }
 

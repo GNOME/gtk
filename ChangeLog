@@ -1,3 +1,17 @@
+2004-03-14  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystem.c (gtk_file_folder_get_info): Allow the path
+	to be NULL, so that people can ask for information about a
+	parent-less file system root (e.g. get_info (get_folder ("/"), NULL)).
+
+	* gtk/gtkfilesystemunix.c (gtk_file_folder_unix_get_info): Allow
+	the condition describe above.
+
+	* gtk/gtkfilechooserdefault.c (get_file_info): Allow getting
+	information of root paths.
+
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): Handle root paths correctly.
+
 Sun Mar 14 22:32:36 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_search_equal_func): Mention

@@ -989,13 +989,20 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 						parent_path ? parent_path : path,
 						GTK_FILE_INFO_DISPLAY_NAME,
 						NULL);
-      file_info = gtk_file_folder_get_info (file_folder, path, error);
+      if (!file_folder)
+	{
+	  result = FALSE;
+	  gtk_file_path_free (parent_path);
+	  gtk_file_path_free (path);
+	  break;
+	}
+
+      file_info = gtk_file_folder_get_info (file_folder, parent_path ? path : NULL, error);
       g_object_unref (file_folder);
 
       if (!file_info)
 	{
 	  result = FALSE;
-
 	  gtk_file_path_free (parent_path);
 	  gtk_file_path_free (path);
 	  break;

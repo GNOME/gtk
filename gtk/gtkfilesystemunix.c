@@ -465,7 +465,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
   const char *filename;
   gboolean result;
   char *parent, *tmp;
-  
+
   system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
   filename = gtk_file_path_get_string (path);
@@ -475,7 +475,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
   tmp = remove_trailing_slash (filename);
   result = mkdir (tmp, 0777) == 0;
   g_free (tmp);
-  
+
   if (!result)
     {
       int save_errno = errno;
@@ -689,12 +689,12 @@ get_parent_dir (const char *filename)
   int len;
 
   len = strlen (filename);
-  
+
   /* Ignore trailing slashes */
   if (len > 1 && filename[len - 1] == '/')
     {
       char *tmp, *parent;
-      
+
       tmp = g_strndup (filename, len - 1);
 
       parent = g_path_get_dirname (tmp);
@@ -713,7 +713,7 @@ gtk_file_system_unix_get_parent (GtkFileSystem     *file_system,
 				 GError           **error)
 {
   const char *filename;
-  
+
   filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, FALSE);
   g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
@@ -1485,6 +1485,26 @@ gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
   gboolean file_must_exist;
   GtkFileInfoType types;
 
+  if (!path)
+    {
+      struct stat buf;
+
+      g_return_val_if_fail (filename_is_root (folder_unix->filename), NULL);
+
+      if (stat (folder_unix->filename, &buf) != 0)
+	return NULL;
+
+      info = gtk_file_info_new ();
+      gtk_file_info_set_display_name (info, "/");
+      gtk_file_info_set_is_folder (info, TRUE);
+      gtk_file_info_set_is_hidden (info, FALSE);
+      gtk_file_info_set_mime_type (info, "x-directory/normal");
+      gtk_file_info_set_modification_time (info, buf.st_mtime);
+      gtk_file_info_set_size (info, buf.st_size);
+
+      return info;
+    }
+
   filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, NULL);
   g_return_val_if_fail (g_path_is_absolute (filename), NULL);
@@ -1523,12 +1543,12 @@ gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
       gchar *display_name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
       if (!display_name)
 	display_name = g_strescape (basename, NULL);
-      
+
       gtk_file_info_set_display_name (info, display_name);
-      
+
       g_free (display_name);
     }
-  
+
   if (types & GTK_FILE_INFO_IS_HIDDEN)
     gtk_file_info_set_is_hidden (info, basename[0] == '.');
 
