@@ -1,3 +1,8 @@
+Sun Mar 04  07:30:03 2001 CET Mikael Hermansson<mikeh@bahnhof.se>
+
+	* gtk/gtktextview.c: fixed bug #51097 about setting gtk_text_view_set_border_window_size()
+	if the widget is already realized.
+
 Sat Mar  3 16:59:16 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpango.h gdk/x11/gdkwindow-x11.c: Doc fixes
