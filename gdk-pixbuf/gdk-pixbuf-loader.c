@@ -30,8 +30,6 @@
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-marshal.h"
 
-#include <gobject/gsignal.h>
-
 enum {
   AREA_UPDATED,
   AREA_PREPARED,
