@@ -1,5 +1,8 @@
 2005-02-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* pixops/*.S: Add .note.GNU-stack sections to Mark these as not 
+	requiring an executable stack.
+	
 	* === Released 2.6.3 ===
 
 2005-02-23  Matthias Clasen  <mclasen@redhat.com>
