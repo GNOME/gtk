@@ -284,6 +284,7 @@ static gboolean gtk_combo_box_key_press            (GtkWidget        *widget,
 						    gpointer          data);
 
 static void     gtk_combo_box_check_appearance     (GtkComboBox      *combo_box);
+static gchar *  gtk_combo_box_real_get_active_text (GtkComboBox      *combo_box);
 
 /* listening to the model */
 static void     gtk_combo_box_model_row_inserted   (GtkTreeModel     *model,
@@ -490,6 +491,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   GtkWidgetClass *widget_class;
 
   binding_set = gtk_binding_set_by_class (klass);
+
+  klass->get_active_text = gtk_combo_box_real_get_active_text;
 
   container_class = (GtkContainerClass *)klass;
   container_class->forall = gtk_combo_box_forall;
@@ -4751,10 +4754,24 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
 gchar *
 gtk_combo_box_get_active_text (GtkComboBox *combo_box)
 {
+  GtkComboBoxClass *class;
+
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
+
+  class = GTK_COMBO_BOX_GET_CLASS (combo_box);
+
+  if (class->get_active_text)
+    return (* class->get_active_text) (combo_box);
+
+  return NULL;
+}
+
+static gchar *
+gtk_combo_box_real_get_active_text (GtkComboBox *combo_box)
+{
   GtkTreeIter iter;
   gchar *text = NULL;
 
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
   g_return_val_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model), NULL);
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))

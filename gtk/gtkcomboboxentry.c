@@ -49,6 +49,7 @@ static void gtk_combo_box_entry_get_property     (GObject               *object,
                                                   GValue                *value,
                                                   GParamSpec            *pspec);
 
+static gchar *gtk_combo_box_entry_get_active_text (GtkComboBox *combo_box);
 static void gtk_combo_box_entry_active_changed   (GtkComboBox           *combo_box,
                                                   gpointer               user_data);
 static void gtk_combo_box_entry_contents_changed (GtkEntry              *entry,
@@ -100,6 +101,7 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
 {
   GObjectClass *object_class;
   GtkWidgetClass *widget_class;
+  GtkComboBoxClass *combo_class;
 
   object_class = (GObjectClass *)klass;
   object_class->set_property = gtk_combo_box_entry_set_property;
@@ -108,6 +110,9 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
   widget_class = (GtkWidgetClass *)klass;
   widget_class->mnemonic_activate = gtk_combo_box_entry_mnemonic_activate;
 
+  combo_class = (GtkComboBoxClass *)klass;
+  combo_class->get_active_text = gtk_combo_box_entry_get_active_text;
+  
   g_object_class_install_property (object_class,
                                    PROP_TEXT_COLUMN,
                                    g_param_spec_int ("text_column",
@@ -381,6 +386,17 @@ gtk_combo_box_entry_new_text (void)
   g_object_unref (store);
 
   return entry_box;
+}
+
+static gchar *
+gtk_combo_box_entry_get_active_text (GtkComboBox *combo_box)
+{
+  GtkComboBoxEntry *combo = GTK_COMBO_BOX_ENTRY (combo_box);
+
+  if (combo->priv->entry)
+    return g_strdup (gtk_entry_get_text (combo->priv->entry));
+
+  return NULL;
 }
 
 #define __GTK_COMBO_BOX_ENTRY_C__
