@@ -1,3 +1,7 @@
+2000-10-14  Robert Brady  <robert@suse.co.uk>
+
+	* configure.in: Added "fa" (Persian) to ALL_LINGUAS.
+
 2000-10-12  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreedatalist.[ch] (gtk_tree_data_list_value_to_node): Added
