@@ -1,3 +1,8 @@
+2001-08-27  Fatih Demir <kabalak@gtranslator.org>
+
+	* tr.po: Removed the translation in line 83 completely -- stupido,
+		how did that happen..
+
 2001-08-27  Abel Cheung  <maddog@linux.org.hk>
 
 	* tr.po: Mark line 83 as fuzzy, gettext complains about it.
