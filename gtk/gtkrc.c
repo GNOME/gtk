@@ -266,8 +266,12 @@ gtk_rc_append_default_pixmap_path(void)
   
   for (n = 0; pixmap_path[n]; n++) ;
   if (n >= GTK_RC_MAX_PIXMAP_PATHS - 1)
-    return;
-  pixmap_path[n++] = g_strdup(path);
+    {
+      g_free (path);
+      return;
+    }
+  
+  pixmap_path[n++] = path;
   pixmap_path[n] = NULL;
   g_free(path);
 }

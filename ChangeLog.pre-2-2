@@ -1,3 +1,8 @@
+Tue Oct  5 02:43:41 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkinputcommon.h (gdk_input_device_new): Free
+	device->info.axes for core pointer.
+
 Mon Oct  4 16:16:53 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
 
         * gtk/gtkrc.{bg,iso88591[345]}: add gtkrc files for some new charset
