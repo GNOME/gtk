@@ -1,5 +1,9 @@
 2003-12-10  Mark McLoughlin  <mark@skynet.ie>
 
+	* gdk/gdk.h: include gdkspawn.h.
+
+2003-12-10  Mark McLoughlin  <mark@skynet.ie>
+
 	* gdk/linux-fb/gdkspawn-fb.c,
 	  gdk/win32/gdkspawn-win32.c,
 	  gdk/x11/gdkspawn-x11.c: (gdk_spawn_command_line_on_screen):
