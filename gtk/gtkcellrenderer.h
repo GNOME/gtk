@@ -107,11 +107,13 @@ struct _GtkCellRendererClass
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags);
 
+  /* Signals */
+  void (* editing_canceled) (GtkCellRenderer *cell);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GType            gtk_cell_renderer_get_type       (void) G_GNUC_CONST;
@@ -151,8 +153,10 @@ void             gtk_cell_renderer_get_fixed_size (GtkCellRenderer      *cell,
 						   gint                 *width,
 						   gint                 *height);
 
+/* For use by cell renderer implementations only */
+void gtk_cell_renderer_editing_canceled (GtkCellRenderer *cell);
 
- 
+
 G_END_DECLS
 
 #endif /* __GTK_CELL_RENDERER_H__ */

@@ -19,6 +19,7 @@
 
 #include "gtkcellrenderer.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtktreeprivate.h"
 
 static void gtk_cell_renderer_init       (GtkCellRenderer      *cell);
@@ -60,6 +61,15 @@ enum {
   PROP_CELL_BACKGROUND_GDK,
   PROP_CELL_BACKGROUND_SET
 };
+
+/* Signal IDs */
+enum {
+  EDITING_CANCELED,
+  LAST_SIGNAL
+};
+
+static guint cell_renderer_signals[LAST_SIGNAL] = { 0 };
+
 
 GType
 gtk_cell_renderer_get_type (void)
@@ -112,6 +122,27 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   class->render = NULL;
   class->get_size = NULL;
+
+  /**
+   * GtkCellRenderer::editing-canceled:
+   *
+   * This signal gets emitted when the user cancels the process of editing a
+   * cell.  For example, an editable cell renderer could be written to cancel
+   * editing when the user presses Escape.
+   *
+   * See also: gtk_cell_renderer_editing_canceled()
+   *
+   * Since: 2.4
+   */
+
+  cell_renderer_signals[EDITING_CANCELED] =
+    g_signal_new ("editing-canceled",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCellRendererClass, editing_canceled),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
 				   PROP_MODE,
@@ -653,4 +684,23 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
     (* width) = cell->width;
   if (height)
     (* height) = cell->height;
+}
+
+/**
+ * gtk_cell_renderer_editing_canceled:
+ * @cell: A #GtkCellRenderer
+ * 
+ * Causes the cell renderer to emit the "editing-canceled" signal.  This
+ * function is for use only by implementations of cell renderers that need to
+ * notify the client program that an editing process was canceled and the
+ * changes were not committed.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_cell_renderer_editing_canceled (GtkCellRenderer *cell)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
 }
