@@ -87,7 +87,7 @@ libpixbuf_xpm_la_LDFLAGS = -avoid-version -module
 #
 libpixbuf_gif_la_SOURCES = io-gif.c
 libpixbuf_gif_la_LDFLAGS = -avoid-version -module
-libpixbuf_gif_la_LIBADD = $(LIBGIF)
+libpixbuf_gif_la_LIBADD =
 
 #
 # The TIFF loader

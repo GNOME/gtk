@@ -5,7 +5,7 @@
  *
  * Authors: Jonathan Blandford <jrb@redhat.com>
  *          Adapted from the gimp gif filter written by Adam Moss <adam@gimp.org>
- *          Gimp work based on earlier work by ......
+ *          Gimp work based on earlier work.
  *          Permission to relicense under the LGPL obtained.
  *
  * This library is free software; you can redistribute it and/or
@@ -34,11 +34,6 @@
 
 
 #define MAXCOLORMAPSIZE  256
-
-#define CM_RED           0
-#define CM_GREEN         1
-#define CM_BLUE          2
-
 #define MAX_LZW_BITS     12
 
 #define INTERLACE          0x40
@@ -46,11 +41,7 @@
 #define BitSet(byte, bit)  (((byte) & (bit)) == (bit))
 #define LM_to_uint(a,b)         (((b)<<8)|(a))
 
-#define GRAYSCALE        1
-#define COLOR            2
-
 typedef unsigned char CMap[3][MAXCOLORMAPSIZE];
-
 
 /* Possible states we can be in. */
 enum {
@@ -72,9 +63,6 @@ typedef struct _Gif89 Gif89;
 struct _Gif89
 {
 	int transparent;
-	int delay_time;
-	int input_flag;
-	int disposal;
 };
 
 typedef struct _GifContext GifContext;
@@ -88,7 +76,6 @@ struct _GifContext
 	unsigned int color_resolution;
 	unsigned int background;
 	unsigned int aspect_ratio;
-	int gray_scale;
 	GdkPixbuf *pixbuf;
 	Gif89 gif89;
 
@@ -248,15 +235,13 @@ gif_get_colormap (GifContext *context)
 			return -1;
 		}
 
-		context->color_map[CM_RED][context->colormap_index] = rgb[0];
-		context->color_map[CM_GREEN][context->colormap_index] = rgb[1];
-		context->color_map[CM_BLUE][context->colormap_index] = rgb[2];
+		context->color_map[0][context->colormap_index] = rgb[0];
+		context->color_map[1][context->colormap_index] = rgb[1];
+		context->color_map[2][context->colormap_index] = rgb[2];
 
 		context->colormap_flag &= (rgb[0] == rgb[1] && rgb[1] == rgb[2]);
 		context->colormap_index ++;
 	}
-
-	context->gray_scale = (context->colormap_flag) ? GRAYSCALE : COLOR;
 
 	return 0;
 }
@@ -327,9 +312,6 @@ gif_get_extension (GifContext *context)
 			retval = get_data_block (context, (unsigned char *) context->block_buf, NULL);
 			if (retval != 0)
 				return retval;
-			context->gif89.disposal = (context->block_buf[0] >> 2) & 0x7;
-			context->gif89.input_flag = (context->block_buf[0] >> 1) & 0x1;
-			context->gif89.delay_time = LM_to_uint (context->block_buf[1], context->block_buf[2]);
 			if (context->pixbuf == NULL) {
 				/* I only want to set the transparency if I haven't
 				 * created the pixbuf yet. */
