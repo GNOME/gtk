@@ -1,3 +1,8 @@
+2003-06-19  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/question_index.sgml: Add a question about changing fonts.
+	(#114747)
+
 2003-06-17  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/Makefile.am: Add rule to regenerate man pages from 
