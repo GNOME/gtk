@@ -1391,7 +1391,7 @@ gtk_rc_find_pixmap_in_path (GScanner *scanner,
 }
 
 gchar*
-gtk_rc_find_module_in_path (GScanner *scanner,
+gtk_rc_find_module_in_path (GScanner    *scanner,
 			    const gchar *module_file)
 {
   gint i;

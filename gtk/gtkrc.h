@@ -27,6 +27,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
+
 typedef enum {
   GTK_RC_FG   = 1 << 0,
   GTK_RC_BG   = 1 << 1,
@@ -36,10 +37,10 @@ typedef enum {
 
 struct _GtkRcStyle
 {
-  char *name;
-  char *font_name;
-  char *fontset_name;
-  char *bg_pixmap_name[5];
+  gchar *name;
+  gchar *font_name;
+  gchar *fontset_name;
+  gchar *bg_pixmap_name[5];
 
   GtkRcFlags color_flags[5];
   GdkColor   fg[5];
@@ -66,29 +67,29 @@ void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
 void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
 
-GtkRcStyle *gtk_rc_style_new              (void);
+GtkRcStyle* gtk_rc_style_new              (void);
 void        gtk_rc_style_ref              (GtkRcStyle  *rc_style);
 void        gtk_rc_style_unref            (GtkRcStyle  *rc_style);
 
 /* Tell gtkrc to use a custom routine to load images specified in rc files instead of
  *   the default xpm-only loader
  */
-typedef	 GdkPixmap * (*GtkImageLoader) (GdkWindow   *window,
-					GdkColormap *colormap,
-					GdkBitmap  **mask,
-					GdkColor    *transparent_color,
-					const gchar *filename);
-void	  gtk_rc_set_image_loader(GtkImageLoader loader);
+typedef	GdkPixmap*  (*GtkImageLoader) 		(GdkWindow   	*window,
+						 GdkColormap 	*colormap,
+						 GdkBitmap     **mask,
+						 GdkColor    	*transparent_color,
+						 const gchar 	*filename);
+void		gtk_rc_set_image_loader      	(GtkImageLoader	 loader);
 
-GdkPixmap *gtk_rc_load_image (GdkColormap *colormap,
-			      GdkColor    *transparent_color,
-			      const gchar *filename);
-gchar      *gtk_rc_find_pixmap_in_path (GScanner    *scanner,
-					const gchar *pixmap_file);
-gchar      *gtk_rc_find_module_in_path (GScanner *scanner,
-					const gchar *module_file);
-gchar      *gtk_rc_get_theme_dir(void);
-gchar      *gtk_rc_get_module_dir(void);
+GdkPixmap*	gtk_rc_load_image		(GdkColormap 	*colormap,
+						 GdkColor    	*transparent_color,
+						 const gchar 	*filename);
+gchar*		gtk_rc_find_pixmap_in_path	(GScanner    	*scanner,
+						 const gchar	*pixmap_file);
+gchar*		gtk_rc_find_module_in_path	(GScanner	*scanner,
+						 const gchar 	*module_file);
+gchar*		gtk_rc_get_theme_dir		(void);
+gchar*		gtk_rc_get_module_dir		(void);
 
 /* private functions/definitions */
 typedef enum {

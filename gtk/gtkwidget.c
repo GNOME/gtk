@@ -2319,7 +2319,7 @@ gtk_widget_stop_remove_accelerator (GtkWidget *widget)
 }
 
 void
-gtk_widget_freeze_accelerators (GtkWidget *widget)
+gtk_widget_lock_accelerators (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -2342,7 +2342,7 @@ gtk_widget_freeze_accelerators (GtkWidget *widget)
 }
 
 void
-gtk_widget_thaw_accelerators (GtkWidget *widget)
+gtk_widget_unlock_accelerators (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -2360,6 +2360,22 @@ gtk_widget_thaw_accelerators (GtkWidget *widget)
 				     GTK_SIGNAL_FUNC (gtk_widget_stop_remove_accelerator),
 				     NULL);
     }
+}
+
+void
+gtk_widget_thaw_accelerators (GtkWidget *widget)
+{
+  g_message ("gtk_widget_thaw_accelerators() is deprecated");
+
+  gtk_widget_unlock_accelerators (widget);
+}
+
+void
+gtk_widget_freeze_accelerators (GtkWidget *widget)
+{
+  g_message ("gtk_widget_freeze_accelerators() is deprecated");
+
+  gtk_widget_lock_accelerators (widget);
 }
 
 void

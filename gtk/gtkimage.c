@@ -26,10 +26,10 @@ static gint gtk_image_expose     (GtkWidget      *widget,
 				  GdkEventExpose *event);
 
 
-guint
+GtkType
 gtk_image_get_type (void)
 {
-  static guint image_type = 0;
+  static GtkType image_type = 0;
 
   if (!image_type)
     {
@@ -45,7 +45,7 @@ gtk_image_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      image_type = gtk_type_unique (gtk_misc_get_type (), &image_info);
+      image_type = gtk_type_unique (GTK_TYPE_MISC, &image_info);
     }
 
   return image_type;
@@ -78,7 +78,7 @@ gtk_image_new (GdkImage  *val,
 
   g_return_val_if_fail (val != NULL, NULL);
 
-  image = gtk_type_new (gtk_image_get_type ());
+  image = gtk_type_new (GTK_TYPE_IMAGE);
 
   gtk_image_set (image, val, mask);
 

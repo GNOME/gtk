@@ -143,7 +143,11 @@ gtk_socket_steal (GtkSocket *socket, guint32 id)
 
   if (socket->plug_window && socket->plug_window->user_data)
     {
-      GtkWidget *child_widget = GTK_WIDGET (socket->plug_window->user_data);
+      /*
+	GtkWidget *child_widget;
+
+	child_widget = GTK_WIDGET (socket->plug_window->user_data);
+      */
 
       g_warning("Stealing from same app not yet implemented");
       

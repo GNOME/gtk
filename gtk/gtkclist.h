@@ -36,15 +36,14 @@ extern "C" {
 /* clist flags */
 enum                    
 {
-  GTK_CLIST_FROZEN              = 1 << 0,
-  GTK_CLIST_IN_DRAG             = 1 << 1,
-  GTK_CLIST_DRAG_SELECTION      = 1 << 2,
-  GTK_CLIST_ROW_HEIGHT_SET      = 1 << 3,
-  GTK_CLIST_SHOW_TITLES         = 1 << 4,
-  GTK_CLIST_CHILD_HAS_FOCUS     = 1 << 5,
-  GTK_CLIST_ADD_MODE            = 1 << 6,
-  GTK_CLIST_AUTO_SORT           = 1 << 7,
-  GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 << 8
+  GTK_CLIST_IN_DRAG             = 1 << 0,
+  GTK_CLIST_DRAG_SELECTION      = 1 << 1,
+  GTK_CLIST_ROW_HEIGHT_SET      = 1 << 2,
+  GTK_CLIST_SHOW_TITLES         = 1 << 3,
+  GTK_CLIST_CHILD_HAS_FOCUS     = 1 << 4,
+  GTK_CLIST_ADD_MODE            = 1 << 5,
+  GTK_CLIST_AUTO_SORT           = 1 << 6,
+  GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 << 7
 }; 
 
 /* cell types */
@@ -67,7 +66,6 @@ typedef enum
 #define GTK_CLIST_SET_FLAG(clist,flag)     (GTK_CLIST_FLAGS (clist) |= (GTK_ ## flag))
 #define GTK_CLIST_UNSET_FLAG(clist,flag)   (GTK_CLIST_FLAGS (clist) &= ~(GTK_ ## flag))
 
-#define GTK_CLIST_FROZEN(clist)            (GTK_CLIST_FLAGS (clist) & GTK_CLIST_FROZEN)
 #define GTK_CLIST_IN_DRAG(clist)           (GTK_CLIST_FLAGS (clist) & GTK_CLIST_IN_DRAG)
 #define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ROW_HEIGHT_SET)
 #define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_SHOW_TITLES)
@@ -109,6 +107,8 @@ struct _GtkCList
   /* mem chunks */
   GMemChunk *row_mem_chunk;
   GMemChunk *cell_mem_chunk;
+
+  guint freeze_count;
   
   /* allocation rectangle after the conatiner_border_width
    * and the width of the shadow border */
@@ -192,6 +192,7 @@ struct _GtkCListClass
   void  (*scroll_adjustments)   (GtkCList       *clist,
 				 GtkAdjustment  *hadjustment,
 				 GtkAdjustment  *vadjustment);
+  void   (*refresh)             (GtkCList       *clist);
   void   (*select_row)          (GtkCList       *clist,
 				 gint            row,
 				 gint            column,

@@ -101,10 +101,10 @@ struct _GtkText
   /* True iff this buffer is wrapping lines, otherwise it is using a
    * horizontal scrollbar. */
   guint line_wrap : 1;
-  /* Frozen, don't do updates. @@@ fixme */
-  guint freeze : 1;
   guint word_wrap : 1;
 
+  /* Frozen, don't do updates. @@@ fixme */
+  guint freeze_count;
 			/* TEXT PROPERTIES */
 
   /* A doubly-linked-list containing TextProperty objects. */

@@ -79,7 +79,7 @@ struct _GtkCalendar
   gint highlight_col;
   
   gpointer private_data;
-  char grow_space [32];
+  gchar grow_space [32];
 };
 
 struct _GtkCalendarClass

@@ -45,7 +45,7 @@ gtk_invisible_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      invisible_type = gtk_type_unique (gtk_widget_get_type (), &invisible_info);
+      invisible_type = gtk_type_unique (GTK_TYPE_WIDGET, &invisible_info);
     }
 
   return invisible_type;
@@ -75,7 +75,7 @@ gtk_invisible_init (GtkInvisible *invisible)
 GtkWidget*
 gtk_invisible_new (void)
 {
-  return GTK_WIDGET ( gtk_type_new (gtk_invisible_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
 }
 
 static void

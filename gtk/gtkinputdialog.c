@@ -107,10 +107,10 @@ gtk_input_dialog_get_device_info(guint32 deviceid)
   return NULL;
 }
 
-guint
+GtkType
 gtk_input_dialog_get_type (void)
 {
-  static guint input_dialog_type = 0;
+  static GtkType input_dialog_type = 0;
 
   if (!input_dialog_type)
     {
@@ -126,7 +126,7 @@ gtk_input_dialog_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      input_dialog_type = gtk_type_unique (gtk_dialog_get_type (),
+      input_dialog_type = gtk_type_unique (GTK_TYPE_DIALOG,
 					   &input_dialog_info);
     }
 
@@ -140,7 +140,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 
   object_class = (GtkObjectClass*) klass;
 
-  parent_class = gtk_type_class (gtk_dialog_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_DIALOG);
 
   input_dialog_signals[ENABLE_DEVICE] =
     gtk_signal_new ("enable_device",
@@ -358,7 +358,7 @@ gtk_input_dialog_new (void)
 {
   GtkInputDialog *inputd;
 
-  inputd = gtk_type_new (gtk_input_dialog_get_type ());
+  inputd = gtk_type_new (GTK_TYPE_INPUT_DIALOG);
 
   return GTK_WIDGET (inputd);
 }

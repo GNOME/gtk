@@ -676,6 +676,8 @@ gtk_text_init (GtkText *text)
   
   text->text = g_new (guchar, INITIAL_BUFFER_SIZE);
   text->text_len = INITIAL_BUFFER_SIZE;
+
+  text->freeze_count = 0;
   
   if (!params_mem_chunk)
     params_mem_chunk = g_mem_chunk_new ("LineParams",
@@ -887,7 +889,7 @@ gtk_text_freeze (GtkText *text)
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
-  text->freeze = TRUE;
+  text->freeze_count++;
 }
 
 void
@@ -896,13 +898,12 @@ gtk_text_thaw (GtkText *text)
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
-  text->freeze = FALSE;
-  
-  if (GTK_WIDGET_REALIZED (text))
-    {
-      recompute_geometry (text);
-      gtk_widget_queue_draw (GTK_WIDGET (text));
-    }
+  if (text->freeze_count)
+    if (!(--text->freeze_count) && GTK_WIDGET_REALIZED (text))
+      {
+	recompute_geometry (text);
+	gtk_widget_queue_draw (GTK_WIDGET (text));
+      }
 }
 
 void
@@ -932,13 +933,13 @@ gtk_text_insert (GtkText    *text,
   if (length == 0)
     return;
   
-  if (!text->freeze && (length > FREEZE_LENGTH))
+  if (!text->freeze_count && (length > FREEZE_LENGTH))
     {
       gtk_text_freeze (text);
       frozen = TRUE;
     }
   
-  if (!text->freeze && (text->line_start_cache != NULL))
+  if (!text->freeze_count && (text->line_start_cache != NULL))
     {
       find_line_containing_point (text, text->point.index, TRUE);
       old_height = total_line_height (text, text->current_line, 1);
@@ -970,7 +971,7 @@ gtk_text_insert (GtkText    *text,
   
   advance_mark_n (&text->point, length);
   
-  if (!text->freeze && (text->line_start_cache != NULL))
+  if (!text->freeze_count && text->line_start_cache != NULL)
     insert_expose (text, old_height, length, new_line_count);
   
   if (frozen)
@@ -1006,13 +1007,13 @@ gtk_text_forward_delete (GtkText *text,
   if (text->point.index + nchars > TEXT_LENGTH (text) || nchars <= 0)
     return FALSE;
   
-  if (!text->freeze && (nchars > FREEZE_LENGTH))
+  if (!text->freeze_count && nchars > FREEZE_LENGTH)
     {
       gtk_text_freeze (text);
       frozen = TRUE;
     }
   
-  if (!text->freeze && (text->line_start_cache != NULL))
+  if (!text->freeze_count && text->line_start_cache != NULL)
     {
       /* We need to undraw the cursor here, since we may later
        * delete the cursor's property
@@ -1054,7 +1055,7 @@ gtk_text_forward_delete (GtkText *text,
   
   delete_text_property (text, nchars);
   
-  if (!text->freeze && (text->line_start_cache != NULL))
+  if (!text->freeze_count && (text->line_start_cache != NULL))
     {
       delete_expose (text, nchars, old_lines, old_height);
       draw_cursor (text, FALSE);

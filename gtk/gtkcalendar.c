@@ -216,7 +216,9 @@ struct _GtkCalendarPrivateData
   GdkWindow *week_win;
   GdkWindow *arrow_win[4];
 
-  guint header_h, day_name_h, main_h;
+  guint header_h;
+  guint day_name_h;
+  guint main_h;
 
   guint	     arrow_state[4];
   guint	     arrow_width;
@@ -234,12 +236,13 @@ struct _GtkCalendarPrivateData
   guint max_label_char_descent;
   guint max_week_char_width;
   
+  guint freeze_count;
+
   /* flags */
-  unsigned int dirty_header:1;
-  unsigned int dirty_day_names:1;
-  unsigned int dirty_main:1;
-  unsigned int dirty_week:1;
-  unsigned int frozen;
+  guint dirty_header : 1;
+  guint dirty_day_names : 1;
+  guint dirty_main : 1;
+  guint dirty_week : 1;
 };
 
 #define GTK_CALENDAR_PRIVATE_DATA(widget)  (((GtkCalendarPrivateData*)(GTK_CALENDAR (widget)->private_data)))
@@ -466,12 +469,13 @@ gtk_calendar_init (GtkCalendar *calendar)
   private_data->max_label_char_descent = 0;
 
   private_data->arrow_width = 10;
+
+  private_data->freeze_count = 0;
   
   private_data->dirty_header = 0;
   private_data->dirty_day_names = 0;
   private_data->dirty_week = 0;
   private_data->dirty_main = 0;
-  private_data->frozen = 0;
 }
 
 GtkWidget*
@@ -1519,7 +1523,7 @@ gtk_calendar_paint_header (GtkWidget *widget)
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
 
-  if (private_data->frozen)
+  if (private_data->freeze_count)
     {
       private_data->dirty_header = 1;
       return;
@@ -1609,7 +1613,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
    * Handle freeze/thaw functionality
    */
   
-  if (private_data->frozen)
+  if (private_data->freeze_count)
     {
       private_data->dirty_day_names = 1;
       return;
@@ -1688,7 +1692,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
    * Handle freeze/thaw functionality
    */
   
-  if (private_data->frozen)
+  if (private_data->freeze_count)
     {
       private_data->dirty_week = 1;
       return;
@@ -1811,7 +1815,7 @@ gtk_calendar_paint_day (GtkWidget *widget,
    * Handle freeze/thaw functionality
    */
   
-  if (private_data->frozen)
+  if (private_data->freeze_count)
     {
       private_data->dirty_main = 1;
       return;
@@ -1908,7 +1912,7 @@ gtk_calendar_paint_main (GtkWidget *widget)
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
 
-  if (private_data->frozen)
+  if (private_data->freeze_count)
     {
       private_data->dirty_main = 1;
       return;
@@ -2453,7 +2457,7 @@ gtk_calendar_paint_arrow (GtkWidget *widget,
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
 
-  if (private_data->frozen)
+  if (private_data->freeze_count)
     {
       private_data->dirty_header = 1;
       return;
@@ -2487,7 +2491,7 @@ gtk_calendar_freeze (GtkCalendar *calendar)
   g_return_if_fail (calendar != NULL);
   g_return_if_fail (GTK_IS_CALENDAR (calendar));
   
-  GTK_CALENDAR_PRIVATE_DATA (calendar)->frozen++;
+  GTK_CALENDAR_PRIVATE_DATA (calendar)->freeze_count++;
 }
 
 void
@@ -2499,29 +2503,26 @@ gtk_calendar_thaw (GtkCalendar *calendar)
   g_return_if_fail (GTK_IS_CALENDAR (calendar));
   
   private_data = GTK_CALENDAR_PRIVATE_DATA (calendar);
-
-  if (private_data->frozen)
-    {
-      private_data->frozen--;
-      if (private_data->frozen)
-	return;
-      
-      if (private_data->dirty_header)
-	if (GTK_WIDGET_DRAWABLE (calendar))
-	  gtk_calendar_paint_header (GTK_WIDGET (calendar));
-      
-      if (private_data->dirty_day_names)
-	if (GTK_WIDGET_DRAWABLE (calendar))
-	  gtk_calendar_paint_day_names (GTK_WIDGET (calendar));
-      
-      if (private_data->dirty_week)
-	if (GTK_WIDGET_DRAWABLE (calendar))
-	  gtk_calendar_paint_week_numbers (GTK_WIDGET (calendar));
-      
-      if (private_data->dirty_main)
-	if (GTK_WIDGET_DRAWABLE (calendar))
-	  gtk_calendar_paint_main (GTK_WIDGET (calendar));
-    }
+  
+  if (private_data->freeze_count)
+    if (!(--private_data->freeze_count))
+      {
+	if (private_data->dirty_header)
+	  if (GTK_WIDGET_DRAWABLE (calendar))
+	    gtk_calendar_paint_header (GTK_WIDGET (calendar));
+	
+	if (private_data->dirty_day_names)
+	  if (GTK_WIDGET_DRAWABLE (calendar))
+	    gtk_calendar_paint_day_names (GTK_WIDGET (calendar));
+	
+	if (private_data->dirty_week)
+	  if (GTK_WIDGET_DRAWABLE (calendar))
+	    gtk_calendar_paint_week_numbers (GTK_WIDGET (calendar));
+	
+	if (private_data->dirty_main)
+	  if (GTK_WIDGET_DRAWABLE (calendar))
+	    gtk_calendar_paint_main (GTK_WIDGET (calendar));
+      }
 }
 
 static void

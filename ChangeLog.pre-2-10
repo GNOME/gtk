@@ -1,3 +1,36 @@
+Sat Nov 28 00:06:49 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: deprecated gtk_widget_freeze_accelerators and
+	gtk_widget_thaw_accelerators, we provide gtk_widget_lock_accelerators
+	and gtk_widget_unlock_accelerators.
+
+	* gtk/gtklayout.h:
+	* gtk/gtklayout.c: implemented incremental freezing facility.
+
+	* gtk/gtktext.h: 
+	* gtk/gtktext.c: implemented incremental freezing facility.
+
+	* gtk/gtkenums.h:
+	* gtk/gtkaccelgroup.h: moved enum GtkAccelFlags into this place.
+
+	* gtk/gtkentry.h:
+	* gtk/gtkentry.c:
+ 	deprecated gtk_entry_adjust_scroll().
+ 	
+ 	* random GtkType, macro and indentation fixes.
+
+Fri Nov 27 22:50:15 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.h: 
+	* gtk/gtkclist.c: implemented incremental freezing facility, added
+	a new class member (*refresh)() which takes over the thaw
+ 	functionality. the clist FROZEN flag got removed on the way.
+	* gtk/gtkctree.c: adaptions to feature the clist refresh functionality
+	and incremental freezing.
+
+	* gtk/gtkcalendar.c: implemented incremental freezing facility.
+
 Fri Nov 27 11:41:27 1998  Raph Levien  <raph@gimp.org>
 
 	* gdk/gdkinputcommon.h (gdk_input_common_init): Fixed it so that

@@ -88,7 +88,7 @@ static void gtk_entry_queue_draw          (GtkEntry          *entry);
 static gint gtk_entry_timer               (gpointer           data);
 static gint gtk_entry_position            (GtkEntry          *entry,
 					   gint               x);
-/* static void gtk_entry_adjust_scroll       (GtkEntry          *entry); */
+static void entry_adjust_scroll           (GtkEntry          *entry);
 static void gtk_entry_grow_text           (GtkEntry          *entry);
 static void gtk_entry_insert_text         (GtkEditable       *editable,
 					   const gchar       *new_text,
@@ -276,7 +276,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   editable_class->insert_text = gtk_entry_insert_text;
   editable_class->delete_text = gtk_entry_delete_text;
-  editable_class->changed = (void (*)(GtkEditable *)) gtk_entry_adjust_scroll;
+  editable_class->changed = (void (*)(GtkEditable *)) entry_adjust_scroll;
 
   editable_class->move_cursor = gtk_entry_move_cursor;
   editable_class->move_word = gtk_entry_move_word;
@@ -445,7 +445,7 @@ gtk_entry_set_position (GtkEntry *entry,
     GTK_EDITABLE(entry)->current_pos = entry->text_length;
   else
     GTK_EDITABLE(entry)->current_pos = position;
-  gtk_entry_adjust_scroll (entry);
+  entry_adjust_scroll (entry);
 }
 
 static void
@@ -762,7 +762,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      widget->requisition.height - widget->style->klass->ythickness * 2);
 
       /* And make sure the cursor is on screen */
-      gtk_entry_adjust_scroll (entry);
+      entry_adjust_scroll (entry);
       
 #ifdef USE_XIM
       if (editable->ic && (gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION))
@@ -965,7 +965,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 
   GTK_EDITABLE(entry)->selection_end_pos = gtk_entry_position (entry, x + entry->scroll_offset);
   GTK_EDITABLE(entry)->current_pos = GTK_EDITABLE(entry)->selection_end_pos;
-  gtk_entry_adjust_scroll (entry);
+  entry_adjust_scroll (entry);
   gtk_entry_queue_draw (entry);
 
   return FALSE;
@@ -1159,7 +1159,7 @@ gtk_entry_key_press (GtkWidget   *widget,
 				    editable->selection_start_pos != editable->selection_end_pos,
 				    event->time);
       
-      gtk_entry_adjust_scroll (entry);
+      entry_adjust_scroll (entry);
       gtk_entry_queue_draw (entry);
     }
 
@@ -1519,6 +1519,17 @@ gtk_entry_position (GtkEntry *entry,
 
 void
 gtk_entry_adjust_scroll (GtkEntry *entry)
+{
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  g_message ("gtk_entry_adjust_scroll() is deprecated");
+
+  entry_adjust_scroll (entry);
+}
+
+static void
+entry_adjust_scroll (GtkEntry *entry)
 {
   gint xoffset, max_offset;
   gint text_area_width;
@@ -2317,7 +2328,7 @@ gtk_entry_style_set	(GtkWidget      *widget,
       scroll_char = gtk_entry_find_position (entry, entry->scroll_offset);
       gtk_entry_recompute_offsets (GTK_ENTRY (widget));
       entry->scroll_offset = entry->char_offset[scroll_char];
-      gtk_entry_adjust_scroll (entry);
+      entry_adjust_scroll (entry);
 
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);

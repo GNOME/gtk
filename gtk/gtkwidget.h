@@ -466,8 +466,8 @@ guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
 					   GtkAccelGroup       *accel_group,
 					   guint                accel_key,
 					   guint                accel_mods);
-void	   gtk_widget_freeze_accelerators (GtkWidget	       *widget);
-void	   gtk_widget_thaw_accelerators   (GtkWidget	       *widget);
+void	   gtk_widget_lock_accelerators   (GtkWidget	       *widget);
+void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
 gint	   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 
@@ -593,6 +593,11 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 #  define gtk_widget_ref gtk_object_ref
 #  define gtk_widget_unref gtk_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
+
+
+/* deprecated */
+void       gtk_widget_freeze_accelerators (GtkWidget	       *widget);
+void	   gtk_widget_thaw_accelerators   (GtkWidget	       *widget);
 
 
 #ifdef __cplusplus

@@ -23,23 +23,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef enum
-{
-  /* should the accelerator appear in
-   * the widget's display?
-   */
-  GTK_ACCEL_VISIBLE        = 1 << 0,
-  /* should the signal associated with
-   * this accelerator be also visible?
-   */
-  GTK_ACCEL_SIGNAL_VISIBLE = 1 << 1,
-  /* may the accelerator be removed
-   * again?
-   */
-  GTK_ACCEL_LOCKED         = 1 << 2,
-  GTK_ACCEL_MASK           = 0x07
-} GtkAccelFlags;
-
 /* Arrow types */
 typedef enum
 {

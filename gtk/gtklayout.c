@@ -88,7 +88,7 @@ gtk_layout_new (GtkAdjustment *hadjustment,
 {
   GtkLayout *layout;
 
-  layout = gtk_type_new (gtk_layout_get_type());
+  layout = gtk_type_new (GTK_TYPE_LAYOUT);
 
   gtk_layout_set_adjustments (layout, hadjustment, vadjustment);
 
@@ -279,7 +279,7 @@ gtk_layout_freeze (GtkLayout *layout)
   g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
-  layout->frozen = TRUE;
+  layout->freeze_count++;
 }
 
 void
@@ -288,20 +288,20 @@ gtk_layout_thaw (GtkLayout *layout)
   g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
-  if (!layout->frozen)
-    return;
-
-  layout->frozen = FALSE;
-  gtk_layout_position_children (layout);
-  gtk_widget_draw (GTK_WIDGET (layout), NULL);
+  if (layout->freeze_count)
+    if (!(--layout->freeze_count))
+      {
+	gtk_layout_position_children (layout);
+	gtk_widget_draw (GTK_WIDGET (layout), NULL);
+      }
 }
 
 /* Basic Object handling procedures
  */
-guint
+GtkType
 gtk_layout_get_type (void)
 {
-  static guint layout_type = 0;
+  static GtkType layout_type = 0;
 
   if (!layout_type)
     {
@@ -316,7 +316,7 @@ gtk_layout_get_type (void)
         (GtkArgGetFunc) NULL,
       };
 
-      layout_type = gtk_type_unique (gtk_container_get_type (), &layout_info);
+      layout_type = gtk_type_unique (GTK_TYPE_CONTAINER, &layout_info);
     }
 
   return layout_type;
@@ -333,7 +333,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
@@ -376,6 +376,8 @@ gtk_layout_init (GtkLayout *layout)
   layout->scroll_x = 0;
   layout->scroll_y = 0;
   layout->visibility = GDK_VISIBILITY_PARTIAL;
+
+  layout->freeze_count = 0;
 }
 
 /* Widget methods
@@ -907,7 +909,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
   layout->xoffset = (gint)layout->hadjustment->value;
   layout->yoffset = (gint)layout->vadjustment->value;
 
-  if (layout->frozen)
+  if (layout->freeze_count)
     return;
 
   if (!GTK_WIDGET_MAPPED (layout))

@@ -32,9 +32,11 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GTK_LAYOUT(obj)          GTK_CHECK_CAST (obj, gtk_layout_get_type (), GtkLayout)
-#define GTK_LAYOUT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_layout_get_type (), GtkLayoutClass)
-#define GTK_IS_LAYOUT(obj)       GTK_CHECK_TYPE (obj, gtk_layout_get_type ())
+#define GTK_TYPE_LAYOUT            (gtk_layout_get_type ())
+#define GTK_LAYOUT(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_LAYOUT, GtkLayout))
+#define GTK_LAYOUT_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LAYOUT, GtkLayoutClass))
+#define GTK_IS_LAYOUT(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_LAYOUT))
+#define GTK_IS_LAYOUT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LAYOUT))
 
 typedef struct _GtkLayout        GtkLayout;
 typedef struct _GtkLayoutClass   GtkLayoutClass;
@@ -69,7 +71,7 @@ struct _GtkLayout {
   gint scroll_x;
   gint scroll_y;
 
-  guint frozen : 1;
+  guint freeze_count;
 };
 
 struct _GtkLayoutClass {
@@ -80,10 +82,9 @@ struct _GtkLayoutClass {
 				 GtkAdjustment  *vadjustment);
 };
 
+GtkType        gtk_layout_get_type        (void);
 GtkWidget*     gtk_layout_new             (GtkAdjustment *hadjustment,
 				           GtkAdjustment *vadjustment);
-
-guint          gtk_layout_get_type        (void);
 void           gtk_layout_put             (GtkLayout     *layout, 
 		                           GtkWidget     *widget, 
 		                           gint           x, 

@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_INPUT_DIALOG(obj)          GTK_CHECK_CAST (obj, gtk_input_dialog_get_type (), GtkInputDialog)
-#define GTK_INPUT_DIALOG_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_input_dialog_get_type (), GtkInputDialogClass)
-#define GTK_IS_INPUT_DIALOG(obj)       GTK_CHECK_TYPE (obj, gtk_input_dialog_get_type ())
+#define GTK_TYPE_INPUT_DIALOG              (gtk_input_dialog_get_type ())
+#define GTK_INPUT_DIALOG(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_INPUT_DIALOG, GtkInputDialog))
+#define GTK_INPUT_DIALOG_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_INPUT_DIALOG, GtkInputDialogClass))
+#define GTK_IS_INPUT_DIALOG(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_INPUT_DIALOG))
+#define GTK_IS_INPUT_DIALOG_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_INPUT_DIALOG))
 
 
 typedef struct _GtkInputDialog       GtkInputDialog;
@@ -66,7 +68,7 @@ struct _GtkInputDialogClass
 };
 
 
-guint      gtk_input_dialog_get_type     (void);
+GtkType    gtk_input_dialog_get_type     (void);
 GtkWidget* gtk_input_dialog_new          (void);
 
 
