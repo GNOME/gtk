@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properrties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-24 16:26-0500\n"
+"POT-Creation-Date: 2004-02-24 19:38-0500\n"
 "PO-Revision-Date: 2004-02-24 23:35+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1295,51 +1295,51 @@ msgstr "목록에 있는 값"
 msgid "Whether entered values must already be present in the list"
 msgstr "입력된 값이 목록에 이미 있는 값이어야 하는 지 여부"
 
-#: gtk/gtkcombobox.c:349
+#: gtk/gtkcombobox.c:400
 msgid "ComboBox model"
 msgstr "콤보 상자 모델"
 
-#: gtk/gtkcombobox.c:350
+#: gtk/gtkcombobox.c:401
 msgid "The model for the combo box"
 msgstr "콤보 상자를 위한 모델"
 
-#: gtk/gtkcombobox.c:357
+#: gtk/gtkcombobox.c:408
 msgid "Wrap width"
 msgstr "줄바꿈 너비"
 
-#: gtk/gtkcombobox.c:358
+#: gtk/gtkcombobox.c:409
 msgid "Wrap width for layouting the items in a grid"
 msgstr "각 항목을 격자에 배치할 때 줄바꿈 너비"
 
-#: gtk/gtkcombobox.c:367
+#: gtk/gtkcombobox.c:418
 msgid "Row span column"
 msgstr "행 범위 열"
 
-#: gtk/gtkcombobox.c:368
+#: gtk/gtkcombobox.c:419
 msgid "TreeModel column containing the row span values"
 msgstr "행 범위 값이 들어 있는 트리모델 열"
 
-#: gtk/gtkcombobox.c:377
+#: gtk/gtkcombobox.c:428
 msgid "Column span column"
 msgstr "열 범위 열"
 
-#: gtk/gtkcombobox.c:378
+#: gtk/gtkcombobox.c:429
 msgid "TreeModel column containing the column span values"
 msgstr "열 범위 값이 들어 있는 트리모델 열"
 
-#: gtk/gtkcombobox.c:387
+#: gtk/gtkcombobox.c:438
 msgid "Active item"
 msgstr "활성 항목"
 
-#: gtk/gtkcombobox.c:388
+#: gtk/gtkcombobox.c:439
 msgid "The item which is currently active"
 msgstr "현재 활성화된 항목"
 
-#: gtk/gtkcombobox.c:396
+#: gtk/gtkcombobox.c:447
 msgid "ComboBox appareance"
 msgstr "콤보 상자 모양"
 
-#: gtk/gtkcombobox.c:397
+#: gtk/gtkcombobox.c:448
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "콤보 상자 모양, 참이면 Windows 스타일입니다."
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-24 16:26-0500\n"
+"POT-Creation-Date: 2004-02-24 19:38-0500\n"
 "PO-Revision-Date: 2004-02-22 11:51+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
@@ -1313,51 +1313,51 @@ msgstr "Verdi i listen"
 msgid "Whether entered values must already be present in the list"
 msgstr "Verdier som spesifiseres må allerede være i listen"
 
-#: gtk/gtkcombobox.c:349
+#: gtk/gtkcombobox.c:400
 msgid "ComboBox model"
 msgstr "Modell for ComboBox"
 
-#: gtk/gtkcombobox.c:350
+#: gtk/gtkcombobox.c:401
 msgid "The model for the combo box"
 msgstr "Modell for komboboksen"
 
-#: gtk/gtkcombobox.c:357
+#: gtk/gtkcombobox.c:408
 msgid "Wrap width"
 msgstr "Bredde for bryting"
 
-#: gtk/gtkcombobox.c:358
+#: gtk/gtkcombobox.c:409
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Brytningsbredde for utplassering av oppføringer i et rutenett"
 
-#: gtk/gtkcombobox.c:367
+#: gtk/gtkcombobox.c:418
 msgid "Row span column"
 msgstr "Kolonne for radutbredelse"
 
-#: gtk/gtkcombobox.c:368
+#: gtk/gtkcombobox.c:419
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolonne som inneholder verdier for radutbredelse"
 
-#: gtk/gtkcombobox.c:377
+#: gtk/gtkcombobox.c:428
 msgid "Column span column"
 msgstr "Kolonne for kolonneutbredelse"
 
-#: gtk/gtkcombobox.c:378
+#: gtk/gtkcombobox.c:429
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolonne som inneholder verdier for kolonneutbredelse"
 
-#: gtk/gtkcombobox.c:387
+#: gtk/gtkcombobox.c:438
 msgid "Active item"
 msgstr "Aktiv oppføring"
 
-#: gtk/gtkcombobox.c:388
+#: gtk/gtkcombobox.c:439
 msgid "The item which is currently active"
 msgstr "Oppføringen som er aktiv"
 
-#: gtk/gtkcombobox.c:396
+#: gtk/gtkcombobox.c:447
 msgid "ComboBox appareance"
 msgstr "Utseende for ComboBox"
 
-#: gtk/gtkcombobox.c:397
+#: gtk/gtkcombobox.c:448
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Utseende for ComboBox. TRUE betyr Windows-stil."
 

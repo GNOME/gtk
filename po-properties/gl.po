@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-24 16:26-0500\n"
+"POT-Creation-Date: 2004-02-24 19:38-0500\n"
 "PO-Revision-Date: 2000-08-10 23:10+0200\n"
 "Last-Translator: Jesus Bravo Alvarez <jba@pobox.com>\n"
 "Language-Team: Galician <trasno@ceu.fi.udc.es>\n"
@@ -1319,54 +1319,54 @@ msgstr ""
 msgid "Whether entered values must already be present in the list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:349
+#: gtk/gtkcombobox.c:400
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:350
+#: gtk/gtkcombobox.c:401
 msgid "The model for the combo box"
 msgstr ""
 
-#: gtk/gtkcombobox.c:357
+#: gtk/gtkcombobox.c:408
 #, fuzzy
 msgid "Wrap width"
 msgstr "Ancho:"
 
-#: gtk/gtkcombobox.c:358
+#: gtk/gtkcombobox.c:409
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:367
+#: gtk/gtkcombobox.c:418
 #, fuzzy
 msgid "Row span column"
 msgstr "Espacio:"
 
-#: gtk/gtkcombobox.c:368
+#: gtk/gtkcombobox.c:419
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:377
+#: gtk/gtkcombobox.c:428
 msgid "Column span column"
 msgstr ""
 
-#: gtk/gtkcombobox.c:378
+#: gtk/gtkcombobox.c:429
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:387
+#: gtk/gtkcombobox.c:438
 #, fuzzy
 msgid "Active item"
 msgstr "(desactivado)"
 
-#: gtk/gtkcombobox.c:388
+#: gtk/gtkcombobox.c:439
 msgid "The item which is currently active"
 msgstr ""
 
-#: gtk/gtkcombobox.c:396
+#: gtk/gtkcombobox.c:447
 msgid "ComboBox appareance"
 msgstr ""
 
-#: gtk/gtkcombobox.c:397
+#: gtk/gtkcombobox.c:448
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr ""
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-24 16:26-0500\n"
+"POT-Creation-Date: 2004-02-24 19:38-0500\n"
 "PO-Revision-Date: 2004-02-09 21:57-0200\n"
 "Last-Translator: Gustavo Noronha Silva <kov@debian.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -1330,51 +1330,51 @@ msgstr "Valor na lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Se valores inseridos têm ou não de já existir na lista"
 
-#: gtk/gtkcombobox.c:349
+#: gtk/gtkcombobox.c:400
 msgid "ComboBox model"
 msgstr "Modelo de ComboBox"
 
-#: gtk/gtkcombobox.c:350
+#: gtk/gtkcombobox.c:401
 msgid "The model for the combo box"
 msgstr "O modelo para a caixa combo"
 
-#: gtk/gtkcombobox.c:357
+#: gtk/gtkcombobox.c:408
 msgid "Wrap width"
 msgstr "Largura da quebra"
 
-#: gtk/gtkcombobox.c:358
+#: gtk/gtkcombobox.c:409
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Quebrar largura para fazer o layout de itens em uma grade"
 
-#: gtk/gtkcombobox.c:367
+#: gtk/gtkcombobox.c:418
 msgid "Row span column"
 msgstr "Coluna de alcance de linha"
 
-#: gtk/gtkcombobox.c:368
+#: gtk/gtkcombobox.c:419
 msgid "TreeModel column containing the row span values"
 msgstr "Coluna TreeModel contendo os valores de alcance da linha"
 
-#: gtk/gtkcombobox.c:377
+#: gtk/gtkcombobox.c:428
 msgid "Column span column"
 msgstr "Coluna de alcance de coluna"
 
-#: gtk/gtkcombobox.c:378
+#: gtk/gtkcombobox.c:429
 msgid "TreeModel column containing the column span values"
 msgstr "Coluna TreeModel contendo os valores de alcance da coluna"
 
-#: gtk/gtkcombobox.c:387
+#: gtk/gtkcombobox.c:438
 msgid "Active item"
 msgstr "Item ativo"
 
-#: gtk/gtkcombobox.c:388
+#: gtk/gtkcombobox.c:439
 msgid "The item which is currently active"
 msgstr "O item que está atualmente ativo"
 
-#: gtk/gtkcombobox.c:396
+#: gtk/gtkcombobox.c:447
 msgid "ComboBox appareance"
 msgstr "Aparência da ComboBox"
 
-#: gtk/gtkcombobox.c:397
+#: gtk/gtkcombobox.c:448
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Aparência da ComboBox, se VERDADEIRO significa estilo-Windows."
 

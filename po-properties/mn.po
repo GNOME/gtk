@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-24 16:26-0500\n"
+"POT-Creation-Date: 2004-02-24 19:38-0500\n"
 "PO-Revision-Date: 2004-02-20 21:07+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -1496,56 +1496,56 @@ msgstr "Жагсаалт дахь утга"
 msgid "Whether entered values must already be present in the list"
 msgstr "Оруулсан утгыг жагсаалтанд гаргасан байх эсэх"
 
-#: gtk/gtkcombobox.c:349
+#: gtk/gtkcombobox.c:400
 msgid "ComboBox model"
 msgstr "Комбобокс загвар"
 
-#: gtk/gtkcombobox.c:350
+#: gtk/gtkcombobox.c:401
 msgid "The model for the combo box"
 msgstr "Комбобоксын загвар"
 
 # gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
-#: gtk/gtkcombobox.c:357
+#: gtk/gtkcombobox.c:408
 msgid "Wrap width"
 msgstr "Өргөн таслах"
 
-#: gtk/gtkcombobox.c:358
+#: gtk/gtkcombobox.c:409
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Торонд объект байрлуулахад өргөн таслах"
 
 # gtk/gtktable.c:174
-#: gtk/gtkcombobox.c:367
+#: gtk/gtkcombobox.c:418
 msgid "Row span column"
 msgstr "Мөр дарах багана"
 
-#: gtk/gtkcombobox.c:368
+#: gtk/gtkcombobox.c:419
 msgid "TreeModel column containing the row span values"
 msgstr "Мөр хоорондын зайн утга агуулах TreeModel-багана"
 
 # gtk/gtktable.c:183
-#: gtk/gtkcombobox.c:377
+#: gtk/gtkcombobox.c:428
 msgid "Column span column"
 msgstr "Багана дарах багана"
 
-#: gtk/gtkcombobox.c:378
+#: gtk/gtkcombobox.c:429
 msgid "TreeModel column containing the column span values"
 msgstr "Багана хоорондын зайн утга агуулах TreeModel-багана"
 
 # gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
-#: gtk/gtkcombobox.c:387
+#: gtk/gtkcombobox.c:438
 msgid "Active item"
 msgstr "Идэвхжүүлэх"
 
 # gtk/gtkfontsel.c:210
-#: gtk/gtkcombobox.c:388
+#: gtk/gtkcombobox.c:439
 msgid "The item which is currently active"
 msgstr "Идэвхитэй байгаа элемент"
 
-#: gtk/gtkcombobox.c:396
+#: gtk/gtkcombobox.c:447
 msgid "ComboBox appareance"
 msgstr "Комбобокс харагдац"
 
-#: gtk/gtkcombobox.c:397
+#: gtk/gtkcombobox.c:448
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Хаана виндовс хэлбэр ҮНЭН байна тэнд комбобокс харагдац"
 

@@ -1,6 +1,13 @@
+Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.4
+=================================================
+* Fix broken gtk_binary_age setting causing wrong soname [Owen Taylor]
+* Add some extra GtkExpander docs [Federico Mena Quintero]
+* Misc bug fixes [Matthias Clasen, Damon Chaplin, Owen, Uwe Zeisberger]
+* Updated translation (ga)
+
 Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.3
 =================================================
-* GtkFileChooser [Federico]:
+* GtkFileChooser [Federico Mena Quintero]:
  - Support bookmarks in GtkFileSystemUnix. [Jan Arne Petersen]
  - Correctly handle typed-in filenames in save mode, folder mode, and
    multiple-selection mode in all combinations.

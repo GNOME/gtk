@@ -1,3 +1,7 @@
+Tue Feb 24 19:06:20 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.4 ===
+
 2004-02-24  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/tmpl/gtkexpander.sgml: Added a section about usage when you

@@ -1,3 +1,11 @@
+Tue Feb 24 19:12:07 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.4 ===
+
+	* configure.in: Bump version to 2.3.4, fix broken
+	gtk_binary_age value by copying the GLib logic
+	to automatically set it to the right values.
+
 Wed Feb 25 00:13:24 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_row_changed): 
