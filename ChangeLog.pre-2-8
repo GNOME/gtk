@@ -1,3 +1,9 @@
+Mon Feb 11 17:54:46 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): set upper
+	member of hadjustment correct, so the hscrollbars of lists smaller
+	than 1 page (in width) are somewhat saner
+
 2002-02-11  jacob berkman  <jacob@ximian.com>
 
 	* gdk/gdkwindow.h (gdk_get_default_root_window): fix signature to
