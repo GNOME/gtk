@@ -306,6 +306,7 @@ static GdkPixBuf *
     _XPMColor *colors, *color, *fallbackcolor;
     art_u8 *pixels, *pixtmp;
     GdkPixBuf *pixbuf;
+    ArtPixBuf *art_pixbuf;
 
     buffer = (*get_buf) (op_header, handle);
     if (!buffer) {
@@ -403,22 +404,15 @@ static GdkPixBuf *
 
     /* Ok, now stuff the GdkPixBuf with goodies */
 
-    pixbuf = g_new(GdkPixBuf, 1);
-
     if (is_trans)
-	pixbuf->art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
+	    art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
     else
-	pixbuf->art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
+	    art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
 
-    /* Ok, I'm anal...shoot me */
-    if (!(pixbuf->art_pixbuf)) {
+    pixbuf = gdk_pixbuf_new (art_pixbuf, NULL);
+
+    if (!pixbuf)
         art_free(pixels);
-	g_free(pixbuf);
-        return NULL;
-    }
-
-    pixbuf->ref_count = 1;
-    pixbuf->unref_func = NULL;
 
     return pixbuf;
 }

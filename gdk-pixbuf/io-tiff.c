@@ -87,15 +87,11 @@ GdkPixBuf *image_load(FILE * f)
     _TIFFfree(rast);
     TIFFClose(tiff);
 
-    /* Return the GdkPixBuf */
-    pixbuf = g_new(GdkPixBuf, 1);
-    pixbuf->art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
+    pixbuf = gdk_pixbuf_new (art_pixbuf_new_rgba (pixels, w, h, (w * 4)),
+			     NULL);
 
-    /* Ok, I'm anal...shoot me */
-    if (!(pixbuf->art_pixbuf))
-	return NULL;
-    pixbuf->ref_count = 1;
-    pixbuf->unref_func = NULL;
+    if (!pixbuf)
+	    art_free (pixels);
 
     return pixbuf;
 }

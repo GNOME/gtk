@@ -32,23 +32,16 @@
 /* Shared library entry point */
 GdkPixBuf *image_load(FILE * f)
 {
-    GdkPixBuf *pixbuf;
     art_u8 *pixels;
+    ArtPixBuf *art_pixbuf;
 
     /* Ok, now stuff the GdkPixBuf with goodies */
 
-    pixbuf = g_new(GdkPixBuf, 1);
-
     if (is_trans)
-	pixbuf->art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
+	    art_pixbuf = art_pixbuf_new_rgba (pixels, w, h, (w * 4));
     else
-	pixbuf->art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
+	    art_pixbuf = art_pixbuf_new_rgb  (pixels, w, h, (w * 3));
 
     /* Ok, I'm anal...shoot me */
-    if (!(pixbuf->art_pixbuf))
-	return NULL;
-    pixbuf->ref_count = 1;
-    pixbuf->unref_func = NULL;
-
-    return pixbuf;
+    return gdk_pixbuf_new (art_pixbuf, NULL);
 }

@@ -35,31 +35,36 @@ GdkPixBuf *image_load(FILE * f)
     png_bytepp rows;
     art_u8 *pixels, *temp, *rowdata;
     GdkPixBuf *pixbuf;
+    ArtPixBuf *art_pixbuf;
 
-    g_return_val_if_fail(f != NULL, NULL);
+    g_return_val_if_fail (f != NULL, NULL);
 
-    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL,
-				     NULL);
+    png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING,
+				      NULL, NULL, NULL);
+    if (!png_ptr)
+	    return NULL;
 
-    info_ptr = png_create_info_struct(png_ptr);
+    info_ptr = png_create_info_struct (png_ptr);
     if (!info_ptr) {
-	png_destroy_read_struct(&png_ptr, NULL, NULL);
-	return NULL;
+	    png_destroy_read_struct (&png_ptr, NULL, NULL);
+	    return NULL;
     }
-    end_info = png_create_info_struct(png_ptr);
-    if (!end_info) {
-	png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-	return NULL;
-    }
-    if (setjmp(png_ptr->jmpbuf)) {
-	png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-	return NULL;
-    }
-    png_init_io(png_ptr, f);
-    png_read_info(png_ptr, info_ptr);
 
-    png_get_IHDR(png_ptr, info_ptr, &w, &h, &depth, &ctype, &inttype,
-		 NULL, NULL);
+    end_info = png_create_info_struct (png_ptr);
+    if (!end_info) {
+	    png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
+	    return NULL;
+    }
+
+    if (setjmp (png_ptr->jmpbuf)) {
+	    png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+	    return NULL;
+    }
+
+    png_init_io   (png_ptr, f);
+    png_read_info (png_ptr, info_ptr);
+    png_get_IHDR  (png_ptr, info_ptr, &w, &h, &depth, &ctype, &inttype,
+		   NULL, NULL);
 
     /* Ok, we want to work with 24 bit images.
      * However, PNG can vary depth per channel.
@@ -67,63 +72,64 @@ GdkPixBuf *image_load(FILE * f)
      * everything into a format libart expects.
      * We also use png_set_strip_16 to reduce down to 8 bit/chan.
      */
-
     if (ctype == PNG_COLOR_TYPE_PALETTE && depth <= 8)
-	png_set_expand(png_ptr);
+	png_set_expand (png_ptr);
 
     if (ctype == PNG_COLOR_TYPE_GRAY && depth < 8)
-	png_set_expand(png_ptr);
+	png_set_expand (png_ptr);
 
-    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-	png_set_expand(png_ptr);
+    if (png_get_valid (png_ptr, info_ptr, PNG_INFO_tRNS)) {
+	png_set_expand (png_ptr);
+	g_warning ("FIXME: We are going to crash");
+    }
 
     if (depth == 16)
-	png_set_strip_16(png_ptr);
+	png_set_strip_16 (png_ptr);
 
     /* We also have png "packing" bits into bytes if < 8 */
     if (depth < 8)
-	png_set_packing(png_ptr);
+	png_set_packing (png_ptr);
 
     /* Lastly, if the PNG is greyscale, convert to RGB */
     if (ctype == PNG_COLOR_TYPE_GRAY || ctype == PNG_COLOR_TYPE_GRAY_ALPHA)
-	png_set_gray_to_rgb(png_ptr);
+	png_set_gray_to_rgb (png_ptr);
 
     /* ...and if we're interlaced... */
-    passes = png_set_interlace_handling(png_ptr);
+    passes = png_set_interlace_handling (png_ptr);
 
     /* Update our info structs */
-    png_read_update_info(png_ptr, info_ptr);
+    png_read_update_info (png_ptr, info_ptr);
 
     /* Allocate some memory and set up row array */
-    /* This "inhales vigirously"... */
+    /* This "inhales vigorously"... */
     if (ctype & PNG_COLOR_MASK_ALPHA)
 	bpp = 4;
     else
 	bpp = 3;
 
-    pixels = art_alloc(w * h * bpp);
-    rows = g_malloc(h * sizeof(png_bytep));
+    pixels = art_alloc (w * h * bpp);
+    rows   = g_malloc  (h * sizeof(png_bytep));
 
-    if ((!pixels) || (!rows)) {
-	png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+    if (!pixels || !rows) {
+	png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
 	return NULL;
     }
     /* Icky code, but it has to be done... */
     for (i = 0; i < h; i++) {
-	if ((rows[i] = g_malloc(w * sizeof(art_u8) * bpp)) == NULL) {
+	if ((rows[i] = g_malloc (w * sizeof (art_u8) * bpp)) == NULL) {
 	    int n;
 	    for (n = 0; n < i; n++)
-		g_free(rows[i]);
-	    g_free(rows);
-	    art_free(pixels);
-	    png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+		g_free (rows[i]);
+	    g_free (rows);
+	    art_free (pixels);
+	    png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
 	    return NULL;
 	}
     }
 
     /* And we FINALLY get here... */
-    png_read_image(png_ptr, rows);
-    png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+    png_read_image (png_ptr, rows);
+    png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
 
     /* Now stuff the bytes into pixels & free rows[y] */
 
@@ -139,27 +145,19 @@ GdkPixBuf *image_load(FILE * f)
 		temp[3] = rowdata[(x * bpp) + 3];
 	    temp += bpp;
 	}
-	g_free(rows[y]);
+	g_free (rows[y]);
     }
-    g_free(rows);
-
-    /* Return the GdkPixBuf */
-    pixbuf = g_new(GdkPixBuf, 1);
+    g_free (rows);
 
     if (ctype & PNG_COLOR_MASK_ALPHA)
-	pixbuf->art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
+	    art_pixbuf = art_pixbuf_new_rgba (pixels, w, h, (w * 4));
     else
-	pixbuf->art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
+	    art_pixbuf = art_pixbuf_new_rgb  (pixels, w, h, (w * 3));
 
-    /* Ok, I'm anal...shoot me */
-    if (!(pixbuf->art_pixbuf)) {
-        art_free(pixels);
-        g_free(pixbuf);
-	return NULL;
-    }
+    pixbuf = gdk_pixbuf_new (art_pixbuf, NULL);
 
-    pixbuf->ref_count = 1;
-    pixbuf->unref_func = NULL;
+    if (!pixbuf)
+        art_free (pixels);
 
     return pixbuf;
 }

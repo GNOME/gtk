@@ -1,3 +1,29 @@
+1999-09-22  Michael Meeks  <michael@nuclecu.unam.mx>
+
+	* src/gdk-pixbuf.c (gdk_pixbuf_new): created.
+	(gdk_pixbuf_scale): use gdk_pixbuf_new + return a new scaled image.
+
+	* src/gdk-pixbuf.h (struct _GdkPixBuf): Re-organise struct, + add
+	GdkPixBufUnrefFunc + gdk_pixbuf_new.
+
+	* src/io-jpeg.c (image_load): clean to use gdk_pixbuf_new.
+
+	* src/io-xpm.c (_pixbuf_create_from_xpm): ditto.
+
+	* src/io-tiff.c (image_load): ditto + fix leak
+
+	* src/io-png.c (image_load): ditto + add more exit points; monitor.png
+	crashes this module ( add warning :-)
+
+	* src/io-bmp.c (image_load): ditto.
+
+	* src/io-gif.c (image_load): ditto.
+
+1999-09-18  Michael Meeks  <michael@nuclecu.unam.mx>
+
+	* src/gdk-pixbuf.c (gdk_pixbuf_scale): Hack rgba support in so
+	it doesn't crash scaling with alpha.
+
 1999-09-17  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/io-bmp.c (image_load): Set the initial ref_count to 1.

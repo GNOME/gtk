@@ -21,7 +21,25 @@ void
 gdk_pixbuf_destroy (GdkPixBuf *pixbuf)
 {
      art_pixbuf_free (pixbuf->art_pixbuf);
+     pixbuf->art_pixbuf = NULL;
      g_free (pixbuf);
+}
+
+GdkPixBuf *
+gdk_pixbuf_new (ArtPixBuf          *art_pixbuf,
+		GdkPixBufUnrefFunc *unref_fn)
+{
+	GdkPixBuf *pixbuf;
+
+	if (!art_pixbuf)
+		return NULL;
+
+	pixbuf             = g_new (GdkPixBuf, 1);
+	pixbuf->ref_count  = 1;
+	pixbuf->unref_fn   = unref_fn;
+	pixbuf->art_pixbuf = art_pixbuf;
+
+	return pixbuf;
 }
 
 void
@@ -46,18 +64,18 @@ gdk_pixbuf_unref (GdkPixBuf *pixbuf)
 }
 
 GdkPixBuf *
-gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
+gdk_pixbuf_scale (const GdkPixBuf *pixbuf, gint w, gint h)
 {
     art_u8 *pixels;
     gint rowstride;
     double affine[6];
     ArtAlphaGamma *alphagamma;
     ArtPixBuf *art_pixbuf = NULL;
+    GdkPixBuf *copy = NULL;
 
     alphagamma = NULL;
 
     affine[1] = affine[2] = affine[4] = affine[5] = 0;
-
 
     affine[0] = w / (double)(pixbuf->art_pixbuf->width);
     affine[3] = h / (double)(pixbuf->art_pixbuf->height);
@@ -71,15 +89,29 @@ gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
 			   affine, ART_FILTER_NEAREST, alphagamma);
 
     if (pixbuf->art_pixbuf->has_alpha)
-      /* should be rgba */
-      art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride);
+	    /* should be rgba */
+	    art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride);
     else
-      art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride);
+	    art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride);
 
-    art_pixbuf_free (pixbuf->art_pixbuf);
-    pixbuf->art_pixbuf = art_pixbuf;
+    copy = gdk_pixbuf_new (art_pixbuf, NULL);
 
-    return pixbuf;
+    if (!copy)
+	    art_free (pixels);
+    
+    return copy;
+}
+
+GdkPixBuf *
+gdk_pixbuf_duplicate (const GdkPixBuf *pixbuf)
+{
+	GdkPixBuf *copy  = g_new (GdkPixBuf, 1);
+
+	copy->ref_count  = 1;
+	copy->unref_fn   = pixbuf->unref_fn;
+	copy->art_pixbuf = art_pixbuf_duplicate (pixbuf->art_pixbuf);
+
+	return copy;
 }
 
 GdkPixBuf *
