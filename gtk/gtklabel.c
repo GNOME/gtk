@@ -1205,7 +1205,7 @@ gtk_label_ensure_layout (GtkLabel *label,
 	  longest_paragraph = width;
 
 	  width = MIN (width,
-		       PANGO_SCALE * gdk_string_width (GTK_WIDGET (label)->style->font,
+		       PANGO_SCALE * gdk_string_width (gtk_style_get_font (GTK_WIDGET (label)->style),
 						"This long string gives a good enough length for any line to have."));
 	  width = MIN (width,
 		       PANGO_SCALE * (gdk_screen_width () + 1) / 2);

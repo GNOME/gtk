@@ -3267,7 +3267,7 @@ row_delete (GtkCTree    *ctree,
 	{
 	  if (GTK_WIDGET_REALIZED (ctree))
 	    gtk_style_detach (ctree_row->row.cell[i].style);
-	  gtk_style_unref (ctree_row->row.cell[i].style);
+	  g_object_unref (ctree_row->row.cell[i].style);
 	}
     }
 
@@ -3275,7 +3275,7 @@ row_delete (GtkCTree    *ctree,
     {
       if (GTK_WIDGET_REALIZED (ctree))
 	gtk_style_detach (ctree_row->row.style);
-      gtk_style_unref (ctree_row->row.style);
+      g_object_unref (ctree_row->row.style);
     }
 
   if (ctree_row->pixmap_closed)
@@ -5001,14 +5001,14 @@ gtk_ctree_node_set_cell_style (GtkCTree     *ctree,
     {
       if (GTK_WIDGET_REALIZED (ctree))
         gtk_style_detach (GTK_CTREE_ROW (node)->row.cell[column].style);
-      gtk_style_unref (GTK_CTREE_ROW (node)->row.cell[column].style);
+      g_object_unref (GTK_CTREE_ROW (node)->row.cell[column].style);
     }
 
   GTK_CTREE_ROW (node)->row.cell[column].style = style;
 
   if (GTK_CTREE_ROW (node)->row.cell[column].style)
     {
-      gtk_style_ref (GTK_CTREE_ROW (node)->row.cell[column].style);
+      g_object_ref (GTK_CTREE_ROW (node)->row.cell[column].style);
       
       if (GTK_WIDGET_REALIZED (ctree))
         GTK_CTREE_ROW (node)->row.cell[column].style =
@@ -5073,14 +5073,14 @@ gtk_ctree_node_set_row_style (GtkCTree     *ctree,
     {
       if (GTK_WIDGET_REALIZED (ctree))
         gtk_style_detach (GTK_CTREE_ROW (node)->row.style);
-      gtk_style_unref (GTK_CTREE_ROW (node)->row.style);
+      g_object_unref (GTK_CTREE_ROW (node)->row.style);
     }
 
   GTK_CTREE_ROW (node)->row.style = style;
 
   if (GTK_CTREE_ROW (node)->row.style)
     {
-      gtk_style_ref (GTK_CTREE_ROW (node)->row.style);
+      g_object_ref (GTK_CTREE_ROW (node)->row.style);
       
       if (GTK_WIDGET_REALIZED (ctree))
         GTK_CTREE_ROW (node)->row.style =

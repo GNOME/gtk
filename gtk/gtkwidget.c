@@ -1249,7 +1249,7 @@ gtk_widget_init (GtkWidget *widget)
 			GTK_DOUBLE_BUFFERED);
 
   widget->style = gtk_widget_get_default_style ();
-  gtk_style_ref (widget->style);
+  g_object_ref (widget->style);
 }
 
 
@@ -3808,7 +3808,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       
       previous_style = widget->style;
       widget->style = style;
-      gtk_style_ref (widget->style);
+      g_object_ref (widget->style);
       
       if (GTK_WIDGET_REALIZED (widget))
 	widget->style = gtk_style_attach (widget->style, widget->window);
@@ -3816,7 +3816,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       gtk_signal_emit (GTK_OBJECT (widget),
 		       widget_signals[STYLE_SET],
 		       initial_emission ? NULL : previous_style);
-      gtk_style_unref (previous_style);
+      g_object_unref (previous_style);
 
       if (widget->parent && !initial_emission)
 	{
@@ -3920,7 +3920,7 @@ gtk_widget_get_default_style (void)
   if (!gtk_default_style)
     {
       gtk_default_style = gtk_style_new ();
-      gtk_style_ref (gtk_default_style);
+      g_object_ref (gtk_default_style);
     }
   
   return gtk_default_style;
@@ -5167,9 +5167,9 @@ gtk_widget_real_destroy (GtkObject *object)
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
   
-  gtk_style_unref (widget->style);
+  g_object_unref (widget->style);
   widget->style = gtk_widget_get_default_style ();
-  gtk_style_ref (widget->style);
+  g_object_ref (widget->style);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -5186,7 +5186,7 @@ gtk_widget_finalize (GObject *object)
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
 
-  gtk_style_unref (widget->style);
+  g_object_unref (widget->style);
   widget->style = NULL;
 
   if (widget->name)

@@ -1313,7 +1313,7 @@ add_text_attrs (GtkTextLayout      *layout,
 {
   PangoAttribute *attr;
 
-  attr = pango_attr_font_desc_new (&style->font);
+  attr = pango_attr_font_desc_new (style->font);
   attr->start_index = start;
   attr->end_index = start + byte_count;
 
@@ -1585,7 +1585,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
   do
     {
       GtkTextAppearance appearance = style->appearance;
-      PangoFontDescription font_desc;
+      PangoFontDescription *font_desc = pango_font_description_copy_static (style->font);
       PangoAttribute *insert_attr;
       GSList *extra_attrs = NULL;
       GSList *tmp_list;
@@ -1597,8 +1597,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
       if (end == G_MAXINT)
 	end = layout->preedit_len;
       
-      pango_attr_iterator_get_font (iter, &style->font,
-				    &font_desc, &language, &extra_attrs);
+      pango_attr_iterator_get_font (iter, font_desc, &language, &extra_attrs);
       
       tmp_list = extra_attrs;
       while (tmp_list)
@@ -1633,7 +1632,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
       
       g_slist_free (extra_attrs);
       
-      insert_attr = pango_attr_font_desc_new (&font_desc);
+      insert_attr = pango_attr_font_desc_new (font_desc);
       insert_attr->start_index = start + offset;
       insert_attr->end_index = end + offset;
       
@@ -1651,6 +1650,8 @@ add_preedit_attrs (GtkTextLayout     *layout,
       add_generic_attrs (layout, &appearance, end - start,
                          attrs, start + offset,
                          size_only, TRUE);
+      
+      pango_font_description_free (font_desc);
     }
   while (pango_attr_iterator_next (iter));
 

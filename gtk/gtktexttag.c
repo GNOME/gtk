@@ -727,68 +727,104 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
     }
 }
 
+static PangoFontMask
+get_property_font_set_mask (guint prop_id)
+{
+  switch (prop_id)
+    {
+    case PROP_FAMILY_SET:
+      return PANGO_FONT_MASK_FAMILY;
+    case PROP_STYLE_SET:
+      return PANGO_FONT_MASK_STYLE;
+    case PROP_VARIANT_SET:
+      return PANGO_FONT_MASK_VARIANT;
+    case PROP_WEIGHT_SET:
+      return PANGO_FONT_MASK_WEIGHT;
+    case PROP_STRETCH_SET:
+      return PANGO_FONT_MASK_STRETCH;
+    case PROP_SIZE_SET:
+      return PANGO_FONT_MASK_SIZE;
+    }
+
+  return 0;
+}
+
+static void
+notify_set_changed (GObject       *object,
+		    PangoFontMask  changed_mask)
+{
+  if (changed_mask & PANGO_FONT_MASK_FAMILY)
+    g_object_notify (object, "family_set");
+  if (changed_mask & PANGO_FONT_MASK_STYLE)
+    g_object_notify (object, "style_set");
+  if (changed_mask & PANGO_FONT_MASK_VARIANT)
+    g_object_notify (object, "variant_set");
+  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
+    g_object_notify (object, "weight_set");
+  if (changed_mask & PANGO_FONT_MASK_STRETCH)
+    g_object_notify (object, "stretch_set");
+  if (changed_mask & PANGO_FONT_MASK_SIZE)
+    g_object_notify (object, "size_set");
+}
+
 static void
 set_font_description (GtkTextTag           *text_tag,
                       PangoFontDescription *font_desc)
 {
-  if (font_desc != NULL)
-    {
-      /* pango_font_description_from_string() will sometimes return
-       * a NULL family or -1 size, so handle those cases.
-       */
-      
-      if (font_desc->family_name)
-        g_object_set (G_OBJECT (text_tag),
-                      "family", font_desc->family_name,
-                      NULL);
-      
-      if (font_desc->size >= 0)
-        g_object_set (G_OBJECT (text_tag),
-                      "size", font_desc->size,
-                      NULL);
-        
-      g_object_set (G_OBJECT (text_tag),
-                    "style", font_desc->style,
-                    "variant", font_desc->variant,
-                    "weight", font_desc->weight,
-                    "stretch", font_desc->stretch,
-                    NULL);
-    }
+  GObject *object = G_OBJECT (text_tag);
+  PangoFontDescription *new_font_desc;
+  PangoFontMask old_mask, new_mask, changed_mask, set_changed_mask;
+  
+  if (font_desc)
+    new_font_desc = pango_font_description_copy (font_desc);
   else
+    new_font_desc = pango_font_description_new ();
+
+  if (text_tag->values->font)
+    old_mask = pango_font_description_get_set_fields (text_tag->values->font);
+  else
+    old_mask = 0;
+  
+  new_mask = pango_font_description_get_set_fields (new_font_desc);
+
+  changed_mask = old_mask | new_mask;
+  set_changed_mask = old_mask ^ new_mask;
+
+  if (text_tag->values->font)
+    pango_font_description_free (text_tag->values->font);
+  text_tag->values->font = new_font_desc;
+  
+  g_object_freeze_notify (object);
+
+  g_object_notify (object, "font_desc");
+  g_object_notify (object, "font");
+  
+  if (changed_mask & PANGO_FONT_MASK_FAMILY)
+    g_object_notify (object, "family");
+  if (changed_mask & PANGO_FONT_MASK_STYLE)
+    g_object_notify (object, "style");
+  if (changed_mask & PANGO_FONT_MASK_VARIANT)
+    g_object_notify (object, "variant");
+  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
+    g_object_notify (object, "weight");
+  if (changed_mask & PANGO_FONT_MASK_STRETCH)
+    g_object_notify (object, "stretch");
+  if (changed_mask & PANGO_FONT_MASK_SIZE)
     {
-      g_object_freeze_notify (G_OBJECT (text_tag));
-      if (text_tag->family_set)
-        {
-          text_tag->family_set = FALSE;
-          g_object_notify (G_OBJECT (text_tag), "family_set");
-        }
-      if (text_tag->style_set)
-        {
-          text_tag->style_set = FALSE;
-          g_object_notify (G_OBJECT (text_tag), "style_set");
-        }
-      if (text_tag->variant_set)
-        {
-          text_tag->variant_set = FALSE;
-          g_object_notify (G_OBJECT (text_tag), "variant_set");
-        }
-      if (text_tag->weight_set)
-        {
-          text_tag->weight_set = FALSE;
-          g_object_notify (G_OBJECT (text_tag), "weight_set");
-        }
-      if (text_tag->stretch_set)
-        {
-          text_tag->stretch_set = FALSE;
-          g_object_notify (G_OBJECT (text_tag), "stretch_set");
-        }
-      if (text_tag->size_set)
-        {
-          text_tag->size_set = FALSE;
-          g_object_notify (G_OBJECT (text_tag), "size_set");
-        }
-      g_object_thaw_notify (G_OBJECT (text_tag));
+      g_object_notify (object, "size");
+      g_object_notify (object, "size_points");
     }
+
+  notify_set_changed (object, set_changed_mask);
+  
+  g_object_thaw_notify (object);
+}
+
+static void
+gtk_text_tag_ensure_font (GtkTextTag *text_tag)
+{
+  if (!text_tag->values->font)
+    text_tag->values->font = pango_font_description_new ();
 }
 
 static void
@@ -820,7 +856,7 @@ gtk_text_tag_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (G_OBJECT (text_tag), "background_gdk");
+        g_object_notify (object, "background_gdk");
       }
       break;
 
@@ -833,7 +869,7 @@ gtk_text_tag_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (G_OBJECT (text_tag), "foreground_gdk");
+        g_object_notify (object, "foreground_gdk");
       }
       break;
 
@@ -858,7 +894,7 @@ gtk_text_tag_set_property (GObject      *object,
         GdkBitmap *bitmap = g_value_get_object (value);
 
         text_tag->bg_stipple_set = TRUE;
-        g_object_notify (G_OBJECT (text_tag), "background_stipple_set");
+        g_object_notify (object, "background_stipple_set");
         
         if (text_tag->values->appearance.bg_stipple != bitmap)
           {
@@ -878,7 +914,7 @@ gtk_text_tag_set_property (GObject      *object,
         GdkBitmap *bitmap = g_value_get_object (value);
 
         text_tag->fg_stipple_set = TRUE;
-        g_object_notify (G_OBJECT (text_tag), "foreground_stipple_set");
+        g_object_notify (object, "foreground_stipple_set");
 
         if (text_tag->values->appearance.fg_stipple != bitmap)
           {
@@ -905,9 +941,6 @@ gtk_text_tag_set_property (GObject      *object,
 
         set_font_description (text_tag, font_desc);
         
-        if (font_desc)
-          pango_font_description_free (font_desc);
-        
         size_changed = TRUE;
       }
       break;
@@ -925,116 +958,103 @@ gtk_text_tag_set_property (GObject      *object,
       break;
 
     case PROP_FAMILY:
-      if (text_tag->values->font.family_name)
-        g_free (text_tag->values->font.family_name);
-      text_tag->values->font.family_name = g_strdup (g_value_get_string (value));
-      text_tag->family_set = TRUE;
-      g_object_notify (G_OBJECT (text_tag), "family_set");
-      g_object_notify (G_OBJECT (text_tag), "font_desc");
-      g_object_notify (G_OBJECT (text_tag), "font");
-      size_changed = TRUE;
-      break;
-
     case PROP_STYLE:
-      text_tag->values->font.style = g_value_get_enum (value);
-      text_tag->style_set = TRUE;
-      g_object_notify (G_OBJECT (text_tag), "style_set");
-      g_object_notify (G_OBJECT (text_tag), "font_desc");
-      g_object_notify (G_OBJECT (text_tag), "font");
-      size_changed = TRUE;
-      break;
-
     case PROP_VARIANT:
-      text_tag->values->font.variant = g_value_get_enum (value);
-      text_tag->variant_set = TRUE;
-      g_object_notify (G_OBJECT (text_tag), "variant_set");
-      g_object_notify (G_OBJECT (text_tag), "font_desc");
-      g_object_notify (G_OBJECT (text_tag), "font");
-      size_changed = TRUE;
-      break;
-
     case PROP_WEIGHT:
-      text_tag->values->font.weight = g_value_get_int (value);
-      text_tag->weight_set = TRUE;
-      g_object_notify (G_OBJECT (text_tag), "weight_set");
-      g_object_notify (G_OBJECT (text_tag), "font_desc");
-      g_object_notify (G_OBJECT (text_tag), "font");
-      size_changed = TRUE;
-      break;
-
     case PROP_STRETCH:
-      text_tag->values->font.stretch = g_value_get_enum (value);
-      text_tag->stretch_set = TRUE;
-      g_object_notify (G_OBJECT (text_tag), "stretch_set");
-      g_object_notify (G_OBJECT (text_tag), "font_desc");
-      g_object_notify (G_OBJECT (text_tag), "font");
-      size_changed = TRUE;
-      break;
-
     case PROP_SIZE:
-      text_tag->values->font.size = g_value_get_int (value);
-      text_tag->size_set = TRUE;
-      g_object_notify (G_OBJECT (text_tag), "size_points");
-      g_object_notify (G_OBJECT (text_tag), "size_set");
-      g_object_notify (G_OBJECT (text_tag), "font_desc");
-      g_object_notify (G_OBJECT (text_tag), "font");
-      size_changed = TRUE;
-      break;
+    case PROP_SIZE_POINTS:
+      {
+	PangoFontMask old_set_mask;
 
+	gtk_text_tag_ensure_font (text_tag);
+	old_set_mask = pango_font_description_get_set_fields (text_tag->values->font);
+ 
+	switch (prop_id)
+	  {
+	  case PROP_FAMILY:
+	    pango_font_description_set_family (text_tag->values->font,
+					       g_value_get_string (value));
+	    break;
+	  case PROP_STYLE:
+	    pango_font_description_set_style (text_tag->values->font,
+					      g_value_get_enum (value));
+	    break;
+	  case PROP_VARIANT:
+	    pango_font_description_set_variant (text_tag->values->font,
+						g_value_get_enum (value));
+	    break;
+	  case PROP_WEIGHT:
+	    pango_font_description_set_weight (text_tag->values->font,
+					       g_value_get_enum (value));
+	    break;
+	  case PROP_STRETCH:
+	    pango_font_description_set_stretch (text_tag->values->font,
+						g_value_get_enum (value));
+	    break;
+	  case PROP_SIZE:
+	    pango_font_description_set_size (text_tag->values->font,
+					     g_value_get_int (value));
+	    g_object_notify (object, "size_points");
+	    break;
+	  case PROP_SIZE_POINTS:
+	    pango_font_description_set_size (text_tag->values->font,
+					     g_value_get_double (value) * PANGO_SCALE);
+	    g_object_notify (object, "size");
+	    break;
+	  }
+
+	size_changed = TRUE;
+	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (text_tag->values->font));
+	g_object_notify (object, "font_desc");
+	g_object_notify (object, "font");
+      }
+      
     case PROP_SCALE:
       text_tag->values->font_scale = g_value_get_double (value);
       text_tag->scale_set = TRUE;
-      size_changed = TRUE;
-      break;
-      
-    case PROP_SIZE_POINTS:
-      text_tag->values->font.size = g_value_get_double (value) * PANGO_SCALE;
-      text_tag->size_set = TRUE;
-      g_object_notify (G_OBJECT (text_tag), "size");
-      g_object_notify (G_OBJECT (text_tag), "size_set");
-      g_object_notify (G_OBJECT (text_tag), "font_desc");
-      g_object_notify (G_OBJECT (text_tag), "font");
+      g_object_notify (object, "scale_set");
       size_changed = TRUE;
       break;
       
     case PROP_PIXELS_ABOVE_LINES:
       text_tag->pixels_above_lines_set = TRUE;
       text_tag->values->pixels_above_lines = g_value_get_int (value);
-      g_object_notify (G_OBJECT (text_tag), "pixels_above_lines_set");
+      g_object_notify (object, "pixels_above_lines_set");
       size_changed = TRUE;
       break;
 
     case PROP_PIXELS_BELOW_LINES:
       text_tag->pixels_below_lines_set = TRUE;
       text_tag->values->pixels_below_lines = g_value_get_int (value);
-      g_object_notify (G_OBJECT (text_tag), "pixels_below_lines_set");
+      g_object_notify (object, "pixels_below_lines_set");
       size_changed = TRUE;
       break;
 
     case PROP_PIXELS_INSIDE_WRAP:
       text_tag->pixels_inside_wrap_set = TRUE;
       text_tag->values->pixels_inside_wrap = g_value_get_int (value);
-      g_object_notify (G_OBJECT (text_tag), "pixels_inside_wrap_set");
+      g_object_notify (object, "pixels_inside_wrap_set");
       size_changed = TRUE;
       break;
 
     case PROP_EDITABLE:
       text_tag->editable_set = TRUE;
       text_tag->values->editable = g_value_get_boolean (value);
-      g_object_notify (G_OBJECT (text_tag), "editable_set");
+      g_object_notify (object, "editable_set");
       break;
 
     case PROP_WRAP_MODE:
       text_tag->wrap_mode_set = TRUE;
       text_tag->values->wrap_mode = g_value_get_enum (value);
-      g_object_notify (G_OBJECT (text_tag), "wrap_mode_set");
+      g_object_notify (object, "wrap_mode_set");
       size_changed = TRUE;
       break;
 
     case PROP_JUSTIFICATION:
       text_tag->justification_set = TRUE;
       text_tag->values->justification = g_value_get_enum (value);
-      g_object_notify (G_OBJECT (text_tag), "justification_set");
+      g_object_notify (object, "justification_set");
       size_changed = TRUE;
       break;
 
@@ -1045,53 +1065,53 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_LEFT_MARGIN:
       text_tag->left_margin_set = TRUE;
       text_tag->values->left_margin = g_value_get_int (value);
-      g_object_notify (G_OBJECT (text_tag), "left_margin_set");
+      g_object_notify (object, "left_margin_set");
       size_changed = TRUE;
       break;
 
     case PROP_INDENT:
       text_tag->indent_set = TRUE;
       text_tag->values->indent = g_value_get_int (value);
-      g_object_notify (G_OBJECT (text_tag), "indent_set");
+      g_object_notify (object, "indent_set");
       size_changed = TRUE;
       break;
 
     case PROP_STRIKETHROUGH:
       text_tag->strikethrough_set = TRUE;
       text_tag->values->appearance.strikethrough = g_value_get_boolean (value);
-      g_object_notify (G_OBJECT (text_tag), "strikethrough_set");
+      g_object_notify (object, "strikethrough_set");
       break;
 
     case PROP_RIGHT_MARGIN:
       text_tag->right_margin_set = TRUE;
       text_tag->values->right_margin = g_value_get_int (value);
-      g_object_notify (G_OBJECT (text_tag), "right_margin_set");
+      g_object_notify (object, "right_margin_set");
       size_changed = TRUE;
       break;
 
     case PROP_UNDERLINE:
       text_tag->underline_set = TRUE;
       text_tag->values->appearance.underline = g_value_get_enum (value);
-      g_object_notify (G_OBJECT (text_tag), "underline_set");
+      g_object_notify (object, "underline_set");
       break;
 
     case PROP_RISE:
       text_tag->rise_set = TRUE;
       text_tag->values->appearance.rise = g_value_get_int (value);
-      g_object_notify (G_OBJECT (text_tag), "rise_set");
+      g_object_notify (object, "rise_set");
       size_changed = TRUE;      
       break;
 
     case PROP_BG_FULL_HEIGHT:
       text_tag->bg_full_height_set = TRUE;
       text_tag->values->bg_full_height = g_value_get_boolean (value);
-      g_object_notify (G_OBJECT (text_tag), "bg_full_height_set");
+      g_object_notify (object, "bg_full_height_set");
       break;
 
     case PROP_LANGUAGE:
       text_tag->language_set = TRUE;
       text_tag->values->language = pango_language_from_string (g_value_get_string (value));
-      g_object_notify (G_OBJECT (text_tag), "language_set");
+      g_object_notify (object, "language_set");
       break;
 
     case PROP_TABS:
@@ -1104,7 +1124,7 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->values->tabs =
         pango_tab_array_copy (g_value_get_boxed (value));
 
-      g_object_notify (G_OBJECT (text_tag), "tabs_set");
+      g_object_notify (object, "tabs_set");
       
       size_changed = TRUE;
       break;
@@ -1112,7 +1132,7 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_INVISIBLE:
       text_tag->invisible_set = TRUE;
       text_tag->values->invisible = g_value_get_boolean (value);
-      g_object_notify (G_OBJECT (text_tag), "invisible_set");
+      g_object_notify (object, "invisible_set");
       size_changed = TRUE;
       break;
       
@@ -1147,33 +1167,14 @@ gtk_text_tag_set_property (GObject      *object,
       break;
 
     case PROP_FAMILY_SET:
-      text_tag->family_set = g_value_get_boolean (value);
-      size_changed = TRUE;
-      break;
-
     case PROP_STYLE_SET:
-      text_tag->style_set = g_value_get_boolean (value);
-      size_changed = TRUE;
-      break;
-
     case PROP_VARIANT_SET:
-      text_tag->variant_set = g_value_get_boolean (value);
-      size_changed = TRUE;
-      break;
-
     case PROP_WEIGHT_SET:
-      text_tag->weight_set = g_value_get_boolean (value);
-      size_changed = TRUE;
-      break;
-
     case PROP_STRETCH_SET:
-      text_tag->stretch_set = g_value_get_boolean (value);
-      size_changed = TRUE;
-      break;
-
     case PROP_SIZE_SET:
-      text_tag->size_set = g_value_get_boolean (value);
-      size_changed = TRUE;
+      if (!g_value_get_boolean (value) && text_tag->values->font)
+	pango_font_description_unset_fields (text_tag->values->font,
+					     get_property_font_set_mask (prop_id));
       break;
 
     case PROP_SCALE_SET:
@@ -1328,44 +1329,61 @@ gtk_text_tag_get_property (GObject      *object,
           /* FIXME GValue imposes a totally gratuitous string copy
            * here, we could just hand off string ownership
            */
-          gchar *str = pango_font_description_to_string (&tag->values->font);
+          gchar *str;
+
+	  gtk_text_tag_ensure_font (tag);
+	  
+	  str = pango_font_description_to_string (tag->values->font);
           g_value_set_string (value, str);
           g_free (str);
         }
       break;
 
     case PROP_FONT_DESC:
-      g_value_set_boxed (value, &tag->values->font);
+      gtk_text_tag_ensure_font (tag);
+      g_value_set_boxed (value, tag->values->font);
       break;
 
     case PROP_FAMILY:
-      g_value_set_string (value, tag->values->font.family_name);
-      break;
-
     case PROP_STYLE:
-      g_value_set_enum (value, tag->values->font.style);
-      break;
-
     case PROP_VARIANT:
-      g_value_set_enum (value, tag->values->font.variant);
-      break;
-
     case PROP_WEIGHT:
-      g_value_set_int (value, tag->values->font.weight);
-      break;
-
     case PROP_STRETCH:
-      g_value_set_enum (value, tag->values->font.stretch);
-      break;
-
     case PROP_SIZE:
-      g_value_set_int (value,  tag->values->font.size);
+    case PROP_SIZE_POINTS:
+      gtk_text_tag_ensure_font (tag);
+      switch (prop_id)
+	{
+	case PROP_FAMILY:
+	  g_value_set_string (value, pango_font_description_get_family (tag->values->font));
+	  break;
+	  
+	case PROP_STYLE:
+	  g_value_set_enum (value, pango_font_description_get_style (tag->values->font));
+	  break;
+	  
+	case PROP_VARIANT:
+	  g_value_set_enum (value, pango_font_description_get_variant (tag->values->font));
+	  break;
+	  
+	case PROP_WEIGHT:
+	  g_value_set_int (value, pango_font_description_get_weight (tag->values->font));
+	  break;
+	  
+	case PROP_STRETCH:
+	  g_value_set_enum (value, pango_font_description_get_stretch (tag->values->font));
+	  break;
+	  
+	case PROP_SIZE:
+	  g_value_set_int (value, pango_font_description_get_size (tag->values->font));
+	  break;
+	  
+	case PROP_SIZE_POINTS:
+	  g_value_set_double (value, ((double)pango_font_description_get_size (tag->values->font)) / (double)PANGO_SCALE);
+	  break;
+	}
       break;
       
-    case PROP_SIZE_POINTS:
-      g_value_set_double (value, ((double)tag->values->font.size) / (double)PANGO_SCALE);
-      break;
-
     case PROP_SCALE:
       g_value_set_double (value, tag->values->font_scale);
       break;
@@ -1456,28 +1474,16 @@ gtk_text_tag_get_property (GObject      *object,
       break;
 
     case PROP_FAMILY_SET:
-      g_value_set_boolean (value, tag->family_set);
-      break;
-
     case PROP_STYLE_SET:
-      g_value_set_boolean (value, tag->style_set);
-      break;
-
     case PROP_VARIANT_SET:
-      g_value_set_boolean (value, tag->variant_set);
-      break;
-
     case PROP_WEIGHT_SET:
-      g_value_set_boolean (value, tag->weight_set);
-      break;
-
     case PROP_STRETCH_SET:
-      g_value_set_boolean (value, tag->stretch_set);
-      break;
-
     case PROP_SIZE_SET:
-      g_value_set_boolean (value, tag->size_set);
-      break;
+      {
+	PangoFontMask set_mask = tag->values->font ? pango_font_description_get_set_fields (tag->values->font) : 0;
+	PangoFontMask test_mask = get_property_font_set_mask (prop_id);
+	g_value_set_boolean (value, (set_mask & test_mask) != 0);
+      }
 
     case PROP_SCALE_SET:
       g_value_set_boolean (value, tag->scale_set);
@@ -1820,8 +1826,8 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   if (dest->appearance.fg_stipple)
     gdk_bitmap_unref (dest->appearance.fg_stipple);
 
-  if (dest->font.family_name)
-    g_free (dest->font.family_name);
+  if (dest->font)
+    pango_font_description_free (dest->font);
   
   /* Copy */
   orig_refcount = dest->refcount;
@@ -1833,7 +1839,8 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 
   dest->language = src->language;
 
-  dest->font.family_name = g_strdup (src->font.family_name);
+  if (dest->font)
+    dest->font = pango_font_description_copy (src->font);
   
   dest->refcount = orig_refcount;
   dest->realized = FALSE;
@@ -1881,8 +1888,8 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
       if (values->tabs)
         pango_tab_array_free (values->tabs);
 
-      if (values->font.family_name)
-        g_free (values->font.family_name);
+      if (values->font)
+	pango_font_description_free (values->font);
       
       g_free (values);
     }
@@ -1976,28 +1983,13 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
           dest->appearance.fg_stipple = vals->appearance.fg_stipple;
         }
 
-      if (tag->family_set)
-        {
-          if (dest->font.family_name)
-            g_free (dest->font.family_name);
-
-          dest->font.family_name = g_strdup (vals->font.family_name);
-        }
-
-      if (tag->style_set)
-        dest->font.style = vals->font.style;
-
-      if (tag->variant_set)
-        dest->font.variant = vals->font.variant;
-
-      if (tag->weight_set)
-        dest->font.weight = vals->font.weight;
-
-      if (tag->stretch_set)
-        dest->font.stretch = vals->font.stretch;
-
-      if (tag->size_set)
-        dest->font.size = vals->font.size;
+      if (vals->font)
+	{
+	  if (dest->font)
+	    pango_font_description_merge (dest->font, vals->font, TRUE);
+	  else
+	    dest->font = pango_font_description_copy (vals->font);
+	}
 
       /* multiply all the scales together to get a composite */
       if (tag->scale_set)
@@ -2068,13 +2060,8 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
   g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
 
   return
-    tag->family_set ||
-    tag->style_set ||
-    tag->variant_set ||
-    tag->weight_set ||
-    tag->size_set ||
+    (tag->values->font && pango_font_description_get_set_fields (tag->values->font) != 0) ||
     tag->scale_set ||
-    tag->stretch_set ||
     tag->justification_set ||
     tag->left_margin_set ||
     tag->indent_set ||

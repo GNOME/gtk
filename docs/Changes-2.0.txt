@@ -491,7 +491,3 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
       ancestor with a colormap set on it explicitely, or if that
       fails, the default colormap.
 
-  
-      
-
-      

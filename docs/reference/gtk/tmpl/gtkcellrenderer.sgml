@@ -36,8 +36,7 @@ GtkCellRenderer
 @height: 
 @xpad: 
 @ypad: 
-@can_activate: 
-@can_edit: 
+@mode: 
 @visible: 
 @is_expander: 
 @is_expanded: 

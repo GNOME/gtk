@@ -302,9 +302,6 @@ static void gtk_text_view_forall (GtkContainer *container,
 
 /* FIXME probably need the focus methods. */
 
-/* Hack-around */
-#define g_signal_handlers_disconnect_by_func(obj, func, data) g_signal_handlers_disconnect_matched (obj, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, 0, 0, NULL, func, data)
-
 typedef struct _GtkTextViewChild GtkTextViewChild;
 
 struct _GtkTextViewChild
@@ -4419,17 +4416,16 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view, GdkEventButton *event)
 
 static void
 gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
-                                         GtkTextAttributes *values,
+                                         GtkTextAttributes  *values,
                                          GtkStyle           *style)
 {
   values->appearance.bg_color = style->base[GTK_STATE_NORMAL];
   values->appearance.fg_color = style->text[GTK_STATE_NORMAL];
 
-  if (values->font.family_name)
-    g_free (values->font.family_name);
+  if (values->font)
+    pango_font_description_free (values->font);
 
-  values->font = *style->font_desc;
-  values->font.family_name = g_strdup (style->font_desc->family_name);
+  values->font = pango_font_description_copy (style->font_desc);
 }
 
 static void

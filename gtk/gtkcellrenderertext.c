@@ -130,6 +130,7 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   GTK_CELL_RENDERER (celltext)->ypad = 2;
 
   celltext->fixed_height_rows = -1;
+  celltext->font = pango_font_description_new ();
 }
 
 static void
@@ -396,8 +397,7 @@ gtk_cell_renderer_text_finalize (GObject *object)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
 
-  if (celltext->font.family_name)
-    g_free (celltext->font.family_name);
+  pango_font_description_free (celltext->font);
 
   if (celltext->text)
     g_free (celltext->text);
@@ -406,6 +406,28 @@ gtk_cell_renderer_text_finalize (GObject *object)
     pango_attr_list_unref (celltext->extra_attrs);
 
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+}
+
+static PangoFontMask
+get_property_font_set_mask (guint prop_id)
+{
+  switch (prop_id)
+    {
+    case PROP_FAMILY_SET:
+      return PANGO_FONT_MASK_FAMILY;
+    case PROP_STYLE_SET:
+      return PANGO_FONT_MASK_STYLE;
+    case PROP_VARIANT_SET:
+      return PANGO_FONT_MASK_VARIANT;
+    case PROP_WEIGHT_SET:
+      return PANGO_FONT_MASK_WEIGHT;
+    case PROP_STRETCH_SET:
+      return PANGO_FONT_MASK_STRETCH;
+    case PROP_SIZE_SET:
+      return PANGO_FONT_MASK_SIZE;
+    }
+
+  return 0;
 }
 
 static void
@@ -455,42 +477,42 @@ gtk_cell_renderer_text_get_property (GObject        *object,
         /* FIXME GValue imposes a totally gratuitous string copy
          * here, we could just hand off string ownership
          */
-        gchar *str = pango_font_description_to_string (&celltext->font);
+        gchar *str = pango_font_description_to_string (celltext->font);
         g_value_set_string (value, str);
         g_free (str);
       }
       break;
       
     case PROP_FONT_DESC:
-      g_value_set_boxed (value, &celltext->font);
+      g_value_set_boxed (value, celltext->font);
       break;
 
     case PROP_FAMILY:
-      g_value_set_string (value, celltext->font.family_name);
+      g_value_set_string (value, pango_font_description_get_family (celltext->font));
       break;
 
     case PROP_STYLE:
-      g_value_set_enum (value, celltext->font.style);
+      g_value_set_enum (value, pango_font_description_get_style (celltext->font));
       break;
 
     case PROP_VARIANT:
-      g_value_set_enum (value, celltext->font.variant);
+      g_value_set_enum (value, pango_font_description_get_variant (celltext->font));
       break;
 
     case PROP_WEIGHT:
-      g_value_set_int (value, celltext->font.weight);
+      g_value_set_int (value, pango_font_description_get_weight (celltext->font));
       break;
 
     case PROP_STRETCH:
-      g_value_set_enum (value, celltext->font.stretch);
+      g_value_set_enum (value, pango_font_description_get_stretch (celltext->font));
       break;
 
     case PROP_SIZE:
-      g_value_set_int (value, celltext->font.size);
+      g_value_set_int (value, pango_font_description_get_size (celltext->font));
       break;
 
     case PROP_SIZE_POINTS:
-      g_value_set_double (value, ((double)celltext->font.size) / (double)PANGO_SCALE);
+      g_value_set_double (value, ((double)pango_font_description_get_size (celltext->font)) / (double)PANGO_SCALE);
       break;
 
     case PROP_SCALE:
@@ -522,28 +544,15 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       break;
 
     case PROP_FAMILY_SET:
-      g_value_set_boolean (value, celltext->family_set);
-      break;
-
     case PROP_STYLE_SET:
-      g_value_set_boolean (value, celltext->style_set);
-      break;
-
     case PROP_VARIANT_SET:
-      g_value_set_boolean (value, celltext->variant_set);
-      break;
-
     case PROP_WEIGHT_SET:
-      g_value_set_boolean (value, celltext->weight_set);
-      break;
-
     case PROP_STRETCH_SET:
-      g_value_set_boolean (value, celltext->stretch_set);
-      break;
-
     case PROP_SIZE_SET:
-      g_value_set_boolean (value, celltext->size_set);
-      break;
+      {
+	PangoFontMask mask = get_property_font_set_mask (param_id);
+	g_value_set_boolean (value, (pango_font_description_get_set_fields (celltext->font) & mask) != 0);
+      }
 
     case PROP_SCALE_SET:
       g_value_set_boolean (value, celltext->scale_set);
@@ -629,67 +638,69 @@ set_fg_color (GtkCellRendererText *celltext,
 }
 
 static void
+notify_set_changed (GObject       *object,
+		    PangoFontMask  changed_mask)
+{
+  if (changed_mask & PANGO_FONT_MASK_FAMILY)
+    g_object_notify (object, "family_set");
+  if (changed_mask & PANGO_FONT_MASK_STYLE)
+    g_object_notify (object, "style_set");
+  if (changed_mask & PANGO_FONT_MASK_VARIANT)
+    g_object_notify (object, "variant_set");
+  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
+    g_object_notify (object, "weight_set");
+  if (changed_mask & PANGO_FONT_MASK_STRETCH)
+    g_object_notify (object, "stretch_set");
+  if (changed_mask & PANGO_FONT_MASK_SIZE)
+    g_object_notify (object, "size_set");
+}
+
+static void
 set_font_description (GtkCellRendererText  *celltext,
                       PangoFontDescription *font_desc)
 {
-  if (font_desc != NULL)
-    {
-      /* pango_font_description_from_string() will sometimes return
-       * a NULL family or -1 size, so handle those cases.
-       */
-      
-      if (font_desc->family_name)
-        g_object_set (G_OBJECT (celltext),
-                      "family", font_desc->family_name,
-                      NULL);
-      
-      if (font_desc->size >= 0)
-        g_object_set (G_OBJECT (celltext),
-                      "size", font_desc->size,
-                      NULL);
-        
-      g_object_set (G_OBJECT (celltext),
-                    "style", font_desc->style,
-                    "variant", font_desc->variant,
-                    "weight", font_desc->weight,
-                    "stretch", font_desc->stretch,
-                    NULL);
-    }
+  GObject *object = G_OBJECT (celltext);
+  PangoFontDescription *new_font_desc;
+  PangoFontMask old_mask, new_mask, changed_mask, set_changed_mask;
+  
+  if (font_desc)
+    new_font_desc = pango_font_description_copy (font_desc);
   else
+    new_font_desc = pango_font_description_new ();
+
+  old_mask = pango_font_description_get_set_fields (celltext->font);
+  new_mask = pango_font_description_get_set_fields (new_font_desc);
+
+  changed_mask = old_mask | new_mask;
+  set_changed_mask = old_mask ^ new_mask;
+
+  pango_font_description_free (celltext->font);
+  celltext->font = new_font_desc;
+  
+  g_object_freeze_notify (object);
+
+  g_object_notify (object, "font_desc");
+  g_object_notify (object, "font");
+  
+  if (changed_mask & PANGO_FONT_MASK_FAMILY)
+    g_object_notify (object, "family");
+  if (changed_mask & PANGO_FONT_MASK_STYLE)
+    g_object_notify (object, "style");
+  if (changed_mask & PANGO_FONT_MASK_VARIANT)
+    g_object_notify (object, "variant");
+  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
+    g_object_notify (object, "weight");
+  if (changed_mask & PANGO_FONT_MASK_STRETCH)
+    g_object_notify (object, "stretch");
+  if (changed_mask & PANGO_FONT_MASK_SIZE)
     {
-      g_object_freeze_notify (G_OBJECT (celltext));
-      if (celltext->family_set)
-        {
-          celltext->family_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "family_set");
-        }
-      if (celltext->style_set)
-        {
-          celltext->style_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "style_set");
-        }
-      if (celltext->variant_set)
-        {
-          celltext->variant_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "variant_set");
-        }
-      if (celltext->weight_set)
-        {
-          celltext->weight_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "weight_set");
-        }
-      if (celltext->stretch_set)
-        {
-          celltext->stretch_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "stretch_set");
-        }
-      if (celltext->size_set)
-        {
-          celltext->size_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "size_set");
-        }
-      g_object_thaw_notify (G_OBJECT (celltext));
+      g_object_notify (object, "size");
+      g_object_notify (object, "size_points");
     }
+
+  notify_set_changed (object, set_changed_mask);
+  
+  g_object_thaw_notify (object);
 }
 
 static void
@@ -706,7 +717,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       if (celltext->text)
         g_free (celltext->text);
       celltext->text = g_strdup (g_value_get_string (value));
-      g_object_notify(G_OBJECT(object), "text");
+      g_object_notify (object, "text");
       break;
 
     case PROP_ATTRIBUTES:
@@ -761,7 +772,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (G_OBJECT (celltext), "background_gdk");
+        g_object_notify (object, "background_gdk");
       }
       break;
       
@@ -776,7 +787,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (G_OBJECT (celltext), "foreground_gdk");
+        g_object_notify (object, "foreground_gdk");
       }
       break;
 
@@ -800,16 +811,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         if (name)
           font_desc = pango_font_description_from_string (name);
 
-	/* This function notifies the relevant GObjects itself.
-	 * I'm not sure how useful the notify() on 'font'
-	 * actually is here, but it's here for consistency.
-	 */
         set_font_description (celltext, font_desc);
-	g_object_notify(G_OBJECT(object), "font_desc");
-	g_object_notify(G_OBJECT(object), "font");
         
-        if (font_desc)
-          pango_font_description_free (font_desc);
 	if (celltext->fixed_height_rows != -1)
 	  celltext->calc_fixed_height = TRUE;
       }
@@ -817,119 +820,94 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_FONT_DESC:
       set_font_description (celltext, g_value_get_boxed (value));
+      
       if (celltext->fixed_height_rows != -1)
 	celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_FAMILY:
-      if (celltext->font.family_name)
-        g_free (celltext->font.family_name);
-      celltext->font.family_name = g_strdup (g_value_get_string (value));
-
-      celltext->family_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "family_set");
-      g_object_notify (G_OBJECT (celltext), "font_desc");
-      g_object_notify (G_OBJECT (celltext), "font");
-      if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
-      break;
-
     case PROP_STYLE:
-      celltext->font.style = g_value_get_enum (value);
-
-      celltext->style_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "style_set");
-      g_object_notify (G_OBJECT (celltext), "font_desc");
-      g_object_notify (G_OBJECT (celltext), "font");
-      if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
-      break;
-
     case PROP_VARIANT:
-      celltext->font.variant = g_value_get_enum (value);
-
-      celltext->variant_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "variant_set");
-      g_object_notify (G_OBJECT (celltext), "font_desc");
-      g_object_notify (G_OBJECT (celltext), "font");
-      if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
-      break;
-
     case PROP_WEIGHT:
-      celltext->font.weight = g_value_get_int (value);
-      
-      celltext->weight_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "weight_set");
-      g_object_notify (G_OBJECT (celltext), "font_desc");
-      g_object_notify (G_OBJECT (celltext), "font");
-      if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
-      break;
-
     case PROP_STRETCH:
-      celltext->font.stretch = g_value_get_enum (value);
-
-      celltext->stretch_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "stretch_set");
-      g_object_notify (G_OBJECT (celltext), "font_desc");
-      g_object_notify (G_OBJECT (celltext), "font");
-      if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
-      break;
-
     case PROP_SIZE:
-      celltext->font.size = g_value_get_int (value);
-
-      celltext->size_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "size_set");
-      g_object_notify (G_OBJECT (celltext), "font_desc");
-      g_object_notify (G_OBJECT (celltext), "font");
-      if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
-      break;
-
+    case PROP_SIZE_POINTS:
+      {
+	PangoFontMask old_set_mask = pango_font_description_get_set_fields (celltext->font);
+	
+	switch (param_id)
+	  {
+	  case PROP_FAMILY:
+	    pango_font_description_set_family (celltext->font,
+					       g_value_get_string (value));
+	    break;
+	  case PROP_STYLE:
+	    pango_font_description_set_style (celltext->font,
+					      g_value_get_enum (value));
+	    break;
+	  case PROP_VARIANT:
+	    pango_font_description_set_variant (celltext->font,
+						g_value_get_enum (value));
+	    break;
+	  case PROP_WEIGHT:
+	    pango_font_description_set_weight (celltext->font,
+					       g_value_get_enum (value));
+	    break;
+	  case PROP_STRETCH:
+	    pango_font_description_set_stretch (celltext->font,
+						g_value_get_enum (value));
+	    break;
+	  case PROP_SIZE:
+	    pango_font_description_set_size (celltext->font,
+					     g_value_get_int (value));
+	    g_object_notify (object, "size_points");
+	    break;
+	  case PROP_SIZE_POINTS:
+	    pango_font_description_set_size (celltext->font,
+					     g_value_get_double (value) * PANGO_SCALE);
+	    g_object_notify (object, "size");
+	    break;
+	  }
+	
+	if (celltext->fixed_height_rows != -1)
+	  celltext->calc_fixed_height = TRUE;
+	
+	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (celltext->font));
+	g_object_notify (object, "font_desc");
+	g_object_notify (object, "font");
+      }
+      
     case PROP_SCALE:
       celltext->font_scale = g_value_get_double (value);
       celltext->scale_set = TRUE;
       if (celltext->fixed_height_rows != -1)
 	celltext->calc_fixed_height = TRUE;
+      g_object_notify (object, "scale_set");
       break;
       
-    case PROP_SIZE_POINTS:
-      celltext->font.size = g_value_get_double (value) * PANGO_SCALE;
-
-      celltext->size_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "size_set");
-      g_object_notify (G_OBJECT (celltext), "font_desc");
-      g_object_notify (G_OBJECT (celltext), "font");
-      if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
-      break;
-
     case PROP_EDITABLE:
       celltext->editable = g_value_get_boolean (value);
       celltext->editable_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "editable_set");
+      g_object_notify (object, "editable_set");
       break;
 
     case PROP_STRIKETHROUGH:
       celltext->strikethrough = g_value_get_boolean (value);
       celltext->strikethrough_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "strikethrough_set");
+      g_object_notify (object, "strikethrough_set");
       break;
 
     case PROP_UNDERLINE:
       celltext->underline_style = g_value_get_enum (value);
       celltext->underline_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "underline_set");
+      g_object_notify (object, "underline_set");
             
       break;
 
     case PROP_RISE:
       celltext->rise = g_value_get_int (value);
       celltext->rise_set = TRUE;
-      g_object_notify (G_OBJECT (celltext), "rise_set");
+      g_object_notify (object, "rise_set");
       if (celltext->fixed_height_rows != -1)
 	celltext->calc_fixed_height = TRUE;
       break;  
@@ -943,27 +921,14 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;
 
     case PROP_FAMILY_SET:
-      celltext->family_set = g_value_get_boolean (value);
-      break;
-
     case PROP_STYLE_SET:
-      celltext->style_set = g_value_get_boolean (value);
-      break;
-
     case PROP_VARIANT_SET:
-      celltext->variant_set = g_value_get_boolean (value);
-      break;
-
     case PROP_WEIGHT_SET:
-      celltext->weight_set = g_value_get_boolean (value);
-      break;
-
     case PROP_STRETCH_SET:
-      celltext->stretch_set = g_value_get_boolean (value);
-      break;
-
     case PROP_SIZE_SET:
-      celltext->size_set = g_value_get_boolean (value);
+      if (!g_value_get_boolean (value))
+	pango_font_description_unset_fields (celltext->font,
+					     get_property_font_set_mask (param_id));
       break;
 
     case PROP_SCALE_SET:
@@ -1061,25 +1026,7 @@ get_layout (GtkCellRendererText *celltext,
                   pango_attr_strikethrough_new (celltext->strikethrough));
     }
 
-  if (celltext->family_set &&
-      celltext->font.family_name)
-    add_attr (attr_list, pango_attr_family_new (celltext->font.family_name));
-  
-  if (celltext->style_set)
-    add_attr (attr_list, pango_attr_style_new (celltext->font.style));
-
-  if (celltext->variant_set)
-    add_attr (attr_list, pango_attr_variant_new (celltext->font.variant));
-
-  if (celltext->weight_set)
-    add_attr (attr_list, pango_attr_weight_new (celltext->font.weight));
-
-  if (celltext->stretch_set)
-    add_attr (attr_list, pango_attr_stretch_new (celltext->font.stretch));
-
-  if (celltext->size_set &&
-      celltext->font.size >= 0)
-    add_attr (attr_list, pango_attr_size_new (celltext->font.size));
+  add_attr (attr_list, pango_attr_font_desc_new (celltext->font));
 
   if (celltext->scale_set &&
       celltext->font_scale != 1.0)
@@ -1137,38 +1084,30 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
   if (celltext->calc_fixed_height)
     {
       PangoContext *context;
-      PangoFontMetrics metrics;
-      PangoFontDescription font_desc;
+      PangoFontMetrics *metrics;
+      PangoFontDescription *font_desc;
+      gint row_height;
 
-      font_desc = (* widget->style->font_desc);
+      font_desc = pango_font_description_copy (widget->style->font_desc);
+      pango_font_description_merge (font_desc, celltext->font, TRUE);
 
-      if (celltext->family_set &&
-	  celltext->font.family_name)
-	font_desc.family_name = celltext->font.family_name;
-      if (celltext->style_set)
-	font_desc.style = celltext->font.style;
-
-      if (celltext->variant_set)
-	font_desc.variant = celltext->font.variant;
-
-      if (celltext->weight_set)
-	font_desc.weight = celltext->font.weight;
-
-      if (celltext->stretch_set)
-	font_desc.stretch = celltext->font.stretch;
-
-      if (celltext->size_set &&
-	  celltext->font.size >= 0)
-	font_desc.size = celltext->font.size;
+      if (celltext->scale_set)
+	pango_font_description_set_size (font_desc,
+					 celltext->font_scale * pango_font_description_get_size (font_desc));
 
       context = gtk_widget_get_pango_context (widget);
-      pango_context_get_metrics (context,
-				 &font_desc,
-				 pango_context_get_language (context),
-				 &metrics);
+
+      metrics = pango_context_get_metrics (context,
+					   font_desc,
+					   pango_context_get_language (context));
+      row_height = (pango_font_metrics_get_ascent (metrics) +
+		    pango_font_metrics_get_descent (metrics));
+      pango_font_metrics_unref (metrics);
+      
       gtk_cell_renderer_set_fixed_size (cell,
 					cell->width, 2*cell->ypad +
-					celltext->fixed_height_rows*(metrics.ascent + metrics.descent)/PANGO_SCALE);
+					celltext->fixed_height_rows * PANGO_PIXELS (row_height));
+      
       if (height)
 	{
 	  *height = cell->height;

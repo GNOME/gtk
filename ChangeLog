@@ -1,3 +1,30 @@
+Wed Sep 12 11:21:14 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcellrenderertext.[ch] gtk/gtktexttag.[ch]
+	  gtk/gtktextview.c tests/testgtk.c: Fix up for changes to 
+	PangoFontDescription.
+
+	* gtk/gtkentry.c gtk/gtkclist.c gtk/gtkcellrenderertext.c
+	gtk/gtkspinbutton.c: Fix up for change to PangoMetrics
+	structure.
+  
+	* gtk/gtkfontsel.c: Fix up for new Pango font listing API.
+
+	* gtk/gtkstyle.[ch]: Add gtk_style_get_font/set_font to replace
+  	direct access to style->font. Deprecate gtk_style_ref/unref.
+  
+ 	* gtk/gtkclist.c gtk/gtkctree.c gtk/gtkstyle.c gtk/gtkwidget.c:
+  	Remove gtk_style_ref/unref with g_object_ref/unref.
+  
+  	* gtk/gtkcalendar.c: Remove leftover macros accessing
+  	style->font.
+  
+  	* gtk/gtkhruler.c (gtk_hruler_draw_ticks): Remove unused
+  	variable.
+  
+  	* gtk/gtktext.c gtk/gtklabel.c: Use gtk_style_get_font() instead of 
+	style->font.
+  
 Tue Sep 18 13:51:35 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderer.h (enum): Get rid of broken "can_edit" and

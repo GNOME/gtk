@@ -412,7 +412,6 @@ static GdkColor gtk_default_selected_base =  { 0, 0xa4a4, 0xdfdf, 0xffff };
 static GdkColor gtk_default_active_base =    { 0, 0xbcbc, 0xd2d2, 0xeeee };
 
 static gpointer parent_class = NULL;
-static GdkFont *static_default_font = NULL;
 
 
 /* --- functions --- */
@@ -450,20 +449,6 @@ gtk_style_init (GtkStyle *style)
   gint i;
   
   style->font_desc = pango_font_description_from_string ("Sans 10");
-
-  if (!static_default_font)
-    {
-      static_default_font = gdk_font_from_description (style->font_desc);
-
-      if (!static_default_font) 
-	static_default_font = gdk_font_load ("fixed");
-
-      if (!static_default_font) 
-	g_error ("Unable to load \"fixed\" font");
-    }
-  
-  style->font = static_default_font;
-  gdk_font_ref (style->font);
 
   style->attach_count = 0;
   style->colormap = NULL;
@@ -612,9 +597,14 @@ gtk_style_finalize (GObject *object)
           g_slist_free_1 (style->styles);
         }
     }
-  
-  gdk_font_unref (style->font);
+
   pango_font_description_free (style->font_desc);
+  
+  if (style->private_font)
+    gdk_font_unref (style->private_font);
+
+  if (style->private_font_desc)
+    pango_font_description_free (style->private_font_desc);
   
   if (style->rc_style)
     gtk_rc_style_unref (style->rc_style);
@@ -735,13 +725,13 @@ gtk_style_attach (GtkStyle  *style,
 
   /* A style gets a refcount from being attached */
   if (new_style->attach_count == 0)
-    gtk_style_ref (new_style);
+    g_object_ref (new_style);
 
   /* Another refcount belongs to the parent */
   if (style != new_style) 
     {
-      gtk_style_unref (style);
-      gtk_style_ref (new_style);
+      g_object_unref (style);
+      g_object_ref (new_style);
     }
   
   new_style->attach_count++;
@@ -762,7 +752,7 @@ gtk_style_detach (GtkStyle *style)
       gdk_colormap_unref (style->colormap);
       style->colormap = NULL;
       
-      gtk_style_unref (style);
+      g_object_unref (style);
     }
 }
 
@@ -1195,11 +1185,11 @@ gtk_style_real_copy (GtkStyle *style,
       style->bg_pixmap[i] = src->bg_pixmap[i];
     }
 
-  if (style->font)
-    gdk_font_unref (style->font);
-  style->font = src->font;
-  if (style->font)
-    gdk_font_ref (style->font);
+  if (style->private_font)
+    gdk_font_unref (style->private_font);
+  style->private_font = src->private_font;
+  if (style->private_font)
+    gdk_font_ref (style->private_font);
 
   if (style->font_desc)
     pango_font_description_free (style->font_desc);
@@ -1225,7 +1215,6 @@ static void
 gtk_style_real_init_from_rc (GtkStyle   *style,
 			     GtkRcStyle *rc_style)
 {
-  GdkFont *old_font;
   gint i;
 
   /* cache _should_ be still empty */
@@ -1235,13 +1224,6 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
     {
       pango_font_description_free (style->font_desc);
       style->font_desc = pango_font_description_copy (rc_style->font_desc);
-
-      old_font = style->font;
-      style->font = gdk_font_from_description (style->font_desc);
-      if (style->font)
-	gdk_font_unref (old_font);
-      else
-	style->font = old_font;
     }
     
   for (i = 0; i < 5; i++)
@@ -1412,15 +1394,7 @@ gtk_style_real_realize (GtkStyle *style)
   gdk_color_black (style->colormap, &style->black);
   gdk_color_white (style->colormap, &style->white);
   
-  gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_FONT;
-  if (style->font->type == GDK_FONT_FONT)
-    {
-      gc_values.font = style->font;
-    }
-  else if (style->font->type == GDK_FONT_FONTSET)
-    {
-      gc_values.font = static_default_font;
-    }
+  gc_values_mask = GDK_GC_FOREGROUND;
   
   gc_values.foreground = style->black;
   style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
@@ -2796,9 +2770,9 @@ gtk_default_draw_string (GtkStyle      *style,
     }
 
   if (state_type == GTK_STATE_INSENSITIVE)
-    gdk_draw_string (window, style->font, style->white_gc, x + 1, y + 1, string);
+    gdk_draw_string (window, gtk_style_get_font (style), style->white_gc, x + 1, y + 1, string);
 
-  gdk_draw_string (window, style->font, style->fg_gc[state_type], x, y, string);
+  gdk_draw_string (window, gtk_style_get_font (style), style->fg_gc[state_type], x, y, string);
 
   if (area)
     {
@@ -4990,3 +4964,89 @@ gtk_border_free (GtkBorder *border)
   g_free (border);
 }
 
+/**
+ * gtk_style_get_font:
+ * @style: a #GtkStyle
+ * 
+ * Gets the #GdkFont to use for the given style. This is
+ * meant only as a replacement for direct access to style->font
+ * and should not be used in new code. New code should
+ * use style->font_desc instead.
+ * 
+ * Return value: the #GdkFont for the style. This font is owned
+ *   by the style; if you want to keep around a copy, you must
+ *   call gdk_font_ref().
+ **/
+GdkFont *
+gtk_style_get_font (GtkStyle *style)
+{
+  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
+
+  if (style->private_font && style->private_font_desc)
+    {
+      if (!style->font_desc ||
+	  !pango_font_description_equal (style->private_font_desc, style->font_desc))
+	{
+	  gdk_font_unref (style->private_font);
+	  style->private_font = NULL;
+	  
+	  if (style->private_font_desc)
+	    {
+	      pango_font_description_free (style->private_font_desc);
+	      style->private_font_desc = NULL;
+	    }
+	}
+    }
+  
+  if (!style->private_font)
+    {
+      if (style->font_desc)
+	{
+	  style->private_font = gdk_font_from_description (style->font_desc);
+	  style->private_font_desc = pango_font_description_copy (style->font_desc);
+	}
+
+      if (!style->private_font)
+	style->private_font = gdk_font_load ("fixed");
+
+      if (!style->private_font) 
+	g_error ("Unable to load \"fixed\" font");
+    }
+
+  return style->private_font;
+}
+
+/**
+ * gtk_style_set_font:
+ * @style: a #GtkStyle.
+ * @font: a #GdkFont, or %NULL to use the #GdkFont corresponding
+ *   to style->font_desc.
+ * 
+ * Sets the #GdkFont to use for a given style. This is
+ * meant only as a replacement for direct access to style->font
+ * and should not be used in new code. New code should
+ * use style->font_desc instead.
+ **/
+void
+gtk_style_set_font (GtkStyle *style,
+		    GdkFont  *font)
+{
+  GdkFont *old_font;
+
+  g_return_if_fail (GTK_IS_STYLE (style));
+
+  old_font = style->private_font;
+
+  style->private_font = font;
+  if (font)
+    gdk_font_ref (font);
+
+  if (old_font)
+    gdk_font_unref (old_font);
+
+  if (style->private_font_desc)
+    {
+      pango_font_description_free (style->private_font_desc);
+      style->private_font_desc = NULL;
+    }
+}

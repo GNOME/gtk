@@ -5140,8 +5140,8 @@ create_clist (void)
       style->fg[GTK_STATE_NORMAL] = col1;
       style->base[GTK_STATE_NORMAL] = col2;
 
-      style->font_desc->size = 14 * PANGO_SCALE;
-      style->font_desc->weight = PANGO_WEIGHT_BOLD;
+      pango_font_description_set_size (style->font_desc, 14 * PANGO_SCALE);
+      pango_font_description_set_weight (style->font_desc, PANGO_WEIGHT_BOLD);
 
       for (i = 0; i < 10; i++)
 	{
@@ -10602,7 +10602,7 @@ create_styles (void)
 
       rc_style = gtk_rc_style_new ();
 
-      rc_style->font_desc = font_desc;
+      rc_style->font_desc = pango_font_description_copy (font_desc);
       rc_style->color_flags[GTK_STATE_NORMAL] = GTK_RC_FG | GTK_RC_BG;
       rc_style->color_flags[GTK_STATE_PRELIGHT] = GTK_RC_FG | GTK_RC_BG;
       rc_style->color_flags[GTK_STATE_ACTIVE] = GTK_RC_FG | GTK_RC_BG;

@@ -3052,15 +3052,20 @@ gtk_clist_set_row_height (GtkCList *clist,
   if (widget->style->font_desc)
     {
       PangoContext *context = gtk_widget_get_pango_context (widget);
-      PangoFontMetrics metrics;
+      PangoFontMetrics *metrics;
 
-      pango_context_get_metrics (context,
-				 widget->style->font_desc,
-				 pango_context_get_language (context),
-				 &metrics);
+      metrics = pango_context_get_metrics (context,
+					   widget->style->font_desc,
+					   pango_context_get_language (context));
       
       if (!GTK_CLIST_ROW_HEIGHT_SET(clist))
-	clist->row_height = PANGO_PIXELS (metrics.ascent + metrics.descent);
+	{
+	  clist->row_height = (pango_font_metrics_get_ascent (metrics) +
+			       pango_font_metrics_get_descent (metrics));
+	  clist->row_height = PANGO_PIXELS (clist->row_height);
+	}
+
+      pango_font_metrics_unref (metrics);
     }
       
   CLIST_REFRESH (clist);
@@ -3294,14 +3299,14 @@ gtk_clist_set_cell_style (GtkCList *clist,
     {
       if (GTK_WIDGET_REALIZED (clist))
         gtk_style_detach (clist_row->cell[column].style);
-      gtk_style_unref (clist_row->cell[column].style);
+      g_object_unref (clist_row->cell[column].style);
     }
 
   clist_row->cell[column].style = style;
 
   if (clist_row->cell[column].style)
     {
-      gtk_style_ref (clist_row->cell[column].style);
+      g_object_ref (clist_row->cell[column].style);
       
       if (GTK_WIDGET_REALIZED (clist))
         clist_row->cell[column].style =
@@ -3373,14 +3378,14 @@ gtk_clist_set_row_style (GtkCList *clist,
     {
       if (GTK_WIDGET_REALIZED (clist))
         gtk_style_detach (clist_row->style);
-      gtk_style_unref (clist_row->style);
+      g_object_unref (clist_row->style);
     }
 
   clist_row->style = style;
 
   if (clist_row->style)
     {
-      gtk_style_ref (clist_row->style);
+      g_object_ref (clist_row->style);
       
       if (GTK_WIDGET_REALIZED (clist))
         clist_row->style = gtk_style_attach (clist_row->style,
@@ -6323,7 +6328,7 @@ row_delete (GtkCList    *clist,
 	{
 	  if (GTK_WIDGET_REALIZED (clist))
 	    gtk_style_detach (clist_row->cell[i].style);
-	  gtk_style_unref (clist_row->cell[i].style);
+	  g_object_unref (clist_row->cell[i].style);
 	}
     }
 
@@ -6331,7 +6336,7 @@ row_delete (GtkCList    *clist,
     {
       if (GTK_WIDGET_REALIZED (clist))
         gtk_style_detach (clist_row->style);
-      gtk_style_unref (clist_row->style);
+      g_object_unref (clist_row->style);
     }
 
   if (clist_row->destroy)

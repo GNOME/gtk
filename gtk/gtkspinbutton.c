@@ -563,16 +563,21 @@ gtk_spin_button_size_request (GtkWidget      *widget,
   if (entry->width_chars < 0)
     {
       PangoContext *context;
-      PangoFontMetrics metrics;
+      PangoFontMetrics *metrics;
       gint width;
       gint w;
-      int string_len;
+      gint string_len;
+      gint digit_width;
 
       context = gtk_widget_get_pango_context (widget);
-      pango_context_get_metrics (context,
-				 widget->style->font_desc,
-				 pango_context_get_language (context),
-				 &metrics);
+      metrics = pango_context_get_metrics (context,
+					   widget->style->font_desc,
+					   pango_context_get_language (context));
+
+      digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
+      digit_width = PANGO_PIXELS (digit_width);
+
+      pango_font_metrics_unref (metrics);
       
       /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
       
@@ -580,11 +585,11 @@ gtk_spin_button_size_request (GtkWidget      *widget,
 
       string_len = compute_double_length (spin_button->adjustment->upper,
                                           spin_button->digits);
-      w = MIN (string_len, 10) * PANGO_PIXELS (metrics.approximate_digit_width);
+      w = MIN (string_len, 10) * digit_width;
       width = MAX (width, w);
       string_len = compute_double_length (spin_button->adjustment->lower,
 					  spin_button->adjustment->step_increment);
-      w = MIN (string_len, 10) * PANGO_PIXELS (metrics.approximate_digit_width);
+      w = MIN (string_len, 10) * digit_width;
       width = MAX (width, w);
       
       requisition->width = width + ARROW_SIZE + 2 * widget->style->xthickness;

@@ -186,10 +186,6 @@ dates_difference(N_int year1, N_int mm1, N_int dd1,
 #define BACKGROUND_COLOR(widget)	 (& (widget)->style->base[GTK_WIDGET_STATE (widget)])
 #define HIGHLIGHT_BACK_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
 
-#define HEADER_FONT(widget) ((widget)->style->font)
-#define LABEL_FONT(widget)   ((widget)->style->font)
-#define DAY_FONT(widget)     ((widget)->style->font)
-
 enum {
   ARROW_YEAR_LEFT,
   ARROW_YEAR_RIGHT,

@@ -44,7 +44,7 @@ struct _GtkCellRendererText
 
   /*< private >*/
   gchar *text;
-  PangoFontDescription font;
+  PangoFontDescription *font;
   gdouble font_scale;
   PangoColor foreground;
   PangoColor background;
@@ -60,14 +60,6 @@ struct _GtkCellRendererText
 
   /* editable feature doesn't work */
   guint editable  : 1;
-
-  /* font elements set */
-  guint family_set : 1;
-  guint style_set : 1;
-  guint variant_set : 1;
-  guint weight_set : 1;
-  guint stretch_set : 1;
-  guint size_set : 1;
 
   guint scale_set : 1;
   

@@ -87,7 +87,6 @@ struct _GtkStyle
   
   GdkColor black;
   GdkColor white;
-  GdkFont *font;
   PangoFontDescription *font_desc;
   
   gint xthickness;
@@ -112,6 +111,8 @@ struct _GtkStyle
   
   gint depth;
   GdkColormap *colormap;
+  GdkFont *private_font;
+  PangoFontDescription *private_font_desc; /* Font description for style->private_font or %NULL */
   
   /* the RcStyle from which this style was created */
   GtkRcStyle	 *rc_style;
@@ -414,12 +415,20 @@ struct _GtkBorder
 
 GType     gtk_style_get_type                 (void) G_GNUC_CONST;
 GtkStyle* gtk_style_new			     (void);
-GtkStyle* gtk_style_copy		     (GtkStyle	    *style);
-GtkStyle* gtk_style_attach		     (GtkStyle	    *style,
-					      GdkWindow	    *window);
+GtkStyle* gtk_style_copy		     (GtkStyle	   *style);
+GtkStyle* gtk_style_attach		     (GtkStyle	   *style,
+					      GdkWindow	   *window);
 void	  gtk_style_detach		     (GtkStyle	   *style);
+
+#ifndef GTK_DISABLE_DEPRECATED
 GtkStyle* gtk_style_ref			     (GtkStyle	   *style);
 void	  gtk_style_unref		     (GtkStyle	   *style);
+
+GdkFont * gtk_style_get_font                 (GtkStyle     *style);
+void      gtk_style_set_font                 (GtkStyle     *style,
+					      GdkFont      *font);
+#endif /* GTK_DISABLE_DEPRECATED */
+
 void	  gtk_style_set_background	     (GtkStyle	   *style,
 					      GdkWindow	   *window,
 					      GtkStateType  state_type);

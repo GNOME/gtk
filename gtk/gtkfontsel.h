@@ -78,7 +78,14 @@ struct _GtkFontSelection
   GtkWidget *filter_button;
   GtkWidget *preview_entry;
 
-  PangoFontDescription *font_desc;
+  PangoFontFamily **families;
+  PangoFontFamily *family;	/* Current family */
+  
+  PangoFontFace **faces;
+  PangoFontFace *face;		/* Current face */
+  
+  gint size;
+  
   GdkFont *font;		/* Cache for gdk_font_selection_get_font, so we can preserve
 				 * refcounting behavior
 				 */

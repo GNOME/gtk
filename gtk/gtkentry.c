@@ -1043,7 +1043,7 @@ gtk_entry_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
   GtkEntry *entry;
-  PangoFontMetrics metrics;
+  PangoFontMetrics *metrics;
   gint xborder, yborder;
   PangoContext *context;
   
@@ -1053,13 +1053,12 @@ gtk_entry_size_request (GtkWidget      *widget,
   entry = GTK_ENTRY (widget);
   
   context = gtk_widget_get_pango_context (widget);
-  pango_context_get_metrics (context,
-			     widget->style->font_desc,
-			     pango_context_get_language (context),
-			     &metrics);
+  metrics = pango_context_get_metrics (context,
+				       widget->style->font_desc,
+				       pango_context_get_language (context));
 
-  entry->ascent = metrics.ascent;
-  entry->descent = metrics.descent;
+  entry->ascent = pango_font_metrics_get_ascent (metrics);
+  entry->descent = pango_font_metrics_get_descent (metrics);
 
   xborder = INNER_BORDER;
   yborder = INNER_BORDER;
@@ -1080,13 +1079,13 @@ gtk_entry_size_request (GtkWidget      *widget,
     requisition->width = MIN_ENTRY_WIDTH + xborder * 2;
   else
     {
-      requisition->width =
-        PANGO_PIXELS (metrics.approximate_char_width) * entry->width_chars +
-        xborder * 2;
+      gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
+      requisition->width = PANGO_PIXELS (char_width) * entry->width_chars + xborder * 2;
     }
     
-  requisition->height = ((metrics.ascent + metrics.descent) / PANGO_SCALE + 
-                         yborder * 2);
+  requisition->height = PANGO_PIXELS (entry->ascent + entry->descent) + yborder * 2;
+
+  pango_font_metrics_unref (metrics);
 }
 
 static void
