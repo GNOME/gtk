@@ -1,5 +1,12 @@
 2000-11-29  Alexander Larsson  <alexl@redhat.com>
 
+	* gdk/linux-fb/gdkinput-ps2.c (move_pointer): If there is
+	a grab, but no grab-cursor, use the cursor from the grabbed
+	window. (gdk_fb_window_send_crossing_events): Send normal
+	enter/leave notifications if grab and owner_events == TRUE.
+
+2000-11-29  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkinput-ps2.c (send_button_event):
 	Do implicit button grabs, even if the window doesn't
 	want the event.

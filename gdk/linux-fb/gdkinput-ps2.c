@@ -388,8 +388,18 @@ move_pointer (MouseDevice *mouse, GdkWindow *in_window)
 
   gdk_fb_cursor_hide ();
 
-  if (_gdk_fb_pointer_grab_window && _gdk_fb_pointer_grab_cursor)
-    the_cursor = _gdk_fb_pointer_grab_cursor;
+  if (_gdk_fb_pointer_grab_window)
+    {
+      if (_gdk_fb_pointer_grab_cursor)
+	the_cursor = _gdk_fb_pointer_grab_cursor;
+      else
+	{
+	  GdkWindow *win = _gdk_fb_pointer_grab_window;
+	  while (!GDK_WINDOW_IMPL_FBDATA (win)->cursor && GDK_WINDOW_OBJECT (win)->parent)
+	    win = (GdkWindow *)GDK_WINDOW_OBJECT (win)->parent;
+	  the_cursor = GDK_WINDOW_IMPL_FBDATA (win)->cursor;
+	}
+    }
   else
     {
       while (!GDK_WINDOW_IMPL_FBDATA (in_window)->cursor && GDK_WINDOW_P (in_window)->parent)
@@ -444,7 +454,7 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
   /* When grab in progress only send normal crossing events about
    * the grabbed window.
    */
-  only_grabbed_window = (_gdk_fb_pointer_grab_window != NULL) &&
+  only_grabbed_window = (_gdk_fb_pointer_grab_window_events != NULL) &&
                         (mode == GDK_CROSSING_NORMAL);
   
   if (a==b)
