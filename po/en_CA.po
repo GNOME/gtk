@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-10 20:16-0500\n"
-"PO-Revision-Date: 2005-01-10 03:57-0400\n"
+"POT-Creation-Date: 2005-01-14 13:28-0500\n"
+"PO-Revision-Date: 2005-01-14 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -827,8 +827,8 @@ msgstr "The licence of the program"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:482
-msgid "_Credits"
-msgstr "_Credits"
+msgid "C_redits"
+msgstr "C_redits"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:491
@@ -896,7 +896,7 @@ msgstr "Alt"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:700
+#: gtk/gtkcalendar.c:703
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -904,14 +904,15 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:710
+#: gtk/gtkcalendar.c:717
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
+#. do not translate the part before the |
+#: gtk/gtkcellrendererprogress.c:236 gtk/gtkcellrendererprogress.c:294
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "progress bar label|%d %%"
+msgstr "%d%%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -2125,22 +2126,22 @@ msgstr "Unable to locate theme engine in module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- No Tip ---"
 
-#: gtk/gtkuimanager.c:1132
+#: gtk/gtkuimanager.c:1137
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Unknown attribute '%s' on line %d char %d"
 
-#: gtk/gtkuimanager.c:1332
+#: gtk/gtkuimanager.c:1337
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Unexpected start tag '%s' on line %d char %d"
 
-#: gtk/gtkuimanager.c:1417
+#: gtk/gtkuimanager.c:1422
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Unexpected character data on line %d char %d"
 
-#: gtk/gtkuimanager.c:2209
+#: gtk/gtkuimanager.c:2214
 msgid "Empty"
 msgstr "Empty"
 
