@@ -396,7 +396,19 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat mkstemp flockfile nl_langinfo)
+AC_CHECK_FUNCS(lstat mkstemp flockfile)
+
+# _NL_TIME_FIRST_WEEKDAY is an enum and not a define
+AC_MSG_CHECKING([for _NL_TIME_FIRST_WEEKDAY])
+AC_TRY_LINK([#include <langinfo.h>], [
+char c;
+c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));
+], gtk_ok=yes, gtk_ok=no)
+AC_MSG_RESULT($gtk_ok)
+if test "$gtk_ok" = "yes"; then
+  AC_DEFINE([HAVE__NL_TIME_FIRST_WEEKDAY], [1],
+	    [Define if _NL_TIME_FIRST_WEEKDAY is available])
+fi
 
 # sigsetjmp is a macro on some platforms, so AC_CHECK_FUNCS is not reliable
 AC_MSG_CHECKING(for sigsetjmp)

@@ -1,7 +1,13 @@
+2005-01-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Check for _NL_TIME_FIRST_WEEKDAY too, since it
+	is an enum value, not a define. Pointed out by Tommi Komulainen.
+	* gtk/gtkcalendar.c (gtk_calendar_init): Adapt.
+
 2005-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Check for nl_langinfo()
-	* gtk/gtkcalendar.c: (gtk_calendar_init): Use nl_langinfo() when it's
+	* gtk/gtkcalendar.c (gtk_calendar_init): Use nl_langinfo() when it's
 	available to determine first day of week   (#163842, Vincent Untz)
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_get_widget): Add hints about 

@@ -34,7 +34,7 @@
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
-#ifdef HAVE_NL_LANGINFO
+#ifdef HAVE__NL_TIME_FIRST_WEEKDAY
 #include <langinfo.h>
 #endif
 #include <string.h>
@@ -706,7 +706,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   else if (strcmp (year_before, "calendar:MY") != 0)
     g_warning ("Whoever translated calendar:MY did so wrongly.\n");
 
-#if defined (HAVE_NL_LANGINFO) && defined (_NL_TIME_FIRST_WEEKDAY)
+#ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   week_start = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
   private_data->week_start = *((unsigned char *) week_start) % 7;
 #else
