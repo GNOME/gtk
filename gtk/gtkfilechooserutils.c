@@ -268,7 +268,7 @@ static void
 delegate_set_current_folder (GtkFileChooser    *chooser,
 			     const GtkFilePath *path)
 {
-  _gtk_file_chooser_set_current_folder_path (chooser, path);
+  _gtk_file_chooser_set_current_folder_path (get_delegate (chooser), path);
 }
 
 static GtkFilePath *
