@@ -101,8 +101,8 @@ struct _GtkTreeViewPrivate
   GdkWindow *drag_highlight_window;
   GtkTreeViewColumn *drag_column;
 
-  GtkTreeRowReference *last_single_clicked;
-  GtkTreeRowReference *last_single_clicked_2;
+  GtkTreeRowReference *last_button_press;
+  GtkTreeRowReference *last_button_press_2;
 
   /* bin_window offset */
   GtkTreeRowReference *top_row;

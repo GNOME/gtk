@@ -1,3 +1,13 @@
+Fri Apr 19 16:30:09 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeprivate.h, gtk/gtktreeview.c: rename
+	last_single_clicked{,_2} to last_button_press{,_2}, as the latter
+	is a more sane name.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): use ->priv->anchor
+	instead of ->priv->cursor, check for the anchor at another place, as
+	you can go in edit mode without	having an anchor.
+
 2002-04-18  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkitemfactory.c:
