@@ -1724,7 +1724,7 @@ gtk_rc_parse_any (GtkRcContext *context,
   scanner->input_name = input_name;
 
   for (i = 0; i < G_N_ELEMENTS (symbols); i++)
-    g_scanner_add_symbol (scanner, symbols[i].name, GINT_TO_POINTER (symbols[i].token));
+    g_scanner_scope_add_symbol (scanner, 0, symbols[i].name, GINT_TO_POINTER (symbols[i].token));
   
   done = FALSE;
   while (!done)

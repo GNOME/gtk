@@ -1,3 +1,10 @@
+2001-10-01  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc_scanner): replace
+	g_scanner_add/remove_symbol by g_scanner_scope_add/remove_symbol.
+
+	* gtk/gtkrc.c (gtk_rc_parse_any): here as well.
+
 Mon Oct  1 14:07:02 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): change
