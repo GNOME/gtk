@@ -1978,7 +1978,7 @@ draw_row (GtkCList     *clist,
 
       if (layout)
 	{
-	  gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height - 1) / 2;
+	  gint row_center_offset = (clist->row_height - logical_rect.height) / 2;
 	  
 	  if (clist->column[i].justification == GTK_JUSTIFY_RIGHT)
 	    {
