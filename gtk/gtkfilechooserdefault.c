@@ -63,6 +63,7 @@
 #include "gtktreemodelsort.h"
 #include "gtktreeselection.h"
 #include "gtktreestore.h"
+#include "gtktooltips.h"
 #include "gtktypebuiltins.h"
 #include "gtkvbox.h"
 
@@ -134,6 +135,8 @@ struct _GtkFileChooserDefault
 
   GtkFileFilter *current_filter;
   GSList *filters;
+
+  GtkTooltips *tooltips;
 
   gboolean has_home;
   gboolean has_desktop;
@@ -628,6 +631,10 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (impl), TRUE);
   gtk_box_set_spacing (GTK_BOX (impl), 12);
+
+  impl->tooltips = gtk_tooltips_new ();
+  g_object_ref (impl->tooltips);
+  gtk_object_sink (GTK_OBJECT (impl->tooltips));
 }
 
 /* Frees the data columns for the specified iter in the shortcuts model*/
@@ -1920,7 +1927,7 @@ selection_check_foreach_cb (GtkTreeModel *model,
 /* Checks whether the selected items in the file list are all files or all folders */
 static void
 selection_check (GtkFileChooserDefault *impl,
-		 int                   *num_selected,
+		 gint                  *num_selected,
 		 gboolean              *all_files,
 		 gboolean              *all_folders)
 {
@@ -1987,6 +1994,34 @@ get_selected_path (GtkFileChooserDefault *impl)
   return closure.path;
 }
 
+typedef struct {
+  GtkFileChooserDefault *impl;
+  gchar *tip;
+} UpdateTooltipData;
+
+static void 
+update_tooltip (GtkTreeModel      *model,
+		GtkTreePath       *path,
+		GtkTreeIter       *iter,
+		gpointer           data)
+{
+  UpdateTooltipData *udata = data;
+  GtkTreeIter child_iter;
+  const GtkFileInfo *info;
+
+  if (udata->tip == NULL)
+    {
+      gtk_tree_model_sort_convert_iter_to_child_iter (udata->impl->sort_model,
+						      &child_iter,
+						      iter);
+  
+      info = _gtk_file_system_model_get_info (udata->impl->browse_files_model, &child_iter);
+      udata->tip = g_strdup_printf (_("Add the folder '%s' to the bookmarks"),
+				    gtk_file_info_get_display_name (info));
+    }
+}
+
+
 /* Sensitize the "add bookmark" button if all the selected items are folders, or
  * if there are no selected items *and* the current folder is not in the
  * bookmarks list.  De-sensitize the button otherwise.
@@ -1994,9 +2029,10 @@ get_selected_path (GtkFileChooserDefault *impl)
 static void
 bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 {
-  int num_selected;
+  gint num_selected;
   gboolean all_folders;
   gboolean active;
+  gchar *tip;
 
   selection_check (impl, &num_selected, NULL, &all_folders);
 
@@ -2017,6 +2053,28 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
   if (impl->browse_files_popup_menu_add_shortcut_item)
     gtk_widget_set_sensitive (impl->browse_files_popup_menu_add_shortcut_item,
 			      (num_selected == 0) ? FALSE : active);
+
+  if (active)
+    {
+      if (num_selected == 0)
+	tip = g_strdup_printf (_("Add the current folder to the bookmarks"));    
+      else if (num_selected > 1)
+	tip = g_strdup_printf (_("Add the selected folders to the bookmarks"));
+      else
+	{
+	  GtkTreeSelection *selection;
+	  UpdateTooltipData data;
+	  
+	  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+	  data.impl = impl;
+	  data.tip = NULL;
+	  gtk_tree_selection_selected_foreach (selection, update_tooltip, &data);
+	  tip = data.tip;
+	  
+	}
+      gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_add_button, tip, NULL);
+      g_free (tip);
+    }
 }
 
 /* Sets the sensitivity of the "remove bookmark" button depending on whether a
@@ -2027,13 +2085,27 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
   gboolean removable = FALSE;
-
+  gchar *name;
+  
   if (shortcuts_get_selected (impl, &iter))
     gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
 			SHORTCUTS_COL_REMOVABLE, &removable,
+			SHORTCUTS_COL_NAME, &name,
 			-1);
 
   gtk_widget_set_sensitive (impl->browse_shortcuts_remove_button, removable);
+
+  if (removable)
+    {
+      gchar *tip;
+
+      tip = g_strdup_printf (_("Remove the bookmark '%s'"), name);
+      gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_remove_button,
+			    tip, NULL);
+      g_free (tip);
+    }
+
+  g_free (name);
 }
 
 /* GtkWidget::drag-begin handler for the shortcuts list. */
@@ -2771,6 +2843,8 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 						  TRUE,
 						  G_CALLBACK (add_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_add_button, TRUE, TRUE, 0);
+  gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_add_button,
+                        _("Add the selected folder to the bookmarks"), NULL);
 
   /* Remove bookmark button */
 
@@ -2781,6 +2855,8 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 						     TRUE,
 						     G_CALLBACK (remove_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_remove_button, TRUE, TRUE, 0);
+  gtk_tooltips_set_tip (impl->tooltips, impl->browse_shortcuts_remove_button,
+                        _("Remove the selected bookmark"), NULL);
 
   return vbox;
 }
@@ -3108,6 +3184,7 @@ file_pane_create (GtkFileChooserDefault *impl,
 {
   GtkWidget *vbox;
   GtkWidget *hbox;
+  GtkWidget *ebox;
   GtkWidget *widget;
 
   vbox = gtk_vbox_new (FALSE, 6);
@@ -3150,8 +3227,17 @@ file_pane_create (GtkFileChooserDefault *impl,
   impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
 
   widget = filter_create (impl);
+  ebox = gtk_event_box_new ();
+  gtk_container_add (GTK_CONTAINER (ebox), widget);
+  gtk_widget_show (ebox);
+  /* We need enter/leave to do tooltips */
+  gtk_widget_add_events (ebox, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
+  gtk_tooltips_set_tip (impl->tooltips, ebox,
+                        _("Select which types of files are shown"), NULL);
+
+
   gtk_widget_show (widget);
-  gtk_box_pack_end (GTK_BOX (impl->filter_combo_hbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (impl->filter_combo_hbox), ebox, FALSE, FALSE, 0);
 
   gtk_size_group_add_widget (size_group, impl->filter_combo_hbox);
   gtk_box_pack_end (GTK_BOX (vbox), impl->filter_combo_hbox, FALSE, FALSE, 0);
