@@ -1,3 +1,8 @@
+Tue Dec 12 11:52:16 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (gtk_clist_optimal_column_width): Fix 
+	off-by-one error in checks. (Dave Lambert)
+
 2000-12-12  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkkeyboard-fb.c (xlate_close, raw_close):

@@ -1689,7 +1689,7 @@ gtk_clist_optimal_column_width (GtkCList *clist,
   g_return_val_if_fail (clist != NULL, 0);
   g_return_val_if_fail (GTK_CLIST (clist), 0);
 
-  if (column < 0 || column > clist->columns)
+  if (column < 0 || column >= clist->columns)
     return 0;
 
   if (GTK_CLIST_SHOW_TITLES(clist) && clist->column[column].button)
