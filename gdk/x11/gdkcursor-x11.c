@@ -37,16 +37,60 @@
  * @cursor_type: cursor to create
  * 
  * Creates a new cursor from the set of builtin cursors.
- * Some useful ones are: #GDK_RIGHT_PTR (right-facing arrow),
- * #GDK_CROSSHAIR (crosshair), #GDK_IBEAM (I-beam), #GDK_WATCH (busy),
- * #GDK_FLEUR (for moving objects), #GDK_HAND (a pointing hand),
- * #GDK_LEFT_SIDE (resize left side), #GDK_RIGHT_SIDE (resize right side),
- * #GDK_TOP_LEFT_CORNER (resize northwest corner), #GDK_TOP_RIGHT_CORNER (resize
- * northeast corner), #GDK_BOTTOM_LEFT_CORNER (resize southwest corner),
- * #GDK_BOTTOM_RIGHT_CORNER (resize southeast corner),
- * #GDK_TOP_SIDE (resize top side), #GDK_BOTTOM (resize bottom side),
- * #GDK_SB_H_DOUBLE_ARROW (move vertical splitter),
- * #GDK_SB_V_DOUBLE_ARROW (move horizontal splitter).
+ * Some useful ones are:
+ * <itemizedlist>
+ * <listitem><para>
+ *  <inlinegraphic format="png" fileref="right_ptr.png"></inlinegraphic> #GDK_RIGHT_PTR (right-facing arrow)
+ * </para></listitem>
+ * <listitem><para>
+ *  <inlinegraphic format="png" fileref="crosshair.png"></inlinegraphic> #GDK_CROSSHAIR (crosshair)
+ * </para></listitem>
+ * <listitem><para>
+ *  <inlinegraphic format="png" fileref="xterm.png"></inlinegraphic> #GDK_XTERM (I-beam)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="watch.png"></inlinegraphic> #GDK_WATCH (busy)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="fleur.png"></inlinegraphic> #GDK_FLEUR (for moving objects)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="hand1.png"></inlinegraphic> #GDK_HAND1 (a right-pointing hand)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="hand2.png"></inlinegraphic> #GDK_HAND2 (a left-pointing hand)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="left_side.png"></inlinegraphic> #GDK_LEFT_SIDE (resize left side)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="right_side.png"></inlinegraphic> #GDK_RIGHT_SIDE (resize right side)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="top_left_corner.png"></inlinegraphic> #GDK_TOP_LEFT_CORNER (resize northwest corner)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="top_right_corner.png"></inlinegraphic> #GDK_TOP_RIGHT_CORNER (resize northeast corner)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="bottom_left_corner.png"></inlinegraphic> #GDK_BOTTOM_LEFT_CORNER (resize southwest corner)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="bottom_right_corner.png"></inlinegraphic> #GDK_BOTTOM_RIGHT_CORNER (resize southeast corner)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="top_side.png"></inlinegraphic> #GDK_TOP_SIDE (resize top side)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="bottom_side.png"></inlinegraphic> #GDK_BOTTOM_SIDE (resize bottom side)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="sb_h_double_arrow.png"></inlinegraphic> #GDK_SB_H_DOUBLE_ARROW (move vertical splitter)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="png" fileref="sb_v_double_arrow.png"></inlinegraphic> #GDK_SB_V_DOUBLE_ARROW (move horizontal splitter)
+ * </para></listitem>
+ * </itemizedlist>
  *
  * To make the cursor invisible, use gdk_cursor_new_from_pixmap() to create
  * a cursor with no pixels in it.

@@ -1,3 +1,8 @@
+2001-12-07  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new): fix up my list of
+	"cursors that are actually useful" in gdk_cursor_new() docs
+
 Thu Dec  6 23:09:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): Fix errors

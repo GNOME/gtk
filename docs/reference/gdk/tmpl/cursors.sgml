@@ -27,7 +27,6 @@ A <type>GdkCursor</type> structure represents a cursor.
 The standard cursors available.
 </para>
 
-
 @GDK_X_CURSOR: <inlinegraphic format="png" fileref="X_cursor.png"></inlinegraphic>
 @GDK_ARROW: <inlinegraphic format="png" fileref="arrow.png"></inlinegraphic>
 @GDK_BASED_ARROW_DOWN: <inlinegraphic format="png" fileref="based_arrow_down.png"></inlinegraphic>
@@ -105,10 +104,9 @@ The standard cursors available.
 @GDK_UR_ANGLE: <inlinegraphic format="png" fileref="ur_angle.png"></inlinegraphic>
 @GDK_WATCH: <inlinegraphic format="png" fileref="watch.png"></inlinegraphic>
 @GDK_XTERM: <inlinegraphic format="png" fileref="xterm.png"></inlinegraphic>
-@GDK_LAST_CURSOR:
+@GDK_LAST_CURSOR: 
 @GDK_CURSOR_IS_PIXMAP: type of cursors constructed with 
     gdk_cursor_new_from_pixmap().
-
 
 <!-- ##### FUNCTION gdk_cursor_new ##### -->
 <para>
@@ -123,7 +121,8 @@ The standard cursors available.
 <para>
 Creates a new cursor from a given pixmap and mask. Both the pixmap and mask
 must have a depth of 1 (i.e. each pixel has only 2 values - on or off).
-The standard cursor size is 16 by 16 pixels.
+The standard cursor size is 16 by 16 pixels. You can create a bitmap 
+from inline data as in the below example.
 </para>
 <example><title>Creating a custom cursor.</title>
 <programlisting>
