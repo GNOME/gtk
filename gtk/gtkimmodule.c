@@ -532,7 +532,9 @@ _gtk_im_module_get_default_context_id (const gchar *locale)
     gtk_im_module_init ();
 
   envvar = g_getenv ("GTK_IM_MODULE");
-  if (envvar && g_hash_table_lookup (contexts_hash, envvar))
+  if (envvar &&
+      (strcmp (envvar, SIMPLE_ID) == 0 ||
+       g_hash_table_lookup (contexts_hash, envvar)))
     return g_strdup (envvar);
 
   /* Strip the locale code down to the essentials

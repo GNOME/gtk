@@ -375,7 +375,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.x = xevent.x_root = 0;
   xevent.y = xevent.y_root = 0;
   xevent.state = event->state;
-  xevent.keycode = event->keyval ? XKeysymToKeycode (xevent.display, event->keyval) : 0;
+  xevent.keycode = event->hardware_keycode;
   xevent.same_screen = True;
   
   if (XFilterEvent ((XEvent *)&xevent, GDK_DRAWABLE_XID (context_xim->client_window)))

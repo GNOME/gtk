@@ -1,3 +1,13 @@
+Fri Sep  6 12:41:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c: Pass the actual input
+	keycode to XIM, rather than the result of backconverting
+	the keysym. Fixes the <> input problem! (#74922)
+
+	* gtk/gtkimmodule.c: Fix bug where GTK_IM_MODULE environment
+	variable couldn't be used to force the input method to
+	the default input method.
+
 2002-09-05  jacob berkman  <jacob@ximian.com>
 
 	* configure.in: fix non-solaris xinerama checks (bug #89732)
