@@ -12,11 +12,15 @@ pixbuf-random-seed
 pixbuf-read
 simple
 stresstest-toolbar
+testactions
 testcalendar
+testcombo
 testdnd
+testfilechooser
 testgtk
 testicontheme
 testinput
+testmerge
 testmenus
 testmultidisplay
 testmultiscreen
