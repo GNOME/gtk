@@ -5254,7 +5254,7 @@ location_popup_handler (GtkFileChooserDefault *impl)
     {
       g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
-      title = ""; /* FIXME: #137272, fix for 2.4.1 */
+      title = _("Save in Location");
     }
 
   dialog = gtk_dialog_new_with_buttons (title,
