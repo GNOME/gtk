@@ -6032,8 +6032,10 @@ adjust_adjustments (GtkCList *clist,
   if (clist->vadjustment)
     {
       clist->vadjustment->page_size = clist->clist_window_height;
-      clist->vadjustment->page_increment = clist->clist_window_height / 2;
       clist->vadjustment->step_increment = clist->row_height;
+      clist->vadjustment->page_increment =
+	MAX (clist->vadjustment->page_size - clist->vadjustment->step_increment,
+	     clist->vadjustment->page_size / 2);
       clist->vadjustment->lower = 0;
       clist->vadjustment->upper = LIST_HEIGHT (clist);
 
@@ -6051,8 +6053,10 @@ adjust_adjustments (GtkCList *clist,
   if (clist->hadjustment)
     {
       clist->hadjustment->page_size = clist->clist_window_width;
-      clist->hadjustment->page_increment = clist->clist_window_width / 2;
       clist->hadjustment->step_increment = 10;
+      clist->vadjustment->page_increment =
+	MAX (clist->vadjustment->page_size - clist->vadjustment->step_increment,
+	     clist->vadjustment->page_size / 2);
       clist->hadjustment->lower = 0;
       clist->hadjustment->upper = LIST_WIDTH (clist);
 

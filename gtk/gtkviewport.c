@@ -705,12 +705,12 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
     }
 
   viewport->hadjustment->page_size = child_allocation.width;
-  viewport->hadjustment->page_increment = viewport->hadjustment->page_size / 2;
-  viewport->hadjustment->step_increment = 10;
+  viewport->hadjustment->step_increment = child_allocation.width * 0.1;
+  viewport->hadjustment->page_increment = child_allocation.width * 0.9;
 
   viewport->vadjustment->page_size = child_allocation.height;
-  viewport->vadjustment->page_increment = viewport->vadjustment->page_size / 2;
-  viewport->vadjustment->step_increment = 10;
+  viewport->vadjustment->step_increment = child_allocation.height * 0.1;
+  viewport->vadjustment->page_increment = child_allocation.height * 0.9;
 
   hval = viewport->hadjustment->value;
   vval = viewport->vadjustment->value;

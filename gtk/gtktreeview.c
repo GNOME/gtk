@@ -1592,8 +1592,8 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
 
   tree_view->priv->hadjustment->page_size = allocation->width;
-  tree_view->priv->hadjustment->page_increment = allocation->width;
-  tree_view->priv->hadjustment->step_increment = allocation->width / 10;
+  tree_view->priv->hadjustment->page_increment = allocation->width * 0.9;
+  tree_view->priv->hadjustment->step_increment = allocation->width * 0.1;
   tree_view->priv->hadjustment->lower = 0;
   tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->page_size, tree_view->priv->width);
 
@@ -1602,8 +1602,8 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   gtk_adjustment_changed (tree_view->priv->hadjustment);
 
   tree_view->priv->vadjustment->page_size = allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view);
-  tree_view->priv->vadjustment->step_increment = (tree_view->priv->vadjustment->page_size) / 10;
-  tree_view->priv->vadjustment->page_increment = (allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view)) / 2;
+  tree_view->priv->vadjustment->step_increment = tree_view->priv->vadjustment->page_size * 0.1;
+  tree_view->priv->vadjustment->page_increment = tree_view->priv->vadjustment->page_size * 0.9;
   tree_view->priv->vadjustment->lower = 0;
   tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->page_size, tree_view->priv->height);
 

@@ -1,3 +1,17 @@
+Mon Feb 18 14:17:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (adjust_adjustments) 
+	* gtk/gtklayout.c (gtk_layout_size_allocate)
+	* gtk/gtktextview.c (gtk_text_view_size_allocate) 
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate) 
+	* gtk/gtkviewport.c (gtk_viewport_size_allocate):
+	Standardize on a page increment of page minus 1 line
+	rather than half a page (#51027, Eric Fischer)
+
+	* gtk/gtkviewport.c (gtk_viewport_size_allocate): 
+	Change step increment to be 0.1 * page_size height rather than
+	a fixed 10 pixels.
+
 Mon Feb 18 12:31:52 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_filter_keypress): 
