@@ -1,5 +1,12 @@
 2004-10-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.4.13 ===
+
+	* configure.in: Bump version.
+
+	* gtk/gtkcontainer.c (_gtk_container_queue_resize): Acknowledge the fact
+	that invariants are broken and loop all the way up to the resize container.
+
 	* === Released 2.4.12 ===
 
 Tue Oct 12 17:11:02 2004    <timj@birnet.org>

@@ -1,6 +1,6 @@
-Overview of Changes from GTK+ 2.4.11 to GTK+ 2.4.12
+Overview of Changes from GTK+ 2.4.11 to GTK+ 2.4.13
 ===================================================
-* Make new notebook tabs appear again. [Chrispin Flowerday, Tim Janik]
+* Fix size allocation problems. [Chrispin Flowerday, Tim Janik, Tommi Komulainen, Owen Taylor]
 * New and updated translations (fr,ta)
 
 Overview of Changes from GTK+ 2.4.10 to GTK+ 2.4.11
