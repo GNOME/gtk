@@ -1528,6 +1528,25 @@ gdk_event_translate (GdkEvent *event,
 	  event->key.keyval = GDK_F15; break;
 	case VK_F16:
 	  event->key.keyval = GDK_F16; break;
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	  if (GetKeyState (VK_CONTROL) < 0)
+	    /* Control-digits won't come in as a WM_CHAR */
+	    event->key.keyval = GDK_0 + (xevent->wParam - '0');
+	  else
+	    {
+	      ignore_WM_CHAR = FALSE;
+	      event->key.keyval = GDK_VoidSymbol;
+	    }
+	  break;
 	default:
 	  if (xevent->message == WM_SYSKEYDOWN || xevent->message == WM_SYSKEYUP)
 	    {

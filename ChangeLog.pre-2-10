@@ -1,8 +1,13 @@
+1999-07-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents.c (gdk_event_translate): Handle
+ 	Control-digits specially.
+
 1999-07-03  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/makefile.{cygwin,msc}: New pthreads version. Use gettext.
 
-Mon Jun 28 10:03:07 1999  Tor Lillqvist  <tml@iki.fi>
+1999-06-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkimage.c (gdk_image_get): bpl was set wrong for
  	bitmaps, should be multiple of 4. (Thanks to Hans Breuer for
