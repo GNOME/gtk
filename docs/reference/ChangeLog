@@ -1,3 +1,15 @@
+2003-08-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkmenumerge.sgml: 
+	* gtk/tmpl/gtkaction.sgml: 
+	* gtk/tmpl/gtkactiongroup.sgml: 
+	* gtk/tmpl/gtkradioaction.sgml: 
+	* gtk/tmpl/gtktoggleaction.sgml: New templates.
+
+	* gtk/gtk-docs.sgml: 
+	* gtk/gtk-sections.txt: Add GtkMenuMerge, GtkAction, GtkActionGroup, 
+	GtkRadioAction, GtkToggleAction.
+
 2003-08-11  Matthias Clasen  <maclas@gmx.de>
  
 	* gdk/gdk-sections.txt: Add gdk_window_set_keep_above and

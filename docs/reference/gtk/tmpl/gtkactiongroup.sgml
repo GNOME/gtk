@@ -1,0 +1,105 @@
+<!-- ##### SECTION Title ##### -->
+GtkActionGroup
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkActionGroup ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### STRUCT GtkActionGroupEntry ##### -->
+<para>
+
+</para>
+
+@name: 
+@label: 
+@stock_id: 
+@accelerator: 
+@tooltip: 
+@callback: 
+@user_data: 
+@entry_type: 
+@extra_data: 
+
+<!-- ##### FUNCTION gtk_action_group_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_group_get_name ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_group_get_action ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@action_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_group_list_actions ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_group_add_action ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@action: 
+
+
+<!-- ##### FUNCTION gtk_action_group_remove_action ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@action: 
+
+
+<!-- ##### FUNCTION gtk_action_group_add_actions ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@entries: 
+@n_entries: 
+
+

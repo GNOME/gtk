@@ -99,6 +99,60 @@ gtk_accessible_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkaction</FILE>
+<TITLE>GtkAction</TITLE>
+GtkAction
+gtk_action_get_name
+gtk_action_activate
+gtk_action_create_icon
+gtk_action_create_menu_item
+gtk_action_create_tool_item
+gtk_action_connect_proxy
+gtk_action_disconnect_proxy
+gtk_action_get_proxies
+gtk_action_block_activate_from
+gtk_action_unblock_activate_from
+gtk_action_set_accel_path
+<SUBSECTION Standard>
+GTK_TYPE_ACTION
+GTK_ACTION
+GTK_ACTION_CLASS
+GTK_IS_ACTION
+GTK_IS_ACTION_CLASS
+GTK_ACTION_GET_CLASS
+GtkActionClass
+<SUBSECTION Private>
+gtk_action_get_type
+GtkActionPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkactiongroup</FILE>
+<TITLE>GtkActionGroup</TITLE>
+GtkActionGroup
+GtkActionGroupEntryTrype
+GtkActionGroupEntry
+gtk_action_group_new
+gtk_action_group_get_name
+gtk_action_group_get_action
+gtk_action_group_list_actions
+gtk_action_group_add_action
+gtk_action_group_remove_action
+gtk_action_group_add_actions
+<SUBSECTION Standard>
+GTK_TYPE_ACTION_GROUP
+GTK_ACTION_GROUP
+GTK_ACTION_GROUP_CLASS
+GTK_IS_ACTION_GROUP
+GTK_IS_ACTION_GROUP_CLASS
+GTK_ACTION_GROUP_GET_CLASS
+GtkActionGroupClass
+<SUBSECTION Private>
+gtk_action_group_get_type
+GtkActionGroupPrivate
+</SECTION>
+
+<SECTION>
 <FILE>gtkadjustment</FILE>
 <TITLE>GtkAdjustment</TITLE>
 GtkAdjustment
@@ -1660,6 +1714,33 @@ gtk_menu_item_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkmenumerge</FILE>
+<TITLE>GtkMenuMerge</TITLE>
+GtkMenuMerge
+gtk_menu_merge_new
+gtk_menu_merge_insert_action_group
+gtk_menu_merge_remove_action_group
+gtk_menu_merge_get_action_groups
+gtk_menu_merge_get_accel_group
+gtk_menu_merge_get_widget
+gtk_menu_merge_add_ui_from_string
+gtk_menu_merge_add_ui_from_file
+gtk_menu_merge_remove_ui
+gtk_menu_merge_get_ui
+<SUBSECTION Standard>
+GTK_TYPE_MENU_MERGE
+GTK_MENU_MERGE
+GTK_MENU_MERGE_CLASS
+GTK_IS_MENU_MERGE
+GTK_IS_MENU_MERGE_CLASS
+GTK_MENU_MERGE_GET_CLASS
+GtkMenuMergeClass
+<SUBSECTION Private>
+gtk_menu_merge_get_type
+GtkMenuMergePrivate
+</SECTION>
+
+<SECTION>
 <FILE>gtkmenushell</FILE>
 <TITLE>GtkMenuShell</TITLE>
 GtkMenuShell
@@ -2005,6 +2086,24 @@ GTK_IS_PROGRESS_BAR_CLASS
 GTK_PROGRESS_BAR_GET_CLASS
 <SUBSECTION Private>
 gtk_progress_bar_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkradioaction</FILE>
+<TITLE>GtkRadioAction</TITLE>
+GtkRadioAction
+gtk_radio_action_get_group
+gtk_radio_action_set_group
+<SUBSECTION Standard>
+GTK_TYPE_RADIO_ACTION
+GTK_RADIO_ACTION
+GTK_RADIO_ACTION_CLASS
+GTK_IS_RADIO_ACTION
+GTK_IS_RADIO_ACTION_CLASS
+GTK_RADIO_ACTION_GET_CLASS
+<SUBSECTION Private>
+gtk_radio_action_get_type
+GtkRadionActionPrivate
 </SECTION>
 
 <SECTION>
@@ -2766,6 +2865,26 @@ GTK_IS_TIPS_QUERY_CLASS
 GTK_TIPS_QUERY_GET_CLASS
 <SUBSECTION Private>
 gtk_tips_query_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtktoggleaction</FILE>
+<TITLE>GtkToggleAction</TITLE>
+GtkToggleAction
+gtk_toggle_action_toggled
+gtk_toggle_action_set_active
+gtk_toggle_action_get_active
+<SUBSECTION Standard>
+GTK_TYPE_TOGGLE_ACTION
+GTK_TOGGLE_ACTION
+GTK_TOGGLE_ACTION_CLASS
+GTK_IS_TOGGLE_ACTION
+GTK_IS_TOGGLE_ACTION_CLASS
+GTK_TOGGLE_ACTION_GET_CLASS
+GtkToggleActionClass
+<SUBSECTION Private>
+gtk_toggle_action_get_type
+GtkToggleActionPrivate
 </SECTION>
 
 <SECTION>

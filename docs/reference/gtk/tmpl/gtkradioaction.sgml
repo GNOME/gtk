@@ -1,0 +1,43 @@
+<!-- ##### SECTION Title ##### -->
+GtkRadioAction
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkRadioAction ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### FUNCTION gtk_radio_action_get_group ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_action_set_group ##### -->
+<para>
+
+</para>
+
+@action: 
+@group: 
+
+

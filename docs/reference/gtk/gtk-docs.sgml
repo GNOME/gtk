@@ -2,6 +2,8 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY GtkAccelLabel SYSTEM "xml/gtkaccellabel.xml">
+<!ENTITY GtkAction SYSTEM "xml/gtkaction.xml">
+<!ENTITY GtkActionGroup SYSTEM "xml/gtkactiongroup.xml">
 <!ENTITY GtkAdjustment SYSTEM "xml/gtkadjustment.xml">
 <!ENTITY GtkAlignment SYSTEM "xml/gtkalignment.xml">
 <!ENTITY GtkArrow SYSTEM "xml/gtkarrow.xml">
@@ -59,6 +61,7 @@
 <!ENTITY GtkMenu SYSTEM "xml/gtkmenu.xml">
 <!ENTITY GtkMenuBar SYSTEM "xml/gtkmenubar.xml">
 <!ENTITY GtkMenuItem SYSTEM "xml/gtkmenuitem.xml">
+<!ENTITY GtkMenuMerge SYSTEM "xml/gtkmenumerge.xml">
 <!ENTITY GtkMenuShell SYSTEM "xml/gtkmenushell.xml">
 <!ENTITY GtkMessageDialog SYSTEM "xml/gtkmessagedialog.xml">
 <!ENTITY GtkMisc SYSTEM "xml/gtkmisc.xml">
@@ -71,6 +74,7 @@
 <!ENTITY GtkPreview SYSTEM "xml/gtkpreview.xml">
 <!ENTITY GtkProgress SYSTEM "xml/gtkprogress.xml">
 <!ENTITY GtkProgressBar SYSTEM "xml/gtkprogressbar.xml">
+<!ENTITY GtkRadioAction SYSTEM "xml/gtkradioaction.xml">
 <!ENTITY GtkRadioButton SYSTEM "xml/gtkradiobutton.xml">
 <!ENTITY GtkRadioMenuItem SYSTEM "xml/gtkradiomenuitem.xml">
 <!ENTITY GtkRadioToolButton SYSTEM "xml/gtkradiotoolbutton.xml">
@@ -96,6 +100,7 @@
 <!ENTITY GtkTextTagTable SYSTEM "xml/gtktexttagtable.xml">
 <!ENTITY GtkTextView SYSTEM "xml/gtktextview.xml">
 <!ENTITY GtkTipsQuery SYSTEM "xml/gtktipsquery.xml">
+<!ENTITY GtkToggleAction SYSTEM "xml/gtktoggleaction.xml">
 <!ENTITY GtkToggleButton SYSTEM "xml/gtktogglebutton.xml">
 <!ENTITY GtkToggleToolButton SYSTEM "xml/gtktoggletoolbutton.xml">
 <!ENTITY GtkToolbar SYSTEM "xml/gtktoolbar.xml">
@@ -390,6 +395,15 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkToolButton;
         &GtkToggleToolButton;
         &GtkRadioToolButton;
+    </chapter>
+ 
+    <chapter id="Actions">
+      <title>Action-based menus and toolbars</title>
+        &GtkMenuMerge;
+        &GtkActionGroup;
+        &GtkAction;
+        &GtkToggleAction;
+        &GtkRadioAction;
     </chapter>
 
     <chapter id="SelectorWidgets">

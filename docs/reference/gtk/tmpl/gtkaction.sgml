@@ -1,0 +1,124 @@
+<!-- ##### SECTION Title ##### -->
+GtkAction
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkAction ##### -->
+<para>
+
+</para>
+
+@object: 
+
+<!-- ##### FUNCTION gtk_action_get_name ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_activate ##### -->
+<para>
+
+</para>
+
+@action: 
+
+
+<!-- ##### FUNCTION gtk_action_create_icon ##### -->
+<para>
+
+</para>
+
+@action: 
+@icon_size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_create_menu_item ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_create_tool_item ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_connect_proxy ##### -->
+<para>
+
+</para>
+
+@action: 
+@proxy: 
+
+
+<!-- ##### FUNCTION gtk_action_disconnect_proxy ##### -->
+<para>
+
+</para>
+
+@action: 
+@proxy: 
+
+
+<!-- ##### FUNCTION gtk_action_get_proxies ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_block_activate_from ##### -->
+<para>
+
+</para>
+
+@action: 
+@proxy: 
+
+
+<!-- ##### FUNCTION gtk_action_unblock_activate_from ##### -->
+<para>
+
+</para>
+
+@action: 
+@proxy: 
+
+
+<!-- ##### FUNCTION gtk_action_set_accel_path ##### -->
+<para>
+
+</para>
+
+@action: 
+@accel_path: 
+
+

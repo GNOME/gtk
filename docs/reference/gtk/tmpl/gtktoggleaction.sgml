@@ -1,0 +1,51 @@
+<!-- ##### SECTION Title ##### -->
+GtkToggleAction
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkToggleAction ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### FUNCTION gtk_toggle_action_toggled ##### -->
+<para>
+
+</para>
+
+@action: 
+
+
+<!-- ##### FUNCTION gtk_toggle_action_set_active ##### -->
+<para>
+
+</para>
+
+@action: 
+@is_active: 
+
+
+<!-- ##### FUNCTION gtk_toggle_action_get_active ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
