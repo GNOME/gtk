@@ -12271,7 +12271,7 @@ do_exit (GtkWidget *widget, GtkWidget *window)
 
 struct {
   char *label;
-  void (*func) ();
+  void (*func) (GtkWidget *widget);
   gboolean do_not_benchmark;
 } buttons[] =
 {
@@ -12468,16 +12468,16 @@ pad (const char *str, int to)
 }
 
 static void
-bench_iteration (void (* fn) ())
+bench_iteration (GtkWidget *widget, void (* fn) (GtkWidget *widget))
 {
-  fn (); /* on */
+  fn (widget); /* on */
   while (g_main_context_iteration (NULL, FALSE));
-  fn (); /* off */
+  fn (widget); /* off */
   while (g_main_context_iteration (NULL, FALSE));
 }
 
 void
-do_real_bench (void (* fn) (), char *name, int num)
+do_real_bench (GtkWidget *widget, void (* fn) (GtkWidget *widget), char *name, int num)
 {
   GTimeVal tv0, tv1;
   double dt_first;
@@ -12492,7 +12492,7 @@ do_real_bench (void (* fn) (), char *name, int num)
   }
 
   g_get_current_time (&tv0);
-  bench_iteration (fn); 
+  bench_iteration (widget, fn); 
   g_get_current_time (&tv1);
 
   dt_first = ((double)tv1.tv_sec - tv0.tv_sec) * 1000.0
@@ -12500,7 +12500,7 @@ do_real_bench (void (* fn) (), char *name, int num)
 
   g_get_current_time (&tv0);
   for (n = 0; n < num - 1; n++)
-    bench_iteration (fn); 
+    bench_iteration (widget, fn); 
   g_get_current_time (&tv1);
   dt = ((double)tv1.tv_sec - tv0.tv_sec) * 1000.0
 	+ (tv1.tv_usec - tv0.tv_usec) / 1000.0;
@@ -12516,15 +12516,17 @@ void
 do_bench (char* what, int num)
 {
   int i;
-  void (* fn) ();
+  GtkWidget *widget;
+  void (* fn) (GtkWidget *widget);
   fn = NULL;
+  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   if (g_ascii_strcasecmp (what, "ALL") == 0)
     {
       for (i = 0; i < nbuttons; i++)
 	{
 	  if (!buttons[i].do_not_benchmark)
-	    do_real_bench (buttons[i].func, buttons[i].label, num);
+	    do_real_bench (widget, buttons[i].func, buttons[i].label, num);
 	}
 
       return;
@@ -12543,7 +12545,7 @@ do_bench (char* what, int num)
       if (!fn)
 	g_print ("Can't bench: \"%s\" not found.\n", what);
       else
-	do_real_bench (fn, buttons[i].label, num);
+	do_real_bench (widget, fn, buttons[i].label, num);
     }
 }
 

@@ -1,3 +1,11 @@
+2002-11-19  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testgtk.c (do_bench): 
+	(do_real_bench): 
+	(bench_iteration): Add a dummy widget and pass it as first
+	argument to the various create functions when in --bench mode, 
+	since these call gtk_widget_get_screen () on their first argument.
+
 Mon Nov 18 17:15:07 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkwindow-decorate.c (gtk_decorated_window_paint): use
