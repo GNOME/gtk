@@ -1017,9 +1017,15 @@ gtk_file_chooser_impl_default_set_property (GObject         *object,
 	  {
 	    impl->folder_mode = folder_mode;
 	    if (impl->folder_mode)
-	      gtk_widget_hide (impl->list_scrollwin);
+	      {
+		gtk_widget_hide (impl->list_scrollwin);
+		gtk_widget_show (impl->tree_scrollwin);
+	      }
 	    else
-	      gtk_widget_show (impl->list_scrollwin);
+	      {
+		gtk_widget_hide (impl->tree_scrollwin);
+		gtk_widget_show (impl->list_scrollwin);
+	      }
 	  }
       }
       break;
@@ -1342,32 +1348,30 @@ update_chooser_entry (GtkFileChooserImplDefault *impl)
 static void
 check_bookmarks_sensitivity (GtkFileChooserImplDefault *impl)
 {
-  GtkTreeIter *iter;
+  GtkTreeIter iter;
   gboolean exists;
 
   if (!gtk_file_system_get_supports_bookmarks (impl->file_system))
     return;
 
-  iter = gtk_tree_iter_copy (&impl->bookmarks_iter);
-
   exists = FALSE;
 
-  while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), iter))
-    {
-      GtkFilePath *path;
+  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
+    do
+      {
+	GtkFilePath *path;
 
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), iter, SHORTCUTS_COL_PATH, &path, -1);
-      g_assert (path != NULL);
+	gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &path, -1);
 
-      if (gtk_file_path_compare (path, impl->current_folder) == 0)
-	{
-	  exists = TRUE;
-	  break;
-	}
-    }
+	if (path && gtk_file_path_compare (path, impl->current_folder) == 0)
+	  {
+	    exists = TRUE;
+	    break;
+	  }
+      }
+    while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter));
 
   gtk_widget_set_sensitive (impl->add_bookmark_button, !exists);
-  gtk_tree_iter_free (iter);
 }
 
 static void
