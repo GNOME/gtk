@@ -679,6 +679,29 @@ gtk_action_group_add_actions (GtkActionGroup *action_group,
 				     user_data, NULL);
 }
 
+typedef struct _SharedData  SharedData;
+
+struct _SharedData {
+  guint          ref_count;
+  gpointer       data;
+  GDestroyNotify destroy;
+};
+
+static void
+shared_data_unref (gpointer data)
+{
+  SharedData *shared_data = (SharedData *)data;
+
+  shared_data->ref_count--;
+  if (shared_data->ref_count == 0)
+    {
+      if (shared_data->destroy) 
+	(*shared_data->destroy) (shared_data->data);
+      
+      g_free (shared_data);
+    }
+}
+
 
 /**
  * gtk_action_group_add_actions_full:
@@ -707,11 +730,17 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
   guint i;
   GtkTranslateFunc translate_func;
   gpointer translate_data;
+  SharedData *shared_data;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
   translate_func = action_group->private_data->translate_func;
   translate_data = action_group->private_data->translate_data;
+
+  shared_data = g_new0 (SharedData, 1);
+  shared_data->ref_count = 1;
+  shared_data->data = user_data;
+  shared_data->destroy = destroy;
 
   for (i = 0; i < n_entries; i++)
     {
@@ -736,15 +765,24 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
 			       entries[i].stock_id);
 
       if (entries[i].callback)
-	g_signal_connect_data (action, "activate",
-			       entries[i].callback, 
-			       user_data, (GClosureNotify)destroy, 0);
+	{
+	  GClosure *closure;
 
+	  closure = g_cclosure_new (entries[i].callback, user_data, NULL);
+	  g_closure_add_finalize_notifier (closure, shared_data, 
+					   (GClosureNotify)shared_data_unref);
+	  shared_data->ref_count++;
+
+	  g_signal_connect_closure (action, "activate", closure, FALSE);
+	}
+	  
       gtk_action_group_add_action_with_accel (action_group, 
 					      action,
 					      entries[i].accelerator);
       g_object_unref (action);
     }
+
+  shared_data_unref (shared_data);
 }
 
 /**
@@ -801,11 +839,17 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
   guint i;
   GtkTranslateFunc translate_func;
   gpointer translate_data;
+  SharedData *shared_data;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
   translate_func = action_group->private_data->translate_func;
   translate_data = action_group->private_data->translate_data;
+
+  shared_data = g_new0 (SharedData, 1);
+  shared_data->ref_count = 1;
+  shared_data->data = user_data;
+  shared_data->destroy = destroy;
 
   for (i = 0; i < n_entries; i++)
     {
@@ -832,15 +876,24 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
       gtk_toggle_action_set_active (action, entries[i].is_active);
 
       if (entries[i].callback)
-	g_signal_connect_data (action, "activate",
-			       entries[i].callback, 
-			       user_data, (GClosureNotify)destroy, 0);
+	{
+	  GClosure *closure;
 
+	  closure = g_cclosure_new (entries[i].callback, user_data, NULL);
+	  g_closure_add_finalize_notifier (closure, shared_data, 
+					   (GClosureNotify)shared_data_unref);
+	  shared_data->ref_count++;
+
+	  g_signal_connect_closure (action, "activate", closure, FALSE);
+	}
+	  
       gtk_action_group_add_action_with_accel (action_group, 
 					      GTK_ACTION (action),
 					      entries[i].accelerator);
       g_object_unref (action);
     }
+
+    shared_data_unref (shared_data);
 }
 
 /**

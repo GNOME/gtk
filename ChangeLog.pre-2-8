@@ -1,3 +1,10 @@
+Thu Jan 29 00:48:47 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_toggle_actions_full): 
+	* gtk/gtkactiongroup.c (gtk_action_group_add_actions_full): Do reference
+	counting on the user_data that is shared between multiple signal handlers,
+	to avoid calling the destroy notify multiple times.  (#132447, Adam Hooper)
+
 2004-01-28  Hans Breuer  <hans@breuer.org>
 
 	* gtk/stock-icons/stock_network_(16|24).png : new GTK_STOCK_NETWORK ...
