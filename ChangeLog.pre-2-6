@@ -2,7 +2,10 @@
 
 	* gtk/gtkfilechooserentry.c (update_current_folder_files): Turn
 	off sorting while inserting batches of new files, since sorting
-	is slow with the current list store implementation.
+	is slow with the current list store implementation. The sorting
+	is turned back on in an idle since the gnome-vfs backend returns
+	directory contents in chunks of 100 files, and we don't want to
+	turn sorting back on until the whole directory is read.
 
 2004-09-27  Matthias Clasen  <mclasen@redhat.com>
 

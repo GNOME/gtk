@@ -58,6 +58,8 @@ struct _GtkFileChooserEntry
 
   guint has_completion : 1;
   guint in_change      : 1;
+
+  guint sorting_idle;
 };
 
 enum
@@ -513,6 +515,17 @@ add_completion_idle (GtkFileChooserEntry *chooser_entry)
     }
 }
 
+static gboolean
+sorting_idle (GtkFileChooserEntry *chooser_entry)
+{
+  chooser_entry->sorting_idle = 0;
+
+  /* Turn sorting back on */
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
+					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
+
+  return FALSE;
+}
 
 static void
 update_current_folder_files (GtkFileChooserEntry *chooser_entry,
@@ -522,9 +535,13 @@ update_current_folder_files (GtkFileChooserEntry *chooser_entry,
 
   g_assert (chooser_entry->completion_store != NULL);
 
-  /* Turn off sorting, since it is slow with the default list store implementation */
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
-					-2, GTK_SORT_ASCENDING);
+  if (chooser_entry->sorting_idle == 0)
+    {
+      /* Turn off sorting, since it is slow with the default list store implementation */
+      gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
+					    -2, GTK_SORT_ASCENDING);
+      chooser_entry->sorting_idle = g_idle_add (sorting_idle, chooser_entry);
+    }
 
   for (tmp_list = added_uris; tmp_list; tmp_list = tmp_list->next)
     {
@@ -548,14 +565,9 @@ update_current_folder_files (GtkFileChooserEntry *chooser_entry,
 			      DISPLAY_NAME_COLUMN, display_name,
 			      PATH_COLUMN, path,
 			      -1);
-
 	  gtk_file_info_free (info);
 	}
     }
-
-  /* Turn sorting back on */
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
-					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
 
   add_completion_idle (chooser_entry);
 }
