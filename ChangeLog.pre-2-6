@@ -1,5 +1,9 @@
 2004-04-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (update_node): Make sure the separators 
+	used to demarkate placeholder ends don't show up on 
+	show_all().  (#140496, Murray Cumming)
+
 	* gtk/gtkspinbutton.c (spin_button_at_limit): Make spinbuttons
 	work with negative increments.  (#137975, Tim Gerla)
 
