@@ -1,3 +1,7 @@
+Thu Jul 22 01:04:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add new ellipsistation api.
+
 Sun Jul 18 20:17:41 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* === released 2.5.0 ==

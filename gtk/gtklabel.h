@@ -60,6 +60,7 @@ struct _GtkLabel
   guint   wrap : 1;
   guint   use_underline : 1;
   guint   use_markup : 1;
+  guint   ellipsize : 3;
 
   guint   mnemonic_keyval;
   
@@ -128,6 +129,9 @@ void     gtk_label_set_text_with_mnemonic         (GtkLabel         *label,
 void     gtk_label_set_justify                    (GtkLabel         *label,
 						   GtkJustification  jtype);
 GtkJustification gtk_label_get_justify            (GtkLabel         *label);
+void     gtk_label_set_ellipsize		  (GtkLabel         *label,
+						   PangoEllipsizeMode mode);
+PangoEllipsizeMode gtk_label_get_ellipsize        (GtkLabel         *label);
 void     gtk_label_set_pattern                    (GtkLabel         *label,
 						   const gchar      *pattern);
 void     gtk_label_set_line_wrap                  (GtkLabel         *label,

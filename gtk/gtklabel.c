@@ -69,7 +69,8 @@ enum {
   PROP_MNEMONIC_KEYVAL,
   PROP_MNEMONIC_WIDGET,
   PROP_CURSOR_POSITION,
-  PROP_SELECTION_BOUND
+  PROP_SELECTION_BOUND,
+  PROP_ELLIPSIZE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -384,6 +385,15 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      0,
                                                      G_PARAM_READABLE));
   
+  g_object_class_install_property (gobject_class,
+				   PROP_ELLIPSIZE,
+                                   g_param_spec_enum ("ellipsize",
+                                                      P_("Ellipsize"),
+                                                      P_("The preferred place to ellipsize the string, if the label does not have enough room to display the entire string, if at all"),
+						      PANGO_TYPE_ELLIPSIZE_MODE,
+						      PANGO_ELLIPSIZE_NONE,
+                                                      G_PARAM_READWRITE));
+  
   /*
    * Key bindings
    */
@@ -501,6 +511,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_MNEMONIC_WIDGET:
       gtk_label_set_mnemonic_widget (label, (GtkWidget*) g_value_get_object (value));
       break;
+    case PROP_ELLIPSIZE:
+      gtk_label_set_ellipsize (label, g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -566,6 +579,9 @@ gtk_label_get_property (GObject     *object,
       else
 	g_value_set_int (value, 0);
       break;
+    case PROP_ELLIPSIZE:
+      g_value_set_enum (value, label->ellipsize);
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -582,6 +598,7 @@ gtk_label_init (GtkLabel *label)
 
   label->jtype = GTK_JUSTIFY_LEFT;
   label->wrap = FALSE;
+  label->ellipsize = PANGO_ELLIPSIZE_NONE;
 
   label->use_underline = FALSE;
   label->use_markup = FALSE;
@@ -1267,6 +1284,54 @@ gtk_label_get_justify (GtkLabel *label)
   return label->jtype;
 }
 
+
+/**
+ * gtk_label_set_ellipsize:
+ * @label: a #GtkLabel
+ * @mode: a #PangoEllipsizeMode
+ *
+ * Sets the mode used to ellipsize (add an ellipsis: "...") to the text if there
+ * is not enough space to render the entire string.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_label_set_ellipsize (GtkLabel          *label,
+			 PangoEllipsizeMode mode)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+  g_return_if_fail (mode >= PANGO_ELLIPSIZE_NONE && mode <= PANGO_ELLIPSIZE_END);
+  
+  if ((PangoEllipsizeMode) label->ellipsize != mode)
+    {
+      label->ellipsize = mode;
+
+      /* No real need to be this drastic, but easier than duplicating the code */
+      gtk_label_clear_layout (label);
+      
+      g_object_notify (G_OBJECT (label), "ellipsize");
+      gtk_widget_queue_resize (GTK_WIDGET (label));
+    }
+}
+
+/**
+ * gtk_label_get_ellipsize:
+ * @label: a #GtkLabel
+ *
+ * Returns the ellipsizing position of the label. See gtk_label_set_ellipsize().
+ *
+ * Return value: #PangoEllipsizeMode
+ *
+ * Since: 2.6
+ **/
+PangoEllipsizeMode
+gtk_label_get_ellipsize (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), PANGO_ELLIPSIZE_NONE);
+
+  return label->ellipsize;
+}
+
 /**
  * gtk_label_set_line_wrap:
  * @label: a #GtkLabel
@@ -1454,6 +1519,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 	}
 
       pango_layout_set_alignment (label->layout, align);
+      pango_layout_set_ellipsize (label->layout, label->ellipsize);
 
       if (label->wrap)
 	{
@@ -1563,13 +1629,31 @@ gtk_label_size_request (GtkWidget      *widget,
   height = label->misc.ypad * 2;
 
   pango_layout_get_extents (label->layout, NULL, &logical_rect);
-  
   aux_info = _gtk_widget_get_aux_info (widget, FALSE);
-  if (label->wrap && aux_info && aux_info->width > 0)
-    width += aux_info->width;
-  else 
-    width += PANGO_PIXELS (logical_rect.width);
-  
+
+  if (label->ellipsize)
+    {
+      PangoContext *context;
+      PangoFontMetrics *metrics;
+      gint char_width;
+
+      /* The minimum size for ellipsized labels is ~ 3 chars */
+      context = pango_layout_get_context (label->layout);
+      metrics = pango_context_get_metrics (context, widget->style->font_desc, NULL);
+
+      char_width = pango_font_metrics_get_approximate_char_width (metrics);
+      pango_font_metrics_unref (metrics);
+
+      width += (PANGO_PIXELS (char_width) * 3);
+    }
+  else
+    {
+      if (label->wrap && aux_info && aux_info->width > 0)
+	width += aux_info->width;
+      else
+	width += PANGO_PIXELS (logical_rect.width);
+    }
+
   height += PANGO_PIXELS (logical_rect.height);
 
   requisition->width = width;
@@ -1585,6 +1669,9 @@ gtk_label_size_allocate (GtkWidget     *widget,
   label = GTK_LABEL (widget);
 
   (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
+
+  if (label->ellipsize)
+    pango_layout_set_width (label->layout, allocation->width * PANGO_SCALE);
 
   if (label->select_info && label->select_info->window)
     {
@@ -1676,7 +1763,7 @@ get_layout_location (GtkLabel  *label,
   GtkMisc *misc;
   GtkWidget *widget;
   gfloat xalign;
-  gint x, y;
+  gint req_width, x, y;
   
   misc = GTK_MISC (label);
   widget = GTK_WIDGET (label);
@@ -1686,16 +1773,27 @@ get_layout_location (GtkLabel  *label,
   else
     xalign = 1.0 - misc->xalign;
 
+  if (label->ellipsize)
+    {
+      PangoRectangle ink_rect;
+
+      pango_layout_get_extents (label->layout, &ink_rect, NULL);
+
+      req_width = PANGO_PIXELS (ink_rect.width);
+    }
+  else
+    req_width = widget->requisition.width;
+
   x = floor (widget->allocation.x + (gint)misc->xpad +
-	     xalign * (widget->allocation.width - widget->requisition.width)
-	     + 0.5);
+	      xalign * (widget->allocation.width - req_width)
+	      + 0.5);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     x = MAX (x, widget->allocation.x + misc->xpad);
   else
     x = MIN (x,
 	     widget->allocation.x + widget->allocation.width -
-	     widget->requisition.width - misc->xpad);
+	     req_width - misc->xpad);
 
   y = floor (widget->allocation.y + (gint)misc->ypad 
              + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign)

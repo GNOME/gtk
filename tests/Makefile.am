@@ -32,6 +32,7 @@ noinst_PROGRAMS =			\
 	testcombo			\
 	testcombochange			\
 	testdnd				\
+	testellipsise			\
 	testentrycompletion 		\
 	testfilechooser			\
 	testgtk				\
@@ -69,6 +70,7 @@ testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
+testellipsise_DEPENDENCIES = $(TEST_DEPS)
 testentrycompletion_DEPENDENCIES = $(TEST_DEPS)
 testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
@@ -99,6 +101,7 @@ testcalendar_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
 testcombochange_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
+testellipsise_LDADD = $(LDADDS)
 testentrycompletion_LDADD = $(LDADDS)
 testfilechooser_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)

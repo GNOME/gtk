@@ -1857,6 +1857,7 @@ gtk_label_set_markup
 gtk_label_set_markup_with_mnemonic
 gtk_label_set_pattern
 gtk_label_set_justify
+gtk_label_set_ellipsize
 gtk_label_get
 gtk_label_parse_uline
 gtk_label_set_line_wrap
@@ -1872,6 +1873,7 @@ gtk_label_set_selectable
 gtk_label_set_text_with_mnemonic
 gtk_label_get_attributes
 gtk_label_get_justify
+gtk_label_get_ellipsize
 gtk_label_get_label
 gtk_label_get_layout
 gtk_label_get_line_wrap

@@ -1,3 +1,14 @@
+Thu Jul 22 01:05:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Require Pango 1.5.1 (for ellipsisation).
+
+	* gtk/gtklabel.h: 
+	* gtk/gtklabel.c (gtk_label_class_init): Add a new :ellipsise
+	property which controls ellipsisation of the label.  (#125250, 
+	Tim Van Wassenhove, patch by James M. Cape)
+
+	* tests/testellipsise.c: Simple test for ellipsisation.
+
 Wed Jul 21 22:46:27 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_new_text): Don't leak the
