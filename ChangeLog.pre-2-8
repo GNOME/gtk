@@ -1,3 +1,15 @@
+2003-05-06  Tor Lillqvist  <tml@iki.fi>
+
+	Fix for #110165 (thanks to Arnaud Charlet):
+	
+	* gdk/win32/gdkevents-win32.c (build_keypress_event,
+	build_keyrelease_event): For unshifted control char, use
+	lowercase ASCII keyval.
+	(gdk_event_translate): Similarily, when handling WM_SYSKEYDOWN and
+	UP (i.e. Alt-something), if it's an unshifted ASCII letter, use
+	lowercase keyval. Use build_key_event_state() here, too, instead
+	of minor code duplication.
+
 2003-05-06  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testmultidisplay.c: Don't include strings.h, it's not

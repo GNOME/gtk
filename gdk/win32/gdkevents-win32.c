@@ -894,6 +894,8 @@ build_keypress_event (GdkEvent *event,
   event->key.group = 0;		/* ??? */
   event->key.keyval = GDK_VoidSymbol;
   
+  build_key_event_state (event);
+
   if (msg->message == WM_IME_COMPOSITION)
     {
       himc = ImmGetContext (msg->hwnd);
@@ -917,7 +919,11 @@ build_keypress_event (GdkEvent *event,
 	      /* For ASCII control chars, the keyval should be the
 	       * corresponding ASCII character.
 	       */
-	      event->key.keyval = msg->wParam + '@';
+	      if ((event->key.state & GDK_SHIFT_MASK) == 0)
+		event->key.keyval = msg->wParam + '`';
+	      else
+		event->key.keyval = msg->wParam + '@';
+
 	      /* This is needed in case of Alt+nnn or Alt+0nnn (on the numpad)
 	       * where nnn<32
 	       */
@@ -951,8 +957,6 @@ build_keypress_event (GdkEvent *event,
 				    wbuf, G_N_ELEMENTS (wbuf));
     }
 
-  build_key_event_state (event);
-
   /* Build UTF-8 string */
   if (ucount > 0)
     {
@@ -985,12 +989,18 @@ build_keyrelease_event (GdkEvent *event,
   event->key.state = 0;
   event->key.group = 0;		/* ??? */
 
+  build_key_event_state (event);
+
   if (msg->message == WM_CHAR || msg->message == WM_SYSCHAR)
     {
       event->key.hardware_keycode = vk_from_char (msg->wParam);
       if (msg->wParam < ' ')
 	{
-	  event->key.keyval = msg->wParam + '@';
+	  if ((event->key.state & GDK_SHIFT_MASK) == 0)
+	    event->key.keyval = msg->wParam + '`';
+	  else
+	    event->key.keyval = msg->wParam + '@';
+      
 	  event->key.state |= GDK_CONTROL_MASK;
 	}
       else
@@ -1007,7 +1017,7 @@ build_keyrelease_event (GdkEvent *event,
       event->key.keyval = GDK_VoidSymbol;
       event->key.hardware_keycode = 0; /* ??? */
     }
-  build_key_event_state (event);
+
   event->key.string = NULL;
   event->key.length = 0;
 }
@@ -2377,7 +2387,20 @@ gdk_event_translate (GdkDisplay *display,
 	  break;
 	default:
 	  if (msg->message == WM_SYSKEYDOWN || msg->message == WM_SYSKEYUP)
-	    event->key.keyval = msg->wParam;
+	    {
+	      if (msg->wParam >= 'A' && msg->wParam <= 'Z')
+		{
+		  /* If Alt-unshifted ASCII letter, lowercase */
+		  if (GetKeyState (VK_SHIFT) < 0)
+		    event->key.keyval = msg->wParam;
+		  else
+		    event->key.keyval = msg->wParam + 0x20;
+		}
+	      else
+		{
+		  event->key.keyval = msg->wParam;
+		}
+	    }
 	  else
 	    ignore_wm_char = FALSE;
 	  break;
@@ -2398,14 +2421,10 @@ gdk_event_translate (GdkDisplay *display,
 			 GDK_KEY_PRESS : GDK_KEY_RELEASE);
       event->key.time = _gdk_win32_get_next_tick (msg->time);
       event->key.state = 0;
-      if (GetKeyState (VK_SHIFT) < 0)
-	event->key.state |= GDK_SHIFT_MASK;
-      if (GetKeyState (VK_CAPITAL) & 0x1)
-	event->key.state |= GDK_LOCK_MASK;
-      if (GetKeyState (VK_CONTROL) < 0)
-	event->key.state |= GDK_CONTROL_MASK;
-      if (msg->wParam != VK_MENU && GetKeyState (VK_MENU) < 0)
-	event->key.state |= GDK_MOD1_MASK;
+      build_key_event_state (event);
+      /* Reset MOD1_MASK if it is the Alt key itself */
+      if (msg->wParam == VK_MENU)
+	event->key.state &= ~GDK_MOD1_MASK;
       event->key.hardware_keycode = msg->wParam;
       event->key.group = 0;
       event->key.string = NULL;
