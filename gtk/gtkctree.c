@@ -5878,12 +5878,6 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
   clist = GTK_CLIST (widget);
   ctree = GTK_CTREE (widget);
 
-  if (gtk_drag_get_source_widget (context) != widget)
-    {
-      gdk_drag_status (context, GDK_ACTION_DEFAULT, time);
-      return FALSE;
-    }
-
   y -= (GTK_CONTAINER (widget)->border_width +
 	widget->style->klass->ythickness + clist->column_title_area.height);
   row = ROW_FROM_YPIXEL (clist, y);
