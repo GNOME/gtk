@@ -104,9 +104,15 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
   if (values_mask & GDK_GC_TS_Y_ORIGIN)
     gc->ts_y_origin = values->ts_y_origin;
 
-  gc->colormap = gdk_drawable_get_colormap (drawable);
-  if (gc->colormap)
-    g_object_ref (G_OBJECT (gc->colormap));
+  /* gc->colormap will already be set if gdk_gc_new_with_values()
+   * recurses - as in GdkPixmap => impl object.
+   */
+  if (!gc->colormap)
+    {
+      gc->colormap = gdk_drawable_get_colormap (drawable);
+      if (gc->colormap)
+	g_object_ref (G_OBJECT (gc->colormap));
+    }
   
   return gc;
 }
