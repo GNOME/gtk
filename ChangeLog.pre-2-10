@@ -1,5 +1,6 @@
-Thu Jan  1 19:43:45 PST 1998 Manish Singh <yosh@gimp.org>
+Thu Jan  1 21:21:56 PST 1998 Manish Singh <yosh@gimp.org>
 
+	* configure.in: fixed up the xinput test
 	* Miscellaneous portability fixes.
 
 Mon Dec 29 22:05:45 1997  Miguel de Icaza  <miguel@nuclecu.unam.mx>

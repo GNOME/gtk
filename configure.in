@@ -110,7 +110,7 @@ x_ldflags="$X_LDFLAGS $X_LIBS"
 
 # set up things for XInput
 
-if test "x$with_xinput" = "xgxi" -o "x$with_xinput" = "xyes"; then
+if test "x$with_xinput" = "xgxi" || test "x$with_xinput" = "xyes"; then
   AC_DEFINE(XINPUT_GXI)
   xinput_progs=gxid
   x_libs="-lXi $x_libs"
