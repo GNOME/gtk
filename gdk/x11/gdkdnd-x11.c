@@ -2768,29 +2768,36 @@ xdnd_drop_filter (GdkXEvent *xev,
  ************************** Public API ***********************
  *************************************************************/
 void
-gdk_dnd_init ()
+gdk_dnd_init (GdkDisplay *display)
 {
   init_byte_order ();
 
-  gdk_add_client_message_filter (
+  gdk_add_client_message_filter_for_display (
+	display,
 	gdk_atom_intern ("_MOTIF_DRAG_AND_DROP_MESSAGE", FALSE),
 	motif_dnd_filter, NULL);
-  gdk_add_client_message_filter (
+  gdk_add_client_message_filter_for_display (
+	display,				     
 	gdk_atom_intern ("XdndEnter", FALSE),
 	xdnd_enter_filter, NULL);
-  gdk_add_client_message_filter (
+  gdk_add_client_message_filter_for_display (
+	display,				     
 	gdk_atom_intern ("XdndLeave", FALSE),
 	xdnd_leave_filter, NULL);
-  gdk_add_client_message_filter (
+  gdk_add_client_message_filter_for_display (
+	display,
 	gdk_atom_intern ("XdndPosition", FALSE),
 	xdnd_position_filter, NULL);
-  gdk_add_client_message_filter (
+  gdk_add_client_message_filter_for_display (
+	display,
 	gdk_atom_intern ("XdndStatus", FALSE),
 	xdnd_status_filter, NULL);
-  gdk_add_client_message_filter (
+  gdk_add_client_message_filter_for_display (
+	display,
 	gdk_atom_intern ("XdndFinished", FALSE),
 	xdnd_finished_filter, NULL);
-  gdk_add_client_message_filter (
+  gdk_add_client_message_filter_for_display (
+	display,				     
 	gdk_atom_intern ("XdndDrop", FALSE),
 	xdnd_drop_filter, NULL);
 }		      

@@ -90,7 +90,9 @@ struct _GdkDisplayImplX11
 
   /* Session Management leader window see ICCCM */
   Window leader_window;
-
+  
+  /* list of filters for client messages */
+  GList *client_filters;	            
 };
 
 struct _GdkDisplayImplX11Class

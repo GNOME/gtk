@@ -133,7 +133,6 @@ static void gdk_xsettings_notify_cb (const char       *name,
 /* Private variable declarations
  */
 
-static GList *client_filters;	            /* Filters for client messages */
 static GList *display_sources;
 
 static GSourceFuncs event_funcs = {
@@ -207,10 +206,14 @@ gdk_events_init (GdkDisplay* display)
 
   display_sources = g_list_prepend (display_sources,display_source);
 
-  gdk_add_client_message_filter (gdk_atom_intern ("WM_PROTOCOLS", FALSE), 
-				 gdk_wm_protocols_filter, NULL);
+  gdk_add_client_message_filter_for_display (
+	display,
+	gdk_atom_intern ("WM_PROTOCOLS", FALSE), 
+	gdk_wm_protocols_filter,   
+	NULL);
   
-  xsettings_client = xsettings_client_new (display_impl->xdisplay, DefaultScreen (display_impl->xdisplay),
+  xsettings_client = xsettings_client_new (display_impl->xdisplay,
+					   DefaultScreen (display_impl->xdisplay),
 					   gdk_xsettings_notify_cb,
 					   gdk_xsettings_watch_cb,
 					   NULL);
@@ -313,7 +316,26 @@ gdk_event_apply_filters (XEvent *xevent,
   return GDK_FILTER_CONTINUE;
 }
 
-/* Expect X Atoms for message_type */
+void 
+gdk_add_client_message_filter_for_display (GdkDisplay   *display,
+					   GdkAtom       message_type,
+					   GdkFilterFunc func,
+					   gpointer      data)
+{
+  GdkClientFilter *filter;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  filter = g_new (GdkClientFilter, 1);
+
+  filter->type = message_type;
+  filter->function = func;
+  filter->data = data;
+  
+  GDK_DISPLAY_IMPL_X11(display)->client_filters = 
+    g_list_prepend (GDK_DISPLAY_IMPL_X11(display)->client_filters,
+		    filter);
+}
+
+#ifndef GDK_MULTIHEAD_SAFE
 void 
 gdk_add_client_message_filter (GdkAtom       message_type,
 			       GdkFilterFunc func,
@@ -325,8 +347,11 @@ gdk_add_client_message_filter (GdkAtom       message_type,
   filter->function = func;
   filter->data = data;
   
-  client_filters = g_list_prepend (client_filters, filter);
+  GDK_DISPLAY_IMPL_X11(display)->client_filters = 
+    g_list_prepend (GDK_DISPLAY_IMPL_X11 (gdk_get_default_display())->client_filters,
+		    filter);
 }
+#endif
 
 static void
 gdk_check_wm_state_changed (GdkWindow *window)
@@ -1523,7 +1548,7 @@ gdk_event_translate (GdkDisplay *display,
 		  g_message ("client message:\twindow: %ld",
 			     xevent->xclient.window));
 	
-	tmp_list = client_filters;
+	tmp_list = display_impl->client_filters;
 	while (tmp_list)
 	  {
 	    GdkClientFilter *filter = tmp_list->data;

@@ -221,7 +221,7 @@ gdk_display_init_new (int argc, char **argv, char *display_name)
   _gdk_windowing_window_init (screen);
   _gdk_windowing_image_init (display);
   gdk_events_init (display);
-  gdk_dnd_init ();
+  gdk_dnd_init (display);
   
   return display;
 }
