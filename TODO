@@ -1,5 +1,3 @@
-For 1.1.0 release:
-
 For 1.2.0 release:
 -	remove deprecated functions from *.[hc] files, especially the
 	non-functional ones.

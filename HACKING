@@ -9,21 +9,24 @@ to have the following packages installed:
 These should be available by ftp from ftp.gnu.org or any of the
 fine GNU mirrors.  Beta software can be found at alpha.gnu.org.
 
-If you are accessing gtk+ via CVS, then you will need to take several
-steps to get it to compile.  You can do all these steps at once
-by running:
+In order to get CVS gtk+ installed on your system, you need to have
+the most recent CVS version of glib installed as well.
+The installation process of glib is similar to that of gtk+, but
+needs to be fulfilled prior to installation of gtk+.
+
+To compile a CVS version of gtk+ on your system, you will need to take
+several steps to setup the tree for compilation.  You can do all these
+steps at once by running:
 
         cvsroot/gtk+# ./autogen.sh
    
 Basically this does the following for you:
 
   	cvsroot/gtk+# aclocal; automake; autoconf
-        cvsroot/gtk+/glib# aclocal; automake; autoconf
 
         The above commands create the "configure" script.  Now you
 	can run the configure script in cvsroot/gtk+ to create all
-	the Makefiles.  You only need to call "configure" in cvsroot/gtk+ 
-	as the one in glib will be invoked automatically.
+	the Makefiles.
 
 Before running autogen.sh or configure, make sure you have libtool 
 in your path.  
@@ -33,11 +36,12 @@ options like --prefix=/usr to configure you can give those options
 to autogen.sh and they will be passed on to configure.
 
 If at all possible, please use CVS to get the latest development version of
-gtk+.  You can do the following to get gtk+ from cvs:
+gtk+ and glib.  You can do the following to get glib and gtk+ from cvs:
 
    $ export CVSROOT=':pserver:anonymous@cvs.gimp.org:/debian/home/gnomecvs'
    $ cvs login
      (there is no password, just hit return)
+   $ cvs -z9 checkout glib
    $ cvs -z9 checkout gtk+
 
 Please submit patches to the gtk-list@redhat.com mailing list (you must

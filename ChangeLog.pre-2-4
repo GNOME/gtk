@@ -1,3 +1,14 @@
+Mon Aug 17 01:40:00 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: version bump to 1.1.1, binary age 0, interface age 0.
+	pass "gmodule" to AM_PATH_GLIB, with that we require libgmodule.so now.
+
+	* gtk/gtkmain.c (gtk_init): since glib's g_return*_if_fail macros log
+	with G_LOG_LEVEL_CRITICAL now, i added "--g-fatal-checks",
+	"--gdk-fatal-checks" and "--gtk-fatal-checks". that makes up six
+	different *-fatal-* arguments now. this needs to be revised and
+ 	compressed to a reasonable amount of arguments.
+
 Sun Aug 16 20:51:59 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_init): fatal warning option is split up now,
