@@ -1,3 +1,7 @@
+2003-09-15  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_action_group_add_toggle_actions[_full].
+
 2003-09-12  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/drawing.sgml: Add deprecation note for gdk_draw_pixmap().

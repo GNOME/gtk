@@ -48,8 +48,12 @@ struct _GtkActionGroupPrivate
   GtkDestroyNotify translate_notify;   
 };
 
-static void gtk_action_group_init       (GtkActionGroup *self);
-static void gtk_action_group_class_init (GtkActionGroupClass *class);
+static void       gtk_action_group_init            (GtkActionGroup      *self);
+static void       gtk_action_group_class_init      (GtkActionGroupClass *class);
+static void       gtk_action_group_finalize        (GObject             *object);
+static GtkAction *gtk_action_group_real_get_action (GtkActionGroup      *self,
+						    const gchar         *name);
+
 
 GType
 gtk_action_group_get_type (void)
@@ -79,9 +83,6 @@ gtk_action_group_get_type (void)
 }
 
 static GObjectClass *parent_class = NULL;
-static void       gtk_action_group_finalize        (GObject        *object);
-static GtkAction *gtk_action_group_real_get_action (GtkActionGroup *self,
-						    const gchar    *name);
 
 static void
 gtk_action_group_class_init (GtkActionGroupClass *klass)
@@ -284,8 +285,8 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  * @n_entries: the number of entries
  * @user_data: data to pass to the action callbacks
  *
- * This is a convenience function to create a number of actions and add them to the
- * action group.
+ * This is a convenience function to create a number of actions and add them 
+ * to the action group.
  *
  * The "activate" signals of the actions are connected to the callbacks and 
  * their accel paths are set to 
@@ -337,15 +338,9 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
   for (i = 0; i < n_entries; i++)
     {
       GtkAction *action;
-      GType action_type;
       gchar *accel_path;
       gchar *label;
       gchar *tooltip;
-
-      if (entries[i].is_toggle)
-	action_type = GTK_TYPE_TOGGLE_ACTION;
-      else
-	action_type = GTK_TYPE_ACTION;
 
       if (translate_func)
 	{
@@ -358,7 +353,7 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
 	  tooltip = entries[i].tooltip;
 	}
 
-      action = g_object_new (action_type,
+      action = g_object_new (GTK_TYPE_ACTION,
 			     "name", entries[i].name,
 			     "label", label,
 			     "tooltip", tooltip,
@@ -393,18 +388,132 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
 }
 
 /**
+ * gtk_action_group_add_toggle_actions:
+ * @action_group: the action group
+ * @entries: an array of toggle action descriptions
+ * @n_entries: the number of entries
+ * @user_data: data to pass to the action callbacks
+ *
+ * This is a convenience function to create a number of toggle actions and add them 
+ * to the action group.
+ *
+ * The "activate" signals of the actions are connected to the callbacks and 
+ * their accel paths are set to 
+ * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
+ * 
+ * Since: 2.4
+ */
+void
+gtk_action_group_add_toggle_actions (GtkActionGroup       *action_group,
+				     GtkToggleActionEntry *entries,
+				     guint                 n_entries,
+				     gpointer              user_data)
+{
+  gtk_action_group_add_toggle_actions_full (action_group, 
+					    entries, n_entries, 
+					    user_data, NULL);
+}
+
+
+/**
+ * gtk_action_group_add_toggle_actions_full:
+ * @action_group: the action group
+ * @entries: an array of toggle action descriptions
+ * @n_entries: the number of entries
+ * @user_data: data to pass to the action callbacks
+ * @destroy: destroy notification callback for @user_data
+ *
+ * This variant of gtk_action_group_add_toggle_actions() adds a 
+ * #GDestroyNotify callback for @user_data. 
+ * 
+ * Since: 2.4
+ */
+void
+gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
+					  GtkToggleActionEntry *entries,
+					  guint                 n_entries,
+					  gpointer              user_data,
+					  GDestroyNotify        destroy)
+{
+  guint i;
+  GtkTranslateFunc translate_func;
+  gpointer translate_data;
+
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  translate_func = action_group->private_data->translate_func;
+  translate_data = action_group->private_data->translate_data;
+
+  for (i = 0; i < n_entries; i++)
+    {
+      GtkAction *action;
+      gchar *accel_path;
+      gchar *label;
+      gchar *tooltip;
+
+      if (translate_func)
+	{
+	  label = translate_func (entries[i].label, translate_data);
+	  tooltip = translate_func (entries[i].tooltip, translate_data);
+	}
+      else
+	{
+	  label = entries[i].label;
+	  tooltip = entries[i].tooltip;
+	}
+
+      action = g_object_new (GTK_TYPE_TOGGLE_ACTION,
+			     "name", entries[i].name,
+			     "label", label,
+			     "tooltip", tooltip,
+			     "stock_id", entries[i].stock_id,
+			     NULL);
+
+      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), 
+				    entries[i].is_active);
+
+      if (entries[i].callback)
+	g_signal_connect_data (action, "activate",
+			       entries[i].callback, 
+			       user_data, (GClosureNotify)destroy, 0);
+
+      /* set the accel path for the menu item */
+      accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
+				entries[i].name, NULL);
+      if (entries[i].accelerator)
+	{
+	  guint accel_key = 0;
+	  GdkModifierType accel_mods;
+
+	  gtk_accelerator_parse (entries[i].accelerator, &accel_key,
+				 &accel_mods);
+	  if (accel_key)
+	    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+	}
+
+      gtk_action_set_accel_path (action, accel_path);
+      g_free (accel_path);
+
+      gtk_action_group_add_action (action_group, action);
+      g_object_unref (action);
+    }
+}
+
+/**
  * gtk_action_group_add_radio_actions:
  * @action_group: the action group
  * @entries: an array of radio action descriptions
  * @n_entries: the number of entries
+ * @value: the value of the action to activate initially, or -1 if
+ *   no action should be activated
  * @on_change: the callback to connect to the changed signal
  * @user_data: data to pass to the action callbacks
  * 
  * This is a convenience routine to create a group of radio actions and
  * add them to the action group. 
  *
- * The"changed" signal of the first radio action is connected to the @on_change 
- * callback and the accel paths of the actions are set to 
+ * The "changed" signal of the first radio action is connected to the 
+ * @on_change callback and the accel paths of the actions are set to 
  * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
  * 
  * Since: 2.4
@@ -413,11 +522,13 @@ void
 gtk_action_group_add_radio_actions (GtkActionGroup      *action_group,
 				    GtkRadioActionEntry *entries,
 				    guint                n_entries,
+				    gint                 value,
 				    GCallback            on_change,
 				    gpointer             user_data)
 {
   gtk_action_group_add_radio_actions_full (action_group, 
 					   entries, n_entries, 
+					   value,
 					   on_change, user_data, NULL);
 }
 
@@ -426,6 +537,8 @@ gtk_action_group_add_radio_actions (GtkActionGroup      *action_group,
  * @action_group: the action group
  * @entries: an array of radio action descriptions
  * @n_entries: the number of entries
+ * @value: the value of the action to activate initially, or -1 if
+ *   no action should be activated
  * @on_change: the callback to connect to the changed signal
  * @user_data: data to pass to the action callbacks
  * @destroy: destroy notification callback for @user_data
@@ -439,6 +552,7 @@ void
 gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 					 GtkRadioActionEntry *entries,
 					 guint                n_entries,
+					 gint                 value,
 					 GCallback            on_change,
 					 gpointer             user_data,
 					 GDestroyNotify       destroy)
@@ -447,6 +561,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
   GtkTranslateFunc translate_func;
   gpointer translate_data;
   GSList *group = NULL;
+  GtkAction *first_action;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
@@ -478,14 +593,13 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 			     "stock_id", entries[i].stock_id,
 			     "value", entries[i].value,
 			     NULL);
-      
+
       if (i == 0) 
-	{
-	  if (on_change)
-	    g_signal_connect_data (action, "changed",
-				   on_change, user_data, 
-				   (GClosureNotify)destroy, 0);
-	}
+	first_action = action;
+
+      if (value == entries[i].value)
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+      
       gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
       group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
 
@@ -509,6 +623,11 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
       gtk_action_group_add_action (action_group, action);
       g_object_unref (action);
     }
+
+  if (on_change)
+    g_signal_connect_data (first_action, "changed",
+			   on_change, user_data, 
+			   (GClosureNotify)destroy, 0);
 }
 
 /**

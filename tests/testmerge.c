@@ -126,9 +126,14 @@ static GtkActionEntry entries[] = {
   { "CopyAction",  GTK_STOCK_COPY,  NULL,     "<control>c", NULL, G_CALLBACK (activate_action) },
   { "PasteAction", GTK_STOCK_PASTE, NULL,     "<control>v", NULL, G_CALLBACK (activate_action) },
   { "AboutAction", NULL,            "_About", NULL,         NULL, G_CALLBACK (activate_action) },
-  { "BoldAction",  GTK_STOCK_BOLD,  "_Bold",  "<control>b", NULL, G_CALLBACK (toggle_action), TRUE },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
+
+static GtkToggleActionEntry toggle_entries[] = {
+  { "BoldAction",  GTK_STOCK_BOLD,  "_Bold",  "<control>b", NULL, G_CALLBACK (toggle_action), 
+    TRUE },
+};
+static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
 enum {
   JUSTIFY_LEFT,
@@ -442,9 +447,15 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   action_group = gtk_action_group_new ("TestActions");
-  gtk_action_group_add_actions (action_group, entries, n_entries, NULL);
+  gtk_action_group_add_actions (action_group, 
+				entries, n_entries, 
+				NULL);
+  gtk_action_group_add_toggle_actions (action_group, 
+				       toggle_entries, n_toggle_entries, 
+				       NULL);
   gtk_action_group_add_radio_actions (action_group, 
 				      radio_entries, n_radio_entries, 
+				      JUSTIFY_LEFT,
 				      G_CALLBACK (radio_action_changed), NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);

@@ -99,6 +99,16 @@ static GtkActionEntry entries[] = {
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
+
+static GtkToggleActionEntry toggle_entries[] = {
+  { "Bold", GTK_STOCK_BOLD,                    /* name, stock id */
+     "_Bold", "<control>B",                    /* label, accelerator */     
+    "Bold",                                    /* tooltip */
+    G_CALLBACK (activate_action), 
+    TRUE },                                    /* is_active */
+};
+static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
+
 enum {
   COLOR_RED,
   COLOR_GREEN,
@@ -159,6 +169,7 @@ static const gchar *ui_info =
 "        <menuitem action='Rectangle'/>"
 "        <menuitem action='Oval'/>"
 "      </menu>"
+"      <menuitem action='Bold'/>"
 "    </menu>"
 "    <menu action='HelpMenu'>"
 "      <menuitem action='About'/>"
@@ -300,7 +311,6 @@ do_appwindow (void)
       GtkWidget *bar;
       GtkTextBuffer *buffer;
       GtkActionGroup *action_group;
-      GtkAction *action;
       GtkUIManager *merge;
       GError *error = NULL;
 
@@ -325,18 +335,25 @@ do_appwindow (void)
        */
       
       action_group = gtk_action_group_new ("AppWindowActions");
-      gtk_action_group_add_actions (action_group, entries, n_entries, NULL);
-      gtk_action_group_add_radio_actions (action_group, color_entries, n_color_entries, 
-					  G_CALLBACK (activate_radio_action), NULL);
-      gtk_action_group_add_radio_actions (action_group, shape_entries, n_shape_entries, 
-					  G_CALLBACK (activate_radio_action), NULL);
-
-      action = gtk_action_group_get_action (action_group, "Red");
-      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-      action = gtk_action_group_get_action (action_group, "Square");
-      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+      gtk_action_group_add_actions (action_group, 
+				    entries, n_entries, 
+				    NULL);
+      gtk_action_group_add_toggle_actions (action_group, 
+					   toggle_entries, n_toggle_entries, 
+					   NULL);
+      gtk_action_group_add_radio_actions (action_group, 
+					  color_entries, n_color_entries, 
+					  COLOR_RED,
+					  G_CALLBACK (activate_radio_action), 
+					  NULL);
+      gtk_action_group_add_radio_actions (action_group, 
+					  shape_entries, n_shape_entries, 
+					  SHAPE_SQUARE,
+					  G_CALLBACK (activate_radio_action), 
+					  NULL);
 
       merge = gtk_ui_manager_new ();
+      g_object_set_data_full (G_OBJECT (window), "ui-manager", merge, g_object_unref);
       gtk_ui_manager_insert_action_group (merge, action_group, 0);
       gtk_window_add_accel_group (GTK_WINDOW (window), 
 				  gtk_ui_manager_get_accel_group (merge));

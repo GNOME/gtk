@@ -1,3 +1,19 @@
+2003-09-15  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.[hc]: (gtk_action_group_add_radio_actions):
+	(gtk_action_group_add_radio_actions_full): Add value parameter to allow
+	setting the currently selected group member before connecting signals.
+	(GtkToggleActionEntry): Separate struct for constructing toggle actions,
+	including a boolean to initialize the action state before connecting
+	signals.
+	(gtk_action_group_add_toggle_actions):
+	(gtk_action_group_add_toggle_actions_full): New functions to construct
+	toggle actions from an array of GtkToggleActionEntries.
+
+	* demos/gtk-demo/appwindow.c: 
+	* tests/testactions.c: 
+	* tests/testmerge.c: Adjust to new action group API.
+
 Sun Sep 14 16:59:52 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_init): Name the arrow 

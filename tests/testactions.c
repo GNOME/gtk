@@ -100,12 +100,8 @@ static GtkActionEntry entries[] = {
     "Copy the selected text to the clipboard", G_CALLBACK (activate_action) },
   { "paste", GTK_STOCK_PASTE, "_Paste", "<control>V",
     "Paste the text from the clipboard", G_CALLBACK (activate_action) },
-  { "bold", GTK_STOCK_BOLD, "_Bold", "<control>B",
-    "Change to bold face", G_CALLBACK (toggle_action), TRUE },
   { "quit", GTK_STOCK_QUIT,  NULL, "<control>Q",
     "Quit the application", G_CALLBACK (gtk_main_quit) },
-  { "toggle-cnp", NULL, "Enable Cut/Copy/Paste", NULL,
-    "Change the sensitivity of the cut, copy and paste actions", G_CALLBACK (toggle_cnp_actions), TRUE },
   { "customise-accels", NULL, "Customise _Accels", NULL,
     "Customise keyboard shortcuts", G_CALLBACK (show_accel_dialog) },
   { "toolbar-small-icons", NULL, "Small Icons", NULL, 
@@ -114,6 +110,16 @@ static GtkActionEntry entries[] = {
     NULL, G_CALLBACK (toolbar_size_large) }
 };
 static guint n_entries = G_N_ELEMENTS (entries);
+
+static GtkToggleActionEntry toggle_entries[] = {
+  { "bold", GTK_STOCK_BOLD, "_Bold", "<control>B",
+    "Change to bold face", 
+    G_CALLBACK (toggle_action), FALSE },
+  { "toggle-cnp", NULL, "Enable Cut/Copy/Paste", NULL,
+    "Change the sensitivity of the cut, copy and paste actions",
+    G_CALLBACK (toggle_cnp_actions), TRUE },
+};
+static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
 enum {
   JUSTIFY_LEFT,
@@ -254,14 +260,20 @@ main (int argc, char **argv)
     gtk_accel_map_load ("accels");
 
   action_group = gtk_action_group_new ("TestActions");
-  gtk_action_group_add_actions (action_group, entries, n_entries, NULL);
-  gtk_action_group_add_radio_actions (action_group, justify_entries, n_justify_entries, 
+  gtk_action_group_add_actions (action_group, 
+				entries, n_entries, 
+				NULL);
+  gtk_action_group_add_toggle_actions (action_group, 
+				       toggle_entries, n_toggle_entries, 
+				       NULL);
+  gtk_action_group_add_radio_actions (action_group, 
+				      justify_entries, n_justify_entries, 
+				      JUSTIFY_LEFT,
 				      G_CALLBACK (radio_action), NULL);
-  gtk_action_group_add_radio_actions (action_group, toolbar_entries, n_toolbar_entries, 
+  gtk_action_group_add_radio_actions (action_group, 
+				      toolbar_entries, n_toolbar_entries, 
+				      GTK_TOOLBAR_BOTH,
 				      G_CALLBACK (radio_action), NULL);
-
-  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (gtk_action_group_get_action (action_group, "toggle-cnp")), 
-				FALSE);
 
   create_window (action_group);
 
