@@ -106,11 +106,11 @@ guint	gtk_signal_new				(const gchar	    *name,
 void	gtk_signal_emit_stop_by_name		(GtkObject	    *object,
 						 const gchar	    *name);
 void	gtk_signal_connect_object_while_alive	(GtkObject	    *object,
-						 const gchar        *signal,
+						 const gchar        *name,
 						 GtkSignalFunc	     func,
 						 GtkObject	    *alive_object);
 void	gtk_signal_connect_while_alive		(GtkObject	    *object,
-						 const gchar        *signal,
+						 const gchar        *name,
 						 GtkSignalFunc	     func,
 						 gpointer	     func_data,
 						 GtkObject	    *alive_object);

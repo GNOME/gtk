@@ -63,6 +63,7 @@ struct _GtkMenuItem
   guint submenu_placement : 1;
   guint submenu_direction : 1;
   guint right_justify: 1;
+  guint timer_from_keypress : 1;
   guint timer;
 };
 

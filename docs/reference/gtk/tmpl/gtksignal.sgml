@@ -602,13 +602,13 @@ with an integer masquerading as a pointer (through GINT_TO_POINTER()).)
 </para>
 
 @object: the object that emits the signal.
-@signal: 
+@name: name of the signal.
 @func: function pointer to attach to the signal.
 @func_data: pointer to pass to func.
 @alive_object: object whose death should cause the handler connection
 to be destroyed.
 <!-- # Unused Parameters # -->
-@name: name of the signal.
+@signal: 
 
 
 <!-- ##### FUNCTION gtk_signal_connect_object_while_alive ##### -->
@@ -628,12 +628,12 @@ clean up the handler.
 </para>
 
 @object: the object associated with the signal.
-@signal: 
+@name: name of the signal.
 @func: function pointer to attach to the signal.
 @alive_object: the user data, which must be an object, whose destruction
 should signal the removal of this signal.
 <!-- # Unused Parameters # -->
-@name: name of the signal.
+@signal: 
 
 
 <!-- ##### MACRO gtk_signal_disconnect ##### -->

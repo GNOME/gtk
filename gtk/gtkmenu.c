@@ -137,6 +137,9 @@ static void gtk_menu_remove         (GtkContainer      *menu,
 
 static void gtk_menu_update_title   (GtkMenu           *menu);
 
+static void       menu_grab_transfer_window_destroy (GtkMenu *menu);
+static GdkWindow *menu_grab_transfer_window_get     (GtkMenu *menu);
+
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
 
@@ -254,6 +257,12 @@ gtk_menu_class_init (GtkMenuClass *class)
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
+
+  gtk_settings_install_property (g_param_spec_boolean ("gtk-can-change-accels",
+						       _("Can change accelerators"),
+						       _("Whether menu accelerators can be changed by pressing a key over the menu item."),
+						       FALSE,
+						       G_PARAM_READWRITE));
 }
 
 
@@ -595,6 +604,30 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
     }
 }
 
+static gboolean
+popup_grab_on_window (GdkWindow *window,
+		      guint32    activate_time)
+{
+  if ((gdk_pointer_grab (window, TRUE,
+			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			 GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+			 GDK_POINTER_MOTION_MASK,
+			 NULL, NULL, activate_time) == 0))
+    {
+      if (gdk_keyboard_grab (window, TRUE,
+			     activate_time) == 0)
+	return TRUE;
+      else
+	{
+	  gdk_display_pointer_ungrab (gdk_drawable_get_display (window),
+				      activate_time);
+	  return FALSE;
+	}
+    }
+
+  return FALSE;
+}
+
 void
 gtk_menu_popup (GtkMenu		    *menu,
 		GtkWidget	    *parent_menu_shell,
@@ -617,9 +650,6 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu_shell = GTK_MENU_SHELL (menu);
   
   menu_shell->parent_menu_shell = parent_menu_shell;
-  menu_shell->active = TRUE;
-  menu_shell->button = button;
-
   
   if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
     {
@@ -636,57 +666,6 @@ gtk_menu_popup (GtkMenu		    *menu,
 	}
     }
 
-  /* If we are popping up the menu from something other than, a button
-   * press then, as a heuristic, we ignore enter events for the menu
-   * until we get a MOTION_NOTIFY.  
-   */
-
-  current_event = gtk_get_current_event ();
-  if (current_event)
-    {
-      if ((current_event->type != GDK_BUTTON_PRESS) &&
-	  (current_event->type != GDK_ENTER_NOTIFY))
-	menu_shell->ignore_enter = TRUE;
-    }
-
-  if (menu->torn_off)
-    {
-      gtk_menu_tearoff_bg_copy (menu);
-
-      gtk_menu_reparent (menu, menu->toplevel, FALSE);
-    }
-  
-  menu->parent_menu_item = parent_menu_item;
-  menu->position_func = func;
-  menu->position_func_data = data;
-  menu_shell->activate_time = activate_time;
-
-  gtk_menu_position (menu);
-
-  /* We need to show the menu _here_ because code expects to be
-   * able to tell if the menu is onscreen by looking at the
-   * GTK_WIDGET_VISIBLE (menu)
-   */
-  gtk_widget_show (GTK_WIDGET (menu));
-  gtk_widget_show (menu->toplevel);
-
-  if (current_event)
-    {
-      /* Also, if we're popping up from a key event, select the first
-       * item in the menu. Bad hack, but no better way to do it
-       * in current menu framework.
-       */
-      if (current_event->type == GDK_KEY_PRESS &&
-          GTK_MENU_SHELL (menu)->children)
-        {
-          gtk_menu_shell_select_item (GTK_MENU_SHELL (menu),
-                                      GTK_MENU_SHELL (menu)->children->data);
-        }
-      
-      gdk_event_free (current_event);
-    }
-  
-  gtk_menu_scroll_to (menu, menu->scroll_offset);
 
   /* Find the last viewable ancestor, and make an X grab on it
    */
@@ -712,23 +691,90 @@ gtk_menu_popup (GtkMenu		    *menu,
       
       parent = GTK_MENU_SHELL (parent)->parent_menu_shell;
     }
-  
-  if (xgrab_shell && (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab))
+
+  /* We want to receive events generated when we map the menu; unfortunately,
+   * since there is probably already an implicit grab in place from the
+   * button that the user used to pop up the menu, we won't receive then --
+   * in particular, the EnterNotify when the menu pops up under the pointer.
+   *
+   * If we are grabbing on a parent menu shell, no problem; just grab on
+   * that menu shell first before popping up the window with owner_events = TRUE.
+   *
+   * When grabbing on the menu itself, things get more convuluted - we
+   * we do an explicit grab on a specially created window with
+   * owner_events = TRUE, which we override further down with a grab
+   * on the menu. (We can't grab on the menu until it is mapped; we
+   * probably could just leave the grab on the other window, with a
+   * little reorganization of the code in gtkmenu*).
+   */
+  if (xgrab_shell && xgrab_shell != widget)
     {
-      if ((gdk_pointer_grab (xgrab_shell->window, TRUE,
-			     GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-			     GDK_POINTER_MOTION_MASK,
-			     NULL, NULL, activate_time) == 0))
-	{
-	  if (gdk_keyboard_grab (xgrab_shell->window, TRUE,
-                                 activate_time) == 0)
-	    GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
-	  else
-	    gdk_display_pointer_ungrab (gdk_drawable_get_display (xgrab_shell->window),
-					activate_time);
-	}
+      if (popup_grab_on_window (xgrab_shell->window, activate_time))
+	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
     }
+  else
+    {
+      GdkWindow *transfer_window;
+
+      xgrab_shell = widget;
+      transfer_window = menu_grab_transfer_window_get (menu);
+      if (popup_grab_on_window (transfer_window, activate_time))
+	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
+    }
+
+  if (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab)
+    {
+      /* We failed to make our pointer/keyboard grab. Rather than leaving the user
+       * with a stuck up window, we just abort here. Presumably the user will
+       * try again.
+       */
+      menu_shell->parent_menu_shell = NULL;
+      return;
+    }
+
+  menu_shell->active = TRUE;
+  menu_shell->button = button;
+
+  /* If we are popping up the menu from something other than, a button
+   * press then, as a heuristic, we ignore enter events for the menu
+   * until we get a MOTION_NOTIFY.  
+   */
+
+  current_event = gtk_get_current_event ();
+  if (current_event)
+    {
+      if ((current_event->type != GDK_BUTTON_PRESS) &&
+	  (current_event->type != GDK_ENTER_NOTIFY))
+	menu_shell->ignore_enter = TRUE;
+
+      gdk_event_free (current_event);
+    }
+
+  if (menu->torn_off)
+    {
+      gtk_menu_tearoff_bg_copy (menu);
+
+      gtk_menu_reparent (menu, menu->toplevel, FALSE);
+    }
+  
+  menu->parent_menu_item = parent_menu_item;
+  menu->position_func = func;
+  menu->position_func_data = data;
+  menu_shell->activate_time = activate_time;
+
+  gtk_menu_position (menu);
+
+  /* We need to show the menu _here_ because code expects to be
+   * able to tell if the menu is onscreen by looking at the
+   * GTK_WIDGET_VISIBLE (menu)
+   */
+  gtk_widget_show (GTK_WIDGET (menu));
+  gtk_widget_show (menu->toplevel);
+
+  gtk_menu_scroll_to (menu, menu->scroll_offset);
+
+  if (xgrab_shell == widget)
+    popup_grab_on_window (widget->window, activate_time); /* Should always succeed */
 
   gtk_grab_add (GTK_WIDGET (menu));
 }
@@ -803,6 +849,8 @@ gtk_menu_popdown (GtkMenu *menu)
 
   menu_shell->have_xgrab = FALSE;
   gtk_grab_remove (GTK_WIDGET (menu));
+
+  menu_grab_transfer_window_destroy (menu);
 }
 
 GtkWidget*
@@ -1283,6 +1331,51 @@ gtk_menu_realize (GtkWidget *widget)
   gdk_window_show (menu->view_window);
 }
 
+/* See notes in gtk_menu_popup() for information about the "grab transfer window"
+ */
+static GdkWindow *
+menu_grab_transfer_window_get (GtkMenu *menu)
+{
+  GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
+  if (!window)
+    {
+      GdkWindowAttr attributes;
+      gint attributes_mask;
+      
+      attributes.x = -100;
+      attributes.y = -100;
+      attributes.width = 10;
+      attributes.height = 10;
+      attributes.window_type = GDK_WINDOW_TEMP;
+      attributes.wclass = GDK_INPUT_ONLY;
+      attributes.override_redirect = TRUE;
+      attributes.event_mask = 0;
+
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+      
+      window = gdk_window_new (NULL, &attributes, attributes_mask);
+      gdk_window_set_user_data (window, menu);
+
+      gdk_window_show (window);
+
+      g_object_set_data (G_OBJECT (menu), "gtk-menu-transfer-window", window);
+    }
+
+  return window;
+}
+
+static void
+menu_grab_transfer_window_destroy (GtkMenu *menu)
+{
+  GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
+  if (window)
+    {
+      gdk_window_set_user_data (window, NULL);
+      gdk_window_destroy (window);
+      g_object_set_data (G_OBJECT (menu), "gtk-menu-transfer-window", NULL);
+    }
+}
+
 static void
 gtk_menu_unrealize (GtkWidget *widget)
 {
@@ -1291,6 +1384,8 @@ gtk_menu_unrealize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_MENU (widget));
 
   menu = GTK_MENU (widget);
+
+  menu_grab_transfer_window_destroy (menu);
 
   gdk_window_set_user_data (menu->view_window, NULL);
   gdk_window_destroy (menu->view_window);
@@ -1639,8 +1734,8 @@ gtk_menu_key_press (GtkWidget	*widget,
 {
   GtkMenuShell *menu_shell;
   GtkMenu *menu;
-  GtkAccelGroup *accel_group;
   gboolean delete = FALSE;
+  gboolean can_change_accels;
   gchar *accel = NULL;
   guint accel_key, accel_mods;
   
@@ -1649,7 +1744,6 @@ gtk_menu_key_press (GtkWidget	*widget,
       
   menu_shell = GTK_MENU_SHELL (widget);
   menu = GTK_MENU (widget);
-  accel_group = gtk_menu_get_accel_group (menu);
   
   gtk_menu_stop_navigating_submenu (menu);
 
@@ -1699,17 +1793,21 @@ gtk_menu_key_press (GtkWidget	*widget,
       break;
     }
 
+  g_object_get (G_OBJECT 
+		(gtk_settings_get_for_screen (gtk_widget_get_screen (widget))),
+		"gtk-can-change-accels",
+		&can_change_accels,
+		NULL);
+  
   accel_key = event->keyval;
   accel_mods = event->state & gtk_accelerator_get_default_mod_mask ();
 
   /* Modify the accelerators */
-  if (menu_shell->active_menu_item &&
+  if (can_change_accels &&
+      menu_shell->active_menu_item &&
       GTK_BIN (menu_shell->active_menu_item)->child &&			/* no seperators */
       GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL &&	/* no submenus */
-      (delete ||
-       (gtk_accelerator_valid (event->keyval, event->state) &&
-	(accel_mods ||
-	 (accel_key >= GDK_F1 && accel_key <= GDK_F35)))))
+      (delete || gtk_accelerator_valid (event->keyval, event->state)))
     {
       GtkWidget *menu_item = menu_shell->active_menu_item;
       gboolean replace_accels = TRUE;
@@ -1730,10 +1828,20 @@ gtk_menu_key_press (GtkWidget	*widget,
 	{
 	  gboolean changed;
 
+	  /* For the keys that act to delete the current setting, we delete
+	   * the current setting if there is one, otherwise, we set the
+	   * key as the accelerator.
+	   */
 	  if (delete)
 	    {
-	      accel_key = 0;
-	      accel_mods = 0;
+	      GtkAccelKey key;
+	      
+	      if (gtk_accel_map_lookup_entry (path, &key) &&
+		  (key.accel_key || key.accel_mods))
+		{
+		  accel_key = 0;
+		  accel_mods = 0;
+		}
 	    }
 	  changed = gtk_accel_map_change_entry (path, accel_key, accel_mods, replace_accels);
 

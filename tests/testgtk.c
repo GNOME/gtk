@@ -11234,6 +11234,9 @@ create_rc_file (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
+  GtkWidget *frame;
+  GtkWidget *vbox;
+  GtkWidget *label;
 
   if (window && 
      (gtk_widget_get_screen (window) != gtk_widget_get_screen (widget)))
@@ -11250,6 +11253,24 @@ create_rc_file (GtkWidget *widget)
 			  GTK_SIGNAL_FUNC(destroy_idle_test),
 			  &window);
 
+      frame = gtk_aspect_frame_new ("Testing RC file prioritization", 0.5, 0.5, 0.0, TRUE);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), frame, FALSE, FALSE, 0);
+
+      vbox = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (frame), vbox);
+      
+      label = gtk_label_new ("This label should be red");
+      gtk_widget_set_name (label, "testgtk-red-label");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("This label should be green");
+      gtk_widget_set_name (label, "testgtk-green-label");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("This label should be blue");
+      gtk_widget_set_name (label, "testgtk-blue-label");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
       gtk_window_set_title (GTK_WINDOW (window), "Reload Rc file");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
@@ -11260,7 +11281,6 @@ create_rc_file (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Reload All");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -11268,7 +11288,6 @@ create_rc_file (GtkWidget *widget)
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -11277,12 +11296,10 @@ create_rc_file (GtkWidget *widget)
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
-
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
@@ -11723,6 +11740,7 @@ create_main_window (void)
 
   label = gtk_label_new (buffer);
   gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
+  gtk_widget_set_name (label, "testgtk-version-label");
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
@@ -11954,7 +11972,18 @@ main (int argc, char *argv[])
 				"debug_msg",
 				1,
 				GTK_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
+  
+  /* We use gtk_rc_parse_string() here so we can make sure it works across theme
+   * changes
+   */
 
+  gtk_rc_parse_string_for_screen (gdk_get_default_screen (),
+				  "style \"testgtk-version-label\" { "
+				  "   fg[NORMAL] = \"#ff0000\"\n"
+				  "   font = \"Sans 18\"\n"
+				  "}\n"
+    "widget \"*.testgtk-version-label\" style \"testgtk-version-label\"");
+  
   create_main_window ();
 
   gtk_main ();

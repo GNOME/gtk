@@ -2300,7 +2300,7 @@ static struct
   const char *xsettings_name;
   const char *gdk_name;
 } settings_map[] = {
-  { "Net/DoubleClickTime", "gtk-double-click-timeout" },
+  { "Net/DoubleClickTime", "gtk-double-click-time" },
   { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
   { "Gtk/ColorPalette", "gtk-color-palette" },
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },

@@ -1,3 +1,27 @@
+2002-02-04  Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>
+
+	* sk.po: Updated Slovak translation.
+
+2002-02-03  Hasbullah Bin Pit <sebol@ikhlas.com>
+
+	* ms.po: Updated Malay Translation.
+
+2002-02-02  Ole Laursen  <olau@hardworking.dk>
+
+	* da.po: Updated Danish translation.
+
+2002-02-01  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Updated Swedish translation.
+
+2002-02-01  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* no.po: Updated Norwegian (bokmål) translation.
+	
+2002-02-01  Ole Laursen  <olau@hardworking.dk>
+
+	* da.po: Updated Danish translation.
+
 Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* POTFILES.in: Add missing files (Christian Rose

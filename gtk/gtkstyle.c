@@ -4410,7 +4410,7 @@ gtk_default_draw_expander (GtkStyle        *style,
   gint line_width;
   gdouble affine[6];
   gint degrees = 0;
-  
+
   gtk_widget_style_get (widget,
 			"expander_size", &expander_size,
 			NULL);
@@ -4433,13 +4433,13 @@ gtk_default_draw_expander (GtkStyle        *style,
   switch (expander_style)
     {
     case GTK_EXPANDER_COLLAPSED:
-      degrees = 0;
+      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 180 : 0;
       break;
     case GTK_EXPANDER_SEMI_COLLAPSED:
-      degrees = 30;
+      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 150 : 30;
       break;
     case GTK_EXPANDER_SEMI_EXPANDED:
-      degrees = 60;
+      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 120 : 60;
       break;
     case GTK_EXPANDER_EXPANDED:
       degrees = 90;
@@ -4447,7 +4447,7 @@ gtk_default_draw_expander (GtkStyle        *style,
     default:
       g_assert_not_reached ();
     }
-  
+
   create_expander_affine (affine, degrees, expander_size, x, y);
 
   for (i = 0; i < 3; i++)
@@ -4707,11 +4707,10 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
     }
 
   /* Clear background */
-  gdk_draw_rectangle (window,
-                      style->bg_gc[state_type],
-                      TRUE,
-                      x, y, width, height);
-  
+  gtk_style_apply_default_background (style, window, FALSE,
+				      state_type, area,
+				      x, y, width, height);   
+
   switch (edge)
     {
     case GDK_WINDOW_EDGE_SOUTH_EAST:

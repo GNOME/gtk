@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
-"POT-Creation-Date: 2002-01-31 09:59-0500\n"
+"POT-Creation-Date: 2002-02-03 11:13+0800\n"
 "PO-Revision-Date: 2002-01-25 03:03+0800\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -125,46 +125,46 @@ msgstr "Imej BMP mempunyai data pengepala bogus"
 msgid "Not enough memory to load bitmap image"
 msgstr "Tak cukup memori untuk memuatkan imej bitmap"
 
-#: gdk-pixbuf/io-ico.c:204
-#, fuzzy, c-format
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
 msgid "Failure reading ICO: %s"
-msgstr "Gagal membaca GIF: %s"
+msgstr "Gagal membaca ICO: %s"
 
-#: gdk-pixbuf/io-ico.c:221
-#, fuzzy
+#: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Fail GIF kehilangan sebahagian data (mungkin ianya dikerat?)"
+msgstr "Fail ICO kehilangan sebahagian data (mungkin ianya dikerat?)"
 
-#: gdk-pixbuf/io-ico.c:259 gdk-pixbuf/io-ico.c:307 gdk-pixbuf/io-ico.c:370
-#: gdk-pixbuf/io-ico.c:423
-#, fuzzy
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:310 gdk-pixbuf/io-ico.c:373
+#: gdk-pixbuf/io-ico.c:435
 msgid "Not enough memory to load icon"
-msgstr "Tak cukup memori untuk memuatkan fail GIF"
+msgstr "Tak cukup memori untuk memuatkan ikon"
 
-#: gdk-pixbuf/io-ico.c:329
+#: gdk-pixbuf/io-ico.c:332
 msgid "Icon has zero width"
-msgstr ""
+msgstr "Ikon mempunyai kelebaran sifar"
 
-#: gdk-pixbuf/io-ico.c:339
+#: gdk-pixbuf/io-ico.c:342
 msgid "Icon has zero height"
-msgstr ""
+msgstr "Ikon mempunyai ketinggian sifar"
 
-#: gdk-pixbuf/io-ico.c:384
-#, fuzzy
+#: gdk-pixbuf/io-ico.c:387
 msgid "Compressed icons are not supported"
-msgstr "Jenis imej '%s'tidak disokong"
+msgstr "Ikon termampat adalah tidak disokong"
 
-#: gdk-pixbuf/io-ico.c:472
-#, fuzzy
+#: gdk-pixbuf/io-ico.c:420
+msgid "Unsupported icon type"
+msgstr "Jenis ikon tidak disokong"
+
+#: gdk-pixbuf/io-ico.c:484
 msgid "Not enough memory to load ICO file"
-msgstr "Tak cukup memori untuk memuatkan fail GIF"
+msgstr "Tak cukup memori untuk memuatkan fail ICO"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Gagal membaca GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1360 gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Fail GIF kehilangan sebahagian data (mungkin ianya dikerat?)"
 
@@ -185,41 +185,41 @@ msgstr "Kod teruk berlaku"
 msgid "Circular table entry in GIF file"
 msgstr "Kemasukan jadual berpusing pada fail GIF"
 
-#: gdk-pixbuf/io-gif.c:754 gdk-pixbuf/io-gif.c:1348 gdk-pixbuf/io-gif.c:1393
-#: gdk-pixbuf/io-gif.c:1507
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
+#: gdk-pixbuf/io-gif.c:1518
 msgid "Not enough memory to load GIF file"
 msgstr "Tak cukup memori untuk memuatkan fail GIF"
 
-#: gdk-pixbuf/io-gif.c:998
+#: gdk-pixbuf/io-gif.c:1009
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Imej GIF rosak (mampatan LZW tidak betul)"
 
-#: gdk-pixbuf/io-gif.c:1048
+#: gdk-pixbuf/io-gif.c:1059
 msgid "File does not appear to be a GIF file"
 msgstr "Fail nampaknya bukan fail GIF"
 
-#: gdk-pixbuf/io-gif.c:1060
+#: gdk-pixbuf/io-gif.c:1071
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Versi %s format fail GIF tidak disokong"
 
-#: gdk-pixbuf/io-gif.c:1135
+#: gdk-pixbuf/io-gif.c:1146
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "Imej GIF mengandungi bingkai yang wujud diluar sempadan imej."
 
-#: gdk-pixbuf/io-gif.c:1151
+#: gdk-pixbuf/io-gif.c:1162
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Bingkai pertama imej GIF telah 'revert to previous' sebagai mod disposal nya."
 
-#: gdk-pixbuf/io-gif.c:1186
+#: gdk-pixbuf/io-gif.c:1197
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 "Imej GIF tiada colormap global, dan bingkai didalamnya tiada colormap lokal."
 
-#: gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1426
 msgid "GIF image was truncated or incomplete."
 msgstr "Imej GID terkerat atau tidak selepas"
 
@@ -369,123 +369,112 @@ msgid "Insufficient memory to load PNM file"
 msgstr "Tak cukup memori untuk memuatkan fail PNM"
 
 #: gdk-pixbuf/io-tga.c:157
-#, fuzzy
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "Tak dapat memperuntukkan memori untuk memuatkan imej PNM"
+msgstr "Tak dapat memperuntukkan memori untukstruct IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:176
-#, fuzzy
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "Tak dapat memperuntukkan memori untuk memuatkan imej PNM"
+msgstr "Tak dapat memperuntukkan memori data IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
-msgstr ""
+msgstr "Tak dapat memperuntukkan data IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:216
-#, fuzzy
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Tak dapat memperuntukkan"
+msgstr "Tak dapat memperuntukkan memori menentara IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:249
-#, fuzzy
 msgid "fread() failed -- premature end-of-file probably encountered"
-msgstr "end-of-file tak matang berlaku"
+msgstr "fread()  gagal --- end-of-file tak matang berlaku"
 
 #: gdk-pixbuf/io-tga.c:259
-#, fuzzy
 msgid "fseek() failed -- premature end-of-file probably encountered"
-msgstr "end-of-file tak matang berlaku"
+msgstr "fseek() gagal --- end-of-file tak matang berlaku"
 
 #: gdk-pixbuf/io-tga.c:288
 msgid "Can't allocate new pixbuf"
-msgstr ""
+msgstr "Tak dapat memperuntukkan pixbuf baru"
 
 #: gdk-pixbuf/io-tga.c:557
 msgid "Can't allocate colormap structure"
-msgstr ""
+msgstr "Tak dapat memperuntukkan struktur colormap"
 
 #: gdk-pixbuf/io-tga.c:564
 msgid "Can't allocate colormap entries"
-msgstr ""
+msgstr "Tak dapat memperuntukkan kemasukan colormap"
 
 #: gdk-pixbuf/io-tga.c:587
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "Bitdepth tak diduga bagi kemasukan colormap"
 
 #: gdk-pixbuf/io-tga.c:607
 msgid "Can't allocate TGA header memory"
-msgstr ""
+msgstr "Takdapat memperuntukkan memori pengepala TGA"
 
 #: gdk-pixbuf/io-tga.c:619
 msgid "TGA image comment length is too long"
-msgstr ""
+msgstr "Komen pada imej TGA terlalu panjang"
 
 #: gdk-pixbuf/io-tga.c:628
-#, fuzzy
 msgid "TGA image type not supported"
-msgstr "Jenis imej '%s'tidak disokong"
+msgstr "Jenis imej TGA ini tidak disokong"
 
 #: gdk-pixbuf/io-tga.c:671
-#, fuzzy
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Tak dapat memperuntukkan"
+msgstr "Tak dapat memperuntukkan memori untuk struct konteks TGA"
 
 #: gdk-pixbuf/io-tga.c:735
 msgid "Excess data in file"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:776
-#, fuzzy
 msgid "Can't allocate memory for TGA header"
-msgstr "Tak dapat memperuntukkan memori untuk memuatkan imej PNM"
+msgstr "Tak dapat memperuntukkan memori untuk pengepala TGA"
 
 #: gdk-pixbuf/io-tga.c:786
 msgid "Too big value in the infolen field of TGA header."
-msgstr ""
+msgstr "NIlai terlalu besar pada medan infolen pada pengepala TGA"
 
 #: gdk-pixbuf/io-tga.c:810
-#, fuzzy
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "Tak dapat memperuntukkan"
+msgstr "Tak dapat memperuntukkan memori untuk buffer sementara cmap bagi TGA"
 
 #: gdk-pixbuf/io-tga.c:822
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "Tak dapat memperuntukkan"
+msgstr "Tak dapat memperuntukkan memori untuk struct colormap TGA"
 
 #: gdk-pixbuf/io-tga.c:831
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "Tak dapat memperuntukkan"
+msgstr "Tak dapat memperuntukkan memori untuk kemasukan colormap TGA"
 
 #: gdk-pixbuf/io-tga.c:841
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr ""
+msgstr "Bitdepth tidak diduga bagi colormap TGA"
 
 #: gdk-pixbuf/io-tga.c:881
 msgid "Pseudo-Color image without colormap"
-msgstr ""
+msgstr "Imej Pseudo-Color tanpa colormap"
 
 #: gdk-pixbuf/io-tga.c:888
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr ""
+msgstr "Tak dapat mencari offset imej -- end-of-file mungkin berlaku"
 
 #: gdk-pixbuf/io-tga.c:897 gdk-pixbuf/io-tga.c:993 gdk-pixbuf/io-tga.c:1059
 msgid "Can't allocate pixbuf"
-msgstr ""
+msgstr "Tak dapat memperuntukkan pixbuf"
 
 #: gdk-pixbuf/io-tga.c:1125 gdk-pixbuf/io-tga.c:1154
 msgid "Unsupported TGA image type"
-msgstr ""
+msgstr "Jenis imej TGA tidak disokong"
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Tak dapat kelebaran imej (fail TIFF tak elok)"
+msgstr "Tak dapat kelebaran imej (fail TIFF teruk)"
 
 #: gdk-pixbuf/io-tiff.c:159
 msgid "Could not get image height (bad TIFF file)"
-msgstr "Taidak mendpaatkan ketinggian imej (fail TIFF tak elok)"
+msgstr "Taidak mendpaatkan ketinggian imej (fail TIFF teruk)"
 
 #: gdk-pixbuf/io-tiff.c:169
 msgid "Width or height of TIFF image is zero"
@@ -597,6 +586,8 @@ msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
+"Posisi mengufuk bagi anak pada ruang yang ada. 0.0 ialah terjajar ke kiri, "
+"1.0 ialah terjajar ke kanan"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -607,6 +598,8 @@ msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
+"Posisi menegak bagi anak pada ruang yang ada. 0.0 ialah terjajar ke atas, "
+"1.0 ialah terjajar ke bawah"
 
 #: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
@@ -783,6 +776,8 @@ msgstr "Guna stok"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
+"Jika ditetapkan, label digunakan untuk memilih item stok selain dari "
+"dipaparkan"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -1638,15 +1633,23 @@ msgstr "Warna kursor"
 msgid "Color with which to draw insertion cursor"
 msgstr "Warna yang digunakan untuk melikus kursor penyelitan"
 
-#: gtk/gtkentry.c:3852 gtk/gtklabel.c:3171
+#: gtk/gtkentry.c:785
+msgid "Select on focus"
+msgstr "Pilih pada fokus"
+
+#: gtk/gtkentry.c:786
+msgid "Whether to select the contents of an entry when it is focused."
+msgstr "Samada untuk memilih kandungan kemasukan bila ianya difokus."
+
+#: gtk/gtkentry.c:3865 gtk/gtklabel.c:3171
 msgid "Select All"
 msgstr "Pilih Semua"
 
-#: gtk/gtkentry.c:3862 gtk/gtklabel.c:3181
+#: gtk/gtkentry.c:3875 gtk/gtklabel.c:3181
 msgid "Input Methods"
 msgstr "Method input"
 
-#: gtk/gtkentry.c:3872 gtk/gtktextview.c:6337
+#: gtk/gtkentry.c:3885 gtk/gtktextview.c:6337
 msgid "_Insert Unicode control character"
 msgstr "Sel_itkan aksara kawalan Unicode"
 
@@ -1667,27 +1670,25 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Samada butang untuk mencipta/menipulasi fail patut dipapatkan."
 
 #: gtk/gtkfilesel.c:656
-msgid "Directories"
-msgstr "Direktori"
+msgid "Folders"
+msgstr "Folder"
 
 #: gtk/gtkfilesel.c:660
-#, fuzzy
-msgid "_Directories"
-msgstr "Direktori"
+msgid "Fol_ders"
+msgstr "Fol_der"
 
 #: gtk/gtkfilesel.c:688
 msgid "Files"
 msgstr "Fail"
 
 #: gtk/gtkfilesel.c:692
-#, fuzzy
 msgid "_Files"
-msgstr "Fail"
+msgstr "_Fail"
 
 #: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:2105
 #, c-format
-msgid "Directory unreadable: %s"
-msgstr "Direktori tidak boleh dibaca: %s"
+msgid "Folder unreadable: %s"
+msgstr "Folder tidak boleh dibaca: %s"
 
 #: gtk/gtkfilesel.c:892
 #, c-format
@@ -1701,34 +1702,31 @@ msgstr ""
 "Anda pasti untuk memilihnya juga?"
 
 #: gtk/gtkfilesel.c:1022
-#, fuzzy
-msgid "Crea_te Dir"
-msgstr "Cipta Dir"
+msgid "_New Folder"
+msgstr ""
 
 #: gtk/gtkfilesel.c:1033
-#, fuzzy
 msgid "De_lete File"
-msgstr "Padam Fail"
+msgstr "Pa_dam Fail"
 
 #: gtk/gtkfilesel.c:1044
-#, fuzzy
 msgid "_Rename File"
-msgstr "Tukarnama Fail"
+msgstr "Tuka_rnama Fail"
 
 #: gtk/gtkfilesel.c:1292
 #, c-format
 msgid ""
-"The directory name \"%s\" contains symbols that are not allowed in filenames"
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"Nama direktori \"%s\" mengandungi simbol yang tidak diizinkan pada namafail"
+"Nama folder \"%s\" mengandungi simbol yang tidak diizinkan pada namafail"
 
 #: gtk/gtkfilesel.c:1294
 #, c-format
 msgid ""
-"Error creating directory \"%s\": %s\n"
+"Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Ralat mencipta direktori \"%s\": %s\n"
+"Ralat menukarnama folder  \"%s\": %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1295 gtk/gtkfilesel.c:1550
@@ -1737,16 +1735,16 @@ msgstr "Anda mungkin menggunakan simbol yang tidak diizinkan pada namafail"
 
 #: gtk/gtkfilesel.c:1303
 #, c-format
-msgid "Error creating directory \"%s\": %s\n"
-msgstr "Ralat mencipta direktori \"%s\": %s\n"
+msgid "Error creating folder \"%s\": %s\n"
+msgstr "Ralat mencipta folder \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1337
-msgid "Create Directory"
-msgstr "Cipta Direktori"
+msgid "New Folder"
+msgstr "Folder Baru"
 
 #: gtk/gtkfilesel.c:1352
-msgid "_Directory name:"
-msgstr "Nama _Direktori:"
+msgid "_Folder name:"
+msgstr "Nama _folder:"
 
 #. buttons
 #: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1653
@@ -1896,9 +1894,8 @@ msgstr "Sai_z:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:453
-#, fuzzy
 msgid "_Preview:"
-msgstr "Pralihat:"
+msgstr "_Pralihat:"
 
 #: gtk/gtkfontsel.c:1204
 msgid "Font Selection"
@@ -1992,88 +1989,80 @@ msgid "Error loading icon: %s"
 msgstr "Ralat memuatkan ikon: %s"
 
 #: gtk/gtkimage.c:129
-#, fuzzy
 msgid "Pixbuf"
-msgstr "Objek Pixbuf"
+msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:130
 msgid "A GdkPixbuf to display."
-msgstr ""
+msgstr "GdkPixbuf untuk dipaparkan."
 
 #: gtk/gtkimage.c:137
 msgid "Pixmap"
-msgstr ""
+msgstr "Pixmap"
 
 #: gtk/gtkimage.c:138
 msgid "A GdkPixmap to display."
-msgstr ""
+msgstr "GdkPixmap untuk dipaparkan."
 
 #: gtk/gtkimage.c:145
-#, fuzzy
 msgid "Image"
-msgstr "Halaman"
+msgstr "Imej"
 
 #: gtk/gtkimage.c:146
 msgid "A GdkImage to display."
-msgstr ""
+msgstr "GdkImage untuk dipaparkan."
 
 #: gtk/gtkimage.c:153
-#, fuzzy
 msgid "Mask"
-msgstr "Markup"
+msgstr "Topengan"
 
 #: gtk/gtkimage.c:154
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
+msgstr "Bitmap topengan untuk digunakan bersama GdkImage atau GdkPixmap"
 
 #: gtk/gtkimage.c:162
-#, fuzzy
-msgid "Filename to load and siplay."
-msgstr "Gagal memuatkan imej TIFF"
+msgid "Filename to load and display."
+msgstr "Namafail untuk dimemuatkan dan dipaparkan."
 
 #: gtk/gtkimage.c:170
 msgid "Stock ID"
-msgstr ""
+msgstr "ID Stok"
 
 #: gtk/gtkimage.c:171
 msgid "Stock ID for a stock image to display."
-msgstr ""
+msgstr "ID stok bagi imej stok untuk dipaparkan."
 
 #: gtk/gtkimage.c:178
-#, fuzzy
 msgid "Icon set"
-msgstr "Ikon"
+msgstr "Set Ikon"
 
 #: gtk/gtkimage.c:179
 msgid "Icon set to display."
-msgstr ""
+msgstr "Set ikon untuk dipaparkan."
 
 #: gtk/gtkimage.c:186
-#, fuzzy
 msgid "Icon size"
-msgstr "Saiz font"
+msgstr "Saiz ikon"
 
 #: gtk/gtkimage.c:187
 msgid "Size to use for stock icon or icon set."
-msgstr ""
+msgstr "Saiz untk digunakan untuk ikon stok dan set ikon."
 
 #: gtk/gtkimage.c:195
-#, fuzzy
 msgid "Animation"
-msgstr "Maklumat"
+msgstr "Animasi"
 
 #: gtk/gtkimage.c:196
 msgid "GdkPixbufAnimation to display."
-msgstr ""
+msgstr "GdkPixbufAnimation untuk dipaparkan."
 
 #: gtk/gtkimage.c:203
-#, fuzzy
 msgid "Storage type"
-msgstr "Jenis lekuk"
+msgstr "Jenis storan"
 
 #: gtk/gtkimage.c:204
 msgid "The representation being used for image data."
-msgstr ""
+msgstr "Penyampaian digunakan oleh data imej."
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
@@ -2282,19 +2271,30 @@ msgstr "Tinggi layout"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:614
+#: gtk/gtkmain.c:613
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:189
+#: gtk/gtkmenu.c:192
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:190
+#: gtk/gtkmenu.c:193
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
 msgstr ""
+
+#: gtk/gtkmenu.c:261
+msgid "Can change accelerators"
+msgstr "Boleh tukar Pemecut"
+
+#: gtk/gtkmenu.c:262
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu "
+"item."
+msgstr ""
+"Samada pemecut menu boleh ditukar dengan menekan kekunci pada item menu."
 
 #: gtk/gtkmenubar.c:151
 msgid "Style of bevel around the menubar"
@@ -2446,7 +2446,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Samada tab patut mempunyai saiz sama"
 
-#: gtk/gtknotebook.c:2339 gtk/gtknotebook.c:4594
+#: gtk/gtknotebook.c:2342 gtk/gtknotebook.c:4597
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"
@@ -2492,12 +2492,17 @@ msgstr "Saiz Handle"
 msgid "Width of handle"
 msgstr "Lebar handle"
 
-#: gtk/gtkrc.c:2773 gtk/gtkrc.c:2776
+#: gtk/gtkrc.c:2252
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr ""
+
+#: gtk/gtkrc.c:2897 gtk/gtkrc.c:2900
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Gagal menjumpai fail imej di pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3185
+#: gtk/gtkrc.c:3339
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Unsur path Pixmap: \"%s\" mestilah mutlak, %s, baris %d"
@@ -2814,41 +2819,37 @@ msgid "Vertical Adjustment"
 msgstr "Penyesuaian menegak"
 
 #: gtk/gtkscrolledwindow.c:191
-#, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "Skala mengufuk"
+msgstr "Polisi Scrollbar mengufuk"
 
 #: gtk/gtkscrolledwindow.c:192
 msgid "When the horizontal scrollbar is displayed"
-msgstr ""
+msgstr "Bila scrollbar mengufuk dipaparkan"
 
 #: gtk/gtkscrolledwindow.c:199
-#, fuzzy
 msgid "Vertical Scrollbar Policy"
-msgstr "Skala menegak"
+msgstr "Polisi Scrollbar menegak"
 
 #: gtk/gtkscrolledwindow.c:200
 msgid "When the vertical scrollbar is displayed"
-msgstr ""
+msgstr "Bila scrollbar menegak dipaparkan"
 
 #: gtk/gtkscrolledwindow.c:208
-#, fuzzy
 msgid "Window Placement"
-msgstr "Tajuk Tetingkap"
+msgstr "Penempatan Tetingkap"
 
 #: gtk/gtkscrolledwindow.c:209
 msgid "Where the contents are located with respect to the scrollbars"
-msgstr ""
+msgstr "Dimana kandungan ditempatkan sesuai dengan scrollbar"
 
+# Gila Bayang (Angau)
 #: gtk/gtkscrolledwindow.c:216
-#, fuzzy
 msgid "Shadow Type"
-msgstr "Jenis bayang"
+msgstr "Jenis Bayang"
 
 #: gtk/gtkscrolledwindow.c:217
-#, fuzzy
 msgid "Style of bevel around the contents"
-msgstr "Gaya bevel sekeliling menubar"
+msgstr "Gaya bevel sekeliling kandungannya"
 
 #: gtk/gtksettings.c:147
 msgid "Double Click Time"
@@ -2868,25 +2869,27 @@ msgstr "Kursor kelip"
 
 #: gtk/gtksettings.c:156
 msgid "Whether the cursor should blink"
-msgstr ""
+msgstr "Samada kursor patut dikelipkan"
 
 #: gtk/gtksettings.c:163
 msgid "Cursor Blink Time"
-msgstr ""
+msgstr "Masa Kelipan Kursor"
 
 #: gtk/gtksettings.c:164
 msgid "Length of the cursor blink cycle, in milleseconds"
-msgstr ""
+msgstr "Panjang kitaran kelipan kursor, dalam milisaat"
 
 #: gtk/gtksettings.c:171
 msgid "Split Cursor"
-msgstr ""
+msgstr "Split Kursor"
 
 #: gtk/gtksettings.c:172
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
+"Samada dua kursor patut dipaparkan bagi campuran teks kiri-ke-kanan dan "
+"kanan-ke-kiri"
 
 #: gtk/gtksettings.c:179
 msgid "Theme Name"
@@ -2894,35 +2897,35 @@ msgstr "Nama Tema"
 
 #: gtk/gtksettings.c:180
 msgid "Name of theme RC file to load"
-msgstr ""
+msgstr "Nama fail RC tema untuk dimuatkan"
 
 #: gtk/gtksettings.c:187
 msgid "Key Theme Name"
-msgstr ""
+msgstr "Nama Tema Kekunci"
 
 #: gtk/gtksettings.c:188
 msgid "Name of key theme RC file to load"
-msgstr ""
+msgstr "Nama fail RC tema kekunci untuk dimuatkan"
 
 #: gtk/gtksettings.c:196
 msgid "Menu bar accelerator"
-msgstr "Pemecuti bar menu"
+msgstr "Pemecut bar menu"
 
 #: gtk/gtksettings.c:197
 msgid "Keybinding to activate the menu bar"
-msgstr ""
+msgstr "Keybinding untuk mengaktifkan bar menu"
 
 #: gtk/gtksettings.c:205
 msgid "Drag threshold"
-msgstr ""
+msgstr "Threshold heretan"
 
 #: gtk/gtksettings.c:206
 msgid "Number of pixels the cursor can move before dragging"
-msgstr ""
+msgstr "Bilangan piksel kursor yang boleh digerakkan sebelum diheret"
 
 #: gtk/gtkspinbutton.c:225
 msgid "The adjustment that holds the value of the spinbutton"
-msgstr ""
+msgstr "Penyesuaian yang memegang nilai bagi spinbutton"
 
 #: gtk/gtkspinbutton.c:232
 msgid "Climb Rate"
@@ -2930,11 +2933,11 @@ msgstr "Kadar Panjat"
 
 #: gtk/gtkspinbutton.c:233
 msgid "The acceleration rate when you hold down a button"
-msgstr ""
+msgstr "Kadar pemecutan bila anda memegang satu butang"
 
 #: gtk/gtkspinbutton.c:243
 msgid "The number of decimal places to display"
-msgstr ""
+msgstr "Bilangan titik perpuluhan untuk dipaparkan"
 
 #: gtk/gtkspinbutton.c:252
 msgid "Snap to Ticks"
@@ -2952,7 +2955,7 @@ msgstr "Numerik"
 
 #: gtk/gtkspinbutton.c:261
 msgid "Whether non-numeric characters should be ignored"
-msgstr ""
+msgstr "Samada aksara bukan-numerik patut diabaikan"
 
 #: gtk/gtkspinbutton.c:268
 msgid "Wrap"
@@ -2960,16 +2963,18 @@ msgstr "Balut"
 
 #: gtk/gtkspinbutton.c:269
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr ""
+msgstr "Samada spinbutton patut dibalut bila menjangkau had"
 
 #: gtk/gtkspinbutton.c:276
 msgid "Update Policy"
-msgstr "Kemaskini polisi"
+msgstr "Polisi Kemaskini"
 
 #: gtk/gtkspinbutton.c:277
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
+"Samada butang spin patut dikemaskini sentiasa atau hanya bila nilai adalah "
+"sah"
 
 #: gtk/gtkspinbutton.c:285
 msgid "Value"
@@ -2977,11 +2982,11 @@ msgstr "Nilai"
 
 #: gtk/gtkspinbutton.c:286
 msgid "Reads the current value, or sets a new value"
-msgstr ""
+msgstr "Baca nilai semasa, atau tetapkan nilai baru"
 
 #: gtk/gtkstatusbar.c:159
 msgid "Style of bevel around the statusbar text"
-msgstr ""
+msgstr "Gaya bevel sekeliling teks bar status"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
@@ -2998,7 +3003,7 @@ msgstr "Ralat"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr ""
+msgstr "Soalan"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -3013,7 +3018,7 @@ msgstr "Ter_apkan"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr ""
+msgstr "_Bold"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
@@ -3021,11 +3026,11 @@ msgstr "_Batal"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr ""
+msgstr "_CD-Rom"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "_Bersihkan"
+msgstr "_Terangkan"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
@@ -3037,7 +3042,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr ""
+msgstr "_Salin"
 
 #: gtk/gtkstock.c:284
 msgid "C_ut"
@@ -3718,14 +3723,12 @@ msgid "Size of icons in default toolbars"
 msgstr "Saiz ikon pada toolbar default"
 
 #: gtk/gtktreemodelsort.c:298
-#, fuzzy
 msgid "TreeModelSort Model"
-msgstr "Model paparan pepohon"
+msgstr "Model TreeModelSort"
 
 #: gtk/gtktreemodelsort.c:299
-#, fuzzy
 msgid "The model for the TreeModelSort to sort"
-msgstr "Model pagi paparan pepohon"
+msgstr "Model pagi TreeModelSort untuk diisih"
 
 #: gtk/gtktreeview.c:499
 msgid "TreeView Model"
@@ -4259,6 +4262,35 @@ msgstr "Vientam (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Method input X"
+
+#~ msgid "Directories"
+#~ msgstr "Direktori"
+
+#~ msgid "_Directories"
+#~ msgstr "_Direktori"
+
+#~ msgid "Crea_te Dir"
+#~ msgstr "Cip_ta Dir"
+
+#~ msgid ""
+#~ "The directory name \"%s\" contains symbols that are not allowed in "
+#~ "filenames"
+#~ msgstr ""
+#~ "Nama direktori \"%s\" mengandungi simbol yang tidak diizinkan pada "
+#~ "namafail"
+
+#~ msgid ""
+#~ "Error creating directory \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ralat mencipta direktori \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "Create Directory"
+#~ msgstr "Cipta Direktori"
+
+#~ msgid "_Directory name:"
+#~ msgstr "Nama _Direktori:"
 
 #~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 #~ msgstr "Gagal menjumpai fail imej di pixmap_path: \"%s\" baris %d"

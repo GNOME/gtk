@@ -10,7 +10,6 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
-	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
 	-DGTK_COMPILATION				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
@@ -584,7 +583,7 @@ EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la libgtk-win32-1.3.la
 # Install a RC file for the default GTK+ theme
 install-data-local:  install-ms-lib install-libtool-import-lib
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
-	$(INSTALL) gtkrc.default $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
+	$(INSTALL) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
 uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc

@@ -75,6 +75,7 @@ struct _GtkRcSet
 
 struct _GtkRcFile
 {
+  gboolean is_string;		/* If TRUE, name is a string to parse with gtk_rc_parse_string() */
   time_t mtime;
   gchar *name;
   gchar *canonical_name;
@@ -525,55 +526,6 @@ gtk_rc_get_default_files (void)
   return gtk_rc_default_files;
 }
 
-/* The following routine is based on _nl_normalize_codeset from
- * the GNU C library. Contributed by
- *
- * Contributed by Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1995.
- * Copyright (C) 1995, 1996, 1997, 1998, 1999 Free Software Foundation, Inc.
- * 
- * Normalize codeset name.  There is no standard for the codeset
- * names.  Normalization allows the user to use any of the common
- * names.
- */
-static gchar *
-_gtk_normalize_codeset (const gchar *codeset, gint name_len)
-{
-  gint len = 0;
-  gint only_digit = 1;
-  gchar *retval;
-  gchar *wp;
-  gint cnt;
-
-  for (cnt = 0; cnt < name_len; ++cnt)
-    if (isalnum (codeset[cnt]))
-      {
-       ++len;
-
-       if (isalpha (codeset[cnt]))
-	 only_digit = 0;
-      }
-
-  retval = g_malloc ((only_digit ? 3 : 0) + len + 1);
-
-  if (only_digit)
-    {
-      memcpy (retval, "iso", 4);
-      wp = retval + 3;
-    }
-  else
-    wp = retval;
-
-  for (cnt = 0; cnt < name_len; ++cnt)
-    if (isalpha (codeset[cnt]))
-      *wp++ = isupper(codeset[cnt]) ? tolower (codeset[cnt]) : codeset[cnt];
-    else if (isdigit (codeset[cnt]))
-      *wp++ = codeset[cnt];
-
-  *wp = '\0';
-
-  return retval;
-}
-
 static void
 gtk_rc_settings_changed (GtkSettings  *settings,
 			 GParamSpec   *pspec,
@@ -689,79 +641,10 @@ gtk_rc_parse_named (GtkRcContext *context,
 static void
 gtk_rc_parse_default_files (GtkRcContext *context)
 {
-  gchar *locale_suffixes[3];
-  gint n_locale_suffixes = 0;
-  gint i, j;
-  gint length;
-  gchar *locale;
-  gchar *p;
+  gint i;
 
-#ifdef G_OS_WIN32      
-  locale = g_win32_getlocale ();
-#else      
-  locale = setlocale (LC_CTYPE, NULL);
-#endif      
-
-  if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
-    {
-      /* Determine locale-specific suffixes for RC files
-       *
-       * We normalize the charset into a standard form,
-       * which has all '-' and '_' characters removed,
-       * and is lowercase.
-       */
-      gchar *normalized_locale;
-      
-      p = strchr (locale, '@');
-      length = p ? (p - locale) : strlen (locale);
-      
-      p = strchr (locale, '.');
-      if (p)
-	{
-	  gchar *tmp1 = g_strndup (locale, p - locale + 1);
-	  gchar *tmp2 = _gtk_normalize_codeset (p + 1, length - (p - locale + 1));
-	  
-	  normalized_locale = g_strconcat (tmp1, tmp2, NULL);
-	  g_free (tmp1);
-	  g_free (tmp2);
-	  
-	  locale_suffixes[n_locale_suffixes++] = g_strdup (normalized_locale);
-	  length = p - locale;
-	}
-      else
-	normalized_locale = g_strndup (locale, length);
-      
-      p = strchr (normalized_locale, '_');
-      if (p)
-	{
-	  locale_suffixes[n_locale_suffixes++] = g_strndup (normalized_locale, length);
-	  length = p - normalized_locale;
-	}
-      
-      locale_suffixes[n_locale_suffixes++] = g_strndup (normalized_locale, length);
-      
-      g_free (normalized_locale);
-    }
-  
   for (i = 0; gtk_rc_default_files[i] != NULL; i++)
-    {
-      /* Try to find a locale specific RC file corresponding to the
-       * current locale to parse before the default file.
-       */
-      for (j = n_locale_suffixes - 1; j >= 0; j--)
-	{
-	  gchar *name = g_strconcat (gtk_rc_default_files[i],
-				     ".",
-				     locale_suffixes[j],
-				     NULL);
-	  gtk_rc_parse_file (context, name, GTK_PATH_PRIO_RC, FALSE);
-	  g_free (name);
-	}
-      gtk_rc_parse_file (context, gtk_rc_default_files[i], GTK_PATH_PRIO_RC, FALSE);
-    }
-
-  for (j = 0; j < n_locale_suffixes; j++)
-    g_free (locale_suffixes[j]);
+    gtk_rc_parse_file (context, gtk_rc_default_files[i], GTK_PATH_PRIO_RC, FALSE);
 }
 
 void
@@ -791,10 +674,24 @@ void
 gtk_rc_parse_string_for_screen (GdkScreen   *screen,
 				const gchar *rc_string)
 {
+  GtkRcFile *rc_file;
+  /* This is wrong; once we have meaningful multiple RC contexts, we need to parse the
+   * string in all contexts, and in fact, in future contexts as well.
+   */
+  GtkRcContext *context = gtk_rc_context_get (gtk_settings_get_for_screen (screen));
+      
   g_return_if_fail (rc_string != NULL);
 
-  gtk_rc_parse_any (gtk_rc_context_get (gtk_settings_get_for_screen (screen)),
-		    "-", -1, rc_string);    
+  rc_file = g_new (GtkRcFile, 1);
+  rc_file->is_string = TRUE;
+  rc_file->name = g_strdup (rc_string);
+  rc_file->canonical_name = NULL;
+  rc_file->mtime = 0;
+  rc_file->reload = TRUE;
+  
+  context->rc_files = g_slist_append (context->rc_files, rc_file);
+
+  gtk_rc_parse_any (context, "-", -1, rc_string);
 }
 
 #ifndef GDK_MULTIHEAD_SAFE
@@ -802,17 +699,15 @@ void
 gtk_rc_parse_string (const gchar *rc_string)
 {
   g_return_if_fail (rc_string != NULL);
-
-  gtk_rc_parse_any (gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_screen ())),
-		    "-", -1, rc_string);	/* FIXME */
+  gtk_rc_parse_string_for_screen (gdk_get_default_screen (), rc_string);
 }
 #endif
 
 static void
-gtk_rc_parse_file (GtkRcContext *context,
-		   const gchar  *filename,
-		   gint          priority,
-		   gboolean      reload)
+gtk_rc_parse_one_file (GtkRcContext *context,
+		       const gchar  *filename,
+		       gint          priority,
+		       gboolean      reload)
 {
   GtkRcFile *rc_file = NULL;
   struct stat statbuf;
@@ -837,6 +732,7 @@ gtk_rc_parse_file (GtkRcContext *context,
   if (!tmp_list)
     {
       rc_file = g_new (GtkRcFile, 1);
+      rc_file->is_string = FALSE;
       rc_file->name = g_strdup (filename);
       rc_file->canonical_name = NULL;
       rc_file->mtime = 0;
@@ -893,6 +789,86 @@ gtk_rc_parse_file (GtkRcContext *context,
   context->default_priority = saved_priority;
 }
 
+static gchar *
+strchr_len (const gchar *str, gint len, char c)
+{
+  while (len--)
+    {
+      if (*str == c)
+	return (gchar *)str;
+
+      str++;
+    }
+
+  return NULL;
+}
+
+static void
+gtk_rc_parse_file (GtkRcContext *context,
+		   const gchar  *filename,
+		   gint          priority,
+		   gboolean      reload)
+{
+  gchar *locale_suffixes[2];
+  gint n_locale_suffixes = 0;
+  gchar *p;
+  const gchar *locale;
+  gint length, j;
+  gboolean found = FALSE;
+
+  #ifdef G_OS_WIN32      
+  locale = g_win32_getlocale ();
+#else      
+  locale = setlocale (LC_CTYPE, NULL);
+#endif      
+
+  if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
+    {
+      /* Determine locale-specific suffixes for RC files
+       *
+       * We normalize the charset into a standard form,
+       * which has all '-' and '_' characters removed,
+       * and is lowercase.
+       */
+      length = strlen (locale);
+      
+      p = strchr (locale, '@');
+      if (p)
+	length = p - locale;
+
+      p = strchr_len (locale, length, '.');
+      if (p)
+	length = p - locale;
+      
+      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+      
+      p = strchr_len (locale, length, '_');
+      if (p)
+	{
+	  length = p - locale;
+	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	}
+    }
+  
+  gtk_rc_parse_one_file (context, filename, priority, reload);
+  for (j = 0; j < n_locale_suffixes; j++)
+    {
+      if (!found)
+	{
+	  gchar *name = g_strconcat (filename, ".", locale_suffixes[j], NULL);
+	  if (g_file_test (name, G_FILE_TEST_EXISTS))
+	    {
+	      gtk_rc_parse_one_file (context, name, priority, FALSE);
+	      found = TRUE;
+	    }
+	      
+	  g_free (name);
+	}
+      
+      g_free (locale_suffixes[j]);
+    }
+}
+
 /**
  * gtk_rc_parse_for_screen:
  * @screen : the #GdkScreen on which the ??? (GtkRcContext) is located.
@@ -915,9 +891,11 @@ void
 gtk_rc_parse (const gchar *filename)
 {
   g_return_if_fail (filename != NULL);
-
+  /* This is wrong; once we have meaningful multiple RC contexts, we need to parse the
+   * file in all contexts, and in fact, in future contexts as well.
+   */
   gtk_rc_parse_file (gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_screen ())),
-		     filename, GTK_PATH_PRIO_RC, TRUE); /* FIXME */
+		     filename, GTK_PATH_PRIO_RC, TRUE); 
 }
 #endif
 
@@ -1362,12 +1340,15 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       while (tmp_list)
 	{
 	  rc_file = tmp_list->data;
-	  
-	  if (!lstat (rc_file->name, &statbuf) && 
-	      (statbuf.st_mtime > rc_file->mtime))
+
+	  if (!rc_file->is_string)
 	    {
-	      mtime_modified = TRUE;
-	      break;
+	      if (!lstat (rc_file->name, &statbuf) && 
+		  (statbuf.st_mtime > rc_file->mtime))
+		{
+		  mtime_modified = TRUE;
+		  break;
+		}
 	    }
 	  
 	  tmp_list = tmp_list->next;
@@ -1391,7 +1372,12 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 	{
 	  rc_file = tmp_list->data;
 	  if (rc_file->reload)
-	    gtk_rc_parse_file (context, rc_file->name, GTK_PATH_PRIO_RC, TRUE);
+	    {
+	      if (rc_file->is_string)
+		gtk_rc_parse_string_for_screen (settings->screen, rc_file->name);
+	      else
+		gtk_rc_parse_file (context, rc_file->name, GTK_PATH_PRIO_RC, TRUE);
+	    }
 
 	  if (rc_file->canonical_name != rc_file->name)
 	    g_free (rc_file->canonical_name);
@@ -1471,10 +1457,52 @@ gtk_rc_styles_match (GSList       *rc_styles,
       sets = sets->next;
 
       if (g_pattern_match (rc_set->pspec, path_length, path, path_reversed))
-	rc_styles = g_slist_append (rc_styles, rc_set->rc_style);
+	rc_styles = g_slist_append (rc_styles, rc_set);
     }
   
   return rc_styles;
+}
+
+static gint
+rc_set_compare (gconstpointer a, gconstpointer b)
+{
+  const GtkRcSet *set_a = a;
+  const GtkRcSet *set_b = b;
+
+  return (set_a->priority < set_b->priority) ? 1 : (set_a->priority == set_b->priority ? 0 : -1);
+}
+
+static GSList *
+sort_and_dereference_sets (GSList *styles)
+{
+  GSList *tmp_list;
+  
+  /* At this point, the list of sets is ordered by:
+   *
+   * a) 'widget' patterns are earlier than 'widget_class' patterns
+   *    which are ealier than 'class' patterns.
+   * a) For two matches for class patterns, a match to a child type
+   *    is before a match to a parent type
+   * c) a match later in the RC file (or in a later RC file) is before a
+   *    match earlier in the RC file.
+   *
+   * With a) taking precedence over b) which takes precendence over c).
+   *
+   * Now sort by priority, which has the highest precendence for sort order
+   */
+  styles = g_slist_sort (styles, rc_set_compare);
+
+  /* Make styles->data = styles->data->rc_style
+   */
+  tmp_list = styles;
+  while (tmp_list)
+    {
+      GtkRcSet *set = tmp_list->data;
+      tmp_list->data = set->rc_style;
+      tmp_list = tmp_list->next;
+    }
+
+  return styles;
 }
 
 /**
@@ -1511,12 +1539,6 @@ gtk_rc_get_style (GtkWidget *widget)
   if (!rc_style_key_id)
     rc_style_key_id = g_quark_from_static_string ("gtk-rc-style");
 
-  widget_rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					       rc_style_key_id);
-
-  if (widget_rc_style)
-    rc_styles = g_slist_prepend (rc_styles, widget_rc_style);
-  
   if (context->rc_sets_widget)
     {
       gchar *path, *path_reversed;
@@ -1562,6 +1584,14 @@ gtk_rc_get_style (GtkWidget *widget)
 	}
     }
   
+  rc_styles = sort_and_dereference_sets (rc_styles);
+  
+  widget_rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+					       rc_style_key_id);
+
+  if (widget_rc_style)
+    rc_styles = g_slist_prepend (rc_styles, widget_rc_style);
+
   if (rc_styles)
     return gtk_rc_init_style (rc_styles);
 
@@ -1658,6 +1688,8 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
 	  type = g_type_parent (type);
 	}
     }
+ 
+  rc_styles = sort_and_dereference_sets (rc_styles);
   
   if (rc_styles)
     return gtk_rc_init_style (rc_styles);
@@ -1924,9 +1956,10 @@ gtk_rc_init_style (GSList *rc_styles)
       GSList *tmp_styles;
       GType rc_style_type = GTK_TYPE_RC_STYLE;
 
-      /* Find the first derived style in the list, and use that to
-       * create the merged style. If we only have raw GtkRcStyles, use
-       * the first style to create the merged style.
+      /* Find the the first style where the RC file specified engine "" {}
+       * or the first derived style and use that to create the
+       * merged style. If we only have raw GtkRcStyles, use the first
+       * style to create the merged style.
        */
       base_style = rc_styles->data;
       tmp_styles = rc_styles;
@@ -1934,7 +1967,8 @@ gtk_rc_init_style (GSList *rc_styles)
 	{
 	  GtkRcStyle *rc_style = tmp_styles->data;
           
-	  if (G_OBJECT_TYPE (rc_style) != rc_style_type)
+	  if (rc_style->engine_specified ||
+	      G_OBJECT_TYPE (rc_style) != rc_style_type)
 	    {
 	      base_style = rc_style;
 	      break;
@@ -2185,6 +2219,58 @@ is_c_identifier (const gchar *string)
   return is_varname;
 }
 
+static void
+parse_include_file (GtkRcContext *context,
+		    GScanner     *scanner,
+		    const gchar  *filename)
+{
+  char *to_parse = NULL;
+  
+  if (g_path_is_absolute (filename))
+    {
+      /* For abolute paths, we call gtk_rc_parse_file unconditionally. We
+       * don't print an error in this case.
+       */
+      to_parse = g_strdup (filename);
+    }
+  else
+    {
+      /* if a relative path, we look relative to all the RC files in the
+       * include stack. We require the file to be found in this case
+       * so we can give meaningful error messages, and because on reparsing
+       * non-absolute paths don't make sense.
+       */
+      GSList *tmp_list = rc_dir_stack;
+      while (tmp_list)
+	{
+	  gchar *tmpname = g_build_filename (tmp_list->data, filename, NULL);
+
+	  if (g_file_test (tmpname, G_FILE_TEST_EXISTS))
+	    {
+	      to_parse = tmpname;
+	      break;
+	    }
+
+	  g_free (tmpname);
+	  
+	  tmp_list = tmp_list->next;
+	}
+    }
+
+  if (to_parse)
+    {
+      gtk_rc_parse_file (context, to_parse, context->default_priority, FALSE);
+      g_free (to_parse);
+    }
+  else
+    {
+      g_scanner_warn (scanner, 
+		      _("Unable to find include file: \"%s\""),
+		      filename);
+    }
+
+}
+
 static guint
 gtk_rc_parse_statement (GtkRcContext *context,
 			GScanner     *scanner)
@@ -2201,7 +2287,7 @@ gtk_rc_parse_statement (GtkRcContext *context,
       token = g_scanner_get_next_token (scanner);
       if (token != G_TOKEN_STRING)
 	return G_TOKEN_STRING;
-      gtk_rc_parse_file (context, scanner->value.v_string, context->default_priority, FALSE);
+      parse_include_file (context, scanner, scanner->value.v_string);
       return G_TOKEN_NONE;
       
     case GTK_RC_TOKEN_STYLE:
@@ -2945,34 +3031,62 @@ gtk_rc_parse_engine (GtkRcContext *context,
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
 
-  engine = gtk_theme_engine_get (scanner->value.v_string);
-  
-  token = g_scanner_get_next_token (scanner);
-  if (token != G_TOKEN_LEFT_CURLY)
-    return G_TOKEN_LEFT_CURLY;
-
-  if (engine)
+  if (!scanner->value.v_string[0])
     {
-      GtkRcStyleClass *new_class;
+      /* Support engine "" {} to mean override to the default engine
+       */
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_LEFT_CURLY)
+	return G_TOKEN_LEFT_CURLY;
       
-      new_style = gtk_theme_engine_create_rc_style (engine);
-      g_type_module_unuse (G_TYPE_MODULE (engine));
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_RIGHT_CURLY)
+	return G_TOKEN_RIGHT_CURLY;
 
-      new_class = GTK_RC_STYLE_GET_CLASS (new_style);
+      parsed_curlies = TRUE;
 
-      new_class->merge (new_style, *rc_style);
-      if ((*rc_style)->name)
-	new_style->name = g_strdup ((*rc_style)->name);
-      
-      if (new_class->parse)
+      if (G_OBJECT_TYPE (*rc_style) != GTK_TYPE_RC_STYLE)
 	{
-	  parsed_curlies = TRUE;
-	  result = new_class->parse (new_style, context->settings, scanner);
-
-	  if (result != G_TOKEN_NONE)
+	  new_style = gtk_rc_style_new ();
+	  gtk_rc_style_real_merge (new_style, *rc_style);
+	  
+	  if ((*rc_style)->name)
+	    new_style->name = g_strdup ((*rc_style)->name);
+	}
+      else
+	(*rc_style)->engine_specified = TRUE;
+    }
+  else
+    {
+      engine = gtk_theme_engine_get (scanner->value.v_string);
+      
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_LEFT_CURLY)
+	return G_TOKEN_LEFT_CURLY;
+      
+      if (engine)
+	{
+	  GtkRcStyleClass *new_class;
+	  
+	  new_style = gtk_theme_engine_create_rc_style (engine);
+	  g_type_module_unuse (G_TYPE_MODULE (engine));
+	  
+	  new_class = GTK_RC_STYLE_GET_CLASS (new_style);
+	  
+	  new_class->merge (new_style, *rc_style);
+	  if ((*rc_style)->name)
+	    new_style->name = g_strdup ((*rc_style)->name);
+	  
+	  if (new_class->parse)
 	    {
-	      g_object_unref (G_OBJECT (new_style));
-	      new_style = NULL;
+	      parsed_curlies = TRUE;
+	      result = new_class->parse (new_style, context->settings, scanner);
+	      
+	      if (result != G_TOKEN_NONE)
+		{
+		  g_object_unref (G_OBJECT (new_style));
+		  new_style = NULL;
+		}
 	    }
 	}
     }
@@ -3001,6 +3115,8 @@ gtk_rc_parse_engine (GtkRcContext *context,
 
   if (new_style)
     {
+      new_style->engine_specified = TRUE;
+      
       g_object_unref (G_OBJECT (*rc_style));
       *rc_style = new_style;
     }
@@ -3339,21 +3455,6 @@ gtk_rc_parse_module_path_string (const gchar *mod_path)
   gtk_rc_append_default_module_path();
 }
 
-static gint
-rc_set_compare (gconstpointer a, gconstpointer b)
-{
-  const GtkRcSet *set_a = a;
-  const GtkRcSet *set_b = b;
-
-  return (set_a->priority < set_b->priority) ? 1 : (set_a->priority == set_b->priority ? 0 : -1);
-}
-
-static GSList *
-insert_rc_set (GSList *list, GtkRcSet *set)
-{
-  return g_slist_insert_sorted (list, set, rc_set_compare);
-}
-
 static guint
 gtk_rc_parse_path_pattern (GtkRcContext *context,
 			   GScanner     *scanner)
@@ -3445,11 +3546,11 @@ gtk_rc_parse_path_pattern (GtkRcContext *context,
       rc_set->priority = priority;
 
       if (path_type == GTK_PATH_WIDGET)
-	context->rc_sets_widget = insert_rc_set (context->rc_sets_widget, rc_set);
+	context->rc_sets_widget = g_slist_prepend (context->rc_sets_widget, rc_set);
       else if (path_type == GTK_PATH_WIDGET_CLASS)
-	context->rc_sets_widget_class = insert_rc_set (context->rc_sets_widget_class, rc_set);
+	context->rc_sets_widget_class = g_slist_prepend (context->rc_sets_widget_class, rc_set);
       else
-	context->rc_sets_class = insert_rc_set (context->rc_sets_class, rc_set);
+	context->rc_sets_class = g_slist_prepend (context->rc_sets_class, rc_set);
     }
 
   g_free (pattern);

@@ -159,7 +159,7 @@ gtk_image_class_init (GtkImageClass *class)
                                    PROP_FILE,
                                    g_param_spec_string ("file",
                                                         _("Filename"),
-                                                        _("Filename to load and siplay."),
+                                                        _("Filename to load and display."),
                                                         NULL,
                                                         G_PARAM_WRITABLE));
   

@@ -33,7 +33,6 @@
 #include "gtkmenu.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
-#include "gtktearoffmenuitem.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksignal.h"
 
@@ -668,11 +667,21 @@ gtk_real_menu_item_select (GtkItem *item)
       GdkEvent *event = gtk_get_current_event ();
 
       etime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
-      if (etime >= last_submenu_deselect_time &&
+      if (event &&
+	  etime >= last_submenu_deselect_time &&
 	  last_submenu_deselect_time + SELECT_TIMEOUT > etime)
-	menu_item->timer = gtk_timeout_add (SELECT_TIMEOUT - (etime - last_submenu_deselect_time),
-					    gtk_menu_item_select_timeout,
-					    menu_item);
+	{
+	  if (!menu_item->timer)
+	    menu_item->timer = gtk_timeout_add (SELECT_TIMEOUT - (etime - last_submenu_deselect_time),
+						gtk_menu_item_select_timeout,
+						menu_item);
+	  if (event &&
+	      event->type != GDK_BUTTON_PRESS &&
+	      event->type != GDK_ENTER_NOTIFY)
+	    menu_item->timer_from_keypress = TRUE;
+	  else
+	    menu_item->timer_from_keypress = FALSE;
+	}
       else
 	gtk_menu_item_popup_submenu (menu_item);
       if (event)
@@ -765,15 +774,8 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget); 
 	  gtk_menu_item_popup_submenu (widget); 
 
+	  _gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu));
 	  submenu = GTK_MENU_SHELL (menu_item->submenu);
-	  if (submenu->children)
-	    {
-	      if (submenu->children->next &&
-		  GTK_IS_TEAROFF_MENU_ITEM (submenu->children->data))
-		gtk_menu_shell_select_item (submenu, submenu->children->next->data);
-	      else
-		gtk_menu_shell_select_item (submenu, submenu->children->data);
-	    }
 	}
     }
 }
@@ -798,9 +800,15 @@ gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
 static gint
 gtk_menu_item_select_timeout (gpointer data)
 {
+  GtkMenuItem *menu_item;
+  
   GDK_THREADS_ENTER ();
 
+  menu_item = GTK_MENU_ITEM (data);
+  
   gtk_menu_item_popup_submenu (data);
+  if (menu_item->timer_from_keypress && menu_item->submenu)
+    GTK_MENU_SHELL (menu_item->submenu)->ignore_enter = TRUE;
 
   GDK_THREADS_LEAVE ();
 

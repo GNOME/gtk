@@ -1604,11 +1604,11 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   tree_view->priv->vadjustment->step_increment = (tree_view->priv->vadjustment->page_size) / 10;
   tree_view->priv->vadjustment->page_increment = (allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view)) / 2;
   tree_view->priv->vadjustment->lower = 0;
-  tree_view->priv->vadjustment->upper = tree_view->priv->height;
+  tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->page_size, tree_view->priv->height);
 
   if (tree_view->priv->vadjustment->value + allocation->height > tree_view->priv->height)
     gtk_adjustment_set_value (tree_view->priv->vadjustment,
-			      MAX (tree_view->priv->height - allocation->height, 0));
+			      MAX (tree_view->priv->height - tree_view->priv->vadjustment->page_size, 0));
   gtk_adjustment_changed (tree_view->priv->vadjustment);
   
   if (GTK_WIDGET_REALIZED (widget))
@@ -1681,6 +1681,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gint depth;
       gint new_y;
       gint y_offset;
+      gint dval;
+      gint pre_val, aft_val;
       GtkTreeViewColumn *column = NULL;
       gint column_handled_click = FALSE;
 
@@ -1758,6 +1760,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       if (column == NULL)
 	return FALSE;
 
+      pre_val = tree_view->priv->vadjustment->value;
+
       tree_view->priv->focus_column = column;
       if (event->state & GDK_CONTROL_MASK)
 	{
@@ -1773,6 +1777,16 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	{
 	  gtk_tree_view_real_set_cursor (tree_view, path, TRUE);
 	}
+
+      /* the treeview may have been scrolled because of _set_cursor,
+       * correct here
+       */
+
+      aft_val = tree_view->priv->vadjustment->value;
+      dval = pre_val - aft_val;
+
+      cell_area.y += dval;
+      background_area.y += dval;
 
       if (event->type == GDK_BUTTON_PRESS &&
 	  !(event->state & gtk_accelerator_get_default_mod_mask ()))
@@ -3480,9 +3494,12 @@ gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view)
   GtkRBNode *node;
 
   gtk_tree_row_reference_free (tree_view->priv->top_row);
-  tree_view->priv->top_row_dy = _gtk_rbtree_find_offset (tree_view->priv->tree,
-							 tree_view->priv->dy,
-							 &tree, &node);
+  if (tree_view->priv->tree == NULL)
+    tree = NULL;
+  else
+    tree_view->priv->top_row_dy = _gtk_rbtree_find_offset (tree_view->priv->tree,
+							   tree_view->priv->dy,
+							   &tree, &node);
   if (tree == NULL)
     {
       tree_view->priv->top_row = NULL;
@@ -6199,7 +6216,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
     return;
   g_return_if_fail (cursor_node != NULL);
 
-  y = CELL_FIRST_PIXEL (tree_view, cursor_tree, cursor_node, vertical_separator);
+  y = _gtk_rbtree_node_find_offset (cursor_tree, cursor_node);
   y += count * tree_view->priv->vadjustment->page_size;
   y = CLAMP (y, (gint)tree_view->priv->vadjustment->lower,  (gint)tree_view->priv->vadjustment->upper - vertical_separator);
 
@@ -9281,6 +9298,7 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
   gint tree_x, tree_y;
   gint tree_width, tree_height;
   GdkWindow *tree_window = GTK_WIDGET (tree_view)->window;
+  GdkScreen *screen = gdk_drawable_get_screen (tree_window);
   GtkRequisition requisition;
 
   gtk_widget_realize (search_dialog);
@@ -9291,15 +9309,15 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
 		       &tree_height);
   gtk_widget_size_request (search_dialog, &requisition);
 
-  if (tree_x + tree_width - requisition.width > gdk_screen_width ())
-    x = gdk_screen_width () - requisition.width;
+  if (tree_x + tree_width - requisition.width > gdk_screen_get_width (screen))
+    x = gdk_screen_get_width (screen) - requisition.width;
   else if (tree_x + tree_width - requisition.width < 0)
     x = 0;
   else
     x = tree_x + tree_width - requisition.width;
 
-  if (tree_y + tree_height > gdk_screen_height ())
-    y = gdk_screen_height () - requisition.height;
+  if (tree_y + tree_height > gdk_screen_get_height (screen))
+    y = gdk_screen_get_height (screen) - requisition.height;
   else if (tree_y + tree_height < 0) /* isn't really possible ... */
     y = 0;
   else

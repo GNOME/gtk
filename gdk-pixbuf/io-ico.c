@@ -139,8 +139,11 @@ struct ico_progressive_state {
 	gint Lines;		/* # of finished lines */
 
 	gint Type;		/*  
+				   32 = RGBA
 				   24 = RGB
+				   16 = 555 RGB
 				   8 = 8 bit colormapped
+				   4 = 4 bpp colormapped
 				   1  = 1 bit bitonal 
 				 */
 
@@ -247,9 +250,9 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  	/* Step 1: The ICO header */
  
  	IconCount = (Data[5] << 8) + (Data[4]);
- 
+	
  	State->HeaderSize = 6 + IconCount*16;
- 	
+
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
  		State->HeaderBuf=g_try_realloc(State->HeaderBuf,State->HeaderSize);
 		if (!State->HeaderBuf) {
@@ -396,17 +399,26 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	g_assert (State->Header.width > 0);
 	g_assert (State->Header.height > 0);
 
-	if (State->Type == 24)
+        if (State->Type == 32)
+                State->LineWidth = State->Header.width * 4;
+        else if (State->Type == 24)
 		State->LineWidth = State->Header.width * 3;
-	if (State->Type == 8)
+        else if (State->Type == 16)
+                State->LineWidth = State->Header.height * 2;
+        else if (State->Type == 8)
 		State->LineWidth = State->Header.width * 1;
-	if (State->Type == 4) {
+        else if (State->Type == 4)
 		State->LineWidth = (State->Header.width+1)/2;
-	}
-	if (State->Type == 1) {
+        else if (State->Type == 1) {
 		State->LineWidth = State->Header.width / 8;
 		if ((State->Header.width & 7) != 0)
 			State->LineWidth++;
+        } else {
+          g_set_error (error,
+                       GDK_PIXBUF_ERROR,
+                       GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                       _("Unsupported icon type"));
+          return;
 	}
 
 	/* Pad to a 32 bit boundary */
@@ -421,8 +433,8 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 				     GDK_PIXBUF_ERROR,
 				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 				     _("Not enough memory to load icon"));
+			return;
 		}
-		return;
 	}
 
 	g_assert(State->LineBuf != NULL);
@@ -513,6 +525,29 @@ gboolean gdk_pixbuf__ico_image_stop_load(gpointer data,
         return TRUE;
 }
 
+static void
+OneLine32 (struct ico_progressive_state *context)
+{
+        gint X;
+        guchar *Pixels;
+
+        X = 0;
+        if (context->Header.Negative == 0)
+                Pixels = (context->pixbuf->pixels +
+                          context->pixbuf->rowstride *
+                          (context->Header.height - context->Lines - 1));
+        else
+                Pixels = (context->pixbuf->pixels +
+                          context->pixbuf->rowstride *
+                          context->Lines);
+        while (X < context->Header.width) {
+                Pixels[X * 4 + 0] = context->LineBuf[X * 4 + 2];
+                Pixels[X * 4 + 1] = context->LineBuf[X * 4 + 1];
+                Pixels[X * 4 + 2] = context->LineBuf[X * 4 + 0];
+                Pixels[X * 4 + 3] = context->LineBuf[X * 4 + 3];
+                X++;
+        }
+}
 
 static void OneLine24(struct ico_progressive_state *context)
 {
@@ -536,6 +571,44 @@ static void OneLine24(struct ico_progressive_state *context)
 	}
 
 }
+
+static void
+OneLine16 (struct ico_progressive_state *context)
+{
+        int i;
+        guchar *pixels;
+        guchar *src;
+
+        if (context->Header.Negative == 0)
+                pixels = (context->pixbuf->pixels +
+                          context->pixbuf->rowstride * (context->Header.height - context->Lines - 1));
+        else
+                pixels = (context->pixbuf->pixels +
+                          context->pixbuf->rowstride * context->Lines);
+
+        src = context->LineBuf;
+
+        for (i = 0; i < context->Header.width; i++) {
+                int v, r, g, b;
+
+                v = (int) src[0] | ((int) src[1] << 8);
+                src += 2;
+
+                /* Extract 5-bit RGB values */
+
+                r = (v >> 10) & 0x1f;
+                g = (v >> 5) & 0x1f;
+                b = v & 0x1f;
+
+                /* Fill the rightmost bits to form 8-bit values */
+
+                *pixels++ = (r << 3) | (r >> 2);
+                *pixels++ = (g << 3) | (g >> 2);
+                *pixels++ = (b << 3) | (b >> 2);
+                pixels++; /* skip alpha channel */
+        }
+}
+
 
 static void OneLine8(struct ico_progressive_state *context)
 {
@@ -674,19 +747,22 @@ static void OneLine(struct ico_progressive_state *context)
 	}
 		
 	if (context->Lines <context->Header.height) {		
-
-		if (context->Type == 24)
+                if (context->Type == 32)
+                        OneLine32 (context);
+		else if (context->Type == 24)
 			OneLine24(context);
-		if (context->Type == 8)
+                else if (context->Type == 16)
+                        OneLine16 (context);
+		else if (context->Type == 8)
 			OneLine8(context);
-		if (context->Type == 4)
+		else if (context->Type == 4)
 			OneLine4(context);
-		if (context->Type == 1)
+		else if (context->Type == 1)
 			OneLine1(context);
+		else 
+			g_assert_not_reached ();
 	} else
-	{
 		OneLineTransp(context);
-	}
 	
 	context->Lines++;
 	if (context->Lines>=context->Header.height) {

@@ -4045,7 +4045,8 @@ gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
     {
       GdkCursor *cursor;
       
-      cursor = gdk_cursor_new (GDK_XTERM);
+      cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
+					  GDK_XTERM);
       gdk_window_set_cursor (text_view->text_window->bin_window, cursor);
       gdk_cursor_unref (cursor);
       text_view->mouse_cursor_obscured = FALSE;
@@ -6404,9 +6405,12 @@ popup_targets_received (GtkClipboard     *clipboard,
 			NULL, NULL,
 			info->button, info->time);
       else
-	gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
-			popup_position_func, text_view,
-			0, gtk_get_current_event_time ());
+	{
+	  gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
+			  popup_position_func, text_view,
+			  0, gtk_get_current_event_time ());
+	  _gtk_menu_shell_select_first (GTK_MENU_SHELL (text_view->popup_menu));
+	}
     }
 
   g_object_unref (text_view);

@@ -725,6 +725,14 @@ gif_fill_in_lines (GifContext *context, guchar *dest, guchar v)
 	}
 }
 
+static void
+set_need_recomposite (gpointer data, gpointer user_data)
+{
+        GdkPixbufFrame *frame = (GdkPixbufFrame *)data;
+        frame->need_recomposite = TRUE;
+}
+
+
 static int
 gif_get_lzw (GifContext *context)
 {
@@ -802,6 +810,9 @@ gif_get_lzw (GifContext *context)
                                 gdk_pixbuf_get_width (context->frame->pixbuf);
                         h = context->frame->y_offset +
                                 gdk_pixbuf_get_height (context->frame->pixbuf);
+                        if (w  > context->animation->width || h > context->animation->height) {
+                                g_list_foreach (context->animation->frames, set_need_recomposite, NULL);
+                        }
                         if (w > context->animation->width)
                                 context->animation->width = w;
                         if (h > context->animation->height)

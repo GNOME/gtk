@@ -9,6 +9,229 @@
 	(draw_with_images): Use the screen's root window when creating the pixmap.
 	(draw_with_images): Get the screen from the GdkDrawableImplX11.
 
+2002-02-04 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup):
+	Fix leak of GdkEvent (#70519)
+
+Mon Feb  4 10:40:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_resize_grip):
+	Fix from Matthias Clasen to clear background appropriately
+	for theme by calling gtk_style_apply_default_background().
+	(#70449)
+
+Mon Feb  4 10:06:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c: gtk-double-click-time,
+	not gtk-double-click-timeout. (#70501)
+
+2002-02-04  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtksignal.c (gtk_signal_connect_while_alive): 
+	(gtk_signal_connect_object_while_alive): rename 
+	"signal" arg to "name" to avoid compiler warnings
+	about shadowing signal(). #70453
+
+2002-02-03  Anders Carlsson  <expander-master@gtk.org>
+
+	* gtk/gtkstyle.c (gtk_default_draw_expander): Add 
+	flipping support to the expanders.
+
+Sat Feb  2 21:54:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	RC file lookup improvements (#68234, suggestions
+	from Matthias Clasen.)
+
+	* gtk/gtkrc.c (gtk_rc_parse_file): Look for the 
+	locale suffix variants (gtkrc.en_US, gtkrc.en) for
+	all RC files we parse, not just the default RC
+	files.
+
+	* gtk/gtkrc.c (gtk_rc_parse_default_files): Remove
+	support for charset specific RC files.
+
+Sat Feb  2 20:16:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c (_gtk_menu_shell_select_first): 
+	Non-exported _gtk_menu_select_first() function that
+	selects the first item of the menu in a standard
+	way. (Skipping tearoffs.)
+
+	* gtk/gtkmenushell.c gtk/gtkentry.c gtk/gtktextview.c
+	gtkmenuitem.c: Use _gtk_menu_shell_select_first().
+
+	* gtk/gtkmenuitem.c (gtk_real_menu_item_select): Remember
+	if we are starting the timeout from a keypress so
+	we can set menushell->ignore_enter properly.
+
+	* gtk/gtknotebook.c (focus_child_in): Return something
+	meaningful if there are no children.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): Fix precendence
+	problem.
+
+Sat Feb  2 19:15:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Fix some bugs in
+	the determination of xgrab_shell.
+
+Sat Feb  2 17:43:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_grab_focus): Add a GtkSetting
+	(gtk-entry-select-on-focus) controlling whether the
+	contents of an entry are selected on focus in.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): Add a GtkSetting
+	(gtk-can-change-accels) controlling whether accelerators can be
+	changed on the fly or not. (#51902)
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): Allow unmodified
+	accelerators, now that accelerator changing can be turned
+	off for those who won't expect it. (#61285)
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Allow 
+	Backspace/Delete/KP_Delete as valid accelerators.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): Allow setting of
+	Delete/Backspace as accelerators by making them toggle
+	the menu item between empty and the pressed key.
+	(#58605)
+
+	* tests/testgtkrc: Remove the objectionably short cursor blink
+	time setting.
+
+Sat Feb  2 16:43:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): To get around the fact
+	that we may have a owner_events = FALSE grab in effect
+	when we pop up a window, make a temporary grab on a
+	different window, then grab on the real window. Fixes
+	a problem where if a context menu popped up under the 
+	cursor, the first item would be stuck unselected.
+	(#59812, reported by Arnaud Charlet.)
+
+2002-02-02  Peter Williams  <peterw@ximian.com>
+
+	* gtk/Makefile.am (install-data-local): Install gtkrc.default
+	from $(srcdir) for when $(builddir) is different.
+
+Sat Feb  2 19:00:39 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/Makefile.am: remove TESTGTK_RCFILE define
+
+Sat Feb  2 11:37:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Remove the 
+	"select first item if popped up from keypress" hack --
+	was causing more problems than it was worth 
+	(#53191, #68483)
+
+	* gtk/gtktextview.c (popup_targets_received): 
+	 gtk/gtkentry.c (popup_targets_received): If activated
+	from keyboard, select first item of popup menu.
+
+Sat Feb  2 18:07:51 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): set upper member
+	of vadjustment correct, so the vscrollbars of lists smaller than
+	1 page are somewhat saner (#66905)
+
+	* gtk/gtkliststore.c (gtk_list_store_remove_silently): do not
+	increment the stamp, liststore is a model with persisting iters
+
+Fri Feb  1 23:54:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.[ch] (gtk_rc_parse_engine):	Support 
+	engine "" {} to mean override to the default 
+	engine. (#70205)
+
+Fri Feb  1 23:25:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_init): Parse the
+	RC string here when the first object is created
+	rather than in the class_init to not break doc 
+	building. (#70341, Havoc Pennington.)
+
+	* gtk/gtkrc.c (parse_include_file): Use the directories
+	for the currently parsed files as the starting point
+	to look for include files. (#59975)
+
+Fri Feb  1 20:21:56 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkinputdialog.c: use gtk_label_new_with_mnemonic for labels
+	that actually have mnemonics
+
+Fri Feb  1 19:57:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Fix use of ! in shell.
+
+	* gtk/gtktooltips.c (gtk_tooltips_class_init) gtkrc.default: 
+	Move the setting of default tooltips colors to gtktooltips.c
+	from gtkrc.default. (Use default priority so themes will
+	override.) (#58542)
+
+Fri Feb  1 17:48:51 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_get_style): Fix ordering of
+	priorities so that priorities take precendence over
+	the ordering by type. (#70205)
+
+	* test/testgtkrc tests/testgtk.c (create_rc_file): Add 
+	some labels to test priorities in testgtkrc.
+
+Fri Feb  1 00:37:49 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): use
+	y coordinate relative to the tree and not the treeview window
+	(fixes the PgDn/PgUp brokenness)
+
+Fri Feb  1 23:40:31 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): adjust
+	cell_area and background_area for possible treeview scroll
+	(fixes #70283, #70065)
+
+Fri Feb  1 22:20:13 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): use
+	height - page_size not height - allocation->height (fixes #66269)
+
+Fri Feb  1 15:22:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_class_init): Fix typo
+	in property description. (Christian Rose.)
+
+Fri Feb  1 14:50:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_parse_string): Handle reparsing
+	any strings if the theme changes. (#69465)
+
+	* tests/testgtk.c: Add a test for gtk_rc_parse_string().
+
+Fri Feb  1 20:50:29 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_dy_to_top_row): set tree to
+	NULL if tree_view->priv->tree is NULL (#70152, patch by John Harper).
+
+Fri Feb  1 12:51:20 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (focus_child_in): Catch the
+	cur_page == NULL (no children) case. (#70287,
+	Paolo Maggi.)
+
+Fri Feb  1 12:12:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (attempt_file_completion): 
+	s/directory/folder/ in all labels and messages.
+
+Fri Feb  1 08:57:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_exit_func): Remove this useless
+	atexit handler. (existance pointed out by Stefan Kost)
+
+	* gtk/gtkmain.c (gtk_init_check): Warning fixes.
+
 Thu Jan 31 18:46:10 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_reference_free): unref the

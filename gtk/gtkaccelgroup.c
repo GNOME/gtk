@@ -803,7 +803,6 @@ gtk_accelerator_valid (guint		  keyval,
 		       GdkModifierType	  modifiers)
 {
   static const guint invalid_accelerator_vals[] = {
-    GDK_BackSpace, GDK_Delete, GDK_KP_Delete,
     GDK_Shift_L, GDK_Shift_R, GDK_Shift_Lock, GDK_Caps_Lock, GDK_ISO_Lock,
     GDK_Control_L, GDK_Control_R, GDK_Meta_L, GDK_Meta_R,
     GDK_Alt_L, GDK_Alt_R, GDK_Super_L, GDK_Super_R, GDK_Hyper_L, GDK_Hyper_R,
