@@ -413,8 +413,8 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
       
       /* Translate screen area into window coordinates */
       
-      XTranslateCoordinates (GDK_DRAWABLE_XDISPLAY (drawable),
-			     GDK_SCREEN_XROOTWIN (visual->screen),
+      XTranslateCoordinates (GDK_SCREEN_XDISPLAY(impl->screen),
+			     GDK_SCREEN_XROOTWIN (impl->screen),
 			     impl->xid,
 			     0, 0, 
 			     &screen_rect.x, &screen_rect.y, 

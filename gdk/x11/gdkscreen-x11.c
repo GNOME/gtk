@@ -157,9 +157,7 @@ gdk_X11_screen_set_default_colormap (GdkScreen * screen,
 				     GdkColormap * colormap)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
-  gdk_colormap_unref (scr_impl->default_colormap);
   scr_impl->default_colormap = colormap;
-  gdk_colormap_ref (scr_impl->default_colormap);
 }
 
 static GdkWindow *
