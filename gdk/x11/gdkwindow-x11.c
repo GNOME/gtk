@@ -1195,7 +1195,8 @@ gdk_window_get_visual (GdkWindow *window)
   
   if (window_private && !window_private->destroyed)
     {
-       if (window_private->window_type == GDK_WINDOW_FOREIGN)
+       if ((window_private->window_type == GDK_WINDOW_FOREIGN)||
+	   (window_private->xwindow==DefaultRootWindow(window_private->xdisplay)))
 	 {
 	    XGetWindowAttributes (window_private->xdisplay,
 				  window_private->xwindow,
@@ -1221,7 +1222,8 @@ gdk_window_get_colormap (GdkWindow *window)
   g_return_val_if_fail (window_private->window_type != GDK_WINDOW_PIXMAP, NULL);
   if (!window_private->destroyed)
     {
-      if (window_private->window_type == GDK_WINDOW_FOREIGN)
+       if ((window_private->window_type == GDK_WINDOW_FOREIGN)||
+	   (window_private->xwindow==DefaultRootWindow(window_private->xdisplay)))
 	{
 	  XGetWindowAttributes (window_private->xdisplay,
 				window_private->xwindow,
