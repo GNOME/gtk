@@ -1,6 +1,11 @@
+2004-05-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): Document the
+	arguments of the ::move-cursor signal.  (#142725)
+
 2004-05-17  Matthias Clasen  <mclasen@redhat.com>
 
-        Mreged from 2.4:
+        Merged from 2.4:
 	
 	* gtk/gtkbutton.c (gtk_button_size_request) 
 	(gtk_button_size_allocate, _gtk_button_paint): Allocate

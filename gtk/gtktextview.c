@@ -691,16 +691,27 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * Signals
    */
 
-  signals[MOVE_CURSOR] =
+  /**
+   * GtkTextView::move-cursor: 
+   * @widget: the object which received the signal
+   * @step: the granularity of the move, as a #GtkMovementStep
+   * @count: the number of @step units to move
+   * @extend_selection: %TRUE if the move should extend the selection
+   *  
+   * The ::move-cursor signal is a keybinding signal which gets emitted
+   * when the user initiates a cursor movement. Applications should not
+   * use it.
+   */
+  signals[MOVE_CURSOR] = 
     g_signal_new ("move_cursor",
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_OBJECT_CLASS_TYPE (gobject_class), 
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION, 
 		  G_STRUCT_OFFSET (GtkTextViewClass, move_cursor),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+		  NULL, NULL, 
+		  _gtk_marshal_VOID__ENUM_INT_BOOLEAN, 
 		  G_TYPE_NONE, 3,
-		  GTK_TYPE_MOVEMENT_STEP,
-		  G_TYPE_INT,
+		  GTK_TYPE_MOVEMENT_STEP, 
+		  G_TYPE_INT, 
 		  G_TYPE_BOOLEAN);
 
   signals[PAGE_HORIZONTALLY] =
