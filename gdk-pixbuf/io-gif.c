@@ -63,7 +63,8 @@
 
 
 
-#undef DUMP_IMAGE_DETAILS
+#undef DUMP_IMAGE_DETAILS 
+#undef IO_GIFDEBUG
 
 #define MAXCOLORMAPSIZE  256
 #define MAX_LZW_BITS     12
@@ -792,12 +793,31 @@ gif_get_lzw (GifContext *context)
                 context->frame->composited = NULL;
                 context->frame->revert = NULL;
                 
-                context->frame->pixbuf =
-                        gdk_pixbuf_new (GDK_COLORSPACE_RGB,
-                                        TRUE,
-                                        8,
-                                        context->frame_len,
-                                        context->frame_height);
+                if (context->frame_len == 0 || context->frame_height == 0) {
+                        /* An empty frame, we just output a single transparent
+                         * pixel at (0, 0).
+                         */
+                        context->x_offset = 0;
+                        context->y_offset = 0;
+                        context->frame_len = 1;
+                        context->frame_height = 1;
+                        context->frame->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, 1, 1);
+                        if (context->frame->pixbuf) {
+                                guchar *pixels;
+
+                                pixels = gdk_pixbuf_get_pixels (context->frame->pixbuf);
+                                pixels[0] = 0;
+                                pixels[1] = 0;
+                                pixels[2] = 0;
+                                pixels[3] = 0;
+                        }
+                } else
+                        context->frame->pixbuf =
+                                gdk_pixbuf_new (GDK_COLORSPACE_RGB,
+                                                TRUE,
+                                                8,
+                                                context->frame_len,
+                                                context->frame_height);
                 if (!context->frame->pixbuf) {
                         g_free (context->frame);
                         g_set_error (context->error,
@@ -987,7 +1007,8 @@ gif_get_lzw (GifContext *context)
 		if (lower_bound <= upper_bound && first_pass == context->draw_pass) {
 			(* context->update_func)
 				(context->frame->pixbuf,
-				 0, lower_bound,
+                                 context->frame->x_offset,
+                                 context->frame->y_offset + lower_bound,
 				 gdk_pixbuf_get_width (context->frame->pixbuf),
 				 upper_bound - lower_bound,
 				 context->user_data);
@@ -1011,9 +1032,9 @@ gif_get_lzw (GifContext *context)
 				(* context->update_func)
 					(context->frame->pixbuf,
 					 context->frame->x_offset,
-                                         lower_bound + context->frame->y_offset,
+                                         context->frame->y_offset + lower_bound,
 					 gdk_pixbuf_get_width (context->frame->pixbuf),
-					 gdk_pixbuf_get_height (context->frame->pixbuf),
+					 gdk_pixbuf_get_height (context->frame->pixbuf) - lower_bound,
 					 context->user_data);
 			}
 		}
@@ -1179,17 +1200,6 @@ gif_get_frame_info (GifContext *context)
 	context->x_offset = LM_to_uint (buf[0], buf[1]);
 	context->y_offset = LM_to_uint (buf[2], buf[3]);
 
-        if ((context->frame_height == 0) || (context->frame_len == 0)) {
-		context->state = GIF_DONE;
-
-                g_set_error (context->error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("GIF image contained a frame with height or width 0."));
-                
-		return -2;
-        }
-            
 	if (((context->frame_height + context->y_offset) > context->height) ||
             ((context->frame_len + context->x_offset) > context->width)) {
 		/* All frames must fit in the image bounds */
@@ -1219,13 +1229,14 @@ gif_get_frame_info (GifContext *context)
 		return -2;
 	}
 
+	context->frame_interlace = BitSet (buf[8], INTERLACE);
+
 #ifdef DUMP_IMAGE_DETAILS
-        g_print (">width: %d height: %d xoffset: %d yoffset: %d disposal: %d delay: %d transparent: %d\n",
+        g_print (">width: %d height: %d xoffset: %d yoffset: %d disposal: %d delay: %d transparent: %d interlace: %d\n",
                  context->frame_len, context->frame_height, context->x_offset, context->y_offset,
-                 context->gif89.disposal, context->gif89.delay_time, context->gif89.transparent);
+                 context->gif89.disposal, context->gif89.delay_time, context->gif89.transparent, context->frame_interlace);
 #endif
         
-	context->frame_interlace = BitSet (buf[8], INTERLACE);
 	if (BitSet (buf[8], LOCALCOLORMAP)) {
 
 #ifdef DUMP_IMAGE_DETAILS

@@ -1,3 +1,13 @@
+2003-06-21  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c: Merge from 2.2: Fix update_func() arguments and accept empty 
+ 	frames.  (#106962)
+
+2003-06-17  Matthias Clasen  <maclas@gmx.de>
+
+	* Makefile.am (man_MANS): Removed, man pages are now installed
+	from docs/reference/gdk-pixbuf.
+
 2003-06-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixdata.c (gdk_pixbuf_new_from_inline): Document
