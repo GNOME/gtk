@@ -1,3 +1,13 @@
+2001-08-04 Alexander Larsson <alexl@redhat.com>
+
+	* gdk/win32/gdkinput.c:
+	Add #ifdef HAVE_WINTAB around wintab.h include.
+
+	* gtk/gtk.def:
+	Removed marshals that have been moved to glib.
+	Commented out plug and socket. They didn't compile for me 
+	on win32.
+
 2001-08-04  Hans Breuer  <hans@breuer.org>
 
 	* gtk/stocks-icons/makefile.msc : new file

@@ -856,15 +856,12 @@ EXPORTS
 	gtk_marshal_BOOLEAN__VOID
 	gtk_marshal_ENUM__ENUM
 	gtk_marshal_INT__POINTER
-	gtk_marshal_VOID__BOOLEAN
-	gtk_marshal_VOID__BOXED
 	gtk_marshal_VOID__BOXED_BOXED
 	gtk_marshal_VOID__BOXED_OBJECT
 	gtk_marshal_VOID__BOXED_STRING_INT
 	gtk_marshal_VOID__BOXED_UINT
 	gtk_marshal_VOID__BOXED_UINT_FLAGS
 	gtk_marshal_VOID__BOXED_UINT_UINT
-	gtk_marshal_VOID__ENUM
 	gtk_marshal_VOID__ENUM_FLOAT
 	gtk_marshal_VOID__ENUM_FLOAT_BOOLEAN
 	gtk_marshal_VOID__ENUM_INT
@@ -1044,10 +1041,10 @@ EXPORTS
 	gtk_pixmap_new
 	gtk_pixmap_set
 	gtk_pixmap_set_build_insensitive
-	gtk_plug_construct
-	gtk_plug_get_id
-	gtk_plug_get_type
-	gtk_plug_new
+;	gtk_plug_construct
+;	gtk_plug_get_id
+;	gtk_plug_get_type
+;	gtk_plug_new
 	gtk_preview_draw_row
 	gtk_preview_get_cmap
 	gtk_preview_get_info
@@ -1222,11 +1219,11 @@ EXPORTS
 	gtk_size_group_new
 	gtk_size_group_remove_widget
 	gtk_size_group_set_mode
-	gtk_socket_add_id
-	gtk_socket_get_id
-	gtk_socket_get_type
-	gtk_socket_new
-	gtk_socket_steal
+;	gtk_socket_add_id
+;	gtk_socket_get_id
+;	gtk_socket_get_type
+;	gtk_socket_new
+;	gtk_socket_steal
 	gtk_spin_button_configure
 	gtk_spin_button_get_adjustment
 	gtk_spin_button_get_digits
