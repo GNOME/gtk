@@ -1,5 +1,6 @@
 Makefile
 Makefile.in
+*.html
 *.info*
 *.dvi
 *.ps

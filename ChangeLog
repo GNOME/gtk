@@ -1,3 +1,8 @@
+Wed Mar 11 14:36:48 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gtk/docs/: added tutorial, changed some files around to
+          make more sense.
+
 Thu Mar 12 10:49:38 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkmain.h: 

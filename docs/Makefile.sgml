@@ -8,9 +8,16 @@
 # the automake stuff...
 #
 
-all: sgml
+all: html
 
-sgml:
+html: faq tut italian_tut
+	perl gtkdocs_fix gtkfaq*.html gtk_tut*.html
+
+faq:
 	sgml2html gtkfaq.sgml
-	cp gtkfaq.html index.html
-	perl gtkfaq_fix *.html
+
+tut:
+	sgml2html gtk_tut.sgml
+
+italian_tut:
+	sgml2html gtk_tut_it.sgml

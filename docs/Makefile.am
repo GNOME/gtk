@@ -5,9 +5,11 @@ info_TEXINFOS = gdk.texi gtk.texi glib.texi
 EXTRA_DIST =	\
 	texinfo.tex	\
 	macros.texi	\
-	Makefile.gtkfaq	\
+	Makefile.sgml	\
+	gtkdocs_fix	\
 	gtkfaq.sgml	\
-	gtkfaq_fix	\
+	gtk_tut.sgml	\
+	gtk_tut_it.sgml	\
 	debugging.txt	\
 	developers.txt	\
 	refcounting.txt	\
