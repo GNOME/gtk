@@ -1,3 +1,8 @@
+Wed Feb 23 10:54:14 GMT 2000  Tony Gale <gale@gtk.org>
+
+        * docs/gtk_tut.sgml: New section on GtkCalendar
+        * examples/calendar: Update example code
+
 Tue Feb 22 13:54:12 GMT 2000  Tony Gale <gale@gtk.org>
 
 	* docs/gtkfaq.sgml: FAQ Update
