@@ -63,9 +63,6 @@ struct _GtkTypeNode
 }
 
 static void  gtk_type_class_init		(GtkType      node_type);
-static guint gtk_type_name_hash			(const char  *key);
-static gint  gtk_type_name_compare		(const char  *a,
-						 const char  *b);
 static void  gtk_type_init_builtin_types	(void);
 
 static GtkTypeNode *type_nodes = NULL;
@@ -136,8 +133,7 @@ gtk_type_init (void)
       g_assert (sizeof (GtkType) >= 4);
       g_assert (TYPE_NODES_BLOCK_SIZE > GTK_TYPE_FUNDAMENTAL_MAX);
       
-      type_name_2_type_ht = g_hash_table_new ((GHashFunc) gtk_type_name_hash,
-					      (GCompareFunc) gtk_type_name_compare);
+      type_name_2_type_ht = g_hash_table_new (g_str_hash, g_str_equal);
       
       gtk_type_init_builtin_types ();
     }
@@ -906,25 +902,6 @@ gtk_type_query (GtkType type)
     }
   
   return NULL;
-}
-
-static guint
-gtk_type_name_hash (const char *key)
-{
-  guint result;
-  
-  result = 0;
-  while (*key)
-    result += (result << 3) + *key++;
-  
-  return result;
-}
-
-static gint
-gtk_type_name_compare (const char *a,
-		       const char *b)
-{
-  return (strcmp (a, b) == 0);
 }
 
 extern void gtk_object_init_type (void);

@@ -1,3 +1,8 @@
+Mon Feb 14 22:50:10 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_init): use g_str_hash() and g_str_equal()
+	for the typename hash table.
+
 Mon Feb 14 15:01:23 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_compute_position): Add some sanity checks
