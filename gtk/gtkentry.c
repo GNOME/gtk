@@ -3226,13 +3226,13 @@ gtk_entry_move_visually (GtkEntry *entry,
 	  count++;
 	}
 
-      if (new_index < 0 || new_index == G_MAXINT)
-	break;
-
-      index = new_index;
+      if (new_index < 0)
+        index = 0;
+      else if (new_index != G_MAXINT)
+        index = new_index;
       
       while (new_trailing--)
-	index = g_utf8_next_char (text + new_index) - text;
+	index = g_utf8_next_char (text + index) - text;
     }
   
   return g_utf8_pointer_to_offset (text, text + index);
