@@ -1,3 +1,8 @@
+2003-01-05  Gustavo Noronha Silva  <kov@debian.org>
+
+	* pt_BR.po: updated translation
+	* saved Changelog as UTF8
+
 2003-01-01  Abel Cheung  <maddog@linux.org.hk>
 
 	* zh_TW.po: Updated traditional Chinese translation.
@@ -88,7 +93,7 @@ Wed Dec 11 14:06:50 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-12-07  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-12-07  Andras Timar  <timar@gnome.hu>
 
@@ -120,7 +125,7 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-11-28  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-11-26  Daniel Elstner  <daniel.elstner@gmx.net>
 
@@ -136,7 +141,7 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 	
 2002-11-15  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-11-22  Dmitry G. Mastrukov  <dmitry@taurussoft.org>
 
@@ -163,11 +168,11 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-11-15  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-11-10  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-11-09  Christian Neumair  <chris@gnome-de.org>
 
@@ -198,15 +203,15 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-10-21  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-10-04  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-09-24  German Poo Caaman~o <gpoo@ubiobio.cl>
 
-	* es.po: Fixed bug #93072 by Juan Manuel Garc?­a Molina
+	* es.po: Fixed bug #93072 by Juan Manuel Garc?Â­a Molina
 			<juanma_gm@wanadoo.es>.
 
 2002-09-09  Yanko Kaneti <yaneti@declera.com>
@@ -305,15 +310,15 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 2002-04-28  Fatih Demir <kabalak@gtranslator.org>
 
-	* tr.po: Committed updated Turkish translation by ?mer.
+	* tr.po: Committed updated Turkish translation by ?Âmer.
 
 2002-04-23  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-04-22  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-04-22  Christophe Merlet  <christophe@merlet.net>
 
@@ -380,7 +385,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 	* ko.po: Updated Korean translation.
 
-2002-04-02  T?µivo Leedj?¤rv  <toivo@linux.ee>
+2002-04-02  T?Âµivo Leedj?Â¤rv  <toivo@linux.ee>
 
 	* et.po: Updated Estonian translation.
 
@@ -399,7 +404,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 2002-03-28  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-03-28  Ole Laursen  <olau@hardworking.dk>
 
@@ -436,7 +441,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 2002-03-17  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-03-16  Christian Meyer  <chrisime@gnome.org>
 
@@ -476,9 +481,9 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 	
 2002-03-06  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
-2002-03-06  Germ??n Poo-Caama?±o <gpoo@ubiobio.cl>
+2002-03-06  Germ??n Poo-Caama?Â±o <gpoo@ubiobio.cl>
 
         * es.po: Updated spanish translation.
 
@@ -496,7 +501,7 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 2002-03-03  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-03-03  Zbigniew Chyla  <cyba@gnome.pl>
 
@@ -519,7 +524,7 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 	* da.po: Updated Danish translation.
 
-2002-02-28  T?µivo Leedj?¤rv  <leedjarv@interest.ee>
+2002-02-28  T?Âµivo Leedj?Â¤rv  <leedjarv@interest.ee>
 
 	* et.po: Updated Estonian translation.
 
@@ -566,7 +571,7 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 2002-02-23  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-02-23  Ole Laursen  <olau@hardworking.dk>
 
@@ -578,19 +583,19 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 2002-02-21  Fatih Demir <kabalak@gtranslator.org>
 
-	* tr.po: Committed updated Turkish translation by Nilg?¼n.
+	* tr.po: Committed updated Turkish translation by Nilg?Â¼n.
 
 Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* POTFILES.in: Add io-wbmp.c.
 
-2002-02-16  T?µivo Leedj?¤rv  <leedjarv@interest.ee>
+2002-02-16  T?Âµivo Leedj?Â¤rv  <leedjarv@interest.ee>
 
 	* et.po: Updated Estonian translation.
 
 2002-02-12  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-02-11  Duarte Loreto <happyguy_pt@hotmail.com>
 
@@ -598,7 +603,7 @@ Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-02-09  Ole Laursen  <olau@hardworking.dk>
 
@@ -630,7 +635,7 @@ Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-02-01  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-02-01  Ole Laursen  <olau@hardworking.dk>
 
@@ -689,7 +694,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-01-11  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¥l) translation.
+	* no.po: Updated Norwegian (bokm?Â¥l) translation.
 	
 2002-01-07  Zbigniew Chyla  <cyba@gnome.pl>
 
@@ -726,7 +731,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2001-12-13  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¯???½) translation.
+	* no.po: Updated Norwegian (bokm?Â¯???Â½) translation.
 	
 2001-12-13  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
 
@@ -743,7 +748,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2001-12-05  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¯???½) translation.
+	* no.po: Updated Norwegian (bokm?Â¯???Â½) translation.
 	
 2001-12-04  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
 
@@ -755,9 +760,9 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2001-12-01  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¯???½) translation.
+	* no.po: Updated Norwegian (bokm?Â¯???Â½) translation.
 	
-2001-11-28  Carlos Perell Mar?¯???½ <carlos@gnome-db.org>
+2001-11-28  Carlos Perell Mar?Â¯???Â½ <carlos@gnome-db.org>
 
 	* es.po: Some fixes.
 
@@ -775,7 +780,7 @@ Sat Nov 24 13:19:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-11-14  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¯???½) translation.
+	* no.po: Updated Norwegian (bokm?Â¯???Â½) translation.
 	
 2001-11-11  Fatih Demir <kabalak@gtranslator.org>
 
@@ -821,7 +826,7 @@ Sat Nov 24 13:19:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-09-27  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¯???½) translation.
+	* no.po: Updated Norwegian (bokm?Â¯???Â½) translation.
 	
 Wed Sep 26 15:34:46 2001  Owen Taylor  <otaylor@redhat.com>
 
@@ -845,7 +850,7 @@ Wed Sep 26 15:34:46 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-09-19  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¯???½) translation.
+	* no.po: Updated Norwegian (bokm?Â¯???Â½) translation.
 	
 2001-09-14  Christian Rose  <menthos@menthos.com>
 
@@ -927,7 +932,7 @@ Sat Sep  8 01:44:32 2001  Jonathan Blandford  <jrb@redhat.com>
 
 2001-08-06  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm?¯???½) translation.
+	* no.po: Updated Norwegian (bokm?Â¯???Â½) translation.
 	
 2001-07-28  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
@@ -1461,7 +1466,7 @@ Tue Dec 22 14:24:37 1998  Owen Taylor  <otaylor@redhat.com>
 
 Sat Dec 19 18:42:39 PST 1998 Shawn T. Amundson <amundson@gtk.org>
 
-	* sv.po: added translation by Tomas ?¯???½ren <stric@ing.umu.se>
+	* sv.po: added translation by Tomas ?Â¯???Â½ren <stric@ing.umu.se>
 
 Fri Dec 18 09:52:28 1998  Owen Taylor  <otaylor@redhat.com>
 
