@@ -1,17 +1,17 @@
 # Translation into the walloon language.
 #
 # Si vos voloz donner on côp di spale pol ratoûrnaedje di Gnome (ou des
-# ôtes libes programes) sicrijhoz-mu a l' adresse emile
-# <srtxg@chanae.alphanet.ch>; nos avans co bråmint di l' ovraedje a fé.
+# ôtes libes programes) sicrijhoz-mu a l' adresse emile
+# <srtxg@chanae.alphanet.ch>; nos avans co bråmint di l' ovraedje a fé.
 #
 # Copyright (C) 1999 Free Software Foundation, Inc.
-# Pablo Saratxaga <pablo@mandrakesoft.com> 1999-2000
+# Pablo Saratxaga <pablo@mandrakesoft.com> 1999-2002
 # Lucyin Mahin, 2000
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2001-03-28 16:12-0500\n"
+"POT-Creation-Date: 2001-07-28 06:30+0200\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <pablo@mandrakesoft.com>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -77,7 +77,7 @@ msgstr "Fitchîs"
 #: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Dji n' sai lere li ridant: %s"
+msgstr "Dji n' sai lere li ridant: %s"
 
 #: gtk/gtkfilesel.c:551
 msgid "Create Dir"
@@ -89,7 +89,7 @@ msgstr "Disfacer li fitchî"
 
 #: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
-msgstr "Rlomer li fitchî"
+msgstr "Rilomer li fitchî"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -116,7 +116,7 @@ msgstr "No do ridant:"
 #. buttons
 #: gtk/gtkfilesel.c:859
 msgid "Create"
-msgstr "Fé"
+msgstr "Askepyî"
 
 #. buttons
 #: gtk/gtkfilesel.c:959
@@ -126,7 +126,7 @@ msgstr "Disfacer"
 #. buttons
 #: gtk/gtkfilesel.c:1074
 msgid "Rename"
-msgstr "Rlomer"
+msgstr "Rilomer"
 
 #: gtk/gtkfilesel.c:1457
 msgid "Selection: "
@@ -158,11 +158,11 @@ msgstr "Stîle di Rawete:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Grandeu è Picsels:"
+msgstr "Grandeu e Picsels:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr "Grandeu è Ponts:"
+msgstr "Grandeu e Ponts:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
@@ -174,7 +174,7 @@ msgstr "Spexheu y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr "Espaçmint:"
+msgstr "Espåçmint:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
@@ -192,7 +192,7 @@ msgstr "Prôpietés del fonte"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Valixhance dimandéye"
+msgstr "Valixhance dimandêye"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
@@ -241,11 +241,11 @@ msgstr "Informåcion sol Fonte"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "No del fonte dimandéye:"
+msgstr "No del fonte dimandêye:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Vrai no del fonte:"
+msgstr "Vraiy no del fonte:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
@@ -258,7 +258,7 @@ msgstr "Passete"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Sôrtes di Fontes:"
+msgstr "Sôres di Fontes:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
@@ -315,16 +315,16 @@ msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
-msgstr "Vos n' avoz nén li fonte ki vos avoz tchwezi"
+msgstr "Vos n' avoz nén li fonte ki vos avoz tchoezi"
 
 #: gtk/gtkfontsel.c:1798
 msgid "The selected font is not a valid font."
-msgstr "Li fonte ki vos avoz tchwezi n' est nén valåbe"
+msgstr "Li fonte ki vos avoz tchoezi n' est nén valåbe"
 
 #: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
-"Ci fonte est ecôdéye so 2 octets, èt mutwè pout nén esse håynéye comufåt"
+"Ci fonte est ecôdêye so 2 octets, et motoit pout nén esse håynêye comufåt"
 
 #: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -340,7 +340,7 @@ msgstr "propôrcionel"
 
 #: gtk/gtkfontsel.c:1984
 msgid "monospaced"
-msgstr "d' espåçmint egål"
+msgstr "d' espåçmint egål"
 
 #: gtk/gtkfontsel.c:1985
 msgid "char cell"
@@ -356,28 +356,28 @@ msgstr "MAX_FONTS passé. Sacwantès fontes polèt manker"
 
 #: gtk/gtkfontsel.c:3508
 msgid "Apply"
-msgstr "Mete èn oûve"
+msgstr "Mete en oûve"
 
 #: gtk/gtkfontsel.c:3530
 msgid "Font Selection"
-msgstr "Tchwezi les fontes"
+msgstr "Tchoezi les fontes"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr "Gamma"
+msgstr "Gama"
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
-msgstr "Valixhance Gamma"
+msgstr "Valixhance Gama"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr "Intréye"
+msgstr "Intrêye"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Nole éndjin d' intréye"
+msgstr "Nole éndjin d' intrêye"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
@@ -402,7 +402,7 @@ msgstr "Môde: "
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr "Assis"
+msgstr "Ashis"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
@@ -437,7 +437,7 @@ msgstr "Limite Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr "nole"
+msgstr "nouk"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
@@ -453,21 +453,20 @@ msgstr "netyî"
 msgid "Page %u"
 msgstr "Pådje %u"
 
-#: gtk/gtkrc.c:1703
+#: gtk/gtkrc.c:1758
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
-"Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\" al roye %d"
+msgstr "Dji n' pout nén trover on fitchî imådje e pixmap_path: «%s» al roye %d"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1761
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\""
+msgstr "Dji n' pout nén trover on fitchî imådje e pixmap_path: «%s»"
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Dji n' pout nén trover on module tcherdjåve è module_path: \"%s\","
+msgstr "Dji n' pout nén trover on module tcherdjåve e module_path: «%s»,"
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
@@ -483,19 +482,19 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "cråsses"
 
 #~ msgid "demibold"
-#~ msgstr "demi cråsses"
+#~ msgstr "dimey cråsses"
 
 #~ msgid "medium"
-#~ msgstr "moyénes"
+#~ msgstr "moyenes"
 
 #~ msgid "normal"
 #~ msgstr "miernowes"
 
 #~ msgid "light"
-#~ msgstr "ledjîres"
+#~ msgstr "ledjires"
 
 #~ msgid "extralight"
-#~ msgstr "foirt ledjîres"
+#~ msgstr "foirt ledjires"
 
 #~ msgid "thin"
 #~ msgstr "tenes"
