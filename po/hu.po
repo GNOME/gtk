@@ -259,11 +259,11 @@ msgstr "(tiltva)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(nem ismert)"
+msgstr "(ismeretlen)"
 
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "tÃ¶rÃ¶l"
+msgstr "törlés"
 
 #: gtk/gtkmain.c:417
 msgid "default:LTR"
