@@ -502,6 +502,8 @@ extern gboolean		 _sizemove_in_progress;
 
 /* Initialization */
 void _gdk_windowing_window_init (void);
+void _gdk_root_window_size_init (void);
+void _gdk_monitor_init(void);
 void _gdk_visual_init (void);
 void _gdk_dnd_init    (void);
 void _gdk_windowing_image_init  (void);

@@ -34,7 +34,7 @@ GdkScreen	 *_gdk_screen = NULL;
 GdkWindow	 *_gdk_parent_root = NULL;
 
 gint		  _gdk_num_monitors;
-GdkRectangle     *_gdk_monitors;
+GdkRectangle     *_gdk_monitors = NULL;
 
 gint		 _gdk_offset_x, _gdk_offset_y;
 

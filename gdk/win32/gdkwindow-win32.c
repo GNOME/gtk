@@ -302,19 +302,31 @@ gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable)
 }
 
 void
+_gdk_root_window_size_init (void)
+{
+  GdkWindowImplWin32 *impl;
+  GdkRectangle rect;
+  int i;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) _gdk_parent_root)->impl);
+  rect = _gdk_monitors[0];
+  for (i = 1; i < _gdk_num_monitors; i++)
+    gdk_rectangle_union (&rect, _gdk_monitors+i, &rect);
+
+  impl->width = rect.width;
+  impl->height = rect.height;
+}
+
+void
 _gdk_windowing_window_init (void)
 {
   GdkWindowObject *private;
-  GdkWindowImplWin32 *impl;
   GdkDrawableImplWin32 *draw_impl;
-  GdkRectangle rect;
-  gint i;
 
   g_assert (_gdk_parent_root == NULL);
   
   _gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)_gdk_parent_root;
-  impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   
   draw_impl->handle = _gdk_root_window;
@@ -325,13 +337,8 @@ _gdk_windowing_window_init (void)
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = gdk_visual_get_system ()->depth;
 
-  rect = _gdk_monitors[0];
-  for (i = 1; i < _gdk_num_monitors; i++)
-    gdk_rectangle_union (&rect, _gdk_monitors+i, &rect);
-
-  impl->width = rect.width;
-  impl->height = rect.height;
-
+  _gdk_root_window_size_init ();
+ 
   _gdk_window_init_position (GDK_WINDOW (private));
 
   gdk_win32_handle_table_insert (&_gdk_root_window, _gdk_parent_root);

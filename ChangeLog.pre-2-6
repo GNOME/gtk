@@ -1,3 +1,27 @@
+2004-09-03  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in: List the three theme gtkrc files separately, zip
+	doesn't do anything if one of the files on its command line
+	doesn't exist.
+
+	Handle changes of screen resolution on Win32. (#151581, reported by
+	Arjohn Kampman)
+	
+	* gdk/win32/gdkwindow-win32.c (_gdk_windowing_window_init,
+	_gdk_root_window_size_init): Factor out setting the root window's
+	size (as the size of the union of all monitors) to a new function.
+
+	* gdk/win32/gdkdisplay-win32.c (gdk_display_open,
+	_gdk_monitor_init): Factor out the monitor query to a new
+	function.
+
+	* gdk/win32/gdkprivate-win32.h: Declare above new functions.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate,
+	handle_display_change): Handle WM_DISPLAYCHANGE by calling the
+	above two functions, and emitting the "size_changed" signal on our
+	(only) GdkScreen.
+
 2004-09-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_get_popup_accessible): 
@@ -78,7 +102,7 @@ Tue Aug 31 17:07:41 2004  Jonathan Blandford  <jrb@redhat.com>
 2004-08-28  Robert Ögren  <gtk@roboros.com>
 
 	On Win32, do not produce tablet motion or button events while a
-	window is being moved or resized. (#151090, reported by Shaneyfelt)
+	window is being moved or resized. (#151090, reported by	Shaneyfelt)
 
 	* gdk/win32/gdkprivate-win32.h
 	* gdk/win32/gdkglobals-win32.c

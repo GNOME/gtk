@@ -2057,6 +2057,14 @@ resize_timer_proc (HWND     hwnd,
     handle_stuff_while_moving_or_resizing ();
 }
 
+static void
+handle_display_change (void)
+{
+  _gdk_monitor_init ();
+  _gdk_root_window_size_init ();
+  g_signal_emit_by_name (_gdk_screen, "size_changed");
+}
+
 static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     MSG        *msg,
@@ -3274,6 +3282,11 @@ gdk_event_translate (GdkDisplay *display,
 
       return_val = TRUE;
       break;
+
+    case WM_DISPLAYCHANGE:
+      handle_display_change ();
+      break;
+      
 
 #ifdef HAVE_WINTAB
       /* Handle WINTAB events here, as we know that gdkinput.c will
