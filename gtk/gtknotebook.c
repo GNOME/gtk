@@ -1148,11 +1148,10 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
       notebook->tab_pos = pos;
 
       if (GTK_WIDGET_VISIBLE (notebook))
-	{
-	  gtk_widget_queue_resize (GTK_WIDGET (notebook));
-	  if (notebook->panel)
-	    gdk_window_clear (notebook->panel);
-	}
+	gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+      if (GTK_WIDGET_DRAWABLE (notebook) && notebook->panel)
+	gdk_window_clear (notebook->panel);
     }
 }
 
@@ -1239,17 +1238,28 @@ gtk_notebook_set_scrollable (GtkNotebook     *notebook,
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
+  scrollable = (scrollable != 0);
+
   if (scrollable != notebook->scrollable)
     {
-      if ( (notebook->scrollable = (scrollable != 0)) ) 
-	gtk_notebook_panel_realize (notebook);
-      else if (notebook->panel)
+      notebook->scrollable = scrollable;
+
+      if (GTK_WIDGET_REALIZED (notebook))
 	{
-	  gdk_window_destroy (notebook->panel);
-	  notebook->panel = NULL;
+	  if (scrollable)
+	    {
+	      gtk_notebook_panel_realize (notebook);
+	    }
+	  else if (notebook->panel)
+	    {
+	      gdk_window_destroy (notebook->panel);
+	      notebook->panel = NULL;
+	    }
 	}
-      gtk_widget_queue_resize (GTK_WIDGET(notebook));
-    }	  
+
+      if (GTK_WIDGET_VISIBLE (notebook))
+	gtk_widget_queue_resize (GTK_WIDGET(notebook));
+    }
 }
 
 static void
@@ -1602,7 +1612,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 
       gtk_notebook_pages_allocate (notebook, allocation);
     }
-   gtk_notebook_set_shape(notebook);
+   gtk_notebook_set_shape (notebook);
 }
 
 static void
@@ -1924,7 +1934,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
       if (!children && !GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
     }
-   gtk_notebook_set_shape(notebook);
+   gtk_notebook_set_shape (notebook);
   return FALSE;
 }
 
@@ -2208,7 +2218,7 @@ gtk_real_notebook_switch_page (GtkNotebook     *notebook,
   
   if (GTK_WIDGET_DRAWABLE (notebook))
     gtk_widget_queue_draw (GTK_WIDGET (notebook));
-   gtk_notebook_set_shape(notebook);
+   gtk_notebook_set_shape (notebook);
 }
 
 static void
@@ -2691,7 +2701,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	    gtk_widget_map (page->tab_label);
 	}
     }
-   gtk_notebook_set_shape(notebook);
+   gtk_notebook_set_shape (notebook);
 }
 
 static void
@@ -2996,7 +3006,7 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
   old_tab = notebook->focus_tab;
   notebook->focus_tab = new_child;
 
-  if (notebook->scrollable)
+  if (notebook->scrollable && GTK_WIDGET_DRAWABLE (notebook))
     {
       if ((new_child == NULL) != (old_tab == NULL))
 	{
@@ -3023,7 +3033,7 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
 	}
     }
   
-  if (!notebook->focus_tab)
+  if (!notebook->show_tabs || !notebook->focus_tab)
     return;
 
   if (old_tab)
@@ -3038,7 +3048,8 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
 				   &(GTK_WIDGET (notebook)->allocation));
       gtk_notebook_expose_tabs (notebook);
     }
-   gtk_notebook_set_shape(notebook);
+
+   gtk_notebook_set_shape (notebook);
 }
 
 static gint
@@ -3132,8 +3143,9 @@ gtk_notebook_update_labels (GtkNotebook *notebook,
 	gtk_label_set (GTK_LABEL (page->tab_label), string);
       if (notebook->menu && page->default_menu)
 	{
-	  if (GTK_IS_LABEL (page->tab_label))
-	    gtk_label_set (GTK_LABEL (page->menu_label), GTK_LABEL (page->tab_label)->label);
+	  if (page->tab_label && GTK_IS_LABEL (page->tab_label))
+	    gtk_label_set (GTK_LABEL (page->menu_label),
+			   GTK_LABEL (page->tab_label)->label);
 	  else
 	    gtk_label_set (GTK_LABEL (page->menu_label), string);
 	}
@@ -3366,6 +3378,7 @@ gtk_notebook_style_set (GtkWidget *widget,
 	if (GTK_WIDGET_DRAWABLE (widget))
 	  gdk_window_clear (widget->window);
      }
-   gtk_widget_queue_draw(widget);
-   gtk_notebook_set_shape(GTK_NOTEBOOK(widget));
+   
+   gtk_widget_queue_draw (widget);
+   gtk_notebook_set_shape (GTK_NOTEBOOK(widget));
 }

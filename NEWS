@@ -1,3 +1,14 @@
+What is new in GTK+ 1.1.2:
+
+* New runtime loading and initialization of modules
+* Tutorial updates
+* Changes to menus including tearoff menus and accelerators
+* Better support for modal dialogs
+* Removed CAN_FOCUS by default from scrollbars and button children of toolbar
+* Fix for clist resize bug
+* New sorting for clist, removed duplicate sorting from ctree
+
+
 What is new in GTK+ 1.1.1:
 
 * Tutorial updates and additions.

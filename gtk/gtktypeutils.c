@@ -53,7 +53,7 @@ struct _GtkTypeNode
     node_var = NULL; \
 }
 
-static void  gtk_type_class_init		(GtkTypeNode *node);
+static void  gtk_type_class_init		(GtkType      node_type);
 static guint gtk_type_name_hash			(const char  *key);
 static gint  gtk_type_name_compare		(const char  *a,
 						 const char  *b);
@@ -296,7 +296,11 @@ gtk_type_parent_class (GtkType type)
       if (node)
 	{
 	  if (!node->klass)
-	    gtk_type_class_init (node);
+	    {
+	      type = node->type;
+	      gtk_type_class_init (type);
+	      LOOKUP_TYPE_NODE (node, type);
+	    }
 	  
 	  return node->klass;
 	}
@@ -314,7 +318,11 @@ gtk_type_class (GtkType type)
   g_return_val_if_fail (node != NULL, NULL);
   
   if (!node->klass)
-    gtk_type_class_init (node);
+    {
+      type = node->type;
+      gtk_type_class_init (type);
+      LOOKUP_TYPE_NODE (node, type);
+    }
   
   return node->klass;
 }
@@ -395,23 +403,20 @@ void
 gtk_type_describe_heritage (GtkType type)
 {
   GtkTypeNode *node;
-  gboolean first;
+  gchar *is_a = "";
   
   LOOKUP_TYPE_NODE (node, type);
-  first = TRUE;
   
   while (node)
     {
-      if (first)
-	{
-	  first = FALSE;
-	  g_print ("is a ");
-	}
-      
       if (node->type_info.type_name)
-	g_print ("%s\n", node->type_info.type_name);
+	g_message ("%s%s",
+		   is_a,
+		   node->type_info.type_name);
       else
-	g_print ("<unnamed type>\n");
+	g_message ("%s<unnamed type>",
+		   is_a);
+      is_a = "is a ";
       
       LOOKUP_TYPE_NODE (node, node->parent_type);
     }
@@ -431,19 +436,23 @@ gtk_type_describe_tree (GtkType	 type,
       GList *list;
       guint old_indent;
       guint i;
+      GString *gstring;
+
+      gstring = g_string_new ("");
       
       for (i = 0; i < indent; i++)
-	g_print (" ");
+	g_string_append_c (gstring, ' ');
       
       if (node->type_info.type_name)
-	g_print ("%s", node->type_info.type_name);
+	g_string_append (gstring, node->type_info.type_name);
       else
-	g_print ("(no-name)");
+	g_string_append (gstring, "<unnamed type>");
       
       if (show_size)
-	g_print (" ( %d bytes )\n", node->type_info.object_size);
-      else
-	g_print ("\n");
+	g_string_sprintfa (gstring, " (%d bytes)", node->type_info.object_size);
+
+      g_message ("%s", gstring->str);
+      g_string_free (gstring, TRUE);
       
       old_indent = indent;
       indent += 4;
@@ -483,8 +492,13 @@ gtk_type_is_a (GtkType type,
 }
 
 static void
-gtk_type_class_init (GtkTypeNode *node)
+gtk_type_class_init (GtkType type)
 {
+  GtkTypeNode *node;
+
+  /* we need to relookup nodes everytime we called an external function */
+  LOOKUP_TYPE_NODE (node, type);
+  
   if (!node->klass && node->type_info.class_size)
     {
       GtkObjectClass *object_class;
@@ -501,7 +515,11 @@ gtk_type_class_init (GtkTypeNode *node)
 	  
 	  LOOKUP_TYPE_NODE (parent, node->parent_type);
 	  if (!parent->klass)
-	    gtk_type_class_init (parent);
+	    {
+	      gtk_type_class_init (parent->type);
+	      LOOKUP_TYPE_NODE (node, type);
+	      LOOKUP_TYPE_NODE (parent, node->parent_type);
+	    }
 	  
 	  if (parent->klass)
 	    memcpy (node->klass, parent->klass, parent->type_info.class_size);
@@ -531,6 +549,7 @@ gtk_type_class_init (GtkTypeNode *node)
 	      
 	      base_class_init = walk->data;
 	      base_class_init (node->klass);
+	      LOOKUP_TYPE_NODE (node, type);
 	    }
 	  g_slist_free (slist);
 	}

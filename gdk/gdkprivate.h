@@ -262,7 +262,6 @@ extern Atom		 gdk_wm_window_protocols[];
 extern Atom		 gdk_selection_property;
 extern GdkDndGlobals	 gdk_dnd;
 extern GdkWindow	*selection_owner[];
-extern gchar		*gdk_progname;
 extern gchar		*gdk_progclass;
 extern gint		 gdk_error_code;
 extern gint		 gdk_error_warnings;

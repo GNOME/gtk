@@ -175,7 +175,7 @@ gdk_pixmap_create_from_data (GdkWindow *window,
   return pixmap;
 }
 
-gint
+static gint
 gdk_pixmap_seek_string (FILE  *infile,
                         const gchar *str,
                         gint   skip_comments)
@@ -199,7 +199,7 @@ gdk_pixmap_seek_string (FILE  *infile,
   return FALSE;
 }
 
-gint
+static gint
 gdk_pixmap_seek_char (FILE  *infile,
                       gchar  c)
 {
@@ -231,7 +231,7 @@ gdk_pixmap_seek_char (FILE  *infile,
   return FALSE;
 }
 
-gint
+static gint
 gdk_pixmap_read_string (FILE  *infile,
                         gchar **buffer,
 			guint *buffer_size)
@@ -286,7 +286,7 @@ gdk_pixmap_read_string (FILE  *infile,
   return ret;
 }
 
-gchar*
+static gchar*
 gdk_pixmap_skip_whitespaces (gchar *buffer)
 {
   gint32 index = 0;
@@ -297,7 +297,7 @@ gdk_pixmap_skip_whitespaces (gchar *buffer)
   return &buffer[index];
 }
 
-gchar*
+static gchar*
 gdk_pixmap_skip_string (gchar *buffer)
 {
   gint32 index = 0;
@@ -311,7 +311,7 @@ gdk_pixmap_skip_string (gchar *buffer)
 /* Xlib crashed ince at a color name lengths around 125 */
 #define MAX_COLOR_LEN 120
 
-gchar*
+static gchar*
 gdk_pixmap_extract_color (gchar *buffer)
 {
   gint counter, numnames;

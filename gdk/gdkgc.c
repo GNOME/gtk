@@ -88,6 +88,42 @@ gdk_gc_new_with_values (GdkWindow	*window,
 	case GDK_XOR:
 	  xvalues.function = GXxor;
 	  break;
+	case GDK_CLEAR:
+	  xvalues.function = GXclear;
+	  break;
+	case GDK_AND:
+	  xvalues.function = GXand;
+	  break;
+	case GDK_AND_REVERSE:
+	  xvalues.function = GXandReverse;
+	  break;
+	case GDK_AND_INVERT:
+	  xvalues.function = GXandInverted;
+	  break;
+	case GDK_NOOP:
+	  xvalues.function = GXnoop;
+	  break;
+	case GDK_OR:
+	  xvalues.function = GXor;
+	  break;
+	case GDK_EQUIV:
+	  xvalues.function = GXequiv;
+	  break;
+	case GDK_OR_REVERSE:
+	  xvalues.function = GXorReverse;
+	  break;
+	case GDK_COPY_INVERT:
+	  xvalues.function = GXcopyInverted;
+	  break;
+	case GDK_OR_INVERT:
+	  xvalues.function = GXorInverted;
+	  break;
+	case GDK_NAND:
+	  xvalues.function = GXnand;
+	  break;
+	case GDK_SET:
+	  xvalues.function = GXset;
+	  break;
 	}
       xvalues_mask |= GCFunction;
     }
@@ -289,6 +325,42 @@ gdk_gc_get_values (GdkGC       *gc,
 	case GXxor:
 	  values->function = GDK_XOR;
 	  break;
+	case GXclear:
+	  values->function = GDK_CLEAR;
+	  break;
+	case GXand:
+	  values->function = GDK_AND;
+	  break;
+	case GXandReverse:
+	  values->function = GDK_AND_REVERSE;
+	  break;
+	case GXandInverted:
+	  values->function = GDK_AND_INVERT;
+	  break;
+	case GXnoop:
+	  values->function = GDK_NOOP;
+	  break;
+	case GXor:
+	  values->function = GDK_OR;
+	  break;
+	case GXequiv:
+	  values->function = GDK_EQUIV;
+	  break;
+	case GXorReverse:
+	  values->function = GDK_OR_REVERSE;
+	  break;
+	case GXcopyInverted:
+	  values->function =GDK_COPY_INVERT;
+	  break;
+	case GXorInverted:
+	  values->function = GDK_OR_INVERT;
+	  break;
+	case GXnand:
+	  values->function = GDK_NAND;
+	  break;
+	case GXset:
+	  values->function = GDK_SET;
+	  break;
 	}
 
       switch (xvalues.fill_style)
@@ -432,6 +504,42 @@ gdk_gc_set_function (GdkGC	 *gc,
       break;
     case GDK_XOR:
       XSetFunction (private->xdisplay, private->xgc, GXxor);
+      break;
+    case GDK_CLEAR:
+      XSetFunction (private->xdisplay, private->xgc, GXclear);
+      break;
+    case GDK_AND:
+      XSetFunction (private->xdisplay, private->xgc, GXand);
+      break;
+    case GDK_AND_REVERSE:
+      XSetFunction (private->xdisplay, private->xgc, GXandReverse);
+      break;
+    case GDK_AND_INVERT:
+      XSetFunction (private->xdisplay, private->xgc, GXandInverted);
+      break;
+    case GDK_NOOP:
+      XSetFunction (private->xdisplay, private->xgc, GXnoop);
+      break;
+    case GDK_OR:
+      XSetFunction (private->xdisplay, private->xgc, GXor);
+      break;
+    case GDK_EQUIV:
+      XSetFunction (private->xdisplay, private->xgc, GXequiv);
+      break;
+    case GDK_OR_REVERSE:
+      XSetFunction (private->xdisplay, private->xgc, GXorReverse);
+      break;
+    case GDK_COPY_INVERT:
+      XSetFunction (private->xdisplay, private->xgc, GXcopyInverted);
+      break;
+    case GDK_OR_INVERT:
+      XSetFunction (private->xdisplay, private->xgc, GXorInverted);
+      break;
+    case GDK_NAND:
+      XSetFunction (private->xdisplay, private->xgc, GXnand);
+      break;
+    case GDK_SET:
+      XSetFunction (private->xdisplay, private->xgc, GXset);
       break;
     }
 }

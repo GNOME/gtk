@@ -1,4 +1,5 @@
 #include "pixmap_theme.h"
+
 /* Theme functions to export */
 void                theme_init(GtkThemeEngine * engine);
 void                theme_exit(void);
@@ -929,9 +930,16 @@ theme_parse_orientation(GScanner * scanner,
 }
 
 void
-destroy_theme_image(struct theme_image *data)
+theme_image_ref (struct theme_image *data)
 {
-  if (data)
+  data->refcount++;
+}
+
+void
+theme_image_unref (struct theme_image *data)
+{
+  data->refcount--;
+  if (data->refcount == 0)
     {
       if (data->detail)
 	g_free (data->detail);
@@ -945,10 +953,26 @@ destroy_theme_image(struct theme_image *data)
     }
 }
 
+void
+theme_data_ref (ThemeData *theme_data)
+{
+  theme_data->refcount++;
+}
+
+void
+theme_data_unref (ThemeData *theme_data)
+{
+  theme_data->refcount--;
+  if (theme_data->refcount == 0)
+    {
+      g_list_foreach (theme_data->img_list, (GFunc) theme_image_unref, NULL);
+      g_list_free (theme_data->img_list);
+    }
+}
 
 guint
 theme_parse_image(GScanner *scanner,
-		  ThemeRcData *theme_data,
+		  ThemeData *theme_data,
 		  struct theme_image **data_return)
 {
   guint               token;
@@ -964,6 +988,8 @@ theme_parse_image(GScanner *scanner,
     return G_TOKEN_LEFT_CURLY;
 
   data = g_malloc(sizeof(struct theme_image));
+
+  data->refcount = 1;
 
   data->function = -1;
   data->file = NULL;
@@ -1078,7 +1104,7 @@ theme_parse_image(GScanner *scanner,
       if (token != G_TOKEN_NONE)
 	{
 	  /* error - cleanup for exit */
-	  destroy_theme_image (data);
+	  theme_image_unref (data);
 	  *data_return = NULL;
 	  return token;
 	}
@@ -1090,7 +1116,7 @@ theme_parse_image(GScanner *scanner,
   if (token != G_TOKEN_RIGHT_CURLY)
     {
       /* error - cleanup for exit */
-      destroy_theme_image (data);
+      theme_image_unref (data);
       *data_return = NULL;
       return G_TOKEN_RIGHT_CURLY;
     }
@@ -1105,7 +1131,7 @@ theme_parse_rc_style(GScanner * scanner,
 		     GtkRcStyle * rc_style)
 {
   static GQuark       scope_id = 0;
-  ThemeRcData        *theme_data;
+  ThemeData        *theme_data;
   guint               old_scope;
   guint               token;
   gint                i;
@@ -1138,8 +1164,9 @@ theme_parse_rc_style(GScanner * scanner,
 
   /* We're ready to go, now parse the top level */
 
-  theme_data = g_new(ThemeRcData, 1);
+  theme_data = g_new(ThemeData, 1);
   theme_data->img_list = NULL;
+  theme_data->refcount = 1;
 
   token = g_scanner_peek_next_token(scanner);
   while (token != G_TOKEN_RIGHT_CURLY)
@@ -1158,7 +1185,8 @@ theme_parse_rc_style(GScanner * scanner,
 
       if (token != G_TOKEN_NONE)
 	{
-	  destroy_theme_image (img);
+	  g_list_foreach (theme_data->img_list, (GFunc)theme_image_unref, NULL);
+	  g_list_free (theme_data->img_list);
 	  g_free (theme_data);
 	  return token;
 	}
@@ -1181,32 +1209,55 @@ void
 theme_merge_rc_style(GtkRcStyle * dest,
 		     GtkRcStyle * src)
 {
-  ThemeRcData        *src_data = src->engine_data;
-  ThemeRcData        *dest_data = dest->engine_data;
+  GList *dest_images;
+  
+  ThemeData        *src_data = src->engine_data;
+  ThemeData        *dest_data = dest->engine_data;
 
   if (!dest_data)
     {
-      dest_data = g_new(ThemeRcData, 1);
-      dest_data->img_list = src_data->img_list;
+      dest_data = g_new(ThemeData, 1);
+      dest_data->img_list = NULL;
+      dest_data->refcount = 1;
       dest->engine_data = dest_data;
     }
-  else
-    dest_data->img_list = g_list_concat(src_data->img_list, 
-					dest_data->img_list);
+
+  if (src_data->img_list)
+    {
+      GList *tmp_list1, *tmp_list2;
+      GList *dest_images = dest_data->img_list;
+      
+      /* Copy src image list and prepend to dest image list */
+
+      dest_data->img_list = g_list_append (NULL, src_data->img_list->data);
+      theme_data_ref (src_data->img_list->data);
+      tmp_list2 = dest_data->img_list;
+      tmp_list1 = src_data->img_list->next;
+      
+      while (tmp_list1)
+	{
+ 	  tmp_list2->next = g_list_alloc();
+	  tmp_list2->next->data = tmp_list1->data;
+	  theme_data_ref (tmp_list1->data);
+	  tmp_list2->next->prev = tmp_list2;
+
+	  tmp_list2 = tmp_list2->next;
+	  tmp_list1 = tmp_list1->next;
+	}
+
+      tmp_list2->next = dest_images;
+    }
 }
 
 void
 theme_rc_style_to_style(GtkStyle * style,
 			GtkRcStyle * rc_style)
 {
-  ThemeRcData        *data = rc_style->engine_data;
-  ThemeStyleData     *style_data;
-
-  style_data = g_new(ThemeStyleData, 1);
-  style_data->img_list = data->img_list;
+  ThemeData        *data = rc_style->engine_data;
 
   style->klass = &th_default_class;
-  style->engine_data = style_data;
+  style->engine_data = data;
+  theme_data_ref (data);
 
   g_print("Theme theme: Creating style\n");
 }
@@ -1215,13 +1266,15 @@ void
 theme_duplicate_style(GtkStyle * dest,
 		      GtkStyle * src)
 {
-  ThemeStyleData     *dest_data;
-  ThemeStyleData     *src_data = src->engine_data;
+  ThemeData     *src_data = src->engine_data;
+  ThemeData     *dest_data;
 
-  dest_data = g_new(ThemeStyleData, 1);
+  dest_data = g_new(ThemeData, 1);
   dest_data->img_list = src_data->img_list;
 
+  dest->klass = &th_default_class;
   dest->engine_data = dest_data;
+  theme_data_ref (dest_data);
 
   g_print("Theme theme: Duplicated style\n");
 }
@@ -1245,12 +1298,7 @@ theme_unrealize_style(GtkStyle * style)
 void
 theme_destroy_rc_style(GtkRcStyle * rc_style)
 {
-  ThemeRcData        *data = rc_style->engine_data;
-
-  if (data)
-    {
-      g_free(data);
-    }
+  theme_data_unref (rc_style->engine_data);
 
   g_print("Theme theme: Destroying rc style for \n");
 }
@@ -1258,12 +1306,7 @@ theme_destroy_rc_style(GtkRcStyle * rc_style)
 void
 theme_destroy_style(GtkStyle * style)
 {
-  ThemeStyleData     *data = style->engine_data;
-
-  if (data)
-    {
-      g_free(data);
-    }
+  theme_data_unref (style->engine_data);
 
   g_print("Theme theme: Destroying style for \n");
 }

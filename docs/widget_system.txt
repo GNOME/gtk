@@ -391,7 +391,7 @@ When a widget receives the unmap signal, it must:
  2) If the widget does not have a window, unmap all child widgets
  3) Do any other functions related to taking the widget offscreen
      (for instance, removing popup windows...)
- 3) Unset GTK_MAPPED
+ 4) Unset GTK_MAPPED
 
 
 The Unrealize signal

@@ -772,8 +772,12 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), "Create Directory");
   gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
-  gtk_widget_show (dialog);
-  
+
+  /* If file dialog is grabbed, grab option dialog */
+  /* When option dialog is closed, file dialog will be grabbed again */
+  if (GTK_WINDOW(fs)->modal)
+      gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+
   vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_border_width(GTK_CONTAINER(vbox), 8);
   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
@@ -811,6 +815,8 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
   GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default(button);
   gtk_widget_show (button);
+
+  gtk_widget_show (dialog);
 }
 
 static void
@@ -871,6 +877,11 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), "Delete File");
   gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+
+  /* If file dialog is grabbed, grab option dialog */
+  /* When option dialog is closed, file dialog will be grabbed again */
+  if (GTK_WINDOW(fs)->modal)
+      gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
   
   vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_border_width(GTK_CONTAINER(vbox), 8);
@@ -906,6 +917,7 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
   gtk_widget_show (button);
 
   gtk_widget_show (dialog);
+
 }
 
 static void
@@ -969,7 +981,11 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), "Rename File");
   gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
-  gtk_widget_show (dialog);
+
+  /* If file dialog is grabbed, grab option dialog */
+  /* When option dialog  closed, file dialog will be grabbed again */
+  if (GTK_WINDOW(fs)->modal)
+    gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
   
   vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_border_width(GTK_CONTAINER(vbox), 8);
@@ -1014,6 +1030,8 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
   GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default(button);
   gtk_widget_show (button);
+
+  gtk_widget_show (dialog);
 }
 
 

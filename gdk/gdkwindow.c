@@ -408,7 +408,7 @@ gdk_window_new (GdkWindow     *parent,
 	  (private->colormap != gdk_colormap_get_system ()) &&
 	  (private->colormap != gdk_window_get_colormap (gdk_window_get_toplevel (window))))
 	{
-	  GDK_NOTE (MISC, g_print ("adding colormap window\n"));
+	  GDK_NOTE (MISC, g_message ("adding colormap window\n"));
 	  gdk_window_add_colormap_windows (window);
 	}
 
@@ -438,7 +438,7 @@ gdk_window_new (GdkWindow     *parent,
   if (attributes_mask & GDK_WA_TITLE)
     title = attributes->title;
   else
-    title = gdk_progname;
+    title = g_get_prgname ();
 
   XmbSetWMProperties (private->xdisplay, private->xwindow,
                       title, title,
@@ -1777,7 +1777,7 @@ gdk_window_dnd_data_set (GdkWindow       *window,
 		       data_numbytes);
   tmp = gdk_atom_name(window_private->dnd_drag_data_type);
 #ifdef DEBUG_DND
-  g_print("DnD type %s on window %ld\n", tmp, window_private->xwindow);
+  g_message("DnD type %s on window %ld\n", tmp, window_private->xwindow);
 #endif
   g_free(tmp);
   
@@ -1807,9 +1807,8 @@ gdk_window_dnd_data_set (GdkWindow       *window,
 
   if (!gdk_send_xevent (event->dragrequest.requestor, False,
 		       StructureNotifyMask, &sev))
-    GDK_NOTE (DND, g_print("Sending XdeDataAvailable to %#x failed\n",
-			   event->dragrequest.requestor));
-
+    GDK_NOTE (DND, g_message("Sending XdeDataAvailable to %#x failed\n",
+			     event->dragrequest.requestor));
 }
 
 void          

@@ -34,6 +34,8 @@ extern "C" {
 #define GTK_PRIORITY_DEFAULT	 0
 #define GTK_PRIORITY_LOW	10
 
+typedef void	(*GtkModuleInitFunc)	(gint		*argc,
+					 gchar	      ***argv);
 typedef gint	(*GtkKeySnoopFunc)	(GtkWidget	*grab_widget,
 					 GdkEventKey	*event,
 					 gpointer	 func_data);
@@ -45,6 +47,9 @@ extern const guint gtk_minor_version;
 extern const guint gtk_micro_version;
 extern const guint gtk_binary_age;
 extern const guint gtk_interface_age;
+gchar* gtk_check_version (guint	required_major,
+			  guint	required_minor,
+			  guint	required_micro);
 
 
 /* Initialization, exit, mainloop and miscellaneous routines

@@ -1,4 +1,5 @@
-#include "motif_theme.h"
+#include <gtk/gtk.h>
+
 /* Theme functions to export */
 void                theme_init(GtkThemeEngine * engine);
 void                theme_exit(void);

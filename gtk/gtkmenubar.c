@@ -16,6 +16,8 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+#include "gdk/gdkkeysyms.h"
+#include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
@@ -69,6 +71,8 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   GtkWidgetClass *widget_class;
   GtkMenuShellClass *menu_shell_class;
 
+  GtkBindingSet *binding_set;
+
   widget_class = (GtkWidgetClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
 
@@ -78,6 +82,28 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   widget_class->expose_event = gtk_menu_bar_expose;
 
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
+
+  binding_set = gtk_binding_set_by_class (class);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Left, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_PREV);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Right, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_NEXT);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Up, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_PARENT);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Down, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_CHILD);
 }
 
 static void

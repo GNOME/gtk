@@ -1,5 +1,4 @@
-
-#include "metal_theme.h"
+#include <gtk/gtk.h>
 
 extern GtkStyleClass th_default_class;
 extern GdkFont     *default_font;

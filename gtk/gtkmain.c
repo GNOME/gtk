@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gmodule.h>
 #include "gtkbutton.h"
 #include "gtkfeatures.h"
 #include "gtkhscrollbar.h"
@@ -134,6 +135,7 @@ static gint  gtk_idle_compare		 (gconstpointer      a,
 static gint  gtk_timeout_compare	 (gconstpointer      a, 
 					  gconstpointer      b);
 
+
 const guint gtk_major_version = GTK_MAJOR_VERSION;
 const guint gtk_minor_version = GTK_MINOR_VERSION;
 const guint gtk_micro_version = GTK_MICRO_VERSION;
@@ -141,7 +143,7 @@ const guint gtk_binary_age = GTK_BINARY_AGE;
 const guint gtk_interface_age = GTK_INTERFACE_AGE;
 
 static gboolean iteration_done = FALSE;
-static guint main_level = 0;
+static guint gtk_main_loop_level = 0;
 static gint gtk_initialized = FALSE;
 static GdkEvent *next_event = NULL;
 static GList *current_events = NULL;
@@ -227,24 +229,45 @@ static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey
 
 #endif /* G_ENABLE_DEBUG */
 
+gchar*
+gtk_check_version (guint required_major,
+		   guint required_minor,
+		   guint required_micro)
+{
+  if (required_major > GTK_MAJOR_VERSION)
+    return "Gtk+ version to old (major mismatch)";
+  if (required_major < GTK_MAJOR_VERSION)
+    return "Gtk+ version to new (major mismatch)";
+  if (required_minor > GTK_MINOR_VERSION)
+    return "Gtk+ version to old (minor mismatch)";
+  if (required_minor < GTK_MINOR_VERSION)
+    return "Gtk+ version to new (minor mismatch)";
+  if (required_micro < GTK_MICRO_VERSION - GTK_BINARY_AGE)
+    return "Gtk+ version to new (micro mismatch)";
+  if (required_micro > GTK_MICRO_VERSION)
+    return "Gtk+ version to old (micro mismatch)";
+  return NULL;
+}
+
+
 gint gtk_use_mb = -1;
 
 void
 gtk_init (int	 *argc,
 	  char ***argv)
 {
+  GSList *gtk_modinit_funcs = NULL;
   gchar *current_locale;
 
   if (gtk_initialized)
     return;
 
-  if (0)
-    {
-      g_set_error_handler (gtk_error);
-      g_set_warning_handler (gtk_warning);
-      g_set_message_handler (gtk_message);
-      g_set_print_handler (gtk_print);
-    }
+#if	0
+  g_set_error_handler (gtk_error);
+  g_set_warning_handler (gtk_warning);
+  g_set_message_handler (gtk_message);
+  g_set_print_handler (gtk_print);
+#endif
   
   /* Initialize "gdk". We pass along the 'argc' and 'argv'
    *  parameters as they contain information that GDK uses
@@ -259,6 +282,7 @@ gtk_init (int	 *argc,
 					      gtk_debug_keys,
 					      gtk_ndebug_keys);
   }
+#endif	/* G_ENABLE_DEBUG */
 
   if (argc && argv)
     {
@@ -266,11 +290,71 @@ gtk_init (int	 *argc,
       
       for (i = 1; i < *argc;)
 	{
-	  if ((strcmp ("--gtk-debug", (*argv)[i]) == 0) ||
-	      (strncmp ("--gtk-debug=", (*argv)[i], 12) == 0))
+	  if (strcmp ("--gtk-module", (*argv)[i]) == 0 ||
+	      strncmp ("--gtk-module=", (*argv)[i], 13) == 0)
+	    {
+	      GModule *module = NULL;
+	      GtkModuleInitFunc modinit_func = NULL;
+	      gchar *module_name = (*argv)[i] + 12;
+	      
+	      if (*module_name == '=')
+		module_name++;
+	      else
+		{
+		  (*argv)[i] = NULL;
+		  i += 1;
+		  module_name = (*argv)[i];
+		}
+	      if (module_name[0] == '/' ||
+		  (module_name[0] == 'l' &&
+		   module_name[1] == 'i' &&
+		   module_name[2] == 'b'))
+		module_name = g_strdup (module_name);
+	      else
+		module_name = g_strconcat ("lib", module_name, ".so", NULL);
+	      (*argv)[i] = NULL;
+	      
+	      if (g_module_supported ())
+		{
+		  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
+		  if (module &&
+		      g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
+		      modinit_func)
+		    {
+		      if (!g_slist_find (gtk_modinit_funcs, modinit_func))
+			gtk_modinit_funcs = g_slist_prepend (gtk_modinit_funcs, modinit_func);
+		      else
+			{
+			  g_module_close (module);
+			  module = NULL;
+			}
+		    }
+		}
+	      if (!modinit_func)
+		{
+		  g_warning ("Failed to load module \"%s\": %s",
+			     module ? g_module_name (module) : module_name,
+			     g_module_error ());
+		  if (module)
+		    g_module_close (module);
+		}
+	      g_free (module_name);
+	    }
+	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
+	    {
+	      GLogLevelFlags fatal_mask;
+	      
+	      fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
+	      fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
+              g_log_set_always_fatal (fatal_mask);
+	      (*argv)[i] = NULL;
+	    }
+#ifdef G_ENABLE_DEBUG
+	  else if ((strcmp ("--gtk-debug", (*argv)[i]) == 0) ||
+		   (strncmp ("--gtk-debug=", (*argv)[i], 12) == 0))
 	    {
 	      gchar *equal_pos = strchr ((*argv)[i], '=');
-
+	      
 	      if (equal_pos != NULL)
 		{
 		  gtk_debug_flags |= g_parse_debug_string (equal_pos+1,
@@ -291,7 +375,7 @@ gtk_init (int	 *argc,
 		   (strncmp ("--gtk-no-debug=", (*argv)[i], 15) == 0))
 	    {
 	      gchar *equal_pos = strchr ((*argv)[i], '=');
-
+	      
 	      if (equal_pos != NULL)
 		{
 		  gtk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
@@ -308,14 +392,10 @@ gtk_init (int	 *argc,
 		}
 	      (*argv)[i] = NULL;
 	    }
-	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
-	    {
-	      g_set_warning_handler ((GWarningFunc)g_error);
-	      (*argv)[i] = NULL;
-	    }
+#endif /* G_ENABLE_DEBUG */
 	  i += 1;
 	}
-
+      
       for (i = 1; i < *argc; i++)
 	{
 	  for (k = i; k < *argc; k++)
@@ -331,9 +411,7 @@ gtk_init (int	 *argc,
 	    }
 	}
     }
-
-#endif /* G_ENABLE_DEBUG */
-
+  
   /* Check if there is a good chance the mb functions will handle things
    * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
    * C locale, or we're using X's mb functions. (-DX_LOCALE && locale != C)
@@ -354,9 +432,10 @@ gtk_init (int	 *argc,
 
   g_free (current_locale);
 
-  GTK_NOTE (MISC, g_print("%s multi-byte string functions.\n", 
-			  gtk_use_mb ? "Using" : "Not using"));
-
+  GTK_NOTE (MISC,
+	    g_message ("%s multi-byte string functions.", 
+		       gtk_use_mb ? "Using" : "Not using"));
+  
   /* Initialize the default visual and colormap to be
    *  used in creating widgets. (We want to use the system
    *  defaults so as to be nice to the colormap).
@@ -376,9 +455,26 @@ gtk_init (int	 *argc,
   
   /* Set the 'initialized' flag.
    */
-   gtk_initialized = TRUE;
-   /* Initialize themes 
-    */
+  gtk_initialized = TRUE;
+
+  /* initialize modules
+   */
+  if (gtk_modinit_funcs)
+    {
+      GSList *slist;
+
+      slist = gtk_modinit_funcs;
+      while (slist)
+	{
+	  GtkModuleInitFunc modinit;
+
+	  modinit = slist->data;
+	  modinit (argc, argv);
+	  slist = slist->next;
+	}
+      
+      g_slist_free (gtk_modinit_funcs);
+    }
 }
 
 void
@@ -406,7 +502,7 @@ gtk_main (void)
   GtkInitFunction *init;
   int old_done;
   
-  main_level++;
+  gtk_main_loop_level++;
   
   tmp_list = functions = init_functions;
   init_functions = NULL;
@@ -437,7 +533,7 @@ gtk_main (void)
 
 	  quit_functions = g_list_remove_link (quit_functions, quit_functions);
 
-	  if ((quitf->main_level && quitf->main_level != main_level) ||
+	  if ((quitf->main_level && quitf->main_level != gtk_main_loop_level) ||
 	      gtk_quit_invoke_function (quitf))
 	    {
 	      reinvoke_list = g_list_prepend (reinvoke_list, quitf);
@@ -450,23 +546,23 @@ gtk_main (void)
 	}
       if (reinvoke_list)
 	{
-	  GList *tmp_list;
+	  GList *work;
 	  
-	  tmp_list = g_list_last (reinvoke_list);
+	  work = g_list_last (reinvoke_list);
 	  if (quit_functions)
-	    quit_functions->prev = tmp_list;
-	  tmp_list->next = quit_functions;
-	  quit_functions = tmp_list;
+	    quit_functions->prev = work;
+	  work->next = quit_functions;
+	  quit_functions = work;
 	}
     }
 	      
-  main_level--;
+  gtk_main_loop_level--;
 }
 
 guint
 gtk_main_level (void)
 {
-  return main_level;
+  return gtk_main_loop_level;
 }
 
 void
@@ -1319,16 +1415,6 @@ gtk_input_add_full (gint source,
     }
   else
     return gdk_input_add_full (source, condition, function, data, destroy);
-}
-
-guint
-gtk_input_add_interp (gint source,
-		      GdkInputCondition condition,
-		      GtkCallbackMarshal callback,
-		      gpointer data,
-		      GtkDestroyNotify destroy)
-{
-  return gtk_input_add_full (source, condition, NULL, callback, data, destroy);
 }
 
 void

@@ -54,6 +54,7 @@ struct _GtkMenuShell
   guint button : 2;
   guint ignore_leave : 1;
   guint menu_flag : 1;
+  guint ignore_enter : 1;
   
   guint32 activate_time;
 };
@@ -66,6 +67,12 @@ struct _GtkMenuShellClass
   
   void (*deactivate)     (GtkMenuShell *menu_shell);
   void (*selection_done) (GtkMenuShell *menu_shell);
+
+  void (*move_current)     (GtkMenuShell        *menu_shell,
+			    GtkMenuDirectionType direction);
+  void (*activate_current) (GtkMenuShell *menu_shell,
+			    gboolean      force_hide);
+  void (*cancel)           (GtkMenuShell *menu_shell);
 };
 
 
@@ -78,6 +85,11 @@ void	gtk_menu_shell_insert	  (GtkMenuShell *menu_shell,
 				   GtkWidget	*child,
 				   gint		 position);
 void	gtk_menu_shell_deactivate (GtkMenuShell *menu_shell);
+void    gtk_menu_shell_select_item (GtkMenuShell      *menu_shell,
+				    GtkWidget         *menu_item);
+void    gtk_menu_shell_activate_item  (GtkMenuShell      *menu_shell,
+				       GtkWidget         *menu_item,
+				       gboolean           force_deactivate);
 
 
 #ifdef __cplusplus

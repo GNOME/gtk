@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SRC_SUBDIRS = gdk gtk themes
+SRC_SUBDIRS = gdk gtk
 SUBDIRS = $(SRC_SUBDIRS) docs
 
 bin_SCRIPTS = gtk-config
@@ -13,6 +13,7 @@ EXTRA_DIST =	\
 	TODO		\
 	NEWS.pre-1-0	\
 	ChangeLog.pre-1-0	\
+	README.cvs-commits	\
 	examples/README.1ST	\
 	examples/extract.awk	\
 	examples/extract.sh	\

@@ -91,6 +91,12 @@
    (exact GTK_MATCH_EXACT)
    (last GTK_MATCH_LAST))
 
+(define-enum GtkMenuDirectionType
+   (parent GTK_MENU_DIR_PARENT)
+   (child GTK_MENU_DIR_CHILD)
+   (next GTK_MENU_DIR_NEXT)
+   (prev GTK_MENU_DIR_PREV))
+
 (define-enum GtkMenuFactoryType
    (menu GTK_MENU_FACTORY_MENU)
    (menu-bar GTK_MENU_FACTORY_MENU_BAR)
@@ -220,6 +226,10 @@
    (toplevel GTK_WINDOW_TOPLEVEL)
    (dialog GTK_WINDOW_DIALOG)
    (popup GTK_WINDOW_POPUP))
+
+(define-enum GtkSortType
+   (ascending GTK_SORT_ASCENDING)
+   (descending GTK_SORT_DESCENDING))
 
 ; enumerations from "./gtkfontsel.h"
 
@@ -470,7 +480,19 @@
 (define-enum GdkFunction
    (copy GDK_COPY)
    (invert GDK_INVERT)
-   (xor GDK_XOR))
+   (xor GDK_XOR)
+   (clear GDK_CLEAR)
+   (and GDK_AND)
+   (and-reverse GDK_AND_REVERSE)
+   (and-invert GDK_AND_INVERT)
+   (noop GDK_NOOP)
+   (or GDK_OR)
+   (equiv GDK_EQUIV)
+   (or-reverse GDK_OR_REVERSE)
+   (copy-invert GDK_COPY_INVERT)
+   (or-invert GDK_OR_INVERT)
+   (nand GDK_NAND)
+   (set GDK_SET))
 
 (define-enum GdkFill
    (solid GDK_SOLID)

@@ -28,7 +28,7 @@
 
 enum {
   ARG_0,
-  ARG_ACCEL_WIDGET,
+  ARG_ACCEL_WIDGET
 };
 
 static void gtk_accel_label_class_init	 (GtkAccelLabelClass  *klass);

@@ -18,13 +18,25 @@
  */
 #include <string.h>
 #include "gtklabel.h"
-
+#include "gdk/gdkkeysyms.h"
 
 enum {
   ARG_0,
   ARG_LABEL,
+  ARG_PATTERN,
   ARG_JUSTIFY
 };
+
+typedef struct _GtkLabelRow GtkLabelRow;
+
+struct _GtkLabelRow {
+  gint index;
+  gint width;
+  gint height;
+  gint len;
+};
+
+GMemChunk *row_mem_chunk = NULL;
 
 static void gtk_label_class_init   (GtkLabelClass  *klass);
 static void gtk_label_init	   (GtkLabel	   *label);
@@ -39,6 +51,8 @@ static void gtk_label_size_request (GtkWidget	   *widget,
 				    GtkRequisition *requisition);
 static gint gtk_label_expose	   (GtkWidget	   *widget,
 				    GdkEventExpose *event);
+static void gtk_label_free_rows     (GtkLabel       *label);
+
 
 static GtkMiscClass *parent_class = NULL;
 
@@ -81,6 +95,7 @@ gtk_label_class_init (GtkLabelClass *class)
   parent_class = gtk_type_class (gtk_misc_get_type ());
   
   gtk_object_add_arg_type ("GtkLabel::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
+  gtk_object_add_arg_type ("GtkLabel::pattern", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_PATTERN);
   gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_JUSTIFICATION, GTK_ARG_READWRITE, ARG_JUSTIFY);
 
   object_class->set_arg = gtk_label_set_arg;
@@ -105,6 +120,9 @@ gtk_label_set_arg (GtkObject	  *object,
     case ARG_LABEL:
       gtk_label_set (label, GTK_VALUE_STRING (*arg) ? GTK_VALUE_STRING (*arg) : "");
       break;
+    case ARG_PATTERN:
+      gtk_label_set_pattern (label, GTK_VALUE_STRING (*arg));
+      break;
     case ARG_JUSTIFY:
       gtk_label_set_justify (label, GTK_VALUE_ENUM (*arg));
       break;
@@ -127,6 +145,9 @@ gtk_label_get_arg (GtkObject	  *object,
     case ARG_LABEL:
       GTK_VALUE_STRING (*arg) = g_strdup (label->label);
       break;
+    case ARG_PATTERN:
+      GTK_VALUE_STRING (*arg) = g_strdup (label->pattern);
+      break;
     case ARG_JUSTIFY:
       GTK_VALUE_ENUM (*arg) = label->jtype;
       break;
@@ -145,6 +166,7 @@ gtk_label_init (GtkLabel *label)
   label->row = NULL;
   label->max_width = 0;
   label->jtype = GTK_JUSTIFY_CENTER;
+  label->pattern = NULL;
   
   gtk_label_set (label, "");
 }
@@ -172,18 +194,57 @@ gtk_label_set (GtkLabel	   *label,
   g_return_if_fail (label != NULL);
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
+
+  if (!row_mem_chunk)
+    row_mem_chunk = g_mem_chunk_create (GtkLabelRow, 64, G_ALLOC_AND_FREE);
   
   if (label->label)
     g_free (label->label);
   label->label = g_strdup (str);
   
   if (label->row)
-    g_slist_free (label->row);
-  label->row = NULL;
-  label->row = g_slist_append (label->row, label->label);
+    gtk_label_free_rows (label);
+
   p = label->label;
-  while ((p = strchr(p, '\n')))
-    label->row = g_slist_append (label->row, ++p);
+  do {
+    GtkLabelRow *row = g_chunk_new (GtkLabelRow, row_mem_chunk);
+    label->row = g_slist_append (label->row, row);
+
+    row->index = p - label->label;
+    
+    p = strchr(p, '\n');
+    if (p)
+      {
+	p++;
+	row->len = (p - label->label) - row->index;
+      }
+    else
+      row->len = strlen (label->label) - row->index;
+  } while (p);
+
+  if (GTK_WIDGET_VISIBLE (label))
+    {
+      if (GTK_WIDGET_MAPPED (label))
+	gdk_window_clear_area (GTK_WIDGET (label)->window,
+			       GTK_WIDGET (label)->allocation.x,
+			       GTK_WIDGET (label)->allocation.y,
+			       GTK_WIDGET (label)->allocation.width,
+			       GTK_WIDGET (label)->allocation.height);
+      
+      gtk_widget_queue_resize (GTK_WIDGET (label));
+    }
+}
+
+void
+gtk_label_set_pattern (GtkLabel	   *label,
+		       const gchar *pattern)
+{
+  g_return_if_fail (label != NULL);
+  g_return_if_fail (GTK_IS_LABEL (label));
+  
+  if (label->pattern)
+    g_free (label->pattern);
+  label->pattern = g_strdup (pattern);
   
   if (GTK_WIDGET_VISIBLE (label))
     {
@@ -238,9 +299,113 @@ gtk_label_finalize (GtkObject *object)
   label = GTK_LABEL (object);
   
   g_free (label->label);
-  g_slist_free (label->row);
+  gtk_label_free_rows (label);
   
   (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+}
+
+static gint
+gtk_label_process_row (GtkLabel     *label,
+		       GtkLabelRow  *row,
+		       gint          x, gint y,
+		       gboolean      draw,
+		       GdkRectangle *area)
+{
+  GtkWidget *widget = GTK_WIDGET (label);
+  
+  char lastc;
+  gint i, j;
+  gint offset;
+  gint height;
+  gint pattern_length;
+
+  if (label->pattern) 
+    pattern_length = strlen (label->pattern);
+  else
+    pattern_length = 0;
+
+  offset = 0;
+  height = widget->style->font->ascent + widget->style->font->descent;
+  
+  if (draw)
+    {
+      if (label->jtype == GTK_JUSTIFY_CENTER)
+	offset = (label->max_width - row->width) / 2;
+      else if (label->jtype == GTK_JUSTIFY_RIGHT)
+	offset = (label->max_width - row->width);
+    }
+      
+  if (label->pattern && (row->index < pattern_length))
+    lastc = label->pattern[0];
+  else
+    lastc = ' ';
+  
+  j = 0;
+  for (i=1; i<=row->len; i++)
+    {
+      char c;
+
+      if (label->pattern && (row->index + i < pattern_length))
+	c = label->pattern[row->index+i];
+      else
+	c = ' ';
+
+      if ((i == row->len) || (lastc != c))
+	{
+	  gint width = 0;
+
+	  if (lastc == '_')
+	    {
+	      gint descent;
+	      gint rbearing;
+	      gint lbearing;
+
+	      gdk_text_extents (widget->style->font,
+				&label->label[row->index+j], i - j,
+				&lbearing, &rbearing, &width, NULL, &descent);
+
+	      if (draw)
+		{
+		  gtk_paint_hline (widget->style, widget->window, 
+				   widget->state, area,
+				   widget, "label", 
+				   offset + x + lbearing - 1, 
+				   offset + x + rbearing, 
+				   y + descent + 2);
+		}
+
+	      height = MAX (height, 
+			    widget->style->font->ascent + descent + 2);
+	    }
+	  else if (i != row->len)
+	    {
+	      width = gdk_text_width (widget->style->font, 
+				      &label->label[row->index+j], 
+				      i - j);
+	    }
+
+	  if (draw)
+	    {
+	      char save = label->label[row->index + i];
+	      label->label[row->index + i] = '\0';
+	      gtk_paint_string(widget->style, widget->window, widget->state,
+			       area, widget, "label", offset + x, y, 
+			       &label->label[row->index+j]);
+	      label->label[row->index + i] = save;
+	    }
+
+		  
+	  offset += width;
+
+	  if (i != row->len)
+	    {
+	      lastc = c;
+	      j = i;
+	    }
+	}
+    }
+
+  return height;
 }
 
 static void
@@ -248,7 +413,7 @@ gtk_label_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
   GtkLabel *label;
-  GSList *row;
+  GSList *tmp_list;
   gint width;
   
   g_return_if_fail (widget != NULL);
@@ -257,38 +422,35 @@ gtk_label_size_request (GtkWidget      *widget,
   
   label = GTK_LABEL (widget);
   
-  row = label->row;
+  requisition->height = label->misc.ypad * 2;
+
+  tmp_list = label->row;
   width = 0;
-  while (row)
+  while (tmp_list)
     {
-      if (row->next)
-	width = MAX (width,
-		     gdk_text_width (GTK_WIDGET (label)->style->font,
-				     row->data,
-				     (gchar*) row->next->data - (gchar*) row->data - 1));
-      else
-	width = MAX (width, gdk_string_width (GTK_WIDGET (label)->style->font, row->data));
-      row = row->next;
+      GtkLabelRow *row = tmp_list->data;
+
+      row->width = gdk_text_width (GTK_WIDGET (label)->style->font,
+				   &label->label [row->index],
+				   row->len);
+      width = MAX (width, row->width);
+
+      requisition->height += gtk_label_process_row (label, row, 0, 0, FALSE, NULL) + 2;
+
+      tmp_list = tmp_list->next;
     }
 
   label->max_width = width;
   requisition->width = width + label->misc.xpad * 2;
-  requisition->height = ((GTK_WIDGET (label)->style->font->ascent +
-			  GTK_WIDGET (label)->style->font->descent + 2) *
-			 g_slist_length(label->row) +
-			 label->misc.ypad * 2);
 }
-
+  
 static gint
 gtk_label_expose (GtkWidget	 *widget,
 		  GdkEventExpose *event)
 {
   GtkLabel *label;
   GtkMisc *misc;
-  GSList *row;
-  gint state;
-  gint offset;
-  gint len;
+  GSList *tmp_list;
   gint x, y;
   
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -300,13 +462,11 @@ gtk_label_expose (GtkWidget	 *widget,
       label = GTK_LABEL (widget);
       misc = GTK_MISC (widget);
       
-      state = widget->state;
-      
       /*
        * GC Clipping
        */
       gdk_gc_set_clip_rectangle (widget->style->white_gc, &event->area);
-      gdk_gc_set_clip_rectangle (widget->style->fg_gc[state], &event->area);
+      gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state], &event->area);
 
       x = widget->allocation.x + misc->xpad +
 	(widget->allocation.width - (label->max_width + label->misc.xpad * 2))
@@ -316,45 +476,101 @@ gtk_label_expose (GtkWidget	 *widget,
 	   (widget->allocation.y + widget->allocation.height -
 	    (widget->requisition.height - misc->ypad * 2)) *
 	   misc->yalign + widget->style->font->ascent) + 1.5;
-      
-      row = label->row;
-      while (row && row->next)
-	{
-	  len = (gchar*) row->next->data - (gchar*) row->data - 1;
-	  offset = 0;
-	  
-	  if (label->jtype == GTK_JUSTIFY_CENTER)
-	    offset = (label->max_width - gdk_text_width (widget->style->font, row->data, len)) / 2;
-	  
-	  else if (label->jtype == GTK_JUSTIFY_RIGHT)
-	    offset = (label->max_width - gdk_text_width (widget->style->font, row->data, len));
-	  
-	   gtk_paint_string(widget->style, widget->window, state,
-			    &event->area, widget, "label", x, y, row->data);
 
-	   row = row->next;
-	   y += widget->style->font->ascent + widget->style->font->descent + 2;
-	}
-      
       /* 
        * COMMENT: we can avoid gdk_text_width() calls here storing in label->row
        * the widths of the rows calculated in gtk_label_set.
        * Once we have a wrapping interface we can support GTK_JUSTIFY_FILL.
        */
-      offset = 0;
-      
-      if (label->jtype == GTK_JUSTIFY_CENTER)
-	offset = (label->max_width - gdk_string_width (widget->style->font, row->data)) / 2;
-      
-      else if (label->jtype == GTK_JUSTIFY_RIGHT)
-	offset = (label->max_width - gdk_string_width (widget->style->font, row->data));
 
-       gtk_paint_string(widget->style, widget->window, state,
-			&event->area, widget, "label", x, y, row->data);
-
-      gdk_gc_set_clip_rectangle (widget->style->white_gc, NULL);
-      gdk_gc_set_clip_rectangle (widget->style->fg_gc[state], NULL);
+      tmp_list = label->row;
+      while (tmp_list)
+	{
+	  y += gtk_label_process_row (label, tmp_list->data, x, y, TRUE, &event->area) + 2;
+	  tmp_list = tmp_list->next;
+	}
       
+      gdk_gc_set_clip_mask (widget->style->white_gc, NULL);
+      gdk_gc_set_clip_mask (widget->style->fg_gc[widget->state], NULL);
+
     }
   return TRUE;
+}
+
+static void
+gtk_label_free_rows (GtkLabel *label)
+{
+  GSList *tmp_list;
+
+  tmp_list = label->row;
+  while (tmp_list)
+    {
+      g_mem_chunk_free (row_mem_chunk, tmp_list->data);
+      tmp_list = tmp_list->next;
+    }
+  g_slist_free (label->row);
+  label->row = NULL;
+}
+
+guint      
+gtk_label_parse_uline (GtkLabel         *label,
+		       const gchar      *string)
+{
+  guint accel_key = GDK_VoidSymbol;
+  const gchar *p;
+  gchar *q, *r;
+  gchar *name, *pattern;
+
+  gint length;
+  gboolean underscore;
+
+  length = strlen (string);
+  
+  name = g_new (gchar, length+1);
+  pattern = g_new (gchar, length+1);
+
+  underscore = FALSE;
+
+  p = string;
+  q = name;
+  r = pattern;
+  underscore = FALSE;
+
+  while (*p)
+    {
+      if (underscore)
+	{
+	  if (*p == '_')
+	    *r++ = ' ';
+	  else
+	    {
+	      *r++ = '_';
+	      if (accel_key == GDK_VoidSymbol)
+		accel_key = gdk_keyval_to_lower (*p);
+	    }
+
+	  *q++ = *p;
+	  underscore = FALSE;
+	}
+      else
+	{
+	  if (*p == '_')
+	    underscore = TRUE;
+	  else
+	    {
+	      *q++ = *p;
+	      *r++ = ' ';
+	    }
+	}
+      p++;
+    }
+  *q = 0;
+
+  gtk_label_set (label, name);
+  gtk_label_set_pattern (label, pattern);
+  
+  g_free (name);
+  g_free (pattern);
+
+  return accel_key;
 }

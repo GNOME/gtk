@@ -1,10 +1,11 @@
 ### Process this file with automake to produce Makefile.in
 
 gtkincludedir = $(includedir)/gtk
+DEFS += -DG_LOG_DOMAIN=\"Gtk\"
 
-lib_LTLIBRARIES = libgtk-1.1.la
+lib_LTLIBRARIES = libgtk.la
 
-libgtk_1_1_la_SOURCES = \
+libgtk_la_SOURCES = \
 	gtkaccelgroup.c		\
 	gtkaccellabel.c		\
 	gtkadjustment.c		\
@@ -84,6 +85,7 @@ libgtk_1_1_la_SOURCES = \
 	gtkstyle.c		\
 	gtkstatusbar.c		\
 	gtktable.c		\
+	gtktearoffmenuitem.c    \
 	gtktext.c		\
 	gtkthemes.c		\
 	gtktipsquery.c		\
@@ -191,6 +193,7 @@ gtkinclude_HEADERS = \
 	gtkstyle.h		\
 	gtkstatusbar.h		\
 	gtktable.h		\
+	gtktearoffmenuitem.h    \
 	gtktext.h		\
 	gtkthemes.h		\
 	gtktipsquery.h		\
@@ -263,7 +266,9 @@ gtkmarshal.c gtkmarshal.h: @MAINT@ gtkmarshal.list genmarshal.pl
 # special remake rules
 makeenums.h: @MAINT@ gtk.h gtkprivate.h
 
-libgtk_1_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+libgtk_la_LDFLAGS = \
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE) \
+	@DL_LIBS@
 
 EXTRA_DIST = \
 	line-arrow.xbm 		\
@@ -296,26 +301,23 @@ EXTRA_DIST = \
         circles.xbm
 
 INCLUDES = \
--DGTK_EXE_PREFIX=\"$(exec_prefix)\"   \
--DGTK_DATA_PREFIX=\"$(prefix)\"   \
--I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@
+	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"   \
+	-DGTK_DATA_PREFIX=\"$(prefix)\"   \
+	-I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@
 
 noinst_PROGRAMS = testgtk testinput testselection testthreads simple 
 
-# FIXME, we currently rely on linking against libglib-1.1
-
 DEPS =	\
-	libgtk-@LT_RELEASE@.la				\
-	$(top_builddir)/gdk/libgdk-@LT_RELEASE@.la
+	libgtk.la				\
+	$(top_builddir)/gdk/libgdk.la
 
 LDADDS = \
-	libgtk-@LT_RELEASE@.la				\
-	$(top_builddir)/gdk/libgdk-@LT_RELEASE@.la	\
+	libgtk.la				        \
+	$(top_builddir)/gdk/libgdk.la	                \
 	@x_ldflags@					\
 	@x_libs@					\
 	@GLIB_LIBS@                                     \
-	-lm -ldl                                        \
-	-lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz -lm
+	-lm -ldl
 
 testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)

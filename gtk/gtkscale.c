@@ -79,6 +79,7 @@ static void
 gtk_scale_init (GtkScale *scale)
 {
   GTK_WIDGET_SET_FLAGS (scale, GTK_CAN_FOCUS);
+  GTK_WIDGET_SET_FLAGS (scale, GTK_NO_WINDOW);
   GTK_RANGE (scale)->digits = 1;
   scale->draw_value = TRUE;
   scale->value_pos = GTK_POS_TOP;

@@ -113,7 +113,7 @@ typedef	struct	_GtkStateData	 GtkStateData;
 struct _GtkStateData
 {
   GtkStateType  state;
-  guint		state_restauration : 1;
+  guint		state_restoration : 1;
   guint         parent_sensitive : 1;
 };
 
@@ -173,7 +173,7 @@ static GMemChunk *aux_info_mem_chunk = NULL;
 
 static GdkColormap *default_colormap = NULL;
 static GdkVisual *default_visual = NULL;
-static GtkStyle *default_style = NULL;
+static GtkStyle *gtk_default_style = NULL;
 
 static GSList *colormap_stack = NULL;
 static GSList *visual_stack = NULL;
@@ -1505,7 +1505,7 @@ gtk_widget_realize (GtkWidget *widget)
     {
       /*
 	if (GTK_IS_CONTAINER (widget) && !GTK_WIDGET_NO_WINDOW (widget))
-	  g_print ("%s\n", gtk_type_name (GTK_WIDGET_TYPE (widget)));
+	  g_message ("gtk_widget_realize(%s)", gtk_type_name (GTK_WIDGET_TYPE (widget)));
       */
       
       if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
@@ -2870,7 +2870,7 @@ gtk_widget_set_state (GtkWidget           *widget,
       GtkStateData data;
 
       data.state = state;
-      data.state_restauration = FALSE;
+      data.state_restoration = FALSE;
       if (widget->parent)
 	data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
       else
@@ -2917,7 +2917,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_SENSITIVE);
       data.state = GTK_WIDGET_STATE (widget);
     }
-  data.state_restauration = TRUE;
+  data.state_restoration = TRUE;
 
   if (widget->parent)
     data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
@@ -2960,7 +2960,7 @@ gtk_widget_set_parent (GtkWidget *widget,
     data.state = GTK_WIDGET_STATE (parent);
   else
     data.state = GTK_WIDGET_STATE (widget);
-  data.state_restauration = FALSE;
+  data.state_restoration = FALSE;
   data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (parent) != FALSE);
 
   gtk_widget_propagate_state (widget, &data);
@@ -3164,26 +3164,26 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
 void
 gtk_widget_set_default_style (GtkStyle *style)
 {
-   if (style != default_style)
+   if (style != gtk_default_style)
      {
-       if (default_style)
-	 gtk_style_unref (default_style);
-       default_style = style;
-       if (default_style)
-	 gtk_style_ref (default_style);
+       if (gtk_default_style)
+	 gtk_style_unref (gtk_default_style);
+       gtk_default_style = style;
+       if (gtk_default_style)
+	 gtk_style_ref (gtk_default_style);
      }
 }
 
 GtkStyle*
 gtk_widget_get_default_style (void)
 {
-  if (!default_style)
+  if (!gtk_default_style)
     {
-      default_style = gtk_style_new ();
-      gtk_style_ref (default_style);
+      gtk_default_style = gtk_style_new ();
+      gtk_style_ref (gtk_default_style);
     }
   
-  return default_style;
+  return gtk_default_style;
 }
 
 void
@@ -4156,7 +4156,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 
       if (GTK_WIDGET_IS_SENSITIVE (widget))
 	{
-	  if (data->state_restauration)
+	  if (data->state_restoration)
 	    GTK_WIDGET_STATE (widget) = GTK_WIDGET_SAVED_STATE (widget);
 	  else
 	    GTK_WIDGET_STATE (widget) = data->state;
@@ -4164,7 +4164,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       else
 	{
 	  GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
-	  if (!data->state_restauration &&
+	  if (!data->state_restoration &&
 	      data->state != GTK_STATE_INSENSITIVE)
 	    GTK_WIDGET_SAVED_STATE (widget) = data->state;
 	}
@@ -4172,7 +4172,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
   else
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
-      if (!data->state_restauration)
+      if (!data->state_restoration)
 	{
 	  if (data->state != GTK_STATE_INSENSITIVE)
 	    GTK_WIDGET_SAVED_STATE (widget) = data->state;

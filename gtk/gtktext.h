@@ -100,8 +100,6 @@ struct _GtkText
 
 			     /* FLAGS */
 
-  /* True iff the cursor has been placed yet. */
-  guint has_cursor : 1;
   /* True iff this buffer is wrapping lines, otherwise it is using a
    * horizontal scrollbar. */
   guint line_wrap : 1;

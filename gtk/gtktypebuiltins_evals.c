@@ -95,6 +95,13 @@ static GtkEnumValue _gtk_match_type_values[] = {
   { GTK_MATCH_LAST, "GTK_MATCH_LAST", "last" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gtk_menu_direction_type_values[] = {
+  { GTK_MENU_DIR_PARENT, "GTK_MENU_DIR_PARENT", "parent" },
+  { GTK_MENU_DIR_CHILD, "GTK_MENU_DIR_CHILD", "child" },
+  { GTK_MENU_DIR_NEXT, "GTK_MENU_DIR_NEXT", "next" },
+  { GTK_MENU_DIR_PREV, "GTK_MENU_DIR_PREV", "prev" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gtk_menu_factory_type_values[] = {
   { GTK_MENU_FACTORY_MENU, "GTK_MENU_FACTORY_MENU", "menu" },
   { GTK_MENU_FACTORY_MENU_BAR, "GTK_MENU_FACTORY_MENU_BAR", "menu-bar" },
@@ -247,6 +254,11 @@ static GtkEnumValue _gtk_window_type_values[] = {
   { GTK_WINDOW_TOPLEVEL, "GTK_WINDOW_TOPLEVEL", "toplevel" },
   { GTK_WINDOW_DIALOG, "GTK_WINDOW_DIALOG", "dialog" },
   { GTK_WINDOW_POPUP, "GTK_WINDOW_POPUP", "popup" },
+  { 0, NULL, NULL }
+};
+static GtkEnumValue _gtk_sort_type_values[] = {
+  { GTK_SORT_ASCENDING, "GTK_SORT_ASCENDING", "ascending" },
+  { GTK_SORT_DESCENDING, "GTK_SORT_DESCENDING", "descending" },
   { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_font_metric_type_values[] = {
@@ -496,6 +508,18 @@ static GtkEnumValue _gdk_function_values[] = {
   { GDK_COPY, "GDK_COPY", "copy" },
   { GDK_INVERT, "GDK_INVERT", "invert" },
   { GDK_XOR, "GDK_XOR", "xor" },
+  { GDK_CLEAR, "GDK_CLEAR", "clear" },
+  { GDK_AND, "GDK_AND", "and" },
+  { GDK_AND_REVERSE, "GDK_AND_REVERSE", "and-reverse" },
+  { GDK_AND_INVERT, "GDK_AND_INVERT", "and-invert" },
+  { GDK_NOOP, "GDK_NOOP", "noop" },
+  { GDK_OR, "GDK_OR", "or" },
+  { GDK_EQUIV, "GDK_EQUIV", "equiv" },
+  { GDK_OR_REVERSE, "GDK_OR_REVERSE", "or-reverse" },
+  { GDK_COPY_INVERT, "GDK_COPY_INVERT", "copy-invert" },
+  { GDK_OR_INVERT, "GDK_OR_INVERT", "or-invert" },
+  { GDK_NAND, "GDK_NAND", "nand" },
+  { GDK_SET, "GDK_SET", "set" },
   { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_fill_values[] = {

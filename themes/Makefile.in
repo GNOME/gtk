@@ -1,3 +1,16 @@
+# Makefile.in generated automatically by automake 1.3 from Makefile.am
+
+# Copyright (C) 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
 SHELL = /bin/sh
 
 srcdir = @srcdir@
@@ -47,8 +60,6 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 CC = @CC@
-GLIB_CFLAGS = @GLIB_CFLAGS@
-GLIB_LIBS = @GLIB_LIBS@
 GTK_CFLAGS = @GTK_CFLAGS@
 GTK_CONFIG = @GTK_CONFIG@
 GTK_LIBS = @GTK_LIBS@
@@ -62,99 +73,91 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
+SUBDIRS = pixmap_data
 
-########################################################
-lib_LTLIBRARIES = libpixmap.la libwin95.la libmotif.la libmetal.la
-lib_DATA = pixmap_data win95_data motif_data metal_data
+CFLAGS = $(GTK_CFLAGS)
+
+enginedir = $(libdir)/gtk/themes/engines
+engine_LTLIBRARIES = libpixmap.la libwin95.la libmotif.la libmetal.la
 
 ###### pixmap theme -> libpixmap.so
 
 libpixmap_la_SOURCES = \
 	pixmap_theme_draw.c	\
-	pixmap_theme_main.c
-
-libpixmapinclude_HEADERS = \
+	pixmap_theme_main.c	\
 	pixmap_theme.h
 
-libpixmap_LDFLAGS = -lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz @GTK_LIBS@
+libpixmap_la_LIBADD = -lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz 
+libpixmap_la_LDFLAGS = -export-dynamic
 
 ###### win95 theme -> libwin95.so
 libwin95_la_SOURCES = \
 	win95_theme_draw.c	\
 	win95_theme_main.c
+libwin95_la_LDFLAGS = -export-dynamic
 
-libwin95include_HEADERS = \
-	win95_theme.h
-
-libwin95_LDFLAGS = -lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz @GTK_LIBS@
-
-###### metal theme -> libmetal.so
-libmetal_la_SOURCES = \
-	metal_theme_draw.c	\
-	metal_theme_main.c
-
-libmetalinclude_HEADERS = \
-	metal_theme.h
-
-libmetal_LDFLAGS = -lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz @GTK_LIBS@
+win95dir = $(datadir)/gtk/themes/win95
+win95_DATA = win95_data/gtkrc
 
 ###### motif theme -> libmotif.so
 libmotif_la_SOURCES = \
 	motif_theme_draw.c	\
 	motif_theme_main.c
+libmotif_la_LDFLAGS = -export-dynamic
 
-libmotifinclude_HEADERS = \
-	motif_theme.h
+motifdir = $(datadir)/gtk/themes/win95
+motif_DATA = motif_data/gtkrc
 
-libmotif_LDFLAGS = -lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz @GTK_LIBS@
+###### metal theme -> libmetal.so
+libmetal_la_SOURCES = \
+	metal_theme_draw.c	\
+	metal_theme_main.c
+libmetal_la_LDFLAGS = -export-dynamic
 
-EXTRA_DIST = \
-	line-arrow.xbm
+metaldir = $(datadir)/gtk/themes/win95
+metal_DATA = metal_data/gtkrc
 
-INCLUDES = -I$(top_srcdir) @GTK_CFLAGS@
+EXTRA_DIST = $(win95_DATA) $(motif_DATA) $(metal_DATA)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-mkinstalldirs = $(SHELL) $(top_srcdir)/../mkinstalldirs
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
-LTLIBRARIES =  $(lib_LTLIBRARIES)
+LTLIBRARIES =  $(engine_LTLIBRARIES)
 
 
 DEFS = @DEFS@ -I. -I$(srcdir) 
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-libpixmap_la_LDFLAGS = 
-libpixmap_la_LIBADD = 
+libpixmap_la_DEPENDENCIES = 
 libpixmap_la_OBJECTS =  pixmap_theme_draw.lo pixmap_theme_main.lo
-libwin95_la_LDFLAGS = 
 libwin95_la_LIBADD = 
 libwin95_la_OBJECTS =  win95_theme_draw.lo win95_theme_main.lo
-libmetal_la_LDFLAGS = 
-libmetal_la_LIBADD = 
-libmetal_la_OBJECTS =  metal_theme_draw.lo metal_theme_main.lo
-libmotif_la_LDFLAGS = 
 libmotif_la_LIBADD = 
 libmotif_la_OBJECTS =  motif_theme_draw.lo motif_theme_main.lo
-CFLAGS = @CFLAGS@
+libmetal_la_LIBADD = 
+libmetal_la_OBJECTS =  metal_theme_draw.lo metal_theme_main.lo
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 LINK = $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
-DIST_COMMON =  Makefile.in aclocal.m4 configure configure.in
+DATA =  $(metal_DATA) $(motif_DATA) $(win95_DATA)
+
+DIST_COMMON =  README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
+Makefile.in NEWS aclocal.m4 config.guess config.sub configure \
+configure.in install-sh ltconfig ltmain.sh missing mkinstalldirs
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP = --best
-DEP_FILES =  \
+DEP_FILES =  .deps/metal_theme_draw.P .deps/metal_theme_main.P \
+.deps/motif_theme_draw.P .deps/motif_theme_main.P \
 .deps/pixmap_theme_draw.P .deps/pixmap_theme_main.P \
-.deps/win95_theme_draw.P .deps/win95_theme_main.P \
-.deps/metal_theme_draw.P .deps/metal_theme_main.P \
-.deps/motif_theme_draw.P .deps/motif_theme_main.P
+.deps/win95_theme_draw.P .deps/win95_theme_main.P
+SOURCES = $(libpixmap_la_SOURCES) $(libwin95_la_SOURCES) $(libmotif_la_SOURCES) $(libmetal_la_SOURCES)
+OBJECTS = $(libpixmap_la_OBJECTS) $(libwin95_la_OBJECTS) $(libmotif_la_OBJECTS) $(libmetal_la_OBJECTS)
 
-SOURCES = $(libpixmap_la_SOURCES) $(libwin95_la_SOURCES) $(libmetal_la_SOURCES) $(libmotif_la_SOURCES)
-OBJECTS = $(libpixmap_la_OBJECTS) $(libwin95_la_OBJECTS) $(libmetal_la_SOURCES) $(libmotif_la_OBJECTS)
-
-all: Makefile $(LTLIBRARIES)
+all: all-recursive all-am
 
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
@@ -173,42 +176,29 @@ config.status: $(srcdir)/configure
 $(srcdir)/configure: @MAINT@$(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
-mostlyclean-libLTLIBRARIES:
+mostlyclean-engineLTLIBRARIES:
 
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+clean-engineLTLIBRARIES:
+	-test -z "$(engine_LTLIBRARIES)" || rm -f $(engine_LTLIBRARIES)
 
-distclean-libLTLIBRARIES:
+distclean-engineLTLIBRARIES:
 
-maintainer-clean-libLTLIBRARIES:
+maintainer-clean-engineLTLIBRARIES:
 
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	$(mkinstalldirs) $(exec_prefix)/lib/gtk/themes/engines
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	    l=`echo $$p | sed s/la$$/so/g`; \
-	    $(INSTALL_PROGRAM) .libs/$$l \
-	    $(exec_prefix)/lib/gtk/themes/engines/; \
-	done
-	@list='$(lib_DATA)'; for p in $$list; do \
-	    l=`echo $$p | sed s/_data$$//g`; \
-	    $(mkinstalldirs) $(exec_prefix)/share/gtk/themes/$$l; \
-	    for f in `ls $$p`; do \
-	      if test -f $$p/$$f; then \
-		$(INSTALL) $$p/$$f \
-	        $(exec_prefix)/share/gtk/themes/$$l/; \
-	      fi; \
-	    done; \
+install-engineLTLIBRARIES: $(engine_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(enginedir)
+	@list='$(engine_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "$(LIBTOOL)  --mode=install $(INSTALL_DATA) $$p $(DESTDIR)$(enginedir)/$$p"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_DATA) $$p $(DESTDIR)$(enginedir)/$$p; \
+	  else :; fi; \
 	done
 
-uninstall-libLTLIBRARIES:
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	    l=`echo $$p | sed s/la$$/so/g`; \
-	    $(RM) \
-	    $(exec_prefix)/lib/gtk/themes/engines/; \
-	done
-	@list='$(lib_DATA)'; for p in $$list; do \
-	    l=`echo $$p | sed s/_data$$//g`; \
-	    $(RM) -rf $(exec_prefix)/share/gtk/themes/$$l/; \
+uninstall-engineLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	list='$(engine_LTLIBRARIES)'; for p in $$list; do \
+	  $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(enginedir)/$$p; \
 	done
 
 .s.o:
@@ -244,19 +234,110 @@ distclean-libtool:
 maintainer-clean-libtool:
 
 libpixmap.la: $(libpixmap_la_OBJECTS) $(libpixmap_la_DEPENDENCIES)
-	$(LINK) -rpath $(libdir) $(libpixmap_la_LDFLAGS) $(libpixmap_la_OBJECTS) $(libpixmap_la_LIBADD) $(LIBS)
-
+	$(LINK) -rpath $(enginedir) $(libpixmap_la_LDFLAGS) $(libpixmap_la_OBJECTS) $(libpixmap_la_LIBADD) $(LIBS)
 
 libwin95.la: $(libwin95_la_OBJECTS) $(libwin95_la_DEPENDENCIES)
-	$(LINK) -rpath $(libdir) $(libwin95_la_LDFLAGS) $(libwin95_la_OBJECTS) $(libwin95_la_LIBADD) $(LIBS)
-
-
-libmetal.la: $(libmetal_la_OBJECTS) $(libmetal_la_DEPENDENCIES)
-	$(LINK) -rpath $(libdir) $(libmetal_la_LDFLAGS) $(libmetal_la_OBJECTS) $(libmetal_la_LIBADD) $(LIBS)
-
+	$(LINK) -rpath $(enginedir) $(libwin95_la_LDFLAGS) $(libwin95_la_OBJECTS) $(libwin95_la_LIBADD) $(LIBS)
 
 libmotif.la: $(libmotif_la_OBJECTS) $(libmotif_la_DEPENDENCIES)
-	$(LINK) -rpath $(libdir) $(libmotif_la_LDFLAGS) $(libmotif_la_OBJECTS) $(libmotif_la_LIBADD) $(LIBS)
+	$(LINK) -rpath $(enginedir) $(libmotif_la_LDFLAGS) $(libmotif_la_OBJECTS) $(libmotif_la_LIBADD) $(LIBS)
+
+libmetal.la: $(libmetal_la_OBJECTS) $(libmetal_la_DEPENDENCIES)
+	$(LINK) -rpath $(enginedir) $(libmetal_la_LDFLAGS) $(libmetal_la_OBJECTS) $(libmetal_la_LIBADD) $(LIBS)
+
+install-metalDATA: $(metal_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(metaldir)
+	@list='$(metal_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(metaldir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(metaldir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(metaldir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(metaldir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-metalDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(metal_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(metaldir)/$$p; \
+	done
+
+install-motifDATA: $(motif_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(motifdir)
+	@list='$(motif_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(motifdir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(motifdir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(motifdir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(motifdir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-motifDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(motif_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(motifdir)/$$p; \
+	done
+
+install-win95DATA: $(win95_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(win95dir)
+	@list='$(win95_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(win95dir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(win95dir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(win95dir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(win95dir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-win95DATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(win95_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(win95dir)/$$p; \
+	done
+
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+
+@SET_MAKE@
+
+all-recursive install-data-recursive install-exec-recursive \
+installdirs-recursive install-recursive uninstall-recursive  \
+check-recursive installcheck-recursive info-recursive dvi-recursive:
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  target=`echo $@ | sed s/-recursive//`; \
+	  echo "Making $$target in $$subdir"; \
+	  (cd $$subdir && $(MAKE) $$target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done && test -z "$$fail"
+
+mostlyclean-recursive clean-recursive distclean-recursive \
+maintainer-clean-recursive:
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
+	  rev="$$subdir $$rev"; \
+	done; \
+	for subdir in $$rev; do \
+	  target=`echo $@ | sed s/-recursive//`; \
+	  echo "Making $$target in $$subdir"; \
+	  (cd $$subdir && $(MAKE) $$target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  (cd $$subdir && $(MAKE) tags); \
+	done
 
 tags: TAGS
 
@@ -264,9 +345,12 @@ ID: $(HEADERS) $(SOURCES) $(LISP)
 	here=`pwd` && cd $(srcdir) \
 	  && mkid -f$$here/ID $(SOURCES) $(HEADERS) $(LISP)
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	tags=; \
 	here=`pwd`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test -f $$subdir/TAGS && tags="$$tags -i $$here/$$subdir/TAGS"; \
+	done; \
 	list='$(SOURCES) $(HEADERS)'; \
 	unique=`for i in $$list; do echo $$i; done | \
 	  awk '    { files[$$0] = 1; } \
@@ -324,11 +408,21 @@ distdir: $(DISTFILES)
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu Makefile
+	$(mkinstalldirs) $(distdir)/metal_data $(distdir)/motif_data \
+	   $(distdir)/win95_data
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  test -f $(distdir)/$$file \
 	  || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
 	  || cp -p $$d/$$file $(distdir)/$$file; \
+	done
+	for subdir in $(SUBDIRS); do \
+	  test -d $(distdir)/$$subdir \
+	  || mkdir $(distdir)/$$subdir \
+	  || exit 1; \
+	  chmod 777 $(distdir)/$$subdir; \
+	  (cd $$subdir && $(MAKE) top_distdir=../$(distdir) distdir=../$(distdir)/$$subdir distdir) \
+	    || exit 1; \
 	done
 
 DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
@@ -354,26 +448,33 @@ maintainer-clean-depend:
 	@-sed -e 's/^\([^:]*\)\.o:/\1.lo \1.o:/' \
 	  < .deps/$(*F).p > .deps/$(*F).P
 	@-rm -f .deps/$(*F).p
-info:
-dvi:
-check: all
-	$(MAKE)
-installcheck:
-install-exec: install-libLTLIBRARIES
+info: info-recursive
+dvi: dvi-recursive
+check: all-am
+	$(MAKE) check-recursive
+installcheck: installcheck-recursive
+all-am: Makefile $(LTLIBRARIES) $(DATA)
+
+install-data-am: install-engineLTLIBRARIES install-metalDATA install-motifDATA install-win95DATA
+
+uninstall-am: uninstall-engineLTLIBRARIES uninstall-metalDATA uninstall-motifDATA uninstall-win95DATA
+
+install-exec: install-exec-recursive
 	@$(NORMAL_INSTALL)
 
-install-data: 
+install-data: install-data-recursive install-data-am
 	@$(NORMAL_INSTALL)
 
-install: install-exec install-data all
+install: install-recursive install-data-am
 	@:
 
-uninstall: uninstall-libLTLIBRARIES
+uninstall: uninstall-recursive uninstall-am
 
 install-strip:
 	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
-installdirs:
-	$(mkinstalldirs)  $(DATADIR)$(libdir)
+installdirs: installdirs-recursive
+	$(mkinstalldirs)  $(DATADIR)$(enginedir) $(DATADIR)$(metaldir) \
+		$(DATADIR)$(motifdir) $(DATADIR)$(win95dir)
 
 
 mostlyclean-generic:
@@ -390,35 +491,52 @@ distclean-generic:
 maintainer-clean-generic:
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-mostlyclean:  mostlyclean-libLTLIBRARIES mostlyclean-compile \
+mostlyclean-am:  mostlyclean-engineLTLIBRARIES mostlyclean-compile \
 		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
 		mostlyclean-generic
 
-clean:  clean-libLTLIBRARIES clean-compile clean-libtool clean-tags \
-		clean-depend clean-generic mostlyclean
+clean-am:  clean-engineLTLIBRARIES clean-compile clean-libtool \
+		clean-tags clean-depend clean-generic mostlyclean-am
 
-distclean:  distclean-libLTLIBRARIES distclean-compile distclean-libtool \
-		distclean-tags distclean-depend distclean-generic clean
+distclean-am:  distclean-engineLTLIBRARIES distclean-compile \
+		distclean-libtool distclean-tags distclean-depend \
+		distclean-generic clean-am
+
+maintainer-clean-am:  maintainer-clean-engineLTLIBRARIES \
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-tags maintainer-clean-depend \
+		maintainer-clean-generic distclean-am
+
+mostlyclean:  mostlyclean-recursive mostlyclean-am
+
+clean:  clean-recursive clean-am
+
+distclean:  distclean-recursive distclean-am
 	-rm -f config.status
 	-rm -f libtool
 
-maintainer-clean:  maintainer-clean-libLTLIBRARIES \
-		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-depend \
-		maintainer-clean-generic distclean
+maintainer-clean:  maintainer-clean-recursive maintainer-clean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 	-rm -f config.status
 
-.PHONY: mostlyclean-libLTLIBRARIES distclean-libLTLIBRARIES \
-clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
-uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-compile \
-distclean-compile clean-compile maintainer-clean-compile \
-mostlyclean-libtool distclean-libtool clean-libtool \
-maintainer-clean-libtool tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir mostlyclean-depend \
-distclean-depend clean-depend maintainer-clean-depend info dvi \
-installcheck install-exec install-data install uninstall all \
+.PHONY: mostlyclean-engineLTLIBRARIES distclean-engineLTLIBRARIES \
+clean-engineLTLIBRARIES maintainer-clean-engineLTLIBRARIES \
+uninstall-engineLTLIBRARIES install-engineLTLIBRARIES \
+mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool uninstall-metalDATA \
+install-metalDATA uninstall-motifDATA install-motifDATA \
+uninstall-win95DATA install-win95DATA install-data-recursive \
+uninstall-data-recursive install-exec-recursive \
+uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
+all-recursive check-recursive installcheck-recursive info-recursive \
+dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
+maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir \
+mostlyclean-depend distclean-depend clean-depend \
+maintainer-clean-depend info dvi installcheck all-am install-data-am \
+uninstall-am install-exec install-data install uninstall all \
 installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 

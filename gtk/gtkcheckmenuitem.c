@@ -151,6 +151,8 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   menu_item_class->activate = gtk_check_menu_item_activate;
   menu_item_class->toggle_size = 12;
 
+  menu_item_class->hide_on_activate = FALSE;
+
   klass->toggled = NULL;
   klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
 }

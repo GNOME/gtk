@@ -214,10 +214,8 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
     {
       if (GTK_WIDGET_REALIZED(toggle_button))
 	{
-	  printf("realized\n");
 	  if (GTK_WIDGET_VISIBLE (toggle_button))
 	    {
-	      printf("visible\n");
 	      gtk_widget_unrealize(GTK_WIDGET(toggle_button));
 	      toggle_button->draw_indicator = draw_indicator;
 	      gtk_widget_realize(GTK_WIDGET(toggle_button));

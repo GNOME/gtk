@@ -1190,18 +1190,29 @@ gtk_default_draw_hline (GtkStyle     *style,
 	gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
 	gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
      }
-   for (i = 0; i < thickness_dark; i++)
+
+   if (detail && !strcmp (detail, "label"))
      {
-	gdk_draw_line (window, style->light_gc[state_type], x2 - i - 1, y + i, x2, y + i);
-	gdk_draw_line (window, style->dark_gc[state_type], x1, y + i, x2 - i - 1, y + i);
+       if (state_type == GTK_STATE_INSENSITIVE)
+	 gdk_draw_line (window, style->white_gc, x1 + 1, y + 1, x2 + 1, y + 1);	 
+       gdk_draw_line (window, style->fg_gc[state_type], x1, y, x2, y);     
+     }
+   else
+     {
+       for (i = 0; i < thickness_dark; i++)
+	 {
+	   gdk_draw_line (window, style->light_gc[state_type], x2 - i - 1, y + i, x2, y + i);
+	   gdk_draw_line (window, style->dark_gc[state_type], x1, y + i, x2 - i - 1, y + i);
+	 }
+       
+       y += thickness_dark;
+       for (i = 0; i < thickness_light; i++)
+	 {
+	   gdk_draw_line (window, style->dark_gc[state_type], x1, y + i, x1 + thickness_light - i - 1, y + i);
+	   gdk_draw_line (window, style->light_gc[state_type], x1 + thickness_light - i - 1, y + i, x2, y + i);
+	 }
      }
    
-   y += thickness_dark;
-   for (i = 0; i < thickness_light; i++)
-     {
-       gdk_draw_line (window, style->dark_gc[state_type], x1, y + i, x1 + thickness_light - i - 1, y + i);
-       gdk_draw_line (window, style->light_gc[state_type], x1 + thickness_light - i - 1, y + i, x2, y + i);
-    }
    if (area)
      {
 	gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);

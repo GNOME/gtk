@@ -20,7 +20,7 @@
 #define __GTK_HBUTTON_BOX_H__
 
 
-#include "gtk/gtkbbox.h"
+#include <gtk/gtkbbox.h>
 
 
 #ifdef __cplusplus

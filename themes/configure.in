@@ -4,8 +4,8 @@ AC_INIT(pixmap_theme.h)
 # Save this value here, since automake will set cflags later
 
 # For automake.
-VERSION=0.1
-PACKAGE=themes
+VERSION=0.1.0
+PACKAGE=gtk-themes
 
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
@@ -43,4 +43,5 @@ AC_FUNC_MMAP
 
 AC_OUTPUT([
 Makefile
+pixmap_data/Makefile
 ])

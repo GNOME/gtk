@@ -27,8 +27,9 @@
 #include	"gtk/gtkmenuitem.h"
 #include	"gtk/gtkradiomenuitem.h"
 #include	"gtk/gtkcheckmenuitem.h"
+#include	"gtk/gtktearoffmenuitem.h"
 #include	"gtk/gtkaccellabel.h"
-#include	"gdk/gdkprivate.h" /* for gdk_progname */
+#include        "gdk/gdkkeysyms.h"
 #include	<string.h>
 #include	<sys/stat.h>
 #include	<fcntl.h>
@@ -98,6 +99,8 @@ static const gchar	*key_type_check_item = "<CheckItem>";
 static GQuark		 quark_type_check_item = 0;
 static const gchar	*key_type_toggle_item = "<ToggleItem>";
 static GQuark		 quark_type_toggle_item = 0;
+static const gchar	*key_type_tearoff_item = "<Tearoff>";
+static GQuark		 quark_type_tearoff_item = 0;
 static const gchar	*key_type_separator_item = "<Separator>";
 static GQuark		 quark_type_separator_item = 0;
 static const gchar	*key_type_branch = "<Branch>";
@@ -210,6 +213,7 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
   quark_type_radio_item = g_quark_from_static_string (key_type_radio_item);
   quark_type_check_item = g_quark_from_static_string (key_type_check_item);
   quark_type_toggle_item = g_quark_from_static_string (key_type_toggle_item);
+  quark_type_tearoff_item = g_quark_from_static_string (key_type_tearoff_item);
   quark_type_separator_item = g_quark_from_static_string (key_type_separator_item);
   quark_type_branch = g_quark_from_static_string (key_type_branch);
   quark_type_last_branch = g_quark_from_static_string (key_type_last_branch);
@@ -314,15 +318,15 @@ gtk_item_factory_propagate_accelerator (GtkItemFactoryItem *item,
 					    GTK_ACCEL_VISIBLE);
 	      else
 		{
-		  GSList *slist;
+		  GSList *work;
 		  
-		  slist = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
-		  while (slist)
+		  work = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
+		  while (work)
 		    {
 		      GtkAccelEntry *ac_entry;
 		      
-		      ac_entry = slist->data;
-		      slist = slist->next;
+		      ac_entry = work->data;
+		      work = work->next;
 		      if (ac_entry->accel_flags & GTK_ACCEL_VISIBLE &&
 			  ac_entry->accel_group == ifactory->accel_group &&
 			  ac_entry->signal_id == signal_id)
@@ -547,6 +551,7 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
 			    const gchar		*path,
 			    GtkAccelGroup	*accel_group)
 {
+  GtkAccelGroup *menu_group;
   guint len;
 
   g_return_if_fail (ifactory != NULL);
@@ -579,6 +584,10 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
 		    NULL);
   gtk_object_ref (GTK_OBJECT (ifactory));
   gtk_object_sink (GTK_OBJECT (ifactory));
+
+  menu_group = gtk_accel_group_new ();
+  gtk_accel_group_attach (menu_group, GTK_OBJECT (ifactory->widget));
+    
   /*
     gtk_signal_connect_object_while_alive (GTK_OBJECT (ifactory->widget),
 					 "destroy",
@@ -626,7 +635,7 @@ gtk_item_factory_from_path (const gchar      *path)
 }
 
 static void
-gtk_item_factory_destroy (GtkObject		 *object)
+gtk_item_factory_destroy (GtkObject *object)
 {
   GtkItemFactory *ifactory;
   GSList *slist;
@@ -638,14 +647,14 @@ gtk_item_factory_destroy (GtkObject		 *object)
 
   if (ifactory->widget)
     {
-      GtkObject *object;
+      GtkObject *dobj;
 
-      object = GTK_OBJECT (ifactory->widget);
+      dobj = GTK_OBJECT (ifactory->widget);
 
-      gtk_object_ref (object);
-      gtk_object_sink (object);
-      gtk_object_destroy (object);
-      gtk_object_unref (object);
+      gtk_object_ref (dobj);
+      gtk_object_sink (dobj);
+      gtk_object_destroy (dobj);
+      gtk_object_unref (dobj);
 
       ifactory->widget = NULL;
     }
@@ -775,8 +784,8 @@ gtk_item_factory_dump_rc (const gchar            *file_name,
     return;
 
   fputs ("; ", f_out);
-  if (gdk_progname)
-    fputs (gdk_progname, f_out);
+  if (g_get_prgname ())
+    fputs (g_get_prgname (), f_out);
   fputs (" GtkItemFactory rc-file         -*- scheme -*-\n", f_out);
   fputs ("; this file is an automated menu-path dump\n", f_out);
   fputs (";\n", f_out);
@@ -880,6 +889,44 @@ gtk_item_factory_get_widget_by_action (GtkItemFactory   *ifactory,
   return NULL;
 }
 
+static gboolean
+gtk_item_factory_parse_path (gchar  *str,
+			     gchar **path,
+			     gchar **parent_path,
+			     gchar **item)
+{
+  gchar *p, *q;
+
+  *path = g_strdup (str);
+
+  p = q = *path;
+  while (*p)
+    {
+      if (*p != '_')
+	{
+	  *q++ = *p;
+	}
+      p++;
+    }
+  *q = 0;
+
+  *parent_path = g_strdup (*path);
+  p = strrchr (*parent_path, '/');
+  if (!p)
+    {
+      g_warning ("GtkItemFactory: invalid entry path `%s'", str);
+      return FALSE;
+    }
+  *p = 0;
+
+  p = strrchr (str, '/');
+  p++;
+
+  *item = g_strdup (p);
+
+  return TRUE;
+}
+
 void
 gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			      GtkItemFactoryEntry    *entry,
@@ -889,11 +936,15 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   GtkWidget *parent;
   GtkWidget *widget;
   GSList *radio_group;
+  gchar *name;
   gchar *parent_path;
-  gchar *p;
+  gchar *path;
+  guint accel_key;
   guint type_id;
   GtkType type;
   gchar *item_type_path;
+  GtkAccelGroup *parent_accel_group = NULL;
+  GSList *tmp_list;
 
   g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
@@ -923,6 +974,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     type = GTK_TYPE_RADIO_MENU_ITEM;
   else if (type_id == quark_type_check_item)
     type = GTK_TYPE_CHECK_MENU_ITEM;
+  else if (type_id == quark_type_tearoff_item)
+    type = GTK_TYPE_TEAROFF_MENU_ITEM;
   else if (type_id == quark_type_toggle_item)
     type = GTK_TYPE_CHECK_MENU_ITEM;
   else if (type_id == quark_type_separator_item)
@@ -949,16 +1002,11 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	  return;
 	}
     }
-  
-  parent_path = g_strdup (entry->path);
-  p = strrchr (parent_path, '/');
-  if (!p)
-    {
-      g_warning ("GtkItemFactory: invalid entry path `%s'", entry->path);
-      return;
-    }
-  *p = 0;
 
+  if (!gtk_item_factory_parse_path (entry->path, 
+				    &path, &parent_path, &name))
+    return;
+  
   parent = gtk_item_factory_get_widget (ifactory, parent_path);
   if (!parent)
     {
@@ -977,9 +1025,10 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   g_free (parent_path);
 
   g_return_if_fail (parent != NULL);
-  
-  p = strrchr (entry->path, '/');
-  p++;
+
+  tmp_list = gtk_accel_groups_from_object (GTK_OBJECT (parent));
+  if (tmp_list)
+    parent_accel_group = tmp_list->data;
   
   widget = gtk_widget_new (type,
 			   "GtkWidget::visible", TRUE,
@@ -993,22 +1042,50 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   if (GTK_IS_CHECK_MENU_ITEM (widget))
     gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (widget), TRUE);
     
-  if (type_id != quark_type_separator_item && *p)
+  if ((type_id != quark_type_separator_item) && 
+      (type_id != quark_type_tearoff_item) &&
+      *name)
     {
       GtkWidget *label;
-      
+
       label =
 	gtk_widget_new (GTK_TYPE_ACCEL_LABEL,
-			"GtkLabel::label", p,
 			"GtkWidget::visible", TRUE,
 			"GtkWidget::parent", widget,
 			"GtkAccelLabel::accel_widget", widget,
 			"GtkMisc::xalign", 0.0,
 			NULL);
+
+      accel_key = gtk_label_parse_uline (GTK_LABEL (label), name);
+
+      if ((accel_key != GDK_VoidSymbol) && GTK_IS_MENU_BAR (parent))
+	{
+	  gtk_widget_add_accelerator (widget,
+				      "activate_item",
+				      ifactory->accel_group,
+				      accel_key, GDK_MOD1_MASK,
+				      GTK_ACCEL_LOCKED);
+	}
+
+      if ((accel_key != GDK_VoidSymbol) && parent_accel_group)
+	{
+	  gtk_widget_add_accelerator (widget,
+				      "activate_item",
+				      parent_accel_group,
+				      accel_key, 0,
+				      GTK_ACCEL_LOCKED);
+	}
     }
+
+  g_free (name);
+
   if (type_id == quark_type_branch ||
       type_id == quark_type_last_branch)
     {
+      GtkAccelGroup *menu_group;
+
+      menu_group = gtk_accel_group_new ();
+      
       if (type_id == quark_type_last_branch)
 	gtk_menu_item_right_justify (GTK_MENU_ITEM (widget));
 	
@@ -1016,11 +1093,13 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       widget =
 	gtk_widget_new (GTK_TYPE_MENU,
 			NULL);
+      
+      gtk_accel_group_attach (menu_group, GTK_OBJECT (widget));
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (parent), widget);
     }	   
   
   gtk_item_factory_add_item (ifactory,
-			     entry->path, entry->accelerator,
+			     path, entry->accelerator,
 			     entry->callback, entry->callback_action, callback_data,
 			     callback_type,
 			     item_type_path,

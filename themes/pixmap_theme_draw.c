@@ -333,7 +333,7 @@ match_theme_image(GtkStyle * style,
   struct theme_image *i;
   char               *str = "";
 
-  l = ((ThemeStyleData *)(style->engine_data))->img_list;
+  l = ((ThemeData *)(style->engine_data))->img_list;
   if (!detail) 
     detail = str;
   

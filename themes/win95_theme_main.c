@@ -1,4 +1,4 @@
-#include "win95_theme.h"
+#include <gtk/gtk.h>
 
 /* Theme functions to export */
 void                theme_init(GtkThemeEngine * engine);

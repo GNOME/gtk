@@ -271,6 +271,7 @@ gdk_rgb_try_colormap (gint nr, gint ng, gint nb)
 	      color.blue = 65535 * pow (color.blue / 65535.0, 0.5);
 #endif
 
+	      /* This should be a raw XAllocColor call */
 	      if (!gdk_color_alloc (cmap, &color))
 		{
 		  char tmp_str[80];
@@ -318,6 +319,31 @@ gdk_rgb_do_colormaps (void)
     if (gdk_rgb_try_colormap (sizes[i][0], sizes[i][1], sizes[i][2]))
       return TRUE;
   return FALSE;
+}
+
+/* Make a 2 x 2 x 2 colorcube */
+static void
+gdk_rgb_colorcube_222 (void)
+{
+  int i;
+  GdkColor color;
+  GdkColormap *cmap;
+
+  if (image_info->cmap_alloced)
+    cmap = image_info->cmap;
+  else
+    cmap = gdk_colormap_get_system ();
+
+  colorcube_d = g_new (guchar, 512);
+
+  for (i = 0; i < 8; i++)
+    {
+      color.red = ((i & 4) >> 2) * 65535;
+      color.green = ((i & 2) >> 1) * 65535;
+      color.blue = (i & 1) * 65535;
+      gdk_color_alloc (cmap, &color);
+      colorcube_d[((i & 4) << 4) | ((i & 2) << 2) | (i & 1)] = color.pixel;
+    }
 }
 
 void
@@ -386,10 +412,15 @@ gdk_rgb_score_visual (GdkVisual *visual)
       else if (visual->depth == 8)
 	quality = 4;
     }
-  else if (visual->type == GDK_VISUAL_PSEUDO_COLOR)
+  else if (visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+	   visual->type == GDK_VISUAL_STATIC_COLOR)
     {
       if (visual->depth == 8)
 	quality = 4;
+      else if (visual->depth == 4)
+	quality = 2;
+      else if (visual->depth == 1)
+	quality = 1;
     }
   else if (visual->type == GDK_VISUAL_STATIC_GRAY
 #ifdef ENABLE_GRAYSCALE
@@ -410,7 +441,7 @@ gdk_rgb_score_visual (GdkVisual *visual)
 
   sys = (visual == gdk_visual_get_system ());
 
-  pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR);
+  pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR || visual->type == GDK_VISUAL_TRUE_COLOR);
 
   if (gdk_rgb_verbose)
     g_print ("Visual 0x%x, type = %s, depth = %d, %x:%x:%x%s; score=%x\n",
@@ -536,7 +567,11 @@ gdk_rgb_init (void)
 
       gdk_rgb_choose_visual ();
 
-      if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
+      if (image_info->visual->depth == 4)
+	{
+	  gdk_rgb_colorcube_222 ();
+	}
+      else if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
 	{
 	  if (gdk_rgb_install_cmap ||
 	      image_info->visual != gdk_visual_get_system ())
@@ -602,30 +637,35 @@ gdk_rgb_xpixel_from_rgb (guint32 rgb)
     pixel = colorcube[((rgb & 0xf00000) >> 12) |
 		     ((rgb & 0xf000) >> 8) |
 		     ((rgb & 0xf0) >> 4)];
-    else
-      {
+  else if (image_info->visual->depth == 4 &&
+	   image_info->visual->type == GDK_VISUAL_STATIC_COLOR)
+    {
+      pixel = colorcube_d[((rgb & 0x800000) >> 17) |
+			 ((rgb & 0x8000) >> 12) |
+			 ((rgb & 0x80) >> 7)];
+    }
+  else
+    {
 #ifdef VERBOSE
-	g_print ("shift, prec: r %d %d g %d %d b %d %d\n",
-		 image_info->visual->red_shift,
-		 image_info->visual->red_prec,
-		 image_info->visual->green_shift,
-		 image_info->visual->green_prec,
-		 image_info->visual->blue_shift,
-		 image_info->visual->blue_prec);
+      g_print ("shift, prec: r %d %d g %d %d b %d %d\n",
+	       image_info->visual->red_shift,
+	       image_info->visual->red_prec,
+	       image_info->visual->green_shift,
+	       image_info->visual->green_prec,
+	       image_info->visual->blue_shift,
+	       image_info->visual->blue_prec);
 #endif
 
-	pixel = (((((rgb & 0xff0000) >> 16) >>
-		   (8 - image_info->visual->red_prec)) <<
-		  image_info->visual->red_shift) +
-		 ((((rgb & 0xff00) >> 8)  >>
-		   (8 - image_info->visual->green_prec)) <<
-		  image_info->visual->green_shift) +
-		 (((rgb & 0xff) >>
-		   (8 - image_info->visual->blue_prec)) <<
-		  image_info->visual->blue_shift));
-
-	;
-      }
+      pixel = (((((rgb & 0xff0000) >> 16) >>
+		 (8 - image_info->visual->red_prec)) <<
+		image_info->visual->red_shift) +
+	       ((((rgb & 0xff00) >> 8)  >>
+		 (8 - image_info->visual->green_prec)) <<
+		image_info->visual->green_shift) +
+	       (((rgb & 0xff) >>
+		 (8 - image_info->visual->blue_prec)) <<
+		image_info->visual->blue_shift));
+    }
 
   return pixel;
 }
@@ -672,7 +712,7 @@ gdk_rgb_convert_8 (GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      if (width < 8 || (((unsigned long)obuf | (unsigned long) bp2) & 3))
+      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
 	{
 	  for (x = 0; x < width; x++)
 	    {
@@ -770,6 +810,7 @@ gdk_rgb_convert_8 (GdkImage *image,
    public domain. */
 
 #define DM_WIDTH 128
+#define DM_WIDTH_SHIFT 7
 #define DM_HEIGHT 128
 static guchar DM[128][128] =
 {
@@ -876,7 +917,7 @@ static guchar DM[128][128] =
   { 46, 2, 56, 11, 41, 1, 49, 6, 27, 47, 2, 48, 5, 32, 37, 3, 13, 19, 32, 1, 55, 28, 60, 17, 43, 59, 32, 20, 49, 16, 55, 23, 14, 46, 2, 36, 6, 30, 20, 49, 12, 47, 35, 14, 21, 60, 29, 14, 35, 24, 46, 1, 56, 29, 53, 8, 33, 23, 56, 1, 35, 46, 20, 39, 26, 4, 53, 28, 17, 38, 60, 34, 48, 9, 55, 15, 46, 7, 41, 31, 60, 24, 16, 36, 1, 59, 19, 52, 35, 6, 55, 11, 59, 33, 7, 57, 4, 29, 48, 1, 19, 26, 37, 30, 18, 63, 37, 6, 59, 1, 40, 24, 56, 33, 46, 22, 35, 7, 24, 53, 39, 5, 26, 45, 55, 18, 62, 7 },
   { 20, 60, 29, 34, 20, 62, 33, 52, 10, 36, 13, 60, 41, 21, 50, 27, 56, 49, 8, 51, 21, 45, 11, 48, 8, 23, 53, 3, 29, 44, 5, 52, 9, 32, 50, 17, 43, 56, 3, 38, 24, 10, 62, 25, 51, 9, 33, 49, 61, 7, 30, 62, 22, 19, 2, 42, 63, 5, 49, 18, 60, 15, 52, 7, 43, 56, 23, 50, 5, 50, 2, 20, 41, 30, 1, 52, 22, 61, 14, 26, 3, 43, 53, 7, 47, 28, 11, 14, 23, 58, 33, 25, 47, 13, 50, 17, 40, 54, 34, 60, 41, 6, 59, 14, 50, 7, 25, 55, 20, 42, 51, 8, 27, 4, 16, 60, 28, 50, 44, 3, 22, 49, 63, 12, 33, 1, 43, 31 },
   { 36, 5, 46, 8, 44, 24, 13, 39, 25, 57, 31, 18, 8, 52, 10, 45, 6, 30, 36, 24, 63, 4, 33, 26, 57, 40, 15, 56, 37, 12, 40, 25, 37, 58, 11, 63, 21, 45, 16, 60, 31, 53, 18, 33, 3, 45, 23, 0, 20, 54, 40, 15, 50, 38, 60, 16, 25, 42, 29, 38, 7, 41, 25, 62, 18, 33, 8, 35, 42, 16, 32, 56, 12, 39, 59, 19, 34, 9, 49, 38, 57, 12, 21, 50, 14, 40, 61, 44, 50, 9, 49, 19, 3, 29, 35, 62, 12, 24, 7, 18, 52, 32, 10, 46, 21, 41, 32, 11, 36, 29, 14, 34, 60, 38, 54, 11, 41, 14, 19, 57, 32, 16, 7, 41, 51, 25, 14, 57 },
-  { 53, 18, 26, 50, 15, 58, 4, 63, 17, 43, 7, 40, 61, 35, 15, 41, 23, 60, 16, 38, 14, 42, 19, 50, 0, 31, 10, 46, 27, 63, 18, 60, 0, 20, 29, 39, 8, 26, 37, 5, 42, 0, 44, 39, 57, 17, 58, 41, 28, 37, 4, 32, 9, 44, 12, 31, 54, 10, 59, 14, 27, 53, 12, 36, 0, 47, 13, 64, 21, 58, 10, 24, 50, 27, 4, 26, 44, 53, 31, 0, 18, 42, 29, 33, 57, 4, 32, 26, 0, 38, 16, 61, 41, 53, 20, 0, 42, 44, 49, 27, 10, 56, 39, 0, 57, 15, 53, 49, 3, 61, 22, 47, 17, 5, 49, 26, 2, 63, 39, 10, 47, 27, 37, 23, 4, 59, 38, 10 },
+  { 53, 18, 26, 50, 15, 58, 4, 63, 17, 43, 7, 40, 61, 35, 15, 41, 23, 60, 16, 38, 14, 42, 19, 50, 0, 31, 10, 46, 27, 63, 18, 60, 0, 20, 29, 39, 8, 26, 37, 5, 42, 0, 44, 39, 57, 17, 58, 41, 28, 37, 4, 32, 9, 44, 12, 31, 54, 10, 59, 14, 27, 53, 12, 36, 0, 47, 13, 63, 21, 58, 10, 24, 50, 27, 4, 26, 44, 53, 31, 0, 18, 42, 29, 33, 57, 4, 32, 26, 0, 38, 16, 61, 41, 53, 20, 0, 42, 44, 49, 27, 10, 56, 39, 0, 57, 15, 53, 49, 3, 61, 22, 47, 17, 5, 49, 26, 2, 63, 39, 10, 47, 27, 37, 23, 4, 59, 38, 10 },
   { 23, 39, 61, 3, 37, 28, 48, 31, 0, 34, 51, 23, 2, 26, 58, 0, 53, 11, 46, 1, 57, 29, 52, 14, 37, 61, 21, 35, 2, 49, 7, 34, 47, 55, 4, 33, 54, 13, 58, 52, 19, 50, 22, 7, 13, 29, 36, 11, 51, 17, 60, 25, 55, 4, 34, 51, 0, 35, 20, 48, 32, 3, 51, 30, 59, 28, 40, 3, 46, 29, 54, 43, 7, 62, 47, 11, 39, 4, 23, 46, 55, 8, 63, 5, 25, 37, 18, 46, 21, 56, 31, 5, 36, 8, 45, 58, 26, 15, 2, 36, 47, 21, 29, 44, 25, 34, 3, 27, 43, 10, 52, 0, 45, 30, 24, 36, 43, 18, 34, 59, 0, 52, 61, 15, 44, 19, 30, 49 },
   { 0, 27, 12, 43, 54, 9, 22, 53, 21, 46, 15, 55, 29, 47, 20, 33, 39, 28, 59, 35, 9, 44, 5, 24, 47, 7, 52, 17, 56, 22, 30, 42, 14, 26, 45, 18, 49, 1, 24, 34, 11, 27, 55, 32, 61, 47, 2, 56, 6, 44, 13, 47, 36, 27, 58, 22, 16, 47, 40, 4, 57, 38, 21, 45, 16, 9, 56, 26, 11, 38, 0, 22, 36, 17, 33, 57, 16, 30, 62, 15, 35, 40, 20, 45, 59, 10, 54, 8, 63, 13, 52, 27, 22, 57, 28, 12, 32, 51, 55, 22, 63, 4, 16, 54, 12, 62, 45, 19, 58, 13, 32, 40, 20, 56, 7, 57, 9, 54, 6, 29, 42, 21, 8, 55, 35, 47, 6, 41 },
   { 56, 33, 58, 32, 19, 35, 42, 6, 59, 11, 38, 5, 49, 12, 62, 7, 52, 17, 5, 25, 54, 20, 61, 31, 54, 27, 41, 11, 44, 5, 59, 12, 36, 51, 10, 61, 28, 41, 48, 9, 43, 63, 5, 40, 20, 8, 49, 26, 34, 21, 58, 1, 18, 45, 7, 39, 61, 26, 8, 50, 23, 10, 63, 5, 55, 37, 19, 49, 52, 15, 59, 47, 13, 54, 1, 25, 42, 58, 10, 48, 3, 27, 50, 1, 17, 48, 34, 41, 16, 40, 2, 45, 10, 39, 17, 61, 5, 38, 19, 9, 41, 31, 60, 38, 5, 23, 36, 8, 30, 55, 24, 63, 12, 48, 14, 51, 31, 20, 45, 25, 12, 50, 32, 2, 28, 11, 62, 14 },
@@ -905,6 +946,7 @@ static guchar DM[128][128] =
 
 #else
 #define DM_WIDTH 8
+#define DM_WIDTH_SHIFT 3
 #define DM_HEIGHT 8
 static guchar DM[8][8] =
 {
@@ -918,6 +960,28 @@ static guchar DM[8][8] =
   { 63, 31, 55, 23, 61, 29, 53, 21 }
 };
 #endif
+
+static guint32 *DM_565 = NULL;
+
+static void
+gdk_rgb_preprocess_dm_565 (void)
+{
+  int i;
+  guint32 dith;
+
+  if (DM_565 == NULL)
+    {
+      DM_565 = g_new (guint32, DM_WIDTH * DM_HEIGHT);
+      for (i = 0; i < DM_WIDTH * DM_HEIGHT; i++)
+	{
+	  dith = DM[0][i] >> 3;
+	  DM_565[i] = (dith << 20) | dith | (((7 - dith) >> 1) << 10);
+#ifdef VERBOSE
+	  g_print ("%i %x %x\n", i, dith, DM_565[i]);
+#endif
+	}
+    }
+}
 
 static void
 gdk_rgb_convert_8_d666 (GdkImage *image,
@@ -1120,7 +1184,7 @@ gdk_rgb_convert_565 (GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      if (width < 8 || (((unsigned long)obuf | (unsigned long) bp2) & 3))
+      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
 	{
 	  for (x = 0; x < width; x++)
 	    {
@@ -1251,7 +1315,7 @@ gdk_rgb_convert_565_gray (GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      if (width < 8 || (((unsigned long)obuf | (unsigned long) bp2) & 3))
+      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
 	{
 	  for (x = 0; x < width; x++)
 	    {
@@ -1367,45 +1431,178 @@ gdk_rgb_convert_565_br (GdkImage *image,
     }
 }
 
+/* Thanks to Ray Lehtiniemi for a patch that resulted in a ~25% speedup
+   in this mode. */
+#ifdef HAIRY_CONVERT_565
 static void
 gdk_rgb_convert_565_d (GdkImage *image,
-		       gint x0, gint y0, gint width, gint height,
-		       guchar *buf, int rowstride,
-		       gint x_align, gint y_align, GdkRgbCmap *cmap)
+		     gint x0, gint y0, gint width, gint height,
+		     guchar *buf, int rowstride,
+		     gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
+  /* Now this is what I'd call some highly tuned code! */
   int x, y;
-  guchar *obuf;
+  guchar *obuf, *obptr;
   gint bpl;
   guchar *bptr, *bp2;
-  guchar r, g, b;
-  gint dith;
-  gint r1, g1, b1;
-  guchar *dmp;
 
+  width += x_align;
+  height += y_align;
+  
   bptr = buf;
   bpl = image->bpl;
   obuf = ((guchar *)image->mem) + y0 * bpl + x0 * 2;
-  for (y = 0; y < height; y++)
+  for (y = y_align; y < height; y++)
     {
-      dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
+      guint32 *dmp = DM_565 + ((y & (DM_HEIGHT - 1)) << DM_WIDTH_SHIFT);
       bp2 = bptr;
-      for (x = 0; x < width; x++)
+      obptr = obuf;
+      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
 	{
-	  r = *bp2++;
-	  g = *bp2++;
-	  b = *bp2++;
-	  dith = dmp[(x_align + x) & (DM_WIDTH - 1)] >> 3;
-	  r1 = r + dith;
-	  g1 = g + ((7 - dith) >> 1);
-	  b1 = b + dith;
-	  ((unsigned short *)obuf)[x] = (((r1 - (r1 >> 5)) & 0xf8) << 8) |
-	    (((g1 - (g1 >> 6)) & 0xfc) << 3) |
-	    (((b1 - (b1 >> 5)) & 0xf8) >> 3);
+	  for (x = x_align; x < width; x++)
+	    {
+	      gint32 rgb = *bp2++ << 20;
+	      rgb += *bp2++ << 10;
+	      rgb += *bp2++;
+	      rgb += dmp[x & (DM_WIDTH - 1)];
+	      rgb += 0x10040100
+		- ((rgb & 0x1e0001e0) >> 5)
+		- ((rgb & 0x00070000) >> 6);
+
+	      ((unsigned short *)obptr)[0] =
+		((rgb & 0x0f800000) >> 12) |
+		((rgb & 0x0003f000) >> 7) |
+		((rgb & 0x000000f8) >> 3);
+	      obptr += 2;
+	    }
+	}
+      else
+	{
+	  for (x = x_align; x < width - 3; x += 4)
+	    {
+	      guint32 r1b0g0r0;
+	      guint32 g2r2b1g1;
+	      guint32 b3g3r3b2;
+	      guint32 rgb02, rgb13;
+
+	      r1b0g0r0 = ((guint32 *)bp2)[0];
+	      g2r2b1g1 = ((guint32 *)bp2)[1];
+	      b3g3r3b2 = ((guint32 *)bp2)[2];
+	      rgb02 =
+		((r1b0g0r0 & 0xff) << 20) +
+		((r1b0g0r0 & 0xff00) << 2) +
+		((r1b0g0r0 & 0xff0000) >> 16) +
+		dmp[x & (DM_WIDTH - 1)];
+	      rgb02 += 0x10040100
+		- ((rgb02 & 0x1e0001e0) >> 5)
+		- ((rgb02 & 0x00070000) >> 6);
+	      rgb13 =
+		((r1b0g0r0 & 0xff000000) >> 4) +
+		((g2r2b1g1 & 0xff) << 10) +
+		((g2r2b1g1 & 0xff00) >> 8) +
+		dmp[(x + 1) & (DM_WIDTH - 1)];
+	      rgb13 += 0x10040100
+		- ((rgb13 & 0x1e0001e0) >> 5)
+		- ((rgb13 & 0x00070000) >> 6);
+	      ((guint32 *)obptr)[0] =
+		((rgb02 & 0x0f800000) >> 12) |
+		((rgb02 & 0x0003f000) >> 7) |
+		((rgb02 & 0x000000f8) >> 3) |
+		((rgb13 & 0x0f800000) << 4) |
+		((rgb13 & 0x0003f000) << 9) |
+		((rgb13 & 0x000000f8) << 13);
+	      rgb02 =
+		((g2r2b1g1 & 0xff0000) << 4) +
+		((g2r2b1g1 & 0xff000000) >> 14) +
+		(b3g3r3b2 & 0xff) +
+		dmp[(x + 2) & (DM_WIDTH - 1)];
+	      rgb02 += 0x10040100
+		- ((rgb02 & 0x1e0001e0) >> 5)
+		- ((rgb02 & 0x00070000) >> 6);
+	      rgb13 =
+		((b3g3r3b2 & 0xff00) << 12) +
+		((b3g3r3b2 & 0xff0000) >> 6) +
+		((b3g3r3b2 & 0xff000000) >> 24) +
+		dmp[(x + 3) & (DM_WIDTH - 1)];
+	      rgb13 += 0x10040100
+		- ((rgb13 & 0x1e0001e0) >> 5)
+		- ((rgb13 & 0x00070000) >> 6);
+	      ((guint32 *)obptr)[1] =
+		((rgb02 & 0x0f800000) >> 12) |
+		((rgb02 & 0x0003f000) >> 7) |
+		((rgb02 & 0x000000f8) >> 3) |
+		((rgb13 & 0x0f800000) << 4) |
+		((rgb13 & 0x0003f000) << 9) |
+		((rgb13 & 0x000000f8) << 13);
+	      bp2 += 12;
+	      obptr += 8;
+	    }
+	  for (; x < width; x++)
+	    {
+	      gint32 rgb = *bp2++ << 20;
+	      rgb += *bp2++ << 10;
+	      rgb += *bp2++;
+	      rgb += dmp[x & (DM_WIDTH - 1)];
+	      rgb += 0x10040100
+		- ((rgb & 0x1e0001e0) >> 5)
+		- ((rgb & 0x00070000) >> 6);
+
+	      ((unsigned short *)obptr)[0] =
+		((rgb & 0x0f800000) >> 12) |
+		((rgb & 0x0003f000) >> 7) |
+		((rgb & 0x000000f8) >> 3);
+	      obptr += 2;
+	    }
 	}
       bptr += rowstride;
       obuf += bpl;
     }
 }
+#else
+static void
+gdk_rgb_convert_565_d (GdkImage *image,
+                       gint x0, gint y0, gint width, gint height,
+                       guchar *buf, int rowstride,
+                       gint x_align, gint y_align, GdkRgbCmap *cmap)
+{
+  int x, y;
+  guchar *obuf;
+  gint bpl;
+  guchar *bptr;
+
+  width += x_align;
+  height += y_align;
+  
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + (x0 - x_align) * 2;
+
+  for (y = y_align; y < height; y++)
+    {
+      guint32 *dmp = DM_565 + ((y & (DM_HEIGHT - 1)) << DM_WIDTH_SHIFT);
+      guchar *bp2 = bptr;
+
+      for (x = x_align; x < width; x++)
+        {
+          gint32 rgb = *bp2++ << 20;
+          rgb += *bp2++ << 10;
+          rgb += *bp2++;
+	  rgb += dmp[x & (DM_WIDTH - 1)];
+          rgb += 0x10040100
+            - ((rgb & 0x1e0001e0) >> 5)
+            - ((rgb & 0x00070000) >> 6);
+
+          ((unsigned short *)obuf)[x] =
+            ((rgb & 0x0f800000) >> 12) |
+            ((rgb & 0x0003f000) >> 7) |
+            ((rgb & 0x000000f8) >> 3);
+        }
+
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+#endif
 
 static void
 gdk_rgb_convert_555 (GdkImage *image,
@@ -1522,7 +1719,7 @@ gdk_rgb_convert_888_lsb (GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      if (width < 8 || (((unsigned long)obuf | (unsigned long) bp2) & 3))
+      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
 	{
 	  for (x = 0; x < width; x++)
 	    {
@@ -1911,6 +2108,70 @@ gdk_rgb_convert_truecolor_msb_d (GdkImage *image,
     }
 }
 
+#define IMAGE_8BPP
+static void
+gdk_rgb_convert_4 (GdkImage *image,
+		   gint x0, gint y0, gint width, gint height,
+		   guchar *buf, int rowstride,
+		   gint x_align, gint y_align,
+		   GdkRgbCmap *cmap)
+{
+  int x, y;
+  gint bpl;
+  guchar *obuf, *obptr;
+  guchar *bptr, *bp2;
+  gint r, g, b;
+  guchar *dmp;
+  gint dith;
+  guchar pix0, pix1;
+
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + x0;
+  for (y = 0; y < height; y++)
+    {
+      dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
+      bp2 = bptr;
+      obptr = obuf;
+#ifdef IMAGE_8BPP
+      for (x = 0; x < width; x += 1)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  dith = (dmp[(x_align + x) & (DM_WIDTH - 1)] << 2) | 3;
+	  obptr[0] = colorcube_d[(((r + dith) & 0x100) >> 2) |
+				(((g + 258 - dith) & 0x100) >> 5) |
+				(((b + dith) & 0x100) >> 8)];
+	  obptr++;
+	}
+#else
+      for (x = 0; x < width; x += 2)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  dith = (dmp[(x_align + x) & (DM_WIDTH - 1)] << 2) | 3;
+	  pix0 = colorcube_d[(((r + dith) & 0x100) >> 2) |
+			    (((g + dith) & 0x100) >> 5) |
+			    (((b + dith) & 0x100) >> 8)];
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  dith = (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) | 3;
+	  pix1 = colorcube_d[(((r + dith) & 0x100) >> 2) |
+			    (((g + dith) & 0x100) >> 5) |
+			    (((b + dith) & 0x100) >> 8)];
+	  obptr[0] = (pix0 << 4) | pix1;
+	  obptr++;
+	}
+#endif
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+
+
 /* Returns a pointer to the stage buffer. */
 static guchar *
 gdk_rgb_ensure_stage (void)
@@ -2166,6 +2427,7 @@ gdk_rgb_select_conv (GdkImage *image)
       conv = gdk_rgb_convert_565;
       conv_d = gdk_rgb_convert_565_d;
       conv_gray = gdk_rgb_convert_565_gray;
+      gdk_rgb_preprocess_dm_565 ();
     }
   else if (bpp == 2 && depth == 16 &&
 	   vtype == GDK_VISUAL_TRUE_COLOR && byterev &&
@@ -2208,7 +2470,7 @@ gdk_rgb_select_conv (GdkImage *image)
   else if (vtype == GDK_VISUAL_TRUE_COLOR && byte_order == GDK_MSB_FIRST)
     {
       conv = gdk_rgb_convert_truecolor_msb;
-      conv = gdk_rgb_convert_truecolor_msb_d;
+      conv_d = gdk_rgb_convert_truecolor_msb_d;
     }
   else if (bpp == 1 && depth == 8 && (vtype == GDK_VISUAL_PSEUDO_COLOR
 #ifdef ENABLE_GRAYSCALE
@@ -2238,6 +2500,10 @@ gdk_rgb_select_conv (GdkImage *image)
     {
       conv = gdk_rgb_convert_gray8;
       conv_gray = gdk_rgb_convert_gray8_gray;
+    }
+  else if (depth == 4)
+    {
+      conv = gdk_rgb_convert_4;
     }
 
   if (conv_d == NULL)

@@ -69,7 +69,7 @@ GtkType
 gtk_tree_get_type (void)
 {
   static GtkType tree_type = 0;
-
+  
   if (!tree_type)
     {
       GtkTypeInfo tree_info =
@@ -83,10 +83,10 @@ gtk_tree_get_type (void)
         /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
-
+      
       tree_type = gtk_type_unique (gtk_container_get_type (), &tree_info);
     }
-
+  
   return tree_type;
 }
 
@@ -96,13 +96,13 @@ gtk_tree_class_init (GtkTreeClass *class)
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
-
+  
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-
+  
   parent_class = gtk_type_class (gtk_container_get_type ());
-
+  
   tree_signals[SELECTION_CHANGED] =
     gtk_signal_new ("selection_changed",
 		    GTK_RUN_FIRST,
@@ -126,11 +126,11 @@ gtk_tree_class_init (GtkTreeClass *class)
 		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
-
+  
   gtk_object_class_add_signals (object_class, tree_signals, LAST_SIGNAL);
-
+  
   object_class->destroy = gtk_tree_destroy;
-
+  
   widget_class->map = gtk_tree_map;
   widget_class->unmap = gtk_tree_unmap;
   widget_class->realize = gtk_tree_realize;
@@ -141,13 +141,13 @@ gtk_tree_class_init (GtkTreeClass *class)
   widget_class->button_release_event = gtk_tree_button_release;
   widget_class->size_request = gtk_tree_size_request;
   widget_class->size_allocate = gtk_tree_size_allocate;
-
+  
   container_class->add = gtk_tree_add;
   container_class->remove = 
-             (void (*)(GtkContainer *, GtkWidget *)) gtk_tree_remove_item;
+    (void (*)(GtkContainer *, GtkWidget *)) gtk_tree_remove_item;
   container_class->foreach = gtk_tree_foreach;
   container_class->child_type = gtk_tree_child_type;
-
+  
   class->selection_changed = NULL;
   class->select_child = gtk_real_tree_select_child;
   class->unselect_child = gtk_real_tree_unselect_child;
@@ -188,7 +188,7 @@ gtk_tree_append (GtkTree   *tree,
   g_return_if_fail (GTK_IS_TREE (tree));
   g_return_if_fail (tree_item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (tree_item));
-
+  
   gtk_tree_insert(tree, tree_item, -1);
 }
 
@@ -200,7 +200,7 @@ gtk_tree_prepend (GtkTree   *tree,
   g_return_if_fail (GTK_IS_TREE (tree));
   g_return_if_fail (tree_item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (tree_item));
-
+  
   gtk_tree_insert(tree, tree_item, 0);
 }
 
@@ -210,31 +210,31 @@ gtk_tree_insert (GtkTree   *tree,
 		 gint       position)
 {
   gint nchildren;
-    
+  
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
   g_return_if_fail (tree_item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (tree_item));
-
+  
   /* set parent widget to item */
   gtk_widget_set_parent (tree_item, GTK_WIDGET (tree));
-    
+  
   if (GTK_WIDGET_VISIBLE (tree_item->parent))
     {
       if (GTK_WIDGET_REALIZED (tree_item->parent) &&
 	  !GTK_WIDGET_REALIZED (tree_item))
 	gtk_widget_realize (tree_item);
-
+      
       if (GTK_WIDGET_MAPPED (tree_item->parent) &&
 	  !GTK_WIDGET_MAPPED (tree_item))
 	gtk_widget_map (tree_item);
     }
-
+  
   nchildren = g_list_length (tree->children);
-    
+  
   if ((position < 0) || (position > nchildren))
     position = nchildren;
-
+  
   if (position == nchildren)
     {
       tree->children = g_list_append(tree->children, tree_item);
@@ -243,10 +243,10 @@ gtk_tree_insert (GtkTree   *tree,
     {
       tree->children = g_list_insert(tree->children, tree_item, position);
     }
-    
+  
   if (GTK_WIDGET_VISIBLE (tree))
     gtk_widget_queue_resize (GTK_WIDGET (tree));
-
+  
 }
 
 static void
@@ -254,36 +254,36 @@ gtk_tree_add (GtkContainer *container,
 	      GtkWidget    *widget)
 {
   GtkTree *tree;
-
+  
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TREE (container));
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (widget));
-
+  
   tree = GTK_TREE (container);
-
+  
   gtk_widget_set_parent (widget, GTK_WIDGET (container));
   if (GTK_WIDGET_VISIBLE (widget->parent))
     {
       if (GTK_WIDGET_REALIZED (widget->parent) &&
 	  !GTK_WIDGET_REALIZED (widget))
 	gtk_widget_realize (widget);
-
+      
       if (GTK_WIDGET_MAPPED (widget->parent) &&
 	  !GTK_WIDGET_MAPPED (widget))
 	gtk_widget_map (widget);
     }
-
+  
   tree->children = g_list_append (tree->children, widget);
-
+  
   if (!tree->selection && (tree->selection_mode == GTK_SELECTION_BROWSE))
     {
       gtk_tree_select_child (tree, widget);
     }
-
+  
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
     gtk_widget_queue_resize (widget);
-
+  
 }
 
 static gint
@@ -292,17 +292,17 @@ gtk_tree_button_press (GtkWidget      *widget,
 {
   GtkTree *tree;
   GtkWidget *item;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
+  
   tree = GTK_TREE (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
-
+  
   while (item && !GTK_IS_TREE_ITEM (item))
     item = item->parent;
-
+  
   if (!item || (item->parent != widget))
     return FALSE;
   
@@ -318,7 +318,7 @@ gtk_tree_button_press (GtkWidget      *widget,
       if(GTK_TREE_ITEM(item)->subtree) gtk_tree_item_collapse(GTK_TREE_ITEM(item));
       break;
     }
-
+  
   return TRUE;
 }
 
@@ -328,14 +328,14 @@ gtk_tree_button_release (GtkWidget      *widget,
 {
   GtkTree *tree;
   GtkWidget *item;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
+  
   tree = GTK_TREE (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
-
+  
   return TRUE;
 }
 
@@ -345,25 +345,25 @@ gtk_tree_child_position (GtkTree   *tree,
 {
   GList *children;
   gint pos;
-
-
+  
+  
   g_return_val_if_fail (tree != NULL, -1);
   g_return_val_if_fail (GTK_IS_TREE (tree), -1);
   g_return_val_if_fail (child != NULL, -1);
-
+  
   pos = 0;
   children = tree->children;
-
+  
   while (children)
     {
       if (child == GTK_WIDGET (children->data)) 
 	return pos;
-
+      
       pos += 1;
       children = children->next;
     }
-
-
+  
+  
   return -1;
 }
 
@@ -413,12 +413,12 @@ gtk_tree_destroy (GtkObject *object)
   GtkTree *tree;
   GtkWidget *child;
   GList *children;
-
+  
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TREE (object));
-
+  
   tree = GTK_TREE (object);
-
+  
   children = tree->children;
   while (children)
     {
@@ -430,10 +430,10 @@ gtk_tree_destroy (GtkObject *object)
       gtk_widget_destroy (child);
       gtk_widget_unref (child);
     }
-
+  
   g_list_free (tree->children);
   tree->children = NULL;
-
+  
   if (tree->root_tree == tree)
     {
       GList *node;
@@ -442,7 +442,7 @@ gtk_tree_destroy (GtkObject *object)
       g_list_free (tree->selection);
       tree->selection = NULL;
     }
-
+  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -456,32 +456,32 @@ gtk_tree_draw (GtkWidget    *widget,
   GtkWidget *child;
   GdkRectangle child_area;
   GList *children;
-
-
+  
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE (widget));
   g_return_if_fail (area != NULL);
-
+  
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       tree = GTK_TREE (widget);
-
+      
       children = tree->children;
       while (children)
 	{
 	  child = children->data;
 	  children = children->next;
-
+	  
 	  if (gtk_widget_intersect (child, area, &child_area))
 	    gtk_widget_draw (child, &child_area);
-
+	  
 	  if((subtree = GTK_TREE_ITEM(child)->subtree) &&
 	     GTK_WIDGET_VISIBLE(subtree) &&
 	     gtk_widget_intersect (subtree, area, &child_area))
 	    gtk_widget_draw (subtree, &child_area);
 	}
     }
-
+  
 }
 
 static gint
@@ -492,31 +492,31 @@ gtk_tree_expose (GtkWidget      *widget,
   GtkWidget *child;
   GdkEventExpose child_event;
   GList *children;
-
-
+  
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
+  
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       tree = GTK_TREE (widget);
-
+      
       child_event = *event;
-
+      
       children = tree->children;
       while (children)
 	{
 	  child = children->data;
 	  children = children->next;
-
+	  
 	  if (GTK_WIDGET_NO_WINDOW (child) &&
 	      gtk_widget_intersect (child, &event->area, &child_event.area))
 	    gtk_widget_event (child, (GdkEvent*) &child_event);
 	}
     }
-
-
+  
+  
   return FALSE;
 }
 
@@ -528,22 +528,22 @@ gtk_tree_foreach (GtkContainer *container,
   GtkTree *tree;
   GtkWidget *child;
   GList *children;
-
-
+  
+  
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TREE (container));
   g_return_if_fail (callback != NULL);
-
+  
   tree = GTK_TREE (container);
   children = tree->children;
-
+  
   while (children)
     {
       child = children->data;
       children = children->next;
-
+      
       (* callback) (child, callback_data);
-
+      
       if(GTK_TREE_ITEM(child)->subtree)
 	(* callback)(GTK_TREE_ITEM(child)->subtree, callback_data);
     }
@@ -555,21 +555,21 @@ gtk_tree_map (GtkWidget *widget)
   GtkTree *tree;
   GtkWidget *child;
   GList *children;
-
-
+  
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE (widget));
-
+  
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   tree = GTK_TREE (widget);
-
+  
   gdk_window_show (widget->window);
-
+  
   if(GTK_IS_TREE(widget->parent)) 
     {
       /* set root tree for this tree */
       tree->root_tree = GTK_TREE(widget->parent)->root_tree;
-
+      
       tree->level = GTK_TREE(GTK_WIDGET(tree)->parent)->level+1;
       tree->indent_value = GTK_TREE(GTK_WIDGET(tree)->parent)->indent_value;
       tree->current_indent = GTK_TREE(GTK_WIDGET(tree)->parent)->current_indent + 
@@ -579,21 +579,21 @@ gtk_tree_map (GtkWidget *widget)
     } 
   else
     tree->root_tree = tree;
-
+  
   children = tree->children;
   while (children)
     {
       child = children->data;
       children = children->next;
-
+      
       if (GTK_WIDGET_VISIBLE (child) &&
 	  !GTK_WIDGET_MAPPED (child))
 	gtk_widget_map (child);
-
+      
       if (GTK_TREE_ITEM (child)->subtree)
 	{
 	  child = GTK_WIDGET (GTK_TREE_ITEM (child)->subtree);
-
+	  
 	  if (GTK_WIDGET_VISIBLE (child) && !GTK_WIDGET_MAPPED (child))
 	    gtk_widget_map (child);
 	}
@@ -607,11 +607,11 @@ gtk_tree_motion_notify (GtkWidget      *widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
+  
 #ifdef TREE_DEBUG
-  g_print("gtk_tree_motion_notify\n");
+  g_message("gtk_tree_motion_notify\n");
 #endif /* TREE_DEBUG */
-
+  
   return FALSE;
 }
 
@@ -620,13 +620,13 @@ gtk_tree_realize (GtkWidget *widget)
 {
   GdkWindowAttr attributes;
   gint attributes_mask;
-
-
+  
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE (widget));
-
+  
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-
+  
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
@@ -636,12 +636,12 @@ gtk_tree_realize (GtkWidget *widget)
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
   attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
-
+  
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-
+  
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
-
+  
   widget->style = gtk_style_attach (widget->style, widget->window);
   gdk_window_set_background (widget->window, 
 			     &widget->style->base[GTK_STATE_NORMAL]);
@@ -652,16 +652,16 @@ gtk_tree_remove_item (GtkTree      *container,
 		      GtkWidget    *widget)
 {
   GList *item_list;
-
+  
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TREE (container));
   g_return_if_fail (widget != NULL);
   g_return_if_fail (container == GTK_TREE (widget->parent));
-
+  
   item_list = g_list_append (NULL, widget);
   
   gtk_tree_remove_items (GTK_TREE (container), item_list);
-
+  
   g_list_free (item_list);
 }
 
@@ -675,7 +675,7 @@ gtk_tree_sort_item_by_depth(GtkWidget* a, GtkWidget* b)
     return 1;
   if((GTK_TREE(a->parent)->level) > (GTK_TREE(b->parent)->level))
     return -1;
-
+  
   return 0;
 }
 
@@ -689,14 +689,14 @@ gtk_tree_remove_items (GtkTree *tree,
   GList *sorted_list;
   GtkTree *real_tree;
   GtkTree *root_tree;
-
+  
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
-
+  
 #ifdef TREE_DEBUG
-  g_print("+ gtk_tree_remove_items [ tree %#x items list %#x ]\n", (int)tree, (int)items);
+  g_message("+ gtk_tree_remove_items [ tree %#x items list %#x ]\n", (int)tree, (int)items);
 #endif /* TREE_DEBUG */
-
+  
   /* We may not yet be mapped, so we actively have to find our
    * root tree
    */
@@ -707,175 +707,175 @@ gtk_tree_remove_items (GtkTree *tree,
       GtkWidget *tmp = GTK_WIDGET (tree);
       while (tmp->parent && GTK_IS_TREE (tmp->parent))
 	tmp = tmp->parent;
-
+      
       root_tree = GTK_TREE (tmp);
     }
-	     
+  
   tmp_list = items;
   selected_widgets = NULL;
   sorted_list = NULL;
   widget = NULL;
-
+  
 #ifdef TREE_DEBUG
-  g_print("* sort list by depth\n");
+  g_message("* sort list by depth\n");
 #endif /* TREE_DEBUG */
-
+  
   while (tmp_list)
     {
-
+      
 #ifdef TREE_DEBUG
-      g_print("* item [%#x] depth [%d]\n", 
-	      (int)tmp_list->data,
-	      (int)GTK_TREE(GTK_WIDGET(tmp_list->data)->parent)->level);
+      g_message ("* item [%#x] depth [%d]\n", 
+		 (int)tmp_list->data,
+		 (int)GTK_TREE(GTK_WIDGET(tmp_list->data)->parent)->level);
 #endif /* TREE_DEBUG */
-
+      
       sorted_list = g_list_insert_sorted(sorted_list,
 					 tmp_list->data,
 					 (GCompareFunc)gtk_tree_sort_item_by_depth);
       tmp_list = g_list_next(tmp_list);
     }
-
+  
 #ifdef TREE_DEBUG
   /* print sorted list */
-  g_print("* sorted list result\n");
+  g_message("* sorted list result\n");
   tmp_list = sorted_list;
   while(tmp_list)
     {
-      g_print("* item [%#x] depth [%d]\n", 
-	      (int)tmp_list->data,
-	      (int)GTK_TREE(GTK_WIDGET(tmp_list->data)->parent)->level);
+      g_message("* item [%#x] depth [%d]\n", 
+		(int)tmp_list->data,
+		(int)GTK_TREE(GTK_WIDGET(tmp_list->data)->parent)->level);
       tmp_list = g_list_next(tmp_list);
     }
 #endif /* TREE_DEBUG */
-
+  
 #ifdef TREE_DEBUG
-  g_print("* scan sorted list\n");
+  g_message("* scan sorted list\n");
 #endif /* TREE_DEBUG */
-
+  
   tmp_list = sorted_list;
   while (tmp_list)
     {
       widget = tmp_list->data;
       tmp_list = tmp_list->next;
-
+      
 #ifdef TREE_DEBUG
-      g_print("* item [%#x] subtree [%#x]\n", 
-	      (int)widget, (int)GTK_TREE_ITEM_SUBTREE(widget));
+      g_message("* item [%#x] subtree [%#x]\n", 
+		(int)widget, (int)GTK_TREE_ITEM_SUBTREE(widget));
 #endif /* TREE_DEBUG */
-
+      
       /* get real owner of this widget */
       real_tree = GTK_TREE(widget->parent);
 #ifdef TREE_DEBUG
-      g_print("* subtree having this widget [%#x]\n", (int)real_tree);
+      g_message("* subtree having this widget [%#x]\n", (int)real_tree);
 #endif /* TREE_DEBUG */
-
+      
       
       if (widget->state == GTK_STATE_SELECTED)
 	{
 	  selected_widgets = g_list_prepend (selected_widgets, widget);
 #ifdef TREE_DEBUG
-	  g_print("* selected widget - adding it in selected list [%#x]\n",
-		  (int)selected_widgets);
+	  g_message("* selected widget - adding it in selected list [%#x]\n",
+		    (int)selected_widgets);
 #endif /* TREE_DEBUG */
 	}
-
+      
       /* remove this item from its real parent */
 #ifdef TREE_DEBUG
-      g_print("* remove widget from its owner tree\n");
+      g_message("* remove widget from its owner tree\n");
 #endif /* TREE_DEBUG */
       real_tree->children = g_list_remove (real_tree->children, widget);
-
+      
       /* remove subtree associate at this item if it exist */      
       if(GTK_TREE_ITEM(widget)->subtree) 
 	{
 #ifdef TREE_DEBUG
-	  g_print("* remove subtree associate at this item [%#x]\n",
-		  (int) GTK_TREE_ITEM(widget)->subtree);
+	  g_message("* remove subtree associate at this item [%#x]\n",
+		    (int) GTK_TREE_ITEM(widget)->subtree);
 #endif /* TREE_DEBUG */
 	  if (GTK_WIDGET_MAPPED (GTK_TREE_ITEM(widget)->subtree))
 	    gtk_widget_unmap (GTK_TREE_ITEM(widget)->subtree);
-
+	  
 	  gtk_widget_unparent (GTK_TREE_ITEM(widget)->subtree);
 	  GTK_TREE_ITEM(widget)->subtree = NULL;
 	}
-
+      
       /* really remove widget for this item */
 #ifdef TREE_DEBUG
-      g_print("* unmap and unparent widget [%#x]\n", (int)widget);
+      g_message("* unmap and unparent widget [%#x]\n", (int)widget);
 #endif /* TREE_DEBUG */
       if (GTK_WIDGET_MAPPED (widget))
 	gtk_widget_unmap (widget);
-
+      
       gtk_widget_unparent (widget);
-
+      
       /* delete subtree if there is no children in it */
       if(real_tree->children == NULL && 
 	 real_tree != root_tree)
 	{
 #ifdef TREE_DEBUG
-	  g_print("* owner tree don't have children ... destroy it\n");
+	  g_message("* owner tree don't have children ... destroy it\n");
 #endif /* TREE_DEBUG */
 	  gtk_tree_item_remove_subtree(GTK_TREE_ITEM(real_tree->tree_owner));
 	}
-
+      
 #ifdef TREE_DEBUG
-      g_print("* next item in list\n");
+      g_message("* next item in list\n");
 #endif /* TREE_DEBUG */
     }
-
+  
   if (selected_widgets)
     {
 #ifdef TREE_DEBUG
-      g_print("* scan selected item list\n");
+      g_message("* scan selected item list\n");
 #endif /* TREE_DEBUG */
       tmp_list = selected_widgets;
       while (tmp_list)
 	{
 	  widget = tmp_list->data;
 	  tmp_list = tmp_list->next;
-
+	  
 #ifdef TREE_DEBUG
-	  g_print("* widget [%#x] subtree [%#x]\n", 
-		  (int)widget, (int)GTK_TREE_ITEM_SUBTREE(widget));
+	  g_message("* widget [%#x] subtree [%#x]\n", 
+		    (int)widget, (int)GTK_TREE_ITEM_SUBTREE(widget));
 #endif /* TREE_DEBUG */
 	  
 	  /* remove widget of selection */
 	  root_tree->selection = g_list_remove (root_tree->selection, widget);
-
+	  
 	  /* unref it to authorize is destruction */
 	  gtk_widget_unref (widget);
 	}
-
+      
       /* emit only one selection_changed signal */
       gtk_signal_emit (GTK_OBJECT (root_tree), 
 		       tree_signals[SELECTION_CHANGED]);
     }
-
+  
 #ifdef TREE_DEBUG
-  g_print("* free selected_widgets list\n");
+  g_message("* free selected_widgets list\n");
 #endif /* TREE_DEBUG */
   g_list_free (selected_widgets);
   g_list_free (sorted_list);
-
+  
   if (root_tree->children && !root_tree->selection &&
       (root_tree->selection_mode == GTK_SELECTION_BROWSE))
     {
 #ifdef TREE_DEBUG
-      g_print("* BROWSE mode, select another item\n");
+      g_message("* BROWSE mode, select another item\n");
 #endif /* TREE_DEBUG */
       widget = root_tree->children->data;
       gtk_tree_select_child (root_tree, widget);
     }
-
+  
   if (GTK_WIDGET_VISIBLE (root_tree))
     {
 #ifdef TREE_DEBUG
-      g_print("* query queue resizing for root_tree\n");
+      g_message("* query queue resizing for root_tree\n");
 #endif /* TREE_DEBUG */      
       gtk_widget_queue_resize (GTK_WIDGET (root_tree));
     }
 }
- 
+
 void
 gtk_tree_select_child (GtkTree   *tree,
 		       GtkWidget *tree_item)
@@ -893,14 +893,14 @@ gtk_tree_select_item (GtkTree   *tree,
 		      gint       item)
 {
   GList *tmp_list;
-
+  
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
-
+  
   tmp_list = g_list_nth (tree->children, item);
   if (tmp_list)
     gtk_tree_select_child (tree, GTK_WIDGET (tmp_list->data));
-
+  
 }
 
 static void
@@ -911,14 +911,14 @@ gtk_tree_size_allocate (GtkWidget     *widget,
   GtkWidget *child, *subtree;
   GtkAllocation child_allocation;
   GList *children;
-
-
+  
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE (widget));
   g_return_if_fail (allocation != NULL);
-
+  
   tree = GTK_TREE (widget);
-
+  
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
     gdk_window_move_resize (widget->window,
@@ -930,22 +930,22 @@ gtk_tree_size_allocate (GtkWidget     *widget,
       child_allocation.x = GTK_CONTAINER (tree)->border_width;
       child_allocation.y = GTK_CONTAINER (tree)->border_width;
       child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2);
-
+      
       children = tree->children;
-
+      
       while (children)
 	{
 	  child = children->data;
 	  children = children->next;
-
+	  
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
 	      child_allocation.height = child->requisition.height;
-
+	      
 	      gtk_widget_size_allocate (child, &child_allocation);
-
+	      
 	      child_allocation.y += child_allocation.height;
-
+	      
 	      if((subtree = GTK_TREE_ITEM(child)->subtree))
 		if(GTK_WIDGET_VISIBLE (subtree))
 		  {
@@ -956,7 +956,7 @@ gtk_tree_size_allocate (GtkWidget     *widget,
 	    }
 	}
     }
-
+  
 }
 
 static void
@@ -966,60 +966,60 @@ gtk_tree_size_request (GtkWidget      *widget,
   GtkTree *tree;
   GtkWidget *child, *subtree;
   GList *children;
-
-
+  
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE (widget));
   g_return_if_fail (requisition != NULL);
-
+  
   tree = GTK_TREE (widget);
   requisition->width = 0;
   requisition->height = 0;
-
+  
   children = tree->children;
   while (children)
     {
       child = children->data;
       children = children->next;
-
+      
       if (GTK_WIDGET_VISIBLE (child))
 	{
 	  gtk_widget_size_request (child, &child->requisition);
-
+	  
 	  requisition->width = MAX (requisition->width, child->requisition.width);
 	  requisition->height += child->requisition.height;
-
+	  
 	  if((subtree = GTK_TREE_ITEM(child)->subtree) &&
 	     GTK_WIDGET_VISIBLE (subtree))
 	    {
 	      gtk_widget_size_request (subtree, &subtree->requisition);
-
+	      
 	      requisition->width = MAX (requisition->width, 
 					subtree->requisition.width);
-
+	      
 	      requisition->height += subtree->requisition.height;
 	    }
 	}
     }
-
+  
   requisition->width += GTK_CONTAINER (tree)->border_width * 2;
   requisition->height += GTK_CONTAINER (tree)->border_width * 2;
-
+  
   requisition->width = MAX (requisition->width, 1);
   requisition->height = MAX (requisition->height, 1);
-
+  
 }
 
 static void
 gtk_tree_unmap (GtkWidget *widget)
 {
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE (widget));
-
+  
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
   gdk_window_hide (widget->window);
-
+  
 }
 
 void
@@ -1030,7 +1030,7 @@ gtk_tree_unselect_child (GtkTree   *tree,
   g_return_if_fail (GTK_IS_TREE (tree));
   g_return_if_fail (tree_item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (tree_item));
-
+  
   gtk_signal_emit (GTK_OBJECT (tree), tree_signals[UNSELECT_CHILD], tree_item);
 }
 
@@ -1039,14 +1039,14 @@ gtk_tree_unselect_item (GtkTree *tree,
 			gint     item)
 {
   GList *tmp_list;
-
+  
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
-
+  
   tmp_list = g_list_nth (tree->children, item);
   if (tmp_list)
     gtk_tree_unselect_child (tree, GTK_WIDGET (tmp_list->data));
-
+  
 }
 
 static void
@@ -1056,32 +1056,32 @@ gtk_real_tree_select_child (GtkTree   *tree,
   GList *selection, *root_selection;
   GList *tmp_list;
   GtkWidget *tmp_item;
-
+  
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (child));
-
+  
   root_selection = tree->root_tree->selection;
   
   switch (tree->root_tree->selection_mode)
     {
     case GTK_SELECTION_SINGLE:
-
+      
       selection = root_selection;
-
+      
       /* remove old selection list */
       while (selection)
 	{
 	  tmp_item = selection->data;
-
+	  
 	  if (tmp_item != child)
 	    {
 	      gtk_tree_item_deselect (GTK_TREE_ITEM (tmp_item));
-
+	      
 	      tmp_list = selection;
 	      selection = selection->next;
-
+	      
 	      root_selection = g_list_remove_link (root_selection, tmp_list);
 	      gtk_widget_unref (tmp_item);
 	      
@@ -1090,7 +1090,7 @@ gtk_real_tree_select_child (GtkTree   *tree,
 	  else
 	    selection = selection->next;
 	}
-
+      
       if (child->state == GTK_STATE_NORMAL)
 	{
 	  gtk_tree_item_select (GTK_TREE_ITEM (child));
@@ -1103,39 +1103,39 @@ gtk_real_tree_select_child (GtkTree   *tree,
 	  root_selection = g_list_remove (root_selection, child);
 	  gtk_widget_unref (child);
 	}
-
+      
       tree->root_tree->selection = root_selection;
-
+      
       gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
 		       tree_signals[SELECTION_CHANGED]);
       break;
-
-
+      
+      
     case GTK_SELECTION_BROWSE:
       selection = root_selection;
-
+      
       while (selection)
 	{
 	  tmp_item = selection->data;
-
+	  
 	  if (tmp_item != child)
 	    {
 	      gtk_tree_item_deselect (GTK_TREE_ITEM (tmp_item));
-
+	      
 	      tmp_list = selection;
 	      selection = selection->next;
-
+	      
 	      root_selection = g_list_remove_link (root_selection, tmp_list);
 	      gtk_widget_unref (tmp_item);
-
+	      
 	      g_list_free (tmp_list);
 	    }
 	  else
 	    selection = selection->next;
 	}
-
+      
       tree->root_tree->selection = root_selection;
-
+      
       if (child->state == GTK_STATE_NORMAL)
 	{
 	  gtk_tree_item_select (GTK_TREE_ITEM (child));
@@ -1146,7 +1146,7 @@ gtk_real_tree_select_child (GtkTree   *tree,
 			   tree_signals[SELECTION_CHANGED]);
 	}
       break;
-
+      
     case GTK_SELECTION_MULTIPLE:
       if (child->state == GTK_STATE_NORMAL)
 	{
@@ -1167,7 +1167,7 @@ gtk_real_tree_select_child (GtkTree   *tree,
 			   tree_signals[SELECTION_CHANGED]);
 	}
       break;
-
+      
     case GTK_SELECTION_EXTENDED:
       break;
     }
@@ -1181,7 +1181,7 @@ gtk_real_tree_unselect_child (GtkTree   *tree,
   g_return_if_fail (GTK_IS_TREE (tree));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (child));
-
+  
   switch (tree->selection_mode)
     {
     case GTK_SELECTION_SINGLE:
@@ -1197,7 +1197,7 @@ gtk_real_tree_unselect_child (GtkTree   *tree,
 			   tree_signals[SELECTION_CHANGED]);
 	}
       break;
-
+      
     case GTK_SELECTION_EXTENDED:
       break;
     }
@@ -1209,7 +1209,7 @@ gtk_tree_set_selection_mode (GtkTree       *tree,
 {
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
-
+  
   tree->selection_mode = mode;
 }
 
@@ -1219,7 +1219,7 @@ gtk_tree_set_view_mode (GtkTree       *tree,
 {
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
-
+  
   tree->view_mode = mode;
 }
 
@@ -1229,6 +1229,6 @@ gtk_tree_set_view_lines (GtkTree       *tree,
 {
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
-
+  
   tree->view_line = flag;
 }

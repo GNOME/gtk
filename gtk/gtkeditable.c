@@ -290,7 +290,6 @@ gtk_editable_class_init (GtkEditableClass *class)
 
   class->insert_text = NULL;
   class->delete_text = NULL;
-  class->changed = (void (*) (GtkEditable*)) gtk_widget_queue_draw;
 
   class->activate = NULL;
   class->set_editable = gtk_editable_real_set_editable;
@@ -523,8 +522,8 @@ gtk_editable_set_selection (GtkEditable *editable,
 }
 
 void
-gtk_editable_set_position      (GtkEditable      *editable,
-				gint              position)
+gtk_editable_set_position (GtkEditable      *editable,
+			   gint              position)
 {
   GtkEditableClass *klass;
 
@@ -533,7 +532,7 @@ gtk_editable_set_position      (GtkEditable      *editable,
 
   klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
-  return klass->set_position (editable, position);
+  klass->set_position (editable, position);
 }
 
 gint
@@ -795,7 +794,7 @@ gtk_editable_select_region (GtkEditable *editable,
   
   if (GTK_WIDGET_REALIZED (editable))
     gtk_editable_claim_selection (editable, start != end, GDK_CURRENT_TIME);
-
+  
   gtk_editable_set_selection (editable, start, end);
 }
 
@@ -806,9 +805,9 @@ static guint32
 gtk_editable_get_event_time (GtkEditable *editable)
 {
   GdkEvent *event;
-
+  
   event = gtk_get_current_event();
-
+  
   if (event)
     switch (event->type)
       {
@@ -835,8 +834,9 @@ gtk_editable_get_event_time (GtkEditable *editable)
       case GDK_PROXIMITY_OUT:
 	return event->proximity.time;
       default:			/* use current time */
+	break;
       }
-
+  
   return GDK_CURRENT_TIME;
 }
 

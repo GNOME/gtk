@@ -1,3 +1,51 @@
+Fri Aug 21 19:02:30 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.[ch] gtk/gtkhscale.c gtk/gtkvscale.[ch]: Fit scales
+	  into the theme-drawing framework. We do this by making them,
+	  like check/radio-buttons, no-window widgets with subwindows. We
+	  then move the value by calling gtk_widget_queue_clear() and only
+	  redraw the value in our draw() / expose() handler.  A virtual
+	  function clear_background is added which queues a clear on the
+	  "background" portion of the widget.
+
+Fri Aug 21 13:04:27 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (mark_bg_gc): Make background colors work
+	  again. (We can't always paint the background with a
+	  paint() function - only do that for selected text)
+
+Mon Aug 17 20:31:01 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktearoffmenuitem.c gtk/gtkclist.[ch] gtk/gtkctree.[ch]
+	  gtk/gtklabel.c gtk/gtkmenu.c: Merges from main branch.
+
+	* Makefile.am (SRC_SUBDIRS): Removed themes from SRC_SUBDIRS.
+	  the themes can't be built as part of the same build since
+	  they depend on gdk_imlib.
+
+Fri Aug 14 12:44:30 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkthemes.c (gtk_theme_engine_get): Removed sample engine code
+	  from gtkthemes.c.
+		
+	* configure.in ltconfig.in ltmain.sh gdk/Makefile.am gtk/Makefile.am
+	  gtk/
+
+	  - Upgrade to libtool-1.2b + patch to add shared library dependencies
+	    for Linux. (Needs to be extended to other platforms where they
+	    are safe)
+
+	 - Check for -ldl so this branch should build on all platforms, though
+	   themes will work on all platforms they could work on.
+
+	 - Use -version and -release simultaneously: sonames stay as they are
+	   in the current scheme, but -lgtk-1.1 changes to -lgtk.
+
+	 - Added in extra -l flags to library LDFLAGS so we get shared library
+	   dependencies against X libs and -ldl. (But not libgtk against 
+	   libgdk or libglib yet, since dependencies against uninstalled
+	   libraries aren't portable)
+
 Fri Aug 21 16:10:38 EDT 1998 The Rasterman <raster@redhat.com>
 	* gtkrc.c - added api calls to find module and theme paths from gtk.
 	  nuked gtk_install_prefix global.
@@ -10,7 +58,7 @@ Thu Aug 20 19:27:49 EDT 1998 The Rasterman <raster@redhat.com>
 	  installed.
 	  
 Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
-	* added ~/.gtk/lib/themes/engines/ to the defautl searchpath for
+	* added ~/.gtk/lib/themes/engines/ to the default searchpath for
 	  gtk theme engines
 	
 Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
@@ -65,6 +113,285 @@ Tue Aug  4 19:12:14 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_idle_draw): Fixed up
 	  handling of partially clipped areas.
+
+Wed Aug  5 02:57:20 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.h:
+	* gtk/gtkctree.c:
+ 	(gtk_ctree_find): changed to return a gboolean
+	(gtk_ctree_insert_gnode): new function for recursive insertion of a
+	GNode tree.
+	(gtk_ctree_real_select_recursive): fix for extended selection
+	(gtk_ctree_sort_recursive): in case node == NULL, sort root nodes too.
+	(gtk_ctree_set_node_info) (set_node_info): few fixes for expanded flag
+
+Tue Aug  4 16:18:26 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: version bump to 1.1.1, binary age 0, interface age 0.
+	GLib version 1.1.1 is now required at minimum.
+
+	* docs/Makefile.am: added gtk_tut_fr.sgml to EXTRA_DIST (french version
+	of the Gtk+ tutorial, contributed by Eric Jacoboni <jaco@dotcom.fr>.
+
+Mon Aug 17 15:31:38 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c: removed gtk_input_add_interp.
+
+	* gtk/gtkeditable.c (gtk_editable_set_position): fixed bogus "return"
+	keyword.
+	(gtk_editable_get_event_time): fix default: case.
+
+	* gtk/gtkclist.c (gtk_clist_swap_rows): fixes for lvalue casts.
+
+	* gdk/gdkpixmap.c: made a bunch of unexported functions static.
+
+	* gdk/gdkcolor.c:
+	* gdk/gdkvisual.c: include "gdkx.h", since it exports prototypes
+	of our functions.
+
+	* various minor compilation cleanups, such as bogus commas in
+	enums and similar things.
+
+Mon Aug 17 07:47:43 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): NULL terminate the arg list to g_strconcat()
+	(thanx raph).
+
+Sun Aug 16 23:14:20 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* NEWS: updated for 1.1.2
+	* gtk+.spec: version = 1.1.2
+
+Mon Aug 17 05:10:29 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): don't call module initializers multiple
+	times. changed --gtk-with-module to --gtk-module at owen's request.
+
+Mon Aug 17 03:47:55 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): feature a new commandline option
+	--gtk-with-module=<module> that allows additional loading and
+	initialization of modules (e.g. GLE).
+
+Mon Aug 17 01:40:00 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: version bump to 1.1.2, binary age 0, interface age 0.
+	pass "gmodule" to AM_PATH_GLIB, with that we require libgmodule.so now.
+
+	* gtk/gtkmain.c (gtk_init): since glib's g_return*_if_fail macros log
+	with G_LOG_LEVEL_CRITICAL now, i added "--g-fatal-checks",
+	"--gdk-fatal-checks" and "--gtk-fatal-checks". that makes up six
+	different *-fatal-* arguments now. this needs to be revised and
+ 	compressed to a reasonable amount of arguments.
+
+Sun Aug 16 20:51:59 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): fatal warning option is split up now,
+	"--g-fatal-warnings" causes fatal warnings in GLib,
+ 	"--gdk-fatal-warnings" causes fatal warnings in Gdk,
+ 	"--gtk-fatal-warnings" causes fatal warnings in Gtk.
+
+	* gtk/Makefile.am: define G_LOG_DOMAIN for gtk.
+	* gdk/Makefile.am: define G_LOG_DOMAIN for gdk.
+
+	* gtk/testgtk.c: 
+	* gdk/gxid.c:
+ 	we need ugly #undef G_LOG_DOMAIN at the start of these files currently,
+ 	since automake doesn't support per target _CFLAGS yet.
+
+	* configure.in: require GLib 1.1.3.
+
+Sat Aug 15 03:19:30 1998  John Ellis  <johne@bellatlantic.net>
+
+	* gtk/gtkctree.[ch] (gtk_ctree_set_drag_compare_func): New function
+	to set a callback to test if a node in drag can be dropped onto
+	it's currrent location.
+	* gtk/gtkctree.c (set_mouse_cursor),(check_cursor): New functions
+	to change the pointer when a drag destination is not allowed.
+
+Thu Aug 13 21:06:00 1998  Raph Levien  <raph@gtk.org>
+
+	* gdk/gdkrgb.c: committing a patch by Ray Lehtiniemi that
+	speeds up the 565_d case by about 25% total. Thanks Ray!
+
+Thu Aug 13 16:47:44 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* Changed GtkSignalFunc back to () from (void). (again!)
+
+	* Added file README.cvs-commits
+	
+Thu Aug 13 09:11:11 BST 1998  Tony Gale  <gale@gtk.org>
+
+        * docs/gtk_tut.sgml:
+          - Tidy up of the menufactory example from
+            Andy Kahn <kahn@zk3.dec.com>
+          - New section on Range Widgets from
+            David Huggins-Daines <bn711@freenet.carleton.ca>
+          - Started a new section on 'Advanced Event and Signal
+            Handling' - used an email from Owen.
+          - New appendix on Gdk Event Types
+          - Added the tictactoe full example code to the
+            'Code Examples' appendix
+
+Tue Jul 21 12:42:01 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gdk/gdkfont.c: Added gdk_text/string_extents() - 
+	  to calculate all the metrics at once of a string, including
+	  things which weren't calculated before.
+
+	* gtk/Makefile.am gtk/gtk.h gtk/gtktearoffmenu.[ch]: New
+	  MenuItem type, that when put as the first thing in a
+	  menu, makes the menu tearoff. Currently drawn as a
+	  dashed line.
+
+	* gtk/gtkmenuitem.h gtk/gtkcheckmenuitem.c: Added a flag
+	  "hide_on_activate" to the MenuItem class structure to allow
+	  check and radio buttons to be changed with <Space> without
+	  hiding the menu.
+
+	* gtk/gtkitemfactory.c: 
+	  - Create a AccelGroup for each MenuShell we create.
+	  - If an '_' appears before a  character 'c' in the path,
+	    then make 'c' an accelerator in the menu's accel group,
+	    and if the menuitem is menubar <alt>C an accelerator 
+	    in the itemfactory's accel group. Double '__' inserts
+	    a literal '_'
+
+	* gtk/gtklabel.[ch]: Add support for a pattern arg - 
+          which is a string. If an '_' appears in this string,
+	  the corresponding position in the label is underlined.
+
+          Add gtk_label_parse_uline() convenience function which
+	  takes a string with embedded underlines, sets the
+	  pattern and label, and returns the accelerator keyval.
+
+	* gtk/gtkmenu.[ch]: Make menus no longer a toplevel widget.
+	  Instead, they create a GtkWindow and add themselves
+	  to that. (When torn off, another new feature, they
+	  create another GtkWindow to hold the torn off menu)
+
+	  New function gtk_menu_set_tearoff_state()
+	
+	* gtk/gtkenums.h gtk/gtkmenushell.[ch] gtk/gtkenums.h: 
+	  Added action signals  for keyboard navigation of menus.
+
+	* gtk/gtkmenushell.c: Key press handler which activates
+          bindings for navigation, and accelerators, for handling
+	  underline accelerators. Exported functions to select 
+	  and activate menu items in a menushell.
+
+	* gtk/testgtk.c: Added a new "Item Factory" test which
+	  tests GtkItemFactory and the new keyboard navigation
+	  of menus.
+
+Tue Aug 11 20:52:58 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_class_init): relookup nodes after
+	external functions have been called. also relookup nodes after
+	this function has been invoked.
+
+Tue Aug 11 15:04:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.[ch]: Removed has_cursor, set the cursor
+	  beginning of Text when creating the Text widget.
+
+	* gtk/testgtk.c: Grab the focus on the text widget so
+	  as to test out the above.
+
+Tue Aug 11 14:55:00 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkeditable.c: Reverted part of timj's change of Jul 16. 
+	  ::changed is a notification signal and should have no default
+	  handler. A complete redraw of the Text widget does _not_ need to
+	  be done on every text insertion.
+
+Tue Aug 11 13:07:29 1998  Owen Taylor  <otaylor@redhat.com>
+	(gtk-abilleira-072198-patch)
+
+	* gtk/gtkwindow.[ch]: 
+	  Add gtk_window_set_modal() which sets a flag; when
+	  set the window does a gtk_grab_add() when the window
+	  is shown, and a gtk_grab_remove() when the window
+	  is hidden. 
+
+	* gtk/gtkfilesel.[ch]: Test if it is running in modal form and in
+	  that case will run "Create Dir","Delete File" and "Rename File" 
+	  dialogs as modal too.
+
+	* gtk/testgtk.c: Added a button with an example of creating modal 
+	  dialog boxes. Including file selection and color selection standard
+	  dialogs.
+	
+Tue Aug 11 00:44:47 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhscrollbar.c gtk/gtkvscrollbar.c gtk/gtktoolbar.c:
+	  Removed CAN_FOCUS by default from scrollbars, button
+	  children of toolbar. (But not GTK_TOOLBAR_CHILD_WIDGET children)
+	  (Scrollbar definitely good change, toolbar bit more questionable)
+
+Tue Aug 11 17:49:33 1998  Tim Janik  <timj@gtk.org>
+
+	* examples/packbox/packbox.c: #include fixes (reported by Asbjoern
+ 	Pettersen).
+
+Tue Aug 11 00:35:56 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkgc.c gdk/gdktypes.h: Applied gtk-pedersen-980727-0; 
+	  added all logical operations to gc->function.
+
+Sun Aug  9 23:31:59 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (adjust_scrollbars): Fix for resize bug. Call
+ 	gtk_widget_size_allocate instead of gtk_widget_queue_resize
+	if the visibility state of a scrollbar changes.
+
+Mon Aug 10 12:49:54 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkhbbox.h: fixed an #include statement (reported by Eric Kidd).
+
+Thu Aug  6 22:37:21 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkclist.c: Renamed my_merge and my_mergesort to
+ 	gtk_clist_merge and gtk_clist_mergesort. :)
+
+1998-08-06  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtk/gtkclist.c: Renamed `merge' -> `my_merge' and
+	`mergesort' -> `my_mergesort'.
+
+Wed Aug  5 21:12:37 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkenums.h: new enum GtkSortType.
+ 	
+	* gtk/gtkclist.h:
+	* gtk/gtkclist.c:
+	Added sorting capabilities to GtkCList. New APIs :
+	gtk_clist_set_compare_func, gtk_clist_set_sort_column,
+	gtk_clist_set_sort_type, gtk_clist_sort, gtk_clist_set_auto_sort. 
+	New internal functions : default_compare, merge, mergesort.
+
+	(gtk_clist_append): This is just a wrapper for gtk_clist_insert now.
+	
+	(gtk_clist_insert): Modified to handle gtk_clist_append and the
+	auto sort flag. Changed the return value from void to gint to
+	return the row number where the element was actually inserted.
+
+	(gtk_clist_swap_rows): Return immediately if auto sort flag is set.
+	
+	* gtk/gtkctree.h:
+	* gtk/gtkctree.c:
+	Removed the auto_sort flag, replaced ctree->node_compare with
+	clist->compare all over the place, modified default_compare to
+	match clist's needs. Removed API´s : gtk_ctree_set_auto_sort,
+	gtk_ctree_set_compare_func. Removed GtkCTreeCompareFunc typedef.
+
+	* gtk/testgtk.c: Modified clist/ctree samples to demonstrate
+	sorting. The lists can be sorted by a column by clicking the 
+	corresponding title button.
+	
+Tue Aug  4 22:02:49 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.1
 
 Wed Aug  5 02:57:20 1998  Lars Hamann  <lars@gtk.org>
 
@@ -480,6 +807,15 @@ Wed Jul 15 17:44:47 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* Fix up line start cache when splitting a property
 	during an insert.
+
+Wed Jul 15 21:15:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: restauration => restoration
+
+Thu Jul 16 20:11:36 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkxid.c (gdk_xid_table_lookup): If xid_ht
+	hasn't been created yet, don't do the lookup.
 
 1998-07-20  Raph Levien  <raph@acm.org>
 
