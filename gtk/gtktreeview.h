@@ -162,12 +162,12 @@ gint                   gtk_tree_view_insert_column                 (GtkTreeView 
 								    gint                       position);
 gint                   gtk_tree_view_insert_column_with_attributes (GtkTreeView               *tree_view,
 								    gint                       position,
-								    gchar                     *title,
+								    const gchar               *title,
 								    GtkCellRenderer           *cell,
 								    ...);
 gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
 								    gint                       position,
-								    gchar                     *title,
+								    const gchar               *title,
 								    GtkCellRenderer           *cell,
                                                                     GtkTreeCellDataFunc        func,
                                                                     gpointer                   data,

@@ -2357,7 +2357,6 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	}
       else if (action == CELL_ACTION_EVENT)
 	{
-	  gint x_offset, y_offset, width, height;
 	  gboolean try_event = FALSE;
 
 	  if (event)

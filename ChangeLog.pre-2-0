@@ -1,3 +1,12 @@
+Fri Mar 15 11:28:41 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_insert_column_with_data_func):
+	make args const, 74159
+	(gtk_tree_view_insert_column_with_attributes): ditto
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_cell_process_action): remov unused variables.
+
 Fri Mar 15 13:31:51 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c (gtk_menu_leave_notify): Fix test for "active
