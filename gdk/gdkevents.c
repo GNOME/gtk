@@ -763,9 +763,8 @@ gdk_input_add_full (gint	      source,
     cond |= (G_IO_IN | G_IO_PRI);
   if (condition & GDK_INPUT_WRITE)
     cond |= G_IO_OUT;
-  /* The things that correspond to GDK_INPUT_EXCEPTION don't
-   * need to be added to events
-   */
+  if (condition & GDK_INPUT_EXCEPTION)
+    cond |= G_IO_ERR|G_IO_HUP|G_IO_NVAL;
 
   channel = g_io_channel_unix_new (source);
   result = g_io_add_watch_full   (channel, 0, cond, gdk_io_invoke,

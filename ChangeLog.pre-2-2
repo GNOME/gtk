@@ -1,3 +1,8 @@
+1998-12-15  Elliot Lee  <sopwith@bogus.cuc.ml.org>
+
+	* gdk/gdkevents.c: Use G_IO_ERR|G_IO_HUP|G_IO_NVAL
+	as the mask for checking for GDK_INPUT_EXCEPTION events.
+
 1998-12-15  Martin Baulig  <martin@home-of-linux.org>
 
 	* acinclude.m4: Make the gettext check for for libc5 systems.
