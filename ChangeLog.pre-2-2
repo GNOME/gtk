@@ -1,3 +1,25 @@
+Wed Dec 16 07:03:32 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: s/USER_DRAW/APP_PAINTABLE/. provided
+	gtk_widget_set_app_paintable() which users can use to make
+	a widget paintable for the application. changed other files accordingly.
+
+Wed Dec 16 05:26:32 1998  Tim Janik  <timj@gtk.org>
+
+        * configure.in: version bump to 1.1.8, binary age 0, interface age 0,
+	depend on GLib 1.1.8.
+
+	* gdk/gdkprivate.h:
+	* gdk/gdkglobals.c: removed last Gdk threads specific bits.
+
+	* gtk/gtkmain.c (gtk_init): s/g_thread_supported/g_thread_supported()/.
+
+	* gtk/gtkprivate.h: changed GTK_THREADS_ENTER and GTK_THREADS_LEAVE
+	to function macros GTK_THREADS_ENTER() and GTK_THREADS_LEAVE().
+	honour G_THREADS_ENABLED in the definition of GTK_THREADS_ENTER()
+ 	and GTK_THREADS_LEAVE(). changed callers accordingly.
+
 Tue Dec 15 21:26:26 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* autogen.sh: warn if glib.m4 or gettext.m4 are not found 

@@ -59,9 +59,18 @@ gdkinclude_HEADERS = \
 	gdktypes.h	\
 	gdkx.h
 
+LDADDS = \
+	@x_ldflags@	\
+	@x_libs@	\
+	@GLIB_LIBS@	\
+	-lm
+
 libgdk_la_LDFLAGS = \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE) \
-         @x_ldflags@ @x_libs@
+         @GLIB_LIBS@	\
+         @x_ldflags@	\
+         @x_libs@	\
+         -lm
 
 EXTRA_PROGRAMS = gxid
 
@@ -69,10 +78,7 @@ bin_PROGRAMS = @xinput_progs@
 
 gxid_SOURCES = gxid.c
 
-gxid_LDADD = \
-	@x_ldflags@	\
-	@x_libs@	\
-	-lm
+gxid_LDADD = $(LDADDS)
 
 X-derived-headers:
 	sed -e 's/^#define[ 	]*XC\([^ 	]*\)[ 	]*\([^ 	]*\)[ 	]*.*$$/GDK\1 = \2,/' \

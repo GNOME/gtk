@@ -62,14 +62,6 @@ GdkWindowPrivate *gdk_xgrab_window = NULL;  /* Window that currently holds the
 					     *	x pointer grab
 					     */
 
-gboolean          gdk_using_threads = FALSE;
-
-/* Used to signal the mainloop thread from its select() */
-#ifdef USE_PTHREADS
-gint              gdk_threads_pipe[2];
-gboolean          gdk_select_waiting = FALSE;
-#endif
-
 #ifdef USE_XIM
 GdkICPrivate *gdk_xim_ic;		/* currently using IC */
 GdkWindow *gdk_xim_window;	        /* currently using Window */

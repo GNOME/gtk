@@ -276,19 +276,12 @@ extern gint		 gdk_error_code;
 extern gint		 gdk_error_warnings;
 extern gint              gdk_null_window_warnings;
 extern GList            *gdk_default_filters;
-extern gboolean          gdk_using_threads;
 extern const int         gdk_nevent_masks;
 extern const int         gdk_event_mask_table[];
 
 extern GdkWindowPrivate *gdk_xgrab_window;  /* Window that currently holds the
 					     * x pointer grab
 					     */
-
-/* Threading stuff */
-#ifdef USE_PTHREADS
-extern gint              gdk_threads_pipe[2];
-extern gboolean          gdk_select_waiting;
-#endif
 
 #ifdef USE_XIM
 /* XIM support */
