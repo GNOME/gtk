@@ -1587,8 +1587,8 @@ tag_sort_func (gconstpointer first, gconstpointer second)
 }
 
 void
-gtk_text_tag_array_sort (GtkTextTag** tag_array_p,
-                         guint len)
+_gtk_text_tag_array_sort (GtkTextTag** tag_array_p,
+                          guint len)
 {
   int i, j, prio;
   GtkTextTag **tag;
@@ -1664,10 +1664,28 @@ gtk_text_attributes_new (void)
   return values;
 }
 
-/* FIXME change the signature of this to be correct */
+GtkTextAttributes*
+gtk_text_attributes_copy (GtkTextAttributes *src)
+{
+  GtkTextAttributes *dest;
+
+  dest = gtk_text_attributes_new ();
+  gtk_text_attributes_copy_values (src, dest);
+
+  return dest;
+}
+
+/**
+ * gtk_text_attributes_copy_values:
+ * @src: a #GtkTextAttributes
+ * @dest: another #GtkTextAttributes
+ * 
+ * Copies the values from @src to @dest so that @dest has the same values
+ * as @src.
+ **/
 void
-gtk_text_attributes_copy (GtkTextAttributes *src,
-                          GtkTextAttributes *dest)
+gtk_text_attributes_copy_values (GtkTextAttributes *src,
+                                 GtkTextAttributes *dest)
 {
   guint orig_refcount;
 
@@ -1754,9 +1772,9 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 }
 
 void
-gtk_text_attributes_realize (GtkTextAttributes *values,
-                             GdkColormap *cmap,
-                             GdkVisual *visual)
+_gtk_text_attributes_realize (GtkTextAttributes *values,
+                              GdkColormap *cmap,
+                              GdkVisual *visual)
 {
   g_return_if_fail (values != NULL);
   g_return_if_fail (values->refcount > 0);
@@ -1775,9 +1793,9 @@ gtk_text_attributes_realize (GtkTextAttributes *values,
 }
 
 void
-gtk_text_attributes_unrealize (GtkTextAttributes *values,
-                               GdkColormap *cmap,
-                               GdkVisual *visual)
+_gtk_text_attributes_unrealize (GtkTextAttributes *values,
+                                GdkColormap *cmap,
+                                GdkVisual *visual)
 {
   g_return_if_fail (values != NULL);
   g_return_if_fail (values->refcount > 0);
@@ -1797,9 +1815,9 @@ gtk_text_attributes_unrealize (GtkTextAttributes *values,
 }
 
 void
-gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
-                                    GtkTextTag**       tags,
-                                    guint              n_tags)
+_gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
+                                     GtkTextTag**       tags,
+                                     guint              n_tags)
 {
   guint n = 0;
 
@@ -1926,7 +1944,7 @@ gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 }
 
 gboolean
-gtk_text_tag_affects_size (GtkTextTag *tag)
+_gtk_text_tag_affects_size (GtkTextTag *tag)
 {
   g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
 
@@ -1952,7 +1970,7 @@ gtk_text_tag_affects_size (GtkTextTag *tag)
 }
 
 gboolean
-gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag)
+_gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag)
 {
   g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
 

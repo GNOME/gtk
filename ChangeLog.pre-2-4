@@ -1,5 +1,19 @@
 2001-01-01  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktexttagprivate.h: uscore-prepend all the stuff in here.
+
+	* gtk/gtk-boxed.defs (GtkTextAttributes): Add boxed type for 
+	GtkTextAttributes
+
+	* gtk/gtktexttag.c: Fix up GtkTextAttributes copying to close bug 
+	#40246
+	(gtk_text_attributes_copy_values): rename from 
+	gtk_text_attributes_copy
+	(gtk_text_attributes_copy): a more standard GTK copy function, 
+	which returns a new object
+
+2001-01-01  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktreeview.c: Adapt to GtkTreeSelection changes
 	
 	* gtk/gtktreeselection.c (_gtk_tree_selection_set_tree_view):

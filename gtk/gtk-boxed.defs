@@ -1286,6 +1286,11 @@
   gtk_text_iter_copy
   gtk_text_iter_free)
 
+
+(define-boxed GtkTextAttributes
+  gtk_text_attributes_ref
+  gtk_text_attributes_unref)
+
 (define-boxed PangoTabArray
   pango_tab_array_copy
   pango_tab_array_free)

@@ -195,12 +195,13 @@ struct _GtkTextAttributes
   guint pad4 : 1;
 };
 
-/* FIXME _copy() has the wrong signature */
-GtkTextAttributes  *gtk_text_attributes_new       (void);
-void                gtk_text_attributes_copy      (GtkTextAttributes *src,
-                                                   GtkTextAttributes *dest);
-void                gtk_text_attributes_unref     (GtkTextAttributes *values);
-void                gtk_text_attributes_ref       (GtkTextAttributes *values);
+GtkTextAttributes* gtk_text_attributes_new         (void);
+GtkTextAttributes* gtk_text_attributes_copy        (GtkTextAttributes *src);
+void               gtk_text_attributes_copy_values (GtkTextAttributes *src,
+                                                    GtkTextAttributes *dest);
+void               gtk_text_attributes_unref       (GtkTextAttributes *values);
+void               gtk_text_attributes_ref         (GtkTextAttributes *values);
+
 
 #ifdef __cplusplus
 }

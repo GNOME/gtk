@@ -1539,12 +1539,11 @@ queue_tag_redisplay (GtkTextBTree      *tree,
                      const GtkTextIter *start,
                      const GtkTextIter *end)
 {
-  if (gtk_text_tag_affects_size (tag))
+  if (_gtk_text_tag_affects_size (tag))
     {
       _gtk_text_btree_invalidate_region (tree, start, end);
-
     }
-  else if (gtk_text_tag_affects_nonsize_appearance (tag))
+  else if (_gtk_text_tag_affects_nonsize_appearance (tag))
     {
       /* We only need to queue a redraw, not a relayout */
       redisplay_region (tree, start, end);

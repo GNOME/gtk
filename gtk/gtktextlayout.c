@@ -945,16 +945,16 @@ get_style (GtkTextLayout *layout,
     }
 
   /* Sort tags in ascending order of priority */
-  gtk_text_tag_array_sort (tags, tag_count);
+  _gtk_text_tag_array_sort (tags, tag_count);
 
   style = gtk_text_attributes_new ();
 
-  gtk_text_attributes_copy (layout->default_style,
-                            style);
+  gtk_text_attributes_copy_values (layout->default_style,
+                                   style);
 
-  gtk_text_attributes_fill_from_tags (style,
-                                      tags,
-                                      tag_count);
+  _gtk_text_attributes_fill_from_tags (style,
+                                       tags,
+                                       tag_count);
 
   g_free (tags);
 

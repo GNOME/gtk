@@ -1207,7 +1207,7 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
     }
 
   /* Sort tags in ascending order of priority */
-  gtk_text_tag_array_sort (tags, tag_count);
+  _gtk_text_tag_array_sort (tags, tag_count);
 
   retval = NULL;
   i = 0;
@@ -1544,11 +1544,11 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
     }
 
   /* Sort tags in ascending order of priority */
-  gtk_text_tag_array_sort (tags, tag_count);
+  _gtk_text_tag_array_sort (tags, tag_count);
 
-  gtk_text_attributes_fill_from_tags (values,
-                                      tags,
-                                      tag_count);
+  _gtk_text_attributes_fill_from_tags (values,
+                                       tags,
+                                       tag_count);
 
   g_free (tags);
 
