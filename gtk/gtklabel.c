@@ -192,10 +192,13 @@ gtk_label_init (GtkLabel *label)
   GTK_WIDGET_SET_FLAGS (label, GTK_NO_WINDOW);
   
   label->label = NULL;
+  label->label_wc = NULL;
+  label->pattern = NULL;
+
   label->words = NULL;
+
   label->max_width = 0;
   label->jtype = GTK_JUSTIFY_CENTER;
-  label->pattern = NULL;
   label->wrap = FALSE;
   
   gtk_label_set_text (label, "");

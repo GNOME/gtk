@@ -1,3 +1,9 @@
+Mon Jan 18 15:46:14 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_init): Initialize
+	label->label_wc. (We allocate labels from
+	a memchunk)
+
 Mon Jan 18 18:53:08 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkscale.c (gtk_scale_set_digits): CLAMP digits into a
