@@ -350,7 +350,6 @@ create_separator (void)
   gtk_box_pack_start (GTK_BOX (hbox),
 		      gtk_vseparator_new (),
 		      TRUE, TRUE, 0);
-  //  gtk_widget_set_size_request (hbox, 200, 150);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),
 		      g_object_new (GTK_TYPE_LABEL,
@@ -358,7 +357,7 @@ create_separator (void)
 				    "justify", GTK_JUSTIFY_CENTER,
 				    NULL),
 		      FALSE, FALSE, 0);
-  return new_widget_info ("separator", vbox, LARGE);
+  return new_widget_info ("separator", vbox, MEDIUM);
 }
 
 static WidgetInfo *
@@ -405,7 +404,7 @@ create_panes (void)
 				    "justify", GTK_JUSTIFY_CENTER,
 				    NULL),
 		      FALSE, FALSE, 0);
-  return new_widget_info ("panes", vbox, LARGE);
+  return new_widget_info ("panes", vbox, MEDIUM);
 }
 
 static WidgetInfo *
