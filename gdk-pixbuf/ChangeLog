@@ -1,3 +1,9 @@
+1999-10-27  Havoc Pennington  <hp@pobox.com>
+
+	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_finalize): 
+	Fix typo that prevented compilation
+	(gdk_pixbuf_loader_destroy): ditto
+
 1999-10-27  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_new): Return a
