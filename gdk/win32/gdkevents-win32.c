@@ -776,6 +776,16 @@ gdk_event_apply_filters (MSG      *msg,
 }
 
 void 
+gdk_display_add_client_message_filter (GdkDisplay   *display,
+				       GdkAtom       message_type,
+				       GdkFilterFunc func,
+				       gpointer      data)
+{
+  /* XXX */
+  gdk_add_client_message_filter (message_type, func, data);
+}
+
+void 
 gdk_add_client_message_filter (GdkAtom       message_type,
 			       GdkFilterFunc func,
 			       gpointer      data)

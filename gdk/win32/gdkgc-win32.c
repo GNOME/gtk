@@ -730,6 +730,14 @@ gdk_gc_copy (GdkGC *dst_gc,
                                          sizeof (DWORD) * src_win32_gc->pen_num_dashes);
 }
 
+GdkScreen *  
+gdk_gc_get_screen (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC_WIN32 (gc), NULL);
+  
+  return _gdk_screen;
+}
+
 static guint bitmask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
 COLORREF

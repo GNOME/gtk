@@ -1,3 +1,17 @@
+2002-12-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkglobals-win32.c: Minor cosmetics.
+
+	Implement two missing functions (#101369)
+
+	* gdk/win32/gdkevents-win32.c
+	(gdk_display_add_client_message_filter): Implement by calling
+	gdk_add_client_message_filter(), no separate displays on Windows,
+	at least not yet.
+
+	* gdk/win32/gdkgc-win32.c (gdk_gc_get_screen): Implement by
+	returning the only screen so far, _gdk_screen.
+
 Mon Dec 16 16:18:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktexttag.c (gtk_text_tag_get_property): Get rid
