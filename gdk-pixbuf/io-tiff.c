@@ -257,11 +257,10 @@ gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
         fd = fileno (f);
         tiff = TIFFFdOpen (fd, "libpixbuf-tiff", "r");
         
-        if (!tiff) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("Failed to open TIFF image"));
+        if (!tiff || global_error) {
+                tiff_set_error (error,
+                                GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                _("Failed to open TIFF image"));
                 tiff_pop_handlers ();
 
                 G_UNLOCK (tiff_loader);
@@ -404,11 +403,10 @@ gdk_pixbuf__tiff_image_stop_load (gpointer data,
                                tiff_seek, tiff_close, 
                                tiff_size, 
                                tiff_map_file, tiff_unmap_file);
-        if (!tiff) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_FAILED,
-                             _("Failed to load TIFF image"));
+        if (!tiff || global_error) {
+                tiff_set_error (error,
+                                GDK_PIXBUF_ERROR_FAILED,
+                                _("Failed to load TIFF image"));
                 retval = FALSE;
         } else {
                 GdkPixbuf *pixbuf;
@@ -418,10 +416,16 @@ gdk_pixbuf__tiff_image_stop_load (gpointer data,
                         g_object_unref (G_OBJECT (pixbuf));
                 retval = pixbuf != NULL;
                 TIFFClose (tiff);
+                if (global_error)
+                        {
+                                tiff_set_error (error,
+                                                GDK_PIXBUF_ERROR_FAILED,
+                                                _("Failed to load TIFF image"));
+                                retval = FALSE;
+                        }
         }
-        
-        if (global_error)
-                g_warning ("Error left set in TIFF loader\n");
+
+        g_assert (!global_error);
         
         g_free (context->buffer);
         g_free (context);

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* GdkPixbuf library - XPM image loader
  *
  * Copyright (C) 1999 Mark Crichton
@@ -926,7 +927,7 @@ find_color(const char *name,
  *	Partial implementation of X color name parsing interface.
  *
  * Results:
- *	Returns non-zero on success.
+ *	Returns TRUE on success.
  *
  * Side effects:
  *	None.
@@ -947,7 +948,8 @@ parse_color (const char *spec,
 		}
 		i /= 3;
 
-		sprintf(fmt, "%%%dx%%%dx%%%dx", i, i, i);
+		g_snprintf (fmt, 16, "%%%dx%%%dx%%%dx", i, i, i);
+
 		if (sscanf(spec+1, fmt, &red, &green, &blue) != 3) {
 			return FALSE;
 		}
@@ -977,20 +979,13 @@ parse_color (const char *spec,
 }
 
 static gint
-xpm_seek_string (FILE *infile, const gchar *str, gint skip_comments)
+xpm_seek_string (FILE *infile, const gchar *str)
 {
 	char instr[1024];
 
 	while (!feof (infile)) {
 		if (fscanf (infile, "%1023s", instr) < 0)
                         return FALSE;
-		if (skip_comments == TRUE && strcmp (instr, "/*") == 0) {
-			fscanf (infile, "%1023s", instr);
-			while (!feof (infile) && strcmp (instr, "*/") != 0)
-				fscanf (infile, "%1023s", instr);
-			fscanf (infile, "%1023s", instr);
-		}
-
 		if (strcmp (instr, str) == 0)
 			return TRUE;
 	}
@@ -1176,7 +1171,7 @@ file_buffer (enum buf_op op, gpointer handle)
 
 	switch (op) {
 	case op_header:
-		if (xpm_seek_string (h->infile, "XPM", FALSE) != TRUE)
+		if (xpm_seek_string (h->infile, "XPM") != TRUE)
 			break;
 
 		if (xpm_seek_char (h->infile, '{') != TRUE)
@@ -1258,11 +1253,35 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 		return NULL;
 	}
 	sscanf (buffer, "%d %d %d %d", &w, &h, &n_col, &cpp);
-	if (cpp >= 32) {
+	if (w <= 0) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("XPM has more than 31 chars per pixel"));
+                             _("XPM file has image width <= 0"));
+		return NULL;
+
+	}
+	if (h <= 0) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("XPM file has image height <= 0"));
+		return NULL;
+
+	}
+	if (n_col <= 0) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("XPM file has invalid number of colors"));
+		return NULL;
+
+	}
+	if (cpp <= 0 || cpp >= 32) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("XPM has invalid number of chars per pixel"));
 		return NULL;
 	}
 
@@ -1430,7 +1449,6 @@ gdk_pixbuf__xpm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
        XPMContext *context;
        gint fd;
 
-       g_warning ("load start");
        context = g_new (XPMContext, 1);
        context->prepare_func = prepare_func;
        context->update_func = update_func;

@@ -1,3 +1,34 @@
+Fri Sep 14 22:53:45 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_begin_load): Handle
+	out-of-memory situation better.
+
+	* io-pnm.c: Robustness fixes for pnm loader
+
+	* io-gif.c: Make gif loader survive TEST_RANDOMLY_MODIFY
+
+	* io-xpm.c (parse_color): detect very long color strings
+
+	All of the above from Matthias Clasen <matthiasc@poet.de>,
+	the remaining from Soeren Sandmann <sandmann@daimi.au.dk>.
+
+	* test-images.h: add tests:
+		- four valid ppm's, eight invalid (matthiasc@poet.de)
+		- one invalid xpm (matthiasc@poet.de)
+		- one valid tga, one invalid (sandmann@daimi.au.dk)
+		- one invalid tiff (sandmann@daimi.au.dk
+
+	* test-loaders.c: enable tests for ppm, png, gif, tga, tiff, xpm
+	
+	* io-tiff.c (gdk_pixbuf__tiff_image_stop_load): TIFFClientOpen can
+	fail - detect it when it happens
+
+	* io-tga.c (gdk_pixbuf__tga_load_increment): Fail if there is too
+	much data in file
+	
+	* gdk-pixbuf-io.c: moved wbmb check after ico check to avoid false
+	positives
+	
 Fri Sep 14 00:30:48 2001  Tim Janik  <timj@gtk.org>
 
 	* Makefile.am: don't used BUILT_SOURCES to build marshal
