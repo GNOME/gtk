@@ -1,5 +1,9 @@
 2002-09-06  Matthias Clasen  <maclas@gmx.de>
 
+	* io-ani.c, io-ani-animation.h, io-ani-animation.c, 
+	pixbufloader_ani.def, Makefile.am, gdk-pixbuf-io.c: New loader,
+	for .ANI animations.
+	
 	* io-xpm.c (pixbuf_create_from_xpm): 
 	* io-xbm.c (gdk_pixbuf__xbm_image_load_real): 
 	* io-ico.c (DecodeHeader): Attach hotspot coordinates to the
