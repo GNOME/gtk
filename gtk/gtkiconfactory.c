@@ -1305,12 +1305,12 @@ gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
       init_icon_sizes ();
       
       *sizes = g_new (GtkIconSize, icon_sizes_used);
-      *n_sizes = icon_sizes_used;
+      *n_sizes = icon_sizes_used - 1;
       
-      i = 0;      
+      i = 1;      
       while (i < icon_sizes_used)
         {
-          (*sizes)[i] = icon_sizes[i].size;
+          (*sizes)[i - 1] = icon_sizes[i].size;
           ++i;
         }
     }

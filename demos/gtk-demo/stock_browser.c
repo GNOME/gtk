@@ -84,26 +84,32 @@ struct _StockItemDisplay
 static gchar*
 id_to_macro (const gchar *id)
 {
-  GString *macro;
+  GString *macro = NULL;
   const gchar *cp;
 
-  /* gtk-foo -> GTK_STOCK_FOO */
-  
-  cp = id;
-  while (*cp && *cp != '-')
-    ++cp;
-
-  if (*cp == '\0')
-    return g_strdup ("??UNKNOWN??");
+  /* gtk-foo-bar -> GTK_STOCK_FOO_BAR */
 
   macro = g_string_new (NULL);
   
-  g_string_append_len (macro, id, cp - id);
+  cp = id;
   
-  g_string_append (macro, "_STOCK");
-  g_string_append (macro, cp);
+  if (strncmp (cp, "gtk-", 4) == 0)
+    {
+      g_string_append (macro, "GTK_STOCK_");
+      cp += 4;
+    }
 
-  g_string_ascii_up (macro);
+  while (*cp)
+    {
+      if (*cp == '-')
+	g_string_append_c (macro, '_');
+      else if (g_ascii_islower (*cp))
+	g_string_append_c (macro, g_ascii_toupper (*cp));
+      else
+	g_string_append_c (macro, *cp);
+
+      cp++;
+    }
 
   return g_string_free (macro, FALSE);
 }
@@ -220,6 +226,38 @@ create_model (void)
   return GTK_TREE_MODEL (store);
 }
 
+/* Finds the largest size at which the given image stock id is
+ * available. This would not be useful for a normal application
+ */
+static GtkIconSize
+get_largest_size (const char *id)
+{
+  GtkIconSet *set = gtk_icon_factory_lookup_default (id);
+  GtkIconSize *sizes;
+  gint n_sizes, i;
+  GtkIconSize best_size = GTK_ICON_SIZE_INVALID;
+  gint best_pixels = 0;
+
+  gtk_icon_set_get_sizes (set, &sizes, &n_sizes);
+
+  for (i = 0; i < n_sizes; i++)
+    {
+      gint width, height;
+      
+      gtk_icon_size_lookup (sizes[i], &width, &height);
+
+      if (width * height > best_pixels)
+	{
+	  best_size = sizes[i];
+	  best_pixels = width * height;
+	}
+    }
+  
+  g_free (sizes);
+
+  return best_size;
+}
+
 static void
 selection_changed (GtkTreeSelection *selection)
 {
@@ -263,12 +301,9 @@ selection_changed (GtkTreeSelection *selection)
           gtk_label_set_text (GTK_LABEL (display->label_accel_label), "");
         }
 
-      /* The problem here is that some icons don't have SIZE_LARGE_TOOLBAR,
-       * so we get a "missing image" icon...
-       */
       if (info->small_icon)
         gtk_image_set_from_stock (GTK_IMAGE (display->icon_image), info->id,
-                                  GTK_ICON_SIZE_LARGE_TOOLBAR);
+                                  get_largest_size (info->id));
       else
         gtk_image_set_from_pixbuf (GTK_IMAGE (display->icon_image), NULL);
 
@@ -403,6 +438,7 @@ do_stock_browser (void)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Stock Icons and Items");
+      gtk_window_set_default_size (GTK_WINDOW (window), -1, 500);
 
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);

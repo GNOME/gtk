@@ -52,7 +52,10 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences/Shape/_Rectangle",   NULL, menuitem_cb, 0, "/Preferences/Shape/Square" },
   { "/_Preferences/Shape/_Oval",        NULL, menuitem_cb, 0, "/Preferences/Shape/Rectangle" },
 
-  { "/_Help",            NULL,         0,                     0, "<LastBranch>" },
+  /* If you wanted this to be right justified you would use "<LastBranch>", not "<Branch>".
+   * Right justified help menu items are generally considered a bad idea now days.
+   */
+  { "/_Help",            NULL,         0,                     0, "<Branch>" },
   { "/Help/_About",      NULL,         menuitem_cb,       0 },
 };
 

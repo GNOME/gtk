@@ -1,3 +1,23 @@
+Thu Nov  1 19:18:34 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/gtk-demo/stock_browser.c (do_stock_browser): 
+	Set a reasonable default height for the window.
+
+	* demos/gtk-demo/stock_browser.c (id_to_macro): Fix
+	bug where subsequent '-' weren't converted to '_'.
+	(#59550, Matthias Clasen)
+
+	* demos/gtk-demo/appwindow.c (menu_items): Don't right 
+	justify the Help menu - just include a comment on
+	how to do it. (#63539, 	Marius Andreiana)
+
+	* gtk/gtkiconfactory.c (gtk_icon_set_get_sizes): Don't 
+	list GTK_ICON_SIZE_INVALID.
+
+	* demos/gtk-demo/stock_browser.c: Show the biggest available
+	size, not a fixed size. (Often reported, including #63539, 
+	Marius Andreiana)
+
 Thu Nov  1 19:11:35 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkrbtree.c (gtk_rbtree_reorder_fixup): Fix reorder_fixup,
