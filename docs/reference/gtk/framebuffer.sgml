@@ -92,7 +92,7 @@ virtual console in the current resolution and bit-depth. This can be
 changed by specifying environment variables:
 </para>
 
-<para>
+<para id="fb-envar">
 <programlisting>
 <envar>GDK_VT</envar>:
  unset means open on the current VT.

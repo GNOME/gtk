@@ -1,3 +1,21 @@
+Sat Jul 31 17:20:22 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add some forgotten functions.
+
+Sat Jul 31 17:18:57 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/framebuffer.sgml: 
+	* gtk/windows.sgml: 
+	* gtk/x11.sgml: 
+	* gtk/running.sgml: Reorganize backend-specific cmdline
+	arguments and environment variables, fill the Windows
+	sections, add XDG_DATA_HOME, XDG_DATA_DIRS.
+
+Sat Jul 31 14:06:32 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/running.sgml: We use GTK2_RC_FILES instead of 
+	GTK_RC_FILES...
+
 2004-07-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Update to combo box api changes.

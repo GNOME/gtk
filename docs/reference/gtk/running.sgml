@@ -22,7 +22,9 @@ How to run and debug your GTK+ application
 All GTK+ applications support a number of standard commandline
 options. These are removed from <literal>argv</literal> by <link
 linkend="gtk-init">gtk_init()</link>. Modules may parse and remove
-further options.
+further options. The <link linkend="x11-cmdline">X11</link> and
+<link linkend="win32-cmdline">Windows</link> GDK backends parse
+some additional commandline options.
 </para>
 
 <formalpara>
@@ -77,7 +79,7 @@ list them here for completeness nevertheless.
 <title><systemitem>--class <replaceable>class</replaceable></systemitem></title>
 
 <para>
-Sets the program class; see gdk_set_program_class(). 
+Sets the program class; see <link linkend="gdk-set-program-class"><function>gdk_set_program_class</function>()</link>. 
 </para>
 </formalpara>
 
@@ -112,68 +114,6 @@ This option is only available if GTK+ has been configured with
 </para>
 </formalpara>
 
-<formalpara>
-<title><systemitem>--display <replaceable>display</replaceable></systemitem></title>
-
-<para>
-The name of the X display to open instead of the one specified
-in the <envar>DISPLAY</envar> environment variable. 
-This option is only available if GTK+ has been configured with
-<option>--gdk-target=x11</option>.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--screen <replaceable>screen_number</replaceable></systemitem></title>
-
-<para>
-  The number of the screen within the default display. This overrides
-  any screen number specified in the display name specified by
-  by he <systemitem>--display</systemitem> command line option or
-  the <envar>DISPLAY</envar> environment variable. If this screen
-  cannot be opened, then GTK+ will fall back to the screen
-  specified in the display name. This option is not useful
-  interactively; the intended purposes is that when a program
-  registers its command line with a <firstterm>session
-  manager</firstterm> for later restarting, it can save the
-  screen it is on, without having to worry if it might be
-  restarted on a different display.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--sync</systemitem></title>
-
-<para>
-Makes all X requests synchronously. This is a useful option for 
-debugging, but it will slow down the performance considerably.
-This option is only available if GTK+ has been configured with
-<option>--gdk-target=x11</option>.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--gxid-host <replaceable>host</replaceable></systemitem></title>
-
-<para>
-The host to contact the <application>gxid</application> daemon on; overrides 
-the <link linkend="GXID"><envar>GXID_HOST</envar></link> environment variable.
-This option is only available if GTK+ has been configured with
-<option>--gdk-target=x11</option>.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--gxid-port <replaceable>port</replaceable></systemitem></title>
-
-<para>
-The port for the connection to <application>gxid</application>; overrides 
-the <link linkend="GXID"><envar>GXID_PORT</envar></link> environment variable.
-This option is only available if GTK+ has been configured with
-<option>--gdk-target=x11</option>.
-</para>
-</formalpara>
-
 </refsect2>
 
 <refsect2>
@@ -182,7 +122,11 @@ This option is only available if GTK+ has been configured with
 <para> 
 GTK+ inspects a number of environment variables in addition to standard
 variables like <envar>LANG</envar>, <envar>PATH</envar>, <envar>HOME</envar> 
-or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
+or <envar>DISPLAY</envar>; mostly to determine paths to look for certain 
+files. The <link linkend="x11-envar">X11</link>, 
+<link linkend="win32-envar">Windows</link> and 
+<link linkend="fb-envar">Framebuffer</link> GDK backends use some
+additional environment variables.
 </para>
 
 <formalpara id="GTK-Debug-Options">
@@ -285,7 +229,7 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
 </formalpara>
 
 <formalpara>
-  <title><envar>GTK_RC_FILES</envar></title>
+  <title><envar>GTK2_RC_FILES</envar></title>
   
   <para>
     Specifies a list of RC files to parse instead of the default ones;
@@ -358,26 +302,15 @@ nevertheless.
   </para>
 </formalpara>
 
-<formalpara id="GXID">
-  <title><envar>GXID_HOST</envar> and <envar>GXID_PORT</envar></title>
-
-  <para>
-    The host and port to contact the <application>gxid</application> daemon on. 
-    <application>gxid</application> is only necessary on X servers which 
-    don't support using the pointer and extension devices at once, and is
-    only built if GTK+ is configured with <option>--with-xinput=gxi</option>. 
-    The <application>XFree86</application> X servers don't have this 
-    restriction.
-  </para>
-</formalpara>
-
 <formalpara>
-  <title><envar>GDK_USE_XFT</envar></title>
+  <title><envar>XDG_DATA_HOME</envar>, <envar>XDG_DATA_DIRS</envar></title>
 
   <para>
-    If this variable is set to 1, GTK+ will use the Pango Xft backend instead
-    of the X backend when possible (i.e. when the X server supports the XRender
-    extension and Pango has been built with Xft support). 
+    GTK+ uses these environment variables to locate icon themes
+    and MIME information. For more information, see 
+    <ulink url="http://freedesktop.org/Standards/icon-theme-spec">Icon Theme Specification</ulink>,
+    the <ulink url="http://freedesktop.org/Standards/shared-mime-info-spec">Shared MIME-info Database</ulink> 
+    and the <ulink url="http://freedesktop.org/Standards/basedir-spec">Base Directory Specification</ulink>.
   </para>
 </formalpara>
 
