@@ -93,11 +93,11 @@ static GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
         
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
-		if (length > 0)
-		  gdk_pixbuf__wbmp_image_load_increment(State,
-							membuf,
-							length,
-                                                        error);
+		if (!gdk_pixbuf__wbmp_image_load_increment(State, membuf, length, 
+							   error)) {
+		  gdk_pixbuf__wbmp_image_stop_load (State, NULL);
+		  return NULL;
+		}
 
 	}
 	if (State->pixbuf != NULL)
@@ -348,8 +348,9 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 		context->needmore = FALSE;
 
 	      out:
-		context->updated_func(context->pixbuf, 0, first_row, context->width, context->cury - first_row + 1,
-				      context->user_data);
+		if(context->updated_func)
+		  context->updated_func(context->pixbuf, 0, first_row, context->width, context->cury - first_row + 1,
+					context->user_data);
 	      }
 	    else
 	      bv = FALSE; /* Nothing left to do, stop feeding me data! */

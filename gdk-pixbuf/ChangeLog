@@ -1,3 +1,9 @@
+2002-03-23  Matthias Clasen  <maclas@gmx.de>
+
+	* io-wbmp.c (gdk_pixbuf__wbmp_image_load_increment):
+	context->updated_func is NULL during a nonincremental load.
+	(gdk_pixbuf__wbmp_image_load): Stop reading after the first error.
+
 2002-03-18  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tga.c: Fix assumptions on rowstride by manually allocating a
