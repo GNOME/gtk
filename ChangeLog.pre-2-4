@@ -1,3 +1,13 @@
+Mon Sep 10 20:47:22 2001  Tim Janik  <timj@gtk.org>
+
+	* tests/testgtk.c (create_idle_test): slight fix for
+	g_object_set() not usable for nesting anymore.
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_class_init): 
+	* gtk/gtkframe.c (gtk_frame_class_init): deprecate ::shadow
+	properties, supply ::shadow_type properties instead as most
+	other widgets do.
+
 2001-09-10  Alex Larsson  <alexl@redhat.com>
 
 	* demos/gtk-demo/stock_browser.c:

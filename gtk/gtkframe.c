@@ -38,6 +38,7 @@ enum {
   PROP_LABEL_XALIGN,
   PROP_LABEL_YALIGN,
   PROP_SHADOW,
+  PROP_SHADOW_TYPE,
   PROP_LABEL_WIDGET
 };
 
@@ -148,7 +149,14 @@ gtk_frame_class_init (GtkFrameClass *class)
                                                         G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW,
-                                   g_param_spec_enum ("shadow",
+                                   g_param_spec_enum ("shadow", NULL,
+                                                      _("Deprecated property, use shadow_type instead."),
+						      GTK_TYPE_SHADOW_TYPE,
+						      GTK_SHADOW_ETCHED_IN,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHADOW_TYPE,
+                                   g_param_spec_enum ("shadow_type",
                                                       _("Frame shadow"),
                                                       _("Appearance of the frame border."),
 						      GTK_TYPE_SHADOW_TYPE,
@@ -206,6 +214,7 @@ gtk_frame_set_property (GObject         *object,
 				 g_value_get_double (value));
       break;
     case PROP_SHADOW:
+    case PROP_SHADOW_TYPE:
       gtk_frame_set_shadow_type (frame, g_value_get_enum (value));
       break;
     case PROP_LABEL_WIDGET:
@@ -239,6 +248,7 @@ gtk_frame_get_property (GObject         *object,
       g_value_set_double (value, frame->label_yalign);
       break;
     case PROP_SHADOW:
+    case PROP_SHADOW_TYPE:
       g_value_set_enum (value, frame->shadow_type);
       break;
     case PROP_LABEL_WIDGET:
@@ -453,7 +463,7 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
   if ((GtkShadowType) frame->shadow_type != type)
     {
       frame->shadow_type = type;
-      g_object_notify (G_OBJECT (frame), "shadow");
+      g_object_notify (G_OBJECT (frame), "shadow_type");
 
       if (GTK_WIDGET_DRAWABLE (frame))
 	{

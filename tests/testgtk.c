@@ -10162,6 +10162,7 @@ create_idle_test (void)
 
   if (!window)
     {
+      GtkWidget *button2;
       GtkWidget *frame;
       GtkWidget *box;
 
@@ -10211,27 +10212,28 @@ create_idle_test (void)
 					  NULL),
 			  "signal::clicked", toggle_idle_container, container,
 			  NULL);
-      button =
-	g_object_connect (gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
-					  "label", "Resize-Queue",
-					  "user_data", (void*)GTK_RESIZE_QUEUE,
-					  "group", button,
-					  "visible", TRUE,
-					  "parent", box,
-					  NULL),
-			  "signal::clicked", toggle_idle_container, container,
-			  NULL);
-      button =
-	g_object_set (g_object_connect (gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
-							"label", "Resize-Immediate",
-							"user_data", (void*)GTK_RESIZE_IMMEDIATE,
-							NULL),
-					"signal::clicked", toggle_idle_container, container,
-					NULL),
-		      "group", button,
-		      "visible", TRUE,
-		      "parent", box,
-		      NULL);
+      button = gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+			       "label", "Resize-Queue",
+			       "user_data", (void*)GTK_RESIZE_QUEUE,
+			       "group", button,
+			       "visible", TRUE,
+			       "parent", box,
+			       NULL);
+      g_object_connect (button,
+			"signal::clicked", toggle_idle_container, container,
+			NULL);
+      button2 = gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+				"label", "Resize-Immediate",
+				"user_data", (void*)GTK_RESIZE_IMMEDIATE,
+				NULL);
+      g_object_connect (button2,
+			"signal::clicked", toggle_idle_container, container,
+			NULL);
+      g_object_set (button2,
+		    "group", button,
+		    "visible", TRUE,
+		    "parent", box,
+		    NULL);
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",

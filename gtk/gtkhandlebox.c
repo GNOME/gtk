@@ -35,6 +35,7 @@
 enum {
   PROP_0,
   PROP_SHADOW,
+  PROP_SHADOW_TYPE,
   PROP_HANDLE_POSITION,
   PROP_SNAP_EDGE
 };
@@ -179,7 +180,14 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW,
-                                   g_param_spec_enum ("shadow",
+                                   g_param_spec_enum ("shadow", NULL,
+                                                      _("Deprecated property, use shadow_type instead."),
+						      GTK_TYPE_SHADOW_TYPE,
+						      GTK_SHADOW_ETCHED_OUT,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHADOW_TYPE,
+                                   g_param_spec_enum ("shadow_type",
                                                       _("Shadow type"),
                                                       _("Appearance of the shadow that surrounds the container."),
 						      GTK_TYPE_SHADOW_TYPE,
@@ -269,6 +277,7 @@ gtk_handle_box_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_SHADOW:
+    case PROP_SHADOW_TYPE:
       gtk_handle_box_set_shadow_type (handle_box, g_value_get_enum (value));
       break;
     case PROP_HANDLE_POSITION:
@@ -294,6 +303,7 @@ gtk_handle_box_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_SHADOW:
+    case PROP_SHADOW_TYPE:
       g_value_set_enum (value, handle_box->shadow_type);
       break;
     case PROP_HANDLE_POSITION:
@@ -733,7 +743,7 @@ gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
   if ((GtkShadowType) handle_box->shadow_type != type)
     {
       handle_box->shadow_type = type;
-      g_object_notify (G_OBJECT (handle_box), "shadow");
+      g_object_notify (G_OBJECT (handle_box), "shadow_type");
       gtk_widget_queue_resize (GTK_WIDGET (handle_box));
     }
 }
