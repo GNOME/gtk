@@ -51,14 +51,14 @@ static GdkScreen *gdk_x11_display_impl_get_default_screen (GdkDisplay *
 static void gdk_x11_display_impl_finalize (GObject * object);
 
 
-extern void _gdk_xsettings_watch_cb (Display * display,
-				     Window window,
-				     Bool is_start, long mask, void *cb_data);
-extern void _gdk_xsettings_notify_cb (Display * display,
-				      Window root_window,
-				      const char *name,
-				      XSettingsAction action,
-				      XSettingsSetting * setting, void *data);
+extern void gdk_xsettings_watch_cb (Display * display,
+				    Window window,
+				    Bool is_start, long mask, void *cb_data);
+extern void gdk_xsettings_notify_cb (Display * display,
+				     Window root_window,
+				     const char *name,
+				     XSettingsAction action,
+				     XSettingsSetting * setting, void *data);
 static gpointer parent_class = NULL;
 GType
 gdk_x11_display_impl_get_type ()
@@ -286,8 +286,8 @@ static GdkScreen *gdk_x11_display_impl_get_screen (GdkDisplay *
             screen_impl->xsettings_client =
       	xsettings_client_new (screen_impl->xdisplay,
       			      screen_impl->screen_num,
-      			      _gdk_xsettings_notify_cb,
-      			      _gdk_xsettings_watch_cb, NULL);
+      			      gdk_xsettings_notify_cb,
+      			      gdk_xsettings_watch_cb, NULL);
           return screen;
         }
       tmp_list = tmp_list->next;
