@@ -8672,7 +8672,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   gboolean expand;
 
 
-  if (node->children)
+  if (node->children && !open_all)
     return TRUE;
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
     return FALSE;

@@ -1,3 +1,19 @@
+Fri Apr  5 18:28:56 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_set_mode): free
+	anchor row reference after unselecting the selection (fixes #76272)
+
+Fri Apr  5 18:27:48 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_expand_row): only return
+	when we don't have to open all children (fixes #75736)
+
+Fri Apr  5 18:24:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_clear): unref
+	cellrenderer after clearing the attributes of the renderer (fixes
+	#75592)
+
 Fri Apr  5 05:55:14 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_grab_focus): implement.

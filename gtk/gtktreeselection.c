@@ -193,13 +193,15 @@ gtk_tree_selection_set_mode (GtkTreeSelection *selection,
   
   if (type == GTK_SELECTION_NONE)
     {
-      gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
       /* We do this so that we unconditionally unset all rows
        */
       tmp_func = selection->user_func;
       selection->user_func = NULL;
       gtk_tree_selection_unselect_all (selection);
       selection->user_func = tmp_func;
+
+      gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
+      selection->tree_view->priv->anchor = NULL;
     }
   else if (type == GTK_SELECTION_SINGLE ||
 	   type == GTK_SELECTION_BROWSE)

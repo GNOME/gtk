@@ -1204,8 +1204,8 @@ gtk_tree_view_column_clear (GtkTreeViewColumn *tree_column)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)list->data;
 
-      g_object_unref (G_OBJECT (info->cell));
       gtk_tree_view_column_clear_attributes (tree_column, info->cell);
+      g_object_unref (G_OBJECT (info->cell));
       g_free (info);
     }
 
