@@ -1,3 +1,19 @@
+Mon Jun 15 23:39:44 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): Moved font
+	lists from the klass structure to a static structure
+	in gtkfontsel.c; cleans up global the namespace.
+
+Mon Jun 15 22:16:10 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/makeenums.pl (parse_entries): Fix (untriggered)
+	bug with /*< skip >*/ and remove warning.
+	
+Mon Jun 15 20:14:09 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/Makefile.am: Made the gtkmarshal.* generation
+	rules maintainer-only.
+
 Mon Jun 15 16:29:45 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdktypes.h gdk/gdkprivate.h gtk/gtk*.h 

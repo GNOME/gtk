@@ -206,6 +206,12 @@
    (dialog GTK_WINDOW_DIALOG)
    (popup GTK_WINDOW_POPUP))
 
+; enumerations from "../../gtk+/gtk/gtkfontsel.h"
+
+(define-enum GtkFontMetricType
+   (ixels-metric PIXELS_METRIC)
+   (oints-metric POINTS_METRIC))
+
 ; enumerations from "../../gtk+/gtk/gtkobject.h"
 
 (define-flags GtkObjectFlags

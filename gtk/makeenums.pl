@@ -73,13 +73,13 @@ sub parse_entries {
 	    if (!defined $flags && defined $value && $value =~ /<</) {
 		$seenbitshift = 1;
 	    }
-	    if (!defined $options{skip}) {
-		if (defined $options) {
-		    my %options = parse_options($options);
+	    if (defined $options) {
+		my %options = parse_options($options);
+		if (!defined $options{skip}) {
 		    push @entries, [ $name, $options{nick} ];
-		} else {
-		    push @entries, [ $name ];
 		}
+	    } else {
+		push @entries, [ $name ];
 	    }
 	} else {
 	    print STDERR "Can't understand: $_\n";

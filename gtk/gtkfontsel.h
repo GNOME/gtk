@@ -50,19 +50,6 @@ typedef struct _GtkFontSelectionDialog	     GtkFontSelectionDialog;
 typedef struct _GtkFontSelectionDialogClass  GtkFontSelectionDialogClass;
 
 
-typedef struct _FontInfo FontInfo;
-typedef struct _FontStyle FontStyle;
-
-/* This struct represents one family of fonts (with one foundry), e.g. adobe
-   courier or sony fixed. It stores the family name, the index of the foundry
-   name, and the index of and number of available styles. */
-struct _FontInfo
-{
-  gchar   *family;
-  guint16  foundry;
-  gint	   style_index;
-  guint16  nstyles;
-};
 
 
 /* This is the number of properties which we keep in the properties array,
@@ -72,32 +59,6 @@ struct _FontInfo
 /* This is the number of properties each style has i.e. Weight, Slant,
    Set Width & Spacing. Note that Foundry is not included. */
 #define GTK_NUM_STYLE_PROPERTIES 5
-
-
-/* Used for the flags field in FontStyle. Note that they can be combined,
-   e.g. a style can have multiple bitmaps and a true scalable version.
-   The displayed flag is used when displaying styles to remember which
-   styles have already been displayed. */
-enum
-{
-  BITMAP_FONT		= 1 << 0,
-  SCALABLE_FONT		= 1 << 1,
-  SCALABLE_BITMAP_FONT	= 1 << 2,
-  DISPLAYED		= 1 << 3
-};
-
-/* This represents one style, as displayed in the Font Style clist. It can
-   have a number of available pixel sizes and point sizes. The indexes point
-   into the two big klass->pixel_sizes & klass->point_sizes arrays. */
-struct _FontStyle
-{
-  guint16  properties[GTK_NUM_STYLE_PROPERTIES];
-  gint	   pixel_sizes_index;
-  guint16  npixel_sizes;
-  gint	   point_sizes_index;
-  guint16  npoint_sizes;
-  guint8   flags;
-};
 
 
 /* Used to determine whether we are using point or pixel sizes. */
@@ -171,30 +132,6 @@ struct _GtkFontSelection
 struct _GtkFontSelectionClass
 {
   GtkWindowClass parent_class;
-
-  /* This is a table with each FontInfo representing one font family+foundry */
-  FontInfo *font_info;
-  gint nfonts;
-
-  /* This stores all the valid combinations of properties for every family.
-     Each FontInfo holds an index into its own space in this one big array. */
-  FontStyle *font_styles;
-  gint nstyles;
-
-  /* This stores all the font sizes available for every style.
-     Each style holds an index into these arrays. */
-  guint16 *pixel_sizes;
-  guint16 *point_sizes;
-
-  /* These are the arrays of all possible weights/slants/set widths/spacings
-     and the amount of space allocated for each array. The extra array is
-     used for the foundries strings. */
-  gchar **properties[GTK_NUM_FONT_PROPERTIES];
-  guint16 nproperties[GTK_NUM_FONT_PROPERTIES];
-  guint16 space_allocated[GTK_NUM_FONT_PROPERTIES];
-
-  /* Whether any scalable bitmap fonts are available. */
-  gboolean scaled_bitmaps_available;
 };
 
 
