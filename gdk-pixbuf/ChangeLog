@@ -1,5 +1,7 @@
 1999-10-26  Jonathan Blandford  <jrb@redhat.com>
 
+	* src/gdk-pixbuf-io.c (image_handler_load): load the vtable fully.
+
 	* src/gdk-pixbuf-loader.c: Finished initial cut at the object.
 
 1999-10-26  Havoc Pennington  <hp@pobox.com>
