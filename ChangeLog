@@ -1,3 +1,7 @@
+Tue Jun 23 22:21:33 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk-boxed.defs: s/GkWidget/GtkWidget/
+
 1998-06-22  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gtk/gtkentry.h, gtk/gtkentry.c: Export the

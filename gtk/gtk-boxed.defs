@@ -643,7 +643,7 @@
 
 ;;; Misc
 
-(define-object GtkMisc (GkWidget))
+(define-object GtkMisc (GtkWidget))
 
 (define-func gtk_misc_set_alignment
   none
