@@ -847,14 +847,18 @@ gtk_menu_need_resize (GtkContainer *container)
 static void
 gtk_menu_deactivate (GtkMenuShell *menu_shell)
 {
+  GtkWidget *parent;
+
   g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU (menu_shell));
 
+  parent = menu_shell->parent_menu_shell;
+  
   menu_shell->activate_time = 0;
   gtk_menu_popdown (GTK_MENU (menu_shell));
 
-  if (menu_shell->parent_menu_shell)
-    gtk_menu_shell_deactivate (GTK_MENU_SHELL (menu_shell->parent_menu_shell));
+  if (parent)
+    gtk_menu_shell_deactivate (GTK_MENU_SHELL (parent));
 }
 
 
