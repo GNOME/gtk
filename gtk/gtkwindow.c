@@ -5608,6 +5608,13 @@ gtk_window_parse_geometry (GtkWindow   *window,
   size_set = FALSE;
   if ((result & WidthValue) || (result & HeightValue))
     {
+      GtkWindowGeometryInfo *info;
+      info = gtk_window_get_geometry_info (window, FALSE);
+      if (info && info->mask & GDK_HINT_RESIZE_INC)
+        {
+          w *= info->geometry.width_inc;
+          h *= info->geometry.height_inc;
+        }
       gtk_window_set_default_size (window, w, h);
       size_set = TRUE;
     }
@@ -5628,15 +5635,18 @@ gtk_window_parse_geometry (GtkWindow   *window,
 
   if ((result & YValue) == 0)
     y = 0;
-  
+
   if (grav == GDK_GRAVITY_SOUTH_WEST ||
       grav == GDK_GRAVITY_SOUTH_EAST)
-    y = gdk_screen_height () - h;
+    y = gdk_screen_height () - h + y;
 
   if (grav == GDK_GRAVITY_SOUTH_EAST ||
       grav == GDK_GRAVITY_NORTH_EAST)
-    x = gdk_screen_width () - w;
+    x = gdk_screen_width () - w + x;
 
+  /* we don't let you put a window offscreen; maybe some people would
+   * prefer to be able to, but it's kind of a bogus thing to do.
+   */
   if (y < 0)
     y = 0;
 

@@ -1,3 +1,9 @@
+2002-02-16  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkwindow.c (gtk_window_parse_geometry): take
+	GDK_HINT_RESIZE_INC into account, and handle negative coordinates
+	correctly. (Can't email Owen - hope this is OK.)
+
 Fri Feb 15 20:09:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.[ch] gtk/gtkmarshallers.list:
