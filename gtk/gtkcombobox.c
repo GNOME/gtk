@@ -255,10 +255,8 @@ static void     gtk_combo_box_cell_layout_clear_attributes   (GtkCellLayout     
 static void     gtk_combo_box_cell_layout_reorder            (GtkCellLayout         *layout,
                                                               GtkCellRenderer       *cell,
                                                               gint                   position);
-#if 1
 static gboolean gtk_combo_box_mnemonic_activate              (GtkWidget    *widget,
 							      gboolean      group_cycling);
-#endif
 
 
 GType
@@ -2830,13 +2828,14 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
 }
 
 
-#if 1
 static gboolean
 gtk_combo_box_mnemonic_activate (GtkWidget *widget,
 				 gboolean   group_cycling)
 {
-  g_print ("I'm here!\n");
-  gtk_widget_grab_focus (GTK_COMBO_BOX (widget)->priv->tree_view);
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+
+  gtk_widget_grab_focus (combo_box->priv->tree_view);
+
   return TRUE;
 }
-#endif
+

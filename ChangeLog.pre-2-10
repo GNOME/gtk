@@ -1,3 +1,9 @@
+Thu Feb  5 23:48:19 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_mnemonic_activate): Add this
+	function, to make mnemonic_activate work for combo boxes.
+	(#133443, Paolo Borelli)
+
 Thu Feb  5 22:05:52 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilesystemunix.c (bookmark_list_read): Initialize result
