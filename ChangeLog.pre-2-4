@@ -1,3 +1,8 @@
+2002-05-03 Erwann Chenede - <erwann.chenede@sun.com>
+  
+        * gtk/gtkplug.[hc] (gtk_plug_construct_for_display):
+	changed the order of the arguments. #80278
+
 2002-05-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkscreen.c (gdk_screen_get_monitor_at_window): Fix doc comment.

@@ -320,14 +320,14 @@ void
 gtk_plug_construct (GtkPlug         *plug,
 		    GdkNativeWindow  socket_id)
 {
-  gtk_plug_construct_for_display (gdk_get_default_display (), plug, socket_id);
+  gtk_plug_construct_for_display (plug, gdk_get_default_display (), socket_id);
 }
 
 /**
  * gtk_plug_construct_for_display:
+ * @plug: a #GtkPlug.
  * @display: the #GdkDisplay associated with @socket_id's 
  *	     #GtkSocket.
- * @plug: a #GtkPlug.
  * @socket_id: the XID of the socket's window.
  *
  * Finish the Initialization of @plug for a given #GtkSocket identified by
@@ -335,8 +335,8 @@ gtk_plug_construct (GtkPlug         *plug,
  * This function will generally only be used by classes deriving from #GtkPlug.
  **/
 void
-gtk_plug_construct_for_display (GdkDisplay	*display,
-				GtkPlug         *plug,
+gtk_plug_construct_for_display (GtkPlug         *plug,
+				GdkDisplay	*display,
 				GdkNativeWindow  socket_id)
 {
   if (socket_id)
@@ -398,7 +398,7 @@ gtk_plug_new_for_display (GdkDisplay	  *display,
   GtkPlug *plug;
 
   plug = GTK_PLUG (gtk_type_new (GTK_TYPE_PLUG));
-  gtk_plug_construct_for_display (display, plug, socket_id);
+  gtk_plug_construct_for_display (plug, display, socket_id);
   return GTK_WIDGET (plug);
 }
 

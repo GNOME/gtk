@@ -83,8 +83,8 @@ void       gtk_plug_construct (GtkPlug         *plug,
 GtkWidget* gtk_plug_new       (GdkNativeWindow  socket_id);
 #endif
 
-void       gtk_plug_construct_for_display (GdkDisplay      *display,
-					   GtkPlug         *plug,
+void       gtk_plug_construct_for_display (GtkPlug         *plug,
+					   GdkDisplay      *display,
 					   GdkNativeWindow  socket_id);
 GtkWidget* gtk_plug_new_for_display       (GdkDisplay      *display,
 					   GdkNativeWindow  socket_id);
