@@ -1,5 +1,9 @@
 2001-06-26  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_set_policy): forgot a notification
+
+2001-06-26  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkwindow.c (gtk_window_class_init): add "resizable"
 	property
 

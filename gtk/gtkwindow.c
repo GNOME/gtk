@@ -951,6 +951,7 @@ gtk_window_set_policy (GtkWindow *window,
 
   g_object_notify (G_OBJECT (window), "allow_shrink");
   g_object_notify (G_OBJECT (window), "allow_grow");
+  g_object_notify (G_OBJECT (window), "resizable");
   g_object_notify (G_OBJECT (window), "auto_shrink");
   
   gtk_widget_queue_resize (GTK_WIDGET (window));
