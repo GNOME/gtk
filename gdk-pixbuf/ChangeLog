@@ -1,3 +1,10 @@
+2002-05-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk-pixbuf-io.c (get_libdir): Use GTK_BINARY_VERSION (and not
+	GTK_VERSION) in the path to the loaders on Win32, too.
+
+	* Makefile.am: Pass GTK_BINARY_VERSION.
+
 2002-05-18  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tiff.c (tiff_image_parse): fix packing order on bigendian 
