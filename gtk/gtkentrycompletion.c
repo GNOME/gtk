@@ -1112,6 +1112,10 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 {
   gint x, y, x_border, y_border;
   gint height;
+  GdkScreen *screen;
+  gint monitor_num;
+  GdkRectangle monitor;
+  GtkRequisition popup_req;
 
   if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return;
@@ -1126,7 +1130,24 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   height = _gtk_entry_completion_resize_popup (completion);
 
-  gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y + height);
+  gtk_widget_size_request (completion->priv->popup_window, &popup_req);
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (completion->priv->entry));
+  monitor_num = gdk_screen_get_monitor_at_window (screen, 
+						  GTK_WIDGET (completion->priv->entry)->window);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  
+  if (x < monitor.x)
+    x = monitor.x;
+  else if (x + popup_req.width > monitor.x + monitor.width)
+    x = monitor.x + monitor.width - popup_req.width;
+  
+  if (y + height + popup_req.height <= monitor.y + monitor.height)
+    y += height;
+  else
+    y -= popup_req.height;
+
+  gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y);
 
   gtk_widget_show (completion->priv->popup_window);
 

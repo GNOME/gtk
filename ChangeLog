@@ -1,3 +1,9 @@
+Tue Mar  2 23:08:12 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): Avoid
+	popping up the completions across the edge of the monitor.
+	Part of #135561.
+
 Tue Mar  2 16:47:40 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testfilechooser.c (set_filename_existing_nonexistent_cb): 
