@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-05-23 17:08-0400\n"
+"POT-Creation-Date: 2002-04-30 01:30+0200\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andraž Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -343,8 +343,8 @@ msgstr "Ključi za sklope besedila PNG morajo biti znaki ASCII."
 #: gdk-pixbuf/io-png.c:794
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
-"Vrednosti za sklop besedila PNG ni mogoče pretvoriti v kodno tabelo ISO-8859-"
-"1."
+"Vrednosti za sklop besedila PNG ni mogoče pretvoriti v kodno tabelo ISO-"
+"8859-1."
 
 #: gdk-pixbuf/io-pnm.c:247
 msgid "PNM loader expected to find an integer, but didn't"
@@ -552,7 +552,7 @@ msgstr "Širina ali višina slike TIFF je nič"
 msgid "Dimensions of TIFF image too large"
 msgstr "Dimenzije slike TIFF so prevelike"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ni dovolj pomnilnika za odprtje datoteke TIFF"
 
@@ -560,15 +560,15 @@ msgstr "Ni dovolj pomnilnika za odprtje datoteke TIFF"
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Nisem uspel naložiti podatkov RGB iz datoteke TIFF"
 
-#: gdk-pixbuf/io-tiff.c:324
+#: gdk-pixbuf/io-tiff.c:309
 msgid "Failed to open TIFF image"
 msgstr "Nisem uspel odpreti slike TIFF"
 
-#: gdk-pixbuf/io-tiff.c:337
+#: gdk-pixbuf/io-tiff.c:322
 msgid "TIFFClose operation failed"
 msgstr "Operacija TIFFClose ni uspela"
 
-#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
+#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
 msgid "Failed to load TIFF image"
 msgstr "Nisem uspel naložiti slike TIFF"
 
@@ -1092,7 +1092,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Ali lahko uporabnik spremeni besedilo"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
-#: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Pisava"
 
@@ -1734,15 +1734,15 @@ msgstr "Izbira fokusa"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Ali naj se izbere vsebina vnosa, ko je fokusiran"
 
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3176
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3186
 msgid "Input Methods"
 msgstr "Načini vnosa"
 
-#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6382
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
 msgid "_Insert Unicode control character"
 msgstr "_Vstavi kontrolni znak Unicode"
 
@@ -1950,19 +1950,19 @@ msgstr "Ime je predolgo"
 msgid "Couldn't convert filename"
 msgstr "Nisem mogel pretvoriti imena datoteke"
 
-#: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
 msgid "X position"
 msgstr "Položaj X"
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
 msgid "X position of child widget"
 msgstr "Položaj X gradnika otroka"
 
-#: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
 msgid "Y position"
 msgstr "Položaj Y"
 
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
 msgid "Y position of child widget"
 msgstr "Položaj Y gradnika otroka"
 
@@ -1972,44 +1972,44 @@ msgstr "Položaj Y gradnika otroka"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcčdefghij ABCČDEFGHIJ"
 
-#: gtk/gtkfontsel.c:205
+#: gtk/gtkfontsel.c:202
 msgid "Font name"
 msgstr "Ime pisave"
 
-#: gtk/gtkfontsel.c:206
+#: gtk/gtkfontsel.c:203
 msgid "The X string that represents this font."
 msgstr "Niz X, ki predstavlja to pisavo"
 
-#: gtk/gtkfontsel.c:213
+#: gtk/gtkfontsel.c:210
 msgid "The GdkFont that is currently selected."
 msgstr "GdkFont (GdkPisava), ki je trenutno izbrana."
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:216
 msgid "Preview text"
 msgstr "Predogled besedila"
 
-#: gtk/gtkfontsel.c:220
+#: gtk/gtkfontsel.c:217
 msgid "The text to display in order to demonstrate the selected font."
 msgstr "Besedilo, ki naj se prikaže za predstavitev izbrane pisave."
 
-#: gtk/gtkfontsel.c:327
+#: gtk/gtkfontsel.c:321
 msgid "_Family:"
 msgstr "_Družina:"
 
-#: gtk/gtkfontsel.c:333
+#: gtk/gtkfontsel.c:327
 msgid "_Style:"
 msgstr "_Slog:"
 
-#: gtk/gtkfontsel.c:339
+#: gtk/gtkfontsel.c:333
 msgid "Si_ze:"
 msgstr "_Velikost:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:468
+#: gtk/gtkfontsel.c:462
 msgid "_Preview:"
 msgstr "_Predolged"
 
-#: gtk/gtkfontsel.c:1269
+#: gtk/gtkfontsel.c:1253
 msgid "Font Selection"
 msgstr "Izbor pisave"
 
@@ -2333,35 +2333,35 @@ msgstr "Pospeševalni gradnik"
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr "Gradnik, ki naj se aktivira, ko je pritisnjena tipka za oznako."
 
-#: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
+#: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "Vodoravna poravnava"
 
-#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:237
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "GtkAdjustment za vodoravno poravnavo."
 
-#: gtk/gtklayout.c:631 gtk/gtkviewport.c:140
+#: gtk/gtklayout.c:625 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr "Navpična poravnava"
 
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:244
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment za navpično poravnavo."
 
-#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:191
 msgid "Width"
 msgstr "Širina"
 
-#: gtk/gtklayout.c:640
+#: gtk/gtklayout.c:634
 msgid "The width of the layout."
 msgstr "Širina postavitve"
 
-#: gtk/gtklayout.c:648
+#: gtk/gtklayout.c:642
 msgid "Height"
 msgstr "Višina"
 
-#: gtk/gtklayout.c:649
+#: gtk/gtklayout.c:643
 msgid "The height of the layout."
 msgstr "Višina postavitve."
 
@@ -2799,17 +2799,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Kako daleč v smeri Y naj se premakne puščica, ko je gumb spuščen"
 
-#: gtk/gtkrc.c:2280
+#: gtk/gtkrc.c:2270
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nisem uspel najti vključene datoteke: \"%s\""
 
-#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3360
+#: gtk/gtkrc.c:3350
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Predmet poti pixmap: \"%s\" mora biti absoluten, %s, vrstica %d"
@@ -3388,6 +3388,7 @@ msgid "_Yes"
 msgstr "_Da"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Povečava _100%"
 
@@ -3779,7 +3780,7 @@ msgstr "Viden kazalec"
 msgid "If the insertion cursor is shown"
 msgstr "Ali je vstavitveni kazalec viden"
 
-#: gtk/gtktextview.c:6373
+#: gtk/gtktextview.c:6366
 msgid "Input _Methods"
 msgstr "_Načini vnosa"
 
@@ -3994,7 +3995,7 @@ msgstr "Naredi razširilnike zamaknjene"
 msgid "Whether to display the column"
 msgstr "Ali naj se stolpec prikaže"
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:441
 msgid "Resizable"
 msgstr "Spremenljive velikosti"
 
@@ -4213,8 +4214,7 @@ msgid "Composite child"
 msgstr "Sestavljen otrok"
 
 #: gtk/gtkwidget.c:480
-#, fuzzy
-msgid "Whether the widget is part of a composite widget"
+msgid "Whether the widget is composed of other widgets"
 msgstr "Ali je gradnik sestavljen iz drugih gradnikov"
 
 #: gtk/gtkwidget.c:486
@@ -4306,27 +4306,27 @@ msgstr "Razmerje črte kazalca"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Razmerje v katerem naj se riše vnosni kazalec"
 
-#: gtk/gtkwindow.c:411
+#: gtk/gtkwindow.c:406
 msgid "Window Type"
 msgstr "Vrsta okna"
 
-#: gtk/gtkwindow.c:412
+#: gtk/gtkwindow.c:407
 msgid "The type of the window"
 msgstr "Vrsta okna"
 
-#: gtk/gtkwindow.c:421
+#: gtk/gtkwindow.c:416
 msgid "Window Title"
 msgstr "Naziv okna"
 
-#: gtk/gtkwindow.c:422
+#: gtk/gtkwindow.c:417
 msgid "The title of the window"
 msgstr "Naziv okna"
 
-#: gtk/gtkwindow.c:429
+#: gtk/gtkwindow.c:424
 msgid "Allow Shrink"
 msgstr "Dovoli skrčitev"
 
-#: gtk/gtkwindow.c:431
+#: gtk/gtkwindow.c:426
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4335,24 +4335,24 @@ msgstr ""
 "Če je RESNIČNO, okno nima najmanjše velikosti. Nastavljanje tega na RESNIČNO "
 "je v 99% časa slaba ideja."
 
-#: gtk/gtkwindow.c:438
+#: gtk/gtkwindow.c:433
 msgid "Allow Grow"
 msgstr "Dovoli rast"
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:434
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
 "Če je RESNIČNO, lahko uporabik poveča okno preko njegove najmanjše velikosti."
 
-#: gtk/gtkwindow.c:447
+#: gtk/gtkwindow.c:442
 msgid "If TRUE, users can resize the window."
 msgstr "Če je RESNIČNO, lahko uporabniki spreminjajo velikost okna"
 
-#: gtk/gtkwindow.c:454
+#: gtk/gtkwindow.c:449
 msgid "Modal"
 msgstr "Modalni"
 
-#: gtk/gtkwindow.c:455
+#: gtk/gtkwindow.c:450
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
@@ -4360,45 +4360,45 @@ msgstr ""
 "Če je RESNIČNO, je okno modalno (medtem, ko je to okno prikazano, druga niso "
 "uporabna)."
 
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:457
 msgid "Window Position"
 msgstr "Lega okna"
 
-#: gtk/gtkwindow.c:463
+#: gtk/gtkwindow.c:458
 msgid "The initial position of the window."
 msgstr "Začetna lega okna"
 
-#: gtk/gtkwindow.c:471
+#: gtk/gtkwindow.c:466
 msgid "Default Width"
 msgstr "Privzeta širina"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:467
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr "Privzeta širina okna, uporabljena kadar se okno pokaže prvič."
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:476
 msgid "Default Height"
 msgstr "Privzeta višina"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:477
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr "Privzeta višina okna, uporabljena kadar se okno prikaže prvič."
 
-#: gtk/gtkwindow.c:491
+#: gtk/gtkwindow.c:486
 msgid "Destroy with Parent"
 msgstr "Uniči skupaj s staršem"
 
-#: gtk/gtkwindow.c:492
+#: gtk/gtkwindow.c:487
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Ali naj bo to okno uničeno skupaj s starševskim"
 
-#: gtk/gtkwindow.c:499
+#: gtk/gtkwindow.c:494
 msgid "Icon"
 msgstr "Ikona"
 
-#: gtk/gtkwindow.c:500
+#: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ikona za to okno"
 
