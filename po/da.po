@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-02-27 18:10-0500\n"
-"PO-Revision-Date: 2002-02-23 14:06+0100\n"
+"POT-Creation-Date: 2002-02-28 19:58+0100\n"
+"PO-Revision-Date: 2002-02-28 19:59+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -622,7 +622,7 @@ msgstr "kunne ikke allokere billedmellemlager på %u byte"
 #.
 #: gtk/gtkaccellabel.c:116
 msgid "Shift"
-msgstr ""
+msgstr "Skift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -631,7 +631,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:122
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -640,7 +640,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:128
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 # RETMIG: undersøg hvad closure betyder i denne forbindelse
 #: gtk/gtkaccellabel.c:136
@@ -1965,7 +1965,7 @@ msgstr "y-position for barnekontrollen"
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:61
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "abcdefghijkæøå ABCDEFGHIJKÆØÅ"
 
 #: gtk/gtkfontsel.c:194
 msgid "Font name"
@@ -2810,26 +2810,22 @@ msgid "Spacing between step buttons and thumb"
 msgstr "Mellemrum mellem pileknapper og greb"
 
 #: gtk/gtkrange.c:329
-#, fuzzy
 msgid "Arrow X Displacement"
-msgstr "Vandret flytning af barn"
+msgstr "Vandret flytning af pil"
 
 #: gtk/gtkrange.c:330
-#, fuzzy
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
-msgstr "Hvor lang i x-retningen barnet flyttes når knappen trykkes ned"
+msgstr "Hvor lang i x-retningen pilen flyttes når knappen trykkes ned"
 
 #: gtk/gtkrange.c:337
-#, fuzzy
 msgid "Arrow Y Displacement"
-msgstr "Lodret flytning af barn"
+msgstr "Lodret flytning af pil"
 
 #: gtk/gtkrange.c:338
-#, fuzzy
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
-msgstr "Hvor lang i y-retningen barnet flyttes når knappen trykkes ned"
+msgstr "Hvor lang i y-retningen pilen flyttes når knappen trykkes ned"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3061,13 +3057,12 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr "Antal punkter markøren må flyttes før det opfattes som et træk"
 
 #: gtk/gtksettings.c:215
-#, fuzzy
 msgid "Font Name"
 msgstr "Skrifttypenavn"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
-msgstr ""
+msgstr "Navnet på den skrifttype der skal bruges som standard"
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
