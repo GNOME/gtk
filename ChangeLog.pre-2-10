@@ -1,3 +1,29 @@
+Thu Mar  5 01:22:06 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Unset allocation
+	  on unparent, to force reallocation if we get adding back
+	  to a new parent which is already size-allocated.
+
+	* gtk/gtktreeitem.c: Keep track of separate +/- pixmaps
+	  for each colormap, removed the idle hack.
+
+	* gdk/gdk.c: Don't warn when unable to open XIM method,
+	  since X11R5 apparently has no default method.
+
+	* gtk/gtkwidget.c (gtk_widget_set_style_internal): Don't
+	  call size_request on initial emission - since the
+	  widget size isn't set yet, it can't change.
+
+	* gtk/Makefile.am: New rules 'test' and 'test-debug' to run
+	  testgtk with the correct working directory.
+
+	* gtk/gtkentry.c (gtk_move_forward_word): 
+	  Check for position at end of line.
+
+	* gtk/gtkinputdialog.h (struct _GtkInputDialogClass): 
+	  removed 'gpointer data' arguments from default handler
+	  structures.
+
 Wed Mar  4 20:06:47 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gdk/gdk.c (gdk_event_translate): Drags can only be started with
@@ -42,7 +68,6 @@ Mon Mar  2 17:48:38 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/testgtk.c: GList where there should have been GSList
 
->>>>>>> 1.174
 Mon Mar  2 12:26:59 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.c: Changed 'entry != NULL' to 'editable != NULL'

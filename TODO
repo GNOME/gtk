@@ -61,6 +61,8 @@ Bugs:
 
  * Change bitfields to guints from enums for C++ ?
 
+ * Force paned window handle to be kept on screen
+
 Additions:
  * it might be good to ues stdio and getch() instead of 1-character reads.
    so one can take advantage of buffering. Currently each read() takes a separate
@@ -86,7 +88,6 @@ Additions:
    void gtk_rc_string_export (const gchar *rc_additions,
                               gboolean     override_rc_styles);
  
-
 TODO AFTER GTK 1.0
 ------------------
 
@@ -210,3 +211,29 @@ TODO AFTER GTK 1.0
     characters be shown?)
 
   - Horizontal scrolling
+
+  - Disable pasting compound text
+
+ ? Allow moving the separator for paned widgets by dragging 
+   it directly instead of using the handle. 
+
+ ? Mark public use of gtk_tree_remove_item as deprecated - it should be used
+   as:
+         gtk_container_remove (GTK_CONTAINER(tree), widget);
+
+ * Standardize that all strings should be passed as gchar *, not 
+   guchar *. But what about non-string data? (gdk_property_change,
+   gtk_selection_data_set) X makes these sort of things guchar...
+
+ * Check into XAddConnectionWatch - is this needed for XIM?
+
+ * Places where a _full variant is needed:
+
+    gtk_clist_set_row_data
+    gtk_init_add
+    gtk_menu_popup
+    gtk_toolbar_prepend_element
+    gtk_toolbar_insert_element
+    gtk_widget_dnd_data_set (should be guchar * with a copy?
+                             shouldn't be there at all...)
+    ??? GtkDrawingarea.draw_data

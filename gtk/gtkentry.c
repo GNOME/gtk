@@ -731,6 +731,9 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  gtk_grab_add (widget);
 
 	  tmp_pos = gtk_entry_position (entry, event->x + entry->scroll_offset);
+	  /* Set it now, so we display things right. We'll unset it
+	   * later if things don't work out */
+	  editable->has_selection = TRUE;
 	  gtk_entry_set_selection (editable, tmp_pos, tmp_pos);
 	  editable->current_pos = editable->selection_start_pos;
 	  break;
@@ -749,7 +752,7 @@ gtk_entry_button_press (GtkWidget      *widget,
     }
   else if (event->type == GDK_BUTTON_PRESS)
     {
-      if (event->button == 2)
+      if ((event->button == 2) && editable->editable)
 	{
 	  if (editable->selection_start_pos == editable->selection_end_pos ||
 	      editable->has_selection)
@@ -765,6 +768,9 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  gtk_entry_set_selection (editable, tmp_pos, tmp_pos);
 	  editable->has_selection = FALSE;
 	  editable->current_pos = editable->selection_start_pos;
+
+	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
+	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
 	}
     }
 
@@ -795,10 +801,9 @@ gtk_entry_button_release (GtkWidget      *widget,
 	  if (gtk_selection_owner_set (widget,
 				       GDK_SELECTION_PRIMARY,
 				       event->time))
-	    {
-	      editable->has_selection = TRUE;
-	      gtk_entry_queue_draw (entry);
-	    }
+	    editable->has_selection = TRUE;
+	  else
+	    gtk_entry_queue_draw (entry);
 	}
       else
 	{
@@ -809,8 +814,6 @@ gtk_entry_button_release (GtkWidget      *widget,
   else if (event->button == 3)
     {
       gtk_grab_remove (widget);
-      if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
-	gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
     }
 
   return FALSE;
@@ -1577,7 +1580,7 @@ gtk_move_forward_word (GtkEntry *entry)
   GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
-  if (entry->text)
+  if (entry->text && (editable->current_pos < entry->text_length))
     {
       text = entry->text;
       i = editable->current_pos;

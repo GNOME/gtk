@@ -34,6 +34,20 @@ enum {
   LAST_SIGNAL
 };
 
+typedef struct _GtkTreePixmaps GtkTreePixmaps;
+
+struct _GtkTreePixmaps {
+  gint refcount;
+  GdkColormap *colormap;
+  
+  GdkPixmap *pixmap_plus;
+  GdkPixmap *pixmap_minus;
+  GdkBitmap *mask_plus;
+  GdkBitmap *mask_minus;
+};
+
+static GList *pixmaps = NULL;
+
 typedef void (*GtkTreeItemSignal) (GtkObject *object,
 				   gpointer   arg1,
 				   gpointer   data);
@@ -69,6 +83,9 @@ static void gtk_tree_item_subtree_button_changed_state (GtkWidget *widget);
 
 static void gtk_tree_item_map(GtkWidget*);
 static void gtk_tree_item_unmap(GtkWidget*);
+
+static void gtk_tree_item_add_pixmaps    (GtkTreeItem       *tree_item);
+static void gtk_tree_item_remove_pixmaps (GtkTreeItem       *tree_item);
 
 static GtkItemClass *parent_class = NULL;
 static GtkContainerClass *container_class = NULL;
@@ -338,33 +355,87 @@ gtk_tree_item_collapse (GtkTreeItem *tree_item)
 
 }
 
-static gint
-gtk_tree_item_idle_hack (GtkTreeItem *tree_item)
+static void
+gtk_tree_item_add_pixmaps (GtkTreeItem *tree_item)
 {
-  static GdkPixmap *pixmap_plus = NULL;
-  static GdkPixmap *pixmap_minus = NULL;
-  static GdkBitmap *mask_plus = NULL; 
-  static GdkBitmap *mask_minus = NULL;
-  GdkColor xpmcolor = { 0, 0, 0, 0 };
-  
-  if (!pixmap_plus)
+  GList *tmp_list;
+  GdkColormap *colormap;
+  GtkTreePixmaps *pixmap_node = NULL;
+
+  if (tree_item->pixmaps)
+    return;
+
+  colormap = gtk_widget_get_colormap (GTK_WIDGET (tree_item));
+
+  tmp_list = pixmaps;
+  while (tmp_list)
     {
+      pixmap_node = (GtkTreePixmaps *)tmp_list->data;
+
+      if (pixmap_node->colormap == colormap)
+	break;
+      
+      tmp_list = tmp_list->next;
+    }
+
+  if (tmp_list)
+    {
+      pixmap_node->refcount++;
+      tree_item->pixmaps = tmp_list;
+    }
+  else
+    {
+      pixmap_node = g_new (GtkTreePixmaps, 1);
+
+      pixmap_node->colormap = colormap;
+      pixmap_node->refcount = 1;
+
       /* create pixmaps for plus icon */
-      pixmap_plus = gdk_pixmap_create_from_xpm_d (GTK_WIDGET (tree_item)->window,
-						  &mask_plus,
-						  &xpmcolor,
-						  tree_plus);
+      pixmap_node->pixmap_plus = 
+	gdk_pixmap_create_from_xpm_d (GTK_WIDGET (tree_item)->window,
+				      &pixmap_node->mask_plus,
+				      NULL,
+				      tree_plus);
       
       /* create pixmaps for minus icon */
-      pixmap_minus = gdk_pixmap_create_from_xpm_d (GTK_WIDGET (tree_item)->window,
-						   &mask_minus,
-						   &xpmcolor,
-						   tree_minus);
-    }
-  gtk_pixmap_set (GTK_PIXMAP (tree_item->plus_pix_widget), pixmap_plus, mask_plus);
-  gtk_pixmap_set (GTK_PIXMAP (tree_item->minus_pix_widget), pixmap_minus, mask_minus);
+      pixmap_node->pixmap_minus = 
+	gdk_pixmap_create_from_xpm_d (GTK_WIDGET (tree_item)->window,
+				      &pixmap_node->mask_minus,
+				      NULL,
+				      tree_minus);
 
-  return FALSE;
+      tree_item->pixmaps = pixmaps = g_list_prepend (pixmaps, pixmap_node);
+    }
+  
+  gtk_pixmap_set (GTK_PIXMAP (tree_item->plus_pix_widget), 
+		  pixmap_node->pixmap_plus, pixmap_node->mask_plus);
+  gtk_pixmap_set (GTK_PIXMAP (tree_item->minus_pix_widget), 
+		  pixmap_node->pixmap_minus, pixmap_node->mask_minus);
+}
+
+static void
+gtk_tree_item_remove_pixmaps (GtkTreeItem *tree_item)
+{
+  if (tree_item->pixmaps)
+    {
+      GtkTreePixmaps *pixmap_node = (GtkTreePixmaps *)tree_item->pixmaps->data;
+      
+      g_assert (pixmap_node->refcount > 0);
+      
+      if (--pixmap_node->refcount == 0)
+	{
+	  gdk_pixmap_unref (pixmap_node->pixmap_plus);
+	  gdk_bitmap_unref (pixmap_node->mask_plus);
+	  gdk_pixmap_unref (pixmap_node->pixmap_minus);
+	  gdk_bitmap_unref (pixmap_node->mask_minus);
+	  
+	  pixmaps = g_list_remove_link (pixmaps, tree_item->pixmaps);
+	  g_list_free_1 (tree_item->pixmaps);
+	  g_free (pixmap_node);
+	}
+
+      tree_item->pixmaps = NULL;
+    }
 }
 
 static void
@@ -379,9 +450,7 @@ gtk_tree_item_realize (GtkWidget *widget)
   gdk_window_set_background (widget->window, 
 			     &widget->style->base[GTK_STATE_NORMAL]);
 
-  gtk_idle_add_priority (-64,
-			 (GtkFunction) gtk_tree_item_idle_hack,
-			 (gpointer) widget);
+  gtk_tree_item_add_pixmaps (GTK_TREE_ITEM (widget));
 }
 
 static void
@@ -875,6 +944,7 @@ gtk_tree_item_destroy (GtkObject *object)
       item->pixmaps_box = NULL;
     }
 
+
   /* destroy plus pixmap */
   if (item->plus_pix_widget)
     {
@@ -890,6 +960,11 @@ gtk_tree_item_destroy (GtkObject *object)
       gtk_widget_unref (item->minus_pix_widget);
       item->minus_pix_widget = NULL;
     }
+
+  /* By removing the pixmaps here, and not in unrealize, we depend on
+   * the fact that a widget can never change colormap or visual.
+   */
+  gtk_tree_item_remove_pixmaps (item);
   
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);

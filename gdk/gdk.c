@@ -551,8 +551,6 @@ gdk_init (int    *argc,
   xim_window = (GdkWindow*)NULL;
 
   gdk_im_open (NULL, NULL, NULL);
-  if (gdk_im_get () == NULL)
-    g_warning ("unable to open input method.");
 #endif
 
   initialized = 1;
@@ -3358,7 +3356,7 @@ gdk_im_open (XrmDatabase db, gchar* res_name, gchar* res_class)
   xim_im = XOpenIM (GDK_DISPLAY(), db, res_name, res_class);
   if (xim_im == NULL)
     {
-      g_warning ("Don\'t open IM.");
+      GDK_NOTE (XIM, g_warning ("Unable to open open IM."));
       return FALSE;
     }
   XGetIMValues (xim_im, XNQueryInputStyle, &xim_styles, NULL, NULL);

@@ -269,3 +269,9 @@ files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
 	  echo $$p; \
 	done
+
+test: testgtk
+	( CWD=`pwd` ; cd $(srcdir) ; $$CWD/testgtk )
+
+test-debug: testgtk
+	( CWD=`pwd` ; cd $(srcdir) ; gdb $$CWD/testgtk )
