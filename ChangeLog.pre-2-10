@@ -1,3 +1,8 @@
+Thu May 30 07:59:38 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (gtk_menu_style_set): add
+	gtk_menu_style_set(). fixes #79345
+
 2002-05-29  Dave Camp  <dave@ximian.com>
 
 	* gtk/gtkdnd.c (gtk_drag_end): Disconnect from keypress events.

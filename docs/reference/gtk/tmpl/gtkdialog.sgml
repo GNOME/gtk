@@ -298,12 +298,12 @@ was clicked.
 
 </para>
 
-<!-- ##### ARG GtkDialog:button-spacing ##### -->
+<!-- ##### ARG GtkDialog:content-area-border ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkDialog:content-area-border ##### -->
+<!-- ##### ARG GtkDialog:button-spacing ##### -->
 <para>
 
 </para>

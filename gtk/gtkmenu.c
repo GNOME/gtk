@@ -113,6 +113,9 @@ static void     gtk_menu_handle_scrolling  (GtkMenu          *menu,
 					    gboolean         enter);
 static void     gtk_menu_set_tearoff_hints (GtkMenu          *menu,
 					    gint             width);
+static void     gtk_menu_style_set         (GtkWidget        *widget,
+					    GtkStyle         *previous_style);
+
 
 static void     gtk_menu_stop_navigating_submenu       (GtkMenu          *menu);
 static gboolean gtk_menu_stop_navigating_submenu_cb    (gpointer          user_data);
@@ -206,6 +209,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->hide_all = gtk_menu_hide_all;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
   widget_class->leave_notify_event = gtk_menu_leave_notify;
+  widget_class->style_set = gtk_menu_style_set;
 
   container_class->remove = gtk_menu_remove;
   
@@ -1258,6 +1262,20 @@ gtk_menu_reorder_child (GtkMenu   *menu,
       if (GTK_WIDGET_VISIBLE (menu_shell))
         gtk_widget_queue_resize (GTK_WIDGET (menu_shell));
     }   
+}
+
+static void
+gtk_menu_style_set (GtkWidget *widget,
+		    GtkStyle  *previous_style)
+{
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      GtkMenu *menu = GTK_MENU (widget);
+      
+      gtk_style_set_background (widget->style, menu->bin_window, GTK_STATE_NORMAL);
+      gtk_style_set_background (widget->style, menu->view_window, GTK_STATE_NORMAL);
+      gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+    }
 }
 
 static void
