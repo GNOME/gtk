@@ -32,6 +32,11 @@ a widget used to choose from a list of items.
 
 </para>
 
+<!-- ##### ARG GtkComboBox:add-tearoffs ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkComboBox:column-span-column ##### -->
 <para>
 
@@ -76,6 +81,15 @@ a widget used to choose from a list of items.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_combo_box_get_wrap_width ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_combo_box_set_wrap_width ##### -->
 <para>
 
@@ -85,6 +99,15 @@ a widget used to choose from a list of items.
 @width: 
 
 
+<!-- ##### FUNCTION gtk_combo_box_get_row_span_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_combo_box_set_row_span_column ##### -->
 <para>
 
@@ -92,6 +115,15 @@ a widget used to choose from a list of items.
 
 @combo_box: 
 @row_span: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_column_span_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_set_column_span_column ##### -->
@@ -201,6 +233,15 @@ a widget used to choose from a list of items.
 
 @combo_box: 
 @position: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_active_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_popup ##### -->

@@ -191,6 +191,11 @@ linkend="GtkTreeModel">GtkTreeModel</link> interface.
 
 </para>
 
+<!-- ##### ARG GtkTreeView:hover-selection ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeView:model ##### -->
 <para>
 
@@ -949,6 +954,42 @@ has some similarity to strcmp() returning 0 for equal strings.
 <!-- # Unused Parameters # -->
 @search_compare_func: 
 @search_data: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_fixed_height_mode ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_fixed_height_mode ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@hover: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_hover_selection ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_hover_selection ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@hover: 
 
 
 <!-- ##### USER_FUNCTION GtkTreeDestroyCountFunc ##### -->

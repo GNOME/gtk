@@ -91,6 +91,11 @@ should be accessed using the functions below.
 @menu: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkMenu:tearoff-state ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenu:tearoff-title ##### -->
 <para>
 
@@ -359,6 +364,15 @@ Returns the #GtkWidget that the menu is attached to.
 
 @menu: a #GtkMenu.
 @Returns: the #GtkWidget that the menu is attached to.
+
+
+<!-- ##### FUNCTION gtk_menu_get_for_attach_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
 
 
 <!-- ##### USER_FUNCTION GtkMenuPositionFunc ##### -->

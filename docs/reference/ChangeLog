@@ -1,3 +1,13 @@
+Tue May 11 00:29:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkpixmap.sgml: 
+	* gtk/tmpl/gtkoldeditable.sgml: 
+	* gtk/tmpl/gtklistitem.sgml: 
+	* gtk/tmpl/gtklist.sgml: 
+	* gtk/tmpl/gtkitemfactory.sgml: 
+	* gtk/tmpl/gtkctree.sgml: 
+	* gtk/tmpl/gtkclist.sgml: Add deprecation notes.
+
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_menu_get_for_attach_widet,

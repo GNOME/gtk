@@ -23,6 +23,10 @@ is %NULL, the position is at the root of the tree and if the sibling
 is %NULL, it will be the last child of parent, otherwise it will be
 inserted just before the sibling.
 </para>
+<para>
+GtkCTree has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkTreeView instead.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

@@ -6,7 +6,7 @@ A factory for menus
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-#GtkItemFactory has been deprecated in favour of #GtkUIManager.
+As of GTK+ 2.4, #GtkItemFactory has been deprecated in favour of #GtkUIManager.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

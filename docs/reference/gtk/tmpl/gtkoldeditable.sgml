@@ -6,7 +6,8 @@ Base class for text-editing widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+GtkOldEditable has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use the #GtkEditable interface instead.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

@@ -17,6 +17,10 @@ X server and so is not available to the client application.
 If you want to create graphical images which can be manipulated by the
 application, look at #GtkImage and #GdkRGB.
 </para>
+<para>
+GtkPixmap has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkImage instead.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

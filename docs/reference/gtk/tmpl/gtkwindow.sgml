@@ -101,6 +101,11 @@ Toplevel which can contain other widgets
 
 </para>
 
+<!-- ##### ARG GtkWindow:focus-on-map ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWindow:gravity ##### -->
 <para>
 
@@ -916,6 +921,15 @@ Deprecated alias for gtk_window_set_position().
 
 
 <!-- ##### FUNCTION gtk_window_get_accept_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_focus_on_map ##### -->
 <para>
 
 </para>
