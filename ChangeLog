@@ -1,3 +1,7 @@
+Mon Nov 24 13:47:39 GMT 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: start 2.x Section 4 updates
+
 Mon Nov 24 04:05:15 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkradiotoolbutton.[ch]

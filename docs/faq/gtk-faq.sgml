@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>November 20th 2003</date>
+  <date>November 24th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -820,7 +820,7 @@ However, bindings for many other languages are available.</para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How do I get started?</title>
+<title>How do I get started? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>So, after you have installed GTK+ there are a couple of
 things that can ease you into developing applications with
@@ -830,10 +830,10 @@ http://www.gtk.org/tutorial/</ulink>, which is undergoing
 development. This will introduce you to writing applications
 using C.</para>
 
-<para>The Tutorial doesn't (yet) contain information on all of
+<para>The GTK+ Tutorial doesn't contain information on all of
 the widgets that are in GTK+. For example code on how to use
-the basics of all the GTK+ widgets you should look at the file
-gtk/testgtk.c (and associated source files) within the GTK+
+the basics of all the GTK+ widgets you should look in the
+directory 'tests' (and associated source files) within the GTK+
 distribution. Looking at these examples will give you a good
 grounding on what the widgets can do.</para>
 
@@ -869,10 +869,17 @@ http://developer.gnome.org/doc/API/2.0/libglade/libglade-notes.html#libglade-bas
 
 <sect1>
 <title>How do I write security sensitive/SUID/SGID programs with GTK+?
-Is GTK+ secure? What's this GTK_MODULES security hole I heard about?</title>
+Is GTK+ secure? What's this GTK_MODULES security hole I heard about?
+<emphasis>[GTK 2.x]</emphasis></title>
 
-<para>The short answer to this question is: Don't write SUID/SGID
+<para>The short answer to this question is: you can't, so don't write SUID/SGID
 programs with GTK+</para>
+
+<para>GTK+ will refuse to run with elevated privileges, as it is not designed
+to be used in this manner. The only correct way to write a setuid program with
+a graphical user interface is to have a setuid backend that communicates with
+the non-setuid graphical user interface via a mechanism such as a pipe and that
+considers the input it receives to be untrusted.</para>
 
 <para>For a more thorough explanation of the GTK+ Developers position on
 this issue see <ulink
@@ -887,7 +894,7 @@ url="http://www.gtk.org/setuid.html">http://www.gtk.org/setuid.html</ulink>.</pa
 but it failed. Any clue? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Since you are good at coding, we will not deal with
-compile time error here :)</para>
+compile time errors here :)</para>
 
 <para>The classic command line to compile a GTK+ based program is</para>
 <para><literallayout>
@@ -896,7 +903,7 @@ compile time error here :)</para>
 
 <para>You should notice the backquote character which is used
 in this command line. A common mistake when you start a GTK+
-based development is to use quote instead of backquotes. If
+based development is to use quotes instead of backquotes. If
 you do so, the compiler will complain about an unknown file
 called <filename>pkg-config gtk+-2.0 --cflags --libs</filename>. The
 text in backquotes is an instruction to your shell to
@@ -924,7 +931,7 @@ needed libraries.</simpara>
 <title>What about using the <command>make</command>
 utility? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>This is a sample makefile which compile a GTK+ based
+<para>This is a sample makefile which compiles a GTK+ based
 program:</para>
 
 <programlisting role="C">
@@ -954,14 +961,14 @@ should read either the related man page or the relevant info file.</para>
 
 <sect1>
 <title>I use the backquote stuff in my makefiles, but my make
-process failed.</title>
+process failed. <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>The backquote construction seems to not be accepted by
 some old <command>make</command> utilities. If you use one of these, the
 make process will probably fail. In order to have the
 backquote syntax working again, you should use the GNU make
 utility (get it on the GNU ftp server at <ulink
-url="ftp://ftp.gnu.org/">ftp://ftp.gnu.org/</ulink>).</para>
+url="ftp://ftp.gnu.org/gnu/make/">ftp://ftp.gnu.org/gnu/make/</ulink>).</para>
 
 </sect1>
 
@@ -985,7 +992,7 @@ relevant packages. These are:</para>
 </listitem>
 </itemizedlist>
 
-<para>You'll find these packages on the GNU main ftp server
+<para>You'll find these packages on the main GNU ftp server
 (<ulink url="ftp://ftp.gnu.org/">ftp://ftp.gnu.org/</ulink>)
 or on any GNU mirror.</para>
 
@@ -1053,7 +1060,7 @@ resources that deal with autoconf and automake).</para>
 <sect1>
 <title>I try to debug my GTK+ application with gdb, but it
 hangs my X server when I hit some breakpoint. Any
-Idea?</title>
+Idea? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>From Federico Mena Quintero:</para>
 
