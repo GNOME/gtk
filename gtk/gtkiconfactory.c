@@ -304,8 +304,8 @@ gtk_icon_factory_remove_default (GtkIconFactory  *factory)
   g_object_unref (factory);
 }
 
-static void
-ensure_default_icons (void)
+void
+_gtk_icon_factory_ensure_default_icons (void)
 {
   if (gtk_default_icons == NULL)
     {
@@ -348,7 +348,7 @@ gtk_icon_factory_lookup_default (const gchar *stock_id)
       tmp_list = g_slist_next (tmp_list);
     }
 
-  ensure_default_icons ();
+  _gtk_icon_factory_ensure_default_icons ();
   
   return gtk_icon_factory_lookup (gtk_default_icons, stock_id);
 }
@@ -2938,7 +2938,7 @@ _gtk_icon_factory_list_ids (void)
 
   ids = NULL;
 
-  ensure_default_icons ();
+  _gtk_icon_factory_ensure_default_icons ();
   
   tmp_list = all_icon_factories;
   while (tmp_list != NULL)

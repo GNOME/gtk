@@ -180,6 +180,7 @@ GtkIconSize      gtk_icon_source_get_size                 (const GtkIconSource *
 /* ignore this */
 void _gtk_icon_set_invalidate_caches (void);
 GSList* _gtk_icon_factory_list_ids (void);
+void _gtk_icon_factory_ensure_default_icons (void);
 
 #ifdef __cplusplus
 }

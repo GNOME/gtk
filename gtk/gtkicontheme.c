@@ -37,6 +37,7 @@
 #endif /* G_OS_WIN32 */
 
 #include "gtkicontheme.h"
+#include "gtkiconfactory.h"
 #include "gtkiconcache.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
@@ -2871,6 +2872,8 @@ find_builtin_icon (const gchar *icon_name,
   gint min_difference = G_MAXINT;
   gboolean has_larger = FALSE;
   BuiltinIcon *min_icon = NULL;
+  
+  _gtk_icon_factory_ensure_default_icons ();
   
   if (!icon_theme_builtin_icons)
     return NULL;

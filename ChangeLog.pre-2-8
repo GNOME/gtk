@@ -1,3 +1,13 @@
+2005-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Make gtk_icon_theme_load_icon() work independent of
+	icon factory initialization.  (#162791, Tristan Van Berkom)
+	
+	* gtk/gtkiconfactory.[hc]: Rename ensure_default_icons to
+	_gtk_icon_factory_ensure_default_icons, and make it non-static.
+
+	* gtk/gtkicontheme.c (find_builtin_icon): ..and call it here.
+
 2005-01-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_remove_shortcut_folder): 
