@@ -84,4 +84,19 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
   Window. The scrollbar policy is set on the scrolled window with
   gtk_scrolled_window_set_policy() and not on the child widgets
   (e.g. GtkCList's gtk_clist_set_policy() was removed).
+
+* the GTK_BASIC flag got removed, and with it the corresponding
+  macro and function GTK_WIDGET_BASIC() and gtk_widget_basic().
   
+* all freeze/thaw methods in gtk work in an incremental way now.
+  code portions like:
+  gboolean frozen;
+  frozen = GTK_CLIST_FROZEN (clist);
+  gtk_clist_freeze (clist);
+  [...]
+  if (!frozen)
+    gtk_clist_thaw (clist);
+  will not work anymore, they have to be modified to simply:
+  gtk_clist_freeze (clist);
+  [...]
+  gtk_clist_thaw (clist);
