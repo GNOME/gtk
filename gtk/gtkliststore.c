@@ -795,7 +795,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
   gint column;
   gboolean emit_signal = FALSE;
   gboolean maybe_need_sort = FALSE;
-  GtkTreeIterCompareFunc func;
+  GtkTreeIterCompareFunc func = NULL;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (VALID_ITER (iter, list_store));

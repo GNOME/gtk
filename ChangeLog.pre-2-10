@@ -1,3 +1,9 @@
+Mon Feb 11 16:48:34 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_set_valist): set value of
+	func to NULL during initialization (we don't use func in the
+	!SORTED case, so we just silent the compiler here) (#71029)
+
 Mon Feb 11 16:40:44 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): install presize
