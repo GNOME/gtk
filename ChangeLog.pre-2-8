@@ -1,3 +1,9 @@
+Tue Feb 26 19:45:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_set_popdown_strings):
+	Call gtk_combo_set_popdown_strings() in case
+	the combo is up currently. (#63535, Skip Montaro)
+
 Tue Feb 26 19:38:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init):

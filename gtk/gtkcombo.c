@@ -936,6 +936,8 @@ gtk_combo_set_popdown_strings (GtkCombo * combo, GList * strings)
   g_return_if_fail (GTK_IS_COMBO (combo));
   g_return_if_fail (strings != NULL);
 
+  gtk_combo_popdown_list (combo);
+
   gtk_list_clear_items (GTK_LIST (combo->list), 0, -1);
   list = strings;
   while (list)
