@@ -2341,16 +2341,13 @@ gtk_tree_view_draw_focus (GtkWidget *widget)
   height = BACKGROUND_HEIGHT (node) - 1;
   if (tree_view->priv->focus_column != NULL)
     {
-      gboolean visible;
-      gboolean can_focus;
+      GtkTreeIter iter;
 
-      g_object_get (G_OBJECT (tree_view->priv->focus_column->cell),
-		    "can_activate", &can_focus,
-		    "visible", &visible,
-		    NULL);
-      if (can_focus && visible)
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, cursor_path);
+      gtk_tree_view_column_cell_set_cell_data (tree_view->priv->focus_column, tree_view->priv->model, &iter);
+
+      if (gtk_tree_view_column_cell_can_focus (tree_view->priv->focus_column))
 	{
-	  GtkTreeIter iter;
 	  GdkRectangle cell_area;
 	  gint x_offset;
 	  gint y_offset;
@@ -2360,10 +2357,9 @@ gtk_tree_view_draw_focus (GtkWidget *widget)
 	  cell_area.width = tree_view->priv->focus_column->displayed_width;
 	  cell_area.height = CELL_HEIGHT (node, vertical_separator);
 
-	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, cursor_path);
-	  gtk_tree_view_column_cell_set_cell_data (tree_view->priv->focus_column, tree_view->priv->model, &iter);
+	  gtk_tree_view_column_cell_get_size (tree_view->priv->focus_column,
+					      &cell_area, &x_offset, &y_offset, &width, &height);
 
-	  gtk_cell_renderer_get_size (tree_view->priv->focus_column->cell, GTK_WIDGET (tree_view), &cell_area, &x_offset, &y_offset, &width, &height);
 	  width += 2;
 	  height += 2;
 	  x = cell_area.x + x_offset - 1;
@@ -4427,7 +4423,7 @@ count_children_helper (GtkRBTree *tree,
 {
   if (node->children)
     _gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, data);
-  ((gint *)data)++;
+  (*((gint *)data))++;
 }
 
 static void
@@ -6598,7 +6594,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
   while (attribute != NULL)
     {
       column_id = va_arg (args, gint);
-      gtk_tree_view_column_add_attribute (column, attribute, column_id);
+      gtk_tree_view_column_add_attribute (column, cell, attribute, column_id);
       attribute = va_arg (args, gchar *);
     }
 
@@ -6644,7 +6640,7 @@ gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_vie
 
   gtk_tree_view_column_set_title (column, title);
   gtk_tree_view_column_set_cell_renderer (column, cell);
-  gtk_tree_view_column_set_cell_data_func (column, func, data, dnotify);
+  gtk_tree_view_column_set_cell_data_func (column, cell, func, data, dnotify);
 
   gtk_tree_view_insert_column (tree_view, column, position);
 
@@ -7094,7 +7090,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   node->children->parent_node = node;
 
   gtk_tree_model_iter_children (tree_view->priv->model, &temp, &iter);
-  temp = iter;
+
   gtk_tree_view_build_tree (tree_view,
 			    node->children,
 			    &temp,
@@ -7163,7 +7159,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
     return FALSE;
 
   TREE_VIEW_INTERNAL_ASSERT (gtk_tree_model_iter_children (tree_view->priv->model, &children, &iter), FALSE);
-  children = iter;
+
   gtk_tree_view_discover_dirty (tree_view,
 				node->children,
 				&children,
@@ -8087,7 +8083,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   GtkTreeIter   iter;
   GtkRBTree    *tree;
   GtkRBNode    *node;
-  GtkCellRenderer *cell;
   gint i;
   gint cell_offset;
   GList *list;
@@ -8130,7 +8125,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                              -1);
 
   gdk_draw_rectangle (drawable,
-                      widget->style->base_gc[GTK_WIDGET_STATE (widget)],
+                      widget->style->base_gc [GTK_WIDGET_STATE (widget)],
                       TRUE,
                       0, 0,
                       bin_window_width + 2,
@@ -8147,16 +8142,12 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
     {
       GtkTreeViewColumn *column = list->data;
       GdkRectangle cell_area;
-      gboolean visible;
       gint vertical_separator;
 
       if (!column->visible)
         continue;
 
-      cell = column->cell;
-      gtk_tree_view_column_cell_set_cell_data (column,
-					       tree_view->priv->model,
-					       &iter);
+      gtk_tree_view_column_cell_set_cell_data (column, tree_view->priv->model, &iter);
 
       background_area.x = cell_offset;
       background_area.width = column->displayed_width;
@@ -8174,15 +8165,13 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
           cell_area.width -= depth * tree_view->priv->tab_offset;
         }
 
-      g_object_get (G_OBJECT (cell), "visible", &visible, NULL);
-      if (visible)
-	gtk_cell_renderer_render (cell,
-				  drawable,
-				  widget,
-				  &background_area,
-				  &cell_area,
-				  NULL,
-				  0);
+      if (gtk_tree_view_column_cell_is_visible (column))
+	gtk_tree_view_column_cell_render (column,
+					  drawable,
+					  &background_area,
+					  &cell_area,
+					  NULL,
+					  0);
 
       cell_offset += column->displayed_width;
     }

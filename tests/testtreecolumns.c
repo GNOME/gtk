@@ -608,7 +608,7 @@ main (int argc, char *argv[])
   column = gtk_tree_view_column_new_with_attributes ("Visible", cell, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (left_tree_view), column);
   g_object_unref (G_OBJECT (column));
-  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_box_pack_start (GTK_BOX (hbox), swindow, TRUE, TRUE, 0);
 
   /* Middle Pane */
@@ -667,7 +667,7 @@ main (int argc, char *argv[])
   cell = gtk_cell_renderer_toggle_new ();
   g_signal_connect_data (G_OBJECT (cell), "toggled", (GCallback) set_visible, top_right_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
-  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (top_right_tree_view), column);
 
   gtk_container_add (GTK_CONTAINER (swindow), top_right_tree_view);
@@ -682,7 +682,7 @@ main (int argc, char *argv[])
   cell = gtk_cell_renderer_toggle_new ();
   g_signal_connect_data (G_OBJECT (cell), "toggled", (GCallback) set_visible, bottom_right_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
-  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (bottom_right_tree_view), column);
   gtk_container_add (GTK_CONTAINER (swindow), bottom_right_tree_view);
   gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);

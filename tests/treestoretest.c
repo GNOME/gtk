@@ -260,7 +260,7 @@ make_window (gint view_type)
       break;
     }
 
-  gtk_tree_view_set_rules_hint (tree_view, TRUE);
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
   selection = G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)));
   gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection), GTK_TREE_SELECTION_SINGLE);
 

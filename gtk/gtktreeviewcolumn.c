@@ -32,8 +32,6 @@
 enum
 {
   PROP_0,
-  
-  PROP_CELL_RENDERER,
   PROP_VISIBLE,
   PROP_SIZING,
   PROP_WIDTH,
@@ -54,6 +52,19 @@ enum
   LAST_SIGNAL
 };
 
+typedef struct _GtkTreeViewColumnCellInfo GtkTreeViewColumnCellInfo;
+struct _GtkTreeViewColumnCellInfo
+{
+  GtkCellRenderer *cell;
+  GSList *attributes;
+  GtkTreeCellDataFunc func;
+  gpointer func_data;
+  GtkDestroyNotify destroy;
+  guint16 padding;
+  guint expand : 1;
+  guint fill : 1;
+  guint pack : 1;
+};
 
 /* Type methods */
 static void gtk_tree_view_column_init                          (GtkTreeViewColumn       *tree_column);
@@ -92,8 +103,10 @@ static void gtk_tree_view_column_sort                          (GtkTreeViewColum
 								gpointer                 data);
 static void gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn       *tree_column);
 static void gtk_tree_view_column_set_attributesv               (GtkTreeViewColumn       *tree_column,
+								GtkCellRenderer         *cell_renderer,
 								va_list                  args);
-
+static GtkTreeViewColumnCellInfo *gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
+								      GtkCellRenderer   *cell_renderer);
 
 
 
@@ -151,14 +164,6 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 		   gtk_marshal_VOID__VOID,
                    GTK_TYPE_NONE, 0);
 
-  g_object_class_install_property (object_class,
-                                   PROP_CELL_RENDERER,
-                                   g_param_spec_object ("cell_renderer",
-                                                        _("Cell renderer"),
-                                                        _("Cell renderer object to use for rendering the cell"),
-                                                        GTK_TYPE_CELL_RENDERER,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
-  
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE,
                                    g_param_spec_boolean ("visible",
@@ -281,8 +286,6 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->requested_width = -1;
   tree_column->min_width = -1;
   tree_column->max_width = -1;
-  tree_column->cell = NULL;
-  tree_column->attributes = NULL;
   tree_column->column_type = GTK_TREE_VIEW_COLUMN_AUTOSIZE;
   tree_column->visible = TRUE;
   tree_column->clickable = FALSE;
@@ -301,11 +304,19 @@ static void
 gtk_tree_view_column_finalize (GObject *object)
 {
   GtkTreeViewColumn *tree_column = (GtkTreeViewColumn *) object;
+  GList *list;
 
-  if (tree_column->func_data && tree_column->destroy)
-    (tree_column->destroy) (tree_column->func_data);
 
-  g_slist_free (tree_column->attributes);
+  for (list = tree_column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      if (info->func_data && info->destroy)
+	(info->destroy) (info->func_data);
+      gtk_tree_view_column_clear_attributes (tree_column, info->cell);
+      g_object_unref (G_OBJECT (info->cell));
+      g_free (info);
+    }
+
   g_free (tree_column->title);
 }
 
@@ -321,12 +332,6 @@ gtk_tree_view_column_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_CELL_RENDERER:
-      gtk_tree_view_column_set_cell_renderer (tree_column,
-                                              (GtkCellRenderer*)
-                                              g_value_get_object (value));
-      break;
-
     case PROP_VISIBLE:
       gtk_tree_view_column_set_visible (tree_column,
                                         g_value_get_boolean (value));
@@ -405,11 +410,6 @@ gtk_tree_view_column_get_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_CELL_RENDERER:
-      g_value_set_object (value,
-                          (GObject*) gtk_tree_view_column_get_cell_renderer (tree_column));
-      break;
-
     case PROP_VISIBLE:
       g_value_set_boolean (value,
                            gtk_tree_view_column_get_visible (tree_column));
@@ -1040,7 +1040,7 @@ gtk_tree_view_column_new_with_attributes (const gchar     *title,
   gtk_tree_view_column_set_cell_renderer (retval, cell);
 
   va_start (args, cell);
-  gtk_tree_view_column_set_attributesv (retval, args);
+  gtk_tree_view_column_set_attributesv (retval, cell, args);
   va_end (args);
 
   return retval;
@@ -1059,42 +1059,115 @@ void
 gtk_tree_view_column_set_cell_renderer (GtkTreeViewColumn *tree_column,
 					GtkCellRenderer   *cell)
 {
-  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  gtk_tree_view_column_pack_start_cell_renderer (tree_column, cell, TRUE, TRUE, 0);
+}
 
-  if (cell)
-    g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  if (cell)
-    g_object_ref (G_OBJECT (cell));
-
-  if (tree_column->cell)
-    g_object_unref (G_OBJECT (tree_column->cell));
-
-  tree_column->cell = cell;
-
-  if (tree_column->tree_view)
-    {
-      tree_column->dirty = TRUE;
-      gtk_widget_queue_resize (tree_column->tree_view);
-    }
-
-  g_object_notify (G_OBJECT (tree_column), "cell_renderer");
+static GtkTreeViewColumnCellInfo *
+gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
+				    GtkCellRenderer   *cell_renderer)
+{
+  GList *list;
+  for (list = tree_column->cell_list; list; list = list->next)
+    if (((GtkTreeViewColumnCellInfo *)list->data)->cell == cell_renderer)
+      return (GtkTreeViewColumnCellInfo *) list->data;
+  return NULL;
 }
 
 /**
- * gtk_tree_view_column_get_cell_renderer:
- * @tree_column: a #GtkTreeViewColumn
+ * gtk_tree_view_column_pack_start_cell_renderer:
+ * @tree_column: A #GtkTreeViewColumn.
+ * @cell: The #GtkCellRenderer, 
+ * @expand: TRUE if @cell is to be given extra space allocated to box.
+ * @fill: TRUE if @cell is to fill space allocated to it.
+ * @padding: extra space in pixels to place on the outside of the cell
  * 
- * Gets the value set with gtk_tree_view_column_set_cell_renderer().
- * 
- * Return value: cell renderer for the column, or %NULL if unset
+ * Packs a cell into 
  **/
-GtkCellRenderer*
-gtk_tree_view_column_get_cell_renderer (GtkTreeViewColumn *tree_column)
+void
+gtk_tree_view_column_pack_start_cell_renderer (GtkTreeViewColumn  *tree_column,
+					       GtkCellRenderer    *cell,
+					       gboolean            expand,
+					       gboolean            fill,
+					       guint               padding)
 {
-  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);
-  
-  return tree_column->cell;
+  GtkTreeViewColumnCellInfo *cell_info;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (! gtk_tree_view_column_get_cell_info (tree_column, cell));
+
+  g_object_ref (G_OBJECT (cell));
+
+  cell_info = g_new0 (GtkTreeViewColumnCellInfo, 1);
+  cell_info->cell = cell;
+  cell_info->expand = expand ? TRUE : FALSE;
+  cell_info->fill = fill ? TRUE : FALSE;
+  cell_info->pack = GTK_PACK_START;
+  cell_info->attributes = NULL;
+
+  tree_column->cell_list = g_list_append (tree_column->cell_list, cell_info);
+}
+
+void
+gtk_tree_view_column_pack_end_cell_renderer (GtkTreeViewColumn  *tree_column,
+					     GtkCellRenderer    *cell,
+					     gboolean            expand,
+					     gboolean            fill,
+					     guint               padding)
+{
+  GtkTreeViewColumnCellInfo *cell_info;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (! gtk_tree_view_column_get_cell_info (tree_column, cell));
+
+  g_object_ref (G_OBJECT (cell));
+
+  cell_info = g_new (GtkTreeViewColumnCellInfo, 1);
+  cell_info->cell = cell;
+  cell_info->expand = expand ? TRUE : FALSE;
+  cell_info->fill = fill ? TRUE : FALSE;
+  cell_info->pack = GTK_PACK_END;
+  cell_info->attributes = NULL;
+
+  tree_column->cell_list = g_list_append (tree_column->cell_list, cell_info);
+}
+
+
+void
+gtk_tree_view_column_clear_cell_renderers (GtkTreeViewColumn *tree_column)
+{
+  GList *list;
+  g_return_if_fail (tree_column != NULL);
+
+  for (list = tree_column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)list->data;
+
+      g_object_unref (G_OBJECT (info->cell));
+      gtk_tree_view_column_clear_attributes (tree_column, info->cell);
+      g_free (info);
+    }
+
+  g_list_free (tree_column->cell_list);
+  tree_column->cell_list = NULL;
+}
+
+GList *
+gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column)
+{
+  GList *retval = NULL, *list;
+
+  g_return_val_if_fail (tree_column != NULL, NULL);
+
+  for (list = tree_column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)list->data;
+
+      retval = g_list_append (retval, info->cell);
+    }
+
+  return retval;
 }
 
 /**
@@ -1109,16 +1182,19 @@ gtk_tree_view_column_get_cell_renderer (GtkTreeViewColumn *tree_column)
  **/
 void
 gtk_tree_view_column_add_attribute (GtkTreeViewColumn *tree_column,
+				    GtkCellRenderer   *cell_renderer,
 				    const gchar       *attribute,
 				    gint               column)
 {
+  GtkTreeViewColumnCellInfo *info;
+
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  info = gtk_tree_view_column_get_cell_info (tree_column, cell_renderer);
+  g_return_if_fail (info != NULL);
 
-  tree_column->attributes = g_slist_prepend (tree_column->attributes,
-					     GINT_TO_POINTER (column));
-  tree_column->attributes = g_slist_prepend (tree_column->attributes,
-					     g_strdup (attribute));
+  info->attributes = g_slist_prepend (info->attributes, GINT_TO_POINTER (column));
+  info->attributes = g_slist_prepend (info->attributes, g_strdup (attribute));
 
   if (tree_column->tree_view)
     {
@@ -1130,24 +1206,20 @@ gtk_tree_view_column_add_attribute (GtkTreeViewColumn *tree_column,
 
 static void
 gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
+				      GtkCellRenderer   *cell_renderer,
 				      va_list            args)
 {
   gchar *attribute;
   gint column;
 
-  g_return_if_fail (tree_column != NULL);
-  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-
   attribute = va_arg (args, gchar *);
 
-  gtk_tree_view_column_clear_attributes (tree_column);
+  gtk_tree_view_column_clear_attributes (tree_column, cell_renderer);
   
   while (attribute != NULL)
     {
       column = va_arg (args, gint);
-      gtk_tree_view_column_add_attribute (tree_column,
-					  attribute,
-					  column);
+      gtk_tree_view_column_add_attribute (tree_column, cell_renderer, attribute, column);
       attribute = va_arg (args, gchar *);
     }
 }
@@ -1164,17 +1236,17 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
  **/
 void
 gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
+				     GtkCellRenderer   *cell_renderer,
 				     ...)
 {
   va_list args;
 
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell_renderer));
+  g_return_if_fail (gtk_tree_view_column_get_cell_info (tree_column, cell_renderer));
 
-  va_start (args, tree_column);
-
-  gtk_tree_view_column_set_attributesv (tree_column, args);
-
+  va_start (args, cell_renderer);
+  gtk_tree_view_column_set_attributesv (tree_column, cell_renderer, args);
   va_end (args);
 }
 
@@ -1193,24 +1265,30 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  **/
 void
 gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn   *tree_column,
+					 GtkCellRenderer     *cell_renderer,
 					 GtkTreeCellDataFunc  func,
 					 gpointer             func_data,
 					 GtkDestroyNotify     destroy)
 {
-  g_return_if_fail (tree_column != NULL);
-  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  GtkTreeViewColumnCellInfo *info;
 
-  if (func == tree_column->func &&
-      func_data == tree_column->func_data &&
-      destroy == tree_column->destroy)
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell_renderer));
+  info = gtk_tree_view_column_get_cell_info (tree_column, cell_renderer);
+
+  g_return_if_fail (info != NULL);
+
+  if (func == info->func &&
+      func_data == info->func_data &&
+      destroy == info->destroy)
     return;
 
-  if (tree_column->func_data && tree_column->destroy)
-    (tree_column->destroy) (tree_column->func_data);
+  if (info->func_data && info->destroy)
+    (info->destroy) (info->func_data);
 
-  tree_column->func = func;
-  tree_column->func_data = func_data;
-  tree_column->destroy = destroy;
+  info->func = func;
+  info->func_data = func_data;
+  info->destroy = destroy;
 
   if (tree_column->tree_view)
     {
@@ -1223,26 +1301,31 @@ gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn   *tree_column,
 /**
  * gtk_tree_view_column_clear_attributes:
  * @tree_column: a #GtkTreeViewColumn
+ *@cell_renderer: a #GtkCellRenderer to clear the attribute mapping on.
  * 
  * Clears all existing attributes previously set with
  * gtk_tree_view_column_set_attributes().
  **/
 void
-gtk_tree_view_column_clear_attributes (GtkTreeViewColumn *tree_column)
+gtk_tree_view_column_clear_attributes (GtkTreeViewColumn *tree_column,
+				       GtkCellRenderer   *cell_renderer)
 {
+  GtkTreeViewColumnCellInfo *info;
   GSList *list;
-  
-  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
-  list = tree_column->attributes;
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell_renderer));
+  info = gtk_tree_view_column_get_cell_info (tree_column, cell_renderer);
+
+  list = info->attributes;
 
   while (list && list->next)
     {
       g_free (list->data);
       list = list->next->next;
     }
-  g_slist_free (tree_column->attributes);
-  tree_column->attributes = NULL;
+  g_slist_free (info->attributes);
+  info->attributes = NULL;
 
   if (tree_column->tree_view)
     {
@@ -1923,35 +2006,39 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 {
   GSList *list;
   GValue value = { 0, };
-  GObject *cell;
+  GList *cell_list;
 
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-  g_return_if_fail (tree_column->cell != NULL);
+  g_return_if_fail (tree_column->cell_list != NULL);
 
   if (tree_model == NULL)
     return;
 
-  cell = (GObject *) tree_column->cell;
-  list = tree_column->attributes;
-
-  g_object_freeze_notify (cell);
-
-  while (list && list->next)
+  for (cell_list = tree_column->cell_list; cell_list; cell_list = cell_list->next)
     {
-      gtk_tree_model_get_value (tree_model, iter,
-				GPOINTER_TO_INT (list->next->data),
-				&value);
-      g_object_set_property (cell, (gchar *) list->data, &value);
-      g_value_unset (&value);
-      list = list->next->next;
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) cell_list->data;
+      GObject *cell = (GObject *) info->cell;
 
+      list = info->attributes;
+
+      g_object_freeze_notify (cell);
+
+      while (list && list->next)
+	{
+	  gtk_tree_model_get_value (tree_model, iter,
+				    GPOINTER_TO_INT (list->next->data),
+				    &value);
+	  g_object_set_property (cell, (gchar *) list->data, &value);
+	  g_value_unset (&value);
+	  list = list->next->next;
+	}
+
+      if (info->func)
+	(* info->func) (tree_column, info->cell, tree_model, iter, info->func_data);
+      g_object_thaw_notify (G_OBJECT (info->cell));
     }
 
-  if (tree_column->func)
-    (* tree_column->func) (tree_column, tree_column->cell, tree_model, iter, tree_column->func_data);
-
-  g_object_thaw_notify (cell);
 }
 
 /**
@@ -1976,7 +2063,7 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
-  gtk_cell_renderer_get_size (tree_column->cell,
+  gtk_cell_renderer_get_size (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell,
 			      tree_column->tree_view,
 			      cell_area,
 			      x_offset,
@@ -2009,15 +2096,15 @@ gtk_tree_view_column_cell_render (GtkTreeViewColumn *tree_column,
   gboolean visible;
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
-  g_object_get (G_OBJECT (tree_column->cell), "visible", &visible, NULL);
+  g_object_get (G_OBJECT ((((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell)), "visible", &visible, NULL);
   if (visible)
-    gtk_cell_renderer_render (tree_column->cell,
-			      window,
-			      tree_column->tree_view,
-			      background_area,
-			      cell_area,
-			      expose_area,
-			      flags);
+  gtk_cell_renderer_render (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell,
+			    window,
+			    tree_column->tree_view,
+			    background_area,
+			    cell_area,
+			    expose_area,
+			    flags);
 }
 
 /**
@@ -2045,13 +2132,13 @@ gtk_tree_view_column_cell_event (GtkTreeViewColumn *tree_column,
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
 
-  g_object_get (G_OBJECT (tree_column->cell),
+  g_object_get (G_OBJECT (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell),
 		"visible", &visible,
 		"can_activate", &can_activate,
 		NULL);
   if (visible && can_activate)
     {
-      if (gtk_cell_renderer_event (tree_column->cell,
+      if (gtk_cell_renderer_event (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell,
 				   event,
 				   tree_column->tree_view,
 				   path_string,
@@ -2061,5 +2148,46 @@ gtk_tree_view_column_cell_event (GtkTreeViewColumn *tree_column,
 	return TRUE;
 
     }
+  return FALSE;
+}
+
+gboolean
+gtk_tree_view_column_cell_can_focus (GtkTreeViewColumn *tree_column)
+{
+  GList *list;
+  gboolean visible;
+  gboolean can_activate;
+
+  for (list = tree_column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      g_object_get (G_OBJECT (info->cell),
+		    "can_activate", &can_activate,
+		    "visible", &visible,
+		    NULL);
+      if (can_activate && visible)
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
+
+gboolean
+gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
+{
+  GList *list;
+  gboolean visible;
+
+  for (list = tree_column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      g_object_get (G_OBJECT (info->cell),
+		    "visible", &visible,
+		    NULL);
+      if (visible)
+	return TRUE;
+    }
+
   return FALSE;
 }

@@ -1,3 +1,19 @@
+Wed Jun 27 19:40:31 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_pack_start_cell_renderer): New function to
+	reflect that you can (hypothetically) pack cell renderers into a
+	column.
+	(gtk_tree_view_column_pack_end_cell_renderer): ditto.
+	(gtk_tree_view_column_cell_is_visible): Move more functionality to
+	the column.
+	(gtk_tree_view_column_cell_can_focus): Move more functionality to
+	the column.
+
+	* gtk/gtktreeview.c: Move to use new column-packing code.
+	(gtk_tree_view_real_expand_row): remove	totally braindead code.
+	(gtk_tree_view_real_collapse_row): ditto.
+
 2001-06-27  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gtk/gtktreeviewcolumn.c: Fix a typo.
