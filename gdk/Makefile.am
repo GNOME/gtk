@@ -172,7 +172,16 @@ EXTRA_HEADERS =
 #
 configexecincludedir = $(libdir)/gtk-2.0/include
 #configexecinclude_DATA = gdkconfig.h
-install-exec-local: gdkconfig.h
+
+if DISABLE_EXPLICIT_DEPS
+sanitize-la: 
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/$(gdktargetlib)
+else
+sanitize-la: 
+	@true
+endif
+
+install-exec-local: gdkconfig.h sanitize-la
 	$(mkinstalldirs) $(DESTDIR)$(configexecincludedir)
 	file=$(DESTDIR)$(configexecincludedir)/gdkconfig.h; \
 	if test -r $$file && cmp -s gdkconfig.h $$file; then :; \

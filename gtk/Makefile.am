@@ -569,6 +569,11 @@ libgtk_target_ldflags = $(gtk_win32_symbols) -lwsock32
 endif
 EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la libgtk-win32-1.3.la
 
+if DISABLE_EXPLICIT_DEPS
+install-exec-local: 
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/$(gtktargetlib)
+endif
+
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local:  install-ms-lib install-libtool-import-lib
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0

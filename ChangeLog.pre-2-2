@@ -1,3 +1,24 @@
+Fri Mar  1 00:46:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add a --enable-explicit-deps option to control
+	whether dependency libraries are written into .la files and .pc
+	files.  Default is auto: if static libraries are off and shlib
+	dependencies are found, don't write deps.
+
+	* gdk/Makefile.am gtk/Makefile.am sanitize-la.sh: Shell script
+	used to strip dependencies out of .la files.
+
+	* Makefile.am: Add a slightly modified distcheck rule that passes
+	--enable-gtk-doc to the configure inside.
+	(So that 'make dist' succeeds inside.)
+
+	* configure.in: If pango was compiled with
+	--disable-explicit-deps, then repeat the checks for X and
+	freetype ourselves so we don't depend on linking to libraries
+	that pango doesn't reveal in the link line. Add some more paranoia
+	for whether what we detect ourselves matches what Pango backends
+	we found.
+	
 2002-03-03  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Output gdk-pixbuf/gdk_pixbuf.rc.
