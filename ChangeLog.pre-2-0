@@ -1,3 +1,9 @@
+Tue Aug 17 10:28:52 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_fileop_error): Propagate
+	modality to error dialog as well as confirmation dialogs.
+	(Bug #1803, reported by Rosanna Wing Sze Yuen)
+
 Wed Aug 11 13:38:26 BST 1999 Tony Gale  <gale@gtk.org>
 
 	* docs/gtkfaq.sgml: FAQ Update
