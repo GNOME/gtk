@@ -152,6 +152,9 @@ main (int argc, char **argv)
   FILE *outfile;
   int i;
   
+  g_type_init (0);
+  
+  
   if (argc < 4)
     usage ();
 
