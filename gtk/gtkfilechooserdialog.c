@@ -212,6 +212,29 @@ file_chooser_widget_update_hints (GtkFileChooserDialog *dialog)
 }
 
 static void
+clamp_to_screen (GtkWidget *widget,
+		 gint      *width,
+		 gint      *height)
+{
+  GdkScreen *screen;
+  int monitor_num;
+  GdkRectangle monitor;
+
+  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+  
+  screen = gtk_widget_get_screen (widget);
+  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+  if (width)
+    *width = MIN (*width, (monitor.width * 3) / 4);
+
+  if (height)
+    *height = MIN (*height, (monitor.height * 3) / 4);
+}
+
+static void
 file_chooser_widget_default_realized_size_changed (GtkWidget            *widget,
 						   GtkFileChooserDialog *dialog)
 {
@@ -289,12 +312,14 @@ file_chooser_widget_default_realized_size_changed (GtkWidget            *widget,
   priv->resize_horizontally = resize_horizontally;
   priv->resize_vertically = resize_vertically;
 
-  /* FIXME: We should make sure that we arent' bigger than the current screen */
   if (dx != 0 || dy != 0)
     {
-      gtk_window_resize (GTK_WINDOW (dialog),
-			 cur_width + dx,
-			 cur_height + dy);
+      gint new_width = cur_width + dx;
+      gint new_height = cur_height + dy;
+
+      clamp_to_screen (GTK_WIDGET (dialog), &new_width, &new_height);
+      
+      gtk_window_resize (GTK_WINDOW (dialog), new_width, new_height);
     }
 
   /* Only store the size if we can resize in that direction. */
