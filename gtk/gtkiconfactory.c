@@ -2091,7 +2091,8 @@ icon_source_clear (GtkIconSource *source)
     case GTK_ICON_SOURCE_FILENAME:
       g_free (source->source.filename);
       source->source.filename = NULL;
-      g_free (source->filename_pixbuf);
+      if (source->filename_pixbuf) 
+	g_object_unref (source->filename_pixbuf);
       source->filename_pixbuf = NULL;
       break;
     case GTK_ICON_SOURCE_PIXBUF:
