@@ -258,6 +258,7 @@ static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
 							CursorType      type);
 static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
                                                         gboolean        include_preedit);
+static void         gtk_entry_reset_layout             (GtkEntry       *entry);
 static void         gtk_entry_queue_draw               (GtkEntry       *entry);
 static void         gtk_entry_reset_im_context         (GtkEntry       *entry);
 static void         gtk_entry_recompute                (GtkEntry       *entry);

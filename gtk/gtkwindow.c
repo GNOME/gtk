@@ -1724,6 +1724,14 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 			 gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE));
 }
 
+static void
+gtk_window_transient_parent_screen_changed (GtkWindow	*parent,
+					    GParamSpec	*pspec,
+					    GtkWindow   *window)
+{
+  gtk_window_set_screen (window, parent->screen);
+}
+
 static void       
 gtk_window_unset_transient_for  (GtkWindow *window)
 {
@@ -1734,6 +1742,9 @@ gtk_window_unset_transient_for  (GtkWindow *window)
 					    window);
       g_signal_handlers_disconnect_by_func (window->transient_parent,
 					    gtk_window_transient_parent_unrealized,
+					    window);
+      g_signal_handlers_disconnect_by_func (window->transient_parent,
+					    gtk_window_transient_parent_screen_changed,
 					    window);
       g_signal_handlers_disconnect_by_func (window->transient_parent,
 					    gtk_widget_destroyed,
@@ -1797,8 +1808,11 @@ gtk_window_set_transient_for  (GtkWindow *window,
       g_signal_connect (parent, "unrealize",
 			G_CALLBACK (gtk_window_transient_parent_unrealized),
 			window);
+      g_signal_connect (parent, "notify::screen",
+			G_CALLBACK (gtk_window_transient_parent_screen_changed),
+			window);
       
-      window->screen = parent->screen;
+      gtk_window_set_screen (window, parent->screen);
 
       if (window->destroy_with_parent)
         connect_parent_destroyed (window);

@@ -1,3 +1,11 @@
+Tue Oct 22 15:32:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c: Actively monitor the screen of the
+	parent. (#80281)
+
+	* gtk/gtkentry.c: Fix missing prototype from the 
+	last commit.
+
 Tue Oct 22 15:46:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_unrealize): Reset the 
