@@ -1779,7 +1779,7 @@ gtk_button_get_image (GtkButton *button)
 {
   GtkButtonPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_RELIEF_NORMAL);
+  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
 
   priv = GTK_BUTTON_GET_PRIVATE (button);
   
