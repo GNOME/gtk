@@ -1,3 +1,25 @@
+Fri Mar  1 18:39:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/{gdkevents-x11.c,gdkmain-x11.c,gdkprivate-x11.h,
+	gdkwindow-x11.c}: Robustify tracking of pointer grab window.
+
+	* gdk/x11/gdkmain-x11.c: Keep track of current keyboard
+	grab window.
+
+	* gdk/x11/gdkmain-x11.c (gdk_pointer_grab_info_libgtk_only,
+	gdk_keyboard_grab_info_libgtk_only): Private libgtk => libgtk
+	API for finding out current grab information.
+	
+	* gtk/gtkmain.c (rewrite_event_for_grabs): Rewrite events
+	so that the effective behavior of owner_events = TRUE is changed
+	to "deliver events to same window group normally" instead
+	of "deliver events to same application normally. #69934
+
+	* gtk/gtkrange.c: Use an explicit gtk_grab_add() so that
+	it works within the GtkList combo, where there is a 
+	owner_events = FALSE gdk_pointer_grab() already in effect.
+	(#65006, reported by Damon Chaplin)
+
 Sat Mar  2 14:32:50 2002  Owen Taylor  <otaylor@redhat.com>
 
         * configure.in: Default to --disable-gtk-doc (avoid Jade

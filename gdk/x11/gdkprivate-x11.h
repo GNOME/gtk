@@ -165,6 +165,10 @@ GC _gdk_x11_gc_flush (GdkGC *gc);
 
 void _gdk_x11_initialize_locale (void);
 
+void _gdk_xgrab_check_unmap   (GdkWindow *window,
+			       gulong     serial);
+void _gdk_xgrab_check_destroy (GdkWindow *window);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern Window		 _gdk_root_window;
 extern gboolean	         _gdk_use_xshm;
@@ -176,10 +180,6 @@ extern GdkAtom		 _gdk_selection_property;
 extern gchar		*_gdk_display_name;
 
 extern Window		 _gdk_leader_window;
-
-extern GdkWindowObject *_gdk_xgrab_window;  /* Window that currently holds the
-					    * x pointer grab
-					    */
 
 /* Used to detect not-up-to-date keymap */
 extern guint _gdk_keymap_serial;

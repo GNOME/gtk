@@ -92,6 +92,18 @@ static gboolean gdk_synchronize = FALSE;
 static GSList *gdk_error_traps = NULL;               /* List of error traps */
 static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
 
+/* Information about current pointer and keyboard grabs held by this
+ * client. If gdk_pointer_xgrab_window or gdk_keyboard_xgrab_window
+ * window is NULL, then the other associated fields are ignored
+ */
+static GdkWindowObject *gdk_pointer_xgrab_window = NULL;
+static gulong gdk_pointer_xgrab_serial;
+static gboolean gdk_pointer_xgrab_owner_events;
+
+static GdkWindowObject *gdk_keyboard_xgrab_window = NULL;
+static gulong gdk_keyboard_xgrab_serial;
+static gboolean gdk_keyboard_xgrab_owner_events;
+
 GdkArgDesc _gdk_windowing_args[] = {
   { "display",     GDK_ARG_STRING,   &_gdk_display_name,    (GdkArgFunc)NULL   },
   { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,     (GdkArgFunc)NULL   },
@@ -251,6 +263,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   Window xwindow;
   Window xconfine_to;
   Cursor xcursor;
+  unsigned long serial;
   int i;
   
   g_return_val_if_fail (window != NULL, 0);
@@ -260,6 +273,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   cursor_private = (GdkCursorPrivate*) cursor;
   
   xwindow = GDK_WINDOW_XID (window);
+  serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   
   if (!confine_to || GDK_WINDOW_DESTROYED (confine_to))
     xconfine_to = None;
@@ -308,7 +322,11 @@ gdk_pointer_grab (GdkWindow *	  window,
     }
   
   if (return_val == GrabSuccess)
-    _gdk_xgrab_window = (GdkWindowObject *)window;
+    {
+      gdk_pointer_xgrab_window = (GdkWindowObject *)window;
+      gdk_pointer_xgrab_serial = serial;
+      gdk_pointer_xgrab_owner_events = owner_events;
+    }
 
   return gdk_x11_convert_grab_status (return_val);
 }
@@ -334,7 +352,7 @@ gdk_pointer_ungrab (guint32 time)
   _gdk_input_ungrab_pointer (time);
   
   XUngrabPointer (gdk_display, time);
-  _gdk_xgrab_window = NULL;
+  gdk_pointer_xgrab_window = NULL;
 }
 
 /*
@@ -355,7 +373,36 @@ gdk_pointer_ungrab (guint32 time)
 gboolean
 gdk_pointer_is_grabbed (void)
 {
-  return _gdk_xgrab_window != NULL;
+  return gdk_pointer_xgrab_window != NULL;
+}
+
+/**
+ * gdk_pointer_grab_info_libgtk_only:
+ * @grab_window: location to store current grab window
+ * @owner_events: location to store boolean indicating whether
+ *   the @owner_events flag to gdk_pointer_grab() was %TRUE.
+ * 
+ * Determines information about the current pointer grab.
+ * This is not public API and must not be used by applications.
+ * 
+ * Return value: %TRUE if this application currently has the
+ *  pointer grabbed.
+ **/
+gboolean
+gdk_pointer_grab_info_libgtk_only (GdkWindow **grab_window,
+				   gboolean   *owner_events)
+{
+  if (gdk_pointer_xgrab_window)
+    {
+      if (grab_window)
+        *grab_window = (GdkWindow *)gdk_pointer_xgrab_window;
+      if (owner_events)
+        *owner_events = gdk_pointer_xgrab_owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 /*
@@ -384,10 +431,13 @@ gdk_keyboard_grab (GdkWindow *	   window,
 		   guint32	   time)
 {
   gint return_val;
+  unsigned long serial;
   
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
+  serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
+
   if (!GDK_WINDOW_DESTROYED (window))
     {
 #ifdef G_ENABLE_DEBUG
@@ -403,6 +453,13 @@ gdk_keyboard_grab (GdkWindow *	   window,
     }
   else
     return_val = AlreadyGrabbed;
+
+  if (return_val == GrabSuccess)
+    {
+      gdk_keyboard_xgrab_window = (GdkWindowObject *)window;
+      gdk_keyboard_xgrab_serial = serial;
+      gdk_keyboard_xgrab_owner_events = owner_events;
+    }
 
   return gdk_x11_convert_grab_status (return_val);
 }
@@ -426,6 +483,94 @@ void
 gdk_keyboard_ungrab (guint32 time)
 {
   XUngrabKeyboard (gdk_display, time);
+  gdk_keyboard_xgrab_window = NULL;
+}
+
+/**
+ * gdk_keyboard_grab_info_libgtk_only:
+ * @grab_window: location to store current grab window
+ * @owner_events: location to store boolean indicating whether
+ *   the @owner_events flag to gdk_keyboard_grab() was %TRUE.
+ * 
+ * Determines information about the current keyboard grab.
+ * This is not public API and must not be used by applications.
+ * 
+ * Return value: %TRUE if this application currently has the
+ *  keyboard grabbed.
+ **/
+gboolean
+gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
+				    gboolean   *owner_events)
+{
+  if (gdk_keyboard_xgrab_window)
+    {
+      if (grab_window)
+        *grab_window = (GdkWindow *)gdk_keyboard_xgrab_window;
+      if (owner_events)
+        *owner_events = gdk_keyboard_xgrab_owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+/**
+ * _gdk_xgrab_check_unmap:
+ * @window: a #GdkWindow
+ * @serial: serial from Unmap event (or from NextRequest(display)
+ *   if the unmap is being done by this client.)
+ * 
+ * Checks to see if an unmap request or event causes the current
+ * grab window to become not viewable, and if so, clear the
+ * the pointer we keep to it.
+ **/
+void
+_gdk_xgrab_check_unmap (GdkWindow *window,
+			gulong     serial)
+{
+  if (gdk_pointer_xgrab_window && serial >= gdk_pointer_xgrab_serial)
+    {
+      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+      GdkWindowObject *tmp = gdk_pointer_xgrab_window;
+      
+
+      while (tmp && tmp != private)
+	tmp = tmp->parent;
+
+      if (tmp)
+	gdk_pointer_xgrab_window = NULL;  
+    }
+
+  if (gdk_keyboard_xgrab_window && serial >= gdk_keyboard_xgrab_serial)
+    {
+      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+      GdkWindowObject *tmp = gdk_keyboard_xgrab_window;
+      
+
+      while (tmp && tmp != private)
+	tmp = tmp->parent;
+
+      if (tmp)
+	gdk_keyboard_xgrab_window = NULL;  
+    }
+}
+
+/**
+ * _gdk_xgrab_check_destroy:
+ * @window: a #GdkWindow
+ * 
+ * Checks to see if window is the current grab window, and if
+ * so, clear the current grab window.
+ **/
+void
+_gdk_xgrab_check_destroy (GdkWindow *window)
+{
+  if ((GdkWindowObject *)window == gdk_pointer_xgrab_window)
+    gdk_pointer_xgrab_window = NULL;
+
+  if ((GdkWindowObject *)window == gdk_keyboard_xgrab_window)
+    gdk_keyboard_xgrab_window = NULL;
 }
 
 /*

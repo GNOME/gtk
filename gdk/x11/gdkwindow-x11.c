@@ -169,6 +169,8 @@ gdk_window_impl_x11_finalize (GObject *object)
   
   wrapper = (GdkWindowObject*) draw_impl->wrapper;
 
+  _gdk_xgrab_check_destroy (GDK_WINDOW (wrapper));
+
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
       gdk_xid_table_remove (draw_impl->xid);
@@ -794,7 +796,9 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	}
     }
   else if (!recursing && !foreign_destroy)
-    XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+    {
+      XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+    }
 }
 
 /* This function is called when the XWindow is really gone.
@@ -819,6 +823,8 @@ gdk_window_destroy_notify (GdkWindow *window)
   gdk_xid_table_remove (GDK_WINDOW_XID (window));
   if (window_impl->focus_window)
     gdk_xid_table_remove (window_impl->focus_window);
+
+  _gdk_xgrab_check_destroy (window);
   
   gdk_drawable_unref (window);
 }
@@ -990,6 +996,13 @@ gdk_window_hide (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowObject*) window;
+
+  /* We'll get the unmap notify eventually, and handle it then,
+   * but checking here makes things more consistent if we are
+   * just doing stuff ourself.
+   */
+  _gdk_xgrab_check_unmap (window,
+			  NextRequest (GDK_WINDOW_XDISPLAY (window)));
 
   /* You can't simply unmap toplevel windows. */
   switch (private->window_type)

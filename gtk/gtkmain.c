@@ -980,6 +980,121 @@ gtk_main_iteration_do (gboolean blocking)
     return TRUE;
 }
 
+/* private libgtk to libgdk interfaces
+ */
+gboolean gdk_pointer_grab_info_libgtk_only  (GdkWindow **grab_window,
+					     gboolean   *owner_events);
+gboolean gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
+					     gboolean   *owner_events);
+
+static void
+rewrite_events_translate (GdkWindow *old_window,
+			  GdkWindow *new_window,
+			  gdouble   *x,
+			  gdouble   *y)
+{
+  gint old_origin_x, old_origin_y;
+  gint new_origin_x, new_origin_y;
+
+  gdk_window_get_origin	(old_window, &old_origin_x, &old_origin_y);
+  gdk_window_get_origin	(new_window, &new_origin_x, &new_origin_y);
+
+  *x += new_origin_x - old_origin_x;
+  *y += new_origin_y - old_origin_y;
+}
+
+GdkEvent *
+rewrite_event_for_window (GdkEvent  *event,
+			  GdkWindow *new_window)
+{
+  event = gdk_event_copy (event);
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+      rewrite_events_translate (event->any.window,
+				new_window,
+				&event->scroll.x, &event->scroll.y);
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      rewrite_events_translate (event->any.window,
+				new_window,
+				&event->button.x, &event->button.y);
+      break;
+    case GDK_MOTION_NOTIFY:
+      rewrite_events_translate (event->any.window,
+				new_window,
+				&event->motion.x, &event->motion.y);
+      break;
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      break;
+
+    default:
+      return event;
+    }
+
+  g_object_unref (event->any.window);
+  event->any.window = g_object_ref (new_window);
+
+  return event;
+}
+
+/* If there is a pointer or keyboard grab in effect with owner_events = TRUE,
+ * then what X11 does is deliver the event normally if it was going to this
+ * client, otherwise, delivers it in terms of the grab window. This function
+ * rewrites events to the effect that events going to the same window group
+ * are delivered normally, otherwise, the event is delivered in terms of the
+ * grab window.
+ */
+static GdkEvent *
+rewrite_event_for_grabs (GdkEvent *event)
+{
+  GdkWindow *grab_window;
+  GtkWidget *event_widget, *grab_widget;;
+  gboolean owner_events;
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_MOTION_NOTIFY:
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      if (!gdk_pointer_grab_info_libgtk_only (&grab_window, &owner_events) ||
+	  !owner_events)
+	return NULL;
+      break;
+
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      if (!gdk_keyboard_grab_info_libgtk_only (&grab_window, &owner_events) ||
+	  !owner_events)
+	return NULL;
+      break;
+
+    default:
+      return NULL;
+    }
+
+  event_widget = gtk_get_event_widget (event);
+  gdk_window_get_user_data (grab_window, (void**) &grab_widget);
+
+  if (grab_widget &&
+      gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
+    return rewrite_event_for_window (event, grab_window);
+  else
+    return NULL;
+}
+
 void 
 gtk_main_do_event (GdkEvent *event)
 {
@@ -987,6 +1102,7 @@ gtk_main_do_event (GdkEvent *event)
   GtkWidget *grab_widget;
   GtkWindowGroup *window_group;
   GdkEvent *next_event;
+  GdkEvent *rewritten_event = NULL;
   GList *tmp_list;
 
   /* If there are any events pending then get the next one.
@@ -1045,14 +1161,24 @@ gtk_main_do_event (GdkEvent *event)
 
       return;
     }
+
+  /* If pointer or keyboard grabs are in effect, munge the events
+   * so that each window group looks like a separate app.
+   */
+  rewritten_event = rewrite_event_for_grabs (event);
+  if (rewritten_event)
+    {
+      event = rewritten_event;
+      event_widget = gtk_get_event_widget (event);
+    }
   
+  window_group = gtk_main_get_window_group (event_widget);
+
   /* Push the event onto a stack of current events for
    * gtk_current_event_get().
    */
   current_events = g_list_prepend (current_events, event);
 
-  window_group = gtk_main_get_window_group (event_widget);
-  
   /* If there is a grab in effect...
    */
   if (window_group->grabs)
@@ -1198,6 +1324,9 @@ gtk_main_do_event (GdkEvent *event)
   tmp_list = current_events;
   current_events = g_list_remove_link (current_events, tmp_list);
   g_list_free_1 (tmp_list);
+
+  if (rewritten_event)
+    gdk_event_free (rewritten_event);
 }
 
 gboolean

@@ -1262,9 +1262,8 @@ gdk_event_translate (GdkEvent *event,
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_ICONIFIED);
-      
-      if (_gdk_xgrab_window == window_private)
-	_gdk_xgrab_window = NULL;
+
+      _gdk_xgrab_check_unmap (window, xevent->xany.serial);
       
       break;
       

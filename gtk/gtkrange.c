@@ -1048,6 +1048,8 @@ range_grab_add (GtkRange      *range,
 {
   /* we don't actually gtk_grab, since a button is down */
 
+  gtk_grab_add (GTK_WIDGET (range));
+  
   range->layout->grab_location = location;
   range->layout->grab_button = button;
   
@@ -1058,6 +1060,8 @@ range_grab_add (GtkRange      *range,
 static void
 range_grab_remove (GtkRange *range)
 {
+  gtk_grab_remove (GTK_WIDGET (range));
+  
   range->layout->grab_location = MOUSE_OUTSIDE;
   range->layout->grab_button = 0;
 
@@ -1305,8 +1309,18 @@ gtk_range_button_release (GtkWidget      *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
 
-  range->layout->mouse_x = event->x;
-  range->layout->mouse_y = event->y;
+  if (event->window == range->event_window)
+    {
+      range->layout->mouse_x = event->x;
+      range->layout->mouse_y = event->y;
+    }
+  else
+    {
+      gdk_window_get_pointer (range->event_window,
+			      &range->layout->mouse_x,
+			      &range->layout->mouse_y,
+			      NULL);
+    }
   
   if (range->layout->grab_button == event->button)
     {
@@ -1318,7 +1332,7 @@ gtk_range_button_release (GtkWidget      *widget,
       gtk_range_remove_step_timer (range);
       
       if (grab_location == MOUSE_SLIDER)
-        update_slider_position (range, event->x, event->y);
+        update_slider_position (range, range->layout->mouse_x, range->layout->mouse_y);
 
       /* Flush any pending discontinuous/delayed updates */
       gtk_range_update_value (range);
