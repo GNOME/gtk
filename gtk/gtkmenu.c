@@ -1168,6 +1168,8 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
        */
       gint width, height;
       
+      menu_shell->ignore_enter = FALSE; 
+      
       gdk_window_get_size (event->window, &width, &height);
       if (event->x >= 0 && event->x < width &&
 	  event->y >= 0 && event->y < height)
@@ -1191,8 +1193,6 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 	   */
 	  return gtk_widget_event (widget, &send_event);
 	}
-      
-      menu_shell->ignore_enter = FALSE; 
     }
 
   return FALSE;
@@ -1384,8 +1384,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
       point[2].x = point[1].x;
       point[2].y = point[0].y;
 
-      if (menu->navigation_region)
-	gdk_region_destroy (menu->navigation_region);
+      gtk_menu_stop_navigating_submenu (menu);
       
       menu->navigation_region = gdk_region_polygon (point, 3, GDK_WINDING_RULE);
 

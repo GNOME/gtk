@@ -1,3 +1,10 @@
+Thu Sep 07 20:54:33 2000  George Lebl <jirka@5z.com>
+
+	* gtk/gtkmenu.c:  in gtk_menu_set_submenu_navigation_region
+	  do stop_navigating_submenu, to clear last timeout properly.
+	  Also in gtk_menu_motion_notify move ignore_enter above
+	  the conditional to make it always happen as suggested by Owen
+
 2000-09-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/makefile.mingw.in: Use -Wall. Add gdkpango-win32.o
