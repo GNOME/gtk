@@ -1,3 +1,10 @@
+Tue Feb 26 19:32:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]vscale.c (gtk_[hv]scale_expose): Chain
+	up before drawing the scale values so that the number
+	is drawn in the right place instead of one step 
+	back. (#61743, patch from Satyajit Kanungo)
+
 Tue Feb 26 19:16:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/win32/gdkkeys-win32.c (gdk_keyval_name): 
