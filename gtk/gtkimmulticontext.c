@@ -471,7 +471,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 				      GtkMenuShell      *menushell)
 {
   const GtkIMContextInfo **contexts;
-  gint n_contexts, i;
+  guint n_contexts, i;
   GSList *group = NULL;
   
   _gtk_im_module_list (&contexts, &n_contexts);

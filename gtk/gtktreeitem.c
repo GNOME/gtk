@@ -634,7 +634,7 @@ gtk_tree_item_paint (GtkWidget    *widget,
 	{
 	  if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
 	    gtk_paint_flat_box(widget->style, widget->window,
-			       widget->state, GTK_STATE_INSENSITIVE,
+			       widget->state, GTK_SHADOW_NONE,
 			       area, widget, "treeitem",
 			       0, 0, -1, -1);
 	  else

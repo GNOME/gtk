@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#define GTK_DISABLE_DEPRECATED
+
 #include "gtkimcontext.h"
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
 #include "gtkmarshalers.h"
@@ -93,56 +95,60 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
   klass->set_surrounding = gtk_im_context_real_set_surrounding;
 
   im_context_signals[PREEDIT_START] =
-    gtk_signal_new ("preedit_start",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_start),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("preedit_start",
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_start),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   
   im_context_signals[PREEDIT_END] =
-    gtk_signal_new ("preedit_end",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_end),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("preedit_end",
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_end),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   
   im_context_signals[PREEDIT_CHANGED] =
-    gtk_signal_new ("preedit_changed",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_changed),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("preedit_changed",
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   
   im_context_signals[COMMIT] =
-    gtk_signal_new ("commit",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkIMContextClass, commit),
-		    _gtk_marshal_VOID__STRING,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_STRING);
+    g_signal_new ("commit",
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkIMContextClass, commit),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__STRING,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_STRING);
 
   im_context_signals[RETRIEVE_SURROUNDING] =
     g_signal_new ("retrieve_surrounding",
-                  GTK_CLASS_TYPE (object_class),
-                  GTK_RUN_LAST,
-                  GTK_SIGNAL_OFFSET (GtkIMContextClass, retrieve_surrounding),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkIMContextClass, retrieve_surrounding),
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__VOID,
-                  GTK_TYPE_BOOL, 0);
+                  G_TYPE_BOOLEAN, 0);
   im_context_signals[DELETE_SURROUNDING] =
     g_signal_new ("delete_surrounding",
-                  GTK_CLASS_TYPE (object_class),
-                  GTK_RUN_LAST,
-                  GTK_SIGNAL_OFFSET (GtkIMContextClass, delete_surrounding),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkIMContextClass, delete_surrounding),
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__INT_INT,
-                  GTK_TYPE_BOOL, 2,
-                  GTK_TYPE_INT,
-		  GTK_TYPE_INT);
+                  G_TYPE_BOOLEAN, 2,
+                  G_TYPE_INT,
+		  G_TYPE_INT);
 }
 
 static void

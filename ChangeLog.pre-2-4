@@ -1,3 +1,39 @@
+Mon Aug  5 14:50:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkitemfactory.h: Add a note that yes, we do know
+	what () means and we can't change it.
+
+	Fixes for warnings reported by David L. Cooper II
+
+	* tests/testtext.c: Warning fixes. Fix order of arguments
+	to gtk_message_dialog_new(). (#85891)
+
+	* gtk/gtktreeitem.c (gtk_tree_item_paint): Fix incorrect
+	use GTK_STATE_INSENSITIVE for a shadow type. (Not clear
+	what the drawing intent was, but it's ENABLE_BROKEN
+	anyways.) (#85880)
+
+	* gtk/gtktexttypes.c: Use character literals
+	instead of direct constants to avoid warning. (#85878)
+
+	* gtk/theme-bits/decompose-bits.c gtk/gtkstyle.c:
+	Fix some signed/unsigned problems (#85876)
+
+	* gtk/gtksignal.c (gtk_signal_newv): Add an explicit
+	cast from GtkSignalRunType to GSignalFlags. (#85875)
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_add_item): Fix
+	use of guint instead of GdkModifierType (#85871)
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_append_menuitems): 
+	Fix signed/unsigned problem (#85870)
+
+	* gtk/gtkimcontext.c (gtk_im_context_class_init): Get
+	rid of GtkType/Signal*. (Fixes #85869 as a side effect)
+
+	* gtk/gtkdnd.c (gtk_drag_get_cursor): Fix some 
+	signed/unsigned warnings (#85865)
+
 2002-08-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmain.c (gtk_check_version): Fix for binary compatibility

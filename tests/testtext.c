@@ -104,7 +104,7 @@ typedef gboolean (*FileselOKFunc) (const char *filename, gpointer data);
 static void
 filesel_ok_cb (GtkWidget *button, GtkWidget *filesel)
 {
-  FileselOKFunc ok_func = g_object_get_data (G_OBJECT (filesel), "ok-func");
+  FileselOKFunc ok_func = (FileselOKFunc)g_object_get_data (G_OBJECT (filesel), "ok-func");
   gpointer data = g_object_get_data (G_OBJECT (filesel), "ok-data");
   gint *result = g_object_get_data (G_OBJECT (filesel), "ok-result");
   
@@ -139,7 +139,7 @@ filesel_run (GtkWindow    *parent,
     gtk_file_selection_set_filename (GTK_FILE_SELECTION (filesel), start_file);
 
   
-  g_object_set_data (G_OBJECT (filesel), "ok-func", func);
+  g_object_set_data (G_OBJECT (filesel), "ok-func", (gpointer)func);
   g_object_set_data (G_OBJECT (filesel), "ok-data", data);
   g_object_set_data (G_OBJECT (filesel), "ok-result", &result);
 
@@ -1844,9 +1844,9 @@ buffer_search (Buffer     *buffer,
     }
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (view->window),
+				   GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_OK,
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
                                    "%d strings found and marked in red",
                                    i);
 

@@ -345,7 +345,8 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
   GtkItemFactoryClass *class;
   GtkItemFactoryItem *item;
   gchar *fpath;
-  guint keyval, mods;
+  guint keyval;
+  GdkModifierType mods;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (item_type != NULL);

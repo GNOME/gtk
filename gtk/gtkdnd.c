@@ -341,8 +341,8 @@ static const guchar action_none_mask_bits[] = {
 
 static struct {
   GdkDragAction action;
-  const char *bits;
-  const char *mask;
+  const guchar *bits;
+  const guchar *mask;
   GdkCursor    *cursor;
 } drag_cursors[] = {
   { GDK_ACTION_DEFAULT, 0 },
@@ -577,10 +577,10 @@ gtk_drag_get_cursor (GdkDisplay   *display,
       GdkWindow *window = gdk_screen_get_root_window (screen);
 
       GdkPixmap *pixmap = 
-	gdk_bitmap_create_from_data (window, drag_cursors[i].bits, CURSOR_WIDTH, CURSOR_HEIGHT);
+	gdk_bitmap_create_from_data (window, (gchar *)drag_cursors[i].bits, CURSOR_WIDTH, CURSOR_HEIGHT);
 
       GdkPixmap *mask = 
-	gdk_bitmap_create_from_data (window, drag_cursors[i].mask, CURSOR_WIDTH, CURSOR_HEIGHT);
+	gdk_bitmap_create_from_data (window, (gchar *)drag_cursors[i].mask, CURSOR_WIDTH, CURSOR_HEIGHT);
 
       drag_cursors[i].cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, 0, 0);
 

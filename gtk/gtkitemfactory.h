@@ -43,6 +43,11 @@ typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
 					    const gchar		*str);
 typedef gchar * (*GtkTranslateFunc)	   (const gchar		*path,
 					    gpointer             func_data);
+/* We use () here to mean unspecified arguments. This is deprecated
+ * as of C99, but we can't change it without breaking compatibility.
+ * (Note that if we are included from a C++ program () will mean
+ * (void) so an explicit cast will be needed.)
+ */
 typedef	void	(*GtkItemFactoryCallback)  ();
 typedef	void	(*GtkItemFactoryCallback1) (gpointer		 callback_data,
 					    guint		 callback_action,

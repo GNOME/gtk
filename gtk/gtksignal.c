@@ -43,7 +43,8 @@ gtk_signal_newv (const gchar         *name,
   
   closure = function_offset ? g_signal_type_cclosure_new (object_type, function_offset) : 0;
   
-  return g_signal_newv (name, object_type, signal_flags, closure, NULL, NULL, marshaller, return_val, n_params, params);
+  return g_signal_newv (name, object_type, (GSignalFlags)signal_flags, closure,
+			NULL, NULL, marshaller, return_val, n_params, params);
 }
 
 guint
