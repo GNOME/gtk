@@ -1,3 +1,9 @@
+Wed Mar 10 22:30:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_clear): Keep the
+	cell_list in a consistent state while iterating over it, since
+	clear_attributes() also iterates over it.  (#136585, Morten Welinder)
+
 2004-03-10  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkexpander.c: (gtk_expander_expose): don't propagate

@@ -636,17 +636,16 @@ gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
 
   g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
 
-  for (i = cellview->priv->cell_list; i; i = i->next)
+  while (cellview->priv->cell_list)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
+      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)cellview->priv->cell_list->data;
 
       gtk_cell_view_cell_layout_clear_attributes (layout, info->cell);
       g_object_unref (G_OBJECT (info->cell));
       g_free (info);
+      cellview->priv->cell_list = g_list_delete_link (cellview->priv->cell_list, 
+						      cellview->priv->cell_list);
     }
-
-  g_list_free (cellview->priv->cell_list);
-  cellview->priv->cell_list = NULL;
 }
 
 static void
