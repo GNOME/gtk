@@ -1,3 +1,11 @@
+2003-03-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c: Use the signed GET_X_LPARAM() and
+	GET_Y_LPARAM() to extract x and y coordinates from an LPARAM or
+	DWORD, and not the unsigned HIWORD() and LOWORD(). Systems with
+	multiple monitors can have negative coordinates on some of the
+	monitors. (partial fix for #99496, Arnaud Charlet)
+
 2003-03-13  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_set_property):
@@ -30,7 +38,7 @@
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
 	WM_SYSCHAR, return FALSE from the window procedure to prevent the
 	DefWindowProc from being called. Otherwise Windows would beep,
-	thinking you are tring to access a (nonexistent) menu when you
+	thinking you are trying to access a (nonexistent) menu when you
 	press Alt-something. Don't do this for Alt-Space,
 	though. (#107454, Martyn Russell)
 
