@@ -936,7 +936,7 @@ free_unthemed_icon (UnthemedIcon *unthemed_icon)
 {
   if (unthemed_icon->svg_filename)
     g_free (unthemed_icon->svg_filename);
-  if (unthemed_icon->svg_filename)
+  if (unthemed_icon->no_svg_filename)
     g_free (unthemed_icon->no_svg_filename);
   g_free (unthemed_icon);
 }
