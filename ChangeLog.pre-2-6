@@ -1,3 +1,9 @@
+Fri Feb 16 18:50:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_real_menu_shell_cancel): Unset
+	the active menu item before deactivating the menu,
+	so gtk_menu_popdown doesn't change the history. (#50964)
+	
 Fri Feb 16 15:55:22 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreeitem.c (gtk_tree_item_draw_lines): 
