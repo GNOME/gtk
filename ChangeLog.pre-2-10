@@ -1,3 +1,9 @@
+Fri May 19 11:52:59 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkdrawingarea.c (gtk_drawing_area_send_configure): set
+	send_event to TRUE.
+	(gtk_drawing_area_size): queue a resize.
+
 Sun Mar 26 03:21:28 2000  Tim Janik  <timj@gtk.org>
 
         * gtk/gtksignal.c (gtk_signal_handlers_destroy): when unref-ing

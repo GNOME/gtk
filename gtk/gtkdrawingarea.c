@@ -54,7 +54,7 @@ gtk_drawing_area_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      drawing_area_type = gtk_type_unique (gtk_widget_get_type (), &drawing_area_info);
+      drawing_area_type = gtk_type_unique (GTK_TYPE_WIDGET, &drawing_area_info);
     }
 
   return drawing_area_type;
@@ -63,9 +63,7 @@ gtk_drawing_area_get_type (void)
 static void
 gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 {
-  GtkWidgetClass *widget_class;
-
-  widget_class = (GtkWidgetClass*) class;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->realize = gtk_drawing_area_realize;
   widget_class->size_allocate = gtk_drawing_area_size_allocate;
@@ -81,7 +79,7 @@ gtk_drawing_area_init (GtkDrawingArea *darea)
 GtkWidget*
 gtk_drawing_area_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_drawing_area_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_DRAWING_AREA));
 }
 
 void
@@ -89,11 +87,12 @@ gtk_drawing_area_size (GtkDrawingArea *darea,
 		       gint            width,
 		       gint            height)
 {
-  g_return_if_fail (darea != NULL);
   g_return_if_fail (GTK_IS_DRAWING_AREA (darea));
 
   GTK_WIDGET (darea)->requisition.width = width;
   GTK_WIDGET (darea)->requisition.height = height;
+
+  gtk_widget_queue_resize (GTK_WIDGET (darea));
 }
 
 static void
@@ -160,6 +159,7 @@ gtk_drawing_area_send_configure (GtkDrawingArea *darea)
 
   event.type = GDK_CONFIGURE;
   event.window = widget->window;
+  event.send_event = TRUE;
   event.x = widget->allocation.x;
   event.y = widget->allocation.y;
   event.width = widget->allocation.width;
