@@ -230,7 +230,8 @@ gtk_tree_selection_set_mode (GtkTreeSelection *selection,
 						  tree,
 						  anchor_path,
 						  0);
-      gtk_tree_path_free (anchor_path);
+      if (anchor_path)
+	gtk_tree_path_free (anchor_path);
     }
 
   selection->type = type;

@@ -805,6 +805,7 @@ typedef struct _GtkRBReorder
   gint flags;
   gint order;
   gint invert_order;
+  gint parity;
 } GtkRBReorder;
 
 static int
@@ -828,19 +829,26 @@ gtk_rbtree_reorder_fixup (GtkRBTree *tree,
   if (node == tree->nil)
     return;
 
+  node->parity = 1;
+
   if (node->left != tree->nil)
     {
       gtk_rbtree_reorder_fixup (tree, node->left);
       node->offset += node->left->offset;
+      node->parity += node->left->parity;
     }
   if (node->right != tree->nil)
     {
       gtk_rbtree_reorder_fixup (tree, node->right);
       node->offset += node->right->offset;
+      node->parity += node->right->parity;
     }
       
   if (node->children)
-    node->offset += node->children->root->offset;
+    {
+      node->offset += node->children->root->offset;
+      node->parity += node->children->root->parity;
+    }
 }
 
 /* It basically pulls everything out of the tree, rearranges it, and puts it
@@ -849,7 +857,6 @@ gtk_rbtree_reorder_fixup (GtkRBTree *tree,
  * heights.  There is probably a more elegant way to write this function.  If
  * anyone wants to spend the time writing it, patches will be accepted.
  */
-
 void
 _gtk_rbtree_reorder (GtkRBTree *tree,
 		     gint      *new_order,

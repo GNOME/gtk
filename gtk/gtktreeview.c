@@ -7987,20 +7987,32 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
-  if (tree_view->priv->reorderable == (reorderable?TRUE:FALSE))
+  reorderable = reorderable != FALSE;
+
+  if (tree_view->priv->reorderable == reorderable)
     return;
 
-  gtk_tree_view_set_rows_drag_source (tree_view,
-                                      GDK_BUTTON1_MASK,
-                                      row_targets,
-                                      G_N_ELEMENTS (row_targets),
-                                      GDK_ACTION_MOVE,
-                                      NULL, NULL);
-  gtk_tree_view_set_rows_drag_dest (tree_view,
-                                    row_targets,
-                                    G_N_ELEMENTS (row_targets),
-                                    GDK_ACTION_MOVE,
-                                    NULL, NULL);
+  tree_view->priv->reorderable = reorderable;
+
+  if (reorderable)
+    {
+      gtk_tree_view_set_rows_drag_source (tree_view,
+					  GDK_BUTTON1_MASK,
+					  row_targets,
+					  G_N_ELEMENTS (row_targets),
+					  GDK_ACTION_MOVE,
+					  NULL, NULL);
+      gtk_tree_view_set_rows_drag_dest (tree_view,
+					row_targets,
+					G_N_ELEMENTS (row_targets),
+					GDK_ACTION_MOVE,
+					NULL, NULL);
+    }
+  else
+    {
+      gtk_tree_view_unset_rows_drag_source (tree_view);
+      gtk_tree_view_unset_rows_drag_dest (tree_view);
+    }
 
   g_object_notify (G_OBJECT (tree_view), "reorderable");
 }
