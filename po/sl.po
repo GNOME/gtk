@@ -1064,11 +1064,11 @@ msgstr "Opis pisave kot struktura PangoFontDescription"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
 msgid "Font family"
-msgstr "Dru푝na pisave"
+msgstr "Dru푝na pisav"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "Ime dru푝ne pisave, npr.: Sans, Helvetica, Times, Monospace"
+msgstr "Ime dru푝ne pisav, npr.: Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
