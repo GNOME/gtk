@@ -1,3 +1,35 @@
+2004-03-11  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #135912 and #135913.
+
+	* gtk/gtkfilechooserdefault.c
+	(shortcuts_filter_model_row_draggable): Implement.
+	(shortcuts_model_filter_new): New function, create a
+	ShortcutsModelFilterClass derived from GtkTreeModelFilter, so that
+	we can implement our own DnD interface methods.
+	(shortcuts_model_create): Use shortcuts_model_filter_new().
+	(shortcuts_list_create): Enable the shortcuts list as a drag
+	source.
+	(file_list_source_targets): Renamed from shortcuts_targets.
+	(shortcuts_list_create): Change the options for
+	gtk_drag_dest_set().  Connect to more drag signals so that we can
+	implement drops by hand.
+	(shortcuts_drag_data_delete_cb): New handler; just stop the emission.
+	(shortcuts_drag_motion_cb): New handler; validate the drop.
+	(shortcuts_drag_leave_cb): New handler; unset the drag_dest_row.
+	(shortcuts_drag_drop_cb): New handler; just stop the emission and
+	remove the idle handler for the drag cursor.
+	(shortcuts_add_bookmark_from_path): Add a position argument,
+	return a boolean success code.
+	(shortcuts_drag_data_received_cb): Handle two cases:  1) Insert
+	the bookmarks at the proper position, rather than always appending
+	them to the list; 2) alternatively, reorder the bookmarks.
+	(struct _GtkFileChooserDefault): New field shortcuts_drag_outside.
+	(shortcuts_drag_motion_cb): Turn off impl->shortcuts_drag_outside.
+	(shortcuts_drag_leave_cb): Turn on impl->shortcuts_drag_outside in
+	an idle handler.
+	(shortcuts_drag_end_cb): New handler; remove the selected bookmark.
+
 Thu Mar 11 01:08:25 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (location_entry_create): up the

@@ -53,6 +53,8 @@
 #include "gtksizegroup.h"
 #include "gtkstock.h"
 #include "gtktable.h"
+#include "gtktreednd.h"
+#include "gtktreeprivate.h"
 #include "gtktreeview.h"
 #include "gtktreemodelsort.h"
 #include "gtktreeselection.h"
@@ -145,6 +147,9 @@ struct _GtkFileChooserDefault
   guint settings_signal_id;
   int icon_size;
 
+  GdkDragContext *shortcuts_drag_context;
+  GSource *shortcuts_drag_outside_idle;
+
   /* Flags */
 
   guint local_only : 1;
@@ -156,6 +161,7 @@ struct _GtkFileChooserDefault
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
   guint shortcuts_current_folder_is_volume : 1;
+  guint shortcuts_drag_outside : 1;
 };
 
 /* Signal IDs */
@@ -188,15 +194,34 @@ enum {
 
 /* Identifiers for target types */
 enum {
+  GTK_TREE_MODEL_ROW,
   TEXT_URI_LIST
 };
 
-/* Target types for DnD in the shortcuts list */
-static GtkTargetEntry shortcuts_targets[] = {
+/* Target types for dragging from the shortcuts list */
+static GtkTargetEntry shortcuts_source_targets[] = {
+  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW }
+};
+
+static const int num_shortcuts_source_targets = (sizeof (shortcuts_source_targets)
+						 / sizeof (shortcuts_source_targets[0]));
+
+/* Target types for dropping into the shortcuts list */
+static GtkTargetEntry shortcuts_dest_targets[] = {
+  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW },
   { "text/uri-list", 0, TEXT_URI_LIST }
 };
 
-static const int num_shortcuts_targets = sizeof (shortcuts_targets) / sizeof (shortcuts_targets[0]);
+static const int num_shortcuts_dest_targets = (sizeof (shortcuts_dest_targets)
+					       / sizeof (shortcuts_dest_targets[0]));
+
+/* Target types for DnD from the file list */
+static GtkTargetEntry file_list_source_targets[] = {
+  { "text/uri-list", 0, TEXT_URI_LIST }
+};
+
+static const int num_file_list_source_targets = (sizeof (file_list_source_targets)
+						 / sizeof (file_list_source_targets[0]));
 
 /* Interesting places in the shortcuts bar */
 typedef enum {
@@ -346,6 +371,37 @@ static void list_mtime_data_func (GtkTreeViewColumn *tree_column,
 				  gpointer           data);
 
 static GObjectClass *parent_class;
+
+
+
+/* Drag and drop interface declarations */
+
+typedef struct {
+  GtkTreeModelFilter parent;
+
+  GtkFileChooserDefault *impl;
+} ShortcutsModelFilter;
+
+typedef struct {
+  GtkTreeModelFilterClass parent_class;
+} ShortcutsModelFilterClass;
+
+#define SHORTCUTS_MODEL_FILTER_TYPE (shortcuts_model_filter_get_type ())
+#define SHORTCUTS_MODEL_FILTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SHORTCUTS_MODEL_FILTER_TYPE, ShortcutsModelFilter))
+
+static void shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (ShortcutsModelFilter,
+			 shortcuts_model_filter,
+			 GTK_TYPE_TREE_MODEL_FILTER,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
+						shortcuts_model_filter_drag_source_iface_init));
+
+static GtkTreeModel *shortcuts_model_filter_new (GtkFileChooserDefault *impl,
+						 GtkTreeModel          *child_model,
+						 GtkTreePath           *root);
+
+
 
 GType
 _gtk_file_chooser_default_get_type (void)
@@ -1295,7 +1351,10 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
       shortcuts_add_bookmarks (impl);
     }
 
-  impl->shortcuts_filter_model = gtk_tree_model_filter_new (GTK_TREE_MODEL (impl->shortcuts_model), NULL);
+  impl->shortcuts_filter_model = shortcuts_model_filter_new (impl,
+							     GTK_TREE_MODEL (impl->shortcuts_model),
+							     NULL);
+
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model),
 					  shortcuts_filter_cb,
 					  impl,
@@ -1483,15 +1542,19 @@ shortcut_find_position (GtkFileChooserDefault *impl,
 }
 
 /* Tries to add a bookmark from a path name */
-static void
+static gboolean
 shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
-				  const GtkFilePath     *path)
+				  const GtkFilePath     *path,
+				  int                    pos)
 {
   GtkFileInfo *info;
   GError *error;
+  gboolean result;
 
   if (shortcut_find_position (impl, path) != -1)
-    return;
+    return FALSE;
+
+  result = FALSE;
 
   error = NULL;
   info = get_file_info (impl->file_system, path, FALSE, &error);
@@ -1513,9 +1576,13 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
   else
     {
       error = NULL;
-      if (!gtk_file_system_insert_bookmark (impl->file_system, path, -1, &error))
+      if (gtk_file_system_insert_bookmark (impl->file_system, path, pos, &error))
+	result = TRUE;
+      else
 	error_could_not_add_bookmark_dialog (impl, path, error);
     }
+
+  return result;
 }
 
 static void
@@ -1535,7 +1602,7 @@ add_bookmark_foreach_cb (GtkTreeModel *model,
   gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, iter);
 
   file_path = _gtk_file_system_model_get_path (GTK_FILE_SYSTEM_MODEL (fs_model), &child_iter);
-  shortcuts_add_bookmark_from_path (impl, file_path);
+  shortcuts_add_bookmark_from_path (impl, file_path, -1);
 }
 
 /* Callback used when the "Add bookmark" button is clicked */
@@ -1548,7 +1615,7 @@ add_bookmark_button_clicked_cb (GtkButton *button,
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
 
   if (gtk_tree_selection_count_selected_rows (selection) == 0)
-    shortcuts_add_bookmark_from_path (impl, impl->current_folder);
+    shortcuts_add_bookmark_from_path (impl, impl->current_folder, -1);
   else
     gtk_tree_selection_selected_foreach (selection,
 					 add_bookmark_foreach_cb,
@@ -1721,6 +1788,357 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
   gtk_widget_set_sensitive (impl->browse_shortcuts_remove_button, removable);
 }
 
+/* GtkWidget::drag-begin handler for the shortcuts list. */
+static void
+shortcuts_drag_begin_cb (GtkWidget             *widget,
+			 GdkDragContext        *context,
+			 GtkFileChooserDefault *impl)
+{
+  impl->shortcuts_drag_context = g_object_ref (context);
+}
+
+/* Removes the idle handler for outside drags */
+static void
+shortcuts_cancel_drag_outside_idle (GtkFileChooserDefault *impl)
+{
+  if (!impl->shortcuts_drag_outside_idle)
+    return;
+
+  g_source_destroy (impl->shortcuts_drag_outside_idle);
+  impl->shortcuts_drag_outside_idle = NULL;
+}
+
+/* GtkWidget::drag-end handler for the shortcuts list. */
+static void
+shortcuts_drag_end_cb (GtkWidget             *widget,
+		       GdkDragContext        *context,
+		       GtkFileChooserDefault *impl)
+{
+  g_object_unref (impl->shortcuts_drag_context);
+
+  shortcuts_cancel_drag_outside_idle (impl);
+
+  if (!impl->shortcuts_drag_outside)
+    return;
+
+  gtk_button_clicked (GTK_BUTTON (impl->browse_shortcuts_remove_button));
+
+  impl->shortcuts_drag_outside = FALSE;
+}
+
+/* GtkWidget::drag-data-delete handler for the shortcuts list. */
+static void
+shortcuts_drag_data_delete_cb (GtkWidget             *widget,
+			       GdkDragContext        *context,
+			       GtkFileChooserDefault *impl)
+{
+  g_signal_stop_emission_by_name (widget, "drag-data-delete");
+}
+
+/* Creates a suitable drag cursor to indicate that the selected bookmark will be
+ * deleted or not.
+ */
+static void
+shortcuts_drag_set_delete_cursor (GtkFileChooserDefault *impl,
+				  gboolean               delete)
+{
+  GtkTreeView *tree_view;
+  GtkTreeSelection *selection;
+  GtkTreeIter iter, child_iter;
+  GtkTreePath *path;
+  GdkPixmap *row_pixmap;
+  GdkBitmap *mask;
+  int row_pixmap_y;
+  int cell_y;
+
+  tree_view = GTK_TREE_VIEW (impl->browse_shortcuts_tree_view);
+
+  /* Find the selected path and get its drag pixmap */
+
+  selection = gtk_tree_view_get_selection (tree_view);
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    g_assert_not_reached ();
+
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model),
+						    &child_iter,
+						    &iter);
+
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &child_iter);
+
+  row_pixmap = gtk_tree_view_create_row_drag_icon (tree_view, path);
+  gtk_tree_path_free (path);
+
+  mask = NULL;
+  row_pixmap_y = 0;
+
+  if (delete)
+    {
+      GdkPixbuf *pixbuf;
+
+      pixbuf = gtk_widget_render_icon (impl->browse_shortcuts_tree_view,
+				       GTK_STOCK_DELETE,
+				       GTK_ICON_SIZE_DND,
+				       NULL);
+      if (pixbuf)
+	{
+	  GdkPixmap *composite;
+	  int row_pixmap_width, row_pixmap_height;
+	  int pixbuf_width, pixbuf_height;
+	  int composite_width, composite_height;
+	  int pixbuf_y;
+	  GdkGC *gc, *mask_gc;
+	  GdkColor color;
+	  GdkBitmap *pixbuf_mask;
+
+	  /* Create pixmap and mask for composite image */
+
+	  gdk_drawable_get_size (row_pixmap, &row_pixmap_width, &row_pixmap_height);
+	  pixbuf_width = gdk_pixbuf_get_width (pixbuf);
+	  pixbuf_height = gdk_pixbuf_get_height (pixbuf);
+
+	  composite_width = MAX (row_pixmap_width, pixbuf_width);
+	  composite_height = MAX (row_pixmap_height, pixbuf_height);
+
+	  row_pixmap_y = (composite_height - row_pixmap_height) / 2;
+	  pixbuf_y = (composite_height - pixbuf_height) / 2;
+
+	  composite = gdk_pixmap_new (row_pixmap, composite_width, composite_height, -1);
+	  gc = gdk_gc_new (composite);
+
+	  mask = gdk_pixmap_new (row_pixmap, composite_width, composite_height, 1);
+	  mask_gc = gdk_gc_new (mask);
+	  color.pixel = 0;
+	  gdk_gc_set_foreground (mask_gc, &color);
+	  gdk_draw_rectangle (mask, mask_gc, TRUE, 0, 0, composite_width, composite_height);
+
+	  color.red = 0xffff;
+	  color.green = 0xffff;
+	  color.blue = 0xffff;
+	  gdk_gc_set_rgb_fg_color (gc, &color);
+	  gdk_draw_rectangle (composite, gc, TRUE, 0, 0, composite_width, composite_height);
+
+	  /* Composite the row pixmap and the pixbuf */
+
+	  gdk_pixbuf_render_pixmap_and_mask_for_colormap
+	    (pixbuf,
+	     gtk_widget_get_colormap (impl->browse_shortcuts_tree_view),
+	     NULL, &pixbuf_mask, 128);
+	  gdk_draw_drawable (mask, mask_gc, pixbuf_mask,
+			     0, 0,
+			     0, pixbuf_y,
+			     pixbuf_width, pixbuf_height);
+	  g_object_unref (pixbuf_mask);
+
+	  gdk_draw_drawable (composite, gc, row_pixmap,
+			     0, 0,
+			     0, row_pixmap_y,
+			     row_pixmap_width, row_pixmap_height);
+	  color.pixel = 1;
+	  gdk_gc_set_foreground (mask_gc, &color);
+	  gdk_draw_rectangle (mask, mask_gc, TRUE, 0, row_pixmap_y, row_pixmap_width, row_pixmap_height);
+
+	  gdk_draw_pixbuf (composite, gc, pixbuf,
+			   0, 0,
+			   0, pixbuf_y,
+			   pixbuf_width, pixbuf_height,
+			   GDK_RGB_DITHER_MAX,
+			   0, 0);
+
+	  g_object_unref (pixbuf);
+	  g_object_unref (row_pixmap);
+
+	  row_pixmap = composite;
+	}
+    }
+
+  /* The hotspot offsets here are copied from gtk_tree_view_drag_begin(), ugh */
+
+  gtk_tree_view_get_path_at_pos (tree_view,
+                                 tree_view->priv->press_start_x,
+                                 tree_view->priv->press_start_y,
+                                 NULL,
+                                 NULL,
+                                 NULL,
+                                 &cell_y);
+
+  gtk_drag_set_icon_pixmap (impl->shortcuts_drag_context,
+			    gdk_drawable_get_colormap (row_pixmap),
+			    row_pixmap,
+			    mask,
+			    tree_view->priv->press_start_x + 1,
+			    row_pixmap_y + cell_y + 1);
+
+  g_object_unref (row_pixmap);
+  if (mask)
+    g_object_unref (mask);
+}
+
+/* We set the delete cursor and the shortcuts_drag_outside flag in an idle
+ * handler so that we can tell apart the drag_leave event that comes right
+ * before a drag_drop, from a normal drag_leave.  We don't want to set the
+ * cursor nor the flag in the latter case.
+ */
+static gboolean
+shortcuts_drag_outside_idle_cb (GtkFileChooserDefault *impl)
+{
+  shortcuts_drag_set_delete_cursor (impl, TRUE);
+  impl->shortcuts_drag_outside = TRUE;
+
+  shortcuts_cancel_drag_outside_idle (impl);
+  return FALSE;
+}
+			 
+/* GtkWidget::drag-leave handler for the shortcuts list.  We unhighlight the
+ * drop position.
+ */
+static void
+shortcuts_drag_leave_cb (GtkWidget             *widget,
+			 GdkDragContext        *context,
+			 guint                  time_,
+			 GtkFileChooserDefault *impl)
+{
+  if (gtk_drag_get_source_widget (context) == widget)
+    {
+      g_assert (impl->shortcuts_drag_outside_idle == NULL);
+
+      impl->shortcuts_drag_outside_idle = g_idle_source_new ();
+      g_source_set_closure (impl->shortcuts_drag_outside_idle,
+			    g_cclosure_new_object (G_CALLBACK (shortcuts_drag_outside_idle_cb),
+						   G_OBJECT (impl)));
+      g_source_attach (impl->shortcuts_drag_outside_idle, NULL);
+    }
+
+  gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
+				   NULL,
+				   GTK_TREE_VIEW_DROP_BEFORE);
+
+  g_signal_stop_emission_by_name (widget, "drag-leave");
+}
+
+/* Computes the appropriate row and position for dropping */
+static void
+shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
+				 int                      x,
+				 int                      y,
+				 GtkTreePath            **path,
+				 GtkTreeViewDropPosition *pos)
+{
+  GtkTreeView *tree_view;
+  GtkTreeViewColumn *column;
+  int cell_y;
+  GdkRectangle cell;
+  int row;
+  int bookmarks_index;
+
+  tree_view = GTK_TREE_VIEW (impl->browse_shortcuts_tree_view);
+
+  bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
+
+  if (!gtk_tree_view_get_path_at_pos (tree_view,
+                                      x,
+				      y - TREE_VIEW_HEADER_HEIGHT (tree_view),
+                                      path,
+                                      &column,
+                                      NULL,
+                                      &cell_y))
+    {
+      row = bookmarks_index + impl->num_bookmarks - 1;
+      *path = gtk_tree_path_new_from_indices (row, -1);
+      *pos = GTK_TREE_VIEW_DROP_AFTER;
+      return;
+    }
+
+  row = *gtk_tree_path_get_indices (*path);
+  gtk_tree_view_get_background_area (tree_view, *path, column, &cell);
+  gtk_tree_path_free (*path);
+
+  if (row < bookmarks_index)
+    {
+      row = bookmarks_index;
+      *pos = GTK_TREE_VIEW_DROP_BEFORE;
+    }
+  else if (row > bookmarks_index + impl->num_bookmarks - 1)
+    {
+      row = bookmarks_index + impl->num_bookmarks - 1;
+      *pos = GTK_TREE_VIEW_DROP_AFTER;
+    }
+  else
+    {
+      if (cell_y < cell.height / 2)
+	*pos = GTK_TREE_VIEW_DROP_BEFORE;
+      else
+	*pos = GTK_TREE_VIEW_DROP_AFTER;
+    }
+
+  *path = gtk_tree_path_new_from_indices (row, -1);
+}
+
+/* GtkWidget::drag-motion handler for the shortcuts list.  We basically
+ * implement the destination side of DnD by hand, due to limitations in
+ * GtkTreeView's DnD API.
+ */
+static gboolean
+shortcuts_drag_motion_cb (GtkWidget             *widget,
+			  GdkDragContext        *context,
+			  gint                   x,
+			  gint                   y,
+			  guint                  time_,
+			  GtkFileChooserDefault *impl)
+{
+  GtkTreePath *path;
+  GtkTreeViewDropPosition pos;
+  GdkDragAction action;
+
+  if (gtk_drag_get_source_widget (context) == widget && impl->shortcuts_drag_outside)
+    {
+      g_assert (impl->shortcuts_drag_outside_idle == NULL);
+
+      shortcuts_drag_set_delete_cursor (impl, FALSE);
+      impl->shortcuts_drag_outside = FALSE;
+    }
+
+  if (context->suggested_action == GDK_ACTION_COPY || (context->actions & GDK_ACTION_COPY) != 0)
+    action = GDK_ACTION_COPY;
+  else if (context->suggested_action == GDK_ACTION_MOVE || (context->actions & GDK_ACTION_MOVE) != 0)
+    action = GDK_ACTION_MOVE;
+  else
+    {
+      goto out;
+      action = 0;
+    }
+
+  shortcuts_compute_drop_position (impl, x, y, &path, &pos);
+  gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), path, pos);
+  gtk_tree_path_free (path);
+
+ out:
+
+  g_signal_stop_emission_by_name (widget, "drag-motion");
+
+  if (action != 0)
+    {
+      gdk_drag_status (context, action, time_);
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+/* GtkWidget::drag-drop handler for the shortcuts list. */
+static gboolean
+shortcuts_drag_drop_cb (GtkWidget             *widget,
+			GdkDragContext        *context,
+			gint                   x,
+			gint                   y,
+			guint                  time_,
+			GtkFileChooserDefault *impl)
+{
+  shortcuts_cancel_drag_outside_idle (impl);
+
+  g_signal_stop_emission_by_name (widget, "drag-drop");
+  return TRUE;
+}
+
 /* Converts raw selection data from text/uri-list to a list of strings */
 static GSList *
 split_uris (const char *data)
@@ -1748,25 +2166,15 @@ split_uris (const char *data)
   return uris;
 }
 
-/* Callback used when we get the drag data for the bookmarks list.  We add the
- * received URIs as bookmarks if they are folders.
- */
+/* Parses a "text/uri-list" string and inserts its URIs as bookmarks */
 static void
-shortcuts_drag_data_received_cb (GtkWidget          *widget,
-				 GdkDragContext     *context,
-				 gint                x,
-				 gint                y,
-				 GtkSelectionData   *selection_data,
-				 guint               info,
-				 guint               time_,
-				 gpointer            data)
+shortcuts_drop_uris (GtkFileChooserDefault *impl,
+		     const char            *data,
+		     int                    position)
 {
-  GtkFileChooserDefault *impl;
   GSList *uris, *l;
 
-  impl = GTK_FILE_CHOOSER_DEFAULT (data);
-
-  uris = split_uris (selection_data->data);
+  uris = split_uris (data);
 
   for (l = uris; l; l = l->next)
     {
@@ -1778,7 +2186,9 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
 
       if (path)
 	{
-	  shortcuts_add_bookmark_from_path (impl, path);
+	  if (shortcuts_add_bookmark_from_path (impl, path, position))
+	    position++;
+
 	  gtk_file_path_free (path);
 	}
       else
@@ -1795,6 +2205,101 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
     }
 
   g_slist_free (uris);
+}
+
+/* Reorders the selected bookmark to the specified position */
+static void
+shortcuts_reorder (GtkFileChooserDefault *impl,
+		   int                    new_position)
+{
+  GtkTreeSelection *selection;
+  GtkTreeIter iter, child_iter;
+  GtkTreePath *path;
+  int old_position;
+  int bookmarks_index;
+  const GtkFilePath *file_path;
+  GtkFilePath *file_path_copy;
+  GError *error;
+
+  /* Get the selected path */
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    g_assert_not_reached ();
+
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model),
+						    &child_iter,
+						    &iter);
+
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &child_iter);
+  old_position = *gtk_tree_path_get_indices (path);
+  gtk_tree_path_free (path);
+
+  bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
+  old_position -= bookmarks_index;
+  g_assert (old_position >= 0 && old_position < impl->num_bookmarks);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &child_iter,
+		      SHORTCUTS_COL_PATH, &file_path,
+		      -1);
+  file_path_copy = gtk_file_path_copy (file_path); /* removal below will free file_path, so we need a copy */
+
+  /* Remove the path from the old position and insert it in the new one */
+
+  if (new_position > old_position)
+    new_position--;
+
+  if (old_position == new_position)
+    return;
+
+  error = NULL;
+  if (gtk_file_system_remove_bookmark (impl->file_system, file_path_copy, &error))
+    shortcuts_add_bookmark_from_path (impl, file_path_copy, new_position);
+  else
+    error_could_not_add_bookmark_dialog (impl, file_path_copy, error);
+
+  gtk_file_path_free (file_path_copy);
+}
+
+/* Callback used when we get the drag data for the bookmarks list.  We add the
+ * received URIs as bookmarks if they are folders.
+ */
+static void
+shortcuts_drag_data_received_cb (GtkWidget          *widget,
+				 GdkDragContext     *context,
+				 gint                x,
+				 gint                y,
+				 GtkSelectionData   *selection_data,
+				 guint               info,
+				 guint               time_,
+				 gpointer            data)
+{
+  GtkFileChooserDefault *impl;
+  GtkTreePath *tree_path;
+  GtkTreeViewDropPosition tree_pos;
+  int position;
+  int bookmarks_index;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (data);
+
+  /* Compute position */
+
+  bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
+
+  shortcuts_compute_drop_position (impl, x, y, &tree_path, &tree_pos);
+  position = *gtk_tree_path_get_indices (tree_path);
+  gtk_tree_path_free (tree_path);
+
+  if (tree_pos == GTK_TREE_VIEW_DROP_AFTER)
+    position++;
+
+  g_assert (position >= bookmarks_index);
+  position -= bookmarks_index;
+
+  if (selection_data->target == gdk_atom_intern ("text/uri-list", FALSE))
+    shortcuts_drop_uris (impl, selection_data->data, position);
+  else if (selection_data->target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
+    shortcuts_reorder (impl, position);
 
   g_signal_stop_emission_by_name (widget, "drag-data-received");
 }
@@ -1832,11 +2337,17 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), impl->shortcuts_filter_model);
 
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
+					  GDK_BUTTON1_MASK,
+					  shortcuts_source_targets,
+					  num_shortcuts_source_targets,
+					  GDK_ACTION_MOVE);
+
   gtk_drag_dest_set (impl->browse_shortcuts_tree_view,
 		     GTK_DEST_DEFAULT_ALL,
-		     shortcuts_targets,
-		     num_shortcuts_targets,
-		     GDK_ACTION_COPY);
+		     shortcuts_dest_targets,
+		     num_shortcuts_dest_targets,
+		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
@@ -1850,6 +2361,19 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   g_signal_connect (impl->browse_shortcuts_tree_view, "row-activated",
 		    G_CALLBACK (shortcuts_row_activated_cb), impl);
 
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-begin",
+		    G_CALLBACK (shortcuts_drag_begin_cb), impl);
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-end",
+		    G_CALLBACK (shortcuts_drag_end_cb), impl);
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-data-delete",
+		    G_CALLBACK (shortcuts_drag_data_delete_cb), impl);
+
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-leave",
+		    G_CALLBACK (shortcuts_drag_leave_cb), impl);
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-motion",
+		    G_CALLBACK (shortcuts_drag_motion_cb), impl);
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-drop",
+		    G_CALLBACK (shortcuts_drag_drop_cb), impl);
   g_signal_connect (impl->browse_shortcuts_tree_view, "drag-data-received",
 		    G_CALLBACK (shortcuts_drag_data_received_cb), impl);
 
@@ -1991,8 +2515,8 @@ create_file_list (GtkFileChooserDefault *impl)
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_files_tree_view),
 					  GDK_BUTTON1_MASK,
-					  shortcuts_targets,
-					  num_shortcuts_targets,
+					  file_list_source_targets,
+					  num_file_list_source_targets,
 					  GDK_ACTION_COPY);
 
   g_signal_connect (selection, "changed",
@@ -4427,4 +4951,86 @@ home_folder_handler (GtkFileChooserDefault *impl)
   g_assert (path != NULL);
 
   change_folder_and_display_error (impl, path);
+}
+
+
+
+/* Drag and drop interfaces */
+
+static void
+shortcuts_model_filter_class_init (ShortcutsModelFilterClass *class)
+{
+}
+
+static void
+shortcuts_model_filter_init (ShortcutsModelFilter *model)
+{
+  model->impl = NULL;
+}
+
+/* GtkTreeDragSource::row_draggable implementation for the shortcuts filter model */
+static gboolean
+shortcuts_model_filter_row_draggable (GtkTreeDragSource *drag_source,
+				      GtkTreePath       *path)
+{
+  ShortcutsModelFilter *model;
+  int pos;
+  int bookmarks_pos;
+
+  model = SHORTCUTS_MODEL_FILTER (drag_source);
+
+  pos = *gtk_tree_path_get_indices (path);
+  bookmarks_pos = shortcuts_get_index (model->impl, SHORTCUTS_BOOKMARKS);
+
+  return (pos >= bookmarks_pos && pos < bookmarks_pos + model->impl->num_bookmarks);
+}
+
+/* GtkTreeDragSource::drag_data_get implementation for the shortcuts filter model */
+static gboolean
+shortcuts_model_filter_drag_data_get (GtkTreeDragSource *drag_source,
+				      GtkTreePath       *path,
+				      GtkSelectionData  *selection_data)
+{
+  ShortcutsModelFilter *model;
+
+  model = SHORTCUTS_MODEL_FILTER (drag_source);
+
+  /* FIXME */
+
+  return FALSE;
+}
+
+/* Fill the GtkTreeDragSourceIface vtable */
+static void
+shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface)
+{
+  iface->row_draggable = shortcuts_model_filter_row_draggable;
+  iface->drag_data_get = shortcuts_model_filter_drag_data_get;
+}
+
+#if 0
+/* Fill the GtkTreeDragDestIface vtable */
+static void
+shortcuts_model_filter_drag_dest_iface_init (GtkTreeDragDestIface *iface)
+{
+  iface->drag_data_received = shortcuts_model_filter_drag_data_received;
+  iface->row_drop_possible = shortcuts_model_filter_row_drop_possible;
+}
+#endif
+
+static GtkTreeModel *
+shortcuts_model_filter_new (GtkFileChooserDefault *impl,
+			    GtkTreeModel          *child_model,
+			    GtkTreePath           *root)
+{
+  ShortcutsModelFilter *model;
+
+  model = g_object_new (SHORTCUTS_MODEL_FILTER_TYPE,
+			"child_model", child_model,
+			"virtual_root", root,
+			NULL);
+
+  model->impl = impl;
+
+  return GTK_TREE_MODEL (model);
 }
