@@ -331,7 +331,7 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat mkstemp)
+AC_CHECK_FUNCS(lstat mkstemp flockfile)
 
 # sigsetjmp is a macro on some platforms, so AC_CHECK_FUNCS is not reliable
 AC_MSG_CHECKING(for sigsetjmp)
