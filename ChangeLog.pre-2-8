@@ -1,3 +1,8 @@
+Sat Dec 14 01:22:05 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkaccellabel.[ch] (gtk_accel_label_refetch): Don't
+	recalculate the acceleration label in an idle handler.
+
 Sat Dec 14 01:00:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_position): Handle the case

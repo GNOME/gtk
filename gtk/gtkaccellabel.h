@@ -54,7 +54,7 @@ struct _GtkAccelLabel
 {
   GtkLabel label;
 
-  guint	         queue_id;
+  guint	         gtk_reserved;
   guint	         accel_padding;
   GtkWidget     *accel_widget;
   GClosure	*accel_closure;

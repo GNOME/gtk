@@ -198,7 +198,6 @@ gtk_accel_label_get_property (GObject    *object,
 static void
 gtk_accel_label_init (GtkAccelLabel *accel_label)
 {
-  accel_label->queue_id = 0;
   accel_label->accel_padding = 3;
   accel_label->accel_widget = NULL;
   accel_label->accel_closure = NULL;
@@ -236,11 +235,6 @@ gtk_accel_label_finalize (GObject *object)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (object);
 
-  if (accel_label->queue_id)
-    {
-      gtk_idle_remove (accel_label->queue_id);
-      accel_label->queue_id = 0;
-    }
   g_free (accel_label->accel_string);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -430,17 +424,6 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 }
 
 static void
-gtk_accel_label_queue_refetch (GtkAccelLabel *accel_label)
-{
-  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
-
-  if (accel_label->queue_id == 0)
-    accel_label->queue_id = gtk_idle_add_priority (G_PRIORITY_HIGH_IDLE,
-						   (GtkFunction) gtk_accel_label_refetch_idle,
-						   accel_label);
-}
-
-static void
 check_accel_changed (GtkAccelGroup  *accel_group,
 		     guint           keyval,
 		     GdkModifierType modifier,
@@ -448,7 +431,7 @@ check_accel_changed (GtkAccelGroup  *accel_group,
 		     GtkAccelLabel  *accel_label)
 {
   if (accel_closure == accel_label->accel_closure)
-    gtk_accel_label_queue_refetch (accel_label);
+    gtk_accel_label_refetch (accel_label);
 }
 
 /**
@@ -486,21 +469,9 @@ gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 				   G_CALLBACK (check_accel_changed),
 				   accel_label, 0);
 	}
-      gtk_accel_label_queue_refetch (accel_label);
+      gtk_accel_label_refetch (accel_label);
       g_object_notify (G_OBJECT (accel_label), "accel_closure");
     }
-}
-
-static gboolean
-gtk_accel_label_refetch_idle (GtkAccelLabel *accel_label)
-{
-  gboolean retval;
-
-  GDK_THREADS_ENTER ();
-  retval = gtk_accel_label_refetch (accel_label);
-  GDK_THREADS_LEAVE ();
-
-  return retval;
 }
 
 static gboolean
@@ -595,12 +566,6 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
   
   if (!accel_label->accel_string)
     accel_label->accel_string = g_strdup ("");
-
-  if (accel_label->queue_id)
-    {
-      gtk_idle_remove (accel_label->queue_id);
-      accel_label->queue_id = 0;
-    }
 
   gtk_widget_queue_resize (GTK_WIDGET (accel_label));
 
