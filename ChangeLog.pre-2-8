@@ -1,3 +1,8 @@
+2004-11-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkselection-x11.c (gdk_text_property_to_utf8_list_for_display): 
+	Don't crash if Xlib fails to return UTF-8. (#159373, Kristian Høgsberg) 
+
 2004-11-20  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (list_icon_data_func): Set an empty
@@ -78,6 +83,7 @@
 	in unfocused selected cells. Also avoid creating two PangoLayouts
 	per render call.  (#154615, #154611, Billy Biggs)
 
+>>>>>>> 1.5367.2.315
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c: 
