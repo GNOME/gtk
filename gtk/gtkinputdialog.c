@@ -175,6 +175,8 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   GList *tmp_list;
   GList *device_info;
 
+  gtk_widget_push_composite_child ();
+
   device_info = gdk_devices_list ();
 
   /* shell and main vbox */
@@ -343,6 +345,8 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   gtk_widget_grab_default (inputd->close_button);
 
   gtk_widget_show (vbox);
+
+  gtk_widget_pop_composite_child ();
 }
 
 
