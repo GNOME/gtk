@@ -149,7 +149,7 @@ you might have to write a marshaller.
 
 <!-- ##### MACRO GTK_SIGNAL_OFFSET ##### -->
 <para>
-
+Use in place of <function>offsetof()</function>, which is used if it exists.
 </para>
 
 <!-- # Unused Parameters # -->

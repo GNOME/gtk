@@ -60,7 +60,7 @@ is convenient if you're creating tags on-the-fly).
 <para>
 Most text manipulation is accomplished with <firstterm>iterators</firstterm>,
 represented by a <link linkend="GtkTextIter">GtkTextIter</link>. An iterator
-represents a position in the text buffer. <link
+represents a position between two characters in the text buffer. <link
 linkend="GtkTextIter">GtkTextIter</link> is a struct designed to be allocated on
 the stack; it's guaranteed to be copiable by value and never contain any
 heap-allocated data. Iterators are not valid indefinitely; whenever the buffer
