@@ -1318,9 +1318,9 @@ gtk_tree_model_sort_set_sort_column_id (GtkTreeSortable *sortable,
   tree_model_sort->sort_column_id = sort_column_id;
   tree_model_sort->order = order;
 
-  gtk_tree_model_sort_sort (tree_model_sort);
-
   gtk_tree_sortable_sort_column_changed (sortable);
+
+  gtk_tree_model_sort_sort (tree_model_sort);
 }
 
 static void
@@ -1368,6 +1368,9 @@ gtk_tree_model_sort_set_sort_func (GtkTreeSortable        *sortable,
   header->func = func;
   header->data = data;
   header->destroy = destroy;
+
+  if (tree_model_sort->sort_column_id == sort_column_id)
+    gtk_tree_model_sort_sort (tree_model_sort);
 }
 
 static void
@@ -1391,6 +1394,9 @@ gtk_tree_model_sort_set_default_sort_func (GtkTreeSortable        *sortable,
   tree_model_sort->default_sort_func = func;
   tree_model_sort->default_sort_data = data;
   tree_model_sort->default_sort_destroy = destroy;
+
+  if (tree_model_sort->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+    gtk_tree_model_sort_sort (tree_model_sort);
 }
 
 static gboolean

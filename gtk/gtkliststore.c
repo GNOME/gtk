@@ -1594,7 +1594,7 @@ gtk_list_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
 				   &src_model,
 				   &src_path))
     goto out;
-    
+
   if (src_model != GTK_TREE_MODEL (drag_dest))
     goto out;
 
@@ -1770,6 +1770,12 @@ gtk_list_store_swap (GtkListStore *store,
   G_SLIST (a->user_data)->next = prev_b;
   G_SLIST (b->user_data)->next = prev_a;
 
+  /* update tail if needed */
+  if (! G_SLIST (a->user_data)->next)
+    store->tail = G_SLIST (a->user_data);
+  else if (! G_SLIST (b->user_data)->next)
+    store->tail = G_SLIST (b->user_data);
+
   /* emit signal */
   order = g_new (gint, store->length);
   for (j = 0; j < store->length; j++)
@@ -1901,8 +1907,11 @@ gtk_list_store_move (GtkListStore *store,
     {
       G_SLIST (store->tail)->next = G_SLIST (iter->user_data);
       G_SLIST (iter->user_data)->next = NULL;
-      store->tail = iter->user_data;
     }
+
+  /* update tail if needed */
+  if (!G_SLIST (iter->user_data)->next)
+    store->tail = G_SLIST (iter->user_data);
 
   /* emit signal */
   if (position)
@@ -2304,7 +2313,7 @@ gtk_list_store_get_sort_column_id (GtkTreeSortable  *sortable,
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (sortable), FALSE);
 
-  if (list_store->sort_column_id == -1)
+  if (list_store->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
     return FALSE;
 
   if (sort_column_id)
@@ -2327,7 +2336,7 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
       (list_store->order == order))
     return;
 
-  if (sort_column_id != -1)
+  if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
     {
       GtkTreeDataSortHeader *header = NULL;
 
@@ -2346,9 +2355,9 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
   list_store->sort_column_id = sort_column_id;
   list_store->order = order;
 
-  gtk_list_store_sort (list_store);
-
   gtk_tree_sortable_sort_column_changed (sortable);
+
+  gtk_list_store_sort (list_store);
 }
 
 static void
@@ -2395,8 +2404,10 @@ gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
   header->func = func;
   header->data = data;
   header->destroy = destroy;
-}
 
+  if (list_store->sort_column_id == sort_column_id)
+    gtk_list_store_sort (list_store);
+}
 
 static void
 gtk_list_store_set_default_sort_func (GtkTreeSortable        *sortable,
@@ -2419,6 +2430,9 @@ gtk_list_store_set_default_sort_func (GtkTreeSortable        *sortable,
   list_store->default_sort_func = func;
   list_store->default_sort_data = data;
   list_store->default_sort_destroy = destroy;
+
+  if (list_store->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+    gtk_list_store_sort (list_store);
 }
 
 static gboolean

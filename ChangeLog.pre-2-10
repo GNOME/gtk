@@ -1,3 +1,60 @@
+Mon Jan 27 22:45:15 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_move): don't handle b if
+	we appended/prepended, send the rows_reordered signal to the 
+	correct level ... (Reported by Matthew Tuck).
+
+Mon Jan 27 22:43:11 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_sort_helper): don't just bail
+	out if the level only has one item, recurse over the child if there
+	is one. (Fixes #100458, reported by Gaël Le Mignot).
+
+Mon Jan 27 22:41:26 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model),
+	(gtk_tree_view_search_equal_func): make TreeView search handle
+	all types which are transformable by GValue. (Fixes #99803, reported
+	by Muktha Narayan).
+
+Mon Jan 27 22:39:25 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_sort_column_id):
+	*really* handle unsetting the ID. Slightly modified patch from
+	Soeren Sandmann. Fixes #87556, reported by Jarek Dukat.
+
+Mon Jan 27 22:33:43 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes the total GtkTreeSortable mess, and #83195, reported by
+	Jarek Dukat
+
+	* gtk/gtktreestore.c (gtk_tree_store_get_sort_column_id),
+	(gtk_tree_store_set_sort_column_id), (gtk_tree_store_set_sort_func),
+	(gtk_tree_store_set_default_sort_func): use the constant
+	GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID instead of -1, make functions
+	work as advertised by the documentation.
+
+	* gtk/gtklistore.c (gtk_list_store_get_sort_column_id),
+	(gtk_list_store_set_sort_column_id), (gtk_list_store_set_sort_func),
+	(gtk_list_store_set_default_sort_func): likewise.
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_set_sort_column_id),
+	(gtk_tree_model_set_sort_func),
+	(gtk_tree_model_sort_set_default_sort_func): make functions work
+	as advertised by the documentation.
+
+Mon Jan 27 22:31:56 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): update focus_column
+	before we decide if we edit. (fixes #100973, reported by Dave Cook).
+
+Mon Jan 27 22:29:30 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Bug report and test case from Paolo Maggi via IRC.
+
+	* gtk/gtkliststore.c (gtk_list_store_swap): update tail if needed,
+	(gtk_list_store_move): update tail if needed.
+
 Mon Jan 27 16:19:59 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.c (gtk_socket_filter_func): event->any.window

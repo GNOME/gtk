@@ -1906,6 +1906,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  return FALSE;
 	}
 
+      tree_view->priv->focus_column = column;
+
       /* decide if we edit */
       if (event->type == GDK_BUTTON_PRESS &&
 	  !(event->state & gtk_accelerator_get_default_mod_mask ()))
@@ -1977,7 +1979,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* select */
       pre_val = tree_view->priv->vadjustment->value;
 
-      tree_view->priv->focus_column = column;
       focus_cell = _gtk_tree_view_column_get_cell_at_pos (column, event->x - background_area.x);
       if (focus_cell)
         gtk_tree_view_column_focus_cell (column, focus_cell);
@@ -7969,18 +7970,20 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       GtkTreePath *path;
       GtkTreeIter iter;
 
-
       if (tree_view->priv->search_column == -1)
 	{
 	  for (i = 0; i < gtk_tree_model_get_n_columns (model); i++)
 	    {
-	      if (gtk_tree_model_get_column_type (model, i) == G_TYPE_STRING)
+	      GType type = gtk_tree_model_get_column_type (model, i);
+
+	      if (g_value_type_transformable (type, G_TYPE_STRING))
 		{
 		  tree_view->priv->search_column = i;
 		  break;
 		}
 	    }
 	}
+
       g_object_ref (tree_view->priv->model);
       g_signal_connect (tree_view->priv->model,
 			"row_changed",
@@ -9628,6 +9631,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 	_gtk_tree_selection_internal_select_node (tree_view->priv->selection,
 						  node, tree, path,
 						  state, FALSE);
+
       if (clamp_node)
         {
 	  gtk_tree_view_clamp_node_visible (tree_view, tree, node);
@@ -10865,10 +10869,22 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
   gchar *case_normalized_string;
   gchar *case_normalized_key;
   GValue value = {0,};
+  GValue transformed = {0,};
   gint key_len;
 
   gtk_tree_model_get_value (model, iter, column, &value);
-  normalized_string = g_utf8_normalize (g_value_get_string (&value), -1, G_NORMALIZE_ALL);
+
+  g_value_init (&transformed, G_TYPE_STRING);
+
+  if (!g_value_transform (&value, &transformed))
+    {
+      g_value_unset (&value);
+      return FALSE;
+    }
+
+  g_value_unset (&value);
+
+  normalized_string = g_utf8_normalize (g_value_get_string (&transformed), -1, G_NORMALIZE_ALL);
   normalized_key = g_utf8_normalize (key, -1, G_NORMALIZE_ALL);
   case_normalized_string = g_utf8_casefold (normalized_string, -1);
   case_normalized_key = g_utf8_casefold (normalized_key, -1);
@@ -10878,7 +10894,7 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
   if (!strncmp (case_normalized_key, case_normalized_string, key_len))
     retval = FALSE;
 
-  g_value_unset (&value);
+  g_value_unset (&transformed);
   g_free (normalized_key);
   g_free (normalized_string);
   g_free (case_normalized_key);
@@ -11100,6 +11116,7 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
 			       cursor_path,
 			       tree_view->priv->focus_column,
 			       &cell_area);
+
   if (_gtk_tree_view_column_cell_event (tree_view->priv->focus_column,
 					&editable_widget,
 					NULL,
