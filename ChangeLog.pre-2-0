@@ -1,3 +1,16 @@
+Thu Jan  7 19:10:21 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkviewport.c (gtk_viewport_style_set): Fixes
+	to drawing the background of the bin window 
+	so that clearing and redrawing of child
+	widgets work properly.
+
+	* gtk/gtkwidget.c (gtk_widget_idle_draw): Juggle around
+	data so that if somebody triggers more redraw queuing
+	from a expose_event handler, it doesn't confuse the
+	heck out of GTK+. (But is highly liable to cause 
+	an infinite loop...)
+
 Thu Jan  7 12:31:41 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.c (gtk_target_list_unref): Fix some

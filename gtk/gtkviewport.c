@@ -555,11 +555,16 @@ gtk_viewport_draw (GtkWidget    *widget,
       
       gtk_viewport_paint (widget, &tmp_area);
 
+      tmp_area.x += viewport->hadjustment->value - widget->style->klass->xthickness;
+      tmp_area.y += viewport->vadjustment->value - widget->style->klass->ythickness;
+      
+      gtk_paint_flat_box(widget->style, viewport->bin_window, 
+			 GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+			 &tmp_area, widget, "viewportbin",
+			 0, 0, -1, -1);
+
       if (bin->child)
 	{
-	  tmp_area.x += viewport->hadjustment->value - widget->style->klass->xthickness;
-	  tmp_area.y += viewport->vadjustment->value - widget->style->klass->ythickness;
-
 	  if (gtk_widget_intersect (bin->child, &tmp_area, &child_area))
 	    gtk_widget_draw (bin->child, &child_area);
 	}
@@ -585,13 +590,22 @@ gtk_viewport_expose (GtkWidget      *widget,
 
       if (event->window == widget->window)
 	gtk_viewport_paint (widget, &event->area);
+      else if (event->window == viewport->bin_window)
+	{
+	  child_event = *event;
 
-      child_event = *event;
-      if ((event->window == viewport->bin_window) &&
-	  (bin->child != NULL) &&
-	  GTK_WIDGET_NO_WINDOW (bin->child) &&
-	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+	  gtk_paint_flat_box(widget->style, viewport->bin_window, 
+			     GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+			     &event->area, widget, "viewportbin",
+			     0, 0, -1, -1);
+	  
+	  if ((bin->child != NULL) &&
+	      GTK_WIDGET_NO_WINDOW (bin->child) &&
+	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
+	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+	}
+	
+
     }
 
   return FALSE;
@@ -688,10 +702,6 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 			      child_allocation.y,
 			      child_allocation.width,
 			      child_allocation.height);
-       gtk_paint_flat_box(widget->style, viewport->bin_window, GTK_STATE_NORMAL,
-			  GTK_SHADOW_NONE,
-			  NULL, widget, "viewportbin",
-			  0, 0, -1, -1);
     }
 
   viewport->hadjustment->page_size = child_allocation.width;
@@ -822,10 +832,6 @@ gtk_viewport_style_set (GtkWidget *widget,
 	
 	gtk_style_set_background (widget->style, viewport->bin_window, GTK_STATE_NORMAL);
 	gtk_style_set_background (widget->style, widget->window, widget->state);
-	gtk_paint_flat_box(widget->style, viewport->bin_window, GTK_STATE_NORMAL,
-			   GTK_SHADOW_NONE,
-			   NULL, widget, "viewportbin",
-			   0, 0, -1, -1);
 	if (GTK_WIDGET_DRAWABLE (widget))
 	  {
 	     gdk_window_clear (widget->window);

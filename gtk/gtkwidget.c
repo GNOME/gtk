@@ -1661,6 +1661,8 @@ static GMemChunk   *draw_data_mem_chunk = NULL;
 static GSList      *draw_data_free_list = NULL;
 static const gchar *draw_data_key  = "gtk-draw-data";
 static GQuark       draw_data_key_id = 0;
+static const gchar *draw_data_tmp_key  = "gtk-draw-data-tmp";
+static GQuark       draw_data_tmp_key_id = 0;
 
 static gint gtk_widget_idle_draw (gpointer data);
 
@@ -1955,18 +1957,39 @@ static gint
 gtk_widget_idle_draw (gpointer data)
 {
   GSList *widget_list;
+  GSList *old_queue;
   GSList *draw_data_list;
   GtkWidget *widget;
   
+  if (!draw_data_tmp_key_id)
+    draw_data_tmp_key_id = g_quark_from_static_string (draw_data_tmp_key);
+      
   GDK_THREADS_ENTER ();
+
+  old_queue = gtk_widget_redraw_queue;
+  gtk_widget_redraw_queue = NULL;
   
-  /* Translate all draw requests to be allocation-relative */
-  widget_list = gtk_widget_redraw_queue;
+  /* Translate all draw requests to be allocation-relative.
+   * At the same time, move all the data out of the way,
+   * so when we get down to the draw step, we can queue
+   * more information for "next time", if the application
+   * is that foolhardy.
+   */
+  widget_list = old_queue;
+  
   while (widget_list)
     {
       widget = widget_list->data;
       draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
 						  draw_data_key_id);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget),
+				 draw_data_key_id,
+				 NULL);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget),
+				 draw_data_tmp_key_id,
+				 draw_data_list);
+
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
 
       while (draw_data_list)
 	{
@@ -2009,15 +2032,15 @@ gtk_widget_idle_draw (gpointer data)
       widget_list = widget_list->next;
     }
 
-  /* Coalesce redraws
+  /* Coalesce redraws.
    */
-  widget_list = gtk_widget_redraw_queue;
+  widget_list = old_queue;
   while (widget_list)
     {
       GSList *prev_node = NULL;
       widget = widget_list->data;
       draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-						  draw_data_key_id);
+						  draw_data_tmp_key_id);
 
       while (draw_data_list)
 	{
@@ -2042,7 +2065,7 @@ gtk_widget_idle_draw (gpointer data)
 			prev_node->next = draw_data_list->next;
 		      else
 			gtk_object_set_data_by_id (GTK_OBJECT (widget),
-						   draw_data_key_id,
+						   draw_data_tmp_key_id,
 						   draw_data_list->next);
 
 		      tmp = draw_data_list->next;
@@ -2082,7 +2105,7 @@ gtk_widget_idle_draw (gpointer data)
 	      
 	      if (parent && GTK_WIDGET_REDRAW_PENDING (parent))
 		parent_list = gtk_object_get_data_by_id (GTK_OBJECT (parent),
-							 draw_data_key_id);
+							 draw_data_tmp_key_id);
 	      else
 		parent_list = NULL;
 	    }
@@ -2107,18 +2130,16 @@ gtk_widget_idle_draw (gpointer data)
 
   /* Process the draws */
   
-  widget_list = gtk_widget_redraw_queue;
+  widget_list = old_queue;
 
   while (widget_list)
     {
       widget = widget_list->data;
       draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-						  draw_data_key_id);
+						  draw_data_tmp_key_id);
       gtk_object_set_data_by_id (GTK_OBJECT (widget),
-				 draw_data_key_id,
+				 draw_data_tmp_key_id,
 				 NULL);
-
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
 
       while (draw_data_list)
 	{
@@ -2138,8 +2159,7 @@ gtk_widget_idle_draw (gpointer data)
       widget_list = widget_list->next;
     }
 
-  g_slist_free (gtk_widget_redraw_queue);
-  gtk_widget_redraw_queue = NULL;
+  g_slist_free (old_queue);
 
   GDK_THREADS_LEAVE ();
   
