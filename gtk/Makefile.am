@@ -501,10 +501,10 @@ EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
 
 
 gtkconfdir = $(sysconfdir)/gtk-2.0
-gtkconf_DATA = gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
+gtkconf_DATA = gtkrc.az gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk gtkrc.iso-8859-2 \
 	gtkrc.iso-8859-5 gtkrc.iso-8859-13 gtkrc.iso-8859-14 \
-	gtkrc.iso-8859-15 gtkrc.zh_CN gtkrc.zh_TW.Big5 \
+	gtkrc.iso-8859-15 gtkrc.zh_CN gtkrc.zh_TW.big5 \
 	gtkrc.ka_GE.georgianacademy gtkrc.ka_GE.georgianps \
 	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii \
 	gtkrc.cp1251
@@ -525,13 +525,14 @@ install-data-local:
 	   done \
 	&& rm -f gtkrc.lt gtkrc.lv gtkrc.cy gtkrc.ga gtkrc.et gtkrc.ka \
 	         gtkrc.vi_VN.viscii111 gtkrc.vi_VN.tcvn5712 gtkrc.vi \
-	         gtkrc.be gtkrc.bg \
+	         gtkrc.be gtkrc.bg gtkrc.mi \
+	&& ln -s gtkrc.iso-8859-13 gtkrc.mi \
 	&& ln -s gtkrc.iso-8859-13 gtkrc.lt \
 	&& ln -s gtkrc.iso-8859-13 gtkrc.lv \
 	&& ln -s gtkrc.iso-8859-14 gtkrc.cy \
 	&& ln -s gtkrc.iso-8859-14 gtkrc.ga \
 	&& ln -s gtkrc.iso-8859-15 gtkrc.et \
-	&& ln -s gtkrc.ka_GE.georgianacademy gtkrc.ka \
+	&& ln -s gtkrc.ka_GE.georgianps gtkrc.ka \
 	&& ln -s gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 \
 	&& ln -s gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 \
 	&& ln -s gtkrc.vi_VN.tcvn5712 gtkrc.vi \

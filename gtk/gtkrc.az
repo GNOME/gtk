@@ -1,0 +1,8 @@
+style "gtk-default-az" {
+       fontset = "-*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-1,\
+                  -*-arial-medium-r-normal--12-*-*-*-*-*-iso8859-1,\
+		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-9e,\
+		  -*-arial-medium-r-normal--12-*-*-*-*-*-iso8859-9e,*-r-*"
+}
+class "GtkWidget" style "gtk-default-az"
+
