@@ -27,6 +27,7 @@
 #include <string.h>
 #include "gtklabel.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
@@ -256,7 +257,7 @@ gtk_label_class_init (GtkLabelClass *class)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkLabelClass, move_cursor),
-                      gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+                      _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
                       GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
   
   signals[COPY_CLIPBOARD] =
@@ -264,7 +265,7 @@ gtk_label_class_init (GtkLabelClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkLabelClass, copy_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
   
   signals[POPULATE_POPUP] =
@@ -272,7 +273,7 @@ gtk_label_class_init (GtkLabelClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkLabelClass, populate_popup),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
 
   g_object_class_install_property (G_OBJECT_CLASS(object_class),

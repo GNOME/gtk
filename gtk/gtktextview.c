@@ -32,6 +32,7 @@
 #include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
@@ -635,7 +636,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, move_cursor),
-                    gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+                    _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
                     GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
 
   signals[SET_ANCHOR] =
@@ -643,7 +644,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, set_anchor),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[INSERT_AT_CURSOR] =
@@ -651,7 +652,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, insert_at_cursor),
-                    gtk_marshal_VOID__STRING,
+                    _gtk_marshal_VOID__STRING,
                     GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
 
   signals[DELETE_FROM_CURSOR] =
@@ -659,7 +660,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, delete_from_cursor),
-                    gtk_marshal_VOID__ENUM_INT,
+                    _gtk_marshal_VOID__ENUM_INT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
 
   signals[CUT_CLIPBOARD] =
@@ -667,7 +668,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, cut_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[COPY_CLIPBOARD] =
@@ -675,7 +676,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, copy_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[PASTE_CLIPBOARD] =
@@ -683,7 +684,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, paste_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[TOGGLE_OVERWRITE] =
@@ -691,7 +692,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, toggle_overwrite),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[SET_SCROLL_ADJUSTMENTS] =
@@ -699,7 +700,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, set_scroll_adjustments),
-                    gtk_marshal_VOID__OBJECT_OBJECT,
+                    _gtk_marshal_VOID__OBJECT_OBJECT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
   widget_class->set_scroll_adjustments_signal = signals[SET_SCROLL_ADJUSTMENTS];
 
@@ -708,7 +709,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, populate_popup),
-                    gtk_marshal_VOID__OBJECT,
+                    _gtk_marshal_VOID__OBJECT,
                     GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
   
   /*

@@ -35,6 +35,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkspinbutton.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtksettings.h"
 #include "gtkintl.h"
@@ -289,7 +290,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkSpinButtonClass, input),
-		    gtk_marshal_INT__POINTER,
+		    _gtk_marshal_INT__POINTER,
 		    GTK_TYPE_INT, 1, GTK_TYPE_POINTER);
 
   spinbutton_signals[OUTPUT] =
@@ -298,7 +299,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkSpinButtonClass, output),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__VOID,
+                  _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
 
   spinbutton_signals[VALUE_CHANGED] =
@@ -306,7 +307,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkSpinButtonClass, value_changed),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 }
 

@@ -54,6 +54,7 @@
 #include "gtksignal.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtktypebuiltins.h"
 
 #include <stdlib.h>
@@ -621,7 +622,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                   G_SIGNAL_RUN_LAST,
                   GTK_SIGNAL_OFFSET (GtkTextTagClass, event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
+                  _gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
                   G_TYPE_BOOLEAN,
                   3,
                   G_TYPE_OBJECT,

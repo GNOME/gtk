@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "gtkobject.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 
 
@@ -332,7 +333,7 @@ gtk_object_class_init (GtkObjectClass *class)
                     G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | GTK_RUN_NO_HOOKS,
                     GTK_CLASS_TYPE (class),
                     GTK_SIGNAL_OFFSET (GtkObjectClass, destroy),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 }
 

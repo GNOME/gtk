@@ -25,6 +25,7 @@
 #include "gtktreemodel.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 
 
@@ -76,7 +77,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, row_changed),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED,
+                    _gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER);
@@ -85,7 +86,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, row_inserted),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED,
+                    _gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER);
@@ -94,7 +95,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, row_has_child_toggled),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED,
+                    _gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER);
@@ -103,7 +104,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, row_deleted),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED,
+                    _gtk_marshal_VOID__BOXED,
                     G_TYPE_NONE, 1,
                     GTK_TYPE_TREE_PATH);
       g_signal_new ("rows_reordered",
@@ -111,7 +112,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, rows_reordered),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED_POINTER,
+                    _gtk_marshal_VOID__BOXED_BOXED_POINTER,
                     G_TYPE_NONE, 3,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER,

@@ -32,6 +32,7 @@
 #include "gtkctree.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkdnd.h"
 #include <gdk/gdkkeysyms.h>
 
@@ -432,7 +433,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_select_row),
-		    gtk_marshal_VOID__POINTER_INT,
+		    _gtk_marshal_VOID__POINTER_INT,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_CTREE_NODE,
 		    GTK_TYPE_INT);
@@ -441,7 +442,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_unselect_row),
-		    gtk_marshal_VOID__POINTER_INT,
+		    _gtk_marshal_VOID__POINTER_INT,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_CTREE_NODE,
 		    GTK_TYPE_INT);
@@ -450,7 +451,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_expand),
-		    gtk_marshal_VOID__POINTER,
+		    _gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_COLLAPSE] =
@@ -458,7 +459,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
-		    gtk_marshal_VOID__POINTER,
+		    _gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_MOVE] =
@@ -466,7 +467,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_move),
-		    gtk_marshal_VOID__POINTER_POINTER_POINTER,
+		    _gtk_marshal_VOID__POINTER_POINTER_POINTER,
 		    GTK_TYPE_NONE, 3,
 		    GTK_TYPE_CTREE_NODE,
 		    GTK_TYPE_CTREE_NODE,
@@ -477,7 +478,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass,
 				       change_focus_row_expansion),
-		    gtk_marshal_VOID__ENUM,
+		    _gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_EXPANSION_TYPE);
 
   binding_set = gtk_binding_set_by_class (klass);

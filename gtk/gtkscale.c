@@ -28,7 +28,7 @@
 #include <math.h>
 #include "gtkintl.h"
 #include "gtkscale.h"
-#include "gtkmarshal.h"
+#include "gtkmarshalers.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 
@@ -138,7 +138,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkScaleClass, format_value),
                   single_string_accumulator, NULL,
-                  gtk_marshal_STRING__DOUBLE,
+                  _gtk_marshal_STRING__DOUBLE,
                   G_TYPE_STRING, 1,
                   G_TYPE_DOUBLE);
 

@@ -42,6 +42,7 @@
 #include "gtkframe.h"
 #include "gtktable.h"
 #include "gtklabel.h"
+#include "gtkmarshalers.h"
 #include "gtkpixmap.h"
 #include "gtkspinbutton.h"
 #include "gtkrange.h"
@@ -1701,7 +1702,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkColorSelectionClass, color_changed),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   gtk_settings_install_property (g_param_spec_string ("gtk-color-palette",

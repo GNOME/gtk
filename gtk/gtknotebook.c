@@ -33,6 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <stdio.h>
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtkbindings.h"
 
 
@@ -437,7 +438,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkNotebookClass, switch_page),
-		    gtk_marshal_VOID__POINTER_UINT,
+		    _gtk_marshal_VOID__POINTER_UINT,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_UINT);
@@ -447,7 +448,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, focus_tab),
                   NULL, NULL,
-                  gtk_marshal_VOID__ENUM,
+                  _gtk_marshal_VOID__ENUM,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_NOTEBOOK_TAB);
   notebook_signals[SELECT_PAGE] = 
@@ -456,7 +457,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, select_page),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOOLEAN,
+                  _gtk_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE, 1,
                   G_TYPE_BOOLEAN);
   notebook_signals[CHANGE_CURRENT_PAGE] = 

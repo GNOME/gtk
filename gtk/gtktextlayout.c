@@ -78,6 +78,7 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtksignal.h"
+#include "gtkmarshalers.h"
 #include "gtktextlayout.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
@@ -179,7 +180,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   GTK_TYPE_NONE,
                   0);
 
@@ -189,7 +190,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
                   NULL, NULL,
-                  gtk_marshal_VOID__INT_INT_INT,
+                  _gtk_marshal_VOID__INT_INT_INT,
                   GTK_TYPE_NONE,
                   3,
                   GTK_TYPE_INT,
@@ -202,7 +203,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT_INT_INT,
+                  _gtk_marshal_VOID__OBJECT_INT_INT,
                   GTK_TYPE_NONE,
                   3,
                   GTK_TYPE_OBJECT,

@@ -31,6 +31,7 @@
 #include "gtkcurve.h"
 #include "gtkdrawingarea.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkradiobutton.h"
 #include "gtksignal.h"
 #include "gtktable.h"
@@ -167,7 +168,7 @@ gtk_curve_class_init (GtkCurveClass *class)
   curve_type_changed_signal =
     gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCurveClass, curve_type_changed),
-		    gtk_marshal_VOID__VOID, GTK_TYPE_NONE, 0);
+		    _gtk_marshal_VOID__VOID, GTK_TYPE_NONE, 0);
 }
 
 static void

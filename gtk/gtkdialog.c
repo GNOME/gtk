@@ -28,6 +28,7 @@
 #include "gtkdialog.h"
 #include "gtkhbbox.h"
 #include "gtkhseparator.h"
+#include "gtkmarshalers.h"
 #include "gtkvbox.h"
 #include "gtksignal.h"
 #include "gdkkeysyms.h"
@@ -132,7 +133,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkDialogClass, response),
-                    gtk_marshal_NONE__INT,
+                    _gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_INT);
 
@@ -141,7 +142,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkDialogClass, close),
-                    gtk_marshal_NONE__NONE,
+                    _gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   
   gtk_widget_class_install_style_property (widget_class,

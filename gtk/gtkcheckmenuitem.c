@@ -28,6 +28,7 @@
 #include "gtkaccellabel.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 #define CHECK_TOGGLE_SIZE 12
 
@@ -138,7 +139,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCheckMenuItemClass, toggled),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 }
 

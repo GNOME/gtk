@@ -21,6 +21,7 @@
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtksignal.h>
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 static void gtk_cell_renderer_toggle_get_property  (GObject                    *object,
 						    guint                       param_id,
@@ -156,7 +157,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCellRendererToggleClass, toggled),
-		    gtk_marshal_VOID__STRING,
+		    _gtk_marshal_VOID__STRING,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STRING);
 }

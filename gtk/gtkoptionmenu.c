@@ -28,6 +28,7 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkoptionmenu.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -158,7 +159,7 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkOptionMenuClass, changed),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
   gobject_class->set_property = gtk_option_menu_set_property;

@@ -44,6 +44,7 @@
 #include "gtklabel.h"
 #include "gtklistitem.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtknotebook.h"
@@ -146,7 +147,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, enable_device),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1, GDK_TYPE_DEVICE);
 
   input_dialog_signals[DISABLE_DEVICE] =
@@ -154,7 +155,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, disable_device),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1, GDK_TYPE_DEVICE);
 }
 

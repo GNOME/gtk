@@ -27,6 +27,7 @@
 #include <string.h>
 #include "gtkaccellabel.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
@@ -166,7 +167,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_RUN_FIRST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_class->activate_signal = menu_item_signals[ACTIVATE];
 
@@ -183,7 +184,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_request),
-                    gtk_marshal_NONE__POINTER,
+                    _gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_POINTER);
 
@@ -192,7 +193,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_allocate),
-                    gtk_marshal_NONE__INT,
+                    _gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_INT);
 }

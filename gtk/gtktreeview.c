@@ -25,6 +25,7 @@
 #include "gtkcellrenderer.h"
 #include "gtksignal.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkbutton.h"
 #include "gtkalignment.h"
 #include "gtklabel.h"
@@ -623,7 +624,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeViewClass, set_scroll_adjustments),
-		    gtk_marshal_VOID__OBJECT_OBJECT,
+		    _gtk_marshal_VOID__OBJECT_OBJECT,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
@@ -632,7 +633,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeViewClass, row_activated),
-		    gtk_marshal_VOID__BOXED_OBJECT,
+		    _gtk_marshal_VOID__BOXED_OBJECT,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_TREE_PATH,
 		    GTK_TYPE_TREE_VIEW_COLUMN);
@@ -643,7 +644,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTreeViewClass, test_expand_row),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED_BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED_BOXED,
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_TREE_ITER,
                   GTK_TYPE_TREE_PATH);
@@ -654,7 +655,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTreeViewClass, test_collapse_row),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED_BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED_BOXED,
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_TREE_ITER,
                   GTK_TYPE_TREE_PATH);
@@ -665,7 +666,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTreeViewClass, row_expanded),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
+                  _gtk_marshal_VOID__BOXED_BOXED,
                   GTK_TYPE_NONE, 2,
                   GTK_TYPE_TREE_ITER,
                   GTK_TYPE_TREE_PATH);
@@ -676,7 +677,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTreeViewClass, row_collapsed),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
+                  _gtk_marshal_VOID__BOXED_BOXED,
                   GTK_TYPE_NONE, 2,
                   GTK_TYPE_TREE_ITER,
                   GTK_TYPE_TREE_PATH);
@@ -687,7 +688,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTreeViewClass, columns_changed),
                   NULL, NULL,
-                  gtk_marshal_NONE__NONE,
+                  _gtk_marshal_NONE__NONE,
                   G_TYPE_NONE, 0);
 
   tree_view_signals[CURSOR_CHANGED] =
@@ -696,7 +697,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTreeViewClass, cursor_changed),
                   NULL, NULL,
-                  gtk_marshal_NONE__NONE,
+                  _gtk_marshal_NONE__NONE,
                   G_TYPE_NONE, 0);
 
   tree_view_signals[MOVE_CURSOR] =
@@ -705,7 +706,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, move_cursor),
                   NULL, NULL,
-                  gtk_marshal_VOID__ENUM_INT,
+                  _gtk_marshal_VOID__ENUM_INT,
                   GTK_TYPE_NONE, 2, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT);
 
   tree_view_signals[SELECT_ALL] =
@@ -714,7 +715,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, select_all),
                   NULL, NULL,
-                  gtk_marshal_NONE__NONE,
+                  _gtk_marshal_NONE__NONE,
                   GTK_TYPE_NONE, 0);
 
   tree_view_signals[SELECT_CURSOR_ROW] =
@@ -723,7 +724,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_row),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOOLEAN,
+                  _gtk_marshal_VOID__BOOLEAN,
                   GTK_TYPE_NONE, 1,
 		  G_TYPE_BOOLEAN);
 
@@ -733,7 +734,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, toggle_cursor_row),
                   NULL, NULL,
-                  gtk_marshal_NONE__NONE,
+                  _gtk_marshal_NONE__NONE,
                   GTK_TYPE_NONE, 0);
 
   tree_view_signals[EXPAND_COLLAPSE_CURSOR_ROW] =
@@ -742,7 +743,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, expand_collapse_cursor_row),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN,
+                  _gtk_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN,
                   GTK_TYPE_NONE, 3, GTK_TYPE_BOOL, GTK_TYPE_BOOL, GTK_TYPE_BOOL);
 
   tree_view_signals[SELECT_CURSOR_PARENT] =
@@ -751,7 +752,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_parent),
                   NULL, NULL,
-                  gtk_marshal_NONE__NONE,
+                  _gtk_marshal_NONE__NONE,
                   GTK_TYPE_NONE, 0);
 
   tree_view_signals[START_INTERACTIVE_SEARCH] =
@@ -760,7 +761,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, start_interactive_search),
                   NULL, NULL,
-                  gtk_marshal_NONE__NONE,
+                  _gtk_marshal_NONE__NONE,
                   GTK_TYPE_NONE, 0);
 
   /* Key bindings */

@@ -1,3 +1,11 @@
+Sat Nov 17 18:26:45 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am gtk/gtkmarshal.list gtk/gtkmarshalers.list
+	gtk/*.c gtk/gtksignal.h: Make gtkmarshal.list/gtkmarshal.h
+	only for compatibility with GTK+-1.2; and deprecate it; 
+	put all marshalers we actually use into gtkmarshalers.list 
+	and use the _gtk_marshal_ prefix for these marshalers.
+
 2001-11-17  Murray Cumming  <murrayc@usa.net>
 
 	* gtk/gtktexttagtable.c (gtk_text_tag_table_class_init):

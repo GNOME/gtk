@@ -26,7 +26,7 @@
  */
 
 #include "gtkmain.h"
-#include "gtkmarshal.h"
+#include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
 
@@ -148,7 +148,7 @@ gtk_plug_class_init (GtkPlugClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPlugClass, embedded),
 		  NULL, NULL,
-		  gtk_marshal_VOID__VOID,
+		  _gtk_marshal_VOID__VOID,
 		  GTK_TYPE_NONE, 0);
 }
 

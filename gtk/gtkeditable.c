@@ -27,6 +27,7 @@
 #include <string.h>
 
 #include "gtkeditable.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 
 
@@ -65,7 +66,7 @@ gtk_editable_base_init (gpointer g_class)
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkEditableClass, insert_text),
 		    NULL, NULL,
-		    gtk_marshal_VOID__STRING_INT_POINTER,
+		    _gtk_marshal_VOID__STRING_INT_POINTER,
 		    G_TYPE_NONE, 3,
 		    GTK_TYPE_STRING,
 		    GTK_TYPE_INT,
@@ -75,7 +76,7 @@ gtk_editable_base_init (gpointer g_class)
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkEditableClass, delete_text),
 		    NULL, NULL,
-		    gtk_marshal_VOID__INT_INT,
+		    _gtk_marshal_VOID__INT_INT,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_INT,
 		    GTK_TYPE_INT);
@@ -84,7 +85,7 @@ gtk_editable_base_init (gpointer g_class)
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkEditableClass, changed),
 		    NULL, NULL,
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
       initialized = TRUE;

@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkrange.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
@@ -240,7 +241,7 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, value_changed),
                   NULL, NULL,
-                  gtk_marshal_NONE__NONE,
+                  _gtk_marshal_NONE__NONE,
                   G_TYPE_NONE, 0);
   
   signals[MOVE_SLIDER] =
@@ -249,7 +250,7 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkRangeClass, move_slider),
                   NULL, NULL,
-                  gtk_marshal_VOID__ENUM,
+                  _gtk_marshal_VOID__ENUM,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_SCROLL_TYPE);
   

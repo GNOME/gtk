@@ -32,6 +32,7 @@
 #include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include <gobject/gobjectnotifyqueue.c>
@@ -225,7 +226,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, add),
-                    gtk_marshal_VOID__OBJECT,
+                    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   container_signals[REMOVE] =
@@ -233,7 +234,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, remove),
-                    gtk_marshal_VOID__OBJECT,
+                    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   container_signals[CHECK_RESIZE] =
@@ -241,14 +242,14 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, check_resize),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   container_signals[SET_FOCUS_CHILD] =
     gtk_signal_new ("set-focus-child",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, set_focus_child),
-                    gtk_marshal_VOID__OBJECT,
+                    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
 }

@@ -21,6 +21,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkeditable.h"
 #include "gtkentry.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
 
@@ -413,7 +414,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCellRendererTextClass, edited),
-		    gtk_marshal_VOID__STRING_STRING,
+		    _gtk_marshal_VOID__STRING_STRING,
 		    GTK_TYPE_NONE, 2,
 		    G_TYPE_STRING,
 		    G_TYPE_STRING);

@@ -27,7 +27,7 @@
 
 #include "gdk/gdkkeysyms.h"
 #include "gtkmain.h"
-#include "gtkmarshal.h"
+#include "gtkmarshalers.h"
 #include "gtkwindow.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
@@ -160,7 +160,7 @@ gtk_socket_class_init (GtkSocketClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkSocketClass, plug_added),
 		  NULL, NULL,
-		  gtk_marshal_VOID__VOID,
+		  _gtk_marshal_VOID__VOID,
 		  GTK_TYPE_NONE, 0);
   socket_signals[PLUG_REMOVED] =
     g_signal_new ("plug_removed",
@@ -168,7 +168,7 @@ gtk_socket_class_init (GtkSocketClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkSocketClass, plug_removed),
                   _gtk_boolean_handled_accumulator, NULL,
-		  gtk_marshal_BOOLEAN__VOID,
+		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 }
 

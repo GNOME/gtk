@@ -19,6 +19,7 @@
 
 #include "gtkimcontext.h"
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "string.h"
 
@@ -96,7 +97,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_start),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   im_context_signals[PREEDIT_END] =
@@ -104,7 +105,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_end),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   im_context_signals[PREEDIT_CHANGED] =
@@ -112,7 +113,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_changed),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   im_context_signals[COMMIT] =
@@ -120,7 +121,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, commit),
-		    gtk_marshal_VOID__STRING,
+		    _gtk_marshal_VOID__STRING,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STRING);
 
@@ -130,7 +131,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                   GTK_RUN_LAST,
                   GTK_SIGNAL_OFFSET (GtkIMContextClass, retrieve_surrounding),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__VOID,
+                  _gtk_marshal_BOOLEAN__VOID,
                   GTK_TYPE_BOOL, 0);
   im_context_signals[DELETE_SURROUNDING] =
     g_signal_new ("delete_surrounding",
@@ -138,7 +139,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                   GTK_RUN_LAST,
                   GTK_SIGNAL_OFFSET (GtkIMContextClass, delete_surrounding),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__INT_INT,
+                  _gtk_marshal_BOOLEAN__INT_INT,
                   GTK_TYPE_BOOL, 2,
                   GTK_TYPE_INT,
 		  GTK_TYPE_INT);

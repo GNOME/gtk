@@ -38,6 +38,7 @@
 #include "gtkmain.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 enum {
   SET_FOCUS,
@@ -454,7 +455,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkWindowClass, set_focus),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT,
+                  _gtk_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
   
@@ -464,7 +465,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWindowClass, frame_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
 
@@ -474,7 +475,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   GTK_SIGNAL_OFFSET (GtkWindowClass, activate_focus),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
 
@@ -484,7 +485,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   GTK_SIGNAL_OFFSET (GtkWindowClass, activate_default),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
 
@@ -494,7 +495,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   GTK_SIGNAL_OFFSET (GtkWindowClass, move_focus),
                   NULL, NULL,
-                  gtk_marshal_VOID__ENUM,
+                  _gtk_marshal_VOID__ENUM,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_DIRECTION_TYPE);

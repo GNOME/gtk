@@ -38,6 +38,7 @@
 #include "gtkimmulticontext.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
@@ -519,7 +520,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkEntryClass, populate_popup),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
   
  /* Action signals */
@@ -529,7 +530,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkEntryClass, activate),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_class->activate_signal = signals[ACTIVATE];
 
@@ -538,7 +539,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkEntryClass, move_cursor),
-                      gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+                      _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
                       GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
 
   signals[INSERT_AT_CURSOR] = 
@@ -546,7 +547,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkEntryClass, insert_at_cursor),
-                      gtk_marshal_VOID__STRING,
+                      _gtk_marshal_VOID__STRING,
                       GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
 
   signals[DELETE_FROM_CURSOR] = 
@@ -554,7 +555,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkEntryClass, delete_from_cursor),
-                      gtk_marshal_VOID__ENUM_INT,
+                      _gtk_marshal_VOID__ENUM_INT,
                       GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
 
   signals[CUT_CLIPBOARD] =
@@ -562,7 +563,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkEntryClass, cut_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[COPY_CLIPBOARD] =
@@ -570,7 +571,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkEntryClass, copy_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[PASTE_CLIPBOARD] =
@@ -578,7 +579,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkEntryClass, paste_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[TOGGLE_OVERWRITE] =
@@ -586,7 +587,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkEntryClass, toggle_overwrite),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   /*

@@ -20,6 +20,7 @@
 #include "gtktreeselection.h"
 #include "gtktreeprivate.h"
 #include "gtkrbtree.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 
 static void gtk_tree_selection_init              (GtkTreeSelection      *selection);
@@ -84,7 +85,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, changed),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 }
 

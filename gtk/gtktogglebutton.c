@@ -26,6 +26,7 @@
 
 #include "gtklabel.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtktogglebutton.h"
 #include "gtkintl.h"
@@ -154,7 +155,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkToggleButtonClass, toggled),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 }
 

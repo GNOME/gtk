@@ -29,6 +29,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
 #define GTK_ENABLE_BROKEN
@@ -634,7 +635,7 @@ gtk_text_class_init (GtkTextClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTextClass, set_scroll_adjustments),
-		    gtk_marshal_VOID__OBJECT_OBJECT,
+		    _gtk_marshal_VOID__OBJECT_OBJECT,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 }
 

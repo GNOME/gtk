@@ -19,6 +19,7 @@
 
 
 #include "gtktreesortable.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 
 static void gtk_tree_sortable_base_init (gpointer g_class);
@@ -61,7 +62,7 @@ gtk_tree_sortable_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeSortableIface, sort_column_changed),
                     NULL, NULL,
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     G_TYPE_NONE, 0);
       initialized = TRUE;
     }
