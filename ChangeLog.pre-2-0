@@ -1,3 +1,8 @@
+Fri Jul 27 11:31:15 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_property):
+	add an "attributes" property to the text renderer for ATK.
+
 2001-07-26  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkimage-fb.c (_gdk_fb_get_image):

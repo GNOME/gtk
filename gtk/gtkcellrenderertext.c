@@ -55,6 +55,7 @@ enum {
 
   PROP_TEXT,
   PROP_MARKUP,
+  PROP_ATTRIBUTES,
   
   /* Style args */
   PROP_BACKGROUND,
@@ -162,6 +163,14 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         _("Marked up text to render"),
                                                         NULL,
                                                         G_PARAM_WRITABLE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_ATTRIBUTES,
+				   g_param_spec_boxed ("attributes",
+						       _("Attributes"),
+						       _("A list of style attributes to apply to the text of the renderer."),
+						       PANGO_TYPE_ATTR_LIST,
+						       G_PARAM_READWRITE));
   
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND,
@@ -412,7 +421,11 @@ gtk_cell_renderer_text_get_property (GObject        *object,
     case PROP_TEXT:
       g_value_set_string (value, celltext->text);
       break;
-      
+
+    case PROP_ATTRIBUTES:
+      g_value_set_boxed (value, celltext->extra_attrs);
+      break;
+
     case PROP_BACKGROUND_GDK:
       {
         GdkColor color;
@@ -693,7 +706,14 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       celltext->text = g_strdup (g_value_get_string (value));
       g_object_notify(G_OBJECT(object), "text");
       break;
-      
+
+    case PROP_ATTRIBUTES:
+      if (celltext->extra_attrs)
+	pango_attr_list_unref (celltext->extra_attrs);
+
+      celltext->extra_attrs = g_value_get_boxed (value);
+      pango_attr_list_ref (celltext->extra_attrs);
+      break;
     case PROP_MARKUP:
       {
 	const gchar *str;
