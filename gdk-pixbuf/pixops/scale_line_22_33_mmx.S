@@ -52,8 +52,8 @@ _pixops_scale_line_22_33_mmx:
 	sarl $16,%edx
 	movl 12(%ebp),%esi
 
-	cmpl %esi,28(%ebp)
-	je   .out
+	cmpl 28(%ebp),%esi
+	jnb  .out
 
 /* For the body of this loop, %mm01, %mm1, %mm2, %mm3 hold the 4 adjoining
  * points we are interpolating between, as:

@@ -94,7 +94,6 @@ pixops_scale_nearest (guchar        *dest_buf,
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
       const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
-      /* FIXME Owen needs to look at this */
       guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
@@ -967,21 +966,36 @@ pixops_process (guchar         *dest_buf,
 		PixopsPixelFunc pixel_func)
 {
   int i, j;
-  int x, y;
+  int x, y;			/* X and Y position in source (fixed_point) */
   guchar **line_bufs = g_new (guchar *, filter->n_y);
 
-  int x_step = (1 << SCALE_SHIFT) / scale_x;
-  int y_step = (1 << SCALE_SHIFT) / scale_y;
+  int x_step = (1 << SCALE_SHIFT) / scale_x; /* X step in source (fixed point) */
+  int y_step = (1 << SCALE_SHIFT) / scale_y; /* Y step in source (fixed point) */
 
-  int dest_x;
+  int check_shift = check_size ? get_check_shift (check_size) : 0;
+
   int scaled_x_offset = floor (filter->x_offset * (1 << SCALE_SHIFT));
 
-  int run_end_index = (((src_width - filter->n_x + 1) << SCALE_SHIFT) - scaled_x_offset - 1) / x_step + 1 - render_x0;
-  int check_shift = check_size ? get_check_shift (check_size) : 0;
+  /* Compute the index where we run off the end of the source buffer. The furthest
+   * source pixel we access at index i is:
+   *
+   *  ((render_x0 + i) * x_step + scaled_x_offset) >> SCALE_SHIFT + filter->n_x - 1
+   *
+   * So, run_end_index is the smallest i for which this pixel is src_width, i.e, for which:
+   *
+   *  (i + render_x0) * x_step >= ((src_width - filter->n_x + 1) << SCALE_SHIFT) - scaled_x_offset
+   *
+   */
+#define MYDIV(a,b) ((a) > 0 ? (a) / (b) : ((a) - (b) + 1) / (b))    /* Division so that -1/5 = -1 */
+  
+  int run_end_x = (((src_width - filter->n_x + 1) << SCALE_SHIFT) - scaled_x_offset);
+  int run_end_index = MYDIV (run_end_x + x_step - 1, x_step) - render_x0;
+  run_end_index = MIN (run_end_index, render_x1 - render_x0);
 
   y = render_y0 * y_step + floor (filter->y_offset * (1 << SCALE_SHIFT));
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
+      int dest_x;
       int y_start = y >> SCALE_SHIFT;
       int x_start;
       int *run_weights = filter->weights + ((y >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * filter->n_x * filter->n_y * SUBSAMPLE;
@@ -1032,12 +1046,12 @@ pixops_process (guchar         *dest_buf,
 	  outbuf += dest_channels;
 	}
 
-      new_outbuf = (*line_func)(run_weights, filter->n_x, filter->n_y,
-				outbuf, dest_x,
-				MIN (outbuf_end, dest_buf + dest_rowstride * i + run_end_index * dest_channels),
-				dest_channels, dest_has_alpha,
-				line_bufs, src_channels, src_has_alpha,
-				x, x_step, src_width, check_size, tcolor1, tcolor2);
+      new_outbuf = (*line_func) (run_weights, filter->n_x, filter->n_y,
+				 outbuf, dest_x,
+				 dest_buf + dest_rowstride * i + run_end_index * dest_channels,
+				 dest_channels, dest_has_alpha,
+				 line_bufs, src_channels, src_has_alpha,
+				 x, x_step, src_width, check_size, tcolor1, tcolor2);
 
       dest_x += (new_outbuf - outbuf) / dest_channels;
 
@@ -1180,6 +1194,10 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
 	  }
 	else			/* Tile */
 	  {
+	    /*           x
+	     * ---------|--.-|----|--.-|-------  SRC
+	     * ------------|---------|---------  DEST
+	     */
 	    for (i = 0; i < n_x; i++)
 	      {
 		if (i < x)
@@ -1208,6 +1226,10 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
 	  }
 	else			/* Tile */
 	  {
+	    /*           y
+	     * ---------|--.-|----|--.-|-------  SRC
+	     * ------------|---------|---------  DEST
+	     */
 	    for (i = 0; i < n_y; i++)
 	      {
 		if (i < y)

@@ -1,7 +1,19 @@
+Fri Jan 11 17:53:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c (pixops_scale_nearest): Remove meaningless
+	FIXME.
+
+	* pixops/pixops.c (pixops_process): Comment the computation
+	of run_end_index and fix some edge cases.
+
+	* pixops/{scale_line_22_33_mmx.S, composite_line_22_4a4_mmx.S:
+	composite_line_color_22_4a4_mmx.S}: Handle the case where
+	dest <= dest_end properly. (#52001)
+
 Thu Jan 10 16:48:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c: Replace some	hardcoded values with the 
-	SUBSAMPLE 
+	SUBSAMPLE constant used elsewhere. (#51033)
 
 Wed Jan  9 11:29:44 2002  Owen Taylor  <otaylor@redhat.com>
 

@@ -40,8 +40,6 @@ rounding the exact result (real values in [0,1]):
 
  Cc = ROUND [255. * (Ca/255. * Aa/255. + (1 - Aa/255.) * Cb/255.)]
 
-We can comp
-
 ROUND(i / 255.) can be computed exactly for i in [0,255*255] as:
 
  t = i + 0x80; result = (t + (t >> 8)) >> 8;  [ call this as To8(i) ]
