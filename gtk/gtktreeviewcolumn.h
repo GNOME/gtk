@@ -124,7 +124,7 @@ GType                   gtk_tree_view_column_get_type            (void) G_GNUC_C
 GtkTreeViewColumn      *gtk_tree_view_column_new                 (void);
 GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const gchar             *title,
 								  GtkCellRenderer         *cell,
-								  ...);
+								  ...) G_GNUC_NULL_TERMINATED;
 void                    gtk_tree_view_column_pack_start          (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell,
 								  gboolean                 expand);
@@ -139,7 +139,7 @@ void                    gtk_tree_view_column_add_attribute       (GtkTreeViewCol
 								  gint                     column);
 void                    gtk_tree_view_column_set_attributes      (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer,
-								  ...);
+								  ...) G_GNUC_NULL_TERMINATED;
 void                    gtk_tree_view_column_set_cell_data_func  (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer,
 								  GtkTreeCellDataFunc      func,

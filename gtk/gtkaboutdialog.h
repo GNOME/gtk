@@ -62,7 +62,7 @@ GType                  gtk_about_dialog_get_type               (void) G_GNUC_CON
 GtkWidget             *gtk_about_dialog_new                    (void);
 void                   gtk_show_about_dialog                   (GtkWindow       *parent,
 								const gchar     *first_property_name,
-								...);
+								...) G_GNUC_NULL_TERMINATED;
 
 G_CONST_RETURN gchar  *gtk_about_dialog_get_name               (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_name               (GtkAboutDialog  *about,

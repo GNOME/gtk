@@ -1,3 +1,17 @@
+2005-03-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtktreeview.h: 
+	* gtk/gtktreeviewcolumn.h: 
+	* gtk/gtktextbuffer.h: 
+	* gtk/gtkobject.h: 
+	* gtk/gtkfilechooserdialog.h: 
+	* gtk/gtkdialog.h: 
+	* gtk/gtkcontainer.h: 
+	* gtk/gtkcelllayout.h: 
+	* gtk/gtkaboutdialog.h: Use G_GNUC_NULL_TERMINATED where
+	appropriate.  (#165682, Marc Meissner)
+
 2005-03-07  Matthias Clasen  <mclasen@redhat.com>
 
 	Convert the gdk keyval-keyname tables to a big string

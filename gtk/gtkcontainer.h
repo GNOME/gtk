@@ -174,15 +174,15 @@ GParamSpec** gtk_container_class_list_child_properties	(GObjectClass	   *cclass,
 void         gtk_container_add_with_properties		(GtkContainer	   *container,
 							 GtkWidget	   *widget,
 							 const gchar	   *first_prop_name,
-							 ...);
+							 ...) G_GNUC_NULL_TERMINATED;
 void         gtk_container_child_set			(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *first_prop_name,
-							 ...);	   
+							 ...) G_GNUC_NULL_TERMINATED;
 void         gtk_container_child_get			(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *first_prop_name,
-							 ...);	   
+							 ...) G_GNUC_NULL_TERMINATED;
 void         gtk_container_child_set_valist		(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *first_property_name,

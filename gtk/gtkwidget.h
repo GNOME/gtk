@@ -435,7 +435,7 @@ struct _GtkWidgetShapeInfo
 GType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_widget_new		  (GType		type,
 					   const gchar	       *first_property_name,
-					   ...);
+					   ...) G_GNUC_NULL_TERMINATED;
 GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
 void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
@@ -444,7 +444,7 @@ void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 #ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_set		  (GtkWidget	       *widget,
 					   const gchar         *first_property_name,
-					   ...);
+					   ...) G_GNUC_NULL_TERMINATED;
 #endif /* GTK_DISABLE_DEPRECATED */
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
@@ -716,7 +716,7 @@ void gtk_widget_style_get_valist   (GtkWidget	     *widget,
 				    va_list         var_args);
 void gtk_widget_style_get          (GtkWidget	     *widget,
 				    const gchar    *first_property_name,
-				    ...);
+				    ...) G_GNUC_NULL_TERMINATED;
 
 
 /* Set certain default values to be used at widget creation time.

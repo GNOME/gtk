@@ -80,7 +80,7 @@ void  gtk_cell_layout_pack_end           (GtkCellLayout         *cell_layout,
 void  gtk_cell_layout_clear              (GtkCellLayout         *cell_layout);
 void  gtk_cell_layout_set_attributes     (GtkCellLayout         *cell_layout,
                                           GtkCellRenderer       *cell,
-                                          ...);
+                                          ...) G_GNUC_NULL_TERMINATED;
 void  gtk_cell_layout_add_attribute      (GtkCellLayout         *cell_layout,
                                           GtkCellRenderer       *cell,
                                           const gchar           *attribute,

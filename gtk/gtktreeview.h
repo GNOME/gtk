@@ -167,7 +167,7 @@ gint                   gtk_tree_view_insert_column_with_attributes (GtkTreeView 
 								    gint                       position,
 								    const gchar               *title,
 								    GtkCellRenderer           *cell,
-								    ...);
+								    ...) G_GNUC_NULL_TERMINATED;
 gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
 								    gint                       position,
 								    const gchar               *title,

@@ -186,14 +186,14 @@ void    gtk_text_buffer_insert_with_tags          (GtkTextBuffer     *buffer,
                                                    const gchar       *text,
                                                    gint               len,
                                                    GtkTextTag        *first_tag,
-                                                   ...);
+                                                   ...) G_GNUC_NULL_TERMINATED;
 
 void    gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer     *buffer,
                                                    GtkTextIter       *iter,
                                                    const gchar       *text,
                                                    gint               len,
                                                    const gchar       *first_tag_name,
-                                                   ...);
+                                                   ...) G_GNUC_NULL_TERMINATED;
 
 /* Delete from the buffer */
 void     gtk_text_buffer_delete             (GtkTextBuffer *buffer,
@@ -292,7 +292,7 @@ void gtk_text_buffer_remove_all_tags       (GtkTextBuffer     *buffer,
 GtkTextTag    *gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
                                            const gchar   *tag_name,
                                            const gchar   *first_property_name,
-                                           ...);
+                                           ...) G_GNUC_NULL_TERMINATED;
 
 /* Obtain iterators pointed at various places, then you can move the
  * iterator around using the GtkTextIter operators

@@ -126,7 +126,7 @@ void gtk_object_destroy	  (GtkObject *object);
 
 GtkObject*	gtk_object_new		  (GtkType	       type,
 					   const gchar	      *first_property_name,
-					   ...);
+					   ...) G_GNUC_NULL_TERMINATED;
 GtkObject*	gtk_object_ref		  (GtkObject	      *object);
 void		gtk_object_unref	  (GtkObject	      *object);
 void gtk_object_weakref	  (GtkObject	    *object,
@@ -204,10 +204,10 @@ typedef enum
 #define	GTK_ARG_READWRITE	(GTK_ARG_READABLE | GTK_ARG_WRITABLE)
 void	gtk_object_get		(GtkObject	*object,
 				 const gchar	*first_property_name,
-				 ...);
+				 ...) G_GNUC_NULL_TERMINATED;
 void	gtk_object_set		(GtkObject	*object,
 				 const gchar	*first_property_name,
-				 ...);
+				 ...) G_GNUC_NULL_TERMINATED;
 void	gtk_object_add_arg_type		(const gchar	*arg_name,
 					 GtkType	 arg_type,
 					 guint		 arg_flags,
