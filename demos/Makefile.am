@@ -2,27 +2,25 @@
 
 SUBDIRS = gtk-demo
 
-INCLUDES = @STRIP_BEGIN@ \
+INCLUDES = 						\
 	-I$(top_srcdir) 				\
 	-I$(top_builddir)/gdk				\
 	-DG_DISABLE_DEPRECATED	 			\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED			\
 	-DGTK_DISABLE_DEPRECATED			\
-	@GTK_DEBUG_FLAGS@				\
-	@GTK_DEP_CFLAGS@				\
-@STRIP_END@
+	$(GTK_DEBUG_FLAGS)				\
+	$(GTK_DEP_CFLAGS)
 
-DEPS = \
+DEPS = 									\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/@gdktargetlib@ 				\
-	$(top_builddir)/gtk/@gtktargetlib@
+	$(top_builddir)/gdk/$(gdktargetlib) 				\
+	$(top_builddir)/gtk/$(gtktargetlib)
 
-LDADDS = @STRIP_BEGIN@ 							\
+LDADDS = 								\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/@gdktargetlib@        			\
-	$(top_builddir)/gtk/@gtktargetlib@ 				\
-@STRIP_END@
+	$(top_builddir)/gdk/$(gdktargetlib)        			\
+	$(top_builddir)/gtk/$(gtktargetlib)
 
 noinst_PROGRAMS = 		\
 	testpixbuf 		\
@@ -37,6 +35,8 @@ pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
 else
 pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$$topdir/gdk-pixbuf/gdk-pixbuf.loaders $$topdir/gdk-pixbuf/gdk-pixbuf-csource
 endif
+
+BUILT_SOURCES = test-inline-pixbufs.h
 
 test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders apple-red.png gnome-foot.png
 	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
@@ -59,7 +59,6 @@ testanimation_LDADD = $(LDADDS)
 pixbuf_demo_LDADD = $(LDADDS)
 
 testpixbuf_SOURCES = testpixbuf.c pixbuf-init.c
-$(testpixbuf_OBJECTS): test-inline-pixbufs.h
 testpixbuf_drawable_SOURCES = testpixbuf-drawable.c pixbuf-init.c
 testpixbuf_save_SOURCES = testpixbuf-save.c
 testpixbuf_scale_SOURCES = testpixbuf-scale.c pixbuf-init.c
@@ -76,3 +75,5 @@ EXTRA_DIST =			\
 	gnome-gmush.png		\
 	gnome-gsame.png		\
 	gnu-keys.png
+
+DISTCLEANFILES = test-inline-pixbufs.h

@@ -1,27 +1,25 @@
 ## Makefile.am for gtk+/tests
 
-INCLUDES = @STRIP_BEGIN@ \
-	-I$(top_srcdir) 				\
-	-I$(top_builddir)/gdk				\
-	-I$(top_srcdir)/gdk				\
-	-DG_DISABLE_DEPRECATED				\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
-	-DGDK_DISABLE_DEPRECATED			\
-	-DGTK_DISABLE_DEPRECATED			\
-	@GTK_DEBUG_FLAGS@				\
-	@GTK_DEP_CFLAGS@				\
-@STRIP_END@
+INCLUDES =					\
+	-I$(top_srcdir)				\
+	-I$(top_builddir)/gdk			\
+	-I$(top_srcdir)/gdk			\
+	-DG_DISABLE_DEPRECATED			\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
+	-DGDK_DISABLE_DEPRECATED		\
+	-DGTK_DISABLE_DEPRECATED		\
+	$(GTK_DEBUG_FLAGS)			\
+	$(GTK_DEP_CFLAGS)
 
-DEPS = \
+DEPS =									\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/@gdktargetlib@ 				\
-	$(top_builddir)/gtk/@gtktargetlib@
+	$(top_builddir)/gdk/$(gdktargetlib)				\
+	$(top_builddir)/gtk/$(gtktargetlib)
 
-LDADDS = @STRIP_BEGIN@ 					\
+LDADDS =								\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/@gdktargetlib@        	\
-	$(top_builddir)/gtk/@gtktargetlib@ 		\
-@STRIP_END@
+	$(top_builddir)/gdk/$(gdktargetlib)				\
+	$(top_builddir)/gtk/$(gtktargetlib)
 
 if USE_X11
 testsocket_programs = testsocket testsocket_child
@@ -128,7 +126,7 @@ testsocket_child_SOURCES =    	\
 	testsocket_child.c	\
 	testsocket_common.c
 
-EXTRA_DIST = @STRIP_BEGIN@ 	\
+EXTRA_DIST = 			\
 	prop-editor.h		\
 	testgtk.1 		\
 	testgtkrc 		\
@@ -143,7 +141,4 @@ EXTRA_DIST = @STRIP_BEGIN@ 	\
 	test.xpm		\
 	check-y.xpm		\
 	check-n.xpm		\
-	test.xpm		\
-@STRIP_END@
-
-
+	test.xpm

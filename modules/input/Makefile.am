@@ -4,7 +4,7 @@ if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
-INCLUDES = @STRIP_BEGIN@ \
+INCLUDES = \
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_builddir)/gdk				\
@@ -12,22 +12,20 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED			\
 	-DGTK_DISABLE_DEPRECATED 			\
-	@GTK_DEBUG_FLAGS@				\
-	@GTK_XIM_FLAGS@					\
-	@GTK_DEP_CFLAGS@				\
-@STRIP_END@
+	$(GTK_DEBUG_FLAGS)				\
+	$(GTK_XIM_FLAGS)				\
+	$(GTK_DEP_CFLAGS)
 
 DEPS = \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/@gdktargetlib@ 				\
-	$(top_builddir)/gtk/@gtktargetlib@
+	$(top_builddir)/gdk/$(gdktargetlib) 				\
+	$(top_builddir)/gtk/$(gtktargetlib)
 
-LDADDS = @STRIP_BEGIN@ 							\
+LDADDS = \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/@gdktargetlib@        			\
-	$(top_builddir)/gtk/@gtktargetlib@ 				\
-	@GTK_DEP_LIBS@							\
-@STRIP_END@
+	$(top_builddir)/gdk/$(gdktargetlib)        			\
+	$(top_builddir)/gtk/$(gtktargetlib) 				\
+	$(GTK_DEP_LIBS)
 
 moduledir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules
 
@@ -100,6 +98,9 @@ install-data-local:
 	  echo "***" ; \
         fi
 
+uninstall-local:
+	rm -f $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules
+
 module_LTLIBRARIES =				\
 	$(IM_XIM_MODULE)			\
 	im-am-et.la				\
@@ -114,6 +115,8 @@ module_LTLIBRARIES =				\
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
 	$(top_builddir)/gtk/gtk-query-immodules-2.0 *.la > gtk.immodules
+
+CLEANFILES = gtk.immodules
 
 if CROSS_COMPILING
 else

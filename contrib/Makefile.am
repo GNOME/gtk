@@ -1,8 +1,5 @@
 
+SUBDIRS =
 if USE_X11
-XDIRS=gdk-pixbuf-xlib
-else
-XDIRS=
+SUBDIRS += gdk-pixbuf-xlib
 endif
-
-SUBDIRS=$(XDIRS)

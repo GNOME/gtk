@@ -2,14 +2,14 @@
 
 SUBDIRS=stock-icons theme-bits
 
-INCLUDES = @STRIP_BEGIN@ \
+INCLUDES =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
-	-DGTK_VERSION=\"@GTK_VERSION@\"			\
-	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
-	-DGTK_HOST=\"@host@\"	                        \
+	-DGTK_VERSION=\"$(GTK_VERSION)\"		\
+	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
+	-DGTK_HOST=\"$(host)\"				\
 	-DGTK_COMPILATION				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
@@ -19,11 +19,10 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED			\
 	-DGTK_DISABLE_DEPRECATED			\
-	@GTK_DEBUG_FLAGS@				\
-	@GTK_DEP_CFLAGS@				\
-@STRIP_END@
+	$(GTK_DEBUG_FLAGS)				\
+	$(GTK_DEP_CFLAGS)
 
-gtarget=@gdktarget@
+gtarget=$(gdktarget)
 
 if PLATFORM_WIN32
 no_undefined = -no-undefined
@@ -67,18 +66,17 @@ endif
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
 libgtkincludedir = $(includedir)/gtk-2.0/gtk
-LDFLAGS = @STRIP_BEGIN@ \
-	@LDFLAGS@								\
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)			\
-	-export-dynamic								\
-	-rpath $(libdir)							\
-	$(no_undefined)								\
-	@LIBTOOL_EXPORT_OPTIONS@						\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la		\
-	$(top_builddir)/gdk/@gdktargetlib@					\
-	$(libgtk_target_ldflags)						\
-	@GTK_DEP_LIBS@								\
-@STRIP_END@
+libadd =								\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
+	$(top_builddir)/gdk/$(gdktargetlib)				\
+	$(GTK_DEP_LIBS)
+
+# common options for the various packages.
+libtool_opts =							\
+  -version-info $(LT_VERSION_INFO)				\
+  -export-dynamic $(no_undefined) $(LIBTOOL_EXPORT_OPTIONS)	\
+  -rpath $(libdir) $(libgtk_target_ldflags)
+
 
 #
 # setup source file variables
@@ -86,7 +84,7 @@ LDFLAGS = @STRIP_BEGIN@ \
 
 # GTK+ header files for public installation (non-generated, or generated
 # by configure)
-gtk_public_h_sources = @STRIP_BEGIN@ \
+gtk_public_h_sources =          \
 	gtk.h			\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
@@ -228,10 +226,10 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkvscrollbar.h		\
 	gtkvseparator.h		\
 	gtkwidget.h		\
-	gtkwindow.h		\
-@STRIP_END@
+	gtkwindow.h
+
 # GTK+ header files that don't get installed
-gtk_private_h_sources = @STRIP_BEGIN@ \
+gtk_private_h_sources =         \
 	gtkrbtree.h 		\
 	gtktextbtree.h		\
 	gtktextchildprivate.h   \
@@ -244,10 +242,10 @@ gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtkthemes.h		\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
-	gtkwindow-decorate.h    \
-@STRIP_END@
+	gtkwindow-decorate.h
+
 # GTK+ C sources to build the library from
-gtk_c_sources = @STRIP_BEGIN@   \
+gtk_c_sources =                 \
 	gtkaccelgroup.c		\
 	gtkaccelmap.c		\
 	gtkaccellabel.c		\
@@ -403,13 +401,11 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkwindow.c		\
 	gtkwindow-decorate.c    \
 	fnmatch.c		\
-	xembed.h		\
-@STRIP_END@
+	xembed.h
 
-gtk_plug_c_sources = @STRIP_BEGIN@   \
+gtk_plug_c_sources =            \
 	gtkplug.c		\
-	gtksocket.c		\
-@STRIP_END@
+	gtksocket.c
 
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities
@@ -418,35 +414,34 @@ gtk_plug_c_sources = @STRIP_BEGIN@   \
 # content
 
 # built sources that get installed with the header files
-gtk_built_public_sources = @STRIP_BEGIN@ \
-	gtkmarshal.h		\
-	gtktypebuiltins.h	\
-@STRIP_END@
-gtk_built_private_headers = @STRIP_BEGIN@ \
-	gtkmarshalers.h		\
-@STRIP_END@
+gtk_built_public_sources =			\
+	gtkmarshal.h				\
+	gtktypebuiltins.h
+
+gtk_built_private_headers =			\
+	gtkmarshalers.h
+
 # built sources that don't get installed
-gtk_built_sources = @STRIP_BEGIN@		\
+gtk_built_sources =				\
 	gtktypebuiltins.c			\
 	gtkmarshalers.c				\
 	gtkmarshalers.h				\
 	gtkmarshal.c				\
 	${gtk_built_private_headers}		\
-	${gtk_built_public_sources}		\
-@STRIP_END@
-stamp_files = @STRIP_BEGIN@ 		\
-	stamp-gtkmarshalers.h		\
-	stamp-gtkmarshal.h		\
-	stamp-gtktypebuiltins.h		\
-@STRIP_END@
+	${gtk_built_public_sources}
+
+stamp_files =					\
+	stamp-gtkmarshalers.h			\
+	stamp-gtkmarshal.h			\
+	stamp-gtktypebuiltins.h
+
 # non-header sources (headers should be specified in the above variables)
 # that don't serve as direct make target sources, i.e. they don't have
 # their own .lo rules and don't get publically installed
-gtk_extra_sources = @STRIP_BEGIN@ \
-	gtkversion.h.in		\
-	gtkmarshalers.list	\
-	gtkmarshal.list		\
-@STRIP_END@
+gtk_extra_sources =				\
+	gtkversion.h.in				\
+	gtkmarshalers.list			\
+	gtkmarshal.list
 
 #
 # setup GTK+ sources and their dependancies
@@ -463,63 +458,40 @@ EXTRA_DIST += $(gtk_built_sources)
 gen_sources = xgen-gdef xgen-gtbh xgen-gtic xgen-gmh xgen-gmc xgen-gmlh xgen-gmlc
 CLEANFILES = $(gen_sources)
 
-## automake 1.5 supports this without $(OBJECTS): $(gtk_built_sources) hack
-#BUILT_SOURCES = $(gtk_built_sources)
-
-$(libgtk_x11_2_0_la_OBJECTS) $(libgtk_linux_fb_2_0_la_OBJECTS) $(libgtk_win32_2_0_la_OBJECTS): ${gtk_built_public_sources} ${gtk_built_private_headers}
+BUILT_SOURCES = $(gtk_built_sources)
 
 # all autogenerated files need to be generated in the srcdir,
 # so old versions get remade and are not confused with newer
 # versions in the build dir. thus a development setup requires
 # srcdir to be writable, passing --disable-rebuilds to
 # ../configure will supress all autogeneration rules.
-$(srcdir)/gtkmarshalers.h: stamp-gtkmarshalers.h
+gtkmarshalers.h: stamp-gtkmarshalers.h
 	@true
 stamp-gtkmarshalers.h: @REBUILD@ gtkmarshalers.list
-	case @GLIB_GENMARSHAL@ in								\
-	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;					\
-	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;						\
-	esac;											\
-	cd $(srcdir)										\
-	&& $$glib_genmarshal --prefix=_gtk_marshal gtkmarshalers.list --header >> xgen-gmlh	\
-	&& (cmp -s xgen-gmlh gtkmarshalers.h || cp xgen-gmlh gtkmarshalers.h)			\
-	&& rm -f xgen-gmlh 									\
+	$(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --header >> xgen-gmlh \
+	&& (cmp -s xgen-gmlh gtkmarshalers.h || cp xgen-gmlh gtkmarshalers.h) \
+	&& rm -f xgen-gmlh \
 	&& echo timestamp > $(@F)	
-$(srcdir)/gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
-	case @GLIB_GENMARSHAL@ in								\
-	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;					\
-	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;						\
-	esac;											\
-	cd $(srcdir)										\
-	&& $$glib_genmarshal --prefix=_gtk_marshal gtkmarshalers.list --body >> xgen-gmlc	\
-	&& cp xgen-gmlc gtkmarshalers.c								\
+gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
+	$(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body >> xgen-gmlc \
+	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
 
-$(srcdir)/gtkmarshal.h: stamp-gtkmarshal.h
+gtkmarshal.h: stamp-gtkmarshal.h
 	@true
 stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list
-	case @GLIB_GENMARSHAL@ in								\
-	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;					\
-	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;						\
-	esac;											\
-	cd $(srcdir)										\
-	&& echo "#ifndef GTK_DISABLE_DEPRECATED" > xgen-gmh					\
-        && $$glib_genmarshal --prefix=gtk_marshal gtkmarshal.list --header >> xgen-gmh		\
-	&& echo "#endif /* GTK_DISABLE_DEPRECATED */" >> xgen-gmh				\
-	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h)				\
-	&& rm -f xgen-gmh 									\
+	echo "#ifndef GTK_DISABLE_DEPRECATED" > xgen-gmh					\
+        && $(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --header >> xgen-gmh \
+	&& echo "#endif /* GTK_DISABLE_DEPRECATED */" >> xgen-gmh \
+	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
+	&& rm -f xgen-gmh \
 	&& echo timestamp > $(@F)
-$(srcdir)/gtkmarshal.c: @REBUILD@ gtkmarshal.list
-	case @GLIB_GENMARSHAL@ in								\
-	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;					\
-	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;						\
-	esac;											\
-	cd $(srcdir)										\
-	&& $$glib_genmarshal --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc		\
-	&& cp xgen-gmc gtkmarshal.c								\
+gtkmarshal.c: @REBUILD@ gtkmarshal.list
+	$(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --body >> xgen-gmc \
+	&& cp xgen-gmc gtkmarshal.c \
 	&& rm -f xgen-gmc 
 
-$(srcdir)/gtktypebuiltins.h: stamp-gtktypebuiltins.h
+gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true
 stamp-gtktypebuiltins.h: @REBUILD@ $(gtk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
@@ -528,10 +500,10 @@ stamp-gtktypebuiltins.h: @REBUILD@ $(gtk_public_h_sources) Makefile
 			--vhead "GType @enum_name@_get_type (void);\n#define GTK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
 			--ftail "G_END_DECLS\n\n#endif /* __GTK_TYPE_BUILTINS_H__ */" \
 		$(gtk_public_h_sources) ) >> xgen-gtbh \
-	&& (cmp -s xgen-gtbh $(srcdir)/gtktypebuiltins.h || cp xgen-gtbh $(srcdir)/gtktypebuiltins.h ) \
+	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h ) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
-$(srcdir)/gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
+gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
 			--fhead "#undef GTK_DISABLE_DEPRECATED\n#define GTK_ENABLE_BROKEN\n#include \"gtk.h\"\n#include \"gtkprivate.h\"" \
 			--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -539,7 +511,7 @@ $(srcdir)/gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
 			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
 		$(gtk_public_h_sources) ) > xgen-gtbc \
-	&& cp xgen-gtbc $(srcdir)/gtktypebuiltins.c  \
+	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
 # target platform:
@@ -552,7 +524,13 @@ libgtk_x11_2_0_la_SOURCES = $(gtk_c_sources) $(gtk_plug_c_sources)
 libgtk_linux_fb_2_0_la_SOURCES = $(gtk_c_sources)
 libgtk_win32_2_0_la_SOURCES = $(gtk_c_sources)
 
-libgtk_win32_2_0_la_LIBADD = $(gtk_win32res_lo)
+libgtk_x11_2_0_la_LDFLAGS = $(libtool_opts)
+libgtk_linux_fb_2_0_la_LDFLAGS = $(libtool_opts)
+libgtk_win32_2_0_la_LDFLAGS = $(libtool_opts)
+
+libgtk_x11_2_0_la_LIBADD = $(libadd)
+libgtk_linux_fb_2_0_la_LIBADD = $(libadd)
+libgtk_win32_2_0_la_LIBADD = $(libadd) $(gtk_win32res_lo)
 libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32res_lo)
 
 if USE_WIN32
@@ -579,15 +557,21 @@ uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key/gtkrc
 	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
 
+# if srcdir!=builddir, clean out maintainer-clean files from builddir
+# this allows dist to pass.
+distclean-local:
+	if test $(srcdir) != .; then \
+	  rm -f $(MAINTAINERCLEANFILES); \
+	fi
+
 DEPS = $(gtktargetlib) $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la $(top_builddir)/gdk/$(gdktargetlib)
 
 TEST_DEPS = $(DEPS) gtk.immodules
 
-LDADDS = @STRIP_BEGIN@ \
+LDADDS =								\
 	$(gtktargetlib)							\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/$(gdktargetlib) 				\
-@STRIP_END@
+	$(top_builddir)/gdk/$(gdktargetlib)
 
 #
 # Installed tools
@@ -606,7 +590,7 @@ files:
 	  echo $$p; \
 	done
 
-EXTRA_DIST += @STRIP_BEGIN@ 	\
+EXTRA_DIST +=                   \
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	tree_plus.xbm		\
@@ -620,8 +604,7 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	gtkrc.key.default	\
 	gtkrc.key.emacs		\
 	makefile.msc		\
-	makefile.msc.in		\
-@STRIP_END@
+	makefile.msc.in
 
 install-data-local:
 

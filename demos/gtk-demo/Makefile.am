@@ -4,27 +4,26 @@ democodedir=$(datadir)/gtk-2.0/demo
 
 ## These should be in the order you want them to appear in the 
 ## demo app, which means alphabetized by demo title, not filename
-demos = @STRIP_BEGIN@	\
-	appwindow.c	\
-	button_box.c	\
-	changedisplay.c	\
-	colorsel.c	\
-	dialog.c	\
-	drawingarea.c	\
-	editable_cells.c \
-	images.c	\
-	item_factory.c	\
-	list_store.c	\
-	menus.c		\
-	panes.c		\
-	pixbufs.c	\
-	sizegroup.c	\
-	stock_browser.c	\
-	textview.c	\
-	tree_store.c	\
-@STRIP_END@
+demos =						\
+	appwindow.c				\
+	button_box.c				\
+	changedisplay.c				\
+	colorsel.c				\
+	dialog.c				\
+	drawingarea.c				\
+	editable_cells.c			\
+	images.c				\
+	item_factory.c				\
+	list_store.c				\
+	menus.c					\
+	panes.c					\
+	pixbufs.c				\
+	sizegroup.c				\
+	stock_browser.c				\
+	textview.c				\
+	tree_store.c
 
-INCLUDES = @STRIP_BEGIN@ \
+INCLUDES = \
 	-DDEMOCODEDIR="\"$(democodedir)\""		\
 	-I$(top_srcdir) 				\
 	-I$(top_builddir)/gdk				\
@@ -32,20 +31,18 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED			\
 	-DGTK_DISABLE_DEPRECATED 			\
-	@GTK_DEBUG_FLAGS@				\
-	@GTK_DEP_CFLAGS@				\
-@STRIP_END@
+	$(GTK_DEBUG_FLAGS)				\
+	$(GTK_DEP_CFLAGS)
 
 DEPS = \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/@gdktargetlib@ 				\
-	$(top_builddir)/gtk/@gtktargetlib@
+	$(top_builddir)/gdk/$(gdktargetlib) 				\
+	$(top_builddir)/gtk/$(gtktargetlib)
 
-LDADDS = @STRIP_BEGIN@ 							\
+LDADDS = \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/@gdktargetlib@        			\
-	$(top_builddir)/gtk/@gtktargetlib@ 				\
-@STRIP_END@
+	$(top_builddir)/gdk/$(gdktargetlib)        			\
+	$(top_builddir)/gtk/$(gtktargetlib)
 
 bin_PROGRAMS = gtk-demo
 
@@ -54,8 +51,8 @@ BUILT_SOURCES = demos.h
 EXTRA_DIST = 		\
 	$(IMAGEFILES)
 
-demos.h: $(demos) geninclude.pl
-	(cd $(srcdir) && $(PERL) ./geninclude.pl $(demos) > demos.h)
+demos.h: @REBUILD@ $(demos) geninclude.pl
+	(here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h
 
 gtk_demo_SOURCES = 		\
 	$(demos)		\
@@ -80,3 +77,5 @@ IMAGEFILES=	alphatest.png		\
 		gtk-logo-rgb.gif
 
 democode_DATA = $(demos) $(IMAGEFILES)
+
+DISTCLEANFILES = demos.h

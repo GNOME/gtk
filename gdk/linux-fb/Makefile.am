@@ -1,15 +1,15 @@
 ## Process this file with automake to produce Makefile.in
 
+bin_PROGRAMS =
+
 if ENABLE_FB_MANAGER
-bin_PROGRAMS = gdkfbmanager gdkfbswitch
-else
-bin_PROGRAMS = 
+bin_PROGRAMS += gdkfbmanager gdkfbswitch
 endif
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 libgdkfbincludedir = $(includedir)/gtk-2.0/gdk/linux-fb
 
-INCLUDES = @STRIP_BEGIN@ 	\
+INCLUDES = \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-DGDK_DATA_PREFIX=\"$(prefix)\"	\
 	-I$(top_srcdir)		\
@@ -17,9 +17,8 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	-I$(top_builddir)/gdk	\
 	-DG_DISABLE_DEPRECATED	\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	@GDK_DEP_CFLAGS@	\
-	@GTK_DEBUG_FLAGS@ 	\
-@STRIP_END@
+	$(GDK_DEP_CFLAGS)	\
+	$(GTK_DEBUG_FLAGS)
 
 noinst_LTLIBRARIES = libgdk-linux-fb.la
 
@@ -82,12 +81,3 @@ gdkfbswitch_sources = gdkfbswitch.c
 gdkfbswitch_LDFLAGS = $(GLIB_LIBS)
 
 EXTRA_DIST=x-cursors.xbm
-
-###########################################
-# Hack to get gdkenumtypes.h built first
-###########################################
-                                       
-$(libgdk_linux_fb_la_OBJECTS): $(top_srcdir)/gdk/gdkenumtypes.h
-
-$(top_srcdir)/gdk/gdkenumtypes.h:
-	@cd $(top_builddir)/gdk && make $(AM_MAKEFLAGS) gdkenumtypes.h

@@ -2,33 +2,30 @@
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 
-INCLUDES = @STRIP_BEGIN@ 	\
+INCLUDES = \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-DINSIDE_GDK_WIN32	\
 	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
-	@GTK_DEBUG_FLAGS@ 	\
-	@GDK_DEP_CFLAGS@	\
-	@GDK_WIN32_EXTRA_CFLAGS@\
-	-DGDK_COMPILATION	\
-@STRIP_END@
+	$(GTK_DEBUG_FLAGS) 	\
+	$(GDK_DEP_CFLAGS)	\
+	$(GDK_WIN32_EXTRA_CFLAGS)\
+	-DGDK_COMPILATION
 
-LDADDS = @STRIP_BEGIN@ 		\
-	@GDK_DEP_LIBS@		\
-@STRIP_END@
+LDADDS = $(GDK_DEP_LIBS)
 
 if HAVE_WINTAB
 libwntab32x_a = .libs/libwntab32x.a
 
-.libs/libwntab32x.a: @WINTAB_LIB@
+.libs/libwntab32x.a: $(WINTAB_LIB)
 	cp $< $@
 endif
 
 if HAVE_IE55
 libie55uuid_a = .libs/libie55uuid.a
 
-.libs/libie55uuid.a: @IE55_UUID_LIB@
+.libs/libie55uuid.a: $(IE55_UUID_LIB)
 	cp $< $@
 endif
 
@@ -81,12 +78,3 @@ libgdkinclude_HEADERS =		\
 	gdkwin32.h
 
 libgdk_win32_la_LIBADD = rc/gdk-win32res.lo
-
-###########################################
-# Hack to get gdkenumtypes.h built first
-###########################################
-                                       
-$(libgdk_win32_la_OBJECTS): $(top_srcdir)/gdk/gdkenumtypes.h
-
-$(top_srcdir)/gdk/gdkenumtypes.h:
-	@cd $(top_builddir)/gdk && make $(AM_MAKEFLAGS) gdkenumtypes.h

@@ -1,20 +1,19 @@
 lib_LTLIBRARIES=libgdk_pixbuf_xlib-2.0.la
 
-INCLUDES = @STRIP_BEGIN@			\
+INCLUDES = \
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_srcdir)/contrib 		\
 	-DG_DISABLE_DEPRECATED			\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
-	@GDK_PIXBUF_XLIB_DEP_CFLAGS@		\
-@STRIP_END@
+	$(GDK_PIXBUF_XLIB_DEP_CFLAGS)
 
 libgdk_pixbuf_xlib_2_0_la_LDFLAGS =         \
 	-export-dynamic						\
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+	-version-info $(LT_VERSION_INFO)
 
 libgdk_pixbuf_xlib_2_0_la_LIBADD = \
-	@GDK_PIXBUF_XLIB_DEP_LIBS@
+	$(GDK_PIXBUF_XLIB_DEP_LIBS)
 
 libgdk_pixbuf_xlib_2_0_la_SOURCES =         \
 	gdk-pixbuf-xlib-private.h	\

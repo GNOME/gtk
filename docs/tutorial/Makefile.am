@@ -35,16 +35,20 @@ EXTRA_DIST = \
 	images/tictactoe.png
 
 if HAVE_DOCBOOK
-html: 
-	(cd $(srcdir); \
-	 db2html gtk-tut.sgml; \
-	 test -d html && rm -r html; \
-	 mv gtk-tut html; \
-	 mkdir html/images; \
-	 cp images/*.png html/images)
+html:
+	if test -w $(srcdir); then \
+	  (cd $(srcdir); \
+	   db2html gtk-tut.sgml; \
+	   test -d html && rm -r html; \
+	   mv gtk-tut html; \
+	   mkdir html/images; \
+	   cp images/*.png html/images); \
+	fi
 
 pdf:
-	(cd $(srcdir); db2pdf gtk-tut.sgml)
+	if test -w $(srcdir); then \
+	  (cd $(srcdir); db2pdf gtk-tut.sgml); \
+	fi
 
 dist-hook: html
 	cp -Rp $(srcdir)/html $(distdir)

@@ -1,3 +1,39 @@
+Tue May  6 16:50:52 2003  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from James Henstridge to update to automake-1.7
+	(#109542)
+ 
+ 	* autogen.sh: update to call newer tools.
+ 
+ 	* configure.in: various updates, to use M4 macros to put
+ 	variables that change each release at the top.
+ 	Use AC_HELP_STRING to format help strings.
+ 	Use AC_CONFIG_COMMANDS to generate gdkconfig.h.
+ 
+ 	* Makefile.am: require Automake 1.7.  Remove gdk-2.0.pc and
+ 	gtk+-2.0.pc on uninstall.  Pass --enable-gtk-doc to configure
+ 	during distcheck.
+ 
+ 	* docs/reference/*/Makefile.am: simplify to use the gtk-doc.make
+ 	makefile fragment.
+ 
+ 	* */Makefile.am: don't use STRIP_BEGIN/STRIP_END.
+ 	Use BUILT_SOURCES where appropriate.
+ 	Build generated files in builddir rather than srcdir.
+ 	Fix uninstall and distclean targets to satisfy distcheck.
+
+	===
+
+	* gdk/*/Makefile.am: Remove the hacks to get gdkenumtypes.h
+	built first, since we are now using BUILT_SOURCES.
+
+	* gdk/Makefile.am: Remove an outdated comment about gdk_headers.
+
+	* demos/gtk-demo/Makefile.am: Fix srcdir != buildd problem
+	with geninclude.pl.
+
+	* configure.in: Update versions to 2.3.0.
+ 
 2003-05-06  Tor Lillqvist  <tml@iki.fi>
 
 	Fix for #110165 (thanks to Arnaud Charlet):

@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/gdk
 
-SUBDIRS=$(gdktarget)
-DIST_SUBDIRS=linux-fb win32 x11
+SUBDIRS = $(gdktarget)
+DIST_SUBDIRS = linux-fb win32 x11
 
 EXTRA_DIST =			\
 	gdkconfig.h.win32 	\
@@ -10,7 +10,7 @@ EXTRA_DIST =			\
 	makeenums.pl		\
 	makefile.msc
 
-common_includes = @STRIP_BEGIN@ 	\
+INCLUDES =                              \
 	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DGDK_COMPILATION		\
 	-I$(top_srcdir)			\
@@ -19,66 +19,25 @@ common_includes = @STRIP_BEGIN@ 	\
 	-DG_DISABLE_DEPRECATED		\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
 	-DGDK_DISABLE_DEPRECATED	\
-	@GTK_DEBUG_FLAGS@ 		\
-	@GDK_DEP_CFLAGS@		\
-@STRIP_END@
+	$(GTK_DEBUG_FLAGS) 		\
+	$(GDK_DEP_CFLAGS)
 
-INCLUDES = $(common_includes)
-gtarget=@gdktarget@
+gtarget=$(gdktarget)
 
 if PLATFORM_WIN32
 no_undefined = -no-undefined
-
-if HAVE_WINTAB
-wintab_lib = -Lwin32 -lwntab32x
-endif
-
-if HAVE_IE55
-ie55uuid_lib = -Lwin32 -lie55uuid
-endif
-endif
-
-if OS_WIN32
-gdk_win32_symbols = -export-symbols gdk.def
-
-install-libtool-import-lib:
-	$(INSTALL) .libs/libgdk-win32-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
-uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libgdk-win32-$(GTK_API_VERSION).dll.a
-else
-install-libtool-import-lib:
-uninstall-libtool-import-lib:
-endif
-
-if MS_LIB_AVAILABLE
-noinst_DATA = gdk-win32-$(GTK_API_VERSION).lib
-
-gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la gdk.def
-	lib -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
-
-install-ms-lib:
-	$(INSTALL) gdk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
-
-uninstall-ms-lib:
-	-rm $(DESTDIR)$(libdir)/gdk-win32-$(GTK_API_VERSION).lib
-else
-install-ms-lib:
-uninstall-ms-lib:
 endif
 
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
-LDFLAGS = @STRIP_BEGIN@ 						\
-	@LDFLAGS@							\
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 		\
+LDADD = \
+	-version-info $(LT_VERSION_INFO)		 		\
 	-export-dynamic 						\
 	-rpath $(libdir) 						\
 	$(no_undefined)							\
-	@LIBTOOL_EXPORT_OPTIONS@					\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(gdk_win32_symbols)						\
-@STRIP_END@
+	$(LIBTOOL_EXPORT_OPTIONS)
+
 
 #
 # setup source file variables
@@ -86,9 +45,7 @@ LDFLAGS = @STRIP_BEGIN@ 						\
 #
 # GDK header files for public installation (non-generated)
 #
-# Note: files added here may need to be be propagated to gdk_headers in gtk/Makefile.am
-#
-gdk_public_h_sources = @STRIP_BEGIN@		\
+gdk_public_h_sources =				\
 	gdk.h					\
 	gdkcolor.h				\
 	gdkcursor.h				\
@@ -114,16 +71,14 @@ gdk_public_h_sources = @STRIP_BEGIN@		\
 	gdkselection.h				\
 	gdktypes.h				\
 	gdkvisual.h				\
-	gdkwindow.h				\
-@STRIP_END@
+	gdkwindow.h
 
-gdk_headers = @STRIP_BEGIN@       \
+gdk_headers =                     \
 	$(gdk_public_h_sources)   \
 	gdkenumtypes.h		  \
-	gdkprivate.h		  \
-@STRIP_END@
+	gdkprivate.h
 
-gdk_c_sources = @STRIP_BEGIN@ 	\
+gdk_c_sources =                 \
 	gdk.c			\
 	gdkcolor.c		\
 	gdkcursor.c		\
@@ -153,8 +108,7 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdkscreen.c		\
 	gdkselection.c		\
 	gdkvisual.c		\
-	gdkwindow.c		\
-@STRIP_END@
+	gdkwindow.c
 
 #
 # setup GDK sources and their dependancies
@@ -164,28 +118,66 @@ gdkincludedir = $(includedir)/gtk-2.0/gdk
 gdkinclude_HEADERS = $(gdk_headers)
 
 # gdkmarshalers.c is not here becuase it is currently an empty file
-common_sources = @STRIP_BEGIN@	\
+common_sources =                \
 	$(gdk_c_sources)	\
 	gdkenumtypes.c		\
-	gdkmarshalers.h		\
-@STRIP_END@
+	gdkmarshalers.h
 
 libgdk_x11_2_0_la_SOURCES = $(common_sources)
-libgdk_linux_fb_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
-libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
+libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS) \
+  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_x11_2_0_la_LDFLAGS = $(LDADD)
 
-libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la @GDK_DEP_LIBS@
-libgdk_linux_fb_2_0_la_LIBADD = linux-fb/libgdk-linux-fb.la @GDK_DEP_LIBS@
-libgdk_win32_2_0_la_LIBADD = \
-	win32/libgdk-win32.la $(wintab_lib) $(ie55uuid_lib) \
-	@GDK_DEP_LIBS@
+libgdk_linux_fb_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
+libgdk_linux_fb_2_0_la_LIBADD = linux-fb/libgdk-linux-fb.la $(GDK_DEP_LIBS) \
+  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_linux_fb_2_0_la_LDFLAGS = $(LDADD)
+
+libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
+libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
+  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
 libgdk_win32_2_0_la_DEPENDENCIES = gdk.def
+libgdk_win32_2_0_la_LDFLAGS = -export-symbols gdk.def $(LDADD)
+if HAVE_WINTAB
+libgdk_win32_2_0_la_LIBADD += -Lwin32 -lwntab32x
+endif
+if HAVE_IE55
+libgdk_win32_2_0_la_LIBADD += -Lwin32 -lie55uuid
+endif
+
+if OS_WIN32
+install-libtool-import-lib:
+	$(INSTALL) .libs/libgdk-win32-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
+uninstall-libtool-import-lib:
+	-rm $(DESTDIR)$(libdir)/libgdk-win32-$(GTK_API_VERSION).dll.a
+else
+install-libtool-import-lib:
+uninstall-libtool-import-lib:
+endif
+
+if MS_LIB_AVAILABLE
+noinst_DATA = gdk-win32-$(GTK_API_VERSION).lib
+
+gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la gdk.def
+	lib -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
+
+install-ms-lib:
+	$(INSTALL) gdk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
+
+uninstall-ms-lib:
+	-rm $(DESTDIR)$(libdir)/gdk-win32-$(GTK_API_VERSION).lib
+else
+install-ms-lib:
+uninstall-ms-lib:
+endif
+
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
 EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-linux-fb-2.0.la libgdk-win32-2.0.la
 
-MAINTAINERCLEANFILES = gdkenumtypes.h stamp-gdkenumtypes.h
+MAINTAINERCLEANFILES = gdkenumtypes.h stamp-gdkenumtypes.h gdkenumtypes.c \
+  gdkmarshalers.h gdkmarshalers.c
 EXTRA_HEADERS =
 
 #
@@ -206,12 +198,14 @@ if DISABLE_EXPLICIT_DEPS
 endif
 
 #note: not gdkconfig.h
-BUILT_SOURCES = stamp-gc-h
+BUILT_SOURCES =					\
+	gdkenumtypes.h				\
+	gdkenumtypes.c				\
+	gdkmarshalers.h 			\
+	gdkmarshalers.c				\
+	gdkconfig.h
 
-# Generate built header without using automake-1.4 BUILT_SOURCES
-$(libgdk_x11_2_0_la_OBJECTS) $(libgdk_linux_fb_2_0_la_OBJECTS) $(libgdk_win32_2_0_la_OBJECTS): gdkenumtypes.h gdkmarshalers.h
-
-$(srcdir)/gdkenumtypes.h: stamp-gdkenumtypes.h
+gdkenumtypes.h: stamp-gdkenumtypes.h
 	@true
 stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
@@ -220,10 +214,10 @@ stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
 			--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
 			--ftail "G_END_DECLS\n\n#endif /* __GDK_ENUM_TYPES_H__ */" \
 		$(gdk_public_h_sources) ) >> xgen-geth \
-	&& (cmp -s xgen-geth $(srcdir)/gdkenumtypes.h || cp xgen-geth $(srcdir)/gdkenumtypes.h ) \
+	&& (cmp -s xgen-geth gdkenumtypes.h || cp xgen-geth gdkenumtypes.h ) \
 	&& rm -f xgen-geth \
 	&& echo timestamp > $(@F)
-$(srcdir)/gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
+gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
 			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdk.h\"" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
@@ -231,33 +225,41 @@ $(srcdir)/gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
 			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
 		$(gdk_public_h_sources) ) > xgen-getc \
-	&& cp xgen-getc $(srcdir)/gdkenumtypes.c  \
+	&& cp xgen-getc gdkenumtypes.c  \
 	&& rm -f xgen-getc
 
 # 
 # Marshaller generation
 #
-$(srcdir)/gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
-	cd $(srcdir) &&											\
-        ( @GLIB_GENMARSHAL@ --prefix=gdk_marshal gdkmarshalers.list --header > gdkmarshalers.tmp	\
-	&& mv gdkmarshalers.tmp gdkmarshalers.h )							\
-        || ( rm -f gdkmarshalers.tmp && exit 1 )
-$(srcdir)/gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	cd $(srcdir) &&											\
-	$( @GLIB_GENMARSHAL@ --prefix=gdk_marshal gdkmarshalers.list --body > gdkmarshalers.tmp	\
-	&& mv gdkmarshalers.tmp gdkmarshalers.c )							\
-       || ( rm -f gdkmarshalers.tmp && exit 1 )
+gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
+	$(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
+	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
+	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
+gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
+	$(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --body > gdkmarshalers-c.tmp	\
+	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
+	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 
 gdkconfig.h: stamp-gc-h
 	@if test -f gdkconfig.h; then :; \
 	else rm -f stamp-gc-h; $(MAKE) stamp-gc-h; fi
-stamp-gc-h: ../config.status
-	cd .. && CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gdk/gdkconfig.h ./config.status
+stamp-gc-h: $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h
 	echo timestamp > stamp-gc-h
+
+DISTCLEANFILES = gdkconfig.h stamp-gc-h
 
 install-data-local: install-ms-lib install-libtool-import-lib
 
 uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
+	rm -f $(DESTDIR)$(configexecincludedir)/gdkconfig.h
+
+# if srcdir!=builddir, clean out maintainer-clean files from builddir
+# this allows dist to pass.
+distclean-local:
+	if test $(srcdir) != .; then \
+	  rm -f $(MAINTAINERCLEANFILES); \
+	fi
 
 .PHONY: files
 

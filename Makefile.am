@@ -4,7 +4,7 @@ SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests contrib
 SUBDIRS = po $(SRC_SUBDIRS) docs build m4macros
 
 # require automake 1.4
-AUTOMAKE_OPTIONS = 1.4
+AUTOMAKE_OPTIONS = 1.7
 
 EXTRA_DIST =			\
 	HACKING			\
@@ -148,6 +148,10 @@ install-data-hook:
 	 rm -f gdk-2.0.pc && cp -f gdk-$(GDKTARGET)-2.0.pc gdk-2.0.pc && \
 	 rm -f gtk+-2.0.pc && cp -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
 
+uninstall-local:
+	rm -f $(DESTDIR)$(pkgconfigdir)/gdk-2.0.pc
+	rm -f $(DESTDIR)$(pkgconfigdir)/gtk+-2.0.pc
+
 dist-hook:
 	if test -f $(srcdir)/INSTALL.in && test -f $(srcdir)/README.in ; then \
 	     CONFIG_FILES="INSTALL:$(srcdir)/INSTALL.in README:$(srcdir)/README.in" \
@@ -181,26 +185,4 @@ snapshot:
 	$(MAKE) dist distdir=$(PACKAGE)-snap`date +"%Y%m%d"`
 
 
-# This is a version of the automake-1.4 distcheck rule modified
-# to pass --enable-gtk-doc to ./configure
-#
-mydistcheck: dist
-	-rm -rf $(distdir)
-	GZIP=$(GZIP_ENV) $(TAR) zxf $(distdir).tar.gz
-	mkdir $(distdir)/=build
-	mkdir $(distdir)/=inst
-	dc_install_base=`cd $(distdir)/=inst && pwd`; \
-	cd $(distdir)/=build \
-	  && ../configure --srcdir=.. --prefix=$$dc_install_base --enable-gtk-doc \
-	  && $(MAKE) $(AM_MAKEFLAGS) \
-	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
-	  && $(MAKE) $(AM_MAKEFLAGS) check \
-	  && $(MAKE) $(AM_MAKEFLAGS) install \
-	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
-	  && $(MAKE) $(AM_MAKEFLAGS) dist
-	-rm -rf $(distdir)
-	@banner="$(distdir).tar.gz is ready for distribution"; \
-	dashes=`echo "$$banner" | sed s/./=/g`; \
-	echo "$$dashes"; \
-	echo "$$banner"; \
-	echo "$$dashes"
+DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
