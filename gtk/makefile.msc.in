@@ -35,7 +35,6 @@ GTK_VER=1.3
 
 all :						\
 	..\config.h				\
-	gtkcompat.h				\
 	generated				\
 	gtk-win32-$(GTK_VER).dll		\
 	testcalendar.exe			\
@@ -344,9 +343,6 @@ gdk_headers =			\
 
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h
-
-gtkcompat.h : gtkcompat.h.win32
-	copy gtkcompat.h.win32 gtkcompat.h
 
 GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c
 

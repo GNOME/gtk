@@ -1,3 +1,12 @@
+2000-11-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkcompat.h.win32: Remove, useless. A distribution already
+	has a built gtkcompat.h. Developers using CVS code on Win32 can
+	hand-edit it from gtkcompat.h.in.
+
+	* gtk/makefile.{mingw,msc}.in: Correspondingly don't try to make
+	gtkcompat.h from gtkcompat.h.win32.
+
 2000-11-14  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_drag_motion): Fix drag-and-drop

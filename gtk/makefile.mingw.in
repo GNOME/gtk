@@ -38,7 +38,6 @@ DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -DGTK_
 
 all :						\
 	../config.h				\
-	gtkcompat.h				\
 	generated				\
 	gtk-win32-$(GTK_VER).dll		\
 	testcalendar.exe			\
@@ -346,9 +345,6 @@ gdk_headers =			\
 	../gdk/gdkwindow.h
 
 ../config.h : ../config.h.win32
-	cp $< $@
-
-gtkcompat.h : gtkcompat.h.win32
 	cp $< $@
 
 GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c
