@@ -1,3 +1,8 @@
+Fri May 28 14:35:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkcontainer.sgml: Fix docs for 
+	gtk_container_border_width().  (#143309, Doug Quale)
+
 Fri May  7 01:36:30 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/gdk-pixbuf-csource.xml: Add an "Environment" 
