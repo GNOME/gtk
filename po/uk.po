@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2001-12-18 14:17+0200\n"
+"POT-Creation-Date: 2001-12-23 18:02-0500\n"
 "PO-Revision-Date: 1999-09-30 21:51 EST\n"
 "Last-Translator: Yuri Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -26,17 +26,14 @@ msgstr "Файл зображення \"%s\" не містить даних"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr ""
-"Невідомо, як завантажити анімацію з файлу "
-"\"%s\""
+msgstr "Невідомо, як завантажити анімацію з файлу \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:606
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Збій завантаження зображення \"%s\": "
-"причина невідома, очевидно файл "
+"Збій завантаження зображення \"%s\": причина невідома, очевидно файл "
 "зіпсований"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
@@ -45,15 +42,12 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Збій завантаження анімації \"%s\": причина "
-"невідома, очевидно файл зіпсований"
+"Збій завантаження анімації \"%s\": причина невідома, очевидно файл зіпсований"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:324
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr ""
-"Неможливо завантажити модуль "
-"завантаження зображення: %s: %s"
+msgstr "Неможливо завантажити модуль завантаження зображення: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:343
 #, c-format
@@ -70,27 +64,21 @@ msgstr "Тип зображення \"%s\" не підтримується"
 #: gdk-pixbuf/gdk-pixbuf-io.c:508
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
-"Не вдалося розпізнати фармат зображення "
-"у файлі \"%s\""
+msgstr "Не вдалося розпізнати фармат зображення у файлі \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:514
 msgid "Unrecognized image file format"
-msgstr ""
-"Нерозпізнаний формат файлу зображення"
+msgstr "Нерозпізнаний формат файлу зображення"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:584
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
-msgstr ""
-"Невідомо, як завантажити файл зображення "
-"з файлу \"%s\""
+msgstr "Невідомо, як завантажити файл зображення з файлу \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:617
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
-"Не вдалося завантажити зображення \"%s\": %s"
+msgstr "Не вдалося завантажити зображення \"%s\": %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:722
 #, c-format
@@ -105,8 +93,8 @@ msgstr "Не вдалося відкрити \"%s\" для запису: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:850
 #, c-format
 msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: "
-"%s"
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
@@ -131,9 +119,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:341
 msgid "Not enough memory to load bitmap image"
-msgstr ""
-"Не вістачає пам'яті для завантаження "
-"растрового зображення"
+msgstr "Не вістачає пам'яті для завантаження растрового зображення"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -165,15 +151,11 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1507
 #, fuzzy
 msgid "Not enough memory to load GIF file"
-msgstr ""
-"Недостатньо пам'яті для завантаження "
-"файлу PNG"
+msgstr "Недостатньо пам'яті для завантаження файлу PNG"
 
 #: gdk-pixbuf/io-gif.c:998
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
-"Зображення GIF зіпсовано (невірне "
-"стиснення LZW)"
+msgstr "Зображення GIF зіпсовано (невірне стиснення LZW)"
 
 #: gdk-pixbuf/io-gif.c:1048
 msgid "File does not appear to be a GIF file"
@@ -182,8 +164,7 @@ msgstr "Файл не схожий на GIF"
 #: gdk-pixbuf/io-gif.c:1060
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
-"Формат файлу GIF версії %s не підтримується"
+msgstr "Формат файлу GIF версії %s не підтримується"
 
 #: gdk-pixbuf/io-gif.c:1135
 msgid "GIF image contained a frame appearing outside the image bounds."
@@ -206,9 +187,7 @@ msgstr ""
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
-"Помилка інтерпретації файлу зображення "
-"JPEG (%s)"
+msgstr "Помилка інтерпретації файлу зображення JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:234
 msgid ""
@@ -218,9 +197,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
-"Не вдалося виділити пам'ять для "
-"завантаження файлу JPEG"
+msgstr "Не вдалося виділити пам'ять для завантаження файлу JPEG"
 
 #: gdk-pixbuf/io-jpeg.c:664
 #, c-format
@@ -238,14 +215,11 @@ msgstr ""
 #: gdk-pixbuf/io-png.c:161
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
-"Фатальна помилка у файлі зображення PNG: %s"
+msgstr "Фатальна помилка у файлі зображення PNG: %s"
 
 #: gdk-pixbuf/io-png.c:267
 msgid "Insufficient memory to load PNG file"
-msgstr ""
-"Недостатньо пам'яті для завантаження "
-"файлу PNG"
+msgstr "Недостатньо пам'яті для завантаження файлу PNG"
 
 #: gdk-pixbuf/io-png.c:585
 #, c-format
@@ -256,16 +230,12 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:636
 msgid "Fatal error reading PNG image file"
-msgstr ""
-"Фатальна помилка зчитування файлу "
-"зображення PNG"
+msgstr "Фатальна помилка зчитування файлу зображення PNG"
 
 #: gdk-pixbuf/io-png.c:685
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
-"Фатальна помилка зчитування файлу "
-"зображення PNG: %s"
+msgstr "Фатальна помилка зчитування файлу зображення PNG: %s"
 
 #: gdk-pixbuf/io-png.c:750
 msgid ""
@@ -286,8 +256,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:286
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
-"Файл PNM має некоректний початковий байт"
+msgstr "Файл PNM має некоректний початковий байт"
 
 #: gdk-pixbuf/io-pnm.c:316
 msgid "PNM file is not in a recognized PNM subformat"
@@ -335,50 +304,35 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:775
 msgid "Can't allocate memory for loading PNM image"
-msgstr ""
-"Неможливо виділити пам'ять для "
-"завантаження файлу PNM"
+msgstr "Неможливо виділити пам'ять для завантаження файлу PNM"
 
 #: gdk-pixbuf/io-pnm.c:824
 msgid "Insufficient memory to load PNM context struct"
-msgstr ""
-"Недостатньо пам'яті для завантаження "
-"структури вмісту PNM"
+msgstr "Недостатньо пам'яті для завантаження структури вмісту PNM"
 
 #: gdk-pixbuf/io-pnm.c:874
 msgid "Unexpected end of PNM image data"
-msgstr ""
-"Неочікуване завершення даних зображення "
-"PNM"
+msgstr "Неочікуване завершення даних зображення PNM"
 
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
-msgstr ""
-"Недостатньо пам'яті для завантаження "
-"файлу PNM"
+msgstr "Недостатньо пам'яті для завантаження файлу PNM"
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
-"Не вдалось отримати ширину (невірний файл "
-"TIFF)"
+msgstr "Не вдалось отримати ширину (невірний файл TIFF)"
 
 #: gdk-pixbuf/io-tiff.c:159
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
-"Не вдалось отримати висоту (невірний файл "
-"TIFF)"
+msgstr "Не вдалось отримати висоту (невірний файл TIFF)"
 
 #: gdk-pixbuf/io-tiff.c:169
 msgid "Width or height of TIFF image is zero"
-msgstr ""
-"Ширина чи висота зображення TIFF рівна нулю"
+msgstr "Ширина чи висота зображення TIFF рівна нулю"
 
 #: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
-"Не достатньо пам'яті для відкривання "
-"файлу TIFF"
+msgstr "Не достатньо пам'яті для відкривання файлу TIFF"
 
 #: gdk-pixbuf/io-tiff.c:201
 #, fuzzy
@@ -403,9 +357,7 @@ msgstr "Невірний файл XBM"
 
 #: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
-msgstr ""
-"Недостатньо пам'яті для завантаження "
-"файлу зображення XBM"
+msgstr "Недостатньо пам'яті для завантаження файлу зображення XBM"
 
 #: gdk-pixbuf/io-xbm.c:428
 msgid "Failed to write to temporary file when loading XBM image"
@@ -443,15 +395,22 @@ msgstr ""
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr ""
+
 #: gdk-pixbuf/gdk-pixdata.c:403
 #, fuzzy, c-format
 msgid "failed to allocate image buffer of %u bytes"
-msgstr ""
-"Не вдалося завантажити зображення \"%s\": %s"
-
-#: gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr ""
+msgstr "Не вдалося завантажити зображення \"%s\": %s"
 
 #: gtk/gtkaccellabel.c:122
 msgid "Accelerator Closure"
@@ -518,9 +477,7 @@ msgstr "Напрям тексту"
 #: gtk/gtkarrow.c:98
 #, fuzzy
 msgid "The direction the arrow should point"
-msgstr ""
-"Напрямок сортування має відображатись "
-"індикатором"
+msgstr "Напрямок сортування має відображатись індикатором"
 
 #: gtk/gtkarrow.c:105
 msgid "Arrow shadow"
@@ -612,8 +569,8 @@ msgstr ""
 
 #: gtk/gtkbbox.c:161
 msgid ""
-"If TRUE, the child appears in a secondary group of children, suitable for, "
-"e.g., help buttons."
+"If TRUE, the child appears in a secondary group of children, suitable for, e."
+"g., help buttons."
 msgstr ""
 
 #: gtk/gtkbox.c:125
@@ -631,8 +588,7 @@ msgstr ""
 #: gtk/gtkbox.c:136
 #, fuzzy
 msgid "Whether the children should all be the same size."
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:282
 msgid "Label"
@@ -812,7 +768,7 @@ msgstr ""
 msgid "Pixbuf for closed expander."
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:519 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:522 gtk/gtkprogressbar.c:207
 msgid "Text"
 msgstr "Текст"
 
@@ -868,7 +824,7 @@ msgstr "Колір переднього плану"
 msgid "Foreground color as a GdkColor"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:451 gtk/gtktexttag.c:277
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:454 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:549
 #, fuzzy
 msgid "Editable"
@@ -1157,8 +1113,7 @@ msgstr ""
 #: gtk/gtkcolorsel.c:1695
 #, fuzzy
 msgid "Whether the color selector should allow setting opacity"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkcolorsel.c:1701
 #, fuzzy
@@ -1168,8 +1123,7 @@ msgstr "Інша палітра"
 #: gtk/gtkcolorsel.c:1702
 #, fuzzy
 msgid "Whether a palette should be used"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkcolorsel.c:1708
 msgid "Current Color"
@@ -1414,117 +1368,114 @@ msgstr ""
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
-#: gtk/gtkentry.c:431 gtk/gtklabel.c:360
+#: gtk/gtkentry.c:434 gtk/gtklabel.c:360
 msgid "Cursor Position"
 msgstr "Позиція курсора"
 
-#: gtk/gtkentry.c:432 gtk/gtklabel.c:361
+#: gtk/gtkentry.c:435 gtk/gtklabel.c:361
 #, fuzzy
 msgid "The current position of the insertion cursor in chars."
 msgstr "Поточна позиція точки вставляння"
 
-#: gtk/gtkentry.c:441 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:444 gtk/gtklabel.c:370
 #, fuzzy
 msgid "Selection Bound"
 msgstr "Вибір: "
 
-#: gtk/gtkentry.c:442 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:445 gtk/gtklabel.c:371
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 
-#: gtk/gtkentry.c:452
+#: gtk/gtkentry.c:455
 msgid "Whether the entry contents can be edited"
 msgstr ""
 
-#: gtk/gtkentry.c:459
+#: gtk/gtkentry.c:462
 msgid "Maximum length"
 msgstr "Максимальна довжина"
 
-#: gtk/gtkentry.c:460
+#: gtk/gtkentry.c:463
 msgid "Maximum number of characters for this entry"
 msgstr "Максимальна кількість символів у полі"
 
-#: gtk/gtkentry.c:468
+#: gtk/gtkentry.c:471
 msgid "Visibility"
 msgstr "Видимість"
 
-#: gtk/gtkentry.c:469
+#: gtk/gtkentry.c:472
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"ХИБНІСТЬ вмикає відображення \"невидимих "
-"символів\" замість справжнього тексту "
-"(режим поролю)"
+"ХИБНІСТЬ вмикає відображення \"невидимих символів\" замість справжнього "
+"тексту (режим поролю)"
 
-#: gtk/gtkentry.c:476
+#: gtk/gtkentry.c:479
 msgid "Has Frame"
 msgstr "Має рамку"
 
-#: gtk/gtkentry.c:477
+#: gtk/gtkentry.c:480
 msgid "FALSE removes outside bevel from entry."
-msgstr ""
-"ХИБНІСТЬ вимикає вовнішню облямівку поля."
+msgstr "ХИБНІСТЬ вимикає вовнішню облямівку поля."
 
-#: gtk/gtkentry.c:484
+#: gtk/gtkentry.c:487
 msgid "Invisible character"
 msgstr "Невидимий символ"
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:488
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
-"Символ, що використовуватиметься для "
-"маскування вмусту поля (в режимі паролю)"
+"Символ, що використовуватиметься для маскування вмусту поля (в режимі паролю)"
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:495
 msgid "Activates default"
 msgstr ""
 
-#: gtk/gtkentry.c:493
+#: gtk/gtkentry.c:496
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:502
 msgid "Width in chars"
 msgstr "Ширина в символах"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:503
 msgid "Number of characters to leave space for in the entry."
 msgstr ""
 
-#: gtk/gtkentry.c:509
+#: gtk/gtkentry.c:512
 msgid "Scroll offset"
 msgstr ""
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:513
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
-#: gtk/gtkentry.c:520
+#: gtk/gtkentry.c:523
 #, fuzzy
 msgid "The contents of the entry"
 msgstr "Поточна позиція точки вставляння"
 
-#: gtk/gtkentry.c:526 gtk/gtklabel.c:379 gtk/gtktextview.c:625
+#: gtk/gtkentry.c:529 gtk/gtklabel.c:379 gtk/gtktextview.c:625
 msgid "Cursor color"
 msgstr "Колір курсора"
 
-#: gtk/gtkentry.c:527 gtk/gtklabel.c:380 gtk/gtktextview.c:626
+#: gtk/gtkentry.c:530 gtk/gtklabel.c:380 gtk/gtktextview.c:626
 msgid "Color with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkentry.c:3826 gtk/gtklabel.c:3160
+#: gtk/gtkentry.c:3847 gtk/gtklabel.c:3161
 msgid "Select All"
 msgstr "Вибрати все"
 
-#: gtk/gtkentry.c:3836 gtk/gtklabel.c:3170
+#: gtk/gtkentry.c:3857 gtk/gtklabel.c:3171
 msgid "Input Methods"
 msgstr "методи вводу"
 
-#: gtk/gtkentry.c:3846 gtk/gtktextview.c:5766
+#: gtk/gtkentry.c:3867 gtk/gtktextview.c:5782
 msgid "_Insert Unicode control character"
 msgstr ""
 
@@ -1583,9 +1534,7 @@ msgstr "Перейменувати файл"
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Назва каталогу \"%s\" містить символи, що "
-"заборонені у назвах файлів"
+msgstr "Назва каталогу \"%s\" містить символи, що заборонені у назвах файлів"
 
 #: gtk/gtkfilesel.c:1239
 #, c-format
@@ -1598,9 +1547,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1240 gtk/gtkfilesel.c:1493
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
-"Очевидно ви використали символи, що "
-"заборонені у назвах файлів."
+msgstr "Очевидно ви використали символи, що заборонені у назвах файлів."
 
 #: gtk/gtkfilesel.c:1248
 #, c-format
@@ -1628,9 +1575,7 @@ msgstr "Створити"
 #: gtk/gtkfilesel.c:1356
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Назва файлу \"%s\" містить символи, що "
-"заборонені у назвах файлів"
+msgstr "Назва файлу \"%s\" містить символи, що заборонені у назвах файлів"
 
 #: gtk/gtkfilesel.c:1359
 #, c-format
@@ -1643,9 +1588,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1507
 msgid "It probably contains symbols not allowed in filenames."
-msgstr ""
-"Очевидно він містить символи, що не "
-"дозволені у назвах файлів."
+msgstr "Очевидно він містить символи, що не дозволені у назвах файлів."
 
 #: gtk/gtkfilesel.c:1370
 #, c-format
@@ -1659,9 +1602,7 @@ msgstr "Видалити"
 #: gtk/gtkfilesel.c:1489 gtk/gtkfilesel.c:1503
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Назва файлу \"%s\" містить символи, що "
-"заборонені у назвах файлів"
+msgstr "Назва файлу \"%s\" містить символи, що заборонені у назвах файлів"
 
 #: gtk/gtkfilesel.c:1491
 #, c-format
@@ -1684,8 +1625,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:1515
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
-"Помилка перейменування файлу \"%s\" у \"%s\": %s"
+msgstr "Помилка перейменування файлу \"%s\" у \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1604
 msgid "Rename"
@@ -2015,9 +1955,7 @@ msgstr "Позиція по X"
 
 #: gtk/gtklayout.c:577
 msgid "X position of child widget"
-msgstr ""
-"Горизонтальна позиція спадкоємного "
-"віджета"
+msgstr "Горизонтальна позиція спадкоємного віджета"
 
 #: gtk/gtklayout.c:586
 msgid "Y position"
@@ -2025,8 +1963,7 @@ msgstr "Позиція по Y"
 
 #: gtk/gtklayout.c:587
 msgid "Y position of child widget"
-msgstr ""
-"Вертикальна позиція спадкоємного віджета"
+msgstr "Вертикальна позиція спадкоємного віджета"
 
 #: gtk/gtklayout.c:596 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
@@ -2198,8 +2135,7 @@ msgstr "Порядок сортування"
 #: gtk/gtknotebook.c:379
 #, fuzzy
 msgid "Whether the border should be shown or not"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtknotebook.c:385
 msgid "Scrollable"
@@ -2276,16 +2212,12 @@ msgstr "Ширина в символах"
 #: gtk/gtkrc.c:2721
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
-"Файл із зображенням не знайдено в pixmap_path: "
-"\"%s\", рядок %d"
+msgstr "Файл із зображенням не знайдено в pixmap_path: \"%s\", рядок %d"
 
 #: gtk/gtkrc.c:2724
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr ""
-"Файл із зображенням не знайдено в pixmap_path: "
-"\"%s\""
+msgstr "Файл із зображенням не знайдено в pixmap_path: \"%s\""
 
 #: gtk/gtkrc.c:3133
 #, c-format
@@ -2320,8 +2252,7 @@ msgstr "Показати текст"
 #: gtk/gtkprogress.c:131
 #, fuzzy
 msgid "Whether the progress is shown as text"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkprogress.c:138
 msgid "Text x alignment"
@@ -2415,9 +2346,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:208
 msgid "Text to be displayed in the progress bar"
-msgstr ""
-"Текст, що показуватиметься у панелі "
-"поступу"
+msgstr "Текст, що показуватиметься у панелі поступу"
 
 #: gtk/gtkrange.c:261
 msgid "Update policy"
@@ -2610,8 +2539,7 @@ msgstr "Колір курсора"
 #: gtk/gtksettings.c:156
 #, fuzzy
 msgid "Whether the cursor should blink"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtksettings.c:163
 #, fuzzy
@@ -2628,8 +2556,8 @@ msgstr ""
 
 #: gtk/gtksettings.c:172
 msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and "
-"right-to-left text"
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
 msgstr ""
 
 #: gtk/gtksettings.c:179
@@ -2697,8 +2625,7 @@ msgstr ""
 #: gtk/gtkspinbutton.c:251
 #, fuzzy
 msgid "Whether non-numeric characters should be ignored"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkspinbutton.c:258
 msgid "Wrap"
@@ -3350,7 +3277,7 @@ msgstr "Видимий курсор"
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:5757
+#: gtk/gtktextview.c:5773
 msgid "Input _Methods"
 msgstr "Методи вводу"
 
@@ -3366,8 +3293,7 @@ msgstr "--- Немає підказки ---"
 #: gtk/gtktogglebutton.c:131
 #, fuzzy
 msgid "If the toggle button should be pressed in or not"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtktogglebutton.c:139
 msgid "If the toggle button is in an \"in between\" state."
@@ -3595,8 +3521,7 @@ msgstr "Мінімальна ширина"
 
 #: gtk/gtktreeviewcolumn.c:218
 msgid "Minimum allowed width of the column"
-msgstr ""
-"Мінімальна дозволена ширина стовпчика"
+msgstr "Мінімальна дозволена ширина стовпчика"
 
 #: gtk/gtktreeviewcolumn.c:227
 msgid "Maximum Width"
@@ -3604,8 +3529,7 @@ msgstr "Максимальна ширина"
 
 #: gtk/gtktreeviewcolumn.c:228
 msgid "Maximum allowed width of the column"
-msgstr ""
-"Максимальна дозволена ширина стовпчика"
+msgstr "Максимальна дозволена ширина стовпчика"
 
 #: gtk/gtktreeviewcolumn.c:237
 msgid "Title"
@@ -3649,8 +3573,7 @@ msgstr "Індикатор сортування"
 
 #: gtk/gtktreeviewcolumn.c:281
 msgid "Whether to show a sort indicator"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtktreeviewcolumn.c:288
 msgid "Sort order"
@@ -3658,9 +3581,7 @@ msgstr "Порядок сортування"
 
 #: gtk/gtktreeviewcolumn.c:289
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
-"Напрямок сортування має відображатись "
-"індикатором"
+msgstr "Напрямок сортування має відображатись індикатором"
 
 #: gtk/gtkviewport.c:133
 msgid ""
@@ -3726,8 +3647,7 @@ msgstr ""
 #: gtk/gtkwidget.c:435
 #, fuzzy
 msgid "Whether the widget responds to input"
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkwidget.c:441
 msgid "Application paintable"
@@ -3818,8 +3738,7 @@ msgstr ""
 #: gtk/gtkwidget.c:1054
 #, fuzzy
 msgid "Whether to draw the focus indicator inside widgets."
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkwidget.c:1060
 msgid "Focus linewidth"
@@ -3828,8 +3747,7 @@ msgstr ""
 #: gtk/gtkwidget.c:1061
 #, fuzzy
 msgid "Width, in pixels, of the focus indicator line."
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkwidget.c:1067
 msgid "Focus line dash pattern"
@@ -3838,8 +3756,7 @@ msgstr ""
 #: gtk/gtkwidget.c:1068
 #, fuzzy
 msgid "Dash pattern used to draw the focus indicator."
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkwidget.c:1073
 msgid "Focus padding"
@@ -3848,8 +3765,7 @@ msgstr ""
 #: gtk/gtkwidget.c:1074
 #, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
-msgstr ""
-"Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtkwindow.c:359
 msgid "Window Type"
@@ -3932,9 +3848,7 @@ msgstr "Знищувати з батьківським"
 
 #: gtk/gtkwindow.c:440
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr ""
-"Чи має це вікно знищуватись разом з "
-"батьківським"
+msgstr "Чи має це вікно знищуватись разом з батьківським"
 
 #: gtk/gtkwindow.c:447
 msgid "Icon"
@@ -3985,6 +3899,4 @@ msgid "X Input Method"
 msgstr "Метод XInput"
 
 #~ msgid "Insufficient memory to save PNG file"
-#~ msgstr ""
-#~ "Недостатньо пам'яті для збереження файлу "
-#~ "PNG."
+#~ msgstr "Недостатньо пам'яті для збереження файлу PNG."
