@@ -1,3 +1,7 @@
+2002-02-18  Matthias Clasen  <maclas@gmx.de>
+
+	* NEWS: fix version number.
+
 2002-02-18  Manish Singh  <yosh@gimp.org>
 
 	* Makefile.am: don't comment out the lines to dist the packer
