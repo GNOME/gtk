@@ -1,3 +1,13 @@
+Tue Nov 30 09:46:49 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_drawable_draw_xtrapezoids)
+	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_drawable_draw_xft_glyphs):
+	Call gdk_x11_drawable_update_xft_clip (part of #159929,
+	James Henstridge)
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_glyphs_transformed): 
+	Remove unused variables.
+
 Tue Nov 23 19:37:34 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_flush): A little bit

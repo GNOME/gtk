@@ -824,18 +824,11 @@ gdk_x11_draw_glyphs_transformed (GdkDrawable      *drawable,
 {
   GdkDrawableImplX11 *impl;
   PangoRenderer *renderer;
-  XftColor color;
-  XftDraw *draw;
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   g_return_if_fail (PANGO_XFT_IS_FONT (font));
 
-  _gdk_gc_x11_get_fg_xft_color (gc, &color);
-      
-  gdk_x11_drawable_update_xft_clip (drawable, gc);
-  draw = gdk_x11_drawable_get_xft_draw (drawable);
-      
   renderer = _gdk_x11_renderer_get (drawable, gc);
   if (matrix)
     pango_renderer_set_matrix (renderer, matrix);
@@ -1635,6 +1628,7 @@ _gdk_x11_drawable_draw_xtrapezoids (GdkDrawable      *drawable,
       return;
     }
 
+  gdk_x11_drawable_update_xft_clip (drawable, gc);
   draw = gdk_x11_drawable_get_xft_draw (drawable);
 
   if (!x11display->mask_format)
@@ -1659,8 +1653,10 @@ _gdk_x11_drawable_draw_xft_glyphs (GdkDrawable      *drawable,
   GdkScreen *screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
   GdkDisplay *display = gdk_screen_get_display (screen);
   GdkDisplayX11 *x11display = GDK_DISPLAY_X11 (display);
+  XftDraw *draw;
    
-  XftDraw *draw = gdk_x11_drawable_get_xft_draw (drawable);
+  gdk_x11_drawable_update_xft_clip (drawable, gc);
+  draw = gdk_x11_drawable_get_xft_draw (drawable);
 
   if (_gdk_x11_have_render (display))
     {
