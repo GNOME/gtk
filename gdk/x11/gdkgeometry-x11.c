@@ -137,6 +137,7 @@
 #include "gdkinternals.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
+#include "gdkwindow-x11.h"
 
 typedef struct _GdkWindowQueueItem GdkWindowQueueItem;
 typedef struct _GdkWindowParentPos GdkWindowParentPos;
@@ -183,8 +184,6 @@ static void gdk_window_postmove           (GdkWindow          *window,
 static void gdk_window_queue_translation  (GdkWindow          *window,
 					   gint                dx,
 					   gint                dy);
-static void gdk_window_tmp_unset_bg       (GdkWindow          *window);
-static void gdk_window_tmp_reset_bg       (GdkWindow          *window);
 static void gdk_window_clip_changed       (GdkWindow          *window,
 					   GdkRectangle       *old_clip,
 					   GdkRectangle       *new_clip);
@@ -324,7 +323,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
   parent_pos.x11_y += new_info.y;
   parent_pos.clip_rect = new_info.clip_rect;
 
-  gdk_window_tmp_unset_bg (window);
+  _gdk_x11_window_tmp_unset_bg (window, FALSE);;
 
   if (dx > 0 || dy > 0)
     gdk_window_queue_translation (window, MAX (dx, 0), MAX (dy, 0));
@@ -361,7 +360,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
 		     impl->position_info.width, impl->position_info.height);
   
   if (impl->position_info.no_bg)
-    gdk_window_tmp_reset_bg (window);
+    _gdk_x11_window_tmp_reset_bg (window, FALSE);
   
   impl->position_info = new_info;
   
@@ -548,7 +547,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 			 new_info.x, new_info.y, new_info.width, new_info.height);
       
       if (impl->position_info.no_bg)
-	gdk_window_tmp_reset_bg (window);
+	_gdk_x11_window_tmp_reset_bg (window, FALSE);
 
       if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
 	XMapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
@@ -594,7 +593,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	}
 
       if (impl->position_info.no_bg)
-	gdk_window_tmp_reset_bg (window);
+	_gdk_x11_window_tmp_reset_bg (window, FALSE);
 
       if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
 	XMapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
@@ -854,7 +853,7 @@ gdk_window_postmove (GdkWindow          *window,
     XMapWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
 
   if (impl->position_info.no_bg)
-    gdk_window_tmp_reset_bg (window);
+    _gdk_x11_window_tmp_reset_bg (window, FALSE);
 
   impl->position_info = new_info;
 
@@ -1064,56 +1063,6 @@ _gdk_window_process_expose (GdkWindow    *window,
 }
 
 static void
-gdk_window_tmp_unset_bg (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl;
-  GdkWindowObject *obj;
-
-  obj = (GdkWindowObject *) window;
-  impl = GDK_WINDOW_IMPL_X11 (obj->impl);
-
-  impl->position_info.no_bg = TRUE;
-
-  if (obj->bg_pixmap != GDK_NO_BG)
-    XSetWindowBackgroundPixmap (GDK_DRAWABLE_XDISPLAY (window),
-				GDK_DRAWABLE_XID (window), None);
-}
-
-static void
-gdk_window_tmp_reset_bg (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl;
-  GdkWindowObject *obj;
-
-  obj = (GdkWindowObject *) window;
-  impl = GDK_WINDOW_IMPL_X11 (obj->impl);
-
-  impl->position_info.no_bg = FALSE;
-
-  if (obj->bg_pixmap == GDK_NO_BG)
-    return;
-  
-  if (obj->bg_pixmap)
-    {
-      Pixmap xpixmap;
-
-      if (obj->bg_pixmap == GDK_PARENT_RELATIVE_BG)
-	xpixmap = ParentRelative;
-      else 
-	xpixmap = GDK_DRAWABLE_XID (obj->bg_pixmap);
-
-      XSetWindowBackgroundPixmap (GDK_DRAWABLE_XDISPLAY (window),
-				  GDK_DRAWABLE_XID (window), xpixmap);
-    }
-  else
-    {
-      XSetWindowBackground (GDK_DRAWABLE_XDISPLAY (window),
-			    GDK_DRAWABLE_XID (window),
-			    obj->bg_color.pixel);
-    }
-}
-
-static void
 gdk_window_clip_changed (GdkWindow *window, GdkRectangle *old_clip, GdkRectangle *new_clip)
 {
   GdkWindowImplX11 *impl;
@@ -1145,7 +1094,7 @@ gdk_window_clip_changed (GdkWindow *window, GdkRectangle *old_clip, GdkRectangle
   gdk_region_subtract (new_clip_region, old_clip_region);
   if (!gdk_region_empty (new_clip_region))
     {
-      gdk_window_tmp_unset_bg (window);
+      _gdk_x11_window_tmp_unset_bg (window, FALSE);;
       gdk_window_invalidate_region (window, new_clip_region, FALSE);
     }
 

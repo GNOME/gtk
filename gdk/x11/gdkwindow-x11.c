@@ -217,6 +217,118 @@ gdk_window_impl_x11_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+static void
+tmp_unset_bg (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl;
+  GdkWindowObject *obj;
+
+  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL_X11 (obj->impl);
+
+  impl->position_info.no_bg = TRUE;
+
+  if (obj->bg_pixmap != GDK_NO_BG)
+    XSetWindowBackgroundPixmap (GDK_DRAWABLE_XDISPLAY (window),
+				GDK_DRAWABLE_XID (window), None);
+}
+
+static void
+tmp_reset_bg (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl;
+  GdkWindowObject *obj;
+
+  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL_X11 (obj->impl);
+
+  impl->position_info.no_bg = FALSE;
+
+  if (obj->bg_pixmap == GDK_NO_BG)
+    return;
+  
+  if (obj->bg_pixmap)
+    {
+      Pixmap xpixmap;
+
+      if (obj->bg_pixmap == GDK_PARENT_RELATIVE_BG)
+	xpixmap = ParentRelative;
+      else 
+	xpixmap = GDK_DRAWABLE_XID (obj->bg_pixmap);
+
+      XSetWindowBackgroundPixmap (GDK_DRAWABLE_XDISPLAY (window),
+				  GDK_DRAWABLE_XID (window), xpixmap);
+    }
+  else
+    {
+      XSetWindowBackground (GDK_DRAWABLE_XDISPLAY (window),
+			    GDK_DRAWABLE_XID (window),
+			    obj->bg_color.pixel);
+    }
+}
+
+void
+_gdk_x11_window_tmp_unset_bg (GdkWindow *window,
+			      gboolean   recurse)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  private = (GdkWindowObject *)window;
+
+  if (private->input_only || private->destroyed || !GDK_WINDOW_IS_MAPPED (window))
+    return;
+
+  /* Don't unset the background of windows that don't select for expose
+   * events. Such windows don't get drawn, so we need the X server
+   * drawing them to prevent them from containing garbage
+   */
+  if (private->window_type != GDK_WINDOW_ROOT &&
+      private->window_type != GDK_WINDOW_FOREIGN &&
+      (private->event_mask & GDK_EXPOSURE_MASK))
+    {
+      tmp_unset_bg (window);
+    }
+
+  if (recurse)
+    {
+      GList *l;
+
+      for (l = private->children; l != NULL; l = l->next)
+	_gdk_x11_window_tmp_unset_bg (l->data, TRUE);
+    }
+}
+
+void
+_gdk_x11_window_tmp_reset_bg (GdkWindow *window,
+			      gboolean   recurse)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;
+
+  if (private->input_only || private->destroyed || !GDK_WINDOW_IS_MAPPED (window))
+    return;
+
+  if (private->window_type != GDK_WINDOW_ROOT &&
+      private->window_type != GDK_WINDOW_FOREIGN &&
+      (private->event_mask & GDK_EXPOSURE_MASK))
+    {
+      tmp_reset_bg (window);
+    }
+
+  if (recurse)
+    {
+      GList *l;
+
+      for (l = private->children; l != NULL; l = l->next)
+	_gdk_x11_window_tmp_reset_bg (l->data, TRUE);
+    }
+}
+
 static GdkColormap*
 gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
 {
@@ -987,6 +1099,14 @@ _gdk_windowing_window_destroy_foreign (GdkWindow *window)
   gdk_error_trap_pop ();
 }
 
+static GdkWindow *
+get_root (GdkWindow *window)
+{
+  GdkScreen *screen = gdk_drawable_get_screen (window);
+
+  return gdk_screen_get_root_window (screen);
+}
+
 /* This function is called when the XWindow is really gone.
  */
 void
@@ -1227,6 +1347,7 @@ show_window_internal (GdkWindow *window,
 	       impl->override_redirect) &&
 	      gdk_window_is_viewable (window))
 	    {
+	      _gdk_x11_window_tmp_reset_bg (window, TRUE);
 	      gdk_window_invalidate_rect (window, NULL, TRUE);
 	    }
 	}
@@ -1275,6 +1396,55 @@ gdk_window_show (GdkWindow *window)
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   show_window_internal (window, TRUE);
+}
+
+static void
+pre_unmap (GdkWindow *window)
+{
+  GdkWindow *start_window = NULL;
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  if (private->input_only)
+    return;
+
+  if (private->window_type == GDK_WINDOW_CHILD)
+    start_window = (GdkWindow *)private->parent;
+  else if (private->window_type == GDK_WINDOW_TEMP)
+    start_window = get_root (window);
+
+  if (start_window)
+    _gdk_x11_window_tmp_unset_bg (start_window, TRUE);
+}
+
+static void
+post_unmap (GdkWindow *window)
+{
+  GdkWindow *start_window = NULL;
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  
+  if (private->input_only)
+    return;
+
+  if (private->window_type == GDK_WINDOW_CHILD)
+    start_window = private->parent;
+  else if (private->window_type == GDK_WINDOW_TEMP)
+    start_window = get_root (window);
+
+  if (start_window)
+    {
+      _gdk_x11_window_tmp_reset_bg (start_window, TRUE);
+
+      if (private->window_type == GDK_WINDOW_CHILD && private->parent)
+	{
+	  GdkRectangle invalid_rect;
+      
+	  gdk_window_get_position (window, &invalid_rect.x, &invalid_rect.y);
+	  gdk_drawable_get_size (GDK_DRAWABLE (window),
+				 &invalid_rect.width, &invalid_rect.height);
+	  gdk_window_invalidate_rect ((GdkWindow *)private->parent,
+				      &invalid_rect, TRUE);
+	}
+    }
 }
 
 /**
@@ -1329,9 +1499,13 @@ gdk_window_hide (GdkWindow *window)
       g_assert (!GDK_WINDOW_IS_MAPPED (window));
       
       _gdk_window_clear_update_area (window);
+
+      pre_unmap (window);
       
       XUnmapWindow (GDK_WINDOW_XDISPLAY (window),
                     GDK_WINDOW_XID (window));
+
+      post_unmap (window);
     }
 }
 
@@ -1360,9 +1534,13 @@ gdk_window_withdraw (GdkWindow *window)
                                      GDK_WINDOW_STATE_WITHDRAWN);
 
       g_assert (!GDK_WINDOW_IS_MAPPED (window));
+
+      pre_unmap (window);
       
       XWithdrawWindow (GDK_WINDOW_XDISPLAY (window),
                        GDK_WINDOW_XID (window), 0);
+
+      post_unmap (window);
     }
 }
 

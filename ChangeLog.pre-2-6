@@ -1,3 +1,23 @@
+Sat Jul 10 00:37:45 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Bug 113310.
+	
+	* gdk/x11/gdkwindow-x11.c (_gdk_x11_window_tmp_{un|re}set_bg):
+	New functions that can do a recursive unset/reset bg.
+
+	* gdk/x11/gdkgeometry-x11.c: Remove
+	gdk_window_tmp_{un|re}set_bg().
+
+	* gdk/x11/gdkwindow-x11.c (pre_unmap, post_unmap): New functions
+	called before and after unmapping a window. They unset the
+	background of all other windows to prevent flicker from the X
+	server repainting the background. post_unmap() also invalidates
+	the parent of the unmapped window to draw it without roundtrips.
+
+	* gdk/x11/gdkwindow-x11.c (show_window_internal): Unset
+	background of newly mapped windows and all desendants to prevent
+	flicker.
+	
 Fri Jul  9 15:33:55 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk/gdkevents.c: have a dummy case GDK_OWNER_CHANGE in switch
@@ -7,6 +27,8 @@ Fri Jul  9 15:33:55 2004  Manish Singh  <yosh@gimp.org>
 	#ifdef HAVE_XFIXES.
 
 Fri Jul  9 23:26:09 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	(Bug 113340)
 
 	* gdk/x11/gdkwindow-x11.h (struct _GdkWindowImplX11): Add an
 	"override_redirect" bit.

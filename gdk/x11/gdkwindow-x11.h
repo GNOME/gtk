@@ -127,6 +127,11 @@ GType gdk_window_impl_x11_get_type (void);
 GdkToplevelX11 *_gdk_x11_window_get_toplevel  (GdkWindow *window);
 void             gdk_x11_window_set_user_time (GdkWindow *window,
                                                guint32    timestamp);
+void		_gdk_x11_window_tmp_unset_bg  (GdkWindow *window,
+					       gboolean   recurse);
+void            _gdk_x11_window_tmp_reset_bg  (GdkWindow *window,
+					       gboolean   recurse);
+
 
 G_END_DECLS
 
