@@ -1,19 +1,17 @@
-# translation of fa.po to Persian
 # This the Persian translation of gtk+
-# Copyright (C) 2000, 2002 The FarsiWeb Project Group
-# Roozbeh Pournader <roozbeh@sharif.edu>, 2000, 2002
+# Copyright (C) 2000, 2002, 2003 The FarsiWeb Project Group
+# Roozbeh Pournader <roozbeh@sharif.edu>, 2000, 2002, 2003
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: fa\n"
+"Project-Id-Version: gtk+\n"
 "POT-Creation-Date: 2002-12-20 15:52-0500\n"
-"PO-Revision-Date: 2002-08-20 04:22+0430\n"
+"PO-Revision-Date: 2002-02-18 08:33+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@sharif.edu>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0beta1\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:703
 #, c-format
@@ -789,7 +787,7 @@ msgstr ""
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
-msgstr ""
+msgstr "جهت پیکان"
 
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
@@ -797,7 +795,7 @@ msgstr ""
 
 #: gtk/gtkarrow.c:106
 msgid "Arrow shadow"
-msgstr ""
+msgstr "سایه‌ی پیکان"
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
@@ -805,7 +803,7 @@ msgstr ""
 
 #: gtk/gtkaspectframe.c:108
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "ردیف کردن افقی"
 
 #: gtk/gtkaspectframe.c:109
 msgid "X alignment of the child"
@@ -879,7 +877,7 @@ msgstr ""
 
 #: gtk/gtkbbox.c:164
 msgid "Secondary"
-msgstr ""
+msgstr "ثانویه"
 
 #: gtk/gtkbbox.c:165
 msgid ""
@@ -889,7 +887,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:128
 msgid "Spacing"
-msgstr ""
+msgstr "فاصله‌گذاری"
 
 #: gtk/gtkbox.c:129
 msgid "The amount of space between children"
@@ -1077,7 +1075,7 @@ msgstr "عرض"
 
 #: gtk/gtkcellrenderer.c:180
 msgid "The fixed width"
-msgstr ""
+msgstr "عرض ثابت"
 
 #: gtk/gtkcellrenderer.c:190
 msgid "height"
@@ -1085,7 +1083,7 @@ msgstr "ارتفاع"
 
 #: gtk/gtkcellrenderer.c:191
 msgid "The fixed height"
-msgstr ""
+msgstr "ارتفاع ثابت"
 
 #: gtk/gtkcellrenderer.c:201
 msgid "Is Expander"
@@ -1284,12 +1282,12 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:283 gtk/gtkcellrenderertext.c:284
 #: gtk/gtktexttag.c:324
 msgid "Font weight"
-msgstr ""
+msgstr "وزن قلم"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:294
 #: gtk/gtktexttag.c:335
 msgid "Font stretch"
-msgstr ""
+msgstr "کشیدگی قلم"
 
 #: gtk/gtkcellrenderertext.c:302 gtk/gtkcellrenderertext.c:303
 #: gtk/gtktexttag.c:344
@@ -1298,7 +1296,7 @@ msgstr "اندازه‌ی قلم"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:364
 msgid "Font points"
-msgstr ""
+msgstr "پونت قلم"
 
 #: gtk/gtkcellrenderertext.c:313 gtk/gtktexttag.c:365
 msgid "Font size in points"
@@ -1306,7 +1304,7 @@ msgstr "اندازه‌ی قلم به پونت"
 
 #: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:354
 msgid "Font scale"
-msgstr ""
+msgstr "مقیاس قلم"
 
 #: gtk/gtkcellrenderertext.c:323
 msgid "Font scaling factor"
@@ -1780,7 +1778,7 @@ msgstr "فاصله‌گذاری دکمه"
 
 #: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "فاصله‌گذاری بین دکمه‌ها"
 
 #: gtk/gtkdialog.c:179
 msgid "Action area border"
@@ -1904,7 +1902,7 @@ msgstr "نام پرونده"
 
 #: gtk/gtkfilesel.c:513
 msgid "The currently selected filename"
-msgstr ""
+msgstr "نام پرونده‌ای که فعلاً انتخاب شده"
 
 #: gtk/gtkfilesel.c:519
 msgid "Show file operations"
@@ -2092,7 +2090,7 @@ msgstr "‏Utf-8 نامعتبر"
 
 #: gtk/gtkfilesel.c:3948
 msgid "Name too long"
-msgstr ""
+msgstr "نام خیلی بلند است"
 
 #: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
@@ -2287,7 +2285,7 @@ msgstr "مجموعه‌شمایلی که باید نمایش یابد."
 
 #: gtk/gtkimage.c:159
 msgid "Mask"
-msgstr ""
+msgstr "نقاب"
 
 #: gtk/gtkimage.c:160
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
@@ -3226,7 +3224,7 @@ msgstr ""
 #: gtk/gtksettings.c:184
 #, fuzzy
 msgid "Length of the cursor blink cycle, in milleseconds"
-msgstr "طول مکان‌نما"
+msgstr "زمان دوره‌ی چشمک‌زدن مکان‌نما، برحسب میلی‌ثانیه"
 
 #: gtk/gtksettings.c:191
 msgid "Split Cursor"
@@ -3415,7 +3413,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr ""
+msgstr "بستن"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
@@ -3457,11 +3455,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr ""
+msgstr "اولین"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr ""
+msgstr "آخرین"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
@@ -3641,12 +3639,12 @@ msgstr "زوم"
 #: gtk/gtkstock.c:336
 #, fuzzy
 msgid "Zoom _In"
-msgstr "زوم"
+msgstr "زوم به داخل"
 
 #: gtk/gtkstock.c:337
 #, fuzzy
 msgid "Zoom _Out"
-msgstr "زوم"
+msgstr "زوم به خارج"
 
 #: gtk/gtktable.c:158
 msgid "Rows"
@@ -3654,7 +3652,7 @@ msgstr "سطرها"
 
 #: gtk/gtktable.c:159
 msgid "The number of rows in the table"
-msgstr ""
+msgstr "تعداد سطرهای جدول"
 
 #: gtk/gtktable.c:167
 msgid "Columns"
@@ -3662,12 +3660,12 @@ msgstr "ستون‌ها"
 
 #: gtk/gtktable.c:168
 msgid "The number of columns in the table"
-msgstr ""
+msgstr "تعداد ستون‌های جدول"
 
 #: gtk/gtktable.c:176
 #, fuzzy
 msgid "Row spacing"
-msgstr "سطر"
+msgstr "فاصله‌گذاری سطرها"
 
 #: gtk/gtktable.c:177
 msgid "The amount of space between two consecutive rows"
@@ -3911,7 +3909,7 @@ msgstr "حاشیه‌ی چپ"
 #: gtk/gtktexttag.c:392 gtk/gtktextview.c:593
 #, fuzzy
 msgid "Width of the left margin in pixels"
-msgstr "عرض"
+msgstr "عرض حاشیه‌ی چپ برحسب نقطه"
 
 #: gtk/gtktexttag.c:401
 msgid "Right margin"
@@ -4566,7 +4564,7 @@ msgstr ""
 #: gtk/gtkwidget.c:400
 #, fuzzy
 msgid "Widget name"
-msgstr "ویجت"
+msgstr "نام ویجت"
 
 #: gtk/gtkwidget.c:401
 msgid "The name of the widget"
@@ -4821,12 +4819,12 @@ msgstr ""
 #: gtk/gtkwindow.c:507
 #, fuzzy
 msgid "Window Position"
-msgstr "پنجره"
+msgstr "موقعیت پنجره"
 
 #: gtk/gtkwindow.c:508
 #, fuzzy
 msgid "The initial position of the window"
-msgstr "نوع این پنجره"
+msgstr "موقعیت اولیه‌ی پنجره"
 
 #: gtk/gtkwindow.c:516
 msgid "Default Width"
@@ -4908,18 +4906,18 @@ msgstr ""
 #. ID
 #: modules/input/imam-et.c:453
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "امهری (EZ+‎)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 #, fuzzy
 msgid "Cyrillic (Transliterated)"
-msgstr "سیریلیک (؟؟)"
+msgstr "سیریلی (؟؟)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "اینوکیتوت (؟؟)"
 
 #. ID
 #: modules/input/imipa.c:144
@@ -4967,71 +4965,3 @@ msgstr ""
 #: modules/input/gtkimcontextxim.c:270
 msgid "How to draw the input method statusbar"
 msgstr ""
-
-#, fuzzy
-#~ msgid "The uppermost row of the child"
-#~ msgstr "نوع این پنجره"
-
-#, fuzzy
-#~ msgid "The lowest row of the child"
-#~ msgstr "نوع این پنجره"
-
-#~ msgid "Don't know how to load the animation in file '%s'"
-#~ msgstr "نمی‌دانم چه‌طور پویانمایی پرونده‌ی '%s' را باز کنم"
-
-#~ msgid "Don't know how to load the image in file '%s'"
-#~ msgstr "نمی‌دانم چه‌طور تصویر پرونده‌ی '%s' را باز کنم"
-
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "حافظه برای بار کردن تصویر TGA کافی نیست"
-
-#, fuzzy
-#~ msgid "Language engine code to use for rendering the text"
-#~ msgstr "زبان کد"
-
-#~ msgid "Directories"
-#~ msgstr "شاخه‌ها"
-
-#, fuzzy
-#~ msgid "_Directories"
-#~ msgstr "شاخه‌ها"
-
-#, fuzzy
-#~ msgid "Crea_te Dir"
-#~ msgstr "ایجاد شاخه"
-
-#~ msgid "Create Directory"
-#~ msgstr "ایجاد شاخه"
-
-#, fuzzy
-#~ msgid "_Directory name:"
-#~ msgstr "نام شاخه:"
-
-#~ msgid "Cancel"
-#~ msgstr "انصراف"
-
-#~ msgid "Delete"
-#~ msgstr "حذف"
-
-#~ msgid "OK"
-#~ msgstr "تأیید"
-
-#~ msgid "Save"
-#~ msgstr "ذخیره"
-
-#~ msgid "Close"
-#~ msgstr "بستن"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-#~ msgstr "پرونده‌ی تصویری در pixmap_path مقابل یافت نشد: \"%s\" سطر %d"
-
-#, fuzzy
-#~ msgid "Line Height"
-#~ msgstr "انتخاب قلم"
-
-#, fuzzy
-#~ msgid "He_x Value:"
-#~ msgstr "کد هگز:"
-
-#~ msgid "0123456789."
-#~ msgstr "۰۱۲۳۴۵۶۷۸۹."
