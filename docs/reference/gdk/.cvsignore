@@ -7,6 +7,7 @@ gdk.signals
 gdk.hierarchy
 gdk-decl.txt
 gdk-decl-list.txt
+gdk-undocumented.txt
 gdk-unused.txt
 *.stamp
 *.lo
