@@ -1529,8 +1529,10 @@ gtk_tree_view_size_request (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  /* we validate 50 rows initially just to make sure we have some size */
-  /* in practice, with a lot of static lists, this should get a good width */
+  /* we validate GTK_TREE_VIEW_NUM_ROWS_PER_IDLE rows initially just to make
+   * sure we have some size. In practice, with a lot of static lists, this
+   * should get a good width.
+   */
   validate_rows (tree_view);
   gtk_tree_view_size_request_columns (tree_view);
   gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
@@ -4417,7 +4419,8 @@ do_validate_rows (GtkTreeView *tree_view)
 	  path = _gtk_tree_view_find_path (tree_view, tree, node);
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 	}
-      validated_area = validate_row (tree_view, tree, node, &iter, path) | validated_area;
+      validated_area = validate_row (tree_view, tree, node, &iter, path) ||
+                       validated_area;
 
       if (!tree_view->priv->fixed_height_check)
         {
@@ -4479,7 +4482,7 @@ validate_rows (GtkTreeView *tree_view)
       g_source_remove (tree_view->priv->validate_rows_timer);
       tree_view->priv->validate_rows_timer = 0;
     }
-  
+
   return retval;
 }
 
@@ -4491,8 +4494,11 @@ validate_rows_handler (GtkTreeView *tree_view)
   GDK_THREADS_ENTER ();
 
   retval = do_validate_rows (tree_view);
-  if (! retval)
-    tree_view->priv->validate_rows_timer = 0;
+  if (! retval && tree_view->priv->validate_rows_timer)
+    {
+      g_source_remove (tree_view->priv->validate_rows_timer);
+      tree_view->priv->validate_rows_timer = 0;
+    }
 
   GDK_THREADS_LEAVE ();
 

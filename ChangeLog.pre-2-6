@@ -1,3 +1,15 @@
+Thu Jul 17 19:24:51 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	Fixes issues pointed out by Morten Welinder in #115140.
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_request): fix comment,
+	(do_validate_rows): update validated_area with a logic OR instead
+	of a bitwise OR,
+	(validate_rows_handler): make the if statement match the one in
+	validate_rows(), so we don't leak the timeout.
+
 Thu Jul 17 19:12:02 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
