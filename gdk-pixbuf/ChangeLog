@@ -1,3 +1,8 @@
+2000-01-15  Federico Mena Quintero  <federico@helixcode.com>
+
+	* HACKING: New file with hacking policies for the gdk-pixbuf
+	module.
+
 2000-01-14  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-render.c (gdk_pixbuf_render_pixmap): new
