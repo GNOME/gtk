@@ -7,3 +7,4 @@ Makefile
 *.lo
 testpixbuf
 testpixbuf-drawable
+testanimation
