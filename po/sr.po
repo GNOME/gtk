@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-04 21:30+0200\n"
-"PO-Revision-Date: 2003-10-04 21:57+0200\n"
+"POT-Creation-Date: 2003-10-06 13:03+0200\n"
+"PO-Revision-Date: 2003-10-06 13:03+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -799,7 +799,8 @@ msgstr "Ознака"
 
 #: gtk/gtkaction.c:194
 msgid "The label used for menu items and buttons that activate this action."
-msgstr "Ознака која се користи за ставке менија и дугмад који покрећу ову акцију."
+msgstr ""
+"Ознака која се користи за ставке менија и дугмад који покрећу ову акцију."
 
 #: gtk/gtkaction.c:200
 msgid "Short label"
@@ -823,7 +824,8 @@ msgstr "Испоручена икона"
 
 #: gtk/gtkaction.c:215
 msgid "The stock icon displayed in widgets representing this action."
-msgstr "Испоручена икона која се приказује у елементима који представљају ову акцију."
+msgstr ""
+"Испоручена икона која се приказује у елементима који представљају ову акцију."
 
 #: gtk/gtkaction.c:221 gtk/gtktoolitem.c:169
 msgid "Is important"
@@ -833,7 +835,9 @@ msgstr "Важно је"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "Да ли се акција сматра важном. Ако је постављено, посредници за ставке алатки ове акције приказују текст у режиму GTK_TOOLBAR_BOTH_HORIZ."
+msgstr ""
+"Да ли се акција сматра важном. Ако је постављено, посредници за ставке "
+"алатки ове акције приказују текст у режиму GTK_TOOLBAR_BOTH_HORIZ."
 
 #: gtk/gtkaction.c:228
 msgid "Hide if empty"
@@ -841,7 +845,8 @@ msgstr "Сакриј ако је празно"
 
 #: gtk/gtkaction.c:229
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr "Ако је постављено, празни посредници менија за ову акцију се сакривају."
+msgstr ""
+"Ако је постављено, празни посредници менија за ову акцију се сакривају."
 
 #: gtk/gtkaction.c:235 gtk/gtkwidget.c:442
 msgid "Sensitive"
@@ -2288,9 +2293,11 @@ msgstr "Видљив прозор"
 
 #: gtk/gtkeventbox.c:120
 msgid ""
-" Whether the event box is visible, as opposed to invisible and only used to "
+"Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
-msgstr "Да ли се види поље са догађајима, насупрот невидљивом и коришћеном само за реаговање на догађаје."
+msgstr ""
+"Да ли се види поље са догађајима, насупрот невидљивом и коришћеном само за "
+"реаговање на догађаје."
 
 #: gtk/gtkeventbox.c:126
 msgid "Above child"
@@ -2300,7 +2307,9 @@ msgstr "Изнад садржаног"
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr "Да ли је прозор за праћење догађаја изнад прозора садржаног елемента уместо испод."
+msgstr ""
+"Да ли је прозор за праћење догађаја изнад прозора садржаног елемента уместо "
+"испод."
 
 #: gtk/gtkexpander.c:186
 msgid "Expanded"
@@ -3576,7 +3585,9 @@ msgstr "Вредност"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr "Вредност коју враћа gtk_radio_action_get_current_value() када је ова акција текућа акција своје групе."
+msgstr ""
+"Вредност коју враћа gtk_radio_action_get_current_value() када је ова акција "
+"текућа акција своје групе."
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
@@ -4821,7 +4832,8 @@ msgstr "Направи исте посреднике као и радио-акц
 
 #: gtk/gtktoggleaction.c:130
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr "Да ли посредници за ову акцију изгледају као посредници за радио-акције"
+msgstr ""
+"Да ли посредници за ову акцију изгледају као посредници за радио-акције"
 
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
@@ -4936,7 +4948,9 @@ msgstr "Текст који се приказује у ставци."
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
-msgstr "Уколико је постављено, подвлачење означава да се следећи знак користи као пречица у приказаном менију"
+msgstr ""
+"Уколико је постављено, подвлачење означава да се следећи знак користи као "
+"пречица у приказаном менију"
 
 #: gtk/gtktoolbutton.c:194
 msgid "Widget to use as the item label"
@@ -4982,7 +4996,9 @@ msgstr "Да ли се приказује ставка алатки када с�
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr "Да ли се ставка алатки сматра важном. Ако је постављено, дугмад алатке приказују и текст у режиму GTK_TOOLBAR_BOTH_HORIZ"
+msgstr ""
+"Да ли се ставка алатки сматра важном. Ако је постављено, дугмад алатке "
+"приказују и текст у режиму GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
