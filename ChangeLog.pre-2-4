@@ -1,3 +1,7 @@
+Thu Jan 22 21:38:52 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* NEWS: Updates
+
 2004-01-22  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (WINDOW_IS_TOPLEVEL):

@@ -16,11 +16,12 @@ Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
   clipboard. [Dom Lachowicz]
 * Improve the GtkCalendar drawing code.  [Matthias]
 * GtkCalendar supports starting the week on any day [Matthias]
-* Misc GtkToolbar fixes and API improvements, most importantly make the
-  toolbar compatible with 2.2 again. [Soeren Sandmann, Jody]
+* Make GtkToolbar compatible with 2.2 again [Soeren Sandmann]
+* Misc GtkToolbar fixes and API improvements [Christian Persch, 
+  Olivar Avramchenko, Jody, Soeren]
 * Misc GtkUIManager fixes and API improvements.  [Jody, Matthias, Jeff Franks]
 * Fix the logic for changing the toplevelness of a 
-  window.  [Soeren Sandmann]
+  window.  [Soeren]
 * Add gtk_menu_shell_cancel() to emit the "cancel" signal on 
   a menu shell.  [Matthias]
 * Do not interpret distant clicks as double clicks, using a
@@ -33,7 +34,7 @@ Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 * Support big and small and alpha-blended icons under Win32.
 * Speed up GtkTreeView, add a fixed height mode.  [Kristian Rietveld]
 * Add a single-paragraph mode and a language property to 
-  GtkCellRendererText [Kristian Rietveld]
+  GtkCellRendererText [Kristian]
 * Add a editing-canceled signal to GtkCellRenderer [Federico Mena Quintero]
 * Misc GtkTreeView bug fixes [Kristian, Soeren, Jonathan Blandford]
 * Implement or improve RTL support in GtkComboBox, GtkCellView, 
@@ -51,12 +52,11 @@ Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 * New and updated translations (bn,ru,sr,sr@Latn,es,cs,sv,ja,no,de,
   nl,sq,pt,pt_BR,nn,hr,lt,fa,it,et,cy,ko,mn,ar,ga,wa,br,af,ms)
 Other contributors: Marco Pesenti Gritti, Tim-Philipp Müller,
-  Olexiy Avramchenko, Noah Levitt, Sebastian Rittau,
-  Bill Haneman, Herman Bloggs, Adam Wright, Manish Singh,
-  Kjartan Maraas, Evan Martin, Alexander Larsson, Joshua N Pritikin,
-  Torsten Schoenfeld, Christian Neumair, Daniel Rogers, 
-  Alexander Winston, Johannes Weißl, Anders Carlsson, Morten Welinder,
-  Olivier Andrieu
+  Noah Levitt, Sebastian Rittau, Bill Haneman, Herman Bloggs, 
+  Adam Wright, Manish Singh, Kjartan Maraas, Evan Martin, 
+  Alexander Larsson, Joshua N Pritikin, Torsten Schoenfeld, 
+  Christian Neumair, Daniel Rogers, Alexander Winston, Johannes 
+  Weißl, Anders Carlsson, Morten Welinder, Olivier Andrieu
 
 Overview of Changes in GTK+-2.3.1
 =================================
