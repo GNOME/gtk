@@ -441,20 +441,24 @@ _gtk_im_module_create (const gchar *context_id)
 
 /* Match @locale against @against.
  * 
- * 'en_US' against 'en_US'       => 3
- * 'en_US' against 'en'          => 2
- * 'en', 'en_UK' against 'en_US' => 1
+ * 'en_US' against 'en_US'       => 4
+ * 'en_US' against 'en'          => 3
+ * 'en', 'en_UK' against 'en_US' => 2
+ *  all locales, against '*' 	 => 1
  */
 static gint
 match_locale (const gchar *locale,
 	      const gchar *against,
 	      gint         against_len)
 {
+  if (strcmp (against, "*") == 0)
+    return 1;
+
   if (strcmp (locale, against) == 0)
-    return 3;
+    return 4;
 
   if (strncmp (locale, against, 2) == 0)
-    return (against_len == 2) ? 2 : 1;
+    return (against_len == 2) ? 3 : 2;
 
   return 0;
 }
