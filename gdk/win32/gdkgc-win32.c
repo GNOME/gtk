@@ -790,11 +790,9 @@ struct _GdkPenCacheEntry
 
 typedef struct _GdkPenCacheEntry GdkPenCacheEntry;
 
-#define gdk_pen_cache_entry_count 5
+#define gdk_pen_cache_entry_count 3
 #define INIT_PEN_ENTRY { FALSE, NULL, 0, 0, 0, 0 }
 static GdkPenCacheEntry gdk_pen_cache[gdk_pen_cache_entry_count] = {
-  INIT_PEN_ENTRY,
-  INIT_PEN_ENTRY,
   INIT_PEN_ENTRY,
   INIT_PEN_ENTRY,
   INIT_PEN_ENTRY,
@@ -897,11 +895,9 @@ struct _GdkHDCCacheEntry
 
 typedef struct _GdkHDCCacheEntry GdkHDCCacheEntry;
 
-#define gdk_hdc_cache_entry_count 5
+#define gdk_hdc_cache_entry_count 3
 #define INIT_HDC_ENTRY   { FALSE, FALSE, NULL, NULL, FALSE, 0, 0, 0 }
 static GdkHDCCacheEntry gdk_hdc_cache[gdk_hdc_cache_entry_count] = {
-  INIT_HDC_ENTRY,
-  INIT_HDC_ENTRY,
   INIT_HDC_ENTRY,
   INIT_HDC_ENTRY,
   INIT_HDC_ENTRY,
