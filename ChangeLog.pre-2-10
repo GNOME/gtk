@@ -1,3 +1,9 @@
+2004-07-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c (update_node, free_node): Ref an sink
+	all proxies, so that we can properly clean up floating proxies
+	which the app didn't adopt.  (#147926, Tommi Komulainen)
+
 Tue Jul 20 00:49:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Set drag_pos
