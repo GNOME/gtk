@@ -874,6 +874,9 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
 {
   gtk_menu_shell_deselect (menu_shell);
 
+  if (!_gtk_menu_item_is_selectable (menu_item))
+    return;
+
   menu_shell->active_menu_item = menu_item;
   _gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
 			       GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement);
