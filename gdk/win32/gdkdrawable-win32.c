@@ -137,20 +137,24 @@ gdk_win32_drawable_description (GdkDrawable *d)
   GdkDrawablePrivate *dp = (GdkDrawablePrivate *) d;
   static gchar buf[1000];
   static gchar *bufp = buf;
+  gchar *msg;
   gint n;
   gchar *retval;
 
-  retval = bufp;
-  n = sprintf (bufp, "%s:%p:%dx%dx%d",
-	       gdk_win32_drawable_type_to_string (GDK_DRAWABLE_TYPE (d)),
-	       GDK_DRAWABLE_XID (d),
-	       dp->width, dp->height,
-	       (GDK_IS_PIXMAP (d) ? GDK_DRAWABLE_WIN32DATA (d)->image->depth
-		: ((GdkColormapPrivate *) dp->colormap)->visual->depth)) + 1;
-  if (bufp < buf + sizeof (buf) - n)
-    bufp += n;
-  else
+  msg = g_strdup_printf
+    ("%s:%p:%dx%dx%d",
+     gdk_win32_drawable_type_to_string (GDK_DRAWABLE_TYPE (d)),
+     GDK_DRAWABLE_XID (d),
+     dp->width, dp->height,
+     (GDK_IS_PIXMAP (d) ? GDK_DRAWABLE_WIN32DATA (d)->image->depth
+      : ((GdkColormapPrivate *) dp->colormap)->visual->depth));
+
+  if (bufp + strlen (msg) + 1 > buf + sizeof (buf))
     bufp = buf;
+  retval = bufp;
+  strcpy (bufp, msg);
+  bufp += strlen (msg) + 1;
+  g_free (msg);
 
   return retval;
 }
