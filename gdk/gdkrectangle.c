@@ -19,6 +19,20 @@
 #include "gdk.h"
 
 
+
+void
+gdk_rectangle_union (GdkRectangle *src1,
+		     GdkRectangle *src2,
+		     GdkRectangle *dest)
+{
+  dest->x = MIN (src1->x, src2->x);
+  dest->y = MIN (src1->y, src2->y);
+  dest->width = 
+    MAX (src1->x + src1->width, src2->x + src2->width) - dest->x;
+  dest->height = 
+    MAX (src1->y + src1->height, src2->y + src2->height) - dest->y;
+}
+
 gint
 gdk_rectangle_intersect (GdkRectangle *src1,
 			 GdkRectangle *src2,

@@ -684,6 +684,9 @@ void	gdk_property_delete (GdkWindow	 *window,
 gint gdk_rectangle_intersect (GdkRectangle *src1,
 			      GdkRectangle *src2,
 			      GdkRectangle *dest);
+void gdk_rectangle_union     (GdkRectangle *src1,
+			      GdkRectangle *src2,
+			      GdkRectangle *dest);
 
 /* XInput support
  */

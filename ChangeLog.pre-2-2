@@ -1,3 +1,16 @@
+Wed Jul 29 16:56:07 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c: Fairly implementation of expose compression.
+	  (No GraphicsExpose compression yet, always compress
+	  with the equivalent of XtCompressMultiple - no compression
+	  of Expose events across non-Expose events)
+	
+	* gdk/gdk.h gdk/gdkrectangle.c: gdk_rectangle_union()
+	  Find rectangle bounding two rectangles.
+
+	* gtk/gtkstyle.c: Set clip rects for a few extra GC's
+	  in gdk_default_draw_shadow()
+	
 Wed Jul 29 16:03:20 EDT 1998 The Rasterman <raster@redhat.com>
 	* Fixed drawing functions to handle switching themes on the fly 
 	  gracefully and look decent.
