@@ -1,3 +1,9 @@
+2004-07-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_position): Make sure 
+	private->monitor_num is a valid monitor number before 
+	using it.  (#139187, Michael Natterer)
+
 Tue Jul  6 02:00:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilechooserdefault.c (popup_position_func): 

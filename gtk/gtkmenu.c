@@ -3311,6 +3311,9 @@ gtk_menu_position (GtkMenu *menu)
   if (menu->position_func)
     {
       (* menu->position_func) (menu, &x, &y, &push_in, menu->position_func_data);
+      if (private->monitor_num < 0) 
+	private->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
+
       gdk_screen_get_monitor_geometry (screen, private->monitor_num, &monitor);
     }
   else
