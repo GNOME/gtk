@@ -206,13 +206,7 @@ _gtk_sequence_insert             (GtkSequencePtr             ptr,
   node = _gtk_sequence_node_new (data);
   node->sequence = ptr->sequence;
 
-  g_print ("%p\n", ptr->sequence);
-
-  g_print ("before: %d\n", _gtk_sequence_get_length (ptr->sequence));
-  
   _gtk_sequence_node_insert_before (ptr, node);
-
-  g_print ("after: %d\n", _gtk_sequence_get_length (ptr->sequence));
 
   return node;
 }
@@ -393,10 +387,7 @@ _gtk_sequence_get_ptr_at_pos     (GtkSequence               *seq,
   len = _gtk_sequence_get_length (seq);
   
   if (pos > len || pos == -1)
-  {
-      g_print ("adjusting pos from %d to %d\n", pos, len);
-      pos = len;
-  }
+    pos = len;
   
   return _gtk_sequence_node_find_by_pos (seq->node, pos);
 }
@@ -1100,6 +1091,9 @@ void
 _gtk_sequence_move (GtkSequencePtr ptr,
 		    GtkSequencePtr new_pos)
 {
+  g_return_if_fail (ptr != NULL);
+  g_return_if_fail (new_pos != NULL);
+  
   if (ptr == new_pos)
     return;
   

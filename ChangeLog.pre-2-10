@@ -1,3 +1,13 @@
+Wed Aug 25 00:22:48 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtksequence.c: Remove debug spew
+
+Wed Aug 25 00:09:07 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_list_store_move_after): Fix logical
+	errors in gtk_list_store_move_before/after(). (#150159, Robert
+	Ögren).
+
 Tue Aug 24 21:46:42 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtksequence.c (_gtk_sequence_move): Just return if the
