@@ -88,7 +88,7 @@ gtk_cell_renderer_sep_text_render (GtkCellRenderer      *cell,
 
   text = st->renderer_text.text;
 
-  if (!text || !text[0])
+  if (!text)
     gtk_paint_hline (gtk_widget_get_style (widget),
 		     window,
 		     GTK_WIDGET_STATE (widget),
