@@ -52,12 +52,6 @@
 #include "circles.xbm"
 #include "test.xpm"
 
-typedef struct _OptionMenuItem
-{
-  gchar        *name;
-  GtkSignalFunc func;
-} OptionMenuItem;
-
 gboolean
 file_exists (const char *filename)
 {
@@ -75,10 +69,11 @@ shape_create_icon (char     *xpm_file,
 		   gint      window_type);
 
 static GtkWidget *
-build_option_menu (OptionMenuItem items[],
-		   gint           num_items,
-		   gint           history,
-		   gpointer       data);
+build_option_menu (gchar           *items[],
+		   gint             num_items,
+		   gint             history,
+		   void           (*func)(GtkWidget *widget, gpointer data),
+		   gpointer         data);
 
 /* macro, structure and variables used by tree window demos */
 #define DEFAULT_NUMBER_OF_ITEM  3
@@ -105,10 +100,11 @@ typedef struct sTreeButtons {
 /* end of tree section */
 
 static GtkWidget *
-build_option_menu (OptionMenuItem items[],
-		   gint           num_items,
-		   gint           history,
-		   gpointer       data)
+build_option_menu (gchar           *items[],
+		   gint             num_items,
+		   gint             history,
+		   void           (*func)(GtkWidget *widget, gpointer data),
+		   gpointer         data)
 {
   GtkWidget *omenu;
   GtkWidget *menu;
@@ -117,15 +113,15 @@ build_option_menu (OptionMenuItem items[],
   gint i;
 
   omenu = gtk_option_menu_new ();
+  gtk_signal_connect (GTK_OBJECT (omenu), "changed",
+		      GTK_SIGNAL_FUNC (func), data);
       
   menu = gtk_menu_new ();
   group = NULL;
   
   for (i = 0; i < num_items; i++)
     {
-      menu_item = gtk_radio_menu_item_new_with_label (group, items[i].name);
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  (GtkSignalFunc) items[i].func, data);
+      menu_item = gtk_radio_menu_item_new_with_label (group, items[i]);
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       if (i == history)
@@ -4456,16 +4452,6 @@ list_clear (GtkWidget *widget,
   gtk_list_clear_items (GTK_LIST (list), 0, -1);
 }
 
-#define RADIOMENUTOGGLED(_rmi_, __i) { \
-  GSList * __g; \
-  __i = 0; \
-  __g = gtk_radio_menu_item_group(_rmi_); \
-  while( __g  && !((GtkCheckMenuItem *)(__g->data))->active) { \
-    __g = __g->next; \
-    __i++; \
-  }\
-}
-
 static GtkWidget *list_omenu;
 
 static void 
@@ -4476,10 +4462,9 @@ list_toggle_sel_mode (GtkWidget *widget, GtkList *list)
   if (!GTK_WIDGET_MAPPED (widget))
     return;
 
-  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)list_omenu)->menu_item), i);
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
-  gtk_list_set_selection_mode (list, (GtkSelectionMode) (3-i));
+  gtk_list_set_selection_mode (list, (GtkSelectionMode) i);
 }
 
 static void
@@ -4487,12 +4472,11 @@ create_list (void)
 {
   static GtkWidget *window = NULL;
 
-  static OptionMenuItem items[] =
+  static gchar *items[] =
   {
-    { "Single",   GTK_SIGNAL_FUNC (list_toggle_sel_mode) },
-    { "Browse",   GTK_SIGNAL_FUNC (list_toggle_sel_mode) },
-    { "Multiple", GTK_SIGNAL_FUNC (list_toggle_sel_mode) },
-    { "Extended", GTK_SIGNAL_FUNC (list_toggle_sel_mode) }
+    "Single",
+    "Browse",
+    "Multiple"
   };
 
   if (!window)
@@ -4590,7 +4574,9 @@ create_list (void)
       label = gtk_label_new ("Selection Mode :");
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
-      list_omenu = build_option_menu (items, 4, 3, list);
+      list_omenu = build_option_menu (items, 3, 3, 
+				      list_toggle_sel_mode,
+				      list);
       gtk_box_pack_start (GTK_BOX (hbox), list_omenu, FALSE, TRUE, 0);
 
       separator = gtk_hseparator_new ();
@@ -4940,10 +4926,9 @@ clist_toggle_sel_mode (GtkWidget *widget, GtkCList *clist)
   if (!GTK_WIDGET_MAPPED (widget))
     return;
 
-  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)clist_omenu)->menu_item), i);
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
-  gtk_clist_set_selection_mode (clist, (GtkSelectionMode) (3-i));
+  gtk_clist_set_selection_mode (clist, (GtkSelectionMode) i);
 }
 
 static void 
@@ -4977,12 +4962,11 @@ create_clist (void)
     "Title 8",  "Title 9",  "Title 10", "Title 11"
   };
 
-  static OptionMenuItem items[] =
+  static gchar *items[] =
   {
-    { "Single",   GTK_SIGNAL_FUNC (clist_toggle_sel_mode) },
-    { "Browse",   GTK_SIGNAL_FUNC (clist_toggle_sel_mode) },
-    { "Multiple", GTK_SIGNAL_FUNC (clist_toggle_sel_mode) },
-    { "Extended", GTK_SIGNAL_FUNC (clist_toggle_sel_mode) }
+    "Single",
+    "Browse",
+    "Multiple",
   };
 
   char text[TESTGTK_CLIST_COLUMNS][50];
@@ -5096,7 +5080,9 @@ create_clist (void)
       label = gtk_label_new ("Selection Mode :");
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
-      clist_omenu = build_option_menu (items, 4, 3, clist);
+      clist_omenu = build_option_menu (items, 3, 3, 
+				       clist_toggle_sel_mode,
+				       clist);
       gtk_box_pack_start (GTK_BOX (hbox), clist_omenu, FALSE, TRUE, 0);
 
       /* 
@@ -5550,16 +5536,15 @@ void ctree_toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
   if (!GTK_WIDGET_MAPPED (widget))
     return;
 
-  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)omenu1)->menu_item), i);
-  
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
+
   if ((ctree->line_style == GTK_CTREE_LINES_TABBED && 
-       ((GtkCTreeLineStyle) (3 - i)) != GTK_CTREE_LINES_TABBED) ||
+       ((GtkCTreeLineStyle) i) != GTK_CTREE_LINES_TABBED) ||
       (ctree->line_style != GTK_CTREE_LINES_TABBED && 
-       ((GtkCTreeLineStyle) (3 - i)) == GTK_CTREE_LINES_TABBED))
+       ((GtkCTreeLineStyle) i) == GTK_CTREE_LINES_TABBED))
     gtk_ctree_pre_recursive (ctree, NULL, set_background, NULL);
-  gtk_ctree_set_line_style (ctree, 3 - i);
-  line_style = 3 - i;
+  gtk_ctree_set_line_style (ctree, i);
+  line_style = i;
 }
 
 void ctree_toggle_expander_style (GtkWidget *widget, GtkCTree *ctree)
@@ -5568,11 +5553,10 @@ void ctree_toggle_expander_style (GtkWidget *widget, GtkCTree *ctree)
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
-
-  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)omenu2)->menu_item), i);
   
-  gtk_ctree_set_expander_style (ctree, (GtkCTreeExpanderStyle) (3 - i));
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
+  
+  gtk_ctree_set_expander_style (ctree, (GtkCTreeExpanderStyle) i);
 }
 
 void ctree_toggle_justify (GtkWidget *widget, GtkCTree *ctree)
@@ -5582,11 +5566,10 @@ void ctree_toggle_justify (GtkWidget *widget, GtkCTree *ctree)
   if (!GTK_WIDGET_MAPPED (widget))
     return;
 
-  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)omenu3)->menu_item), i);
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
   gtk_clist_set_column_justification (GTK_CLIST (ctree), ctree->tree_column, 
-				      (GtkJustification) (1 - i));
+				      (GtkJustification) i);
 }
 
 void ctree_toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
@@ -5596,10 +5579,9 @@ void ctree_toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
   if (!GTK_WIDGET_MAPPED (widget))
     return;
 
-  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)omenu4)->menu_item), i);
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
-  gtk_clist_set_selection_mode (GTK_CLIST (ctree), (GtkSelectionMode) (3 - i));
+  gtk_clist_set_selection_mode (GTK_CLIST (ctree), (GtkSelectionMode) i);
   after_press (ctree, NULL);
 }
     
@@ -5764,34 +5746,33 @@ void create_ctree (void)
   char *title[] = { "Tree" , "Info" };
   char buf[80];
 
-  static OptionMenuItem items1[] =
+  static gchar *items1[] =
   {
-    { "No lines", GTK_SIGNAL_FUNC (ctree_toggle_line_style) },
-    { "Solid",    GTK_SIGNAL_FUNC (ctree_toggle_line_style) },
-    { "Dotted",   GTK_SIGNAL_FUNC (ctree_toggle_line_style) },
-    { "Tabbed",   GTK_SIGNAL_FUNC (ctree_toggle_line_style) }
+    "No lines",
+    "Solid",
+    "Dotted",
+    "Tabbed"
   };
 
-  static OptionMenuItem items2[] =
+  static gchar *items2[] =
   {
-    { "None",     GTK_SIGNAL_FUNC (ctree_toggle_expander_style) },
-    { "Square",   GTK_SIGNAL_FUNC (ctree_toggle_expander_style) },
-    { "Triangle", GTK_SIGNAL_FUNC (ctree_toggle_expander_style) },
-    { "Circular", GTK_SIGNAL_FUNC (ctree_toggle_expander_style) }
+    "None",
+    "Square",
+    "Triangle",
+    "Circular"
   };
 
-  static OptionMenuItem items3[] =
+  static gchar *items3[] =
   {
-    { "Left",  GTK_SIGNAL_FUNC (ctree_toggle_justify) },
-    { "Right", GTK_SIGNAL_FUNC (ctree_toggle_justify) }
+    "Left",
+    "Right"
   };
-
-  static OptionMenuItem items4[] =
+  
+  static gchar *items4[] =
   {
-    { "Single",   GTK_SIGNAL_FUNC (ctree_toggle_sel_mode) },
-    { "Browse",   GTK_SIGNAL_FUNC (ctree_toggle_sel_mode) },
-    { "Multiple", GTK_SIGNAL_FUNC (ctree_toggle_sel_mode) },
-    { "Extended", GTK_SIGNAL_FUNC (ctree_toggle_sel_mode) }
+    "Single",
+    "Browse",
+    "Multiple",
   };
 
   if (!window)
@@ -5985,21 +5966,27 @@ void create_ctree (void)
       hbox = gtk_hbox_new (TRUE, 5);
       gtk_box_pack_start (GTK_BOX (mbox), hbox, FALSE, FALSE, 0);
 
-      omenu1 = build_option_menu (items1, 4, 2, ctree);
+      omenu1 = build_option_menu (items1, 4, 2, 
+				  ctree_toggle_line_style,
+				  ctree);
       gtk_box_pack_start (GTK_BOX (hbox), omenu1, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, omenu1, "The tree's line style.", NULL);
 
-      omenu2 = build_option_menu (items2, 4, 1, ctree);
+      omenu2 = build_option_menu (items2, 4, 1, 
+				  ctree_toggle_expander_style,
+				  ctree);
       gtk_box_pack_start (GTK_BOX (hbox), omenu2, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, omenu2, "The tree's expander style.",
 			    NULL);
 
-      omenu3 = build_option_menu (items3, 2, 0, ctree);
+      omenu3 = build_option_menu (items3, 2, 0, 
+				  ctree_toggle_justify, ctree);
       gtk_box_pack_start (GTK_BOX (hbox), omenu3, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, omenu3, "The tree's justification.",
 			    NULL);
 
-      omenu4 = build_option_menu (items4, 4, 3, ctree);
+      omenu4 = build_option_menu (items4, 3, 3, 
+				  ctree_toggle_sel_mode, ctree);
       gtk_box_pack_start (GTK_BOX (hbox), omenu4, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, omenu4, "The list's selection mode.",
 			    NULL);
@@ -7248,54 +7235,56 @@ show_all_pages (GtkButton   *button,
 }
 
 static void
-standard_notebook (GtkButton   *button,
-                   GtkNotebook *notebook)
+notebook_type_changed (GtkWidget   *optionmenu,
+		       GtkNotebook *notebook)
 {
-  gint i;
+  gint i, c;
 
-  gtk_notebook_set_show_tabs (notebook, TRUE);
-  gtk_notebook_set_show_border (notebook, TRUE);
-  gtk_notebook_set_scrollable (notebook, FALSE);
+  enum {
+    STANDARD,
+    NOTABS,
+    BORDERLESS,
+    SCROLLABLE
+  };
+
+  c = gtk_option_menu_get_history (GTK_OPTION_MENU (optionmenu));
+
+  switch (c)
+    {
+    case STANDARD:
+      /* standard notebook */
+      gtk_notebook_set_show_tabs (notebook, TRUE);
+      gtk_notebook_set_show_border (notebook, TRUE);
+      gtk_notebook_set_scrollable (notebook, FALSE);
+      break;
+
+    case NOTABS:
+      /* notabs notebook */
+      gtk_notebook_set_show_tabs (notebook, FALSE);
+      gtk_notebook_set_show_border (notebook, TRUE);
+      break;
+
+    case BORDERLESS:
+      /* borderless */
+      gtk_notebook_set_show_tabs (notebook, FALSE);
+      gtk_notebook_set_show_border (notebook, FALSE);
+      break;
+
+    case SCROLLABLE:  
+      /* scrollable */
+      gtk_notebook_set_show_tabs (notebook, TRUE);
+      gtk_notebook_set_show_border (notebook, TRUE);
+      gtk_notebook_set_scrollable (notebook, TRUE);
+      if (g_list_length (notebook->children) == 5)
+	create_pages (notebook, 6, 15);
+      
+      return;
+      break;
+    }
+  
   if (g_list_length (notebook->children) == 15)
     for (i = 0; i < 10; i++)
       gtk_notebook_remove_page (notebook, 5);
-}
-
-static void
-notabs_notebook (GtkButton   *button,
-                 GtkNotebook *notebook)
-{
-  gint i;
-
-  gtk_notebook_set_show_tabs (notebook, FALSE);
-  gtk_notebook_set_show_border (notebook, TRUE);
-  if (g_list_length (notebook->children) == 15)
-    for (i = 0; i < 10; i++)
-      gtk_notebook_remove_page (notebook, 5);
-}
-
-static void
-borderless_notebook (GtkButton   *button,
-		     GtkNotebook *notebook)
-{
-  gint i;
-
-  gtk_notebook_set_show_tabs (notebook, FALSE);
-  gtk_notebook_set_show_border (notebook, FALSE);
-  if (g_list_length (notebook->children) == 15)
-    for (i = 0; i < 10; i++)
-      gtk_notebook_remove_page (notebook, 5);
-}
-
-static void
-scrollable_notebook (GtkButton   *button,
-                     GtkNotebook *notebook)
-{
-  gtk_notebook_set_show_tabs (notebook, TRUE);
-  gtk_notebook_set_show_border (notebook, TRUE);
-  gtk_notebook_set_scrollable (notebook, TRUE);
-  if (g_list_length (notebook->children) == 5)
-    create_pages (notebook, 6, 15);
 }
 
 static void
@@ -7327,12 +7316,12 @@ create_notebook (void)
   GdkColor *transparent = NULL;
   GtkWidget *label;
 
-  static OptionMenuItem items[] =
+  static gchar *items[] =
   {
-    { "Standard",   GTK_SIGNAL_FUNC (standard_notebook) },
-    { "No tabs",    GTK_SIGNAL_FUNC (notabs_notebook) },
-    { "Borderless", GTK_SIGNAL_FUNC (borderless_notebook) },
-    { "Scrollable", GTK_SIGNAL_FUNC (scrollable_notebook) },
+    "Standard",
+    "No tabs",
+    "Borderless",
+    "Scrollable"
   };
 
   if (!window)
@@ -7396,7 +7385,9 @@ create_notebook (void)
       label = gtk_label_new ("Notebook Style :");
       gtk_box_pack_start (GTK_BOX (box2), label, FALSE, TRUE, 0);
 
-      omenu = build_option_menu (items, G_N_ELEMENTS (items), 0, sample_notebook);
+      omenu = build_option_menu (items, G_N_ELEMENTS (items), 0,
+				 notebook_type_changed,
+				 sample_notebook);
       gtk_box_pack_start (GTK_BOX (box2), omenu, FALSE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Show all Pages");
@@ -8870,11 +8861,10 @@ progressbar_toggle_orientation (GtkWidget *widget, ProgressData *pdata)
   if (!GTK_WIDGET_MAPPED (widget))
     return;
 
-  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)(pdata->omenu1))->menu_item), i);
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
   gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata->pbar),
-			    (GtkProgressBarOrientation) (3-i));
+				    (GtkProgressBarOrientation) i);
 }
 
 static void
@@ -8897,16 +8887,13 @@ progressbar_toggle_bar_style (GtkWidget *widget, ProgressData *pdata)
   if (!GTK_WIDGET_MAPPED (widget))
     return;
 
-  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)(pdata->omenu2))->menu_item), i);
-
-  i = 1 - i;
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
   if (i == 1)
     gtk_widget_set_sensitive (pdata->block_spin, TRUE);
   else
     gtk_widget_set_sensitive (pdata->block_spin, FALSE);
-
+  
   gtk_progress_bar_set_bar_style (GTK_PROGRESS_BAR (pdata->pbar),
 				  (GtkProgressBarStyle) i);
 }
@@ -8990,18 +8977,18 @@ create_progress_bar (void)
   GtkAdjustment *adj;
   static ProgressData *pdata = NULL;
 
-  static OptionMenuItem items1[] =
+  static gchar *items1[] =
   {
-    { "Left-Right", GTK_SIGNAL_FUNC (progressbar_toggle_orientation) },
-    { "Right-Left", GTK_SIGNAL_FUNC (progressbar_toggle_orientation) },
-    { "Bottom-Top", GTK_SIGNAL_FUNC (progressbar_toggle_orientation) },
-    { "Top-Bottom", GTK_SIGNAL_FUNC (progressbar_toggle_orientation) }
+    "Left-Right",
+    "Right-Left",
+    "Bottom-Top",
+    "Top-Bottom"
   };
 
-  static OptionMenuItem items2[] =
+  static gchar *items2[] =
   {
-    { "Continuous", GTK_SIGNAL_FUNC (progressbar_toggle_bar_style) },
-    { "Discrete",   GTK_SIGNAL_FUNC (progressbar_toggle_bar_style) }
+    "Continuous",
+    "Discrete"
   };
 
   if (!pdata)
@@ -9071,7 +9058,9 @@ create_progress_bar (void)
 			5, 5);
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-      pdata->omenu1 = build_option_menu (items1, 4, 0, pdata);
+      pdata->omenu1 = build_option_menu (items1, 4, 0,
+					 progressbar_toggle_orientation,
+					 pdata);
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
@@ -9140,7 +9129,9 @@ create_progress_bar (void)
 			5, 5);
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-      pdata->omenu2 = build_option_menu (items2, 2, 0, pdata);
+      pdata->omenu2 = build_option_menu	(items2, 2, 0,
+					 progressbar_toggle_bar_style,
+					 pdata);
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 3, 4,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
