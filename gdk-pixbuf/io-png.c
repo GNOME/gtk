@@ -257,7 +257,9 @@ struct _LoadContext {
 };
 
 gpointer
-image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
+image_begin_load (ModulePreparedNotifyFunc prepare_func,
+		  ModuleUpdatedNotifyFunc update_func,
+		  gpointer user_data)
 {
         LoadContext* lc;
         
@@ -265,7 +267,7 @@ image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
         
         lc->fatal_error_occurred = FALSE;
 
-        lc->notify_func = func;
+        lc->notify_func = prepare_func;
         lc->notify_user_data = user_data;
 
         /* Create the main PNG context struct */

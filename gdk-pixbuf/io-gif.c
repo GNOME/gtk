@@ -121,7 +121,8 @@ struct _GifContext
 	FILE *file;
 
 	/* progressive read, only. */
-	ModulePreparedNotifyFunc func;
+	ModulePreparedNotifyFunc prepare_func;
+	ModuleUpdatedNotifyFunc update_func;
 	gpointer user_data;
 	guchar *buf;
 	guint ptr;
@@ -650,8 +651,8 @@ gif_get_lzw (GifContext *context)
 						  context->width,
 						  context->height);
 
-		if (context->func)
-			(* context->func) (context->pixbuf, context->user_data);
+		if (context->prepare_func)
+			(* context->prepare_func) (context->pixbuf, context->user_data);
 	}
 
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
@@ -675,7 +676,7 @@ gif_get_lzw (GifContext *context)
 			*(temp+2) = context->color_map [2][(guchar) v];
 		}
 
-		if (context->func && context->frame_interlace)
+		if (context->prepare_func && context->frame_interlace)
 			gif_fill_in_lines (context, dest, v);
 
 		context->draw_xpos++;
@@ -957,7 +958,8 @@ image_load (FILE *file)
 	context->file = file;
 	context->pixbuf = NULL;
 	context->state = GIF_START;
-	context->func = NULL;
+	context->prepare_func = NULL;
+	context->update_func = NULL;
 
 	gif_main_loop (context);
 
@@ -965,7 +967,9 @@ image_load (FILE *file)
 }
 
 gpointer
-image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
+image_begin_load (ModulePreparedNotifyFunc prepare_func,
+		  ModuleUpdatedNotifyFunc update_func,
+		  gpointer user_data)
 {
 	GifContext *context;
 
@@ -973,7 +977,7 @@ image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
 	count = 0;
 #endif
 	context = g_new (GifContext, 1);
-	context->func = func;
+	context->prepare_func = prepare_func;
 	context->user_data = user_data;
 	context->file = NULL;
 	context->pixbuf = NULL;

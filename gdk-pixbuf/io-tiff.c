@@ -37,7 +37,8 @@
 typedef struct _TiffData TiffData;
 struct _TiffData
 {
-	ModulePreparedNotifyFunc func;
+	ModulePreparedNotifyFunc prepare_func;
+	ModuleUpdatedNotifyFunc update_func;
 	gpointer user_data;
 
 	gchar *tempname;
@@ -69,7 +70,7 @@ image_load_real (FILE *f, TiffData *context)
 	pixbuf = gdk_pixbuf_new (ART_PIX_RGB, TRUE, 8, w, h);
 
 	if (context)
-		(* context->func) (pixbuf, context->user_data);
+		(* context->prepare_func) (pixbuf, context->user_data);
 
 	/* Yes, it needs to be _TIFFMalloc... */
 	rast = (uint32 *) _TIFFmalloc (num_pixs * sizeof (uint32));
@@ -108,8 +109,10 @@ image_load_real (FILE *f, TiffData *context)
 	_TIFFfree (rast);
 	TIFFClose (tiff);
 
-	if (context)
+	if (context) {
 		gdk_pixbuf_unref (pixbuf);
+		(* context->update_func) (pixbuf, context->user_data, 0, 0, w, h);
+	}
 
 	return pixbuf;
 }
@@ -132,14 +135,17 @@ image_load (FILE *f)
  * the file when it's done.  It's not pretty.
  */
 
+
 gpointer
-image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
+image_begin_load (ModulePreparedNotifyFunc prepare_func,
+		  ModuleUpdatedNotifyFunc update_func,
+		  gpointer user_data)
 {
 	TiffData *context;
 	gint fd;
 
 	context = g_new (TiffData, 1);
-	context->func = func;
+	context->prepare_func = prepare_func;
 	context->user_data = user_data;
 	context->all_okay = TRUE;
 	context->tempname = g_strdup ("/tmp/gdkpixbuf-tif-tmp.XXXXXX");

@@ -59,7 +59,7 @@ struct _GdkPixbufLoaderClass {
 	void (* area_prepared) (GdkPixbufLoader *loader);
 
 	void (* area_updated)  (GdkPixbufLoader *loader,
-                                int x, int y, int width, int height);
+                                guint x, guint y, guint width, guint height);
 
 	void (* closed)  (GdkPixbufLoader *loader);
 };

@@ -39,6 +39,7 @@ extern "C" {
 
 
 typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data);
+typedef void (* ModuleUpdatedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data, guint x, guint y, guint width, guint height);
 
 typedef struct _GdkPixbufModule GdkPixbufModule;
 struct _GdkPixbufModule {
@@ -49,7 +50,7 @@ struct _GdkPixbufModule {
         GdkPixbuf *(* load_xpm_data) (const gchar **data);
 
         /* Incremental loading */
-        gpointer   (* begin_load)    (ModulePreparedNotifyFunc func, gpointer user_data);
+        gpointer   (* begin_load)    (ModulePreparedNotifyFunc prepare_func, ModuleUpdatedNotifyFunc update_func, gpointer user_data);
         void       (* stop_load)     (gpointer context);
         gboolean   (* load_increment)(gpointer context, const gchar *buf, guint size);
 };

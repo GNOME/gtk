@@ -219,6 +219,21 @@ gdk_pixbuf_loader_prepare (GdkPixbuf *pixbuf, gpointer loader)
 	gtk_signal_emit (GTK_OBJECT (loader), pixbuf_loader_signals[AREA_PREPARED]);
 }
 
+static void
+gdk_pixbuf_loader_update (GdkPixbuf *pixbuf, gpointer loader, guint x, guint y, guint width, guint height)
+{
+	GdkPixbufLoaderPrivate *priv = NULL;
+
+	priv = GDK_PIXBUF_LOADER (loader)->private;
+
+	gtk_signal_emit (GTK_OBJECT (loader),
+			 pixbuf_loader_signals[AREA_UPDATED],
+			 x, y,
+			 /* sanity check in here.  Defend against an errant loader */
+			 MIN (width, gdk_pixbuf_get_width (priv->pixbuf)),
+			 MIN (height, gdk_pixbuf_get_height (priv->pixbuf)));
+}
+
 
 
 /**
@@ -259,7 +274,7 @@ gdk_pixbuf_loader_load_module(GdkPixbufLoader *loader)
 		return 0;
 	}
 
-	priv->context = (*priv->image_module->begin_load) (gdk_pixbuf_loader_prepare, loader);
+	priv->context = (*priv->image_module->begin_load) (gdk_pixbuf_loader_prepare, gdk_pixbuf_loader_update, loader);
 
 	if (priv->context == NULL) {
 		g_warning("Failed to begin progressive load");
