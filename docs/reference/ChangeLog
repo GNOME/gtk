@@ -1,3 +1,9 @@
+2002-04-30  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/other_software.sgml: half-finished docs on merging GTK with
+	existing hunks of code (event loop integration, using threads
+	vs. processes, blah blah)
+
 Thu Apr 25 22:37:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/tmpl/{events,input_devices,region,x_interaction}.sgml:

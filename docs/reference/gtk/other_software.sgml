@@ -1,0 +1,207 @@
+<refentry id="gtk-other-software" revision="5 Sept 2001">
+<refmeta>
+<refentrytitle>Mixing GTK+ with other software</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>Mixing GTK+ with other software</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Mixing GTK+ with other software</refname>
+<refpurpose>
+How to combine GTK+ with other code and event loops
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Overview</title>
+
+<para>
+Often people want to use GTK+ in combination with another library or existing 
+body of code that is not GTK+-aware. The general problem people encounter 
+is that the control flow of the other code does not return to GTK+, so 
+widgets do not repaint, mouse and keyboard events are ignored, and so forth.
+</para>
+
+<para>
+This section describes some approaches to solving this problem. The most
+suitable approach depends on the code that's involved, the platforms you're
+targetting, and your own familiarity with each approach.
+</para>
+
+</refsect1>
+
+<refsect1>
+<title>Periodically yield to GTK+ main loop</title>
+
+<para>
+This is the simplest method, but requires you to modify the non-GTK+ code.
+Say you have a function that does some kind of lengthy task:
+<informalexample>
+<programlisting>
+  void
+  do_lengthy_task (void)
+  {
+     int i;
+     for (i = 0; i &lt; BIG_NUMBER; ++i)
+       {
+         do_small_part_of_task ();
+       }
+  }
+</programlisting>
+</informalexample>
+You simply insert code into this function that processes pending main loop tasks, if any:
+<informalexample>
+<programlisting>
+  void
+  do_lengthy_task (void)
+  {
+     int i;
+     for (i = 0; i &lt; BIG_NUMBER; ++i)
+       {
+         do_small_part_of_task ();
+
+         /* allow main loop to process pending events; NULL 
+          * means the default context. 
+          */
+         while (g_main_context_pending (NULL))
+           g_main_context_iteration (NULL, FALSE);
+       }
+  }
+</programlisting>
+</informalexample>
+</para>
+
+<para>
+The primary disadvantage of this approach is that you have to trade off UI
+responsiveness and the performance of the task. That is, if
+do_small_part_of_task() does very little of the task, you'll spend lots of CPU
+time on <link
+linkend="g-main-context-iteration">g_main_context_iteration()</link>. While if
+do_small_part_of_task() does a lot of work, the GUI will seem noticeably
+"chunky" to the user.
+</para>
+
+<para>
+Another disadvantage to this approach is that you can't have more than one
+lengthy task at the same time, unless you manually integrate them.
+</para>
+
+<para>
+The big advantage of this approach is that it's simple and straightforward, and
+works fine for simple applications such as tossing up a progress bar during the
+lengthy task.
+</para>
+
+</refsect1>
+
+<refsect1>
+<title>Run the other code as a slave of the GTK+ main loop</title>
+
+<para>
+As a slightly cleaner solution, you can ask the main loop to run a small part of your 
+task whenever it isn't busy &mdash; that is, when it's <firstterm>idle</firstterm>.
+GLib provides a function <link linkend="g-idle-add">g_idle_add()</link> that's useful 
+for this. An "idle handler" added with <link linkend="g-idle-add">g_idle_add()</link>
+will be run continuously as long as it returns <literal>TRUE</literal>. However, 
+the main loop gives higher priority to GUI-related tasks, so will run those instead
+when appropriate.
+</para>
+
+<para>
+Here's a simple example:
+<informalexample>
+<programlisting>
+  gboolean
+  my_idle_handler (gpointer user_data)
+  {
+    do_small_part_of_task ();
+  
+    if (task_complete)
+      return FALSE; /* removes the idle handler */
+    else
+      return TRUE;  /* runs the idle handler again */
+  }
+
+  g_idle_add (my_idle_handler, NULL);
+</programlisting>
+</informalexample>
+</para>
+
+<para>
+If your task involves reading data from the network, you should instead use
+<link linkend="g-input-add">g_input_add()</link>; this will allow the 
+main loop to sleep until data is available on a file descriptor, then 
+wake up to read that data.
+</para>
+
+<para>
+<link linkend="g-idle-add">g_idle_add()</link> returns a main loop source ID you can 
+use to remove the idle handler with <link linkend="g-source-remove">g_source_remove()</link>.
+This is useful for cancelling a task, for example. Another approach is to keep a flag 
+variable and have the idle handler itself return <literal>FALSE</literal> when appropriate.
+</para>
+
+</refsect1>
+
+<refsect1>
+<title>Use multiple processes</title>
+
+<para>
+If you can't break a task into small chunks &mdash; the
+"do_small_part_of_task()" function in the above examples &mdash; you'll have to
+separate your program into two parts, by spawning a child thread or process.
+A process does not share the same address space (variables and data) with its parent.
+A thread does share the same address space, so a change made to a variable in 
+one thread will be visible to other threads as well.
+</para>
+
+<para>
+This manual can't go into full detail on processes, threads, and other UNIX
+programming topics.  You may wish to get a book or two &mdash; two I'm familiar
+with are Beginning Linux Programming (WROX Press) and Advanced Programming in
+the UNIX Environment (by Richard Stevens.
+</para>
+
+<para>
+Those books also cover the central issue you'll need to address in order to have
+a multi-process application: how to communicate between the processes. The
+simplest solution is to use pipes; <link
+linkend="g-input-add">g_input_add()</link> in combination with <link
+linkend="g-spawn-async-with-pipes">g_spawn_async_with_pipes()</link> should make
+this reasonably convenient. There are other possibilities, of course, such as
+sockets, shared memory, and X Window System client message events, depending on
+your needs.
+</para>
+
+</refsect1>
+
+
+<refsect1>
+<title>Use multiple threads</title>
+
+<para>
+
+</para>
+
+</refsect1>
+
+<refsect1>
+<title>Integrate the GTK+ main loop with another main loop</title>
+
+<para>
+</para>
+
+</refsect1>
+
+
+<refsect1>
+<title>Things that won't work</title>
+
+<para>
+signals
+</para>
+
+</refsect1>
+
+
+</refentry>
