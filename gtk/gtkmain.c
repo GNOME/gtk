@@ -118,6 +118,14 @@ static void  gtk_warning		 (gchar		     *str);
 static void  gtk_message		 (gchar		     *str);
 static void  gtk_print			 (gchar		     *str);
 
+static gint  gtk_idle_remove_from_list    (GList               **list, 
+					   guint                 tag, 
+					   gpointer              data, 
+					   gint                  remove_link);
+static gint  gtk_timeout_remove_from_list (GList               **list, 
+					   guint                 tag, 
+					   gint                  remove_link);
+
 static gint  gtk_idle_compare		 (gpointer	      a, 
 					  gpointer	      b);
 
@@ -141,20 +149,54 @@ static GList *init_functions = NULL;	   /* A list of init functions.
 					    */
 static GList *quit_functions = NULL;	   /* A list of quit functions.
 					    */
+
+
+/* When handling timeouts, the algorithm is to move all of the expired
+ * timeouts from timeout_functions to current_timeouts then process
+ * them as a batch. If one of the timeouts recursively calls the main
+ * loop, then the remainder of the timeouts in current_timeouts will
+ * be processed before anything else happens.
+ * 
+ * Each timeout is procesed as follows:
+ *
+ * - The timeout is removed from current_timeouts
+ * - The timeout is pushed on the running_timeouts stack
+ * - The timeout is executed
+ * - The timeout stack is popped
+ * - If the timeout function wasn't removed from the stack while executing,
+ *   and it returned TRUE, it is added back to timeout_functions, otherwise
+ *   it is destroyed if necessary.
+ *
+ * gtk_timeout_remove() works by checking for the timeout in
+ * timeout_functions current_timeouts and running_timeouts. If it is
+ * found in one of the first two, it is removed and destroyed. If it
+ * is found in running_timeouts, it is destroyed and ->data is set to
+ * NULL for the stack entry.
+ *
+ * Idle functions work pretty much identically.  
+ */
+
 static GList *timeout_functions = NULL;	   /* A list of timeout functions sorted by
 					    *  when the length of the time interval
 					    *  remaining. Therefore, the first timeout
 					    *  function to expire is at the head of
 					    *  the list and the last to expire is at
-					    *  the tail of the list.
-					    */
+					    *  the tail of the list.  */
 static GList *idle_functions = NULL;	   /* A list of idle functions.
 					    */
 
+/* The idle functions / timeouts that are currently being processed 
+ *  by gtk_handle_current_(timeouts/idles) 
+ */
 static GList *current_idles = NULL;
 static GList *current_timeouts = NULL;
-static GtkIdleFunction    *running_idle = NULL;
-static GtkTimeoutFunction *running_timeout = NULL;
+
+/* A stack of idle functions / timeouts that are currently being
+ * being executed
+ */
+static GList *running_idles = NULL;
+static GList *running_timeouts = NULL;
+
 static GMemChunk *timeout_mem_chunk = NULL;
 static GMemChunk *idle_mem_chunk = NULL;
 static GMemChunk *quit_mem_chunk = NULL;
@@ -878,55 +920,56 @@ gtk_timeout_add_interp (guint32		   interval,
   return gtk_timeout_add_full (interval, NULL, function, data, destroy);
 }
 
+/* Search for the specified tag in a list of timeouts. If it
+ * is found, destroy the timeout, and either remove the link
+ * or set link->data to NULL depending on remove_link
+ */
+static gint
+gtk_timeout_remove_from_list (GList **list, guint tag, gint remove_link)
+{
+  GList *tmp_list;
+  GtkTimeoutFunction *timeoutf;
+
+  tmp_list = *list;
+  while (tmp_list)
+    {
+      timeoutf = tmp_list->data;
+      
+      if (timeoutf->tag == tag)
+	{
+	  if (remove_link)
+	    {
+	      *list = g_list_remove_link (*list, tmp_list);
+	      g_list_free (tmp_list);
+	    }
+	  else
+	    tmp_list->data = NULL;
+
+	  gtk_timeout_destroy (timeoutf);
+	  
+	  return TRUE;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
+  return FALSE;
+}
+
 void
 gtk_timeout_remove (guint tag)
 {
-  GtkTimeoutFunction *timeoutf;
-  GList *tmp_list;
   
   /* Remove a timeout function.
    * (Which, basically, involves searching the
    *  list for the tag).
    */
-  if ((running_timeout) && (running_timeout->tag == tag))
-    {
-      gtk_timeout_destroy (running_timeout);
-      running_timeout = NULL;
-    }
 
-  tmp_list = timeout_functions;
-  while (tmp_list)
-    {
-      timeoutf = tmp_list->data;
-      
-      if (timeoutf->tag == tag)
-	{
-	  timeout_functions = g_list_remove_link (timeout_functions, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_timeout_destroy (timeoutf);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-  
-  tmp_list = current_timeouts;
-  while (tmp_list)
-    {
-      timeoutf = tmp_list->data;
-      
-      if (timeoutf->tag == tag)
-	{
-	  current_timeouts = g_list_remove_link (current_timeouts, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_timeout_destroy (timeoutf);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
+  if (gtk_timeout_remove_from_list (&timeout_functions, tag, TRUE))
+    return;
+  if (gtk_timeout_remove_from_list (&current_timeouts, tag, TRUE))
+    return;
+  if (gtk_timeout_remove_from_list (&running_timeouts, tag, FALSE))
+    return;
 }
 
 /* We rely on some knowledge of how g_list_insert_sorted works to make
@@ -1123,92 +1166,70 @@ gtk_quit_remove_by_data (gpointer data)
     }
 }
 
-void
-gtk_idle_remove (guint tag)
+/* Search for the specified tag in a list of idles. If it
+ * is found, destroy the idle, and either remove the link
+ * or set link->data to NULL depending on remove_link
+ *
+ * If tag != 0, match tag against idlef->tag, otherwise, match
+ * data against idlef->data
+ */
+static gint
+gtk_idle_remove_from_list (GList  **list, 
+			   guint    tag, 
+			   gpointer data, 
+			   gint     remove_link)
 {
   GtkIdleFunction *idlef;
   GList *tmp_list;
   
-  if ((running_idle) && (running_idle->tag == tag))
+  tmp_list = *list;
+  while (tmp_list)
     {
-      gtk_idle_destroy (running_idle);
-      running_idle = NULL;
-    }
+      idlef = tmp_list->data;
+      
+      if (((tag != 0) && (idlef->tag == tag)) ||
+	  ((tag == 0) && (idlef->data == data)))
+	{
+	  if (remove_link)
+	    {
+	      *list = g_list_remove_link (*list, tmp_list);
+	      g_list_free (tmp_list);
+	    }
+	  else
+	    tmp_list->data = NULL;
 
-  tmp_list = idle_functions;
-  while (tmp_list)
-    {
-      idlef = tmp_list->data;
-      
-      if (idlef->tag == tag)
-	{
-	  idle_functions = g_list_remove_link (idle_functions, tmp_list);
-	  g_list_free (tmp_list);
 	  gtk_idle_destroy (idlef);
 	  
-	  return;
+	  return TRUE;
 	}
       
       tmp_list = tmp_list->next;
     }
+  return FALSE;
+}
+
+void
+gtk_idle_remove (guint tag)
+{
+  g_return_if_fail (tag != 0);
   
-  tmp_list = current_idles;
-  while (tmp_list)
-    {
-      idlef = tmp_list->data;
-      
-      if (idlef->tag == tag)
-	{
-	  current_idles = g_list_remove_link (current_idles, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_idle_destroy (idlef);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
+  if (gtk_idle_remove_from_list (&idle_functions, tag, NULL, TRUE))
+    return;
+  if (gtk_idle_remove_from_list (&current_idles, tag, NULL, TRUE))
+    return;
+  if (gtk_idle_remove_from_list (&running_idles, tag, NULL, FALSE))
+    return;
 }
 
 void
 gtk_idle_remove_by_data (gpointer data)
 {
-  GtkIdleFunction *idlef;
-  GList *tmp_list;
-  
-  tmp_list = idle_functions;
-  while (tmp_list)
-    {
-      idlef = tmp_list->data;
-      
-      if (idlef->data == data)
-	{
-	  idle_functions = g_list_remove_link (idle_functions, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_idle_destroy (idlef);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-  
-  tmp_list = current_idles;
-  while (tmp_list)
-    {
-      idlef = tmp_list->data;
-      
-      if (idlef->data == data)
-	{
-	  current_idles = g_list_remove_link (current_idles, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_idle_destroy (idlef);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
+  if (gtk_idle_remove_from_list (&idle_functions, 0, data, TRUE))
+    return;
+  if (gtk_idle_remove_from_list (&current_idles, 0, data, TRUE))
+    return;
+  if (gtk_idle_remove_from_list (&running_idles, 0, data, FALSE))
+    return;
 }
 
 static void
@@ -1356,30 +1377,39 @@ gtk_invoke_timeout_function (GtkTimeoutFunction *timeoutf)
 static void
 gtk_handle_current_timeouts (guint32 the_time)
 {
+  gint result;
   GList *tmp_list;
+  GtkTimeoutFunction *timeoutf;
   
   while (current_timeouts)
     {
       tmp_list = current_timeouts;
-      running_timeout = tmp_list->data;
+      timeoutf = tmp_list->data;
       
       current_timeouts = g_list_remove_link (current_timeouts, tmp_list);
-      g_list_free (tmp_list);
+      running_timeouts = g_list_prepend (running_timeouts, tmp_list);
       
-      if ((gtk_invoke_timeout_function (running_timeout) == FALSE) ||
-	  (running_timeout == NULL))
+      result = gtk_invoke_timeout_function (timeoutf);
+
+      running_timeouts = g_list_remove_link (running_timeouts, tmp_list);
+      timeoutf = tmp_list->data;
+      
+      g_list_free_1 (tmp_list);
+
+      if (timeoutf)
 	{
-	  if (running_timeout)
-	    gtk_timeout_destroy (running_timeout);
-	}
-      else
-	{
-	  running_timeout->interval = running_timeout->originterval;
-	  running_timeout->start = the_time;
-	  gtk_timeout_insert (running_timeout);
+	  if (!result)
+	    {
+	      gtk_timeout_destroy (timeoutf);
+	    }
+	  else
+	    {
+	      timeoutf->interval = timeoutf->originterval;
+	      timeoutf->start = the_time;
+	      gtk_timeout_insert (timeoutf);
+	    }
 	}
     }
-  running_timeout = NULL;
 }
 
 static void
@@ -1469,20 +1499,27 @@ gtk_handle_current_idles ()
 {
   GList *tmp_list;
   GList *tmp_list2;
+  GtkIdleFunction *idlef;
+  gint result;
   
   while (current_idles)
     {
       tmp_list = current_idles;
-      running_idle = tmp_list->data;
+      idlef = tmp_list->data;
       
       current_idles = g_list_remove_link (current_idles, tmp_list);
+      running_idles = g_list_prepend (running_idles, tmp_list);
+
+      result = gtk_idle_invoke_function (idlef);
       
-      if ((gtk_idle_invoke_function (running_idle) == FALSE) ||
-	  (running_idle == NULL))
+      running_idles = g_list_remove_link (running_idles, tmp_list);
+      idlef = tmp_list->data;
+      
+      if (!idlef || !result)
 	{
 	  g_list_free (tmp_list);
-	  if (running_idle)
-	    gtk_idle_destroy (running_idle);
+	  if (idlef)
+	    gtk_idle_destroy (idlef);
 	}
       else
 	{
@@ -1491,7 +1528,7 @@ gtk_handle_current_idles ()
 	   */
 	  tmp_list2 = idle_functions;
 	  while (tmp_list2 &&
-		 (((GtkIdleFunction *)tmp_list2->data)->priority <= running_idle->priority))
+		 (((GtkIdleFunction *)tmp_list2->data)->priority <= idlef->priority))
 	    tmp_list2 = tmp_list2->next;
 
 	  if (!tmp_list2)
@@ -1512,7 +1549,6 @@ gtk_handle_current_idles ()
 	    }
 	}
     }
-  running_idle = NULL;
 }
 
 static void

@@ -1,3 +1,8 @@
+Sun Apr  5 15:08:25 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c: Reverted broken implementation of removing
+	the current timeout/idle. Substituted a (hopefully) functional one.
+
 Sun Apr  5 09:35:55 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_events_pending): take expired timeouts into
