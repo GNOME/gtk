@@ -309,7 +309,7 @@ static gint                cmpl_last_valid_char    (CompletionState* cmpl_state)
 /* When the user selects a non-directory, call cmpl_completion_fullname
  * to get the full name of the selected file.
  */
-static const gchar*        cmpl_completion_fullname (const gchar*, CompletionState* cmpl_state);
+static gchar*              cmpl_completion_fullname (const gchar*, CompletionState* cmpl_state);
 
 
 /* Directory operations. */
@@ -1251,7 +1251,9 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   text = gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry));
   if (text)
     {
-      sys_filename = g_filename_from_utf8 (cmpl_completion_fullname (text, filesel->cmpl_state), -1, NULL, NULL, NULL);
+      gchar *fullname = cmpl_completion_fullname (text, filesel->cmpl_state);
+      sys_filename = g_filename_from_utf8 (fullname, -1, NULL, NULL, NULL);
+      g_free (fullname);
       if (!sys_filename)
 	return nothing;
       strncpy (something, sys_filename, sizeof (something));
@@ -2544,19 +2546,17 @@ cmpl_last_valid_char (CompletionState *cmpl_state)
   return cmpl_state->last_valid_char;
 }
 
-static const gchar*
+static gchar*
 cmpl_completion_fullname (const gchar     *text,
 			  CompletionState *cmpl_state)
 {
-  static const char nothing[2] = "";
-
   if (!cmpl_state_okay (cmpl_state))
     {
-      return nothing;
+      return g_strdup ("");
     }
   else if (g_path_is_absolute (text))
     {
-      strcpy (cmpl_state->updated_text, text);
+      return g_strdup (text);
     }
 #ifdef HAVE_PWD_H
   else if (text[0] == '~')
@@ -2566,33 +2566,19 @@ cmpl_completion_fullname (const gchar     *text,
 
       dir = open_user_dir (text, cmpl_state);
 
-      if (!dir)
+      if (dir)
 	{
-	  /* spencer says just return ~something, so
-	   * for now just do it. */
-	  strcpy (cmpl_state->updated_text, text);
-	}
-      else
-	{
-
-	  strcpy (cmpl_state->updated_text, dir->fullname);
-
 	  slash = strchr (text, G_DIR_SEPARATOR);
-
-	  if (slash)
-	    strcat (cmpl_state->updated_text, slash);
+	  
+	  /* slash may be NULL, that works too */
+	  return g_strconcat (dir->fullname, slash, NULL);
 	}
     }
 #endif
-  else
-    {
-      strcpy (cmpl_state->updated_text, cmpl_state->reference_dir->fullname);
-      if (cmpl_state->updated_text[strlen (cmpl_state->updated_text) - 1] != G_DIR_SEPARATOR)
-	strcat (cmpl_state->updated_text, G_DIR_SEPARATOR_S);
-      strcat (cmpl_state->updated_text, text);
-    }
-
-  return cmpl_state->updated_text;
+  
+  return g_build_filename (cmpl_state->reference_dir->fullname,
+			   text,
+			   NULL);
 }
 
 /* The three completion selectors
