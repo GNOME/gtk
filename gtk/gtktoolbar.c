@@ -561,8 +561,8 @@ gtk_toolbar_expose (GtkWidget      *widget,
 		     &event->area, widget, "toolbar",
 		     widget->allocation.x + border_width,
                      widget->allocation.y + border_width,
-		     widget->allocation.width - border_width,
-                     widget->allocation.height - border_width);
+		     widget->allocation.width - 2 * border_width,
+                     widget->allocation.height - 2 * border_width);
       
       for (children = toolbar->children; children; children = children->next)
 	{
