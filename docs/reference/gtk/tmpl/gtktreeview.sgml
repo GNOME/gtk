@@ -475,7 +475,6 @@ GtkTreeView
 </para>
 
 @tree_view: 
-@window: 
 @x: 
 @y: 
 @path: 
@@ -483,6 +482,8 @@ GtkTreeView
 @cell_x: 
 @cell_y: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@window: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_cell_area ##### -->

@@ -1,3 +1,23 @@
+Fri Nov 16 19:44:35 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_default): Move 
+	notification of "has_default" to here, so it
+	is safe to call gtk_window_set_default() instead
+	of gtk_widget_grab_default().
+
+	* gtk/gtkwindow.c (gtk_window_set_focus): Make it call
+	gtk_widget_grab_focus(), which then calls 
+	_gtk_widget_internal_set_focus(). This makes 
+	gtk_window_set_focus() a safe way of both setting
+	and unsetting the focus widget.
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_state): Use
+	gtk_widget_get_toplevel(), instead of gtk_widget_ancestor
+	to find the toplevel.
+
+	* gtk/gtkwindow.h: Move gtk_window_set_focus/default
+	from the "internal functions" section.
+
 2001-11-16  jacob berkman  <jacob@ximian.com>
 
 	* tests/testgtk.c (create_radio_buttons): add some no-indicator

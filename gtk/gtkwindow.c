@@ -922,14 +922,14 @@ gtk_window_get_role (GtkWindow *window)
 /**
  * gtk_window_set_focus:
  * @window: a #GtkWindow
- * @focus: widget to be the new focus widget
+ * @focus: widget to be the new focus widget, or %NULL to unset
+ *   any focus widget for the toplevel window.
  *
- * If @focus is not the current focus widget, and is focusable, emits
- * the "set_focus" signal to set @focus as the focus widget for the
- * window.  This function is more or less GTK-internal; to focus an
- * entry widget or the like, you should use gtk_widget_grab_focus()
- * instead of this function.
- * 
+ * If @focus is not the current focus widget, and is focusable, sets
+ * it as the focus widget for the window. If @focus is %NULL, unsets
+ * the focus widget for this window. To set the focus to a particular
+ * widget in the toplevel, it is usually more convenient to use
+ * gtk_widget_grab_focus() instead of this function.
  **/
 void
 gtk_window_set_focus (GtkWindow *window,
@@ -942,6 +942,18 @@ gtk_window_set_focus (GtkWindow *window,
       g_return_if_fail (GTK_WIDGET_CAN_FOCUS (focus));
     }
 
+  if (focus)
+    gtk_widget_grab_focus (focus);
+  else
+    _gtk_window_internal_set_focus (window, NULL);
+}
+
+void
+_gtk_window_internal_set_focus (GtkWindow *window,
+				GtkWidget *focus)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
   if ((window->focus_widget != focus) ||
       (focus && !GTK_WIDGET_HAS_FOCUS (focus)))
     gtk_signal_emit (GTK_OBJECT (window), window_signals[SET_FOCUS], focus);
@@ -950,30 +962,39 @@ gtk_window_set_focus (GtkWindow *window,
 /**
  * gtk_window_set_default:
  * @window: a #GtkWindow
- * @default_widget: widget to be the default
+ * @default_widget: widget to be the default, or %NULL to unset the
+ *                  default widget for the toplevel.
  *
  * The default widget is the widget that's activated when the user
- * presses Enter in a dialog (for example). This function tells a
- * #GtkWindow about the current default widget; it's really a GTK
- * internal function and you shouldn't need it. Instead, to change the
- * default widget, first set the #GTK_CAN_DEFAULT flag on the widget
- * you'd like to make the default using GTK_WIDGET_SET_FLAGS(), then
- * call gtk_widget_grab_default() to move the default.
- * 
+ * presses Enter in a dialog (for example). This function sets or
+ * unsets the default widget for a #GtkWindow about. When setting
+ * (rather than unsetting) the default widget it's generally easier to
+ * call gtk_widget_grab_focus() on the widget. Before making a widget
+ * the default widget, you must set the #GTK_CAN_DEFAULT flag on the
+ * widget you'd like to make the default using GTK_WIDGET_SET_FLAGS().
  **/
 void
 gtk_window_set_default (GtkWindow *window,
 			GtkWidget *default_widget)
 {
+  GtkWidget *old_default;
+  
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (default_widget)
     g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (default_widget));
-
+  
   if (window->default_widget != default_widget)
     {
+      GtkWidget *old_default_widget = NULL;
+      
+      if (default_widget)
+	g_object_ref (default_widget);
+      
       if (window->default_widget)
 	{
+	  old_default_widget = window->default_widget;
+	  
 	  if (window->focus_widget != window->default_widget ||
 	      !GTK_WIDGET_RECEIVES_DEFAULT (window->default_widget))
 	    GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
@@ -988,6 +1009,15 @@ gtk_window_set_default (GtkWindow *window,
 	      !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget))
 	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
 	  gtk_widget_queue_draw (window->default_widget);
+	}
+
+      if (old_default_widget)
+	g_object_notify (G_OBJECT (old_default_widget), "has_default");
+      
+      if (default_widget)
+	{
+	  g_object_notify (G_OBJECT (default_widget), "has_default");
+	  g_object_unref (default_widget);
 	}
     }
 }

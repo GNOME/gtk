@@ -3345,12 +3345,12 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 	  
 	  if (widget == focus_widget)
 	    {
-	      /* We call gtk_window_set_focus() here so that the
+	      /* We call _gtk_window_internal_set_focus() here so that the
 	       * toplevel window can request the focus if necessary.
 	       * This is needed when the toplevel is a GtkPlug
 	       */
 	      if (!GTK_WIDGET_HAS_FOCUS (widget))
-		gtk_window_set_focus (GTK_WINDOW (toplevel), focus_widget);
+		_gtk_window_internal_set_focus (GTK_WINDOW (toplevel), focus_widget);
 
 	      return;
 	    }
@@ -3385,7 +3385,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 	  widget = widget->parent;
 	}
       if (GTK_IS_WINDOW (widget))
-	gtk_window_set_focus (GTK_WINDOW (widget), focus_widget);
+	_gtk_window_internal_set_focus (GTK_WINDOW (widget), focus_widget);
     }
 }
 
@@ -3455,22 +3455,14 @@ void
 gtk_widget_grab_default (GtkWidget *widget)
 {
   GtkWidget *window;
-  GtkType window_type;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (widget));
   
-  window_type = GTK_TYPE_WINDOW;
-  window = widget->parent;
+  window = gtk_widget_get_toplevel (widget);
   
-  while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
-    window = window->parent;
-  
-  if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
-    {
-      gtk_window_set_default (GTK_WINDOW (window), widget);
-      g_object_notify (G_OBJECT (widget), "has_default");
-    }
+  if (window && GTK_WIDGET_TOPLEVEL (window))
+    gtk_window_set_default (GTK_WINDOW (window), widget);
   else
     g_warning (G_STRLOC ": widget not within a GtkWindow");
 }
@@ -5775,8 +5767,8 @@ gtk_widget_propagate_state (GtkWidget           *widget,
     {
       GtkWidget *window;
 
-      window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
-      if (window)
+      window = gtk_widget_get_toplevel (widget);
+      if (window && GTK_WIDGET_TOPLEVEL (window))
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
