@@ -3475,9 +3475,12 @@ gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view)
   GtkRBNode *node;
 
   gtk_tree_row_reference_free (tree_view->priv->top_row);
-  tree_view->priv->top_row_dy = _gtk_rbtree_find_offset (tree_view->priv->tree,
-							 tree_view->priv->dy,
-							 &tree, &node);
+  if (tree_view->priv->tree == NULL)
+    tree = NULL;
+  else
+    tree_view->priv->top_row_dy = _gtk_rbtree_find_offset (tree_view->priv->tree,
+							   tree_view->priv->dy,
+							   &tree, &node);
   if (tree == NULL)
     {
       tree_view->priv->top_row = NULL;

@@ -1,3 +1,8 @@
+Fri Feb  1 20:50:29 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_dy_to_top_row): set tree to
+	NULL if tree_view->priv->tree is NULL (#70152, patch by John Harper).
+
 Fri Feb  1 12:51:20 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (focus_child_in): Catch the
