@@ -616,7 +616,7 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 					break;
 				case 1:
 					if(context->num_planes < 1 || context->num_planes > 4) {
-						g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image has unsupported number of 1-bit planes"));
+						g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image has unsupported number of %d-bit planes"), 1);
 						return FALSE;
 					}
 					break;
