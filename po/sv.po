@@ -8,12 +8,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2001-12-08 18:34+0100\n"
-"PO-Revision-Date: 2001-12-04 01:34+0100\n"
+"POT-Creation-Date: 2001-12-15 16:29+0100\n"
+"PO-Revision-Date: 2001-12-15 16:36+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:551
@@ -36,8 +36,8 @@ msgstr "Vet inte hur man läser in animationen i filen \"%s\""
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Misslyckades med att läsa in bilden \"%s\": anledningen är okänd, troligtvis "
-"en trasig bildfil"
+"Misslyckades med att läsa in bilden \"%s\": anledningen är okänd, "
+"troligtvis en trasig bildfil"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
@@ -59,8 +59,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Bildinläsningsmodulen %s exporterar inte rätt gränssnitt; den kanske är från "
-"en annan GTK-version?"
+"Bildinläsningsmodulen %s exporterar inte rätt gränssnitt; den kanske är "
+"från en annan GTK-version?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:460 gdk-pixbuf/gdk-pixbuf-io.c:486
 #, c-format
@@ -91,12 +91,12 @@ msgstr "Misslyckades med att läsa in bilden \"%s\": %s"
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Detta bygge av gdk-pixbuf stöder inte sparande av bildformatet: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:830
+#: gdk-pixbuf/gdk-pixbuf-io.c:829
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Misslyckades med att öppna \"%s\" för skrivning: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:851
+#: gdk-pixbuf/gdk-pixbuf-io.c:850
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -207,8 +207,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Inte tillräckligt med minne för att läsa in bild, försök att avsluta några "
-"program för att frigöra minne"
+"Inte tillräckligt med minne för att läsa in bild, försök att avsluta "
+"några program för att frigöra minne"
 
 #: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -220,16 +220,16 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%s\" kunde "
-"inte tolkas."
+"JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%s\" "
+"kunde inte tolkas."
 
 #: gdk-pixbuf/io-jpeg.c:679
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%d\" är inte "
-"tillåtet."
+"JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%d\" är "
+"inte tillåtet."
 
 #: gdk-pixbuf/io-png.c:161
 #, c-format
@@ -246,8 +246,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"Inte tillräckligt med minne för att lagra en %ld × %ld stor bild; försök att "
-"avsluta några program för att frigöra minne"
+"Inte tillräckligt med minne för att lagra en %ld × %ld stor bild; "
+"försök att avsluta några program för att frigöra minne"
 
 #: gdk-pixbuf/io-png.c:636
 msgid "Fatal error reading PNG image file"
@@ -258,23 +258,21 @@ msgstr "Ödesdigert fel vid läsning av PNG-bildfil"
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Ödesdigert fel vid läsning av PNG-bildfil: %s"
 
-#: gdk-pixbuf/io-png.c:751
+#: gdk-pixbuf/io-png.c:750
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
-msgstr "Nycklar för PNG-tEXt-stycken måste ha minst 1 och som mest 79 tecken."
+msgstr ""
+"Nycklar för PNG-tEXt-stycken måste ha minst 1 och som mest 79 tecken."
 
-#: gdk-pixbuf/io-png.c:759
+#: gdk-pixbuf/io-png.c:758
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr "Nycklar för PNG-tEXt-stycken måste vara ASCII-tecken."
 
-#: gdk-pixbuf/io-png.c:780
+#: gdk-pixbuf/io-png.c:779
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
-"Värdet för ett PNG-tEXt-stycke kan inte konverteras till ISO-8859-1-kodning."
-
-#: gdk-pixbuf/io-png.c:845
-msgid "Insufficient memory to save PNG file"
-msgstr "Inte tillräckligt med minne för att spara PNG-fil"
+"Värdet för ett PNG-tEXt-stycke kan inte konverteras till ISO-8859-1-"
+"kodning."
 
 #: gdk-pixbuf/io-pnm.c:254
 msgid "PNM loader expected to find an integer, but didn't"
@@ -386,39 +384,41 @@ msgstr "Inte tillräckligt med minne för att läsa in XBM-bildfil"
 
 #: gdk-pixbuf/io-xbm.c:428
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Misslyckades med att skriva till temporär fil vid inläsning av XBM-fil"
+msgstr ""
+"Misslyckades med att skriva till temporär fil vid inläsning av XBM-fil"
 
-#: gdk-pixbuf/io-xpm.c:1234
+#: gdk-pixbuf/io-xpm.c:1235
 msgid "No XPM header found"
 msgstr "Inget XPM-huvud hittades"
 
-#: gdk-pixbuf/io-xpm.c:1242
+#: gdk-pixbuf/io-xpm.c:1243
 msgid "XPM file has image width <= 0"
 msgstr "XPM-filen har bildbredd <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1250
+#: gdk-pixbuf/io-xpm.c:1251
 msgid "XPM file has image height <= 0"
 msgstr "XPM-filen har bildhöjd <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1258
+#: gdk-pixbuf/io-xpm.c:1259
 msgid "XPM file has invalid number of colors"
 msgstr "XPM-filen har ogiltigt antal färger"
 
-#: gdk-pixbuf/io-xpm.c:1266
+#: gdk-pixbuf/io-xpm.c:1267
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM har ogiltigt antal tecken per bildpunkt"
 
-#: gdk-pixbuf/io-xpm.c:1284
+#: gdk-pixbuf/io-xpm.c:1285
 msgid "Can't read XPM colormap"
 msgstr "Kan inte läsa XPM-färgkarta"
 
-#: gdk-pixbuf/io-xpm.c:1325
+#: gdk-pixbuf/io-xpm.c:1326
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Kan inte allokera minne för inläsning av XPM-bild"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Misslyckades med skrivning till temporär fil vid inläsning av XPM-bild"
+msgstr ""
+"Misslyckades med skrivning till temporär fil vid inläsning av XPM-bild"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -486,9 +486,9 @@ msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"Om tillgängligt horisontellt utrymme är större än vad som krävs för barnet, "
-"är detta hur mycket av det som ska användas för barnet. 0,0 betyder inget, "
-"1,0 betyder allt"
+"Om tillgängligt horisontellt utrymme är större än vad som krävs för "
+"barnet, är detta hur mycket av det som ska användas för barnet. 0,0 "
+"betyder inget, 1,0 betyder allt"
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
@@ -499,9 +499,9 @@ msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"Om tillgängligt vertikalt utrymme är större än vad som krävs för barnet, är "
-"detta hur mycket av det som ska användas för barnet. 0,0 betyder inget, 1,0 "
-"betyder allt"
+"Om tillgängligt vertikalt utrymme är större än vad som krävs för "
+"barnet, är detta hur mycket av det som ska användas för barnet. 0,0 "
+"betyder inget, 1,0 betyder allt"
 
 #: gtk/gtkarrow.c:97
 msgid "Arrow direction"
@@ -644,8 +644,8 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
-"Om detta är angivet kommer en understrykning i texten att indikera att nästa "
-"tecken ska användas som en genvägstangent"
+"Om detta är angivet kommer en understrykning i texten att indikera att "
+"nästa tecken ska användas som en genvägstangent"
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
@@ -693,7 +693,8 @@ msgstr "X-förflyttning av barn"
 #: gtk/gtkbutton.c:279
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
-msgstr "Hur långt bort i x-riktingen barnet ska flyttas då knappen trycks ned"
+msgstr ""
+"Hur långt bort i x-riktingen barnet ska flyttas då knappen trycks ned"
 
 #: gtk/gtkbutton.c:286
 msgid "Child Y Displacement"
@@ -702,7 +703,8 @@ msgstr "Y-förflyttning av barn"
 #: gtk/gtkbutton.c:287
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
-msgstr "Hur långt bort i y-riktningen barnet ska flyttas då knappen trycks ned"
+msgstr ""
+"Hur långt bort i y-riktningen barnet ska flyttas då knappen trycks ned"
 
 #: gtk/gtkcellrenderer.c:103
 msgid "mode"
@@ -1129,9 +1131,9 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"Den färg som valdes tidigare, för att du ska kunna jämföra med den färg du "
-"väljer nu. Du kan dra färgen till en palettpost, eller välja denna färg som "
-"den aktuella genom att dra den till det andra färgprovet."
+"Den färg som valdes tidigare, för att du ska kunna jämföra med den färg "
+"du väljer nu. Du kan dra färgen till en palettpost, eller välja denna "
+"färg som den aktuella genom att dra den till det andra färgprovet."
 
 #: gtk/gtkcolorsel.c:587
 msgid ""
@@ -1150,9 +1152,9 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Klicka på denna palettpost för att göra den till aktuell färg. För att ändra "
-"denna post kan du dra ett färgprov hit eller högerklicka och välja \"Spara "
-"färg här\"."
+"Klicka på denna palettpost för att göra den till aktuell färg. För att "
+"ändra denna post kan du dra ett färgprov hit eller högerklicka och välja "
+"\"Spara färg här\"."
 
 #: gtk/gtkcolorsel.c:1694
 msgid "Has Opacity Control"
@@ -1199,16 +1201,16 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"Välj den färg som du vill ha från den yttre ringen. Välj mörkheten eller "
-"ljusheten på den färgen genom att använda den inre triangeln."
+"Välj den färg som du vill ha från den yttre ringen. Välj mörkheten "
+"eller ljusheten på den färgen genom att använda den inre triangeln."
 
 #: gtk/gtkcolorsel.c:1800
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Klicka på pipetten, och klicka sedan på en färg någonstans på din skärm för "
-"att välja den färgen."
+"Klicka på pipetten, och klicka sedan på en färg någonstans på din "
+"skärm för att välja den färgen."
 
 #: gtk/gtkcolorsel.c:1809
 msgid "_Hue:"
@@ -1477,7 +1479,8 @@ msgstr "Osynligt tecken"
 #: gtk/gtkentry.c:482
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
-"Tecknet att använda när fältets innehåll ska maskeras (i \"lösenordsläge\")"
+"Tecknet att använda när fältets innehåll ska maskeras (i "
+"\"lösenordsläge\")"
 
 #: gtk/gtkentry.c:489
 msgid "Activates default"
@@ -1520,11 +1523,11 @@ msgstr "Markörfärg"
 msgid "Color with which to draw insertion cursor"
 msgstr "Färg att rita insättningsmarkören med"
 
-#: gtk/gtkentry.c:3805 gtk/gtklabel.c:3156
+#: gtk/gtkentry.c:3805 gtk/gtklabel.c:3160
 msgid "Select All"
 msgstr "Markera allt"
 
-#: gtk/gtkentry.c:3815 gtk/gtklabel.c:3166 gtk/gtktextview.c:5747
+#: gtk/gtkentry.c:3815 gtk/gtklabel.c:3170 gtk/gtktextview.c:5747
 msgid "Input Methods"
 msgstr "Inmatningsmetoder"
 
@@ -1586,7 +1589,8 @@ msgstr "Byt namn på fil"
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Katalognamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
+msgstr ""
+"Katalognamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
 
 #: gtk/gtkfilesel.c:1239
 #, c-format
@@ -1980,7 +1984,8 @@ msgstr "Radbryt"
 
 #: gtk/gtklabel.c:329
 msgid "If set, wrap lines if the text becomes too wide."
-msgstr "Om detta är angivet kommer texten att radbrytas om den blir för bred."
+msgstr ""
+"Om detta är angivet kommer texten att radbrytas om den blir för bred."
 
 #: gtk/gtklabel.c:335
 msgid "Selectable"
@@ -2217,7 +2222,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Huruvida flikar ska ha samma storlek"
 
-#: gtk/gtknotebook.c:2283 gtk/gtknotebook.c:4514
+#: gtk/gtknotebook.c:2283 gtk/gtknotebook.c:4515
 #, c-format
 msgid "Page %u"
 msgstr "Sida %u"
@@ -2265,17 +2270,17 @@ msgstr "Storlek på handtag"
 msgid "Width of handle"
 msgstr "Bredd på handtag"
 
-#: gtk/gtkrc.c:2723
+#: gtk/gtkrc.c:2721
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\" rad %d"
 
-#: gtk/gtkrc.c:2726
+#: gtk/gtkrc.c:2724
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
 
-#: gtk/gtkrc.c:3135
+#: gtk/gtkrc.c:3133
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Sökvägselement i bild: \"%s\" måste vara absolut, %s, rad %d"
@@ -2303,8 +2308,9 @@ msgid ""
 "take."
 msgstr ""
 "Om sant är GtkProgress i aktivitetsläge, vilket betyder att det signalerar "
-"att något händer, men inte hur mycket aktiviteten är slutförd. Detta används "
-"när du gör någonting som du inte vet hur lång tid det kommer att ta."
+"att något händer, men inte hur mycket aktiviteten är slutförd. "
+"Detta används när du gör någonting som du inte vet hur lång tid det "
+"kommer att ta."
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
@@ -2368,7 +2374,8 @@ msgstr "Aktivitetssteg"
 
 #: gtk/gtkprogressbar.c:158
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr "Ökningen som används för varje iterering i aktivitetsläge (föråldrat)"
+msgstr ""
+"Ökningen som används för varje iterering i aktivitetsläge (föråldrat)"
 
 #: gtk/gtkprogressbar.c:167
 msgid "Activity Blocks"
@@ -2379,7 +2386,8 @@ msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 msgstr ""
-"Antalet block som kan passa in i förloppsmätaren i aktivitetsläge (föråldrat)"
+"Antalet block som kan passa in i förloppsmätaren i aktivitetsläge "
+"(föråldrat)"
 
 #: gtk/gtkprogressbar.c:177
 msgid "Discrete Blocks"
@@ -2554,7 +2562,8 @@ msgstr "Fast storlek på rullningslist"
 #: gtk/gtkscrollbar.c:86
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
-"Ändra inte storleken på rullningslisten, lås den bara till den minsta längden"
+"Ändra inte storleken på rullningslisten, lås den bara till den minsta "
+"längden"
 
 #: gtk/gtkscrollbar.c:93
 msgid "Backward stepper"
@@ -2590,13 +2599,14 @@ msgstr "Sekundär framlängesstegare"
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
-"Visa en sekundär knapp med framlängespil på motsatt sida av rullningslisten"
+"Visa en sekundär knapp med framlängespil på motsatt sida av "
+"rullningslisten"
 
-#: gtk/gtksettings.c:146
+#: gtk/gtksettings.c:147
 msgid "Double Click Time"
 msgstr "Tid för dubbelklick"
 
-#: gtk/gtksettings.c:147
+#: gtk/gtksettings.c:148
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2604,57 +2614,65 @@ msgstr ""
 "Största tid som tillåts mellan två klick för att de ska betraktas som en "
 "dubbelklickning (i millisekunder)"
 
-#: gtk/gtksettings.c:154
+#: gtk/gtksettings.c:155
 msgid "Cursor Blink"
 msgstr "Markörblinkning"
 
-#: gtk/gtksettings.c:155
+#: gtk/gtksettings.c:156
 msgid "Whether the cursor should blink"
 msgstr "Huruvida markören ska blinka"
 
-#: gtk/gtksettings.c:162
+#: gtk/gtksettings.c:163
 msgid "Cursor Blink Time"
 msgstr "Blinktid för markör"
 
-#: gtk/gtksettings.c:163
+#: gtk/gtksettings.c:164
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Längd på markörens blinkcykel, i millisekunder"
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:171
 msgid "Split Cursor"
 msgstr "Delad markör"
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:172
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
-"Huruvida två markörer ska visas för blandad vänster-till-höger- och höger-"
-"till-vänster-text"
+"Huruvida två markörer ska visas för blandad vänster-till-höger- och "
+"höger-till-vänster-text"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:179
 msgid "Theme Name"
 msgstr "Temanamn"
 
-#: gtk/gtksettings.c:179
+#: gtk/gtksettings.c:180
 msgid "Name of theme RC file to load"
 msgstr "Namn på den tema-RC-fil som ska läsas in"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:187
 msgid "Key Theme Name"
 msgstr "Nyckeltemanamn"
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:188
 msgid "Name of key theme RC file to load"
 msgstr "Namn på den nyckeltema-RC-fil som ska läsas in"
 
-#: gtk/gtksettings.c:195
+#: gtk/gtksettings.c:196
 msgid "Menu bar accelerator"
 msgstr "Snabbtangent för menyrad"
 
-#: gtk/gtksettings.c:196
+#: gtk/gtksettings.c:197
 msgid "Keybinding to activate the menu bar"
 msgstr "Snabbtangent för att aktivera menyraden"
+
+#: gtk/gtksettings.c:205
+msgid "Drag threshold"
+msgstr "Dragtröskel"
+
+#: gtk/gtksettings.c:206
+msgid "Number of pixels the cursor can move before dragging"
+msgstr "Antalet bildpunkter markören kan flyttas innan drag"
 
 #: gtk/gtkspinbutton.c:215
 msgid "The adjustment that holds the value of the spinbutton"
@@ -2708,7 +2726,8 @@ msgstr "Uppdateringspolicy"
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
-"Huruvida spinnknappen alltid ska uppdatera, eller endast då värdet är giltigt"
+"Huruvida spinnknappen alltid ska uppdatera, eller endast då värdet är "
+"giltigt"
 
 #: gtk/gtkspinbutton.c:275
 msgid "Value"
@@ -3385,7 +3404,8 @@ msgstr "Storlek på utfyllnad"
 
 #: gtk/gtktoolbar.c:252
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr "Mängden kantmellanrum mellan skuggan från verktygsraden och knapparna"
+msgstr ""
+"Mängden kantmellanrum mellan skuggan från verktygsraden och knapparna"
 
 #: gtk/gtktoolbar.c:260
 msgid "Space style"
@@ -3480,7 +3500,8 @@ msgstr "Regeltips"
 
 #: gtk/gtktreeview.c:555
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr "Ställ in ett tips för temamotorn att rita rader i alternerande färger"
+msgstr ""
+"Ställ in ett tips för temamotorn att rita rader i alternerande färger"
 
 #: gtk/gtktreeview.c:562
 msgid "Enable Search"
@@ -3643,16 +3664,16 @@ msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport."
 msgstr ""
-"Det GtkAdjustment som avgör värdena på den horisontella positionen för denna "
-"skrivbordsvy."
+"Det GtkAdjustment som avgör värdena på den horisontella positionen för "
+"denna skrivbordsvy."
 
 #: gtk/gtkviewport.c:141
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport."
 msgstr ""
-"Det GtkAdjustment som avgör värdena på den vertikala positionen för denna "
-"skrivbordsvy."
+"Det GtkAdjustment som avgör värdena på den vertikala positionen för "
+"denna skrivbordsvy."
 
 #: gtk/gtkviewport.c:149
 msgid "Determines how the shadowed box around the viewport is drawn."
@@ -3683,8 +3704,8 @@ msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
 msgstr ""
-"Åsidosättande för breddbegäran av widgeten, eller -1 om naturlig begäran ska "
-"användas."
+"Åsidosättande för breddbegäran av widgeten, eller -1 om naturlig begäran "
+"ska användas."
 
 #: gtk/gtkwidget.c:418
 msgid "Height request"
@@ -3695,8 +3716,8 @@ msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
 msgstr ""
-"Åsidosättande för höjdbegäran av widgeten, eller -1 om naturlig begäran ska "
-"användas."
+"Åsidosättande för höjdbegäran av widgeten, eller -1 om naturlig begäran "
+"ska användas."
 
 #: gtk/gtkwidget.c:428
 msgid "Whether the widget is visible"
@@ -3756,7 +3777,8 @@ msgstr "Mottar standard"
 
 #: gtk/gtkwidget.c:477
 msgid "If TRUE, the widget will receive the default action when it is focused."
-msgstr "Om SANT kommer widgeten att motta standardåtgärden då den har fokus."
+msgstr ""
+"Om SANT kommer widgeten att motta standardåtgärden då den har fokus."
 
 #: gtk/gtkwidget.c:483
 msgid "Composite child"
@@ -3784,7 +3806,8 @@ msgstr "Händelser"
 
 #: gtk/gtkwidget.c:498
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
-msgstr "Händelsemasken som avgör vilken typ av GdkEvent som denna widget får."
+msgstr ""
+"Händelsemasken som avgör vilken typ av GdkEvent som denna widget får."
 
 #: gtk/gtkwidget.c:505
 msgid "Extension events"
@@ -3853,8 +3876,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
-"Om SANT har fönstret ingen minsta storlek. Att ställa in detta till SANT är "
-"en dum idé i 99% av fallen."
+"Om SANT har fönstret ingen minsta storlek. Att ställa in detta till SANT "
+"är en dum idé i 99% av fallen."
 
 #: gtk/gtkwindow.c:386
 msgid "Allow Grow"
@@ -3964,6 +3987,9 @@ msgstr "Vietnamesisk (VIQR)"
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
 
+#~ msgid "Insufficient memory to save PNG file"
+#~ msgstr "Inte tillräckligt med minne för att spara PNG-fil"
+
 #~ msgid "Value between 0.0 and 1.0 to indicate X alignment"
 #~ msgstr "Värde mellan 0.0 och 1.0 för att indikera X-justering"
 
@@ -4040,12 +4066,13 @@ msgstr "X-inmatningsmetod"
 #~ "Image has an incorrect pixel rowstride, perhaps the data was corrupted "
 #~ "somehow."
 #~ msgstr ""
-#~ "Bilden har en ogiltig rad med bildpunkter, kanske datat har förstörts på "
-#~ "något sätt."
+#~ "Bilden har en ogiltig rad med bildpunkter, kanske datat har förstörts "
+#~ "på något sätt."
 
 #~ msgid ""
 #~ "Image size is impossibly large, perhaps the data was corrupted somehow"
-#~ msgstr "Bildstorleken är omöjligt stor, kanske datat skadades på något sätt"
+#~ msgstr ""
+#~ "Bildstorleken är omöjligt stor, kanske datat skadades på något sätt"
 
 #~ msgid "Image data is partially missing, probably it was corrupted somehow."
 #~ msgstr "Bilddata saknas delvis, troligtvis skadades det på något sätt."
@@ -4054,8 +4081,8 @@ msgstr "X-inmatningsmetod"
 #~ "Image has an unknown colorspace code (%d), perhaps the image data was "
 #~ "corrupted"
 #~ msgstr ""
-#~ "Bilden har en okänd färgområdeskod (%d), kanske bilddatat skadades på på "
-#~ "något sätt"
+#~ "Bilden har en okänd färgområdeskod (%d), kanske bilddatat skadades på "
+#~ "på något sätt"
 
 #~ msgid ""
 #~ "Image has an improper number of bits per sample (%d), perhaps the image "
