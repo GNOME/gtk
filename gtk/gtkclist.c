@@ -1080,6 +1080,9 @@ gtk_clist_set_column_resizeable (GtkCList *clist,
     return;
 
   clist->column[column].resizeable = resizeable;
+
+  if (GTK_WIDGET_VISIBLE (clist))
+    size_allocate_title_buttons (clist);
 }
 
 void
@@ -2599,6 +2602,11 @@ gtk_clist_realize (GtkWidget * widget)
   attributes.cursor = clist->cursor_drag = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
   attributes_mask = GDK_WA_CURSOR;
   
+  attributes.x =  LIST_WIDTH (clist) + 1;
+  attributes.y = 0;
+  attributes.width = 0;
+  attributes.height = 0;
+
   for (i = 0; i < clist->columns; i++)
     {
       clist->column[i].window = gdk_window_new (clist->title_window, &attributes, attributes_mask);

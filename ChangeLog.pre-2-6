@@ -1,3 +1,9 @@
+Wed Oct  7 23:59:37 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_set_column_resizeable): added
+	size_allocate_title_buttons call
+	(gtk_clist_realize): changed initial column.window position
+
 Wed Oct  7 20:27:28 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.h (struct _GtkCTree): removed xor_gc, use clists
