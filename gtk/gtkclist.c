@@ -5401,12 +5401,20 @@ get_cell_style (GtkCList     *clist,
 		GdkGC       **fg_gc,
 		GdkGC       **bg_gc)
 {
+  gint fg_state;
+
+  if ((state == GTK_STATE_PRELIGHT) &&
+      (GTK_WIDGET (clist)->state == GTK_STATE_INSENSITIVE))
+    fg_state = GTK_STATE_INSENSITIVE;
+  else
+    fg_state = state;
+
   if (clist_row->cell[column].style)
     {
       if (style)
 	*style = clist_row->cell[column].style;
       if (fg_gc)
-	*fg_gc = clist_row->cell[column].style->fg_gc[state];
+	*fg_gc = clist_row->cell[column].style->fg_gc[fg_state];
       if (bg_gc)
 	*bg_gc = clist_row->cell[column].style->bg_gc[state];
     }
@@ -5415,7 +5423,7 @@ get_cell_style (GtkCList     *clist,
       if (style)
 	*style = clist_row->style;
       if (fg_gc)
-	*fg_gc = clist_row->style->fg_gc[state];
+	*fg_gc = clist_row->style->fg_gc[fg_state];
       if (bg_gc)
 	*bg_gc = clist_row->style->bg_gc[state];
     }
@@ -5424,7 +5432,7 @@ get_cell_style (GtkCList     *clist,
       if (style)
 	*style = GTK_WIDGET (clist)->style;
       if (fg_gc)
-	*fg_gc = GTK_WIDGET (clist)->style->fg_gc[state];
+	*fg_gc = GTK_WIDGET (clist)->style->fg_gc[fg_state];
       if (bg_gc)
 	*bg_gc = GTK_WIDGET (clist)->style->bg_gc[state];
 

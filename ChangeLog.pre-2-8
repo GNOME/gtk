@@ -1,3 +1,9 @@
+Thu Dec  3 16:37:42 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (get_cell_style): Use GTK_STATE_INSENSITIVE
+	for the foreground of cells for CLists in the insensitive
+	state, instead of GTK_STATE_PRELIGHT.
+
 Thu Dec  3 06:20:59 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c: moved checks upon focus setting from
