@@ -1,3 +1,49 @@
+Wed May 26 23:26:51 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Support insensitive cells in tree views and combo boxes:
+	
+	* gtk/gtkcellrenderer.h: 
+	* gtk/gtkcellrenderer.c: Add a ::sensitive property.
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): 
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): 
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render): 
+	Support drawing insensitive.
+
+	* gtk/gtkcellview.h: 
+	* gtk/gtkcellview.c (gtk_cell_view_get_cell_renderers): New 
+	function to obtain the cell renderers from a cell view. Also
+	export gtk_cell_view_set_cell_data().
+
+	* gtk/gtktreeselection.c (tree_column_is_sensitive):
+	* gtk/gtktreeselection.c (row_is_selectable): Helper functions
+	to determine whether all visible cells in a row are insensitive
+	and whether a row is selectable. A row is not selectable if the 
+	user function says so or if all visible cells are insensitive.
+	* gtk/gtktreeselection.c (_gtk_tree_selection_internal_select_node): 
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_select_node): 
+	Use row_is_selectable().
+	
+	* gtk/gtkcombobox.c (row_is_sensitive): 
+	* gtk/gtkcombobox.c (tree_column_row_is_sensitive): 
+	* gtk/gtkcombobox.c (menu_row_is_sensitive): Helper functions
+	to determine row sensitivity in menu or list mode.
+
+	* gtk/gtkcombobox.c (update_menu_sensitivity): Helper function
+	to set up sensitivity menu items from the underlying rows.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_popup): 
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_button_press): Use
+	update_menu_sensitivity().
+		
+	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): Setup the cell
+	data funcs.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_key_press): Skip insensitive
+	rows.
+
+	* tests/testcombo.c (main): Make some rows insensitive.
+
 2004-05-26  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Send key

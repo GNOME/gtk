@@ -71,6 +71,7 @@ struct _GtkCellRenderer
   guint is_expander : 1;
   guint is_expanded : 1;
   guint cell_background_set : 1;
+  guint sensitive : 1;
 };
 
 struct _GtkCellRendererClass

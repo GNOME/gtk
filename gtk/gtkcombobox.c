@@ -1142,6 +1142,140 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
     *y -= *height;
 } 
 
+static gboolean
+menu_row_is_sensitive (GtkComboBox *combo_box,
+		       GtkWidget   *item)
+{
+  GtkWidget *cell_view;
+  GList *cells, *list;
+  gboolean sensitive;
+
+  cell_view = gtk_bin_get_child (GTK_BIN (item));
+  
+  gtk_cell_view_set_cell_data (GTK_CELL_VIEW (cell_view));
+  cells = gtk_cell_view_get_cell_renderers (GTK_CELL_VIEW (cell_view));
+
+  sensitive = FALSE;
+  list = cells;
+  while (list)
+    {
+      g_object_get (G_OBJECT (list->data), "sensitive", &sensitive, NULL);
+      
+      if (sensitive)
+	break;
+
+      list = list->next;
+    }
+  g_list_free (cells);
+
+  return sensitive;
+}
+		       
+
+static gboolean
+tree_column_row_is_sensitive (GtkComboBox *combo_box,
+			      GtkTreeIter *iter)
+{
+  GList *cells, *list;
+  gboolean sensitive;
+
+  if (!combo_box->priv->column)
+    return TRUE;
+
+  gtk_tree_view_column_cell_set_cell_data (combo_box->priv->column,
+					   combo_box->priv->model,
+					   iter, FALSE, FALSE);
+
+  cells = gtk_tree_view_column_get_cell_renderers (combo_box->priv->column);
+
+  sensitive = FALSE;
+  list = cells;
+  while (list)
+    {
+      g_object_get (G_OBJECT (list->data), "sensitive", &sensitive, NULL);
+      
+      if (sensitive)
+	break;
+
+      list = list->next;
+    }
+  g_list_free (cells);
+
+  return sensitive;
+}
+		       
+static gboolean
+row_is_sensitive (GtkComboBox *combo_box,
+		  gint         index)
+{
+  gboolean sensitive;
+
+  if (!combo_box->priv->model)
+    return TRUE;
+
+  if (GTK_IS_MENU (combo_box->priv->popup_widget))
+    {
+      GtkWidget *item;
+      GList *children, *child;
+
+      children = gtk_container_get_children (GTK_CONTAINER (combo_box->priv->popup_widget));
+      child = children;
+      if (GTK_IS_TEAROFF_MENU_ITEM (child->data))
+	child = child->next;
+      child = g_list_nth (child, index);
+      item = GTK_WIDGET (child->data);
+      g_list_free (children);
+
+      sensitive = menu_row_is_sensitive (combo_box, item);
+    }
+  else
+    {
+      GtkTreePath *path;
+      GtkTreeIter iter;
+
+      path = gtk_tree_path_new_from_indices (index, -1);
+      if (gtk_tree_model_get_iter (combo_box->priv->model, &iter, path))
+	sensitive = tree_column_row_is_sensitive (combo_box, &iter);
+      else
+	sensitive = TRUE;
+
+      gtk_tree_path_free (path);
+
+    }
+
+  return sensitive;
+}
+
+static void
+update_menu_sensitivity (GtkComboBox *combo_box)
+{
+  gint i, items;
+  GtkWidget *menu;
+  GList *children, *child;
+
+  if (!combo_box->priv->model)
+    return;
+
+  items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
+  menu = combo_box->priv->popup_widget;
+
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+  child = children;
+
+  if (GTK_IS_TEAROFF_MENU_ITEM (child->data))
+    child = child->next;
+
+  for (i = 0; i < items; i++, child = child->next)
+    {
+      GtkWidget *item = GTK_WIDGET (child->data);
+      gboolean sensitive;
+
+      sensitive = menu_row_is_sensitive (combo_box, item);
+      gtk_widget_set_sensitive (item, sensitive);
+    }
+  g_list_free (children);
+}
+
 /**
  * gtk_combo_box_popup:
  * @combo_box: a #GtkComboBox
@@ -1165,6 +1299,7 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
 
   if (GTK_IS_MENU (combo_box->priv->popup_widget))
     {
+      update_menu_sensitivity (combo_box);
       gtk_menu_set_active (GTK_MENU (combo_box->priv->popup_widget),
 			   combo_box->priv->active_item);
 
@@ -1957,7 +2092,7 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
   if (event->type == GDK_BUTTON_PRESS && event->button == 1)
     {
       combo_box->priv->popup_in_progress = TRUE;
-      
+      update_menu_sensitivity (combo_box);
       gtk_menu_set_active (GTK_MENU (combo_box->priv->popup_widget),
 			   combo_box->priv->active_item);
 
@@ -2295,6 +2430,10 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
                                               j->data,
                                               GPOINTER_TO_INT (j->next->data));
         }
+
+      gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo_box->priv->column), 
+					  info->cell, info->func, info->func_data, 
+					  NULL);
     }
 
   if (combo_box->priv->active_item != -1)
@@ -2484,22 +2623,34 @@ gtk_combo_box_key_press (GtkWidget   *widget,
     case GDK_Down:
     case GDK_KP_Down:
       new_index = index + 1;
+      while (new_index < items && !row_is_sensitive (combo_box, new_index))
+	new_index++;
+      if (new_index == items)
+	new_index = index;
       break;
     case GDK_Up:
     case GDK_KP_Up:
       new_index = index - 1;
+      while (new_index >= 0 && !row_is_sensitive (combo_box, new_index))
+	new_index--;
+      if (new_index < 0)
+	new_index = index;
       break;
     case GDK_Page_Up:
     case GDK_KP_Page_Up:
     case GDK_Home: 
     case GDK_KP_Home:
       new_index = 0;
+      while (new_index < items - 1 && !row_is_sensitive (combo_box, new_index))
+	new_index++;
       break;
     case GDK_Page_Down:
     case GDK_KP_Page_Down:
     case GDK_End: 
     case GDK_KP_End:
       new_index = items - 1;
+      while (new_index > 0 && !row_is_sensitive (combo_box, new_index))
+	new_index--;
       break;
     default:
       return FALSE;

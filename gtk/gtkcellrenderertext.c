@@ -1374,8 +1374,11 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 
   gtk_cell_renderer_text_get_size (cell, widget, cell_area, &x_offset, &y_offset, NULL, NULL);
 
-
-  if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
+  if (!cell->sensitive) 
+    {
+      state = GTK_STATE_INSENSITIVE;
+    }
+  else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
     {
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	state = GTK_STATE_SELECTED;

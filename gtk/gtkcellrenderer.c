@@ -50,6 +50,7 @@ enum {
   PROP_ZERO,
   PROP_MODE,
   PROP_VISIBLE,
+  PROP_SENSITIVE,
   PROP_XALIGN,
   PROP_YALIGN,
   PROP_XPAD,
@@ -111,6 +112,7 @@ gtk_cell_renderer_init (GtkCellRenderer *cell)
   cell->yalign = 0.5;
   cell->xpad = 0;
   cell->ypad = 0;
+  cell->sensitive = TRUE;
 }
 
 static void
@@ -162,8 +164,14 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 P_("visible"),
 							 P_("Display the cell"),
 							 TRUE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+				   PROP_SENSITIVE,
+				   g_param_spec_boolean ("sensitive",
+							 P_("Sensitive"),
+							 P_("Display the cell sensitive"),
+							 TRUE,
+							 G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_XALIGN,
@@ -293,6 +301,9 @@ gtk_cell_renderer_get_property (GObject     *object,
     case PROP_VISIBLE:
       g_value_set_boolean (value, cell->visible);
       break;
+    case PROP_SENSITIVE:
+      g_value_set_boolean (value, cell->sensitive);
+      break;
     case PROP_XALIGN:
       g_value_set_float (value, cell->xalign);
       break;
@@ -354,6 +365,9 @@ gtk_cell_renderer_set_property (GObject      *object,
       break;
     case PROP_VISIBLE:
       cell->visible = g_value_get_boolean (value);
+      break;
+    case PROP_SENSITIVE:
+      cell->sensitive = g_value_get_boolean (value);
       break;
     case PROP_XALIGN:
       cell->xalign = g_value_get_float (value);

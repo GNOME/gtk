@@ -1279,6 +1279,73 @@ gtk_tree_selection_unselect_range (GtkTreeSelection *selection,
     g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
 }
 
+static gboolean
+tree_column_is_sensitive (GtkTreeViewColumn *column,
+			  GtkTreeModel      *model,
+			  GtkTreeIter       *iter)
+{
+  GList *cells, *list;
+  gboolean sensitive;
+  gboolean visible;
+
+  gtk_tree_view_column_cell_set_cell_data (column, model,
+					   iter, FALSE, FALSE);
+
+  cells = gtk_tree_view_column_get_cell_renderers (column);
+
+  list = cells;
+  while (list)
+    {
+      g_object_get (G_OBJECT (list->data), 
+		    "sensitive", &sensitive, 
+		    "visible", &visible,
+		    NULL);
+      
+      if (visible && sensitive)
+	break;
+
+      list = list->next;
+    }
+  g_list_free (cells);
+
+  return sensitive;
+}
+
+static gboolean
+row_is_selectable (GtkTreeSelection *selection,
+		   GtkRBNode        *node,
+		   GtkTreePath      *path)
+{
+  GList *list;
+  gboolean sensitive;
+  
+  sensitive = FALSE;
+  for (list = selection->tree_view->priv->columns; list && !sensitive; list = list->next)
+    {
+      GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
+      GtkTreeIter iter;
+
+      if (!column->visible)
+	continue;
+
+      if (gtk_tree_model_get_iter (selection->tree_view->priv->model, &iter, path))
+	sensitive = tree_column_is_sensitive (column, selection->tree_view->priv->model, &iter);
+      else
+	sensitive = TRUE;
+    }
+
+  if (!sensitive)
+    return FALSE;
+
+  if (selection->user_func)
+    return (*selection->user_func) (selection, selection->tree_view->priv->model, path,
+				    GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED),
+				    selection->user_data);
+  else
+    return TRUE;
+}
+
+
 /* Called internally by gtktreeview.c It handles actually selecting the tree.
  */
 
@@ -1328,17 +1395,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	    {
 	      /* We only want to select the new node if we can unselect the old one,
 	       * and we can select the new one. */
-	      if (selection->user_func)
-		{
-		  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path,
-					       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED),
-					       selection->user_data))
-		    dirty = TRUE;
-		}
-	      else
-		{
-		  dirty = TRUE;
-		}
+	      dirty = row_is_selectable (selection, node, path);
 
 	      /* if dirty is FALSE, we weren't able to select the new one, otherwise, we try to
 	       * unselect the new one
@@ -1455,15 +1512,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) != select)
     {
       path = _gtk_tree_view_find_path (selection->tree_view, tree, node);
-      if (selection->user_func)
-	{
-	  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path,
-                                       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED),
-                                       selection->user_data))
-	    selected = TRUE;
-	}
-      else
-	selected = TRUE;
+      selected = row_is_selectable (selection, node, path);
       gtk_tree_path_free (path);
     }
 

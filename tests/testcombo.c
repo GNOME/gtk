@@ -183,6 +183,26 @@ setup_combo_entry (GtkWidget *entry_box)
 				   "klaas");
 }
 
+static void
+set_sensitive (GtkCellLayout   *cell_layout,
+	       GtkCellRenderer *cell,
+	       GtkTreeModel    *tree_model,
+	       GtkTreeIter     *iter,
+	       gpointer         data)
+{
+  GtkTreePath *path;
+  gint *indices;
+  gboolean sensitive;
+
+  path = gtk_tree_model_get_path (tree_model, iter);
+  indices = gtk_tree_path_get_indices (path);
+
+  sensitive = indices[0] % 2;
+  gtk_tree_path_free (path);
+
+  g_object_set (cell, "sensitive", sensitive, NULL);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -259,6 +279,10 @@ main (int argc, char **argv)
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
                                         "pixbuf", 0,
                                         NULL);
+	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combobox),
+					    renderer,
+					    set_sensitive,
+					    NULL, NULL);
 
         renderer = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
@@ -267,7 +291,10 @@ main (int argc, char **argv)
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
                                         "text", 1,
                                         NULL);
-
+	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combobox),
+					    renderer,
+					    set_sensitive,
+					    NULL, NULL);
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 1);
 
 
