@@ -275,3 +275,19 @@ Text/Edit widget:
   - "changed" emitted when doing deletes on empty Text widget.
 
   - Delete IC in editable->unrealize, not editable->finalize?
+
+Calendar Widget:
+
+ - The widget should be nicely resizeable vertical to.
+
+ - CALENDAR_MARGIN should be removed, uses INNER_BORDER and
+   style->class->[xy]thickness insted.
+
+ - Flag to choose between using standard three letter abbreviated
+   weekday name or just the first character from it. It looks like
+   that is what most other calendar-widgets do.
+
+ - Arrows should resize with the header-font.
+
+ - The keyboard support has to be finished.
+

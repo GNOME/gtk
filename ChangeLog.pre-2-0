@@ -1,3 +1,9 @@
+Sun Sep 27 02:18:06 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.h:
+	  gtk/gtkcalendar.c:
+	  examples/calendar: Added gtkcalendar widget and demo
+
 Sat Sep 26 06:15:34 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_sort): 

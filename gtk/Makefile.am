@@ -18,6 +18,7 @@ libgtk_la_SOURCES = \
 	gtkbbox.c		\
 	gtkbox.c		\
 	gtkbutton.c		\
+	gtkcalendar.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
 	gtkclist.c		\
@@ -122,6 +123,7 @@ source_headers = \
 	gtkbbox.h		\
 	gtkbox.h		\
 	gtkbutton.h		\
+	gtkcalendar.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
 	gtkclist.h		\
