@@ -1026,7 +1026,7 @@ palette_new (GtkColorSelection *colorsel)
 
   gtk_tooltips_set_tip (priv->tooltips,
                         retval,
-                        _("This is a palette entry used for quick access to commonly-used colors. Double click it to make this color the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""),
+                        _("Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""),
                         NULL);
   return retval;
 }
