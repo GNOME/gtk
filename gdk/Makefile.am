@@ -16,7 +16,7 @@ INCLUDES = @STRIP_BEGIN@ \
 lib_LTLIBRARIES = libgdk.la
 
 # libtool stuff: set version and export symbols for resolving
-libgdkincludedir = $(includedir)/gdk
+libgdkincludedir = $(includedir)/gtk-1.2/gdk
 libgdk_la_LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
 	-release $(LT_RELEASE) \

@@ -91,15 +91,7 @@ if test "$lib_gthread" = "yes"; then
 fi
 
 if test "$echo_cflags" = "yes"; then
-      if test @includedir@ != /usr/include ; then
-        includes=-I@includedir@
-        for i in $glib_cflags ; do
-          if test $i = -I@includedir@ ; then
-            includes=""
-          fi
-        done
-      fi
-      echo $includes $glib_cflags @x_cflags@ 
+      echo -I@includedir@/gtk-1.2 $glib_cflags @x_cflags@ 
 fi
 
 if test "$echo_libs" = "yes"; then

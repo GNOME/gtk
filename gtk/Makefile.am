@@ -22,7 +22,7 @@ INCLUDES = @STRIP_BEGIN@ \
 lib_LTLIBRARIES = libgtk.la
 
 # libtool stuff: set version and export symbols for resolving
-libgtkincludedir = $(includedir)/gtk
+libgtkincludedir = $(includedir)/gtk-1.2/gtk
 libgtk_la_LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
 	-release $(LT_RELEASE) 					\
