@@ -1,3 +1,8 @@
+Wed Nov 13 21:45:36 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkhsv.c: get rid of deprecated gdk_rgb_gc_set_foreground
+	usage in favor of gdk_gc_set_rgb_fg_color.
+
 Thu Nov 14 00:33:26 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (attach_widget_screen_changed): Monitor

@@ -1029,9 +1029,19 @@ paint_ring (GtkHSV      *hsv,
   hsv_to_rgb (&r, &g, &b);
   
   if (INTENSITY (r, g, b) > 0.5)
-    gdk_rgb_gc_set_foreground (priv->gc, 0x000000);
+    {
+      color.red = 0x0000;
+      color.green = 0x0000;
+      color.blue = 0x0000;
+    }
   else
-    gdk_rgb_gc_set_foreground (priv->gc, 0xffffff);
+    {
+      color.red = 0xffff;
+      color.green = 0xffff;
+      color.blue = 0xffff;
+    }
+
+  gdk_gc_set_rgb_fg_color (priv->gc, &color);
   
   gdk_draw_line (drawable, priv->gc,
 		 -x + center, -y + center,
@@ -1284,11 +1294,21 @@ paint_triangle (GtkHSV      *hsv,
   g = priv->s;
   b = priv->v;
   hsv_to_rgb (&r, &g, &b);
-  
+
   if (INTENSITY (r, g, b) > 0.5)
-    gdk_rgb_gc_set_foreground (priv->gc, 0x000000);
+    {
+      color.red = 0x0000;
+      color.green = 0x0000;
+      color.blue = 0x0000;
+    }
   else
-    gdk_rgb_gc_set_foreground (priv->gc, 0xffffff);
+    {
+      color.red = 0xffff;
+      color.green = 0xffff;
+      color.blue = 0xffff;
+    }
+
+  gdk_gc_set_rgb_fg_color (priv->gc, &color);
 
 #define OUTER_RADIUS 4
 #define INNER_RADIUS 3 
