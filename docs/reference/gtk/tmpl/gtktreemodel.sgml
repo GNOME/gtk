@@ -609,7 +609,7 @@ versions of GTK+.
 
 <!-- ##### MACRO gtk_tree_model_get_iter_root ##### -->
 <para>
-A alternate name for gtk_tree_model_get_iter_root() provided for
+A alternate name for gtk_tree_model_get_iter_first() provided for
 compatibility reasons; this macro will be deprecated in future
 versions of GTK+.
 </para>
