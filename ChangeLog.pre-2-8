@@ -1,3 +1,8 @@
+1999-10-11  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* gdk/gdk.c (gdk_beep): Modified the XBell call to use the default
+	X values
+
 1999-10-09  ERDI Gergo  <cactus@cactus.rulez.org>
 
 	* gtk/gtktoolbar.h, gtk/gtktoolbar.c: Added horizontal icon/text

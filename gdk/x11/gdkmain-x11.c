@@ -819,7 +819,7 @@ gdk_key_repeat_restore (void)
 void
 gdk_beep (void)
 {
-  XBell(gdk_display, 100);
+  XBell(gdk_display, 0);
 }
 
 /*
