@@ -1,3 +1,8 @@
+Thu Dec 12 17:01:38 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkdnd.c (gtk_drag_find_widget): Skip insensitive
+ 	widgets. (#84061)
+ 
 Tue Dec 10 14:37:41 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate)
