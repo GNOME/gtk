@@ -47,7 +47,9 @@ from The Open Group.
 ICEILTEMPDECL
 #endif
 
-static void miLineArc();
+static void
+miLineArc (GdkDrawable *pDraw, GdkGC *pGC, GdkColor *pixel, SpanDataPtr spanData,
+	LineFacePtr leftFace, LineFacePtr rightFace, double xorg, double yorg, gboolean isInt);
 
 /*
  * spans-based polygon filler
@@ -1531,12 +1533,12 @@ miWideLine (pDrawable, pGC, mode, npt, pPts)
 		       &leftFace, &rightFace);
 	if (GDK_GC_FBDATA(pGC)->values.cap_style == GDK_CAP_ROUND)
 	{
-	    miLineArc (pDrawable, pGC, pixel, spanData,
+	    miLineArc (pDrawable, pGC, &pixel, spanData,
 		       &leftFace, (LineFacePtr) NULL,
 		       (double)0.0, (double)0.0,
 		       TRUE);
 	    rightFace.dx = -1;	/* sleezy hack to make it work */
-	    miLineArc (pDrawable, pGC, pixel, spanData,
+	    miLineArc (pDrawable, pGC, &pixel, spanData,
 		       (LineFacePtr) NULL, &rightFace,
  		       (double)0.0, (double)0.0,
 		       TRUE);
@@ -1762,7 +1764,7 @@ miWideDashSegment (pDrawable, pGC, spanData, pDashOffset, pDashIndex,
 		    	    lcapFace.ya = vertices[V_TOP].y;
 			    lcapFace.k = -slopes[V_LEFT].k;
 		    	}
-		    	miLineArc (pDrawable, pGC, pixel, spanData,
+		    	miLineArc (pDrawable, pGC, &pixel, spanData,
 			       	   &lcapFace, (LineFacePtr) NULL,
 			       	   lcenterx, lcentery, FALSE);
 		    }
@@ -1778,7 +1780,7 @@ miWideDashSegment (pDrawable, pGC, spanData, pDashOffset, pDashIndex,
 		    	rcapFace.ya = -vertices[V_RIGHT].y;
 			rcapFace.k = -slopes[V_RIGHT].k;
 		    }
-		    miLineArc (pDrawable, pGC, pixel, spanData,
+		    miLineArc (pDrawable, pGC, &pixel, spanData,
 			       (LineFacePtr) NULL, &rcapFace,
 			       rcenterx, rcentery, FALSE);
 		    break;
@@ -1871,7 +1873,7 @@ miWideDashSegment (pDrawable, pGC, spanData, pDashOffset, pDashIndex,
 		lcapFace.ya = vertices[V_TOP].y;
 		lcapFace.k = -slopes[V_LEFT].k;
 	    }
-	    miLineArc (pDrawable, pGC, pixel, spanData,
+	    miLineArc (pDrawable, pGC, &pixel, spanData,
 		       &lcapFace, (LineFacePtr) NULL,
 		       rcenterx, rcentery, FALSE);
 	}
@@ -2012,7 +2014,7 @@ miWideDash (pDrawable, pGC, mode, npt, pPts)
 			firstIsFg = startIsFg;
 		    }
 	    	    else if (GDK_GC_FBDATA(pGC)->values.cap_style == GDK_CAP_ROUND)
-		    	miLineArc (pDrawable, pGC, pixel, spanData,
+		    	miLineArc (pDrawable, pGC, &pixel, spanData,
 			       	   &leftFace, (LineFacePtr) NULL,
 			       	   (double)0.0, (double)0.0, TRUE);
 	    	}
@@ -2072,14 +2074,14 @@ miWideDash (pDrawable, pGC, mode, npt, pPts)
 	pixel = (dashIndex & 1) ? GDK_GC_FBDATA(pGC)->values.background : GDK_GC_FBDATA(pGC)->values.foreground;
 	switch (GDK_GC_FBDATA(pGC)->values.cap_style) {
 	case GDK_CAP_ROUND:
-	    miLineArc (pDrawable, pGC, pixel, spanData,
+	    miLineArc (pDrawable, pGC, &pixel, spanData,
 		       (LineFacePtr) NULL, (LineFacePtr) NULL,
 		       (double)x2, (double)y2,
 		       FALSE);
 	    break;
 	case GDK_CAP_PROJECTING:
 	    x1 = GDK_GC_FBDATA(pGC)->values.line_width;
-	    miFillRectPolyHelper (pDrawable, pGC, pixel, spanData,
+	    miFillRectPolyHelper (pDrawable, pGC, &pixel, spanData,
 				  x2 - (x1 >> 1), y2 - (x1 >> 1), x1, x1);
 	    break;
 	default:
