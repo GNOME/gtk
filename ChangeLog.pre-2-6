@@ -1,3 +1,8 @@
+2003-11-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_focus): If the window is
+	maximized, use SW_SHOWMAXIMIZED. (#126986, John Ehresman)
+
 Wed Nov 12 21:05:30 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstyle.c (make_cursor_gc): Add a const to get rid of 
@@ -103,7 +108,7 @@ Tue Oct 28 09:44:16 2003  Owen Taylor  <otaylor@redhat.com>
 	to pop down properly when switching to another top-level window
 	using the task switcher (Alt-Tab). Using low-level hooks to
 	implement pointer and keyboard grabbing would be cleaner, but
-	low-level hooks sound a bit dangerous, and Owen say we should
+	low-level hooks sound a bit dangerous, and Owen says we should
 	avoid using them if at all possible. Fix for #107320.
 
 	On WM_MOUSELEAVE, generate a leave event of type
