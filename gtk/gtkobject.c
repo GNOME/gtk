@@ -641,7 +641,6 @@ gtk_object_add_arg_type (const char *arg_name,
   info->class_type = class_type;
   info->arg_id = arg_id;
   info->seq_id = ++((GtkObjectClass*) gtk_type_class (class_type))->n_args;
-  printf ("arg seq id: %d for %s\n", info->seq_id, info->name);
 
   if (!arg_info_ht)
     arg_info_ht = g_hash_table_new (g_str_hash, g_str_equal);
