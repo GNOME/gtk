@@ -1,3 +1,7 @@
+2002-03-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk.types: Add interfaces to get docs on their signals.
+
 Sat Mar  9 13:00:38 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/tmpl/gtktreemodel.sgml: Lots of docs.
