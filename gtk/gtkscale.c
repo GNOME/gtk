@@ -32,6 +32,13 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 
+
+#define	MAX_DIGITS	(64)	/* don't change this,
+				 * a) you don't need to and
+				 * b) you might cause buffer owerflows in
+				 *    unrelated code portions otherwise
+				 */
+
 enum {
   PROP_0,
   PROP_DIGITS,
@@ -147,9 +154,9 @@ gtk_scale_class_init (GtkScaleClass *class)
                                    g_param_spec_int ("digits",
 						     _("Digits"),
 						     _("The number of decimal places that are displayed in the value"),
-						     0,
-						     G_MAXINT,
-						     0,
+						     -1,
+						     MAX_DIGITS,
+						     1,
 						     G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
@@ -346,7 +353,7 @@ gtk_scale_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DIGITS:
-      g_value_set_int (value, scale->digits);
+      g_value_set_int (value, scale->draw_digits);
       break;
     case PROP_DRAW_VALUE:
       g_value_set_boolean (value, scale->draw_value);
@@ -374,11 +381,10 @@ gtk_scale_init (GtkScale *scale)
   range->has_stepper_b = FALSE;
   range->has_stepper_c = FALSE;
   range->has_stepper_d = FALSE;
-  
+
+  scale->draw_digits = 1;
   scale->draw_value = TRUE;
   scale->value_pos = GTK_POS_TOP;
-  scale->digits = 1;
-  range->round_digits = scale->digits;
 }
 
 void
@@ -391,12 +397,11 @@ gtk_scale_set_digits (GtkScale *scale,
 
   range = GTK_RANGE (scale);
   
-  digits = CLAMP (digits, -1, 16);
+  digits = CLAMP (digits, -1, MAX_DIGITS);
 
-  if (scale->digits != digits)
+  if (scale->draw_digits != digits)
     {
-      scale->digits = digits;
-      range->round_digits = digits;
+      scale->draw_digits = digits;
       
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
@@ -409,7 +414,7 @@ gtk_scale_get_digits (GtkScale *scale)
 {
   g_return_val_if_fail (GTK_IS_SCALE (scale), -1);
 
-  return scale->digits;
+  return scale->draw_digits;
 }
 
 void
@@ -602,6 +607,6 @@ _gtk_scale_format_value (GtkScale *scale,
   if (fmt)
     return fmt;
   else
-    return g_strdup_printf ("%0.*f", scale->digits,
+    return g_strdup_printf ("%0.*f", scale->draw_digits,
                             value);
 }

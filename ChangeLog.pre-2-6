@@ -1,3 +1,10 @@
+Tue Jan 29 11:51:14 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscale.[hc]: fix default value for ::digits property,
+	leave as 1 as per havoc's request.
+	don't apply the draw_digits value to range->round_digits,
+	so we don't perform gross quantization by default.
+
 2002-01-25  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbtree.c (_gtk_text_btree_delete): fix assertion
