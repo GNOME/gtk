@@ -318,7 +318,7 @@ xim_info_display_closed (GdkDisplay *display,
   for (tmp_list = ics; tmp_list; tmp_list = tmp_list->next)
     set_ic_client_window (tmp_list->data, NULL, TRUE);
 
-  g_slist_free (tmp_list);
+  g_slist_free (ics);
   
   g_signal_handler_disconnect (info->settings, info->status_set);
   g_signal_handler_disconnect (info->settings, info->preedit_set);
