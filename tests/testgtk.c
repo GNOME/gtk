@@ -1559,6 +1559,108 @@ create_list ()
 }
 
 void
+create_clist ()
+{
+  gint i;
+  static GtkWidget *window = NULL;
+
+  static char *titles[] =
+  {
+    "Title 0",
+    "Title 1",
+    "Title 2",
+    "Title 3",
+    "Title 4",
+    "Title 5",
+    "Title 6"
+  };
+  static int columns = sizeof (titles) / sizeof (titles[0]);
+
+  GtkWidget *box1;
+  GtkWidget *box2;
+  GtkWidget *clist;
+  GtkWidget *button;
+  GtkWidget *separator;
+
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(destroy_window),
+			  &window);
+      gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			  GTK_SIGNAL_FUNC(destroy_window),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "clist");
+      gtk_container_border_width (GTK_CONTAINER (window), 0);
+
+
+      box1 = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_widget_show (box1);
+
+
+      box2 = gtk_vbox_new (FALSE, 10);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+      gtk_widget_show (box2);
+
+
+      clist = gtk_clist_new (columns, titles);
+
+      gtk_clist_set_row_height (GTK_CLIST (clist), 20);
+      
+      for (i = 0; i < columns; i++)
+	gtk_clist_set_column_width (GTK_CLIST (clist), i, 50);
+
+      gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_BROWSE);
+
+      gtk_clist_set_policy (GTK_CLIST (clist), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+      gtk_clist_set_column_justification (GTK_CLIST (clist), 1, GTK_JUSTIFY_RIGHT);
+      gtk_clist_set_column_justification (GTK_CLIST (clist), 2, GTK_JUSTIFY_RIGHT);
+
+      for (i = 0; i < 100; i++)
+	gtk_clist_append (GTK_CLIST (clist), titles);
+
+
+      gtk_container_border_width (GTK_CONTAINER (clist), 5);
+      gtk_box_pack_start (GTK_BOX (box2), clist, TRUE, TRUE, 0);
+      gtk_widget_show (clist);
+
+
+      separator = gtk_hseparator_new ();
+      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+      gtk_widget_show (separator);
+
+      box2 = gtk_vbox_new (FALSE, 10);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+      gtk_widget_show (box2);
+
+      button = gtk_button_new_with_label ("close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
+
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_grab_default (button);
+
+      gtk_widget_show (button);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+
+}
+
+void
 color_selection_ok (GtkWidget               *w,
                     GtkColorSelectionDialog *cs)
 {
@@ -3529,6 +3631,7 @@ create_main_window ()
       { "drawing areas", NULL },
       { "entry", create_entry },
       { "list", create_list },
+      { "clist", create_clist},
       { "color selection", create_color_selection },
       { "file selection", create_file_selection },
       { "dialog", create_dialog },

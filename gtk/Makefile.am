@@ -16,6 +16,7 @@ libgtk_la_SOURCES = \
 	gtkbutton.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
+	gtkclist.c		\
 	gtkcolorsel.c		\
 	gtkcontainer.c		\
 	gtkcurve.c		\
@@ -103,6 +104,7 @@ gtkinclude_HEADERS = \
 	gtkbutton.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
+	gtkclist.h		\
 	gtkcolorsel.h		\
 	gtkcontainer.h		\
 	gtkcurve.h		\

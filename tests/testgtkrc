@@ -28,8 +28,8 @@ style "scale"
 
 style "button"
 {
-  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
-  bg[PRELIGHT] = { 0, 0, 0.75 }
+#  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+#  bg[PRELIGHT] = { 0, 0, 0.75 }
 }
 
 style "main_button" = "button"
@@ -61,7 +61,7 @@ style "curve"
   fg[NORMAL] = { 58000, 0, 0 }			# red
 }
 
-widget_class "*" style "default"
+#widget_class "*" style "default"
 widget_class "GtkWindow" style "window"
 widget_class "GtkDialog" style "window"
 widget_class "GtkFileSelection" style "window"
