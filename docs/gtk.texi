@@ -763,6 +763,7 @@ The available widgets (in alphabetical order):
 * GtkCombo::			The combo box widget.
 * GtkContainer::                The container widget.
 * GtkCurve::			The curve widget.
+* GtkGammaCurve::		The gamma curve widget.
 * GtkDialog::                   The dialog widget.
 * GtkDrawingArea::              The drawing area widget.
 * GtkEntry::                    The entry widget.
@@ -1773,7 +1774,7 @@ a @code{GtkWidget} object. @code{NULL} is returned on failure.
 @gtkstdmacros{Combo, COMBO}
 
 @page
-@node GtkContainer, GtkGammaCurve, GtkCurve, GtkCombo, Widgets
+@node GtkContainer, GtkCurve, GtkCombo, Widgets
 @comment node-name, next, previous, up
 @section The container widget
 
@@ -1853,7 +1854,7 @@ Remove @var{widget} from @var{container}.
 @gtkstdmacros{Container, CONTAINER}
 
 @page
-@node GtkCurve, GtkGammaCurve, GtkDialog, GtkContainer, Widgets
+@node GtkCurve, GtkGammaCurve, GtkContainer, Widgets
 @comment node-name, next, previous, up
 @section The curve widget
 
@@ -1905,7 +1906,7 @@ Create a new @code{GtkCurve} returning the new widget as a pointer to a
 @gtkstdmacros{Curve, CURVE}
 
 @page
-@node GtkGammaCurve, GtkCurve, GtkDialog, GtkContainer, Widgets
+@node GtkGammaCurve, GtkDialog, GtkCurve, Widgets
 @comment node-name, next, previous, up
 @section The gamma curve widget
 
@@ -1937,7 +1938,7 @@ Create a new @code{GtkGamma} returning the new widget as a pointer to a
 @gtkstdmacros{GammaCurve, GAMMACURVE}
 
 @page
-@node GtkDialog, GtkDrawingArea, GtkGammaCurve, GtkCurve, Widgets
+@node GtkDialog, GtkDrawingArea, GtkGammaCurve, Widgets
 @comment node-name, next, previous, up
 @section The dialog widget
 
@@ -2011,7 +2012,10 @@ Set the size of the @var{darea} widget, created previously, to @var{width} and @
 
 @subsection Description
 
-Enter text into this widget.  Derived from @pxref{GtkEditable}.  Can be
+@comment Enter text into this widget.  Derived from @pxref{GtkEditable}.  Can be
+@comment set so it isn't editable.
+
+Enter text into this widget.  Derived from GtkEditable.  Can be
 set so it isn't editable.
 
 @subsection Options
