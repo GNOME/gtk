@@ -103,10 +103,10 @@ gtk_tree_selection_finalize (GObject *object)
 
 /**
  * _gtk_tree_selection_new:
- * 
+ *
  * Creates a new #GtkTreeSelection object.  This function should not be invoked,
  * as each #GtkTreeView will create it's own #GtkTreeSelection.
- * 
+ *
  * Return value: A newly created #GtkTreeSelection object.
  **/
 GtkTreeSelection*
@@ -122,10 +122,10 @@ _gtk_tree_selection_new (void)
 /**
  * _gtk_tree_selection_new_with_tree_view:
  * @tree_view: The #GtkTreeView.
- * 
+ *
  * Creates a new #GtkTreeSelection object.  This function should not be invoked,
  * as each #GtkTreeView will create it's own #GtkTreeSelection.
- * 
+ *
  * Return value: A newly created #GtkTreeSelection object.
  **/
 GtkTreeSelection*
@@ -146,7 +146,7 @@ _gtk_tree_selection_new_with_tree_view (GtkTreeView *tree_view)
  * _gtk_tree_selection_set_tree_view:
  * @selection: A #GtkTreeSelection.
  * @tree_view: The #GtkTreeView.
- * 
+ *
  * Sets the #GtkTreeView of @selection.  This function should not be invoked, as
  * it is used internally by #GtkTreeView.
  **/
@@ -167,7 +167,7 @@ _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
  * gtk_tree_selection_set_mode:
  * @selection: A #GtkTreeSelection.
  * @type: The selection type.
- * 
+ *
  * Sets the selection type of the @selection.  If the previous type was
  * #GTK_TREE_SELECTION_MULTI and @type is #GTK_TREE_SELECTION_SINGLE, then
  * the anchor is kept selected, if it was previously selected.
@@ -200,7 +200,7 @@ gtk_tree_selection_set_mode (GtkTreeSelection     *selection,
                                         anchor_path,
                                         &tree,
                                         &node);
-              
+
               if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
                 selected = TRUE;
 
@@ -225,7 +225,7 @@ gtk_tree_selection_set_mode (GtkTreeSelection     *selection,
  * @func: The selection function.
  * @data: The selection function's data.
  * @destroy: The destroy function for user data.  May be NULL.
- * 
+ *
  * Sets the selection function.  If set, this function is called before any node
  * is selected or unselected, giving some control over which nodes are selected.
  **/
@@ -247,9 +247,9 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 /**
  * gtk_tree_selection_get_user_data:
  * @selection: A #GtkTreeSelection.
- * 
+ *
  * Returns the user data for the selection function.
- * 
+ *
  * Return value: The user data.
  **/
 gpointer
@@ -274,13 +274,13 @@ gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
  * @selection: A #GtkTreeSelection.
  * @model: A pointer set to the #GtkTreeModel, or NULL.
  * @iter: The #GtkTreeIter, or NULL.
- * 
+ *
  * Sets @iter to the currently selected node if @selection is set to
  * #GTK_TREE_SELECTION_SINGLE.  @iter may be NULL if you just want to test if
  * @selection has any selected nodes.  @model is filled with the current model
  * as a convenience.  This function will not work if you use @selection is
  * #GTK_TREE_SELECTION_MULTI.
- * 
+ *
  * Return value: TRUE, if there is a selected node.
  **/
 gboolean
@@ -292,7 +292,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   GtkRBNode *node;
   GtkTreePath *anchor_path;
   gboolean retval;
-  
+
   g_return_val_if_fail (selection != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
   g_return_val_if_fail (selection->type == GTK_TREE_SELECTION_SINGLE, FALSE);
@@ -301,7 +301,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
 
   if (model)
     *model = selection->tree_view->priv->model;
-  
+
   if (selection->tree_view->priv->anchor == NULL)
     return FALSE;
 
@@ -309,7 +309,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
 
   if (anchor_path == NULL)
     return FALSE;
-  
+
   if (iter == NULL)
     {
       gtk_tree_path_free (anchor_path);
@@ -317,7 +317,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
     }
 
   retval = FALSE;
-  
+
   if (!_gtk_tree_view_find_node (selection->tree_view,
                                  anchor_path,
                                  &tree,
@@ -336,7 +336,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
     }
 
   gtk_tree_path_free (anchor_path);
-  
+
   return retval;
 }
 
@@ -345,7 +345,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * @selection: A #GtkTreeSelection.
  * @func: The function to call for each selected node.
  * @data: user data to pass to the function.
- * 
+ *
  * Calls a function for each selected node.
  **/
 void
@@ -442,7 +442,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
  * gtk_tree_selection_select_path:
  * @selection: A #GtkTreeSelection.
  * @path: The #GtkTreePath to be selected.
- * 
+ *
  * Select the row at @path.
  **/
 void
@@ -480,7 +480,7 @@ gtk_tree_selection_select_path (GtkTreeSelection *selection,
  * gtk_tree_selection_unselect_path:
  * @selection: A #GtkTreeSelection.
  * @path: The #GtkTreePath to be unselected.
- * 
+ *
  * Unselects the row at @path.
  **/
 void
@@ -514,7 +514,7 @@ gtk_tree_selection_unselect_path (GtkTreeSelection *selection,
  * gtk_tree_selection_select_iter:
  * @selection: A #GtkTreeSelection.
  * @iter: The #GtkTreeIter to be selected.
- * 
+ *
  * Selects the specified iterator.
  **/
 void
@@ -544,7 +544,7 @@ gtk_tree_selection_select_iter (GtkTreeSelection *selection,
  * gtk_tree_selection_unselect_iter:
  * @selection: A #GtkTreeSelection.
  * @iter: The #GtkTreeIter to be unselected.
- * 
+ *
  * Unselects the specified iterator.
  **/
 void
@@ -612,7 +612,7 @@ gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
       gint dirty;
 
       /* Just select the last row */
-      
+
       dirty = gtk_tree_selection_real_unselect_all (selection);
 
       tree = selection->tree_view->priv->tree;
@@ -638,7 +638,7 @@ gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
   else
     {
       /* Mark all nodes selected */
-      
+
       tuple = g_new (struct _TempTuple, 1);
       tuple->selection = selection;
       tuple->dirty = FALSE;
@@ -661,7 +661,7 @@ gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_select_all:
  * @selection: A #GtkTreeSelection.
- * 
+ *
  * Selects all the nodes.  If the type of @selection is
  * #GTK_TREE_SELECTION_SINGLE, then the last row is selected.
  **/
@@ -706,7 +706,7 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
       GtkRBTree *tree = NULL;
       GtkRBNode *node = NULL;
       GtkTreePath *anchor_path;
-      
+
       if (selection->tree_view->priv->anchor == NULL)
 	return FALSE;
 
@@ -714,7 +714,7 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 
       if (anchor_path == NULL)
         return FALSE;
-      
+
       _gtk_tree_view_find_node (selection->tree_view,
                                 anchor_path,
 				&tree,
@@ -724,7 +724,7 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 
       if (tree == NULL)
         return FALSE;
-      
+
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
 	{
 	  if (gtk_tree_selection_real_select_node (selection, tree, node, FALSE))
@@ -737,17 +737,17 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
       return FALSE;
     }
   else
-    {  
+    {
       tuple = g_new (struct _TempTuple, 1);
       tuple->selection = selection;
       tuple->dirty = FALSE;
-      
+
       _gtk_rbtree_traverse (selection->tree_view->priv->tree,
                             selection->tree_view->priv->tree->root,
                             G_PRE_ORDER,
                             unselect_all_helper,
                             tuple);
-      
+
       if (tuple->dirty)
         {
           g_free (tuple);
@@ -761,7 +761,7 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_unselect_all:
  * @selection: A #GtkTreeSelection.
- * 
+ *
  * Unselects all the nodes.
  **/
 void
@@ -873,7 +873,7 @@ gtk_tree_selection_real_select_range (GtkTreeSelection *selection,
  * @selection: A #GtkTreeSelection.
  * @start_path: The initial node of the range.
  * @end_path: The final node of the range.
- * 
+ *
  * Selects a range of nodes, determined by @start_path and @end_path inclusive.
  **/
 void
@@ -931,7 +931,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 		  if (gtk_tree_selection_real_select_node (selection, tree, node, TRUE))
 		    {
 		      selection->tree_view->priv->anchor =
-			gtk_tree_row_reference_new (selection->tree_view->priv->model, path);
+			gtk_tree_row_reference_new_proxy (G_OBJECT (selection->tree_view), selection->tree_view->priv->model, path);
 		    }
 		}
 	    }
@@ -941,7 +941,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 		{
 		  dirty = TRUE;
 		  selection->tree_view->priv->anchor =
-		    gtk_tree_row_reference_new (selection->tree_view->priv->model, path);
+		    gtk_tree_row_reference_new_proxy (G_OBJECT (selection->tree_view), selection->tree_view->priv->model, path);
 		}
 	    }
 	}
@@ -952,10 +952,9 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	{
 	  if (selection->tree_view->priv->anchor)
 	    gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
-      
+
 	  selection->tree_view->priv->anchor =
-	    gtk_tree_row_reference_new (selection->tree_view->priv->model,
-					path);
+	    gtk_tree_row_reference_new_proxy (G_OBJECT (selection->tree_view), selection->tree_view->priv->model, path);
 	  dirty = gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
 	}
       else if ((state & (GDK_CONTROL_MASK|GDK_SHIFT_MASK)) == (GDK_SHIFT_MASK|GDK_CONTROL_MASK))
@@ -969,10 +968,9 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	  flags = node->flags;
 	  if (selection->tree_view->priv->anchor)
 	    gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
-      
+
 	  selection->tree_view->priv->anchor =
-	    gtk_tree_row_reference_new (selection->tree_view->priv->model,
-					path);      
+	    gtk_tree_row_reference_new_proxy (G_OBJECT (selection->tree_view), selection->tree_view->priv->model, path);
 
 	  if ((flags & GTK_RBNODE_IS_SELECTED) == GTK_RBNODE_IS_SELECTED)
 	    dirty |= gtk_tree_selection_real_select_node (selection, tree, node, FALSE);
@@ -992,18 +990,17 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 
 	  if (selection->tree_view->priv->anchor)
 	    gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
-      
+
 	  selection->tree_view->priv->anchor =
-	    gtk_tree_row_reference_new (selection->tree_view->priv->model,
-					path);
-      
+	    gtk_tree_row_reference_new_proxy (G_OBJECT (selection->tree_view), selection->tree_view->priv->model, path);
+
 	  dirty |= gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
 	}
     }
 
   if (anchor_path)
     gtk_tree_path_free (anchor_path);
-  
+
   if (dirty)
     gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
 }
@@ -1038,7 +1035,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 	selected = TRUE;
       gtk_tree_path_free (path);
     }
-  
+
   if (selected == TRUE)
     {
       node->flags ^= GTK_RBNODE_IS_SELECTED;

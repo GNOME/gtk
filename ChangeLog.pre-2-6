@@ -1,3 +1,8 @@
+Wed Feb 28 16:36:46 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_*): Sanitize
+	GtkRowReference.
+
 2001-02-28  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwidget.h (struct _GtkWidgetClass): Remove draw_focus and

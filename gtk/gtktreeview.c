@@ -2184,8 +2184,7 @@ gtk_tree_view_focus (GtkContainer     *container,
                 gtk_tree_row_reference_free (tree_view->priv->cursor);
               
               tree_view->priv->cursor =
-                gtk_tree_row_reference_new (tree_view->priv->model,
-                                            tmp_path);
+                gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, tmp_path);
               cursor_path = tmp_path;
             }
           
@@ -2231,8 +2230,7 @@ gtk_tree_view_focus (GtkContainer     *container,
             gtk_tree_row_reference_free (tree_view->priv->cursor);
           
           tree_view->priv->cursor =
-            gtk_tree_row_reference_new (tree_view->priv->model,
-                                        tmp_path);
+            gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, tmp_path);
           cursor_path = tmp_path;
         }        
 
@@ -2262,8 +2260,7 @@ gtk_tree_view_focus (GtkContainer     *container,
         gtk_tree_row_reference_free (tree_view->priv->cursor);
       
       tree_view->priv->cursor =
-        gtk_tree_row_reference_new (tree_view->priv->model,
-                                    tmp_path);
+        gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, tmp_path);
       cursor_path = tmp_path;
       
       gtk_tree_selection_select_path (tree_view->priv->selection,
@@ -2364,8 +2361,7 @@ gtk_tree_view_focus (GtkContainer     *container,
                                                     cursor_path,
                                                     state);
 
-          tree_view->priv->cursor = gtk_tree_row_reference_new (tree_view->priv->model,
-                                                                cursor_path);
+          tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, cursor_path);
 
 
           /* draw the newly-selected row */
@@ -2547,6 +2543,9 @@ gtk_tree_view_inserted (GtkTreeModel *model,
     }
   else if (iter == NULL)
     gtk_tree_model_get_iter (model, iter, path);
+  
+  /* Update all row-references */
+  gtk_tree_row_reference_inserted (G_OBJECT (data), path);
 
   depth = gtk_tree_path_get_depth (path);
   indices = gtk_tree_path_get_indices (path);
@@ -2704,7 +2703,9 @@ gtk_tree_view_deleted (GtkTreeModel *model,
 
   if (tree == NULL)
     return;
-  
+
+  gtk_tree_row_reference_deleted (G_OBJECT (data), path);
+
   /* next, update the selection */
   if (tree_view->priv->anchor)
     {
@@ -5383,8 +5384,7 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
   if (path)
     {
       tree_view->priv->drag_dest_row =
-        gtk_tree_row_reference_new (tree_view->priv->model,
-                                    path);
+        gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
       gtk_tree_view_queue_draw_path (tree_view, path, NULL);
     }
   else

@@ -210,11 +210,9 @@ GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree
 void              _gtk_tree_selection_set_tree_view      (GtkTreeSelection *selection,
                                                           GtkTreeView      *tree_view);
 
-GtkTreeRowReference *_gtk_tree_row_reference_new_from_view (GtkTreePath *path);
-void                 _gtk_tree_row_reference_inserted      (GtkTreeRowReference *reference,
-							    GtkTreePath         *path);
-gboolean             _gtk_tree_row_reference_deleted       (GtkTreeRowReference *reference,
-							    GtkTreePath         *path);
+
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
