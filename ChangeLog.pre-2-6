@@ -6,7 +6,7 @@
 Mon Feb 11 22:03:15 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkpaned.[ch]: Opaque resizing + prelighting for paned widget.
-	* gtk/gtkvpaned.c, gtk/gtkvpaned.h: move resizing logic to gtkpaned.c
+	* gtk/gtkvpaned.c, gtk/gtkhpaned.c: move reszing logic to gtkpaned.c
 
 Mon Feb 11 21:42:17 2002  Kristian Rietveld  <kris@gtk.org>
 
