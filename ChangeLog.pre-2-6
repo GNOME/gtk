@@ -1,3 +1,74 @@
+2000-09-26  Havoc Pennington  <hp@redhat.com>
+
+        * gtk/gtkiconfactory.c (gtk_icon_set_clear): remove
+	Fix some warnings	
+
+2000-09-26  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/Makefile.am (gtk_private_h_sources): Move more text widget
+	headers	into the private header list
+
+	* Makefile.am (pkgconfig_DATA): install pkg-config files
+
+	* configure.in: add pkg-config files
+
+	* gdk-2.0.pc.in, gdk-pixbuf.pc.in, gtk+-2.0.pc.in: pkg-config files
+
+	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Invalidate
+	outstanding icon caches on theme change.
+
+	* gtk/gtkiconfactory.h, gtk/gtkiconfactory.c: New icon system. Three 
+	important types:
+
+	(GtkIconSource): Specification for creating a pixbuf 
+	appropriate for a direction/state/size triplet from 
+	a source pixbuf or filename
+
+	(GtkIconSet): List of GtkIconSource objects that are used to
+	create the "same" icon (e.g. an OK button icon), and cache for
+	rendered icons
+
+	(GtkIconFactory): Hash from stock ID to GtkIconSet; used to look
+	up the icon set for a given stock ID.  GTK maintains a stack of
+	GtkIconFactory to search, and applications or libraries can add
+	additional icon factories on top of the stack
+	
+        * gtk/gtkrc.h, gtk/gtkrc.c: When loading an RcStyle, parse 
+	the set of GtkIconSource specified for a given stock ID into 
+	a GtkIconSet, and put the GtkIconSet into a GtkIconFactory for the 
+	RcStyle, under the specified stock ID.
+
+	* gtk/gtkstyle.h, gtk/gtkstyle.c: Add a virtual function
+	render_icon used to derive a GdkPixbuf from a GtkIconSource.
+	This allows people to theme how prelight, insensitive, etc. are
+	done.
+
+	(gtk_style_lookup_icon_set): Look up a stock ID in the list of
+	icon factories for a style, and return the resulting 
+	icon set if any.
+
+	(gtk_style_render_icon): Render an icon using the render_icon 
+	method in the GtkStyleClass.
+
+	* gtk/gtkwidget.h, gtk/gtkwidget.c (gtk_widget_render_icon): 
+	Use the style for a given widget to look up a stock ID, get the
+	icon set, and render an icon using the render_icon method 
+	of the style
+
+	* gtk/gtkstock.h, gtk/gtkstock.c: Header with the GtkStockItem type
+	(contains information about a stock item), the built-in stock item
+	IDs, and functions to add/lookup stock items.
+
+	* gtk/stock-icons/*: Stock icons that come with GTK
+
+	* gtk/gtkbutton.h, gtk/gtkbutton.c (gtk_button_new_stock): Returns
+	a button based on a GtkStockItem
+	(gtk_button_new_accel): Takes a uline string and accel group, and
+	installs the accelerator.
+
+	* gtk/gtkimage.h, gtk/gtkimage.c: Make this into a generic
+	image-display widget.
+	
 2000-09-25  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c: Draw the focus, and leave space to do so.

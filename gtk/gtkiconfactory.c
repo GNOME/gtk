@@ -210,7 +210,7 @@ sized_icon_set_from_inline (const guchar *inline_data,
   GtkIconSource source = { NULL, NULL, 0, 0, NULL,
                            TRUE, TRUE, FALSE };
 
-  source.size = size;
+  source.size = (gchar*) size;
 
   set = gtk_icon_set_new ();
 
@@ -417,8 +417,6 @@ init_icon_sizes (void)
 {
   if (icon_sizes == NULL)
     {
-      IconSize *is;
-      
       icon_sizes = g_hash_table_new (g_str_hash, g_str_equal);
 
       icon_size_add (GTK_ICON_SIZE_MENU, 16, 16);
@@ -459,8 +457,6 @@ gtk_icon_size_register (const gchar *alias,
                         gint         width,
                         gint         height)
 {
-  gpointer old_key, old_value;
-  
   g_return_if_fail (alias != NULL);
   g_return_if_fail (width > 0);
   g_return_if_fail (height > 0);
@@ -489,8 +485,6 @@ gtk_icon_size_register_alias (const gchar *alias,
  * GdkPixbuf objects and forget all GtkIconSources. Used to
  * recycle an icon set.
  */
-static void gtk_icon_set_clear      (GtkIconSet       *icon_set);
-
 static GdkPixbuf *find_in_cache     (GtkIconSet       *icon_set,
                                      GtkStyle         *style,
                                      GtkTextDirection  direction,
@@ -831,24 +825,6 @@ gtk_icon_source_free (GtkIconSource *source)
     g_object_unref (G_OBJECT (source->pixbuf));
 
   g_free (source);
-}
-
-void
-gtk_icon_set_clear (GtkIconSet *icon_set)
-{
-  GSList *tmp_list;
-
-  g_return_if_fail (icon_set != NULL);
-  
-  tmp_list = icon_set->sources;
-  while (tmp_list != NULL)
-    {
-      gtk_icon_source_free (tmp_list->data);
-
-      tmp_list = g_slist_next (tmp_list);
-    }
-
-  clear_cache (icon_set, TRUE);
 }
 
 /* Note that the logical maximum is 20 per GtkTextDirection, so we could
