@@ -1,3 +1,9 @@
+Tue Feb 17 23:11:21 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenu.c (gtk_menu_do_remove): Make sure that we keep
+	priv->columns >= 1 even for empty menus, since we divide by it
+	somewhere else.  (#133428, Vincent Noel)
+
 Tue Feb 17 23:02:58 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Fix for #119722, reported by Olexiy Avramchenko, patch by Owen

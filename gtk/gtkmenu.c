@@ -948,9 +948,11 @@ gtk_menu_do_remove (GtkMenuShell *menu_shell,
   delta = ai->bottom_attach - ai->top_attach;
   single_column = priv->columns == 1;
 
-  /* recalculate these, assuming the child has already been removed */
+  /* Recalculate these, assuming the child has already been removed. 
+   * Note that an empty menu is assumed to have one column.
+   */
   priv->rows = 0;
-  priv->columns = 0;
+  priv->columns = 1;
 
   for (children = menu_shell->children; children; children = children->next)
     {
@@ -1015,7 +1017,7 @@ gtk_menu_do_insert (GtkMenuShell *menu_shell,
     {
       /* attach after the last row */
       gtk_menu_attach (GTK_MENU (menu_shell), child,
-                       0, priv->columns ? priv->columns : 1,
+                       0, priv->columns,
                        priv->rows, priv->rows + 1);
 
       return;
@@ -1039,7 +1041,7 @@ gtk_menu_do_insert (GtkMenuShell *menu_shell,
 
   /* attach the new item */
   gtk_menu_attach (GTK_MENU (menu_shell), child,
-                   0, priv->columns ? priv->columns : 1,
+                   0, priv->columns,
                    position, position + 1);
 }
 
