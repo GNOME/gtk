@@ -49,7 +49,77 @@ IGNORE_HFILES=			\
 	xembed.h
 
 # Images to copy into HTML directory
-HTML_IMAGES =
+HTML_IMAGES =							\
+	../../../gtk/stock-items/stock_add.png			\
+	../../../gtk/stock-items/stock_button_apply.png		\
+	../../../gtk/stock-items/stock_text_bold.png		\
+	../../../gtk/stock-items/stock_button_cancel.png	\
+	../../../gtk/stock-items/stock_cdrom.png		\
+	../../../gtk/stock-items/stock_clear.png		\
+	../../../gtk/stock-items/stock_close.png		\
+	../../../gtk/stock-items/stock_convert.png		\
+	../../../gtk/stock-items/stock_menu_copy.png		\
+	../../../gtk/stock-items/stock_menu_cut.png		\
+	../../../gtk/stock-items/stock_menu_trash.png		\
+	../../../gtk/stock-items/dialog_error.png		\
+	../../../gtk/stock-items/dialog_info.png		\
+	../../../gtk/stock-items/dialog_question.png		\
+	../../../gtk/stock-items/dialog_warning.png		\
+	../../../gtk/stock-items/stock_dnd.png			\
+	../../../gtk/stock-items/stock_dnd_multiple.png		\
+	../../../gtk/stock-items/stock_exec.png			\
+	../../../gtk/stock-items/stock_search.png		\
+	../../../gtk/stock-items/stock_search_replace.png	\
+	../../../gtk/stock-items/stock_save.png			\
+	../../../gtk/stock-items/stock_bottom.png		\
+	../../../gtk/stock-items/stock_first.png		\
+	../../../gtk/stock-items/stock_last.png			\
+	../../../gtk/stock-items/stock_top.png			\
+	../../../gtk/stock-items/stock_left_arrow.png		\
+	../../../gtk/stock-items/stock_down_arrow.png		\
+	../../../gtk/stock-items/stock_right_arrow.png		\
+	../../../gtk/stock-items/stock_up_arrow.png		\
+	../../../gtk/stock-items/stock_help.png			\
+	../../../gtk/stock-items/stock_home.png			\
+	../../../gtk/stock-items/stock_index.png		\
+	../../../gtk/stock-items/stock_text_italic.png		\
+	../../../gtk/stock-items/stock_jump_to.png		\
+	../../../gtk/stock-items/stock_align_center.png		\
+	../../../gtk/stock-items/stock_align_justify.png	\
+	../../../gtk/stock-items/stock_align_left.png		\
+	../../../gtk/stock-items/stock_align_right.png		\
+	../../../gtk/stock-items/dialog_error.png		\
+	../../../gtk/stock-items/stock_new.png			\
+	../../../gtk/stock-items/stock_button_no.png		\
+	../../../gtk/stock-items/stock_button_ok.png		\
+	../../../gtk/stock-items/stock_open.png			\
+	../../../gtk/stock-items/stock_paste.png		\
+	../../../gtk/stock-items/stock_preferences.png		\
+	../../../gtk/stock-items/stock_print.png		\
+	../../../gtk/stock-items/stock_print_preview.png	\
+	../../../gtk/stock-items/stock_properties.png		\
+	../../../gtk/stock-items/stock_exit.png			\
+	../../../gtk/stock-items/stock_redo.png			\
+	../../../gtk/stock-items/stock_refresh.png		\
+	../../../gtk/stock-items/stock_remove.png		\
+	../../../gtk/stock-items/stock_revert.png		\
+	../../../gtk/stock-items/stock_save.png			\
+	../../../gtk/stock-items/stock_save_as.png		\
+	../../../gtk/stock-items/stock_colorselector.png	\
+	../../../gtk/stock-items/stock_font.png			\
+	../../../gtk/stock-items/stock_sort_ascending.png	\
+	../../../gtk/stock-items/stock_sort_descending.png	\
+	../../../gtk/stock-items/stock_spellcheck.png		\
+	../../../gtk/stock-items/stock_stop.png			\
+	../../../gtk/stock-items/stock_text_strikeout.png	\
+	../../../gtk/stock-items/stock_undelete.png		\
+	../../../gtk/stock-items/stock_text_underline.png	\
+	../../../gtk/stock-items/stock_undo.png			\
+	../../../gtk/stock-items/stock_button_yes.png		\
+	../../../gtk/stock-items/stock_zoom_1.png		\
+	../../../gtk/stock-items/stock_zoom_fit.png		\
+	../../../gtk/stock-items/stock_zoom_in.png		\
+	../../../gtk/stock-items/stock_zoom_out.png
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files = 		\
@@ -165,7 +235,10 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo '*** Building HTML ***'
 	test -d $(srcdir)/html || mkdir $(srcdir)/html
 	cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
-	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
+	images="$(HTML_IMAGES)" ; 		\
+	for i in $$images ; do			\
+	  cp $$i html ;  			\
+	done
 	@echo '-- Fixing Crossreferences' 
 	cd $(srcdir) && gtkdoc-fixxref --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	touch html-build.stamp
@@ -213,7 +286,7 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	cp $(srcdir)/html/index.sgml $(distdir)/html
 	-cp $(srcdir)/html/*.html $(srcdir)/html/*.css $(distdir)/html
 
-	images=$(HTML_IMAGES) ;    	      \
+	images="$(HTML_IMAGES)" ;    	      \
 	for i in $$images ; do		      \
 	  cp $(srcdir)/$$i $(distdir)/html ;  \
 	done
