@@ -2,11 +2,33 @@
 Threads
 
 <!-- ##### SECTION Short_Description ##### -->
-
+functions for using GDK in multi-threaded programs
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+For thread safety, GDK relies on the thread primitives in GLib, 
+and on the thread-safe GLib main loop.
+</para>
+<para>
+You must call g_thread_init() before executing any other GTK+ or GDK 
+functions in a threaded GTK+ program.
+</para>
+<para>
+Idles, timeouts, and input functions are executed outside
+of the main GTK+ lock. So, if you need to call GTK+
+inside of such a callback, you must surround the callback
+with a gdk_threads_enter()/gdk_threads_leave() pair.
+(However, signals are still executed within the main
+GTK+ lock.)
+</para>
+<para>
+In particular, this means, if you are writing widgets that might 
+be used in threaded programs, you <emphasis>must</emphasis> surround 
+timeouts and idle functions in this matter.
+</para>
+<para>
+As always, you must also surround any calls to GTK+ not made within 
+a signal handler with a gdk_threads_enter()/gdk_threads_leave() pair.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,35 +38,40 @@ Threads
 
 <!-- ##### MACRO GDK_THREADS_ENTER ##### -->
 <para>
-
+This macro marks the begin of a critical section
+in which GDK and GTK+ functions can be called.
+Only one thread at a time can be in such a critial 
+section.
 </para>
 
 
 
 <!-- ##### MACRO GDK_THREADS_LEAVE ##### -->
 <para>
-
+This macro marks the end of a critical section 
+begun with #GDK_THREADS_ENTER.
 </para>
 
 
 
 <!-- ##### FUNCTION gdk_threads_enter ##### -->
 <para>
-
+Enters a critical region like #GDK_THREADS_ENTER.
 </para>
 
 
 
 <!-- ##### FUNCTION gdk_threads_leave ##### -->
 <para>
-
+Leaves a critical region begun with gdk_threads_enter(). 
 </para>
 
 
 
 <!-- ##### VARIABLE gdk_threads_mutex ##### -->
 <para>
-
+The #GMutex used to implement the critical region for
+gdk_threads_enter()/gdk_threads_leave().
 </para>
 
 

@@ -1,3 +1,8 @@
+2001-10-17  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkdnd.c, gtk/gtkclipboard.c, gdk/x11/gdkmain-x11.c:
+	Documentation updates.
+
 Wed Oct 17 15:17:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_real_insert_text): Fix mistake

@@ -382,28 +382,29 @@ Returns the X font belonging to a #GdkFont.
 
 <!-- ##### FUNCTION gdk_x11_gc_get_xdisplay ##### -->
 <para>
-
+Returns the display of a #GdkGC.
 </para>
 
-@gc: 
-@Returns: 
+@gc: a #GdkGC. 
+@Returns: an Xlib <type>Display*</type>.
 
 
 <!-- ##### FUNCTION gdk_x11_gc_get_xgc ##### -->
 <para>
-
+Returns the X GC of a #GdkGC.
 </para>
 
-@gc: 
-@Returns: 
+@gc: a #GdkGC.
+@Returns: an Xlib <type>GC</type>.
 
 
 <!-- ##### FUNCTION gdk_x11_get_default_root_xwindow ##### -->
 <para>
-
+Gets the root window of the default screen 
+(see gdk_x11_get_default_screen()).  
 </para>
 
-@Returns: 
+@Returns: an Xlib <type>Window</type>.
 
 
 <!-- ##### FUNCTION gdk_x11_get_default_screen ##### -->
@@ -416,10 +417,12 @@ Returns the X font belonging to a #GdkFont.
 
 <!-- ##### FUNCTION gdk_x11_get_default_xdisplay ##### -->
 <para>
-
+Gets the default GTK+ display.
 </para>
 
-@Returns: 
+@Returns: the Xlib <type>Display*</type> for the display
+  specified in the <option>--display</option> command line option 
+  or the <envar>DISPLAY</envar> environment variable.
 
 
 <!-- ##### FUNCTION gdk_x11_grab_server ##### -->
@@ -434,11 +437,11 @@ gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.
 
 <!-- ##### FUNCTION gdk_x11_image_get_xdisplay ##### -->
 <para>
-
+Returns the display of a #GdkImage.
 </para>
 
-@image: 
-@Returns: 
+@drawable: a #GdkImage.
+@Returns: an Xlib <type>Display*</type>.
 
 
 <!-- ##### FUNCTION gdk_x11_image_get_ximage ##### -->

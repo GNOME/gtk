@@ -1,3 +1,9 @@
+2001-10-17  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkdnd.sgml, gtk/tmpl/gtkclipboard.sgml,
+	gdk/tmpl/general.sgml, gdk/tmpl/threads.sgml, 
+	gdk/tmpl/x_interaction.sgml: Updates.
+
 2001-10-13  Matthias Clasen   <matthiasc@poet.de>
 
 	* gdk/tmpl/x_interaction.sgml: Update.

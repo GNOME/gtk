@@ -92,7 +92,7 @@ Storing data on Clipboards.
 
 <!-- ##### USER_FUNCTION GtkClipboardReceivedFunc ##### -->
 <para>
-    A function to be called when the results of gtk_clipboard_request_text()
+    A function to be called when the results of gtk_clipboard_request_contents()
     are received, or when the request fails.
 </para>
 
@@ -120,10 +120,10 @@ Storing data on Clipboards.
 A function that will be called to provide the contents of the selection.
 If multiple types of data were advertised, the requested type can
 be determined from the @info parameter or by checking the target field
-of @selection_data. If the data could succesfully be converted into
+of @selection_data. If the data could successfully be converted into
 then it should be stored into the @selection_data object by
 calling gtk_selection_data_set() (or related functions such
-as gtk_seletion_data_get().) If no data is set, the requestor
+as gtk_selection_data_set_text()). If no data is set, the requestor
 will be informed that the attempt to get the data failed.    
 </para>
 

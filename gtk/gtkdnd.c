@@ -1972,8 +1972,8 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
  * @mask: the transparency mask for an image.
  * 
  * Sets the icon that will be used for drags from a particular widget
- * from a pixmap/mask. GTK+ retains a reference count for the
- * arguments, and will release them when they are no longer needed.
+ * from a pixmap/mask. GTK+ retains references for the arguments, and 
+ * will release them when they are no longer needed.
  * Use gtk_drag_source_set_icon_pixbuf() instead.
  **/
 void 
@@ -2012,8 +2012,8 @@ gtk_drag_source_set_icon (GtkWidget     *widget,
  * @pixbuf: the #GdkPixbuf for the drag icon
  * 
  * Sets the icon that will be used for drags from a particular widget
- * from a #GdkPixbuf. GTK+ retains a reference count @pixbuf.
- * and will release it when it is no longer needed.
+ * from a #GdkPixbuf. GTK+ retains a reference for @pixbuf and will 
+ * release it when it is no longer needed.
  **/
 void 
 gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
@@ -2025,8 +2025,7 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
-  g_return_if_fail (site != NULL);
-  
+  g_return_if_fail (site != NULL); 
   gdk_pixbuf_ref (pixbuf);
 
   gtk_drag_source_unset_icon (site);
@@ -2038,11 +2037,11 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
 /**
  * gtk_drag_source_set_icon_stock:
  * @widget: a #GtkWidget
- * @stock: the ID of the stock icon to use..
+ * @stock: the ID of the stock icon to use
  * @size: size at which to render the stock icon
  *
- * Sets the icon that will be used for drags from a particular to
- * a stock icon. 
+ * Sets the icon that will be used for drags from a particular source
+ * to a stock icon. 
  **/
 void 
 gtk_drag_source_set_icon_stock (GtkWidget   *widget,
@@ -2199,7 +2198,7 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
 }
 
 /**
- * gtk_drag_set_icon_pixbuf:
+ * gtk_drag_set_icon_stock:
  * @context: the context for a drag. (This must be called 
  *            with a  context for the source side of a drag)
  * @stock: the ID of the stock icon to use for the drag.
@@ -2230,8 +2229,8 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
  * @hot_x: the X offset within @pixmap of the hotspot.
  * @hot_y: the Y offset within @pixmap of the hotspot.
  * 
- * Sets @pixmap as the icon for a given drag. GTK+ retains a
- * reference count for the arguments, and will release them when
+ * Sets @pixmap as the icon for a given drag. GTK+ retains
+ * references for the arguments, and will release them when
  * they are no longer needed. In general, gtk_drag_set_icon_pixbuf()
  * will be more convenient to use.
  **/
@@ -2303,10 +2302,10 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
  * @hot_x: The X offset within @widget of the hotspot.
  * @hot_y: The Y offset within @widget of the hotspot.
  * 
- * Changes the default drag icon. GTK+ retains a reference count for the
+ * Changes the default drag icon. GTK+ retains references for the
  * arguments, and will release them when they are no longer needed.
  * This function is obsolete. The default icon should now be changed
- * via the stock system by changing the stock pixbuf for GTK_STOCK_DND.
+ * via the stock system by changing the stock pixbuf for %GTK_STOCK_DND.
  **/
 void 
 gtk_drag_set_default_icon (GdkColormap   *colormap,
