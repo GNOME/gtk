@@ -805,12 +805,8 @@ create_handle_box ()
     
     gtk_container_border_width (GTK_CONTAINER (window), 20);
     
-    /* 
-     *these 15 lines are a nice and easy example for GtkHButtonBox 
-     */
     hbox = gtk_handle_box_new ();
     gtk_container_add (GTK_CONTAINER (window), hbox);
-    gtk_widget_set_usize(hbox, 300, 40);
     gtk_widget_show (hbox);
 #if 0
 #if 0

@@ -10,7 +10,7 @@ BUGS
  * Lists should scroll to center the recently selected item if it isn't
    visible.
 
- * Notbook: there are a few cosmetic problems left
+ * Notebook: there are a few cosmetic problems left
 
  * Verticle scrollbar: the expose event looks hosed and is causing 
    quite a bit of flickering
@@ -69,7 +69,5 @@ Other stuff todo, as of yet not categorized into the above:
  there may be some work needed to remove any style dependencies in widget
  code. Maybe GtkStyle's should have 'draw_push_button', 'draw_check_button',
  etc, functions to draw the various widgets.
-
--OffiX drag and drop support
 
 -Make all widget attributes configurable after the widget is created.

@@ -26,9 +26,9 @@ static void gtk_handle_box_class_init    (GtkHandleBoxClass *klass);
 static void gtk_handle_box_init          (GtkHandleBox      *handle_box);
 static void gtk_handle_box_realize       (GtkWidget        *widget);
 static void gtk_handle_box_size_request  (GtkWidget *widget,
-					  GtkRequisition   *requisition);
+					      GtkRequisition   *requisition);
 static void gtk_handle_box_size_allocate (GtkWidget *widget,
-					  GtkAllocation *allocation);
+					      GtkAllocation *allocation);
 static void gtk_handle_box_paint         (GtkWidget *widget,
 					  GdkRectangle *area);
 static void gtk_handle_box_draw          (GtkWidget *widget,
@@ -146,8 +146,8 @@ gtk_handle_box_size_request (GtkWidget      *widget,
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX(widget);
 
-  requisition->width = DRAG_HANDLE_SIZE + BORDER_SIZE * 2 + GTK_CONTAINER(widget)->border_width * 2;
-  requisition->height = BORDER_SIZE + GTK_CONTAINER(widget)->border_width * 2;
+  requisition->width = DRAG_HANDLE_SIZE + GTK_CONTAINER(widget)->border_width * 2;
+  requisition->height = GTK_CONTAINER(widget)->border_width * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -157,14 +157,9 @@ gtk_handle_box_size_request (GtkWidget      *widget,
       requisition->height += bin->child->requisition.height;
     }
 
-  g_print("New size request is %d x %d\n",
-	  requisition->width, requisition->height);
-
-#if 0
   hb->real_requisition = *requisition;
   if(hb->is_onroot)
-    requisition->height = 3;
-#endif
+      requisition->height = 3;
 }
 
 static void
@@ -183,13 +178,19 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX(widget);
 
-  g_print("Our allocation is (%d, %d) - %d x %d\n",
-	  allocation->x, allocation->y,
-	  allocation->width, allocation->height);
-  child_allocation.x = DRAG_HANDLE_SIZE + BORDER_SIZE;
-  child_allocation.y = BORDER_SIZE;
-  child_allocation.width = allocation->width - DRAG_HANDLE_SIZE - GTK_CONTAINER(widget)->border_width * 2 - BORDER_SIZE * 2;
-  child_allocation.height = allocation->height - GTK_CONTAINER(widget)->border_width * 2 - BORDER_SIZE * 2;
+  child_allocation.x = DRAG_HANDLE_SIZE;
+  child_allocation.y = 0;
+
+  if(hb->is_onroot)
+    {
+      child_allocation.width = bin->child->requisition.width;
+      child_allocation.height = bin->child->requisition.height;
+    }
+  else
+    {
+      child_allocation.width = allocation->width - DRAG_HANDLE_SIZE - GTK_CONTAINER(widget)->border_width;
+      child_allocation.height = allocation->height - GTK_CONTAINER(widget)->border_width;
+    }
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -198,25 +199,14 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 
   if (GTK_WIDGET_REALIZED (widget))
     {
-      if(hb->is_onroot)
-	gdk_window_resize (widget->window,
-			   child_allocation.width
-			   + GTK_CONTAINER(widget)->border_width
-			   + BORDER_SIZE,
-			   child_allocation.height
-			   + GTK_CONTAINER(widget)->border_width
-			   + BORDER_SIZE);
-      else
-	gdk_window_move_resize (widget->window,
-				allocation->x + GTK_CONTAINER(widget)->border_width + BORDER_SIZE,
-				allocation->y + GTK_CONTAINER(widget)->border_width + BORDER_SIZE,
-				child_allocation.width + GTK_CONTAINER(widget)->border_width + BORDER_SIZE,
-				child_allocation.height + GTK_CONTAINER(widget)->border_width + BORDER_SIZE);
+      gdk_window_resize (widget->window,
+			 child_allocation.width + DRAG_HANDLE_SIZE,
+			 child_allocation.height);
+      if(!hb->is_onroot)
+	gdk_window_move (widget->window,
+			 allocation->x + GTK_CONTAINER(widget)->border_width,
+			 allocation->y + GTK_CONTAINER(widget)->border_width);
     }
-
-  g_print("New child allocation is (%d, %d) - %d x %d\n",
-	  child_allocation.x, child_allocation.y,
-	  child_allocation.width, child_allocation.height);
 }
 
 static void gtk_handle_box_paint(GtkWidget *widget,
@@ -242,19 +232,21 @@ static void gtk_handle_box_paint(GtkWidget *widget,
 		   area->y, line_y2,
 		   x);
 
-  gtk_draw_shadow(widget->style,
-		  widget->window,
-		  GTK_WIDGET_STATE(widget),
-		  GTK_SHADOW_OUT,
-		  0, 0,
-		  widget->allocation.width - 1,
-		  widget->allocation.height);
+  if(GTK_BIN(widget)->child)
+    gtk_draw_shadow(widget->style,
+		    widget->window,
+		    GTK_WIDGET_STATE(widget),
+		    GTK_SHADOW_OUT,
+		    0, 0,
+		    GTK_BIN(widget)->child->requisition.width + DRAG_HANDLE_SIZE,
+		    GTK_BIN(widget)->child->requisition.height);
+
   if(hb->is_onroot)
     gtk_draw_hline(widget->style,
 		   widget->parent->window,
 		   GTK_WIDGET_STATE(widget),
 		   widget->allocation.x,
-		   widget->allocation.width - widget->allocation.x,
+		   widget->allocation.width + widget->allocation.x,
 		   widget->allocation.y);
 }
 
@@ -318,7 +310,6 @@ gtk_handle_box_get_parent_position(GtkWidget *widget,
   gdk_window_get_origin(widget->parent->window, x, y);
   *x += widget->allocation.x;
   *y += widget->allocation.y;
-  g_print("Position is %d x %d\n", *x, *y);
 }
 
 static gint
@@ -342,7 +333,6 @@ gtk_handle_box_button_changed(GtkWidget *widget,
 					     &parentx,
 					     &parenty);
 	  hb->is_being_dragged = TRUE;
-	  g_print("Grabbing\n");
 	  gdk_pointer_grab(widget->window,
 			   TRUE,
 			   GDK_POINTER_MOTION_MASK
@@ -353,7 +343,6 @@ gtk_handle_box_button_changed(GtkWidget *widget,
 	}
       else if(event->type == GDK_BUTTON_RELEASE)
 	{
-	  g_print("Ungrabbing\n");
 	  gdk_pointer_ungrab(GDK_CURRENT_TIME);
 	  hb->is_being_dragged = FALSE;
 	}
@@ -372,15 +361,12 @@ gtk_handle_box_reparent      (GtkWidget *widget,
   if(in_root)
     {
       GTK_HANDLE_BOX(widget)->is_onroot = TRUE;
-      g_print("Reparenting to root\n");
       gdk_window_set_override_redirect(widget->window, TRUE);
       gdk_window_reparent(widget->window, GDK_ROOT_PARENT(),
 			  parentx,
 			  parenty);
       gdk_window_raise(widget->window);
-#if 0
       widget->requisition = hb->real_requisition;
-#endif
       gtk_widget_queue_resize(widget->parent);
       gdk_pointer_ungrab(GDK_CURRENT_TIME);
       gdk_pointer_grab(widget->window,
@@ -394,7 +380,6 @@ gtk_handle_box_reparent      (GtkWidget *widget,
   else
     {
       GTK_HANDLE_BOX(widget)->is_onroot = FALSE;
-      g_print("Reparenting to parent %#x\n", (gint)(widget->parent->window));
       gdk_window_reparent(widget->window, widget->parent->window,
 			  widget->allocation.x, widget->allocation.y);
       widget->requisition.height = 3;

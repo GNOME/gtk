@@ -270,7 +270,7 @@ gtk_tree_add (GtkContainer *container,
 
   tree->children = g_list_append (tree->children, widget);
 
-#ifdef 0
+#if 0
   if (!tree->selection && (tree->selection_mode == GTK_SELECTION_BROWSE))
     {
       gtk_tree_select_child (tree, widget);
