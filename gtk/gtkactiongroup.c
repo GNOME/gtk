@@ -525,7 +525,12 @@ gtk_action_group_get_action (GtkActionGroup *action_group,
  * @action_group: the action group
  * @action: an action
  *
- * Adds an action object to the action group. 
+ * Adds an action object to the action group. Note that this function
+ * does not set up the accel path of the action, which can lead to problems
+ * if a user tries to modify the accelerator of a menuitem associated with
+ * the action. Therefore you must either set the accel path yourself with
+ * gtk_action_set_accel_path(), or use 
+ * <literal>gtk_action_group_add_action_with_accel (..., NULL)</literal>.
  *
  * Since: 2.4
  */

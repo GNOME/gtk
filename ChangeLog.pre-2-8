@@ -1,5 +1,9 @@
 2004-04-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action): Document
+	possible accelerator gotcha when using this function.  (#139641, 
+	Christian Persch)
+
 	* gtk/gtkuimanager.c (node_remove_ui_reference): Don't leak
 	list nodes.  (#138862, Morten Welinder)
 
