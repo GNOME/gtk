@@ -1,3 +1,14 @@
+Fri Apr  7 17:19:27 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/Makefile.am: Fix problem with installation directory for
+	gdkx.h
+
+	* gtk/gtkmenuitem.c gtk/gtkmenushell.c: Patch from David Santiago
+	<mrcooger@cyberverse.com> so that when selecting menus with the
+	mouse, the first item will not be selected, but when selecting
+	with an accelerator, or navigating left-right on a menubar with
+	the menus popped up, the first item will be selected.
+
 2000-04-05  Dan Damian  <dand@dnttm.ro>
 
 	* configure.in: Added "ro" to ALL_LINGUAS.

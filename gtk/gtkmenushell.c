@@ -136,6 +136,7 @@ static gint gtk_menu_shell_is_item           (GtkMenuShell      *menu_shell,
 static GtkWidget *gtk_menu_shell_get_item    (GtkMenuShell      *menu_shell,
 					      GdkEvent          *event);
 static GtkType    gtk_menu_shell_child_type  (GtkContainer      *container);
+static void gtk_menu_shell_select_submenu_first (GtkMenuShell   *menu_shell); 
 
 static void gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 					      GtkMenuDirectionType direction);
@@ -904,6 +905,21 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 }
 
 static void
+gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
+{
+  GtkMenuItem *menu_item;
+
+  menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item); 
+  
+  if (menu_item->submenu)
+    {
+      GtkMenuShell *submenu = GTK_MENU_SHELL (menu_item->submenu); 
+      if (submenu->children)
+	gtk_menu_shell_select_item (submenu, submenu->children->data); 
+    }
+}
+
+static void
 gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 				  GtkMenuDirectionType direction)
 {
@@ -923,8 +939,11 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	  if (GTK_MENU_SHELL_CLASS (GTK_OBJECT (parent_menu_shell)->klass)->submenu_placement == 
 		       GTK_MENU_SHELL_CLASS (GTK_OBJECT (menu_shell)->klass)->submenu_placement)
 	    gtk_menu_shell_deselect (menu_shell);
-	  else
-	    gtk_menu_shell_move_selected (parent_menu_shell, -1);
+	  else 
+	    {
+	      gtk_menu_shell_move_selected (parent_menu_shell, -1);
+	      gtk_menu_shell_select_submenu_first (parent_menu_shell); 
+	    }
 	}
       break;
       
@@ -946,7 +965,10 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	    parent_menu_shell = GTK_MENU_SHELL (parent_menu_shell->parent_menu_shell);
 	  
 	  if (parent_menu_shell)
-	    gtk_menu_shell_move_selected (parent_menu_shell, 1);
+	    {
+	      gtk_menu_shell_move_selected (parent_menu_shell, 1);
+	      gtk_menu_shell_select_submenu_first (parent_menu_shell);
+	    }
 	}
       break;
       

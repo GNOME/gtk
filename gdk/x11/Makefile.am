@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+libgdkincludedir = $(includedir)/gdk
+
 INCLUDES = @STRIP_BEGIN@ 	\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-I$(top_srcdir)		\
@@ -68,7 +70,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkinputprivate.h  	\
 	$(xinput_sources)
 
-INCLUDE_HEADERS = 		\
+libgdkinclude_HEADERS = \
 	gdkx.h
 
 EXTRA_PROGRAMS = gxid
