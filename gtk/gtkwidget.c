@@ -4577,7 +4577,7 @@ gtk_widget_get_screen (GtkWidget *widget)
 	     g_type_name (G_OBJECT_TYPE(G_OBJECT (toplevel))));
   return NULL;
 #else
-  return gdk_get_default_display ();
+  return gdk_get_default_screen ();
 #endif
 }
 /**

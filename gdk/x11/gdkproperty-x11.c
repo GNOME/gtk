@@ -557,9 +557,6 @@ gdk_property_change (GdkWindow    *window,
     {
       GdkScreen *screen;
       
-      if (GDK_WINDOW_DESTROYED (window))
-	return;
-
       screen = gdk_get_default_screen ();
       window = gdk_screen_get_root_window (screen);
       

@@ -361,8 +361,10 @@ gdk_window_new (GdkWindow     *parent,
   
   if (!parent)
     {
+#ifdef GDK_MULTIHEAD_SAFE      
       g_warning ("gdk_window_new(): no parent specified. "
 		 "reverting to parent = default root window");
+#endif      
       screen = gdk_get_default_screen ();
       parent = gdk_screen_get_root_window (screen);
     }
