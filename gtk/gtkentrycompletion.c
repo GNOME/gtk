@@ -999,11 +999,13 @@ gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
  * @completion: A #GtkEntryCompletion.
  * @column: The column in the model of @completion to get strings from.
  *
- * Convience function for setting up the most used case of this code: a
+ * Convenience function for setting up the most used case of this code: a
  * completion list with just strings. This function will set up @completion
  * to have a list displaying all (and just) strings in the completion list,
  * and to get those strings from @column in the model of @completion.
  *
+ * This functions creates and adds a GtkCellRendererText for the selected column.
+
  * Since: 2.4
  */
 void
