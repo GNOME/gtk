@@ -805,6 +805,7 @@ static struct {
   { 0xFF80 /* Space */, ' ' },
   { 0xFFAA /* Multiply */, '*' },
   { 0xFFAB /* Add */, '+' },
+  { 0xFFAC /* Separator */, ',' },
   { 0xFFAD /* Subtract */, '-' },
   { 0xFFAE /* Decimal */, '.' },
   { 0xFFAF /* Divide */, '/' },

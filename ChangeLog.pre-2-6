@@ -1,3 +1,8 @@
+Wed Nov 12 20:54:02 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkkeyuni.c: Map KP_Separator to ','.
+	(#122941, Egmont Koblinger)
+
 2003-11-12  Padraig O'Briain  <padraig.obriain@sun.com>
 
 	*gtk/gtkcolorsel.c (gtk_color_selection_init): Add tooltip for
