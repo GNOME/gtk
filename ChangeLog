@@ -1,3 +1,8 @@
+2003-06-05  Noah Levitt  <nlevitt@columbia.edu>
+
+	* gtk/gtknotebook.c (gtk_notebook_button_press): Ignore button
+	presses that are not on the tab (#114534).
+
 Thu Jun  5 20:35:40 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/Makefile.am: Conditionalize deendencies for

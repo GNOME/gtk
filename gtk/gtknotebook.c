@@ -1704,7 +1704,8 @@ gtk_notebook_button_press (GtkWidget      *widget,
   gint num;
   gint x, y;
 
-  if (event->type != GDK_BUTTON_PRESS || !notebook->children ||
+  if (event->window != notebook->event_window || 
+      event->type != GDK_BUTTON_PRESS || !notebook->children ||
       notebook->button)
     return FALSE;
 
