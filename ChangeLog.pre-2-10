@@ -1,3 +1,11 @@
+Fri Feb 19 17:52:28 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.h: grouped function names into application-level,
+	widget-level and non-public.
+
+	* gtk/gtktreeitem.c (gtk_tree_item_size_request): use auto
+	pix_requisition instead of item->pixmaps_box->requisition.
+
 Thu Feb 18 17:26:09 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): 

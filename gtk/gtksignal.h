@@ -46,7 +46,6 @@ typedef gboolean (*GtkEmissionHook) (GtkObject	    *object,
 				     GtkArg	    *params,
 				     gpointer        data);
 
-
 typedef struct _GtkSignalQuery		GtkSignalQuery;
 
 struct	_GtkSignalQuery
@@ -61,38 +60,11 @@ struct	_GtkSignalQuery
   const GtkType	  *params;
 };
 
-void   gtk_signal_init			  (void);
-guint  gtk_signal_new			  (const gchar	       *name,
-					   GtkSignalRunType	signal_flags,
-					   GtkType		object_type,
-					   guint		function_offset,
-					   GtkSignalMarshaller	marshaller,
-					   GtkType		return_val,
-					   guint		nparams,
-					   ...);
-guint  gtk_signal_newv			  (const gchar	       *name,
-					   GtkSignalRunType	signal_flags,
-					   GtkType		object_type,
-					   guint		function_offset,
-					   GtkSignalMarshaller	marshaller,
-					   GtkType		return_val,
-					   guint		nparams,
-					   GtkType	       *params);
+
+/* Application-level methods */
 guint  gtk_signal_lookup		  (const gchar	       *name,
 					   GtkType		object_type);
 gchar* gtk_signal_name			  (guint		signal_id);
-void   gtk_signal_emit			  (GtkObject	       *object,
-					   guint		signal_id,
-					   ...);
-void   gtk_signal_emit_by_name		  (GtkObject	       *object,
-					   const gchar	       *name,
-					   ...);
-void   gtk_signal_emitv			  (GtkObject           *object,
-					   guint                signal_id,
-					   GtkArg              *params);
-void   gtk_signal_emitv_by_name		  (GtkObject           *object,
-					   const gchar	       *name,
-					   GtkArg              *params);
 guint  gtk_signal_n_emissions		  (GtkObject   	       *object,
 					   guint                signal_id);
 guint  gtk_signal_n_emissions_by_name	  (GtkObject   	       *object,
@@ -165,7 +137,6 @@ guint  gtk_signal_handler_pending_by_func (GtkObject	       *object,
 					   gboolean		may_be_blocked,
 					   GtkSignalFunc	func,
 					   gpointer		data);
-void   gtk_signal_handlers_destroy	  (GtkObject	       *object);
 guint  gtk_signal_add_emission_hook	  (guint		signal_id,
 					   GtkEmissionHook	hook_func,
 					   gpointer       	data);
@@ -176,14 +147,48 @@ guint  gtk_signal_add_emission_hook_full  (guint		signal_id,
 void   gtk_signal_remove_emission_hook	  (guint		signal_id,
 					   guint		hook_id);
 
-void   gtk_signal_set_funcs		  (GtkSignalMarshal	marshal_func,
-					   GtkSignalDestroy	destroy_func);
-
 /* Report internal information about a signal. The caller has the
  * responsibility to invoke a subsequent g_free (returned_data); but
  * must not modify data pointed to by the members of GtkSignalQuery 
  */
 GtkSignalQuery* gtk_signal_query	  (guint		signal_id);
+
+
+/* Widget-level methods */
+void   gtk_signal_init			  (void);
+guint  gtk_signal_new			  (const gchar	       *name,
+					   GtkSignalRunType	signal_flags,
+					   GtkType		object_type,
+					   guint		function_offset,
+					   GtkSignalMarshaller	marshaller,
+					   GtkType		return_val,
+					   guint		nparams,
+					   ...);
+guint  gtk_signal_newv			  (const gchar	       *name,
+					   GtkSignalRunType	signal_flags,
+					   GtkType		object_type,
+					   guint		function_offset,
+					   GtkSignalMarshaller	marshaller,
+					   GtkType		return_val,
+					   guint		nparams,
+					   GtkType	       *params);
+void   gtk_signal_emit			  (GtkObject	       *object,
+					   guint		signal_id,
+					   ...);
+void   gtk_signal_emit_by_name		  (GtkObject	       *object,
+					   const gchar	       *name,
+					   ...);
+void   gtk_signal_emitv			  (GtkObject           *object,
+					   guint                signal_id,
+					   GtkArg              *params);
+void   gtk_signal_emitv_by_name		  (GtkObject           *object,
+					   const gchar	       *name,
+					   GtkArg              *params);
+/* Non-public methods */
+void   gtk_signal_handlers_destroy	  (GtkObject	       *object);
+void   gtk_signal_set_funcs		  (GtkSignalMarshal	marshal_func,
+					   GtkSignalDestroy	destroy_func);
+
 
 
 #ifdef __cplusplus
