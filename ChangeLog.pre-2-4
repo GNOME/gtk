@@ -1,3 +1,8 @@
+Tue Mar  5 18:06:49 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_resizable):
+	doc fix proposed by tvv@sparc.spb.su (Vitaly Tishkov), #73567.
+
 2002-03-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_reference_deleted): Fix docs.

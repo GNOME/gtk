@@ -1481,9 +1481,9 @@ gtk_tree_view_column_get_visible (GtkTreeViewColumn *tree_column)
  * @resizable: %TRUE, if the column can be resized
  * 
  * If @resizable is %TRUE, then the user can explicitly resize the column by
- * grabbing the outer edge of the column button.  If the sizing mode of the
- * column is #GTK_TREE_VIEW_COLUMN_AUTOSIZE, then it is changed to
- * #GTK_TREE_VIEW_COLUMN_GROW_ONLY.
+ * grabbing the outer edge of the column button.  If resizable is TRUE and
+ * sizing mode of the column is #GTK_TREE_VIEW_COLUMN_AUTOSIZE, then the sizing
+ * mode is changed to #GTK_TREE_VIEW_COLUMN_GROW_ONLY.
  **/
 void
 gtk_tree_view_column_set_resizable (GtkTreeViewColumn *tree_column,
