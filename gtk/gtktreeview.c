@@ -3678,7 +3678,7 @@ validate_visible_area (GtkTreeView *tree_view)
   if (tree_view->priv->scroll_to_path)
     {
       path = gtk_tree_row_reference_get_path (tree_view->priv->scroll_to_path);
-      if (!_gtk_tree_view_find_node (tree_view, path, &tree, &node))
+      if (path && !_gtk_tree_view_find_node (tree_view, path, &tree, &node))
 	{
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 	  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
@@ -3707,7 +3707,13 @@ validate_visible_area (GtkTreeView *tree_view)
 	/* the scroll to isn't valid; ignore it.
 	 */
 	{
-	  gtk_tree_path_free (path);
+	  if (tree_view->priv->scroll_to_path && !path)
+	    {
+	      gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
+	      tree_view->priv->scroll_to_path = NULL;
+	    }
+	  if (path)
+	    gtk_tree_path_free (path);
 	  path = NULL;
 	}      
     }

@@ -2370,10 +2370,8 @@ gtk_tree_view_column_cell_render_or_focus (GtkTreeViewColumn *tree_column,
       if (min_x >= max_x || min_y >= max_y)
 	{
 	  *focus_rectangle = *cell_area;
-	  focus_rectangle->x -= focus_line_width;
-	  focus_rectangle->y -= focus_line_width;
-	  focus_rectangle->width += 2 * focus_line_width;
-	  focus_rectangle->height += 2 * focus_line_width;
+	  /* don't change the focus_rectangle, just draw it nicely inside
+	   * the cell area */
 	}
       else
 	{

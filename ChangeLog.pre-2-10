@@ -1,3 +1,11 @@
+Tue Feb 26 19:47:16 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (validate_visible_area): take into account
+	that a path from a rowref can be NULL. (#72623 and #72650)
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_render_or_focus):
+	let focus_rectangle be the same as cell_area for empty cells (#69900)
+
 Tue Feb 26 11:51:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkkeyhash.c (_gtk_key_hash_remove_entry): Fix
