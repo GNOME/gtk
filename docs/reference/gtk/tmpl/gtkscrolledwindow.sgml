@@ -225,6 +225,23 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 @Returns: 
 
 
+<!-- ##### SIGNAL GtkScrolledWindow::move-focus-out ##### -->
+<para>
+
+</para>
+
+@scrolledwindow: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkScrolledWindow::scroll-child ##### -->
+<para>
+
+</para>
+
+@scrolledwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG GtkScrolledWindow:hadjustment ##### -->
 <para>
 Horizontal adjustment. See gtk_scrolled_window_set_hadjustment(), gtk_scrolled_window_get_hadjustment().

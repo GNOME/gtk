@@ -1,4 +1,3 @@
-/* example-start packbox packbox.c */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +8,7 @@ gint delete_event( GtkWidget *widget,
                    gpointer   data )
 {
     gtk_main_quit();
-    return(FALSE);
+    return FALSE;
 }
 
 /* Make a new hbox filled with button-labels. Arguments for the 
@@ -85,7 +84,7 @@ int main( int   argc,
     if (argc != 2) {
 	fprintf (stderr, "usage: packbox num, where num is 1, 2, or 3.\n");
 	/* This just does cleanup in GTK and exits with an exit status of 1. */
-	gtk_exit (1);
+	exit (1);
     }
     
     which = atoi (argv[1]);
@@ -96,7 +95,7 @@ int main( int   argc,
     /* You should always remember to connect the delete_event signal
      * to the main window. This is very important for proper intuitive
      * behavior */
-    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+    g_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
@@ -246,7 +245,7 @@ int main( int   argc,
 	 * and the "end" label will be separated from the other labels in the
 	 * hbox. Otherwise, all the widgets in the hbox would be packed as
 	 * close together as possible. */
-	gtk_widget_set_usize (separator, 400, 5);
+	gtk_widget_set_size_request (separator, 400, 5);
 	/* pack the separator into the vbox (box1) created near the start 
 	 * of main() */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
@@ -260,7 +259,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("Quit");
     
     /* Setup the signal to terminate the program when the button is clicked */
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
 			       GTK_SIGNAL_FUNC (gtk_main_quit),
 			       GTK_OBJECT (window));
     /* Pack the button into the quitbox.
@@ -288,6 +287,5 @@ int main( int   argc,
     /* Control returns here when gtk_main_quit() is called, but not when 
      * gtk_exit is used. */
     
-    return(0);
+    return 0;
 }
-/* example-end */

@@ -1,4 +1,3 @@
-/* example-start label label.c */
 
 #include <gtk/gtk.h>
 
@@ -15,7 +14,7 @@ int main( int   argc,
   gtk_init(&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+  g_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC(gtk_main_quit),
 		      NULL);
 
@@ -97,6 +96,5 @@ int main( int   argc,
 
   gtk_main ();
   
-  return(0);
+  return 0;
 }
-/* example-end */

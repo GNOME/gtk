@@ -1,5 +1,5 @@
-/* example-start menu menu.c */
 
+#include <stdio.h>
 #include <gtk/gtk.h>
 
 static gint button_press (GtkWidget *, GdkEvent *);
@@ -23,9 +23,9 @@ int main( int   argc,
 
     /* create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_usize (GTK_WIDGET (window), 200, 100);
+    gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title (GTK_WINDOW (window), "GTK Menu Test");
-    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+    g_signal_connect (GTK_OBJECT (window), "delete_event",
                         (GtkSignalFunc) gtk_main_quit, NULL);
 
     /* Init the menu-widget, and remember -- never
@@ -49,10 +49,10 @@ int main( int   argc,
             menu_items = gtk_menu_item_new_with_label (buf);
 
             /* ...and add it to the menu. */
-            gtk_menu_append (GTK_MENU (menu), menu_items);
+            gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_items);
 
 	    /* Do something interesting when the menuitem is selected */
-	    gtk_signal_connect_object (GTK_OBJECT (menu_items), "activate",
+	    g_signal_connect_swapped (GTK_OBJECT (menu_items), "activate",
 		GTK_SIGNAL_FUNC (menuitem_response), (gpointer) g_strdup (buf));
 
             /* Show the widget */
@@ -82,14 +82,14 @@ int main( int   argc,
 
     /* Create a button to which to attach menu as a popup */
     button = gtk_button_new_with_label ("press me");
-    gtk_signal_connect_object (GTK_OBJECT (button), "event",
+    g_signal_connect_swapped (GTK_OBJECT (button), "event",
 	GTK_SIGNAL_FUNC (button_press), GTK_OBJECT (menu));
     gtk_box_pack_end (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);
 
     /* And finally we append the menu-item to the menu-bar -- this is the
      * "root" menu-item I have been raving about =) */
-    gtk_menu_bar_append (GTK_MENU_BAR (menu_bar), root_menu);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu_bar), root_menu);
 
     /* always display the window as the last step so it all splashes on
      * the screen at once. */
@@ -97,7 +97,7 @@ int main( int   argc,
 
     gtk_main ();
 
-    return(0);
+    return 0;
 }
 
 /* Respond to a button-press by posting a menu passed in as widget.
@@ -130,4 +130,3 @@ static void menuitem_response( gchar *string )
 {
     printf ("%s\n", string);
 }
-/* example-end */

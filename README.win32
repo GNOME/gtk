@@ -10,13 +10,6 @@ until the CVS HEAD version is useable. (But note, the Win32 backend
 has never been claimed to be "production quality", although it works
 surprisingly well for the GIMP.)
 
-Note that right now (January 2002), the gtk-1-3-win32-production
-branch has more functionality and somewhat cleaner code in gdk/win32.
-The code that handles pixmaps and images (DIB sections) and colormaps
-(palettes) has been substantially refactored and cleaned up. (For
-instance, 256-color mode now work.) Those improvements have not yet
-been done here.
-
 Building GTK+ on Win32
 ======================
 

@@ -1,4 +1,3 @@
-/* example-start aspectframe aspectframe.c */
 
 #include <gtk/gtk.h>
    
@@ -12,8 +11,8 @@ int main( int argc,
    
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
-                        GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+    g_signal_connect (GTK_OBJECT (window), "destroy",
+	              GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
    
     /* Create an aspect_frame and add it to our toplevel window */
@@ -33,7 +32,7 @@ int main( int argc,
    
     /* Ask for a 200x200 window, but the AspectFrame will give us a 200x100
      * window since we are forcing a 2x1 aspect ratio */
-    gtk_widget_set_usize (drawing_area, 200, 200);
+    gtk_widget_set_size_request (drawing_area, 200, 200);
     gtk_container_add (GTK_CONTAINER(aspect_frame), drawing_area);
     gtk_widget_show (drawing_area);
    
@@ -41,4 +40,3 @@ int main( int argc,
     gtk_main ();
     return 0;
 }
-/* example-end */

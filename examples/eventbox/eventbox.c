@@ -1,5 +1,5 @@
-/* example-start eventbox eventbox.c */
 
+#include <stdlib.h>
 #include <gtk/gtk.h>
 
 int main( int argc,
@@ -15,8 +15,8 @@ int main( int argc,
     
     gtk_window_set_title (GTK_WINDOW (window), "Event Box");
     
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			GTK_SIGNAL_FUNC (gtk_exit), NULL);
+    g_signal_connect (GTK_OBJECT (window), "destroy",
+			GTK_SIGNAL_FUNC (exit), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
@@ -33,12 +33,12 @@ int main( int argc,
     gtk_widget_show (label);
     
     /* Clip it short. */
-    gtk_widget_set_usize (label, 110, 20);
+    gtk_widget_set_size_request (label, 110, 20);
     
     /* And bind an action to it */
     gtk_widget_set_events (event_box, GDK_BUTTON_PRESS_MASK);
-    gtk_signal_connect (GTK_OBJECT(event_box), "button_press_event",
-			GTK_SIGNAL_FUNC (gtk_exit), NULL);
+    g_signal_connect (GTK_OBJECT(event_box), "button_press_event",
+			GTK_SIGNAL_FUNC (exit), NULL);
     
     /* Yet one more thing you need an X window for ... */
     
@@ -49,6 +49,5 @@ int main( int argc,
     
     gtk_main ();
     
-    return(0);
+    return 0;
 }
-/* example-end */

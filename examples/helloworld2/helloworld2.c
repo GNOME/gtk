@@ -1,4 +1,3 @@
-/* example-start helloworld2 helloworld2.c */
 
 #include <gtk/gtk.h>
 
@@ -40,7 +39,7 @@ int main( int   argc,
 
     /* Here we just set a handler for delete_event that immediately
      * exits GTK. */
-    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+    g_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
 
     /* Sets the border width of the window. */
@@ -56,10 +55,10 @@ int main( int   argc,
 
     /* Creates a new button with the label "Button 1". */
     button = gtk_button_new_with_label ("Button 1");
-
+    
     /* Now when the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+    g_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (callback), (gpointer) "button 1");
 
     /* Instead of gtk_container_add, we pack this button into the invisible
@@ -75,7 +74,7 @@ int main( int   argc,
 
     /* Call the same callback function with a different argument,
      * passing a pointer to "button 2" instead. */
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+    g_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (callback), (gpointer) "button 2");
 
     gtk_box_pack_start(GTK_BOX(box1), button, TRUE, TRUE, 0);
@@ -87,10 +86,9 @@ int main( int   argc,
     gtk_widget_show(box1);
 
     gtk_widget_show (window);
-
+    
     /* Rest in gtk_main and wait for the fun to begin! */
     gtk_main ();
 
-    return(0);
+    return 0;
 }
-/* example-end */

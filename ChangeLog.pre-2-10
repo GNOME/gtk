@@ -9,6 +9,431 @@
 	(draw_with_images): Use the screen's root window when creating the pixmap.
 	(draw_with_images): Get the screen from the GdkDrawableImplX11.
 
+Sun Feb 17 21:30:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Released 1.3.14
+
+	* configure.in: Version 1.3.14, interface, binary age 0.
+
+	* gdk/gdkregion-generic.c (miSubtractO): Fix out-of-bounds
+	read. (#71619, reported by Morten Welinder)
+
+	* gtk/gtkmenu.c (gtk_menu_class_init): Fix setting default.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_class_init): Add
+	a select_multiple property to go along with thenew 
+	get/set_select_multiple.
+
+	* gdk/gdkwindow.c: Patch from Soeren Sandmann to improve
+	update debugging code. (#71703)
+
+2002-02-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkcolor-win32.c (free_colors): Don't set the
+	PC_EXPLICIT flag for unused palette entries, that might have
+	undesired side effects. Just set them to black. Black is always
+	present in a palette, so having superfluous black entries won't
+	cause any extra allocations from the system palette either when
+	realized.
+
+	* gdk/win32/gdkevents-win32.c
+	(gdk_event_translate:WM_QUERYNEWPALETTE): Don't do anything if the
+	system visual is static color, i.e. the user has told GDK to use
+	just the 16 static colors. In that case no need to redraw
+	anything, as the colors are static and by definition always
+	correctly mapped in the system palette.
+	(WM_PALETTECHANGED): Ditto, no need to call UpdateColors() either.
+	
+	* gtk/gtk.def: Add new gtkfilesel entry points.
+
+2002-02-17  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tutorial/gtk-tut.sgml, examples/paned/paned.c, 
+	examples/paned/Makefile: Make the paned example deprecation-clean.
+
+2002-02-17  jacob berkman  <jacob@ximian.com>
+
+	* Makefile.am: remove the packer example files as they don't exist
+	in CVS.
+
+2002-02-16  Manish Singh  <yosh@gimp.org>
+
+	* tests/testgtk.c: hm, check buttons look better for below.
+
+2002-02-16  Manish Singh  <yosh@gimp.org>
+
+	* tests/testgtk.c: redid the filesel test. Added a way to set select
+	multiple as a toggle button, and made show/hide fileops toggle
+	buttons as well. get_selections() is called on OK and all the
+	filenames selected are printed.
+
+2002-02-17  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32: Remove comment about the gtk-1-3-win32-production
+	branch having more functionality.
+
+	* gdk/win32/*.c: Massive changes. Too many to list here, but I'll
+	try a summary:
+
+	1) Unify GdkPixmap and GdkImage implementation: For each
+	GdkPixmap, allocate a GdkImage, and vice versa.
+	GdkPixmapImplWin32Data has a pointer to the GdkImage.
+	GdkImage::windowing_data is a pointer to the GdkPixmap.
+
+	This simplifies many pixmap and image related functions a lot, and
+	reduces duplicated code. For instance, there is only one
+	place in gdk/win32 where CreateDIBSection() is called, in the
+	function _gdk_win32_new_pixmap(). Converting a bitmap (GdkPixmap)
+	to a Windows region is almost trivial, with the bitmap bits being
+	readily accessible in the associated GdkImage.
+
+	All blitting between GdkPixmaps, GdkWindows and GdkImages goes
+	through handled the _gdk_win32_blit() function, which calls
+	different functions to handle the cases of blitting from pixmaps,
+	inside windows (scrolling), or from windows, which all require
+	somewhat different handling.
+
+	2) Support 256-color mode. This has long been very broken, now it
+	works more or less OK. Keep the logical palette for each colormap
+	as small as possible while allocating and freeing colors. Select
+	and realize the logical palette associated with a GdkColormap into
+	a DC before drawing or blitting.
+
+	When the display is in 256-color mode, make it possible for the
+	user to override the size of the palette(s) used with either the
+	GDK_WIN32_MAX_COLORS environment variable, or a -max-colors
+	command line option. It is possible to reduce the palette size all
+	the way down to using just the 16 static colors (which causes the
+	system visual to be of type GDK_VISUAL_STATIC_COLOR. This could
+	possibly be useful if one desperately wants to avoid color
+	flashing. (Note that in order for this to work properly, an as of
+	yet not commited fix to gdkrgb.c is needed.)
+
+	Handle the palette messages. On WM_PALETTECHANGED, call
+	UpdateColors() for the given window hierarchy. Do this only if a
+	window in some other top-level window hierarchy caused the palette
+	change (realized a palette). Do this max five times in a row (an
+	arbitrarily chosen limit), though, otherwise redraw by generating
+	expose events. On WM_QUERYNEWPALETTE, cause a redraw of the whole
+	window hierarchy by generating GDK_EXPOSE events.
+
+	3) Code cleanup in general. For instance, remove the "emulated"
+	X11 structs ColormapStruct, Visual and XStandardColormap. Use the
+	new GDK_DEBUG_* flags for debugging output in the relevant source
+	files. Remove the unused colormap hash table in gdkcolor-win32.c
+
+	4) Plug some resource leaks.
+
+2002-02-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c (gdk_dropfiles_filter): Use
+	g_filename_to_uri() to actually create legal URIs in the
+	text/uri-list data.
+
+2002-02-16  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkfilesel.[ch]: Added multiple selection API
+
+2002-02-16  Manish Singh  <yosh@gimp.org>
+
+	* gdk/linux-fb/miarc.c: use fabs() on a double instead of abs()
+
+2002-02-17  Matthias Clasen  <maclas@gmx.de>
+
+	More work on #71430.
+
+	* examples/*/Makefile (CFLAGS): add deprecation guards.
+	
+	* docs/tutorial/gtk-tut.sgml, examples/*/*.c: make most examples
+	deprecation-clean; the major offenders right now are the examples
+	that make heavy use of completely deprecated or broken widgets:
+	list, tree, text, pixmap, paned and progressbar. These will have
+	to be redone from scratch.
+
+Sun Feb 17 00:13:06 2002  Kristian Rietveld  <kris@gtk.org>
+
+	This commit lands the 'dy patch'.
+
+	* gtk/gtktreeview.c (validate_rows_handler): update top_row or dy,
+	(gtk_tree_view_top_row_to_dy): new function,
+	(gtk_tree_view_row_changed): update top_row or dy,
+	(gtk_tree_view_rows_reordered): update top_row
+
+2002-02-16  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/Makefile.am (INCLUDES): add -DGDK_PIXBUF_DISABLE_DEPRECATED.
+
+2002-02-16  Matthias Clasen  <maclas@gmx.de>
+
+	* examples/extract.awk: rearrange rules to not emit the example 
+	start and end markers.
+
+	* docs/tutorial/gtk-tut.sgml: turn the start and end markers into
+	SGML comments, so they don't clutter the formatted tutorial.
+
+2002-02-16  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkwindow.c (gtk_window_parse_geometry): take
+	GDK_HINT_RESIZE_INC into account, and handle negative coordinates
+	correctly. (Can't email Owen - hope this is OK.)
+
+Fri Feb 15 20:09:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.[ch] gtk/gtkmarshallers.list:
+	Add key bindings on GtkScrolledWindow for arrow keys,
+	PageUp/PageDown Home/End to scroll the window. 
+	Bind Control-[Shift]-Tab to focus out of the scrolled
+	window entirely. Allow the scrolled window to be
+	focused if no child can be focused. (#63480)
+
+	* gtk/gtkwidget.c (gtk_widget_hide): Remove the REALIZED()
+	check - if we have visible but not mapped widgets 
+	(inside a unshown notebook tab, for instance), we need
+	to track their size. (#65087, reported by Damon Chaplin.)
+
+	* gtk/gtkcolorsel.c (palette_change_color): Shut up
+	a warning.
+
+2002-02-16  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/rc/Makefile.am (gdk-win32res.lo): Depend on gtk.ico.
+
+	* gdk/win32/rc/gtk.ico: Use the real GTK logo. Thanks to Jernej
+	Simoncic for providing the nice multi-resolution .ico file.
+
+2002-02-15 Alexey Malyshev <maa@sparc.spb.su>
+	
+        * gtk/tmpl/gtkimage.sgml
+	removed wrong sentence from gtk_image_new() docs
+
+Fri Feb 15 19:38:00 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_clear_traverse): new function
+	(gtk_tree_store_clear): traverse the tree, so we emit row_deleted
+	for every node. This way we don't have confused row refs crashing the
+	application. (#70631)
+
+2002-02-14  Richard Hult  <rhult@codefactory.se>
+
+	* gtk/gtkpaned.c (gtk_paned_enter): Only queue a draw on the
+	handle, not the whole widget. #71530.
+	(gtk_paned_leave): Likewise.
+
+2002-02-14  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkrange.c (gtk_range_class_init) : add new signal
+	  'adjust_bounds' to potentialy change the bounds before assigning the
+	  new value and camping it to the existing bounds.
+	(gtk_range_internal_set_value) : used here. #68800.
+	* gtk/gtkmarshalers.list : add VOID:DOUBLE
+
+Thu Feb 14 21:08:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkglobals.c: Remove GDKVAR from C file, see
+	if anyone complains. (#71317, Morten Welinder.)
+
+2002-02-14  Matthias Clasen  <maclas@gmx.de>
+
+	The following changes are the beginning of the work on #71430.
+	
+	* examples/extract.sh, examples/extract.awk: Make extraction work.
+	
+	* examples/Makefile (SUBDIRS): Remove packer.
+
+	* examples/packer/pack.c, examples/packer/Makefile: Removed.
+
+	* docs/tutorial/gtk-tut.sgml: Fix the included examples far
+	enough to make them compile and (mostly) work, remove the packer
+	example.
+
+Thu Feb 14 16:46:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtktextdisplay.c gtk/gtklabel.c
+	gtk/gtkstyle.[ch] gtk/gtkwidget.c: Patch from Bill
+	Haneman and Padraig O'Briain to add cursor_aspect_ratio
+	style property to GtkWidget to allow theming the aspect
+	ratio of the cursor.
+
+	* gtk/gtkentry.c gtk/gtktextview.c gtk/gtklabel.c
+	gtk/gtkwidget.c tests/testgtkrc: Move cursor-color style property
+	to GtkWidget.
+
+Thu Feb 14 11:13:22 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_get_surrounding): 
+	Fix bug where we called get_surrounding on the context,.
+	not the slave.
+
+Thu Feb 14 00:10:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler): Only
+	pop the tooltip down on a select set of events, not
+	on any unknown event. (#71157, Jody Goldberg)
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler):
+	Fix some warnings.
+
+Thu Feb 14 00:02:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_size_request): A bunch of
+	small allocation/drawing fixes.
+
+	* gtk/gtkcalendar.c: Replace DAY_XPAD, DAY_YPAD with
+	GtkWidget::focus-padding
+
+Wed Feb 13 23:01:20 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c: Patch from Bill Haneman to draw
+	to focus using gtk_paint_focus() with the focus width
+	GtkWidget::focus-width. (#63075)
+
+	* gtk/gtkcalendar.c (gtk_calendar_size_request): Initialize
+	label_char_ascent/descent to 0. (#56925, reported by
+	(Jean-Noel Guiheneuf)
+
+2002-02-13  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_flush_scroll): validate a
+	larger area, proportional to widget size, to fix
+	#71427 reported by Dennis Bjorklund
+
+2002-02-13  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_paint): just go ahead and flush 
+	all the first validate stuff if it hasn't been done, presumably
+	someone called process_updates at a weird time.
+
+	* tests/testtext.c (do_apply_colors): terminate on >= end, not >
+	end, avoids infinite loop when end is at the end of the buffer.
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_delete): when creating a
+	line data, we were adding it to the wrong line ("line" instead of
+	"start_line")
+
+2002-02-13  Joe Shaw  <joe@ximian.com>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_expose): Don't chain up to the
+	container's expose event.  Instead call
+	gtk_tree_item_expose_child() on each child.  Avoids a failed
+	g_assert() in gtk_container_propagate_expose().
+	(gtk_tree_item_expose_child): Added.  Synthesize an expose event
+	for our children.  Basically gtk_container_propagate_expose()
+	minus the g_assert().  (#71396)
+
+2002-02-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkinternals.h: Add some more GdkDebugFlags, for more
+	fine-grained debugging output (mainly used in the Win32 backend).
+
+	* gdk/gdk.c: Corresponding additions to the gdk_debug_keys table.
+
+Wed Feb 13 15:42:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.[ch] gtkwidget.c: Implement Control-F1
+	as toggle-tooltips-mode.
+
+	* gtk/gtktooltips.c: Remove parsing of tooltips style
+	string from here ... now in gtkrc.c.
+
+Wed Feb 13 12:41:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_init_check): g_warning() if setting
+	the local fails, like gdk_set_locale() did.
+
+	* gdk/x11/gdkselection-x11.c (gdk_text_property_to_utf8_list): 
+	Don't free local_list if local_count == 0. (#71241, reported
+	by Kevin Vandersloot.)
+
+	* gdk/x11/gdkselection-x11.c (gdk_text_property_to_text_list): 
+	Clean up list == NULL handling and failure.
+
+Wed Feb 13 11:27:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testtreeview.c (typesystem_recurse): Cast GType
+	to long and use %ld to fix warning. (#71318, Morten Welinder)
+
+Wed Feb 13 13:26:39 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenu.c: fix figuring accel path and changing behaviour.
+
+Wed Feb 13 06:42:37 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktable.c (gtk_table_size_allocate_pass1): partly revert
+	my recent expanding change to not expand the table if all children
+	have not epxand behaviour. this fixes palette views which often
+	use homogeneous non-expanding tables.
+
+Tue Feb 12 14:27:41 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): emit
+	row_deleted before we start unreffing the nodes ourselves
+	(gtk_tree_model_sort_increment_stamp): always increment the stamp,
+	and not only if the stamp equals 0 (pointed out by Darin Adler)
+
+	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): we want
+	to continue the while loop and not the nested for loop.
+
+Tue Feb 12 02:19:49 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktable.c (gtk_table_size_allocate_pass1): always spread out
+	the extra space allocated for the homogeneous case, as we don't
+	properly deal with readjusting table allocation within it. (for  this
+	purpose, a GtkAlignment can be used as table parent).
+
+2002-02-11  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_row_changed):
+	Consider reordering the row even when there's no sort column, if
+	there's a default sort function.
+	(gtk_tree_model_sort_rows_reordered): Use symbolic constants.
+	(gtk_tree_model_sort_level_find_insert): Add code to handle the
+	case where there is no sort column, but a default sort function.
+	(gtk_tree_model_sort_insert_value): Add code to handle the case
+	where there is no sort column an no default sort function.
+	(gtk_tree_model_sort_set_model): Use symbolic constant.
+	(gtk_tree_model_sort_reset_default_sort_func): Use symbolic constant.
+
+2002-02-11  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkfilesel.c: converted the "Delete File" dialog to
+	GtkMessageDialog. Marked missing strings for translation.
+
+Mon Feb 11 22:03:15 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.[ch]: Opaque resizing + prelighting for paned widget.
+	* gtk/gtkvpaned.c, gtk/gtkhpaned.c: move reszing logic to gtkpaned.c
+
+Mon Feb 11 21:42:17 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Implements DnD scrolling and fixes #71139
+
+	* gtk/gtktreeview.c (gtk_tree_view_vertical_autoscroll): new function,
+	(scroll_row_timeout): new function,
+	(gtk_tree_view_drag_motion): create scroll_timeout, so
+	scroll_row_timeout gets called
+
+Mon Feb 11 17:54:46 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): set upper
+	member of hadjustment correct, so the hscrollbars of lists smaller
+	than 1 page (in width) are somewhat saner
+
+2002-02-11  jacob berkman  <jacob@ximian.com>
+
+	* gdk/gdkwindow.h (gdk_get_default_root_window): fix signature to
+	match implementation
+
+Mon Feb 11 16:48:34 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_set_valist): set value of
+	func to NULL during initialization (we don't use func in the
+	!SORTED case, so we just silent the compiler here) (#71029)
+
+Mon Feb 11 16:40:44 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): install presize
+	handler, so the validate_rows_handler will always be run (#70997)
+
 Sun Feb 10 22:20:46 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): increase
@@ -25,8 +450,9 @@ Sun Feb 10 12:32:44 2002  Owen Taylor  <otaylor@redhat.com>
 2002-02-10  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkcalendar.c (gtk_calendar_class_init): Set finalize handler;
-	(gtk_calendar_finalize): Rename gtk_calendar_destroy to gtk_calendar_finalize
-	since ::destroy can be called multiple times, resulting in double-freeing memory.
+	(gtk_calendar_finalize): Rename gtk_calendar_destroy to 
+	gtk_calendar_finalize since ::destroy can be called multiple times, 
+	resulting in double-freeing memory.
 
 2002-02-10  Hans Breuer  <hans@breuer.org>
 
@@ -55,7 +481,7 @@ Sun Feb 10 12:32:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* gtk/gtksizegroup.c: Fix a double «The» typo in a string.
+	* gtk/gtksizegroup.c: Fix a double "The" typo in a string.
 	
 2002-02-09  Matthias Clasen  <matthias@local>
 
@@ -1609,11 +2035,7 @@ Sat Jan 12 16:57:31 2002  Kristian Rietveld  <kris@gtk.org>
 	cursor, set the Windows cursor to none first.
 
 	* gdk/win32/gdkgc-win32.c (predraw_set_foreground): Delete the old
-	brush that was in the DC, like the win32-procution branch does. I
-	guess this plugs a resource leak? With the HDC cache, the old
-	brush might be something we created ourselves, and not a stock
-	brush. And it doesn't do any harm to call DeleteObject on stock
-	brushes.
+	brush that was in the DC, like the win32-production branch does.
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_impl_win32_finalize): If
 	the window has a cursor which is the current Windows cursor,

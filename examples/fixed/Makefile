@@ -1,8 +1,14 @@
 
 CC = gcc
 
+CFLAGS = -Wall			 	\
+	-DG_DISABLE_DEPRECATED 	 	\
+	-DGDK_DISABLE_DEPRECATED 	\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED \
+	-DGTK_DISABLE_DEPRECATED
+
 fixed: fixed.c 
-	$(CC) `pkg-config --cflags gtk+-2.0`  fixed.c -o fixed `pkg-config --libs gtk+-2.0`
+	$(CC) fixed.c -o fixed $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
 
 clean: 
 	rm -f *.o fixed

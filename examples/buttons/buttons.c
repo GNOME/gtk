@@ -1,5 +1,5 @@
-/* example-start buttons buttons.c */
 
+#include <stdlib.h>
 #include <gtk/gtk.h>
 
 /* Create a new hbox with an image and a label packed into it
@@ -28,7 +28,7 @@ GtkWidget *xpm_label_box( GtkWidget *parent,
     pixmap = gdk_pixmap_create_from_xpm (parent->window, &mask,
 					 &style->bg[GTK_STATE_NORMAL],
 					 xpm_filename);
-    pixmapwid = gtk_pixmap_new (pixmap, mask);
+    pixmapwid = gtk_image_new_from_file (xpm_filename);
 
     /* Create a label for the button */
     label = gtk_label_new (label_text);
@@ -52,7 +52,6 @@ void callback( GtkWidget *widget,
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
-
 int main( int   argc,
           char *argv[] )
 {
@@ -68,12 +67,14 @@ int main( int   argc,
 
     gtk_window_set_title (GTK_WINDOW (window), "Pixmap'd Buttons!");
 
+#if 1
     /* It's a good idea to do this for all windows. */
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			GTK_SIGNAL_FUNC (gtk_exit), NULL);
+    g_signal_connect (GTK_OBJECT (window), "destroy",
+	              GTK_SIGNAL_FUNC (exit), NULL);
 
-    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			GTK_SIGNAL_FUNC (gtk_exit), NULL);
+    g_signal_connect (GTK_OBJECT (window), "delete_event",
+	 	      GTK_SIGNAL_FUNC (exit), NULL);
+#endif
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -83,8 +84,8 @@ int main( int   argc,
     button = gtk_button_new ();
 
     /* Connect the "clicked" signal of the button to our callback */
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (callback), (gpointer) "cool button");
+    g_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (callback), (gpointer) "cool button");
 
     /* This calls our box creating function */
     box1 = xpm_label_box(window, "info.xpm", "cool button");
@@ -105,4 +106,3 @@ int main( int   argc,
 
     return(0);
 }
-/* example-end */

@@ -1,10 +1,9 @@
-/* example-start list list.c */
 
 /* Include the GTK header files
  * Include stdio.h, we need that for the printf() function
  */
-#include        <gtk/gtk.h>
-#include        <stdio.h>
+#include <gtk/gtk.h>
+#include <stdio.h>
 
 /* This is our data identification string to store
  * data in list items
@@ -52,7 +51,7 @@ gint main( int    argc,
      */
     window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "GtkList Example");
-    gtk_signal_connect(GTK_OBJECT(window),
+    g_signal_connect(GTK_OBJECT(window),
 		       "destroy",
 		       GTK_SIGNAL_FUNC(gtk_main_quit),
 		       NULL);
@@ -61,13 +60,13 @@ gint main( int    argc,
     /* Inside the window we need a box to arrange the widgets
      * vertically */
     vbox=gtk_vbox_new(FALSE, 5);
-    gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+    gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
     gtk_container_add(GTK_CONTAINER(window), vbox);
     gtk_widget_show(vbox);
     
     /* This is the scrolled window to put the List widget inside */
     scrolled_window=gtk_scrolled_window_new(NULL, NULL);
-    gtk_widget_set_usize(scrolled_window, 250, 150);
+    gtk_widget_set_size_request (scrolled_window, 250, 150);
     gtk_container_add(GTK_CONTAINER(vbox), scrolled_window);
     gtk_widget_show(scrolled_window);
     
@@ -87,8 +86,8 @@ gint main( int    argc,
     
     /* We create a "Prison" to put a list item in ;) */
     frame=gtk_frame_new("Prison");
-    gtk_widget_set_usize(frame, 200, 50);
-    gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+    gtk_widget_set_size_request (frame, 200, 50);
+    gtk_container_set_border_width (GTK_CONTAINER (frame), 5);
     gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
     gtk_container_add(GTK_CONTAINER(vbox), frame);
     gtk_widget_show(frame);
@@ -267,7 +266,7 @@ void sigh_print_selection( GtkWidget *gtklist,
 	gchar           *item_data_string;
 	
 	list_item=GTK_OBJECT(dlist->data);
-	item_data_string=gtk_object_get_data(list_item,
+	item_data_string=g_object_get_data(G_OBJECT (list_item),
 					     list_item_data_key);
 	g_print("%s ", item_data_string);
 	
@@ -275,4 +274,3 @@ void sigh_print_selection( GtkWidget *gtklist,
     }
     g_print("\n");
 }
-/* example-end */
