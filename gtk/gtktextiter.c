@@ -5083,7 +5083,10 @@ _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
   else
     {
       iter_init_from_byte_offset (iter, tree, line, 0);
-      gtk_text_iter_forward_to_tag_toggle (iter, tag);
+
+      if (!gtk_text_iter_toggles_tag (iter, tag))
+        gtk_text_iter_forward_to_tag_toggle (iter, tag);
+
       check_invariants (iter);
       return TRUE;
     }
