@@ -142,6 +142,7 @@ gdk_display_get_pointer
 gdk_display_get_window_at_pointer
 GdkDisplayPointerHooks
 gdk_display_set_pointer_hooks
+gdk_display_warp_pointer
 gdk_display_supports_cursor_color
 gdk_display_supports_cursor_alpha
 gdk_display_get_default_cursor_size
