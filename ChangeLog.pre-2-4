@@ -1,3 +1,16 @@
+2004-02-23  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (list_selection_changed): Call
+	bookmarks_check_add_sensitivity().
+	(shortcut_exists): New helper function; moved the testing code
+	over from bookmarks_check_add_sensitivity().
+	(bookmarks_check_add_sensitivity): Check the contents of the
+	selection in the file/folder list.  Use shortcut_exists().
+	(shortcuts_add_bookmark_from_path): Don't insert the bookmark if
+	the path is already in the shortcuts list.
+	(add_bookmark_button_clicked_cb): Add the bookmarks from the list
+	selection or from the current folder, as appropriate.
+
 Mon Feb 23 21:09:06 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_pane_create): Add

@@ -1123,6 +1123,70 @@ create_folder_tree (GtkFileChooserDefault *impl)
   return impl->tree_scrollwin;
 }
 
+/* Returns whether a path is already present in the shortcuts list */
+static gboolean
+shortcut_exists (GtkFileChooserDefault *impl,
+		 const GtkFilePath     *path)
+{
+  gboolean exists;
+  GtkTreeIter iter;
+  int volumes_idx;
+  int separator_idx;
+
+  exists = FALSE;
+
+  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
+    {
+      int i;
+
+      separator_idx = shortcuts_get_index (impl, SHORTCUTS_SEPARATOR);
+      volumes_idx = shortcuts_get_index (impl, SHORTCUTS_VOLUMES);
+
+      i = 0;
+
+      do
+	{
+	  gpointer data;
+
+	  if (i == separator_idx)
+	    continue;
+
+	  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &data, -1);
+
+	  if (i >= volumes_idx && i < volumes_idx + impl->num_volumes)
+	    {
+	      GtkFileSystemVolume *volume;
+	      GtkFilePath *base_path;
+
+	      volume = data;
+	      base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
+
+	      exists = strcmp (gtk_file_path_get_string (path),
+			       gtk_file_path_get_string (base_path)) == 0;
+	      g_free (base_path);
+
+	      if (exists)
+		break;
+	    }
+	  else
+	    {
+	      GtkFilePath *model_path;
+
+	      model_path = data;
+
+	      if (model_path && gtk_file_path_compare (model_path, path) == 0)
+		{
+		  exists = TRUE;
+		  break;
+		}
+	    }
+	}
+      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter));
+    }
+
+  return exists;
+}
+
 /* Tries to add a bookmark from a path name */
 static void
 shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
@@ -1130,6 +1194,9 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
 {
   GtkFileInfo *info;
   GError *error;
+
+  if (shortcut_exists (impl, path))
+    return;
 
   error = NULL;
   info = get_file_info (impl->file_system, path, &error);
@@ -1153,12 +1220,54 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
     }
 }
 
+static void
+add_bookmark_foreach_cb (GtkTreeModel *model,
+			 GtkTreePath  *path,
+			 GtkTreeIter  *iter,
+			 gpointer      data)
+{
+  GtkFileChooserDefault *impl;
+  GtkFileSystemModel *fs_model;
+  GtkTreeIter child_iter;
+  const GtkFilePath *file_path;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (data);
+
+  if (impl->folder_mode)
+    {
+      fs_model = impl->tree_model;
+      child_iter = *iter;
+    }
+  else
+    {
+      fs_model = impl->list_model;
+      gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, iter);
+    }
+
+  file_path = _gtk_file_system_model_get_path (fs_model, &child_iter);
+  shortcuts_add_bookmark_from_path (impl, file_path);
+}
+
 /* Callback used when the "Add bookmark" button is clicked */
 static void
 add_bookmark_button_clicked_cb (GtkButton *button,
 				GtkFileChooserDefault *impl)
 {
-  shortcuts_add_bookmark_from_path (impl, impl->current_folder);
+  GtkWidget *tree_view;
+  GtkTreeSelection *selection;
+
+  if (impl->folder_mode)
+    tree_view = impl->tree;
+  else
+    tree_view = impl->list;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
+  if (gtk_tree_selection_count_selected_rows (selection) == 0)
+    shortcuts_add_bookmark_from_path (impl, impl->current_folder);
+  else
+    gtk_tree_selection_selected_foreach (selection,
+					 add_bookmark_foreach_cb,
+					 impl);
 }
 
 /* Callback used when the "Remove bookmark" button is clicked */
@@ -1194,69 +1303,76 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
     }
 }
 
-/* Sensitize the "add bookmark" button if the current folder is not in the
- * bookmarks list, or de-sensitize it otherwise.
+struct is_folders_foreach_closure {
+  GtkFileChooserDefault *impl;
+  gboolean all_folders;
+};
+
+/* Used from gtk_tree_selection_selected_foreach() */
+static void
+is_folders_foreach_cb (GtkTreeModel *model,
+		       GtkTreePath  *path,
+		       GtkTreeIter  *iter,
+		       gpointer      data)
+{
+  struct is_folders_foreach_closure *closure;
+  GtkTreeIter child_iter;
+  const GtkFileInfo *info;
+
+  closure = data;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
+
+  info = _gtk_file_system_model_get_info (closure->impl->list_model, &child_iter);
+  closure->all_folders &= gtk_file_info_get_is_folder (info);
+}
+
+/* Returns whether the selected items in the file list are all folders */
+static gboolean
+selection_is_folders (GtkFileChooserDefault *impl)
+{
+  struct is_folders_foreach_closure closure;
+  GtkTreeSelection *selection;
+
+  g_assert (!impl->folder_mode);
+
+  closure.impl = impl;
+  closure.all_folders = TRUE;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+  gtk_tree_selection_selected_foreach (selection,
+				       is_folders_foreach_cb,
+				       &closure);
+
+  return closure.all_folders;
+}
+
+/* Sensitize the "add bookmark" button if all the selected items are folders, or
+ * if there are no selected items *and* the current folder is not in the
+ * bookmarks list.  De-sensitize the button otherwise.
  */
 static void
 bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 {
-  GtkTreeIter iter;
-  gboolean exists;
-  int volumes_idx;
-  int separator_idx;
+  GtkWidget *tree_view;
+  GtkTreeSelection *selection;
+  gboolean active;
 
-  exists = FALSE;
+  /* Check selection */
 
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
-    {
-      int i;
+  if (impl->folder_mode)
+    tree_view = impl->tree;
+  else
+    tree_view = impl->list;
 
-      separator_idx = shortcuts_get_index (impl, SHORTCUTS_SEPARATOR);
-      volumes_idx = shortcuts_get_index (impl, SHORTCUTS_VOLUMES);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
 
-      i = 0;
+  if (gtk_tree_selection_count_selected_rows (selection) == 0)
+    active = !shortcut_exists (impl, impl->current_folder);
+  else
+    active = (impl->folder_mode || selection_is_folders (impl));
 
-      do
-	{
-	  gpointer data;
-
-	  if (i == separator_idx)
-	    continue;
-
-	  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &data, -1);
-
-	  if (i >= volumes_idx && i < volumes_idx + impl->num_volumes)
-	    {
-	      GtkFileSystemVolume *volume;
-	      GtkFilePath *base_path;
-
-	      volume = data;
-	      base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
-
-	      exists = strcmp (gtk_file_path_get_string (impl->current_folder),
-			       gtk_file_path_get_string (base_path)) == 0;
-	      g_free (base_path);
-
-	      if (exists)
-		break;
-	    }
-	  else
-	    {
-	      GtkFilePath *path;
-
-	      path = data;
-
-	      if (path && gtk_file_path_compare (path, impl->current_folder) == 0)
-		{
-		  exists = TRUE;
-		  break;
-		}
-	    }
-	}
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter));
-    }
-
-  gtk_widget_set_sensitive (impl->add_bookmark_button, !exists);
+  gtk_widget_set_sensitive (impl->add_bookmark_button, active);
 }
 
 /* Sets the sensitivity of the "remove bookmark" button depending on whether a
@@ -3083,6 +3199,7 @@ list_selection_changed (GtkTreeSelection      *selection,
 
   update_chooser_entry (impl);
   check_preview_change (impl);
+  bookmarks_check_add_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
 }
