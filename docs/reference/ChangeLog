@@ -1,3 +1,10 @@
+2004-07-04  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtk-docs.sgml:
+	* gtk/gtk-sections.txt:
+	* gtk/gtk.types:
+	Add GtkIconView to the documentation.
+	
 Sat Jul  3 23:44:45 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtksocket.sgml: 

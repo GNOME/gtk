@@ -52,6 +52,7 @@
 <!ENTITY GtkHScale SYSTEM "xml/gtkhscale.xml">
 <!ENTITY GtkHScrollbar SYSTEM "xml/gtkhscrollbar.xml">
 <!ENTITY GtkHSeparator SYSTEM "xml/gtkhseparator.xml">
+<!ENTITY GtkIconView SYSTEM "xml/gtkiconview.xml">
 <!ENTITY GtkImage SYSTEM "xml/gtkimage.xml">
 <!ENTITY GtkImageMenuItem SYSTEM "xml/gtkimagemenuitem.xml">
 <!ENTITY GtkIMContext SYSTEM "xml/gtkimcontext.xml">
