@@ -7315,10 +7315,17 @@ gtk_requisition_get_type (void)
  * @widget: a #GtkWidget
  *
  * Returns the accessible object that describes the widget to an
- * assistive technology. The documentation of the 
- * <ulink url="http://developer.gnome.org/doc/API/2.0/atk/index.html">ATK</ulink>
- * library contains more information about accessible objects and 
- * their uses.
+ * assistive technology. 
+ * 
+ * If no accessibility library is loaded (i.e. no ATK implementation library is 
+ * loaded via <envar>GTK_MODULES</envar> or via another application library, 
+ * such as libgnome), then this #AtkObject instance may be a no-op. Likewise, 
+ * if no class-specific #AtkObject implementation is available for the widget 
+ * instance in question, it will inherit an #AtkObject implementation from the 
+ * first ancestor class for which such an implementation is defined.
+ *
+ * The documentation of the <ulink url="http://developer.gnome.org/doc/API/2.0/atk/index.html">ATK</ulink>
+ * library contains more information about accessible objects and their uses.
  * 
  * Returns: the #AtkObject associated with @widget
  */

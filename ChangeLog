@@ -1,3 +1,8 @@
+2005-01-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_get_accessible): More details
+	provided by Bill Haneman.
+
 2005-01-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_get_accessible): Add docs.  (#164725,
