@@ -73,8 +73,6 @@ GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkWindow    *window,
 						  GdkColor     *transparent_color,
 						  gchar       **data);
 
-GdkScreen *gdk_pixmap_get_screen (GdkDrawable *drawable);
-
 /* Functions to create/lookup pixmaps from their native equivalents
  */
 #ifndef GDK_MULTIHEAD_SAFE

@@ -1,7 +1,14 @@
 2002-05-01 Erwann Chenede - <erwann.chenede@sun.com>
+  	
+	* gdk/gdkpixmap.[hc] (gdk_pixmap_get_screen):
+	* x11/gdkpixmap-x11.c:
+	removed that function as gdk_drawable_get_screen
+	does the job. #79964
+
+2002-05-01 Erwann Chenede - <erwann.chenede@sun.com>
 
 	* gdk/gdkscreen.[hc] (gdk_screen_x11_get_monitor_at_window):
-	remove virtualization and made it cross platform. fix #79961
+	remove virtualization and made it cross platform. #79961
 	* gdk/x11/gdkdisplay-x11.c (check_solaris_xinerama):
 	fixed initialization bugs.
 	* gdk/x11/gdkscreen-x11.[hc] (gdk_screen_get_monitor_geometry):
@@ -9,7 +16,7 @@
 	* gtk/gtkwindow.c (gtk_window_compute_configure_request):
 	* gtk/gtkmenu.c (gtk_menu_position):
 	take a GdkRectangle argument instead of returning 
-	a GdkRectangle * and propagated the changes. fix #79974
+	a GdkRectangle * and propagated the changes. #79974
 	
 2002-05-01  Anders Carlsson  <andersca@gnu.org>
 

@@ -135,6 +135,7 @@ static gint         gdk_pixmap_real_get_depth    (GdkDrawable *drawable);
 static void         gdk_pixmap_real_set_colormap (GdkDrawable *drawable,
                                                   GdkColormap *cmap);
 static GdkColormap* gdk_pixmap_real_get_colormap (GdkDrawable *drawable);
+static GdkScreen*   gdk_pixmap_real_get_screen   (GdkDrawable *drawable);
 
 static void gdk_pixmap_init       (GdkPixmapObject      *pixmap);
 static void gdk_pixmap_class_init (GdkPixmapObjectClass *klass);
@@ -201,7 +202,7 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_image = gdk_pixmap_draw_image;
   drawable_class->_draw_pixbuf = gdk_pixmap_draw_pixbuf;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
-  drawable_class->get_screen = gdk_pixmap_get_screen;
+  drawable_class->get_screen = gdk_pixmap_real_get_screen;
   drawable_class->get_size = gdk_pixmap_real_get_size;
   drawable_class->set_colormap = gdk_pixmap_real_set_colormap;
   drawable_class->get_colormap = gdk_pixmap_real_get_colormap;
@@ -622,3 +623,8 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 						transparent_color, data);
 }
 
+static GdkScreen*
+gdk_pixmap_real_get_screen (GdkDrawable *drawable)
+{
+    return gdk_drawable_get_screen (GDK_PIXMAP_OBJECT (drawable)->impl);
+}
