@@ -1,3 +1,11 @@
+Wed Jul 15 17:44:47 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (new_text_property): We free things from
+	the text property MemChunk, so it needs to be G_ALLOC_AND_FREE.
+
+	* Fix up line start cache when splitting a property
+	during an insert.
+
 1998-07-20  Raph Levien  <raph@acm.org>
 
 	* gdk/gdkrgb.c: More cleanups in the config process.
