@@ -476,6 +476,8 @@ gtk_hscale_pos_background (GtkHScale *hscale,
       *h -= theight;
       break;
     }
+  *w = MAX (*w, 0);
+  *h = MAX (*h, 0);
 }
 
 static void

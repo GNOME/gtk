@@ -1,3 +1,10 @@
+Thu Dec 30 04:51:05 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkvscale.c (gtk_vscale_pos_background): 
+	* gtk/gtkhscale.c (gtk_hscale_pos_background): when calculating the
+	background size relative to our allocation, guard against small
+	allocations, we may have not yet been size allocated.
+
 Fri Dec 24 03:41:33 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am: reverted sopwith's changes to Makefile.am,

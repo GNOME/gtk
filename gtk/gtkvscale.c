@@ -478,6 +478,8 @@ gtk_vscale_pos_background (GtkVScale *vscale,
       *h -= theight;
       break;
     }
+  *w = MAX (*w, 0);
+  *h = MAX (*h, 0);
 }
 
 static void
