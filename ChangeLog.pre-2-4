@@ -1,3 +1,10 @@
+Wed Jan 30 20:15:49 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_set_valist): save last minute
+	changes before committing.
+
+	* gtk/gtkliststore.c (gtk_list_store_set_valist): ditto
+
 Wed Jan 30 18:46:14 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_set_valist): only emit the

@@ -910,26 +910,28 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
   gint column;
   gboolean emit_signal = FALSE;
   gboolean maybe_need_sort = FALSE;
-  GtkTreeIterCompareFunc func;
+  GtkTreeIterCompareFunc func = NULL;
 
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
   g_return_if_fail (VALID_ITER (iter, tree_store));
 
   column = va_arg (var_args, gint);
 
-  if (tree_store->sort_column_id != -1)
+  if (GTK_TREE_STORE_IS_SORTED (tree_store))
     {
-      GtkTreeDataSortHeader *header;
-      header = _gtk_tree_data_list_get_header (tree_store->sort_list,
-					       tree_store->sort_column_id);
-      g_return_if_fail (header != NULL);
-      g_return_if_fail (header->func != NULL);
-      func = header->func;
-    }
-  else
-    {
-      g_return_if_fail (tree_store->default_sort_func != NULL);
-      func = tree_store->default_sort_func;
+      if (tree_store->sort_column_id != -1)
+	{
+	  GtkTreeDataSortHeader *header;
+	  header = _gtk_tree_data_list_get_header (tree_store->sort_list,
+						   tree_store->sort_column_id);
+	  g_return_if_fail (header != NULL);
+	  g_return_if_fail (header->func != NULL);
+	  func = header->func;
+	}
+      else
+	{
+	  func = tree_store->default_sort_func;
+	}
     }
 
   if (func != gtk_tree_data_list_compare_func)

@@ -802,19 +802,21 @@ gtk_list_store_set_valist (GtkListStore *list_store,
 
   column = va_arg (var_args, gint);
 
-  if (list_store->sort_column_id != -1)
+  if (GTK_LIST_STORE_IS_SORTED (list_store))
     {
-      GtkTreeDataSortHeader *header;
-      header = _gtk_tree_data_list_get_header (list_store->sort_list,
-					       list_store->sort_column_id);
-      g_return_if_fail (header != NULL);
-      g_return_if_fail (header->func != NULL);
-      func = header->func;
-    }
-  else
-    {
-      g_return_if_fail (list_store->default_sort_func != NULL);
-      func = list_store->default_sort_func;
+      if (list_store->sort_column_id != -1)
+	{
+	  GtkTreeDataSortHeader *header;
+	  header = _gtk_tree_data_list_get_header (list_store->sort_list,
+						   list_store->sort_column_id);
+	  g_return_if_fail (header != NULL);
+	  g_return_if_fail (header->func != NULL);
+	  func = header->func;
+	}
+      else
+	{
+	  func = list_store->default_sort_func;
+	}
     }
 
   if (func != gtk_tree_data_list_compare_func)
