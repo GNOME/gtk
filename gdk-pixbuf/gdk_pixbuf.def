@@ -34,6 +34,7 @@ EXPORTS
 	gdk_pixbuf_get_has_alpha
 	gdk_pixbuf_get_height
 	gdk_pixbuf_get_n_channels
+	gdk_pixbuf_get_option
 	gdk_pixbuf_get_pixels
 	gdk_pixbuf_get_rowstride
 	gdk_pixbuf_get_type

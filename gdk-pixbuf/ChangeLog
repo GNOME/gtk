@@ -1,3 +1,7 @@
+2001-11-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk_pixbuf.def: Add gdk_pixbuf_get_option.
+
 Fri Nov 30 15:55:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.c (gdk_pixdata_deserialize): Fix
