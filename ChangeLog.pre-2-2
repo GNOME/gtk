@@ -1,3 +1,27 @@
+2002-05-27  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	[ merge from stable ]
+
+	Fixes for #83190
+
+	* gtk/gtktreedatalist.h (_GtkTreeDataList::data): Add missing
+	fields to anonymous union: glong, gulong, gint64 and guint64.
+	This is an internal header file, so it should not affect ABI
+	or API compatibility.
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_node_to_value):
+	Implement missing support for glong, gulong, gint64 and guint64
+	fundamental types.  Use data.v_uint instead of data.v_int for
+	G_TYPE_FLAGS, as GValue does.
+	(_gtk_tree_data_list_value_to_node): ditto
+	(_gtk_tree_data_list_node_copy): Add case labels for missing
+	fundamental types, and reorder them to match the other functions.
+	(gtk_tree_data_list_compare_func): Implement comparison for
+	glong, gulong, gint64 and guint64.  Use g_value_get_enum()
+	for G_TYPE_ENUM and g_value_get_flags() for G_TYPE_FLAGS, rather
+	than accessing them as gint/guint.  The G_VALUE_HOLDS() check
+	probably won't like this.
+
 2002-05-24  Dave Camp  <dave@ximian.com>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted): 

@@ -35,6 +35,10 @@ struct _GtkTreeDataList
     gint8          v_char;
     guint8         v_uchar;
     guint	   v_uint;
+    glong	   v_long;
+    gulong	   v_ulong;
+    gint64	   v_int64;
+    guint64        v_uint64;
     gfloat	   v_float;
     gdouble        v_double;
     gpointer	   v_pointer;

@@ -133,11 +133,23 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
     case G_TYPE_UINT:
       g_value_set_uint (value, (guint) list->data.v_uint);
       break;
+    case G_TYPE_LONG:
+      g_value_set_long (value, list->data.v_long);
+      break;
+    case G_TYPE_ULONG:
+      g_value_set_ulong (value, list->data.v_ulong);
+      break;
+    case G_TYPE_INT64:
+      g_value_set_int64 (value, list->data.v_int64);
+      break;
+    case G_TYPE_UINT64:
+      g_value_set_uint64 (value, list->data.v_uint64);
+      break;
     case G_TYPE_ENUM:
       g_value_set_enum (value, list->data.v_int);
       break;
     case G_TYPE_FLAGS:
-      g_value_set_flags (value, (int) list->data.v_int);
+      g_value_set_flags (value, list->data.v_uint);
       break;
     case G_TYPE_FLOAT:
       g_value_set_float (value, (gfloat) list->data.v_float);
@@ -181,14 +193,26 @@ _gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
     case G_TYPE_INT:
       list->data.v_int = g_value_get_int (value);
       break;
+    case G_TYPE_UINT:
+      list->data.v_uint = g_value_get_uint (value);
+      break;
+    case G_TYPE_LONG:
+      list->data.v_long = g_value_get_long (value);
+      break;
+    case G_TYPE_ULONG:
+      list->data.v_ulong = g_value_get_ulong (value);
+      break;
+    case G_TYPE_INT64:
+      list->data.v_int64 = g_value_get_int64 (value);
+      break;
+    case G_TYPE_UINT64:
+      list->data.v_uint64 = g_value_get_uint64 (value);
+      break;
     case G_TYPE_ENUM:
       list->data.v_int = g_value_get_enum (value);
       break;
     case G_TYPE_FLAGS:
-      list->data.v_int = g_value_get_flags (value);
-      break;
-    case G_TYPE_UINT:
-      list->data.v_uint = g_value_get_uint (value);
+      list->data.v_uint = g_value_get_flags (value);
       break;
     case G_TYPE_POINTER:
       list->data.v_pointer = g_value_get_pointer (value);
@@ -233,11 +257,17 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
 
   switch (G_TYPE_FUNDAMENTAL (type))
     {
-    case G_TYPE_UINT:
-    case G_TYPE_INT:
-    case G_TYPE_UCHAR:
-    case G_TYPE_CHAR:
     case G_TYPE_BOOLEAN:
+    case G_TYPE_CHAR:
+    case G_TYPE_UCHAR:
+    case G_TYPE_INT:
+    case G_TYPE_UINT:
+    case G_TYPE_LONG:
+    case G_TYPE_ULONG:
+    case G_TYPE_INT64:
+    case G_TYPE_UINT64:
+    case G_TYPE_ENUM:
+    case G_TYPE_FLAGS:
     case G_TYPE_POINTER:
     case G_TYPE_FLOAT:
     case G_TYPE_DOUBLE:
@@ -323,20 +353,52 @@ gtk_tree_data_list_compare_func (GtkTreeModel *model,
       else
 	retval = 1;
       break;
+    case G_TYPE_LONG:
+      if (g_value_get_long (&a_value) < g_value_get_long (&b_value))
+	retval = -1;
+      else if (g_value_get_long (&a_value) == g_value_get_long (&b_value))
+	retval = 0;
+      else
+	retval = 1;
+      break;
+    case G_TYPE_ULONG:
+      if (g_value_get_ulong (&a_value) < g_value_get_ulong (&b_value))
+	retval = -1;
+      else if (g_value_get_ulong (&a_value) == g_value_get_ulong (&b_value))
+	retval = 0;
+      else
+	retval = 1;
+      break;
+    case G_TYPE_INT64:
+      if (g_value_get_int64 (&a_value) < g_value_get_int64 (&b_value))
+	retval = -1;
+      else if (g_value_get_int64 (&a_value) == g_value_get_int64 (&b_value))
+	retval = 0;
+      else
+	retval = 1;
+      break;
+    case G_TYPE_UINT64:
+      if (g_value_get_uint64 (&a_value) < g_value_get_uint64 (&b_value))
+	retval = -1;
+      else if (g_value_get_uint64 (&a_value) == g_value_get_uint64 (&b_value))
+	retval = 0;
+      else
+	retval = 1;
+      break;
     case G_TYPE_ENUM:
       /* this is somewhat bogus. */
-      if (g_value_get_int (&a_value) < g_value_get_int (&b_value))
+      if (g_value_get_enum (&a_value) < g_value_get_enum (&b_value))
 	retval = -1;
-      else if (g_value_get_int (&a_value) == g_value_get_int (&b_value))
+      else if (g_value_get_enum (&a_value) == g_value_get_enum (&b_value))
 	retval = 0;
       else
 	retval = 1;
       break;
     case G_TYPE_FLAGS:
       /* this is even more bogus. */
-      if (g_value_get_uint (&a_value) < g_value_get_uint (&b_value))
+      if (g_value_get_flags (&a_value) < g_value_get_flags (&b_value))
 	retval = -1;
-      else if (g_value_get_uint (&a_value) == g_value_get_uint (&b_value))
+      else if (g_value_get_flags (&a_value) == g_value_get_flags (&b_value))
 	retval = 0;
       else
 	retval = 1;
