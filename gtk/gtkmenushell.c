@@ -551,21 +551,14 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
   if (!menu_shell->active_menu_item && menu_shell->parent_menu_shell)
     return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent *)event);
   
-  if (gtk_bindings_activate (GTK_OBJECT (widget),
-			     event->keyval,
-			     event->state))
+  if (_gtk_bindings_activate_event (GTK_OBJECT (widget), event))
     return TRUE;
 
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_IS_WINDOW (toplevel) &&
-      gtk_window_mnemonic_activate (GTK_WINDOW (toplevel),
-				    event->keyval,
-				    event->state))
+      _gtk_window_activate_key (GTK_WINDOW (toplevel), event))
     return TRUE;
   
-  if (gtk_accel_groups_activate (G_OBJECT (widget), event->keyval, event->state))
-    return TRUE;
-
   return FALSE;
 }
 

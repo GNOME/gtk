@@ -1075,7 +1075,7 @@ gtk_bindings_activate (GtkObject      *object,
   if (!GTK_IS_WIDGET (object))
     return FALSE;
 
-  is_release = (BINDING_MOD_MASK () & GDK_RELEASE_MASK) != 0;
+  is_release = (modifiers & GDK_RELEASE_MASK) != 0;
   modifiers = modifiers & BINDING_MOD_MASK () & ~GDK_RELEASE_MASK;
 
   key_hash = binding_key_hash_for_keymap (gdk_keymap_get_default ());

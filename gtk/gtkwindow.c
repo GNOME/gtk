@@ -226,8 +226,6 @@ static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
 
 static void        gtk_window_notify_keys_changed (GtkWindow   *window);
-static gboolean    gtk_window_activate_key        (GtkWindow   *window,
-						   GdkEventKey *event);
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 
@@ -3534,7 +3532,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
   /* Check for mnemonics and accelerators
    */
   if (!handled)
-    handled = gtk_window_activate_key (window, event);
+    handled = _gtk_window_activate_key (window, event);
 
   if (!handled)
     {
@@ -5812,9 +5810,18 @@ gtk_window_free_key_hash (GtkWindow *window)
     }
 }
 
-static gboolean
-gtk_window_activate_key (GtkWindow   *window,
-			 GdkEventKey *event)
+/**
+ * _gtk_window_activate_key:
+ * @window: a #GtkWindow
+ * @event: a #GdkEventKey
+ * 
+ * Activates mnemonics and accelerators for this #GtKWindow
+ * 
+ * Return value: %TRUE if a mnemonic or accelerator was found and activated.
+ **/
+gboolean
+_gtk_window_activate_key (GtkWindow   *window,
+			  GdkEventKey *event)
 {
   GtkKeyHash *key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
   GtkWindowKeyEntry *found_entry = NULL;

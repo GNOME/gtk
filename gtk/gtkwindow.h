@@ -325,6 +325,8 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint      *new_width,
 						gint      *new_height);
 GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
+gboolean        _gtk_window_activate_key       (GtkWindow   *window,
+						GdkEventKey *event);
 
 /* --- internal (GtkAcceleratable) --- */
 gboolean	_gtk_window_query_nonaccels	(GtkWindow	*window,

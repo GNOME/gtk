@@ -1,3 +1,21 @@
+Thu Feb 21 16:51:17 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Add
+	GDK_ISO_Next_Group/Prev_Group/Level3_Shift/
+	First_Group/Last_Group to list of invalid accelerators.
+	(A lot more that should be added, but probably would
+	want a range mechanism. These are the ones found in
+	the standard XFree86 config files.)
+
+	* gtk/gtkbindings.c (gtk_bindings_activate): Fix problem
+	that broke bindings for menus.
+
+	* gtk/gtkwindow.[ch]: Export _gtk_window_activate_key()
+	privately.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_key_press): Use
+	_gtk_window_activate_key(), gtk_bindings_activate_event().
+
 Thu Feb 21 12:24:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c (gtk_ctree_class_init): Remove some workarounds
