@@ -119,9 +119,9 @@ struct _GtkDisconnectInfo
 };
 
 
-static guint	    gtk_signal_hash	       (g_const_pointer h);
-static gint	    gtk_signal_compare	       (g_const_pointer h1,
-						g_const_pointer h2);
+static guint	    gtk_signal_hash	       (gconstpointer h);
+static gint	    gtk_signal_compare	       (gconstpointer h1,
+						gconstpointer h2);
 static GtkHandler*  gtk_signal_handler_new     (void);
 static void	    gtk_signal_handler_ref     (GtkHandler    *handler);
 static void	    gtk_signal_handler_unref   (GtkHandler    *handler,
@@ -1186,7 +1186,7 @@ gtk_signal_set_funcs (GtkSignalMarshal marshal_func,
 }
 
 static guint
-gtk_signal_hash (g_const_pointer h)
+gtk_signal_hash (gconstpointer h)
 {
   register const GtkSignalHash *hash = h;
   
@@ -1194,8 +1194,8 @@ gtk_signal_hash (g_const_pointer h)
 }
 
 static gint
-gtk_signal_compare (g_const_pointer h1,
-		    g_const_pointer h2)
+gtk_signal_compare (gconstpointer h1,
+		    gconstpointer h2)
 {
   register const GtkSignalHash *hash1 = h1;
   register const GtkSignalHash *hash2 = h2;

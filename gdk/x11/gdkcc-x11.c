@@ -66,7 +66,7 @@
 
 
 static guint
-hash_color (g_const_pointer key)
+hash_color (gconstpointer key)
 {
   const GdkColor *color = key;
 
@@ -74,8 +74,8 @@ hash_color (g_const_pointer key)
 }
 
 static gint
-compare_colors (g_const_pointer a,
-		g_const_pointer b)
+compare_colors (gconstpointer a,
+		gconstpointer b)
 {
   const GdkColor *aa = a;
   const GdkColor *bb = b;

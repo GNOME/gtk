@@ -2495,7 +2495,7 @@ insert_expose (GtkText* text, guint old_pixels, gint nchars,
 }
 
 static guint
-font_hash (g_const_pointer font)
+font_hash (gconstpointer font)
 {
   return gdk_font_id ((const GdkFont*) font);
 }

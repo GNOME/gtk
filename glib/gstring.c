@@ -50,14 +50,14 @@ static GMemChunk *string_mem_chunk = NULL;
  */
 
 gint
-g_str_equal (g_const_pointer v, g_const_pointer v2)
+g_str_equal (gconstpointer v, gconstpointer v2)
 {
   return strcmp ((const gchar*) v, (const gchar*)v2) == 0;
 }
 
 /* a char* hash function from ASU */
 guint
-g_str_hash (g_const_pointer v)
+g_str_hash (gconstpointer v)
 {
   const char *s = (char*)v;
   const char *p;

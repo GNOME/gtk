@@ -57,8 +57,8 @@ static GMemChunk	*accel_entries_mem_chunk = NULL;
 
 /* --- functions --- */
 static gint
-gtk_accel_entries_equal (g_const_pointer a,
-			 g_const_pointer b)
+gtk_accel_entries_equal (gconstpointer a,
+			 gconstpointer b)
 {
   const GtkAccelEntry *e1;
   const GtkAccelEntry *e2;
@@ -72,7 +72,7 @@ gtk_accel_entries_equal (g_const_pointer a,
 }
 
 static guint
-gtk_accel_entries_hash (g_const_pointer a)
+gtk_accel_entries_hash (gconstpointer a)
 {
   const GtkAccelEntry *e;
   guint h;

@@ -41,14 +41,14 @@ struct _GDatasetData
 
 struct _GDataset
 {
-  g_const_pointer location;
+  gconstpointer location;
   GDatasetData *data_list;
 };
 
 
 /* --- prototypes --- */
-static inline GDataset*	g_dataset_lookup	(g_const_pointer dataset_location);
-static inline void	g_dataset_destroy_i	(GDataset	 *dataset);
+static inline GDataset*	g_dataset_lookup	(gconstpointer dataset_location);
+static inline void	g_dataset_destroy_i	(GDataset     *dataset);
 static void		g_dataset_initialize	(void);
 static guint*		g_dataset_id_new	(void);
 
@@ -65,7 +65,7 @@ static guint g_dataset_id_index = G_DATASET_ID_BLOCK_SIZE + 1;
 
 /* --- functions --- */
 static inline GDataset*
-g_dataset_lookup (g_const_pointer	dataset_location)
+g_dataset_lookup (gconstpointer	dataset_location)
 {
   register GDataset *dataset;
   
@@ -109,7 +109,7 @@ g_dataset_destroy_i (GDataset *dataset)
 }
 
 void
-g_dataset_destroy (g_const_pointer  dataset_location)
+g_dataset_destroy (gconstpointer  dataset_location)
 {
   register GDataset *dataset;
   
@@ -121,9 +121,9 @@ g_dataset_destroy (g_const_pointer  dataset_location)
 }
 
 void
-g_dataset_id_set_destroy (g_const_pointer  dataset_location,
-			  guint            key_id,
-			  GDestroyNotify   destroy_func)
+g_dataset_id_set_destroy (gconstpointer  dataset_location,
+			  guint          key_id,
+			  GDestroyNotify destroy_func)
 {
   g_return_if_fail (dataset_location != NULL);
   
@@ -150,8 +150,8 @@ g_dataset_id_set_destroy (g_const_pointer  dataset_location,
 }
 
 gpointer
-g_dataset_id_get_data (g_const_pointer  dataset_location,
-		       guint            key_id)
+g_dataset_id_get_data (gconstpointer  dataset_location,
+		       guint          key_id)
 {
   g_return_val_if_fail (dataset_location != NULL, NULL);
   
@@ -174,10 +174,10 @@ g_dataset_id_get_data (g_const_pointer  dataset_location,
 }
 
 void
-g_dataset_id_set_data_full (g_const_pointer  dataset_location,
-			    guint            key_id,
-			    gpointer         data,
-			    GDestroyNotify   destroy_func)
+g_dataset_id_set_data_full (gconstpointer  dataset_location,
+			    guint          key_id,
+			    gpointer       data,
+			    GDestroyNotify destroy_func)
 {
   register GDataset *dataset;
   register GDatasetData *list;

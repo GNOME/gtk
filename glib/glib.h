@@ -389,7 +389,7 @@ typedef double gldouble;
 #endif /* 0 */
 
 typedef void* gpointer;
-typedef const void *g_const_pointer;
+typedef const void *gconstpointer;
 
 #if (SIZEOF_CHAR == 1)
 typedef signed char	gint8;
@@ -472,9 +472,9 @@ typedef void		(*GScannerMsgFunc)	(GScanner *scanner,
 						 gint	   error);
 typedef void		(*GDestroyNotify)	(gpointer  data);
 
-typedef guint		(*GHashFunc)		(g_const_pointer  key);
-typedef gint		(*GCompareFunc)		(g_const_pointer  a,
-						 g_const_pointer  b);
+typedef guint		(*GHashFunc)		(gconstpointer    key);
+typedef gint		(*GCompareFunc)		(gconstpointer    a,
+						 gconstpointer    b);
 
 struct _GList
 {
@@ -627,9 +627,9 @@ void	    g_hash_table_insert	 (GHashTable	 *hash_table,
 				  gpointer        key,
 				  gpointer        value);
 void	    g_hash_table_remove	 (GHashTable	 *hash_table,
-				  g_const_pointer key);
+				  gconstpointer   key);
 gpointer    g_hash_table_lookup	 (GHashTable	 *hash_table,
-				  g_const_pointer  key);
+				  gconstpointer    key);
 void	    g_hash_table_freeze	 (GHashTable	 *hash_table);
 void	    g_hash_table_thaw	 (GHashTable	 *hash_table);
 void	    g_hash_table_foreach (GHashTable	 *hash_table,
@@ -893,29 +893,29 @@ GArray* g_rarray_truncate (GArray   *array,
 
 /* Hash Functions
  */
-gint  g_str_equal (g_const_pointer v,
-		   g_const_pointer v2);
-guint g_str_hash  (g_const_pointer v);
+gint  g_str_equal (gconstpointer   v,
+		   gconstpointer   v2);
+guint g_str_hash  (gconstpointer v);
 
 /* This "hash" function will just return the key's adress as an
  * unsigned integer. Useful for hashing on plain adresses or
  * simple integer values.
  */
-guint g_direct_hash (g_const_pointer key);
+guint g_direct_hash (gconstpointer key);
 
 
 /* Location Associated Data
  */
-void	  g_dataset_destroy		(g_const_pointer dataset_location);
+void	  g_dataset_destroy		(gconstpointer   dataset_location);
 guint	  g_dataset_try_key		(const gchar    *key);
 guint	  g_dataset_force_id		(const gchar    *key);
-gpointer  g_dataset_id_get_data		(g_const_pointer dataset_location,
+gpointer  g_dataset_id_get_data		(gconstpointer   dataset_location,
 					 guint		 key_id);
-void	  g_dataset_id_set_data_full	(g_const_pointer dataset_location,
+void	  g_dataset_id_set_data_full	(gconstpointer   dataset_location,
 					 guint		 key_id,
 					 gpointer        data,
 					 GDestroyNotify	 destroy_func);
-void	  g_dataset_id_set_destroy	(g_const_pointer dataset_location,
+void	  g_dataset_id_set_destroy	(gconstpointer   dataset_location,
 					 guint		 key_id,
 					 GDestroyNotify	 destroy_func);
 

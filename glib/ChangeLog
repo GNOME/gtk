@@ -1,3 +1,7 @@
+Wed Jun 10 12:56:07 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* glib.h: renamed g_const_pointer => gconstpointer
+
 Tue Jun  9 17:47:33 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* glib.h: Remove #error - HP/UX.

@@ -1,3 +1,12 @@
+Wed Jun 10 12:57:03 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkcc.c glib/ghash.c glib/glib.h glib/gstring.c
+          glib/gutils.c glib/testglib.c glib/gdataset.c
+          gtk/gtkaccelgroup.c gtk/gtkmain.c gtk/gtksignal.c
+          gtk/gtktext.c gtk/gtkbindings.c:
+
+	 renamed g_const_pointer => gconstpointer
+
 Wed Jun 10 06:25:17 1998  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdk.c (gdk_init): prevent gdk_init() from segfaulting when

@@ -847,7 +847,7 @@ g_parse_debug_string  (const gchar *string,
 }
 
 guint
-g_direct_hash(g_const_pointer key)
+g_direct_hash(gconstpointer key)
 {
   return GPOINTER_TO_UINT (key);
 }

@@ -70,7 +70,7 @@ binding_signal_free (GtkBindingSignal *sig)
 }
 
 static guint
-binding_entry_hash (g_const_pointer  key)
+binding_entry_hash (gconstpointer  key)
 {
   register const GtkBindingEntry *e = key;
   register guint h;
@@ -82,8 +82,8 @@ binding_entry_hash (g_const_pointer  key)
 }
 
 static gint
-binding_entries_compare (g_const_pointer  a,
-			 g_const_pointer  b)
+binding_entries_compare (gconstpointer  a,
+			 gconstpointer  b)
 {
   register const GtkBindingEntry *ea = a;
   register const GtkBindingEntry *eb = b;
@@ -762,8 +762,8 @@ binding_match_activate (GSList          *pspec_list,
 }
 
 static gint
-gtk_binding_pattern_compare (g_const_pointer a,
-			     g_const_pointer b)
+gtk_binding_pattern_compare (gconstpointer a,
+			     gconstpointer b)
 {
   register const GtkPatternSpec *pa  = a;
   register const GtkPatternSpec *pb  = b;
