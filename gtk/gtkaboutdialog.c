@@ -2046,7 +2046,7 @@ gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
   GtkAboutDialogActivateLinkFunc old;
 
   if (activate_email_hook_destroy != NULL)
-    (* activate_email_hook_destroy) (activate_url_hook_data);
+    (* activate_email_hook_destroy) (activate_email_hook_data);
 
   old = activate_email_hook;
 
@@ -2078,7 +2078,7 @@ gtk_about_dialog_set_url_hook (GtkAboutDialogActivateLinkFunc func,
   GtkAboutDialogActivateLinkFunc old;
 
   if (activate_url_hook_destroy != NULL)
-    (* activate_url_hook_destroy) (activate_email_hook_data);
+    (* activate_url_hook_destroy) (activate_url_hook_data);
 
   old = activate_url_hook;
 

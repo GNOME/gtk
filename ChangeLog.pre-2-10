@@ -1,3 +1,9 @@
+2004-11-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_email_hook) 
+	(gtk_about_dialog_set_url_hook): Destroy the correct 
+	data.  (#158522, John Finlay)
+
 2004-11-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Use gmodule-no-export-2.0.pc, require glib 2.5.7
