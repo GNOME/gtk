@@ -159,6 +159,8 @@ static void gtk_notebook_size_allocate       (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static gint gtk_notebook_expose              (GtkWidget        *widget,
 					      GdkEventExpose   *event);
+static gboolean gtk_notebook_scroll          (GtkWidget        *widget,
+                                              GdkEventScroll   *event);
 static gint gtk_notebook_button_press        (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static gint gtk_notebook_button_release      (GtkWidget        *widget,
@@ -364,6 +366,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->size_request = gtk_notebook_size_request;
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->expose_event = gtk_notebook_expose;
+  widget_class->scroll_event = gtk_notebook_scroll;
   widget_class->button_press_event = gtk_notebook_button_press;
   widget_class->button_release_event = gtk_notebook_button_release;
   widget_class->enter_notify_event = gtk_notebook_enter_notify;
@@ -998,6 +1001,7 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_size_request
  * gtk_notebook_size_allocate
  * gtk_notebook_expose
+ * gtk_notebook_scroll
  * gtk_notebook_button_press
  * gtk_notebook_button_release
  * gtk_notebook_enter_notify
@@ -1146,8 +1150,8 @@ gtk_notebook_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-			    GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK);
-
+			    GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK |
+			    GDK_SCROLL_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   notebook->event_window = gdk_window_new (gtk_widget_get_parent_window (widget), 
@@ -1762,6 +1766,27 @@ get_widget_coordinates (GtkWidget *widget,
     }
   else
     return FALSE;
+}
+
+static gboolean
+gtk_notebook_scroll (GtkWidget      *widget,
+                     GdkEventScroll *event)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+
+  switch (event->direction)
+    {
+    case GDK_SCROLL_RIGHT:
+    case GDK_SCROLL_DOWN:
+      gtk_notebook_next_page (notebook);
+      break;
+    case GDK_SCROLL_LEFT:
+    case GDK_SCROLL_UP:
+      gtk_notebook_prev_page (notebook);
+      break;
+    }
+
+  return TRUE;
 }
 
 static gboolean
