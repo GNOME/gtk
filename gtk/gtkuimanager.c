@@ -1200,75 +1200,123 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
  * @path: a path
  * @name: the name for the added UI element
  * @action: the name of the action to be proxied, or %NULL to add a separator
+ * @type: the type of UI element to add.
+ * @top: if %TRUE, the UI element is added before its siblings, otherwise it 
+ *   is added after its siblings.
  * 
- * Adds a UI element to the current contents of @self. The path must lead to 
- * a place where a menuitem or toolitem can be inserted. If @action is %NULL,
- * a separator is inserted, otherwise a menuitem or toolitem.
+ * Adds a UI element to the current contents of @self. 
+ *
+ * If @type is %GTK_UI_MANAGER_AUTO, GTK+ inserts a menuitem, toolitem or 
+ * separator if such an element can be inserted at the place determined by 
+ * @path. Otherwise @type must indicate an element that can be inserted at 
+ * the place determined by @path.
  * 
  * Since: 2.4
  **/
 void
-gtk_ui_manager_add_ui (GtkUIManager *self,
-		       guint         merge_id,
-		       const gchar  *path,
-		       const gchar  *name,
-		       const gchar  *action)
+gtk_ui_manager_add_ui (GtkUIManager        *self,
+		       guint                merge_id,
+		       const gchar         *path,
+		       const gchar         *name,
+		       const gchar         *action,
+		       GtkUIManagerItemType type,
+		       gboolean             top)
 {
   GNode *node;
   GNode *child;
-  NodeType type;
+  NodeType node_type;
   GQuark action_quark = 0;
 
   g_return_if_fail (GTK_IS_UI_MANAGER (self));  
   g_return_if_fail (merge_id > 0);
+  g_return_if_fail (name != NULL);
 
   node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
   
   if (node == NULL)
     return;
 
+  node_type = NODE_TYPE_UNDECIDED;
+
   switch (NODE_INFO (node)->type) 
     {
+    case NODE_TYPE_MENUBAR:
     case NODE_TYPE_MENU:
     case NODE_TYPE_POPUP:
     case NODE_TYPE_MENU_PLACEHOLDER:
-      if (action != NULL)
-	type = NODE_TYPE_MENUITEM;
-      else
-	type = NODE_TYPE_SEPARATOR;
+      switch (type) 
+	{
+	case GTK_UI_MANAGER_AUTO:
+	  if (action != NULL)
+	      node_type = NODE_TYPE_MENUITEM;
+	  else
+	      node_type = NODE_TYPE_SEPARATOR;
+	  break;
+	case GTK_UI_MANAGER_MENU:
+	  node_type = NODE_TYPE_MENU;
+	  break;
+	case GTK_UI_MANAGER_MENUITEM:
+	  node_type = NODE_TYPE_MENUITEM;
+	  break;
+	case GTK_UI_MANAGER_SEPARATOR:
+	  node_type = NODE_TYPE_SEPARATOR;
+	  break;
+	case GTK_UI_MANAGER_PLACEHOLDER:
+	  node_type = NODE_TYPE_MENU_PLACEHOLDER;
+	  break;
+	default: ;
+	  /* do nothing */
+	}
       break;
     case NODE_TYPE_TOOLBAR:
     case NODE_TYPE_TOOLBAR_PLACEHOLDER:
-      if (action != NULL)
-	type = NODE_TYPE_TOOLITEM;
-      else
-	type = NODE_TYPE_SEPARATOR;
+      switch (type) 
+	{
+	case GTK_UI_MANAGER_AUTO:
+	  if (action != NULL)
+	      node_type = NODE_TYPE_TOOLITEM;
+	  else
+	      node_type = NODE_TYPE_SEPARATOR;
+	  break;
+	case GTK_UI_MANAGER_TOOLITEM:
+	  node_type = NODE_TYPE_TOOLITEM;
+	  break;
+	case GTK_UI_MANAGER_SEPARATOR:
+	  node_type = NODE_TYPE_SEPARATOR;
+	  break;
+	case GTK_UI_MANAGER_PLACEHOLDER:
+	  node_type = NODE_TYPE_MENU_PLACEHOLDER;
+	  break;
+	default: ;
+	  /* do nothing */
+	}
       break;
-    default:
-      return;
+    case NODE_TYPE_ROOT:
+      switch (type) 
+	{
+	case GTK_UI_MANAGER_MENUBAR:
+	  node_type = NODE_TYPE_MENUBAR;
+	  break;
+	case GTK_UI_MANAGER_TOOLBAR:
+	  node_type = NODE_TYPE_TOOLBAR;
+	  break;
+	case GTK_UI_MANAGER_POPUP:
+	  node_type = NODE_TYPE_POPUP;
+	  break;
+	default: ;
+	  /* do nothing */
+	}
+      break;
+    default: ;
+      /* do nothing */
     }
 
-  if (name == NULL)
-    {
-      switch (type)
-	{
-	case NODE_TYPE_MENUITEM:
-	  name = "menuitem";
-	  break;
-	case NODE_TYPE_TOOLITEM:
-	  name = "toolitem";
-	  break;
-	case NODE_TYPE_SEPARATOR:
-	  name = "separator";
-	  break;
-	default:
-	  g_assert_not_reached ();
-	}
-    }
-  
+  if (node_type == NODE_TYPE_UNDECIDED)
+    return;
+   
   child = get_child_node (self, node,
 			  name, strlen (name),
-			  type, TRUE, FALSE);
+			  node_type, TRUE, top);
 
   if (action != NULL)
     action_quark = g_quark_from_string (action);
@@ -1282,6 +1330,8 @@ gtk_ui_manager_add_ui (GtkUIManager *self,
   NODE_INFO (child)->dirty = TRUE;
 
   queue_update (self);
+
+  g_signal_emit (self, merge_signals[CHANGED], 0);
 }
 
 static gboolean

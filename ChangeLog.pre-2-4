@@ -1,3 +1,13 @@
+2003-09-04  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testmerge.c (toggle_dynamic): Test gtk_ui_manager_add_ui(). 
+
+	* gtk/gtkuimanager.h: Add GtkUIManagerItemType enum which is needed for the
+	'type' argument of gtk_ui_manager_add_ui().
+
+	* gtk/gtkuimanager.[hc] (gtk_ui_manager_add_ui): Add 'type' and 'top' arguments
+	to make this function as powerful as the XML methods of adding UI.  (#120647)
+
 Thu Sep  4 19:11:23 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from stable.

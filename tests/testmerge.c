@@ -31,6 +31,57 @@ toggle_tearoffs (GtkWidget    *button,
 }
 
 static void
+toggle_dynamic (GtkWidget    *button, 
+		GtkUIManager *merge)
+{
+  GtkAction *dyn;
+  static GtkActionGroup *dynamic = NULL;
+  static guint merge_id = 0;
+
+  if (!dynamic)
+    {
+      dynamic = gtk_action_group_new ("dynamic");
+      gtk_ui_manager_insert_action_group (merge, dynamic, 0);
+      dyn = g_object_new (GTK_TYPE_ACTION,
+			  "name", "dyn1",
+			  "label", "Dynamic action 1",
+			  "stock_id", GTK_STOCK_COPY,
+			  NULL);
+      gtk_action_group_add_action (dynamic, dyn);
+      dyn = g_object_new (GTK_TYPE_ACTION,
+			  "name", "dyn2",
+			  "label", "Dynamic action 2",
+			  "stock_id", GTK_STOCK_EXECUTE,
+			  NULL);
+      gtk_action_group_add_action (dynamic, dyn);
+    }
+  
+  if (merge_id == 0)
+    {
+      merge_id = gtk_ui_manager_new_merge_id (merge);
+      gtk_ui_manager_add_ui (merge, merge_id, "/toolbar1/ToolbarPlaceholder", 
+			     "dyn1", "dyn1", 0, 0);
+      gtk_ui_manager_add_ui (merge, merge_id, "/toolbar1/ToolbarPlaceholder", 
+			     "dynsep", NULL, GTK_UI_MANAGER_SEPARATOR, 0);
+      gtk_ui_manager_add_ui (merge, merge_id, "/toolbar1/ToolbarPlaceholder", 
+			     "dyn2", "dyn2", 0, 0);
+
+      gtk_ui_manager_add_ui (merge, merge_id, "/menubar/EditMenu", 
+			     "dyn1menu", "dyn1", GTK_UI_MANAGER_MENU, 0);
+      gtk_ui_manager_add_ui (merge, merge_id, "/menubar/EditMenu/dyn1menu", 
+			     "dyn1", "dyn1", GTK_UI_MANAGER_MENUITEM, 0);
+      gtk_ui_manager_add_ui (merge, merge_id, "/menubar/EditMenu/dyn1menu", 
+			     "dyn2", "dyn2", GTK_UI_MANAGER_AUTO, TRUE);
+    }
+  else 
+    {
+      gtk_ui_manager_remove_ui (merge, merge_id);
+      merge_id = 0;
+    }
+}
+
+
+static void
 activate_action (GtkAction *action)
 {
   const gchar *name = gtk_action_get_name (action);
@@ -59,7 +110,6 @@ radio_action_changed (GtkAction *action, GtkRadioAction *current)
 	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (current)),
 	     gtk_radio_action_get_current_value (current));
 }
-
 
 static GtkActionEntry entries[] = {
   { "FileMenuAction", NULL, "_File" },
@@ -450,6 +500,10 @@ main (int argc, char **argv)
 
   button = gtk_check_button_new_with_label ("Tearoffs");
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_tearoffs), merge);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_check_button_new_with_label ("Dynamic");
+  g_signal_connect (button, "clicked", G_CALLBACK (toggle_dynamic), merge);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Activate path");
