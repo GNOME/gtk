@@ -62,6 +62,7 @@
 
 #define GTK_FILE_CHOOSER_BUTTON_GET_PRIVATE(object) (GTK_FILE_CHOOSER_BUTTON ((object))->priv)
 
+#define DEFAULT_TITLE		N_("Select A File")
 #define HOME_DISPLAY_NAME	N_("Home")
 #define DESKTOP_DISPLAY_NAME	N_("Desktop")
 #define FALLBACK_DISPLAY_NAME	N_("(None)")
@@ -349,7 +350,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 				   g_param_spec_string ("title",
 							P_("Title"),
 							P_("The title of the file chooser dialog."),
-							_("Select a File"),
+							_(DEFAULT_TITLE),
 							G_PARAM_READWRITE));
 
   /**
@@ -2211,7 +2212,7 @@ gtk_file_chooser_button_new (const gchar          *title,
 
   return g_object_new (GTK_TYPE_FILE_CHOOSER_BUTTON,
 		       "action", action,
-		       "title", title,
+		       "title", (title ? title : _(DEFAULT_TITLE)),
 		       NULL);
 }
 
@@ -2236,15 +2237,15 @@ gtk_file_chooser_button_new_with_backend (const gchar          *title,
 			action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL);
 
   return g_object_new (GTK_TYPE_FILE_CHOOSER_BUTTON,
-		       "title", title,
 		       "action", action,
+		       "title", (title ? title : _(DEFAULT_TITLE)),
 		       "file-system-backend", backend,
 		       NULL);
 }
 
 /**
  * gtk_file_chooser_button_new_with_dialog:
- * @dialog: the #GtkDialog widget to use.
+ * @dialog: the #GtkFileChooserDialog widget to use.
  * 
  * Creates a #GtkFileChooserButton widget which uses @dialog as it's
  * file-picking window. Note that @dialog must be a #GtkFileChooserDialog (or
@@ -2323,7 +2324,7 @@ gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
 /**
  * gtk_file_chooser_button_set_width_chars:
  * @button: the button widget to examine.
- * @n_chars: the new width, in chracters.
+ * @n_chars: the new width, in characters.
  * 
  * Sets the width (in characters) that @button will use to @n_chars.
  * 

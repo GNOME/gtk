@@ -1,3 +1,12 @@
+2005-01-06  James M. Cape  <jcape@ignore-your.tv>
+
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_new)
+	(gtk_file_chooser_button_new_with_backend): Use default title if
+	NULL is passed.
+
+	* docs/reference/gtk/tmpl/gtkfilechooserbutton.sgml: Make examples
+	match API.
+
 2005-01-05  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #161409:
