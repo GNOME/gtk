@@ -1,15 +1,21 @@
 Overview of Changes in GTK+ 1.2.9:
 
-* Addition of .pc files
-* Minor i18n improvements
-* Improved submenu navigation
-* Some DEFAULT widget shuffeling
-* Minor GtkTable improvements
-* Selection and DND bug fixes
+* Move include files into a gtk-1-2/ subdir to support parallel
+  installation with GTK+-2.0. If you are installing from source
+  on top of a previous version, you should to remove $(includedir)/gdk/
+  and $(includedir)/gtk/ manually before installing the new version.
+* Improved submenu navigation.
+* Other small useability improvements for menus, scrollbars, etc.
 * Patch enabling themes with better appearance by making some 
   geometry parameters settable.
+* Changes so that using fonts (as well as fontsets) for 
+  non-iso-8859-1 locales will work.
+* New --with-native-locale configure option for faster string
+  handling on systems with non-broken locale support.
+* Refuse to initialize GTK+ when setuid (http://www.gtk.org/setuid.html)
+* Change to make GdkRGB use less SHM segments.
+* Addition of .pc files
 * Many bug fixes 
-
   (#50834, #50892, #13447, #50857, #1923, #50934, #3123, #51163,
    #50492, #51026, #1704, #51039, #2682, #50964, #50926, #50686, 
    #50678, #50511, #8170, #567, #424, #1290, #4524, #8041, #8002,
