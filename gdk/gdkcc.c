@@ -1405,9 +1405,9 @@ gdk_color_context_query_colors (GdkColorContext *cc,
       if (cc->clut == NULL)
 	for (i = 0, tc = colors; i < num_colors; i++, tc++)
 	  {
-	    tc->red   = (tc->pixel & cc->masks.red) * 65535 / cc->masks.red;
-	    tc->green = (tc->pixel & cc->masks.green) * 65535 / cc->masks.green;
-	    tc->blue  = (tc->pixel & cc->masks.blue) * 65535 / cc->masks.blue;
+	    tc->red   = ((tc->pixel & cc->masks.red) >> cc->shifts.red) << (16 - cc->bits.red);
+	    tc->green = ((tc->pixel & cc->masks.green) >> cc->shifts.green) << (16 - cc->bits.green);
+	    tc->blue  = ((tc->pixel & cc->masks.blue) >> cc->shifts.blue) << (16 - cc->bits.blue);
 	  }
       else
 	{

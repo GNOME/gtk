@@ -1,3 +1,8 @@
+Sun Feb 22 00:20:12 MET 1998  Eckehard Berns  <eb@berns.prima.de>
+
+	* gdk/gdkcc.c (gdk_color_context_query_colors): fixed a bug for mode
+	GDK_CC_MODE_TRUE, when on a 24-bit visual on a 32-bit mashine.
+
 Sat Feb 21 12:06:11 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
 
 	* gtk/gtkentry.c (gtk_entry_set_text): Added a test for passing a
