@@ -1,3 +1,8 @@
+Wed May 14 18:24:50 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixdata.c (gdk_pixdata_deserialize): Add a 
+	(gint32 *) => (guint32 *) cast. (#108615, Rick Jones)
+
 2003-04-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): 

@@ -197,7 +197,7 @@ gdk_pixdata_deserialize (GdkPixdata   *pixdata,
 
   /* deserialize header */
   stream = get_uint32 (stream, &pixdata->magic);
-  stream = get_uint32 (stream, &pixdata->length);
+  stream = get_uint32 (stream, (guint32 *)&pixdata->length);
   if (pixdata->magic != GDK_PIXBUF_MAGIC_NUMBER || pixdata->length < GDK_PIXDATA_HEADER_LENGTH)
     return_header_corrupt (error);
   stream = get_uint32 (stream, &pixdata->pixdata_type);
