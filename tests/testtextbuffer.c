@@ -92,10 +92,10 @@ main (int argc, char** argv)
   /* Put stuff in the buffer */
 
   fill_buffer (buffer);
-#if 0
+
   /* Subject stuff-bloated buffer to further torment */
   run_tests (buffer);
-#endif
+
   /* Delete all stuff from the buffer */
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   gtk_text_buffer_delete (buffer, &start, &end);

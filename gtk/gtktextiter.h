@@ -66,6 +66,9 @@ struct _GtkTextIter {
   gpointer dummy10;
   gint dummy11;
   gint dummy12;
+  /* padding */
+  gint dummy13;
+  gpointer dummy14;
 };
 
 

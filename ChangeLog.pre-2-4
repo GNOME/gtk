@@ -1,3 +1,15 @@
+2001-11-14  Havoc Pennington  <hp@redhat.com>
+
+	* tests/testtextbuffer.c (main): bulk of the tests were commented
+	out, oops.
+
+	* gtk/gtktextiter.c (find_paragraph_delimiter_for_line): make this 
+	function work, should resolve #63426
+	(gtk_text_iter_ends_line): return TRUE for the end iterator
+
+	* gtk/gtktextiter.h: put padding back in GtkTextIter, I thought of
+	a couple things that might get cached in here.
+
 Tue Nov 13 21:00:59 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_class_init): new

@@ -65,6 +65,10 @@ struct _GtkTextRealIter
      and ditto for char offsets. */
   gint segment_byte_offset;
   gint segment_char_offset;
+
+  /* padding */
+  gint pad1;
+  gpointer pad2;
 };
 
 /* These "set" functions should not assume any fields
@@ -1511,12 +1515,14 @@ gtk_text_iter_starts_line (const GtkTextIter   *iter)
  * gtk_text_iter_ends_line:
  * @iter: an iterator
  *
- * Returns %TRUE if @iter points to the start of the paragraph delimiter
- * characters for a line (delimiters will be either a newline, a
- * carriage return, a carriage return followed by a newline, or a
- * Unicode paragraph separator character). Note that an iterator pointing
- * to the \n of a \r\n pair will not be counted as the end of a line,
- * the line ends before the \r.
+ * Returns %TRUE if @iter points to the start of the paragraph
+ * delimiter characters for a line (delimiters will be either a
+ * newline, a carriage return, a carriage return followed by a
+ * newline, or a Unicode paragraph separator character). Note that an
+ * iterator pointing to the \n of a \r\n pair will not be counted as
+ * the end of a line, the line ends before the \r. The end iterator is
+ * considered to be at the end of a line, even though there are no
+ * paragraph delimiter chars there.
  *
  * Return value: whether @iter is at the end of a line
  **/
@@ -1539,7 +1545,7 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
 
   wc = gtk_text_iter_get_char (iter);
   
-  if (wc == '\r' || wc == PARAGRAPH_SEPARATOR)
+  if (wc == '\r' || wc == PARAGRAPH_SEPARATOR || wc == 0) /* wc == 0 is end iterator */
     return TRUE;
   else if (wc == '\n')
     {
@@ -3760,11 +3766,17 @@ find_paragraph_delimiter_for_line (GtkTextIter *iter)
   GtkTextIter end;
   end = *iter;
 
-  /* if we aren't on the last line, go forward to start of next line, then scan
-   * back for the delimiters on the previous line
-   */
-  if (gtk_text_iter_forward_line (&end))
+  if (_gtk_text_line_contains_end_iter (_gtk_text_iter_get_text_line (&end),
+                                        _gtk_text_iter_get_btree (&end)))
     {
+      gtk_text_iter_forward_to_end (&end);
+    }
+  else
+    {
+      /* if we aren't on the last line, go forward to start of next line, then scan
+       * back for the delimiters on the previous line
+       */
+      gtk_text_iter_forward_line (&end);
       gtk_text_iter_backward_char (&end);
       while (!gtk_text_iter_ends_line (&end))
         gtk_text_iter_backward_char (&end);
