@@ -452,7 +452,7 @@ gtk_progress_set_adjustment (GtkProgress   *progress,
   if (adjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
   else
-    adjustment = (GtkAdjustment*) gtk_object_new (GTK_TYPE_ADJUSTMENT, NULL);
+    adjustment = (GtkAdjustment*) gtk_adjustment_new (0, 0, 100, 0, 0, 0);
 
   if (progress->adjustment != adjustment)
     {

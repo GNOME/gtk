@@ -1,3 +1,10 @@
+Mon Nov 23 04:24:55 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkprogress.c: (gtk_progress_set_adjustment): make a saner
+	default adjustment (from 0 to 100) instead. I'm not sure if this
+	is the correct level for the fix, but gtk_progress_bar_new()'s
+	original default behavior is restored.
+
 1998-11-23  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtk/gtkfeatures.h.in (GTK_HAVE_FEATURES_1_1_5): Define this so
