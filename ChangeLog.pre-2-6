@@ -1,5 +1,8 @@
 2004-04-12  Matthias Clasen  <mclasen@dhcp64-228.boston.redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_unset_model): Don't unref
+	model if it is NULL. (#139770)
+
 	* gtk/gtktreeview.c (gtk_tree_view_get_cell_area): Typo fix.
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_init): Don't add

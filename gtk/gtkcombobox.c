@@ -1483,8 +1483,11 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
                                (GtkCallback)gtk_widget_destroy, NULL);
     }
 
-  g_object_unref (G_OBJECT (combo_box->priv->model));
-  combo_box->priv->model = NULL;
+  if (combo_box->priv->model)
+    {
+      g_object_unref (G_OBJECT (combo_box->priv->model));
+      combo_box->priv->model = NULL;
+    }
 }
 
 static void
