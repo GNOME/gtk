@@ -1,3 +1,7 @@
+Wed Oct 31 15:31:13 2001  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkstock.c: fix typo to make it compile
+
 Wed Oct 31 17:27:20 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): if
