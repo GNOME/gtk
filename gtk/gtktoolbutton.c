@@ -842,8 +842,16 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
   if (icon_widget != button->priv->icon_widget)
     {
       if (button->priv->icon_widget)
-	g_object_unref (G_OBJECT (button->priv->icon_widget));
+	{
+	  if (button->priv->icon_widget->parent)
+	    {
+	      gtk_container_remove (GTK_CONTAINER (button->priv->icon_widget->parent),
+				    button->priv->icon_widget);
+	    }
 
+	  g_object_unref (G_OBJECT (button->priv->icon_widget));
+	}
+      
       if (icon_widget)
 	{
 	  g_object_ref (icon_widget);
@@ -881,8 +889,16 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
   if (label_widget != button->priv->label_widget)
     {
       if (button->priv->label_widget)
-	g_object_unref (button->priv->label_widget);
-
+	{
+	  if (button->priv->icon_widget->parent)
+	    {
+	      gtk_container_remove (GTK_CONTAINER (button->priv->icon_widget->parent),
+				    button->priv->icon_widget);
+	    }
+	  
+	  g_object_unref (button->priv->label_widget);
+	}
+      
       if (label_widget)
 	{
 	  g_object_ref (label_widget);

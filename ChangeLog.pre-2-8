@@ -1,3 +1,11 @@
+Wed Apr 21 21:38:03 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_set_label_widget,
+	gtk_tool_button_set_icon_widget): Remove the old widget from the
+	tool button before overwriting it with the new widget.
+
+	(#140508, Todd Goyen)
+	
 2004-04-22  Tor Lillqvist  <tml@iki.fi>
 
 	Fix the file chooser on Windows. I can't make it misbehave or
