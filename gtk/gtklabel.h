@@ -54,14 +54,14 @@ struct _GtkLabel
   GtkMisc misc;
 
   gchar    *label;
-  GdkWChar *label_wc;
-  gchar  *pattern;
+  gchar    *pattern;
 
-  GtkLabelWord *words;
-
-  guint	  max_width : 16;
   guint   jtype : 2;
-  gboolean wrap;
+  gboolean wrap : 1;
+
+  /*< private >*/
+  gint rtl : 2;			/* Base dir, cached to detect changes */
+  PangoLayout *layout;
 };
 
 struct _GtkLabelClass

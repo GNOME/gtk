@@ -279,6 +279,10 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 					GTK_CONTAINER (widget)->border_width - 1);
 	  child_allocation.height = MAX (1, allocation->height - (GTK_CONTAINER (widget)->border_width + 1) * 2);
 	  
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	    child_allocation.x = allocation->x + allocation->width
+	      - (child_allocation.x - allocation->x + child_allocation.width);
+	  
 	  gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
 	}
     }
@@ -386,9 +390,11 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 				new_area.x, new_area.y,
 				new_area.width, new_area.height);
 	}
-      
-      x = widget->allocation.x + CHECK_BUTTON_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
-      y = widget->allocation.y + (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2;
+
+      /* FIXME: What is the + 1 doing here?
+       */
+      x = widget->allocation.x + CHECK_BUTTON_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width + 1;
+      y = widget->allocation.y + (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2 + 1;
       width = CHECK_BUTTON_CLASS (widget)->indicator_size;
       height = CHECK_BUTTON_CLASS (widget)->indicator_size;
       
@@ -403,9 +409,12 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 	  state_type = GTK_WIDGET_STATE (widget);
 	}
 
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	x = widget->allocation.x + widget->allocation.width - (width + x - widget->allocation.x);
+
       gtk_paint_check (widget->style, window,
 		       state_type, shadow_type,
 		       area, widget, "checkbutton",
-		       x + 1, y + 1, width, height);
+		       x, y, width, height);
     }
 }

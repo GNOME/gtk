@@ -77,6 +77,14 @@ typedef enum
   GTK_DIR_RIGHT
 } GtkDirectionType;
 
+/* Reading directions for text */
+typedef enum
+{
+  GTK_TEXT_DIR_NONE,
+  GTK_TEXT_DIR_RTL,
+  GTK_TEXT_DIR_LTR
+} GtkTextDirection;
+
 /* justification for label and maybe other widgets (text?) */
 typedef enum
 {

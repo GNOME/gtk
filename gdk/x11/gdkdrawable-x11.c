@@ -25,65 +25,72 @@
  */
 
 #include "gdkprivate-x11.h"
+#include <pango/pangox.h>
 
-static void    gdk_x11_drawable_destroy   (GdkDrawable     *drawable);
+static void gdk_x11_drawable_destroy (GdkDrawable    *drawable);
 
-static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    gint            filled,
-				    gint            x,
-				    gint            y,
-				    gint            width,
-				    gint            height);
-static void gdk_x11_draw_arc       (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    gint            filled,
-				    gint            x,
-				    gint            y,
-				    gint            width,
-				    gint            height,
-				    gint            angle1,
-				    gint            angle2);
-static void gdk_x11_draw_polygon   (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    gint            filled,
-				    GdkPoint       *points,
-				    gint            npoints);
-static void gdk_x11_draw_text      (GdkDrawable    *drawable,
-				    GdkFont        *font,
-				    GdkGC          *gc,
-				    gint            x,
-				    gint            y,
-				    const gchar    *text,
-				    gint            text_length);
-static void gdk_x11_draw_text_wc   (GdkDrawable    *drawable,
-				    GdkFont        *font,
-				    GdkGC          *gc,
-				    gint            x,
-				    gint            y,
-				    const GdkWChar *text,
-				    gint            text_length);
-static void gdk_x11_draw_drawable  (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    GdkPixmap      *src,
-				    gint            xsrc,
-				    gint            ysrc,
-				    gint            xdest,
-				    gint            ydest,
-				    gint            width,
-				    gint            height);
-static void gdk_x11_draw_points    (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    GdkPoint       *points,
-				    gint            npoints);
-static void gdk_x11_draw_segments  (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    GdkSegment     *segs,
-				    gint            nsegs);
-static void gdk_x11_draw_lines     (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    GdkPoint       *points,
-				    gint            npoints);
+static void gdk_x11_draw_rectangle   (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      gint            filled,
+				      gint            x,
+				      gint            y,
+				      gint            width,
+				      gint            height);
+static void gdk_x11_draw_arc         (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      gint            filled,
+				      gint            x,
+				      gint            y,
+				      gint            width,
+				      gint            height,
+				      gint            angle1,
+				      gint            angle2);
+static void gdk_x11_draw_polygon     (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      gint            filled,
+				      GdkPoint       *points,
+				      gint            npoints);
+static void gdk_x11_draw_text        (GdkDrawable    *drawable,
+				      GdkFont        *font,
+				      GdkGC          *gc,
+				      gint            x,
+				      gint            y,
+				      const gchar    *text,
+				      gint            text_length);
+static void gdk_x11_draw_text_wc     (GdkDrawable    *drawable,
+				      GdkFont        *font,
+				      GdkGC          *gc,
+				      gint            x,
+				      gint            y,
+				      const GdkWChar *text,
+				      gint            text_length);
+static void gdk_x11_draw_drawable    (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkPixmap      *src,
+				      gint            xsrc,
+				      gint            ysrc,
+				      gint            xdest,
+				      gint            ydest,
+				      gint            width,
+				      gint            height);
+static void gdk_x11_draw_points      (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkPoint       *points,
+				      gint            npoints);
+static void gdk_x11_draw_segments    (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkSegment     *segs,
+				      gint            nsegs);
+static void gdk_x11_draw_lines       (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkPoint       *points,
+				      gint            npoints);
+
+static void gdk_x11_draw_layout      (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      gint            x,
+				      gint            y,
+				      PangoLayout    *layout);
 
 
 GdkDrawableClass _gdk_x11_drawable_class = {
@@ -97,7 +104,8 @@ GdkDrawableClass _gdk_x11_drawable_class = {
   gdk_x11_draw_drawable,
   gdk_x11_draw_points,
   gdk_x11_draw_segments,
-  gdk_x11_draw_lines
+  gdk_x11_draw_lines,
+  gdk_x11_draw_layout
 };
 
 /*****************************************************
@@ -470,4 +478,17 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
 	      CoordModeOrigin);
 
   g_free (tmp_points);
+}
+
+static void
+gdk_x11_draw_layout (GdkDrawable *drawable,
+		     GdkGC       *gc,
+		     gint         x,
+		     gint         y,
+		     PangoLayout *layout)
+{
+  pango_x_render_layout (GDK_DRAWABLE_XDISPLAY (drawable),
+			 GDK_DRAWABLE_XID (drawable),
+			 GDK_GC_XGC (gc),
+			 layout, x, y);
 }

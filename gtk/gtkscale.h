@@ -66,7 +66,6 @@ struct _GtkScaleClass
   void (* draw_value) (GtkScale *scale);
 };
 
-
 GtkType gtk_scale_get_type        (void);
 void    gtk_scale_set_digits      (GtkScale        *scale,
 				   gint             digits);
@@ -75,9 +74,11 @@ void    gtk_scale_set_draw_value  (GtkScale        *scale,
 void    gtk_scale_set_value_pos   (GtkScale        *scale,
 				   GtkPositionType  pos);
 gint    gtk_scale_get_value_width (GtkScale        *scale);
+void    gtk_scale_get_value_size  (GtkScale        *scale,
+				   gint            *width,
+				   gint            *height);
 
 void    gtk_scale_draw_value      (GtkScale        *scale);
-
 
 #ifdef __cplusplus
 }

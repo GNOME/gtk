@@ -791,6 +791,8 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
 	g_free (rc_style->fontset_name);
       if (rc_style->font_name)
 	g_free (rc_style->font_name);
+      if (rc_style->font_desc)
+	pango_font_description_free (rc_style->font_desc);
       
       for (i=0 ; i<5 ; i++)
 	if (rc_style->bg_pixmap_name[i])
@@ -1252,6 +1254,11 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
       else
 	style->font = old_font;
     }
+
+  if (rc_style->font_desc)
+    style->font_desc = pango_font_description_copy (rc_style->font_desc);
+  else
+    style->font_desc = pango_font_description_from_string ("Sans 10");
   
   for (i = 0; i < 5; i++)
     {
@@ -1337,6 +1344,8 @@ gtk_rc_style_init (GSList *rc_styles)
 	    proto_style->font_name = g_strdup (rc_style->font_name);
 	  if (!proto_style->fontset_name && rc_style->fontset_name)
 	    proto_style->fontset_name = g_strdup (rc_style->fontset_name);
+	  if (!proto_style->font_desc && rc_style->font_desc)
+	    proto_style->font_desc = pango_font_description_copy (rc_style->font_desc);
 
 	  if (!proto_style->engine && rc_style->engine)
 	    {

@@ -42,14 +42,16 @@ extern "C" {
 typedef enum
 {
   PRIVATE_GTK_USER_STYLE	= 1 <<  0,
-  PRIVATE_GTK_REDRAW_PENDING	= 1 <<  1,
+  PRIVATE_GTK_REDRAW_PENDING	= 1 <<  1,  /* Unused */
   PRIVATE_GTK_RESIZE_PENDING	= 1 <<  2,
   PRIVATE_GTK_RESIZE_NEEDED	= 1 <<  3,
   PRIVATE_GTK_LEAVE_PENDING	= 1 <<  4,
   PRIVATE_GTK_HAS_SHAPE_MASK	= 1 <<  5,
   PRIVATE_GTK_IN_REPARENT       = 1 <<  6,
-  PRIVATE_GTK_IS_OFFSCREEN      = 1 <<  7,
-  PRIVATE_GTK_FULLDRAW_PENDING  = 1 <<  8
+  PRIVATE_GTK_IS_OFFSCREEN      = 1 <<  7,  /* Unused */
+  PRIVATE_GTK_FULLDRAW_PENDING  = 1 <<  8,
+  PRIVATE_GTK_DIRECTION_SET     = 1 <<  9,   /* If the reading direction is not DIR_NONE */
+  PRIVATE_GTK_DIRECTION_LTR     = 1 <<  10,  /* If the reading direction is DIR_LTR */
 } GtkPrivateFlags;
 
 /* Macros for extracting a widgets private_flags from GtkWidget.
@@ -64,6 +66,8 @@ typedef enum
 #define GTK_WIDGET_IN_REPARENT(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IN_REPARENT) != 0)
 #define GTK_WIDGET_IS_OFFSCREEN(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IS_OFFSCREEN) != 0)
 #define GTK_WIDGET_FULLDRAW_PENDING(obj)  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_FULLDRAW_PENDING) != 0)
+#define GTK_WIDGET_DIRECTION_SET(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_DIRECTION_SET) != 0)
+#define GTK_WIDGET_DIRECTION_LTR(obj)     ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_DIRECTION_LTR) != 0)
 
 /* Macros for setting and clearing private widget flags.
  * we use a preprocessor string concatenation here for a clear

@@ -354,29 +354,36 @@ gtk_frame_paint (GtkWidget    *widget,
 
       if (frame->label)
 	{
-	   label_area_width = (widget->allocation.width -
-			       GTK_CONTAINER (frame)->border_width * 2 -
-			       widget->style->klass->xthickness * 2);
-	   
-	   x2 = ((label_area_width - frame->label_width) * frame->label_xalign +
-		GTK_CONTAINER (frame)->border_width + widget->style->klass->xthickness);
-	   y2 = (GTK_CONTAINER (frame)->border_width + widget->style->font->ascent);
+	  gfloat xalign;
 
-	   gtk_paint_shadow_gap (widget->style, widget->window,
-				 GTK_STATE_NORMAL, frame->shadow_type,
-				 area, widget, "frame",
-				 widget->allocation.x + x,
-				 widget->allocation.y + y + height_extra / 2,
-				 widget->allocation.width - x * 2,
-				 widget->allocation.height - y * 2 - height_extra / 2,
-				 GTK_POS_TOP, 
-				 x2 + 2 - x, frame->label_width - 4);
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	    xalign = frame->label_xalign;
+	  else
+	    xalign = 1 - frame->label_xalign;
+
+	  label_area_width = (widget->allocation.width -
+			      GTK_CONTAINER (frame)->border_width * 2 -
+			      widget->style->klass->xthickness * 2);
 	   
-	   gtk_paint_string (widget->style, widget->window, GTK_WIDGET_STATE (widget),
-			     area, widget, "frame",
-			     widget->allocation.x + x2 + 3,
-			     widget->allocation.y + y2,
-			     frame->label);
+	  x2 = ((label_area_width - frame->label_width) * xalign +
+		GTK_CONTAINER (frame)->border_width + widget->style->klass->xthickness);
+	  y2 = (GTK_CONTAINER (frame)->border_width + widget->style->font->ascent);
+
+	  gtk_paint_shadow_gap (widget->style, widget->window,
+				GTK_STATE_NORMAL, frame->shadow_type,
+				area, widget, "frame",
+				widget->allocation.x + x,
+				widget->allocation.y + y + height_extra / 2,
+				widget->allocation.width - x * 2,
+				widget->allocation.height - y * 2 - height_extra / 2,
+				GTK_POS_TOP, 
+				x2 + 2 - x, frame->label_width - 4);
+	   
+	  gtk_paint_string (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+			    area, widget, "frame",
+			    widget->allocation.x + x2 + 3,
+			    widget->allocation.y + y2,
+			    frame->label);
 	}
        else
 	 gtk_paint_shadow (widget->style, widget->window,

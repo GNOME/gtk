@@ -21,3 +21,10 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
   window's owner.
 
 - The detail arguments in the GtkStyleClass structure are now 'const gchar *'.
+
+- Inserting and deleting text in GtkEntry though functions such
+  as gtk_entry_insert_text() now leave the cursor at its original
+  position in the text instead of moving it to the location of
+  the insertion/deletion.
+
+  

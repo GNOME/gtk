@@ -1696,6 +1696,22 @@ void create_labels (void)
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
+      frame = gtk_frame_new ("Internationalized Label");
+      label = gtk_label_new ("French (Français) Bonjour, Salut\n"
+			     "Korean (한글)   안녕하세요, 안녕하십니까\n"
+			     "Russian (Русский) Здравствуйте!");
+      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Bidirection Label");
+      label = gtk_label_new ("Arabic  السلام عليكم\n"
+			     "Hebrew   שלום");
+      gtk_widget_set_direction (label, GTK_TEXT_DIR_RTL);
+      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
       frame = gtk_frame_new ("Line wrapped label");
@@ -1726,12 +1742,11 @@ void create_labels (void)
 
       frame = gtk_frame_new ("Underlined label");
       label = gtk_label_new ("This label is underlined!\n"
-			     "This one is underlined in ���ܸ������quite a funky fashion");
+			     "This one is underlined (こんにちは) in quite a funky fashion");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_label_set_pattern (GTK_LABEL (label), "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
-
     }
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show_all (window);
@@ -5294,6 +5309,69 @@ create_file_selection (void)
     gtk_widget_destroy (window);
 }
 
+void
+flipping_toggled_cb (GtkWidget *widget, gpointer data)
+{
+  int state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+  int new_direction = state ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+
+  if (new_direction != gtk_widget_get_default_direction ())
+    {
+      GList *toplevels;
+      
+      gtk_widget_set_default_direction (new_direction);
+
+      toplevels = gtk_container_get_toplevels();
+      while (toplevels)
+	{
+	  gtk_widget_queue_resize (toplevels->data);
+	  toplevels = toplevels->next;
+	}
+    }
+
+}
+
+void
+create_flipping (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *check_button, *button;
+
+  if (!window)
+    {
+      window = gtk_dialog_new ();
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Bidirectional Flipping");
+
+      check_button = gtk_check_button_new_with_label ("Right-to-left global direction");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+			  check_button, TRUE, TRUE, 0);
+
+      if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL)
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
+
+      gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
+			  flipping_toggled_cb, FALSE);
+
+      gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
+      
+      button = gtk_button_new_with_label ("Close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy), GTK_OBJECT (window));
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
+			  button, TRUE, TRUE, 0);
+    }
+  
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * GtkFontSelection
  */
@@ -8397,6 +8475,7 @@ create_main_window (void)
       { "entry", create_entry },
       { "event watcher", create_event_watcher },
       { "file selection", create_file_selection },
+      { "flipping", create_flipping },
       { "font selection", create_font_selection },
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },

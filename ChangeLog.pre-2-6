@@ -1,3 +1,53 @@
+Wed Apr  5 00:18:14 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add checks for Pango
+
+	* configure.in docs/Makefile.am: Add test for sgml2html
+	and allow 'make dist' without building html, but print out
+	warnings in that case. (For making snapshots)
+
+	* gdk/Makefile.am gdk/x11/Makefile.am gtk/Makefile.am:
+	Add Pango libraries and C flags
+
+	* gdk/gdkdraw.c gdk/gdkdrawable.h gdkwindow.c gdk/x11/gdkdrawable-x11.c:
+	Add function (gdk_draw_layout) to draw a pango layout.
+
+	* gdk/gdkpango.h gdk/x11/gdkpango-x11.c: New file with functions
+	for getting Pango contexts for GDK.
+
+	* gtk/gtkeditable.c: Get rid of dead code gtk_editable_parent_set()
+
+	* gtk/gtkentry.[ch]: Complete rewrite to use Pango, add bidirectional
+	editing.
+
+	* gtk/gtkentry.c: Hack in simple Hebrew input with direct
+	keysym => unicode translations. More languages can be added
+	here, but real input-method support is needed.
+
+	* docs/Changes-1.4.txt: Added note about entry behavior.
+	
+	* gtk/gtkenums.h gtk/gtkwidget.[ch] testgtk.c gtkprivate.h: Add functions
+	to set the reading direction for a widget and the global direction.
+	Add test which allows toggling the global direction. Two private
+	flags are used to store the direction. (GTK_DIRECTION_SET + GTK_DIRECTION_LTR)
+
+	* gtk/gtkcheckbutton.c gtk/gtkframe.c gtk/gtkhbbox.c gtk/gtkhbox.c
+	  gtk/gtkradiobutton.c gtk/gtkspinbutton.c gtk/gtktable.c 
+
+	* gtk/gtk[hv]scale.c gtk/gtkscale.[ch]: Draw numbers using Pango
+
+	* gtk/gtklabel.[ch]: Moved to Pango and considerably rewritten. Line breaking,
+	underlining now handled by Pango.
+
+	* gtk/gtkstyle.[ch] gtk/gtkrc.[ch]: Add a PangoFontDescription
+	to RCStyle and Style. (Having both this and the old font name and GdkFont 
+	is temporary.)
+
+	* gtk/gtkwidget.[ch] (gtk_widget_create_pango_{context,layout}): Added 
+	convenience functions for creating contexts and layouts for widgets.
+
+	* gtk/testgtk.c: Enhance label tests with multilingual labels.
+
 Wed Apr  5 00:08:36 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_new): Fix screwy

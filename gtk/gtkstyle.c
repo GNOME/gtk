@@ -745,9 +745,11 @@ gtk_style_destroy (GtkStyle *style)
     }
   
   gdk_font_unref (style->font);
+  pango_font_description_free (style->font_desc);
+  
   if (style->rc_style)
     gtk_rc_style_unref (style->rc_style);
-  
+
   g_free (style);
 }
 
@@ -3140,7 +3142,7 @@ gtk_default_draw_handle (GtkStyle      *style,
   gtk_paint_box (style, window, state_type, shadow_type, area, widget, 
                  detail, x, y, width, height);
   
-
+  
   if (!strcmp (detail, "paned"))
     {
       /* we want to ignore the shadow border in paned widgets */

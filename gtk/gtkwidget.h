@@ -572,6 +572,9 @@ void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 void       gtk_widget_modify_style      (GtkWidget      *widget,
 					 GtkRcStyle     *style);
 
+PangoContext *gtk_widget_create_pango_context (GtkWidget *widget);
+PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget *widget);
+
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,
  * the returned name is newly allocated.
  */
@@ -604,6 +607,16 @@ GtkStyle*    gtk_widget_get_default_style    (void);
 GdkColormap* gtk_widget_get_default_colormap (void);
 GdkVisual*   gtk_widget_get_default_visual   (void);
 
+/* Functions for setting directionality for widgets
+ */
+
+void             gtk_widget_set_direction         (GtkWidget        *widget,
+						   GtkTextDirection  dir);
+GtkTextDirection gtk_widget_get_direction         (GtkWidget        *widget);
+
+void             gtk_widget_set_default_direction (GtkTextDirection  dir);
+GtkTextDirection gtk_widget_get_default_direction (void);
+
 /* Counterpart to gdk_window_shape_combine_mask.
  */
 void	     gtk_widget_shape_combine_mask (GtkWidget *widget,
@@ -625,6 +638,7 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 					    guint     *path_length,
 					    gchar    **path,
 					    gchar    **path_reversed);
+
 
 #if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
 #  define gtk_widget_ref gtk_object_ref

@@ -38,6 +38,7 @@
 #include <gdk/gdkim.h>
 #include <gdk/gdkimage.h>
 #include <gdk/gdkinput.h>
+#include <gdk/gdkpango.h>
 #include <gdk/gdkpixmap.h>
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkregion.h>

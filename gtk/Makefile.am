@@ -13,6 +13,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
 	@GTK_LOCALE_FLAGS@				\
+	@PANGO_CFLAGS@					\
 	@GLIB_CFLAGS@					\
 	@x_cflags@					\
 @STRIP_END@
@@ -29,6 +30,7 @@ libgtk_la_LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
 	-release $(LT_RELEASE) 					\
 	-export-dynamic						\
+	@PANGO_LIBS@						\
 	@GLIB_DEPLIBS@ 						\
 	@x_ldflags@						\
 	@x_libs@ 						\
@@ -444,6 +446,7 @@ LDADDS = @STRIP_BEGIN@ \
 	@x_ldflags@			\
 	@x_libs@			\
 	@GDK_WLIBS@			\
+	@PANGO_LIBS@			\
 	@GLIB_LIBS@			\
 	@GTK_LIBS_EXTRA@		\
 	-lm				\

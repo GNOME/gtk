@@ -49,6 +49,7 @@ struct _GtkRcStyle
   gchar *font_name;
   gchar *fontset_name;
   gchar *bg_pixmap_name[5];
+  PangoFontDescription *font_desc;
 
   GtkRcFlags color_flags[5];
   GdkColor   fg[5];

@@ -445,3 +445,20 @@ gdk_draw_lines (GdkDrawable *drawable,
 
   ((GdkDrawablePrivate *)drawable)->klass->draw_lines (drawable, gc, points, npoints);
 }
+
+void
+gdk_draw_layout (GdkDrawable  *drawable,
+		 GdkGC        *gc,
+		 gint          x,
+		 gint          y,
+		 PangoLayout  *layout)
+{
+
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (gc != NULL);
+
+  if (GDK_DRAWABLE_DESTROYED (drawable))
+    return;
+
+  ((GdkDrawablePrivate *)drawable)->klass->draw_layout (drawable, gc, x, y, layout);
+}

@@ -272,8 +272,14 @@ gtk_hbutton_box_size_allocate (GtkWidget     *widget,
 	{
 	  child_allocation.width = child_width;
 	  child_allocation.height = child_height;
-	  child_allocation.x = x;
+
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	    child_allocation.x = x;
+	  else
+	    child_allocation.x = allocation->x + allocation->width - (x - allocation->x + child_width);
+	  
 	  child_allocation.y = y;
+
 	  gtk_widget_size_allocate (child->widget, &child_allocation);
 	  x += childspace;
 	}

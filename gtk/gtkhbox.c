@@ -163,6 +163,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
   gint width;
   gint extra;
   gint x;
+  GtkTextDirection direction;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HBOX (widget));
@@ -171,6 +172,8 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
   box = GTK_BOX (widget);
   widget->allocation = *allocation;
 
+  direction = gtk_widget_get_direction (widget);
+  
   nvis_children = 0;
   nexpand_children = 0;
   children = box->children;
@@ -264,6 +267,9 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 		  child_allocation.x = x + (child_width - child_allocation.width) / 2;
 		}
 
+	      if (direction == GTK_TEXT_DIR_RTL)
+		child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+
 	      gtk_widget_size_allocate (child->widget, &child_allocation);
 
 	      x += child_width + box->spacing;
@@ -319,6 +325,9 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 		  child_allocation.width = child_requisition.width;
                   child_allocation.x = x + (child_width - child_allocation.width) / 2 - child_width;
                 }
+
+	      if (direction == GTK_TEXT_DIR_RTL)
+		child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
               gtk_widget_size_allocate (child->widget, &child_allocation);
 

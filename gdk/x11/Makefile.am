@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+libgdkincludedir = $(includedir)/gdk
+
 INCLUDES = @STRIP_BEGIN@ 	\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-I$(top_srcdir)		\
@@ -8,6 +10,7 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	@GTK_DEBUG_FLAGS@ 	\
 	@GTK_XIM_FLAGS@		\
 	@GTK_LOCALE_FLAGS@	\
+	@PANGO_CFLAGS@		\
 	@GLIB_CFLAGS@		\
 	@x_cflags@ 		\
 @STRIP_END@
@@ -52,9 +55,12 @@ libgdk_x11_la_SOURCES =    	\
 	gdkimage-x11.c	   	\
 	gdkinput.c	   	\
 	gdkmain-x11.c	   	\
+	gdkpango-x11.c		\
 	gdkpixmap-x11.c	   	\
 	gdkproperty-x11.c  	\
+	gdkpoly-generic.h	\
 	gdkpolyreg-generic.c 	\
+	gdkregion-generic.h	\
 	gdkregion-generic.c 	\
 	gdkselection-x11.c 	\
 	gdkvisual-x11.c	   	\
@@ -68,7 +74,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkinputprivate.h  	\
 	$(xinput_sources)
 
-INCLUDE_HEADERS = 		\
+libgdkinclude_HEADERS = 	\
 	gdkx.h
 
 EXTRA_PROGRAMS = gxid

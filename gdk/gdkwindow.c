@@ -99,7 +99,11 @@ static void   gdk_window_draw_lines     (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPoint        *points,
 					 gint             npoints);
-
+static void   gdk_window_draw_layout    (GdkDrawable     *drawable,
+					 GdkGC           *gc,
+					 gint             x,
+					 gint             y,
+					 PangoLayout     *layout);
 
 /* All drawing operations on windows are forwarded through the following
  * class to enable the automatic-backing-store feature.
@@ -115,7 +119,8 @@ GdkDrawableClass _gdk_window_class = {
   gdk_window_draw_drawable,
   gdk_window_draw_points,
   gdk_window_draw_segments,
-  gdk_window_draw_lines
+  gdk_window_draw_lines,
+  gdk_window_draw_layout
 };
 
 GdkWindow *
@@ -913,6 +918,29 @@ gdk_window_draw_lines (GdkDrawable *drawable,
 
   if (new_points != points)
     g_free (new_points);
+
+  RESTORE_GC (gc);
+}
+
+static void
+gdk_window_draw_layout (GdkDrawable  *drawable,
+			GdkGC        *gc,
+			gint          x,
+			gint          y,
+			PangoLayout  *layout)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+
+  OFFSET_GC (gc);
+
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+      gdk_draw_layout (paint->pixmap, gc, x - x_offset, y - y_offset, layout);
+    }
+  else
+    _gdk_windowing_window_class.draw_layout (drawable, gc,
+					     x - x_offset, y - y_offset, layout);
 
   RESTORE_GC (gc);
 }
