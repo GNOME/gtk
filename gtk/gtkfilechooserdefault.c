@@ -37,10 +37,13 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkmenuitem.h"
+#include "gtkmessagedialog.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
 #include "gtktable.h"
+#include "gtktoolbar.h"
+#include "gtktoolbutton.h"
 #include "gtktreeview.h"
 #include "gtktreemodelsort.h"
 #include "gtktreeselection.h"
@@ -91,6 +94,7 @@ struct _GtkFileChooserDefault
 
   GtkWidget *preview_frame;
 
+  GtkWidget *toolbar;
   GtkWidget *filter_alignment;
   GtkWidget *filter_combo;
   GtkWidget *tree_scrollwin;
@@ -322,7 +326,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
 
-  gtk_container_set_border_width (GTK_CONTAINER (impl), 5);
+  gtk_box_set_spacing (GTK_BOX (impl), 12);
 }
 
 static void
@@ -335,6 +339,27 @@ gtk_file_chooser_default_finalize (GObject *object)
   g_object_unref (impl->file_system);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+/* Shows a simple error dialog */
+static void
+error_dialog (GtkFileChooserDefault *impl,
+	      const char            *msg,
+	      GError                *error)
+{
+  GtkWidget *toplevel;
+  GtkWidget *dialog;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+
+  dialog = gtk_message_dialog_new (toplevel ? GTK_WINDOW (toplevel) : NULL,
+				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_ERROR,
+				   GTK_BUTTONS_CLOSE,
+				   msg,
+				   error->message);
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
 }
 
 static void
@@ -618,6 +643,56 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->shortcuts_tree), GTK_TREE_MODEL (impl->shortcuts_model));
 }
 
+/* Callback used when the "Up" toolbar button is clicked */
+static void
+toolbar_up_cb (GtkToolButton         *button,
+	       GtkFileChooserDefault *impl)
+{
+  GtkFilePath *parent_path;
+  GError *error;
+
+  error = NULL;
+  if (gtk_file_system_get_parent (impl->file_system, impl->current_folder, &parent_path, &error))
+    {
+      if (parent_path) /* If we were on a root, parent_path will be NULL */
+	{
+	  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), parent_path);
+	  gtk_file_path_free (parent_path);
+	}
+    }
+  else
+    {
+      error_dialog (impl,
+		    "Could not go to the parent folder:\n%s",
+		    error);
+      g_error_free (error);
+    }
+}
+
+/* Appends an item to the toolbar */
+static void
+toolbar_add_item (GtkFileChooserDefault *impl,
+		  const char            *stock_id,
+		  GCallback              callback)
+{
+  GtkToolItem *item;
+
+  item = gtk_tool_button_new_from_stock (stock_id);
+  g_signal_connect (item, "clicked", callback, impl);
+  gtk_toolbar_insert (GTK_TOOLBAR (impl->toolbar), item, -1);
+  gtk_widget_show (GTK_WIDGET (item));
+}
+
+/* Creates the toolbar widget */
+static GtkWidget *
+toolbar_create (GtkFileChooserDefault *impl)
+{
+  impl->toolbar = gtk_toolbar_new ();
+  toolbar_add_item (impl, GTK_STOCK_GO_UP, G_CALLBACK (toolbar_up_cb));
+
+  return impl->toolbar;
+}
+
 /* Creates the widgets for the filter combo box */
 static GtkWidget *
 create_filter (GtkFileChooserDefault *impl)
@@ -816,6 +891,7 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->shortcuts_tree), FALSE);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
   gtk_tree_selection_set_select_function (selection,
 					  shortcuts_select_func,
 					  impl, NULL);
@@ -1005,10 +1081,16 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   gtk_widget_push_composite_child ();
 
+  /* Toolbar */
+  widget = toolbar_create (impl);
+  gtk_box_pack_start (GTK_BOX (impl), widget, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
+
   /* Basic table */
 
   table = gtk_table_new (3, 2, FALSE);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 12);
   gtk_box_pack_start (GTK_BOX (impl), table, TRUE, TRUE, 0);
   gtk_widget_show (table);
 

@@ -1,3 +1,17 @@
+2003-11-02  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init): Do
+	not set a border width for the toplevel container.
+	(toolbar_create): New function; create a simple toolbar for the
+	file chooser.
+	(gtk_file_chooser_default_constructor): Use a spacing of 12 for
+	the table, as per the HIG.
+	(gtk_file_chooser_default_init): Likewise, for the default
+	implementation's vbox.
+
+	* gtk/gtkfilesystem.c (gtk_file_system_get_parent): Added docs to
+	note that NULL is a valid return value for the parent path.
+
 Sat Nov  1 14:59:27 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_row_activated): 

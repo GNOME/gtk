@@ -508,6 +508,20 @@ gtk_file_system_create_folder(GtkFileSystem     *file_system,
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, path, error);
 }
 
+/**
+ * gtk_file_system_get_parent:
+ * @file_system: a #GtkFileSystem
+ * @path: base path name
+ * @parent: location to store parent path name
+ * @error: location to store error, or %NULL
+ * 
+ * Gets the name of the parent folder of a file.
+ * 
+ * Return value: TRUE if the operation was successful; note that in this case @parent
+ * can be returned as %NULL if the base @path has no parent folder (i.e. if it is
+ * already a file system root).  If the operation fails, this function returns FALSE
+ * and sets the @error value if it is specified.
+ **/
 gboolean
 gtk_file_system_get_parent (GtkFileSystem     *file_system,
 			    const GtkFilePath *path,
