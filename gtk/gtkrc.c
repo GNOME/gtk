@@ -1196,7 +1196,7 @@ insert_rc_property (GtkRcStyle    *style,
 	  else
 	    return;
 	}
-      else if (cmp > 0)
+      else if (cmp < 0)
 	break;
 
       i++;

@@ -1,3 +1,8 @@
+Tue Sep 11 13:59:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (insert_rc_property): Fixed reversed comparison
+	causing RC properties not to work.
+
 2001-09-11  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/dialog-error.png: less drastic
