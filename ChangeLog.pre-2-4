@@ -1,3 +1,11 @@
+Mon Apr  8 20:28:54 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_select_path),
+	(gtk_tree_selection_unselect_path),
+	(gtk_tree_selection_path_is_selected): check the return value of
+	_gtk_tree_view_find_node and return if it's TRUE. This makes those
+	functions work somewhat saner on non-expanded trees.
+
 Fri Apr  5 18:28:56 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_set_mode): free

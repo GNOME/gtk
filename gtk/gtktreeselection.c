@@ -527,17 +527,19 @@ gtk_tree_selection_select_path (GtkTreeSelection *selection,
   GtkRBNode *node;
   GtkRBTree *tree;
   GdkModifierType state = 0;
+  gboolean ret;
 
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (path != NULL);
 
-  _gtk_tree_view_find_node (selection->tree_view,
-			    path,
-			    &tree,
-			    &node);
+  ret = _gtk_tree_view_find_node (selection->tree_view,
+				  path,
+				  &tree,
+				  &node);
 
-  if (node == NULL || GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+  if (node == NULL || GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) ||
+      ret == TRUE)
     return;
 
   if (selection->type == GTK_SELECTION_MULTIPLE)
@@ -563,17 +565,19 @@ gtk_tree_selection_unselect_path (GtkTreeSelection *selection,
 {
   GtkRBNode *node;
   GtkRBTree *tree;
+  gboolean ret;
 
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (path != NULL);
 
-  _gtk_tree_view_find_node (selection->tree_view,
-			    path,
-			    &tree,
-			    &node);
+  ret = _gtk_tree_view_find_node (selection->tree_view,
+				  path,
+				  &tree,
+				  &node);
 
-  if (node == NULL || !GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+  if (node == NULL || !GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) ||
+      ret == TRUE)
     return;
 
   _gtk_tree_selection_internal_select_node (selection,
@@ -656,18 +660,20 @@ gtk_tree_selection_path_is_selected (GtkTreeSelection *selection,
 {
   GtkRBNode *node;
   GtkRBTree *tree;
+  gboolean ret;
 
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (selection->tree_view != NULL, FALSE);
   g_return_val_if_fail (selection->tree_view->priv->model != NULL, FALSE);
 
-  _gtk_tree_view_find_node (selection->tree_view,
-			    path,
-			    &tree,
-			    &node);
+  ret = _gtk_tree_view_find_node (selection->tree_view,
+				  path,
+				  &tree,
+				  &node);
 
-  if ((node == NULL) || !GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+  if ((node == NULL) || !GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) ||
+      ret == TRUE)
     return FALSE;
 
   return TRUE;
