@@ -8744,6 +8744,77 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
 }
 
 
+/* FIXME this adjust_allocation is a big cut-and-paste from
+ * GtkCList, needs to be some "official" way to do this
+ * factored out.
+ */
+typedef struct
+{
+  GdkWindow *window;
+  int dx;
+  int dy;
+} ScrollData;
+
+/* The window to which widget->window is relative */
+#define ALLOCATION_WINDOW(widget)		\
+   (GTK_WIDGET_NO_WINDOW (widget) ?		\
+    (widget)->window :                          \
+     gdk_window_get_parent ((widget)->window))
+
+static void
+adjust_allocation_recurse (GtkWidget *widget,
+			   gpointer   data)
+{
+  ScrollData *scroll_data = data;
+
+  /* Need to really size allocate instead of just poking
+   * into widget->allocation if the widget is not realized.
+   * FIXME someone figure out why this was.
+   */
+  if (!GTK_WIDGET_REALIZED (widget))
+    {
+      if (GTK_WIDGET_VISIBLE (widget))
+	{
+	  GdkRectangle tmp_rectangle = widget->allocation;
+	  tmp_rectangle.x += scroll_data->dx;
+          tmp_rectangle.y += scroll_data->dy;
+          
+	  gtk_widget_size_allocate (widget, &tmp_rectangle);
+	}
+    }
+  else
+    {
+      if (ALLOCATION_WINDOW (widget) == scroll_data->window)
+	{
+	  widget->allocation.x += scroll_data->dx;
+          widget->allocation.y += scroll_data->dy;
+          
+	  if (GTK_IS_CONTAINER (widget))
+	    gtk_container_forall (GTK_CONTAINER (widget),
+				  adjust_allocation_recurse,
+				  data);
+	}
+    }
+}
+
+static void
+adjust_allocation (GtkWidget *widget,
+		   int        dx,
+                   int        dy)
+{
+  ScrollData scroll_data;
+
+  if (GTK_WIDGET_REALIZED (widget))
+    scroll_data.window = ALLOCATION_WINDOW (widget);
+  else
+    scroll_data.window = NULL;
+    
+  scroll_data.dx = dx;
+  scroll_data.dy = dy;
+  
+  adjust_allocation_recurse (widget, &scroll_data);
+}
+
 /* Callbacks */
 static void
 gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
@@ -8763,7 +8834,24 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
       if (dy && tree_view->priv->edited_column)
 	{
 	  if (GTK_IS_WIDGET (tree_view->priv->edited_column->editable_widget))
-	    GTK_WIDGET (tree_view->priv->edited_column->editable_widget)->allocation.y += dy;
+	    {
+	      GList *list;
+	      GtkWidget *widget;
+	      GtkTreeViewChild *child = NULL;
+
+	      widget = GTK_WIDGET (tree_view->priv->edited_column->editable_widget);
+	      adjust_allocation (widget, 0, dy); 
+	      
+	      for (list = tree_view->priv->children; list; list = list->next)
+		{
+		  child = (GtkTreeViewChild *)list->data;
+		  if (child->widget == widget)
+		    {
+		      child->y += dy;
+		      break;
+		    }
+		}
+	    }
 	}
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
 

@@ -1,5 +1,10 @@
 2004-07-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_adjustment_changed): 
+	Prepare to handle composite implementations of
+	GtkCellEditable, but recursively poking at
+	allocation->y (hack stolen from GtkCList).
+
 	* gtk/gtkmain.h: Add gtk_parse_args(), its a public 
 	function.  (#147476, Owen Taylor)
 
