@@ -1,3 +1,8 @@
+2005-03-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/editable_cells.c: Also demonstrate
+	GtkCellRenderer::editing-started and separators.
+
 Tue Mar 15 20:34:33 2005  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkinput-xfree.c: #include gdkaliasdef.c here too.

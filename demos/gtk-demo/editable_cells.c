@@ -2,7 +2,9 @@
  *
  * This demo demonstrates the use of editable cells in a GtkTreeView. If
  * you're new to the GtkTreeView widgets and associates, look into
- * the GtkListStore example first.
+ * the GtkListStore example first. It also shows how to use the
+ * GtkCellRenderer::editing-started signal to do custom setup of the
+ * editable widget.
  *
  * The cell renderers used in this demo are GtkCellRendererText and 
  * GtkCellRendererCombo.
@@ -100,7 +102,6 @@ static GtkTreeModel *
 create_numbers_model (void)
 {
 #define N_NUMBERS 10
-
   gint i = 0;
   GtkListStore *model;
   GtkTreeIter iter;
@@ -166,6 +167,32 @@ remove_item (GtkWidget *widget, gpointer data)
 
       gtk_tree_path_free (path);
     }
+}
+
+static gboolean
+separator_row (GtkTreeModel *model,
+	       GtkTreeIter  *iter,
+	       gpointer      data)
+{
+  GtkTreePath *path;
+  gint idx;
+
+  path = gtk_tree_model_get_path (model, iter);
+  idx = gtk_tree_path_get_indices (path)[0];
+
+  gtk_tree_path_free (path);
+
+  return idx == 5;
+}
+
+static void
+editing_started (GtkCellRenderer *cell,
+		 GtkCellEditable *editable,
+		 const gchar     *path,
+		 gpointer         data)
+{
+  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (editable), 
+					separator_row, NULL, NULL);
 }
 
 static void
@@ -234,6 +261,8 @@ add_columns (GtkTreeView  *treeview,
 		NULL);
   g_signal_connect (renderer, "edited",
 		    G_CALLBACK (cell_edited), items_model);
+  g_signal_connect (renderer, "editing-started",
+		    G_CALLBACK (editing_started), NULL);
   g_object_set_data (G_OBJECT (renderer), "column", GINT_TO_POINTER (COLUMN_ITEM_NUMBER));
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
