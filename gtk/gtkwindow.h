@@ -89,7 +89,9 @@ struct _GtkWindow
   guint iconify_initially : 1;
   guint stick_initially : 1;
   guint maximize_initially : 1;
-  
+
+  GdkWindowTypeHint type_hint : 2;
+
   guint frame_left;
   guint frame_top;
   guint frame_right;
@@ -129,6 +131,8 @@ gint	   gtk_window_activate_default	       (GtkWindow           *window);
 
 void       gtk_window_set_transient_for        (GtkWindow           *window, 
 						GtkWindow           *parent);
+void       gtk_window_set_type_hint            (GtkWindow           *window, 
+						GdkWindowTypeHint    hint);
 void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
 void       gtk_window_set_geometry_hints       (GtkWindow           *window,

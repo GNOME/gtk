@@ -409,6 +409,7 @@ gtk_handle_box_realize (GtkWidget *widget)
   hb->float_window = gdk_window_new (NULL, &attributes, attributes_mask);
   gdk_window_set_user_data (hb->float_window, widget);
   gdk_window_set_decorations (hb->float_window, 0);
+  gdk_window_set_type_hint (hb->float_window, GDK_WINDOW_TYPE_HINT_TOOLBAR);
   
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_WIDGET_STATE (hb));

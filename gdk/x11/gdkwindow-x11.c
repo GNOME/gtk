@@ -761,6 +761,12 @@ set_initial_hints (GdkWindow *window)
       ++i;
     }
 
+  if (private->modal_hint)
+    {
+      atoms[i] = gdk_atom_intern ("_NET_WM_STATE_MODAL", FALSE);
+      ++i;
+    }
+
   if (i > 0)
     {
       XChangeProperty (GDK_WINDOW_XDISPLAY (window),
@@ -1141,6 +1147,121 @@ gdk_window_set_hints (GdkWindow *window,
 		     &size_hints);
 }
 
+/**
+ * gdk_window_set_type_hint:
+ * @window: A #GdkWindow
+ * @hint: A hint of the function this window will have
+ *
+ * The application can use this call to provide a hint to the window
+ * manager about the functionality of a window. The window manager
+ * can use this information when determining the decoration and behaviour
+ * of the window.
+ *
+ * The hint must be set before the window is mapped.
+ **/
+void
+gdk_window_set_type_hint (GdkWindow        *window,
+			  GdkWindowTypeHint hint)
+{
+  GdkAtom atom;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  switch (hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_DIALOG:
+      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_DIALOG", FALSE);
+      break;
+    case GDK_WINDOW_TYPE_HINT_MENU:
+      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_MENU", FALSE);
+      break;
+    case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_TOOLBAR", FALSE);
+      break;
+    default:
+      g_warning ("Unknown hint %d passed to gdk_window_set_type_hint", hint);
+      /* Fall thru */
+    case GDK_WINDOW_TYPE_HINT_NORMAL:
+      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_NORMAL", FALSE);
+      break;
+    }
+
+  XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+		   GDK_WINDOW_XID (window),
+		   gdk_atom_intern ("_NET_WM_WINDOW_TYPE", FALSE),
+		   XA_ATOM, 32, PropModeReplace,
+		   (guchar *)&atom, 1);
+}
+
+
+static void
+gdk_wmspec_change_state (gboolean add,
+			 GdkWindow *window,
+			 GdkAtom state1,
+			 GdkAtom state2)
+{
+  XEvent xev;
+  Atom op;
+
+  if (add)
+    op = gdk_atom_intern ("_NET_WM_STATE_ADD", FALSE);
+  else
+    op = gdk_atom_intern ("_NET_WM_STATE_REMOVE", FALSE);
+  
+  xev.xclient.type = ClientMessage;
+  xev.xclient.serial = 0;
+  xev.xclient.send_event = True;
+  xev.xclient.display = gdk_display;
+  xev.xclient.window = GDK_WINDOW_XID (window);
+  xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+  xev.xclient.format = 32;
+  xev.xclient.data.l[0] = op;
+  xev.xclient.data.l[1] = state1;
+  xev.xclient.data.l[2] = state2;
+  
+  XSendEvent (gdk_display, gdk_root_window, False,
+	      SubstructureRedirectMask | SubstructureNotifyMask,
+	      &xev);
+}
+/**
+ * gdk_window_set_modal_hint:
+ * @window: A #GdkWindow
+ * @modal: TRUE if the window is modal, FALSE otherwise.
+ *
+ * The application can use this hint to tell the window manager
+ * that a certain window has modal behaviour. The window manager
+ * can use this information to handle modal windows in a special
+ * way.
+ *
+ * You should only use this on windows for which you have
+ * previously called #gdk_window_set_transient_for()
+ **/
+void
+gdk_window_set_modal_hint (GdkWindow *window,
+			   gboolean   modal)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  private = (GdkWindowObject*) window;
+
+  private->modal_hint = modal;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    gdk_wmspec_change_state (modal, window,
+			     gdk_atom_intern ("_NET_WM_STATE_MODAL", FALSE),
+			     0);
+}
+
 void 
 gdk_window_set_geometry_hints (GdkWindow      *window,
 			       GdkGeometry    *geometry,
@@ -1310,7 +1431,15 @@ gdk_window_set_title (GdkWindow   *window,
 
   set_text_property (window, gdk_atom_intern ("WM_NAME", FALSE), title);
   if (!gdk_window_icon_name_set (window))
-    set_text_property (window, gdk_atom_intern ("WM_ICON_NAME", FALSE), title);
+    {
+      XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+		       GDK_WINDOW_XID (window),
+		       gdk_atom_intern ("_NET_WM_ICON_NAME", FALSE),
+		       gdk_atom_intern ("UTF8_STRING", FALSE), 8,
+		       PropModeReplace, title,
+		       strlen (title));
+      set_text_property (window, gdk_atom_intern ("WM_ICON_NAME", FALSE), title);
+    }
 }
 
 void          
@@ -1955,6 +2084,114 @@ gdk_window_set_override_redirect (GdkWindow *window,
     }
 }
 
+
+/**
+ * gdk_window_set_icon_list:
+ * @window: The #GdkWindow toplevel window to set the icon of.
+ * @pixbufs: A list of pixbufs, of different sizes.
+ * @Returns: TRUE if the icons were set, false otherwise
+ *
+ * Sets a list of icons for the window. One of these will be used
+ * to represent the window when it has been iconified. The icon is
+ * usually shown in an icon box or some sort of task bar. Which icon
+ * size is shown depends on the window manager. The window manager
+ * can scale the icon  but setting several size icons can give better
+ * image quality since the window manager may only need to scale the
+ * icon by a small amount or not at all.
+ *
+ * On the X11 backend this call might fail if the window manager
+ * doesn't support the Extended Window Manager Hints. Then this
+ * function returns FALSE, and the application should fall back
+ * to #gdk_window_set_icon().
+ **/
+gboolean
+gdk_window_set_icon_list (GdkWindow *window,
+			  GList     *pixbufs)
+{
+  guint *data;
+  guchar *pixels;
+  guint *p;
+  gint size;
+  GList *l;
+  GdkPixbuf *pixbuf;
+  gint width, height, stride;
+  gint x, y;
+  gint n_channels;
+  
+  g_return_val_if_fail (window != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return FALSE;
+
+  if (!gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_ICON", FALSE)))
+    return FALSE;
+  
+  l = pixbufs;
+  size = 0;
+  
+  while (l)
+    {
+      pixbuf = l->data;
+      g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), FALSE);
+
+      width = gdk_pixbuf_get_width (pixbuf);
+      height = gdk_pixbuf_get_height (pixbuf);
+      
+      size += 2 + width * height;
+
+      l = g_list_next (l);
+    }
+
+  data = g_malloc (size*4);
+
+  l = pixbufs;
+  p = data;
+  while (l)
+    {
+      pixbuf = l->data;
+      
+      width = gdk_pixbuf_get_width (pixbuf);
+      height = gdk_pixbuf_get_height (pixbuf);
+      stride = gdk_pixbuf_get_rowstride (pixbuf);
+      n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+      
+      *p++ = width;
+      *p++ = height;
+
+      pixels = gdk_pixbuf_get_pixels (pixbuf);
+
+      for (y = 0; y < height; y++)
+	{
+	  for (x = 0; x < width; x++)
+	    {
+	      guchar r, g, b, a;
+	      
+	      r = pixels[y*stride + x*n_channels + 0];
+	      g = pixels[y*stride + x*n_channels + 1];
+	      b = pixels[y*stride + x*n_channels + 2];
+	      if (n_channels >= 4)
+		a = pixels[y*stride + x*n_channels + 3];
+	      else
+		a = 255;
+	      
+	      *p++ = a << 24 | r << 16 | g << 8 | b ;
+	    }
+	}
+
+      l = g_list_next (l);
+    }
+
+  XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+		   GDK_WINDOW_XID (window),
+		   gdk_atom_intern ("_NET_WM_ICON", FALSE),
+		   XA_CARDINAL, 32,
+		   PropModeReplace,
+		   (guchar*) data, size);
+
+  return TRUE;
+}
+
 void          
 gdk_window_set_icon (GdkWindow *window, 
 		     GdkWindow *icon_window,
@@ -2017,6 +2254,12 @@ gdk_window_set_icon_name (GdkWindow   *window,
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
 		      GUINT_TO_POINTER (TRUE));
 
+  XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+		   GDK_WINDOW_XID (window),
+		   gdk_atom_intern ("_NET_WM_ICON_NAME", FALSE),
+		   gdk_atom_intern ("UTF8_STRING", FALSE), 8,
+		   PropModeReplace, name,
+		   strlen (name));
   set_text_property (window, gdk_atom_intern ("WM_ICON_NAME", FALSE), name);
 }
 
@@ -2096,21 +2339,9 @@ gdk_window_stick (GdkWindow *window)
       XEvent xev;
 
       /* Request stick during viewport scroll */
-      xev.xclient.type = ClientMessage;
-      xev.xclient.serial = 0;
-      xev.xclient.send_event = True;
-      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
-      xev.xclient.display = gdk_display;
-      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
-      xev.xclient.format = 32;
-
-      xev.xclient.data.l[0] = gdk_atom_intern ("_NET_WM_STATE_ADD", FALSE);
-      xev.xclient.data.l[1] = gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE);
-      xev.xclient.data.l[2] = 0;
-      
-      XSendEvent (gdk_display, gdk_root_window, False,
-                  SubstructureRedirectMask | SubstructureNotifyMask,
-                  &xev);
+      gdk_wmspec_change_state (TRUE, window,
+			       gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE),
+			       0);
 
       /* Request desktop 0xFFFFFFFF */
       xev.xclient.type = ClientMessage;
@@ -2154,21 +2385,9 @@ gdk_window_unstick (GdkWindow *window)
       gulong *current_desktop;
       
       /* Request unstick from viewport */
-      xev.xclient.type = ClientMessage;
-      xev.xclient.serial = 0;
-      xev.xclient.send_event = True;
-      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
-      xev.xclient.display = gdk_display;
-      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
-      xev.xclient.format = 32;
-
-      xev.xclient.data.l[0] = gdk_atom_intern ("_NET_WM_STATE_REMOVE", FALSE);
-      xev.xclient.data.l[1] = gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE);
-      xev.xclient.data.l[2] = 0;
-      
-      XSendEvent (gdk_display, gdk_root_window, False,
-                  SubstructureRedirectMask | SubstructureNotifyMask,
-                  &xev);
+      gdk_wmspec_change_state (FALSE, window,
+			       gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE),
+			       0);
 
       /* Get current desktop, then set it; this is a race, but not
        * one that matters much in practice.
@@ -2217,31 +2436,13 @@ gdk_window_maximize (GdkWindow *window)
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
-    {
-      XEvent xev;
-
-      xev.xclient.type = ClientMessage;
-      xev.xclient.serial = 0;
-      xev.xclient.send_event = True;
-      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
-      xev.xclient.display = gdk_display;
-      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
-      xev.xclient.format = 32;
-
-      xev.xclient.data.l[0] = gdk_atom_intern ("_NET_WM_STATE_ADD", FALSE);
-      xev.xclient.data.l[1] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
-      xev.xclient.data.l[2] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);
-      
-      XSendEvent (gdk_display, gdk_root_window, False,
-                  SubstructureRedirectMask | SubstructureNotifyMask,
-                  &xev);
-    }
+    gdk_wmspec_change_state (TRUE, window,
+			     gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE),
+			     gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE));
   else
-    {
-      gdk_synthesize_window_state (window,
-                                   0,
-                                   GDK_WINDOW_STATE_MAXIMIZED);
-    }
+    gdk_synthesize_window_state (window,
+				 0,
+				 GDK_WINDOW_STATE_MAXIMIZED);
 }
 
 void
@@ -2253,31 +2454,13 @@ gdk_window_unmaximize (GdkWindow *window)
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
-    {
-      XEvent xev;
-
-      xev.xclient.type = ClientMessage;
-      xev.xclient.serial = 0;
-      xev.xclient.send_event = True;
-      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
-      xev.xclient.display = gdk_display;
-      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
-      xev.xclient.format = 32;
-
-      xev.xclient.data.l[0] = gdk_atom_intern ("_NET_WM_STATE_REMOVE", FALSE);
-      xev.xclient.data.l[1] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
-      xev.xclient.data.l[2] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);
-      
-      XSendEvent (gdk_display, gdk_root_window, False,
-                  SubstructureRedirectMask | SubstructureNotifyMask,
-                  &xev);
-    }
+    gdk_wmspec_change_state (FALSE, window,
+			     gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE),
+			     gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE));
   else
-    {
-      gdk_synthesize_window_state (window,
-                                   GDK_WINDOW_STATE_MAXIMIZED,
-                                   0);
-    }
+    gdk_synthesize_window_state (window,
+				 GDK_WINDOW_STATE_MAXIMIZED,
+				 0);
 }
 
 void          

@@ -314,6 +314,7 @@ gtk_window_init (GtkWindow *window)
   window->frame_right = 0;
   window->frame_top = 0;
   window->frame_bottom = 0;
+  window->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
     
   gtk_widget_ref (GTK_WIDGET (window));
   gtk_object_sink (GTK_OBJECT (window));
@@ -974,6 +975,30 @@ gtk_window_set_transient_for  (GtkWindow *window,
 }
 
 /**
+ * gtk_window_set_type_hint:
+ * @window: a #GtkWindow
+ * @hint: the window type
+ *
+ * By setting the type hint for the window, you allow the window
+ * manager to decorate and handle the window in a way which is
+ * suitable to the function of the window in your application.
+ *
+ * This function should be called before the window becomes visible.
+ *
+ * gtk_dialog_new_with_buttons() and other convenience functions in GTK+
+ * will sometimes call gtk_window_set_type_hint() on your behalf.
+ * 
+ **/
+void
+gtk_window_set_type_hint (GtkWindow           *window, 
+			  GdkWindowTypeHint    hint)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (!GTK_WIDGET_VISIBLE (window));
+  window->type_hint = hint;
+}
+
+/**
  * gtk_window_set_destroy_with_parent:
  * @window: a #GtkWindow
  * @setting: whether to destroy @window with its transient parent
@@ -1428,6 +1453,14 @@ gtk_window_realize (GtkWidget *widget)
       GTK_WIDGET_REALIZED (window->transient_parent))
     gdk_window_set_transient_for (widget->window,
 				  GTK_WIDGET (window->transient_parent)->window);
+
+  gdk_window_set_type_hint (widget->window, window->type_hint);
+
+  /* transient_for must be set to allow the modal hint */
+  if (window->transient_parent && window->modal)
+    gdk_window_set_modal_hint (widget->window, TRUE);
+  else
+    gdk_window_set_modal_hint (widget->window, FALSE);
 }
 
 static void

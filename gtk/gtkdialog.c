@@ -139,6 +139,9 @@ gtk_dialog_init (GtkDialog *dialog)
   separator = gtk_hseparator_new ();
   gtk_box_pack_end (GTK_BOX (dialog->vbox), separator, FALSE, TRUE, 0);
   gtk_widget_show (separator);
+
+  gtk_window_set_type_hint (GTK_WINDOW (dialog),
+			    GDK_WINDOW_TYPE_HINT_DIALOG);
 }
 
 static gint
@@ -202,7 +205,7 @@ gtk_dialog_new_empty (const gchar     *title,
 
   if (flags & GTK_DIALOG_MODAL)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-
+  
   if (flags & GTK_DIALOG_DESTROY_WITH_PARENT)
     gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 

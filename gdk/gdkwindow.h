@@ -84,6 +84,28 @@ typedef enum
   GDK_HINT_WIN_GRAVITY = 1 << 6
 } GdkWindowHints;
 
+
+/* Window type hints.
+ * These are hints for the window manager that indicate
+ * what type of function the window has. The window manager
+ * can use this when determining decoration and behaviour
+ * of the window. The hint must be set before mapping the
+ * window.
+ *
+ *   Normal: Normal toplevel window
+ *   Dialog: Dialog window
+ *   Menu: Window used to implement a menu.
+ *   Toolbar: Window used to implement toolbars.
+ */
+typedef enum
+{
+  GDK_WINDOW_TYPE_HINT_NORMAL,
+  GDK_WINDOW_TYPE_HINT_DIALOG,
+  GDK_WINDOW_TYPE_HINT_MENU,
+  GDK_WINDOW_TYPE_HINT_TOOLBAR
+} GdkWindowTypeHint;
+
+
 /* The next two enumeration values current match the
  * Motif constants. If this is changed, the implementation
  * of gdk_window_set_decorations/gdk_window_set_functions
@@ -204,6 +226,7 @@ struct _GdkWindowObject
   
   guint guffaw_gravity : 1;
   guint input_only : 1;
+  guint modal_hint : 1;
   
   guint destroyed : 2;
 };
@@ -332,6 +355,10 @@ void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   max_width,
 					  gint		   max_height,
 					  gint		   flags);
+void          gdk_window_set_type_hint   (GdkWindow       *window,
+					  GdkWindowTypeHint hint);
+void          gdk_window_set_modal_hint  (GdkWindow       *window,
+					  gboolean         modal);
 void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkGeometry      *geometry,
 					     GdkWindowHints    flags);
@@ -389,6 +416,8 @@ GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 void	      gdk_window_set_events	 (GdkWindow	  *window,
 					  GdkEventMask	   event_mask);
 
+gboolean      gdk_window_set_icon_list   (GdkWindow       *window,
+					  GList           *pixbufs);
 void	      gdk_window_set_icon	 (GdkWindow	  *window, 
 					  GdkWindow	  *icon_window,
 					  GdkPixmap	  *pixmap,

@@ -1,5 +1,32 @@
 2001-03-05  Alexander Larsson  <alexl@redhat.com>
 
+	* gdk/gdkwindow.h:
+	Added GdkWindowTypeHint type. Added modal_hint field to GdkWindindow.
+	New functions gdk_window_set_type_hint, gdk_window_set_modal_hint and
+	gdk_window_set_icon_list for net wmspec functionality.
+
+	* gdk/x11/gdkwindow-x11.c:
+	Set _NEW_WM_STATE_MODAL from window->modal_hint in set_inital_hints.
+	Implement gdk_window_set_type_hint, gdk_window_set_modal_hint and
+	gdk_window_set_icon_list.
+	Added gdk_wmspec_change_state helper function and used it in the code.
+	Set _NET_WM_ICON_NAME in gdk_window_set_title and gdk_window_set_icon_name.
+
+	* gtk/gtkdialog.c (gtk_dialog_init):
+	Set GDK_WINDOW_TYPE_HINT_DIALOG.
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_realize):
+	Set GDK_WINDOW_TYPE_HINT_TOOLBAR.
+
+	* gtk/gtkwindow.c:
+	new function gtk_window_set_type_hint.
+	On realize, set type hint and modal hint.
+
+	* gtk/gtkwindow.h:
+	Added type_hint field and gtk_window_set_type_hint.
+
+2001-03-05  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtklabel.[ch]:
 	Convert from GtkArg to GParam (originally based on patch from Lee Mallabone).
 	New function gtk_label_get_accel_keyval () to get the underline accelerator
