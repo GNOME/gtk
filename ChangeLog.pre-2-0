@@ -1,3 +1,7 @@
+Wed Jun 28 18:03:09 BST 2000  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Change DocBook layout slightly
+
 Wed Jun 28 17:49:05 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Finish Section 6. Add Section 7.

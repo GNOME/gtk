@@ -29,11 +29,9 @@
 
   <!-- ***************************************************************** -->
   <chapter>
-    <title>General Information</title>
-    <para>Here's a paragraph of text because it is stylistically poor
-    to start a section right after the chapter title.</para>
+    <title>GTK+ FAQ</title>
     <sect1>
-      <title></title>
+      <title>General Information</title>
 
       <!-- ----------------------------------------------------------------- -->
 
@@ -326,13 +324,10 @@
 	</itemizedlist>
       </sect2>
     </sect1>
-  </chapter>
 
-  <!-- ***************************************************************** -->
-  <chapter>
-    <title>How to find, configure, install, and troubleshoot GTK+</title>
+    <!-- ***************************************************************** -->
     <sect1>
-      <title></title>
+      <title>How to find, configure, install, and troubleshoot GTK+</title>
  
       <!-- ----------------------------------------------------------------- -->
 
@@ -524,13 +519,10 @@ and reinstall gtk+.</para>
       </sect2>
 
     </sect1>
-  </chapter>
 
-  <!-- ***************************************************************** -->
-  <chapter>
-    <title>Development of GTK+</title>
+    <!-- ***************************************************************** -->
     <sect1>
-      <title></title>
+      <title>Development of GTK+</title>
  
       <!-- ----------------------------------------------------------------- -->
 
@@ -729,13 +721,10 @@ and reinstall gtk+.</para>
       </sect2>
 
     </sect1>
-  </chapter>
 
-  <!-- ***************************************************************** -->
-  <chapter>
-    <title>Development with GTK+: the begining</title>
+    <!-- ***************************************************************** -->
     <sect1>
-      <title></title>
+      <title>Development with GTK+: the begining</title>
  
       <!-- ----------------------------------------------------------------- -->
 
@@ -938,13 +927,10 @@ automake --add-missing --include-deps --foreign
         Netherlands, YMMV).</quote></para>
       </sect2>
     </sect1>
-  </chapter>
 
-  <!-- ***************************************************************** -->
-  <chapter>
-    <title>Development with GTK+: general questions</title>
+    <!-- ***************************************************************** -->
     <sect1>
-      <title></title>
+      <title>Development with GTK+: general questions</title>
  
       <!-- ----------------------------------------------------------------- -->
 
@@ -1455,7 +1441,7 @@ int main(int argc, char *argv[])
       <!-- ----------------------------------------------------------------- -->
 
      <sect2>
-	<title>How to I identifiy a widgets top level window or other
+	<title>How do I identifiy a widgets top level window or other
 	ancestor?</title>
 
 	<para>There are a couple of ways to find the top level parent
@@ -2092,13 +2078,10 @@ gint gtk_clist_prepend (GtkCList *clist,
 </programlisting>
       </sect2>
     </sect1>
-  </chapter>
 
-  <!-- ***************************************************************** -->
-  <chapter>
-    <title>Development with GTK+: widget specific questions</title>
+    <!-- ***************************************************************** -->
     <sect1>
-      <title></title>
+      <title>Development with GTK+: widget specific questions</title>
  
       <!-- ----------------------------------------------------------------- -->
 
@@ -2798,13 +2781,10 @@ main (int argc, char *argv[])
       </sect2>
 
     </sect1>
-  </chapter>
 
-  <!-- ***************************************************************** -->
-  <chapter>
-    <title>About GDK</title>
+    <!-- ***************************************************************** -->
     <sect1>
-      <title></title>
+      <title>About GDK</title>
  
       <!-- ----------------------------------------------------------------- -->
 
