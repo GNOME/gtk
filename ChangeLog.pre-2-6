@@ -1,3 +1,11 @@
+Fri Mar  5 18:00:36 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (new_folder_button_clicked): scroll
+	to the new path.
+
+	* gtk/gtktreeview.c (gtk_tree_view_adjustment_changed): Update the
+	allocation when scrolling instead of cancelling editing.
+
 Fri Mar  5 23:52:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_set_modify_func): 

@@ -8514,7 +8514,10 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 		       0);
       dy = tree_view->priv->dy - (int) tree_view->priv->vadjustment->value;
       if (dy && tree_view->priv->edited_column)
-        gtk_tree_view_stop_editing (tree_view, TRUE);
+	{
+	  if (GTK_IS_WIDGET (tree_view->priv->edited_column->editable_widget))
+	    GTK_WIDGET (tree_view->priv->edited_column->editable_widget)->allocation.y += dy;
+	}
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
 
       /* update our dy and top_row */

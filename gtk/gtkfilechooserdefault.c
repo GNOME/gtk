@@ -1254,9 +1254,13 @@ new_folder_button_clicked (GtkButton             *button,
   /* FIXME: this doesn't work for folder mode, just for file mode */
 
   _gtk_file_system_model_add_editable (impl->browse_files_model, &iter);
-  g_object_set (impl->list_name_renderer, "editable", TRUE, NULL);
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->browse_files_model), &iter);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->browse_files_tree_view),
+				path, impl->list_name_column,
+				FALSE, 0.0, 0.0);
+
+  g_object_set (impl->list_name_renderer, "editable", TRUE, NULL);
   gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view),
 			    path,
 			    impl->list_name_column,
