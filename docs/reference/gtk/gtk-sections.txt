@@ -1037,6 +1037,7 @@ gtk_im_context_focus_in
 gtk_im_context_focus_out
 gtk_im_context_reset
 gtk_im_context_set_cursor_location
+gtk_im_context_set_use_preedit
 <SUBSECTION Standard>
 GTK_IM_CONTEXT
 GTK_IS_IM_CONTEXT
@@ -1571,7 +1572,6 @@ gtk_paned_gutter_size
 gtk_paned_pack1
 gtk_paned_pack2
 gtk_paned_set_gutter_size
-gtk_paned_set_handle_size
 gtk_paned_set_position
 gtk_paned_get_position
 <SUBSECTION Standard>
@@ -1886,6 +1886,18 @@ gtk_separator_menu_item_get_type
 GtkSettings
 GtkSettingsClass
 GtkSettingsValue
+gtk_settings_get_global
+gtk_settings_install_property
+gtk_settings_install_property_parser
+gtk_rc_property_parse_color
+gtk_rc_property_parse_enum
+gtk_rc_property_parse_flags
+gtk_rc_property_parse_requisition
+gtk_rc_property_parse_border
+gtk_settings_set_property_value
+gtk_settings_set_string_property
+gtk_settings_set_long_property
+gtk_settings_set_double_property
 <SUBSECTION Standard>
 GTK_IS_SETTINGS
 GTK_IS_SETTINGS_CLASS
@@ -1894,7 +1906,7 @@ GTK_SETTINGS_CLASS
 GTK_SETTINGS_GET_CLASS
 GTK_TYPE_SETTINGS
 <SUBSECTION Private>
-
+gtk_settings_get_type
 </SECTION>
 
 
@@ -1923,9 +1935,12 @@ GtkSpinType
 <TITLE>GtkSpinButton</TITLE>
 gtk_spin_button_configure
 gtk_spin_button_new
+gtk_spin_button_new_with_range
 gtk_spin_button_set_adjustment
 gtk_spin_button_get_adjustment
 gtk_spin_button_set_digits
+gtk_spin_button_set_increments
+gtk_spin_button_set_range
 gtk_spin_button_get_value_as_float
 gtk_spin_button_get_value_as_int
 gtk_spin_button_set_value
@@ -1955,6 +1970,8 @@ gtk_statusbar_get_context_id
 gtk_statusbar_push
 gtk_statusbar_pop
 gtk_statusbar_remove
+gtk_statusbar_set_has_resize_grip
+gtk_statusbar_get_has_resize_grip
 <SUBSECTION Standard>
 GTK_STATUSBAR
 GTK_IS_STATUSBAR
@@ -2315,6 +2332,7 @@ gtk_text_view_set_indent
 gtk_text_view_get_indent
 gtk_text_view_set_tabs
 gtk_text_view_get_tabs
+GTK_TEXT_VIEW_PRIORITY_VALIDATE
 <SUBSECTION Standard>
 GTK_TEXT_VIEW
 GTK_IS_TEXT_VIEW
@@ -2545,8 +2563,6 @@ GValueCompareFunc
 gtk_tree_model_sort_new
 gtk_tree_model_sort_new_with_model
 gtk_tree_model_sort_set_model
-gtk_tree_model_sort_set_sort_column
-gtk_tree_model_sort_set_compare
 gtk_tree_model_sort_convert_path
 gtk_tree_model_sort_convert_iter
 <SUBSECTION Standard>
@@ -2618,7 +2634,6 @@ GTK_IS_TREE_STORE_CLASS
 GTK_TYPE_TREE_VIEW_COLUMN
 GtkTreeViewColumn
 GtkTreeViewColumnSizing
-GtkTreeViewColumnFunc
 <TITLE>GtkTreeViewColumn</TITLE>
 gtk_tree_view_column_new
 gtk_tree_view_column_new_with_attributes
@@ -2777,7 +2792,6 @@ gtk_list_store_new
 gtk_list_store_new_with_types
 gtk_list_store_set_n_columns
 gtk_list_store_set_column_type
-gtk_list_store_set_cell
 gtk_list_store_remove
 gtk_list_store_insert
 gtk_list_store_insert_before
@@ -2987,7 +3001,6 @@ gtk_widget_accelerator_signal
 gtk_widget_event
 gtk_widget_activate
 gtk_widget_reparent
-gtk_widget_popup
 gtk_widget_intersect
 gtk_widget_is_focus
 gtk_widget_grab_focus
@@ -3062,7 +3075,7 @@ gtk_widget_set_composite_name
 gtk_widget_set_scroll_adjustments
 gtk_widget_unlock_accelerators
 gtk_widget_accelerators_locked
-gtk_widget_activate_mnemonic
+gtk_widget_mnemonic_activate
 gtk_widget_class_install_style_property
 gtk_widget_class_install_style_property_parser
 gtk_widget_region_intersect
@@ -3070,6 +3083,11 @@ gtk_widget_send_expose
 gtk_widget_style_get
 gtk_widget_style_get_property
 gtk_widget_style_get_valist
+
+<SUBSECTION>
+gtk_requisition_copy
+gtk_requisition_free
+
 <SUBSECTION Standard>
 GTK_WIDGET
 GTK_IS_WIDGET
@@ -3088,6 +3106,8 @@ gtk_window_new
 gtk_window_set_title
 gtk_window_set_wmclass
 gtk_window_set_policy
+gtk_window_set_resizeable
+gtk_window_get_resizeable
 gtk_window_add_accel_group
 gtk_window_remove_accel_group
 gtk_window_position
@@ -3096,17 +3116,24 @@ gtk_window_activate_default
 gtk_window_set_modal
 gtk_window_set_default_size
 gtk_window_set_geometry_hints
+gtk_window_set_gravity
+gtk_window_get_gravity
 gtk_window_set_position
 gtk_window_set_transient_for
 gtk_window_set_destroy_with_parent
 gtk_window_list_toplevels
-gtk_window_activate_mnemonic
 gtk_window_add_mnemonic
-gtk_window_deiconify
-gtk_window_iconify
-gtk_window_maximize
-gtk_window_present
 gtk_window_remove_mnemonic
+gtk_window_mnemonic_activate
+gtk_window_present
+gtk_window_iconify
+gtk_window_deiconify
+gtk_window_stick
+gtk_window_unstick
+gtk_window_maximize
+gtk_window_unmaximize
+gtk_window_begin_resize_drag
+gtk_window_begin_move_drag
 gtk_window_set_decorated
 gtk_window_set_decorations_hint
 gtk_window_set_frame_dimensions
@@ -3115,9 +3142,6 @@ gtk_window_set_has_frame
 gtk_window_set_mnemonic_modifier
 gtk_window_set_role
 gtk_window_set_type_hint
-gtk_window_stick
-gtk_window_unmaximize
-gtk_window_unstick
 <SUBSECTION Standard>
 GTK_WINDOW
 GTK_IS_WINDOW
@@ -3127,12 +3151,18 @@ GTK_WINDOW_CLASS
 GTK_IS_WINDOW_CLASS
 GTK_WINDOW_GET_CLASS
 
+<SUBSECTION>
+gtk_decorated_window_init
+gtk_decorated_window_calculate_frame_size
+gtk_decorated_window_set_title
+gtk_decorated_window_move_resize_window
+
 <SUBSECTION Private>
+GtkWindowGeometryInfo
 gtk_window_set_focus
 gtk_window_set_default
 gtk_window_remove_embedded_xid
 gtk_window_add_embedded_xid
-gtk_window_reposition
 </SECTION>
 
 
@@ -3297,6 +3327,7 @@ gtk_draw_slider
 gtk_draw_tab
 gtk_draw_expander
 gtk_draw_layout
+gtk_draw_resize_grip
 gtk_paint_arrow
 gtk_paint_box
 gtk_paint_box_gap
@@ -3317,6 +3348,16 @@ gtk_paint_tab
 gtk_paint_vline
 gtk_paint_expander
 gtk_paint_layout
+gtk_paint_resize_grip
+
+<SUBSECTION>
+GtkBorder
+gtk_border_copy
+gtk_border_free
+
+<SUBSECTION>
+GtkRcProperty
+GtkRcPropertyParser
 
 <SUBSECTION Standard>
 GTK_STYLE
@@ -3349,6 +3390,7 @@ GtkRcStyleClass
 GtkRcFlags
 GtkImageLoader
 GtkRcTokenType
+gtk_rc_scanner_new
 gtk_rc_get_style
 gtk_rc_add_widget_name_style
 gtk_rc_add_widget_class_style
@@ -3482,6 +3524,9 @@ GtkTargetFlags
 gtk_drag_dest_set
 gtk_drag_dest_set_proxy
 gtk_drag_dest_unset
+gtk_drag_dest_find_target
+gtk_drag_dest_get_target_list
+gtk_drag_dest_set_target_list
 gtk_drag_finish
 gtk_drag_get_data
 gtk_drag_get_source_widget
@@ -3493,6 +3538,7 @@ gtk_drag_set_icon_widget
 gtk_drag_set_icon_pixmap
 gtk_drag_set_icon_default
 gtk_drag_set_default_icon
+gtk_drag_check_threshold
 gtk_drag_source_set
 gtk_drag_source_set_icon
 gtk_drag_source_unset
@@ -3644,12 +3690,6 @@ GTK_TYPE_IDENTIFIER
 <SECTION>
 <FILE>gtkbindings</FILE>
 <TITLE>Bindings</TITLE>
-GtkPatternSpec
-gtk_pattern_spec_init
-gtk_pattern_spec_free_segs
-gtk_pattern_match
-gtk_pattern_match_string
-gtk_pattern_match_simple
 GtkBindingSet
 GtkBindingEntry
 GtkBindingSignal
@@ -3709,17 +3749,6 @@ GtkSortType
 <SUBSECTION Private>
 GtkMenuCallback
 GtkMenuEntry
-GtkMenuPath
-GtkMenuFactory
-GtkMenuFactoryType
-gtk_menu_factory_new
-gtk_menu_factory_destroy
-gtk_menu_factory_add_entries
-gtk_menu_factory_add_subfactory
-gtk_menu_factory_remove_paths
-gtk_menu_factory_remove_entries
-gtk_menu_factory_remove_subfactory
-gtk_menu_factory_find
 </SECTION>
 
 <SECTION>

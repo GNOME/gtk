@@ -247,6 +247,14 @@ into account.
 Though this value is not always correct.
 
 
+<!-- ##### FUNCTION gdk_set_double_click_time ##### -->
+<para>
+
+</para>
+
+@msec: 
+
+
 <!-- ##### FUNCTION gdk_keyboard_grab ##### -->
 <para>
 Grabs the keyboard so that all events are passed to this

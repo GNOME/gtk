@@ -1,0 +1,75 @@
+<!-- ##### SECTION Title ##### -->
+GtkImageMenuItem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkImageMenuItem ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+<!-- ##### STRUCT GtkImageMenuItemClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_add_image ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@child: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_get_image ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_get_type ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_new ##### -->
+<para>
+
+</para>
+
+@widget: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_new_from_stock ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@accel_group: 
+@Returns: 
+
+

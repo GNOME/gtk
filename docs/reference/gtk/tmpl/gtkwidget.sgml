@@ -1239,6 +1239,16 @@ GtkWidget
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_mnemonic_activate ##### -->
+<para>
+
+</para>
+
+@widget: 
+@group_cycling: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_widget_class_install_style_property ##### -->
 <para>
 
@@ -1310,6 +1320,23 @@ GtkWidget
 @widget: 
 @first_property_name: 
 @var_args: 
+
+
+<!-- ##### FUNCTION gtk_requisition_copy ##### -->
+<para>
+
+</para>
+
+@requisition: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_requisition_free ##### -->
+<para>
+
+</para>
+
+@requisition: 
 
 
 <!-- ##### SIGNAL GtkWidget::add-accelerator ##### -->

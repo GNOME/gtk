@@ -1,0 +1,161 @@
+<!-- ##### SECTION Title ##### -->
+GtkSettings
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkSettings ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkSettingsClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkSettingsValue ##### -->
+<para>
+
+</para>
+
+@origin: 
+@value: 
+
+<!-- ##### FUNCTION gtk_settings_get_global ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_settings_install_property ##### -->
+<para>
+
+</para>
+
+@settings: 
+@pspec: 
+
+
+<!-- ##### FUNCTION gtk_settings_install_property_parser ##### -->
+<para>
+
+</para>
+
+@settings: 
+@pspec: 
+@parser: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_color ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_enum ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_flags ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_requisition ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_property_parse_border ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@gstring: 
+@property_value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_settings_set_property_value ##### -->
+<para>
+
+</para>
+
+@settings: 
+@name: 
+@svalue: 
+
+
+<!-- ##### FUNCTION gtk_settings_set_string_property ##### -->
+<para>
+
+</para>
+
+@settings: 
+@name: 
+@v_string: 
+@origin: 
+
+
+<!-- ##### FUNCTION gtk_settings_set_long_property ##### -->
+<para>
+
+</para>
+
+@settings: 
+@name: 
+@v_long: 
+@origin: 
+
+
+<!-- ##### FUNCTION gtk_settings_set_double_property ##### -->
+<para>
+
+</para>
+
+@settings: 
+@name: 
+@v_double: 
+@origin: 
+
+

@@ -1,3 +1,10 @@
+Tue Apr 17 10:59:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (GTKDOC_CFLAGS): Remove -DGTK_DISABLE_COMPAT
+	add -DGTK_ENABLE_BROKEN
+
+	* {gtk/gtk,gdk/gdk}-sections.txt: Updated
+
 Fri Apr 13 10:41:10 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* */Makefile.am: Add $(top_builddir) to includes as necessary,

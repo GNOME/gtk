@@ -356,6 +356,17 @@ FIXME: add more here.
 @changed_mask: 
 @new_window_state: 
 
+<!-- ##### STRUCT GdkEventSetting ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@action: 
+@name: 
+
 <!-- ##### ENUM GdkScrollDirection ##### -->
 <para>
 
@@ -413,4 +424,13 @@ Specifies the type of a property change for a #GdkEventProperty.
 @GDK_WINDOW_STATE_ICONIFIED: 
 @GDK_WINDOW_STATE_MAXIMIZED: 
 @GDK_WINDOW_STATE_STICKY: 
+
+<!-- ##### ENUM GdkSettingAction ##### -->
+<para>
+
+</para>
+
+@GDK_SETTING_ACTION_NEW: 
+@GDK_SETTING_ACTION_CHANGED: 
+@GDK_SETTING_ACTION_DELETED: 
 

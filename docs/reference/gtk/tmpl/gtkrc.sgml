@@ -496,7 +496,6 @@ This can later be composited together with other
 #GtkRcStyle structures to form a #GtkStyle.
 </para>
 
-@parent_instance: 
 @name: 
 @bg_pixmap_name: 
 @font_desc: 
@@ -615,6 +614,14 @@ specific portions of a RC file.
 @GTK_RC_TOKEN_LTR: 
 @GTK_RC_TOKEN_RTL: 
 @GTK_RC_TOKEN_LAST: 
+
+<!-- ##### FUNCTION gtk_rc_scanner_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 
 <!-- ##### FUNCTION gtk_rc_get_style ##### -->
 <para>

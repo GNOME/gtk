@@ -39,6 +39,8 @@ GtkTreeViewColumn
 @min_width: 
 @max_width: 
 @displayed_width: 
+@drag_x: 
+@drag_y: 
 @func: 
 @func_data: 
 @destroy: 
@@ -54,6 +56,8 @@ GtkTreeViewColumn
 @button_active: 
 @dirty: 
 @show_sort_indicator: 
+@maybe_reordered: 
+@reorderable: 
 
 <!-- ##### ENUM GtkTreeViewColumnSizing ##### -->
 <para>

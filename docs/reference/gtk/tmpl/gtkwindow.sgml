@@ -128,6 +128,24 @@ the child gets a larger allocation than it requests.
 it's larger
 
 
+<!-- ##### FUNCTION gtk_window_set_resizeable ##### -->
+<para>
+
+</para>
+
+@window: 
+@resizeable: 
+
+
+<!-- ##### FUNCTION gtk_window_get_resizeable ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_add_accel_group ##### -->
 <para>
 
@@ -201,6 +219,24 @@ it's larger
 @geom_mask: 
 
 
+<!-- ##### FUNCTION gtk_window_set_gravity ##### -->
+<para>
+
+</para>
+
+@window: 
+@gravity: 
+
+
+<!-- ##### FUNCTION gtk_window_get_gravity ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_set_position ##### -->
 <para>
 
@@ -246,7 +282,28 @@ it's larger
 @target: 
 
 
-<!-- ##### FUNCTION gtk_window_deiconify ##### -->
+<!-- ##### FUNCTION gtk_window_remove_mnemonic ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@target: 
+
+
+<!-- ##### FUNCTION gtk_window_mnemonic_activate ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@modifier: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_present ##### -->
 <para>
 
 </para>
@@ -262,6 +319,30 @@ it's larger
 @window: 
 
 
+<!-- ##### FUNCTION gtk_window_deiconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_stick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_unstick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
 <!-- ##### FUNCTION gtk_window_maximize ##### -->
 <para>
 
@@ -270,7 +351,7 @@ it's larger
 @window: 
 
 
-<!-- ##### FUNCTION gtk_window_present ##### -->
+<!-- ##### FUNCTION gtk_window_unmaximize ##### -->
 <para>
 
 </para>
@@ -278,14 +359,29 @@ it's larger
 @window: 
 
 
-<!-- ##### FUNCTION gtk_window_remove_mnemonic ##### -->
+<!-- ##### FUNCTION gtk_window_begin_resize_drag ##### -->
 <para>
 
 </para>
 
 @window: 
-@keyval: 
-@target: 
+@edge: 
+@button: 
+@root_x: 
+@root_y: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gtk_window_begin_move_drag ##### -->
+<para>
+
+</para>
+
+@window: 
+@button: 
+@root_x: 
+@root_y: 
+@timestamp: 
 
 
 <!-- ##### FUNCTION gtk_window_set_decorated ##### -->
@@ -362,7 +458,7 @@ it's larger
 @hint: 
 
 
-<!-- ##### FUNCTION gtk_window_stick ##### -->
+<!-- ##### FUNCTION gtk_decorated_window_init ##### -->
 <para>
 
 </para>
@@ -370,7 +466,7 @@ it's larger
 @window: 
 
 
-<!-- ##### FUNCTION gtk_window_unmaximize ##### -->
+<!-- ##### FUNCTION gtk_decorated_window_calculate_frame_size ##### -->
 <para>
 
 </para>
@@ -378,12 +474,25 @@ it's larger
 @window: 
 
 
-<!-- ##### FUNCTION gtk_window_unstick ##### -->
+<!-- ##### FUNCTION gtk_decorated_window_set_title ##### -->
 <para>
 
 </para>
 
 @window: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_decorated_window_move_resize_window ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
 
 
 <!-- ##### SIGNAL GtkWindow::frame-event ##### -->

@@ -509,6 +509,21 @@ Styles
 @layout: 
 
 
+<!-- ##### FUNCTION gtk_draw_resize_grip ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@edge: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
 <!-- ##### FUNCTION gtk_paint_arrow ##### -->
 <para>
 
@@ -865,5 +880,71 @@ Styles
 @x: 
 @y: 
 @layout: 
+
+
+<!-- ##### FUNCTION gtk_paint_resize_grip ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@area: 
+@widget: 
+@detail: 
+@edge: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### STRUCT GtkBorder ##### -->
+<para>
+
+</para>
+
+@left: 
+@right: 
+@top: 
+@bottom: 
+
+<!-- ##### FUNCTION gtk_border_copy ##### -->
+<para>
+
+</para>
+
+@border: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_border_free ##### -->
+<para>
+
+</para>
+
+@border: 
+
+
+<!-- ##### STRUCT GtkRcProperty ##### -->
+<para>
+
+</para>
+
+@type_name: 
+@property_name: 
+@origin: 
+@value: 
+
+<!-- ##### USER_FUNCTION GtkRcPropertyParser ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@rc_string: 
+@property_value: 
+@Returns: 
 
 

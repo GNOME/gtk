@@ -1,0 +1,37 @@
+<!-- ##### SECTION Title ##### -->
+GtkSeparatorMenuItem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkSeparatorMenuItem ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+<!-- ##### STRUCT GtkSeparatorMenuItemClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_separator_menu_item_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

@@ -68,7 +68,7 @@ GTKDOC_CFLAGS = @STRIP_BEGIN@ 				\
 	-I$(top_srcdir) 				\
 	-I$(top_builddir) 				\
 	-I$(top_builddir)/gdk				\
-	-DGTK_DISABLE_COMPAT_H				\
+	-DGTK_ENABLE_BROKEN				\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
 	@GTK_LOCALE_FLAGS@				\

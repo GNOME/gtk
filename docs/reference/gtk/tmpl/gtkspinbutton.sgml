@@ -172,6 +172,17 @@ Creates a new #GtkSpinButton.
 @Returns: a #GtkWidget.
 
 
+<!-- ##### FUNCTION gtk_spin_button_new_with_range ##### -->
+<para>
+
+</para>
+
+@min: 
+@max: 
+@step: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_spin_button_set_adjustment ##### -->
 <para>
 
@@ -197,6 +208,26 @@ Creates a new #GtkSpinButton.
 
 @spin_button: 
 @digits: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_increments ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@step: 
+@page: 
+
+
+<!-- ##### FUNCTION gtk_spin_button_set_range ##### -->
+<para>
+
+</para>
+
+@spin_button: 
+@min: 
+@max: 
 
 
 <!-- ##### FUNCTION gtk_spin_button_get_value_as_float ##### -->

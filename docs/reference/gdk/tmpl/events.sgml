@@ -333,3 +333,13 @@ Note that GTK+ must be compiled with debugging enabled, i.e. using the
 @show_events: TRUE to output event debugging information.
 
 
+<!-- ##### FUNCTION gdk_setting_get ##### -->
+<para>
+
+</para>
+
+@name: 
+@value: 
+@Returns: 
+
+

@@ -100,6 +100,24 @@ Forces the removal of a message from a statusbar's stack. The exact context_id a
 @message_id: a message identifier, as returned by gtk_statusbar_push().
 
 
+<!-- ##### FUNCTION gtk_statusbar_set_has_resize_grip ##### -->
+<para>
+
+</para>
+
+@statusbar: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_statusbar_get_has_resize_grip ##### -->
+<para>
+
+</para>
+
+@statusbar: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkStatusbar::text-popped ##### -->
 <para>
 Is emitted whenever a new message is popped off a statusbar's stack.

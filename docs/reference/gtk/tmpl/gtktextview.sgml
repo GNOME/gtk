@@ -544,6 +544,13 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### MACRO GTK_TEXT_VIEW_PRIORITY_VALIDATE ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
 <para>
 

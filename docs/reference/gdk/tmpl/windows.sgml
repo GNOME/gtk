@@ -121,6 +121,20 @@ Windows
 @GDK_GRAVITY_SOUTH_EAST: 
 @GDK_GRAVITY_STATIC: 
 
+<!-- ##### ENUM GdkWindowEdge ##### -->
+<para>
+
+</para>
+
+@GDK_WINDOW_EDGE_NORTH_WEST: 
+@GDK_WINDOW_EDGE_NORTH: 
+@GDK_WINDOW_EDGE_NORTH_EAST: 
+@GDK_WINDOW_EDGE_WEST: 
+@GDK_WINDOW_EDGE_EAST: 
+@GDK_WINDOW_EDGE_SOUTH_WEST: 
+@GDK_WINDOW_EDGE_SOUTH: 
+@GDK_WINDOW_EDGE_SOUTH_EAST: 
+
 <!-- ##### ENUM GdkWindowTypeHint ##### -->
 <para>
 
@@ -422,6 +436,44 @@ Windows
 </para>
 
 @window: 
+
+
+<!-- ##### FUNCTION gdk_window_begin_resize_drag ##### -->
+<para>
+
+</para>
+
+@window: 
+@edge: 
+@button: 
+@root_x: 
+@root_y: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gdk_window_begin_move_drag ##### -->
+<para>
+
+</para>
+
+@window: 
+@button: 
+@root_x: 
+@root_y: 
+@timestamp: 
+
+
+<!-- ##### FUNCTION gdk_window_constrain_size ##### -->
+<para>
+
+</para>
+
+@geometry: 
+@flags: 
+@width: 
+@height: 
+@new_width: 
+@new_height: 
 
 
 <!-- ##### FUNCTION gdk_window_begin_paint_rect ##### -->
@@ -778,6 +830,15 @@ Windows
 @window: 
 @x: 
 @y: 
+
+
+<!-- ##### FUNCTION gdk_window_get_frame_extents ##### -->
+<para>
+
+</para>
+
+@window: 
+@rect: 
 
 
 <!-- ##### MACRO gdk_window_get_size ##### -->

@@ -27,6 +27,7 @@ gdk_pointer_grab
 GdkGrabStatus
 gdk_pointer_ungrab
 gdk_pointer_is_grabbed
+gdk_set_double_click_time
 
 <SUBSECTION>
 gdk_keyboard_grab
@@ -49,9 +50,63 @@ GDK_WINDOWING_WIN32
 GDK_WINDOWING_NANOX
 GDK_WINDOWING_FB
 
+<SUBSECTION Standard>
+GDK_TYPE_GRAB_STATUS
+
+<SUBSECTION Private>
+GDK_TYPE_STATUS
+
 <SUBSECTION Private>
 GdkStatus
 GDKVAR
+gdk_axis_use_get_type
+gdk_byte_order_get_type
+gdk_cap_style_get_type
+gdk_crossing_mode_get_type
+gdk_cursor_type_get_type
+gdk_drag_action_get_type
+gdk_drag_protocol_get_type
+gdk_event_mask_get_type
+gdk_event_type_get_type
+gdk_extension_mode_get_type
+gdk_fill_get_type
+gdk_fill_rule_get_type
+gdk_filter_return_get_type
+gdk_font_type_get_type
+gdk_function_get_type
+gdk_gc_values_mask_get_type
+gdk_grab_status_get_type
+gdk_gravity_get_type
+gdk_image_type_get_type
+gdk_input_condition_get_type
+gdk_input_mode_get_type
+gdk_input_source_get_type
+gdk_join_style_get_type
+gdk_line_style_get_type
+gdk_modifier_type_get_type
+gdk_notify_type_get_type
+gdk_overlap_type_get_type
+gdk_property_state_get_type
+gdk_prop_mode_get_type
+gdk_rgb_dither_get_type
+gdk_scroll_direction_get_type
+gdk_selection_get_type
+gdk_selection_type_get_type
+gdk_setting_action_get_type
+gdk_status_get_type
+gdk_subwindow_mode_get_type
+gdk_target_get_type
+gdk_visibility_state_get_type
+gdk_visual_type_get_type
+gdk_window_attributes_type_get_type
+gdk_window_class_get_type
+gdk_window_edge_get_type
+gdk_window_hints_get_type
+gdk_window_state_get_type
+gdk_window_type_get_type
+gdk_window_type_hint_get_type
+gdk_wm_decoration_get_type
+gdk_wm_function_get_type
 </SECTION>
 
 <SECTION>
@@ -108,6 +163,7 @@ GDK_IS_IMAGE
 GDK_IMAGE_CLASS
 GDK_IMAGE_GET_CLASS
 GDK_IS_IMAGE_CLASS
+GDK_TYPE_IMAGE_TYPE
 
 <SUBSECTION Private>
 GdkImageClass
@@ -147,6 +203,9 @@ gdk_rgb_get_colormap
 gdk_rgb_get_cmap
 gdk_rgb_ditherable
 gdk_rgb_set_verbose
+
+<SUBSECTION Standard>
+GDK_TYPE_RGB_DITHER
 </SECTION>
 
 <SECTION>
@@ -195,10 +254,12 @@ GDK_TYPE_COLORMAP
 GDK_IS_COLORMAP
 GDK_COLORMAP_CLASS
 GDK_IS_COLORMAP_CLASS
+GDK_TYPE_COLOR
 
 <SUBSECTION Private>
 GdkColormapClass
 gdk_colormap_get_type
+gdk_color_get_type
 </SECTION>
 
 <SECTION>
@@ -238,6 +299,13 @@ gdk_font_full_name_free
 GdkWChar
 gdk_wcstombs
 gdk_mbstowcs
+
+<SUBSECTION Standard>
+GDK_TYPE_FONT
+GDK_TYPE_FONT_TYPE
+
+<SUBSECTION Private>
+gdk_font_get_type
 </SECTION>
 
 <SECTION>
@@ -347,6 +415,14 @@ gdk_gc_get_type
 GDK_GC_CLASS
 GDK_GC_GET_CLASS
 GDK_IS_GC_CLASS
+GDK_TYPE_CAP_STYLE
+GDK_TYPE_FILL
+GDK_TYPE_FILL_RULE
+GDK_TYPE_FUNCTION
+GDK_TYPE_GC_VALUES_MASK
+GDK_TYPE_JOIN_STYLE
+GDK_TYPE_LINE_STYLE
+GDK_TYPE_SUBWINDOW_MODE
 </SECTION>
 
 <SECTION>
@@ -368,6 +444,14 @@ gdk_visual_get_best_with_type
 gdk_visual_get_best_with_both
 gdk_visual_ref
 gdk_visual_unref
+
+<SUBSECTION Standard>
+GDK_TYPE_BYTE_ORDER
+GDK_TYPE_VISUAL_TYPE
+GDK_TYPE_VISUAL
+
+<SUBSECTION Private>
+gdk_visual_get_type
 </SECTION>
 
 <SECTION>
@@ -381,6 +465,7 @@ GdkWindowAttributesType
 GdkWindowHints
 GdkGeometry
 GdkGravity
+GdkWindowEdge
 GdkWindowTypeHint
 gdk_window_new
 gdk_window_destroy
@@ -413,6 +498,9 @@ gdk_window_raise
 gdk_window_lower
 gdk_window_focus
 gdk_window_register_dnd
+gdk_window_begin_resize_drag
+gdk_window_begin_move_drag
+gdk_window_constrain_size
 
 <SUBSECTION>
 gdk_window_begin_paint_rect
@@ -457,6 +545,7 @@ gdk_window_set_modal_hint
 gdk_window_set_type_hint
 gdk_window_get_position
 gdk_window_get_root_origin
+gdk_window_get_frame_extents
 gdk_window_get_size
 gdk_window_get_visual
 gdk_window_get_colormap
@@ -491,6 +580,17 @@ GDK_TYPE_WINDOW
 GDK_IS_WINDOW
 GDK_WINDOW_CLASS
 GDK_IS_WINDOW_CLASS
+GDK_TYPE_FILTER_RETURN
+GDK_TYPE_GRAVITY
+GDK_TYPE_MODIFIER_TYPE
+GDK_TYPE_WINDOW_ATTRIBUTES_TYPE
+GDK_TYPE_WINDOW_CLASS
+GDK_TYPE_WINDOW_EDGE
+GDK_TYPE_WINDOW_HINTS
+GDK_TYPE_WINDOW_TYPE
+GDK_TYPE_WINDOW_TYPE_HINT
+GDK_TYPE_WM_DECORATION
+GDK_TYPE_WM_FUNCTION
 
 <SUBSECTION Private>
 gdk_window_object_get_type
@@ -510,6 +610,11 @@ gdk_selection_owner_get
 gdk_selection_convert
 gdk_selection_property_get
 gdk_selection_send_notify
+
+<SUBSECTION Standard>
+GDK_TYPE_SELECTION
+GDK_TYPE_SELECTION_TYPE
+GDK_TYPE_TARGET
 </SECTION>
 
 <SECTION>
@@ -530,6 +635,9 @@ gdk_property_get
 gdk_property_change
 GdkPropMode
 gdk_property_delete
+
+<SUBSECTION Standard>
+GDK_TYPE_PROP_MODE
 </SECTION>
 
 <SECTION>
@@ -587,6 +695,8 @@ GdkSpan
 GdkSpanFunc
 gdk_region_spans_intersect_foreach
 
+<SUBSECTION Standard>
+GDK_TYPE_OVERLAP_TYPE
 </SECTION>
 
 <SECTION>
@@ -663,6 +773,12 @@ gdk_device_get_axis
 gdk_input_set_extension_events
 GdkExtensionMode
 
+<SUBSECTION Standard>
+GDK_TYPE_AXIS_USE
+GDK_TYPE_EXTENSION_MODE
+GDK_TYPE_INPUT_MODE
+GDK_TYPE_INPUT_SOURCE
+
 <SUBSECTION Private>
 GDK_MAX_TIMECOORD_AXES
 </SECTION>
@@ -701,6 +817,13 @@ gdk_add_client_message_filter
 <SUBSECTION>
 gdk_get_show_events
 gdk_set_show_events
+
+<SUBSECTION>
+gdk_setting_get
+
+<SUBSECTION Standard>
+GDK_TYPE_EVENT_MASK
+GDK_TYPE_EVENT_TYPE
 </SECTION>
 
 <SECTION>
@@ -727,6 +850,7 @@ GdkEventProximity
 GdkEventClient
 GdkEventNoExpose
 GdkEventWindowState
+GdkEventSetting
 
 <SUBSECTION>
 GdkScrollDirection
@@ -735,6 +859,20 @@ GdkCrossingMode
 GdkNotifyType
 GdkPropertyState
 GdkWindowState
+GdkSettingAction
+
+<SUBSECTION Standard>
+GDK_TYPE_CROSSING_MODE
+GDK_TYPE_EVENT
+GDK_TYPE_NOTIFY_TYPE
+GDK_TYPE_PROPERTY_STATE
+GDK_TYPE_SCROLL_DIRECTION
+GDK_TYPE_SETTING_ACTION
+GDK_TYPE_VISIBILITY_STATE
+GDK_TYPE_WINDOW_STATE
+
+<SUBSECTION Private>
+gdk_event_get_type
 </SECTION>
 
 <SECTION>
@@ -747,6 +885,9 @@ gdk_cursor_new_from_pixmap
 gdk_cursor_ref
 gdk_cursor_unref
 gdk_cursor_destroy
+
+<SUBSECTION Standard>
+GDK_TYPE_CURSOR_TYPE
 </SECTION>
 
 <SECTION>
@@ -758,6 +899,9 @@ GdkInputFunction
 GdkDestroyNotify
 gdk_input_add
 gdk_input_remove
+
+<SUBSECTION Standard>
+GDK_TYPE_INPUT_CONDITION
 </SECTION>
 
 <SECTION>
@@ -787,6 +931,8 @@ GDK_IS_DRAG_CONTEXT
 GDK_DRAG_CONTEXT_CLASS
 GDK_DRAG_CONTEXT_GET_CLASS
 GDK_IS_DRAG_CONTEXT_CLASS
+GDK_TYPE_DRAG_ACTION
+GDK_TYPE_DRAG_PROTOCOL
 
 <SUBSECTION Private>
 GdkDragContextClass

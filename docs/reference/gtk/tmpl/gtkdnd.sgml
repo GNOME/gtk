@@ -150,6 +150,35 @@ notification of drags.
 @widget: a #GtkWidget
 
 
+<!-- ##### FUNCTION gtk_drag_dest_find_target ##### -->
+<para>
+
+</para>
+
+@widget: 
+@context: 
+@target_list: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_drag_dest_get_target_list ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_drag_dest_set_target_list ##### -->
+<para>
+
+</para>
+
+@widget: 
+@target_list: 
+
+
 <!-- ##### FUNCTION gtk_drag_finish ##### -->
 <para>
 Inform the drag source that the drop is finished, and
@@ -286,6 +315,19 @@ arguments, and will release them when they are no longer needed.
 @mask: the transparency mask for an image.
 @hot_x: The X offset within @widget of the hotspot.
 @hot_y: The Y offset within @widget of the hotspot.
+
+
+<!-- ##### FUNCTION gtk_drag_check_threshold ##### -->
+<para>
+
+</para>
+
+@widget: 
+@start_x: 
+@start_y: 
+@current_x: 
+@current_y: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_drag_source_set ##### -->
