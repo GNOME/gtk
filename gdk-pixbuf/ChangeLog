@@ -1,3 +1,9 @@
+2002-09-12  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif-animation.h: 
+	* gdk-pixbuf.h: Move GdkPixbufFrame from the public header to
+	the gif-animation-specific private header.  (#91929)
+
 2002-09-12  Federico Mena Quintero  <federico@ximian.com>
 
 	* io-jpeg.c (gdk_pixbuf__jpeg_image_load): Unref the pixbuf if we

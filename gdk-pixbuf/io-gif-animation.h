@@ -47,6 +47,7 @@ typedef enum {
 
 typedef struct _GdkPixbufGifAnim GdkPixbufGifAnim;
 typedef struct _GdkPixbufGifAnimClass GdkPixbufGifAnimClass;
+typedef struct _GdkPixbufFrame GdkPixbufFrame;
 
 #define GDK_TYPE_PIXBUF_GIF_ANIM              (gdk_pixbuf_gif_anim_get_type ())
 #define GDK_PIXBUF_GIF_ANIM(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXBUF_GIF_ANIM, GdkPixbufGifAnim))
