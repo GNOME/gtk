@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-05-24 17:01-0500\n"
+"POT-Creation-Date: 2002-05-26 17:56-0500\n"
 "PO-Revision-Date: 2002-05-20 06:39+0300\n"
 "Last-Translator: Sayed Jaffer Al-Mosawi <mosawi@arabeyes.org>\n"
 "Language-Team: Arabic <contact@arabeyes.org>\n"
@@ -97,7 +97,7 @@ msgstr "تعذر فتح '%s' لكتابة: %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "تعذر إغلاق '%s' أثناء كتابة الصورة، كل البيانات قد لا يتم حفظها: %s"
+msgstr "تعذر إغلاق '%s' أثناء كتابة الصورة، كل البيانات قد لا يتم حفظها: % s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
@@ -3348,7 +3348,7 @@ msgstr "تحجيم _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr "تكبير للملائمة"
+msgstr "تكبير لل_ملائمة"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
@@ -4161,9 +4161,8 @@ msgid "Composite child"
 msgstr "ابن مركب"
 
 #: gtk/gtkwidget.c:480
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "ما إذا كان الكائن مركبا من كائنات أخرى"
+msgstr "ما إذا كان الكائن مركبا من كائن آخر"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
