@@ -107,12 +107,6 @@ gtk_file_chooser_class_init (gpointer g_iface)
 							    GTK_TYPE_FILE_FILTER,
 							    G_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
-				       g_param_spec_boolean ("folder-mode",
-							     P_("Folder Mode"),
-							     P_("Whether to select folders rather than files"),
-							     FALSE,
-							     G_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("local-only",
 							     P_("Local Only"),
 							     P_("Whether the selected file(s) should be limited to local file: URLs"),

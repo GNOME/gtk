@@ -1,3 +1,11 @@
+Fri Feb 27 15:06:00 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_class_init): remove
+	folder-mode property.
+
+	* gtk/gtkfilechooserutils.c
+	(_gtk_file_chooser_install_properties): remove FOLDER_MODE property.
+
 Thu Feb 26 17:38:40 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcombobox.c: Add function declaration for
