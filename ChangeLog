@@ -1,5 +1,9 @@
 2001-10-18  Havoc Pennington  <hp@redhat.com>
 
+	* gdk/x11/gdkpixmap-x11.c (gdk_pixmap_lookup): fix compilation
+
+2001-10-18  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkbutton.c (gtk_button_class_init): Change button signals
 	to GTK_RUN_LAST, #50239
 

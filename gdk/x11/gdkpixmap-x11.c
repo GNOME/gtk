@@ -355,5 +355,5 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
 GdkPixmap*
 gdk_pixmap_lookup (GdkNativeWindow anid)
 {
-  return (GdkPixmap*) gdk_xid_table_lookup (xid);
+  return (GdkPixmap*) gdk_xid_table_lookup (anid);
 }
