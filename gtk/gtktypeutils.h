@@ -106,9 +106,7 @@ struct _GtkArg
     gulong ulong_data;
     gfloat float_data;
     gdouble double_data;
-    gchar *string_data;
     gpointer pointer_data;
-    GtkObject *object_data;
     struct {
       GtkCallbackMarshal marshal;
       gpointer data;
@@ -141,14 +139,14 @@ struct _GtkArg
 #define GTK_VALUE_ULONG(a)	((a).d.ulong_data)
 #define GTK_VALUE_FLOAT(a)	((a).d.float_data)
 #define GTK_VALUE_DOUBLE(a)	((a).d.double_data)
-#define GTK_VALUE_STRING(a)	((a).d.string_data)
+#define GTK_VALUE_STRING(a)	((a).d.pointer_data)
 #define GTK_VALUE_ENUM(a)	((a).d.int_data)
 #define GTK_VALUE_FLAGS(a)	((a).d.int_data)
 #define GTK_VALUE_BOXED(a)	((a).d.pointer_data)
 #define GTK_VALUE_FOREIGN(a)	((a).d.foreign_data)
 #define GTK_VALUE_CALLBACK(a)	((a).d.callback_data)
 #define GTK_VALUE_ARGS(a)	((a).d.args_data)
-#define GTK_VALUE_OBJECT(a)	((a).d.object_data)
+#define GTK_VALUE_OBJECT(a)	((a).d.pointer_data)
 #define GTK_VALUE_POINTER(a)	((a).d.pointer_data)
 #define GTK_VALUE_SIGNAL(a)	((a).d.signal_data)
 #define GTK_VALUE_C_CALLBACK(a) ((a).d.c_callback_data)
