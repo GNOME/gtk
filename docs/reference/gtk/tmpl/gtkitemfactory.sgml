@@ -31,12 +31,15 @@ As of GTK+ 2.4, #GtkItemFactory has been deprecated in favour of #GtkUIManager.
 
 <!-- ##### USER_FUNCTION GtkTranslateFunc ##### -->
 <para>
-
+The function used to translate messages in e.g. #GtkIconFactory
+and #GtkActionGroup. 
 </para>
 
-@path: 
-@func_data: 
-@Returns: 
+@path: The id of the message. In #GtkItemFactory this will be a path
+  from a #GtkItemFactoryEntry, in #GtkActionGroup, it will be a label
+  or tooltip from a #GtkActionEntry. 
+@func_data: user data passed in when registering the function 
+@Returns: the translated message
 
 
 <!-- ##### USER_FUNCTION GtkItemFactoryCallback ##### -->

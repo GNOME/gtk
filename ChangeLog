@@ -1,5 +1,8 @@
 2004-12-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkactiongroup.c (gtk_action_group_translate_string): Don't 
+	translate NULL messages.  (#161789, Morten Welinder)
+
 	* gtk/gtkmessagedialog.c (setup_primary_label_font): Don't show
 	the secondary label on show_all().  (#161707, Christian Persch)
 

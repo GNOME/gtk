@@ -1,3 +1,7 @@
+2004-12-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkitemfactory.sgml: Document GtkTranslateFunc
+
 2004-12-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/x_interaction.sgml: Remove a no longer needed
