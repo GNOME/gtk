@@ -812,8 +812,8 @@ gtk_layout_realize (GtkWidget *widget)
 				   &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
 
-  attributes.x = 0;
-  attributes.y = 0;
+  attributes.x = - layout->hadjustment->value,
+  attributes.y = - layout->vadjustment->value;
   attributes.width = MAX (layout->width, widget->allocation.width);
   attributes.height = MAX (layout->height, widget->allocation.height);
   attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK | 

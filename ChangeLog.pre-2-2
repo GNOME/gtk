@@ -1,3 +1,8 @@
+2002-01-15  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtklayout.c (gtk_layout_realize) : It is possible that a
+	GtkLayout may have been scrolled _before_ it was realized.
+
 Tue Jan 15 18:10:24 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_grab_notify): Stop
