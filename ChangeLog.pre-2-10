@@ -1,7 +1,12 @@
+2004-10-11  Matthias Clasen  <matthias@localhost.localdomain>
+
+	* docs/tools/widgets.c: Create scrolledwindow and statusbar 
+	images.
+
 2004-10-10  Matthias Clasen  <matthias@localhost.localdomain>
 
-	* docs/tools/widgets.c: Create a toolbar, menubar and
-	messagedialog images.
+	* docs/tools/widgets.c: Create a toolbar, menubar, progressbar,
+	notebook and messagedialog images.
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_select_all): 
 	Avoid a warning.

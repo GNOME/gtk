@@ -443,7 +443,7 @@ create_window (void)
 static WidgetInfo *
 create_toolbar (void)
 {
-  GtkWidget *widget, *menu, *vbox, *align;
+  GtkWidget *widget, *menu;
   GtkToolItem *item;
 
   widget = gtk_toolbar_new ();
@@ -461,16 +461,6 @@ create_toolbar (void)
 
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (widget), FALSE);
 
-#if 0
-  vbox = gtk_vbox_new (FALSE, 3);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  gtk_container_add (GTK_CONTAINER (align), widget);
-  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox),
-		      gtk_label_new ("Toolbar"),
-		      FALSE, FALSE, 0);
-
-#endif
   return new_widget_info ("toolbar", widget, SMALL);
 }
 
@@ -539,10 +529,11 @@ create_progressbar (void)
   GtkWidget *widget;
   GtkWidget *align;
 
-  vbox = gtk_vbox_new (FALSE, 3);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   widget = gtk_progress_bar_new ();
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.5);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),
@@ -552,11 +543,66 @@ create_progressbar (void)
   return new_widget_info ("progressbar", vbox, SMALL);
 }
 
+static WidgetInfo *
+create_scrolledwindow (void)
+{
+  GtkWidget *scrolledwin, *label;
+
+  scrolledwin = gtk_scrolled_window_new (NULL, NULL);
+  label = gtk_label_new ("Scrolled Window");
+
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolledwin), 
+					 label);
+
+  return new_widget_info ("scrolledwindow", scrolledwin, MEDIUM);
+}
+
+static WidgetInfo *
+create_spinbutton (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox, *align;
+
+  widget = gtk_spin_button_new_with_range (0.0, 100.0, 1.0);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Spin Button"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("spinbutton", vbox, SMALL);
+}
+
+static WidgetInfo *
+create_statusbar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox, *align;
+
+  widget = gtk_statusbar_new ();
+  gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (widget), TRUE);
+  gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "Hold on...");
+  gtk_widget_set_size_request (widget, 220, -1);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Status Bar"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("statusbar", vbox, SMALL);
+}
+
 GList *
 get_all_widgets (void)
 {
   GList *retval = NULL;
-
+#if 0
   retval = g_list_prepend (retval, create_button ());
   retval = g_list_prepend (retval, create_toggle_button ());
   retval = g_list_prepend (retval, create_check_button ());
@@ -580,6 +626,10 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_notebook ());
   retval = g_list_prepend (retval, create_message_dialog ());
   retval = g_list_prepend (retval, create_progressbar ());
+  retval = g_list_prepend (retval, create_scrolledwindow ());
+  retval = g_list_prepend (retval, create_spinbutton ());
+#endif
+  retval = g_list_prepend (retval, create_statusbar ());
 
   return retval;
 }

@@ -1,48 +1,80 @@
 <para role="gallery">
-<link linkend="GtkAccelLabel"><inlinegraphic fileref="accel-label.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkButton"><inlinegraphic fileref="button.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkCheckButton"><inlinegraphic fileref="check-button.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkColorButton"><inlinegraphic fileref="color-button.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkComboBoxEntry"><inlinegraphic
-fileref="combo-box-entry.png" format="PNG"></inlinegraphic></link>
-<link linkend="GtkEntry"><inlinegraphic fileref="entry.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="gtk-GtkFileChooserButton"><inlinegraphic
-fileref="file-button.png" format="PNG"></inlinegraphic></link> <link
-linkend="GtkFontButton"><inlinegraphic fileref="font-button.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkFrame"><inlinegraphic fileref="frame.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkIconView"><inlinegraphic fileref="icon-view.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkLabel"><inlinegraphic fileref="label.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkTreeView"><inlinegraphic fileref="list-and-tree.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkTextView"><inlinegraphic fileref="multiline-text.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkPaned"><inlinegraphic fileref="panes.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkRadioButton"><inlinegraphic fileref="radio-group.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkSeparator"><inlinegraphic fileref="separator.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkToggleButton"><inlinegraphic fileref="toggle-button.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkWindow"><inlinegraphic fileref="window.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkNotebook"><inlinegraphic fileref="notebook.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkMessageDialog"><inlinegraphic fileref="messagedialog.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkToolbar"><inlinegraphic fileref="toolbar.png"
-format="PNG"></inlinegraphic></link> <link
-linkend="GtkMenuBar"><inlinegraphic fileref="menubar.png"
-format="PNG"></inlinegraphic></link>
-linkend="GtkProgressBar"><inlinegraphic fileref="progressbar.png"
-format="PNG"></inlinegraphic></link>
+  <link linkend="GtkAccelLabel">
+    <inlinegraphic fileref="accel-label.png" format="PNG"></inlinegraphic>
+  </link> 
+  <link linkend="GtkButton">
+    <inlinegraphic fileref="button.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkCheckButton">
+    <inlinegraphic fileref="check-button.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkColorButton">
+    <inlinegraphic fileref="color-button.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkComboBoxEntry">
+    <inlinegraphic fileref="combo-box-entry.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkEntry">
+    <inlinegraphic fileref="entry.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="gtk-GtkFileChooserButton">
+    <inlinegraphic fileref="file-button.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkFontButton">
+    <inlinegraphic fileref="font-button.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkFrame">
+    <inlinegraphic fileref="frame.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkIconView">
+    <inlinegraphic fileref="icon-view.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkLabel">
+    <inlinegraphic fileref="label.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkTreeView">
+    <inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkTextView">
+    <inlinegraphic fileref="multiline-text.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkPaned">
+    <inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic>
+  </link> 
+  <link linkend="GtkRadioButton">
+    <inlinegraphic fileref="radio-group.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkSeparator">
+    <inlinegraphic fileref="separator.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkToggleButton">
+    <inlinegraphic fileref="toggle-button.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkWindow">
+    <inlinegraphic fileref="window.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkNotebook">
+    <inlinegraphic fileref="notebook.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkMessageDialog">
+    <inlinegraphic fileref="messagedialog.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkToolbar">
+    <inlinegraphic fileref="toolbar.png" format="PNG"></inlinegraphic>
+  </link> 
+  <link linkend="GtkMenuBar">
+    <inlinegraphic fileref="menubar.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkProgressBar">
+    <inlinegraphic fileref="progressbar.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkScrolledWindow">
+    <inlinegraphic fileref="scrolledwindow.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkSpinButton">
+    <inlinegraphic fileref="spinbutton.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkStatusbar">
+    <inlinegraphic fileref="statusbar.png" format="PNG"></inlinegraphic>
+  </link>
 </para>

@@ -1,3 +1,10 @@
+2004-10-11  Matthias Clasen  <matthias@localhost.localdomain>
+
+	* gtk/images/statusbar.png: New image.
+
+	* gtk/visual_index.xml:
+	* gtk/Makefile.am (HTML_IMAGES): Add statusbar image.
+
 2004-10-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/migrating-GtkComboBox.sgml: Remove chapterinfo.
@@ -9,6 +16,12 @@
 	(#154943)
 
 2004-10-10  Matthias Clasen  <matthias@localhost.localdomain>
+
+	* gtk/images/spinbutton.png:
+	* gtk/images/scrolledwindow.png: New images.
+
+	* gtk/Makefile.am (HTML_IMAGES): 
+	* gtk/visual_index.xml: Add scrolled window and spinbutton.
 
 	* gtk/images/progressbar.png:
 	* gtk/images/notebook.png:
