@@ -1,5 +1,10 @@
 2004-02-06  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_volumes): Free the
+	list.  Fixes #133546.
+
+2004-02-06  Federico Mena Quintero  <federico@ximian.com>
+
 	Fix #132327.
 
 	* gtk/gtkfilesystemunix.c (struct _GtkFileSystemUnix): Add a

@@ -786,6 +786,8 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
     }
 
   impl->num_volumes = n;
+
+  g_slist_free (list);
 }
 
 /* Used from shortcuts_remove_rows() */
