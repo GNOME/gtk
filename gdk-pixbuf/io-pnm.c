@@ -1013,8 +1013,6 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 			if (retval == PNM_SUSPEND) {
 				break;
 			} else if (retval == PNM_FATAL_ERR) {
-				if (context->pixbuf)
-					g_object_unref (context->pixbuf);
 				return FALSE;
 			} else if (retval == PNM_OK) {	
 				/* send updated signal */

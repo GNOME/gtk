@@ -358,10 +358,6 @@ main (int argc, char **argv)
 {
   int seed;
 
-  /* Set a malloc which emulates low mem */
-  max_allocation = G_MAXINT;
-  g_mem_set_vtable (&limited_table);
-  
   if (argc > 1)
     seed = atoi (argv[1]);
   else
@@ -370,6 +366,10 @@ main (int argc, char **argv)
       write_seed (seed);
     }
   g_random_set_seed (seed);
+
+  /* Set a malloc which emulates low mem */
+  max_allocation = G_MAXINT;
+  g_mem_set_vtable (&limited_table);
   
   g_type_init ();
   g_log_set_always_fatal (G_LOG_LEVEL_WARNING | G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
@@ -411,7 +411,7 @@ main (int argc, char **argv)
   TEST (tiff1_test_1, FALSE);
   TEST (tiff1_test_2, FALSE);
 #if 0
-  TEST (tiff1_test_3, FALSE); /* Segfault in TIFFReadDirectory with libtiff 3.5.5, fixed in 3.5.7 */
+  TEST (tiff1_test_3, FALSE); /* Segfault in TIFFReadDirectory */
 #endif
 
   TEST (valid_tga_test, TRUE);
@@ -421,7 +421,11 @@ main (int argc, char **argv)
 
   TEST (wbmp_test_1, FALSE); 
   TEST (wbmp_test_2, FALSE);
-  
+   
+  TEST (invalid_bmp_1, FALSE);
+
+  TEST (valid_ras_test, TRUE);
+
   TEST_RANDOM (GIF_HEADER, 150, FALSE);
   TEST_RANDOM (PNG_HEADER, 1100, FALSE);
   TEST_RANDOM (JPEG_HEADER, 800, FALSE);
@@ -435,8 +439,9 @@ main (int argc, char **argv)
   TEST_RANDOM (BMP_HEADER, 150, FALSE);
 #define XPM_HEADER '/', '*', ' ', 'X', 'P', 'M', ' ', '*', '/'
   TEST_RANDOM (XPM_HEADER, 150, FALSE);
-
-
+#define RAS_HEADER 0x59, 0xA6, 0x6A, 0x95
+  TEST_RANDOM (RAS_HEADER, 300, FALSE);
+  
   TEST_RANDOMLY_MODIFIED (valid_tiff1_test, FALSE);  
   TEST_RANDOMLY_MODIFIED (valid_gif_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_png_test, FALSE);
@@ -445,8 +450,9 @@ main (int argc, char **argv)
   TEST_RANDOMLY_MODIFIED (valid_ico_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_bmp_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_xpm_test, FALSE);
+  TEST_RANDOMLY_MODIFIED (valid_ras_test, FALSE);
+  TEST_RANDOMLY_MODIFIED (valid_ppm_4, FALSE);
   
-
   /* memory tests */
 
   /* How do the loaders behave when memory is low?

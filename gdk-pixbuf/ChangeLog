@@ -1,3 +1,15 @@
+2002-03-13  Matthias Clasen  <maclas@gmx.de>
+
+	* test-images.h: Add valid_ras_test and invalid_bmp_1.
+
+	* test-loaders.c (main): Add random tests for ras and pnm and an
+	invalid bmp which was a crasher until my 2002-03-12 commit.
+
+	* io-pnm.c (gdk_pixbuf__pnm_image_load_increment): Don't unref the
+	pixbuf on errors.
+
+	* io-ras.c: Handle some errors.
+
 2002-03-12  Sven Neumann  <sven@gimp.org>
 
 	* gdk-pixbuf.c (gdk_pixbuf_fill): use sequential writes instead of
