@@ -377,6 +377,7 @@ gtk_main_iteration ()
 	  /* otherwise fall through */
 	  
 	case GDK_EXPOSE:
+	case GDK_NO_EXPOSE:
 	case GDK_FOCUS_CHANGE:
 	case GDK_CONFIGURE:
 	case GDK_MAP:
@@ -390,6 +391,7 @@ gtk_main_iteration ()
 	case GDK_DROP_ENTER:
 	case GDK_DROP_LEAVE:
 	case GDK_DROP_DATA_AVAIL:
+	case GDK_VISIBILITY_NOTIFY:
 	  gtk_widget_event (event_widget, event);
 	  break;
 	  

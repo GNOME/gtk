@@ -191,6 +191,7 @@ gtkinclude_HEADERS = \
 	gtkframe.h		\
 	gtkgamma.h		\
 	gtkgc.h			\
+	gtkhandlebox.h		\
 	gtkhbbox.h		\
 	gtkhbox.h		\
 	gtkhpaned.h		\

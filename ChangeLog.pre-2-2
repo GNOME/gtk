@@ -1,3 +1,8 @@
+Fri Jan  2 15:42:51 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/gtkmain.c (gtk_main_iteration): Make the big switch handle
+	GDK_NO_EXPOSE and GDK_VISIBILITY_NOTIFY events.
+
 Fri Jan  2 12:07:33 CST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* gtk/gtkviewport.c: corrects a small resize bug in the 
