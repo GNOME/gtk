@@ -1,3 +1,8 @@
+Sun Jul 12 16:40:06 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkargcollector.c (gtk_arg_collect_value): fix float argument
+	collection (always casted to doubles upon argument passing).
+
 Sun Jul 12 05:59:26 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.c (gtk_type_new): call the base classes'

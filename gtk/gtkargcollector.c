@@ -33,7 +33,7 @@ gtk_arg_collect_value (GtkType  fundamental_type,
       error_msg = g_strdup ("invalid untyped argument");
       break;
     case GTK_TYPE_NONE:
-      error_msg = g_strdup ("invalid argument type `void'");
+      /* error_msg = g_strdup ("invalid argument type `void'"); */
       break;
     case GTK_TYPE_CHAR:
       GTK_VALUE_CHAR (*arg) = va_arg (*var_args, gchar);
@@ -60,7 +60,8 @@ gtk_arg_collect_value (GtkType  fundamental_type,
       GTK_VALUE_ULONG (*arg) = va_arg (*var_args, gulong);
       break;
     case GTK_TYPE_FLOAT:
-      GTK_VALUE_FLOAT (*arg) = va_arg (*var_args, gfloat);
+      /* GTK_VALUE_FLOAT (*arg) = va_arg (*var_args, gfloat); */
+      GTK_VALUE_FLOAT (*arg) = va_arg (*var_args, gdouble);
       break;
     case GTK_TYPE_DOUBLE:
       GTK_VALUE_DOUBLE (*arg) = va_arg (*var_args, gdouble);
