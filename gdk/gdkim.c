@@ -1509,11 +1509,20 @@ _gdk_wcstombs_len (const GdkWChar *src,
   wctomb (NULL, 0);
 
   for (i=0; (src_len < 0 || i < src_len) && src[i]; i++)
-    len += wctomb (p, src[i]);
+    {
+      int charlen = wctomb (p, src[i]);
+      g_return_if_fail (charlen < 0, NULL);
+      
+      len += charlen;
+    }
 
   result = g_malloc (len + 1);
 
-  wcstombs (result, (wchar_t *)src, len);
+  /* Old versions of GNU libc apparently can't handle a max of 0 here
+   */
+  if (len > 0)
+    wcstombs (result, (wchar_t *)src, len);
+  
   result[len] = '\0';
 
   if (p != buf)

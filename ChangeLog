@@ -1,3 +1,11 @@
+Thu Mar 15 01:31:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkim.c (_gdk_wcstombs_len): Make somewhat more
+	safe on broken libcs, also add a g_return_if_fail()
+	to make the failure case when we somehow get a
+	string of invalid wide characters more clear.
+	(#51644, Sergey Vlasov)
+
 Thu Mar 15 01:05:49 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_add_initial_default_files): Fix 
