@@ -78,7 +78,7 @@ typedef enum {
   GTK_DELETE_DISPLAY_LINE_ENDS,
   GTK_DELETE_PARAGRAPH_ENDS,      /* like C-k in Emacs (or its reverse) */
   GTK_DELETE_PARAGRAPHS,          /* C-k in pico, kill whole line */
-  GTK_DELETE_WHITESPACE,          /* M-\ in Emacs */
+  GTK_DELETE_WHITESPACE           /* M-\ in Emacs */
 } GtkDeleteType;
 
 /* Focus movement types */

@@ -183,6 +183,15 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_iter_get_child_anchor ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_iter_begins_tag ##### -->
 <para>
 
@@ -427,6 +436,15 @@ types related to the text widget and how they work together.
 
 @iter: 
 @char_on_line: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_set_line_index ##### -->
+<para>
+
+</para>
+
+@iter: 
+@byte_on_line: 
 
 
 <!-- ##### FUNCTION gtk_text_iter_forward_to_end ##### -->

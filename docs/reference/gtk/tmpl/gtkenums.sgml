@@ -84,6 +84,20 @@ widget.
 @GTK_CURVE_TYPE_SPLINE: 
 @GTK_CURVE_TYPE_FREE: 
 
+<!-- ##### ENUM GtkDeleteType ##### -->
+<para>
+
+</para>
+
+@GTK_DELETE_CHARS: 
+@GTK_DELETE_WORD_ENDS: 
+@GTK_DELETE_WORDS: 
+@GTK_DELETE_DISPLAY_LINES: 
+@GTK_DELETE_DISPLAY_LINE_ENDS: 
+@GTK_DELETE_PARAGRAPH_ENDS: 
+@GTK_DELETE_PARAGRAPHS: 
+@GTK_DELETE_WHITESPACE: 
+
 <!-- ##### ENUM GtkDirectionType ##### -->
 <para>
 
@@ -127,6 +141,21 @@ Used for justifying the text inside a #GtkLabel widget. (See also
 @GTK_PIXELS: 
 @GTK_INCHES: 
 @GTK_CENTIMETERS: 
+
+<!-- ##### ENUM GtkMovementStep ##### -->
+<para>
+
+</para>
+
+@GTK_MOVEMENT_CHARS: 
+@GTK_MOVEMENT_POSITIONS: 
+@GTK_MOVEMENT_WORDS: 
+@GTK_MOVEMENT_DISPLAY_LINES: 
+@GTK_MOVEMENT_DISPLAY_LINE_ENDS: 
+@GTK_MOVEMENT_PARAGRAPHS: 
+@GTK_MOVEMENT_PARAGRAPH_ENDS: 
+@GTK_MOVEMENT_PAGES: 
+@GTK_MOVEMENT_BUFFER_ENDS: 
 
 <!-- ##### ENUM GtkOrientation ##### -->
 <para>

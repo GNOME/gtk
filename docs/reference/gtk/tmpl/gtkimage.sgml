@@ -28,6 +28,180 @@ below.
 </para>
 
 
+<!-- ##### FUNCTION gtk_image_get_icon_set ##### -->
+<para>
+
+</para>
+
+@image: 
+@icon_set: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_get_image ##### -->
+<para>
+
+</para>
+
+@image: 
+@gdk_image: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_get_pixmap ##### -->
+<para>
+
+</para>
+
+@image: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_get_stock ##### -->
+<para>
+
+</para>
+
+@image: 
+@stock_id: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_get_storage_type ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_icon_set ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_image ##### -->
+<para>
+
+</para>
+
+@image: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_pixmap ##### -->
+<para>
+
+</para>
+
+@pixmap: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_new_from_stock ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_file ##### -->
+<para>
+
+</para>
+
+@image: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_icon_set ##### -->
+<para>
+
+</para>
+
+@image: 
+@icon_set: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_image ##### -->
+<para>
+
+</para>
+
+@image: 
+@gdk_image: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@image: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_pixmap ##### -->
+<para>
+
+</para>
+
+@image: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_stock ##### -->
+<para>
+
+</para>
+
+@image: 
+@stock_id: 
+@size: 
+
+
 <!-- ##### FUNCTION gtk_image_new ##### -->
 <para>
 Creates the new GtkImage using the value and the mask.

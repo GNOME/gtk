@@ -145,6 +145,15 @@ gtk_window_set_title(). See the #GtkWindow section for more).
 @GTK_DIALOG_MODAL: 
 @GTK_DIALOG_DESTROY_WITH_PARENT: 
 
+<!-- ##### ENUM GtkResponseType ##### -->
+<para>
+
+</para>
+
+@GTK_RESPONSE_NONE: 
+@GTK_RESPONSE_REJECT: 
+@GTK_RESPONSE_ACCEPT: 
+
 <!-- ##### FUNCTION gtk_dialog_new ##### -->
 <para>
 Creates a new dialog box. Widgets should not be packed into this #GtkWindow

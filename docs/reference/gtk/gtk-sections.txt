@@ -160,6 +160,8 @@ GTK_BOX_GET_CLASS
 GtkButton
 gtk_button_new
 gtk_button_new_with_label
+gtk_button_new_accel
+gtk_button_new_stock
 gtk_button_pressed
 gtk_button_released
 gtk_button_clicked
@@ -606,6 +608,7 @@ GTK_DATA_GET_CLASS
 GtkDialog
 <TITLE>GtkDialog</TITLE>
 GtkDialogFlags
+GtkResponseType
 gtk_dialog_new
 gtk_dialog_new_with_buttons
 gtk_dialog_run
@@ -952,6 +955,24 @@ GTK_HSEPARATOR_GET_CLASS
 <FILE>gtkimage</FILE>
 <TITLE>GtkImage</TITLE>
 GtkImage
+gtk_image_get_icon_set
+gtk_image_get_image
+gtk_image_get_pixbuf
+gtk_image_get_pixmap
+gtk_image_get_stock
+gtk_image_get_storage_type
+gtk_image_new_from_file
+gtk_image_new_from_icon_set
+gtk_image_new_from_image
+gtk_image_new_from_pixbuf
+gtk_image_new_from_pixmap
+gtk_image_new_from_stock
+gtk_image_set_from_file
+gtk_image_set_from_icon_set
+gtk_image_set_from_image
+gtk_image_set_from_pixbuf
+gtk_image_set_from_pixmap
+gtk_image_set_from_stock
 gtk_image_new
 gtk_image_set
 gtk_image_get
@@ -963,6 +984,13 @@ gtk_image_get_type
 GTK_IMAGE_CLASS
 GTK_IS_IMAGE_CLASS
 GTK_IMAGE_GET_CLASS
+<SUBSECTION Private>
+GtkImageIconSetData
+GtkImageImageData
+GtkImagePixbufData
+GtkImagePixmapData
+GtkImageStockData
+GtkImageType
 </SECTION>
 
 <SECTION>
@@ -1964,18 +1992,24 @@ gtk_text_buffer_insert_at_cursor
 gtk_text_buffer_insert_interactive
 gtk_text_buffer_insert_interactive_at_cursor
 gtk_text_buffer_insert_range
+gtk_text_buffer_insert_range_interactive
+gtk_text_buffer_insert_with_tags
+gtk_text_buffer_insert_with_tags_by_name
 gtk_text_buffer_delete
 gtk_text_buffer_delete_interactive
 gtk_text_buffer_set_text
 gtk_text_buffer_get_text
 gtk_text_buffer_get_slice
 gtk_text_buffer_insert_pixbuf
+gtk_text_buffer_create_child_anchor
 gtk_text_buffer_create_mark
 gtk_text_buffer_move_mark
+gtk_text_buffer_move_mark_by_name
 gtk_text_buffer_delete_mark
 gtk_text_buffer_delete_mark_by_name
 gtk_text_buffer_get_mark
 gtk_text_buffer_get_insert
+gtk_text_buffer_get_selection_bound
 gtk_text_buffer_place_cursor
 gtk_text_buffer_apply_tag
 gtk_text_buffer_remove_tag
@@ -1985,14 +2019,19 @@ gtk_text_buffer_create_tag
 gtk_text_buffer_get_iter_at_line_offset
 gtk_text_buffer_get_iter_at_offset
 gtk_text_buffer_get_iter_at_line
+gtk_text_buffer_get_iter_at_line_index
+gtk_text_buffer_get_iter_at_mark
+gtk_text_buffer_get_iter_at_child_anchor
 gtk_text_buffer_get_last_iter
 gtk_text_buffer_get_bounds
-gtk_text_buffer_get_iter_at_mark
 gtk_text_buffer_get_tags
 gtk_text_buffer_modified
 gtk_text_buffer_set_modified
 gtk_text_buffer_delete_selection
 gtk_text_buffer_paste_clipboard
+gtk_text_buffer_copy_clipboard
+gtk_text_buffer_cut_clipboard
+gtk_text_buffer_paste_primary
 gtk_text_buffer_get_selection_bounds
 <SUBSECTION Standard>
 GTK_TEXT_BUFFER
@@ -2024,6 +2063,7 @@ gtk_text_iter_get_visible_text
 gtk_text_iter_get_pixbuf
 gtk_text_iter_get_marks
 gtk_text_iter_get_toggled_tags
+gtk_text_iter_get_child_anchor
 gtk_text_iter_begins_tag
 gtk_text_iter_ends_tag
 gtk_text_iter_toggles_tag
@@ -2050,6 +2090,7 @@ gtk_text_iter_backward_word_start
 gtk_text_iter_set_offset
 gtk_text_iter_set_line
 gtk_text_iter_set_line_offset
+gtk_text_iter_set_line_index
 gtk_text_iter_forward_to_end
 gtk_text_iter_forward_to_newline
 gtk_text_iter_forward_to_tag_toggle
@@ -2073,6 +2114,15 @@ GtkTextMark
 gtk_text_mark_set_visible
 gtk_text_mark_is_visible
 gtk_text_mark_get_deleted
+gtk_text_mark_get_name
+<SUBSECTION Standard>
+GTK_TEXT_MARK
+GTK_IS_TEXT_MARK
+GTK_TYPE_TEXT_MARK
+gtk_text_mark_get_type
+GTK_TEXT_MARK_CLASS
+GTK_IS_TEXT_MARK_CLASS
+GTK_TEXT_MARK_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -2126,6 +2176,7 @@ GTK_TEXT_TAG_TABLE_GET_CLASS
 <FILE>gtktextview</FILE>
 GtkTextView
 <TITLE>GtkTextView</TITLE>
+GtkTextWindowType
 gtk_text_view_new
 gtk_text_view_new_with_buffer
 gtk_text_view_set_buffer
@@ -2141,6 +2192,18 @@ gtk_text_view_get_editable
 gtk_text_view_set_cursor_visible
 gtk_text_view_get_cursor_visible
 gtk_text_view_get_iter_location
+gtk_text_view_get_line_at_y
+gtk_text_view_get_line_yrange
+gtk_text_view_get_iter_at_location
+gtk_text_view_buffer_to_window_coords
+gtk_text_view_window_to_buffer_coords
+gtk_text_view_get_window
+gtk_text_view_get_window_type
+gtk_text_view_set_border_window_size
+gtk_text_view_set_text_window_size
+gtk_text_view_add_child_at_anchor
+gtk_text_view_add_child_in_window
+gtk_text_view_move_child
 <SUBSECTION Standard>
 GTK_TEXT_VIEW
 GTK_IS_TEXT_VIEW
@@ -2149,6 +2212,11 @@ gtk_text_view_get_type
 GTK_TEXT_VIEW_CLASS
 GTK_IS_TEXT_VIEW_CLASS
 GTK_TEXT_VIEW_GET_CLASS
+<SUBSECTION Private>
+GtkTextBTree
+GtkTextChildBody
+GtkTextPixbuf
+GtkTextWindow
 </SECTION>
 
 <SECTION>
@@ -2863,6 +2931,7 @@ gtk_widget_modify_font
 gtk_widget_create_pango_context
 gtk_widget_get_pango_context
 gtk_widget_create_pango_layout
+gtk_widget_render_stock_icon
 gtk_widget_pop_composite_child
 gtk_widget_push_composite_child
 gtk_widget_queue_clear
@@ -2905,6 +2974,7 @@ gtk_window_set_position
 gtk_window_set_transient_for
 gtk_window_set_destroy_with_parent
 gtk_window_list_toplevels
+gtk_window_get_default_accel_group
 <SUBSECTION Standard>
 GTK_WINDOW
 GTK_IS_WINDOW
@@ -3060,6 +3130,8 @@ gtk_style_unref
 gtk_style_set_background
 gtk_style_apply_default_background
 gtk_style_apply_default_pixmap
+gtk_style_lookup_icon_set
+gtk_style_render_icon
 gtk_draw_hline
 gtk_draw_vline
 gtk_draw_shadow
@@ -3461,10 +3533,12 @@ GtkAttachOptions
 GtkButtonBoxStyle
 GtkCornerType
 GtkCurveType
+GtkDeleteType
 GtkDirectionType
 GtkJustification
 GtkMatchType
 GtkMetricType
+GtkMovementStep
 GtkOrientation
 GtkPackType
 GtkPathPriorityType
@@ -3504,3 +3578,71 @@ gtk_menu_factory_remove_subfactory
 gtk_menu_factory_find
 </SECTION>
 
+<SECTION>
+<FILE>gtkstock</FILE>
+<TITLE>Stock Items</TITLE>
+GtkStockItem
+gtk_stock_add
+gtk_stock_add_static
+gtk_stock_item_copy
+gtk_stock_item_free
+gtk_stock_list_items
+gtk_stock_lookup
+<SUBSECTION Stock IDs>
+GTK_STOCK_BUTTON_APPLY
+GTK_STOCK_BUTTON_CANCEL
+GTK_STOCK_BUTTON_CLOSE
+GTK_STOCK_BUTTON_NO
+GTK_STOCK_BUTTON_OK
+GTK_STOCK_BUTTON_YES
+GTK_STOCK_DIALOG_ERROR
+GTK_STOCK_DIALOG_INFO
+GTK_STOCK_DIALOG_QUESTION
+GTK_STOCK_DIALOG_WARNING
+GTK_STOCK_HELP
+GTK_STOCK_NEW
+GTK_STOCK_OPEN
+GTK_STOCK_QUIT
+GTK_STOCK_SAVE
+GTK_STOCK_CLOSE
+</SECTION>
+
+
+<SECTION>
+<FILE>gtkiconfactory</FILE>
+<TITLE>Themeable Stock Images</TITLE>
+GtkIconSource
+GtkIconFactory
+GtkIconSet
+gtk_icon_source_copy
+gtk_icon_source_free
+gtk_icon_factory_add
+gtk_icon_factory_add_default
+gtk_icon_factory_lookup
+gtk_icon_factory_lookup_default
+gtk_icon_factory_new
+gtk_icon_factory_remove_default
+gtk_icon_set_add_source
+gtk_icon_set_copy
+gtk_icon_set_new
+gtk_icon_set_ref
+gtk_icon_set_render_icon
+gtk_icon_set_unref
+GTK_ICON_SIZE_MENU
+GTK_ICON_SIZE_BUTTON
+GTK_ICON_SIZE_SMALL_TOOLBAR
+GTK_ICON_SIZE_LARGE_TOOLBAR
+GTK_ICON_SIZE_DIALOG
+gtk_icon_size_lookup
+gtk_icon_size_register
+gtk_icon_size_register_alias
+<SUBSECTION Standard>
+GtkIconFactoryClass
+GTK_TYPE_ICON_FACTORY
+GTK_ICON_FACTORY
+GTK_IS_ICON_FACTORY
+GTK_ICON_FACTORY_CLASS
+GTK_ICON_FACTORY_GET_CLASS
+GTK_IS_ICON_FACTORY_CLASS
+gtk_icon_factory_get_type
+</SECTION>

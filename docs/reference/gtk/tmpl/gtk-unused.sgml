@@ -1,12 +1,1224 @@
-<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Title ##### -->
-Debugging
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Title ##### -->
+Menu Factory
 
 
-<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Short_Description ##### -->
+<!-- ##### MACRO GTK_WIDGET_IN_REPARENT ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_text_buffer_paste_primary_selection ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@override_location: 
+@time: 
+@interactive: 
+@default_editable: 
+
+<!-- ##### ENUM GtkTextViewScrollType ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_SCROLL_TO_TOP: 
+@GTK_TEXT_SCROLL_TO_BOTTOM: 
+@GTK_TEXT_SCROLL_PAGE_DOWN: 
+@GTK_TEXT_SCROLL_PAGE_UP: 
+
+<!-- ##### MACRO gtk_widget_pop_visual ##### -->
+<para>
+
+</para>
+
+@v: 
+
+<!-- ##### STRUCT GtkMenuFactory ##### -->
+<para>
+
+</para>
+
+@path: 
+@type: 
+@accel_group: 
+@widget: 
+@subfactories: 
+
+<!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+@selection: 
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_text_buffer_find_regexp ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@regexp: 
+@start: 
+@end: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_text_buffer_find_string ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@str: 
+@start: 
+@end: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_text_buffer_spew ##### -->
+<para>
+
+</para>
+
+@buffer: 
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_STRING ##### -->
+<para>
+
+</para>
 
 
+<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
+<para>
+
+</para>
+
+@container: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_INT__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### SECTION ./tmpl/gtkprivate.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkFontType ##### -->
+<para>
+A set of bit flags used to specify the type of fonts shown
+when calling gtk_font_selection_dialog_set_filter() or
+gtk_font_selection_set_filter().
+</para>
+
+@GTK_FONT_BITMAP: bitmap fonts.
+@GTK_FONT_SCALABLE: scalable fonts.
+@GTK_FONT_SCALABLE_BITMAP: scaled bitmap fonts.
+@GTK_FONT_ALL: a bitwise combination of all of the above.
+
+<!-- ##### MACRO GTK_TYPE_MAKE ##### -->
+<para>
+Combine a fundemantal type and a sequence number to create a gtk type.
+</para>
+
+@parent_t: 
+@seqno: 
+
+<!-- ##### FUNCTION gtk_menu_factory_find ##### -->
+<para>
+
+</para>
+
+@factory: 
+@path: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Title ##### -->
+GtkIMContextSimple
+
+
+<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
+<para>
+Internal function used by #GtkHPaned and #GtkVPaned
+</para>
+
+@paned: 
+@allocation: 
+@child1_req: 
+@child2_req: 
+
+<!-- ##### SIGNAL GtkTextView::move-insert ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### ARG GtkTextTag:overstrike_set ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_trace_referencing ##### -->
+<para>
+Private: print debugging information while doing a gtk_object_ref() or 
+a gtk_object_unref().
+</para>
+
+@object: object to reference or unreference.
+@func: name of caller's function to print (used within macros).
+@dummy: unused.
+@line: line number (used within macros).
+@do_ref: whether to reference or unreference.
+
+<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT_BOOL ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_TYPE_STRUCTURED_FIRST ##### -->
+<para>
+The first structured enumerated type value.
+</para>
+
+
+<!-- ##### FUNCTION gtk_text_mark_ref ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Title ##### -->
+Signal Marshallers
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_STRING_STRING ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkTextView::scroll-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkprivate.sgml:Title ##### -->
+Private Information
+
+
+<!-- ##### SIGNAL GtkTextView::insert ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### FUNCTION gtk_signal_add_emission_hook_full ##### -->
+<para>
+Add an emission hook for a type of signal, for any object.
+(with control of what happens when the hook is
+destroyed).
+</para>
+
+@signal_id: the type of signal add the hook for.
+@hook_func: the function to invoke to handle the hook.
+@data: the user data passed in to hook_func.
+@destroy: a function to invoke when the hook is destroyed,
+to clean up any allocation done just for this
+signal handler.
+@Returns: the id (that you may pass as a parameter
+to gtk_signal_remove_emission_hook()).
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Title ##### -->
+gtkenums.sgml
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_type_set_varargs_type ##### -->
+<para>
+Set the varargs type for a fundamental type @foreign_type.
+</para>
+
+@foreign_type: Must be a GtkType with a sequence number of zero.  Must not be a
+fundamental type.
+@varargs_type: Must be a GtkType which is either structured or flag, or NONE.
+
+<!-- ##### MACRO GTK_PRIVATE_SET_FLAG ##### -->
+<para>
+
+</para>
+
+@wid: 
+@flag: 
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_ENUM_ENUM_POINTER ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_im_context_simple_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### STRUCT GtkTextTabArray ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkMenuFactoryType ##### -->
+<para>
+
+</para>
+
+@GTK_MENU_FACTORY_MENU: 
+@GTK_MENU_FACTORY_MENU_BAR: 
+@GTK_MENU_FACTORY_OPTION_MENU: 
+
+<!-- ##### FUNCTION gtk_font_selection_set_filter ##### -->
+<para>
+Sets one of the two font filters, to limit the fonts shown.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@filter_type: which of the two font filters to set, either
+#GTK_FONT_FILTER_BASE or #GTK_FONT_FILTER_USER. The user filter
+can be changed by the user, but the base filter is permanent.
+@font_type: the types of font to be shown. This is a bitwise combination of
+#GTK_FONT_BITMAP, #GTK_FONT_SCALABLE and #GTK_FONT_SCALABLE_BITMAP,
+or #GTK_FONT_ALL to show all three font types.
+@foundries: a NULL-terminated array of strings containing foundry names which
+will be shown, or NULL to show all foundries.
+@weights: a NULL-terminated array of strings containing weight names which
+will be shown, or NULL to show all weights.
+@slants: a NULL-terminated array of strings containing slant names which
+will be shown, or NULL to show all slants.
+@setwidths: a NULL-terminated array of strings containing setwidth names which
+will be shown, or NULL to show all setwidths.
+@spacings: a NULL-terminated array of strings containing spacings which
+will be shown, or NULL to show all spacings.
+@charsets: a NULL-terminated array of strings containing charset names which
+will be shown, or NULL to show all charsets.
+
+<!-- ##### MACRO GTK_WIDGET_LEAVE_PENDING ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### MACRO GTK_TYPE_NUM_BUILTINS ##### -->
+<para>
+No idea.
+</para>
+
+
+<!-- ##### SIGNAL GtkTextView::cut-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_marshal_INT__POINTER_CHAR_CHAR ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### ARG GtkTextTag:overstrike ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkTextView::copy-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_accel_group_marshal_remove ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### SIGNAL GtkTextView::delete ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### MACRO gtk_widget_push_visual ##### -->
+<para>
+
+</para>
+
+@v: 
+@visual: 
+
+<!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### MACRO GTK_TYPE_IDENTIFIER ##### -->
+<para>
+Hide the name of gtk_identifier_get_type
+</para>
+
+
+<!-- ##### FUNCTION gtk_themes_exit ##### -->
+<para>
+
+</para>
+
+@error_code: 
+
+<!-- ##### STRUCT GtkTypeQuery ##### -->
+<para>
+A structure used to return values from @gtk_type_query.
+</para>
+
+@type: 
+@type_name: 
+@object_size: 
+@class_size: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT_BOOL ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO GTK_TYPE_FLAT_FIRST ##### -->
+<para>
+The first "flat" (no struct) enumerated type value.
+</para>
+
+
+<!-- ##### FUNCTION gtk_accel_group_marshal_add ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO GTK_PRIVATE_UNSET_FLAG ##### -->
+<para>
+
+</para>
+
+@wid: 
+@flag: 
+
+<!-- ##### FUNCTION gtk_window_set_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@focus: 
 
 <!-- ##### MACRO gtk_marshal_NONE__BOXED ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_VALUE_C_CALLBACK ##### -->
+<para>
+Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
+</para>
+
+@a: 
+
+<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_type_children_types ##### -->
+<para>
+Return the pointer to the type's children's types.
+</para>
+
+@type: GtkType
+@Returns: pointer to a GList
+
+<!-- ##### MACRO GTK_PRIVATE_FLAGS ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+<!-- ##### FUNCTION gtk_menu_factory_add_entries ##### -->
+<para>
+
+</para>
+
+@factory: 
+@entries: 
+@nentries: 
+
+<!-- ##### MACRO GTK_WIDGET_IS_OFFSCREEN ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### FUNCTION gtk_identifier_get_type ##### -->
+<para>
+Get the type of GtkIdentifier.
+</para>
+
+@Returns: GtkType -- the enumerated type of something.
+
+<!-- ##### FUNCTION gtk_type_describe_tree ##### -->
+<para>
+Given a @type, describe all of its children, and their children.  Only
+show the size if @show_size is true.
+</para>
+
+@type: GtkType
+@show_size: gboolean
+
+<!-- ##### STRUCT GtkMenuPath ##### -->
+<para>
+
+</para>
+
+@path: 
+@widget: 
+
+<!-- ##### FUNCTION gtk_signal_handler_pending_by_id ##### -->
+<para>
+Returns whether a connection id is valid (and optionally not blocked).
+</para>
+
+@object: the object to search for the desired handler.
+@handler_id: the connection id.
+@may_be_blocked: whether it is acceptable to return a blocked
+handler.
+@Returns: TRUE if the signal exists and wasn't blocked,
+unless #may_be_blocked was specified.  FALSE otherwise.
+
+<!-- ##### MACRO GTK_TYPE_SEQNO ##### -->
+<para>
+Convert a gtk type into its sequence number
+</para>
+
+@type: 
+
+<!-- ##### MACRO GTK_VALUE_CALLBACK ##### -->
+<para>
+Use to get the value of a GtkArg whose GtkType is GTK_TYPE_CALLBACK
+</para>
+
+@a: 
+
+<!-- ##### MACRO GTK_WIDGET_HAS_SHAPE_MASK ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__STRING_INT_POINTER ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_type_register_enum ##### -->
+<para>
+Register a new set of enum @values and give them the name in
+@type_name.
+</para>
+
+@type_name: must not be null.
+@values: GtkEnumValue*
+@Returns: 
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_set_filter ##### -->
+<para>
+Sets one of the two font filters, to limit the fonts shown.
+</para>
+
+@fsd: a #GtkFontSelectionDialog.
+@filter_type: which of the two font filters to set, either
+#GTK_FONT_FILTER_BASE or #GTK_FONT_FILTER_USER. The user filter
+can be changed by the user, but the base filter is permanent.
+@font_type: the types of font to be shown. This is a bitwise combination of
+#GTK_FONT_BITMAP, #GTK_FONT_SCALABLE and #GTK_FONT_SCALABLE_BITMAP,
+or #GTK_FONT_ALL to show all three font types.
+@foundries: a NULL-terminated array of strings containing foundry names which
+will be shown, or NULL to show all foundries.
+@weights: a NULL-terminated array of strings containing weight names which
+will be shown, or NULL to show all weights.
+@slants: a NULL-terminated array of strings containing slant names which
+will be shown, or NULL to show all slants.
+@setwidths: a NULL-terminated array of strings containing setwidth names which
+will be shown, or NULL to show all setwidths.
+@spacings: a NULL-terminated array of strings containing spacings which
+will be shown, or NULL to show all spacings.
+@charsets: a NULL-terminated array of strings containing charset names which
+will be shown, or NULL to show all charsets.
+
+<!-- ##### MACRO GTK_VALUE_FOREIGN ##### -->
+<para>
+Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
+</para>
+
+@a: 
+
+<!-- ##### MACRO gtk_widget_set_default_visual ##### -->
+<para>
+
+</para>
+
+@v: 
+@visual: 
+
+<!-- ##### ENUM GtkPrivateFlags ##### -->
+<para>
+
+</para>
+
+@PRIVATE_GTK_USER_STYLE: 
+@PRIVATE_GTK_RESIZE_PENDING: 
+@PRIVATE_GTK_RESIZE_NEEDED: 
+@PRIVATE_GTK_LEAVE_PENDING: 
+@PRIVATE_GTK_HAS_SHAPE_MASK: 
+@PRIVATE_GTK_IN_REPARENT: 
+@PRIVATE_GTK_DIRECTION_SET: 
+@PRIVATE_GTK_DIRECTION_LTR: 
+
+<!-- ##### FUNCTION gtk_text_mark_unref ##### -->
+<para>
+
+</para>
+
+@mark: 
+
+<!-- ##### FUNCTION gtk_signal_query ##### -->
+<para>
+Obtain information about a signal.
+</para>
+
+@signal_id: the signal type identifier.
+@Returns: a pointer to a GtkSignalQuery structure
+which contains all the information, or NULL.
+The pointer is allocated just for you:  you must g_free() it.
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_text_mark_deleted ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### FUNCTION gtk_text_buffer_cut ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@time: 
+@interactive: 
+@default_editable: 
+
+<!-- ##### MACRO gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_type_free ##### -->
+<para>
+Given the type of an object and a pointer to it, the object is freed.
+</para>
+
+@type: GtkType
+@mem: gpointer to the object
+
+<!-- ##### FUNCTION gtk_text_buffer_copy ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@time: 
+
+<!-- ##### STRUCT GtkTextBTree ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_menu_factory_remove_paths ##### -->
+<para>
+
+</para>
+
+@factory: 
+@paths: 
+@npaths: 
+
+<!-- ##### FUNCTION gtk_menu_factory_destroy ##### -->
+<para>
+
+</para>
+
+@factory: 
+
+<!-- ##### MACRO GTK_TYPE_STRUCTURED_LAST ##### -->
+<para>
+The last structured enumerated type value.
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_BOOL__POINTER_INT_INT_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_type_describe_heritage ##### -->
+<para>
+Print the types @type inherits from.
+</para>
+
+@type: GtkType
+
+<!-- ##### FUNCTION gtk_selection_data_set_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@str: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTextView::delete-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### FUNCTION gtk_container_get_toplevels ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### MACRO GTK_WIDGET_RESIZE_NEEDED ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_INT__INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_window_remove_embedded_xid ##### -->
+<para>
+
+</para>
+
+@window: 
+@xid: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_signal_n_emissions ##### -->
+<para>
+Find out the recursion depth of emissions for a particular type
+of signal and object.  (So it will
+always return 0 or 1 if #GTK_RUN_NO_RECURSE is specified)
+This is a way to avoid recursion:  you can see if
+you are currently running in that signal handler and emit it only
+if you are.
+</para>
+<para>Another way to look at it is that this number increases
+by one when #gtk_signal_emit(), et al, are called,
+and decreases by one when #gtk_signal_emit() returns.
+</para>
+
+@object: the object with the signal handler.
+@signal_id: the signal id.
+@Returns: the recursion depth of emissions of this signal for this
+object.
+
+<!-- ##### MACRO GTK_NOTE ##### -->
+<para>
+
+</para>
+
+@type: 
+@action: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### STRUCT GtkDialogButton ##### -->
+<para>
+Deprecated.
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_type_query ##### -->
+<para>
+Given a type, return various interesting parameters of the type.
+</para>
+
+@type: GtkType
+@Returns: GtkTypeQuery*
+
+<!-- ##### SIGNAL GtkTextView::paste-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_color_selection_set_opacity ##### -->
+<para>
+Controls whether opacity can be set with the #GtkColorSelection.
+If this functionality is enabled, the necessary additional widgets
+are added to the #GtkColorSelection and the opacity value can be
+retrieved via the fourth value in the color array returned by
+the gtk_color_selection_get_color() function.
+</para>
+
+@colorsel: a #GtkColorSelection.
+@use_opacity: a boolean indicating whether the opacity selection
+is enabled.
+
+<!-- ##### USER_FUNCTION GtkSignalMarshal ##### -->
+<para>
+This is currently a hack left in for a scheme wrapper library.
+It may be removed.
+</para>
+<para>
+Don't use it.
+</para>
+
+@object: The object which emits the signal.
+@data: The user data associated with the hook.
+@nparams: The number of parameters to the function.
+@args: The actual values of the arguments.
+@arg_types: The types of the arguments.
+@return_type: The type of the return value from the function
+or #GTK_TYPE_NONE for no return value.
+
+<!-- ##### MACRO GTK_WIDGET_USER_STYLE ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Short_Description ##### -->
+Functions to adapt C structures to native calling convention.
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO GTK_CONTAINER_RESIZE_PENDING ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__BOOL ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_signal_set_funcs ##### -->
+<para>
+These set default functions to call when the user didn't
+supply a function when connecting.  (These are rarely
+used, and probably only for language bindings)
+</para>
+<para>
+By default, there are no such functions.
+</para>
+
+@marshal_func: the function to invoke on every handlers for which there
+isn't a function pointer.  May be NULL.
+@destroy_func: the function to invoke when each hook is destroyed.
+May be NULL.
+
+<!-- ##### USER_FUNCTION GtkSignalDestroy ##### -->
+<para>
+A function which you can use to clean up when the
+signal handler is destroyed.
+</para>
+<para>
+For example, if your handler requires a few variables
+that you made into a struct and allocated (using g_new()
+or something), then you will probably want to free
+it as soon as the hook is destroyed.  This will
+allow you to do that. (For this in particular
+it is convenient to pass g_free() as a #GtkSignalDestroy
+function).
+</para>
+
+@data: The user data associated with the hook that is being
+destroyed.
+
+<!-- ##### FUNCTION gtk_type_set_chunk_alloc ##### -->
+<para>
+Set the mem_chunk size so it will hold @n_chunks of the objects of that @type.
+</para>
+
+@type: There must be an unlocked TypeNode associated with this type otherwise nothing happens.
+@n_chunks: 
+
+<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkSignal</term>
+<listitem><para>The signal handling functions (of which marshallers are 
+really an implementation detail).</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+
+<!-- ##### FUNCTION gtk_text_buffer_insert_pixmap ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@pixmap: 
+@mask: 
+
+<!-- ##### ENUM GtkTextViewMovementStep ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_MOVEMENT_CHAR: 
+@GTK_TEXT_MOVEMENT_POSITIONS: 
+@GTK_TEXT_MOVEMENT_WORD: 
+@GTK_TEXT_MOVEMENT_WRAPPED_LINE: 
+@GTK_TEXT_MOVEMENT_LINE: 
+@GTK_TEXT_MOVEMENT_LINE_ENDS: 
+@GTK_TEXT_MOVEMENT_BUFFER_ENDS: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
 <para>
 
 </para>
@@ -78,583 +1290,26 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 </refsect2>
 
 
-<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Short_Description ##### -->
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__UINT_STRING ##### -->
+<!-- ##### ENUM GtkFontFilterType ##### -->
 <para>
-
+A set of bit flags used to specify the filter being set
+when calling gtk_font_selection_dialog_set_filter() or
+gtk_font_selection_set_filter().
 </para>
 
+@GTK_FONT_FILTER_BASE: the base filter, which can't be changed by the user.
+@GTK_FONT_FILTER_USER: the user filter, which can be changed from within the
+'Filter' page of the #GtkFontSelection widget.
 
-<!-- ##### MACRO GTK_PRIVATE_UNSET_FLAG ##### -->
-<para>
-
-</para>
-
-@wid: 
-@flag: 
-
-<!-- ##### MACRO GTK_WIDGET_REDRAW_PENDING ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SIGNAL GtkTextView::insert ##### -->
+<!-- ##### SIGNAL GtkTextView::move ##### -->
 <para>
 
 </para>
 
 @textview: the object which received the signal.
 @arg1: 
-
-<!-- ##### MACRO gtk_widget_set_default_visual ##### -->
-<para>
-
-</para>
-
-@v: 
-@visual: 
-
-<!-- ##### FUNCTION gtk_window_set_focus ##### -->
-<para>
-
-</para>
-
-@window: 
-@focus: 
-
-<!-- ##### SECTION ./tmpl/gtkprivate.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_ENUM ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_font_selection_set_filter ##### -->
-<para>
-Sets one of the two font filters, to limit the fonts shown.
-</para>
-
-@fontsel: a #GtkFontSelection.
-@filter_type: which of the two font filters to set, either
-#GTK_FONT_FILTER_BASE or #GTK_FONT_FILTER_USER. The user filter
-can be changed by the user, but the base filter is permanent.
-@font_type: the types of font to be shown. This is a bitwise combination of
-#GTK_FONT_BITMAP, #GTK_FONT_SCALABLE and #GTK_FONT_SCALABLE_BITMAP,
-or #GTK_FONT_ALL to show all three font types.
-@foundries: a NULL-terminated array of strings containing foundry names which
-will be shown, or NULL to show all foundries.
-@weights: a NULL-terminated array of strings containing weight names which
-will be shown, or NULL to show all weights.
-@slants: a NULL-terminated array of strings containing slant names which
-will be shown, or NULL to show all slants.
-@setwidths: a NULL-terminated array of strings containing setwidth names which
-will be shown, or NULL to show all setwidths.
-@spacings: a NULL-terminated array of strings containing spacings which
-will be shown, or NULL to show all spacings.
-@charsets: a NULL-terminated array of strings containing charset names which
-will be shown, or NULL to show all charsets.
-
-<!-- ##### FUNCTION gtk_container_unregister_toplevel ##### -->
-<para>
-
-</para>
-
-@container: 
-
-<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Title ##### -->
-Signal Marshallers
-
-
-<!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Long_Description ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### STRUCT GtkTypeQuery ##### -->
-<para>
-A structure used to return values from @gtk_type_query.
-</para>
-
-@type: 
-@type_name: 
-@object_size: 
-@class_size: 
-
-<!-- ##### FUNCTION gtk_text_buffer_get_clipboard_contents ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@Returns: 
-
-<!-- ##### MACRO gtk_widget_pop_visual ##### -->
-<para>
-
-</para>
-
-@v: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### USER_FUNCTION GtkSignalMarshal ##### -->
-<para>
-This is currently a hack left in for a scheme wrapper library.
-It may be removed.
-</para>
-<para>
-Don't use it.
-</para>
-
-@object: The object which emits the signal.
-@data: The user data associated with the hook.
-@nparams: The number of parameters to the function.
-@args: The actual values of the arguments.
-@arg_types: The types of the arguments.
-@return_type: The type of the return value from the function
-or #GTK_TYPE_NONE for no return value.
-
-<!-- ##### FUNCTION gtk_signal_add_emission_hook_full ##### -->
-<para>
-Add an emission hook for a type of signal, for any object.
-(with control of what happens when the hook is
-destroyed).
-</para>
-
-@signal_id: the type of signal add the hook for.
-@hook_func: the function to invoke to handle the hook.
-@data: the user data passed in to hook_func.
-@destroy: a function to invoke when the hook is destroyed,
-to clean up any allocation done just for this
-signal handler.
-@Returns: the id (that you may pass as a parameter
-to gtk_signal_remove_emission_hook()).
-
-<!-- ##### FUNCTION gtk_text_buffer_paste_primary_selection ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@override_location: 
-@time: 
-@interactive: 
-@default_editable: 
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### SIGNAL GtkTextView::copy-text ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-
-<!-- ##### FUNCTION gtk_text_view_get_iter_at_pixel ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@iter: 
-@x: 
-@y: 
-
-<!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Short_Description ##### -->
-
-
-
-<!-- ##### FUNCTION gtk_identifier_get_type ##### -->
-<para>
-Get the type of GtkIdentifier.
-</para>
-
-@Returns: GtkType -- the enumerated type of something.
-
-<!-- ##### MACRO gtk_marshal_BOOL__POINTER_INT_INT_UINT ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__NONE ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_text_mark_deleted ##### -->
-<para>
-
-</para>
-
-@mark: 
-@Returns: 
-
-<!-- ##### MACRO gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_ruler_draw_ticks ##### -->
-<para>
-
-</para>
-
-@ruler: the gtkruler
-
-<!-- ##### FUNCTION gtk_selection_data_set_text ##### -->
-<para>
-
-</para>
-
-@selection_data: 
-@str: 
-@Returns: 
-
-<!-- ##### FUNCTION gtk_themes_init ##### -->
-<para>
-
-</para>
-
-@argc: 
-@argv: 
-
-<!-- ##### FUNCTION gtk_type_register_enum ##### -->
-<para>
-Register a new set of enum @values and give them the name in
-@type_name.
-</para>
-
-@type_name: must not be null.
-@values: GtkEnumValue*
-@Returns: 
-
-<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Title ##### -->
-Menu Factory
-
-
-<!-- ##### VARIABLE gtk_debug_flags ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO gtk_widget_set_visual ##### -->
-<para>
-
-</para>
-
-@w: 
-@v: 
-@widget: 
-@visual: 
-
-<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_ENUM_ENUM_POINTER ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO GTK_TYPE_SEQNO ##### -->
-<para>
-Convert a gtk type into its sequence number
-</para>
-
-@type: 
-
-<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ENUM GtkMenuFactoryType ##### -->
-<para>
-
-</para>
-
-@GTK_MENU_FACTORY_MENU: 
-@GTK_MENU_FACTORY_MENU_BAR: 
-@GTK_MENU_FACTORY_OPTION_MENU: 
-
-<!-- ##### MACRO gtk_marshal_NONE__STRING ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_POINTER_UINT_UINT ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO GTK_WIDGET_IS_OFFSCREEN ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-<!-- ##### MACRO GTK_MAX_COMPOSE_LEN ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gtkprivate.sgml:Short_Description ##### -->
-
-
-
-<!-- ##### SIGNAL GtkTextView::cut-text ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-
-<!-- ##### STRUCT GtkDialogButton ##### -->
-<para>
-Deprecated.
-</para>
-
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### ARG GtkTextTag:overstrike_set ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_text_buffer_cut ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@time: 
-@interactive: 
-@default_editable: 
-
-<!-- ##### ENUM GtkTextViewMovementStep ##### -->
-<para>
-
-</para>
-
-@GTK_TEXT_MOVEMENT_CHAR: 
-@GTK_TEXT_MOVEMENT_POSITIONS: 
-@GTK_TEXT_MOVEMENT_WORD: 
-@GTK_TEXT_MOVEMENT_WRAPPED_LINE: 
-@GTK_TEXT_MOVEMENT_LINE: 
-@GTK_TEXT_MOVEMENT_LINE_ENDS: 
-@GTK_TEXT_MOVEMENT_BUFFER_ENDS: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### SECTION ./tmpl/gtkdebug.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO GTK_CONTAINER_RESIZE_PENDING ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-<!-- ##### FUNCTION gtk_menu_factory_remove_entries ##### -->
-<para>
-
-</para>
-
-@factory: 
-@entries: 
-@nentries: 
-
-<!-- ##### FUNCTION gtk_text_buffer_find_string ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@iter: 
-@str: 
-@start: 
-@end: 
-@Returns: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_marshal_INT__INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT_BOOL ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
-<para>
-Internal function used by #GtkHPaned and #GtkVPaned
-</para>
-
-@paned: 
-@allocation: 
-@child1_req: 
-@child2_req: 
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_STRING_STRING ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_trace_referencing ##### -->
-<para>
-Private: print debugging information while doing a gtk_object_ref() or 
-a gtk_object_unref().
-</para>
-
-@object: object to reference or unreference.
-@func: name of caller's function to print (used within macros).
-@dummy: unused.
-@line: line number (used within macros).
-@do_ref: whether to reference or unreference.
-
-<!-- ##### MACRO GTK_VALUE_CALLBACK ##### -->
-<para>
-Use to get the value of a GtkArg whose GtkType is GTK_TYPE_CALLBACK
-</para>
-
-@a: 
-
-<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT_BOOL ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ENUM GtkFontType ##### -->
-<para>
-A set of bit flags used to specify the type of fonts shown
-when calling gtk_font_selection_dialog_set_filter() or
-gtk_font_selection_set_filter().
-</para>
-
-@GTK_FONT_BITMAP: bitmap fonts.
-@GTK_FONT_SCALABLE: scalable fonts.
-@GTK_FONT_SCALABLE_BITMAP: scaled bitmap fonts.
-@GTK_FONT_ALL: a bitwise combination of all of the above.
-
-<!-- ##### MACRO GTK_TYPE_STRUCTURED_LAST ##### -->
-<para>
-The last structured enumerated type value.
-</para>
-
+@arg2: 
+@arg3: 
 
 <!-- ##### MACRO GTK_OBJECT_NSIGNALS ##### -->
 <para>
@@ -662,77 +1317,6 @@ Get the number of signals defined by this object.
 </para>
 
 @obj: the object to query.
-
-<!-- ##### FUNCTION gtk_menu_factory_remove_subfactory ##### -->
-<para>
-
-</para>
-
-@factory: 
-@subfactory: 
-@path: 
-
-<!-- ##### FUNCTION gtk_type_children_types ##### -->
-<para>
-Return the pointer to the type's children's types.
-</para>
-
-@type: GtkType
-@Returns: pointer to a GList
-
-<!-- ##### FUNCTION gtk_type_register_flags ##### -->
-<para>
-Register a new set of flags @values and give them the name in
-@type_name.
-</para>
-
-@type_name: must not be null.
-@values: GtkFlagValue*
-@Returns: 
-
-<!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
-<para>
-
-</para>
-
-@widget: 
-@selection: 
-
-<!-- ##### SIGNAL GtkTextView::scroll-text ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-
-<!-- ##### ENUM GtkPrivateFlags ##### -->
-<para>
-
-</para>
-
-@PRIVATE_GTK_USER_STYLE: 
-@PRIVATE_GTK_RESIZE_PENDING: 
-@PRIVATE_GTK_RESIZE_NEEDED: 
-@PRIVATE_GTK_LEAVE_PENDING: 
-@PRIVATE_GTK_HAS_SHAPE_MASK: 
-@PRIVATE_GTK_IN_REPARENT: 
-@PRIVATE_GTK_DIRECTION_SET: 
-@PRIVATE_GTK_DIRECTION_LTR: 
-
-<!-- ##### FUNCTION gtk_type_set_chunk_alloc ##### -->
-<para>
-Set the mem_chunk size so it will hold @n_chunks of the objects of that @type.
-</para>
-
-@type: There must be an unlocked TypeNode associated with this type otherwise nothing happens.
-@n_chunks: 
-
-<!-- ##### MACRO GTK_TYPE_STRUCTURED_FIRST ##### -->
-<para>
-The first structured enumerated type value.
-</para>
-
 
 <!-- ##### STRUCT GtkSignalQuery ##### -->
 <para>
@@ -750,232 +1334,12 @@ and its unique identifying integer.
 @nparams: 
 @params: 
 
-<!-- ##### FUNCTION gtk_type_describe_tree ##### -->
-<para>
-Given a @type, describe all of its children, and their children.  Only
-show the size if @show_size is true.
-</para>
-
-@type: GtkType
-@show_size: gboolean
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Long_Description ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_window_remove_embedded_xid ##### -->
-<para>
-
-</para>
-
-@window: 
-@xid: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_text_iter_get_pixmap ##### -->
-<para>
-
-</para>
-
-@iter: 
-@pixmap: 
-@mask: 
-@Returns: 
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_UINT ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_font_selection_dialog_set_filter ##### -->
-<para>
-Sets one of the two font filters, to limit the fonts shown.
-</para>
-
-@fsd: a #GtkFontSelectionDialog.
-@filter_type: which of the two font filters to set, either
-#GTK_FONT_FILTER_BASE or #GTK_FONT_FILTER_USER. The user filter
-can be changed by the user, but the base filter is permanent.
-@font_type: the types of font to be shown. This is a bitwise combination of
-#GTK_FONT_BITMAP, #GTK_FONT_SCALABLE and #GTK_FONT_SCALABLE_BITMAP,
-or #GTK_FONT_ALL to show all three font types.
-@foundries: a NULL-terminated array of strings containing foundry names which
-will be shown, or NULL to show all foundries.
-@weights: a NULL-terminated array of strings containing weight names which
-will be shown, or NULL to show all weights.
-@slants: a NULL-terminated array of strings containing slant names which
-will be shown, or NULL to show all slants.
-@setwidths: a NULL-terminated array of strings containing setwidth names which
-will be shown, or NULL to show all setwidths.
-@spacings: a NULL-terminated array of strings containing spacings which
-will be shown, or NULL to show all spacings.
-@charsets: a NULL-terminated array of strings containing charset names which
-will be shown, or NULL to show all charsets.
-
-<!-- ##### SIGNAL GtkTextView::delete-text ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### FUNCTION gtk_container_get_toplevels ##### -->
+<!-- ##### FUNCTION gtk_icon_factory_get_type ##### -->
 <para>
 
 </para>
 
 @Returns: 
-
-<!-- ##### MACRO GTK_TYPE_NUM_BUILTINS ##### -->
-<para>
-No idea.
-</para>
-
-
-<!-- ##### MACRO GTK_TYPE_MAKE ##### -->
-<para>
-Combine a fundemantal type and a sequence number to create a gtk type.
-</para>
-
-@parent_t: 
-@seqno: 
-
-<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Short_Description ##### -->
-Functions to adapt C structures to native calling convention.
-
-
-<!-- ##### MACRO GTK_TYPE_FLAT_LAST ##### -->
-<para>
-The last "flat" (no struct) enumerated type value.
-</para>
-
-
-<!-- ##### FUNCTION gtk_text_mark_unref ##### -->
-<para>
-
-</para>
-
-@mark: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_signal_handlers_destroy ##### -->
-<para>
-Destroy all the signal handlers connected to an object.
-This is done automatically when the object is destroyed.
-</para>
-<para>
-This function is labeled private.
-</para>
-
-@object: the object whose signal handlers should be destroyed.
-
-<!-- ##### FUNCTION gtk_text_iter_in_region ##### -->
-<para>
-
-</para>
-
-@iter: 
-@start: 
-@end: 
-@Returns: 
-
-<!-- ##### FUNCTION gtk_type_get_varargs_type ##### -->
-<para>
-Get the varargs type associated with @foreign_type
-</para>
-
-@foreign_type: GtkType
-@Returns: GtkType
-
-<!-- ##### STRUCT GtkMenuFactory ##### -->
-<para>
-
-</para>
-
-@path: 
-@type: 
-@accel_group: 
-@widget: 
-@subfactories: 
-
-<!-- ##### MACRO GTK_VALUE_FOREIGN ##### -->
-<para>
-Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
-</para>
-
-@a: 
-
-<!-- ##### SIGNAL GtkTextView::paste-text ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-
-<!-- ##### MACRO GTK_PRIVATE_SET_FLAG ##### -->
-<para>
-
-</para>
-
-@wid: 
-@flag: 
-
-<!-- ##### FUNCTION gtk_ruler_draw_pos ##### -->
-<para>
-
-</para>
-
-@ruler: the gtkruler
-
-<!-- ##### MACRO GTK_WIDGET_USER_STYLE ##### -->
-<para>
-
-</para>
-
-@obj: 
 
 <!-- ##### ENUM GtkDebugFlag ##### -->
 <para>
@@ -988,44 +1352,39 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 @GTK_DEBUG_DND: 
 @GTK_DEBUG_PLUGSOCKET: 
 
-<!-- ##### FUNCTION gtk_menu_factory_remove_paths ##### -->
+<!-- ##### FUNCTION gtk_themes_init ##### -->
 <para>
 
 </para>
 
-@factory: 
-@paths: 
-@npaths: 
+@argc: 
+@argv: 
 
-<!-- ##### FUNCTION gtk_type_query ##### -->
-<para>
-Given a type, return various interesting parameters of the type.
-</para>
-
-@type: GtkType
-@Returns: GtkTypeQuery*
-
-<!-- ##### SECTION ./tmpl/gtkprivate.sgml:Long_Description ##### -->
+<!-- ##### MACRO GTK_MAX_COMPOSE_LEN ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### MACRO GTK_TYPE_IDENTIFIER ##### -->
-<para>
-Hide the name of gtk_identifier_get_type
-</para>
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT ##### -->
+<!-- ##### FUNCTION gtk_window_set_default ##### -->
 <para>
 
 </para>
 
-@object: 
-@func: 
-@func_data: 
-@args: 
+@window: 
+@defaultw: 
+
+<!-- ##### MACRO gtk_marshal_NONE__STRING ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### MACRO gtk_marshal_NONE__ENUM ##### -->
 <para>
@@ -1033,102 +1392,54 @@ Hide the name of gtk_identifier_get_type
 </para>
 
 
-<!-- ##### FUNCTION gtk_signal_handler_pending_by_id ##### -->
+<!-- ##### FUNCTION gtk_type_get_varargs_type ##### -->
 <para>
-Returns whether a connection id is valid (and optionally not blocked).
+Get the varargs type associated with @foreign_type
 </para>
 
-@object: the object to search for the desired handler.
-@handler_id: the connection id.
-@may_be_blocked: whether it is acceptable to return a blocked
-handler.
-@Returns: TRUE if the signal exists and wasn't blocked,
-unless #may_be_blocked was specified.  FALSE otherwise.
+@foreign_type: GtkType
+@Returns: GtkType
 
-<!-- ##### MACRO GTK_PRIVATE_FLAGS ##### -->
+<!-- ##### FUNCTION gtk_text_view_get_iter_at_pixel ##### -->
 <para>
 
 </para>
 
-@wid: 
+@text_view: 
+@iter: 
+@x: 
+@y: 
 
-<!-- ##### FUNCTION gtk_selection_data_get_text ##### -->
+<!-- ##### FUNCTION gtk_signal_n_emissions_by_name ##### -->
+<para>
+Find out the recursion depth of emissions for a particular type
+of signal and object.  Just like gtk_signal_n_emissions()
+except it will lookup the signal id for you.
+</para>
+
+@object: the object with the signal handler.
+@name: the signal name.
+@Returns: the recursion depth of emissions of this signal for this
+object.
+
+<!-- ##### FUNCTION gtk_container_unregister_toplevel ##### -->
 <para>
 
 </para>
 
-@selection_data: 
-@Returns: 
+@container: 
 
-<!-- ##### FUNCTION gtk_marshal_BOOL__NONE ##### -->
+<!-- ##### FUNCTION gtk_rc_init ##### -->
 <para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_type_free ##### -->
-<para>
-Given the type of an object and a pointer to it, the object is freed.
-</para>
-
-@type: GtkType
-@mem: gpointer to the object
-
-<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Short_Description ##### -->
-
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### STRUCT GtkMenuPath ##### -->
-<para>
-
-</para>
-
-@path: 
-@widget: 
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT ##### -->
-<para>
-
+Internal function.
 </para>
 
 
-<!-- ##### SECTION ./tmpl/gtkprivate.sgml:Title ##### -->
-Private Information
-
-
-<!-- ##### FUNCTION gtk_menu_factory_find ##### -->
+<!-- ##### MACRO GTK_TYPE_FLAT_LAST ##### -->
 <para>
-
+The last "flat" (no struct) enumerated type value.
 </para>
 
-@factory: 
-@path: 
-@Returns: 
-
-<!-- ##### STRUCT GtkMenuEntry ##### -->
-<para>
-
-</para>
-
-@path: 
-@accelerator: 
-@callback: 
-@callback_data: 
-@widget: 
 
 <!-- ##### FUNCTION gtk_window_add_embedded_xid ##### -->
 <para>
@@ -1138,7 +1449,7 @@ Private Information
 @window: 
 @xid: 
 
-<!-- ##### FUNCTION gtk_marshal_NONE__BOOL ##### -->
+<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK_C_CALLBACK ##### -->
 <para>
 
 </para>
@@ -1148,20 +1459,66 @@ Private Information
 @func_data: 
 @args: 
 
-<!-- ##### FUNCTION gtk_color_selection_set_opacity ##### -->
+<!-- ##### FUNCTION gtk_type_register_flags ##### -->
 <para>
-Controls whether opacity can be set with the #GtkColorSelection.
-If this functionality is enabled, the necessary additional widgets
-are added to the #GtkColorSelection and the opacity value can be
-retrieved via the fourth value in the color array returned by
-the gtk_color_selection_get_color() function.
+Register a new set of flags @values and give them the name in
+@type_name.
 </para>
 
-@colorsel: a #GtkColorSelection.
-@use_opacity: a boolean indicating whether the opacity selection
-is enabled.
+@type_name: must not be null.
+@values: GtkFlagValue*
+@Returns: 
 
-<!-- ##### FUNCTION gtk_marshal_INT__POINTER ##### -->
+<!-- ##### SIGNAL GtkTextView::delete-at-cursor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### FUNCTION gtk_menu_factory_new ##### -->
+<para>
+
+</para>
+
+@type: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### MACRO gtk_widget_set_visual ##### -->
+<para>
+
+</para>
+
+@w: 
+@v: 
+@widget: 
+@visual: 
+
+<!-- ##### MACRO gtk_signal_default_marshaller ##### -->
+<para>
+A marshaller that returns void and takes no extra parameters.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### FUNCTION gtk_text_buffer_set_clipboard_contents ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@text: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT_POINTER ##### -->
 <para>
 
 </para>
@@ -1171,19 +1528,147 @@ is enabled.
 @func_data: 
 @args: 
 
-<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:See_Also ##### -->
+<!-- ##### FUNCTION gtk_type_parent_class ##### -->
 <para>
-<variablelist>
-
-<varlistentry>
-<term>#GtkSignal</term>
-<listitem><para>The signal handling functions (of which marshallers are 
-really an implementation detail).</para></listitem>
-</varlistentry>
-
-</variablelist>
+Return the class of the parent.  Initialize the class if necessary.
+Return NULL if anything goes wrong.
 </para>
 
+@type: GtkType
+@Returns: gpointer to the klass.
+
+<!-- ##### MACRO GTK_WIDGET_REDRAW_PENDING ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### ENUM GtkTextViewDeleteType ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_DELETE_CHAR: 
+@GTK_TEXT_DELETE_HALF_WORD: 
+@GTK_TEXT_DELETE_WHOLE_WORD: 
+@GTK_TEXT_DELETE_HALF_WRAPPED_LINE: 
+@GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE: 
+@GTK_TEXT_DELETE_HALF_LINE: 
+@GTK_TEXT_DELETE_WHOLE_LINE: 
+@GTK_TEXT_DELETE_WHITESPACE: 
+@GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE: 
+
+<!-- ##### FUNCTION gtk_text_buffer_get_clipboard_contents ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_menu_factory_remove_entries ##### -->
+<para>
+
+</para>
+
+@factory: 
+@entries: 
+@nentries: 
+
+<!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
+<para>
+Given a GtkTypeClass pointer @klass, and a GtkType @cast_type, make
+sure that it's okay to cast something of that @klass into a @cast_type.
+</para>
+
+@klass: GtkTypeClass*
+@cast_type: GtkType
+@Returns: Always return @klass.
+
+<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_selection_data_get_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
+<para>
+
+</para>
+
+@widget: 
+@user_data: 
+
+<!-- ##### VARIABLE gtk_debug_flags ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkprivate.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_menu_factory_remove_subfactory ##### -->
+<para>
+
+</para>
+
+@factory: 
+@subfactory: 
+@path: 
+
+<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Title ##### -->
+Debugging
+
+
+<!-- ##### FUNCTION gtk_type_check_object_cast ##### -->
+<para>
+Given a pointer to a GtkTypeObject @type_object, and a GtkType @cast_type,
+make sure that it's okay to cast @type_object into a @cast_type.
+</para>
+
+@type_object: GtkTypeObject*
+@cast_type: GtkType
+@Returns: the same GtkTypeObject* as @type_object
+
+<!-- ##### FUNCTION gtk_ruler_draw_pos ##### -->
+<para>
+
+</para>
+
+@ruler: the gtkruler
 
 <!-- ##### STRUCT GtkTreeViewPrivate ##### -->
 <para>
@@ -1217,105 +1702,25 @@ really an implementation detail).</para></listitem>
 @column: 
 @header_height: 
 
-<!-- ##### MACRO GTK_WIDGET_RESIZE_NEEDED ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-<!-- ##### MACRO GTK_NOTE ##### -->
-<para>
-
-</para>
-
-@type: 
-@action: 
-
-<!-- ##### ENUM GtkTextViewDeleteType ##### -->
-<para>
-
-</para>
-
-@GTK_TEXT_DELETE_CHAR: 
-@GTK_TEXT_DELETE_HALF_WORD: 
-@GTK_TEXT_DELETE_WHOLE_WORD: 
-@GTK_TEXT_DELETE_HALF_WRAPPED_LINE: 
-@GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE: 
-@GTK_TEXT_DELETE_HALF_LINE: 
-@GTK_TEXT_DELETE_WHOLE_LINE: 
-@GTK_TEXT_DELETE_WHITESPACE: 
-@GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE: 
-
-<!-- ##### MACRO GTK_TYPE_FLAT_FIRST ##### -->
-<para>
-The first "flat" (no struct) enumerated type value.
-</para>
-
-
-<!-- ##### FUNCTION gtk_menu_factory_new ##### -->
-<para>
-
-</para>
-
-@type: 
-@Returns: 
-
-<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM ##### -->
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_UINT ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### FUNCTION gtk_text_buffer_spew ##### -->
-<para>
-
-</para>
-
-@buffer: 
-
-<!-- ##### MACRO gtk_signal_default_marshaller ##### -->
-<para>
-A marshaller that returns void and takes no extra parameters.
-</para>
-
-
-<!-- ##### STRUCT GtkTextTabArray ##### -->
+<!-- ##### SECTION ./tmpl/gtkdebug.sgml:See_Also ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### ARG GtkTextTag:overstrike ##### -->
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_ENUM ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### MACRO GTK_WIDGET_HAS_SHAPE_MASK ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-<!-- ##### FUNCTION gtk_text_buffer_copy ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@time: 
-
-<!-- ##### FUNCTION gtk_text_mark_ref ##### -->
-<para>
-
-</para>
-
-@mark: 
-@Returns: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT ##### -->
+<!-- ##### FUNCTION gtk_marshal_NONE__NONE ##### -->
 <para>
 
 </para>
@@ -1324,6 +1729,31 @@ A marshaller that returns void and takes no extra parameters.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### FUNCTION gtk_signal_handlers_destroy ##### -->
+<para>
+Destroy all the signal handlers connected to an object.
+This is done automatically when the object is destroyed.
+</para>
+<para>
+This function is labeled private.
+</para>
+
+@object: the object whose signal handlers should be destroyed.
+
+<!-- ##### FUNCTION gtk_text_iter_get_pixmap ##### -->
+<para>
+
+</para>
+
+@iter: 
+@pixmap: 
+@mask: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/gtkprivate.sgml:Short_Description ##### -->
+
+
 
 <!-- ##### MACRO GTK_OBJECT_SIGNALS ##### -->
 <para>
@@ -1332,11 +1762,7 @@ Get the array of signals defined for this object.
 
 @obj: the object to fetch the signals from.
 
-<!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Title ##### -->
-gtkenums.sgml
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT_POINTER ##### -->
+<!-- ##### FUNCTION gtk_marshal_BOOL__NONE ##### -->
 <para>
 
 </para>
@@ -1346,427 +1772,12 @@ gtkenums.sgml
 @func_data: 
 @args: 
 
-<!-- ##### FUNCTION gtk_type_check_object_cast ##### -->
-<para>
-Given a pointer to a GtkTypeObject @type_object, and a GtkType @cast_type,
-make sure that it's okay to cast @type_object into a @cast_type.
-</para>
-
-@type_object: GtkTypeObject*
-@cast_type: GtkType
-@Returns: the same GtkTypeObject* as @type_object
-
-<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
+<!-- ##### FUNCTION gtk_text_iter_in_region ##### -->
 <para>
 
 </para>
 
-@widget: 
-@user_data: 
-
-<!-- ##### FUNCTION gtk_themes_exit ##### -->
-<para>
-
-</para>
-
-@error_code: 
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Long_Description ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_type_set_varargs_type ##### -->
-<para>
-Set the varargs type for a fundamental type @foreign_type.
-</para>
-
-@foreign_type: Must be a GtkType with a sequence number of zero.  Must not be a
-fundamental type.
-@varargs_type: Must be a GtkType which is either structured or flag, or NONE.
-
-<!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
-<para>
-Given a GtkTypeClass pointer @klass, and a GtkType @cast_type, make
-sure that it's okay to cast something of that @klass into a @cast_type.
-</para>
-
-@klass: GtkTypeClass*
-@cast_type: GtkType
-@Returns: Always return @klass.
-
-<!-- ##### FUNCTION gtk_menu_factory_destroy ##### -->
-<para>
-
-</para>
-
-@factory: 
-
-<!-- ##### FUNCTION gtk_signal_n_emissions ##### -->
-<para>
-Find out the recursion depth of emissions for a particular type
-of signal and object.  (So it will
-always return 0 or 1 if #GTK_RUN_NO_RECURSE is specified)
-This is a way to avoid recursion:  you can see if
-you are currently running in that signal handler and emit it only
-if you are.
-</para>
-<para>Another way to look at it is that this number increases
-by one when #gtk_signal_emit(), et al, are called,
-and decreases by one when #gtk_signal_emit() returns.
-</para>
-
-@object: the object with the signal handler.
-@signal_id: the signal id.
-@Returns: the recursion depth of emissions of this signal for this
-object.
-
-<!-- ##### FUNCTION gtk_text_buffer_insert_pixmap ##### -->
-<para>
-
-</para>
-
-@buffer: 
 @iter: 
-@pixmap: 
-@mask: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK_C_CALLBACK ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT_POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### MACRO GTK_VALUE_ARGS ##### -->
-<para>
-Use to get the value of a GtkArg whose GtkType is GTK_TYPE_ARGS
-</para>
-
-@a: 
-
-<!-- ##### FUNCTION gtk_menu_factory_add_entries ##### -->
-<para>
-
-</para>
-
-@factory: 
-@entries: 
-@nentries: 
-
-<!-- ##### FUNCTION gtk_signal_set_funcs ##### -->
-<para>
-These set default functions to call when the user didn't
-supply a function when connecting.  (These are rarely
-used, and probably only for language bindings)
-</para>
-<para>
-By default, there are no such functions.
-</para>
-
-@marshal_func: the function to invoke on every handlers for which there
-isn't a function pointer.  May be NULL.
-@destroy_func: the function to invoke when each hook is destroyed.
-May be NULL.
-
-<!-- ##### FUNCTION gtk_im_context_simple_new ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-<!-- ##### FUNCTION gtk_type_describe_heritage ##### -->
-<para>
-Print the types @type inherits from.
-</para>
-
-@type: GtkType
-
-<!-- ##### FUNCTION gtk_text_buffer_set_clipboard_contents ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@text: 
-
-<!-- ##### ENUM GtkFontFilterType ##### -->
-<para>
-A set of bit flags used to specify the filter being set
-when calling gtk_font_selection_dialog_set_filter() or
-gtk_font_selection_set_filter().
-</para>
-
-@GTK_FONT_FILTER_BASE: the base filter, which can't be changed by the user.
-@GTK_FONT_FILTER_USER: the user filter, which can be changed from within the
-'Filter' page of the #GtkFontSelection widget.
-
-<!-- ##### FUNCTION gtk_type_parent_class ##### -->
-<para>
-Return the class of the parent.  Initialize the class if necessary.
-Return NULL if anything goes wrong.
-</para>
-
-@type: GtkType
-@Returns: gpointer to the klass.
-
-<!-- ##### USER_FUNCTION GtkSignalDestroy ##### -->
-<para>
-A function which you can use to clean up when the
-signal handler is destroyed.
-</para>
-<para>
-For example, if your handler requires a few variables
-that you made into a struct and allocated (using g_new()
-or something), then you will probably want to free
-it as soon as the hook is destroyed.  This will
-allow you to do that. (For this in particular
-it is convenient to pass g_free() as a #GtkSignalDestroy
-function).
-</para>
-
-@data: The user data associated with the hook that is being
-destroyed.
-
-<!-- ##### FUNCTION gtk_window_set_default ##### -->
-<para>
-
-</para>
-
-@window: 
-@defaultw: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### MACRO GTK_WIDGET_LEAVE_PENDING ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-<!-- ##### MACRO gtk_marshal_NONE__UINT ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_accel_group_marshal_add ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### MACRO GTK_WIDGET_IN_REPARENT ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-<!-- ##### FUNCTION gtk_marshal_INT__POINTER_CHAR_CHAR ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_accel_group_marshal_remove ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### MACRO gtk_marshal_NONE__STRING_INT_POINTER ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### FUNCTION gtk_rc_init ##### -->
-<para>
-Internal function.
-</para>
-
-
-<!-- ##### FUNCTION gtk_signal_query ##### -->
-<para>
-Obtain information about a signal.
-</para>
-
-@signal_id: the signal type identifier.
-@Returns: a pointer to a GtkSignalQuery structure
-which contains all the information, or NULL.
-The pointer is allocated just for you:  you must g_free() it.
-
-<!-- ##### FUNCTION gtk_signal_n_emissions_by_name ##### -->
-<para>
-Find out the recursion depth of emissions for a particular type
-of signal and object.  Just like gtk_signal_n_emissions()
-except it will lookup the signal id for you.
-</para>
-
-@object: the object with the signal handler.
-@name: the signal name.
-@Returns: the recursion depth of emissions of this signal for this
-object.
-
-<!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SIGNAL GtkTextView::delete ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
-<para>
-
-</para>
-
-@container: 
-
-<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO gtk_widget_push_visual ##### -->
-<para>
-
-</para>
-
-@v: 
-@visual: 
-
-<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Title ##### -->
-GtkIMContextSimple
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### MACRO GTK_VALUE_C_CALLBACK ##### -->
-<para>
-Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
-</para>
-
-@a: 
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-<!-- ##### SIGNAL GtkTextView::move-insert ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Long_Description ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gtk_text_buffer_find_regexp ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@regexp: 
 @start: 
 @end: 
 @Returns: 
@@ -1780,19 +1791,34 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
 @subfactory: 
 @path: 
 
-<!-- ##### ENUM GtkTextViewScrollType ##### -->
+<!-- ##### STRUCT GtkMenuEntry ##### -->
 <para>
 
 </para>
 
-@GTK_TEXT_SCROLL_TO_TOP: 
-@GTK_TEXT_SCROLL_TO_BOTTOM: 
-@GTK_TEXT_SCROLL_PAGE_DOWN: 
-@GTK_TEXT_SCROLL_PAGE_UP: 
+@path: 
+@accelerator: 
+@callback: 
+@callback_data: 
+@widget: 
 
-<!-- ##### STRUCT GtkTextBTree ##### -->
+<!-- ##### FUNCTION gtk_ruler_draw_ticks ##### -->
 <para>
 
 </para>
 
+@ruler: the gtkruler
+
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_VALUE_ARGS ##### -->
+<para>
+Use to get the value of a GtkArg whose GtkType is GTK_TYPE_ARGS
+</para>
+
+@a: 
 

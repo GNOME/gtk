@@ -1169,6 +1169,18 @@ GtkWidget
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_render_stock_icon ##### -->
+<para>
+
+</para>
+
+@widget: 
+@stock_id: 
+@size: 
+@detail: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_widget_pop_composite_child ##### -->
 <para>
 

@@ -1,4 +1,10 @@
-Incompatible Changes from GTK+-1.2 to GTK+-1.4:
+Incompatible Changes from GTK+-1.2 to GTK+-2.0:
+
+* gtk_container_get_toplevels() was removed and replaced with
+  gtk_window_list_toplevels(), which has different memory management 
+  on the return value (gtk_window_list_toplevels() copies the GList
+  and also references each widget in the list, so you have to
+  g_list_free() the list after first unref'ing each list member).
 
 * The gdk_time* functions have been removed. This functionality
   has been unused since the main loop was moved into GLib

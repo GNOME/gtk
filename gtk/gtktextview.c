@@ -880,7 +880,7 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  * @iter: a #GtkTextIter
  * @location: bounds of the character at @iter
  *
- * Returns a rectangle which roughly contains the character at @iter.
+ * Gets a rectangle which roughly contains the character at @iter.
  * The rectangle position is in buffer coordinates; use
  * gtk_text_view_buffer_to_window_coords() to convert these
  * coordinates to coordinates for one of the windows in the text view.
@@ -904,7 +904,7 @@ gtk_text_view_get_iter_location (GtkTextView       *text_view,
  * @y: return location for a y coordinate
  * @height: return location for a height
  *
- * Returns the y coordinate of the top of the line containing @iter,
+ * Gets the y coordinate of the top of the line containing @iter,
  * and the height of the line. The coordinate is a buffer coordinate;
  * convert to window coordinates with gtk_text_view_buffer_to_window_coords().
  * 
@@ -931,7 +931,7 @@ gtk_text_view_get_line_yrange (GtkTextView       *text_view,
  * @y: a y coordinate
  * @line_top: return location for top coordinate of the line
  * 
- * Returns the #GtkTextIter at the start of the line containing
+ * Gets the #GtkTextIter at the start of the line containing
  * the coordinate @y. @y is in buffer coordinates, convert from
  * window coordinates with gtk_text_view_window_to_buffer_coords().
  * If non-%NULL, @line_top will be filled with the coordinate of the top

@@ -116,6 +116,45 @@ types related to the text widget and how they work together.
 @end: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_insert_range_interactive ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@start: 
+@end: 
+@default_editable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_insert_with_tags ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@text: 
+@len: 
+@first_tag: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_insert_with_tags_by_name ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@text: 
+@len: 
+@first_tag_name: 
+@Varargs: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_delete ##### -->
 <para>
 
@@ -191,6 +230,16 @@ types related to the text widget and how they work together.
 @pixbuf: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_create_child_anchor ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_create_mark ##### -->
 <para>
 
@@ -210,6 +259,16 @@ types related to the text widget and how they work together.
 
 @buffer: 
 @mark: 
+@where: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_move_mark_by_name ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@name: 
 @where: 
 
 
@@ -242,6 +301,15 @@ types related to the text widget and how they work together.
 
 
 <!-- ##### FUNCTION gtk_text_buffer_get_insert ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_selection_bound ##### -->
 <para>
 
 </para>
@@ -344,6 +412,37 @@ types related to the text widget and how they work together.
 @line_number: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_get_iter_at_line_index ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@line_number: 
+@byte_index: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_iter_at_mark ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@mark: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_iter_at_child_anchor ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@anchor: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_get_last_iter ##### -->
 <para>
 
@@ -361,16 +460,6 @@ types related to the text widget and how they work together.
 @buffer: 
 @start: 
 @end: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_get_iter_at_mark ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@iter: 
-@mark: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_get_tags ##### -->
@@ -422,6 +511,33 @@ types related to the text widget and how they work together.
 <!-- # Unused Parameters # -->
 @time: 
 @interactive: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_copy_clipboard ##### -->
+<para>
+
+</para>
+
+@buffer: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_cut_clipboard ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@default_editable: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_paste_primary ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@override_location: 
+@default_editable: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_get_selection_bounds ##### -->

@@ -26,6 +26,19 @@ types related to the text widget and how they work together.
 </para>
 
 
+<!-- ##### ENUM GtkTextWindowType ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_WINDOW_PRIVATE: 
+@GTK_TEXT_WINDOW_WIDGET: 
+@GTK_TEXT_WINDOW_TEXT: 
+@GTK_TEXT_WINDOW_LEFT: 
+@GTK_TEXT_WINDOW_RIGHT: 
+@GTK_TEXT_WINDOW_TOP: 
+@GTK_TEXT_WINDOW_BOTTOM: 
+
 <!-- ##### FUNCTION gtk_text_view_new ##### -->
 <para>
 
@@ -164,6 +177,138 @@ types related to the text widget and how they work together.
 @location: 
 
 
+<!-- ##### FUNCTION gtk_text_view_get_line_at_y ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@target_iter: 
+@y: 
+@line_top: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_line_yrange ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@y: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_iter_at_location ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_text_view_buffer_to_window_coords ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@win: 
+@buffer_x: 
+@buffer_y: 
+@window_x: 
+@window_y: 
+
+
+<!-- ##### FUNCTION gtk_text_view_window_to_buffer_coords ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@win: 
+@window_x: 
+@window_y: 
+@buffer_x: 
+@buffer_y: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_window ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@win: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_window_type ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_border_window_size ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@type: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_text_window_size ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_text_view_add_child_at_anchor ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@child: 
+@anchor: 
+
+
+<!-- ##### FUNCTION gtk_text_view_add_child_in_window ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@child: 
+@which_window: 
+@xpos: 
+@ypos: 
+
+
+<!-- ##### FUNCTION gtk_text_view_move_child ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@child: 
+@xpos: 
+@ypos: 
+
+
 <!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
 <para>
 
@@ -178,7 +323,7 @@ types related to the text widget and how they work together.
 
 @textview: the object which received the signal.
 
-<!-- ##### SIGNAL GtkTextView::delete-at-cursor ##### -->
+<!-- ##### SIGNAL GtkTextView::delete-from-cursor ##### -->
 <para>
 
 </para>
@@ -195,7 +340,7 @@ types related to the text widget and how they work together.
 @textview: the object which received the signal.
 @arg1: 
 
-<!-- ##### SIGNAL GtkTextView::move ##### -->
+<!-- ##### SIGNAL GtkTextView::move-cursor ##### -->
 <para>
 
 </para>

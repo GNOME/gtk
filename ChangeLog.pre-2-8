@@ -1,3 +1,16 @@
+2000-11-04  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkenums.h: remove trailing comma from GtkDeleteType member
+	list
+
+	* docs/Changes-2.0.txt: Add note about
+	gtk_container_get_toplevels()
+
+	* gtk/gtktextview.h: formatting
+	
+	* gtk/gtktextview.c: don't start descriptions with "Returns",
+	confuses gtk-doc
+
 Sat Nov  4 10:12:27 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* autogen.sh: When doing sanity checking on ACLOCAL_FLAGS,

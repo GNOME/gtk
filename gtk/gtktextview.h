@@ -59,7 +59,8 @@ typedef struct _GtkTextViewClass GtkTextViewClass;
 /* Internal private type. */
 typedef struct _GtkTextWindow GtkTextWindow;
 
-struct _GtkTextView {
+struct _GtkTextView
+{
   GtkContainer parent_instance;
 
   struct _GtkTextLayout *layout;
@@ -120,7 +121,8 @@ struct _GtkTextView {
   GSList *children;
 };
 
-struct _GtkTextViewClass {
+struct _GtkTextViewClass
+{
   GtkContainerClass parent_class;
 
   /* These are all RUN_ACTION signals for keybindings */

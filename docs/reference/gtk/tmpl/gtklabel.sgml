@@ -40,12 +40,44 @@ pass NULL to get an empty label widget.
 @Returns: The newly allocated #GtkLabel widget
 
 
-<!-- ##### MACRO gtk_label_set ##### -->
+<!-- ##### FUNCTION gtk_label_set_text ##### -->
 <para>
-Aliases gtk_label_set_text.  Probably used for backward compatibility with
-Gtk+ 1.0.x.
+Sets the text within the #GtkLabel widget.  It overwrites any text that
+was there before.  Note that underlines that were there before do not
+get overwritten.  If you want to erase underlines just send NULL to
+gtk_label_set_pattern().
 </para>
 
+@label: The #GtkLabel you want to set the text for.
+@str: The text you want to add.
+
+
+<!-- ##### FUNCTION gtk_label_set_attributes ##### -->
+<para>
+
+</para>
+
+@label: 
+@attrs: 
+
+
+<!-- ##### FUNCTION gtk_label_set_markup ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+
+
+<!-- ##### FUNCTION gtk_label_set_markup_with_accel ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_label_set_pattern ##### -->
@@ -108,16 +140,12 @@ by the edge of the widget if it exceeds the widget size.
 @wrap: TRUE turns it on; FALSE turns it off.
 
 
-<!-- ##### FUNCTION gtk_label_set_text ##### -->
+<!-- ##### MACRO gtk_label_set ##### -->
 <para>
-Sets the text within the #GtkLabel widget.  It overwrites any text that
-was there before.  Note that underlines that were there before do not
-get overwritten.  If you want to erase underlines just send NULL to
-gtk_label_set_pattern().
+Aliases gtk_label_set_text.  Probably used for backward compatibility with
+Gtk+ 1.0.x.
 </para>
 
-@label: The #GtkLabel you want to set the text for.
-@str: The text you want to add.
 
 
 <!-- ##### ARG GtkLabel:label ##### -->
