@@ -1,3 +1,8 @@
+2002-03-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkrc.h: Remove obsolete Win32-only declaration of
+	gtk_win32_get_installation_directory().
+
 Sun Mar  3 17:03:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenushell.c gtk/gtkmenubar.[ch]: Back out
