@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.5\n"
-"POT-Creation-Date: 2002-07-10 18:49+0200\n"
-"PO-Revision-Date: 2002-07-10 18:50+0200\n"
+"POT-Creation-Date: 2002-07-22 13:05+0200\n"
+"PO-Revision-Date: 2002-07-22 13:07+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <gnome@softcatala.net>\n"
 "MIME-Version: 1.0\n"
@@ -437,7 +437,11 @@ msgstr "La imatge RAS té dades de capçalera erronis"
 msgid "RAS image has unknown type"
 msgstr "La imatge RAS és de tipus desconegut"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+msgid "unsupported RAS image variation"
+msgstr "Variant d'imatge RAS no suportada"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "Memòria insuficient per carregar la imatge RAS"
 
