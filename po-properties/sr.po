@@ -10,14 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-12 01:10+0100\n"
-"PO-Revision-Date: 2004-02-12 01:12+0100\n"
+"POT-Creation-Date: 2004-02-20 02:46+0100\n"
+"PO-Revision-Date: 2004-02-20 02:52+0100\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
@@ -118,7 +119,7 @@ msgstr "Име"
 msgid "A unique name for the action."
 msgstr "Јединствено име за акцију."
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:209 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:288 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Ознака"
@@ -287,7 +288,7 @@ msgstr "Величина странице прилагођења"
 msgid "Horizontal alignment"
 msgstr "Водоравно поравнање"
 
-#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:260
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -299,7 +300,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Усправно поравнање"
 
-#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:279
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -536,18 +537,18 @@ msgstr "Положај"
 msgid "The index of the child in the parent"
 msgstr "Индекс садржаног елемента у садржаоцу"
 
-#: gtk/gtkbutton.c:204
+#: gtk/gtkbutton.c:210
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Садржај ознаке унутар дугмета, уколико дугме садржи ознаку"
 
-#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
+#: gtk/gtkbutton.c:217 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Користи подвлаку"
 
-#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -555,78 +556,86 @@ msgstr ""
 "Уколико је постављено, подвлачење означава да се следећи знак користи као "
 "пречица"
 
-#: gtk/gtkbutton.c:219
+#: gtk/gtkbutton.c:225
 msgid "Use stock"
 msgstr "Користи већ припремљене"
 
-#: gtk/gtkbutton.c:220
+#: gtk/gtkbutton.c:226
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Уколико је постављено, ознака се бира од већ припремљених ставки уместо "
 "приказивања"
 
-#: gtk/gtkbutton.c:227
+#: gtk/gtkbutton.c:233
 msgid "Focus on click"
 msgstr "Фокусирање кликом"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:234
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Да ли дугме добија фокус када се кликне на њега мишем"
 
-#: gtk/gtkbutton.c:235
+#: gtk/gtkbutton.c:241
 msgid "Border relief"
 msgstr "Изглед ивице"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:242
 msgid "The border relief style"
 msgstr "Стил изгледа ивице"
 
-#: gtk/gtkbutton.c:253
+#: gtk/gtkbutton.c:259
 msgid "Horizontal alignment for child"
 msgstr "Водоравно поравнање за садржани елемент"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:278
 msgid "Vertical alignment for child"
 msgstr "Усправно поравнање за садржани елемент"
 
-#: gtk/gtkbutton.c:340
+#: gtk/gtkbutton.c:346
 msgid "Default Spacing"
 msgstr "Размак подразумеваних"
 
-#: gtk/gtkbutton.c:341
+#: gtk/gtkbutton.c:347
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Размак који треба додати за „подразумеване“ дугмиће"
 
-#: gtk/gtkbutton.c:347
+#: gtk/gtkbutton.c:353
 msgid "Default Outside Spacing"
 msgstr "Размак око подразумеваних"
 
-#: gtk/gtkbutton.c:348
+#: gtk/gtkbutton.c:354
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "Размак који треба додати увек око подразумеваних дугмића"
 
-#: gtk/gtkbutton.c:353
+#: gtk/gtkbutton.c:359
 msgid "Child X Displacement"
 msgstr "Водоравни померај садржаног елемента"
 
 # Da li je "kada se pritisne" ili "kada se otpusti"?
-#: gtk/gtkbutton.c:354
+#: gtk/gtkbutton.c:360
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Колико да се помери садржани елемент у правцу X осе на притисак дугмета"
 
-#: gtk/gtkbutton.c:361
+#: gtk/gtkbutton.c:367
 msgid "Child Y Displacement"
 msgstr "Усправни померај садржаног елемента"
 
-#: gtk/gtkbutton.c:362
+#: gtk/gtkbutton.c:368
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Колико померити садржани елемент у правцу Y осе када се дугме притисне"
+
+#: gtk/gtkbutton.c:375
+msgid "Show button images"
+msgstr "Прикажи слике дугмета"
+
+#: gtk/gtkbutton.c:376
+msgid "Whether stock icons should be shown in buttons"
+msgstr "Да ли се приказују испоручене иконе у дугмадима"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -829,14 +838,14 @@ msgid "Size"
 msgstr "Величина"
 
 #: gtk/gtkcellrendererpixbuf.c:169
-msgid "The size of the rendered icon"
-msgstr "Величина исцртане сличице"
+msgid "The GtkIconSize value that specifies the size of the rendered icon"
+msgstr "GtkIconSize вредност која одређује величину исцртане иконе"
 
-#: gtk/gtkcellrendererpixbuf.c:177
+#: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
 msgstr "Детаљ"
 
-#: gtk/gtkcellrendererpixbuf.c:178
+#: gtk/gtkcellrendererpixbuf.c:179
 msgid "Render detail to pass to the theme engine"
 msgstr "Детаљ исцртавања који се прослеђује мотору теме"
 
@@ -1312,51 +1321,51 @@ msgstr "Вредност са списка"
 msgid "Whether entered values must already be present in the list"
 msgstr "Да ли унете вредности морају већ бити присутне на списку"
 
-#: gtk/gtkcombobox.c:346
+#: gtk/gtkcombobox.c:344
 msgid "ComboBox model"
 msgstr "Модел падајуће листе"
 
-#: gtk/gtkcombobox.c:347
+#: gtk/gtkcombobox.c:345
 msgid "The model for the combo box"
 msgstr "Модел за падајућу листу"
 
-#: gtk/gtkcombobox.c:354
+#: gtk/gtkcombobox.c:352
 msgid "Wrap width"
 msgstr "Ширина за прелом"
 
-#: gtk/gtkcombobox.c:355
+#: gtk/gtkcombobox.c:353
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ширина за прелом при распоређивању ставки у мрежи"
 
-#: gtk/gtkcombobox.c:364
+#: gtk/gtkcombobox.c:362
 msgid "Row span column"
 msgstr "Ред обухвата колону"
 
-#: gtk/gtkcombobox.c:365
+#: gtk/gtkcombobox.c:363
 msgid "TreeModel column containing the row span values"
 msgstr "Модел колоне стабла који садржи вредности обухватања редова"
 
-#: gtk/gtkcombobox.c:374
+#: gtk/gtkcombobox.c:372
 msgid "Column span column"
 msgstr "Колона обухвата колону"
 
-#: gtk/gtkcombobox.c:375
+#: gtk/gtkcombobox.c:373
 msgid "TreeModel column containing the column span values"
 msgstr "Модел колоне стабла који садржи вредности обухватања колона"
 
-#: gtk/gtkcombobox.c:384
+#: gtk/gtkcombobox.c:382
 msgid "Active item"
 msgstr "Активна ставка"
 
-#: gtk/gtkcombobox.c:385
+#: gtk/gtkcombobox.c:383
 msgid "The item which is currently active"
 msgstr "Ставка која је тренутно активна"
 
-#: gtk/gtkcombobox.c:393
+#: gtk/gtkcombobox.c:391
 msgid "ComboBox appareance"
 msgstr "Изглед падајуће листе"
 
-#: gtk/gtkcombobox.c:394
+#: gtk/gtkcombobox.c:392
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Изглед падајуће листе, ако је постављено означава Windows стил."
 
@@ -1656,12 +1665,12 @@ msgid "The type of operation that the file selector is performing"
 msgstr "Врста операције коју обавља избирач датотека"
 
 #: gtk/gtkfilechooser.c:99
-msgid "File System"
-msgstr "Систем датотека"
+msgid "File System Backend"
+msgstr "Машинерија за систем датотека"
 
 #: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr "Објекат система датотека који се користи"
+msgid "Name of file system backend to use"
+msgstr "Име машинерије за систем датотека који ће се користити"
 
 #: gtk/gtkfilechooser.c:105
 msgid "Filter"
@@ -1975,13 +1984,21 @@ msgstr "Врста смештаја"
 msgid "The representation being used for image data"
 msgstr "Начин записа који се користи за податке за слику"
 
-#: gtk/gtkimagemenuitem.c:124
+#: gtk/gtkimagemenuitem.c:137
 msgid "Image widget"
 msgstr "Елемент за слику"
 
-#: gtk/gtkimagemenuitem.c:125
+#: gtk/gtkimagemenuitem.c:138
 msgid "Child widget to appear next to the menu text"
 msgstr "Садржани елемент који се појављује поред текста за мени"
+
+#: gtk/gtkimagemenuitem.c:143
+msgid "Show menu images"
+msgstr "Прикажи слике у менију"
+
+#: gtk/gtkimagemenuitem.c:144
+msgid "Whether images should be shown in menus"
+msgstr "Да ли се приказују слике у менију"
 
 #: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:542
 msgid "Screen"
@@ -2216,7 +2233,8 @@ msgstr "Користи раздвојник"
 #: gtk/gtkmessagedialog.c:126
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
-msgstr "Да ли да постави раздвојник између текста и дугмади у прозорчету са порукама"
+msgstr ""
+"Да ли да постави раздвојник између текста и дугмади у прозорчету са порукама"
 
 #: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
@@ -2750,43 +2768,43 @@ msgstr "Највећа величина"
 msgid "Maximum size of the ruler"
 msgstr "Највећа дозвољена величина лењира"
 
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+#: gtk/gtkscale.c:170 gtk/gtkspinbutton.c:258
 msgid "Digits"
 msgstr "Цифара"
 
-#: gtk/gtkscale.c:157
+#: gtk/gtkscale.c:171
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Број децималних места која ће бити приказана за вредност"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:180
 msgid "Draw Value"
 msgstr "Прикажи вредност"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:181
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Да ли се текућа вредност приказује као текст уз клизач"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:188
 msgid "Value Position"
 msgstr "Место за вредност"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:189
 msgid "The position in which the current value is displayed"
 msgstr "Место на којем се приказује текућа вредност"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:196
 msgid "Slider Length"
 msgstr "Дужина клизача"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:197
 msgid "Length of scale's slider"
 msgstr "Дужина клизача за размерник"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:205
 msgid "Value spacing"
 msgstr "Размак вредности"
 
-#: gtk/gtkscale.c:192
+#: gtk/gtkscale.c:206
 msgid "Space between value text and the slider/trough area"
 msgstr "Размак између текста са вредношћу и површине клизача"
 
@@ -4348,3 +4366,6 @@ msgstr "Стил стања IM-а"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Како исцртати линију стања начина уноса"
+
+#~ msgid "File system object to use"
+#~ msgstr "Објекат система датотека који се користи"
