@@ -75,41 +75,6 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
                                                       guint size,
                                                       GError **error);
 
-
-/* Shared library entry point --> This should be removed when
-   generic_image_load enters gdk-pixbuf-io. */
-static GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
-{
-	size_t length;
-	char membuf[4096];
-	struct wbmp_progressive_state *State;
-
-	GdkPixbuf *pb;
-
-	State = gdk_pixbuf__wbmp_image_begin_load(NULL, NULL, NULL, NULL,
-                                                  error);
-
-        if (State == NULL)
-          return NULL;
-        
-	while (feof(f) == 0) {
-		length = fread(membuf, 1, 4096, f);
-		if (!gdk_pixbuf__wbmp_image_load_increment(State, membuf, length, 
-							   error)) {
-		  gdk_pixbuf__wbmp_image_stop_load (State, NULL);
-		  return NULL;
-		}
-
-	}
-	if (State->pixbuf != NULL)
-		g_object_ref(State->pixbuf);
-
-	pb = State->pixbuf;
-
-	gdk_pixbuf__wbmp_image_stop_load(State, NULL);
-	return pb;
-}
-
 /* 
  * func - called when we have pixmap created (but no image data)
  * user_data - passed as arg 1 to func
@@ -376,7 +341,6 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 void
 gdk_pixbuf__wbmp_fill_vtable (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__wbmp_image_load;
   module->begin_load = gdk_pixbuf__wbmp_image_begin_load;
   module->stop_load = gdk_pixbuf__wbmp_image_stop_load;
   module->load_increment = gdk_pixbuf__wbmp_image_load_increment;

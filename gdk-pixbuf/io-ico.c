@@ -182,56 +182,6 @@ context_free (struct ico_progressive_state *context)
 
 	g_free (context);
 }
-				
-/* Shared library entry point --> Can go when generic_image_load
-   enters gdk-pixbuf-io */
-static GdkPixbuf *
-gdk_pixbuf__ico_image_load(FILE * f, GError **error)
-{
-	guchar membuf [4096];
-	size_t length;
-	struct ico_progressive_state *State;
-
-	GdkPixbuf *pb;
-
-	State = gdk_pixbuf__ico_image_begin_load(NULL, NULL, NULL, NULL, error);
-
-        if (State == NULL)
-		return NULL;
-        
-	while (!feof(f)) {
-		length = fread(membuf, 1, 4096, f);
-		if (ferror (f)) {
-			g_set_error (error,
-				     G_FILE_ERROR,
-				     g_file_error_from_errno (errno),
-				     _("Failure reading ICO: %s"), g_strerror (errno));
-			context_free (State);
-			return NULL;
-		}
-		if (length > 0)
-                        if (!gdk_pixbuf__ico_image_load_increment(State, membuf, length,
-                                                                  error)) {
-				context_free (State);
-                                return NULL;
-			}
-	}
-	if (State->pixbuf != NULL)
-		g_object_ref (State->pixbuf);
-	else {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("ICO file was missing some data (perhaps it was truncated somehow?)"));
-		context_free (State);
-		return NULL;
-	}
-
-	pb = State->pixbuf;
-
-	gdk_pixbuf__ico_image_stop_load(State, NULL);
-	return pb;
-}
 
 static void DecodeHeader(guchar *Data, gint Bytes,
 			 struct ico_progressive_state *State,
@@ -878,7 +828,6 @@ gdk_pixbuf__ico_image_load_increment(gpointer data,
 void
 gdk_pixbuf__ico_fill_vtable (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__ico_image_load;
   module->begin_load = gdk_pixbuf__ico_image_begin_load;
   module->stop_load = gdk_pixbuf__ico_image_stop_load;
   module->load_increment = gdk_pixbuf__ico_image_load_increment;

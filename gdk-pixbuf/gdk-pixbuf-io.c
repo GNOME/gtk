@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "linux" -*- */
 /* GdkPixbuf library - Main loading interface.
  *
  * Copyright (C) 1999 The Free Software Foundation
@@ -552,6 +553,55 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 	return NULL;
 }
 
+
+static void
+prepared_notify (GdkPixbuf *pixbuf, 
+		 GdkPixbufAnimation *anim, 
+		 gpointer user_data)
+{
+	if (pixbuf != NULL)
+		g_object_ref (pixbuf);
+	*((GdkPixbuf **)user_data) = pixbuf;
+}
+
+static GdkPixbuf *
+generic_image_load (GdkPixbufModule *module,
+		    FILE *f,
+		    GError **error)
+{
+	guchar buffer[4096];
+	size_t length;
+	GdkPixbuf *pixbuf = NULL;
+	gpointer context;
+
+	if (module->load != NULL)
+		return (* module->load) (f, error);
+	
+	context = module->begin_load (NULL, prepared_notify, NULL, &pixbuf, error);
+	
+	if (!context)
+		return NULL;
+	
+	while (!feof (f)) {
+		length = fread (buffer, 1, sizeof (buffer), f);
+		if (length > 0)
+			if (!module->load_increment (context, buffer, length, error)) {
+				module->stop_load (context, NULL);
+				if (pixbuf != NULL)
+					g_object_unref (pixbuf);
+				return NULL;
+			}
+	}
+
+	if (!module->stop_load (context, error)) {
+		if (pixbuf != NULL)
+			g_object_unref (pixbuf);
+		return NULL;
+	}
+	
+	return pixbuf;
+}
+
 /**
  * gdk_pixbuf_new_from_file:
  * @filename: Name of file to load.
@@ -612,19 +662,8 @@ gdk_pixbuf_new_from_file (const char *filename,
                         return NULL;
                 }
 
-	if (image_module->load == NULL) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
-                             _("Don't know how to load the image in file '%s'"),
-                             filename);
-                
-		fclose (f);
-		return NULL;
-	}
-
 	fseek (f, 0, SEEK_SET);
-	pixbuf = (* image_module->load) (f, error);
+	pixbuf = generic_image_load (image_module, f, error);
 	fclose (f);
 
         if (pixbuf == NULL && error != NULL && *error == NULL) {

@@ -104,41 +104,6 @@ static gboolean gdk_pixbuf__ras_image_load_increment(gpointer data,
                                                      const guchar * buf, guint size,
                                                      GError **error);
 
-
-
-/* Shared library entry point */
-static GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f, GError **error)
-{
-	guchar *membuf;
-	size_t length;
-	struct ras_progressive_state *State;
-	
-	GdkPixbuf *pb;
-	
-	State = gdk_pixbuf__ras_image_begin_load(NULL, NULL, NULL, NULL, error);
-	
-	membuf = g_malloc(4096);
-	
-	g_assert(membuf != NULL);
-	
-	while (feof(f) == 0) {
-		length = fread(membuf, 1, 4096, f);
-                if (!gdk_pixbuf__ras_image_load_increment(State, membuf, length,
-                                                          error)) {
-                        gdk_pixbuf__ras_image_stop_load (State, NULL);
-                        return NULL;
-                }
-	}
-	g_free(membuf);
-	if (State->pixbuf != NULL)
-		g_object_ref(State->pixbuf);
-
-	pb = State->pixbuf;
-
-	gdk_pixbuf__ras_image_stop_load(State, NULL);
-	return pb;
-}
-
 static gboolean RAS2State(struct rasterfile *RAS,
 			  struct ras_progressive_state *State,
 			  GError **error)
@@ -541,7 +506,6 @@ gdk_pixbuf__ras_image_load_increment(gpointer data,
 void
 gdk_pixbuf__ras_fill_vtable (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__ras_image_load;
   module->begin_load = gdk_pixbuf__ras_image_begin_load;
   module->stop_load = gdk_pixbuf__ras_image_stop_load;
   module->load_increment = gdk_pixbuf__ras_image_load_increment;

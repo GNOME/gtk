@@ -1,5 +1,12 @@
 2002-07-07  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk-pixbuf-io.c (generic_image_load): New function for loading
+	an image from a file either via module->load or incrementally.
+	(prepared_notify): ModulePreparedNotifyFunc for generic_image_load.
+	(gdk_pixbuf_new_from_file): Use generic_image_load.
+	* io-bmp.c, io-ico.c, io-ras.c, io-wbmp.c: Remove trivial
+	implementations of module->load.  (#71266)
+	
 	* io-ico.c (DecodeHeader): Correct computation of image height.
 	(OneLine): Correct update notification.
 

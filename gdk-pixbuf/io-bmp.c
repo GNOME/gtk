@@ -194,45 +194,6 @@ static gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data,
                                                      GError **error);
 
 
-
-/* Shared library entry point --> This should be removed when
-   generic_image_load enters gdk-pixbuf-io. */
-static GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
-{
-	guchar membuf[4096];
-	size_t length;
-	struct bmp_progressive_state *State;
-
-	GdkPixbuf *pb;
-
-	State =
-	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL,
-                                             error);
-
-        if (State == NULL)
-          return NULL;
-
-	while (feof(f) == 0) {
-		length = fread(membuf, 1, sizeof (membuf), f);
-		if (length > 0)
-                  if (!gdk_pixbuf__bmp_image_load_increment(State,
-                                                            membuf,
-                                                            length,
-                                                            error)) {
-                          gdk_pixbuf__bmp_image_stop_load (State, NULL);
-                          return NULL;
-                  }
-
-	}
-	if (State->pixbuf != NULL)
-		g_object_ref(State->pixbuf);
-
-	pb = State->pixbuf;
-
-	gdk_pixbuf__bmp_image_stop_load(State, NULL);
-	return pb;
-}
-
 /* Picks up a 32-bit little-endian integer starting at the specified location.
  * Does it by hand instead of dereferencing a simple (gint *) cast due to
  * alignment constraints many platforms.
@@ -1083,7 +1044,6 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 void
 gdk_pixbuf__bmp_fill_vtable (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__bmp_image_load;
   module->begin_load = gdk_pixbuf__bmp_image_begin_load;
   module->stop_load = gdk_pixbuf__bmp_image_stop_load;
   module->load_increment = gdk_pixbuf__bmp_image_load_increment;
