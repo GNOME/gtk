@@ -1,5 +1,13 @@
 2003-03-13  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
+	WM_MOUSEMOVE, the test whether we have actually moved (and thus
+	shouldn't generate an GDK event) moved after the call to
+	propagate() and translate_mouse_coords(). Otherwise we were
+	testing wrong values. (#108115, Allin Cottrell)
+	(gdk_event_translate): On WM_?BUTTONUP, set current_{x,y} the same
+	way as in WM_?BUTTONDOWN and WM_MOUSEMOVE.
+
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): if a grab cursor
 	is used, must copy the HCURSOR with CopyCursor(), as it is OK to
 	destroy the GdkCursor after calling gdk_pointer_grab(). Set the

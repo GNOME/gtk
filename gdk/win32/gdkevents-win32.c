@@ -2551,7 +2551,7 @@ gdk_event_translate (GdkDisplay *display,
       event->button.x = current_x = (gint16) LOWORD (msg->lParam);
       event->button.y = current_y = (gint16) HIWORD (msg->lParam);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-      event->button.x += xoffset;  /* XXX translate current_x, y too? */
+      event->button.x += xoffset;
       event->button.y += yoffset;
       event->button.x_root = current_x_root = msg->pt.x;
       event->button.y_root = current_y_root = msg->pt.y;
@@ -2605,9 +2605,11 @@ gdk_event_translate (GdkDisplay *display,
 	  event->button.time = _gdk_win32_get_next_tick (msg->time);
 	  if (window != orig_window)
 	    translate_mouse_coords (orig_window, window, msg);
+	  event->button.x = current_x = (gint16) LOWORD (msg->lParam);
+	  event->button.y = current_y = (gint16) HIWORD (msg->lParam);
 	  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-	  event->button.x = (gint16) LOWORD (msg->lParam) + xoffset;
-	  event->button.y = (gint16) HIWORD (msg->lParam) + yoffset;
+	  event->button.x += xoffset;
+	  event->button.y += yoffset;
 	  event->button.x_root = current_x_root = msg->pt.x;
 	  event->button.y_root = current_y_root = msg->pt.y;
 	  event->button.axes = NULL;
@@ -2631,15 +2633,6 @@ gdk_event_translate (GdkDisplay *display,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
       ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
-
-      /* If we haven't moved, don't create any event.
-       * Windows sends WM_MOUSEMOVE messages after button presses
-       * even if the mouse doesn't move. This disturbs gtk.
-       */
-      if (window == current_window
-	  && LOWORD (msg->lParam) == current_x
-	  && HIWORD (msg->lParam) == current_y)
-	break;
 
       /* HB: only process mouse move messages if we own the active window. */
       GetWindowThreadProcessId (GetActiveWindow (), &pidActWin);
@@ -2668,6 +2661,16 @@ gdk_event_translate (GdkDisplay *display,
       event->motion.time = _gdk_win32_get_next_tick (msg->time);
       if (window != orig_window)
 	translate_mouse_coords (orig_window, window, msg);
+
+      /* If we haven't moved, don't create any event.
+       * Windows sends WM_MOUSEMOVE messages after button presses
+       * even if the mouse doesn't move. This disturbs gtk.
+       */
+      if (window == current_window
+	  && LOWORD (msg->lParam) == current_x
+	  && HIWORD (msg->lParam) == current_y)
+	break;
+
       event->motion.x = current_x = (gint16) LOWORD (msg->lParam);
       event->motion.y = current_y = (gint16) HIWORD (msg->lParam);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
