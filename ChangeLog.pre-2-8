@@ -1,3 +1,7 @@
+Sun Jul 26 21:03:54 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.0.5
+
 Sat Jul 25 05:16:04 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_params_get): collect floats as doubles.
