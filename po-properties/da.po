@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-24 12:00+0100\n"
+"POT-Creation-Date: 2004-11-25 15:53+0100\n"
 "PO-Revision-Date: 2004-11-24 12:03+0100\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -2497,7 +2497,7 @@ msgstr "Vinkel"
 
 #: gtk/gtklabel.c:489
 msgid "Angle at which the label is rotated"
-msgstr "Vinkel som etiketten roteres"
+msgstr "Vinkel som etiketten roteres med"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
