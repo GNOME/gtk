@@ -1,16 +1,16 @@
 # Copyright (C) 1999-2002 Free Software Foundation, Inc.
 # Sergey Panov <sipan@mit.edu>, 1999.
-# Valek Filippov <frob@df.ru>, 2000- 2002
-# Dmitry Mastrukov <dmitry@taurussoft.org>, 2002-2003
+# Valek Filippov <frob@df.ru>, 2000-2002
+# Dmitry Mastrukov <dmitry@taurussoft.org>, 2002-2004
 # Sun G11n <gnome_int_l10n@ireland.sun.com>, 2002
 # Andrew W. Nosenko <awn@bcs.zp.ua>, 2003
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.3\n"
+"Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-29 12:15+0300\n"
-"PO-Revision-Date: 2004-01-29 12:19+0300\n"
+"POT-Creation-Date: 2004-02-05 16:46+0300\n"
+"PO-Revision-Date: 2004-02-05 16:51+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1300,30 +1300,26 @@ msgstr "Не удалось преобразовать имя файла"
 msgid "(Empty)"
 msgstr "(Пусто)"
 
-#: gtk/gtkfilesystemunix.c:346 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "произошла ошибка  создания каталога \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:389 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Эта файловая система не поддерживает подсоединение"
 
-#: gtk/gtkfilesystemunix.c:397
+#: gtk/gtkfilesystemunix.c:400
 msgid "Filesystem"
 msgstr "Файловая система"
 
-#: gtk/gtkfilesystemunix.c:416 gtk/gtkfilesystemunix.c:1051
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "произошла ошибка  при получении информации о \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:868 gtk/gtkfilesystemunix.c:881
-msgid "This file system does not support bookmarks"
-msgstr "Эта файловая система не поддерживает закладки"
-
-#: gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Произошёл сбой при сохранении закладки (%s)"
@@ -1489,11 +1485,11 @@ msgstr "(неизвестен)"
 msgid "clear"
 msgstr "очистить"
 
-#: gtk/gtklabel.c:3225
+#: gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Выделить все"
 
-#: gtk/gtklabel.c:3235
+#: gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Методы ввода"
 
@@ -1510,6 +1506,14 @@ msgstr "default:LTR"
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
+
+#: gtk/gtkradiotoolbutton.c:89
+msgid "Group"
+msgstr "Группа"
+
+#: gtk/gtkradiotoolbutton.c:90
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Радио-кнопка, к группе которой принадлежит данная кнопка"
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -1936,6 +1940,9 @@ msgstr "Метод XInput"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не удалось получить информацию о файле \"%s\": %s"
+
+#~ msgid "This file system does not support bookmarks"
+#~ msgstr "Эта файловая система не поддерживает закладки"
 
 #~ msgid "This file system does not support icons"
 #~ msgstr "Эта файловая система не поддерживает значки"
