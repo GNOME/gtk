@@ -295,8 +295,7 @@ typedef char   gchar;
 typedef short  gshort;
 typedef long   glong;
 typedef int    gint;
-typedef unsigned char gboolean; /* Josh says. */
-			/* #gimp says, and common sense says. Where's Josh? */
+typedef char   gboolean;
 
 typedef unsigned char	guchar;
 typedef unsigned short	gushort;
@@ -391,7 +390,7 @@ struct _GString
 
 struct _GArray
 {
-  gpointer *data;
+  gchar *data;
   guint len;
 };
 
@@ -513,6 +512,7 @@ void	    g_hash_table_thaw	 (GHashTable	 *hash_table);
 void	    g_hash_table_foreach (GHashTable	 *hash_table,
 				  GHFunc	  func,
 				  gpointer	  user_data);
+
 
 /* Caches
  */
@@ -745,25 +745,33 @@ void	 g_string_sprintfa  (GString *string,
 			     ...);
 #endif
 
-/* Resizable pointer array.  There used to be a more complicated
- * interface that dealt with arbitrary sizes.  It was found to be
- * too ugly to use.  Add appends appends a pointer.  Remove fills
- * any cleared spot and shortens the array.
- */                                                                           
-#define g_array_index(array,index) (array->data)[index]
+/* Resizable arrays
+ */
+#define g_array_append_val(array,type,val) \
+     g_rarray_append (array, (gpointer) &val, sizeof (type))
+#define g_array_append_vals(array,type,vals,nvals) \
+     g_rarray_append (array, (gpointer) vals, sizeof (type) * nvals)
+#define g_array_prepend_val(array,type,val) \
+     g_rarray_prepend (array, (gpointer) &val, sizeof (type))
+#define g_array_prepend_vals(array,type,vals,nvals) \
+     g_rarray_prepend (array, (gpointer) vals, sizeof (type) * nvals)
+#define g_array_truncate(array,type,length) \
+     g_rarray_truncate (array, length, sizeof (type))
+#define g_array_index(array,type,index) \
+     ((type*) array->data)[index]
 
-GArray* g_array_new	     (void);
-void	g_array_free	     (GArray   *array,
-			      gboolean free_seg);
-void    g_array_set_size     (GArray   *array,
-			      gint      length);
-void    g_array_remove_index (GArray   *array,
-			      gint      index);
-gboolean g_array_remove	     (GArray   *array,
-			      gpointer  data);
-void    g_array_add	     (GArray   *array,
-			      gpointer  data);
-
+GArray* g_array_new	  (gint	     zero_terminated);
+void	g_array_free	  (GArray   *array,
+			   gint	     free_segment);
+GArray* g_rarray_append	  (GArray   *array,
+			   gpointer  data,
+			   gint	     size);
+GArray* g_rarray_prepend  (GArray   *array,
+			   gpointer  data,
+			   gint	     size);
+GArray* g_rarray_truncate (GArray   *array,
+			   gint	     length,
+			   gint	     size);
 
 /* Hash Functions
  */
