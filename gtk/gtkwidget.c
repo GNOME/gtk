@@ -1129,6 +1129,7 @@ gtk_widget_unparent (GtkWidget *widget)
   GtkWidget *toplevel;
   GtkWidget *child;
   GtkWidget *old_parent;
+  GSList *tmp_list, *prev_list;
   
   g_return_if_fail (widget != NULL);
   if (widget->parent == NULL)
@@ -1149,11 +1150,42 @@ gtk_widget_unparent (GtkWidget *widget)
 	gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
     }
 
-  if (GTK_WIDGET_RESIZE_NEEDED (widget))
+  /* Remove the widget and all its children from toplevel->resize_widgets 
+   */
+
+  /* Three ways to make this prettier:
+   *   Write a g_slist_conditional_remove (GSList, gboolean (*)(gpointer))
+   *   Change resize_widgets to a GList
+   *   Just bite the bullet and use g_slist_remove
+   */
+  tmp_list = GTK_CONTAINER (toplevel)->resize_widgets;
+  prev_list = NULL;
+  while (tmp_list)
     {
-      GTK_CONTAINER (toplevel)->resize_widgets =
-	g_slist_remove (GTK_CONTAINER (toplevel)->resize_widgets, widget);
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
+      GSList *tmp = tmp_list;
+      GtkWidget *child = (GtkWidget *)tmp->data;
+      GtkWidget *parent = child;
+
+      tmp_list = tmp_list->next;
+
+      while (parent && (parent != widget))
+	parent = parent->parent;
+
+      if (parent == widget)
+	{
+	  GTK_PRIVATE_UNSET_FLAG (child, GTK_RESIZE_NEEDED);
+
+	  if (prev_list)
+	    prev_list->next = tmp_list;
+	  else
+	    GTK_CONTAINER (toplevel)->resize_widgets = tmp_list;
+
+	  tmp->next = NULL;
+
+	  g_slist_free_1 (tmp);
+	}
+      else
+	prev_list = tmp;
     }
   
   if (widget->window &&

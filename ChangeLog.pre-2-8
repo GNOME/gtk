@@ -1,3 +1,10 @@
+Wed Apr  8 17:27:40 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Make sure
+	widgets get removed from the resize queue before the
+	connection between them and the resize queue is broken
+	by unparenting their parent.
+
 1998-04-08  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gdk/gdk.c (gdk_event_translate): During drag and drop, set the
