@@ -1,3 +1,12 @@
+Thu Nov 16 16:11:39 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (EXTRA_DIST): Do not, in any circumstances,
+	distribute gtk.immodules.
+
+	* gtk/Makefile.am (install-data-local): Don't install the
+	gtk.immodules file created for the uninstalled modules;
+	instead run gtk-query-immodules after install
+
 Wed Nov 15 21:51:31 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/Makefile.am (im_xim_la_LDFLAGS): Point

@@ -508,14 +508,12 @@ endif
 EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
 
 
-gtkconfdir = $(sysconfdir)/gtk-2.0
-gtkconf_DATA = gtk.immodules
-
 # We create a dummy theme for the default GTK+ theme
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
 	echo "# Empty gtkrc for default theme" > $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
-	$(mkinstalldirs) $(DESTDIR)$(gtkconfdir)
+	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0
+	$(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
@@ -623,6 +621,7 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	makefile.mingw.in	\
 	makefile.msc		\
 	makefile.msc.in		\
-	$(gtkconf_DATA)		\
 @STRIP_END@
+
+install-data-local:
 
