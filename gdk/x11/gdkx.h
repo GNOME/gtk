@@ -186,7 +186,7 @@ gpointer      gdk_xid_table_lookup     (XID              xid);
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
 /* returns TRUE if we support the given WM spec feature */
-gboolean      gdk_wmspec_supported     (GdkAtom property);
+gboolean      gdk_net_wm_supports      (GdkAtom property);
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))

@@ -278,10 +278,15 @@ void          gdk_window_scroll                (GdkWindow *window,
  *  The shape_mask can be the mask
  *  from gdk_pixmap_create_from_xpm.   Stefan Wille
  */
-void gdk_window_shape_combine_mask (GdkWindow	    *window,
-				    GdkBitmap	    *shape_mask,
-				    gint	     offset_x,
-				    gint	     offset_y);
+void gdk_window_shape_combine_mask  (GdkWindow	    *window,
+                                     GdkBitmap	    *shape_mask,
+                                     gint	     offset_x,
+                                     gint	     offset_y);
+void gdk_window_shape_combine_region (GdkWindow	    *window,
+                                      GdkRegion     *shape_region,
+                                      gint	     offset_x,
+                                      gint	     offset_y);
+
 /*
  * This routine allows you to quickly take the shapes of all the child windows
  * of a window and use their shapes as the shape mask for this window - useful

@@ -40,8 +40,11 @@ GdkRegion *gdk_region_copy      (GdkRegion    *region);
 GdkRegion *gdk_region_rectangle (GdkRectangle *rectangle);
 void       gdk_region_destroy   (GdkRegion    *region);
 
-void	       gdk_region_get_clipbox (GdkRegion    *region,
-				       GdkRectangle *rectangle);
+void	       gdk_region_get_clipbox    (GdkRegion     *region,
+                                          GdkRectangle  *rectangle);
+void           gdk_region_get_rectangles (GdkRegion     *region,
+                                          GdkRectangle **rectangles,
+                                          gint          *n_rectangles);
 
 gboolean       gdk_region_empty    (GdkRegion    *region);
 gboolean       gdk_region_equal    (GdkRegion    *region1,

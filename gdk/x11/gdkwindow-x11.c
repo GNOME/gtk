@@ -1066,7 +1066,7 @@ gdk_window_focus (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
-  if (gdk_wmspec_supported (gdk_atom_intern ("_NET_ACTIVE_WINDOW", FALSE)))
+  if (gdk_net_wm_supports (gdk_atom_intern ("_NET_ACTIVE_WINDOW", FALSE)))
     {
       XEvent xev;
 
@@ -1831,6 +1831,8 @@ gdk_window_have_shape_ext (void)
   return (have_shape == YES);
 }
 
+#define WARN_SHAPE_TOO_BIG() g_warning ("GdkWindow is too large to allow the use of shape masks or shape regions.")
+
 /*
  * This needs the X11 shape extension.
  * If not available, shaped windows will look
@@ -1842,6 +1844,7 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       gint x, gint y)
 {
   Pixmap pixmap;
+  gint xoffset, yoffset;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1849,6 +1852,14 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 #ifdef HAVE_SHAPE_EXT
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+
+  if (xoffset != 0 || yoffset != 0)
+    {
+      WARN_SHAPE_TOO_BIG ();
+      return;
+    }
   
   if (gdk_window_have_shape_ext ())
     {
@@ -1872,6 +1883,58 @@ gdk_window_shape_combine_mask (GdkWindow *window,
     }
 #endif /* HAVE_SHAPE_EXT */
 }
+
+void
+gdk_window_shape_combine_region (GdkWindow *window,
+                                 GdkRegion *shape_region,
+                                 gint       offset_x,
+                                 gint       offset_y)
+{
+  gint xoffset, yoffset;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+#ifdef HAVE_SHAPE_EXT
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+
+  if (xoffset != 0 || yoffset != 0)
+    {
+      WARN_SHAPE_TOO_BIG ();
+      return;
+    }
+  
+  if (shape_region == NULL)
+    {
+      /* Use NULL mask to unset the shape */
+      gdk_window_shape_combine_mask (window, NULL, 0, 0);
+      return;
+    }
+  
+  if (gdk_window_have_shape_ext ())
+    {
+      gint n_rects = 0;
+      XRectangle *xrects = NULL;
+
+      _gdk_region_get_xrectangles (shape_region,
+                                   0, 0,
+                                   &xrects, &n_rects);
+      
+      XShapeCombineRectangles (GDK_WINDOW_XDISPLAY (window),
+                               GDK_WINDOW_XID (window),
+                               ShapeBounding,
+                               offset_x, offset_y,
+                               xrects, n_rects,
+                               ShapeSet,
+                               YXBanded);
+
+      g_free (xrects);
+    }
+#endif /* HAVE_SHAPE_EXT */
+}
+
 
 void
 gdk_window_set_override_redirect (GdkWindow *window,

@@ -77,6 +77,8 @@ struct _GtkEntry
   guint        need_im_reset : 1;
 
   guint        has_frame : 1;
+
+  guint        activates_default : 1;
   
   guint   button;
   guint   timer;
@@ -146,6 +148,9 @@ gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 gint           max);
+void       gtk_entry_set_activates_default      (GtkEntry      *entry,
+                                                 gboolean       setting);
+gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);
 
 /* Somewhat more convenient than the GtkEditable generic functions
  */

@@ -1,3 +1,33 @@
+2001-03-02  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_flush): use
+	_gdk_region_get_xrectangles()
+
+	* gdk/x11/gdkmain-x11.c (_gdk_region_get_xrectangles): new function
+
+	* gtk/testgtk.c (create_shapes): add test for shape_combine_region
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_shape_combine_region): new
+	function, contributed by Ron Steinke	
+
+	* gdk/x11/gdkevents-x11.c (gdk_wmspec_supported): rename
+	gdk_net_wm_supports
+
+	* gdk/gdkregion-generic.c (gdk_region_get_rectangles): 
+	New function, contributed by Ron Steinke
+
+	* gtk/gtkentry.c (gtk_entry_get_layout_offsets): New function, 
+	used to line up the text in the entry when using the entry for
+	editable sheet cell hacks
+
+	* gtk/testgtk.c (create_entry): test the activate_default setting
+	on GtkEntry
+
+	* gtk/gtkentry.c (gtk_entry_set_activates_default): New function to 
+	cause the entry to activate the default button for a dialog when 
+	activated
+	(gtk_entry_get_activates_default): new function
+
 Wed Feb 28 19:10:43 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (real_remove_row): Patch from ChiDeok

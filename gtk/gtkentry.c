@@ -41,6 +41,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#include "gtkwindow.h"
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
@@ -73,7 +74,8 @@ enum {
   PROP_EDITABLE,
   PROP_MAX_LENGTH,
   PROP_VISIBILITY,
-  PROP_INVISIBLE_CHAR
+  PROP_INVISIBLE_CHAR,
+  PROP_ACTIVATES_DEFAULT
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -205,6 +207,7 @@ static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
 static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
+static void gtk_entry_real_activate      (GtkEntry        *entry);
 
 /* IM Context Callbacks
  */
@@ -355,7 +358,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->copy_clipboard = gtk_entry_copy_clipboard;
   class->paste_clipboard = gtk_entry_paste_clipboard;
   class->toggle_overwrite = gtk_entry_toggle_overwrite;
-
+  class->activate = gtk_entry_real_activate;
+  
   g_object_class_install_property (gobject_class,
                                    PROP_TEXT_POSITION,
                                    g_param_spec_int ("text_position",
@@ -401,6 +405,14 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      '*',
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVATES_DEFAULT,
+                                   g_param_spec_boolean ("activates_default",
+							 _("Activates default"),
+							 _("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed."),
+                                                         FALSE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
   signals[INSERT_TEXT] =
     gtk_signal_new ("insert_text",
 		    GTK_RUN_LAST,
@@ -675,6 +687,10 @@ static void   gtk_entry_set_property (GObject         *object,
       gtk_entry_set_invisible_char (entry, g_value_get_int (value));
       break;
 
+    case PROP_ACTIVATES_DEFAULT:
+      gtk_entry_set_activates_default (entry, g_value_get_boolean (value));
+      break;
+      
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -707,6 +723,9 @@ static void   gtk_entry_get_property (GObject         *object,
       break;
     case PROP_INVISIBLE_CHAR:
       g_value_set_int (value, entry->invisible_char);
+      break;
+    case PROP_ACTIVATES_DEFAULT:
+      g_value_set_boolean (value, entry->activates_default);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -923,12 +942,94 @@ gtk_entry_size_request (GtkWidget      *widget,
 }
 
 static void
+get_borders (GtkEntry *entry,
+             gint     *xborder,
+             gint     *yborder)
+{
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (entry);
+  
+  if (entry->has_frame)
+    {
+      if (xborder)
+        *xborder = widget->style->xthickness;
+      if (yborder)
+        *yborder = widget->style->ythickness;
+    }
+  else
+    {
+      /* 1 pixel for focus rect */
+      if (xborder)
+        *xborder = 1;
+      if (yborder)
+        *yborder = 1;
+    }
+}
+
+static void
+get_text_area_size (GtkEntry *entry,
+                    gint     *x,
+                    gint     *y,
+                    gint     *width,
+                    gint     *height)
+{
+  gint xborder, yborder;
+  GtkRequisition requisition;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (entry);
+  
+  gtk_widget_get_child_requisition (widget, &requisition);
+
+  get_borders (entry, &xborder, &yborder);
+
+  if (x)
+    *x = xborder;
+
+  if (y)
+    *y = yborder;
+  
+  if (width)
+    *width = GTK_WIDGET (entry)->allocation.width - xborder * 2;
+
+  if (height)
+    *height = requisition.height - yborder * 2;
+}
+
+static void
+get_widget_window_size (GtkEntry *entry,
+                        gint     *x,
+                        gint     *y,
+                        gint     *width,
+                        gint     *height)
+{
+  GtkRequisition requisition;
+  GtkWidget *widget;  
+
+  widget = GTK_WIDGET (entry);
+      
+  gtk_widget_get_child_requisition (widget, &requisition);
+
+  if (x)
+    *x = widget->allocation.x;
+
+  if (y)
+    *y = widget->allocation.y + (widget->allocation.height - requisition.height) / 2;
+
+  if (width)
+    *width = widget->allocation.width;
+
+  if (height)
+    *height = requisition.height;
+}
+
+static void
 gtk_entry_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
   GtkEntry *entry;
   GtkEditable *editable;
-  gint xborder, yborder;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
@@ -937,18 +1038,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
-
-  if (entry->has_frame)
-    {
-      xborder = widget->style->xthickness;
-      yborder = widget->style->ythickness;
-    }
-  else
-    {
-      /* 1 pixel for focus rect */
-      xborder = 1;
-      yborder = 1;
-    }
   
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -956,18 +1045,17 @@ gtk_entry_size_allocate (GtkWidget     *widget,
        * backwards compatibility reasons) the realization here to
        * be affected by the usize of the entry, if set
        */
-      GtkRequisition requisition;
-      gtk_widget_get_child_requisition (widget, &requisition);
-  
+      gint x, y, width, height;
+
+      get_widget_window_size (entry, &x, &y, &width, &height);
+      
       gdk_window_move_resize (widget->window,
-			      allocation->x,
-			      allocation->y + (allocation->height - requisition.height) / 2,
-			      allocation->width, requisition.height);
+                              x, y, width, height);   
+
+      get_text_area_size (entry, &x, &y, &width, &height);
+      
       gdk_window_move_resize (entry->text_area,
-                              xborder,
-                              yborder,
-			      allocation->width - xborder * 2,
-			      requisition.height - yborder * 2);
+                              x, y, width, height);
 
       gtk_entry_recompute (entry);
     }
@@ -1777,6 +1865,24 @@ gtk_entry_toggle_overwrite (GtkEntry *entry)
   entry->overwrite_mode = !entry->overwrite_mode;
 }
 
+static void
+gtk_entry_real_activate (GtkEntry *entry)
+{
+  GtkWindow *window;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (entry);
+
+  if (entry->activates_default)
+    {
+      window = (GtkWindow *) gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
+      
+      if (window &&
+          window->default_widget != widget)
+        gtk_window_activate_default (window);
+    }
+}
+
 /* IM Context Callbacks
  */
 
@@ -1987,6 +2093,47 @@ gtk_entry_get_layout (GtkEntry *entry,
 }
 
 static void
+get_layout_position (GtkEntry *entry,
+                     gint     *x,
+                     gint     *y)
+{
+  PangoLayout *layout;
+  PangoRectangle logical_rect;
+  gint area_width, area_height;
+  gint y_pos;
+  PangoLayoutLine *line;
+  
+  layout = gtk_entry_get_layout (entry, TRUE);
+
+  get_text_area_size (entry, NULL, NULL, &area_width, &area_height);      
+      
+  area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
+  
+  line = pango_layout_get_lines (layout)->data;
+  pango_layout_line_get_extents (line, NULL, &logical_rect);
+  
+  /* Align primarily for locale's ascent/descent */
+  y_pos = ((area_height - entry->ascent - entry->descent) / 2 + 
+           entry->ascent + logical_rect.y);
+  
+  /* Now see if we need to adjust to fit in actual drawn string */
+  if (logical_rect.height > area_height)
+    y_pos = (area_height - logical_rect.height) / 2;
+  else if (y_pos < 0)
+    y_pos = 0;
+  else if (y_pos + logical_rect.height > area_height)
+    y_pos = area_height - logical_rect.height;
+  
+  y_pos = INNER_BORDER + y_pos / PANGO_SCALE;
+
+  if (x)
+    *x = INNER_BORDER - entry->scroll_offset;
+
+  if (y)
+    *y = y_pos;
+}
+
+static void
 gtk_entry_draw_text (GtkEntry *entry)
 {
   GtkWidget *widget;
@@ -2001,59 +2148,46 @@ gtk_entry_draw_text (GtkEntry *entry)
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
-      PangoRectangle logical_rect;
       gint area_width, area_height;
+      gint x, y;
       gint start_pos, end_pos;
-      gint y_pos;
-
-      gdk_window_get_size (entry->text_area, &area_width, &area_height);
       
       widget = GTK_WIDGET (entry);
+      
+      get_layout_position (entry, &x, &y);
+
+      get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
 
       gtk_paint_flat_box (widget->style, entry->text_area, 
 			  GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
 			  NULL, widget, "entry_bg", 
 			  0, 0, area_width, area_height);
-      
-      area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
 
-      line = pango_layout_get_lines (layout)->data;
-      pango_layout_line_get_extents (line, NULL, &logical_rect);
-
-      /* Align primarily for locale's ascent/descent */
-      y_pos = ((area_height - entry->ascent - entry->descent) / 2 + 
-	       entry->ascent + logical_rect.y);
-
-      /* Now see if we need to adjust to fit in actual drawn string */
-      if (logical_rect.height > area_height)
-	y_pos = (area_height - logical_rect.height) / 2;
-      else if (y_pos < 0)
-	y_pos = 0;
-      else if (y_pos + logical_rect.height > area_height)
-	y_pos = area_height - logical_rect.height;
-      
-      y_pos = INNER_BORDER + y_pos / PANGO_SCALE;
-
-      gdk_draw_layout (entry->text_area, widget->style->text_gc [widget->state], 
-		       INNER_BORDER - entry->scroll_offset, y_pos,
+      gdk_draw_layout (entry->text_area, widget->style->text_gc [widget->state],       
+                       x, y,
 		       layout);
-
+      
       if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
 	{
 	  gint *ranges;
 	  gint n_ranges, i;
+          PangoRectangle logical_rect;
 	  gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
 	  gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
 	  GdkRegion *clip_region = gdk_region_new ();
 
+          line = pango_layout_get_lines (layout)->data;
+          
 	  pango_layout_line_get_x_ranges (line, start_index, end_index, &ranges, &n_ranges);
 
+          pango_layout_get_extents (layout, NULL, &logical_rect);
+          
 	  for (i=0; i < n_ranges; i++)
 	    {
 	      GdkRectangle rect;
 
 	      rect.x = INNER_BORDER - entry->scroll_offset + ranges[2*i] / PANGO_SCALE;
-	      rect.y = y_pos;
+	      rect.y = y;
 	      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
 	      rect.height = logical_rect.height / PANGO_SCALE;
 	      
@@ -2065,7 +2199,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 
 	  gdk_gc_set_clip_region (widget->style->fg_gc [GTK_STATE_SELECTED], clip_region);
 	  gdk_draw_layout (entry->text_area, widget->style->fg_gc [GTK_STATE_SELECTED], 
-			   INNER_BORDER - entry->scroll_offset, y_pos,
+			   x, y,
 			   layout);
 	  gdk_gc_set_clip_region (widget->style->fg_gc [GTK_STATE_SELECTED], NULL);
 	  
@@ -2705,6 +2839,51 @@ gtk_entry_set_max_length (GtkEntry     *entry,
 }
 
 /**
+ * gtk_entry_set_activates_default:
+ * @entry: a #GtkEntry
+ * @setting: %TRUE to activate window's default widget on Enter keypress
+ *
+ * If @setting is %TRUE, pressing Enter in the @entry will activate the default
+ * widget for the window containing the entry. This usually means that
+ * the dialog box containing the entry will be closed, since the default
+ * widget is usually one of the dialog buttons.
+ *
+ * (For experts: if @setting is %TRUE, the entry calls
+ * gtk_window_activate_default() on the window containing the entry, in
+ * the default handler for the "activate" signal.)
+ * 
+ **/
+void
+gtk_entry_set_activates_default (GtkEntry *entry,
+                                 gboolean  setting)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  setting = setting != FALSE;
+
+  if (setting != entry->activates_default)
+    {
+      entry->activates_default = setting;
+      g_object_notify (G_OBJECT (entry), "activates_default");
+    }
+}
+
+/**
+ * gtk_entry_get_activates_default:
+ * @entry: a #GtkEntry
+ * 
+ * Retrieves the value set by gtk_entry_set_activates_default().
+ * 
+ * Return value: %TRUE if the entry will activate the default widget
+ **/
+gboolean
+gtk_entry_get_activates_default (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return entry->activates_default;
+}
+
+/**
  * gtk_entry_set_has_frame:
  * @entry: a #GtkEntry
  * @setting: new value
@@ -2729,7 +2908,7 @@ gtk_entry_set_has_frame (GtkEntry *entry,
  * gtk_entry_get_has_frame:
  * @entry: a #GtkEntry
  * 
- * 
+ * Gets the value set by gtk_entry_set_has_frame().
  * 
  * Return value: whether the entry has a beveled frame
  **/
@@ -2739,6 +2918,40 @@ gtk_entry_get_has_frame (GtkEntry *entry)
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
   return entry->has_frame;
+}
+
+/**
+ * gtk_entry_get_layout_offsets:
+ * @entry: a #GtkEntry
+ * @x: location to store X coordinate of layout
+ * @y: location to store Y coordinate of layout
+ *
+ * Obtains the position of the #PangoLayout used to render text
+ * in the entry, in widget coordinates. Useful if you want to line
+ * up the text in an entry with some other text, e.g. when using the
+ * entry to implement editable cells in a sheet widget.
+ * 
+ **/
+void
+gtk_entry_get_layout_offsets (GtkEntry *entry,
+                              gint     *x,
+                              gint     *y)
+{
+  gint text_area_x, text_area_y;
+  
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  /* this gets coords relative to text area */
+  get_layout_position (entry, x, y);
+
+  /* convert to widget coords */
+  get_text_area_size (entry, &text_area_x, &text_area_y, NULL, NULL);
+  
+  if (x)
+    *x += text_area_x;
+
+  if (y)
+    *y += text_area_y;
 }
 
 /* Quick hack of a popup menu

@@ -186,6 +186,42 @@ gdk_region_get_clipbox (GdkRegion *r, GdkRectangle *rect)
   rect->height = r->extents.y2 - r->extents.y1;
 }
 
+
+/**
+ * gdk_region_get_rectangles:
+ * @region: a #GdkRegion
+ * @rectangles: return location for an array of rectangles
+ * @n_rectangles: length of returned array
+ *
+ * Obtains the area covered by the region as a list of rectangles.
+ * The array returned in @rectangles must be freed with g_free().
+ * 
+ **/
+void
+gdk_region_get_rectangles (GdkRegion     *region,
+                           GdkRectangle **rectangles,
+                           gint          *n_rectangles)
+{
+  gint i;
+  
+  g_return_if_fail (region != NULL);
+  g_return_if_fail (rectangles != NULL);
+  g_return_if_fail (n_rectangles != NULL);
+  
+  *n_rectangles = region->numRects;
+  *rectangles = g_new (GdkRectangle, region->numRects);
+
+  for (i = 0; i < region->numRects; i++)
+    {
+      GdkRegionBox rect;
+      rect = region->rects[i];
+      (*rectangles)[i].x = rect.x1;
+      (*rectangles)[i].y = rect.y1;
+      (*rectangles)[i].width = rect.x2 - rect.x1;
+      (*rectangles)[i].height = rect.y2 - rect.y1;
+    }
+}
+
 void
 gdk_region_union_with_rect (GdkRegion    *region,
 			    GdkRectangle *rect)

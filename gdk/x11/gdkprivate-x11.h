@@ -86,6 +86,12 @@ void _gdk_window_process_expose    (GdkWindow     *window,
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
 
+void     _gdk_region_get_xrectangles       (GdkRegion            *region,
+                                            gint                  x_offset,
+                                            gint                  y_offset,
+                                            XRectangle          **rects,
+                                            gint                 *n_rects);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
 extern Atom		 gdk_wm_delete_window;

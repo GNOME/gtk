@@ -53,6 +53,7 @@
 
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
+#include "gdkregion-generic.h"
 #include "gdkinputprivate.h"
 
 #include <pango/pangox.h>
@@ -736,4 +737,27 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   gdk_error_warnings = old_warnings;
   
   return result && !gdk_error_code;
+}
+
+void
+_gdk_region_get_xrectangles (GdkRegion   *region,
+                             gint         x_offset,
+                             gint         y_offset,
+                             XRectangle **rects,
+                             gint        *n_rects)
+{
+  XRectangle *rectangles = g_new (XRectangle, region->numRects);
+  GdkRegionBox *boxes = region->rects;
+  gint i;
+  
+  for (i = 0; i < region->numRects; i++)
+    {
+      rectangles[i].x = CLAMP (boxes[i].x1 + x_offset, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].y = CLAMP (boxes[i].y1 + y_offset, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].width = CLAMP (boxes[i].x2 + x_offset, G_MINSHORT, G_MAXSHORT) - rectangles[i].x;
+      rectangles[i].height = CLAMP (boxes[i].y2 + y_offset, G_MINSHORT, G_MAXSHORT) - rectangles[i].y;
+    }
+
+  *rects = rectangles;
+  *n_rects = region->numRects;
 }

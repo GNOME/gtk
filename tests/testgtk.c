@@ -3429,8 +3429,8 @@ static void
 entry_toggle_visibility (GtkWidget *checkbutton,
 			GtkWidget *entry)
 {
-   gtk_entry_set_visibility(GTK_ENTRY(entry),
-                            GTK_TOGGLE_BUTTON(checkbutton)->active);
+   gtk_entry_set_visibility (GTK_ENTRY (entry),
+                             GTK_TOGGLE_BUTTON (checkbutton)->active);
 }
 
 static void
@@ -3443,6 +3443,15 @@ entry_toggle_invisible_char (GtkWidget *checkbutton,
     gtk_entry_set_invisible_char (GTK_ENTRY (entry), '*');
 }
 
+
+static void
+entry_toggle_activate_default (GtkWidget *checkbutton,
+                               GtkWidget *entry)
+{
+   gtk_entry_set_activates_default (GTK_ENTRY (entry),
+                                    GTK_TOGGLE_BUTTON (checkbutton)->active);
+}
+
 static void
 create_entry (void)
 {
@@ -3452,6 +3461,7 @@ create_entry (void)
   GtkWidget *editable_check;
   GtkWidget *sensitive_check;
   GtkWidget *invisible_char_check;
+  GtkWidget *activate_check;
   GtkWidget *entry, *cb;
   GtkWidget *button;
   GtkWidget *separator;
@@ -3525,6 +3535,13 @@ create_entry (void)
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sensitive_check), TRUE);
       gtk_widget_show (sensitive_check);
 
+      activate_check = gtk_check_button_new_with_label ("Activates default");
+      gtk_box_pack_start (GTK_BOX (box2), activate_check, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT (activate_check), "toggled",
+			  GTK_SIGNAL_FUNC (entry_toggle_activate_default), entry);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (activate_check), FALSE);
+      gtk_widget_show (activate_check);
+      
       invisible_char_check = gtk_check_button_new_with_label("invisible_char = 0");
       gtk_box_pack_start (GTK_BOX (box2), invisible_char_check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(invisible_char_check), "toggled",
@@ -3541,7 +3558,6 @@ create_entry (void)
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
@@ -7538,7 +7554,8 @@ create_shapes (void)
   static GtkWidget *modeller = NULL;
   static GtkWidget *sheets = NULL;
   static GtkWidget *rings = NULL;
-
+  static GtkWidget *with_region = NULL;
+  
   if (!(file_exists ("Modeller.xpm") &&
 	file_exists ("FilesQueue.xpm") &&
 	file_exists ("3DRings.xpm")))
@@ -7581,6 +7598,48 @@ create_shapes (void)
     }
   else
     gtk_widget_destroy (rings);
+
+  if (!with_region)
+    {
+      GdkRegion *region;
+      gint x, y;
+      
+      with_region = shape_create_icon ("3DRings.xpm",
+                                       460, 270, 25,25, GTK_WINDOW_TOPLEVEL);
+
+      gtk_signal_connect (GTK_OBJECT (with_region), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &with_region);
+
+      /* reset shape from mask to a region */
+      x = 0;
+      y = 0;
+      region = gdk_region_new ();
+
+      while (x < 460)
+        {
+          while (y < 270)
+            {
+              GdkRectangle rect;
+              rect.x = x;
+              rect.y = y;
+              rect.width = 10;
+              rect.height = 10;
+
+              gdk_region_union_with_rect (region, &rect);
+              
+              y += 20;
+            }
+          y = 0;
+          x += 20;
+        }
+
+      gdk_window_shape_combine_region (with_region->window,
+                                       region,
+                                       0, 0);
+    }
+  else
+    gtk_widget_destroy (with_region);
 }
 
 /*

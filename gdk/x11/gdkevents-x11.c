@@ -1756,7 +1756,7 @@ gdk_x11_get_server_time (GdkWindow *window)
 
 
 gboolean
-gdk_wmspec_supported (GdkAtom property)
+gdk_net_wm_supports (GdkAtom property)
 {
   static GdkAtom wmspec_check_atom = 0;
   static GdkAtom wmspec_supported_atom = 0;
@@ -1840,7 +1840,7 @@ gdk_wmspec_supported (GdkAtom property)
   XFree (xwindow);
   
   /* since wmspec_check_window != None this isn't infinite. ;-) */
-  return gdk_wmspec_supported (property);
+  return gdk_net_wm_supports (property);
 }
 
 

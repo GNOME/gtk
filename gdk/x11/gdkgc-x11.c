@@ -190,21 +190,19 @@ _gdk_x11_gc_flush (GdkGC *gc)
 			gc->clip_x_origin, gc->clip_y_origin);
       else
 	{
-	  XRectangle *rectangles = g_new (XRectangle, private->clip_region->numRects);
-	  GdkRegionBox *boxes = private->clip_region->rects;
-	  int i;
+	  XRectangle *rectangles;
+          gint n_rects;
 
-	  for (i=0; i<private->clip_region->numRects; i++)
-	    {
-	      rectangles[i].x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
-	      rectangles[i].y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
-	      rectangles[i].width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rectangles[i].x;
-	      rectangles[i].height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rectangles[i].y;
-	    }
+          _gdk_region_get_xrectangles (private->clip_region,
+                                       gc->clip_x_origin,
+                                       gc->clip_y_origin,
+                                       &rectangles,
+                                       &n_rects);
 	  
-	  XSetClipRectangles(GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), 0, 0, rectangles,
-			     private->clip_region->numRects, YXBanded);
-
+	  XSetClipRectangles (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), 0, 0,
+                              rectangles,
+                              n_rects, YXBanded);
+          
 	  g_free (rectangles);
 	}
     }
