@@ -16,74 +16,74 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:703
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "'%s' §¸¡ôÒ ¾¢Èì¸ ÓÊÂÅ¢ø¨Ä: %s"
+msgstr "'%s' கோப்பு திறக்க முடியவில்லை: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:157
 #: gdk-pixbuf/gdk-pixbuf-io.c:713
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "'%s' ¯ÕÅì §¸¡ôÀ¢ø ¾Ã× ²Ðõ ¸¢¨¼Â¡Ð"
+msgstr "'%s' உருவக் கோப்பில் தரவு ஏதும் கிடையாது"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:197
 #: gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "'%s' ¯ÕÅì §¸¡ô¨À ²üÈ ÓÊÂÅ¢ø¨Ä: ¸¡Ã½õ ¦¾Ã¢Â¡Ð, °ÆÄ¡ì¸Àð¼ ¯ÕÅì §¸¡ôÀ¡¸ ­Õì¸Ä¡õ"
+msgstr "'%s' உருவக் கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, ஊழலாக்கபட்ட உருவக் கோப்பாக இருக்கலாம்"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:225
 #, c-format
 msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
-msgstr "'%s' «¨ºçð¼ §¸¡ô¨À ²üÈ ÓÊÂÅ¢ø¨Ä: ¸¡Ã½õ ¦¾Ã¢Â¡Ð, °ÆÄ¡ì¸Àð¼ «¨ºçð¼ì §¸¡ôÀ¡¸ ­Õì¸Ä¡õ"
+msgstr "'%s' அசைவூட்ட கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, ஊழலாக்கபட்ட அசைவூட்டக் கோப்பாக இருக்கலாம்"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "¯ÕÅõ-²üÚõ ÜÚ¨Å ²üÈ ÓÊÂÅ¢ø¨Ä: %s: %s"
+msgstr "உருவம்-ஏற்றும் கூறுவை ஏற்ற முடியவில்லை: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:392
 #, c-format
 msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
-msgstr "¯ÕÅõ-²üÚõ ÜÚ %s ºÃ¢Â¡É ­¨¼Ó¸ò¨¾ ²üÚÁ¾¢ ¦ºöÅ¾¢ø¨Ä; ­Ð §ÅÕ ´Õ GTK À¾¢ôÒì¸¡¸ ­Õì¸ì ÜÎõ?"
+msgstr "உருவம்-ஏற்றும் கூறு %s சரியான இடைமுகத்தை ஏற்றுமதி செய்வதில்லை; இது வேரு ஒரு GTK பதிப்புக்காக இருக்கக் கூடும்?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:531
 #: gdk-pixbuf/gdk-pixbuf-io.c:579
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "'%s' ¯ÕÅ Å¨¸ìÌ ¬¾ÃÅÇ¢ôÒ ¸¢¨¼Â¡Ð"
+msgstr "'%s' உருவ வகைக்கு ஆதரவளிப்பு கிடையாது"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:611
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "'%s' ¯ÕÅì §¸¡ôÀ¢ý Å¨¸¨Â ¯½Ã ÓÊÂÅ¢ø¨Ä"
+msgstr "'%s' உருவக் கோப்பின் வகையை உணர முடியவில்லை"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:617
 msgid "Unrecognized image file format"
-msgstr "¯½ÃÓÊÂ¡¾ ¯ÕÅì §¸¡ôÒ Å¨¸"
+msgstr "உணரமுடியாத உருவக் கோப்பு வகை"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:758
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "'%s' ¯ÕÅ §¸¡ô¨À ²üÈ ÓÊÂÅ¢ø¨Ä: %s"
+msgstr "'%s' உருவ கோப்பை ஏற்ற முடியவில்லை: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:866
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "­ó¾ gdk-pixbuf «¨ÁôÀ¢ø, ­ó¾ ¯ÕÅ Å¨¸Â¢ø §ºÁ¢ôÀ¾üÌ ¬¾ÃÅ¢ø¨Ä: %s"
+msgstr "இந்த gdk-pixbuf அமைப்பில், இந்த உருவ வகையில் சேமிப்பதற்கு ஆதரவில்லை: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:971
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr "'%s' §¸¡ô¨À ±ØÐÅ¾üÌ ¾¢Èì¸ ÓÊÂÅ¢ø¨Ä: %s"
+msgstr "'%s' கோப்பை எழுதுவதற்கு திறக்க முடியவில்லை: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:992
 #, c-format
 msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
-msgstr "¯ÕÅò¨¾ ±ØÐõ§À¡Ð '%s' ã¼ ÓÊÂÅ¢ø¨Ä, «¨ÉòÐ ¾Ã×¸Ùõ §ºÁ¢ì¸ôÀ¼¡Áø ­Õì¸Ä¡õ: %s"
+msgstr "உருவத்தை எழுதும்போது '%s' மூட முடியவில்லை, அனைத்து தரவுகளும் சேமிக்கப்படாமல் இருக்கலாம்: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:332
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "'%s' Å¨¸Â¡É ¯ÕÅí¸¨Ç ÀÊÓ¨ÈÂ¡¸ ²üÚÅ¾üÌ ¬¾Ã× ¸¢¨¼Â¡Ð"
+msgstr "'%s' வகையான உருவங்களை படிமுறையாக ஏற்றுவதற்கு ஆதரவு கிடையாது"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:356
 #: gdk-pixbuf/gdk-pixbuf-loader.c:457
@@ -93,21 +93,21 @@ msgstr "Internal error: Image loader module '%s' failed to begin loading an imag
 
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
-msgstr "¯ÕÅò¾¢ý ¾¨ÄôÀÌ¾¢ ¦¸Î¾Ä¡ÉÐ"
+msgstr "உருவத்தின் தலைப்பகுதி கெடுதலானது"
 
 #: gdk-pixbuf/gdk-pixdata.c:150
 msgid "Image format unknown"
-msgstr "¦¾Ã¢Â¡¾ ¯ÕÅ ÅÊÅõ "
+msgstr "தெரியாத உருவ வடிவம் "
 
 #: gdk-pixbuf/gdk-pixdata.c:155
 #: gdk-pixbuf/gdk-pixdata.c:456
 msgid "Image pixel data corrupt"
-msgstr "¯ÕÅò¾¢ý À¢ì¦ºø ¾Ã× ¦¸Î¾Ä¡ÉÐ"
+msgstr "உருவத்தின் பிக்செல் தரவு கெடுதலானது"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
-msgstr "¯ÕÅ ¾¡í¸¸ò¾¢ð¸¡¸ %u ¨ÀðÎ¸û ´Ðì¸¢ ¨Åì¸ ÓÊÂÅ¢ø¨Ä"
+msgstr "உருவ தாங்ககத்திட்காக %u பைட்டுகள் ஒதுக்கி வைக்க முடியவில்லை"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -129,7 +129,7 @@ msgstr ""
 #: gdk-pixbuf/io-ani.c:511
 #: gdk-pixbuf/io-ani.c:583
 msgid "Not enough memory to load animation"
-msgstr "«¨ºçð¼ò¨¾ ²üÈ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "அசைவூட்டத்தை ஏற்ற நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-ani.c:400
 #: gdk-pixbuf/io-ani.c:417
@@ -139,42 +139,42 @@ msgstr ""
 
 #: gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr "ANI ¯ÕÅ Å¨¸ "
+msgstr "ANI உருவ வகை "
 
 #: gdk-pixbuf/io-bmp.c:223
 #: gdk-pixbuf/io-bmp.c:339
 msgid "Not enough memory to load bitmap image"
-msgstr "Ì¨ÈÅ¡É ¿¢¨ÉÅ¸ò¾¢É¡ø À¢ðÀ¼ò¨¾ ²üÈ ÓÊÂ¡Ð"
+msgstr "குறைவான நினைவகத்தினால் பிட்படத்தை ஏற்ற முடியாது"
 
 #: gdk-pixbuf/io-bmp.c:263
 msgid "BMP image has unsupported header size"
-msgstr "BMP ¯ÕÅò¾¢ø ¬¾ÃÅ¢øÄ¡ ¾¨ÄôÒ-ÀÌ¾¢ ¯ñÎ"
+msgstr "BMP உருவத்தில் ஆதரவில்லா தலைப்பு-பகுதி உண்டு"
 
 #: gdk-pixbuf/io-bmp.c:288
 #: gdk-pixbuf/io-bmp.c:311
 #: gdk-pixbuf/io-bmp.c:371
 msgid "BMP image has bogus header data"
-msgstr "BMP ¯ÕÅò¾¢ø À¢¨ÆÂ¡É ¾¨ÄôÒ-ÀÌ¾¢ ¾Ã× ¯ñÎ"
+msgstr "BMP உருவத்தில் பிழையான தலைப்பு-பகுதி தரவு உண்டு"
 
 #: gdk-pixbuf/io-bmp.c:1076
 msgid "The BMP image format"
-msgstr "BMP ¯ÕÅ Å¨¸"
+msgstr "BMP உருவ வகை"
 
 #: gdk-pixbuf/io-gif.c:219
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr "GIF Å¡º¢ìÌõ §À¡Ð À¢¨Æ: %s"
+msgstr "GIF வாசிக்கும் போது பிழை: %s"
 
 #: gdk-pixbuf/io-gif.c:491
 #: gdk-pixbuf/io-gif.c:1428
 #: gdk-pixbuf/io-gif.c:1589
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF §¸¡ôÀ¢ø º¢Ä ¾Ã×¸û ¸¢¨¼Â¡Ð (Ð½¢ì¸ôÀð¼¾¡¸ ­ÕìÌ§Á¡?)"
+msgstr "GIF கோப்பில் சில தரவுகள் கிடையாது (துணிக்கப்பட்டதாக இருக்குமோ?)"
 
 #: gdk-pixbuf/io-gif.c:500
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF ²üÈ¢Â¢ø (%s) ¯ûÇ¨Áô À¢¨Æ"
+msgstr "GIF ஏற்றியில் (%s) உள்ளமைப் பிழை"
 
 #: gdk-pixbuf/io-gif.c:574
 msgid "Stack overflow"
@@ -182,7 +182,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:634
 msgid "GIF image loader can't understand this image."
-msgstr "GIF ²üÈ¢ìÌ ­ó¾ ¯ÕÅò¨¾ ´Øí¸¡¸ ÒÈ¢óÐ§¸¡øÄ ÓÊÂÅ¢ø¨Ä"
+msgstr "GIF ஏற்றிக்கு இந்த உருவத்தை ஒழுங்காக புறிந்துகோல்ல முடியவில்லை"
 
 #: gdk-pixbuf/io-gif.c:663
 msgid "Bad code encountered"
@@ -197,28 +197,28 @@ msgstr "Circular table entry in GIF file"
 #: gdk-pixbuf/io-gif.c:1462
 #: gdk-pixbuf/io-gif.c:1577
 msgid "Not enough memory to load GIF file"
-msgstr "GIF §¸¡ô¨À ²üÚÅ¾üÌ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "GIF கோப்பை ஏற்றுவதற்கு நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-gif.c:1053
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF ¯ÕÅõ º¢¨¾ó¾Ð (À¢¨ÆÂ¡É LZW ¦ºÈ¢ôÒ)"
+msgstr "GIF உருவம் சிதைந்தது (பிழையான LZW செறிப்பு)"
 
 #: gdk-pixbuf/io-gif.c:1103
 msgid "File does not appear to be a GIF file"
-msgstr "­ó¾ §¸¡ôÒ GIF §¸¡ôÀ¡¸ §¾¡ýÈÅ¢ø¨Ä"
+msgstr "இந்த கோப்பு GIF கோப்பாக தோன்றவில்லை"
 
 #: gdk-pixbuf/io-gif.c:1115
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "À¾¢ôÒ %s GIF §¸¡ôÒ Å¨¸¸Ç¢ìÌ ¬¾Ã× ¸¢¨¼Â¡Ð"
+msgstr "பதிப்பு %s GIF கோப்பு வகைகளிக்கு ஆதரவு கிடையாது"
 
 #: gdk-pixbuf/io-gif.c:1188
 msgid "GIF image contained a frame with height or width 0."
-msgstr "GIF ¯Ã¢Åò¾¢ø ¯ûÇ ºð¼õ ´ýÈ¢ý ¯ÂÃõ «øÄÐ «¸Äõ 0."
+msgstr "GIF உரிவத்தில் உள்ள சட்டம் ஒன்றின் உயரம் அல்லது அகலம் 0."
 
 #: gdk-pixbuf/io-gif.c:1201
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr "GIF ¯Ã¢Åò¾¢Ûø ¯øÄ ºð¼õ ´ýÚ ¯ÕÅò¾¢ý ±ø¨ÄìÌ ¦ÅÇ¢§Â §¾ýÚ¸¢ÈÐ"
+msgstr "GIF உரிவத்தினுல் உல்ல சட்டம் ஒன்று உருவத்தின் எல்லைக்கு வெளியே தேன்றுகிறது"
 
 #: gdk-pixbuf/io-gif.c:1217
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
@@ -226,15 +226,15 @@ msgstr "First frame of GIF image had 'revert to previous' as its disposal mode."
 
 #: gdk-pixbuf/io-gif.c:1252
 msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
-msgstr "GIF ¯ÕÅò¾¢ø ÓÆ¨Á Åñ½ Å¢ÅÃô À¼õ ¸¢¨¼Â¡Ð, ÁüÚõ «¾Ûø ­ÕìÌõ µ÷ ºð¼ò¾¢üÌ Åñ½ Å¢ÅÃô À¼õ ¸¢¨¼Â¡Ð."
+msgstr "GIF உருவத்தில் முழமை வண்ண விவரப் படம் கிடையாது, மற்றும் அதனுல் இருக்கும் ஓர் சட்டத்திற்கு வண்ண விவரப் படம் கிடையாது."
 
 #: gdk-pixbuf/io-gif.c:1484
 msgid "GIF image was truncated or incomplete."
-msgstr "GIF ¯ÕÅõ Ð½¢ì¸ôÀð¼Ð «øÄÐ â÷¾¢Â¡¸¡¾Ð."
+msgstr "GIF உருவம் துணிக்கப்பட்டது அல்லது பூர்தியாகாதது."
 
 #: gdk-pixbuf/io-gif.c:1636
 msgid "The GIF image format"
-msgstr "GIF ¯ÕÅ Å¨¸ "
+msgstr "GIF உருவ வகை "
 
 #: gdk-pixbuf/io-ico.c:218
 #: gdk-pixbuf/io-ico.c:277
@@ -242,23 +242,23 @@ msgstr "GIF ¯ÕÅ Å¨¸ "
 #: gdk-pixbuf/io-ico.c:401
 #: gdk-pixbuf/io-ico.c:418
 msgid "Not enough memory to load icon"
-msgstr "ÌÚõÀ¼ò¨¾ ²üÚÅ¾üÌ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "குறும்படத்தை ஏற்றுவதற்கு நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-ico.c:262
 msgid "Invalid header in icon"
-msgstr "ÌÚõÀ¼ò¾¢ø ¦ºøÖÀÊÂ¡¸¡¾ ¾¨ÄôÀÌ¾¢"
+msgstr "குறும்படத்தில் செல்லுபடியாகாத தலைப்பகுதி"
 
 #: gdk-pixbuf/io-ico.c:299
 msgid "Icon has zero width"
-msgstr "ÌÚõÀ¼ò¾¢ý «¸Äõ 0"
+msgstr "குறும்படத்தின் அகலம் 0"
 
 #: gdk-pixbuf/io-ico.c:309
 msgid "Icon has zero height"
-msgstr "ÌÚõÀ¼ò¾¢ý ¯ÂÃõ 0"
+msgstr "குறும்படத்தின் உயரம் 0"
 
 #: gdk-pixbuf/io-ico.c:353
 msgid "Compressed icons are not supported"
-msgstr "¦ºÈ¢ôÀ¡É ¯ÕÅ Å¨¸ìÌ ¬¾ÃÅÇ¢ôÒ ¸¢¨¼Â¡Ð"
+msgstr "செறிப்பான உருவ வகைக்கு ஆதரவளிப்பு கிடையாது"
 
 #: gdk-pixbuf/io-ico.c:386
 msgid "Unsupported icon type"
@@ -266,20 +266,20 @@ msgstr ""
 
 #: gdk-pixbuf/io-ico.c:466
 msgid "Not enough memory to load ICO file"
-msgstr "ICO §¸¡ô¨À ²üÚÅ¾üÌ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "ICO கோப்பை ஏற்றுவதற்கு நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-ico.c:871
 msgid "The ICO image format"
-msgstr "ICO ¯ÕÅ Å¨¸ "
+msgstr "ICO உருவ வகை "
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG (%s) ¯ÕÅì §¸¡ô¨À Å¡º¢ìÌõ§À¡Ð À¢¨Æ"
+msgstr "JPEG (%s) உருவக் கோப்பை வாசிக்கும்போது பிழை"
 
 #: gdk-pixbuf/io-jpeg.c:349
 msgid "Insufficient memory to load image, try exiting some applications to free memory"
-msgstr "¯ÕÅò¨¾ ²üÚÅ¾üÌ ¿¢¨ÉÅ¸õ §À¡¾¡Ð, ¿¢¨ÉÅ¸ò¨¾ Å¢Îì¸ º¢Ä §¸¡ôÒ¸¨Ç ã¼×õ"
+msgstr "உருவத்தை ஏற்றுவதற்கு நினைவகம் போதாது, நினைவகத்தை விடுக்க சில கோப்புகளை மூடவும்"
 
 #: gdk-pixbuf/io-jpeg.c:383
 #: gdk-pixbuf/io-jpeg.c:744
@@ -291,17 +291,17 @@ msgstr ""
 #: gdk-pixbuf/io-jpeg.c:673
 #: gdk-pixbuf/io-jpeg.c:858
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG §¸¡ô¨À ²üÚÅ¾üÌ ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£Î ¦ºöÂ ÓÊÂÅ¢ø¨Ä"
+msgstr "JPEG கோப்பை ஏற்றுவதற்கு நினைவகத்தை ஒதுக்கீடு செய்ய முடியவில்லை"
 
 #: gdk-pixbuf/io-jpeg.c:812
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
-msgstr "JPEG ¾Ãõ 0 ìÌõ 100 ­¨¼Â¢ø ­Õì¸ §ÅñÎõ; '%s' «Ä¸¢¼ ÓÊÂÅ¢ø¨Ä."
+msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%s' அலகிட முடியவில்லை."
 
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG ¾Ãõ 0 ìÌõ 100 ­¨¼Â¢ø ­Õì¸ §ÅñÎõ; '%d' Á¾¢ôÀ¢ìÌ «ÛÁ¾¢ ¸¢¨¼Â¡Ð."
+msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%d' மதிப்பிக்கு அனுமதி கிடையாது."
 
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
@@ -309,7 +309,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG ¯ÕÅ Å¨¸Â¢ý Å¡öì¸¡ø À¢ðÎ¸û (Bits per channel) À¢¨ÆÂ¡ÉÐ."
+msgstr "PNG உருவ வகையின் வாய்க்கால் பிட்டுகள் (Bits per channel) பிழையானது."
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
@@ -330,11 +330,11 @@ msgstr ""
 #: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "PNG ¯ÕÅì §¸¡ôÀ¢ø ¦¸¡ø À¢¨Æ: %s"
+msgstr "PNG உருவக் கோப்பில் கொல் பிழை: %s"
 
 #: gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
-msgstr "PNG §¸¡ô¨À ²üÚÅ¾üÌ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "PNG கோப்பை ஏற்றுவதற்கு நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-png.c:605
 #, c-format
@@ -343,12 +343,12 @@ msgstr "Insufficient memory to store a %ld by %ld image; try exiting some applic
 
 #: gdk-pixbuf/io-png.c:656
 msgid "Fatal error reading PNG image file"
-msgstr "PNG ¯ÕÅì §¸¡ô¨À ²üÚõ§À¡Ð ¦¸¡ø À¢¨Æ"
+msgstr "PNG உருவக் கோப்பை ஏற்றும்போது கொல் பிழை"
 
 #: gdk-pixbuf/io-png.c:705
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG ¯ÕÅì §¸¡ô¨À ²üÚõ§À¡Ð ¦¸¡ø À¢¨Æ: %s"
+msgstr "PNG உருவக் கோப்பை ஏற்றும்போது கொல் பிழை: %s"
 
 #: gdk-pixbuf/io-png.c:771
 msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
@@ -365,35 +365,35 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:919
 msgid "The PNG image format"
-msgstr "PNG ¯ÕÅ Å¨¸"
+msgstr "PNG உருவ வகை"
 
 #: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM ²üÈ¢ µ÷ ÓØ±ñ ±¾¢÷À¡÷ò¾Ð, «É¡ø ¸¢¨¼ì¸Å¢ø¨Ä"
+msgstr "PNM ஏற்றி ஓர் முழுஎண் எதிர்பார்த்தது, அனால் கிடைக்கவில்லை"
 
 #: gdk-pixbuf/io-pnm.c:280
 msgid "PNM file has an incorrect initial byte"
-msgstr "PNM §¸¡ôÀ¢ø À¢¨ÆÂ¡É ¦¾¡¼ì¸ ¨ÀðÎ"
+msgstr "PNM கோப்பில் பிழையான தொடக்க பைட்டு"
 
 #: gdk-pixbuf/io-pnm.c:310
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM ÀÌ¾¢-ÅÊÅõ ¦¾Ã¢ó¾ µ÷ PNM §¸¡ôÒ «øÄ"
+msgstr "PNM பகுதி-வடிவம் தெரிந்த ஓர் PNM கோப்பு அல்ல"
 
 #: gdk-pixbuf/io-pnm.c:335
 msgid "PNM file has an image width of 0"
-msgstr "PNM §¸¡ôÀ¢ø ¯øÄ ¯ÕÅ «¸Äõ 0"
+msgstr "PNM கோப்பில் உல்ல உருவ அகலம் 0"
 
 #: gdk-pixbuf/io-pnm.c:356
 msgid "PNM file has an image height of 0"
-msgstr "PNM §¸¡ôÀ¢ø ¯øÄ ¯ÕÅ ¯ÂÃõ 0"
+msgstr "PNM கோப்பில் உல்ல உருவ உயரம் 0"
 
 #: gdk-pixbuf/io-pnm.c:379
 msgid "Maximum color value in PNM file is 0"
-msgstr "PNM §¸¡ôÀ¢ø Á¢¸-«¾¢¸Á¡É Åñ½ Á¾¢ôÒ 0"
+msgstr "PNM கோப்பில் மிக-அதிகமான வண்ண மதிப்பு 0"
 
 #: gdk-pixbuf/io-pnm.c:387
 msgid "Maximum color value in PNM file is too large"
-msgstr "PNM §¸¡ôÀ¢ø ¬¸ìÜÊÂ Åñ½ Á¾¢ôÒ §ÀÃÇÅ¡ÉÐ"
+msgstr "PNM கோப்பில் ஆகக்கூடிய வண்ண மதிப்பு பேரளவானது"
 
 #: gdk-pixbuf/io-pnm.c:395
 msgid "Can't handle PNM files with maximum color values greater than 255"
@@ -403,16 +403,16 @@ msgstr ""
 #: gdk-pixbuf/io-pnm.c:462
 #: gdk-pixbuf/io-pnm.c:494
 msgid "Raw PNM image type is invalid"
-msgstr "ãÄ PNM ¯ÕÅ Å¨¸ À¢¨ÆÂ¡ÉÐ"
+msgstr "மூல PNM உருவ வகை பிழையானது"
 
 #: gdk-pixbuf/io-pnm.c:554
 #: gdk-pixbuf/io-pnm.c:596
 msgid "PNM image format is invalid"
-msgstr "PNM ¯ÕÅ Å¨¸ À¢¨ÆÂ¡ÉÐ"
+msgstr "PNM உருவ வகை பிழையானது"
 
 #: gdk-pixbuf/io-pnm.c:655
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM ¯ÕÅ ²üÈ¢ìÌ ­ó¾ PNM ÀÌ¾¢-ÅÊÅò¨¾ ²üÈ ÓÊÂ¡Ð"
+msgstr "PNM உருவ ஏற்றிக்கு இந்த PNM பகுதி-வடிவத்தை ஏற்ற முடியாது"
 
 #: gdk-pixbuf/io-pnm.c:710
 msgid "Premature end-of-file encountered"
@@ -425,19 +425,19 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:769
 msgid "Can't allocate memory for loading PNM image"
-msgstr "PNM ¯ÕÅò¨¾ ²üÚÅ¾üÌ ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¼ ÓÊÂ¡Ð"
+msgstr "PNM உருவத்தை ஏற்றுவதற்கு நினைவகத்தை ஒதுக்கீட முடியாது"
 
 #: gdk-pixbuf/io-pnm.c:819
 msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM Ýú ¸ð¼¨ÁôÒ (context struct) ²üÈ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "PNM சூழ் கட்டமைப்பு (context struct) ஏற்ற நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
-msgstr "±¾¢÷À¡÷ì¸¡¾ PNM ¯ÕÅò ¾Ã× ÓÊ×"
+msgstr "எதிர்பார்க்காத PNM உருவத் தரவு முடிவு"
 
 #: gdk-pixbuf/io-pnm.c:991
 msgid "Insufficient memory to load PNM file"
-msgstr "PNM §¸¡ôÒ ²üÈ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "PNM கோப்பு ஏற்ற நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-pnm.c:1070
 msgid "The PNM/PBM/PGM/PPM image format family"
@@ -445,11 +445,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-ras.c:125
 msgid "RAS image has bogus header data"
-msgstr "RAS ¯ÕÅò¾¢ø ÒÃ¢Â¡¾ ¾¨ÄôÒôÀÌ¾¢ ¯ñÎ"
+msgstr "RAS உருவத்தில் புரியாத தலைப்புப்பகுதி உண்டு"
 
 #: gdk-pixbuf/io-ras.c:147
 msgid "RAS image has unknown type"
-msgstr "RAS ¯ÕÅ ÅÊÅò¾¢ø ¦¾Ã¢Â¡¾ Å¨¸"
+msgstr "RAS உருவ வடிவத்தில் தெரியாத வகை"
 
 #: gdk-pixbuf/io-ras.c:155
 msgid "unsupported RAS image variation"
@@ -458,7 +458,7 @@ msgstr ""
 #: gdk-pixbuf/io-ras.c:170
 #: gdk-pixbuf/io-ras.c:190
 msgid "Not enough memory to load RAS image"
-msgstr "RAS ¯ÕÅ Å¨¸¨Â ²üÈ ¿¢¨ÉÅõ §À¡¾¡Ð"
+msgstr "RAS உருவ வகையை ஏற்ற நினைவம் போதாது"
 
 #: gdk-pixbuf/io-ras.c:532
 msgid "The Sun raster image format"
@@ -466,11 +466,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "IOBuffer ¸ð¼¨ÁôÒì¸¡É ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¨Åì¸ ÓÊÂ¡Ð"
+msgstr "IOBuffer கட்டமைப்புக்கான நினைவகத்தை ஒதுக்கீவைக்க முடியாது"
 
 #: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "IOBuffer ¾Ã×ì¸¡É ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¨Åì¸ ÓÊÂ¡Ð"
+msgstr "IOBuffer தரவுக்கான நினைவகத்தை ஒதுக்கீவைக்க முடியாது"
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
@@ -478,7 +478,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "¾ü¸¡Ä¢¸ IOBuffer ¾Ã× ´Ðì¸£¨Åì¸ ÓÊÂ¡Ð"
+msgstr "தற்காலிக IOBuffer தரவு ஒதுக்கீவைக்க முடியாது"
 
 #: gdk-pixbuf/io-tga.c:283
 msgid "fread() failed -- premature end-of-file probably encountered"
@@ -522,11 +522,11 @@ msgstr ""
 #: gdk-pixbuf/io-tga.c:763
 #: gdk-pixbuf/io-tga.c:770
 msgid "TGA image type not supported"
-msgstr "TGA ¯ÕÅ Å¨¸ìÌ ¬¾ÃÅÇ¢ôÒ ¸¢¨¼Â¡Ð"
+msgstr "TGA உருவ வகைக்கு ஆதரவளிப்பு கிடையாது"
 
 #: gdk-pixbuf/io-tga.c:816
 msgid "Can't allocate memory for TGA context struct"
-msgstr "TGA ÝÆø ¸ð¼¨ÁôÀ¢ð¸¡É ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¨Åì¸ ÓÊÂ¡Ð"
+msgstr "TGA சூழல் கட்டமைப்பிட்கான நினைவகத்தை ஒதுக்கீவைக்க முடியாது"
 
 #: gdk-pixbuf/io-tga.c:880
 msgid "Excess data in file"
@@ -534,7 +534,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Can't allocate memory for TGA header"
-msgstr "TGA ¾¨ÄôÀÌ¾¢ì¸¡É ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¨Åì¸ ÓÊÂ¡Ð"
+msgstr "TGA தலைப்பகுதிக்கான நினைவகத்தை ஒதுக்கீவைக்க முடியாது"
 
 #: gdk-pixbuf/io-tga.c:936
 msgid "Too big value in the infolen field of TGA header."
@@ -542,15 +542,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:960
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "TGA cmap ¾ü¸¡Ä¢¸ þ¨¼Â¸ò¾¢ð¸¡É ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¨Åì¸ ÓÊÂ¡Ð"
+msgstr "TGA cmap தற்காலிக இடையகத்திட்கான நினைவகத்தை ஒதுக்கீவைக்க முடியாது"
 
 #: gdk-pixbuf/io-tga.c:972
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "TGA Åñ½-Å¢ÅÃô-À¼ ¸ð¼¨ÁôÒì¸¡É ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¨Åì¸ ÓÊÂ¡Ð"
+msgstr "TGA வண்ண-விவரப்-பட கட்டமைப்புக்கான நினைவகத்தை ஒதுக்கீவைக்க முடியாது"
 
 #: gdk-pixbuf/io-tga.c:981
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "TGA Åñ½-Å¢ÅÃô-À¼ Ñ¨Æ×¸Ùì¸¡É ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¨Åì¸ ÓÊÂ¡Ð"
+msgstr "TGA வண்ண-விவரப்-பட நுழைவுகளுக்கான நினைவகத்தை ஒதுக்கீவைக்க முடியாது"
 
 #: gdk-pixbuf/io-tga.c:991
 msgid "Unexpected bitdepth for TGA colormap"
@@ -581,15 +581,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
-msgstr "¯ÕÅò¾¢ý «¸Äò¨¾ ¦ÀÈÓÊÂÅ¢ø¨Ä (¦¸ðÎ¾Ä¡É TIFF §¸¡ôÒ)"
+msgstr "உருவத்தின் அகலத்தை பெறமுடியவில்லை (கெட்டுதலான TIFF கோப்பு)"
 
 #: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
-msgstr "¯ÕÅò¾¢ý ¯ÂÃÅò¨¾ ¦ÀÈÓÊÂÅ¢ø¨Ä (¦¸ðÎ¾Ä¡É TIFF §¸¡ôÒ)"
+msgstr "உருவத்தின் உயரவத்தை பெறமுடியவில்லை (கெட்டுதலான TIFF கோப்பு)"
 
 #: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
-msgstr "TIFF ¯ÕÅò¾¢ý «¸Äõ «øÄÐ ¯ÂÃõ ÍÆ¢"
+msgstr "TIFF உருவத்தின் அகலம் அல்லது உயரம் சுழி"
 
 #: gdk-pixbuf/io-tiff.c:215
 #: gdk-pixbuf/io-tiff.c:224
@@ -600,11 +600,11 @@ msgstr ""
 #: gdk-pixbuf/io-tiff.c:246
 #: gdk-pixbuf/io-tiff.c:553
 msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF §¸¡ôÒ ¾¢ÈôÀ¾üÌ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "TIFF கோப்பு திறப்பதற்கு நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
-msgstr "TIFF §¸¡ôÀ¢Ä¢ÕóÐ RGB ¾Ã× ²üÈ ÓÊÂÅ¢ø¨Ä"
+msgstr "TIFF கோப்பிலிருந்து RGB தரவு ஏற்ற முடியவில்லை"
 
 #: gdk-pixbuf/io-tiff.c:266
 msgid "Unsupported TIFF variant"
@@ -612,16 +612,16 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
-msgstr "TIFF ¯ÕÅò¨¾ò ¾¢Èì¸ ÓÊÂÅ¢ø¨Ä"
+msgstr "TIFF உருவத்தைத் திறக்க முடியவில்லை"
 
 #: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
-msgstr "TIFFClose À½¢ ¦¿¡ÊôÀ¨¼ó¾Ð"
+msgstr "TIFFClose பணி நொடிப்படைந்தது"
 
 #: gdk-pixbuf/io-tiff.c:483
 #: gdk-pixbuf/io-tiff.c:496
 msgid "Failed to load TIFF image"
-msgstr "TIFF ¯ÕÅò¨¾ò ²üÈ ÓÊÂÅ¢ø¨Ä"
+msgstr "TIFF உருவத்தைத் ஏற்ற முடியவில்லை"
 
 #: gdk-pixbuf/io-tiff.c:591
 msgid "The TIFF image format"
@@ -629,7 +629,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
-msgstr "¯ÕÅò¾¢ý «¸Äõ 0"
+msgstr "உருவத்தின் அகலம் 0"
 
 #: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
@@ -637,7 +637,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr "¯ÕÅò¨¾ ²üÚÅ¾ðÌ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "உருவத்தை ஏற்றுவதட்கு நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
@@ -649,15 +649,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-xbm.c:285
 msgid "Invalid XBM file"
-msgstr "À¢¨ÆÂ¡É XBM §¸¡ôÒ"
+msgstr "பிழையான XBM கோப்பு"
 
 #: gdk-pixbuf/io-xbm.c:295
 msgid "Insufficient memory to load XBM image file"
-msgstr "XBM ¯ÕÅì§¸¡ô¨À ²üÚÅ¾üÌ ¿¢¨ÉÅ¸õ §À¡¾¡Ð"
+msgstr "XBM உருவக்கோப்பை ஏற்றுவதற்கு நினைவகம் போதாது"
 
 #: gdk-pixbuf/io-xbm.c:439
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM ¯ÕÅò¨¾ ²üÚõ§À¡Ð, ¾ü¸¡Ä¢¸Á¡É §¸¡ôÀ¢üÌ ±Ø¾ ÓÊÂÅ¢ø¨Ä"
+msgstr "XBM உருவத்தை ஏற்றும்போது, தற்காலிகமான கோப்பிற்கு எழுத முடியவில்லை"
 
 #: gdk-pixbuf/io-xbm.c:474
 msgid "The XBM image format"
@@ -665,15 +665,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
-msgstr "XPM ¾¨ÄôÀÌ¾¢¨Â ¸ñÎÀ¢Êì¸ÓÊÂÅ¢ø¨Ä"
+msgstr "XPM தலைப்பகுதியை கண்டுபிடிக்கமுடியவில்லை"
 
 #: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
-msgstr "XPM §¸¡ôÀ¢ý ¯ÕÅ «¸Äõ <= 0"
+msgstr "XPM கோப்பின் உருவ அகலம் <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1245
 msgid "XPM file has image height <= 0"
-msgstr "XPM §¸¡ôÀ¢ý ¯ÕÅ ¯ÂÃõ <= 0"
+msgstr "XPM கோப்பின் உருவ உயரம் <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM file has invalid number of colors"
@@ -682,27 +682,27 @@ msgstr ""
 #: gdk-pixbuf/io-xpm.c:1261
 #, fuzzy
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XP­ø 31 'chars per pixel' §Áø ¯ûÇÉ"
+msgstr "XPஇல் 31 'chars per pixel' மேல் உள்ளன"
 
 #: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
-msgstr "XPM Åñ½-Å¢ÅÃô À¼õ Å¡º¢ì¸ÓÊÂÅ¢ø¨Ä"
+msgstr "XPM வண்ண-விவரப் படம் வாசிக்கமுடியவில்லை"
 
 #: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
-msgstr "XBM ¯ÕÅò¨¾ ²üÚÅ¾üÌ ¿¢¨ÉÅ¸ò¨¾ ´Ðì¸£¼ ÓÊÂ¡Ð"
+msgstr "XBM உருவத்தை ஏற்றுவதற்கு நினைவகத்தை ஒதுக்கீட முடியாது"
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM ¯ÕÅò¨¾ ²üÚõ§À¡Ð, ¾ü¸¡Ä¢¸Á¡É §¸¡ôÀ¢üÌ ±Ø¾ ÓÊÂÅ¢ø¨Ä"
+msgstr "XPM உருவத்தை ஏற்றும்போது, தற்காலிகமான கோப்பிற்கு எழுத முடியவில்லை"
 
 #: gdk-pixbuf/io-xpm.c:1543
 msgid "The XPM image format"
-msgstr "XPM ¯ÕÅ Å¨¸"
+msgstr "XPM உருவ வகை"
 
 #: gdk/gdkdisplaymanager.c:117
 msgid "Default Display"
-msgstr "¦¸¡¼¡¿¢¨Äì ¸¡ðº¢"
+msgstr "கொடாநிலைக் காட்சி"
 
 #: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
@@ -737,7 +737,7 @@ msgstr ""
 
 #: gtk/gtkaccellabel.c:137
 msgid "Accelerator Closure"
-msgstr "¬÷ÓÎ¸ø ãÎ¾ø"
+msgstr "ஆர்முடுகல் மூடுதல்"
 
 #: gtk/gtkaccellabel.c:138
 #, fuzzy
@@ -746,7 +746,7 @@ msgstr "The object monitored by this accelerator label"
 
 #: gtk/gtkaccellabel.c:144
 msgid "Accelerator Widget"
-msgstr "¬÷ÓÎ¸ø Å¢ð¦ºðÎ"
+msgstr "ஆர்முடுகல் விட்செட்டு"
 
 #: gtk/gtkaccellabel.c:145
 #, fuzzy
@@ -755,7 +755,7 @@ msgstr "The object monitored by this accelerator label"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
-msgstr "¸¢¨¼ §¿÷ôÀÎò¾õ"
+msgstr "கிடை நேர்ப்படுத்தம்"
 
 #: gtk/gtkalignment.c:103
 msgid "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"
@@ -763,7 +763,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
-msgstr "¦ºíÌò¾Á¡É §¿÷ôÀÎò¾õ"
+msgstr "செங்குத்தமான நேர்ப்படுத்தம்"
 
 #: gtk/gtkalignment.c:113
 msgid "Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"
@@ -771,7 +771,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
-msgstr "¸¢¨¼ «Ç×§¸¡ø"
+msgstr "கிடை அளவுகோல்"
 
 #: gtk/gtkalignment.c:122
 msgid "If available horizontal space is bigger than needed for the child, how much of it to use for the child. 0.0 means none, 1.0 means all"
@@ -779,7 +779,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
-msgstr "¦ºíÌò¾Á¡É «Ç×§¸¡ø"
+msgstr "செங்குத்தமான அளவுகோல்"
 
 #: gtk/gtkalignment.c:131
 msgid "If available vertical space is bigger than needed for the child, how much of it to use for the child. 0.0 means none, 1.0 means all"
@@ -788,35 +788,35 @@ msgstr ""
 #: gtk/gtkarrow.c:98
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
-msgstr "«õÒ ¸¡ñÀ¢ì¸ôÀ¼ §ÅñÊÂ ¾¢¨º"
+msgstr "அம்பு காண்பிக்கப்பட வேண்டிய திசை"
 
 #: gtk/gtkarrow.c:106
 msgid "Arrow shadow"
-msgstr "«õÒ ¿¢Æø"
+msgstr "அம்பு நிழல்"
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr "«õ¨Àî ÍüÈ¢ÕìÌõ ¿¢ÆÄ¢ý §¾¡üÈõ"
+msgstr "அம்பைச் சுற்றிருக்கும் நிழலின் தோற்றம்"
 
 #: gtk/gtkaspectframe.c:108
 msgid "Horizontal Alignment"
-msgstr "¸¢¨¼ §¿÷ôÀÎò¾õ"
+msgstr "கிடை நேர்ப்படுத்தம்"
 
 #: gtk/gtkaspectframe.c:109
 msgid "X alignment of the child"
-msgstr "§ºöÂ¢ý X §¿÷ôÀÎò¾õ"
+msgstr "சேய்யின் X நேர்ப்படுத்தம்"
 
 #: gtk/gtkaspectframe.c:115
 msgid "Vertical Alignment"
-msgstr "¦ºíÌò¾Á¡¸ §¿÷ôÀÎò¾õ"
+msgstr "செங்குத்தமாக நேர்ப்படுத்தம்"
 
 #: gtk/gtkaspectframe.c:116
 msgid "Y alignment of the child"
-msgstr "§ºöÂ¢ý Y §¿÷ôÀÎò¾õ"
+msgstr "சேய்யின் Y நேர்ப்படுத்தம்"
 
 #: gtk/gtkaspectframe.c:122
 msgid "Obey child"
-msgstr "Å¢¸¢¾õ"
+msgstr "விகிதம்"
 
 #: gtk/gtkaspectframe.c:123
 msgid "Aspect ratio if obey_child is FALSE"
@@ -824,7 +824,7 @@ msgstr "Aspect ratio if obey_child is FALSE"
 
 #: gtk/gtkaspectframe.c:129
 msgid " ID\n"
-msgstr " «¨¼Â¡Çõ\n"
+msgstr " அடையாளம்\n"
 
 #: gtk/gtkaspectframe.c:130
 msgid "Force aspect ratio to match that of the frame's child"
@@ -864,7 +864,7 @@ msgstr "Amount to increase child's size on the top and bottom"
 
 #: gtk/gtkbbox.c:155
 msgid "Layout style"
-msgstr "±ØòÐÅ¨¸ À¡½¢"
+msgstr "எழுத்துவகை பாணி"
 
 #: gtk/gtkbbox.c:156
 msgid "How to layout the buttons in the box. Possible values are default, spread, edge, start and end"
@@ -881,7 +881,7 @@ msgstr "If TRUE, the child appears in a secondary group of children, suitable fo
 
 #: gtk/gtkbox.c:128
 msgid "Spacing"
-msgstr "­¨¼¦ÅÇ¢"
+msgstr "இடைவெளி"
 
 #: gtk/gtkbox.c:129
 #, fuzzy
@@ -896,21 +896,21 @@ msgstr "Homogeneous"
 #: gtk/gtkbox.c:139
 #, fuzzy
 msgid "Whether the children should all be the same size"
-msgstr "§ºö «¨ÉòÐõ ´§È «ÇÅ¢ø ­Õì¸ §ÅñÎÁ¡"
+msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
 
 #: gtk/gtkbox.c:146
 #: gtk/gtkpreview.c:132
 msgid "Expand"
-msgstr "Å¢Ã¢ì¸×õ"
+msgstr "விரிக்கவும்"
 
 #: gtk/gtkbox.c:147
 #, fuzzy
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "§ºö «¨ÉòÐõ ´§È «ÇÅ¢ø ­Õì¸ §ÅñÎÁ¡"
+msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
 
 #: gtk/gtkbox.c:153
 msgid "Fill"
-msgstr "¿¢ÃôÒ"
+msgstr "நிரப்பு"
 
 #: gtk/gtkbox.c:154
 msgid "Whether extra space given to the child should be allocated to the child or used as padding"
@@ -926,7 +926,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:167
 msgid "Pack type"
-msgstr "«Îì¸ø Å¨¸"
+msgstr "அடுக்கல் வகை"
 
 #: gtk/gtkbox.c:168
 #: gtk/gtknotebook.c:488
@@ -938,29 +938,29 @@ msgstr ""
 #: gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
-msgstr "­¼õ"
+msgstr "இடம்"
 
 #: gtk/gtkbox.c:175
 #: gtk/gtknotebook.c:467
 #, fuzzy
 msgid "The index of the child in the parent"
-msgstr "¾ü§À¡¨¾Â Àì¸ò¾¢ý ÍðÎ"
+msgstr "தற்போதைய பக்கத்தின் சுட்டு"
 
 #: gtk/gtkbutton.c:189
 #: gtk/gtkframe.c:125
 #: gtk/gtklabel.c:290
 msgid "Label"
-msgstr "«¨¼Â¡Çõ"
+msgstr "அடையாளம்"
 
 #: gtk/gtkbutton.c:190
 #, fuzzy
 msgid "Text of the label widget inside the button, if the button contains a label widget"
-msgstr "¦À¡ò¾¡É¢ø «¨¼Â¡Ç Å¢ð¦ºÊÕó¾¡ø, «ó¾ ¦À¡ò¾¡ÛÇ¢ÕìÌõ «¨¼Â¡Ç Å¢ð¦ºÊý ¯¨Ã."
+msgstr "பொத்தானில் அடையாள விட்செடிருந்தால், அந்த பொத்தானுளிருக்கும் அடையாள விட்செடின் உரை."
 
 #: gtk/gtkbutton.c:197
 #: gtk/gtklabel.c:311
 msgid "Use underline"
-msgstr "¸£ø§¸¡Î ÀÂýÀÎò¾×õ"
+msgstr "கீல்கோடு பயன்படுத்தவும்"
 
 #: gtk/gtkbutton.c:198
 #: gtk/gtklabel.c:312
@@ -986,7 +986,7 @@ msgstr "The border relief style."
 
 #: gtk/gtkbutton.c:271
 msgid "Default Spacing"
-msgstr "¦¸¡¼¡ ¿¢¨Ä ­¨¼¦ÅÇ¢"
+msgstr "கொடா நிலை இடைவெளி"
 
 #: gtk/gtkbutton.c:272
 msgid "Extra space to add for CAN_DEFAULT buttons"
@@ -1018,7 +1018,7 @@ msgstr "How far in the y direction to move the child when the button is depresse
 
 #: gtk/gtkcellrenderer.c:116
 msgid "mode"
-msgstr "Ó¨È¨Á"
+msgstr "முறைமை"
 
 #: gtk/gtkcellrenderer.c:117
 msgid "Editable mode of the CellRenderer"
@@ -1026,11 +1026,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:126
 msgid "visible"
-msgstr "À¡÷ì¸ìÜÊÂÐ"
+msgstr "பார்க்கக்கூடியது"
 
 #: gtk/gtkcellrenderer.c:127
 msgid "Display the cell"
-msgstr "¸Äý ¸¡ñÀ¢"
+msgstr "கலன் காண்பி"
 
 #: gtk/gtkcellrenderer.c:135
 msgid "xalign"
@@ -1066,19 +1066,19 @@ msgstr "The ypad"
 
 #: gtk/gtkcellrenderer.c:179
 msgid "width"
-msgstr "«¸Äõ"
+msgstr "அகலம்"
 
 #: gtk/gtkcellrenderer.c:180
 msgid "The fixed width"
-msgstr "Á¡üÈÓÊÂ¡¾ «¸Äõ"
+msgstr "மாற்றமுடியாத அகலம்"
 
 #: gtk/gtkcellrenderer.c:190
 msgid "height"
-msgstr "¯ÂÃõ"
+msgstr "உயரம்"
 
 #: gtk/gtkcellrenderer.c:191
 msgid "The fixed height"
-msgstr "Á¡üÈÓÊÂ¡¾ ¯ÂÃõ"
+msgstr "மாற்றமுடியாத உயரம்"
 
 #: gtk/gtkcellrenderer.c:201
 msgid "Is Expander"
@@ -1086,7 +1086,7 @@ msgstr "Is Expander"
 
 #: gtk/gtkcellrenderer.c:202
 msgid "Row has children"
-msgstr "ÅÃ¢¨ºìÌ §ºö ¯ñÎ"
+msgstr "வரிசைக்கு சேய் உண்டு"
 
 #: gtk/gtkcellrenderer.c:211
 msgid "Is Expanded"
@@ -1099,41 +1099,41 @@ msgstr "Row is an expander row, and is expanded"
 #: gtk/gtkcellrenderer.c:220
 #, fuzzy
 msgid "Cell background color name"
-msgstr "À¢ýÉ½¢ Åñ½ô ¦ÀÂ÷"
+msgstr "பின்னணி வண்ணப் பெயர்"
 
 #: gtk/gtkcellrenderer.c:221
 #, fuzzy
 msgid "Cell background color as a string"
-msgstr "À¢ýÉ½¢ Åñ½õ µ÷ ºÃÁ¡¸"
+msgstr "பின்னணி வண்ணம் ஓர் சரமாக"
 
 #: gtk/gtkcellrenderer.c:228
 #, fuzzy
 msgid "Cell background color"
-msgstr "À¢ýÉ½¢ Åñ½õ"
+msgstr "பின்னணி வண்ணம்"
 
 #: gtk/gtkcellrenderer.c:229
 #, fuzzy
 msgid "Cell background color as a GdkColor"
-msgstr "À¢ýÉ½¢ Åñ½õ µ÷ GdkColorÃ¡¸"
+msgstr "பின்னணி வண்ணம் ஓர் GdkColorராக"
 
 #: gtk/gtkcellrenderer.c:237
 #, fuzzy
 msgid "Cell background set"
-msgstr "À¢ýÉ½¢ «¨Áì¸ôÀð¼Ð"
+msgstr "பின்னணி அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderer.c:238
 #, fuzzy
 msgid "Whether this tag affects the cell background color"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ À¢ýÉ½¢ Åñ½ò¨¾ À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு பின்னணி வண்ணத்தை பாதிக்குமா"
 
 #: gtk/gtkcellrendererpixbuf.c:132
 msgid "Pixbuf Object"
-msgstr "Pixbuf ­ÄìÌ"
+msgstr "Pixbuf இலக்கு"
 
 #: gtk/gtkcellrendererpixbuf.c:133
 #, fuzzy
 msgid "The pixbuf to render"
-msgstr "Å¨ÃÂ§ÅñÊÂ pixbuf."
+msgstr "வரையவேண்டிய pixbuf."
 
 #: gtk/gtkcellrendererpixbuf.c:141
 #, fuzzy
@@ -1164,7 +1164,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:167
 msgid "Size"
-msgstr "«Ç×"
+msgstr "அளவு"
 
 #: gtk/gtkcellrendererpixbuf.c:168
 #, fuzzy
@@ -1173,7 +1173,7 @@ msgstr "Size of the expander arrow"
 
 #: gtk/gtkcellrendererpixbuf.c:176
 msgid "Detail"
-msgstr "«õÒ ¾¢¨º"
+msgstr "அம்பு திசை"
 
 #: gtk/gtkcellrendererpixbuf.c:177
 msgid "Render detail to pass to the theme engine"
@@ -1183,11 +1183,11 @@ msgstr ""
 #: gtk/gtkentry.c:524
 #: gtk/gtkprogressbar.c:218
 msgid "Text"
-msgstr "¯¨Ã"
+msgstr "உரை"
 
 #: gtk/gtkcellrenderertext.c:176
 msgid "Text to render"
-msgstr "Å¨ÃÂ§ÅñÊÂ ¯¨Ã"
+msgstr "வரையவேண்டிய உரை"
 
 #: gtk/gtkcellrenderertext.c:183
 msgid "Markup"
@@ -1200,7 +1200,7 @@ msgstr "Marked up text to render"
 #: gtk/gtkcellrenderertext.c:191
 #: gtk/gtklabel.c:297
 msgid "Attributes"
-msgstr "ÀñÒ¸û"
+msgstr "பண்புகள்"
 
 #: gtk/gtkcellrenderertext.c:192
 #, fuzzy
@@ -1210,53 +1210,53 @@ msgstr "A list of style attributes to apply to the text of the renderer."
 #: gtk/gtkcellrenderertext.c:199
 #: gtk/gtktexttag.c:205
 msgid "Background color name"
-msgstr "À¢ýÉ½¢ Åñ½ô ¦ÀÂ÷"
+msgstr "பின்னணி வண்ணப் பெயர்"
 
 #: gtk/gtkcellrenderertext.c:200
 #: gtk/gtktexttag.c:206
 msgid "Background color as a string"
-msgstr "À¢ýÉ½¢ Åñ½õ µ÷ ºÃÁ¡¸"
+msgstr "பின்னணி வண்ணம் ஓர் சரமாக"
 
 #: gtk/gtkcellrenderertext.c:207
 #: gtk/gtktexttag.c:213
 msgid "Background color"
-msgstr "À¢ýÉ½¢ Åñ½õ"
+msgstr "பின்னணி வண்ணம்"
 
 #: gtk/gtkcellrenderertext.c:208
 msgid "Background color as a GdkColor"
-msgstr "À¢ýÉ½¢ Åñ½õ µ÷ GdkColorÃ¡¸"
+msgstr "பின்னணி வண்ணம் ஓர் GdkColorராக"
 
 #: gtk/gtkcellrenderertext.c:215
 #: gtk/gtktexttag.c:239
 msgid "Foreground color name"
-msgstr "ÓýÉ½¢ Åñ½ô ¦ÀÂ÷"
+msgstr "முன்னணி வண்ணப் பெயர்"
 
 #: gtk/gtkcellrenderertext.c:216
 #: gtk/gtktexttag.c:240
 msgid "Foreground color as a string"
-msgstr "ÓýÉ½¢ Åñ½õ µ÷ ºÃÁ¡¸"
+msgstr "முன்னணி வண்ணம் ஓர் சரமாக"
 
 #: gtk/gtkcellrenderertext.c:223
 #: gtk/gtktexttag.c:247
 msgid "Foreground color"
-msgstr "ÓýÉ½¢ Åñ½õ"
+msgstr "முன்னணி வண்ணம்"
 
 #: gtk/gtkcellrenderertext.c:224
 msgid "Foreground color as a GdkColor"
-msgstr "ÓýÉ½¢ Åñ½õ µ÷ GdkColorÃ¡¸"
+msgstr "முன்னணி வண்ணம் ஓர் GdkColorராக"
 
 #: gtk/gtkcellrenderertext.c:232
 #: gtk/gtkentry.c:456
 #: gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:570
 msgid "Editable"
-msgstr "À¾¢ôÀ¢ì¸ìÜÊÂÐ"
+msgstr "பதிப்பிக்கக்கூடியது"
 
 #: gtk/gtkcellrenderertext.c:233
 #: gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:571
 msgid "Whether the text can be modified by the user"
-msgstr "ÀÂÉÃ¡ø Á¡üÈìÜÊÂ ¯¨ÃÂ¡¸ ­Õ¸ìÜÎõ"
+msgstr "பயனரால் மாற்றக்கூடிய உரையாக இருகக்கூடும்"
 
 #: gtk/gtkcellrenderertext.c:240
 #: gtk/gtkcellrenderertext.c:248
@@ -1264,32 +1264,32 @@ msgstr "ÀÂÉÃ¡ø Á¡üÈìÜÊÂ ¯¨ÃÂ¡¸ ­Õ¸ìÜÎõ"
 #: gtk/gtktexttag.c:281
 #: gtk/gtktexttag.c:289
 msgid "Font"
-msgstr "±ØòÐ Å¨¸"
+msgstr "எழுத்து வகை"
 
 #: gtk/gtkcellrenderertext.c:241
 msgid "Font description as a string"
-msgstr "±ØòÐ Å¨¸Â¢ý Å¢ÅÃ½õ µ÷ ºÃÁ¡¸"
+msgstr "எழுத்து வகையின் விவரணம் ஓர் சரமாக"
 
 #: gtk/gtkcellrenderertext.c:249
 #: gtk/gtktexttag.c:290
 msgid "Font description as a PangoFontDescription struct"
-msgstr "±ØòÐ Å¨¸Â¢ý Å¢ÅÃ½õ µ÷ 'PangoFontDescription struct'¬¸"
+msgstr "எழுத்து வகையின் விவரணம் ஓர் 'PangoFontDescription struct'ஆக"
 
 #: gtk/gtkcellrenderertext.c:257
 #: gtk/gtktexttag.c:298
 msgid "Font family"
-msgstr "±ØòÐ Å¨¸ ÌÎõÀõ"
+msgstr "எழுத்து வகை குடும்பம்"
 
 #: gtk/gtkcellrenderertext.c:258
 #: gtk/gtktexttag.c:299
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "±ØòÐ Å¨¸ ÌÎõÀò¾¢ý ¦ÀÂ÷, e.g. Sans, Helvetica, Times, Monospace"
+msgstr "எழுத்து வகை குடும்பத்தின் பெயர், e.g. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:265
 #: gtk/gtkcellrenderertext.c:266
 #: gtk/gtktexttag.c:306
 msgid "Font style"
-msgstr "±ØòÐÅ¨¸ À¡½¢"
+msgstr "எழுத்துவகை பாணி"
 
 #: gtk/gtkcellrenderertext.c:274
 #: gtk/gtkcellrenderertext.c:275
@@ -1301,43 +1301,43 @@ msgstr "Font variant"
 #: gtk/gtkcellrenderertext.c:284
 #: gtk/gtktexttag.c:324
 msgid "Font weight"
-msgstr "±ØòÐÅ¨¸ ¸Éõ"
+msgstr "எழுத்துவகை கனம்"
 
 #: gtk/gtkcellrenderertext.c:293
 #: gtk/gtkcellrenderertext.c:294
 #: gtk/gtktexttag.c:335
 msgid "Font stretch"
-msgstr "±ØòÐÅ¨¸ ¿£ðÎ"
+msgstr "எழுத்துவகை நீட்டு"
 
 #: gtk/gtkcellrenderertext.c:302
 #: gtk/gtkcellrenderertext.c:303
 #: gtk/gtktexttag.c:344
 msgid "Font size"
-msgstr "ÒûÇ¢ «Ç×"
+msgstr "புள்ளி அளவு"
 
 #: gtk/gtkcellrenderertext.c:312
 #: gtk/gtktexttag.c:364
 msgid "Font points"
-msgstr "±ØòÐÅ¨¸ ÒûÇ¢¸û"
+msgstr "எழுத்துவகை புள்ளிகள்"
 
 #: gtk/gtkcellrenderertext.c:313
 #: gtk/gtktexttag.c:365
 msgid "Font size in points"
-msgstr "±ØòÐÅ¨¸ «Ç× ÒûÇ¢¸Ç¢ø"
+msgstr "எழுத்துவகை அளவு புள்ளிகளில்"
 
 #: gtk/gtkcellrenderertext.c:322
 #: gtk/gtktexttag.c:354
 msgid "Font scale"
-msgstr "±ØòÐÅ¨¸ «Ç×§¸¡ø"
+msgstr "எழுத்துவகை அளவுகோல்"
 
 #: gtk/gtkcellrenderertext.c:323
 msgid "Font scaling factor"
-msgstr "±ØòÐÅ¨¸ «Ç×Á¡üÈõ ¸¡Ã½¢"
+msgstr "எழுத்துவகை அளவுமாற்றம் காரணி"
 
 #: gtk/gtkcellrenderertext.c:332
 #: gtk/gtktexttag.c:423
 msgid "Rise"
-msgstr "±Æ¢ó¾¢Õ"
+msgstr "எழிந்திரு"
 
 #: gtk/gtkcellrenderertext.c:333
 msgid "Offset of text above the baseline (below the baseline if rise is negative)"
@@ -1356,122 +1356,122 @@ msgstr "Whether to strike through the text"
 #: gtk/gtkcellrenderertext.c:351
 #: gtk/gtktexttag.c:471
 msgid "Underline"
-msgstr "¸£ø§¸¡Î"
+msgstr "கீல்கோடு"
 
 #: gtk/gtkcellrenderertext.c:352
 #: gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
-msgstr "­ó¾ ¯¨ÃÂ¢ý ¸£ø§¸¡Î À¡½¢"
+msgstr "இந்த உரையின் கீல்கோடு பாணி"
 
 #: gtk/gtkcellrenderertext.c:362
 #: gtk/gtktexttag.c:508
 msgid "Background set"
-msgstr "À¢ýÉ½¢ «¨Áì¸ôÀð¼Ð"
+msgstr "பின்னணி அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:363
 #: gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ À¢ýÉ½¢ Åñ½ò¨¾ À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு பின்னணி வண்ணத்தை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:366
 #: gtk/gtktexttag.c:520
 msgid "Foreground set"
-msgstr "ÓýÉ½¢ «¨Áì¸ôÀð¼Ð"
+msgstr "முன்னணி அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:367
 #: gtk/gtktexttag.c:521
 msgid "Whether this tag affects the foreground color"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ÓýÉ½¢ Åñ½ò¨¾ À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு முன்னணி வண்ணத்தை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:370
 #: gtk/gtktexttag.c:528
 msgid "Editability set"
-msgstr "À¾¢ôÀ¢ò¾ø «¨Áì¸ôÀð¼Ð"
+msgstr "பதிப்பித்தல் அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:371
 #: gtk/gtktexttag.c:529
 msgid "Whether this tag affects text editability"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ¯¨Ã À¾¢ôÀ¢ò¾¨Ä À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு உரை பதிப்பித்தலை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:374
 #: gtk/gtktexttag.c:532
 msgid "Font family set"
-msgstr "±ØòÐ Å¨¸ ÌÎõÀõ «¨Áì¸ôÀð¼Ð"
+msgstr "எழுத்து வகை குடும்பம் அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:375
 #: gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ±ØòÐ Å¨¸ ÌÎõÀò¨¾ À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு எழுத்து வகை குடும்பத்தை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:378
 #: gtk/gtktexttag.c:536
 msgid "Font style set"
-msgstr "±ØòÐÅ¨¸ «¨Áì¸ôÀð¼Ð"
+msgstr "எழுத்துவகை அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:379
 #: gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font style"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ±ØòÐ Å¨¸ À¡½¢¨Â À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு எழுத்து வகை பாணியை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:382
 #: gtk/gtktexttag.c:540
 msgid "Font variant set"
-msgstr "Font variant «¨Áì¸ôÀð¼Ð"
+msgstr "Font variant அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:383
 #: gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font variant"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ±ØòÐ Å¨¸ variant¨¼ À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு எழுத்து வகை variantடை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:386
 #: gtk/gtktexttag.c:544
 msgid "Font weight set"
-msgstr "±ØòÐ Å¨¸ ¸Éõ «¨Áì¸ôÀð¼Ð"
+msgstr "எழுத்து வகை கனம் அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:387
 #: gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font weight"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ±ØòÐ Å¨¸ ¸Éò¨¾ À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு எழுத்து வகை கனத்தை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:390
 #: gtk/gtktexttag.c:548
 msgid "Font stretch set"
-msgstr "±ØòÐ Å¨¸ ¿£ðÎ «¨Áì¸ôÀð¼Ð"
+msgstr "எழுத்து வகை நீட்டு அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:391
 #: gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font stretch"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ±ØòÐ Å¨¸ ¿£ð¨À À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு எழுத்து வகை நீட்பை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:394
 #: gtk/gtktexttag.c:552
 msgid "Font size set"
-msgstr "±ØòÐ Å¨¸ «Ç× «¨Áì¸ôÀð¼Ð"
+msgstr "எழுத்து வகை அளவு அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:395
 #: gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font size"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ±ØòÐ Å¨¸ «Ç×¨Å À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு எழுத்து வகை அளவுவை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:398
 #: gtk/gtktexttag.c:556
 msgid "Font scale set"
-msgstr "±ØòÐ Å¨¸ «Ç×§¸¡ø «¨Áì¸ôÀð¼Ð"
+msgstr "எழுத்து வகை அளவுகோல் அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:399
 #: gtk/gtktexttag.c:557
 msgid "Whether this tag scales the font size by a factor"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ±ØòÐ Å¨¸ «Ç×§¸¡¨Ä À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு எழுத்து வகை அளவுகோலை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:402
 #: gtk/gtktexttag.c:576
 msgid "Rise set"
-msgstr "±Æ¢ó¾¢Õò¾ø «¨Áì¸ôÀð¼Ð"
+msgstr "எழிந்திருத்தல் அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:403
 #: gtk/gtktexttag.c:577
 msgid "Whether this tag affects the rise"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ±Æ¢ó¾¢Õò¾¨Ä À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு எழிந்திருத்தலை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertext.c:406
 #: gtk/gtktexttag.c:592
@@ -1486,12 +1486,12 @@ msgstr "Whether this tag affects strikethrough"
 #: gtk/gtkcellrenderertext.c:410
 #: gtk/gtktexttag.c:600
 msgid "Underline set"
-msgstr "¸£ø§¸¡Î «¨Áì¸ôÀð¼Ð"
+msgstr "கீல்கோடு அமைக்கப்பட்டது"
 
 #: gtk/gtkcellrenderertext.c:411
 #: gtk/gtktexttag.c:601
 msgid "Whether this tag affects underlining"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ¸£ø§¸¡¨¼ À¡¾¢ìÌÁ¡"
+msgstr "இந்த அடையாள ஒட்டு கீல்கோடை பாதிக்குமா"
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "Toggle state"
@@ -1519,7 +1519,7 @@ msgstr "Active"
 #: gtk/gtkcellrenderertoggle.c:151
 #, fuzzy
 msgid "The toggle button can be activated"
-msgstr "­Õ¿¢¨ÄÁ¡üÈ¢ ¦À¡ò¾¡ý \"¿¢¨Ä¸ÙìÌ ¿ÎÅ¢ø\" ¯ûÇ§¾¡"
+msgstr "இருநிலைமாற்றி பொத்தான் \"நிலைகளுக்கு நடுவில்\" உள்ளதோ"
 
 #: gtk/gtkcellrenderertoggle.c:159
 msgid "Radio state"
@@ -1532,7 +1532,7 @@ msgstr "Draw the toggle button as a radio button"
 #: gtk/gtkcheckbutton.c:98
 #: gtk/gtkoptionmenu.c:197
 msgid "Indicator Size"
-msgstr "¸¡ðÊÂ¢ý «Ç×"
+msgstr "காட்டியின் அளவு"
 
 #: gtk/gtkcheckbutton.c:99
 msgid "Size of check or radio indicator"
@@ -1555,7 +1555,7 @@ msgstr "Active"
 #: gtk/gtkcheckmenuitem.c:118
 #, fuzzy
 msgid "Whether the menu item is checked"
-msgstr "ÀðÊ ¯ÕôÀÊ §¾÷×¦ºöÂôÀðÎûÇ¾¡"
+msgstr "பட்டி உருப்படி தேர்வுசெய்யப்பட்டுள்ளதா"
 
 #: gtk/gtkcheckmenuitem.c:125
 #: gtk/gtktogglebutton.c:140
@@ -1573,11 +1573,11 @@ msgstr "The previously-selected color, for comparison to the color you're select
 
 #: gtk/gtkcolorsel.c:564
 msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "§¾÷¾¢ÕìÌõ Åñ½õ. ±¾¢÷¸¡Äò¾¢ø ÀÂñÀÎòÐÅ¾üÌ, ­ó¾ Åñ½ò¨¾ ­ØòÐ Åñ½ò ¾ðÊø §À¡¼×õ."
+msgstr "தேர்திருக்கும் வண்ணம். எதிர்காலத்தில் பயண்படுத்துவதற்கு, இந்த வண்ணத்தை இழுத்து வண்ணத் தட்டில் போடவும்."
 
 #: gtk/gtkcolorsel.c:926
 msgid "_Save color here"
-msgstr "_Åñ½ò¨¾ ­íÌ §ºÁ¢"
+msgstr "_வண்ணத்தை இங்கு சேமி"
 
 #: gtk/gtkcolorsel.c:1129
 msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1585,43 +1585,43 @@ msgstr "Click this palette entry to make it the current color. To change this en
 
 #: gtk/gtkcolorsel.c:1743
 msgid "Has Opacity Control"
-msgstr "´Ç¢ô Ò¸¡¨Á ¸ðÎôÀ¡Î ¯ñÎ"
+msgstr "ஒளிப் புகாமை கட்டுப்பாடு உண்டு"
 
 #: gtk/gtkcolorsel.c:1744
 msgid "Whether the color selector should allow setting opacity"
-msgstr "Åñ½ò §¾Ã¢× ´Ç¢ô Ò¸¡¨Á «¨Á¨¾¾ÖìÌ «ÑÁ¾¢ ¦¸¡Îì¸§ÅñÎÁ¡"
+msgstr "வண்ணத் தேரிவு ஒளிப் புகாமை அமைதைதலுக்கு அநுமதி கொடுக்கவேண்டுமா"
 
 #: gtk/gtkcolorsel.c:1750
 msgid "Has palette"
-msgstr "Åñ½ò ¾ðÎ ¯ñÎ"
+msgstr "வண்ணத் தட்டு உண்டு"
 
 #: gtk/gtkcolorsel.c:1751
 msgid "Whether a palette should be used"
-msgstr "Åñ½ò ¾ðÎ ´ý¨Èô ÀÂýÀÎò¾ §ÅñÎÁ¡"
+msgstr "வண்ணத் தட்டு ஒன்றைப் பயன்படுத்த வேண்டுமா"
 
 #: gtk/gtkcolorsel.c:1757
 msgid "Current Color"
-msgstr "¾ü§À¡¨¾Â Åñ½õ"
+msgstr "தற்போதைய வண்ணம்"
 
 #: gtk/gtkcolorsel.c:1758
 msgid "The current color"
-msgstr "¾ü§À¡¨¾Â Åñ½õ"
+msgstr "தற்போதைய வண்ணம்"
 
 #: gtk/gtkcolorsel.c:1764
 msgid "Current Alpha"
-msgstr "¾ü§À¡¨¾Â Alpha"
+msgstr "தற்போதைய Alpha"
 
 #: gtk/gtkcolorsel.c:1765
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "¾ü§À¡¨¾Â ´Ç¢ô Ò¸¡¨Á Á¾¢ôÒ (0 fully transparent, 65535 fully opaque)"
+msgstr "தற்போதைய ஒளிப் புகாமை மதிப்பு (0 fully transparent, 65535 fully opaque)"
 
 #: gtk/gtkcolorsel.c:1779
 msgid "Custom palette"
-msgstr "¾É¢ôÀÂý Åñ½ò ¾ðÎ"
+msgstr "தனிப்பயன் வண்ணத் தட்டு"
 
 #: gtk/gtkcolorsel.c:1780
 msgid "Palette to use in the color selector"
-msgstr "Åñ½ò §¾÷¾Ä¢ø ÀÂýÀÎò¾ §ÅñÊÂ Åñ½ò ¾ðÎ"
+msgstr "வண்ணத் தேர்தலில் பயன்படுத்த வேண்டிய வண்ணத் தட்டு"
 
 #: gtk/gtkcolorsel.c:1821
 msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
@@ -1633,63 +1633,63 @@ msgstr "Click the eyedropper, then click a color anywhere on your screen to sele
 
 #: gtk/gtkcolorsel.c:1855
 msgid "_Hue:"
-msgstr "¿¢Èõ:"
+msgstr "நிறம்:"
 
 #: gtk/gtkcolorsel.c:1856
 msgid "Position on the color wheel."
-msgstr "Åñ½î ºì¸Ãò¾¢ø ­¼õ."
+msgstr "வண்ணச் சக்கரத்தில் இடம்."
 
 #: gtk/gtkcolorsel.c:1857
 msgid "_Saturation:"
-msgstr "¦¾Å¢ð¼õ:"
+msgstr "தெவிட்டம்:"
 
 #: gtk/gtkcolorsel.c:1858
 msgid "\"Deepness\" of the color."
-msgstr "­ó¾ Åñ½ò¾¢ý ¬Æõ."
+msgstr "இந்த வண்ணத்தின் ஆழம்."
 
 #: gtk/gtkcolorsel.c:1859
 msgid "_Value:"
-msgstr "Á¾¢ôÒ:"
+msgstr "மதிப்பு:"
 
 #: gtk/gtkcolorsel.c:1860
 msgid "Brightness of the color."
-msgstr "­ó¾ Åñ½ò¾¢ý ´Ç¢÷×."
+msgstr "இந்த வண்ணத்தின் ஒளிர்வு."
 
 #: gtk/gtkcolorsel.c:1861
 msgid "_Red:"
-msgstr "º¢ÅôÒ:"
+msgstr "சிவப்பு:"
 
 #: gtk/gtkcolorsel.c:1862
 msgid "Amount of red light in the color."
-msgstr "Åñ½ò¾¢ø ¯øÄ º¢ÅôÒ ¿¢È ´Ç¢ «Ç×."
+msgstr "வண்ணத்தில் உல்ல சிவப்பு நிற ஒளி அளவு."
 
 #: gtk/gtkcolorsel.c:1863
 msgid "_Green:"
-msgstr "Àî¨º:"
+msgstr "பச்சை:"
 
 #: gtk/gtkcolorsel.c:1864
 msgid "Amount of green light in the color."
-msgstr "Åñ½ò¾¢ø ¯øÄ Àî¨º ¿¢È ´Ç¢ «Ç×."
+msgstr "வண்ணத்தில் உல்ல பச்சை நிற ஒளி அளவு."
 
 #: gtk/gtkcolorsel.c:1865
 msgid "_Blue:"
-msgstr "¿£Äõ:"
+msgstr "நீலம்:"
 
 #: gtk/gtkcolorsel.c:1866
 msgid "Amount of blue light in the color."
-msgstr "Åñ½ò¾¢ø ¯øÄ ¿£Ä ¿¢È ´Ç¢ «Ç×."
+msgstr "வண்ணத்தில் உல்ல நீல நிற ஒளி அளவு."
 
 #: gtk/gtkcolorsel.c:1869
 msgid "_Opacity:"
-msgstr "´Ç¢-Ò¸¡¨Á:"
+msgstr "ஒளி-புகாமை:"
 
 #: gtk/gtkcolorsel.c:1877
 msgid "Transparency of the currently-selected color."
-msgstr "¾ü§À¡Ð §¾÷×¦ºöÂôÀð¼ Åñ½ò¾¢ý ÒÄôÀ¡Î."
+msgstr "தற்போது தேர்வுசெய்யப்பட்ட வண்ணத்தின் புலப்பாடு."
 
 #: gtk/gtkcolorsel.c:1892
 msgid "Color _Name:"
-msgstr "Åñ½ò¾¢ý ¦ÀÂ÷:"
+msgstr "வண்ணத்தின் பெயர்:"
 
 #: gtk/gtkcolorsel.c:1904
 msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
@@ -1697,19 +1697,19 @@ msgstr "You can enter an HTML-style hexadecimal color value, or simply a color n
 
 #: gtk/gtkcolorsel.c:1923
 msgid "_Palette"
-msgstr "Åñ½ò ¾ðÎ"
+msgstr "வண்ணத் தட்டு"
 
 #: gtk/gtkcombo.c:143
 msgid "Enable arrow keys"
-msgstr "«õÒ Å¢¨º¸¨Ç ­ÂÖ¨ÁôÀÎòÐ"
+msgstr "அம்பு விசைகளை இயலுமைப்படுத்து"
 
 #: gtk/gtkcombo.c:144
 msgid "Whether the arrow keys move through the list of items"
-msgstr "«õÒ Å¢¨º¸û ¯ÕôÊ¸û ÀðÊ ÅÆ¢§Â ¿¸ÕÁ¡"
+msgstr "அம்பு விசைகள் உருப்டிகள் பட்டி வழியே நகருமா"
 
 #: gtk/gtkcombo.c:150
 msgid "Always enable arrows"
-msgstr "«õÒ¸¨Ç ±ô¦À¡ØÐõ ­ÂÖ¨ÁôÀÎòÐ"
+msgstr "அம்புகளை எப்பொழுதும் இயலுமைப்படுத்து"
 
 #: gtk/gtkcombo.c:151
 msgid "Obsolete property, ignored"
@@ -1717,11 +1717,11 @@ msgstr ""
 
 #: gtk/gtkcombo.c:157
 msgid "Case sensitive"
-msgstr "Å¨¸Ô½÷×ûÇ"
+msgstr "வகையுணர்வுள்ள"
 
 #: gtk/gtkcombo.c:158
 msgid "Whether list item matching is case sensitive"
-msgstr "¦À¡Õò¾Á¡É ÀðÊ ¯ÕôÒ Å¨¸Ô½÷×ûÇ¾¡"
+msgstr "பொருத்தமான பட்டி உருப்பு வகையுணர்வுள்ளதா"
 
 #: gtk/gtkcombo.c:165
 msgid "Allow empty"
@@ -1734,7 +1734,7 @@ msgstr ""
 #: gtk/gtkcombo.c:173
 #, fuzzy
 msgid "Value in list"
-msgstr "Á¾¢ôÒ ­¨¼¦ÅÇ¢"
+msgstr "மதிப்பு இடைவெளி"
 
 #: gtk/gtkcombo.c:174
 msgid "Whether entered values must already be present in the list"
@@ -1742,15 +1742,15 @@ msgstr ""
 
 #: gtk/gtkcontainer.c:202
 msgid "Resize mode"
-msgstr "ÁÚ «Ç× Á¡üÈø Ó¨È¨Á"
+msgstr "மறு அளவு மாற்றல் முறைமை"
 
 #: gtk/gtkcontainer.c:203
 msgid "Specify how resize events are handled"
-msgstr "ÁÚ «Ç× Á¡üÈø ¿¢¸úîº¢¸¨Ç ¨¸Â¡ÙÅÐ ±ôÀÊ ±É ÌÈ¢ôÀ¢Î"
+msgstr "மறு அளவு மாற்றல் நிகழ்ச்சிகளை கையாளுவது எப்படி என குறிப்பிடு"
 
 #: gtk/gtkcontainer.c:210
 msgid "Border width"
-msgstr "±ø¨Ä «¸Äõ"
+msgstr "எல்லை அகலம்"
 
 #: gtk/gtkcontainer.c:211
 #, fuzzy
@@ -1759,16 +1759,16 @@ msgstr "The width of the empty border outside the containers children."
 
 #: gtk/gtkcontainer.c:219
 msgid "Child"
-msgstr "§ºö"
+msgstr "சேய்"
 
 #: gtk/gtkcontainer.c:220
 #, fuzzy
 msgid "Can be used to add a new child to the container"
-msgstr "À¡ò¾¢Ãò¾¢ø Ò¾¢Â §ºö ´ý¨Èî §º÷ôÀ¾üÌ ÀÂýÀÎò¾Ä¡õ"
+msgstr "பாத்திரத்தில் புதிய சேய் ஒன்றைச் சேர்ப்பதற்கு பயன்படுத்தலாம்"
 
 #: gtk/gtkcurve.c:121
 msgid "Curve type"
-msgstr "Å¨Ç× Å¨¸"
+msgstr "வளைவு வகை"
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
@@ -1809,7 +1809,7 @@ msgstr "Maximum possible value for Y"
 
 #: gtk/gtkdialog.c:136
 msgid "Has separator"
-msgstr "À¢Ã¢ôÒ ¯ñÎ"
+msgstr "பிரிப்பு உண்டு"
 
 #: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
@@ -1817,23 +1817,23 @@ msgstr "The dialog has a separator bar above its buttons"
 
 #: gtk/gtkdialog.c:162
 msgid "Content area border"
-msgstr "¦À¡Õû ÀÃôÒ ±ø¨Ä"
+msgstr "பொருள் பரப்பு எல்லை"
 
 #: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
-msgstr "¾¨Ä¨Á ¯¨ÃÂ¡¼ø ±ø¨Ä¨Âî ÍüÈ¢ÔûÇ ±ø¨ÄÂ¢ý «¸Äõ"
+msgstr "தலைமை உரையாடல் எல்லையைச் சுற்றியுள்ள எல்லையின் அகலம்"
 
 #: gtk/gtkdialog.c:170
 msgid "Button spacing"
-msgstr "¦À¡ò¾¡ý ­¨¼¦ÅÇ¢"
+msgstr "பொத்தான் இடைவெளி"
 
 #: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
-msgstr "¦À¡ò¾¡ý ­¨¼Â¢ø ¯ûÇ ­¨¼¦ÅÇ¢"
+msgstr "பொத்தான் இடையில் உள்ள இடைவெளி"
 
 #: gtk/gtkdialog.c:179
 msgid "Action area border"
-msgstr "¦ºÂø ÀÃôÒ ±ø¨Ä"
+msgstr "செயல் பரப்பு எல்லை"
 
 #: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
@@ -1843,19 +1843,19 @@ msgstr "Width of border around the button area at the bottom of the dialog"
 #: gtk/gtklabel.c:368
 #, fuzzy
 msgid "Cursor Position"
-msgstr "­¼õ"
+msgstr "இடம்"
 
 #: gtk/gtkentry.c:437
 #: gtk/gtklabel.c:369
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
-msgstr "¦ºÕÌÁ¢¼ò¾¢ý ¾ü§À¡¨¾Â ­¼õ"
+msgstr "செருகுமிடத்தின் தற்போதைய இடம்"
 
 #: gtk/gtkentry.c:446
 #: gtk/gtklabel.c:378
 #, fuzzy
 msgid "Selection Bound"
-msgstr "¦¾Ã¢× ¦ºö¾Ð: "
+msgstr "தெரிவு செய்தது: "
 
 #: gtk/gtkentry.c:447
 #: gtk/gtklabel.c:379
@@ -1864,20 +1864,20 @@ msgstr ""
 
 #: gtk/gtkentry.c:457
 msgid "Whether the entry contents can be edited"
-msgstr "¯ûÇ£Î ¦À¡Õü¸¨Ç À¾¢ôÀ¢ü¸ ÓÊÔÁ¡"
+msgstr "உள்ளீடு பொருற்களை பதிப்பிற்க முடியுமா"
 
 #: gtk/gtkentry.c:464
 msgid "Maximum length"
-msgstr "Á¢¸ìÜÊÂ ¿£ð¼õ"
+msgstr "மிகக்கூடிய நீட்டம்"
 
 #: gtk/gtkentry.c:465
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "­ó¾ ¯ûÇ£ð¼ò¾¢üÌ Á¢¸ìÜÊÂ ÅÃ¢ÔÕ ±ñ"
+msgstr "இந்த உள்ளீட்டத்திற்கு மிகக்கூடிய வரியுரு எண்"
 
 #: gtk/gtkentry.c:473
 msgid "Visibility"
-msgstr "À¡÷¸ìÜÊÂÐ"
+msgstr "பார்கக்கூடியது"
 
 #: gtk/gtkentry.c:474
 msgid "FALSE displays the \"invisible char\" instead of the actual text (password mode)"
@@ -1886,7 +1886,7 @@ msgstr "FALSE displays the \"invisible char\" instead of the actual text (passwo
 #: gtk/gtkentry.c:481
 #, fuzzy
 msgid "Has Frame"
-msgstr "Åñ½ò ¾ðÎ ¯ñÎ"
+msgstr "வண்ணத் தட்டு உண்டு"
 
 #: gtk/gtkentry.c:482
 msgid "FALSE removes outside bevel from entry"
@@ -1894,15 +1894,15 @@ msgstr ""
 
 #: gtk/gtkentry.c:489
 msgid "Invisible character"
-msgstr "À¡÷ì¸ÓÊÂ¡¾ ÅÃ¢ÔÕ"
+msgstr "பார்க்கமுடியாத வரியுரு"
 
 #: gtk/gtkentry.c:490
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "¯ûÇ£Î ¦À¡Õü¸¨Ç Á¨ÈìÌõ§À¡Ð ÀÂýÀÎò¾ §ÅñÊÂ ÅÃ¢ÔÕ (\"password mode\" ­Ûø)"
+msgstr "உள்ளீடு பொருற்களை மறைக்கும்போது பயன்படுத்த வேண்டிய வரியுரு (\"password mode\" இனுல்)"
 
 #: gtk/gtkentry.c:497
 msgid "Activates default"
-msgstr "¦¸¡¼¡ ¿¢¨Ä¨Â ¦¾¡¼íÌõ"
+msgstr "கொடா நிலையை தொடங்கும்"
 
 #: gtk/gtkentry.c:498
 #, fuzzy
@@ -1911,16 +1911,16 @@ msgstr "Whether to activate the default widget (such as the default button in a 
 
 #: gtk/gtkentry.c:504
 msgid "Width in chars"
-msgstr "chars­ø «¸Äõ"
+msgstr "charsஇல் அகலம்"
 
 #: gtk/gtkentry.c:505
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
-msgstr "`¯ûÄ£ð¼ò¾¢ø ­¨¼Å¢¼ §ÅñÊÂ ÅÃ¢ÔÕ¸Ç¢ý ±ñ"
+msgstr "`உள்லீட்டத்தில் இடைவிட வேண்டிய வரியுருகளின் எண்"
 
 #: gtk/gtkentry.c:514
 msgid "Scroll offset"
-msgstr "¾¢¨Ã ¯ÕÇø ´Ðì¸õ"
+msgstr "திரை உருளல் ஒதுக்கம்"
 
 #: gtk/gtkentry.c:515
 msgid "Number of pixels of the entry scrolled off the screen to the left"
@@ -1929,28 +1929,28 @@ msgstr "Number of pixels of the entry scrolled off the screen to the left"
 #: gtk/gtkentry.c:525
 #, fuzzy
 msgid "The contents of the entry"
-msgstr "Å¢ð¦ºðÊý ¦ÀÂ÷"
+msgstr "விட்செட்டின் பெயர்"
 
 #: gtk/gtkentry.c:756
 #, fuzzy
 msgid "Select on focus"
-msgstr "¦¾Ã¢× ¦ºö¾Ð: "
+msgstr "தெரிவு செய்தது: "
 
 #: gtk/gtkentry.c:757
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr "¯ûÇ£Î ¦À¡Õü¸¨Ç À¾¢ôÀ¢ü¸ ÓÊÔÁ¡"
+msgstr "உள்ளீடு பொருற்களை பதிப்பிற்க முடியுமா"
 
 #: gtk/gtkentry.c:3957
 #: gtk/gtklabel.c:3222
 #, fuzzy
 msgid "Select All"
-msgstr "¦¾Ã¢× ¦ºöÂìÜÊÂÐ"
+msgstr "தெரிவு செய்யக்கூடியது"
 
 #: gtk/gtkentry.c:3967
 #: gtk/gtklabel.c:3232
 msgid "Input Methods"
-msgstr "¯ûÇ£Î Ó¨È¸û"
+msgstr "உள்ளீடு முறைகள்"
 
 #: gtk/gtkentry.c:3977
 #: gtk/gtktextview.c:6611
@@ -1960,26 +1960,26 @@ msgstr ""
 #: gtk/gtkfilesel.c:512
 #: gtk/gtkimage.c:167
 msgid "Filename"
-msgstr "§¸¡ôÒô¦ÀÂ÷"
+msgstr "கோப்புப்பெயர்"
 
 #: gtk/gtkfilesel.c:513
 #, fuzzy
 msgid "The currently selected filename"
-msgstr "¾ü§À¡Ð ¦¾Ã¢× ¦ºöÂôÀð¼ §¸¡ôÒô¦ÀÂ÷."
+msgstr "தற்போது தெரிவு செய்யப்பட்ட கோப்புப்பெயர்."
 
 #: gtk/gtkfilesel.c:519
 msgid "Show file operations"
-msgstr "§¸¡ôÒ ­Âì¸í¸¨Çì ¸¡ñÀ¢"
+msgstr "கோப்பு இயக்கங்களைக் காண்பி"
 
 #: gtk/gtkfilesel.c:520
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr "§¸¡ôÒ¸¨Ç À¨¼ìÌõ/¨¸Â¡Ùõ ¦À¡ò¾¡ý¸¨Ç ¸¡ñÀ¢ì¸ôÀ¼ §ÅñÎÁ¡."
+msgstr "கோப்புகளை படைக்கும்/கையாளும் பொத்தான்களை காண்பிக்கப்பட வேண்டுமா."
 
 #: gtk/gtkfilesel.c:527
 #, fuzzy
 msgid "Select multiple"
-msgstr "¦¾Ã¢× ¦ºöÂìÜÊÂÐ"
+msgstr "தெரிவு செய்யக்கூடியது"
 
 #: gtk/gtkfilesel.c:528
 msgid "Whether to allow multiple files to be selected"
@@ -1987,25 +1987,25 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:683
 msgid "Folders"
-msgstr "«¨¼×¸û"
+msgstr "அடைவுகள்"
 
 #: gtk/gtkfilesel.c:687
 msgid "Fol_ders"
-msgstr "«¨¼_×¸û"
+msgstr "அடை_வுகள்"
 
 #: gtk/gtkfilesel.c:719
 msgid "Files"
-msgstr "§¸¡ôÒ¸û"
+msgstr "கோப்புகள்"
 
 #: gtk/gtkfilesel.c:723
 msgid "_Files"
-msgstr "_§¸¡ôÒ¸û"
+msgstr "_கோப்புகள்"
 
 #: gtk/gtkfilesel.c:806
 #: gtk/gtkfilesel.c:2204
 #, fuzzy, c-format
 msgid "Folder unreadable: %s"
-msgstr "%s : «¨¼¨Å Å¡º¢ì¸ ÓÊÂ¡Ð"
+msgstr "%s : அடைவை வாசிக்க முடியாது"
 
 #: gtk/gtkfilesel.c:937
 #, c-format
@@ -2019,33 +2019,33 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1079
 msgid "De_lete File"
-msgstr "§¸¡ôÒ «Æ¢"
+msgstr "கோப்பு அழி"
 
 #: gtk/gtkfilesel.c:1090
 msgid "_Rename File"
-msgstr "§¸¡ôÒ ¦ÀÂ÷ Á¡üÚ"
+msgstr "கோப்பு பெயர் மாற்று"
 
 #: gtk/gtkfilesel.c:1386
 #, fuzzy, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "§¸¡ôÒô ¦ÀÂ÷¸Ç¢ø «ÑÁ¾¢ì¸ÓÊÂ¡¾ ÌÈ¢Â£Î¸û §¸¡ôÒô ¦ÀÂÃ¢ø ¯ûÇÉ \"%s\""
+msgstr "கோப்புப் பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் கோப்புப் பெயரில் உள்ளன \"%s\""
 
 #: gtk/gtkfilesel.c:1388
 #, fuzzy, c-format
 msgid "Error creating folder \"%s\": %s\n"
 "%s"
-msgstr "\"%s\" §¸¡ô¨À ¦ÀÂ÷ Á¡üÚõ§À¡Ð À¢¨Æ: %s\n"
+msgstr "\"%s\" கோப்பை பெயர் மாற்றும்போது பிழை: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1389
 #: gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
-msgstr "§¸¡ôÒô ¦ÀÂ÷¸Ç¢ø «ÑÁ¾¢ì¸ÓÊÂ¡¾ ÌÈ¢Â£Î¸û ÀÂýÀÎò¾¢ ­Õì¸Ä¡õ."
+msgstr "கோப்புப் பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் பயன்படுத்தி இருக்கலாம்."
 
 #: gtk/gtkfilesel.c:1397
 #, fuzzy, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr "\"%s\" «¨¼× À¨¼ìÌõ§À¡Ð À¢¨Æ: %s\n"
+msgstr "\"%s\" அடைவு படைக்கும்போது பிழை: %s\n"
 
 #: gtk/gtkfilesel.c:1431
 msgid "New Folder"
@@ -2053,84 +2053,84 @@ msgstr "0x8402250"
 
 #: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
-msgstr "«¨¼× _¦ÀÂ÷:"
+msgstr "அடைவு _பெயர்:"
 
 #: gtk/gtkfilesel.c:1472
 msgid "C_reate"
-msgstr "_À¨¼"
+msgstr "_படை"
 
 #: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "§¸¡ôÒô ¦ÀÂ÷¸Ç¢ø «ÑÁ¾¢ì¸ÓÊÂ¡¾ ÌÈ¢Â£Î¸û §¸¡ôÒô ¦ÀÂÃ¢ø ¯ûÇÉ \"%s\""
+msgstr "கோப்புப் பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் கோப்புப் பெயரில் உள்ளன \"%s\""
 
 #: gtk/gtkfilesel.c:1521
 #, c-format
 msgid "Error deleting file \"%s\": %s\n"
 "%s"
-msgstr "\"%s\" §¸¡ô¨À ¿£ìÌõ§À¡Ð À¢¨Æ: %s\n"
+msgstr "\"%s\" கோப்பை நீக்கும்போது பிழை: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1523
 #: gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
-msgstr "§¸¡ôÒô ¦ÀÂ÷¸Ç¢ø «ÑÁ¾¢ì¸ÓÊÂ¡¾ ÌÈ¢Â£Î¸û ¯ûÇ¢Õì¸Ä¡õ."
+msgstr "கோப்புப் பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் உள்ளிருக்கலாம்."
 
 #: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr "\"%s\" §¸¡ô¨À ¿£ìÌõ§À¡Ð À¢¨Æ: %s"
+msgstr "\"%s\" கோப்பை நீக்கும்போது பிழை: %s"
 
 #: gtk/gtkfilesel.c:1575
 #, fuzzy, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "\"%s\" §¸¡ô¨À ¿£ìÌõ§À¡Ð À¢¨Æ: %s"
+msgstr "\"%s\" கோப்பை நீக்கும்போது பிழை: %s"
 
 #: gtk/gtkfilesel.c:1580
 msgid "Delete File"
-msgstr "§¸¡ô¨À ¿£ìÌ"
+msgstr "கோப்பை நீக்கு"
 
 #: gtk/gtkfilesel.c:1626
 #: gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "§¸¡ôÒô ¦ÀÂ÷¸Ç¢ø «ÑÁ¾¢ì¸ÓÊÂ¡¾ ÌÈ¢Â£Î¸û §¸¡ôÒô ¦ÀÂÃ¢ø ¯ûÇÉ \"%s\""
+msgstr "கோப்புப் பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் கோப்புப் பெயரில் உள்ளன \"%s\""
 
 #: gtk/gtkfilesel.c:1628
 #, c-format
 msgid "Error renaming file to \"%s\": %s\n"
 "%s"
-msgstr "§¸¡ô¨À \"%s\" ìÌ ¦ÀÂ÷ Á¡üÚõ§À¡Ð À¢¨Æ: %s\n"
+msgstr "கோப்பை \"%s\" க்கு பெயர் மாற்றும்போது பிழை: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Error renaming file \"%s\": %s\n"
 "%s"
-msgstr "\"%s\" §¸¡ô¨À ¦ÀÂ÷ Á¡üÚõ§À¡Ð À¢¨Æ: %s\n"
+msgstr "\"%s\" கோப்பை பெயர் மாற்றும்போது பிழை: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "\"%s\" §¸¡ô¨À \"%s\" ìÌ ¦ÀÂ÷ Á¡üÚõ§À¡Ð À¢¨Æ: %s"
+msgstr "\"%s\" கோப்பை \"%s\" க்கு பெயர் மாற்றும்போது பிழை: %s"
 
 #: gtk/gtkfilesel.c:1699
 msgid "Rename File"
-msgstr "§¸¡ôÀ¢ý ¦ÀÂ¨Ã Á¡üÚ"
+msgstr "கோப்பின் பெயரை மாற்று"
 
 #: gtk/gtkfilesel.c:1714
 #, fuzzy, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "§¸¡ôÀ¢ý ¦ÀÂ¨Ã Á¡üÚ"
+msgstr "கோப்பின் பெயரை மாற்று"
 
 #: gtk/gtkfilesel.c:1745
 msgid "_Rename"
-msgstr "_¦ÀÂ÷ Á¡üÚ"
+msgstr "_பெயர் மாற்று"
 
 #: gtk/gtkfilesel.c:2184
 msgid "_Selection: "
-msgstr "_¦¾Ã¢× ¦ºö¾Ð: "
+msgstr "_தெரிவு செய்தது: "
 
 #: gtk/gtkfilesel.c:3077
 #, fuzzy, c-format
@@ -2143,31 +2143,31 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3948
 msgid "Name too long"
-msgstr "Á¢¸-¿£ñ¼ ¦ÀÂ÷"
+msgstr "மிக-நீண்ட பெயர்"
 
 #: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
-msgstr "§¸¡ôÒô ¦ÀÂ¨Ã Á¡üÈ ÓÊÂÅ¢ø¨Ä"
+msgstr "கோப்புப் பெயரை மாற்ற முடியவில்லை"
 
 #: gtk/gtkfixed.c:120
 #: gtk/gtklayout.c:611
 msgid "X position"
-msgstr "X ­¼õ"
+msgstr "X இடம்"
 
 #: gtk/gtkfixed.c:121
 #: gtk/gtklayout.c:612
 msgid "X position of child widget"
-msgstr "§ºö Å¢ð¦ºðÊý X ­¼õ"
+msgstr "சேய் விட்செட்டின் X இடம்"
 
 #: gtk/gtkfixed.c:130
 #: gtk/gtklayout.c:621
 msgid "Y position"
-msgstr "Y ­¼õ"
+msgstr "Y இடம்"
 
 #: gtk/gtkfixed.c:131
 #: gtk/gtklayout.c:622
 msgid "Y position of child widget"
-msgstr "§ºö Å¢ð¦ºðÊý Y ­¼õ"
+msgstr "சேய் விட்செட்டின் Y இடம்"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -2177,70 +2177,70 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:210
 msgid "Font name"
-msgstr "±ØòÐ Å¨¸ ¦ÀÂ÷"
+msgstr "எழுத்து வகை பெயர்"
 
 #: gtk/gtkfontsel.c:211
 #, fuzzy
 msgid "The X string that represents this font"
-msgstr "­ó¾ ±ØòÐ Å¨¸Â¢ý X ºÃõ Å¨¸Â¡É À¢Ã¾¢¿¢¾¢."
+msgstr "இந்த எழுத்து வகையின் X சரம் வகையான பிரதிநிதி."
 
 #: gtk/gtkfontsel.c:218
 #, fuzzy
 msgid "The GdkFont that is currently selected"
-msgstr "¾ü§À¡Ð ¦¾Ã¢× ¦ºöÂôÀðÎøÄ GdkFont"
+msgstr "தற்போது தெரிவு செய்யப்பட்டுல்ல GdkFont"
 
 #: gtk/gtkfontsel.c:224
 msgid "Preview text"
-msgstr "¯¨Ã Óý-¸¡ðº¢"
+msgstr "உரை முன்-காட்சி"
 
 #: gtk/gtkfontsel.c:225
 #, fuzzy
 msgid "The text to display in order to demonstrate the selected font"
-msgstr "¦¾Ã¢× ¦ºöÂôÀðÎøÄ ±ØòÐ Å¨¸¨Â ±ÎòÐì ¸¡ð¼ ÀÂýÀÎò¾ §ÅñÊÂ ¯¨Ã."
+msgstr "தெரிவு செய்யப்பட்டுல்ல எழுத்து வகையை எடுத்துக் காட்ட பயன்படுத்த வேண்டிய உரை."
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
-msgstr "ÌÎõÀõ:"
+msgstr "குடும்பம்:"
 
 #: gtk/gtkfontsel.c:338
 msgid "_Style:"
-msgstr "À¡½¢:"
+msgstr "பாணி:"
 
 #: gtk/gtkfontsel.c:344
 msgid "Si_ze:"
-msgstr "«Ç×:"
+msgstr "அளவு:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
 msgid "_Preview:"
-msgstr "_Óý¸¡ðº¢:"
+msgstr "_முன்காட்சி:"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
-msgstr "±ØòÐÅ¨¸ §¾÷×"
+msgstr "எழுத்துவகை தேர்வு"
 
 #: gtk/gtkframe.c:126
 #, fuzzy
 msgid "Text of the frame's label"
-msgstr "ºð¼ò¾¢ý «¨¼Â¡Ç ¯¨Ã"
+msgstr "சட்டத்தின் அடையாள உரை"
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
-msgstr "xalign «¨¼Â¡Çõ"
+msgstr "xalign அடையாளம்"
 
 #: gtk/gtkframe.c:134
 #, fuzzy
 msgid "The horizontal alignment of the label"
-msgstr "«¨¼Â¡Çò¾¢ý ¸¢¨¼¾¢¨º §¿÷ôÀÎò¾õ"
+msgstr "அடையாளத்தின் கிடைதிசை நேர்ப்படுத்தம்"
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
-msgstr "yalign «¨¼Â¡Çõ"
+msgstr "yalign அடையாளம்"
 
 #: gtk/gtkframe.c:144
 #, fuzzy
 msgid "The vertical alignment of the label"
-msgstr "«¨¼Â¡Çò¾¢ý ¦¿Î¾¢¨º §¿÷ôÀÎò¾õ"
+msgstr "அடையாளத்தின் நெடுதிசை நேர்ப்படுத்தம்"
 
 #: gtk/gtkframe.c:153
 #: gtk/gtkhandlebox.c:195
@@ -2249,21 +2249,21 @@ msgstr ""
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
-msgstr "ºð¼ ¿¢Æø"
+msgstr "சட்ட நிழல்"
 
 #: gtk/gtkframe.c:161
 #, fuzzy
 msgid "Appearance of the frame border"
-msgstr "ºð¼ ±ø¨ÄÀ¢ý §¾¡üÈõ"
+msgstr "சட்ட எல்லைபின் தோற்றம்"
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr "Å¢ð¦ºð «¨¼Â¡Çõ"
+msgstr "விட்செட் அடையாளம்"
 
 #: gtk/gtkframe.c:170
 #, fuzzy
 msgid "A widget to display in place of the usual frame label"
-msgstr "ÅÆì¸Á¡¸É ºð¼ «¨¼Â¡Çõ ­ÕìÌÁ¢¼ò¾¢ø ¸¡½À¢ì¸ µ÷ Å¢ð¦ºð."
+msgstr "வழக்கமாகன சட்ட அடையாளம் இருக்குமிடத்தில் காணபிக்க ஓர் விட்செட்."
 
 #: gtk/gtkgamma.c:399
 msgid "Gamma"
@@ -2271,7 +2271,7 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:409
 msgid "_Gamma value"
-msgstr "Gamma Á¾¢ôÒ"
+msgstr "Gamma மதிப்பு"
 
 #: gtk/gtkhandlebox.c:202
 #: gtk/gtkmenubar.c:156
@@ -2279,21 +2279,21 @@ msgstr "Gamma Á¾¢ôÒ"
 #: gtk/gtktoolbar.c:282
 #: gtk/gtkviewport.c:150
 msgid "Shadow type"
-msgstr "¿¢Æø Å¨¸"
+msgstr "நிழல் வகை"
 
 #: gtk/gtkhandlebox.c:203
 #, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
-msgstr "À¡ò¾÷ò¨¾ ÍüÈ¢ÔûÇ ¿¢ÆÄ¢ý §¾¡üÈõ"
+msgstr "பாத்தர்த்தை சுற்றியுள்ள நிழலின் தோற்றம்"
 
 #: gtk/gtkhandlebox.c:211
 msgid "Handle position"
-msgstr "¨¸ôÀ¢ÊÂ¢ý ­¼õ"
+msgstr "கைப்பிடியின் இடம்"
 
 #: gtk/gtkhandlebox.c:212
 #, fuzzy
 msgid "Position of the handle relative to the child widget"
-msgstr "§ºö Å¢ð¦ºÎìÌ º¡÷À¡¸ ¨¸ôÀ¢ÊÂ¢ý ­¼õ"
+msgstr "சேய் விட்செடுக்கு சார்பாக கைப்பிடியின் இடம்"
 
 #: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
@@ -2319,12 +2319,12 @@ msgstr ""
 #: gtk/gtkiconfactory.c:1692
 #, c-format
 msgid "Error loading icon: %s"
-msgstr "ÌÚÀ¼õ ²üÚõ§À¡Ð À¢¨Æ: %s"
+msgstr "குறுபடம் ஏற்றும்போது பிழை: %s"
 
 #: gtk/gtkimage.c:135
 #, fuzzy
 msgid "Pixbuf"
-msgstr "Pixbuf ­ÄìÌ"
+msgstr "Pixbuf இலக்கு"
 
 #: gtk/gtkimage.c:136
 msgid "A GdkPixbuf to display"
@@ -2340,7 +2340,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:151
 msgid "Image"
-msgstr "¯ÕÅõ"
+msgstr "உருவம்"
 
 #: gtk/gtkimage.c:152
 msgid "A GdkImage to display"
@@ -2358,7 +2358,7 @@ msgstr ""
 #: gtk/gtkimage.c:168
 #, fuzzy
 msgid "Filename to load and display"
-msgstr "TIFF ¯ÕÅò¨¾ò ²üÈ ÓÊÂÅ¢ø¨Ä"
+msgstr "TIFF உருவத்தைத் ஏற்ற முடியவில்லை"
 
 #: gtk/gtkimage.c:177
 msgid "Stock ID for a stock image to display"
@@ -2376,7 +2376,7 @@ msgstr ""
 #: gtk/gtkimage.c:192
 #, fuzzy
 msgid "Icon size"
-msgstr "ÒûÇ¢ «Ç×"
+msgstr "புள்ளி அளவு"
 
 #: gtk/gtkimage.c:193
 msgid "Size to use for stock icon or icon set"
@@ -2385,7 +2385,7 @@ msgstr ""
 #: gtk/gtkimage.c:201
 #, fuzzy
 msgid "Animation"
-msgstr "¾¸Åø"
+msgstr "தகவல்"
 
 #: gtk/gtkimage.c:202
 msgid "GdkPixbufAnimation to display"
@@ -2394,7 +2394,7 @@ msgstr ""
 #: gtk/gtkimage.c:209
 #, fuzzy
 msgid "Storage type"
-msgstr "Å¨Ç× Å¨¸"
+msgstr "வளைவு வகை"
 
 #: gtk/gtkimage.c:210
 msgid "The representation being used for image data"
@@ -2402,93 +2402,93 @@ msgstr ""
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
-msgstr "¯ÕÅ Å¢ð¦ºð"
+msgstr "உருவ விட்செட்"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
-msgstr "ÀðÊ ¯¨ÃìÌ «Õ¸¢ø §¾¡ýÈ §ÅñÊÂ §ºö Å¢ð¦ºð"
+msgstr "பட்டி உரைக்கு அருகில் தோன்ற வேண்டிய சேய் விட்செட்"
 
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
-msgstr "¯ûÇ£Î"
+msgstr "உள்ளீடு"
 
 #: gtk/gtkinputdialog.c:239
 msgid "No input devices"
-msgstr "¯ûÇ¢ðÎî º¡¾Éõ ¸¢¨¼Â¡Ð"
+msgstr "உள்ளிட்டுச் சாதனம் கிடையாது"
 
 #: gtk/gtkinputdialog.c:251
 msgid "_Device:"
-msgstr "º¡¾Éõ:"
+msgstr "சாதனம்:"
 
 #: gtk/gtkinputdialog.c:268
 msgid "Disabled"
-msgstr "Ó¼Á¡¸¢ÂÐ"
+msgstr "முடமாகியது"
 
 #: gtk/gtkinputdialog.c:275
 #: gtk/gtkinvisible.c:114
 #: gtk/gtkwindow.c:552
 msgid "Screen"
-msgstr "¾¢¨Ã"
+msgstr "திரை"
 
 #: gtk/gtkinputdialog.c:282
 msgid "Window"
-msgstr "º¡ÇÃõ"
+msgstr "சாளரம்"
 
 #: gtk/gtkinputdialog.c:289
 msgid "_Mode: "
-msgstr "_Ó¨È¨Á: "
+msgstr "_முறைமை: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:320
 msgid "_Axes"
-msgstr "«îÍì¸û"
+msgstr "அச்சுக்கள்"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:337
 msgid "_Keys"
-msgstr "Å¢¨º¸û"
+msgstr "விசைகள்"
 
 #: gtk/gtkinputdialog.c:557
 msgid "X"
-msgstr "Å¡¢¨º(X)"
+msgstr "வாிசை(X)"
 
 #: gtk/gtkinputdialog.c:558
 msgid "Y"
-msgstr "¦¿ÎÅ¡¢¨º(Y)"
+msgstr "நெடுவாிசை(Y)"
 
 #: gtk/gtkinputdialog.c:559
 msgid "Pressure"
-msgstr "«Øò¾õ"
+msgstr "அழுத்தம்"
 
 #: gtk/gtkinputdialog.c:560
 msgid "X Tilt"
-msgstr "X º¡ö×"
+msgstr "X சாய்வு"
 
 #: gtk/gtkinputdialog.c:561
 msgid "Y Tilt"
-msgstr "Y º¡ö×"
+msgstr "Y சாய்வு"
 
 #: gtk/gtkinputdialog.c:562
 msgid "Wheel"
-msgstr "ºì¸Ãõ"
+msgstr "சக்கரம்"
 
 #: gtk/gtkinputdialog.c:602
 msgid "none"
-msgstr "´ýÚÁ¢ø¨Ä"
+msgstr "ஒன்றுமில்லை"
 
 #: gtk/gtkinputdialog.c:638
 #: gtk/gtkinputdialog.c:674
 msgid "(disabled)"
-msgstr "(Ó¼Á¡¸¢ÂÐ)"
+msgstr "(முடமாகியது)"
 
 #: gtk/gtkinputdialog.c:667
 msgid "(unknown)"
-msgstr "(¦¾Ã¢Â¡¾Ð)"
+msgstr "(தெரியாதது)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:754
 msgid "clear"
-msgstr "ÐôÀÃÅ¡ìÌ"
+msgstr "துப்பரவாக்கு"
 
 #: gtk/gtkinvisible.c:115
 #: gtk/gtkwindow.c:553
@@ -2498,7 +2498,7 @@ msgstr ""
 #: gtk/gtklabel.c:291
 #, fuzzy
 msgid "The text of the label"
-msgstr "«¨¼Â¡Çò¾¢ý ¯¨Ã"
+msgstr "அடையாளத்தின் உரை"
 
 #: gtk/gtklabel.c:298
 #, fuzzy
@@ -2518,7 +2518,7 @@ msgstr "The text of the label includes XML markup. See pango_parse_markup()."
 #: gtk/gtktexttag.c:374
 #: gtk/gtktextview.c:587
 msgid "Justification"
-msgstr "§¿÷ò¾¢ ¦ºö¾ø"
+msgstr "நேர்த்தி செய்தல்"
 
 #: gtk/gtklabel.c:320
 #, fuzzy
@@ -2536,40 +2536,40 @@ msgstr "A string with _ characters in positions correspond to characters in the 
 
 #: gtk/gtklabel.c:336
 msgid "Line wrap"
-msgstr "ÅÃ¢ ÁÊôÒ"
+msgstr "வரி மடிப்பு"
 
 #: gtk/gtklabel.c:337
 #, fuzzy
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr "«¨Áì¸ôÀðÎÊÕó¾¡ø, ¯¨Ã Á¢¸-«¸ÄÁ¡Éø ÅÃ¢¸¨Ç ÁÊôÒî ¦ºö"
+msgstr "அமைக்கப்பட்டுடிருந்தால், உரை மிக-அகலமானல் வரிகளை மடிப்புச் செய்"
 
 #: gtk/gtklabel.c:344
 #, fuzzy
 msgid "Whether the label text can be selected with the mouse"
-msgstr "¯¨Ã «¨¼Â¡Çõ Íñ¦¼Ä¢Â¡ø ¦¾Ã¢× ¦ºöÂ ÓÊÔÁ¡"
+msgstr "உரை அடையாளம் சுண்டெலியால் தெரிவு செய்ய முடியுமா"
 
 #: gtk/gtklabel.c:350
 msgid "Mnemonic key"
-msgstr "¿¢¨É×òÐ¨½ Å¢¨º"
+msgstr "நினைவுத்துணை விசை"
 
 #: gtk/gtklabel.c:351
 #, fuzzy
 msgid "The mnemonic accelerator key for this label"
-msgstr "­ó¾ «¨¼Â¡Ç¸¢ð¸¡É ¿¢¨É×òÐ¨½ ¬÷ÓÎ¸ø Å¢¨º."
+msgstr "இந்த அடையாளகிட்கான நினைவுத்துணை ஆர்முடுகல் விசை."
 
 #: gtk/gtklabel.c:359
 msgid "Mnemonic widget"
-msgstr "¿¢¨É×òÐ¨½ Å¢ð¦ºð"
+msgstr "நினைவுத்துணை விட்செட்"
 
 #: gtk/gtklabel.c:360
 #, fuzzy
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "«¨¼Â¡Çò¾¢ý ¿¢¨É×òÐ¨½ Å¢¨º «Óò¾ôÀð¼¡ø àñÎ ¦ºö§ÅñÊÂ Å¢ð¦ºð"
+msgstr "அடையாளத்தின் நினைவுத்துணை விசை அமுத்தப்பட்டால் தூண்டு செய்வேண்டிய விட்செட்"
 
 #: gtk/gtklayout.c:631
 #: gtk/gtkviewport.c:134
 msgid "Horizontal adjustment"
-msgstr "¸¢¨¼ ´Æ¢íÌÀÎò¾ø"
+msgstr "கிடை ஒழிங்குபடுத்தல்"
 
 #: gtk/gtklayout.c:632
 #: gtk/gtkscrolledwindow.c:236
@@ -2580,7 +2580,7 @@ msgstr "The GtkAdjustment for the horizontal position."
 #: gtk/gtklayout.c:639
 #: gtk/gtkviewport.c:142
 msgid "Vertical adjustment"
-msgstr "¦¿Îì¸Á¡¸ ´Æ¢íÌÀÎò¾ø"
+msgstr "நெடுக்கமாக ஒழிங்குபடுத்தல்"
 
 #: gtk/gtklayout.c:640
 #: gtk/gtkscrolledwindow.c:243
@@ -2591,21 +2591,21 @@ msgstr "The GtkAdjustment for the vertical position."
 #: gtk/gtklayout.c:647
 #: gtk/gtktreeviewcolumn.c:201
 msgid "Width"
-msgstr "«¸Äõ"
+msgstr "அகலம்"
 
 #: gtk/gtklayout.c:648
 #, fuzzy
 msgid "The width of the layout"
-msgstr "­¼ «¨ÁÅ¢ý «¸Äõ."
+msgstr "இட அமைவின் அகலம்."
 
 #: gtk/gtklayout.c:656
 msgid "Height"
-msgstr "¯ÂÃõ"
+msgstr "உயரம்"
 
 #: gtk/gtklayout.c:657
 #, fuzzy
 msgid "The height of the layout"
-msgstr "­¼ «¨ÁÅ¢ý ¯ÂÃõ"
+msgstr "இட அமைவின் உயரம்"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2627,7 +2627,7 @@ msgstr ""
 #: gtk/gtkmenu.c:379
 #, fuzzy
 msgid "Can change accelerators"
-msgstr "ÀðÊô ÀÄ¨¸ ¬÷ÓÎ¸ø"
+msgstr "பட்டிப் பலகை ஆர்முடுகல்"
 
 #: gtk/gtkmenu.c:380
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
@@ -2651,16 +2651,16 @@ msgstr ""
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
-msgstr "ÀðÊô ÀÄ¨¸¨Â ÍüÈ¢ÔûÇ bevelÂ¢ý À¡½¢"
+msgstr "பட்டிப் பலகையை சுற்றியுள்ள bevelயின் பாணி"
 
 #: gtk/gtkmenubar.c:164
 #: gtk/gtktoolbar.c:256
 msgid "Internal padding"
-msgstr "¯ûÇ¨Á ¿¢ÃôÀø"
+msgstr "உள்ளமை நிரப்பல்"
 
 #: gtk/gtkmenubar.c:165
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "ÀðÊô Àð¨¼ìÌõ ÀðÊ ¯ÕôÀÊìÌõ ¿ÎÅ¢Ä¢ÕìÌõ ±ø¨Ä ­¨¼¦ÅÇ¢ý «Ç×"
+msgstr "பட்டிப் பட்டைக்கும் பட்டி உருப்படிக்கும் நடுவிலிருக்கும் எல்லை இடைவெளின் அளவு"
 
 #: gtk/gtkmenubar.c:172
 msgid "Delay before drop down menus appear"
@@ -2672,11 +2672,11 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:106
 msgid "Image/label border"
-msgstr "¯ÕÅõ/«¨¼Â¡Ç ±ø¨Ä"
+msgstr "உருவம்/அடையாள எல்லை"
 
 #: gtk/gtkmessagedialog.c:107
 msgid "Width of border around the label and image in the message dialog"
-msgstr "¾¸Åø ¯¨ÃÂ¡¼Ä¢øÄ¢ÕìÌõ «¨¼Â¡Çò¾¢üÌõ ¯ÕÅò¾¢üÌõ ÍüÈ¢ÔûÇ ±ø¨ÄÂ¢ý «¸Äõ"
+msgstr "தகவல் உரையாடலில்லிருக்கும் அடையாளத்திற்கும் உருவத்திற்கும் சுற்றியுள்ள எல்லையின் அகலம்"
 
 #: gtk/gtkmessagedialog.c:115
 msgid "Message Type"
@@ -2685,7 +2685,7 @@ msgstr ""
 #: gtk/gtkmessagedialog.c:116
 #, fuzzy
 msgid "The type of message"
-msgstr "«¨¼Â¡Çò¾¢ý ¯¨Ã"
+msgstr "அடையாளத்தின் உரை"
 
 #: gtk/gtkmessagedialog.c:123
 msgid "Message Buttons"
@@ -2701,7 +2701,7 @@ msgstr "X align"
 
 #: gtk/gtkmisc.c:99
 msgid "The horizontal alignment, from 0 (left) to 1 (right)"
-msgstr "¸¢¨¼¾¢¨º §¿÷ôÀÎò¾ø, 0 (­¼Ð) ­Ä¢ÕóÐ 1 (ÅÄÐ) Å¨Ã"
+msgstr "கிடைதிசை நேர்ப்படுத்தல், 0 (இடது) இலிருந்து 1 (வலது) வரை"
 
 #: gtk/gtkmisc.c:108
 msgid "Y align"
@@ -2709,7 +2709,7 @@ msgstr "Y align"
 
 #: gtk/gtkmisc.c:109
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr "¦¿Î¾¢¨º §¿÷ôÀÎò¾ø, 0 (§Áø) ­Ä¢ÕóÐ 1 (¸£ú) Å¨Ã"
+msgstr "நெடுதிசை நேர்ப்படுத்தல், 0 (மேல்) இலிருந்து 1 (கீழ்) வரை"
 
 #: gtk/gtkmisc.c:118
 msgid "X pad"
@@ -2717,7 +2717,7 @@ msgstr "X pad"
 
 #: gtk/gtkmisc.c:119
 msgid "The amount of space to add on the left and right of the widget, in pixels"
-msgstr "À¢ì¦ºø¸Ç¢ø, Å¢ð¦ºðÎìÌ ÅÄÐ Àì¸ò¾¢Öõ ­¼Ð Àì¸ò¾¢Öõ ­ÕìÌõ ­¨¼¦ÅÇ¢Â¢ý «Ç×"
+msgstr "பிக்செல்களில், விட்செட்டுக்கு வலது பக்கத்திலும் இடது பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
 
 #: gtk/gtkmisc.c:128
 msgid "Y pad"
@@ -2725,72 +2725,72 @@ msgstr "Y pad"
 
 #: gtk/gtkmisc.c:129
 msgid "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr "À¢ì¦ºø¸Ç¢ø, Å¢ð¦ºðÎìÌ §Áø Àì¸ò¾¢Öõ ¸£ú Àì¸ò¾¢Öõ ­ÕìÌõ ­¨¼¦ÅÇ¢Â¢ý «Ç×"
+msgstr "பிக்செல்களில், விட்செட்டுக்கு மேல் பக்கத்திலும் கீழ் பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
 
 #: gtk/gtknotebook.c:372
 msgid "Page"
-msgstr "Àì¸õ"
+msgstr "பக்கம்"
 
 #: gtk/gtknotebook.c:373
 msgid "The index of the current page"
-msgstr "¾ü§À¡¨¾Â Àì¸ò¾¢ý ÍðÎ"
+msgstr "தற்போதைய பக்கத்தின் சுட்டு"
 
 #: gtk/gtknotebook.c:381
 msgid "Tab Position"
-msgstr "¾ò¾ø ­¼õ"
+msgstr "தத்தல் இடம்"
 
 #: gtk/gtknotebook.c:382
 msgid "Which side of the notebook holds the tabs"
-msgstr "¾ò¾ø ­ÕìÌÁ¢¼õ Òò¾¸ò¾¢ý ±ôÀì¸ò¾¢ø"
+msgstr "தத்தல் இருக்குமிடம் புத்தகத்தின் எப்பக்கத்தில்"
 
 #: gtk/gtknotebook.c:389
 msgid "Tab Border"
-msgstr "¾ò¾ø ±ø¨Ä"
+msgstr "தத்தல் எல்லை"
 
 #: gtk/gtknotebook.c:390
 msgid "Width of the border around the tab labels"
-msgstr "¾ò¾ø «¨¼Â¡Çò¨¾ ÍüÈ¢ÔûÇ ±ø¨ÄÂ¢ý «¸Äõ"
+msgstr "தத்தல் அடையாளத்தை சுற்றியுள்ள எல்லையின் அகலம்"
 
 #: gtk/gtknotebook.c:398
 msgid "Horizontal Tab Border"
-msgstr "¸¢¨¼ ¾ò¾ø ±ø¨Ä"
+msgstr "கிடை தத்தல் எல்லை"
 
 #: gtk/gtknotebook.c:399
 msgid "Width of the horizontal border of tab labels"
-msgstr "¾ò¾ø «¨¼Â¡Çí¸¨Çî ÍüÈ¢ÔûÇ ¸¢¨¼ ±ø¨ÄÂ¢ý «¸Äõ"
+msgstr "தத்தல் அடையாளங்களைச் சுற்றியுள்ள கிடை எல்லையின் அகலம்"
 
 #: gtk/gtknotebook.c:407
 msgid "Vertical Tab Border"
-msgstr "¦¿Î ¾ò¾ø ±ø¨Ä"
+msgstr "நெடு தத்தல் எல்லை"
 
 #: gtk/gtknotebook.c:408
 msgid "Width of the vertical border of tab labels"
-msgstr "¾ò¾ø «¨¼Â¡Çí¸¨Çî ÍüÈ¢ÔûÇ ¦¿Î ±ø¨ÄÂ¢ý «¸Äõ"
+msgstr "தத்தல் அடையாளங்களைச் சுற்றியுள்ள நெடு எல்லையின் அகலம்"
 
 #: gtk/gtknotebook.c:416
 msgid "Show Tabs"
-msgstr "¾ò¾ø¸¨Çì ¸¡ñÀ¢"
+msgstr "தத்தல்களைக் காண்பி"
 
 #: gtk/gtknotebook.c:417
 msgid "Whether tabs should be shown or not"
-msgstr "¾ò¾ø¸û ¸¡ñÀ¢ôÀ¾¡ ­ø¨ÄÂ¡"
+msgstr "தத்தல்கள் காண்பிப்பதா இல்லையா"
 
 #: gtk/gtknotebook.c:423
 msgid "Show Border"
-msgstr "±ø¨Äì ¸¡ñÀ¢"
+msgstr "எல்லைக் காண்பி"
 
 #: gtk/gtknotebook.c:424
 msgid "Whether the border should be shown or not"
-msgstr "±ø¨Ä¨Âì ¸¡ñÀ¢ôÀ¾¡ ­ø¨ÄÂ¡"
+msgstr "எல்லையைக் காண்பிப்பதா இல்லையா"
 
 #: gtk/gtknotebook.c:430
 msgid "Scrollable"
-msgstr "¾¢¨Ã ¯ÕÇÄìÜÊÂÐ"
+msgstr "திரை உருளலக்கூடியது"
 
 #: gtk/gtknotebook.c:431
 #, fuzzy
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr "¦ÁöÂ¡É¡ø, ÜÊÂ ¾ò¾ø¸û ­Õó¾¡ø ¯ÕÇø «õÒ¸û ¸¡ñÀ¢ì¸ôÀÎõ"
+msgstr "மெய்யானால், கூடிய தத்தல்கள் இருந்தால் உருளல் அம்புகள் காண்பிக்கப்படும்"
 
 #: gtk/gtknotebook.c:437
 msgid "Enable Popup"
@@ -2828,7 +2828,7 @@ msgstr "The xpad."
 #: gtk/gtknotebook.c:474
 #, fuzzy
 msgid "Whether to expand the childs tab or not"
-msgstr "±ø¨Ä¨Âì ¸¡ñÀ¢ôÀ¾¡ ­ø¨ÄÂ¡"
+msgstr "எல்லையைக் காண்பிப்பதா இல்லையா"
 
 #: gtk/gtknotebook.c:480
 msgid "Tab fill"
@@ -2837,7 +2837,7 @@ msgstr ""
 #: gtk/gtknotebook.c:481
 #, fuzzy
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "§ºö «¨ÉòÐõ ´§È «ÇÅ¢ø ­Õì¸ §ÅñÎÁ¡"
+msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
 
 #: gtk/gtknotebook.c:487
 msgid "Tab pack type"
@@ -2847,7 +2847,7 @@ msgstr ""
 #: gtk/gtknotebook.c:4766
 #, c-format
 msgid "Page %u"
-msgstr "Àì¸õ %u"
+msgstr "பக்கம் %u"
 
 #: gtk/gtkoptionmenu.c:190
 msgid "Menu"
@@ -2863,7 +2863,7 @@ msgstr "Size of dropdown indicator"
 
 #: gtk/gtkoptionmenu.c:204
 msgid "Spacing around indicator"
-msgstr "¸¡ðÊ¨Âî ÍüÈ¢ÕìÌõ ­¨¼¦ÅÇ¢ «Ç×"
+msgstr "காட்டியைச் சுற்றிருக்கும் இடைவெளி அளவு"
 
 #: gtk/gtkpaned.c:219
 #, fuzzy
@@ -2872,7 +2872,7 @@ msgstr "Position of paned separator in pixels(0 means all the way to the left/to
 
 #: gtk/gtkpaned.c:227
 msgid "Position Set"
-msgstr "­¼õ «¨Áì¸ôÀðÎûÇÐ"
+msgstr "இடம் அமைக்கப்பட்டுள்ளது"
 
 #: gtk/gtkpaned.c:228
 msgid "TRUE if the Position property should be used"
@@ -2880,11 +2880,11 @@ msgstr "TRUE if the Position property should be used"
 
 #: gtk/gtkpaned.c:234
 msgid "Handle Size"
-msgstr "¨¸ôÀ¢ÊÂ¢ý «Ç×"
+msgstr "கைப்பிடியின் அளவு"
 
 #: gtk/gtkpaned.c:235
 msgid "Width of handle"
-msgstr "¨¸ôÀ¢ÊÂ¢ý «¸Äõ"
+msgstr "கைப்பிடியின் அகலம்"
 
 #: gtk/gtkpreview.c:133
 msgid "Whether the preview widget should take up the entire space it is allocated"
@@ -2892,7 +2892,7 @@ msgstr "Whether the preview widget should take up the entire space it is allocat
 
 #: gtk/gtkprogress.c:127
 msgid "Activity mode"
-msgstr "¦ºÂüÀ¡Î Ó¨È¨Á"
+msgstr "செயற்பாடு முறைமை"
 
 #: gtk/gtkprogress.c:128
 #, fuzzy
@@ -2901,15 +2901,15 @@ msgstr "If true the GtkProgress is in activity mode, meaning that is signals som
 
 #: gtk/gtkprogress.c:135
 msgid "Show text"
-msgstr "¯¨Ã¨Âì ¸¡ñÀ¢"
+msgstr "உரையைக் காண்பி"
 
 #: gtk/gtkprogress.c:136
 msgid "Whether the progress is shown as text"
-msgstr "Óý§ÉüÈõ ¯¨Ã¨Âì ¸¡ñÀ¢ì¸ôÀÎ§Á¡"
+msgstr "முன்னேற்றம் உரையைக் காண்பிக்கப்படுமோ"
 
 #: gtk/gtkprogress.c:143
 msgid "Text x alignment"
-msgstr "¯¨ÃÂ¢ý x §¿÷ôÀÎò¾õ"
+msgstr "உரையின் x நேர்ப்படுத்தம்"
 
 #: gtk/gtkprogress.c:144
 #, fuzzy
@@ -2918,7 +2918,7 @@ msgstr "A number between 0.0 and 1.0 specifying the horizontal alignment of the 
 
 #: gtk/gtkprogress.c:152
 msgid "Text y alignment"
-msgstr "¯¨ÃÂ¢ý y §¿÷ôÀÎò¾õ"
+msgstr "உரையின் y நேர்ப்படுத்தம்"
 
 #: gtk/gtkprogress.c:153
 msgid "A number between 0.0 and 1.0 specifying the vertical alignment of the text in the progress widget"
@@ -2928,7 +2928,7 @@ msgstr "A number between 0.0 and 1.0 specifying the vertical alignment of the te
 #: gtk/gtkrange.c:284
 #: gtk/gtkspinbutton.c:240
 msgid "Adjustment"
-msgstr "´Æ¢íÌÀÎò¾ø"
+msgstr "ஒழிங்குபடுத்தல்"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -2937,16 +2937,16 @@ msgstr "The GtkAdjustment connected to the progress bar (Deprecated)"
 #: gtk/gtkprogressbar.c:150
 #: gtk/gtktoolbar.c:229
 msgid "Orientation"
-msgstr "¾¢¨º «¨Á×"
+msgstr "திசை அமைவு"
 
 #: gtk/gtkprogressbar.c:151
 #, fuzzy
 msgid "Orientation and growth direction of the progress bar"
-msgstr "Óý§ÉüÈ Àð¨¼Â¢ý ¾¢¨º «¨Á×õ ÅÇ÷îº¢Ôõ"
+msgstr "முன்னேற்ற பட்டையின் திசை அமைவும் வளர்ச்சியும்"
 
 #: gtk/gtkprogressbar.c:159
 msgid "Bar style"
-msgstr "Àð¨¼ À¡½¢"
+msgstr "பட்டை பாணி"
 
 #: gtk/gtkprogressbar.c:160
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
@@ -2954,40 +2954,40 @@ msgstr "Specifies the visual style of the bar in percentage mode (Deprecated)"
 
 #: gtk/gtkprogressbar.c:168
 msgid "Activity Step"
-msgstr "¦ºÂüÀ¡Î ÀÊ"
+msgstr "செயற்பாடு படி"
 
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr "The·increment·used·for·each·iteration·in·activity·mode·(Deprecated)"
+msgstr "Theஃincrementஃusedஃforஃeachஃiterationஃinஃactivityஃmodeஃ(Deprecated)"
 
 #: gtk/gtkprogressbar.c:178
 msgid "Activity Blocks"
-msgstr "¦ºÂüÀ¡Î ¸ð¼í¸û"
+msgstr "செயற்பாடு கட்டங்கள்"
 
 #: gtk/gtkprogressbar.c:179
 msgid "The number of blocks which can fit in the progress bar area in activity mode (Deprecated)"
-msgstr "The·number·of·blocks·which·can·fit·in·the·progress·bar·area·in·activity·mode·(Deprecated)"
+msgstr "Theஃnumberஃofஃblocksஃwhichஃcanஃfitஃinஃtheஃprogressஃbarஃareaஃinஃactivityஃmodeஃ(Deprecated)"
 
 #: gtk/gtkprogressbar.c:188
 msgid "Discrete Blocks"
-msgstr "¯¾¢Ã¢ ¸ð¼í¸û"
+msgstr "உதிரி கட்டங்கள்"
 
 #: gtk/gtkprogressbar.c:189
 #, fuzzy
 msgid "The number of discrete blocks in a progress bar (when shown in the discrete style)"
-msgstr "Óý§ÉüÈô Àð¨¼Â¢ÖûÇ À¢Ã¢¿¢¨Ä ¸ð¼í¸Ç¢ý ±ñ (¯¾¢Ã¢ Å¨¸Â¢ø ¸¡ñÀ¢ì¸ôÀÎõ §À¡Ð"
+msgstr "முன்னேற்றப் பட்டையிலுள்ள பிரிநிலை கட்டங்களின் எண் (உதிரி வகையில் காண்பிக்கப்படும் போது"
 
 #: gtk/gtkprogressbar.c:198
 msgid "Fraction"
-msgstr "ÀÌ¾¢"
+msgstr "பகுதி"
 
 #: gtk/gtkprogressbar.c:199
 msgid "The fraction of total work that has been completed"
-msgstr "ÓØ À½¢Â¢ø ÓÊì¸ôÀð¼ ÀÌ¾¢"
+msgstr "முழு பணியில் முடிக்கப்பட்ட பகுதி"
 
 #: gtk/gtkprogressbar.c:208
 msgid "Pulse Step"
-msgstr "ÐÊôÒô ÀÊ"
+msgstr "துடிப்புப் படி"
 
 #: gtk/gtkprogressbar.c:209
 msgid "The fraction of total progress to move the bouncing block when pulsed"
@@ -2995,7 +2995,7 @@ msgstr "The fraction of total progress to move the bouncing block when pulsed"
 
 #: gtk/gtkprogressbar.c:219
 msgid "Text to be displayed in the progress bar"
-msgstr "Óý§ÉüÈô Àð¨¼Â¢ø ¸¡ñÀ¢ì¸ô¼ §ÅñÊÂ ¯¨Ã"
+msgstr "முன்னேற்றப் பட்டையில் காண்பிக்கப்ட வேண்டிய உரை"
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
@@ -3007,27 +3007,27 @@ msgstr ""
 
 #: gtk/gtkrange.c:275
 msgid "Update policy"
-msgstr "¿¢¨ÄôÒ¾¢ôÀ¢ò¾ø ¾¢ð¼õ"
+msgstr "நிலைப்புதிப்பித்தல் திட்டம்"
 
 #: gtk/gtkrange.c:276
 msgid "How the range should be updated on the screen"
-msgstr "Å£îÍ ¾¢¨ÈÂ¢ø ±ôÀÊ ¿¢¨ÄôÒ¾¢ôÀ¢ì¸ §Å½Îõ"
+msgstr "வீச்சு திறையில் எப்படி நிலைப்புதிப்பிக்க வேணடும்"
 
 #: gtk/gtkrange.c:285
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr "The·GtkAdjustment·that·contains·the·current·value·of·this·range·object"
+msgstr "TheஃGtkAdjustmentஃthatஃcontainsஃtheஃcurrentஃvalueஃofஃthisஃrangeஃobject"
 
 #: gtk/gtkrange.c:292
 msgid "Inverted"
-msgstr "ÒÃñ¼Ð"
+msgstr "புரண்டது"
 
 #: gtk/gtkrange.c:293
 msgid "Invert direction slider moves to increase range value"
-msgstr "Invert·direction·slider·moves·to·increase·range·value"
+msgstr "Invertஃdirectionஃsliderஃmovesஃtoஃincreaseஃrangeஃvalue"
 
 #: gtk/gtkrange.c:299
 msgid "Slider Width"
-msgstr "Slider «¸Äõ"
+msgstr "Slider அகலம்"
 
 #: gtk/gtkrange.c:300
 msgid "Width of scrollbar or scale thumb"
@@ -3086,53 +3086,53 @@ msgstr ""
 #: gtk/gtkrc.c:3021
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "pixmap_path'Â¢ø À¼ò¾¢ý §¸¡ô¨Àì ¸ñÎÀ¢Êì¸ ÓÊÂÅ¢ø¨Ä: \"%s\""
+msgstr "pixmap_path'யில் படத்தின் கோப்பைக் கண்டுபிடிக்க முடியவில்லை: \"%s\""
 
 #: gtk/gtkrc.c:3456
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pixmap À¡¨¾ ¯ÚôÒ: ¾É¢ì¨¸Â¡É \"%s\", %s, ÅÃ¢¨º %d"
+msgstr "Pixmap பாதை உறுப்பு: தனிக்கையான \"%s\", %s, வரிசை %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr "¸£§Æ"
+msgstr "கீழே"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
-msgstr "Áð¼ô ÀÄ¨¸Â¢ý «Ê ±ø¨Ä"
+msgstr "மட்டப் பலகையின் அடி எல்லை"
 
 #: gtk/gtkruler.c:128
 msgid "Upper"
-msgstr "§Áø"
+msgstr "மேல்"
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
-msgstr "Áð¼ô ÀÄ¨¸Â¢ý §Áø ±ø¨Ä"
+msgstr "மட்டப் பலகையின் மேல் எல்லை"
 
 #: gtk/gtkruler.c:139
 msgid "Position of mark on the ruler"
-msgstr "Áð¼ô ÀÄ¨¸Â¢ø ¯ûÇ ÌÈ¢Â¢ý ­¼õ"
+msgstr "மட்டப் பலகையில் உள்ள குறியின் இடம்"
 
 #: gtk/gtkruler.c:148
 msgid "Max Size"
-msgstr "¬¸ìÜÊÂ «Ç×"
+msgstr "ஆகக்கூடிய அளவு"
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
-msgstr "Áð¼ô ÀÄ¨¸Â¢ý ¬¸ìÜÊÂ «Ç×"
+msgstr "மட்டப் பலகையின் ஆகக்கூடிய அளவு"
 
 #: gtk/gtkscale.c:156
 #: gtk/gtkspinbutton.c:258
 msgid "Digits"
-msgstr "­Äì¸í¸û"
+msgstr "இலக்கங்கள்"
 
 #: gtk/gtkscale.c:157
 msgid "The number of decimal places that are displayed in the value"
-msgstr "Á¾¢ôÀ¢ø ¸¡ñÀ¢ì¸ôÀÎõ À¾¢ýÁõ ­¼í¸Ç¢ý ±ñ"
+msgstr "மதிப்பில் காண்பிக்கப்படும் பதின்மம் இடங்களின் எண்"
 
 #: gtk/gtkscale.c:166
 msgid "Draw Value"
-msgstr "Á¾¢ô¨À Å¨Ã"
+msgstr "மதிப்பை வரை"
 
 #: gtk/gtkscale.c:167
 msgid "Whether the current value is displayed as a string next to the slider"
@@ -3140,11 +3140,11 @@ msgstr "Whether the current value is displayed as a string next to the slider"
 
 #: gtk/gtkscale.c:174
 msgid "Value Position"
-msgstr "Á¾¢ôÒ ­¼õ"
+msgstr "மதிப்பு இடம்"
 
 #: gtk/gtkscale.c:175
 msgid "The position in which the current value is displayed"
-msgstr "¾ü§À¡¨¾Â Á¾¢ôÒ ¸¡ñÀ¢ì¸ôÀ¼ §ÅñÊÂ ­¼õ"
+msgstr "தற்போதைய மதிப்பு காண்பிக்கப்பட வேண்டிய இடம்"
 
 #: gtk/gtkscale.c:182
 msgid "Slider Length"
@@ -3156,7 +3156,7 @@ msgstr "Length of scale's slider"
 
 #: gtk/gtkscale.c:191
 msgid "Value spacing"
-msgstr "Á¾¢ôÒ ­¨¼¦ÅÇ¢"
+msgstr "மதிப்பு இடைவெளி"
 
 #: gtk/gtkscale.c:192
 msgid "Space between value text and the slider/trough area"
@@ -3192,7 +3192,7 @@ msgstr "Forward stepper"
 
 #: gtk/gtkscrollbar.c:106
 msgid "Display the standard forward arrow button"
-msgstr "¦ºó¾ÃÁ¡É ÓýÒÈ-«õÒ-¦À¡ò¾¡ý ¸¡ñÀ¢"
+msgstr "செந்தரமான முன்புற-அம்பு-பொத்தான் காண்பி"
 
 #: gtk/gtkscrollbar.c:113
 msgid "Secondary backward stepper"
@@ -3214,18 +3214,18 @@ msgstr "Display a secondary forward arrow button on the opposite end of the scro
 #: gtk/gtktext.c:601
 #: gtk/gtktreeview.c:525
 msgid "Horizontal Adjustment"
-msgstr "¸¢¨¼¾¢¨º ´Æ¢íÌÀÎò¾ø"
+msgstr "கிடைதிசை ஒழிங்குபடுத்தல்"
 
 #: gtk/gtkscrolledwindow.c:242
 #: gtk/gtktext.c:609
 #: gtk/gtktreeview.c:533
 msgid "Vertical Adjustment"
-msgstr "¦¿Î¾¢¨º ´Æ¢íÌÀÎò¾ø"
+msgstr "நெடுதிசை ஒழிங்குபடுத்தல்"
 
 #: gtk/gtkscrolledwindow.c:249
 #, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "¸¢¨¼ «Ç×§¸¡ø"
+msgstr "கிடை அளவுகோல்"
 
 #: gtk/gtkscrolledwindow.c:250
 msgid "When the horizontal scrollbar is displayed"
@@ -3234,7 +3234,7 @@ msgstr ""
 #: gtk/gtkscrolledwindow.c:257
 #, fuzzy
 msgid "Vertical Scrollbar Policy"
-msgstr "¦ºíÌò¾Á¡É «Ç×§¸¡ø"
+msgstr "செங்குத்தமான அளவுகோல்"
 
 #: gtk/gtkscrolledwindow.c:258
 msgid "When the vertical scrollbar is displayed"
@@ -3243,7 +3243,7 @@ msgstr ""
 #: gtk/gtkscrolledwindow.c:266
 #, fuzzy
 msgid "Window Placement"
-msgstr "º¡ÇÃ ¾¨ÄôÒ"
+msgstr "சாளர தலைப்பு"
 
 #: gtk/gtkscrolledwindow.c:267
 msgid "Where the contents are located with respect to the scrollbars"
@@ -3252,17 +3252,17 @@ msgstr ""
 #: gtk/gtkscrolledwindow.c:274
 #, fuzzy
 msgid "Shadow Type"
-msgstr "¿¢Æø Å¨¸"
+msgstr "நிழல் வகை"
 
 #: gtk/gtkscrolledwindow.c:275
 #, fuzzy
 msgid "Style of bevel around the contents"
-msgstr "ÀðÊô ÀÄ¨¸¨Â ÍüÈ¢ÔûÇ bevelÂ¢ý À¡½¢"
+msgstr "பட்டிப் பலகையை சுற்றியுள்ள bevelயின் பாணி"
 
 #: gtk/gtkscrolledwindow.c:282
 #, fuzzy
 msgid "Scrollbar spacing"
-msgstr "Àò¾¢ ­¨¼¦ÅÇ¢"
+msgstr "பத்தி இடைவெளி"
 
 #: gtk/gtkscrolledwindow.c:283
 #, fuzzy
@@ -3271,23 +3271,23 @@ msgstr "Number of pixels of the entry scrolled off the screen to the left"
 
 #: gtk/gtksettings.c:167
 msgid "Double Click Time"
-msgstr "­Ãð¨¼ «ÓìÌ §¿Ãõ"
+msgstr "இரட்டை அமுக்கு நேரம்"
 
 #: gtk/gtksettings.c:168
 msgid "Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"
-msgstr "­Ãð¨¼ «ÓìÌ ±É ¸ÕÐÅ¾üÌ ­ÃñÎ «ÓìÌ¸û ¿¨¼¦ÀÚõ §¿Ãò¾¢ý Á¢¸ìÜÊÂ ­¨¼¦ÅÇ¢  (Á¢øÄ¢-¿¢Ê¸û)"
+msgstr "இரட்டை அமுக்கு என கருதுவதற்கு இரண்டு அமுக்குகள் நடைபெறும் நேரத்தின் மிகக்கூடிய இடைவெளி  (மில்லி-நிடிகள்)"
 
 #: gtk/gtksettings.c:175
 msgid "Cursor Blink"
-msgstr "¿¢¨Ä ¸¡ðÊ º¢Á¢ð¼õ"
+msgstr "நிலை காட்டி சிமிட்டம்"
 
 #: gtk/gtksettings.c:176
 msgid "Whether the cursor should blink"
-msgstr "¨Ä ¸¡ðÊ º¢Á¢ð¼ §ÅñÎÁ¡"
+msgstr "லை காட்டி சிமிட்ட வேண்டுமா"
 
 #: gtk/gtksettings.c:183
 msgid "Cursor Blink Time"
-msgstr "¿¢¨Ä ¸¡ðÊ º¢Á¢ð¼õ §¿Ãõ"
+msgstr "நிலை காட்டி சிமிட்டம் நேரம்"
 
 #: gtk/gtksettings.c:184
 msgid "Length of the cursor blink cycle, in milleseconds"
@@ -3319,7 +3319,7 @@ msgstr "Name of key theme RC file to load"
 
 #: gtk/gtksettings.c:216
 msgid "Menu bar accelerator"
-msgstr "ÀðÊô ÀÄ¨¸ ¬÷ÓÎ¸ø"
+msgstr "பட்டிப் பலகை ஆர்முடுகல்"
 
 #: gtk/gtksettings.c:217
 msgid "Keybinding to activate the menu bar"
@@ -3336,7 +3336,7 @@ msgstr ""
 #: gtk/gtksettings.c:234
 #, fuzzy
 msgid "Font Name"
-msgstr "±ØòÐ Å¨¸ ¦ÀÂ÷"
+msgstr "எழுத்து வகை பெயர்"
 
 #: gtk/gtksettings.c:235
 msgid "Name of default font to use"
@@ -3345,7 +3345,7 @@ msgstr ""
 #: gtk/gtksettings.c:243
 #, fuzzy
 msgid "Icon Sizes"
-msgstr "¸¡ðÊÂ¢ý «Ç×"
+msgstr "காட்டியின் அளவு"
 
 #: gtk/gtksettings.c:244
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
@@ -3353,7 +3353,7 @@ msgstr ""
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
-msgstr "Ó¨È"
+msgstr "முறை"
 
 #: gtk/gtksizegroup.c:242
 #, fuzzy
@@ -3386,7 +3386,7 @@ msgstr "Whether erroneous values are automatically changed to a spin button's ne
 
 #: gtk/gtkspinbutton.c:276
 msgid "Numeric"
-msgstr "±ñ"
+msgstr "எண்"
 
 #: gtk/gtkspinbutton.c:277
 msgid "Whether non-numeric characters should be ignored"
@@ -3394,7 +3394,7 @@ msgstr "Whether non-numeric characters should be ignored"
 
 #: gtk/gtkspinbutton.c:284
 msgid "Wrap"
-msgstr "ÁÊôÒ"
+msgstr "மடிப்பு"
 
 #: gtk/gtkspinbutton.c:285
 msgid "Whether a spin button should wrap upon reaching its limits"
@@ -3402,7 +3402,7 @@ msgstr "Whether a spin button should wrap upon reaching its limits"
 
 #: gtk/gtkspinbutton.c:292
 msgid "Update Policy"
-msgstr "¿¢¸ú¿¢¨Äô Ò¾¢ôÀ¢ò¾ø ¾¢ð¼õ"
+msgstr "நிகழ்நிலைப் புதிப்பித்தல் திட்டம்"
 
 #: gtk/gtkspinbutton.c:293
 msgid "Whether the spin button should update always, or only when the value is legal"
@@ -3410,11 +3410,11 @@ msgstr "Whether the spin button should update always, or only when the value is 
 
 #: gtk/gtkspinbutton.c:301
 msgid "Value"
-msgstr "Á¾¢ôÒ"
+msgstr "மதிப்பு"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
-msgstr "¾ü§À¡¨¾Â Á¾¢ô¨À Å¡º¢ìÌõ, «øÄÐ Ò¾¢Â Á¾¢ô¨À «¨ÁìÌõ"
+msgstr "தற்போதைய மதிப்பை வாசிக்கும், அல்லது புதிய மதிப்பை அமைக்கும்"
 
 #: gtk/gtkstatusbar.c:162
 msgid "Style of bevel around the statusbar text"
@@ -3423,38 +3423,38 @@ msgstr "Style of bevel around the statusbar text"
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
-msgstr "¾¸Åø"
+msgstr "தகவல்"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr "±îºÃ¢ì¨¸"
+msgstr "எச்சரிக்கை"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
-msgstr "À¢¨Æ"
+msgstr "பிழை"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr "§¸ûÅ¢"
+msgstr "கேள்வி"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "_§º÷"
+msgstr "_சேர்"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr "ÀÂýÀÎòÐ"
+msgstr "பயன்படுத்து"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr "¾ÊôÒ"
+msgstr "தடிப்பு"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "¿£ìÌ"
+msgstr "நீக்கு"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
@@ -3462,47 +3462,47 @@ msgstr ""
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "ÐôÀÃÅ¡ìÌ"
+msgstr "துப்பரவாக்கு"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "ãÎ"
+msgstr "மூடு"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "_¿¢¨ÄÁ£ðÎ"
+msgstr "_நிலைமீட்டு"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr "¿¸ø"
+msgstr "நகல்"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr "¦Å_ðÎ"
+msgstr "வெ_ட்டு"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "_«Æ¢"
+msgstr "_அழி"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr "_¦ºÂøÀÎòÐ"
+msgstr "_செயல்படுத்து"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr "¸ñÎÀ¢Ê"
+msgstr "கண்டுபிடி"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr "¸ñÎÀ¢ÊòÐ Á¡üÚ"
+msgstr "கண்டுபிடித்து மாற்று"
 
 #: gtk/gtkstock.c:289
 msgid "_Floppy"
-msgstr "_¦¿¸¢ú ÅðÎ"
+msgstr "_நெகிழ் வட்டு"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr "_«Ê"
+msgstr "_அடி"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
@@ -3510,132 +3510,132 @@ msgstr "Selectable"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr "_¸¨¼º¢"
+msgstr "_கடைசி"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr "_¯îº¢"
+msgstr "_உச்சி"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr "À¢ý"
+msgstr "பின்"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "_¸£ú"
+msgstr "_கீழ்"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr "Óý"
+msgstr "முன்"
 
 #: gtk/gtkstock.c:297
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "¯¾Å¢"
+msgstr "உதவி"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
-msgstr "­øÄõ"
+msgstr "இல்லம்"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr "_ÍðÎ"
+msgstr "_சுட்டு"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr "º¡ö×"
+msgstr "சாய்வு"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr "_­íÌ §À¡"
+msgstr "_இங்கு போ"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
-msgstr "¨ÁÂõ"
+msgstr "மையம்"
 
 #: gtk/gtkstock.c:304
 msgid "_Fill"
-msgstr "¿¢ÃôÒ"
+msgstr "நிரப்பு"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr "­¼Ð"
+msgstr "இடது"
 
 #: gtk/gtkstock.c:306
 msgid "_Right"
-msgstr "ÅÄÐ"
+msgstr "வலது"
 
 #: gtk/gtkstock.c:307
 msgid "_New"
-msgstr "Ò¾¢ÂÐ"
+msgstr "புதியது"
 
 #: gtk/gtkstock.c:308
 msgid "_No"
-msgstr "­ø¨Ä"
+msgstr "இல்லை"
 
 #: gtk/gtkstock.c:309
 msgid "_OK"
-msgstr "ºÃ¢"
+msgstr "சரி"
 
 #: gtk/gtkstock.c:310
 msgid "_Open"
-msgstr "¾¢Èì¸×õ"
+msgstr "திறக்கவும்"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr "´ðÎ"
+msgstr "ஒட்டு"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr "Å¢ÕôÀí¸û"
+msgstr "விருப்பங்கள்"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr "«îº¢Î"
+msgstr "அச்சிடு"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "«îº¢ÎÅ¨¾ Óý-¸¡ñÀ¢"
+msgstr "அச்சிடுவதை முன்-காண்பி"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr "ÀñÒ¸û"
+msgstr "பண்புகள்"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr "¦ÅÇ¢§ÂÚ"
+msgstr "வெளியேறு"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
-msgstr "ÁÚÀÊÔõ"
+msgstr "மறுபடியும்"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr "_ÒÐìÌ"
+msgstr "_புதுக்கு"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "_¸ÆðÎ"
+msgstr "_கழட்டு"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr "¿¢¨ÄÁ£ðÎ"
+msgstr "நிலைமீட்டு"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "§ºÁ¢"
+msgstr "சேமி"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "§ÅÚ¦ÀÂÃ¢ø §ºÁ¢"
+msgstr "வேறுபெயரில் சேமி"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
-msgstr "_Åñ½õ"
+msgstr "_வண்ணம்"
 
 #: gtk/gtkstock.c:324
 msgid "_Font"
-msgstr "_±ØòÐÕ"
+msgstr "_எழுத்துரு"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
@@ -3647,11 +3647,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr "±ØòÐ ºÃ¢À¡÷ôÒ"
+msgstr "எழுத்து சரிபார்ப்பு"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr "¿¢ÚòÐ"
+msgstr "நிறுத்து"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
@@ -3659,67 +3659,67 @@ msgstr "_Strikethrough"
 
 #: gtk/gtkstock.c:330
 msgid "_Undelete"
-msgstr "_«Æ¢ò¾ø ¿£ìÌ"
+msgstr "_அழித்தல் நீக்கு"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr "¸£ø§¸¡Î"
+msgstr "கீல்கோடு"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr "¸Å¢ø"
+msgstr "கவில்"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
-msgstr "¬õ"
+msgstr "ஆம்"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr "100% ¦ÀÃ¢¾¡ìÌ"
+msgstr "100% பெரிதாக்கு"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr "¦À¡Õò¾Á¡¸ ¦ÀÃ¢¾¡ìÌ"
+msgstr "பொருத்தமாக பெரிதாக்கு"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr "¦ÀÃ¢¾¡ìÌ"
+msgstr "பெரிதாக்கு"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr "º¢È¢¾¡ìÌ"
+msgstr "சிறிதாக்கு"
 
 #: gtk/gtktable.c:158
 msgid "Rows"
-msgstr "ÅÃ¢¨º¸û"
+msgstr "வரிசைகள்"
 
 #: gtk/gtktable.c:159
 msgid "The number of rows in the table"
-msgstr "«ð¼Å¨½Â¢ÖûÇ ÅÃ¢¨º¸Ç¢ý ±ñ"
+msgstr "அட்டவணையிலுள்ள வரிசைகளின் எண்"
 
 #: gtk/gtktable.c:167
 msgid "Columns"
-msgstr "Àò¾¢¸û"
+msgstr "பத்திகள்"
 
 #: gtk/gtktable.c:168
 msgid "The number of columns in the table"
-msgstr "«ð¼Å¨½Â¢ÖûÇ Àò¾¢¸Ç¢ý ±ñ"
+msgstr "அட்டவணையிலுள்ள பத்திகளின் எண்"
 
 #: gtk/gtktable.c:176
 msgid "Row spacing"
-msgstr "ÅÃ¢¨º ­¨¼¦ÅÇ¢"
+msgstr "வரிசை இடைவெளி"
 
 #: gtk/gtktable.c:177
 msgid "The amount of space between two consecutive rows"
-msgstr "Àì¸òÐ ÅÃ¢¨º¸ÙìÌ ¿ÎÅ¢ÖûÇ ­¨¼¦ÅÇ¢ «Ç×"
+msgstr "பக்கத்து வரிசைகளுக்கு நடுவிலுள்ள இடைவெளி அளவு"
 
 #: gtk/gtktable.c:185
 msgid "Column spacing"
-msgstr "Àò¾¢ ­¨¼¦ÅÇ¢"
+msgstr "பத்தி இடைவெளி"
 
 #: gtk/gtktable.c:186
 msgid "The amount of space between two consecutive columns"
-msgstr "Àì¸òÐ Àò¾¢¸ÙìÌ ¿ÎÅ¢ÖûÇ ­¨¼¦ÅÇ¢ «Ç×"
+msgstr "பக்கத்து பத்திகளுக்கு நடுவிலுள்ள இடைவெளி அளவு"
 
 #: gtk/gtktable.c:194
 msgid "Homogenous"
@@ -3727,7 +3727,7 @@ msgstr "Homogenous"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "­Ð ¦ÁöÂ¡É¡ø, «ð¼Å¨½Â¢ý º¢üÈ¨È¸û «¨ÉòÐõ ´§È «¸Äõ/¯ÂÃõ"
+msgstr "இது மெய்யானால், அட்டவணையின் சிற்றறைகள் அனைத்தும் ஒறே அகலம்/உயரம்"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
@@ -3764,7 +3764,7 @@ msgstr ""
 #: gtk/gtktable.c:230
 #, fuzzy
 msgid "Horizontal options"
-msgstr "¸¢¨¼ «Ç×§¸¡ø"
+msgstr "கிடை அளவுகோல்"
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
@@ -3773,7 +3773,7 @@ msgstr ""
 #: gtk/gtktable.c:237
 #, fuzzy
 msgid "Vertical options"
-msgstr "¦ºíÌò¾Á¡É «Ç×§¸¡ø"
+msgstr "செங்குத்தமான அளவுகோல்"
 
 #: gtk/gtktable.c:238
 msgid "Options specifying the vertical behaviour of the child"
@@ -3782,17 +3782,17 @@ msgstr ""
 #: gtk/gtktable.c:244
 #, fuzzy
 msgid "Horizontal padding"
-msgstr "¸¢¨¼ §¿÷ôÀÎò¾õ"
+msgstr "கிடை நேர்ப்படுத்தம்"
 
 #: gtk/gtktable.c:245
 #, fuzzy
 msgid "Extra space to put between the child and its left and right neighbors, in pixels"
-msgstr "À¢ì¦ºø¸Ç¢ø, Å¢ð¦ºðÎìÌ ÅÄÐ Àì¸ò¾¢Öõ ­¼Ð Àì¸ò¾¢Öõ ­ÕìÌõ ­¨¼¦ÅÇ¢Â¢ý «Ç×"
+msgstr "பிக்செல்களில், விட்செட்டுக்கு வலது பக்கத்திலும் இடது பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
 
 #: gtk/gtktable.c:251
 #, fuzzy
 msgid "Vertical padding"
-msgstr "¯ûÇ¨Á ¿¢ÃôÀø"
+msgstr "உள்ளமை நிரப்பல்"
 
 #: gtk/gtktable.c:252
 msgid "Extra space to put between the child and its upper and lower neighbors, in pixels"
@@ -3800,15 +3800,15 @@ msgstr ""
 
 #: gtk/gtktext.c:602
 msgid "Horizontal adjustment for the text widget"
-msgstr "¯¨Ã Å¢ð¦ºðÎ¸¡É ¸¢¨¼¾¢¨º ´Æ¢íÌÀÎò¾¢"
+msgstr "உரை விட்செட்டுகான கிடைதிசை ஒழிங்குபடுத்தி"
 
 #: gtk/gtktext.c:610
 msgid "Vertical adjustment for the text widget"
-msgstr "¯¨Ã Å¢ð¦ºðÎ¸¡É ¦¿Î¾¢¨º ´Æ¢íÌÀÎò¾¢"
+msgstr "உரை விட்செட்டுகான நெடுதிசை ஒழிங்குபடுத்தி"
 
 #: gtk/gtktext.c:617
 msgid "Line Wrap"
-msgstr "ÅÃ¢¨º ÁÊôÒ"
+msgstr "வரிசை மடிப்பு"
 
 #: gtk/gtktext.c:618
 msgid "Whether lines are wrapped at widget edges"
@@ -3816,7 +3816,7 @@ msgstr "Whether lines are wrapped at widget edges"
 
 #: gtk/gtktext.c:625
 msgid "Word Wrap"
-msgstr "¦º¡ø ÁÊôÒ"
+msgstr "சொல் மடிப்பு"
 
 #: gtk/gtktext.c:626
 msgid "Whether words are wrapped at widget edges"
@@ -3825,30 +3825,30 @@ msgstr "Whether words are wrapped at widget edges"
 #: gtk/gtktextbuffer.c:180
 #, fuzzy
 msgid "Tag Table"
-msgstr "«¨¼Â¡Ç ´ðÎô ¦ÀÂ÷"
+msgstr "அடையாள ஒட்டுப் பெயர்"
 
 #: gtk/gtktextbuffer.c:181
 #, fuzzy
 msgid "Text Tag Table"
-msgstr "¯¨ÃÂ¢ý y §¿÷ôÀÎò¾õ"
+msgstr "உரையின் y நேர்ப்படுத்தம்"
 
 #: gtk/gtktexttag.c:195
 msgid "Tag name"
-msgstr "«¨¼Â¡Ç ´ðÎô ¦ÀÂ÷"
+msgstr "அடையாள ஒட்டுப் பெயர்"
 
 #: gtk/gtktexttag.c:196
 #, fuzzy
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr "¯¨Ã «¨¼Â¡Çò¨¾ ÌÈ¢ôÀ¢ÎÅ¾üÌ ÀÂýÀÎò¾ôÀÎõ ¦ÀÂ÷"
+msgstr "உரை அடையாளத்தை குறிப்பிடுவதற்கு பயன்படுத்தப்படும் பெயர்"
 
 #: gtk/gtktexttag.c:214
 #, fuzzy
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "À¢ýÉ½¢ Åñ½õ µ÷ GdkColorÃ¡¸"
+msgstr "பின்னணி வண்ணம் ஓர் GdkColorராக"
 
 #: gtk/gtktexttag.c:221
 msgid "Background full height"
-msgstr "ÓØ ¯ÂÃò¾¢üÌõ À¢ýÉ½¢"
+msgstr "முழு உயரத்திற்கும் பின்னணி"
 
 #: gtk/gtktexttag.c:222
 msgid "Whether the background color fills the entire line height or only the height of the tagged characters"
@@ -3860,12 +3860,12 @@ msgstr "Background stipple mask"
 
 #: gtk/gtktexttag.c:231
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr "¯¨Ã À¢ýÉ½¢¨Â Å¨ÃÔõ§À¡Ð ¾¢¨ÃÂ¡¸ ÀÂýÀÎò¾§ÅñÊÂ À¢ð-À¼õ"
+msgstr "உரை பின்னணியை வரையும்போது திரையாக பயன்படுத்தவேண்டிய பிட்-படம்"
 
 #: gtk/gtktexttag.c:248
 #, fuzzy
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "ÓýÉ½¢ Åñ½õ µ÷ GdkColorÃ¡¸"
+msgstr "முன்னணி வண்ணம் ஓர் GdkColorராக"
 
 #: gtk/gtktexttag.c:256
 msgid "Foreground stipple mask"
@@ -3873,20 +3873,20 @@ msgstr "Foreground stipple mask"
 
 #: gtk/gtktexttag.c:257
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr "¯¨Ã ÓýÉ½¢¨Â Å¨ÃÔõ§À¡Ð ¾¢¨ÃÂ¡¸ ÀÂýÀÎò¾§ÅñÊÂ À¢ð-À¼õ"
+msgstr "உரை முன்னணியை வரையும்போது திரையாக பயன்படுத்தவேண்டிய பிட்-படம்"
 
 #: gtk/gtktexttag.c:264
 msgid "Text direction"
-msgstr "¯¨Ã ¾¢¨º"
+msgstr "உரை திசை"
 
 #: gtk/gtktexttag.c:265
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "¯¨Ã ¾¢¨º, ¯¾¡ÃÉõ: ÅÄÐ-­¼Ð «øÄÐ ­¼Ð-ÅÄÐ"
+msgstr "உரை திசை, உதாரனம்: வலது-இடது அல்லது இடது-வலது"
 
 #: gtk/gtktexttag.c:282
 #, fuzzy
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "±ØòÐ Å¨¸Â¢ý Å¢ÅÃ½õ µ÷ ºÃÁ¡¸"
+msgstr "எழுத்து வகையின் விவரணம் ஓர் சரமாக"
 
 #: gtk/gtktexttag.c:307
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -3907,7 +3907,7 @@ msgstr ""
 #: gtk/gtktexttag.c:345
 #, fuzzy
 msgid "Font size in Pango units"
-msgstr "±ØòÐÅ¨¸ «Ç× ÒûÇ¢¸Ç¢ø"
+msgstr "எழுத்துவகை அளவு புள்ளிகளில்"
 
 #: gtk/gtktexttag.c:355
 msgid "Font size as a scale factor relative to the default font size. This properly adapts to theme changes etc. so is recommended. Pango predefines some scales such as PANGO_SCALE_X_LARGE"
@@ -3916,11 +3916,11 @@ msgstr ""
 #: gtk/gtktexttag.c:375
 #: gtk/gtktextview.c:588
 msgid "Left, right, or center justification"
-msgstr "­¼Ð, ÅÄÐ, «øÄÐ §¿÷ò¾¢ ¦ºö¾ø"
+msgstr "இடது, வலது, அல்லது நேர்த்தி செய்தல்"
 
 #: gtk/gtktexttag.c:383
 msgid "Language"
-msgstr "¦Á¡Æ¢"
+msgstr "மொழி"
 
 #: gtk/gtktexttag.c:384
 msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
@@ -3928,31 +3928,31 @@ msgstr ""
 
 #: gtk/gtktexttag.c:391
 msgid "Left margin"
-msgstr "­¼Ð µÃõ"
+msgstr "இடது ஓரம்"
 
 #: gtk/gtktexttag.c:392
 #: gtk/gtktextview.c:597
 msgid "Width of the left margin in pixels"
-msgstr "À¢ìºø¸Ç¢ø ­¼Ð µÃò¾¢ý «¸Äõ"
+msgstr "பிக்சல்களில் இடது ஓரத்தின் அகலம்"
 
 #: gtk/gtktexttag.c:401
 msgid "Right margin"
-msgstr "ÅÄÐ µÃõ"
+msgstr "வலது ஓரம்"
 
 #: gtk/gtktexttag.c:402
 #: gtk/gtktextview.c:607
 msgid "Width of the right margin in pixels"
-msgstr "À¢ìºø¸Ç¢ø ÅÄÐ µÃò¾¢ý «¸Äõ"
+msgstr "பிக்சல்களில் வலது ஓரத்தின் அகலம்"
 
 #: gtk/gtktexttag.c:412
 #: gtk/gtktextview.c:616
 msgid "Indent"
-msgstr "¯û¾û"
+msgstr "உள்தள்"
 
 #: gtk/gtktexttag.c:413
 #: gtk/gtktextview.c:617
 msgid "Amount to indent the paragraph, in pixels"
-msgstr "À¢¦ºø¸Ç¢ø, Àò¾¢¨Â ¯û¾ûÙõ «Ç×"
+msgstr "பிசெல்களில், பத்தியை உள்தள்ளும் அளவு"
 
 #: gtk/gtktexttag.c:424
 #, fuzzy
@@ -3961,118 +3961,118 @@ msgstr "Offset of text above the baseline (below the baseline if rise is negativ
 
 #: gtk/gtktexttag.c:433
 msgid "Pixels above lines"
-msgstr "ÅÃ¢¨º¸ÙìÌ §Áø À¢¦ºø¸û"
+msgstr "வரிசைகளுக்கு மேல் பிசெல்கள்"
 
 #: gtk/gtktexttag.c:434
 #: gtk/gtktextview.c:541
 msgid "Pixels of blank space above paragraphs"
-msgstr "Àò¾¢¸ÙìÌ §Áø ¦ÅüÚ-­¨¼¦ÅÇ¢ À¢ì¦ºø¸û"
+msgstr "பத்திகளுக்கு மேல் வெற்று-இடைவெளி பிக்செல்கள்"
 
 #: gtk/gtktexttag.c:443
 msgid "Pixels below lines"
-msgstr "ÅÃ¢¨º¸ÙìÌ ¸£ú À¢¦ºø¸û"
+msgstr "வரிசைகளுக்கு கீழ் பிசெல்கள்"
 
 #: gtk/gtktexttag.c:444
 #: gtk/gtktextview.c:551
 msgid "Pixels of blank space below paragraphs"
-msgstr "Àò¾¢¸ÙìÌ ¸£ú ¦ÅüÚ-­¨¼¦ÅÇ¢ À¢ì¦ºø¸û"
+msgstr "பத்திகளுக்கு கீழ் வெற்று-இடைவெளி பிக்செல்கள்"
 
 #: gtk/gtktexttag.c:453
 msgid "Pixels inside wrap"
-msgstr "ÁÊôÒìÌû À¢ì¦ºø¸û"
+msgstr "மடிப்புக்குள் பிக்செல்கள்"
 
 #: gtk/gtktexttag.c:454
 #: gtk/gtktextview.c:561
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr "Àò¾¢¸Ç¢ø ÁÊì¸ôÀð¼ ÅÃ¢¨Å¸ÙìÌ ¿ÎÅ¢ø ¦ÅüÚ-­¨¼¦ÅÇ¢ À¢ì¦ºø¸û"
+msgstr "பத்திகளில் மடிக்கப்பட்ட வரிவைகளுக்கு நடுவில் வெற்று-இடைவெளி பிக்செல்கள்"
 
 #: gtk/gtktexttag.c:480
 msgid "Wrap mode"
-msgstr "ÁÊôÒ Ó¨È¨Á"
+msgstr "மடிப்பு முறைமை"
 
 #: gtk/gtktexttag.c:481
 #: gtk/gtktextview.c:579
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr "¦º¡ø ±ø¨Ä¸Ç¢ø, «øÄÐ ÅÃ¢ÔÕ ±ø¨Ä¸Ç¢ø, «øÄÐ ÅÃ¢¨º¸¨Ç ÁÊôÀ¢ì¸ §ÅñÎÁ¡"
+msgstr "சொல் எல்லைகளில், அல்லது வரியுரு எல்லைகளில், அல்லது வரிசைகளை மடிப்பிக்க வேண்டுமா"
 
 #: gtk/gtktexttag.c:490
 #: gtk/gtktextview.c:626
 msgid "Tabs"
-msgstr "¾ò¾¸û"
+msgstr "தத்தகள்"
 
 #: gtk/gtktexttag.c:491
 #: gtk/gtktextview.c:627
 msgid "Custom tabs for this text"
-msgstr "­ó¾ ¯¨Ã¸Ùì¸¡¸ ¾É¢ôÀÂÉ¡¸ ¾ò¾¸û"
+msgstr "இந்த உரைகளுக்காக தனிப்பயனாக தத்தகள்"
 
 #: gtk/gtktexttag.c:498
 msgid "Invisible"
-msgstr "À¡÷ì¸ÓÊÂ¡¾Ð"
+msgstr "பார்க்கமுடியாதது"
 
 #: gtk/gtktexttag.c:499
 #, fuzzy
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "­ó¾ ¯¨Ã Á¨Èó¾¾¡"
+msgstr "இந்த உரை மறைந்ததா"
 
 #: gtk/gtktexttag.c:512
 msgid "Background full height set"
-msgstr "ÓØ ¯ÂÃò¾¢üÌõ À¢ýÉ½¢ «¨Á"
+msgstr "முழு உயரத்திற்கும் பின்னணி அமை"
 
 #: gtk/gtktexttag.c:513
 msgid "Whether this tag affects background height"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ À¢ýÉ½¢ ¯ÂÃò¨¾ À¡¾¢ìÌ§Á¡"
+msgstr "இந்த அடையாள ஒட்டு பின்னணி உயரத்தை பாதிக்குமோ"
 
 #: gtk/gtktexttag.c:516
 msgid "Background stipple set"
-msgstr "À¢ýÉ½¢ ÒûÇ¢-Å¨Ã¨Å «¨Á"
+msgstr "பின்னணி புள்ளி-வரைவை அமை"
 
 #: gtk/gtktexttag.c:517
 msgid "Whether this tag affects the background stipple"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ À¢ýÉ½¢ ÒûÇ¢-Å¨Ã¨Å À¡¾¢ìÌ§Á¡"
+msgstr "இந்த அடையாள ஒட்டு பின்னணி புள்ளி-வரைவை பாதிக்குமோ"
 
 #: gtk/gtktexttag.c:524
 msgid "Foreground stipple set"
-msgstr "ÓýÉ½¢ ÒûÇ¢-Å¨Ã¨Å «¨Á"
+msgstr "முன்னணி புள்ளி-வரைவை அமை"
 
 #: gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground stipple"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ÓýÉ½¢ ÒûÇ¢-Å¨Ã¨Å À¡¾¢ìÌ§Á¡"
+msgstr "இந்த அடையாள ஒட்டு முன்னணி புள்ளி-வரைவை பாதிக்குமோ"
 
 #: gtk/gtktexttag.c:560
 msgid "Justification set"
-msgstr "§¿÷ò¾¢ ¦ºö¾ø «¨Á¸ôÀðÎûÇÐ"
+msgstr "நேர்த்தி செய்தல் அமைகப்பட்டுள்ளது"
 
 #: gtk/gtktexttag.c:561
 msgid "Whether this tag affects paragraph justification"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ Àò¾¢ §¿÷ò¾¢ ¦ºö¾¨Äô À¡¾¢ìÌ§Á¡"
+msgstr "இந்த அடையாள ஒட்டு பத்தி நேர்த்தி செய்தலைப் பாதிக்குமோ"
 
 #: gtk/gtktexttag.c:564
 msgid "Language set"
-msgstr "¦Á¡Æ¢ «¨Á¸ôÀðÎûÇÐ"
+msgstr "மொழி அமைகப்பட்டுள்ளது"
 
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ Å¨ÃÂôÀÎõ ¯¨ÃÂ¢ý ¦Á¡Æ¢¨Âô À¡¾¢ìÌ§Á¡"
+msgstr "இந்த அடையாள ஒட்டு வரையப்படும் உரையின் மொழியைப் பாதிக்குமோ"
 
 #: gtk/gtktexttag.c:568
 msgid "Left margin set"
-msgstr "­¼Ð µÃõ «¨Á¸ôÀðÎûÇÐ"
+msgstr "இடது ஓரம் அமைகப்பட்டுள்ளது"
 
 #: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the left margin"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ­¼Ð µÃò¨¾ô À¡¾¢ìÌ§Á¡"
+msgstr "இந்த அடையாள ஒட்டு இடது ஓரத்தைப் பாதிக்குமோ"
 
 #: gtk/gtktexttag.c:572
 msgid "Indent set"
-msgstr "¯û¾ûÇø «¨Á¸ôÀðÎûÇÐ"
+msgstr "உள்தள்ளல் அமைகப்பட்டுள்ளது"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects indentation"
-msgstr "­ó¾ «¨¼Â¡Ç ´ðÎ ¯û¾ûÇ¨Äô À¡¾¢ìÌ§Á¡"
+msgstr "இந்த அடையாள ஒட்டு உள்தள்ளலைப் பாதிக்குமோ"
 
 #: gtk/gtktexttag.c:580
 msgid "Pixels above lines set"
-msgstr "ÅÃ¢¨º¸ÙìÌ §ÁÄ¢ÕìÌõ À¢ì¦ºø¸û «¨Á¸ôÀðÎûÇÉ"
+msgstr "வரிசைகளுக்கு மேலிருக்கும் பிக்செல்கள் அமைகப்பட்டுள்ளன"
 
 #: gtk/gtktexttag.c:581
 #: gtk/gtktexttag.c:585
@@ -4165,31 +4165,31 @@ msgstr ""
 
 #: gtk/gtktextview.c:540
 msgid "Pixels Above Lines"
-msgstr "ÅÃ¢¨º¸ÙìÌ §Áø À¢ì¦ºø¸û"
+msgstr "வரிசைகளுக்கு மேல் பிக்செல்கள்"
 
 #: gtk/gtktextview.c:550
 msgid "Pixels Below Lines"
-msgstr "ÅÃ¢¨º¸ÙìÌ ¸£ú À¢ì¦ºø¸û"
+msgstr "வரிசைகளுக்கு கீழ் பிக்செல்கள்"
 
 #: gtk/gtktextview.c:560
 msgid "Pixels Inside Wrap"
-msgstr "ÁÊôÒìÌû À¢ì¦ºø¸û"
+msgstr "மடிப்புக்குள் பிக்செல்கள்"
 
 #: gtk/gtktextview.c:578
 msgid "Wrap Mode"
-msgstr "ÁÊôÒ Ó¨È¨Á"
+msgstr "மடிப்பு முறைமை"
 
 #: gtk/gtktextview.c:596
 msgid "Left Margin"
-msgstr "­¼Ð µÃõ"
+msgstr "இடது ஓரம்"
 
 #: gtk/gtktextview.c:606
 msgid "Right Margin"
-msgstr "ÅÄÐ µÃõ"
+msgstr "வலது ஓரம்"
 
 #: gtk/gtktextview.c:634
 msgid "Cursor Visible"
-msgstr "¿¢¨Ä ¸¡ðÊ À¡ì¸ìÜÊÂÐ"
+msgstr "நிலை காட்டி பாக்கக்கூடியது"
 
 #: gtk/gtktextview.c:635
 msgid "If the insertion cursor is shown"
@@ -4197,7 +4197,7 @@ msgstr "If the insertion cursor is shown"
 
 #: gtk/gtktextview.c:6602
 msgid "Input _Methods"
-msgstr "¯ûÇ£ðÒ _Ó¨È¸û"
+msgstr "உள்ளீட்பு _முறைகள்"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -4206,20 +4206,20 @@ msgstr "Unable to locate theme engine in module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:184
 msgid "--- No Tip ---"
-msgstr "--- º¢Ú ÐôÒ ¸¢¨¼Â¡Ð ---"
+msgstr "--- சிறு துப்பு கிடையாது ---"
 
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
-msgstr "­Õ¿¢¨ÄÁ¡üÈ¢ ¦À¡ò¾¡ý ¯û «Øò¾ §ÅñÎÁ¡ ­ø¨ÄÂ¡"
+msgstr "இருநிலைமாற்றி பொத்தான் உள் அழுத்த வேண்டுமா இல்லையா"
 
 #: gtk/gtktogglebutton.c:141
 #, fuzzy
 msgid "If the toggle button is in an \"in between\" state"
-msgstr "­Õ¿¢¨ÄÁ¡üÈ¢ ¦À¡ò¾¡ý \"¿¢¨Ä¸ÙìÌ ¿ÎÅ¢ø\" ¯ûÇ§¾¡"
+msgstr "இருநிலைமாற்றி பொத்தான் \"நிலைகளுக்கு நடுவில்\" உள்ளதோ"
 
 #: gtk/gtktogglebutton.c:148
 msgid "Draw Indicator"
-msgstr "¸¡ðÊ¨Â Å¨Ã"
+msgstr "காட்டியை வரை"
 
 #: gtk/gtktogglebutton.c:149
 msgid "If the toggle part of the button is displayed"
@@ -4227,15 +4227,15 @@ msgstr "If the toggle part of the button is displayed"
 
 #: gtk/gtktoolbar.c:230
 msgid "The orientation of the toolbar"
-msgstr "¸ÕÅ¢ô Àð¨¼Â¢ý ¾¢¨º «¨Á×"
+msgstr "கருவிப் பட்டையின் திசை அமைவு"
 
 #: gtk/gtktoolbar.c:238
 msgid "Toolbar Style"
-msgstr "¸ÕÅ¢ô Àð¨¼ À¡½¢"
+msgstr "கருவிப் பட்டை பாணி"
 
 #: gtk/gtktoolbar.c:239
 msgid "How to draw the toolbar"
-msgstr "¸ÕÅ¢ô Àð¨¼¨Â ±ôÀÊ Å¨ÃÅÐ"
+msgstr "கருவிப் பட்டையை எப்படி வரைவது"
 
 #: gtk/gtktoolbar.c:247
 msgid "Spacer size"
@@ -4247,11 +4247,11 @@ msgstr "Size of spacers"
 
 #: gtk/gtktoolbar.c:257
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr "¸ÕÅ¢ô Àð¨¼Â¢ý ¿¢ÆÖìÌõ ¦À¡ò¾¡ý¸ÙìÌõ ¿ÎÅ¢ÖûÇ ­¨¼¦ÅÇ¢ «Ç×"
+msgstr "கருவிப் பட்டையின் நிழலுக்கும் பொத்தான்களுக்கும் நடுவிலுள்ள இடைவெளி அளவு"
 
 #: gtk/gtktoolbar.c:265
 msgid "Space style"
-msgstr "­¨¼¦ÅÇ¢ À¡½¢"
+msgstr "இடைவெளி பாணி"
 
 #: gtk/gtktoolbar.c:266
 msgid "Whether spacers are vertical lines or just blank"
@@ -4271,59 +4271,59 @@ msgstr "Style of bevel around the toolbar"
 
 #: gtk/gtktoolbar.c:289
 msgid "Toolbar style"
-msgstr "¸ÕÅ¢ô Àð¨¼Â¢ý À¡½¢"
+msgstr "கருவிப் பட்டையின் பாணி"
 
 #: gtk/gtktoolbar.c:290
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr "¦¸¡¼¡ ¿¢¨Ä ¸ÕÅ¢ô Àð¨¼¸Ç¢ø ¯¨Ã ÁðÎõ, ¯¨ÃÔõ ÌÚõÀ¼í¸Ùõ, ÌÚõÀ¼í¸û ÁðÎõ, ...."
+msgstr "கொடா நிலை கருவிப் பட்டைகளில் உரை மட்டும், உரையும் குறும்படங்களும், குறும்படங்கள் மட்டும், ...."
 
 #: gtk/gtktoolbar.c:296
 msgid "Toolbar icon size"
-msgstr "¸ÕÅ¢ô Àð¨¼ ÌÚõÀ¼ «Ç×"
+msgstr "கருவிப் பட்டை குறும்பட அளவு"
 
 #: gtk/gtktoolbar.c:297
 msgid "Size of icons in default toolbars"
-msgstr "¦¸¡¼¡ ¿¢¨Ä ¸ÕÅ¢ô Àð¨¼¸Ç¢ÖûÇ ÌÚõÀ¼í¸Ç¢ý «Ç×"
+msgstr "கொடா நிலை கருவிப் பட்டைகளிலுள்ள குறும்படங்களின் அளவு"
 
 #: gtk/gtktreemodelsort.c:306
 #, fuzzy
 msgid "TreeModelSort Model"
-msgstr "TreeView ÀÊÁõ"
+msgstr "TreeView படிமம்"
 
 #: gtk/gtktreemodelsort.c:307
 #, fuzzy
 msgid "The model for the TreeModelSort to sort"
-msgstr "ÁÃì-¸¡ðº¢Â¢ý ÀÊÁõ"
+msgstr "மரக்-காட்சியின் படிமம்"
 
 #: gtk/gtktreeview.c:517
 msgid "TreeView Model"
-msgstr "TreeView ÀÊÁõ"
+msgstr "TreeView படிமம்"
 
 #: gtk/gtktreeview.c:518
 msgid "The model for the tree view"
-msgstr "ÁÃì-¸¡ðº¢Â¢ý ÀÊÁõ"
+msgstr "மரக்-காட்சியின் படிமம்"
 
 #: gtk/gtktreeview.c:526
 msgid "Horizontal Adjustment for the widget"
-msgstr "Å¢ð¦ºðÎì¸¡É ¸¢¨¼¾¢¨º ´Æ¢íÌÀÎò¾ø"
+msgstr "விட்செட்டுக்கான கிடைதிசை ஒழிங்குபடுத்தல்"
 
 #: gtk/gtktreeview.c:534
 msgid "Vertical Adjustment for the widget"
-msgstr "Å¢ð¦ºðÎì¸¡É ¦¿Î¾¢¨º ´Æ¢íÌÀÎò¾ø"
+msgstr "விட்செட்டுக்கான நெடுதிசை ஒழிங்குபடுத்தல்"
 
 #: gtk/gtktreeview.c:541
 #: gtk/gtktreeviewcolumn.c:185
 #: gtk/gtkwidget.c:433
 msgid "Visible"
-msgstr "À¡ì¸ìÜÊÂÐ"
+msgstr "பாக்கக்கூடியது"
 
 #: gtk/gtktreeview.c:542
 msgid "Show the column header buttons"
-msgstr "Àò¾¢¸Ç¢ý ¾¨ÄôÒ ¦À¡ò¾¡ý¸¨Ç ¸¡ñÀ¢"
+msgstr "பத்திகளின் தலைப்பு பொத்தான்களை காண்பி"
 
 #: gtk/gtktreeview.c:549
 msgid "Headers Clickable"
-msgstr "¾¨ÄôÒ¸¨Ç «Óì¸ ÓÊÔõ"
+msgstr "தலைப்புகளை அமுக்க முடியும்"
 
 #: gtk/gtktreeview.c:550
 msgid "Column headers respond to click events"
@@ -4340,7 +4340,7 @@ msgstr "Set the column for the expander column"
 #: gtk/gtktreeview.c:565
 #: gtk/gtktreeviewcolumn.c:284
 msgid "Reorderable"
-msgstr "ÁÚÅÃ¢¨ºÂ¡ì¸ìÜÊÂÐ"
+msgstr "மறுவரிசையாக்கக்கூடியது"
 
 #: gtk/gtktreeview.c:566
 msgid "View is reorderable"
@@ -4356,7 +4356,7 @@ msgstr "Set a hint to the theme engine to draw rows in alternating colors"
 
 #: gtk/gtktreeview.c:581
 msgid "Enable Search"
-msgstr "§¾¼ø ­ÂÖ¨ÁôÀÎòÐ"
+msgstr "தேடல் இயலுமைப்படுத்து"
 
 #: gtk/gtktreeview.c:582
 msgid "View allows user to search through columns interactively"
@@ -4364,7 +4364,7 @@ msgstr "View allows user to search through columns interactively"
 
 #: gtk/gtktreeview.c:589
 msgid "Search Column"
-msgstr "§¾Î¾ø Àò¾¢"
+msgstr "தேடுதல் பத்தி"
 
 #: gtk/gtktreeview.c:590
 msgid "Model column to search through when searching through code"
@@ -4380,7 +4380,7 @@ msgstr "Size of the expander arrow"
 
 #: gtk/gtktreeview.c:612
 msgid "Vertical Separator Width"
-msgstr "¦¿Î-À¢Ã¢ôÀ¢Â¢ý «¸Äõ"
+msgstr "நெடு-பிரிப்பியின் அகலம்"
 
 #: gtk/gtktreeview.c:613
 #, fuzzy
@@ -4436,7 +4436,7 @@ msgstr "Whether to display the column"
 #: gtk/gtktreeviewcolumn.c:193
 #: gtk/gtkwindow.c:491
 msgid "Resizable"
-msgstr "«Ç× Á¡üÈìÜÊÂÐ"
+msgstr "அளவு மாற்றக்கூடியது"
 
 #: gtk/gtktreeviewcolumn.c:194
 msgid "Column is user-resizable"
@@ -4444,7 +4444,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:202
 msgid "Current width of the column"
-msgstr "Àò¾¢Â¢ý ¾ü§À¡¨¾Â «¸Äõ"
+msgstr "பத்தியின் தற்போதைய அகலம்"
 
 #: gtk/gtktreeviewcolumn.c:210
 msgid "Sizing"
@@ -4456,60 +4456,60 @@ msgstr "Resize mode of the column"
 
 #: gtk/gtktreeviewcolumn.c:219
 msgid "Fixed Width"
-msgstr "Á¡È¡ «¸Äõ"
+msgstr "மாறா அகலம்"
 
 #: gtk/gtktreeviewcolumn.c:220
 #, fuzzy
 msgid "Current fixed width of the column"
-msgstr "Àò¾¢Â¢ý ¾ü§À¡¨¾Â «¸Çõ"
+msgstr "பத்தியின் தற்போதைய அகளம்"
 
 #: gtk/gtktreeviewcolumn.c:229
 msgid "Minimum Width"
-msgstr "¬¸º¢Ú¾¡É «¸Äõ"
+msgstr "ஆகசிறுதான அகலம்"
 
 #: gtk/gtktreeviewcolumn.c:230
 msgid "Minimum allowed width of the column"
-msgstr "¬¸º¢Ú¾¡¸ «ÛÁ¾¢ì¸ôÀÎõ Àò¾¢Â¢ý «¸Äõ"
+msgstr "ஆகசிறுதாக அனுமதிக்கப்படும் பத்தியின் அகலம்"
 
 #: gtk/gtktreeviewcolumn.c:239
 msgid "Maximum Width"
-msgstr "¬¸ô¦ÀÈ¢¾¡É «¸Äõ"
+msgstr "ஆகப்பெறிதான அகலம்"
 
 #: gtk/gtktreeviewcolumn.c:240
 msgid "Maximum allowed width of the column"
-msgstr "¬¸ô¦ÀÈ¢¾¡¸ «ÛÁ¾¢ì¸ôÀÎõ Àò¾¢Â¢ý «¸Äõ"
+msgstr "ஆகப்பெறிதாக அனுமதிக்கப்படும் பத்தியின் அகலம்"
 
 #: gtk/gtktreeviewcolumn.c:249
 msgid "Title"
-msgstr "¾¨ÄôÒ"
+msgstr "தலைப்பு"
 
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Title to appear in column header"
-msgstr "Àò¾¢Â¢ý ¾¨ÄôÀ¢ø §¾¡üÚõ ¾¨ÄôÒ"
+msgstr "பத்தியின் தலைப்பில் தோற்றும் தலைப்பு"
 
 #: gtk/gtktreeviewcolumn.c:257
 msgid "Clickable"
-msgstr "«Óì¸ìÜÊÂÐ"
+msgstr "அமுக்கக்கூடியது"
 
 #: gtk/gtktreeviewcolumn.c:258
 msgid "Whether the header can be clicked"
-msgstr "¾¨ÄôÒ «Óì¸ ÓÊÔÁ¡"
+msgstr "தலைப்பு அமுக்க முடியுமா"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "Widget"
-msgstr "Å¢ð¦ºð"
+msgstr "விட்செட்"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Widget to put in column header button instead of column title"
-msgstr "Àò¾¢ ¾¨ÄôÀ¢ø §À¡ÎÅ¾üÌ À¾¢Ä¡¸ Àò¾¢ ¾¨ÄôÒ ¦À¡ò¾¡É¢ø §À¡¼§ÅñÊÂ Å¢ð¦ºð"
+msgstr "பத்தி தலைப்பில் போடுவதற்கு பதிலாக பத்தி தலைப்பு பொத்தானில் போடவேண்டிய விட்செட்"
 
 #: gtk/gtktreeviewcolumn.c:274
 msgid "Alignment"
-msgstr "§¿÷ôÀÎò¾õ"
+msgstr "நேர்ப்படுத்தம்"
 
 #: gtk/gtktreeviewcolumn.c:275
 msgid "X Alignment of the column header text or widget"
-msgstr "Àò¾¢ ¾¨ÄôÀÌ¾¢ ¯¨ÃÂ¢ý «øÄÐ Å¢ð¦ºÊý X §¿÷ôÀÎò¾õ"
+msgstr "பத்தி தலைப்பகுதி உரையின் அல்லது விட்செடின் X நேர்ப்படுத்தம்"
 
 #: gtk/gtktreeviewcolumn.c:285
 #, fuzzy
@@ -4518,15 +4518,15 @@ msgstr "Wether the column can be reordered around the headers"
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Sort indicator"
-msgstr "ÅÃ¢¨ºôÀÎò¾ø ¸¡ðÊ"
+msgstr "வரிசைப்படுத்தல் காட்டி"
 
 #: gtk/gtktreeviewcolumn.c:293
 msgid "Whether to show a sort indicator"
-msgstr "ÅÃ¢¨ºôÀÎò¾ø ¸¡ðÊ¨Âì ¸¡ñÀ¢ôÀ¾¡"
+msgstr "வரிசைப்படுத்தல் காட்டியைக் காண்பிப்பதா"
 
 #: gtk/gtktreeviewcolumn.c:300
 msgid "Sort order"
-msgstr "ÅÃ¢¨ºôÀÎò¾ø ÅÃ¢¨º"
+msgstr "வரிசைப்படுத்தல் வரிசை"
 
 #: gtk/gtktreeviewcolumn.c:301
 msgid "Sort direction the sort indicator should indicate"
@@ -4549,24 +4549,24 @@ msgstr "Determines how the shadowed box around the viewport is drawn."
 
 #: gtk/gtkwidget.c:400
 msgid "Widget name"
-msgstr "Å¢ð¦ºð ¦ÀÂ÷"
+msgstr "விட்செட் பெயர்"
 
 #: gtk/gtkwidget.c:401
 msgid "The name of the widget"
-msgstr "Å¢ð¦ºðÊý ¦ÀÂ÷"
+msgstr "விட்செட்டின் பெயர்"
 
 #: gtk/gtkwidget.c:407
 msgid "Parent widget"
-msgstr "¦Àü§È¡÷ Å¢ð¦ºð"
+msgstr "பெற்றோர் விட்செட்"
 
 #: gtk/gtkwidget.c:408
 #, fuzzy
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr "­ó¾ Å¢ð¦ºðÊý ¦Àü§È¡÷ Å¢ð¦ºð. µ÷ Container Å¢ð¦ºð¼¡¸ ­Õì¸§ÅñÎõ"
+msgstr "இந்த விட்செட்டின் பெற்றோர் விட்செட். ஓர் Container விட்செட்டாக இருக்கவேண்டும்"
 
 #: gtk/gtkwidget.c:415
 msgid "Width request"
-msgstr "«¸Äõ §ÅñÎ§¸¡û"
+msgstr "அகலம் வேண்டுகோள்"
 
 #: gtk/gtkwidget.c:416
 #, fuzzy
@@ -4575,7 +4575,7 @@ msgstr "Override for width request of the widget, or -1 if natural request shoul
 
 #: gtk/gtkwidget.c:424
 msgid "Height request"
-msgstr "¯ÂÃõ §ÅñÎ§¸¡û"
+msgstr "உயரம் வேண்டுகோள்"
 
 #: gtk/gtkwidget.c:425
 #, fuzzy
@@ -4584,19 +4584,19 @@ msgstr "Override for height request of the widget, or -1 if natural request shou
 
 #: gtk/gtkwidget.c:434
 msgid "Whether the widget is visible"
-msgstr "­ó¾ Å¢ð¦ºð À¡÷ì¸ìÜÊÂ¾¡"
+msgstr "இந்த விட்செட் பார்க்கக்கூடியதா"
 
 #: gtk/gtkwidget.c:440
 msgid "Sensitive"
-msgstr "¯½÷×¨¼ÂÐ"
+msgstr "உணர்வுடையது"
 
 #: gtk/gtkwidget.c:441
 msgid "Whether the widget responds to input"
-msgstr "­ó¾ Å¢ð¦ºð ¯ûÇ£¸ÙìÌ À¾¢ÄÇ¢ìÌÁ¡"
+msgstr "இந்த விட்செட் உள்ளீகளுக்கு பதிலளிக்குமா"
 
 #: gtk/gtkwidget.c:447
 msgid "Application paintable"
-msgstr "ÀÂýÀ¡Î¸û Åñ½õ âºìÜÊÂÐ"
+msgstr "பயன்பாடுகள் வண்ணம் பூசக்கூடியது"
 
 #: gtk/gtkwidget.c:448
 msgid "Whether the application will paint directly on the widget"
@@ -4664,7 +4664,7 @@ msgstr "Whether the widget is composed of other widgets"
 
 #: gtk/gtkwidget.c:503
 msgid "Style"
-msgstr "À¡½¢"
+msgstr "பாணி"
 
 #: gtk/gtkwidget.c:504
 #, fuzzy
@@ -4673,7 +4673,7 @@ msgstr "The style of the widget, which contains information about how it will lo
 
 #: gtk/gtkwidget.c:510
 msgid "Events"
-msgstr "¿¢¸úîº¢¸û"
+msgstr "நிகழ்ச்சிகள்"
 
 #: gtk/gtkwidget.c:511
 #, fuzzy
@@ -4682,7 +4682,7 @@ msgstr "The event mask that decides what kind of GdkEvents this widget gets."
 
 #: gtk/gtkwidget.c:518
 msgid "Extension events"
-msgstr "¿£ÊôÒ ¿¢¸úîº¢¸û"
+msgstr "நீடிப்பு நிகழ்ச்சிகள்"
 
 #: gtk/gtkwidget.c:519
 #, fuzzy
@@ -4727,16 +4727,16 @@ msgstr "Whether to draw the focus indicator inside widgets."
 
 #: gtk/gtkwidget.c:1124
 msgid "Cursor color"
-msgstr "¿¢¨Ä ¸¡ðÊ Åñ½õ"
+msgstr "நிலை காட்டி வண்ணம்"
 
 #: gtk/gtkwidget.c:1125
 msgid "Color with which to draw insertion cursor"
-msgstr "¦ºÕÌÁ¢¼ ¿¢¨Ä ¸¡ðÊ¨Â Å¨ÃÂ§ÅñÊÂ Åñ½õ"
+msgstr "செருகுமிட நிலை காட்டியை வரையவேண்டிய வண்ணம்"
 
 #: gtk/gtkwidget.c:1130
 #, fuzzy
 msgid "Secondary cursor color"
-msgstr "¿¢¨Ä ¸¡ðÊ Åñ½õ"
+msgstr "நிலை காட்டி வண்ணம்"
 
 #: gtk/gtkwidget.c:1131
 msgid "Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"
@@ -4749,23 +4749,23 @@ msgstr ""
 #: gtk/gtkwidget.c:1137
 #, fuzzy
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "¦ºÕÌÁ¢¼ ¿¢¨Ä ¸¡ðÊ¨Â Å¨ÃÂ§ÅñÊÂ Åñ½õ"
+msgstr "செருகுமிட நிலை காட்டியை வரையவேண்டிய வண்ணம்"
 
 #: gtk/gtkwindow.c:456
 msgid "Window Type"
-msgstr "º¡ÇÃ Å¨¸"
+msgstr "சாளர வகை"
 
 #: gtk/gtkwindow.c:457
 msgid "The type of the window"
-msgstr "º¡ÇÃò¾¢ý Å¨¸"
+msgstr "சாளரத்தின் வகை"
 
 #: gtk/gtkwindow.c:466
 msgid "Window Title"
-msgstr "º¡ÇÃ ¾¨ÄôÒ"
+msgstr "சாளர தலைப்பு"
 
 #: gtk/gtkwindow.c:467
 msgid "The title of the window"
-msgstr "º¡ÇÃò¾¢ý ¾¨ÄôÒ"
+msgstr "சாளரத்தின் தலைப்பு"
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Shrink"
@@ -4778,7 +4778,7 @@ msgstr "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of 
 
 #: gtk/gtkwindow.c:483
 msgid "Allow Grow"
-msgstr "ÅÇ÷îº¢ «ÑÁ¾¢"
+msgstr "வளர்ச்சி அநுமதி"
 
 #: gtk/gtkwindow.c:484
 #, fuzzy
@@ -4788,7 +4788,7 @@ msgstr "If TRUE, users can expand the window beyond its minimum size."
 #: gtk/gtkwindow.c:492
 #, fuzzy
 msgid "If TRUE, users can resize the window"
-msgstr "TRUE ±ýÈ¡ø, ÀÂÉÃ¡ø º¡ÇÃò¾¢ý «Ç¨Å Á¡üÈ ÓÊÔõ."
+msgstr "TRUE என்றால், பயனரால் சாளரத்தின் அளவை மாற்ற முடியும்."
 
 #: gtk/gtkwindow.c:499
 msgid "Modal"
@@ -4801,34 +4801,34 @@ msgstr "If TRUE, the window is modal (other windows are not usable while this on
 
 #: gtk/gtkwindow.c:507
 msgid "Window Position"
-msgstr "º¡ÇÃò¾¢ý ­¼õ"
+msgstr "சாளரத்தின் இடம்"
 
 #: gtk/gtkwindow.c:508
 #, fuzzy
 msgid "The initial position of the window"
-msgstr "¦¾¡¼íÌõ§À¡Ð º¡ÇÃò¾¢ý ­¼õ"
+msgstr "தொடங்கும்போது சாளரத்தின் இடம்"
 
 #: gtk/gtkwindow.c:516
 msgid "Default Width"
-msgstr "¦¸¡¼¡ ¿¢¨Ä «¸Äõ"
+msgstr "கொடா நிலை அகலம்"
 
 #: gtk/gtkwindow.c:517
 #, fuzzy
 msgid "The default width of the window, used when initially showing the window"
-msgstr "º¡Ç÷ò¨¾ Ó¾øÓ¨È ¸¡ñÀìÌõ§À¡Ð, º¡ÇÃò¾¢ý ¦¸¡¼¡ ¿¢¨Ä «¸Çõ."
+msgstr "சாளர்த்தை முதல்முறை காண்பக்கும்போது, சாளரத்தின் கொடா நிலை அகளம்."
 
 #: gtk/gtkwindow.c:526
 msgid "Default Height"
-msgstr "¦¸¡¼¡ ¿¢¨Ä ¯ÂÃõ"
+msgstr "கொடா நிலை உயரம்"
 
 #: gtk/gtkwindow.c:527
 #, fuzzy
 msgid "The default height of the window, used when initially showing the window"
-msgstr "º¡Ç÷ò¨¾ Ó¾øÓ¨È ¸¡ñÀìÌõ§À¡Ð, º¡ÇÃò¾¢ý ¦¸¡¼¡ ¿¢¨Ä ¯ÂÃõ"
+msgstr "சாளர்த்தை முதல்முறை காண்பக்கும்போது, சாளரத்தின் கொடா நிலை உயரம்"
 
 #: gtk/gtkwindow.c:536
 msgid "Destroy with Parent"
-msgstr "¦Àü§È¡¨Ã «Æ¢"
+msgstr "பெற்றோரை அழி"
 
 #: gtk/gtkwindow.c:537
 msgid "If this window should be destroyed when the parent is destroyed"
@@ -4836,11 +4836,11 @@ msgstr "If this window should be destroyed when the parent is destroyed"
 
 #: gtk/gtkwindow.c:544
 msgid "Icon"
-msgstr "ÌÚõÀ¼õ"
+msgstr "குறும்படம்"
 
 #: gtk/gtkwindow.c:545
 msgid "Icon for this window"
-msgstr "­ó¾ º¡ÇÃò¾¢ý ÌÚõÀ¼õ"
+msgstr "இந்த சாளரத்தின் குறும்படம்"
 
 #: gtk/gtkwindow.c:560
 #, fuzzy
@@ -4908,7 +4908,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr "Thai (¯¨¼ó¾Ð)"
+msgstr "Thai (உடைந்தது)"
 
 #. ID
 #: modules/input/imti-er.c:452
@@ -4928,7 +4928,7 @@ msgstr "Vietnamese (VIQR)"
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr "X ¯ûÇ£ðÎ Ó¨È"
+msgstr "X உள்ளீட்டு முறை"
 
 #: modules/input/gtkimcontextxim.c:260
 msgid "IM Preedit style"
@@ -4941,10 +4941,10 @@ msgstr ""
 #: modules/input/gtkimcontextxim.c:269
 #, fuzzy
 msgid "IM Status style"
-msgstr "­¨¼¦ÅÇ¢ À¡½¢"
+msgstr "இடைவெளி பாணி"
 
 #: modules/input/gtkimcontextxim.c:270
 #, fuzzy
 msgid "How to draw the input method statusbar"
-msgstr "¸ÕÅ¢ô Àð¨¼¨Â ±ôÀÊ Å¨ÃÅÐ"
+msgstr "கருவிப் பட்டையை எப்படி வரைவது"
 
