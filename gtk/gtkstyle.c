@@ -297,8 +297,9 @@ gtk_style_detach (GtkStyle *style)
 
       style->depth = -1;
       style->colormap = NULL;
-      gtk_style_remove (style);
     }
+
+  gtk_style_remove (style);
 }
 
 GtkStyle*

@@ -1,3 +1,7 @@
+Wed Dec 3 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkstyle.c: fixed a problem introduced recently in 
+	gtk_style_detach witch crashed script_fu.
+
 Wed Dec 3 1997 Owen Taylor <owt1@cornell.edu>
 	* gdk/Makefile.am: add a dependence for $(DEP_FILES) on
 	$(BUILT_SOURCES) to work around automake problem
