@@ -1,3 +1,7 @@
+2005-02-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkcalendar.sgml: Some additions. 
+
 2005-02-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.6.2 ===
