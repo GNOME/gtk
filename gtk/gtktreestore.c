@@ -35,7 +35,6 @@ static void         gtk_tree_store_drag_source_init(GtkTreeDragSourceIface *ifac
 static void         gtk_tree_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static void         gtk_tree_store_sortable_init   (GtkTreeSortableIface   *iface);
 static void         gtk_tree_store_finalize        (GObject           *object);
-static void         gtk_tree_store_destroy         (GtkObject         *object);
 static guint        gtk_tree_store_get_flags       (GtkTreeModel      *tree_model);
 static gint         gtk_tree_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GType        gtk_tree_store_get_column_type (GtkTreeModel      *tree_model,
@@ -111,7 +110,11 @@ static void     gtk_tree_store_set_default_sort_func   (GtkTreeSortable        *
 							GtkDestroyNotify        destroy);
 static gboolean gtk_tree_store_has_default_sort_func   (GtkTreeSortable        *sortable);
 
-static void     validate_gnode                    (GNode *node);
+static void     validate_gnode                         (GNode *node);
+
+
+static GObjectClass *parent_class = NULL;
+
 
 static inline void
 validate_tree (GtkTreeStore *tree_store)
@@ -193,16 +196,14 @@ gtk_tree_store_get_type (void)
 }
 
 static void
-gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
+gtk_tree_store_class_init (GtkTreeStoreClass *class)
 {
   GObjectClass *object_class;
-  GtkObjectClass *gobject_class;
 
-  object_class = (GObjectClass *) tree_store_class;
-  gobject_class = (GtkObjectClass *) tree_store_class;
+  parent_class = g_type_class_peek_parent (class);
+  object_class = (GObjectClass *) class;
 
   object_class->finalize = gtk_tree_store_finalize;
-  gobject_class->destroy = gtk_tree_store_destroy;
 }
 
 static void
@@ -409,12 +410,6 @@ gtk_tree_store_finalize (GObject *object)
   g_node_children_foreach (tree_store->root, G_TRAVERSE_LEAFS, node_free, tree_store->column_headers);
   _gtk_tree_data_list_header_free (tree_store->sort_list);
   g_free (tree_store->column_headers);
-}
-
-static void
-gtk_tree_store_destroy (GtkObject *gobject)
-{
-  GtkTreeStore *tree_store = GTK_TREE_STORE (gobject);
 
   if (tree_store->default_sort_destroy)
     {
@@ -422,6 +417,8 @@ gtk_tree_store_destroy (GtkObject *gobject)
       tree_store->default_sort_destroy = NULL;
       tree_store->default_sort_data = NULL;
     }
+
+  (* parent_class->finalize) (object);
 }
 
 /* fulfill the GtkTreeModel requirements */

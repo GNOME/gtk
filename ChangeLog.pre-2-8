@@ -1,3 +1,10 @@
+Tue Oct  9 17:40:24 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_finalize): We're a gobject,
+	not a GtkObject.  Thanks andersca.
+
+	* gtk/gtkliststore.c (gtk_list_store_finalize): ditto
+
 Tue Oct  9 14:50:51 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c

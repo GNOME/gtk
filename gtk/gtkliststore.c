@@ -35,7 +35,6 @@ static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *iface);
 static void         gtk_list_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static void         gtk_list_store_sortable_init   (GtkTreeSortableIface   *iface);
-static void         gtk_list_store_destroy         (GtkObject         *gobject);
 static void         gtk_list_store_finalize        (GObject           *object);
 static guint        gtk_list_store_get_flags       (GtkTreeModel      *tree_model);
 static gint         gtk_list_store_get_n_columns   (GtkTreeModel      *tree_model);
@@ -112,6 +111,8 @@ static void     gtk_list_store_set_default_sort_func (GtkTreeSortable        *so
 						      GtkDestroyNotify        destroy);
 static gboolean gtk_list_store_has_default_sort_func (GtkTreeSortable        *sortable);
 
+
+static GObjectClass *parent_class = NULL;
 
 
 static void
@@ -195,13 +196,11 @@ static void
 gtk_list_store_class_init (GtkListStoreClass *class)
 {
   GObjectClass *object_class;
-  GtkObjectClass *gobject_class;
 
+  parent_class = g_type_class_peek_parent (class);
   object_class = (GObjectClass*) class;
-  gobject_class = (GtkObjectClass*) class;
 
   object_class->finalize = gtk_list_store_finalize;
-  gobject_class->destroy = gtk_list_store_destroy;
 }
 
 static void
@@ -396,19 +395,14 @@ gtk_list_store_finalize (GObject *object)
   _gtk_tree_data_list_header_free (list_store->sort_list);
   g_free (list_store->column_headers);
   
-}
-
-static void
-gtk_list_store_destroy (GtkObject *gobject)
-{
-  GtkListStore *list_store = GTK_LIST_STORE (gobject);
-
   if (list_store->default_sort_destroy)
     {
       (* list_store->default_sort_destroy) (list_store->default_sort_data);
       list_store->default_sort_destroy = NULL;
       list_store->default_sort_data = NULL;
     }
+
+  (* parent_class->finalize) (object);
 }
 
 /* Fulfill the GtkTreeModel requirements */
