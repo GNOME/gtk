@@ -4,7 +4,7 @@ CC = gcc
 dial_test: gtkdial.o dial_test.o
 	$(CC) `gtk-config --libs` dial_test.o gtkdial.o -o dial_test
 
-dial_test.o: 
+dial_test.o: dial_test.c gtkdial.h
 	$(CC) `gtk-config --cflags` -c dial_test.c -o dial_test.o
 
 gtkdial.o: gtkdial.c gtkdial.h
