@@ -1,3 +1,12 @@
+2005-03-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstyle.c: Document which parameters may be NULL.  
+	(#166855, Frank Naumann)
+
+2005-03-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* AUTHORS: Add original authors of incorporated software.
+
 Thu Mar  3 16:59:44 2005  Manish Singh  <yosh@gimp.org>
 
 	* configure.in: URL escape the '+' in gtk+ in the bugzilla URL.

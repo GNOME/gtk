@@ -5809,9 +5809,10 @@ hls_to_rgb (gdouble *h,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: rectangle to which the output is clipped
- * @widget: the widget
- * @detail: a style detail
+ * @area: rectangle to which the output is clipped, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x1: the starting x coordinate
  * @x2: the ending x coordinate
  * @y: the y coordinate
@@ -5842,9 +5843,10 @@ gtk_paint_hline (GtkStyle      *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: rectangle to which the output is clipped
- * @widget: the widget
- * @detail: a style detail
+ * @area: rectangle to which the output is clipped, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @y1_: the starting y coordinate
  * @y2_: the ending y coordinate
  * @x: the x coordinate
@@ -5876,9 +5878,10 @@ gtk_paint_vline (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the rectangle
  * @y: y origin of the rectangle
  * @width: width of the rectangle 
@@ -5913,9 +5916,10 @@ gtk_paint_shadow (GtkStyle     *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @points: an array of #GdkPoint<!-- -->s
  * @npoints: length of @points
  * @fill: %TRUE if the polygon should be filled
@@ -5947,9 +5951,10 @@ gtk_paint_polygon (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @arrow_type: the type of arrow to draw
  * @fill: %TRUE if the arrow tip should be filled
  * @x: x origin of the rectangle to draw the arrow in
@@ -5988,9 +5993,10 @@ gtk_paint_arrow (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the rectangle to draw the diamond in
  * @y: y origin of the rectangle to draw the diamond in
  * @width: width of the rectangle to draw the diamond in
@@ -6024,9 +6030,10 @@ gtk_paint_diamond (GtkStyle      *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin
  * @y: y origin
  * @string: the string to draw
@@ -6059,9 +6066,10 @@ gtk_paint_string (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the box
  * @y: y origin of the box
  * @width: the width of the box
@@ -6095,9 +6103,10 @@ gtk_paint_box (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the box
  * @y: y origin of the box
  * @width: the width of the box
@@ -6131,9 +6140,10 @@ gtk_paint_flat_box (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the rectangle to draw the check in
  * @y: y origin of the rectangle to draw the check in
  * @width: the width of the rectangle to draw the check in
@@ -6168,9 +6178,10 @@ gtk_paint_check (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the rectangle to draw the option in
  * @y: y origin of the rectangle to draw the option in
  * @width: the width of the rectangle to draw the option in
@@ -6205,9 +6216,10 @@ gtk_paint_option (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the rectangle to draw the tab in
  * @y: y origin of the rectangle to draw the tab in
  * @width: the width of the rectangle to draw the tab in
@@ -6242,9 +6254,10 @@ gtk_paint_tab (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the rectangle
  * @y: y origin of the rectangle
  * @width: width of the rectangle 
@@ -6287,9 +6300,10 @@ gtk_paint_shadow_gap (GtkStyle       *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the rectangle
  * @y: y origin of the rectangle
  * @width: width of the rectangle 
@@ -6330,9 +6344,10 @@ gtk_paint_box_gap (GtkStyle       *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the extension
  * @y: y origin of the extension
  * @width: width of the extension 
@@ -6367,9 +6382,10 @@ gtk_paint_extension (GtkStyle       *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: the x origin of the rectangle around which to draw a focus indicator
  * @y: the y origin of the rectangle around which to draw a focus indicator
  * @width: the width of the rectangle around which to draw a focus indicator
@@ -6424,9 +6440,10 @@ gtk_paint_slider (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: x origin of the handle
  * @y: y origin of the handle
  * @width: with of the handle
@@ -6461,9 +6478,10 @@ gtk_paint_handle (GtkStyle      *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @x: the x position to draw the expander at
  * @y: the y position to draw the expander at
  * @expander_style: the style to draw the expander in
@@ -6514,9 +6532,10 @@ gtk_paint_layout (GtkStyle        *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle
- * @widget: the widget
- * @detail: a style detail
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
  * @edge: the edge in which to draw the resize grip
  * @x: the x origin of the rectangle in which to draw the resize grip
  * @y: the y origin of the rectangle in which to draw the resize grip
