@@ -1,3 +1,11 @@
+Tue Apr 16 17:28:21 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): check
+	->priv->cursor and ->priv->anchor rowrefs before removing
+	node->children from the rbtree. Also check the
+	->priv->last_single_clicked and ->priv->last_single_clicked_2 rowrefs
+	(I think I really need to rename those two someday).
+
 Tue Apr 16 07:53:49 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmenu.c (gtk_menu_key_press): don't install/change accelerators

@@ -8846,6 +8846,53 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_tree_path_free (child_path);
     }
 
+  if (gtk_tree_row_reference_valid (tree_view->priv->cursor))
+    {
+      GtkTreePath *cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+
+      if (gtk_tree_path_is_ancestor (path, cursor_path))
+	{
+	  gtk_tree_row_reference_free (tree_view->priv->cursor);
+	  tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
+								      tree_view->priv->model,
+								      path);
+	}
+      gtk_tree_path_free (cursor_path);
+    }
+
+  if (gtk_tree_row_reference_valid (tree_view->priv->anchor))
+    {
+      GtkTreePath *anchor_path = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
+      if (gtk_tree_path_is_ancestor (path, anchor_path))
+	{
+	  gtk_tree_row_reference_free (tree_view->priv->anchor);
+	  tree_view->priv->anchor = NULL;
+	}
+      gtk_tree_path_free (anchor_path);
+    }
+
+  if (gtk_tree_row_reference_valid (tree_view->priv->last_single_clicked))
+    {
+      GtkTreePath *lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_single_clicked);
+      if (gtk_tree_path_is_ancestor (path, lsc))
+        {
+	  gtk_tree_row_reference_free (tree_view->priv->last_single_clicked);
+	  tree_view->priv->last_single_clicked = NULL;
+	}
+      gtk_tree_path_free (lsc);
+    }
+
+  if (gtk_tree_row_reference_valid (tree_view->priv->last_single_clicked_2))
+    {
+      GtkTreePath *lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_single_clicked_2);
+      if (gtk_tree_path_is_ancestor (path, lsc))
+        {
+	  gtk_tree_row_reference_free (tree_view->priv->last_single_clicked_2);
+	  tree_view->priv->last_single_clicked_2 = NULL;
+	}
+      gtk_tree_path_free (lsc);
+    }
+
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
     {
       _gtk_rbtree_remove (node->children);
@@ -8880,32 +8927,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   if (GTK_WIDGET_MAPPED (tree_view))
     {
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-    }
-
-  if (gtk_tree_row_reference_valid (tree_view->priv->cursor))
-    {
-      GtkTreePath *cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
-
-      if (gtk_tree_path_is_ancestor (path, cursor_path))
-	{
-	  gtk_tree_row_reference_free (tree_view->priv->cursor);
-	  tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
-								      tree_view->priv->model,
-								      path);
-	}
-      gtk_tree_path_free (cursor_path);
-    }
-
-  if (gtk_tree_row_reference_valid (tree_view->priv->anchor))
-      {
-      GtkTreePath *anchor_path = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
-      if (gtk_tree_path_is_ancestor (path, anchor_path))
-	{
-	  gtk_tree_row_reference_free (tree_view->priv->anchor);
-	  tree_view->priv->anchor = NULL;
-	}
-      gtk_tree_path_free (anchor_path);
-
     }
 
   g_signal_emit (G_OBJECT (tree_view), tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
