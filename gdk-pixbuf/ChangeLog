@@ -1,3 +1,8 @@
+1999-12-12  Federico Mena Quintero  <federico@redhat.com>
+
+	* gdk-pixbuf/Makefile.am (libgdk_pixbuf_la_LDFLAGS): Use a
+	conditional to see whether to link $(GNOME_LIBS) or not.
+
 1999-12-10  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-io.h: thinking about the new loading API.
