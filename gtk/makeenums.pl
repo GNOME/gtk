@@ -43,7 +43,7 @@ sub parse_entries {
 
 	# Handle include files
 	if (/^\#include\s*<([^>]*)>/ ) {
-            my $file= "$ENV{'srcdir'}/../$1";
+            my $file= "../$1";
 	    open NEWFILE, $file or die "Cannot open include file $file: $!\n";
 	    
 	    if (parse_entries (\*NEWFILE)) {
