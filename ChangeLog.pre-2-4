@@ -1,3 +1,13 @@
+Fri Jul  5 20:18:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.[ch] gtk/gtkmenubar.c gtk/gtkmenuitem.c
+	gtk/gtkentry.c gtk/gtktextview.c: Add an extra parameter
+	to _gtk_menu_item_select_first() to allow us to choose
+	whether we want to select the first item predictably
+	or to select the first sensitive item. Fixes problem
+	with insensitive menu items and keynav. (#85796,
+	reported by Bill Haneman and others.)
+
 Fri Jul  5 02:50:24 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_collapse_all): fix warning.
