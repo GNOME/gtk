@@ -1,0 +1,97 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeModelSort
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTreeModelSort ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### USER_FUNCTION GValueCompareFunc ##### -->
+<para>
+
+</para>
+
+@a: 
+@b: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_new_with_model ##### -->
+<para>
+
+</para>
+
+@model: 
+@func: 
+@sort_col: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_set_model ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@model: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_set_sort_col ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@sort_col: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_set_compare ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@func: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_resort ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_convert_path ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@path: 
+@Returns: 
+
+

@@ -1,0 +1,43 @@
+<!-- ##### SECTION Title ##### -->
+file-saving
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_pixbuf_savev ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@filename: 
+@type: 
+@option_keys: 
+@option_values: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@filename: 
+@type: 
+@error: 
+@Varargs: 
+@Returns: 
+
+
