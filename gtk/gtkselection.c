@@ -408,12 +408,22 @@ gtk_selection_owner_set (GtkWidget *widget,
 			 GdkAtom    selection,
 			 guint32    time)
 {
-  g_return_val_if_fail (widget == NULL || GTK_WIDGET_REALIZED (widget), FALSE);
+  GdkDisplay *display;
   
-  return gtk_selection_owner_set_for_display (gdk_get_default_display(),
-					      widget,
-					      selection,
-					      time);
+  g_return_val_if_fail (widget == NULL || GTK_WIDGET_REALIZED (widget), FALSE);
+
+  if (widget)
+    display = gtk_widget_get_display (widget);
+  else
+    {
+      GTK_NOTE (MULTIHEAD,
+		g_warning ("gtk_selection_owner_set (NULL,...) is not multihead safe"));
+		 
+      display = gdk_get_default_display ();
+    }
+  
+  return gtk_selection_owner_set_for_display (display, widget,
+					      selection, time);
 }
 
 /*************************************************************

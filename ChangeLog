@@ -1,3 +1,31 @@
+Thu Jun 20 15:36:40 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_selection_owner_set): Get
+	the owner from the display if !NULL. Otherwise, warn for
+	multihead. (#85680)
+
+Thu Jun 20 15:17:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch]: Get rid of gtk_style_get_font_for_display(),
+	make gtk_style_get_font() warn for multihead if called
+	on an unattached style. (#80277)
+
+	* gtk/gtktext.c: Remove use of gtk_style_get_font_for_display();
+	this makes gtktext not multihead safe, but it doesn't matter;
+	it's ENABLE_BROKEN anyways.
+
+	* gtk/gtkmain.c gtk/gtkdebug.h: Add GTK_NOTE(MULTIHEAD,[])
+
+Thu Jun 20 14:51:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_notify): Only
+	change the double click time if the screen for
+	the notification is screen 0 of the display.
+	(#77978)
+
+	* gdk/gdkevents.c (gdk_display_set_double_click_time): Fix 
+	half-done rename.
+
 Thu Jun 20 12:16:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkinvisible.c (gtk_invisible_set_screen): Add
