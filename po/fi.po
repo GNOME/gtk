@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
-"POT-Creation-Date: 2003-02-02 10:11-0500\n"
+"POT-Creation-Date: 2003-04-13 23:31+0300\n"
 "PO-Revision-Date: 2003-01-05 16:54+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -273,7 +273,7 @@ msgstr "Tukematon kuvaketyyppi"
 msgid "Not enough memory to load ICO file"
 msgstr "Ei tarpeeksi muistia ICO-tiedoston lataamiseksi"
 
-#: gdk-pixbuf/io-ico.c:871
+#: gdk-pixbuf/io-ico.c:872
 msgid "The ICO image format"
 msgstr "ICO-kuvamuoto"
 
@@ -477,113 +477,113 @@ msgstr "Ei tarpeeksi muistia RAS-kuvan lataamiseen"
 msgid "The Sun raster image format"
 msgstr "Sun-rasterikuvamuoto"
 
-#: gdk-pixbuf/io-tga.c:159
+#: gdk-pixbuf/io-tga.c:157
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Ei voi varata muistia IOBuffer-tietorakenteelle"
 
-#: gdk-pixbuf/io-tga.c:178
+#: gdk-pixbuf/io-tga.c:176
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "Ei voi varata muistia IOBuffer-datalle"
 
-#: gdk-pixbuf/io-tga.c:189
+#: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
 msgstr "Ei voi varata uudelleen IOBuffer-dataa"
 
-#: gdk-pixbuf/io-tga.c:219
+#: gdk-pixbuf/io-tga.c:217
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Ei voi varata tilapäistä IOBuffer-dataa"
 
-#: gdk-pixbuf/io-tga.c:283
+#: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "fread() epäonnistui -- luultavasti tiedosto loppuu ennenaikaisesti"
 
-#: gdk-pixbuf/io-tga.c:293
+#: gdk-pixbuf/io-tga.c:291
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() epäonnistui -- luultavasti tiedosto loppuu ennenaikaisesti"
 
-#: gdk-pixbuf/io-tga.c:326
+#: gdk-pixbuf/io-tga.c:324
 msgid "Can't allocate new pixbuf"
 msgstr "Ei voi varata uutta kuvapuskuria"
 
-#: gdk-pixbuf/io-tga.c:639
+#: gdk-pixbuf/io-tga.c:637
 msgid "Can't allocate colormap structure"
 msgstr "Ei voi varata värikarttarakennetta"
 
-#: gdk-pixbuf/io-tga.c:646
+#: gdk-pixbuf/io-tga.c:644
 msgid "Can't allocate colormap entries"
 msgstr "Ei voi varata värikartan kohtia"
 
-#: gdk-pixbuf/io-tga.c:668
+#: gdk-pixbuf/io-tga.c:666
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Odottamaton värikartan kohtien bittisyvyys"
 
-#: gdk-pixbuf/io-tga.c:686
+#: gdk-pixbuf/io-tga.c:684
 msgid "Can't allocate TGA header memory"
 msgstr "Ei voi varata TGA-otsakkeen muistia"
 
-#: gdk-pixbuf/io-tga.c:719
+#: gdk-pixbuf/io-tga.c:717
 msgid "TGA image has invalid dimensions"
 msgstr "TGA-kuvan mitat ovat virheelliset"
 
-#: gdk-pixbuf/io-tga.c:725
+#: gdk-pixbuf/io-tga.c:723
 msgid "TGA image comment length is too long"
 msgstr "TGA-kuvan kommentin pituus on liian suuri"
 
-#: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
-#: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
+#: gdk-pixbuf/io-tga.c:732 gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:751
+#: gdk-pixbuf/io-tga.c:761 gdk-pixbuf/io-tga.c:768
 msgid "TGA image type not supported"
 msgstr "TGA-kuvatyyppi ei tuettu"
 
-#: gdk-pixbuf/io-tga.c:816
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Ei voi varata muistia TGA-kontekstirakenteelle"
 
-#: gdk-pixbuf/io-tga.c:880
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "Ylimääräistä dataa tiedostossa"
 
-#: gdk-pixbuf/io-tga.c:926
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr "Ei voi varata muistia TGA-otsakkeelle"
 
-#: gdk-pixbuf/io-tga.c:936
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr "Liian pitkä arvo TGA-otsakkeen infolen-kentässä."
 
-#: gdk-pixbuf/io-tga.c:960
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "Ei voi varata muistia TGA-cmap väliaikaispuskurille"
 
-#: gdk-pixbuf/io-tga.c:972
+#: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "Ei voi varata muistia TGA-värikarttarakenteelle"
 
-#: gdk-pixbuf/io-tga.c:981
+#: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "Ei voi varata muistia TGA-värikartan kohdille"
 
-#: gdk-pixbuf/io-tga.c:991
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Odottamaton TGA-värikartan bittisyvyys"
 
-#: gdk-pixbuf/io-tga.c:1032
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr "Pseudovärikuva ilman värikarttaa"
 
-#: gdk-pixbuf/io-tga.c:1039
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 "Ei voi siirtyä kuvan alkukohtaan -- kohtasi todennäköisesti tiedoston lopun"
 
-#: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr "Ei voi varata kuvapuskuria"
 
-#: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr "Tukematon TGA-kuvatyyppi"
 
-#: gdk-pixbuf/io-tga.c:1370
+#: gdk-pixbuf/io-tga.c:1368
 msgid "The Targa image format"
 msgstr "Targa-kuvamuoto"
 
@@ -915,7 +915,7 @@ msgstr "Välit"
 msgid "The amount of space between children"
 msgstr "Lasten välien suuruus"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:444
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:450
 msgid "Homogeneous"
 msgstr "Tasakokoisuus"
 
@@ -955,7 +955,7 @@ msgstr "Lapsen ja sen naapureiden välinen ylimääräinen tila pikseleinä."
 msgid "Pack type"
 msgstr "Pakkaustapa"
 
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:488
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:494
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -963,12 +963,12 @@ msgstr ""
 "GtkPackType, joka määrittää miten lapsi pakkautuu emon alkuun ja loppuun "
 "nähden"
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:472 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Sijainti"
 
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:467
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:473
 msgid "The index of the child in the parent"
 msgstr "Nykyisen lapsen indeksi emon sisällä"
 
@@ -1916,15 +1916,15 @@ msgstr "Valitse kohdistettaessa"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Muuttuuko sisältö valituksi, kun kenttä saa syöttökohdistuksen"
 
-#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3980 gtk/gtklabel.c:3222 gtk/gtktextview.c:6574
 msgid "Select All"
 msgstr "Valitse kaikki"
 
-#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3990 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Syöttötavat"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6543
+#: gtk/gtkentry.c:4000 gtk/gtktextview.c:6593
 msgid "_Insert Unicode control character"
 msgstr "_Lisää Unicode-kontrollimerkki"
 
@@ -1954,11 +1954,11 @@ msgstr "Voiko useita tiedostoja valita"
 
 #: gtk/gtkfilesel.c:722
 msgid "Folders"
-msgstr "Kansiot"
+msgstr "Hakemistot"
 
 #: gtk/gtkfilesel.c:726
 msgid "Fol_ders"
-msgstr "Tie_dostot"
+msgstr "_Hakemistot"
 
 #: gtk/gtkfilesel.c:758
 msgid "Files"
@@ -1991,7 +1991,7 @@ msgstr "_Uusi hakemisto"
 
 #: gtk/gtkfilesel.c:1118
 msgid "De_lete File"
-msgstr "_Poista tiedosto"
+msgstr "Poista tie_dosto"
 
 #: gtk/gtkfilesel.c:1129
 msgid "_Rename File"
@@ -2693,76 +2693,76 @@ msgid ""
 msgstr "Säätimen ylä- ja alapuolelle lisättävä väli kuvapisteinä."
 
 # , c-format
-#: gtk/gtknotebook.c:372
+#: gtk/gtknotebook.c:378
 msgid "Page"
 msgstr "Sivu"
 
-#: gtk/gtknotebook.c:373
+#: gtk/gtknotebook.c:379
 msgid "The index of the current page"
 msgstr "Nykyisen sivun indeksi"
 
-#: gtk/gtknotebook.c:381
+#: gtk/gtknotebook.c:387
 msgid "Tab Position"
 msgstr "Välilehtien sijainti"
 
-#: gtk/gtknotebook.c:382
+#: gtk/gtknotebook.c:388
 msgid "Which side of the notebook holds the tabs"
 msgstr "Millä muistion sivulla välilehdet ovat."
 
-#: gtk/gtknotebook.c:389
+#: gtk/gtknotebook.c:395
 msgid "Tab Border"
 msgstr "Välilehden reunus"
 
-#: gtk/gtknotebook.c:390
+#: gtk/gtknotebook.c:396
 msgid "Width of the border around the tab labels"
 msgstr "Välilehden nimiötä ympäröivän reunuksen leveys"
 
-#: gtk/gtknotebook.c:398
+#: gtk/gtknotebook.c:404
 msgid "Horizontal Tab Border"
 msgstr "Välilehden vaakareunus"
 
-#: gtk/gtknotebook.c:399
+#: gtk/gtknotebook.c:405
 msgid "Width of the horizontal border of tab labels"
 msgstr "Välilehden nimiön vaakareunuksen leveys"
 
-#: gtk/gtknotebook.c:407
+#: gtk/gtknotebook.c:413
 msgid "Vertical Tab Border"
 msgstr "Välilehden pystyreunus"
 
-#: gtk/gtknotebook.c:408
+#: gtk/gtknotebook.c:414
 msgid "Width of the vertical border of tab labels"
 msgstr "Välilehden nimiön pystyreunuksen leveys"
 
-#: gtk/gtknotebook.c:416
+#: gtk/gtknotebook.c:422
 msgid "Show Tabs"
 msgstr "Näytä välilehdet"
 
-#: gtk/gtknotebook.c:417
+#: gtk/gtknotebook.c:423
 msgid "Whether tabs should be shown or not"
 msgstr "Näkyvätkö välilehdet vaiko eivät"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:429
 msgid "Show Border"
 msgstr "Näytä reunus"
 
-#: gtk/gtknotebook.c:424
+#: gtk/gtknotebook.c:430
 msgid "Whether the border should be shown or not"
 msgstr "Näkyykö reunus vai ei"
 
-#: gtk/gtknotebook.c:430
+#: gtk/gtknotebook.c:436
 msgid "Scrollable"
 msgstr "Vieritettävissä"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:437
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Jos TOSI, niin välilehtien selausnuolet näkyvät, kun lehdet eivät enää sovi"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:443
 msgid "Enable Popup"
 msgstr "Kontekstivalikko"
 
-#: gtk/gtknotebook.c:438
+#: gtk/gtknotebook.c:444
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2770,48 +2770,48 @@ msgstr ""
 "Jos TOSI, niin muistion napsauttaminen oikealla hiiren painikkeella avaa "
 "valikon, josta voi siirtyä välilehdelle"
 
-#: gtk/gtknotebook.c:445
+#: gtk/gtknotebook.c:451
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ovatko välilehdet tasakokoisia"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:458
 msgid "Tab label"
 msgstr "Välilehden nimiö"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:459
 msgid "The string displayed on the childs tab label"
 msgstr "Lapsen välilehden nimiössä näkyvä teksti"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:465
 msgid "Menu label"
 msgstr "Valikkonimiö"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:466
 msgid "The string displayed in the childs menu entry"
 msgstr "Lapsen valikkokohdassa näkyvä teksti"
 
-#: gtk/gtknotebook.c:473
+#: gtk/gtknotebook.c:479
 msgid "Tab expand"
 msgstr "Välilehden laajentuminen"
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:480
 msgid "Whether to expand the childs tab or not"
 msgstr "Laajentuuko lapsen välilehti vai ei"
 
-#: gtk/gtknotebook.c:480
+#: gtk/gtknotebook.c:486
 msgid "Tab fill"
 msgstr "Välilehden täyttö"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:487
 msgid "Wheather the childs tab should fill the allocated area or not"
 msgstr "Täyttääkö lapsen välilehti koko varatun alueen vai ei"
 
-#: gtk/gtknotebook.c:487
+#: gtk/gtknotebook.c:493
 msgid "Tab pack type"
 msgstr "Välilehden pakkaustyyppi"
 
 # , c-format
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4787
+#: gtk/gtknotebook.c:2474 gtk/gtknotebook.c:4821
 #, c-format
 msgid "Page %u"
 msgstr "Sivu %u"
@@ -2906,7 +2906,7 @@ msgstr ""
 "Numero väliltä 0.0 - 1.0, joka määrittää tekstin pystykohdistuksen "
 "edistymissäätimessä"
 
-#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:284 gtk/gtkspinbutton.c:240
+#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
 msgid "Adjustment"
 msgstr "Säätö"
 
@@ -2991,72 +2991,72 @@ msgstr "Ryhmä"
 msgid "The radio button whose group this widget belongs."
 msgstr "Vaihtoehtopainike, jonka ryhmään tämä säädin kuuluu."
 
-#: gtk/gtkrange.c:275
+#: gtk/gtkrange.c:281
 msgid "Update policy"
-msgstr "Päivitystapa"
+msgstr "Päivityskäytäntö"
 
-#: gtk/gtkrange.c:276
+#: gtk/gtkrange.c:282
 msgid "How the range should be updated on the screen"
 msgstr "Miten lukuvälin tulisi päivittyä ruudulla"
 
-#: gtk/gtkrange.c:285
+#: gtk/gtkrange.c:291
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment, joka sisältää tämän lukuväliolion nykyisen arvon"
 
-#: gtk/gtkrange.c:292
+#: gtk/gtkrange.c:298
 msgid "Inverted"
 msgstr "Käänteinen"
 
-#: gtk/gtkrange.c:293
+#: gtk/gtkrange.c:299
 msgid "Invert direction slider moves to increase range value"
 msgstr "Käännä suunta, jossa liukusäädin kasvattaa arvoa"
 
-#: gtk/gtkrange.c:299
+#: gtk/gtkrange.c:305
 msgid "Slider Width"
 msgstr "Liukusäätimen leveys"
 
-#: gtk/gtkrange.c:300
+#: gtk/gtkrange.c:306
 msgid "Width of scrollbar or scale thumb"
 msgstr "Vierityspalkin tai liukusäätimen vetopainikkeen leveys"
 
-#: gtk/gtkrange.c:307
+#: gtk/gtkrange.c:313
 msgid "Trough Border"
 msgstr "Uran reuna"
 
-#: gtk/gtkrange.c:308
+#: gtk/gtkrange.c:314
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Väli liu'uttimen tai askeltimien ja uran ulkoreunuksen välissä"
 
-#: gtk/gtkrange.c:315
+#: gtk/gtkrange.c:321
 msgid "Stepper Size"
 msgstr "Askeltimen koko"
 
-#: gtk/gtkrange.c:316
+#: gtk/gtkrange.c:322
 msgid "Length of step buttons at ends"
 msgstr "Päissä olevien askelluspainikkeiden pituus"
 
-#: gtk/gtkrange.c:323
+#: gtk/gtkrange.c:329
 msgid "Stepper Spacing"
 msgstr "Askeltimien väli"
 
-#: gtk/gtkrange.c:324
+#: gtk/gtkrange.c:330
 msgid "Spacing between step buttons and thumb"
 msgstr "Väli askelluspainikkeiden ja vetopainikkeen välillä"
 
-#: gtk/gtkrange.c:331
+#: gtk/gtkrange.c:337
 msgid "Arrow X Displacement"
 msgstr "Nuolen x-poikkeama"
 
-#: gtk/gtkrange.c:332
+#: gtk/gtkrange.c:338
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Kuinka paljon x-suuntaan nuoli liikkuu, kun painike päästetään ylös"
 
-#: gtk/gtkrange.c:339
+#: gtk/gtkrange.c:345
 msgid "Arrow Y Displacement"
 msgstr "Nuolen y-poikkeama"
 
-#: gtk/gtkrange.c:340
+#: gtk/gtkrange.c:346
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Kuinka paljon y-suuntaan nuoli liikkuu, kun painike päästetään ylös"
@@ -3208,7 +3208,7 @@ msgstr "Pystysäätö"
 
 #: gtk/gtkscrolledwindow.c:249
 msgid "Horizontal Scrollbar Policy"
-msgstr "Vaakavierityspalkit"
+msgstr "Vaakavierityspalkkikäytäntö"
 
 #: gtk/gtkscrolledwindow.c:250
 msgid "When the horizontal scrollbar is displayed"
@@ -3216,7 +3216,7 @@ msgstr "Milloin vaakavierityspalkki näkyy"
 
 #: gtk/gtkscrolledwindow.c:257
 msgid "Vertical Scrollbar Policy"
-msgstr "Pystyvierityspalkit"
+msgstr "Pystyvierityspalkkikäytäntö"
 
 #: gtk/gtkscrolledwindow.c:258
 msgid "When the vertical scrollbar is displayed"
@@ -3392,7 +3392,7 @@ msgstr "Kiertyykö pyöröpainikkeen arvo ympäri, kun se saavuttaa rajansa"
 
 #: gtk/gtkspinbutton.c:292
 msgid "Update Policy"
-msgstr "Päivitystapa"
+msgstr "Päivityskäytäntö"
 
 #: gtk/gtkspinbutton.c:293
 msgid ""
@@ -4198,7 +4198,7 @@ msgstr "Kohdistin näkyy"
 msgid "If the insertion cursor is shown"
 msgstr "Näkyykö tekstikohdistin"
 
-#: gtk/gtktextview.c:6534
+#: gtk/gtktextview.c:6584
 msgid "Input _Methods"
 msgstr "Syöttö_tavat"
 
