@@ -1,3 +1,10 @@
+Tue Nov 17 1998  Tuomas Lukka <lukka@iki.fi>
+
+	* gtk/gtktypeutils.c: Fix vital bug where LOOKUP was used when
+ 	  getting types even though we were not using real type names,
+	  just the index.  This caused random crashes when more than 
+	  256 types were defined.
+
 1998-11-17  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtk/genmarshal.pl: Put output files in the current directory

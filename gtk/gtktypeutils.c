@@ -96,7 +96,15 @@ gtk_type_node_next_and_invalidate (void)
   new_type = n_type_nodes++;
   n_free_type_nodes--;
   
-  LOOKUP_TYPE_NODE (node, new_type);
+  /* This can't be used here - new_type can be over 256!
+   * LOOKUP_TYPE_NODE (node, new_type);
+   * Code copied from above (we may assume we are all right here):
+   */
+
+  if(new_type == 0) 
+    return NULL;
+  node = type_nodes + new_type;
+
   if (node)
     node->type = new_type;
   
