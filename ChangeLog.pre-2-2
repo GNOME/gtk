@@ -1,3 +1,12 @@
+Mon Jul  3 17:08:14 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_charset_for_locale):
+	Use g_get_charset() instead of g_get_codeset().
+
+	* gtk/gtkframe.[ch] gtkframe.h gtk/gtktextmark.h: 
+	Comment out some strdup'ing functions to keep timj
+	happy until we finish fighting this out.
+
 Mon Jul  3 14:24:16 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_draw): Ignore calls with

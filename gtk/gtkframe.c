@@ -72,6 +72,12 @@ static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 static GtkBinClass *parent_class = NULL;
 
 
+/* Here until I convince timj about memory management behavior
+ */
+gchar *    gtk_frame_get_label        (GtkFrame      *frame);
+gchar *    gtk_label_get_text (GtkLabel         *label);
+
+
 GtkType
 gtk_frame_get_type (void)
 {

@@ -72,7 +72,8 @@ GtkType    gtk_frame_get_type         (void);
 GtkWidget* gtk_frame_new              (const gchar   *label);
 void       gtk_frame_set_label        (GtkFrame      *frame,
 				       const gchar   *label);
-gchar *    gtk_frame_get_label        (GtkFrame      *frame);
+/* Temporarily commented out until memory management behavior is figured out */
+/* gchar *    gtk_frame_get_label        (GtkFrame      *frame); */
 void       gtk_frame_set_label_widget (GtkFrame      *frame,
 				       GtkWidget     *title_widget);
 void       gtk_frame_set_label_align  (GtkFrame      *frame,

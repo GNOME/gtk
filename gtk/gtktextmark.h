@@ -13,7 +13,8 @@ void gtk_text_mark_set_visible (GtkTextMark *mark,
                                  gboolean setting);
 
 gboolean gtk_text_mark_is_visible (GtkTextMark *mark);
-char *   gtk_text_mark_get_name   (GtkTextMark *mark);
+/* Temporarily commented out until memory management behavior is figured out */
+/* char *   gtk_text_mark_get_name   (GtkTextMark *mark); */
 
 #ifdef __cplusplus
 }

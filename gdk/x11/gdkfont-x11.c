@@ -150,11 +150,14 @@ gdk_font_charset_for_locale ()
     { "ISO-8859-7", "iso8859-7" },
     { "ISO-8859-8", "iso8859-8" },
     { "ISO-8859-9", "iso8859-9" },
+    { "UTF-8", "iso8859-1" }
   };
 
-  char *codeset = g_get_codeset ();
+  char *codeset;
   char *result = NULL;
   int i;
+
+  g_get_charset (&codeset);
   
   for (i=0; i < G_N_ELEMENTS (charset_map); i++)
     if (strcmp (charset_map[i][0], codeset) == 0)
@@ -162,8 +165,6 @@ gdk_font_charset_for_locale ()
 	result = charset_map[i][1];
 	break;
       }
-
-  g_free (codeset);
 
   if (result)
     return g_strdup (result);
