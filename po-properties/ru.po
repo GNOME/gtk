@@ -1,16 +1,16 @@
 # Copyright (C) 1999-2002 Free Software Foundation, Inc.
 # Sergey Panov <sipan@mit.edu>, 1999.
 # Valek Filippov <frob@df.ru>, 2000- 2002
-# Dmitry Mastrukov <dmitry@taurussoft.org>, 2002-2003
+# Dmitry Mastrukov <dmitry@taurussoft.org>, 2002-2004
 # Sun G11n <gnome_int_l10n@ireland.sun.com>, 2002
 # Andrew W. Nosenko <awn@bcs.zp.ua>, 2003
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.3\n"
+"Project-Id-Version: gtk+-properties 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2003-12-10 06:55+0300\n"
+"POT-Creation-Date: 2004-01-21 09:50+0300\n"
+"PO-Revision-Date: 2004-01-21 09:51+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf.c:122
 #, fuzzy
 msgid "Has Alpha"
-msgstr "Использовать разметку"
+msgstr "Имеет палитру"
 
 #: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "Whether the pixbuf has an alpha channel"
@@ -219,7 +219,7 @@ msgstr "Будет ли виджет видимым"
 #: gtk/gtkaction.c:271
 #, fuzzy
 msgid "Action Group"
-msgstr "Дробь"
+msgstr "Граница области действий"
 
 #: gtk/gtkaction.c:272
 msgid ""
@@ -1677,16 +1677,15 @@ msgstr "И_мя каталога:"
 #: gtk/gtkfilechooser.c:112
 #, fuzzy
 msgid "Whether to select folders rather than files"
-msgstr "Будет ли ход выполнения процесса отображаться в виде текста"
+msgstr "Влияет ли этот тэг на семейство шрифта"
 
 #: gtk/gtkfilechooser.c:117
 msgid "Local Only"
 msgstr ""
 
 #: gtk/gtkfilechooser.c:118
-#, fuzzy
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "Будет ли ход выполнения процесса отображаться в виде текста"
+msgstr ""
 
 #: gtk/gtkfilechooser.c:123
 #, fuzzy
@@ -1728,7 +1727,7 @@ msgstr "Допускать ли выделение нескольких файл
 #: gtk/gtkfilechooser.c:148
 #, fuzzy
 msgid "Show Hidden"
-msgstr "Показывать текст"
+msgstr "Показывать заголовок"
 
 #: gtk/gtkfilechooser.c:149
 #, fuzzy
@@ -3605,12 +3604,11 @@ msgstr "Должен ли вводимый текст перезаписыват
 
 #: gtk/gtktextview.c:673
 msgid "Accepts tab"
-msgstr "Использовать табуляции"
+msgstr ""
 
 #: gtk/gtktextview.c:674
 msgid "Whether Tab will result in a tab character being entered"
 msgstr ""
-"Должен ли вставляться символ табуляции при нажатии на клавишу табуляции"
 
 #: gtk/gtktoggleaction.c:129
 #, fuzzy
@@ -4194,53 +4192,53 @@ msgstr ""
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1374
+#: gtk/gtkwidget.c:1362
 msgid "Interior Focus"
 msgstr "Внутренний фокус ввода"
 
-#: gtk/gtkwidget.c:1375
+#: gtk/gtkwidget.c:1363
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Рисовать ли индикатор фокуса ввода внутри элементов управления"
 
-#: gtk/gtkwidget.c:1381
+#: gtk/gtkwidget.c:1369
 msgid "Focus linewidth"
 msgstr "Ширина линии фокуса ввода"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1370
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Ширина линии-индикатора фокуса вода, в точках растра"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1376
 msgid "Focus line dash pattern"
 msgstr "Штрих линии фокуса ввода"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1377
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Образец штрихов для отображения линии-индикатора фокуса ввода"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1382
 msgid "Focus padding"
 msgstr "Отступ фокуса ввода"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1383
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Расстояние между индикатором фокуса ввода и 'рамкой' элемента управления, в "
 "точках растра"
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1388
 msgid "Cursor color"
 msgstr "Цвет курсора"
 
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1389
 msgid "Color with which to draw insertion cursor"
 msgstr "Цвет, используемый для курсора"
 
-#: gtk/gtkwidget.c:1406
+#: gtk/gtkwidget.c:1394
 msgid "Secondary cursor color"
 msgstr "Цвет второго курсора"
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1395
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4248,11 +4246,11 @@ msgstr ""
 "Цвет для отображения второго курсора при использовании смешанного (справа "
 "налево и слева направо) ввода текста"
 
-#: gtk/gtkwidget.c:1412
+#: gtk/gtkwidget.c:1400
 msgid "Cursor line aspect ratio"
 msgstr "Пропорции курсора"
 
-#: gtk/gtkwidget.c:1413
+#: gtk/gtkwidget.c:1401
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Пропорции курсора"
 
@@ -4408,7 +4406,7 @@ msgstr ""
 #: gtk/gtkwindow.c:598
 #, fuzzy
 msgid "Accept focus"
-msgstr "Использовать табуляции"
+msgstr "Имеет фокус"
 
 #: gtk/gtkwindow.c:599
 #, fuzzy
@@ -4450,3 +4448,1198 @@ msgstr "Стиль строки состояния метода ввода"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Как рисовать строку состояния метода ввода"
+
+#~ msgid "Failed to open file '%s': %s"
+#~ msgstr "Произошёл сбой при открытии файла \"%s\": %s"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Файл изображения \"%s\" не содержит никаких данных"
+
+#~ msgid ""
+#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
+#~ msgstr ""
+#~ "Произошёл сбой при загрузке изображения \"%s\": причина неизвестна, "
+#~ "возможно, файл изображения повреждён"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Произошёл сбой при загрузке анимации \"%s\": причина неизвестна, "
+#~ "возможно, файл анимации повреждён"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Невозможно загрузить модуль загрузки изображений: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Модуль загрузки изображений \"%s\" не экспортирует соответствующий "
+#~ "интерфейс; может быть, модуль остался от предыдущей версии пакета GTK?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Тип изображения \"%s\" не поддерживается"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Не удалось распознать формат изображения для файла \"%s\""
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Формат файла изображения не распознан"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Произошёл сбой при загрузке изображения \"%s\": %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Эта сборка подсистемы \"gdk-pixbuf\" не поддерживает сохранение "
+#~ "изображений в таком формате: %s"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Произошёл сбой при открытии файла \"%s\" для записи: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Произошёл сбой при закрытии файла \"%s\" во время записи изображения, не "
+#~ "все данные могли быть сохранены: %s"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Пошаговая загрузка изображения формата \"%s\" не поддерживается"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to begin loading an "
+#~ "image, but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Произошла внутренняя ошибка: Модуль загрузки изображений \"%s\" засбоил "
+#~ "при начале загрузки изображения, но не сообщил причину сбоя"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Заголовок изображения повреждён"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Формат изображения неизвестен"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Пиксельные данные изображения повреждены"
+
+#~ msgid "failed to allocate image buffer of %u bytes"
+#~ msgstr ""
+#~ "произошёл сбой при распределении памяти  в размере %u байт для буфера "
+#~ "изображения"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Непредвиденная последовательность кадров обнаружена в анимации"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Данный тип анимации не поддерживается"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Заголовок анимации недопустим"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Недостаточно памяти для загрузки анимации"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Данная последовательность кадров в анимации неверна"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Формат ANI для изображений"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Недостаточно памяти для загрузки изображения"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Изображение формата BMP имеет неподдерживаемый размер заголовка"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Изображение формата BMP имеет неправильные данные в заголовке"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Формат BMP для изображений"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Произошёл сбой при чтении файла формата GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "Файл формата GIF не содержал некоторые данные (возможно был обрезан?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr ""
+#~ "Произошла внутренняя ошибка в загрузчике изображений формата GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Стек переполнен"
+
+#~ msgid "GIF image loader can't understand this image."
+#~ msgstr "Загрузчик изображений формата GIF не может понять это изображение."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Неправильный код обнаружен"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Круговая табличная запись обнаружена в файле формата GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Недостаточно памяти для загрузки файла формата GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr ""
+#~ "Изображение формата GIF повреждено (неправильное сжатие алгоритмом LZW)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Вероятно, файл не является файлом формата GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Файлы формата GIF версии %s не поддерживаются"
+
+#~ msgid "GIF image contained a frame appearing outside the image bounds."
+#~ msgstr ""
+#~ "Изображение формата GIF содержит кадр, выходящий за пределы изображения."
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "Изображение формата GIF не имеет глобальной карты цветов, и кадр внутри "
+#~ "него не имеет локальной карты цветов."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Изображение формата GIF было обрезано или незавершено."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Формат GIF для изображений"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Недостаточно памяти для загрузки значка"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Заголовок значка недопустим"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Ширина значка равна нулю"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Высота значка равна нулю"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Сжатые значки не поддерживаются"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Данный тип значка не поддерживается"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Недостаточно памяти для загрузки файла формата ICO"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Формат ICO для изображений"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Произошла ошибка интерпретации файла изображения формата JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Недостаточно памяти для загрузки изображения; попытайтесь закрыть "
+#~ "некоторые приложения, чтобы освободить память"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Цветовое пространство (%s) формата JPEG не поддерживается"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Не удалось распределить память для загрузки файла формата JPEG"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Качество формата JPEG должно быть между 0 и 100; значение \"%s\" не может "
+#~ "быть обработано."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Качество формата JPEG должно быть между 0 и 100; значение \"%d\" "
+#~ "недопустимо."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Формат JPEG для изображений"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Значение числа бит на канал для изображения формата PNM недопустимо"
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr ""
+#~ "Преобразованное изображение формата PNG имеет нулевую ширину или высоту"
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr ""
+#~ "Значение числа бит на канал преобразованного изображения формата PNG не "
+#~ "равняется 8-ми."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Преобразованное изображение формата PNG не имеет тип RGB или RGBA"
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Преобразованное иображение формата PNG имеет неподдерживаемое число "
+#~ "каналов, это число должно быть 3 или 4"
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Произошла фатальная ошибка в файле изображения формата PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Недостаточно памяти для загрузки файла формата PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Недостаточно памяти для хранения %ld из %ld изображений; попробуйте "
+#~ "закрыть некоторые приложения, чтобы уменьшить количество используемой "
+#~ "памяти"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Произошла фатальная ошибка при чтении файла изображения формата PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr ""
+#~ "Произошла фатальная ошибка при чтении файла изображения формата PNG: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Ключи для блоков текста в изображении формата PNG должны содержать не "
+#~ "менее 1 и не более 79 символов."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr ""
+#~ "Ключи для блоков текста в изображении формата PNG должны быть символами "
+#~ "набора ASCII."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Значение для блока текста %s в изображении формата PNG не может быть "
+#~ "преобразовано в кодировку ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Формат PNG для изображений"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr ""
+#~ "Загрузчик изображений формата PNM ожидал найти целое число, но не нашёл "
+#~ "его"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "Файл формата PNM имеет неправильный первый байт"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "Файл формата PNM имеет нераспознаваемый субформат PNM"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "Файл формата PNM имеет нулевую ширину изображения"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "Файл формата PNM имеет нулевую высоту изображения"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Максимальное значение цвета в файле формата PNM равняется 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Максимальное значение цвета в файле формата PNM слишком велико"
+
+#~ msgid "Can't handle PNM files with maximum color values greater than 255"
+#~ msgstr ""
+#~ "Невозможно обработать файлы формата PNM с максимальными значениями цвета "
+#~ "большими, чем 255"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Данный тип изображения формата PNM недопустим"
+
+#~ msgid "PNM image format is invalid"
+#~ msgstr "Данное изображение формата PNM недопустимо"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr ""
+#~ "Загрузчик изображений формата PNM не поддерживает этот субформат PNM"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Преждевременный конец файла обнаружен"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "Формат PNM требует в точности одного пробела перед данными семпла"
+
+#~ msgid "Can't allocate memory for loading PNM image"
+#~ msgstr ""
+#~ "Невозможно распределить память для загрузки файла изображения формата PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Недостаточно памяти для загрузки структуры формата PNM"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Непредвиденный конец данных  обнаружен в изображении формата PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Недостаточно памяти для загрузки файла формата PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Семейство форматов PNM/PBM/PGM/PPM для изображений"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "Заголовок изображения формата RAS содержит неправильные данные"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "Тип изображения формата RAS неизвестен"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "данная разновидность изображения формата RAS не поддерживается"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Недостаточно памяти для загрузки изображения формата RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Растровый формат компании Сан (Sun) для изображений"
+
+#~ msgid "Can't allocate memory for IOBuffer struct"
+#~ msgstr "Невозможно распределить память для структуры IOBuffer"
+
+#~ msgid "Can't allocate memory for IOBuffer data"
+#~ msgstr "Невозможно распределить память для данных структуры IOBuffer"
+
+#~ msgid "Can't realloc IOBuffer data"
+#~ msgstr "Невозможно перераспределить память для данных структуры IOBuffer"
+
+#~ msgid "Can't allocate temporary IOBuffer data"
+#~ msgstr ""
+#~ "Невозможно распределить память для временных данных структуры IOBuffer"
+
+#~ msgid "fread() failed -- premature end-of-file probably encountered"
+#~ msgstr ""
+#~ "Произошёл сбой в функции fread() - возможно, преждевременный конец файла "
+#~ "обнаружен"
+
+#~ msgid "fseek() failed -- premature end-of-file probably encountered"
+#~ msgstr ""
+#~ "Произошёл сбой в функции fseek() - возможно, преждевременный конец файла "
+#~ "обнаружен"
+
+#~ msgid "Can't allocate new pixbuf"
+#~ msgstr "Невозможно распределить память для новой структуры pixbuf"
+
+#~ msgid "Can't allocate colormap structure"
+#~ msgstr "Невозможно распределить память для структуры карты цветов"
+
+#~ msgid "Can't allocate colormap entries"
+#~ msgstr "Невозможно распределить память для элемента карты цветов"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Непредвиденная глубина цвета обнаружена для элемента карты цветов"
+
+#~ msgid "Can't allocate TGA header memory"
+#~ msgstr "Невозможно распределить память для заголовка формата TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "Размер изображения формата TGA недопустим"
+
+#~ msgid "TGA image comment length is too long"
+#~ msgstr "Комментарий к изображению формата TGA слишком длинный"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Данный тип формата TGA не поддерживается"
+
+#~ msgid "Can't allocate memory for TGA context struct"
+#~ msgstr "Невозможно распределить память для структуры содержания формата TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Данные в файле избыточны"
+
+#~ msgid "Can't allocate memory for TGA header"
+#~ msgstr "Невозможно распределить память для заголовка формата TGA"
+
+#~ msgid "Too big value in the infolen field of TGA header."
+#~ msgstr "Слишком большое значение поля infolen в заголовке формата TGA"
+
+#~ msgid "Can't allocate memory for TGA cmap temporary buffer"
+#~ msgstr ""
+#~ "Невозможно распределить память для временного буфера cmap формата TGA"
+
+#~ msgid "Can't allocate memory for TGA colormap struct"
+#~ msgstr "Невозможно распределить память для структуры цвета формата TGA"
+
+#~ msgid "Can't allocate memory for TGA colormap entries"
+#~ msgstr ""
+#~ "Невозможно распределить память для элемента карты цветов формата TGA"
+
+#~ msgid "Unexpected bitdepth for TGA colormap"
+#~ msgstr "Непредвиденная глубина цвета обнаружена карты цветов формата TGA"
+
+#~ msgid "Pseudo-Color image without colormap"
+#~ msgstr "Псевдо-цветное изображение без карты цветов"
+
+#~ msgid "Can't seek to image offset -- end-of-file probably encountered"
+#~ msgstr "Невозможно перейти по смещению - возможно, конец файла обнаружен"
+
+#~ msgid "Can't allocate pixbuf"
+#~ msgstr "Невозможно распределить новую структуру pixbuf"
+
+#~ msgid "Unsupported TGA image type"
+#~ msgstr "Данный тип изображения формата TGA не поддерживается"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Формат Targa для изображений"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr ""
+#~ "Не удалось определить ширину изображения (испорченный файл формата TIFF)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr ""
+#~ "Не удалось определить высоту изображения (испорченный файл формата TIFF)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Ширина или высота изображения формата TIFF равна 0"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Изображение формата TIFF слишком большое"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Недостаточно памяти для открытия файла формата TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Произошёл сбой при загрузке данных RGB из файла формата TIFF"
+
+#~ msgid "Unsupported TIFF variant"
+#~ msgstr "Данный вариант формата TIFF не поддерживается"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Произошёл сбой при открытии изображения формата TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Произошёл сбой в функции TIFFClose"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Произошёл сбой при загрузке изображения формата TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Формат TIFF для изображений"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Изображение имеет нулевую ширину"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Изображение имеет нулевую высоту"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Недостаточно памяти для загрузки изображения"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Не удалось сохранить оставшуюся часть"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Формат WBMP для изображений"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Файл формата XBM недопустим"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Недостаточно памяти для загрузки файла изображения формата XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr ""
+#~ "Произошёл сбой при записи временного файла во время загрузки изображения "
+#~ "формата XBM"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Формат XBM для изображений"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Заголовок XPM не найден"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Ширина изображения в файле формата XPM  меньше или равна 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Высота изображения в файле формата XPM меньше или равна 0"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Файл формата XPM имеет недопустимое число цветов"
+
+#~ msgid "Can't read XPM colormap"
+#~ msgstr "Невозможно прочитать цветовую карту XPM"
+
+#~ msgid "Can't allocate memory for loading XPM image"
+#~ msgstr "Не удалось распределить память для загрузки изображения формата XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr ""
+#~ "Произошёл сбой при записи временного файла во время загрузки изображения "
+#~ "формата XPM"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Формат XPM для изображений"
+
+#~ msgid "Shift"
+#~ msgstr "Shift"
+
+#~ msgid "Ctrl"
+#~ msgstr "Ctrl"
+
+#~ msgid "Alt"
+#~ msgstr "Alt"
+
+#~ msgid ""
+#~ "The previously-selected color, for comparison to the color you're "
+#~ "selecting now. You can drag this color to a palette entry, or select this "
+#~ "color as current by dragging it to the other color swatch alongside."
+#~ msgstr ""
+#~ "Ранее выбранный цвет для сравнения с текущим выбранным цветом. Вы можете "
+#~ "перетащить этот цвет в палитру или выбрать этот цвет текущим, перетащив "
+#~ "его в расположенный сбоку образец."
+
+#~ msgid ""
+#~ "The color you've chosen. You can drag this color to a palette entry to "
+#~ "save it for use in the future."
+#~ msgstr ""
+#~ "Цвет, который вы выбрали. Вы можете перетащить его в палитру, чтобы "
+#~ "сохранить для последующего использования."
+
+#~ msgid "_Save color here"
+#~ msgstr "Со_хранить цвет здесь"
+
+#~ msgid ""
+#~ "Click this palette entry to make it the current color. To change this "
+#~ "entry, drag a color swatch here or right-click it and select \"Save color "
+#~ "here.\""
+#~ msgstr ""
+#~ "Щёлкните по элементу в палитре, чтобы сделать его текущим цветом. Чтобы "
+#~ "изменить этот элемент, перетащите сюда образец цвета или щёлкните правой "
+#~ "клавишей и выберите \"Сохранить цвет здесь\""
+
+#~ msgid ""
+#~ "Select the color you want from the outer ring. Select the darkness or "
+#~ "lightness of that color using the inner triangle."
+#~ msgstr ""
+#~ "Выберите желаемый цвет на внешнем круге. Выберите более тёмный или более "
+#~ "светлый оттенки, используя внутренний треугольник."
+
+#~ msgid ""
+#~ "Click the eyedropper, then click a color anywhere on your screen to "
+#~ "select that color."
+#~ msgstr ""
+#~ "Щелкните на пипетке, затем щёлкните на цвете в любом месте экрана, чтобы "
+#~ "выбрать этот цвет."
+
+#~ msgid "_Hue:"
+#~ msgstr "То_н:"
+
+#~ msgid "Position on the color wheel."
+#~ msgstr "Положение цветового круга."
+
+#~ msgid "_Saturation:"
+#~ msgstr "Нас_ыщенность:"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"Глубина\" цвета."
+
+#~ msgid "_Value:"
+#~ msgstr "Зна_чение:"
+
+#~ msgid "Brightness of the color."
+#~ msgstr "Яркость цвета."
+
+#~ msgid "_Red:"
+#~ msgstr "_Красный:"
+
+#~ msgid "Amount of red light in the color."
+#~ msgstr "Количество красного оттенка в цвете."
+
+#~ msgid "_Green:"
+#~ msgstr "_Зеленый:"
+
+#~ msgid "Amount of green light in the color."
+#~ msgstr "Количество зелёного оттенка в цвете."
+
+#~ msgid "_Blue:"
+#~ msgstr "С_иний:"
+
+#~ msgid "Amount of blue light in the color."
+#~ msgstr "Количество синего оттенка в цвете."
+
+#~ msgid "_Opacity:"
+#~ msgstr "Не_прозрачность:"
+
+#~ msgid "Transparency of the currently-selected color."
+#~ msgstr "Прозрачность выбранного цвета."
+
+#~ msgid ""
+#~ "You can enter an HTML-style hexadecimal color value, or simply a color "
+#~ "name such as 'orange' in this entry."
+#~ msgstr ""
+#~ "Вы можете ввести в этой строке или шестнадцатеричное значение цвета (в "
+#~ "стиле HTML), или название цвета, например \"orange\"."
+
+#~ msgid "_Palette"
+#~ msgstr "Па_литра"
+
+#~ msgid "Select All"
+#~ msgstr "Выделить все"
+
+#~ msgid "Input Methods"
+#~ msgstr "Методы ввода"
+
+#~ msgid "_Insert Unicode control character"
+#~ msgstr "Вст_авить управляющий символ набора Юникод"
+
+#~ msgid "Folders"
+#~ msgstr "Каталоги"
+
+#~ msgid "Fol_ders"
+#~ msgstr "_Каталоги"
+
+#~ msgid "_Files"
+#~ msgstr "_Файлы"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Каталог нечитаем: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "Файл \"%s\" размещен на другой машине (с именем %s) и может быть "
+#~ "недоступен этой программе.\n"
+#~ "Хотите выбрать именно его?"
+
+#~ msgid "_New Folder"
+#~ msgstr "_Создать каталог"
+
+#~ msgid "De_lete File"
+#~ msgstr "У_далить файл"
+
+#~ msgid "_Rename File"
+#~ msgstr "Переи_меновать файл"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Имя каталога \"%s\" содержит символы, недопустимые в названиях файлов"
+
+#~ msgid ""
+#~ "Error creating folder \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Произошла ошибка создания каталога \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "You probably used symbols not allowed in filenames."
+#~ msgstr "Возможно, вы используете символы, недопустимые в именах файлов."
+
+#~ msgid "Error creating folder \"%s\": %s\n"
+#~ msgstr "Произошла ошибка  создания каталога \"%s\": %s\n"
+
+#~ msgid "New Folder"
+#~ msgstr "Создать каталог"
+
+#~ msgid "C_reate"
+#~ msgstr "Со_здать"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "Имя файла \"%s\" содержит символы, недопустимые в названиях файлов"
+
+#~ msgid ""
+#~ "Error deleting file \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Произошла ошибка удаления файла \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "It probably contains symbols not allowed in filenames."
+#~ msgstr "Возможно содержит символы, недопустимые в именах файлов."
+
+#~ msgid "Error deleting file \"%s\": %s"
+#~ msgstr "Произошла ошибка удаления файла \"%s\": %s"
+
+#~ msgid "Really delete file \"%s\" ?"
+#~ msgstr "Действительно удалить файл \"%s\"?"
+
+#~ msgid "Delete File"
+#~ msgstr "Удалить файл"
+
+#~ msgid ""
+#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "Имя файла \"%s\" содержит символы, недопустимые в названиях файлов"
+
+#~ msgid ""
+#~ "Error renaming file to \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Произошла ошибка переименования файла в \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Error renaming file \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Произошла ошибка переименования файла в \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Произошла ошибка переименования файла \"%s\" в \"%s\": %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Переименовать файл"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Переименовать файл \"%s\" в:"
+
+#~ msgid "_Rename"
+#~ msgstr "_Переименовать"
+
+#~ msgid "_Selection: "
+#~ msgstr "_Выбор: "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
+#~ "environment variable G_BROKEN_FILENAMES): %s"
+#~ msgstr ""
+#~ "Имя файла \"%s\" нельзя конвертировать в UTF-8 (попробуйте задать "
+#~ "переменную среды G_BROKEN_FILENAMES): %s"
+
+#~ msgid "Invalid Utf-8"
+#~ msgstr "Данная последовательность UTF-8 недопустима"
+
+#~ msgid "Name too long"
+#~ msgstr "Имя слишком длинное"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Не удалось преобразовать название файла"
+
+#~ msgid "abcdefghijk ABCDEFGHIJK"
+#~ msgstr "абвгде АБВГДЕ abcde ABCDE"
+
+#~ msgid "_Family:"
+#~ msgstr "_Семейство:"
+
+#~ msgid "_Style:"
+#~ msgstr "Сти_ль:"
+
+#~ msgid "Si_ze:"
+#~ msgstr "_Размер:"
+
+#~ msgid "_Preview:"
+#~ msgstr "Образе_ц:"
+
+#~ msgid "Font Selection"
+#~ msgstr "Выбор шрифта"
+
+#~ msgid "Gamma"
+#~ msgstr "Гамма"
+
+#~ msgid "_Gamma value"
+#~ msgstr "_Гамма-значение"
+
+#~ msgid "Error loading icon: %s"
+#~ msgstr "Произошла ошибка загрузки пиктограммы: %s"
+
+#~ msgid "Default"
+#~ msgstr "По умолчанию"
+
+#~ msgid "Input"
+#~ msgstr "Ввод"
+
+#~ msgid "No input devices"
+#~ msgstr "Нет устройства ввода"
+
+#~ msgid "_Device:"
+#~ msgstr "_Устройство:"
+
+#~ msgid "Disabled"
+#~ msgstr "Выключен"
+
+#~ msgid "Window"
+#~ msgstr "Окно"
+
+#~ msgid "_Mode: "
+#~ msgstr "_Режим: "
+
+#~ msgid "_Axes"
+#~ msgstr "О_си"
+
+#~ msgid "_Keys"
+#~ msgstr "_Клавиши"
+
+#~ msgid "X"
+#~ msgstr "X"
+
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#~ msgid "Pressure"
+#~ msgstr "Нажим"
+
+#~ msgid "X Tilt"
+#~ msgstr "Наклон X"
+
+#~ msgid "Y Tilt"
+#~ msgstr "Наклон Y"
+
+#~ msgid "Wheel"
+#~ msgstr "Колесо"
+
+#~ msgid "none"
+#~ msgstr "нет"
+
+#~ msgid "(disabled)"
+#~ msgstr "(выключен)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(неизвестен)"
+
+#~ msgid "clear"
+#~ msgstr "очистить"
+
+#~ msgid "default:LTR"
+#~ msgstr "default:LTR"
+
+#~ msgid "Page %u"
+#~ msgstr "Страница %u"
+
+#~ msgid "Unable to find include file: \"%s\""
+#~ msgstr "Не удалось найти подключаемый файл: \"%s\""
+
+#~ msgid "Unable to locate image file in pixmap_path: \"%s\""
+#~ msgstr "Файл с изображением не найден в pixmap_path: \"%s\""
+
+#~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+#~ msgstr ""
+#~ "Компонент пути к рисунку \"%s\" должен быть абсолютным, %s, строка %d"
+
+#~ msgid "Information"
+#~ msgstr "Информация"
+
+#~ msgid "Warning"
+#~ msgstr "Предупреждение"
+
+#~ msgid "Error"
+#~ msgstr "Ошибка"
+
+#~ msgid "Question"
+#~ msgstr "Вопрос"
+
+#~ msgid "_Add"
+#~ msgstr "Доб_авить"
+
+#~ msgid "_Apply"
+#~ msgstr "_Применить"
+
+#~ msgid "_Bold"
+#~ msgstr "Полу_жирный"
+
+#~ msgid "_Cancel"
+#~ msgstr "О_тменить"
+
+#~ msgid "_CD-Rom"
+#~ msgstr "_CD-Rom"
+
+#~ msgid "_Clear"
+#~ msgstr "О_чистить"
+
+#~ msgid "_Close"
+#~ msgstr "_Закрыть"
+
+#~ msgid "_Convert"
+#~ msgstr "П_реобразовать"
+
+#~ msgid "_Copy"
+#~ msgstr "С_копировать"
+
+#~ msgid "Cu_t"
+#~ msgstr "_Вырезать"
+
+#~ msgid "_Delete"
+#~ msgstr "У_далить"
+
+#~ msgid "_Execute"
+#~ msgstr "_Выполнить"
+
+#~ msgid "_Find"
+#~ msgstr "_Найти"
+
+#~ msgid "Find and _Replace"
+#~ msgstr "Найти и _заменить"
+
+#~ msgid "_Floppy"
+#~ msgstr "_Флоппи"
+
+#~ msgid "_Bottom"
+#~ msgstr "В самый ни_з"
+
+#~ msgid "_First"
+#~ msgstr "В _начало"
+
+#~ msgid "_Last"
+#~ msgstr "В коне_ц"
+
+#~ msgid "_Top"
+#~ msgstr "На самый вер_х"
+
+#~ msgid "_Back"
+#~ msgstr "На_зад"
+
+#~ msgid "_Down"
+#~ msgstr "В_низ"
+
+#~ msgid "_Forward"
+#~ msgstr "В_перёд"
+
+#~ msgid "_Up"
+#~ msgstr "_Вверх"
+
+#~ msgid "_Help"
+#~ msgstr "_Справка"
+
+#~ msgid "_Home"
+#~ msgstr "_Домой"
+
+#~ msgid "_Index"
+#~ msgstr "_Индекс"
+
+#~ msgid "_Italic"
+#~ msgstr "_Курсив"
+
+#~ msgid "_Jump to"
+#~ msgstr "Перейти _к"
+
+#~ msgid "_Center"
+#~ msgstr "По _центру"
+
+#~ msgid "_Fill"
+#~ msgstr "По _ширине"
+
+#~ msgid "_Left"
+#~ msgstr "По _левому краю"
+
+#~ msgid "_Right"
+#~ msgstr "По _правому краю"
+
+#~ msgid "_New"
+#~ msgstr "_Создать"
+
+#~ msgid "_No"
+#~ msgstr "_Нет"
+
+#~ msgid "_OK"
+#~ msgstr "_OK"
+
+#~ msgid "_Open"
+#~ msgstr "_Открыть"
+
+#~ msgid "_Paste"
+#~ msgstr "Вст_авить"
+
+#~ msgid "_Preferences"
+#~ msgstr "_Изменить настройки"
+
+#~ msgid "_Print"
+#~ msgstr "На_печатать"
+
+#~ msgid "Print Pre_view"
+#~ msgstr "Посмотреть образе_ц печати"
+
+#~ msgid "_Properties"
+#~ msgstr "_Изменить свойства"
+
+#~ msgid "_Quit"
+#~ msgstr "В_ыйти"
+
+#~ msgid "_Redo"
+#~ msgstr "Возв_ратить"
+
+#~ msgid "_Refresh"
+#~ msgstr "Об_новить"
+
+#~ msgid "_Remove"
+#~ msgstr "У_брать"
+
+#~ msgid "_Revert"
+#~ msgstr "_Восстановить"
+
+#~ msgid "_Save"
+#~ msgstr "Со_хранить"
+
+#~ msgid "Save _As"
+#~ msgstr "Сохранить _как"
+
+#~ msgid "_Color"
+#~ msgstr "_Цвет"
+
+#~ msgid "_Font"
+#~ msgstr "_Шрифт"
+
+#~ msgid "_Ascending"
+#~ msgstr "По воз_растанию"
+
+#~ msgid "_Descending"
+#~ msgstr "По _убыванию"
+
+#~ msgid "_Spell Check"
+#~ msgstr "Проверить право_писание"
+
+#~ msgid "_Stop"
+#~ msgstr "О_становить"
+
+#~ msgid "_Strikethrough"
+#~ msgstr "Пере_черкивание"
+
+#~ msgid "_Undelete"
+#~ msgstr "Вос_становить удалённое"
+
+#~ msgid "_Underline"
+#~ msgstr "По_дчеркивание"
+
+#~ msgid "_Undo"
+#~ msgstr "_Откатить"
+
+#~ msgid "_Yes"
+#~ msgstr "_Да"
+
+#~ msgid "Zoom _100%"
+#~ msgstr "Восстановить ис_ходный масштаб"
+
+#~ msgid "Zoom to _Fit"
+#~ msgstr "Подогнать масштаб по _ширине"
+
+#~ msgid "Zoom _In"
+#~ msgstr "У_величить масштаб"
+
+#~ msgid "Zoom _Out"
+#~ msgstr "У_меньшить масштаб"
+
+#~ msgid "LRM _Left-to-right mark"
+#~ msgstr "LRM Метка с_лева направо"
+
+#~ msgid "RLM _Right-to-left mark"
+#~ msgstr "RLM Метка с_права налево"
+
+#~ msgid "LRE Left-to-right _embedding"
+#~ msgstr "LRE Вс_тавка слева направо"
+
+#~ msgid "RLE Right-to-left e_mbedding"
+#~ msgstr "RLE Вст_авка справа налево"
+
+#~ msgid "LRO Left-to-right _override"
+#~ msgstr "LRO П_ерекрывание слева направо"
+
+#~ msgid "RLO Right-to-left o_verride"
+#~ msgstr "RLO Пере_крывание справа налево"
+
+#~ msgid "PDF _Pop directional formatting"
+#~ msgstr "PDF _Расположение по вертикали"
+
+#~ msgid "ZWS _Zero width space"
+#~ msgstr "ZWS _Нулевой пробел"
+
+#~ msgid "ZWJ Zero width _joiner"
+#~ msgstr "ZWJ Нулевой о_бъединитель"
+
+#~ msgid "ZWNJ Zero width _non-joiner"
+#~ msgstr "ZWNJ Нулевой ра_зъединитель"
+
+#~ msgid "Input _Methods"
+#~ msgstr "Использовать _методы ввода"
+
+#~ msgid "Unable to locate theme engine in module_path: \"%s\","
+#~ msgstr "Загружаемый модуль тем не найден в module_path: \"%s\","
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- Нет подсказки ---"
+
+#~ msgid "Amharic (EZ+)"
+#~ msgstr "Амхарский (EZ+)"
+
+#~ msgid "Cedilla"
+#~ msgstr "Седиль"
+
+#~ msgid "Cyrillic (Transliterated)"
+#~ msgstr "Кириллица (транслитерация)"
+
+#~ msgid "Inukitut (Transliterated)"
+#~ msgstr "Инукитут (Транслитерация)"
+
+#~ msgid "IPA"
+#~ msgstr "IPA"
+
+#~ msgid "Thai (Broken)"
+#~ msgstr "Тайская (с пробелами)"
+
+#~ msgid "Tigrigna-Eritrean (EZ+)"
+#~ msgstr "Тигринья (Эритрея, EZ+)"
+
+#~ msgid "Tigrigna-Ethiopian (EZ+)"
+#~ msgstr "Тигринья (Эфиопия, EZ+)"
+
+#~ msgid "Vietnamese (VIQR)"
+#~ msgstr "Вьетнамская (VIQR)"
+
+#~ msgid "X Input Method"
+#~ msgstr "Метод XInput"
+
+#~ msgid "GIF image contained a frame with height or width 0."
+#~ msgstr ""
+#~ "Изображение формата GIF содержит кадр с нулевой шириной или высотой."
+
+#~ msgid ""
+#~ "First frame of GIF image had 'revert to previous' as its disposal mode."
+#~ msgstr ""
+#~ "Первый кадр изображения формата GIF имел режим размещения \"возврат к "
+#~ "предыдущему\""
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Изображение имеет нулевую ширину и/или высоту"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Изображение имеет неподдерживаемое число бит на пиксель"
+
+#~ msgid "Image has unsupported number of 1-bit planes"
+#~ msgstr "Изображение имеет неподдерживаемое число однобитовых плоскостей"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr ""
+#~ "Изображение имеет неподдерживаемое число многобитовых (%d) плоскостей"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Невозможно распределить память для новой структуры pixbuf"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Невозможно распределить память для данных строки"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Невозможно распределить память для данных палитры"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Не получены все строки изображения формата PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Палитра не найдена в конце данных формата PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Формат PCX для изображений"
+
+#~ msgid "Week Start Monday"
+#~ msgstr "Неделя начинается в понедельник"
+
+#~ msgid "If TRUE, Monday is displayed as the first day of the week"
+#~ msgstr "Если \"ИСТИНА\", то понедельник отображается как первый день недели"
+
+#~ msgid "Color Selection"
+#~ msgstr "Выбор цвета"
+
+#~ msgid "Select _All"
+#~ msgstr "Выделить вс_ё"
