@@ -43,3 +43,18 @@ GtkCellRendererPixbuf
 
 </para>
 
+<!-- ##### ARG GtkCellRendererPixbuf:stock-id ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererPixbuf:stock-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererPixbuf:stock-detail ##### -->
+<para>
+
+</para>
+

@@ -220,6 +220,25 @@ time.
 @n_colors: 
 
 
+<!-- ##### FUNCTION gtk_color_selection_set_change_palette_with_screen_hook ##### -->
+<para>
+
+</para>
+
+@func: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkColorSelectionChangePaletteWithScreenFunc ##### -->
+<para>
+
+</para>
+
+@screen: 
+@colors: 
+@n_colors: 
+
+
 <!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
 <para>
 

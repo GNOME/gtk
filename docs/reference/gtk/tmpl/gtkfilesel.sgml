@@ -143,11 +143,10 @@ Sets a default path for the file requestor. If @filename includes a directory pa
 
 <!-- ##### FUNCTION gtk_file_selection_get_filename ##### -->
 <para>
-Retrieves the currently selected filename from the file selection dialog. If no file is selected then the selected directory path is returned.
 </para>
 
-@filesel: a #GtkFileSelection
-@Returns: a string containing the selected file's full path.
+@filesel:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_file_selection_complete ##### -->

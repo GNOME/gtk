@@ -32,3 +32,35 @@ The #GtkInvisible-struct struct contains no public fields.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_invisible_new_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_invisible_set_screen ##### -->
+<para>
+
+</para>
+
+@invisible: 
+@screen: 
+
+
+<!-- ##### FUNCTION gtk_invisible_get_screen ##### -->
+<para>
+
+</para>
+
+@invisible: 
+@Returns: 
+
+
+<!-- ##### ARG GtkInvisible:screen ##### -->
+<para>
+
+</para>
+

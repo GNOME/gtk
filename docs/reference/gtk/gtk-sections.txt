@@ -482,6 +482,8 @@ gtk_color_selection_palette_from_string
 gtk_color_selection_palette_to_string
 gtk_color_selection_set_change_palette_hook
 GtkColorSelectionChangePaletteFunc
+gtk_color_selection_set_change_palette_with_screen_hook
+GtkColorSelectionChangePaletteWithScreenFunc
 gtk_color_selection_set_color
 gtk_color_selection_get_color
 <SUBSECTION Standard>
@@ -1269,6 +1271,9 @@ gtk_input_dialog_get_type
 <TITLE>GtkInvisible</TITLE>
 GtkInvisible
 gtk_invisible_new
+gtk_invisible_new_for_screen
+gtk_invisible_set_screen
+gtk_invisible_get_screen
 <SUBSECTION Standard>
 GTK_INVISIBLE
 GTK_IS_INVISIBLE
@@ -1481,6 +1486,7 @@ gtk_list_item_get_type
 <TITLE>GtkMenu</TITLE>
 GtkMenu
 gtk_menu_new
+gtk_menu_set_screen
 gtk_menu_append
 gtk_menu_prepend
 gtk_menu_insert
@@ -1800,7 +1806,9 @@ gtk_pixmap_get_type
 <TITLE>GtkPlug</TITLE>
 GtkPlug
 gtk_plug_construct
+gtk_plug_construct_for_display
 gtk_plug_new
+gtk_plug_new_for_display
 gtk_plug_get_id
 <SUBSECTION Standard>
 GTK_PLUG
@@ -2102,6 +2110,7 @@ gtk_separator_menu_item_get_type
 GtkSettings
 GtkSettingsValue
 gtk_settings_get_default
+gtk_settings_get_for_screen
 gtk_settings_install_property
 gtk_settings_install_property_parser
 gtk_rc_property_parse_color
@@ -3594,6 +3603,11 @@ gtk_widget_freeze_child_notify
 gtk_widget_get_child_visible
 gtk_widget_get_parent
 gtk_widget_get_settings
+gtk_widget_get_clipboard
+gtk_widget_get_display
+gtk_widget_get_root_window
+gtk_widget_get_screen
+gtk_widget_has_screen
 gtk_widget_get_size_request
 gtk_widget_pop_visual
 gtk_widget_push_visual
@@ -3642,6 +3656,8 @@ gtk_window_get_gravity
 gtk_window_set_position
 gtk_window_set_transient_for
 gtk_window_set_destroy_with_parent
+gtk_window_set_screen
+gtk_window_get_screen
 gtk_window_list_toplevels
 gtk_window_add_mnemonic
 gtk_window_remove_mnemonic
@@ -3991,6 +4007,7 @@ gtk_target_list_add_table
 gtk_target_list_remove
 gtk_target_list_find
 gtk_selection_owner_set
+gtk_selection_owner_set_for_display
 gtk_selection_add_target
 gtk_selection_add_targets
 gtk_selection_clear_targets
@@ -4024,6 +4041,8 @@ GtkClipboardTextReceivedFunc
 GtkClipboardGetFunc
 GtkClipboardClearFunc
 gtk_clipboard_get
+gtk_clipboard_get_for_display
+gtk_clipboard_get_display
 gtk_clipboard_set_with_data
 gtk_clipboard_set_with_owner
 gtk_clipboard_get_owner

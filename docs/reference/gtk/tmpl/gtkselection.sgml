@@ -150,14 +150,24 @@ Looks up a given target in a #GtkTargetList.
 
 <!-- ##### FUNCTION gtk_selection_owner_set ##### -->
 <para>
-Claims ownership of a given selection for a particular widget,
-or, if @widget is %NULL, release ownership of the selection.
 </para>
 
-@widget: a #GtkWidget, or %NULL.
-@selection: an interned atom representing the selection to claim
-@time: the time stamp for claiming the selection
-@Returns: %TRUE if the operation succeeded
+@widget:
+@selection:
+@time:
+@Returns:
+
+
+<!-- ##### FUNCTION gtk_selection_owner_set_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@widget: 
+@selection: 
+@time: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_selection_add_target ##### -->

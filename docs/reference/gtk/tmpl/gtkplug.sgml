@@ -38,8 +38,18 @@ inside the first applications window.
 <para>
 </para>
 
-@plug:
-@socket_id:
+@plug: 
+@socket_id: 
+
+
+<!-- ##### FUNCTION gtk_plug_construct_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@plug: 
+@socket_id: 
 
 
 <!-- ##### FUNCTION gtk_plug_new ##### -->
@@ -48,6 +58,16 @@ inside the first applications window.
 
 @socket_id: the window ID of the socket, or 0.
 @Returns: the new #GtkPlug widget.
+
+
+<!-- ##### FUNCTION gtk_plug_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@socket_id: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_plug_get_id ##### -->

@@ -1,3 +1,7 @@
+Tue Apr 30 14:16:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk-sections.txt: Update for multihead.
+
 Tue Apr 30 12:26:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-sections.txt: Update for multihead.

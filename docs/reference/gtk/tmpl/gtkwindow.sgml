@@ -263,6 +263,24 @@ Deprecated alias for gtk_window_set_position().
 @setting: 
 
 
+<!-- ##### FUNCTION gtk_window_set_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@screen: 
+
+
+<!-- ##### FUNCTION gtk_window_get_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_list_toplevels ##### -->
 <para>
 
@@ -817,6 +835,11 @@ The position of the window.
 </para>
 
 <!-- ##### ARG GtkWindow:icon ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:screen ##### -->
 <para>
 
 </para>

@@ -345,6 +345,7 @@ Turns off certain widget flags.
 @format: 
 @data: 
 @length: 
+@display: 
 
 <!-- ##### STRUCT GtkWidgetAuxInfo ##### -->
 <para>
@@ -1424,6 +1425,52 @@ This function is not useful for applications.
 
 
 <!-- ##### FUNCTION gtk_widget_get_settings ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_clipboard ##### -->
+<para>
+
+</para>
+
+@widget: 
+@selection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_display ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_root_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_screen ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_has_screen ##### -->
 <para>
 
 </para>

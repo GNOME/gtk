@@ -91,6 +91,15 @@ Creates a new #GtkMenu.
 @Returns: a new #GtkMenu.
 
 
+<!-- ##### FUNCTION gtk_menu_set_screen ##### -->
+<para>
+
+</para>
+
+@menu: 
+@screen: 
+
+
 <!-- ##### MACRO gtk_menu_append ##### -->
 <para>
 Adds a new #GtkMenuItem to the end of the menu's item list.

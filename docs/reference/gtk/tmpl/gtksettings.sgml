@@ -36,6 +36,15 @@ GtkSettings
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_settings_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_settings_install_property ##### -->
 <para>
 

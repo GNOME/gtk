@@ -158,6 +158,25 @@ will not be used again.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_clipboard_get_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@selection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clipboard_get_display ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_set_with_data ##### -->
 <para>
 

@@ -167,3 +167,18 @@ GtkCellRenderer
 
 </para>
 
+<!-- ##### ARG GtkCellRenderer:cell-background ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:cell-background-gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:cell-background-set ##### -->
+<para>
+
+</para>
+
