@@ -1,8 +1,10 @@
 EXPORTS
 	gdk_atom_intern
 	gdk_atom_name
+	gdk_axis_use_get_type
 	gdk_beep
 	gdk_bitmap_create_from_data
+	gdk_byte_order_get_type
 	gdk_cap_style_get_type
 	gdk_char_height
 	gdk_char_measure
@@ -34,6 +36,7 @@ EXPORTS
 	gdk_colors_free
 	gdk_colors_store
 	gdk_core_pointer
+	gdk_crossing_mode_get_type
 	gdk_cursor_new
 	gdk_cursor_new_from_pixmap
 	gdk_cursor_ref
@@ -124,11 +127,14 @@ EXPORTS
 	gdk_event_queue_remove_link
 	gdk_event_send_client_message
 	gdk_event_send_clientmessage_toall
+	gdk_event_type_get_type
 	gdk_event_unqueue
 	gdk_events_pending
 	gdk_exit
 	gdk_extension_mode_get_type
 	gdk_fill_get_type
+	gdk_fill_rule_get_type
+	gdk_filter_return_get_type
 	gdk_flush
 	gdk_font_equal
 	gdk_font_from_description
@@ -138,6 +144,7 @@ EXPORTS
 	gdk_font_id
 	gdk_font_load
 	gdk_font_ref
+	gdk_font_type_get_type
 	gdk_font_unref
 	gdk_fontset_load
 	gdk_free_compound_text
@@ -173,6 +180,7 @@ EXPORTS
 	gdk_get_display
 	gdk_get_show_events
 	gdk_get_use_xshm
+	gdk_grab_status_get_type
 	gdk_gravity_get_type
 	gdk_image_get
 	gdk_image_get_pixel
@@ -190,9 +198,11 @@ EXPORTS
 	gdk_input_condition_get_type
 	gdk_input_exit
 	gdk_input_init
+	gdk_input_mode_get_type
 	gdk_input_motion_events
 	gdk_input_remove
 	gdk_input_set_extension_events
+	gdk_input_source_get_type
 	gdk_join_style_get_type
 	gdk_key_repeat_disable
 	gdk_key_repeat_restore
@@ -217,7 +227,9 @@ EXPORTS
 	gdk_list_visuals
 	gdk_mbstowcs
 	gdk_modifier_type_get_type
+	gdk_notify_type_get_type
 	gdk_null_window_warnings
+	gdk_overlap_type_get_type
 	gdk_pango_attr_embossed_new
 	gdk_pango_attr_stipple_new
 	gdk_pango_context_get
@@ -245,6 +257,7 @@ EXPORTS
 	gdk_property_change
 	gdk_property_delete
 	gdk_property_get
+	gdk_property_state_get_type
 	gdk_query_depths
 	gdk_query_visual_types
 	gdk_rectangle_get_type
@@ -284,7 +297,9 @@ EXPORTS
 	gdk_screen_height_mm
 	gdk_screen_width
 	gdk_screen_width_mm
+	gdk_scroll_direction_get_type
 	gdk_selection_convert
+	gdk_selection_get_type
 	gdk_selection_owner_get
 	gdk_selection_owner_set
 	gdk_selection_property
@@ -295,7 +310,9 @@ EXPORTS
 	gdk_set_show_events
 	gdk_set_sm_client_id
 	gdk_set_use_xshm
+	gdk_setting_action_get_type
 	gdk_setting_get
+	gdk_status_get_type
 	gdk_string_extents
 	gdk_string_height
 	gdk_string_measure
@@ -303,6 +320,7 @@ EXPORTS
 	gdk_string_width
 	gdk_subwindow_mode_get_type
 	gdk_synthesize_window_state
+	gdk_target_get_type
 	gdk_text_extents
 	gdk_text_extents_wc
 	gdk_text_height
@@ -317,6 +335,7 @@ EXPORTS
 	gdk_unicode_to_keyval
 	gdk_utf8_to_compound_text
 	gdk_utf8_to_string_target
+	gdk_visibility_state_get_type
 	gdk_visual_get_best
 	gdk_visual_get_best_depth
 	gdk_visual_get_best_type
@@ -332,10 +351,12 @@ EXPORTS
 	gdk_win32_hdc_release
 	gdk_window_add_filter
 	gdk_window_at_pointer
+	gdk_window_attributes_type_get_type
 	gdk_window_begin_move_drag
 	gdk_window_begin_paint_rect
 	gdk_window_begin_paint_region
 	gdk_window_begin_resize_drag
+	gdk_window_class_get_type
 	gdk_window_clear
 	gdk_window_clear_area
 	gdk_window_clear_area_e
@@ -343,6 +364,7 @@ EXPORTS
 	gdk_window_deiconify
 	gdk_window_destroy
 	gdk_window_destroy_notify
+	gdk_window_edge_get_type
 	gdk_window_end_paint
 	gdk_window_focus
 	gdk_window_foreign_new
@@ -362,6 +384,7 @@ EXPORTS
 	gdk_window_get_user_data
 	gdk_window_get_window_type
 	gdk_window_hide
+	gdk_window_hints_get_type
 	gdk_window_iconify
 	gdk_window_invalidate_rect
 	gdk_window_invalidate_region
@@ -407,8 +430,10 @@ EXPORTS
 	gdk_window_shape_combine_mask
 	gdk_window_shape_combine_region
 	gdk_window_show
+	gdk_window_state_get_type
 	gdk_window_stick
 	gdk_window_thaw_updates
+	gdk_window_type_get_type
 	gdk_window_type_hint_get_type
 	gdk_window_unmaximize
 	gdk_window_unstick

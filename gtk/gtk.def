@@ -618,6 +618,7 @@ EXPORTS
 	gtk_hscrollbar_new
 	gtk_hseparator_get_type
 	gtk_hseparator_new
+	gtk_icon_factory_add
 	gtk_icon_factory_add_default
 	gtk_icon_factory_get_type
 	gtk_icon_factory_lookup
@@ -1041,10 +1042,10 @@ EXPORTS
 	gtk_pixmap_new
 	gtk_pixmap_set
 	gtk_pixmap_set_build_insensitive
-;	gtk_plug_construct
-;	gtk_plug_get_id
-;	gtk_plug_get_type
-;	gtk_plug_new
+	gtk_plug_construct
+	gtk_plug_get_id
+	gtk_plug_get_type
+	gtk_plug_new
 	gtk_preview_draw_row
 	gtk_preview_get_cmap
 	gtk_preview_get_info
@@ -1219,11 +1220,11 @@ EXPORTS
 	gtk_size_group_new
 	gtk_size_group_remove_widget
 	gtk_size_group_set_mode
-;	gtk_socket_add_id
-;	gtk_socket_get_id
-;	gtk_socket_get_type
-;	gtk_socket_new
-;	gtk_socket_steal
+	gtk_socket_add_id
+	gtk_socket_get_id
+	gtk_socket_get_type
+	gtk_socket_new
+	gtk_socket_steal
 	gtk_spin_button_configure
 	gtk_spin_button_get_adjustment
 	gtk_spin_button_get_digits
@@ -1872,7 +1873,6 @@ EXPORTS
 	gtk_widget_get_style
 	gtk_widget_get_toplevel
 	gtk_widget_get_type
-	gtk_widget_get_usize
 	gtk_widget_get_visual
 	gtk_widget_grab_default
 	gtk_widget_grab_focus
@@ -1932,6 +1932,7 @@ EXPORTS
 	gtk_widget_set_style
 	gtk_widget_set_uposition
 	gtk_widget_set_usize
+	gtk_widget_set_size_request
 	gtk_widget_shape_combine_mask
 	gtk_widget_show
 	gtk_widget_show_all
@@ -1963,8 +1964,10 @@ EXPORTS
 	gtk_window_get_has_frame
 	gtk_window_get_mnemonic_modifier
 	gtk_window_get_modal
+	gtk_window_get_position
 	gtk_window_get_resizable
 	gtk_window_get_role
+	gtk_window_get_size
 	gtk_window_get_title
 	gtk_window_get_transient_for
 	gtk_window_get_type
@@ -1977,11 +1980,15 @@ EXPORTS
 	gtk_window_list_toplevels
 	gtk_window_maximize
 	gtk_window_mnemonic_activate
+	gtk_window_move
 	gtk_window_new
+	gtk_window_parse_geometry
 	gtk_window_present
 	gtk_window_remove_accel_group
 	gtk_window_remove_embedded_xid
 	gtk_window_remove_mnemonic
+	gtk_window_reshow_with_initial_size
+	gtk_window_resize
 	gtk_window_set_decorated
 	gtk_window_set_default
 	gtk_window_set_default_size

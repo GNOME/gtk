@@ -1,3 +1,26 @@
+2001-08-18  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.def : updated externals
+
+	* gdk/win32/gdkselection-win32.c : returning TRUE with gdk_selection_set
+	is required to get (at least) visible in entry fields. Some selections
+	are really handled now - even on win32 - but copying via middle
+	mouse button into a different app needs to wait ... 
+
+	* gdk/win32/gdkdnd-win32.c : implemented inter-app drag&drop
+	mostly by stealling code from gdkdnd-fb.c. Thanks to who ever wrote it!
+
+	* gdk/win32/gdkevents-win32.c : some tweaking to get better expose
+	handling. I'm not sure if it is better now, but at least not worse
+
+	* gdk/win32/gdkgeometry-win32.c : replaced every call to MoveWindow
+	with SetWindowPos () which allows more fine-tuning backing-store wise
+
+	* gdk/win32/gdkwindow-win32.c : allow unraised gdk_window_show ().
+	Also changed move/resize to be more like the X version.
+
+	* gtk/gtk.def : updated externals
+
 2001-08-19  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtktooltips.c
