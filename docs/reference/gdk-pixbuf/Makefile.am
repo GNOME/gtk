@@ -57,7 +57,7 @@ content_files =				\
 	gdk-pixbuf-query-loaders.xml
 
 # Images to copy into HTML directory
-HTML_IMAGES = 
+HTML_IMAGES = composite.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=
@@ -65,7 +65,12 @@ FIXXREF_OPTIONS=
 include $(top_srcdir)/gtk-doc.make
 
 # Other files to distribute
-EXTRA_DIST += version.xml.in
+EXTRA_DIST += version.xml.in \
+	composite.png \
+	composite.dia \
+	apple-red-1a.png \
+	apple-red-2c.png \
+	gnome-gmush-1.png
 
 ########################################################################
 
