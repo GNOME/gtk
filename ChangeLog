@@ -1,3 +1,8 @@
+Thu Nov  5 18:52:35 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.h (struct _GtkCListClass)
+	* gtk/gtkclist.c (gtk_clist_class_init): removed scrollbar_spacing.
+
 Thu Nov  5 16:00:32 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.h (struct _GtkCList): removed vscrollbar, hscrollbar,

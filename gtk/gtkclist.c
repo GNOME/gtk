@@ -43,9 +43,6 @@
 /* used for auto-scrolling */
 #define SCROLL_TIME  100
 
-/* scrollbar spacing class macro */
-#define SCROLLBAR_SPACING(w) (GTK_CLIST_CLASS (GTK_OBJECT (w)->klass)->scrollbar_spacing)
-
 /* gives the top pixel of the given row in context of
  * the clist's voffset */
 #define ROW_TOP_YPIXEL(clist, row) (((clist)->row_height * (row)) + \
@@ -595,8 +592,6 @@ gtk_clist_class_init (GtkCListClass *klass)
   klass->abort_column_resize = abort_column_resize;
   klass->set_cell_contents = set_cell_contents;
   klass->cell_size_request = cell_size_request;
-
-  klass->scrollbar_spacing = 5;
 
   {
     GtkBindingSet *binding_set;

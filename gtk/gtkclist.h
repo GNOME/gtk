@@ -252,8 +252,6 @@ struct _GtkCListClass
 				 GtkCListRow    *clist_row,
 				 gint            column,
 				 GtkRequisition *requisition);
-
-  gint scrollbar_spacing;
 };
 
 struct _GtkCListColumn
