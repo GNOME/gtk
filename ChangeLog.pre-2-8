@@ -1,3 +1,17 @@
+Wed Apr 18 12:15:52 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c gdk/x11/gdkwindow-x11.h 
+	  gdk/x11/gdkevents-x11.c: Introduce an extra child
+	of toplevel windows that serves to hold the focus to
+	avoid events being delivered to embedded windows.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Introduce
+	some extra variables to clean up code and reduce the
+	number of casts.
+
+	* gdk/x11/gdkwindow-x11.h (struct _GdkXPositionInfo): Use
+	guint for 1 bit bit fields, not gboolean.
+
 Wed Apr 18 10:04:23 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_paint_window): Return FALSE,

@@ -43,9 +43,9 @@ struct _GdkXPositionInfo
   gint height;
   gint x_offset;		/* Offsets to add to X coordinates within window */
   gint y_offset;		/*   to get GDK coodinates within window */
-  gboolean big : 1;
-  gboolean mapped : 1;
-  gboolean no_bg : 1;	        /* Set when the window background is temporarily
+  guint big : 1;
+  guint mapped : 1;
+  guint no_bg : 1;	        /* Set when the window background is temporarily
 				 * unset during resizing and scaling */
   GdkRectangle clip_rect;	/* visible rectangle of window */
 };
@@ -72,6 +72,22 @@ struct _GdkWindowImplX11
   gint height;
   
   GdkXPositionInfo position_info;
+
+  /* Set if the window, or any descendent of it, has the focus
+   */
+  guint has_focus : 1;
+
+  /* Set if !window_has_focus, but events are being sent to the
+   * window because the pointer is in it. (Typically, no window
+   * manager is running.
+   */
+  guint has_pointer_focus : 1;
+
+  /* We use an extra X window for toplevel windows that we XSetInputFocus()
+   * to in order to avoid getting keyboard events redirected to subwindows
+   * that might not even be part of this app
+   */
+  Window focus_window;
 };
  
 struct _GdkWindowImplX11Class 

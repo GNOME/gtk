@@ -171,6 +171,8 @@ gdk_window_impl_x11_finalize (GObject *object)
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
       gdk_xid_table_remove (draw_impl->xid);
+      if (window_impl->focus_window)
+	gdk_xid_table_remove (window_impl->focus_window);
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -311,6 +313,8 @@ gdk_window_new (GdkWindow     *parent,
   GdkVisual *visual;
   Window xparent;
   Visual *xvisual;
+  Display *xdisplay;
+  Window xid;
 
   XSetWindowAttributes xattributes;
   long xattributes_mask;
@@ -342,7 +346,7 @@ gdk_window_new (GdkWindow     *parent,
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
   
-  draw_impl->xdisplay = GDK_WINDOW_XDISPLAY (parent); 
+  xdisplay = draw_impl->xdisplay = GDK_WINDOW_XDISPLAY (parent); 
   
   private->parent = (GdkWindowObject *)parent;
 
@@ -489,15 +493,14 @@ gdk_window_new (GdkWindow     *parent,
       gdk_colormap_ref (draw_impl->colormap);
     }
 
-  draw_impl->xid = XCreateWindow (GDK_WINDOW_XDISPLAY (parent),
-                                  xparent,
-                                  impl->position_info.x, impl->position_info.y,
-                                  impl->position_info.width, impl->position_info.height,
-                                  0, depth, class, xvisual,
-                                  xattributes_mask, &xattributes);
+  xid = draw_impl->xid = XCreateWindow (xdisplay, xparent,
+					impl->position_info.x, impl->position_info.y,
+					impl->position_info.width, impl->position_info.height,
+					0, depth, class, xvisual,
+					xattributes_mask, &xattributes);
 
   gdk_drawable_ref (window);
-  gdk_xid_table_insert (&GDK_WINDOW_XID (window), window);
+  gdk_xid_table_insert (&draw_impl->xid, window);
   
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
@@ -509,13 +512,10 @@ gdk_window_new (GdkWindow     *parent,
   switch (GDK_WINDOW_TYPE (private))
     {
     case GDK_WINDOW_DIALOG:
-      XSetTransientForHint (GDK_WINDOW_XDISPLAY (window),
-			    GDK_WINDOW_XID (window),
-			    xparent);
+      XSetTransientForHint (xdisplay, xid, xparent);
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-      XSetWMProtocols (GDK_WINDOW_XDISPLAY (window),
-		       GDK_WINDOW_XID (window),
+      XSetWMProtocols (xdisplay, xid,
 		       gdk_wm_window_protocols, 3);
       break;
     case GDK_WINDOW_CHILD:
@@ -532,12 +532,30 @@ gdk_window_new (GdkWindow     *parent,
       
       return window;
     }
-  
+
+  if (class != InputOnly)
+    {
+      /* The focus window is off the visible area, and serves to receive key
+       * press events so they don't get sent to child windows.
+       */
+      impl->focus_window = XCreateSimpleWindow (xdisplay, xid,
+						-1, -1, 1, 1, 0,
+						xattributes.background_pixel,
+						xattributes.background_pixel);
+      /* FIXME: probably better to actually track the requested event mask for the toplevel
+       */
+      XSelectInput (xdisplay, impl->focus_window,
+		    KeyPressMask | KeyReleaseMask | FocusChangeMask);
+      
+      XMapWindow (xdisplay, impl->focus_window);
+      gdk_xid_table_insert (&impl->focus_window, window);
+    }
+
   size_hints.flags = PSize;
   size_hints.width = impl->width;
   size_hints.height = impl->height;
   
-  wm_hints.flags = InputHint | StateHint | WindowGroupHint;
+  wm_hints.flags = StateHint | WindowGroupHint;
   wm_hints.window_group = gdk_leader_window;
   wm_hints.input = True;
   wm_hints.initial_state = NormalState;
@@ -546,19 +564,14 @@ gdk_window_new (GdkWindow     *parent,
    * attention to PSize, and even if they do, is this the
    * correct value???
    */
-  XSetWMNormalHints (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
-		     &size_hints);
+  XSetWMNormalHints (xdisplay, xid, &size_hints);
   
-  XSetWMHints (GDK_WINDOW_XDISPLAY (window),
-	       GDK_WINDOW_XID (window),
-	       &wm_hints);
+  XSetWMHints (xdisplay, xid, &wm_hints);
   
   if (!wm_client_leader_atom)
     wm_client_leader_atom = gdk_atom_intern ("WM_CLIENT_LEADER", FALSE);
   
-  XChangeProperty (GDK_WINDOW_XDISPLAY (window),
-		   GDK_WINDOW_XID (window),
+  XChangeProperty (xdisplay, xid,
 	   	   wm_client_leader_atom,
 		   XA_WINDOW, 32, PropModeReplace,
 		   (guchar*) &gdk_leader_window, 1);
@@ -575,9 +588,7 @@ gdk_window_new (GdkWindow     *parent,
       class_hint = XAllocClassHint ();
       class_hint->res_name = attributes->wmclass_name;
       class_hint->res_class = attributes->wmclass_class;
-      XSetClassHint (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
-		     class_hint);
+      XSetClassHint (xdisplay, xid, class_hint);
       XFree (class_hint);
     }
   
@@ -643,6 +654,8 @@ gdk_window_foreign_new (GdkNativeWindow anid)
 
   private->depth = attrs.depth;
   
+  _gdk_window_init_position (GDK_WINDOW (private));
+
   gdk_drawable_ref (window);
   gdk_xid_table_insert (&GDK_WINDOW_XID (window), window);
   
@@ -700,8 +713,12 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 void
 gdk_window_destroy_notify (GdkWindow *window)
 {
+  GdkWindowImplX11 *window_impl;
+
   g_return_if_fail (window != NULL);
   
+  window_impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *)window)->impl);
+
   if (!GDK_WINDOW_DESTROYED (window))
     {
       if (GDK_WINDOW_TYPE(window) != GDK_WINDOW_FOREIGN)
@@ -711,6 +728,9 @@ gdk_window_destroy_notify (GdkWindow *window)
     }
   
   gdk_xid_table_remove (GDK_WINDOW_XID (window));
+  if (window_impl->focus_window)
+    gdk_xid_table_remove (window_impl->focus_window);
+  
   gdk_drawable_unref (window);
 }
 
@@ -992,8 +1012,7 @@ gdk_window_reparent (GdkWindow *window,
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (new_parent != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (new_parent));
+  g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
   
   if (!new_parent)
     new_parent = gdk_parent_root;

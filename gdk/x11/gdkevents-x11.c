@@ -404,6 +404,23 @@ gdk_check_wm_state_changed (GdkWindow *window)
     }
 }
 
+#define HAS_FOCUS(window_impl)                           \
+  ((window_impl)->has_focus || (window_impl)->has_pointer_focus)
+
+static void
+generate_focus_event (GdkWindow *window,
+		      gboolean   in)
+{
+  GdkEvent event;
+  
+  event.type = GDK_FOCUS_CHANGE;
+  event.focus_change.window = window;
+  event.focus_change.send_event = FALSE;
+  event.focus_change.in = in;
+  
+  gdk_event_put (&event);
+}
+
 static gint
 gdk_event_translate (GdkEvent *event,
 		     XEvent   *xevent,
@@ -412,6 +429,7 @@ gdk_event_translate (GdkEvent *event,
   
   GdkWindow *window;
   GdkWindowObject *window_private;
+  GdkWindowImplX11 *window_impl = NULL;
   static XComposeStatus compose;
   KeySym keysym;
   int charcount;
@@ -439,12 +457,7 @@ gdk_event_translate (GdkEvent *event,
     }
   
   window = gdk_window_lookup (xevent->xany.window);
-  /* FIXME: window might be a GdkPixmap!!! */
-  
   window_private = (GdkWindowObject *) window;
-  
-  if (window != NULL)
-    gdk_window_ref (window);
 
   if (_gdk_moveresize_window &&
       (xevent->xany.type == MotionNotify ||
@@ -468,6 +481,29 @@ gdk_event_translate (GdkEvent *event,
         return FALSE;
     }
   
+  /* FIXME: window might be a GdkPixmap!!! */
+  if (window != NULL)
+    {
+      window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+	  
+      if (xevent->xany.window != GDK_WINDOW_XID (window))
+	{
+	  g_assert (xevent->xany.window == window_impl->focus_window);
+
+	  switch (xevent->type)
+	    {
+	    case KeyPress:
+	    case KeyRelease:
+	      xevent->xany.window = GDK_WINDOW_XID (window);
+	      break;
+	    default:
+	      return False;
+	    }
+	}
+
+      gdk_window_ref (window);
+    }
+
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
   
@@ -718,7 +754,20 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xcrossing.window,
 			   xevent->xcrossing.detail,
 			   xevent->xcrossing.subwindow));
-      
+
+      /* Handle focusing (in the case where no window manager is running */
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+	  xevent->xcrossing.detail != NotifyInferior &&
+	  xevent->xcrossing.focus && !window_impl->has_focus)
+	{
+	  gboolean had_focus = HAS_FOCUS (window_impl);
+	  
+	  window_impl->has_pointer_focus = TRUE;
+
+	  if (HAS_FOCUS (window_impl) != had_focus)
+	    generate_focus_event (window, TRUE);
+	}
+
       /* Tell XInput stuff about it if appropriate */
       if (window_private &&
 	  !GDK_WINDOW_DESTROYED (window) &&
@@ -792,6 +841,19 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xcrossing.window,
 			   xevent->xcrossing.detail, xevent->xcrossing.subwindow));
       
+      /* Handle focusing (in the case where no window manager is running */
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+	  xevent->xcrossing.detail != NotifyInferior &&
+	  xevent->xcrossing.focus && !window_impl->has_focus)
+	{
+	  gboolean had_focus = HAS_FOCUS (window_impl);
+	  
+	  window_impl->has_pointer_focus = FALSE;
+
+	  if (HAS_FOCUS (window_impl) != had_focus)
+	    generate_focus_event (window, FALSE);
+	}
+
       event->crossing.type = GDK_LEAVE_NOTIFY;
       event->crossing.window = window;
       
@@ -853,38 +915,77 @@ gdk_event_translate (GdkEvent *event,
       
       break;
       
-    case FocusIn:
-    case FocusOut:
       /* We only care about focus events that indicate that _this_
        * window (not a ancestor or child) got or lost the focus
        */
-      switch (xevent->xfocus.detail)
+    case FocusIn:
+      GDK_NOTE (EVENTS,
+		g_message ("focus in:\t\twindow: %ld", xevent->xfocus.window));
+      
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 	{
-	case NotifyAncestor:
-	case NotifyInferior:
-	case NotifyNonlinear:
-	  GDK_NOTE (EVENTS,
-		    g_message ("focus %s:\t\twindow: %ld",
-			       (xevent->xany.type == FocusIn) ? "in" : "out",
-			       xevent->xfocus.window));
+	  gboolean had_focus = HAS_FOCUS (window_impl);
 	  
+	  switch (xevent->xfocus.detail)
+	    {
+	    case NotifyAncestor:
+	    case NotifyNonlinear:
+	    case NotifyVirtual:
+	    case NotifyNonlinearVirtual:
+	      window_impl->has_focus = TRUE;
+	      break;
+	    case NotifyPointer:
+	      window_impl->has_pointer_focus = TRUE;
+	      break;
+	    case NotifyInferior:
+	    case NotifyPointerRoot:
+	    case NotifyDetailNone:
+	      break;
+	    }
+
+	  if (HAS_FOCUS (window_impl) != had_focus)
+	    generate_focus_event (window, TRUE);
+	}
+      break;
+    case FocusOut:
+      GDK_NOTE (EVENTS,
+		g_message ("focus out:\t\twindow: %ld", xevent->xfocus.window));
+
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+	{
+	  gboolean had_focus = HAS_FOCUS (window_impl);
+	    
+	  switch (xevent->xfocus.detail)
+	    {
+	    case NotifyAncestor:
+	    case NotifyNonlinear:
+	    case NotifyVirtual:
+	    case NotifyNonlinearVirtual:
+	      window_impl->has_focus = FALSE;
+	      break;
+	    case NotifyPointer:
+	      window_impl->has_pointer_focus = FALSE;
+	    break;
+	    case NotifyInferior:
+	    case NotifyPointerRoot:
+	    case NotifyDetailNone:
+	      break;
+	    }
+
+	  if (HAS_FOCUS (window_impl) != had_focus)
+	    generate_focus_event (window, FALSE);
+	}
+      break;
+
+#if 0      
  	  /* gdk_keyboard_grab() causes following events. These events confuse
  	   * the XIM focus, so ignore them.
  	   */
  	  if (xevent->xfocus.mode == NotifyGrab ||
  	      xevent->xfocus.mode == NotifyUngrab)
  	    break;
-	  
-	  event->focus_change.type = GDK_FOCUS_CHANGE;
-	  event->focus_change.window = window;
-	  event->focus_change.in = (xevent->xany.type == FocusIn);
+#endif
 
-	  break;
-	default:
-	  return_val = FALSE;
-	}
-      break;
-      
     case KeymapNotify:
       GDK_NOTE (EVENTS,
 		g_message ("keymap notify"));
@@ -1381,6 +1482,11 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
     }
   else if ((Atom) xevent->xclient.data.l[0] == gdk_wm_take_focus)
     {
+      GdkWindow *win = event->any.window;
+      Window focus_win = GDK_WINDOW_IMPL_X11(((GdkWindowObject *)win)->impl)->focus_window;
+
+      XSetInputFocus (GDK_WINDOW_XDISPLAY (win), focus_win,
+		      RevertToParent, xevent->xclient.data.l[1]);
     }
   else if ((Atom) xevent->xclient.data.l[0] == gdk_atom_intern ("_NET_WM_PING", FALSE))
     {
