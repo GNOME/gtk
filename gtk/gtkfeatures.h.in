@@ -79,6 +79,10 @@ extern "C" {
  */
 #define GTK_HAVE_FEATURES_1_1_7				1-1-7
 
+/* Gtk+ 1.1.8 version tag
+ */
+#define GTK_HAVE_FEATURES_1_1_8				1-1-8
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

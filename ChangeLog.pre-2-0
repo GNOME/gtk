@@ -1,3 +1,11 @@
+Sat Dec 12 19:11:35 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenuitem.c: made GtkMenuItem::activate a GTK_RUN_ACTION signal.
+
+	* gtk/gtkbutton.c: made GtkButton::clicked a GTK_RUN_ACTION signal.
+
+	* gtk/gtkfeatures.h.in: define GTK_HAVE_FEATURES_1_1_8.
+
 Sat Dec 12 17:46:55 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtklayout.c (gtk_layout_unrealize): Mark

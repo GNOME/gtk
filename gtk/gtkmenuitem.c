@@ -113,7 +113,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   menu_item_signals[ACTIVATE] =
     gtk_signal_new ("activate",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_FIRST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
                     gtk_marshal_NONE__NONE,
@@ -278,18 +278,27 @@ gtk_menu_item_configure (GtkMenuItem *menu_item,
 void
 gtk_menu_item_select (GtkMenuItem *menu_item)
 {
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+  
   gtk_item_select (GTK_ITEM (menu_item));
 }
 
 void
 gtk_menu_item_deselect (GtkMenuItem *menu_item)
 {
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+  
   gtk_item_deselect (GTK_ITEM (menu_item));
 }
 
 void
 gtk_menu_item_activate (GtkMenuItem *menu_item)
 {
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+  
   gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[ACTIVATE]);
 }
 

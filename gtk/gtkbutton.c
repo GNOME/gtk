@@ -151,7 +151,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 		    GTK_TYPE_NONE, 0);
   button_signals[CLICKED] =
     gtk_signal_new ("clicked",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_FIRST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
                     gtk_marshal_NONE__NONE,
@@ -306,30 +306,45 @@ gtk_button_new_with_label (const gchar *label)
 void
 gtk_button_pressed (GtkButton *button)
 {
+  g_return_if_fail (button != NULL);
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
   gtk_signal_emit (GTK_OBJECT (button), button_signals[PRESSED]);
 }
 
 void
 gtk_button_released (GtkButton *button)
 {
+  g_return_if_fail (button != NULL);
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
   gtk_signal_emit (GTK_OBJECT (button), button_signals[RELEASED]);
 }
 
 void
 gtk_button_clicked (GtkButton *button)
 {
+  g_return_if_fail (button != NULL);
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
   gtk_signal_emit (GTK_OBJECT (button), button_signals[CLICKED]);
 }
 
 void
 gtk_button_enter (GtkButton *button)
 {
+  g_return_if_fail (button != NULL);
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
   gtk_signal_emit (GTK_OBJECT (button), button_signals[ENTER]);
 }
 
 void
 gtk_button_leave (GtkButton *button)
 {
+  g_return_if_fail (button != NULL);
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
   gtk_signal_emit (GTK_OBJECT (button), button_signals[LEAVE]);
 }
 
