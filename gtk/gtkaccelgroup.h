@@ -148,6 +148,8 @@ void	 gtk_accelerator_parse		      (const gchar     *accelerator,
 					       GdkModifierType *accelerator_mods);
 gchar*	 gtk_accelerator_name		      (guint	        accelerator_key,
 					       GdkModifierType  accelerator_mods);
+gchar*	 gtk_accelerator_display_name	      (guint	        accelerator_key,
+					       GdkModifierType  accelerator_mods);
 void	 gtk_accelerator_set_default_mod_mask (GdkModifierType  default_mod_mask);
 guint	 gtk_accelerator_get_default_mod_mask (void);
 

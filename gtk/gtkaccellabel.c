@@ -528,6 +528,71 @@ substitute_underscores (char *str)
       *p = ' ';
 }
 
+gchar *
+_gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
+					      guint               accelerator_key,
+					      GdkModifierType     accelerator_mods)
+{
+  GString *gstring;
+  gboolean seen_mod = FALSE;
+  gunichar ch;
+  
+  gstring = g_string_new ("");
+  
+  if (accelerator_mods & GDK_SHIFT_MASK)
+    {
+      g_string_append (gstring, klass->mod_name_shift);
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_CONTROL_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+      g_string_append (gstring, klass->mod_name_control);
+      seen_mod = TRUE;
+    }
+  if (accelerator_mods & GDK_MOD1_MASK)
+    {
+      if (seen_mod)
+	g_string_append (gstring, klass->mod_separator);
+      g_string_append (gstring, klass->mod_name_alt);
+      seen_mod = TRUE;
+    }
+  if (seen_mod)
+    g_string_append (gstring, klass->mod_separator);
+  
+  ch = gdk_keyval_to_unicode (accelerator_key);
+  if (ch && (g_unichar_isgraph (ch) || ch == ' ') &&
+      (ch < 0x80 || klass->latin1_to_char))
+    {
+      switch (ch)
+	{
+	case ' ':
+	  g_string_append (gstring, "Space");
+	  break;
+	case '\\':
+	  g_string_append (gstring, "Backslash");
+	  break;
+	default:
+	  g_string_append_unichar (gstring, g_unichar_toupper (ch));
+	  break;
+	}
+    }
+  else
+    {
+      gchar *tmp;
+      
+      tmp = gtk_accelerator_name (accelerator_key, 0);
+      if (tmp[0] != 0 && tmp[1] == 0)
+	tmp[0] = g_ascii_toupper (tmp[0]);
+      substitute_underscores (tmp);
+      g_string_append (gstring, tmp);
+      g_free (tmp);
+    }
+
+  return g_string_free (gstring, FALSE);
+}
+
 gboolean
 gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
@@ -549,66 +614,15 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 
       if (key && key->accel_flags & GTK_ACCEL_VISIBLE)
 	{
-	  GString *gstring;
-	  gboolean seen_mod = FALSE;
-	  gunichar ch;
-	  
-	  gstring = g_string_new (accel_label->accel_string);
-	  g_string_append (gstring, gstring->len ? class->accel_seperator : "   ");
-	  
-	  if (key->accel_mods & GDK_SHIFT_MASK)
-	    {
-	      g_string_append (gstring, class->mod_name_shift);
-	      seen_mod = TRUE;
-	    }
-	  if (key->accel_mods & GDK_CONTROL_MASK)
-	    {
-	      if (seen_mod)
-		g_string_append (gstring, class->mod_separator);
-	      g_string_append (gstring, class->mod_name_control);
-	      seen_mod = TRUE;
-	    }
-	  if (key->accel_mods & GDK_MOD1_MASK)
-	    {
-	      if (seen_mod)
-		g_string_append (gstring, class->mod_separator);
-	      g_string_append (gstring, class->mod_name_alt);
-	      seen_mod = TRUE;
-	    }
-	  if (seen_mod)
-	    g_string_append (gstring, class->mod_separator);
+	  GtkAccelLabelClass *klass;
+	  gchar *tmp;
 
-	  ch = gdk_keyval_to_unicode (key->accel_key);
-	  if (ch && (g_unichar_isgraph (ch) || ch == ' ') &&
-	      (ch < 0x80 || class->latin1_to_char))
-	    {
-	      switch (ch)
-		{
-		case ' ':
-		  g_string_append (gstring, "Space");
-		  break;
-		case '\\':
-		  g_string_append (gstring, "Backslash");
-		  break;
-		default:
-		  g_string_append_unichar (gstring, g_unichar_toupper (ch));
-		  break;
-		}
-	    }
-	  else
-	    {
-	      gchar *tmp;
-	      
-	      tmp = gtk_accelerator_name (key->accel_key, 0);
-	      if (tmp[0] != 0 && tmp[1] == 0)
-		tmp[0] = g_ascii_toupper (tmp[0]);
-	      substitute_underscores (tmp);
-	      g_string_append (gstring, tmp);
-	      g_free (tmp);
-	    }
-	  g_free (accel_label->accel_string);
-	  accel_label->accel_string = gstring->str;
-	  g_string_free (gstring, FALSE);
+	  klass = GTK_ACCEL_LABEL_GET_CLASS (accel_label);
+	  tmp = _gtk_accel_label_class_get_accelerator_label (klass,
+							      key->accel_key,
+							      key->accel_mods);
+	  accel_label->accel_string = g_strconcat ("   ", tmp, NULL);
+	  g_free (tmp);
 	}
       if (!accel_label->accel_string)
 	accel_label->accel_string = g_strdup ("-/-");

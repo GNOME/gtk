@@ -1,5 +1,20 @@
 2004-10-05  Matthias Clasen  <mclasen@redhat.com>
 
+	Provide access to the string representation of accelerators used
+	in GtkAccelLabel.  (#154068, John Spray)
+
+	* gtk/gtkaccelgroup.h:
+	* gtk/gtkaccelgroup.c (gtk_accelerator_get_label): New function
+	to return the accelerator label used in GtkAccelLabel. 
+	(gtk_accelerator_name): Update docs to point to 
+	gtk_accelerator_get_label().
+	* gtk/gtkaccellabel.h:
+	* gtk/gtkaccellabel.c (_gtk_accel_label_class_get_accelerator_label): 
+	New auxiliary function which creates the string representing the
+	accelerator.
+	
+2004-10-05  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Resize the
 	popup if a new model is set.  (#154129, Bernd Demian)
 

@@ -34,10 +34,7 @@
 #include <gtk/gtklabel.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_ACCEL_LABEL		(gtk_accel_label_get_type ())
 #define GTK_ACCEL_LABEL(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ACCEL_LABEL, GtkAccelLabel))
@@ -97,9 +94,11 @@ void	   gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 					      GClosure	    *accel_closure);
 gboolean   gtk_accel_label_refetch           (GtkAccelLabel *accel_label);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+/* private */
+gchar *    _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
+							 guint               accelerator_key,
+							 GdkModifierType     accelerator_mods);
 
+G_END_DECLS
 
 #endif /* __GTK_ACCEL_LABEL_H__ */

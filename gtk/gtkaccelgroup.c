@@ -30,7 +30,9 @@
 
 #include "gtkalias.h"
 #include "gtkaccelgroup.h"
+#include "gtkaccellabel.h" /* For _gtk_accel_label_class_get_accelerator_label */
 #include "gtkaccelmap.h"
+#include "gtkintl.h"
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
 #include "gdk/gdkkeysyms.h"
 #include "gtkmarshalers.h"
@@ -1056,14 +1058,16 @@ gtk_accelerator_parse (const gchar     *accelerator,
  * gtk_accelerator_name:
  * @accelerator_key:  accelerator keyval
  * @accelerator_mods: accelerator modifier mask
- * @returns:          a newly-allocated accelerator name
  * 
  * Converts an accelerator keyval and modifier mask
  * into a string parseable by gtk_accelerator_parse().
  * For example, if you pass in #GDK_q and #GDK_CONTROL_MASK,
  * this function returns "&lt;Control&gt;q". 
  *
- * The caller of this function must free the returned string.
+ * If you need to display accelerators in the user interface,
+ * see gtk_accelerator_get_label().
+ *
+ * Returns: a newly-allocated accelerator name
  */
 gchar*
 gtk_accelerator_name (guint           accelerator_key,
@@ -1154,6 +1158,47 @@ gtk_accelerator_name (guint           accelerator_key,
 
   return accelerator;
 }
+
+/* Underscores in key names are better displayed as spaces
+ * E.g., Page_Up should be "Page Up"
+ */
+static void
+substitute_underscores (char *str)
+{
+  char *p;
+
+  for (p = str; *p; p++)
+    if (*p == '_')
+      *p = ' ';
+}
+
+/**
+ * gtk_accelerator_get_label:
+ * @accelerator_key:  accelerator keyval
+ * @accelerator_mods: accelerator modifier mask
+ * 
+ * Converts an accelerator keyval and modifier mask into a string 
+ * which can be used to represent the accelerator to the user. 
+ *
+ * Returns: a newly-allocated string representing the accelerator.
+ *
+ * Since: 2.6
+ */
+gchar*
+gtk_accelerator_get_label (guint           accelerator_key,
+			   GdkModifierType accelerator_mods)
+{
+  GtkAccelLabelClass *klass;
+  gchar *label;
+
+  klass = g_type_class_ref (GTK_TYPE_ACCEL_LABEL);
+  label = _gtk_accel_label_class_get_accelerator_label (klass, 
+							accelerator_key, 
+							accelerator_mods);
+  g_type_class_unref (klass); /* klass is kept alive since gtk uses static types */
+
+  return label;
+}  
 
 /**
  * gtk_accelerator_set_default_mod_mask:
