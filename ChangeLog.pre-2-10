@@ -1,3 +1,8 @@
+2005-03-17  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpango.c: Fix get_stipple_surface to actually work, set
+	EXTEND_REPEAT on the stipple pattern.
+
 2005-03-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_set_markup): Fix formatting

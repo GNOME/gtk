@@ -183,16 +183,20 @@ get_stipple_surface (GdkPangoRenderer *gdk_renderer,
 
       cairo_set_operator (tmp_cr, CAIRO_OPERATOR_SRC);
       cairo_show_surface (tmp_cr, alpha_surface, width, height);
-      
+
       set_part_color (gdk_renderer, tmp_cr, part);
-      cairo_set_operator (tmp_cr, CAIRO_OPERATOR_OVER);
+      cairo_set_operator (tmp_cr, CAIRO_OPERATOR_ATOP);
       
       cairo_rectangle (tmp_cr, 0, 0, width, height);
       cairo_fill (tmp_cr);
 
       cairo_destroy (tmp_cr);
       cairo_surface_destroy (alpha_surface);
+
+      gdk_renderer->priv->stipple_surface[part] = surface;
     }
+
+  return gdk_renderer->priv->stipple_surface[part];
 }
 
 static cairo_t *
@@ -209,6 +213,7 @@ create_cairo_context (GdkPangoRenderer *gdk_renderer,
       cairo_pattern_t *pattern;
 
       pattern = cairo_pattern_create_for_surface (surface);
+      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
       if (gdk_renderer->priv->base_gc->ts_x_origin != 0 ||
 	  gdk_renderer->priv->base_gc->ts_y_origin != 0)
