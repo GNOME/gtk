@@ -1,0 +1,5 @@
+Tue Jul 22 15:37:45 2003  Jonathan Blandford  <jrb@gnome.org>
+
+	* xdgmime/xdgmime.c (xdg_mime_init): use XDG_DATA_HOME instead of
+	XDG_CONFIG_HOME.
+
