@@ -3596,7 +3596,14 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
             event->keyval == GDK_ISO_Left_Tab) &&
            !(event->state & GDK_CONTROL_MASK))
     {
-      gtk_text_view_commit_text (text_view, "\t");
+      /* If the text isn't editable, move the focus instead */
+      if (text_view->editable)
+	gtk_text_view_commit_text (text_view, "\t");
+      else
+	gtk_text_view_move_focus (text_view,
+				  (event->state & GDK_SHIFT_MASK) ?
+				  GTK_DIR_TAB_BACKWARD: GTK_DIR_TAB_FORWARD);
+
       retval = TRUE;
     }
   else
