@@ -235,10 +235,15 @@ GdkPixbuf *gdk_pixbuf_composite_color_simple (const GdkPixbuf *src,
 
 /* Animation support */
 
-GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char *filename);
+GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename);
 
-GdkPixbufAnimation *gdk_pixbuf_animation_ref   (GdkPixbufAnimation *animation);
-void                gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation);
+GdkPixbufAnimation *gdk_pixbuf_animation_ref             (GdkPixbufAnimation *animation);
+void                gdk_pixbuf_animation_unref           (GdkPixbufAnimation *animation);
+
+int                 gdk_pixbuf_animation_get_width       (GdkPixbufAnimation *animation);
+int                 gdk_pixbuf_animation_get_height      (GdkPixbufAnimation *animation);
+GList              *gdk_pixbuf_animation_get_frames      (GdkPixbufAnimation *animation);
+int                 gdk_pixbuf_animation_get_num_frames  (GdkPixbufAnimation *animation);
 
 /* General (presently empty) initialization hooks, primarily for gnome-libs */
 void gdk_pixbuf_preinit  (gpointer app, gpointer modinfo);
