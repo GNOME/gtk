@@ -1,5 +1,9 @@
 2005-04-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c: Move documentation inline, document
+	if add_target functions append or prepend.  (#172350, 
+	Jon-Kare Hellan)
+
 	Make gtk_combo_box_get_active_text do the right thing for
 	GtkComboBoxEntry (#171373, Robert Staudinger)
 	
