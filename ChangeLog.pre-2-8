@@ -1,3 +1,9 @@
+2005-02-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_present): Use the timestamp of
+	the last user interaction when focusing the window.  (#166379, 
+	Elijah Newren)
+
 Thu Feb 17 14:58:16 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkuimanager.c (start_element_handler): make sure expand

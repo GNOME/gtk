@@ -45,6 +45,10 @@
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
 enum {
   SET_FOCUS,
   FRAME_EVENT,
@@ -5932,8 +5936,13 @@ gtk_window_present (GtkWindow *window)
       /* note that gdk_window_focus() will also move the window to
        * the current desktop, for WM spec compliant window managers.
        */
+#ifdef GDK_WINDOWING_X11
+      gdk_window_focus (widget->window,
+			gdk_x11_display_get_user_time (gtk_widget_get_display (widget)));
+#else
       gdk_window_focus (widget->window,
                         gtk_get_current_event_time ());
+#endif
     }
   else
     {
