@@ -466,10 +466,16 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   viewport = GTK_VIEWPORT (widget);
   bin = GTK_BIN (widget);
 
-  child_allocation.x = GTK_WIDGET (viewport)->style->klass->xthickness;
-  child_allocation.width = allocation->width - child_allocation.x * 2;
+  child_allocation.x = 0;
+  child_allocation.y = 0;
 
-  child_allocation.y = GTK_WIDGET (viewport)->style->klass->ythickness;
+  if (viewport->shadow_type != GTK_SHADOW_NONE)
+    {
+      child_allocation.x = GTK_WIDGET (viewport)->style->klass->xthickness;
+      child_allocation.y = GTK_WIDGET (viewport)->style->klass->ythickness;
+    }
+
+  child_allocation.width = allocation->width - child_allocation.x * 2;
   child_allocation.height = allocation->height - child_allocation.y * 2;
 
   if (GTK_WIDGET_REALIZED (widget))

@@ -1,3 +1,19 @@
+Fri Jan  2 12:07:33 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gtk/gtkviewport.c: corrects a small resize bug in the 
+          viewport widget.  The viewport widget provides a _set_shadow 
+          function to draw its shadows. But if GTK_SHADOW_NONE is sent 
+          to this function, the viewport isn't resized correctly (it's 
+          still considered as a shadowed widget).  (gtk-fortier-971213-0)
+
+	* gtk/gtknotebook.c: this patch fixes the redraw problems of 
+          notebook tabs, without using gdk_gc_set_clip_rectangle.
+          (gtk-hamann_jeske-971218-0)
+ 
+	* add gtk_widget_(show/hide)_all (Stefan Wille)
+          (gtk-wille-301297-0)  Patch for testgtk not included
+          because it did not patch clean.  
+
 Thu Jan  1 21:21:56 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in: fixed up the xinput test
@@ -11,6 +27,7 @@ Mon Dec 29 22:05:45 1997  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 Sat Dec 27 20:39:99 1997  Elliot Lee <sopwith@redhat.com>
 	* gtk/gtkhandlebox.c: It mostly works now, please test it and make
 	fixes as needed.
+
 Fri Dec 26 11:20:03 1997  Scott Goehring  <scott@poverty.bloomington.in.us>
 
 	* gtk/Makefile.am (gtkinclude_HEADERS): added gtkhandlebox.c

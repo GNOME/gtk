@@ -51,9 +51,6 @@ static void gtk_notebook_foreach        (GtkContainer     *container,
 					 gpointer          callback_data);
 static void gtk_notebook_switch_page    (GtkNotebook      *notebook,
 					 GtkNotebookPage  *page);
-static void gtk_notebook_set_clip_rect  (GtkNotebook      *notebook,
-				 	 GtkStateType      state_type,
-					 GdkRectangle     *area);
 static void gtk_notebook_draw_tab       (GtkNotebook      *notebook,
 					 GtkNotebookPage  *page,
 					 GdkRectangle     *area);
@@ -738,11 +735,6 @@ gtk_notebook_paint (GtkWidget    *widget,
     {
       notebook = GTK_NOTEBOOK (widget);
 
-      /* Set the clip rectangle here, so we don't overwrite things
-       * outside of exposed area when drawing shadows */
-      gtk_notebook_set_clip_rect (notebook, GTK_STATE_ACTIVE, area);
-      gtk_notebook_set_clip_rect (notebook, GTK_STATE_NORMAL, area);
-
       gdk_window_clear_area (widget->window,
 			     area->x, area->y,
 			     area->width, area->height);
@@ -874,9 +866,6 @@ gtk_notebook_paint (GtkWidget    *widget,
 			       x, y, width, height);
 	    }
 	}
-
-      gtk_notebook_set_clip_rect (notebook, GTK_STATE_ACTIVE, NULL);
-      gtk_notebook_set_clip_rect (notebook, GTK_STATE_NORMAL, NULL);
     }
 }
 
@@ -1071,18 +1060,6 @@ gtk_notebook_switch_page (GtkNotebook     *notebook,
     }
 }
 
-static void
-gtk_notebook_set_clip_rect (GtkNotebook  *notebook,
-			    GtkStateType  state_type,
-			    GdkRectangle *area)
-{
-  GtkWidget *widget = GTK_WIDGET (notebook);
-  
-  gdk_gc_set_clip_rectangle (widget->style->bg_gc[state_type],    area);
-  gdk_gc_set_clip_rectangle (widget->style->light_gc[state_type], area);
-  gdk_gc_set_clip_rectangle (widget->style->dark_gc[state_type],  area);
-  gdk_gc_set_clip_rectangle (widget->style->black_gc,             area);
-}
 
 static void
 gtk_notebook_draw_tab (GtkNotebook     *notebook,
@@ -1093,7 +1070,8 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   GdkRectangle page_area;
   GtkStateType state_type;
   GdkPoint points[6];
-
+  gint n;
+ 
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (page != NULL);
   g_return_if_fail (area != NULL);
@@ -1105,100 +1083,205 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 
   if (gdk_rectangle_intersect (&page_area, area, &child_area))
     {
+      GtkWidget *widget;
+
       switch (notebook->tab_pos)
 	{
 	case GTK_POS_TOP:
-	  points[0].x = page->allocation.x + page->allocation.width - 1;
-	  points[0].y = page->allocation.y + page->allocation.height - 1;
+	  if( child_area.x + child_area.width > 
+	      page->allocation.x + page->allocation.width - TAB_OVERLAP ) 
+	    {
+	      points[0].x = page->allocation.x + page->allocation.width - 1;
+	      points[0].y = page->allocation.y + page->allocation.height - 1;
 
-	  points[1].x = page->allocation.x + page->allocation.width - 1;
-	  points[1].y = page->allocation.y + TAB_CURVATURE;
+	      points[1].x = page->allocation.x + page->allocation.width - 1;
+	      points[1].y = page->allocation.y + TAB_CURVATURE;
 
-	  points[2].x = page->allocation.x + page->allocation.width - TAB_CURVATURE - 1;
-	  points[2].y = page->allocation.y;
+	      points[2].x = page->allocation.x + page->allocation.width 
+		- TAB_CURVATURE - 1;
+	      points[2].y = page->allocation.y;
+	      n = 3;
+	    }
+	  else 
+	    {
+	      points[0].x = page->allocation.x + page->allocation.width 
+		- TAB_OVERLAP - 1;
+	      points[0].y = page->allocation.y;
+	      n = 1;
+	    }
+	  
+	  if( (child_area.x < page->allocation.x + TAB_OVERLAP) &&
+	      (page == notebook->cur_page || 
+	       page == (GtkNotebookPage *)(notebook->children->data)) ) 
+	    {
+	      points[n].x = page->allocation.x + TAB_CURVATURE;
+	      points[n++].y = page->allocation.y;
+	    
+	      points[n].x = page->allocation.x;
+	      points[n++].y = page->allocation.y + TAB_CURVATURE;
 
-	  points[3].x = page->allocation.x + TAB_CURVATURE;
-	  points[3].y = page->allocation.y;
-
-	  points[4].x = page->allocation.x;
-	  points[4].y = page->allocation.y + TAB_CURVATURE;
-
-	  points[5].x = page->allocation.x;
-	  points[5].y = page->allocation.y + page->allocation.height - 1;
+	      points[n].x = page->allocation.x;
+	      points[n++].y = page->allocation.y + page->allocation.height - 1;
+	    }
+	  else 
+	    {
+	      points[n].x = page->allocation.x + TAB_OVERLAP;
+	      points[n++].y = page->allocation.y;
+	    }
 	  break;
 	case GTK_POS_BOTTOM:
-	  points[0].x = page->allocation.x;
-	  points[0].y = page->allocation.y;
+	  if( (child_area.x < page->allocation.x + TAB_OVERLAP) &&
+	      (page == notebook->cur_page || 
+	       page == (GtkNotebookPage *)(notebook->children->data)) ) 
+	    {
+	      points[0].x = page->allocation.x;
+	      points[0].y = page->allocation.y;
 
-	  points[1].x = page->allocation.x;
-	  points[1].y = page->allocation.y + page->allocation.height - TAB_CURVATURE - 1;
+	      points[1].x = page->allocation.x;
+	      points[1].y = page->allocation.y + page->allocation.height 
+		- TAB_CURVATURE - 1;
 
-	  points[2].x = page->allocation.x + TAB_CURVATURE;
-	  points[2].y = page->allocation.y + page->allocation.height - 1;
+	      points[2].x = page->allocation.x + TAB_CURVATURE;
+	      points[2].y = page->allocation.y + page->allocation.height - 1;
+	      n = 3;
+	    }
+	  else 
+	    {
+	      points[0].x = page->allocation.x + TAB_OVERLAP;
+	      points[0].y = page->allocation.y + page->allocation.height - 1;
+	      n = 1;
+	    }
 
-	  points[3].x = page->allocation.x + page->allocation.width - TAB_CURVATURE - 1;
-	  points[3].y = page->allocation.y + page->allocation.height - 1;
+	  if( child_area.x + child_area.width > 
+	      page->allocation.x + page->allocation.width - TAB_OVERLAP ) 
+	    {
+	      points[n].x = page->allocation.x + page->allocation.width 
+		- TAB_CURVATURE - 1;
+	      points[n++].y = page->allocation.y + page->allocation.height - 1;
 
-	  points[4].x = page->allocation.x + page->allocation.width - 1;
-	  points[4].y = page->allocation.y + page->allocation.height - TAB_CURVATURE - 1;
-
-	  points[5].x = page->allocation.x + page->allocation.width - 1;
-	  points[5].y = page->allocation.y;
+	      points[n].x = page->allocation.x + page->allocation.width - 1;
+	      points[n++].y = page->allocation.y + page->allocation.height 
+		- TAB_CURVATURE - 1;
+	    
+	      points[n].x = page->allocation.x + page->allocation.width - 1;
+	      points[n++].y = page->allocation.y;
+	    }
+	  else 
+	    {
+	      points[n].x = page->allocation.x + page->allocation.width 
+		- TAB_OVERLAP - 1;
+	      points[n++].y = page->allocation.y + page->allocation.height - 1;
+	    }
 	  break;
 	case GTK_POS_LEFT:
-	  points[0].x = page->allocation.x + page->allocation.width - 1;
-	  points[0].y = page->allocation.y;
+	  if( (child_area.y < page->allocation.y + TAB_OVERLAP) &&
+	      (page == notebook->cur_page || 
+	       page == (GtkNotebookPage *)(notebook->children->data)) ) 
+	    {
+	      points[0].x = page->allocation.x + page->allocation.width - 1;
+	      points[0].y = page->allocation.y;
+	      
+	      points[1].x = page->allocation.x + TAB_CURVATURE;
+	      points[1].y = page->allocation.y;
 
-	  points[1].x = page->allocation.x + TAB_CURVATURE;
-	  points[1].y = page->allocation.y;
+	      points[2].x = page->allocation.x;
+	      points[2].y = page->allocation.y + TAB_CURVATURE;
+	      n = 3;
+	    }
+	  else 
+	    {
+	      points[0].x = page->allocation.x;
+	      points[0].y = page->allocation.y + TAB_OVERLAP;
+	      n = 1;
+	    }
 
-	  points[2].x = page->allocation.x;
-	  points[2].y = page->allocation.y + TAB_CURVATURE;
+	  if( child_area.y + child_area.height > 
+	      page->allocation.y + page->allocation.height - TAB_OVERLAP ) 
+	    {
+	      points[n].x = page->allocation.x;
+	      points[n++].y = page->allocation.y + page->allocation.height 
+		- TAB_CURVATURE - 1;
 
-	  points[3].x = page->allocation.x;
-	  points[3].y = page->allocation.y + page->allocation.height - TAB_CURVATURE - 1;
+	      points[n].x = page->allocation.x + TAB_CURVATURE;
+	      points[n++].y = page->allocation.y + page->allocation.height - 1;
 
-	  points[4].x = page->allocation.x + TAB_CURVATURE;
-	  points[4].y = page->allocation.y + page->allocation.height - 1;
-
-	  points[5].x = page->allocation.x + page->allocation.width - 1;
-	  points[5].y = page->allocation.y + page->allocation.height - 1;
+	      points[n].x = page->allocation.x + page->allocation.width - 1;
+	      points[n++].y = page->allocation.y + page->allocation.height - 1;
+	    }
+	  else 
+	    {
+	      points[n].x = page->allocation.x;
+	      points[n++].y = page->allocation.y + page->allocation.height 
+		- TAB_OVERLAP - 1;
+	    }
 	  break;
 	case GTK_POS_RIGHT:
-	  points[0].x = page->allocation.x;
-	  points[0].y = page->allocation.y + page->allocation.height - 1;
+	  if( child_area.y + child_area.height > 
+	      page->allocation.y + page->allocation.height - TAB_OVERLAP ) 
+	    {
+	      points[0].x = page->allocation.x;
+	      points[0].y = page->allocation.y + page->allocation.height - 1;
 
-	  points[1].x = page->allocation.x + page->allocation.width - TAB_CURVATURE - 1;
-	  points[1].y = page->allocation.y + page->allocation.height - 1;
+	      points[1].x = page->allocation.x + page->allocation.width 
+		- TAB_CURVATURE - 1;
+	      points[1].y = page->allocation.y + page->allocation.height - 1;
+	      
+	      points[2].x = page->allocation.x + page->allocation.width - 1;
+	      points[2].y = page->allocation.y + page->allocation.height 
+		- TAB_CURVATURE - 1;
+	      n = 3;
+	    }
+	  else 
+	    {
+	      points[0].x = page->allocation.x + page->allocation.width - 1;
+	      points[0].y = page->allocation.y + page->allocation.height 
+		- TAB_OVERLAP - 1;
+	      n = 1;
+	    }
 
-	  points[2].x = page->allocation.x + page->allocation.width - 1;
-	  points[2].y = page->allocation.y + page->allocation.height - TAB_CURVATURE - 1;
+	  if( (child_area.y < page->allocation.y + TAB_OVERLAP) && 
+	      (page == notebook->cur_page || 
+	       page == (GtkNotebookPage *)(notebook->children->data)) ) 
+	    {
+	      points[n].x = page->allocation.x + page->allocation.width - 1;
+	      points[n++].y = page->allocation.y + TAB_CURVATURE;
 
-	  points[3].x = page->allocation.x + page->allocation.width - 1;
-	  points[3].y = page->allocation.y + TAB_CURVATURE;
+	      points[n].x = page->allocation.x + page->allocation.width 
+		- TAB_CURVATURE - 1;
+	      points[n++].y = page->allocation.y;
 
-	  points[4].x = page->allocation.x + page->allocation.width - TAB_CURVATURE - 1;
-	  points[4].y = page->allocation.y;
-
-	  points[5].x = page->allocation.x;
-	  points[5].y = page->allocation.y;
+	      points[n].x = page->allocation.x;
+	      points[n++].y = page->allocation.y;
+	    }
+	  else 
+	    {
+	      points[n].x = page->allocation.x + page->allocation.width - 1;
+	      points[n++].y = page->allocation.y + TAB_OVERLAP;
+	    }
 	  break;
 	}
 
+      widget = GTK_WIDGET(notebook);
+
       if (notebook->cur_page == page)
 	state_type = GTK_STATE_NORMAL;
-      else
-	state_type = GTK_STATE_ACTIVE;
+      else 
+	{
+	  state_type = GTK_STATE_ACTIVE;
+	
+	  gdk_draw_rectangle (widget->window, widget->style->bg_gc[state_type],
+			      TRUE, child_area.x, child_area.y,
+			      child_area.width, child_area.height);
+	}
 
-      gtk_draw_polygon (GTK_WIDGET (notebook)->style,
-			GTK_WIDGET (notebook)->window,
-			state_type, GTK_SHADOW_OUT,
-			points, 6, (notebook->cur_page != page));
-
+      gtk_draw_polygon (widget->style, widget->window, state_type, 
+			GTK_SHADOW_OUT,	points, n, FALSE);
+	
       if (gtk_widget_intersect (page->tab_label, area, &child_area))
 	gtk_widget_draw (page->tab_label, &child_area);
     }
 }
+
 
 static void
 gtk_notebook_pages_allocate (GtkNotebook   *notebook,

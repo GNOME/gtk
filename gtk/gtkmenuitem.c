@@ -65,6 +65,8 @@ static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gint             *x,
 					  gint             *y,
 					  gpointer          user_data);
+static void gtk_menu_item_show_all       (GtkWidget        *widget);
+static void gtk_menu_item_hide_all       (GtkWidget        *widget);
 
 static GtkItemClass *parent_class;
 static gint menu_item_signals[LAST_SIGNAL] = { 0 };
@@ -127,6 +129,8 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->expose_event = gtk_menu_item_expose;
   widget_class->enter_notify_event = gtk_menu_item_enter;
   widget_class->leave_notify_event = gtk_menu_item_leave;
+  widget_class->show_all = gtk_menu_item_show_all;
+  widget_class->hide_all = gtk_menu_item_hide_all;  
 
   item_class->select = gtk_real_menu_item_select;
   item_class->deselect = gtk_real_menu_item_deselect;
@@ -744,4 +748,41 @@ gtk_menu_item_right_justify(GtkMenuItem *menuitem)
   g_return_if_fail (GTK_IS_MENU_ITEM (menuitem));
 
   menuitem->right_justify = 1;
+}
+
+static void
+gtk_menu_item_show_all (GtkWidget *widget)
+{
+  GtkContainer *container;
+  GtkMenuItem  *menu_item;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
+  container = GTK_CONTAINER (widget);
+  menu_item = GTK_MENU_ITEM (widget);
+
+  /* Show children, traverse to submenu, show self. */
+  gtk_container_foreach (container, (GtkCallback) gtk_widget_show_all, NULL);
+  if (menu_item->submenu)
+    gtk_widget_show_all (menu_item->submenu);
+  gtk_widget_show (widget);
+}
+
+
+static void
+gtk_menu_item_hide_all (GtkWidget *widget)
+{
+  GtkContainer *container;
+  GtkMenuItem  *menu_item;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
+  container = GTK_CONTAINER (widget);
+  menu_item = GTK_MENU_ITEM (widget);
+
+  /* Reverse order of gtk_menu_item_show_all */
+  gtk_widget_hide (widget);
+  if (menu_item->submenu)
+    gtk_widget_hide_all (menu_item->submenu);
+  gtk_container_foreach (container, (GtkCallback) gtk_widget_hide_all, NULL);
 }

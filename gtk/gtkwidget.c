@@ -596,6 +596,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->activate_signal = 0;
   klass->show = gtk_real_widget_show;
   klass->hide = gtk_real_widget_hide;
+  klass->show_all = gtk_real_widget_show;
+  klass->hide_all = gtk_real_widget_hide;
   klass->map = gtk_real_widget_map;
   klass->unmap = gtk_real_widget_unmap;
   klass->realize = gtk_real_widget_realize;
@@ -1007,6 +1009,58 @@ gtk_widget_hide (GtkWidget *widget)
   
   if (GTK_WIDGET_VISIBLE (widget))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
+}
+
+/*****************************************
+ * gtk_widget_show_all:
+ *
+ *   Shows the widget and all children.
+ *
+ *   Container classes overwrite
+ *   show_all and hide_all to call
+ *   show_all (hide_all) on both themselves
+ *   and on their child widgets.
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_show_all (GtkWidget *widget)
+{
+  GtkWidgetClass *widget_class;
+  
+  g_return_if_fail (widget != NULL);
+  
+  /* show_all shouldn't be invoked through a signal,
+     because in this case it would be quite slow - there would
+     be a show and show_all signal emitted for every child widget.
+   */
+  widget_class = GTK_WIDGET_CLASS(GTK_OBJECT(widget)->klass);
+  widget_class->show_all (widget);
+}
+
+/*****************************************
+ * gtk_widget_hide_all:
+ *
+ *   Hides the widget and all children.
+ *   See gtk_widget_show_all.
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_hide_all (GtkWidget *widget)
+{
+  GtkWidgetClass *widget_class;
+
+  g_return_if_fail (widget != NULL);
+
+  widget_class = GTK_WIDGET_CLASS(GTK_OBJECT(widget)->klass);
+  widget_class->hide_all (widget);
 }
 
 /*****************************************

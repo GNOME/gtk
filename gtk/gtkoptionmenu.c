@@ -54,6 +54,8 @@ static void gtk_option_menu_position        (GtkMenu            *menu,
 					     gint               *x,
 					     gint               *y,
 					     gpointer            user_data);
+static void gtk_option_menu_show_all        (GtkWidget          *widget);
+static void gtk_option_menu_hide_all        (GtkWidget          *widget);
 
 
 static GtkButtonClass *parent_class = NULL;
@@ -103,6 +105,8 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   widget_class->size_allocate = gtk_option_menu_size_allocate;
   widget_class->expose_event = gtk_option_menu_expose;
   widget_class->button_press_event = gtk_option_menu_button_press;
+  widget_class->show_all = gtk_option_menu_show_all;
+  widget_class->hide_all = gtk_option_menu_hide_all;
 }
 
 static void
@@ -583,3 +587,38 @@ gtk_option_menu_position (GtkMenu  *menu,
   *x = menu_xpos;
   *y = menu_ypos;
 }
+
+
+static void
+gtk_option_menu_show_all (GtkWidget *widget)
+{
+  GtkContainer *container;
+  GtkOptionMenu *option_menu;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_OPTION_MENU (widget));
+  container = GTK_CONTAINER (widget);
+  option_menu = GTK_OPTION_MENU (widget);
+
+  gtk_widget_show (widget);
+  gtk_container_foreach (container, (GtkCallback) gtk_widget_show_all, NULL);
+  if (option_menu->menu)
+    gtk_widget_show_all (option_menu->menu);
+  if (option_menu->menu_item)
+    gtk_widget_show_all (option_menu->menu_item);
+}
+
+
+static void
+gtk_option_menu_hide_all (GtkWidget *widget)
+{
+  GtkContainer *container;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_OPTION_MENU (widget));
+  container = GTK_CONTAINER (widget);
+
+  gtk_widget_hide (widget);
+  gtk_container_foreach (container, (GtkCallback) gtk_widget_hide_all, NULL);
+}
+

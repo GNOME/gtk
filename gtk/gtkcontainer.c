@@ -83,6 +83,9 @@ static gint gtk_container_focus_move        (GtkContainer      *container,
 					     GtkDirectionType   direction);
 static void gtk_container_children_callback (GtkWidget         *widget,
                                              gpointer           client_data);
+static void gtk_container_show_all          (GtkWidget         *widget);
+static void gtk_container_hide_all          (GtkWidget         *widget);
+
 
 
 static gint container_signals[LAST_SIGNAL] = { 0 };
@@ -168,6 +171,13 @@ gtk_container_class_init (GtkContainerClass *class)
 
   gtk_object_class_add_signals (object_class, container_signals, LAST_SIGNAL);
 
+  /* Other container classes should overwrite show_all and hide_all,
+     unless they make all their children accessable
+     through gtk_container_foreach.
+  */
+  widget_class->show_all = gtk_container_show_all;
+  widget_class->hide_all = gtk_container_hide_all;  
+  
   class->need_resize = gtk_real_container_need_resize;
   class->focus = gtk_real_container_focus;
 }
@@ -842,3 +852,39 @@ gtk_container_children_callback (GtkWidget *widget,
   children = (GList**) client_data;
   *children = g_list_prepend (*children, widget);
 }
+
+static void
+gtk_container_show_all (GtkWidget *widget)
+{
+  GtkContainer *container;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (widget));
+  container = GTK_CONTAINER (widget);
+
+  /* First show children, then self.
+     This makes sure that toplevel windows get shown as last widget.
+     Otherwise the user would see the widgets get
+     visible one after another.
+  */
+  gtk_container_foreach (container, (GtkCallback) gtk_widget_show_all, NULL);
+  gtk_widget_show (widget);
+}
+
+
+static void
+gtk_container_hide_all (GtkWidget *widget)
+{
+  GtkContainer *container;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (widget));
+  container = GTK_CONTAINER (widget);
+
+  /* First hide self, then children.
+     This is the reverse order of gtk_container_show_all.
+  */
+  gtk_widget_hide (widget);  
+  gtk_container_foreach (container, (GtkCallback) gtk_widget_hide_all, NULL);
+}
+
