@@ -526,6 +526,211 @@ and reinstall gtk+.</para>
     </sect1>
   </chapter>
 
+  <!-- ***************************************************************** -->
+  <chapter>
+    <title>Development of GTK+</title>
+    <sect1>
+      <title></title>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Whats this CVS thing that everyone keeps talking about,
+	and how do I access it?</title>
+	<para>CVS is the Concurent Version System and is a very
+	popular means of version control for software projects. It is
+	designed to allow multiple  authors to be able to
+	simultanously operate on the same source tree.  This source
+	tree is centrally maintained, but each developer has a local
+	mirror of this repository that they make there changes to.</para>
+	<para>The GTK+ developers use a CVS repository to store the
+	master copy of the current development version of GTK+. As
+	such, people wishing to contribute patches to GTK+ should
+	generate them against the CVS version. Normal people should
+	use the packaged releases.</para>
+	<para>The CVS toolset is available as RPM packages from the
+	usual RedHat sites. The latest version is available at <ulink
+	url="http://download.cyclic.com/pub/">http://download.cyclic.com/pub/
+	</ulink></para>
+	<para>Anyone can download the latest CVS version of GTK+ by
+	using anonymous access using the following steps:</para>
+	<itemizedlist>
+	  <listitem><simpara> In a bourne shell descendant (e.g. bash) type:</simpara>
+	<para><literallayout><literal>CVSROOT=':pserver:anonymous@anoncvs.gnome.org:/cvs/gnome'</literal>
+<literal>export CVSROOT</literal></literallayout></para>
+	  </listitem>
+	  <listitem><simpara>Next, the first time the source tree is
+	  checked out, a cvs login is needed. </simpara>
+	<para><literallayout><literal>cvs login</literal></literallayout></para>
+	    <para>This will ask you for a password. There is no
+	  password for cvs.gimp.org, so just enter a carriage return.</para>
+	  </listitem>
+	  <listitem><simpara>To get the tree and place it in a subdir of your
+	  current working directory, issue the command:</simpara>
+	<para><literallayout><literal>cvs -z3 get gtk+</literal></literallayout></para>
+	<para>Note that with the GTK+ 1.1 tree, glib has been moved to
+        a separate CVS module, so if you don't have glib installed you will
+        need to get that as well:</para>
+	<para><literallayout><literal>cvs -z3 get glib</literal></literallayout></para>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How can I contribute to GTK+?</title>
+	<para>It's simple. If something doesn't work like you think it
+	should in a program, check the documentation to make sure
+	you're not missing something. If it is a true bug or missing
+	feature, track it down in the GTK+ source, change it,  and
+	then generate a patch in the form of a 'context diff'. This
+	can be done using a command such as <literal>diff -ru
+	&lt;oldfile&gt; &lt;newfile&gt;.</literal>  Then upload the patchfile to:</para>
+	<para><literallayout><literal>ftp://ftp.gtk.org/incoming</literal></literallayout></para>
+	<para>along with a README file. Make sure you follow the
+	naming conventions or your patch will just be deleted! The
+	filenames should be of this form:</para>
+	<para><literallayout><literal>gtk&lt;username&gt;-&lt;date yymmdd-n&gt;.patch.gz</literal>
+<literal>gtk-&lt;username&gt;-&lt;date yymmdd-n&gt;.patch.README</literal></literallayout></para>
+	<para>The "n" in the date indicates a unique number (starting
+	from 0) of patches you uploaded that day.  It should be 0,
+	unless you upload more than one patch in the same day.</para>
+
+	<para>Example:</para>
+	<para><literallayout><literal>gtk-gale-982701-0.patch.gz</literal>
+<literal>gtk-gale-982701-0.patch.README</literal></literallayout></para>
+	<para>Once you upload <emphasis>anything</emphasis>, send the README to ftp-admin@gtk.org</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I know if my patch got applied, and if not, why
+	not?</title>
+	<para>Uploaded patches will be moved to
+	<filename>ftp://ftp.gtk.org/pub/gtk/patches</filename> where one of the
+	GTK+ development team will pick them up. If applied, they will
+	be moved to <filename>/pub/gtk/patches/old</filename>.</para>
+	<para>Patches that aren't applied, for whatever reason, are
+	moved to <filename>/pub/gtk/patches/unapplied</filename> or
+	<filename>/pub/gtk/patches/outdated</filename>. At this point you can ask
+	on the <literal>gtk-list</literal> mailing list why your patch wasn't
+	applied. There are many possible reasons why patches may not
+	be applied, ranging from it doesn't apply cleanly, to it isn't
+	right. Don't be put off if your patch didn't make it first
+	time round.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>What is the policy on incorporating new widgets into
+	the library?</title>
+	<para>This is up to the authors, so you will have to ask them
+	once you are done with your widget. As a general guideline,
+	widgets that are  generally useful, work, and are not a
+	disgrace to the widget set will gladly be included.</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Is anyone working on bindings for languages other than
+	C?</title>
+	<para>The GTK+ home page (<ulink
+	url="http://www.gtk.org/">http://www.gtk.org/</ulink>)
+	presents a list of GTK+ bindings.</para>
+	<itemizedlist>
+	  <listitem><simpara>There are several C++ wrappers for GTK+.</simpara>
+	    <itemizedlist> 
+	      <listitem><simpara>the gtk-- package, which is a very small wrapper for GTK+.
+              You can find the home page at <ulink
+              url="http://www.cs.tut.fi/~p150650/gtk/gtk--.html">
+              http://www.cs.tut.fi/~p150650/gtk/gtk--.html</ulink>. The FTP site is 
+              <ulink url="ftp://ftp.gtk.org/pub/gtk/gtk--">
+              ftp://ftp.gtk.org/pub/gtk/gtk--</ulink>.</simpara>
+	      </listitem>
+	      <listitem><simpara>the VDK package, which was built as
+              the base package of a GTK+ application Borland-like
+              builder. The home page can be found at <ulink
+              url="http://www.guest.net/homepages/mmotta/VDKHome">
+              http://www.guest.net/homepages/mmotta/VDKHome</ulink>.</simpara>
+	      </listitem>
+
+	      <listitem><simpara>The wxWindows/Gtk package, a free C++ library for cross-platform 
+              GUI development. The home page of this package is
+              <ulink url="http://www.freiburg.linux.de/~wxxt/">
+              http://www.freiburg.linux.de/~wxxt/</ulink>.</simpara>
+	      </listitem>
+	    </itemizedlist>
+	  </listitem>
+	  <listitem><simpara>There are three known Objective-c
+	  bindings currently in development:</simpara>
+	    <itemizedlist> 
+	      <listitem><simpara>The <ulink
+	  url="http://www.gnome.org/">http://www.gnome.org/</ulink>
+	  package of choice is objgtk. Objgtk is based on the Object class and is maintained by
+          <ulink url="mailto:sopwith@cuc.edu">Elliot Lee</ulink>. Apparently,
+	  objgtk is being accepted as the `standard' Objective-C binding for GTK+.</simpara>
+	      </listitem>
+
+	      <listitem><simpara>If you are more inclined towards the 
+              <ulink url="http://www.gnustep.org/">GNUstep project</ulink>,
+              you may want to check out GTKKit by 
+              <ulink url="mailto:helge@mdlink.de">Helge He&szlig;</ulink>.
+              The intention is to setup a GTK+ binding using the FoundationKit. 
+              GTKKit includes nicities like writing a XML-type template file to 
+              construct a GTK+ interface.</simpara>
+	      </listitem>
+
+	      <listitem><simpara>The GToolKit package, which can be found at
+  <ulink url="ftp://ftp.gtk.org/pub/gtk/objc-gtoolkit/">
+  ftp://ftp.gtk.org/pub/gtk/objc-gtoolkit/</ulink>.</simpara>
+	      </listitem>
+	    </itemizedlist>
+	  </listitem>
+	  <listitem><simpara>Perl bindings <ulink
+	  url="ftp://ftp.gtk.org/pub/gtk/perl">ftp://ftp.gtk.org/pub/gtk/perl</ulink></simpara>
+	  </listitem>
+	  <listitem><simpara>Guile bindings. The home page is at
+  <ulink url="http://www.ping.de/sites/zagadka/guile-gtk">http://www.ping.de/sites/zagadka/guile-gtk</ulink>.
+  By the way, Guile is the GNU Project's implemention of R4RS Scheme (the
+  standard). If you like Scheme, you may want to take a look at this.</simpara>
+	  </listitem>
+	  <listitem><simpara>David Monniaux reports:
+  <quote>I've started a gtk-O'Caml binding system.
+  The basics of the system, including callbacks, work fine.
+
+  The current development is in
+  <ulink url="http://www.ens-lyon.fr/~dmonniau/arcs">http://www.ens-lyon.fr/~dmonniau/arcs</ulink>
+  </quote></simpara>
+	  </listitem>
+	  <listitem><simpara>Several python bindings have been done:</simpara>
+	    <itemizedlist>
+	      <listitem><simpara>pygtk is at 
+  <ulink url="http://www.daa.com.au/~james/pygtk">http://www.daa.com.au/~james/pygtk</ulink> and 
+  <ulink url="ftp://ftp.gtk.org/pub/gtk/python">ftp://ftp.gtk.org/pub/gtk/python</ulink></simpara>
+	      </listitem>
+
+	      <listitem><simpara>python-gtk is at
+  <ulink url="http://www.ucalgary.ca/~nascheme/python-gtk">http://www.ucalgary.ca/~nascheme/python-gtk</ulink></simpara>
+	      </listitem>
+	    </itemizedlist>
+	  </listitem>
+	  <listitem><simpara>There's are a couple of OpenGL/Mesa
+	  widgets available for GTK+. I suggest you start at
+  <ulink url="http://www.student.oulu.fi/~jlof/gtkglarea/index.html">http://www.student.oulu.fi/~jlof/gtkglarea/index.html</ulink></simpara>
+	  </listitem>
+	  <listitem><simpara>Last, there are a lot of other language
+	  bindings for languages such as Eiffel, TOM, Pascal, Pike, etc.</simpara>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+
+    </sect1>
+  </chapter>
+
   <!-- ----------------------------------------------------------------- -->
 
 </book>
