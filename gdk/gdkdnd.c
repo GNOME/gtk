@@ -150,6 +150,7 @@ gdk_drag_context_unref (GdkDragContext *context)
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
 
   g_return_if_fail (context != NULL);
+  g_return_if_fail (private->ref_count > 0);
 
   private->ref_count--;
   

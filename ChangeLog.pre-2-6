@@ -1,3 +1,22 @@
+1999-08-18  Federico Mena Quintero  <federico@redhat.com>
+
+	* gtk/gtkselection.c (gtk_target_list_ref): Added missing sanity
+	checks.
+	(gtk_target_list_unref): Likewise.
+
+	* gdk/gdkpixmap.c (gdk_pixmap_unref): g_return_if_fail() the
+	refcount is greater than zero.
+
+	* gdk/gdkwindow.c (gdk_window_unref): Likewise.
+
+	* gdk/gdkfont.c (gdk_font_unref): Likewise.
+
+	* gdk/gdkgc.c (gdk_gc_unref): Likewise.
+
+	* gdk/gdkdnd.c (gdk_drag_context_unref): Likewise.
+
+	* gtk/gtkthemes.c (gtk_theme_engine_unref): Likewise.
+
 Tue Aug 17 15:47:07 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_draw_value_bar):

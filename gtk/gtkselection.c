@@ -174,12 +174,17 @@ gtk_target_list_new (const GtkTargetEntry *targets,
 void               
 gtk_target_list_ref (GtkTargetList *list)
 {
+  g_return_if_fail (list != NULL);
+
   list->ref_count++;
 }
 
 void               
 gtk_target_list_unref (GtkTargetList *list)
 {
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (list->ref_count > 0);
+
   list->ref_count--;
   if (list->ref_count == 0)
     {

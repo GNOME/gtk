@@ -141,10 +141,10 @@ void
 gdk_font_unref (GdkFont *font)
 {
   GdkFontPrivate *private;
+  private = (GdkFontPrivate*) font;
 
   g_return_if_fail (font != NULL);
-
-  private = (GdkFontPrivate*) font;
+  g_return_if_fail (private->ref_count > 0);
 
   private->ref_count -= 1;
   if (private->ref_count == 0)

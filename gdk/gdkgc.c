@@ -286,6 +286,7 @@ gdk_gc_unref (GdkGC *gc)
   GdkGCPrivate *private = (GdkGCPrivate*) gc;
   
   g_return_if_fail (gc != NULL);
+  g_return_if_fail (private->ref_count > 0);
   
   if (private->ref_count > 1)
     private->ref_count -= 1;

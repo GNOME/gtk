@@ -724,6 +724,7 @@ gdk_window_unref (GdkWindow *window)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
   g_return_if_fail (window != NULL);
+  g_return_if_fail (private->ref_count > 0);
   
   private->ref_count -= 1;
   if (private->ref_count == 0)

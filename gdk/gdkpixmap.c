@@ -817,7 +817,8 @@ void
 gdk_pixmap_unref (GdkPixmap *pixmap)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)pixmap;
-  g_return_if_fail(pixmap != NULL);
+  g_return_if_fail (pixmap != NULL);
+  g_return_if_fail (private->ref_count > 0);
 
   private->ref_count -= 1;
   if (private->ref_count == 0)

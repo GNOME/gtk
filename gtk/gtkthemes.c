@@ -137,10 +137,11 @@ void
 gtk_theme_engine_unref (GtkThemeEngine *engine)
 {
   GtkThemeEnginePrivate *private;
+  private = (GtkThemeEnginePrivate *)engine;
 
   g_return_if_fail (engine != NULL);
+  g_return_if_fail (private->refcount > 0);
 
-  private = (GtkThemeEnginePrivate *)engine;
   private->refcount--;
 
   if (private->refcount == 0)
