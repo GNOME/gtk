@@ -34,7 +34,7 @@
 #define ICON_TEXT_PADDING 3
 
 #define EGG_ICON_LIST_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EGG_TYPE_ICON_LIST, EggIconListPrivate))
-#define VALID_MODEL_AND_COLUMNS(obj) (TRUE)
+#define VALID_MODEL_AND_COLUMNS(obj) ((obj)->priv->model != NULL)
 
 struct _EggIconListItem
 {
@@ -94,8 +94,6 @@ struct _EggIconListPrivate
   guint ctrl_pressed : 1;
   guint shift_pressed : 1;
   
-  char *typeahead_string;
-
   EggIconListItem *last_single_clicked;
   
   /* Drag-and-drop. */
@@ -1756,13 +1754,15 @@ egg_icon_list_paint_item (EggIconList     *icon_list,
 			      item->layout_height + 2 * ICON_TEXT_PADDING);
 	}
 
-      egg_icon_list_update_item_text (icon_list, item);  
-      gdk_draw_layout (icon_list->priv->bin_window,
-		       GTK_WIDGET (icon_list)->style->text_gc[item->selected ? state : GTK_STATE_NORMAL],
-		       item->layout_x - ((item->width - item->layout_width) / 2) - (MAX (item->pixbuf_width, MINIMUM_ICON_ITEM_WIDTH) - item->width) / 2,
-		       item->layout_y,
-		       icon_list->priv->layout);
-      
+      egg_icon_list_update_item_text (icon_list, item);
+      gtk_paint_layout (GTK_WIDGET (icon_list)->style,
+			icon_list->priv->bin_window,
+			item->selected ? state : GTK_STATE_NORMAL,
+			TRUE, area, GTK_WIDGET (icon_list), "icon_list",
+			item->layout_x - ((item->width - item->layout_width) / 2) - (MAX (item->pixbuf_width, MINIMUM_ICON_ITEM_WIDTH) - item->width) / 2,
+			item->layout_y,
+			icon_list->priv->layout);
+
       if (GTK_WIDGET_HAS_FOCUS (icon_list) &&
 	  item == icon_list->priv->cursor_item)
 	gtk_paint_focus (GTK_WIDGET (icon_list)->style,
@@ -1770,7 +1770,7 @@ egg_icon_list_paint_item (EggIconList     *icon_list,
 			 item->selected ? GTK_STATE_SELECTED : GTK_STATE_NORMAL,
 			 area,
 			 GTK_WIDGET (icon_list),
-			 "iconlist",
+			 "icon_list",
 			 item->layout_x - ICON_TEXT_PADDING,
 			 item->layout_y - ICON_TEXT_PADDING,
 			 item->layout_width + 2 * ICON_TEXT_PADDING,
@@ -2866,6 +2866,8 @@ egg_icon_list_set_model (EggIconList *icon_list,
 
       egg_icon_list_build_items (icon_list);
     }
+
+  g_object_notify (G_OBJECT (icon_list), "model");  
 }
 
 /**
