@@ -49,6 +49,8 @@ Describes a type of line wrapping.
                 be technical, between graphemes, see
                 pango_get_log_attrs())
 @GTK_WRAP_WORD: wrap text, breaking lines in between words
+@GTK_WRAP_WORD_CHAR: wrap text, breaking lines in between words, or if 
+                that is not enough, also between graphemes.
 
 <!-- ##### STRUCT GtkTextAttributes ##### -->
 <para>

@@ -1,5 +1,7 @@
 2003-04-07  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtktexttag.sgml: Document GTK_WRAP_WORD_CHAR.  (#110086)
+
 	* gtk/tmpl/gtkenums.sgml, gtk/tmpl/gtkmain.sgml,
 	gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkradiobutton.sgml,
 	gtk/tmpl/gtkspinbutton.sgml, gtk/tmpl/gtkstatusbar.sgml,

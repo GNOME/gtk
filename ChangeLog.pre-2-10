@@ -1,5 +1,9 @@
 2003-04-07  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktextlayout.c (set_para_values): 
+	* gtk/gtkenums.h (GtkWrapMode): Add GTK_WRAP_WORD_CHAR.  (#110086,
+	David Brigada)
+
 	* gtk/gtkcelleditable.c, gtk/gtkfixed.c, gtk/gtktreemodel.c,
 	gtk/gtktreeselection.c, gtk/gtktreeview.c: Fix numerous
 	misspellings of possessive "its".  (#110027, Doug Quale)

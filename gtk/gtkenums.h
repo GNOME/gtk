@@ -416,7 +416,8 @@ typedef enum
 {
   GTK_WRAP_NONE,
   GTK_WRAP_CHAR,
-  GTK_WRAP_WORD
+  GTK_WRAP_WORD,
+  GTK_WRAP_WORD_CHAR
 } GtkWrapMode;
 
 /* How to sort */

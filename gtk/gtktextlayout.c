@@ -1156,6 +1156,12 @@ set_para_values (GtkTextLayout      *layout,
       pango_layout_set_wrap (display->layout, PANGO_WRAP_WORD);
       break;
 
+    case GTK_WRAP_WORD_CHAR:
+      layout_width = layout->screen_width - display->left_margin - display->right_margin;
+      pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
+      pango_layout_set_wrap (display->layout, PANGO_WRAP_WORD_CHAR);
+      break;
+
     case GTK_WRAP_NONE:
       break;
     }
