@@ -776,7 +776,7 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 }
 
 GdkPixmap*
-gdk_pixmap_foreign_new (guint32 anid)
+gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {
   GdkPixmap *pixmap;
   GdkDrawablePrivate *private;

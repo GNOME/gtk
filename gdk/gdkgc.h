@@ -73,6 +73,7 @@ typedef enum
   GDK_COPY_INVERT,
   GDK_OR_INVERT,
   GDK_NAND,
+  GDK_NOR,
   GDK_SET
 } GdkFunction;
 

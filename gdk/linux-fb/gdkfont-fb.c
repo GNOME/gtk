@@ -24,12 +24,36 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <t1lib.h>
 #include <math.h>
 #include <stdlib.h>
 #include "gdkfont.h"
 #include "gdkprivate-fb.h"
+#include "gdkpango.h"
 
+#include <pango/pango.h>
+
+#include <freetype/freetype.h>
+#if !defined(FREETYPE_MAJOR) || FREETYPE_MAJOR != 2
+#error "We need Freetype 2.0 (beta?)"
+#endif
+
+GdkFont*
+gdk_font_from_description (PangoFontDescription *font_desc)
+{
+  GdkFont *font;
+  GdkFontPrivateFB *private;
+
+  g_return_val_if_fail(font_desc, NULL);
+
+  private = g_new0(GdkFontPrivateFB, 1);
+  font = (GdkFont *)private;
+  private->base.ref_count = 1;
+
+  return font;
+}
+
+/* ********************* */
+#if 0
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
 
@@ -139,11 +163,14 @@ gdk_fontset_load (const gchar *fontset_name)
 {
   return gdk_font_load(fontset_name);
 }
+#endif
 
 void
 _gdk_font_destroy (GdkFont *font)
 {
+#if 0
   gdk_font_hash_remove (font->type, font);
+#endif
       
   switch (font->type)
     {
@@ -221,9 +248,11 @@ gdk_font_equal (const GdkFont *fonta,
 
   if(fonta == fontb)
     return TRUE;
+#if 0
   if(privatea->t1_font_id == privateb->t1_font_id
      && privatea->size == privateb->size)
     return TRUE;
+#endif
 
   return FALSE;
 }
@@ -233,6 +262,7 @@ gdk_text_width (GdkFont      *font,
 		const gchar  *text,
 		gint          text_length)
 {
+#if 0
   GdkFontPrivateFB *private;
   gint width;
   double n;
@@ -256,6 +286,9 @@ gdk_text_width (GdkFont      *font,
     }
 
   return width;
+#else
+  return 0;
+#endif
 }
 
 gint
@@ -263,6 +296,7 @@ gdk_text_width_wc (GdkFont	  *font,
 		   const GdkWChar *text,
 		   gint		   text_length)
 {
+#if 0
   char *realstr;
   int i;
 
@@ -272,6 +306,9 @@ gdk_text_width_wc (GdkFont	  *font,
   realstr[i] = '\0';
 
   return gdk_text_width(font, realstr, text_length);
+#else
+  return 0;
+#endif
 }
 
 void
@@ -284,6 +321,7 @@ gdk_text_extents (GdkFont     *font,
 		  gint        *ascent,
 		  gint        *descent)
 {
+#if 0
   GdkFontPrivateFB *private;
   METRICSINFO mi;
 
@@ -304,6 +342,18 @@ gdk_text_extents (GdkFont     *font,
     *lbearing = ((double)mi.bbox.llx) / 1000.0 * private->size;
   if(rbearing)
     *rbearing = ((double)mi.bbox.urx) / 1000.0 * private->size;
+#else
+  if(ascent)
+    *ascent = 0;
+  if(descent)
+    *descent = 0;
+  if(width)
+    *width = 0;
+  if(lbearing)
+    *lbearing = 0;
+  if(rbearing)
+    *rbearing = 0;
+#endif
 }
 
 void

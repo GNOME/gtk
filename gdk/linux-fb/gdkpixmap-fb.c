@@ -80,6 +80,7 @@ gdk_fb_pixmap_alloc (void)
   private->klass_data = g_new0 (GdkDrawableFBData, 1);
   private->window_type = GDK_DRAWABLE_PIXMAP;
   private->colormap = gdk_colormap_ref(gdk_colormap_get_system());
+  GDK_DRAWABLE_FBDATA(private)->mem = NULL;
 
   return drawable;
 }

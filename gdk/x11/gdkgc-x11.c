@@ -200,6 +200,9 @@ gdk_x11_gc_get_values (GdkGC       *gc,
 	case GXset:
 	  values->function = GDK_SET;
 	  break;
+	case GXnor:
+	  values->function = GDK_NOR;
+	  break;
 	}
 
       switch (xvalues.fill_style)
@@ -403,6 +406,9 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 	  break;
 	case GDK_SET:
 	  xvalues->function = GXset;
+	  break;
+	case GDK_NOR:
+	  xvalues->function = GXnor;
 	  break;
 	}
       *xvalues_mask |= GCFunction;

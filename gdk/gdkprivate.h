@@ -49,10 +49,9 @@ extern "C" {
                           GDK_DRAWABLE_TYPE(d) == GDK_WINDOW_FOREIGN)
 #define GDK_IS_PIXMAP(d) (GDK_DRAWABLE_TYPE(d) == GDK_DRAWABLE_PIXMAP)
 #define GDK_DRAWABLE_DESTROYED(d) (((GdkDrawablePrivate *)d)->destroyed)
-
-#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
-#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
-#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
+#define GDK_DRAWABLE_P(d) ((GdkDrawablePrivate*)d)
+#define GDK_WINDOW_P(d) ((GdkWindowPrivate*)d)
+#define GDK_GC_P(d) ((GdkGCPrivate*)d)
 
 typedef struct _GdkDrawablePrivate     GdkDrawablePrivate;
 typedef struct _GdkWindowPrivate       GdkWindowPrivate;

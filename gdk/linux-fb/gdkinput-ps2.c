@@ -208,20 +208,43 @@ send_button_event(PS2Mouse *mouse, guint button, gboolean press_event, time_t th
 }
 
 static GdkPixmap *last_contents = NULL;
-static GdkPoint last_location;
+static GdkPoint last_location, last_contents_size;
 static GdkCursor *last_cursor = NULL;
+GdkFBDrawingContext *gdk_fb_cursor_dc = NULL;
+static GdkFBDrawingContext cursor_dc_dat;
 static GdkGC *cursor_gc;
+
+static GdkFBDrawingContext *
+gdk_fb_cursor_dc_reset(void)
+{
+  if(gdk_fb_cursor_dc)
+    gdk_fb_drawing_context_finalize(gdk_fb_cursor_dc);
+
+  gdk_fb_cursor_dc = &cursor_dc_dat;
+  gdk_fb_drawing_context_init(gdk_fb_cursor_dc, gdk_parent_root, cursor_gc, TRUE, FALSE);
+
+  return gdk_fb_cursor_dc;
+}
 
 void
 gdk_fb_cursor_hide(void)
 {
+  GdkFBDrawingContext *mydc = gdk_fb_cursor_dc;
+
+  if(!mydc)
+    mydc = gdk_fb_cursor_dc_reset();
+
   if(last_contents)
     {
       gdk_gc_set_clip_mask(cursor_gc, NULL);
       /* Restore old picture */
-      gdk_fb_draw_drawable_2(gdk_parent_root, cursor_gc, last_contents, 0, 0, last_location.x, last_location.y,
-			     GDK_DRAWABLE_P(last_contents)->width,
-			     GDK_DRAWABLE_P(last_contents)->height, TRUE, FALSE);
+      gdk_fb_draw_drawable_3(gdk_parent_root, cursor_gc, last_contents,
+			     mydc,
+			     0, 0,
+			     last_location.x,
+			     last_location.y,
+			     last_contents_size.x,
+			     last_contents_size.y);
     }
 }
 
@@ -233,13 +256,18 @@ gdk_fb_cursor_invalidate(void)
 }
 
 void
-gdk_fb_cursor_unhide(void)
+gdk_fb_cursor_unhide()
 {
+  GdkFBDrawingContext *mydc = gdk_fb_cursor_dc;
+
+  if(!mydc)
+    mydc = gdk_fb_cursor_dc_reset();
+
   if(last_cursor)
     {
       if(!last_contents
-	 || GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width != GDK_DRAWABLE_P(last_contents)->width
-	 || GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height != GDK_DRAWABLE_P(last_contents)->height)
+	 || GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width > GDK_DRAWABLE_P(last_contents)->width
+	 || GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height > GDK_DRAWABLE_P(last_contents)->height)
 	{
 	  if(last_contents)
 	    gdk_pixmap_unref(last_contents);
@@ -251,15 +279,20 @@ gdk_fb_cursor_unhide(void)
 	}
 
       gdk_gc_set_clip_mask(cursor_gc, NULL);
-      gdk_fb_draw_drawable_2(last_contents, cursor_gc, gdk_parent_root, last_location.x, last_location.y, 0, 0,
+      gdk_fb_draw_drawable_2(last_contents, cursor_gc, gdk_parent_root, last_location.x,
+			     last_location.y, 0, 0,
 			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width,
 			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height, TRUE, FALSE);
+      last_contents_size.x = GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width;
+      last_contents_size.y = GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height;
       gdk_gc_set_clip_mask(cursor_gc, GDK_CURSOR_FB(last_cursor)->mask);
       gdk_gc_set_clip_origin(cursor_gc, last_location.x, last_location.y);
-      gdk_fb_draw_drawable_2(gdk_parent_root, cursor_gc, GDK_CURSOR_FB(last_cursor)->cursor,
+
+      gdk_fb_cursor_dc_reset();
+      gdk_fb_draw_drawable_3(gdk_parent_root, cursor_gc, GDK_CURSOR_FB(last_cursor)->cursor, mydc,
 			     0, 0, last_location.x, last_location.y,
 			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->width,
-			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height, TRUE, FALSE);
+			     GDK_DRAWABLE_P(GDK_CURSOR_FB(last_cursor)->cursor)->height);
     }
   else
     gdk_fb_cursor_invalidate();
@@ -299,9 +332,6 @@ move_pointer(PS2Mouse *mouse, GdkWindow *in_window)
 
   gdk_fb_cursor_hide();
 
-  last_location.x = mouse->x;
-  last_location.y = mouse->y;
-
   if(_gdk_fb_pointer_grab_cursor)
     the_cursor = _gdk_fb_pointer_grab_cursor;
   else
@@ -310,6 +340,9 @@ move_pointer(PS2Mouse *mouse, GdkWindow *in_window)
 	in_window = GDK_WINDOW_P(in_window)->parent;
       the_cursor = GDK_WINDOW_FBDATA(in_window)->cursor;
     }
+
+  last_location.x = mouse->x - GDK_CURSOR_FB(the_cursor)->hot_x;
+  last_location.y = mouse->y - GDK_CURSOR_FB(the_cursor)->hot_y;
 
   if(the_cursor)
     gdk_cursor_ref(the_cursor);
@@ -386,7 +419,7 @@ handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 
   if(dx || dy) {
     GdkEvent *event;
-    gint x, y, rx, ry;
+    gint x, y;
     GdkWindow *win;
     guint state;
 
@@ -582,9 +615,18 @@ gdk_window_find_focus(void)
   if(_gdk_fb_keyboard_grab_window)
     return _gdk_fb_keyboard_grab_window;
   else if(GDK_WINDOW_P(gdk_parent_root)->children)
-    return GDK_WINDOW_P(gdk_parent_root)->children->data;
-  else
-    return gdk_parent_root;
+    {
+      GList *item;
+      for(item = GDK_WINDOW_P(gdk_parent_root)->children; item; item = item->next)
+	{
+	  GdkWindowPrivate *priv = item->data;
+
+	  if(priv->mapped)
+	    return item->data;
+	}
+    }
+
+  return gdk_parent_root;
 }
 
 static gboolean
@@ -623,6 +665,7 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 	{'=', '+', 0},
 	{GDK_BackSpace, 0, 0},
 	{GDK_Tab, 0, 0},
+
 	/* 0x10 */
 	{'q', 'Q', 0},
 	{'w', 'W', 0},
@@ -652,15 +695,15 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 	{';', ':', 0},
 	{'\'', '"', 0},
 	{'`', '~', 0},
-	{0, 0, 0},
 	{GDK_Shift_L, 0, 0}, /* mod */
 	{'\\', 0, 0},
 	{'z', 0, 0},
 	{'x', 0, 0},
 	{'c', 0, 0},
 
-	/* 0x30 */
 	{'v', 'V', 0},
+
+	/* 0x30 */
 	{'b', 'B', 0},
 	{'n', 'N', 0},
 	{'m', 'M', 0},
@@ -669,7 +712,8 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 	{'/', 0, 0},
 	{GDK_Shift_R, 0, 0}, /* mod */
 	{GDK_KP_Multiply, 0, 0},
-	{' ', 0, 0},
+	{0, 0, 0},
+	{GDK_space, 0, 0},
 	{0, 0, 0},
 	{GDK_F1, 0, 0},
 	{GDK_F2, 0, 0},

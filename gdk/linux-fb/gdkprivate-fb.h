@@ -37,6 +37,7 @@
 #include "gdkregion-generic.h"
 #include <linux/fb.h>
 #include <stdio.h>
+#include <freetype/freetype.h>
 
 #define GDK_DRAWABLE_FBDATA(win) ((GdkDrawableFBData *)(((GdkDrawablePrivate*)(win))->klass_data))
 #define GDK_PIXMAP_FBDATA(win) ((GdkPixmapFBData *)(((GdkDrawablePrivate*)(win))->klass_data))
@@ -46,6 +47,7 @@
 
 typedef struct _GdkDrawableFBData GdkDrawableFBData;
 typedef struct _GdkWindowFBData GdkWindowFBData;
+typedef struct _GdkPixmapFBData GdkPixmapFBData;
 
 struct _GdkDrawableFBData
 {
@@ -87,6 +89,7 @@ struct _GdkFBDisplay
   gulong mem_len;
   struct fb_fix_screeninfo sinfo;
   struct fb_var_screeninfo modeinfo;
+  int red_byte, green_byte, blue_byte; /* For truecolor */
 };
 
 typedef struct {
@@ -104,15 +107,18 @@ typedef struct {
 typedef struct {
   GdkCursor base;
   GdkPixmap *cursor, *mask;
+  int hot_x, hot_y;
 } GdkCursorPrivateFB;
 
 typedef struct {
   GdkFontPrivate base;
 
-  int t1_font_id;
+  FT_Face face;
   double size;
-  GSList *names;
 } GdkFontPrivateFB;
+
+void gdk_fb_font_init(void);
+void gdk_fb_font_fini(void);
 
 typedef struct {
   GdkImagePrivate base;
@@ -156,6 +162,39 @@ void gdk_fb_draw_drawable  (GdkDrawable    *drawable,
 			    gint            ydest,
 			    gint            width,
 			    gint            height);
+
+typedef struct {
+  GdkWindow *bg_relto;
+  GdkPixmap *bgpm;
+
+  GdkRegion *real_clip_region;
+
+  guchar *mem, *clipmem;
+  gpointer cursor_dc;
+
+  guint rowstride, clip_rowstride;
+  int clipxoff, clipyoff;
+
+  gboolean draw_bg : 1;
+  gboolean copy_region : 1;
+  gboolean handle_cursor : 1;
+} GdkFBDrawingContext;
+
+void gdk_fb_drawing_context_init(GdkFBDrawingContext *dc, GdkDrawable *drawable,
+				 GdkGC *gc, gboolean draw_bg, gboolean do_clipping);
+void gdk_fb_drawing_context_finalize(GdkFBDrawingContext *dc);
+
+void gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
+			     GdkGC *gc,
+			     GdkPixmap *src,
+			     GdkFBDrawingContext *dc,
+			     gint xsrc,
+			     gint ysrc,
+			     gint xdest,
+			     gint ydest,
+			     gint width,
+			     gint height);
+
 void gdk_fb_draw_drawable_2 (GdkDrawable *drawable,
 			     GdkGC       *gc,
 			     GdkPixmap   *src,
@@ -190,5 +229,24 @@ void gdk_fb_cursor_hide(void);
 void gdk_fb_redraw_all(void);
 
 void gdk_input_ps2_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask);
+
+#define PANGO_TYPE_FB_FONT              (pango_fb_font_get_type ())
+#define PANGO_FB_FONT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_FB_FONT, PangoFBFont))
+typedef struct _PangoFBFont        PangoFBFont;
+struct _PangoFBFont
+{
+  PangoFont parent;
+
+  FT_Face ftf;
+  PangoFontDescription desc;
+  PangoCoverage *coverage;
+  GHashTable *extents;
+};
+GType pango_fb_font_get_type (void);
+gboolean pango_fb_has_glyph(PangoFont *font, PangoGlyph glyph);
+PangoGlyph pango_fb_get_unknown_glyph(PangoFont *font);
+
+extern void CM(void); /* Check for general mem corruption */
+extern void RP(GdkDrawable *drawable); /* Same, for pixmaps */
 
 #endif /* __GDK_PRIVATE_FB_H__ */

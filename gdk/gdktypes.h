@@ -76,6 +76,12 @@ typedef struct _GdkSegment	      GdkSegment;
  */
 typedef guint32			    GdkWChar;
 typedef gulong     		    GdkAtom;
+
+#ifdef GDK_NATIVE_WINDOW_POINTER
+typedef gpointer GdkNativeWindow;
+#else
+typedef guint32 GdkNativeWindow;
+#endif
  
 /* Forward declarations of commonly used types
  */

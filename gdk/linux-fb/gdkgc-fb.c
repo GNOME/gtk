@@ -110,7 +110,7 @@ gdk_fb_gc_set_values (GdkGC           *gc,
     {
       oldpm = GDK_GC_FBDATA(gc)->values.tile;
       if(values->tile)
-	g_assert(GDK_DRAWABLE_P(values->tile)->depth == 8);
+	g_assert(GDK_DRAWABLE_P(values->tile)->depth >= 8);
 
       GDK_GC_FBDATA(gc)->values.tile = values->tile?gdk_pixmap_ref(values->tile):NULL;
       GDK_GC_FBDATA(gc)->values_mask |= GDK_GC_TILE;
@@ -137,6 +137,12 @@ gdk_fb_gc_set_values (GdkGC           *gc,
       GDK_GC_FBDATA(gc)->values_mask |= GDK_GC_CLIP_MASK;
       if(oldpm)
 	gdk_pixmap_unref(oldpm);
+
+      if(GDK_GC_FBDATA(gc)->clip_region)
+	{
+	  gdk_region_destroy(GDK_GC_FBDATA(gc)->clip_region);
+	  GDK_GC_FBDATA(gc)->clip_region = NULL;
+	}
     }
 
   if(values_mask & GDK_GC_SUBWINDOW)
@@ -220,6 +226,19 @@ gdk_fb_gc_set_dashes (GdkGC *gc,
     }
 }
 
+static void
+gc_unset_cmask(GdkGC *gc)
+{
+  GdkGCPrivate *private = (GdkGCPrivate *)gc;
+  GdkGCFBData *data;
+  data = GDK_GC_FBDATA (gc);
+  if(data->values.clip_mask)
+    {
+      gdk_pixmap_unref(data->values.clip_mask);
+      data->values.clip_mask = NULL;
+      data->values_mask &= ~ GDK_GC_CLIP_MASK;
+    }
+}
 void
 gdk_gc_set_clip_rectangle (GdkGC	*gc,
 			   GdkRectangle *rectangle)
@@ -244,6 +263,8 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
   private->clip_y_origin = 0;
   data->values.clip_x_origin = 0;
   data->values.clip_y_origin = 0;
+
+  gc_unset_cmask(gc);
 } 
 
 void
@@ -273,6 +294,8 @@ gdk_gc_set_clip_region (GdkGC	  *gc,
   private->clip_y_origin = 0;
   data->values.clip_x_origin = 0;
   data->values.clip_y_origin = 0;
+
+  gc_unset_cmask(gc);
 }
 
 

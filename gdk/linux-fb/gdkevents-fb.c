@@ -90,10 +90,27 @@ static GSourceFuncs event_funcs = {
  * Functions for maintaining the event queue *
  *********************************************/
 
+static gboolean fb_events_prepare(gpointer  source_data, 
+				  GTimeVal *current_time,
+				  gint     *timeout,
+				  gpointer  user_data);
+static gboolean fb_events_check(gpointer  source_data,
+				GTimeVal *current_time,
+				gpointer  user_data);
+static gboolean fb_events_dispatch(gpointer  source_data, 
+				   GTimeVal *dispatch_time,
+				   gpointer  user_data);
 void 
 gdk_events_init (void)
 {
-  
+  static GSourceFuncs fb_events_funcs = {
+    fb_events_prepare,
+    fb_events_check,
+    fb_events_dispatch,
+    NULL
+  };
+
+  g_source_add(G_PRIORITY_HIGH_IDLE, TRUE, &fb_events_funcs, NULL, NULL, NULL);
 }
 
 /*
@@ -121,21 +138,64 @@ gdk_events_pending (void)
 GdkEvent*
 gdk_event_get_graphics_expose (GdkWindow *window)
 {
+  GList *ltmp;
   g_return_val_if_fail (window != NULL, NULL);
   
-  return NULL;	
+  for(ltmp = gdk_queued_events; ltmp; ltmp = ltmp->next)
+    {
+      GdkEvent *event = ltmp->data;
+      if(event->type == GDK_EXPOSE
+	 && event->expose.window == window)
+	break;
+    }
+
+  if(ltmp)
+    {
+      GdkEvent *retval = ltmp->data;
+
+      gdk_event_queue_remove_link(ltmp);
+      g_list_free_1(ltmp);
+
+      return retval;
+    }
+
+  return NULL;
 }
 
 void
 gdk_events_queue (void)
-{
-  
+{  
 }
 
-static gint handler_tag = 0;
+static gboolean
+fb_events_prepare(gpointer  source_data, 
+		  GTimeVal *current_time,
+		  gint     *timeout,
+		  gpointer  user_data)
+{
+  *timeout = -1;
+
+  return fb_events_check(source_data, current_time, user_data);
+}
 
 static gboolean
-dispatch_events(gpointer data)
+fb_events_check(gpointer  source_data,
+		GTimeVal *current_time,
+		gpointer  user_data)
+{
+  gboolean retval;
+
+  GDK_THREADS_ENTER();
+
+  retval = (gdk_event_queue_find_first () != NULL);
+
+  GDK_THREADS_LEAVE();
+
+  return retval;
+}
+
+static gboolean
+fb_events_dispatch(gpointer source_data, GTimeVal *dispatch_time, gpointer user_data)
 {
   GdkEvent *event;
 
@@ -148,31 +208,13 @@ dispatch_events(gpointer data)
 	gdk_fb_drawable_clear(event->expose.window);
       else if(gdk_event_func)
 	(*gdk_event_func)(event, gdk_event_data);
+
       gdk_event_free(event);
     }
 
   GDK_THREADS_LEAVE();
-  if(event && !handler_tag)
-    handler_tag = g_idle_add_full(G_PRIORITY_HIGH_IDLE, dispatch_events, NULL, NULL);
-  else if(!event && handler_tag)
-    {
-      g_source_remove(handler_tag);
-      handler_tag = 0;
-    }
 
-  return handler_tag?TRUE:FALSE;
-}
-
-void
-_gdk_event_queue_changed(GList *queue)
-{
-  if(queue && !handler_tag)
-    handler_tag = g_idle_add_full(G_PRIORITY_HIGH_IDLE, dispatch_events, NULL, NULL);
-  else if(!queue && handler_tag)
-    {
-      g_source_remove(handler_tag);
-      handler_tag = 0;
-    }
+  return TRUE;
 }
 
 /*

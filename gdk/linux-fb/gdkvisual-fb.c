@@ -66,20 +66,20 @@ gdk_visual_init (void)
       system_visual->colormap_size = 1 << gdk_display->modeinfo.bits_per_pixel;
       system_visual->type = GDK_VISUAL_DIRECT_COLOR;
     case FB_VISUAL_TRUECOLOR:
-      if(gdk_display->sinfo.visual == GDK_VISUAL_TRUE_COLOR)
+      if(gdk_display->sinfo.visual == FB_VISUAL_TRUECOLOR)
 	system_visual->type = GDK_VISUAL_TRUE_COLOR;
 
-      system_visual->red_prec = MIN(system_visual->depth / 3, 8);
-      system_visual->red_shift = 0;
-      system_visual->red_mask = ((1 << (system_visual->red_prec + 1)) - 1) << system_visual->red_shift;
+      system_visual->red_prec = gdk_display->modeinfo.red.length;
+      system_visual->red_shift = gdk_display->modeinfo.red.offset;
+      system_visual->red_mask = ((1 << (system_visual->red_prec)) - 1) << system_visual->red_shift;
 
-      system_visual->green_shift = system_visual->red_prec;
-      system_visual->green_prec = MIN(system_visual->depth / 3, 8);
-      system_visual->green_mask = ((1 << (system_visual->green_prec + 1)) - 1) << system_visual->green_shift;
+      system_visual->green_prec = gdk_display->modeinfo.green.length;
+      system_visual->green_shift = gdk_display->modeinfo.green.offset;
+      system_visual->green_mask = ((1 << (system_visual->green_prec)) - 1) << system_visual->green_shift;
 
-      system_visual->blue_shift = system_visual->green_prec + system_visual->green_shift;
-      system_visual->blue_prec = MIN(system_visual->depth / 3, 8);
-      system_visual->blue_mask = ((1 << (system_visual->blue_prec + 1)) - 1) << system_visual->blue_shift;
+      system_visual->blue_prec = gdk_display->modeinfo.blue.length;
+      system_visual->blue_shift = gdk_display->modeinfo.blue.offset;
+      system_visual->blue_mask = ((1 << (system_visual->blue_prec)) - 1) << system_visual->blue_shift;
       break;
     case FB_VISUAL_STATIC_PSEUDOCOLOR:
       system_visual->type = GDK_VISUAL_STATIC_COLOR;

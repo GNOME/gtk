@@ -30,10 +30,10 @@
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
-#include <t1lib.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 #include "gdk.h"
 
@@ -65,8 +65,6 @@ gdk_fb_display_new(const char *filename)
 {
   int fd, n;
   GdkFBDisplay *retval;
-  guint16 red[256], green[256], blue[256];
-  struct fb_cmap cmap;
 
   fd = open(filename, O_RDWR);
   if(fd < 0)
@@ -78,15 +76,29 @@ gdk_fb_display_new(const char *filename)
   n |= ioctl(fd, FBIOGET_VSCREENINFO, &retval->modeinfo);
   g_assert(!n);
 
-  retval->fbmem = mmap(NULL, retval->sinfo.smem_len, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+  /* We used to use sinfo.smem_len, but that seemed to be broken in many cases */
+  retval->fbmem = mmap(NULL, retval->modeinfo.yres * retval->sinfo.line_length,
+		       PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
   g_assert(retval->fbmem != MAP_FAILED);
 
-  for(n = 0; n < 16; n++)
-    red[n] = green[n] = blue[n] = n << 12;
-  for(n = 16; n < 256; n++)
-    red[n] = green[n] = blue[n] = n << 8;
-  cmap.red = red; cmap.green = green; cmap.blue = blue; cmap.len = 256; cmap.start = 0;
-  ioctl(fd, FBIOPUTCMAP, &cmap);
+  if(retval->sinfo.visual == FB_VISUAL_PSEUDOCOLOR)
+    {
+      guint16 red[256], green[256], blue[256];
+      struct fb_cmap cmap;
+      for(n = 0; n < 16; n++)
+	red[n] = green[n] = blue[n] = n << 12;
+      for(n = 16; n < 256; n++)
+	red[n] = green[n] = blue[n] = n << 8;
+      cmap.red = red; cmap.green = green; cmap.blue = blue; cmap.len = 256; cmap.start = 0;
+      ioctl(fd, FBIOPUTCMAP, &cmap);
+    }
+
+  if(retval->sinfo.visual == FB_VISUAL_TRUECOLOR)
+    {
+      retval->red_byte = retval->modeinfo.red.offset >> 3;
+      retval->green_byte = retval->modeinfo.green.offset >> 3;
+      retval->blue_byte = retval->modeinfo.blue.offset >> 3;
+    }
 
   return retval;
 }
@@ -94,7 +106,8 @@ gdk_fb_display_new(const char *filename)
 static void
 gdk_fb_display_destroy(GdkFBDisplay *fbd)
 {
-  munmap(fbd->fbmem, fbd->sinfo.smem_len);
+  munmap(fbd->fbmem, fbd->modeinfo.yres * fbd->sinfo.line_length);
+  close(fbd->fd);
   g_free(fbd);
 }
 
@@ -112,8 +125,7 @@ _gdk_windowing_init_check (int argc, char **argv)
   if(!gdk_display)
     return FALSE;
 
-  T1_InitLib(NO_LOGFILE|IGNORE_FONTDATABASE);
-  T1_AASetBitsPerPixel(gdk_display->modeinfo.bits_per_pixel);
+  gdk_fb_font_init();
 
   gdk_initialized = TRUE;
 
@@ -156,14 +168,20 @@ gdk_pointer_grab (GdkWindow *	  window,
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
   if(_gdk_fb_pointer_grab_window)
-    return 1;
+    gdk_pointer_ungrab(time);
 
   if(!owner_events)
     _gdk_fb_pointer_grab_window = gdk_window_ref(window);
 
+  if(cursor)
+    gdk_fb_cursor_hide();
+
   _gdk_fb_pointer_grab_confine = confine_to?gdk_window_ref(confine_to):NULL;
   _gdk_fb_pointer_grab_events = event_mask;
   _gdk_fb_pointer_grab_cursor = cursor?gdk_cursor_ref(cursor):NULL;
+
+  if(cursor)
+    gdk_fb_cursor_unhide();
   
   return 0;
 }
@@ -186,6 +204,11 @@ gdk_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
+  gboolean have_grab_cursor = _gdk_fb_pointer_grab_cursor && 1;
+
+  if(have_grab_cursor)
+    gdk_fb_cursor_hide();
+
   if(_gdk_fb_pointer_grab_window)
     gdk_window_unref(_gdk_fb_pointer_grab_window);
   _gdk_fb_pointer_grab_window = NULL;
@@ -197,6 +220,9 @@ gdk_pointer_ungrab (guint32 time)
   if(_gdk_fb_pointer_grab_cursor)
     gdk_cursor_unref(_gdk_fb_pointer_grab_cursor);
   _gdk_fb_pointer_grab_cursor = NULL;
+
+  if(have_grab_cursor)
+    gdk_fb_cursor_unhide();
 }
 
 /*
@@ -414,7 +440,7 @@ gdk_windowing_exit (void)
 {
   gdk_fb_display_destroy(gdk_display); gdk_display = NULL;
 
-  T1_CloseLib();
+  gdk_fb_font_fini();
 
   keyboard_shutdown();
 }
@@ -429,20 +455,6 @@ guint
 gdk_keyval_from_name (const gchar *keyval_name)
 {
   return 0;
-}
-
-void     gdk_keyval_convert_case (guint        symbol,
-                                  guint       *lower,
-                                  guint       *upper)
-{
-  if(symbol >= 'a' && symbol <= 'z')
-    symbol = toupper(symbol);
-
-  if(upper)
-    *upper = symbol;
-
-  if(lower)
-    *lower = symbol;
 }
 
 gchar *
@@ -561,4 +573,58 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
     }
 
   return NULL;
+}
+
+void CM(void)
+{
+  static gpointer mymem = NULL;
+  gpointer arry[256];
+  int i;
+
+  free(mymem);
+
+  for(i = 0; i < sizeof(arry)/sizeof(arry[0]); i++)
+    arry[i] = malloc(i+1);
+  for(i = 0; i < sizeof(arry)/sizeof(arry[0]); i++)
+    free(arry[i]);
+
+  mymem = malloc(256);
+}
+
+/* XXX badhack */
+typedef struct _GdkWindowPaint GdkWindowPaint;
+
+struct _GdkWindowPaint
+{
+  GdkRegion *region;
+  GdkPixmap *pixmap;
+  gint x_offset;
+  gint y_offset;
+};
+
+void RP(GdkDrawable *d)
+{
+#if 0
+  if(GDK_DRAWABLE_TYPE(d) == GDK_DRAWABLE_PIXMAP)
+    {
+      if(!GDK_PIXMAP_FBDATA(d)->no_free_mem)
+	{
+	  guchar *oldmem = GDK_DRAWABLE_FBDATA(d)->mem;
+	  guint len = ((GDK_DRAWABLE_P(d)->width * GDK_DRAWABLE_P(d)->depth + 7) / 8) * GDK_DRAWABLE_P(d)->height;
+	  GDK_DRAWABLE_FBDATA(d)->mem = g_malloc(len);
+	  memcpy(GDK_DRAWABLE_FBDATA(d)->mem, oldmem, len);
+	  g_free(oldmem);
+	}
+    }
+  else
+    {
+      GSList *priv = GDK_WINDOW_P(d)->paint_stack;
+      for(; priv; priv = priv->next)
+	{
+	  GdkWindowPaint *p = priv->data;
+
+	  RP(p->pixmap);
+	}
+    }
+#endif
 }

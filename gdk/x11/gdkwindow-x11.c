@@ -435,7 +435,7 @@ gdk_window_new (GdkWindow     *parent,
 }
 
 GdkWindow *
-gdk_window_foreign_new (guint32 anid)
+gdk_window_foreign_new (GdkNativeWindow anid)
 {
   GdkWindow *window;
   GdkWindowPrivate *private;

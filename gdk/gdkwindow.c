@@ -657,7 +657,7 @@ gdk_window_begin_paint_region (GdkWindow *window,
 	    {
 	      tmp_paint = private->paint_stack->data;
 	      gdk_region_subtract (init_region, tmp_paint->region);
-	      
+
 	      tmp_list = tmp_list->next;
 	    }
 	}
@@ -745,6 +745,7 @@ gdk_window_free_paint_stack (GdkWindow *window)
       while (tmp_list)
 	{
 	  GdkWindowPaint *paint = tmp_list->data;
+
 	  if (tmp_list == private->paint_stack)
 	    gdk_drawable_unref (paint->pixmap);
 		  
@@ -1119,6 +1120,7 @@ gdk_window_draw_glyphs (GdkDrawable      *drawable,
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
+
       gdk_draw_glyphs (paint->pixmap, gc, font, x - x_offset, y - y_offset, glyphs);
     }
   else

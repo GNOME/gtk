@@ -1,10 +1,20 @@
 #include "gdkprivate-fb.h"
 #include "mi.h"
-#include <t1lib.h>
+
+/* #define USE_FTGRAYS */
+#define USE_AA
+#include <freetype/ftglyph.h>
+
+#include <endian.h>
+#ifndef __BYTE_ORDER
+#error "endian.h needs to #define __BYTE_ORDER"
+#endif
 
 #ifndef g_alloca
 #define g_alloca alloca
 #endif
+
+static void gdk_fb_drawable_set_pixel(GdkDrawable *drawable, GdkGC *gc, int x, int y, GdkColor *spot, gboolean abs_coords);
 
 static void gdk_fb_drawable_destroy   (GdkDrawable     *drawable);
 void gdk_fb_draw_rectangle (GdkDrawable    *drawable,
@@ -42,6 +52,12 @@ static void gdk_fb_draw_text_wc   (GdkDrawable    *drawable,
 				   gint            y,
 				   const GdkWChar *text,
 				   gint            text_length);
+static void gdk_fb_draw_glyphs(GdkDrawable      *drawable,
+			       GdkGC	           *gc,
+			       PangoFont        *font,
+			       gint              x,
+			       gint              y,
+			       PangoGlyphString *glyphs);
 void gdk_fb_draw_drawable  (GdkDrawable    *drawable,
 			    GdkGC          *gc,
 			    GdkPixmap      *src,
@@ -75,7 +91,8 @@ GdkDrawableClass _gdk_fb_drawable_class = {
   gdk_fb_draw_drawable,
   gdk_fb_draw_points,
   gdk_fb_draw_segments,
-  gdk_fb_draw_lines
+  gdk_fb_draw_lines,
+  gdk_fb_draw_glyphs
 };
 
 /*****************************************************
@@ -184,12 +201,10 @@ gdk_fb_clip_region(GdkDrawable *drawable, GdkGC *gc, gboolean do_clipping)
 }
 
 static void
-gdk_fb_fill_span(GdkDrawable *drawable, GdkGC *gc, GdkSegment *cur, guint pixel, GdkVisual *visual)
+gdk_fb_fill_span(GdkDrawable *drawable, GdkGC *gc, GdkSegment *cur, GdkColor *color, GdkVisual *visual)
 {
   int curx, cury;
-  guchar *mem = GDK_DRAWABLE_FBDATA(drawable)->mem;
-  guint rowstride = GDK_DRAWABLE_FBDATA(drawable)->rowstride;
-  guint depth = GDK_DRAWABLE_P(drawable)->depth;
+  GdkColor spot = *color;
 
   if(gc
      && (GDK_GC_FBDATA(gc)->values.clip_mask
@@ -218,6 +233,10 @@ gdk_fb_fill_span(GdkDrawable *drawable, GdkGC *gc, GdkSegment *cur, guint pixel,
 	{
 	  gint xstep, ystep;
 	  gint relx, rely;
+	  GdkFBDrawingContext *dc, dc_data;
+	  dc = &dc_data;
+
+	  gdk_fb_drawing_context_init(dc, drawable, gc, FALSE, TRUE);
 
 	  ts = GDK_GC_FBDATA(gc)->values.tile;
 	  for(cury = cur->y1; cury < cur->y2; cury += ystep)
@@ -243,12 +262,15 @@ gdk_fb_fill_span(GdkDrawable *drawable, GdkGC *gc, GdkSegment *cur, guint pixel,
 
 		  xstep = MIN(GDK_DRAWABLE_P(ts)->width - draww, cur->x2 - relx);
 
-		  gdk_fb_draw_drawable_2(drawable, gc, ts,
+		  gdk_fb_draw_drawable_3(drawable, gc, ts,
+					 dc,
 					 draww, drawh,
 					 relx, rely,
-					 xstep, ystep, FALSE, TRUE);
+					 xstep, ystep);
 		}
 	    }
+
+	  gdk_fb_drawing_context_finalize(dc);
 
 	  return;
 	}
@@ -262,163 +284,165 @@ gdk_fb_fill_span(GdkDrawable *drawable, GdkGC *gc, GdkSegment *cur, guint pixel,
 	  solid_stipple = (GDK_GC_FBDATA(gc)->values.fill == GDK_OPAQUE_STIPPLED);
 	}
 
-      switch(depth)
+      for(cury = cur->y1; cury < cur->y2; cury++)
 	{
-	case 1:
-	  g_assert(!ts);
-	  for(cury = cur->y1; cury < cur->y2; cury++)
+	  for(curx = cur->x1; curx < cur->x2; curx++)
 	    {
-	      for(curx = cur->x1; curx < cur->x2; curx++)
+	      int maskx = curx+clipxoff, masky = cury + clipyoff;
+	      guchar foo;
+
+	      if(cmask)
 		{
-		  guchar *ptr = mem + (cury * rowstride) + (curx >> 3);
-		  int maskx = curx+clipxoff, masky = cury + clipyoff;
-		  guchar foo;
+		  foo = clipmem[masky*mask_rowstride + (maskx >> 3)];
 
-		  if(cmask)
-		    {
-		      foo = clipmem[masky*mask_rowstride + (maskx >> 3)];
-
-		      if(!(foo & (1 << (maskx % 8))))
-			continue;
-		    }
-
-		  *ptr |= (1 << (curx % 8));
+		  if(!(foo & (1 << (maskx % 8))))
+		    continue;
 		}
-	    }
-	  break;
-	case 8:
-	  for(cury = cur->y1; cury < cur->y2; cury++)
-	    {
-	      for(curx = cur->x1; curx < cur->x2; curx++)
+
+	      if(ts)
 		{
-		  guchar *ptr = mem + (cury * rowstride) + curx;
-		  int maskx = curx+clipxoff, masky = cury + clipyoff;
-		  guchar foo;
+		  int wid = GDK_DRAWABLE_P(ts)->width, hih = GDK_DRAWABLE_P(ts)->height;
 
-		  if(cmask)
+		  maskx = (curx+tsxoff)%wid;
+		  masky = (cury+tsyoff)%hih;
+		  if(maskx < 0)
+		    maskx += wid;
+		  if(masky < 0)
+		    masky += hih;
+
+		  foo = GDK_DRAWABLE_FBDATA(ts)->mem[(maskx >> 3) + GDK_DRAWABLE_FBDATA(ts)->rowstride*masky];
+		  if(foo & (1 << (maskx % 8)))
 		    {
-		      foo = clipmem[masky*mask_rowstride + (maskx >> 3)];
-
-		      if(!(foo & (1 << (maskx % 8))))
-			continue;
+		      spot = GDK_GC_FBDATA(gc)->values.foreground;
 		    }
-
-		  if(ts)
+		  else if(solid_stipple)
 		    {
-		      int wid = GDK_DRAWABLE_P(ts)->width, hih = GDK_DRAWABLE_P(ts)->height;
-		      maskx = (curx+tsxoff)%wid;
-		      masky = (cury+tsyoff)%hih;
-		      if(maskx < 0)
-			maskx += wid;
-		      if(masky < 0)
-			masky += hih;
-
-		      foo = GDK_DRAWABLE_FBDATA(ts)->mem[(maskx >> 3) + GDK_DRAWABLE_FBDATA(ts)->rowstride*masky];
-		      if(foo & (1 << (maskx % 8)))
-			{
-			  pixel = GDK_GC_FBDATA(gc)->values.foreground.pixel;
-			}
-		      else if(solid_stipple)
-			{
-			  pixel = GDK_GC_FBDATA(gc)->values.background.pixel;
-			}
-		      else
-			continue;
+		      spot = GDK_GC_FBDATA(gc)->values.background;
 		    }
-
-		  *ptr = pixel;
+		  else
+		    continue;
 		}
+
+	      gdk_fb_drawable_set_pixel(drawable, gc, curx, cury, &spot, TRUE);
 	    }
-	  break;
-
-	case 16:
-	case 24:
-	case 32:
-	  for(cury = cur->y1; cury < cur->y2; cury++)
-	    {
-	      for(curx = cur->x1; curx < cur->x2; curx++)
-		{
-		  guint *ptr2 = (guint *)(mem + (cury * rowstride) + (curx * (depth >> 3)));
-		  int maskx = curx+clipxoff, masky = cury + clipyoff;
-		  guchar foo;
-
-		  if(cmask)
-		    {
-		      foo = clipmem[masky*mask_rowstride + (maskx >> 3)];
-
-		      if(!(foo & (1 << (maskx % 8))))
-			continue;
-		    }
-
-		  if(ts)
-		    {
-		      int wid = GDK_DRAWABLE_P(ts)->width, hih = GDK_DRAWABLE_P(ts)->height;
-
-		      maskx = (curx+tsxoff)%wid;
-		      masky = (cury+tsyoff)%hih;
-		      if(maskx < 0)
-			maskx += wid;
-		      if(masky < 0)
-			masky += hih;
-
-		      foo = GDK_DRAWABLE_FBDATA(ts)->mem[(maskx >> 3) + GDK_DRAWABLE_FBDATA(ts)->rowstride*masky];
-		      if(foo & (1 << (maskx % 8)))
-			{
-			  pixel = GDK_GC_FBDATA(gc)->values.foreground.pixel;
-			}
-		      else if(solid_stipple)
-			{
-			  pixel = GDK_GC_FBDATA(gc)->values.background.pixel;
-			}
-		      else
-			continue;
-		    }
-
-		  *ptr2 = (*ptr2 & ~(visual->red_mask|visual->green_mask|visual->blue_mask)) | pixel;
-		}
-	    }
-	  break;
 	}
     }
   else
     {
-      switch(depth)
+      guchar *mem = GDK_DRAWABLE_FBDATA(drawable)->mem, *ptr;
+      guint rowstride = GDK_DRAWABLE_FBDATA(drawable)->rowstride;
+      int n;
+
+      switch(GDK_DRAWABLE_P(drawable)->depth)
 	{
 	case 1:
-	  for(cury = cur->y1; cury < cur->y2; cury++)
-	    {
-	      for(curx = cur->x1; curx < cur->x2; curx++)
-		{
-		  guchar *ptr = mem + (cury * rowstride) + (curx >> 3);
+	  {
+	    int fromx = MIN((cur->x1+7)&(~7), cur->x2);
+	    int begn = fromx - cur->x1, begoff = cur->x1 % 8, endn;
+	    guchar begmask, endmask;
+	    int body_end = cur->x2 & ~7;
+	    int body_len = (body_end - fromx)/8;
 
-		  if(pixel)
-		    *ptr |= (1 << (curx % 8));
-		  else
-		    *ptr &= ~(1 << (curx % 8));
-		}
-	    }
+	    begmask = ((1 << (begn + begoff)) - 1)
+	      & ~((1 << (begoff)) - 1);
+	    endn = cur->x2 - body_end;
+	    endmask = (1 << endn) - 1;
+
+	    for(cury = cur->y1; cury < cur->y2; cury++)
+	      {
+		ptr = mem + cury*rowstride + (cur->x1 >> 3);
+
+		if(spot.pixel)
+		  *ptr |= begmask;
+		else
+		  *ptr &= ~begmask;
+
+		curx = fromx;
+
+		if(curx < cur->x2)
+		  {
+		    ptr = mem + cury*rowstride + (curx >> 3);
+		    memset(ptr, spot.pixel?0xFF:0, body_len);
+
+		    if(endn)
+		      {
+			ptr = mem + cury*rowstride + (body_end >> 3);
+			if(spot.pixel)
+			  *ptr |= endmask;
+			else
+			  *ptr &= ~endmask;
+		      }
+		  }
+	      }
+	  }
 	  break;
-
 	case 8:
 	  for(cury = cur->y1; cury < cur->y2; cury++)
 	    {
-	      guchar *ptr = mem + (cury * rowstride) + cur->x1;
-	      memset(ptr, pixel, cur->x2 - cur->x1);
+	      ptr = mem + cury*rowstride + cur->x1;
+	      memset(ptr, spot.pixel, cur->x2 - cur->x1);
 	    }
 	  break;
-
 	case 16:
+	  {
+	    int i;
+	    n = cur->x2 - cur->x1;
+	    for(cury = cur->y1; cury < cur->y2; cury++)
+	      {
+		guint16 *p16 = (guint16 *)(mem + cury * rowstride + cur->x1*2);
+		for(i = 0; i < n; i++)
+		  *(p16++) = spot.pixel;
+	      }
+	  }
+	  break;
 	case 24:
+	  {
+	    guchar redval = spot.red>>8, greenval=spot.green>>8, blueval=spot.blue>>8;
+	    guchar *firstline, *ptr_end;
+
+	    if((cur->y2 - cur->y1) <= 0)
+	      break;
+
+	    n = (cur->x2 - cur->x1)*3;
+
+	    firstline = ptr = mem + cur->y1 * rowstride + cur->x1*3;
+	    ptr_end = ptr+n;
+	    while(ptr < ptr_end)
+	      {
+		ptr[gdk_display->red_byte] = redval;
+		ptr[gdk_display->green_byte] = greenval;
+		ptr[gdk_display->blue_byte] = blueval;
+		ptr += 3;
+	      }
+	    for(cury = cur->y1 + 1, ptr = mem + cury * rowstride + cur->x1*3; cury < cur->y2; cury++, ptr += rowstride)
+	      {
+		memcpy(ptr, firstline, n);
+	      }
+	  }
+	  break;
 	case 32:
+	  {
+	    int i;
+	    n = cur->x2 - cur->x1;
+	    for(cury = cur->y1; cury < cur->y2; cury++)
+	      {
+		guint32 *p32 = (guint32 *)(mem + cury * rowstride + cur->x1*4);
+		for(i = 0; i < n; i++)
+		  *(p32++) = spot.pixel;
+	      }
+	  }
+	  break;
+	default:
+	  g_assert_not_reached();
+#if 0
 	  for(cury = cur->y1; cury < cur->y2; cury++)
 	    {
 	      for(curx = cur->x1; curx < cur->x2; curx++)
 		{
-		  guint *ptr2 = (guint *)(mem + (cury * rowstride) + (curx * (depth >> 3)));
-
-		  *ptr2 = (*ptr2 & ~(visual->red_mask|visual->green_mask|visual->blue_mask)) | pixel;
+		  gdk_fb_drawable_set_pixel(drawable, gc, curx, cury, &spot, TRUE);
 		}
 	    }
+#endif
 	  break;
 	}
     }
@@ -430,7 +454,7 @@ gdk_fb_fill_spans(GdkDrawable *drawable,
 		  GdkRectangle *rects, int nrects)
 {
   int i;
-  guint pixel;
+  GdkColor color;
   GdkRegion *real_clip_region, *tmpreg;
   GdkRectangle draw_rect, cursor_rect;
   GdkVisual *visual = gdk_visual_get_system();
@@ -441,12 +465,12 @@ gdk_fb_fill_spans(GdkDrawable *drawable,
   if(GDK_IS_WINDOW(drawable) && GDK_WINDOW_P(drawable)->input_only)
     g_error("Drawing on the evil input-only!");
 
-  if(gc)
-    pixel = GDK_GC_FBDATA(gc)->values.foreground.pixel;
+  if(gc && (GDK_GC_FBDATA(gc)->values_mask | GDK_GC_FOREGROUND))
+    color = GDK_GC_FBDATA(gc)->values.foreground;
   else if(GDK_IS_WINDOW(drawable))
-    pixel = GDK_WINDOW_P(drawable)->bg_color.pixel;
+    color = GDK_WINDOW_P(drawable)->bg_color;
   else
-    pixel = 0;
+    gdk_color_black(GDK_DRAWABLE_P(drawable)->colormap, &color);
 
   real_clip_region = gdk_fb_clip_region(drawable, gc, TRUE);
 
@@ -496,11 +520,14 @@ gdk_fb_fill_spans(GdkDrawable *drawable,
 	  tmpreg = gdk_region_rectangle(&draw_rect);
 	  gdk_region_intersect(tmpreg, real_clip_region);
 	  for(j = 0; j < tmpreg->numRects; j++)
-	    gdk_fb_fill_span(drawable, gc, &tmpreg->rects[j], pixel, visual);
+	    {
+	      cur = tmpreg->rects[j];
+	      gdk_fb_fill_span(drawable, gc, &cur, &color, visual);
+	    }
 	  gdk_region_destroy(tmpreg);
 	  break;
 	case GDK_OVERLAP_RECTANGLE_IN:
-	  gdk_fb_fill_span(drawable, gc, &cur, pixel, visual);
+	  gdk_fb_fill_span(drawable, gc, &cur, &color, visual);
 	  break;
 	default:
 	  break;
@@ -509,6 +536,230 @@ gdk_fb_fill_spans(GdkDrawable *drawable,
 
   gdk_region_destroy(real_clip_region);
   if(handle_cursor)
+    gdk_fb_cursor_unhide();
+}
+
+typedef enum { GPR_USED_BG, GPR_AA_GRAYVAL, GPR_NONE, GPR_ERR_BOUNDS } GetPixelRet;
+static GetPixelRet
+gdk_fb_drawable_get_pixel(GdkDrawable *drawable, GdkGC *gc, int x, int y, GdkColor *spot,
+			  gboolean abs_coords, GdkDrawable *bg_relto, GdkDrawable *bgpm)
+{
+  GetPixelRet retval = GPR_NONE;
+  guchar *mem = GDK_DRAWABLE_FBDATA(drawable)->mem;
+  guint rowstride = GDK_DRAWABLE_FBDATA(drawable)->rowstride;
+
+  if(!abs_coords)
+    {
+      x += GDK_DRAWABLE_FBDATA(drawable)->abs_x;
+      y += GDK_DRAWABLE_FBDATA(drawable)->abs_y;
+    }
+
+  switch(GDK_DRAWABLE_P(drawable)->depth)
+    {
+    case 1:
+      {
+	guchar foo = mem[(x >> 3) + y * rowstride];
+	if(foo & (1 << (x % 8)))
+	  *spot = GDK_GC_FBDATA(gc)->values.foreground;
+	else
+	  {
+	    retval = GPR_USED_BG;
+
+	    if(bgpm)
+	      {
+		int bgx, bgy;
+
+		bgx = (x - GDK_DRAWABLE_FBDATA(bg_relto)->abs_x) % GDK_DRAWABLE_P(bgpm)->width;
+		bgy = (y - GDK_DRAWABLE_FBDATA(bg_relto)->abs_y) % GDK_DRAWABLE_P(bgpm)->height;
+
+		gdk_fb_drawable_get_pixel(bgpm, gc, bgx, bgy, spot, FALSE, NULL, NULL);
+		retval = GPR_USED_BG;
+	      }
+	    else
+	      {
+		*spot = GDK_GC_FBDATA(gc)->values.background;
+	      }
+	  }
+      }
+      break;
+    case 71:
+      if(mem[x + y * rowstride])
+	*spot = GDK_GC_FBDATA(gc)->values.foreground;
+      else
+	*spot = GDK_GC_FBDATA(gc)->values.background;
+      break;
+    case 77:
+      retval = GPR_AA_GRAYVAL;
+      spot->pixel = mem[x + y * rowstride] << 1;
+      spot->red = spot->green = spot->blue = spot->pixel << 8;
+      break;
+    case 78: /* AA mode */
+      retval = GPR_AA_GRAYVAL;
+      spot->pixel = mem[x + y * rowstride];
+      spot->red = spot->green = spot->blue = spot->pixel << 8;
+      break;
+    case 8:
+      spot->pixel = mem[x + y * rowstride];
+      *spot = GDK_DRAWABLE_P(drawable)->colormap->colors[spot->pixel];
+      break;
+    case 16:
+      {
+	guint16 val16 = *((guint16 *)&mem[x*2 + y*rowstride]);
+
+	spot->red = (((1<<gdk_display->modeinfo.red.length) - 1) & (val16 >> gdk_display->modeinfo.red.offset)) << (16 - gdk_display->modeinfo.red.length);
+	spot->green = (((1<<gdk_display->modeinfo.green.length) - 1) & (val16 >> gdk_display->modeinfo.green.offset)) << (16 - gdk_display->modeinfo.green.length);
+	spot->blue = (((1<<gdk_display->modeinfo.blue.length) - 1) & (val16 >> gdk_display->modeinfo.blue.offset)) << (16 - gdk_display->modeinfo.blue.length);
+
+	spot->pixel = val16;
+      }
+      break;
+    case 24:
+      {
+	guchar *smem = &mem[x*3 + y*rowstride];
+	spot->red = smem[gdk_display->red_byte] << 8;
+	spot->green = smem[gdk_display->green_byte] << 8;
+	spot->blue = smem[gdk_display->blue_byte] << 8;
+#if (__BYTE_ORDER == __BIG_ENDIAN)
+	spot->pixel = (smem[0]<<16)|(smem[1]<<8)|smem[2];
+#else
+	spot->pixel = smem[0]|(smem[1]<<8)|(smem[2]<<16);
+#endif
+      }
+      break;
+    case 32:
+      {
+	guchar *smem = &mem[x*4 + y*rowstride];
+	spot->red = smem[gdk_display->red_byte] << 8;
+	spot->green = smem[gdk_display->green_byte] << 8;
+	spot->blue = smem[gdk_display->blue_byte] << 8;
+	spot->pixel = *(guint32 *)smem;
+      }
+      break;
+    }
+
+  return retval;
+}
+
+static void
+gdk_fb_drawable_set_pixel(GdkDrawable *drawable, GdkGC *gc, int x, int y, GdkColor *spot,
+			  gboolean abs_coords)
+{
+  guchar *mem = GDK_DRAWABLE_FBDATA(drawable)->mem;
+  guint rowstride = GDK_DRAWABLE_FBDATA(drawable)->rowstride;
+
+  if(!abs_coords)
+    {
+      x += GDK_DRAWABLE_FBDATA(drawable)->abs_x;
+      y += GDK_DRAWABLE_FBDATA(drawable)->abs_y;
+    }
+
+  switch(GDK_DRAWABLE_P(drawable)->depth)
+    {
+    case 1:
+      {
+	guchar *foo = mem + (y*rowstride) + (x >> 3);
+
+	if(spot->pixel)
+	  *foo |= (1 << (x % 8));
+	else
+	  *foo &= ~(1 << (x % 8));
+      }
+      break;
+    case 8:
+      mem[x + y*rowstride] = spot->pixel;
+      break;
+    case 16:
+      {
+	guint16 *p16 = (guint16 *)&mem[x*2 + y*rowstride];
+	*p16 = spot->pixel;
+      }
+      break;
+    case 24:
+      {
+	guchar *smem = &mem[x*3 + y*rowstride];
+	smem[gdk_display->red_byte] = spot->red >> 8;
+	smem[gdk_display->green_byte] = spot->green >> 8;
+	smem[gdk_display->blue_byte] = spot->blue >> 8;
+      };
+      break;
+    case 32:
+      {
+	guint32 *smem = (guint32 *)&mem[x*4 + y*rowstride];
+	*smem = spot->pixel;
+      }
+      break;
+    default:
+      g_assert_not_reached();
+      break;
+    }
+
+}
+
+void
+gdk_fb_drawing_context_init(GdkFBDrawingContext *dc,
+			    GdkDrawable *drawable,
+			    GdkGC *gc,
+			    gboolean draw_bg,
+			    gboolean do_clipping)
+{
+  dc->mem = GDK_DRAWABLE_FBDATA(drawable)->mem;
+  dc->rowstride = GDK_DRAWABLE_FBDATA(drawable)->rowstride;
+  dc->handle_cursor = FALSE;
+  dc->bgpm = NULL;
+  dc->bg_relto = drawable;
+  dc->draw_bg = draw_bg;
+
+  if(GDK_IS_WINDOW(drawable))
+    {
+      dc->bgpm = GDK_WINDOW_P(drawable)->bg_pixmap;
+      if(dc->bgpm == GDK_PARENT_RELATIVE_BG)
+	{
+	  for(; dc->bgpm == GDK_PARENT_RELATIVE_BG && dc->bg_relto; dc->bg_relto = GDK_WINDOW_P(dc->bg_relto)->parent)
+	    dc->bgpm = GDK_WINDOW_P(dc->bg_relto)->bg_pixmap;
+	}
+
+      if(dc->bgpm == GDK_NO_BG)
+	dc->bgpm = NULL;
+    }
+  dc->clipxoff = - GDK_DRAWABLE_FBDATA(drawable)->abs_x;
+  dc->clipyoff = - GDK_DRAWABLE_FBDATA(drawable)->abs_y;
+
+  dc->real_clip_region = gdk_fb_clip_region(drawable, gc, do_clipping);
+
+  if(gc)
+    {
+      dc->clipxoff -= GDK_GC_FBDATA(gc)->values.clip_x_origin;
+      dc->clipyoff -= GDK_GC_FBDATA(gc)->values.clip_y_origin;
+
+      if(GDK_GC_FBDATA(gc)->values.clip_mask)
+	{
+	  dc->clipmem = GDK_DRAWABLE_FBDATA(GDK_GC_FBDATA(gc)->values.clip_mask)->mem;
+	  dc->clip_rowstride = GDK_DRAWABLE_FBDATA(GDK_GC_FBDATA(gc)->values.clip_mask)->rowstride;
+	}
+    }
+
+  if(do_clipping)
+    {
+      GdkRectangle cursor_rect;
+
+      gdk_fb_get_cursor_rect(&cursor_rect);
+
+      if(GDK_DRAWABLE_FBDATA(drawable)->mem == GDK_DRAWABLE_FBDATA(gdk_parent_root)->mem
+	 && cursor_rect.x >= 0
+	 && gdk_region_rect_in(dc->real_clip_region, &cursor_rect) != GDK_OVERLAP_RECTANGLE_OUT)
+	{
+	  dc->handle_cursor = TRUE;
+	  gdk_fb_cursor_hide();
+	}
+    }
+}
+
+void
+gdk_fb_drawing_context_finalize(GdkFBDrawingContext *dc)
+{
+  gdk_region_destroy(dc->real_clip_region);
+
+  if(dc->handle_cursor)
     gdk_fb_cursor_unhide();
 }
 
@@ -525,57 +776,58 @@ gdk_fb_draw_drawable_2 (GdkDrawable *drawable,
 			gboolean     draw_bg,
 			gboolean     do_clipping)
 {
-  GdkRegion *real_clip_region, *tmpreg;
-  GdkRectangle rect, cursor_rect;
-  int i;
-  int src_x_off, src_y_off;
-  int clipxoff, clipyoff;
-  guchar *mem = GDK_DRAWABLE_FBDATA(drawable)->mem, *srcmem = GDK_DRAWABLE_FBDATA(src)->mem;
-  guchar *clipmem;
-  guint rowstride = GDK_DRAWABLE_FBDATA(drawable)->rowstride, src_rowstride = GDK_DRAWABLE_FBDATA(src)->rowstride;
-  guint clip_rowstride;
-  GdkDrawableFBData *fbd;
-  gboolean handle_cursor = FALSE;
-  GdkPixmap *bgpm = NULL;
-  GdkWindow *bg_relto = drawable;
+  GdkFBDrawingContext *dc, dc_data;
+  dc = &dc_data;
 
-  if(GDK_IS_WINDOW(drawable) && !GDK_WINDOW_P(drawable)->mapped)
-    return;
-  if(GDK_IS_WINDOW(drawable) && GDK_WINDOW_P(drawable)->input_only)
-    g_error("Drawing on the evil input-only!");
+  gdk_fb_drawing_context_init(dc, drawable, gc, draw_bg, do_clipping);
+  gdk_fb_draw_drawable_3(drawable, gc, src, dc, xsrc, ysrc, xdest, ydest, width, height);
+  gdk_fb_drawing_context_finalize(dc);
+}
+
+void
+gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
+			GdkGC       *gc,
+			GdkPixmap   *src,
+			GdkFBDrawingContext *dc,
+			gint         xsrc,
+			gint         ysrc,
+			gint         xdest,
+			gint         ydest,
+			gint         width,
+			gint         height)
+{
+  GdkRectangle rect;
+  guchar *srcmem = GDK_DRAWABLE_FBDATA(src)->mem;
+  int src_x_off, src_y_off;
+  GdkRegion *tmpreg, *real_clip_region;
+  int i;
 
   if(GDK_IS_WINDOW(drawable))
     {
-      bgpm = GDK_WINDOW_P(drawable)->bg_pixmap;
-      if(bgpm == GDK_PARENT_RELATIVE_BG)
-	{
-	  for(; bgpm == GDK_PARENT_RELATIVE_BG && bg_relto; bg_relto = GDK_WINDOW_P(bg_relto)->parent)
-	    bgpm = GDK_WINDOW_P(bg_relto)->bg_pixmap;
-	}
-
-      if(bgpm == GDK_NO_BG)
-	bgpm = NULL;
-
-      if(bgpm)
-	g_assert(GDK_DRAWABLE_P(bgpm)->depth == 8);
+      if(!GDK_WINDOW_P(drawable)->mapped)
+	return;
+      if(GDK_WINDOW_P(drawable)->input_only)
+	g_error("Drawing on the evil input-only!");
     }
 
   if(drawable == src)
     {
       GdkDrawableFBData *fbd = GDK_DRAWABLE_FBDATA(src);
+
       /* One lame hack deserves another ;-) */
       srcmem = g_alloca(fbd->rowstride * fbd->lim_y);
-      memcpy(srcmem, mem, fbd->rowstride * fbd->lim_y);
+      memcpy(srcmem, dc->mem, fbd->rowstride * fbd->lim_y);
     }
 
-  real_clip_region = gdk_fb_clip_region(drawable, gc, do_clipping);
+  /* Do some magic to avoid creating extra regions unnecessarily */
+  tmpreg = dc->real_clip_region;
+
   rect.x = xdest + GDK_DRAWABLE_FBDATA(drawable)->abs_x;
   rect.y = ydest + GDK_DRAWABLE_FBDATA(drawable)->abs_y;
   rect.width = width;
   rect.height = height;
-  tmpreg = gdk_region_rectangle(&rect);
+  real_clip_region = gdk_region_rectangle(&rect);
   gdk_region_intersect(real_clip_region, tmpreg);
-  gdk_region_destroy(tmpreg);
 
   rect.x = xdest + GDK_DRAWABLE_FBDATA(drawable)->abs_x;
   rect.y = ydest + GDK_DRAWABLE_FBDATA(drawable)->abs_y;
@@ -589,30 +841,6 @@ gdk_fb_draw_drawable_2 (GdkDrawable *drawable,
 
   src_x_off = (GDK_DRAWABLE_FBDATA(src)->abs_x + xsrc) - (GDK_DRAWABLE_FBDATA(drawable)->abs_x + xdest);
   src_y_off = (GDK_DRAWABLE_FBDATA(src)->abs_y + ysrc) - (GDK_DRAWABLE_FBDATA(drawable)->abs_y + ydest);
-  clipxoff = - GDK_DRAWABLE_FBDATA(drawable)->abs_x;
-  clipyoff = - GDK_DRAWABLE_FBDATA(drawable)->abs_y;
-  if(gc)
-    {
-      clipxoff -= GDK_GC_FBDATA(gc)->values.clip_x_origin;
-      clipyoff -= GDK_GC_FBDATA(gc)->values.clip_y_origin;
-
-      if(GDK_GC_FBDATA(gc)->values.clip_mask)
-	{
-	  fbd = GDK_DRAWABLE_FBDATA(GDK_GC_FBDATA(gc)->values.clip_mask);
-	  clipmem = GDK_DRAWABLE_FBDATA(GDK_GC_FBDATA(gc)->values.clip_mask)->mem;
-	  clip_rowstride = GDK_DRAWABLE_FBDATA(GDK_GC_FBDATA(gc)->values.clip_mask)->rowstride;
-	}
-    }
-
-  gdk_fb_get_cursor_rect(&cursor_rect);
-  if(do_clipping
-     && GDK_DRAWABLE_FBDATA(drawable)->mem == GDK_DRAWABLE_FBDATA(gdk_parent_root)->mem
-     && cursor_rect.x >= 0
-     && gdk_region_rect_in(real_clip_region, &cursor_rect) != GDK_OVERLAP_RECTANGLE_OUT)
-    {
-      handle_cursor = TRUE;
-      gdk_fb_cursor_hide();
-    }
 
   for(i = 0; i < real_clip_region->numRects; i++)
     {
@@ -620,16 +848,19 @@ gdk_fb_draw_drawable_2 (GdkDrawable *drawable,
       int cur_y;
 
       if(GDK_DRAWABLE_P(src)->depth == GDK_DRAWABLE_P(drawable)->depth
-	 && GDK_DRAWABLE_P(src)->depth > 1
+	 && GDK_DRAWABLE_P(src)->depth >= 8
+	 && GDK_DRAWABLE_P(src)->depth <= 32
 	 && (!gc || !GDK_GC_FBDATA(gc)->values.clip_mask))
 	{
 	  guint depth = GDK_DRAWABLE_P(src)->depth;
+	  guint src_rowstride = GDK_DRAWABLE_FBDATA(src)->rowstride;
+	  int linelen = (cur->x2 - cur->x1)*(depth>>3);
 
 	  for(cur_y = cur->y1; cur_y < cur->y2; cur_y++)
 	    {
-	      memcpy(mem + (cur_y * rowstride) + cur->x1*(depth>>3),
+	      memcpy(dc->mem + (cur_y * dc->rowstride) + cur->x1*(depth>>3),
 		     srcmem + ((cur_y + src_y_off)*src_rowstride) + (cur->x1 + src_x_off)*(depth>>3),
-		     (cur->x2 - cur->x1)*(depth>>3));
+		     linelen);
 	    }
 	}
       else
@@ -640,96 +871,118 @@ gdk_fb_draw_drawable_2 (GdkDrawable *drawable,
 	    {
 	      for(cur_x = cur->x1; cur_x < cur->x2; cur_x++)
 		{
-		  guint pixel;
-		  guint16 *p16;
-		  guint32 *p32;
+		  GdkColor spot;
 
 		  if(gc && GDK_GC_FBDATA(gc)->values.clip_mask)
 		    {
-		      int maskx = cur_x+clipxoff, masky = cur_y + clipyoff;
+		      int maskx = cur_x+dc->clipxoff, masky = cur_y + dc->clipyoff;
 		      guchar foo;
 
-		      if(maskx < 0 || masky < 0)
-			continue;
-
-		      foo = clipmem[masky*clip_rowstride + (maskx >> 3)];
+		      foo = dc->clipmem[masky*dc->clip_rowstride + (maskx >> 3)];
 
 		      if(!(foo & (1 << (maskx % 8))))
 			continue;
 		    }
 
-		  switch(GDK_DRAWABLE_P(src)->depth)
+		  switch(gdk_fb_drawable_get_pixel(src, gc, cur_x + src_x_off, cur_y + src_y_off, &spot, TRUE, NULL, NULL))
 		    {
-		    case 1:
+		    case GPR_AA_GRAYVAL:
 		      {
-			guchar foo = srcmem[((cur_x + src_x_off) >> 3) + ((cur_y + src_y_off)*src_rowstride)];
+			GdkColor realspot, fg;
+			guint graylevel = spot.pixel;
+			gint tmp;
 
-			if(foo & (1 << ((cur_x + src_x_off) % 8))) {
-			  pixel = GDK_GC_FBDATA(gc)->values.foreground.pixel;
-			} else if(draw_bg) {
-			  if(bgpm)
-			    {
-			      int bgx, bgy;
-
-			      bgx = (cur_x - GDK_DRAWABLE_FBDATA(bg_relto)->abs_x) % GDK_DRAWABLE_P(bgpm)->width;
-			      bgy = (cur_y - GDK_DRAWABLE_FBDATA(bg_relto)->abs_y) % GDK_DRAWABLE_P(bgpm)->height;
-
-			      pixel = GDK_DRAWABLE_FBDATA(bgpm)->mem[bgx + bgy * GDK_DRAWABLE_FBDATA(bgpm)->rowstride];
-			    }
-			  else
-			    pixel = GDK_GC_FBDATA(gc)->values.background.pixel;
-			} else
-			  continue;
-		      }
-		      break;
-		    case 8:
-		      pixel = srcmem[(cur_x + src_x_off) + ((cur_y + src_y_off)*src_rowstride)];
-		      break;
-		    case 16:
-		      pixel = *(guint16 *)(srcmem + (cur_x + src_x_off)*2 + ((cur_y + src_y_off)*src_rowstride));
-		      break;
-		    case 24:
-		      pixel = 0x00FFFFFF & *(guint32 *)(srcmem + (cur_x + src_x_off)*3 + ((cur_y + src_y_off)*src_rowstride));
-		      break;
-		    case 32:
-		      pixel = *(guint32 *)(srcmem + (cur_x + src_x_off)*4 + ((cur_y + src_y_off)*src_rowstride));
-		      break;
-		    default:
-		      g_assert_not_reached();
-		      break;
-		    }
-
-		  switch(GDK_DRAWABLE_P(drawable)->depth)
-		    {
-		    case 1:
-		      {
-			guchar *foo = mem + (cur_y*src_rowstride) + (cur_x >> 3);
-
-			if(pixel == GDK_GC_FBDATA(gc)->values.foreground.pixel)
-			  *foo |= (1 << (cur_x % 8));
+			if(GDK_DRAWABLE_P(drawable)->depth == 1)
+			  {
+			    if(spot.pixel > 192)
+			      spot = GDK_GC_FBDATA(gc)->values.foreground;
+			    else
+			     spot = GDK_GC_FBDATA(gc)->values.background;
+			    break;
+			  }
 			else
-			  *foo &= ~(1 << (cur_x % 8));
+			  {
+			    if(graylevel >= 254)
+			      {
+				spot = GDK_GC_FBDATA(gc)->values.foreground;
+			      }
+			    else if(graylevel <= 2)
+			      {
+				if(!dc->draw_bg)
+				  continue;
+
+				spot = GDK_GC_FBDATA(gc)->values.background;
+			      }
+			    else
+			      {
+				switch(gdk_fb_drawable_get_pixel(drawable, gc, cur_x, cur_y, &realspot, TRUE, dc->bg_relto, dc->bgpm))
+				  {
+				  case GPR_NONE:
+				  case GPR_USED_BG:
+				    break;
+				  default:
+				    g_assert_not_reached();
+				    break;
+				  }
+
+				fg = GDK_GC_FBDATA(gc)->values.foreground;
+				/* Now figure out what 'spot' should actually look like */
+				fg.red >>= 8;
+				fg.green >>= 8;
+				fg.blue >>= 8;
+				realspot.red >>= 8;
+				realspot.green >>= 8;
+				realspot.blue >>= 8;
+
+				tmp = (fg.red - realspot.red) * graylevel;
+				spot.red = realspot.red + ((tmp + (tmp >> 8) + 0x80) >> 8);
+				spot.red <<= 8;
+
+				tmp = (fg.green - realspot.green) * graylevel;
+				spot.green = realspot.green + ((tmp + (tmp >> 8) + 0x80) >> 8);
+				spot.green <<= 8;
+
+				tmp = (fg.blue - realspot.blue) * graylevel;
+				spot.blue = realspot.blue + ((tmp + (tmp >> 8) + 0x80) >> 8);
+				spot.blue <<= 8;
+
+				/* Now find the pixel for this thingie */
+				switch(GDK_DRAWABLE_P(drawable)->depth)
+				  {
+				  case 8:
+				    if(!gdk_colormap_alloc_color(GDK_DRAWABLE_P(drawable)->colormap, &spot, FALSE, TRUE))
+				      {
+					g_error("Can't allocate AA color!");
+				      }
+				    break;
+				  case 16:
+				    spot.pixel = (spot.red >> (16 - gdk_display->modeinfo.red.length)) << gdk_display->modeinfo.red.offset;
+				    spot.pixel |= (spot.green >> (16 - gdk_display->modeinfo.green.length)) << gdk_display->modeinfo.green.offset;
+				    spot.pixel |= (spot.blue >> (16 - gdk_display->modeinfo.blue.length)) << gdk_display->modeinfo.blue.offset;
+				    break;
+				  case 24:
+				  case 32:
+				    spot.pixel = ((spot.red & 0xFF00) << (gdk_display->modeinfo.red.offset - 8))
+				      | ((spot.green & 0xFF00) << (gdk_display->modeinfo.green.offset - 8))
+				      | ((spot.blue & 0xFF00) << (gdk_display->modeinfo.blue.offset - 8));
+				    break;
+				  }
+			      }
+			  }
 		      }
 		      break;
-		    case 8:
-		      mem[cur_x + cur_y*rowstride] = pixel;
+		    case GPR_USED_BG:
+		      if(!dc->draw_bg)
+			continue;
 		      break;
-		    case 16:
-		      p16 = (guint16 *)&mem[cur_x*2 + cur_y*rowstride];
-		      *p16 = pixel;
-		      break;
-		    case 24:
-		      p32 = (guint32 *)&mem[cur_x*3 + cur_y*rowstride];
-		      *p32 = (*p32 & 0xFF000000) | pixel;
-		      break;
-		    case 32:
-		      p32 = (guint32 *)&mem[cur_x*4 + cur_y*rowstride];
-		      *p32 = pixel;
+		    case GPR_NONE:
 		      break;
 		    default:
 		      g_assert_not_reached();
 		      break;
 		    }
+
+		  gdk_fb_drawable_set_pixel(drawable, gc, cur_x, cur_y, &spot, GDK_DRAWABLE_P(src)->depth);
 		}
 	    }
 	}
@@ -737,9 +990,6 @@ gdk_fb_draw_drawable_2 (GdkDrawable *drawable,
 
  out:
   gdk_region_destroy(real_clip_region);
-
-  if(handle_cursor)
-    gdk_fb_cursor_unhide();
 }
 
 void
@@ -765,33 +1015,7 @@ gdk_fb_draw_text(GdkDrawable    *drawable,
 		 const gchar    *text,
 		 gint            text_length)
 {
-  GLYPH *g;
-  GdkDrawablePrivate tmp_pixmap;
-  GdkDrawableFBData fbd;
-
-  if(GDK_IS_WINDOW(drawable) && !GDK_WINDOW_P(drawable)->mapped)
-    return;
-
-  y -= font->ascent; /* y is relative to baseline, we want it relative to top left corner */
-
-  g = T1_SetString(GDK_FONT_FB(font)->t1_font_id, (char *)text, text_length, 0, T1_KERNING, GDK_FONT_FB(font)->size,
-		   NULL);
-  g_assert(g);
-
-  tmp_pixmap.window_type = GDK_DRAWABLE_PIXMAP;
-  tmp_pixmap.width = (g->metrics.rightSideBearing - g->metrics.leftSideBearing);
-  tmp_pixmap.height = (g->metrics.ascent - g->metrics.descent);
-  tmp_pixmap.depth = 1;
-
-  fbd.mem = g->bits;
-  fbd.abs_x = fbd.abs_y = fbd.llim_x = fbd.llim_y = 0;
-  fbd.lim_x = tmp_pixmap.width;
-  fbd.lim_y = tmp_pixmap.height;
-  fbd.rowstride = (tmp_pixmap.width + 7) / 8;
-  tmp_pixmap.klass_data = &fbd;
-  tmp_pixmap.klass = &_gdk_fb_drawable_class;
-
-  gdk_fb_draw_drawable_2(drawable, gc, (GdkPixmap *)&tmp_pixmap, 0, 0, x, y, tmp_pixmap.width, tmp_pixmap.height, FALSE, TRUE);
+  g_warning("gdk_fb_draw_text NYI");
 }
 
 static void
@@ -803,19 +1027,7 @@ gdk_fb_draw_text_wc (GdkDrawable    *drawable,
 		     const GdkWChar *text,
 		     gint	      text_length)
 {
-  char *realbuf;
-  int i;
-
-  if(GDK_IS_WINDOW(drawable) && (!GDK_WINDOW_P(drawable)->mapped || GDK_WINDOW_P(drawable)->input_only))
-    return;
-
-  /* A hack, a hack, a pretty little hack */
-  realbuf = alloca(text_length + 1);
-  for(i = 0; i < text_length; i++)
-    realbuf[i] = text[i];
-  realbuf[i] = 0;
-
-  gdk_fb_draw_text(drawable, font, gc, x, y, realbuf, text_length);
+  g_warning("gdk_fb_draw_text_wc NYI");
 }
 
 void
@@ -831,17 +1043,6 @@ gdk_fb_draw_rectangle (GdkDrawable    *drawable,
 
   if(filled)
     {
-#if 0
-      static volatile int print_rect = 0;
-
-      if(print_rect)
-	{
-	  fprintf(debug_out, "[%d, %d] +[%d, %d]\n", x, y, width, height);
-	  if(y < 0)
-	    G_BREAKPOINT();
-	}
-#endif
-
       rect.x = x;
       rect.y = y;
       rect.width = width;
@@ -868,7 +1069,7 @@ static void gdk_fb_draw_points    (GdkDrawable    *drawable,
 				   GdkPoint       *points,
 				   gint            npoints)
 {
-  GdkRectangle *rects = alloca(npoints * sizeof(GdkRectangle));
+  GdkRectangle *rects = g_alloca(npoints * sizeof(GdkRectangle));
   int i;
 
   for(i = 0; i < npoints; i++)
@@ -916,7 +1117,7 @@ static void gdk_fb_draw_polygon   (GdkDrawable    *drawable,
     miFillPolygon(drawable, gc, 0, 0, npoints, points);
   else
     {
-      GdkPoint *realpts = alloca(sizeof(GdkPoint) * (npoints + 1));
+      GdkPoint *realpts = g_alloca(sizeof(GdkPoint) * (npoints + 1));
 
       memcpy(realpts, points, sizeof(GdkPoint) * npoints);
       realpts[npoints] = points[0];
@@ -957,5 +1158,112 @@ static void gdk_fb_draw_segments  (GdkDrawable    *drawable,
 void
 gdk_fb_drawable_clear(GdkDrawable *d)
 {
+  extern void
+    _gdk_windowing_window_clear_area (GdkWindow *window,
+				      gint       x,
+				      gint       y,
+				      gint       width,
+				      gint       height);
+
   _gdk_windowing_window_clear_area(d, 0, 0, GDK_DRAWABLE_P(d)->width, GDK_DRAWABLE_P(d)->height);
+}
+
+extern FT_Library gdk_fb_ft_lib;
+
+extern void pango_fb_font_set_size(PangoFont *font);
+
+static void gdk_fb_draw_glyphs(GdkDrawable      *drawable,
+			       GdkGC	        *gc,
+			       PangoFont        *font,
+			       gint              x,
+			       gint              y,
+			       PangoGlyphString *glyphs)
+{
+  int i;
+  GdkPixmapFBData fbd;
+  GdkDrawablePrivate tmp_foo;
+  FT_Face ftf;
+  int xpos;
+  GdkFBDrawingContext fbdc;
+
+  g_return_if_fail(font);
+
+  gdk_fb_drawing_context_init(&fbdc, drawable, gc, FALSE, TRUE);
+
+  ftf = PANGO_FB_FONT(font)->ftf;
+
+  /* Fake its existence as a pixmap */
+  memset(&tmp_foo, 0, sizeof(tmp_foo));
+  memset(&fbd, 0, sizeof(fbd));
+  tmp_foo.klass = &_gdk_fb_drawable_class;
+  tmp_foo.klass_data = &fbd;
+  tmp_foo.window_type = GDK_DRAWABLE_PIXMAP;
+
+  pango_fb_font_set_size(font);
+  for(i = xpos = 0; i < glyphs->num_glyphs; i++)
+    {
+      FT_GlyphSlot g;
+      FT_Bitmap *renderme;
+      int this_wid;
+
+      FT_Load_Glyph(ftf, glyphs->glyphs[i].glyph, FT_LOAD_DEFAULT);
+      g = ftf->glyph;
+
+      if(g->format != ft_glyph_format_bitmap)
+	{
+	  FT_BitmapGlyph bgy;
+	  int bdepth;
+#ifdef USE_AA
+#ifdef USE_FTGRAYS
+	  bdepth = 256;
+#else
+	  bdepth = 128;
+#endif
+#else
+	  bdepth = 0;
+#endif
+
+	  if(FT_Get_Glyph_Bitmap(ftf, glyphs->glyphs[i].glyph, 0, bdepth, NULL, &bgy))
+	    continue;
+
+	  renderme = &bgy->bitmap;
+	}
+      else
+	renderme = &g->bitmap;
+
+      fbd.drawable_data.mem = renderme->buffer;
+      fbd.drawable_data.rowstride = renderme->pitch;
+      tmp_foo.width = fbd.drawable_data.lim_x = renderme->width;
+      tmp_foo.height = fbd.drawable_data.lim_y = renderme->rows;
+
+      switch(renderme->pixel_mode)
+	{
+	case ft_pixel_mode_mono:
+	  tmp_foo.depth = 1;
+	  break;
+	case ft_pixel_mode_grays:
+#if defined(USE_FTGRAYS)
+	  tmp_foo.depth = 78;
+#else
+	  tmp_foo.depth = 77;
+#endif
+	  break;
+	default:
+	  g_assert_not_reached();
+	  break;
+	}
+
+      this_wid = (xpos + glyphs->glyphs[i].geometry.width)/PANGO_SCALE;
+      gdk_fb_draw_drawable_3(drawable, gc, (GdkDrawable *)&tmp_foo,
+			     &fbdc,
+			     0, 0,
+			     x + (xpos + glyphs->glyphs[i].geometry.x_offset)/PANGO_SCALE,
+			     y + glyphs->glyphs[i].geometry.y_offset / PANGO_SCALE
+			     + ((-ftf->glyph->metrics.horiBearingY) >> 6),
+			     this_wid, renderme->rows);
+
+      xpos += glyphs->glyphs[i].geometry.width;
+    }
+
+  gdk_fb_drawing_context_finalize(&fbdc);
 }

@@ -116,7 +116,11 @@ gdk_window_init (void)
   private->y = 0;
 
   GDK_DRAWABLE_FBDATA(private)->mem = gdk_display->fbmem;
+#if 0
   GDK_DRAWABLE_FBDATA(private)->rowstride = gdk_display->modeinfo.xres * (gdk_display->modeinfo.bits_per_pixel >> 3);
+#else
+  GDK_DRAWABLE_FBDATA(private)->rowstride = gdk_display->sinfo.line_length;
+#endif
   GDK_DRAWABLE_FBDATA(private)->lim_x = gdk_display->modeinfo.xres;
   GDK_DRAWABLE_FBDATA(private)->lim_y = gdk_display->modeinfo.yres;
   GDK_WINDOW_FBDATA(private)->event_mask = GDK_EXPOSURE_MASK;
@@ -177,7 +181,7 @@ gdk_window_new (GdkWindow     *parent,
   private->drawable.height = (attributes->height > 1) ? (attributes->height) : (1);
   private->drawable.window_type = attributes->window_type;
   GDK_DRAWABLE_FBDATA(private)->mem = gdk_display->fbmem;
-  GDK_DRAWABLE_FBDATA(private)->rowstride = gdk_display->modeinfo.xres * (gdk_display->modeinfo.bits_per_pixel >> 3);
+  GDK_DRAWABLE_FBDATA(private)->rowstride = GDK_DRAWABLE_FBDATA(gdk_parent_root)->rowstride;
   gdk_window_move_resize (window, x, y,
 			  private->drawable.width, private->drawable.height);
 

@@ -9,23 +9,22 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	@GTK_XIM_FLAGS@		\
 	@GTK_LOCALE_FLAGS@	\
 	@GLIB_CFLAGS@		\
+	@PANGO_CFLAGS@		\
 @STRIP_END@
 
 LDFLAGS = @STRIP_BEGIN@ \
 	@GLIB_LIBS@	\
-	-L/gnome2/lib   \
-	-lt1		\
+	@PANGO_CFLAGS@	\
+	-lfreetype	\
 	-lm		\
 @STRIP_END@
 
-if USE_LINUX_FB
+noinst_LTLIBRARIES = libgdk-linux-fb.la
+noinst_PROGRAMS=#test-fb
 
-lib_LTLIBRARIES = libgdk-fb.la
-noinst_PROGRAMS=test-fb
+#test_fb_LDFLAGS=../libgdk.la libgdk-linux-fb.la
 
-test_fb_LDFLAGS=../libgdk.la libgdk-fb.la
-
-libgdk_fb_la_SOURCES =    	\
+libgdk_linux_fb_la_SOURCES =    	\
 	gdkcolor-fb.c	   	\
 	gdkcursor-fb.c	   	\
 	gdkdnd-fb.c	   	\
@@ -57,10 +56,6 @@ libgdk_fb_la_SOURCES =    	\
 	miwideline.c		\
 	mizerclip.c		\
 	mizerline.c		\
+	mispans.c		\
+	gdkpango-fb.c
 	mispans.c
-else
-lib_LTLIBRARIES =
-noinst_PROGRAMS=
-
-endif
-

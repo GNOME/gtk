@@ -135,7 +135,6 @@ gdk_event_queue_remove_link (GList *node)
     node->next->prev = node->prev;
   else
     gdk_queued_tail = node->prev;
-  
 }
 
 /*************************************************************

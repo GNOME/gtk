@@ -342,8 +342,8 @@ struct _GdkEventSelection
   GdkAtom selection;
   GdkAtom target;
   GdkAtom property;
-  guint32 requestor;
   guint32 time;
+  GdkNativeWindow requestor;
 };
 
 /* This event type will be used pretty rarely. It only is important

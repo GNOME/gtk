@@ -375,7 +375,6 @@ gdk_draw_image (GdkDrawable *drawable,
   if (height == -1)
     height = image->height;
 
-
   if (GDK_IS_WINDOW (drawable))
     _gdk_window_draw_image (drawable, gc, image, xsrc, ysrc,
 			    xdest, ydest, width, height);

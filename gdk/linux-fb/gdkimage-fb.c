@@ -26,6 +26,10 @@
 
 #include <config.h>
 
+#include <endian.h>
+#ifndef __BYTE_ORDER
+#error "endian.h needs to #define __BYTE_ORDER"
+#endif
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -111,7 +115,7 @@ gdk_image_new (GdkImageType  type,
     {
       image->byte_order = 0;
       image->mem = g_malloc(width * height * (image->depth >> 3));
-      image->bpp = image->depth;
+      image->bpp = image->depth/8;
       image->bpl = (width * image->depth + 7)/8;
     }
 
@@ -128,7 +132,7 @@ gdk_image_get (GdkWindow *window,
   GdkImage *image;
   GdkImagePrivateFB *private;
   gint bits_per_pixel = GDK_DRAWABLE_P(gdk_parent_root)->depth;
-  GdkDrawableFBData fbd;
+  GdkPixmapFBData fbd;
   GdkDrawablePrivate tmp_foo;
 
   g_return_val_if_fail (window != NULL, NULL);
@@ -157,7 +161,7 @@ gdk_image_get (GdkWindow *window,
   else
     image->bpp = 4;
   image->byte_order = 1;
-  image->bpl = (image->width * image->bpp + 7)/8;
+  image->bpl = (image->width * image->depth + 7)/8;
   image->mem = g_malloc(image->bpl * image->height);
   
   /* Fake its existence as a pixmap */
@@ -165,11 +169,12 @@ gdk_image_get (GdkWindow *window,
   memset(&fbd, 0, sizeof(fbd));
   tmp_foo.klass = &_gdk_fb_drawable_class;
   tmp_foo.klass_data = &fbd;
-  fbd.mem = image->mem;
-  fbd.rowstride = image->bpl;
-  tmp_foo.width = fbd.lim_x = image->width;
-  tmp_foo.height = fbd.lim_y = image->height;
+  fbd.drawable_data.mem = image->mem;
+  fbd.drawable_data.rowstride = image->bpl;
+  tmp_foo.width = fbd.drawable_data.lim_x = image->width;
+  tmp_foo.height = fbd.drawable_data.lim_y = image->height;
   tmp_foo.depth = image->depth;
+  tmp_foo.window_type = GDK_DRAWABLE_PIXMAP;
 
   gdk_fb_draw_drawable((GdkPixmap *)&tmp_foo, NULL, window, x, y, 0, 0, width, height);
 
@@ -187,9 +192,24 @@ gdk_image_get_pixel (GdkImage *image,
 
   private = (GdkImagePrivateFB *) image;
 
-  g_assert(image->depth == 8);
+  switch(image->depth)
+    {
+    case 8:
+      return ((guchar *)image->mem)[x + y * image->bpl];
+      break;
+    case 16:
+      return *((guint16 *)&((guchar *)image->mem)[x*2 + y*image->bpl]);
+      break;
+    case 24:
+    case 32:
+      {
+	guchar *smem = &(((guchar *)image->mem)[x*image->bpp + y*image->bpl]);
+	return smem[0]|(smem[1]<<8)|(smem[2]<<16);
+      }
+      break;
+    }
 
-  return ((guchar *)image->mem)[x + y * image->bpl];
+  return 0;
 }
 
 void
@@ -198,14 +218,39 @@ gdk_image_put_pixel (GdkImage *image,
 		     gint y,
 		     guint32 pixel)
 {
-  GdkImagePrivateFB *private;
+  guchar *ptr = image->mem;
 
   g_return_if_fail (image != NULL);
 
-  private = (GdkImagePrivateFB *) image;
-  g_assert(image->depth == 8);
-
-  ((guchar *)image->mem)[x + y * image->bpl] = pixel;
+  switch(image->depth)
+    {
+    case 8:
+      ptr[x + y * image->bpl] = pixel;
+      break;
+    case 16:
+      {
+	guint16 *p16 = (guint16 *)&ptr[x*2 + y*image->bpl];
+	*p16 = pixel;
+      }
+      break;
+    case 24:
+      {
+	guchar *smem = &ptr[x*3 + y*image->bpl];
+	smem[0] = (pixel & 0xFF);
+	smem[1] = (pixel & 0xFF00) >> 8;
+	smem[2] = (pixel & 0xFF0000) >> 16;
+      }
+      break;
+    case 32:
+      {
+	guint32 *smem = (guint32 *)&ptr[x*4 + y*image->bpl];
+	*smem = pixel;
+      }
+      break;
+    default:
+      g_assert_not_reached();
+      break;
+    }
 }
 
 static void
@@ -234,7 +279,7 @@ gdk_image_put_normal (GdkImage    *image,
 		      gint         height)
 {
   GdkImagePrivateFB *image_private;
-  GdkDrawableFBData fbd;
+  GdkPixmapFBData fbd;
   GdkDrawablePrivate tmp_foo;
 
   g_return_if_fail (drawable != NULL);
@@ -253,11 +298,12 @@ gdk_image_put_normal (GdkImage    *image,
   memset(&fbd, 0, sizeof(fbd));
   tmp_foo.klass = &_gdk_fb_drawable_class;
   tmp_foo.klass_data = &fbd;
-  fbd.mem = image->mem;
-  fbd.rowstride = image->bpl;
-  tmp_foo.width = fbd.lim_x = image->width;
-  tmp_foo.height = fbd.lim_y = image->height;
+  fbd.drawable_data.mem = image->mem;
+  fbd.drawable_data.rowstride = image->bpl;
+  tmp_foo.width = fbd.drawable_data.lim_x = image->width;
+  tmp_foo.height = fbd.drawable_data.lim_y = image->height;
   tmp_foo.depth = image->depth;
+  tmp_foo.window_type = GDK_DRAWABLE_PIXMAP;
 
   gdk_fb_draw_drawable(drawable, gc, (GdkPixmap *)&tmp_foo, xsrc, ysrc, xdest, ydest, width, height);
 }
