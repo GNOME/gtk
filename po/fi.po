@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-11-16 16:11-0500\n"
+"POT-Creation-Date: 2000-12-31 00:18+0200\n"
 "PO-Revision-Date: 2000-11-06 21:43+02:00\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@saunalahti.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -43,43 +43,43 @@ msgstr "GIF-tiedostomuodon versiota %s ei tueta"
 msgid "GIF animation contained a frame with an incorrect size"
 msgstr "GIF-animaatio sisälsi väärän kokoisen kuvan"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1410
 msgid "Hue:"
 msgstr "Sävy:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1411
 msgid "Saturation:"
 msgstr "Kylläisyys:"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1412
 msgid "Value:"
 msgstr "Arvo:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1413
 msgid "Red:"
 msgstr "Punainen:"
 
-#: gtk/gtkcolorsel.c:1426
+#: gtk/gtkcolorsel.c:1414
 msgid "Green:"
 msgstr "Vihreä:"
 
-#: gtk/gtkcolorsel.c:1427
+#: gtk/gtkcolorsel.c:1415
 msgid "Blue:"
 msgstr "Sininen:"
 
-#: gtk/gtkcolorsel.c:1430
+#: gtk/gtkcolorsel.c:1418
 msgid "Opacity:"
 msgstr "Peitto:"
 
-#: gtk/gtkcolorsel.c:1445
+#: gtk/gtkcolorsel.c:1433
 msgid "Hex Value:"
 msgstr "Heksa-arvo:"
 
-#: gtk/gtkcolorsel.c:1466
+#: gtk/gtkcolorsel.c:1454
 msgid "Custom Palette"
 msgstr "Mukautettu paletti"
 
-#: gtk/gtkcolorsel.c:1471
+#: gtk/gtkcolorsel.c:1459
 msgid "Set Color"
 msgstr "Aseta väri"
 
@@ -121,7 +121,7 @@ msgid "Error"
 msgstr "Virhe"
 
 #. close button
-#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:334 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "Sulje"
 
@@ -174,7 +174,7 @@ msgstr "Koko:"
 msgid "Preview:"
 msgstr "Esikatselu:"
 
-#: gtk/gtkfontsel.c:966
+#: gtk/gtkfontsel.c:971
 msgid "Font Selection"
 msgstr "Kirjasinlajin valinta"
 
@@ -191,88 +191,88 @@ msgid "OK"
 msgstr "OK"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:185
+#: gtk/gtkinputdialog.c:181
 msgid "Input"
 msgstr "Syöte"
 
-#: gtk/gtkinputdialog.c:193
+#: gtk/gtkinputdialog.c:189
 msgid "No input devices"
 msgstr "Ei syöttölaitteita"
 
-#: gtk/gtkinputdialog.c:222
+#: gtk/gtkinputdialog.c:218
 msgid "Device:"
 msgstr "Laite:"
 
-#: gtk/gtkinputdialog.c:238
+#: gtk/gtkinputdialog.c:234
 msgid "Disabled"
 msgstr "Poistettu"
 
-#: gtk/gtkinputdialog.c:246
+#: gtk/gtkinputdialog.c:242
 msgid "Screen"
 msgstr "Näyttö"
 
-#: gtk/gtkinputdialog.c:254
+#: gtk/gtkinputdialog.c:250
 msgid "Window"
 msgstr "Ikkuna"
 
-#: gtk/gtkinputdialog.c:262
+#: gtk/gtkinputdialog.c:258
 msgid "Mode: "
 msgstr "Tila:"
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:292
+#: gtk/gtkinputdialog.c:288
 msgid "Axes"
 msgstr "Akselit"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:308
+#: gtk/gtkinputdialog.c:304
 msgid "Keys"
 msgstr "Avaimet"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
+#: gtk/gtkinputdialog.c:325 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "Tallenna"
 
-#: gtk/gtkinputdialog.c:471
+#: gtk/gtkinputdialog.c:467
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:472
+#: gtk/gtkinputdialog.c:468
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:473
+#: gtk/gtkinputdialog.c:469
 msgid "Pressure"
 msgstr "Paine"
 
-#: gtk/gtkinputdialog.c:474
+#: gtk/gtkinputdialog.c:470
 msgid "X Tilt"
 msgstr "X-kallistus"
 
-#: gtk/gtkinputdialog.c:475
+#: gtk/gtkinputdialog.c:471
 msgid "Y Tilt"
 msgstr "Y-kallistus"
 
-#: gtk/gtkinputdialog.c:476
+#: gtk/gtkinputdialog.c:472
 msgid "Wheel"
 msgstr "Rulla"
 
-#: gtk/gtkinputdialog.c:516
+#: gtk/gtkinputdialog.c:512
 msgid "none"
 msgstr "ei"
 
-#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+#: gtk/gtkinputdialog.c:546 gtk/gtkinputdialog.c:582
 msgid "(disabled)"
 msgstr "(ei käytössä)"
 
-#: gtk/gtkinputdialog.c:579
+#: gtk/gtkinputdialog.c:575
 msgid "(unknown)"
 msgstr "(tuntematon)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:664
+#: gtk/gtkinputdialog.c:660
 msgid "clear"
 msgstr "tyhjennä"
 
@@ -331,7 +331,7 @@ msgid "Open"
 msgstr "Avaa"
 
 # , c-format
-#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#: gtk/gtknotebook.c:2034 gtk/gtknotebook.c:4353
 #, c-format
 msgid "Page %u"
 msgstr "Sivu %u"
