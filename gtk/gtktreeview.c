@@ -6815,10 +6815,16 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   GtkRBNode *tmpnode = NULL;
   gint depth;
   gint i = 0;
-  gint height = 0;
+  gint height;
   gboolean free_path = FALSE;
 
   g_return_if_fail (path != NULL || iter != NULL);
+
+  if (tree_view->priv->fixed_height_mode
+      && tree_view->priv->fixed_height >= 0)
+    height = tree_view->priv->fixed_height;
+  else
+    height = 0;
 
   if (path == NULL)
     {
@@ -6876,12 +6882,6 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
 
   if (tree == NULL)
     goto done;
-
-  if (tree_view->priv->fixed_height_mode
-      && tree_view->priv->fixed_height >= 0)
-    height = tree_view->priv->fixed_height;
-  else
-    height = 0;
 
   /* ref the node */
   gtk_tree_model_ref_node (tree_view->priv->model, iter);
