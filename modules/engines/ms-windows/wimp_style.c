@@ -248,11 +248,9 @@ setup_system_colors(GtkStyle *style)
   sys_color_to_gtk_color(COLOR_HIGHLIGHT,
                          &style->base[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(COLOR_HIGHLIGHT,
-                         &style->fg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT,
                          &style->bg[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT,
-                                    &style->text[GTK_STATE_SELECTED]);
+                         &style->text[GTK_STATE_SELECTED]);
 
   sprintf(buf, "style \"wimp-menu-item\"\n"
           "{ bg[PRELIGHT] = { %d, %d, %d }\n"
@@ -526,6 +524,20 @@ get_scrollbar_arrow_button_state(GtkArrowType arrow_type,
 }
 
 static int
+get_expander_state(GtkExpanderStyle expander_style, GtkStateType gtk_state)
+{
+  int state = GLPS_OPENED;
+
+  switch (expander_style)
+    {
+    case GTK_EXPANDER_COLLAPSED:
+    case GTK_EXPANDER_SEMI_COLLAPSED:
+      state = GLPS_CLOSED;
+    }
+  return state;
+}
+
+static int
 get_part_state(const char *detail, GtkStateType gtk_state)
 {
   int state = 0;
@@ -536,19 +548,23 @@ get_part_state(const char *detail, GtkStateType gtk_state)
       switch (gtk_state)
         {
         case GTK_STATE_NORMAL:
+        case GTK_STATE_SELECTED:
           state = PBS_NORMAL;
           break;
         case GTK_STATE_ACTIVE:
           state = PBS_PRESSED;
           break;
         case GTK_STATE_PRELIGHT:
-        case GTK_STATE_SELECTED:
           state = PBS_HOT;
           break;
         case GTK_STATE_INSENSITIVE:
           state = PBS_DISABLED;
           break;
         }
+    }
+  else if (! strcmp(detail, "buttondefault"))
+    {
+      state = PBS_DEFAULTED;
     }
   else if (! strcmp(detail, "tab"))
     {
@@ -696,6 +712,82 @@ draw_check(GtkStyle      *style,
 }
 
 static void
+draw_expander(GtkStyle      *style,
+	      GdkWindow     *window,
+	      GtkStateType   state,
+	      GdkRectangle  *area,
+	      GtkWidget     *widget,
+	      const gchar   *detail,
+	      gint           x,
+	      gint           y,
+	      GtkExpanderStyle expander_style)
+{
+  gint expander_size;
+  gint expander_semi_size;
+  GdkColor color;
+  GdkGCValues values;
+  gboolean success;
+  struct ThemeDrawInfo info;
+
+  gtk_widget_style_get (widget, "expander_size", &expander_size, NULL);
+
+  if (get_theme_draw_info(style, window, x, y - expander_size / 2,
+			  expander_size, expander_size, L"TreeView", &info))
+    {
+      int pstate = get_expander_state (expander_style, state);
+
+      draw_theme_background(info.theme, info.dc, TVP_GLYPH,
+                            pstate, &info.rect, NULL);
+      free_theme_draw_info(&info);
+      return;
+    }
+
+  if (expander_size > 2)
+    expander_size -= 2;
+
+  if (area)
+    gdk_gc_set_clip_rectangle (style->fg_gc[state], area);
+
+  expander_semi_size = expander_size / 2;
+  x -= expander_semi_size;
+  y -= expander_semi_size;
+
+  gdk_gc_get_values (style->fg_gc[state], &values);
+
+  /* RGB values to emulate Windows Classic style */
+  color.red = color.green = color.blue = 128 << 8;
+
+  success = gdk_colormap_alloc_color
+    (gtk_widget_get_default_colormap (), &color, FALSE, TRUE);
+
+  if (success)
+    gdk_gc_set_foreground (style->fg_gc[state], &color);
+
+  gdk_draw_rectangle
+    (window, style->fg_gc[state], FALSE, x, y, expander_size, expander_size);
+
+  if (success)
+    gdk_gc_set_foreground (style->fg_gc[state], &values.foreground);
+  
+  gdk_draw_line
+    (window, style->fg_gc[state], x + 2, y + expander_semi_size,
+     x + expander_size - 2, y + expander_semi_size);
+
+  switch (expander_style)
+    {
+    case GTK_EXPANDER_COLLAPSED:
+    case GTK_EXPANDER_SEMI_COLLAPSED:
+      gdk_draw_line
+	(window, style->fg_gc[state], x + expander_semi_size, y + 2,
+	 x + expander_semi_size, y + expander_size - 2);
+      break;
+    }
+
+  if (area)
+    gdk_gc_set_clip_rectangle (style->fg_gc[state], NULL);
+}
+
+static void
 draw_option(GtkStyle      *style,
 	    GdkWindow     *window,
 	    GtkStateType   state,
@@ -718,14 +810,26 @@ draw_option(GtkStyle      *style,
     }
   else
     {
-      draw_part (window, style->black_gc, area, x, y, RADIO_BLACK);
-      draw_part (window, style->dark_gc[state], area, x, y, RADIO_DARK);
-      draw_part (window, style->mid_gc[state], area, x, y, RADIO_MID);
-      draw_part (window, style->light_gc[state], area, x, y, RADIO_LIGHT);
-      draw_part (window, style->base_gc[state], area, x, y, RADIO_BASE);
+      struct ThemeDrawInfo info;
+      if (get_theme_draw_info(style, window, x, y, width,
+                              height, L"Button", &info))
+        {
+          int pstate = get_check_button_state(shadow, state);
+          draw_theme_background(info.theme, info.dc, BP_RADIOBUTTON,
+                                pstate, &info.rect, NULL);
+          free_theme_draw_info(&info);
+        }
+      else
+	{
+	  draw_part (window, style->black_gc, area, x, y, RADIO_BLACK);
+	  draw_part (window, style->dark_gc[state], area, x, y, RADIO_DARK);
+	  draw_part (window, style->mid_gc[state], area, x, y, RADIO_MID);
+	  draw_part (window, style->light_gc[state], area, x, y, RADIO_LIGHT);
+	  draw_part (window, style->base_gc[state], area, x, y, RADIO_BASE);
       
-      if (shadow == GTK_SHADOW_IN)
-	draw_part (window, style->text_gc[state], area, x, y, RADIO_TEXT);
+	  if (shadow == GTK_SHADOW_IN)
+	    draw_part (window, style->text_gc[state], area, x, y, RADIO_TEXT);
+	}
     }
 }
 
@@ -1028,7 +1132,9 @@ draw_box (GtkStyle      *style,
 	  gint           width,
 	  gint           height)
 {
-  if (detail && strcmp (detail, "button") == 0)
+  if (detail &&
+      (!strcmp (detail, "button") ||
+       !strcmp (detail, "buttondefault")))
     {
       struct ThemeDrawInfo info;
 
@@ -1042,7 +1148,6 @@ draw_box (GtkStyle      *style,
           return;
         }
     }
-
   else if (detail && !strcmp (detail, "spinbutton"))
     {
       struct ThemeDrawInfo info;
@@ -1177,7 +1282,7 @@ draw_box (GtkStyle      *style,
             }
         }
     }
-      
+
   parent_class->draw_box (style, window, state_type, shadow_type, area,
 			  widget, detail, x, y, width, height);
 
@@ -1228,20 +1333,22 @@ draw_tab (GtkStyle      *style,
   if (widget)
     gtk_widget_style_get (widget, "indicator_size", &indicator_size, NULL);
 
-//  if (detail && strcmp (detail, "optionmenutab") == 0)
-//    {
-//      struct ThemeDrawInfo info;
-//      if (get_theme_draw_info(style, window, x, y, width, height,
-//                              L"Combobox", &info))
-//        {
-//          int partid = CP_DROPDOWNBUTTON;
-//          int pstate = CBXS_NORMAL;
-//          draw_theme_background(info.theme, info.dc, partid,
-//                                pstate, &info.rect, NULL);
-//          free_theme_draw_info(&info);
-//          return;
-//        }
-//    }
+#if 0
+  if (detail && strcmp (detail, "optionmenutab") == 0)
+    {
+      struct ThemeDrawInfo info;
+      if (get_theme_draw_info(style, window, x, y, width, height,
+                              L"ComboBox", &info))
+        {
+          int partid = CP_DROPDOWNBUTTON;
+          int pstate = CBXS_NORMAL;
+          draw_theme_background(info.theme, info.dc, partid,
+                                pstate, &info.rect, NULL);
+          free_theme_draw_info(&info);
+          return;
+        }
+    }
+#endif
   option_menu_get_props (widget, &indicator_size, &indicator_spacing);
 
   x += (width - indicator_size.width) / 2;
@@ -1271,22 +1378,26 @@ draw_extension(GtkStyle *style,
   if (detail && !strcmp(detail, "tab"))
     {
       struct ThemeDrawInfo info;
+      GtkNotebook *notebook = GTK_NOTEBOOK(widget);
 
-      if (get_theme_draw_info(style, window, x, y, width, height,
-                              L"Tab", &info))
+      /* FIXME: pos != TOP to be implemented */
+      if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP
+          && get_theme_draw_info(style, window, x, y, width, height,
+                                 L"Tab", &info))
         {
           int partid = TABP_TABITEM;
           int win_state = get_part_state(detail, state_type);
+
           if (state_type == GTK_STATE_NORMAL)
             {
-              GtkNotebook *notebook = GTK_NOTEBOOK(widget);
-              // FIXME: where does the magic number 2 come from?
+              /* FIXME: where does the magic number 2 come from? */
               info.rect.bottom+=2; 
               if (gtk_notebook_get_current_page(notebook) == 0)
                 {
                   partid = TABP_TABITEMLEFTEDGE;
                 }
             }
+
           draw_theme_background(info.theme, info.dc, partid,
                                 win_state, &info.rect, NULL);
           free_theme_draw_info(&info);
@@ -1308,9 +1419,12 @@ draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
   if (detail && !strcmp(detail, "notebook"))
     {
       struct ThemeDrawInfo info;
+      GtkNotebook *notebook = GTK_NOTEBOOK(widget);
 
-      if (get_theme_draw_info(style, window, x, y, width, height,
-                              L"Tab", &info))
+      /* FIXME: pos != TOP to be implemented */
+      if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP
+          && get_theme_draw_info(style, window, x, y, width, height,
+                                 L"Tab", &info))
         {
           draw_theme_background(info.theme, info.dc, TABP_PANE,
                                 0, &info.rect, NULL);
@@ -1322,12 +1436,13 @@ draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
                              area, widget, detail, x, y, width, height,
                              gap_side, gap_x, gap_width);
 }
+
 static void
-draw_flat_box(GtkStyle *style, GdkWindow *window,
-              GtkStateType state_type, GtkShadowType shadow_type,
-              GdkRectangle *area, GtkWidget *widget,
-              const gchar *detail, gint x, gint y,
-              gint width, gint height)
+draw_flat_box (GtkStyle *style, GdkWindow *window,
+               GtkStateType state_type, GtkShadowType shadow_type,
+               GdkRectangle *area, GtkWidget *widget,
+               const gchar *detail, gint x, gint y,
+               gint width, gint height)
 {
   if (detail && ! strcmp (detail, "checkbutton"))
     {
@@ -1336,6 +1451,7 @@ draw_flat_box(GtkStyle *style, GdkWindow *window,
           return;
         }
     }
+
   //      gtk_style_apply_default_background (style, window,
   //				  widget && !GTK_WIDGET_NO_WINDOW (widget),
   //				  state_type, area, x, y, width, height);
@@ -1365,16 +1481,16 @@ wimp_style_class_init (WimpStyleClass *klass)
 
   parent_class = g_type_class_peek_parent (klass);
 
-  style_class->init_from_rc = wimp_style_init_from_rc;
-  style_class->draw_arrow = draw_arrow;
-  style_class->draw_box = draw_box;
-  style_class->draw_check = draw_check;
-
-  style_class->draw_option = draw_option;
-  style_class->draw_tab = draw_tab;
+  style_class->init_from_rc    = wimp_style_init_from_rc;
+  style_class->draw_arrow      = draw_arrow;
+  style_class->draw_box        = draw_box;
+  style_class->draw_check      = draw_check;
+  style_class->draw_option     = draw_option;
+  style_class->draw_tab        = draw_tab;
+  style_class->draw_flat_box   = draw_flat_box;
+  style_class->draw_expander   = draw_expander;
   style_class->draw_extension = draw_extension;
   style_class->draw_box_gap = draw_box_gap;
-  style_class->draw_flat_box = draw_flat_box;
 }
 
 GType wimp_type_style = 0;

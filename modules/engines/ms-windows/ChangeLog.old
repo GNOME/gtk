@@ -1,0 +1,17 @@
+2003-04-15  Raymond Penners  <raymond@dotsphinx.com>
+
+	* wimp_style.c: Tabs not located on top of the notebook are not
+	rendered properly using XP theming. Added fallback to non-XP
+	theming behaviour if the tabs are not located on top (to be
+	removed when full notebook support is in).
+
+2003-04-15  Arnaud Charlet  <charlet@ACT-Europe.FR>
+
+	* wimp_style.c: Add handling of expander. Fix colors for combo box
+	items. Add native rendering of radio buttons. Fix handling of
+	default buttons. Add native rendering of tree expanders.
+
+2003-03-18  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.1.0 ===
+	
