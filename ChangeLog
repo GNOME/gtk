@@ -1,3 +1,8 @@
+2004-07-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_popdown): Don't crash if
+	unrealized.
+
 2004-07-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkrc.c (_gtk_rc_init): Apply the gtk-default-menu-item-style 
