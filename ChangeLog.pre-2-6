@@ -1,3 +1,32 @@
+Mon Jul 17 18:52:38 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_text): Restore code to
+	paint the background of the text area which was accidentally
+	removed at some point.
+
+	* gtk/gtkrc.[ch] gtk/gtkstyle.[ch] gtk/gtkthemes.[ch]: 
+	  
+	 - Move	most of the functionality from the theme vtable
+	   into GtkRcStyleClass and GtkStyleClass. The moved
+	   vtable functions were changed a bit in the move to
+	   work better in their new home.
+
+	 - Get rid of the engine and engine_data fields from
+	   GtkRcStyle and GtkStyle; instead the theme
+	   engine derives theme-specific subclasses of GtkRcStyle
+	   and GtkStyle
+
+	 - Add extra dlsym() found entry point to themes,
+	   theme_create_rc_style().
+
+	* gtk/gtkstyle.c: Copy xthickness, ythickness fields
+	in gtk_style_real_copy.
+
+ 	* gtk/themes.[ch]: add a function gtk_theme_engine_register_type()
+	to register a type associated with an engine. (The engine
+	won't be unloaded as there is an instance of the type.)
+
+
 Mon Jul 17 18:19:06 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml: Clean ups.

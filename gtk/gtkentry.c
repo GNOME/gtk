@@ -1183,12 +1183,17 @@ gtk_entry_draw_text (GtkEntry *entry)
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       PangoRectangle logical_rect;
-      int area_height;
+      gint area_width, area_height;
 
-      gdk_window_get_size (entry->text_area, NULL, &area_height);
+      gdk_window_get_size (entry->text_area, &area_width, &area_height);
       area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
       
       widget = GTK_WIDGET (entry);
+
+      gtk_paint_flat_box (widget->style, entry->text_area, 
+			  GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+			  NULL, widget, "entry_bg", 
+			  0, 0, area_width, area_height);
 
       gtk_entry_ensure_layout (entry);
 

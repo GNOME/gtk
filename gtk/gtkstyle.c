@@ -45,8 +45,18 @@
 #endif /* M_PI_4 */
 
 static void         gtk_style_realize (GtkStyle    *style,
-                                       GdkColormap *colormap,
-                                       gint         depth);
+                                       GdkColormap *colormap);
+
+static void      gtk_style_real_realize        (GtkStyle     *style);
+static void      gtk_style_real_unrealize      (GtkStyle     *style);
+static void      gtk_style_real_copy           (GtkStyle     *style,
+						GtkStyle     *src);
+static void      gtk_style_real_set_background (GtkStyle     *style,
+						GdkWindow    *window,
+						GtkStateType  state_type);
+static GtkStyle *gtk_style_real_clone          (GtkStyle     *style);
+static void      gtk_style_real_init_from_rc   (GtkStyle     *style,
+						GtkRcStyle   *rc_style);
 
 static void gtk_default_draw_hline      (GtkStyle        *style,
 					 GdkWindow       *window,
@@ -403,9 +413,6 @@ gtk_style_init (GtkStyle *style)
   for (i = 0; i < 5; i++)
     style->bg_pixmap[i] = NULL;
   
-  style->engine = NULL;
-  style->engine_data = NULL;
-  
   style->rc_style = NULL;
   
   for (i = 0; i < 5; i++)
@@ -432,6 +439,13 @@ gtk_style_class_init (GtkStyleClass *klass)
 
   object_class->finalize = gtk_style_finalize;
 
+  klass->clone = gtk_style_real_clone;
+  klass->copy = gtk_style_real_copy;
+  klass->init_from_rc = gtk_style_real_init_from_rc;
+  klass->realize = gtk_style_real_realize;
+  klass->unrealize = gtk_style_real_unrealize;
+  klass->set_background = gtk_style_real_set_background;
+  
   klass->draw_hline = gtk_default_draw_hline;
   klass->draw_vline = gtk_default_draw_vline;
   klass->draw_shadow = gtk_default_draw_shadow;
@@ -479,12 +493,6 @@ gtk_style_finalize (GObject *object)
         }
     }
   
-  if (style->engine)
-    {
-      style->engine->destroy_style (style);
-      gtk_theme_engine_unref (style->engine);
-    }
-  
   gdk_font_unref (style->font);
   pango_font_description_free (style->font_desc);
   
@@ -499,41 +507,11 @@ GtkStyle*
 gtk_style_copy (GtkStyle *style)
 {
   GtkStyle *new_style;
-  guint i;
   
-  g_return_val_if_fail (style != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
   
-  new_style = gtk_style_new ();
-  
-  for (i = 0; i < 5; i++)
-    {
-      new_style->fg[i] = style->fg[i];
-      new_style->bg[i] = style->bg[i];
-      new_style->text[i] = style->text[i];
-      new_style->base[i] = style->base[i];
-      
-      new_style->bg_pixmap[i] = style->bg_pixmap[i];
-    }
-  
-  gdk_font_unref (new_style->font);
-  new_style->font = style->font;
-  gdk_font_ref (new_style->font);
-
-  pango_font_description_free (new_style->font_desc);
-  new_style->font_desc = pango_font_description_copy (style->font_desc);
-  
-  if (style->rc_style)
-    {
-      new_style->rc_style = style->rc_style;
-      gtk_rc_style_ref (style->rc_style);
-    }
-  
-  if (style->engine)
-    {
-      new_style->engine = style->engine;
-      gtk_theme_engine_ref (new_style->engine);
-      new_style->engine->duplicate_style (new_style, style);
-    }
+  new_style = GTK_STYLE_GET_CLASS (style)->clone (style);
+  GTK_STYLE_GET_CLASS (style)->copy (new_style, style);
 
   return new_style;
 }
@@ -603,13 +581,11 @@ gtk_style_attach (GtkStyle  *style,
   GSList *styles;
   GtkStyle *new_style = NULL;
   GdkColormap *colormap;
-  gint depth;
   
   g_return_val_if_fail (style != NULL, NULL);
   g_return_val_if_fail (window != NULL, NULL);
   
   colormap = gdk_window_get_colormap (window);
-  depth = gdk_window_get_visual (window)->depth;
   
   if (!style->styles)
     style->styles = g_slist_append (NULL, style);
@@ -621,11 +597,10 @@ gtk_style_attach (GtkStyle  *style,
       
       if (new_style->attach_count == 0)
         {
-          gtk_style_realize (new_style, colormap, depth);
+          gtk_style_realize (new_style, colormap);
           break;
         }
-      else if (new_style->colormap == colormap &&
-               new_style->depth == depth)
+      else if (new_style->colormap == colormap)
         break;
       
       new_style = NULL;
@@ -635,7 +610,7 @@ gtk_style_attach (GtkStyle  *style,
   if (!new_style)
     {
       new_style = gtk_style_duplicate (style);
-      gtk_style_realize (new_style, colormap, depth);
+      gtk_style_realize (new_style, colormap);
     }
 
   /* A style gets a refcount from being attached */
@@ -657,29 +632,12 @@ gtk_style_attach (GtkStyle  *style,
 void
 gtk_style_detach (GtkStyle *style)
 {
-  gint i;
-  
   g_return_if_fail (style != NULL);
   
   style->attach_count -= 1;
   if (style->attach_count == 0)
     {
-      if (style->engine)
-        style->engine->unrealize_style (style);
-      
-      gtk_gc_release (style->black_gc);
-      gtk_gc_release (style->white_gc);
-      
-      for (i = 0; i < 5; i++)
-        {
-          gtk_gc_release (style->fg_gc[i]);
-          gtk_gc_release (style->bg_gc[i]);
-          gtk_gc_release (style->light_gc[i]);
-          gtk_gc_release (style->dark_gc[i]);
-          gtk_gc_release (style->mid_gc[i]);
-          gtk_gc_release (style->text_gc[i]);
-          gtk_gc_release (style->base_gc[i]);
-        }
+      GTK_STYLE_GET_CLASS (style)->unrealize (style);
       
       gtk_style_unref (style);
     }
@@ -699,100 +657,14 @@ gtk_style_unref (GtkStyle *style)
 
 static void
 gtk_style_realize (GtkStyle    *style,
-                   GdkColormap *colormap,
-                   gint         depth)
+                   GdkColormap *colormap)
 {
-  GdkGCValues gc_values;
-  GdkGCValuesMask gc_values_mask;
-  gint i;
-  
   g_return_if_fail (style != NULL);
   
   style->colormap = colormap;
-  style->depth = depth;
-  
-  for (i = 0; i < 5; i++)
-    {
-      gtk_style_shade (&style->bg[i], &style->light[i], LIGHTNESS_MULT);
-      gtk_style_shade (&style->bg[i], &style->dark[i], DARKNESS_MULT);
-      
-      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
-      style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
-      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
-    }
-  
-  gdk_color_black (colormap, &style->black);
-  gdk_color_white (colormap, &style->white);
-  
-  gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_FONT;
-  if (style->font->type == GDK_FONT_FONT)
-    {
-      gc_values.font = style->font;
-    }
-  else if (style->font->type == GDK_FONT_FONTSET)
-    {
-      gc_values.font = default_font;
-    }
-  
-  gc_values.foreground = style->black;
-  style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-  
-  gc_values.foreground = style->white;
-  style->white_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-  
-  for (i = 0; i < 5; i++)
-    {
-      if (style->rc_style && style->rc_style->bg_pixmap_name[i])
-        style->bg_pixmap[i] = gtk_rc_load_image (style->colormap,
-                                                 &style->bg[i],
-                                                 style->rc_style->bg_pixmap_name[i]);
-      
-      if (!gdk_color_alloc (colormap, &style->fg[i]))
-        g_warning ("unable to allocate color: ( %d %d %d )",
-                   style->fg[i].red, style->fg[i].green, style->fg[i].blue);
-      if (!gdk_color_alloc (colormap, &style->bg[i]))
-        g_warning ("unable to allocate color: ( %d %d %d )",
-                   style->bg[i].red, style->bg[i].green, style->bg[i].blue);
-      if (!gdk_color_alloc (colormap, &style->light[i]))
-        g_warning ("unable to allocate color: ( %d %d %d )",
-                   style->light[i].red, style->light[i].green, style->light[i].blue);
-      if (!gdk_color_alloc (colormap, &style->dark[i]))
-        g_warning ("unable to allocate color: ( %d %d %d )",
-                   style->dark[i].red, style->dark[i].green, style->dark[i].blue);
-      if (!gdk_color_alloc (colormap, &style->mid[i]))
-        g_warning ("unable to allocate color: ( %d %d %d )",
-                   style->mid[i].red, style->mid[i].green, style->mid[i].blue);
-      if (!gdk_color_alloc (colormap, &style->text[i]))
-        g_warning ("unable to allocate color: ( %d %d %d )",
-                   style->text[i].red, style->text[i].green, style->text[i].blue);
-      if (!gdk_color_alloc (colormap, &style->base[i]))
-        g_warning ("unable to allocate color: ( %d %d %d )",
-                   style->base[i].red, style->base[i].green, style->base[i].blue);
-      
-      gc_values.foreground = style->fg[i];
-      style->fg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->bg[i];
-      style->bg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->light[i];
-      style->light_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->dark[i];
-      style->dark_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->mid[i];
-      style->mid_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->text[i];
-      style->text_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->base[i];
-      style->base_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-    }
-  
-  if (style->engine)
-    style->engine->realize_style (style);
+  style->depth = gdk_colormap_get_visual (colormap)->depth;
+
+  GTK_STYLE_GET_CLASS (style)->realize (style);
 }
 
 void
@@ -1143,18 +1015,212 @@ gtk_style_set_background (GtkStyle    *style,
                           GdkWindow   *window,
                           GtkStateType state_type)
 {
-  GdkPixmap *pixmap;
-  gint parent_relative;
-  
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
   
-  if (style->engine && style->engine->set_background)
+  GTK_STYLE_GET_CLASS (style)->set_background (style, window, state_type);
+}
+
+/* Default functions */
+static GtkStyle *
+gtk_style_real_clone (GtkStyle *style)
+{
+  return GTK_STYLE (g_object_new (G_OBJECT_TYPE (style), NULL));
+}
+
+static void
+gtk_style_real_copy (GtkStyle *style,
+		     GtkStyle *src)
+{
+  gint i;
+  
+  for (i = 0; i < 5; i++)
     {
-      style->engine->set_background (style, window, state_type);
+      style->fg[i] = src->fg[i];
+      style->bg[i] = src->bg[i];
+      style->text[i] = src->text[i];
+      style->base[i] = src->base[i];
       
-      return;
+      style->bg_pixmap[i] = src->bg_pixmap[i];
     }
+
+  if (style->font)
+    gdk_font_unref (style->font);
+  style->font = src->font;
+  if (style->font)
+    gdk_font_ref (style->font);
+
+  if (style->font_desc)
+    pango_font_description_free (style->font_desc);
+  if (src->font_desc)
+    style->font_desc = pango_font_description_copy (src->font_desc);
+  else
+    style->font_desc = NULL;
+  
+  style->xthickness = src->xthickness;
+  style->ythickness = src->ythickness;
+
+  if (style->rc_style)
+    gtk_rc_style_unref (style->rc_style);
+  style->rc_style = src->rc_style;
+  if (src->rc_style)
+    gtk_rc_style_ref (src->rc_style);
+}
+
+static void
+gtk_style_real_init_from_rc (GtkStyle   *style,
+			     GtkRcStyle *rc_style)
+{
+  GdkFont *old_font;
+  gint i;
+
+  if (rc_style->font_desc)
+    {
+      pango_font_description_free (style->font_desc);
+      style->font_desc = pango_font_description_copy (rc_style->font_desc);
+
+      old_font = style->font;
+      style->font = gdk_font_from_description (style->font_desc);
+      if (style->font)
+	gdk_font_unref (old_font);
+      else
+	style->font = old_font;
+    }
+    
+  for (i = 0; i < 5; i++)
+    {
+      if (rc_style->color_flags[i] & GTK_RC_FG)
+	style->fg[i] = rc_style->fg[i];
+      if (rc_style->color_flags[i] & GTK_RC_BG)
+	style->bg[i] = rc_style->bg[i];
+      if (rc_style->color_flags[i] & GTK_RC_TEXT)
+	style->text[i] = rc_style->text[i];
+      if (rc_style->color_flags[i] & GTK_RC_BASE)
+	style->base[i] = rc_style->base[i];
+    }
+
+  if (rc_style->xthickness >= 0)
+    style->xthickness = rc_style->xthickness;
+  if (rc_style->ythickness >= 0)
+    style->ythickness = rc_style->ythickness;
+}
+
+static void
+gtk_style_real_realize (GtkStyle *style)
+{
+  GdkGCValues gc_values;
+  GdkGCValuesMask gc_values_mask;
+  
+  gint i;
+
+  for (i = 0; i < 5; i++)
+    {
+      gtk_style_shade (&style->bg[i], &style->light[i], LIGHTNESS_MULT);
+      gtk_style_shade (&style->bg[i], &style->dark[i], DARKNESS_MULT);
+      
+      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
+      style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
+      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
+    }
+  
+  gdk_color_black (style->colormap, &style->black);
+  gdk_color_white (style->colormap, &style->white);
+  
+  gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_FONT;
+  if (style->font->type == GDK_FONT_FONT)
+    {
+      gc_values.font = style->font;
+    }
+  else if (style->font->type == GDK_FONT_FONTSET)
+    {
+      gc_values.font = default_font;
+    }
+  
+  gc_values.foreground = style->black;
+  style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+  
+  gc_values.foreground = style->white;
+  style->white_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+  
+  for (i = 0; i < 5; i++)
+    {
+      if (style->rc_style && style->rc_style->bg_pixmap_name[i])
+        style->bg_pixmap[i] = gtk_rc_load_image (style->colormap,
+                                                 &style->bg[i],
+                                                 style->rc_style->bg_pixmap_name[i]);
+      
+      if (!gdk_color_alloc (style->colormap, &style->fg[i]))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->fg[i].red, style->fg[i].green, style->fg[i].blue);
+      if (!gdk_color_alloc (style->colormap, &style->bg[i]))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->bg[i].red, style->bg[i].green, style->bg[i].blue);
+      if (!gdk_color_alloc (style->colormap, &style->light[i]))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->light[i].red, style->light[i].green, style->light[i].blue);
+      if (!gdk_color_alloc (style->colormap, &style->dark[i]))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->dark[i].red, style->dark[i].green, style->dark[i].blue);
+      if (!gdk_color_alloc (style->colormap, &style->mid[i]))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->mid[i].red, style->mid[i].green, style->mid[i].blue);
+      if (!gdk_color_alloc (style->colormap, &style->text[i]))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->text[i].red, style->text[i].green, style->text[i].blue);
+      if (!gdk_color_alloc (style->colormap, &style->base[i]))
+        g_warning ("unable to allocate color: ( %d %d %d )",
+                   style->base[i].red, style->base[i].green, style->base[i].blue);
+      
+      gc_values.foreground = style->fg[i];
+      style->fg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+      
+      gc_values.foreground = style->bg[i];
+      style->bg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+      
+      gc_values.foreground = style->light[i];
+      style->light_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+      
+      gc_values.foreground = style->dark[i];
+      style->dark_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+      
+      gc_values.foreground = style->mid[i];
+      style->mid_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+      
+      gc_values.foreground = style->text[i];
+      style->text_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+      
+      gc_values.foreground = style->base[i];
+      style->base_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
+    }
+}
+
+static void
+gtk_style_real_unrealize (GtkStyle *style)
+{
+  int i;
+
+  gtk_gc_release (style->black_gc);
+  gtk_gc_release (style->white_gc);
+      
+  for (i = 0; i < 5; i++)
+    {
+      gtk_gc_release (style->fg_gc[i]);
+      gtk_gc_release (style->bg_gc[i]);
+      gtk_gc_release (style->light_gc[i]);
+      gtk_gc_release (style->dark_gc[i]);
+      gtk_gc_release (style->mid_gc[i]);
+      gtk_gc_release (style->text_gc[i]);
+      gtk_gc_release (style->base_gc[i]);
+    }
+}
+
+static void
+gtk_style_real_set_background (GtkStyle    *style,
+			       GdkWindow   *window,
+			       GtkStateType state_type)
+{
+  GdkPixmap *pixmap;
+  gint parent_relative;
   
   if (style->bg_pixmap[state_type])
     {
@@ -1175,8 +1241,6 @@ gtk_style_set_background (GtkStyle    *style,
     gdk_window_set_background (window, &style->bg[state_type]);
 }
 
-
-/* Default functions */
 void
 gtk_style_apply_default_background (GtkStyle     *style,
                                     GdkWindow    *window,

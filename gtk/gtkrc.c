@@ -121,7 +121,7 @@ static guint       gtk_rc_parse_fontset              (GScanner        *scanner,
 static guint       gtk_rc_parse_font_name            (GScanner        *scanner,
                                                       GtkRcStyle      *rc_style);
 static guint       gtk_rc_parse_engine               (GScanner        *scanner,
-                                                      GtkRcStyle      *rc_style);
+                                                      GtkRcStyle     **rc_style);
 static guint       gtk_rc_parse_pixmap_path          (GScanner        *scanner);
 static void        gtk_rc_parse_pixmap_path_string   (gchar           *pix_path);
 static guint       gtk_rc_parse_module_path          (GScanner        *scanner);
@@ -134,9 +134,13 @@ static void        gtk_rc_clear_styles               (void);
 static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_add_initial_default_files  (void);
 
-static void        gtk_rc_style_init                 (GtkRcStyle      *style);
-static void        gtk_rc_style_class_init           (GtkRcStyleClass *klass);
-static void        gtk_rc_style_finalize             (GObject         *object);
+static void        gtk_rc_style_init              (GtkRcStyle      *style);
+static void        gtk_rc_style_class_init        (GtkRcStyleClass *klass);
+static void        gtk_rc_style_finalize          (GObject         *object);
+static void        gtk_rc_style_real_merge        (GtkRcStyle      *dest,
+						   GtkRcStyle      *src);
+static GtkRcStyle *gtk_rc_style_real_clone        (GtkRcStyle      *rc_style);
+static GtkStyle *  gtk_rc_style_real_create_style (GtkRcStyle      *rc_style);
 
 static gpointer parent_class = NULL;
 
@@ -746,8 +750,6 @@ gtk_rc_style_init (GtkRcStyle *style)
     }
   style->xthickness = -1;
   style->ythickness = -1;
-  style->engine = NULL;
-  style->engine_data = NULL;
   style->rc_style_lists = NULL;
 }
 
@@ -759,6 +761,11 @@ gtk_rc_style_class_init (GtkRcStyleClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gtk_rc_style_finalize;
+
+  klass->parse = NULL;
+  klass->clone = gtk_rc_style_real_clone;
+  klass->merge = gtk_rc_style_real_merge;
+  klass->create_style = gtk_rc_style_real_create_style;
 }
 
 /* Like g_slist_remove, but remove all copies of data */
@@ -808,18 +815,12 @@ gtk_rc_style_finalize (GObject *object)
 
   rc_style = GTK_RC_STYLE (object);
   
-  if (rc_style->engine)
-    {
-      rc_style->engine->destroy_rc_style (rc_style);
-      gtk_theme_engine_unref (rc_style->engine);
-    }
-
   if (rc_style->name)
     g_free (rc_style->name);
   if (rc_style->font_desc)
     pango_font_description_free (rc_style->font_desc);
       
-  for (i=0 ; i<5 ; i++)
+  for (i=0 ; i < 5 ; i++)
     if (rc_style->bg_pixmap_name[i])
       g_free (rc_style->bg_pixmap_name[i]);
   
@@ -884,6 +885,64 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
   g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
 
   g_object_unref (G_OBJECT (rc_style));
+}
+
+static GtkRcStyle *
+gtk_rc_style_real_clone (GtkRcStyle *style)
+{
+  return GTK_RC_STYLE (g_object_new (G_OBJECT_TYPE (style), NULL));
+}
+
+static void
+gtk_rc_style_real_merge (GtkRcStyle *dest,
+			 GtkRcStyle *src)
+{
+  gint i;
+  
+  for (i = 0; i < 5; i++)
+    {
+      if (!dest->bg_pixmap_name[i] && src->bg_pixmap_name[i])
+	dest->bg_pixmap_name[i] = g_strdup (src->bg_pixmap_name[i]);
+      
+      if (!(dest->color_flags[i] & GTK_RC_FG) && 
+	  src->color_flags[i] & GTK_RC_FG)
+	{
+	  dest->fg[i] = src->fg[i];
+	  dest->color_flags[i] |= GTK_RC_FG;
+	}
+      if (!(dest->color_flags[i] & GTK_RC_BG) && 
+	  src->color_flags[i] & GTK_RC_BG)
+	{
+	  dest->bg[i] = src->bg[i];
+	  dest->color_flags[i] |= GTK_RC_BG;
+	}
+      if (!(dest->color_flags[i] & GTK_RC_TEXT) && 
+	  src->color_flags[i] & GTK_RC_TEXT)
+	{
+	  dest->text[i] = src->text[i];
+	  dest->color_flags[i] |= GTK_RC_TEXT;
+	}
+      if (!(dest->color_flags[i] & GTK_RC_BASE) && 
+	  src->color_flags[i] & GTK_RC_BASE)
+	{
+	  dest->base[i] = src->base[i];
+	  dest->color_flags[i] |= GTK_RC_BASE;
+	}
+    }
+
+  if (dest->xthickness < 0 && src->xthickness >= 0)
+    dest->xthickness = src->xthickness;
+  if (dest->ythickness < 0 && src->ythickness >= 0)
+    dest->ythickness = src->ythickness;
+
+  if (!dest->font_desc && src->font_desc)
+    dest->font_desc = pango_font_description_copy (src->font_desc);
+}
+
+static GtkStyle *
+gtk_rc_style_real_create_style (GtkRcStyle *rc_style)
+{
+  return gtk_style_new ();
 }
 
 static void
@@ -1274,55 +1333,18 @@ gtk_rc_style_find (const char *name)
     return NULL;
 }
 
-/* Assumes ownership of rc_style */
 static GtkStyle *
 gtk_rc_style_to_style (GtkRcStyle *rc_style)
 {
   GtkStyle *style;
-  GdkFont *old_font;
-  gint i;
 
-  style = gtk_style_new ();
+  style = GTK_RC_STYLE_GET_CLASS (rc_style)->create_style (rc_style);
 
   style->rc_style = rc_style;
-
-  if (rc_style->font_desc)
-    {
-      pango_font_description_free (style->font_desc);
-      style->font_desc = pango_font_description_copy (rc_style->font_desc);
-
-      old_font = style->font;
-      style->font = gdk_font_from_description (style->font_desc);
-      if (style->font)
-	gdk_font_unref (old_font);
-      else
-	style->font = old_font;
-    }
-    
-  for (i = 0; i < 5; i++)
-    {
-      if (rc_style->color_flags[i] & GTK_RC_FG)
-	style->fg[i] = rc_style->fg[i];
-      if (rc_style->color_flags[i] & GTK_RC_BG)
-	style->bg[i] = rc_style->bg[i];
-      if (rc_style->color_flags[i] & GTK_RC_TEXT)
-	style->text[i] = rc_style->text[i];
-      if (rc_style->color_flags[i] & GTK_RC_BASE)
-	style->base[i] = rc_style->base[i];
-    }
-
-  if (rc_style->xthickness >= 0)
-    style->xthickness = rc_style->xthickness;
-  if (rc_style->ythickness >= 0)
-    style->ythickness = rc_style->ythickness;
-
-  if (rc_style->engine)
-    {
-      style->engine = rc_style->engine;
-      gtk_theme_engine_ref (style->engine);
-      rc_style->engine->rc_style_to_style (style, rc_style);
-    }
-
+  gtk_rc_style_ref (rc_style);
+  
+  GTK_STYLE_GET_CLASS (style)->init_from_rc (style, rc_style);
+  
   return style;
 }
 
@@ -1333,6 +1355,8 @@ gtk_rc_init_style (GSList *rc_styles)
   GtkStyle *style = NULL;
   gint i;
 
+  g_return_val_if_fail (rc_styles != NULL, NULL);
+  
   if (!realized_style_ht)
     realized_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_styles_hash,
 					  (GCompareFunc) gtk_rc_styles_compare);
@@ -1341,71 +1365,46 @@ gtk_rc_init_style (GSList *rc_styles)
 
   if (!style)
     {
+      GtkRcStyle *base_style = NULL;
       GtkRcStyle *proto_style;
-      GSList *tmp_style;
-      
-      proto_style = gtk_rc_style_new ();
+      GtkRcStyleClass *proto_style_class;
+      GSList *tmp_styles;
+      GType rc_style_type = GTK_TYPE_RC_STYLE;
 
-      tmp_style = rc_styles;
-      while (tmp_style)
+      /* Find the first derived style in the list, and use that to
+       * create the merged style. If we only have raw GtkRcStyles, use
+       * the first style to create the merged style.
+       */
+      base_style = rc_styles->data;
+      tmp_styles = rc_styles;
+      while (tmp_styles)
 	{
-	  GtkRcStyle *rc_style = tmp_style->data;
+	  GtkRcStyle *rc_style = tmp_styles->data;
 
-	  for (i = 0; i < 5; i++)
+	  if (G_OBJECT_TYPE (rc_style) != rc_style_type)
 	    {
-	      if (!proto_style->bg_pixmap_name[i] && rc_style->bg_pixmap_name[i])
-		proto_style->bg_pixmap_name[i] = g_strdup (rc_style->bg_pixmap_name[i]);
-
-	      if (!(proto_style->color_flags[i] & GTK_RC_FG) && 
-		    rc_style->color_flags[i] & GTK_RC_FG)
-		{
-		  proto_style->fg[i] = rc_style->fg[i];
-		  proto_style->color_flags[i] |= GTK_RC_FG;
-		}
-	      if (!(proto_style->color_flags[i] & GTK_RC_BG) && 
-		    rc_style->color_flags[i] & GTK_RC_BG)
-		{
-		  proto_style->bg[i] = rc_style->bg[i];
-		  proto_style->color_flags[i] |= GTK_RC_BG;
-		}
-	      if (!(proto_style->color_flags[i] & GTK_RC_TEXT) && 
-		    rc_style->color_flags[i] & GTK_RC_TEXT)
-		{
-		  proto_style->text[i] = rc_style->text[i];
-		  proto_style->color_flags[i] |= GTK_RC_TEXT;
-		}
-	      if (!(proto_style->color_flags[i] & GTK_RC_BASE) && 
-		    rc_style->color_flags[i] & GTK_RC_BASE)
-		{
-		  proto_style->base[i] = rc_style->base[i];
-		  proto_style->color_flags[i] |= GTK_RC_BASE;
-		}
+	      base_style = rc_style;
+	      break;
 	    }
 
-	  if (proto_style->xthickness < 0 && rc_style->xthickness >= 0)
-	    proto_style->xthickness = rc_style->xthickness;
-	  if (proto_style->ythickness < 0 && rc_style->ythickness >= 0)
-	    proto_style->ythickness = rc_style->ythickness;
-
-	  if (!proto_style->font_desc && rc_style->font_desc)
-	    proto_style->font_desc = pango_font_description_copy (rc_style->font_desc);
-
-	  if (!proto_style->engine && rc_style->engine)
-	    {
-	      proto_style->engine = rc_style->engine;
-	      gtk_theme_engine_ref (proto_style->engine);
-	    }
+	  tmp_styles = tmp_styles->next;
+	}
+      
+      proto_style_class = GTK_RC_STYLE_GET_CLASS (base_style);
+      proto_style = proto_style_class->clone (base_style);
+      
+      tmp_styles = rc_styles;
+      while (tmp_styles)
+	{
+	  GtkRcStyle *rc_style = tmp_styles->data;
 	  
-	  if (proto_style->engine &&
-	      (proto_style->engine == rc_style->engine))
-	    proto_style->engine->merge_rc_style (proto_style, rc_style);
-
+	  proto_style_class->merge (proto_style, rc_style);
+	  
 	  /* Point from each rc_style to the list of styles */
-
 	  if (!g_slist_find (rc_style->rc_style_lists, rc_styles))
 	    rc_style->rc_style_lists = g_slist_prepend (rc_style->rc_style_lists, rc_styles);
-
-	  tmp_style = tmp_style->next;
+	  
+	  tmp_styles = tmp_styles->next;
 	}
 
       for (i = 0; i < 5; i++)
@@ -1417,6 +1416,7 @@ gtk_rc_init_style (GSList *rc_styles)
 	  }
 
       style = gtk_rc_style_to_style (proto_style);
+      gtk_rc_style_unref (proto_style);
 
       g_hash_table_insert (realized_style_ht, rc_styles, style);
     }
@@ -1509,9 +1509,6 @@ gtk_rc_parse_style (GScanner *scanner)
 
       for (i = 0; i < 5; i++)
 	rc_style->color_flags[i] = 0;
-
-      rc_style->engine = NULL;
-      rc_style->engine_data = NULL;
     }
   
   token = g_scanner_peek_next_token (scanner);
@@ -1604,7 +1601,7 @@ gtk_rc_parse_style (GScanner *scanner)
 	  token = gtk_rc_parse_font_name (scanner, rc_style);
 	  break;
 	case GTK_RC_TOKEN_ENGINE:
-	  token = gtk_rc_parse_engine (scanner, rc_style);
+	  token = gtk_rc_parse_engine (scanner, &rc_style);
 	  break;
 	default:
 	  g_scanner_get_next_token (scanner);
@@ -1977,10 +1974,14 @@ gtk_rc_parse_font_name (GScanner   *scanner,
 
 static guint	   
 gtk_rc_parse_engine (GScanner	 *scanner,
-		     GtkRcStyle	 *rc_style)
+		     GtkRcStyle	**rc_style)
 {
   guint token;
-
+  GtkThemeEngine *engine;
+  guint result = G_TOKEN_NONE;
+  GtkRcStyle *new_style = NULL;
+  gboolean parsed_curlies = FALSE;
+  
   token = g_scanner_get_next_token (scanner);
   if (token != GTK_RC_TOKEN_ENGINE)
     return GTK_RC_TOKEN_ENGINE;
@@ -1989,32 +1990,67 @@ gtk_rc_parse_engine (GScanner	 *scanner,
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
 
-  rc_style->engine = gtk_theme_engine_get (scanner->value.v_string);
-
+  engine = gtk_theme_engine_get (scanner->value.v_string);
+  
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_LEFT_CURLY)
     return G_TOKEN_LEFT_CURLY;
 
-  if (rc_style->engine)
-    return rc_style->engine->parse_rc_style (scanner, rc_style);
-  else
+  if (engine)
     {
-      /* Skip over remainder, looking for nested {}'s */
+      GtkRcStyleClass *new_class;
+      
+      new_style = gtk_theme_engine_create_rc_style (engine);
+      gtk_theme_engine_unref (engine);
+
+      new_class = GTK_RC_STYLE_GET_CLASS (new_style);
+
+      new_class->merge (new_style, *rc_style);
+      if ((*rc_style)->name)
+	new_style->name = g_strdup ((*rc_style)->name);
+      
+      if (new_class->parse)
+	{
+	  parsed_curlies = TRUE;
+	  result = new_class->parse (new_style, scanner);
+
+	  if (result != G_TOKEN_NONE)
+	    {
+	      g_object_unref (G_OBJECT (new_style));
+	      new_style = NULL;
+	    }
+	}
+    }
+
+  if (!parsed_curlies)
+    {
+      /* Skip over remainder, looking for nested {}'s
+       */
       guint count = 1;
       
+      result = G_TOKEN_RIGHT_CURLY;
       while ((token = g_scanner_get_next_token (scanner)) != G_TOKEN_EOF)
 	{
 	  if (token == G_TOKEN_LEFT_CURLY)
 	    count++;
 	  else if (token == G_TOKEN_RIGHT_CURLY)
 	    count--;
-
+	  
 	  if (count == 0)
-	    return G_TOKEN_NONE;
+	    {
+	      result = G_TOKEN_NONE;
+	      break;
+	    }
 	}
-
-      return G_TOKEN_RIGHT_CURLY;
     }
+
+  if (new_style)
+    {
+      g_object_unref (G_OBJECT (*rc_style));
+      *rc_style = new_style;
+    }
+
+  return result;
 }
 
 guint

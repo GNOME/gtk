@@ -71,9 +71,6 @@ struct _GtkRcStyle
   gint xthickness;
   gint ythickness;
 
-  GtkThemeEngine *engine;
-  gpointer        engine_data;
-
   /*< private >*/
   
   /* list of RC style lists including this RC style */
@@ -84,6 +81,27 @@ struct _GtkRcStyleClass
 {
   GObjectClass parent_class;
 
+  /* Create an empty RC style of the same type as this RC style.
+   * The default implementation, which does
+   * g_object_new (G_OBJECT_TYPE (style), NULL);
+   * should work in most cases.
+   */
+  GtkRcStyle *(*clone) (GtkRcStyle *rc_style);
+
+  /* Fill in engine specific parts of GtkRcStyle by parsing contents
+   * of brackets. Returns G_TOKEN_NONE if succesful, otherwise returns
+   * the token it expected but didn't get.
+   */
+  guint     (*parse)  (GtkRcStyle *rc_style, GScanner *scanner);
+  
+  /* Combine RC style data from src into dest. If overriden, this
+   * function should chain to the parent.
+   */
+  void      (*merge)  (GtkRcStyle *dest, GtkRcStyle *src);
+
+  /* Create an empty style suitable to this RC style
+   */
+  GtkStyle *(*create_style) (GtkRcStyle *rc_style);
 };
 
 void	  gtk_rc_init			(void);
@@ -101,10 +119,10 @@ void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
 void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
 
-GType       gtk_rc_style_get_type         (void);
-GtkRcStyle* gtk_rc_style_new              (void);
-void        gtk_rc_style_ref              (GtkRcStyle  *rc_style);
-void        gtk_rc_style_unref            (GtkRcStyle  *rc_style);
+GType       gtk_rc_style_get_type   (void);
+GtkRcStyle* gtk_rc_style_new        (void);
+void        gtk_rc_style_ref        (GtkRcStyle *rc_style);
+void        gtk_rc_style_unref      (GtkRcStyle *rc_style);
 
 /* Tell gtkrc to use a custom routine to load images specified in rc files instead of
  *   the default xpm-only loader

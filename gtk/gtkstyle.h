@@ -84,6 +84,9 @@ struct _GtkStyle
   GdkFont *font;
   PangoFontDescription *font_desc;
   
+  gint xthickness;
+  gint ythickness;
+  
   GdkGC *fg_gc[5];
   GdkGC *bg_gc[5];
   GdkGC *light_gc[5];
@@ -96,9 +99,6 @@ struct _GtkStyle
   
   GdkPixmap *bg_pixmap[5];
 
-  gint xthickness;
-  gint ythickness;
-  
   /*< private >*/
   
   gint attach_count;
@@ -106,10 +106,6 @@ struct _GtkStyle
   gint depth;
   GdkColormap *colormap;
   
-  GtkThemeEngine *engine;
-  
-  gpointer	  engine_data;
-
   GtkRcStyle	 *rc_style;	/* the Rc style from which this style
 				 * was created
 				 */
@@ -119,7 +115,42 @@ struct _GtkStyle
 struct _GtkStyleClass
 {
   GObjectClass parent_class;
-  
+
+  /* Initialize for a particular colormap/depth
+   * combination. style->colormap/style->depth will have
+   * been set at this point. Will typically chain to parent.
+   */
+  void (*realize)               (GtkStyle               *style);
+
+  /* Clean up for a particular colormap/depth combination. Will
+   * typically chain to parent.
+   */
+  void (*unrealize)             (GtkStyle               *style);
+
+  /* Make style an exact duplicate of src.
+   */
+  void (*copy)                  (GtkStyle               *style,
+				 GtkStyle               *src);
+
+  /* Create an empty style of the same type as this style.
+   * The default implementation, which does
+   * g_object_new (G_OBJECT_TYPE (style), NULL);
+   * should work in most cases.
+   */
+  GtkStyle *(*clone)             (GtkStyle               *style);
+
+  /* Initialize the GtkStyle with the values in the GtkRcStyle.
+   * should chain to the parent implementation.
+   */
+  void     (*init_from_rc)      (GtkStyle               *style,
+				 GtkRcStyle             *rc_style);
+
+  void (*set_background)        (GtkStyle               *style,
+				 GdkWindow              *window,
+				 GtkStateType            state_type);
+
+  /* Drawing functions
+   */
   void (*draw_hline)		(GtkStyle		*style,
 				 GdkWindow		*window,
 				 GtkStateType		 state_type,
