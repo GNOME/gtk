@@ -1,3 +1,23 @@
+2000-09-26  Havoc Pennington  <hp@redhat.com>
+
+	* gdk-pixbuf-util.c (gdk_pixbuf_saturate_and_pixelate): Add this
+	function here, instead of putting it in a private GTK+ file.
+
+	* gdk-pixbuf-private.h (GdkPixbufInlineFormat): include an 
+	enum here for the known formats of inlined pixbufs.
+	Also, #define our file magic here.
+
+2000-06-23  Havoc Pennington  <hp@redhat.com>
+
+	* make-inline-pixbuf.c: Small program that creates C variable
+	declarations of inline pixbuf data. This can be read 
+	by gdk_pixbuf_new_from_inline.
+
+	* gdk-pixbuf.h (gdk_pixbuf_new_from_inline): New function to read
+	inline pixbuf data and create a pixbuf from it.	
+
+	* gdk-pixbuf-data.c (gdk_pixbuf_new_from_inline): implement here
+
 2000-09-07  Tor Lillqvist  <tml@iki.fi>
 
 	* makefile.mingw.in: Use own version number for gdk-pixbuf DLLs,
@@ -27,6 +47,7 @@
 	* io-wbmp.c: Some bug fixes - now tested to work.
 
 2000-07-27  Elliot Lee  <sopwith@redhat.com>
+
 	* gdk-pixbuf-io.h, gdk-pixbuf-io.c: Add gdk_pixbuf_get_named_module() function to facilitate above change
 	* io-wbmp.c, pixbufloader_wbmp.defs, gdk-pixbuf-io.c, Makefile: Implement loader for WBMP format.
 	* io-bmp.c: Don't malloc a temporary buffer - use stack instead.
@@ -91,7 +112,7 @@ Thu Jul  6 11:49:47 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (libgdk_pixbuf_la_LDFLAGS): Use GTK+ version
 	soname scheme for gdk-pixbuf.
-
+	
 2000-06-21  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf.c: Convert GdkPixbuf to GObject, leaving it opaque

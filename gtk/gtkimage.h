@@ -36,7 +36,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-
 #define GTK_TYPE_IMAGE                  (gtk_image_get_type ())
 #define GTK_IMAGE(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_IMAGE, GtkImage))
 #define GTK_IMAGE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IMAGE, GtkImageClass))
@@ -48,12 +47,65 @@ extern "C" {
 typedef struct _GtkImage       GtkImage;
 typedef struct _GtkImageClass  GtkImageClass;
 
+typedef struct _GtkImagePixmapData  GtkImagePixmapData;
+typedef struct _GtkImageImageData   GtkImageImageData;
+typedef struct _GtkImagePixbufData  GtkImagePixbufData;
+typedef struct _GtkImageStockData   GtkImageStockData;
+typedef struct _GtkImageIconSetData GtkImageIconSetData;
+
+struct _GtkImagePixmapData
+{
+  GdkPixmap *pixmap;
+  GdkBitmap *mask;
+};
+
+struct _GtkImageImageData
+{
+  GdkImage *image;
+  GdkBitmap *mask;
+};
+
+struct _GtkImagePixbufData
+{
+  GdkPixbuf *pixbuf;
+};
+
+struct _GtkImageStockData
+{
+  gchar *stock_id;
+  gchar *size;
+};
+
+struct _GtkImageIconSetData
+{
+  GtkIconSet *icon_set;
+  gchar      *size;
+};
+
+typedef enum
+{
+  GTK_IMAGE_EMPTY,
+  GTK_IMAGE_PIXMAP,
+  GTK_IMAGE_IMAGE,
+  GTK_IMAGE_PIXBUF,
+  GTK_IMAGE_STOCK,
+  GTK_IMAGE_ICON_SET
+} GtkImageType;
+
 struct _GtkImage
 {
   GtkMisc misc;
 
-  GdkImage *image;
-  GdkBitmap *mask;
+  GtkImageType storage_type;
+  
+  union
+  {
+    GtkImagePixmapData pixmap;
+    GtkImageImageData image;
+    GtkImagePixbufData pixbuf;
+    GtkImageStockData stock;
+    GtkImageIconSetData icon_set;
+  } data;
 };
 
 struct _GtkImageClass
@@ -61,8 +113,56 @@ struct _GtkImageClass
   GtkMiscClass parent_class;
 };
 
-
 GtkType    gtk_image_get_type (void) G_GNUC_CONST;
+
+GtkWidget* gtk_image_new_from_pixmap   (GdkPixmap       *pixmap,
+                                        GdkBitmap       *mask);
+GtkWidget* gtk_image_new_from_image    (GdkImage        *image,
+                                        GdkBitmap       *mask);
+GtkWidget* gtk_image_new_from_file     (const gchar     *filename);
+GtkWidget* gtk_image_new_from_pixbuf   (GdkPixbuf       *pixbuf);
+GtkWidget* gtk_image_new_from_stock    (const gchar     *stock_id,
+                                        const gchar     *size);
+GtkWidget* gtk_image_new_from_icon_set (GtkIconSet      *icon_set,
+                                        const gchar     *size);
+
+void gtk_image_set_from_pixmap   (GtkImage        *image,
+                                  GdkPixmap       *pixmap,
+                                  GdkBitmap       *mask);
+void gtk_image_set_from_image    (GtkImage        *image,
+                                  GdkImage        *gdk_image,
+                                  GdkBitmap       *mask);
+void gtk_image_set_from_file     (GtkImage        *image,
+                                  const gchar     *filename);
+void gtk_image_set_from_pixbuf   (GtkImage        *image,
+                                  GdkPixbuf       *pixbuf);
+void gtk_image_set_from_stock    (GtkImage        *image,
+                                  const gchar     *stock_id,
+                                  const gchar     *size);
+void gtk_image_set_from_icon_set (GtkImage        *image,
+                                  GtkIconSet      *icon_set,
+                                  const gchar     *size);
+
+GtkImageType gtk_image_get_storage_type (GtkImage   *image);
+
+void       gtk_image_get_pixmap   (GtkImage         *image,
+                                   GdkPixmap       **pixmap,
+                                   GdkBitmap       **mask);
+void       gtk_image_get_image    (GtkImage         *image,
+                                   GdkImage        **gdk_image,
+                                   GdkBitmap       **mask);
+GdkPixbuf* gtk_image_get_pixbuf   (GtkImage         *image);
+void       gtk_image_get_stock    (GtkImage         *image,
+                                   gchar           **stock_id,
+                                   gchar           **size);
+void       gtk_image_get_icon_set (GtkImage         *image,
+                                   GtkIconSet      **icon_set,
+                                   gchar           **size);
+
+
+
+/* These three are deprecated */
+
 GtkWidget* gtk_image_new      (GdkImage   *val,
 			       GdkBitmap  *mask);
 void       gtk_image_set      (GtkImage   *image,

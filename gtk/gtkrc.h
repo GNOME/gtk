@@ -35,6 +35,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/* Forward declaration */
+typedef struct _GtkIconFactory GtkIconFactory;
+
 #define GTK_TYPE_RC_STYLE              (gtk_rc_style_get_type ())
 #define GTK_RC_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_RC_STYLE, GtkRcStyle))
 #define GTK_RC_STYLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RC_STYLE, GtkRcStyleClass))
@@ -70,11 +73,13 @@ struct _GtkRcStyle
 
   gint xthickness;
   gint ythickness;
-
+  
   /*< private >*/
   
   /* list of RC style lists including this RC style */
   GSList *rc_style_lists;
+
+  GSList *icon_factories;
 };
 
 struct _GtkRcStyleClass
@@ -177,6 +182,9 @@ typedef enum {
   GTK_RC_TOKEN_HIGHEST,
   GTK_RC_TOKEN_ENGINE,
   GTK_RC_TOKEN_MODULE_PATH,
+  GTK_RC_TOKEN_STOCK,
+  GTK_RC_TOKEN_LTR,
+  GTK_RC_TOKEN_RTL,
   GTK_RC_TOKEN_LAST
 } GtkRcTokenType;
 

@@ -606,6 +606,11 @@ PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
 					       const gchar *text);
 
+GdkPixbuf* gtk_widget_render_stock_icon       (GtkWidget      *widget,
+                                               const gchar    *stock_id,
+                                               const gchar    *size,
+                                               const gchar    *detail);
+
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,
  * the returned name is newly allocated.
  */

@@ -75,7 +75,11 @@ struct _GtkButtonClass
 
 GtkType        gtk_button_get_type       (void) G_GNUC_CONST;
 GtkWidget*     gtk_button_new            (void);
-GtkWidget*     gtk_button_new_with_label (const gchar *label);
+GtkWidget*     gtk_button_new_with_label (const gchar   *label);
+GtkWidget*     gtk_button_new_stock      (const gchar   *stock_id,
+                                          GtkAccelGroup *accel_group);
+GtkWidget*     gtk_button_new_accel      (const gchar   *uline_label,
+                                          GtkAccelGroup *accel_group);
 void           gtk_button_pressed        (GtkButton *button);
 void           gtk_button_released       (GtkButton *button);
 void           gtk_button_clicked        (GtkButton *button);

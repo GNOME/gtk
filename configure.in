@@ -1005,6 +1005,9 @@ gtk+.spec
 docs/gtk-config.1
 Makefile
 gtk-config-2.0
+gdk-pixbuf.pc
+gdk-2.0.pc
+gtk+-2.0.pc
 po/Makefile.in
 build/Makefile
 build/win32/Makefile
@@ -1031,6 +1034,7 @@ gdk/linux-fb/Makefile
 gtk/Makefile
 gtk/makefile.mingw
 gtk/gtkcompat.h
+gtk/stock-icons/Makefile
 modules/Makefile
 modules/linux-fb/Makefile
 ], [chmod +x gtk-config-2.0])

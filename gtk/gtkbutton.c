@@ -29,7 +29,10 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
-
+#include "gtkimage.h"
+#include "gtkhbox.h"
+#include "gtkstock.h"
+#include "gtkiconfactory.h"
 
 #define CHILD_SPACING     1
 #define DEFAULT_LEFT_POS  4
@@ -45,6 +48,7 @@ enum {
   LEAVE,
   LAST_SIGNAL
 };
+
 enum {
   ARG_0,
   ARG_LABEL,
@@ -307,6 +311,93 @@ gtk_button_new_with_label (const gchar *label)
 
   gtk_container_add (GTK_CONTAINER (button), label_widget);
   gtk_widget_show (label_widget);
+
+  return button;
+}
+
+GtkWidget*
+gtk_button_new_stock (const gchar   *stock_id,
+                      GtkAccelGroup *accel_group)
+{
+  GtkWidget *button;
+  GtkStockItem item;
+
+  if (gtk_stock_lookup (stock_id, &item))
+    {
+      GtkWidget *label;
+      GtkWidget *image;
+      GtkWidget *hbox;
+      guint keyval;
+      
+      button = gtk_button_new ();
+
+      label = gtk_label_new (NULL);
+      keyval = gtk_label_parse_uline (GTK_LABEL (label),
+                                      item.label);
+
+      if (keyval && accel_group)
+        {
+          gtk_widget_add_accelerator (button,
+                                      "clicked",
+                                      accel_group,
+                                      keyval,
+                                      GDK_MOD1_MASK,
+                                      GTK_ACCEL_LOCKED);
+        }
+
+      /* Also add the stock accelerator if one was specified. */
+      if (item.keyval && accel_group)
+        {
+          gtk_widget_add_accelerator (button,
+                                      "clicked",
+                                      accel_group,
+                                      item.keyval,
+                                      item.modifier,
+                                      GTK_ACCEL_LOCKED);
+        }
+
+      image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
+      hbox = gtk_hbox_new (FALSE, 0);
+
+      gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 2);
+      gtk_box_pack_end (GTK_BOX (hbox), label, TRUE, TRUE, 2);
+      
+      gtk_container_add (GTK_CONTAINER (button), hbox);
+      gtk_widget_show_all (hbox);
+    }
+  else
+    {
+      button = gtk_button_new_accel (stock_id, accel_group);
+    }
+  
+  return button;
+}
+
+GtkWidget*
+gtk_button_new_accel (const gchar   *uline_label,
+                      GtkAccelGroup *accel_group)
+{
+  GtkWidget *button;
+  GtkWidget *label;
+  guint keyval;
+
+  button = gtk_button_new ();
+  
+  label = gtk_label_new (NULL);
+  keyval = gtk_label_parse_uline (GTK_LABEL (label), uline_label);
+
+  if (keyval && accel_group)
+    {
+      gtk_widget_add_accelerator (button,
+                                  "clicked",
+                                  accel_group,
+                                  keyval,
+                                  GDK_MOD1_MASK,
+                                  GTK_ACCEL_LOCKED);
+    }
+  
+  gtk_container_add (GTK_CONTAINER (button), label);
+  gtk_widget_show (label);
 
   return button;
 }

@@ -28,6 +28,7 @@
 #include <string.h>
 #include <locale.h>
 #include "gtkcontainer.h"
+#include "gtkiconfactory.h"
 #include "gtkmain.h"
 #include "gtkrc.h"
 #include "gtkselection.h"
@@ -3539,6 +3540,37 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
     pango_layout_set_text (layout, text, -1);
 
   return layout;
+}
+
+GdkPixbuf*
+gtk_widget_render_stock_icon (GtkWidget      *widget,
+                              const gchar    *stock_id,
+                              const gchar    *size,
+                              const gchar    *detail)
+{
+  GtkIconSet *icon_set;
+  GdkPixbuf *retval;
+  
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (stock_id != NULL, NULL);
+  g_return_val_if_fail (size != NULL, NULL);
+  
+  gtk_widget_ensure_style (widget);
+  
+  icon_set = gtk_style_lookup_icon_set (widget->style, stock_id);
+
+  if (icon_set == NULL)
+    return NULL;
+
+  retval = gtk_icon_set_render_icon (icon_set,
+                                     widget->style,
+                                     gtk_widget_get_direction (widget),
+                                     GTK_WIDGET_STATE (widget),
+                                     size,
+                                     widget,
+                                     detail);
+
+  return retval;
 }
 
 /*************************************************************

@@ -75,6 +75,7 @@
 #include <gtk/gtkhscale.h>
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkhseparator.h>
+#include <gtk/gtkiconfactory.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkimmulticontext.h>
@@ -116,6 +117,7 @@
 #include <gtk/gtksignal.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
+#include <gtk/gtkstock.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtktable.h>

@@ -1,5 +1,7 @@
 ## Makefile.am for gtk+/gtk
 
+SUBDIRS=stock-icons
+
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_DISABLE_COMPAT_H				\
@@ -96,6 +98,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
 	gtkhsv.h		\
+	gtkiconfactory.h	\
 	gtkimage.h		\
 	gtkimcontext.h		\
 	gtkimmulticontext.h	\
@@ -141,6 +144,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkspinbutton.h		\
 	gtkstyle.h		\
 	gtkstatusbar.h		\
+	gtkstock.h		\
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
 	gtktextbuffer.h		\
@@ -178,16 +182,18 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 # interface)
 
 gtk_semipublic_h_sources = @STRIP_BEGIN@ \
-	gtktextbtree.h		\
-	gtktextchild.h		\
 	gtktextdisplay.h	\
 	gtktextlayout.h		\
-	gtktextsegment.h	\
-	gtktexttypes.h		\
 @STRIP_END@	
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources = @STRIP_BEGIN@ \
+	gtktextbtree.h		\
+	gtktextchild.h		\
+	gtktextsegment.h	\
+	gtktexttypes.h		\
+	gtktextiterprivate.h	\
+	gtktextmarkprivate.h	\
 	gtktexttagprivate.h	\
 @STRIP_END@
 
@@ -238,6 +244,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkhscrollbar.c		\
 	gtkhseparator.c		\
 	gtkhsv.c		\
+	gtkiconfactory.c	\
 	gtkimage.c		\
 	gtkimcontext.c		\
 	gtkimcontextsimple.c	\
@@ -283,6 +290,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtksignal.c		\
 	gtksocket.c             \
 	gtkspinbutton.c		\
+	gtkstock.c		\
 	gtkstyle.c		\
 	gtkstatusbar.c		\
 	gtktable.c		\

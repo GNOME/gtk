@@ -51,7 +51,8 @@ typedef struct _GtkStyleClass  GtkStyleClass;
  */
 typedef struct _GtkThemeEngine GtkThemeEngine;
 typedef struct _GtkRcStyle     GtkRcStyle;
-
+typedef struct _GtkIconSet     GtkIconSet;
+typedef struct _GtkIconSource  GtkIconSource;
 
 /* We make this forward declaration here, since we pass
  * GtkWidgt's to the draw functions.
@@ -110,6 +111,8 @@ struct _GtkStyle
 				 * was created
 				 */
   GSList	 *styles;
+
+  GSList         *icon_factories;
 };
 
 struct _GtkStyleClass
@@ -149,8 +152,18 @@ struct _GtkStyleClass
 				 GdkWindow              *window,
 				 GtkStateType            state_type);
 
+
+  GdkPixbuf * (* render_icon)   (GtkStyle               *style,
+                                 const GtkIconSource    *source,
+                                 GtkTextDirection        direction,
+                                 GtkStateType            state,
+                                 const gchar            *size,
+                                 GtkWidget              *widget,
+                                 const gchar            *detail);
+  
   /* Drawing functions
    */
+  
   void (*draw_hline)		(GtkStyle		*style,
 				 GdkWindow		*window,
 				 GtkStateType		 state_type,
@@ -408,6 +421,15 @@ void	  gtk_style_apply_default_background (GtkStyle	   *style,
 					      gint	    width, 
 					      gint	    height);
 
+GtkIconSet* gtk_style_lookup_icon_set (GtkStyle            *style,
+                                       const gchar         *stock_id);
+GdkPixbuf * gtk_style_render_icon     (GtkStyle            *style,
+                                       const GtkIconSource *source,
+                                       GtkTextDirection     direction,
+                                       GtkStateType         state,
+                                       const gchar *        size,
+                                       GtkWidget           *widget,
+                                       const gchar         *detail);
 void gtk_draw_hline      (GtkStyle        *style,
 			  GdkWindow       *window,
 			  GtkStateType     state_type,
@@ -814,6 +836,7 @@ void gtk_paint_handle     (GtkStyle        *style,
 			   gint             width,
 			   gint             height,
 			   GtkOrientation   orientation);
+
 
 #ifdef __cplusplus
 }

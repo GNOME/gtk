@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+target=@gdktarget@
+
+Name: GTK+
+Description: GIMP Tool Kit
+Version: @VERSION@
+Requires: gdk-2.0
+Libs: -L${libdir} -lgtk-${target}-1.3
+Cflags: -I${includedir}

@@ -36,7 +36,10 @@ extern "C" {
 
 
 
-/* Color spaces; right now only RGB is supported */
+/* Color spaces; right now only RGB is supported.
+ * Note that these values are encoded in inline pixbufs
+ * as ints, so don't reorder them
+ */
 typedef enum {
 	GDK_COLORSPACE_RGB
 } GdkColorspace;
@@ -103,6 +106,11 @@ GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data,
 
 GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data);
 
+/* Read an inline pixbuf */
+GdkPixbuf *gdk_pixbuf_new_from_inline   (const guchar *inline_pixbuf,
+                                         gboolean      copy_pixels,
+                                         int           length);
+
 /* Adding an alpha channel */
 GdkPixbuf *gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf, gboolean substitute_color,
 				 guchar r, guchar g, guchar b);
@@ -113,6 +121,12 @@ void gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
 			   int width, int height,
 			   GdkPixbuf *dest_pixbuf,
 			   int dest_x, int dest_y);
+
+/* Brighten/darken and optionally make it pixelated-looking */
+void gdk_pixbuf_saturate_and_pixelate (const GdkPixbuf *src,
+                                       GdkPixbuf       *dest,
+                                       gfloat           saturation,
+                                       gboolean         pixelate);
 
 
 
