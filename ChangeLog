@@ -1,3 +1,8 @@
+2001-03-05  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state):
+	Set GDK_WINDOW_TYPE_HINT_MENU on tearoff window.
+
 2001-03-05  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtklabel.c: Made the "parent_class" pointer static. The

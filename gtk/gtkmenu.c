@@ -840,6 +840,8 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 						     "type", GTK_WINDOW_TOPLEVEL,
 						     "signal::destroy", gtk_widget_destroyed, &menu->tearoff_window,
 						     NULL);
+	      gtk_window_set_type_hint (GTK_WINDOW (menu->tearoff_window),
+					GDK_WINDOW_TYPE_HINT_MENU);
 	      gtk_widget_set_app_paintable (menu->tearoff_window, TRUE);
 	      gtk_signal_connect (GTK_OBJECT (menu->tearoff_window),  
 				  "event",
