@@ -1,3 +1,7 @@
+Tue Apr  5 16:00:04 2005  Manish Singh  <yosh@gimp.org>
+
+	* Makefile.am: add xdgmimecache.[ch].
+
 2005-03-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimeglob.c: Sync to latest upstream,

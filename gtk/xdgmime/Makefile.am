@@ -7,6 +7,8 @@ libxdgmime_la_SOURCES = \
 	xdgmime.h	\
 	xdgmimealias.c	\
 	xdgmimealias.h	\
+	xdgmimecache.c	\
+	xdgmimecache.h	\
 	xdgmimeglob.c 	\
 	xdgmimeglob.h 	\
 	xdgmimeint.c 	\
