@@ -1176,6 +1176,10 @@ gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
  * directory path, then the requestor will open with that path as its
  * current working directory.
  *
+ * This has the consequence that in order to open the requestor with a 
+ * working directory and an empty filename, @filename must have a trailing
+ * directory separator.
+ *
  * The encoding of @filename is the on-disk encoding, which
  * may not be UTF-8. See g_filename_from_utf8().
  **/
