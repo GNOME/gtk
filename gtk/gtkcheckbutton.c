@@ -29,7 +29,7 @@
 #include "gtklabel.h"
 
 
-#define INDICATOR_SIZE     10
+#define INDICATOR_SIZE     13
 #define INDICATOR_SPACING  2
 
 

@@ -1,3 +1,13 @@
+Mon Apr 30 20:29:27 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c gtk/gtkcheckbutton.c gtk/gtkoptionmenu.c 
+	  gtk/gtkspinbutton.c gtk/gtkstyle.c gtk/gtkwidget.c:
+  	  New default theme! A slighly improved version of the 2.0 Raleigh
+	  theme, with Windows-esque focus/drawing default. 
+	  (GtkWidget::interior_focus defaults to TRUE.)
+
+	* gtk/gtkstyle.[ch]: Add a text_aa color halfway between text and base.
+
 2001-04-30  Havoc Pennington  <hp@pobox.com>
 
 	* tests/testtext.c (line_numbers_expose): fix to work with
@@ -13,7 +23,8 @@ Mon Apr 30 19:18:07 2001  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkbbox.c gtk/gtkdialog.c: Tweak padding some to deal
 	  with GtkWidget::interior_focus = TRUE better.
 
-	* gtk/gtkbutton.c
+	* gtk/gtkbutton.c: Switch ::default_spacing to ::default_border,
+	::default_outside_border for more flexibility.
 
 	* gtk/gtkwidget.c (gtk_widget_style_get_valist): Remove 
 	G_VALUE_NO_COPY_CONTENTS, to correspond with the recent

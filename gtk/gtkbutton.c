@@ -37,8 +37,8 @@
 
 #define CHILD_SPACING     1
 
-static GtkBorder default_default_border = { 5, 5, 6, 6 };
-static GtkBorder default_default_outside_border = { 5, 5, 6, 6 };
+static GtkBorder default_default_border = { 1, 1, 1, 1 };
+static GtkBorder default_default_outside_border = { 0, 0, 0, 0 };
 
 /* Time out before giving up on getting a key release when animatng
  * the close button.

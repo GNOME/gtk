@@ -48,8 +48,8 @@ struct _GtkOptionMenuProps
 
 static GtkOptionMenuProps default_props = {
   FALSE,
-  { 12, 8 },
-  { 3, 7, 2, 2 }		/* Left, right, top, bottom */
+  { 7, 13 },
+  { 7, 5, 2, 2 }		/* Left, right, top, bottom */
 };
 
 static void gtk_option_menu_class_init      (GtkOptionMenuClass *klass);

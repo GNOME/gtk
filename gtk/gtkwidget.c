@@ -991,7 +991,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 					   g_param_spec_boolean ("interior_focus",
 								 _("Interior Focus"),
 								 _("Whether to draw the focus indicator inside widgets."),
-								 FALSE,
+								 TRUE,
 								 G_PARAM_READABLE));
 }
 

@@ -203,7 +203,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     _("Width of scrollbar or scale thumb"),
 							     0,
 							     G_MAXINT,
-							     11,
+							     14,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("trough_border",
@@ -211,7 +211,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     _("Width of border around range"),
 							     0,
 							     G_MAXINT,
-							     2,
+							     1,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("stepper_size",
@@ -219,7 +219,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     _("Size of step buttons at ends"),
 							     0,
 							     G_MAXINT,
-							     11,
+							     14,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("stepper_spacing",
@@ -227,7 +227,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     _("Spacing between step buttons and thumb"),
 							     G_MININT,
 							     G_MAXINT,
-							     1,
+							     0,
 							     G_PARAM_READABLE));
 }
 

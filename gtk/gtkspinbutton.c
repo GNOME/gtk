@@ -231,7 +231,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   gtk_widget_class_install_style_property_parser (widget_class,
 						  g_param_spec_enum ("shadow_type", "Shadow Type", NULL,
 								     GTK_TYPE_SHADOW_TYPE,
-								     GTK_SHADOW_NONE,
+								     GTK_SHADOW_IN,
 								     G_PARAM_READABLE),
 						  gtk_rc_property_parse_enum);
   spinbutton_signals[INPUT] =

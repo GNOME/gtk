@@ -83,6 +83,7 @@ struct _GtkStyle
   GdkColor mid[5];
   GdkColor text[5];
   GdkColor base[5];
+  GdkColor text_aa[5];		/* Halfway between text/base */
   
   GdkColor black;
   GdkColor white;
@@ -99,6 +100,7 @@ struct _GtkStyle
   GdkGC *mid_gc[5];
   GdkGC *text_gc[5];
   GdkGC *base_gc[5];
+  GdkGC *text_aa_gc[5];
   GdkGC *black_gc;
   GdkGC *white_gc;
   
