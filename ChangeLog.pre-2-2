@@ -1,3 +1,9 @@
+Sat Jun 13 10:51:56 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtkspinbutton.h gtkspinbutton.c testgtk.c 
+	(gtk_spin_button_set_shadow_type):
+	New API to set the shadow type of the arrow panel.
+
 Fri Jun 12 21:20:42 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_expose): Removed
