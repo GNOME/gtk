@@ -1,6 +1,9 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
+ * GtkSpinButton widget for GTK+
+ * Copyright (C) 1998 Lars Hamann and Stefan Jeske
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -62,13 +65,13 @@ struct _GtkSpinButton
 
   guint8 update_policy;
 
-  guint snapped : 1;
   guint in_child : 2;
   guint click_child : 2;
   guint button : 2;
   guint need_timer : 1;
   guint timer_calls : 3;
-  guint digits : 7;
+  guint digits : 3;
+  guint numeric : 1;
 };
 
 struct _GtkSpinButtonClass
@@ -114,6 +117,10 @@ gtk_spin_button_set_value          (GtkSpinButton  *spin_button,
 void
 gtk_spin_button_set_update_policy  (GtkSpinButton             *spin_button,
 				    GtkSpinButtonUpdatePolicy  policy);
+
+void
+gtk_spin_button_set_numeric        (GtkSpinButton  *spin_button,
+				    gint            numeric);
 
 #ifdef __cplusplus
 }
