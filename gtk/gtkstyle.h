@@ -26,6 +26,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+#pragma }
 
 typedef struct _GtkStyle         GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;
@@ -74,17 +75,17 @@ struct _GtkStyle
 
   GdkPixmap *bg_pixmap[5];
 
-  GtkThemeEngine *engine;
-  GtkStyleClass  *klass;
-
-  gpointer        engine_data;
-
   /* Private */
   gint ref_count;
   gint attach_count;
 
   gint depth;
   GdkColormap *colormap;
+
+  GtkStyleClass  *klass;        /* Not private - reorder me */
+  GtkThemeEngine *engine;
+
+  gpointer        engine_data;
 
   GtkRcStyle     *rc_style;	/* the Rc style from which this style
 				 * was created */

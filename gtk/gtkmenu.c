@@ -60,6 +60,9 @@ static void gtk_menu_deactivate	    (GtkMenuShell      *menu_shell);
 static void gtk_menu_show_all	    (GtkWidget	       *widget);
 static void gtk_menu_hide_all	    (GtkWidget	       *widget);
 static void gtk_menu_position       (GtkMenu           *menu);
+static void gtk_menu_reparent       (GtkMenu           *menu, 
+				     GtkWidget         *new_parent, 
+				     gboolean           unrealize);
 
 static GtkMenuShellClass *parent_class = NULL;
 static const gchar	*attach_data_key = "gtk-menu-attach-data";
@@ -162,6 +165,11 @@ gtk_menu_init (GtkMenu *menu)
 
   gtk_container_add (GTK_CONTAINER (menu->toplevel), GTK_WIDGET (menu));
 
+  /* Refloat the menu, so that reference counting for the menu isn't
+   * affected by it being a child of the toplevel
+   */
+  GTK_WIDGET_SET_FLAGS (menu, GTK_FLOATING);
+
   menu->tearoff_window = NULL;
   menu->torn_off = FALSE;
 
@@ -179,13 +187,16 @@ gtk_menu_destroy (GtkObject	    *object)
 
   menu = GTK_MENU (object);
   
-  gtk_widget_ref (GTK_WIDGET (object));
+  gtk_object_ref (object);
   
   data = gtk_object_get_data (object, attach_data_key);
   if (data)
     gtk_menu_detach (menu);
   
   gtk_menu_set_accel_group (menu, NULL);
+
+  /* Add back the reference count for being a child */
+  gtk_object_ref (object);
   
   gtk_widget_destroy (menu->toplevel);
   if (menu->tearoff_window)
@@ -194,7 +205,7 @@ gtk_menu_destroy (GtkObject	    *object)
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
   
-  gtk_widget_unref (GTK_WIDGET (object));
+  gtk_object_unref (object);
 }
 
 
@@ -222,7 +233,7 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
       return;
     }
   
-  gtk_widget_ref (GTK_WIDGET (menu));
+  gtk_object_ref (GTK_OBJECT (menu));
   gtk_object_sink (GTK_OBJECT (menu));
   
   data = g_new (GtkMenuAttachData, 1);
@@ -369,8 +380,10 @@ gtk_menu_popup (GtkMenu		    *menu,
       gdk_window_set_back_pixmap (menu->tearoff_window->window, pixmap, FALSE);
       gdk_pixmap_unref (pixmap);
 
-      gtk_container_remove (GTK_CONTAINER (menu->tearoff_window), widget);
-      gtk_container_add (GTK_CONTAINER (menu->toplevel), widget);
+      /* We force an unrealize here so that we don't trigger redrawing/
+       * clearing code - we just want to reveal our backing pixmap.
+       */
+      gtk_menu_reparent (menu, menu->toplevel, TRUE);
     }
   
   menu->parent_menu_item = parent_menu_item;
@@ -464,17 +477,21 @@ gtk_menu_popdown (GtkMenu *menu)
 
   if (menu->torn_off)
     {
-      if (GTK_BIN (menu->toplevel)->child)
-	gtk_widget_reparent (GTK_WIDGET (menu), menu->tearoff_window);
+      if (GTK_BIN (menu->toplevel)->child) 
+	{
+	  gtk_menu_reparent (menu, menu->tearoff_window, FALSE);
+	} 
       else
-	/* We popped up the menu from the tearoff, so we need to 
-	 * release the grab - we aren't actually hiding the menu.
-	 */
-	if (menu_shell->have_xgrab)
-	  {
-	    gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	    gdk_keyboard_ungrab (GDK_CURRENT_TIME);
-	  }
+	{
+	  /* We popped up the menu from the tearoff, so we need to 
+	   * release the grab - we aren't actually hiding the menu.
+	   */
+	  if (menu_shell->have_xgrab)
+	    {
+	      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+	      gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+	    }
+	}
     }
   else
     gtk_widget_hide (GTK_WIDGET (menu));
@@ -608,7 +625,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      gtk_window_set_policy (GTK_WINDOW (menu->tearoff_window),
 				     FALSE, FALSE, TRUE);
 	    }
-	  gtk_widget_reparent (GTK_WIDGET (menu), menu->tearoff_window);
+	  gtk_menu_reparent (menu, menu->tearoff_window, FALSE);
 
 	  gtk_menu_position (menu);
 	  
@@ -618,7 +635,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
       else
 	{
 	  gtk_widget_hide (menu->tearoff_window);
-	  gtk_widget_reparent (GTK_WIDGET (menu), menu->toplevel);
+	  gtk_menu_reparent (menu, menu->toplevel, FALSE);
 	}
     }
 }
@@ -1045,3 +1062,38 @@ gtk_menu_position (GtkMenu *menu)
 			        menu->toplevel : menu->tearoff_window, 
 			    x, y);
 }
+
+/* Reparent the menu, taking care of the refcounting
+ */
+static void 
+gtk_menu_reparent (GtkMenu      *menu, 
+		   GtkWidget    *new_parent, 
+		   gboolean      unrealize)
+{
+  GtkObject *object = GTK_OBJECT (menu);
+  GtkWidget *widget = GTK_WIDGET (menu);
+  
+  gboolean was_floating = GTK_OBJECT_FLOATING (object);
+  gtk_object_ref (object);
+  gtk_object_sink (object);
+
+  if (unrealize)
+    {
+      gtk_object_ref (object);
+      gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
+      gtk_container_add (GTK_CONTAINER (new_parent), widget);
+      gtk_object_unref (object);
+    }
+  else
+    gtk_widget_reparent (GTK_WIDGET (menu), new_parent);
+  
+  if (was_floating)
+    GTK_OBJECT_SET_FLAGS (object, GTK_FLOATING);
+  else
+    gtk_object_unref (object);
+}
+
+
+
+
+
