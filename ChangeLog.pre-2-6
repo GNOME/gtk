@@ -1,3 +1,15 @@
+Wed Apr  4 04:13:18 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/stock-icons/Makefile.am: stay in builddir and read/write
+	files to/from source dir. (if we don't stay in builddir, we
+	can't reach make-inline-pixbuf.
+
+	* gdk/Makefile.am (gdkenumtypes.c): add $(srcdir) to mekeenums.pl
+	deps.
+
+	* configure.in (GTK_MICRO_VERSION): up and away (1.3.3 bin/interface
+	ages 0).
+
 Tue Apr  3 15:04:45 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodelsort.h:  removed set_sort_column, as it was
