@@ -1,3 +1,9 @@
+Wed Dec 23 20:31:40 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c: Fix problem where empty labels were 
+	getting a requisition height of zero, and trailing 
+	newlines were being ignored.
+
 Wed Dec 23 13:58:14 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_parse_uline):
