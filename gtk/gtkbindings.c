@@ -28,7 +28,7 @@
 
 
 /* --- defines --- */
-#define	BINDING_MOD_MASK()	(gtk_accelerator_get_default_mod_mask ())
+#define	BINDING_MOD_MASK()	(gtk_accelerator_get_default_mod_mask () | GDK_RELEASE_MASK)
 
 
 /* --- variables --- */

@@ -844,6 +844,20 @@ is_control (const gchar *string)
 	  (string[8] == '>'));
 }
 
+static inline gboolean
+is_release (const gchar *string)
+{
+  return ((string[0] == '<') &&
+	  (string[1] == 'r' || string[1] == 'R') &&
+	  (string[2] == 'e' || string[2] == 'E') &&
+	  (string[3] == 'l' || string[3] == 'L') &&
+	  (string[4] == 'e' || string[4] == 'E') &&
+	  (string[5] == 'a' || string[5] == 'A') &&
+	  (string[6] == 's' || string[6] == 'S') &&
+	  (string[7] == 'e' || string[7] == 'E') &&
+	  (string[8] == '>'));
+}
+
 void
 gtk_accelerator_parse (const gchar    *accelerator,
 		       guint          *accelerator_key,
@@ -866,7 +880,13 @@ gtk_accelerator_parse (const gchar    *accelerator,
     {
       if (*accelerator == '<')
 	{
-	  if (len >= 9 && is_control (accelerator))
+	  if (len >= 9 && is_release (accelerator))
+	    {
+	      accelerator += 9;
+	      len -= 9;
+	      mods |= GDK_RELEASE_MASK;
+	    }
+	  else if (len >= 9 && is_control (accelerator))
 	    {
 	      accelerator += 9;
 	      len -= 9;
@@ -947,6 +967,7 @@ gtk_accelerator_name (guint           accelerator_key,
 {
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
+  static const gchar text_release[] = "<Release>";
   static const gchar text_mod1[] = "<Alt>";
   static const gchar text_mod2[] = "<Mod2>";
   static const gchar text_mod3[] = "<Mod3>";
@@ -967,6 +988,8 @@ gtk_accelerator_name (guint           accelerator_key,
     l += sizeof (text_shift) - 1;
   if (accelerator_mods & GDK_CONTROL_MASK)
     l += sizeof (text_control) - 1;
+  if (accelerator_mods & GDK_RELEASE_MASK)
+    l += sizeof (text_release) - 1;
   if (accelerator_mods & GDK_MOD1_MASK)
     l += sizeof (text_mod1) - 1;
   if (accelerator_mods & GDK_MOD2_MASK)
@@ -992,6 +1015,11 @@ gtk_accelerator_name (guint           accelerator_key,
     {
       strcpy (accelerator + l, text_control);
       l += sizeof (text_control) - 1;
+    }
+  if (accelerator_mods & GDK_RELEASE_MASK)
+    {
+      strcpy (accelerator + l, text_release);
+      l += sizeof (text_release) - 1;
     }
   if (accelerator_mods & GDK_MOD1_MASK)
     {

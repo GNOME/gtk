@@ -1,5 +1,13 @@
 Tue Jun 30 09:24:40 1998  Tim Janik  <timj@gtk.org>
 
+	* gtk/gtkaccelgroup.c (gtk_accelerator_parse): parse "<Release>"
+	modifier as well.
+	(gtk_accelerator_name): add "<Release>" to the accelerator name if
+	neccessary.
+
+	* gtk/gtkbindings.c (BINDING_MOD_MASK): take BINDING_MOD_MASK into
+ 	account.
+
 	* gtk/gtkwidget.c (gtk_widget_real_key_release_event): implemented
 	default handler for key-release events, which checks for activation
 	of GDK_RELEASE_MASK key bindings.
