@@ -1,13 +1,14 @@
-# gtk+ yn Gymraeg
+# gtk+ yn Gymraeg.
 # Copyright (C) 2003 Free Software Foundation, Inc.
-# Rhoslyn Prys <rhoslyn.prys@ntlworld.com>, 2002
-# Dafydd Harries <daf@parnassus.ath.cx>, 2003
+# Rhoslyn Prys <rhoslyn.prys@ntlworld.com>, 2002.
+# Dafydd Harries <daf@parnassus.ath.cx>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
-"POT-Creation-Date: 2003-08-25 22:08-0400\n"
-"PO-Revision-Date: 2003-08-19 06:07+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-08-19 02:56+0100\n"
+"PO-Revision-Date: 2003-08-26 14:10+0100\n"
 "Last-Translator: Dafydd Harries <daf@parnassus.ath.cx>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
@@ -737,12 +738,10 @@ msgstr "Ctrl"
 msgid "Alt"
 msgstr "Alt"
 
-# EFALLAI
 #: gtk/gtkaccellabel.c:137
 msgid "Accelerator Closure"
 msgstr "Amgaead Cyflymydd"
 
-# EFALLAI
 #: gtk/gtkaccellabel.c:138
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Yr amgaead i'w arolygu ar gyfer newidiadau cyflymydd"
@@ -885,19 +884,17 @@ msgstr "Ymyl fertigol mewnol y plentyn"
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "Faint i gynyddu maint y plentyn ar y brig a'r gwaelod"
 
-# EFALLAI
 #: gtk/gtkbbox.c:155
 msgid "Layout style"
 msgstr "Arddull llunweddi"
 
-# EFALLAI
 #: gtk/gtkbbox.c:156
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
 "Sut i lunweddi'r botymau yn y blwch. Gwerthoedd posib: arferol, gorchuddio, "
-"ymylon, dechrau a diwedd."
+"ymylon, dechrau a diwedd"
 
 #: gtk/gtkbbox.c:164
 msgid "Secondary"
@@ -1008,12 +1005,10 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "A dylir defyddio'r label er mwyn dewis eitem stoc yn lle ei ddangos"
 
-# EFALLAI (esgyniad?)
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
 msgstr "Esgyniad border"
 
-# EFALLAI (esgyniad?)
 #: gtk/gtkbutton.c:214
 msgid "The border relief style"
 msgstr "Arddull esgyniad y border"
@@ -1090,22 +1085,18 @@ msgstr "cyfuniad Y"
 msgid "The y-align"
 msgstr "Y cyfuniad Y"
 
-# EFALLAI
 #: gtk/gtkcellrenderer.c:157
 msgid "xpad"
 msgstr "bylchu x"
 
-# EFALLAI
 #: gtk/gtkcellrenderer.c:158
 msgid "The xpad"
 msgstr "Y bylchu x"
 
-# EFALLAI
 #: gtk/gtkcellrenderer.c:168
 msgid "ypad"
 msgstr "bylchu y"
 
-# EFALLAI
 #: gtk/gtkcellrenderer.c:169
 msgid "The ypad"
 msgstr "Y bylchu y"
@@ -1385,7 +1376,6 @@ msgstr "Gosod blaendir"
 msgid "Whether this tag affects the foreground color"
 msgstr "A ydy'r tag hwn yn affeithio ar liw y blaendir"
 
-# EFALLAI
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:528
 msgid "Editability set"
 msgstr "Gosod golygadwyedd"
@@ -1498,7 +1488,6 @@ msgstr "Gweithredadwy"
 msgid "The toggle button can be activated"
 msgstr "Gellir gweithredu'r botwm togl"
 
-# EFALLAI (radio?)
 #: gtk/gtkcellrenderertoggle.c:159
 msgid "Radio state"
 msgstr "Cyflwr radio"
@@ -1619,7 +1608,6 @@ msgstr ""
 "Dewiswch y lliw rydych ei eisiau o'r cylch allanol. Dewiswch tywyllwch neu "
 "oleuni y lliw hwnnw gan ddefnyddio'r triongl mewnol."
 
-# EFALLAI
 #: gtk/gtkcolorsel.c:1859
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
@@ -1730,7 +1718,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:165
 msgid "Allow empty"
-msgstr "Caniatàu gwerth gwag"
+msgstr "Caniatau gwerth gwag"
 
 #: gtk/gtkcombo.c:166
 msgid "Whether an empty value may be entered in this field"
@@ -1951,7 +1939,7 @@ msgstr "_Mewnosod nod rheoli Unicode"
 
 #: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
-msgstr "Enw ffeil"
+msgstr "Enw Ffeil"
 
 #: gtk/gtkfilesel.c:557
 msgid "The currently selected filename"
@@ -2534,7 +2522,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:336
 msgid "Line wrap"
-msgstr "Amlap llinellau"
+msgstr "Amlapio llinellau"
 
 #: gtk/gtklabel.c:337
 msgid "If set, wrap lines if the text becomes too wide"
@@ -3588,7 +3576,7 @@ msgstr "I _Fyny"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "_Cymorth"
+msgstr "C_ymorth"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
@@ -4988,7 +4976,7 @@ msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
-"Awgrym i'r amglchedd bwrdd gwaith er mwyn iddo ddaeall pa fath o ffenest yw "
+"Awgrym i'r amglchedd penbwrdd er mwyn iddo ddaeall pa fath o ffenest yw "
 "hon a sut i ymdrin ag ef."
 
 # EFALLAI
