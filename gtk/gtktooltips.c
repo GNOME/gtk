@@ -173,10 +173,6 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
 				 "expose_event",
 				 GTK_SIGNAL_FUNC (gtk_tooltips_paint_window), 
 				 GTK_OBJECT (tooltips));
-      gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 
-				 "draw",
-				 GTK_SIGNAL_FUNC (gtk_tooltips_paint_window), 
-				 GTK_OBJECT (tooltips));
 
       tooltips->tip_label = gtk_label_new (NULL);
       gtk_label_set_line_wrap (GTK_LABEL (tooltips->tip_label), TRUE);

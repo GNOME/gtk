@@ -1,3 +1,18 @@
+2000-12-04  Havoc Pennington  <hp@redhat.com>
+
+        Fix bugs Alex found:
+	
+	* gtk/gtktooltips.c (gtk_tooltips_force_window): nuke connection
+	to "draw"
+
+	* gtk/gtkdnd.c (gtk_drag_highlight): nuke connection to "draw"
+
+	* gtk/gtkcolorsel.c (palette_new): nuke connection to "draw"
+
+	* gtk/gtklistitem.c (gtk_list_item_expose): Put the old _draw() 
+	implementation in here, apparently the expose() implementation was
+	dead code.
+
 2000-12-04  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkpango-fb.c (pango_fb_font_get_metrics):

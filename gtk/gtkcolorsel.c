@@ -622,14 +622,6 @@ palette_press (GtkWidget      *drawing_area,
 }
 
 static void
-palette_draw (GtkWidget    *drawing_area,
-	      GdkRectangle *area,
-	      gpointer      data)
-{
-  palette_paint (drawing_area, area, data);
-}
-
-static void
 palette_unset_color (GtkWidget *drawing_area)
 {
   if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) == 0)
@@ -819,7 +811,6 @@ palette_new (GtkColorSelection *colorsel)
   gtk_object_set_data (GTK_OBJECT (retval), "color_set", GINT_TO_POINTER (0)); 
   gtk_widget_set_events (retval, GDK_BUTTON_PRESS_MASK | GDK_EXPOSURE_MASK);
   
-  gtk_signal_connect (GTK_OBJECT (retval), "draw", palette_draw, colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "expose_event", palette_expose, colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "button_press_event", palette_press, colorsel);
   

@@ -482,36 +482,53 @@ gtk_list_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
   GtkBin *bin;
-  GdkEventExpose child_event;
 
   g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_LIST_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       bin = GTK_BIN (widget);
 
-      if (!GTK_WIDGET_IS_SENSITIVE (widget))
-	gdk_window_set_background (widget->window, &widget->style->bg[GTK_STATE_INSENSITIVE]);
-      else if (widget->state == GTK_STATE_NORMAL)
-	gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
+      if (widget->state == GTK_STATE_NORMAL)
+        {
+          gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+          gdk_window_clear_area (widget->window, event->area.x, event->area.y,
+                                 event->area.width, event->area.height);
+        }
       else
-	gdk_window_set_background (widget->window, &widget->style->bg[widget->state]);
-
-      gdk_window_clear_area (widget->window, event->area.x, event->area.y,
-			     event->area.width, event->area.height);
+        {
+          gtk_paint_flat_box (widget->style, widget->window, 
+                              widget->state, GTK_SHADOW_ETCHED_OUT,
+                              &event->area, widget, "listitem",
+                              0, 0, -1, -1);           
+        }
 
       if (bin->child)
 	{
+          GdkEventExpose child_event;
+          
 	  child_event = *event;
 
 	  if (GTK_WIDGET_NO_WINDOW (bin->child) &&
 	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
 	}
-
-      gtk_widget_draw_focus (widget);
+      
+      if (GTK_WIDGET_HAS_FOCUS (widget))
+        {
+          if (GTK_IS_LIST (widget->parent) && GTK_LIST (widget->parent)->add_mode)
+            gtk_paint_focus (widget->style, widget->window,
+                             NULL, widget, "add-mode",
+                             0, 0,
+                             widget->allocation.width - 1,
+                             widget->allocation.height - 1);
+          else
+            gtk_paint_focus (widget->style, widget->window,
+                             NULL, widget, NULL,
+                             0, 0,
+                             widget->allocation.width - 1,
+                             widget->allocation.height - 1);
+        }
     }
 
   return FALSE;
