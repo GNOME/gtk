@@ -1550,7 +1550,7 @@ gtk_list_store_move_before (GtkListStore *store,
     g_return_if_fail (VALID_ITER (position, store));
 
   if (position)
-    pos = _gtk_sequence_ptr_get_position (iter->user_data);
+    pos = _gtk_sequence_ptr_get_position (position->user_data);
   else
     pos = -1;
   
@@ -1583,7 +1583,7 @@ gtk_list_store_move_after (GtkListStore *store,
     g_return_if_fail (VALID_ITER (position, store));
 
   if (position)
-    pos = _gtk_sequence_ptr_get_position (iter->user_data);
+    pos = _gtk_sequence_ptr_get_position (position->user_data) + 1;
   else
     pos = 0;
   
