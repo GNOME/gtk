@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.9\n"
-"POT-Creation-Date: 2001-10-28 02:51+0200\n"
+"POT-Creation-Date: 2001-10-29 22:26+0100\n"
 "PO-Revision-Date: 2000-10-28 09:55+0100\n"
 "Last-Translator: Roy-Magne Mo <rmo@sunnmore.net>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -279,7 +279,7 @@ msgstr "Pikslar"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
 msgid "Preview:"
-msgstr "Førehandsyning:"
+msgstr "Førehandsvising:"
 
 # gtk/gtkfontsel.c:716
 #: gtk/gtkfontsel.c:716
@@ -436,7 +436,7 @@ msgstr "Bruk"
 # gtk/gtkfontsel.c:3530
 #: gtk/gtkfontsel.c:3530
 msgid "Font Selection"
-msgstr "Val av skrifttype"
+msgstr "Skrifttypeval"
 
 # gtk/gtkgamma.c:396
 #: gtk/gtkgamma.c:396
@@ -467,7 +467,7 @@ msgstr "Eining:"
 # gtk/gtkinputdialog.c:253
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr "Slått av"
+msgstr "Av"
 
 # gtk/gtkinputdialog.c:261
 #: gtk/gtkinputdialog.c:261
