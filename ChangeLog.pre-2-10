@@ -1,3 +1,7 @@
+Thu Aug 12 02:20:54 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* NEWS: Updates
+
 Thu Aug 12 00:07:15 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.c (gtk_action_new):  Link to information about

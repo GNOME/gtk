@@ -1,3 +1,42 @@
+Overview of Changes from GTK+ 2.4.4 to GTK+ 2.4.5 (up to #149620)
+=================================================
+* GtkFileChooser
+ - Set busy cursor while mounting [Federico Mena Quintero]
+ - Set accessible name [Padraig O'Briain]
+ - Improve activation on focus [Federico]
+ - Accept paths in entry [Federico]
+* GtkTreeView
+ - Draw focus indicator for empty tree views [Federico]
+ - Make column dragging more robust [Matthias Clasen, 
+   Christian Biere]
+ - Prevent DND on non-sources [Pawel Salek]
+* GtkUIManager
+ - Accept paths with a leading / [David Malcolm]
+* Gdk
+ - Fix handling of keep-above and keep-below 
+   state [Matthew Garret]
+ - Add some missing error traps [Thomas Leonard]
+* gdk-pixbuf
+ - Make incremental loading work for 8bit pcx 
+   files [Magnus Bergman]
+ - Handle edge pixels consistently [Brian Cameron, 
+   Matthias]
+* Bug fixes for Copy-Paste behaviour in text widgets 
+  [Mikael Hallendal, Scott Bronson]
+* Memory leak fixes in multiple widgets [Kjartan Maraas, 
+  Tommi Komulainen, Crispin Flowerday, Matthias]
+* Win32 fixes [Robert Ögren, Tor Lillqvist, Hans Breuer
+* Other bug fixes [John Cupitt, Elke Meier, Matthias, 
+  Peter Zelezny, Guilherme Salgado, John Finlay, Tommi,
+  Padaig, Olivier Sessink, Nicolas Deves, Lorenzo Gil 
+  Sanchez, Christian Persch, Morten Welinder, Markku Vire]
+* Documentation improvements [Owen Taylor, Matthias, Axel 
+  Simon, David, Federico, Mariano Suarez-Alvarez]
+* Updated translations (ang,az,bg,br,ca,cs,en_CA,es,fi,fr,hi,hu,
+  it,ja,ko,mn,nb,nl,no,pl,pt,pt_BR,ru,sq,sr,sr@Latn,sr@ije,sv,uz,
+  wa,zh_CN)
+
+
 Overview of Changes from GTK+ 2.4.3 to GTK+ 2.4.4
 =================================================
 * GtkFileChooser
