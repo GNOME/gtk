@@ -5161,24 +5161,23 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
        */
       text_window_scroll (text_view->text_window, dx, dy);
     }
-
-  /* This could result in invalidation, which would install the
-   * first_validate_idle, which would validate onscreen;
-   * but we're going to go ahead and validate here, so
-   * first_validate_idle shouldn't have anything to do.
-   */
-  gtk_text_view_update_layout_width (text_view);
-  
-  /* note that validation of onscreen could invoke this function
-   * recursively, by scrolling to maintain first_para, or in response
-   * to updating the layout width, however there is no problem with
-   * that, or shouldn't be.
-   */
-  gtk_text_view_validate_onscreen (text_view);
-
   /* process exposes */
   if (GTK_WIDGET_REALIZED (text_view))
     {
+      /* This could result in invalidation, which would install the
+       * first_validate_idle, which would validate onscreen;
+       * but we're going to go ahead and validate here, so
+       * first_validate_idle shouldn't have anything to do.
+       */
+      gtk_text_view_update_layout_width (text_view);
+  
+      /* note that validation of onscreen could invoke this function
+       * recursively, by scrolling to maintain first_para, or in response
+       * to updating the layout width, however there is no problem with
+       * that, or shouldn't be.
+       */
+      gtk_text_view_validate_onscreen (text_view);
+
       if (text_view->left_window)
         gdk_window_process_updates (text_view->left_window->bin_window, TRUE);
 
