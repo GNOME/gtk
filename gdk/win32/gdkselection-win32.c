@@ -158,7 +158,7 @@ _gdk_selection_property_store (GdkWindow *owner,
 	  return;
 	}
       else
-	prop->length = strlen (prop->data + 1);
+	prop->length = strlen (prop->data) + 1;
     }
   else
     {
