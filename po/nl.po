@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2004-04-17 23:54+0200\n"
+"POT-Creation-Date: 2004-07-11 20:42+0200\n"
+"PO-Revision-Date: 2004-07-12 05:14+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -115,7 +115,7 @@ msgstr "Niet mogelijk om van tijdelijk bestand te lezen"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1444
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr "Openen van '%s' om te schrijven is mislukt: %s"
+msgstr "Openen van '%s' voor schrijven is mislukt: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1469
 #, c-format
@@ -927,15 +927,15 @@ msgstr "Kleurwiel"
 msgid "Color Selection"
 msgstr "Kleurselectie"
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "_Alles selecteren"
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "Invoer_methoden"
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode controleteken invoegen "
 
@@ -1303,15 +1303,18 @@ msgstr ""
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fout bij hernoemen van bestand \"%s\" naar \"%s\": %s"
 
+# bestandsnaam wijzigen
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
-msgstr "Bestandsnaam wijzigen"
+msgstr "Bestand hernoemen"
 
+# bestandsnaam wijzigen in
 #: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Bestand \"%s\" wijzigen naar:"
+msgstr "Bestand \"%s\" hernoemen naar:"
 
+# naam wijzigen
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
 msgstr "_Hernoemen"
@@ -1331,7 +1334,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
-msgstr "Ongeldige UTF-8"
+msgstr "Ongeldig UTF-8"
 
 #: gtk/gtkfilesel.c:4019
 msgid "Name too long"
@@ -1355,7 +1358,7 @@ msgstr "%s: %s"
 #: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1357
 #, c-format
 msgid "error getting information for '%s': %s"
-msgstr "fout bij verkrijgen vna in formatie over '%s': %s"
+msgstr "fout bij verkrijgen van informatie over '%s': %s"
 
 #: gtk/gtkfilesystemunix.c:490 gtk/gtkfilesystemwin32.c:434
 #, c-format
@@ -1371,18 +1374,16 @@ msgid "Filesystem"
 msgstr "Bestandsysteem"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Kon geen informatie verkrijgen over bestand '%s': %s"
+msgstr "Kon geen standaard pictogram verkrijgen voor %s"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
-"De naam \"%s\" is ongeldig omdat het het teken \"%s\" bevat. Gebruik een "
-"andere naam."
+msgstr "De naam \"%s\" is ongeldig omdat deze het teken \"%s\" bevat. Gebruik een andere naam."
 
 #: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
 #, c-format
