@@ -1,5 +1,9 @@
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/gtkcontainer.c (gtk_container_set_border_width): Mention
+	that the valid width is in range 0-65535 pixels. Fixes bug 
+	#56754.
+
 	* gtk/gtksizegroup.c (gtk_size_group_set_mode): Remove
 	a dot in the documentation. Fixes bug #62632.
 
