@@ -524,24 +524,31 @@ static void
 gtk_icon_theme_init (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv;
-
+  gchar **xdg_data_dirs;
+  int i, j;
+  
   priv = g_type_instance_get_private ((GTypeInstance *)icon_theme,
 				      GTK_TYPE_ICON_THEME);
   icon_theme->priv = priv;
 
   priv->custom_theme = FALSE;
   priv->current_theme = g_strdup (DEFAULT_THEME_NAME);
-  priv->search_path = g_new (char *, 5);
-  
 
-  priv->search_path[0] = g_build_filename (g_get_home_dir (),
-					   ".icons",
-					   NULL);
-  priv->search_path[1] = g_build_filename (GTK_DATADIR, "pixmaps", NULL);
-  priv->search_path[2] = g_build_filename (GTK_DATADIR, "icons", NULL);
-  priv->search_path[3] = g_strdup ("/usr/share/icons");
-  priv->search_path[4] = g_strdup ("/usr/share/pixmaps");
-  priv->search_path_len = 5;
+  xdg_data_dirs = g_get_system_data_dirs ();
+  for (i = 0; xdg_data_dirs[i]; i++) ;
+
+  priv->search_path_len = i + 3;
+  
+  priv->search_path = g_new (char *, priv->search_path_len);
+  
+  i = 0;
+  priv->search_path[i++] = g_build_filename (g_get_home_dir (), ".icons", NULL);
+  priv->search_path[i++] = g_build_filename (g_get_user_data_dir (), "icons", NULL);
+  
+  for (j = 0; xdg_data_dirs[j]; j++) 
+    priv->search_path[i++] = g_build_filename (xdg_data_dirs[j], "icons", NULL);
+
+  priv->search_path[i++] = g_strdup ("/usr/share/pixmaps");
 
   priv->themes_valid = FALSE;
   priv->themes = NULL;

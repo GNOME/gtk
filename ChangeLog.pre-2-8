@@ -1,5 +1,11 @@
 2004-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (gtk_icon_theme_init): Look up icon themes in the 
+	directories specified in the icon theme spec: $HOME/.icons, 
+	$XDG_DATA_DIRS/icons, /usr/share/pixmaps. Note that GTK+ used to also look 
+	in $GTK_DATA_DIR/icons, $GTK_DATA_DIR/pixmaps and /usr/share/icons.  (#148694)
+	
+
 	* gtk/gtkframe.c (gtk_frame_paint): Take widget->state into account when
 	painting the shadows.  (#150351, Tim Janik)
 
