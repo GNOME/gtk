@@ -219,10 +219,58 @@ gtk_settings_get_property (GObject     *object,
 {
   GtkSettings *settings = GTK_SETTINGS (object);
 
-  if (gdk_setting_get (pspec->name, value))
-    g_param_value_validate (pspec, value);
+  if (g_value_type_transformable (G_TYPE_INT, G_VALUE_TYPE (value)) ||
+      g_value_type_transformable (G_TYPE_STRING, G_VALUE_TYPE (value)) ||
+      g_value_type_transformable (GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
+    {
+      if (gdk_setting_get (pspec->name, value))
+        g_param_value_validate (pspec, value);
+      else
+        g_value_copy (settings->property_values + property_id - 1, value);
+    }
   else
-    g_value_copy (settings->property_values + property_id - 1, value);
+    {
+      GValue val = { 0, };
+
+      /* Try to get xsetting as a string and parse it. */
+      
+      g_value_init (&val, G_TYPE_STRING);
+
+      if (!gdk_setting_get (pspec->name, &val))
+        {
+          g_value_copy (settings->property_values + property_id - 1, value);
+        }
+      else
+        {
+          GValue tmp_value = { 0, };
+          GValue gstring_value = { 0, };
+          GtkRcPropertyParser parser = g_param_spec_get_qdata (pspec,
+                                                               quark_property_parser);
+          
+          g_value_init (&gstring_value, G_TYPE_GSTRING);
+
+          g_value_set_boxed (&gstring_value,
+                             g_string_new (g_value_get_string (&val)));
+
+          g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+
+          if (parser && _gtk_settings_parse_convert (parser, &gstring_value,
+                                                     pspec, &tmp_value))
+            {
+              g_value_copy (&tmp_value, value);
+              g_param_value_validate (pspec, value);
+            }
+          else
+            {
+              g_value_copy (settings->property_values + property_id - 1, value);
+            }
+
+          g_value_unset (&gstring_value);
+          g_value_unset (&tmp_value);
+        }
+
+      g_value_unset (&val);
+    }
 }
 
 static void
@@ -359,9 +407,11 @@ settings_install_property_parser (GtkSettingsClass   *class,
       break;
     default:
       if (!parser)
-	g_warning (G_STRLOC ": parser needs to be specified for property \"%s\" of type `%s'",
-		   pspec->name, g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
-      return 0;
+        {
+          g_warning (G_STRLOC ": parser needs to be specified for property \"%s\" of type `%s'",
+                     pspec->name, g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+          return 0;
+        }
     }
   if (g_object_class_find_property (G_OBJECT_CLASS (class), pspec->name))
     {
@@ -617,7 +667,7 @@ gtk_rc_property_parse_enum (const GParamSpec *pspec,
   if (scanner->token == G_TOKEN_IDENTIFIER)
     {
       GEnumClass *class = G_PARAM_SPEC_ENUM (pspec)->enum_class;
-
+      
       enum_value = g_enum_get_value_by_name (class, scanner->value.v_identifier);
       if (!enum_value)
 	enum_value = g_enum_get_value_by_nick (class, scanner->value.v_identifier);
@@ -820,7 +870,7 @@ void
 _gtk_settings_handle_event (GdkEventSetting *event)
 {
   GtkSettings *settings = gtk_settings_get_global ();
-
+  
   if (g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name))
     g_object_notify (G_OBJECT (settings), event->name);
 }

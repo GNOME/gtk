@@ -91,6 +91,12 @@ struct _GtkToolbar
 
   gint             button_maxw;
   gint             button_maxh;
+
+  guint            style_set_connection;
+  guint            icon_size_connection;
+  
+  guint            style_set : 1;
+  guint            icon_size_set : 1;
 };
 
 struct _GtkToolbarClass
@@ -105,8 +111,7 @@ struct _GtkToolbarClass
 
 
 GtkType    gtk_toolbar_get_type        (void) G_GNUC_CONST;
-GtkWidget* gtk_toolbar_new             (GtkOrientation   orientation,
-					GtkToolbarStyle  style);
+GtkWidget* gtk_toolbar_new             (void);
 
 /* Simple button items */
 GtkWidget* gtk_toolbar_append_item     (GtkToolbar      *toolbar,
@@ -133,8 +138,6 @@ GtkWidget* gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
 					gint             position);
 
 /* Stock Items */
-void       gtk_toolbar_set_icon_size   (GtkToolbar      *toolbar,
-					GtkIconSize      icon_size);
 GtkWidget* gtk_toolbar_insert_stock    (GtkToolbar      *toolbar,
 					const gchar     *stock_id,
 					const char      *tooltip_text,
@@ -203,8 +206,12 @@ void       gtk_toolbar_set_orientation       (GtkToolbar           *toolbar,
 					      GtkOrientation        orientation);
 void       gtk_toolbar_set_style             (GtkToolbar           *toolbar,
 					      GtkToolbarStyle       style);
+void       gtk_toolbar_set_icon_size         (GtkToolbar           *toolbar,
+                                              GtkIconSize           icon_size);
 void       gtk_toolbar_set_tooltips          (GtkToolbar           *toolbar,
 					      gboolean		    enable);
+void       gtk_toolbar_unset_style           (GtkToolbar           *toolbar);
+void       gtk_toolbar_unset_icon_size       (GtkToolbar           *toolbar);
 
 #ifdef __cplusplus
 }

@@ -724,7 +724,7 @@ create_toolbar (void)
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       gtk_widget_realize (window);
 
-      toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+      toolbar = gtk_toolbar_new ();
 
       gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar),
 				GTK_STOCK_NEW,
@@ -825,7 +825,7 @@ make_toolbar (GtkWidget *window)
   if (!GTK_WIDGET_REALIZED (window))
     gtk_widget_realize (window);
 
-  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  toolbar = gtk_toolbar_new ();
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Horizontal", "Horizontal toolbar layout", NULL,

@@ -78,9 +78,10 @@ SPACE is just a space in the style of the toolbar's GtkToolbarSpaceStyle. BUTTON
 creates a new toolbar. 
 </para>
 
+@Returns: the newly created toolbar.
+<!-- # Unused Parameters # -->
 @orientation: a #GtkOrientation. It determines whether the toolbar appears horizontally or vertically.
 @style: a #GtkToolbarStyle. It determines if the toolbar will contain buttons with just labels, just images, or both.
-@Returns: the newly created toolbar.
 
 
 <!-- ##### FUNCTION gtk_toolbar_append_item ##### -->

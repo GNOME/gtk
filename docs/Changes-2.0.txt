@@ -323,9 +323,32 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 * GdkColorContext is gone; you probably weren't using it anyway.
   Use GdkColormap and the gdk_rgb_* functions instead.
 
+* GtkMenuBar now draws the GtkContainer::border_width space outside
+  the frame, not inside the frame
+
+* In GTK 1.2, if an event handler returned TRUE it prevented
+  propagation of that event to parent widgets. That is, the 
+  event signal would not be emitted on parent widgets. In 
+  GTK 2.0, if an event handler returns TRUE, the current signal 
+  emission on the current widget is immediately stopped. That is,
+  other callbacks connected to the signal will not be invoked.
+
+* gtk_toolbar_new() no longer has arguments. This function 
+  was broken because the default GtkToolbarStyle (icons, text, both)
+  is now a user preference, which is overridden when you call
+  gtk_toolbar_set_style(). The constructor forced everyone to 
+  override the preference, which was undesirable. So to port
+  your app, decide if you want to force the toolbar style 
+  or conform to the user's global defaults; if you want to force
+  it, call gtk_toolbar_set_style().
+
+  The orientation arg was removed from toolbar_new() as well, just
+  because it wasn't very useful and we were breaking the function
+  anyway so had an opportunity to lose it. Call
+  gtk_toolbar_set_orientation() to set toolbar orientation.
+
 * GtkRange/GtkScrollbar/GtkScale were rewritten; this means that most
   theme engines won't draw them properly, and any custom subclasses of
   these widgets will need a rewrite (though if you could figure out
   how to subclass the old version of GtkRange, you have our
   respect). Also, GtkTroughType is gone.
-

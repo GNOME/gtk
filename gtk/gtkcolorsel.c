@@ -126,6 +126,9 @@ struct _ColorSelectionPrivate
 
   /* Window for grabbing on */
   GtkWidget *dropper_grab_widget;
+
+  /* Connection to settings */
+  guint settings_connection;
 };
 
 
@@ -1621,6 +1624,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 {
   GtkObjectClass *object_class;
   GObjectClass *gobject_class;
+  gchar *palette;
   
   object_class = GTK_OBJECT_CLASS (klass);
   gobject_class = G_OBJECT_CLASS (klass);
@@ -1644,8 +1648,14 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                                                       _("Palette to use in the color selector"),
                                                       default_colors,
                                                       G_PARAM_READWRITE));
+
+  g_object_get (G_OBJECT (gtk_settings_get_global ()),
+                "gtk-color-palette",
+                &palette,
+                NULL);
   
-  fill_palette_from_string (default_colors);
+  fill_palette_from_string (palette);
+  g_free (palette);
 
   change_palette_hook = default_change_palette_func;
   
@@ -1813,11 +1823,12 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   /* Set default colors */
 
   update_palette (colorsel);
-  
-  g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
-                         "notify::gtk-color-palette",
-                         G_CALLBACK (palette_change_notify_instance),
-                         colorsel, NULL, FALSE, FALSE);
+
+  priv->settings_connection = 
+    g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
+                           "notify::gtk-color-palette",
+                           G_CALLBACK (palette_change_notify_instance),
+                           colorsel, NULL, FALSE, FALSE);
   
   /* hide unused stuff */
   
@@ -1862,6 +1873,13 @@ gtk_color_selection_finalize (GObject *object)
   
   if (cselection->private_data)
     {
+      ColorSelectionPrivate *priv;
+
+      priv = cselection->private_data;
+
+      g_signal_handler_disconnect (gtk_settings_get_global (),
+                                   priv->settings_connection);
+      
       g_free (cselection->private_data);
       cselection->private_data = NULL;
     }

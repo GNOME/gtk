@@ -313,7 +313,7 @@ gtk_icon_factory_lookup_default (const gchar *stock_id)
 
       if (icon_set)
         return icon_set;
-
+      
       tmp_list = g_slist_next (tmp_list);
     }
 

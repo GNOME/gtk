@@ -217,26 +217,6 @@ Define a function pointer.
 </para>
 
 
-<!-- ##### USER_FUNCTION GtkArgGetFunc ##### -->
-<para>
-Define a function pointer.  Deprecated.
-</para>
-
-@object: 
-@arg: 
-@arg_id: 
-
-
-<!-- ##### USER_FUNCTION GtkArgSetFunc ##### -->
-<para>
-Define a function pointer.  Deprecated.
-</para>
-
-@object: 
-@arg: 
-@arg_id: 
-
-
 <!-- ##### TYPEDEF GtkTypeObject ##### -->
 <para>
 A GtkTypeObject defines the minimum structure requirements

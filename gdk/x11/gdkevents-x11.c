@@ -1913,6 +1913,9 @@ static struct
 } settings_map[] = {
   { "Net/DoubleClickTime", "gtk-double-click-timeout" },
   { "Net/DragThreshold", "gtk-drag-threshold" },
+  { "Gtk/ColorPalette", "gtk-color-palette" },
+  { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
+  { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
   { "Net/CursorBlink", "gtk-cursor-blink" },
   { "Net/CursorBlinkTime", "gtk-cursor-blink-time" }
 };

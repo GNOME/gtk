@@ -343,6 +343,24 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 </para>
 
 
+<!-- ##### USER_FUNCTION GtkArgGetFunc ##### -->
+<para>
+Define a function pointer.  Deprecated.
+</para>
+
+@object: 
+@arg: 
+@arg_id: 
+
+<!-- ##### USER_FUNCTION GtkArgSetFunc ##### -->
+<para>
+Define a function pointer.  Deprecated.
+</para>
+
+@object: 
+@arg: 
+@arg_id: 
+
 <!-- ##### ARG GtkContainer:reallocate-redraws ##### -->
 <para>
 

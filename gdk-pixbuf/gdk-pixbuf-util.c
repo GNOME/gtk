@@ -30,18 +30,20 @@
 /**
  * gdk_pixbuf_add_alpha:
  * @pixbuf: A pixbuf.
- * @substitute_color: Whether to substitute a color for zero opacity.  If this
+ * @substitute_color: Whether to set a color to zero opacity.  If this
  * is #FALSE, then the (@r, @g, @b) arguments will be ignored.
  * @r: Red value to substitute.
  * @g: Green value to substitute.
  * @b: Blue value to substitute.
  *
- * Takes an existing pixbuf and adds an alpha channel to it.  If the original
- * pixbuf already had alpha information, then the contents of the new pixbuf are
- * exactly the same as the original's.  Otherwise, the new pixbuf will have all
- * pixels with full opacity if @substitute_color is #FALSE.  If
- * @substitute_color is #TRUE, then the color specified by (@r, @g, @b) will be
- * substituted for zero opacity.
+ * Takes an existing pixbuf and adds an alpha channel to it.
+ * If the existing pixbuf already had an alpha channel, the channel
+ * values are copied from the original; otherwise, the alpha channel
+ * is initialized to 255 (full opacity).
+ * 
+ * If @substitute_color is #TRUE, then the color specified by (@r, @g, @b) will be
+ * assigned zero opacity. That is, if you pass (255, 255, 255) for the
+ * substitute color, all white pixels will become fully transparent.
  *
  * Return value: A newly-created pixbuf with a reference count of 1.
  **/
@@ -62,10 +64,12 @@ gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf,
 		if (!new_pixbuf)
 			return NULL;
 
-		return new_pixbuf;
-	}
-
-	new_pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, pixbuf->width, pixbuf->height);
+                if (!substitute_color)
+                        return new_pixbuf;
+	} else {
+                new_pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, pixbuf->width, pixbuf->height);
+        }
+        
 	if (!new_pixbuf)
 		return NULL;
 
@@ -75,16 +79,26 @@ gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf,
 
 		src = pixbuf->pixels + y * pixbuf->rowstride;
 		dest = new_pixbuf->pixels + y * new_pixbuf->rowstride;
-
-		for (x = 0; x < pixbuf->width; x++) {
-			tr = *dest++ = *src++;
-			tg = *dest++ = *src++;
-			tb = *dest++ = *src++;
-
-			if (substitute_color && tr == r && tg == g && tb == b)
-				*dest++ = 0;
-			else
-				*dest++ = 255;
+                
+                if (pixbuf->has_alpha) {
+                        /* Just subst color, we already copied everything else */
+                        for (x = 0; x < pixbuf->width; x++) {
+                                if (src[0] == r && src[1] == g && src[2] == b)
+                                        dest[3] = 0;
+                                src += 4;
+                                dest += 4;
+                        }
+                } else {                        
+                        for (x = 0; x < pixbuf->width; x++) {
+                                tr = *dest++ = *src++;
+                                tg = *dest++ = *src++;
+                                tb = *dest++ = *src++;
+                                
+                                if (substitute_color && tr == r && tg == g && tb == b)
+                                        *dest++ = 0;
+                                else
+                                        *dest++ = 255;
+                        }
 		}
 	}
 

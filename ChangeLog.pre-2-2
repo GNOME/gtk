@@ -1,3 +1,53 @@
+2001-05-10  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_get_property): Handle case where
+	we need to parse the xsetting as if it were an RC file string.
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_class_init): load initial
+	value of palette from settings, not from static variable
+
+	* gdk/x11/gdkevents-x11.c: add color palette, toolbar mode to
+	xsettings translation table
+
+	* gtk/gtktoolbar.c (gtk_toolbar_new): Remove arguments, because 
+	hardcoding the toolbar style conflicts with new customizable 
+	toolbar style philosophy
+	(gtk_toolbar_class_init): add settings for default toolbar style;
+	these are used unless the app specifically forces a toolbar style
+
+	* gtk/gtksettings.c (settings_install_property_parser): only
+	return at the start if we warn and parser == NULL
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_finalize): disconnect the
+	palette changed handler so we don't notify dead color selections
+
+	* gtk/gtkstyle.c (gtk_default_draw_shadow): handle
+	xthickness/ythickness of 0 or 1 properly 
+	(gtk_default_draw_resize_grip): clear the background behind the
+	resize grips, and align to bottom right if we square the 
+	area to be drawn.
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_init): set horizontal usize on 
+	statusbar label to 1, so it doesn't make toplevels resize oddly
+	(gtk_statusbar_size_request): add grip size to request
+	(gtk_statusbar_size_allocate): hack so the hbox still works with 
+	the grip size in the request
+
+	* gtk/gtktoolbar.c (gtk_toolbar_show_all): override to fix 
+	bug where showing all on a toplevel makes the toolbar 
+	button text appear despite the toolbar mode
+
+	* gtk/gtkmenubar.c: add internal padding style property
+
+	* gtk/gtktoolbar.c: Add internal padding style property; add
+	shadow type style property
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_paint): paint box with widget
+	state; and put Container::border_width outside the frame
+
+	* gtk/gtktextview.c: don't draw focus rectangle if we're in
+	interior focus mode, we just use blinking cursor
+
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
 	* configure.in: Make gdk-pixbuf have same version number as GTK
