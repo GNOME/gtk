@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-0.es\n"
-"POT-Creation-Date: 2002-11-04 17:01-0500\n"
+"POT-Creation-Date: 2002-11-08 14:52-0500\n"
 "PO-Revision-Date: 2002-10-29 14:46+0100\n"
 "Last-Translator: Juan Manuel García Molina <juanma_gm@wanadoo.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -159,7 +159,7 @@ msgstr "La imagen BMP tiene datos de cabecera erróneos"
 msgid "Failure reading GIF: %s"
 msgstr "Fallo leyendo el GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Al archivo GIF le faltan algunos de datos (¿quizás se ha truncado en algún "
@@ -170,57 +170,57 @@ msgstr ""
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Error interno en el cargador de GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:541
+#: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
 msgstr "Desbordamiento de pila"
 
-#: gdk-pixbuf/io-gif.c:600
+#: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
 msgstr "El cargador de imágenes GIF no puede entender esta imagen."
 
-#: gdk-pixbuf/io-gif.c:629
+#: gdk-pixbuf/io-gif.c:632
 msgid "Bad code encountered"
 msgstr "Se ha encontrado un código incorrecto"
 
-#: gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:642
 msgid "Circular table entry in GIF file"
 msgstr "Entrada de tabla circular en el archivo GIF"
 
-#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
-#: gdk-pixbuf/io-gif.c:1540
+#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
+#: gdk-pixbuf/io-gif.c:1543
 msgid "Not enough memory to load GIF file"
 msgstr "No hay memoria suficiente para cargar el archivo GIF"
 
-#: gdk-pixbuf/io-gif.c:1019
+#: gdk-pixbuf/io-gif.c:1022
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "La imagen GIF está corrupta (la compresión LZW es incorrecta)"
 
-#: gdk-pixbuf/io-gif.c:1069
+#: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
 msgstr "El archivo no parece ser un archivo GIF"
 
-#: gdk-pixbuf/io-gif.c:1081
+#: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "La versión %s del formato de archivo GIF no está implementado"
 
-#: gdk-pixbuf/io-gif.c:1154
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame with height or width 0."
 msgstr "La imagen GIF contenía un marco con alto ó ancho 0."
 
-#: gdk-pixbuf/io-gif.c:1167
+#: gdk-pixbuf/io-gif.c:1170
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 "La imagen GIF contiene un marco que aparece fuera de los límites de la "
 "imagen."
 
-#: gdk-pixbuf/io-gif.c:1183
+#: gdk-pixbuf/io-gif.c:1186
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "El primer marco de la imagen GIF tiene «volver al anterior» como su modo de "
 "disposición."
 
-#: gdk-pixbuf/io-gif.c:1218
+#: gdk-pixbuf/io-gif.c:1221
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -228,7 +228,7 @@ msgstr ""
 "La imagen GIF no tiene un mapa de colores global, y un marco interno no "
 "tiene un mapa de color local."
 
-#: gdk-pixbuf/io-gif.c:1447
+#: gdk-pixbuf/io-gif.c:1450
 msgid "GIF image was truncated or incomplete."
 msgstr "La imagen GIF fue truncada o incompleta."
 
@@ -1811,7 +1811,7 @@ msgstr "Métodos de entrada"
 msgid "_Insert Unicode control character"
 msgstr "_Insertar carácter de control Unicode"
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "Nombre de archivo"
 
@@ -1999,7 +1999,7 @@ msgstr "Cambiar el nombre"
 msgid "Selection: "
 msgstr "Selección: "
 
-#: gtk/gtkfilesel.c:3004
+#: gtk/gtkfilesel.c:3005
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2008,15 +2008,15 @@ msgstr ""
 "El nombre de archivo «%s» no se pudo convertir a UTF-8 (intente fijar la "
 "variable de entorno G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3007
+#: gtk/gtkfilesel.c:3008
 msgid "Invalid Utf-8"
 msgstr "Utf-8 no válido"
 
-#: gtk/gtkfilesel.c:3873
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "El nombre es muy largo"
 
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr "No se pudo convertir el nombre de archivo"
 
@@ -2168,79 +2168,79 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Error al cargar icono: %s"
 
-#: gtk/gtkimage.c:131
+#: gtk/gtkimage.c:133
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132
+#: gtk/gtkimage.c:134
 msgid "A GdkPixbuf to display."
 msgstr "Un GdkPixbuf a mostrar."
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:141
 msgid "Pixmap"
 msgstr "Mapa de píxeles"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:142
 msgid "A GdkPixmap to display."
 msgstr "Un GdkPixmap a mostrar."
 
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:149
 msgid "Image"
 msgstr "Imagen"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:150
 msgid "A GdkImage to display."
 msgstr "Un GdkImage para mostrar."
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:157
 msgid "Mask"
 msgstr "Máscara"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:158
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Máscara de bitmap para usar con GdkImage o GdkPixmap"
 
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:166
 msgid "Filename to load and display."
 msgstr "Nombre de archivo a cargar y mostrar."
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:174
 msgid "Stock ID"
 msgstr "ID de stock"
 
-#: gtk/gtkimage.c:173
+#: gtk/gtkimage.c:175
 msgid "Stock ID for a stock image to display."
 msgstr "ID de stock para una imagen de stock a mostrar."
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:182
 msgid "Icon set"
 msgstr "Definir icono"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:183
 msgid "Icon set to display."
 msgstr "Juego de iconos a mostrar."
 
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:190
 msgid "Icon size"
 msgstr "Tamaño del icono"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
 msgstr "Tamaño para usar el icono de stock o el juego de iconos."
 
-#: gtk/gtkimage.c:197
+#: gtk/gtkimage.c:199
 msgid "Animation"
 msgstr "Animación"
 
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:200
 msgid "GdkPixbufAnimation to display."
 msgstr "GdkPixbufAnimation a mostrar."
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:207
 msgid "Storage type"
 msgstr "Tipo de almacenamiento"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:208
 msgid "The representation being used for image data."
 msgstr "La representación empleada para los datos de la imagen"
 

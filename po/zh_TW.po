@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.6\n"
-"POT-Creation-Date: 2002-11-04 17:01-0500\n"
+"POT-Creation-Date: 2002-11-08 14:52-0500\n"
 "PO-Revision-Date: 2002-08-22 12:35+1000\n"
 "Last-Translator: Ben Wu <hpwu@redhat.com>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -143,7 +143,7 @@ msgstr "BMP 圖像中有冗餘的標頭資料"
 msgid "Failure reading GIF: %s"
 msgstr "無法讀入 GIF：%s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 檔缺少了一部份資料 (可能檔案被截斷了？)"
 
@@ -152,59 +152,59 @@ msgstr "GIF 檔缺少了一部份資料 (可能檔案被截斷了？)"
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF 載入模組出現內部錯誤 (%s)"
 
-#: gdk-pixbuf/io-gif.c:541
+#: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:600
+#: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
 msgstr "GIF 圖像載入模組無法分析此圖像。"
 
-#: gdk-pixbuf/io-gif.c:629
+#: gdk-pixbuf/io-gif.c:632
 msgid "Bad code encountered"
 msgstr "發現不當的圖像壓縮編碼"
 
-#: gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:642
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
-#: gdk-pixbuf/io-gif.c:1540
+#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
+#: gdk-pixbuf/io-gif.c:1543
 msgid "Not enough memory to load GIF file"
 msgstr "記憶體不足以載入 GIF 檔"
 
-#: gdk-pixbuf/io-gif.c:1019
+#: gdk-pixbuf/io-gif.c:1022
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF 圖像已損毀 (不正確的 LZW 壓縮資料)"
 
-#: gdk-pixbuf/io-gif.c:1069
+#: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
 msgstr "檔案不像是 GIF 檔"
 
-#: gdk-pixbuf/io-gif.c:1081
+#: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "不支援 %s 版本的 GIF 檔案格式"
 
-#: gdk-pixbuf/io-gif.c:1154
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF 圖像的其中一個畫格高度或寬度為 0。"
 
-#: gdk-pixbuf/io-gif.c:1167
+#: gdk-pixbuf/io-gif.c:1170
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF 圖像的其中一個畫格超出了圖像邊界。"
 
-#: gdk-pixbuf/io-gif.c:1183
+#: gdk-pixbuf/io-gif.c:1186
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1218
+#: gdk-pixbuf/io-gif.c:1221
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF 圖像沒有整體使用的色彩項目，而且圖像其中一個畫格沒有專用的色彩。"
 
-#: gdk-pixbuf/io-gif.c:1447
+#: gdk-pixbuf/io-gif.c:1450
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 檔案被截斷或是不完整。"
 
@@ -1710,7 +1710,7 @@ msgstr "輸入法"
 msgid "_Insert Unicode control character"
 msgstr "插入 Unicode 控制字元(_I)"
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "檔案名稱"
 
@@ -1888,7 +1888,7 @@ msgstr "改名"
 msgid "Selection: "
 msgstr ""
 
-#: gtk/gtkfilesel.c:3004
+#: gtk/gtkfilesel.c:3005
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1897,15 +1897,15 @@ msgstr ""
 "檔案名稱“%s”無法轉換為 UTF-8 編碼 （請嘗試設定環境變數 "
 "G_BROKEN_FILENAMES）： %s"
 
-#: gtk/gtkfilesel.c:3007
+#: gtk/gtkfilesel.c:3008
 msgid "Invalid Utf-8"
 msgstr "無效的 UTF-8 資料"
 
-#: gtk/gtkfilesel.c:3873
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "名稱過長"
 
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr "無法轉換檔案名稱"
 
@@ -2055,79 +2055,79 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "載入圖示時發生錯誤：%s"
 
-#: gtk/gtkimage.c:131
+#: gtk/gtkimage.c:133
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132
+#: gtk/gtkimage.c:134
 msgid "A GdkPixbuf to display."
 msgstr "顯示的 GdkPixbuf。"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:141
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:142
 msgid "A GdkPixmap to display."
 msgstr "顯示的 GdkPixmap。"
 
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:149
 msgid "Image"
 msgstr "圖像"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:150
 msgid "A GdkImage to display."
 msgstr "顯示的 GdkImage。"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:157
 msgid "Mask"
 msgstr ""
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:158
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr ""
 
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:166
 msgid "Filename to load and display."
 msgstr "載入的圖像檔名稱。"
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:174
 msgid "Stock ID"
 msgstr ""
 
-#: gtk/gtkimage.c:173
+#: gtk/gtkimage.c:175
 msgid "Stock ID for a stock image to display."
 msgstr ""
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:182
 msgid "Icon set"
 msgstr "圖示集"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:183
 msgid "Icon set to display."
 msgstr "顯示的圖示集。"
 
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:190
 msgid "Icon size"
 msgstr "圖示大小"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
 msgstr ""
 
-#: gtk/gtkimage.c:197
+#: gtk/gtkimage.c:199
 msgid "Animation"
 msgstr "動畫"
 
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:200
 msgid "GdkPixbufAnimation to display."
 msgstr "顯示的 GdkPixbufAnimation。"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:207
 msgid "Storage type"
 msgstr ""
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:208
 msgid "The representation being used for image data."
 msgstr ""
 

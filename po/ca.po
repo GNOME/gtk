@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.5\n"
-"POT-Creation-Date: 2002-11-04 17:01-0500\n"
+"POT-Creation-Date: 2002-11-08 14:52-0500\n"
 "PO-Revision-Date: 2002-10-25 16:08+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <gnome@softcatala.net>\n"
@@ -154,7 +154,7 @@ msgstr "La imatge BMP conté dades de capçalera errònies"
 msgid "Failure reading GIF: %s"
 msgstr "Fallida llegint el GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Al fitxer GIF li manquen algunes dades (potser que s'hagin truncat d'alguna "
@@ -165,55 +165,55 @@ msgstr ""
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Error intern en el carregador de GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:541
+#: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
 msgstr "Desbordament de la pila"
 
-#: gdk-pixbuf/io-gif.c:600
+#: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
 msgstr "El carregador d'imatges GIF no entén aquesta imatge."
 
-#: gdk-pixbuf/io-gif.c:629
+#: gdk-pixbuf/io-gif.c:632
 msgid "Bad code encountered"
 msgstr "S'ha trobat un codi incorrecte"
 
-#: gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:642
 msgid "Circular table entry in GIF file"
 msgstr "Entrada de taula circular al fitxer GIF"
 
-#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
-#: gdk-pixbuf/io-gif.c:1540
+#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
+#: gdk-pixbuf/io-gif.c:1543
 msgid "Not enough memory to load GIF file"
 msgstr "No existeix suficient memòria per carregar el fitxer GIF"
 
-#: gdk-pixbuf/io-gif.c:1019
+#: gdk-pixbuf/io-gif.c:1022
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "La imatge GIF és corrupta (la compressió LZW és incorrecte)"
 
-#: gdk-pixbuf/io-gif.c:1069
+#: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
 msgstr "El fitxer no sembla ésser un fitxer GIF"
 
-#: gdk-pixbuf/io-gif.c:1081
+#: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "La versió %s del format del fitxer GIF no està suportada"
 
-#: gdk-pixbuf/io-gif.c:1154
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame with height or width 0."
 msgstr "La imatge GIF conté un marc amb una alçada o amplada 0."
 
-#: gdk-pixbuf/io-gif.c:1167
+#: gdk-pixbuf/io-gif.c:1170
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "La imatge GIF conté un marc que queda fora dels límits de la mateixa."
 
-#: gdk-pixbuf/io-gif.c:1183
+#: gdk-pixbuf/io-gif.c:1186
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "El primer marc de la imatge de GIF tenia «retornar a l'anterior» com el seu "
 "mode de disposició."
 
-#: gdk-pixbuf/io-gif.c:1218
+#: gdk-pixbuf/io-gif.c:1221
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -221,7 +221,7 @@ msgstr ""
 "La imatge GIF no té un mapa de colors global, i un marc intern no té un "
 "mapade color local"
 
-#: gdk-pixbuf/io-gif.c:1447
+#: gdk-pixbuf/io-gif.c:1450
 msgid "GIF image was truncated or incomplete."
 msgstr "La imatge GIF fou truncada o incomplerta."
 
@@ -1789,7 +1789,7 @@ msgstr "Mètodes d'entrada"
 msgid "_Insert Unicode control character"
 msgstr "_Inserta caràcters de control Unicode"
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "Nom del fitxer"
 
@@ -1977,7 +1977,7 @@ msgstr "Reanomena"
 msgid "Selection: "
 msgstr "Selecció:"
 
-#: gtk/gtkfilesel.c:3004
+#: gtk/gtkfilesel.c:3005
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1986,15 +1986,15 @@ msgstr ""
 "El nom del fitxer «%s» no ha pogut ser convertit com a UTF-8 (intenteu "
 "introduir la variable d'entorn G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3007
+#: gtk/gtkfilesel.c:3008
 msgid "Invalid Utf-8"
 msgstr "Utf-8 no vàlid"
 
-#: gtk/gtkfilesel.c:3873
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "El nom és massa llarg"
 
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr "No s'ha pogut convertir el nom del fitxer"
 
@@ -2145,79 +2145,79 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Error carregant la icona: %s"
 
-#: gtk/gtkimage.c:131
+#: gtk/gtkimage.c:133
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132
+#: gtk/gtkimage.c:134
 msgid "A GdkPixbuf to display."
 msgstr "Un GdkPixbuf a visualitzar"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:141
 msgid "Pixmap"
 msgstr "Mapa de pixels"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:142
 msgid "A GdkPixmap to display."
 msgstr "Un GdkPixmap a visualitzar"
 
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:149
 msgid "Image"
 msgstr "Imatge"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:150
 msgid "A GdkImage to display."
 msgstr "Un GdkImage a visualitzar"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:157
 msgid "Mask"
 msgstr "Màscara"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:158
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Màscara de mapa de bits per utilitzar amb GdkImage o GdkPixmap"
 
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:166
 msgid "Filename to load and display."
 msgstr "Nom de fitxer a carregar i visualitzar."
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:174
 msgid "Stock ID"
 msgstr "Identificació de l'acció"
 
-#: gtk/gtkimage.c:173
+#: gtk/gtkimage.c:175
 msgid "Stock ID for a stock image to display."
 msgstr "Identificació de l'acción per a que una imatge comuna a visualitzar."
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:182
 msgid "Icon set"
 msgstr "Definiu icona"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:183
 msgid "Icon set to display."
 msgstr "Definiu icona a visualitzar"
 
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:190
 msgid "Icon size"
 msgstr "Mida d'icona"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
 msgstr "Mida a utilitzar per a la icona o el sistema comú de la icona."
 
-#: gtk/gtkimage.c:197
+#: gtk/gtkimage.c:199
 msgid "Animation"
 msgstr "Animació"
 
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:200
 msgid "GdkPixbufAnimation to display."
 msgstr "GdkPixbufAnimation a visualitzar."
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:207
 msgid "Storage type"
 msgstr "Tipus d'enmagatzemament"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:208
 msgid "The representation being used for image data."
 msgstr "La representació utilitzada per les dades de la imatge."
 

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sk\n"
-"POT-Creation-Date: 2002-11-04 17:01-0500\n"
+"POT-Creation-Date: 2002-11-08 14:52-0500\n"
 "PO-Revision-Date: 2002-11-04 18:15+0100\n"
 "Last-Translator: Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -153,7 +153,7 @@ msgstr "Obrázok BMP má neplatné dáta v hlavičke"
 msgid "Failure reading GIF: %s"
 msgstr "Chyba pri čítaní GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Súbor GIF neobsahuje niektoré dáta (možno bola jeho časť odrezaná)"
 
@@ -162,54 +162,54 @@ msgstr "Súbor GIF neobsahuje niektoré dáta (možno bola jeho časť odrezaná
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Interná chyba modulu pre GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:541
+#: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
 msgstr "Pretečenie zásobníka"
 
-#: gdk-pixbuf/io-gif.c:600
+#: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
 msgstr "Modul obrázkov GIF nerozpoznal tento obrázok."
 
-#: gdk-pixbuf/io-gif.c:629
+#: gdk-pixbuf/io-gif.c:632
 msgid "Bad code encountered"
 msgstr "Nájdený chybný kód"
 
-#: gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:642
 msgid "Circular table entry in GIF file"
 msgstr "Cyklická položka v tabuľke v súbore GIF"
 
-#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
-#: gdk-pixbuf/io-gif.c:1540
+#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
+#: gdk-pixbuf/io-gif.c:1543
 msgid "Not enough memory to load GIF file"
 msgstr "Nedostatok pamäti pre načítanie obrázku GIF"
 
-#: gdk-pixbuf/io-gif.c:1019
+#: gdk-pixbuf/io-gif.c:1022
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Obrázok GIF je poškodený (neplatná kompresia LZW)"
 
-#: gdk-pixbuf/io-gif.c:1069
+#: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
 msgstr "Súbor nevyzerá ako GIF"
 
-#: gdk-pixbuf/io-gif.c:1081
+#: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Verzia %s formátu GIF nie je podporovaná"
 
-#: gdk-pixbuf/io-gif.c:1154
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame with height or width 0."
 msgstr "Obrázok GIF obsahuje rámec s výškou alebo šírkou 0."
 
-#: gdk-pixbuf/io-gif.c:1167
+#: gdk-pixbuf/io-gif.c:1170
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "Obrázok GIF obsahuje rámec zobrazený mimo okraje obrázku."
 
-#: gdk-pixbuf/io-gif.c:1183
+#: gdk-pixbuf/io-gif.c:1186
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Prvý rámec obrázku GIF má obsahuje príkaz 'vrátiť sa k predchádzajúcemu'."
 
-#: gdk-pixbuf/io-gif.c:1218
+#: gdk-pixbuf/io-gif.c:1221
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -217,7 +217,7 @@ msgstr ""
 "Obrázok GIF neobsahuje globálnu farebnú mapu a rámec v ňom neobsahuje mapu "
 "lokálnu."
 
-#: gdk-pixbuf/io-gif.c:1447
+#: gdk-pixbuf/io-gif.c:1450
 msgid "GIF image was truncated or incomplete."
 msgstr "Obrázok GIF bol skrátený alebo nie je úplný."
 
@@ -1762,7 +1762,7 @@ msgstr "Metódy vstupu"
 msgid "_Insert Unicode control character"
 msgstr "_Vložiť ovládací znak Unicode"
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "Meno súboru"
 
@@ -1945,7 +1945,7 @@ msgstr "Premenovať"
 msgid "Selection: "
 msgstr "Výber: "
 
-#: gtk/gtkfilesel.c:3004
+#: gtk/gtkfilesel.c:3005
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1954,15 +1954,15 @@ msgstr ""
 "Meno súboru \"%s\" nie je možné previesť do kódovania UTF-8. (Skúste "
 "nastaviť premennú prostredia G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3007
+#: gtk/gtkfilesel.c:3008
 msgid "Invalid Utf-8"
 msgstr "Neplatný súbor Utf-8"
 
-#: gtk/gtkfilesel.c:3873
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "Meno príliš dlhé"
 
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr "Nie je možné previesť meno súboru"
 
@@ -2112,79 +2112,79 @@ msgstr "Strana boxu, ktorá je zarovnaná s bodom pre zasunutie boxu."
 msgid "Error loading icon: %s"
 msgstr "Chyba pri načítaní ikony: %s"
 
-#: gtk/gtkimage.c:131
+#: gtk/gtkimage.c:133
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132
+#: gtk/gtkimage.c:134
 msgid "A GdkPixbuf to display."
 msgstr "Zobrazovaný GdkPixbuf."
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:141
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:142
 msgid "A GdkPixmap to display."
 msgstr "Zobrazovaný GdkPixmap."
 
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:149
 msgid "Image"
 msgstr "Obrázok"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:150
 msgid "A GdkImage to display."
 msgstr "Zobrazovaný GdkImage."
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:157
 msgid "Mask"
 msgstr "Maska"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:158
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Bitová maska pre použitie s GdkImage alebo GdkPixmap"
 
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:166
 msgid "Filename to load and display."
 msgstr "Meno načítavaného a zobrazeného súboru."
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:174
 msgid "Stock ID"
 msgstr "Štandardné ID"
 
-#: gtk/gtkimage.c:173
+#: gtk/gtkimage.c:175
 msgid "Stock ID for a stock image to display."
 msgstr "Štandardné ID pre zobrazinie štandardného obrázku."
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:182
 msgid "Icon set"
 msgstr "Skupina ikon"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:183
 msgid "Icon set to display."
 msgstr "Zobrazená skupina ikon."
 
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:190
 msgid "Icon size"
 msgstr "Veľkosť ikony"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
 msgstr "Veľkosť pre štandardnú ikonu alebo skupinu ikon."
 
-#: gtk/gtkimage.c:197
+#: gtk/gtkimage.c:199
 msgid "Animation"
 msgstr "Animácia"
 
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:200
 msgid "GdkPixbufAnimation to display."
 msgstr "Zobrazená GdkPixbufAnimation."
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:207
 msgid "Storage type"
 msgstr "Typ uloženia"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:208
 msgid "The representation being used for image data."
 msgstr "Reprezentácia použitá pre dáta obrázku."
 

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.x\n"
-"POT-Creation-Date: 2002-11-04 17:01-0500\n"
+"POT-Creation-Date: 2002-11-08 14:52-0500\n"
 "PO-Revision-Date: 2001-12-09 13:52+0800\n"
 "Last-Translator: He Qiangqiang <carton@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -146,7 +146,7 @@ msgstr "BMP 图像有错误的头部数据"
 msgid "Failure reading GIF: %s"
 msgstr "无法读入 GIF：%s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 文件缺少了某些数据(可能文件被截短了？)"
 
@@ -155,61 +155,61 @@ msgstr "GIF 文件缺少了某些数据(可能文件被截短了？)"
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF 文件载入模块产生内部程序错误(%s)"
 
-#: gdk-pixbuf/io-gif.c:541
+#: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:600
+#: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
 msgstr "GIF 文件载入模块无法分析此图像。"
 
-#: gdk-pixbuf/io-gif.c:629
+#: gdk-pixbuf/io-gif.c:632
 msgid "Bad code encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:642
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
-#: gdk-pixbuf/io-gif.c:1540
+#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
+#: gdk-pixbuf/io-gif.c:1543
 msgid "Not enough memory to load GIF file"
 msgstr "内存不足以载入 GIF 文件"
 
-#: gdk-pixbuf/io-gif.c:1019
+#: gdk-pixbuf/io-gif.c:1022
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF 图像已损坏(不正确的 LZW 压缩数据)"
 
-#: gdk-pixbuf/io-gif.c:1069
+#: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
 msgstr "文件好像不是 GIF 文件"
 
-#: gdk-pixbuf/io-gif.c:1081
+#: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "不支持 %s 版本的 GIF 文件格式"
 
-#: gdk-pixbuf/io-gif.c:1154
+#: gdk-pixbuf/io-gif.c:1157
 #, fuzzy
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF 图像中的一帧超出了图像边界。"
 
-#: gdk-pixbuf/io-gif.c:1167
+#: gdk-pixbuf/io-gif.c:1170
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF 图像中的一帧超出了图像边界。"
 
-#: gdk-pixbuf/io-gif.c:1183
+#: gdk-pixbuf/io-gif.c:1186
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1218
+#: gdk-pixbuf/io-gif.c:1221
 #, fuzzy
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF 图像没有全局的颜色映射表，它其中的一帧也没有局部的颜色映射表。"
 
-#: gdk-pixbuf/io-gif.c:1447
+#: gdk-pixbuf/io-gif.c:1450
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 文件被截短或是不完整。"
 
@@ -1751,7 +1751,7 @@ msgstr "输入法"
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "文件名"
 
@@ -1939,23 +1939,23 @@ msgstr "重命名"
 msgid "Selection: "
 msgstr "选中："
 
-#: gtk/gtkfilesel.c:3004
+#: gtk/gtkfilesel.c:3005
 #, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr "文件名 %s 无法转换到 UTF-8。请尝试设置环境变量 G_BROKEN_FILENAMES。"
 
-#: gtk/gtkfilesel.c:3007
+#: gtk/gtkfilesel.c:3008
 #, fuzzy
 msgid "Invalid Utf-8"
 msgstr "XBM 文件无效"
 
-#: gtk/gtkfilesel.c:3873
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "名称过长"
 
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr "无法转换文件名"
 
@@ -2106,87 +2106,87 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "载入图标时出错：%s"
 
-#: gtk/gtkimage.c:131
+#: gtk/gtkimage.c:133
 #, fuzzy
 msgid "Pixbuf"
 msgstr "Pixbuf 对象"
 
-#: gtk/gtkimage.c:132
+#: gtk/gtkimage.c:134
 msgid "A GdkPixbuf to display."
 msgstr ""
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:141
 msgid "Pixmap"
 msgstr ""
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:142
 msgid "A GdkPixmap to display."
 msgstr ""
 
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:149
 #, fuzzy
 msgid "Image"
 msgstr "页"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:150
 msgid "A GdkImage to display."
 msgstr ""
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:157
 #, fuzzy
 msgid "Mask"
 msgstr "标记语言"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:158
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr ""
 
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:166
 #, fuzzy
 msgid "Filename to load and display."
 msgstr "无法载入 TIFF 图像"
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:174
 msgid "Stock ID"
 msgstr ""
 
-#: gtk/gtkimage.c:173
+#: gtk/gtkimage.c:175
 msgid "Stock ID for a stock image to display."
 msgstr ""
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:182
 #, fuzzy
 msgid "Icon set"
 msgstr "图标"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:183
 msgid "Icon set to display."
 msgstr ""
 
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:190
 #, fuzzy
 msgid "Icon size"
 msgstr "字体大小"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
 msgstr ""
 
-#: gtk/gtkimage.c:197
+#: gtk/gtkimage.c:199
 #, fuzzy
 msgid "Animation"
 msgstr "信息"
 
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:200
 msgid "GdkPixbufAnimation to display."
 msgstr ""
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:207
 #, fuzzy
 msgid "Storage type"
 msgstr "曲线类型"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:208
 msgid "The representation being used for image data."
 msgstr ""
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-11-04 17:01-0500\n"
+"POT-Creation-Date: 2002-11-08 14:52-0500\n"
 "PO-Revision-Date: 2002-06-08 14:30+0530\n"
 "Last-Translator: Anurag Seetha <anuragseetha@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi-gnome@lists.sourceforge.net>\n"
@@ -170,7 +170,7 @@ msgid "Failure reading GIF: %s"
 msgstr "GIF %s को पढ़ने में असफल"
 
 # gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF लोडर (%s) में आंतरिक त्रुटि"
 
@@ -180,72 +180,72 @@ msgstr "GIF लोडर (%s) में आंतरिक त्रुटि"
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF इमेज लोडर इस इमेज को समझ नहीं पा रहा है"
 
-#: gdk-pixbuf/io-gif.c:541
+#: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
 msgstr ""
 
 # gdk-pixbuf/io-gif.c:592
-#: gdk-pixbuf/io-gif.c:600
+#: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
 msgstr "खराब लोड कोड आया है"
 
 # gdk-pixbuf/io-gif.c:621
-#: gdk-pixbuf/io-gif.c:629
+#: gdk-pixbuf/io-gif.c:632
 msgid "Bad code encountered"
 msgstr "GIF फाइल में चक्राकार टेबल प्रविष्टि"
 
 # gdk-pixbuf/io-gif.c:630
-#: gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:642
 msgid "Circular table entry in GIF file"
 msgstr "GIF फाइल को लोड करने के लिए पर्याप्त मेमोरी नहीं है"
 
 # gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
 # gdk-pixbuf/io-gif.c:1530
-#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
-#: gdk-pixbuf/io-gif.c:1540
+#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
+#: gdk-pixbuf/io-gif.c:1543
 msgid "Not enough memory to load GIF file"
 msgstr "GIF फाइल को लोड करने के लिए पर्याप्त मेमोरी नहीं है"
 
 # gdk-pixbuf/io-gif.c:1009
-#: gdk-pixbuf/io-gif.c:1019
+#: gdk-pixbuf/io-gif.c:1022
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF इमेज खराब है (गलत LZW संघीकरण)"
 
 # gdk-pixbuf/io-gif.c:1059
-#: gdk-pixbuf/io-gif.c:1069
+#: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
 msgstr "यह फाइल GIF फाइल नहीं है"
 
 # gdk-pixbuf/io-gif.c:1071
-#: gdk-pixbuf/io-gif.c:1081
+#: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF फाइल प्रारूप का यह संस्करण %s का प्रयोग संभव नहीं है"
 
 # gdk-pixbuf/io-gif.c:1144
-#: gdk-pixbuf/io-gif.c:1154
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF इमेज में शून्य ऊंचाई या चौड़ाई की एक फ्रेम शामिल है"
 
 # gdk-pixbuf/io-gif.c:1157
-#: gdk-pixbuf/io-gif.c:1167
+#: gdk-pixbuf/io-gif.c:1170
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF इमेज में एक फ्रेम ऐसा है जो इमेज की सीमाओं से बाहर है"
 
 # gdk-pixbuf/io-gif.c:1173
-#: gdk-pixbuf/io-gif.c:1183
+#: gdk-pixbuf/io-gif.c:1186
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
 # gdk-pixbuf/io-gif.c:1208
-#: gdk-pixbuf/io-gif.c:1218
+#: gdk-pixbuf/io-gif.c:1221
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF इमेज में व्यापक रंगमैप नहीं है तथा एक फ्रेम के अंदर स्थानीय रंगमैप भी नहीं है"
 
 # gdk-pixbuf/io-gif.c:1437
-#: gdk-pixbuf/io-gif.c:1447
+#: gdk-pixbuf/io-gif.c:1450
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF इमेज अधूरी या खरीब है"
 
@@ -2121,7 +2121,7 @@ msgid "_Insert Unicode control character"
 msgstr "यूनिकोड कन्ट्रोल कैरेक्टर प्रविष्ट करें"
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "फाइलनाम"
 
@@ -2330,7 +2330,7 @@ msgid "Selection: "
 msgstr "चयनित"
 
 # gtk/gtkfilesel.c:2983
-#: gtk/gtkfilesel.c:3004
+#: gtk/gtkfilesel.c:3005
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2340,17 +2340,17 @@ msgstr ""
 "Filenames के समायोजन की जांच करें)"
 
 # gtk/gtkfilesel.c:2986
-#: gtk/gtkfilesel.c:3007
+#: gtk/gtkfilesel.c:3008
 msgid "Invalid Utf-8"
 msgstr "अवैध UTF-8"
 
 # gtk/gtkfilesel.c:3852
-#: gtk/gtkfilesel.c:3873
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "नाम अत्यधिक लम्बा है"
 
 # gtk/gtkfilesel.c:3854
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr "फाइलनाम परिवर्तित नहीं किया जा सकता"
 
@@ -2536,97 +2536,97 @@ msgid "Error loading icon: %s"
 msgstr "आइकान को लोड करने में त्रुटि %s"
 
 # gtk/gtkimage.c:129
-#: gtk/gtkimage.c:131
+#: gtk/gtkimage.c:133
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
 # gtk/gtkimage.c:130
-#: gtk/gtkimage.c:132
+#: gtk/gtkimage.c:134
 msgid "A GdkPixbuf to display."
 msgstr "प्रदर्शित की जाने वाली GdkPixbuf"
 
 # gtk/gtkimage.c:137
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:141
 msgid "Pixmap"
 msgstr "Pixmap"
 
 # gtk/gtkimage.c:138
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:142
 msgid "A GdkPixmap to display."
 msgstr "प्रदर्शित की जाने वाली GdkPixmap"
 
 # gtk/gtkimage.c:145
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:149
 msgid "Image"
 msgstr "इमेज"
 
 # gtk/gtkimage.c:146
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:150
 msgid "A GdkImage to display."
 msgstr "प्रदर्शित की जाने वाली GdkImage"
 
 # gtk/gtkimage.c:153
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:157
 msgid "Mask"
 msgstr "मास्क"
 
 # gtk/gtkimage.c:154
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:158
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage या Gdk pixmap के साथ प्रयुक्त होने वाला बिटमैप मास्क"
 
 # gtk/gtkimage.c:162
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:166
 msgid "Filename to load and display."
 msgstr "लोड एवं प्रदर्शित की जाने वाली फाइल का नाम"
 
 # gtk/gtkimage.c:170
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:174
 msgid "Stock ID"
 msgstr "Stock ID"
 
 # gtk/gtkimage.c:171
-#: gtk/gtkimage.c:173
+#: gtk/gtkimage.c:175
 msgid "Stock ID for a stock image to display."
 msgstr "प्रदर्शित की जाने वाली भंडार इमेज का stock ID"
 
 # gtk/gtkimage.c:178
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:182
 msgid "Icon set"
 msgstr "आइकान समूह"
 
 # gtk/gtkimage.c:179
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:183
 msgid "Icon set to display."
 msgstr "प्रदर्शित किया जाने वाला आइकान समूह"
 
 # gtk/gtkimage.c:186
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:190
 msgid "Icon size"
 msgstr "आइकान आकार"
 
 # gtk/gtkimage.c:187
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
 msgstr "भंडार आइकान या आइकान समूह को प्रयोग करने का आकार"
 
 # gtk/gtkimage.c:195
-#: gtk/gtkimage.c:197
+#: gtk/gtkimage.c:199
 msgid "Animation"
 msgstr "एनीमेशन"
 
 # gtk/gtkimage.c:196
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:200
 msgid "GdkPixbufAnimation to display."
 msgstr "प्रदर्शित किए जाने वाला Gdk Pixbuf Animation"
 
 # gtk/gtkimage.c:203
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:207
 msgid "Storage type"
 msgstr "संग्रहण प्रकार"
 
 # gtk/gtkimage.c:204
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:208
 msgid "The representation being used for image data."
 msgstr "इमेज डाटा के लिए प्रयुक्त प्रस्तुतिकरण"
 

@@ -1,3 +1,11 @@
+Overview of Changes in GTK+ 2.0.8
+=================================
+* Fix typo in io-gif.c that broke loading GIFS [Akira Tagoh]
+* Improve redraws when scrolling on Win32 [Tor Lillqvist]
+* Fix problem with RENDER and XFree86-4.1 [Owen Taylor, Jamie Zawinski]
+* Fix problem with GtkImage placement [Owen, Sven Neumann, Soeren Sandmann]
+* Updated translation (el)
+
 Overview of Changes in GTK+ 2.0.7
 =================================
 * Fix some memory leaks in gdk-pixbuf [Sven Neumann]

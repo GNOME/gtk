@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ \n"
-"POT-Creation-Date: 2002-11-04 17:01-0500\n"
+"POT-Creation-Date: 2002-11-08 14:52-0500\n"
 "PO-Revision-Date: 2002-02-20 17:56+0200\n"
 "Last-Translator: Nilgün Belma Bugüner <nilgun@fide.org>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -175,7 +175,7 @@ msgid "Failure reading GIF: %s"
 msgstr "GIF okunurken hata: %s"
 
 # gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1352 gdk-pixbuf/io-gif.c:1511
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF dosyasında veri eksik (Dosya kırpılmış olabilir mi?)"
 
@@ -185,67 +185,67 @@ msgstr "GIF dosyasında veri eksik (Dosya kırpılmış olabilir mi?)"
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF yükleyicide iç hata (%s)"
 
-#: gdk-pixbuf/io-gif.c:541
+#: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
 msgstr ""
 
 # gdk-pixbuf/io-gif.c:592
-#: gdk-pixbuf/io-gif.c:600
+#: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
 msgstr "GIF resim yükleyici bu resmi tanımlayamadı"
 
-#: gdk-pixbuf/io-gif.c:629
+#: gdk-pixbuf/io-gif.c:632
 msgid "Bad code encountered"
 msgstr "Hatalı kod saptandı"
 
 # gdk-pixbuf/io-gif.c:622
-#: gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:642
 msgid "Circular table entry in GIF file"
 msgstr "GIF dosyasında döngüsel tablo girdisi"
 
 # gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
 # gdk-pixbuf/io-gif.c:1499
-#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
-#: gdk-pixbuf/io-gif.c:1540
+#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
+#: gdk-pixbuf/io-gif.c:1543
 msgid "Not enough memory to load GIF file"
 msgstr "GIF dosyasını yüklemek için bellek yetersiz"
 
 # gdk-pixbuf/io-gif.c:990
-#: gdk-pixbuf/io-gif.c:1019
+#: gdk-pixbuf/io-gif.c:1022
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Bozuk GIF dosyası (LZW sıkıştırması yanlış)"
 
 # gdk-pixbuf/io-gif.c:1040
-#: gdk-pixbuf/io-gif.c:1069
+#: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
 msgstr "Bir GIF dosyası gibi görünmüyor"
 
 # gdk-pixbuf/io-gif.c:1052
-#: gdk-pixbuf/io-gif.c:1081
+#: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "%s sürümü GIF dosya biçemi desteklenmiyor"
 
 # gdk-pixbuf/io-gif.c:1127
-#: gdk-pixbuf/io-gif.c:1154
+#: gdk-pixbuf/io-gif.c:1157
 #, fuzzy
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF dosyası resim sınırlarının dışında görünen bir çerçeve içeriyor."
 
 # gdk-pixbuf/io-gif.c:1127
-#: gdk-pixbuf/io-gif.c:1167
+#: gdk-pixbuf/io-gif.c:1170
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF dosyası resim sınırlarının dışında görünen bir çerçeve içeriyor."
 
 # gdk-pixbuf/io-gif.c:1143
-#: gdk-pixbuf/io-gif.c:1183
+#: gdk-pixbuf/io-gif.c:1186
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "GIF resminin ilk çerçevesi kurtulma kipi olarak 'önceki duruma dönüş' "
 "içeriyor."
 
 # gdk-pixbuf/io-gif.c:1178
-#: gdk-pixbuf/io-gif.c:1218
+#: gdk-pixbuf/io-gif.c:1221
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -254,7 +254,7 @@ msgstr ""
 "de yok."
 
 # gdk-pixbuf/io-gif.c:1407
-#: gdk-pixbuf/io-gif.c:1447
+#: gdk-pixbuf/io-gif.c:1450
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF resmi ya kırpılmış ya da tamamlanmamış."
 
@@ -2102,7 +2102,7 @@ msgid "_Insert Unicode control character"
 msgstr "_Unicode denetim karakteri gir"
 
 # gtk/gtkfilesel.c:502
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "Dosyaismi"
 
@@ -2320,7 +2320,7 @@ msgid "Selection: "
 msgstr "Seçim: "
 
 # gtk/gtkfilesel.c:2407
-#: gtk/gtkfilesel.c:3004
+#: gtk/gtkfilesel.c:3005
 #, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2330,18 +2330,18 @@ msgstr ""
 "kullanmayı deneyin."
 
 # gdk-pixbuf/io-xbm.c:284
-#: gtk/gtkfilesel.c:3007
+#: gtk/gtkfilesel.c:3008
 #, fuzzy
 msgid "Invalid Utf-8"
 msgstr "Geçersiz XBM dosyası"
 
 # gtk/gtkfilesel.c:3275
-#: gtk/gtkfilesel.c:3873
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "İsim çok uzun"
 
 # gtk/gtkfilesel.c:3277
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr "Dosya ismi dönüştürülemedi"
 
@@ -2523,87 +2523,87 @@ msgid "Error loading icon: %s"
 msgstr "Simge yüklenirken hata: %s"
 
 # gtk/gtkcellrendererpixbuf.c:102 gtk/gtkcellrenderertextpixbuf.c:125
-#: gtk/gtkimage.c:131
+#: gtk/gtkimage.c:133
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132
+#: gtk/gtkimage.c:134
 msgid "A GdkPixbuf to display."
 msgstr "Gösterilecek GdkPixbuf"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:141
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:142
 msgid "A GdkPixmap to display."
 msgstr "Gösterilecek GdkPixmap."
 
 # gtk/gtknotebook.c:324
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:149
 msgid "Image"
 msgstr "Resim"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:150
 msgid "A GdkImage to display."
 msgstr "Gösterilecek GdkImage."
 
 # gtk/gtkcellrenderertext.c:162
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:157
 msgid "Mask"
 msgstr "Mask"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:158
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage ya da GdkPixmap ile kullanılacak mask biteşlemi"
 
 # gdk-pixbuf/io-tiff.c:411
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:166
 msgid "Filename to load and display."
 msgstr "Yüklenecek ve gösterilecek dosya."
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:174
 msgid "Stock ID"
 msgstr "Stok Kimliği"
 
-#: gtk/gtkimage.c:173
+#: gtk/gtkimage.c:175
 msgid "Stock ID for a stock image to display."
 msgstr "Gösterilecek bir stok resmi için stok kimliği"
 
 # gtk/gtkcheckmenuitem.c:122 gtk/gtktogglebutton.c:152
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:182
 msgid "Icon set"
 msgstr "Simge kümesi"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:183
 msgid "Icon set to display."
 msgstr "Gösterilecek simge kümesi"
 
 # gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
 # gtk/gtktexttag.c:347 gtk/gtktexttag.c:348
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:190
 msgid "Icon size"
 msgstr "Simge boyutu"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
 msgstr "Stok simgesi veya simge kümesi için kullanılacak boyut"
 
 # gtk/gtkstock.c:267
-#: gtk/gtkimage.c:197
+#: gtk/gtkimage.c:199
 msgid "Animation"
 msgstr "Canlandırma"
 
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:200
 msgid "GdkPixbufAnimation to display."
 msgstr "Gösterilecek GdkPixbufAnimation"
 
 # gtk/gtkcurve.c:120
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:207
 msgid "Storage type"
 msgstr "Saklama türü"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:208
 msgid "The representation being used for image data."
 msgstr "Resim verisi için kullanılan sunum"
 

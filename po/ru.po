@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.x\n"
-"POT-Creation-Date: 2002-11-04 17:01-0500\n"
+"POT-Creation-Date: 2002-11-08 14:52-0500\n"
 "PO-Revision-Date: 2002-10-15 14:21+0400\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -178,7 +178,7 @@ msgid "Failure reading GIF: %s"
 msgstr "Сбой при чтении файла в формате GIF: %s"
 
 # gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1395 gdk-pixbuf/io-gif.c:1555
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Файл в формате GIF содержал испорченные данные (возможно был обрезан?)"
 
@@ -188,68 +188,68 @@ msgstr "Файл в формате GIF содержал испорченные �
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Внутренняя ошибка в загрузчике GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:541
+#: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
 msgstr ""
 
 # gdk-pixbuf/io-gif.c:592
-#: gdk-pixbuf/io-gif.c:600
+#: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
 msgstr "Загрузчик изображений в формате GIF не может понять это изображение."
 
 # gdk-pixbuf/io-gif.c:621
-#: gdk-pixbuf/io-gif.c:629
+#: gdk-pixbuf/io-gif.c:632
 msgid "Bad code encountered"
 msgstr "Обнаружен неправильный код"
 
 # gdk-pixbuf/io-gif.c:630
-#: gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:642
 msgid "Circular table entry in GIF file"
 msgstr "Круговая табличная запись в файле в формате GIF"
 
 # gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
 # gdk-pixbuf/io-gif.c:1530
-#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
-#: gdk-pixbuf/io-gif.c:1540
+#: gdk-pixbuf/io-gif.c:775 gdk-pixbuf/io-gif.c:1383 gdk-pixbuf/io-gif.c:1428
+#: gdk-pixbuf/io-gif.c:1543
 msgid "Not enough memory to load GIF file"
 msgstr "Недостаточно памяти для загрузки файла в формате GIF"
 
 # gdk-pixbuf/io-gif.c:1009
-#: gdk-pixbuf/io-gif.c:1019
+#: gdk-pixbuf/io-gif.c:1022
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Изображение в формате GIF повреждено (неправильное сжатие LZW)"
 
 # gdk-pixbuf/io-gif.c:1059
-#: gdk-pixbuf/io-gif.c:1069
+#: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
 msgstr "Вероятно, файл не является файлом в формате GIF"
 
 # gdk-pixbuf/io-gif.c:1071
-#: gdk-pixbuf/io-gif.c:1081
+#: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Файлы в формате GIF версии %s не поддерживаются"
 
 # gdk-pixbuf/io-gif.c:1144
-#: gdk-pixbuf/io-gif.c:1154
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame with height or width 0."
 msgstr "Изображение в формате GIF содержит кадр с нулевой шириной или высотой."
 
 # gdk-pixbuf/io-gif.c:1157
-#: gdk-pixbuf/io-gif.c:1167
+#: gdk-pixbuf/io-gif.c:1170
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 "Изображение в формате GIF содержит кадр, выходящий за пределы изображения."
 
 # gdk-pixbuf/io-gif.c:1173
-#: gdk-pixbuf/io-gif.c:1183
+#: gdk-pixbuf/io-gif.c:1186
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Первый кадр изображения в формате GIF имел режим размещения 'возврат к "
 "предыдущему'"
 
 # gdk-pixbuf/io-gif.c:1208
-#: gdk-pixbuf/io-gif.c:1218
+#: gdk-pixbuf/io-gif.c:1221
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -258,7 +258,7 @@ msgstr ""
 "него не имеет локальной карты цветов."
 
 # gdk-pixbuf/io-gif.c:1437
-#: gdk-pixbuf/io-gif.c:1447
+#: gdk-pixbuf/io-gif.c:1450
 msgid "GIF image was truncated or incomplete."
 msgstr "Изображение в формате GIF было обрезано или незавершено."
 
@@ -2113,7 +2113,7 @@ msgid "_Insert Unicode control character"
 msgstr "Вс_тавить управляющий символ Unicode"
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "Имя файла"
 
@@ -2325,7 +2325,7 @@ msgstr "Переименовать"
 msgid "Selection: "
 msgstr "Выбор: "
 
-#: gtk/gtkfilesel.c:3004
+#: gtk/gtkfilesel.c:3005
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2335,17 +2335,17 @@ msgstr ""
 "среды G_BROKEN_FILENAMES): %s"
 
 # gtk/gtkfilesel.c:2986
-#: gtk/gtkfilesel.c:3007
+#: gtk/gtkfilesel.c:3008
 msgid "Invalid Utf-8"
 msgstr "Недопустимая последовательность Utf-8"
 
 # gtk/gtkfilesel.c:3852
-#: gtk/gtkfilesel.c:3873
+#: gtk/gtkfilesel.c:3875
 msgid "Name too long"
 msgstr "Имя слишком длинное"
 
 # gtk/gtkfilesel.c:3854
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3877
 msgid "Couldn't convert filename"
 msgstr "Не удалось преобразовать название файла"
 
@@ -2524,91 +2524,91 @@ msgid "Error loading icon: %s"
 msgstr "Ошибка загрузки пиктограммы: %s"
 
 # gtk/gtkimage.c:129
-#: gtk/gtkimage.c:131
+#: gtk/gtkimage.c:133
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
 # gtk/gtkimage.c:130
-#: gtk/gtkimage.c:132
+#: gtk/gtkimage.c:134
 msgid "A GdkPixbuf to display."
 msgstr "Отображаемая картинка (GdkPixbuf)."
 
 # gtk/gtkimage.c:137
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:141
 msgid "Pixmap"
 msgstr "Растровая картинка"
 
 # gtk/gtkimage.c:138
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:142
 msgid "A GdkPixmap to display."
 msgstr "Отображаемая растровая картинка (GdkPixmap)"
 
 # gtk/gtkimage.c:145
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:149
 msgid "Image"
 msgstr "Изображение"
 
 # gtk/gtkimage.c:146
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:150
 msgid "A GdkImage to display."
 msgstr "Отображаемое изображение (GdkImage)"
 
 # gtk/gtkimage.c:153
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:157
 msgid "Mask"
 msgstr "Маска"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:158
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Битовая маска, используемая с объектами GdkImage или GdkPixmap"
 
 # gtk/gtkimage.c:162
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:166
 msgid "Filename to load and display."
 msgstr "Имя файла для загрузки и отображения."
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:174
 msgid "Stock ID"
 msgstr "ID встроенной пиктограммы"
 
-#: gtk/gtkimage.c:173
+#: gtk/gtkimage.c:175
 msgid "Stock ID for a stock image to display."
 msgstr "ID встроенного изображения для вывода на экран."
 
 # gtk/gtkimage.c:178
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:182
 msgid "Icon set"
 msgstr "Набор пиктограмм"
 
 # gtk/gtkimage.c:179
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:183
 msgid "Icon set to display."
 msgstr "Отображаемый набор пиктограмм"
 
 # gtk/gtkimage.c:186
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:190
 msgid "Icon size"
 msgstr "Размер пиктограммы"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
 msgstr "Размер для встроенной пиктограммы или набора пиктограмм."
 
 # gtk/gtkimage.c:195
-#: gtk/gtkimage.c:197
+#: gtk/gtkimage.c:199
 msgid "Animation"
 msgstr "Анимация"
 
-#: gtk/gtkimage.c:198
+#: gtk/gtkimage.c:200
 msgid "GdkPixbufAnimation to display."
 msgstr "Объект GdkPixbufAnimation для вывода на дисплей."
 
 # gtk/gtkimage.c:203
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:207
 msgid "Storage type"
 msgstr "Тип хранения"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:208
 msgid "The representation being used for image data."
 msgstr "Представление, используемое для данных изображения."
 
