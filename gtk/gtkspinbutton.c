@@ -482,7 +482,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 static void
 gtk_spin_button_finalize (GObject *object)
 {
-  gtk_object_unref (GTK_OBJECT (GTK_SPIN_BUTTON (object)->adjustment));
+  gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (object), NULL);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1640,11 +1640,10 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 	  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
 			      (GtkSignalFunc) adjustment_changed_cb,
 			      (gpointer) spin_button);
+	  spin_button->timer_step = spin_button->adjustment->step_increment;
         }
 
       gtk_widget_queue_resize (GTK_WIDGET (spin_button));
-
-      spin_button->timer_step = spin_button->adjustment->step_increment;
     }
 
   g_object_notify (G_OBJECT (spin_button), "adjustment");

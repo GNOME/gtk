@@ -1,3 +1,9 @@
+Mon Sep 23 12:12:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c: Patch from Joshua N Pritikin to
+	fix problem where signal connection wasn't removed
+	from adjustment on finalize. (#93962)
+
 Sun Sep 22 18:22:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/linux-fb/{gdkinput.c,gdkkeyboard-fb.c,gdk/linux-fb/gdkmain-fb.c,
