@@ -1,5 +1,9 @@
 2001-02-06  Christophe Merlet  <redfox@eikonex.org>
 
+	* update.sh: PACKAGE must be gtk20, isn't it ?.
+
+2001-02-06  Christophe Merlet  <redfox@eikonex.org>
+
 	* fr.po: Updated French translation.
 
 2001-01-29  Kjartan Maraas  <kmaraas@gnome.org>

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 VERSION="1.2.5"
-PACKAGE="gtk+"
+PACKAGE="gtk20"
 
 if [ "x$1" = "x--help" ]; then
 
