@@ -1,3 +1,13 @@
+Wed Apr 21 21:26:11 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_init): properly initialize
+	translate_* fields.
+	(gtk_item_factory_finalize): invoke translate_notify independant from
+	translate_data.
+	(gtk_item_factory_set_translate_func): likewise.
+	(gtk_item_factory_destroy): only ifactory pointer from those widgets
+	that belong to us (stupid me).
+
 Wed Apr 21 14:20:22 1999  George Lebl  <jirka@5z.com>
 
 	* gdk/gdkwindow.c: (gdk_window_remove_filter) correctly remove the

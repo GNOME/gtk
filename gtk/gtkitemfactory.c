@@ -224,6 +224,9 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
   ifactory->accel_group = NULL;
   ifactory->widget = NULL;
   ifactory->items = NULL;
+  ifactory->translate_func = NULL;
+  ifactory->translate_data = NULL;
+  ifactory->translate_notify = NULL;
 }
 
 GtkItemFactory*
@@ -661,7 +664,7 @@ gtk_item_factory_destroy (GtkObject *object)
       GSList *link;
       
       for (link = item->widgets; link; link = link->next)
-	if (gtk_object_get_data_by_id (link->data, quark_item_factory))
+	if (gtk_object_get_data_by_id (link->data, quark_item_factory) == ifactory)
 	  gtk_object_remove_data_by_id (link->data, quark_item_factory);
     }
   g_slist_free (ifactory->items);
@@ -684,7 +687,7 @@ gtk_item_factory_finalize (GtkObject		  *object)
   g_free (ifactory->path);
   g_assert (ifactory->widget == NULL);
 
-  if (ifactory->translate_data && ifactory->translate_notify)
+  if (ifactory->translate_notify)
     ifactory->translate_notify (ifactory->translate_data);
   
   parent_class->finalize (object);
@@ -1651,7 +1654,7 @@ gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
 {
   g_return_if_fail (ifactory != NULL);
   
-  if (ifactory->translate_data && ifactory->translate_notify)
+  if (ifactory->translate_notify)
     ifactory->translate_notify (ifactory->translate_data);
       
   ifactory->translate_func = func;
