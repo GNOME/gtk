@@ -1,3 +1,10 @@
+Wed May 20 05:02:26 1998  Tim Janik  <timj@gtk.org>
+
+        * glib.h: conditionally define NULL, FALSE and TRUE.
+        (g_mem_chunk_create): new convenience macro as a short hand for
+        g_mem_chunk_new().
+        (g_chunk_free): new convenience macro to be consistent with g_chunk_new.
+
 Tue, 19 May 1998 09:00:02 +0200  §Paolo Molaro <lupus@debian.org>
 
 	* gcompletion.c: generic functions for com<TAB>pletion...
