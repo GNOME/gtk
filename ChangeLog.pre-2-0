@@ -1,3 +1,8 @@
+Wed Apr 21 14:20:22 1999  George Lebl  <jirka@5z.com>
+
+        * gdk/gdkwindow.c: (gdk_window_remove_filter) correctly remove the
+          default filter from the list
+
 Mon Mar  8 12:52:53 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_grab_default): Add a warning

@@ -1988,7 +1988,7 @@ gdk_window_remove_filter (GdkWindow     *window,
 	  if (private)
 	    private->filters = g_list_remove_link (private->filters, node);
 	  else
-	    gdk_default_filters = g_list_remove_link (gdk_default_filters, tmp_list);
+	    gdk_default_filters = g_list_remove_link (gdk_default_filters, node);
 	  g_list_free_1 (node);
 	  g_free (filter);
 	  
