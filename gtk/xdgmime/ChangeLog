@@ -1,3 +1,10 @@
+2004-12-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmimealias.c (_xdg_mime_alias_read_from_file): 
+	* xdgmimeparent.c (_xdg_mime_parent_read_from_file): Make
+	repeated calls accumulate the results, don't call qsort()
+	on empty arrays.  (#160838, Mariano Suárez-Alvarez)
+
 2004-12-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.5.6 ===

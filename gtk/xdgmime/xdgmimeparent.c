@@ -134,8 +134,8 @@ _xdg_mime_parent_read_from_file (XdgParentList *list,
 
   /* FIXME: Not UTF-8 safe.  Doesn't work if lines are greater than 255 chars.
    * Blah */
-  alloc = 16;
-  list->parents = malloc (alloc * sizeof (XdgMimeParents));
+  alloc = list->n_mimes + 16;
+  list->parents = realloc (list->parents, alloc * sizeof (XdgMimeParents));
   while (fgets (line, 255, file) != NULL)
     {
       char *sep;
@@ -191,8 +191,9 @@ _xdg_mime_parent_read_from_file (XdgParentList *list,
 
   fclose (file);  
   
-  qsort (list->parents, list->n_mimes, 
-	 sizeof (XdgMimeParents), &parent_entry_cmp);
+  if (list->n_mimes > 1)
+    qsort (list->parents, list->n_mimes, 
+           sizeof (XdgMimeParents), &parent_entry_cmp);
 }
 
 

@@ -128,8 +128,8 @@ _xdg_mime_alias_read_from_file (XdgAliasList *list,
 
   /* FIXME: Not UTF-8 safe.  Doesn't work if lines are greater than 255 chars.
    * Blah */
-  alloc = 16;
-  list->aliases = malloc (alloc * sizeof (XdgAlias));
+  alloc = list->n_aliases + 16;
+  list->aliases = realloc (list->aliases, alloc * sizeof (XdgAlias));
   while (fgets (line, 255, file) != NULL)
     {
       char *sep;
@@ -156,8 +156,9 @@ _xdg_mime_alias_read_from_file (XdgAliasList *list,
 
   fclose (file);  
   
-  qsort (list->aliases, list->n_aliases, 
-	 sizeof (XdgAlias), alias_entry_cmp);
+  if (list->n_aliases > 1)
+    qsort (list->aliases, list->n_aliases, 
+           sizeof (XdgAlias), alias_entry_cmp);
 }
 
 
