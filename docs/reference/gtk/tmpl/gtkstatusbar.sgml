@@ -10,7 +10,9 @@ A #GtkStatusbar is usually placed along the bottom of an application's main
 #GtkWindow. It may provide a regular commentary of the application's status
 (as is usually the case in a web browser, for example), or may be used to
 simply output a message when the status changes, (when an upload is complete
-in an FTP client, for example).
+in an FTP client, for example). 
+It may also have a resize grip (a triangular area in the lower left corner) 
+which can be clicked on to resize the window containing the statusbar.
 </para>
 <para>
 Status bars in Gtk+ maintain a stack of messages. The message at
@@ -102,20 +104,20 @@ Forces the removal of a message from a statusbar's stack. The exact context_id a
 
 <!-- ##### FUNCTION gtk_statusbar_set_has_resize_grip ##### -->
 <para>
-
+Sets whether the statusbar has a resize grip. %TRUE by default.
 </para>
 
-@statusbar: 
-@setting: 
+@statusbar: a #GtkStatusBar. 
+@setting: %TRUE to have a resize grip.
 
 
 <!-- ##### FUNCTION gtk_statusbar_get_has_resize_grip ##### -->
 <para>
-
+Returns whether the statusbar has a resize grip.
 </para>
 
-@statusbar: 
-@Returns: 
+@statusbar: a #GtkStatusBar.
+@Returns: %TRUE if the statusbar has a resize grip.
 
 
 <!-- ##### SIGNAL GtkStatusbar::text-popped ##### -->

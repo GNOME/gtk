@@ -151,13 +151,8 @@ as @group.
 
 <!-- ##### MACRO gtk_radio_button_group ##### -->
 <para>
-Retrieves the group assigned to a radio button.
+Deprecated compatibility macro. Use gtk_radio_button_get_group() instead.
 </para>
-
-@Returns: a linked list containing all the radio buttons in the same group
-as @radio_button.
-<!-- # Unused Parameters # -->
-@radio_button: a #GtkRadioButton.
 
 
 <!-- ##### FUNCTION gtk_radio_button_set_group ##### -->
@@ -170,16 +165,17 @@ changes.
 
 @radio_button: a #GtkRadioButton.
 @group: an existing radio button group, such as one returned from
-gtk_radio_button_group().
+gtk_radio_button_get_group().
 
 
 <!-- ##### FUNCTION gtk_radio_button_get_group ##### -->
 <para>
-
+Retrieves the group assigned to a radio button.
 </para>
 
-@radio_button: 
-@Returns: 
+@radio_button: a #GtkRadioButton.
+@Returns: a linked list containing all the radio buttons in the same group
+as @radio_button.
 
 
 <!-- ##### ARG GtkRadioButton:group ##### -->

@@ -2,11 +2,13 @@
 GtkSeparatorMenuItem
 
 <!-- ##### SECTION Short_Description ##### -->
-
+a separator used in menus.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkSeparatorMenuItem is a separator used to group
+items within a menu. It displays a horizontal line with a shadow to
+make it appear sunken into the interface.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,21 +18,16 @@ GtkSeparatorMenuItem
 
 <!-- ##### STRUCT GtkSeparatorMenuItem ##### -->
 <para>
-
-</para>
-
-
-<!-- ##### STRUCT GtkSeparatorMenuItemClass ##### -->
-<para>
-
+The #GtkSeparatorMenuItem-struct struct contains private data only, and
+should be accessed using the functions below.
 </para>
 
 
 <!-- ##### FUNCTION gtk_separator_menu_item_new ##### -->
 <para>
-
+Creates a new #GtkSeparatorMenuItem.
 </para>
 
-@Returns: 
+@Returns: a new #GtkSeparatorMenuItem.
 
 

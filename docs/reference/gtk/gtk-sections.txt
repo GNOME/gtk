@@ -1945,9 +1945,9 @@ GTK_SEPARATOR_GET_CLASS
 <FILE>gtkseparatormenuitem</FILE>
 <TITLE>GtkSeparatorMenuItem</TITLE>
 GtkSeparatorMenuItem
-GtkSeparatorMenuItemClass
 gtk_separator_menu_item_new
 <SUBSECTION Standard>
+GtkSeparatorMenuItemClass
 GTK_SEPARATOR_MENU_ITEM
 GTK_SEPARATOR_MENU_ITEM_CLASS
 GTK_SEPARATOR_MENU_ITEM_GET_CLASS
@@ -2732,8 +2732,10 @@ gtk_tree_selection_get_selected
 gtk_tree_selection_selected_foreach
 gtk_tree_selection_select_path
 gtk_tree_selection_unselect_path
+gtk_tree_selection_path_is_selected
 gtk_tree_selection_select_iter
 gtk_tree_selection_unselect_iter
+gtk_tree_selection_iter_is_selected
 gtk_tree_selection_select_all
 gtk_tree_selection_unselect_all
 gtk_tree_selection_select_range

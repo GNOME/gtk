@@ -22,9 +22,6 @@ operations can cause errors in this domain, or in the #G_FILE_ERROR
 domain.
 </para>
 
-@GDK_PIXBUF_ERROR_HEADER_CORRUPT: 
-@GDK_PIXBUF_ERROR_PIXEL_CORRUPT: 
-@GDK_PIXBUF_ERROR_UNKNOWN_FORMAT: 
 @GDK_PIXBUF_ERROR_CORRUPT_IMAGE: An image file was broken somehow.
 @GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY: Not enough memory.
 @GDK_PIXBUF_ERROR_BAD_OPTION: A bad option was passed to a pixbuf save module.

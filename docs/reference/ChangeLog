@@ -1,5 +1,15 @@
 2001-10-10  Matthias Clasen   <matthiasc@poet.de>
 
+	* gtk/gtk-sections.txt, gtk/tmpl/gtkspinbutton.sgml,
+	gtk/tmpl/gtkseparatormenuitem.sgml, gtk/tmpl/gtknotebook.sgml,
+	gtk/tmpl/gtkstatusbar.sgml, gtk/tmpl/gtkradiobutton.sgml,
+	gtk/tmpl/gtkradiomenuitem.sgml: Updates.
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt, 
+	gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Follow recent API changes.
+
+2001-10-10  Matthias Clasen   <matthiasc@poet.de>
+
 	* gtk/tmpl/gtkcalendar.sgml, gtk/tmpl/gtkeditable.sgml: Update.
 
 	* gdk-pixbuf/gdk-pixbuf.sgml: Add entity for tmpl/inline.sgml.

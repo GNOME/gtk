@@ -232,12 +232,12 @@ Creates a new #GtkSpinButton.
 
 <!-- ##### MACRO gtk_spin_button_get_value_as_float ##### -->
 <para>
-
+Gets the value in the @spin_button. This function is deprecated,
+use gtk_spin_button_get_value() instead.
 </para>
 
-@Returns: 
-<!-- # Unused Parameters # -->
-@spin_button: 
+@spin_button: a #GtkSpinButton.
+@Returns: the value of @spin_button.
 
 
 <!-- ##### FUNCTION gtk_spin_button_get_value_as_int ##### -->
