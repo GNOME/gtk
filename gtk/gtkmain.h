@@ -98,14 +98,16 @@ gboolean gtk_init_check           (int    *argc,
 void	 gtk_init_abi_check       (int	  *argc,
 				   char	***argv,
 				   int     num_checks,
-				   size_t  sizeof_GtkWindow);
+				   size_t  sizeof_GtkWindow,
+				   size_t  sizeof_GtkBox);
 gboolean gtk_init_check_abi_check (int	  *argc,
 				   char	***argv,
 				   int     num_checks,
-				   size_t  sizeof_GtkWindow);
+				   size_t  sizeof_GtkWindow,
+				   size_t  sizeof_GtkBox);
 
-#define gtk_init(argc, argv) gtk_init_abi_check (argc, argv, 1, sizeof (GtkWindow))
-#define gtk_init_check(argc, argv) gtk_init_check_abi_check (argc, argv, 1, sizeof (GtkWindow))
+#define gtk_init(argc, argv) gtk_init_abi_check (argc, argv, 2, sizeof (GtkWindow), sizeof (GtkBox))
+#define gtk_init_check(argc, argv) gtk_init_check_abi_check (argc, argv, 2, sizeof (GtkWindow), sizeof (GtkBox))
 
 #endif
 

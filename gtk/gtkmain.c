@@ -49,6 +49,7 @@
 #include <pango/pango-utils.h>	/* For pango_split_file_list */
 
 #include "gtkaccelmap.h"
+#include "gtkbox.h"
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmain.h"
@@ -182,8 +183,6 @@ gtk_check_version (guint required_major,
     return "Gtk+ version too old (micro mismatch)";
   return NULL;
 }
-
-#undef gtk_init_check
 
 /* This checks to see if the process is running suid or sgid
  * at the current time. If so, we don't allow GTK+ to be initialized.
@@ -551,6 +550,8 @@ gtk_disable_setlocale (void)
   do_setlocale = FALSE;
 }
 
+#undef gtk_init_check
+
 gboolean
 gtk_init_check (int	 *argc,
 		char   ***argv)
@@ -790,23 +791,46 @@ check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
 	     "The code using GTK+ thinks GtkWindow is of different\n"
              "size than it actually is in this build of GTK+.\n"
 	     "On Windows, this probably means that you have compiled\n"
-	     "your code with gcc without the -fnative-struct switch.");
+	     "your code with gcc without the -fnative-struct switch,\n"
+	     "or that you are using an unsupported compiler.");
+}
+
+/* In GTK+ 2.0 the GtkWindow struct actually is the same size in
+ * gcc-compiled code on Win32 whether compiled with -fnative-struct or
+ * not. Unfortunately this wan't noticed until after GTK+ 2.0.1. So,
+ * from GTK+ 2.0.2 on, check some other struct, too, where the use of
+ * -fnative-struct still matters. GtkBox is one such.
+ */
+static void
+check_sizeof_GtkBox (size_t sizeof_GtkBox)
+{
+  if (sizeof_GtkBox != sizeof (GtkBox))
+    g_error ("Incompatible build!\n"
+	     "The code using GTK+ thinks GtkBox is of different\n"
+             "size than it actually is in this build of GTK+.\n"
+	     "On Windows, this probably means that you have compiled\n"
+	     "your code with gcc without the -fnative-struct switch,\n"
+	     "or that you are using an unsupported compiler.");
 }
 
 /* These two functions might get more checks added later, thus pass
  * in the number of extra args.
  */
 void
-gtk_init_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow)
+gtk_init_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow, size_t sizeof_GtkBox)
 {
   check_sizeof_GtkWindow (sizeof_GtkWindow);
+  if (num_checks >= 2)
+    check_sizeof_GtkBox (sizeof_GtkBox);
   gtk_init (argc, argv);
 }
 
 gboolean
-gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow)
+gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow, size_t sizeof_GtkBox)
 {
   check_sizeof_GtkWindow (sizeof_GtkWindow);
+  if (num_checks >= 2)
+    check_sizeof_GtkBox (sizeof_GtkBox);
   return gtk_init_check (argc, argv);
 }
 
