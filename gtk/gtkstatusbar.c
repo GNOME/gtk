@@ -19,14 +19,29 @@
 
 #include "gtkframe.h"
 #include "gtklabel.h"
+#include "gtksignal.h"
 #include "gtkstatusbar.h"
+
+
+enum
+{
+  SIGNAL_TEXT_PUSHED,
+  SIGNAL_TEXT_POPPED,
+  SIGNAL_LAST
+};
+
+typedef void    (*SignalTextP)                    (GtkObject          *object,
+					  	   const gchar        *text,
+						   gpointer            func_data);
 
 static void gtk_statusbar_class_init               (GtkStatusbarClass *class);
 static void gtk_statusbar_init                     (GtkStatusbar      *statusbar);
 static void gtk_statusbar_destroy                  (GtkObject         *object);
-static void gtk_statusbar_show_top_msg             (GtkStatusbar *statusbar);
-
+static void gtk_statusbar_update		   (GtkStatusbar      *statusbar,
+						    const gchar       *text);
+     
 static GtkContainerClass *parent_class;
+static gint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
 guint      
 gtk_statusbar_get_type ()
@@ -53,6 +68,19 @@ gtk_statusbar_get_type ()
 };
 
 static void
+gtk_statusbar_marshal_text_p (GtkObject      *object,
+			      GtkSignalFunc  func,
+			      gpointer       func_data,
+			      GtkArg         *args)
+{
+  SignalTextP sfunc = (SignalTextP) func;
+
+  (* sfunc) (object,
+	     GTK_VALUE_STRING (args[0]),
+	     func_data);
+}
+
+static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
 {
   GtkObjectClass *object_class;
@@ -63,105 +91,196 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
-  parent_class = gtk_type_class (gtk_box_get_type ());
+  parent_class = gtk_type_class (gtk_hbox_get_type ());
 
+  statusbar_signals[SIGNAL_TEXT_PUSHED] =
+    gtk_signal_new ("text_pushed",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_pushed),
+		    gtk_statusbar_marshal_text_p,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_STRING);
+  statusbar_signals[SIGNAL_TEXT_POPPED] =
+    gtk_signal_new ("text_popped",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_popped),
+		    gtk_statusbar_marshal_text_p,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_STRING);
+  gtk_object_class_add_signals (object_class, statusbar_signals, SIGNAL_LAST);
+  
   object_class->destroy = gtk_statusbar_destroy;
 
+  class->messages_mem_chunk = g_mem_chunk_new ("GtkStatusBar messages mem chunk",
+					       sizeof (GtkStatusbarMsg),
+					       sizeof (GtkStatusbarMsg) * 64,
+					       G_ALLOC_AND_FREE);
+
+  class->text_pushed = gtk_statusbar_update;
+  class->text_popped = gtk_statusbar_update;
 }
 
 static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
-  GTK_BOX (statusbar)->spacing = 2;
-  GTK_BOX (statusbar)->homogeneous = FALSE;
+  GtkBox *box;
+
+  box = GTK_BOX (statusbar);
+
+  box->spacing = 2;
+  box->homogeneous = FALSE;
 
   statusbar->frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), GTK_SHADOW_IN);
-  gtk_box_pack_start (GTK_BOX (statusbar), statusbar->frame, 1, 1, 0);
+  gtk_box_pack_start (box, statusbar->frame, TRUE, TRUE, 0);
   gtk_widget_show (statusbar->frame);
 
-  statusbar->label = gtk_label_new("");
-  gtk_misc_set_alignment(GTK_MISC(statusbar->label), 0.0, 0.0);
-  gtk_container_add(GTK_CONTAINER(statusbar->frame), statusbar->label);
+  statusbar->label = gtk_label_new ("");
+  gtk_misc_set_alignment (GTK_MISC (statusbar->label), 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (statusbar->frame), statusbar->label);
   gtk_widget_show (statusbar->label);
 
-  statusbar->next_statusid = 1;
-  statusbar->msgs = g_list_alloc();
+  statusbar->seq_status_id = 1;
+  statusbar->messages = NULL;
 }
 
 GtkWidget* 
 gtk_statusbar_new ()
 {
-  GtkStatusbar *statusbar;
-
-  statusbar = gtk_type_new (gtk_statusbar_get_type ());
-
-  return GTK_WIDGET (statusbar);
-}
-
-gint
-gtk_statusbar_push (GtkStatusbar *statusbar, gchar *str)
-{
-  GtkStatusbarMsg *msg;
-  GList *list;
-
-  list = statusbar->msgs;
-  msg = g_new(GtkStatusbarMsg, 1);
-  msg->str = g_strdup(str);
-  msg->statusid = statusbar->next_statusid;
-  statusbar->next_statusid++;
-
-  g_list_append(list, msg);
-
-  gtk_statusbar_show_top_msg(statusbar);
-
-  return msg->statusid;
+  return gtk_type_new (gtk_statusbar_get_type ());
 }
 
 static void
-gtk_statusbar_show_top_msg (GtkStatusbar *statusbar)
+gtk_statusbar_update (GtkStatusbar *statusbar,
+		      const gchar  *text)
 {
-  GList *listitem;
-  listitem = g_list_last(statusbar->msgs);
+  g_return_if_fail (statusbar != NULL);
+  g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
+  if (!text)
+    text = "";
 
-  if ((listitem != NULL)  && (listitem->data != NULL)) 
-    gtk_label_set(GTK_LABEL(statusbar->label), ((GtkStatusbarMsg*) (listitem->data))->str);
+  gtk_label_set (GTK_LABEL (statusbar->label), text);
+}
 
+guint
+gtk_statusbar_push (GtkStatusbar *statusbar,
+		    const gchar  *text)
+{
+  GtkStatusbarMsg *msg;
+  GtkStatusbarClass *class;
+
+  g_return_val_if_fail (statusbar != NULL, 0);
+  g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
+  g_return_val_if_fail (text != NULL, 0);
+
+  class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
+  msg = g_chunk_new (GtkStatusbarMsg, class->messages_mem_chunk);
+  msg->text = g_strdup (text);
+  msg->status_id = statusbar->seq_status_id++;
+
+  statusbar->messages = g_list_prepend (statusbar->messages, msg);
+
+  gtk_signal_emit (GTK_OBJECT (statusbar), statusbar_signals[SIGNAL_TEXT_PUSHED], msg->text);
+
+  return msg->status_id;
 }
 
 void
-gtk_statusbar_pop (GtkStatusbar *statusbar, gint statusid) 
+gtk_statusbar_pop (GtkStatusbar *statusbar)
 {
-  GList *listitem;
+  GtkStatusbarMsg *msg;
 
-  listitem = g_list_last(statusbar->msgs);
+  g_return_if_fail (statusbar != NULL);
+  g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
+  if (statusbar->messages)
+    {
+      GList *list;
+      GtkStatusbarClass *class;
 
-  while ((listitem != NULL) && (listitem->data != NULL)) {
-    
-    if (((GtkStatusbarMsg*)(listitem->data))->statusid == statusid) {
-      g_list_remove(listitem, listitem->data);
-      break;
+      list = statusbar->messages;
+      msg = list->data;
+      class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
+      
+      statusbar->messages = g_list_remove_link (statusbar->messages, list);
+      g_free (msg->text);
+      g_mem_chunk_free (class->messages_mem_chunk, msg);
+      g_list_free_1 (list);
     }
 
-    listitem = listitem->prev;
-  }
- 
-  gtk_statusbar_show_top_msg(statusbar);
+  msg = statusbar->messages ? statusbar->messages->data : NULL;
+
+  gtk_signal_emit (GTK_OBJECT (statusbar), statusbar_signals[SIGNAL_TEXT_POPPED],
+		   msg ? msg->text : NULL);
+}
+
+void
+gtk_statusbar_steal (GtkStatusbar *statusbar,
+		     guint          status_id) 
+{
+  GtkStatusbarMsg *msg;
+
+  g_return_if_fail (statusbar != NULL);
+  g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
+
+  msg = statusbar->messages ? statusbar->messages->data : NULL;
+  if (msg)
+    {
+      GList *list;
+      
+      if (msg->status_id == status_id)
+	{
+	  gtk_statusbar_pop (statusbar);
+	  return;
+	}
+      
+      for (list = statusbar->messages; list; list = list->next)
+	{
+	  msg = list->data;
+	  
+	  if (msg->status_id == status_id)
+	    {
+	      GtkStatusbarClass *class;
+	      
+	      class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
+	      statusbar->messages = g_list_remove_link (statusbar->messages, list);
+	      g_free (msg->text);
+	      g_mem_chunk_free (class->messages_mem_chunk, msg);
+	      g_list_free_1 (list);
+	      
+	      break;
+	    }
+	}
+    }
 }
 
 static void
 gtk_statusbar_destroy (GtkObject *object)
 {
   GtkStatusbar *statusbar;
+  GtkStatusbarClass *class;
+  GList *list;
+
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (object));
 
   statusbar = GTK_STATUSBAR (object);
-  g_list_free(statusbar->msgs);
+  class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
+
+  for (list = statusbar->messages; list; list = list->next)
+    {
+      GtkStatusbarMsg *msg;
+
+      msg = list->data;
+      g_free (msg->text);
+      g_mem_chunk_free (class->messages_mem_chunk, msg);
+    }
+  g_list_free (statusbar->messages);
+  statusbar->messages = NULL;
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
-

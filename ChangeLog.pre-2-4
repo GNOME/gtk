@@ -1,3 +1,13 @@
+Mon Feb 23 13:44:10 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkstatusbar.h:
+	* gtk/gtkstatusbar.c:
+ 	(re-)implemented the statusbar widget. my first intend was to fix the
+ 	code, but then there was nothing to fix - the whole thing was just a
+ 	big JOKE!
+	people who don't even know the semantics of the g_list_* functions
+	shouldn't put their hands on widget code and inheritance!
+
 Sun Feb 22 20:42:04 1998  Marc Ewing <marc@redhat.com>
 
 	* gtk/gtkclist.c (gtk_clist_insert): Allow inserts

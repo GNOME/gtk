@@ -40,31 +40,41 @@ struct _GtkStatusbar
 
   GtkWidget *frame;
   GtkWidget *label;
-  GList *msgs;
 
-  gint next_statusid;
+  GList *messages;
+
+  guint seq_status_id;
 };
 
 struct _GtkStatusbarClass
 {
   GtkHBoxClass parent_class;
+
+  GMemChunk *messages_mem_chunk;
+
+  void	(*text_pushed)	(GtkStatusbar	*statusbar,
+			 const gchar	*text);
+  void	(*text_popped)	(GtkStatusbar	*statusbar,
+			 const gchar	*text);
 };
 
 struct _GtkStatusbarMsg
 {
-  gchar *str;
-  gint statusid;
+  gchar *text;
+  guint status_id;
 };
 
 guint      gtk_statusbar_get_type     	(void);
 GtkWidget* gtk_statusbar_new          	(void);
 
 /* Returns StatusID used for gtk_statusbar_push */
-gint       gtk_statusbar_push          	(GtkStatusbar *statusbar, 
-					 gchar *text);
+guint      gtk_statusbar_push          	(GtkStatusbar *statusbar, 
+					 const gchar  *text);
+void       gtk_statusbar_pop          	(GtkStatusbar *statusbar);
+void       gtk_statusbar_steal         	(GtkStatusbar *statusbar, 
+					 guint          status_id);
 
-void       gtk_statusbar_pop          	(GtkStatusbar *statusbar, 
-					 gint statusid);
+
 
 #ifdef __cplusplus
 } 

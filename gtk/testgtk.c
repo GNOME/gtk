@@ -782,6 +782,154 @@ make_toolbar (GtkWidget *window)
   return toolbar;
 }
 
+static guint statusbar_counter = 1;
+
+static void
+statusbar_push (GtkWidget *button,
+		GtkStatusbar *statusbar)
+{
+  gchar text[1024];
+
+  sprintf (text, "something %d", statusbar_counter++);
+
+  gtk_statusbar_push (statusbar, text);
+}
+
+static void
+statusbar_pop (GtkWidget *button,
+	       GtkStatusbar *statusbar)
+{
+  gtk_statusbar_pop (statusbar);
+}
+
+static void
+statusbar_steal (GtkWidget *button,
+	         GtkStatusbar *statusbar)
+{
+  gtk_statusbar_steal (statusbar, 4);
+}
+
+static void
+statusbar_popped (GtkStatusbar  *statusbar,
+		  const gchar	*text)
+{
+  if (!statusbar->messages)
+    statusbar_counter = 1;
+}
+
+static void
+statusbar_dump_stack (GtkWidget *button,
+		      GtkStatusbar *statusbar)
+{
+  GList *list;
+
+  for (list = statusbar->messages; list; list = list->next)
+    {
+      GtkStatusbarMsg *msg;
+
+      msg = list->data;
+      g_print ("status_id: %d, status_text: \"%s\"\n", msg->status_id, msg->text);
+    }
+}
+
+static void
+create_statusbar ()
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *box1;
+  GtkWidget *box2;
+  GtkWidget *button;
+  GtkWidget *separator;
+  GtkWidget *statusbar;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window);
+      gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			  GTK_SIGNAL_FUNC (gtk_true),
+			  NULL);
+
+      gtk_window_set_title (GTK_WINDOW (window), "statusbar");
+      gtk_container_border_width (GTK_CONTAINER (window), 0);
+
+
+      box1 = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_widget_show (box1);
+
+
+      box2 = gtk_vbox_new (FALSE, 10);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+      gtk_widget_show (box2);
+
+      statusbar = gtk_statusbar_new ();
+      gtk_box_pack_end (GTK_BOX (box1), statusbar, TRUE, TRUE, 0);
+      gtk_widget_show (statusbar);
+      gtk_signal_connect (GTK_OBJECT (statusbar),
+			  "text_popped",
+			  GTK_SIGNAL_FUNC (statusbar_popped),
+			  NULL);
+
+      button = gtk_widget_new (gtk_button_get_type (),
+			       "GtkButton::label", "push something",
+			       "GtkWidget::visible", TRUE,
+			       "GtkWidget::parent", box2,
+			       "GtkObject::signal::clicked", statusbar_push, statusbar,
+			       NULL);
+
+      button = gtk_widget_new (gtk_button_get_type (),
+			       "GtkButton::label", "pop",
+			       "GtkWidget::visible", TRUE,
+			       "GtkWidget::parent", box2,
+			       "GtkObject::signal::clicked", statusbar_pop, statusbar,
+			       NULL);
+
+      button = gtk_widget_new (gtk_button_get_type (),
+			       "GtkButton::label", "steal #4",
+			       "GtkWidget::visible", TRUE,
+			       "GtkWidget::parent", box2,
+			       "GtkObject::signal::clicked", statusbar_steal, statusbar,
+			       NULL);
+
+      button = gtk_widget_new (gtk_button_get_type (),
+			       "GtkButton::label", "dump stack",
+			       "GtkWidget::visible", TRUE,
+			       "GtkWidget::parent", box2,
+			       "GtkObject::signal::clicked", statusbar_dump_stack, statusbar,
+			       NULL);
+
+      separator = gtk_hseparator_new ();
+      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+      gtk_widget_show (separator);
+
+
+      box2 = gtk_vbox_new (FALSE, 10);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+      gtk_widget_show (box2);
+
+
+      button = gtk_button_new_with_label ("close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_grab_default (button);
+      gtk_widget_show (button);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 static void
 create_handle_box ()
 {
@@ -4221,6 +4369,7 @@ create_main_window ()
       { "button box", create_button_box },
       { "toolbar", create_toolbar },
       { "handle box", create_handle_box },
+      { "statusbar", create_statusbar },
       { "reparent", create_reparent },
       { "pixmap", create_pixmap },
       { "tooltips", create_tooltips },
