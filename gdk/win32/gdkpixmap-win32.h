@@ -53,10 +53,7 @@ struct _GdkPixmapImplWin32
 
   gint width;
   gint height;
-
-  GdkImage *image;		/* A pointer to the GdkImage
-				 * containing the pixels.
-				 */
+  guchar *bits;
   guint is_foreign : 1;
 };
  

@@ -1,3 +1,32 @@
+2003-06-28  Tor Lillqvist  <tml@iki.fi>
+
+	Fix for #111028, thanks to J. Ali Harlow, who writes:
+	I found that the GdkPixmap->GdkImage reference really isn't
+	important. It's only really there to have somewhere convenient to
+	store the location of the pixel data in the pixmap and as an easy
+	way of accessing the dimensions of that data. I have therefore put
+	together a fix which removes this reference entirely which seems
+	to solve the problem.
+
+	* gdk/win32/gdkpixmap-win32.h (struct _GdkPixmapImplWin32):
+	Instead of a pointer to a GdkImage, keep a pointer to the pixels
+	directly.
+
+	* gdk/win32/gdkimage-win32.c (_gdk_win32_setup_pixmap_image): Remove.
+	(_gdk_win32_new_image): New function, replacing the above. Creates
+	a GdkImage without any associated GdkPixmap.
+	(gdk_image_new_bitmap, _gdk_image_new_for_depth): Use it instead.
+
+	* gdk/win32/gdkprivate-win32.h: Remove from here, too.
+
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new_from_pixmap)
+	* gdk/win32/gdkdrawable-win32.c (blit_from_pixmap)
+	* gdk/win32/gdkgc-win32.c (_gdk_win32_bitmap_to_hrgn)
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_drawable_description):
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_impl_win32_finalize,
+	gdk_pixmap_new, gdk_bitmap_create_from_data, gdk_pixmap_foreign_new)
+	Corresponding changes.
+
 Thu Jun 26 21:41:16 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktreeviewcolumn.c

@@ -923,17 +923,16 @@ gchar *
 _gdk_win32_drawable_description (GdkDrawable *d)
 {
   GdkVisual *v;
-  gint width, height;
+  gint width, height, depth;
 
   gdk_drawable_get_size (d, &width, &height);
+  depth = gdk_drawable_get_depth (d);
 
   return static_printf
     ("%s:%p:%dx%dx%d",
      G_OBJECT_TYPE_NAME (d),
      GDK_DRAWABLE_HANDLE (d),
-     width, height,
-     (GDK_IS_PIXMAP (d) ? GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (d)->impl)->image->depth
-      : ((v = gdk_drawable_get_visual (d)) ? v->depth : gdk_visual_get_system ()->depth)));
+     width, height, depth);
 }
 
 #endif /* G_ENABLE_DEBUG */
