@@ -66,4 +66,7 @@ gint       gtk_statusbar_push          	(GtkStatusbar *statusbar,
 void       gtk_statusbar_pop          	(GtkStatusbar *statusbar, 
 					 gint statusid);
 
+#ifdef __cplusplus
+} 
+#endif /* __cplusplus */
 #endif /* __GTK_STATUSBAR_H_ */
