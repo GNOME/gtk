@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2\n"
-"POT-Creation-Date: 2000-07-14 16:26-0400\n"
+"POT-Creation-Date: 2000-07-23 21:41+0200\n"
 "PO-Revision-Date: 2000-05-10 13:52+0100\n"
 "Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -42,17 +42,16 @@ msgid "Opacity:"
 msgstr "Átlátszóság:"
 
 #: gtk/gtkcolorsel.c:1438
-#, fuzzy
 msgid "Hex Value:"
-msgstr "Érték:"
+msgstr "Hexa érték:"
 
 #: gtk/gtkcolorsel.c:1459
 msgid "Custom Palette"
-msgstr ""
+msgstr "Egyéni paletta"
 
 #: gtk/gtkcolorsel.c:1464
 msgid "Set Color"
-msgstr ""
+msgstr "Szín beállítása"
 
 #. The OK button
 #: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
@@ -144,9 +143,8 @@ msgid "Family:"
 msgstr "Család:"
 
 #: gtk/gtkfontsel.c:194
-#, fuzzy
 msgid "Style:"
-msgstr "Stílus hozzáadása:"
+msgstr "Stílus:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
@@ -240,7 +238,7 @@ msgstr "Y döntés"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr ""
+msgstr "Görgõ"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
@@ -264,17 +262,17 @@ msgstr "töröl"
 msgid "Page %u"
 msgstr "%u. lap"
 
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nem találom a képet a pixmap_path (%s) útvonalon (%d. sor)"
 
-#: gtk/gtkrc.c:1878
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"
 
-#: gtk/gtkthemes.c:103
+#: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "Nem találom a betölthetõ modult a module_path (%s) útvonalon,"
