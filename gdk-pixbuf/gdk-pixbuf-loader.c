@@ -253,7 +253,6 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
       return 0;
     }
 
-  //g_print ("\n%s\n", priv->image_module->module_name);
   priv->context = priv->image_module->begin_load (gdk_pixbuf_loader_prepare,
 						  gdk_pixbuf_loader_update,
 						  loader,

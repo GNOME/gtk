@@ -1,3 +1,8 @@
+2002-02-21  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_load_module): remove
+	C++-commented debug spew, reported by David L. Cooper
+
 2002-02-15  Matthias Clasen  <maclas@gmx.de>
 
 	* pixops/pixops.c (correct_total): New function to make sure
