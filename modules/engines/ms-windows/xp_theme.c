@@ -40,6 +40,7 @@ static LPCWSTR class_descriptors[] =
   L"Edit",
   L"TreeView",
   L"Spin",
+  L"Progress",
 };
 
 static const short element_part_map[]=
@@ -70,6 +71,10 @@ static const short element_part_map[]=
   BP_RADIOBUTTON,
   TVP_GLYPH,
   TVP_GLYPH,
+  PP_CHUNK,
+  PP_CHUNKVERT,
+  PP_BAR,
+  PP_BARVERT,
 };
 
 
@@ -198,6 +203,13 @@ xp_theme_get_handle_by_element(XpThemeElement element)
     case XP_THEME_ELEMENT_SPIN_BUTTON_UP:
     case XP_THEME_ELEMENT_SPIN_BUTTON_DOWN:
       klazz = XP_THEME_CLASS_SPIN;
+      break;
+
+    case XP_THEME_ELEMENT_PROGRESS_BAR_H:
+    case XP_THEME_ELEMENT_PROGRESS_BAR_V:
+    case XP_THEME_ELEMENT_PROGRESS_TROUGH_H:
+    case XP_THEME_ELEMENT_PROGRESS_TROUGH_V:
+      klazz = XP_THEME_CLASS_PROGRESS;
       break;
 
     case XP_THEME_ELEMENT_TREEVIEW_EXPANDER_OPENED:
@@ -443,6 +455,13 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
       ret = GLPS_OPENED;
       break;
 
+    case XP_THEME_ELEMENT_PROGRESS_BAR_H:
+    case XP_THEME_ELEMENT_PROGRESS_BAR_V:
+    case XP_THEME_ELEMENT_PROGRESS_TROUGH_H:
+    case XP_THEME_ELEMENT_PROGRESS_TROUGH_V:
+      ret = 0;
+      break;
+      
     default:
       switch(state)
         {
@@ -518,6 +537,18 @@ xp_theme_is_drawable(XpThemeElement element)
   if (uxtheme_dll)
     {
       ret = xp_theme_get_handle_by_element(element) != NULL;
+    }
+  return ret;
+}
+
+gboolean
+xp_theme_get_system_font(LOGFONTW *lf)
+{
+  gboolean ret = FALSE;
+  if (get_theme_sys_font_func != NULL)
+    {
+      HRESULT hr = (*get_theme_sys_font_func)(NULL, TMT_MSGBOXFONT, lf);
+      ret = (hr == S_OK);
     }
   return ret;
 }

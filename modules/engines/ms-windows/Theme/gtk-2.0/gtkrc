@@ -26,3 +26,4 @@ style "wimp-scrollbar"
 }
 
 class "GtkScrollbar" style "wimp-scrollbar"
+

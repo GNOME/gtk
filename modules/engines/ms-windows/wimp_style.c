@@ -301,6 +301,27 @@ sanitize_size (GdkWindow *window,
   return set_bg;
 }
 
+static XpThemeElement
+map_gtk_progress_bar_to_xp(GtkProgressBar *progress_bar, gboolean trough)
+{
+  XpThemeElement ret;
+  switch (progress_bar->orientation)
+    {
+    case GTK_PROGRESS_LEFT_TO_RIGHT:
+    case GTK_PROGRESS_RIGHT_TO_LEFT:
+      ret = trough
+        ? XP_THEME_ELEMENT_PROGRESS_TROUGH_H
+        : XP_THEME_ELEMENT_PROGRESS_BAR_H;
+      break;
+    default:
+      ret = trough
+        ? XP_THEME_ELEMENT_PROGRESS_TROUGH_V
+        : XP_THEME_ELEMENT_PROGRESS_BAR_V;
+      break;
+    }
+  return ret;
+}
+
 static void
 draw_part (GdkDrawable  *drawable,
 	   GdkGC        *gc,
@@ -858,6 +879,19 @@ draw_box (GtkStyle      *style,
             }
         }
     }
+  else if (detail && !strcmp (detail, "bar"))
+    {
+      if (widget && GTK_IS_PROGRESS_BAR (widget))
+        {
+          GtkProgressBar *progress_bar = GTK_PROGRESS_BAR(widget);
+          XpThemeElement xp_progress_bar = map_gtk_progress_bar_to_xp (progress_bar, FALSE);
+          if (xp_theme_draw (window, xp_progress_bar,
+                             style, x, y, width, height, state_type))
+            {
+              return;
+            }
+        }
+    }
 
   if (detail && strcmp (detail, "menuitem") == 0) 
     shadow_type = GTK_SHADOW_NONE;
@@ -866,7 +900,17 @@ draw_box (GtkStyle      *style,
     {
       if (widget && GTK_IS_PROGRESS_BAR (widget))
         {
-          // Blank in classic Windows 
+          GtkProgressBar *progress_bar = GTK_PROGRESS_BAR(widget);
+          XpThemeElement xp_progress_bar = map_gtk_progress_bar_to_xp (progress_bar, TRUE);
+          if (xp_theme_draw (window, xp_progress_bar,
+                             style, x, y, width, height, state_type))
+            {
+              return;
+            }
+          else
+            {
+              // Blank in classic Windows
+            }
         }
       else
         {
@@ -1135,14 +1179,14 @@ wimp_style_class_init (WimpStyleClass *klass)
 
   parent_class = g_type_class_peek_parent (klass);
 
-  style_class->init_from_rc    = wimp_style_init_from_rc;
-  style_class->draw_arrow      = draw_arrow;
-  style_class->draw_box        = draw_box;
-  style_class->draw_check      = draw_check;
-  style_class->draw_option     = draw_option;
-  style_class->draw_tab        = draw_tab;
-  style_class->draw_flat_box   = draw_flat_box;
-  style_class->draw_expander   = draw_expander;
+  style_class->init_from_rc = wimp_style_init_from_rc;
+  style_class->draw_arrow = draw_arrow;
+  style_class->draw_box = draw_box;
+  style_class->draw_check = draw_check;
+  style_class->draw_option = draw_option;
+  style_class->draw_tab = draw_tab;
+  style_class->draw_flat_box = draw_flat_box;
+  style_class->draw_expander = draw_expander;
   style_class->draw_extension = draw_extension;
   style_class->draw_box_gap = draw_box_gap;
   style_class->draw_shadow = draw_shadow;
