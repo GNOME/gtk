@@ -966,51 +966,31 @@ gtk_container_get_resize_container (GtkContainer *container)
 static gboolean
 gtk_container_idle_sizer (gpointer data)
 {
-  static gboolean initialized = 0;
-  static GTimeVal last_time;
-  GTimeVal current_time;
-  
   GDK_THREADS_ENTER ();
 
-  if (container_resize_queue)
+  /* we may be invoked with a container_resize_queue of NULL, because
+   * queue_resize could have been adding an extra idle function while
+   * the queue still got processed. we better just ignore such case
+   * than trying to explicitely work around them with some extra flags,
+   * since it doesn't cause any actual harm.
+   */
+  while (container_resize_queue)
     {
-      /* we may be invoked with a container_resize_queue of NULL, because
-       * queue_resize could have been adding an extra idle function while
-       * the queue still got processed. we better just ignore such case
-       * than trying to explicitely work around them with some extra flags,
-       * since it doesn't cause any actual harm.
-       */
-      while (container_resize_queue)
-	{
-	  GSList *slist;
-	  GtkWidget *widget;
-	  
-	  slist = container_resize_queue;
-	  container_resize_queue = slist->next;
-	  widget = slist->data;
-	  g_slist_free_1 (slist);
-	  
-	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
-	  gtk_container_check_resize (GTK_CONTAINER (widget));
-	}
-      
-      gdk_window_process_all_updates ();
-      
-      g_get_current_time (&current_time);
-      
-      if (initialized)
-	{
-	  gdouble diff = ((current_time.tv_usec - last_time.tv_usec) / 1000. +
-			  (current_time.tv_sec - last_time.tv_sec) * 1000.);
-	  /*	  g_print ("Frame time: %g msec\n", diff);	     */
-	}
-      else
-	initialized = TRUE;
-      
-      last_time = current_time;
-      
-      GDK_THREADS_LEAVE ();
+      GSList *slist;
+      GtkWidget *widget;
+
+      slist = container_resize_queue;
+      container_resize_queue = slist->next;
+      widget = slist->data;
+      g_slist_free_1 (slist);
+
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
+      gtk_container_check_resize (GTK_CONTAINER (widget));
     }
+
+  gdk_window_process_all_updates ();
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

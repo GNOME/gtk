@@ -1,3 +1,8 @@
+Wed Nov 14 15:14:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcontainer.c (gtk_container_idle_sizer): Back
+	out accidental commit of debugging timing code.
+
 2001-11-14  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_move_cursor): fix Control-E so
