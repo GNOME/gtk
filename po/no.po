@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.3\n"
-"POT-Creation-Date: 2001-09-25 15:51-0400\n"
+"POT-Creation-Date: 2001-09-27 13:37+0200\n"
 "PO-Revision-Date: 2001-09-19 17:50+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -56,6 +56,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
+"Modul %s for bildelasting eksporterer ikke riktig grensesnitt; kanskje den "
+"er fra en annen GTK-versjon?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:452 gdk-pixbuf/gdk-pixbuf-io.c:478
 #, c-format
@@ -84,12 +86,12 @@ msgstr "Feil under lasting av bilde '%s': %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:714
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
+msgstr "Dette bygget av gdk-pixbuf støtter ikke lagring av bildeformatet: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:817
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "Feil under åpning av '%s' for skriving: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:838
 #, c-format
@@ -97,11 +99,13 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
+"Feil under lukking av '%s' under skriving av bilde. Det er ikke sikkert at "
+"alle data er lagret: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:252
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
+msgstr "Inkrementell lasting av bildetype '%s' er ikke støttet"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:275 gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
@@ -109,44 +113,46 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
+"Intern feil: Modul for lasting av bilder '%s' feilet ved start av "
+"bildelasting, men ga ingen årsak for feilen"
 
 #: gdk-pixbuf/io-bmp.c:255
 msgid "BMP image has unsupported header size"
-msgstr ""
+msgstr "BMP-bilde har ustøttet headerstørrelse"
 
 #: gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "BMP-bilde har ugyldige data i header"
 
 #: gdk-pixbuf/io-bmp.c:325
 msgid "Not enough memory to load bitmap image"
-msgstr ""
+msgstr "Ikke nok minne til å laste bitkart-bilde"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "Feil under lesing av GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1360 gdk-pixbuf/io-gif.c:1519
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
+msgstr "GIF-fil mangler noen data (kanskje den har blitt avkuttet på en måte?)"
 
 #: gdk-pixbuf/io-gif.c:469
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr ""
+msgstr "Intern feil i GIF-laster (%s)"
 
 #: gdk-pixbuf/io-gif.c:592
 msgid "GIF image loader can't understand this image."
-msgstr ""
+msgstr "GIF-bildelasteren skjønner ikke dette bildet."
 
 #: gdk-pixbuf/io-gif.c:621
 msgid "Bad code encountered"
-msgstr ""
+msgstr "Ugyldig kode funnet"
 
 #: gdk-pixbuf/io-gif.c:630
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "Sirkulær tabelloppføring i GIF-fil"
 
 #: gdk-pixbuf/io-gif.c:754 gdk-pixbuf/io-gif.c:1348 gdk-pixbuf/io-gif.c:1393
 #: gdk-pixbuf/io-gif.c:1507
@@ -282,7 +288,7 @@ msgstr "Maksimal fargeverdi i PNM-filen er for stor"
 
 #: gdk-pixbuf/io-pnm.c:401
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr ""
+msgstr "Kan ikke håndtere PNM-filer med flere fargeverdier enn 255"
 
 #: gdk-pixbuf/io-pnm.c:440 gdk-pixbuf/io-pnm.c:468 gdk-pixbuf/io-pnm.c:500
 msgid "Raw PNM image type is invalid"
@@ -298,11 +304,12 @@ msgstr "PNM-bildelaster støtter ikke dette PNM-underformatet"
 
 #: gdk-pixbuf/io-pnm.c:716
 msgid "Premature end-of-file encountered"
-msgstr ""
+msgstr "Prematur slutt-på-fil funnet"
 
 #: gdk-pixbuf/io-pnm.c:748 gdk-pixbuf/io-pnm.c:967
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
+"Ubehandlede PNM-formater krever eksakt ett blankt felt før eksempeldata"
 
 #: gdk-pixbuf/io-pnm.c:775
 msgid "Can't allocate memory for loading PNM image"
@@ -399,15 +406,15 @@ msgstr "Feil under skriving til midlertidig fil under lasting av XPM-bilde"
 
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
-msgstr ""
+msgstr "Korrupt header i bilde"
 
 #: gdk-pixbuf/gdk-pixdata.c:150
 msgid "Image format unknown"
-msgstr ""
+msgstr "Ukjent bildeformat"
 
 #: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:432
 msgid "Image pixel data corrupt"
-msgstr ""
+msgstr "Korrupt pikseldata i bilde"
 
 #: gdk-pixbuf/gdk-pixdata.c:378
 #, c-format
@@ -420,7 +427,7 @@ msgstr "Akselleratorobjekt"
 
 #: gtk/gtkaccellabel.c:116
 msgid "The object monitored by this accelerator label"
-msgstr ""
+msgstr "Objektet som overvåkes av denne akselleratoretiketten"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
@@ -428,15 +435,15 @@ msgstr "Horisontal justering"
 
 #: gtk/gtkalignment.c:103
 msgid "Value between 0.0 and 1.0 to indicate X alignment"
-msgstr ""
+msgstr "Verdi mellom 0.0 og 1.0 som skal indikere X-justering"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
-msgstr ""
+msgstr "Vertikal justering"
 
 #: gtk/gtkalignment.c:113
 msgid "Value between 0.0 and 1.0 to indicate Y alignment"
-msgstr ""
+msgstr "Verdi mellom 0.0 og 1.0 som indikerer Y-justering"
 
 #: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
@@ -444,7 +451,7 @@ msgstr "Horisontal skalering"
 
 #: gtk/gtkalignment.c:122
 msgid "Value between 0.0 and 1.0 to indicate X scale"
-msgstr ""
+msgstr "Verdi mellom 0.0 og 1.0 som indikerer X-skalering"
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
@@ -452,7 +459,7 @@ msgstr "Vertikal skalering"
 
 #: gtk/gtkalignment.c:131
 msgid "Value between 0.0 and 1.0 to indicate Y scale"
-msgstr ""
+msgstr "Verdi mellom 0.0 og 1.0 som indikerer Y-skalering"
 
 #: gtk/gtkarrow.c:97
 msgid "Arrow direction"
@@ -460,15 +467,15 @@ msgstr "Pilretning"
 
 #: gtk/gtkarrow.c:98
 msgid "The direction the arrow should point"
-msgstr ""
+msgstr "Pekeretning for pilen"
 
 #: gtk/gtkarrow.c:105
 msgid "Arrow shadow"
-msgstr ""
+msgstr "Pilens skygge"
 
 #: gtk/gtkarrow.c:106
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "Utseende for skyggen som omgir pilen"
 
 #: gtk/gtkaspectframe.c:107
 msgid "Horizontal Alignment"
@@ -492,15 +499,15 @@ msgstr "Rate"
 
 #: gtk/gtkaspectframe.c:122
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr ""
+msgstr "Aspektrate hvis obey_child er USANN"
 
 #: gtk/gtkaspectframe.c:128
 msgid "Obey child"
-msgstr ""
+msgstr "Adlyd barn"
 
 #: gtk/gtkaspectframe.c:129
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
+msgstr "Tving aspektraten til å passe til rammens barn"
 
 #: gtk/gtkbbox.c:115
 msgid "Minimum child width"
@@ -508,7 +515,7 @@ msgstr "Minimal bredde for barn"
 
 #: gtk/gtkbbox.c:116
 msgid "Minimum width of buttons inside the box"
-msgstr ""
+msgstr "Minimum bredde på knappene inne i boksen"
 
 #: gtk/gtkbbox.c:124
 msgid "Minimum child height"
@@ -516,11 +523,11 @@ msgstr "Minimal høyde for barn"
 
 #: gtk/gtkbbox.c:125
 msgid "Minimum height of buttons inside the box"
-msgstr ""
+msgstr "Minimum høyde på knappene inne i boksen"
 
 #: gtk/gtkbbox.c:133
 msgid "Child internal width padding"
-msgstr ""
+msgstr "Internt breddefyll for barn"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
@@ -592,7 +599,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:199
 msgid "Use stock"
-msgstr ""
+msgstr "Bruk lager"
 
 #: gtk/gtkbutton.c:200
 msgid ""
@@ -794,7 +801,7 @@ msgstr "Redigerbar"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "Om teksten kan endres av brukeren"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:192 gtk/gtktexttag.c:284 gtk/gtktexttag.c:292
@@ -807,7 +814,7 @@ msgstr "Beskrivelse av skrifttypen som en streng"
 
 #: gtk/gtkcellrenderertext.c:247 gtk/gtktexttag.c:293
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "Skrifttypebeskrivelse som en PangoFontDescription struct"
 
 #: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:301
 msgid "Font family"
@@ -815,7 +822,7 @@ msgstr "Skrifttypefamilie"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "Navn på skrifttypefamilien, f.eks Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:309 gtk/gtktexttag.c:310
@@ -856,7 +863,7 @@ msgstr "Skrifttypeskalering"
 
 #: gtk/gtkcellrenderertext.c:322
 msgid "Font scaling factor"
-msgstr ""
+msgstr "Skaleringsfaktor for skrifttype"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:426
 msgid "Rise"
@@ -885,59 +892,59 @@ msgstr "Stil for understreking av denne teksten."
 
 #: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:511
 msgid "Background set"
-msgstr ""
+msgstr "Bakgrunn satt"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:512
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Om denne merkingen påvirker bakgrunnsfargen"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:523
 msgid "Foreground set"
-msgstr ""
+msgstr "Forgrunn satt"
 
 #: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:524
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Om denne merkingen påvirker forgrunnsfargen"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:531
 msgid "Editability set"
-msgstr ""
+msgstr "Redigerbarhet satt"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:532
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "Om denne merkingen påvirker redigerbarhet for teksten"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:535
 msgid "Font family set"
-msgstr ""
+msgstr "Skrifttypefamilie satt"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:536
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Om denne merkingen påvirker skrifttypefamilien"
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:539
 msgid "Font style set"
-msgstr ""
+msgstr "Skrifttypestil satt"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:540
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Om denne merkingen påvirker skrifttypestil"
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:543
 msgid "Font variant set"
-msgstr ""
+msgstr "Skrifttypevariant satt"
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:544
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Om denne merkingen påvirker skrifttypevariant"
 
 #: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:547
 msgid "Font weight set"
-msgstr ""
+msgstr "Skrifttypetyngde satt"
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:548
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Om denne merkingen påvirker skrifttypetyngden"
 
 #: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:551
 msgid "Font stretch set"
@@ -949,43 +956,43 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:555
 msgid "Font size set"
-msgstr ""
+msgstr "Skrifttypestørrelse satt"
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:556
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Om denne merkingen påvirker skrifttypestørrelsen"
 
 #: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:559
 msgid "Font scale set"
-msgstr ""
+msgstr "Skrifttypeskalering satt"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:560
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Om denne merkingen skalerer skrifttypestørrelsen med en gitt faktor"
 
 #: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:579
 msgid "Rise set"
-msgstr ""
+msgstr "Heving satt"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:580
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Om denne merkingen påvirker heving"
 
 #: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:595
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Gjennomstreking satt"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:596
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Om denne merkingen påvirker gjennomstreking"
 
 #: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:603
 msgid "Underline set"
-msgstr ""
+msgstr "Understreking satt"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:604
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Om denne merkingen påvirker understreking"
 
 #: gtk/gtkcellrenderertoggle.c:129
 msgid "Toggle state"
@@ -1015,19 +1022,19 @@ msgstr "Tegn knapp for vending som en radioknapp"
 
 #: gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:160
 msgid "Indicator Size"
-msgstr ""
+msgstr "Indikatorstørrelse"
 
 #: gtk/gtkcheckbutton.c:96
 msgid "Size of check or radio indicator"
-msgstr ""
+msgstr "Størrelse på avkrysnings- eller radioindikator"
 
 #: gtk/gtkcheckbutton.c:103 gtk/gtkoptionmenu.c:166
 msgid "Indicator Spacing"
-msgstr ""
+msgstr "Mellomrom for indikator"
 
 #: gtk/gtkcheckbutton.c:104
 msgid "Spacing around check or radio indicator"
-msgstr ""
+msgstr "Mellomrom rundt avkrysnings- eller radioindikator"
 
 #: gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:142
 msgid "Active"
@@ -1035,15 +1042,15 @@ msgstr "Aktiv"
 
 #: gtk/gtkcheckmenuitem.c:115
 msgid "Whether the menu item is checked."
-msgstr ""
+msgstr "Om menyoppføringen er avkrysset."
 
 #: gtk/gtkcheckmenuitem.c:122 gtk/gtktogglebutton.c:150
 msgid "Inconsistent"
-msgstr ""
+msgstr "Inkonsistent"
 
 #: gtk/gtkcheckmenuitem.c:123
 msgid "Whether to display an \"inconsistent\" state."
-msgstr ""
+msgstr "Om \"inkonsistent\" tilstand skal anvises."
 
 #: gtk/gtkcolorsel.c:582
 msgid ""
@@ -1060,7 +1067,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:891
 msgid "_Save color here"
-msgstr ""
+msgstr "_Lagre fargen her"
 
 #: gtk/gtkcolorsel.c:1059
 msgid ""
@@ -1070,7 +1077,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1675
 msgid "Has Opacity Control"
-msgstr ""
+msgstr "Har kontroll for ugjennomsiktighet"
 
 #: gtk/gtkcolorsel.c:1676
 msgid "Whether the color selector should allow setting opacity"
@@ -1099,6 +1106,8 @@ msgstr "Nåværende alpha"
 #: gtk/gtkcolorsel.c:1697
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
+"Nåværende verdi for ugjennomsiktighet (0 helt gjennomsiktig, 65535 helt "
+"ugjennomsiktig)"
 
 #: gtk/gtkcolorsel.c:1710
 msgid "Custom palette"
@@ -1106,7 +1115,7 @@ msgstr "Egendefinert palett"
 
 #: gtk/gtkcolorsel.c:1711
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "Palett som skal brukes i fargevelgeren"
 
 #: gtk/gtkcolorsel.c:1766
 msgid ""
@@ -1126,7 +1135,7 @@ msgstr "_Glød:"
 
 #: gtk/gtkcolorsel.c:1804
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "Posisjon på fargehjulet."
 
 #: gtk/gtkcolorsel.c:1805
 msgid "_Saturation:"
@@ -1142,7 +1151,7 @@ msgstr "_Verdi:"
 
 #: gtk/gtkcolorsel.c:1808
 msgid "Brightness of the color."
-msgstr ""
+msgstr "Lysstyrke for fargen."
 
 #: gtk/gtkcolorsel.c:1809
 msgid "_Red:"
@@ -1150,7 +1159,7 @@ msgstr "_Rød:"
 
 #: gtk/gtkcolorsel.c:1810
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "Mende med rødt lys i fargen."
 
 #: gtk/gtkcolorsel.c:1811
 msgid "_Green:"
@@ -1158,7 +1167,7 @@ msgstr "_Grønn:"
 
 #: gtk/gtkcolorsel.c:1812
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "Mengde med grønt lys i fargen."
 
 #: gtk/gtkcolorsel.c:1813
 msgid "_Blue:"
@@ -1166,7 +1175,7 @@ msgstr "_Blå:"
 
 #: gtk/gtkcolorsel.c:1814
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "Mengde med blått lys i fargen."
 
 #: gtk/gtkcolorsel.c:1817
 msgid "_Opacity:"
@@ -1174,11 +1183,11 @@ msgstr "_Ugjennomsiktighet:"
 
 #: gtk/gtkcolorsel.c:1825
 msgid "Transparency of the currently-selected color."
-msgstr ""
+msgstr "Gjennomsiktighet i valgt farge."
 
 #: gtk/gtkcolorsel.c:1840
 msgid "Color _Name:"
-msgstr ""
+msgstr "Farge_navn:"
 
 #: gtk/gtkcolorsel.c:1852
 msgid ""
@@ -1192,15 +1201,15 @@ msgstr "_Palett"
 
 #: gtk/gtkcombo.c:133
 msgid "Enable arrow keys"
-msgstr ""
+msgstr "Aktiver piltaster"
 
 #: gtk/gtkcombo.c:134
 msgid "Whether the arrow keys move through the list of items"
-msgstr ""
+msgstr "Om piltastene skal flytte markøren gjennom listen med oppføringer"
 
 #: gtk/gtkcombo.c:140
 msgid "Always enable arrows"
-msgstr ""
+msgstr "Alltid aktiver piler"
 
 #: gtk/gtkcombo.c:141
 msgid ""
@@ -1225,7 +1234,7 @@ msgstr ""
 
 #: gtk/gtkcontainer.c:215
 msgid "Border width"
-msgstr ""
+msgstr "Kantbredde"
 
 #: gtk/gtkcontainer.c:216
 msgid "The width of the empty border outside the containers children."
@@ -1253,7 +1262,7 @@ msgstr "Minimum X"
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "Minste mulige verdi for X"
 
 #: gtk/gtkcurve.c:139
 msgid "Maximum X"
@@ -1393,23 +1402,23 @@ msgstr "Markørfarge"
 msgid "Color with which to draw insertion cursor"
 msgstr "Farge som markøren skal tegnes med"
 
-#: gtk/gtkentry.c:3761 gtk/gtklabel.c:3122 gtk/gtktextview.c:5434
+#: gtk/gtkentry.c:3765 gtk/gtklabel.c:3122 gtk/gtktextview.c:5443
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: gtk/gtkentry.c:3763 gtk/gtklabel.c:3124 gtk/gtktextview.c:5436
+#: gtk/gtkentry.c:3767 gtk/gtklabel.c:3124 gtk/gtktextview.c:5445
 msgid "Copy"
 msgstr "Kopier"
 
-#: gtk/gtkentry.c:3765 gtk/gtklabel.c:3126 gtk/gtktextview.c:5439
+#: gtk/gtkentry.c:3769 gtk/gtklabel.c:3126 gtk/gtktextview.c:5448
 msgid "Paste"
 msgstr "Lim inn"
 
-#: gtk/gtkentry.c:3768 gtk/gtklabel.c:3129
+#: gtk/gtkentry.c:3772 gtk/gtklabel.c:3129
 msgid "Select All"
 msgstr "Velg alt"
 
-#: gtk/gtkentry.c:3778 gtk/gtklabel.c:3139 gtk/gtktextview.c:5446
+#: gtk/gtkentry.c:3782 gtk/gtklabel.c:3139 gtk/gtktextview.c:5455
 msgid "Input Methods"
 msgstr "Inndatametode"
 
@@ -2078,7 +2087,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2125 gtk/gtknotebook.c:4517
+#: gtk/gtknotebook.c:2134 gtk/gtknotebook.c:4529
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
