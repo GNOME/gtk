@@ -2820,7 +2820,6 @@ gtk_label_focus (GtkWidget         *widget,
 		 GtkDirectionType   direction)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GdkEvent *event;
   GdkModifierType state;
   
   /* We want to be in the tab chain only if we are selectable
@@ -2834,6 +2833,8 @@ gtk_label_focus (GtkWidget         *widget,
 
   if (state & GDK_CONTROL_MASK)
     return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+  else
+    return FALSE;
 }
 
 /* Compute the X position for an offset that corresponds to the "more important

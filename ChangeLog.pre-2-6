@@ -1,3 +1,8 @@
+Thu Mar 11 14:07:18 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_focus): Fix a missing return
+	value.
+
 Thu Mar 11 13:58:24 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmessagedialog.c gtk/gtklabel.c: Back out the
