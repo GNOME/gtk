@@ -1,7 +1,4 @@
-# translation of gtk+.HEAD.po to Azerbaijani
-# translation of gtk+.HEAD.po to Azerbaijani
-# translation of gtk+.HEAD.po to Azerbaijani
-# translation of gtk+.HEAD.az.po to Azerbaijani Turkish
+# translation of gtk+.HEAD.az.po to Azerbaijani
 # Copyright (C) 2003, 2004 Free Software Foundation, Inc.
 # Vasif Ismailoglu MD <azerb_linux@hotmail.com>, 2000.
 # Mətin Əmirov <metin@karegen.com>, 2003, 2004.
@@ -10,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-15 20:07+0200\n"
-"PO-Revision-Date: 2004-04-15 22:49+0300\n"
+"POT-Creation-Date: 2004-04-17 13:55+0200\n"
+"PO-Revision-Date: 2004-04-17 22:41+0300\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani <translation-team-az@lists.sourceforge.net>\n"
-"net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"net>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.0.2\n"
 
@@ -35,7 +32,8 @@ msgstr "'%s' rəsm faylı heç bir mə'lumat daxil etmir"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:813
 #: gdk-pixbuf/gdk-pixbuf-io.c:939 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "'%s' rəsmi yüklənə bilmədi: səbəbi bilinmir, xəsərli fayl ola bilər"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
@@ -43,7 +41,8 @@ msgstr "'%s' rəsmi yüklənə bilmədi: səbəbi bilinmir, xəsərli fayl ola b
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "'%s' animasiyası yüklənə bilmədi: səbəbi bilinmir, xəsərli fayl ola bilər"
+msgstr ""
+"'%s' animasiyası yüklənə bilmədi: səbəbi bilinmir, xəsərli fayl ola bilər"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:415
 #, c-format
@@ -339,7 +338,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG keyfiyyət qiyməti 0 ilə 100 arasında olmalıdır; '%d' qiyməti qəbl "
 "edilməz."
@@ -443,8 +443,10 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG rəsm oxunmasında ağır xəta: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG mətn parçaları açarları ən az 1 ən çox 79 xarakterə malik olmalıdırlar."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr ""
+"PNG mətn parçaları açarları ən az 1 ən çox 79 xarakterə malik olmalıdırlar."
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -452,8 +454,10 @@ msgstr "PNG mətn parçaları açarları ASCII xarakterləri olmalıdırlar."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr "PNG %s mətn parçasının qiyməti ISO-8859-1 kodlamasına dönüşdürülə bilməz."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgstr ""
+"PNG %s mətn parçasının qiyməti ISO-8859-1 kodlamasına dönüşdürülə bilməz."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -489,7 +493,8 @@ msgstr "PNM faylının maksimal rəng qiyməti çox böyükdür"
 
 #: gdk-pixbuf/io-pnm.c:396
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr "255 üstündə maksimal rəng qiymətinə malik olan PNM fayllarını dəstəkləmirəm."
+msgstr ""
+"255 üstündə maksimal rəng qiymətinə malik olan PNM fayllarını dəstəkləmirəm."
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -944,7 +949,7 @@ msgstr ""
 "%s nişanlara əlavə edilə bilmədi:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:749 gtk/gtkfilechooserdefault.c:5175
+#: gtk/gtkfilechooserdefault.c:749 gtk/gtkfilechooserdefault.c:5196
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -993,120 +998,120 @@ msgstr ""
 "%s nişanı silinə bilmədi:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2298
+#: gtk/gtkfilechooserdefault.c:2319
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s hökmsüz cığır adı olduğu üçün nişanlara əlavə edilə bilmədi."
 
-#: gtk/gtkfilechooserdefault.c:2486
+#: gtk/gtkfilechooserdefault.c:2507
 msgid "Folder"
 msgstr "Qovluq"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2533 gtk/gtkstock.c:276
+#: gtk/gtkfilechooserdefault.c:2554 gtk/gtkstock.c:276
 msgid "_Add"
 msgstr "Ə_lavə Et"
 
-#: gtk/gtkfilechooserdefault.c:2543 gtk/gtkstock.c:324
+#: gtk/gtkfilechooserdefault.c:2564 gtk/gtkstock.c:324
 msgid "_Remove"
 msgstr "_Sil"
 
-#: gtk/gtkfilechooserdefault.c:2620
+#: gtk/gtkfilechooserdefault.c:2641
 msgid "Show _Hidden Files"
 msgstr "_Gizli Faylları Göstər"
 
-#: gtk/gtkfilechooserdefault.c:2732
+#: gtk/gtkfilechooserdefault.c:2753
 msgid "Name"
 msgstr "Ad"
 
-#: gtk/gtkfilechooserdefault.c:2754
+#: gtk/gtkfilechooserdefault.c:2775
 msgid "Size"
 msgstr "Böyüklük"
 
-#: gtk/gtkfilechooserdefault.c:2766
+#: gtk/gtkfilechooserdefault.c:2787
 msgid "Modified"
 msgstr "Təkmilləşdirmə tarixi"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2828
+#: gtk/gtkfilechooserdefault.c:2849
 msgid "Create Fo_lder"
 msgstr "_Qovluq Yarat"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2935
+#: gtk/gtkfilechooserdefault.c:2956
 msgid "_Name:"
 msgstr "_Ad:"
 
-#: gtk/gtkfilechooserdefault.c:2977
+#: gtk/gtkfilechooserdefault.c:2998
 msgid "_Browse for other folders"
 msgstr "_Digər qovluqları gəz"
 
-#: gtk/gtkfilechooserdefault.c:3214
+#: gtk/gtkfilechooserdefault.c:3235
 msgid "Save in _folder:"
 msgstr "_Qovluğa qeyd et:"
 
-#: gtk/gtkfilechooserdefault.c:3216
+#: gtk/gtkfilechooserdefault.c:3237
 msgid "Create in _folder:"
 msgstr "_Qovluqda yarat:"
 
-#: gtk/gtkfilechooserdefault.c:3841
+#: gtk/gtkfilechooserdefault.c:3862
 msgid "Can't change to folder because it isn't local"
 msgstr "Qovluq yerli olmadığına görə açıla bilmədi."
 
-#: gtk/gtkfilechooserdefault.c:3976
+#: gtk/gtkfilechooserdefault.c:3997
 msgid "Could not find the path"
 msgstr "Cığır tapıla bilmədi"
 
-#: gtk/gtkfilechooserdefault.c:4324
+#: gtk/gtkfilechooserdefault.c:4345
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s qısa yolu mövcud deyil"
 
-#: gtk/gtkfilechooserdefault.c:4948
+#: gtk/gtkfilechooserdefault.c:4969
 msgid "Type name of new folder"
 msgstr "Yeni qovluğun adını yazın"
 
-#: gtk/gtkfilechooserdefault.c:4977
+#: gtk/gtkfilechooserdefault.c:4998
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bayt"
 msgstr[1] "%d bayt"
 
-#: gtk/gtkfilechooserdefault.c:4979
+#: gtk/gtkfilechooserdefault.c:5000
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:4981
+#: gtk/gtkfilechooserdefault.c:5002
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:4983
+#: gtk/gtkfilechooserdefault.c:5004
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5028
+#: gtk/gtkfilechooserdefault.c:5049
 msgid "Today"
 msgstr "Bugün"
 
-#: gtk/gtkfilechooserdefault.c:5030
+#: gtk/gtkfilechooserdefault.c:5051
 msgid "Yesterday"
 msgstr "Dünən"
 
-#: gtk/gtkfilechooserdefault.c:5041
+#: gtk/gtkfilechooserdefault.c:5062
 msgid "Unknown"
 msgstr "Namə'lum"
 
-#: gtk/gtkfilechooserdefault.c:5136
+#: gtk/gtkfilechooserdefault.c:5157
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Bildirdiyiniz qovluq hökmsüz cığırda olduğuna görə açıla bilmədi."
 
-#: gtk/gtkfilechooserdefault.c:5213
+#: gtk/gtkfilechooserdefault.c:5234
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1115,15 +1120,15 @@ msgstr ""
 "%s seçilə bilmədi:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5251
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Open Location"
 msgstr "Mövqe Aç"
 
-#: gtk/gtkfilechooserdefault.c:5257
+#: gtk/gtkfilechooserdefault.c:5278
 msgid "Save in Location"
 msgstr "Mövqeyə Qeyd Et"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5296
 msgid "_Location:"
 msgstr "_Mövqe:"
 
@@ -1173,7 +1178,8 @@ msgstr "Faylı _Yenidən Adlandır"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" faylı fayl adları üçün icazə verilməyən simvollar daxil edir"
 
 #: gtk/gtkfilesel.c:1441
@@ -1273,7 +1279,7 @@ msgstr "Faylı Yenidən Adlandır"
 #: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "\"%s\" faylını yenidən adlandır:"
+msgstr "\"%s\" faylının adını bununla dəyişdir:"
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
@@ -1281,16 +1287,16 @@ msgstr "_Yenidən Adlandır"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
-msgstr "_Seki: "
+msgstr "_Seçim: "
 
 #: gtk/gtkfilesel.c:3139
 #, c-format
 msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
-"environment variable G_BROKEN_FILENAMES): %s"
+"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+"environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"%s fayl adı UTF-8 olaraq dəyişdirilə bilmir. (Mühit parametrəsini "
-"G_BROKEN_FAYLNAMES olaraq dəyişdirməyə çalışın): %s"
+"\"%s\" fayl adı UTF-8 olaraq dəyişdirilə bilmədi. (mühit parametrini "
+"G_FILENAME_ENCODING olaraq dəyişdirməyə çalışın): %s"
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
@@ -1339,8 +1345,8 @@ msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
-"\"%s\" adı \"%s\" hərfini daxil etdiyi üçün hökmsüzdür. "
-"Xahiş edirik başqa ad seçin."
+"\"%s\" adı \"%s\" hərfini daxil etdiyi üçün hökmsüzdür. Xahiş edirik başqa "
+"ad seçin."
 
 #: gtk/gtkfilesystemunix.c:1328 gtk/gtkfilesystemwin32.c:875
 #, c-format
@@ -1394,7 +1400,7 @@ msgstr "_Nümayiş:"
 
 #: gtk/gtkfontsel.c:1286
 msgid "Font Selection"
-msgstr "Yazı Növü Seçkisi"
+msgstr "Yazı Növü Seçimi"
 
 #: gtk/gtkgamma.c:400
 msgid "Gamma"
@@ -1546,17 +1552,17 @@ msgstr "Bu düymənin ait olduğu qərar vasitə düyməsi qrupu."
 #: gtk/gtkrc.c:2390
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "İnclude faylı tapıla bilmədi: \"%s\""
+msgstr "Include faylı tapıla bilmədi: \"%s\""
 
 #: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Pixmap_path dəki rəsm faylının yeri tapıla bilmir:  \"%s\""
+msgstr "Pixmap_path-dəki rəsm faylının yeri tapıla bilmir:  \"%s\""
 
 #: gtk/gtkrc.c:3467
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Rəsmcik cığır elementi: \"%s\" mütləq olmalıdır, %s, sətir %d"
+msgstr "Piksməp cığır elementi: \"%s\" mütləq olmalıdır, %s, sətir %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:268
@@ -1829,11 +1835,11 @@ msgstr "Ən _Uyğun"
 
 #: gtk/gtkstock.c:341
 msgid "Zoom _In"
-msgstr "_Yaxınlaş"
+msgstr "_Yaxınlaşdır"
 
 #: gtk/gtkstock.c:342
 msgid "Zoom _Out"
-msgstr "_Uzaqlaş"
+msgstr "_Uzaqlaşdır"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
@@ -1878,7 +1884,7 @@ msgstr "ZWNJ Sıfır en birləşdirici _olmayan"
 #: gtk/gtkthemes.c:70
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "örtü mühərrikini \"module_path\"da tapa bilmirəm: \"%s\","
+msgstr "Örtük mühərrikini \"module_path\"da tapa bilmirəm: \"%s\","
 
 #: gtk/gtktipsquery.c:185
 msgid "--- No Tip ---"
@@ -1906,7 +1912,7 @@ msgstr "Boş"
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr "Amharik (EZ+)"
+msgstr "Amharikcə (EZ+)"
 
 #. ID
 #: modules/input/imcedilla.c:91
@@ -1916,7 +1922,7 @@ msgstr "Cedilla"
 #. ID
 #: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr "Kiril (Translit)"
+msgstr "Kirilcə (Translit)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
@@ -1931,7 +1937,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:178
 msgid "Thai (Broken)"
-msgstr "Tay (Qırıq)"
+msgstr "Tayca (Qırıq)"
 
 #. ID
 #: modules/input/imti-er.c:453
@@ -1941,7 +1947,7 @@ msgstr "Tigrigna-Eritrean (EZ+)"
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Tigrigna-Ethiopian (EZ+)"
+msgstr "Tigrigna-Efiopiyaca (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:244
@@ -1951,10 +1957,9 @@ msgstr "Vyetnamca (VIQR)"
 #. ID
 #: modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr "X Giriş Metodu "
+msgstr "X Giriş Yöntəmi"
 
 #: tests/testfilechooser.c:179
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' faylının mə'lumatı alına bilmədi: %s"
-
