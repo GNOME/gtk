@@ -53,6 +53,7 @@ struct _GtkCombo {
 	guint use_arrows:1;
 	guint use_arrows_always:1;
 
+        guint16 current_button;
 	guint activate_id;
 };
 

@@ -551,13 +551,6 @@ gtk_text_set_editable (GtkText *text,
     draw_cursor (text, TRUE);
   else
     undraw_cursor (text, TRUE);
-
-  if (GTK_WIDGET_DRAWABLE (widget) &&
-      widget->style->bg_pixmap[GTK_STATE_NORMAL])
-    {
-      gdk_window_clear (widget->window); /* just the border */
-      gtk_widget_queue_draw (widget);
-    }
 }
 
 void
@@ -1182,8 +1175,7 @@ gtk_text_draw_focus (GtkWidget *widget)
       width -= 2 * xthick;
       height -= 2 * ythick;
 
-      if (widget->style->bg_pixmap[GTK_STATE_NORMAL] &&
-	  !GTK_EDITABLE (text)->editable)
+      if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
 	{
 	  /* top rect */
 	  clear_focus_area (text, x, y, width, yextra);
@@ -2244,6 +2236,8 @@ correct_cache_delete (GtkText* text, gint nchars, gint lines)
 static void
 delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
 {
+  GtkWidget *widget = GTK_WIDGET (text);
+
   gint pixel_height;
   guint new_pixels = 0;
   GdkRectangle rect;
@@ -2278,16 +2272,18 @@ delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
 
   if (old_pixels != new_pixels)
     {
-      gdk_draw_pixmap (text->text_area,
-		       text->gc,
-		       text->text_area,
-		       0,
-		       pixel_height + old_pixels,
-		       0,
-		       pixel_height + new_pixels,
-		       width,
-		       height);
-
+      if (!widget->style->bg_pixmap[GTK_STATE_NORMAL])
+	{
+	  gdk_draw_pixmap (text->text_area,
+			   text->gc,
+			   text->text_area,
+			   0,
+			   pixel_height + old_pixels,
+			   0,
+			   pixel_height + new_pixels,
+			   width,
+			   height);
+	}
       text->vadj->upper += new_pixels;
       text->vadj->upper -= old_pixels;
       adjust_adj (text, text->vadj);
@@ -2308,7 +2304,19 @@ delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
   draw_cursor (text, FALSE);
 
   if (old_pixels != new_pixels)
-    process_exposes (text);
+    {
+      if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
+	{
+	  rect.x = 0;
+	  rect.y = pixel_height + new_pixels;
+	  rect.width = width;
+	  rect.height = height - rect.y;
+	  
+	  expose_text (text, &rect, FALSE);
+	}
+      else
+	process_exposes (text);
+    }
   
   TEXT_ASSERT (text);
   TEXT_SHOW(text);
@@ -2357,6 +2365,8 @@ static void
 insert_expose (GtkText* text, guint old_pixels, gint nchars,
 	       guint new_line_count)
 {
+  GtkWidget *widget = GTK_WIDGET (text);
+
   gint pixel_height;
   guint new_pixels = 0;
   GdkRectangle rect;
@@ -2390,16 +2400,19 @@ insert_expose (GtkText* text, guint old_pixels, gint nchars,
 
   if (old_pixels != new_pixels)
     {
-      gdk_draw_pixmap (text->text_area,
-		       text->gc,
-		       text->text_area,
-		       0,
-		       pixel_height + old_pixels,
-		       0,
-		       pixel_height + new_pixels,
-		       width,
-		       height + (old_pixels - new_pixels) - pixel_height);
+      if (!widget->style->bg_pixmap[GTK_STATE_NORMAL])
+	{
+	  gdk_draw_pixmap (text->text_area,
+			   text->gc,
+			   text->text_area,
+			   0,
+			   pixel_height + old_pixels,
+			   0,
+			   pixel_height + new_pixels,
+			   width,
+			   height + (old_pixels - new_pixels) - pixel_height);
 
+	}
       text->vadj->upper += new_pixels;
       text->vadj->upper -= old_pixels;
       adjust_adj (text, text->vadj);
@@ -2409,19 +2422,31 @@ insert_expose (GtkText* text, guint old_pixels, gint nchars,
   rect.y = pixel_height;
   rect.width = width;
   rect.height = new_pixels;
-
+  
   expose_text (text, &rect, FALSE);
   gtk_text_draw_focus ( (GtkWidget *) text);
 
   text->cursor_mark = text->point;
 
   find_cursor (text, TRUE);
-
+  
   draw_cursor (text, FALSE);
-
+      
   if (old_pixels != new_pixels)
-    process_exposes (text);
-    
+    {
+      if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
+	{
+	  rect.x = 0;
+	  rect.y = pixel_height + new_pixels;
+	  rect.width = width;
+	  rect.height = height - rect.y;
+	  
+	  expose_text (text, &rect, FALSE);
+	}
+      else
+	process_exposes (text);
+    }
+
   TEXT_SHOW_ADJ (text, text->vadj, "vadj");
   TEXT_ASSERT (text);
   TEXT_SHOW(text);
@@ -4122,8 +4147,7 @@ draw_line (GtkText* text,
 			    pixel_start_height,
 			    running_offset,
 			    LINE_HEIGHT (*lp));
-      else if (!editable->editable && 
-	       GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
+      else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
 	{
 	  GdkRectangle rect;
 
@@ -4174,8 +4198,7 @@ draw_line (GtkText* text,
 				pixel_start_height,
 				pixel_width,
 				LINE_HEIGHT(*lp));
-	  else if (!editable->editable && 
-		   GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
+	  else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
 	    {
 	      GdkRectangle rect;
 	      
@@ -4319,8 +4342,7 @@ undraw_cursor (GtkText* text, gint absolute)
 
       font = MARK_CURRENT_FONT(&text->cursor_mark);
 
-      if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL] && 
-	  !editable->editable)
+      if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
 	{
 	  GdkRectangle rect;
 
@@ -4426,8 +4448,7 @@ clear_area (GtkText *text, GdkRectangle *area)
 {
   GtkWidget *widget = GTK_WIDGET (text);
   
-  if (widget->style->bg_pixmap[GTK_STATE_NORMAL] && 
-      !GTK_EDITABLE(text)->editable)
+  if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
     {
       gint width, height;
       gint x = area->x, y = area->y;
@@ -4497,7 +4518,14 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 	{
 	  if (CACHE_DATA(cache).start.index <= text->cursor_mark.index &&
 	      CACHE_DATA(cache).end.index >= text->cursor_mark.index)
-	    draw_cursor (text, TRUE);
+	    {
+	      /* We undraw and draw the cursor here to get the drawn
+	       * level right ... FIXME - maybe the second parameter
+	       * of draw_cursor should work differently
+	       */
+	      undraw_cursor (text, FALSE);
+	      draw_cursor (text, FALSE);
+	    }
 	}
 
       pixels += LINE_HEIGHT(CACHE_DATA(cache));

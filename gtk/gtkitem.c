@@ -28,11 +28,15 @@ enum {
 };
 
 
-static void gtk_item_class_init (GtkItemClass *klass);
-static void gtk_item_init       (GtkItem      *item);
-static void gtk_item_map        (GtkWidget    *widget);
-static void gtk_item_unmap      (GtkWidget    *widget);
-static void gtk_item_realize    (GtkWidget    *widget);
+static void gtk_item_class_init (GtkItemClass     *klass);
+static void gtk_item_init       (GtkItem          *item);
+static void gtk_item_map        (GtkWidget        *widget);
+static void gtk_item_unmap      (GtkWidget        *widget);
+static void gtk_item_realize    (GtkWidget        *widget);
+static gint gtk_item_enter      (GtkWidget        *widget,
+				 GdkEventCrossing *event);
+static gint gtk_item_leave      (GtkWidget        *widget,
+				 GdkEventCrossing *event);
 
 
 static guint item_signals[LAST_SIGNAL] = { 0 };
@@ -99,6 +103,8 @@ gtk_item_class_init (GtkItemClass *class)
   widget_class->map = gtk_item_map;
   widget_class->unmap = gtk_item_unmap;
   widget_class->realize = gtk_item_realize;
+  widget_class->enter_notify_event = gtk_item_enter;
+  widget_class->leave_notify_event = gtk_item_leave;
 
   class->select = NULL;
   class->deselect = NULL;
@@ -192,3 +198,26 @@ gtk_item_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 }
+
+static gint
+gtk_item_enter (GtkWidget        *widget,
+		GdkEventCrossing *event)
+{
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ITEM (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  return gtk_widget_event (widget->parent, (GdkEvent*) event);
+}
+
+static gint
+gtk_item_leave (GtkWidget        *widget,
+		GdkEventCrossing *event)
+{
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ITEM (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  return gtk_widget_event (widget->parent, (GdkEvent*) event);
+}
+

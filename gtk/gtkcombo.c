@@ -52,13 +52,23 @@ static void         gtk_combo_get_pos         (GtkCombo      *combo,
                                                gint          *y, 
                                                gint          *height, 
                                                gint          *width);
-static void         gtk_combo_popup_list      (GtkButton     *button, 
-                                               GtkCombo      *combo);
+static void         gtk_combo_popup_list      (GtkCombo      *combo);
+static void         gtk_combo_activate        (GtkWidget        *widget,
+					       GtkCombo         *combo);
+static void         gtk_combo_popup_button_press (GtkWidget        *button,
+						  GdkEventButton   *event,
+						  GtkCombo         *combo);
+static void         gtk_combo_popup_button_leave (GtkWidget        *button,
+						  GdkEventCrossing *event,
+						  GtkCombo         *combo);
 static void         gtk_combo_update_entry    (GtkList       *list, 
                                                GtkCombo      *combo);
 static void         gtk_combo_update_list     (GtkEntry      *entry, 
                                                GtkCombo      *combo);
 static gint         gtk_combo_button_press    (GtkWidget     *widget,
+				               GdkEvent      *event,
+				               GtkCombo      *combo);
+static gint         gtk_combo_button_release  (GtkWidget     *widget,
 				               GdkEvent      *event,
 				               GtkCombo      *combo);
 static gint         gtk_combo_list_key_press  (GtkWidget     *widget, 
@@ -315,7 +325,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 }
 
 static void
-gtk_combo_popup_list (GtkButton * button, GtkCombo * combo)
+gtk_combo_popup_list (GtkCombo * combo)
 {
   gint height, width, x, y;
   gint old_width, old_height;
@@ -342,6 +352,14 @@ gtk_combo_popup_list (GtkButton * button, GtkCombo * combo)
   gtk_widget_show (combo->popwin);
 
   gtk_widget_grab_focus (combo->popwin);
+}
+
+static void        
+gtk_combo_activate (GtkWidget        *widget,
+		    GtkCombo         *combo)
+{
+  gtk_combo_popup_list (combo);
+
   gtk_grab_add (combo->popwin);
   gdk_pointer_grab (combo->popwin->window, TRUE,
 		    GDK_BUTTON_PRESS_MASK | 
@@ -350,15 +368,28 @@ gtk_combo_popup_list (GtkButton * button, GtkCombo * combo)
 		    NULL, NULL, GDK_CURRENT_TIME);
 }
 
-#if 0
-static void
-prelight_bug (GtkButton * b, GtkCombo * combo)
+static void        
+gtk_combo_popup_button_press (GtkWidget        *button,
+			      GdkEventButton   *event,
+			      GtkCombo         *combo)
 {
-  /* avoid prelight state... */
-  gtk_widget_set_state (combo->button, GTK_STATE_NORMAL);
+  if (!combo->current_button && (event->button == 1))
+    gtk_combo_popup_list (combo);
 
+  gtk_widget_event (combo->list, (GdkEvent *)event);
+
+  combo->current_button = event->button;
 }
-#endif
+
+static void         
+gtk_combo_popup_button_leave (GtkWidget        *button,
+			      GdkEventCrossing *event,
+			      GtkCombo         *combo)
+{
+  if (combo->current_button)
+    gtk_signal_emit_stop_by_name (GTK_OBJECT (button), "leave_notify_event");
+}
+
 
 static void
 gtk_combo_update_entry (GtkList * list, GtkCombo * combo)
@@ -374,9 +405,6 @@ gtk_combo_update_entry (GtkList * list, GtkCombo * combo)
 	text = "";
       gtk_entry_set_text (GTK_ENTRY (combo->entry), text);
     }
-  gtk_widget_hide (combo->popwin);
-  gtk_grab_remove (combo->popwin);
-  gdk_pointer_ungrab (GDK_CURRENT_TIME);
   gtk_signal_handler_unblock (GTK_OBJECT (list), combo->list_change_id);
 }
 
@@ -424,7 +452,59 @@ gtk_combo_button_press (GtkWidget * widget, GdkEvent * event, GtkCombo * combo)
 
   gtk_widget_hide (combo->popwin);
   gtk_grab_remove (combo->popwin);
-  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+  gdk_pointer_ungrab (event->button.time);
+
+  return TRUE;
+}
+
+static gint
+gtk_combo_button_release (GtkWidget * widget, GdkEvent * event, GtkCombo * combo)
+{
+  GtkWidget *child;
+  
+  if ((combo->current_button != 0) && (event->button.button == 1))
+    {
+      GdkEventCrossing tmp_event;
+
+      combo->current_button = 0;
+
+      gtk_widget_event (combo->button, event);
+
+      /* Un-pre-hightlight */
+      
+      tmp_event.type = GDK_LEAVE_NOTIFY;
+      tmp_event.window = combo->button->window;
+      tmp_event.send_event = TRUE;
+      tmp_event.subwindow = NULL;
+      tmp_event.detail = GDK_NOTIFY_ANCESTOR;
+      
+      gtk_widget_event (combo->button, (GdkEvent *)&tmp_event);
+
+      /* Check to see if we released inside the button */
+      child = gtk_get_event_widget ((GdkEvent*) event);
+
+      while (child && child != (combo->button))
+	child = child->parent;
+
+      if (child == combo->button)
+	{
+	  gtk_grab_add (combo->popwin);
+	  gdk_pointer_grab (combo->popwin->window, TRUE,
+			    GDK_BUTTON_PRESS_MASK | 
+			    GDK_BUTTON_RELEASE_MASK |
+			    GDK_POINTER_MOTION_MASK, 
+			    NULL, NULL, GDK_CURRENT_TIME);
+	  
+	  return FALSE;
+	}
+    }
+  else
+    {
+      gtk_grab_remove (combo->popwin);
+      gdk_pointer_ungrab (event->button.time);
+    }
+  
+  gtk_widget_hide (combo->popwin);
 
   return TRUE;
 }
@@ -457,6 +537,7 @@ gtk_combo_init (GtkCombo * combo)
   combo->use_arrows_always = 0;
   combo->entry = gtk_entry_new ();
   combo->button = gtk_button_new ();
+  combo->current_button = 0;
   arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
   gtk_widget_show (arrow);
   gtk_container_add (GTK_CONTAINER (combo->button), arrow);
@@ -471,9 +552,11 @@ gtk_combo_init (GtkCombo * combo)
   gtk_signal_connect_after (GTK_OBJECT (combo->entry), "focus_out_event",
 			    (GtkSignalFunc) gtk_combo_entry_focus_out, combo);
   combo->activate_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "activate",
-		      (GtkSignalFunc) gtk_combo_popup_list, combo);
-  gtk_signal_connect (GTK_OBJECT (combo->button), "clicked",
-		      (GtkSignalFunc) gtk_combo_popup_list, combo);
+		      (GtkSignalFunc) gtk_combo_activate, combo);
+  gtk_signal_connect_after (GTK_OBJECT (combo->button), "button_press_event",
+			    (GtkSignalFunc) gtk_combo_popup_button_press, combo);
+  gtk_signal_connect (GTK_OBJECT (combo->button), "leave_notify_event",
+		      (GtkSignalFunc) gtk_combo_popup_button_leave, combo);
   /*gtk_signal_connect(GTK_OBJECT(combo->button), "clicked",
      (GtkSignalFunc)prelight_bug, combo); */
 
@@ -514,7 +597,8 @@ gtk_combo_init (GtkCombo * combo)
 		      (GtkSignalFunc) gtk_combo_list_key_press, combo);
   gtk_signal_connect (GTK_OBJECT (combo->popwin), "button_press_event",
 		      GTK_SIGNAL_FUNC (gtk_combo_button_press), combo);
-  
+  gtk_signal_connect (GTK_OBJECT (combo->popwin), "button_release_event",
+		      GTK_SIGNAL_FUNC (gtk_combo_button_release), combo);
 }
 
 guint

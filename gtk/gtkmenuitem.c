@@ -55,10 +55,6 @@ static void gtk_menu_item_draw           (GtkWidget        *widget,
 					  GdkRectangle     *area);
 static gint gtk_menu_item_expose         (GtkWidget        *widget,
 					  GdkEventExpose   *event);
-static gint gtk_menu_item_enter          (GtkWidget        *widget,
-					  GdkEventCrossing *event);
-static gint gtk_menu_item_leave          (GtkWidget        *widget,
-					  GdkEventCrossing *event);
 static void gtk_real_menu_item_select    (GtkItem          *item);
 static void gtk_real_menu_item_deselect  (GtkItem          *item);
 static gint gtk_menu_item_select_timeout (gpointer          data);
@@ -129,8 +125,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->remove_accelerator = gtk_menu_item_remove_accel;
   widget_class->draw = gtk_menu_item_draw;
   widget_class->expose_event = gtk_menu_item_expose;
-  widget_class->enter_notify_event = gtk_menu_item_enter;
-  widget_class->leave_notify_event = gtk_menu_item_leave;
   widget_class->show_all = gtk_menu_item_show_all;
   widget_class->hide_all = gtk_menu_item_hide_all;  
 
@@ -593,28 +587,6 @@ gtk_menu_item_expose (GtkWidget      *widget,
     }
 
   return FALSE;
-}
-
-static gint
-gtk_menu_item_enter (GtkWidget        *widget,
-		     GdkEventCrossing *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_MENU_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  return gtk_widget_event (widget->parent, (GdkEvent*) event);
-}
-
-static gint
-gtk_menu_item_leave (GtkWidget        *widget,
-		     GdkEventCrossing *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_MENU_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  return gtk_widget_event (widget->parent, (GdkEvent*) event);
 }
 
 static void

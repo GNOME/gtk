@@ -1,3 +1,27 @@
+Thu Apr 30 11:18:00 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkcombo.[ch]: Allow the user to use the popup list
+	like a menu.
+	
+	* gtk/gtkmenuitem.c gtk/gtkitem.c: Moved enter/leave handlers
+	to gtkitem.c so dragging can also work in lists.
+
+	* gtk/gtklist.[ch]: Track child enter events and use
+	those to allow dragging the selection. 
+
+Thu Apr 30 11:16:06 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktext.c: Try enabling background pixmaps for editable text
+	widgets.  There is a bit of flashing, but not too bad. If you
+	don't want the flashing, you can always not set a background
+	pixmap.
+
+Wed Apr 29 15:46:13 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktext.c: Fixed a bug where the drawn level
+	was being messed up when the text was scrolled
+	during a deletion.
+	
 1998-04-28  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gdk/gdk.c (gdk_event_translate): Random debugging fixed this

@@ -45,8 +45,8 @@ static void gtk_list_draw            (GtkWidget      *widget,
 				      GdkRectangle   *area);
 static gint gtk_list_expose          (GtkWidget      *widget,
 				      GdkEventExpose *event);
-static gint gtk_list_motion_notify   (GtkWidget      *widget,
-				      GdkEventMotion *event);
+static gint gtk_list_enter_notify    (GtkWidget        *widget,
+				      GdkEventCrossing *event);
 static gint gtk_list_button_press    (GtkWidget      *widget,
 				      GdkEventButton *event);
 static gint gtk_list_button_release  (GtkWidget      *widget,
@@ -148,9 +148,9 @@ gtk_list_class_init (GtkListClass *class)
   widget_class->realize = gtk_list_realize;
   widget_class->draw = gtk_list_draw;
   widget_class->expose_event = gtk_list_expose;
-  widget_class->motion_notify_event = gtk_list_motion_notify;
   widget_class->button_press_event = gtk_list_button_press;
   widget_class->button_release_event = gtk_list_button_release;
+  widget_class->enter_notify_event = gtk_list_enter_notify;
   widget_class->size_request = gtk_list_size_request;
   widget_class->size_allocate = gtk_list_size_allocate;
 
@@ -173,7 +173,7 @@ gtk_list_init (GtkList *list)
   list->selection_end_pos = 0;
   list->selection_mode = GTK_SELECTION_SINGLE;
   list->scroll_direction = 0;
-  list->have_grab = FALSE;
+  list->button = 0;
 }
 
 GtkWidget*
@@ -673,14 +673,27 @@ gtk_list_expose (GtkWidget      *widget,
 }
 
 static gint
-gtk_list_motion_notify (GtkWidget      *widget,
-			GdkEventMotion *event)
+gtk_list_enter_notify (GtkWidget        *widget,
+		       GdkEventCrossing *event)
 {
+  GtkList *list;
+  GtkWidget *item;
+
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  /* g_print ("gtk_list_motion_notify\n"); */
+  list = GTK_LIST (widget);
+  item = gtk_get_event_widget ((GdkEvent*) event);
+
+  if (!list->button)
+    return FALSE;
+  
+  while (item && !GTK_IS_LIST_ITEM (item))
+    item = item->parent;
+
+  if (item && (item->parent == widget))
+    gtk_list_select_child (list, item);
 
   return FALSE;
 }
@@ -698,14 +711,22 @@ gtk_list_button_press (GtkWidget      *widget,
 
   list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
+
+  if (list->button && (list->button != event->button))
+    return FALSE;
+  list->button = event->button;
   
   while (item && !GTK_IS_LIST_ITEM (item))
     item = item->parent;
 
-  if (!item || (item->parent != widget))
-    return FALSE;
-  
-  gtk_list_select_child (list, item);
+  if (item && (item->parent == widget))
+    gtk_list_select_child (list, item);
+
+  gdk_pointer_grab (widget->window, TRUE,
+		    GDK_BUTTON_PRESS_MASK | 
+		    GDK_BUTTON_RELEASE_MASK,
+		    NULL, NULL, event->time);
+  gtk_grab_add (widget);
 
   return FALSE;
 }
@@ -723,6 +744,13 @@ gtk_list_button_release (GtkWidget      *widget,
 
   list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
+
+  if (list->button != event->button)
+    return FALSE;
+  list->button = 0;
+  
+  gtk_grab_remove (widget);
+  gdk_pointer_ungrab (event->time);
 
   return FALSE;
 }

@@ -51,6 +51,7 @@ struct _GtkList
   guint selection_mode : 2;
   guint scroll_direction : 1;
   guint have_grab : 1;
+  guint16 button;
 };
 
 struct _GtkListClass
