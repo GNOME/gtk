@@ -1,3 +1,12 @@
+Mon Feb  1 14:54:28 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_expose): Cast uints
+	  to ints in geometry calculations. This should
+	  prevent FP exceptions on FreeBSD when quantities
+	  become negative. [ Actually, this is probably
+	  a workaround with a gcc bug with handling of
+	  bitfields, according to Ben Jackson <ben@ben.com> ]
+
 Mon Feb  1 13:35:14 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* examples/Makefile: update to new examples
