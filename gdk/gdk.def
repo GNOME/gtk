@@ -284,7 +284,6 @@ EXPORTS
 	gdk_screen_width_mm
 	gdk_scroll_direction_get_type
 	gdk_selection_convert
-	gdk_selection_get_type
 	gdk_selection_owner_get
 	gdk_selection_owner_set
 	gdk_selection_property_get
@@ -304,7 +303,6 @@ EXPORTS
 	gdk_string_width
 	gdk_subwindow_mode_get_type
 	gdk_synthesize_window_state
-	gdk_target_get_type
 	gdk_text_extents
 	gdk_text_extents_wc
 	gdk_text_height
@@ -426,4 +424,5 @@ EXPORTS
 	gdk_window_withdraw
 	gdk_wm_decoration_get_type
 	gdk_wm_function_get_type
-
+	gdk_window_lookup
+	gdk_device_get_type

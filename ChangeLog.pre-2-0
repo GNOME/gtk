@@ -1,3 +1,18 @@
+2001-10-26  Hans Breuer  <hans@breuer.org>
+
+	* gdk-pixbuf/gdk_pixbuf.def : 
+	* gdk/gdk.def : 
+	* gtk/gtk.def : updated externals
+
+	* gdk/win32/gdkpixmap-win32.c : removed duplicate of
+	gdk_window_lookup implementation. It already was in
+	gdk/win32/gdkwindow-win32.c
+
+	* gdk/win32/gdkproperty-win32.c : made it compile again
+	after GdkAtom API change
+
+	* gtk/gtk/makefile.msc.in : updated
+
 Wed Oct 24 11:36:33 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (GTK_MICRO_VERSION): Version 1.3.10,

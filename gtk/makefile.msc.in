@@ -24,12 +24,13 @@ GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
 PERL = perl
 AWK = gawk
 
-INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf 
-DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(ATK_CFLAGS)
-LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
+INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf -DPANGO_ENABLE_BACKEND
+DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
+		$(INTL_CFLAGS) $(ATK_CFLAGS) $(DIRENT_CFLAGS)
+LDFLAGS = $(ATK_LIBS) $(DIRENT_LIBS) /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
 # Don't define GTK_COMPILATION here, because it's for gtk-x.x.dll only
-DEFINES = -DG_ENABLE_DEBUG -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"$(GTK_VER)\"
+DEFINES = $(G_DEBUGGING) -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"$(GTK_VER)\"
 
 TOUCH = copy makefile.msc+nul
 
@@ -43,7 +44,8 @@ all :						\
 	generated				\
 	gtk-stocks-icons			\
 	gtk-win32-$(GTK_VER).dll		\
-	gtk-win32-$(GTK_VER)s.lib
+#	gtk-win32-$(GTK_VER)s.lib \
+#	gtk-x11-$(GTK_VER).dll
 
 gtk_OBJECTS = 					\
 	fnmatch.obj				\
@@ -61,9 +63,9 @@ gtk_OBJECTS = 					\
 	gtkbox.obj				\
 	gtkbutton.obj				\
 	gtkcalendar.obj				\
+	gtkcelleditable.obj			\
 	gtkcellrenderer.obj			\
 	gtkcellrenderertext.obj			\
-	gtkcellrenderertextpixbuf.obj		\
 	gtkcellrenderertoggle.obj		\
 	gtkcellrendererpixbuf.obj		\
 	gtkcheckbutton.obj			\
@@ -124,7 +126,6 @@ gtk_OBJECTS = 					\
 	gtkobject.obj				\
 	gtkoldeditable.obj			\
 	gtkoptionmenu.obj			\
-#	gtkpacker.obj				\
 	gtkpaned.obj				\
 	gtkpixmap.obj				\
 	gtkplug.obj				\
@@ -222,9 +223,9 @@ gtk_public_h_sources =		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
+	gtkcelleditable.h \
 	gtkcellrenderer.h	\
 	gtkcellrenderertext.h	\
-	gtkcellrenderertextpixbuf.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellrendererpixbuf.h	\
 	gtkdebug.h		\
@@ -392,10 +393,13 @@ gtksignal.obj : gtksignal.c gtkmarshal.c gtkmarshal.h
 # Linking:
 #
 gtk-win32-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Fm -Fegtk-win32-$(GTK_VER).dll $(gtk_OBJECTS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def
+	$(CC) $(CFLAGS) -LD -Fm -Fegtk-win32-$(GTK_VER).dll $(gtk_OBJECTS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib wsock32.lib $(LDFLAGS) /def:gtk.def
 
 gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)
 	lib /out:gtk-win32-$(GTK_VER)s.lib $(gtk_OBJECTS)
+
+gtk-x11-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
+	$(CC) $(CFLAGS) -LD -Fm -Fegtk-x11-$(GTK_VER).dll $(gtk_OBJECTS) ../gdk/gdk-x11-$(GTK_VER).lib $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def
 
 # General rule for compiling the objects into the DLL
 .c.obj :
