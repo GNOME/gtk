@@ -1,4 +1,4 @@
-2002-01-14  Hasbullah Bin Pit
+2002-01-14  Hasbullah Bin Pit <sebol@ikhlas.com>
 
 	* configure.in (ALL_LINGUAS): Add "ms" to the language list.
 	* po/ms.po: Added Malay Translation.
