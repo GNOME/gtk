@@ -9509,6 +9509,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gint x, y;
   GList *list;
   GdkDisplay *display;
+  GdkWindow *child, *parent;
 
   if (node->children == NULL)
     return FALSE;
@@ -9655,12 +9656,19 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
    * again. To do this, we fake a motion event and send it to ourselves. */
 
   display = gdk_drawable_get_display (tree_view->priv->bin_window);
-  if (gdk_display_get_window_at_pointer (display, &x, &y) == tree_view->priv->bin_window)
+  child = tree_view->priv->bin_window;
+  parent = gdk_window_get_parent (child);
+
+  if (gdk_window_get_pointer (parent, &x, &y, NULL) == child)
     {
       GdkEventMotion event;
+      gint child_x, child_y;
+
+      gdk_window_get_position (child, &child_x, &child_y);
+
       event.window = tree_view->priv->bin_window;
-      event.x = x;
-      event.y = y;
+      event.x = x - child_x;
+      event.y = y - child_y;
 
       /* despite the fact this isn't a real event, I'm almost positive it will
        * never trigger a drag event.  maybe_drag is the only function that uses

@@ -1,3 +1,11 @@
+Sat Jul 12 15:51:18 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): use
+	gdk_window_get_pointer instead of gdk_display_get_window_at_pointer
+	to avoid a roundtrip (#110272, Owen Taylor).
+
 Sat Jul 12 15:28:26 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
@@ -6,7 +14,7 @@ Sat Jul 12 15:28:26 2003  Kristian Rietveld  <kris@gtk.org>
 	testcase provided by Timo Sirainen, #111500, testcase provided by
 	manu, #113241, reported by Pedro Gimeno/Michael Natterer.
 
-	*  gtk/gtktreeview.c (validate_visible_area): scrolling to a dy
+	* gtk/gtktreeview.c (validate_visible_area): scrolling to a dy
 	which is equal to the lower border of the window means scrolling
 	to an invisible row, always update the dy when scrolling to an
 	invisible row, corrected area_above/below calculations for
