@@ -37,7 +37,8 @@ enum {
   PROP_SHADOW,
   PROP_SHADOW_TYPE,
   PROP_HANDLE_POSITION,
-  PROP_SNAP_EDGE
+  PROP_SNAP_EDGE,
+  PROP_SNAP_EDGE_SET
 };
 
 #define DRAG_HANDLE_SIZE 10
@@ -214,6 +215,14 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 						      GTK_POS_TOP,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_SNAP_EDGE_SET,
+                                   g_param_spec_boolean ("snap_edge_set",
+							 _("Snap edge set"),
+							 _("Whether to use the value from the snap_edge property or a value derived from handle_position"),
+							 FALSE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+
   object_class->destroy = gtk_handle_box_destroy;
 
   widget_class->map = gtk_handle_box_map;
@@ -291,6 +300,10 @@ gtk_handle_box_set_property (GObject         *object,
     case PROP_SNAP_EDGE:
       gtk_handle_box_set_snap_edge (handle_box, g_value_get_enum (value));
       break;
+    case PROP_SNAP_EDGE_SET:
+      if (!g_value_get_boolean (value))
+	gtk_handle_box_set_snap_edge (handle_box, (GtkPositionType)-1);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -315,7 +328,12 @@ gtk_handle_box_get_property (GObject         *object,
       g_value_set_enum (value, handle_box->handle_position);
       break;
     case PROP_SNAP_EDGE:
-      g_value_set_enum (value, handle_box->snap_edge);
+      g_value_set_enum (value,
+			(handle_box->snap_edge == -1 ?
+			 GTK_POS_TOP : handle_box->snap_edge));
+      break;
+    case PROP_SNAP_EDGE_SET:
+      g_value_set_boolean (value, handle_box->snap_edge != -1);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -819,7 +837,11 @@ gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
   if (handle_box->snap_edge != edge)
     {
       handle_box->snap_edge = edge;
+      
+      g_object_freeze_notify (G_OBJECT (handle_box));
       g_object_notify (G_OBJECT (handle_box), "snap_edge");
+      g_object_notify (G_OBJECT (handle_box), "snap_edge_set");
+      g_object_thaw_notify (G_OBJECT (handle_box));
     }
 }
 

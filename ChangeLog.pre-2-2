@@ -1,3 +1,10 @@
+Thu Nov  7 14:24:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhandlebox.c: Add a snap_edge_set property to
+	deal with the fact that we have an unset state for
+	the snap_edge property. (Reported by Matthias Clasen
+	#97505)
+	
 Thu Nov  7 12:53:08 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.[ch] gtk/gtkwindow.c gtk/gtkinvisible.c: 
