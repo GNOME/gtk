@@ -43,7 +43,7 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Falló al cargar la animación '%s': razón desconicida, probablemente un "
+"Falló al cargar la animación '%s': razón desconocida, probablemente un "
 "fichero de animación corrompido"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:324
@@ -57,7 +57,7 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"El módulo de carga de imágenes %s no exporta el interface adecuado; tal vez "
+"El módulo de carga de imágenes %s no exporta el interfaz adecuado; tal vez "
 "es de una versión de GTK diferente"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:460 gdk-pixbuf/gdk-pixbuf-io.c:486
@@ -116,11 +116,11 @@ msgid ""
 "but didn't give a reason for the failure"
 msgstr ""
 "Error interno: El módulo cargado de imágenes '%s' falló al comenzar al "
-"cargar la imagen, pero no dió razón del fallo"
+"cargar la imagen, pero no dio razón del fallo"
 
 #: gdk-pixbuf/io-bmp.c:255
 msgid "BMP image has unsupported header size"
-msgstr "Imagen BMP tiene un ramaño de cabecera no soportado"
+msgstr "Imagen BMP tiene un tamaño de cabecera no soportado"
 
 #: gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has bogus header data"
@@ -178,7 +178,7 @@ msgstr "Versión %s del formato de archivos GIF no soportada"
 #: gdk-pixbuf/io-gif.c:1135
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
-"Imagen GIF contine un marco que aparece fuera de los límites de la imagen"
+"Imagen GIF contiene un marco que aparece fuera de los límites de la imagen"
 
 #: gdk-pixbuf/io-gif.c:1151
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
@@ -361,7 +361,7 @@ msgstr "Ancho o alto de la imagen TIFF es cero"
 
 #: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
 msgid "Insufficient memory to open TIFF file"
-msgstr "Memoria insuficiente para abri el fichero TIFF"
+msgstr "Memoria insuficiente para abrir el fichero TIFF"
 
 #: gdk-pixbuf/io-tiff.c:201
 msgid "Failed to load RGB data from TIFF file"
@@ -774,7 +774,7 @@ msgstr "Fila tiene hijos."
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
-msgstr "Está Espandido"
+msgstr "Está Expandido"
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
@@ -1400,7 +1400,7 @@ msgstr "La posición inicial de la ventana."
 #: gtk/gtkentry.c:428 gtk/gtklabel.c:370
 #, fuzzy
 msgid "Selection Bound"
-msgstr "SelecciÃ³n: "
+msgstr "Selección: "
 
 #: gtk/gtkentry.c:429 gtk/gtklabel.c:371
 msgid ""
@@ -1639,7 +1639,7 @@ msgstr "Renombrar"
 
 #: gtk/gtkfilesel.c:2036
 msgid "Selection: "
-msgstr "SelecciÃ³n: "
+msgstr "Selección: "
 
 #: gtk/gtkfilesel.c:2647
 #, c-format
@@ -1695,7 +1695,7 @@ msgstr "PrevisualizaciÃ³n:"
 
 #: gtk/gtkfontsel.c:1059
 msgid "Font Selection"
-msgstr "SelecciÃ³n de Fuentes"
+msgstr "Selección de Fuentes"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label."
@@ -2605,7 +2605,7 @@ msgstr "Numérico"
 
 #: gtk/gtkspinbutton.c:251
 msgid "Whether non-numeric characters should be ignored"
-msgstr "Cuando los caracteres no numéricos no deberíasn ser ignorados"
+msgstr "Cuando los caracteres no numéricos no deberían ser ignorados"
 
 #: gtk/gtkspinbutton.c:258
 msgid "Wrap"
@@ -3813,7 +3813,7 @@ msgstr "Destruir con el Padre"
 
 #: gtk/gtkwindow.c:440
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr "Si esta ventana debería ser destruída cuando el padre se destruye"
+msgstr "Si esta ventana debería ser destruida cuando el padre se destruye"
 
 #: gtk/gtkwindow.c:447
 msgid "Icon"
