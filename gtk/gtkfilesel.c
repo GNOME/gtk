@@ -3071,10 +3071,12 @@ open_new_dir (gchar       *dir_name,
       if (sent->entries[n_entries].entry_name == NULL
 	  || !g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
 	{
+	  gchar *escaped_str = g_strescape (dirent, NULL);
 	  g_message (_("The filename \"%s\" couldn't be converted to UTF-8 "
 		       "(try setting the environment variable G_BROKEN_FILENAMES): %s"),
-		     dirent,
+		     escaped_str,
 		     error->message ? error->message : _("Invalid Utf-8"));
+	  g_free (escaped_str);
 	  g_clear_error (&error);
 	  continue;
 	}

@@ -1,3 +1,9 @@
+Thu Nov  7 18:09:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (open_new_dir): Escape invalid
+	filename before printing it out, since it isn't
+	a valid UTF-8 string. (#94676)
+
 Thu Nov  7 17:18:06 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_pixbuf): 
