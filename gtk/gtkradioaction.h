@@ -32,6 +32,8 @@
 
 #include <gtk/gtktoggleaction.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_RADIO_ACTION            (gtk_radio_action_get_type ())
 #define GTK_RADIO_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RADIO_ACTION, GtkRadioAction))
 #define GTK_RADIO_ACTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_ACTION, GtkRadioActionClass))
@@ -71,5 +73,7 @@ GSList  *gtk_radio_action_get_group         (GtkRadioAction *action);
 void     gtk_radio_action_set_group         (GtkRadioAction *action,
 				             GSList         *group);
 gint     gtk_radio_action_get_current_value (GtkRadioAction *action);
+
+G_END_DECLS
 
 #endif  /* __GTK_RADIO_ACTION_H__ */

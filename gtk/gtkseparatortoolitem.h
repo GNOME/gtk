@@ -24,6 +24,8 @@
 
 #include "gtktoolitem.h"
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_SEPARATOR_TOOL_ITEM            (gtk_separator_tool_item_get_type ())
 #define GTK_SEPARATOR_TOOL_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SEPARATOR_TOOL_ITEM, GtkSeparatorToolItem))
 #define GTK_SEPARATOR_TOOL_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SEPARATOR_TOOL_ITEM, GtkSeparatorToolItemClass))
@@ -52,5 +54,7 @@ struct _GtkSeparatorToolItemClass
 
 GType        gtk_separator_tool_item_get_type (void) G_GNUC_CONST;
 GtkToolItem *gtk_separator_tool_item_new      (void);
+
+G_END_DECLS
 
 #endif /* __GTK_SEPARATOR_TOOL_ITEM_H__ */

@@ -33,6 +33,8 @@
 #include <gtk/gtkaction.h>
 #include <gtk/gtkitemfactory.h> /* for GtkTranslateFunc */
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_ACTION_GROUP              (gtk_action_group_get_type ())
 #define GTK_ACTION_GROUP(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ACTION_GROUP, GtkActionGroup))
 #define GTK_ACTION_GROUP_CLASS(vtable)     (G_TYPE_CHECK_CLASS_CAST ((vtable), GTK_TYPE_ACTION_GROUP, GtkActionGroupClass))
@@ -149,5 +151,6 @@ void            gtk_action_group_set_translate_func      (GtkActionGroup       *
 void            gtk_action_group_set_translation_domain  (GtkActionGroup       *action_group,
 							  const gchar          *domain);
 
+G_END_DECLS
 
 #endif  /* __GTK_ACTION_GROUP_H__ */

@@ -27,6 +27,8 @@
 #include <gtk/gtktooltips.h>
 #include <gtk/gtkmenuitem.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_TOOL_ITEM            (gtk_tool_item_get_type ())
 #define GTK_TOOL_ITEM(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_TOOL_ITEM, GtkToolItem))
 #define GTK_TOOL_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOL_ITEM, GtkToolItemClass))
@@ -116,5 +118,6 @@ void            gtk_tool_item_set_proxy_menu_item      (GtkToolItem *tool_item,
 /* internal function */
 void       _gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item);
 
+G_END_DECLS
 
 #endif /* __GTK_TOOL_ITEM_H__ */

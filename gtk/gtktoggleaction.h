@@ -32,6 +32,8 @@
 
 #include <gtk/gtkaction.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_TOGGLE_ACTION            (gtk_toggle_action_get_type ())
 #define GTK_TOGGLE_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TOGGLE_ACTION, GtkToggleAction))
 #define GTK_TOGGLE_ACTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOGGLE_ACTION, GtkToggleActionClass))
@@ -74,5 +76,6 @@ void     gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action,
 					      gboolean         draw_as_radio);
 gboolean gtk_toggle_action_get_draw_as_radio (GtkToggleAction *action);
 
+G_END_DECLS
 
 #endif  /* __GTK_TOGGLE_ACTION_H__ */

@@ -1,3 +1,15 @@
+Sat Oct 11 23:14:36 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.h: 
+	* gtk/gtkaction.h: 
+	* gtk/gtkradioaction.h: 
+	* gtk/gtkradiotoolbutton.h: 
+	* gtk/gtkseparatortoolitem.h: 
+	* gtk/gtktoggleaction.h: 
+	* gtk/gtktoolitem.h: 
+	* gtk/gtkuimanager.h: Add G_BEGIN_DECLS/G_END_DECLS to make 
+	these usable in C++.  (#124351, Murray Cumming)
+
 Sat Oct 11 19:09:05 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_set_text): Check if completion is

@@ -38,6 +38,8 @@
 #include <gtk/gtkaction.h>
 #include <gtk/gtkactiongroup.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_UI_MANAGER            (gtk_ui_manager_get_type ())
 #define GTK_UI_MANAGER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_UI_MANAGER, GtkUIManager))
 #define GTK_UI_MANAGER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_UI_MANAGER, GtkUIManagerClass))
@@ -121,6 +123,6 @@ gchar         *gtk_ui_manager_get_ui              (GtkUIManager          *self);
 void           gtk_ui_manager_ensure_update       (GtkUIManager          *self);
 guint          gtk_ui_manager_new_merge_id        (GtkUIManager          *self);
 
-
+G_END_DECLS
 
 #endif /* __GTK_UI_MANAGER_H__ */

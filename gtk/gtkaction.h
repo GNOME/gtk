@@ -33,6 +33,8 @@
 #include <gtk/gtkwidget.h>
 #include <glib-object.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_ACTION            (gtk_action_get_type ())
 #define GTK_ACTION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ACTION, GtkAction))
 #define GTK_ACTION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ACTION, GtkActionClass))
@@ -105,5 +107,6 @@ void         gtk_action_set_accel_path         (GtkAction     *action,
 void         gtk_action_set_accel_group        (GtkAction     *action,
 						GtkAccelGroup *accel_group);
 
+G_END_DECLS
 
 #endif  /* __GTK_ACTION_H__ */
