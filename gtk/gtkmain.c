@@ -432,12 +432,13 @@ gtk_main (void)
   GList *tmp_list;
   GList *functions;
   GtkInitFunction *init;
-
   GMainLoop *loop;
-  GSList *tmp_node;
 
   gtk_main_loop_level++;
   
+  loop = g_main_new (TRUE);
+  main_loops = g_slist_prepend (main_loops, loop);
+
   tmp_list = functions = init_functions;
   init_functions = NULL;
   
@@ -450,19 +451,14 @@ gtk_main (void)
       g_free (init);
     }
   g_list_free (functions);
-  
-  loop = g_main_new ();
-  main_loops = g_slist_prepend (main_loops, loop);
 
-  GDK_THREADS_LEAVE ();
-  g_main_run (loop);
-  GDK_THREADS_ENTER ();
-  
-  g_main_destroy (loop);
-
-  tmp_node = main_loops;
-  main_loops = g_slist_remove_link (main_loops, main_loops);
-  g_slist_free_1 (tmp_node);
+  if (g_main_is_running (main_loops->data))
+    {
+      GDK_THREADS_LEAVE ();
+      g_main_run (loop);
+      GDK_THREADS_ENTER ();
+      gdk_flush ();
+    }
 
   if (quit_functions)
     {
@@ -496,8 +492,14 @@ gtk_main (void)
 	  work->next = quit_functions;
 	  quit_functions = work;
 	}
+
+      gdk_flush ();
     }
 	      
+  main_loops = g_slist_remove (main_loops, loop);
+
+  g_main_destroy (loop);
+
   gtk_main_loop_level--;
 }
 
@@ -510,6 +512,8 @@ gtk_main_level (void)
 void
 gtk_main_quit (void)
 {
+  g_return_if_fail (main_loops != NULL);
+
   g_main_quit (main_loops->data);
 }
 

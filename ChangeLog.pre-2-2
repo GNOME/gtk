@@ -1,3 +1,17 @@
+Fri Dec 18 01:32:59 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_main): added gdk_flush() after g_main_run(), so we
+ 	get the original behaviour back, i.e. the event queue needs to be flushed
+	after a main loop has been quitted.
+	(gtk_main): add/remove the current main loop to/from the main loop
+ 	before/after init/quit functions have been exected to preserve the
+ 	original gtk_main_quit() behaviour.
+
+Thu Dec 17 23:48:29 1998  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkevents.c (gdk_events_init): changed argument order in call
+	to g_main_add_poll() to match recent glib changes.
+
 Thu Dec 17 20:33:28 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk-config.in: Add @INTLLIBS@. 

@@ -408,7 +408,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (list_hbox);
 
   /* The directories clist */
-
   dir_title[0] = _("Directories");
   dir_title[1] = NULL;
   filesel->dir_list = gtk_clist_new_with_titles (1, (gchar**) dir_title);
