@@ -1,3 +1,28 @@
+2000-01-30  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/testgtk.c (set_cursor): use gdk_cursor_unref instead of
+	destroy
+
+	* gdk/gdkimage.c (gdk_image_ref): image wasn't being returned
+
+	* gdk/gdkprivate.h: declare _gdk_cursor_destroy which is then 
+	implemented in platform-specific code
+
+	* gdk/Makefile.am (gdk_c_sources): add gdkcursor.c
+
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_destroy): rename with an
+	underscore in front
+
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_destroy):
+	put an underscore in front
+
+	* gdk/gdkcursor.c: new file, implements
+	gdk_cursor_ref/gdk_cursor_unref
+
+	* gdk/gdkcursor.h: Refcount GdkCursor
+
+	* gdk/gdkcompat.h (gdk_cursor_destroy): compat
+
 2000-01-29  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkwindow.h

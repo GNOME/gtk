@@ -262,6 +262,8 @@ void _gdk_font_destroy (GdkFont *font);
 
 void _gdk_colormap_real_destroy (GdkColormap *colormap);
 
+void _gdk_cursor_destroy (GdkCursor *cursor);
+
 /* Initialization */
 
 extern GdkArgDesc _gdk_windowing_args[];

@@ -3270,7 +3270,7 @@ set_cursor (GtkWidget *spinner,
 
   cursor = gdk_cursor_new (c);
   gdk_window_set_cursor (widget->window, cursor);
-  gdk_cursor_destroy (cursor);
+  gdk_cursor_unref (cursor);
 }
 
 static gint

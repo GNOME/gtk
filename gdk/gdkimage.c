@@ -38,6 +38,8 @@ gdk_image_ref (GdkImage *image)
   g_return_val_if_fail (image != NULL, NULL);
 
   private->ref_count++;
+
+  return image;
 }
 
 void

@@ -79,7 +79,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source, GdkPixmap *mask, GdkColor *fg, Gd
 }
 
 void
-gdk_cursor_destroy (GdkCursor *cursor)
+_gdk_cursor_destroy (GdkCursor *cursor)
 {
   GdkCursorPrivate *private;
 

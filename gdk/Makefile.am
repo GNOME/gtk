@@ -76,6 +76,7 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 gdk_c_sources = @STRIP_BEGIN@ \
 	gdk.c		\
 	gdkcolor.c	\
+	gdkcursor.c	\
 	gdkdraw.c	\
 	gdkevents.c     \
 	gdkfont.c	\

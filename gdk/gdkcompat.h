@@ -34,6 +34,8 @@ extern "C" {
 
 #define gdk_gc_destroy                 gdk_gc_unref
 #define gdk_image_destroy              gdk_image_unref
+#define gdk_cursor_destroy             gdk_cursor_unref
+
 
 #define GDK_WINDOW_PIXMAP GDK_DRAWABLE_PIXMAP
              
