@@ -1,5 +1,8 @@
 2003-01-15  Tor Lillqvist  <tml@iki.fi>
 
+	* configure.in: On Win32 with gcc, use either -fnative-struct or
+	-mms-bitfields depending on gcc version.
+
 	* gtk/Makefile.am (gtk_c_sources): Remove fnmatch.h from here, too.
 
 2002-12-22  Tor Lillqvist  <tml@iki.fi>
