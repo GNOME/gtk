@@ -1418,6 +1418,26 @@ AC_SUBST(GTK_DEP_CFLAGS)
 AC_SUBST(GTK_DEBUG_FLAGS)
 AC_SUBST(GTK_XIM_FLAGS)
 
+################################################################
+# Strip -export-dynamic from the link lines of various libraries
+################################################################
+
+#
+# pkg-config --libs gmodule includes the "export_dynamic" flag,
+#  but this flag is only meaningful for executables. For libraries
+#  the effect is undefined; what it causes on Linux is that the
+#  export list from -export-symbols-regex is ignored and everything
+#  is exported
+#	
+export_dynamic=`(./libtool --config; echo eval echo \\$export_dynamic_flag_spec) | sh`
+if test -n "$export_dynamic"; then
+  GDK_PIXBUF_DEP_LIBS=`echo $GDK_PIXBUF_DEP_LIBS | sed -e "s/$export_dynamic//"`
+  GDK_PIXBUF_XLIB_DEP_LIBS=`echo $GDK_PIXBUF_XLIB_DEP_LIBS | sed -e "s/$export_dynamic//"`
+  GDK_DEP_LIBS=`echo $GDK_DEP_LIBS | sed -e "s/$export_dynamic//"`
+  GTK_DEP_LIBS=`echo $GTK_DEP_LIBS | sed -e "s/$export_dynamic//"`
+fi
+
+
 ##################################################
 # Checks for gtk-doc and docbook-tools
 ##################################################
