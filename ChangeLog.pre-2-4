@@ -1,3 +1,14 @@
+1998-03-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_row_is_visible): Now we return a
+	GtkVisibility value, instead of a simple boolean.  Also, changed
+	all the functions that expected a boolean value to use
+	"!= GTK_VISIBILITY_NONE".
+
+	* gtk/gtkclist.h: Changed prototype for gtk_clist_row_is_visible().
+
+	* gtk/gtkenums.h (enum): Added GtkVisibility enum.
+
 Fri Mar 13 11:23:55 PST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* docs/gtk_tut.sgml:

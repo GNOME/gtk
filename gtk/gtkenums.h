@@ -208,6 +208,14 @@ typedef enum
   GTK_TOOLBAR_BOTH
 } GtkToolbarStyle;
 
+/* Generic visibility flags */
+typedef enum
+{
+  GTK_VISIBILITY_NONE,
+  GTK_VISIBILITY_PARTIAL,
+  GTK_VISIBILITY_FULL
+} GtkVisibility;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

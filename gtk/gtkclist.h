@@ -352,9 +352,9 @@ void gtk_clist_moveto (GtkCList * clist,
 		       gfloat row_align,
 		       gfloat col_align);
 
-/* returns true if the row is visible */
-gint gtk_clist_row_is_visible (GtkCList * clist,
-			       gint row);
+/* returns whether the row is visible */
+GtkVisibility gtk_clist_row_is_visible (GtkCList * clist,
+					gint row);
 
 /* returns the cell type */
 GtkCellType gtk_clist_get_cell_type (GtkCList * clist,

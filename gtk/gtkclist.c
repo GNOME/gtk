@@ -960,7 +960,7 @@ gtk_clist_set_text (GtkCList * clist,
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
     {
-      if (gtk_clist_row_is_visible (clist, row))
+      if (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE)
 	draw_row (clist, NULL, row, clist_row);
     }
 }
@@ -1018,7 +1018,7 @@ gtk_clist_set_pixmap (GtkCList * clist,
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
     {
-      if (gtk_clist_row_is_visible (clist, row))
+      if (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE)
 	draw_row (clist, NULL, row, clist_row);
     }
 }
@@ -1081,7 +1081,7 @@ gtk_clist_set_pixtext (GtkCList * clist,
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
     {
-      if (gtk_clist_row_is_visible (clist, row))
+      if (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE)
 	draw_row (clist, NULL, row, clist_row);
     }
 }
@@ -1144,7 +1144,8 @@ gtk_clist_set_foreground (GtkCList * clist,
   else
     clist_row->fg_set = FALSE;
 
-  if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
+  if (!GTK_CLIST_FROZEN (clist)
+      && (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE))
     draw_row (clist, NULL, row, clist_row);
 }
 
@@ -1170,7 +1171,8 @@ gtk_clist_set_background (GtkCList * clist,
   else
     clist_row->bg_set = FALSE;
 
-  if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
+  if (!GTK_CLIST_FROZEN (clist)
+      && (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE))
     draw_row (clist, NULL, row, clist_row);
 }
 
@@ -1195,7 +1197,8 @@ gtk_clist_set_shift (GtkCList * clist,
   clist_row->cell[column].vertical = vertical;
   clist_row->cell[column].horizontal = horizontal;
 
-  if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
+  if (!GTK_CLIST_FROZEN (clist)
+      && (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE))
     draw_row (clist, NULL, row, clist_row);
 }
 
@@ -1244,7 +1247,7 @@ gtk_clist_append (GtkCList * clist,
     {
       adjust_scrollbars (clist);
 
-      if (gtk_clist_row_is_visible (clist, clist->rows - 1))
+      if (gtk_clist_row_is_visible (clist, clist->rows - 1) != GTK_VISIBILITY_NONE)
 	draw_rows (clist, NULL);
     }
 
@@ -1298,7 +1301,7 @@ gtk_clist_insert (GtkCList * clist,
     {
       adjust_scrollbars (clist);
 
-      if (gtk_clist_row_is_visible (clist, row))
+      if (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE)
 	draw_rows (clist, NULL);
     }
 }
@@ -1317,7 +1320,7 @@ gtk_clist_remove (GtkCList * clist,
   if (row < 0 || row > (clist->rows - 1))
     return;
 
-  was_visible = gtk_clist_row_is_visible (clist, row);
+  was_visible = (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE);
   was_selected = 0;
 
   /* get the row we're going to delete */
@@ -1564,25 +1567,33 @@ gtk_clist_unselect_row (GtkCList * clist,
   unselect_row (clist, row, column, NULL);
 }
 
-gint
+GtkVisibility
 gtk_clist_row_is_visible (GtkCList * clist,
-			 gint row)
+			  gint row)
 {
+  gint top;
+
   g_return_val_if_fail (clist != NULL, 0);
 
   if (row < 0 || row >= clist->rows)
-    return 0;
+    return GTK_VISIBILITY_NONE;
 
   if (clist->row_height == 0)
-    return 0;
+    return GTK_VISIBILITY_NONE;
 
   if (row < ROW_FROM_YPIXEL (clist, 0))
-    return 0;
+    return GTK_VISIBILITY_NONE;
 
   if (row > ROW_FROM_YPIXEL (clist, clist->clist_window_height))
-    return 0;
+    return GTK_VISIBILITY_NONE;
 
-  return 1;
+  top = ROW_TOP_YPIXEL (clist, row);
+
+  if ((top < 0)
+      || ((top + clist->row_height) >= clist->clist_window_height))
+    return GTK_VISIBILITY_PARTIAL;
+
+  return GTK_VISIBILITY_FULL;
 }
 
 GtkAdjustment *
@@ -2481,7 +2492,7 @@ draw_row (GtkCList * clist,
 				intersect_rectangle.y,
 				intersect_rectangle.width,
 				intersect_rectangle.height);
-	}	  
+	}
 
       if (!gdk_rectangle_intersect (area, &row_rectangle, &intersect_rectangle))
 	return;
@@ -3023,7 +3034,8 @@ real_select_row (GtkCList * clist,
       clist_row->state = GTK_STATE_SELECTED;
       clist->selection = g_list_append (clist->selection, (gpointer) row);
 
-      if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
+      if (!GTK_CLIST_FROZEN (clist)
+	  && (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE))
 	draw_row (clist, NULL, row, clist_row);
     }
 }
@@ -3048,7 +3060,8 @@ real_unselect_row (GtkCList * clist,
       clist_row->state = GTK_STATE_NORMAL;
       clist->selection = g_list_remove (clist->selection, (gpointer) row);
 
-      if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
+      if (!GTK_CLIST_FROZEN (clist)
+	  && (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE))
 	draw_row (clist, NULL, row, clist_row);
     }
 }
