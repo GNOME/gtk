@@ -8936,7 +8936,6 @@ section.</para>
 <!-- example-start menu itemfactory.c -->
 
 #include &lt;gtk/gtk.h&gt;
-#include &lt;strings.h&gt;
 
 /* Obligatory basic callback */
 static void print_hello( GtkWidget *w,

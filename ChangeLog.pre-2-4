@@ -1,3 +1,12 @@
+2003-05-06  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testmultidisplay.c: Don't include strings.h, it's not
+	needed anymore.  (#112388)
+
+	* examples/menu/itemfactory.c: 
+	* docs/tutorial/gtk-tut.sgml: Remove an unneeded include from the
+	itemfactory example.
+
 2003-05-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkdnd.c (gtk_drag_source_set_icon_stock):  Actually set the

@@ -1,6 +1,5 @@
 
 #include <gtk/gtk.h>
-#include <strings.h>
 
 /* Obligatory basic callback */
 static void print_hello( GtkWidget *w,
