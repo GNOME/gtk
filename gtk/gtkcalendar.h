@@ -53,11 +53,7 @@ typedef enum
 
 struct _GtkCalendar
 {
-  /* This widget is derived from GtkWidget */
   GtkWidget widget;
-  
-  GdkWindow *header_win, *day_name_win, *main_win, *week_win;
-  gint header_h, day_name_h, main_h;
   
   GtkStyle  *header_style;
   GtkStyle  *label_style;
@@ -74,44 +70,12 @@ struct _GtkCalendar
   GtkCalendarDisplayOptions  display_flags;
   GdkColor marked_date_color[31];
   
-  /* Header Information */
-  GdkWindow *arrow_win[4];
-  gint	     arrow_state[4];
-  gint	     arrow_width;
-  gint	     max_month_width;
-  gint	     max_year_width;
-  
-  /* Other info */
-  gint calstarty, calnumrows;
-  
-  /* Style parameters for this widget */
   GdkGC *gc;
-  GdkCursor *cross;
   
-  gint day_width;
-  gint week_width;
-  GdkRectangle header_button[4];
-  GdkRectangle rect_days[6][7];
+  guint highlight_row;
+  guint highlight_col;
   
-  gint highlight_row;
-  gint highlight_col;
-  
-  gint min_day_width;
-  gint max_day_char_width;
-  gint max_day_char_ascent;
-  gint max_day_char_descent;
-  gint max_label_char_ascent;
-  gint max_label_char_descent;
-  gint max_week_char_width;
-  /* flags */
-  unsigned int dirty_header:1;
-  unsigned int dirty_day_names:1;
-  unsigned int dirty_main:1;
-  unsigned int dirty_week:1;
-  unsigned int frozen;
-  
-  gint week_num_w;
-  gint font_width_day_name, font_width_day;
+  gpointer private_data;
   char grow_space [32];
 };
 

@@ -1,3 +1,15 @@
+Sun Oct  4 17:55:52 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.h:
+	  gtk/gtkcalendar.c: Some significant changes, including:
+	  - No longer draw focus around entire widget, only around
+	    the day which has focus
+	  - Draw relief around entire widget like originally planned
+	  - Show header and day names by default 
+	  - Move data private to the widget out of GtkCalendar struct
+	    and only point to it with a gpointer
+	  - Remove some old unused variables from GtkCalendar struct
+
 Sun Oct  4 17:45:43 BST 1998  Tony Gale  <gale@gtk.org>
 
 	* docs/gtk_tut.sgml: update I've had sat around:
