@@ -219,7 +219,7 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
 #endif
 
 static void
-setup_system_settings (GtkStyle * style)
+setup_system_settings (void)
 {
   GtkSettings * settings;
   int menu_delay, cursor_blink_time;
@@ -316,52 +316,27 @@ sys_color_to_gtk_color(int id, GdkColor *pcolor)
 }
 
 static void
-setup_system_styles(GtkStyle *style)
+setup_wimp_rc_style(void)
 {
+  /* TODO: Owen says:
+  	 "If your setup_system_styles() function called gtk_rc_parse_string(), then you are just piling a new set of strings on top each time the theme changes .. the old ones won't be removed" */
+
   char buf[1024], font_buf[256], *font_ptr;
+
   GdkColor menu_color;
   GdkColor menu_text_color;
-  GdkColor fg_prelight;
-  GdkColor bg_prelight;
-  GdkColor base_prelight;
-  GdkColor text_prelight;
   GdkColor tooltip_back;
   GdkColor tooltip_fore;
   GdkColor btn_fore;
   GdkColor progress_back;
 
+  GdkColor fg_prelight;
+  GdkColor bg_prelight;
+  GdkColor base_prelight;
+  GdkColor text_prelight;
+
   NONCLIENTMETRICS nc;
   gint paned_size = 15;
-
-  int i;
-
-  /* Default forgeground */
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->fg[GTK_STATE_INSENSITIVE]);
-
-  /* Default background */
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(COLOR_SCROLLBAR, &style->bg[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->bg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_INSENSITIVE]);
-
-  /* Default base */
-  sys_color_to_gtk_color(COLOR_WINDOW, &style->base[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->base[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(COLOR_WINDOW, &style->base[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->base[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->base[GTK_STATE_INSENSITIVE]);
-
-  /* Default text */
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->text[GTK_STATE_INSENSITIVE]);
 
   /* Prelight */
   sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &fg_prelight);
@@ -381,20 +356,6 @@ setup_system_styles(GtkStyle *style)
 
   /* progress bar background color */
   sys_color_to_gtk_color(COLOR_HIGHLIGHT, &progress_back);
-
-  for (i = 0; i < 5; i++)
-    {
-      sys_color_to_gtk_color(COLOR_3DSHADOW, &style->dark[i]);
-      sys_color_to_gtk_color(COLOR_3DHILIGHT, &style->light[i]);
-
-      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
-      style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
-      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
-
-      style->text_aa[i].red = (style->text[i].red + style->base[i].red) / 2;
-      style->text_aa[i].green = (style->text[i].green + style->base[i].green) / 2;
-      style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
-    }
 
   /* Enable coloring for menus. */
   font_ptr = sys_font_to_pango_font (MENU_FONT,font_buf);
@@ -517,6 +478,54 @@ setup_system_styles(GtkStyle *style)
 	  "{GtkPaned::handle-size = %d\n"
 	  "}widget_class \"*GtkPaned*\" style \"wimp-paned\"\n", paned_size);
   gtk_rc_parse_string(buf);
+}
+
+static void
+setup_system_styles(GtkStyle *style)
+{
+  int i;
+
+  /* Default forgeground */
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->fg[GTK_STATE_INSENSITIVE]);
+
+  /* Default background */
+  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(COLOR_SCROLLBAR, &style->bg[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->bg[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_INSENSITIVE]);
+
+  /* Default base */
+  sys_color_to_gtk_color(COLOR_WINDOW, &style->base[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->base[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(COLOR_WINDOW, &style->base[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->base[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(COLOR_3DFACE, &style->base[GTK_STATE_INSENSITIVE]);
+
+  /* Default text */
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->text[GTK_STATE_INSENSITIVE]);
+
+  for (i = 0; i < 5; i++)
+    {
+      sys_color_to_gtk_color(COLOR_3DSHADOW, &style->dark[i]);
+      sys_color_to_gtk_color(COLOR_3DHILIGHT, &style->light[i]);
+
+      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
+      style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
+      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
+
+      style->text_aa[i].red = (style->text[i].red + style->base[i].red) / 2;
+      style->text_aa[i].green = (style->text[i].green + style->base[i].green) / 2;
+      style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
+    }
 }
 
 static gboolean
@@ -1515,14 +1524,7 @@ wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
   setup_system_font (style);
   setup_system_styles (style);
-  setup_system_settings (style);
   parent_class->init_from_rc(style, rc_style);
-}
-
-static void
-wimp_style_init (WimpStyle * style)
-{
-  xp_theme_init ();
 }
 
 static void
@@ -1563,11 +1565,19 @@ wimp_style_register_type (GTypeModule *module)
     NULL,           /* class_data */
     sizeof (WimpStyle),
     0,              /* n_preallocs */
-    (GInstanceInitFunc) wimp_style_init,
+    (GInstanceInitFunc) NULL,
   };
 
   wimp_type_style = g_type_module_register_type (module,
 						   GTK_TYPE_STYLE,
 						   "WimpStyle",
 						   &object_info, 0);
+}
+
+void
+wimp_init (void)
+{
+	xp_theme_init ();
+	setup_system_settings ();
+	setup_wimp_rc_style ();
 }

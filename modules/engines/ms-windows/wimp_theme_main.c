@@ -43,6 +43,7 @@ global_filter_func (void     *xevent,
     case WM_THEMECHANGED:
 	case WM_SYSCOLORCHANGE:
 		xp_theme_exit();
+		wimp_init ();
 		gtk_rc_reparse_all_for_settings (gtk_settings_get_default(), TRUE);
 		return GDK_FILTER_REMOVE;
 	default:
@@ -56,6 +57,7 @@ theme_init (GTypeModule *module)
   wimp_rc_style_register_type (module);
   wimp_style_register_type (module);
 
+  wimp_init ();
   gdk_window_add_filter (NULL, global_filter_func, NULL);
 }
 

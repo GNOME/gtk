@@ -1,5 +1,9 @@
 2003-10-03  Dom Lachowicz <cinamod@hotmail.com>
 
+	* src/wimp_style.c wimp_style_main.c: Refactor how we're doing styles. Much faster, lower memory consumption
+	
+2003-10-03  Dom Lachowicz <cinamod@hotmail.com>
+
 	* src/wimp_style_main.c: Catch theme and color changes. Needs more testing and fine-tuning
 	
 2003-10-02  Dom Lachowicz <cinamod@hotmail.com>
