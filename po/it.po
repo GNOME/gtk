@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-15 20:35+0100\n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2004-03-15 22:18+0100\n"
 "Last-Translator: Alessio Dessì <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -959,7 +959,7 @@ msgstr ""
 "Impossibile aggiungere un segnalibro per «%s»:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4940
+#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4942
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -977,11 +977,11 @@ msgstr ""
 "Impossibile spostarsi nella cartella «%s»:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:805
+#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:809
 msgid "Home"
 msgstr "Home"
 
-#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:807
+#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:811
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -1066,60 +1066,60 @@ msgstr "Salva nella ca_rtella:"
 msgid "Create in _folder:"
 msgstr "Crea nella _cartella:"
 
-#: gtk/gtkfilechooserdefault.c:3702
+#: gtk/gtkfilechooserdefault.c:3701
 msgid "Can't change to folder because it isn't local"
 msgstr "Impossibile passare alla cartella specificata perché non è locale"
 
-#: gtk/gtkfilechooserdefault.c:4146
+#: gtk/gtkfilechooserdefault.c:4148
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "la scorciatoia «%s» non esiste"
 
-#: gtk/gtkfilechooserdefault.c:4763
+#: gtk/gtkfilechooserdefault.c:4765
 msgid "Type name of new folder"
 msgstr "Digitare il nome della nuova cartella"
 
-#: gtk/gtkfilechooserdefault.c:4792
+#: gtk/gtkfilechooserdefault.c:4794
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:4794
+#: gtk/gtkfilechooserdefault.c:4796
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f kB"
 
-#: gtk/gtkfilechooserdefault.c:4796
+#: gtk/gtkfilechooserdefault.c:4798
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:4798
+#: gtk/gtkfilechooserdefault.c:4800
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:4843
+#: gtk/gtkfilechooserdefault.c:4845
 msgid "Today"
 msgstr "Oggi"
 
-#: gtk/gtkfilechooserdefault.c:4845
+#: gtk/gtkfilechooserdefault.c:4847
 msgid "Yesterday"
 msgstr "Ieri"
 
-#: gtk/gtkfilechooserdefault.c:4856
+#: gtk/gtkfilechooserdefault.c:4858
 msgid "Unknown"
 msgstr "Sconosciuto"
 
-#: gtk/gtkfilechooserdefault.c:4901
+#: gtk/gtkfilechooserdefault.c:4903
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Impossibile passare alla cartella specificata perché è stato fornito un "
 "percorso non valido."
 
-#: gtk/gtkfilechooserdefault.c:4972
+#: gtk/gtkfilechooserdefault.c:4980
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1128,11 +1128,11 @@ msgstr ""
 "Impossibile selezionare «%s»:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5008
+#: gtk/gtkfilechooserdefault.c:5020
 msgid "Open Location"
 msgstr "Apri posizione"
 
-#: gtk/gtkfilechooserdefault.c:5023
+#: gtk/gtkfilechooserdefault.c:5044
 msgid "_Location:"
 msgstr "_Posizione: "
 
@@ -1327,8 +1327,8 @@ msgstr "(Vuoto)"
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:594
-#: gtk/gtkfilesystemunix.c:1638 gtk/gtkfilesystemwin32.c:1176
+#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
+#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "errore nell'ottenere informazioni per «%s»: %s"
@@ -1338,20 +1338,20 @@ msgstr "errore nell'ottenere informazioni per «%s»: %s"
 msgid "error creating directory '%s': %s"
 msgstr "errore nel creare la directory «%s»: %s"
 
-#: gtk/gtkfilesystemunix.c:547 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:566 gtk/gtkfilesystemwin32.c:417
 msgid "This file system does not support mounting"
 msgstr "Questo file system non supporta operazioni di mount"
 
-#: gtk/gtkfilesystemunix.c:555
+#: gtk/gtkfilesystemunix.c:574
 msgid "Filesystem"
 msgstr "File system"
 
-#: gtk/gtkfilesystemunix.c:1239 gtk/gtkfilesystemwin32.c:794
+#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:794
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Salvataggio del segnalibro fallito (%s)"
 
-#: gtk/gtkfilesystemunix.c:1534
+#: gtk/gtkfilesystemunix.c:1553
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "errore nell'ottenere informazioni per «%s»"

@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-09 11:16-0500\n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2002-12-07 10:05+0200\n"
 "Last-Translator: Gil 'Dolfin' Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -133,8 +133,8 @@ msgstr "שם הגופן"
 msgid "A unique name for the action."
 msgstr ""
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:211 gtk/gtkexpander.c:202
-#: gtk/gtkframe.c:126 gtk/gtklabel.c:289 gtk/gtktoolbutton.c:180
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
+#: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "תוית"
 
@@ -312,7 +312,7 @@ msgstr "מצב ההחלפה של הכפתור"
 msgid "Horizontal alignment"
 msgstr "יישור אופקי"
 
-#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:262
+#: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -322,7 +322,7 @@ msgstr "מיקום אופקי של ילד במרחב הזמין. 0.0 זה ישו
 msgid "Vertical alignment"
 msgstr "יישור אנכי"
 
-#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:281
+#: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -492,7 +492,7 @@ msgid ""
 "g., help buttons"
 msgstr "אם חיובי, הילד מופיע בקבוצה משני של ילדים, מתאים לדוגמה לכפתורי עזרה"
 
-#: gtk/gtkbox.c:129 gtk/gtkexpander.c:226
+#: gtk/gtkbox.c:129 gtk/gtkexpander.c:229
 msgid "Spacing"
 msgstr "מרווח"
 
@@ -500,7 +500,7 @@ msgstr "מרווח"
 msgid "The amount of space between children"
 msgstr "כמות המרווח בין ילדים"
 
-#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:534
+#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:531
 msgid "Homogeneous"
 msgstr "הומוגני"
 
@@ -508,7 +508,7 @@ msgstr "הומוגני"
 msgid "Whether the children should all be the same size"
 msgstr "האם הילדים יהיו באותו גודל"
 
-#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
+#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:523
 #: gtk/gtktreeviewcolumn.c:295
 msgid "Expand"
 msgstr "הרחב"
@@ -554,100 +554,100 @@ msgstr "מיקום"
 msgid "The index of the child in the parent"
 msgstr "האינדקס של הילד בהורה"
 
-#: gtk/gtkbutton.c:212
+#: gtk/gtkbutton.c:213
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "מלל פריט התוית בתוך הכפתור, אם הכפתור מכיל פריט תוית"
 
-#: gtk/gtkbutton.c:219 gtk/gtkexpander.c:210 gtk/gtklabel.c:310
+#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "השתמש בקו תחתי"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:211 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr "אם נקבע, קו תחתי במלל יציין שהתו הבא ישמש למקשי מאיצי הזיכרון"
 
-#: gtk/gtkbutton.c:227
+#: gtk/gtkbutton.c:228
 msgid "Use stock"
 msgstr "השתמש במחסנית"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:229
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "אם נקבע, התוית תשמש לבחירת פריט מחסנית במקום להיות מוצגת"
 
-#: gtk/gtkbutton.c:235
+#: gtk/gtkbutton.c:236
 msgid "Focus on click"
 msgstr ""
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:237
 #, fuzzy
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "האם תוית המלל יכולה להבחר עם העכבר"
 
-#: gtk/gtkbutton.c:243
+#: gtk/gtkbutton.c:244
 msgid "Border relief"
 msgstr "שחרור מסגרת"
 
-#: gtk/gtkbutton.c:244
+#: gtk/gtkbutton.c:245
 msgid "The border relief style"
 msgstr "סגנון שחרור המסגרת"
 
-#: gtk/gtkbutton.c:261
+#: gtk/gtkbutton.c:262
 #, fuzzy
 msgid "Horizontal alignment for child"
 msgstr "יישור אופקי"
 
-#: gtk/gtkbutton.c:280
+#: gtk/gtkbutton.c:281
 #, fuzzy
 msgid "Vertical alignment for child"
 msgstr "יישור אנכי"
 
-#: gtk/gtkbutton.c:348
+#: gtk/gtkbutton.c:349
 msgid "Default Spacing"
 msgstr "מרווח ברירת מחדל"
 
-#: gtk/gtkbutton.c:349
+#: gtk/gtkbutton.c:350
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "מרווח נוסף להוספה לכפתורי CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:355
+#: gtk/gtkbutton.c:356
 msgid "Default Outside Spacing"
 msgstr "מרווח חיצוני ברירת מחדל"
 
-#: gtk/gtkbutton.c:356
+#: gtk/gtkbutton.c:357
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "מרווח חיצוני להוספה לכפתורי CAN_DEFAULT שתמיש יצוייר מחוץ לגבולות"
 
-#: gtk/gtkbutton.c:361
+#: gtk/gtkbutton.c:362
 msgid "Child X Displacement"
 msgstr "העברת ילד X"
 
-#: gtk/gtkbutton.c:362
+#: gtk/gtkbutton.c:363
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "כמה רחוק בכיוון ה X להזיז את הילד כאשר הכפתור נלחץ"
 
-#: gtk/gtkbutton.c:369
+#: gtk/gtkbutton.c:370
 msgid "Child Y Displacement"
 msgstr "העברת ילד Y"
 
-#: gtk/gtkbutton.c:370
+#: gtk/gtkbutton.c:371
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "כמה רחוק בכיוון ה Y להזיז את הילד כאשר הכפתור נלחץ"
 
-#: gtk/gtkbutton.c:377
+#: gtk/gtkbutton.c:378
 msgid "Show button images"
 msgstr ""
 
-#: gtk/gtkbutton.c:378
+#: gtk/gtkbutton.c:379
 #, fuzzy
 msgid "Whether stock icons should be shown in buttons"
 msgstr "האם הכרטיסיות צריכות להיות מוצגות או לא"
@@ -884,7 +884,7 @@ msgstr "סימון"
 msgid "Marked up text to render"
 msgstr "מלל מסומן ליצירה"
 
-#: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:296
+#: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:299
 msgid "Attributes"
 msgstr "מאפיינים"
 
@@ -1191,7 +1191,7 @@ msgstr "גודל מחוון"
 msgid "Size of check or radio indicator"
 msgstr "גודל מחוון הבחירה או הסימון"
 
-#: gtk/gtkcheckbutton.c:107 gtk/gtkexpander.c:252 gtk/gtkoptionmenu.c:206
+#: gtk/gtkcheckbutton.c:107 gtk/gtkexpander.c:255 gtk/gtkoptionmenu.c:206
 msgid "Indicator Spacing"
 msgstr "מרווח מחוון"
 
@@ -1335,56 +1335,56 @@ msgstr "ערך ברשימה"
 msgid "Whether entered values must already be present in the list"
 msgstr "האם הערכים המוכנסים חייבים להיות כבר ברשימה"
 
-#: gtk/gtkcombobox.c:451
+#: gtk/gtkcombobox.c:457
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:452
+#: gtk/gtkcombobox.c:458
 msgid "The model for the combo box"
 msgstr ""
 
-#: gtk/gtkcombobox.c:459
+#: gtk/gtkcombobox.c:465
 #, fuzzy
 msgid "Wrap width"
 msgstr "רוחב"
 
-#: gtk/gtkcombobox.c:460
+#: gtk/gtkcombobox.c:466
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:469
+#: gtk/gtkcombobox.c:475
 #, fuzzy
 msgid "Row span column"
 msgstr "מרווח בין שורות"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:476
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:479
+#: gtk/gtkcombobox.c:485
 #, fuzzy
 msgid "Column span column"
 msgstr "מרווח בין עמודות"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:486
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:489
+#: gtk/gtkcombobox.c:495
 #, fuzzy
 msgid "Active item"
 msgstr "פעיל"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:496
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "האינדקס של העמוד הנוכחי"
 
-#: gtk/gtkcombobox.c:498
+#: gtk/gtkcombobox.c:504
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:499
+#: gtk/gtkcombobox.c:505
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 
@@ -1461,51 +1461,51 @@ msgstr "Y מקסימלי"
 msgid "Maximum possible value for Y"
 msgstr "הערך המקסימלי ל Y"
 
-#: gtk/gtkdialog.c:145
+#: gtk/gtkdialog.c:146
 msgid "Has separator"
 msgstr "יש מפריד"
 
-#: gtk/gtkdialog.c:146
+#: gtk/gtkdialog.c:147
 msgid "The dialog has a separator bar above its buttons"
 msgstr "לתיבת דו-שיח זו יש קו מפריד מעל כפתוריה"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:172
 msgid "Content area border"
 msgstr "גבולות אזור תוכן"
 
-#: gtk/gtkdialog.c:172
+#: gtk/gtkdialog.c:173
 msgid "Width of border around the main dialog area"
 msgstr ""
 
-#: gtk/gtkdialog.c:179
+#: gtk/gtkdialog.c:180
 msgid "Button spacing"
 msgstr "מרווח כפתור"
 
-#: gtk/gtkdialog.c:180
+#: gtk/gtkdialog.c:181
 msgid "Spacing between buttons"
 msgstr "מרווח בין כפתורים"
 
-#: gtk/gtkdialog.c:188
+#: gtk/gtkdialog.c:189
 msgid "Action area border"
 msgstr ""
 
-#: gtk/gtkdialog.c:189
+#: gtk/gtkdialog.c:190
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:367
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "מיקום הסמן"
 
-#: gtk/gtkentry.c:458 gtk/gtklabel.c:368
+#: gtk/gtkentry.c:458 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:467 gtk/gtklabel.c:377
+#: gtk/gtkentry.c:467 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr ""
 
-#: gtk/gtkentry.c:468 gtk/gtklabel.c:378
+#: gtk/gtkentry.c:468 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
@@ -1597,21 +1597,21 @@ msgstr ""
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:200
+#: gtk/gtkentrycompletion.c:222
 msgid "Completion Model"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:201
+#: gtk/gtkentrycompletion.c:223
 #, fuzzy
 msgid "The model to find matches in"
 msgstr "סוג החלון"
 
-#: gtk/gtkentrycompletion.c:207
+#: gtk/gtkentrycompletion.c:229
 #, fuzzy
 msgid "Minimum Key Length"
 msgstr "אורך מקסימלי"
 
-#: gtk/gtkentrycompletion.c:208
+#: gtk/gtkentrycompletion.c:230
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
@@ -1637,50 +1637,50 @@ msgid ""
 "child widget as opposed to below it."
 msgstr ""
 
-#: gtk/gtkexpander.c:194
+#: gtk/gtkexpander.c:197
 #, fuzzy
 msgid "Expanded"
 msgstr "הרחב"
 
-#: gtk/gtkexpander.c:195
+#: gtk/gtkexpander.c:198
 msgid "Whether the expander has been opened to reveal the child widget"
 msgstr ""
 
-#: gtk/gtkexpander.c:203
+#: gtk/gtkexpander.c:206
 #, fuzzy
 msgid "Text of the expander's label"
 msgstr "מלל תוית המסגרת"
 
-#: gtk/gtkexpander.c:218 gtk/gtklabel.c:303
+#: gtk/gtkexpander.c:221 gtk/gtklabel.c:306
 msgid "Use markup"
 msgstr "השתמש בסימון"
 
-#: gtk/gtkexpander.c:219 gtk/gtklabel.c:304
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:307
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 
-#: gtk/gtkexpander.c:227
+#: gtk/gtkexpander.c:230
 #, fuzzy
 msgid "Space to put between the label and the child"
 msgstr "מרווח נוסף לשים בין הילד ושכניו, בפיקסלים"
 
-#: gtk/gtkexpander.c:236 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:194
+#: gtk/gtkexpander.c:239 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:194
 msgid "Label widget"
 msgstr "פריט תוית"
 
-#: gtk/gtkexpander.c:237
+#: gtk/gtkexpander.c:240
 msgid "A widget to display in place of the usual expander label"
 msgstr ""
 
-#: gtk/gtkexpander.c:243 gtk/gtktreeview.c:622
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:622
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtkexpander.c:244 gtk/gtktreeview.c:623
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:623
 msgid "Size of the expander arrow"
 msgstr ""
 
-#: gtk/gtkexpander.c:253
+#: gtk/gtkexpander.c:256
 #, fuzzy
 msgid "Spacing around expander arrow"
 msgstr "מרווח סביב מחוון הבחירה או הסימון"
@@ -1782,11 +1782,11 @@ msgstr "הצג מלל"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "האם כפתורים ליצירת/שינוי קבצים צריכים להיות מוצגים"
 
-#: gtk/gtkfilechooserdefault.c:467
+#: gtk/gtkfilechooserdefault.c:550
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:468
+#: gtk/gtkfilechooserdefault.c:551
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "שם גופן ברירת המחדל לשימוש"
@@ -1934,7 +1934,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr ""
 
 #: gtk/gtkhandlebox.c:203 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
-#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:151
+#: gtk/gtktoolbar.c:572 gtk/gtkviewport.c:151
 msgid "Shadow type"
 msgstr "סוג צללית"
 
@@ -2068,64 +2068,64 @@ msgstr "צג"
 msgid "The screen where this window will be displayed"
 msgstr "הצג בו החלון יוצג"
 
-#: gtk/gtklabel.c:290
+#: gtk/gtklabel.c:293
 msgid "The text of the label"
 msgstr "מלל התוית"
 
-#: gtk/gtklabel.c:297
+#: gtk/gtklabel.c:300
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "רשימת מאפייני סגנון להוספה למלל של התוית"
 
-#: gtk/gtklabel.c:318 gtk/gtktexttag.c:375 gtk/gtktextview.c:603
+#: gtk/gtklabel.c:321 gtk/gtktexttag.c:375 gtk/gtktextview.c:603
 msgid "Justification"
 msgstr "יישור"
 
-#: gtk/gtklabel.c:319
+#: gtk/gtklabel.c:322
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
 msgstr ""
 
-#: gtk/gtklabel.c:327
+#: gtk/gtklabel.c:330
 msgid "Pattern"
 msgstr "דפוס"
 
-#: gtk/gtklabel.c:328
+#: gtk/gtklabel.c:331
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
 
-#: gtk/gtklabel.c:335
+#: gtk/gtklabel.c:338
 msgid "Line wrap"
 msgstr "גלישת שורות"
 
-#: gtk/gtklabel.c:336
+#: gtk/gtklabel.c:339
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "אם נקבע, אפשר גלישת שורות אם המלל ניהיה רחב מידי"
 
-#: gtk/gtklabel.c:342
+#: gtk/gtklabel.c:345
 msgid "Selectable"
 msgstr "_ניתן לבחירה"
 
-#: gtk/gtklabel.c:343
+#: gtk/gtklabel.c:346
 msgid "Whether the label text can be selected with the mouse"
 msgstr "האם תוית המלל יכולה להבחר עם העכבר"
 
-#: gtk/gtklabel.c:349
+#: gtk/gtklabel.c:352
 msgid "Mnemonic key"
 msgstr "מקש זיכרון"
 
-#: gtk/gtklabel.c:350
+#: gtk/gtklabel.c:353
 msgid "The mnemonic accelerator key for this label"
 msgstr "מקש מאיץ הזיכרון של תוית זו"
 
-#: gtk/gtklabel.c:358
+#: gtk/gtklabel.c:361
 msgid "Mnemonic widget"
 msgstr "פריט זיכרון"
 
-#: gtk/gtklabel.c:359
+#: gtk/gtklabel.c:362
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 
@@ -2153,103 +2153,103 @@ msgstr "רוחב הפריסה"
 msgid "The height of the layout"
 msgstr "גובה הפריסה"
 
-#: gtk/gtkmenu.c:355
+#: gtk/gtkmenu.c:518
 msgid "Tearoff Title"
 msgstr "כותרת נתלש"
 
-#: gtk/gtkmenu.c:356
+#: gtk/gtkmenu.c:519
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "הכותרת שתוצג על-ידי מנהל החלונות כאשר תפריט זה יתלש"
 
-#: gtk/gtkmenu.c:362
+#: gtk/gtkmenu.c:525
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "מילוי אנכי"
 
-#: gtk/gtkmenu.c:363
+#: gtk/gtkmenu.c:526
 msgid "Extra space at the top and bottom of the menu"
 msgstr ""
 
-#: gtk/gtkmenu.c:371
+#: gtk/gtkmenu.c:534
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "שיעור אנכי"
 
-#: gtk/gtkmenu.c:372
+#: gtk/gtkmenu.c:535
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:380
+#: gtk/gtkmenu.c:543
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "שיעור אופקי"
 
-#: gtk/gtkmenu.c:381
+#: gtk/gtkmenu.c:544
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:391
+#: gtk/gtkmenu.c:554
 msgid "Left Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:392 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:399
+#: gtk/gtkmenu.c:562
 msgid "Right Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:400
+#: gtk/gtkmenu.c:563
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:407
+#: gtk/gtkmenu.c:570
 msgid "Top Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:408
+#: gtk/gtkmenu.c:571
 msgid "The row number to attach the top of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:415
+#: gtk/gtkmenu.c:578
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "_תחתית"
 
-#: gtk/gtkmenu.c:416 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:666
 msgid "Can change accelerators"
 msgstr "יכול לשנות מאיצים"
 
-#: gtk/gtkmenu.c:504
+#: gtk/gtkmenu.c:667
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
-#: gtk/gtkmenu.c:509
+#: gtk/gtkmenu.c:672
 msgid "Delay before submenus appear"
 msgstr "השהייה לפני שתת-תפריטים מופיעים"
 
-#: gtk/gtkmenu.c:510
+#: gtk/gtkmenu.c:673
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:680
 msgid "Delay before hiding a submenu"
 msgstr ""
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:681
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2259,7 +2259,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr ""
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:548
 msgid "Internal padding"
 msgstr "מילוי פנימי"
 
@@ -2275,37 +2275,37 @@ msgstr ""
 msgid "Delay before the submenus of a menu bar appear"
 msgstr ""
 
-#: gtk/gtkmessagedialog.c:110
+#: gtk/gtkmessagedialog.c:107
 msgid "Image/label border"
 msgstr ""
 
-#: gtk/gtkmessagedialog.c:111
+#: gtk/gtkmessagedialog.c:108
 msgid "Width of border around the label and image in the message dialog"
 msgstr ""
 
-#: gtk/gtkmessagedialog.c:126
+#: gtk/gtkmessagedialog.c:123
 #, fuzzy
 msgid "Use separator"
 msgstr "יש מפריד"
 
-#: gtk/gtkmessagedialog.c:127
+#: gtk/gtkmessagedialog.c:124
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
 
-#: gtk/gtkmessagedialog.c:133
+#: gtk/gtkmessagedialog.c:130
 msgid "Message Type"
 msgstr "סוג הודעה"
 
-#: gtk/gtkmessagedialog.c:134
+#: gtk/gtkmessagedialog.c:131
 msgid "The type of message"
 msgstr "הסוג של ההודעה"
 
-#: gtk/gtkmessagedialog.c:141
+#: gtk/gtkmessagedialog.c:138
 msgid "Message Buttons"
 msgstr "כפתורי הודעה"
 
-#: gtk/gtkmessagedialog.c:142
+#: gtk/gtkmessagedialog.c:139
 msgid "The buttons shown in the message dialog"
 msgstr "הכפתורים שיוצגו בתיבת הדו-שיח של ההודעה"
 
@@ -2608,7 +2608,7 @@ msgstr "יישור"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:497
 msgid "Orientation"
 msgstr "כיוון"
 
@@ -3634,83 +3634,83 @@ msgstr ""
 msgid "If the toggle part of the button is displayed"
 msgstr ""
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:498
 msgid "The orientation of the toolbar"
 msgstr ""
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:506
 msgid "Toolbar Style"
 msgstr "סגנון סרגל כלים"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:507
 msgid "How to draw the toolbar"
 msgstr ""
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:514
 #, fuzzy
 msgid "Show Arrow"
 msgstr "הצג מסגרת"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:515
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 
-#: gtk/gtktoolbar.c:527
+#: gtk/gtktoolbar.c:524
 #, fuzzy
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "האם הילד יקבל מרווח נוסף כאשר ההורה גדל"
 
-#: gtk/gtktoolbar.c:535
+#: gtk/gtktoolbar.c:532
 #, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "האם הילדים יהיו באותו גודל"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:539
 msgid "Spacer size"
 msgstr ""
 
-#: gtk/gtktoolbar.c:543
+#: gtk/gtktoolbar.c:540
 msgid "Size of spacers"
 msgstr ""
 
-#: gtk/gtktoolbar.c:552
+#: gtk/gtktoolbar.c:549
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 
-#: gtk/gtktoolbar.c:560
+#: gtk/gtktoolbar.c:557
 msgid "Space style"
 msgstr ""
 
-#: gtk/gtktoolbar.c:561
+#: gtk/gtktoolbar.c:558
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 
-#: gtk/gtktoolbar.c:568
+#: gtk/gtktoolbar.c:565
 msgid "Button relief"
 msgstr ""
 
-#: gtk/gtktoolbar.c:569
+#: gtk/gtktoolbar.c:566
 msgid "Type of bevel around toolbar buttons"
 msgstr ""
 
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:573
 msgid "Style of bevel around the toolbar"
 msgstr ""
 
-#: gtk/gtktoolbar.c:582
+#: gtk/gtktoolbar.c:579
 msgid "Toolbar style"
 msgstr ""
 
-#: gtk/gtktoolbar.c:583
+#: gtk/gtktoolbar.c:580
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
-#: gtk/gtktoolbar.c:589
+#: gtk/gtktoolbar.c:586
 msgid "Toolbar icon size"
 msgstr ""
 
-#: gtk/gtktoolbar.c:590
+#: gtk/gtktoolbar.c:587
 msgid "Size of icons in default toolbars"
 msgstr ""
 

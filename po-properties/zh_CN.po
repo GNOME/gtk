@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-12 04:15+0100\n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2004-03-12 23:09+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -116,7 +116,7 @@ msgstr "名称"
 msgid "A unique name for the action."
 msgstr "动作的唯一名称。"
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "标签"
@@ -157,8 +157,7 @@ msgstr "水平时可见"
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
-msgstr ""
-"当工具栏处于水平方向时，工具栏项目是否可见。"
+msgstr "当工具栏处于水平方向时，工具栏项目是否可见。"
 
 #: gtk/gtkaction.c:236 gtk/gtktoolitem.c:165
 msgid "Visible when vertical"
@@ -168,8 +167,7 @@ msgstr "垂直时可见"
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
-msgstr ""
-"当工具栏处于垂直方向时，工具栏项目是否可见。"
+msgstr "当工具栏处于垂直方向时，工具栏项目是否可见。"
 
 #: gtk/gtkaction.c:243 gtk/gtktoolitem.c:172
 msgid "Is important"
@@ -216,8 +214,7 @@ msgstr "动作组"
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr ""
-"此 GtkAction 所关联的 GtkActionGroup，或者为 NULL(仅为内部使用)。"
+msgstr "此 GtkAction 所关联的 GtkActionGroup，或者为 NULL(仅为内部使用)。"
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
@@ -455,7 +452,7 @@ msgid ""
 "g., help buttons"
 msgstr "若为 TRUE，子部件将会出现在子部件的二级组中，适用于像帮助这样的按钮。"
 
-#: gtk/gtkbox.c:129 gtk/gtkexpander.c:226
+#: gtk/gtkbox.c:129 gtk/gtkexpander.c:229
 msgid "Spacing"
 msgstr "间距"
 
@@ -463,7 +460,7 @@ msgstr "间距"
 msgid "The amount of space between children"
 msgstr "子部件间的间距总和"
 
-#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:534
+#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:531
 msgid "Homogeneous"
 msgstr "统一大小"
 
@@ -471,7 +468,7 @@ msgstr "统一大小"
 msgid "Whether the children should all be the same size"
 msgstr "子部件是否使用统一大小"
 
-#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
+#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:523
 #: gtk/gtktreeviewcolumn.c:295
 msgid "Expand"
 msgstr "展开"
@@ -523,12 +520,12 @@ msgid ""
 "widget"
 msgstr "按钮中的文字标签，如果该按钮包含一个标签的话"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:210 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "使用下划线"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:211 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1146,7 +1143,7 @@ msgstr "指示器大小"
 msgid "Size of check or radio indicator"
 msgstr "复选或单选指示器的大小"
 
-#: gtk/gtkcheckbutton.c:107 gtk/gtkexpander.c:252 gtk/gtkoptionmenu.c:206
+#: gtk/gtkcheckbutton.c:107 gtk/gtkexpander.c:255 gtk/gtkoptionmenu.c:206
 msgid "Indicator Spacing"
 msgstr "指示器间距"
 
@@ -1283,51 +1280,51 @@ msgstr "限于列表中存在值"
 msgid "Whether entered values must already be present in the list"
 msgstr "输入的内容是否必须已存在于列表中"
 
-#: gtk/gtkcombobox.c:451
+#: gtk/gtkcombobox.c:457
 msgid "ComboBox model"
 msgstr "组合框模型"
 
-#: gtk/gtkcombobox.c:452
+#: gtk/gtkcombobox.c:458
 msgid "The model for the combo box"
 msgstr "组合框的模型"
 
-#: gtk/gtkcombobox.c:459
+#: gtk/gtkcombobox.c:465
 msgid "Wrap width"
 msgstr "环绕宽度"
 
-#: gtk/gtkcombobox.c:460
+#: gtk/gtkcombobox.c:466
 msgid "Wrap width for layouting the items in a grid"
 msgstr "在网格中排列项目时的环绕宽度"
 
-#: gtk/gtkcombobox.c:469
+#: gtk/gtkcombobox.c:475
 msgid "Row span column"
 msgstr "行跨列"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:476
 msgid "TreeModel column containing the row span values"
 msgstr "包含跨行值时的树型列"
 
-#: gtk/gtkcombobox.c:479
+#: gtk/gtkcombobox.c:485
 msgid "Column span column"
 msgstr "列跨列"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:486
 msgid "TreeModel column containing the column span values"
 msgstr "包含跨列值时的树型列"
 
-#: gtk/gtkcombobox.c:489
+#: gtk/gtkcombobox.c:495
 msgid "Active item"
 msgstr "激活项"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:496
 msgid "The item which is currently active"
 msgstr "当前激活的项目"
 
-#: gtk/gtkcombobox.c:498
+#: gtk/gtkcombobox.c:504
 msgid "Appears as list"
 msgstr "表现为列表"
 
-#: gtk/gtkcombobox.c:499
+#: gtk/gtkcombobox.c:505
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr "组合下拉框是否要显示为列表而不是菜单"
 
@@ -1403,35 +1400,35 @@ msgstr "Y 最大值"
 msgid "Maximum possible value for Y"
 msgstr "Y 可能的最大值"
 
-#: gtk/gtkdialog.c:145
+#: gtk/gtkdialog.c:146
 msgid "Has separator"
 msgstr "有分隔线"
 
-#: gtk/gtkdialog.c:146
+#: gtk/gtkdialog.c:147
 msgid "The dialog has a separator bar above its buttons"
 msgstr "此对话框的按钮上有一条分隔线"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:172
 msgid "Content area border"
 msgstr "内容区边界"
 
-#: gtk/gtkdialog.c:172
+#: gtk/gtkdialog.c:173
 msgid "Width of border around the main dialog area"
 msgstr "主对话框区域周围的边界宽度"
 
-#: gtk/gtkdialog.c:179
+#: gtk/gtkdialog.c:180
 msgid "Button spacing"
 msgstr "按钮间距"
 
-#: gtk/gtkdialog.c:180
+#: gtk/gtkdialog.c:181
 msgid "Spacing between buttons"
 msgstr "按钮之间的间距"
 
-#: gtk/gtkdialog.c:188
+#: gtk/gtkdialog.c:189
 msgid "Action area border"
 msgstr "动作区边界"
 
-#: gtk/gtkdialog.c:189
+#: gtk/gtkdialog.c:190
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "对话框底部按钮区域周围的边界宽度"
 
@@ -1538,19 +1535,19 @@ msgstr "聚焦时选中"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "当一项被聚焦时是否选中其内容"
 
-#: gtk/gtkentrycompletion.c:200
+#: gtk/gtkentrycompletion.c:222
 msgid "Completion Model"
 msgstr "完成模型"
 
-#: gtk/gtkentrycompletion.c:201
+#: gtk/gtkentrycompletion.c:223
 msgid "The model to find matches in"
 msgstr "查找匹配项的模型"
 
-#: gtk/gtkentrycompletion.c:207
+#: gtk/gtkentrycompletion.c:229
 msgid "Minimum Key Length"
 msgstr "最小键长度"
 
-#: gtk/gtkentrycompletion.c:208
+#: gtk/gtkentrycompletion.c:230
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "查阅匹配项时搜索关键字的最小长度"
 
@@ -1562,8 +1559,7 @@ msgstr "可见窗口"
 msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
-msgstr ""
-"事件框是否可见，与不可见相对，且仅用于陷阱事件。"
+msgstr "事件框是否可见，与不可见相对，且仅用于陷阱事件。"
 
 #: gtk/gtkeventbox.c:127
 msgid "Above child"
@@ -1573,50 +1569,49 @@ msgstr "位于子窗口之上"
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr ""
-"事件框的事件陷阱窗口是要位于子部件的窗口之上，还是要在其之下。"
+msgstr "事件框的事件陷阱窗口是要位于子部件的窗口之上，还是要在其之下。"
 
-#: gtk/gtkexpander.c:194
+#: gtk/gtkexpander.c:197
 msgid "Expanded"
 msgstr "已展开"
 
-#: gtk/gtkexpander.c:195
+#: gtk/gtkexpander.c:198
 msgid "Whether the expander has been opened to reveal the child widget"
 msgstr "扩展器是否是否已展开以显示其子部件"
 
-#: gtk/gtkexpander.c:203
+#: gtk/gtkexpander.c:206
 msgid "Text of the expander's label"
 msgstr "扩展器标签的文字"
 
-#: gtk/gtkexpander.c:218 gtk/gtklabel.c:306
+#: gtk/gtkexpander.c:221 gtk/gtklabel.c:306
 msgid "Use markup"
 msgstr "使用标记语言"
 
-#: gtk/gtkexpander.c:219 gtk/gtklabel.c:307
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:307
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "标签文字包含 XML 标记语言。参见 pango_parse_markup()"
 
-#: gtk/gtkexpander.c:227
+#: gtk/gtkexpander.c:230
 msgid "Space to put between the label and the child"
 msgstr "标签和子部件之间的空间"
 
-#: gtk/gtkexpander.c:236 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:194
+#: gtk/gtkexpander.c:239 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:194
 msgid "Label widget"
 msgstr "标签部件"
 
-#: gtk/gtkexpander.c:237
+#: gtk/gtkexpander.c:240
 msgid "A widget to display in place of the usual expander label"
 msgstr "在通常的扩展器标签的位置显示的部件"
 
-#: gtk/gtkexpander.c:243 gtk/gtktreeview.c:622
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:622
 msgid "Expander Size"
 msgstr "扩展器大小"
 
-#: gtk/gtkexpander.c:244 gtk/gtktreeview.c:623
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:623
 msgid "Size of the expander arrow"
 msgstr "扩展器箭头的大小"
 
-#: gtk/gtkexpander.c:253
+#: gtk/gtkexpander.c:256
 msgid "Spacing around expander arrow"
 msgstr "扩展器箭头周围的间距"
 
@@ -1701,11 +1696,11 @@ msgstr "显示隐藏文件"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "是否显示隐藏的文件或文件夹。"
 
-#: gtk/gtkfilechooserdefault.c:526
+#: gtk/gtkfilechooserdefault.c:550
 msgid "Default file chooser backend"
 msgstr "默认文件选择器后端"
 
-#: gtk/gtkfilechooserdefault.c:527
+#: gtk/gtkfilechooserdefault.c:551
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "默认要使用的 GtkFileChooser 后端名称"
 
@@ -1846,7 +1841,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "在通常的框架标签的位置显示的部件"
 
 #: gtk/gtkhandlebox.c:203 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
-#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:151
+#: gtk/gtktoolbar.c:572 gtk/gtkviewport.c:151
 msgid "Shadow type"
 msgstr "阴影类型"
 
@@ -2065,101 +2060,99 @@ msgstr "布局宽度"
 msgid "The height of the layout"
 msgstr "布局高度"
 
-#: gtk/gtkmenu.c:355
+#: gtk/gtkmenu.c:518
 msgid "Tearoff Title"
 msgstr "折叠标题"
 
-#: gtk/gtkmenu.c:356
+#: gtk/gtkmenu.c:519
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "当此菜单被折叠可供窗口管理器显示的标题"
 
-#: gtk/gtkmenu.c:362
+#: gtk/gtkmenu.c:525
 msgid "Vertical Padding"
 msgstr "垂直留空"
 
-#: gtk/gtkmenu.c:363
+#: gtk/gtkmenu.c:526
 msgid "Extra space at the top and bottom of the menu"
 msgstr "菜单上下两端额外的空白"
 
-#: gtk/gtkmenu.c:371
+#: gtk/gtkmenu.c:534
 msgid "Vertical Offset"
 msgstr "垂直偏移"
 
-#: gtk/gtkmenu.c:372
+#: gtk/gtkmenu.c:535
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
-msgstr ""
-"菜单为子菜单时，在垂直方向上定位这么多像素的便宜"
+msgstr "菜单为子菜单时，在垂直方向上定位这么多像素的便宜"
 
-#: gtk/gtkmenu.c:380
+#: gtk/gtkmenu.c:543
 msgid "Horizontal Offset"
 msgstr "水平偏移"
 
-#: gtk/gtkmenu.c:381
+#: gtk/gtkmenu.c:544
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr ""
-"菜单为子菜单时，在水平方向上定位这么多像素的便宜"
+msgstr "菜单为子菜单时，在水平方向上定位这么多像素的便宜"
 
-#: gtk/gtkmenu.c:391
+#: gtk/gtkmenu.c:554
 msgid "Left Attach"
 msgstr "左侧附加"
 
-#: gtk/gtkmenu.c:392 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "将子部件左侧附加到哪一列"
 
-#: gtk/gtkmenu.c:399
+#: gtk/gtkmenu.c:562
 msgid "Right Attach"
 msgstr "右侧附加"
 
-#: gtk/gtkmenu.c:400
+#: gtk/gtkmenu.c:563
 msgid "The column number to attach the right side of the child to"
 msgstr "将子部件右侧附加到哪一列"
 
-#: gtk/gtkmenu.c:407
+#: gtk/gtkmenu.c:570
 msgid "Top Attach"
 msgstr "上侧附加"
 
-#: gtk/gtkmenu.c:408
+#: gtk/gtkmenu.c:571
 msgid "The row number to attach the top of the child to"
 msgstr "将子部件上侧附加到哪一行"
 
-#: gtk/gtkmenu.c:415
+#: gtk/gtkmenu.c:578
 msgid "Bottom Attach"
 msgstr "下侧附加"
 
-#: gtk/gtkmenu.c:416 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "将子部件下侧附加到哪一行"
 
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:666
 msgid "Can change accelerators"
 msgstr "可更改加速键"
 
-#: gtk/gtkmenu.c:504
+#: gtk/gtkmenu.c:667
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "菜单加速键是否可通过在菜单项上按键进行更改"
 
-#: gtk/gtkmenu.c:509
+#: gtk/gtkmenu.c:672
 msgid "Delay before submenus appear"
 msgstr "子菜单出现的延迟"
 
-#: gtk/gtkmenu.c:510
+#: gtk/gtkmenu.c:673
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "在子菜单出现前鼠标指针必须指向菜单项的最短时间"
 
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:680
 msgid "Delay before hiding a submenu"
 msgstr "隐藏子菜单的延迟"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:681
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2169,7 +2162,7 @@ msgstr "在隐藏子菜单前鼠标指针必须远离子菜单的最短时间"
 msgid "Style of bevel around the menubar"
 msgstr "菜单栏的周围的立体样式"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:548
 msgid "Internal padding"
 msgstr "内部留空"
 
@@ -2200,8 +2193,7 @@ msgstr "有分隔线"
 #: gtk/gtkmessagedialog.c:124
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
-msgstr ""
-"是否在消息对话框的文字和按钮之间放置分隔符"
+msgstr "是否在消息对话框的文字和按钮之间放置分隔符"
 
 #: gtk/gtkmessagedialog.c:130
 msgid "Message Type"
@@ -2516,7 +2508,7 @@ msgstr "调整部件"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "连接到进度条的 GtkAdjustment 部件(不赞成使用)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:497
 msgid "Orientation"
 msgstr "方向"
 
@@ -2589,7 +2581,8 @@ msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
 msgstr ""
-"此动作为其动作组的的当前动作时，gtk_radio_action_get_current_value() 返回的值。"
+"此动作为其动作组的的当前动作时，gtk_radio_action_get_current_value() 返回的"
+"值。"
 
 #: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:112
 msgid "Group"
@@ -3535,80 +3528,80 @@ msgstr "绘制指示器"
 msgid "If the toggle part of the button is displayed"
 msgstr "是否显示按钮的切换标志"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:498
 msgid "The orientation of the toolbar"
 msgstr "工具栏方向"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:506
 msgid "Toolbar Style"
 msgstr "工具栏风格"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:507
 msgid "How to draw the toolbar"
 msgstr "如何绘制工具栏"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:514
 msgid "Show Arrow"
 msgstr "显示箭头"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:515
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "工具栏显示不下时是否要显示箭头"
 
-#: gtk/gtktoolbar.c:527
+#: gtk/gtktoolbar.c:524
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "子部件是否在工具栏增长时获得额外空间"
 
-#: gtk/gtktoolbar.c:535
+#: gtk/gtktoolbar.c:532
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "同类子部件是否使用统一大小"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:539
 msgid "Spacer size"
 msgstr "间隔大小"
 
-#: gtk/gtktoolbar.c:543
+#: gtk/gtktoolbar.c:540
 msgid "Size of spacers"
 msgstr "工具栏上间隔的大小"
 
-#: gtk/gtktoolbar.c:552
+#: gtk/gtktoolbar.c:549
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "工具栏阴影与按钮之间的间距"
 
-#: gtk/gtktoolbar.c:560
+#: gtk/gtktoolbar.c:557
 msgid "Space style"
 msgstr "间隔风格"
 
-#: gtk/gtktoolbar.c:561
+#: gtk/gtktoolbar.c:558
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "间隔为垂直线或只是空白"
 
-#: gtk/gtktoolbar.c:568
+#: gtk/gtktoolbar.c:565
 msgid "Button relief"
 msgstr "按钮浮雕"
 
-#: gtk/gtktoolbar.c:569
+#: gtk/gtktoolbar.c:566
 msgid "Type of bevel around toolbar buttons"
 msgstr "工具栏按钮周围的立体效果类型"
 
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:573
 msgid "Style of bevel around the toolbar"
 msgstr "工具栏周围的立体效果样式"
 
-#: gtk/gtktoolbar.c:582
+#: gtk/gtktoolbar.c:579
 msgid "Toolbar style"
 msgstr "工具栏风格"
 
-#: gtk/gtktoolbar.c:583
+#: gtk/gtktoolbar.c:580
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "默认工具栏是只有文字，文字和图标，还是只有图标，等等"
 
-#: gtk/gtktoolbar.c:589
+#: gtk/gtktoolbar.c:586
 msgid "Toolbar icon size"
 msgstr "工具栏图标大小"
 
-#: gtk/gtktoolbar.c:590
+#: gtk/gtktoolbar.c:587
 msgid "Size of icons in default toolbars"
 msgstr "默认工具栏上的图标大小"
 

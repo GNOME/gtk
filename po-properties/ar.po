@@ -11,13 +11,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-13 15:32+0100\n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2004-03-13 19:32+0100\n"
 "Last-Translator: Christian Meyer <chrisime@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
@@ -496,8 +496,7 @@ msgstr "ملأ"
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
-msgstr ""
-"فيما إذا يجب تخصيص الفضاء الإضافي للإبن للإبن نفسه أو كحشو"
+msgstr "فيما إذا يجب تخصيص الفضاء الإضافي للإبن للإبن نفسه أو كحشو"
 
 #: gtk/gtkbox.c:161
 msgid "Padding"
@@ -515,8 +514,7 @@ msgstr "نوع التحزيم"
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
-msgstr ""
-"GtkPackType مؤشر لما إذا سيحزم الإبن بمرجع لبداية أو نهاية الأب"
+msgstr "GtkPackType مؤشر لما إذا سيحزم الإبن بمرجع لبداية أو نهاية الأب"
 
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:491 gtk/gtkpaned.c:239
 #: gtk/gtkruler.c:139
@@ -1294,51 +1292,51 @@ msgstr "القيمة في القائمة"
 msgid "Whether entered values must already be present in the list"
 msgstr "فيما إذا وجب على القيم المدخلة أن تكون موجودةً في القائمة"
 
-#: gtk/gtkcombobox.c:455
+#: gtk/gtkcombobox.c:457
 msgid "ComboBox model"
 msgstr "نموذج ComboBox"
 
-#: gtk/gtkcombobox.c:456
+#: gtk/gtkcombobox.c:458
 msgid "The model for the combo box"
 msgstr "نموذج لصندوق المجموعات"
 
-#: gtk/gtkcombobox.c:463
+#: gtk/gtkcombobox.c:465
 msgid "Wrap width"
 msgstr "عرض اللف"
 
-#: gtk/gtkcombobox.c:464
+#: gtk/gtkcombobox.c:466
 msgid "Wrap width for layouting the items in a grid"
 msgstr "عرض اللف عند تصميم العناصر في الشبكة"
 
-#: gtk/gtkcombobox.c:473
+#: gtk/gtkcombobox.c:475
 msgid "Row span column"
 msgstr "عمود إمتداد السطر"
 
-#: gtk/gtkcombobox.c:474
+#: gtk/gtkcombobox.c:476
 msgid "TreeModel column containing the row span values"
 msgstr "عمود نموذج الشجرة المحتوي على قيم إمتداد السطر"
 
-#: gtk/gtkcombobox.c:483
+#: gtk/gtkcombobox.c:485
 msgid "Column span column"
 msgstr "عمود إمتداد العمود"
 
-#: gtk/gtkcombobox.c:484
+#: gtk/gtkcombobox.c:486
 msgid "TreeModel column containing the column span values"
 msgstr "عمود TreeModel الحاوي لقيم مدى العمود"
 
-#: gtk/gtkcombobox.c:493
+#: gtk/gtkcombobox.c:495
 msgid "Active item"
 msgstr "العنصر النشط"
 
-#: gtk/gtkcombobox.c:494
+#: gtk/gtkcombobox.c:496
 msgid "The item which is currently active"
 msgstr "العنصر النشط حاليا"
 
-#: gtk/gtkcombobox.c:502
+#: gtk/gtkcombobox.c:504
 msgid "Appears as list"
 msgstr "يظهر كقائمة"
 
-#: gtk/gtkcombobox.c:503
+#: gtk/gtkcombobox.c:505
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 
@@ -1461,8 +1459,7 @@ msgstr "قيد المنتقى"
 #: gtk/gtkentry.c:468 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
-"موقع النهاية المعكوسة للمنتقى من المؤشر في الرموز"
+msgstr "موقع النهاية المعكوسة للمنتقى من المؤشر في الرموز"
 
 #: gtk/gtkentry.c:478
 msgid "Whether the entry contents can be edited"
@@ -1542,8 +1539,7 @@ msgstr "تنسيق س"
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr ""
-"الترصيف الأفقي، من 0 (يسار) إلى 1 (يمين). مقلوب لتصاميم RTL"
+msgstr "الترصيف الأفقي، من 0 (يسار) إلى 1 (يمين). مقلوب لتصاميم RTL"
 
 #: gtk/gtkentry.c:787
 msgid "Select on focus"
@@ -1553,19 +1549,19 @@ msgstr "اختيار عند التركيز"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "فيما اذا سيقع انتقاء محتويات خانة عند تركيزها"
 
-#: gtk/gtkentrycompletion.c:200
+#: gtk/gtkentrycompletion.c:222
 msgid "Completion Model"
 msgstr "نمط الانهاء"
 
-#: gtk/gtkentrycompletion.c:201
+#: gtk/gtkentrycompletion.c:223
 msgid "The model to find matches in"
 msgstr "النموذج الذي فيه توجد المقابلات"
 
-#: gtk/gtkentrycompletion.c:207
+#: gtk/gtkentrycompletion.c:229
 msgid "Minimum Key Length"
 msgstr "الطول الأدنى للمفتاح"
 
-#: gtk/gtkentrycompletion.c:208
+#: gtk/gtkentrycompletion.c:230
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "الطول الأدنى لمفتاح البحث حتى يمكن البحث عن المتطابقات"
 
@@ -1714,11 +1710,11 @@ msgstr "اظهار المخفي"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "فيما اذا وجب عرض الملفات و الدلائل المخفية"
 
-#: gtk/gtkfilechooserdefault.c:526
+#: gtk/gtkfilechooserdefault.c:550
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:527
+#: gtk/gtkfilechooserdefault.c:551
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "اسم خلفية GtkFileChooser التي ستستخدم إفتراضيّا"
 
@@ -2076,102 +2072,102 @@ msgstr "عرض التصميم"
 msgid "The height of the layout"
 msgstr "ارتفاع التصميم"
 
-#: gtk/gtkmenu.c:355
+#: gtk/gtkmenu.c:518
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:356
+#: gtk/gtkmenu.c:519
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 
-#: gtk/gtkmenu.c:362
+#: gtk/gtkmenu.c:525
 msgid "Vertical Padding"
 msgstr "الحشو العمودي"
 
-#: gtk/gtkmenu.c:363
+#: gtk/gtkmenu.c:526
 msgid "Extra space at the top and bottom of the menu"
 msgstr "مساحة اضافية لأعلى وأسفل القائمة"
 
-#: gtk/gtkmenu.c:371
+#: gtk/gtkmenu.c:534
 msgid "Vertical Offset"
 msgstr "التكافؤ العمودي"
 
-#: gtk/gtkmenu.c:372
+#: gtk/gtkmenu.c:535
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:380
+#: gtk/gtkmenu.c:543
 msgid "Horizontal Offset"
 msgstr "التكافؤ العمودي"
 
-#: gtk/gtkmenu.c:381
+#: gtk/gtkmenu.c:544
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:391
+#: gtk/gtkmenu.c:554
 msgid "Left Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:392 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:399
+#: gtk/gtkmenu.c:562
 msgid "Right Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:400
+#: gtk/gtkmenu.c:563
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:407
+#: gtk/gtkmenu.c:570
 msgid "Top Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:408
+#: gtk/gtkmenu.c:571
 msgid "The row number to attach the top of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:415
+#: gtk/gtkmenu.c:578
 msgid "Bottom Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:416 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:666
 msgid "Can change accelerators"
 msgstr "من الممكن تغيير مفاتيح الاختصار"
 
-#: gtk/gtkmenu.c:504
+#: gtk/gtkmenu.c:667
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "فيما اذا كان من الممكن تغيير مفاتيح اختصار القوائم بضغط مفتاح فوق عنصر "
 "القائمة"
 
-#: gtk/gtkmenu.c:509
+#: gtk/gtkmenu.c:672
 msgid "Delay before submenus appear"
 msgstr "التأخير قبل ظهور القوائم المحوية"
 
-#: gtk/gtkmenu.c:510
+#: gtk/gtkmenu.c:673
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "الوقت الأدنى الذي يجب أن يبقى فيه المؤشر فوق عنصر قائمة لتظهر القائمة المحوية"
 
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:680
 msgid "Delay before hiding a submenu"
 msgstr "التأخير قبل اخفاء قائمة محوية"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:681
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3913,16 +3909,13 @@ msgstr "سلسلة XML تصف واجهة المستخدم المدمجة"
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
-msgstr ""
-""
-"GtkAdjustment·المحدّد·لقيم·الموقع·الأفقي·لمنفذ·المشهد"
+msgstr "GtkAdjustment·المحدّد·لقيم·الموقع·الأفقي·لمنفذ·المشهد"
 
 #: gtk/gtkviewport.c:144
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
-msgstr ""
-"GtkAdjustment المحدّد لقيم الموقع العمودي لمنفذ المشهد"
+msgstr "GtkAdjustment المحدّد لقيم الموقع العمودي لمنفذ المشهد"
 
 #: gtk/gtkviewport.c:152
 msgid "Determines how the shadowed box around the viewport is drawn"
@@ -4164,7 +4157,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"إذا ضبط لـ TRUE فلن يكون للنافذة حجم أدنى. ضبط هذا لـ TRUE فكرة سيّئة  في 99% من الحالات."
+"إذا ضبط لـ TRUE فلن يكون للنافذة حجم أدنى. ضبط هذا لـ TRUE فكرة سيّئة  في 99% "
+"من الحالات."
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Grow"

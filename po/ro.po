@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-15 21:37+0200\n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2004-03-14 16:36+0200\n"
 "Last-Translator: Mişu Moldovan <dumol@go.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -947,7 +947,7 @@ msgstr ""
 "Nu am putut adăuga un favorit pentru %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4941
+#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4942
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1050,58 +1050,58 @@ msgstr "Salvează în _director:"
 msgid "Create in _folder:"
 msgstr "Creează _director:"
 
-#: gtk/gtkfilechooserdefault.c:3702
+#: gtk/gtkfilechooserdefault.c:3701
 msgid "Can't change to folder because it isn't local"
 msgstr "Nu pot schimba în directorul specificat deoarece nu este local"
 
-#: gtk/gtkfilechooserdefault.c:4147
+#: gtk/gtkfilechooserdefault.c:4148
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "combinaţia de taste %s nu există"
 
-#: gtk/gtkfilechooserdefault.c:4764
+#: gtk/gtkfilechooserdefault.c:4765
 msgid "Type name of new folder"
 msgstr "Introduceţi numele noului director"
 
-#: gtk/gtkfilechooserdefault.c:4793
+#: gtk/gtkfilechooserdefault.c:4794
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octeţi"
 
-#: gtk/gtkfilechooserdefault.c:4795
+#: gtk/gtkfilechooserdefault.c:4796
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f O"
 
-#: gtk/gtkfilechooserdefault.c:4797
+#: gtk/gtkfilechooserdefault.c:4798
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:4799
+#: gtk/gtkfilechooserdefault.c:4800
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:4844
+#: gtk/gtkfilechooserdefault.c:4845
 msgid "Today"
 msgstr "Azi"
 
-#: gtk/gtkfilechooserdefault.c:4846
+#: gtk/gtkfilechooserdefault.c:4847
 msgid "Yesterday"
 msgstr "Ieri"
 
-#: gtk/gtkfilechooserdefault.c:4857
+#: gtk/gtkfilechooserdefault.c:4858
 msgid "Unknown"
 msgstr "Necunoscut"
 
-#: gtk/gtkfilechooserdefault.c:4902
+#: gtk/gtkfilechooserdefault.c:4903
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Nu pot schimba în directorul specificat deoarece este o cale invalidă."
 
-#: gtk/gtkfilechooserdefault.c:4979
+#: gtk/gtkfilechooserdefault.c:4980
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1110,11 +1110,11 @@ msgstr ""
 "Nu am putut selecta %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5019
+#: gtk/gtkfilechooserdefault.c:5020
 msgid "Open Location"
 msgstr "Deschide locaţia"
 
-#: gtk/gtkfilechooserdefault.c:5043
+#: gtk/gtkfilechooserdefault.c:5044
 msgid "_Location:"
 msgstr "_Locaţie: "
 
@@ -1308,8 +1308,8 @@ msgstr "(Gol)"
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:594
-#: gtk/gtkfilesystemunix.c:1638 gtk/gtkfilesystemwin32.c:1176
+#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
+#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "eroare la obţinerea detalilor despre „%s”: %s"
@@ -1319,20 +1319,20 @@ msgstr "eroare la obţinerea detalilor despre „%s”: %s"
 msgid "error creating directory '%s': %s"
 msgstr "eroare la crearea directorului „%s”: %s"
 
-#: gtk/gtkfilesystemunix.c:547 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:566 gtk/gtkfilesystemwin32.c:417
 msgid "This file system does not support mounting"
 msgstr "Acest sistem de fişiere nu suportă „mount”"
 
-#: gtk/gtkfilesystemunix.c:555
+#: gtk/gtkfilesystemunix.c:574
 msgid "Filesystem"
 msgstr "Sistem de fişiere"
 
-#: gtk/gtkfilesystemunix.c:1239 gtk/gtkfilesystemwin32.c:794
+#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:794
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Salvarea favoritului a eşuat (%s)"
 
-#: gtk/gtkfilesystemunix.c:1534
+#: gtk/gtkfilesystemunix.c:1553
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "eroare la obţinerea detalilor despre '%s'"

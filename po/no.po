@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-15 16:19+0100\n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2004-03-15 16:20+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
@@ -939,7 +939,7 @@ msgstr ""
 "Kunne ikke legge til bokmerke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4928
+#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4942
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -957,15 +957,15 @@ msgstr ""
 "Kunne ikke bytte aktiv mappe til %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:805
+#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:809
 msgid "Home"
 msgstr "Hjem"
 
-#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:807
+#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:811
 msgid "Desktop"
 msgstr "Skrivebord"
 
-#: gtk/gtkfilechooserdefault.c:1479
+#: gtk/gtkfilechooserdefault.c:1491
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -974,12 +974,12 @@ msgstr ""
 "Kunne ikke opprette mappe %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1636
+#: gtk/gtkfilechooserdefault.c:1648
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Kunne ikke legge til bokmerke for %s fordi det ikke er en mappe."
 
-#: gtk/gtkfilechooserdefault.c:1719
+#: gtk/gtkfilechooserdefault.c:1731
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -988,112 +988,112 @@ msgstr ""
 "Kunne ikke fjerne bokmerke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2285
+#: gtk/gtkfilechooserdefault.c:2297
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Kunne ikke legge til bokmerke for %s fordi det er en ugyldig sti."
 
-#: gtk/gtkfilechooserdefault.c:2473
+#: gtk/gtkfilechooserdefault.c:2485
 msgid "Folder"
 msgstr "Mappe"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2520 gtk/gtkstock.c:276
+#: gtk/gtkfilechooserdefault.c:2532 gtk/gtkstock.c:276
 msgid "_Add"
 msgstr "_Legg til"
 
-#: gtk/gtkfilechooserdefault.c:2530 gtk/gtkstock.c:324
+#: gtk/gtkfilechooserdefault.c:2542 gtk/gtkstock.c:324
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: gtk/gtkfilechooserdefault.c:2616
+#: gtk/gtkfilechooserdefault.c:2628
 msgid "Name"
 msgstr "Navn"
 
-#: gtk/gtkfilechooserdefault.c:2638
+#: gtk/gtkfilechooserdefault.c:2650
 msgid "Size"
 msgstr "Størrelse"
 
-#: gtk/gtkfilechooserdefault.c:2650
+#: gtk/gtkfilechooserdefault.c:2662
 msgid "Modified"
 msgstr "Endret"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2712
+#: gtk/gtkfilechooserdefault.c:2724
 msgid "Create _Folder"
 msgstr "Opprett _mappe"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2819
+#: gtk/gtkfilechooserdefault.c:2831
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: gtk/gtkfilechooserdefault.c:2861
+#: gtk/gtkfilechooserdefault.c:2873
 msgid "_Browse for other folders"
 msgstr "_Se gjennom andre mapper"
 
-#: gtk/gtkfilechooserdefault.c:3099
+#: gtk/gtkfilechooserdefault.c:3111
 msgid "Save in _folder:"
 msgstr "Lagre i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:3101
+#: gtk/gtkfilechooserdefault.c:3113
 msgid "Create in _folder:"
 msgstr "Opprett i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:3690
+#: gtk/gtkfilechooserdefault.c:3701
 msgid "Can't change to folder because it isn't local"
 msgstr "Kan ikke gå til mappen fordi den ikke er lokal."
 
-#: gtk/gtkfilechooserdefault.c:4134
+#: gtk/gtkfilechooserdefault.c:4148
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "snarvei %s eksisterer ikke"
 
-#: gtk/gtkfilechooserdefault.c:4751
+#: gtk/gtkfilechooserdefault.c:4765
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: gtk/gtkfilechooserdefault.c:4780
+#: gtk/gtkfilechooserdefault.c:4794
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:4782
+#: gtk/gtkfilechooserdefault.c:4796
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:4784
+#: gtk/gtkfilechooserdefault.c:4798
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:4786
+#: gtk/gtkfilechooserdefault.c:4800
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:4831
+#: gtk/gtkfilechooserdefault.c:4845
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:4833
+#: gtk/gtkfilechooserdefault.c:4847
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:4844
+#: gtk/gtkfilechooserdefault.c:4858
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: gtk/gtkfilechooserdefault.c:4889
+#: gtk/gtkfilechooserdefault.c:4903
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Kan ikke gå til mappen du oppga fordi det er en ugyldig sti."
 
-#: gtk/gtkfilechooserdefault.c:4960
+#: gtk/gtkfilechooserdefault.c:4980
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1102,11 +1102,11 @@ msgstr ""
 "Kunne ikke velge %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:4996
+#: gtk/gtkfilechooserdefault.c:5020
 msgid "Open Location"
 msgstr "Åpne lokasjon"
 
-#: gtk/gtkfilechooserdefault.c:5011
+#: gtk/gtkfilechooserdefault.c:5044
 msgid "_Location:"
 msgstr "_Lokasjon: "
 
@@ -1297,8 +1297,8 @@ msgstr "(Tom)"
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:594
-#: gtk/gtkfilesystemunix.c:1638 gtk/gtkfilesystemwin32.c:1176
+#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
+#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "feil under henting av informasjon om «%s»: %s"
@@ -1308,20 +1308,20 @@ msgstr "feil under henting av informasjon om «%s»: %s"
 msgid "error creating directory '%s': %s"
 msgstr "feil under oppretting av katalog «%s»: %s"
 
-#: gtk/gtkfilesystemunix.c:547 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:566 gtk/gtkfilesystemwin32.c:417
 msgid "This file system does not support mounting"
 msgstr "Dette filsystemet støtter ikke montering"
 
-#: gtk/gtkfilesystemunix.c:555
+#: gtk/gtkfilesystemunix.c:574
 msgid "Filesystem"
 msgstr "Filsystem"
 
-#: gtk/gtkfilesystemunix.c:1239 gtk/gtkfilesystemwin32.c:794
+#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:794
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Lagring av bokmerke feilet (%s)"
 
-#: gtk/gtkfilesystemunix.c:1534
+#: gtk/gtkfilesystemunix.c:1553
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "feil under henting av informasjon for «%s»"

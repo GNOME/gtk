@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-15 19:53+0100\n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2004-03-15 19:53+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -966,7 +966,7 @@ msgstr ""
 "Es konnte kein Lesezeichen für %s hinzugefügt werden:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4940
+#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4942
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1074,64 +1074,64 @@ msgstr "In _Ordner speichern:"
 msgid "Create in _folder:"
 msgstr "In _Ordner anlegen"
 
-#: gtk/gtkfilechooserdefault.c:3702
+#: gtk/gtkfilechooserdefault.c:3701
 msgid "Can't change to folder because it isn't local"
 msgstr ""
 "Es konnte nicht in den angegebenen Ordner gewechselt werden, da dieser nicht "
 "lokal ist."
 
 # CHECK - shortcuts == Lesezeichen?
-#: gtk/gtkfilechooserdefault.c:4146
+#: gtk/gtkfilechooserdefault.c:4148
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "Das Lesezeichen %s existiert nicht"
 
 # CHECK
-#: gtk/gtkfilechooserdefault.c:4763
+#: gtk/gtkfilechooserdefault.c:4765
 msgid "Type name of new folder"
 msgstr "Name des anzulegenden Ordners eingeben"
 
-#: gtk/gtkfilechooserdefault.c:4792
+#: gtk/gtkfilechooserdefault.c:4794
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d Byte"
 msgstr[1] "%d Bytes"
 
-#: gtk/gtkfilechooserdefault.c:4794
+#: gtk/gtkfilechooserdefault.c:4796
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:4796
+#: gtk/gtkfilechooserdefault.c:4798
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:4798
+#: gtk/gtkfilechooserdefault.c:4800
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:4843
+#: gtk/gtkfilechooserdefault.c:4845
 msgid "Today"
 msgstr "Heute"
 
-#: gtk/gtkfilechooserdefault.c:4845
+#: gtk/gtkfilechooserdefault.c:4847
 msgid "Yesterday"
 msgstr "Gestern"
 
-#: gtk/gtkfilechooserdefault.c:4856
+#: gtk/gtkfilechooserdefault.c:4858
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: gtk/gtkfilechooserdefault.c:4901
+#: gtk/gtkfilechooserdefault.c:4903
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Es konnte nicht in den angegebenen Ordner gewechselt werden, da dessen Pfad "
 "ungültig ist."
 
-#: gtk/gtkfilechooserdefault.c:4972
+#: gtk/gtkfilechooserdefault.c:4980
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1140,11 +1140,11 @@ msgstr ""
 "%s konnte nicht gewählt werden:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5012
+#: gtk/gtkfilechooserdefault.c:5020
 msgid "Open Location"
 msgstr "Ort öffnen"
 
-#: gtk/gtkfilechooserdefault.c:5036
+#: gtk/gtkfilechooserdefault.c:5044
 msgid "_Location:"
 msgstr "_Ort:"
 
@@ -1341,8 +1341,8 @@ msgstr "(Leer)"
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:594
-#: gtk/gtkfilesystemunix.c:1638 gtk/gtkfilesystemwin32.c:1176
+#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
+#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "Fehler beim Abrufen der Informationen zu »%s«: %s"
@@ -1352,20 +1352,20 @@ msgstr "Fehler beim Abrufen der Informationen zu »%s«: %s"
 msgid "error creating directory '%s': %s"
 msgstr "Fehler beim Anlegen des Verzeichnisses »%s«: %s"
 
-#: gtk/gtkfilesystemunix.c:547 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:566 gtk/gtkfilesystemwin32.c:417
 msgid "This file system does not support mounting"
 msgstr "Dieses Dateisystem unterstützt das Einbinden nicht"
 
-#: gtk/gtkfilesystemunix.c:555
+#: gtk/gtkfilesystemunix.c:574
 msgid "Filesystem"
 msgstr "Dateisystem"
 
-#: gtk/gtkfilesystemunix.c:1239 gtk/gtkfilesystemwin32.c:794
+#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:794
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Speichern des Lesezeichens gescheitert (%s)"
 
-#: gtk/gtkfilesystemunix.c:1534
+#: gtk/gtkfilesystemunix.c:1553
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "Fehler beim Abrufen der Informationen zu »%s«"

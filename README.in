@@ -28,6 +28,11 @@ See the file 'INSTALL'
 Release notes
 =============
 
+* The new GtkFileChooser widget emphasizes simplicity and thus does 
+  not provide a navigation entry by default when opening files. 
+  Experienced command line users will likely want to make heavy use of
+  the location dialog brought up by the Control-L key shortcut.
+
 * As compared to GTK+-1.2, the default configuration of GTK+-2 has been 
   stream-lined to reduce confusion on the part of new users or users 
   coming from other environments.  Users used to older versions of 
@@ -62,7 +67,7 @@ Release notes
   from the library, on others not. In no case can applications
   use these private symbols.
 
-* GTK+-2.3 now requires version 2 of Xft; old fashioned core X
+* GTK+-2.4 now requires version 2 of Xft; old fashioned core X
   fonts are no longer supported.
 
 * There is a bug in the Xft library in XFree86-4.1 and possibly previous
@@ -83,16 +88,19 @@ Release notes
 
 * The assumption of GLib and GTK+ by default is that filenames on the
   filesystem are encoded in UTF-8 rather than the encoding of the locale;
-  The GTK+ developers consider that having filenames whose interpretation
+  the GTK+ developers consider that having filenames whose interpretation
   depends on the current locale is fundamentally a bad idea.
 
   If you have filenames encoded in the encoding of your locale, then
-  you may want to set the G_BROKEN_FILENAMES environment variable:
+  you may want to set the G_FILENAME_ENCODING environment variable:
   
-   G_BROKEN_FILENAMES=1
-   export G_BROKEN_FILENAMES
+   G_FILENAME_ENCODING=@local
+   export G_FILENAME_ENCODING
 
-  Best integration of GTK+-2.2 with the environment is achieved by 
+  (Earlier versions of GLib-2.x required a different environment variable
+  setting; G_BROKEN_FILENAMES=1 to achieve the same effect; this 
+  is still supported, but G_FILENAME_ENCODING is preferred.)
+  Best integration of GTK+-2.4 with the environment is achieved by 
   using a UTF-8 locale.
 
 How to report bugs

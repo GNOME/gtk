@@ -1,3 +1,37 @@
+Overview of Changes from GTK+ 2.3.6 to GTK+ 2.4.0
+=================================================
+* GtkFileChooser
+ - Handle icon theme changes [Federico, Jonathan]
+ - Add reordering bookmarks via DND [Federico]
+ - Cache filesystem data inside GtkFileSystemUnix backend [Morten Welinder]
+ - Implement local-only mode so that apps don't get remote paths
+   they don't expect [Owen Taylor]
+ - Add Alt-Down keybinding [Mark McLoughlin, Owen]
+ - Major rewrite of location dialog completion code [Jonathan]
+ - Bug fixes [Federico, Jonathan, Morten, Mark, Owen, Anders Carlsson, 
+   Soeren Sandmann, Olivier Andrieu]
+* GtkComboBox [Matthias Clasen]
+ - Handle the case of no-active-row properly
+ - Improve positioning of popup
+ - Miscellaneous bug fixes
+* Win32 [Tor]
+ - Handle different install locations for gdk-pixbuf loaders
+ - Bug fixes [John Ehresman, Bruce Hochstetler, Dave Neary]
+* Improve handling of foreign GdkWindows on destruction [Soeren, Owen]
+* Require Control-Tab to focus labels [Owen]
+* RTL flipping for GtkArrow [Semion Chichelnitsky]
+* Support justifcation with wrapping off in GtkTextView [Owen, Felipe Heidrich]
+* Change layout algorithm for mixed gridded/non-gridded menus
+  to fix performance problems [Soeren, Owen, Christian Persch]
+* Doc improvements [Matthias, Owen]
+* Misc bug fixes
+* Updated translations (ar,az,ca,cs,da,de,es,fr,ga,hr,it,ja,lt,no,nl,pt,ro,
+  ru,sq,uk,zh_CN)
+
+Other contributors: Dave Bordoley, Hans Breuer, David L. Cooper II, 
+  Dennis Cranston, Dov Grobgeld, Niklas Knuttson, Kjartan Maraas, 
+  Michael Natterer, Nils O. Selåsdal, Philip K Warren, Dan Winship
+
 Overview of Changes from GTK+ 2.3.5 to GTK+ 2.3.6
 =================================================
 * GtkComboBox
@@ -136,7 +170,7 @@ Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.3
 * Add Xft settings for hinting and antialiasing. [Federico, Owen]
 * Make size of indicator in menu items themeable. [Bill Hanemann, 
   Narayana Pattipati, Matthias]
-* Fixes to GtkIconTheme [Tosten Schoenfeld]
+* Fixes to GtkIconTheme [Torsten Schoenfeld]
 * Improve drawing of GtkExpander. [Mark McLoughlin]
 * Improve drawing of paned handles. [Soeren]
 * Remove broken hangul input module. [Changwoo Ryu]
@@ -194,7 +228,7 @@ Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 * GtkCalendar supports starting the week on any day [Matthias]
 * Make GtkToolbar compatible with 2.2 again [Soeren]
 * Misc GtkToolbar fixes and API improvements [Christian Persch, 
-  Olivar Avramchenko, Jody, Soeren]
+  Olexiy Avramchenko, Jody, Soeren]
 * Misc GtkUIManager fixes and API improvements.  [Jody, Matthias, Jeff Franks]
 * Add a way to lock individual accelerator paths  [Matthias]
 * Add gtk_menu_shell_cancel() to emit the "cancel" signal on 
@@ -297,7 +331,7 @@ Overview of Changes from GTK+-2.2.x to GTK+-2.3.0
    interface (UI is still a work in progress) [Owen Taylor, 
    Federico Mena Quintero]
  - New combo box widgets: GtkComboBox, GtkComboBoxEntry [Kristian Rietveld]
- - New "disclosure triangle" widget: GtkExpander [Marc McLoughlin]
+ - New "disclosure triangle" widget: GtkExpander [Mark McLoughlin]
  - "Picker button" widgets based on code from libgnomeui: 
    GtkFontButton, GtkColorButton [Matthias Clasen]
 
@@ -329,7 +363,7 @@ Overview of Changes from GTK+-2.2.x to GTK+-2.3.0
 
 * GtkTextView [Matthias]
  - Add properties "accepts_tab" [Soeren], "overwrite" property 
-   [Jeroen Zwarepoorte], "buffer"
+   [Jeroen Zwartepoorte], "buffer"
  - Add gtk_text_buffer_select_range()
  - Implement drag-selection by words/lines (also for Gtkentry)
  - Some fixes to invisible text handling
@@ -400,7 +434,7 @@ Overview of Changes from GTK+-2.2.x to GTK+-2.3.0
 * Documentation
  - Use XML source for man pages; add man pages for tools that didn't
    have them before [Matthias]
- - Tutorial improvements [Sebasitian Rittau, Tony Gale, Roger Leigh, Matthias]
+ - Tutorial improvements [Sebastian Rittau, Tony Gale, Roger Leigh, Matthias]
  - FAQ improvements [Tony, Gonzalo Odiard, Owen]
  - Misc documentation improvements [Matthias, Frederic Lespez, Tomas Ogren, 
    Martin Pool, Mariano Suarez-Alvarez]

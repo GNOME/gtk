@@ -1,3 +1,7 @@
+Tue Mar 16 13:17:26 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.4.0 ===
+
 Tue Mar 16 00:13:19 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktreestore.sgml: Remove cvs conflict

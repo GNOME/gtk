@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
-"Report-Msgid-Bugs-To: Duarte Loreto <happyguy_pt@hotmail.com>\n"
-"POT-Creation-Date: 2004-03-15 21:57+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2004-03-15 22:00+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -948,7 +948,7 @@ msgstr ""
 "Incapaz de adicionar um marcador para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4941
+#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4942
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1052,58 +1052,58 @@ msgstr "Gravar na _pasta:"
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:3702
+#: gtk/gtkfilechooserdefault.c:3701
 msgid "Can't change to folder because it isn't local"
 msgstr "Incapaz de ir para a pasta especificada por não ser local"
 
-#: gtk/gtkfilechooserdefault.c:4147
+#: gtk/gtkfilechooserdefault.c:4148
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "atalho %s não existe"
 
-#: gtk/gtkfilechooserdefault.c:4764
+#: gtk/gtkfilechooserdefault.c:4765
 msgid "Type name of new folder"
 msgstr "Introduza o nome da nova pasta"
 
-#: gtk/gtkfilechooserdefault.c:4793
+#: gtk/gtkfilechooserdefault.c:4794
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:4795
+#: gtk/gtkfilechooserdefault.c:4796
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:4797
+#: gtk/gtkfilechooserdefault.c:4798
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:4799
+#: gtk/gtkfilechooserdefault.c:4800
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:4844
+#: gtk/gtkfilechooserdefault.c:4845
 msgid "Today"
 msgstr "Hoje"
 
-#: gtk/gtkfilechooserdefault.c:4846
+#: gtk/gtkfilechooserdefault.c:4847
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: gtk/gtkfilechooserdefault.c:4857
+#: gtk/gtkfilechooserdefault.c:4858
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserdefault.c:4902
+#: gtk/gtkfilechooserdefault.c:4903
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Incapaz de ir para a pasta especificada por ser um caminho inválido."
 
-#: gtk/gtkfilechooserdefault.c:4979
+#: gtk/gtkfilechooserdefault.c:4980
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1112,11 +1112,11 @@ msgstr ""
 "Incapaz de seleccionar %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5019
+#: gtk/gtkfilechooserdefault.c:5020
 msgid "Open Location"
 msgstr "Abrir Localização"
 
-#: gtk/gtkfilechooserdefault.c:5043
+#: gtk/gtkfilechooserdefault.c:5044
 msgid "_Location:"
 msgstr "_Localização:"
 
@@ -1314,8 +1314,8 @@ msgstr "(Vazio)"
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:594
-#: gtk/gtkfilesystemunix.c:1638 gtk/gtkfilesystemwin32.c:1176
+#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
+#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "erro ao obter informação de '%s': %s"
@@ -1325,20 +1325,20 @@ msgstr "erro ao obter informação de '%s': %s"
 msgid "error creating directory '%s': %s"
 msgstr "erro ao criar directório '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:547 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:566 gtk/gtkfilesystemwin32.c:417
 msgid "This file system does not support mounting"
 msgstr "Este sistema de ficheiros não suporta ser montado"
 
-#: gtk/gtkfilesystemunix.c:555
+#: gtk/gtkfilesystemunix.c:574
 msgid "Filesystem"
 msgstr "Sistema de ficheiros"
 
-#: gtk/gtkfilesystemunix.c:1239 gtk/gtkfilesystemwin32.c:794
+#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:794
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Falha ao gravar marcador (%s)"
 
-#: gtk/gtkfilesystemunix.c:1534
+#: gtk/gtkfilesystemunix.c:1553
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "erro ao obter informação de '%s'"

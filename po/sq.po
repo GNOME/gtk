@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 19:33+0100\n"
+"POT-Creation-Date: 2004-03-16 14:27-0500\n"
 "PO-Revision-Date: 2004-03-16 19:35+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -32,8 +32,10 @@ msgstr "File '%s' nuk përmban të dhëna"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:813
 #: gdk-pixbuf/gdk-pixbuf-io.c:939 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
@@ -85,7 +87,8 @@ msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1171 gdk-pixbuf/gdk-pixbuf-io.c:1287
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
+msgstr ""
+"Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1200
 msgid "Insufficient memory to save image to callback"
@@ -336,8 +339,10 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
@@ -398,7 +403,8 @@ msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
+msgstr ""
+"Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -438,7 +444,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Gabim fatal gjatë leximit të file PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
 "79 simbole."
@@ -449,7 +456,8 @@ msgstr "Kyçet për segmentet e tekstit PNG duhet të jenë simbole ASCII."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "Vlera %s për segmentin e tekstit PNG nuk mund të konvertohet në familjen ISO-"
 "8859-1."
@@ -683,7 +691,8 @@ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
 
 #: gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
+msgstr ""
+"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
@@ -719,7 +728,8 @@ msgstr "Nuk arrij të siguroj kujtesë për ngarkimin e figurës XPM"
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
+msgstr ""
+"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
 
 #: gdk-pixbuf/io-xpm.c:1543
 msgid "The XPM image format"
@@ -773,7 +783,7 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "kalendari:week_start:0"
 
-#: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbuttion.c:573
+#: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
 msgstr "Zgjidh një ngjyrë"
 
@@ -978,7 +988,8 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1648
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr "I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
+msgstr ""
+"I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
 
 #: gtk/gtkfilechooserdefault.c:1731
 #, c-format
@@ -1161,7 +1172,8 @@ msgstr "_Riemërto File"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
 
 #: gtk/gtkfilesel.c:1441
@@ -1534,7 +1546,8 @@ msgstr "E pamundur gjetja e file së figurës në pixmap_path: \"%s\""
 #: gtk/gtkrc.c:3467
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
+msgstr ""
+"Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:268
@@ -1882,52 +1895,52 @@ msgid "Empty"
 msgstr "Bosh"
 
 #. ID
-#: modules/input/imam-et.c:453
+#: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
 msgstr "Amharike (EZ+)"
 
 #. ID
-#: modules/input/imcedilla.c:90
+#: modules/input/imcedilla.c:91
 msgid "Cedilla"
 msgstr "Cedilla"
 
 #. ID
-#: modules/input/imcyrillic-translit.c:216
+#: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
 msgstr "Cirilike (Tejshkronjëzuar)"
 
 #. ID
-#: modules/input/iminuktitut.c:126
+#: modules/input/iminuktitut.c:127
 msgid "Inukitut (Transliterated)"
 msgstr "Inukitut (Tejshkronjëzuar)"
 
 #. ID
-#: modules/input/imipa.c:144
+#: modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: modules/input/imthai-broken.c:177
+#: modules/input/imthai-broken.c:178
 msgid "Thai (Broken)"
 msgstr "Tajlandeze (Broken)"
 
 #. ID
-#: modules/input/imti-er.c:452
+#: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrigna-Eritrean (EZ+)"
 
 #. ID
-#: modules/input/imti-et.c:452
+#: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tigrigna-Ethiopian (EZ+)"
 
 #. ID
-#: modules/input/imviqr.c:243
+#: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnameze (VIQR)"
 
 #. ID
-#: modules/input/imxim.c:27
+#: modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "Metodë Futjeje për X"
 
@@ -1935,4 +1948,3 @@ msgstr "Metodë Futjeje për X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
-

@@ -1,3 +1,7 @@
+Mon Mar 15 15:01:59 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.4.0 ===
+
 2004-03-15  Tor Lillqvist  <tml@iki.fi>
 
 	* queryloaders.c (main): [Win32] Look up installation prefix at
