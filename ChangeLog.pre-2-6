@@ -1,3 +1,10 @@
+2002-01-16  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_scroll_pages): update
+	cursor_y_pos with clamped delta rather than theoretical delta
+	(#68788). Also, if we can't page up/down further then jump 
+	to top/bottom of the document.
+
 Wed Jan 16 19:33:41 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_map): Refresh

@@ -4459,6 +4459,7 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
                             gint         count)
 {
   gdouble newval;
+  gdouble oldval;
   GtkAdjustment *adj;
   gint cursor_x_pos, cursor_y_pos;
   GtkTextIter new_insert;
@@ -4486,22 +4487,38 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
   gtk_text_layout_validate_yrange (text_view->layout, &anchor, y0, y1);
   /* FIXME do we need to update the adjustment ranges here? */
+
+  if (count < 0 && adj->value <= (adj->lower + 1e-12))
+    {
+      /* already at top, just be sure we are at offset 0 */
+      gtk_text_buffer_get_start_iter (get_buffer (text_view), &new_insert);
+      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+    }
+  else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
+    {
+      /* already at bottom, just be sure we are at the end */
+      gtk_text_buffer_get_end_iter (get_buffer (text_view), &new_insert);
+      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+    }
+  else
+    {
+      gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, &cursor_y_pos);
+
+      newval = adj->value;
+      oldval = adj->value;
   
-  gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, &cursor_y_pos);
+      newval += count * adj->page_increment;
 
-  newval = adj->value;
+      set_adjustment_clamped (adj, newval);
+      cursor_y_pos += adj->value - oldval;
 
-  newval += count * adj->page_increment;
+      gtk_text_layout_get_iter_at_pixel (text_view->layout, &new_insert, cursor_x_pos, cursor_y_pos);
+      clamp_iter_onscreen (text_view, &new_insert);
+      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
 
-  cursor_y_pos += newval - adj->value;
-  set_adjustment_clamped (adj, newval);
-
-  gtk_text_layout_get_iter_at_pixel (text_view->layout, &new_insert, cursor_x_pos, cursor_y_pos);
-  clamp_iter_onscreen (text_view, &new_insert);
-  gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
-
-  gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
-
+      gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
+    }
+  
   /* Adjust to have the cursor _entirely_ onscreen, move_mark_onscreen
    * only guarantees 1 pixel onscreen.
    */
