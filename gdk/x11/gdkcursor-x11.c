@@ -515,7 +515,7 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
 	    *md |= 1 << (i % 8);
 	  
 	  src += n_channels;
-	  if (i % 8 == 0)
+	  if (i % 8 == 7)
 	    {
 	      d++; 
 	      md++;

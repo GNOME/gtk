@@ -1,3 +1,8 @@
+2003-07-11  Morten Welinder  <terra@gnome.org>
+
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_pixbuf): Fix memory
+	access error.  (#69436)
+
 Fri Jul 11 14:32:43 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Landing GtkTreeModelFilter and the completion code. (Test program
