@@ -62,10 +62,7 @@ record_bytes (gpointer mem, gsize bytes)
 static gpointer
 limited_try_malloc (gsize n_bytes)
 {
-  gpointer mem = malloc (n_bytes + HEADER_SPACE);
-  //fprintf (stderr, "malloced %p\n", mem);
-  
-  return record_bytes (mem, n_bytes);
+  return record_bytes (malloc (n_bytes + HEADER_SPACE), n_bytes);
 }
 
 static gpointer
@@ -81,9 +78,6 @@ limited_calloc (gsize n_blocks,
   int bytes = n_blocks * n_block_bytes + HEADER_SPACE;
   gpointer mem = malloc (bytes);
   memset (mem, 0, bytes);
-
-  //fprintf (stderr, "calloced %p\n", mem);
-  
   return record_bytes (mem, n_blocks * n_block_bytes);
 }
 
@@ -91,14 +85,10 @@ static void
 limited_free (gpointer mem)
 {
   gpointer real = ((char*)mem) - HEADER_SPACE;
-  gint new_allocation;
-  
-  // fprintf (stderr, "Freeing %p\n", real);
 
   g_assert (current_allocation >= 0);
-  new_allocation = current_allocation - GPOINTER_TO_INT (*(void**)real);
-  g_assert (new_allocation >= 0);
-  current_allocation = new_allocation;
+  current_allocation -= GPOINTER_TO_INT (*(void**)real);
+  g_assert (current_allocation >= 0);
   
   free (real);
 }
@@ -386,7 +376,6 @@ main (int argc, char **argv)
   
   putenv ("GDK_PIXBUF_MODULEDIR="BUILT_MODULES_DIR);
 
- #if 0
   TEST (valid_ppm_1, TRUE);
   TEST (valid_ppm_2, TRUE);
   TEST (valid_ppm_3, FALSE); /* image is valid, but we don't handle maxval > 255 */
@@ -414,17 +403,17 @@ main (int argc, char **argv)
 
   TEST (valid_ico_test, TRUE);
   TEST (ico_test_1, FALSE);
-  //  TEST (ico_test_2, FALSE);
+  TEST (ico_test_2, FALSE);
 
   TEST (valid_jpeg_test, TRUE);
   
   TEST (valid_tiff1_test, TRUE);
   TEST (tiff1_test_1, FALSE);
   TEST (tiff1_test_2, FALSE);
-#endif
-  TEST (tiff1_test_3, FALSE); /* Segfault in TIFFReadDirectory with libtiff 3.5.5, fixed in 3.5.7 */
-
 #if 0
+  TEST (tiff1_test_3, FALSE); /* Segfault in TIFFReadDirectory with libtiff 3.5.5, fixed in 3.5.7 */
+#endif
+
   TEST (valid_tga_test, TRUE);
   TEST (tga_test_1, FALSE);
 
@@ -447,7 +436,7 @@ main (int argc, char **argv)
   TEST_RANDOMLY_MODIFIED (valid_tga_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_ico_test, FALSE);
-#endif  
+  
 
   /* memory tests */
 
@@ -466,17 +455,20 @@ main (int argc, char **argv)
        returns successfully, even though they have called the error
        handler with an 'out of memory' message.
   */
+
   max_allocation = PRETEND_MEM_SIZE;
   almost_exhaust_memory ();
 
   g_print ("Allocated %dK of %dK, %dK free during tests\n",
            current_allocation / 1024, max_allocation / 1024,
            (max_allocation - current_allocation) / 1024);
-  LOWMEMTEST (valid_tiff1_test);
-#if 0  
+  
+#if 0
+  LOWMEMTEST (valid_tiff1_test);  
+#endif
   LOWMEMTEST (valid_gif_test);
   LOWMEMTEST (valid_png_test);
   LOWMEMTEST (valid_jpeg_test);
-#endif  
+  
   return 0;
 }
