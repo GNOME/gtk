@@ -1,15 +1,15 @@
 # This is the German locale definition for Gtk+.
-# Copyright (C) 1998 Free Software Foundation, Inc.
-# Matthias Warkus <mawarkus@gnome.org>, 2001.
-# Daniel Egger <Daniel.Egger@t-online>, 1998.
+# Copyright (C) 1998-2002 Free Software Foundation, Inc.
+# Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
+# Daniel Egger <Daniel.Egger@t-online>, 1998.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.0\n"
-"POT-Creation-Date: 2002-03-08 14:45-0500\n"
-"PO-Revision-Date: 2002-03-02 14:40+0100\n"
-"Last-Translator: Sven Neumann <sven@gimp.org>\n"
+"Project-Id-Version: gtk+ 2.0.x\n"
+"POT-Creation-Date: 2002-03-16 16:35+0100\n"
+"PO-Revision-Date: 2002-03-16 16:33+0100\n"
+"Last-Translator: Christian Meyer <chrisime@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,25 +18,25 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Datei `%s' konnte nicht geöffnet werden: %s"
+msgstr "Datei »%s« konnte nicht geöffnet werden: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Bilddatei `%s' enthält keine Daten"
+msgstr "Bilddatei »%s« enthält keine Daten"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
 msgstr ""
-"Es ist nicht bekannt, wie die Animation in der Datei `%s' geladen werden kann"
+"Es ist nicht bekannt, wie die Animation in der Datei »%s« geladen werden kann"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Bild `%s' konnte nicht geladen werden: Grund unbekannt, vermutlich eine "
+"Bild »%s« konnte nicht geladen werden: Grund unbekannt, vermutlich eine "
 "defekte Bilddatei"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
@@ -45,7 +45,7 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Animation `%s' kann nicht geladen werden: Grund unbekannt, vermutlich eine "
+"Animation »%s« kann nicht geladen werden: Grund unbekannt, vermutlich eine "
 "defekte Animationsdatei"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:354
@@ -65,12 +65,12 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "Bildtyp `%s' wird nicht unterstützt"
+msgstr "Bildtyp »%s« wird nicht unterstützt"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:538
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Das Bild-Dateiformat für Datei `%s' konnte nicht erkannt werden"
+msgstr "Das Bild-Dateiformat für Datei »%s« konnte nicht erkannt werden"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:544
 msgid "Unrecognized image file format"
@@ -79,12 +79,12 @@ msgstr "Unbekanntes Bild-Dateiformat"
 #: gdk-pixbuf/gdk-pixbuf-io.c:614
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
-msgstr "Wir wissen nicht, wie das Bild in Datei `%s' geladen werden kann"
+msgstr "Wir wissen nicht, wie das Bild in Datei »%s« geladen werden kann"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:647
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "Bild `%s' konnte nicht geladen werden: %s"
+msgstr "Bild »%s« konnte nicht geladen werden: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:752
 #, c-format
@@ -96,7 +96,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr "`%s' konnte nicht zum Schreiben geöffnet werden: %s"
+msgstr "»%s« konnte nicht zum Schreiben geöffnet werden: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:880
 #, c-format
@@ -104,13 +104,13 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"`%s' konnte nach dem Schreiben des Bildes nicht geschlossen werden, evtl. "
+"»%s« konnte nach dem Schreiben des Bildes nicht geschlossen werden, evtl. "
 "wurden nicht alle Daten gespeichert: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Schrittweises Laden des Bildtyps `%s' wird nicht unterstützt"
+msgstr "Schrittweises Laden des Bildtyps »%s« wird nicht unterstützt"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
@@ -118,7 +118,7 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Interner Fehler: Bildlader-Modul `%s' schaffte es nicht, das Laden eines "
+"Interner Fehler: Bildlader-Modul »%s« schaffte es nicht, das Laden eines "
 "Bildes zu beginnen, gab aber keinen Grund für den Fehler an"
 
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
@@ -129,7 +129,7 @@ msgstr "Nicht genug Speicher, um Bitmap-Bild zu laden"
 msgid "BMP image has unsupported header size"
 msgstr "Vorspannlänge des BMP-Bildes wird nicht unterstützt"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "Vorspanndaten des BMP-Bildes sind Unsinn"
 
@@ -177,7 +177,7 @@ msgstr "Nicht genug Speicher, um ICO-Bild zu laden"
 msgid "Failure reading GIF: %s"
 msgstr "Fehler beim Lesen von GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1541
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Daten in der GIF-Datei fehlten (vielleicht wurde sie irgendwie verstümmelt?)"
@@ -199,8 +199,8 @@ msgstr "Ungültiger Code ist aufgetreten"
 msgid "Circular table entry in GIF file"
 msgstr "Ringschluss in Tabelleneinträgen in GIF-Datei"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
-#: gdk-pixbuf/io-gif.c:1518
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1529
 msgid "Not enough memory to load GIF file"
 msgstr "Nicht genug Speicher, um GIF-Bild zu laden"
 
@@ -217,20 +217,24 @@ msgstr "Datei scheint keine GIF-Datei zu sein"
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Version %s des GIF-Dateiformats wird nicht unterstützt"
 
-#: gdk-pixbuf/io-gif.c:1146
+#: gdk-pixbuf/io-gif.c:1144
+msgid "GIF image contained a frame with height or width 0."
+msgstr "Die GIF-Datei enthielt ein Einzelbild, mit Höhe oder Breite 0."
+
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 "Die GIF-Datei enthielt ein Einzelbild, das außerhalb der Bildgrenzen "
 "erscheint."
 
-#: gdk-pixbuf/io-gif.c:1162
+#: gdk-pixbuf/io-gif.c:1173
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
-"Das erste Einzelbild des GIF-Bildes hatte `zum vorigen zurück gehen' als "
+"Das erste Einzelbild des GIF-Bildes hatte »zum vorherigen zurück gehen« als "
 "Verlassensmodus."
 
 # gdk-pixbuf/io-gi178
-#: gdk-pixbuf/io-gif.c:1197
+#: gdk-pixbuf/io-gif.c:1208
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -238,7 +242,7 @@ msgstr ""
 "Das GIF-Bild hat keine globale Farbtabelle, und ein Einzelbild darin hat "
 "keine lokale Farbtabelle."
 
-#: gdk-pixbuf/io-gif.c:1426
+#: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-Bild wurde verstümmelt oder ist unvollständig."
 
@@ -265,7 +269,7 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"JPEG-Qualität muss ein Wert zwischen 0 und 100 sein; Wert `%s' konnte nicht "
+"JPEG-Qualität muss ein Wert zwischen 0 und 100 sein; Wert »%s« konnte nicht "
 "verarbeitet werden."
 
 #: gdk-pixbuf/io-jpeg.c:679
@@ -273,13 +277,13 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"JPEG-Qualität muss ein Wert zwischen 0 und 100 sein; Wert `%d' ist nicht "
+"JPEG-Qualität muss ein Wert zwischen 0 und 100 sein; Wert »%d« ist nicht "
 "erlaubt."
 
 #: gdk-pixbuf/io-png.c:161
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "Fataler Fehler in PNG-Bilddatei: %s"
+msgstr "Schwerer Fehler in PNG-Bilddatei: %s"
 
 #: gdk-pixbuf/io-png.c:273
 msgid "Insufficient memory to load PNG file"
@@ -291,17 +295,17 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"Ungenügender Speicher, um ein %ldx%ld-Bild zu speichern; veSie, einige "
-"Anwendungen zu beenden, um den Speicherverbrauch zu reduzieren"
+"Ungenügender Speicher, um ein %ldx%ld-Bild zu speichern; versuchen Sie, "
+"einige Anwendungen zu beenden, um den Speicherverbrauch zu reduzieren"
 
 #: gdk-pixbuf/io-png.c:642
 msgid "Fatal error reading PNG image file"
-msgstr "Fataler Fehler beim Lesen einer PNG-Bilddatei"
+msgstr "Schwerer Fehler beim Lesen einer PNG-Bilddatei"
 
 #: gdk-pixbuf/io-png.c:691
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "FFehler beim Lesen einer PNG-Bilddatei: %s"
+msgstr "Schwerer Fehler beim Lesen einer PNG-Bilddatei: %s"
 
 #: gdk-pixbuf/io-png.c:757
 msgid ""
@@ -458,7 +462,7 @@ msgstr "Speicher für TGA-Vorspann kann nicht bereitgestellt werden"
 
 #: gdk-pixbuf/io-tga.c:808
 msgid "Too big value in the infolen field of TGA header."
-msgstr "Zu großer Wert im Feld 'infolen' des TGA-Vorspanns."
+msgstr "Zu großer Wert im Feld »infolen« des TGA-Vorspanns."
 
 #: gdk-pixbuf/io-tga.c:832
 msgid "Can't allocate memory for TGA cmap temporary buffer"
@@ -645,7 +649,7 @@ msgstr "Der auf Kürzeländerungen hin zu überwachende Ausdruck"
 
 #: gtk/gtkaccellabel.c:143
 msgid "Accelerator Widget"
-msgstr "Kürzelwidget"
+msgstr "Kürzel-Widget"
 
 #: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
@@ -832,7 +836,7 @@ msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
 msgstr ""
-"Text des Beschriftungswidgets im Knopf, falls der Knopf ein solches enthält."
+"Text des Beschriftungs-Widgets im Knopf, falls der Knopf ein solches enthält."
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
@@ -855,7 +859,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Falls aktiv, wird die Beschriftung nicht angezeigt, sondern verwendet, um "
-"einen Repertoireeintrag zu wählen"
+"einen Repertoire-Eintrag zu wählen"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -997,7 +1001,7 @@ msgstr "Der darzustellende Pixbuf."
 
 #: gtk/gtkcellrendererpixbuf.c:113
 msgid "Pixbuf Expander Open"
-msgstr "Pixbuf Ausklapper offen"
+msgstr "Pixbuf-Ausklapper offen"
 
 #: gtk/gtkcellrendererpixbuf.c:114
 msgid "Pixbuf for open expander."
@@ -1005,7 +1009,7 @@ msgstr "Pixbuf für offenen Ausklapper."
 
 #: gtk/gtkcellrendererpixbuf.c:122
 msgid "Pixbuf Expander Closed"
-msgstr "Pixbuf Ausklapper geschlossen"
+msgstr "Pixbuf-Ausklapper geschlossen"
 
 #: gtk/gtkcellrendererpixbuf.c:123
 msgid "Pixbuf for closed expander."
@@ -1246,7 +1250,7 @@ msgstr "Schriftskalierung einstellen"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
-msgstr "Soll dieses TagSchrifgröße um einen Faktor skalieren?"
+msgstr "Soll dieses Tag die Schrifgröße um einen Faktor skalieren?"
 
 #: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
 msgid "Rise set"
@@ -1326,7 +1330,7 @@ msgstr "Inkonsistent"
 
 #: gtk/gtkcheckmenuitem.c:124
 msgid "Whether to display an \"inconsistent\" state."
-msgstr "Soll der Zustand \"inkonsistent\" angezeigt werden?"
+msgstr "Soll der Zustand »inkonsistent« angezeigt werden?"
 
 #: gtk/gtkcolorsel.c:582
 msgid ""
@@ -1358,7 +1362,7 @@ msgid ""
 msgstr ""
 "Klicken Sie auf diesen Paletteneintrag, um ihn zur aktuellen Farbe zu "
 "machen. Um diesen Eintrag zu ändern, ziehen Sie einen Farbfleck darauf oder "
-"rechtsklicken Sie darauf und wählen Sie \"Farbe hier speichern.\""
+"rechtsklicken Sie darauf und wählen Sie »Farbe hier speichern«."
 
 #: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
@@ -1390,7 +1394,9 @@ msgstr "Aktuelles Alpha"
 
 #: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "Die aktuelle Deckkraft (0 ist völlig transparent, 65535 völlig opak)"
+msgstr ""
+"Die aktuelle Deckkraft (0 ist völlig transparent, 65535 völlig "
+"undurchsichtig)"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
@@ -1431,7 +1437,7 @@ msgstr "_Sättigung:"
 
 #: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
-msgstr "\"Tiefe\" der Farbe."
+msgstr "»Tiefe« der Farbe."
 
 #: gtk/gtkcolorsel.c:1825
 msgid "_Value:"
@@ -1483,7 +1489,7 @@ msgid ""
 "such as 'orange' in this entry."
 msgstr ""
 "Sie können in diesem Feld einen hexadezimalen Farbwert wie bei HTML eingeben,"
-"einfach einen Farbnamen wie `orange'."
+"einfach einen Farbnamen wie »orange«."
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
@@ -1534,11 +1540,11 @@ msgstr "Müssen eingetragene Werte bereits in der Liste vorhanden sein?"
 
 #: gtk/gtkcontainer.c:200
 msgid "Resize mode"
-msgstr "Größenänderungs-Modus"
+msgstr "Größenänderungsmodus"
 
 #: gtk/gtkcontainer.c:201
 msgid "Specify how resize events are handled"
-msgstr "Die Art und Weise, wie mit Größenänderungs-Ereignissen umgegangen wird"
+msgstr "Die Art und Weise, wie mit Größenänderungsereignissen umgegangen wird"
 
 #: gtk/gtkcontainer.c:208
 msgid "Border width"
@@ -1554,7 +1560,7 @@ msgstr "Kind"
 
 #: gtk/gtkcontainer.c:218
 msgid "Can be used to add a new child to the container."
-msgstr "Kann benutzt werden, um ein neues Kind zum Container hinzuzufügen"
+msgstr "Kann verwendet werden, um ein neues Kind zum Container hinzuzufügen"
 
 #: gtk/gtkcurve.c:121
 msgid "Curve type"
@@ -1667,8 +1673,8 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"Wenn FALSCH, das \"unsichtbare Zeichen\" statt des eigentlichen Texts "
-"anzeigen (Passwortmodus)"
+"Wenn FALSCH, das »unsichtbare Zeichen« statt des eigentlichen Texts anzeigen "
+"(Passwort-Modus)"
 
 #: gtk/gtkentry.c:480
 msgid "Has Frame"
@@ -1684,8 +1690,7 @@ msgstr "Unsichtbares Zeichen"
 
 #: gtk/gtkentry.c:489
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr ""
-"Das Zeichen, mit dem Feldinhalte verdeckt werden (im \"Passwortmodus\")"
+msgstr "Das Zeichen, mit dem Feldinhalte verdeckt werden (im »Passwort-Modus«)"
 
 #: gtk/gtkentry.c:496
 msgid "Activates default"
@@ -1696,7 +1701,7 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
-"Soll das Vorgabewidget (z.B. der Vorgabeknopf in einem Dialogfenster) "
+"Soll das Vorgabe-Widget (z.B. der Vorgabeknopf in einem Dialogfenster) "
 "aktiviert werden, wenn Eingabe gedrückt wird?"
 
 #: gtk/gtkentry.c:503
@@ -1751,7 +1756,7 @@ msgstr "Der momentan ausgewählte Dateiname."
 
 #: gtk/gtkfilesel.c:543
 msgid "Show file operations"
-msgstr "Dateiaktionen anzeigen"
+msgstr "Dateiaktionen zeigen"
 
 #: gtk/gtkfilesel.c:544
 msgid "Whether buttons for creating/manipulating files should be displayed."
@@ -1793,7 +1798,7 @@ msgid ""
 "availible to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Die Datei \"%s\" liegt auf einer anderen Maschine (namens %s) und könnte für "
+"Die Datei »%s« liegt auf einer anderen Maschine (namens %s) und könnte für "
 "dieses Programm nicht verfügbar sein.\n"
 "Sind Sie sicher, dass Sie sie auswählen wollen?"
 
@@ -1814,7 +1819,7 @@ msgstr "Datei _umbenennen"
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"Der Ordnername \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt sind"
+"Der Ordnername »%s« enthält Symbole, die in Dateinamen nicht erlaubt sind"
 
 #: gtk/gtkfilesel.c:1360
 #, c-format
@@ -1822,7 +1827,7 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Fehler beim Erstellen des Ordners \"%s\": %s\n"
+"Fehler beim Erstellen des Ordners »%s«: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
@@ -1833,7 +1838,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr "Fehler beim Erstellen des Ordners \"%s\": %s\n"
+msgstr "Fehler beim Erstellen des Ordners »%s«: %s\n"
 
 #: gtk/gtkfilesel.c:1403
 msgid "New Folder"
@@ -1851,7 +1856,7 @@ msgstr "Erstellen"
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"Der Dateiname \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt sind"
+"Der Dateiname »%s« enthält Symbole, die in Dateinamen nicht erlaubt sind"
 
 #: gtk/gtkfilesel.c:1488
 #, c-format
@@ -1859,7 +1864,7 @@ msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
-"Fehler beim Löschen der Datei \"%s\": %s\n"
+"Fehler beim Löschen der Datei »%s«: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
@@ -1870,12 +1875,12 @@ msgstr ""
 #: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr "Fehler beim Löschen der Datei \"%s\": %s"
+msgstr "Fehler beim Löschen der Datei »%s«: %s"
 
 #: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "Datei \"%s\" wirklich löschen?"
+msgstr "Datei »%s« wirklich löschen?"
 
 #: gtk/gtkfilesel.c:1547
 msgid "Delete File"
@@ -1885,7 +1890,7 @@ msgstr "Datei löschen"
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"Der Dateiname \"%s\" enthält Symbole, die in Dateinamen nicht erlaubt sind"
+"Der Dateiname »%s« enthält Symbole, die in Dateinamen nicht erlaubt sind"
 
 #: gtk/gtkfilesel.c:1595
 #, c-format
@@ -1893,7 +1898,7 @@ msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
-"Fehler beim Umbenennen der Datei in \"%s\": %s\n"
+"Fehler beim Umbenennen der Datei in »%s«: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1609
@@ -1902,13 +1907,13 @@ msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
-"Fehler beim Umbenennen der Datei \"%s\": %s\n"
+"Fehler beim Umbenennen der Datei »%s«: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Fehler beim Umbenennen der Datei \"%s\" in \"%s\": %s"
+msgstr "Fehler beim Umbenennen der Datei »%s« in »%s«: %s"
 
 #: gtk/gtkfilesel.c:1666
 msgid "Rename File"
@@ -1917,7 +1922,7 @@ msgstr "Datei umbenennen"
 #: gtk/gtkfilesel.c:1681
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Datei \"%s\" umbenennen in:"
+msgstr "Datei »%s« umbenennen in:"
 
 #: gtk/gtkfilesel.c:1712
 msgid "Rename"
@@ -1950,7 +1955,7 @@ msgstr "x-Position"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
 msgid "X position of child widget"
-msgstr "x-Position des Kindwidgets"
+msgstr "x-Position des Kind-Widgets"
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
 msgid "Y position"
@@ -1958,7 +1963,7 @@ msgstr "y-Position"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
 msgid "Y position of child widget"
-msgstr "y-Position des Kindwidgets"
+msgstr "y-Position des Kind-Widgets"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -2043,7 +2048,7 @@ msgstr "Aussehen des Rahmenrandes."
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr "Beschriftungswidget"
+msgstr "Beschriftungs-Widget"
 
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label."
@@ -2073,7 +2078,7 @@ msgstr "Griffposition"
 
 #: gtk/gtkhandlebox.c:202
 msgid "Position of the handle relative to the child widget."
-msgstr "Position des Griffs bezüglich des Kindwidgets."
+msgstr "Position des Griffs bezüglich des Kind-Widgets."
 
 #: gtk/gtkhandlebox.c:210
 msgid "Snap edge"
@@ -2137,7 +2142,7 @@ msgstr "Repertoire-Kennung"
 
 #: gtk/gtkimage.c:171
 msgid "Stock ID for a stock image to display."
-msgstr "Repertoirekennung des anzuzeigenden Standardicons."
+msgstr "Repertoire-Kennung des anzuzeigenden Standardicons."
 
 #: gtk/gtkimage.c:178
 msgid "Icon set"
@@ -2173,11 +2178,11 @@ msgstr "Das für Bilddaten verwendete Format."
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
-msgstr "Bildwidget"
+msgstr "Bild-Widget"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
-msgstr "Kindwidget, das neben dem Menütext erscheint"
+msgstr "Kind-Widget, das neben dem Menütext erscheint"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:184
@@ -2301,7 +2306,7 @@ msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline."
 msgstr ""
-"Eine Zeichenkette, in der ein '_'-Zeichen bedeutet, dass das entsprechende "
+"Eine Zeichenkette, in der ein »_«-Zeichen bedeutet, dass das entsprechende "
 "Zeichen im Text unterstrichen wird."
 
 #: gtk/gtklabel.c:326
@@ -2330,7 +2335,7 @@ msgstr "Das Tastaturkürzel für diese Beschriftung."
 
 #: gtk/gtklabel.c:349
 msgid "Mnemonic widget"
-msgstr "Kürzelwidget"
+msgstr "Kürzel-Widget"
 
 #: gtk/gtklabel.c:350
 msgid "The widget to be activated when the label's mnemonic key is pressed."
@@ -2604,17 +2609,17 @@ msgstr "Breite des Griffs"
 #: gtk/gtkrc.c:2253
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "Include-Datei kann nicht gefunden werden: \"%s\""
+msgstr "Include-Datei kann nicht gefunden werden: »%s«"
 
 #: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Bilddatei kann nicht in pixmap_path gefunden werden: \"%s\""
+msgstr "Bilddatei kann nicht in pixmap_path gefunden werden: »%s«"
 
 #: gtk/gtkrc.c:3329
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pixmap-Pfadelement: \"%s\" muss absolut sein; %s, Zeile %d"
+msgstr "Pixmap-Pfadelement: »%s« muss absolut sein; %s, Zeile %d"
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
@@ -2623,7 +2628,8 @@ msgstr "Ausdehnen"
 #: gtk/gtkpreview.c:130
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
-msgstr "Soll das Vorschauwidget den gesamten ihm zugewiesenen Platz einnehmen?"
+msgstr ""
+"Soll das Vorschau-Widget den gesamten ihm zugewiesenen Platz einnehmen?"
 
 #: gtk/gtkprogress.c:122
 msgid "Activity mode"
@@ -2658,7 +2664,7 @@ msgid ""
 "in the progresswidget"
 msgstr ""
 "Eine Zahl zwischen 0,0 und 1,0, die die horizontale Ausrichtung des Texts im "
-"Fortschrittswidget angibt"
+"Fortschritts-Widget angibt"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -2670,7 +2676,7 @@ msgid ""
 "in the progress widget"
 msgstr ""
 "Eine Zahl zwischen 0,0 und 1,0, die die vertikale Ausrichtung des Texts im "
-"Fortschrittswidget angibt"
+"Fortschritts-Widget angibt"
 
 #: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
@@ -3017,7 +3023,7 @@ msgstr "Cursor-Blinkzeit"
 
 #: gtk/gtksettings.c:165
 msgid "Length of the cursor blink cycle, in milleseconds"
-msgstr "Länge des Cursor-Blinkzyklus' in Millisekunden"
+msgstr "Länge des Cursor-Blinkzyklus in Millisekunden"
 
 #: gtk/gtksettings.c:172
 msgid "Split Cursor"
@@ -3184,7 +3190,7 @@ msgstr "_Löschen"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "_Schließen"
+msgstr "S_chließen"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
@@ -3453,11 +3459,11 @@ msgstr "Wenn WAHR, sind die Tabellenzellen alle gleich breit/hoch"
 
 #: gtk/gtktext.c:599
 msgid "Horizontal adjustment for the text widget"
-msgstr "Horizontale Stellgröße für das Textwidget"
+msgstr "Horizontale Stellgröße für das Text-Widget"
 
 #: gtk/gtktext.c:607
 msgid "Vertical adjustment for the text widget"
-msgstr "Vertikale Stellgröße für das Textwidget"
+msgstr "Vertikale Stellgröße für das Text-Widget"
 
 #: gtk/gtktext.c:614
 msgid "Line Wrap"
@@ -3465,7 +3471,7 @@ msgstr "Zeilenumbruch"
 
 #: gtk/gtktext.c:615
 msgid "Whether lines are wrapped at widget edges"
-msgstr "Sollen Zeilen an den Widgetkanten umbrochen werden?"
+msgstr "Sollen Zeilen an den Widget-Kanten umbrochen werden?"
 
 #: gtk/gtktext.c:622
 msgid "Word Wrap"
@@ -3473,7 +3479,7 @@ msgstr "Wortumbruch"
 
 #: gtk/gtktext.c:623
 msgid "Whether words are wrapped at widget edges"
-msgstr "Sollen Wörter an den Widgetkanten umbrochen werden?"
+msgstr "Sollen Wörter an den Widget-Kanten umbrochen werden?"
 
 #: gtk/gtktexttag.c:199
 msgid "Tag name"
@@ -3576,6 +3582,7 @@ msgstr "Leerraum unter Absätzen in Pixel"
 msgid "Pixels inside wrap"
 msgstr "Pixel im Umbruch"
 
+# CHECK!!!
 #: gtk/gtktexttag.c:458 gtk/gtktextview.c:557
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Leerrachen umbrochenen Zeilen eines Absatzes in Pixel"
@@ -3651,7 +3658,7 @@ msgstr "Linken Rand einstellen"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects the left margin"
-msgstr "Soll dieses Tag den linken Rand bnflussen?"
+msgstr "Soll dieses Tag den linken Rand beeinflussen?"
 
 #: gtk/gtktexttag.c:576
 msgid "Indent set"
@@ -3669,9 +3676,10 @@ msgstr "Pixel über Zeilen einstellen"
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "Soll dieses Tag den Leerraum über Zeilen beeinflussen?"
 
+# CHECK
 #: gtk/gtktexttag.c:588
 msgid "Pixels below lines set"
-msgstr "Piter Zeilen einstellen"
+msgstr "Pixel unter Zeilen einstellen"
 
 #: gtk/gtktexttag.c:592
 msgid "Pixels inside wrap set"
@@ -3680,7 +3688,8 @@ msgstr "Pixel im Umbruch einstellen"
 #: gtk/gtktexttag.c:593
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
-"Soll dieses tag die Anzahl Pixel zwischen umbrochenen Zeilen beeinflussen?"
+"Soll dieses Tag die Anzahl der Pixel zwischen umbrochenen Zeilen "
+"beeinflussen?"
 
 #: gtk/gtktexttag.c:600
 msgid "Right margin set"
@@ -3784,7 +3793,7 @@ msgstr "Cursor sichtbar"
 
 #: gtk/gtktextview.c:631
 msgid "If the insertion cursor is shown"
-msgstr "Soll der Einfügecursngezeigt werden?"
+msgstr "Soll der Einfügecursor gezeigt werden?"
 
 # gtk/gtkentry.c:3567 gtk/gtktextview
 #: gtk/gtktextview.c:6335
@@ -3794,7 +3803,7 @@ msgstr "Eingabe_methoden"
 #: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Themen-Engine kann nicht in module_path gefunden werden: \"%s\","
+msgstr "Themen-Engine kann nicht in module_path gefunden werden: »%s«,"
 
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
@@ -3806,7 +3815,7 @@ msgstr "Soll der Umschaltknopf eingedrückt sein oder nicht?"
 
 #: gtk/gtktogglebutton.c:139
 msgid "If the toggle button is in an \"in between\" state."
-msgstr "Ist der Umschaltknopf in einem \"Zwischen\"-Zustand?"
+msgstr "Ist der Umschaltknopf in einem »Zwischen«-Zustand?"
 
 #: gtk/gtktogglebutton.c:146
 msgid "Draw Indicator"
@@ -3908,7 +3917,7 @@ msgstr "Sichtbar"
 
 #: gtk/gtktreeview.c:536
 msgid "Show the column header buttons"
-msgstr "Die Spaltenkopf-Knöpfe anzeigen"
+msgstr "Die Spaltenkopf-Knöpfe zeigen"
 
 #: gtk/gtktreeview.c:543
 msgid "Headers Clickable"
@@ -4125,7 +4134,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:390
 msgid "Widget name"
-msgstr "Widgetname"
+msgstr "Widget-Name"
 
 #: gtk/gtkwidget.c:391
 msgid "The name of the widget"
@@ -4133,11 +4142,11 @@ msgstr "Der Name des Widgets"
 
 #: gtk/gtkwidget.c:397
 msgid "Parent widget"
-msgstr "Mutterwidget"
+msgstr "Mutter-Widget"
 
 #: gtk/gtkwidget.c:398
 msgid "The parent widget of this widget. Must be a Container widget."
-msgstr "Das Mutterwidget dieses Widgets. Muss ein Containerwidget sein."
+msgstr "Das Mutter-Widget dieses Widgets. Muss ein Container-Widget sein."
 
 #: gtk/gtkwidget.c:405
 msgid "Width request"
@@ -4205,7 +4214,7 @@ msgstr "Kann Vorgabe sein"
 
 #: gtk/gtkwidget.c:459
 msgid "Whether the widget can be the default widget"
-msgstr "Soll das Widget das Vorgabewidget sein können?"
+msgstr "Soll das Widget das Vorgabe-Widget sein können?"
 
 #: gtk/gtkwidget.c:465
 msgid "Has default"
@@ -4213,7 +4222,7 @@ msgstr "Ist Vorgabe"
 
 #: gtk/gtkwidget.c:466
 msgid "Whether the widget is the default widget"
-msgstr "Soll das Widget das Vorgabewidget sein?"
+msgstr "Soll das Widget das Vorgabe-Widget sein?"
 
 #: gtk/gtkwidget.c:472
 msgid "Receives default"
@@ -4434,8 +4443,8 @@ msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets."
 msgstr ""
-"Die Richtungen, in der die Größengruppe die angeforderten Größen ihrer "
-"Teilwidgets beeinflusst."
+"Die Richtungen, in der die Größengruppe die angeforderten Größen ihrer Teil-"
+"Widgets beeinflusst."
 
 #. ID
 #: modules/input/imam-et.c:454
@@ -4460,7 +4469,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr "Thai (außer Betrieb)"
+msgstr "Thai (Defekt)"
 
 #. ID
 #: modules/input/imti-er.c:453
