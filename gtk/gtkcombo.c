@@ -36,7 +36,8 @@
 
 const gchar *gtk_combo_string_key = "gtk-combo-string-value";
 
-#define COMBO_LIST_MAX_HEIGHT 400
+#define COMBO_LIST_MAX_HEIGHT	(400)
+#define	EMPTY_LIST_HEIGHT	(15)
 
 static void         gtk_combo_class_init      (GtkComboClass *klass);
 static void         gtk_combo_init            (GtkCombo      *combo);
@@ -235,7 +236,7 @@ gtk_combo_entry_focus_out (GtkEntry * entry, GdkEventFocus * event, GtkCombo * c
          the signal_emit_stop doesn't seem to work either...
        */
       gtk_idle_add ((GtkFunction) gtk_combo_focus_idle, combo);
-      /*gtk_signal_emit_stop_by_name(GTK_OBJECT(entry), "focus_out_event"); */
+      /*gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "focus_out_event"); */
       return TRUE;
     }
   return FALSE;
@@ -247,7 +248,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
   GtkBin *popwin;
   GtkWidget *widget;
   GtkScrolledWindow *popup;
-
+  
   gint real_height;
   GtkRequisition list_requisition;
   gboolean show_hscroll = FALSE;
@@ -258,41 +259,41 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
   gint work_height;
   gint old_height;
   gint old_width;
-
+  
   widget = GTK_WIDGET(combo);
   popup  = GTK_SCROLLED_WINDOW (combo->popup);
   popwin = GTK_BIN (combo->popwin);
-
+  
   gdk_window_get_origin (combo->entry->window, x, y);
   real_height = MIN (combo->entry->requisition.height, 
 		     combo->entry->allocation.height);
   *y += real_height;
   avail_height = gdk_screen_height () - *y;
-
+  
   gtk_widget_size_request (combo->list, &list_requisition);
   min_height = MIN (list_requisition.height, 
 		    popup->vscrollbar->requisition.height);
-
-
-  alloc_width = widget->allocation.width -
-    2 * popwin->child->style->klass->xthickness -
-    2 * GTK_CONTAINER (popwin->child)->border_width -
-    2 * GTK_CONTAINER (combo->popup)->border_width -
-    2 * GTK_CONTAINER (popup->viewport)->border_width - 
-    2 * popup->viewport->style->klass->xthickness;
-
-  work_height =  
-    2 * popwin->child->style->klass->ythickness +
-    2 * GTK_CONTAINER (popwin->child)->border_width +
-    2 * GTK_CONTAINER (combo->popup)->border_width +
-    2 * GTK_CONTAINER (popup->viewport)->border_width +
-    2 * popup->viewport->style->klass->xthickness;
-
+  if (!GTK_LIST (combo->list)->children)
+    list_requisition.height += EMPTY_LIST_HEIGHT;
+  
+  alloc_width = (widget->allocation.width -
+		 2 * popwin->child->style->klass->xthickness -
+		 2 * GTK_CONTAINER (popwin->child)->border_width -
+		 2 * GTK_CONTAINER (combo->popup)->border_width -
+		 2 * GTK_CONTAINER (popup->viewport)->border_width - 
+		 2 * popup->viewport->style->klass->xthickness);
+  
+  work_height = (2 * popwin->child->style->klass->ythickness +
+		 2 * GTK_CONTAINER (popwin->child)->border_width +
+		 2 * GTK_CONTAINER (combo->popup)->border_width +
+		 2 * GTK_CONTAINER (popup->viewport)->border_width +
+		 2 * popup->viewport->style->klass->xthickness);
+  
   do 
     {
       old_width = alloc_width;
       old_height = work_height;
-
+      
       if (!show_hscroll &&
 	  alloc_width < list_requisition.width)
 	{
@@ -307,7 +308,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 	  if (work_height + min_height > avail_height && 
 	      *y - real_height > avail_height)
 	    {
-	      *y -= (work_height +list_requisition.height + real_height);
+	      *y -= (work_height + list_requisition.height + real_height);
 	      break;
 	    }
 	  alloc_width -= 
@@ -317,10 +318,10 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 	  show_vscroll = TRUE;
 	}
     } while (old_width != alloc_width || old_height != work_height);
-
+  
   *width = widget->allocation.width;
   if (show_vscroll)
-      *height = avail_height;
+    *height = avail_height;
   else
     *height = work_height + list_requisition.height;
   
@@ -333,9 +334,6 @@ gtk_combo_popup_list (GtkCombo * combo)
 {
   gint height, width, x, y;
   gint old_width, old_height;
-
-  if (!GTK_LIST (combo->list)->children)
-    return;
 
   old_width = combo->popwin->allocation.width;
   old_height  = combo->popwin->allocation.height;
@@ -364,6 +362,8 @@ gtk_combo_activate (GtkWidget        *widget,
 {
   gtk_combo_popup_list (combo);
 
+  if (!GTK_WIDGET_HAS_FOCUS (combo->entry))
+    gtk_widget_grab_focus (combo->entry);
   gtk_grab_add (combo->popwin);
   gdk_pointer_grab (combo->popwin->window, TRUE,
 		    GDK_BUTTON_PRESS_MASK | 
@@ -377,6 +377,8 @@ gtk_combo_popup_button_press (GtkWidget        *button,
 			      GdkEventButton   *event,
 			      GtkCombo         *combo)
 {
+  if (!GTK_WIDGET_HAS_FOCUS (combo->entry))
+    gtk_widget_grab_focus (combo->entry);
   if (!combo->current_button && (event->button == 1))
     gtk_combo_popup_list (combo);
 

@@ -4,6 +4,16 @@ Fri May  1 12:28:35 1998  Owen Taylor  <otaylor@gtk.org>
 	is popped up so that it will be compatible with 
 	auto-scrolling in the future.
 
+Fri May  1 20:25:29 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcombo.c (gtk_combo_popup_list): do not just return if
+	the combo-list is empty since that will cause the combo to operate
+	on a non existing GtkList window.
+	(gtk_combo_get_pos): provide the combo list with a usfull default
+ 	height if empty.
+	(gtk_combo_popup_button_press): grab the focus.
+	(gtk_combo_activate): grab the focus.
+
 Fri May  1 12:06:43 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkwindow.[ch] (gtk_widget_reset_rc_styles): New
