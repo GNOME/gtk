@@ -1,3 +1,9 @@
+2004-11-08  Bastien Nocera  <hadess@hadess.net>
+
+	* gtk/stock-icons/stock_media_play_rtl_16.png:
+	* gtk/stock-icons/stock_media_play_rtl_24.png: add the icons again
+	with the binary flag (Closes: #157665)
+
 2004-11-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilefilter.h:
