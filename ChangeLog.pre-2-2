@@ -1,3 +1,8 @@
+Tue Aug 22 12:33:24 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c (create_styles): Fix double free of
+	font desc.
+
 Mon Aug 21 22:39:18 2000  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtkwidget.[ch]: Add gtk_widget_modify_{fg,bg,text,base,font}.

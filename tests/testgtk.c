@@ -8581,8 +8581,6 @@ create_styles (void)
       g_object_unref (G_OBJECT (rc_style));
       
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
-      pango_font_description_free (font_desc);
     }
   
   if (!GTK_WIDGET_VISIBLE (window))
