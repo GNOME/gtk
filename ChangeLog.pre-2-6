@@ -1,3 +1,8 @@
+2004-12-08  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (pending_op_process): Center the
+	selected row so that it's easily visible.
+
 2004-12-08  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from HEAD: 
