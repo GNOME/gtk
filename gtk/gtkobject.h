@@ -294,7 +294,7 @@ void gtk_object_remove_data (GtkObject   *object,
 			     const gchar *key);
 
 /* Set the "user_data" object data field of "object". It should
- *  be noted that this is no different than calling 'gtk_object_data_add'
+ *  be noted that this is no different than calling 'gtk_object_set_data'
  *  with a key of "user_data". It is merely provided as a convenience.
  */
 void gtk_object_set_user_data (GtkObject *object,

@@ -229,7 +229,7 @@ gtk_signal_newv (const gchar         *name,
   type = g_hash_table_lookup (signal_info_hash_table, &info);
   if (type)
     {
-      g_warning ("signal \"%s\" already exists in the \"%s\" class ancestry\n",
+      g_warning ("gtk_signal_newv(): signal \"%s\" already exists in the `%s' class ancestry\n",
 		 name, gtk_type_name (object_type));
       return 0;
     }
@@ -367,6 +367,11 @@ gtk_signal_emit_by_name (GtkObject       *object,
 
       va_end (args);
     }
+  else
+    {
+      g_warning ("gtk_signal_emit_by_name(): could not find signal \"%s\" in the `%s' class ancestry",
+		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+    }
 }
 
 void
@@ -381,6 +386,9 @@ gtk_signal_emit_stop (GtkObject *object,
 
   if (gtk_emission_check (current_emissions, object, signal_type))
     gtk_emission_add (&stop_emissions, object, signal_type);
+  else
+    g_warning ("gtk_signal_emit_stop(): no current emission (%d) for object `%s'",
+	       signal_type, gtk_type_name (GTK_OBJECT_TYPE (object)));
 }
 
 void
@@ -398,6 +406,9 @@ gtk_signal_emit_stop_by_name (GtkObject       *object,
   type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
   if (type)
     gtk_signal_emit_stop (object, type);
+  else
+    g_warning ("gtk_signal_emit_stop_by_name(): could not find signal \"%s\" in the `%s' class ancestry",
+	       name, gtk_type_name (GTK_OBJECT_TYPE (object)));
 }
 
 gint
@@ -416,7 +427,7 @@ gtk_signal_connect (GtkObject     *object,
   type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
   if (!type)
     {
-      g_warning ("could not find signal type \"%s\" in the \"%s\" class ancestry",
+      g_warning ("gtk_signal_connect(): could not find signal \"%s\" in the `%s' class ancestry",
 		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
@@ -442,7 +453,7 @@ gtk_signal_connect_after (GtkObject     *object,
   type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
   if (!type)
     {
-      g_warning ("could not find signal type \"%s\" in the \"%s\" class ancestry",
+      g_warning ("gtk_signal_connect_after(): could not find signal \"%s\" in the `%s' class ancestry",
 		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
@@ -472,7 +483,7 @@ gtk_signal_connect_full (GtkObject           *object,
   type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
   if (!type)
     {
-      g_warning ("could not find signal type \"%s\" in the \"%s\" class ancestry",
+      g_warning ("gtk_signal_connect_full(): could not find signal \"%s\" in the `%s' class ancestry",
 		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
@@ -516,7 +527,7 @@ gtk_signal_connect_object (GtkObject     *object,
   type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
   if (!type)
     {
-      g_warning ("could not find signal type \"%s\" in the \"%s\" class ancestry",
+      g_warning ("gtk_signal_connect_object(): could not find signal \"%s\" in the `%s' class ancestry",
 		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
@@ -542,7 +553,7 @@ gtk_signal_connect_object_after (GtkObject     *object,
   type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
   if (!type)
     {
-      g_warning ("could not find signal type \"%s\" in the \"%s\" class ancestry",
+      g_warning ("gtk_signal_connect_object_after(): could not find signal \"%s\" in the `%s' class ancestry",
 		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
@@ -1191,7 +1202,9 @@ gtk_signal_connect_by_type (GtkObject       *object,
   
   if (!found_it)
     {
-      g_warning ("could not find signal (%d) in object's list of signals", signal_type);
+      g_warning ("gtk_signal_connect_by_type(): could not find signal type (%d) in signal list of `%s'",
+		 signal_type,
+		 gtk_type_name (class->type));
       return 0;
     }
 
