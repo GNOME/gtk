@@ -53,6 +53,8 @@ struct _GdkPixmapImplX11
 
   gint width;
   gint height;
+
+  guint is_foreign : 1;
 };
  
 struct _GdkPixmapImplX11Class 

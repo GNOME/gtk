@@ -184,5 +184,9 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
 
   #define gdk_rgb_get_cmap               gdk_rgb_get_colormap
 
-
-
+- gdk_pixmap_foreign_new() no longer calls XFreePixmap() on the 
+  pixmap when the GdkPixmap is finalized. This change corresponds
+  to the behavior of gdk_window_foreign_new(), and fixes a lot
+  of problems with code where the pixmap wasn't supposed to be
+  freed. If XFreePixmap() is needed, it can be done using the
+  destroy-notification facilities of g_object_set_data().

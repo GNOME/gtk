@@ -120,8 +120,10 @@ gdk_pixmap_impl_x11_finalize (GObject *object)
 {
   GdkPixmapImplX11 *impl = GDK_PIXMAP_IMPL_X11 (object);
   GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_X11 (impl)->wrapper);
+
+  if (!impl->is_foreign)
+    XFreePixmap (GDK_PIXMAP_XDISPLAY (wrapper), GDK_PIXMAP_XID (wrapper));
   
-  XFreePixmap (GDK_PIXMAP_XDISPLAY (wrapper), GDK_PIXMAP_XID (wrapper));
   gdk_xid_table_remove (GDK_PIXMAP_XID (wrapper));
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -171,10 +173,11 @@ gdk_pixmap_new (GdkWindow *window,
                                   GDK_WINDOW_XID (window),
                                   width, height, depth);
   
+  pix_impl->is_foreign = FALSE;
   pix_impl->width = width;
   pix_impl->height = height;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth;
-
+  
   gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
 
   return pixmap;
@@ -205,6 +208,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   pix_impl = GDK_PIXMAP_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
 
+  pix_impl->is_foreign = FALSE;
   pix_impl->width = width;
   pix_impl->height = height;
   GDK_PIXMAP_OBJECT (pixmap)->depth = 1;
@@ -253,6 +257,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   pix_impl = GDK_PIXMAP_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
   
+  pix_impl->is_foreign = FALSE;
   pix_impl->width = width;
   pix_impl->height = height;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth;
@@ -301,6 +306,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   draw_impl->xdisplay = GDK_DISPLAY ();
   draw_impl->xid = xpixmap;
 
+  pix_impl->is_foreign = TRUE;
   pix_impl->width = w_ret;
   pix_impl->height = h_ret;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth_ret;
