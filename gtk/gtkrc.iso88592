@@ -5,8 +5,9 @@
 # and a gtkrc.$LANG doesn't exist yet.
 
 style "default" {
-       fontset = "-*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-1,\
-		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-2"
+       fontset = "-*-aplos-medium-r-normal--12-*-*-*-*-*-iso8859-2,
+		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-2,\
+		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-1"
 }
 class "GtkWidget" style "default"
 
