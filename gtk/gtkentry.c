@@ -1422,17 +1422,17 @@ gtk_entry_insert_text (GtkEditable *editable,
 
   entry = GTK_ENTRY (editable);
 
+  if (new_text_length < 0)
+    new_text_length = strlen (new_text);
+
   /* Make sure we do not exceed the maximum size of the entry. */
   if (entry->text_max_length != 0 &&
       new_text_length + entry->text_length > entry->text_max_length)
     new_text_length = entry->text_max_length - entry->text_length;
 
   /* Don't insert anything, if there was nothing to insert. */
-  if (new_text_length == 0)
+  if (new_text_length <= 0)
     return;
-
-  if (new_text_length < 0)
-    new_text_length = strlen (new_text);
 
   start_pos = *position;
   end_pos = start_pos + new_text_length;
@@ -1878,4 +1878,16 @@ gtk_entry_select_region  (GtkEntry       *entry,
 			  gint            end)
 {
   gtk_editable_select_region (GTK_EDITABLE(entry), start, end);
+}
+
+void
+gtk_entry_set_max_length (GtkEntry     *entry,
+                          guint16       max)
+{
+  g_return_if_fail(entry != NULL);
+  g_return_if_fail(GTK_IS_ENTRY(entry));
+
+  if (max && entry->text_length > max)
+  	gtk_editable_delete_text(GTK_EDITABLE(entry), max, -1);
+  entry->text_max_length = max;
 }

@@ -1,3 +1,9 @@
+
+Wed Mar 18 17:38:25 CET 1998	Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkentry.[ch]: checked in gtk_entry_set_max_length
+	(it truncates the texts if it's longer, now)
+
 Wed Mar 18 02:06:52 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.c (gtk_container_border_width): use the resize queue.

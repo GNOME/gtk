@@ -78,7 +78,9 @@ void       gtk_entry_set_visibility (GtkEntry      *entry,
 				     gboolean       visible);
 void       gtk_entry_set_editable   (GtkEntry      *entry,
 				     gboolean       editable);
-
+/* text is truncated if needed */
+void       gtk_entry_set_max_length (GtkEntry      *entry,
+				     guint16        max);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
