@@ -29,6 +29,7 @@ SUBDIRS = 	arrow \
 		scribble-simple \
 		scrolledwin \
 		selection \
+		spinbutton \
 		statusbar \
 		table \
 		text \
