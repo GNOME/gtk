@@ -1,3 +1,10 @@
+Mon Mar 15 03:38:34 1999  George Lebl  <jirka@5z.com>
+
+	* gtk/gtkdnd.c: (gtk_drag_highlight) swap the
+	  gtk_drag_highlight_expose and gtk_drag_highlight_paint since
+	  it was connecting a void function to expose_event and the int
+	  returning function to the draw signal
+
 1999-03-14  Jeff Garzik  <jgarzik@pobox.com>
 
 	* configure.in:
