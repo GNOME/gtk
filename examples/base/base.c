@@ -10,10 +10,10 @@ int main( int   argc,
     gtk_init (&argc, &argv);
     
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_widget_show (window);
+    gtk_widget_show  (window);
     
     gtk_main ();
     
-    return 0;
+    return(0);
 }
 /* example-end */

@@ -1,3 +1,12 @@
+Thu Dec 10 17:58:49 GMT 1998  Tony Gale  <gale@gtk.org>
+
+	* docs/gtk_tut.sgml:
+	  - re-write the GtkProgressBar section to the 1.1 API.
+	  - add an Appendix listing all the signals
+	    (apologies to TimJ for taking so long in using his hard work
+	     in automating the extraction - thanx Tim). 
+	* examples/*: bring them all upto the tutorial versions
+
 Thu Dec 10 02:21:16 1998  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gtk/testdnd.c: use g_snprintf, eliminate need for string.h

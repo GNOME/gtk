@@ -1,3 +1,5 @@
+/* example-start scribble-simple scribble-simple.c */
+
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -175,3 +177,4 @@ main (int argc, char *argv[])
 
   return 0;
 }
+/* example-end */

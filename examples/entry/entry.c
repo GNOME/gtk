@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* entry.c */
+/* example-start entry entry.c */
 
 #include <gtk/gtk.h>
 
@@ -90,3 +88,4 @@ int main (int argc, char *argv[])
     gtk_main();
     return(0);
 }
+/* example-end */

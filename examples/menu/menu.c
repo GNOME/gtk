@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* menu.c */
+/* example-start menu menu.c */
 
 #include <gtk/gtk.h>
 
@@ -27,7 +25,7 @@ int main (int argc, char *argv[])
     gtk_widget_set_usize( GTK_WIDGET (window), 200, 100);
     gtk_window_set_title(GTK_WINDOW (window), "GTK Menu Test");
     gtk_signal_connect(GTK_OBJECT (window), "delete_event",
-                       (GtkSignalFunc) gtk_exit, NULL);
+                       (GtkSignalFunc) gtk_main_quit, NULL);
 
     /* Init the menu-widget, and remember -- never
      * gtk_show_widget() the menu widget!! 
@@ -101,8 +99,6 @@ int main (int argc, char *argv[])
     return 0;
 }
 
-
-
 /* Respond to a button-press by posting a menu passed in as widget.
  *
  * Note that the "widget" argument is the menu being posted, NOT
@@ -132,3 +128,4 @@ static void menuitem_response (gchar *string)
 {
     printf("%s\n", string);
 }
+/* example-end */

@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* pixmap.c */
+/* example-start pixmap pixmap.c */
 
 #include <gtk/gtk.h>
 
@@ -31,8 +29,7 @@ static const char * xpm_data[] = {
 
 /* when invoked (via signal delete_event), terminates the application.
  */
-void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) 
-{
+void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) {
     gtk_main_quit();
 }
 
@@ -84,3 +81,4 @@ int main( int argc, char *argv[] )
           
     return 0;
 }
+/* example-end */

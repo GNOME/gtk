@@ -1,4 +1,4 @@
-/* aspectframe.c */
+/* example-start aspectframe aspectframe.c */
 
 #include <gtk/gtk.h>
    
@@ -13,7 +13,7 @@ main (int argc, char *argv[])
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
-    GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+                        GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
     gtk_container_border_width (GTK_CONTAINER (window), 10);
    
     /* Create an aspect_frame and add it to our toplevel window */
@@ -41,3 +41,4 @@ main (int argc, char *argv[])
     gtk_main ();
     return 0;
 }
+/* example-end */

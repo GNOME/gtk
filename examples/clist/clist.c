@@ -39,7 +39,7 @@ gint main (int argc, gchar *argv[])
     clist = gtk_clist_new_with_titles( 2, titles);
 
     /* When a selection is made, we want to know about it. The callback
-     * used is selection_made, and it's code can be found further down */
+     * used is selection_made, and its code can be found further down */
     gtk_signal_connect(GTK_OBJECT(clist), "select_row",
 		       GTK_SIGNAL_FUNC(selection_made),
 		       NULL);

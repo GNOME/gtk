@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* scrolledwin.c */
+/* example-start scrolledwin scrolledwin.c */
 
 #include <gtk/gtk.h>
 
@@ -22,7 +20,7 @@ int main (int argc, char *argv[])
     
     /* Create a new dialog window for the scrolled window to be
      * packed into.  A dialog is just like a normal window except it has a 
-     * vbox and a horizontal seperator packed into it.  It's just a shortcut
+     * vbox and a horizontal separator packed into it.  It's just a shortcut
      * for creating dialogs */
     window = gtk_dialog_new ();
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -38,7 +36,7 @@ int main (int argc, char *argv[])
     
     /* the policy is one of GTK_POLICY AUTOMATIC, or GTK_POLICY_ALWAYS.
      * GTK_POLICY_AUTOMATIC will automatically decide whether you need
-     * scrollbars, wheras GTK_POLICY_ALWAYS will always leave the scrollbars
+     * scrollbars, whereas GTK_POLICY_ALWAYS will always leave the scrollbars
      * there.  The first one is the horizontal scrollbar, the second, 
      * the vertical. */
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -62,13 +60,13 @@ int main (int argc, char *argv[])
     /* this simply creates a grid of toggle buttons on the table
      * to demonstrate the scrolled window. */
     for (i = 0; i < 10; i++)
-	    for (j = 0; j < 10; j++) {
-		sprintf (buffer, "button (%d,%d)\n", i, j);
-		button = gtk_toggle_button_new_with_label (buffer);
-		gtk_table_attach_defaults (GTK_TABLE (table), button,
-					   i, i+1, j, j+1);
-		gtk_widget_show (button);
-	    }
+       for (j = 0; j < 10; j++) {
+          sprintf (buffer, "button (%d,%d)\n", i, j);
+	  button = gtk_toggle_button_new_with_label (buffer);
+	  gtk_table_attach_defaults (GTK_TABLE (table), button,
+	                             i, i+1, j, j+1);
+          gtk_widget_show (button);
+       }
     
     /* Add a "close" button to the bottom of the dialog */
     button = gtk_button_new_with_label ("close");
@@ -92,3 +90,4 @@ int main (int argc, char *argv[])
     
     return(0);
 }
+/* example-end */

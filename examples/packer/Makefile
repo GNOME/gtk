@@ -1,7 +1,7 @@
 
 CC = gcc
 
-packer: packer.c 
+packer: pack.c 
 	$(CC) `gtk-config --cflags`  pack.c -o packer `gtk-config --libs`
 
 clean: 

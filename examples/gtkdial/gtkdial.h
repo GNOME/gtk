@@ -1,3 +1,5 @@
+/* example-start gtkdial gtkdial.h */
+
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -87,3 +89,4 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 
 
 #endif /* __GTK_DIAL_H__ */
+/* example-end */

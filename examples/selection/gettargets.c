@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* gettargets.c */
+/* example-start selection gettargets.c */
 
 #include <gtk/gtk.h>
 
@@ -14,7 +12,7 @@ get_targets (GtkWidget *widget, gpointer data)
 {
   static GdkAtom targets_atom = GDK_NONE;
 
-  /* Get the atom corresonding to the string "TARGETS" */
+  /* Get the atom corresponding to the string "TARGETS" */
   if (targets_atom == GDK_NONE)
     targets_atom = gdk_atom_intern ("TARGETS", FALSE);
 
@@ -96,3 +94,4 @@ main (int argc, char *argv[])
   
   return 0;
 }
+/* example-end */

@@ -1,3 +1,5 @@
+/* example-start tictactoe tictactoe.h */
+
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -59,3 +61,5 @@ void	       tictactoe_clear           (Tictactoe *ttt);
 #endif /* __cplusplus */
 
 #endif /* __TICTACTOE_H__ */
+
+/* example-end */

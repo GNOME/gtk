@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* setselection.c */
+/* example-start selection setselection.c */
 
 #include <gtk/gtk.h>
 #include <time.h>
@@ -104,3 +102,4 @@ main (int argc, char *argv[])
   
   return 0;
 }
+/* example-end */

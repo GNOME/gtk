@@ -1,3 +1,5 @@
+/* example-start gtkdial gtkdial.c */
+
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -26,7 +28,7 @@
 #define SCROLL_DELAY_LENGTH  300
 #define DIAL_DEFAULT_SIZE 100
 
-/* Forward declararations */
+/* Forward declarations */
 
 static void gtk_dial_class_init               (GtkDialClass    *klass);
 static void gtk_dial_init                     (GtkDial         *dial);
@@ -587,5 +589,4 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
       dial->old_value = adjustment->value;
     }
 }
-
-
+/* example-end */

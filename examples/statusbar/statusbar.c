@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* statusbar.c (Tony Gale) */
+/* example-start statusbar statusbar.c */
 
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -72,3 +70,4 @@ int main (int argc, char *argv[])
 
     return 0;
 }
+/* example-end */

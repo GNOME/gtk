@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* list.c */
+/* example-start list list.c */
 
 /* include the gtk+ header files
  * include stdio.h, we need that for the printf() function
@@ -65,7 +63,7 @@ gint main (int argc, gchar *argv[])
     gtk_container_add(GTK_CONTAINER(window), vbox);
     gtk_widget_show(vbox);
     
-    /* this is the scolled window to put the GtkList widget inside */
+    /* this is the scrolled window to put the GtkList widget inside */
     scrolled_window=gtk_scrolled_window_new(NULL, NULL);
     gtk_widget_set_usize(scrolled_window, 250, 150);
     gtk_container_add(GTK_CONTAINER(vbox), scrolled_window);
@@ -94,7 +92,7 @@ gint main (int argc, gchar *argv[])
     gtk_widget_show(frame);
     
     /* connect the sigh_button_event() signal handler to the GtkList
-     * wich will handle the "arresting" of list items
+     * which will handle the "arresting" of list items
      */
     gtk_signal_connect(GTK_OBJECT(gtklist),
 		       "button_release_event",
@@ -107,8 +105,8 @@ gint main (int argc, gchar *argv[])
     gtk_container_add(GTK_CONTAINER(vbox), separator);
     gtk_widget_show(separator);
     
-    /* finaly create a button and connect it´s "clicked" signal
-     * to the destroyment of the window
+    /* finally create a button and connect it´s "clicked" signal
+     * to the destruction of the window
      */
     button=gtk_button_new_with_label("Close");
     gtk_container_add(GTK_CONTAINER(vbox), button);
@@ -165,7 +163,7 @@ gint main (int argc, gchar *argv[])
     }
     gtk_list_append_items(GTK_LIST(gtklist), dlist);
     
-    /* finaly we want to see the window, don´t we? ;)
+    /* finally we want to see the window, don't we? ;)
      */
     gtk_widget_show(window);
     
@@ -204,7 +202,7 @@ sigh_button_event       (GtkWidget      *gtklist,
 	else
 		new_prisoner=NULL;
 	
-	/* look for already prisoned list items, we
+	/* look for already imprisoned list items, we
 	 * will put them back into the list
 	 * remember to free the doubly linked list that
 	 * gtk_container_children() returns
@@ -282,3 +280,4 @@ sigh_print_selection    (GtkWidget      *gtklist,
     }
     g_print("\n");
 }
+/* example-end */

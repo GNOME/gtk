@@ -1,3 +1,5 @@
+/* example-start tictactoe ttt_test.c */
+
 #include <gtk/gtk.h>
 #include "tictactoe.h"
 
@@ -39,3 +41,5 @@ main (int argc, char *argv[])
   
   return 0;
 }
+
+/* example-end */

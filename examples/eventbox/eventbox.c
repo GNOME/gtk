@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* eventbox.c */
+/* example-start eventbox eventbox.c */
 
 #include <gtk/gtk.h>
 
@@ -53,3 +51,4 @@ main (int argc, char *argv[])
     
     return 0;
 }
+/* example-end */

@@ -1,4 +1,4 @@
-/* paned.c */
+/* example-start paned paned.c */
 
 #include <gtk/gtk.h>
    
@@ -134,3 +134,4 @@ main (int argc, char *argv[])
     gtk_main ();
     return 0;
 }
+/* example-end */

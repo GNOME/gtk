@@ -126,7 +126,7 @@ int main (int argc, char *argv[])
     g_print ("-> item %s->%p, subtree %p\n", itemnames[i], item,
 	     subtree);
 
-    /* This is still necesary if you want these signals to be called
+    /* This is still necessary if you want these signals to be called
        for the subtree's children.  Note that selection_change will be 
        signalled for the root tree regardless. */
     gtk_signal_connect (GTK_OBJECT(subtree), "select_child",

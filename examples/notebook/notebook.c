@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* notebook.c */
+/* example-start notebook notebook.c */
 
 #include <gtk/gtk.h>
 
@@ -36,7 +34,7 @@ void remove_book (GtkButton *button, GtkNotebook *notebook)
     gtk_widget_draw(GTK_WIDGET(notebook), NULL);
 }
 
-void delete (GtkWidget *widget, GdkEvent *event, gpointer data)
+void delete (GtkWidget *widget, GtkWidget *event, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -172,3 +170,4 @@ int main (int argc, char *argv[])
     
     return 0;
 }
+/* example-end */

@@ -1,6 +1,4 @@
-/* This file extracted from the GTK tutorial. */
-
-/* wheelbarrow.c */
+/* example-start wheelbarrow wheelbarrow.c */
 
 #include <gtk/gtk.h>
 
@@ -121,8 +119,7 @@ static char * WheelbarrowFull_xpm[] = {
 "                                                "};
 
 
-/* when invoked (via signal delete_event), terminates the application.
- */
+/* When invoked (via signal delete_event), terminates the application */
 void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) {
     gtk_main_quit();
 }
@@ -136,16 +133,16 @@ int main (int argc, char *argv[])
     GtkStyle *style;
     GdkGC *gc;
     
-    /* create the main window, and attach delete_event signal to terminate
-       the application.  Note that the main window will not have a titlebar
-       since we're making it a popup. */
+    /* Create the main window, and attach delete_event signal to terminate
+     * the application.  Note that the main window will not have a titlebar
+     * since we're making it a popup. */
     gtk_init (&argc, &argv);
     window = gtk_window_new( GTK_WINDOW_POPUP );
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
                         GTK_SIGNAL_FUNC (close_application), NULL);
-    gtk_widget_realize (window);
+    gtk_widget_show (window);
 
-    /* now for the pixmap and the pixmap widget */
+    /* Now for the pixmap and the pixmap widget */
     style = gtk_widget_get_default_style();
     gc = style->black_gc;
     gdk_pixmap = gdk_pixmap_create_from_xpm_d( window->window, &mask,
@@ -169,5 +166,6 @@ int main (int argc, char *argv[])
     gtk_widget_show( window );
     gtk_main ();
           
-    return 0;
+    return(0);
 }
+/* example-end */
