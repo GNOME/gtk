@@ -905,11 +905,14 @@ gdk_gc_predraw (GdkDrawable  *drawable,
   GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
   GdkColormapPrivate *colormap_private =
     (GdkColormapPrivate *) drawable_private->colormap;
+  GdkVisual *visual;
   COLORREF bg;
   COLORREF fg;
   LOGBRUSH logbrush;
   HPEN hpen;
   HBRUSH hbr;
+  guchar r, g, b;
+  static guint mask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
   g_assert (gc_private->xgc == NULL);
 
@@ -966,8 +969,7 @@ gdk_gc_predraw (GdkDrawable  *drawable,
       RealizePalette (gc_private->xgc);
       fg = PALETTEINDEX (gc_private->foreground.pixel);
     }
-  else if (colormap_private != NULL
-	   && colormap_private->xcolormap->rc_palette)
+  else if (colormap_private->xcolormap->rc_palette)
     {
       int k;
       if (SelectPalette (gc_private->xgc,
@@ -987,10 +989,15 @@ gdk_gc_predraw (GdkDrawable  *drawable,
     }
   else
     {
-      COLORREF foreground = RGB (gc_private->foreground.red >> 8,
-				 gc_private->foreground.green >> 8,
-				 gc_private->foreground.blue >> 8);
-      fg = GetNearestColor (gc_private->xgc, foreground);
+      visual = colormap_private->visual;
+      r = (gc_private->foreground.pixel & visual->red_mask) >> visual->red_shift;
+      r = (r * 255) / mask[visual->red_prec];
+      g = (gc_private->foreground.pixel & visual->green_mask) >> visual->green_shift;
+      g = (g * 255) / mask[visual->green_prec];
+      b = (gc_private->foreground.pixel & visual->blue_mask) >> visual->blue_shift;
+      b = (b * 255) / mask[visual->blue_prec];
+
+      fg = GetNearestColor (gc_private->xgc, RGB (r, g, b));
     }
   logbrush.lbStyle = BS_SOLID;
   logbrush.lbColor = fg;
@@ -1044,17 +1051,21 @@ gdk_gc_predraw (GdkDrawable  *drawable,
 	  /* a bitmap */
 	  bg = PALETTEINDEX (gc_private->background.pixel);
 	}
-      else if (colormap_private != NULL
-	  && colormap_private->xcolormap->rc_palette)
+      else if (colormap_private->xcolormap->rc_palette)
 	{
 	  bg = PALETTEINDEX (gc_private->background.pixel);
 	}
       else
 	{
-	  COLORREF background = RGB (gc_private->background.red >> 8,
-				     gc_private->background.green >> 8,
-				     gc_private->background.blue >> 8);
-	  bg = GetNearestColor (gc_private->xgc, background);
+	  visual = colormap_private->visual;
+	  r = (gc_private->background.pixel & visual->red_mask) >> visual->red_shift;
+	  r = (r * 255) / mask[visual->red_prec];
+	  g = (gc_private->background.pixel & visual->green_mask) >> visual->green_shift;
+	  g = (g * 255) / mask[visual->green_prec];
+	  b = (gc_private->background.pixel & visual->blue_mask) >> visual->blue_shift;
+	  b = (b * 255) / mask[visual->green_prec];
+	  
+	  fg = GetNearestColor (gc_private->xgc, RGB (r, g, b));
 	}
       if (SetBkColor (gc_private->xgc, bg) == CLR_INVALID)
 	g_warning ("gdk_gc_predraw: SetBkColor failed");

@@ -1,3 +1,17 @@
+1999-11-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_gc_predraw): Also for truecolor
+	drawables use just the pixel field in the foreground and
+	background GdkColor of the GdkGC.
+
+	gdk_gc_set_{fore,back}ground() are called in the GIMP with
+	GdkColors containing uninitialized (red,green,blue) fields, and
+	just the pixel field filled in, and furthermore in the
+	visual-dependent format as returned by gdk_rgb_xpixel_from_rgb().
+	It thus turns out that we really don't need to have the full
+	GdkColor for fg and bg in GdkGCWin32Data after all. Will change
+	it later to have just the pixel values.
+
 Mon Nov 15 17:17:51 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* docs/gtkfaq.sgml: s/gtk_main_iteration/g_main_iteration/
