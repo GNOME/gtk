@@ -1,3 +1,8 @@
+Tue Dec  8 18:02:57 GMT 1998  Tony Gale  <gale@gtk.org>
+
+	* examples/Makefile: simple top level Makefile that invokes all
+	  the sub-directory Makefiles.
+
 1998-12-08  Andrew T. Veliath  <andrewtv@usa.net>
 
 	* gtk/testgtk.c: Functions to test the toolbar space style.
