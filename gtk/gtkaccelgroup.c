@@ -379,6 +379,8 @@ gtk_accel_group_add (GtkAccelGroup	*accel_group,
       return;
     }
   
+  g_free (query);
+
   /* prematurely abort if the group/entry is already locked
    */
   if (accel_group->lock_count > 0)

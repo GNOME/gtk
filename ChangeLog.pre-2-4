@@ -1,3 +1,23 @@
+Sat Aug 29 14:50:56 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkcolor.c:
+	(gdk_colormap_new) (gdk_colormap_get_system):
+	quell some warnings with g_hash_table_new
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_add): free the GtkSignalQuery
+	when we're done with it
+
+	* gtk/itemfactory.c:
+	(gtk_item_factory_from_path):
+	(gtk_item_factory_create_item): free some strings
+
+	* gtk/gtklabel.c:
+	(gtk_label_finalize): free label->pattern when done
+	(gtk_label_parse_uline): null terminate pattern string, delete
+	some duplicated code
+
+	* gtk/testthreads.c: add #include <unistd.h> for sleep()
+
 Tue Aug 25 16:52:47 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (recompute_geometry): Make sure the
