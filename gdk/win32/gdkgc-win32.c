@@ -784,7 +784,7 @@ _gdk_win32_colormap_color (GdkColormap *colormap,
   guchar r, g, b;
 
   if (colormap == NULL)
-    return DIBINDEX (pixel);
+    return DIBINDEX (pixel & 1);
 
   colormap_private = GDK_WIN32_COLORMAP_DATA (colormap);
 

@@ -1,3 +1,12 @@
+2002-02-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/Makefile.am: Move bdfcursor.c from
+	libgdk_win32_la_SOURCES to EXTRA_DIST.
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_colormap_color_pack): In the
+	bitmap case, use just the LSB of the pixel value. Does this match
+	X11 semantics? Or should it be pixel!=0?
+
 Wed Feb 27 19:16:50 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_new): 
