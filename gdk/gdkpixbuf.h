@@ -20,6 +20,7 @@ void gdk_pixbuf_render_threshold_alpha   (GdkPixbuf           *pixbuf,
 					  int                  width,
 					  int                  height,
 					  int                  alpha_threshold);
+#ifndef GDK_DISABLE_DEPRECATED
 void gdk_pixbuf_render_to_drawable       (GdkPixbuf           *pixbuf,
 					  GdkDrawable         *drawable,
 					  GdkGC               *gc,
@@ -45,7 +46,7 @@ void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf           *pixbuf,
 					  GdkRgbDither         dither,
 					  int                  x_dither,
 					  int                  y_dither);
-
+#endif /* GDK_DISABLE_DEPRECATED */
 void gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf    *pixbuf,
 						     GdkColormap  *colormap,
 						     GdkPixmap   **pixmap_return,

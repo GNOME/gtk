@@ -1,5 +1,13 @@
 2003-01-31  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/gdkpixbuf.h: 
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable): 
+	(gdk_pixbuf_render_to_drawable_alpha): Deprecate.  (#60582)
+
+	* gtk/gtkcolorsel.h:
+	* gtk/gtkcolorsel.c (gtk_color_selection_set_change_palette_hook):
+	Deprecate.  (#98167)
+
 	* gtk/gtkpaned.h: Deprecate gtk_paned_computed_position(). (#97077)
 
 	* gtk/gtkmain.h: Deprecate the gtk_timeout_*, gtk_idle_*

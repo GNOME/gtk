@@ -110,8 +110,10 @@ gboolean gtk_color_selection_palette_from_string (const gchar       *str,
 gchar*   gtk_color_selection_palette_to_string   (const GdkColor    *colors,
                                                   gint               n_colors);
 
+#ifndef GTK_DISABLE_DEPRECATED
 #ifndef GDK_MULTIHEAD_SAFE
 GtkColorSelectionChangePaletteFunc           gtk_color_selection_set_change_palette_hook             (GtkColorSelectionChangePaletteFunc           func);
+#endif
 #endif
 
 GtkColorSelectionChangePaletteWithScreenFunc gtk_color_selection_set_change_palette_with_screen_hook (GtkColorSelectionChangePaletteWithScreenFunc func);
