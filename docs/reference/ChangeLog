@@ -1,5 +1,10 @@
-Sun Nov 16 00:41:48 2003  Matthias Clasen  <maclas@gmx.de>
+Mon Nov 17 23:29:21 2003  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtk-sections.txt: Add gtk_combo_box_new_with_model,
+	gtk_combo_box_set_model.
+
+Sun Nov 16 00:41:48 2003  Matthias Clasen  <maclas@gmx.de>
+ 
 	* gtk/gtk-sections.txt: Remove gtk_tool_item_[sg]et_pack_end.
 
 Sun Nov 16 00:32:18 2003  Matthias Clasen  <maclas@gmx.de>
