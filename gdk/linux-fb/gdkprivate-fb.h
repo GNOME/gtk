@@ -271,7 +271,10 @@ void       gdk_fb_window_move_resize          (GdkWindow       *window,
 					       gint             height,
 					       gboolean         send_expose_events);
 GdkWindow *gdk_fb_window_find_focus           (void);
-GdkRegion *gdk_fb_window_get_abs_shape        (GdkDrawable *window);
+GdkRegion *gdk_fb_window_get_abs_shape        (GdkDrawable     *window);
+GdkRegion *gdk_fb_window_peek_shape           (GdkDrawable     *window,
+					       gint            *dx,
+					       gint            *dy);
 GdkGC *   _gdk_fb_gc_new                      (GdkDrawable     *drawable,
 					       GdkGCValues     *values,
 					       GdkGCValuesMask  values_mask);
@@ -355,7 +358,8 @@ void       gdk_fb_fill_spans               (GdkDrawable         *real_drawable,
 GdkRegion *gdk_fb_clip_region              (GdkDrawable         *drawable,
 					    GdkGC               *gc,
 					    gboolean             do_clipping,
-					    gboolean             do_children);
+					    gboolean             do_children,
+					    gboolean             full_shapes);
 
 
 GdkGrabStatus gdk_fb_pointer_grab          (GdkWindow           *window,

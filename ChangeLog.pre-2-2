@@ -1,3 +1,21 @@
+2001-01-15  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	For optization, add an full_shapes argument to gdk_fb_clip_region.
+	If this is false, only the cliprects of the shapes are used.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Export gdk_fb_window_peek_shape.
+	Add full_shapes to gdk_fb_clip_region.
+
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_fb_window_move_resize):
+	When moving a window, don't clear everything under the it, just the
+	root window. Makes stuff faster and flash less.
+	(gdk_window_get_pointer): Correctly handle offseted shapes, due to
+	USE_CHILD_SHAPE. (gdk_fb_window_peek_shape): Return the correct
+	offset of the shape.
+	
+
 2001-01-12  Havoc Pennington  <hp@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c (gdk_window_scroll): offset the 

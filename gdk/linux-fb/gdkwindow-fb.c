@@ -41,7 +41,6 @@ static gpointer parent_class = NULL;
 static void recompute_drawable (GdkDrawable *drawable);
 static void gdk_fb_window_raise (GdkWindow *window);
 static GdkRegion* gdk_window_fb_get_visible_region (GdkDrawable *drawable);
-static GdkRegion *gdk_fb_window_peek_shape (GdkDrawable *window);
 
 typedef struct
 {
@@ -972,6 +971,8 @@ gdk_fb_window_move_resize (GdkWindow *window,
   gint i, draw_dir;
   GdkEvent *event;
   GdkWindow *mousewin;
+  GdkRectangle root_rect;
+  GdkRectangle update_rect;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1001,7 +1002,8 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	send_expose_events = FALSE;
 
       if (private->mapped && send_expose_events)
-	old_region = gdk_fb_clip_region (GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE);
+
+	old_region = gdk_fb_clip_region (GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE, FALSE);
 
       dx = x - private->x;
       dy = y - private->y;
@@ -1022,7 +1024,7 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	      GdkRegion *new_region, *region;
 	      gboolean handle_cursor = FALSE;
 
-	      new_region = gdk_fb_clip_region (GDK_DRAWABLE_IMPL (window), NULL, TRUE, FALSE);
+	      new_region = gdk_fb_clip_region (GDK_DRAWABLE_IMPL (window), NULL, TRUE, FALSE, TRUE);
 
 	      region = gdk_region_copy (old_region);
 	      gdk_region_offset (region, dx, dy);
@@ -1069,7 +1071,22 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	      gdk_region_subtract (new_region, region);
 	      gdk_region_destroy (region);
 
-	      gdk_window_invalidate_region_clear (gdk_parent_root, new_region);
+
+	      /* Clear the root window in new_region */
+	      root_rect.x = 0;
+	      root_rect.y = 0;
+	      root_rect.width = gdk_screen_width();
+	      root_rect.height = gdk_screen_height();
+	      gdk_region_get_clipbox (new_region, &update_rect);
+	      if (gdk_rectangle_intersect (&update_rect, &root_rect, &update_rect))
+		gdk_window_clear_area (gdk_parent_root,
+				       update_rect.x,
+				       update_rect.y,
+				       update_rect.width,
+				       update_rect.height);
+	      /* Invalidate regions in new_region */
+	      gdk_window_invalidate_region (gdk_parent_root, new_region, TRUE);
+	      
 	      if (handle_cursor)
 		gdk_fb_cursor_unhide ();
 
@@ -1536,6 +1553,7 @@ gdk_window_get_pointer (GdkWindow       *window,
   int winx = 0;
   int winy = 0;
   int x_int, y_int;
+  gint shape_dx, shape_dy;
   GdkModifierType my_mask;
   GdkRegion *shape;
 
@@ -1559,10 +1577,10 @@ gdk_window_get_pointer (GdkWindow       *window,
   
   return_val = NULL;
   
-  shape = gdk_fb_window_peek_shape (window);
+  shape = gdk_fb_window_peek_shape (window, &shape_dx, &shape_dy);
   if ((winx >= 0) && (winx < GDK_DRAWABLE_IMPL_FBDATA (window)->width) &&
       (winy >= 0) && (winy < GDK_DRAWABLE_IMPL_FBDATA (window)->height) &&
-      (!shape || gdk_region_point_in (shape, winx, winy)))
+      (!shape || gdk_region_point_in (shape, winx - shape_dx, winy - shape_dy)))
     {
       GdkWindowObject *private;
       GdkWindowObject *sub;
@@ -1579,12 +1597,13 @@ gdk_window_get_pointer (GdkWindow       *window,
 	      if (!sub->mapped)
 		continue;
 
-	      shape = gdk_fb_window_peek_shape (GDK_WINDOW (sub));
+	      shape = gdk_fb_window_peek_shape (GDK_WINDOW (sub),
+						&shape_dx, &shape_dy);
 	      if (subx >= sub->x &&
 		  (subx < (GDK_DRAWABLE_IMPL_FBDATA (sub)->width + sub->x)) &&
 		  (suby >= sub->y) &&
 		  (suby < (GDK_DRAWABLE_IMPL_FBDATA (sub)->height + sub->y)) &&
-		  (!shape || gdk_region_point_in (shape, subx - sub->x, suby - sub->y)))
+		  (!shape || gdk_region_point_in (shape, subx - sub->x - shape_dx, suby - sub->y - shape_dy)))
 		{
 		  subx -= sub->x;
 		  suby -= sub->y;
@@ -1726,25 +1745,36 @@ gdk_fb_region_create_from_bitmap (GdkBitmap *bitmap)
   return region;
 }
 
-static GdkRegion *
-gdk_fb_window_peek_shape (GdkDrawable *window)
+GdkRegion *
+gdk_fb_window_peek_shape (GdkDrawable *window, gint *dx, gint *dy)
 {
+  gint x, y;
+  
   if (!GDK_IS_WINDOW (window))
     return NULL;
 
   if (GDK_WINDOW_IMPL_FBDATA (window)->shape == NULL)
     return NULL;
+
+  x = y = 0;
   
-  if (GDK_WINDOW_IMPL_FBDATA (window)->shape == GDK_FB_USE_CHILD_SHAPE)
+  while (GDK_WINDOW_IMPL_FBDATA (window)->shape == GDK_FB_USE_CHILD_SHAPE)
     {
       GList *children;
       children = ((GdkWindowObject*)window)->children;
       if (children)
-	return gdk_fb_window_peek_shape ((GdkDrawable *)children->data);
+	{
+	  window = (GdkDrawable *)children->data;
+	  x += GDK_WINDOW_P(window)->x;
+	  y += GDK_WINDOW_P(window)->y;
+	}
       else
 	return NULL;
     }
 
+  *dx = x;
+  *dy = y;
+  
   return GDK_WINDOW_IMPL_FBDATA (window)->shape;
 }
 GdkRegion *

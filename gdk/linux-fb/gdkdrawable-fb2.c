@@ -301,7 +301,8 @@ GdkRegion *
 gdk_fb_clip_region (GdkDrawable *drawable,
 		    GdkGC *gc,
 		    gboolean do_clipping,
-		    gboolean do_children)
+		    gboolean do_children,
+		    gboolean full_shapes)
 {
   GdkRectangle draw_rect;
   GdkRegion *real_clip_region, *tmpreg, *shape;
@@ -336,11 +337,34 @@ gdk_fb_clip_region (GdkDrawable *drawable,
       parent = GDK_WINDOW_P (private->wrapper);
       while (parent != (GdkWindowObject *)gdk_parent_root)
 	{
-	  shape = gdk_fb_window_get_abs_shape (GDK_DRAWABLE (parent));
-	  if (shape)
+	  if (full_shapes)
 	    {
-	      gdk_region_intersect (real_clip_region, shape);
-	      gdk_region_destroy (shape);
+	      shape = gdk_fb_window_get_abs_shape (GDK_DRAWABLE (parent));
+	      if (shape)
+		{
+		  gdk_region_intersect (real_clip_region, shape);
+		  gdk_region_destroy (shape);
+		}
+	    }
+	  else
+	    {
+	      gint dx, dy;
+	      shape = gdk_fb_window_peek_shape (GDK_DRAWABLE (parent), &dx, &dy);
+	      if (shape)
+		{
+		  GdkRectangle rect;
+		  GdkRegion *reg;
+		  
+		  gdk_region_get_clipbox (shape, &rect);
+		  
+		  rect.x += GDK_DRAWABLE_IMPL_FBDATA (parent)->abs_x + dx;
+		  rect.y += GDK_DRAWABLE_IMPL_FBDATA (parent)->abs_y + dy;
+		  
+		  reg = gdk_region_rectangle(&rect);
+		  gdk_region_intersect (real_clip_region, reg);
+		  gdk_region_destroy (reg);
+		}
+	      
 	    }
 	  parent = parent->parent;
 	}
@@ -492,7 +516,7 @@ gdk_fb_fill_spans (GdkDrawable *real_drawable,
   else
     gdk_color_black (private->colormap, &info.color);
 
-  real_clip_region = gdk_fb_clip_region (drawable, gc, TRUE, GDK_GC_FBDATA (gc)->values.function != GDK_INVERT);
+  real_clip_region = gdk_fb_clip_region (drawable, gc, TRUE, GDK_GC_FBDATA (gc)->values.function != GDK_INVERT, TRUE);
 
   if (private->mem == GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->mem &&
       gdk_fb_cursor_region_need_hide (real_clip_region))
@@ -570,7 +594,7 @@ gdk_fb_drawing_context_init (GdkFBDrawingContext *dc,
   dc->clipxoff = - private->abs_x;
   dc->clipyoff = - private->abs_y;
 
-  dc->real_clip_region = gdk_fb_clip_region (drawable, gc, do_clipping, TRUE);
+  dc->real_clip_region = gdk_fb_clip_region (drawable, gc, do_clipping, TRUE, TRUE);
 
   if (gc)
     {
@@ -824,7 +848,7 @@ gdk_fb_draw_rectangle (GdkDrawable    *drawable,
       else
 	gdk_color_black (private->colormap, &color);
       
-      real_clip_region = gdk_fb_clip_region (drawable, gc, TRUE, GDK_GC_FBDATA (gc)->values.function != GDK_INVERT);
+      real_clip_region = gdk_fb_clip_region (drawable, gc, TRUE, GDK_GC_FBDATA (gc)->values.function != GDK_INVERT, TRUE);
       
       if (private->mem == GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->mem &&
 	  gdk_fb_cursor_region_need_hide (real_clip_region))
