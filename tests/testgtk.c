@@ -7522,10 +7522,6 @@ create_main_window (void)
   gtk_widget_show_all (window);
 }
 
-#ifdef HAVE_LIBGLE
-#include <gle/gle.h>
-#endif /* !HAVE_LIBGLE */
-
 int
 main (int argc, char *argv[])
 {
@@ -7536,10 +7532,6 @@ main (int argc, char *argv[])
   gtk_set_locale ();
 
   gtk_init (&argc, &argv);
-
-#ifdef HAVE_LIBGLE
-  gle_init (&argc, &argv);
-#endif /* !HAVE_LIBGLE */
 
   /* bindings test
    */
