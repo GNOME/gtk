@@ -6,7 +6,7 @@
 # Copyright (C) 1999 Jesus Bravo Alvarez
 # Jesus Bravo Alvarez <jba@pobox.com>, 1999.
 #
-# Conclusion Date: 1999-08-30 18:49+0200
+# First Version: 1999-08-30 18:49+0200
 # Based on es.po by Pablo Saratxaga <srtxg@chanae.alphanet.ch>
 # and pt.po by Nuno Ferreira <nmrf@rnl.ist.utl.pt>
 #
@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.5\n"
 "POT-Creation-Date: 1999-11-13 21:31+0100\n"
-"PO-Revision-Date: 1999-10-03 17:34+0200\n"
+"PO-Revision-Date: 2000-01-02 13:15+0100\n"
 "Last-Translator: Jesus Bravo Alvarez <jba@pobox.com>\n"
 "Language-Team: Galician <gpul-traduccion@ceu.fi.udc.es>\n"
 "MIME-Version: 1.0\n"
@@ -345,7 +345,7 @@ msgstr "monoespaciada"
 
 #: gtk/gtkfontsel.c:1963
 msgid "char cell"
-msgstr ""
+msgstr "cela de carácter"
 
 #: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
@@ -430,11 +430,11 @@ msgstr "Presión"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr ""
+msgstr "Inclinación X"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr ""
+msgstr "Inclinación Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
