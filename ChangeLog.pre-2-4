@@ -1,3 +1,9 @@
+Wed Jan  7 18:06:17 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkentry.c:
+	* gtk/gtkentry.h: applied patch to use a backing pixmap for
+	drawing, which removes the bad flickering. (gtk-wille-980106-0)
+
 Wed Jan  7 02:14:30 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* glib/glib.h

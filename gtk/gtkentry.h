@@ -41,6 +41,7 @@ struct _GtkEntry
   GtkWidget widget;
 
   GdkWindow *text_area;
+  GdkPixmap *backing_pixmap;
   gchar *text;
 
   guint16 text_size;

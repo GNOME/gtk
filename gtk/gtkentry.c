@@ -72,6 +72,8 @@ static void gtk_entry_size_request        (GtkWidget         *widget,
 					   GtkRequisition    *requisition);
 static void gtk_entry_size_allocate       (GtkWidget         *widget,
 					   GtkAllocation     *allocation);
+static void gtk_entry_make_backing_pixmap (GtkEntry *entry,
+					   gint width, gint height);
 static void gtk_entry_draw                (GtkWidget         *widget,
 					   GdkRectangle      *area);
 static gint gtk_entry_expose              (GtkWidget         *widget,
@@ -97,6 +99,9 @@ static void gtk_entry_selection_received  (GtkWidget         *widget,
 					   GtkSelectionData  *selection_data);
 static void gtk_entry_draw_text           (GtkEntry          *entry);
 static void gtk_entry_draw_cursor         (GtkEntry          *entry);
+static void gtk_entry_draw_cursor_on_drawable
+					  (GtkEntry          *entry,
+					   GdkDrawable       *drawable);
 static void gtk_entry_queue_draw          (GtkEntry          *entry);
 static gint gtk_entry_timer               (gpointer           data);
 static gint gtk_entry_position            (GtkEntry          *entry,
@@ -314,6 +319,7 @@ gtk_entry_init (GtkEntry *entry)
   GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
 
   entry->text_area = NULL;
+  entry->backing_pixmap = NULL;
   entry->text = NULL;
   entry->text_size = 0;
   entry->text_length = 0;
@@ -537,6 +543,9 @@ gtk_entry_destroy (GtkObject *object)
   if (entry->text)
     g_free (entry->text);
   entry->text = NULL;
+
+  if (entry->backing_pixmap)
+    gdk_pixmap_unref (entry->backing_pixmap);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -1034,9 +1043,7 @@ gtk_entry_key_press (GtkWidget   *widget,
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_delete_line (entry);
 	  else if (event->state & GDK_SHIFT_MASK)
-	    {
-	      gtk_entry_cut_clipboard (entry, event);
-	    }
+	    gtk_entry_cut_clipboard (entry, event);
 	  else
 	    gtk_delete_forward_character (entry);
 	}
@@ -1373,6 +1380,33 @@ gtk_entry_selection_received  (GtkWidget         *widget,
 }
 
 static void
+gtk_entry_make_backing_pixmap (GtkEntry *entry, gint width, gint height)
+{
+  gint pixmap_width, pixmap_height;
+
+  if (!entry->backing_pixmap)
+    {
+      /* allocate */
+      entry->backing_pixmap = gdk_pixmap_new (entry->text_area,
+					      width, height,
+					      -1);
+    }
+  else
+    {
+      /* reallocate if sizes don't match */
+      gdk_window_get_size (entry->backing_pixmap,
+			   &pixmap_width, &pixmap_height);
+      if ((pixmap_width != width) || (pixmap_height != height))
+	{
+	  gdk_pixmap_unref (entry->backing_pixmap);
+	  entry->backing_pixmap = gdk_pixmap_new (entry->text_area,
+						  width, height,
+						  -1);
+	}
+    }
+}
+
+static void
 gtk_entry_draw_text (GtkEntry *entry)
 {
   GtkWidget *widget;
@@ -1383,6 +1417,8 @@ gtk_entry_draw_text (GtkEntry *entry)
   gint selection_end_xoffset;
   gint width, height;
   gint y;
+  GdkDrawable *drawable;
+  gint use_backing_pixmap;
 
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
@@ -1403,75 +1439,117 @@ gtk_entry_draw_text (GtkEntry *entry)
     {
       widget = GTK_WIDGET (entry);
 
-      gdk_window_clear (entry->text_area);
-
-      if (entry->text)
-	{
-	  gdk_window_get_size (entry->text_area, &width, &height);
-	  y = (height - (widget->style->font->ascent + widget->style->font->descent)) / 2;
-	  y += widget->style->font->ascent;
-
-          if (entry->selection_start_pos != entry->selection_end_pos)
-            {
-	      selected_state = GTK_STATE_SELECTED;
-	      if (!entry->have_selection)
-		selected_state = GTK_STATE_ACTIVE;
-
-              selection_start_pos = MIN (entry->selection_start_pos, entry->selection_end_pos);
-              selection_end_pos = MAX (entry->selection_start_pos, entry->selection_end_pos);
-
-              selection_start_xoffset = gdk_text_width (widget->style->font,
-							entry->text,
-							selection_start_pos);
-              selection_end_xoffset = gdk_text_width (widget->style->font,
-						      entry->text,
-						      selection_end_pos);
-
-              if (selection_start_pos > 0)
-                gdk_draw_text (entry->text_area, widget->style->font,
-                               widget->style->fg_gc[GTK_STATE_NORMAL],
-                               -entry->scroll_offset, y,
-                               entry->text, selection_start_pos);
-
-              gdk_draw_rectangle (entry->text_area,
-                                  widget->style->bg_gc[selected_state],
-                                  TRUE,
-                                  -entry->scroll_offset + selection_start_xoffset,
-                                  0,
-                                  selection_end_xoffset - selection_start_xoffset,
-                                  -1);
-
-              gdk_draw_text (entry->text_area, widget->style->font,
-                             widget->style->fg_gc[selected_state],
-                             -entry->scroll_offset + selection_start_xoffset, y,
-                             entry->text + selection_start_pos,
-                             selection_end_pos - selection_start_pos);
-
-              if (selection_end_pos < entry->text_length)
-                gdk_draw_string (entry->text_area, widget->style->font,
-                                 widget->style->fg_gc[GTK_STATE_NORMAL],
-                                 -entry->scroll_offset + selection_end_xoffset, y,
-                                 entry->text + selection_end_pos);
-	    }
-          else
-            {
-	      GdkGCValues values;
-
-	      gdk_gc_get_values (widget->style->fg_gc[GTK_STATE_NORMAL], &values);
-              gdk_draw_string (entry->text_area, widget->style->font,
-                               widget->style->fg_gc[GTK_STATE_NORMAL],
-                               -entry->scroll_offset, y,
-                               entry->text);
-            }
+      if (!entry->text)
+	{	  
+	  gdk_window_clear (entry->text_area);
+	  if (entry->editable)
+	    gtk_entry_draw_cursor (entry);
+	  return;
 	}
 
-      if(entry->editable)
-	gtk_entry_draw_cursor (entry);
+      gdk_window_get_size (entry->text_area, &width, &height);
+
+      /*
+	If the widget has focus, draw on a backing pixmap to avoid flickering
+	and copy it to the text_area.
+	Otherwise draw to text_area directly for better speed.
+      */
+      use_backing_pixmap = GTK_WIDGET_HAS_FOCUS (widget) && (entry->text != NULL);
+      if (use_backing_pixmap)
+	{
+	  gtk_entry_make_backing_pixmap (entry, width, height);
+	  drawable = entry->backing_pixmap;
+	  gdk_draw_rectangle (drawable,
+			      widget->style->white_gc,
+			      TRUE,
+			      0, 0,
+			      width,
+			      height);
+	}
+      else
+	{
+	  drawable = entry->text_area;
+	  gdk_window_clear (entry->text_area);
+	}
+ 
+      y = (height - (widget->style->font->ascent + widget->style->font->descent)) / 2;
+      y += widget->style->font->ascent;
+
+      if (entry->selection_start_pos != entry->selection_end_pos)
+	{
+	  selected_state = GTK_STATE_SELECTED;
+	  if (!entry->have_selection)
+	    selected_state = GTK_STATE_ACTIVE;
+
+	  selection_start_pos = MIN (entry->selection_start_pos, entry->selection_end_pos);
+	  selection_end_pos = MAX (entry->selection_start_pos, entry->selection_end_pos);
+
+	  selection_start_xoffset = gdk_text_width (widget->style->font,
+						    entry->text,
+						    selection_start_pos);
+	  selection_end_xoffset = gdk_text_width (widget->style->font,
+						  entry->text,
+						  selection_end_pos);
+
+	  if (selection_start_pos > 0)
+	    gdk_draw_text (drawable, widget->style->font,
+			   widget->style->fg_gc[GTK_STATE_NORMAL],
+			   -entry->scroll_offset, y,
+			   entry->text, selection_start_pos);
+
+	  gdk_draw_rectangle (drawable,
+			      widget->style->bg_gc[selected_state],
+			      TRUE,
+			      -entry->scroll_offset + selection_start_xoffset,
+			      0,
+			      selection_end_xoffset - selection_start_xoffset,
+			      -1);
+
+	  gdk_draw_text (drawable, widget->style->font,
+			 widget->style->fg_gc[selected_state],
+			 -entry->scroll_offset + selection_start_xoffset, y,
+			 entry->text + selection_start_pos,
+			 selection_end_pos - selection_start_pos);
+
+	  if (selection_end_pos < entry->text_length)
+	    gdk_draw_string (drawable, widget->style->font,
+			     widget->style->fg_gc[GTK_STATE_NORMAL],
+			     -entry->scroll_offset + selection_end_xoffset, y,
+			     entry->text + selection_end_pos);
+	}
+      else
+	{
+	  GdkGCValues values;
+	  
+	  gdk_gc_get_values (widget->style->fg_gc[GTK_STATE_NORMAL], &values);
+	  gdk_draw_string (drawable, widget->style->font,
+			   widget->style->fg_gc[GTK_STATE_NORMAL],
+			   -entry->scroll_offset, y,
+			   entry->text);
+	}
+
+      if (entry->editable)
+	gtk_entry_draw_cursor_on_drawable (entry, drawable);
+
+      if (use_backing_pixmap)
+	gdk_draw_pixmap(entry->text_area,
+			widget->style->fg_gc[GTK_STATE_NORMAL],
+			entry->backing_pixmap,
+			0, 0, 0, 0, width, height);	  
     }
 }
 
 static void
 gtk_entry_draw_cursor (GtkEntry *entry)
+{
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  gtk_entry_draw_cursor_on_drawable (entry, entry->text_area);
+}
+
+static void
+gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 {
   GtkWidget *widget;
   GdkGC *gc;
@@ -1498,7 +1576,7 @@ gtk_entry_draw_cursor (GtkEntry *entry)
 	gc = widget->style->white_gc;
 
       gdk_window_get_size (entry->text_area, NULL, &text_area_height);
-      gdk_draw_line (entry->text_area, gc, xoffset, 0, xoffset, text_area_height);
+      gdk_draw_line (drawable, gc, xoffset, 0, xoffset, text_area_height);
 #ifdef USE_XIM
       if (gdk_im_ready() && entry->ic && 
 	  gdk_ic_get_style (entry->ic) & GdkIMPreeditPosition)
