@@ -9,7 +9,7 @@
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Nathan Froyd, Tony Gale, Shawn T. Amundson, Emmanuel Deloget
 
-<date>August 10th 1999
+<date>August 28th 1999
 
 <abstract> This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just looking at 
@@ -46,30 +46,31 @@ Thanks again (I know, it's really short :)
 <!-- ----------------------------------------------------------------- -->
 <sect1>Authors
 <p>
-The authors of GTK+ are:
+The original authors of GTK+ were:
 
 <itemize>
-<item>Peter Mattis    (petm@xcf.berkeley.edu)
-<item>Spencer Kimball (spencer@xcf.berkeley.edu)
-<item>Josh MacDonald  (jmacd@xcf.berkeley.edu)
+<item>Peter Mattis
+<item>Spencer Kimball
+<item>Josh MacDonald
 </itemize>
-GTK+ is distributed under the GNU Library General Public License
+
+Since then, much has been added by others. Please see the AUTHORS
+file in the distribution for the GTK+ Team.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>What is GTK+?
 <p>
-GTK+ is a small and efficient widget set designed with the general look 
-and feel of Motif.  In reality, it looks much better than Motif.  It
-contains common widgets and some more complex widgets such as a file
-selection, and color selection widgets.
+GTK+ is a small and efficient widget set designed with the general
+look and feel of Motif.  In reality, it looks much better than Motif.
+It contains common widgets and some more complex widgets such as a
+file selection, and color selection widgets.
 
-GTK+ provides some unique features. (At least, I know of no other widget 
-library which provides them). For
-example, a button does not contain a label, it contains a child widget, 
-which in most instances will be a label.
-However, the child widget can also be a pixmap, image or any combination 
-possible the programmer desires.
-This flexibility is adhered to throughout the library. 
+GTK+ provides some unique features. (At least, I know of no other
+widget library which provides them). For example, a button does not
+contain a label, it contains a child widget, which in most instances
+will be a label.  However, the child widget can also be a pixmap,
+image or any combination possible the programmer desires.  This
+flexibility is adhered to throughout the library.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>What is the + in GTK+?
@@ -86,14 +87,13 @@ enhancement to the original gtk that adds object oriented features."
 </quote>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Does the G in GTK+ stand for General, Gimp, or GNU?
+<sect1>Does the G in GTK+, GDK and GLib stand for?
 <p>
-Peter Mattis informed the gtk mailing list that:
-<quote>
-"I think the last time Spencer and I talked about it we decided on 
-GTK = Gimp ToolKit. But I don't know for sure. Its definately not
-GNU, though."
-</quote>
+GTK+ == Gimp Toolkit
+
+GDK == Gtk+ Drawing Kit
+
+GLib == G Library
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Where is the documentation for GTK+?
@@ -121,28 +121,10 @@ name="http://www.bcpl.net/~eharlow/book">
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is there a mailing list (or mailing list archive) for GTK+?
 <p>
-There are two mailing lists:
-<itemize>
-<item>A mailing list for discussion of development of GTK based applications
-is hosted at gtk-app-devel-list@redhat.com. To subscribe send an
-email message to <htmlurl url="mailto:gtk-app-devel-list-request@redhat.com"
-name="gtk-app-devel-list-request@redhat.com">
-with <em>subscribe</em> in the <bf>subject</bf>.
-<p>
-<item>A mailing list for discussion of development of GTK is hosted 
-at gtk-list@redhat.com. To subscribe send an
-email message to <htmlurl url="mailto:gtk-list-request@redhat.com" 
-name="gtk-list-request@redhat.com">
-with <em>subscribe</em> in the <bf>subject</bf>.
-<p>
-An archive of the mailing list can be found at 
-<htmlurl url="http://www.gnome.org/mailing-lists/archives/gtk-list" 
-name="http://www.gnome.org/mailing-lists/archives/gtk-list">
-</itemize>
-<!-- ----------------------------------------------------------------- -->
-<sect1>The gtk-list hasn't had any traffic for days, is it dead?
-<p>
-No, everyone's just busy coding.
+Information on mailing lists relating to GTK+ can be found at:
+
+<htmlurl url="http://www.gtk.org/mailinglists.html"
+name="http://www.gtk.org/mailinglists.html">
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How to get help with GTK+
@@ -154,7 +136,56 @@ that case, the best place to post questions is to the GTK+ mailing list.
 <!-- ----------------------------------------------------------------- -->
 <sect1>How to report bugs in GTK+
 <p>
-Bug reports should be sent to the GTK+ mailing list.
+Bugs should be reported to the GNOME bug tracking
+system (<htmlurl url="http://bugs.gnome.org"
+name="http://bugs.gnome.org">). To report a problem about GTK+, send
+mail to submit@bugs.gnome.org.
+
+The subject of the mail should describe your problem. In the body of
+the mail, you should first include a "pseudo-header" that gives the
+package and version number. This should be separated by a blank line
+from the actual headers.
+
+<verb>
+ Package: gtk+
+ Version: 1.2.0
+</verb>
+
+Substitute 1.2.0 with the version of GTK+ that you have installed.
+
+Then describe the bug. Include:
+
+<itemize>
+<item> Information about your system. For instance:
+   <itemize>
+   <item> What operating system and version
+   <item> What version of X
+   <item> For Linux, what version of the C library
+   </itemize>
+  And anything else you think is relevant.
+
+<item> How to reproduce the bug. 
+
+  If you can reproduce it with the testgtk program that is built 
+  in the gtk/ subdirectory, that will be most convenient.  Otherwise, 
+  please include a short test program that exhibits the behavior. 
+  As a last resort, you can also provide a pointer to a larger piece 
+  of software that can be downloaded.
+
+  (Bugs that can be reproduced within the  GIMP are almost as good 
+  as bugs that can be reproduced in testgtk. If you are reporting a 
+  bug found with the GIMP, please include the version number of the GIMP 
+  you are using)
+
+<item> If the bug was a crash, the exact text that was printed out
+  when the crash occured.
+
+<item> Further information such as stack traces may be useful, but
+  are not necessary. If you do send a stack trace, and the error
+  is an X error, it will be more useful if the stacktrace
+  is produced running the test program with the <tt/--sync/ command
+  line option.
+</itemize>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is there a Windows version of GTK+?
@@ -169,8 +200,13 @@ name="http://www.iki.fi/tml/gimp/win32"> for more information.
 <sect1>What applications have been written with GTK+?
 <p>
 A list of some GTK+ based application can be found on the GTK+ web
-server at <htmlurl url="http://www.gtk.org/apps/" 
-name="http://www.gtk.org/apps/"> and contains more than 350 applications.
+server at <htmlurl url="http://www.gtk.org/apps/"
+name="http://www.gtk.org/apps/"> and contains more than 350
+applications.
+
+Failing that, look for a project to work on for the GNOME project,
+<htmlurl url="http://www.gnome.org/" name="http://www.gnome.org/">
+Write a game. Write something that is useful.
 
 Some of these are:
 <itemize>
@@ -763,7 +799,7 @@ bit hard to get (here in The Netherlands, YMMV).
 </quote>
 
 <!-- ***************************************************************** -->
-<sect>Development with GTK+: the programming part
+<sect>Development with GTK+: general questions
 <!-- ***************************************************************** -->
 <!-- ----------------------------------------------------------------- -->
 <sect1>What widgets are in GTK?
@@ -953,6 +989,70 @@ carefully.
 
 Regardless, it's especially not a priority since relatively good
 workarounds exist. -->
+<!-- ----------------------------------------------------------------- -->
+<sect1>Why do this strange 'x io error' occur when I <tt/fork()/ in my GTK+ app?
+<p>
+This is not really a GTK+ problem, and the problem is not related to <tt/fork()/
+too. If the 'x io error' occurs then you probably use the <tt/exit()/ function
+in order to exit from the child process.
+
+When GDK opens an X display, it creates a socket file descriptor. When you use
+the <tt/exit()/ function, you implicitly close all the open file descriptors,
+and the underlying X library really doesn't like this.
+
+The right function to use here is <tt/_exit()/. 
+
+Erik Mouw gave the following piece of code about the fork()/exit() problem
+(slightly modified)
+
+<tscreen><verb>
+  int pid = fork();
+
+  if(pid==-1)
+    {
+      perror("fork");
+      exit(-1);
+    }
+  else if(pid==0) /* child */
+    {
+      retval=system("a command"); /* can use exec* functions here */
+      _exit(retval);  /* notice _exit() instead of exit() */
+    }
+  else /* parent */
+    {
+      for(;;)
+        {
+          if(waitpid(pid, &amp;status, WNOHANG) == pid)
+            {
+              waitpid(pid, &amp;status, WUNTRACED); /* anti zombie code */
+              break;
+            }
+        }
+
+      return(WEXITSTATUS(status));
+    }
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Why don't the contents of a button move when the button is pressed? Here's a patch to make it work that way...
+<p>
+From: Peter Mattis
+
+<quote>
+The reason buttons don't move their child down and to the right when
+they are depressed is because I don't think that's what is happening
+visually. My view of buttons is that you are looking at them straight
+on. That is, the user interface lies in a plane and you're above it
+looking straight at it. When a button gets pressed it moves directly
+away from you. To be absolutely correct I guess the child should
+actually shrink a tiny amount. But I don't see why the child should
+shift down and to the left. Remember, the child is supposed to be
+attached to the buttons surface. Its not good for it to appear like
+the child is slipping on the surface of the button.
+<P>
+On a more practical note, I did implement this at one point and
+determined it didn't look good and removed it.
+</quote>     
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How to I identifiy a widgets top level window or other ancestor?
@@ -984,159 +1084,7 @@ using the <tt/entry/ widget simply use:
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How do I find out about the selection of a GtkList?
-<p>
 
-Get the selection something like this:
-<tscreen><verb>
-GList *sel;
-sel = GTK_LIST(list)->selection;
-</verb></tscreen>
-
-This is how GList is defined (quoting glist.h):
-<tscreen><verb>
-typedef struct _GList GList;
-
-struct _GList
-{
-  gpointer data;
-  GList *next;
-  GList *prev;
-};
-</verb></tscreen>
-
-A GList structure is just a simple structure for doubly linked lists.
-there exist several g_list_*() functions to modify a linked list in
-glib.h.  However the GTK_LIST(MyGtkList)->selection is maintained
-by the gtk_list_*() functions and should not be modified.
-
-The selection_mode of the GtkList determines the selection
-facilities of a GtkList and therefore the contents
-of GTK_LIST(AnyGtkList)->selection:
-
-<verb>
-selection_mode          GTK_LIST()->selection contents
-------------------------------------------------------
-
-GTK_SELECTION_SINGLE)   selection is either NULL
-                        or contains a GList* pointer
-                        for a single selected item.
-
-GTK_SELECTION_BROWSE)   selection is NULL if the list
-                        contains no widgets, otherwise
-                        it contains a GList* pointer
-                        for one GList structure.
-GTK_SELECTION_MULTIPLE) selection is NULL if no listitems
-                        are selected or a a GList* pointer
-                        for the first selected item. that
-                        in turn points to a GList structure
-                        for the second selected item and so
-                        on
-
-GTK_SELECTION_EXTENDED) selection is NULL.
-</verb>
-
-The data field of the GList structure GTK_LIST(MyGtkList)->selection points
-to the first GtkListItem that is selected.  So if you would like to determine 
-which listitems are selected you should go like this:
-
-Upon Initialization:
-<tscreen><verb>
-{
-        gchar           *list_items[]={
-                                "Item0",
-                                "Item1",
-                                "foo",
-                                "last Item",
-                        };
-        guint           nlist_items=sizeof(list_items)/sizeof(list_items[0]);
-        GtkWidget       *list_item;
-        guint           i;
-
-        list=gtk_list_new();
-        gtk_list_set_selection_mode(GTK_LIST(list), GTK_SELECTION_MULTIPLE);
-        gtk_container_add(GTK_CONTAINER(AnyGtkContainer), list);
-        gtk_widget_show (list);
-
-        for (i = 0; i < nlist_items; i++)
-        {
-                list_item=gtk_list_item_new_with_label(list_items[i]);
-                gtk_object_set_user_data(GTK_OBJECT(list_item), (gpointer)i);
-                gtk_container_add(GTK_CONTAINER(list), list_item);
-                gtk_widget_show(list_item);
-        }
-}
-</verb></tscreen>
-
-To get known about the selection:
-<tscreen><verb>
-{
-        GList   *items;
-
-        items=GTK_LIST(list)->selection;
-
-        printf("Selected Items: ");
-        while (items) {
-                if (GTK_IS_LIST_ITEM(items->data))
-                        printf("%d ", (guint) 
-                gtk_object_get_user_data(items->data));
-                items=items->next;
-        }
-        printf("\n");
-}
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>How can I prevent redrawing and resizing while I change multiple widgets?
-<p>
-Old versions of GTK+ used to provide the <tt/gtk_container_enable_resize()/ and
-<tt/gtk_container_disable_resize()/ functions to enable or disable the resize while
-modifying widgets.
-
-In the current version of GTK+, there is no more need for these functions, 
-since GTK+ will only resize a widget during idle.
-
-<!-- XXX should we get rid of this one ? -->
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>I don't want the user of my applications to enter text into a GtkCombo. Any idea?
-<p>
-A GtkCombo has an associated entry which can be accessed using the
-following expression:
-
-<tscreen><verb>
-      GTK_COMBO(combo_widget)->entry
-</verb></tscreen>
-
-If you don't want the user to be able to modify the content of this
-entry, you can use the gtk_entry_set_editable() function:
-
-<tscreen><verb>
-      void gtk_entry_set_editable(GtkEntry *entry, 
-                                  gboolean editable);
-</verb></tscreen>
-
-Set the editable parameter to FALSE to disable typing into the entry.
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>How do I catch a combo box change?
-<p>
-The entry which is associated to your GtkCombo send a "changed" signal when:
-<itemize>
-      <item>some text is typed in
-      <item>the selection of the combo box is changed
-</itemize>
-
-To catch any combo box change, simply connect your signal handler with
-
-<tscreen><verb>
-      gtk_signal_connect(GTK_COMBO(cb)->entry,
-                         "changed",
-                         GTK_SIGNAL_FUNC(my_cb_change_handler),
-                         NULL);
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
 <sect1>How do I catch a double click event (in a list widget, for example)?
 <p>
 Tim Janik wrote to gtk-list (slightly modified):
@@ -1270,76 +1218,7 @@ copy gtkviewport.c and strip out the adjustment and shadow
 functionality (perhaps you could call it GtkClipper).
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How can I define a separation line in a menu? 
-<p>
-See the <htmlurl url="http://www.gtk.org/tutorial/"
-name="Tutorial"> for information on how to create menus.
-However, to create a separation line in a menu, just insert an
-empty menu item:
 
-<tscreen><verb>
-menuitem = gtk_menu_item_new();
-gtk_menu_append(GTK_MENU(menu), menuitem);
-gtk_widget_show(menuitem);
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>How can I right justify a menu, such as Help? 
-<p>
-Depending on if you use the MenuFactory or not, there are two ways to proceed.
-With the MenuFactory, use something like the following:
-
-<tscreen><verb>
-menu_path = gtk_menu_factory_find (factory,  "<MyApp>/Help");
-gtk_menu_item_right_justify(menu_path->widget);
-</verb></tscreen>
-
-If you do not use the MenuFactory, you should simply use:
-
-<tscreen><verb>
-gtk_menu_item_right_justify(my_menu_item);
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>How do I add some underlined accelerators to menu items?
-<p>
-Damon Chaplin, the technical force behind the Glade project, provided the
-following code sample (this code is an output from Glade). It creates a
-small <tt/File/ menu item with only one child (<tt/New/). The F in <tt/File/ 
-and the N in <tt/New/ are underlined, and the relevant accelerators are 
-created.
-
-<tscreen><verb>
-  menubar1 = gtk_menu_bar_new ();
-  gtk_object_set_data (GTK_OBJECT (window1), "menubar1", menubar1);
-  gtk_widget_show (menubar1);
-  gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
-
-  file1 = gtk_menu_item_new_with_label ("");
-  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (file1)->child),
-                                   _("_File"));
-  gtk_widget_add_accelerator (file1, "activate_item", accel_group,
-                              tmp_key, GDK_MOD1_MASK, 0);
-  gtk_object_set_data (GTK_OBJECT (window1), "file1", file1);
-  gtk_widget_show (file1);
-  gtk_container_add (GTK_CONTAINER (menubar1), file1);
-
-  file1_menu = gtk_menu_new ();
-  file1_menu_accels = gtk_menu_ensure_uline_accel_group (GTK_MENU (file1_menu));
-  gtk_object_set_data (GTK_OBJECT (window1), "file1_menu", file1_menu);
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (file1), file1_menu);
-
-  new1 = gtk_menu_item_new_with_label ("");
-  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (new1)->child),
-                                   _("_New"));
-  gtk_widget_add_accelerator (new1, "activate_item", file1_menu_accels,
-                              tmp_key, 0, 0);
-  gtk_object_set_data (GTK_OBJECT (window1), "new1", new1);
-  gtk_widget_show (new1);
-  gtk_container_add (GTK_CONTAINER (file1_menu), new1);
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
 <sect1>How do I make my window modal? / How do I make a single window active?
 <p>
 After you create your window, do <tt/gtk_grab_add(my_window)/. And after 
@@ -1420,46 +1299,14 @@ you:
 </itemize>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How do I right (or otherwise) justify a label?
-<p>
-Are you sure you want to <em>justify</em> the labels?  The label class contains 
-the <tt/gtk_label_set_justify()/ function that is used to control the 
-justification of a multi-line label.
-
-What you probably want is to set the <em>alignment</em> of the label, ie right 
-align it, center it or left align it. If you want to do this, you 
-should use:
-
-<tscreen><verb>
-void gtk_misc_set_alignment     (GtkMisc *misc,
-                                gfloat xalign,
-                                gfloat yalign);
-</verb></tscreen>
-
-where the <tt/xalign/ and <tt/yalign/ values are floats in [0.00;1.00].
-
-<tscreen><verb>
-GtkWidget       *label;
-
-/* horizontal : left align, vertical : top */
-gtk_misc_set_alignment(GTK_MISK(label), 0.0f, 0.0f);
-
-/* horizontal : centered, vertical : centered */
-gtk_misc_set_alignment(GTK_MISK(label), 0.5f, 0.5f);
-
-/* horizontal : right align, vertical : bottom */
-gtk_misc_set_alignment(GTK_MISK(label), 1.0f, 1.0f);
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>How could I get any widget position?
+<sect1>How could I get any widgets position?
 <p>
 As Tim Janik pointed out, there are different cases, and each case requires
 a different solution.
 
 <itemize>
 <item>  If you want the position of a widget relative to its parent, you should
-        use <tt/widget->allocate.x/ and <tt/widget->allocate.y/.
+        use <tt/widget->allocation.x/ and <tt/widget->allocation.y/.
 <item>  If you want the position of a window relative to the X root window,
         you should use <tt/gdk_window_get_geometry()/ or 
         <tt/gdk_window_get_origin()/.
@@ -1468,7 +1315,7 @@ a different solution.
 </itemize>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How do I set the position/size of a widget/window?
+<sect1>How do I set the size of a widget/window? How do I prevent the user resizing my window?
 <p>
 The <tt/gtk_widget_set_uposition()/ function is used to set the
 position of any widget.
@@ -1476,14 +1323,18 @@ position of any widget.
 The <tt/gtk_widget_set_usize()/ function is used to set the
 size of a widget. In order to use all the features that are provided by
 this function when it acts on a window, you may want to use the
-<tt/gtk_window_set_policy/ function. The definition of this function
-is the following:
+<tt/gtk_window_set_policy/ function. The definition of these functions
+is:
 
 <tscreen><verb>
-void        gtk_window_set_policy           (GtkWindow *window,
-                                             gint allow_shrink,
-                                             gint allow_grow,
-                                             gint auto_shrink);
+void        gtk_widget_set_usize (GtkWidget *widget,
+                                  gint width,
+                                  gint height);
+
+void        gtk_window_set_policy (GtkWindow *window,
+                                   gint allow_shrink,
+                                   gint allow_grow,
+                                   gint auto_shrink);
 </verb></tscreen>
 
 <tt/Auto_shrink/ will automatically shrink the window when the
@@ -1531,12 +1382,345 @@ function. The first parameter is you widget pointer. The second parameter
 is a boolean value: when this value is TRUE, the widget is enabled.
 
 <!-- ----------------------------------------------------------------- -->
+
+<sect1>Shouldn't the text argument in the gtk_clist_* functions be declared const?
+<p>
+For example:
+<verb>
+gint gtk_clist_prepend (GtkCList    *clist,
+                        gchar       *text[]);
+</verb>
+
+Answer: No, while a type "gchar*" (pointer to char) can automatically
+be cast into "const gchar*" (pointer to const char), this does not
+apply for "gchar *[]" (array of an unspecified number of pointers to
+char) into "const gchar *[]" (array of an unspecified number of
+pointers to const char).
+
+The type qualifier "const" may be subject to automatic casting, but
+in the array case, it is not the array itself that needs the (const)
+qualified cast, but its members, thus changing the whole type.
+
+<!-- ***************************************************************** -->
+<sect>Development with GTK+: widget specific questions 
+<!-- ***************************************************************** -->
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I find out about the selection of a GtkList?
+<p>
+Get the selection something like this:
+<tscreen><verb>
+GList *sel;
+sel = GTK_LIST(list)->selection;
+</verb></tscreen>
+
+This is how GList is defined (quoting glist.h):
+<tscreen><verb>
+typedef struct _GList GList;
+
+struct _GList
+{
+  gpointer data;
+  GList *next;
+  GList *prev;
+};
+</verb></tscreen>
+
+A GList structure is just a simple structure for doubly linked lists.
+there exist several g_list_*() functions to modify a linked list in
+glib.h.  However the GTK_LIST(MyGtkList)->selection is maintained
+by the gtk_list_*() functions and should not be modified.
+
+The selection_mode of the GtkList determines the selection
+facilities of a GtkList and therefore the contents
+of GTK_LIST(AnyGtkList)->selection:
+
+<verb>
+selection_mode          GTK_LIST()->selection contents
+------------------------------------------------------
+
+GTK_SELECTION_SINGLE)   selection is either NULL
+                        or contains a GList* pointer
+                        for a single selected item.
+
+GTK_SELECTION_BROWSE)   selection is NULL if the list
+                        contains no widgets, otherwise
+                        it contains a GList* pointer
+                        for one GList structure.
+GTK_SELECTION_MULTIPLE) selection is NULL if no listitems
+                        are selected or a a GList* pointer
+                        for the first selected item. that
+                        in turn points to a GList structure
+                        for the second selected item and so
+                        on
+
+GTK_SELECTION_EXTENDED) selection is NULL.
+</verb>
+
+The data field of the GList structure GTK_LIST(MyGtkList)->selection points
+to the first GtkListItem that is selected.  So if you would like to determine 
+which listitems are selected you should go like this:
+
+Upon Initialization:
+<tscreen><verb>
+{
+        gchar           *list_items[]={
+                                "Item0",
+                                "Item1",
+                                "foo",
+                                "last Item",
+                        };
+        guint           nlist_items=sizeof(list_items)/sizeof(list_items[0]);
+        GtkWidget       *list_item;
+        guint           i;
+
+        list=gtk_list_new();
+        gtk_list_set_selection_mode(GTK_LIST(list), GTK_SELECTION_MULTIPLE);
+        gtk_container_add(GTK_CONTAINER(AnyGtkContainer), list);
+        gtk_widget_show (list);
+
+        for (i = 0; i < nlist_items; i++)
+        {
+                list_item=gtk_list_item_new_with_label(list_items[i]);
+                gtk_object_set_user_data(GTK_OBJECT(list_item), (gpointer)i);
+                gtk_container_add(GTK_CONTAINER(list), list_item);
+                gtk_widget_show(list_item);
+        }
+}
+</verb></tscreen>
+
+To get known about the selection:
+<tscreen><verb>
+{
+        GList   *items;
+
+        items=GTK_LIST(list)->selection;
+
+        printf("Selected Items: ");
+        while (items) {
+                if (GTK_IS_LIST_ITEM(items->data))
+                        printf("%d ", (guint) 
+                gtk_object_get_user_data(items->data));
+                items=items->next;
+        }
+        printf("\n");
+}
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- --><p>
+<sect1>I don't want the user of my applications to enter text into a GtkCombo. Any idea?
+<p>
+A GtkCombo has an associated entry which can be accessed using the
+following expression:
+
+<tscreen><verb>
+      GTK_COMBO(combo_widget)->entry
+</verb></tscreen>
+
+If you don't want the user to be able to modify the content of this
+entry, you can use the gtk_entry_set_editable() function:
+
+<tscreen><verb>
+      void gtk_entry_set_editable(GtkEntry *entry, 
+                                  gboolean editable);
+</verb></tscreen>
+
+Set the editable parameter to FALSE to disable typing into the entry.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I catch a combo box change?
+<p>
+The entry which is associated to your GtkCombo send a "changed" signal when:
+<itemize>
+      <item>some text is typed in
+      <item>the selection of the combo box is changed
+</itemize>
+
+To catch any combo box change, simply connect your signal handler with
+
+<tscreen><verb>
+      gtk_signal_connect(GTK_COMBO(cb)->entry,
+                         "changed",
+                         GTK_SIGNAL_FUNC(my_cb_change_handler),
+                         NULL);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How can I define a separation line in a menu? 
+<p>
+See the <htmlurl url="http://www.gtk.org/tutorial/"
+name="Tutorial"> for information on how to create menus.
+However, to create a separation line in a menu, just insert an
+empty menu item:
+
+<tscreen><verb>
+menuitem = gtk_menu_item_new();
+gtk_menu_append(GTK_MENU(menu), menuitem);
+gtk_widget_show(menuitem);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How can I right justify a menu, such as Help? 
+<p>
+Depending on if you use the MenuFactory or not, there are two ways to proceed.
+With the MenuFactory, use something like the following:
+
+<tscreen><verb>
+menu_path = gtk_menu_factory_find (factory,  "<MyApp>/Help");
+gtk_menu_item_right_justify(menu_path->widget);
+</verb></tscreen>
+
+If you do not use the MenuFactory, you should simply use:
+
+<tscreen><verb>
+gtk_menu_item_right_justify(my_menu_item);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I add some underlined accelerators to menu items?
+<p>
+Damon Chaplin, the technical force behind the Glade project, provided the
+following code sample (this code is an output from Glade). It creates a
+small <tt/File/ menu item with only one child (<tt/New/). The F in <tt/File/ 
+and the N in <tt/New/ are underlined, and the relevant accelerators are 
+created.
+
+<tscreen><verb>
+  menubar1 = gtk_menu_bar_new ();
+  gtk_object_set_data (GTK_OBJECT (window1), "menubar1", menubar1);
+  gtk_widget_show (menubar1);
+  gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
+
+  file1 = gtk_menu_item_new_with_label ("");
+  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (file1)->child),
+                                   _("_File"));
+  gtk_widget_add_accelerator (file1, "activate_item", accel_group,
+                              tmp_key, GDK_MOD1_MASK, 0);
+  gtk_object_set_data (GTK_OBJECT (window1), "file1", file1);
+  gtk_widget_show (file1);
+  gtk_container_add (GTK_CONTAINER (menubar1), file1);
+
+  file1_menu = gtk_menu_new ();
+  file1_menu_accels = gtk_menu_ensure_uline_accel_group (GTK_MENU (file1_menu));
+  gtk_object_set_data (GTK_OBJECT (window1), "file1_menu", file1_menu);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (file1), file1_menu);
+
+  new1 = gtk_menu_item_new_with_label ("");
+  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (new1)->child),
+                                   _("_New"));
+  gtk_widget_add_accelerator (new1, "activate_item", file1_menu_accels,
+                              tmp_key, 0, 0);
+  gtk_object_set_data (GTK_OBJECT (window1), "new1", new1);
+  gtk_widget_show (new1);
+  gtk_container_add (GTK_CONTAINER (file1_menu), new1);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I right (or otherwise) justify a GtkLabel?
+<p>
+Are you sure you want to <em>justify</em> the labels?  The label class contains 
+the <tt/gtk_label_set_justify()/ function that is used to control the 
+justification of a multi-line label.
+
+What you probably want is to set the <em>alignment</em> of the label, ie right 
+align it, center it or left align it. If you want to do this, you 
+should use:
+
+<tscreen><verb>
+void gtk_misc_set_alignment     (GtkMisc *misc,
+                                gfloat xalign,
+                                gfloat yalign);
+</verb></tscreen>
+
+where the <tt/xalign/ and <tt/yalign/ values are floats in [0.00;1.00].
+
+<tscreen><verb>
+GtkWidget       *label;
+
+/* horizontal : left align, vertical : top */
+gtk_misc_set_alignment(GTK_MISK(label), 0.0f, 0.0f);
+
+/* horizontal : centered, vertical : centered */
+gtk_misc_set_alignment(GTK_MISK(label), 0.5f, 0.5f);
+
+/* horizontal : right align, vertical : bottom */
+gtk_misc_set_alignment(GTK_MISK(label), 1.0f, 1.0f);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I set the color and font of a GtkLabel using a Resource File?
+<p>
+The widget name path constructed for a Label consists of the widget
+names of its object hierarchy as well, e.g.
+
+<verb>
+window (name: humphrey)
+  hbox
+    label (name: mylabel)
+</verb>
+
+The widget path your pattern needs to match would be:
+<tt/humphrey.GtkHBox.mylabel/
+
+The resource file may look something like:
+
+<verb>
+style "title"
+{
+      fg[NORMAL] = {1.0, 0.0, 0.0}
+      font = "-adobe-helvetica-bold-r-normal--*-140-*-*-*-*-*-*"
+}
+widget "*mylabel" style "title"
+</verb>
+
+In your program, you would also need to give a name to the Label
+widget, which can be done using:
+<verb>
+  label = gtk_label_new("Some Label Text");
+  gtk_widget_set_name(label, "mylabel");
+  gtk_widget_show(label);
+</verb>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I configure Tooltips in a Resource File?
+<p>
+The tooltip's window is named "gtk-tooltips", GtkTooltips in itself is not
+a GtkWidget (though a GtkObject) and as such is not attempted to match any
+widget styles.
+
+So, you resource file should look something like:
+<verb> 
+style "postie"
+{
+      bg[NORMAL] = {1.0, 1.0, 0.0}
+}
+widget "gtk-tooltips*" style "postie"
+</verb>
 <sect1>How do I use horizontal scrollbars with a GtkText widget?
 <p>
 The short answer is that you can't. The current version of the GtkText
 widget does not support horizontal scrolling. There is an intention to
 completely rewrite the GtkText widget, at which time this limitation
 will be removed.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>I can't add more than (something like) 2000 chars in a GtkEntry. What's wrong?
+<p>
+There is now a known problem in the GtkEntry widget. In the
+<tt/gtk_entry_insert_text()/ function, the following lines limit
+the number of chars in the entry to 2047.
+
+<tscreen><verb>
+  /* The algorithms here will work as long as, the text size (a
+   * multiple of 2), fits into a guint16 but we specify a shorter
+   * maximum length so that if the user pastes a very long text, there
+   * is not a long hang from the slow X_LOCALE functions.  */
+
+  if (entry->text_max_length == 0)
+    max_length = 2047;
+  else
+    max_length = MIN (2047, entry->text_max_length);
+</verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I change the font of a GtkText widget?
@@ -1622,93 +1806,6 @@ main (int argc, char *argv[])
 
 Now, if you really want to change the cursor position, you should use the
 <tt/gtk_editable_set_position()/ function.
-
-<!-- ***************************************************************** -->
-<sect>Development with GTK+: misc questions
-<!-- ***************************************************************** -->
-<!-- ----------------------------------------------------------------- -->
-<sect1>Why do this strange 'x io error' occur when I <tt/fork()/ in my GTK+ app?
-<p>
-This is not really a GTK+ problem, and the problem is not related to <tt/fork()/
-too. If the 'x io error' occurs then you probably use the <tt/exit()/ function
-in order to exit from the child process.
-
-When GDK opens an X display, it creates a socket file descriptor. When you use
-the <tt/exit()/ function, you implicitly close all the open file descriptors,
-and the underlying X library really doesn't like this.
-
-The right function to use here is <tt/_exit()/. 
-
-Erik Mouw gave the following piece of code about the fork()/exit() problem
-(slightly modified)
-
-<tscreen><verb>
-  int pid = fork();
-
-  if(pid==-1)
-    {
-      perror("fork");
-      exit(-1);
-    }
-  else if(pid==0) /* child */
-    {
-      retval=system("a command"); /* can use exec* functions here */
-      _exit(retval);  /* notice _exit() instead of exit() */
-    }
-  else /* parent */
-    {
-      for(;;)
-        {
-          if(waitpid(pid, &amp;status, WNOHANG) == pid)
-            {
-              waitpid(pid, &amp;status, WUNTRACED); /* anti zombie code */
-              break;
-            }
-        }
-
-      return(WEXITSTATUS(status));
-    }
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>I can't add more than (something like) 2000 chars in a GtkEntry. What's wrong?
-<p>
-There is now a known problem in the GtkEntry widget. In the
-<tt/gtk_entry_insert_text()/ function, the following lines limit
-the number of chars in the entry to 2047.
-
-<tscreen><verb>
-  /* The algorithms here will work as long as, the text size (a
-   * multiple of 2), fits into a guint16 but we specify a shorter
-   * maximum length so that if the user pastes a very long text, there
-   * is not a long hang from the slow X_LOCALE functions.  */
-
-  if (entry->text_max_length == 0)
-    max_length = 2047;
-  else
-    max_length = MIN (2047, entry->text_max_length);
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>Why don't the contents of a button move when the button is pressed? Here's a patch to make it work that way...
-<p>
-From: Peter Mattis
-
-<quote>
-The reason buttons don't move their child down and to the right when
-they are depressed is because I don't think that's what is happening
-visually. My view of buttons is that you are looking at them straight
-on. That is, the user interface lies in a plane and you're above it
-looking straight at it. When a button gets pressed it moves directly
-away from you. To be absolutely correct I guess the child should
-actually shrink a tiny amount. But I don't see why the child should
-shift down and to the left. Remember, the child is supposed to be
-attached to the buttons surface. Its not good for it to appear like
-the child is slipping on the surface of the button.
-<P>
-On a more practical note, I did implement this at one point and
-determined it didn't look good and removed it.
-</quote>     
 
 <!-- ***************************************************************** -->
 <sect>About gdk
