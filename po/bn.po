@@ -320,8 +320,10 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"ছবি লোড করার মত পর্যাপ্ত মেমরি নেই , কিছু আ্যপ্লিকেশন বন্ধ করার মাধ্যমে মেমরি ফাঁকা "
+"ছবি লোড করার মত পর্যাপ্ত মেমরি নেই , কিছু অ্যাপ্লিকেশন বন্ধ করার মাধ্যমে মেমরি ফাঁকা "
 "করে পুনরায় চেষ্টা করে দেখুন"
+#"ছবি লোড করার মত পর্যাপ্ত মেমরি নেই , কিছু আ্যপ্লিকেশন বন্ধ করার মাধ্যমে মেমরি ফাঁকা "
+#"করে পুনরায় চেষ্টা করে দেখুন"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
@@ -828,7 +830,7 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"বাইরের চাকতি থেকে আপনার পছন্দের রংটিকে নির্বাচন করুন।  তারপরে সেই রঙের গাঢ ভাব "
+"বাইরের চাকতি থেকে আপনার পছন্দের রংটিকে নির্বাচন করুন।  তারপরে সেই রঙের গাঢ়তা "
 "নির্ধারণের জন্য ভেতরের ত্রিভুজটি ব্যবহার করুন।"
 #"বাহিরের চাকতি থেকে আপনার পছন্দের রংটিকে নির্বাচন করুন।  তারপরে সেই রঙের গাঢ়তা "
 #"নির্ধারণের জন্য ভেতরের ত্রিভুজটি ব্যবহার করুন।"
@@ -852,14 +854,12 @@ msgstr "রঙিন চাকতির উপরে অবস্থান."
 
 #: gtk/gtkcolorsel.c:1883
 msgid "_Saturation:"
-msgstr ""
-#msgstr "গাঢ়তা (_গ)"
-#did not find this word in the dictionary
+msgstr "গাঢ়তা (_গ)"
+
 
 #: gtk/gtkcolorsel.c:1884
 msgid "\"Deepness\" of the color."
-msgstr ""
-#msgstr "রঙের \"গাঢ়তা\"।"
+msgstr "রঙের \"গাঢ়তা\"।"
 
 #: gtk/gtkcolorsel.c:1885
 msgid "_Value:"
