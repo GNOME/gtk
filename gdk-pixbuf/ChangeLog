@@ -1,3 +1,18 @@
+1999-10-29  Michael Fulbright  <drmike@redhat.com>
+
+	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): Actually
+	load the image handler when we determine the image type.
+
+	* src/gdk-pixbuf-io.[ch] (gdk_pixbuf_load_module): Changed the
+	previously static function load_image_handler () to
+	a public function gdk_pixbuf_load_module (). It is needed in
+	gdk-pixbuf-loader.c to load image handler modules.  This function
+	is different from gdk_pixbuf_get_module (), which only returns
+	a reference to the required handler, because it actually loads
+	the handler into memory. Both actions should possibly be combined
+	in a convenience function since one w/o the other doesn't seem to
+	make much sense.
+
 1999-10-28  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_to_drawable): New

@@ -270,16 +270,19 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader, guchar *buf, size_t count)
 			priv->image_module = gdk_pixbuf_get_module (priv->buf, 128);
 			if (priv->image_module == NULL)
 				return FALSE;
-			else if ((priv->image_module->begin_load == NULL) ||
-				 (priv->image_module->stop_load == NULL) ||
-				 (priv->image_module->load_increment == NULL)) {
+			else if (priv->image_module->module == NULL)
+				gdk_pixbuf_load_module (priv->image_module);
+
+			if ((priv->image_module->begin_load == NULL) ||
+			    (priv->image_module->stop_load == NULL) ||
+			    (priv->image_module->load_increment == NULL)) {
 				g_warning ("module %s does not support incremental loading.\n",
 					   priv->image_module->module_name);
 				return FALSE;
 			} else {
 				priv->context = (*priv->image_module->begin_load) (
 					gdk_pixbuf_loader_prepare, loader);
-
+				
                                 if (priv->context == NULL) {
                                         g_warning("Failed to begin progressive load");
                                         return FALSE;

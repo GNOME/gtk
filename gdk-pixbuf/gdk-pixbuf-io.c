@@ -149,8 +149,12 @@ GdkPixbufModule file_formats [] = {
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
-static void
-image_handler_load (GdkPixbufModule *image_module)
+
+/* actually load the image handler - gdk_pixbuf_get_module only get a */
+/* reference to the module to load, it doesn't actually load it       */
+/* perhaps these actions should be combined in one function           */
+void
+gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 {
 	char *module_name;
 	char *path;
@@ -240,7 +244,7 @@ gdk_pixbuf_new_from_file (const char *filename)
 	image_module = gdk_pixbuf_get_module (buffer, size);
 	if (image_module){
 		if (image_module->module == NULL)
-			image_handler_load (image_module);
+			gdk_pixbuf_load_module (image_module);
 
 		if (image_module->load == NULL) {
 			fclose (f);
@@ -270,7 +274,7 @@ gdk_pixbuf_new_from_xpm_data (const gchar **data)
         GdkPixbuf *pixbuf;
 
         if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {
-                image_handler_load(&file_formats[XPM_FILE_FORMAT_INDEX]);
+                gdk_pixbuf_load_module(&file_formats[XPM_FILE_FORMAT_INDEX]);
         }
 
         if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {

@@ -6,6 +6,7 @@
  *          Miguel de Icaza <miguel@gnu.org>
  *          Federico Mena-Quintero <federico@gimp.org>
  *          Jonathan Blandford <jrb@redhat.com>
+ *          Michael Fulbright <drmike@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,4 +47,5 @@ struct _GdkPixbufModule {
 
 
 GdkPixbufModule *gdk_pixbuf_get_module (gchar *buffer, gint size);
+void gdk_pixbuf_load_module (GdkPixbufModule *image_module);
 
