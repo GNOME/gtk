@@ -169,7 +169,7 @@ check_get_set_text (GtkTextBuffer *buffer,
 
   if (n != strlen (str))
     g_error ("Sum of chars in lines is %d but buffer byte count is %d",
-             n, strlen (str));
+             n, (int) strlen (str));
   
   gtk_text_buffer_set_text (buffer, "", -1);
 

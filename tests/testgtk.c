@@ -2996,12 +2996,12 @@ create_saved_position (GtkWidget *widget)
 
       window = g_object_connect (gtk_widget_new (GTK_TYPE_WINDOW,
 						 "type", GTK_WINDOW_TOPLEVEL,
-						 "x", upositionx,
-						 "y", upositiony,
 						 "title", "Saved Position",
 						 NULL),
 				 "signal::configure_event", uposition_configure, NULL,
 				 NULL);
+
+      gtk_window_move (GTK_WINDOW (window), upositionx, upositiony);
 
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
