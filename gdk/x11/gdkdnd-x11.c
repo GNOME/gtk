@@ -1742,6 +1742,10 @@ motif_dnd_filter (GdkXEvent *xev,
   Atom atom;
   gint16 x_root, y_root;
   gboolean is_reply;
+
+  if (!event->any.window ||
+      gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
+    return GDK_FILTER_CONTINUE;			/* Not for us */
   
   /* First read some fields common to all Motif DND messages */
 
@@ -1880,6 +1884,10 @@ xdnd_status_filter (GdkXEvent *xev,
   guint32 flags = xevent->xclient.data.l[1];
   Atom action = xevent->xclient.data.l[4];
   GdkDragContext *context;
+
+  if (!event->any.window ||
+      gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
+    return GDK_FILTER_CONTINUE;			/* Not for us */
   
   GDK_NOTE (DND, 
 	    g_message ("XdndStatus: dest_window: %#x  action: %ld",
@@ -1922,6 +1930,10 @@ xdnd_finished_filter (GdkXEvent *xev,
   XEvent *xevent = (XEvent *)xev;
   guint32 dest_window = xevent->xclient.data.l[0];
   GdkDragContext *context;
+
+  if (!event->any.window ||
+      gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
+    return GDK_FILTER_CONTINUE;			/* Not for us */
   
   GDK_NOTE (DND, 
 	    g_message ("XdndFinished: dest_window: %#x", dest_window));
@@ -2373,9 +2385,17 @@ xdnd_enter_filter (GdkXEvent *xev,
   gulong nitems, after;
   Atom *data;
 
-  guint32 source_window = xevent->xclient.data.l[0];
-  gboolean get_types = ((xevent->xclient.data.l[1] & 1) != 0);
-  gint version = (xevent->xclient.data.l[1] & 0xff000000) >> 24;
+  guint32 source_window;
+  gboolean get_types;
+  gint version;
+
+  if (!event->any.window ||
+      gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
+    return GDK_FILTER_CONTINUE;			/* Not for us */
+
+  source_window = xevent->xclient.data.l[0];
+  get_types = ((xevent->xclient.data.l[1] & 1) != 0);
+  version = (xevent->xclient.data.l[1] & 0xff000000) >> 24;
   
   GDK_NOTE (DND, 
 	    g_message ("XdndEnter: source_window: %#x, version: %#x",
@@ -2474,6 +2494,10 @@ xdnd_leave_filter (GdkXEvent *xev,
 	    g_message ("XdndLeave: source_window: %#x",
 		       source_window));
 
+  if (!event->any.window ||
+      gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
+    return GDK_FILTER_CONTINUE;			/* Not for us */
+
   if ((current_dest_drag != NULL) &&
       (current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
       (GDK_DRAWABLE_XID (current_dest_drag->source_window) == source_window))
@@ -2501,6 +2525,10 @@ xdnd_position_filter (GdkXEvent *xev,
   gint16 y_root = xevent->xclient.data.l[2] & 0xffff;
   guint32 time = xevent->xclient.data.l[3];
   Atom action = xevent->xclient.data.l[4];
+
+  if (!event->any.window ||
+      gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
+    return GDK_FILTER_CONTINUE;			/* Not for us */
   
   GDK_NOTE (DND, 
 	    g_message ("XdndPosition: source_window: %#x  position: (%d, %d)  time: %d  action: %ld",
@@ -2541,6 +2569,10 @@ xdnd_drop_filter (GdkXEvent *xev,
   XEvent *xevent = (XEvent *)xev;
   guint32 source_window = xevent->xclient.data.l[0];
   guint32 time = xevent->xclient.data.l[2];
+
+  if (!event->any.window ||
+      gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
+    return GDK_FILTER_CONTINUE;			/* Not for us */
   
   GDK_NOTE (DND, 
 	    g_message ("XdndDrop: source_window: %#x  time: %d",
