@@ -3289,7 +3289,7 @@ gdk_window_set_icon_name (GdkWindow   *window,
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
 		      GUINT_TO_POINTER (TRUE));
 
-  XChangeProperty (GDK_DISPLAY_XDISPLAY (window),
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
 		   GDK_WINDOW_XID (window),
 		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"),
 		   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,

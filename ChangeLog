@@ -1,3 +1,8 @@
+Thu Nov 14 14:58:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon_name): 
+	Fix display/window typo. (#98511, Soeren Sandmann)
+
 Fri Nov  8 18:04:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/{linux-fb,win32,11}/Makefile.am: Try a different
