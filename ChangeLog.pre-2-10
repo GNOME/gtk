@@ -1,3 +1,8 @@
+Sun Feb 29 16:38:53 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): Fix a
+	typo in property string.
+
 Sun Feb 29 16:35:23 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpango.c gtk/gtktextdisplay.c: Implement
