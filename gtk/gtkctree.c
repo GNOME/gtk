@@ -545,6 +545,7 @@ gtk_ctree_button_press (GtkWidget      *widget,
 			    GDK_POINTER_MOTION_HINT_MASK |
 			    GDK_BUTTON2_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
 			    NULL, NULL, event->time);
+	  gtk_grab_add (widget);
 	  ctree->in_drag = TRUE;
 	  ctree->drag_source = work;
 	  ctree->drag_target = NULL;
@@ -586,6 +587,7 @@ gtk_ctree_button_press (GtkWidget      *widget,
 				GDK_BUTTON1_MOTION_MASK |
 				GDK_BUTTON_RELEASE_MASK,
 				NULL, NULL, event->time);
+	      gtk_grab_add (widget);
 
 	      if (GTK_CLIST_ADD_MODE (clist))
 		{
@@ -779,7 +781,9 @@ gtk_ctree_button_release (GtkWidget      *widget,
 
   if (event->button == 2 && clist->anchor == -1)
     {
+      gtk_grab_remove (widget);
       gdk_pointer_ungrab (event->time);
+
       ctree->in_drag = FALSE;
 
       if (ctree->use_icons && ctree->drag_icon)
@@ -2633,13 +2637,11 @@ gtk_ctree_unlink (GtkCTree *ctree,
 	}
     }
 
-
   if (work)
     {
       work->prev->next = NULL;
       work->prev = node->prev;
     }
-      
 
   if (node->prev && node->prev->next == node)
     node->prev->next = work;
@@ -2781,7 +2783,7 @@ change_focus_row_expansion (GtkCTree          *ctree,
 
   clist = GTK_CLIST (ctree);
 
-  if (gdk_pointer_is_grabbed ())
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (ctree))
     return;
   
   if (!(node = g_list_nth (clist->row_list, clist->focus_row)) ||
@@ -3346,7 +3348,7 @@ real_tree_select (GtkCTree *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
-  if (!node)
+  if (!node || GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
     return;
 
   clist = GTK_CLIST (ctree);
@@ -3401,13 +3403,10 @@ real_tree_unselect (GtkCTree *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
-  if (!node)
+  if (!node || GTK_CTREE_ROW (node)->row.state != GTK_STATE_SELECTED)
     return;
 
   clist = GTK_CLIST (ctree);
-
-  if (GTK_CTREE_ROW (node)->row.state != GTK_STATE_SELECTED)
-    return;
 
   if (clist->selection_end && clist->selection_end->data == node)
     clist->selection_end = clist->selection_end->prev;

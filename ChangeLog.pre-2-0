@@ -1,3 +1,13 @@
+Sun Jul 26 14:06:37 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_button_press) (gtk_clist_button_release)
+	(abort_column_resize) (gtk_clist_key_press): fix for pointer grab
+	
+	* gtk/gtkctree.c (real_tree_select): added check to avoid double
+	selected rows
+	(gtk_ctree_button_press)
+ 	(gtk_ctree_button_release): fix for pointer grab
+
 Sat Jul 25 13:16:00 1998 Damon Chaplin  <DAChaplin@msn.com>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_get_fonts): 
