@@ -1,3 +1,15 @@
+Mon Nov 15 17:17:17 2004  Manish Singh  <yosh@gimp.org>
+
+	* configure.in: Output Makefile for the pixbuf engine directory.
+
+	* gtk/gtk.symbols: Add gtk_button_{get,set}_image.
+
+	* modules/engines/pixbuf/pixbuf-render.c: Replace usage of deprecated
+	functions.
+
+	* modules/engines/pixbuf/pixbuf-draw.c: undef GDK_DISABLE_DEPRECATED
+	for gdk_draw_string (ick).
+
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.[hc]: Add a GtkButton::image property with setter 

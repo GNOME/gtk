@@ -424,13 +424,12 @@ pixbuf_render (GdkPixbuf    *src,
 					 128);
     }
 
-  gdk_pixbuf_render_to_drawable_alpha (tmp_pixbuf, window,
-				       x_offset, y_offset,
-				       rect.x, rect.y,
-				       rect.width, rect.height,
-				       GDK_PIXBUF_ALPHA_FULL, 128,
-				       GDK_RGB_DITHER_NORMAL,
-				       0, 0);
+  gdk_draw_pixbuf (window, NULL, tmp_pixbuf,
+		   x_offset, y_offset,
+		   rect.x, rect.y,
+		   rect.width, rect.height,
+		   GDK_RGB_DITHER_NORMAL,
+		   0, 0);
   g_object_unref (tmp_pixbuf);
 }
 
@@ -778,13 +777,13 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 				       pixbuf_height,
 				       -1);
 	  tmp_gc = gdk_gc_new (tmp_pixmap);
-	  gdk_pixbuf_render_to_drawable (pixbuf, tmp_pixmap, tmp_gc,
-					 0, 0, 
-					 0, 0,
-					 pixbuf_width, pixbuf_height,
-					 GDK_RGB_DITHER_NORMAL,
-					 0, 0);
-	  gdk_gc_unref (tmp_gc);
+	  gdk_draw_pixbuf (tmp_pixmap, tmp_gc, pixbuf,
+			   0, 0, 
+			   0, 0,
+			   pixbuf_width, pixbuf_height,
+			   GDK_RGB_DITHER_NORMAL,
+			   0, 0);
+	  g_object_unref (tmp_gc);
 
 	  gc_values.fill = GDK_TILED;
 	  gc_values.tile = tmp_pixmap;
@@ -796,7 +795,7 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 	  else
 	    gdk_draw_rectangle (window, tmp_gc, TRUE, x, y, width, height);
 	  
-	  gdk_gc_unref (tmp_gc);
+	  g_object_unref (tmp_gc);
 	  g_object_unref (tmp_pixmap);
 	}
     }

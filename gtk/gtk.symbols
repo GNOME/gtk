@@ -196,6 +196,7 @@ gtk_button_clicked
 gtk_button_enter
 gtk_button_get_alignment
 gtk_button_get_focus_on_click
+gtk_button_get_image
 gtk_button_get_label
 gtk_button_get_relief
 gtk_button_get_type
@@ -210,6 +211,7 @@ gtk_button_pressed
 gtk_button_released
 gtk_button_set_alignment
 gtk_button_set_focus_on_click
+gtk_button_set_image
 gtk_button_set_label
 gtk_button_set_relief
 gtk_button_set_use_stock
