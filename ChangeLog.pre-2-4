@@ -1,3 +1,11 @@
+2002-08-31  Tor Lillqvist  <tml@iki.fi>
+
+	* Include <sys/cygwin.h on Cygwin, for cygwin_conv_to_posix_path().
+	(translate_win32_path, get_real_filename): Use
+	cygwin_conv_to_posix_path().
+	(gtk_file_selection_dir_activate): Call get_real_filename() here,
+	too. (#91843, Masahiro Sakai) 
+
 2002-08-26  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (RegisterGdkClass): Use MAX_PATH

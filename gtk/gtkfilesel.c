@@ -94,6 +94,10 @@
 #endif
 #endif /* G_OS_WIN32 */
 
+#ifdef G_WITH_CYGWIN
+#include <sys/cygwin.h>		/* For cygwin_conv_to_posix_path */
+#endif
+
 #define DIR_LIST_WIDTH   180
 #define DIR_LIST_HEIGHT  180
 #define FILE_LIST_WIDTH  180
@@ -433,7 +437,7 @@ static gint cmpl_errno;
  * instance translate:
  * x:\somepath\file.jpg
  * to:
- * //x/somepath/file.jpg
+ * /cygdrive/x/somepath/file.jpg
  *
  * Replace the path in the selection text field.
  * Return a boolean value concerning whether a
@@ -443,46 +447,19 @@ static int
 translate_win32_path (GtkFileSelection *filesel)
 {
   int updated = 0;
-  gchar *path;
+  const gchar *path;
+  gchar newPath[MAX_PATH];
 
   /*
    * Retrieve the current path
    */
   path = gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry));
 
-  /*
-   * Translate only if this looks like a DOS-ish
-   * path... First handle any drive letters.
-   */
-  if (isalpha (path[0]) && (path[1] == ':')) {
-    /*
-     * This part kind of stinks... It isn't possible
-     * to know if there is enough space in the current
-     * string for the extra character required in this
-     * conversion.  Assume that there isn't enough space
-     * and use the set function on the text field to
-     * set the newly created string.
-     */
-    gchar *newPath = g_strdup_printf ("//%c/%s", path[0], (path + 3));
+  cygwin_conv_to_posix_path (path, newPath);
+  updated = (strcmp (path, newPath) != 0);
+
+  if (updated)
     gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), newPath);
-
-    path = newPath;
-    updated = 1;
-  }
-
-  /*
-   * Now, replace backslashes with forward slashes 
-   * if necessary.
-   */
-  if (strchr (path, '\\'))
-    {
-      int index;
-      for (index = 0; path[index] != '\0'; index++)
-	if (path[index] == '\\')
-	  path[index] = '/';
-      
-      updated = 1;
-    }
     
   return updated;
 }
@@ -1918,17 +1895,26 @@ get_real_filename (gchar    *filename,
   /* Check to see if the selection was a drive selector */
   if (isalpha (filename[0]) && (filename[1] == ':'))
     {
-      /* It is... map it to a CYGWIN32 drive */
-      gchar *temp_filename = g_strdup_printf ("//%c/", tolower (filename[0]));
+      gchar temp_filename[MAX_PATH];
+      int len;
 
+      cygwin_conv_to_posix_path (filename, temp_filename);
+
+      /* we need trailing '/'. */
+      len = strlen (temp_filename);
+      if (len > 0 && temp_filename[len-1] != '/')
+        {
+          temp_filename[len]   = '/';
+          temp_filename[len+1] = '\0';
+        }
+      
       if (free_old)
 	g_free (filename);
 
-      return temp_filename;
+      return g_strdup (temp_filename);
     }
-#else
-  return filename;
 #endif /* G_WITH_CYGWIN */
+  return filename;
 }
 
 static void
@@ -1945,7 +1931,6 @@ gtk_file_selection_file_activate (GtkTreeView       *tree_view,
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_model_get (model, &iter, FILE_COLUMN, &filename, -1);
   filename = get_real_filename (filename, TRUE);
-
   gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
   gtk_button_clicked (GTK_BUTTON (fs->ok_button));
 
@@ -1965,6 +1950,7 @@ gtk_file_selection_dir_activate (GtkTreeView       *tree_view,
 
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_model_get (model, &iter, DIR_COLUMN, &filename, -1);
+  filename = get_real_filename (filename, TRUE);
   gtk_file_selection_populate (fs, filename, FALSE, FALSE);
   g_free (filename);
 }
