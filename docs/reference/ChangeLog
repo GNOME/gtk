@@ -1,3 +1,8 @@
+Tue Oct 26 16:50:15 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkrc.sgml: Added information about widget
+	paths and pattern matching.
+
 1999-09-22  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtk/tmpl/*.sgml: ran make templates, to fix problems with structs.

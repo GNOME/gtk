@@ -22,14 +22,12 @@ in the users home directory, and
 (<literal>$localstatedir</literal> defaults to 
 <filename>/usr/local/etc</filename>).
 </para>
-
 <para>
 The set of these <firstterm>default</firstterm> files
 can be retrieved with gtk_rc_get_default_files()
 and modified with gtk_rc_add_default_file() and
 gtk_rc_set_default_files().
 </para>
-
 <para>
 For each default file, in addition to the file itself,
 GTK+ will look for a locale-specific file that will
@@ -40,6 +38,65 @@ then GTK+ looks for <filename>~/.gtkrc.ja_JP.ujis</filename>,
 <filename>~/.gtkrc.ja_JP</filename>, and
 <filename>~/.gtkrc.ja</filename>, and parses the
 first one it finds.
+</para>
+</refsect2>
+
+<refsect2><title>Pathnames and patterns</title>
+<para>
+A resource file defines a number of styles and key bindings and
+attaches them to particular widgets. The attachment is done
+by the <literal>widget</literal>, <literal>widget_class</literal>,
+and <literal>class</literal> declarations. As an example
+of such a statement:
+<programlisting>
+widget "mywindow.*.GtkEntry" style "my-entry-class"
+</programlisting>
+attaches the style <literal>"my-entry-class"</literal>
+to all widgets whose <firstterm>widget class</firstterm>
+matches the <firstterm>pattern</firstterm>
+<literal>"mywindow.*.GtkEntry"</literal>.
+</para>
+<para>
+The patterns here are given in the standard shell glob
+syntax. The <literal>"?"</literal> wildcard matches
+any character, while <literal>"*"</literal> matches
+zero or more of any character. The three types of
+matching are against the widget path, the
+<firstterm>class path</firstterm> and the class
+heirarchy. Both the widget and the class paths consists of a
+<literal>"."</literal> separated list of all the
+parents of the widget and the widget itself from
+outermost to innermost. The difference is that in
+the widget path, the name assigned by
+<function>gtk_widget_set_name()</function> is used
+if present, otherwise the class name of the widget, while
+for the widget path, the class name is always used.
+</para>
+<para>
+So, if you have a <classname>GtkEntry</classname> named
+<literal>"myentry"</literal>, inside of a of a window
+named <literal>"mywindow"</literal>, then the
+widget path is:
+<programlisting>
+"mwindow.GtkHBox.myentry"
+</programlisting>
+while the class path is:
+<programlisting>
+"GtkWindow.GtkHBox.GtkEntry"
+</programlisting>
+</para>
+<para>
+Matching against class is a little different. The pattern
+match is done against all class names in the widgets
+class heirarchy (not the layout heirarchy) in sequence, so the
+pattern:
+<programlisting>
+class "GtkButton" style "my-style"
+</programlisting>
+will match not just <classname>GtkButton</classname> widgets,
+but also <classname>GtkToggleButton</classname> and
+<classname>GtkCheckButton</classname> widgets, since
+those classes derive from <classname>GtkButton</classname>.
 </para>
 </refsect2>
 
@@ -106,7 +163,7 @@ The possible toplevel declarations are:
           <replaceable>name</replaceable></literal></term>
     <listitem>
      <para>Specify a style or binding set for a particular
-     group of widgets by matching on the widget path.</para>
+     group of widgets by matching on the widget pathname.</para>
     </listitem>
   </varlistentry>
   <varlistentry>
@@ -115,7 +172,7 @@ The possible toplevel declarations are:
           <replaceable>name</replaceable></literal></term>
     <listitem>
      <para>Specify a style or binding set for a particular
-     group of widgets by matching on the class path.</para>
+     group of widgets by matching on the class pathname.</para>
     </listitem>
   </varlistentry>
 </variablelist>
