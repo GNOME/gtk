@@ -10702,7 +10702,7 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
   if (tree_view->priv->edited_column == NULL)
     return;
 
-  /**
+  /*
    * This is very evil. We need to do this, because
    * gtk_cell_editable_editing_done may trigger gtk_tree_view_row_changed
    * later on. If gtk_tree_view_row_changed notices

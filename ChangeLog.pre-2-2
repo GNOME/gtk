@@ -1,3 +1,8 @@
+Thu May  9 23:33:32 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_stop_editing): fixup comment,
+	so it doesn't screw the docs.
+
 2002-05-08  Michael Natterer  <mitch@gimp.org>
 
 	* configure.in: fixed yesterdays fix for cross compiling: simply
