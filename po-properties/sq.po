@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
+"POT-Creation-Date: 2004-04-30 12:06-0400\n"
 "PO-Revision-Date: 2004-03-03 10:48+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -205,7 +205,7 @@ msgstr "I ndjeshëm"
 msgid "Whether the action is enabled."
 msgstr "Tregon nëse veprimi është aktiv."
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:552
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "I dukshëm"
@@ -596,19 +596,19 @@ msgstr "Rreshtim horizontal për birin"
 msgid "Vertical alignment for child"
 msgstr "Rreshtim vertikal për birin"
 
-#: gtk/gtkbutton.c:349
+#: gtk/gtkbutton.c:350
 msgid "Default Spacing"
 msgstr "Hapësira e prezgjedhur"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:351
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Hapësirë ekstra e shtueshme për butonat CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:356
+#: gtk/gtkbutton.c:357
 msgid "Default Outside Spacing"
 msgstr "Hapësira e jashtme e prezgjedhur"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:358
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -616,29 +616,29 @@ msgstr ""
 "Hapësirë ekstra e shtueshme për butonat CAN_DEFAULT e vizatuar përherë "
 "jashtë kornizës"
 
-#: gtk/gtkbutton.c:362
+#: gtk/gtkbutton.c:363
 msgid "Child X Displacement"
 msgstr "Zhvendosja X e Birit"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:364
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "Sa larg sipas x-it të zhvendoset biri kur shtypet pulsanti"
 
-#: gtk/gtkbutton.c:370
+#: gtk/gtkbutton.c:371
 msgid "Child Y Displacement"
 msgstr "Zhvendosja Y e birit"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:372
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Sa larg sipas y-it të zhvendoset biri kur shtypet pulsanti"
 
-#: gtk/gtkbutton.c:378
+#: gtk/gtkbutton.c:379
 msgid "Show button images"
 msgstr "Shfaq figurat e butonit"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:380
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Nëse duhen apo jo treguar ikonat rezervë në butonë"
 
@@ -702,107 +702,107 @@ msgstr "Shfaq Numrat e Javëve"
 msgid "If TRUE, week numbers are displayed"
 msgstr "Nëse TRUE, do të shfaqen numrat e javëve"
 
-#: gtk/gtkcellrenderer.c:151
+#: gtk/gtkcellrenderer.c:152
 msgid "mode"
 msgstr "modaliteti"
 
-#: gtk/gtkcellrenderer.c:152
+#: gtk/gtkcellrenderer.c:153
 msgid "Editable mode of the CellRenderer"
 msgstr "Modalitet i ndryshueshëm i CellRenderer"
 
-#: gtk/gtkcellrenderer.c:161
+#: gtk/gtkcellrenderer.c:162
 msgid "visible"
 msgstr "i dukshëm"
 
-#: gtk/gtkcellrenderer.c:162
+#: gtk/gtkcellrenderer.c:163
 msgid "Display the cell"
 msgstr "Shfaq kutinë"
 
-#: gtk/gtkcellrenderer.c:170
+#: gtk/gtkcellrenderer.c:171
 msgid "xalign"
 msgstr "drejtimi x"
 
-#: gtk/gtkcellrenderer.c:171
+#: gtk/gtkcellrenderer.c:172
 msgid "The x-align"
 msgstr "Drejtimi-x"
 
-#: gtk/gtkcellrenderer.c:181
+#: gtk/gtkcellrenderer.c:182
 msgid "yalign"
 msgstr "drejtimi y"
 
-#: gtk/gtkcellrenderer.c:182
+#: gtk/gtkcellrenderer.c:183
 msgid "The y-align"
 msgstr "Drejtimi-y"
 
-#: gtk/gtkcellrenderer.c:192
+#: gtk/gtkcellrenderer.c:193
 msgid "xpad"
 msgstr "zbutja sipas x"
 
-#: gtk/gtkcellrenderer.c:193
+#: gtk/gtkcellrenderer.c:194
 msgid "The xpad"
 msgstr "Zbutja sipas x"
 
-#: gtk/gtkcellrenderer.c:203
+#: gtk/gtkcellrenderer.c:204
 msgid "ypad"
 msgstr "zbutja sipas y"
 
-#: gtk/gtkcellrenderer.c:204
+#: gtk/gtkcellrenderer.c:205
 msgid "The ypad"
 msgstr "Zbutja sipas y"
 
-#: gtk/gtkcellrenderer.c:214
+#: gtk/gtkcellrenderer.c:215
 msgid "width"
 msgstr "gjerësia"
 
-#: gtk/gtkcellrenderer.c:215
+#: gtk/gtkcellrenderer.c:216
 msgid "The fixed width"
 msgstr "Gjerësia e caktuar"
 
-#: gtk/gtkcellrenderer.c:225
+#: gtk/gtkcellrenderer.c:226
 msgid "height"
 msgstr "lartësia"
 
-#: gtk/gtkcellrenderer.c:226
+#: gtk/gtkcellrenderer.c:227
 msgid "The fixed height"
 msgstr "Lartësia e caktuar"
 
-#: gtk/gtkcellrenderer.c:236
+#: gtk/gtkcellrenderer.c:237
 msgid "Is Expander"
 msgstr "Është Zgjerues"
 
-#: gtk/gtkcellrenderer.c:237
+#: gtk/gtkcellrenderer.c:238
 msgid "Row has children"
 msgstr "Rreshti ka bij"
 
-#: gtk/gtkcellrenderer.c:246
+#: gtk/gtkcellrenderer.c:247
 msgid "Is Expanded"
 msgstr "Është Zgjeruar"
 
-#: gtk/gtkcellrenderer.c:247
+#: gtk/gtkcellrenderer.c:248
 msgid "Row is an expander row, and is expanded"
 msgstr "Rreshti është një rresht zgjerues, dhe është zgjeruar"
 
-#: gtk/gtkcellrenderer.c:255
+#: gtk/gtkcellrenderer.c:256
 msgid "Cell background color name"
 msgstr "Emri i ngjyrës së sfondit të kutisë"
 
-#: gtk/gtkcellrenderer.c:256
+#: gtk/gtkcellrenderer.c:257
 msgid "Cell background color as a string"
 msgstr "Ngjyra e sfondit të kutisë e shprehur në formë stringe"
 
-#: gtk/gtkcellrenderer.c:263
+#: gtk/gtkcellrenderer.c:264
 msgid "Cell background color"
 msgstr "Ngjyra e sfondit të kutisë"
 
-#: gtk/gtkcellrenderer.c:264
+#: gtk/gtkcellrenderer.c:265
 msgid "Cell background color as a GdkColor"
 msgstr "Ngjyra e sfondit të kutisë e shprehur si GdkColor"
 
-#: gtk/gtkcellrenderer.c:272
+#: gtk/gtkcellrenderer.c:273
 msgid "Cell background set"
 msgstr "Rregullimi i sfondit të kutisë"
 
-#: gtk/gtkcellrenderer.c:273
+#: gtk/gtkcellrenderer.c:274
 msgid "Whether this tag affects the cell background color"
 msgstr "Nëse ky tag ndikon apo jo tek ngjyrat e sfondit të kutive"
 
@@ -919,11 +919,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Ngjyra e përparme e shprehur si GdkColor"
 
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
-#: gtk/gtktextview.c:586
+#: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "E ndryshueshme"
 
-#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:275 gtk/gtktextview.c:587
+#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:275 gtk/gtktextview.c:588
 msgid "Whether the text can be modified by the user"
 msgstr "Nëse teksti mund të ndryshohet nga përdoruesi"
 
@@ -1232,7 +1232,7 @@ msgstr "Titulli"
 msgid "The title of the color selection dialog"
 msgstr "Titulli i dritares së dialogut për zgjedhjen e ngjyrave"
 
-#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1776
+#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1781
 msgid "Current Color"
 msgstr "Ngjyra aktuale"
 
@@ -1240,7 +1240,7 @@ msgstr "Ngjyra aktuale"
 msgid "The selected color"
 msgstr "Ngjyra e zgjedhur"
 
-#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1783
+#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1788
 msgid "Current Alpha"
 msgstr "Alfa e Aktuale"
 
@@ -1250,38 +1250,38 @@ msgstr ""
 "Vlera aktuale për patejdukshmërinë (0 plotësisht i tejdukshëm, 65535 krejt "
 "opak)"
 
-#: gtk/gtkcolorsel.c:1762
+#: gtk/gtkcolorsel.c:1767
 msgid "Has Opacity Control"
 msgstr "Kontrollon Patejdukshmërinë"
 
-#: gtk/gtkcolorsel.c:1763
+#: gtk/gtkcolorsel.c:1768
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 "Nëse zgjedhësi i ngjyrave duhet të lejojë apo jo rregullimin e "
 "patejdukshmërisë"
 
-#: gtk/gtkcolorsel.c:1769
+#: gtk/gtkcolorsel.c:1774
 msgid "Has palette"
 msgstr "Ka paletë"
 
-#: gtk/gtkcolorsel.c:1770
+#: gtk/gtkcolorsel.c:1775
 msgid "Whether a palette should be used"
 msgstr "Nëse duhet përdorur një paletë"
 
-#: gtk/gtkcolorsel.c:1777
+#: gtk/gtkcolorsel.c:1782
 msgid "The current color"
 msgstr "Ngjyra aktuale"
 
-#: gtk/gtkcolorsel.c:1784
+#: gtk/gtkcolorsel.c:1789
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Vlera aktuale për patejdukshmërinë (0 krejt i tejdukshëm, 65535 krejt opak)"
 
-#: gtk/gtkcolorsel.c:1798
+#: gtk/gtkcolorsel.c:1803
 msgid "Custom palette"
 msgstr "Paleta e personalizuar"
 
-#: gtk/gtkcolorsel.c:1799
+#: gtk/gtkcolorsel.c:1804
 msgid "Palette to use in the color selector"
 msgstr "Paleta që duhet përdorur tek zgjedhësi i ngjyrave"
 
@@ -1327,53 +1327,53 @@ msgstr "Vlerë në listë"
 msgid "Whether entered values must already be present in the list"
 msgstr "Nëse vlerat e dhëna duhet tashmë të jenë të pranishme në listë"
 
-#: gtk/gtkcombobox.c:457
+#: gtk/gtkcombobox.c:462
 msgid "ComboBox model"
 msgstr "Modeli i ComboBox"
 
-#: gtk/gtkcombobox.c:458
+#: gtk/gtkcombobox.c:463
 msgid "The model for the combo box"
 msgstr "Modeli për combo box"
 
-#: gtk/gtkcombobox.c:465
+#: gtk/gtkcombobox.c:470
 msgid "Wrap width"
 msgstr "Gjerësia e hapit"
 
-#: gtk/gtkcombobox.c:466
+#: gtk/gtkcombobox.c:471
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Gjerësia e hapit për pasqyrimin e elementëve në një rrjetë"
 
-#: gtk/gtkcombobox.c:475
+#: gtk/gtkcombobox.c:480
 msgid "Row span column"
 msgstr "Hapësira e kollonave"
 
-#: gtk/gtkcombobox.c:476
+#: gtk/gtkcombobox.c:481
 msgid "TreeModel column containing the row span values"
 msgstr ""
 "Kollona e modelit të degëzimit që përmban vlerat e hapësirave të rreshtave"
 
-#: gtk/gtkcombobox.c:485
+#: gtk/gtkcombobox.c:490
 msgid "Column span column"
 msgstr "Kollona e hapësirës së kollonës"
 
-#: gtk/gtkcombobox.c:486
+#: gtk/gtkcombobox.c:491
 msgid "TreeModel column containing the column span values"
 msgstr ""
 "Kollona e modelit të degëzimit që përmban vlerat e hapësirave të kollonave"
 
-#: gtk/gtkcombobox.c:495
+#: gtk/gtkcombobox.c:500
 msgid "Active item"
 msgstr "Elementi aktiv"
 
-#: gtk/gtkcombobox.c:496
+#: gtk/gtkcombobox.c:501
 msgid "The item which is currently active"
 msgstr "Elementi aktualisht aktiv"
 
-#: gtk/gtkcombobox.c:504
+#: gtk/gtkcombobox.c:509
 msgid "Appears as list"
 msgstr "Shfaqet si listë"
 
-#: gtk/gtkcombobox.c:505
+#: gtk/gtkcombobox.c:510
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 "Nëse kutia e kombinuar poshtëlëshuese duhet të paraqitet si listë në vend të "
@@ -1596,19 +1596,19 @@ msgstr "Zgjidh në fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Nëse të zgjidhen përmbajtjet e një zëri kur ky fokusohet"
 
-#: gtk/gtkentrycompletion.c:222
+#: gtk/gtkentrycompletion.c:223
 msgid "Completion Model"
 msgstr "Modeli i plotësimit"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "The model to find matches in"
 msgstr "Modeli për gjetje përputhjesh në"
 
-#: gtk/gtkentrycompletion.c:229
+#: gtk/gtkentrycompletion.c:230
 msgid "Minimum Key Length"
 msgstr "Gjatësia më e Vogël e Kyçit"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 "Gjatësia më e vogël e kyçit të kërkimit që të mund të kërkohen përputhje"
@@ -1672,11 +1672,11 @@ msgstr ""
 "Një instrument që do të shfaqet në vend të etiketës së zakonshme të "
 "shpalosësit"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:622
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
 msgid "Expander Size"
 msgstr "Madhësia e zgjeruesit"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:623
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
 msgid "Size of the expander arrow"
 msgstr "Madhësia e shigjetës së zgjeruesit"
 
@@ -1684,94 +1684,94 @@ msgstr "Madhësia e shigjetës së zgjeruesit"
 msgid "Spacing around expander arrow"
 msgstr "Hapësira rreth kutisë së shpalosësit"
 
-#: gtk/gtkfilechooser.c:93
+#: gtk/gtkfilechooser.c:175
 msgid "Action"
 msgstr "Veprimi"
 
-#: gtk/gtkfilechooser.c:94
+#: gtk/gtkfilechooser.c:176
 msgid "The type of operation that the file selector is performing"
 msgstr "Lloji i operacionit që zgjedhësi i file po kryen"
 
-#: gtk/gtkfilechooser.c:100
+#: gtk/gtkfilechooser.c:182
 msgid "File System Backend"
 msgstr "File sistemi backend"
 
-#: gtk/gtkfilechooser.c:101
+#: gtk/gtkfilechooser.c:183
 msgid "Name of file system backend to use"
 msgstr "Emri i file sistemit backend që duhet përdorur"
 
-#: gtk/gtkfilechooser.c:106
+#: gtk/gtkfilechooser.c:188
 msgid "Filter"
 msgstr "Filtri"
 
-#: gtk/gtkfilechooser.c:107
+#: gtk/gtkfilechooser.c:189
 msgid "The current filter for selecting which files are displayed"
 msgstr "Filtri aktual për të zgjedhur se çfarë files duhen shfaqur"
 
-#: gtk/gtkfilechooser.c:112
+#: gtk/gtkfilechooser.c:194
 msgid "Local Only"
 msgstr "Vetëm lokalë"
 
-#: gtk/gtkfilechooser.c:113
+#: gtk/gtkfilechooser.c:195
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "Nëse file(s) i zgjedhur duhet të kufizohet në file lokalë: URLs"
 
-#: gtk/gtkfilechooser.c:118
+#: gtk/gtkfilechooser.c:200
 msgid "Preview widget"
 msgstr "Pamja e parë e widget"
 
-#: gtk/gtkfilechooser.c:119
+#: gtk/gtkfilechooser.c:201
 msgid "Application supplied widget for custom previews."
 msgstr "Programi i afruar për të paraqitur pamjet e personalizuara të widget."
 
-#: gtk/gtkfilechooser.c:124
+#: gtk/gtkfilechooser.c:206
 msgid "Preview Widget Active"
 msgstr "Pamja e parë e widget aktiv"
 
-#: gtk/gtkfilechooser.c:125
+#: gtk/gtkfilechooser.c:207
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
 "Nëse programi i afruar për të paraqitur pamjet e personalizuara të widget "
 "duhet shfaqur."
 
-#: gtk/gtkfilechooser.c:130
+#: gtk/gtkfilechooser.c:212
 msgid "Use Preview Label"
 msgstr "Përdor etiketën \"Shikoje\""
 
-#: gtk/gtkfilechooser.c:131
+#: gtk/gtkfilechooser.c:213
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "Nëse duhet shfaqur një etiketë rezerve me emrin e file të shikuar."
 
-#: gtk/gtkfilechooser.c:136
+#: gtk/gtkfilechooser.c:218
 msgid "Extra widget"
 msgstr "Widget shtesë"
 
-#: gtk/gtkfilechooser.c:137
+#: gtk/gtkfilechooser.c:219
 msgid "Application supplied widget for extra options."
 msgstr "Programi afron një widget për opcione shtesë."
 
-#: gtk/gtkfilechooser.c:142
+#: gtk/gtkfilechooser.c:224
 msgid "Select Multiple"
 msgstr "Zgjedhje shumëfishe"
 
-#: gtk/gtkfilechooser.c:143 gtk/gtkfilesel.c:575
+#: gtk/gtkfilechooser.c:225 gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
 msgstr "Nëse lejohet zgjedhja e files shumfishë"
 
-#: gtk/gtkfilechooser.c:149
+#: gtk/gtkfilechooser.c:231
 msgid "Show Hidden"
 msgstr "Shfaq të padukshmit"
 
-#: gtk/gtkfilechooser.c:150
+#: gtk/gtkfilechooser.c:232
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Nëse files dhe kartelat e padukshme duhen shfaqur"
 
-#: gtk/gtkfilechooserdefault.c:550
+#: gtk/gtkfilechooserdefault.c:559
 msgid "Default file chooser backend"
 msgstr "Zgjedhësi backend i prezgjedhur i file"
 
-#: gtk/gtkfilechooserdefault.c:551
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Emri i GtkFileChooser backend që duhet përdorur si i prezgjedhur"
 
@@ -2058,7 +2058,7 @@ msgstr "Teksti i etiketës"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "NJë listë vetish stili për t'u zbatuar tek teksti i etiketës"
 
-#: gtk/gtklabel.c:321 gtk/gtktexttag.c:375 gtk/gtktextview.c:603
+#: gtk/gtklabel.c:321 gtk/gtktexttag.c:375 gtk/gtktextview.c:604
 msgid "Justification"
 msgstr "Orientimi"
 
@@ -2891,11 +2891,11 @@ msgstr ""
 "Shfaq një buton të dytë shigjetë para në anën e kundërt të panelit të "
 "rrëshqitësit"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:536
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
 msgid "Horizontal Adjustment"
 msgstr "Rregullimi horizontal"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:544
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
 msgid "Vertical Adjustment"
 msgstr "Rregullimi vertikal"
 
@@ -3422,7 +3422,7 @@ msgstr ""
 "për gërmat. Kjo veti përshtatet me ndryshime temash etj, ndaj këshillohet. "
 "Pango përcakton paraprakisht disa shkallë si fjala vjen PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:376 gtk/gtktextview.c:604
+#: gtk/gtktexttag.c:376 gtk/gtktextview.c:605
 msgid "Left, right, or center justification"
 msgstr "Drejtimi majtas, djathtas, apo qendër"
 
@@ -3430,7 +3430,7 @@ msgstr "Drejtimi majtas, djathtas, apo qendër"
 msgid "Left margin"
 msgstr "Kufiri i majtë"
 
-#: gtk/gtktexttag.c:393 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:393 gtk/gtktextview.c:614
 msgid "Width of the left margin in pixels"
 msgstr "Gjerësia e kufirit të majtë në pixels"
 
@@ -3438,15 +3438,15 @@ msgstr "Gjerësia e kufirit të majtë në pixels"
 msgid "Right margin"
 msgstr "Kufiri i djathtë"
 
-#: gtk/gtktexttag.c:403 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:403 gtk/gtktextview.c:624
 msgid "Width of the right margin in pixels"
 msgstr "Gjerësia e kufirit të djathtë në pixels"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:633
 msgid "Indent"
 msgstr "Ngushto"
 
-#: gtk/gtktexttag.c:414 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:414 gtk/gtktextview.c:634
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Madhësia e kryeradhës së paragrafit, në piksel"
 
@@ -3462,7 +3462,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Piksel mbi vijat"
 
-#: gtk/gtktexttag.c:435 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:558
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixels e hapësirës bosh mbi paragrafë"
 
@@ -3470,7 +3470,7 @@ msgstr "Pixels e hapësirës bosh mbi paragrafë"
 msgid "Pixels below lines"
 msgstr "Piksel nën vijë"
 
-#: gtk/gtktexttag.c:445 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:445 gtk/gtktextview.c:568
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixels e hapësirës bosh nën paragrafë"
 
@@ -3478,7 +3478,7 @@ msgstr "Pixels e hapësirës bosh nën paragrafë"
 msgid "Pixels inside wrap"
 msgstr "Piksel brenda mbështjellëses"
 
-#: gtk/gtktexttag.c:455 gtk/gtktextview.c:577
+#: gtk/gtktexttag.c:455 gtk/gtktextview.c:578
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixels e hapësirës bosh ndërmjet vijash të mbështjella në një paragraf"
 
@@ -3486,18 +3486,18 @@ msgstr "Pixels e hapësirës bosh ndërmjet vijash të mbështjella në një par
 msgid "Wrap mode"
 msgstr "Në krye automatikisht"
 
-#: gtk/gtktexttag.c:482 gtk/gtktextview.c:595
+#: gtk/gtktexttag.c:482 gtk/gtktextview.c:596
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Nëse duhet të mos mbështillen vija kurrë, në kufij fjalësh ose në kufij "
 "gërmash"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:643
 msgid "Tabs"
 msgstr "Skedat"
 
-#: gtk/gtktexttag.c:492 gtk/gtktextview.c:643
+#: gtk/gtktexttag.c:492 gtk/gtktextview.c:644
 msgid "Custom tabs for this text"
 msgstr "Skedat e personalizuara për këtë tekst"
 
@@ -3610,67 +3610,67 @@ msgstr "Përcakto tekstin e fshehur"
 msgid "Whether this tag affects text visibility"
 msgstr "Tregon nëse ky tag influencon dukshmërinë e tekstit"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:557
 msgid "Pixels Above Lines"
 msgstr "Pixel mbi rreshta"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:567
 msgid "Pixels Below Lines"
 msgstr "Pixel poshtë rreshtave"
 
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:577
 msgid "Pixels Inside Wrap"
 msgstr "Piksel Brenda Mbështjelljes"
 
-#: gtk/gtktextview.c:594
+#: gtk/gtktextview.c:595
 msgid "Wrap Mode"
 msgstr "Mënyra \"në krye automatikisht\""
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:613
 msgid "Left Margin"
 msgstr "Kufiri i majtë"
 
-#: gtk/gtktextview.c:622
+#: gtk/gtktextview.c:623
 msgid "Right Margin"
 msgstr "Kufiri i djathtë"
 
-#: gtk/gtktextview.c:650
+#: gtk/gtktextview.c:651
 msgid "Cursor Visible"
 msgstr "Kursor i dukshëm"
 
-#: gtk/gtktextview.c:651
+#: gtk/gtktextview.c:652
 msgid "If the insertion cursor is shown"
 msgstr "Nëse kursori i futjes tregohet"
 
-#: gtk/gtktextview.c:658
+#: gtk/gtktextview.c:659
 msgid "Buffer"
 msgstr "Buffer"
 
-#: gtk/gtktextview.c:659
+#: gtk/gtktextview.c:660
 msgid "The buffer which is displayed"
 msgstr "Buffer-i i shfaqur"
 
-#: gtk/gtktextview.c:666
+#: gtk/gtktextview.c:667
 msgid "Overwrite mode"
 msgstr "Modaliteti mbishkrim"
 
-#: gtk/gtktextview.c:667
+#: gtk/gtktextview.c:668
 msgid "Whether entered text overwrites existing contents"
 msgstr "Nëse teksti i shkruar mbishkruan përmbajtjen e ekzistuese"
 
-#: gtk/gtktextview.c:674
+#: gtk/gtktextview.c:675
 msgid "Accepts tab"
 msgstr "Pranon tab"
 
-#: gtk/gtktextview.c:675
+#: gtk/gtktextview.c:676
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Kur Tab duhet të rezultojë në shtimin e një simboli tab"
 
-#: gtk/gtktextview.c:684
+#: gtk/gtktextview.c:685
 msgid "Error underline color"
 msgstr "Ngjyra e nënvizimit të gabimeve"
 
-#: gtk/gtktextview.c:685
+#: gtk/gtktextview.c:686
 msgid "Color with which to draw error-indication underlines"
 msgstr "Ngjyra me të cilën duhen vizatuar nënvizimet që venë në dukje gabimet"
 
@@ -3831,133 +3831,133 @@ msgstr "Modeli i paraqitjes së degëzuar"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Lloji i renditjes për paraqitjen e degëzuar"
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:532
 msgid "TreeView Model"
 msgstr "Modeli i paraqitjes së degëzuar"
 
-#: gtk/gtktreeview.c:529
+#: gtk/gtktreeview.c:533
 msgid "The model for the tree view"
 msgstr "Modeli për paraqitjen e degëzuar"
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:541
 msgid "Horizontal Adjustment for the widget"
 msgstr "Përshtatje Horizontale për \"widget\"-in"
 
-#: gtk/gtktreeview.c:545
+#: gtk/gtktreeview.c:549
 msgid "Vertical Adjustment for the widget"
 msgstr "Përshtatje Vertikale për \"widget\"-in"
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:557
 msgid "Show the column header buttons"
 msgstr "Shfaq butonat e titullit të kollonave"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:564
 msgid "Headers Clickable"
 msgstr "Tituj të Klikueshëm"
 
-#: gtk/gtktreeview.c:561
+#: gtk/gtktreeview.c:565
 msgid "Column headers respond to click events"
 msgstr "Headers e kollonave reagojnë ndaj klikimeve"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:572
 msgid "Expander Column"
 msgstr "Kollona e zgjeruesit"
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:573
 msgid "Set the column for the expander column"
 msgstr "Përcakto kollonën për kollonën e zgjeruesit"
 
-#: gtk/gtktreeview.c:576 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "E rirenditshëm"
 
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:581
 msgid "View is reorderable"
 msgstr "Pamja është e rirenditshme"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:588
 msgid "Rules Hint"
 msgstr "Sugjerimi i rregullave"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:589
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Përcakto sugjerimentin tek kontrolluesi i temave për të vizatuar rreshtat në "
 "ngjyra të alternuara"
 
-#: gtk/gtktreeview.c:592
+#: gtk/gtktreeview.c:596
 msgid "Enable Search"
 msgstr "Mundëso Kërkimet"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:597
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "Paraqitja i mundëson përdoruesit kërkimin nëpër kollona në mënyrë "
 "ndërvepruese"
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:604
 msgid "Search Column"
 msgstr "Kërko kollonën"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:605
 msgid "Model column to search through when searching through code"
 msgstr "Model kollone për t'u kërkuar kur kërkohet nëpër kod"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:614
 msgid "Fixed Height Mode"
 msgstr "Modalitet me Lartësi të pandryshueshme"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:615
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Shpejto GtkTreeView duke supozuar që të gjithë rreshtat kanë lartësi të "
 "njëjtë"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:635
 msgid "Vertical Separator Width"
 msgstr "Gjerësia e Ndarësit Vertikal"
 
-#: gtk/gtktreeview.c:632
+#: gtk/gtktreeview.c:636
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Hapësira vertikale ndërmjet kutive. Duhet të jetë një numër çift"
 
-#: gtk/gtktreeview.c:640
+#: gtk/gtktreeview.c:644
 msgid "Horizontal Separator Width"
 msgstr "Gjerësia e Ndarësit Horizontal"
 
-#: gtk/gtktreeview.c:641
+#: gtk/gtktreeview.c:645
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Hapësira horizontale ndërmjet qelive.  Duhet të jetë një numër çift"
 
-#: gtk/gtktreeview.c:649
+#: gtk/gtktreeview.c:653
 msgid "Allow Rules"
 msgstr "Lejon përdorimin e rregullave"
 
-#: gtk/gtktreeview.c:650
+#: gtk/gtktreeview.c:654
 msgid "Allow drawing of alternating color rows"
 msgstr "Lejo vizatimin me ngjyra të alternuara të rreshtave"
 
-#: gtk/gtktreeview.c:656
+#: gtk/gtktreeview.c:660
 msgid "Indent Expanders"
 msgstr "Dhëmbëzo zgjeruesit"
 
-#: gtk/gtktreeview.c:657
+#: gtk/gtktreeview.c:661
 msgid "Make the expanders indented"
 msgstr "Bëj që zgjeruesit të jenë të dhëmbëzuar"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:667
 msgid "Even Row Color"
 msgstr "Ngjyra e Rreshtit Çift"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:668
 msgid "Color to use for even rows"
 msgstr "Ngjyra që duhet përdorur për rreshtat çift"
 
-#: gtk/gtktreeview.c:670
+#: gtk/gtktreeview.c:674
 msgid "Odd Row Color"
 msgstr "Ngjyra e Rreshtit Tek"
 
-#: gtk/gtktreeview.c:671
+#: gtk/gtktreeview.c:675
 msgid "Color to use for odd rows"
 msgstr "Ngjyra që duhet përdorur për rreshtat tek"
 
@@ -4484,18 +4484,18 @@ msgstr "Graviteti"
 msgid "The window gravity of the window"
 msgstr "Dritarja e gravitetit të dritares"
 
-#: modules/input/gtkimcontextxim.c:326
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
 msgstr "Stil IM preedit"
 
-#: modules/input/gtkimcontextxim.c:327
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method preedit string"
 msgstr "Tregon si duhet shfaqur stringa e metodës së input preedit"
 
-#: modules/input/gtkimcontextxim.c:335
+#: modules/input/gtkimcontextxim.c:339
 msgid "IM Status style"
 msgstr "Gjendja e stilit IM"
 
-#: modules/input/gtkimcontextxim.c:336
+#: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Tregon si duhet shfaqur metod e input e panelit të gjendjes"

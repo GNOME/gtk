@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
+"POT-Creation-Date: 2004-04-30 12:06-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -215,7 +215,7 @@ msgid "Whether the action is enabled."
 msgstr "Үйлдэл нээлттэй эсэх."
 
 # gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:552
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Харагдхуйц"
@@ -658,53 +658,53 @@ msgid "Vertical alignment for child"
 msgstr "Хүүгийн босоо зэрэгцүүлэлт "
 
 # gtk/gtkbutton.c:265
-#: gtk/gtkbutton.c:349
+#: gtk/gtkbutton.c:350
 msgid "Default Spacing"
 msgstr "Анхдагч зай"
 
-#: gtk/gtkbutton.c:350
+#: gtk/gtkbutton.c:351
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT товчнуудад зориулсан нэмэлт зай."
 
 # gtk/gtkbutton.c:272
-#: gtk/gtkbutton.c:356
+#: gtk/gtkbutton.c:357
 msgid "Default Outside Spacing"
 msgstr "Анхдагч гадаад зай"
 
-#: gtk/gtkbutton.c:357
+#: gtk/gtkbutton.c:358
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "CAN_DEFAULT товчнуудад зориулсан товчнуудыг хүрээлэх нэмэлт зай"
 
-#: gtk/gtkbutton.c:362
+#: gtk/gtkbutton.c:363
 msgid "Child X Displacement"
 msgstr "Дэд элементийн хэвтээ тэнхлэгийн дагуух шилжилт"
 
-#: gtk/gtkbutton.c:363
+#: gtk/gtkbutton.c:364
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Хэрэв товч дарагдсан бол дэд элемтентийг хэвтээ тэнхлэгийн дагуу хэр зэрэг "
 "шилжүүлэх"
 
-#: gtk/gtkbutton.c:370
+#: gtk/gtkbutton.c:371
 msgid "Child Y Displacement"
 msgstr "Дэд элементийн босоо тэнхлэгийн дагуух шилжилт"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:372
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Хэрэв товч дарагдсан бол дэд элемтентийг босоо тэнхлэгийн дагуу хэр зэрэг "
 "шилжүүлэх"
 
-#: gtk/gtkbutton.c:378
+#: gtk/gtkbutton.c:379
 msgid "Show button images"
 msgstr "Товчны зургууд харуулах"
 
 # gtk/gtknotebook.c:407
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:380
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Товчинд эмблем зураг харуулах эсэх"
 
@@ -775,122 +775,122 @@ msgid "If TRUE, week numbers are displayed"
 msgstr "Хэрэв ҮНЭН бол долоо хоногийн тоо харагдана"
 
 # gtk/gtkcellrenderer.c:103
-#: gtk/gtkcellrenderer.c:151
+#: gtk/gtkcellrenderer.c:152
 msgid "mode"
 msgstr "горим"
 
-#: gtk/gtkcellrenderer.c:152
+#: gtk/gtkcellrenderer.c:153
 msgid "Editable mode of the CellRenderer"
 msgstr "CellRenderer -ийн засвар хийх горим"
 
 # gtk/gtkcellrenderer.c:113
-#: gtk/gtkcellrenderer.c:161
+#: gtk/gtkcellrenderer.c:162
 msgid "visible"
 msgstr "харагдах"
 
 # gtk/gtkcellrenderer.c:114
-#: gtk/gtkcellrenderer.c:162
+#: gtk/gtkcellrenderer.c:163
 msgid "Display the cell"
 msgstr "Уг нүдийг харагдуулах"
 
 # gtk/gtkcellrenderer.c:122
-#: gtk/gtkcellrenderer.c:170
+#: gtk/gtkcellrenderer.c:171
 msgid "xalign"
 msgstr "x-зэрэгцүүлэлт"
 
 # gtk/gtkcellrenderer.c:123
-#: gtk/gtkcellrenderer.c:171
+#: gtk/gtkcellrenderer.c:172
 msgid "The x-align"
 msgstr "X тэнхлэгээр зэрэгцүүлэх."
 
 # gtk/gtkcellrenderer.c:133
-#: gtk/gtkcellrenderer.c:181
+#: gtk/gtkcellrenderer.c:182
 msgid "yalign"
 msgstr "y-зэрэгцүүлэлт"
 
 # gtk/gtkcellrenderer.c:134
-#: gtk/gtkcellrenderer.c:182
+#: gtk/gtkcellrenderer.c:183
 msgid "The y-align"
 msgstr "X тэнхлэгээр зэрэгцүүлэх."
 
-#: gtk/gtkcellrenderer.c:192
+#: gtk/gtkcellrenderer.c:193
 msgid "xpad"
 msgstr "Хэвтээ тэнхлэгээр дүүрэх"
 
-#: gtk/gtkcellrenderer.c:193
+#: gtk/gtkcellrenderer.c:194
 msgid "The xpad"
 msgstr "Хэвтээ тэнхлэгээр дүүрэх"
 
-#: gtk/gtkcellrenderer.c:203
+#: gtk/gtkcellrenderer.c:204
 msgid "ypad"
 msgstr "Босоо тэнхлэгээр дүүрэх"
 
-#: gtk/gtkcellrenderer.c:204
+#: gtk/gtkcellrenderer.c:205
 msgid "The ypad"
 msgstr "Босоо тэнхлэгээр дүүрэх"
 
 # gtk/gtkcellrenderer.c:166
-#: gtk/gtkcellrenderer.c:214
+#: gtk/gtkcellrenderer.c:215
 msgid "width"
 msgstr "өргөн"
 
 # gtk/gtkcellrenderer.c:167
-#: gtk/gtkcellrenderer.c:215
+#: gtk/gtkcellrenderer.c:216
 msgid "The fixed width"
 msgstr "Хатуу өргөн"
 
 # gtk/gtkcellrenderer.c:177
-#: gtk/gtkcellrenderer.c:225
+#: gtk/gtkcellrenderer.c:226
 msgid "height"
 msgstr "өндөр"
 
 # gtk/gtkcellrenderer.c:178
-#: gtk/gtkcellrenderer.c:226
+#: gtk/gtkcellrenderer.c:227
 msgid "The fixed height"
 msgstr "хатуу өндөр"
 
-#: gtk/gtkcellrenderer.c:236
+#: gtk/gtkcellrenderer.c:237
 msgid "Is Expander"
 msgstr "Өргөтгөгдсөн"
 
-#: gtk/gtkcellrenderer.c:237
+#: gtk/gtkcellrenderer.c:238
 msgid "Row has children"
 msgstr "Мөр дэд элементтэй"
 
-#: gtk/gtkcellrenderer.c:246
+#: gtk/gtkcellrenderer.c:247
 msgid "Is Expanded"
 msgstr "Өргөтгөгдсөн"
 
-#: gtk/gtkcellrenderer.c:247
+#: gtk/gtkcellrenderer.c:248
 msgid "Row is an expander row, and is expanded"
 msgstr "Мөр нь өргөтгөгч мөр бөгөөд өргөтгөгдсөн байна."
 
 # gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
-#: gtk/gtkcellrenderer.c:255
+#: gtk/gtkcellrenderer.c:256
 msgid "Cell background color name"
 msgstr "Нүдний дэвсгэр өнгө (нэрээр)"
 
 # gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
-#: gtk/gtkcellrenderer.c:256
+#: gtk/gtkcellrenderer.c:257
 msgid "Cell background color as a string"
 msgstr "Нүдний дэвсгэр өнгө (үгээр)"
 
 # gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
-#: gtk/gtkcellrenderer.c:263
+#: gtk/gtkcellrenderer.c:264
 msgid "Cell background color"
 msgstr "Нүдний дэвсгэр өнгө"
 
 # gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
-#: gtk/gtkcellrenderer.c:264
+#: gtk/gtkcellrenderer.c:265
 msgid "Cell background color as a GdkColor"
 msgstr "Нүдний дэвсгэр өнгө GdkColor шиг"
 
 # gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
-#: gtk/gtkcellrenderer.c:272
+#: gtk/gtkcellrenderer.c:273
 msgid "Cell background set"
 msgstr "Нүдний дэвсгэр тавих"
 
-#: gtk/gtkcellrenderer.c:273
+#: gtk/gtkcellrenderer.c:274
 msgid "Whether this tag affects the cell background color"
 msgstr "Уг таг дэвсгэрийн өнгөнд нөлөөлөх эсэх"
 
@@ -1024,12 +1024,12 @@ msgstr "GdkColor шиг тэмдэгтийн өнгө "
 # gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 # gtk/gtktextview.c:568
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
-#: gtk/gtktextview.c:586
+#: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "Засварлах"
 
 # gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
-#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:275 gtk/gtktextview.c:587
+#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:275 gtk/gtktextview.c:588
 msgid "Whether the text can be modified by the user"
 msgstr "Текстийг хэрэглэгч өөрчилж болох эсэх"
 
@@ -1389,7 +1389,7 @@ msgid "The title of the color selection dialog"
 msgstr "Өнгө сонгогч диалогийн гарчиг"
 
 # gtk/gtkcolorsel.c:1718
-#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1776
+#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1781
 msgid "Current Color"
 msgstr "Идэвхитэй өнгө "
 
@@ -1399,7 +1399,7 @@ msgid "The selected color"
 msgstr "Сонгогдсон өнгө "
 
 # gtk/gtkcolorsel.c:1725
-#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1783
+#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1788
 msgid "Current Alpha"
 msgstr "Харгалзах альфа-суваг "
 
@@ -1409,41 +1409,41 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Одоогын бүрэлтийн хүч (\"0\" бол тунгалаг, \"65535\" үл харагдахуйц) "
 
 # gtk/gtkcolorsel.c:1704
-#: gtk/gtkcolorsel.c:1762
+#: gtk/gtkcolorsel.c:1767
 msgid "Has Opacity Control"
 msgstr "Тохиргоо тодорхойгүй "
 
 # gtk/gtkcolorsel.c:1705
-#: gtk/gtkcolorsel.c:1763
+#: gtk/gtkcolorsel.c:1768
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Өнгө сонгогч нь тодорхойгүй тогтоохыг зөвшөөрөөд тодорхойлж байна "
 
 # gtk/gtkcolorsel.c:1711
-#: gtk/gtkcolorsel.c:1769
+#: gtk/gtkcolorsel.c:1774
 msgid "Has palette"
 msgstr "Өнгөний нийлүүлэг "
 
 # gtk/gtkcolorsel.c:1712
-#: gtk/gtkcolorsel.c:1770
+#: gtk/gtkcolorsel.c:1775
 msgid "Whether a palette should be used"
 msgstr "Ашигласан өнгөний нийлүүлэг үү, эсвэл "
 
 # gtk/gtkcolorsel.c:1719
-#: gtk/gtkcolorsel.c:1777
+#: gtk/gtkcolorsel.c:1782
 msgid "The current color"
 msgstr "Харгалзах өнгө "
 
 # gtk/gtkcolorsel.c:1726
-#: gtk/gtkcolorsel.c:1784
+#: gtk/gtkcolorsel.c:1789
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Одоогын тодорхойгүй утга (\"0\" -ээс , \"65535\" -хүртэлх) "
 
 # gtk/gtkcolorsel.c:1739
-#: gtk/gtkcolorsel.c:1798
+#: gtk/gtkcolorsel.c:1803
 msgid "Custom palette"
 msgstr "Сонголт хийх өнгөний нийлүүлэг "
 
-#: gtk/gtkcolorsel.c:1799
+#: gtk/gtkcolorsel.c:1804
 msgid "Palette to use in the color selector"
 msgstr "Өнгө сонгогчид ашиглагдах будгын нийлүүлэг"
 
@@ -1495,56 +1495,56 @@ msgstr "Жагсаалт дахь утга"
 msgid "Whether entered values must already be present in the list"
 msgstr "Оруулсан утгыг жагсаалтанд гаргасан байх эсэх"
 
-#: gtk/gtkcombobox.c:457
+#: gtk/gtkcombobox.c:462
 msgid "ComboBox model"
 msgstr "Комбобокс загвар"
 
-#: gtk/gtkcombobox.c:458
+#: gtk/gtkcombobox.c:463
 msgid "The model for the combo box"
 msgstr "Комбобоксын загвар"
 
 # gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
-#: gtk/gtkcombobox.c:465
+#: gtk/gtkcombobox.c:470
 msgid "Wrap width"
 msgstr "Өргөн таслах"
 
-#: gtk/gtkcombobox.c:466
+#: gtk/gtkcombobox.c:471
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Торонд объект байрлуулахад өргөн таслах"
 
 # gtk/gtktable.c:174
-#: gtk/gtkcombobox.c:475
+#: gtk/gtkcombobox.c:480
 msgid "Row span column"
 msgstr "Мөр дарах багана"
 
-#: gtk/gtkcombobox.c:476
+#: gtk/gtkcombobox.c:481
 msgid "TreeModel column containing the row span values"
 msgstr "Мөр хоорондын зайн утга агуулах TreeModel-багана"
 
 # gtk/gtktable.c:183
-#: gtk/gtkcombobox.c:485
+#: gtk/gtkcombobox.c:490
 msgid "Column span column"
 msgstr "Багана дарах багана"
 
-#: gtk/gtkcombobox.c:486
+#: gtk/gtkcombobox.c:491
 msgid "TreeModel column containing the column span values"
 msgstr "Багана хоорондын зайн утга агуулах TreeModel-багана"
 
 # gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
-#: gtk/gtkcombobox.c:495
+#: gtk/gtkcombobox.c:500
 msgid "Active item"
 msgstr "Идэвхжүүлэх"
 
 # gtk/gtkfontsel.c:210
-#: gtk/gtkcombobox.c:496
+#: gtk/gtkcombobox.c:501
 msgid "The item which is currently active"
 msgstr "Идэвхитэй байгаа элемент"
 
-#: gtk/gtkcombobox.c:504
+#: gtk/gtkcombobox.c:509
 msgid "Appears as list"
 msgstr "Жагсаалтаар харуулах"
 
-#: gtk/gtkcombobox.c:505
+#: gtk/gtkcombobox.c:510
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr "combobox dropdowns цэснээс илүү жагсаалт шиг харагдах эсэх"
 
@@ -1798,20 +1798,20 @@ msgstr "Фокус дахь сонголт"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Голлуулах үед бүртгэлийн агуулгыг сонгох эсэх."
 
-#: gtk/gtkentrycompletion.c:222
+#: gtk/gtkentrycompletion.c:223
 msgid "Completion Model"
 msgstr "Гүйцээлтийн загвар"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "The model to find matches in"
 msgstr "Сонголтоор хайгдах загвар"
 
 # gtk/gtkscrollbar.c:76
-#: gtk/gtkentrycompletion.c:229
+#: gtk/gtkentrycompletion.c:230
 msgid "Minimum Key Length"
 msgstr "Х/Б түлхүүрийн урт"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Х/Б богино сонголтоор хайх түлхүүрийн урт"
 
@@ -1879,11 +1879,11 @@ msgstr "Бичээс виджет"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Энгийн задлагчийн бичээсийн оронд харуулах удирдлагын элемент"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:622
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
 msgid "Expander Size"
 msgstr "Дэлгэгдэгчийн хэмжээ"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:623
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
 msgid "Size of the expander arrow"
 msgstr "Дэлгэгдэгч сумны хэмжээ"
 
@@ -1893,101 +1893,101 @@ msgid "Spacing around expander arrow"
 msgstr "Индикаторын сум орчимийн зай"
 
 # gtk/gtkprogressbar.c:187
-#: gtk/gtkfilechooser.c:93
+#: gtk/gtkfilechooser.c:175
 msgid "Action"
 msgstr "Үйлдэл"
 
-#: gtk/gtkfilechooser.c:94
+#: gtk/gtkfilechooser.c:176
 msgid "The type of operation that the file selector is performing"
 msgstr "Файл сонгогч хийх үйлдлийн төрөл"
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilechooser.c:100
+#: gtk/gtkfilechooser.c:182
 msgid "File System Backend"
 msgstr "Файл систем Бакэнд"
 
 # gtk/gtksettings.c:216
-#: gtk/gtkfilechooser.c:101
+#: gtk/gtkfilechooser.c:183
 msgid "Name of file system backend to use"
 msgstr "Хэрэглэх бакэнд файлын системтийн нэр"
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilechooser.c:106
+#: gtk/gtkfilechooser.c:188
 msgid "Filter"
 msgstr "Шүүлтүүр"
 
-#: gtk/gtkfilechooser.c:107
+#: gtk/gtkfilechooser.c:189
 msgid "The current filter for selecting which files are displayed"
 msgstr "Ямар файлууд харуулахыг сонгох идэвхитэй шүүлтүүр"
 
-#: gtk/gtkfilechooser.c:112
+#: gtk/gtkfilechooser.c:194
 msgid "Local Only"
 msgstr "Зөвхөн локал"
 
-#: gtk/gtkfilechooser.c:113
+#: gtk/gtkfilechooser.c:195
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "Сонгосон файлууд локал файлаар хязгаарлагдах эсэх: URLs"
 
-#: gtk/gtkfilechooser.c:118
+#: gtk/gtkfilechooser.c:200
 msgid "Preview widget"
 msgstr "Тольдолт харагдац"
 
-#: gtk/gtkfilechooser.c:119
+#: gtk/gtkfilechooser.c:201
 msgid "Application supplied widget for custom previews."
 msgstr "Програм хэвшмэл тольдолтуудын хувьд виджет нийлүүлнэ."
 
-#: gtk/gtkfilechooser.c:124
+#: gtk/gtkfilechooser.c:206
 msgid "Preview Widget Active"
 msgstr "Тольдолт харагдац идэвхтэй"
 
-#: gtk/gtkfilechooser.c:125
+#: gtk/gtkfilechooser.c:207
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr "Харуулах хэвшмэл тольдолтуудын хувьд програм виджет нийлүүлнэ."
 
-#: gtk/gtkfilechooser.c:130
+#: gtk/gtkfilechooser.c:212
 msgid "Use Preview Label"
 msgstr "Тольдолт бичээст хэрэглэх"
 
-#: gtk/gtkfilechooser.c:131
+#: gtk/gtkfilechooser.c:213
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "Тольдсон файлын нэртэй дүрст бичээсийг харуулах эсэх."
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkfilechooser.c:136
+#: gtk/gtkfilechooser.c:218
 msgid "Extra widget"
 msgstr "Тусгай элемент"
 
-#: gtk/gtkfilechooser.c:137
+#: gtk/gtkfilechooser.c:219
 msgid "Application supplied widget for extra options."
 msgstr "Програм тусгай сонголтууд дээр виджет нийлүүлнэ."
 
 # gtk/gtkfilesel.c:551
-#: gtk/gtkfilechooser.c:142
+#: gtk/gtkfilechooser.c:224
 msgid "Select Multiple"
 msgstr "Олон сонголт"
 
 # gtk/gtkfilesel.c:552
-#: gtk/gtkfilechooser.c:143 gtk/gtkfilesel.c:575
+#: gtk/gtkfilechooser.c:225 gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
 msgstr "Олон файл сонгогдож болох эсэх."
 
 # gtk/gtknotebook.c:413
-#: gtk/gtkfilechooser.c:149
+#: gtk/gtkfilechooser.c:231
 msgid "Show Hidden"
 msgstr "Далдласанг харуулах"
 
 # gtk/gtkfilesel.c:544
-#: gtk/gtkfilechooser.c:150
+#: gtk/gtkfilechooser.c:232
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Далдласан файл эсвэл лавлахуудыг харуулах эсэх"
 
-#: gtk/gtkfilechooserdefault.c:550
+#: gtk/gtkfilechooserdefault.c:559
 msgid "Default file chooser backend"
 msgstr "Стандарт файл сонгогч"
 
 # gtk/gtksettings.c:216
-#: gtk/gtkfilechooserdefault.c:551
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Стандартаар хэрэглэх GtkFileChooser· бакэндын нэр"
 
@@ -2317,7 +2317,7 @@ msgid "A list of style attributes to apply to the text of the label"
 msgstr "бичээс -ийн текстэнд хэрэглэгдэх загварын жагсаалтын аттрибутууд."
 
 # gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
-#: gtk/gtklabel.c:321 gtk/gtktexttag.c:375 gtk/gtktextview.c:603
+#: gtk/gtklabel.c:321 gtk/gtktexttag.c:375 gtk/gtktextview.c:604
 msgid "Justification"
 msgstr "Тэнцүүлэх"
 
@@ -3186,11 +3186,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Гүйлгүүрийн эсрэг талд урагш шилжих сумтай хоёр дох товчийг дүрслэх"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:536
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
 msgid "Horizontal Adjustment"
 msgstr "Хэвтээ зэрэгцүүлэлт"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:544
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
 msgid "Vertical Adjustment"
 msgstr "Босоо зэрэгцүүлэлт"
 
@@ -3751,7 +3751,7 @@ msgstr ""
 "PANGO_SCALE_X_LARGE"
 
 # gtk/gtktexttag.c:379 gtk/gtktextview.c:586
-#: gtk/gtktexttag.c:376 gtk/gtktextview.c:604
+#: gtk/gtktexttag.c:376 gtk/gtktextview.c:605
 msgid "Left, right, or center justification"
 msgstr "Зүүн баруун эсвэл төв зэрэгцүүлэлт"
 
@@ -3761,7 +3761,7 @@ msgid "Left margin"
 msgstr "Зүүн хязгаар "
 
 # gtk/gtktexttag.c:396 gtk/gtktextview.c:595
-#: gtk/gtktexttag.c:393 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:393 gtk/gtktextview.c:614
 msgid "Width of the left margin in pixels"
 msgstr "Цэгүүдийн зүүн хязгаарын өргөн "
 
@@ -3771,17 +3771,17 @@ msgid "Right margin"
 msgstr "Баруун хязгаар "
 
 # gtk/gtktexttag.c:406 gtk/gtktextview.c:605
-#: gtk/gtktexttag.c:403 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:403 gtk/gtktextview.c:624
 msgid "Width of the right margin in pixels"
 msgstr "Цэгүүдийн баруун хязгаарын өргөн"
 
 # gtk/gtktexttag.c:416 gtk/gtktextview.c:614
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:633
 msgid "Indent"
 msgstr "Шүд "
 
 # gtk/gtktexttag.c:417 gtk/gtktextview.c:615
-#: gtk/gtktexttag.c:414 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:414 gtk/gtktextview.c:634
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Догол мөрийн шүднүүдийн нийлбэрийг цэгээр"
 
@@ -3798,7 +3798,7 @@ msgid "Pixels above lines"
 msgstr "Шугамуудын дээрх цэгүүд"
 
 # gtk/gtktexttag.c:438 gtk/gtktextview.c:539
-#: gtk/gtktexttag.c:435 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:435 gtk/gtktextview.c:558
 msgid "Pixels of blank space above paragraphs"
 msgstr "Догол мөрийн дээрх хоосон зайн цэгүүд"
 
@@ -3808,7 +3808,7 @@ msgid "Pixels below lines"
 msgstr "Шугамуудын доорх цэгүүд"
 
 # gtk/gtktexttag.c:448 gtk/gtktextview.c:549
-#: gtk/gtktexttag.c:445 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:445 gtk/gtktextview.c:568
 msgid "Pixels of blank space below paragraphs"
 msgstr "Догол мөрийн доорхи хоосон зайн цэгүүд"
 
@@ -3818,7 +3818,7 @@ msgid "Pixels inside wrap"
 msgstr "Мөр таслалтын цэгүүд "
 
 # gtk/gtktexttag.c:458 gtk/gtktextview.c:559
-#: gtk/gtktexttag.c:455 gtk/gtktextview.c:577
+#: gtk/gtktexttag.c:455 gtk/gtktextview.c:578
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Догол мөрийн доторхи мөр таслалт хоорондын хоосон зай (цэгээр)"
 
@@ -3827,16 +3827,16 @@ msgstr "Догол мөрийн доторхи мөр таслалт хооро�
 msgid "Wrap mode"
 msgstr "Мөр таслах горим"
 
-#: gtk/gtktexttag.c:482 gtk/gtktextview.c:595
+#: gtk/gtktexttag.c:482 gtk/gtktextview.c:596
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Мөрүүдийг үг эсвэл тэмдэгтийн хязгаараар таслахгүй юу?"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:643
 msgid "Tabs"
 msgstr "ТАВ"
 
-#: gtk/gtktexttag.c:492 gtk/gtktextview.c:643
+#: gtk/gtktexttag.c:492 gtk/gtktextview.c:644
 msgid "Custom tabs for this text"
 msgstr "Энэхүү текстэнд зориулсан хэрэглэгчийн ТАВ"
 
@@ -3953,75 +3953,75 @@ msgid "Whether this tag affects text visibility"
 msgstr "Энэхүү таг нь текстийн харагдацад нөлөөлөх эсэх"
 
 # gtk/gtktextview.c:538
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:557
 msgid "Pixels Above Lines"
 msgstr "Шугамуудын дээрхи цэгүүд "
 
 # gtk/gtktextview.c:548
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:567
 msgid "Pixels Below Lines"
 msgstr "Шугамуудын доорхи цэгүүд "
 
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:577
 msgid "Pixels Inside Wrap"
 msgstr "Нэг мөрөн дахь цэг"
 
 # gtk/gtktextview.c:576
-#: gtk/gtktextview.c:594
+#: gtk/gtktextview.c:595
 msgid "Wrap Mode"
 msgstr "Мөр таслах горим"
 
 # gtk/gtktextview.c:594
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:613
 msgid "Left Margin"
 msgstr "Зүүн хязгаар "
 
 # gtk/gtktextview.c:604
-#: gtk/gtktextview.c:622
+#: gtk/gtktextview.c:623
 msgid "Right Margin"
 msgstr "Баруун хязгаар "
 
 # gtk/gtktextview.c:632
-#: gtk/gtktextview.c:650
+#: gtk/gtktextview.c:651
 msgid "Cursor Visible"
 msgstr "Түүчээын харагдах байдал"
 
 # gtk/gtktextview.c:633
-#: gtk/gtktextview.c:651
+#: gtk/gtktextview.c:652
 msgid "If the insertion cursor is shown"
 msgstr "Хэрэв оруулагч түүчээ үзэгдэж байвал"
 
-#: gtk/gtktextview.c:658
+#: gtk/gtktextview.c:659
 msgid "Buffer"
 msgstr "Буфер"
 
-#: gtk/gtktextview.c:659
+#: gtk/gtktextview.c:660
 msgid "The buffer which is displayed"
 msgstr "Харагдах буфер"
 
 # gtk/gtkcontainer.c:200
-#: gtk/gtktextview.c:666
+#: gtk/gtktextview.c:667
 msgid "Overwrite mode"
 msgstr "Дарж бичих горим"
 
-#: gtk/gtktextview.c:667
+#: gtk/gtktextview.c:668
 msgid "Whether entered text overwrites existing contents"
 msgstr "Оруулсан текст өмнө байсан агуулгыг дарах эсэх"
 
-#: gtk/gtktextview.c:674
+#: gtk/gtktextview.c:675
 msgid "Accepts tab"
 msgstr "Зөвшөөх ТАВ"
 
-#: gtk/gtktextview.c:675
+#: gtk/gtktextview.c:676
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "таб товчилуураар ТАВ тэмдэгт оруулах эсэх"
 
 # gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:684
+#: gtk/gtktextview.c:685
 msgid "Error underline color"
 msgstr "Алдаа тэмдэглэх өнгө"
 
-#: gtk/gtktextview.c:685
+#: gtk/gtktextview.c:686
 msgid "Color with which to draw error-indication underlines"
 msgstr "Алдаа зааж доогуур нь зурж тэмдэглэхэд хэрэглэх өнгө"
 
@@ -4198,136 +4198,136 @@ msgstr "TreeModelSort загвар"
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort-оор сортлох загвар"
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:532
 msgid "TreeView Model"
 msgstr "Модчилж үзүүлэх загвар"
 
-#: gtk/gtktreeview.c:529
+#: gtk/gtktreeview.c:533
 msgid "The model for the tree view"
 msgstr "Модоор харуулах загвар"
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:541
 msgid "Horizontal Adjustment for the widget"
 msgstr "Удирдлагын элементийн хэвтээ тохируулга"
 
-#: gtk/gtktreeview.c:545
+#: gtk/gtktreeview.c:549
 msgid "Vertical Adjustment for the widget"
 msgstr "Удирдлагын элементийн босоо тохируулга"
 
 # gtk/gtktreeview.c:539
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:557
 msgid "Show the column header buttons"
 msgstr "Баганы толгойн товчыг үзүүлэх"
 
 # gtk/gtktreeview.c:546
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:564
 msgid "Headers Clickable"
 msgstr "Сонгогдохуйц толгойнууд "
 
 # gtk/gtktreeview.c:547
-#: gtk/gtktreeview.c:561
+#: gtk/gtktreeview.c:565
 msgid "Column headers respond to click events"
 msgstr "Үр дүнг гаргах багана"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:572
 msgid "Expander Column"
 msgstr "Дэлгэгдэгч  багана"
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:573
 msgid "Set the column for the expander column"
 msgstr "Баганыг дэлгэгдэгч багана болгож тохируулах"
 
 # gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
-#: gtk/gtktreeview.c:576 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Дахин цэгцлэхүйц"
 
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:581
 msgid "View is reorderable"
 msgstr "Дахин цэгцлэхүйцээр харуулах"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:588
 msgid "Rules Hint"
 msgstr "Сануулгын дүрмүүд"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:589
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Мөрүүдийн өнгө солигдоход хэлбэрийн машинд дохио дамжуулах"
 
 # gtk/gtktreeview.c:578
-#: gtk/gtktreeview.c:592
+#: gtk/gtktreeview.c:596
 msgid "Enable Search"
 msgstr "Хайлтыг идэвхжүүлэх"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:597
 msgid "View allows user to search through columns interactively"
 msgstr "Баганаар хайж буй хэрэглэгчийн сумыг үзүүлэх"
 
 # gtk/gtktreeview.c:586
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:604
 msgid "Search Column"
 msgstr "Багана хайх"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:605
 msgid "Model column to search through when searching through code"
 msgstr "Кодоор хайх үеийн баганы загвар"
 
 # gtk/gtkcellrenderer.c:178
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:614
 msgid "Fixed Height Mode"
 msgstr "хатуу өндөртэй горим"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:615
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "GtkTreeView бүх мөрийг ижил өндөртэй авч хурдасгана."
 
 # gtk/gtktreeview.c:609
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:635
 msgid "Vertical Separator Width"
 msgstr "Босоо тусгаарлагчийн өргөн"
 
-#: gtk/gtktreeview.c:632
+#: gtk/gtktreeview.c:636
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Босоо зай нүд хоёрын хооронд ижил тоо байх ёстой"
 
 # gtk/gtktreeview.c:618
-#: gtk/gtktreeview.c:640
+#: gtk/gtktreeview.c:644
 msgid "Horizontal Separator Width"
 msgstr "Хэвтээ тусгаарлагчийн өргөн"
 
-#: gtk/gtktreeview.c:641
+#: gtk/gtktreeview.c:645
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Хэвтээ зай нүд хоёрын хооронд ижил тоо байх ёстой."
 
-#: gtk/gtktreeview.c:649
+#: gtk/gtktreeview.c:653
 msgid "Allow Rules"
 msgstr "Дүрмүүдийг зөвшөөрөх"
 
-#: gtk/gtktreeview.c:650
+#: gtk/gtktreeview.c:654
 msgid "Allow drawing of alternating color rows"
 msgstr "Мөрийн өнгө солихыг хүлээн зөвшөөрөх"
 
-#: gtk/gtktreeview.c:656
+#: gtk/gtktreeview.c:660
 msgid "Indent Expanders"
 msgstr "Дэлгэгч"
 
-#: gtk/gtktreeview.c:657
+#: gtk/gtktreeview.c:661
 msgid "Make the expanders indented"
 msgstr "Дэлгэгдсэн хавтсын урд талын тэмдэгийг дар"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:667
 msgid "Even Row Color"
 msgstr "Хэрэглээгүй байгаа (идэвхгүй байгаа) мөрийн өнгө"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:668
 msgid "Color to use for even rows"
 msgstr "Хэрэглээгүй байгаа (идэвхгүй байгаа) мөрийн өнгө"
 
-#: gtk/gtktreeview.c:670
+#: gtk/gtktreeview.c:674
 msgid "Odd Row Color"
 msgstr "Хэрэглэж байгаа (идэвхтэй байгаа) мөрийн өнгө"
 
-#: gtk/gtktreeview.c:671
+#: gtk/gtktreeview.c:675
 msgid "Color to use for odd rows"
 msgstr "Хэрэглэж (идэвхтэй байгаа) байгаа мөрийн өнгө."
 
@@ -4894,20 +4894,20 @@ msgstr "Хүнд"
 msgid "The window gravity of the window"
 msgstr "Цонхны цонхны хүнд"
 
-#: modules/input/gtkimcontextxim.c:326
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
 msgstr "IM Preedit хэлбэр"
 
-#: modules/input/gtkimcontextxim.c:327
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method preedit string"
 msgstr "Урьдаас боловсруулсан оролтын схемийн үгсийг яаж тодорхойлох вэ"
 
-#: modules/input/gtkimcontextxim.c:335
+#: modules/input/gtkimcontextxim.c:339
 msgid "IM Status style"
 msgstr "IM төлөвийн хэлбэр"
 
 # gtk/gtktoolbar.c:234
-#: modules/input/gtkimcontextxim.c:336
+#: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Төлөвийн самбарыг оруулах аргыг хэрхэн үзүүлэх"
 

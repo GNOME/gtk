@@ -1,3 +1,11 @@
+2004-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.1 ===
+
+	* configure.in: Version 2.4.1, interface age 1. 
+
+	* NEWS: Updates
+
 2004-04-29  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes #140412.
@@ -233,7 +241,7 @@ Sun Apr 18 16:15:15 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 2004-04-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcolorsel.c: Add a11y relations between the color
-	wheel and the spin buttons.  (#132745, Padraig, O'Briain)
+	wheel and the spin buttons.  (#132745, Padraig O'Briain)
 
 	* gtk/gtkiconfactory.c (gtk_icon_set_render_icon): Document
 	the meaning of size == -1.

@@ -1,3 +1,7 @@
+2004-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.1 ===
+
 2004-04-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-ani.c (gdk_pixbuf__ani_image_load_animation): 

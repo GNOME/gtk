@@ -1,3 +1,7 @@
+2004-04-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.1 ===
+
 2004-04-29  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/tmpl/gtkfilechooser.sgml: Added an .gtkrc-2.0 example of how

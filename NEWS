@@ -1,3 +1,42 @@
+Overview of Changes from GTK+ 2.4.0 to GTK+ 2.4.1
+=================================================
+* GtkFileChooser
+ - bug fixes [Morten Welinder, Federico Mena Quintero]
+ - pre-fill the location entry [Federico]
+ - internal api changes to allow setting a busy cursor
+   while loading [Federico]
+ - improve pathbar button sizing [Owen Taylor]
+ - add keybindings for removing bookmarks [Federico]
+* GtkComboBox, GtkEntryCompletion
+ - fix repositioning logic [Niklas Knutsson]
+ - make keynav wrap around [Matthias]
+ - improve theme compliance [Matthias, Brian Cameron]
+* GtkUIManager
+ - accept unnamed <separator>s [Anders Carlsson]
+ - robustify against gtk_widget_show_all() [Murray Cumming]
+ - warn if an accelerator cannot be parsed  [Jody Goldberg]
+* Win32
+ - fix DND positioning [Hans Breuer]
+ - update gtkfilesystemwin32 [Tor Lillqvist, J. Ali Harlow]
+ - make filechooser work on Windows [Tor]
+ - draw arcs more correctly [Tor]
+ - disable tables support by support, add --use-wintab to
+   get it back  [Tor]
+* Make color wheel accessible [Padraig O'Briain]
+* Support _NET_WM_USER_TIME [Elijah Newren, Soeren Sandmann]
+* Doc improvements [Federico, Matthias, Christian Persch]
+  Olexiy Avramchenko, Tim-Philipp Müller]
+* Misc bug fixes [Alex Converse, Owen, Jacques Garrigue,
+  Jonathan Blandford, Anders Carlsson, Christian, Hans,
+  Matthias, Morten, Philip Langdale, Brian, Pedro Rodriguez,
+  Soeren, Torsten Schoenfield, Dongho Shin, Andrew E. Makeev,
+  Todd Goyen, Tim Gerla, John Finlay, Theppitak Karoonboonyanan,
+  John Ehresman, Chris Sherlock, Jody]
+* Updated translations (af,ar,az,bn,br,ca,cs,cy,da,de,el,en_CA,
+  en_GB,es,et,eu,fi,fr,ga,gu,he,hr,hu,id,is,it,ja,ko,lt,mi,ml,
+  mn,mr,ms,ne,nl,nn,no,pa,pl,pt,pt_BR,sk,ru,sq,sr,sr@ije,sr@Latn,
+  sv,tr,uk,uz,wa,zh_CN)
+
 Overview of Changes from GTK+ 2.3.6 to GTK+ 2.4.0
 =================================================
 * GtkFileChooser

@@ -15,16 +15,16 @@ Without those packages make distcheck will *not* pass.
 
 0) Blow away your gtk+ directory, check a new version out
 1) autogen and build it, make sure to enable docs.
-2) Update NEWS based on ChangeLog
+2) Update NEWS based on the various ChangeLog files
 3) Update version in configure.in, increase micro and interface age by 1.
 (Note that this is critical, a slip-up here will cause the soname to change).
-4) Add === Released 2.x.y === at the top of the ChangeLog
-5) make mydistcheck
-6) Fix broken stuff found by 4) repeat
+4) Add === Released 2.x.y === at the top of all ChangeLog files
+5) make distcheck
+6) Fix broken stuff found by 5) repeat
 7) cvs commit; you'll have a bunch of po file changes, and maybe some
 doc changes too (NOTE: be sure to use cvs with compression, else you'll
 end up waiting for a long time :).
-8) If 7) fails because someone else committed inbetween, curse, cvs up
+8) If 7) fails because someone else committed inbetween, curse, cvs up,
 fix conflicts and go to 5)
 9) type 'cvs tag GTK_2_x_y' in the toplevel directory
 10) You now have the tarball, and the CVS tag, now upload the tarball to

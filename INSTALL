@@ -12,18 +12,14 @@ GTK+ requires the following packages:
    these libraries are available from:
 
     http://www.libtiff.org/
-    ftp://swrinde.nde.swri.edu/pub/png/src/
-    ftp://ftp.uu.net/graphics/jpeg/
-
-   If these libraries are not available, the corresponding 
-   image loaders will simply not be built. However, this
-   may cause applications using GTK+ not to function properly.
+    http://www.libpng.org/
+    http://www.ijg.org/
 
 Simple install procedure
 ========================
 
-  % gzip -cd gtk+-2.4.0.tar.gz | tar xvf - # unpack the sources
-  % cd gtk+-2.4.0			   # change to the toplevel directory
+  % gzip -cd gtk+-2.4.1.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-2.4.1			   # change to the toplevel directory
   % ./configure				   # run the `configure' script
   % make				   # build GTK
   [ Become root if necessary ]

@@ -229,7 +229,7 @@ Finds or creates an atom corresponding to a given string.
                  just return %GDK_NONE if the requested atom doesn't already
                  exists. Currently, the flag is ignored, since checking the 
                  existance of an atom is as expensive as creating it.
-@Returns: the atom corresponding to @atom_name. 
+@Returns: the atom corresponding to @atom_name.
 
 
 <!-- ##### FUNCTION gdk_atom_name ##### -->
