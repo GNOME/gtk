@@ -3028,7 +3028,7 @@ gtk_window_realize (GtkWidget *widget)
 	}
       gtk_widget_size_allocate (widget, &allocation);
       
-      gtk_container_queue_resize (GTK_CONTAINER (widget));
+      _gtk_container_queue_resize (GTK_CONTAINER (widget));
 
       g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
     }

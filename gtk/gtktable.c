@@ -909,7 +909,7 @@ gtk_table_remove (GtkContainer *container,
 	  g_free (child);
 	  
 	  if (was_visible && GTK_WIDGET_VISIBLE (container))
-	    gtk_container_queue_resize (container);
+	    gtk_widget_queue_resize (GTK_WIDGET (container));
 	  break;
 	}
     }

@@ -945,7 +945,7 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
 
 /**
  * gtk_tree_store_insert:
- * @list_store: A #GtkListStore
+ * @tree_store: A #GtkListStore
  * @iter: An unset #GtkTreeIter to set to the new row
  * @parent: A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
@@ -993,7 +993,7 @@ gtk_tree_store_insert (GtkTreeStore *tree_store,
  * gtk_tree_store_insert_before:
  * @tree_store: A #GtkTreeStore
  * @iter: An unset #GtkTreeIter to set to the new row
- * parent: A valid #GtkTreeIter, or %NULL
+ * @parent: A valid #GtkTreeIter, or %NULL
  * @sibling: A valid #GtkTreeIter, or %NULL
  *
  * Inserts a new row before @sibling.  If @sibling is %NULL, then the row will
@@ -1057,7 +1057,7 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
  * gtk_tree_store_insert_after:
  * @tree_store: A #GtkTreeStore
  * @iter: An unset #GtkTreeIter to set to the new row
- * parent: A valid #GtkTreeIter, or %NULL
+ * @parent: A valid #GtkTreeIter, or %NULL
  * @sibling: A valid #GtkTreeIter, or %NULL
  *
  * Inserts a new row after @sibling.  If @sibling is %NULL, then the row will be

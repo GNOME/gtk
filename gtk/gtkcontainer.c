@@ -719,7 +719,7 @@ gtk_container_destroy (GtkObject *object)
   if (GTK_CONTAINER_RESIZE_PENDING (container))
     _gtk_container_dequeue_resize_handler (container);
   if (container->resize_widgets)
-    gtk_container_clear_resize_widgets (container);
+    _gtk_container_clear_resize_widgets (container);
 
   /* do this before walking child widgets, to avoid
    * removing children from focus chain one by one.
@@ -905,7 +905,7 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
 }
 
 void
-gtk_container_clear_resize_widgets (GtkContainer *container)
+_gtk_container_clear_resize_widgets (GtkContainer *container)
 {
   GSList *node;
 
@@ -949,7 +949,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
 	gtk_container_check_resize (container);
       else
 	{
-	  gtk_container_clear_resize_widgets (container);
+	  _gtk_container_clear_resize_widgets (container);
 	  gtk_widget_queue_resize (GTK_WIDGET (container));
 	}
        g_object_notify (G_OBJECT (container), "resize_mode");
@@ -1032,7 +1032,7 @@ gtk_container_idle_sizer (gpointer data)
 }
 
 void
-gtk_container_queue_resize (GtkContainer *container)
+_gtk_container_queue_resize (GtkContainer *container)
 {
   GtkContainer *resize_container;
   
@@ -1045,7 +1045,7 @@ gtk_container_queue_resize (GtkContainer *container)
    * processing or their resize handler to be queued.
    */
   if (GTK_IS_RESIZE_CONTAINER (container))
-    gtk_container_clear_resize_widgets (container);
+    _gtk_container_clear_resize_widgets (container);
   if (GTK_OBJECT_DESTROYED (container) ||
       GTK_WIDGET_RESIZE_NEEDED (container))
     return;
@@ -1192,7 +1192,7 @@ gtk_container_resize_children (GtkContainer *container)
        * resize_widgets list.
        */
       if (resize_container->parent)
-	gtk_container_queue_resize (container);
+	_gtk_container_queue_resize (container);
       else
 	gtk_widget_size_allocate (GTK_WIDGET (container),
 				  &GTK_WIDGET (container)->allocation);
@@ -1454,7 +1454,7 @@ gtk_container_child_default_composite_name (GtkContainer *container,
 }
 
 gchar*
-gtk_container_child_composite_name (GtkContainer *container,
+_gtk_container_child_composite_name (GtkContainer *container,
 				    GtkWidget    *child)
 {
   g_return_val_if_fail (container != NULL, NULL);

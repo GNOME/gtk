@@ -1,3 +1,20 @@
+Mon Sep 24 12:48:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.h: Add a compat macro that got lost.
+
+	* gtk/gtktreestore.c: Doc fixes.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Fix reference
+	leak for windows that receive events after being destroyed.
+	(#60863, Joshua N. Pritikin)
+
+	* gtk/gtktable.c (gtk_table_remove): Use gtk_widget_queue_resize
+	rather than gtk_container_queue_resize().
+
+	* gtk/{gtkcontainer.c,gtkwidget.c,gtkwindow.c}: _gtk prefix
+	gtk_container_queue_resize, gtk_container_queue_resize_widgets,
+	gtk_container_child_composite_name. (#60217.)
+
 2001-09-22  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkmenu.h : fix compat macros for gtk_menu_<prepend|insert>

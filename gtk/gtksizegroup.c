@@ -117,12 +117,12 @@ static void
 real_queue_resize (GtkWidget *widget)
 {
   if (GTK_IS_RESIZE_CONTAINER (widget))
-    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
+    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
   
   if (widget->parent)
-    gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
+    _gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
   else if (GTK_WIDGET_TOPLEVEL (widget) && GTK_IS_CONTAINER (widget))
-    gtk_container_queue_resize (GTK_CONTAINER (widget));
+    _gtk_container_queue_resize (GTK_CONTAINER (widget));
 }
 
 static void

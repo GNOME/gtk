@@ -1470,7 +1470,7 @@ gtk_widget_unparent (GtkWidget *widget)
     toplevel = NULL;
 
   if (GTK_IS_RESIZE_CONTAINER (widget))
-    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
+    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
   
   /* Remove the widget and all its children from any ->resize_widgets list
    * of all the parents in our branch. This code should move into gtkcontainer.c
@@ -2305,7 +2305,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     }
 
   if (GTK_IS_RESIZE_CONTAINER (widget))
-    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
+    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 
@@ -4895,7 +4895,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   if (GTK_WIDGET_COMPOSITE_CHILD (widget) && widget->parent)
-    return gtk_container_child_composite_name (GTK_CONTAINER (widget->parent),
+    return _gtk_container_child_composite_name (GTK_CONTAINER (widget->parent),
 					       widget);
   else
     return NULL;

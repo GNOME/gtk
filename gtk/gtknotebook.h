@@ -224,6 +224,7 @@ void gtk_notebook_reorder_child           (GtkNotebook *notebook,
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define	gtk_notebook_current_page               gtk_notebook_get_current_page
+#define gtk_notebook_set_page                   gtk_notebook_set_current_page
 #endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
