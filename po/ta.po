@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-08 15:41-0400\n"
-"PO-Revision-Date: 2004-09-16 13:29+0530\n"
+"PO-Revision-Date: 2004-10-09 10:29+0530\n"
 "Last-Translator: Jayaradha N <jaya@pune.redhat.com>\n"
 "Language-Team: Tamil <zhakanini@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3.1\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
 "\n"
 "\n"
 
@@ -34,25 +34,20 @@ msgstr "'%s' உருவக் கோப்பில் தரவு ஏது�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"'%s' உருவக் கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, ஊழலாக்கபட்ட உருவக் கோப்பாக "
-"இருக்கலாம்"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "'%s' உருவக் கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, கோப்பு சிதைந்திருக்கலாம்."
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:239
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
-"'%s' அசைவூட்ட கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, ஊழலாக்கபட்ட அசைவூட்டக் கோப்பாக "
-"இருக்கலாம்"
+msgstr "'%s' அசைவூட்ட கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, கோப்பு சிதைந்திருக்கலாம்"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:415
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "உருவம்-ஏற்றும் கூறுவை ஏற்ற முடியவில்லை: %s: %s"
+msgstr "பிம்பன் ஏற்றும் பகுதியை ஏற்ற முடியவில்லை: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:430
 #, c-format
@@ -66,7 +61,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "'%s' உருவ வகைக்கு ஆதரவளிப்பு கிடையாது"
+msgstr "'%s' உருவ வகைக்கு ஆதரவு இல்லை"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:663
 #, c-format
@@ -138,7 +133,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
-msgstr "உருவத்தின் தலைப்பகுதி கெடுதலானது"
+msgstr "உருவத்தின் தலைப்பகுதி அழிந்துபோயிருக்கலாம்"
 
 #: gdk-pixbuf/gdk-pixdata.c:151
 msgid "Image format unknown"
@@ -225,7 +220,7 @@ msgstr "தவறான அடையாளம் உள்ளது"
 
 #: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
-msgstr "Circular table entry in GIF file"
+msgstr "GIF கோப்பில் வட்ட அட்டவணை உள்ளீடு"
 
 #: gdk-pixbuf/io-gif.c:869 gdk-pixbuf/io-gif.c:1430 gdk-pixbuf/io-gif.c:1476
 #: gdk-pixbuf/io-gif.c:1591
@@ -255,11 +250,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
-msgstr "GIF உருவம் துணிக்கப்பட்டது அல்லது பூர்தியாகாதது."
+msgstr "GIF உருவம் துண்டிக்கப்பட்டுள்ளது அல்லது முழுமை பெறவில்லை"
 
 #: gdk-pixbuf/io-gif.c:1650
 msgid "The GIF image format"
-msgstr "GIF உருவ வகை"
+msgstr "GIF பிம்ப வகை"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
 #: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
@@ -337,10 +332,8 @@ msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இர�
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%d' மதிப்பிக்கு அனுமதி கிடையாது."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%d' மதிப்பிக்கு அனுமதி கிடையாது."
 
 #: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
@@ -439,8 +432,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG உருவக் கோப்பை ஏற்றும்போது கொல் பிழை: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG உரைக்கான விசை 1 லிருந்து 79 எழுத்துக்களுக்குள் இருக்க வேண்டும்"
 
 #: gdk-pixbuf/io-png.c:821
@@ -449,8 +441,7 @@ msgstr "PNG உரைக்கான ஆஸ்கி எழுத்துக்
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "PNG உரை %s மதிப்பை ISO-8859-1 குறியீடாக மாற்ற முடியாது "
 
 #: gdk-pixbuf/io-png.c:994
@@ -592,7 +583,7 @@ msgstr "TGA செல்லாத அளவில் உள்ளது"
 #: gdk-pixbuf/io-tga.c:778 gdk-pixbuf/io-tga.c:787 gdk-pixbuf/io-tga.c:797
 #: gdk-pixbuf/io-tga.c:807 gdk-pixbuf/io-tga.c:814
 msgid "TGA image type not supported"
-msgstr "TGA உருவ வகைக்கு ஆதரவளிப்பு கிடையாது"
+msgstr "TGA உருவ வகைக்கு ஆதரவு கிடையாது"
 
 #: gdk-pixbuf/io-tga.c:861
 msgid "Can't allocate memory for TGA context struct"
@@ -757,7 +748,7 @@ msgstr "Alt"
 #.
 #: gtk/gtkcalendar.c:709
 msgid "calendar:MY"
-msgstr "நாள்காட்டி:மா வ"
+msgstr "நாள்காட்டி:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -765,7 +756,7 @@ msgstr "நாள்காட்டி:மா வ"
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr "நால் காட்டி:வாரம்_தொடக்கம்:0"
+msgstr "நாள்காட்டி:வாரம்_தொடக்கம்:0"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
@@ -902,7 +893,7 @@ msgstr "வண்ணம் தேர்ந்தெடுத்தல்"
 
 #: gtk/gtkentry.c:4324 gtk/gtktextview.c:6933
 msgid "Select _All"
-msgstr "«¨Éò¨¾Ôõ ¦¾Ã¢× ¦ºö¸"
+msgstr "அனைத்தையும் தேர்வு செய்"
 
 #: gtk/gtkentry.c:4334 gtk/gtktextview.c:6943
 msgid "Input _Methods"
@@ -1007,11 +998,11 @@ msgstr "_சேர்"
 
 #: gtk/gtkfilechooserdefault.c:2686 gtk/gtkstock.c:341
 msgid "_Remove"
-msgstr "_கழட்டுக"
+msgstr "நீக்கு"
 
 #: gtk/gtkfilechooserdefault.c:2765
 msgid "Show _Hidden Files"
-msgstr "(_H)மறைந்த கோப்புகளை காட்டு"
+msgstr "மறைந்த கோப்புகளை காட்டு"
 
 #: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilesel.c:766
 msgid "Files"
@@ -1032,7 +1023,7 @@ msgstr "மாற்றப்பட்டது"
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:2986
 msgid "Create Fo_lder"
-msgstr "(_l)அடைவை உருவாக்குு"
+msgstr "அடைவை உருவாக்கு"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:3093
@@ -1041,15 +1032,15 @@ msgstr "பெயர்:"
 
 #: gtk/gtkfilechooserdefault.c:3137
 msgid "_Browse for other folders"
-msgstr "(_B)மற்ற அடைவை பார்"
+msgstr "மற்ற அடைவை பார்"
 
 #: gtk/gtkfilechooserdefault.c:3379
 msgid "Save in _folder:"
-msgstr "(_f)அடைவில் சேமி:"
+msgstr "அடைவில் சேமி:"
 
 #: gtk/gtkfilechooserdefault.c:3381
 msgid "Create in _folder:"
-msgstr "(_f)அடைவில் உருவாக்கு"
+msgstr "அடைவில் உருவாக்கு"
 
 #: gtk/gtkfilechooserdefault.c:4072
 msgid "Can't change to folder because it isn't local"
@@ -1125,7 +1116,7 @@ msgstr "இடத்தில் சேமி::"
 
 #: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
-msgstr "(_L)இடம்::"
+msgstr "இடம்:"
 
 #: gtk/gtkfilesel.c:730
 msgid "Folders"
@@ -1160,7 +1151,7 @@ msgstr "_புதிய அடைவு"
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
-msgstr "கொப்பு அழி"
+msgstr "கோப்பை அழி"
 
 #: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
@@ -1168,8 +1159,7 @@ msgstr "கோப்பின் _பெயரை மாற்றுக"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" அடைவு பெயரில் கோப்பு பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் உள்ளன"
 
 #: gtk/gtkfilesel.c:1441
@@ -1183,7 +1173,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
-msgstr "கோப்புப் பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் பயன்படுத்தி இருக்கலாம்."
+msgstr "கோப்புப் பெயர்களில் அனுமதிக்கமுடியாத குறியீடுகள் பயன்படுத்தி இருக்கலாம்."
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
@@ -1277,7 +1267,7 @@ msgstr "_பெயர் மாற்று"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
-msgstr "தெரிவு _செய்தது:"
+msgstr "தேர்வு:"
 
 #: gtk/gtkfilesel.c:3139
 #, c-format
@@ -1352,16 +1342,16 @@ msgstr "'%s' -க்கான தகவல் பெறும்போது ப
 
 #: gtk/gtkfilesystemwin32.c:1126
 msgid "This file system does not support icons for everything"
-msgstr "இந்த கோப்பு அமைப்பு அனைத்துக்கும் சின்னங்களை பயன்படுத்த ஆதரவு தராது"
+msgstr "இந்த கோப்பு அமைப்பு அனைத்துக்கும் சின்னங்களை பயன்படுத்த ஆதரவு இல்லை"
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
-msgstr "எழுத்துரு தேர்ந்தெடுக"
+msgstr "எழுத்துரு தேர்வு செய்"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:288
 msgid "Sans 12"
-msgstr "சான்ஸ் 12"
+msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:806
 msgid "Font"
@@ -1371,7 +1361,7 @@ msgstr "எழுத்து வகை"
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:72
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "அஆஇஈஉஊஎஏஐஒஓஔஃ ABCDEFGHIJK"
+msgstr "abcdefghijk ABCDEFGHIJK"
 
 #: gtk/gtkfontsel.c:359
 msgid "_Family:"
@@ -1472,11 +1462,11 @@ msgstr "விசைகள்"
 
 #: gtk/gtkinputdialog.c:561
 msgid "X"
-msgstr "வாிசை(X)"
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:562
 msgid "Y"
-msgstr "நெடுவாிசை(Y)"
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:563
 msgid "Pressure"
@@ -1509,11 +1499,11 @@ msgstr "(தெரியாதது)"
 #. and clear button
 #: gtk/gtkinputdialog.c:758
 msgid "clear"
-msgstr "துப்பரவாக்கு"
+msgstr "தூய்மைசெய்"
 
 #: gtk/gtklabel.c:3297
 msgid "Select All"
-msgstr "அனைத்தையும் தெரிவுசெய்க"
+msgstr "அனைத்தையும் தேர்வு செய்"
 
 #: gtk/gtklabel.c:3307
 msgid "Input Methods"
@@ -1579,7 +1569,7 @@ msgstr "பயன்படுத்து"
 
 #: gtk/gtkstock.c:295
 msgid "_Bold"
-msgstr "தடிப்பு"
+msgstr "தடித்த"
 
 #: gtk/gtkstock.c:296
 msgid "_Cancel"
@@ -1663,7 +1653,7 @@ msgstr "_மேல்"
 
 #: gtk/gtkstock.c:316
 msgid "_Harddisk"
-msgstr "(H)வன்தகடு"
+msgstr "வன்தகடு"
 
 #: gtk/gtkstock.c:317
 msgid "_Help"
@@ -1691,7 +1681,7 @@ msgstr "சாய்வு"
 
 #: gtk/gtkstock.c:323
 msgid "_Jump to"
-msgstr "_இதட்கு போ"
+msgstr "இங்கு தாவு"
 
 #: gtk/gtkstock.c:324
 msgid "_Center"
@@ -1799,7 +1789,7 @@ msgstr "நிறுத்து"
 
 #: gtk/gtkstock.c:351
 msgid "_Strikethrough"
-msgstr "_Strikethrough"
+msgstr "அடிக்கவும்"
 
 #: gtk/gtkstock.c:352
 msgid "_Undelete"
@@ -1807,11 +1797,11 @@ msgstr "_அழிக்காதே"
 
 #: gtk/gtkstock.c:353
 msgid "_Underline"
-msgstr "கீல்கோடு"
+msgstr "அடிக்கோடு"
 
 #: gtk/gtkstock.c:354
 msgid "_Undo"
-msgstr "கவில்"
+msgstr "செயல்நீக்கு"
 
 #: gtk/gtkstock.c:355
 msgid "_Yes"
@@ -1819,7 +1809,7 @@ msgstr "ஆம்"
 
 #: gtk/gtkstock.c:356
 msgid "_Normal Size"
-msgstr "_­ÂøÀ¡É «Ç×"
+msgstr "இயல்பான அளவு"
 
 #: gtk/gtkstock.c:357
 msgid "Best _Fit"
@@ -1843,35 +1833,35 @@ msgstr "RLM _வலதிலிருந்து-இடதுவரை கு�
 
 #: gtk/gtktextutil.c:49
 msgid "LRE Left-to-right _embedding"
-msgstr "(e) LRE இடமிருந்து வலம் பொதித்தல்"
+msgstr "LRE இடமிருந்து வலம் பொதித்தல்"
 
 #: gtk/gtktextutil.c:50
 msgid "RLE Right-to-left e_mbedding"
-msgstr "(_m)RLE வலமிருந்து இடம் பொதித்தல்"
+msgstr "RLE வலமிருந்து இடம் பொதித்தல்"
 
 #: gtk/gtktextutil.c:51
 msgid "LRO Left-to-right _override"
-msgstr "(_o)LRO வலமிருந்து இடம் புறக்கணி"
+msgstr "LRO வலமிருந்து இடம் புறக்கணி"
 
 #: gtk/gtktextutil.c:52
 msgid "RLO Right-to-left o_verride"
-msgstr "(_v)RLOஇடமிருந்து வலம்ு இடம் புறக்கணி"
+msgstr "RLOஇடமிருந்து வலம் இடம் புறக்கணி"
 
 #: gtk/gtktextutil.c:53
 msgid "PDF _Pop directional formatting"
-msgstr "(_P)PDF பாப் வழி வடிவமைப்பு"
+msgstr "PDF பாப் வழி வடிவமைப்பு"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWS _Zero width space"
-msgstr "(_Z) ZWS பூஜ்ஜிய அகல இடைவெளி"
+msgstr "ZWS பூஜ்ஜிய அகல இடைவெளி"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWJ Zero width _joiner"
-msgstr "(_j) ZWJ பூஜ்ஜிய இணைப்பு"
+msgstr "ZWJ பூஜ்ஜிய இணைப்பு"
 
 #: gtk/gtktextutil.c:56
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "(_n) ZWNJ பூஜ்ஜிய அகல இணைப்பில்லா"
+msgstr "ZWNJ பூஜ்ஜிய அகல இணைப்பில்லா"
 
 #: gtk/gtkthemes.c:70
 #, c-format
@@ -1914,7 +1904,7 @@ msgstr "சிடிலா"
 #. ID
 #: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr "Cyrillic (Transliterated)"
+msgstr "கைரலில்(பேச்சொலி)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
@@ -1944,7 +1934,7 @@ msgstr "டிக்ரிகனா-எதியோபியா (EZ+)"
 #. ID
 #: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
-msgstr "Vietnamese (VIQR)"
+msgstr "வியட்நாமிய (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:28
@@ -1956,5 +1946,3 @@ msgstr "X உள்ளீட்டு முறை"
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' கோப்பின் தகவல் பெற முடியவில்லை: %s"
 
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "XPM பிம்பத்தை ஏற்றுவதற்கு நினைவகத்தை ஒதுக்க முடியாது"
