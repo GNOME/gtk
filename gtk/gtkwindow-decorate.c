@@ -597,7 +597,7 @@ gtk_decorated_window_paint (GtkWidget    *widget,
       gint width, height;
 
       frame = window->frame;
-      gdk_window_get_size (frame, &width, &height);
+      gdk_drawable_get_size (frame, &width, &height);
 
       /* Top */
       gtk_paint_flat_box (widget->style, frame, GTK_STATE_NORMAL,
