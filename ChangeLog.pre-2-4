@@ -1,3 +1,32 @@
+Wed Aug 20 21:26:49 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkplug.c (gtk_plug_focus): Send the focus on
+	to the parent when there was no focus widget before
+	and no focus widget after - that is, when there are
+	no focusable widgets. (#108678, help tracking it
+	down from Padraig O'Briain, Federico Mena Quintero, )
+
+	* gtk/gtkxembed.[ch]: Move various shared utilities
+	for the XEMBED protocol eused by GtkPlug and GtkSocket 
+	here.
+
+	* gtk/gtkxembed.[ch] gtkplug.c gtksocket.c: Implement
+	a flag bit that is sent with focus mesages to indicate
+	that the focus has wrapped around on the toplevel;
+	use this bit to catch infinite loops when there is no
+	focusable widget at ll in the entire toplevel.
+
+	* tests/testsocket.c (child_read_watch): Remove an
+	extraneous unref.
+
+	* gtk/gtkplug.c gtk/gtksocket.c gtk/gtkxembed.h: 
+	Up XEMBED protocol version to 1, add logic for 
+	sending the right version in XEMBED_EMBEDDED_NOTIFY.
+
+	* gtk/gtksocket.c (gtk_socket_add_window): Send
+	the embedder window in the XEMBED_EMBEDDED_NOTIFY
+	as the spec requires.
+
 Mon Aug 25 16:15:41 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c: Fix up CapsLock and 
