@@ -1,5 +1,7 @@
 2002-11-07  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/gdk.types: Add gdk_display_manager_get_type.
+
 	* gdk/gdk-docs.sgml: Add displaymanager section.
 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Don't mark GdkPixbufLoader

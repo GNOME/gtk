@@ -1,6 +1,7 @@
 #include <gdk/gdk.h>
 
 gdk_display_get_type
+gdk_display_manager_get_type
 gdk_screen_get_type
 gdk_drawable_get_type
 gdk_window_object_get_type
