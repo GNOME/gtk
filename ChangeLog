@@ -1,3 +1,10 @@
+Wed Jul  7 23:44:32 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkimage.c (gtk_image_expose): Make sure that subpixbufs
+	are properly aligned for gdk_pixbuf_saturate_and_pixelate(),
+	in order to avoid rendering artifacts from misaligned 
+	pixelation patterns.  (#145585, Felipe Heidrich, Billy Biggs)
+
 Tue Jul  6 23:00:32 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkwindow-x11.c (_gdk_x11_window_set_user_time): Fix
