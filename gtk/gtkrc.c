@@ -2696,6 +2696,7 @@ gtk_rc_parse_style (GtkRcContext *context,
 	      scanner->next_value.v_identifier[0] <= 'Z') /* match namespaced type names */
 	    {
 	      GtkRcProperty prop = { 0, 0, NULL, { 0, }, };
+	      gchar *name;
 	      
 	      g_scanner_get_next_token (scanner); /* eat type name */
 	      prop.type_name = g_quark_from_string (scanner->value.v_identifier);
@@ -2713,8 +2714,10 @@ gtk_rc_parse_style (GtkRcContext *context,
 		}
 
 	      /* it's important that we do the same canonification as GParamSpecPool here */
-	      g_strcanon (scanner->value.v_identifier, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
-	      prop.property_name = g_quark_from_string (scanner->value.v_identifier);
+	      name = g_strdup (scanner->value.v_identifier);
+	      g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
+	      prop.property_name = g_quark_from_string (name);
+	      g_free (name)
 
 	      token = gtk_rc_parse_assignment (scanner, &prop);
 	      if (token == G_TOKEN_NONE)

@@ -1,3 +1,8 @@
+2005-04-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_parse_style): Don't modify scanner->value,
+	copy it first.  (#165693, Tommi Komulainen)
+
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_grab_focus): 
