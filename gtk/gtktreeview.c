@@ -6333,6 +6333,19 @@ count_children_helper (GtkRBTree *tree,
 }
 
 static void
+check_selection_helper (GtkRBTree *tree,
+                        GtkRBNode *node,
+                        gpointer   data)
+{
+  gint *value = (gint *)data;
+
+  *value = GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED);
+
+  if (node->children && !*value)
+    _gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, check_selection_helper, data);
+}
+
+static void
 gtk_tree_view_row_deleted (GtkTreeModel *model,
 			   GtkTreePath  *path,
 			   gpointer      data)
@@ -6341,7 +6354,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   GtkRBTree *tree;
   GtkRBNode *node;
   GList *list;
-  gint selection_changed;
+  gint selection_changed = FALSE;
 
   g_return_if_fail (path != NULL);
 
@@ -6353,8 +6366,9 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   if (tree == NULL)
     return;
 
-  /* Change the selection */
-  selection_changed = GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED);
+  /* check if the selection has been changed */
+  _gtk_rbtree_traverse (tree, node, G_POST_ORDER,
+                        check_selection_helper, &selection_changed);
 
   for (list = tree_view->priv->columns; list; list = list->next)
     if (((GtkTreeViewColumn *)list->data)->visible &&

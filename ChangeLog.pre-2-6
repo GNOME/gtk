@@ -1,3 +1,12 @@
+Thu May 29 17:06:09 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (check_selection_helper): new function,
+	(gtk_tree_view_row_deleted): traverse the tree from the
+	deleted node to see whether the selection changed, instead of
+	just checking this node. (Fixes #107400, reported by 'Duncan').
+
 Thu May 29 16:31:34 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
