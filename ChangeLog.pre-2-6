@@ -1,3 +1,8 @@
+2004-09-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c: Make --g-fatal-warnings a G_OPTION_ARG_NONE,
+	since it doesn't take an argument.
+
 2004-09-29  Christopher Blizzard  <blizzard@redhat.com>
 
 	* gtk/gtkmenutoolbutton.h: Remove trailing semicolon on

@@ -350,6 +350,7 @@ gtk_disable_setlocale (void)
 #endif
 
 static GString *gtk_modules_string = NULL;
+static gboolean g_fatal_warnings = FALSE;
 
 #ifdef G_ENABLE_DEBUG
 static gboolean
@@ -389,23 +390,11 @@ gtk_arg_module_cb (const char *key, const char *value, gpointer user_data)
   return TRUE;
 }
 
-static gboolean
-gtk_arg_warnings_cb (const char *key, const char *value, gpointer user_data)
-{
-  GLogLevelFlags fatal_mask;
-
-  fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
-  fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
-  g_log_set_always_fatal (fatal_mask);
-
-  return TRUE;
-}
-
 static GOptionEntry gtk_args[] = {
   { "gtk-module",       0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_module_cb,   
     /* Description of --gtk-module=MODULES in --help output */ N_("Load additional GTK+ modules"), 
     /* Placeholder in --gtk-module=MODULES in --help output */ N_("MODULES") },
-  { "g-fatal-warnings", 0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_warnings_cb, 
+  { "g-fatal-warnings", 0, 0, G_OPTION_ARG_NONE, &g_fatal_warnings, 
     /* Description of --g-fatal-warnings in --help output */   N_("Make all warnings fatal"), NULL },
 #ifdef G_ENABLE_DEBUG
   { "gtk-debug",        0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_debug_cb,    
@@ -460,6 +449,15 @@ static void
 do_post_parse_initialization (int    *argc,
 			      char ***argv)
 {
+  if (g_fatal_warnings)
+    {
+      GLogLevelFlags fatal_mask;
+
+      fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
+      fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
+      g_log_set_always_fatal (fatal_mask);
+    }
+
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
 
