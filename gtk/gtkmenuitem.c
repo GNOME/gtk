@@ -63,7 +63,7 @@ static void gtk_real_menu_item_select    (GtkItem          *item);
 static void gtk_real_menu_item_deselect  (GtkItem          *item);
 static void gtk_real_menu_item_activate_item  (GtkMenuItem      *item);
 static gint gtk_menu_item_select_timeout (gpointer          data);
-static void gtk_menu_item_select_timeout_unlocked (gpointer     data);
+static void gtk_menu_item_popup_submenu  (gpointer     data);
 static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gint             *x,
 					  gint             *y,
@@ -553,7 +553,7 @@ gtk_real_menu_item_select (GtkItem *item)
 					    gtk_menu_item_select_timeout,
 					    menu_item);
       else
-	gtk_menu_item_select_timeout_unlocked (menu_item);
+	gtk_menu_item_popup_submenu (menu_item);
       if(event) gdk_event_free(event);
     }
   
@@ -598,6 +598,7 @@ static void
 gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 {
   GtkWidget *widget;
+  GtkMenuShell *submenu; 
 
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
@@ -621,7 +622,12 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 	      menu_shell->active = TRUE;
 	    }
 
-	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget);
+	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget); 
+	  gtk_menu_item_popup_submenu (widget); 
+
+	  submenu = GTK_MENU_SHELL (menu_item->submenu);
+	  if (submenu->children)
+	    gtk_menu_shell_select_item (submenu, submenu->children->data);
 	}
     }
 }
@@ -631,7 +637,7 @@ gtk_menu_item_select_timeout (gpointer data)
 {
   GDK_THREADS_ENTER ();
 
-  gtk_menu_item_select_timeout_unlocked (data);
+  gtk_menu_item_popup_submenu (data);
 
   GDK_THREADS_LEAVE ();
 
@@ -639,7 +645,7 @@ gtk_menu_item_select_timeout (gpointer data)
 }
 
 static void
-gtk_menu_item_select_timeout_unlocked (gpointer data)
+gtk_menu_item_popup_submenu (gpointer data)
 {
   GtkMenuItem *menu_item;
 
@@ -655,16 +661,6 @@ gtk_menu_item_select_timeout_unlocked (gpointer data)
 		      menu_item,
 		      GTK_MENU_SHELL (GTK_WIDGET (menu_item)->parent)->button,
 		      0);
-      
-      /* This is a bit of a hack - we want to select the first item
-       * of menus hanging of a menu bar, but not for cascading submenus
-       */
-      if (GTK_IS_MENU_BAR (GTK_WIDGET (menu_item)->parent))
-	{
-	  GtkMenuShell *submenu = GTK_MENU_SHELL (menu_item->submenu);
-	  if (submenu->children)
-	    gtk_menu_shell_select_item (submenu, submenu->children->data);
-	}
     }
 }
 

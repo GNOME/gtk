@@ -1,3 +1,13 @@
+Mon Jan 29 19:44:26 2001  Owen Taylor  <otaylor@redhat.com>
+
+        [ Backport from HEAD ]
+	
+	* gtk/gtkmenuitem.c gtk/gtkmenushell.c: Patch from David Santiago
+	<mrcooger@cyberverse.com> so that when selecting menus with the
+	mouse, the first item will not be selected, but when selecting
+	with an accelerator, or navigating left-right on a menubar with
+	the menus popped up, the first item will be selected.
+	
 Mon Jan 29 19:00:01 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk{ctree.c,clist.c} (set_cell_contents): Handle setting
