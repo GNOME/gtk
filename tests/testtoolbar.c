@@ -472,6 +472,28 @@ popup_context_menu (GtkToolbar *toolbar, gint x, gint y, gint button_number)
   return TRUE;
 }
 
+static gboolean
+toolbar_drag_motion (GtkToolbar     *toolbar,
+		     GdkDragContext *context,
+		     gint            x,
+		     gint            y,
+		     guint           time,
+		     gpointer        null)
+{
+  gdk_drag_status (context, GDK_ACTION_MOVE, time);
+  gtk_toolbar_highlight_drop_location (toolbar, x, y, 100, 60);
+  return TRUE;
+}
+
+static void
+toolbar_drag_leave (GtkToolbar     *toolbar,
+		    GdkDragContext *context,
+		    guint           time,
+		    gpointer	    null)
+{
+  gtk_toolbar_unhighlight_drop_location (toolbar);
+}
+
 gint
 main (gint argc, gchar **argv)
 {
@@ -577,6 +599,7 @@ main (gint argc, gchar **argv)
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), NULL);
   add_item_to_list (store, item, "New");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_tool_item_set_expand (item, TRUE);
 
   item = gtk_tool_button_new_from_stock (GTK_STOCK_OPEN);
   add_item_to_list (store, item, "Open");
@@ -624,7 +647,10 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "Left");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
-  item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_CENTER);  make_prop_editor (G_OBJECT (item));
+  item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_CENTER);
+#if 0
+  make_prop_editor (G_OBJECT (item));
+#endif
 
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Center");
@@ -668,12 +694,18 @@ main (gint argc, gchar **argv)
   gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
 		     target_table, G_N_ELEMENTS (target_table),
 		     GDK_ACTION_MOVE);
+  g_signal_connect (toolbar, "drag_motion",
+		    G_CALLBACK (toolbar_drag_motion), NULL);
+  g_signal_connect (toolbar, "drag_leave",
+		    G_CALLBACK (toolbar_drag_leave), NULL);
   g_signal_connect (toolbar, "drag_drop",
 		    G_CALLBACK (toolbar_drag_drop), label);
 
   gtk_widget_show_all (window);
 
+#if 0
   make_prop_editor (G_OBJECT (toolbar));
+#endif
 
   g_signal_connect (window, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
   

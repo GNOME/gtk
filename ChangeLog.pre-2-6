@@ -1,3 +1,29 @@
+Mon Oct 20 20:27:22 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Add support for OS X like sliding of toolbar items during drag and
+	drop, (#110919, Dave Bordoley)
+
+	Make dnd highlighting the responsibility of the
+	application. (Fixes #116298, Owen Taylor)
+
+	* gtk/gtktoolbar.h: Add prototypes for new API.
+	
+	* gtk/gtktoolbar.c
+	(physical_to_logical, logical_to_physical): new functions
+	converting between "position including placeholders" and "position
+	excluding placeholders".
+	(gtk_toolbar_class_init): remove drag_leave and drag_motion
+	handlers
+	(struct _ToolbarContent): new struct containing information
+	related to toolbar items.
+	(gtk_toolbar_highlight_drop_location): new public function
+	(gtk_toolbar_unhighlight_drop_location): new public function
+	
+	* tests/testtoolbar.c
+	(toolbar_drag_motion, toolbar_drag_leave): new functions
+	(main): connect to dnd signals.  Make the "New" item expand to
+	make drag and drop more exciting.
+
 Wed Oct 15 22:39:23 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_init): it's
