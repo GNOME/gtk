@@ -1,3 +1,9 @@
+Tue Oct  1 17:35:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdkpixdata.c: Patch from Andy Wingo to always 
+	escape ? to avoid accidentally generating trigraphs
+	in the output (#94631)
+
 2002-09-28  Tor Lillqvist  <tml@iki.fi>
 
 	* pixops/*.S: Don't use .type on Cygwin, either (#91597, Masahiro

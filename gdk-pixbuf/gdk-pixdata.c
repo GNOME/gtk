@@ -505,7 +505,7 @@ save_uchar (CSourceData *cdata,
 	  cdata->pad = FALSE;
 	}
     }
-  if (d < 33 || d > 126)
+  if (d < 33 || d > 126 || d == '?')
     {
       APPEND (gstring, "\\%o", d);
       cdata->pos += 1 + 1 + (d > 7) + (d > 63);
