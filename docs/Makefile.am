@@ -2,7 +2,7 @@
 
 SUBDIRS = tutorial faq reference
 
-EXTRA_DIST += \
+EXTRA_DIST = \
 	Changes-1.2.txt			\
 	Changes-2.0.txt			\
 	debugging.txt			\

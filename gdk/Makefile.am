@@ -142,10 +142,9 @@ lib_LTLIBRARIES = $(extra)
 
 EXTRA_LTLIBRARIES = libgdk-x11-1.3.la libgdk-nanox-1.3.la libgdk-linux-fb-1.3.la
 
-MAINTAINERCLEANFILES +=
-EXTRA_HEADERS +=
-EXTRA_DIST +=
-EXTRA_DIST +=
+MAINTAINERCLEANFILES =
+EXTRA_HEADERS =
+EXTRA_DIST =
 
 #
 # rules to generate built sources

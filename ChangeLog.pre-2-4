@@ -1,3 +1,27 @@
+2001-09-18  Matt Wilson  <msw@redhat.com>
+
+	* docs/Makefile.am (EXTRA_DIST): don't use += before =
+
+	* docs/faq/Makefile.am (EXTRA_DIST): likewise
+
+	* docs/tutorial/Makefile.am (EXTRA_DIST): likewise
+	
+	* gdk/Makefile.am (MAINTAINERCLEANFILES): likewise
+	(EXTRA_HEADERS): likewise
+
+	* gtk/Makefile.am (MAINTAINERCLEANFILES): likewise
+	(EXTRA_HEADERS): likewise
+	(EXTRA_DIST): likewise
+	(CLEANFILES): likewise
+
+	* gtk/stock-icons/Makefile.am (CLEANFILES): likewise
+
+	* tests/Makefile.am (EXTRA_DIST): likewise
+	
+	* Makefile.am (install-data-local): changed to use
+	install-data-hook, which runs after install-pkgconfigDATA, so that
+	the pkgconfigdir will have been created and populated first.
+
 Mon Sep 17 17:39:52 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcelleditable.[ch]: Add editable interface.  This should

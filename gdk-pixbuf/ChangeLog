@@ -1,3 +1,9 @@
+2001-09-17  Matt Wilson  <msw@redhat.com>
+
+	* Makefile.am (libpixbufloader_xbm_la_LDFLAGS): removed duplicate
+	LDFLAGS definition, use the -avoid-version one.
+	(libpixbufloader_tga_la_LDFLAGS): likewise
+
 Mon Sep 17 11:49:02 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/*: Mirror GdkInterpType to PixopsInterpType

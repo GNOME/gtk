@@ -144,7 +144,7 @@ DISTCLEANFILES =				\
 
 ## symlink gdk-2.0.pc and gtk+-2.0.pc to default target for the platform 
 DEFAULT_GDKTARGET=x11
-install-data-local:
+install-data-hook:
 	(cd $(DESTDIR)$(pkgconfigdir) && \
 	 test -e gdk-$(DEFAULT_GDKTARGET)-2.0.pc && \
 	 test -e gtk+-$(DEFAULT_GDKTARGET)-2.0.pc && \

@@ -401,9 +401,9 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 #
 gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkversion.h
 gtk_target_sources = $(gtk_c_sources) $(gtk_plug_c_sources)
-MAINTAINERCLEANFILES += $(gtk_built_sources)
-EXTRA_HEADERS +=
-EXTRA_DIST += $(gtk_private_h_sources) $(gtk_extra_sources)
+MAINTAINERCLEANFILES = $(gtk_built_sources)
+EXTRA_HEADERS =
+EXTRA_DIST = $(gtk_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
 
 #
@@ -411,7 +411,7 @@ EXTRA_DIST += $(gtk_built_sources)
 #
 # setup autogeneration dependancies
 gen_sources = xgen-gdef xgen-gtbh xgen-gtbvc xgen-gtbic xgen-gtbec xgen-gmh xgen-gmc
-CLEANFILES += $(gen_sources)
+CLEANFILES = $(gen_sources)
 Makefile: oldest-source-stamp	# oh boy, does automake SUCK!
 oldest-source-stamp: $(gtk_built_sources)
 $(OBJECTS): oldest-source-stamp  ${gtk_built_public_sources} # this is our oldest file, used for implicit auto-generation deps

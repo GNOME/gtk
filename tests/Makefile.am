@@ -95,7 +95,7 @@ testsocket_child_SOURCES =    	\
 	testsocket_child.c	\
 	testsocket_common.c
 
-EXTRA_DIST += @STRIP_BEGIN@ 	\
+EXTRA_DIST = @STRIP_BEGIN@ 	\
 	prop-editor.h		\
 	testgtk.1 		\
 	testgtkrc 		\

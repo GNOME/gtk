@@ -91,7 +91,6 @@ libpixbufloader_wbmp_la_LIBADD = $(module_libs)
 # The XBM loader
 #
 libpixbufloader_xbm_la_SOURCES = io-xbm.c
-libpixbufloader_xbm_la_LDFLAGS = -version-info 1:0:0 -module
 libpixbufloader_xbm_la_LDFLAGS = -avoid-version -module
 libpixbufloader_xbm_la_LIBADD = $(module_libs)
 
@@ -99,7 +98,6 @@ libpixbufloader_xbm_la_LIBADD = $(module_libs)
 # The TGA loader
 #
 libpixbufloader_tga_la_SOURCES = io-tga.c
-libpixbufloader_tga_la_LDFLAGS = -version-info 1:0:0 -module
 libpixbufloader_tga_la_LDFLAGS = -avoid-version -module
 libpixbufloader_tga_la_LIBADD = $(module_libs)
 

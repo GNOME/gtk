@@ -150,7 +150,7 @@ VARIABLES = @STRIP_BEGIN@ 									\
 @STRIP_END@
 
 noinst_DATA = gtkstockpixbufs.h
-CLEANFILES += $(noinst_DATA)
+CLEANFILES = $(noinst_DATA)
 
 pixbuf_dir = $(top_builddir)/gdk-pixbuf
 
