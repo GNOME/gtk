@@ -1,3 +1,9 @@
+2003-03-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_set_vadjustment): 
+	(gtk_scrolled_window_set_hadjustment): Replace uses of
+	gtk_object_new by g_object_new.
+
 Thu Feb 27 17:44:24 2003  Manish Singh  <yosh@gimp.org>
 
 	* demos/gtk-demo/main.c

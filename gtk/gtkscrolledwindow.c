@@ -373,7 +373,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
   if (hadjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadjustment));
   else
-    hadjustment = (GtkAdjustment*) gtk_object_new (GTK_TYPE_ADJUSTMENT, NULL);
+    hadjustment = (GtkAdjustment*) g_object_new (GTK_TYPE_ADJUSTMENT, NULL);
 
   bin = GTK_BIN (scrolled_window);
 
@@ -427,7 +427,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
   if (vadjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (vadjustment));
   else
-    vadjustment = (GtkAdjustment*) gtk_object_new (GTK_TYPE_ADJUSTMENT, NULL);
+    vadjustment = (GtkAdjustment*) g_object_new (GTK_TYPE_ADJUSTMENT, NULL);
 
   bin = GTK_BIN (scrolled_window);
 
