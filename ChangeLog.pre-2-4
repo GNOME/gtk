@@ -1,3 +1,12 @@
+Wed Jan 31 16:21:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklist.c (gtk_list_signal_item_toggle): Don't allow
+	toggling of rows off in BROWSE or EXTENDED mode. (#12072, Greg
+	Hudson.) The solution here isn't perfect - you get an extraneous
+	emission of "toggle", which could conceivably confuse an app,
+	but better than the current situation. LXR search seems to
+	indicate that no apps in GNOME CVS connect to "toggle".
+
 Wed Jan 31 15:46:13 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (libgtkinclude_HEADERS): Move gtkfeatures.h from
