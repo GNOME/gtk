@@ -632,10 +632,10 @@ gtk_button_map (GtkWidget *widget)
   
   g_return_if_fail (GTK_IS_BUTTON (widget));
 
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+
   if (button->event_window)
     gdk_window_show (button->event_window);
-
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
 }
 
 static void

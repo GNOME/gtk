@@ -457,6 +457,7 @@ property_widget (GObject *object, GParamSpec *spec, gboolean can_modify)
   GtkAdjustment *adj;
   gchar *msg;
   
+#if 0
   switch (G_PARAM_SPEC_TYPE (spec))
     {
     case G_TYPE_PARAM_INT:
@@ -641,6 +642,7 @@ property_widget (GObject *object, GParamSpec *spec, gboolean can_modify)
       g_free (msg);
       gtk_misc_set_alignment (GTK_MISC (prop_edit), 0.0, 0.5);
     }
+#endif
   
   return prop_edit;
 }

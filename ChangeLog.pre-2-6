@@ -1,3 +1,16 @@
+Wed Nov 21 22:55:37 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbutton.c (gtk_button_map): raise event window afte
+	children, in order for the input pnly window to stay *above*
+	children.
+
+Wed Nov 21 22:44:27 2001  Tim Janik  <timj@gtk.org>
+
+	* tests/testtreeview.c: make hackery worse ;) by checking fundamental
+	type walks againts G_TYPE_FUNDAMENTAL_MAX.
+	
+	* tests/prop-editor.c: disable type hackery.
+
 Wed Nov 21 17:41:39 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkimage.c (gdk_image_get): Fix problem with
