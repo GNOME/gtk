@@ -1,13 +1,13 @@
 # traditional Chinese translation of gtk+ 2.x
-# Copyright (C) 2000, 01, 02, 03 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 # 辛立仁 <hsin@med.cgu.edu.tw>, 2000.
 # Chih-Wei Huang <cwhuang@linux.org.tw>, 2000.
 # Abel Cheung <maddog@linux.org.hk>, 2001-2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.2.1\n"
-"POT-Creation-Date: 2003-05-07 12:34+0800\n"
+"Project-Id-Version: gtk+ 2.3.0\n"
+"POT-Creation-Date: 2003-05-11 06:40+0800\n"
 "PO-Revision-Date: 2003-05-07 17:36+0800\n"
 "Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -15,23 +15,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "無法開啟檔案‘%s’：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:746
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "圖像檔‘%s’沒有內容"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:780
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:781
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "無法載入圖像檔‘%s’：原因不明，可能檔案已經損毀"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:225
+#: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -64,22 +64,22 @@ msgstr "無法識別圖像檔‘%s’的圖像格式"
 msgid "Unrecognized image file format"
 msgstr "無法識別的圖像檔格式"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:791
+#: gdk-pixbuf/gdk-pixbuf-io.c:792
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "無法載入圖像‘%s’：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:899
+#: gdk-pixbuf/gdk-pixbuf-io.c:900
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "此 gdk-pixbuf 版本不支援儲存以下的圖像格式：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1004
+#: gdk-pixbuf/gdk-pixbuf-io.c:1008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "無法開啟‘%s’以供寫入資料：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1025
+#: gdk-pixbuf/gdk-pixbuf-io.c:1029
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -91,7 +91,7 @@ msgstr "寫入圖像後無法關閉‘%s’，資料可能無法完整地儲存�
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "不支援以漸進方式載入圖像類型‘%s’"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:356 gdk-pixbuf/gdk-pixbuf-loader.c:457
+#: gdk-pixbuf/gdk-pixbuf-loader.c:356 gdk-pixbuf/gdk-pixbuf-loader.c:458
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -820,7 +820,7 @@ msgstr "比率"
 
 #: gtk/gtkaspectframe.c:123
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "「配合副元件」為 FALSE 時的長寬比"
+msgstr "obey_child 為 FALSE 時的長寬比"
 
 #: gtk/gtkaspectframe.c:129
 msgid "Obey child"
@@ -1311,11 +1311,11 @@ msgstr "文字在基準線以上的距離 (負數表示文字在基準線以下)
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
 msgid "Strikethrough"
-msgstr "劃線"
+msgstr "刪除線"
 
 #: gtk/gtkcellrenderertext.c:344 gtk/gtktexttag.c:464
 msgid "Whether to strike through the text"
-msgstr "應否在文字中央劃線"
+msgstr "應否在文字中央加上刪除線"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:471
 msgid "Underline"
@@ -1415,11 +1415,11 @@ msgstr "本標籤會否影響文字升高的情況"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:592
 msgid "Strikethrough set"
-msgstr "劃線設定"
+msgstr "刪除線設定"
 
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:593
 msgid "Whether this tag affects strikethrough"
-msgstr "本標籤會否影響文字劃線"
+msgstr "本標籤會否影響刪除線的設定"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:600
 msgid "Underline set"
@@ -1427,7 +1427,7 @@ msgstr "底線設定"
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:601
 msgid "Whether this tag affects underlining"
-msgstr "本標籤會否影響底線"
+msgstr "本標籤會否影響底線的設定"
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "Toggle state"
@@ -1539,15 +1539,15 @@ msgstr "應否使用色盤"
 
 #: gtk/gtkcolorsel.c:1756
 msgid "Current Color"
-msgstr "目前色彩"
+msgstr "目前的顏色"
 
 #: gtk/gtkcolorsel.c:1757
 msgid "The current color"
-msgstr "目前的色彩"
+msgstr "目前的顏色"
 
 #: gtk/gtkcolorsel.c:1763
 msgid "Current Alpha"
-msgstr "目前透明度"
+msgstr "目前的透明度"
 
 #: gtk/gtkcolorsel.c:1764
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
@@ -1660,7 +1660,7 @@ msgstr "永遠啟用箭頭"
 
 #: gtk/gtkcombo.c:151
 msgid "Obsolete property, ignored"
-msgstr ""
+msgstr "本屬性己經過時，因此不會理會"
 
 #: gtk/gtkcombo.c:157
 msgid "Case sensitive"
@@ -1668,7 +1668,7 @@ msgstr "區分大小寫"
 
 #: gtk/gtkcombo.c:158
 msgid "Whether list item matching is case sensitive"
-msgstr ""
+msgstr "在清單中搜尋項目時是否區分大小寫"
 
 #: gtk/gtkcombo.c:165
 msgid "Allow empty"
@@ -1676,7 +1676,7 @@ msgstr "接受空白"
 
 #: gtk/gtkcombo.c:166
 msgid "Whether an empty value may be entered in this field"
-msgstr "本欄位可否接受空白的值"
+msgstr "本欄位可否接受空白的變數值"
 
 #: gtk/gtkcombo.c:173
 msgid "Value in list"
@@ -1905,7 +1905,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:566
 msgid "Select multiple"
-msgstr ""
+msgstr "選取多個項目"
 
 #: gtk/gtkfilesel.c:567
 msgid "Whether to allow multiple files to be selected"
@@ -2107,7 +2107,7 @@ msgstr "副元件的垂直位置"
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:68
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "abcdefghijk ABCDEFGHIJK 中文測試"
+msgstr "abcd ABCD 中文測試"
 
 #: gtk/gtkfontsel.c:210
 msgid "Font name"
@@ -2119,7 +2119,7 @@ msgstr "表示本字型的 X 字串"
 
 #: gtk/gtkfontsel.c:218
 msgid "The GdkFont that is currently selected"
-msgstr "目前選取的 GdkFont"
+msgstr "目前選定的 GdkFont"
 
 #: gtk/gtkfontsel.c:224
 msgid "Preview text"
@@ -2127,7 +2127,7 @@ msgstr "預覽文字"
 
 #: gtk/gtkfontsel.c:225
 msgid "The text to display in order to demonstrate the selected font"
-msgstr "示範所選取的字型時使用的字串"
+msgstr "顯示選定的字型時所使用的字串"
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
@@ -2152,39 +2152,39 @@ msgstr "字型選擇"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label"
-msgstr ""
+msgstr "框架的標籤文字"
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
-msgstr ""
+msgstr "標籤水平位置"
 
 #: gtk/gtkframe.c:134
 msgid "The horizontal alignment of the label"
-msgstr ""
+msgstr "標籤的水平位置"
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
-msgstr ""
+msgstr "標籤垂直位置"
 
 #: gtk/gtkframe.c:144
 msgid "The vertical alignment of the label"
-msgstr ""
+msgstr "標籤的垂直位置"
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 msgid "Deprecated property, use shadow_type instead"
-msgstr ""
+msgstr "本屬性已經過時，請使用 shadow_type"
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
-msgstr ""
+msgstr "框架陰影"
 
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border"
-msgstr ""
+msgstr "框架的外觀"
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr ""
+msgstr "標籤元件"
 
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label"
@@ -2205,15 +2205,15 @@ msgstr "陰影類型"
 
 #: gtk/gtkhandlebox.c:203
 msgid "Appearance of the shadow that surrounds the container"
-msgstr ""
+msgstr "容器元件周圍的陰影的外觀"
 
 #: gtk/gtkhandlebox.c:211
 msgid "Handle position"
-msgstr ""
+msgstr "控制項位置"
 
 #: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
-msgstr ""
+msgstr "相對於副元件的控制項位置"
 
 #: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
@@ -3171,8 +3171,7 @@ msgstr "雙擊時間"
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr ""
-"代表雙擊的兩下按鍵之間可接受的最長時間 (亳秒)，如果再長則不作雙擊處理"
+msgstr "代表雙擊的兩下按鍵之間可接受的最長時間 (亳秒)，如果再長則不作雙擊處理"
 
 #: gtk/gtksettings.c:176
 msgid "Cursor Blink"
@@ -3427,7 +3426,7 @@ msgstr "下(_D)"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr "下一頁(_B)"
+msgstr "下一頁(_F)"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
@@ -3631,7 +3630,7 @@ msgstr "統一尺寸"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "設為 TRUE 表示表格中所有格子尺寸都一樣"
+msgstr "設為 TRUE 表示表格中所有儲存格尺寸都一樣"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
@@ -3789,11 +3788,11 @@ msgstr "以字串方式表達的字型，例如“Sans Italic 12”"
 
 #: gtk/gtktexttag.c:307
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr "以 PangoStyle方式表示的字型款式，例如 PANGO_STYLE_ITALIC"
+msgstr "以 PangoStyle 方式表示的字型款式，例如 PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr ""
+msgstr "以 PangoVariant 方式表示的字型變化，例如 PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:325
 msgid ""
@@ -3992,19 +3991,19 @@ msgstr ""
 
 #: gtk/gtktexttag.c:596
 msgid "Right margin set"
-msgstr ""
+msgstr "右邊邊界設定"
 
 #: gtk/gtktexttag.c:597
 msgid "Whether this tag affects the right margin"
-msgstr ""
+msgstr "本標籤會否影響右邊邊界"
 
 #: gtk/gtktexttag.c:604
 msgid "Wrap mode set"
-msgstr ""
+msgstr "換行模式設定"
 
 #: gtk/gtktexttag.c:605
 msgid "Whether this tag affects line wrap mode"
-msgstr ""
+msgstr "本標籤會否影響換行模式"
 
 #: gtk/gtktexttag.c:608
 msgid "Tabs set"
@@ -4016,7 +4015,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:612
 msgid "Invisible set"
-msgstr ""
+msgstr "隱藏設定"
 
 #: gtk/gtktexttag.c:613
 msgid "Whether this tag affects text visibility"
@@ -4278,7 +4277,7 @@ msgstr "垂直分隔元件寬度"
 
 #: gtk/gtktreeview.c:615
 msgid "Vertical space between cells.  Must be an even number"
-msgstr "格子與格子之間的垂直寬度。必須是偶數"
+msgstr "儲存格之間的垂直寬度。必須是偶數"
 
 #: gtk/gtktreeview.c:623
 msgid "Horizontal Separator Width"
@@ -4286,7 +4285,7 @@ msgstr "水平分隔元件寬度"
 
 #: gtk/gtktreeview.c:624
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr "格子與格子之間的水平寬度。必須是偶數"
+msgstr "儲存格之間的水平寬度。必須是偶數"
 
 #: gtk/gtktreeview.c:632
 msgid "Allow Rules"
@@ -4405,23 +4404,20 @@ msgid "Whether the column can be reordered around the headers"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:292
-#, fuzzy
 msgid "Sort indicator"
-msgstr "排序指示器"
+msgstr "排序指示元件"
 
 #: gtk/gtktreeviewcolumn.c:293
-#, fuzzy
 msgid "Whether to show a sort indicator"
-msgstr "是否顯示排序指示器"
+msgstr "是否顯示排序指示元件"
 
 #: gtk/gtktreeviewcolumn.c:300
 msgid "Sort order"
 msgstr "排列次序"
 
 #: gtk/gtktreeviewcolumn.c:301
-#, fuzzy
 msgid "Sort direction the sort indicator should indicate"
-msgstr "排序指示器應顯示的排序方向"
+msgstr "排序指示元件所指示的排序方向"
 
 #: gtk/gtkviewport.c:135
 msgid ""
@@ -4829,6 +4825,21 @@ msgstr "輸入法狀態的式樣"
 #: modules/input/gtkimcontextxim.c:275
 msgid "How to draw the input method statusbar"
 msgstr "如何顯示輸入法的狀態列"
+
+#~ msgid "Color Selection"
+#~ msgstr "色彩選擇"
+
+#~ msgid "Select _All"
+#~ msgstr "全部選取(_A)"
+
+#~ msgid "_Insert Unicode Control Character"
+#~ msgstr "插入統一碼控制字元(_I)"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "無效的 UTF-8 資料"
+
+#~ msgid "Buffer"
+#~ msgstr "緩衝區"
 
 #~ msgid "Don't know how to load the animation in file '%s'"
 #~ msgstr "無法載入檔案‘%s’內的動畫"
