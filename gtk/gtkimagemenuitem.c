@@ -284,12 +284,25 @@ gtk_image_menu_item_forall (GtkContainer   *container,
     (* callback) (image_menu_item->image, callback_data);
 }
 
+/**
+ * gtk_image_menu_item_new:
+ * @returns: a new #GtkImageMenuItem.
+ *
+ * Creates a new #GtkImageMenuItem with an empty label.
+ **/
 GtkWidget*
 gtk_image_menu_item_new (void)
 {
   return g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
 }
 
+/**
+ * gtk_image_menu_item_new_with_label:
+ * @label: the text of the menu item.
+ * @returns: a new #GtkImageMenuItem.
+ *
+ * Creates a new #GtkImageMenuItem containing a label. 
+ **/
 GtkWidget*
 gtk_image_menu_item_new_with_label (const gchar *label)
 {
@@ -313,7 +326,7 @@ gtk_image_menu_item_new_with_label (const gchar *label)
 
 /**
  * gtk_image_menu_item_new_with_mnemonic:
- * @label: The text of the button, with an underscore in front of the
+ * @label: the text of the menu item, with an underscore in front of the
  *         mnemonic character
  * @returns: a new #GtkImageMenuItem
  *
@@ -342,6 +355,16 @@ gtk_image_menu_item_new_with_mnemonic (const gchar *label)
   return GTK_WIDGET(image_menu_item);
 }
 
+/**
+ * gtk_image_menu_item_new_from_stock:
+ * @stock_id: the name of the stock item.
+ * @accel_group: the #GtkAccelGroup to add the menu items accelerator to.
+ * @returns: a new #GtkImageMenuItem.
+ *
+ * Creates a new #GtkImageMenuItem containing the image and text from a 
+ * stock item. Some stock ids have preprocessor macros like #GTK_STOCK_OK 
+ * and #GTK_STOCK_APPLY.
+ **/
 GtkWidget*
 gtk_image_menu_item_new_from_stock (const gchar      *stock_id,
 				    GtkAccelGroup    *accel_group)
@@ -379,6 +402,13 @@ gtk_image_menu_item_new_from_stock (const gchar      *stock_id,
   return item;
 }
 
+/** 
+ * gtk_image_menu_item_set_image:
+ * @image_menu_item: a #GtkImageMenuItem.
+ * @image: a widget to set as the image for the menu item.
+ * 
+ * Sets the image of @image_menu_item to the given widget.
+ **/ 
 void
 gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
                                GtkWidget        *image)
@@ -402,6 +432,14 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
   g_object_notify (G_OBJECT (image_menu_item), "image");
 }
 
+/**
+ * gtk_image_menu_item_get_image:
+ * @image_menu_item: a #GtkImageMenuItem.
+ * @returns: the widget set as image of @image_menu_item.
+ *
+ * Gets the widget that is currently set as the image of @image_menu_item.
+ * See gtk_image_menu_item_set_image().
+ **/
 GtkWidget*
 gtk_image_menu_item_get_image (GtkImageMenuItem *image_menu_item)
 {

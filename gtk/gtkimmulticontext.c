@@ -113,6 +113,13 @@ gtk_im_multicontext_init (GtkIMMulticontext *multicontext)
   multicontext->slave = NULL;
 }
 
+/**
+ * gtk_im_multicontext_new:
+ *
+ * Creates a new #GtkIMMulticontext.
+ *
+ * Returns: a new #GtkIMMulticontext.
+ **/
 GtkIMContext *
 gtk_im_multicontext_new (void)
 {

@@ -91,10 +91,10 @@ Selects the menu item from the menu shell.
 
 <!-- ##### FUNCTION gtk_menu_shell_deselect ##### -->
 <para>
-
+Deselects the currently selected item from the menu shell, if any.
 </para>
 
-@menu_shell: 
+@menu_shell: a #GtkMenuShell. 
 
 
 <!-- ##### FUNCTION gtk_menu_shell_activate_item ##### -->

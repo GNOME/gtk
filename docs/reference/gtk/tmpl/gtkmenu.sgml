@@ -170,11 +170,12 @@ Set the #GtkAccelGroup which holds global accelerators for the menu.
 
 <!-- ##### FUNCTION gtk_menu_get_accel_group ##### -->
 <para>
-
+Gets the #GtkAccelGroup which holds global accelerators for the menu.
+See gtk_menu_set_accel_group().
 </para>
 
-@menu: 
-@Returns: 
+@menu: a #GtkMenu.
+@Returns: the #GtkAccelGroup associated with the menu.
 
 
 <!-- ##### FUNCTION gtk_menu_set_title ##### -->

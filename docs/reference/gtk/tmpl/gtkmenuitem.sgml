@@ -119,20 +119,20 @@ Emits the "activate" signal on the given item
 
 <!-- ##### FUNCTION gtk_menu_item_toggle_size_request ##### -->
 <para>
-
+Emits the "toggle_size_request" signal on the given item.
 </para>
 
-@menu_item: 
-@requisition: 
+@menu_item: the menu item 
+@requisition: the requisition to use as signal data.
 
 
 <!-- ##### FUNCTION gtk_menu_item_toggle_size_allocate ##### -->
 <para>
-
+Emits the "toggle_size_allocate" signal on the given item.
 </para>
 
-@menu_item: 
-@allocation: 
+@menu_item: the menu item. 
+@allocation: the allocation to use as signal data.
 
 
 <!-- ##### MACRO gtk_menu_item_right_justify ##### -->

@@ -1,3 +1,9 @@
+2001-10-28  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkcellrenderertoggle.c, gtk/gtkimcontextsimple.c,
+	gtk/gtkimmulticontext.c, gtk/gtkimagemenuitem.c,
+	gtk/gtkiconfactory.c, gtk/gtkwindow.c: Documentation updates.
+
 2001-10-28  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_class_init): do not call

@@ -380,6 +380,8 @@ gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
 /**
  * gtk_cell_renderer_toggle_get_radio:
  * @toggle: a #GtkCellRendererToggle
+ *
+ * Returns wether we're rendering radio toggles rather than checkboxes. 
  * 
  * Return value: %TRUE if we're rendering radio toggles rather than checkboxes
  **/
@@ -391,6 +393,15 @@ gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle)
   return toggle->radio;
 }
 
+/**
+ * gtk_cell_renderer_toggle_get_active:
+ * @check_menu_item: a #GtkCellRendererToggle
+ *
+ * Returns whether the cell renderer is active. See
+ * gtk_cell_renderer_toggle_set_active().
+ *
+ * Return value: %TRUE if the cell renderer is active.
+
 gboolean
 gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle)
 {
@@ -399,6 +410,13 @@ gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle)
   return toggle->active;
 }
 
+/**
+ * gtk_cell_renderer_toggle_set_active:
+ * @toggle: a #GtkCellRendererToggle.
+ * @setting: the value to set.
+ *
+ * Activates or deactivates a cell renderer.
+ **/
 void
 gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
 				     gboolean               setting)

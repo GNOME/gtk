@@ -29,14 +29,6 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 
-#if defined (GDK_WINDOWING_X11)
-#include "x11/gdkx.h"
-#elif defined (GDK_WINDOWING_WIN32)
-#include "win32/gdkwin32.h"
-#elif defined (GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"
-#endif
-
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtksignal.h"
@@ -5134,7 +5126,7 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
 }
 
 /**
- * gtk_window_group_add_widget:
+ * gtk_window_group_add_window:
  * @window_group: a #GtkWindowGroup
  * @window: the #GtkWindow to add
  * 

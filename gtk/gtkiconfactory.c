@@ -514,6 +514,7 @@ get_default_icons (GtkIconFactory *factory)
   add_unsized (factory, stock_convert, GTK_STOCK_CONVERT);
   add_unsized (factory, stock_copy, GTK_STOCK_COPY);
   add_unsized (factory, stock_cut, GTK_STOCK_CUT);
+  add_unsized (factory, stock_delete, GTK_STOCK_DELETE);
   add_unsized (factory, stock_down_arrow, GTK_STOCK_GO_DOWN);
   add_unsized (factory, stock_exec, GTK_STOCK_EXECUTE);
   add_unsized (factory, stock_exit, GTK_STOCK_QUIT);
@@ -548,7 +549,7 @@ get_default_icons (GtkIconFactory *factory)
   add_unsized (factory, stock_text_strikeout, GTK_STOCK_STRIKETHROUGH);
   add_unsized (factory, stock_text_underline, GTK_STOCK_UNDERLINE);
   add_unsized (factory, stock_top, GTK_STOCK_GOTO_TOP);
-  add_unsized (factory, stock_trash, GTK_STOCK_DELETE);
+  add_unsized (factory, stock_trash, GTK_STOCK_TRASHCAN);
   add_unsized (factory, stock_undelete, GTK_STOCK_UNDELETE);
   add_unsized (factory, stock_undo, GTK_STOCK_UNDO);
   add_unsized (factory, stock_up_arrow, GTK_STOCK_GO_UP);
@@ -768,6 +769,13 @@ gtk_icon_size_register_alias (const gchar *alias,
   g_hash_table_insert (icon_aliases, ia->name, ia);
 }
 
+/** 
+ * gtk_icon_size_from_name:
+ * @name: the name to look up.
+ * @returns: the icon size with the given name.
+ * 
+ * Looks up the icon size associated with @name.
+ **/
 GtkIconSize
 gtk_icon_size_from_name (const gchar *name)
 {
@@ -783,6 +791,14 @@ gtk_icon_size_from_name (const gchar *name)
     return GTK_ICON_SIZE_INVALID;
 }
 
+/**
+ * gtk_icon_size_get_name:
+ * @size: a #GtkIconSize.
+ * @returns: the name of the given icon size.
+ * 
+ * Gets the canonical name of the given icon size. The returned string 
+ * is statically allocated and should not be freed.
+ **/
 G_CONST_RETURN gchar*
 gtk_icon_size_get_name (GtkIconSize  size)
 {
