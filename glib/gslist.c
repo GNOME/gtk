@@ -358,13 +358,13 @@ g_slist_insert_sorted (GSList    *list,
       return new_list;
     }
  
-  cmp = (*func) (tmp_list->data, data);
+  cmp = (*func) (data, tmp_list->data);
  
   while ((tmp_list->next) && (cmp > 0))
     {
       prev_list = tmp_list;
       tmp_list = tmp_list->next;
-      cmp = (*func) (tmp_list->data, data);
+      cmp = (*func) (data, tmp_list->data);
     }
 
   if (cmp == 0)

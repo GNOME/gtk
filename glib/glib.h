@@ -419,8 +419,8 @@ void   g_list_foreach	  (GList     *list,
 			   GFunc      func,
 			   gpointer   user_data);
 
-#define g_list_previous(list) (((GList *)list)->prev)
-#define g_list_next(list) (((GList *)list)->next)
+#define g_list_previous(list) ((list) ? (((GList *)list)->prev) : NULL)
+#define g_list_next(list) ((list) ? (((GList *)list)->next) : NULL)
 
 /* Singly linked lists
  */
@@ -455,7 +455,7 @@ void	g_slist_foreach	    (GSList   *list,
 			     GFunc     func,
 			     gpointer  user_data);
 
-#define g_slist_next(list) (((GSList *)list)->next)
+#define g_slist_next(list) ((list) ? (((GSList *)list)->next) : NULL)
 
 /* List Allocators
  */

@@ -381,12 +381,12 @@ g_list_insert_sorted (GList    *list,
       return new_list;
     }
   
-  cmp = (*func) (tmp_list->data, data);
+  cmp = (*func) (data, tmp_list->data);
   
   while ((tmp_list->next) && (cmp > 0))
     {
       tmp_list = tmp_list->next;
-      cmp = (*func) (tmp_list->data, data);
+      cmp = (*func) (data, tmp_list->data);
     }
 
   if (cmp == 0)

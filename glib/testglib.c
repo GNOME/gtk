@@ -138,7 +138,7 @@ main (int   argc,
   for (i = 0; i < 10; i++)
     {
       t = g_list_nth (list, i);
-      if (*((gint*) t->data) != (9 - i))
+      if (*((gint*) t->data) != i)
          g_error ("Sorted insert failed");
     }
     
@@ -156,7 +156,7 @@ main (int   argc,
   for (i = 0; i < 10; i++)
     {
       t = g_list_nth (list, i);
-      if (*((gint*) t->data) != i)
+      if (*((gint*) t->data) != (9 - i))
          g_error ("Sorted insert failed");
     }
     
@@ -193,7 +193,7 @@ main (int   argc,
   for (i = 0; i < 10; i++)
     {
       st = g_slist_nth (slist, i);
-      if (*((gint*) st->data) != (9 - i))
+      if (*((gint*) st->data) != i)
          g_error ("Sorted insert failed");
     }
      
@@ -211,7 +211,7 @@ main (int   argc,
   for (i = 0; i < 10; i++)
     {
       st = g_slist_nth (slist, i);
-      if (*((gint*) st->data) != i)
+      if (*((gint*) st->data) != (9 - i))
          g_error("Sorted insert failed");
     }
     
