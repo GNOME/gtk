@@ -808,7 +808,7 @@ xlate_io (GIOChannel *gioc,
 	  dummy[0] = keycode;
 	  dummy[1] = 0;
 
-	  len = isprint (keycode) ? 1 : 0;
+	  len = ((keycode < 255) && isprint (keycode)) ? 1 : 0;
 	  gdk_fb_handle_key (keycode,
 			     keycode,
 			     modifier,

@@ -1,3 +1,8 @@
+2000-12-22  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkkeyboard-fb.c (xlate_io):
+	Don't use isprint() for chars > 255.
+
 2000-12-21  Havoc Pennington  <hp@redhat.com>
 
 	* tests/testtreeview.c: more work
