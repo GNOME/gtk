@@ -4017,25 +4017,30 @@ gtk_widget_modify_color_component (GtkWidget     *widget,
 {
   GtkRcStyle *rc_style = gtk_widget_get_modifier_style (widget);  
 
-  switch (component)
+  if (color)
     {
-    case GTK_RC_FG:
-      rc_style->fg[state] = *color;
-      break;
-    case GTK_RC_BG:
-      rc_style->bg[state] = *color;
-      break;
-    case GTK_RC_TEXT:
-      rc_style->text[state] = *color;
-       break;
-    case GTK_RC_BASE:
-      rc_style->base[state] = *color;
-      break;
-    default:
-      g_assert_not_reached();
+      switch (component)
+	{
+	case GTK_RC_FG:
+	  rc_style->fg[state] = *color;
+	  break;
+	case GTK_RC_BG:
+	  rc_style->bg[state] = *color;
+	  break;
+	case GTK_RC_TEXT:
+	  rc_style->text[state] = *color;
+	  break;
+	case GTK_RC_BASE:
+	  rc_style->base[state] = *color;
+	  break;
+	default:
+	  g_assert_not_reached();
+	}
+      
+      rc_style->color_flags[state] |= component;
     }
-
-  rc_style->color_flags[state] |= component;
+  else
+    rc_style->color_flags[state] &= ~component;
 
   gtk_widget_modify_style (widget, rc_style);
 }
@@ -4044,7 +4049,9 @@ gtk_widget_modify_color_component (GtkWidget     *widget,
  * gtk_widget_modify_fg:
  * @widget: a #GtkWidget.
  * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated).
+ * @color: the color to assign (does not need to be allocated),
+ *         or %NULL to undo the effect of previous calls to
+ *         of gtk_widget_modify_fg().
  * 
  * Sets the foreground color for a widget in a particular state.  All
  * other style values are left untouched. See also
@@ -4066,7 +4073,9 @@ gtk_widget_modify_fg (GtkWidget   *widget,
  * gtk_widget_modify_bg:
  * @widget: a #GtkWidget.
  * @state: the state for which to set the background color.
- * @color: the color to assign (does not need to be allocated).
+ * @color: the color to assign (does not need to be allocated),
+ *         or %NULL to undo the effect of previous calls to
+ *         of gtk_widget_modify_bg().
  * 
  * Sets the background color for a widget in a particular state.  All
  * other style values are left untouched. See also
@@ -4088,7 +4097,9 @@ gtk_widget_modify_bg (GtkWidget   *widget,
  * gtk_widget_modify_text:
  * @widget: a #GtkWidget.
  * @state: the state for which to set the text color.
- * @color: the color to assign (does not need to be allocated).
+ * @color: the color to assign (does not need to be allocated),
+ *         or %NULL to undo the effect of previous calls to
+ *         of gtk_widget_modify_text().
  * 
  * Sets the text color for a widget in a particular state.  All other
  * style values are left untouched. The text color is the foreground
@@ -4112,7 +4123,9 @@ gtk_widget_modify_text (GtkWidget   *widget,
  * gtk_widget_modify_base:
  * @widget: a #GtkWidget.
  * @state: the state for which to set the base color.
- * @color: the color to assign (does not need to be allocated).
+ * @color: the color to assign (does not need to be allocated),
+ *         or %NULL to undo the effect of previous calls to
+ *         of gtk_widget_modify_base().
  * 
  * Sets the base color for a widget in a particular state.
  * All other style values are left untouched. The base color
@@ -4135,7 +4148,8 @@ gtk_widget_modify_base (GtkWidget  *widget,
 /**
  * gtk_widget_modify_font:
  * @widget: a #GtkWidget
- * @font_desc: the font description to use
+ * @font_desc: the font description to use, or %NULL to undo
+ *   the effect of previous calls to gtk_widget_modify_font().
  * 
  * Sets the font to use for a widget.  All other style values are left
  * untouched. See also gtk_widget_modify_style().
@@ -4153,9 +4167,12 @@ gtk_widget_modify_font (GtkWidget            *widget,
 
   if (rc_style->font_desc)
     pango_font_description_free (rc_style->font_desc);
-  
-  rc_style->font_desc = pango_font_description_copy (font_desc);
 
+  if (font_desc)
+    rc_style->font_desc = pango_font_description_copy (font_desc);
+  else
+    rc_style->font_desc = NULL;
+  
   gtk_widget_modify_style (widget, rc_style);
 }
 

@@ -1,3 +1,11 @@
+Sat Apr 20 12:07:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_modify_color_component): Accept
+	NULL for color to mean "unmodify"
+
+	* gtk/gtkwidget.c (gtk_widget_modify_font): Accept NULL for
+	font_desc to mean "unmodify".
+
 Sat Apr 20 16:49:26 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gdk/x11/gdkpixmap-x11.c (gdk_pixmap_new): replace GDK_IS_WINDOW
@@ -111,6 +119,7 @@ Tue Apr 16 07:53:49 2002  Tim Janik  <timj@gtk.org>
 	* gtk/gtkwidget.c (_gtk_widget_get_accel_path): export whether the
 	accel path is from a locked accel group.
 
+>>>>>>> 1.3353
 Mon Apr 15 15:41:56 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcontainer.c (gtk_container_focus): include internal
