@@ -1,3 +1,11 @@
+2004-04-11  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkspawn-win32.c : workaround for bug #137496,
+	the real fix would involve just another small API breakage,
+	i.e. gdk_spawn_* using GPid not just gint.
+
+	* gtk/makefile.msc.in : build gtk-win32.res, not gtk.res
+
 2004-04-10  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkkeys-win32.c (gdk_keymap_translate_keyboard_state):

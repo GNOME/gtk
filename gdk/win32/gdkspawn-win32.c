@@ -38,6 +38,7 @@ gdk_spawn_on_screen (GdkScreen             *screen,
 		     GError               **error)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+  g_assert (sizeof(GPid) == sizeof(int));
 
   return g_spawn_async (working_directory,
 			argv,
@@ -45,7 +46,7 @@ gdk_spawn_on_screen (GdkScreen             *screen,
 			flags,
 			child_setup,
 			user_data,
-			child_pid,
+			(GPid*)child_pid,
 			error);
 }
 
@@ -64,6 +65,7 @@ gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
 				GError              **error)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+  g_assert (sizeof(GPid) == sizeof(int));
 
   return g_spawn_async_with_pipes (working_directory,
 				   argv,
@@ -71,7 +73,7 @@ gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
 				   flags,
 				   child_setup,
 				   user_data,
-				   child_pid,
+				   (GPid*)child_pid,
 				   standard_input,
 				   standard_output,
 				   standard_error,

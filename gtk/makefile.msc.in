@@ -484,13 +484,13 @@ gtkmarshal.c : gtkmarshal.list
 gtksignal.obj : gtksignal.c gtkmarshal.c gtkmarshal.h
 	$(CC) $(CFLAGS) -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" gtksignal.c
 
-gtk.res : gtk.rc
-	rc -DBUILDNUMBER=0 -r -fo gtk.res gtk.rc
+gtk-win32.res : gtk-win32.rc
+	rc -DBUILDNUMBER=0 -r -fo gtk-win32.res gtk-win32.rc
 
 #
 # Linking:
 #
-libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def gtk.res
+libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def gtk-win32.res
 	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) gtk.res \
 	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) \
 	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib \
