@@ -31,6 +31,9 @@ static void gtk_cell_renderer_pixbuf_set_property  (GObject                    *
 						    GParamSpec                 *pspec);
 static void gtk_cell_renderer_pixbuf_init       (GtkCellRendererPixbuf      *celltext);
 static void gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class);
+static void gtk_cell_renderer_pixbuf_finalize   (GObject                    *object);
+static void gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
+							  GtkWidget             *widget);
 static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
 						 GdkRectangle               *rectangle,
@@ -51,8 +54,13 @@ enum {
 	PROP_ZERO,
 	PROP_PIXBUF,
 	PROP_PIXBUF_EXPANDER_OPEN,
-	PROP_PIXBUF_EXPANDER_CLOSED
+	PROP_PIXBUF_EXPANDER_CLOSED,
+	PROP_STOCK_ID,
+	PROP_STOCK_SIZE,
+	PROP_STOCK_DETAIL
 };
+
+static gpointer parent_class;
 
 
 GtkType
@@ -84,6 +92,7 @@ gtk_cell_renderer_pixbuf_get_type (void)
 static void
 gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
 {
+	cellpixbuf->stock_size = GTK_ICON_SIZE_MENU;
 }
 
 static void
@@ -91,6 +100,10 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
+
+	parent_class = g_type_class_peek_parent (class);
+
+	object_class->finalize = gtk_cell_renderer_pixbuf_finalize;
 
 	object_class->get_property = gtk_cell_renderer_pixbuf_get_property;
 	object_class->set_property = gtk_cell_renderer_pixbuf_set_property;
@@ -124,6 +137,49 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							      GDK_TYPE_PIXBUF,
 							      G_PARAM_READABLE |
 							      G_PARAM_WRITABLE));
+
+	g_object_class_install_property (object_class,
+                                         PROP_STOCK_ID,
+                                         g_param_spec_string ("stock_id",
+                                                              _("Stock ID"),
+                                                              _("The stock ID of the stock icon to render"),
+                                                              NULL,
+                                                              G_PARAM_READWRITE));
+
+        g_object_class_install_property (object_class,
+                                         PROP_STOCK_SIZE,
+                                         g_param_spec_enum ("stock_size",
+                                                            _("Size"),
+                                                            _("The size of the rendered icon"),
+                                                            GTK_TYPE_ICON_SIZE,
+                                                            GTK_ICON_SIZE_MENU,
+                                                            G_PARAM_READWRITE));
+
+        g_object_class_install_property (object_class,
+                                         PROP_STOCK_DETAIL,
+                                         g_param_spec_string ("stock_detail",
+                                                              _("Detail"),
+                                                              _("Render detail to pass to the theme engine"),
+                                                              NULL,
+                                                              G_PARAM_READWRITE));
+
+}
+
+static void
+gtk_cell_renderer_pixbuf_finalize (GObject *object)
+{
+  GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
+
+  if (cellpixbuf->pixbuf && cellpixbuf->stock_id)
+    g_object_unref (cellpixbuf->pixbuf);
+
+  if (cellpixbuf->stock_id)
+    g_free (cellpixbuf->stock_id);
+
+  if (cellpixbuf->stock_detail)
+    g_free (cellpixbuf->stock_detail);
+
+  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void
@@ -147,6 +203,15 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
     case PROP_PIXBUF_EXPANDER_CLOSED:
       g_value_set_object (value,
                           cellpixbuf->pixbuf_expander_closed ? G_OBJECT (cellpixbuf->pixbuf_expander_closed) : NULL);
+      break;
+    case PROP_STOCK_ID:
+      g_value_set_string (value, cellpixbuf->stock_id);
+      break;
+    case PROP_STOCK_SIZE:
+      g_value_set_enum (value, cellpixbuf->stock_size);
+      break;
+    case PROP_STOCK_DETAIL:
+      g_value_set_string (value, cellpixbuf->stock_detail);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -190,9 +255,31 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 	g_object_unref (G_OBJECT (cellpixbuf->pixbuf_expander_closed));
       cellpixbuf->pixbuf_expander_closed = pixbuf;
       break;
+    case PROP_STOCK_ID:
+      if (cellpixbuf->stock_id)
+        g_free (cellpixbuf->stock_id);
+      cellpixbuf->stock_id = g_strdup (g_value_get_string (value));
+      g_object_notify (G_OBJECT (object), "stock_id");
+      break;
+    case PROP_STOCK_SIZE:
+      cellpixbuf->stock_size = g_value_get_enum (value);
+      g_object_notify (G_OBJECT (object), "stock_size");
+      break;
+    case PROP_STOCK_DETAIL:
+      if (cellpixbuf->stock_detail)
+        g_free (cellpixbuf->stock_detail);
+      cellpixbuf->stock_detail = g_strdup (g_value_get_string (value));
+      g_object_notify (G_OBJECT (object), "stock_detail");
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
+    }
+
+  if (cellpixbuf->pixbuf && cellpixbuf->stock_id)
+    {
+      g_object_unref (cellpixbuf->pixbuf);
+      cellpixbuf->pixbuf = NULL;
     }
 }
 
@@ -216,6 +303,19 @@ gtk_cell_renderer_pixbuf_new (void)
 }
 
 static void
+gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
+					      GtkWidget             *widget)
+{
+  if (cellpixbuf->pixbuf)
+    g_object_unref (G_OBJECT (cellpixbuf->pixbuf));
+
+  cellpixbuf->pixbuf = gtk_widget_render_icon (widget,
+					       cellpixbuf->stock_id,
+					       cellpixbuf->stock_size,
+					       cellpixbuf->stock_detail);
+}
+
+static void
 gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
 				   GtkWidget       *widget,
 				   GdkRectangle    *cell_area,
@@ -229,6 +329,9 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
   gint pixbuf_height = 0;
   gint calc_width;
   gint calc_height;
+
+  if (!cellpixbuf->pixbuf && cellpixbuf->stock_id)
+    gtk_cell_renderer_pixbuf_create_stock_pixbuf (cellpixbuf, widget);
 
   if (cellpixbuf->pixbuf)
     {
@@ -287,6 +390,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
   GdkPixbuf *pixbuf;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
+  gboolean stock_pixbuf = FALSE;
 
   pixbuf = cellpixbuf->pixbuf;
   if (cell->is_expander)
@@ -299,14 +403,19 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
 	pixbuf = cellpixbuf->pixbuf_expander_closed;
     }
 
-  if (!pixbuf)
+  if (!pixbuf && !cellpixbuf->stock_id)
     return;
+  else if (!pixbuf && cellpixbuf->stock_id)
+    stock_pixbuf = TRUE;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, cell_area,
 				     &pix_rect.x,
 				     &pix_rect.y,
 				     &pix_rect.width,
 				     &pix_rect.height);
+
+  if (stock_pixbuf)
+    pixbuf = cellpixbuf->pixbuf;
   
   pix_rect.x += cell_area->x;
   pix_rect.y += cell_area->y;

@@ -1,3 +1,17 @@
+Mon Apr 22 19:24:29 2002  Kristian Rietveld  <kris@gtk.org>
+
+	This commit adds stock icon functionality to GtkCellRendererPixbuf
+	which is totally cool.
+
+	* gtk/gtkcellrendererpixbuf.h: add some fields
+
+	* gtk/gtkcellrendererpixbuf.c: add finalize method, add some
+	properties, add some stock icon rendering code.
+
+	* demos/gtk-demo/stock_browser.c: modified to use the stock
+	icon stuff in the cellrendererpixbuf instead of its own stock icon
+	rendering code.
+
 2002-04-21  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_reparent):

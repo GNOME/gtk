@@ -41,9 +41,14 @@ struct _GtkCellRendererPixbuf
 {
   GtkCellRenderer parent;
 
+  /*< private >*/
   GdkPixbuf *pixbuf;
   GdkPixbuf *pixbuf_expander_open;
   GdkPixbuf *pixbuf_expander_closed;
+
+  gchar *stock_id;
+  GtkIconSize stock_size;
+  gchar *stock_detail;
 };
 
 struct _GtkCellRendererPixbufClass

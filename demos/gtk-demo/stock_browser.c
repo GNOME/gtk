@@ -121,7 +121,7 @@ create_model (void)
   GSList *ids;
   GSList *tmp_list;
   
-  store = gtk_list_store_new (1, STOCK_ITEM_INFO_TYPE);
+  store = gtk_list_store_new (2, STOCK_ITEM_INFO_TYPE, G_TYPE_STRING);
 
   ids = gtk_stock_list_ids ();
   ids = g_slist_sort (ids, (GCompareFunc) strcmp);
@@ -210,7 +210,7 @@ create_model (void)
       info.macro = id_to_macro (info.id);
       
       gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter, 0, &info, -1);
+      gtk_list_store_set (store, &iter, 0, &info, 1, info.id, -1);
 
       g_free (info.macro);
       g_free (info.accel_str);
@@ -340,26 +340,6 @@ macro_set_func_text (GtkTreeViewColumn *tree_column,
 }
 
 static void
-macro_set_func_pixbuf (GtkTreeViewColumn *tree_column,
-		       GtkCellRenderer   *cell,
-		       GtkTreeModel      *model,
-		       GtkTreeIter       *iter,
-		       gpointer           data)
-{
-  StockItemInfo *info;
-  
-  gtk_tree_model_get (model, iter,
-                      0, &info,
-                      -1);
-  
-  g_object_set (GTK_CELL_RENDERER (cell),
-                "pixbuf", info->small_icon,
-                NULL);
-  
-  stock_item_info_free (info);
-}
-
-static void
 id_set_func (GtkTreeViewColumn *tree_column,
              GtkCellRenderer   *cell,
              GtkTreeModel      *model,
@@ -467,8 +447,8 @@ do_stock_browser (void)
       gtk_tree_view_column_pack_start (column,
 				       cell_renderer,
 				       FALSE);
-      gtk_tree_view_column_set_cell_data_func (column, cell_renderer,
-					       macro_set_func_pixbuf, NULL, NULL);
+      gtk_tree_view_column_set_attributes (column, cell_renderer,
+					   "stock_id", 1, NULL);
       cell_renderer = gtk_cell_renderer_text_new ();
       gtk_tree_view_column_pack_start (column,
 				       cell_renderer,
@@ -480,7 +460,6 @@ do_stock_browser (void)
 				   column);
 
       cell_renderer = gtk_cell_renderer_text_new ();
-
       gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (treeview),
                                                   -1,
                                                   "Label",
@@ -489,6 +468,7 @@ do_stock_browser (void)
                                                   NULL,
                                                   NULL);
 
+      cell_renderer = gtk_cell_renderer_text_new ();
       gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (treeview),
                                                   -1,
                                                   "Accel",
@@ -497,6 +477,7 @@ do_stock_browser (void)
                                                   NULL,
                                                   NULL);
 
+      cell_renderer = gtk_cell_renderer_text_new ();
       gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (treeview),
                                                   -1,
                                                   "ID",
