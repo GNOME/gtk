@@ -333,6 +333,9 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 			  {
 			    guchar pixval;
 
+			    if (context->curx + (7 - xoff) == context->width)
+			      break;
+
 			    if(byte & (1<<xoff))
 			      pixval = 0xFF;
 			    else

@@ -1,3 +1,20 @@
+2002-02-10  Matthias Clasen  <matthias@local>
+
+	* test-images.h (tiff1_test_3), test-loaders.c (main): Add a
+	(#ifdef 0'ed) test provoking a segfault in TIFFReadDirectory(). 
+	
+	* io-ico.c (DecodeHeader): Check that pixbuf could be allocated.
+
+	* test-images.h (ico_test_2), test-loaders.c (main): Test the 
+	previous change.
+
+	* io-wbmp.c (gdk_pixbuf__wbmp_image_load_increment): Don't write 
+	beyond the end of buffer if width % 8 != 0.
+
+	* io-tga.c (try_preload): Enforce that ctx->hdr->type is one of
+	the supported types, otherwise parse_data_for_row () will not make
+	any progress, leading to an infinite loop.
+
 Mon Feb 11 14:31:53 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c (bilinear_make_weights): Fix handing of

@@ -403,22 +403,24 @@ main (int argc, char **argv)
 
   TEST (valid_ico_test, TRUE);
   TEST (ico_test_1, FALSE);
-  
+  TEST (ico_test_2, FALSE);
+
   TEST (valid_jpeg_test, TRUE);
   
   TEST (valid_tiff1_test, TRUE);
   TEST (tiff1_test_1, FALSE);
   TEST (tiff1_test_2, FALSE);
+#if 0
+  TEST (tiff1_test_3, FALSE); /* Segfault in TIFFReadDirectory with libtiff 3.5.5, fixed in 3.5.7 */
+#endif
 
   TEST (valid_tga_test, TRUE);
   TEST (tga_test_1, FALSE);
 
   TEST (xpm_test_1, FALSE);
 
-#if 0
   TEST (wbmp_test_1, FALSE); 
   TEST (wbmp_test_2, FALSE);
-#endif
   
   TEST_RANDOM (GIF_HEADER, 150, FALSE);
   TEST_RANDOM (PNG_HEADER, 1100, FALSE);
@@ -432,12 +434,10 @@ main (int argc, char **argv)
   TEST_RANDOMLY_MODIFIED (valid_gif_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_png_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_tga_test, FALSE);
-  TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);  /* The jpeg loader does not break */
-  TEST_RANDOMLY_MODIFIED (valid_ico_test, FALSE);    /* The ico loader does not seem to
-						     * break, but the image tend to 
-						     * mutate into a wbmp image, and
-						     * the wbmp loader is broken
-						     */
+  TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);
+  TEST_RANDOMLY_MODIFIED (valid_ico_test, FALSE);
+  
+
   /* memory tests */
 
   /* How do the loaders behave when memory is low?

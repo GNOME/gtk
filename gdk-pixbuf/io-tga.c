@@ -633,6 +633,20 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 					    _("TGA image type not supported"));
 				return FALSE;
 			}
+			switch (ctx->hdr->type) {
+			    case TGA_TYPE_PSEUDOCOLOR:
+			    case TGA_TYPE_TRUECOLOR:
+			    case TGA_TYPE_GRAYSCALE:
+			    case TGA_TYPE_RLE_PSEUDOCOLOR:
+			    case TGA_TYPE_RLE_TRUECOLOR:
+			    case TGA_TYPE_RLE_GRAYSCALE:
+			      break;
+			    default:
+			      g_set_error(err, GDK_PIXBUF_ERROR, 
+					  GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+					  _("TGA image type not supported"));
+			      return FALSE;    
+			}
 			if (!fill_in_context(ctx, err))
 				return FALSE;
 		} else {
