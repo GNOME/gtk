@@ -1,3 +1,8 @@
+Tue Mar  9 00:52:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/migrating-GtkAction.sgml: Fix the example XML ui
+	description.
+
 Mon Mar  8 08:26:52 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/building.sgml: Fix link to gettext. (Henning Nielsen Lund)
