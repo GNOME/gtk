@@ -926,7 +926,8 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
     gtk_list_store_set (impl->shortcuts_model, &iter,
 			SHORTCUTS_COL_PIXBUF, pixbuf,
 			-1);
-
+    g_object_unref (pixbuf);
+    
   next_iter:
     i++;
   } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model),&iter));
