@@ -323,14 +323,14 @@ gtk_clist_class_init (GtkCListClass * klass)
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, select_row),
 		    gtk_clist_marshal_signal_1,
-	    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_POINTER);
+	    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_GDK_EVENT);
   clist_signals[UNSELECT_ROW] =
     gtk_signal_new ("unselect_row",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, unselect_row),
 		    gtk_clist_marshal_signal_1,
-	    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_POINTER);
+	    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_GDK_EVENT);
   clist_signals[CLICK_COLUMN] =
     gtk_signal_new ("click_column",
 		    GTK_RUN_FIRST,

@@ -1,3 +1,9 @@
+
+Fri May 22 08:51:10 CEST 1998  Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkclist.c: use GTK_TYPE_GDK_EVENT in (un)?select_row
+	signal.
+
 1998-05-21    <sopwith@redhat.com>
 
 	* gtk/gtkrc.[ch]: gtk_rc_set_image_loader() - allow apps to set a custom
