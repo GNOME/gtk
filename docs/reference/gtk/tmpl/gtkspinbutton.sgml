@@ -448,14 +448,19 @@ the amount a spin button changes when an arrow is clicked.
 the number of decimal places to display.
 </para>
 
+<!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
+<para>
+whether erroneous values are automatically changed to a spin button's nearest step increment.
+</para>
+
 <!-- ##### ARG GtkSpinButton:numeric ##### -->
 <para>
 whether non-numeric characters should be ignored.
 </para>
 
-<!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
+<!-- ##### ARG GtkSpinButton:wrap ##### -->
 <para>
-whether erroneous values are automatically changed to a spin button's nearest step increment.
+whether a spin button should wrap upon reaching its limits.
 </para>
 
 <!-- ##### ARG GtkSpinButton:update-policy ##### -->
@@ -466,10 +471,5 @@ how a spin button should be updated.
 <!-- ##### ARG GtkSpinButton:value ##### -->
 <para>
 reads the current value, or sets a new value.
-</para>
-
-<!-- ##### ARG GtkSpinButton:wrap ##### -->
-<para>
-whether a spin button should wrap upon reaching its limits.
 </para>
 

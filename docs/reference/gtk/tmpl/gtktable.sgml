@@ -251,14 +251,9 @@ to %FALSE if this is not your desired behaviour.
 @Returns: 
 
 
-<!-- ##### ARG GtkTable:column-spacing ##### -->
+<!-- ##### ARG GtkTable:n-rows ##### -->
 <para>
-Sets or retrieves the number of pixels of space between columns.
-</para>
-
-<!-- ##### ARG GtkTable:homogeneous ##### -->
-<para>
-Whether each cell in the table should be the same size or not.
+Sets or retrieves the number of rows in a table.
 </para>
 
 <!-- ##### ARG GtkTable:n-columns ##### -->
@@ -266,9 +261,9 @@ Whether each cell in the table should be the same size or not.
 Sets or retrieves the number of columns in a table.
 </para>
 
-<!-- ##### ARG GtkTable:n-rows ##### -->
+<!-- ##### ARG GtkTable:column-spacing ##### -->
 <para>
-Sets or retrieves the number of rows in a table.
+Sets or retrieves the number of pixels of space between columns.
 </para>
 
 <!-- ##### ARG GtkTable:row-spacing ##### -->
@@ -276,43 +271,8 @@ Sets or retrieves the number of rows in a table.
 Sets or retrieves the number of pixels of space between rows.
 </para>
 
-<!-- ##### ARG GtkTable:bottom-attach ##### -->
+<!-- ##### ARG GtkTable:homogeneous ##### -->
 <para>
-
-</para>
-
-<!-- ##### ARG GtkTable:left-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:right-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:top-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:x-options ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:x-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:y-options ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:y-padding ##### -->
-<para>
-
+Whether each cell in the table should be the same size or not.
 </para>
 

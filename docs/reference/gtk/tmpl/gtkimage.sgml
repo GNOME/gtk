@@ -359,17 +359,12 @@ Gets the #GtkImage.
 @mask: a #GdkBitmap that indicates which parts of the image should be transparent.
 
 
-<!-- ##### ARG GtkImage:file ##### -->
+<!-- ##### ARG GtkImage:pixbuf ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkImage:icon-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkImage:icon-size ##### -->
+<!-- ##### ARG GtkImage:pixmap ##### -->
 <para>
 
 </para>
@@ -384,22 +379,27 @@ Gets the #GtkImage.
 
 </para>
 
-<!-- ##### ARG GtkImage:pixbuf ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkImage:pixbuf-animation ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkImage:pixmap ##### -->
+<!-- ##### ARG GtkImage:file ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkImage:stock ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:icon-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:icon-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:pixbuf-animation ##### -->
 <para>
 
 </para>

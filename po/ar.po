@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-11-08 14:52-0500\n"
+"POT-Creation-Date: 2002-11-20 20:37+0100\n"
 "PO-Revision-Date: 2002-05-20 06:39+0300\n"
 "Last-Translator: Sayed Jaffer Al-Mosawi <mosawi@arabeyes.org>\n"
 "Language-Team: Arabic <contact@arabeyes.org>\n"

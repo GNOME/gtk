@@ -138,17 +138,17 @@ Emitted when the range value changes.
 
 @range: the #GtkRange
 
+<!-- ##### ARG GtkRange:update-policy ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkRange:adjustment ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkRange:inverted ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:update-policy ##### -->
 <para>
 
 </para>

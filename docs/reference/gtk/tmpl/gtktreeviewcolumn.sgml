@@ -478,32 +478,7 @@ calling gtk_tree_view_column_set_cell_data_func()
 
 @treeviewcolumn: the object which received the signal.
 
-<!-- ##### ARG GtkTreeViewColumn:alignment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:clickable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:fixed-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:max-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:min-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:reorderable ##### -->
+<!-- ##### ARG GtkTreeViewColumn:visible ##### -->
 <para>
 
 </para>
@@ -513,7 +488,52 @@ calling gtk_tree_view_column_set_cell_data_func()
 
 </para>
 
+<!-- ##### ARG GtkTreeViewColumn:width ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeViewColumn:sizing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:fixed-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:min-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:max-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:clickable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:alignment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:reorderable ##### -->
 <para>
 
 </para>
@@ -524,26 +544,6 @@ calling gtk_tree_view_column_set_cell_data_func()
 </para>
 
 <!-- ##### ARG GtkTreeViewColumn:sort-order ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:title ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:width ##### -->
 <para>
 
 </para>

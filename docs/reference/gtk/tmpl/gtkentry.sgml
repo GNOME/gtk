@@ -339,12 +339,12 @@ use gtk_editable_set_editable() instead.
 
 @entry: the object which received the signal.
 
-<!-- ##### ARG GtkEntry:activates-default ##### -->
+<!-- ##### ARG GtkEntry:cursor-position ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkEntry:cursor-position ##### -->
+<!-- ##### ARG GtkEntry:selection-bound ##### -->
 <para>
 
 </para>
@@ -352,6 +352,18 @@ use gtk_editable_set_editable() instead.
 <!-- ##### ARG GtkEntry:editable ##### -->
 <para>
 
+</para>
+
+<!-- ##### ARG GtkEntry:max-length ##### -->
+<para>
+Determines the maximum allowed length of the contents
+of the widget. See gtk_entry_set_max_length().
+</para>
+
+<!-- ##### ARG GtkEntry:visibility ##### -->
+<para>
+Determines whether the contents of the entry widget
+are visible or not. See gtk_entry_set_visibility().
 </para>
 
 <!-- ##### ARG GtkEntry:has-frame ##### -->
@@ -364,10 +376,14 @@ use gtk_editable_set_editable() instead.
 
 </para>
 
-<!-- ##### ARG GtkEntry:max-length ##### -->
+<!-- ##### ARG GtkEntry:activates-default ##### -->
 <para>
-Determines the maximum allowed length of the contents
-of the widget. See gtk_entry_set_max_length().
+
+</para>
+
+<!-- ##### ARG GtkEntry:width-chars ##### -->
+<para>
+
 </para>
 
 <!-- ##### ARG GtkEntry:scroll-offset ##### -->
@@ -375,23 +391,7 @@ of the widget. See gtk_entry_set_max_length().
 
 </para>
 
-<!-- ##### ARG GtkEntry:selection-bound ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkEntry:text ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:visibility ##### -->
-<para>
-Determines whether the contents of the entry widget
-are visible or not. See gtk_entry_set_visibility().
-</para>
-
-<!-- ##### ARG GtkEntry:width-chars ##### -->
 <para>
 
 </para>

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sk\n"
-"POT-Creation-Date: 2002-11-08 14:52-0500\n"
+"POT-Creation-Date: 2002-11-20 20:37+0100\n"
 "PO-Revision-Date: 2002-11-04 18:15+0100\n"
 "Last-Translator: Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"

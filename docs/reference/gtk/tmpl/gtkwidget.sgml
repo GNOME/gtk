@@ -1770,9 +1770,9 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 @widget: the object which received the signal.
-@widget2: 
-<!-- # Unused Parameters # -->
 @widget: 
+<!-- # Unused Parameters # -->
+@widget2: 
 
 <!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
 <para>
@@ -2038,51 +2038,6 @@ a widget changes from un-anchored to anchored or vice-versa.
 @event: 
 @Returns: 
 
-<!-- ##### ARG GtkWidget:app-paintable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:can-default ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:can-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:composite-child ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:events ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:extension-events ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:has-default ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:has-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:height-request ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkWidget:name ##### -->
 <para>
 
@@ -2093,17 +2048,12 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:receives-default ##### -->
+<!-- ##### ARG GtkWidget:width-request ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:sensitive ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:style ##### -->
+<!-- ##### ARG GtkWidget:height-request ##### -->
 <para>
 
 </para>
@@ -2113,7 +2063,57 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:width-request ##### -->
+<!-- ##### ARG GtkWidget:sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:app-paintable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:can-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:has-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:can-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:has-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:receives-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:composite-child ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:events ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:extension-events ##### -->
 <para>
 
 </para>

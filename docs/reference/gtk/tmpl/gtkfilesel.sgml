@@ -205,17 +205,17 @@ Hides the file operation buttons that normally appear at the top of the dialog. 
 @Returns: 
 
 
+<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkFileSelection:filename ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkFileSelection:select-multiple ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
 <para>
 
 </para>

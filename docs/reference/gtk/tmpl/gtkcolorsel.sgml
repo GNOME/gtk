@@ -246,12 +246,7 @@ according to its update policy.
 
 @colorselection: the object which received the signal.
 
-<!-- ##### ARG GtkColorSelection:current-alpha ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkColorSelection:current-color ##### -->
+<!-- ##### ARG GtkColorSelection:has-palette ##### -->
 <para>
 
 </para>
@@ -261,7 +256,12 @@ according to its update policy.
 
 </para>
 
-<!-- ##### ARG GtkColorSelection:has-palette ##### -->
+<!-- ##### ARG GtkColorSelection:current-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelection:current-alpha ##### -->
 <para>
 
 </para>

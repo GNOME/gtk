@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.7\n"
-"POT-Creation-Date: 2002-11-08 14:52-0500\n"
+"POT-Creation-Date: 2002-11-20 20:37+0100\n"
 "PO-Revision-Date: 2002-11-04 12:19+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"

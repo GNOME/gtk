@@ -272,15 +272,25 @@ gtk_progress_set_percentage() instead.
 @percentage: the new percent complete value.
 
 
-<!-- ##### ARG GtkProgressBar:activity-blocks ##### -->
+<!-- ##### ARG GtkProgressBar:fraction ##### -->
 <para>
-The number of blocks which can fit in the progress bar
-area in activity mode.
+
 </para>
 
-<!-- ##### ARG GtkProgressBar:activity-step ##### -->
+<!-- ##### ARG GtkProgressBar:pulse-step ##### -->
 <para>
-The increment used for each iteration in activity mode.
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:orientation ##### -->
+<para>
+a #GtkProgressBarOrientation value which specifies the
+orientation and growth direction of the bar.
+</para>
+
+<!-- ##### ARG GtkProgressBar:text ##### -->
+<para>
+
 </para>
 
 <!-- ##### ARG GtkProgressBar:adjustment ##### -->
@@ -294,30 +304,20 @@ a #GtkProgressBarStyle value which specifies the
 visual style of the bar in percentage mode.
 </para>
 
+<!-- ##### ARG GtkProgressBar:activity-step ##### -->
+<para>
+The increment used for each iteration in activity mode.
+</para>
+
+<!-- ##### ARG GtkProgressBar:activity-blocks ##### -->
+<para>
+The number of blocks which can fit in the progress bar
+area in activity mode.
+</para>
+
 <!-- ##### ARG GtkProgressBar:discrete-blocks ##### -->
 <para>
 The number of blocks which which make up progress bar
 when it is shown in %GTK_PROGRESS_DISCRETE style.
-</para>
-
-<!-- ##### ARG GtkProgressBar:fraction ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:orientation ##### -->
-<para>
-a #GtkProgressBarOrientation value which specifies the
-orientation and growth direction of the bar.
-</para>
-
-<!-- ##### ARG GtkProgressBar:pulse-step ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:text ##### -->
-<para>
-
 </para>
 

@@ -445,25 +445,14 @@ Emitted when the user or a function changes the current page.
 @page: the new current page
 @page_num: the index of the page
 
-<!-- ##### ARG GtkNotebook:enable-popup ##### -->
+<!-- ##### ARG GtkNotebook:tab-pos ##### -->
 <para>
-Whether the popup menu for switching pages is enabled.
+The edge at which the tabs for switching pages are drawn.
 </para>
 
-<!-- ##### ARG GtkNotebook:homogeneous ##### -->
+<!-- ##### ARG GtkNotebook:show-tabs ##### -->
 <para>
-whether the tabs must have all the same size.
-</para>
-
-<!-- ##### ARG GtkNotebook:page ##### -->
-<para>
-The current page
-</para>
-
-<!-- ##### ARG GtkNotebook:scrollable ##### -->
-<para>
-Whether the tab label area will have arrows for scrolling if there
-are too many tabs to fit in the area.
+Whether to show tabs for the notebook pages.
 </para>
 
 <!-- ##### ARG GtkNotebook:show-border ##### -->
@@ -471,9 +460,10 @@ are too many tabs to fit in the area.
 Whether to draw a bevel around the noteobook.
 </para>
 
-<!-- ##### ARG GtkNotebook:show-tabs ##### -->
+<!-- ##### ARG GtkNotebook:scrollable ##### -->
 <para>
-Whether to show tabs for the notebook pages.
+Whether the tab label area will have arrows for scrolling if there
+are too many tabs to fit in the area.
 </para>
 
 <!-- ##### ARG GtkNotebook:tab-border ##### -->
@@ -486,43 +476,23 @@ Whether the tab labels have a border on all sides.
 Whether the tab labels have a horizontal border.
 </para>
 
-<!-- ##### ARG GtkNotebook:tab-pos ##### -->
-<para>
-The edge at which the tabs for switching pages are drawn.
-</para>
-
 <!-- ##### ARG GtkNotebook:tab-vborder ##### -->
 <para>
 Whether the tab labels have a vertical border.
 </para>
 
-<!-- ##### ARG GtkNotebook:menu-label ##### -->
+<!-- ##### ARG GtkNotebook:page ##### -->
 <para>
-
+The current page
 </para>
 
-<!-- ##### ARG GtkNotebook:position ##### -->
+<!-- ##### ARG GtkNotebook:enable-popup ##### -->
 <para>
-
+Whether the popup menu for switching pages is enabled.
 </para>
 
-<!-- ##### ARG GtkNotebook:tab-expand ##### -->
+<!-- ##### ARG GtkNotebook:homogeneous ##### -->
 <para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-fill ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-pack ##### -->
-<para>
-
+whether the tabs must have all the same size.
 </para>
 

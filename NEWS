@@ -1,3 +1,18 @@
+Overview of Changes in GTK+ 2.0.9
+=================================
+* Fix colormap refcounting, which caused frequent metacity crashes
+  [Christopher James Lahey]
+* Lots of work on the Win32 backend [Tor Lillqvist]
+ - Scrolling fixes
+ - GdkGC clipping fixes and improvements
+ - Started implementing all fill styles
+* GtkTreeView bug fixes [Kristian Rietveld]
+ - Make TreeView reordering work on FreeBSD/Solaris [Heiner Eichmann]
+* Various bug fixes
+
+Other contributors: Matthias Clasen, Arnaud Charlet, Vitaly Tishkov,
+   Josh Parsons, Peter Bloomfield
+
 Overview of Changes in GTK+ 2.0.8
 =================================
 * Fix typo in io-gif.c that broke loading GIFS [Akira Tagoh]

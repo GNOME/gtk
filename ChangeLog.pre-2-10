@@ -1,3 +1,11 @@
+Wed Nov 20 20:35:14 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* ==== Released 2.0.9 ====
+
+	* configure.in: Version 2.0.9, interface, binary age 9.
+
+	* NEWS: updated.
+
 Wed Nov 20 19:42:57 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Merged treeview fixes from HEAD.

@@ -156,11 +156,6 @@ area.
 Horizontal scroll adjustment, see gtk_layout_set_hadjustment()
 </para>
 
-<!-- ##### ARG GtkLayout:height ##### -->
-<para>
-Layout height, see gtk_layout_set_size()
-</para>
-
 <!-- ##### ARG GtkLayout:vadjustment ##### -->
 <para>
 Vertical scroll adjustment, see gtk_layout_set_vadjustment()
@@ -171,13 +166,8 @@ Vertical scroll adjustment, see gtk_layout_set_vadjustment()
 Layout width, see gtk_layout_set_size()
 </para>
 
-<!-- ##### ARG GtkLayout:x ##### -->
+<!-- ##### ARG GtkLayout:height ##### -->
 <para>
-
-</para>
-
-<!-- ##### ARG GtkLayout:y ##### -->
-<para>
-
+Layout height, see gtk_layout_set_size()
 </para>
 

@@ -370,40 +370,15 @@ field in #GtkBoxChild-struct.
 in #GtkBoxChild-struct.
 
 
-<!-- ##### ARG GtkBox:homogeneous ##### -->
-<para>
-how to allocate space for children, equally or variably.  Refers to
-the <structfield>homogeneous</structfield> field of #GtkBox-struct.
-</para>
-
 <!-- ##### ARG GtkBox:spacing ##### -->
 <para>
 the minimum amount of space to put between children.  Refers to the
 <structfield>spacing</structfield> field of #GtkBox-struct.
 </para>
 
-<!-- ##### ARG GtkBox:expand ##### -->
+<!-- ##### ARG GtkBox:homogeneous ##### -->
 <para>
-
-</para>
-
-<!-- ##### ARG GtkBox:fill ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:pack-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:position ##### -->
-<para>
-
+how to allocate space for children, equally or variably.  Refers to
+the <structfield>homogeneous</structfield> field of #GtkBox-struct.
 </para>
 
