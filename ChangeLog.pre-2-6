@@ -1,5 +1,9 @@
 2003-12-07  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_icon): Don't use the
+	return value from SendMessage(WM_SETICON). That is the old
+	icon. Fixes GDI resource leak. (#128559, Tim Evans)
+
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): If we already
 	have a pointer grab active with a grab cursor set, destroy that
 	cursor to avoid a GDI resource leak. (#128410, Tim Evans)
