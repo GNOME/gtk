@@ -314,6 +314,18 @@ static GtkEnumValue _gtk_private_flags_values[] = {
   { PRIVATE_GTK_IN_REPARENT, "PRIVATE_GTK_IN_REPARENT", "in-reparent" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gtk_progress_bar_style_values[] = {
+  { GTK_PROGRESS_CONTINUOUS, "GTK_PROGRESS_CONTINUOUS", "continuous" },
+  { GTK_PROGRESS_DISCRETE, "GTK_PROGRESS_DISCRETE", "discrete" },
+  { 0, NULL, NULL }
+};
+static GtkEnumValue _gtk_progress_bar_orientation_values[] = {
+  { GTK_PROGRESS_LEFT_TO_RIGHT, "GTK_PROGRESS_LEFT_TO_RIGHT", "left-to-right" },
+  { GTK_PROGRESS_RIGHT_TO_LEFT, "GTK_PROGRESS_RIGHT_TO_LEFT", "right-to-left" },
+  { GTK_PROGRESS_BOTTOM_TO_TOP, "GTK_PROGRESS_BOTTOM_TO_TOP", "bottom-to-top" },
+  { GTK_PROGRESS_TOP_TO_BOTTOM, "GTK_PROGRESS_TOP_TO_BOTTOM", "top-to-bottom" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gtk_spin_button_update_policy_values[] = {
   { GTK_UPDATE_ALWAYS, "GTK_UPDATE_ALWAYS", "always" },
   { GTK_UPDATE_IF_VALID, "GTK_UPDATE_IF_VALID", "if-valid" },

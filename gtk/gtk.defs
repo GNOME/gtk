@@ -287,6 +287,18 @@
    (has-shape-mask PRIVATE_GTK_HAS_SHAPE_MASK)
    (in-reparent PRIVATE_GTK_IN_REPARENT))
 
+; enumerations from "./gtkprogressbar.h"
+
+(define-enum GtkProgressBarStyle
+   (continuous GTK_PROGRESS_CONTINUOUS)
+   (discrete GTK_PROGRESS_DISCRETE))
+
+(define-enum GtkProgressBarOrientation
+   (left-to-right GTK_PROGRESS_LEFT_TO_RIGHT)
+   (right-to-left GTK_PROGRESS_RIGHT_TO_LEFT)
+   (bottom-to-top GTK_PROGRESS_BOTTOM_TO_TOP)
+   (top-to-bottom GTK_PROGRESS_TOP_TO_BOTTOM))
+
 ; enumerations from "./gtkspinbutton.h"
 
 (define-enum GtkSpinButtonUpdatePolicy
