@@ -1,3 +1,8 @@
+Thu Feb 17 14:58:16 2005  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkuimanager.c (start_element_handler): make sure expand
+	is initialized, cast to GTK_SEPARATOR_TOOL_ITEM.
+
 Thu Feb 17 14:52:57 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcombobox.c: Pass gtk_widget_get_toplevel() a GTK_WIDGET.

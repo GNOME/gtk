@@ -1103,7 +1103,7 @@ start_element_handler (GMarkupParseContext *context,
   const gchar *action;
   GQuark action_quark;
   gboolean top;
-  gboolean expand;
+  gboolean expand = FALSE;
   
   gboolean raise_error = TRUE;
 
@@ -2496,7 +2496,8 @@ update_node (GtkUIManager *self,
 	      if (info->expand)
 		{
 		  gtk_tool_item_set_expand (GTK_TOOL_ITEM (item), TRUE);
-		  gtk_separator_tool_item_set_draw (item, FALSE);
+		  gtk_separator_tool_item_set_draw
+		    (GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
 		  separator_mode = SEPARATOR_MODE_VISIBLE;
 		}
 		else
