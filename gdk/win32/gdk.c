@@ -136,6 +136,9 @@ gdk_init_check (int    *argc,
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     gdk_input_ignore_wintab = TRUE;
 
+  if (getenv ("GDK_EVENT_FUNC_FROM_WINDOW_PROC") != NULL)
+    gdk_event_func_from_window_proc = TRUE;
+
   if (argc && argv)
     {
       if (*argc > 0)
@@ -215,6 +218,11 @@ gdk_init_check (int    *argc,
 	      {
 		(*argv)[i] = NULL;
 		gdk_input_ignore_wintab = TRUE;
+	      }
+	    else if (strcmp ("--gdk-event-func-from-window-proc", (*argv)[i]) == 0)
+	      {
+		(*argv)[i] = NULL;
+		gdk_event_func_from_window_proc = TRUE;
 	      }
 	  i += 1;
 	}

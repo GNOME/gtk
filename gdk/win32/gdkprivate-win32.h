@@ -388,6 +388,7 @@ GDKVAR gint		 gdk_error_code;
 GDKVAR gint		 gdk_error_warnings;
 GDKVAR gint              gdk_null_window_warnings;
 extern GList            *gdk_default_filters;
+extern gint		 gdk_event_func_from_window_proc;
 
 #ifdef USE_XIM
 /* XIM support */

@@ -47,6 +47,8 @@ typedef struct _GdkEventPrivate GdkEventPrivate;
 #define DOUBLE_CLICK_DIST      5
 #define TRIPLE_CLICK_DIST      5
 
+gint gdk_event_func_from_window_proc = FALSE;
+
 typedef enum
 {
   /* Following flag is set for events on the event queue during
@@ -201,11 +203,30 @@ gdk_WindowProc(HWND hwnd,
       eventp = gdk_event_new ();
       *eventp = event;
 
-      gdk_event_queue_append (eventp);
+      /* Philippe Colantoni <colanton@aris.ss.uci.edu> suggests this
+       * in order to handle events while opaque resizing neatly.  I
+       * don't want it as default. Set the
+       * GDK_EVENT_FUNC_FROM_WINDOW_PROC env var to get this
+       * behaviour.
+       */
+      if (gdk_event_func_from_window_proc && event_func)
+	{
+	  GDK_THREADS_ENTER ();
+	  
+	  (*event_func) (eventp, event_data);
+	  gdk_event_free (eventp);
+	  
+	  GDK_THREADS_LEAVE ();
+	}
+      else
+	{
+	  gdk_event_queue_append (eventp);
 #if 1
-      /* Wake up WaitMessage */
-      PostMessage (NULL, gdk_ping_msg, 0, 0);
+	  /* Wake up WaitMessage */
+	  PostMessage (NULL, gdk_ping_msg, 0, 0);
 #endif
+	}
+      
       if (ret_val_flag)
 	return ret_val;
       else

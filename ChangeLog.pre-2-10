@@ -1,3 +1,19 @@
+1999-08-27  Tor Lillqvist  <tml@iki.fi>
+
+	Win32: Philippe Colantoni <colanton@aris.ss.uci.edu> suggests a
+	way to get window contents continually refreshed while resizing. I
+	didn't like the effects myself, so it's not on by default.
+
+	* gdk/win32/gdkprivate.h: New flag variable
+	gdk_event_func_from_window_proc, FALSE by default.
+
+	* gdk/win32/gdk.c (gdk_init_check): Set above flag if the
+	environment variable GDK_EVENT_FUNC_FROM_WINDOW_PROC is set, or we
+	are passed --gdk-event-func-from-window-proc.
+
+	* gdk/win32/gdkevents.c (gdk_WindowProc): If above flag is set,
+	and we have am event_func, call it instead of enqueing the event.
+
 1999-08-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents.c (gdk_event_translate): Fix from Simon
