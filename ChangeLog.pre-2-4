@@ -1,3 +1,9 @@
+Sat Sep  7 21:24:55 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (get_button_relief): call
+	gtk_widget_ensure_style() before reading "button_relief". Fixes
+	(#92741).
+
 2002-09-06  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Add ani to all_loaders.

@@ -50,6 +50,7 @@ gtk_button_box_set_layout().
 GtkVButtonBox does not contain any public fields.
 </para>
 
+
 <!-- ##### FUNCTION gtk_vbutton_box_new ##### -->
 <para>
 Creates a new vertical button box.

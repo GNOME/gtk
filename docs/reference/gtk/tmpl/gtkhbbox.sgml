@@ -50,6 +50,7 @@ gtk_button_box_set_layout().
 GtkHButtonBox does not contain any public fields.
 </para>
 
+
 <!-- ##### FUNCTION gtk_hbutton_box_new ##### -->
 <para>
 Creates a new horizontal button box.
