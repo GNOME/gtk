@@ -1,3 +1,13 @@
+2003-09-11  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testgtk.c: Add table menu tests.
+
+	* gtk/gtkmenu.c (gtk_menu_free_private): Don't forget to free the 
+	GtkMenuPrivate struct itself. Pointed out by valgrind.
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_finalize): Clean up 
+	properly.  (#121998)
+
 Wed Sep 10 22:25:04 2003  Kristian Rietveld  <kris@gtk.org>
 
 	The table menu patch! Turns GtkMenu into a table, so you can attach

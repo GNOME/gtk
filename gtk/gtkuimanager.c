@@ -64,7 +64,7 @@ typedef struct _Node  Node;
 struct _Node {
   NodeType type;
 
-  const gchar *name;
+  gchar *name;
 
   GQuark action_name;
   GtkAction *action;
@@ -126,6 +126,7 @@ static GNode *get_node                    (GtkUIManager *self,
 					   const gchar *path,
 					   NodeType node_type,
 					   gboolean create);
+static gboolean free_node                 (GNode *node);
 
 static void  node_prepend_ui_reference    (Node *node,
 					   guint merge_id,
@@ -269,10 +270,9 @@ gtk_ui_manager_init (GtkUIManager *self)
   self->private_data->last_merge_id = 0;
   self->private_data->add_tearoffs = FALSE;
 
-
   merge_id = gtk_ui_manager_new_merge_id (self);
-  node = get_child_node (self, NULL, "ui", 4,
-			NODE_TYPE_ROOT, TRUE, FALSE);
+  node = get_child_node (self, NULL, "ui", 2,
+			 NODE_TYPE_ROOT, TRUE, FALSE);
   node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
 }
 
@@ -286,6 +286,20 @@ gtk_ui_manager_finalize (GObject *object)
       g_source_remove (self->private_data->update_tag);
       self->private_data->update_tag = 0;
     }
+  
+  g_node_traverse (self->private_data->root_node, 
+		   G_POST_ORDER, G_TRAVERSE_ALL, -1,
+		   (GNodeTraverseFunc)free_node, 0);
+  g_node_destroy (self->private_data->root_node);
+  self->private_data->root_node = NULL;
+  
+  g_list_foreach (self->private_data->action_groups,
+                  (GFunc) g_object_unref, NULL);
+  g_list_free (self->private_data->action_groups);
+  self->private_data->action_groups = NULL;
+
+  g_object_unref (self->private_data->accel_group);
+  self->private_data->accel_group = NULL;
 }
 
 static void
@@ -462,7 +476,7 @@ gtk_ui_manager_remove_action_group (GtkUIManager   *self,
  * Since: 2.4
  **/
 GList *
-gtk_ui_manager_get_action_groups (GtkUIManager   *self)
+gtk_ui_manager_get_action_groups (GtkUIManager *self)
 {
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
 
@@ -480,7 +494,7 @@ gtk_ui_manager_get_action_groups (GtkUIManager   *self)
  * Since: 2.4
  **/
 GtkAccelGroup *
-gtk_ui_manager_get_accel_group (GtkUIManager   *self)
+gtk_ui_manager_get_accel_group (GtkUIManager *self)
 {
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
 
@@ -538,8 +552,8 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
  * Since: 2.4
  **/
 GtkAction *           
-gtk_ui_manager_get_action (GtkUIManager   *self,
-			   const gchar    *path)
+gtk_ui_manager_get_action (GtkUIManager *self,
+			   const gchar  *path)
 {
   GNode *node;
 
@@ -559,13 +573,13 @@ gtk_ui_manager_get_action (GtkUIManager   *self,
 }
 
 static GNode *
-get_child_node (GtkUIManager        *self, 
-		GNode               *parent,
-		const gchar         *childname, 
-		gint                 childname_length,
-		NodeType node_type,
-		gboolean             create, 
-		gboolean             top)
+get_child_node (GtkUIManager *self, 
+		GNode        *parent,
+		const gchar  *childname, 
+		gint          childname_length,
+		NodeType      node_type,
+		gboolean      create, 
+		gboolean      top)
 {
   GNode *child = NULL;
 
@@ -644,10 +658,10 @@ get_child_node (GtkUIManager        *self,
 }
 
 static GNode *
-get_node (GtkUIManager        *self, 
-	  const gchar         *path,
-	  NodeType node_type, 
-	  gboolean             create)
+get_node (GtkUIManager *self, 
+	  const gchar  *path,
+	  NodeType      node_type, 
+	  gboolean      create)
 {
   const gchar *pos, *end;
   GNode *parent, *node;
@@ -677,7 +691,24 @@ get_node (GtkUIManager        *self,
 
   if (node != NULL && NODE_INFO (node)->type == NODE_TYPE_UNDECIDED)
     NODE_INFO (node)->type = node_type;
+
   return node;
+}
+
+static gboolean
+free_node (GNode *node)
+{
+  Node *info = NODE_INFO (node);
+  
+  g_list_foreach (info->uifiles, (GFunc) g_free, NULL);
+  g_list_free (info->uifiles);
+
+  if (info->action)
+    g_object_unref (info->action);
+  g_free (info->name);
+  g_chunk_free (info, merge_node_chunk);
+
+  return FALSE;
 }
 
 /**
@@ -700,9 +731,9 @@ gtk_ui_manager_new_merge_id (GtkUIManager *self)
 }
 
 static void
-node_prepend_ui_reference (Node *node,
-			   guint             merge_id, 
-			   GQuark            action_quark)
+node_prepend_ui_reference (Node   *node,
+			   guint   merge_id, 
+			   GQuark  action_quark)
 {
   NodeUIReference *reference;
 
@@ -717,8 +748,8 @@ node_prepend_ui_reference (Node *node,
 }
 
 static void
-node_remove_ui_reference (Node *node,
-			  guint             merge_id)
+node_remove_ui_reference (Node  *node,
+			  guint  merge_id)
 {
   GList *p;
   
@@ -1900,11 +1931,9 @@ update_node (GtkUIManager *self,
     {
       if (info->proxy)
 	gtk_widget_destroy (info->proxy);
-      if ((info->type == NODE_TYPE_MENU_PLACEHOLDER ||
-	   info->type == NODE_TYPE_TOOLBAR_PLACEHOLDER) &&
-	  info->extra)
+      if (info->extra)
 	gtk_widget_destroy (info->extra);
-      g_chunk_free (info, merge_node_chunk);
+      free_node (node);
       g_node_destroy (node);
     }
 }
@@ -2056,8 +2085,8 @@ print_node (GtkUIManager *self,
  *
  * Since: 2.4
  **/
-gchar*
-gtk_ui_manager_get_ui (GtkUIManager   *self)
+gchar *
+gtk_ui_manager_get_ui (GtkUIManager *self)
 {
   GString *buffer;
 

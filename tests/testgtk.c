@@ -3465,6 +3465,162 @@ create_menu (GdkScreen *screen, gint depth, gint length, gboolean tearoff)
   return menu;
 }
 
+static GtkWidget*
+create_table_menu (GdkScreen *screen, gint cols, gint rows, gboolean tearoff)
+{
+  GtkWidget *menu;
+  GtkWidget *menuitem;
+  GtkWidget *submenu;
+  GtkWidget *image;
+  char buf[32];
+  int i, j;
+
+  menu = gtk_menu_new ();
+  gtk_menu_set_screen (GTK_MENU (menu), screen);
+
+  j = 0;
+  if (tearoff)
+    {
+      menuitem = gtk_tearoff_menu_item_new ();
+      gtk_menu_attach (GTK_MENU (menu), menuitem, 0, cols, j, j + 1);
+      gtk_widget_show (menuitem);
+      j++;
+    }
+  
+  menuitem = gtk_menu_item_new_with_label ("items");
+  gtk_menu_attach (GTK_MENU (menu), menuitem, 0, cols, j, j + 1);
+
+  submenu = gtk_menu_new ();
+  gtk_menu_set_screen (GTK_MENU (submenu), screen);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+  gtk_widget_show (menuitem);
+  j++;
+
+  /* now fill the items submenu */
+  image = gtk_image_new_from_stock (GTK_STOCK_HELP,
+				    GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image);
+  menuitem = gtk_image_menu_item_new_with_label ("Image");
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 0, 1);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("x");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 0, 1);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("x");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 1, 2);
+  gtk_widget_show (menuitem);
+  
+  image = gtk_image_new_from_stock (GTK_STOCK_HELP,
+				    GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image);
+  menuitem = gtk_image_menu_item_new_with_label ("Image");
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 1, 2);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_radio_menu_item_new_with_label (NULL, "Radio");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 2, 3);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("x");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 2, 3);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("x");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 3, 4);
+  gtk_widget_show (menuitem);
+  
+  menuitem = gtk_radio_menu_item_new_with_label (NULL, "Radio");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 3, 4);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_check_menu_item_new_with_label ("Check");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 4, 5);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("x");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 4, 5);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("x");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 5, 6);
+  gtk_widget_show (menuitem);
+  
+  menuitem = gtk_check_menu_item_new_with_label ("Check");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 5, 6);
+  gtk_widget_show (menuitem);
+  /* end of items submenu */
+
+  menuitem = gtk_menu_item_new_with_label ("spanning");
+  gtk_menu_attach (GTK_MENU (menu), menuitem, 0, cols, j, j + 1);
+
+  submenu = gtk_menu_new ();
+  gtk_menu_set_screen (GTK_MENU (submenu), screen);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+  gtk_widget_show (menuitem);
+  j++;
+
+  /* now fill the spanning submenu */
+  menuitem = gtk_menu_item_new_with_label ("a");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 2, 0, 1);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("b");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 2, 3, 0, 2);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("c");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 1, 3);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("d");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 1, 2);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("e");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 3, 2, 3);
+  gtk_widget_show (menuitem);
+  /* end of spanning submenu */
+  
+  menuitem = gtk_menu_item_new_with_label ("left");
+  gtk_menu_attach (GTK_MENU (menu), menuitem, 0, 1, j, j + 1);
+  submenu = gtk_menu_new ();
+  gtk_menu_set_screen (GTK_MENU (submenu), screen);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("Empty");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 0, 1);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("right");
+  gtk_menu_attach (GTK_MENU (menu), menuitem, 1, 2, j, j + 1);
+  submenu = gtk_menu_new ();
+  gtk_menu_set_screen (GTK_MENU (submenu), screen);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+  gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("Empty");
+  gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 0, 1);
+  gtk_widget_show (menuitem);
+
+  j++;
+
+  for (; j < rows; j++)
+      for (i = 0; i < cols; i++)
+      {
+	sprintf (buf, "(%d %d)", i, j);
+	menuitem = gtk_menu_item_new_with_label (buf);
+	gtk_menu_attach (GTK_MENU (menu), menuitem, i, i + 1, j, j + 1);
+	gtk_widget_show (menuitem);
+      }
+  
+  return menu;
+}
+
 static void
 create_menus (GtkWidget *widget)
 {
@@ -3513,6 +3669,13 @@ create_menus (GtkWidget *widget)
       menu = create_menu (screen, 2, 50, TRUE);
       
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+      gtk_widget_show (menuitem);
+
+      menu = create_table_menu (screen, 2, 50, TRUE);
+      
+      menuitem = gtk_menu_item_new_with_label ("table");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);

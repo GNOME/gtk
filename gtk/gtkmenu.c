@@ -28,6 +28,7 @@
 
 #include <string.h> /* memset */
 #include "gdk/gdkkeysyms.h"
+#include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkbindings.h"
 #include "gtklabel.h"
@@ -226,6 +227,8 @@ gtk_menu_free_private (gpointer data)
   GtkMenuPrivate *priv = (GtkMenuPrivate *)data;
 
   g_free (priv->heights);
+
+  g_free (priv);
 }
 
 GtkMenuPrivate *
@@ -2303,6 +2306,41 @@ gtk_menu_button_release (GtkWidget      *widget,
   return GTK_WIDGET_CLASS (parent_class)->button_release_event (widget, event);
 }
 
+static const gchar *
+get_accel_path (GtkWidget *menu_item,
+		gboolean  *locked)
+{
+  const gchar *path;
+  GtkWidget *label;
+  GClosure *accel_closure;
+  GtkAccelGroup *accel_group;    
+
+  path = _gtk_widget_get_accel_path (menu_item, locked);
+  if (!path)
+    {
+      path = GTK_MENU_ITEM (menu_item)->accel_path;
+      
+      if (locked)
+	{
+	  *locked = TRUE;
+
+	  label = GTK_BIN (menu_item)->child;
+	  
+	  if (GTK_IS_ACCEL_LABEL (label))
+	    {
+	      g_object_get (label, 
+			    "accel_closure", &accel_closure, 
+			    NULL);
+	      accel_group = gtk_accel_group_from_accel_closure (accel_closure);
+	      
+	      *locked = accel_group->lock_count > 0;
+	    }
+	}
+    }
+
+  return path;
+}
+
 static gboolean
 gtk_menu_key_press (GtkWidget	*widget,
 		    GdkEventKey *event)
@@ -2397,7 +2435,7 @@ gtk_menu_key_press (GtkWidget	*widget,
       gboolean locked, replace_accels = TRUE;
       const gchar *path;
 
-      path = _gtk_widget_get_accel_path (menu_item, &locked);
+      path = get_accel_path (menu_item, &locked);
       if (!path || locked)
 	{
 	  /* can't change accelerators on menu_items without paths
