@@ -1,3 +1,15 @@
+Thu Jul 25 11:57:57 2002  Owen Taylor  <otaylor@redhat.com>
+
+	[ Patch from Padraig O'Briain, #87904 ]
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Cleanup -
+	use G_SIGNAL_RUN_LAST not GTK_RUN_LAST when using
+	g_signal new.
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_mnemonic_activate): 
+	Always focus the widget, even when we are activating
+	as well.
+
 2002-07-24  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c: Apply patch from Gustavo

@@ -52,6 +52,8 @@ static void gtk_toggle_button_class_init    (GtkToggleButtonClass *klass);
 static void gtk_toggle_button_init          (GtkToggleButton      *toggle_button);
 static gint gtk_toggle_button_expose        (GtkWidget            *widget,
 					     GdkEventExpose       *event);
+static gboolean gtk_toggle_button_mnemonic_activate  (GtkWidget            *widget,
+                                                      gboolean              group_cycling);
 static void gtk_toggle_button_pressed       (GtkButton            *button);
 static void gtk_toggle_button_released      (GtkButton            *button);
 static void gtk_toggle_button_clicked       (GtkButton            *button);
@@ -115,6 +117,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   gobject_class->get_property = gtk_toggle_button_get_property;
 
   widget_class->expose_event = gtk_toggle_button_expose;
+  widget_class->mnemonic_activate = gtk_toggle_button_mnemonic_activate;
 
   button_class->pressed = gtk_toggle_button_pressed;
   button_class->released = gtk_toggle_button_released;
@@ -399,6 +402,24 @@ gtk_toggle_button_expose (GtkWidget      *widget,
     }
   
   return FALSE;
+}
+
+static gboolean
+gtk_toggle_button_mnemonic_activate (GtkWidget *widget,
+                                     gboolean   group_cycling)
+{
+  /*
+   * We override the standard implementation in 
+   * gtk_widget_real_mnemonic_activate() in order to focus the widget even
+   * if there is no mnemonic conflict.
+   */
+  if (GTK_WIDGET_CAN_FOCUS (widget))
+    gtk_widget_grab_focus (widget);
+
+  if (!group_cycling)
+    gtk_widget_activate (widget);
+
+  return TRUE;
 }
 
 static void

@@ -631,7 +631,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[MNEMONIC_ACTIVATE] =
     g_signal_new ("mnemonic_activate",
                   GTK_CLASS_TYPE (object_class),
-                  GTK_RUN_LAST,
+                  G_SIGNAL_RUN_LAST,
                   GTK_SIGNAL_OFFSET (GtkWidgetClass, mnemonic_activate),
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__BOOLEAN,
