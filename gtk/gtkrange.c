@@ -1553,29 +1553,18 @@ gtk_range_style_set (GtkWidget *widget,
 
   range = GTK_RANGE (widget);
 
-  if (GTK_WIDGET_REALIZED (widget) &&
-      !GTK_WIDGET_NO_WINDOW (widget))
+  if (GTK_WIDGET_REALIZED (widget))
     {
-       if (range->trough)
-	{
-	  gtk_style_set_background (widget->style, range->trough, GTK_STATE_ACTIVE);
-	  if (GTK_WIDGET_DRAWABLE (widget))
-	    gdk_window_clear (range->trough);
-	}
-      /* The draw will take care of the slider */
+      if (range->trough)
+	gtk_style_set_background (widget->style, range->trough, GTK_STATE_ACTIVE);
 
+      if (range->slider)
+	gtk_style_set_background (widget->style, range->slider, GTK_STATE_NORMAL);
+      
       if (range->step_forw)
-	{
-	  gtk_style_set_background (widget->style, range->step_forw, GTK_STATE_ACTIVE);
-	  if (GTK_WIDGET_DRAWABLE (widget))
-	    gdk_window_clear (range->step_forw);
-	}
+	gtk_style_set_background (widget->style, range->step_forw, GTK_STATE_ACTIVE);
+
       if (range->step_back)
-	{
-	  gtk_style_set_background (widget->style, range->step_back, GTK_STATE_ACTIVE);
-	  if (GTK_WIDGET_DRAWABLE (widget))
-	    gdk_window_clear (range->step_back);
-	}
-       gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+	gtk_style_set_background (widget->style, range->step_back, GTK_STATE_ACTIVE);
     }
 }
