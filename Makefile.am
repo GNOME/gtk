@@ -3,10 +3,15 @@
 SRC_SUBDIRS = glib gdk gtk
 SUBDIRS = $(SRC_SUBDIRS) docs
 
+bin_SCRIPTS = gtk-config
+
 EXTRA_DIST =	\
 	gtk+.prj	\
 	makecopyright	\
 	TODO
+
+m4datadir = $(datadir)/aclocal
+m4data_DATA = gtk.m4
 
 .PHONY: files populate checkin release
 
