@@ -1,3 +1,11 @@
+Tue Aug 12 14:27:42 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_lookup): Remove
+	GDK_LOCK_MASK before calling
+	gdk_keymap_translate_keyboard_state so bindings 
+	and accelerators are independent of the Caps-lock
+	key. (#115384, reported by Toni Willberg)
+
 Mon Aug 11 12:07:14 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (get_real_window): Add missing
