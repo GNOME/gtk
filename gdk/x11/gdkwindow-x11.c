@@ -1444,6 +1444,7 @@ gdk_window_remove_filter  (GdkWindow     *window,
 	{
 	  private->filters = g_list_remove_link (private->filters, tmp_list);
 	  g_list_free_1 (tmp_list);
+	  g_free (filter);
 	  
 	  return;
 	}

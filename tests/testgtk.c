@@ -2591,9 +2591,6 @@ dnd_drop (GtkWidget *button, GdkEvent *event)
   gtk_widget_show(vbox);
   gtk_grab_add(window);
   gtk_widget_show(window);
-
-  g_free (event->dropdataavailable.data);
-  g_free (event->dropdataavailable.data_type);
 }
 
 void

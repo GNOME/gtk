@@ -375,7 +375,7 @@
 
 (define-boxed GdkFont
   gdk_font_ref
-  gdk_font_free)
+  gdk_font_unref)
 
 (define-boxed GdkWindow
   gdk_window_ref

@@ -34,6 +34,7 @@ void	   gtk_init		 (int	       *argc,
 				  char	     ***argv);
 void	   gtk_exit		 (gint		error_code);
 gchar*	   gtk_set_locale	 (void);
+gint       gtk_events_pending    (void);
 void	   gtk_main		 (void);
 guint	   gtk_main_level	 (void);
 void	   gtk_main_quit	 (void);

@@ -222,9 +222,16 @@ gtk_main_quit ()
   done = TRUE;
 }
 
-gint gtk_main_iteration ()
+gint
+gtk_events_pending (void)
 {
-  return gtk_main_iteration_do(TRUE);
+  return gdk_events_pending() + (next_event != NULL) ? 1 : 0;
+}
+
+gint 
+gtk_main_iteration ()
+{
+  return gtk_main_iteration_do (TRUE);
 }
 
 gint
@@ -272,7 +279,7 @@ gtk_main_iteration_do (gboolean blocking)
        */
       gtk_handle_timer ();
       
-      if(blocking) event = gdk_event_get ();
+      if (blocking) event = gdk_event_get ();
     }
   
   /* "gdk_event_get" can return FALSE if the timer goes off
