@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-21 20:18+0000\n"
+"PO-Revision-Date: 2004-02-02 08:18+0000\n"
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org\n"
 "Language-Team: Gaeilge <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1408,7 +1408,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:853
 msgid "default:LTR"
-msgstr "loicead:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5072
 #, c-format
@@ -1445,7 +1445,7 @@ msgstr "Earráid"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr ""
+msgstr "Ceist"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -1548,7 +1548,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:299
 msgid "_Help"
-msgstr "_Cuidiú"
+msgstr "C_uidiú"
 
 #: gtk/gtkstock.c:300
 msgid "_Home"
@@ -1672,7 +1672,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:330
 msgid "_Spell Check"
-msgstr ""
+msgstr "_Litriú"
 
 #: gtk/gtkstock.c:331
 msgid "_Stop"
@@ -1692,7 +1692,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:335
 msgid "_Undo"
-msgstr ""
+msgstr "_Leasú"
 
 #: gtk/gtkstock.c:336
 msgid "_Yes"
@@ -1805,7 +1805,7 @@ msgstr ""
 #. ID
 #: modules/input/imipa.c:144
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/imthai-broken.c:177
