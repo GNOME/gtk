@@ -1,3 +1,22 @@
+Wed Jul 15 12:39:27 1998  Raph Levien  <raph@acm.org>
+
+	* This checkin integrates GdkRgb version 0.0.3 into the Gtk 1.1
+	source tree. For more information on GdkRgb, please see:
+	http://www.levien.com/gdkrgb/
+
+	* gtk/gtkfeatures.h.in (GTK_HAVE_GDK_RGB): added this feature. It
+	bothers me slightly that the feature is in gdk, and this file is
+	in gtk, but it's probably ok.
+
+	* gdk/gdk.h: Added an #include of <gdk/gdkrgb.h>
+
+	* gdk/gdkrgb.c:
+	* gdk/gdkrgb.h: Added this module.
+
+	* Makefile.am (EXTRA_DIST): Added gdkrgb.c and gdkrgb.h files.
+
+	* configure.in: added AC_C_BIGENDIAN test (needed by GdkRgb).
+
 Wed Jul 15 14:20:10 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_signal_real_emit): pass only the signal_id

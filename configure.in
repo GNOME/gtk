@@ -367,6 +367,9 @@ AC_HEADER_STDC
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
+# Checks for endianness (needed by GdkRgb).
+AC_C_BIGENDIAN
+
 # Checks for library functions.
 AC_TYPE_SIGNAL
 AC_FUNC_MMAP

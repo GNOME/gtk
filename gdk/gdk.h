@@ -842,7 +842,7 @@ guint    gdk_keyval_to_lower		  (guint	keyval);
 gboolean gdk_keyval_is_upper		  (guint	keyval);
 gboolean gdk_keyval_is_lower		  (guint	keyval);
 
-
+#include <gdk/gdkrgb.h>
 
 #ifdef __cplusplus
 }
