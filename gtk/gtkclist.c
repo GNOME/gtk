@@ -2244,18 +2244,18 @@ gtk_clist_size_allocate (GtkWidget * widget,
    * border width */
   clist->internal_allocation.x = 0;
   clist->internal_allocation.y = 0;
-  clist->internal_allocation.width = MAX (0, allocation->width -
+  clist->internal_allocation.width = MAX (1, allocation->width -
     GTK_CONTAINER (widget)->border_width * 2);
-  clist->internal_allocation.height = MAX (0, allocation->height -
+  clist->internal_allocation.height = MAX (1, allocation->height -
     GTK_CONTAINER (widget)->border_width * 2);
 	
   /* allocate clist window assuming no scrollbars */
   clist_allocation.x = clist->internal_allocation.x + widget->style->klass->xthickness;
   clist_allocation.y = clist->internal_allocation.y + widget->style->klass->ythickness +
     clist->column_title_area.height;
-  clist_allocation.width = MAX (0, clist->internal_allocation.width - 
+  clist_allocation.width = MAX (1, clist->internal_allocation.width - 
     (2 * widget->style->klass->xthickness));
-  clist_allocation.height = MAX (0, clist->internal_allocation.height -
+  clist_allocation.height = MAX (1, clist->internal_allocation.height -
     (2 * widget->style->klass->ythickness) -
     clist->column_title_area.height);
   
@@ -2277,7 +2277,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	  if (!vscrollbar_vis)
 	    {
 	      vscrollbar_vis = 1;
-	      clist_allocation.width = MAX (0, clist_allocation.width - 
+	      clist_allocation.width = MAX (1, clist_allocation.width - 
                 (clist->vscrollbar->requisition.width +
 		 SCROLLBAR_SPACING (clist)));
 	    }  
@@ -2293,7 +2293,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	  if (!hscrollbar_vis)
 	    {
 	      hscrollbar_vis = 1;
-	      clist_allocation.height = MAX (0,	clist_allocation.height - 
+	      clist_allocation.height = MAX (1,	clist_allocation.height - 
 		(clist->hscrollbar->requisition.height +
 		 SCROLLBAR_SPACING (clist)));
 	    }  
@@ -2345,7 +2345,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	clist->vscrollbar->requisition.width;
       child_allocation.y = clist->internal_allocation.y;
       child_allocation.width = clist->vscrollbar->requisition.width;
-      child_allocation.height = MAX (0, clist->internal_allocation.height -
+      child_allocation.height = MAX (1, clist->internal_allocation.height -
 	(hscrollbar_vis ? (clist->hscrollbar->requisition.height + SCROLLBAR_SPACING (clist)) : 0));
       
       gtk_widget_size_allocate (clist->vscrollbar, &child_allocation);
@@ -2365,7 +2365,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
       child_allocation.y = clist->internal_allocation.y +
 	clist->internal_allocation.height -
 	clist->hscrollbar->requisition.height;
-      child_allocation.width = MAX (0, clist->internal_allocation.width -
+      child_allocation.width = MAX (1, clist->internal_allocation.width -
 	(vscrollbar_vis ? (clist->vscrollbar->requisition.width + SCROLLBAR_SPACING (clist)) : 0));
       child_allocation.height = clist->hscrollbar->requisition.height;
       

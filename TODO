@@ -99,6 +99,9 @@ TODO AFTER GTK 1.0
  * Entry should have a password mode (and it should show stars
    for user feedback).
 
+ * Entry should allow set_usize to work better, and should compute
+   a different width when a maximum length is used.
+
  * More dialogs: Print, GtkFontSelector, maybe others...
 
  * Multiple document interface (MDI)?
@@ -191,13 +194,13 @@ TODO AFTER GTK 1.0
      aaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
      as:
-     | Maximum column
+                            | Maximum column
      aaaaaaaaaaa bbbbbbbbbbb|
      bbbbbbbbbbbbbbbbbbbbbbb|
      bbbbbbbbb              |
 
      Instead of:
-     | 
+                            | 
      aaaaaaaaaaa            |
      bbbbbbbbbbbbbbbbbbbbbbb|
      bbbbbbbbbbbbbbbbbbbb   |
@@ -211,6 +214,8 @@ TODO AFTER GTK 1.0
     [ From: Stefan Jeske <jeske@braunschweig.netsurf.de> ]
 
   - Really big font (150 pt), plus lots of editing caused segfault
+
+  - "changed" emitted when doing deletes on empty Text widget.
 
  ? Allow moving the separator for paned widgets by dragging 
    it directly instead of using the handle. 
@@ -257,3 +262,13 @@ TODO AFTER GTK 1.0
    Fix: Only send GDK_EVENT_CONFIGURE when the window is resized,
    create a new event type for toplevel motion. (GDK_EVENT_REPOSITION?)
    and eliminate the resize count in GtkWindow.
+
+ * Generic ScrolledWindow interface, which provide automatic scrollbar
+   capability to Viewport, Text, and CList widgets.
+
+   GTK_POLICY_NEVER for scrolled windows.
+
+ * Consider caching more state in GdkWindowPrivate. Currently, 
+   every widget realization involves a XGetGeometry and a
+   XGetWindowAttributes. And every GdkWindow destruction
+   involves a XQueryTree.

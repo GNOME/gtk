@@ -249,9 +249,9 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 				CHECK_BUTTON_CLASS (widget)->indicator_size +
 				CHECK_BUTTON_CLASS (widget)->indicator_spacing * 3 + 1);
 	  child_allocation.y = GTK_CONTAINER (widget)->border_width + 1;
-	  child_allocation.width = MAX (0, allocation->width - child_allocation.x  -
+	  child_allocation.width = MAX (1, allocation->width - child_allocation.x  -
 				    GTK_CONTAINER (widget)->border_width - 1);
-	  child_allocation.height = MAX (0, allocation->height - child_allocation.y * 2);
+	  child_allocation.height = MAX (1, allocation->height - child_allocation.y * 2);
 
 	  gtk_widget_size_allocate (button->child, &child_allocation);
 	}

@@ -44,6 +44,7 @@ gdk_pixmap_new (GdkWindow *window,
   GdkWindowPrivate *window_private;
 
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
+  g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
@@ -87,6 +88,7 @@ gdk_bitmap_create_from_data (GdkWindow *window,
   GdkWindowPrivate *window_private;
 
   g_return_val_if_fail (data != NULL, NULL);
+  g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
@@ -135,6 +137,7 @@ gdk_pixmap_create_from_data (GdkWindow *window,
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
+  g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
     window = (GdkWindow*) &gdk_root_parent;
@@ -179,13 +182,13 @@ gdk_pixmap_seek_string (FILE  *infile,
 
   while (!feof (infile))
     {
-      fscanf (infile, "%s", instr);
+      fscanf (infile, "%1023s", instr);
       if (skip_comments == TRUE && strcmp (instr, "/*") == 0)
         {
-          fscanf (infile, "%s", instr);
+          fscanf (infile, "%1023s", instr);
           while (!feof (infile) && strcmp (instr, "*/") != 0)
-            fscanf (infile, "%s", instr);
-          fscanf(infile, "%s", instr);
+            fscanf (infile, "%1023s", instr);
+          fscanf(infile, "%1023s", instr);
         }
       if (strcmp (instr, str)==0)
         return TRUE;
@@ -198,29 +201,31 @@ gint
 gdk_pixmap_seek_char (FILE  *infile,
                       gchar  c)
 {
-  gchar b, oldb;
+  gint b, oldb;
 
-  while (!feof (infile))
+  while ((b = getc(infile)) != EOF)
     {
-      fscanf(infile, "%c", &b);
       if (c != b && b == '/')
-        {
-          fscanf (infile, "%c", &b);
-          if (b == '*')
-            {
-              oldb = b;
-              while (!feof (infile) && !(oldb == '*' && b == '/'))
-                {
-                  oldb = b;
-                  fscanf (infile, "%c", &b);
-                }
-              fscanf (infile, "%c", &b);
-            }
+	{
+	  b = getc (infile);
+	  if (b == EOF)
+	    return FALSE;
+	  else if (b == '*')	/* we have a comment */
+ 	    {
+	      b = -1;
+	      do
+ 		{
+ 		  oldb = b;
+		  b = getc (infile);
+ 		  if (b == EOF)
+ 		    return FALSE;
+ 		}
+ 	      while (!(oldb == '*' && b == '/'));
+ 	    }
         }
-      if (c == b)
-        return TRUE;
+      else if (c == b)
+ 	return TRUE;
     }
-
   return FALSE;
 }
 
@@ -229,31 +234,28 @@ gdk_pixmap_read_string (FILE  *infile,
                         gchar **buffer,
 			guint *buffer_size)
 {
-  gchar c;
+  gint c;
   guint cnt = 0;
 
   if ((*buffer) == NULL)
     {
       (*buffer_size) = 10 * sizeof (gchar);
-      (*buffer) = (gchar *) malloc (*buffer_size);
+      (*buffer) = g_new(gchar, *buffer_size);
     }
 
   do
-    fscanf (infile, "%c", &c);
-  while (!feof (infile) && c != '"');
+    c = getc (infile);
+  while (c != EOF && c != '"');
 
   if (c != '"')
     return FALSE;
 
-  while (!feof (infile))
+  while ((c = getc(infile)) != EOF)
     {
-      fscanf (infile, "%c", &c);
-
       if (cnt == (*buffer_size))
 	{
 	  (*buffer_size) *= 2;
-	  (*buffer) = (gchar *) realloc ((*buffer), *buffer_size);	  
-	}
+ 	  (*buffer) = (gchar *) g_realloc ((*buffer), *buffer_size);	}
 
       if (c != '"')
         (*buffer)[cnt++] = c;
@@ -329,7 +331,7 @@ gdk_pixmap_extract_color (gchar *buffer)
 
   while (finished == FALSE)
     {
-      sscanf (ptr, "%s", temp);
+      sscanf (ptr, "%127s", temp);
 
       if ((gint)ptr[0] == 0 || strcmp ("s", temp) == 0 || strcmp ("m", temp) == 0 ||
           strcmp ("g", temp) == 0 || strcmp ("g4", temp) == 0)

@@ -1,3 +1,35 @@
+Tue Apr  7 19:14:03 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkpixmap.c: Added maximum field widths to prevent
+	possible '%s' scanf overflows. Replaced scanf("%c")
+	with getc(), Don't interpret /*/ as a full comment. Use
+	g_realloc/g_new.
+
+	* gtk/gtkwidget.h gtk/gtkprivate.h: Changed all flag
+	tests to check for ((GTK_WIDGET_FLAGS(widget) & FLAG) != 0)
+	instead of (GTK_WIDGET_FLAGS(widget) & FLAG)
+
+	* gtk/gtkfilesel.c: Use getwd() instead of getcwd() on  
+	SunOS, because getcwd() hangs up in a wait4().
+	(Found by David Monniaux <monniaux@clipper.ens.fr>)
+
+	- Check device/inode/mtime not just inode/mtime, when
+	caching scanned directories.
+	(From: scottk@ig.utexas.edu (Scott Kempf))
+	
+	* gdk/gdkpixmap.c: Check for 0 width/height when
+	creating pixmaps.
+
+	* gtk/*.c: Global substitution of recently introduced
+	"MAX (0," for allocations to "MAX (1,", since 
+	creating a backing pixmap with a zero width or height
+	fails.
+
+	* gdk/gdkwindow.c (gdk_window_new): Don't set all the
+	WM properties for child windows. Don't set the base
+	size, since the value we set will be taken as a minimum
+	size.
+
 Wed Apr  8 00:00:48 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtklabel.c (gtk_label_expose): don't take '\n' into account for

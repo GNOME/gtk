@@ -1,3 +1,8 @@
+Tue Apr  7 19:36:48 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gutils.c (g_direct_compare): Removed, because that's what
+	a NULL comparison function means. And it wasn't 64 bit safe.
+
 Mon Apr  6 18:43:25 1998  Tim Janik  <timj@gtk.org>
 
 	* gscanner.c (g_scanner_get_token_ll): fixed a bug that caused floats

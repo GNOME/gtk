@@ -316,8 +316,8 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
 
       /* make sure we don't allocate a negative width or height,
        * since that will be cast to a (very big) guint16 */
-      width = MAX (0, width);
-      height = MAX (0, height);
+      width = MAX (1, width);
+      height = MAX (1, height);
 
       if (ratio * height > width)
 	{

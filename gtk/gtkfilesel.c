@@ -93,6 +93,7 @@ struct _CompletionDirSent
 {
   ino_t inode;
   time_t mtime;
+  dev_t device;
 
   gint entry_count;
   gchar *name_buffer; /* memory segment containing names of all entries */
@@ -1504,7 +1505,14 @@ cmpl_init_state (void)
 
   new_state = g_new (CompletionState, 1);
 
+  /* We don't use getcwd() on SUNOS, because, it does a popen("pwd")
+   * and, if that wasn't bad enough, hangs in doing so.
+   */
+#if defined(sun) && !defined(__SVR4)
+  if (!getwd (getcwd_buf))
+#else    
   if (!getcwd (getcwd_buf, MAXPATHLEN))
+#endif    
     {
       cmpl_errno = errno;
       return NULL;
@@ -1856,6 +1864,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf)
   sent = g_new(CompletionDirSent, 1);
   sent->mtime = sbuf->st_mtime;
   sent->inode = sbuf->st_ino;
+  sent->device = sbuf->st_dev;
 
   path_buf_len = strlen(dir_name);
 
@@ -1953,7 +1962,8 @@ open_dir(gchar* dir_name, CompletionState* cmpl_state)
       sent = cdsl->data;
 
       if(sent->inode == sbuf.st_ino &&
-	 sent->mtime == sbuf.st_mtime)
+	 sent->mtime == sbuf.st_mtime &&
+	 sent->device == sbuf.st_dev)
 	return attach_dir(sent, dir_name, cmpl_state);
 
       cdsl = cdsl->next;
@@ -2108,7 +2118,11 @@ find_parent_dir_fullname(gchar* dirname)
   gchar buffer[MAXPATHLEN];
   gchar buffer2[MAXPATHLEN];
 
+#if defined(sun) && !defined(__SVR4)
+  if(!getwd(buffer))
+#else
   if(!getcwd(buffer, MAXPATHLEN))
+#endif    
     {
       cmpl_errno = errno;
       return NULL;
@@ -2120,7 +2134,11 @@ find_parent_dir_fullname(gchar* dirname)
       return NULL;
     }
 
+#if defined(sun) && !defined(__SVR4)
+  if(!getwd(buffer2))
+#else
   if(!getcwd(buffer2, MAXPATHLEN))
+#endif
     {
       chdir(buffer);
       cmpl_errno = errno;

@@ -355,6 +355,10 @@ gdk_window_new (GdkWindow     *parent,
   gdk_window_ref (window);
   gdk_xid_table_insert (&private->xwindow, window);
 
+  gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
+				  (attributes->cursor) :
+				  NULL));
+
   switch (private->window_type)
     {
     case GDK_WINDOW_DIALOG:
@@ -368,26 +372,31 @@ gdk_window_new (GdkWindow     *parent,
 	  (colormap != gdk_colormap_get_system ()) &&
 	  (colormap != gdk_window_get_colormap (gdk_window_get_toplevel (window))))
 	{
-	  g_print ("adding colormap window\n");
+	  GDK_NOTE (MISC, g_print ("adding colormap window\n"));
 	  gdk_window_add_colormap_windows (window);
 	}
-      break;
+
+      return window;
     default:
-      break;
+
+      return window;
     }
 
-  size_hints.flags = PSize | PBaseSize;
+  size_hints.flags = PSize;
   size_hints.width = private->width;
   size_hints.height = private->height;
-  size_hints.base_width = private->width;
-  size_hints.base_height = private->height;
 
   wm_hints.flags = InputHint | StateHint | WindowGroupHint;
   wm_hints.window_group = gdk_leader_window;
   wm_hints.input = True;
   wm_hints.initial_state = NormalState;
 
+  /* FIXME: Is there any point in doing this? Do any WM's pay
+   * attention to PSize, and even if they do, is this the
+   * correct value???
+   */
   XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
+
   XSetWMHints (private->xdisplay, private->xwindow, &wm_hints);
 
   if (attributes_mask & GDK_WA_TITLE)
@@ -409,9 +418,6 @@ gdk_window_new (GdkWindow     *parent,
       XFree (class_hint);
     }
 
-  gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
-				  (attributes->cursor) :
-				  NULL));
 
   return window;
 }

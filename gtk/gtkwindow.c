@@ -1283,6 +1283,7 @@ gtk_window_set_hints (GtkWidget      *widget,
   GtkWidgetAuxInfo *aux_info;
   gint flags;
   gint ux, uy;
+  gint min_width, min_height;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
@@ -1303,6 +1304,7 @@ gtk_window_set_hints (GtkWidget      *widget,
 	  uy = aux_info->y;
 	  flags |= GDK_HINT_POS;
 	}
+
       if (!window->allow_shrink)
 	flags |= GDK_HINT_MIN_SIZE;
       if (!window->allow_grow)
