@@ -403,7 +403,6 @@ void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
 					   guint                accel_key,
 					   guint                accel_mods,
 					   GtkAccelFlags        accel_flags);
-void	   gtk_widget_stop_accelerator    (GtkWidget	       *widget);
 void	   gtk_widget_remove_accelerator  (GtkWidget           *widget,
 					   GtkAccelGroup       *accel_group,
 					   guint                accel_key,
@@ -415,6 +414,8 @@ guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
 					   GtkAccelGroup       *accel_group,
 					   guint                accel_key,
 					   guint                accel_mods);
+void	   gtk_widget_freeze_accelerators (GtkWidget	       *widget);
+void	   gtk_widget_thaw_accelerators   (GtkWidget	       *widget);
 gint	   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 

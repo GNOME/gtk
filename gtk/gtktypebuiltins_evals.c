@@ -300,7 +300,6 @@ static GtkEnumValue _gtk_private_flags_values[] = {
 static GtkEnumValue _gtk_spin_button_update_policy_values[] = {
   { GTK_UPDATE_ALWAYS, "GTK_UPDATE_ALWAYS", "always" },
   { GTK_UPDATE_IF_VALID, "GTK_UPDATE_IF_VALID", "if-valid" },
-  { GTK_UPDATE_SNAP_TO_TICKS, "GTK_UPDATE_SNAP_TO_TICKS", "snap-to-ticks" },
   { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_toolbar_child_type_values[] = {

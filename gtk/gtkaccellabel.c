@@ -194,6 +194,15 @@ gtk_accel_label_finalize (GtkObject *object)
   GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+guint
+gtk_accel_label_accelerator_width (GtkAccelLabel *accel_label)
+{
+  g_return_if_fail (accel_label != NULL);
+  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+  
+  return accel_label->accel_padding + accel_label->accel_string_width;
+}
+
 static void
 gtk_accel_label_size_request (GtkWidget	     *widget,
 			      GtkRequisition *requisition)
@@ -211,7 +220,6 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   
   accel_label->accel_string_width = gdk_string_width (GTK_WIDGET (accel_label)->style->font,
 						      accel_label->accel_string);
-  requisition->width += accel_label->accel_padding + accel_label->accel_string_width;
 }
 
 static gint
@@ -232,9 +240,9 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
     {
       guint ac_width;
       
-      ac_width = accel_label->accel_padding + accel_label->accel_string_width;
+      ac_width = gtk_accel_label_accelerator_width (accel_label);
       
-      if (widget->allocation.width > ac_width + misc->xpad * 2)
+      if (widget->allocation.width >= widget->requisition.width + ac_width)
 	{
 	  guint x;
 	  guint y;

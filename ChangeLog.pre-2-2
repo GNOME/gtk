@@ -1,3 +1,37 @@
+Thu Jun 18 03:30:06 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccellabel.h:
+	* gtk/gtkaccellabel.c: new function gtk_accel_label_accelerator_width to
+	request the size of the accelerator portion of an accel label.
+	(gtk_accel_label_size_request): don't request for the accelerators size.
+	(gtk_accel_label_expose_event): only draw the accelerator if we got
+ 	enough extra space.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_request): request accelerator
+	width from children.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): when adding an accelerator to an
+	object (after removal has been requested) check if there is still an
+	accelerator remaining to avoid adding two accelerators on an object.
+	this can happen for locked accelerators (or accelerator-frozen widgets).
+	(gtk_menu_size_request): feature childrens accelerator width in size
+ 	requests.
+
+	* gtk/gtknotebook.c (gtk_notebook_menu_item_create): use
+	gtk_widget_freeze_accelerators() for dynamically created menu items.
+
+	* gtk/gtksignal.h: 
+	* gtk/gtksignal.c: new function gtk_signal_handler_pending_by_func()
+	which will return a handler_id > 0 if the specified function is pending
+	for `signal_id'.
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c: remove gtk_widget_stop_accelerator, which was just
+	a signal handler function to stop accelerator addition.
+	added gtk_widget_freeze_accelerators and gtk_widget_thaw_accelerators
+	which will prevent (undo) any accelerators from being added to or
+ 	removed from a widget.
+
 Wed Jun 17 21:59:09 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtkspinbutton.h gtkspinbutton.c testgtk.c:

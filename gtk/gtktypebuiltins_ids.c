@@ -85,7 +85,7 @@
   { "GtkPrivateFlags", &GTK_TYPE_PRIVATE_FLAGS,
     GTK_TYPE_FLAGS, _gtk_private_flags_values },
   { "GtkSpinButtonUpdatePolicy", &GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY,
-    GTK_TYPE_FLAGS, _gtk_spin_button_update_policy_values },
+    GTK_TYPE_ENUM, _gtk_spin_button_update_policy_values },
   { "GtkToolbarChildType", &GTK_TYPE_TOOLBAR_CHILD_TYPE,
     GTK_TYPE_ENUM, _gtk_toolbar_child_type_values },
   { "GtkTreeViewMode", &GTK_TYPE_TREE_VIEW_MODE,

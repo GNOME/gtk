@@ -274,10 +274,9 @@
 
 ; enumerations from "./gtkspinbutton.h"
 
-(define-flags GtkSpinButtonUpdatePolicy
+(define-enum GtkSpinButtonUpdatePolicy
    (always GTK_UPDATE_ALWAYS)
-   (if-valid GTK_UPDATE_IF_VALID)
-   (snap-to-ticks GTK_UPDATE_SNAP_TO_TICKS))
+   (if-valid GTK_UPDATE_IF_VALID))
 
 ; enumerations from "./gtktoolbar.h"
 

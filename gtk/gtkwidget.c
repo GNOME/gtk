@@ -1847,6 +1847,68 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 }
 
+static void
+gtk_widget_stop_add_accelerator (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_signal_emit_stop (GTK_OBJECT (widget), widget_signals[ADD_ACCELERATOR]);
+}
+
+static void
+gtk_widget_stop_remove_accelerator (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_signal_emit_stop (GTK_OBJECT (widget), widget_signals[REMOVE_ACCELERATOR]);
+}
+
+void
+gtk_widget_freeze_accelerators (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (gtk_signal_handler_pending_by_func (GTK_OBJECT (widget),
+					  widget_signals[ADD_ACCELERATOR],
+					  TRUE,
+					  GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
+					  NULL) == 0)
+    {
+      gtk_signal_connect (GTK_OBJECT (widget),
+			  "add_accelerator",
+			  GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
+			  NULL);
+      gtk_signal_connect (GTK_OBJECT (widget),
+			  "remove_accelerator",
+			  GTK_SIGNAL_FUNC (gtk_widget_stop_remove_accelerator),
+			  NULL);
+    }
+}
+
+void
+gtk_widget_thaw_accelerators (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (gtk_signal_handler_pending_by_func (GTK_OBJECT (widget),
+					  widget_signals[ADD_ACCELERATOR],
+					  TRUE,
+					  GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
+					  NULL) > 0)
+    {
+      gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
+				     GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
+				     NULL);
+      gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
+				     GTK_SIGNAL_FUNC (gtk_widget_stop_remove_accelerator),
+				     NULL);
+    }
+}
+
 void
 gtk_widget_add_accelerator (GtkWidget           *widget,
 			    const gchar         *accel_signal,
@@ -1865,15 +1927,6 @@ gtk_widget_add_accelerator (GtkWidget           *widget,
 		       accel_flags,
 		       (GtkObject*) widget,
 		       accel_signal);
-}
-
-void
-gtk_widget_stop_accelerator (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_signal_emit_stop (GTK_OBJECT (widget), widget_signals[ADD_ACCELERATOR]);
 }
 
 void

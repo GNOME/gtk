@@ -48,6 +48,7 @@ struct _GtkMenuItem
   
   guint	  accelerator_signal;
   guint16 toggle_size;
+  guint16 accelerator_width;
   
   guint show_toggle_indicator : 1;
   guint show_submenu_indicator : 1;

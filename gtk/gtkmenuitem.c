@@ -135,6 +135,7 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   menu_item->submenu = NULL;
   menu_item->accelerator_signal = menu_item_signals[ACTIVATE];
   menu_item->toggle_size = 0;
+  menu_item->accelerator_width = 0;
   menu_item->show_toggle_indicator = FALSE;
   menu_item->show_submenu_indicator = FALSE;
   menu_item->submenu_direction = GTK_DIRECTION_RIGHT;
@@ -270,6 +271,24 @@ gtk_menu_item_activate (GtkMenuItem *menu_item)
   gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[ACTIVATE]);
 }
 
+static void
+gtk_menu_item_accel_width_foreach (GtkWidget *widget,
+				   gpointer data)
+{
+  guint *width = data;
+
+  if (GTK_IS_ACCEL_LABEL (widget))
+    {
+      guint w;
+
+      w = gtk_accel_label_accelerator_width (GTK_ACCEL_LABEL (widget));
+      *width = MAX (*width, w);
+    }
+  else if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+			   gtk_menu_item_accel_width_foreach,
+			   data);
+}
 
 static void
 gtk_menu_item_size_request (GtkWidget      *widget,
@@ -277,6 +296,7 @@ gtk_menu_item_size_request (GtkWidget      *widget,
 {
   GtkMenuItem *menu_item;
   GtkBin *bin;
+  guint accel_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
@@ -298,8 +318,15 @@ gtk_menu_item_size_request (GtkWidget      *widget,
       requisition->width += bin->child->requisition.width;
       requisition->height += bin->child->requisition.height;
     }
+
   if (menu_item->submenu && menu_item->show_submenu_indicator)
     requisition->width += 21;
+
+  accel_width = 0;
+  gtk_container_foreach (GTK_CONTAINER (menu_item),
+			 gtk_menu_item_accel_width_foreach,
+			 &accel_width);
+  menu_item->accelerator_width = accel_width;
 }
 
 static void

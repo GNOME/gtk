@@ -1501,7 +1501,44 @@ gtk_signal_handler_pending (GtkObject		*object,
   while (handlers && handlers->signal_id == signal_id)
     {
       if (handlers->id > 0 &&
-	  (may_be_blocked || handlers->blocked == 0))
+	  (may_be_blocked || handlers->blocked == FALSE))
+	{
+	  handler_id = handlers->id;
+	  break;
+	}
+      
+      handlers = handlers->next;
+    }
+  
+  return handler_id;
+}
+
+guint
+gtk_signal_handler_pending_by_func (GtkObject           *object,
+				    guint                signal_id,
+				    gboolean             may_be_blocked,
+				    GtkSignalFunc        func,
+				    gpointer             data)
+{
+  GtkHandler *handlers;
+  guint handler_id;
+  
+  g_return_val_if_fail (object != NULL, 0);
+  g_return_val_if_fail (func != NULL, 0);
+  g_return_val_if_fail (signal_id >= 1, 0);
+
+  if (GTK_OBJECT_CONNECTED (object))
+    handlers = gtk_signal_get_handlers (object, signal_id);
+  else
+    return 0;
+  
+  handler_id = 0;
+  while (handlers && handlers->signal_id == signal_id)
+    {
+      if (handlers->id > 0 &&
+	  handlers->func == func &&
+	  handlers->func_data == data &&
+	  (may_be_blocked || handlers->blocked == FALSE))
 	{
 	  handler_id = handlers->id;
 	  break;

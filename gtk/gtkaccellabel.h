@@ -50,7 +50,7 @@ struct _GtkAccelLabel
   guint	     accel_padding;
   GtkWidget *accel_widget;
   gchar     *accel_string;
-  guint	     accel_string_width : 16;
+  guint16     accel_string_width;
 };
 
 struct _GtkAccelLabelClass
@@ -68,11 +68,12 @@ struct _GtkAccelLabelClass
 };
 
 
-GtkType	   gtk_accel_label_get_type	    (void);
-GtkWidget* gtk_accel_label_new		    (const gchar   *string);
-void	   gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
-					     GtkWidget	   *accel_widget);
-gboolean   gtk_accel_label_refetch          (GtkAccelLabel *accel_label);
+GtkType	   gtk_accel_label_get_type	     (void);
+GtkWidget* gtk_accel_label_new		     (const gchar   *string);
+guint	   gtk_accel_label_accelerator_width (GtkAccelLabel *accel_label);
+void	   gtk_accel_label_set_accel_widget  (GtkAccelLabel *accel_label,
+					      GtkWidget	    *accel_widget);
+gboolean   gtk_accel_label_refetch           (GtkAccelLabel *accel_label);
 
 
 #ifdef __cplusplus

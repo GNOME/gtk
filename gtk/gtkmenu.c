@@ -567,7 +567,8 @@ gtk_menu_size_request (GtkWidget      *widget,
   GtkMenuShell *menu_shell;
   GtkWidget *child;
   GList *children;
-  gint max_toggle_size;
+  guint max_toggle_size;
+  guint max_accel_width;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU (widget));
@@ -580,6 +581,7 @@ gtk_menu_size_request (GtkWidget      *widget,
   requisition->height = 0;
   
   max_toggle_size = 0;
+  max_accel_width = 0;
   
   children = menu_shell->children;
   while (children)
@@ -596,10 +598,11 @@ gtk_menu_size_request (GtkWidget      *widget,
 	  requisition->height += child->requisition.height;
 	  
 	  max_toggle_size = MAX (max_toggle_size, MENU_ITEM_CLASS (child)->toggle_size);
+	  max_accel_width = MAX (max_accel_width, GTK_MENU_ITEM (child)->accelerator_width);
 	}
     }
   
-  requisition->width += max_toggle_size;
+  requisition->width += max_toggle_size + max_accel_width;
   requisition->width += (GTK_CONTAINER (menu)->border_width +
 			 widget->style->klass->xthickness) * 2;
   requisition->height += (GTK_CONTAINER (menu)->border_width +
@@ -821,16 +824,34 @@ gtk_menu_key_press (GtkWidget	*widget,
 					  TRUE);
 	  
 	  if (!delete &&
-	      gtk_widget_accelerator_signal (GTK_WIDGET (menu_item),
-					     accel_group,
-					     event->keyval,
-					     event->state) == 0)
-	    gtk_widget_add_accelerator (GTK_WIDGET (menu_item),
-					gtk_signal_name (menu_item->accelerator_signal),
-					accel_group,
-					event->keyval,
-					event->state,
-					GTK_ACCEL_VISIBLE);
+	      0 == gtk_widget_accelerator_signal (GTK_WIDGET (menu_item),
+						  accel_group,
+						  event->keyval,
+						  event->state))
+	    {
+	      GSList *slist;
+	      
+	      slist = gtk_accel_group_entries_from_object (GTK_OBJECT (menu_item));
+	      while (slist)
+		{
+		  GtkAccelEntry *ac_entry;
+		  
+		  ac_entry = slist->data;
+		  
+		  if (ac_entry->signal_id == menu_item->accelerator_signal)
+		    break;
+		  
+		  slist = slist->next;
+		}
+
+	      if (!slist)
+		gtk_widget_add_accelerator (GTK_WIDGET (menu_item),
+					    gtk_signal_name (menu_item->accelerator_signal),
+					    accel_group,
+					    event->keyval,
+					    event->state,
+					    GTK_ACCEL_VISIBLE);
+	    }
 	}
     }
   

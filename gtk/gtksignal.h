@@ -165,6 +165,11 @@ void   gtk_signal_handler_unblock_by_data (GtkObject	       *object,
 guint  gtk_signal_handler_pending	  (GtkObject	       *object,
 					   guint		signal_id,
 					   gboolean		may_be_blocked);
+guint  gtk_signal_handler_pending_by_func (GtkObject	       *object,
+					   guint		signal_id,
+					   gboolean		may_be_blocked,
+					   GtkSignalFunc	func,
+					   gpointer		data);
 void   gtk_signal_handlers_destroy	  (GtkObject	       *object);
 void   gtk_signal_default_marshaller	  (GtkObject	       *object,
 					   GtkSignalFunc	func,

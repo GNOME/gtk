@@ -23,6 +23,7 @@
 #include "gtk.h"
 #include "../gdk/gdk.h"
 #include "../gdk/gdkx.h"
+#include "../gdk/gdkkeysyms.h"
 
 #include "circles.xbm"
 
@@ -2056,64 +2057,104 @@ create_menus (void)
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
-  GtkWidget *menu;
-  GtkWidget *menubar;
-  GtkWidget *menuitem;
   GtkWidget *optionmenu;
   GtkWidget *separator;
-
+  
   if (!window)
     {
+      GtkWidget *menubar;
+      GtkWidget *menu;
+      GtkWidget *menuitem;
+      GtkAccelGroup *accel_group;
+      
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
+      
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete-event",
 			  GTK_SIGNAL_FUNC (gtk_true),
 			  NULL);
-
+      
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
-
-
+      
+      
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
       gtk_widget_show (box1);
-
-
+      
+      
       menubar = gtk_menu_bar_new ();
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
-
+      
       menu = create_menu (2);
-
+      
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
-
+      
       menuitem = gtk_menu_item_new_with_label ("foo");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
-
+      
       menuitem = gtk_menu_item_new_with_label ("bar");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4));
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
-
-
+      
+      
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
       gtk_widget_show (box2);
+      
+      menu = create_menu (1);
+      accel_group = gtk_accel_group_get_default ();
+      gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
 
-
+      menuitem = gtk_check_menu_item_new_with_label ("Accelerate Me");
+      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_widget_show (menuitem);
+      gtk_widget_add_accelerator (menuitem,
+				  "activate",
+				  accel_group,
+				  GDK_F1,
+				  0,
+				  GTK_ACCEL_VISIBLE | GTK_ACCEL_SIGNAL_VISIBLE);
+      menuitem = gtk_check_menu_item_new_with_label ("Accelerator Locked");
+      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_widget_show (menuitem);
+      gtk_widget_add_accelerator (menuitem,
+				  "activate",
+				  accel_group,
+				  GDK_F2,
+				  0,
+				  GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
+      menuitem = gtk_check_menu_item_new_with_label ("Accelerators Frozen");
+      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_widget_show (menuitem);
+      gtk_widget_add_accelerator (menuitem,
+				  "activate",
+				  accel_group,
+				  GDK_F2,
+				  0,
+				  GTK_ACCEL_VISIBLE);
+      gtk_widget_add_accelerator (menuitem,
+				  "activate",
+				  accel_group,
+				  GDK_F3,
+				  0,
+				  GTK_ACCEL_VISIBLE);
+      gtk_widget_freeze_accelerators (menuitem);
+      
       optionmenu = gtk_option_menu_new ();
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), create_menu (1));
-      gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu), 4);
+      gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
+      gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu), 3);
       gtk_box_pack_start (GTK_BOX (box2), optionmenu, TRUE, TRUE, 0);
       gtk_widget_show (optionmenu);
 
