@@ -283,4 +283,3 @@ print_blurb (FILE    *bout,
     }
 }
 
-#include "x"
