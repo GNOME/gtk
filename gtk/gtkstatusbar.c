@@ -75,16 +75,17 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   GTK_BOX (statusbar)->spacing = 2;
   GTK_BOX (statusbar)->homogeneous = FALSE;
 
-  statusbar->frame = gtk_frame_new(NULL);
-  gtk_frame_set_shadow_type(GTK_FRAME(statusbar->frame), GTK_SHADOW_IN);
-  gtk_box_pack_start(GTK_BOX(statusbar), statusbar->frame, 1,1,0);
+  statusbar->frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), GTK_SHADOW_IN);
+  gtk_box_pack_start (GTK_BOX (statusbar), statusbar->frame, 1, 1, 0);
+  gtk_widget_show (statusbar->frame);
 
   statusbar->label = gtk_label_new("");
   gtk_misc_set_alignment(GTK_MISC(statusbar->label), 0.0, 0.0);
   gtk_container_add(GTK_CONTAINER(statusbar->frame), statusbar->label);
+  gtk_widget_show (statusbar->label);
 
   statusbar->next_statusid = 1;
-
   statusbar->msgs = g_list_alloc();
 }
 
