@@ -175,8 +175,6 @@ void                    gtk_tree_view_column_set_sort_order      (GtkTreeViewCol
 GtkTreeSortOrder        gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn       *tree_column);
 
 
-
-
 /* These functions are meant primarily for interaction between the GtkTreeView and the column.
  */
 void                    gtk_tree_view_column_cell_set_cell_data  (GtkTreeViewColumn       *tree_column,

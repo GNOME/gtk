@@ -375,7 +375,7 @@ gtk_list_store_get_flags (GtkTreeModel *tree_model)
 {
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), 0);
 
-  return GTK_TREE_MODEL_ITERS_PERSIST;
+  return GTK_TREE_MODEL_ITERS_PERSIST | GTK_TREE_MODEL_LIST_ONLY;
 }
 
 static gint

@@ -1,3 +1,11 @@
+Tue Jun 12 12:41:27 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.h (GTK_TREE_MODEL_LIST_ONLY): further justify
+	gtk_tree_model_get_flags by adding a second flag for atk.
+
+	* gtk/gtktreemodel.c: make cursor behavior interact better with
+	mouse presses.
+
 Mon Jun 11 12:43:08 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): changed

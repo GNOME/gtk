@@ -162,7 +162,6 @@ _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
   selection->tree_view = tree_view;
 }
 
-/* FIXME explain what the anchor is */
 /**
  * gtk_tree_selection_set_mode:
  * @selection: A #GtkTreeSelection.

@@ -234,6 +234,7 @@ struct _GtkTreeViewPrivate
        };                               }G_STMT_END
 #endif
 
+
 /* functions that shouldn't be exported */
 void         _gtk_tree_selection_internal_select_node (GtkTreeSelection  *selection,
 						       GtkRBNode         *node,
