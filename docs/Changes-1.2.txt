@@ -6,6 +6,35 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
   a version of GtkMenuFactory is currently still provided to ease
   the migration phase.
 
+* The GtkTypeInfo structures used in the gtk_*_type_init() functions has
+  changed a bit, the old format:  
+      GtkTypeInfo bin_info =
+      {
+        "GtkBin",
+        sizeof (GtkBin),
+        sizeof (GtkBinClass),
+        (GtkClassInitFunc) gtk_bin_class_init,
+        (GtkObjectInitFunc) gtk_bin_init,
+        (GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
+      };
+  needs to be converted to:
+      static const GtkTypeInfo bin_info =
+      {
+        "GtkBin",
+        sizeof (GtkBin),
+        sizeof (GtkBinClass),
+        (GtkClassInitFunc) gtk_bin_class_init,
+        (GtkObjectInitFunc) gtk_bin_init,
+        /* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
+        (GtkClassInitFunc) NULL,
+      };
+  the GtkArgSetFunc and GtkArgGetFunc functions are not supported from the
+  type system anymore, and you should make sure that your code only fills
+  in these fields with NULL and doesn't use the deprecated function typedefs
+  (GtkArgSetFunc) and (GtkArgGetFunc) anymore.
+
 * A number of Gtk functions got renamed. For compatibility, function
   name aliases covering the old 1.0.x function names are defined in
   gtkcompat.h. To asure your Gtk program doesn't rely on outdated function
