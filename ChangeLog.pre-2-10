@@ -1,3 +1,12 @@
+Mon Jan 27 15:58:31 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* configure.in: Fix --without-modules/--disable-modules
+ 	confusion that was causing --disable-modules not to work.
+ 	(#102865, Akira Tagoh)
+ 
+ 	* configure.in: Fix problem with plain --with-xinput
+ 	(#104266, Akira Tagoh)
+	
 2003-01-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Make
