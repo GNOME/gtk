@@ -39,6 +39,13 @@
 
 #include "xembed.h"
 
+typedef struct _GtkSocketPrivate GtkSocketPrivate;
+
+struct _GtkSocketPrivate
+{
+  gint resize_count;
+};
+
 /* Forward declararations */
 
 static void     gtk_socket_class_init           (GtkSocketClass   *klass);
@@ -103,6 +110,27 @@ enum {
 static guint socket_signals[LAST_SIGNAL] = { 0 };
 
 static GtkWidgetClass *parent_class = NULL;
+
+GtkSocketPrivate *
+gtk_socket_get_private (GtkSocket *socket)
+{
+  GtkSocketPrivate *private;
+  static GQuark private_quark = 0;
+
+  if (!private_quark)
+    private_quark = g_quark_from_static_string ("gtk-socket-private");
+
+  private = g_object_get_qdata (G_OBJECT (socket), private_quark);
+
+  if (!private)
+    {
+      private = g_new0 (GtkSocketPrivate, 1);
+      g_object_set_qdata_full (G_OBJECT (socket), private_quark,
+			       private, (GDestroyNotify) g_free);
+    }
+
+  return private;
+}
 
 GtkType
 gtk_socket_get_type (void)
@@ -358,6 +386,7 @@ gtk_socket_realize (GtkWidget *widget)
 static void
 gtk_socket_end_embedding (GtkSocket *socket)
 {
+  GtkSocketPrivate *private = gtk_socket_get_private (socket);
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
   gint i;
   
@@ -367,6 +396,7 @@ gtk_socket_end_embedding (GtkSocket *socket)
 
   g_object_unref (socket->plug_window);
   socket->plug_window = NULL;
+  private->resize_count = 0;
 
   /* Remove from end to avoid indexes shifting. This is evil */
   for (i = socket->accel_group->n_accels - 1; i >= 0; i--)
@@ -414,19 +444,15 @@ gtk_socket_size_request (GtkWidget      *widget,
 	  long supplied;
 	  
 	  gdk_error_trap_push ();
+
+	  socket->request_width = 1;
+	  socket->request_height = 1;
 	  
 	  if (XGetWMNormalHints (GDK_DISPLAY(),
 				 GDK_WINDOW_XWINDOW (socket->plug_window),
 				 &hints, &supplied))
 	    {
-	      /* This is obsolete, according the X docs, but many programs
-	       * still use it */
-	      if (hints.flags & (PSize | USSize))
-		{
-		  socket->request_width = hints.width;
-		  socket->request_height = hints.height;
-		}
-	      else if (hints.flags & PMinSize)
+	      if (hints.flags & PMinSize)
 		{
 		  socket->request_width = hints.min_width;
 		  socket->request_height = hints.min_height;
@@ -437,7 +463,7 @@ gtk_socket_size_request (GtkWidget      *widget,
 		  socket->request_height = hints.base_height;
 		}
 	    }
-	  socket->have_size = TRUE;	/* don't check again? */
+	  socket->have_size = TRUE;
 	  
 	  gdk_error_trap_pop ();
 	}
@@ -486,22 +512,19 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 	}
       else if (socket->plug_window)
 	{
+	  GtkSocketPrivate *private = gtk_socket_get_private (socket);
+	  
 	  gdk_error_trap_push ();
 	  
-	  if (!socket->need_map &&
-	      (allocation->width == socket->current_width) &&
-	      (allocation->height == socket->current_height))
-	    {
-	      gtk_socket_send_configure_event (socket);
-	      GTK_NOTE(PLUGSOCKET, 
-		       g_message ("GtkSocket - allocated no change: %d %d",
-				  allocation->width, allocation->height));
-	    }
-	  else
+	  if (allocation->width != socket->current_width ||
+	      allocation->height != socket->current_height)
 	    {
 	      gdk_window_move_resize (socket->plug_window,
 				      0, 0,
 				      allocation->width, allocation->height);
+	      if (private->resize_count)
+		private->resize_count--;
+	      
 	      GTK_NOTE(PLUGSOCKET,
 		       g_message ("GtkSocket - allocated: %d %d",
 				  allocation->width, allocation->height));
@@ -513,6 +536,15 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 	    {
 	      gdk_window_show (socket->plug_window);
 	      socket->need_map = FALSE;
+	    }
+
+	  while (private->resize_count)
+	    {
+	      gtk_socket_send_configure_event (socket);
+	      private->resize_count--;
+	      GTK_NOTE(PLUGSOCKET,
+		       g_message ("GtkSocket - sending synthetic configure: %d %d",
+				  allocation->width, allocation->height));
 	    }
 
 	  gdk_flush ();
@@ -932,6 +964,7 @@ static void
 gtk_socket_send_configure_event (GtkSocket *socket)
 {
   XEvent event;
+  gint x, y;
 
   g_return_if_fail (socket->plug_window != NULL);
 
@@ -941,8 +974,16 @@ gtk_socket_send_configure_event (GtkSocket *socket)
   event.xconfigure.event = GDK_WINDOW_XWINDOW (socket->plug_window);
   event.xconfigure.window = GDK_WINDOW_XWINDOW (socket->plug_window);
 
-  event.xconfigure.x = 0;
-  event.xconfigure.y = 0;
+  /* The ICCCM says that synthetic events should have root relative
+   * coordinates. We still aren't really ICCCM compliant, since
+   * we don't send events when the real toplevel is moved.
+   */
+  gdk_error_trap_push ();
+  gdk_window_get_origin (socket->plug_window, &x, &y);
+  gdk_error_trap_pop ();
+			 
+  event.xconfigure.x = x;
+  event.xconfigure.y = y;
   event.xconfigure.width = GTK_WIDGET(socket)->allocation.width;
   event.xconfigure.height = GTK_WIDGET(socket)->allocation.height;
 
@@ -1279,14 +1320,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
 	    if (socket->plug_window)
 	      {
-		socket->request_width = xcwe->width;
-		socket->request_height = xcwe->height;
-		socket->have_size = TRUE;
-		
 		GTK_NOTE(PLUGSOCKET,
-			 g_message ("GtkSocket - window created with size: %d %d",
-				    socket->request_width,
-				    socket->request_height));
+			 g_message ("GtkSocket - window created"));
 	      }
 	  }
 	
@@ -1304,17 +1339,16 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	
 	if (socket->plug_window)
 	  {
+	    GtkSocketPrivate *private = gtk_socket_get_private (socket);
+	    
 	    if (xcre->value_mask & (CWWidth | CWHeight))
 	      {
-		socket->request_width = xcre->width;
-		socket->request_height = xcre->height;
-		socket->have_size = TRUE;
-		
 		GTK_NOTE(PLUGSOCKET,
 			 g_message ("GtkSocket - configure request: %d %d",
 				    socket->request_width,
 				    socket->request_height));
-		
+
+		private->resize_count++;
 		gtk_widget_queue_resize (widget);
 	      }
 	    else if (xcre->value_mask & (CWX | CWY))
@@ -1399,7 +1433,12 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	{
 	  GdkDragProtocol protocol;
 
-	  if ((xevent->xproperty.atom == gdk_x11_get_xatom_by_name ("XdndAware")) ||
+	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name ("WM_NORMAL_HINTS"))
+	    {
+	      socket->have_size = FALSE;
+	      gtk_widget_queue_resize (widget);
+	    }
+	  else if ((xevent->xproperty.atom == gdk_x11_get_xatom_by_name ("XdndAware")) ||
 	      (xevent->xproperty.atom == gdk_x11_get_xatom_by_name ("_MOTIF_DRAG_RECEIVER_INFO")))
 	    {
 	      gdk_error_trap_push ();
