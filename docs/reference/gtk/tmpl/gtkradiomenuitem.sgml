@@ -62,7 +62,7 @@ Creates a new #GtkRadioMenuItem.
 
 <!-- ##### FUNCTION gtk_radio_menu_item_new_with_label ##### -->
 <para>
-Creates a new #GtkRadioMenuItem whose child is a simple #GtlLabel.
+Creates a new #GtkRadioMenuItem whose child is a simple #GtkLabel.
 </para>
 
 @group: the group to which the radio menu item is to be attached
