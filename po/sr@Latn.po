@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-11 18:14+0100\n"
-"PO-Revision-Date: 2003-12-11 18:16+0100\n"
+"POT-Creation-Date: 2003-12-15 08:35+0100\n"
+"PO-Revision-Date: 2003-12-15 09:03+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -788,7 +788,7 @@ msgstr "Ime"
 msgid "A unique name for the action."
 msgstr "Jedinstveno ime za akciju."
 
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:193 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Oznaka"
@@ -869,25 +869,21 @@ msgstr "Jedinstveno ime za grupu akcija."
 msgid "Horizontal alignment"
 msgstr "Vodoravno poravnanje"
 
-#: gtk/gtkalignment.c:117
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr ""
-"Vodoravna pozicija deteta u dostupnom prostoru. 0.0 označava levo poravnanje, "
-"1.0 desno poravnanje."
+msgstr "Vodoravni položaj sadržanog elementa u dostupnom prostoru. 0.0 označava levo poravnanje, 1.0 desno poravnanje."
 
 #: gtk/gtkalignment.c:126
 msgid "Vertical alignment"
 msgstr "Uspravno poravnanje"
 
-#: gtk/gtkalignment.c:127
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
-msgstr ""
-"Uspravna pozicija deteta u dostupnom prostoru. 0.0 označava poravnanje sa "
-"vrhom, a 1.0 poravnanje sa dnom."
+msgstr "Uspravni položaj sadržanog elementa u dostupnom prostoru. 0.0 označava poravnanje sa vrhom, a 1.0 poravnanje sa dnom."
 
 #: gtk/gtkalignment.c:135
 msgid "Horizontal scale"
@@ -1112,24 +1108,24 @@ msgstr "Određuje da li je sadržani element vezan za početak ili kraj sadržao
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:238
 #: gtk/gtkruler.c:138
 msgid "Position"
-msgstr "Mesto"
+msgstr "Položaj"
 
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:491
 msgid "The index of the child in the parent"
 msgstr "Indeks sadržanog elementa u sadržaocu"
 
-#: gtk/gtkbutton.c:191
+#: gtk/gtkbutton.c:204
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Sadržaj oznake unutar dugmeta, ukoliko dugme sadrži oznaku"
 
-#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Koristi podvlaku"
 
-#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1137,67 +1133,75 @@ msgstr ""
 "Ukoliko je postavljeno, podvlačenje označava da se sledeći znak koristi kao "
 "prečica"
 
-#: gtk/gtkbutton.c:206
+#: gtk/gtkbutton.c:219
 msgid "Use stock"
 msgstr "Koristi već pripremljene"
 
-#: gtk/gtkbutton.c:207
+#: gtk/gtkbutton.c:220
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Ukoliko je postavljeno, oznaka se bira od već pripremljenih stavki umesto "
 "prikazivanja"
 
-#: gtk/gtkbutton.c:214
+#: gtk/gtkbutton.c:227
 msgid "Focus on click"
 msgstr "Fokusiranje klikom"
 
-#: gtk/gtkbutton.c:215
+#: gtk/gtkbutton.c:228
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Da li dugme dobija fokus kada se klikne na njega mišem"
 
-#: gtk/gtkbutton.c:222
+#: gtk/gtkbutton.c:235
 msgid "Border relief"
 msgstr "Izgled ivice"
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:236
 msgid "The border relief style"
 msgstr "Stil izgleda ivice"
 
-#: gtk/gtkbutton.c:280
+#: gtk/gtkbutton.c:253
+msgid "Horizontal alignment for child"
+msgstr "Vodoravno poravnanje za sadržani element"
+
+#: gtk/gtkbutton.c:272
+msgid "Vertical alignment for child"
+msgstr "Uspravno poravnanje za sadržani element"
+
+#: gtk/gtkbutton.c:331
 msgid "Default Spacing"
 msgstr "Razmak podrazumevanih"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:332
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Razmak koji treba dodati za „podrazumevane“ dugmiće"
 
-#: gtk/gtkbutton.c:287
+#: gtk/gtkbutton.c:338
 msgid "Default Outside Spacing"
 msgstr "Razmak oko podrazumevanih"
 
-#: gtk/gtkbutton.c:288
+#: gtk/gtkbutton.c:339
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "Razmak koji treba dodati uvek oko podrazumevanih dugmića"
 
-#: gtk/gtkbutton.c:293
+#: gtk/gtkbutton.c:344
 msgid "Child X Displacement"
 msgstr "Vodoravni pomeraj sadržanog elementa"
 
 # Da li je "kada se pritisne" ili "kada se otpusti"?
-#: gtk/gtkbutton.c:294
+#: gtk/gtkbutton.c:345
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Koliko da se pomeri sadržani element u pravcu X ose na pritisak dugmeta"
 
-#: gtk/gtkbutton.c:301
+#: gtk/gtkbutton.c:352
 msgid "Child Y Displacement"
 msgstr "Uspravni pomeraj sadržanog elementa"
 
-#: gtk/gtkbutton.c:302
+#: gtk/gtkbutton.c:353
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Koliko pomeriti sadržani element u pravcu Y ose kada se dugme pritisne"
@@ -1899,7 +1903,7 @@ msgstr "_Nijansa:"
 
 #: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
-msgstr "Mesto na točku boja."
+msgstr "Položaj na točku boja."
 
 #: gtk/gtkcolorsel.c:1876
 msgid "_Saturation:"
@@ -2164,11 +2168,11 @@ msgstr "Širina ivice oko prostora za dugmiće u dnu prozorčeta"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:368
 msgid "Cursor Position"
-msgstr "Pozicija kursora"
+msgstr "Položaj kurzora"
 
 #: gtk/gtkentry.c:447 gtk/gtklabel.c:369
 msgid "The current position of the insertion cursor in chars"
-msgstr "Tekuća pozicija kursora za unos kao broj znakova"
+msgstr "Tekući položaj kurzora za unos kao broj znakova"
 
 #: gtk/gtkentry.c:456 gtk/gtklabel.c:378
 msgid "Selection Bound"
@@ -2177,7 +2181,7 @@ msgstr "Granica izbora"
 #: gtk/gtkentry.c:457 gtk/gtklabel.c:379
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
-msgstr "Pozicija suprotnog kraja izbora u odnosu na kursor kao broj znakova"
+msgstr "Položaj suprotnog kraja izbora u odnosu na kurzor kao broj znakova"
 
 #: gtk/gtkentry.c:467
 msgid "Whether the entry contents can be edited"
@@ -2790,7 +2794,7 @@ msgstr "Ne može pretvoriti ime datoteke"
 msgid "(Empty)"
 msgstr "(Prazno)"
 
-#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:371
+#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:383
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "greška pri obrazovanju direktorijuma „%s“: %s"
@@ -2803,31 +2807,35 @@ msgstr "Ovaj sistem datoteka ne podržava ikone"
 msgid "This file system does not support bookmarks"
 msgstr "Ovaj sistem datoteka ne podržava obeleživače"
 
-#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:893
+#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:1069
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "greška pri dobavljanju podataka o „%s“: %s"
 
-#: gtk/gtkfilesystemwin32.c:680
+#: gtk/gtkfilesystemwin32.c:692
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Neuspešno snimanje obeleživača (%s)"
 
+#: gtk/gtkfilesystemwin32.c:848
+msgid "This file system does not support icons for everything"
+msgstr "Ovaj sistem datoteka ne podržava ikone za sve"
+
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
-msgstr "Vodoravna postavka"
+msgstr "Vodoravni položaj"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position of child widget"
-msgstr "Vodoravna postavka sadržanog elementa"
+msgstr "Vodoravni položaj sadržanog elementa"
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
 msgid "Y position"
-msgstr "Uspravna postavka"
+msgstr "Uspravni položaj"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position of child widget"
-msgstr "Uspravna postavka sadržanog elementa"
+msgstr "Uspravni položaj sadržanog elementa"
 
 #: gtk/gtkfontbutton.c:176
 msgid "The title of the font selection dialog"
@@ -2980,11 +2988,11 @@ msgstr "Izgled senke koja uokviruje sadržalac"
 
 #: gtk/gtkhandlebox.c:211
 msgid "Handle position"
-msgstr "Pozicija ručke"
+msgstr "Položaj ručke"
 
 #: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
-msgstr "Pozicija ručke u odnosu na dete"
+msgstr "Položaj ručke u odnosu na sadržani element"
 
 #: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
@@ -3004,9 +3012,7 @@ msgstr "Postavljeno privlačenje ivici"
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
-msgstr ""
-"Da li se koristi vrednost iz osobine „privuci ivici“ ili vrednost izvedena "
-"iz „pozicija ručke“"
+msgstr "Da li se koristi vrednost iz osobine snap_edge (privuci ivici) ili vrednost izvedena iz handle_position (pozicije ručke)"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -3266,7 +3272,7 @@ msgstr "Vodoravna popravka"
 
 #: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:236
 msgid "The GtkAdjustment for the horizontal position"
-msgstr "GtkAdjustment za vodoravnu poziciju"
+msgstr "GtkAdjustment za vodoravni položaj"
 
 #: gtk/gtklayout.c:639 gtk/gtkviewport.c:142
 msgid "Vertical adjustment"
@@ -3274,7 +3280,7 @@ msgstr "Uspravna popravka"
 
 #: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:243
 msgid "The GtkAdjustment for the vertical position"
-msgstr "GtkAdjustment za uspravnu poziciju"
+msgstr "GtkAdjustment za uspravni položaj"
 
 #: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:235
 msgid "Width"
@@ -3297,7 +3303,7 @@ msgstr "Visina prikaza"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:840
+#: gtk/gtkmain.c:851
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3490,7 +3496,7 @@ msgstr "Broj tekućeg lista"
 
 #: gtk/gtknotebook.c:405
 msgid "Tab Position"
-msgstr "Pozicija jezičaka"
+msgstr "Položaj jezičaka"
 
 #: gtk/gtknotebook.c:406
 msgid "Which side of the notebook holds the tabs"
@@ -3656,17 +3662,15 @@ msgstr "Razmaci oko pokazatelja"
 #: gtk/gtkpaned.c:239
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr ""
-"Pozicija razdvojnika ploča u tačkama (0 označava skroz na levoj strani ili "
-"na vrhu)"
+msgstr "Položaj razdvojnika ploča u tačkama (0 označava skroz na levoj strani ili na vrhu)"
 
 #: gtk/gtkpaned.c:247
 msgid "Position Set"
-msgstr "Postavljena pozicija"
+msgstr "Položaj postavljen"
 
 #: gtk/gtkpaned.c:248
 msgid "TRUE if the Position property should be used"
-msgstr "Uključeno ukoliko treba koristiti osobinu za poziciju"
+msgstr "Uključeno ukoliko treba koristiti osobinu za položaj"
 
 #: gtk/gtkpaned.c:254
 msgid "Handle Size"
@@ -5531,13 +5535,13 @@ msgstr "Prazno"
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
-msgstr "GtkAdjustment koji određuje vrednost vodoravne pozicije ovog pogleda"
+msgstr "GtkAdjustment koji određuje vrednost vodoravnog položaja ovog pogleda"
 
 #: gtk/gtkviewport.c:143
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
-msgstr "GtkAdjustment koji određuje vrednost uspravne pozicije ovog pogleda"
+msgstr "GtkAdjustment koji određuje vrednost uspravnog položaja ovog pogleda"
 
 #: gtk/gtkviewport.c:151
 msgid "Determines how the shadowed box around the viewport is drawn"
@@ -5820,11 +5824,11 @@ msgstr ""
 
 #: gtk/gtkwindow.c:497
 msgid "Window Position"
-msgstr "Pozicija prozora"
+msgstr "Položaj prozora"
 
 #: gtk/gtkwindow.c:498
 msgid "The initial position of the window"
-msgstr "Početna pozicija prozora"
+msgstr "Početni položaj prozora"
 
 #: gtk/gtkwindow.c:506
 msgid "Default Width"
