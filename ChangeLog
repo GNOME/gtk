@@ -1,3 +1,10 @@
+Sun May 16 23:11:47 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Merged from 2.4:
+	
+	* gtk/gtkhruler.c (gtk_hruler_draw_ticks): Remove two useless 
+	lines.  (#142479, Morten Welinder)
+
 Sun May 16 22:27:17 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkintl.h (Q_): Add a Q_() macro. 
