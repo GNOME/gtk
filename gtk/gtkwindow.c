@@ -1099,7 +1099,6 @@ gtk_window_move_resize (GtkWindow *window)
        if ((x != -1) && (y != -1))
 	 gdk_window_move (widget->window, x, y);
        
-       gtk_window_draw(widget, NULL);
        gtk_container_resize_children (GTK_CONTAINER (window));
     }
 }
