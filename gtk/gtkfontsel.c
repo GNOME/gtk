@@ -279,6 +279,28 @@ static void gtk_font_selection_get_property (GObject         *object,
     }
 }
 
+/* Handles key press events on the lists, so that we can trap Enter to
+ * activate the default button on our own.
+ */
+static gboolean
+list_row_activated (GtkWidget *widget)
+{
+  GtkWindow *window;
+  
+  window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
+  if (!GTK_WIDGET_TOPLEVEL (window))
+    window = NULL;
+  
+  if (window
+      && widget != window->default_widget
+      && !(widget == window->focus_widget &&
+	   (!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
+    {
+      gtk_window_activate_default (window);
+    }
+  
+  return TRUE;
+}
 
 static void
 gtk_font_selection_init (GtkFontSelection *fontsel)
@@ -359,6 +381,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   fontsel->family_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
   g_object_unref (model);
 
+  g_signal_connect (fontsel->family_list, "row-activated",
+		    G_CALLBACK (list_row_activated), fontsel);
+
   column = gtk_tree_view_column_new_with_attributes ("Family",
 						     gtk_cell_renderer_text_new (),
 						     "text", FAMILY_NAME_COLUMN,
@@ -392,6 +417,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 			      G_TYPE_STRING); /* FACE_NAME_COLUMN */
   fontsel->face_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
   g_object_unref (model);
+  g_signal_connect (fontsel->face_list, "row-activated",
+		    G_CALLBACK (list_row_activated), fontsel);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (style_label), fontsel->face_list);
 
@@ -425,6 +452,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   model = gtk_list_store_new (1, G_TYPE_INT);
   fontsel->size_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
   g_object_unref (model);
+  g_signal_connect (fontsel->size_list, "row-activated",
+		    G_CALLBACK (list_row_activated), fontsel);
 
   column = gtk_tree_view_column_new_with_attributes ("Size",
 						     gtk_cell_renderer_text_new (),
@@ -958,7 +987,10 @@ gtk_font_selection_size_activate (GtkWidget   *w,
   text = gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry));
   new_size = MAX (0.1, atof (text) * PANGO_SCALE + 0.5);
 
-  gtk_font_selection_set_size (fontsel, new_size);
+  if (fontsel->size != new_size)
+    gtk_font_selection_set_size (fontsel, new_size);
+  else 
+    list_row_activated (w);
 }
 
 static gboolean
