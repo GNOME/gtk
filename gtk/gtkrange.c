@@ -49,7 +49,6 @@ static void gtk_range_get_arg		       (GtkObject        *object,
 						GtkArg           *arg,
 						guint             arg_id);
 static void gtk_range_destroy                  (GtkObject        *object);
-static void gtk_range_draw_focus               (GtkWidget        *widget);
 static void gtk_range_unrealize                (GtkWidget        *widget);
 static gint gtk_range_expose                   (GtkWidget        *widget,
 						GdkEventExpose   *event);
@@ -65,10 +64,6 @@ static gint gtk_range_enter_notify             (GtkWidget        *widget,
 						GdkEventCrossing *event);
 static gint gtk_range_leave_notify             (GtkWidget        *widget,
 						GdkEventCrossing *event);
-static gint gtk_range_focus_in                 (GtkWidget        *widget,
-						GdkEventFocus    *event);
-static gint gtk_range_focus_out                (GtkWidget        *widget,
-						GdkEventFocus    *event);
 static gint gtk_range_scroll_event             (GtkWidget        *widget,
 						GdkEventScroll   *event);
 static void gtk_range_style_set                 (GtkWidget       *widget,
@@ -138,7 +133,6 @@ gtk_range_class_init (GtkRangeClass *class)
   object_class->get_arg = gtk_range_get_arg;
   object_class->destroy = gtk_range_destroy;
 
-  widget_class->draw_focus = gtk_range_draw_focus;
   widget_class->unrealize = gtk_range_unrealize;
   widget_class->expose_event = gtk_range_expose;
   widget_class->button_press_event = gtk_range_button_press;
@@ -148,8 +142,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->key_press_event = gtk_range_key_press;
   widget_class->enter_notify_event = gtk_range_enter_notify;
   widget_class->leave_notify_event = gtk_range_leave_notify;
-  widget_class->focus_in_event = gtk_range_focus_in;
-  widget_class->focus_out_event = gtk_range_focus_out;
   widget_class->style_set = gtk_range_style_set;
 
   class->slider_width = 11;
@@ -798,16 +790,6 @@ gtk_range_destroy (GtkObject *object)
 }
 
 static void
-gtk_range_draw_focus (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_RANGE (widget));
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    _gtk_range_draw_trough (GTK_RANGE (widget));
-}
-
-static void
 gtk_range_unrealize (GtkWidget *widget)
 {
   GtkRange *range;
@@ -1268,32 +1250,6 @@ gtk_range_leave_notify (GtkWidget        *widget,
 	  (range->click_child == RANGE_CLASS (range)->trough))
 	_gtk_range_draw_step_back (range);
     }
-
-  return TRUE;
-}
-
-static gint
-gtk_range_focus_in (GtkWidget     *widget,
-		    GdkEventFocus *event)
-{
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-
-  return TRUE;
-}
-
-static gint
-gtk_range_focus_out (GtkWidget     *widget,
-		     GdkEventFocus *event)
-{
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
 
   return TRUE;
 }

@@ -72,8 +72,6 @@ static void gtk_button_size_allocate  (GtkWidget        *widget,
 				       GtkAllocation    *allocation);
 static void gtk_button_paint          (GtkWidget        *widget,
 				       GdkRectangle     *area);
-static void gtk_button_draw_focus     (GtkWidget        *widget);
-static void gtk_button_draw_default   (GtkWidget        *widget);
 static gint gtk_button_expose         (GtkWidget        *widget,
 				       GdkEventExpose   *event);
 static gint gtk_button_button_press   (GtkWidget        *widget,
@@ -84,10 +82,6 @@ static gint gtk_button_enter_notify   (GtkWidget        *widget,
 				       GdkEventCrossing *event);
 static gint gtk_button_leave_notify   (GtkWidget        *widget,
 				       GdkEventCrossing *event);
-static gint gtk_button_focus_in       (GtkWidget        *widget,
-				       GdkEventFocus    *event);
-static gint gtk_button_focus_out      (GtkWidget        *widget,
-				       GdkEventFocus    *event);
 static void gtk_button_add            (GtkContainer     *container,
 				       GtkWidget        *widget);
 static void gtk_button_remove         (GtkContainer     *container,
@@ -147,8 +141,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   object_class->get_arg = gtk_button_get_arg;
 
   widget_class->realize = gtk_button_realize;
-  widget_class->draw_focus = gtk_button_draw_focus;
-  widget_class->draw_default = gtk_button_draw_default;
   widget_class->size_request = gtk_button_size_request;
   widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->expose_event = gtk_button_expose;
@@ -156,8 +148,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->button_release_event = gtk_button_button_release;
   widget_class->enter_notify_event = gtk_button_enter_notify;
   widget_class->leave_notify_event = gtk_button_leave_notify;
-  widget_class->focus_in_event = gtk_button_focus_in;
-  widget_class->focus_out_event = gtk_button_focus_out;
 
   container_class->add = gtk_button_add;
   container_class->remove = gtk_button_remove;
@@ -690,18 +680,6 @@ gtk_button_paint (GtkWidget    *widget,
     }
 }
 
-static void
-gtk_button_draw_focus (GtkWidget *widget)
-{
-  gtk_widget_draw (widget, NULL);
-}
-
-static void
-gtk_button_draw_default (GtkWidget *widget)
-{
-  gtk_widget_draw (widget, NULL);
-}
-
 static gint
 gtk_button_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
@@ -815,34 +793,6 @@ gtk_button_leave_notify (GtkWidget        *widget,
       button->in_button = FALSE;
       gtk_button_leave (button);
     }
-
-  return FALSE;
-}
-
-static gint
-gtk_button_focus_in (GtkWidget     *widget,
-		     GdkEventFocus *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-
-  return FALSE;
-}
-
-static gint
-gtk_button_focus_out (GtkWidget     *widget,
-		      GdkEventFocus *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
 
   return FALSE;
 }

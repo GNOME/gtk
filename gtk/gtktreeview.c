@@ -289,7 +289,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->leave_notify_event = gtk_tree_view_leave_notify;
   widget_class->button_press_event = gtk_tree_view_button_press;
   widget_class->button_release_event = gtk_tree_view_button_release;
-  widget_class->draw_focus = gtk_tree_view_draw_focus;
   widget_class->focus_in_event = gtk_tree_view_focus_in;
   widget_class->focus_out_event = gtk_tree_view_focus_out;
 

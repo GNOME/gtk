@@ -553,7 +553,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->unrealize = gtk_text_unrealize;
   widget_class->style_set = gtk_text_style_set;
   widget_class->state_changed = gtk_text_state_changed;
-  widget_class->draw_focus = gtk_text_draw_focus;
   widget_class->size_request = gtk_text_size_request;
   widget_class->size_allocate = gtk_text_size_allocate;
   widget_class->expose_event = gtk_text_expose;
@@ -1692,7 +1691,7 @@ gtk_text_expose (GtkWidget      *widget,
   else if (event->count == 0)
     {
       TDEBUG (("in gtk_text_expose (focus)\n"));
-      gtk_widget_draw_focus (widget);
+      gtk_text_draw_focus (widget);
     }
   
   return FALSE;
@@ -2228,17 +2227,12 @@ gtk_text_focus_in (GtkWidget     *widget,
   
   TDEBUG (("in gtk_text_focus_in\n"));
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-  
 #ifdef USE_XIM
   if (GTK_OLD_EDITABLE (widget)->ic)
     gdk_im_begin (GTK_OLD_EDITABLE (widget)->ic, GTK_TEXT(widget)->text_area);
 #endif
   
-  draw_cursor (GTK_TEXT(widget), TRUE);
-  
-  return FALSE;
+  return (* GTK_WIDGET_CLASS (parent_class)->focus_in_event) (widget, event);
 }
 
 static gint
@@ -2251,16 +2245,11 @@ gtk_text_focus_out (GtkWidget     *widget,
   
   TDEBUG (("in gtk_text_focus_out\n"));
   
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-  
-  undraw_cursor (GTK_TEXT(widget), TRUE);
-  
 #ifdef USE_XIM
   gdk_im_end ();
 #endif
-  
-  return FALSE;
+
+  return (* GTK_WIDGET_CLASS (parent_class)->focus_out_event) (widget, event);
 }
 
 static void

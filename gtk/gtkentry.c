@@ -327,7 +327,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   widget_class->realize = gtk_entry_realize;
   widget_class->unrealize = gtk_entry_unrealize;
-  widget_class->draw_focus = gtk_entry_draw_focus;
   widget_class->size_request = gtk_entry_size_request;
   widget_class->size_allocate = gtk_entry_size_allocate;
   widget_class->expose_event = gtk_entry_expose;
@@ -1033,7 +1032,7 @@ gtk_entry_expose (GtkWidget      *widget,
   entry = GTK_ENTRY (widget);
 
   if (widget->window == event->window)
-    gtk_widget_draw_focus (widget);
+    gtk_entry_draw_focus (widget);
   else if (entry->text_area == event->window)
     {
       gtk_entry_draw_text (GTK_ENTRY (widget));
@@ -1246,7 +1245,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
+  gtk_entry_draw_focus (widget);
   gtk_entry_queue_draw (GTK_ENTRY (widget));
   
   GTK_ENTRY (widget)->need_im_reset = TRUE;
@@ -1264,7 +1263,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
+  gtk_entry_draw_focus (widget);
   gtk_entry_queue_draw (GTK_ENTRY (widget));
 
   GTK_ENTRY (widget)->need_im_reset = TRUE;

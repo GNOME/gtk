@@ -523,7 +523,6 @@ gtk_clist_class_init (GtkCListClass *klass)
   widget_class->size_allocate = gtk_clist_size_allocate;
   widget_class->focus_in_event = gtk_clist_focus_in;
   widget_class->focus_out_event = gtk_clist_focus_out;
-  widget_class->draw_focus = gtk_clist_draw_focus;
   widget_class->style_set = gtk_clist_style_set;
   widget_class->drag_begin = gtk_clist_drag_begin;
   widget_class->drag_end = gtk_clist_drag_end;
@@ -6637,10 +6636,10 @@ gtk_clist_focus_in (GtkWidget     *widget,
 	gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
 			 clist->focus_row, -1, event);
       else
-	gtk_widget_draw_focus (widget);
+	gtk_clist_draw_focus (widget);
     }
   else
-    gtk_widget_draw_focus (widget);
+    gtk_clist_draw_focus (widget);
 
   return FALSE;
 }
@@ -6657,7 +6656,7 @@ gtk_clist_focus_out (GtkWidget     *widget,
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
 
-  gtk_widget_draw_focus (widget);
+  gtk_clist_draw_focus (widget);
   
   clist = GTK_CLIST (widget);
 

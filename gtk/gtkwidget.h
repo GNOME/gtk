@@ -242,8 +242,6 @@ struct _GtkWidgetClass
   void (* unmap)	       (GtkWidget        *widget);
   void (* realize)	       (GtkWidget        *widget);
   void (* unrealize)	       (GtkWidget        *widget);
-  void (* draw_focus)	       (GtkWidget        *widget);
-  void (* draw_default)	       (GtkWidget        *widget);
   void (* size_request)	       (GtkWidget        *widget,
 				GtkRequisition   *requisition);
   void (* size_allocate)       (GtkWidget        *widget,
@@ -443,8 +441,6 @@ void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_draw		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area);
 #endif /* GTK_DISABLE_DEPRECATED */
-void	   gtk_widget_draw_focus	  (GtkWidget	       *widget);
-void	   gtk_widget_draw_default	  (GtkWidget	       *widget);
 void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,

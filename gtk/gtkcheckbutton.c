@@ -34,7 +34,6 @@
 
 static void gtk_check_button_class_init          (GtkCheckButtonClass *klass);
 static void gtk_check_button_init                (GtkCheckButton      *check_button);
-static void gtk_check_button_draw_focus          (GtkWidget           *widget);
 static void gtk_check_button_size_request        (GtkWidget           *widget,
 						  GtkRequisition      *requisition);
 static void gtk_check_button_size_allocate       (GtkWidget           *widget,
@@ -84,7 +83,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   widget_class = (GtkWidgetClass*) class;
   parent_class = gtk_type_class (gtk_toggle_button_get_type ());
   
-  widget_class->draw_focus = gtk_check_button_draw_focus;
   widget_class->size_request = gtk_check_button_size_request;
   widget_class->size_allocate = gtk_check_button_size_allocate;
   widget_class->expose_event = gtk_check_button_expose;
@@ -154,22 +152,6 @@ gtk_check_button_paint (GtkWidget    *widget,
 			 widget->allocation.width - 2 * border_width - 1,
 			 widget->allocation.height - 2 * border_width - 1);
     }
-}
-
-static void
-gtk_check_button_draw_focus (GtkWidget *widget)
-{
-  gint border_width;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
-  
-  border_width = GTK_CONTAINER (widget)->border_width;
-  gtk_widget_queue_clear_area (widget->parent, 
-			       border_width + widget->allocation.x,
-			       border_width + widget->allocation.y,
-			       widget->allocation.width - 2 * border_width,
-			       widget->allocation.height - 2 * border_width);
 }
 
 static void

@@ -52,8 +52,6 @@ enum {
   UNMAP,
   REALIZE,
   UNREALIZE,
-  DRAW_FOCUS,
-  DRAW_DEFAULT,
   SIZE_REQUEST,
   SIZE_ALLOCATE,
   STATE_CHANGED,
@@ -161,6 +159,10 @@ static gint gtk_widget_real_key_press_event      (GtkWidget         *widget,
 						  GdkEventKey       *event);
 static gint gtk_widget_real_key_release_event    (GtkWidget         *widget,
 						  GdkEventKey       *event);
+static gint gtk_widget_real_focus_in_event       (GtkWidget         *widget,
+                                                  GdkEventFocus     *event);
+static gint gtk_widget_real_focus_out_event      (GtkWidget         *widget,
+                                                  GdkEventFocus     *event);
 static void gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
 static void gtk_widget_direction_changed	 (GtkWidget	    *widget,
@@ -289,7 +291,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unmap = gtk_widget_real_unmap;
   klass->realize = gtk_widget_real_realize;
   klass->unrealize = gtk_widget_real_unrealize;
-  klass->draw_focus = NULL;
   klass->size_request = gtk_widget_real_size_request;
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->state_changed = NULL;
@@ -311,8 +312,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->enter_notify_event = NULL;
   klass->leave_notify_event = NULL;
   klass->configure_event = NULL;
-  klass->focus_in_event = NULL;
-  klass->focus_out_event = NULL;
+  klass->focus_in_event = gtk_widget_real_focus_in_event;
+  klass->focus_out_event = gtk_widget_real_focus_out_event;
   klass->map_event = NULL;
   klass->unmap_event = NULL;
   klass->window_state_event = NULL;
@@ -394,20 +395,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unrealize),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[DRAW_FOCUS] =
-    gtk_signal_new ("draw_focus",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw_focus),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[DRAW_DEFAULT] =
-    gtk_signal_new ("draw_default",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw_default),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[SIZE_REQUEST] =
@@ -1881,45 +1868,6 @@ gtk_widget_draw (GtkWidget    *widget,
 }
 
 /**
- * gtk_widget_draw_focus:
- * @widget: a #GtkWidget
- *
- * This function is only for use in widget implementations. Invokes the
- * "draw_focus" virtual method/signal on @widget, causing the focus
- * rectangle to be drawn or undrawn according to the focus state of
- * the widget. Normally called from widget implementations in the
- * "focus_in_event" and "focus_out_event" handlers.
- * 
- **/
-void
-gtk_widget_draw_focus (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW_FOCUS]);
-}
-
-/**
- * gtk_widget_draw_default:
- * @widget: a #GtkWidget
- * 
- * This function is only for use in widget implementations. Invokes the
- * "draw_default" virtual method/signal on a widget, causing it to
- * draw the default rectangle (indicating that the widget is
- * the default widget, i.e. the one that's activated by pressing
- * the enter key, generally).
- **/
-void
-gtk_widget_draw_default (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW_DEFAULT]);
-}
-
-/**
  * gtk_widget_size_request:
  * @widget: a #GtkWidget
  * @requisition: a #GtkRequisition to be filled in
@@ -2260,6 +2208,26 @@ gtk_widget_real_key_release_event (GtkWidget         *widget,
 				     event->state | GDK_RELEASE_MASK);
 
   return handled;
+}
+
+static gint
+gtk_widget_real_focus_in_event (GtkWidget     *widget,
+                                GdkEventFocus *event)
+{
+  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
+  gtk_widget_queue_draw (widget);
+
+  return FALSE;
+}
+
+static gint
+gtk_widget_real_focus_out_event (GtkWidget     *widget,
+                                 GdkEventFocus *event)
+{
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+  gtk_widget_queue_draw (widget);
+
+  return FALSE;
 }
 
 /**

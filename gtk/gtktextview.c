@@ -462,7 +462,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
   widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->expose_event = gtk_text_view_expose_event;
-  widget_class->draw_focus = gtk_text_view_draw_focus;
 
   widget_class->drag_begin = gtk_text_view_drag_begin;
   widget_class->drag_end = gtk_text_view_drag_end;
@@ -3160,7 +3159,7 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
+  gtk_widget_queue_draw (widget);
 
   if (text_view->cursor_visible && text_view->layout)
     {
@@ -3180,7 +3179,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
+  gtk_widget_queue_draw (widget);
 
   if (text_view->cursor_visible && text_view->layout)
     {
@@ -3291,7 +3290,7 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
     }
 
   if (event->window == widget->window)
-    gtk_widget_draw_focus (widget);
+    gtk_text_view_draw_focus (widget);
 
   return TRUE;
 }

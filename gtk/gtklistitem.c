@@ -56,15 +56,10 @@ static void gtk_list_item_size_allocate     (GtkWidget        *widget,
 					     GtkAllocation    *allocation);
 static void gtk_list_item_style_set         (GtkWidget        *widget,
 					     GtkStyle         *previous_style);
-static void gtk_list_item_draw_focus        (GtkWidget        *widget);
 static gint gtk_list_item_button_press      (GtkWidget        *widget,
 					     GdkEventButton   *event);
 static gint gtk_list_item_expose            (GtkWidget        *widget,
 					     GdkEventExpose   *event);
-static gint gtk_list_item_focus_in          (GtkWidget        *widget,
-					     GdkEventFocus    *event);
-static gint gtk_list_item_focus_out         (GtkWidget        *widget,
-					     GdkEventFocus    *event);
 static void gtk_real_list_item_select       (GtkItem          *item);
 static void gtk_real_list_item_deselect     (GtkItem          *item);
 static void gtk_real_list_item_toggle       (GtkItem          *item);
@@ -117,11 +112,8 @@ gtk_list_item_class_init (GtkListItemClass *class)
   widget_class->size_request = gtk_list_item_size_request;
   widget_class->size_allocate = gtk_list_item_size_allocate;
   widget_class->style_set = gtk_list_item_style_set;
-  widget_class->draw_focus = gtk_list_item_draw_focus;
   widget_class->button_press_event = gtk_list_item_button_press;
   widget_class->expose_event = gtk_list_item_expose;
-  widget_class->focus_in_event = gtk_list_item_focus_in;
-  widget_class->focus_out_event = gtk_list_item_focus_out;
 
   item_class->select = gtk_real_list_item_select;
   item_class->deselect = gtk_real_list_item_deselect;
@@ -450,15 +442,6 @@ gtk_list_item_style_set	(GtkWidget      *widget,
     gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
 }
 
-static void
-gtk_list_item_draw_focus (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_LIST_ITEM (widget));
-  
-  gtk_widget_draw(widget, NULL);
-}
-
 static gint
 gtk_list_item_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
@@ -527,34 +510,6 @@ gtk_list_item_expose (GtkWidget      *widget,
                              widget->allocation.height - 1);
         }
     }
-
-  return FALSE;
-}
-
-static gint
-gtk_list_item_focus_in (GtkWidget     *widget,
-			GdkEventFocus *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_LIST_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-
-  return FALSE;
-}
-
-static gint
-gtk_list_item_focus_out (GtkWidget     *widget,
-			 GdkEventFocus *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_LIST_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
 
   return FALSE;
 }

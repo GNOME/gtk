@@ -1,3 +1,23 @@
+2001-02-28  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkwidget.h (struct _GtkWidgetClass): Remove draw_focus and
+	draw_default
+	(gtk_widget_draw_focus): remove this function; we could instead
+	make it just gtk_widget_draw(), but in most cases I think the
+	result would be broken user code, so think it's better to have
+	that code not compile and get fixed
+	(gtk_widget_draw_default): ditto
+
+	* gtk/gtkwidget.c: Add default handlers for focus_in_event and
+	focus_out_event that set/unset GTK_HAS_FOCUS and call queue_draw
+	
+	* gtk/gtkwindow.c (gtk_window_set_default): just queue a draw when
+	widgets lose/get the default, instead of calling draw_default
+	
+	* docs/Changes-2.0.txt: note about all this
+
+	Then fixed every widget in GTK, I won't list all the filenames.
+
 Tue Feb 27 19:32:53 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (deleted_callback): Proxy out to

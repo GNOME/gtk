@@ -284,10 +284,6 @@ static gint gtk_calendar_leave_notify	(GtkWidget *widget,
 					 GdkEventCrossing *event);
 static gint gtk_calendar_key_press	(GtkWidget	   *widget,
 					 GdkEventKey	   *event);
-static gint gtk_calendar_focus_in	(GtkWidget *widget,
-					 GdkEventFocus *event);
-static gint gtk_calendar_focus_out	(GtkWidget *widget,
-					 GdkEventFocus *event);
 static void gtk_calendar_state_changed	(GtkWidget *widget,
 					 GtkStateType previous_state);
 static void gtk_calendar_style_set	(GtkWidget *widget,
@@ -358,7 +354,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->realize = gtk_calendar_realize;
   widget_class->unrealize = gtk_calendar_unrealize;
   widget_class->expose_event = gtk_calendar_expose;
-  widget_class->draw_focus = gtk_calendar_draw_focus;
   widget_class->size_request = gtk_calendar_size_request;
   widget_class->size_allocate = gtk_calendar_size_allocate;
   widget_class->button_press_event = gtk_calendar_button_press;
@@ -366,8 +361,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->enter_notify_event = gtk_calendar_enter_notify;
   widget_class->leave_notify_event = gtk_calendar_leave_notify;
   widget_class->key_press_event = gtk_calendar_key_press;
-  widget_class->focus_in_event = gtk_calendar_focus_in;
-  widget_class->focus_out_event = gtk_calendar_focus_out;
   widget_class->style_set = gtk_calendar_style_set;
   widget_class->state_changed = gtk_calendar_state_changed;
   
@@ -1484,7 +1477,7 @@ gtk_calendar_expose (GtkWidget	    *widget,
       if (event->window == private_data->week_win)
 	gtk_calendar_paint_week_numbers (widget);
       if (event->window == widget->window)
-	gtk_widget_draw_focus (widget);
+	gtk_calendar_draw_focus (widget);
     }
   
   return FALSE;
@@ -1516,7 +1509,7 @@ gtk_calendar_paint (GtkWidget	 *widget,
   if (private_data->week_win != NULL)
     gtk_calendar_paint_week_numbers (widget);
   
-  gtk_widget_draw_focus (widget);
+  gtk_calendar_draw_focus (widget);
 }
 
 static void
@@ -2622,25 +2615,6 @@ gtk_calendar_state_changed (GtkWidget	   *widget,
   gtk_calendar_set_background (widget);
 }
 
-static gint
-gtk_calendar_focus_in (GtkWidget	 *widget,
-		       GdkEventFocus	 *event)
-{
-  GtkCalendar *calendar;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CALENDAR (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  calendar = GTK_CALENDAR (widget);
-  
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-  gtk_calendar_paint_day (widget, calendar->focus_row, calendar->focus_col);
-  
-  return FALSE;
-}
-
 static void
 gtk_calendar_destroy (GtkObject *object)
 {
@@ -2649,25 +2623,6 @@ gtk_calendar_destroy (GtkObject *object)
   g_free (private_data);
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
-
-static gint
-gtk_calendar_focus_out (GtkWidget	  *widget,
-			GdkEventFocus	  *event)
-{
-  GtkCalendar *calendar;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CALENDAR (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  calendar = GTK_CALENDAR (widget);
-  
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-  gtk_calendar_paint_day (widget, calendar->focus_row, calendar->focus_col);
-  
-  return FALSE;
 }
 
 static gint

@@ -296,3 +296,14 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
 - GdkColorContext is gone; you probably weren't using it anyway.
   Use GdkColormap and the gdk_rgb_* functions instead.
+
+- The draw_default and draw_focus methods/signals on GtkWidget are
+  gone; simply draw things in your expose handler. 
+  gtk_widget_draw_focus() and gtk_widget_draw_default() wrapper
+  functions are also gone; just queue a draw on the widget,  
+  or the part affected by the focus/default anyway.
+
+  Also, GtkWidget now has default implementations for focus_in_event
+  and focus_out_event. These set/unset GTK_HAS_FOCUS, and queue a
+  draw. So if your focus in/out handler just does that, you can delete
+  it.

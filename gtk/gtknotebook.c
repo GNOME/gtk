@@ -143,8 +143,6 @@ static gint gtk_notebook_key_press           (GtkWidget        *widget,
 					      GdkEventKey      *event);
 static gint gtk_notebook_focus_in            (GtkWidget        *widget,
 					      GdkEventFocus    *event);
-static gint gtk_notebook_focus_out           (GtkWidget        *widget,
-					      GdkEventFocus    *event);
 static void gtk_notebook_draw_focus          (GtkWidget        *widget);
 static void gtk_notebook_style_set           (GtkWidget        *widget,
 					      GtkStyle         *previous_style);
@@ -299,8 +297,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->motion_notify_event = gtk_notebook_motion_notify;
   widget_class->key_press_event = gtk_notebook_key_press;
   widget_class->focus_in_event = gtk_notebook_focus_in;
-  widget_class->focus_out_event = gtk_notebook_focus_out;
-  widget_class->draw_focus = gtk_notebook_draw_focus;
   widget_class->style_set = gtk_notebook_style_set;
    
   container_class->add = gtk_notebook_add;
@@ -979,7 +975,7 @@ gtk_notebook_expose (GtkWidget      *widget,
 	  if (notebook->cur_page && 
 	      gtk_widget_intersect (notebook->cur_page->tab_label, 
 				    &event->area, &child_area))
-	    gtk_widget_draw_focus (widget);
+	    gtk_notebook_draw_focus (widget);
 	}
 
       child_event = *event;
@@ -1278,24 +1274,8 @@ gtk_notebook_focus_in (GtkWidget     *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   GTK_NOTEBOOK (widget)->child_has_focus = FALSE;
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
 
-  return FALSE;
-}
-
-static gint
-gtk_notebook_focus_out (GtkWidget     *widget,
-			GdkEventFocus *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-
-  return FALSE;
+  return (* GTK_WIDGET_CLASS (parent_class)->focus_in_event) (widget, event);
 }
 
 static void

@@ -65,17 +65,12 @@ static void gtk_tree_item_size_request  (GtkWidget        *widget,
 					 GtkRequisition   *requisition);
 static void gtk_tree_item_size_allocate (GtkWidget        *widget,
 					 GtkAllocation    *allocation);
-static void gtk_tree_item_draw_focus    (GtkWidget        *widget);
 static void gtk_tree_item_paint         (GtkWidget        *widget,
 					 GdkRectangle     *area);
 static gint gtk_tree_item_button_press  (GtkWidget        *widget,
 					 GdkEventButton   *event);
 static gint gtk_tree_item_expose        (GtkWidget        *widget,
 					 GdkEventExpose   *event);
-static gint gtk_tree_item_focus_in      (GtkWidget        *widget,
-					 GdkEventFocus    *event);
-static gint gtk_tree_item_focus_out     (GtkWidget        *widget,
-					 GdkEventFocus    *event);
 static void gtk_tree_item_forall        (GtkContainer    *container,
 					 gboolean         include_internals,
 					 GtkCallback      callback,
@@ -146,11 +141,8 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
   widget_class->realize = gtk_tree_item_realize;
   widget_class->size_request = gtk_tree_item_size_request;
   widget_class->size_allocate = gtk_tree_item_size_allocate;
-  widget_class->draw_focus = gtk_tree_item_draw_focus;
   widget_class->button_press_event = gtk_tree_item_button_press;
   widget_class->expose_event = gtk_tree_item_expose;
-  widget_class->focus_in_event = gtk_tree_item_focus_in;
-  widget_class->focus_out_event = gtk_tree_item_focus_out;
   widget_class->map = gtk_tree_item_map;
   widget_class->unmap = gtk_tree_item_unmap;
 
@@ -703,15 +695,6 @@ gtk_tree_item_paint (GtkWidget    *widget,
     }
 }
 
-static void
-gtk_tree_item_draw_focus (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
-
-  gtk_widget_draw(widget, NULL);
-}
-
 static gint
 gtk_tree_item_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
@@ -751,36 +734,6 @@ gtk_tree_item_expose (GtkWidget      *widget,
 	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
    }
-
-  return FALSE;
-}
-
-static gint
-gtk_tree_item_focus_in (GtkWidget     *widget,
-			GdkEventFocus *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_TREE_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-
-
-  return FALSE;
-}
-
-static gint
-gtk_tree_item_focus_out (GtkWidget     *widget,
-			 GdkEventFocus *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_TREE_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_widget_draw_focus (widget);
-
 
   return FALSE;
 }

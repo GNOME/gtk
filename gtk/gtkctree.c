@@ -5781,9 +5781,8 @@ real_undo_selection (GtkCList *clist)
 
   if (GTK_WIDGET_HAS_FOCUS (clist) && clist->focus_row != clist->undo_anchor)
     {
-      gtk_widget_draw_focus (GTK_WIDGET (clist));
       clist->focus_row = clist->undo_anchor;
-      gtk_widget_draw_focus (GTK_WIDGET (clist));
+      gtk_widget_queue_draw (GTK_WIDGET (clist));
     }
   else
     clist->focus_row = clist->undo_anchor;
