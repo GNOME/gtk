@@ -685,11 +685,17 @@ gtk_main_do_event (GdkEvent *event)
       break;
       
     case GDK_DESTROY:
-      gtk_widget_ref (event_widget);
-      gtk_widget_event (event_widget, event);
-      if (!GTK_OBJECT_DESTROYED (event_widget))
-	gtk_widget_destroy (event_widget);
-      gtk_widget_unref (event_widget);
+      /* Unexpected GDK_DESTROY from the outside, ignore for
+       * child windows, handle like a GDK_DELETE for toplevels
+       */
+      if (!event_widget->parent)
+	{
+	  gtk_widget_ref (event_widget);
+	  if (!gtk_widget_event (event_widget, event) &&
+	      !GTK_OBJECT_DESTROYED (event_widget))
+	    gtk_widget_destroy (event_widget);
+	  gtk_widget_unref (event_widget);
+	}
       break;
       
     case GDK_PROPERTY_NOTIFY:

@@ -1,3 +1,17 @@
+Thu Sep  2 16:33:59 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c: When we receive an unexpected
+	destroy notify on one of our windows, don't just
+	warn about it, also mark our windows as destroyed.
+
+	* gtk/gtkmain.c: Ignore unexpected destroy notifies
+	for children, for toplevel windows handle them
+	like delete_event.
+
+	* gtk/gtkplug.c: Add an unrealize handler so that
+	we unref plug->socket_window when we are done
+	with it.
+
 Fri Sep  3 14:52:54 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (clear_area): Fix stupid signedness
