@@ -4,7 +4,7 @@ gcc2_compiled.:
 .text
 	.align 16
 
-#ifndef __MINGW32__
+#if !defined(__MINGW32__) && !defined(__CYGWIN__)	
 	
 .globl pixops_scale_line_22_33_mmx
 	.type	 pixops_scale_line_22_33_mmx,@function

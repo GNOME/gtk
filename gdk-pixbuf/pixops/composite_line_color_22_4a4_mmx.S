@@ -4,7 +4,7 @@ gcc2_compiled.:
 .text
 	.align 16
 
-#ifndef __MINGW32__
+#if !defined(__MINGW32__) && !defined(__CYGWIN__)	
 
 .globl pixops_composite_line_color_22_4a4_mmx
 	.type	 pixops_composite_line_color_22_4a4_mmx,@function
