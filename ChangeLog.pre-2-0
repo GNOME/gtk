@@ -1,3 +1,60 @@
+Tue Mar 16 17:43:33 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc_string): ensure the
+	item factory class has been created.
+	(gtk_item_factory_parse_rc): likewise.
+
+	* gtk/gtkmenu.c:
+	keep proper references for old_active_menu_item.
+	(gtk_menu_reparent): unset the usize of the new parent,
+	so the menu can sanely be size requested and we don't get nasty screen
+	artefacts upon next reparentation.
+	(gtk_menu_motion_notify): set send_event to TRUE if we synthesize an
+	enter notify. only synthesize enter notifies if the pointer really is
+	inside the event window.
+	(gtk_menu_popdown): use gtk_menu_shell_deselect().
+	(gtk_menu_popup): move the background setting stuff into
+	gtk_menu_tearoff_bg_copy() so it can be called from other places as well.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_press): use
+	gtk_menu_shell_select_item() to select the new item.
+	(gtk_menu_shell_deselect): export this function, so gtkmenu.c can
+	do the right thing for deselection as well.
+
+Sat Mar 15 20:10:33 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.[hc]:
+	(gtk_widget_accelerators_locked): return whether a widget's accelerators
+	are locked.
+
+        * gtk/gtkmenu.c (gtk_menu_key_press): don't remove or install new or
+	existing accelerators if the widget's accelerators are locked.
+
+Sat Mar 14 19:44:05 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.[hc]: allow managing of foreign menu items.
+
+	* gtk/gtkmenu.c: truely forward key press and key release events to
+	the menu widget from the toplevel or tearoff window. we can't simply
+	connect to that, we need to stop further processing of the events as
+	well.
+
+Sat Mar 13 13:14:17 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenu.c:
+	(gtk_menu_key_press): pass event->keyval, event->state to
+	gtk_accelerator_valid, instead of event->keyval twice.
+	refuse to install single letter accelerators for menus that use
+	single letter shortcuts.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_create_item): use
+	gtk_menu_ensure_uline_accel_group().
+
+	* gtk/gtkmenu.[hc]: added gtk_menu_ensure_uline_accel_group()
+	which will always return an uline accel group, made
+	gtk_menu_get_uline_accel_group() return NULL if the group isn't
+	yet created.
+
 Mon Mar 15 01:03:27 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.h (struct _GtkCListColumn): added button_passive flag.

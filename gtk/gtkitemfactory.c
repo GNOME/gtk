@@ -88,6 +88,7 @@ static GQuark		 quark_if_menu_pos = 0;
 static GQuark		 quark_item_factory = 0;
 static GQuark		 quark_item_path = 0;
 static GQuark		 quark_action = 0;
+static GQuark		 quark_accel_group = 0;
 static GQuark		 quark_type_item = 0;
 static GQuark		 quark_type_title = 0;
 static GQuark		 quark_type_radio_item = 0;
@@ -183,6 +184,7 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
   class->cpair_comment_single = g_strdup (";\n");
 
   class->item_ht = g_hash_table_new (g_str_hash, g_str_equal);
+  class->dummy = NULL;
   ifactory_item_chunks =
     g_mem_chunk_new ("GtkItemFactoryItem",
 		     sizeof (GtkItemFactoryItem),
@@ -199,6 +201,7 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
   quark_item_factory		= g_quark_from_static_string ("GtkItemFactory");
   quark_item_path		= g_quark_from_static_string ("GtkItemFactory-path");
   quark_action			= g_quark_from_static_string ("GtkItemFactory-action");
+  quark_accel_group		= g_quark_from_static_string ("GtkAccelGroup");
   quark_type_item		= g_quark_from_static_string ("<Item>");
   quark_type_title		= g_quark_from_static_string ("<Title>");
   quark_type_radio_item		= g_quark_from_static_string ("<RadioItem>");
@@ -287,50 +290,48 @@ gtk_item_factory_propagate_accelerator (GtkItemFactoryItem *item,
   for (slist = widget_list; slist; slist = slist->next)
     {
       GtkWidget *widget;
-      GtkItemFactory *ifactory;
+      GtkAccelGroup *accel_group;
+      guint signal_id;
       
       widget = slist->data;
       
-      ifactory = gtk_item_factory_from_widget (widget);
+      accel_group = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_accel_group);
       
-      if (ifactory)
+      signal_id = gtk_signal_lookup ("activate", GTK_OBJECT_TYPE (widget));
+      if (signal_id && accel_group)
 	{
-	  guint signal_id;
-	  
-	  signal_id = gtk_signal_lookup ("activate", GTK_OBJECT_TYPE (widget));
-	  if (signal_id)
+	  if (item->accelerator_key)
+	    gtk_widget_add_accelerator (widget,
+					"activate",
+					accel_group,
+					item->accelerator_key,
+					item->accelerator_mods,
+					GTK_ACCEL_VISIBLE);
+	  else
 	    {
-	      if (item->accelerator_key)
-		gtk_widget_add_accelerator (widget,
-					    "activate",
-					    ifactory->accel_group,
-					    item->accelerator_key,
-					    item->accelerator_mods,
-					    GTK_ACCEL_VISIBLE);
-	      else
+	      GSList *work;
+	      
+	      work = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
+	      while (work)
 		{
-		  GSList *work;
+		  GtkAccelEntry *ac_entry;
 		  
-		  work = gtk_accel_group_entries_from_object (GTK_OBJECT (widget));
-		  while (work)
-		    {
-		      GtkAccelEntry *ac_entry;
-		      
-		      ac_entry = work->data;
-		      work = work->next;
-		      if (ac_entry->accel_flags & GTK_ACCEL_VISIBLE &&
-			  ac_entry->accel_group == ifactory->accel_group &&
-			  ac_entry->signal_id == signal_id)
-			gtk_widget_remove_accelerator (GTK_WIDGET (widget),
-						       ac_entry->accel_group,
-						       ac_entry->accelerator_key,
-						       ac_entry->accelerator_mods);
-		    }
+		  ac_entry = work->data;
+		  work = work->next;
+		  if (ac_entry->accel_flags & GTK_ACCEL_VISIBLE &&
+		      ac_entry->accel_group == accel_group &&
+		      ac_entry->signal_id == signal_id)
+		    gtk_widget_remove_accelerator (GTK_WIDGET (widget),
+						   ac_entry->accel_group,
+						   ac_entry->accelerator_key,
+						   ac_entry->accelerator_mods);
 		}
 	    }
 	}
+
       gtk_widget_unref (widget);
     }
+  
   g_slist_free (widget_list);
   
   item->in_propagation = FALSE;
@@ -388,6 +389,89 @@ gtk_item_factory_item_remove_widget (GtkWidget		*widget,
   gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_item_path);
 }
 
+void
+gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
+			      const gchar    *full_path,
+			      GtkAccelGroup  *accel_group,
+			      guint           keyval,
+			      GdkModifierType modifiers)
+{
+  GtkItemFactoryClass *class;
+  GtkItemFactoryItem *item;
+
+  g_return_if_fail (GTK_IS_WIDGET (accel_widget));
+  g_return_if_fail (full_path != NULL);
+
+  class = gtk_type_class (GTK_TYPE_ITEM_FACTORY);
+
+  keyval = keyval != GDK_VoidSymbol ? keyval : 0;
+
+  item = g_hash_table_lookup (class->item_ht, full_path);
+  if (!item)
+    {
+      item = g_chunk_new (GtkItemFactoryItem, ifactory_item_chunks);
+
+      item->path = g_strdup (full_path);
+      item->accelerator_key = keyval;
+      item->accelerator_mods = modifiers;
+      item->modified = FALSE;
+      item->in_propagation = FALSE;
+      item->dummy = NULL;
+      item->widgets = NULL;
+      
+      g_hash_table_insert (class->item_ht, item->path, item);
+    }
+
+  item->widgets = g_slist_prepend (item->widgets, accel_widget);
+  gtk_signal_connect (GTK_OBJECT (accel_widget),
+		      "destroy",
+		      GTK_SIGNAL_FUNC (gtk_item_factory_item_remove_widget),
+		      item);
+
+  /* set the item path for the widget
+   */
+  gtk_object_set_data_by_id (GTK_OBJECT (accel_widget), quark_item_path, item->path);
+  gtk_widget_set_name (accel_widget, item->path);
+  if (accel_group)
+    {
+      gtk_accel_group_ref (accel_group);
+      gtk_object_set_data_by_id_full (GTK_OBJECT (accel_widget),
+				      quark_accel_group,
+				      accel_group,
+				      (GtkDestroyNotify) gtk_accel_group_unref);
+    }
+  else
+    gtk_object_set_data_by_id (GTK_OBJECT (accel_widget), quark_accel_group, NULL);
+
+  /* install defined accelerators
+   */
+  if (gtk_signal_lookup ("activate", GTK_OBJECT_TYPE (accel_widget)))
+    {
+      if (item->accelerator_key && accel_group)
+	gtk_widget_add_accelerator (accel_widget,
+				    "activate",
+				    accel_group,
+				    item->accelerator_key,
+				    item->accelerator_mods,
+				    GTK_ACCEL_VISIBLE);
+      else
+	gtk_widget_remove_accelerators (accel_widget,
+					"activate",
+					TRUE);
+    }
+
+  /* keep track of accelerator changes
+   */
+  gtk_signal_connect_after (GTK_OBJECT (accel_widget),
+			    "add-accelerator",
+			    GTK_SIGNAL_FUNC (gtk_item_factory_item_add_accelerator),
+			    item);
+  gtk_signal_connect_after (GTK_OBJECT (accel_widget),
+			    "remove-accelerator",
+			    GTK_SIGNAL_FUNC (gtk_item_factory_item_remove_accelerator),
+			    item);
+}
+
 static void
 ifactory_cb_data_free (gpointer mem)
 {
@@ -408,105 +492,17 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
   GtkItemFactoryClass *class;
   GtkItemFactoryItem *item;
   gchar *fpath;
+  guint keyval, mods;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (item_type != NULL);
 
   class = GTK_ITEM_FACTORY_CLASS (GTK_OBJECT (ifactory)->klass);
 
-  fpath = g_strconcat (ifactory->path, path, NULL);
-  item = g_hash_table_lookup (class->item_ht, fpath);
-
-  /* link the widget into its item-entry
-   */
-  if (!item)
-    {
-      guint keyval;
-      guint mods;
-
-      if (accelerator)
-	gtk_accelerator_parse (accelerator, &keyval, &mods);
-      else
-	{
-	  keyval = 0;
-	  mods = 0;
-	}
-
-      item = g_chunk_new (GtkItemFactoryItem, ifactory_item_chunks);
-
-      item->path = fpath;
-      fpath = NULL;
-      item->accelerator_key = keyval;
-      item->accelerator_mods = mods;
-      item->modified = FALSE;
-      item->in_propagation = FALSE;
-      item->item_type = NULL;
-      item->widgets = NULL;
-      
-      g_hash_table_insert (class->item_ht, item->path, item);
-    }
-  g_free (fpath);
-
-  if (item->item_type == NULL)
-    {
-      g_assert (item->widgets == NULL);
-      
-      if (item_type != ITEM_FACTORY_STRING)
-	item->item_type = g_strdup (item_type);
-      else
-	item->item_type = ITEM_FACTORY_STRING;
-    }
-
-  item->widgets = g_slist_prepend (item->widgets, widget);
-  gtk_signal_connect (GTK_OBJECT (widget),
-		      "destroy",
-		      GTK_SIGNAL_FUNC (gtk_item_factory_item_remove_widget),
-		      item);
-
-  /* asure the factory knows about the corresponding items
-   */
-  if (!g_slist_find (ifactory->items, item))
-    ifactory->items = g_slist_prepend (ifactory->items, item);
-
-  /* set back pointers for the widget
-   */
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_item_factory, ifactory);
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_item_path, item->path);
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_action, GUINT_TO_POINTER (callback_action));
-  gtk_widget_set_name (widget, item->path);
-
   /* set accelerator group on menu widgets
    */
   if (GTK_IS_MENU (widget))
     gtk_menu_set_accel_group ((GtkMenu*) widget, ifactory->accel_group);
-
-  /* install defined accelerators
-   */
-  if (gtk_signal_lookup ("activate", GTK_OBJECT_TYPE (widget)))
-    {
-      if (item->accelerator_key)
-	gtk_widget_add_accelerator (widget,
-				    "activate",
-				    ifactory->accel_group,
-				    item->accelerator_key,
-				    item->accelerator_mods,
-				    GTK_ACCEL_VISIBLE);
-      else
-	gtk_widget_remove_accelerators (widget,
-					"activate",
-					TRUE);
-    }
-
-  /* keep track of accelerator changes
-   */
-  gtk_signal_connect_after (GTK_OBJECT (widget),
-			    "add-accelerator",
-			    GTK_SIGNAL_FUNC (gtk_item_factory_item_add_accelerator),
-			    item);
-  gtk_signal_connect_after (GTK_OBJECT (widget),
-			    "remove-accelerator",
-			    GTK_SIGNAL_FUNC (gtk_item_factory_item_remove_accelerator),
-			    item);
 
   /* connect callback if neccessary
    */
@@ -528,6 +524,28 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
 			  GTK_SIGNAL_FUNC (gtk_item_factory_callback_marshal),
 			  data);
     }
+
+  /* link the widget into its item-entry
+   * and keep back pointer on both the item factory and the widget
+   */
+  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_action, GUINT_TO_POINTER (callback_action));
+  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_item_factory, ifactory);
+  if (accelerator)
+    gtk_accelerator_parse (accelerator, &keyval, &mods);
+  else
+    {
+      keyval = 0;
+      mods = 0;
+    }
+  fpath = g_strconcat (ifactory->path, path, NULL);
+  gtk_item_factory_add_foreign (widget, fpath, ifactory->accel_group, keyval, mods);
+  item = g_hash_table_lookup (class->item_ht, fpath);
+  g_free (fpath);
+
+  g_return_if_fail (item != NULL);
+
+  if (!g_slist_find (ifactory->items, item))
+    ifactory->items = g_slist_prepend (ifactory->items, item);
 }
 
 void
@@ -1099,7 +1117,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	  if (GTK_IS_MENU (parent))
 	    gtk_widget_add_accelerator (widget,
 					"activate_item",
-					gtk_menu_get_uline_accel_group (GTK_MENU (parent)),
+					gtk_menu_ensure_uline_accel_group (GTK_MENU (parent)),
 					accel_key, 0,
 					GTK_ACCEL_LOCKED);
 	}
@@ -1466,7 +1484,7 @@ gtk_item_factory_parse_menu_path (GScanner            *scanner,
       item->accelerator_mods = 0;
       item->modified = TRUE;
       item->in_propagation = FALSE;
-      item->item_type = NULL;
+      item->dummy = NULL;
       item->widgets = NULL;
 
       g_hash_table_insert (class->item_ht, item->path, item);
@@ -1553,6 +1571,9 @@ gtk_item_factory_parse_rc_string (const gchar	 *rc_string)
 
   g_return_if_fail (rc_string != NULL);
 
+  if (!gtk_item_factory_class)
+    gtk_type_class (GTK_TYPE_ITEM_FACTORY);
+
   ifactory_scanner_config.cpair_comment_single = gtk_item_factory_class->cpair_comment_single;
   scanner = g_scanner_new (&ifactory_scanner_config);
 
@@ -1606,6 +1627,9 @@ gtk_item_factory_parse_rc (const gchar	  *file_name)
   fd = open (file_name, O_RDONLY);
   if (fd < 0)
     return;
+
+  if (!gtk_item_factory_class)
+    gtk_type_class (GTK_TYPE_ITEM_FACTORY);
 
   ifactory_scanner_config.cpair_comment_single = gtk_item_factory_class->cpair_comment_single;
   scanner = g_scanner_new (&ifactory_scanner_config);

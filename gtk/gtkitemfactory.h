@@ -118,7 +118,7 @@ struct _GtkItemFactoryItem
   guint  accelerator_mods;
   guint	 modified : 1;
   guint  in_propagation : 1;
-  gchar *item_type;
+  gchar *dummy;
 
   GSList *widgets;
 };
@@ -142,6 +142,11 @@ void		gtk_item_factory_construct (GtkItemFactory	*ifactory,
 void		gtk_item_factory_parse_rc	    (const gchar    *file_name);
 void		gtk_item_factory_parse_rc_string    (const gchar    *rc_string);
 void		gtk_item_factory_parse_rc_scanner   (GScanner	    *scanner);
+void		gtk_item_factory_add_foreign        (GtkWidget	    *accel_widget,
+						     const gchar    *full_path,
+						     GtkAccelGroup  *accel_group,
+						     guint	     keyval,
+						     GdkModifierType modifiers);
      
 GtkItemFactory*	gtk_item_factory_from_widget	    (GtkWidget	      *widget);
 gchar*		gtk_item_factory_path_from_widget   (GtkWidget	      *widget);

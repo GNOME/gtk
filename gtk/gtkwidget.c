@@ -2499,12 +2499,8 @@ gtk_widget_lock_accelerators (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (gtk_signal_handler_pending_by_func (GTK_OBJECT (widget),
-					  widget_signals[ADD_ACCELERATOR],
-					  TRUE,
-					  GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
-					  NULL) == 0)
+  
+  if (!gtk_widget_accelerators_locked (widget))
     {
       gtk_signal_connect (GTK_OBJECT (widget),
 			  "add_accelerator",
@@ -2522,12 +2518,8 @@ gtk_widget_unlock_accelerators (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (gtk_signal_handler_pending_by_func (GTK_OBJECT (widget),
-					  widget_signals[ADD_ACCELERATOR],
-					  TRUE,
-					  GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
-					  NULL) > 0)
+  
+  if (gtk_widget_accelerators_locked (widget))
     {
       gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
 				     GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
@@ -2536,6 +2528,18 @@ gtk_widget_unlock_accelerators (GtkWidget *widget)
 				     GTK_SIGNAL_FUNC (gtk_widget_stop_remove_accelerator),
 				     NULL);
     }
+}
+
+gboolean
+gtk_widget_accelerators_locked (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  return gtk_signal_handler_pending_by_func (GTK_OBJECT (widget),
+					     widget_signals[ADD_ACCELERATOR],
+					     TRUE,
+					     GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
+					     NULL) > 0;
 }
 
 void

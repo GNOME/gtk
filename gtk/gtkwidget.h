@@ -491,6 +491,7 @@ guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
 					   guint                accel_mods);
 void	   gtk_widget_lock_accelerators   (GtkWidget	       *widget);
 void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
+gboolean   gtk_widget_accelerators_locked (GtkWidget	       *widget);
 gint	   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 
