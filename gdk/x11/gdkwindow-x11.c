@@ -61,44 +61,56 @@ int event_mask_table[20] =
 
 /* internal function created for and used by gdk_window_xid_at_coords */
 Window
-gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y, 
-		  GList *excludes, gboolean excl_child)
+gdk_window_xid_at (Window   base,
+		   gint     bx,
+		   gint     by,
+		   gint     x,
+		   gint     y, 
+		   GList   *excludes,
+		   gboolean excl_child)
 {
    GdkWindow *window;
    GdkWindowPrivate *private;
    Display *disp;
-   Window *list=NULL;
-   Window child=0,parent_win=0,root_win=0;
-
+   Window *list = NULL;
+   Window child = 0, parent_win = 0, root_win = 0;
    int i;
    unsigned int ww, wh, wb, wd, num;
-   int wx,wy;
+   int wx, wy;
    
-   window=(GdkWindow*)&gdk_root_parent;
-   private=(GdkWindowPrivate*)window;
-   disp=private->xdisplay;
-   if (!XGetGeometry(disp,base,&root_win,&wx,&wy,&ww,&wh,&wb,&wd))
+   window = (GdkWindow*) &gdk_root_parent;
+   private = (GdkWindowPrivate*) window;
+   disp = private->xdisplay;
+   if (!XGetGeometry (disp, base, &root_win, &wx, &wy, &ww, &wh, &wb, &wd))
      return 0;
-   wx+=bx;wy+=by;
-   if (!((x>=wx)&&(y>=wy)&&(x<(int)(wx+ww))&&(y<(int)(wy+wh))))
+   wx += bx;
+   wy += by;
+
+   if (!((x >= wx) &&
+	 (y >= wy) &&
+	 (x < (int) (wx + ww)) &&
+	 (y < (int) (wy + wh))))
      return 0;
-   if (!XQueryTree(disp,base,&root_win,&parent_win,&list,&num))
+
+   if (!XQueryTree (disp, base, &root_win, &parent_win, &list, &num))
      return base;
+
    if (list)
      {
-	for (i=num-1;;i--)
+	for (i = num - 1; ; i--)
 	  {
-	     if ((!excl_child)||(!g_list_find(excludes,(gpointer *)list[i])))
+	     if ((!excl_child) || (!g_list_find (excludes, (gpointer *) list[i])))
 	       {
-		 if ((child=gdk_window_xid_at(list[i],wx,wy,x,y,excludes,excl_child))!=0)
+		 if ((child = gdk_window_xid_at (list[i], wx, wy, x, y, excludes, excl_child)) != 0)
 		   {
-		     XFree(list);
+		     XFree (list);
 		     return child;
 		   }
 	       }
-	     if (!i) break;
+	     if (!i)
+	       break;
 	  }
-	XFree(list);
+	XFree (list);
      }
    return base;
 }
@@ -117,24 +129,31 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y,
  * those X,Y co-ordinates.
  */
 Window
-gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
+gdk_window_xid_at_coords (gint     x,
+			  gint     y,
+			  GList   *excludes,
+			  gboolean excl_child)
 {
    GdkWindow *window;
    GdkWindowPrivate *private;
    Display *disp;
-   Window *list=NULL;
-   Window root,child=0,parent_win=0,root_win=0;
+   Window *list = NULL;
+   Window root, child = 0, parent_win = 0, root_win = 0;
    unsigned int num;
    int i;
    
-   window=(GdkWindow*)&gdk_root_parent;
-   private=(GdkWindowPrivate*)window;
-   disp=private->xdisplay;
-   root=private->xwindow;
-   XGrabServer(disp);
-   num=g_list_length(excludes);
-   if (!XQueryTree(disp,root,&root_win,&parent_win,&list,&num))
-	return root;
+   window = (GdkWindow*) &gdk_root_parent;
+   private = (GdkWindowPrivate*) window;
+   disp = private->xdisplay;
+   root = private->xwindow;
+   num = g_list_length (excludes);
+
+   XGrabServer (disp);
+   if (!XQueryTree (disp, root, &root_win, &parent_win, &list, &num))
+     {
+       XUngrabServer(disp);
+       return root;
+     }
    if (list)
      {
        i = num - 1;
@@ -147,7 +166,7 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
 	   if (xwa.map_state != IsViewable)
 	     continue;
 
-	   if (excl_child && g_list_find(excludes,(gpointer *)list[i]))
+	   if (excl_child && g_list_find (excludes, (gpointer *) list[i]))
 	     continue;
 	   
 	   if ((child = gdk_window_xid_at (list[i], 0, 0, x, y, excludes, excl_child)) == 0)
@@ -155,23 +174,23 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
 
 	   if (excludes)
 	     {
-	       if (!g_list_find(excludes,(gpointer *)child))
+	       if (!g_list_find (excludes, (gpointer *) child))
 		 {
-		   XFree(list);
-		   XUngrabServer(disp);
+		   XFree (list);
+		   XUngrabServer (disp);
 		   return child;
 		 }
 	     }
 	   else
 	     {
-	       XFree(list);
-	       XUngrabServer(disp);
+	       XFree (list);
+	       XUngrabServer (disp);
 	       return child;
 	     }
 	 } while (--i > 0);
-	XFree(list);
+	XFree (list);
      }
-   XUngrabServer(disp);
+   XUngrabServer (disp);
    return root;
 }
 
@@ -1324,6 +1343,46 @@ gdk_window_get_pointer (GdkWindow       *window,
     }
   
   return return_val;
+}
+
+GdkWindow*
+gdk_window_at_pointer (gint *win_x,
+		       gint *win_y)
+{
+  GdkWindowPrivate *private;
+  GdkWindow *window;
+  Window root;
+  Window xwindow;
+  Window xwindow_last = 0;
+  int rootx = -1, rooty = -1;
+  int winx, winy;
+  unsigned int xmask;
+
+  private = &gdk_root_parent;
+
+  xwindow = private->xwindow;
+
+  XGrabServer (private->xdisplay);
+  while (xwindow)
+    {
+      xwindow_last = xwindow;
+      XQueryPointer (private->xdisplay,
+		     xwindow,
+		     &root, &xwindow,
+		     &rootx, &rooty,
+		     &winx, &winy,
+		     &xmask);
+    }
+  XUngrabServer (private->xdisplay);
+  
+  window = gdk_window_lookup (xwindow_last);
+
+  if (win_x)
+    *win_x = window ? winx : -1;
+  if (win_y)
+    *win_y = window ? winy : -1;
+
+  return window;
 }
 
 GdkWindow*

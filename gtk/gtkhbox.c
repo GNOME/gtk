@@ -27,10 +27,10 @@ static void gtk_hbox_size_allocate (GtkWidget      *widget,
 				    GtkAllocation  *allocation);
 
 
-guint
+GtkType
 gtk_hbox_get_type (void)
 {
-  static guint hbox_type = 0;
+  static GtkType hbox_type = 0;
 
   if (!hbox_type)
     {
@@ -45,7 +45,7 @@ gtk_hbox_get_type (void)
         (GtkArgGetFunc) NULL,
       };
 
-      hbox_type = gtk_type_unique (gtk_box_get_type (), &hbox_info);
+      hbox_type = gtk_type_unique (GTK_TYPE_BOX, &hbox_info);
     }
 
   return hbox_type;

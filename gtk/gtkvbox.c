@@ -27,10 +27,10 @@ static void gtk_vbox_size_allocate (GtkWidget      *widget,
 				    GtkAllocation  *allocation);
 
 
-guint
+GtkType
 gtk_vbox_get_type (void)
 {
-  static guint vbox_type = 0;
+  static GtkType vbox_type = 0;
 
   if (!vbox_type)
     {
@@ -45,7 +45,7 @@ gtk_vbox_get_type (void)
         (GtkArgGetFunc) NULL,
       };
 
-      vbox_type = gtk_type_unique (gtk_box_get_type (), &vbox_info);
+      vbox_type = gtk_type_unique (GTK_TYPE_BOX, &vbox_info);
     }
 
   return vbox_type;

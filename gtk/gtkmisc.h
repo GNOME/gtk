@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,24 +26,27 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_MISC(obj)          GTK_CHECK_CAST (obj, gtk_misc_get_type (), GtkMisc)
-#define GTK_MISC_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_misc_get_type (), GtkMiscClass)
-#define GTK_IS_MISC(obj)       GTK_CHECK_TYPE (obj, gtk_misc_get_type ())
+#define GTK_TYPE_MISC		       (gtk_misc_get_type ())
+#define GTK_MISC(obj)		       (GTK_CHECK_CAST ((obj), GTK_TYPE_MISC, GtkMisc))
+#define GTK_MISC_CLASS(klass)	       (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MISC, GtkMiscClass))
+#define GTK_IS_MISC(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_MISC))
+#define GTK_IS_MISC_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MISC))
 
 
-typedef struct _GtkMisc       GtkMisc;
+typedef struct _GtkMisc	      GtkMisc;
 typedef struct _GtkMiscClass  GtkMiscClass;
 
 struct _GtkMisc
 {
   GtkWidget widget;
-
+  
   gfloat xalign;
   gfloat yalign;
-
+  
   guint16 xpad;
   guint16 ypad;
 };
@@ -54,13 +57,13 @@ struct _GtkMiscClass
 };
 
 
-guint  gtk_misc_get_type      (void);
-void   gtk_misc_set_alignment (GtkMisc *misc,
-			       gfloat   xalign,
-			       gfloat   yalign);
-void   gtk_misc_set_padding   (GtkMisc *misc,
-			       gint     xpad,
-			       gint     ypad);
+GtkType gtk_misc_get_type      (void);
+void	gtk_misc_set_alignment (GtkMisc *misc,
+				gfloat	 xalign,
+				gfloat	 yalign);
+void	gtk_misc_set_padding   (GtkMisc *misc,
+				gint	 xpad,
+				gint	 ypad);
 
 
 #ifdef __cplusplus
@@ -68,4 +71,4 @@ void   gtk_misc_set_padding   (GtkMisc *misc,
 #endif /* __cplusplus */
 
 
-#endif /* __GTK_LABEL_H__ */
+#endif /* __GTK_MISC_H__ */

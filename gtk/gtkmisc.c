@@ -39,10 +39,10 @@ static void gtk_misc_get_arg    (GtkMisc      *misc,
 				 guint         arg_id);
 
 
-guint
+GtkType
 gtk_misc_get_type (void)
 {
-  static guint misc_type = 0;
+  static GtkType misc_type = 0;
 
   if (!misc_type)
     {
@@ -57,7 +57,7 @@ gtk_misc_get_type (void)
         (GtkArgGetFunc) gtk_misc_get_arg,
       };
 
-      misc_type = gtk_type_unique (gtk_widget_get_type (), &misc_info);
+      misc_type = gtk_type_unique (GTK_TYPE_WIDGET, &misc_info);
     }
 
   return misc_type;

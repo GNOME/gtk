@@ -1,3 +1,19 @@
+Wed Jun 17 03:47:40 1998  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdk.h:
+	* gdk/gdkwindow.c: new function gdk_window_at_pointer() to retrive
+	the current GdkWindow the pointer is on if there is any.
+	
+	* gtk/gtktable.c (gtk_table_init): preallocate a table with one row
+	and one column, so we don't construction logic at all. changed a few
+	(x < y - 1) to (x + 1 < y), to avoid failing evaluations due to
+	unsigned int wraps.
+
+	* gtk/gtkwidget.c (gtk_widget_set_parent): removed left over code
+ 	portion, added an additional check for parent != widget.
+
+	* more GtkType and macro fixups.
+
 1998-06-16  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkhandlebox.c (draw_textured_frame): Now accepts an extra

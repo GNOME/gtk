@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,21 +26,24 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_PIXMAP(obj)          GTK_CHECK_CAST (obj, gtk_pixmap_get_type (), GtkPixmap)
-#define GTK_PIXMAP_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_pixmap_get_type (), GtkPixmapClass)
-#define GTK_IS_PIXMAP(obj)       GTK_CHECK_TYPE (obj, gtk_pixmap_get_type ())
+#define GTK_TYPE_PIXMAP			 (gtk_pixmap_get_type ())
+#define GTK_PIXMAP(obj)			 (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP, GtkPixmap))
+#define GTK_PIXMAP_CLASS(klass)		 (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PIXMAP, GtkPixmapClass))
+#define GTK_IS_PIXMAP(obj)		 (GTK_CHECK_TYPE ((obj), GTK_TYPE_PIXMAP))
+#define GTK_IS_PIXMAP_CLASS(klass)	 (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PIXMAP))
 
 
-typedef struct _GtkPixmap       GtkPixmap;
-typedef struct _GtkPixmapClass  GtkPixmapClass;
+typedef struct _GtkPixmap	GtkPixmap;
+typedef struct _GtkPixmapClass	GtkPixmapClass;
 
 struct _GtkPixmap
 {
   GtkMisc misc;
-
+  
   GdkPixmap *pixmap;
   GdkBitmap *mask;
 };
@@ -51,13 +54,13 @@ struct _GtkPixmapClass
 };
 
 
-guint      gtk_pixmap_get_type   (void);
-GtkWidget* gtk_pixmap_new        (GdkPixmap  *pixmap,
+GtkType	   gtk_pixmap_get_type	 (void);
+GtkWidget* gtk_pixmap_new	 (GdkPixmap  *pixmap,
 				  GdkBitmap  *mask);
-void       gtk_pixmap_set        (GtkPixmap  *pixmap,
+void	   gtk_pixmap_set	 (GtkPixmap  *pixmap,
 				  GdkPixmap  *val,
 				  GdkBitmap  *mask);
-void       gtk_pixmap_get        (GtkPixmap  *pixmap,
+void	   gtk_pixmap_get	 (GtkPixmap  *pixmap,
 				  GdkPixmap **val,
 				  GdkBitmap **mask);
 

@@ -367,6 +367,8 @@ gtk_table_init (GtkTable *table)
   table->column_spacing = 0;
   table->row_spacing = 0;
   table->homogeneous = FALSE;
+
+  gtk_table_resize (table, 1, 1);
 }
 
 GtkWidget*
@@ -544,8 +546,7 @@ gtk_table_set_row_spacing (GtkTable *table,
 {
   g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
-  /* g_return_if_fail ((row >= 0) && (row < (table->nrows - 1))); */
-  g_return_if_fail (row < table->nrows - 1);
+  g_return_if_fail (row + 1 < table->nrows);
   
   if (table->rows[row].spacing != spacing)
     {
@@ -563,8 +564,7 @@ gtk_table_set_col_spacing (GtkTable *table,
 {
   g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
-  /* g_return_if_fail ((column >= 0) && (column < (table->ncols - 1))); */
-  g_return_if_fail (column < table->ncols - 1);
+  g_return_if_fail (column + 1 < table->ncols);
   
   if (table->cols[column].spacing != spacing)
     {
@@ -585,7 +585,7 @@ gtk_table_set_row_spacings (GtkTable *table,
   g_return_if_fail (GTK_IS_TABLE (table));
   
   table->row_spacing = spacing;
-  for (row = 0; row < table->nrows - 1; row++)
+  for (row = 0; row + 1 < table->nrows; row++)
     table->rows[row].spacing = spacing;
   
   if (GTK_WIDGET_VISIBLE (table))
@@ -602,7 +602,7 @@ gtk_table_set_col_spacings (GtkTable *table,
   g_return_if_fail (GTK_IS_TABLE (table));
   
   table->column_spacing = spacing;
-  for (col = 0; col < table->ncols - 1; col++)
+  for (col = 0; col + 1 < table->ncols; col++)
     table->cols[col].spacing = spacing;
   
   if (GTK_WIDGET_VISIBLE (table))
@@ -777,12 +777,12 @@ gtk_table_size_request (GtkWidget      *widget,
   
   for (col = 0; col < table->ncols; col++)
     requisition->width += table->cols[col].requisition;
-  for (col = 0; col < table->ncols - 1; col++)
+  for (col = 0; col + 1 < table->ncols; col++)
     requisition->width += table->cols[col].spacing;
   
   for (row = 0; row < table->nrows; row++)
     requisition->height += table->rows[row].requisition;
-  for (row = 0; row < table->nrows - 1; row++)
+  for (row = 0; row + 1 < table->nrows; row++)
     requisition->height += table->rows[row].spacing;
   
   requisition->width += GTK_CONTAINER (table)->border_width * 2;
@@ -1244,7 +1244,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	{
 	  width = real_width;
 	  
-	  for (col = 0; col < table->ncols - 1; col++)
+	  for (col = 0; col + 1 < table->ncols; col++)
 	    width -= table->cols[col].spacing;
 	  
 	  for (col = 0; col < table->ncols; col++)
@@ -1269,7 +1269,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	  if (table->cols[col].shrink)
 	    nshrink += 1;
 	}
-      for (col = 0; col < table->ncols - 1; col++)
+      for (col = 0; col + 1 < table->ncols; col++)
 	width += table->cols[col].spacing;
       
       /* Check to see if we were allocated more width than we requested.
@@ -1321,7 +1321,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	{
 	  height = real_height;
 	  
-	  for (row = 0; row < table->nrows - 1; row++)
+	  for (row = 0; row + 1 < table->nrows; row++)
 	    height -= table->rows[row].spacing;
 	  
 	  
@@ -1347,7 +1347,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	  if (table->rows[row].shrink)
 	    nshrink += 1;
 	}
-      for (row = 0; row < table->nrows - 1; row++)
+      for (row = 0; row + 1 < table->nrows; row++)
 	height += table->rows[row].spacing;
       
       /* Check to see if we were allocated more height than we requested.

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,15 +26,18 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_HBOX(obj)          GTK_CHECK_CAST (obj, gtk_hbox_get_type (), GtkHBox)
-#define GTK_HBOX_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_hbox_get_type (), GtkHBoxClass)
-#define GTK_IS_HBOX(obj)       GTK_CHECK_TYPE (obj, gtk_hbox_get_type ())
+#define GTK_TYPE_HBOX		       (gtk_hbox_get_type ())
+#define GTK_HBOX(obj)		       (GTK_CHECK_CAST ((obj), GTK_TYPE_HBOX, GtkHBox))
+#define GTK_HBOX_CLASS(klass)	       (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBOX, GtkHBoxClass))
+#define GTK_IS_HBOX(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_HBOX))
+#define GTK_IS_HBOX_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBOX))
 
 
-typedef struct _GtkHBox       GtkHBox;
+typedef struct _GtkHBox	      GtkHBox;
 typedef struct _GtkHBoxClass  GtkHBoxClass;
 
 struct _GtkHBox
@@ -48,8 +51,8 @@ struct _GtkHBoxClass
 };
 
 
-guint      gtk_hbox_get_type (void);
-GtkWidget* gtk_hbox_new      (gint homogeneous,
+GtkType	   gtk_hbox_get_type (void);
+GtkWidget* gtk_hbox_new	     (gint homogeneous,
 			      gint spacing);
 
 

@@ -68,10 +68,10 @@ static GtkType gtk_box_child_type (GtkContainer   *container);
 static GtkContainerClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_box_get_type (void)
 {
-  static guint box_type = 0;
+  static GtkType box_type = 0;
 
   if (!box_type)
     {
@@ -86,7 +86,7 @@ gtk_box_get_type (void)
         (GtkArgGetFunc) gtk_box_get_arg,
       };
 
-      box_type = gtk_type_unique (gtk_container_get_type (), &box_info);
+      box_type = gtk_type_unique (GTK_TYPE_CONTAINER, &box_info);
     }
 
   return box_type;
@@ -103,7 +103,7 @@ gtk_box_class_init (GtkBoxClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   gtk_object_add_arg_type ("GtkBox::spacing", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_SPACING);
   gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);

@@ -2532,6 +2532,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   g_return_if_fail (widget->parent == NULL);
   g_return_if_fail (!GTK_WIDGET_TOPLEVEL (widget));
   g_return_if_fail (parent != NULL);
+  g_return_if_fail (widget != parent);
 
   /* keep this function in sync with gtk_menu_attach_to_widget()
    */
@@ -2548,9 +2549,6 @@ gtk_widget_set_parent (GtkWidget *widget,
   data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (parent) != FALSE);
 
   gtk_widget_propagate_state (widget, &data);
-  
-  while (parent->parent != NULL)
-    parent = parent->parent;
   
   gtk_widget_set_style_recurse (widget, NULL);
 

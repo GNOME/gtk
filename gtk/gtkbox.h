@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,22 +26,25 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_BOX(obj)          GTK_CHECK_CAST (obj, gtk_box_get_type (), GtkBox)
-#define GTK_BOX_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_box_get_type (), GtkBoxClass)
-#define GTK_IS_BOX(obj)       GTK_CHECK_TYPE (obj, gtk_box_get_type ())
+#define GTK_TYPE_BOX		      (gtk_box_get_type ())
+#define GTK_BOX(obj)		      (GTK_CHECK_CAST ((obj), GTK_TYPE_BOX, GtkBox))
+#define GTK_BOX_CLASS(klass)	      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BOX, GtkBoxClass))
+#define GTK_IS_BOX(obj)		      (GTK_CHECK_TYPE ((obj), GTK_TYPE_BOX))
+#define GTK_IS_BOX_CLASS(klass)	      (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BOX))
 
 
-typedef struct _GtkBox        GtkBox;
+typedef struct _GtkBox	      GtkBox;
 typedef struct _GtkBoxClass   GtkBoxClass;
 typedef struct _GtkBoxChild   GtkBoxChild;
 
 struct _GtkBox
 {
   GtkContainer container;
-
+  
   GList *children;
   gint16 spacing;
   guint homogeneous : 1;
@@ -62,39 +65,39 @@ struct _GtkBoxChild
 };
 
 
-guint      gtk_box_get_type            (void);
-void       gtk_box_pack_start          (GtkBox       *box,
+GtkType	   gtk_box_get_type	       (void);
+void	   gtk_box_pack_start	       (GtkBox	     *box,
 					GtkWidget    *child,
 					gboolean      expand,
 					gboolean      fill,
-					guint         padding);
-void       gtk_box_pack_end            (GtkBox       *box,
+					guint	      padding);
+void	   gtk_box_pack_end	       (GtkBox	     *box,
 					GtkWidget    *child,
 					gboolean      expand,
 					gboolean      fill,
-					guint         padding);
-void       gtk_box_pack_start_defaults (GtkBox       *box,
+					guint	      padding);
+void	   gtk_box_pack_start_defaults (GtkBox	     *box,
 					GtkWidget    *widget);
-void       gtk_box_pack_end_defaults   (GtkBox       *box,
+void	   gtk_box_pack_end_defaults   (GtkBox	     *box,
 					GtkWidget    *widget);
-void       gtk_box_set_homogeneous     (GtkBox       *box,
+void	   gtk_box_set_homogeneous     (GtkBox	     *box,
 					gboolean      homogeneous);
-void       gtk_box_set_spacing         (GtkBox       *box,
-					gint          spacing);
-void	   gtk_box_reorder_child       (GtkBox       *box,
+void	   gtk_box_set_spacing	       (GtkBox	     *box,
+					gint	      spacing);
+void	   gtk_box_reorder_child       (GtkBox	     *box,
 					GtkWidget    *child,
-					gint          position);
-void       gtk_box_query_child_packing (GtkBox       *box,
+					gint	      position);
+void	   gtk_box_query_child_packing (GtkBox	     *box,
 					GtkWidget    *child,
 					gboolean     *expand,
 					gboolean     *fill,
-					guint        *padding,
+					guint	     *padding,
 					GtkPackType  *pack_type);
-void       gtk_box_set_child_packing   (GtkBox       *box,
+void	   gtk_box_set_child_packing   (GtkBox	     *box,
 					GtkWidget    *child,
 					gboolean      expand,
 					gboolean      fill,
-					guint         padding,
+					guint	      padding,
 					GtkPackType   pack_type);
 
 

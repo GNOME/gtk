@@ -28,10 +28,10 @@ static void gtk_pixmap_finalize   (GtkObject       *object);
 
 static GtkWidgetClass *parent_class;
 
-guint
+GtkType
 gtk_pixmap_get_type (void)
 {
-  static guint pixmap_type = 0;
+  static GtkType pixmap_type = 0;
 
   if (!pixmap_type)
     {
@@ -46,7 +46,7 @@ gtk_pixmap_get_type (void)
         (GtkArgGetFunc) NULL,
       };
 
-      pixmap_type = gtk_type_unique (gtk_misc_get_type (), &pixmap_info);
+      pixmap_type = gtk_type_unique (GTK_TYPE_MISC, &pixmap_info);
     }
 
   return pixmap_type;
