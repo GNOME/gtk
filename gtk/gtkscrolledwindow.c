@@ -382,6 +382,11 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 
   gtk_container_disable_resize (GTK_CONTAINER (scrolled_window));
 
+  if (scrolled_window->hscrollbar_policy == GTK_POLICY_ALWAYS)
+    scrolled_window->hscrollbar_visible = TRUE;
+  if (scrolled_window->vscrollbar_policy == GTK_POLICY_ALWAYS)
+    scrolled_window->vscrollbar_visible = TRUE;
+
   if (GTK_WIDGET_VISIBLE (scrolled_window->viewport))
     {
       count = 0;

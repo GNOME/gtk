@@ -1,3 +1,9 @@
+Fri May  1 22:45:55 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_allocate):
+	Always show the scrollbars when the policy is 
+	GTK_POLICY_ALWAYS...
+
 Fri May  1 10:05:44 1998  Tim Janik  <timj@gtk.org>
 
         * gtk/gtklist.c (gtk_list_add): let gtk_list_append_items do the work
