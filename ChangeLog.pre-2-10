@@ -1,3 +1,11 @@
+2000-12-18  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/gdkevents.c (gdk_event_get_state): wow, that implementation
+	was pretty non-working.
+
+	* gtk/testtext.c (fill_file_buffer): make this a bit more robust
+	by passing the length to g_utf8_validate().
+
 2000-12-16  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gdk-pixbuf-loader.h, gtk/gdk-pixbuf-loader.c: 

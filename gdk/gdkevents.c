@@ -397,18 +397,15 @@ gdk_event_free (GdkEvent *event)
   g_mem_chunk_free (event_chunk, event);
 }
 
-/*
- *--------------------------------------------------------------
+/**
  * gdk_event_get_time:
- *    Get the timestamp from an event.
- *   arguments:
- *     event:
- *   results:
- *    The event's time stamp, if it has one, otherwise
- *    GDK_CURRENT_TIME.
- *--------------------------------------------------------------
- */
-
+ * @event: a #GdkEvent
+ * 
+ * Returns the time stamp from @event, if there is one; otherwise
+ * returns #GDK_CURRENT_TIME. If @event is %NULL, returns #GDK_CURRENT_TIME.
+ * 
+ * Return value: time stamp field from @event
+ **/
 guint32
 gdk_event_get_time (GdkEvent *event)
 {
@@ -471,7 +468,8 @@ gdk_event_get_time (GdkEvent *event)
  * 
  * If the event contains a "state" field, puts that field in @state. Otherwise
  * stores an empty state (0). Returns %TRUE if there was a state field
- * in the event.
+ * in the event. @event may be %NULL, in which case it's treated
+ * as if the event had no state field.
  * 
  * Return value: %TRUE if there was a state field in the event 
  **/
@@ -479,28 +477,37 @@ gboolean
 gdk_event_get_state (GdkEvent        *event,
                      GdkModifierType *state)
 {
+  g_return_val_if_fail (state != NULL, FALSE);
+  
   if (event)
     switch (event->type)
       {
       case GDK_MOTION_NOTIFY:
-	return event->motion.state;
+	*state = event->motion.state;
+        return TRUE;
       case GDK_BUTTON_PRESS:
       case GDK_2BUTTON_PRESS:
       case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
-        return event->button.state;
+        *state =  event->button.state;
+        return TRUE;
       case GDK_SCROLL:
-	return event->scroll.state;
+	*state =  event->scroll.state;
+        return TRUE;
       case GDK_KEY_PRESS:
       case GDK_KEY_RELEASE:
-	return event->key.state;
+	*state =  event->key.state;
+        return TRUE;
       case GDK_ENTER_NOTIFY:
       case GDK_LEAVE_NOTIFY:
-	return event->crossing.state;
+	*state =  event->crossing.state;
+        return TRUE;
       case GDK_PROPERTY_NOTIFY:
-	return event->property.state;
+	*state =  event->property.state;
+        return TRUE;
       case GDK_VISIBILITY_NOTIFY:
-        return event->visibility.state;
+        *state =  event->visibility.state;
+        return TRUE;
       case GDK_CLIENT_EVENT:
       case GDK_NO_EXPOSE:
       case GDK_CONFIGURE:
@@ -526,7 +533,8 @@ gdk_event_get_state (GdkEvent        *event,
         break;
       }
 
-  return 0;
+  *state = 0;
+  return FALSE;
 }
 
 /**

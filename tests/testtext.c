@@ -643,7 +643,7 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
       count = fread (buf + remaining, 1, to_read, f);
       buf[count + remaining] = '\0';
 
-      g_utf8_validate (buf, -1, &leftover);
+      g_utf8_validate (buf, count + remaining, &leftover);
       
       g_assert (g_utf8_validate (buf, leftover - buf, NULL));
       gtk_text_buffer_insert (buffer, &iter, buf, leftover - buf);
