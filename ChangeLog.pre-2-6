@@ -1,3 +1,27 @@
+2002-01-28 Bill Haneman <bill.haneman@sun.com>
+
+	* gtk/gtkstyle.c:
+	Make sure that the default expanders are drawn with
+	an outline thickness appropriate to the size of the
+	expanders (RINT expander_size/7).
+	Added static gtk_style_draw_polygon_with_gc(), to
+	reduce code duplication.
+
+	* gtk/gtktreeview.c: (gtk_tree_view_bin_expose):
+	Use focus_line_thickness when drawing focus lines.
+
+	* gtk/gtktreeviewcolumn.c:(gtk_tree_view_column_cell_get_size):
+	Adjust requested width to include focus line thickness.
+	(gtk_tree_view_column_cell_render_or_focus):
+	Calculate a focus line rectangle which gets larger as the focus
+	line thickness increases, to avoid overwriting cell content.
+	Render left-aligned content at x+focus_line_width.
+	(gtk_tree_view_column_cell_draw_focus):
+	Don't draw a focus line around an editable text cell, since the
+	text caret already indicates keyboard focus.
+	Pass a GtkStateType appropriate to the focussed cell's state
+	to gtk_paint_focus.
+
 Mon Jan 28 14:44:40 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): Only

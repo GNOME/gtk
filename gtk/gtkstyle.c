@@ -4346,6 +4346,18 @@ apply_affine_on_point (double affine[6], GdkPoint *point)
 }
 
 static void
+gtk_style_draw_polygon_with_gc (GdkWindow *window, GdkGC *gc, gint line_width,
+				gboolean do_fill, GdkPoint *points, gint n_points)
+{
+  gdk_gc_set_line_attributes (gc, line_width,
+			      GDK_LINE_SOLID,
+			      GDK_CAP_BUTT, GDK_JOIN_MITER);
+
+  gdk_draw_polygon (window, gc, do_fill, points, n_points);
+  gdk_gc_set_line_attributes (gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+}
+
+static void
 gtk_default_draw_expander (GtkStyle        *style,
                            GdkWindow       *window,
                            GtkStateType     state_type,
@@ -4359,12 +4371,14 @@ gtk_default_draw_expander (GtkStyle        *style,
   gint expander_size;
   GdkPoint points[3];
   gint i;
+  gint line_width;
   gdouble affine[6];
   gint degrees = 0;
   
   gtk_widget_style_get (widget,
 			"expander_size", &expander_size,
 			NULL);
+  line_width = MAX (1, expander_size/7);
 
   if (area)
     {
@@ -4372,12 +4386,13 @@ gtk_default_draw_expander (GtkStyle        *style,
       gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], area);
     }
 
-  points[0].x = 0;
-  points[0].y = 0;
-  points[1].x = expander_size / 2;
-  points[1].y =  expander_size / 2;
-  points[2].x = 0;
-  points[2].y = expander_size;
+  expander_size -= (line_width * 2 - 2);
+  points[0].x = line_width / 2;
+  points[0].y = line_width / 2;
+  points[1].x = expander_size / 2 + line_width / 2;
+  points[1].y = expander_size / 2 + line_width / 2;
+  points[2].x = line_width / 2;
+  points[2].y = expander_size + line_width / 2;
 
   switch (expander_style)
     {
@@ -4404,22 +4419,22 @@ gtk_default_draw_expander (GtkStyle        *style,
 
   if (state_type == GTK_STATE_PRELIGHT)
     {
-      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-			TRUE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
+				      1, TRUE, points, 3);
     }
   else if (state_type == GTK_STATE_ACTIVE)
     {
-      gdk_draw_polygon (window, style->light_gc[GTK_STATE_ACTIVE],
-			TRUE, points, 3);
-      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-			FALSE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->light_gc[GTK_STATE_ACTIVE],
+				      1, TRUE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
+				      line_width, FALSE, points, 3);
     }
   else
     {
-      gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
-			TRUE, points, 3);
-      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-			FALSE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->base_gc[GTK_STATE_NORMAL],
+				      1, TRUE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
+				      line_width, FALSE, points, 3);
     }
   if (area)
     {

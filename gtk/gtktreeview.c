@@ -2854,6 +2854,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  GtkRBTree *tree = NULL;
 	  GtkRBNode *node = NULL;
 	  gint width;
+	  gint focus_line_width;
 
           switch (tree_view->priv->drag_dest_pos)
             {
@@ -2873,15 +2874,18 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 		break;
 	      gdk_drawable_get_size (tree_view->priv->bin_window,
 				     &width, NULL);
+	      gtk_widget_style_get (widget, "focus-line-width", &focus_line_width, NULL);
 	      gtk_paint_focus (widget->style,
 			       tree_view->priv->bin_window,
 			       GTK_WIDGET_STATE (widget),
 			       NULL,
 			       widget,
 			       "treeview-drop-indicator",
-			       0, BACKGROUND_FIRST_PIXEL (tree_view, tree, node),
-			       width, MAX (BACKGROUND_HEIGHT (node), tree_view->priv->expander_size));
-
+			       0, BACKGROUND_FIRST_PIXEL (tree_view, tree, node)
+			       - focus_line_width / 2,
+			       width, MAX(BACKGROUND_HEIGHT (node),
+					  tree_view->priv->expander_size)
+			       - focus_line_width + 1);
               break;
             }
 
