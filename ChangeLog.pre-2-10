@@ -1,3 +1,15 @@
+Tue Jun  1 22:45:42 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenu.c (get_accel_path): Handle accel_closure being
+	NULL on an accel label. (#139641, Sam Stephenson, patch by 
+	Michael Natterer)
+
+Tue Jun  1 22:19:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkicontheme.c (theme_subdir_load):  Prevent icon 
+	lookup finding icons in the wrong prefix.  (#143328,
+	Mark McLoughlin)
+
 Wed Jun  2 00:39:58 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): Make menus

@@ -2564,9 +2564,12 @@ get_accel_path (GtkWidget *menu_item,
 	      g_object_get (label, 
 			    "accel_closure", &accel_closure, 
 			    NULL);
-	      accel_group = gtk_accel_group_from_accel_closure (accel_closure);
-	      
-	      *locked = accel_group->lock_count > 0;
+	      if (accel_closure)
+		{
+		  accel_group = gtk_accel_group_from_accel_closure (accel_closure);
+		  
+		  *locked = accel_group->lock_count > 0;
+		}
 	    }
 	}
     }
