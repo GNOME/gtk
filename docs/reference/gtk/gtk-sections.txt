@@ -2,6 +2,52 @@
 <INCLUDE>gtk/gtk.h</INCLUDE>
 
 <SECTION>
+<FILE>gtkaccelgroup</FILE>
+<TITLE>Keyboard Accelerators</TITLE>
+GtkAccelGroup
+gtk_accel_group_get_type
+gtk_accel_group_new
+gtk_accel_group_connect
+gtk_accel_group_disconnect
+gtk_accel_group_query
+gtk_accel_group_activate
+gtk_accel_groups_activate
+gtk_accel_group_lock
+gtk_accel_group_unlock
+gtk_accelerator_valid
+gtk_accelerator_parse
+gtk_accelerator_name
+gtk_accelerator_set_default_mod_mask
+gtk_accelerator_get_default_mod_mask
+<SUBSECTION Private>
+<SUBSECTION Standard>
+GtkAccelGroupClass
+GTK_TYPE_ACCEL_GROUP
+GTK_ACCEL_GROUP
+GTK_IS_ACCEL_GROUP
+GTK_ACCEL_GROUP_CLASS
+GTK_IS_ACCEL_GROUP_CLASS
+GTK_ACCEL_GROUP_GET_CLASS
+</SECTION>
+
+<SECTION>
+<FILE>gtkaccelmap</FILE>
+<TITLE>Accelerator Maps</TITLE>
+GtkAccelMapNotify
+GtkAccelMapForeach
+gtk_accel_map_add_entry
+gtk_accel_map_lookup_entry
+gtk_accel_map_change_entry
+gtk_accel_map_add_notifer
+gtk_accel_map_remove_notifer
+gtk_accel_map_load
+gtk_accel_map_save
+gtk_accel_map_foreach
+gtk_accel_map_load_fd
+gtk_accel_map_save_fd
+</SECTION>
+
+<SECTION>
 <FILE>gtkaccellabel</FILE>
 <TITLE>GtkAccelLabel</TITLE>
 GtkAccelLabel
@@ -1428,6 +1474,7 @@ gtk_menu_reorder_child
 gtk_menu_popup
 gtk_menu_set_accel_group
 gtk_menu_get_accel_group
+gtk_menu_set_accel_path
 gtk_menu_set_title
 gtk_menu_get_tearoff_state
 gtk_menu_get_title
@@ -1481,6 +1528,7 @@ gtk_menu_item_new_with_label
 gtk_menu_item_new_with_mnemonic
 gtk_menu_item_set_right_justified
 gtk_menu_item_set_submenu
+gtk_menu_item_set_accel_path  
 gtk_menu_item_remove_submenu
 gtk_menu_item_select
 gtk_menu_item_deselect
@@ -3878,49 +3926,6 @@ GTK_RC_STYLE_GET_CLASS
 <SUBSECTION Private>
 gtk_rc_style_get_type
 GtkRcContext
-</SECTION>
-
-<SECTION>
-<FILE>gtkaccelgroup</FILE>
-<TITLE>Keyboard Accelerators</TITLE>
-GtkAccelGroup
-gtk_accel_group_new
-gtk_accel_group_get_default
-gtk_accel_group_ref
-gtk_accel_group_unref
-gtk_accel_group_activate
-gtk_accel_groups_activate
-gtk_accel_group_attach
-gtk_accel_group_detach
-gtk_accel_group_add
-gtk_accel_group_remove
-gtk_accel_group_lock
-gtk_accel_group_unlock
-gtk_accelerator_valid
-gtk_accelerator_parse
-gtk_accelerator_name
-gtk_accelerator_set_default_mod_mask
-gtk_accelerator_get_default_mod_mask
-<SUBSECTION Private>
-GtkAccelEntry
-gtk_accel_group_get_type
-gtk_accel_group_get_entry
-gtk_accel_group_lock_entry
-gtk_accel_group_unlock_entry
-gtk_accel_group_handle_add
-gtk_accel_group_handle_remove
-gtk_accel_group_create_add
-gtk_accel_group_create_remove
-gtk_accel_groups_from_object
-gtk_accel_group_entries_from_object
-<SUBSECTION Standard>
-GtkAccelGroupClass
-GTK_ACCEL_GROUP
-GTK_TYPE_ACCEL_GROUP
-GTK_ACCEL_GROUP_CLASS
-GTK_ACCEL_GROUP_GET_CLASS
-GTK_IS_ACCEL_GROUP
-GTK_IS_ACCEL_GROUP_CLASS
 </SECTION>
 
 <SECTION>

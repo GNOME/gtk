@@ -32,7 +32,11 @@ BEGIN {
       printf ("#    define GTKTYPEBUILTINS_VAR extern __declspec(dllimport)\n");
       printf ("#  endif\n");
       printf ("#else\n");
-      printf ("#  define GTKTYPEBUILTINS_VAR extern\n");
+      printf ("#  ifdef GTK_COMPILATION\n");
+      printf ("#    define GTKTYPEBUILTINS_VAR\n");
+      printf ("#  else\n");
+      printf ("#    define GTKTYPEBUILTINS_VAR extern\n");
+      printf ("#  endif\n");
       printf ("#endif\n");
       printf ("\n");
     }

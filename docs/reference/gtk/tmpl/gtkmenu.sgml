@@ -96,9 +96,9 @@ Creates a new #GtkMenu.
 Adds a new #GtkMenuItem to the end of the menu's item list.
 </para>
 
-<!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
+<!-- # Unused Parameters # -->
 @m: 
 @c: 
 
@@ -108,9 +108,9 @@ Adds a new #GtkMenuItem to the end of the menu's item list.
 Adds a new #GtkMenuItem to the beginning of the menu's item list.
 </para>
 
-<!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
+<!-- # Unused Parameters # -->
 @menu_child: 
 @m: 
 @c: 
@@ -122,10 +122,10 @@ Adds a new #GtkMenuItem to the menu's item list at the position
 indicated by @position. 
 </para>
 
-<!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
 @pos: 
+<!-- # Unused Parameters # -->
 @position: The position in the item list where @child is added.
 Positions are numbered from 0 to n-1.
 
@@ -162,6 +162,9 @@ at the current pointer position.
 <!-- ##### FUNCTION gtk_menu_set_accel_group ##### -->
 <para>
 Set the #GtkAccelGroup which holds global accelerators for the menu.
+This accelerator group needs to also be added to all windows that
+this menu is being used in with gtk_window_add_accel_group(), in order
+for those windows to support all the accelerators contained in this group.
 </para>
 
 @menu: a #GtkMenu.
@@ -176,6 +179,15 @@ See gtk_menu_set_accel_group().
 
 @menu: a #GtkMenu.
 @Returns: the #GtkAccelGroup associated with the menu.
+
+
+<!-- ##### FUNCTION gtk_menu_set_accel_path ##### -->
+<para>
+
+</para>
+
+@menu: 
+@accel_path: 
 
 
 <!-- ##### FUNCTION gtk_menu_set_title ##### -->

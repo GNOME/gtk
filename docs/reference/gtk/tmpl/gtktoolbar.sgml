@@ -47,8 +47,8 @@ Widgets can be visibly grouped by adding gaps between widgets using gtk_toolbar_
 to a #GtkToolbar.
 </para>
 
-@GTK_TOOLBAR_CHILD_SPACE: a space in the style of the toolbar's #GtkToolbarSpaceStyle. 
-@GTK_TOOLBAR_CHILD_BUTTON: a #GtkButton. 
+@GTK_TOOLBAR_CHILD_SPACE: a space in the style of the toolbar's #GtkToolbarSpaceStyle.
+@GTK_TOOLBAR_CHILD_BUTTON: a #GtkButton.
 @GTK_TOOLBAR_CHILD_TOGGLEBUTTON: a #GtkToggleButton.
 @GTK_TOOLBAR_CHILD_RADIOBUTTON: a #GtkRadioButton.
 @GTK_TOOLBAR_CHILD_WIDGET: a standard #GtkWidget.

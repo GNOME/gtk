@@ -45,6 +45,7 @@ enum {
   ACTIVATE_FOCUS,
   ACTIVATE_DEFAULT,
   MOVE_FOCUS,
+  ACCELS_CHANGED,
   LAST_SIGNAL
 };
 
@@ -220,6 +221,7 @@ static void     gtk_window_set_default_size_internal (GtkWindow    *window,
 
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
+static void	gtk_window_notify_accels_changed      (GtkWindow    *window);
 
 static GSList      *toplevel_list = NULL;
 static GHashTable  *mnemonic_hash_table = NULL;
@@ -309,6 +311,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
+  mnemonic_hash_table = g_hash_table_new (mnemonic_hash, mnemonic_equal);
+
   gobject_class->dispose = gtk_window_dispose;
   gobject_class->finalize = gtk_window_finalize;
 
@@ -345,6 +349,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->move_focus = gtk_window_move_focus;
+  klass->accels_changed = NULL;
   
   /* Construct */
   g_object_class_install_property (gobject_class,
@@ -493,10 +498,16 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
-  
-  if (!mnemonic_hash_table)
-    mnemonic_hash_table = g_hash_table_new (mnemonic_hash,
-					    mnemonic_equal);
+
+  window_signals[ACCELS_CHANGED] =
+    g_signal_new ("accels_changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  GTK_SIGNAL_OFFSET (GtkWindowClass, accels_changed),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   /*
    * Key bindings
@@ -1001,6 +1012,38 @@ gtk_window_set_policy (GtkWindow *window,
   gtk_widget_queue_resize (GTK_WIDGET (window));
 }
 
+static gboolean
+handle_accels_changed (gpointer data)
+{
+  GtkWindow *window = GTK_WINDOW (data);
+
+  if (window->accels_changed_handler)
+    {
+      gtk_idle_remove (window->accels_changed_handler);
+      window->accels_changed_handler = 0;
+    }
+
+  g_signal_emit (window, window_signals[ACCELS_CHANGED], 0);
+
+  return FALSE;
+}
+
+static void
+gtk_window_notify_accels_changed (GtkWindow *window)
+{
+  if (!window->accels_changed_handler)
+    window->accels_changed_handler = gtk_idle_add (handle_accels_changed, window);
+}
+
+/**
+ * gtk_window_add_accel_group:
+ * @window: window to attach accelerator group to
+ * @accel_group: a #GtkAccelGroup
+ *
+ * Associate @accel_group with @window, such that calling
+ * gtk_accel_groups_activate() on @window will activate accelerators
+ * in @accel_group.
+ **/
 void
 gtk_window_add_accel_group (GtkWindow        *window,
 			    GtkAccelGroup    *accel_group)
@@ -1008,9 +1051,19 @@ gtk_window_add_accel_group (GtkWindow        *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (accel_group != NULL);
 
-  gtk_accel_group_attach (accel_group, G_OBJECT (window));
+  _gtk_accel_group_attach (accel_group, G_OBJECT (window));
+  g_signal_connect_object (accel_group, "accel_changed",
+			   G_CALLBACK (gtk_window_notify_accels_changed),
+			   window, G_CONNECT_SWAPPED);
 }
 
+/**
+ * gtk_accel_group_detach:
+ * @accel_group: a #GtkAccelGroup
+ * @object: a #GObject
+ *
+ * Reverses the effects of gtk_window_add_accel_group().
+ **/
 void
 gtk_window_remove_accel_group (GtkWindow       *window,
 			       GtkAccelGroup   *accel_group)
@@ -1018,7 +1071,10 @@ gtk_window_remove_accel_group (GtkWindow       *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (accel_group != NULL);
 
-  gtk_accel_group_detach (accel_group, G_OBJECT (window));
+  g_signal_handlers_disconnect_by_func (accel_group,
+					G_CALLBACK (gtk_window_notify_accels_changed),
+					window);
+  _gtk_accel_group_detach (accel_group, G_OBJECT (window));
 }
 
 void
@@ -1048,6 +1104,7 @@ gtk_window_add_mnemonic (GtkWindow *window,
       mnemonic->targets = g_slist_prepend (NULL, target);
       g_hash_table_insert (mnemonic_hash_table, mnemonic, mnemonic);
     }
+  gtk_window_notify_accels_changed (window);
 }
 
 void
@@ -1073,6 +1130,7 @@ gtk_window_remove_mnemonic (GtkWindow *window,
       g_hash_table_remove (mnemonic_hash_table, mnemonic);
       g_free (mnemonic);
     }
+  gtk_window_notify_accels_changed (window);
 }
 
 gboolean
@@ -1140,6 +1198,7 @@ gtk_window_set_mnemonic_modifier (GtkWindow      *window,
   g_return_if_fail ((modifier & ~GDK_MODIFIER_MASK) == 0);
 
   window->mnemonic_modifier = modifier;
+  gtk_window_notify_accels_changed (window);
 }
 
 /**
@@ -2836,7 +2895,13 @@ gtk_window_finalize (GObject *object)
 				       &window->geometry_info->widget);
       g_free (window->geometry_info);
     }
-  
+
+  if (window->accels_changed_handler)
+    {
+      gtk_idle_remove (window->accels_changed_handler);
+      window->accels_changed_handler = 0;
+    }
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -3371,6 +3436,46 @@ gtk_window_configure_event (GtkWidget         *widget,
   return TRUE;
 }
 
+/* the accel_key and accel_mods fields of the key have to be setup
+ * upon calling this function. it'll then return whether that key
+ * is at all used as accelerator, and if so will OR in the
+ * accel_flags member of the key.
+ */
+gboolean
+_gtk_window_query_nonaccels (GtkWindow      *window,
+			     guint           accel_key,
+			     GdkModifierType accel_mods)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  /* movement keys are considered locked accels */
+  if (!accel_mods)
+    {
+      static const guint bindings[] = {
+	GDK_space, GDK_KP_Space, GDK_Return, GDK_KP_Enter, GDK_Up, GDK_KP_Up, GDK_Down, GDK_KP_Down,
+	GDK_Left, GDK_KP_Left, GDK_Right, GDK_KP_Right, GDK_Tab, GDK_KP_Tab, GDK_ISO_Left_Tab,
+      };
+      guint i;
+      
+      for (i = 0; i < G_N_ELEMENTS (bindings); i++)
+	if (bindings[i] == accel_key)
+	  return TRUE;
+    }
+
+  /* mnemonics are considered locked accels */
+  if (accel_mods == window->mnemonic_modifier)
+    {
+      GtkWindowMnemonic mkey;
+
+      mkey.window = window;
+      mkey.keyval = accel_key;
+      if (g_hash_table_lookup (mnemonic_hash_table, &mkey))
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
 static gint
 gtk_window_key_press_event (GtkWidget   *widget,
 			    GdkEventKey *event)
@@ -3404,29 +3509,6 @@ gtk_window_key_press_event (GtkWidget   *widget,
   return handled;
 }
 
-
-static void
-gtk_window_real_activate_default (GtkWindow *window)
-{
-  gtk_window_activate_default (window);
-}
-
-static void
-gtk_window_real_activate_focus (GtkWindow *window)
-{
-  gtk_window_activate_focus (window);
-}
-
-static void
-gtk_window_move_focus (GtkWindow       *window,
-                       GtkDirectionType dir)
-{
-  gtk_widget_child_focus (GTK_WIDGET (window), dir);
-  
-  if (!GTK_CONTAINER (window)->focus_child)
-    gtk_window_set_focus (window, NULL);
-}
-
 static gint
 gtk_window_key_release_event (GtkWidget   *widget,
 			      GdkEventKey *event)
@@ -3450,6 +3532,28 @@ gtk_window_key_release_event (GtkWidget   *widget,
     handled = GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
 
   return handled;
+}
+
+static void
+gtk_window_real_activate_default (GtkWindow *window)
+{
+  gtk_window_activate_default (window);
+}
+
+static void
+gtk_window_real_activate_focus (GtkWindow *window)
+{
+  gtk_window_activate_focus (window);
+}
+
+static void
+gtk_window_move_focus (GtkWindow       *window,
+                       GtkDirectionType dir)
+{
+  gtk_widget_child_focus (GTK_WIDGET (window), dir);
+  
+  if (!GTK_CONTAINER (window)->focus_child)
+    gtk_window_set_focus (window, NULL);
 }
 
 static gint

@@ -86,6 +86,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtk.h			\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
+	gtkaccelmap.h		\
 	gtkaccessible.h		\
 	gtkadjustment.h		\
 	gtkalignment.h		\
@@ -244,6 +245,7 @@ gtk_private_h_sources = @STRIP_BEGIN@ \
 # GTK+ C sources to build the library from
 gtk_c_sources = @STRIP_BEGIN@   \
 	gtkaccelgroup.c		\
+	gtkaccelmap.c		\
 	gtkaccellabel.c		\
 	gtkaccessible.c		\
 	gtkadjustment.c		\

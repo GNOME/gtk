@@ -178,7 +178,7 @@ worried about differences in case.
 </para>
 
 @combo: a #GtkCombo.
-@val: %TRUE if the text in the list items is case sensitive. 
+@val: %TRUE if the text in the list items is case sensitive.
 
 
 <!-- ##### FUNCTION gtk_combo_set_item_string ##### -->

@@ -694,6 +694,13 @@ it's larger
 @height: 
 
 
+<!-- ##### SIGNAL GtkWindow::accels-changed ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
 <!-- ##### SIGNAL GtkWindow::activate-default ##### -->
 <para>
 

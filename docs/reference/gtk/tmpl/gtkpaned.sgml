@@ -112,6 +112,9 @@ Old name for gtk_paned_set_handle_size()
 Old name for gtk_paned_set_gutter_size()
 </para>
 
+@p: 
+@s: 
+
 
 <!-- ##### FUNCTION gtk_paned_pack1 ##### -->
 <para>

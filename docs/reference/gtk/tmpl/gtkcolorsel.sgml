@@ -225,7 +225,7 @@ time.
 
 </para>
 
-@colorsel:
+@colorsel: 
 @color: 
 
 
@@ -234,8 +234,8 @@ time.
 
 </para>
 
-@colorsel:
-@color:
+@colorsel: 
+@color: 
 
 
 <!-- ##### SIGNAL GtkColorSelection::color-changed ##### -->

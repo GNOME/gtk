@@ -79,11 +79,7 @@ struct _GtkItemFactoryClass
 {
   GtkObjectClass	 object_class;
 
-  gchar			*cpair_comment_single;
-
   GHashTable		*item_ht;
-
-  gpointer               dummy;
 };
 
 struct _GtkItemFactoryEntry
@@ -122,12 +118,6 @@ struct _GtkItemFactoryEntry
 struct _GtkItemFactoryItem
 {
   gchar *path;
-  guint  accelerator_key;
-  guint  accelerator_mods;
-  guint	 modified : 1;
-  guint  in_propagation : 1;
-  gchar *dummy;
-
   GSList *widgets;
 };
 
@@ -147,9 +137,6 @@ void		gtk_item_factory_construct (GtkItemFactory	*ifactory,
      
 /* These functions operate on GtkItemFactoryClass basis.
  */
-void		gtk_item_factory_parse_rc	    (const gchar    *file_name);
-void		gtk_item_factory_parse_rc_string    (const gchar    *rc_string);
-void		gtk_item_factory_parse_rc_scanner   (GScanner	    *scanner);
 void		gtk_item_factory_add_foreign        (GtkWidget	    *accel_widget,
 						     const gchar    *full_path,
 						     GtkAccelGroup  *accel_group,
@@ -168,19 +155,6 @@ GtkWidget*	gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
 GtkWidget*	gtk_item_factory_get_item_by_action   (GtkItemFactory *ifactory,
 						       guint	       action);
 
-/* If `path_pspec' is passed as `NULL', this function will iterate over
- * all hash entries. otherwise only those entries will be dumped for which
- * the pattern matches, e.g. "<Image>*...".
- */
-void	gtk_item_factory_dump_items	(GPatternSpec		*path_pspec,
-					 gboolean		 modified_only,
-					 GtkPrintFunc		 print_func,
-					 gpointer		 func_data);
-void	gtk_item_factory_dump_rc	(const gchar		*file_name,
-					 GPatternSpec		*path_pspec,
-					 gboolean		 modified_only);
-void	gtk_item_factory_print_func	(gpointer		 FILE_pointer,
-					 const gchar		*string);
 void	gtk_item_factory_create_item	(GtkItemFactory		*ifactory,
 					 GtkItemFactoryEntry	*entry,
 					 gpointer		 callback_data,

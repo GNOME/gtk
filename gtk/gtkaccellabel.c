@@ -26,17 +26,19 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
+#include "gtkaccellabel.h"
+#include "gtkaccelmap.h"
+#include "gtkmain.h"
+#include "gtksignal.h"
+#include "gtkintl.h"
 
 #include <string.h>
 #include <ctype.h>
-#include "gtkmain.h"
-#include "gtksignal.h"
-#include "gtkaccellabel.h"
-#include "gtkintl.h"
 
 enum {
   PROP_0,
-  PROP_ACCEL_OBJECT
+  PROP_ACCEL_CLOSURE,
+  PROP_ACCEL_WIDGET
 };
 
 static void     gtk_accel_label_class_init   (GtkAccelLabelClass *klass);
@@ -90,33 +92,17 @@ static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkMiscClass *misc_class;
-  GtkLabelClass *label_class;
+  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   
   accel_label_class = class;
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-  misc_class = (GtkMiscClass*) class;
-  label_class = (GtkLabelClass*) class;
-  
-  parent_class = gtk_type_class (GTK_TYPE_LABEL);
+  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->finalize = gtk_accel_label_finalize;
   gobject_class->set_property = gtk_accel_label_set_property;
   gobject_class->get_property = gtk_accel_label_get_property;
   
   object_class->destroy = gtk_accel_label_destroy;
-  
-  g_object_class_install_property (G_OBJECT_CLASS(object_class),
-                                   PROP_ACCEL_OBJECT,
-                                   g_param_spec_object ("accel_object",
-                                                        _("Accelerator object"),
-                                                        _("The object monitored by this accelerator label"),
-                                                        G_TYPE_OBJECT,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
-
    
   widget_class->size_request = gtk_accel_label_size_request;
   widget_class->expose_event = gtk_accel_label_expose_event;
@@ -129,6 +115,21 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   class->mod_separator = g_strdup ("+");
   class->accel_seperator = g_strdup (" / ");
   class->latin1_to_char = TRUE;
+  
+  g_object_class_install_property (G_OBJECT_CLASS (object_class),
+                                   PROP_ACCEL_CLOSURE,
+                                   g_param_spec_object ("accel_closure",
+                                                        _("Accelerator Closure"),
+                                                        _("The closure to be monitored for accelerator changes"),
+                                                        GTK_TYPE_WIDGET,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (G_OBJECT_CLASS (object_class),
+                                   PROP_ACCEL_WIDGET,
+                                   g_param_spec_object ("accel_widget",
+                                                        _("Accelerator Widget"),
+                                                        _("The widget to be monitored for accelerator changes"),
+                                                        GTK_TYPE_WIDGET,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 }
 
 static void
@@ -143,8 +144,11 @@ gtk_accel_label_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACCEL_OBJECT:
-      gtk_accel_label_set_accel_object (accel_label, g_value_get_object (value));
+    case PROP_ACCEL_CLOSURE:
+      gtk_accel_label_set_accel_closure (accel_label, g_value_get_boxed (value));
+      break;
+    case PROP_ACCEL_WIDGET:
+      gtk_accel_label_set_accel_widget (accel_label, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -152,10 +156,11 @@ gtk_accel_label_set_property (GObject      *object,
     }
 }
 
-static void gtk_accel_label_get_property (GObject    *object,
-					  guint       prop_id,
-					  GValue     *value,
-					  GParamSpec *pspec)
+static void
+gtk_accel_label_get_property (GObject    *object,
+			      guint       prop_id,
+			      GValue     *value,
+			      GParamSpec *pspec)
 {
   GtkAccelLabel  *accel_label;
 
@@ -163,8 +168,11 @@ static void gtk_accel_label_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ACCEL_OBJECT:
-       g_value_set_object (value, accel_label->accel_object);
+    case PROP_ACCEL_CLOSURE:
+      g_value_set_boxed (value, accel_label->accel_closure);
+      break;
+    case PROP_ACCEL_WIDGET:
+      g_value_set_object (value, accel_label->accel_widget);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -177,7 +185,9 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
 {
   accel_label->queue_id = 0;
   accel_label->accel_padding = 3;
-  accel_label->accel_object = NULL;
+  accel_label->accel_widget = NULL;
+  accel_label->accel_closure = NULL;
+  accel_label->accel_group = NULL;
   accel_label->accel_string = NULL;
   
   gtk_accel_label_refetch (accel_label);
@@ -206,7 +216,8 @@ gtk_accel_label_destroy (GtkObject *object)
   
   accel_label = GTK_ACCEL_LABEL (object);
 
-  gtk_accel_label_set_accel_object (accel_label, NULL);
+  gtk_accel_label_set_accel_widget (accel_label, NULL);
+  gtk_accel_label_set_accel_closure (accel_label, NULL);
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -214,33 +225,34 @@ gtk_accel_label_destroy (GtkObject *object)
 static void
 gtk_accel_label_finalize (GObject *object)
 {
-  GtkAccelLabel *accel_label;
-  
-  g_return_if_fail (GTK_IS_ACCEL_LABEL (object));
-  
-  accel_label = GTK_ACCEL_LABEL (object);
-  
+  GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (object);
+
+  if (accel_label->queue_id)
+    {
+      gtk_idle_remove (accel_label->queue_id);
+      accel_label->queue_id = 0;
+    }
   g_free (accel_label->accel_string);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /**
- * gtk_accel_label_get_accel_object:
+ * gtk_accel_label_get_accel_widget:
  * @accel_label: a #GtkAccelLabel
  *
  * Fetches the widget monitored by this accelerator label. See
- * gtk_accel_label_set_accel_object().
+ * gtk_accel_label_set_accel_widget().
  *
  * Return value: the object monitored by the accelerator label,
  *               or %NULL.
  **/
-GObject *
-gtk_accel_label_get_accel_object (GtkAccelLabel *accel_label)
+GtkWidget*
+gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
 {
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), NULL);
 
-  return accel_label->accel_object;
+  return accel_label->accel_widget;
 }
 
 guint
@@ -337,6 +349,55 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 }
 
 static void
+refetch_widget_accel_closure (GtkAccelLabel *accel_label)
+{
+  GSList *slist;
+
+  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+  g_return_if_fail (GTK_IS_WIDGET (accel_label->accel_widget));
+  
+  for (slist = _gtk_widget_get_accel_closures (accel_label->accel_widget); slist; slist = slist->next)
+    if (gtk_accel_group_from_accel_closure (slist->data))
+      {
+	/* we just take the first correctly used closure */
+	gtk_accel_label_set_accel_closure (accel_label, slist->data);
+	return;
+      }
+  gtk_accel_label_set_accel_closure (accel_label, NULL);
+}
+
+void
+gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
+				  GtkWidget     *accel_widget)
+{
+  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+  if (accel_widget)
+    g_return_if_fail (GTK_IS_WIDGET (accel_widget));
+    
+  if (accel_widget != accel_label->accel_widget)
+    {
+      if (accel_label->accel_widget)
+	{
+	  gtk_accel_label_set_accel_closure (accel_label, NULL);
+	  g_signal_handlers_disconnect_by_func (accel_label->accel_widget,
+						G_CALLBACK (refetch_widget_accel_closure),
+						accel_label);
+	  g_object_unref (accel_label->accel_widget);
+	}
+      accel_label->accel_widget = accel_widget;
+      if (accel_label->accel_widget)
+	{
+	  g_object_ref (accel_label->accel_widget);
+	  g_signal_connect_object (accel_label->accel_widget, "accel_closures_changed",
+				   G_CALLBACK (refetch_widget_accel_closure),
+				   accel_label, G_CONNECT_SWAPPED);
+	  refetch_widget_accel_closure (accel_label);
+	}
+      g_object_notify (G_OBJECT (accel_label), "accel_widget");
+    }
+}
+
+static void
 gtk_accel_label_queue_refetch (GtkAccelLabel *accel_label)
 {
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
@@ -347,45 +408,46 @@ gtk_accel_label_queue_refetch (GtkAccelLabel *accel_label)
 						   accel_label);
 }
 
+static void
+check_accel_changed (GtkAccelGroup  *accel_group,
+		     guint           keyval,
+		     GdkModifierType modifier,
+		     GClosure       *accel_closure,
+		     GtkAccelLabel  *accel_label)
+{
+  if (accel_closure == accel_label->accel_closure)
+    gtk_accel_label_queue_refetch (accel_label);
+}
+
 void
-gtk_accel_label_set_accel_object (GtkAccelLabel *accel_label,
-				  GObject	*accel_object)
+gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
+				   GClosure      *accel_closure)
 {
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
-  g_return_if_fail (accel_object == NULL || G_IS_OBJECT (accel_object));
-    
-  if (accel_object != accel_label->accel_object)
-    {
-      if (accel_label->accel_object)
-	{
-	  g_signal_handlers_disconnect_by_func (accel_label->accel_object,
-						G_CALLBACK (gtk_accel_label_queue_refetch),
-						accel_object);
-	  g_object_unref (accel_label->accel_object);
-	}
-      if (accel_label->queue_id)
-	{
-	  gtk_idle_remove (accel_label->queue_id);
-	  accel_label->queue_id = 0;
-	}
-      accel_label->accel_object = accel_object;
-      if (accel_label->accel_object)
-	{
-	  g_object_ref (accel_label->accel_object);
-	  g_signal_connect_object (accel_label->accel_object,
-				   "add-accelerator",
-				   G_CALLBACK (gtk_accel_label_queue_refetch),
-				   accel_label,
-				   G_CONNECT_AFTER | G_CONNECT_SWAPPED);
-	  g_signal_connect_object (accel_label->accel_object,
-				   "remove-accelerator",
-				   G_CALLBACK (gtk_accel_label_queue_refetch),
-				   accel_label,
-				   G_CONNECT_AFTER | G_CONNECT_SWAPPED);
-	}
-       gtk_accel_label_refetch (accel_label);
+  if (accel_closure)
+    g_return_if_fail (gtk_accel_group_from_accel_closure (accel_closure) != NULL);
 
-       g_object_notify (G_OBJECT (accel_label), "accel_object");
+  if (accel_closure != accel_label->accel_closure)
+    {
+      if (accel_label->accel_closure)
+	{
+	  g_signal_handlers_disconnect_by_func (accel_label->accel_group,
+						G_CALLBACK (check_accel_changed),
+						accel_label);
+	  accel_label->accel_group = NULL;
+	  g_closure_unref (accel_label->accel_closure);
+	}
+      accel_label->accel_closure = accel_closure;
+      if (accel_label->accel_closure)
+	{
+	  g_closure_ref (accel_label->accel_closure);
+	  accel_label->accel_group = gtk_accel_group_from_accel_closure (accel_closure);
+	  g_signal_connect_object (accel_label->accel_group, "accel_changed",
+				   G_CALLBACK (check_accel_changed),
+				   accel_label, 0);
+	}
+      gtk_accel_label_queue_refetch (accel_label);
+      g_object_notify (G_OBJECT (accel_label), "accel_closure");
     }
 }
 
@@ -401,106 +463,105 @@ gtk_accel_label_refetch_idle (GtkAccelLabel *accel_label)
   return retval;
 }
 
+static gboolean
+find_accel (GtkAccelKey *key,
+	    GClosure    *closure,
+	    gpointer     data)
+{
+  return data == (gpointer) closure;
+}
+
 gboolean
 gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelClass *class;
+  gchar *utf8;
 
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
   class = GTK_ACCEL_LABEL_GET_CLASS (accel_label);
-  
+
   g_free (accel_label->accel_string);
   accel_label->accel_string = NULL;
-  
-  if (accel_label->accel_object)
+
+  if (accel_label->accel_closure)
     {
-      GtkAccelEntry *entry = NULL;
-      GSList *slist;
-      
-      slist = gtk_accel_group_entries_from_object (accel_label->accel_object);
-      for (; slist; slist = slist->next)
+      GtkAccelKey *key = gtk_accel_group_find (accel_label->accel_group, find_accel, accel_label->accel_closure);
+
+      if (key && key->accel_flags & GTK_ACCEL_VISIBLE)
 	{
-	  entry = slist->data;
-	  if (entry->accel_flags & GTK_ACCEL_VISIBLE)
+	  GString *gstring;
+	  gboolean seen_mod = FALSE;
+	  
+	  gstring = g_string_new (accel_label->accel_string);
+	  g_string_append (gstring, gstring->len ? class->accel_seperator : "   ");
+	  
+	  if (key->accel_mods & GDK_SHIFT_MASK)
 	    {
-	      GString *gstring;
-	      gboolean had_mod;
-	      
-	      gstring = g_string_new (accel_label->accel_string);
-	      if (gstring->len)
-		g_string_append (gstring, class->accel_seperator);
-	      else
-		g_string_append (gstring, "   ");
-
-	      if (entry->accel_flags & GTK_ACCEL_SIGNAL_VISIBLE)
-		{
-		  g_string_append (gstring, class->signal_quote1);
-		  g_string_append (gstring, gtk_signal_name (entry->signal_id));
-		  g_string_append (gstring, class->signal_quote2);
-		}
-	      
-	      had_mod = FALSE;
-	      if (entry->accelerator_mods & GDK_SHIFT_MASK)
-		{
-		  g_string_append (gstring, class->mod_name_shift);
-		  had_mod = TRUE;
-		}
-	      if (entry->accelerator_mods & GDK_CONTROL_MASK)
-		{
-		  if (had_mod)
-		    g_string_append (gstring, class->mod_separator);
-		  g_string_append (gstring, class->mod_name_control);
-		  had_mod = TRUE;
-		}
-	      if (entry->accelerator_mods & GDK_MOD1_MASK)
-		{
-		  if (had_mod)
-		    g_string_append (gstring, class->mod_separator);
-		  g_string_append (gstring, class->mod_name_alt);
-		  had_mod = TRUE;
-		}
-	      
-	      if (had_mod)
-		g_string_append (gstring, class->mod_separator);
-	      if (entry->accelerator_key < 0x80 ||
-		  (entry->accelerator_key > 0x80 &&
-		   entry->accelerator_key <= 0xff &&
-		   class->latin1_to_char))
-		{
-		  switch (entry->accelerator_key)
-		    {
-		    case ' ':
-		      g_string_append (gstring, "Space");
-		      break;
-		    case '\\':
-		      g_string_append (gstring, "Backslash");
-		      break;
-		    default:
-		      g_string_append_c (gstring, toupper (entry->accelerator_key));
-		      break;
-		    }
-		}
-	      else
-		{
-		  gchar *tmp;
-		  
-		  tmp = gtk_accelerator_name (entry->accelerator_key, 0);
-		  if (tmp[0] != 0 && tmp[1] == 0)
-		    tmp[0] = toupper (tmp[0]);
-		  g_string_append (gstring, tmp);
-		  g_free (tmp);
-		}
-
-	      g_free (accel_label->accel_string);
-	      accel_label->accel_string = gstring->str;
-	      g_string_free (gstring, FALSE);
+	      g_string_append (gstring, class->mod_name_shift);
+	      seen_mod = TRUE;
 	    }
+	  if (key->accel_mods & GDK_CONTROL_MASK)
+	    {
+	      if (seen_mod)
+		g_string_append (gstring, class->mod_separator);
+	      g_string_append (gstring, class->mod_name_control);
+	      seen_mod = TRUE;
+	    }
+	  if (key->accel_mods & GDK_MOD1_MASK)
+	    {
+	      if (seen_mod)
+		g_string_append (gstring, class->mod_separator);
+	      g_string_append (gstring, class->mod_name_alt);
+	      seen_mod = TRUE;
+	    }
+	  if (seen_mod)
+	    g_string_append (gstring, class->mod_separator);
+	  if (key->accel_key < 0x80 ||
+	      (key->accel_key > 0x80 &&
+	       key->accel_key <= 0xff &&
+	       class->latin1_to_char))
+	    {
+	      switch (key->accel_key)
+		{
+		case ' ':
+		  g_string_append (gstring, "Space");
+		  break;
+		case '\\':
+		  g_string_append (gstring, "Backslash");
+		  break;
+		default:
+		  g_string_append_c (gstring, toupper (key->accel_key));
+		  break;
+		}
+	    }
+	  else
+	    {
+	      gchar *tmp;
+	      
+	      tmp = gtk_accelerator_name (key->accel_key, 0);
+	      if (tmp[0] != 0 && tmp[1] == 0)
+		tmp[0] = toupper (tmp[0]);
+	      g_string_append (gstring, tmp);
+	      g_free (tmp);
+	    }
+	  g_free (accel_label->accel_string);
+	  accel_label->accel_string = gstring->str;
+	  g_string_free (gstring, FALSE);
 	}
+      if (!accel_label->accel_string)
+	accel_label->accel_string = g_strdup ("-/-");
     }
-
+  
   if (!accel_label->accel_string)
     accel_label->accel_string = g_strdup ("");
+
+  utf8 = g_locale_to_utf8 (accel_label->accel_string, -1, NULL, NULL, NULL);
+  if (utf8)
+    {
+      g_free (accel_label->accel_string);
+      accel_label->accel_string = utf8;
+    }
 
   if (accel_label->queue_id)
     {

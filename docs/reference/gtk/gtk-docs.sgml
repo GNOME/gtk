@@ -126,7 +126,8 @@
 <!entity gtk-Styles SYSTEM "sgml/gtkstyle.sgml">
 <!entity gtk-Themes SYSTEM "sgml/gtkthemes.sgml">
 <!entity gtk-Resource-Files SYSTEM "sgml/gtkrc.sgml">
-<!entity gtk-Keyboard-Accelerators SYSTEM "sgml/gtkaccelgroup.sgml">
+<!entity GtkAccelGroup SYSTEM "sgml/gtkaccelgroup.sgml">
+<!entity gtk-accel-map SYSTEM "sgml/gtkaccelmap.sgml">
 <!entity gtk-Selections SYSTEM "sgml/gtkselection.sgml">
 <!entity gtk-Clipboards SYSTEM "sgml/gtkclipboard.sgml">
 <!entity gtk-Drag-and-Drop SYSTEM "sgml/gtkdnd.sgml">
@@ -248,7 +249,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <title>GTK+ Core Reference</title>
 
     &gtk-General;
-    &gtk-Keyboard-Accelerators;
+    &GtkAccelGroup;
+    &gtk-accel-map;
     &gtk-Clipboards;
     &gtk-Drag-and-Drop;
     &gtk-Stock-Items;

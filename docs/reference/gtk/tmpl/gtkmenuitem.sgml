@@ -83,6 +83,15 @@ Sets the widget submenu, or changes it.
 @submenu: the submenu
 
 
+<!-- ##### FUNCTION gtk_menu_item_set_accel_path ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@accel_path: 
+
+
 <!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
 <para>
 Removes the widget's submenu.

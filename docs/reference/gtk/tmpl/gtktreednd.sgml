@@ -43,6 +43,7 @@ GtkTreeView drag-and-drop
 </para>
 
 @g_iface: 
+@row_draggable: 
 @drag_data_get: 
 @drag_data_delete: 
 

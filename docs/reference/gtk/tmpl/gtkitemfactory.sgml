@@ -84,11 +84,6 @@ GtkItemFactory
 </para>
 
 @path: 
-@accelerator_key: 
-@accelerator_mods: 
-@modified: 
-@in_propagation: 
-@dummy: 
 @widgets: 
 
 <!-- ##### FUNCTION gtk_item_factory_new ##### -->
@@ -111,30 +106,6 @@ GtkItemFactory
 @container_type: 
 @path: 
 @accel_group: 
-
-
-<!-- ##### FUNCTION gtk_item_factory_parse_rc ##### -->
-<para>
-
-</para>
-
-@file_name: 
-
-
-<!-- ##### FUNCTION gtk_item_factory_parse_rc_string ##### -->
-<para>
-
-</para>
-
-@rc_string: 
-
-
-<!-- ##### FUNCTION gtk_item_factory_parse_rc_scanner ##### -->
-<para>
-
-</para>
-
-@scanner: 
 
 
 <!-- ##### FUNCTION gtk_item_factory_add_foreign ##### -->
@@ -205,36 +176,6 @@ GtkItemFactory
 @ifactory: 
 @action: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_item_factory_dump_items ##### -->
-<para>
-
-</para>
-
-@path_pspec: 
-@modified_only: 
-@print_func: 
-@func_data: 
-
-
-<!-- ##### FUNCTION gtk_item_factory_dump_rc ##### -->
-<para>
-
-</para>
-
-@file_name: 
-@path_pspec: 
-@modified_only: 
-
-
-<!-- ##### FUNCTION gtk_item_factory_print_func ##### -->
-<para>
-
-</para>
-
-@FILE_pointer: 
-@string: 
 
 
 <!-- ##### FUNCTION gtk_item_factory_create_item ##### -->

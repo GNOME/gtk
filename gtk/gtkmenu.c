@@ -27,6 +27,7 @@
 #include <ctype.h>
 #include <string.h> /* memset */
 #include "gdk/gdkkeysyms.h"
+#include "gtkaccelmap.h"
 #include "gtkbindings.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
@@ -76,6 +77,7 @@ static void     gtk_menu_get_property      (GObject     *object,
 					    GValue      *value,
 					    GParamSpec  *pspec);
 static void     gtk_menu_destroy           (GtkObject        *object);
+static void     gtk_menu_finalize          (GObject          *object);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
 static void     gtk_menu_size_request      (GtkWidget        *widget,
@@ -83,6 +85,7 @@ static void     gtk_menu_size_request      (GtkWidget        *widget,
 static void     gtk_menu_size_allocate     (GtkWidget        *widget,
 					    GtkAllocation    *allocation);
 static void     gtk_menu_paint             (GtkWidget        *widget);
+static void     gtk_menu_show              (GtkWidget        *widget);
 static gboolean gtk_menu_expose            (GtkWidget        *widget,
 					    GdkEventExpose   *event);
 static gboolean gtk_menu_key_press         (GtkWidget        *widget,
@@ -161,21 +164,16 @@ gtk_menu_get_type (void)
 static void
 gtk_menu_class_init (GtkMenuClass *class)
 {
-  GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
-  GtkMenuShellClass *menu_shell_class;
-
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
+  GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
   GtkBindingSet *binding_set;
   
-  gobject_class = (GObjectClass*) class;
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-  container_class = (GtkContainerClass*) class;
-  menu_shell_class = (GtkMenuShellClass*) class;
-  parent_class = gtk_type_class (gtk_menu_shell_get_type ());
+  parent_class = g_type_class_peek_parent (class);
   
+  gobject_class->finalize = gtk_menu_finalize;
   gobject_class->set_property = gtk_menu_set_property;
   gobject_class->get_property = gtk_menu_get_property;
 
@@ -192,6 +190,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->unrealize = gtk_menu_unrealize;
   widget_class->size_request = gtk_menu_size_request;
   widget_class->size_allocate = gtk_menu_size_allocate;
+  widget_class->show = gtk_menu_show;
   widget_class->expose_event = gtk_menu_expose;
   widget_class->key_press_event = gtk_menu_key_press;
   widget_class->motion_notify_event = gtk_menu_motion_notify;
@@ -388,8 +387,6 @@ gtk_menu_destroy (GtkObject *object)
   
   gtk_menu_stop_navigating_submenu (menu);
 
-  gtk_menu_set_accel_group (menu, NULL);
-
   if (menu->old_active_menu_item)
     {
       gtk_widget_unref (menu->old_active_menu_item);
@@ -403,6 +400,12 @@ gtk_menu_destroy (GtkObject *object)
       gtk_object_ref (object);
     }
   
+  if (menu->accel_group)
+    {
+      g_object_unref (menu->accel_group);
+      menu->accel_group = NULL;
+    }
+
   if (menu->toplevel)
     gtk_widget_destroy (menu->toplevel);
   if (menu->tearoff_window)
@@ -411,6 +414,15 @@ gtk_menu_destroy (GtkObject *object)
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
+static void
+gtk_menu_finalize (GObject *object)
+{
+  GtkMenu *menu = GTK_MENU (object);
+
+  g_free (menu->accel_path);
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
 
 void
 gtk_menu_attach_to_widget (GtkMenu	       *menu,
@@ -828,6 +840,7 @@ gtk_menu_set_accel_group (GtkMenu	*menu,
       menu->accel_group = accel_group;
       if (menu->accel_group)
 	gtk_accel_group_ref (menu->accel_group);
+      _gtk_menu_refresh_accel_paths (menu, TRUE);
     }
 }
 
@@ -837,6 +850,76 @@ gtk_menu_get_accel_group (GtkMenu *menu)
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
 
   return menu->accel_group;
+}
+
+/**
+ * gtk_menu_set_accel_path
+ * @menu:       a valid #GtkMenu
+ * @accel_path: a valid accelerator path
+ *
+ * Sets an accelerator path for this menu from which accelerator paths
+ * for its immediate children, its menu items, can be constructed.
+ * The main purpose of this function is to spare the programmer the
+ * inconvenience of having to call gtk_menu_item_set_accel_path() on
+ * each menu item that should support runtime user changable accelerators.
+ * Instead, by just calling gtk_menu_set_accel_path() on their parent,
+ * each menu item of this menu, that contains a label describing its purpose,
+ * automatically gets an accel path assigned. For example, a menu containing
+ * menu items "New" and "Exit", will, after gtk_menu_set_accel_path (menu,
+ * "<Gnumeric-Sheet>/File"); has been called, assign its items the accel paths:
+ * "<Gnumeric-Sheet>/File/New" and "<Gnumeric-Sheet>/File/Exit".
+ * Assigning accel paths to menu items then enables the user to change
+ * their accelerators at runtime. More details about accelerator paths
+ * and their default setups can be found at gtk_accel_map_add_entry().
+ */
+void
+gtk_menu_set_accel_path (GtkMenu     *menu,
+			 const gchar *accel_path)
+{
+  g_return_if_fail (GTK_IS_MENU (menu));
+  if (accel_path)
+    g_return_if_fail (accel_path[0] == '<' && strchr (accel_path, '/')); /* simplistic check */
+
+  g_free (menu->accel_path);
+  menu->accel_path = g_strdup (accel_path);
+  if (menu->accel_path)
+    _gtk_menu_refresh_accel_paths (menu, FALSE);
+}
+
+typedef struct {
+  GtkMenu *menu;
+  gboolean group_changed;
+} AccelPropagation;
+
+static void
+refresh_accel_paths_froeach (GtkWidget *widget,
+			     gpointer   data)
+{
+  AccelPropagation *prop = data;
+
+  if (GTK_IS_MENU_ITEM (widget))	/* should always be true */
+    _gtk_menu_item_refresh_accel_path (GTK_MENU_ITEM (widget),
+				       prop->menu->accel_path,
+				       prop->menu->accel_group,
+				       prop->group_changed);
+}
+
+void
+_gtk_menu_refresh_accel_paths (GtkMenu *menu,
+			       gboolean group_changed)
+{
+  g_return_if_fail (GTK_IS_MENU (menu));
+      
+  if (menu->accel_path && menu->accel_group)
+    {
+      AccelPropagation prop;
+
+      prop.menu = menu;
+      prop.group_changed = group_changed;
+      gtk_container_foreach (GTK_CONTAINER (menu),
+			     refresh_accel_paths_froeach,
+			     &prop);
+    }
 }
 
 void
@@ -1480,20 +1563,33 @@ gtk_menu_expose (GtkWidget	*widget,
   return FALSE;
 }
 
+static void
+gtk_menu_show (GtkWidget *widget)
+{
+  GtkMenu *menu = GTK_MENU (widget);
+
+  _gtk_menu_refresh_accel_paths (menu, FALSE);
+
+  GTK_WIDGET_CLASS (parent_class)->show (widget);
+}
+
 static gboolean
 gtk_menu_key_press (GtkWidget	*widget,
 		    GdkEventKey *event)
 {
   GtkMenuShell *menu_shell;
   GtkMenu *menu;
+  GtkAccelGroup *accel_group;
   gboolean delete = FALSE;
   gchar *accel = NULL;
+  guint accel_key, accel_mods;
   
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
       
   menu_shell = GTK_MENU_SHELL (widget);
   menu = GTK_MENU (widget);
+  accel_group = gtk_menu_get_accel_group (menu);
   
   gtk_menu_stop_navigating_submenu (menu);
 
@@ -1543,58 +1639,50 @@ gtk_menu_key_press (GtkWidget	*widget,
       break;
     }
 
+  accel_key = event->keyval;
+  accel_mods = event->state & gtk_accelerator_get_default_mod_mask ();
+
   /* Modify the accelerators */
   if (menu_shell->active_menu_item &&
-      GTK_BIN (menu_shell->active_menu_item)->child &&
-      GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL &&
-      !gtk_widget_accelerators_locked (menu_shell->active_menu_item) &&
+      GTK_BIN (menu_shell->active_menu_item)->child &&			/* no seperators */
+      GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL &&	/* no submenus */
       (delete ||
        (gtk_accelerator_valid (event->keyval, event->state) &&
-	(event->state ||
-	 (event->keyval >= GDK_F1 && event->keyval <= GDK_F35)))))
+	(accel_mods ||
+	 (accel_key >= GDK_F1 && accel_key <= GDK_F35)))))
     {
-      GtkMenuItem *menu_item;
-      GtkAccelGroup *accel_group;
-      
-      menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item);
-      
-      if (!GTK_MENU (widget)->accel_group)
-	accel_group = gtk_accel_group_get_default ();
-      else
-	accel_group = GTK_MENU (widget)->accel_group;
-      
-      gtk_widget_remove_accelerators (GTK_WIDGET (menu_item),
-				      gtk_signal_name (menu_item->accelerator_signal),
-				      TRUE);
-      
-      if (!delete &&
-	  0 == gtk_widget_accelerator_signal (GTK_WIDGET (menu_item),
-					      accel_group,
-					      event->keyval,
-					      event->state))
+      GtkWidget *menu_item = menu_shell->active_menu_item;
+      gboolean replace_accels = TRUE;
+      const gchar *path;
+
+      path = _gtk_widget_get_accel_path (menu_item);
+      if (!path)
 	{
-	  GSList *slist;
-	  
-	  slist = gtk_accel_group_entries_from_object (G_OBJECT (menu_item));
-	  while (slist)
+	  /* can't change accelerators on menu_items without paths
+	   * (basically, those items are accelerator-locked).
+	   */
+	  /* g_print("item has no path, menu prefix: %s\n", menu->accel_path); */
+	  gdk_beep ();
+	}
+      else
+	{
+	  gboolean changed;
+
+	  if (delete)
 	    {
-	      GtkAccelEntry *ac_entry;
-	      
-	      ac_entry = slist->data;
-	      
-	      if (ac_entry->signal_id == menu_item->accelerator_signal)
-		break;
-	      
-	      slist = slist->next;
+	      accel_key = 0;
+	      accel_mods = 0;
 	    }
-	  
-	  if (!slist)
-	    gtk_widget_add_accelerator (GTK_WIDGET (menu_item),
-					gtk_signal_name (menu_item->accelerator_signal),
-					accel_group,
-					event->keyval,
-					event->state,
-					GTK_ACCEL_VISIBLE);
+	  changed = gtk_accel_map_change_entry (path, accel_key, accel_mods, replace_accels);
+
+	  if (!changed)
+	    {
+	      /* we failed, probably because this key is in use and
+	       * locked already
+	       */
+	      /* g_print("failed to change\n"); */
+	      gdk_beep ();
+	    }
 	}
     }
   

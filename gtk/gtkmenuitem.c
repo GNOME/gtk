@@ -51,6 +51,7 @@ enum {
 static void gtk_menu_item_class_init     (GtkMenuItemClass *klass);
 static void gtk_menu_item_init           (GtkMenuItem      *menu_item);
 static void gtk_menu_item_destroy        (GtkObject        *object);
+static void gtk_menu_item_finalize       (GObject          *object);
 static void gtk_menu_item_size_request   (GtkWidget        *widget,
 					  GtkRequisition   *requisition);
 static void gtk_menu_item_size_allocate  (GtkWidget        *widget,
@@ -59,6 +60,7 @@ static void gtk_menu_item_paint          (GtkWidget        *widget,
 					  GdkRectangle     *area);
 static gint gtk_menu_item_expose         (GtkWidget        *widget,
 					  GdkEventExpose   *event);
+
 
 static void gtk_real_menu_item_select               (GtkItem     *item);
 static void gtk_real_menu_item_deselect             (GtkItem     *item);
@@ -120,18 +122,15 @@ gtk_menu_item_get_type (void)
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
 {
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
-  GtkItemClass *item_class;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GtkItemClass *item_class = GTK_ITEM_CLASS (klass);
 
-  object_class = (GtkObjectClass*) klass;
-  widget_class = (GtkWidgetClass*) klass;
-  container_class = (GtkContainerClass*) klass;
-  item_class = (GtkItemClass*) klass;
+  parent_class = g_type_class_peek_parent (klass);
 
-  parent_class = gtk_type_class (gtk_item_get_type ());
-
+  gobject_class->finalize = gtk_menu_item_finalize;
 
   object_class->destroy = gtk_menu_item_destroy;
 
@@ -141,7 +140,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->show_all = gtk_menu_item_show_all;
   widget_class->hide_all = gtk_menu_item_hide_all;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
-
+  
   container_class->forall = gtk_menu_item_forall;
 
   item_class->select = gtk_real_menu_item_select;
@@ -194,7 +193,6 @@ static void
 gtk_menu_item_init (GtkMenuItem *menu_item)
 {
   menu_item->submenu = NULL;
-  menu_item->accelerator_signal = menu_item_signals[ACTIVATE];
   menu_item->toggle_size = 0;
   menu_item->accelerator_width = 0;
   menu_item->show_submenu_indicator = FALSE;
@@ -269,8 +267,17 @@ gtk_menu_item_destroy (GtkObject *object)
   if (menu_item->submenu)
     gtk_widget_destroy (menu_item->submenu);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+gtk_menu_item_finalize (GObject *object)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
+
+  g_free (menu_item->accel_path);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -898,6 +905,107 @@ gtk_menu_item_hide_all (GtkWidget *widget)
 }
 
 static void
+gtk_menu_item_accel_name_foreach (GtkWidget *widget,
+				  gpointer data)
+{
+  const gchar **path_p = data;
+
+  if (!*path_p)
+    {
+      if (GTK_IS_LABEL (widget))
+	{
+	  *path_p = gtk_label_get_text (GTK_LABEL (widget));
+	  if (*path_p && (*path_p)[0] == 0)
+	    *path_p = NULL;
+	}
+      else if (GTK_IS_CONTAINER (widget))
+	gtk_container_foreach (GTK_CONTAINER (widget),
+			       gtk_menu_item_accel_name_foreach,
+			       data);
+    }
+}
+
+void
+_gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
+				   const gchar   *prefix,
+				   GtkAccelGroup *accel_group,
+				   gboolean       group_changed)
+{
+  const gchar *path;
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+
+  widget = GTK_WIDGET (menu_item);
+
+  path = _gtk_widget_get_accel_path (widget);
+  if (!path)					/* no active accel_path yet */
+    {
+      path = menu_item->accel_path;
+      if (!path && prefix)
+	{
+	  gchar *postfix = NULL;
+
+	  /* try to construct one from label text */
+	  gtk_container_foreach (GTK_CONTAINER (menu_item),
+				 gtk_menu_item_accel_name_foreach,
+				 &postfix);
+	  menu_item->accel_path = postfix ? g_strconcat (prefix, "/", postfix, NULL) : NULL;
+	  path = menu_item->accel_path;
+	}
+      if (path)
+	_gtk_widget_set_accel_path (widget, path, accel_group);
+    }
+  else if (group_changed)			/* reinstall accelerators */
+    _gtk_widget_set_accel_path (widget, path, accel_group);
+}
+
+/**
+ * gtk_menu_item_set_accel_path
+ * @menu_item:  a valid #GtkMenuItem
+ * @accel_path: accelerator path, corresponding to this menu item's funcitonality
+ *
+ * Set the accelerator path on @menu_item, through which runtime changes of the
+ * menu item's accelerator caused by the user can be identified and saved to
+ * persistant storage (see gtk_accel_map_save() on this).
+ * To setup a default accelerator for this menu item, call
+ * gtk_accel_map_add_entry() with the same @accel_path.
+ * See also gtk_accel_map_add_entry() on the specifics of accelerator paths,
+ * and gtk_menu_set_accel_path() for a more convenient variant of this function.
+ */
+void
+gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
+			      const gchar *accel_path)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+  g_return_if_fail (accel_path && accel_path[0] == '<' && strchr (accel_path, '/'));
+
+  widget = GTK_WIDGET (menu_item);
+
+  /* store new path */
+  g_free (menu_item->accel_path);
+  menu_item->accel_path = g_strdup (accel_path);
+
+  /* forget accelerators associated with old path */
+  _gtk_widget_set_accel_path (widget, NULL, NULL);
+
+  /* install accelerators associated with new path */
+  if (widget->parent)
+    {
+      GtkMenu *menu = GTK_MENU (widget->parent);
+
+      if (menu->accel_group)
+	_gtk_menu_item_refresh_accel_path (GTK_MENU_ITEM (widget),
+					   NULL,
+					   menu->accel_group,
+					   FALSE);
+    }
+}
+
+static void
 gtk_menu_item_forall (GtkContainer *container,
 		      gboolean      include_internals,
 		      GtkCallback   callback,
@@ -913,5 +1021,5 @@ gtk_menu_item_forall (GtkContainer *container,
   menu_item = GTK_MENU_ITEM (container);
 
   if (bin->child)
-    (* callback) (bin->child, callback_data);
+    callback (bin->child, callback_data);
 }

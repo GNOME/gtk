@@ -98,7 +98,7 @@ do_menus (void)
 			G_CALLBACK (gtk_true), NULL);
       
       accel_group = gtk_accel_group_new ();
-      gtk_accel_group_attach (accel_group, G_OBJECT (window));
+      gtk_window_add_accel_group (window, accel_group);
 
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -150,7 +150,7 @@ do_menus (void)
 				  accel_group,
 				  GDK_F1,
 				  0,
-				  GTK_ACCEL_VISIBLE | GTK_ACCEL_SIGNAL_VISIBLE);
+				  GTK_ACCEL_VISIBLE);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerator Locked");
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
@@ -175,7 +175,6 @@ do_menus (void)
 				  GDK_F3,
 				  0,
 				  GTK_ACCEL_VISIBLE);
-      gtk_widget_lock_accelerators (menuitem);
       
       optionmenu = gtk_option_menu_new ();
       gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);

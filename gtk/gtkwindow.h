@@ -104,6 +104,8 @@ struct _GtkWindow
   guint frame_top;
   guint frame_right;
   guint frame_bottom;
+
+  guint accels_changed_handler;
   
   GdkModifierType mnemonic_modifier;
   gpointer gtk_reserved1;	/* For future GdkScreen * */
@@ -124,6 +126,7 @@ struct _GtkWindowClass
   void     (* activate_default)        (GtkWindow       *window);
   void     (* move_focus)              (GtkWindow       *window,
                                         GtkDirectionType direction);  
+  void	   (*accels_changed)	       (GtkWindow	*window);
 };
 
 #define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())
@@ -319,6 +322,11 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint      *new_width,
 						gint      *new_height);
 GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
+
+/* --- internal (GtkAcceleratable) --- */
+gboolean	_gtk_window_query_nonaccels	(GtkWindow	*window,
+						 guint		 accel_key,
+						 GdkModifierType accel_mods);
 
 #ifdef __cplusplus
 }

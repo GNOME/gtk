@@ -1,3 +1,69 @@
+Mon Nov 12 23:08:37 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/maketypes.awk: fix type utils generation on unix.
+
+	* gtk/gtkaccelmap.[hc]: new files, implementing a global accelerator
+	registry.
+
+	* gtk/gtkaccelgroup.[hc]: major API/implementation revamp:
+	removed GTK_ACCEL_SIGNAL_VISIBLE, gtk_accel_group_get_default,
+	gtk_accel_group_get_entry, gtk_accel_group_(un)lock_entry,
+	gtk_accel_group_add/remove, gtk_accel_group_handle_add/remove,
+	gtk_accel_group_create_add/remove, gtk_accel_group_entries_from_object.
+	introduced ::accel_changed signal for change notification, and
+	gtk_accel_group_connect/disconnect to connect closures to accel groups.
+	made gtk_accel_group_attach/detach and gtk_accel_group_activate private
+	functions.
+	deprecated gtk_accel_group_ref/unref.
+
+	* gtk/gtkaccellabel.[hc]: changes to make accellabels pay attention
+	to accel group changed notification and basically operate on closures.
+	removed gtk_accel_label_get_accel_object and
+	gtk_accel_label_set_accel_object.
+	introduced gtk_accel_label_set_accel_closure, and for convenience,
+	gtk_accel_label_set_accel_widget.
+
+	* gtk/gtkitemfactory.[hc]: removed accelerator propagation code
+	which mostly moved into gtkaccelmap.[hc].
+	removed gtk_item_factory_parse_rc*, gtk_item_factory_dump_*
+	and gtk_item_factory_print_func.
+
+	* gtk/gtkmain.c: call _gtk_accel_map_init().
+
+	* gtk/gtkmenuitem.[hc]: introduced gtk_menu_item_set_accel_path(),
+	that associates an accelerator path with menu items, through which
+	persistent accelerator settings on menu items are enabled.
+
+	* gtk/gtkmenu.[hc]: added gtk_menu_set_accel_path() so accelerator
+	paths of menu item can be default constructed to allow installation
+	of accelerators on menu items that don't come with an accelerator
+	binding by default.
+
+	* gtk/gtksettings.c: fix STRING type rc settings by special casing
+	them appropriately in the parser.
+
+	* gtk/gtksignal.[hc]: allow a class function offset of 0 for
+	gtk_signal_newv().
+
+	* gtk/gtkwidget.[hc]: accelerator API revamp.
+	removed ::accelerator_add/remove signals, gtk_widget_accelerator_signal,
+	gtk_widget_accelerators_locked, gtk_widget_remove_accelerators and
+	gtk_widget_(un)lock_accelerators.
+	accelerators maintained through gtk_widget_add/remove_accelerator()
+	are not runtime changable now, the correct sequence to setup a
+	widget for runtime changable accelerators is now:
+	  gtk_accel_map_add_entry(accel_path, key, mods);
+	  _gtk_widget_set_accel_path(widget, accel_path, accel_group);
+
+	* gtk/gtkwindow.[hc]: accelerator changes, proxy and coalesce accel
+	group changes (as well as mnemonic changes) through the new signal
+	::accels_changed.
+
+Sat Nov 10 12:08:56 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksettings.c (_gtk_settings_parse_convert): properly handle
+	GString->string conversions.
+
 Mon Nov 12 19:33:52 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmessagedialog.c (gtk_message_dialog_new): Warn

@@ -20,7 +20,6 @@ Public enumerated types used throughout GTK+.
 </para>
 
 @GTK_ACCEL_VISIBLE: 
-@GTK_ACCEL_SIGNAL_VISIBLE: 
 @GTK_ACCEL_LOCKED: 
 @GTK_ACCEL_MASK: 
 

@@ -527,27 +527,6 @@ GtkWidget
 @accel_group: 
 @accel_key: 
 @accel_mods: 
-
-
-<!-- ##### FUNCTION gtk_widget_remove_accelerators ##### -->
-<para>
-
-</para>
-
-@widget: 
-@accel_signal: 
-@visible_only: 
-
-
-<!-- ##### FUNCTION gtk_widget_accelerator_signal ##### -->
-<para>
-
-</para>
-
-@widget: 
-@accel_group: 
-@accel_key: 
-@accel_mods: 
 @Returns: 
 
 
@@ -1000,14 +979,6 @@ GtkWidget
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_widget_lock_accelerators ##### -->
-<para>
-
-</para>
-
-@widget: 
-
-
 <!-- ##### FUNCTION gtk_widget_modify_style ##### -->
 <para>
 
@@ -1204,23 +1175,6 @@ GtkWidget
 @widget: 
 @hadjustment: 
 @vadjustment: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_widget_unlock_accelerators ##### -->
-<para>
-
-</para>
-
-@widget: 
-
-
-<!-- ##### FUNCTION gtk_widget_accelerators_locked ##### -->
-<para>
-
-</para>
-
-@widget: 
 @Returns: 
 
 
@@ -1456,17 +1410,12 @@ GtkWidget
 @requisition: 
 
 
-<!-- ##### SIGNAL GtkWidget::add-accelerator ##### -->
+<!-- ##### SIGNAL GtkWidget::accel-closures-changed ##### -->
 <para>
 
 </para>
 
 @widget: the object which received the signal.
-@accel_signal_id: 
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-@accel_flags: 
 
 <!-- ##### SIGNAL GtkWidget::button-press-event ##### -->
 <para>
@@ -1833,16 +1782,6 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 @widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::remove-accelerator ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@accel_group: 
-@accel_key: 
-@accel_mods: 
 
 <!-- ##### SIGNAL GtkWidget::scroll-event ##### -->
 <para>

@@ -49,18 +49,6 @@ GtkTreeView
 @Returns: 
 
 
-<!-- ##### USER_FUNCTION GtkTreeViewDraggableFunc ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@context: 
-@path: 
-@user_data: 
-@Returns: 
-
-
 <!-- ##### USER_FUNCTION GtkTreeViewMappingFunc ##### -->
 <para>
 
@@ -69,19 +57,6 @@ GtkTreeView
 @tree_view: 
 @path: 
 @user_data: 
-
-
-<!-- ##### USER_FUNCTION GtkTreeViewDroppableFunc ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@context: 
-@path: 
-@pos: 
-@user_data: 
-@Returns: 
 
 
 <!-- ##### USER_FUNCTION GtkTreeViewSearchEqualFunc ##### -->
@@ -557,33 +532,6 @@ GtkTreeView
 @ty: 
 @wx: 
 @wy: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_set_rows_drag_source ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@start_button_mask: 
-@targets: 
-@n_targets: 
-@actions: 
-@row_draggable_func: 
-@user_data: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_set_rows_drag_dest ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@targets: 
-@n_targets: 
-@actions: 
-@location_droppable_func: 
-@user_data: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_unset_rows_drag_source ##### -->

@@ -277,18 +277,6 @@ struct _GtkWidgetClass
   void (* child_notify)        (GtkWidget	 *widget,
 				GParamSpec       *pspec);
   
-  /* accelerators */
-  void (* add_accelerator)     (GtkWidget      *widget,
-				guint           accel_signal_id,
-				GtkAccelGroup  *accel_group,
-				guint           accel_key,
-				GdkModifierType accel_mods,
-				GtkAccelFlags   accel_flags);
-  void (* remove_accelerator)  (GtkWidget      *widget,
-				GtkAccelGroup  *accel_group,
-				guint           accel_key,
-				GdkModifierType accel_mods);
-
   /* Mnemonics */
   gboolean (* mnemonic_activate) (GtkWidget    *widget,
 				  gboolean      group_cycling);
@@ -496,20 +484,15 @@ void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
 					   guint                accel_key,
 					   guint                accel_mods,
 					   GtkAccelFlags        accel_flags);
-void	   gtk_widget_remove_accelerator  (GtkWidget           *widget,
+gboolean   gtk_widget_remove_accelerator  (GtkWidget           *widget,
 					   GtkAccelGroup       *accel_group,
 					   guint                accel_key,
 					   guint                accel_mods);
-void	   gtk_widget_remove_accelerators (GtkWidget           *widget,
-					   const gchar	       *accel_signal,
-					   gboolean		visible_only);
-guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
-					   GtkAccelGroup       *accel_group,
-					   guint                accel_key,
-					   guint                accel_mods);
-void	   gtk_widget_lock_accelerators   (GtkWidget	       *widget);
-void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
-gboolean   gtk_widget_accelerators_locked (GtkWidget	       *widget);
+void         _gtk_widget_set_accel_path   (GtkWidget           *widget,
+					   const gchar         *accel_path,
+					   GtkAccelGroup       *accel_group);
+const gchar* _gtk_widget_get_accel_path   (GtkWidget           *widget);
+GSList*    _gtk_widget_get_accel_closures (GtkWidget	       *widget);
 gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
 					   gboolean             group_cycling);
 gboolean   gtk_widget_event		  (GtkWidget	       *widget,

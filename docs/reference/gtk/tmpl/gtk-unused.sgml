@@ -495,9 +495,9 @@ This is a private struct used by GTK+ internally, don't worry about it.
 @object: 
 @signal_id: 
 
-<!-- ##### ARG GtkAccelLabel:accel-widget ##### -->
+<!-- ##### ARG GtkAccelLabel:accel-object ##### -->
 <para>
-The widget whose accelerators are to be shown by the #GtkAccelLabel.
+
 </para>
 
 
@@ -1186,6 +1186,29 @@ produce superscript and subscript.
 @parent: 
 @priv: 
 
+<!-- ##### USER_FUNCTION GtkTreeViewDraggableFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@context: 
+@path: 
+@user_data: 
+@Returns: 
+
+<!-- ##### USER_FUNCTION GtkTreeViewDroppableFunc ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@context: 
+@path: 
+@pos: 
+@user_data: 
+@Returns: 
+
 <!-- ##### ARG GtkVScale:adjustment ##### -->
 <para>
 the #GtkAdjustment which sets the range of the scale.
@@ -1206,6 +1229,18 @@ the #GtkAdjustment which sets the range of the scale.
 @widget: the object which received the signal.
 @arg1: 
 @Returns: 
+
+<!-- ##### SIGNAL GtkWidget::add-accelerator ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@accel_signal_id: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@accel_flags: 
 
 <!-- ##### SIGNAL GtkWidget::debug-msg ##### -->
 <para>
@@ -1236,6 +1271,16 @@ the #GtkAdjustment which sets the range of the scale.
 </para>
 
 @widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::remove-accelerator ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@accel_group: 
+@accel_key: 
+@accel_mods: 
 
 <!-- ##### ARG GtkWidget:height ##### -->
 <para>
@@ -1273,6 +1318,37 @@ If the window shrinks automatically when widgets within it shrink.
 </para>
 
 
+<!-- ##### FUNCTION gtk_accel_group_activate ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_accel_group_add ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@path: 
+@accel_key: 
+@accel_mods: 
+@accel_flags: 
+@object: 
+@accel_signal: 
+
+<!-- ##### FUNCTION gtk_accel_group_attach ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@object: 
+
 <!-- ##### FUNCTION gtk_accel_group_create_add ##### -->
 <para>
 
@@ -1293,12 +1369,27 @@ If the window shrinks automatically when widgets within it shrink.
 @handler_offset: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_accel_group_detach ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@object: 
+
 <!-- ##### FUNCTION gtk_accel_group_entries_from_object ##### -->
 <para>
 
 </para>
 
 @object: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_accel_group_get_default ##### -->
+<para>
+
+</para>
+
 @Returns: 
 
 <!-- ##### FUNCTION gtk_accel_group_get_entry ##### -->
@@ -1342,6 +1433,24 @@ If the window shrinks automatically when widgets within it shrink.
 @accel_key: 
 @accel_mods: 
 
+<!-- ##### MACRO gtk_accel_group_ref ##### -->
+<para>
+
+</para>
+
+@Returns: 
+@accel_group: 
+
+<!-- ##### FUNCTION gtk_accel_group_remove ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@object: 
+
 <!-- ##### FUNCTION gtk_accel_group_unlock_entry ##### -->
 <para>
 
@@ -1351,6 +1460,13 @@ If the window shrinks automatically when widgets within it shrink.
 @accel_key: 
 @accel_mods: 
 
+<!-- ##### MACRO gtk_accel_group_unref ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+
 <!-- ##### FUNCTION gtk_accel_groups_from_object ##### -->
 <para>
 
@@ -1358,6 +1474,22 @@ If the window shrinks automatically when widgets within it shrink.
 
 @object: 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_accel_label_get_accel_object ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_accel_label_set_accel_object ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@accel_object: 
 
 <!-- ##### FUNCTION gtk_arg_copy ##### -->
 <para>
@@ -1904,6 +2036,54 @@ Get the type of GtkIdentifier.
 </para>
 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_dump_items ##### -->
+<para>
+
+</para>
+
+@path_pspec: 
+@modified_only: 
+@print_func: 
+@func_data: 
+
+<!-- ##### FUNCTION gtk_item_factory_dump_rc ##### -->
+<para>
+
+</para>
+
+@file_name: 
+@path_pspec: 
+@modified_only: 
+
+<!-- ##### FUNCTION gtk_item_factory_parse_rc ##### -->
+<para>
+
+</para>
+
+@file_name: 
+
+<!-- ##### FUNCTION gtk_item_factory_parse_rc_scanner ##### -->
+<para>
+
+</para>
+
+@scanner: 
+
+<!-- ##### FUNCTION gtk_item_factory_parse_rc_string ##### -->
+<para>
+
+</para>
+
+@rc_string: 
+
+<!-- ##### FUNCTION gtk_item_factory_print_func ##### -->
+<para>
+
+</para>
+
+@FILE_pointer: 
+@string: 
 
 <!-- ##### FUNCTION gtk_label_set_markup_with_accel ##### -->
 <para>
@@ -2715,6 +2895,31 @@ a gtk_object_unref().
 @width: 
 @size: 
 
+<!-- ##### FUNCTION gtk_tree_view_set_rows_drag_dest ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@targets: 
+@n_targets: 
+@actions: 
+@location_droppable_func: 
+@user_data: 
+
+<!-- ##### FUNCTION gtk_tree_view_set_rows_drag_source ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@start_button_mask: 
+@targets: 
+@n_targets: 
+@actions: 
+@row_draggable_func: 
+@user_data: 
+
 <!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
 <para>
 Given a GtkTypeClass pointer @klass, and a GtkType @cast_type, make
@@ -2829,6 +3034,25 @@ Set the varargs type for a fundamental type @foreign_type.
 fundamental type.
 @varargs_type: Must be a GtkType which is either structured or flag, or NONE.
 
+<!-- ##### FUNCTION gtk_widget_accelerator_signal ##### -->
+<para>
+
+</para>
+
+@widget: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_widget_accelerators_locked ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_widget_activate_mnemonic ##### -->
 <para>
 
@@ -2846,6 +3070,13 @@ fundamental type.
 @widget: 
 @width: 
 @height: 
+
+<!-- ##### FUNCTION gtk_widget_lock_accelerators ##### -->
+<para>
+
+</para>
+
+@widget: 
 
 <!-- ##### FUNCTION gtk_widget_pop_style ##### -->
 <para>
@@ -2869,12 +3100,28 @@ fundamental type.
 
 @style: 
 
+<!-- ##### FUNCTION gtk_widget_remove_accelerators ##### -->
+<para>
+
+</para>
+
+@widget: 
+@accel_signal: 
+@visible_only: 
+
 <!-- ##### FUNCTION gtk_widget_set_default_style ##### -->
 <para>
 
 </para>
 
 @style: 
+
+<!-- ##### FUNCTION gtk_widget_unlock_accelerators ##### -->
+<para>
+
+</para>
+
+@widget: 
 
 <!-- ##### FUNCTION gtk_window_activate_mnemonic ##### -->
 <para>

@@ -54,9 +54,9 @@ struct _GtkMenuItem
   
   GtkWidget *submenu;
   
-  guint	  accelerator_signal;
   guint16 toggle_size;
   guint16 accelerator_width;
+  gchar  *accel_path;
   
   guint show_submenu_indicator : 1;
   guint submenu_placement : 1;
@@ -106,6 +106,13 @@ void       gtk_menu_item_toggle_size_allocate (GtkMenuItem         *menu_item,
 void       gtk_menu_item_set_right_justified  (GtkMenuItem         *menu_item,
 					       gboolean             right_justified);
 gboolean   gtk_menu_item_get_right_justified  (GtkMenuItem         *menu_item);
+void	   gtk_menu_item_set_accel_path	      (GtkMenuItem	   *menu_item,
+					       const gchar	   *accel_path);
+
+void	  _gtk_menu_item_refresh_accel_path   (GtkMenuItem	   *menu_item,
+					       const gchar	   *prefix,
+					       GtkAccelGroup	   *accel_group,
+					       gboolean		    group_changed);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_menu_item_right_justify(menu_item) gtk_menu_item_set_right_justified ((menu_item), TRUE)

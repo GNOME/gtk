@@ -94,7 +94,7 @@ Creates a new #GtkAccelLabel.
 @Returns: a new #GtkAccelLabel.
 
 
-<!-- ##### FUNCTION gtk_accel_label_get_accel_object ##### -->
+<!-- ##### FUNCTION gtk_accel_label_get_accel_widget ##### -->
 <para>
 
 </para>
@@ -103,24 +103,7 @@ Creates a new #GtkAccelLabel.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_accel_label_set_accel_object ##### -->
-<para>
-
-</para>
-
-@accel_label: 
-@accel_object: 
-
-
-<!-- ##### MACRO gtk_accel_label_get_accel_widget ##### -->
-<para>
-
-</para>
-
-@accel_label:
-
-
-<!-- ##### MACRO gtk_accel_label_set_accel_widget ##### -->
+<!-- ##### FUNCTION gtk_accel_label_set_accel_widget ##### -->
 <para>
 Sets the widget whose accelerators are to be shown.
 </para>
@@ -151,8 +134,13 @@ accelerators are added or removed from the associated widget.
 @Returns: always returns %FALSE.
 
 
-<!-- ##### ARG GtkAccelLabel:accel-object ##### -->
+<!-- ##### ARG GtkAccelLabel:accel-closure ##### -->
 <para>
 
+</para>
+
+<!-- ##### ARG GtkAccelLabel:accel-widget ##### -->
+<para>
+The widget whose accelerators are to be shown by the #GtkAccelLabel.
 </para>
 

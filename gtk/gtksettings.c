@@ -399,8 +399,17 @@ _gtk_settings_parse_convert (GtkRcPropertyParser parser,
       if (free_gstring)
 	g_string_free (gstring, TRUE);
     }
-  else if (!G_VALUE_HOLDS (src_value, G_TYPE_GSTRING) &&
-	   g_value_type_transformable (G_VALUE_TYPE (src_value), G_VALUE_TYPE (dest_value)))
+  else if (G_VALUE_HOLDS (src_value, G_TYPE_GSTRING))
+    {
+      if (G_VALUE_HOLDS (dest_value, G_TYPE_STRING))
+	{
+	  GString *gstring = g_value_get_boxed (src_value);
+
+	  g_value_set_string (dest_value, gstring ? gstring->str : NULL);
+	  success = !g_param_value_validate (pspec, dest_value);
+	}
+    }
+  else if (g_value_type_transformable (G_VALUE_TYPE (src_value), G_VALUE_TYPE (dest_value)))
     success = g_param_value_convert (pspec, src_value, dest_value, TRUE);
 
   return success;
@@ -420,7 +429,7 @@ apply_queued_setting (GtkSettings      *data,
     g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
   else
     {
-      gchar *debug = g_strdup_value_contents (&tmp_value);
+      gchar *debug = g_strdup_value_contents (&qvalue->value);
       
       g_message ("%s: failed to retrieve property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
 		 qvalue->origin,
@@ -519,7 +528,7 @@ _gtk_rc_property_parser_from_type (GType type)
 void
 gtk_settings_install_property (GParamSpec  *pspec)
 {
-  GtkRcPropertyParser parser = NULL;
+  GtkRcPropertyParser parser;
 
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
@@ -549,9 +558,9 @@ free_value (gpointer data)
 }
 
 void
-gtk_settings_set_property_value  (GtkSettings            *settings,
-				  const gchar            *prop_name,
-				  const GtkSettingsValue *new_value)
+gtk_settings_set_property_value (GtkSettings            *settings,
+				 const gchar            *prop_name,
+				 const GtkSettingsValue *new_value)
 {
   GtkSettingsValue *qvalue;
   GParamSpec *pspec;
@@ -908,7 +917,6 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
 
   return success;
 }
-
 
 void
 _gtk_settings_handle_event (GdkEventSetting *event)

@@ -1,9 +1,9 @@
 <!-- ##### SECTION Title ##### -->
-Keyboard Accelerators
+Keyboard Accelerator Groups
 
 <!-- ##### SECTION Short_Description ##### -->
 
-global keyboard accelerators (for an entire #GtkWindow)
+Groups of global keyboard accelerators for an entire #GtkWindow
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -11,14 +11,15 @@ A #GtkAccelGroup represents a group of keyboard accelerators,
 typically attached to a toplevel #GtkWindow (with
 gtk_window_add_accel_group()). Usually you won't need to create a
 #GtkAccelGroup directly; instead, when using #GtkItemFactory, GTK+
-automatically sets up the accelerators for your menus.
+automatically sets up the accelerators for your menus in the item
+factory's #GtkAccelGroup.
 </para>
 
 <para>
 Note that <firstterm>accelerators</firstterm> are different from
 <firstterm>mnemonics</firstterm>. Accelerators are shortcuts for
 activating a menu item; they appear alongside the menu item they're a
-shortcut for, for example "Ctrl+Q" might appear alongside the "Quit"
+shortcut for. For example "Ctrl+Q" might appear alongside the "Quit"
 menu item. Mnemonics are shortcuts for GUI elements such as text
 entries or buttons; they appear as underlined characters. See
 gtk_label_new_with_mnemonic(). Menu items can have both accelerators
@@ -27,13 +28,22 @@ and mnemonics, of course.
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-gtk_label_new_with_mnemonic(), gtk_window_add_accel_group()
+gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
+gtk_item_factory_new(), gtk_label_new_with_mnemonic()
 </para>
 
 <!-- ##### STRUCT GtkAccelGroup ##### -->
 <para>
-On opaque data type representing a group of accelerators.
+An object representing and maintaining a group of accelerators.
 </para>
+
+
+<!-- ##### FUNCTION gtk_accel_group_get_type ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_accel_group_new ##### -->
@@ -44,72 +54,7 @@ On opaque data type representing a group of accelerators.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_accel_group_get_default ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_ref ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_unref ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_activate ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_groups_activate ##### -->
-<para>
-
-</para>
-
-@object: 
-@accel_key: 
-@accel_mods: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_attach ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@object: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_detach ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@object: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_add ##### -->
+<!-- ##### FUNCTION gtk_accel_group_connect ##### -->
 <para>
 
 </para>
@@ -118,11 +63,13 @@ On opaque data type representing a group of accelerators.
 @accel_key: 
 @accel_mods: 
 @accel_flags: 
-@object: 
-@accel_signal: 
+@closure: 
+@accel_path_quark: 
+<!-- # Unused Parameters # -->
+@path_quark: 
 
 
-<!-- ##### FUNCTION gtk_accel_group_remove ##### -->
+<!-- ##### FUNCTION gtk_accel_group_disconnect ##### -->
 <para>
 
 </para>
@@ -130,6 +77,31 @@ On opaque data type representing a group of accelerators.
 @accel_group: 
 @accel_key: 
 @accel_mods: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_query ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@n_entries: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_groups_activate ##### -->
+<para>
+
+</para>
+
+@acceleratable: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+<!-- # Unused Parameters # -->
 @object: 
 
 

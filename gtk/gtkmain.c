@@ -47,6 +47,7 @@
 
 #include <pango/pango-utils.h>	/* For pango_split_file_list */
 
+#include "gtkaccelmap.h"
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmain.h"
@@ -625,8 +626,8 @@ gtk_init_check (int	 *argc,
   gtk_colormap = gdk_colormap_get_system ();
 
   gtk_type_init (0);
+  _gtk_accel_map_init ();  
   _gtk_rc_init ();
-  
   
   /* Register an exit function to make sure we are able to cleanup.
    */
