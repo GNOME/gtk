@@ -1493,22 +1493,20 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
   GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
+  gtk_entry_set_activates_default (GTK_ENTRY (fs->fileop_entry), TRUE); 
   gtk_widget_show (fs->fileop_entry);
   
   /* buttons */
-  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog), 
+				  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_widget_destroy),
 			    dialog);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button);
-  gtk_widget_show (button);
 
   gtk_widget_grab_focus (fs->fileop_entry);
 
-  button = gtk_button_new_with_mnemonic (_("C_reate"));
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog), 
+				  _("C_reate"), GTK_RESPONSE_OK);
   gtk_widget_set_sensitive (button, FALSE);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (gtk_file_selection_create_dir_confirmed),
@@ -1517,10 +1515,7 @@ gtk_file_selection_create_dir (GtkWidget *widget,
                     G_CALLBACK (gtk_file_selection_fileop_entry_changed),
 		    button);
 
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_show (button);
+  gtk_widget_grab_default (button);
   
   gtk_widget_show (dialog);
 }
@@ -1762,6 +1757,7 @@ gtk_file_selection_rename_file (GtkWidget *widget,
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
   GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
+  gtk_entry_set_activates_default (GTK_ENTRY (fs->fileop_entry), TRUE); 
   gtk_widget_show (fs->fileop_entry);
   
   gtk_entry_set_text (GTK_ENTRY (fs->fileop_entry), fs->fileop_file);
@@ -1769,19 +1765,16 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 			      0, strlen (fs->fileop_file));
 
   /* buttons */
-  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog), 
+				  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_widget_destroy),
 			    dialog);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		      button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button);
-  gtk_widget_show (button);
 
   gtk_widget_grab_focus (fs->fileop_entry);
 
-  button = gtk_button_new_with_mnemonic (_("_Rename"));
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog), 
+				  _("_Rename"), GTK_RESPONSE_OK);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (gtk_file_selection_rename_file_confirmed),
 		    fs);
@@ -1789,10 +1782,7 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 		    G_CALLBACK (gtk_file_selection_fileop_entry_changed),
 		    button);
 
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		      button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_show (button);
+  gtk_widget_grab_default (button);
   
   gtk_widget_show (dialog);
 }

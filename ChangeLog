@@ -1,5 +1,13 @@
 2003-05-22  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkfilesel.c (gtk_file_selection_create_dir): 
+	(gtk_file_selection_rename_file): Some keynav improvements for the
+	"Rename File" and "Create Directory" subdialogs: Enter in entry
+	activates default, default is "Create"/"Rename", Escape cancels
+	dialog.  (#113110)
+
+2003-05-22  Matthias Clasen  <maclas@gmx.de>
+
 	* gdk/x11/gdkdrawable-x11.c (gdk_x11_drawable_update_xft_clip):
 	Use XftDrawSetClipRectangles(), since we're inside HAVE_XFT2
 	anyway.  (#113476)
