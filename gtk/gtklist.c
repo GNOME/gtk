@@ -757,7 +757,7 @@ gtk_list_button_press (GtkWidget      *widget,
   list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
 
-  if (list->button && (list->button != event->button))
+  if ((event->button != 1) || (list->button))
     return FALSE;
   
   while (item && !GTK_IS_LIST_ITEM (item))

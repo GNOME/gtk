@@ -1,3 +1,9 @@
+Thu Jun 18 23:08:36 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtklist.c (gtk_list_button_press): Only respond
+	  to selection with button 1. This allows context-sensitive
+	  menus to work correctly.
+
 Fri Jun 19 03:29:04 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkaccelgroup.c: 
