@@ -2607,8 +2607,6 @@ gtk_menu_position (GtkMenu *menu)
 
   screen = gtk_widget_get_screen (widget);
   monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
-  if (monitor_num < 0)
-    monitor_num = 0;
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
   /* We need the requisition to figure out the right place to
