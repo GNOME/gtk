@@ -1,3 +1,8 @@
+Mon Sep 17 11:49:02 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/*: Mirror GdkInterpType to PixopsInterpType
+	to avoid including gdk-pixbuf headers.
+
 2001-09-16  James Henstridge  <james@daa.com.au>
 
 	* .cvsignore: add generated files to ignore list.

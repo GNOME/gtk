@@ -2,8 +2,6 @@ noinst_LTLIBRARIES = libpixops.la
 
 INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) -I$(top_builddir) 	\
-	-I$(top_srcdir)/gdk-pixbuf 		\
-	-I$(top_builddir)/gdk-pixbuf 		\
 	@GTK_DEBUG_FLAGS@			\
 	@GDK_PIXBUF_DEP_CFLAGS@			\
 @STRIP_END@

@@ -76,16 +76,16 @@ dump_array (double times[3][3][4])
 
 	  switch (j)
 	    {
-	    case GDK_INTERP_NEAREST:
+	    case PIXOPS_INTERP_NEAREST:
 	      printf ("  NEAREST\n");
 	      break;
-	    case GDK_INTERP_TILES:
+	    case PIXOPS_INTERP_TILES:
 	      printf ("  TILES\n");
 	      break;
-	    case GDK_INTERP_BILINEAR:
+	    case PIXOPS_INTERP_BILINEAR:
 	      printf ("  BILINEAR\n");
 	      break;
-	    case GDK_INTERP_HYPER:
+	    case PIXOPS_INTERP_HYPER:
 	      printf ("  HYPER\n");
 	      break;
 	    }
@@ -152,24 +152,24 @@ int main (int argc, char **argv)
 	dest_buf = g_malloc(dest_rowstride * dest_height);
 	memset (dest_buf, 0x80, dest_rowstride * dest_height);
 
-	for (filter_level = GDK_INTERP_NEAREST ; filter_level <= GDK_INTERP_HYPER; filter_level++)
+	for (filter_level = PIXOPS_INTERP_NEAREST ; filter_level <= PIXOPS_INTERP_HYPER; filter_level++)
 	  {
 	    printf ("src_channels = %d (%s); dest_channels = %d (%s); filter_level=",
 		    src_channels, src_has_alpha ? "alpha" : "no alpha",
 		    dest_channels, dest_has_alpha ? "alpha" : "no alpha");
 	    switch (filter_level)
 	      {
-	      case GDK_INTERP_NEAREST:
-		printf ("GDK_INTERP_NEAREST\n");
+	      case PIXOPS_INTERP_NEAREST:
+		printf ("PIXOPS_INTERP_NEAREST\n");
 		break;
-	      case GDK_INTERP_TILES:
-		printf ("GDK_INTERP_TILES\n");
+	      case PIXOPS_INTERP_TILES:
+		printf ("PIXOPS_INTERP_TILES\n");
 		break;
-	      case GDK_INTERP_BILINEAR:
-		printf ("GDK_INTERP_BILINEAR\n");
+	      case PIXOPS_INTERP_BILINEAR:
+		printf ("PIXOPS_INTERP_BILINEAR\n");
 		break;
-	      case GDK_INTERP_HYPER:
-		printf ("GDK_INTERP_HYPER\n");
+	      case PIXOPS_INTERP_HYPER:
+		printf ("PIXOPS_INTERP_HYPER\n");
 		break;
 	      }
 
