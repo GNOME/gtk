@@ -376,6 +376,8 @@ static gboolean shortcuts_select_func   (GtkTreeSelection      *selection,
 					 GtkTreePath           *path,
 					 gboolean               path_currently_selected,
 					 gpointer               data);
+static gboolean shortcuts_get_selected  (GtkFileChooserDefault *impl,
+					 GtkTreeIter           *iter);
 static void shortcuts_activate_iter (GtkFileChooserDefault *impl,
 				     GtkTreeIter           *iter);
 static int shortcuts_get_index (GtkFileChooserDefault *impl,
@@ -1056,9 +1058,9 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
   } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model),&iter));
 }
 
-/* If a shortcut corresponds to the current folder, selects it */
-static void
-shortcuts_find_current_folder (GtkFileChooserDefault *impl)
+static void 
+shortcuts_find_folder (GtkFileChooserDefault *impl,
+		       GtkFilePath           *folder)
 {
   GtkTreeSelection *selection;
   int pos;
@@ -1066,8 +1068,8 @@ shortcuts_find_current_folder (GtkFileChooserDefault *impl)
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
 
-  g_assert (impl->current_folder != NULL);
-  pos = shortcut_find_position (impl, impl->current_folder);
+  g_assert (folder != NULL);
+  pos = shortcut_find_position (impl, folder);
   if (pos == -1)
     {
       gtk_tree_selection_unselect_all (selection);
@@ -1077,6 +1079,13 @@ shortcuts_find_current_folder (GtkFileChooserDefault *impl)
   path = gtk_tree_path_new_from_indices (pos, -1);
   gtk_tree_selection_select_path (selection, path);
   gtk_tree_path_free (path);
+}
+
+/* If a shortcut corresponds to the current folder, selects it */
+static void
+shortcuts_find_current_folder (GtkFileChooserDefault *impl)
+{
+  shortcuts_find_folder (impl, impl->current_folder);
 }
 
 /* Convenience function to get the display name and icon info for a path */
@@ -1452,9 +1461,40 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 {
   GSList *bookmarks;
   gboolean old_changing_folders;
-
+  GtkTreeIter iter;
+  GtkFilePath *list_selected = NULL;
+  GtkFilePath *combo_selected = NULL;
+  gboolean is_volume;
+  gpointer col_data;
+        
   old_changing_folders = impl->changing_folder;
   impl->changing_folder = TRUE;
+
+  if (shortcuts_get_selected (impl, &iter))
+    {
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), 
+			  &iter, 
+			  SHORTCUTS_COL_DATA, &col_data,
+			  SHORTCUTS_COL_IS_VOLUME, &is_volume,
+			  -1);
+
+      if (col_data && !is_volume)
+	list_selected = gtk_file_path_copy (col_data);
+    }
+
+  if (impl->save_folder_combo &&
+      gtk_combo_box_get_active_iter (GTK_COMBO_BOX (impl->save_folder_combo), 
+				     &iter))
+    {
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), 
+			  &iter, 
+			  SHORTCUTS_COL_DATA, &col_data,
+			  SHORTCUTS_COL_IS_VOLUME, &is_volume,
+			  -1);
+      
+      if (col_data && !is_volume)
+	combo_selected = gtk_file_path_copy (col_data);
+    }
 
   if (impl->num_bookmarks > 0)
     shortcuts_remove_rows (impl,
@@ -1466,12 +1506,28 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
   gtk_file_paths_free (bookmarks);
 
   if (impl->num_bookmarks > 0)
-    {
-      shortcuts_insert_separator (impl, SHORTCUTS_BOOKMARKS_SEPARATOR);
-    }
+    shortcuts_insert_separator (impl, SHORTCUTS_BOOKMARKS_SEPARATOR);
+
   if (impl->shortcuts_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model));
 
+  if (list_selected)
+    {
+      shortcuts_find_folder (impl, list_selected);
+      gtk_file_path_free (list_selected);
+    }
+
+  if (combo_selected)
+    {
+      gint pos;
+
+      pos = shortcut_find_position (impl, combo_selected);
+      if (pos != -1)
+	gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), 
+				  pos);
+      gtk_file_path_free (combo_selected);
+    }
+  
   impl->changing_folder = old_changing_folders;
 }
 
@@ -1917,6 +1973,9 @@ shortcuts_get_selected (GtkFileChooserDefault *impl,
 {
   GtkTreeSelection *selection;
   GtkTreeIter parent_iter;
+
+  if (!impl->browse_shortcuts_tree_view)
+    return FALSE;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
 
