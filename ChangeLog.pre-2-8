@@ -1,3 +1,14 @@
+Sat Aug 16 10:34:49 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/imcedilla.c: Make the list of default
+	languages more comprehensive. (Suggestion of
+	Fco. Javier F. Serrador)
+
+Sat Aug  9 12:47:11 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_arg_context_parse): Fix broken 
+	parentheses when skipping args.
+
 Fri Aug 15 16:54:39 2003  Owen Taylor  <otaylor@redhat.com>
 
 	Improve Cedilla handling - based on a patch from Gustavo 

@@ -109,7 +109,7 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 	{
 	  char *arg;
 	  
-	  if (!(*argv)[i][0] == '-' && (*argv)[i][1] == '-')
+	  if (!((*argv)[i][0] == '-' && (*argv)[i][1] == '-'))
 	    continue;
 	  
 	  arg = (*argv)[i] + 2;

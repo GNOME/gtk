@@ -90,7 +90,7 @@ static const GtkIMContextInfo cedilla_info = {
   N_("Cedilla"),                   /* Human readable name */
   "gtk+",			   /* Translation domain */
    GTK_LOCALEDIR,		   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
-  "fr:pt"		           /* Languages for which this module is the default */
+  "az:ca:co:fr:gv:oc:pt:sq:tr:wa"  /* Languages for which this module is the default */
 };
 
 static const GtkIMContextInfo *info_list[] = {
