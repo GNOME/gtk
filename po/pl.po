@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-29 08:21+0100\n"
+"POT-Creation-Date: 2004-02-02 08:06+0100\n"
 "PO-Revision-Date: 2003-11-18 11:32+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1284,30 +1284,26 @@ msgstr "Nie można przekonwertować nazwy pliku"
 msgid "(Empty)"
 msgstr "(Pusty)"
 
-#: gtk/gtkfilesystemunix.c:346 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "Błąd przy tworzeniu katalogu \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:389 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Ten system plików nie obsługuje montowania"
 
-#: gtk/gtkfilesystemunix.c:397
+#: gtk/gtkfilesystemunix.c:400
 msgid "Filesystem"
 msgstr "System plików"
 
-#: gtk/gtkfilesystemunix.c:416 gtk/gtkfilesystemunix.c:1051
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "Błąd przy pobieraniu informacji dla \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:868 gtk/gtkfilesystemunix.c:881
-msgid "This file system does not support bookmarks"
-msgstr "Ten system plików nie obsługuje zakładek"
-
-#: gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Zapisanie zakładki nie powiodło się (%s)"
@@ -1494,6 +1490,15 @@ msgstr "default:LTR"
 #, c-format
 msgid "Page %u"
 msgstr "Strona %u"
+
+#: gtk/gtkradiotoolbutton.c:89
+msgid "Group"
+msgstr "Grupa"
+
+# FIXME - wrrrrr, nie cierpię takich bełkotów
+#: gtk/gtkradiotoolbutton.c:90
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Grupa, do której należy ten przycisk narzędzia radiowego."
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -1920,6 +1925,9 @@ msgstr "Metoda wejściowa X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nie można pobrać informacji dla pliku \"%s\": %s"
+
+#~ msgid "This file system does not support bookmarks"
+#~ msgstr "Ten system plików nie obsługuje zakładek"
 
 #~ msgid "This file system does not support icons"
 #~ msgstr "Ten system plików nie obsługuje ikon"
