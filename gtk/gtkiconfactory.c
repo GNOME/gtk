@@ -2436,7 +2436,10 @@ static void
 ensure_cache_up_to_date (GtkIconSet *icon_set)
 {
   if (icon_set->cache_serial != cache_serial)
-    clear_cache (icon_set, TRUE);
+    {
+      clear_cache (icon_set, TRUE);
+      icon_set->cache_serial = cache_serial;
+    }
 }
 
 static void

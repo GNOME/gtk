@@ -311,7 +311,7 @@ target_drag_motion	   (GtkWidget	       *widget,
     {
       have_drag = TRUE;
       gtk_image_set_from_pixmap (GTK_IMAGE (widget),
-				 trashcan_closed, trashcan_closed_mask);
+				 trashcan_open, trashcan_open_mask);
     }
 
   source_widget = gtk_drag_get_source_widget (context);

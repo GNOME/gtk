@@ -1,3 +1,15 @@
+Sat Jul  5 09:55:38 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_send_client_message_to_all_recurse):
+	Somehow, a WM_STATE => _NET_WM_STATE change hand been made here.
+
+	* tests/testdnd.c (target_drag_motion): Make the trashcan
+	open again. (Got lost in deprecation cleanup.)
+
+	* gtk/gtkiconfactory.c (ensure_cache_up_to_date): Actually
+	update the icon cache serial so we don't continually
+	think we are out-of-date.
+
 2003-07-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_polygon,
