@@ -13,6 +13,7 @@
 	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: use MS Windows button order, not Gnome HIG order
 	* modules/engines/ms-windows/msw_style.c (draw_handle): Draw XP toolbar grippie handle properly
 	(draw_resize_grip): Draw XP status bar grippie handle properly
+	(draw_arrow): XP theme combo box arrows on toolbars
 
 2004-11-30  Dom Lachowicz <cinamod@hotmail.com>
 

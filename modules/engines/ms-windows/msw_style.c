@@ -1164,6 +1164,29 @@ reverse_engineer_stepper_box (GtkWidget    *range,
   *height = box_height;
 }
 
+static XpThemeElement to_xp_arrow(GtkArrowType   arrow_type)
+{
+	XpThemeElement xp_arrow;
+
+	switch (arrow_type)
+	{
+		case GTK_ARROW_UP:
+			xp_arrow = XP_THEME_ELEMENT_ARROW_UP;
+			break;
+		case GTK_ARROW_DOWN:
+			xp_arrow = XP_THEME_ELEMENT_ARROW_DOWN;
+			break;
+		case GTK_ARROW_LEFT:
+			xp_arrow = XP_THEME_ELEMENT_ARROW_LEFT;
+			break;
+		default:
+			xp_arrow = XP_THEME_ELEMENT_ARROW_RIGHT;
+			break;
+	}
+
+	return xp_arrow;
+}
+
 static void
 draw_arrow (GtkStyle      *style,
 	    GdkWindow     *window,
@@ -1212,29 +1235,14 @@ draw_arrow (GtkStyle      *style,
       gint box_y = y;
       gint box_width = width;
       gint box_height = height;
-      XpThemeElement xp_arrow;
+
       reverse_engineer_stepper_box (widget, arrow_type,
 				    &box_x, &box_y, &box_width, &box_height);
 
       if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
         is_disabled = TRUE;
 
-      switch (arrow_type)
-        {
-        case GTK_ARROW_UP:
-          xp_arrow = XP_THEME_ELEMENT_ARROW_UP;
-          break;
-        case GTK_ARROW_DOWN:
-          xp_arrow = XP_THEME_ELEMENT_ARROW_DOWN;
-          break;
-        case GTK_ARROW_LEFT:
-          xp_arrow = XP_THEME_ELEMENT_ARROW_LEFT;
-          break;
-        default:
-          xp_arrow = XP_THEME_ELEMENT_ARROW_RIGHT;
-          break;
-        }
-      if (xp_theme_draw(window, xp_arrow, style, box_x, box_y, box_width, box_height, state, area))
+      if (xp_theme_draw(window, to_xp_arrow(arrow_type), style, box_x, box_y, box_width, box_height, state, area))
         {
         }
       else if (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN)
@@ -1262,6 +1270,13 @@ draw_arrow (GtkStyle      *style,
 		  if (xp_theme_draw(window, XP_THEME_ELEMENT_REBAR_CHEVRON, style, x, y, width, height, state, area))
 				return;
 	  }
+	  /* probably a gtk combo box on a toolbar */
+	  else if (widget->parent && GTK_IS_BUTTON (widget->parent))
+  		{
+		  	if (xp_theme_draw(window, XP_THEME_ELEMENT_COMBOBUTTON, style, x-3, widget->allocation.y+1,
+                        width+5, widget->allocation.height-4, state, area))
+				return;
+  		}
 
       if (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN)
 	{
