@@ -1,3 +1,21 @@
+2001-10-26  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtktreeview.c: 
+	(gtk_tree_view_class_init): Create new "indent_expander"
+	style property.
+
+	(gtk_tree_view_get_arrow_xrange): Add a tree argument
+	to the function since the xrange can change depending
+	on where in the tree we are. 
+	
+	(coords_are_over_arrow): Update function call to
+	gtk_tree_view_get_arrow_xrange.
+	(gtk_tree_view_draw_arrow): Likewise.
+	
+	(gtk_tree_view_real_expand_collapse_cursor_row):
+	Call real_{expand|collapse}_row, so that we'll have an
+	animation.
+
 Fri Oct 26 20:13:36 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* tests/Makefile.am: fixed a small typo
