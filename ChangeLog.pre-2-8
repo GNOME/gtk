@@ -1,3 +1,18 @@
+Mon Aug  2 00:12:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.c (gtk_entry_class_init):
+	(gtk_entry_get_alignment): 
+	(gtk_entry_set_alignment): Document the xalign property
+	and its getter and setter as 2.4 additions.  (#148978,
+	Axel Simon)
+
+Mon Aug  2 00:11:31 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): 
+	* gtk/gtkactiongroup.c (gtk_action_group_class_init): Use
+	canonical signal names in doc comments, since gtk-doc won't
+	pick up signal docs with underscores.  
+
 2004-08-01  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Post-release version bump

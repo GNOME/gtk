@@ -202,7 +202,7 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 		  GTK_TYPE_ACTION, GTK_TYPE_WIDGET);
 
   /**
-   * GtkActionGroup::pre_activate:
+   * GtkActionGroup::pre-activate:
    * @action_group: the group
    * @action: the action
    *
@@ -223,7 +223,7 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 		  GTK_TYPE_ACTION);
 
   /**
-   * GtkActionGroup::post_activate:
+   * GtkActionGroup::post-activate:
    * @action_group: the group
    * @action: the action
    *

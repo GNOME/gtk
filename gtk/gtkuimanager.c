@@ -271,7 +271,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  G_TYPE_NONE, 0);
   
   /**
-   * GtkUIManager::connect_proxy:
+   * GtkUIManager::connect-proxy:
    * @uimanager: the ui manager
    * @action: the action
    * @proxy: the proxy
@@ -297,7 +297,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  GTK_TYPE_WIDGET);
 
   /**
-   * GtkUIManager::disconnect_proxy:
+   * GtkUIManager::disconnect-proxy:
    * @uimanager: the ui manager
    * @action: the action
    * @proxy: the proxy
@@ -319,7 +319,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  GTK_TYPE_WIDGET);
 
   /**
-   * GtkUIManager::pre_activate:
+   * GtkUIManager::pre-activate:
    * @uimanager: the ui manager
    * @action: the action
    *
@@ -342,7 +342,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  GTK_TYPE_ACTION);
 
   /**
-   * GtkUIManager::post_activate:
+   * GtkUIManager::post-activate:
    * @uimanager: the ui manager
    * @action: the action
    *

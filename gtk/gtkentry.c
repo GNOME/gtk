@@ -571,6 +571,14 @@ gtk_entry_class_init (GtkEntryClass *class)
 							"",
 							G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  /**
+   * GtkEntry:xalign:
+   *
+   * The horizontal alignment, from 0 (left) to 1 (right). 
+   * Reversed for RTL layouts.
+   * 
+   * Since: 2.4
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
                                    g_param_spec_float ("xalign",
@@ -4158,6 +4166,8 @@ gtk_entry_get_layout_offsets (GtkEntry *entry,
  * Sets the alignment for the contents of the entry. This controls
  * the horizontal positioning of the contents when the displayed
  * text is shorter than the width of the entry.
+ *
+ * Since: 2.4
  **/
 void
 gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign)
@@ -4190,6 +4200,8 @@ gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign)
  * Gets the value set by gtk_entry_set_alignment().
  * 
  * Return value: the alignment
+ *
+ * Since: 2.4
  **/
 gfloat
 gtk_entry_get_alignment (GtkEntry *entry)
