@@ -441,7 +441,7 @@ viewport_set_adjustment (GtkViewport    *viewport,
   GtkAdjustment **adjustmentp = ADJUSTMENT_POINTER (viewport, orientation);
   gboolean value_changed;
 
-  if (adjustment == *adjustmentp)
+  if (adjustment && adjustment == *adjustmentp)
     return;
 
   if (!adjustment)

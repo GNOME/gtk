@@ -1,3 +1,8 @@
+Sun Jun  8 11:27:29 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkviewport.c (viewport_set_adjustment): Fix bug with 
+	set_adjustment (viewport, NULL);
+
 2003-06-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconfactory.c (get_default_icons): 
