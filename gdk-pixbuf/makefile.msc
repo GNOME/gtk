@@ -57,9 +57,11 @@ OBJECTS = \
 	io-xpm.obj \
 	io-jpeg.obj \
 
-gdk_pixbuf_headers = 			\
-	gdk-pixbuf.h			\
-	gdk-pixbuf-loader.h
+gdk_pixbuf_headers = 	\
+	gdk-pixbuf.h	\
+	gdk-pixbuf-core.h	\
+	gdk-pixbuf-loader.h	\
+	gdk-pixbuf-transform.h
 
 gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
 	..\..\glib\gobject\glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h

@@ -25,10 +25,12 @@ EXPORTS
 	gdk_pixbuf_error_get_type
 	gdk_pixbuf_error_quark
 	gdk_pixbuf_fill
+	gdk_pixbuf_flip
 	gdk_pixbuf_format_get_description
 	gdk_pixbuf_format_get_extensions
 	gdk_pixbuf_format_get_mime_types
 	gdk_pixbuf_format_get_name
+	gdk_pixbuf_format_is_scalable
 	gdk_pixbuf_format_is_writable
 	gdk_pixbuf_from_pixdata
 	gdk_pixbuf_get_bits_per_sample
@@ -65,6 +67,8 @@ EXPORTS
 	gdk_pixbuf_new_subpixbuf
 	gdk_pixbuf_non_anim_new
 	gdk_pixbuf_ref
+	gdk_pixbuf_rotate_simple
+	gdk_pixbuf_rotation_get_type
 	gdk_pixbuf_saturate_and_pixelate
 	gdk_pixbuf_save
 	gdk_pixbuf_save_to_buffer
