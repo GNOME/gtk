@@ -1,15 +1,4 @@
 <chapter id="gtk-migrating-GtkComboBox">
-  <chapterinfo>
-    <author>
-      <firstname>Matthias</firstname>
-      <surname>Clasen</surname>
-      <affiliation>
-	<address>
-	  <email>maclas@gmx.de</email>
-	</address>
-      </affiliation>
-    </author>
-  </chapterinfo>
 
   <title>Migrating from GtkOptionMenu and GtkCombo to GtkComboBox and GtkComboBoxEntry</title>
 
