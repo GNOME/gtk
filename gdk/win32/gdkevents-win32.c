@@ -86,6 +86,10 @@ static gboolean  gdk_event_translate	(GdkDisplay *display,
 					 MSG	    *msg,
 					 gint       *ret_valp,
 					 gboolean    return_exposes);
+static void      handle_wm_paint        (MSG        *msg,
+					 GdkWindow  *window,
+					 gboolean    return_exposes,
+					 GdkEvent  **event);
 
 static gboolean gdk_event_prepare  (GSource     *source,
 				    gint        *timeout);
@@ -437,7 +441,7 @@ GdkEvent*
 gdk_event_get_graphics_expose (GdkWindow *window)
 {
   MSG msg;
-  GdkEvent *event;
+  GdkEvent *event = NULL;
 
   g_return_val_if_fail (window != NULL, NULL);
   
@@ -445,16 +449,12 @@ gdk_event_get_graphics_expose (GdkWindow *window)
 
   if (PeekMessage (&msg, GDK_WINDOW_HWND (window), WM_PAINT, WM_PAINT, PM_REMOVE))
     {
-      event = gdk_event_new (GDK_NOTHING);
-      
-      if (gdk_event_translate (gdk_drawable_get_display (window), 
-                               &msg, NULL, TRUE))
+      handle_wm_paint (&msg, window, TRUE, &event);
+      if (event != NULL)
 	{
 	  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: got it!\n"));
 	  return event;
 	}
-      else
-	gdk_event_free (event);
     }
   
   GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: nope\n"));
@@ -1883,6 +1883,108 @@ adjust_drag (LONG *drag,
     *drag = curr - ((curr - *drag + inc/2) / inc) * inc;
 }
 
+static void
+handle_wm_paint (MSG        *msg,
+		 GdkWindow  *window,
+		 gboolean    return_exposes,
+		 GdkEvent  **event)
+{
+  HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
+  HDC hdc;
+  PAINTSTRUCT paintstruct;
+  GdkRegion *update_region;
+  gint xoffset, yoffset;
+
+  if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
+    {
+      WIN32_GDI_FAILED ("GetUpdateRgn");
+      return;
+    }
+
+  hdc = BeginPaint (msg->hwnd, &paintstruct);
+
+  GDK_NOTE (EVENTS, g_print ("WM_PAINT: %p  %s %s dc %p%s\n",
+			     msg->hwnd,
+			     _gdk_win32_rect_to_string (&paintstruct.rcPaint),
+			     (paintstruct.fErase ? "erase" : ""),
+			     hdc,
+			     (return_exposes ? " return_exposes" : "")));
+
+  EndPaint (msg->hwnd, &paintstruct);
+
+  /* HB: don't generate GDK_EXPOSE events for InputOnly
+   * windows -> backing store now works!
+   */
+  if (((GdkWindowObject *) window)->input_only)
+    {
+      DeleteObject (hrgn);
+      return;
+    }
+
+  if (!(((GdkWindowObject *) window)->event_mask & GDK_EXPOSURE_MASK))
+    {
+      GDK_NOTE (EVENTS, g_print ("...ignored\n"));
+      DeleteObject (hrgn);
+      return;
+    }
+
+#if 0 /* we need to process exposes even with GDK_NO_BG
+   * Otherwise The GIMP canvas update is broken ....
+   */
+  if (((GdkWindowObject *) window)->bg_pixmap == GDK_NO_BG)
+    break;
+#endif
+
+  if ((paintstruct.rcPaint.right == paintstruct.rcPaint.left) ||
+      (paintstruct.rcPaint.bottom == paintstruct.rcPaint.top))
+    {
+      GDK_NOTE (EVENTS, g_print ("...empty paintstruct, ignored\n"));
+      DeleteObject (hrgn);
+      return;
+    }
+
+  if (return_exposes)
+    {
+      if (!GDK_WINDOW_DESTROYED (window))
+	{
+	  GList *list = gdk_drawable_get_display (window)->queued_events;
+
+	  *event = gdk_event_new (GDK_EXPOSE);
+	  (*event)->expose.window = window;
+	  (*event)->expose.area.x = paintstruct.rcPaint.left;
+	  (*event)->expose.area.y = paintstruct.rcPaint.top;
+	  (*event)->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
+	  (*event)->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
+	  (*event)->expose.region = _gdk_win32_hrgn_to_region (hrgn);
+	  (*event)->expose.count = 0;
+
+	  while (list != NULL)
+	    {
+	      GdkEventPrivate *evp = list->data;
+
+	      if (evp->event.any.type == GDK_EXPOSE &&
+		  evp->event.any.window == window &&
+		  !(evp->flags & GDK_EVENT_PENDING))
+		evp->event.expose.count++;
+
+	      list = list->next;
+	    }
+	}
+
+      return;
+    }
+
+  update_region = _gdk_win32_hrgn_to_region (hrgn);
+
+  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+  gdk_region_offset (update_region, xoffset, yoffset);
+  
+  _gdk_window_process_expose (window, update_region);
+  gdk_region_destroy (update_region);
+
+  DeleteObject (hrgn);
+}
+
 static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     MSG      *msg,
@@ -1891,14 +1993,11 @@ gdk_event_translate (GdkDisplay *display,
 {
   DWORD pidActWin;
   DWORD pidThis;
-  PAINTSTRUCT paintstruct;
-  HDC hdc;
   RECT rect, *drag, orig_drag;
   POINT point;
   MINMAXINFO *mmi;
   HWND hwnd;
   HCURSOR hcursor;
-  HRGN hrgn;
   CHARSETINFO charset_info;
   BYTE key_state[256];
   HIMC himc;
@@ -2285,10 +2384,6 @@ gdk_event_translate (GdkDisplay *display,
 
       API_CALL (GetKeyboardState, (key_state));
 
-      /* Note that for this message we always return FALSE from
-       * gdk_event_translate(), so any events we want have to be
-       * created and appended to the queue here.
-       */
       for (i = 0; i < ccount; i++)
 	{
 	  if (((GdkWindowObject *) window)->event_mask & GDK_KEY_PRESS_MASK)
@@ -2394,7 +2489,6 @@ gdk_event_translate (GdkDisplay *display,
       _gdk_event_button_generate (display, event);
 
       return_val = TRUE;
-
       break;
 
     case WM_LBUTTONUP:
@@ -2588,6 +2682,7 @@ gdk_event_translate (GdkDisplay *display,
       }
       return_val = TRUE;
       break;
+
     case WM_MOUSEWHEEL:
       GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %p %d\n",
 				 msg->hwnd, HIWORD (msg->wParam)));
@@ -2680,6 +2775,15 @@ gdk_event_translate (GdkDisplay *display,
       update_colors (window, TRUE);
       break;
 
+     case WM_MOUSEACTIVATE:
+       GDK_NOTE (EVENTS, g_print ("WM_MOUSEACTIVATE: %p\n", msg->hwnd));
+       if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP) 
+	 {
+	   *ret_valp = MA_NOACTIVATE;
+	   return_val = TRUE;
+	 }
+       break;
+
     case WM_SETFOCUS:
     case WM_KILLFOCUS:
       GDK_NOTE (EVENTS, g_print ("WM_%sFOCUS: %p\n",
@@ -2715,97 +2819,7 @@ gdk_event_translate (GdkDisplay *display,
       break;
 
     case WM_PAINT:
-      hrgn = CreateRectRgn (0, 0, 0, 0);
-      if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
-	{
-	  WIN32_GDI_FAILED ("GetUpdateRgn");
-	  break;
-	}
-
-      hdc = BeginPaint (msg->hwnd, &paintstruct);
-
-      GDK_NOTE (EVENTS, g_print ("WM_PAINT: %p  %s %s dc %p%s\n",
-				 msg->hwnd,
-				 _gdk_win32_rect_to_string (&paintstruct.rcPaint),
-				 (paintstruct.fErase ? "erase" : ""),
-				 hdc,
-				 (return_exposes ? " return_exposes" : "")));
-
-      EndPaint (msg->hwnd, &paintstruct);
-
-      /* HB: don't generate GDK_EXPOSE events for InputOnly
-       * windows -> backing store now works!
-       */
-      if (((GdkWindowObject *) window)->input_only)
-	{
-	  DeleteObject (hrgn);
-	  break;
-	}
-
-      if (!(((GdkWindowObject *) window)->event_mask & GDK_EXPOSURE_MASK))
-	{
-	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
-	  DeleteObject (hrgn);
-	  break;
-	}
-
-#if 0 /* we need to process exposes even with GDK_NO_BG
-       * Otherwise The GIMP canvas update is broken ....
-       */
-      if (((GdkWindowObject *) window)->bg_pixmap == GDK_NO_BG)
-	break;
-#endif
-
-      if ((paintstruct.rcPaint.right == paintstruct.rcPaint.left) ||
-	  (paintstruct.rcPaint.bottom == paintstruct.rcPaint.top))
-	{
-	  GDK_NOTE (EVENTS, g_print ("...empty paintstruct, ignored\n"));
-	  DeleteObject (hrgn);
-	  break;
-	}
-
-      if (return_exposes)
-        {
-	  if (!GDK_WINDOW_DESTROYED (window))
-	    {
-              GList *list = display->queued_events;
-
-	      event = gdk_event_new (GDK_EXPOSE);
-	      event->expose.window = window;
-	      event->expose.area.x = paintstruct.rcPaint.left;
-	      event->expose.area.y = paintstruct.rcPaint.top;
-	      event->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
-	      event->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
-	      event->expose.region = _gdk_win32_hrgn_to_region (hrgn);
-	      event->expose.count = 0;
-	      
-              while (list != NULL)
-                {
-		  GdkEventPrivate *event = list->data;
-		  
-                  if (event->event.any.type == GDK_EXPOSE &&
-		      event->event.any.window == window &&
-		      !(event->flags & GDK_EVENT_PENDING))
-		    event->event.expose.count++;
-
-		  list = list->next;
-                }
-	      append_event (display, event);
-            }
-
-	  return_val = TRUE;
-        }
-      else
-        {
-          GdkRegion *update_region = _gdk_win32_hrgn_to_region (hrgn);
-
-	  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-	  gdk_region_offset (update_region, xoffset, yoffset);
-
-	  _gdk_window_process_expose (window, update_region);
-	  gdk_region_destroy (update_region);
-        }
-      DeleteObject (hrgn);
+      handle_wm_paint (msg, window, FALSE, NULL);
       break;
 
     case WM_SETCURSOR:

@@ -28,6 +28,31 @@ struct _CallbackData
   GtkTreePath *path;
 };
 
+#ifdef G_OS_WIN32
+
+#undef DEMOCODEDIR
+
+static char *
+get_democodedir (void)
+{
+  static char *result = NULL;
+
+  if (result == NULL)
+    {
+      result = g_win32_get_package_installation_directory (NULL, NULL);
+      if (result == NULL)
+	result = "unknown-location";
+
+      result = g_strconcat (result, "\\share\\gtk-2.0\\demo", NULL);
+    }
+
+  return result;
+}
+
+#define DEMOCODEDIR get_democodedir ()
+
+#endif
+
 /**
  * demo_find_file:
  * @base: base filename

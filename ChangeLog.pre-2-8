@@ -1,3 +1,22 @@
+2003-09-25  Tor Lillqvist  <tml@iki.fi>
+
+	* demos/gtk-demo/main.c: Don't use hardcoded DEMOCODEDIR on Windows.
+
+2003-09-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (handle_wm_paint): New
+	function. Code split out from gdk_event_translate(). Needed
+	because gdk_event_get_graphics_expose() couldn't do anything
+	sensible otherwise. (Not that I think graphics exposes work anyway
+	in gdk/win32, but at least now the code could work.)
+
+	(gdk_event_get_graphics_expose): Call handle_wm_paint() instead of
+	gdk_event_translate(), which couldn't have worked as it doesn't
+	take any pre-allocated GdkEvent parameter any longer.
+	
+	(gdk_event_translate): Handle WM_MOUSEACTIVATE: Don't let
+	GDK_WINDOW_TEMP windows be activated. (#122578, John Ehresman)
+
 2003-09-24  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/appwindow.c (do_appwindow): Demonstrate tooltips
