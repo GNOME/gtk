@@ -1,3 +1,10 @@
+2001-10-10  Michael Meeks  <michael@ximian.com>
+
+	* gtk/gtkcombo.c (gtk_combo_class_init): add enable_empty
+	and value_in_list properties.
+	(gtk_combo_set_value_in_list): notify change.
+	(gtk_combo_set_property, gtk_combo_get_property): impl. prop.
+
 2001-10-11  James Henstridge  <james@daa.com.au>
 
 	* configure.in: add AS=CC and ASFLAGS=CFLAGS substitutions so

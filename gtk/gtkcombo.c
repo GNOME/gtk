@@ -51,7 +51,9 @@ enum {
   PROP_0,
   PROP_ENABLE_ARROW_KEYS,
   PROP_ENABLE_ARROWS_ALWAYS,
-  PROP_CASE_SENSITIVE
+  PROP_CASE_SENSITIVE,
+  PROP_ALLOW_EMPTY,
+  PROP_VALUE_IN_LIST
 };
 
 static void         gtk_combo_class_init         (GtkComboClass    *klass);
@@ -146,6 +148,22 @@ gtk_combo_class_init (GtkComboClass * klass)
                                    g_param_spec_boolean ("case_sensitive",
                                                          _("Case sensitive"),
                                                          _("Whether list item matching is case sensitive"),
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ALLOW_EMPTY,
+                                   g_param_spec_boolean ("allow_empty",
+                                                         _("Allow empty"),
+							 _("Whether an empty value may be entered in this field"),
+                                                         TRUE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_VALUE_IN_LIST,
+                                   g_param_spec_boolean ("value_in_list",
+                                                         _("Value in list"),
+                                                         _("Whether entered values must already be present in the list"),
                                                          FALSE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   
@@ -876,6 +894,10 @@ gtk_combo_set_value_in_list (GtkCombo * combo, gboolean val, gboolean ok_if_empt
 
   combo->value_in_list = val;
   combo->ok_if_empty = ok_if_empty;
+  g_object_freeze_notify (G_OBJECT (combo));
+  g_object_notify (G_OBJECT (combo), "value_in_list");
+  g_object_notify (G_OBJECT (combo), "allow_empty");
+  g_object_thaw_notify (G_OBJECT (combo));
 }
 
 void
@@ -1021,16 +1043,19 @@ gtk_combo_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_ENABLE_ARROW_KEYS:
-      /* This call does the notification */
       gtk_combo_set_use_arrows (combo, g_value_get_boolean (value));
       break;
     case PROP_ENABLE_ARROWS_ALWAYS:
-      /* This call does the notification */
       gtk_combo_set_use_arrows_always (combo, g_value_get_boolean (value));
       break;
     case PROP_CASE_SENSITIVE:
-      /* This call does the notification */
       gtk_combo_set_case_sensitive (combo, g_value_get_boolean (value));
+      break;
+    case PROP_ALLOW_EMPTY:
+      combo->ok_if_empty = g_value_get_boolean (value);
+      break;
+    case PROP_VALUE_IN_LIST:
+      combo->value_in_list = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1057,6 +1082,12 @@ gtk_combo_get_property (GObject         *object,
       break;
     case PROP_CASE_SENSITIVE:
       g_value_set_boolean (value, combo->case_sensitive);
+      break;
+    case PROP_ALLOW_EMPTY:
+      g_value_set_boolean (value, combo->ok_if_empty);
+      break;
+    case PROP_VALUE_IN_LIST:
+      g_value_set_boolean (value, combo->value_in_list);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
