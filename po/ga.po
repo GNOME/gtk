@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-02-02 08:18+0000\n"
+"PO-Revision-Date: 2004-03-08 21:48+0000\n"
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org\n"
 "Language-Team: Gaeilge <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Teip as oscail comhad '%s': %s"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "Níl sonraí ar fáil san comhad d'Íomha '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
 #: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:234
@@ -915,16 +915,18 @@ msgid "Desktop"
 msgstr "Deasc"
 
 #: gtk/gtkfilechooserdefault.c:1229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create folder %s:\n"
 "%s"
-msgstr "Earraidh ag cruthaigh fillteán \"%s\": %s\n"
+msgstr ""
+"Earraidh ag cruthaigh fillteán %s:\n"
+"%s"
 
 #: gtk/gtkfilechooserdefault.c:1331 gtk/gtkfilechooserdefault.c:1854
 #, fuzzy
 msgid "Name"
-msgstr "_Ainm Dath:"
+msgstr "_Ainm:"
 
 #: gtk/gtkfilechooserdefault.c:1422
 #, c-format
@@ -968,21 +970,18 @@ msgstr ""
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:1938
-#, fuzzy
 msgid "Create _Folder"
-msgstr "Fillteán Nua"
+msgstr "Cruthaigh _Fillteán"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:2047
-#, fuzzy
 msgid "_Name:"
-msgstr "_Ainm Dath:"
+msgstr "_Ainm:"
 
 #. Folder combo
 #: gtk/gtkfilechooserdefault.c:2066
-#, fuzzy
 msgid "Save in _Folder:"
-msgstr "Fillteán Nua"
+msgstr "Sábháil mar _Fillteán:"
 
 #: gtk/gtkfilechooserdefault.c:2089
 msgid "_Browse for other folders"
@@ -1042,12 +1041,11 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:4065
 msgid "Open Location"
-msgstr ""
+msgstr "Oscail Áit"
 
 #: gtk/gtkfilechooserdefault.c:4080
-#, fuzzy
 msgid "_Location:"
-msgstr "_Rogha: "
+msgstr "_Áit:"
 
 #: gtk/gtkfilechooserdefault.c:4114
 #, c-format
@@ -1179,11 +1177,13 @@ msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
+"Earraidh ag athainmigh comhad \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1700
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "Earraidh ag athainmigh comhad \"%s\" do \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
@@ -1270,7 +1270,7 @@ msgstr "Clófhoireann"
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:68
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "aábcdeéfghiíj AÁBCDEÉFGHIÍ"
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
@@ -1430,7 +1430,7 @@ msgstr "Leathanach %u"
 
 #: gtk/gtkradiotoolbutton.c:89
 msgid "Group"
-msgstr ""
+msgstr "Grupa"
 
 #: gtk/gtkradiotoolbutton.c:90
 msgid "The radio tool button whose group this button belongs to."
@@ -1605,9 +1605,8 @@ msgid "_Right"
 msgstr "Ar _Deis"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgid "_Network"
-msgstr "_Nua"
+msgstr "_Idirlíon"
 
 #: gtk/gtkstock.c:311
 msgid "_New"
@@ -1852,26 +1851,26 @@ msgstr ""
 msgid "Could not get information for file '%s': %s"
 msgstr ""
 
-#~ msgid "File name"
-#~ msgstr "Ainm Comhad"
+msgid "File name"
+msgstr "Ainm Comhad"
 
-#~ msgid "Preview"
-#~ msgstr "Réamhthaispeántas"
+msgid "Preview"
+msgstr "Réamhthaispeántas"
 
-#~ msgid "Add"
-#~ msgstr "Suimigh"
+msgid "Add"
+msgstr "Suimigh"
 
-#~ msgid "Remove"
-#~ msgstr "Scríos"
+msgid "Remove"
+msgstr "Scríos"
 
-#~ msgid "Up"
-#~ msgstr "Suas"
+msgid "Up"
+msgstr "Suas"
 
-#~ msgid "_Filename:"
-#~ msgstr "_Ainm Comhad:"
+msgid "_Filename:"
+msgstr "_Ainm Comhad:"
 
-#~ msgid "Current folder: %s"
-#~ msgstr "Fillteán reatha: %s"
+msgid "Current folder: %s"
+msgstr "Fillteán reatha: %s"
 
-#~ msgid "Zoom _100%"
-#~ msgstr "Súmáil _100%"
+msgid "Zoom _100%"
+msgstr "Súmáil _100%"
