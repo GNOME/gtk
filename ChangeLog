@@ -1,3 +1,10 @@
+Sat Aug 10 22:18:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixbuf-render.c 
+	(gdk_pixbuf_render_pixmap_and_mask[_for_colormap]): Mention
+	in the docs that @pixmap_return and @mask_return can
+	be %NULL.
+
 2002-08-10  Soren Sandmann  <sandmann@daimi.au.dk>
 
 	* docs/reference/gtk/tree_widget.sgml,

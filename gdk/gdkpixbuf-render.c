@@ -244,8 +244,10 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
 /**
  * gdk_pixbuf_render_pixmap_and_mask:
  * @pixbuf: A pixbuf.
- * @pixmap_return: Return value for the created pixmap.
- * @mask_return: Return value for the created mask.
+ * @pixmap_return: Location to store a pointer to the created pixmap,
+ *   or %NULL if the pixmap is not needed.
+ * @mask_return: Location to store a pointer to the created mask,
+ *   or %NULL if the mask is not needed.
  * @alpha_threshold: Threshold value for opacity values.
  *
  * Creates a pixmap and a mask bitmap which are returned in the @pixmap_return
@@ -279,8 +281,10 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
  * gdk_pixbuf_render_pixmap_and_mask_for_colormap:
  * @pixbuf: A pixbuf.
  * @colormap: A #GdkColormap
- * @pixmap_return: Return value for the created pixmap.
- * @mask_return: Return value for the created mask.
+ * @pixmap_return: Location to store a pointer to the created pixmap,
+ *   or %NULL if the pixmap is not needed.
+ * @mask_return: Location to store a pointer to the created mask,
+ *   or %NULL if the mask is not needed.
  * @alpha_threshold: Threshold value for opacity values.
  *
  * Creates a pixmap and a mask bitmap which are returned in the @pixmap_return
