@@ -528,7 +528,7 @@ gdk_string_to_compound_text (const gchar *str,
  * routines for COMPOUND_TEXT only enforce this in one direction,
  * causing cut-and-paste of \r and \r\n separated text to fail.
  * This routine strips out all non-allowed C0 and C1 characters
- * from the input string and also canonicalizes \r, \r\n, and \n\r to \n
+ * from the input string and also canonicalizes \r, and \r\n to \n
  */
 static gchar * 
 sanitize_utf8 (const gchar *src)
@@ -539,10 +539,10 @@ sanitize_utf8 (const gchar *src)
 
   while (*p)
     {
-      if (*p == '\r' || *p == '\n')
+      if (*p == '\r')
 	{
 	  p++;
-	  if (*p == '\r' || *p == '\n')
+	  if (*p == '\n')
 	    p++;
 
 	  g_string_append_c (result, '\n');
@@ -553,7 +553,7 @@ sanitize_utf8 (const gchar *src)
 	  char buf[7];
 	  gint buflen;
 	  
-	  if (!((ch < 0x20 && ch != '\t') || (ch >= 0x7f && ch < 0xa0)))
+	  if (!((ch < 0x20 && ch != '\t' && ch != '\n') || (ch >= 0x7f && ch < 0xa0)))
 	    {
 	      buflen = g_unichar_to_utf8 (ch, buf);
 	      g_string_append_len (result, buf, buflen);

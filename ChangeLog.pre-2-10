@@ -1,3 +1,8 @@
+Mon Jan 14 17:14:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkselection-x11.c (sanitize_utf8): Don't
+	mangle sequences of consecutive \n or \r.
+
 Mon Jan 14 17:42:28 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_stop_editing): allow cancel to
