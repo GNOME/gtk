@@ -93,8 +93,9 @@ gtk_handle_box_get_type (void)
 	sizeof (GtkHandleBoxClass),
 	(GtkClassInitFunc) gtk_handle_box_class_init,
 	(GtkObjectInitFunc) gtk_handle_box_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       handle_box_type = gtk_type_unique (gtk_bin_get_type (), &handle_box_info);

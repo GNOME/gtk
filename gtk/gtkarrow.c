@@ -42,8 +42,9 @@ gtk_arrow_get_type (void)
 	sizeof (GtkArrowClass),
 	(GtkClassInitFunc) gtk_arrow_class_init,
 	(GtkObjectInitFunc) gtk_arrow_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       arrow_type = gtk_type_unique (gtk_misc_get_type (), &arrow_info);

@@ -88,8 +88,9 @@ gtk_tree_get_type (void)
 	sizeof (GtkTreeClass),
 	(GtkClassInitFunc) gtk_tree_class_init,
 	(GtkObjectInitFunc) gtk_tree_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       tree_type = gtk_type_unique (gtk_container_get_type (), &tree_info);

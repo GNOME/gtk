@@ -65,8 +65,9 @@ gtk_scrolled_window_get_type (void)
 	sizeof (GtkScrolledWindowClass),
 	(GtkClassInitFunc) gtk_scrolled_window_class_init,
 	(GtkObjectInitFunc) gtk_scrolled_window_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       scrolled_window_type = gtk_type_unique (gtk_container_get_type (), &scrolled_window_info);

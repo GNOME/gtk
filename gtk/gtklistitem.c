@@ -60,8 +60,9 @@ gtk_list_item_get_type (void)
 	sizeof (GtkListItemClass),
 	(GtkClassInitFunc) gtk_list_item_class_init,
 	(GtkObjectInitFunc) gtk_list_item_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       list_item_type = gtk_type_unique (gtk_item_get_type (), &list_item_info);

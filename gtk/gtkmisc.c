@@ -31,10 +31,10 @@ enum {
 static void gtk_misc_class_init (GtkMiscClass *klass);
 static void gtk_misc_init       (GtkMisc      *misc);
 static void gtk_misc_realize    (GtkWidget    *widget);
-static void gtk_misc_set_arg    (GtkMisc      *misc,
+static void gtk_misc_set_arg    (GtkObject    *object,
 				 GtkArg       *arg,
 				 guint         arg_id);
-static void gtk_misc_get_arg    (GtkMisc      *misc,
+static void gtk_misc_get_arg    (GtkObject    *object,
 				 GtkArg       *arg,
 				 guint         arg_id);
 
@@ -53,8 +53,9 @@ gtk_misc_get_type (void)
 	sizeof (GtkMiscClass),
 	(GtkClassInitFunc) gtk_misc_class_init,
 	(GtkObjectInitFunc) gtk_misc_init,
-	(GtkArgSetFunc) gtk_misc_set_arg,
-        (GtkArgGetFunc) gtk_misc_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       misc_type = gtk_type_unique (GTK_TYPE_WIDGET, &misc_info);
@@ -66,14 +67,19 @@ gtk_misc_get_type (void)
 static void
 gtk_misc_class_init (GtkMiscClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
   gtk_object_add_arg_type ("GtkMisc::xalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_XALIGN);
   gtk_object_add_arg_type ("GtkMisc::yalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_YALIGN);
   gtk_object_add_arg_type ("GtkMisc::xpad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_XPAD);
   gtk_object_add_arg_type ("GtkMisc::ypad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_YPAD);
+
+  object_class->set_arg = gtk_misc_set_arg;
+  object_class->get_arg = gtk_misc_get_arg;
   
   widget_class->realize = gtk_misc_realize;
 }
@@ -90,10 +96,14 @@ gtk_misc_init (GtkMisc *misc)
 }
 
 static void
-gtk_misc_set_arg (GtkMisc        *misc,
+gtk_misc_set_arg (GtkObject      *object,
 		  GtkArg         *arg,
 		  guint           arg_id)
 {
+  GtkMisc *misc;
+
+  misc = GTK_MISC (object);
+
   switch (arg_id)
     {
     case ARG_XALIGN:
@@ -114,10 +124,14 @@ gtk_misc_set_arg (GtkMisc        *misc,
 }
 
 static void
-gtk_misc_get_arg (GtkMisc        *misc,
+gtk_misc_get_arg (GtkObject	 *object,
 		  GtkArg         *arg,
 		  guint           arg_id)
 {
+  GtkMisc *misc;
+
+  misc = GTK_MISC (object);
+
   switch (arg_id)
     {
     case ARG_XALIGN:

@@ -28,10 +28,10 @@ enum {
 
 static void gtk_label_class_init   (GtkLabelClass  *klass);
 static void gtk_label_init	   (GtkLabel	   *label);
-static void gtk_label_set_arg	   (GtkLabel	   *label,
+static void gtk_label_set_arg	   (GtkObject	   *object,
 				    GtkArg	   *arg,
 				    guint	    arg_id);
-static void gtk_label_get_arg	   (GtkLabel	   *label,
+static void gtk_label_get_arg	   (GtkObject      *object,
 				    GtkArg	   *arg,
 				    guint	    arg_id);
 static void gtk_label_finalize	   (GtkObject	   *object);
@@ -63,8 +63,9 @@ gtk_label_get_type (void)
 	sizeof (GtkLabelClass),
 	(GtkClassInitFunc) gtk_label_class_init,
 	(GtkObjectInitFunc) gtk_label_init,
-	(GtkArgSetFunc) gtk_label_set_arg,
-	(GtkArgGetFunc) gtk_label_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
       
       label_type = gtk_type_unique (gtk_misc_get_type (), &label_info);
@@ -87,7 +88,9 @@ gtk_label_class_init (GtkLabelClass *class)
   
   gtk_object_add_arg_type ("GtkLabel::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
   gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_JUSTIFICATION, GTK_ARG_READWRITE, ARG_JUSTIFY);
-  
+
+  object_class->set_arg = gtk_label_set_arg;
+  object_class->get_arg = gtk_label_get_arg;
   object_class->finalize = gtk_label_finalize;
   
   widget_class->size_request = gtk_label_size_request;
@@ -97,10 +100,14 @@ gtk_label_class_init (GtkLabelClass *class)
 }
 
 static void
-gtk_label_set_arg (GtkLabel	  *label,
+gtk_label_set_arg (GtkObject	  *object,
 		   GtkArg	  *arg,
 		   guint	   arg_id)
 {
+  GtkLabel *label;
+
+  label = GTK_LABEL (object);
+
   switch (arg_id)
     {
     case ARG_LABEL:
@@ -115,10 +122,14 @@ gtk_label_set_arg (GtkLabel	  *label,
 }
 
 static void
-gtk_label_get_arg (GtkLabel	  *label,
+gtk_label_get_arg (GtkObject	  *object,
 		   GtkArg	  *arg,
 		   guint	   arg_id)
 {
+  GtkLabel *label;
+
+  label = GTK_LABEL (object);
+
   switch (arg_id)
     {
     case ARG_LABEL:

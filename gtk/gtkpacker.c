@@ -167,8 +167,9 @@ gtk_packer_get_type (void)
         sizeof (GtkPackerClass),
         (GtkClassInitFunc) gtk_packer_class_init,
         (GtkObjectInitFunc) gtk_packer_init,
-        (GtkArgSetFunc) gtk_packer_set_arg,
-        (GtkArgGetFunc) gtk_packer_get_arg
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       packer_type = gtk_type_unique (GTK_TYPE_CONTAINER, &packer_info);
@@ -180,9 +181,11 @@ gtk_packer_get_type (void)
 static void
 gtk_packer_class_init (GtkPackerClass *klass)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   
+  object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
@@ -206,6 +209,9 @@ gtk_packer_class_init (GtkPackerClass *klass)
   gtk_container_add_child_arg_type ("GtkPacker::ipad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_X);
   gtk_container_add_child_arg_type ("GtkPacker::ipad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_Y);
   gtk_container_add_child_arg_type ("GtkPacker::position", GTK_TYPE_LONG, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
+
+  object_class->set_arg = gtk_packer_set_arg;
+  object_class->get_arg = gtk_packer_get_arg;
 
   widget_class->map = gtk_packer_map;
   widget_class->unmap = gtk_packer_unmap;

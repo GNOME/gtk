@@ -41,8 +41,9 @@ gtk_vbox_get_type (void)
 	sizeof (GtkVBoxClass),
 	(GtkClassInitFunc) gtk_vbox_class_init,
 	(GtkObjectInitFunc) gtk_vbox_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       vbox_type = gtk_type_unique (GTK_TYPE_BOX, &vbox_info);

@@ -43,8 +43,9 @@ gtk_button_box_get_type (void)
 	sizeof (GtkButtonBoxClass),
 	(GtkClassInitFunc) gtk_button_box_class_init,
 	(GtkObjectInitFunc) gtk_button_box_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       button_box_type = gtk_type_unique (gtk_box_get_type (), &button_box_info);

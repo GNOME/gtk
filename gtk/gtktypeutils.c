@@ -191,6 +191,8 @@ gtk_type_create (GtkType      parent_type,
 
   new_node->type_info = *type_info;
   new_node->type_info.type_name = type_name;
+  /* new_node->type_info.reserved_1 = NULL; */
+  new_node->type_info.reserved_2 = NULL;
   new_node->n_supers = parent ? parent->n_supers + 1 : 0;
   new_node->chunk_alloc_locked = FALSE;
   new_node->supers = g_new0 (GtkType, new_node->n_supers + 1);
@@ -472,42 +474,6 @@ gtk_type_is_a (GtkType type,
   return FALSE;
 }
 
-void
-gtk_type_get_arg (GtkObject   *object,
-		  GtkType      type,
-		  GtkArg      *arg,
-		  guint	       arg_id)
-{
-  GtkTypeNode *node;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (arg != NULL);
-
-  LOOKUP_TYPE_NODE (node, type);
-
-  if (node && node->type_info.arg_get_func)
-    (* node->type_info.arg_get_func) (object, arg, arg_id);
-  else
-    arg->type = GTK_TYPE_INVALID;
-}
-
-void
-gtk_type_set_arg (GtkObject *object,
-		  GtkType    type,
-		  GtkArg    *arg,
-		  guint	     arg_id)
-{
-  GtkTypeNode *node;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (arg != NULL);
-
-  LOOKUP_TYPE_NODE (node, type);
-
-  if (node && node->type_info.arg_set_func)
-    (* node->type_info.arg_set_func) (object, arg, arg_id);
-}
-
 GtkArg*
 gtk_arg_copy (GtkArg         *src_arg,
 	      GtkArg         *dest_arg)
@@ -534,6 +500,12 @@ gtk_type_class_init (GtkTypeNode *node)
 {
   if (!node->klass && node->type_info.class_size)
     {
+      GtkObjectClass *object_class;
+      GtkTypeNode *base_node;
+      GSList *slist;
+
+      g_assert (node->type_info.class_size >= sizeof (GtkObjectClass));
+
       node->klass = g_malloc0 (node->type_info.class_size);
       
       if (node->parent_type)
@@ -547,28 +519,42 @@ gtk_type_class_init (GtkTypeNode *node)
 	  if (parent->klass)
 	    memcpy (node->klass, parent->klass, parent->type_info.class_size);
 	}
-      
-      if (gtk_type_is_a (node->type, GTK_TYPE_OBJECT))
-	{
-	  GtkObjectClass *object_class;
 	  
+      object_class = node->klass;
+      object_class->type = node->type;
+
+      /* stack all base class initialization functions, so we
+       * call them in ascending order.
+       */
+      base_node = node;
+      slist = NULL;
+      while (base_node)
+	{
+	  if (base_node->type_info.base_class_init_func)
+	    slist = g_slist_prepend (slist, base_node->type_info.base_class_init_func);
+	  LOOKUP_TYPE_NODE (base_node, base_node->parent_type);
+	}
+      if (slist)
+	{
+	  GSList *walk;
+
+	  for (walk = slist; walk; walk = walk->next)
+	    {
+	      register GtkClassInitFunc base_class_init;
+
+	      base_class_init = walk->data;
+	      base_class_init (node->klass);
+	    }
+	  g_slist_free (slist);
+	}
+      
 	  /* FIXME: this initialization needs to be done through
 	   * a function pointer someday.
 	   */
 	  g_assert (node->type_info.class_size >= sizeof (GtkObjectClass));
 	  
-	  object_class = node->klass;
-	  object_class->type = node->type;
-	  object_class->signals = NULL;
-	  object_class->nsignals = 0;
-	  object_class->n_args = 0;
-	}
-      
-      /* class_init_func is used as data pointer for
-       * class_size==0 types
-       */
       if (node->type_info.class_init_func)
-	(* node->type_info.class_init_func) (node->klass);
+	node->type_info.class_init_func (node->klass);
     }
 }
 
@@ -582,7 +568,7 @@ gtk_type_enum_get_values (GtkType      enum_type)
 
       LOOKUP_TYPE_NODE (node, enum_type);
       if (node)
-	return (GtkEnumValue*) node->type_info.class_init_func;
+	return (GtkEnumValue*) node->type_info.reserved_1;
     }
 
   g_warning ("gtk_type_enum_get_values(): type `%s' is not derived from `enum' or `flags'",
@@ -608,10 +594,10 @@ gtk_type_register_intern (gchar        *name,
   info.type_name = name;
   info.object_size = 0;
   info.class_size = 0;
-  info.class_init_func = (void*) values;
+  info.class_init_func = NULL;
   info.object_init_func = NULL;
-  info.arg_set_func = NULL;
-  info.arg_get_func = NULL;
+  info.reserved_1 = values;
+  info.reserved_2 = NULL;
 
   /* relookup pointers afterwards.
    */

@@ -80,16 +80,20 @@ typedef struct _GtkTypeInfo    GtkTypeInfo;
 typedef struct _GtkEnumValue   GtkEnumValue;
 typedef struct _GtkEnumValue   GtkFlagValue;
 
-typedef void (*GtkClassInitFunc)  (gpointer klass);
-typedef void (*GtkObjectInitFunc) (gpointer object);
-typedef void (*GtkArgGetFunc) (GtkObject *object, GtkArg *arg, guint arg_id);
-typedef void (*GtkArgSetFunc) (GtkObject *object, GtkArg *arg, guint arg_id);
-typedef gint (*GtkFunction) (gpointer data);
+typedef void (*GtkClassInitFunc)   (gpointer   klass);
+typedef void (*GtkObjectInitFunc)  (gpointer   object);
+typedef void (*GtkArgGetFunc)	   (GtkObject *object,
+				    GtkArg    *arg,
+				    guint      arg_id);
+typedef void (*GtkArgSetFunc)	   (GtkObject *object,
+				    GtkArg    *arg,
+				    guint      arg_id);
+typedef gint (*GtkFunction)	   (gpointer   data);
 typedef void (*GtkCallbackMarshal) (GtkObject *object,
-				    gpointer data,
-				    guint n_args,
-				    GtkArg *args);
-typedef void (*GtkDestroyNotify) (gpointer data);
+				    gpointer   data,
+				    guint      n_args,
+				    GtkArg    *args);
+typedef void (*GtkDestroyNotify)   (gpointer   data);
 
 struct _GtkArg
 {
@@ -169,13 +173,14 @@ struct _GtkArg
 
 struct _GtkTypeInfo
 {
-  gchar *type_name;
-  guint object_size;
-  guint class_size;
-  GtkClassInitFunc class_init_func;
-  GtkObjectInitFunc object_init_func;
-  GtkArgSetFunc arg_set_func;
-  GtkArgGetFunc arg_get_func;
+  gchar			*type_name;
+  guint			 object_size;
+  guint			 class_size;
+  GtkClassInitFunc	 class_init_func;
+  GtkObjectInitFunc	 object_init_func;
+  gpointer		 reserved_1;
+  gpointer		 reserved_2;
+  GtkClassInitFunc	 base_class_init_func;
 };
 
 struct _GtkEnumValue
@@ -205,22 +210,14 @@ void		gtk_type_describe_tree	    	(GtkType	 type,
 						 gboolean	 show_size);
 gint		gtk_type_is_a		    	(GtkType	 type,
 						 GtkType	 is_a_type);
-void		gtk_type_get_arg	    	(GtkObject	*object,
-						 GtkType	 type,
-						 GtkArg		*arg,
-						 guint		 arg_id);
-void		gtk_type_set_arg	    	(GtkObject	*object,
-						 GtkType	 type,
-						 GtkArg		*arg,
-						 guint		 arg_id);
-GtkArg*		gtk_arg_copy		    	(GtkArg		*src_arg,
-						 GtkArg		*dest_arg);
 GtkType		gtk_type_register_enum     	(const gchar	*type_name,
 						 GtkEnumValue	*values);
 GtkType		gtk_type_register_flags		(const gchar	*type_name,
 						 GtkFlagValue	*values);
 GtkEnumValue*	gtk_type_enum_get_values	(GtkType	enum_type);
 GtkFlagValue*	gtk_type_flags_get_values	(GtkType	flags_type);
+GtkArg*		gtk_arg_copy		    	(GtkArg		*src_arg,
+						 GtkArg		*dest_arg);
 
 
 #ifdef __cplusplus

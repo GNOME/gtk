@@ -207,8 +207,9 @@ gtk_color_selection_get_type (void)
 	sizeof (GtkColorSelectionClass),
 	(GtkClassInitFunc) gtk_color_selection_class_init,
 	(GtkObjectInitFunc) gtk_color_selection_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       color_selection_type = gtk_type_unique (gtk_vbox_get_type (), &colorsel_info);
@@ -1444,8 +1445,9 @@ gtk_color_selection_dialog_get_type (void)
 	sizeof (GtkColorSelectionDialogClass),
 	(GtkClassInitFunc) gtk_color_selection_dialog_class_init,
 	(GtkObjectInitFunc) gtk_color_selection_dialog_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       color_selection_dialog_type = gtk_type_unique (gtk_window_get_type (), &colorsel_diag_info);

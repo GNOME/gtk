@@ -61,24 +61,25 @@ struct _GtkArgInfo
 };
 
 
-void		      gtk_object_init_type     (void);
-static void           gtk_object_class_init    (GtkObjectClass *klass);
-static void           gtk_object_init          (GtkObject      *object);
-static void           gtk_object_set_arg       (GtkObject      *object,
-						GtkArg         *arg,
-						guint		arg_id);
-static void           gtk_object_get_arg       (GtkObject      *object,
-						GtkArg         *arg,
-						guint		arg_id);
-static void           gtk_object_shutdown      (GtkObject      *object);
-static void           gtk_object_real_destroy  (GtkObject      *object);
-static void           gtk_object_finalize      (GtkObject      *object);
-static void           gtk_object_notify_weaks  (GtkObject      *object);
+void		      gtk_object_init_type       (void);
+static void           gtk_object_base_class_init (GtkObjectClass *klass);
+static void           gtk_object_class_init      (GtkObjectClass *klass);
+static void           gtk_object_init            (GtkObject      *object);
+static void           gtk_object_set_arg         (GtkObject      *object,
+						  GtkArg         *arg,
+						  guint		  arg_id);
+static void           gtk_object_get_arg         (GtkObject      *object,
+						  GtkArg         *arg,
+						  guint		  arg_id);
+static void           gtk_object_shutdown        (GtkObject      *object);
+static void           gtk_object_real_destroy    (GtkObject      *object);
+static void           gtk_object_finalize        (GtkObject      *object);
+static void           gtk_object_notify_weaks    (GtkObject      *object);
 
-GtkArg*               gtk_object_collect_args  (guint   *nargs,
-						GtkType (*) (const gchar*),
-						va_list  args1,
-						va_list  args2);
+GtkArg*               gtk_object_collect_args    (guint          *nargs,
+						  GtkType        (*) (const gchar*),
+						  va_list         args1,
+						  va_list         args2);
 
 static guint object_signals[LAST_SIGNAL] = { 0 };
 
@@ -140,8 +141,9 @@ gtk_object_init_type (void)
     sizeof (GtkObjectClass),
     (GtkClassInitFunc) gtk_object_class_init,
     (GtkObjectInitFunc) gtk_object_init,
-    gtk_object_set_arg,
-    gtk_object_get_arg,
+    /* reversed_1 */ NULL,
+    /* reversed_2 */ NULL,
+    (GtkClassInitFunc) gtk_object_base_class_init,
   };
 
   object_type = gtk_type_unique (0, &object_info);
@@ -160,12 +162,21 @@ gtk_object_get_type (void)
 }
 
 static void
-gtk_object_class_init (GtkObjectClass *class)
+gtk_object_base_class_init (GtkObjectClass *class)
 {
+  /* reset instance specific fields that don't get inhrited */
   class->signals = NULL;
   class->nsignals = 0;
   class->n_args = 0;
 
+  /* reset instance specifc methods that don't get inherited */
+  class->get_arg = NULL;
+  class->set_arg = NULL;
+}
+
+static void
+gtk_object_class_init (GtkObjectClass *class)
+{
   gtk_object_add_arg_type ("GtkObject::user_data",
 			   GTK_TYPE_POINTER,
 			   GTK_ARG_READWRITE,
@@ -189,6 +200,8 @@ gtk_object_class_init (GtkObjectClass *class)
 
   gtk_object_class_add_signals (class, object_signals, LAST_SIGNAL);
 
+  class->get_arg = gtk_object_get_arg;
+  class->set_arg = gtk_object_set_arg;
   class->shutdown = gtk_object_shutdown;
   class->destroy = gtk_object_real_destroy;
   class->finalize = gtk_object_finalize;
@@ -286,7 +299,7 @@ gtk_object_set_arg (GtkObject *object,
     case ARG_SIGNAL:
       if ((arg->name[9 + 2 + 6] != ':') || (arg->name[9 + 2 + 7] != ':'))
 	{
-	  g_warning ("invalid signal argument: \"%s\"\n", arg->name);
+	  g_warning ("gtk_object_set_arg(): invalid signal argument: \"%s\"\n", arg->name);
 	  return;
 	}
       gtk_signal_connect (object, arg->name + 9 + 2 + 6 + 2,
@@ -296,7 +309,7 @@ gtk_object_set_arg (GtkObject *object,
     case ARG_OBJECT_SIGNAL:
       if ((arg->name[9 + 2 + 13] != ':') || (arg->name[9 + 2 + 14] != ':'))
 	{
-	  g_warning ("invalid signal argument: \"%s\"\n", arg->name);
+	  g_warning ("gtk_object_set_arg(): invalid signal argument: \"%s\"\n", arg->name);
 	  return;
 	}
       gtk_signal_connect_object (object, arg->name + 9 + 2 + 13 + 2,
@@ -677,6 +690,7 @@ gtk_object_getv (GtkObject           *object,
       GtkArgInfo *info;
       gchar *lookup_name;
       gchar *d;
+      GtkObjectClass *oclass;
       
       
       /* hm, the name cutting shouldn't be needed on gets, but what the heck...
@@ -722,7 +736,16 @@ gtk_object_getv (GtkObject           *object,
 	g_free (lookup_name);
 
       args[i].type = info->type;
+
+      oclass = gtk_type_class (info->class_type);
+      if (oclass && oclass->get_arg)
+	oclass->get_arg (object, &args[i], info->arg_id);
+      else
+	args[i].type = GTK_TYPE_INVALID;
+
+#if 0
       gtk_type_get_arg (object, info->class_type, &args[i], info->arg_id);
+#endif
     }
 }
 
@@ -882,6 +905,7 @@ gtk_object_setv (GtkObject *object,
       gchar *lookup_name;
       gchar *d;
       gboolean arg_ok;
+      GtkObjectClass *oclass;
 
       lookup_name = g_strdup (args[i].name);
       d = strchr (lookup_name, ':');
@@ -928,7 +952,13 @@ gtk_object_setv (GtkObject *object,
       if (!arg_ok)
 	continue;
 
+      oclass = gtk_type_class (info->class_type);
+      if (oclass && oclass->set_arg)
+	oclass->set_arg (object, &args[i], info->arg_id);
+
+#if 0
       gtk_type_set_arg (object, info->class_type, &args[i], info->arg_id);
+#endif
     }
 }
 

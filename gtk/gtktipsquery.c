@@ -64,10 +64,10 @@ static void	gtk_tips_query_init		(GtkTipsQuery		*tips_query);
 static void	gtk_tips_query_destroy		(GtkObject		*object);
 static gint	gtk_tips_query_event		(GtkWidget		*widget,
 						 GdkEvent		*event);
-static void	gtk_tips_query_set_arg		(GtkTipsQuery		*tips_query,
+static void	gtk_tips_query_set_arg		(GtkObject              *object,
 						 GtkArg			*arg,
 						 guint			 arg_id);
-static void	gtk_tips_query_get_arg		(GtkTipsQuery		*tips_query,
+static void	gtk_tips_query_get_arg		(GtkObject              *object,
 						 GtkArg			*arg,
 						 guint			arg_id);
 static void	gtk_tips_query_real_start_query	(GtkTipsQuery		*tips_query);
@@ -98,8 +98,9 @@ gtk_tips_query_get_type (void)
 	sizeof (GtkTipsQueryClass),
 	(GtkClassInitFunc) gtk_tips_query_class_init,
 	(GtkObjectInitFunc) gtk_tips_query_init,
-	(GtkArgSetFunc) gtk_tips_query_set_arg,
-	(GtkArgGetFunc) gtk_tips_query_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       tips_query_type = gtk_type_unique (gtk_label_get_type (), &tips_query_info);
@@ -195,7 +196,10 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_TYPE_GDK_EVENT);
   gtk_object_class_add_signals (object_class, tips_query_signals, SIGNAL_LAST);
 
+  object_class->set_arg = gtk_tips_query_set_arg;
+  object_class->get_arg = gtk_tips_query_get_arg;
   object_class->destroy = gtk_tips_query_destroy;
+
   widget_class->event = gtk_tips_query_event;
 
   class->start_query = gtk_tips_query_real_start_query;
@@ -219,10 +223,14 @@ gtk_tips_query_init (GtkTipsQuery *tips_query)
 }
 
 static void
-gtk_tips_query_set_arg (GtkTipsQuery           *tips_query,
+gtk_tips_query_set_arg (GtkObject              *object,
 			GtkArg                 *arg,
 			guint                   arg_id)
 {
+  GtkTipsQuery *tips_query;
+
+  tips_query = GTK_TIPS_QUERY (object);
+
   switch (arg_id)
     {
     case ARG_EMIT_ALWAYS:
@@ -243,10 +251,14 @@ gtk_tips_query_set_arg (GtkTipsQuery           *tips_query,
 }
 
 static void
-gtk_tips_query_get_arg (GtkTipsQuery           *tips_query,
-			GtkArg                 *arg,
+gtk_tips_query_get_arg (GtkObject             *object,
+			GtkArg                *arg,
 			guint                  arg_id)
 {
+  GtkTipsQuery *tips_query;
+
+  tips_query = GTK_TIPS_QUERY (object);
+
   switch (arg_id)
     {
     case ARG_EMIT_ALWAYS:

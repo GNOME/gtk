@@ -189,6 +189,14 @@ struct _GtkObjectClass
   /* The number of arguments per class.
    */
   guint n_args;
+
+  /* Non overridable class methods to set and get per class arguments */
+  void (*set_arg) (GtkObject *object,
+		   GtkArg    *arg,
+		   guint      arg_id);
+  void (*get_arg) (GtkObject *object,
+		   GtkArg    *arg,
+		   guint      arg_id);
   
   /* The functions that will end an objects life time. In one way ore
    *  another all three of them are defined for all objects. If an
@@ -199,7 +207,7 @@ struct _GtkObjectClass
    *  an example of how to do this).
    */
   void (* shutdown) (GtkObject *object);
-  void (* destroy) (GtkObject *object);
+  void (* destroy)  (GtkObject *object);
   
   void (* finalize) (GtkObject *object);
 };

@@ -60,8 +60,9 @@ gtk_radio_button_get_type (void)
 	sizeof (GtkRadioButtonClass),
 	(GtkClassInitFunc) gtk_radio_button_class_init,
 	(GtkObjectInitFunc) gtk_radio_button_init,
-	(GtkArgSetFunc) gtk_radio_button_set_arg,
-        (GtkArgGetFunc) gtk_radio_button_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       radio_button_type = gtk_type_unique (gtk_check_button_get_type (), &radio_button_info);
@@ -85,6 +86,8 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 
   gtk_object_add_arg_type ("GtkRadioButton::group", GTK_TYPE_RADIO_BUTTON, GTK_ARG_WRITABLE, ARG_GROUP);
 
+  object_class->set_arg = gtk_radio_button_set_arg;
+  object_class->get_arg = gtk_radio_button_get_arg;
   object_class->destroy = gtk_radio_button_destroy;
 
   button_class->clicked = gtk_radio_button_clicked;

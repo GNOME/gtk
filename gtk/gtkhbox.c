@@ -41,8 +41,9 @@ gtk_hbox_get_type (void)
 	sizeof (GtkHBoxClass),
 	(GtkClassInitFunc) gtk_hbox_class_init,
 	(GtkObjectInitFunc) gtk_hbox_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       hbox_type = gtk_type_unique (GTK_TYPE_BOX, &hbox_info);

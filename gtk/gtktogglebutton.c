@@ -71,8 +71,9 @@ gtk_toggle_button_get_type (void)
 	sizeof (GtkToggleButtonClass),
 	(GtkClassInitFunc) gtk_toggle_button_class_init,
 	(GtkObjectInitFunc) gtk_toggle_button_init,
-	(GtkArgSetFunc) gtk_toggle_button_set_arg,
-        (GtkArgGetFunc) gtk_toggle_button_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       toggle_button_type = gtk_type_unique (gtk_button_get_type (), &toggle_button_info);
@@ -106,6 +107,9 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, toggle_button_signals, LAST_SIGNAL);
+
+  object_class->set_arg = gtk_toggle_button_set_arg;
+  object_class->get_arg = gtk_toggle_button_get_arg;
 
   widget_class->draw_focus = gtk_toggle_button_draw_focus;
 

@@ -162,8 +162,9 @@ gtk_item_factory_get_type (void)
 	sizeof (GtkItemFactoryClass),
 	(GtkClassInitFunc) gtk_item_factory_class_init,
 	(GtkObjectInitFunc) gtk_item_factory_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
       
       item_factory_type = gtk_type_unique (GTK_TYPE_OBJECT, &item_factory_info);

@@ -399,8 +399,9 @@ gtk_font_selection_get_type()
 	sizeof(GtkFontSelectionClass),
 	(GtkClassInitFunc) gtk_font_selection_class_init,
 	(GtkObjectInitFunc) gtk_font_selection_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       font_selection_type = gtk_type_unique (gtk_notebook_get_type(),
@@ -2363,13 +2364,15 @@ gtk_font_selection_get_fonts (void)
 	  res_y = atoi(field);
 
 	  if (pixels == 0 && points == 0)
-	    if (res_x == 0 && res_y == 0)
-	      flags = SCALABLE_FONT;
-	    else
-	      {
-		flags = SCALABLE_BITMAP_FONT;
-		fontsel_info->scaled_bitmaps_available = TRUE;
-	      }
+	    {
+	      if (res_x == 0 && res_y == 0)
+		flags = SCALABLE_FONT;
+	      else
+		{
+		  flags = SCALABLE_BITMAP_FONT;
+		  fontsel_info->scaled_bitmaps_available = TRUE;
+		}
+	    }
 	  else
 	    flags = BITMAP_FONT;
 
@@ -3074,8 +3077,9 @@ gtk_font_selection_dialog_get_type	(void)
 	sizeof (GtkFontSelectionDialogClass),
 	(GtkClassInitFunc) gtk_font_selection_dialog_class_init,
 	(GtkObjectInitFunc) gtk_font_selection_dialog_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       font_selection_dialog_type = gtk_type_unique (gtk_window_get_type (), &fontsel_diag_info);

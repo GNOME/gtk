@@ -54,8 +54,9 @@ gtk_ruler_get_type (void)
 	sizeof (GtkRulerClass),
 	(GtkClassInitFunc) gtk_ruler_class_init,
 	(GtkObjectInitFunc) gtk_ruler_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       ruler_type = gtk_type_unique (gtk_widget_get_type (), &ruler_info);

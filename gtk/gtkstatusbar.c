@@ -61,8 +61,9 @@ gtk_statusbar_get_type (void)
         sizeof (GtkStatusbarClass),
         (GtkClassInitFunc) gtk_statusbar_class_init,
         (GtkObjectInitFunc) gtk_statusbar_init,
-        (GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+        /* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       statusbar_type = gtk_type_unique (gtk_hbox_get_type (), &statusbar_info);

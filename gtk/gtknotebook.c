@@ -161,8 +161,9 @@ gtk_notebook_get_type (void)
 	sizeof (GtkNotebookClass),
 	(GtkClassInitFunc) gtk_notebook_class_init,
 	(GtkObjectInitFunc) gtk_notebook_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       notebook_type = gtk_type_unique (gtk_container_get_type (), &notebook_info);

@@ -79,8 +79,9 @@ gtk_menu_get_type (void)
 	sizeof (GtkMenuClass),
 	(GtkClassInitFunc) gtk_menu_class_init,
 	(GtkObjectInitFunc) gtk_menu_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
       
       menu_type = gtk_type_unique (gtk_menu_shell_get_type (), &menu_info);

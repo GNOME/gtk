@@ -80,13 +80,14 @@ static void gtk_container_marshal_signal_3 (GtkObject      *object,
 					    GtkArg         *args);
 
 
+static void gtk_container_base_class_init   (GtkContainerClass *klass);
 static void gtk_container_class_init        (GtkContainerClass *klass);
 static void gtk_container_init              (GtkContainer      *container);
 static void gtk_container_destroy           (GtkObject         *object);
-static void gtk_container_get_arg           (GtkContainer      *container,
+static void gtk_container_get_arg           (GtkObject	       *object,
 					     GtkArg            *arg,
 					     guint		arg_id);
-static void gtk_container_set_arg           (GtkContainer      *container,
+static void gtk_container_set_arg           (GtkObject	       *object,
 					     GtkArg            *arg,
 					     guint		arg_id);
 static void gtk_container_add_unimplemented (GtkContainer      *container,
@@ -147,14 +148,24 @@ gtk_container_get_type (void)
 	sizeof (GtkContainerClass),
 	(GtkClassInitFunc) gtk_container_class_init,
 	(GtkObjectInitFunc) gtk_container_init,
-	(GtkArgSetFunc) gtk_container_set_arg,
-	(GtkArgGetFunc) gtk_container_get_arg,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) gtk_container_base_class_init,
       };
 
       container_type = gtk_type_unique (gtk_widget_get_type (), &container_info);
     }
 
   return container_type;
+}
+
+static void
+gtk_container_base_class_init (GtkContainerClass *class)
+{
+  /* reset instance specifc class fields that don't get inherited */
+  class->n_child_args = 0;
+  class->set_child_arg = NULL;
+  class->get_child_arg = NULL;
 }
 
 static void
@@ -223,7 +234,9 @@ gtk_container_class_init (GtkContainerClass *class)
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   gtk_object_class_add_signals (object_class, container_signals, LAST_SIGNAL);
-  
+
+  object_class->get_arg = gtk_container_get_arg;
+  object_class->set_arg = gtk_container_set_arg;
   object_class->destroy = gtk_container_destroy;
   
   /* Other container classes should overwrite show_all and hide_all,
@@ -239,11 +252,7 @@ gtk_container_class_init (GtkContainerClass *class)
   class->foreach = NULL;
   class->focus = gtk_container_real_focus;
   class->set_focus_child = gtk_container_real_set_focus_child;
-
-  /* linkage */
   class->child_type = NULL;
-  class->get_child_arg = NULL;
-  class->set_child_arg = NULL;
 }
 
 static void
@@ -259,10 +268,10 @@ gtk_container_get_child_arg (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (arg != NULL);
 
-  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
-
-  if (class->get_child_arg)
+  class = gtk_type_class (type);
+  if (class && class->get_child_arg)
     class->get_child_arg (container, child, arg, arg_id);
   else
     arg->type = GTK_TYPE_INVALID;
@@ -281,10 +290,10 @@ gtk_container_set_child_arg (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (arg != NULL);
 
-  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
-
-  if (class->set_child_arg)
+  class = gtk_type_class (type);
+  if (class && class->set_child_arg)
     class->set_child_arg (container, child, arg, arg_id);
 }
 
@@ -297,10 +306,11 @@ gtk_container_child_type (GtkContainer      *container)
   g_return_val_if_fail (container != NULL, 0);
   g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
 
-  slot = GTK_TYPE_NONE;
   class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
   if (class->child_type)
     slot = class->child_type (container);
+  else
+    slot = GTK_TYPE_NONE;
 
   return slot;
 }
@@ -767,10 +777,14 @@ gtk_container_destroy (GtkObject *object)
 }
 
 static void
-gtk_container_set_arg (GtkContainer *container,
+gtk_container_set_arg (GtkObject    *object,
 		       GtkArg       *arg,
 		       guint	     arg_id)
 {
+  GtkContainer *container;
+
+  container = GTK_CONTAINER (object);
+
   switch (arg_id)
     {
     case ARG_BORDER_WIDTH:
@@ -788,10 +802,14 @@ gtk_container_set_arg (GtkContainer *container,
 }
 
 static void
-gtk_container_get_arg (GtkContainer *container,
+gtk_container_get_arg (GtkObject    *object,
 		       GtkArg       *arg,
 		       guint	     arg_id)
 {
+  GtkContainer *container;
+
+  container = GTK_CONTAINER (object);
+  
   switch (arg_id)
     {
     case ARG_BORDER_WIDTH:

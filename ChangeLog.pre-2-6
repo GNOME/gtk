@@ -1,3 +1,117 @@
+Sun Jun 28 04:29:10 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_class_init): call the base class init
+	fucntions from all parent types upon class initialization.
+
+	* gtk/gtkcontainer.c:
+ 	(gtk_container_get_type): announce gtk_container_base_class_init to
+ 	the type system.
+	(gtk_container_base_class_init): new function to feature base class
+	initialization.
+	(gtk_container_get_child_arg): 
+	(gtk_container_set_child_arg): call the GtkContainerClass get_child_arg
+	and set_child_arg methods of the class indicated through the argument
+	name.
+
+	* gtk/gtkobject.c:
+	(gtk_object_base_class_init): new function to feature base class
+ 	initialization.
+	(gtk_object_init_type): announce gtk_object_base_class_init to the type
+	system.
+	(gtk_object_class_init): setup the get_arg and set_arg pointers for
+	GtkObjectClass.
+	(gtk_object_setv): 
+ 	(gtk_object_getv): call the GtkObjectClass get_arg and set_arg methods,
+ 	instead of bothering the type system with this.
+
+	* gtk/gtkaccellabel.c: 
+	* gtk/gtkbutton.c: 
+	* gtk/gtkradiobutton.c: 
+	* gtk/gtktable.c:
+	* gtk/gtktogglebutton.c: 
+	* gtk/gtktipsquery.c: 
+	* gtk/gtkbox.c: 
+	* gtk/gtkpacker.c: 
+	* gtk/gtkwidget.c: 
+	* gtk/gtkwindow.c: 
+	* gtk/gtkframe.c: 
+	* gtk/gtkmisc.c:
+	* gtk/gtklabel.c: set the object_class->{g|s}et_arg pointers to the
+	corresponding gtk_*_{g|s]et_arg functions and updated the gtk_*_get_type
+	functions wrt GtkTypeInfo initialization. changed a lot of the set/get
+	arg functions to take a GtkObject argument.
+
+	gtk/gtkadjustment.c:
+	gtk/gtkalignment.c:
+	gtk/gtkarrow.c:
+	gtk/gtkaspectframe.c:
+	gtk/gtkbbox.c:
+	gtk/gtkbin.c:
+	gtk/gtkcheckbutton.c:
+	gtk/gtkcheckmenuitem.c:
+	gtk/gtkclist.c:
+	gtk/gtkcolorsel.c:
+	gtk/gtkcombo.c:
+	gtk/gtkctree.c:
+	gtk/gtkcurve.c:
+	gtk/gtkdata.c:
+	gtk/gtkdialog.c:
+	gtk/gtkdrawingarea.c:
+	gtk/gtkeditable.c:
+	gtk/gtkentry.c:
+	gtk/gtkeventbox.c:
+	gtk/gtkfilesel.c:
+	gtk/gtkfixed.c:
+	gtk/gtkfontsel.c:
+	gtk/gtkgamma.c:
+	gtk/gtkhandlebox.c:
+	gtk/gtkhbbox.c:
+	gtk/gtkhbox.c:
+	gtk/gtkhpaned.c:
+	gtk/gtkhruler.c:
+	gtk/gtkhscale.c:
+	gtk/gtkhscrollbar.c:
+	gtk/gtkhseparator.c:
+	gtk/gtkimage.c:
+	gtk/gtkinputdialog.c:
+	gtk/gtkitem.c:
+	gtk/gtkitemfactory.c:
+	gtk/gtklist.c:
+	gtk/gtklistitem.c:
+	gtk/gtkmenu.c:
+	gtk/gtkmenubar.c:
+	gtk/gtkmenuitem.c:
+	gtk/gtkmenushell.c:
+	gtk/gtknotebook.c:
+	gtk/gtkoptionmenu.c:
+	gtk/gtkpaned.c:
+	gtk/gtkpixmap.c:
+	gtk/gtkpreview.c:
+	gtk/gtkprogressbar.c:
+	gtk/gtkradiomenuitem.c:
+	gtk/gtkrange.c:
+	gtk/gtkruler.c:
+	gtk/gtkscale.c:
+	gtk/gtkscrollbar.c:
+	gtk/gtkscrolledwindow.c:
+	gtk/gtkseparator.c:
+	gtk/gtkspinbutton.c:
+	gtk/gtkstatusbar.c:
+	gtk/gtktext.c:
+	gtk/gtktoolbar.c:
+	gtk/gtktooltips.c:
+	gtk/gtktree.c:
+	gtk/gtktreeitem.c:
+	gtk/gtkvbbox.c:
+	gtk/gtkvbox.c:
+	gtk/gtkviewport.c:
+	gtk/gtkvpaned.c:
+	gtk/gtkvruler.c:
+	gtk/gtkvscale.c:
+	gtk/gtkvscrollbar.c:
+	gtk/gtkvseparator.c: updated the GtkTypeInfo initialization code to
+	match the modified GtkTypeInfo structure.
+
 Sat Jun 27 23:23:27 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/testgtk.c: use rand() instead of random() for portability

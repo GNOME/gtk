@@ -459,8 +459,9 @@ gtk_text_get_type (void)
 	sizeof (GtkTextClass),
 	(GtkClassInitFunc) gtk_text_class_init,
 	(GtkObjectInitFunc) gtk_text_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       text_type = gtk_type_unique (gtk_editable_get_type (), &text_info);

@@ -54,8 +54,9 @@ gtk_paned_get_type (void)
 	sizeof (GtkPanedClass),
 	(GtkClassInitFunc) gtk_paned_class_init,
 	(GtkObjectInitFunc) gtk_paned_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       paned_type = gtk_type_unique (gtk_container_get_type (), &paned_info);

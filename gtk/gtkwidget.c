@@ -165,10 +165,10 @@ static void gtk_widget_marshal_signal_7 (GtkObject	*object,
 
 static void gtk_widget_class_init		 (GtkWidgetClass    *klass);
 static void gtk_widget_init			 (GtkWidget	    *widget);
-static void gtk_widget_set_arg			 (GtkWidget	    *widget,
+static void gtk_widget_set_arg			 (GtkObject         *object,
 						  GtkArg	    *arg,
 						  guint		     arg_id);
-static void gtk_widget_get_arg			 (GtkWidget	    *widget,
+static void gtk_widget_get_arg			 (GtkObject         *object,
 						  GtkArg	    *arg,
 						  guint		     arg_id);
 static void gtk_widget_shutdown			 (GtkObject	    *object);
@@ -266,8 +266,9 @@ gtk_widget_get_type (void)
 	sizeof (GtkWidgetClass),
 	(GtkClassInitFunc) gtk_widget_class_init,
 	(GtkObjectInitFunc) gtk_widget_init,
-	(GtkArgSetFunc) gtk_widget_set_arg,
-	(GtkArgGetFunc) gtk_widget_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
       
       widget_type = gtk_type_unique (gtk_object_get_type (), &widget_info);
@@ -686,7 +687,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_GDK_EVENT);
 
   gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
-  
+
+  object_class->set_arg = gtk_widget_set_arg;
+  object_class->get_arg = gtk_widget_get_arg;
   object_class->shutdown = gtk_widget_shutdown;
   object_class->destroy = gtk_widget_real_destroy;
   object_class->finalize = gtk_widget_finalize;
@@ -751,23 +754,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   }
 }
 
-/*****************************************
- * gtk_widget_set_arg:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 static void
-gtk_widget_set_arg (GtkWidget	*widget,
+gtk_widget_set_arg (GtkObject   *object,
 		    GtkArg	*arg,
 		    guint	 arg_id)
 {
-  guint32 saved_flags;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (object);
 
   switch (arg_id)
     {
+      guint32 saved_flags;
+      
     case ARG_NAME:
       gtk_widget_set_name (widget, GTK_VALUE_STRING (*arg));
       break;
@@ -845,16 +844,20 @@ gtk_widget_set_arg (GtkWidget	*widget,
  *****************************************/
 
 static void
-gtk_widget_get_arg (GtkWidget	*widget,
+gtk_widget_get_arg (GtkObject   *object,
 		    GtkArg	*arg,
 		    guint	 arg_id)
 {
-  GtkWidgetAuxInfo *aux_info;
-  gint *eventp;
-  GdkExtensionMode *modep;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (object);
   
   switch (arg_id)
     {
+      GtkWidgetAuxInfo *aux_info;
+      gint *eventp;
+      GdkExtensionMode *modep;
+
     case ARG_NAME:
       if (widget->name)
 	GTK_VALUE_STRING (*arg) = g_strdup (widget->name);

@@ -30,10 +30,10 @@ enum {
 
 static void gtk_frame_class_init    (GtkFrameClass  *klass);
 static void gtk_frame_init          (GtkFrame       *frame);
-static void gtk_frame_set_arg       (GtkFrame       *frame,
+static void gtk_frame_set_arg       (GtkObject      *object,
 				     GtkArg         *arg,
 				     guint           arg_id);
-static void gtk_frame_get_arg       (GtkFrame       *frame,
+static void gtk_frame_get_arg       (GtkObject      *object,
 				     GtkArg         *arg,
 				     guint           arg_id);
 static void gtk_frame_finalize      (GtkObject      *object);
@@ -68,8 +68,9 @@ gtk_frame_get_type (void)
 	sizeof (GtkFrameClass),
 	(GtkClassInitFunc) gtk_frame_class_init,
 	(GtkObjectInitFunc) gtk_frame_init,
-	(GtkArgSetFunc) gtk_frame_set_arg,
-        (GtkArgGetFunc) gtk_frame_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       frame_type = gtk_type_unique (gtk_bin_get_type (), &frame_info);
@@ -94,6 +95,8 @@ gtk_frame_class_init (GtkFrameClass *class)
   gtk_object_add_arg_type ("GtkFrame::label_yalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_LABEL_YALIGN);
   gtk_object_add_arg_type ("GtkFrame::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
 
+  object_class->set_arg = gtk_frame_set_arg;
+  object_class->get_arg = gtk_frame_get_arg;
   object_class->finalize = gtk_frame_finalize;
 
   widget_class->draw = gtk_frame_draw;
@@ -117,10 +120,14 @@ gtk_frame_init (GtkFrame *frame)
 }
 
 static void
-gtk_frame_set_arg (GtkFrame       *frame,
+gtk_frame_set_arg (GtkObject      *object,
 		   GtkArg         *arg,
 		   guint           arg_id)
 {
+  GtkFrame *frame;
+
+  frame = GTK_FRAME (object);
+
   switch (arg_id)
     {
     case ARG_LABEL:
@@ -141,10 +148,14 @@ gtk_frame_set_arg (GtkFrame       *frame,
 }
 
 static void
-gtk_frame_get_arg (GtkFrame       *frame,
+gtk_frame_get_arg (GtkObject      *object,
 		   GtkArg         *arg,
 		   guint           arg_id)
 {
+  GtkFrame *frame;
+
+  frame = GTK_FRAME (object);
+
   switch (arg_id)
     {
     case ARG_LABEL:

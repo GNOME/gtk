@@ -33,10 +33,10 @@ enum {
 
 static void gtk_accel_label_class_init	 (GtkAccelLabelClass  *klass);
 static void gtk_accel_label_init	 (GtkAccelLabel	      *accel_label);
-static void gtk_accel_label_set_arg	 (GtkAccelLabel	      *accel_label,
-					  GtkArg	      *arg,
-					  guint		       arg_id);
-static void gtk_accel_label_get_arg	 (GtkAccelLabel	 *accel_label,
+static void gtk_accel_label_set_arg	 (GtkObject      *object,
+					  GtkArg	 *arg,
+					  guint		  arg_id);
+static void gtk_accel_label_get_arg	 (GtkObject      *object,
 					  GtkArg	 *arg,
 					  guint		  arg_id);
 static void gtk_accel_label_destroy	 (GtkObject	 *object);
@@ -64,8 +64,9 @@ gtk_accel_label_get_type (void)
 	sizeof (GtkAccelLabelClass),
 	(GtkClassInitFunc) gtk_accel_label_class_init,
 	(GtkObjectInitFunc) gtk_accel_label_init,
-	(GtkArgSetFunc) gtk_accel_label_set_arg,
-	(GtkArgGetFunc) gtk_accel_label_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
       
       accel_label_type = gtk_type_unique (gtk_label_get_type (), &accel_label_info);
@@ -91,7 +92,9 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   parent_class = gtk_type_class (gtk_label_get_type ());
   
   gtk_object_add_arg_type ("GtkAccelLabel::accel_widget", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_ACCEL_WIDGET);
-  
+
+  object_class->set_arg = gtk_accel_label_set_arg;
+  object_class->get_arg = gtk_accel_label_get_arg;
   object_class->destroy = gtk_accel_label_destroy;
   object_class->finalize = gtk_accel_label_finalize;
   
@@ -109,10 +112,14 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 }
 
 static void
-gtk_accel_label_set_arg (GtkAccelLabel	*accel_label,
+gtk_accel_label_set_arg (GtkObject      *object,
 			 GtkArg		*arg,
 			 guint		 arg_id)
 {
+  GtkAccelLabel  *accel_label;
+
+  accel_label = GTK_ACCEL_LABEL (object);
+
   switch (arg_id)
     {
     case ARG_ACCEL_WIDGET:
@@ -124,10 +131,14 @@ gtk_accel_label_set_arg (GtkAccelLabel	*accel_label,
 }
 
 static void
-gtk_accel_label_get_arg (GtkAccelLabel	*accel_label,
+gtk_accel_label_get_arg (GtkObject      *object,
 			 GtkArg		*arg,
 			 guint		 arg_id)
 {
+  GtkAccelLabel  *accel_label;
+
+  accel_label = GTK_ACCEL_LABEL (object);
+
   switch (arg_id)
     {
     case ARG_ACCEL_WIDGET:

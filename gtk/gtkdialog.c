@@ -41,8 +41,9 @@ gtk_dialog_get_type (void)
 	sizeof (GtkDialogClass),
 	(GtkClassInitFunc) gtk_dialog_class_init,
 	(GtkObjectInitFunc) gtk_dialog_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       dialog_type = gtk_type_unique (gtk_window_get_type (), &dialog_info);

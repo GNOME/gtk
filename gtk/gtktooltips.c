@@ -63,8 +63,9 @@ gtk_tooltips_get_type (void)
 	sizeof (GtkTooltipsClass),
 	(GtkClassInitFunc) gtk_tooltips_class_init,
 	(GtkObjectInitFunc) gtk_tooltips_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       tooltips_type = gtk_type_unique (gtk_data_get_type (), &tooltips_info);

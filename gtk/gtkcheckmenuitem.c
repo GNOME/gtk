@@ -61,8 +61,9 @@ gtk_check_menu_item_get_type (void)
         sizeof (GtkCheckMenuItemClass),
         (GtkClassInitFunc) gtk_check_menu_item_class_init,
         (GtkObjectInitFunc) gtk_check_menu_item_init,
-        (GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+        /* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       check_menu_item_type = gtk_type_unique (gtk_menu_item_get_type (), &check_menu_item_info);

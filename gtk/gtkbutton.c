@@ -46,10 +46,10 @@ enum {
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
 static void gtk_button_init           (GtkButton        *button);
-static void gtk_button_set_arg        (GtkButton        *button,
+static void gtk_button_set_arg        (GtkObject        *object,
 				       GtkArg           *arg,
 				       guint		 arg_id);
-static void gtk_button_get_arg        (GtkButton        *button,
+static void gtk_button_get_arg        (GtkObject        *object,
 				       GtkArg           *arg,
 				       guint		 arg_id);
 static void gtk_button_map            (GtkWidget        *widget);
@@ -111,8 +111,9 @@ gtk_button_get_type (void)
 	sizeof (GtkButtonClass),
 	(GtkClassInitFunc) gtk_button_class_init,
 	(GtkObjectInitFunc) gtk_button_init,
-	(GtkArgSetFunc) gtk_button_set_arg,
-	(GtkArgGetFunc) gtk_button_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       button_type = gtk_type_unique (gtk_container_get_type (), &button_info);
@@ -175,6 +176,9 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   gtk_object_class_add_signals (object_class, button_signals, LAST_SIGNAL);
 
+  object_class->set_arg = gtk_button_set_arg;
+  object_class->get_arg = gtk_button_get_arg;
+
   widget_class->activate_signal = button_signals[CLICKED];
   widget_class->map = gtk_button_map;
   widget_class->unmap = gtk_button_unmap;
@@ -225,14 +229,18 @@ gtk_button_child_type  (GtkContainer     *container)
 }
 
 static void
-gtk_button_set_arg (GtkButton *button,
+gtk_button_set_arg (GtkObject *object,
 		    GtkArg    *arg,
 		    guint      arg_id)
 {
-  GtkWidget *label;
+  GtkButton *button;
+
+  button = GTK_BUTTON (object);
 
   switch (arg_id)
     {
+      GtkWidget *label;
+
     case ARG_LABEL:
       if (button->child)
 	{
@@ -251,10 +259,14 @@ gtk_button_set_arg (GtkButton *button,
 }
 
 static void
-gtk_button_get_arg (GtkButton *button,
+gtk_button_get_arg (GtkObject *object,
 		    GtkArg    *arg,
 		    guint      arg_id)
 {
+  GtkButton *button;
+
+  button = GTK_BUTTON (object);
+
   switch (arg_id)
     {
     case ARG_LABEL:

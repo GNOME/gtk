@@ -106,8 +106,9 @@ gtk_table_get_type (void)
 	sizeof (GtkTableClass),
 	(GtkClassInitFunc) gtk_table_class_init,
 	(GtkObjectInitFunc) gtk_table_init,
-	gtk_table_set_arg,
-	gtk_table_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
       
       table_type = gtk_type_unique (gtk_container_get_type (), &table_info);
@@ -143,6 +144,8 @@ gtk_table_class_init (GtkTableClass *class)
   gtk_container_add_child_arg_type ("GtkTable::x_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_X_PADDING);
   gtk_container_add_child_arg_type ("GtkTable::y_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_Y_PADDING);
 
+  object_class->get_arg = gtk_table_get_arg;
+  object_class->set_arg = gtk_table_set_arg;
   object_class->finalize = gtk_table_finalize;
   
   widget_class->map = gtk_table_map;

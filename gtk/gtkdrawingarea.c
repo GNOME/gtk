@@ -41,8 +41,9 @@ gtk_drawing_area_get_type (void)
 	sizeof (GtkDrawingAreaClass),
 	(GtkClassInitFunc) gtk_drawing_area_class_init,
 	(GtkObjectInitFunc) gtk_drawing_area_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       drawing_area_type = gtk_type_unique (gtk_widget_get_type (), &drawing_area_info);

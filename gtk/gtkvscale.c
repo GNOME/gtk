@@ -60,8 +60,9 @@ gtk_vscale_get_type (void)
 	sizeof (GtkVScaleClass),
 	(GtkClassInitFunc) gtk_vscale_class_init,
 	(GtkObjectInitFunc) gtk_vscale_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       vscale_type = gtk_type_unique (gtk_scale_get_type (), &vscale_info);

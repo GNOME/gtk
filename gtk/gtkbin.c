@@ -54,8 +54,9 @@ gtk_bin_get_type (void)
 	sizeof (GtkBinClass),
 	(GtkClassInitFunc) gtk_bin_class_init,
 	(GtkObjectInitFunc) gtk_bin_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       bin_type = gtk_type_unique (gtk_container_get_type (), &bin_info);

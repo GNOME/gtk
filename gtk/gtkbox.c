@@ -35,10 +35,10 @@ enum {
 
 static void gtk_box_class_init (GtkBoxClass    *klass);
 static void gtk_box_init       (GtkBox         *box);
-static void gtk_box_get_arg    (GtkBox         *box,
+static void gtk_box_get_arg    (GtkObject      *object,
 				GtkArg         *arg,
 				guint           arg_id);
-static void gtk_box_set_arg    (GtkBox         *box,
+static void gtk_box_set_arg    (GtkObject      *object,
 				GtkArg         *arg,
 				guint           arg_id);
 static void gtk_box_map        (GtkWidget      *widget);
@@ -82,8 +82,9 @@ gtk_box_get_type (void)
 	sizeof (GtkBoxClass),
 	(GtkClassInitFunc) gtk_box_class_init,
 	(GtkObjectInitFunc) gtk_box_init,
-	(GtkArgSetFunc) gtk_box_set_arg,
-        (GtkArgGetFunc) gtk_box_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       box_type = gtk_type_unique (GTK_TYPE_CONTAINER, &box_info);
@@ -113,6 +114,9 @@ gtk_box_class_init (GtkBoxClass *class)
   gtk_container_add_child_arg_type ("GtkBox::pack_type", GTK_TYPE_PACK_TYPE, GTK_ARG_READWRITE, CHILD_ARG_PACK_TYPE);
   gtk_container_add_child_arg_type ("GtkBox::position", GTK_TYPE_LONG, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
 
+  object_class->set_arg = gtk_box_set_arg;
+  object_class->get_arg = gtk_box_get_arg;
+
   widget_class->map = gtk_box_map;
   widget_class->unmap = gtk_box_unmap;
   widget_class->draw = gtk_box_draw;
@@ -137,10 +141,14 @@ gtk_box_init (GtkBox *box)
 }
 
 static void
-gtk_box_set_arg (GtkBox       *box,
+gtk_box_set_arg (GtkObject    *object,
 		 GtkArg       *arg,
 		 guint         arg_id)
 {
+  GtkBox *box;
+
+  box = GTK_BOX (object);
+
   switch (arg_id)
     {
     case ARG_SPACING:
@@ -155,10 +163,14 @@ gtk_box_set_arg (GtkBox       *box,
 }
 
 static void
-gtk_box_get_arg (GtkBox       *box,
+gtk_box_get_arg (GtkObject    *object,
 		 GtkArg       *arg,
 		 guint         arg_id)
 {
+  GtkBox *box;
+
+  box = GTK_BOX (object);
+
   switch (arg_id)
     {
     case ARG_SPACING:

@@ -121,8 +121,9 @@ gtk_editable_get_type (void)
 	sizeof (GtkEditableClass),
 	(GtkClassInitFunc) gtk_editable_class_init,
 	(GtkObjectInitFunc) gtk_editable_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       editable_type = gtk_type_unique (gtk_widget_get_type (), &editable_info);

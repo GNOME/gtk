@@ -107,8 +107,9 @@ gtk_spin_button_get_type (void)
 	sizeof (GtkSpinButtonClass),
 	(GtkClassInitFunc) gtk_spin_button_class_init,
 	(GtkObjectInitFunc) gtk_spin_button_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+        /* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       spin_button_type = gtk_type_unique (gtk_entry_get_type (), 

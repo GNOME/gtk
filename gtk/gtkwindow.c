@@ -57,10 +57,10 @@ static void gtk_window_marshal_signal_2 (GtkObject      *object,
 					 GtkArg         *args);
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
-static void gtk_window_set_arg            (GtkWindow         *window,
+static void gtk_window_set_arg            (GtkObject         *object,
 					   GtkArg            *arg,
 					   guint	      arg_id);
-static void gtk_window_get_arg            (GtkWindow         *window,
+static void gtk_window_get_arg            (GtkObject         *object,
 					   GtkArg            *arg,
 					   guint	      arg_id);
 static void gtk_window_shutdown           (GtkObject         *object);
@@ -122,8 +122,9 @@ gtk_window_get_type (void)
 	sizeof (GtkWindowClass),
 	(GtkClassInitFunc) gtk_window_class_init,
 	(GtkObjectInitFunc) gtk_window_init,
-	(GtkArgSetFunc) gtk_window_set_arg,
-	(GtkArgGetFunc) gtk_window_get_arg,
+        /* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
       window_type = gtk_type_unique (gtk_bin_get_type (), &window_info);
@@ -163,6 +164,8 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gtk_object_class_add_signals (object_class, window_signals, LAST_SIGNAL);
 
+  object_class->set_arg = gtk_window_set_arg;
+  object_class->get_arg = gtk_window_get_arg;
   object_class->shutdown = gtk_window_shutdown;
   object_class->destroy = gtk_window_destroy;
   object_class->finalize = gtk_window_finalize;
@@ -215,10 +218,14 @@ gtk_window_init (GtkWindow *window)
 }
 
 static void
-gtk_window_set_arg (GtkWindow  *window,
+gtk_window_set_arg (GtkObject  *object,
 		    GtkArg     *arg,
 		    guint	arg_id)
 {
+  GtkWindow  *window;
+
+  window = GTK_WINDOW (object);
+
   switch (arg_id)
     {
     case ARG_TYPE:
@@ -248,10 +255,14 @@ gtk_window_set_arg (GtkWindow  *window,
 }
 
 static void
-gtk_window_get_arg (GtkWindow  *window,
+gtk_window_get_arg (GtkObject  *object,
 		    GtkArg     *arg,
 		    guint	arg_id)
 {
+  GtkWindow  *window;
+
+  window = GTK_WINDOW (object);
+
   switch (arg_id)
     {
     case ARG_TYPE:

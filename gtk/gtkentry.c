@@ -214,8 +214,9 @@ gtk_entry_get_type (void)
 	sizeof (GtkEntryClass),
 	(GtkClassInitFunc) gtk_entry_class_init,
 	(GtkObjectInitFunc) gtk_entry_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reversed_1 */ NULL,
+	/* reversed_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
       entry_type = gtk_type_unique (gtk_editable_get_type (), &entry_info);
