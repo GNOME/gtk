@@ -10,11 +10,9 @@ OPTIMIZE = -O
 
 TOP = ../..
 
-include $(TOP)/build/win32/make.mingw
+include $(TOP)/glib/build/win32/make.mingw
 
 ################################################################
-
-# Nothing much configurable below
 
 INCLUDES = -I . -I ..
 DEFINES = -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\"

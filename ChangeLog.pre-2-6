@@ -1,3 +1,15 @@
+2001-10-24  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkcolor-win32.c (compare_xcolor_entries): Use
+	g_strcasecmp.
+
+	* {gdk,gtk}/makefile.{mingw,msc}.in
+	* gdk/win32/makefile.{mingw,msc}: Use the stuff from
+	build/win32. Fix typos and errors.
+
+	* config.h.win32: Define HAVE_DIRENT_H as mingw has it, and with
+	MSVC we use the same implementation, in build/win32/dirent.
+
 2001-10-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkprivate.h

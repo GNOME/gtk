@@ -132,7 +132,6 @@ libgdk_la_SOURCES = $(gdk_c_sources)
 MAINTAINERCLEANFILES +=
 EXTRA_HEADERS +=
 EXTRA_DIST +=
-EXTRA_DIST +=
 
 #
 # rules to generate built sources

@@ -49,7 +49,7 @@
 #define GTK_COMPILED_WITH_DEBUGGING "minimum"
 
 /* #undef HAVE_CATGETS */
-/* #undef HAVE_DIRENT_H */
+#define HAVE_DIRENT_H 1
 #define HAVE_GETTEXT 1
 /* #undef HAVE_IPC_H */
 /* #undef HAVE_LC_MESSAGES */

@@ -1,27 +1,13 @@
-## Makefile for building the gtk DLL with Microsoft C
+## Makefile for building the GTK DLL with Microsoft C
 ## Use: nmake -f makefile.msc
 
-# Change this to wherever you want to install the DLLs. This directory
-# should be in your PATH.
-BIN = C:\bin
+## There is no install target, you have to decide where and 
+## how to install for yourself.
+
+TOP = ..\..
+!INCLUDE $(TOP)\glib\build\win32\make.msc
 
 ################################################################
-
-# Nothing much configurable below
-
-!IFNDEF DEBUG
-# Full optimization:
-OPTIMIZE = -Ox -MD
-LINKDEBUG =
-!ELSE
-# Debugging:
-OPTIMIZE = -Zi -MDd
-LINKDEBUG = /debug
-!ENDIF
-
-# cl -? describes the options
-# Some files use near as an identifier
-CC = cl -G5 -GF $(OPTIMIZE) -W3 -DHAVE_CONFIG_H -nologo -Dnear=xxnear
 
 # Perl and awk are needed to generate some source files.
 # These generated source files are distribuyted with the Win32 GTk+ source
@@ -29,14 +15,12 @@ CC = cl -G5 -GF $(OPTIMIZE) -W3 -DHAVE_CONFIG_H -nologo -Dnear=xxnear
 PERL = perl
 AWK = awk
 
-LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
-INSTALL = copy
 TOUCH = copy makefile.msc+nul
 
-GLIB = ..\..\glib
-INTL = ..\..\intl
-
-CFLAGS = -I. -I.. -I..\gdk -I$(GLIB) -I$(GLIB)\glib -I$(GLIB)\gmodule -I$(INTL) -DGTK_DISABLE_COMPAT_H
+INCLUDES = -I. -I.. -I..\gdk
+DEPCFLAGS = $(GLIB_CFLAGS) $(DIRENT_CFLAGS) $(INTL_CFLAGS)
+# Some files use near as an identifier
+DEFINES = -DHAVE_CONFIG_H -Dnear=xxnear -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\"
 
 all : \
 	..\config.h	\
@@ -297,10 +281,12 @@ gdk_headers = \
 gtkcompat.h : gtkcompat.h.win32
 	copy gtkcompat.h.win32 gtkcompat.h
 
+GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c
+
 #
 # Generated source files:
 #
-generated : gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c
+generated : $(GENERATED)
 	$(TOUCH) generated
 
 gtk.defs : makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
@@ -331,23 +317,19 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 # Linking:
 #
 libgtk-@LT_CURRENT_MINUS_AGE@.dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Felibgtk-@LT_CURRENT_MINUS_AGE@.dll $(gtk_OBJECTS) ..\gdk\gdk.lib $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /implib:gtk.lib /def:gtk.def
-
-# General rule for compiling the objects into the DLL
-.c.obj :
-	$(CC) $(CFLAGS) -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $<
+	$(CC) $(CFLAGS) -LD -Felibgtk-@LT_CURRENT_MINUS_AGE@.dll $(gtk_OBJECTS) ..\gdk\gdk.lib $(INTL_LIBS) $(GLIB_LIBS) $(DIRENT_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /implib:gtk.lib /def:gtk.def
 
 #
 # Test programs:
 #
 testdnd.exe : libgtk-@LT_CURRENT_MINUS_AGE@.dll testdnd.obj
-	$(CC) $(CFLAGS) testdnd.obj gtk.lib ..\gdk\gdk.lib $(GLIB_LIBS).lib $(LDFLAGS)
+	$(CC) $(CFLAGS) testdnd.obj gtk.lib ..\gdk\gdk.lib $(GLIB_LIBS) $(LDFLAGS)
 
 # Must have separate rules for these objects that don't go in the DLL
 testdnd.obj : testdnd.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
 
-testgtk.exe : libgtk-@LT_CURRENT_MINUS_AGE@.dlll testgtk.obj
+testgtk.exe : libgtk-@LT_CURRENT_MINUS_AGE@.dll testgtk.obj
 	$(CC) $(CFLAGS) testgtk.obj gtk.lib ..\gdk\gdk.lib $(GLIB_LIBS) $(LDFLAGS)
 
 testgtk.obj : testgtk.c
@@ -377,17 +359,5 @@ simple.exe : libgtk-@LT_CURRENT_MINUS_AGE@.dll simple.obj
 simple.obj : simple.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c
 
-# The clean target doesn't remove the generated sources
-clean:
-	del *.exe
-	del *.obj
-	del *.dll
-	del *.lib
-	del *.exp
-	del *.err
-	del *.map
-	del *.sym
-	del *.lk1
-	del *.mk1
-	del *.pdb
-	del *.ilk
+clean-generated:
+	-del $(GENERATED)

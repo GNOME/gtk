@@ -8,7 +8,7 @@ OPTIMIZE = -O
 
 TOP = ../..
 
-include $(TOP)/build/win32/make.mingw
+include $(TOP)/glib/build/win32/make.mingw
 
 ################################################################
 
@@ -363,4 +363,5 @@ simple.o : simple.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c
 
 clean-generated:
-	rm gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c
+	-rm $(GENERATED)
+

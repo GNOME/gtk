@@ -6,30 +6,24 @@
 ## There is no install target, you have to decide where and 
 ## how to install for yourself.
 
+TOP = ..\..
+!INCLUDE $(TOP)\glib\build\win32\make.msc
+
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
 WTKIT = ..\..\wtkit126
 
 ###############################################################
 
-# Nothing much configurable below
-
 !IFNDEF DEBUG
-# Full optimization:
-OPTIMIZE = -Ox -MD -Zi
 LINKDEBUG = /nodefaultlib:libc.lib
 !ELSE
 # Debugging:
-OPTIMIZE = -Zi -MDd
 LINKDEBUG = /nodefaultlib:libcd.lib /nodefaultlib:libc.lib /debug
 !ENDIF
 
-# cl -? describes the options
-CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
-
-LDFLAGS = /link $(LINKDEBUG)
-
-GLIB = ..\..\glib
-CFLAGS = -I . -I .. -I $(GLIB) -I$(GLIB)\glib -DG_ENABLE_DEBUG -DHAVE_CONFIG_H
+INCLUDES = -I . -I .. 
+DEPCFLAGS = $(GLIB_CFLAGS) -GD
+DEFINES = -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\"
 
 all: \
 	..\config.h \
@@ -58,13 +52,3 @@ gdkconfig.h : gdkconfig.h.win32
 
 libgdk-@LT_CURRENT_MINUS_AGE@.dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
 	$(CC) $(CFLAGS) -LD -Felibgdk-@LT_CURRENT_MINUS_AGE@.dll $(gdk_OBJECTS) win32\gdk-win32.lib $(WTKIT)\lib\i386\wntab32x.lib $(GLIB)\glib\glib-$(GLIB_VER).lib gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res $(LDFLAGS) /implib:gdk.lib /def:gdk.def
-
-.c.obj :
-	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
-
-clean:
-	del *.dll
-	del *.obj
-	del *.lib
-	del *.err
-	del *.res

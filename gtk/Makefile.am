@@ -369,7 +369,7 @@ libgtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_built_public_sources)
 libgtk_la_SOURCES = $(gtk_c_sources)
 MAINTAINERCLEANFILES += $(gtk_built_public_sources) $(gtk_built_sources)
 EXTRA_HEADERS +=
-EXTRA_DIST += $(gtk_private_h_sources)
+EXTRA_DIST = $(gtk_private_h_sources)
 EXTRA_DIST += $(gtk_built_sources) $(gtk_built_public_sources) $(gtk_extra_sources)
 
 #
@@ -538,6 +538,7 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	check-n.xpm		\
 	test.xpm		\
 	gtk.def			\
+	makefile.mingw		\
 	makefile.msc		\
 	$(gtkconf_DATA)		\
 @STRIP_END@

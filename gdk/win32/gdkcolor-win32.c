@@ -1211,7 +1211,7 @@ static XColorEntry xColors[] = {
 static int
 compare_xcolor_entries (const void *a, const void *b)
 {
-  return strcasecmp ((const char *) a, ((const XColorEntry *) b)->name);
+  return g_strcasecmp ((const char *) a, ((const XColorEntry *) b)->name);
 }
 
 static int
