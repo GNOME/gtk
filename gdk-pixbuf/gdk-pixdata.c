@@ -17,10 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 #include <config.h>
-#include "gdk-pixbuf-alias.h"
 #include "gdk-pixdata.h"
 
 #include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-alias.h"
 #include <string.h>
 
 #define APPEND g_string_append_printf
@@ -921,3 +921,6 @@ gdk_pixbuf_new_from_inline (gint          data_length,
 
   return gdk_pixbuf_from_pixdata (&pixdata, copy_pixels, error);
 }
+
+#define __GDK_PIXDATA_C__
+#include "gdk-pixbuf-aliasdef.c"

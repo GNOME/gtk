@@ -33,9 +33,9 @@
 #include <unistd.h>
 #endif
 
-#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf-alias.h"
 
 #include <glib/gstdio.h>
 
@@ -906,7 +906,6 @@ gdk_pixbuf_new_from_file (const char *filename,
 #ifdef G_OS_WIN32
 
 #undef gdk_pixbuf_new_from_file
-
 GdkPixbuf *
 gdk_pixbuf_new_from_file (const char *filename,
                           GError    **error)
@@ -2211,6 +2210,9 @@ gdk_pixbuf_get_formats (void)
 	return result;
 }
 
+
+#define __GDK_PIXBUF_IO_C__
+#include "gdk-pixbuf-aliasdef.c"
 
 
 

@@ -21,9 +21,9 @@
  */
 
 #include <config.h>
-#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-alias.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -78,3 +78,6 @@ gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean
 
 	return pixbuf;
 }
+
+#define __GDK_PIXBUF_DATA_C__
+#include "gdk-pixbuf-aliasdef.c"

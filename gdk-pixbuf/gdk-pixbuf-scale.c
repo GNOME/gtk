@@ -23,9 +23,9 @@
 #include <config.h>
 #include <math.h>
 #include <string.h>
-#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf-private.h"
 #include "pixops/pixops.h"
+#include "gdk-pixbuf-alias.h"
 
 
 
@@ -455,3 +455,5 @@ gdk_pixbuf_flip (const GdkPixbuf *src,
   return dest;
 }
 				     
+#define __GDK_PIXBUF_SCALE_C__
+#include "gdk-pixbuf-aliasdef.c"

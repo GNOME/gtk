@@ -24,11 +24,11 @@
 
 #include <config.h>
 #include <errno.h>
-#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-i18n.h"
 #include "gdk-pixbuf-animation.h"
+#include "gdk-pixbuf-alias.h"
 
 #include <glib/gstdio.h>
 
@@ -822,3 +822,5 @@ gdk_pixbuf_non_anim_iter_advance (GdkPixbufAnimationIter *iter,
         return FALSE;
 }
 
+#define __GDK_PIXBUF_ANIMATION_C__
+#include "gdk-pixbuf-aliasdef.c"
