@@ -11,4 +11,4 @@ tictactoe.o: tictactoe.c tictactoe.h
 	$(CC) `gtk-config --cflags` -c tictactoe.c -o tictactoe.o
 
 clean: 
-	rm *.o ttt_test
+	rm -f *.o ttt_test

@@ -1,3 +1,10 @@
+Overview of Changes in GTK+ 0.99.9:
+
+* Added examples directory, even more examples soon
+* Added optional word wrap to gtktext
+* Changes to gtkhandlebox
+* Lots of bug fixes
+
 Overview of Changes in GTK+ 0.99.8:
 
 * Compilation and configuration fixes

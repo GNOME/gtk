@@ -1,5 +1,5 @@
 # Note that this is NOT a relocatable package
-%define ver      0.99.8
+%define ver      0.99.9
 %define rel      SNAP
 %define prefix   /usr
 
@@ -13,7 +13,7 @@ Source: ftp://ftp.gimp.org/pub/gtk/v0.99/gtk+-%{ver}.tar.gz
 BuildRoot: /tmp/gtk-root
 Obsoletes: gtk
 Packager: Marc Ewing <marc@redhat.com>
-URL: http://www.gimp.org/gtk
+URL: http://www.gtk.org
 Prereq: /sbin/install-info
 Docdir: %{prefix}/doc
 
@@ -36,6 +36,11 @@ Xlib to help automate things like dealing with different color depths,
 and GTK is a widget set for creating user interfaces.
 
 %changelog
+
+* Thu Mar 19 1998 Shawn T. Amundson <amundson@gimp.org>
+
+- Changed version to 0.99.9
+- Changed gtk home page to www.gtk.org
 
 * Thu Mar 19 1998 Shawn T. Amundson <amundson@gimp.org>
 

@@ -11,4 +11,4 @@ gtkdial.o: gtkdial.c gtkdial.h
 	$(CC) `gtk-config --cflags` -c gtkdial.c -o gtkdial.o
 
 clean: 
-	rm *.o dial_test
+	rm -f *.o dial_test
