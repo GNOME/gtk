@@ -1,3 +1,9 @@
+2001-11-29  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextiter.c (_gtk_text_iter_forward_indexable_segment):
+	assertion here that we were at the end iterator was not correct;
+	change code to move us to the end iterator. bug #65731
+
 Wed Nov 28 20:05:44 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): Remove 

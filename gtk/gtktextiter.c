@@ -2010,14 +2010,17 @@ _gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
         }
       else
         {
-          /* End of buffer */
+          /* End of buffer, but iter is still at start of last segment,
+           * not at the end iterator. We put it on the end iterator.
+           */
           
           check_invariants (iter);
 
           g_assert (!_gtk_text_line_is_last (real->line, real->tree));
           g_assert (_gtk_text_line_contains_end_iter (real->line, real->tree));
-          if (!gtk_text_iter_is_end (iter))
-            _gtk_text_btree_spew (_gtk_text_iter_get_btree (iter));              
+
+          gtk_text_iter_forward_to_line_end (iter);
+
           g_assert (gtk_text_iter_is_end (iter));
           
           return FALSE;
