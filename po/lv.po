@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-09-30 05:05+0200\n"
-"PO-Revision-Date: 2002-10-01 00:10+0200\n"
+"POT-Creation-Date: 2002-10-25 05:13+0200\n"
+"PO-Revision-Date: 2002-10-27 00:04+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
 "MIME-Version: 1.0\n"
@@ -141,8 +141,8 @@ msgid "Failure reading GIF: %s"
 msgstr "Kļūda nolasot GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:460
-#: gdk-pixbuf/io-gif.c:1382
-#: gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:1392
+#: gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF failam trūkst daži dati (iespējams, tas ir ticis aprauts?)"
 
@@ -151,55 +151,59 @@ msgstr "GIF failam trūkst daži dati (iespējams, tas ir ticis aprauts?)"
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Iekšēja kļūda GIF ielādētājā (%s)"
 
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:541
+msgid "Stack overflow"
+msgstr "Steka pārpilde"
+
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr "GIF attēlu ielādētājs nesaprot šo attēlu."
 
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr "Parādījās slikts kods"
 
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr "Cirkulārs tabulas ievads GIF failā"
 
-#: gdk-pixbuf/io-gif.c:762
-#: gdk-pixbuf/io-gif.c:1370
-#: gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:772
+#: gdk-pixbuf/io-gif.c:1380
+#: gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr "Nav pietiekoši atmiņas, lai ielādētu GIF failu"
 
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF fails ir bojāts (nepareiza LZW kompresija)"
 
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr "Fails neizskatās, ka būtu GIF fails"
 
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF faila formāta versija %s nav atbalstīta"
 
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF attēls satur kadru ar augstumu vai platumu izmērā 0."
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF attēls satur kadru, kurš izskatās ārpus attēla rāmjiem."
 
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr "GIF attēla pirmajam kadram bija 'atgriezties pie iepriekšējā' kā tā rīcības režīms."
 
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1218
 msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
 msgstr "GIF attēlam nav globālas krāsukartes, un kadram tā iekšpusē nav lokālas krāsukartes."
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF attēls ir ticis aprauts vai ir nepilnīgs."
 
@@ -747,7 +751,7 @@ msgstr "Proporcija"
 
 #: gtk/gtkaspectframe.c:122
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "Skata proporcija, ja obey_child ir APLAMS"
+msgstr "Skata proporcija, ja obey_child ir FALSE"
 
 #: gtk/gtkaspectframe.c:128
 msgid "Obey child"
@@ -803,7 +807,7 @@ msgstr "Sekundārs"
 
 #: gtk/gtkbbox.c:161
 msgid "If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons."
-msgstr "Ja PATIESS, bērns parādās sekundārajā atvasinājumu grupā, piemērots, piem., palīdzības pogām."
+msgstr "Ja TRUE, bērns parādās sekundārajā atvasinājumu grupā, piemērots, piem., palīdzības pogām."
 
 #: gtk/gtkbox.c:125
 msgid "Spacing"
@@ -1691,7 +1695,7 @@ msgstr "Ir Rāmis"
 
 #: gtk/gtkentry.c:481
 msgid "FALSE removes outside bevel from entry."
-msgstr "APLAMS izņem ārpuses konusu no ieraksta."
+msgstr "FALSE izņem ārpuses konusu no ieraksta."
 
 #: gtk/gtkentry.c:488
 msgid "Invisible character"
@@ -1737,17 +1741,17 @@ msgstr "Izvēlēties pie fokusēšanas"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Vai izvēlēties ieraksta saturu, kad tas tiek fokusēts."
 
-#: gtk/gtkentry.c:3877
+#: gtk/gtkentry.c:3902
 #: gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Izvēlēties Visu"
 
-#: gtk/gtkentry.c:3887
+#: gtk/gtkentry.c:3912
 #: gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Ievades Metodes"
 
-#: gtk/gtkentry.c:3897
+#: gtk/gtkentry.c:3922
 #: gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "_Ievietot Unicdoe kontroles rakstzīmi"
@@ -2309,11 +2313,11 @@ msgstr "Virkne ar _ rakstzīmēm pozīcijās, kas atbilst pasvītrojamajām raks
 
 #: gtk/gtklabel.c:326
 msgid "Line wrap"
-msgstr "Rindiņu iekļaušana"
+msgstr "Rindiņu aplaušana"
 
 #: gtk/gtklabel.c:327
 msgid "If set, wrap lines if the text becomes too wide."
-msgstr "Ja iestatīts, iekļaut rindiņas, ja teksts kļūst pārāk plašs."
+msgstr "Ja iestatīts, aplauzt rindiņas, ja teksts kļūst pārāk plašs."
 
 #: gtk/gtklabel.c:333
 msgid "Selectable"
@@ -2345,7 +2349,7 @@ msgid "Horizontal adjustment"
 msgstr "Horizontālā noregulēšana"
 
 #: gtk/gtklayout.c:624
-#: gtk/gtkscrolledwindow.c:237
+#: gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "Horizontālās pozīcijas noregulēšana (GtkAdjustment)."
 
@@ -2355,7 +2359,7 @@ msgid "Vertical adjustment"
 msgstr "Vertikālais noregulēšana"
 
 #: gtk/gtklayout.c:632
-#: gtk/gtkscrolledwindow.c:244
+#: gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
 msgstr "Vertikālās pozīcijas noregulēšana (GtkAdjustment)."
 
@@ -2532,7 +2536,7 @@ msgstr "Ritināma"
 
 #: gtk/gtknotebook.c:421
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
-msgstr "Ja PATIESS, ritināšanas bultas tiek pievienotas, ja ir pārāk daudz ietilpināmo sadaļu"
+msgstr "Ja TRUE, ritināšanas bultas tiek pievienotas, ja ir pārāk daudz ietilpināmo sadaļu"
 
 #: gtk/gtknotebook.c:427
 msgid "Enable Popup"
@@ -2540,7 +2544,7 @@ msgstr "Aktizvizēt Izlecēju"
 
 #: gtk/gtknotebook.c:428
 msgid "If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"
-msgstr "Ja PATIESS, nospiežot labo peles pogu uz piezīmjgrāmatas, tiek parādīta izlecējizvēlne, kuru varat lietot, lai pārietu uz lapu"
+msgstr "Ja TRUE, nospiežot labo peles pogu uz piezīmjgrāmatas, tiek parādīta izlecējizvēlne, kuru varat lietot, lai pārietu uz lapu"
 
 #: gtk/gtknotebook.c:435
 msgid "Whether tabs should have homogeneous sizes"
@@ -2583,7 +2587,7 @@ msgstr "Pozīcijas Iestādījums"
 
 #: gtk/gtkpaned.c:218
 msgid "TRUE if the Position property should be used"
-msgstr "PATIESS, ja jālieto Pozīcijas rekvizīts"
+msgstr "TRUE, ja jālieto Pozīcijas rekvizīts"
 
 #: gtk/gtkpaned.c:224
 msgid "Handle Size"
@@ -2905,47 +2909,47 @@ msgstr "Papildu turp ritinātājs"
 msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Parādīt otru uz priekšu vērstās bultas pogu pretējā ritjoslas galā"
 
-#: gtk/gtkscrolledwindow.c:236
+#: gtk/gtkscrolledwindow.c:232
 #: gtk/gtktext.c:598
 #: gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "Horizontālais Noregulējums"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:239
 #: gtk/gtktext.c:606
 #: gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "Vertikālais Noregulējums"
 
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
 msgstr "Horizontālās Ritjoslas Politika"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:247
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Vai horizontālā ritjosla tiek attēlota"
 
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:254
 msgid "Vertical Scrollbar Policy"
 msgstr "Vertikālās Ritjoslas Politika"
 
-#: gtk/gtkscrolledwindow.c:259
+#: gtk/gtkscrolledwindow.c:255
 msgid "When the vertical scrollbar is displayed"
 msgstr "Vai vertikālā ritjosla tiek attēlota"
 
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
 msgstr "Loga Novietojums"
 
-#: gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Vai saturs tiek novietots attiecībā pret ritināmajām joslām"
 
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
 msgstr "Ēnas Tips"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
 msgstr "Konusa stils ap saturu"
 
@@ -3063,11 +3067,11 @@ msgstr "Vai neciparu rakstzīmes būtu jāignorē"
 
 #: gtk/gtkspinbutton.c:281
 msgid "Wrap"
-msgstr "Iekļaut"
+msgstr "Aplauzt"
 
 #: gtk/gtkspinbutton.c:282
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr "Vai griešanās pogai būtu jāiekļaujas sasniedzot tās robežas"
+msgstr "Vai griešanās pogai būtu jaaplaužas, sasniedzot tās robežas"
 
 #: gtk/gtkspinbutton.c:289
 msgid "Update Policy"
@@ -3399,7 +3403,7 @@ msgstr "Vienādi"
 
 #: gtk/gtktable.c:193
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Ja PATIESS, tas nozīmē, ka tabulas šunas visas ir vienāda platuma/augstuma"
+msgstr "Ja TRUE, tas nozīmē, ka tabulas šūnas visas ir vienāda platuma/augstuma"
 
 #: gtk/gtktext.c:599
 msgid "Horizontal adjustment for the text widget"
@@ -3411,19 +3415,19 @@ msgstr "Verikālā teksta logdaļas noregulēšana"
 
 #: gtk/gtktext.c:614
 msgid "Line Wrap"
-msgstr "Rindiņu Iekļaušana"
+msgstr "Rindiņu Aplaušana"
 
 #: gtk/gtktext.c:615
 msgid "Whether lines are wrapped at widget edges"
-msgstr "Vai rindiņas tiek iekļautas pie logdaļu malām"
+msgstr "Vai rindiņas tiek aplauztas pie logdaļu malām"
 
 #: gtk/gtktext.c:622
 msgid "Word Wrap"
-msgstr "Vārdu iekļaušana"
+msgstr "Vārdu aplaušana"
 
 #: gtk/gtktext.c:623
 msgid "Whether words are wrapped at widget edges"
-msgstr "Vai vārdi tiek iekļauti pie logdaļu malām"
+msgstr "Vai vārdi tiek aplauzti pie logdaļu malām"
 
 #: gtk/gtktexttag.c:199
 msgid "Tag name"
@@ -3531,16 +3535,16 @@ msgstr "Pikseļu iekšpusē iekļaušana"
 #: gtk/gtktexttag.c:458
 #: gtk/gtktextview.c:559
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr "Pikseļu daudzums atstarpē starp iekļautām rindiņām paragrāfā"
+msgstr "Pikseļu daudzums atstarpē starp aplauztām rindiņām paragrāfā"
 
 #: gtk/gtktexttag.c:484
 msgid "Wrap mode"
-msgstr "Iekļaušanas režīms"
+msgstr "Aplaušanas režīms"
 
 #: gtk/gtktexttag.c:485
 #: gtk/gtktextview.c:577
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr "Vai iekļaut rindiņas nekad, vārdu robežās vai rakstzīmju robežās"
+msgstr "Vai aplauzt rindiņas nekad, vārdu robežās vai rakstzīmju robežās"
 
 #: gtk/gtktexttag.c:494
 #: gtk/gtktextview.c:624
@@ -3635,7 +3639,7 @@ msgstr "Pikseļu iekšpusē iekļaušanas iestādījums"
 
 #: gtk/gtktexttag.c:593
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr "Vai šis tags ietekmē pikseļu daudzumu starp iekļautām rindiņām"
+msgstr "Vai šis tags ietekmē pikseļu daudzumu starp aplauztām rindiņām"
 
 #: gtk/gtktexttag.c:600
 msgid "Right margin set"
@@ -3647,11 +3651,11 @@ msgstr "Vai šis tags ietekmē labo malu"
 
 #: gtk/gtktexttag.c:608
 msgid "Wrap mode set"
-msgstr "Iekļaušanas režīma iestādījums"
+msgstr "Aplaušanas režīma iestādījums"
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects line wrap mode"
-msgstr "Vai šis tags ietekmē rindiņu iekļaušanas režīmu"
+msgstr "Vai šis tags ietekmē rindiņu aplaušanas režīmu"
 
 #: gtk/gtktexttag.c:612
 msgid "Tabs set"
@@ -3723,7 +3727,7 @@ msgstr "Pikseļu Iekšpusē Iekļaušana"
 
 #: gtk/gtktextview.c:576
 msgid "Wrap Mode"
-msgstr "Iekļaušanass Režīms"
+msgstr "Aplaušanas Režīms"
 
 #: gtk/gtktextview.c:594
 msgid "Left Margin"
@@ -4156,7 +4160,7 @@ msgstr "Saņem noklusēto"
 
 #: gtk/gtkwidget.c:473
 msgid "If TRUE, the widget will receive the default action when it is focused."
-msgstr "Ja PATIESS, logdaļa saņems noklusēto darbību, kad tā tiek fokusēta."
+msgstr "Ja TRUE, logdaļa saņems noklusēto darbību, kad tā tiek fokusēta."
 
 #: gtk/gtkwidget.c:479
 msgid "Composite child"
@@ -4269,7 +4273,7 @@ msgstr "Atļaut Sarauties"
 #: gtk/gtkwindow.c:431
 #, no-c-format
 msgid "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea."
-msgstr "Ja PATIESS, logam nav minimālā izmēra. Uzstādīt šo kā PATIESS 99% gadījumu nav laba doma."
+msgstr "Ja TRUE, logam nav minimālā izmēra. Uzstādīt šo kā TRUE 99% gadījumu nav laba doma."
 
 #: gtk/gtkwindow.c:438
 msgid "Allow Grow"
@@ -4277,11 +4281,11 @@ msgstr "Atļaut Augt"
 
 #: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
-msgstr "Ja PATIESS, lietotāji var paplašināt logu aiz tā minimālā izmēra."
+msgstr "Ja TRUE, lietotāji var paplašināt logu aiz tā minimālā izmēra."
 
 #: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
-msgstr "Ja PATIESS, lietotāji var mainīt loga izmēru."
+msgstr "Ja TRUE, lietotāji var mainīt loga izmēru."
 
 #: gtk/gtkwindow.c:454
 msgid "Modal"
@@ -4289,7 +4293,7 @@ msgstr "Modāls"
 
 #: gtk/gtkwindow.c:455
 msgid "If TRUE, the window is modal (other windows are not usable while this one is up)."
-msgstr "Ja PATIESI, tad logs ir modāls (citi logi nav lietojami kamēr šis ir virspusē)."
+msgstr "Ja TRUE, tad logs ir modāls (citi logi nav lietojami kamēr šis ir virspusē)."
 
 #: gtk/gtkwindow.c:462
 msgid "Window Position"
