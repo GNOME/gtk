@@ -72,3 +72,5 @@ libgdk_linux_fb_la_SOURCES =    	\
 	mispans.c		\
 	gdkpango-fb.c
 	mispans.c
+
+EXTRA_DIST=x-cursors.xbm

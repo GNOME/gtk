@@ -122,6 +122,13 @@ pango_fb_font_map_load_font(PangoFontMap *fontmap,
       d2.family_name = "Arial";
       desc = &d2;
     }
+  /* XXX fixme badhack */
+  if(!strcasecmp(desc->family_name, "serif"))
+    {
+      d2 = *desc;
+      d2.family_name = "Times New Roman";
+      desc = &d2;
+    }
 
   retval = g_hash_table_lookup(fbfm->all_fonts, desc);
 

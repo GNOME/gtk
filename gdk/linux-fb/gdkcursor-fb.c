@@ -28,7 +28,7 @@
 #include "gdkprivate-fb.h"
 #include "gdkcursor.h"
 
-#include "/home/sopwith/bin/t2.xbm"
+#include "x-cursors.xbm"
 
 static struct {
   const guchar *bits;
