@@ -376,7 +376,7 @@ static gint cmpl_errno;
  * translation had to be made.
  */
 int
-translate_win32_path(GtkFileSelection *filesel)
+translate_win32_path (GtkFileSelection *filesel)
 {
   int updated = 0;
   gchar *path;
@@ -390,7 +390,7 @@ translate_win32_path(GtkFileSelection *filesel)
    * Translate only if this looks like a DOS-ish
    * path... First handle any drive letters.
    */
-  if (isalpha(path[0]) && (path[1] == ':')) {
+  if (isalpha (path[0]) && (path[1] == ':')) {
     /*
      * This part kind of stinks... It isn't possible
      * to know if there is enough space in the current
@@ -399,10 +399,7 @@ translate_win32_path(GtkFileSelection *filesel)
      * and use the set function on the text field to
      * set the newly created string.
      */
-    gchar *newPath;
-
-    newPath = g_malloc(strlen(path) + 2);
-    sprintf(newPath, "//%c/%s", path[0], (path + 3));
+    gchar *newPath = g_strdup_printf ("//%c/%s", path[0], (path + 3));
     gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), newPath);
 
     path = newPath;
@@ -413,14 +410,15 @@ translate_win32_path(GtkFileSelection *filesel)
    * Now, replace backslashes with forward slashes 
    * if necessary.
    */
-  if (strchr(path, '\\')) {
-    int index;
-    for (index = 0; path[index] != '\0'; index++)
-      if (path[index] == '\\')
-	path[index] = '/';
-
-    updated = 1;
-  }
+  if (strchr (path, '\\'))
+    {
+      int index;
+      for (index = 0; path[index] != '\0'; index++)
+	if (path[index] == '\\')
+	  path[index] = '/';
+      
+      updated = 1;
+    }
     
   return updated;
 }
@@ -486,13 +484,13 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 
   /* The horizontal box containing create, rename etc. buttons */
   filesel->button_area = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout(GTK_BUTTON_BOX(filesel->button_area), GTK_BUTTONBOX_START);
-  gtk_button_box_set_spacing(GTK_BUTTON_BOX(filesel->button_area), 0);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (filesel->button_area), GTK_BUTTONBOX_START);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (filesel->button_area), 0);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), filesel->button_area, 
 		      FALSE, FALSE, 0);
   gtk_widget_show (filesel->button_area);
   
-  gtk_file_selection_show_fileop_buttons(filesel);
+  gtk_file_selection_show_fileop_buttons (filesel);
 
   /* hbox for pulldown menu */
   pulldown_hbox = gtk_hbox_new (TRUE, 5);
@@ -558,8 +556,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   
   /*  The OK/Cancel button area */
   confirm_area = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout(GTK_BUTTON_BOX(confirm_area), GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing(GTK_BUTTON_BOX(confirm_area), 5);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (confirm_area), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (confirm_area), 5);
   gtk_box_pack_end (GTK_BOX (filesel->main_vbox), confirm_area, FALSE, FALSE, 0);
   gtk_widget_show (confirm_area);
 
@@ -665,7 +663,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
       gtk_widget_show (filesel->fileop_ren_file);
     }
 
-  gtk_widget_queue_resize(GTK_WIDGET(filesel));
+  gtk_widget_queue_resize (GTK_WIDGET (filesel));
 }
 
 void       
@@ -739,7 +737,7 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), nothing);
 
 #ifdef G_WITH_CYGWIN
-  translate_win32_path(filesel);
+  translate_win32_path (filesel);
 #endif
   text = gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry));
   if (text)
@@ -809,7 +807,8 @@ gtk_file_selection_destroy (GtkObject *object)
 /* Begin file operations callbacks */
 
 static void
-gtk_file_selection_fileop_error (GtkFileSelection *fs, gchar *error_message)
+gtk_file_selection_fileop_error (GtkFileSelection *fs,
+				 gchar            *error_message)
 {
   GtkWidget *label;
   GtkWidget *vbox;
@@ -830,19 +829,19 @@ gtk_file_selection_fileop_error (GtkFileSelection *fs, gchar *error_message)
   
   /* If file dialog is grabbed, make this dialog modal too */
   /* When error dialog is closed, file dialog will be grabbed again */
-  if (GTK_WINDOW(fs)->modal)
-      gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+  if (GTK_WINDOW (fs)->modal)
+      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
-  vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
 		     FALSE, FALSE, 0);
-  gtk_widget_show(vbox);
+  gtk_widget_show (vbox);
 
-  label = gtk_label_new(error_message);
-  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
-  gtk_widget_show(label);
+  label = gtk_label_new (error_message);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show (label);
 
   /* yes, we free it */
   g_free (error_message);
@@ -852,17 +851,18 @@ gtk_file_selection_fileop_error (GtkFileSelection *fs, gchar *error_message)
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
 		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default(button);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button);
   gtk_widget_show (button);
 
   gtk_widget_show (dialog);
 }
 
 static void
-gtk_file_selection_fileop_destroy (GtkWidget *widget, gpointer data)
+gtk_file_selection_fileop_destroy (GtkWidget *widget,
+				   gpointer   data)
 {
   GtkFileSelection *fs = data;
 
@@ -874,12 +874,14 @@ gtk_file_selection_fileop_destroy (GtkWidget *widget, gpointer data)
 
 
 static void
-gtk_file_selection_create_dir_confirmed (GtkWidget *widget, gpointer data)
+gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
+					 gpointer   data)
 {
   GtkFileSelection *fs = data;
   gchar *dirname;
   gchar *path;
   gchar *full_path;
+  gchar *xpath;
   gchar *buf;
   CompletionState *cmpl_state;
   
@@ -891,20 +893,23 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget, gpointer data)
   path = cmpl_reference_position (cmpl_state);
   
   full_path = g_strconcat (path, G_DIR_SEPARATOR_S, dirname, NULL);
-  if ( (mkdir (full_path, 0755) < 0) ) 
+  xpath = g_filename_from_utf8 (full_path);
+  if (mkdir (xpath, 0755) < 0) 
     {
       buf = g_strconcat ("Error creating directory \"", dirname, "\":  ", 
-			 g_strerror(errno), NULL);
+			 g_strerror (errno), NULL);
       gtk_file_selection_fileop_error (fs, buf);
     }
   g_free (full_path);
+  g_free (xpath);
   
   gtk_widget_destroy (fs->fileop_dialog);
   gtk_file_selection_populate (fs, "", FALSE);
 }
   
 static void
-gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
+gtk_file_selection_create_dir (GtkWidget *widget,
+			       gpointer   data)
 {
   GtkFileSelection *fs = data;
   GtkWidget *label;
@@ -929,25 +934,25 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog is closed, file dialog will be grabbed again */
-  if (GTK_WINDOW(fs)->modal)
-      gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+  if (GTK_WINDOW (fs)->modal)
+      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
-  vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
 		     FALSE, FALSE, 0);
-  gtk_widget_show(vbox);
+  gtk_widget_show( vbox);
   
-  label = gtk_label_new(_("Directory name:"));
-  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
-  gtk_widget_show(label);
+  label = gtk_label_new (_("Directory name:"));
+  gtk_misc_set_alignment(GTK_MISC (label), 0.0, 0.0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show (label);
 
   /*  The directory entry widget  */
   fs->fileop_entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
-  GTK_WIDGET_SET_FLAGS(fs->fileop_entry, GTK_CAN_DEFAULT);
+  GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
   gtk_widget_show (fs->fileop_entry);
   
   /* buttons */
@@ -955,31 +960,33 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) gtk_file_selection_create_dir_confirmed, 
 		      (gpointer) fs);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
 		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
-  gtk_widget_show(button);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_show (button);
   
   button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
 		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default(button);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button);
   gtk_widget_show (button);
 
   gtk_widget_show (dialog);
 }
 
 static void
-gtk_file_selection_delete_file_confirmed (GtkWidget *widget, gpointer data)
+gtk_file_selection_delete_file_confirmed (GtkWidget *widget,
+					  gpointer   data)
 {
   GtkFileSelection *fs = data;
   CompletionState *cmpl_state;
   gchar *path;
   gchar *full_path;
+  gchar *xpath;
   gchar *buf;
   
   g_return_if_fail (fs != NULL);
@@ -989,20 +996,23 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget, gpointer data)
   path = cmpl_reference_position (cmpl_state);
   
   full_path = g_strconcat (path, G_DIR_SEPARATOR_S, fs->fileop_file, NULL);
-  if ( (unlink (full_path) < 0) ) 
+  xpath = g_filename_from_utf8 (full_path);
+  if (unlink (xpath) < 0) 
     {
       buf = g_strconcat ("Error deleting file \"", fs->fileop_file, "\":  ", 
-			 g_strerror(errno), NULL);
+			 g_strerror (errno), NULL);
       gtk_file_selection_fileop_error (fs, buf);
     }
   g_free (full_path);
+  g_free (xpath);
   
   gtk_widget_destroy (fs->fileop_dialog);
   gtk_file_selection_populate (fs, "", FALSE);
 }
 
 static void
-gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
+gtk_file_selection_delete_file (GtkWidget *widget,
+				gpointer   data)
 {
   GtkFileSelection *fs = data;
   GtkWidget *label;
@@ -1019,12 +1029,12 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
 	  return;
 
 #ifdef G_WITH_CYGWIN
-  translate_win32_path(fs);
+  translate_win32_path (fs);
 #endif
 
   filename = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
-  if (strlen(filename) < 1)
-	  return;
+  if (strlen (filename) < 1)
+    return;
 
   fs->fileop_file = filename;
   
@@ -1038,40 +1048,40 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog is closed, file dialog will be grabbed again */
-  if (GTK_WINDOW(fs)->modal)
-      gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+  if (GTK_WINDOW (fs)->modal)
+      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   
-  vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
 		     FALSE, FALSE, 0);
-  gtk_widget_show(vbox);
+  gtk_widget_show (vbox);
 
   buf = g_strconcat ("Really delete file \"", filename, "\" ?", NULL);
-  label = gtk_label_new(buf);
-  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
-  gtk_widget_show(label);
-  g_free(buf);
+  label = gtk_label_new (buf);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show (label);
+  g_free (buf);
   
   /* buttons */
   button = gtk_button_new_with_label (_("Delete"));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) gtk_file_selection_delete_file_confirmed, 
 		      (gpointer) fs);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
-		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
-  gtk_widget_show(button);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+		      button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_show (button);
   
   button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
-		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default(button);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+		      button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button);
   gtk_widget_show (button);
 
   gtk_widget_show (dialog);
@@ -1079,7 +1089,8 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
 }
 
 static void
-gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
+gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
+					  gpointer   data)
 {
   GtkFileSelection *fs = data;
   gchar *buf;
@@ -1099,10 +1110,10 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
   new_filename = g_strconcat (path, G_DIR_SEPARATOR_S, file, NULL);
   old_filename = g_strconcat (path, G_DIR_SEPARATOR_S, fs->fileop_file, NULL);
 
-  if ( (rename (old_filename, new_filename)) < 0) 
+  if (rename (old_filename, new_filename) < 0) 
     {
       buf = g_strconcat ("Error renaming file \"", file, "\":  ", 
-			 g_strerror(errno), NULL);
+			 g_strerror (errno), NULL);
       gtk_file_selection_fileop_error (fs, buf);
     }
   g_free (new_filename);
@@ -1113,7 +1124,8 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
 }
   
 static void
-gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
+gtk_file_selection_rename_file (GtkWidget *widget,
+				gpointer   data)
 {
   GtkFileSelection *fs = data;
   GtkWidget *label;
@@ -1129,8 +1141,8 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
 	  return;
 
   fs->fileop_file = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
-  if (strlen(fs->fileop_file) < 1)
-	  return;
+  if (strlen (fs->fileop_file) < 1)
+    return;
   
   /* main dialog */
   fs->fileop_dialog = dialog = gtk_dialog_new ();
@@ -1142,27 +1154,27 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog  closed, file dialog will be grabbed again */
-  if (GTK_WINDOW(fs)->modal)
-    gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+  if (GTK_WINDOW (fs)->modal)
+    gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   
-  vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER(vbox), 8);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
-		     FALSE, FALSE, 0);
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
+		      FALSE, FALSE, 0);
   gtk_widget_show(vbox);
   
   buf = g_strconcat ("Rename file \"", fs->fileop_file, "\" to:", NULL);
   label = gtk_label_new(buf);
-  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
-  gtk_widget_show(label);
-  g_free(buf);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show (label);
+  g_free (buf);
 
   /* New filename entry */
   fs->fileop_entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
-  GTK_WIDGET_SET_FLAGS(fs->fileop_entry, GTK_CAN_DEFAULT);
+  GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
   gtk_widget_show (fs->fileop_entry);
   
   gtk_entry_set_text (GTK_ENTRY (fs->fileop_entry), fs->fileop_file);
@@ -1174,19 +1186,19 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) gtk_file_selection_rename_file_confirmed, 
 		      (gpointer) fs);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
-		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
-  gtk_widget_show(button);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+		      button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_show (button);
   
   button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
-		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default(button);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+		      button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button);
   gtk_widget_show (button);
 
   gtk_widget_show (dialog);
@@ -1208,7 +1220,7 @@ gtk_file_selection_key_press (GtkWidget   *widget,
     {
       fs = GTK_FILE_SELECTION (user_data);
 #ifdef G_WITH_CYGWIN
-      translate_win32_path(fs);
+      translate_win32_path (fs);
 #endif
       text = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
 
@@ -1228,7 +1240,8 @@ gtk_file_selection_key_press (GtkWidget   *widget,
 
 
 static void
-gtk_file_selection_history_callback (GtkWidget *widget, gpointer data)
+gtk_file_selection_history_callback (GtkWidget *widget,
+				     gpointer   data)
 {
   GtkFileSelection *fs = data;
   HistoryCallbackArg *callback_arg;
@@ -1254,7 +1267,7 @@ gtk_file_selection_history_callback (GtkWidget *widget, gpointer data)
 
 static void 
 gtk_file_selection_update_history_menu (GtkFileSelection *fs,
-					gchar *current_directory)
+					gchar            *current_directory)
 {
   HistoryCallbackArg *callback_arg;
   GtkWidget *menu_item;
@@ -1283,7 +1296,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
       gtk_widget_destroy (fs->history_menu);
     }
   
-  fs->history_menu = gtk_menu_new();
+  fs->history_menu = gtk_menu_new ();
 
   current_dir = g_strdup (current_directory);
 
@@ -1299,7 +1312,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  if (i != dir_len) 
 		  current_dir[i + 1] = '\0';
 #ifdef G_WITH_CYGWIN
-	  if (!strcmp(current_dir, "//"))
+	  if (!strcmp (current_dir, "//"))
 	    continue;
 #endif
 	  menu_item = gtk_menu_item_new_with_label (current_dir);
@@ -1335,11 +1348,11 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 }
 
 static void
-gtk_file_selection_file_button (GtkWidget *widget,
-			       gint row, 
-			       gint column, 
-			       GdkEventButton *bevent,
-			       gpointer user_data)
+gtk_file_selection_file_button (GtkWidget      *widget,
+				gint            row, 
+				gint            column, 
+				GdkEventButton *bevent,
+				gpointer        user_data)
 {
   GtkFileSelection *fs = NULL;
   gchar *filename, *temp = NULL;
@@ -1355,13 +1368,11 @@ gtk_file_selection_file_button (GtkWidget *widget,
 
 #ifdef G_WITH_CYGWIN
   /* Check to see if the selection was a drive selector */
-  if (isalpha(filename[0]) && (filename[1] == ':')) {
+  if (isalpha (filename[0]) && (filename[1] == ':')) {
     /* It is... map it to a CYGWIN32 drive */
-    char temp_filename[10];
-
-    sprintf(temp_filename, "//%c/", tolower(filename[0]));
+    gchar *temp_filename = g_strdup_printf ("//%c/", tolower (filename[0]));
     g_free(filename);
-    filename = g_strdup(temp_filename);
+    filename = temp_filename;
   }
 #endif /* G_WITH_CYGWIN */
 
@@ -1386,11 +1397,11 @@ gtk_file_selection_file_button (GtkWidget *widget,
 }
 
 static void
-gtk_file_selection_dir_button (GtkWidget *widget,
-			       gint row, 
-			       gint column, 
+gtk_file_selection_dir_button (GtkWidget      *widget,
+			       gint            row, 
+			       gint            column, 
 			       GdkEventButton *bevent,
-			       gpointer user_data)
+			       gpointer        user_data)
 {
   GtkFileSelection *fs = NULL;
   gchar *filename, *temp = NULL;
@@ -1427,7 +1438,7 @@ gtk_file_selection_dir_button (GtkWidget *widget,
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
 
 static void
-win32_gtk_add_drives_to_dir_list(GtkWidget *the_dir_list)
+win32_gtk_add_drives_to_dir_list (GtkWidget *the_dir_list)
 {
   gchar *text[2], *textPtr;
   gchar buffer[128];
@@ -1437,33 +1448,33 @@ win32_gtk_add_drives_to_dir_list(GtkWidget *the_dir_list)
   text[1] = NULL;
 
   /* Get the Drives string */
-  GetLogicalDriveStrings(sizeof(buffer), buffer);
+  GetLogicalDriveStrings (sizeof (buffer), buffer);
 
   /* Add the drives as necessary */
   textPtr = buffer;
   while (*textPtr != '\0') {
     /* Get the volume information for this drive */
-    if ((tolower(textPtr[0]) != 'a') && (tolower(textPtr[0]) != 'b'))
+    if ((tolower (textPtr[0]) != 'a') && (tolower (textPtr[0]) != 'b'))
       {
 	/* Ignore floppies (?) */
 	DWORD maxComponentLength, flags;
 
-	GetVolumeInformation(textPtr,
-			     volumeNameBuf, sizeof(volumeNameBuf),
-			     NULL, &maxComponentLength,
-			     &flags, NULL, 0);
+	GetVolumeInformation (textPtr,
+			      volumeNameBuf, sizeof(volumeNameBuf),
+			      NULL, &maxComponentLength,
+			      &flags, NULL, 0);
 	/* Build the actual displayable string */
 
-	sprintf(formatBuffer, "%c:\\", toupper(textPtr[0]));
+	sprintf (formatBuffer, "%c:\\", toupper(textPtr[0]));
 #if 0 /* HB: removed to allow drive change AND directory update with one click */
-	if (strlen(volumeNameBuf) > 0)
-	  sprintf(formatBuffer, "%s (%s)", formatBuffer, volumeNameBuf);
+	if (strlen (volumeNameBuf) > 0)
+	  sprintf (formatBuffer, "%s (%s)", formatBuffer, volumeNameBuf);
 #endif
 	/* Add to the list */
 	text[0] = formatBuffer;
 	gtk_clist_append (GTK_CLIST (the_dir_list), text);
       }
-    textPtr += (strlen(textPtr) + 1);
+    textPtr += (strlen (textPtr) + 1);
   }
 }
 #endif
@@ -1633,31 +1644,32 @@ gtk_file_selection_abort (GtkFileSelection *fs)
 /* The four completion state selectors
  */
 static gchar*
-cmpl_updated_text (CompletionState* cmpl_state)
+cmpl_updated_text (CompletionState *cmpl_state)
 {
   return cmpl_state->updated_text;
 }
 
 static gboolean
-cmpl_updated_dir (CompletionState* cmpl_state)
+cmpl_updated_dir (CompletionState *cmpl_state)
 {
   return cmpl_state->re_complete;
 }
 
 static gchar*
-cmpl_reference_position (CompletionState* cmpl_state)
+cmpl_reference_position (CompletionState *cmpl_state)
 {
   return cmpl_state->reference_dir->fullname;
 }
 
 static gint
-cmpl_last_valid_char (CompletionState* cmpl_state)
+cmpl_last_valid_char (CompletionState *cmpl_state)
 {
   return cmpl_state->last_valid_char;
 }
 
 static gchar*
-cmpl_completion_fullname (gchar* text, CompletionState* cmpl_state)
+cmpl_completion_fullname (gchar           *text,
+			  CompletionState *cmpl_state)
 {
   static char nothing[2] = "";
 
@@ -1734,11 +1746,15 @@ static CompletionState*
 cmpl_init_state (void)
 {
   gchar *getcwd_buf;
+  gchar *utf8_cwd;
   CompletionState *new_state;
 
   new_state = g_new (CompletionState, 1);
 
+  /* g_get_current_dir() returns a GSystemCodepageString */
   getcwd_buf = g_get_current_dir ();
+  utf8_cwd = g_filename_to_utf8 (getcwd_buf);
+  g_free (getcwd_buf);
 
 tryagain:
 
@@ -1755,7 +1771,7 @@ tryagain:
   new_state->user_dir_name_buffer = NULL;
   new_state->user_directories = NULL;
 
-  new_state->reference_dir =  open_dir (getcwd_buf, new_state);
+  new_state->reference_dir = open_dir (utf8_cwd, new_state);
 
   if (!new_state->reference_dir)
     {
@@ -1764,34 +1780,36 @@ tryagain:
       goto tryagain;
     }
 
-  g_free (getcwd_buf);
+  g_free (utf8_cwd);
   return new_state;
 }
 
 static void
-cmpl_free_dir_list(GList* dp0)
+cmpl_free_dir_list (GList* dp0)
 {
   GList *dp = dp0;
 
-  while (dp) {
-    free_dir (dp->data);
-    dp = dp->next;
-  }
+  while (dp)
+    {
+      free_dir (dp->data);
+      dp = dp->next;
+    }
 
-  g_list_free(dp0);
+  g_list_free (dp0);
 }
 
 static void
-cmpl_free_dir_sent_list(GList* dp0)
+cmpl_free_dir_sent_list (GList* dp0)
 {
   GList *dp = dp0;
 
-  while (dp) {
-    free_dir_sent (dp->data);
-    dp = dp->next;
-  }
+  while (dp)
+    {
+      free_dir_sent (dp->data);
+      dp = dp->next;
+    }
 
-  g_list_free(dp0);
+  g_list_free (dp0);
 }
 
 static void
@@ -1815,48 +1833,50 @@ cmpl_free_state (CompletionState* cmpl_state)
 }
 
 static void
-free_dir(CompletionDir* dir)
+free_dir (CompletionDir* dir)
 {
-  g_free(dir->fullname);
-  g_free(dir);
+  g_free (dir->fullname);
+  g_free (dir);
 }
 
 static void
-free_dir_sent(CompletionDirSent* sent)
+free_dir_sent (CompletionDirSent* sent)
 {
   gint i;
   for (i = 0; i < sent->entry_count; i++)
-    g_free(sent->entries[i].entry_name);
-  g_free(sent->entries);
-  g_free(sent);
+    g_free (sent->entries[i].entry_name);
+  g_free (sent->entries);
+  g_free (sent);
 }
 
 static void
-prune_memory_usage(CompletionState *cmpl_state)
+prune_memory_usage (CompletionState *cmpl_state)
 {
   GList* cdsl = cmpl_state->directory_sent_storage;
   GList* cdl = cmpl_state->directory_storage;
   GList* cdl0 = cdl;
   gint len = 0;
 
-  for(; cdsl && len < CMPL_DIRECTORY_CACHE_SIZE; len += 1)
+  for (; cdsl && len < CMPL_DIRECTORY_CACHE_SIZE; len += 1)
     cdsl = cdsl->next;
 
-  if (cdsl) {
-    cmpl_free_dir_sent_list(cdsl->next);
-    cdsl->next = NULL;
-  }
+  if (cdsl)
+    {
+      cmpl_free_dir_sent_list (cdsl->next);
+      cdsl->next = NULL;
+    }
 
   cmpl_state->directory_storage = NULL;
-  while (cdl) {
-    if (cdl->data == cmpl_state->reference_dir)
-      cmpl_state->directory_storage = g_list_prepend(NULL, cdl->data);
-    else
-      free_dir (cdl->data);
-    cdl = cdl->next;
-  }
+  while (cdl)
+    {
+      if (cdl->data == cmpl_state->reference_dir)
+	cmpl_state->directory_storage = g_list_prepend (NULL, cdl->data);
+      else
+	free_dir (cdl->data);
+      cdl = cdl->next;
+    }
 
-  g_list_free(cdl0);
+  g_list_free (cdl0);
 }
 
 /**********************************************************************/
@@ -1864,14 +1884,14 @@ prune_memory_usage(CompletionState *cmpl_state)
 /**********************************************************************/
 
 static PossibleCompletion*
-cmpl_completion_matches (gchar* text_to_complete,
-			 gchar** remaining_text,
-			 CompletionState* cmpl_state)
+cmpl_completion_matches (gchar           *text_to_complete,
+			 gchar          **remaining_text,
+			 CompletionState *cmpl_state)
 {
   gchar* first_slash;
   PossibleCompletion *poss;
 
-  prune_memory_usage(cmpl_state);
+  prune_memory_usage (cmpl_state);
 
   g_assert (text_to_complete != NULL);
 
@@ -1893,7 +1913,7 @@ cmpl_completion_matches (gchar* text_to_complete,
        */
       poss = attempt_homedir_completion (text_to_complete, cmpl_state);
 
-      update_cmpl(poss, cmpl_state);
+      update_cmpl (poss, cmpl_state);
 
       return poss;
     }
@@ -1901,7 +1921,7 @@ cmpl_completion_matches (gchar* text_to_complete,
   cmpl_state->reference_dir =
     open_ref_dir (text_to_complete, remaining_text, cmpl_state);
 
-  if(!cmpl_state->reference_dir)
+  if (!cmpl_state->reference_dir)
     return NULL;
 
   cmpl_state->completion_dir =
@@ -1909,7 +1929,7 @@ cmpl_completion_matches (gchar* text_to_complete,
 
   cmpl_state->last_valid_char = *remaining_text - text_to_complete;
 
-  if(!cmpl_state->completion_dir)
+  if (!cmpl_state->completion_dir)
     return NULL;
 
   cmpl_state->completion_dir->cmpl_index = -1;
@@ -1920,9 +1940,9 @@ cmpl_completion_matches (gchar* text_to_complete,
 
   cmpl_state->reference_dir = cmpl_state->completion_dir;
 
-  poss = attempt_file_completion(cmpl_state);
+  poss = attempt_file_completion (cmpl_state);
 
-  update_cmpl(poss, cmpl_state);
+  update_cmpl (poss, cmpl_state);
 
   return poss;
 }
@@ -1935,15 +1955,15 @@ cmpl_next_completion (CompletionState* cmpl_state)
   cmpl_state->the_completion.text[0] = 0;
 
 #ifdef HAVE_PWD_H
-  if(cmpl_state->user_completion_index >= 0)
-    poss = attempt_homedir_completion(cmpl_state->last_completion_text, cmpl_state);
+  if (cmpl_state->user_completion_index >= 0)
+    poss = attempt_homedir_completion (cmpl_state->last_completion_text, cmpl_state);
   else
-    poss = attempt_file_completion(cmpl_state);
+    poss = attempt_file_completion (cmpl_state);
 #else
-  poss = attempt_file_completion(cmpl_state);
+  poss = attempt_file_completion (cmpl_state);
 #endif
 
-  update_cmpl(poss, cmpl_state);
+  update_cmpl (poss, cmpl_state);
 
   return poss;
 }
@@ -1954,22 +1974,22 @@ cmpl_next_completion (CompletionState* cmpl_state)
 
 /* Open the directory where completion will begin from, if possible. */
 static CompletionDir*
-open_ref_dir(gchar* text_to_complete,
-	     gchar** remaining_text,
-	     CompletionState* cmpl_state)
+open_ref_dir (gchar           *text_to_complete,
+	      gchar          **remaining_text,
+	      CompletionState *cmpl_state)
 {
   gchar* first_slash;
   CompletionDir *new_dir;
 
-  first_slash = strchr(text_to_complete, G_DIR_SEPARATOR);
+  first_slash = strchr (text_to_complete, G_DIR_SEPARATOR);
 
 #ifdef G_WITH_CYGWIN
   if (text_to_complete[0] == '/' && text_to_complete[1] == '/')
     {
       char root_dir[5];
-      sprintf(root_dir, "//%c", text_to_complete[2]);
+      sprintf (root_dir, "//%c", text_to_complete[2]);
 
-      new_dir = open_dir(root_dir, cmpl_state);
+      new_dir = open_dir (root_dir, cmpl_state);
 
       if (new_dir) {
 	*remaining_text = text_to_complete + 4;
@@ -1982,14 +2002,14 @@ open_ref_dir(gchar* text_to_complete,
 #ifdef HAVE_PWD_H
   else if (text_to_complete[0] == '~')
     {
-      new_dir = open_user_dir(text_to_complete, cmpl_state);
+      new_dir = open_user_dir (text_to_complete, cmpl_state);
 
-      if(new_dir)
+      if (new_dir)
 	{
-	  if(first_slash)
+	  if (first_slash)
 	    *remaining_text = first_slash + 1;
 	  else
-	    *remaining_text = text_to_complete + strlen(text_to_complete);
+	    *remaining_text = text_to_complete + strlen (text_to_complete);
 	}
       else
 	{
@@ -1999,7 +2019,7 @@ open_ref_dir(gchar* text_to_complete,
 #endif
   else if (g_path_is_absolute (text_to_complete) || !cmpl_state->reference_dir)
     {
-      gchar *tmp = g_strdup(text_to_complete);
+      gchar *tmp = g_strdup (text_to_complete);
       gchar *p;
 
       p = tmp;
@@ -2007,7 +2027,7 @@ open_ref_dir(gchar* text_to_complete,
 	p++;
 
       *p = '\0';
-      p = strrchr(tmp, G_DIR_SEPARATOR);
+      p = strrchr (tmp, G_DIR_SEPARATOR);
       if (p)
 	{
 	  if (p == tmp)
@@ -2015,9 +2035,9 @@ open_ref_dir(gchar* text_to_complete,
       
 	  *p = '\0';
 
-	  new_dir = open_dir(tmp, cmpl_state);
+	  new_dir = open_dir (tmp, cmpl_state);
 
-	  if(new_dir)
+	  if (new_dir)
 	    *remaining_text = text_to_complete + 
 	      ((p == tmp + 1) ? (p - tmp) : (p + 1 - tmp));
 	}
@@ -2025,13 +2045,16 @@ open_ref_dir(gchar* text_to_complete,
 	{
 	  /* If no possible candidates, use the cwd */
 	  gchar *curdir = g_get_current_dir ();
-	  
-	  new_dir = open_dir(curdir, cmpl_state);
+	  gchar *utf8_curdir = g_filename_to_utf8 (curdir);
+
+	  g_free (curdir);
+
+	  new_dir = open_dir (utf8_curdir, cmpl_state);
 
 	  if (new_dir)
 	    *remaining_text = text_to_complete;
 
-	  g_free (curdir);
+	  g_free (utf8_curdir);
 	}
 
       g_free (tmp);
@@ -2040,10 +2063,10 @@ open_ref_dir(gchar* text_to_complete,
     {
       *remaining_text = text_to_complete;
 
-      new_dir = open_dir(cmpl_state->reference_dir->fullname, cmpl_state);
+      new_dir = open_dir (cmpl_state->reference_dir->fullname, cmpl_state);
     }
 
-  if(new_dir)
+  if (new_dir)
     {
       new_dir->cmpl_index = -1;
       new_dir->cmpl_parent = NULL;
@@ -2056,57 +2079,67 @@ open_ref_dir(gchar* text_to_complete,
 
 /* open a directory by user name */
 static CompletionDir*
-open_user_dir(gchar* text_to_complete,
-	      CompletionState *cmpl_state)
+open_user_dir (gchar           *text_to_complete,
+	       CompletionState *cmpl_state)
 {
+  CompletionDir *result;
   gchar *first_slash;
   gint cmp_len;
 
-  g_assert(text_to_complete && text_to_complete[0] == '~');
+  g_assert (text_to_complete && text_to_complete[0] == '~');
 
-  first_slash = strchr(text_to_complete, G_DIR_SEPARATOR);
+  first_slash = strchr (text_to_complete, G_DIR_SEPARATOR);
 
   if (first_slash)
     cmp_len = first_slash - text_to_complete - 1;
   else
-    cmp_len = strlen(text_to_complete + 1);
+    cmp_len = strlen (text_to_complete + 1);
 
-  if(!cmp_len)
+  if (!cmp_len)
     {
       /* ~/ */
       gchar *homedir = g_get_home_dir ();
+      gchar *utf8_home = g_filename_to_utf8 (homedir);
 
-      if (homedir)
-	return open_dir(homedir, cmpl_state);
+      g_free (homedir);
+
+      if (utf8_homedir)
+	result = open_dir (utf8_homedir, cmpl_state);
       else
-	return NULL;
+	result = NULL;
+      
+      g_free (utf8_homedir);
     }
   else
     {
       /* ~user/ */
-      char* copy = g_new(char, cmp_len + 1);
+      gchar* copy = g_new (char, cmp_len + 1);
+      gchar *utf8_dir;
       struct passwd *pwd;
-      strncpy(copy, text_to_complete + 1, cmp_len);
+
+      strncpy (copy, text_to_complete + 1, cmp_len);
       copy[cmp_len] = 0;
-      pwd = getpwnam(copy);
-      g_free(copy);
+      pwd = getpwnam (copy);
+      g_free (copy);
       if (!pwd)
 	{
 	  cmpl_errno = errno;
 	  return NULL;
 	}
-
-      return open_dir(pwd->pw_dir, cmpl_state);
+      utf8_dir = g_filename_to_utf8 (pwd->pw_dir);
+      result = open_dir (utf8_dir, cmpl_state);
+      g_free (utf8_dir);
     }
+  return result;
 }
 
 #endif
 
 /* open a directory relative the the current relative directory */
 static CompletionDir*
-open_relative_dir(gchar* dir_name,
-		  CompletionDir* dir,
-		  CompletionState *cmpl_state)
+open_relative_dir (gchar           *dir_name,
+		   CompletionDir   *dir,
+		   CompletionState *cmpl_state)
 {
   CompletionDir *result;
   GString *path;
@@ -2114,12 +2147,12 @@ open_relative_dir(gchar* dir_name,
   path = g_string_sized_new (dir->fullname_len + strlen (dir_name) + 10);
   g_string_assign (path, dir->fullname);
 
-  if(dir->fullname_len > 1
-    && path->str[dir->fullname_len - 1] != G_DIR_SEPARATOR)
-     g_string_append_c (path, G_DIR_SEPARATOR);
+  if (dir->fullname_len > 1
+      && path->str[dir->fullname_len - 1] != G_DIR_SEPARATOR)
+    g_string_append_c (path, G_DIR_SEPARATOR);
   g_string_append (path, dir_name);
 
-  result = open_dir(path->str, cmpl_state);
+  result = open_dir (path->str, cmpl_state);
 
   g_string_free (path, TRUE);
 
@@ -2128,10 +2161,12 @@ open_relative_dir(gchar* dir_name,
 
 /* after the cache lookup fails, really open a new directory */
 static CompletionDirSent*
-open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
+open_new_dir (gchar       *dir_name,
+	      struct stat *sbuf,
+	      gboolean     stat_subdirs)
 {
-  CompletionDirSent* sent;
-  DIR* directory;
+  CompletionDirSent *sent;
+  DIR *directory;
   struct dirent *dirent_ptr;
   gint entry_count = 0;
   gint i;
@@ -2139,7 +2174,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
   GString *path;
   gchar *xdir;
 
-  sent = g_new(CompletionDirSent, 1);
+  sent = g_new (CompletionDirSent, 1);
   sent->mtime = sbuf->st_mtime;
   sent->inode = sbuf->st_ino;
   sent->device = sbuf->st_dev;
@@ -2147,33 +2182,31 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
   path = g_string_sized_new (2*MAXPATHLEN + 10);
 
   xdir = g_filename_from_utf8 (dir_name);
-  directory = opendir(xdir);
+  directory = opendir (xdir);
 
-  if(!directory)
+  if (!directory)
     {
       cmpl_errno = errno;
       g_free (xdir);
       return NULL;
     }
 
-  while((dirent_ptr = readdir(directory)) != NULL)
-    {
-      entry_count++;
-    }
+  while ((dirent_ptr = readdir (directory)) != NULL)
+    entry_count++;
 
-  sent->entries = g_new(CompletionDirEntry, entry_count);
+  sent->entries = g_new (CompletionDirEntry, entry_count);
   sent->entry_count = entry_count;
 
-  rewinddir(directory);
+  rewinddir (directory);
 
-  for(i = 0; i < entry_count; i += 1)
+  for (i = 0; i < entry_count; i += 1)
     {
-      dirent_ptr = readdir(directory);
+      dirent_ptr = readdir (directory);
 
-      if(!dirent_ptr)
+      if (!dirent_ptr)
 	{
 	  cmpl_errno = errno;
-	  closedir(directory);
+	  closedir (directory);
 	  g_free (xdir);
 	  return NULL;
 	}
@@ -2189,6 +2222,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 
       if (stat_subdirs)
 	{
+	  /* Here we know path->str is a GSystemCodepageString */
 	  if (stat (path->str, &ent_sbuf) >= 0 && S_ISDIR (ent_sbuf.st_mode))
 	    sent->entries[i].is_dir = TRUE;
 	  else
@@ -2202,9 +2236,9 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 
   g_free (xdir);
   g_string_free (path, TRUE);
-  qsort(sent->entries, sent->entry_count, sizeof(CompletionDirEntry), compare_cmpl_dir);
+  qsort (sent->entries, sent->entry_count, sizeof (CompletionDirEntry), compare_cmpl_dir);
 
-  closedir(directory);
+  closedir (directory);
 
   return sent;
 }
@@ -2212,7 +2246,9 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 #if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
 
 static gboolean
-check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
+check_dir (gchar       *dir_name,
+	   struct stat *result,
+	   gboolean    *stat_subdirs)
 {
   /* A list of directories that we know only contain other directories.
    * Trying to stat every file in these directories would be very
@@ -2228,9 +2264,9 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
     { "/net", FALSE, { 0 } }
   };
 
-  static const gint n_no_stat_dirs = sizeof(no_stat_dirs) / sizeof(no_stat_dirs[0]);
+  static const gint n_no_stat_dirs = G_N_ELEMENTS (no_stat_dirs);
   static gboolean initialized = FALSE;
-
+  gchar *xdir;
   gint i;
 
   if (!initialized)
@@ -2243,14 +2279,17 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
 	}
     }
 
-  if(stat(dir_name, result) < 0)
+  xdir = g_filename_from_utf8 (dir_name);
+  if (stat (xdir, result) < 0)
     {
+      g_free (xdir);
       cmpl_errno = errno;
       return FALSE;
     }
+  g_free (xdir);
 
   *stat_subdirs = TRUE;
-  for (i=0; i<n_no_stat_dirs; i++)
+  for (i = 0; i < n_no_stat_dirs; i++)
     {
       if (no_stat_dirs[i].present &&
 	  (no_stat_dirs[i].statbuf.st_dev == result->st_dev) &&
@@ -2268,7 +2307,8 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
 
 /* open a directory by absolute pathname */
 static CompletionDir*
-open_dir(gchar* dir_name, CompletionState* cmpl_state)
+open_dir (gchar           *dir_name,
+	  CompletionState *cmpl_state)
 {
   struct stat sbuf;
   gboolean stat_subdirs;
@@ -2285,10 +2325,10 @@ open_dir(gchar* dir_name, CompletionState* cmpl_state)
     {
       sent = cdsl->data;
 
-      if(sent->inode == sbuf.st_ino &&
-	 sent->mtime == sbuf.st_mtime &&
-	 sent->device == sbuf.st_dev)
-	return attach_dir(sent, dir_name, cmpl_state);
+      if (sent->inode == sbuf.st_ino &&
+	  sent->mtime == sbuf.st_mtime &&
+	  sent->device == sbuf.st_dev)
+	return attach_dir (sent, dir_name, cmpl_state);
 
       cdsl = cdsl->next;
     }
@@ -2296,45 +2336,49 @@ open_dir(gchar* dir_name, CompletionState* cmpl_state)
   stat_subdirs = TRUE;
 #endif
 
-  sent = open_new_dir(dir_name, &sbuf, stat_subdirs);
+  sent = open_new_dir (dir_name, &sbuf, stat_subdirs);
 
-  if (sent) {
-    cmpl_state->directory_sent_storage =
-      g_list_prepend(cmpl_state->directory_sent_storage, sent);
+  if (sent)
+    {
+      cmpl_state->directory_sent_storage =
+	g_list_prepend (cmpl_state->directory_sent_storage, sent);
 
-    return attach_dir(sent, dir_name, cmpl_state);
-  }
+      return attach_dir (sent, dir_name, cmpl_state);
+    }
 
   return NULL;
 }
 
 static CompletionDir*
-attach_dir(CompletionDirSent* sent, gchar* dir_name, CompletionState *cmpl_state)
+attach_dir (CompletionDirSent *sent,
+	    gchar             *dir_name,
+	    CompletionState   *cmpl_state)
 {
   CompletionDir* new_dir;
 
-  new_dir = g_new(CompletionDir, 1);
+  new_dir = g_new (CompletionDir, 1);
 
   cmpl_state->directory_storage =
-    g_list_prepend(cmpl_state->directory_storage, new_dir);
+    g_list_prepend (cmpl_state->directory_storage, new_dir);
 
   new_dir->sent = sent;
-  new_dir->fullname = g_strdup(dir_name);
-  new_dir->fullname_len = strlen(dir_name);
+  new_dir->fullname = g_strdup (dir_name);
+  new_dir->fullname_len = strlen (dir_name);
 
   return new_dir;
 }
 
 static gint
-correct_dir_fullname(CompletionDir* cmpl_dir)
+correct_dir_fullname (CompletionDir* cmpl_dir)
 {
-  gint length = strlen(cmpl_dir->fullname);
-  gchar *first_slash = strchr(cmpl_dir->fullname, G_DIR_SEPARATOR);
+  gint length = strlen (cmpl_dir->fullname);
+  gchar *first_slash = strchr (cmpl_dir->fullname, G_DIR_SEPARATOR);
+  gchar *xfilename;
   struct stat sbuf;
 
   /* Does it end with /. (\.) ? */
   if (length >= 2 &&
-      strcmp(cmpl_dir->fullname + length - 2, G_DIR_SEPARATOR_S ".") == 0)
+      strcmp (cmpl_dir->fullname + length - 2, G_DIR_SEPARATOR_S ".") == 0)
     {
       /* Is it just the root directory (on a drive) ? */
       if (cmpl_dir->fullname + length - 2 == first_slash)
@@ -2351,77 +2395,85 @@ correct_dir_fullname(CompletionDir* cmpl_dir)
 
   /* Ends with /./ (\.\)? */
   else if (length >= 3 &&
-	   strcmp(cmpl_dir->fullname + length - 3,
-		  G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S) == 0)
+	   strcmp (cmpl_dir->fullname + length - 3,
+		   G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S) == 0)
     cmpl_dir->fullname[length - 2] = 0;
 
   /* Ends with /.. (\..) ? */
   else if (length >= 3 &&
-	   strcmp(cmpl_dir->fullname + length - 3,
-		  G_DIR_SEPARATOR_S "..") == 0)
+	   strcmp (cmpl_dir->fullname + length - 3,
+		   G_DIR_SEPARATOR_S "..") == 0)
     {
       /* Is it just /.. (X:\..)? */
-      if(cmpl_dir->fullname + length - 3 == first_slash)
+      if (cmpl_dir->fullname + length - 3 == first_slash)
 	{
 	  cmpl_dir->fullname[length - 2] = 0;
 	  cmpl_dir->fullname_len = length - 2;
 	  return TRUE;
 	}
 
-      if(stat(cmpl_dir->fullname, &sbuf) < 0)
+      xfilename = g_filename_from_utf8 (cmpl_dir->fullname);
+      if (stat (xfilename, &sbuf) < 0)
 	{
+	  g_free (xfilename);
 	  cmpl_errno = errno;
 	  return FALSE;
 	}
+      g_free (xfilename);
 
       cmpl_dir->fullname[length - 3] = 0;
 
-      if(!correct_parent(cmpl_dir, &sbuf))
+      if (!correct_parent (cmpl_dir, &sbuf))
 	return FALSE;
     }
 
   /* Ends with /../ (\..\)? */
   else if (length >= 4 &&
-	   strcmp(cmpl_dir->fullname + length - 4,
-		  G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S) == 0)
+	   strcmp (cmpl_dir->fullname + length - 4,
+		   G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S) == 0)
     {
       /* Is it just /../ (X:\..\)? */
-      if(cmpl_dir->fullname + length - 4 == first_slash)
+      if (cmpl_dir->fullname + length - 4 == first_slash)
 	{
 	  cmpl_dir->fullname[length - 3] = 0;
 	  cmpl_dir->fullname_len = length - 3;
 	  return TRUE;
 	}
 
-      if(stat(cmpl_dir->fullname, &sbuf) < 0)
+      xfilename = g_filename_from_utf8 (cmpl_dir->fullname);
+      if (stat (xfilename, &sbuf) < 0)
 	{
+	  g_free (xfilename);
 	  cmpl_errno = errno;
 	  return FALSE;
 	}
+      g_free (xfilename);
 
       cmpl_dir->fullname[length - 4] = 0;
 
-      if(!correct_parent(cmpl_dir, &sbuf))
+      if (!correct_parent (cmpl_dir, &sbuf))
 	return FALSE;
     }
 
-  cmpl_dir->fullname_len = strlen(cmpl_dir->fullname);
+  cmpl_dir->fullname_len = strlen (cmpl_dir->fullname);
 
   return TRUE;
 }
 
 static gint
-correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
+correct_parent (CompletionDir *cmpl_dir,
+		struct stat   *sbuf)
 {
   struct stat parbuf;
   gchar *last_slash;
   gchar *first_slash;
   gchar *new_name;
+  gchar *xfilename;
   gchar c = 0;
 
-  last_slash = strrchr(cmpl_dir->fullname, G_DIR_SEPARATOR);
-  g_assert(last_slash);
-  first_slash = strchr(cmpl_dir->fullname, G_DIR_SEPARATOR);
+  last_slash = strrchr (cmpl_dir->fullname, G_DIR_SEPARATOR);
+  g_assert (last_slash);
+  first_slash = strchr (cmpl_dir->fullname, G_DIR_SEPARATOR);
 
   /* Clever (?) way to check for top-level directory that works also on
    * Win32, where there is a drive letter and colon prefixed...
@@ -2436,32 +2488,35 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
       last_slash[1] = 0;
     }
 
-  if (stat(cmpl_dir->fullname, &parbuf) < 0)
+  xfilename = g_filename_from_utf8 (cmpl_dir->fullname);
+  if (stat (xfilename, &parbuf) < 0)
     {
+      g_free (xfilename);
       cmpl_errno = errno;
       if (!c)
 	last_slash[0] = G_DIR_SEPARATOR;
       return FALSE;
     }
+  g_free (xfilename);
 
 #ifndef G_OS_WIN32		/* No inode numbers on Win32 */
   if (parbuf.st_ino == sbuf->st_ino && parbuf.st_dev == sbuf->st_dev)
     /* it wasn't a link */
     return TRUE;
 
-  if(c)
+  if (c)
     last_slash[1] = c;
   else
     last_slash[0] = G_DIR_SEPARATOR;
 
   /* it was a link, have to figure it out the hard way */
 
-  new_name = find_parent_dir_fullname(cmpl_dir->fullname);
+  new_name = find_parent_dir_fullname (cmpl_dir->fullname);
 
   if (!new_name)
     return FALSE;
 
-  g_free(cmpl_dir->fullname);
+  g_free (cmpl_dir->fullname);
 
   cmpl_dir->fullname = new_name;
 #endif
@@ -2472,22 +2527,29 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
 #ifndef G_OS_WIN32
 
 static gchar*
-find_parent_dir_fullname(gchar* dirname)
+find_parent_dir_fullname (gchar* dirname)
 {
   gchar *orig_dir;
   gchar *result;
+  gchar *xcwd;
+  gchar *xdir;
 
   orig_dir = g_get_current_dir ();
 
-  if(chdir(dirname) != 0 || chdir("..") != 0)
+  xdir = g_filename_from_utf8 (dirname);
+  if (chdir (xdir) != 0 || chdir ("..") != 0)
     {
+      g_free (xdir);
       cmpl_errno = errno;
       return NULL;
     }
+  g_free (xdir);
 
-  result = g_get_current_dir ();
+  xcwd = g_get_current_dir ();
+  result = g_filename_to_utf8 (cwd);
+  g_free (xcwd);
 
-  if(chdir(orig_dir) != 0)
+  if (chdir (orig_dir) != 0)
     {
       cmpl_errno = errno;
       return NULL;
@@ -2506,30 +2568,30 @@ find_parent_dir_fullname(gchar* dirname)
 #ifdef HAVE_PWD_H
 
 static PossibleCompletion*
-attempt_homedir_completion(gchar* text_to_complete,
-			   CompletionState *cmpl_state)
+attempt_homedir_completion (gchar           *text_to_complete,
+			    CompletionState *cmpl_state)
 {
   gint index, length;
 
   if (!cmpl_state->user_dir_name_buffer &&
-      !get_pwdb(cmpl_state))
+      !get_pwdb (cmpl_state))
     return NULL;
-  length = strlen(text_to_complete) - 1;
+  length = strlen (text_to_complete) - 1;
 
   cmpl_state->user_completion_index += 1;
 
-  while(cmpl_state->user_completion_index < cmpl_state->user_directories_len)
+  while (cmpl_state->user_completion_index < cmpl_state->user_directories_len)
     {
-      index = first_diff_index(text_to_complete + 1,
-			       cmpl_state->user_directories
-			       [cmpl_state->user_completion_index].login);
+      index = first_diff_index (text_to_complete + 1,
+				cmpl_state->user_directories
+				[cmpl_state->user_completion_index].login);
 
-      switch(index)
+      switch (index)
 	{
 	case PATTERN_MATCH:
 	  break;
 	default:
-	  if(cmpl_state->last_valid_char < (index + 1))
+	  if (cmpl_state->last_valid_char < (index + 1))
 	    cmpl_state->last_valid_char = index + 1;
 	  cmpl_state->user_completion_index += 1;
 	  continue;
@@ -2538,17 +2600,17 @@ attempt_homedir_completion(gchar* text_to_complete,
       cmpl_state->the_completion.is_a_completion = 1;
       cmpl_state->the_completion.is_directory = TRUE;
 
-      append_completion_text("~", cmpl_state);
+      append_completion_text ("~", cmpl_state);
 
-      append_completion_text(cmpl_state->
+      append_completion_text (cmpl_state->
 			      user_directories[cmpl_state->user_completion_index].login,
-			     cmpl_state);
+			      cmpl_state);
 
-      return append_completion_text(G_DIR_SEPARATOR_S, cmpl_state);
+      return append_completion_text (G_DIR_SEPARATOR_S, cmpl_state);
     }
 
-  if(text_to_complete[1] ||
-     cmpl_state->user_completion_index > cmpl_state->user_directories_len)
+  if (text_to_complete[1]
+      || cmpl_state->user_completion_index > cmpl_state->user_directories_len)
     {
       cmpl_state->user_completion_index = -1;
       return NULL;
@@ -2559,7 +2621,7 @@ attempt_homedir_completion(gchar* text_to_complete,
       cmpl_state->the_completion.is_a_completion = 1;
       cmpl_state->the_completion.is_directory = TRUE;
 
-      return append_completion_text("~" G_DIR_SEPARATOR_S, cmpl_state);
+      return append_completion_text ("~" G_DIR_SEPARATOR_S, cmpl_state);
     }
 }
 
@@ -2574,65 +2636,68 @@ attempt_homedir_completion(gchar* text_to_complete,
 /* returns the index (>= 0) of the first differing character,
  * PATTERN_MATCH if the completion matches */
 static gint
-first_diff_index(gchar* pat, gchar* text)
+first_diff_index (gchar *pat,
+		  gchar *text)
 {
   gint diff = 0;
 
-  while(*pat && *text && FOLD(*text) == FOLD(*pat))
+  while (*pat && *text && FOLD (*text) == FOLD (*pat))
     {
       pat += 1;
       text += 1;
       diff += 1;
     }
 
-  if(*pat)
+  if (*pat)
     return diff;
 
   return PATTERN_MATCH;
 }
 
 static PossibleCompletion*
-append_completion_text(gchar* text, CompletionState* cmpl_state)
+append_completion_text (gchar           *text,
+			CompletionState *cmpl_state)
 {
   gint len, i = 1;
 
-  if(!cmpl_state->the_completion.text)
+  if (!cmpl_state->the_completion.text)
     return NULL;
 
-  len = strlen(text) + strlen(cmpl_state->the_completion.text) + 1;
+  len = strlen (text) + strlen (cmpl_state->the_completion.text) + 1;
 
-  if(cmpl_state->the_completion.text_alloc > len)
+  if (cmpl_state->the_completion.text_alloc > len)
     {
-      strcat(cmpl_state->the_completion.text, text);
+      strcat (cmpl_state->the_completion.text, text);
       return &cmpl_state->the_completion;
     }
 
-  while(i < len) { i <<= 1; }
+  while (i < len)
+    i <<= 1;
 
   cmpl_state->the_completion.text_alloc = i;
 
-  cmpl_state->the_completion.text = (gchar*)g_realloc(cmpl_state->the_completion.text, i);
+  cmpl_state->the_completion.text = (gchar*) g_realloc (cmpl_state->the_completion.text, i);
 
-  if(!cmpl_state->the_completion.text)
+  if (!cmpl_state->the_completion.text)
     return NULL;
   else
     {
-      strcat(cmpl_state->the_completion.text, text);
+      strcat (cmpl_state->the_completion.text, text);
       return &cmpl_state->the_completion;
     }
 }
 
 static CompletionDir*
-find_completion_dir(gchar* text_to_complete,
-		    gchar** remaining_text,
-		    CompletionState* cmpl_state)
+find_completion_dir (gchar          *text_to_complete,
+		    gchar          **remaining_text,
+		    CompletionState *cmpl_state)
 {
-  gchar* first_slash = strchr(text_to_complete, G_DIR_SEPARATOR);
+  gchar* first_slash = strchr (text_to_complete, G_DIR_SEPARATOR);
   CompletionDir* dir = cmpl_state->reference_dir;
   CompletionDir* next;
   *remaining_text = text_to_complete;
 
-  while(first_slash)
+  while (first_slash)
     {
       gint len = first_slash - *remaining_text;
       gint found = 0;
@@ -2640,16 +2705,16 @@ find_completion_dir(gchar* text_to_complete,
       gint i;
       gchar* pat_buf = g_new (gchar, len + 1);
 
-      strncpy(pat_buf, *remaining_text, len);
+      strncpy (pat_buf, *remaining_text, len);
       pat_buf[len] = 0;
 
-      for(i = 0; i < dir->sent->entry_count; i += 1)
+      for (i = 0; i < dir->sent->entry_count; i += 1)
 	{
-	  if(dir->sent->entries[i].is_dir &&
-	     fnmatch(pat_buf, dir->sent->entries[i].entry_name,
-		     FNMATCH_FLAGS)!= FNM_NOMATCH)
+	  if (dir->sent->entries[i].is_dir &&
+	     fnmatch (pat_buf, dir->sent->entries[i].entry_name,
+		      FNMATCH_FLAGS)!= FNM_NOMATCH)
 	    {
-	      if(found)
+	      if (found)
 		{
 		  g_free (pat_buf);
 		  return dir;
@@ -2668,9 +2733,9 @@ find_completion_dir(gchar* text_to_complete,
 	  found_name = pat_buf;
 	}
 
-      next = open_relative_dir(found_name, dir, cmpl_state);
+      next = open_relative_dir (found_name, dir, cmpl_state);
       
-      if(!next)
+      if (!next)
 	{
 	  g_free (pat_buf);
 	  return NULL;
@@ -2680,14 +2745,14 @@ find_completion_dir(gchar* text_to_complete,
       
       dir = next;
       
-      if(!correct_dir_fullname(dir))
+      if (!correct_dir_fullname (dir))
 	{
-	  g_free(pat_buf);
+	  g_free (pat_buf);
 	  return NULL;
 	}
       
       *remaining_text = first_slash + 1;
-      first_slash = strchr(*remaining_text, G_DIR_SEPARATOR);
+      first_slash = strchr (*remaining_text, G_DIR_SEPARATOR);
 
       g_free (pat_buf);
     }
@@ -2696,46 +2761,47 @@ find_completion_dir(gchar* text_to_complete,
 }
 
 static void
-update_cmpl(PossibleCompletion* poss, CompletionState* cmpl_state)
+update_cmpl (PossibleCompletion *poss,
+	     CompletionState    *cmpl_state)
 {
   gint cmpl_len;
 
-  if(!poss || !cmpl_is_a_completion(poss))
+  if (!poss || !cmpl_is_a_completion (poss))
     return;
 
-  cmpl_len = strlen(cmpl_this_completion(poss));
+  cmpl_len = strlen (cmpl_this_completion (poss));
 
-  if(cmpl_state->updated_text_alloc < cmpl_len + 1)
+  if (cmpl_state->updated_text_alloc < cmpl_len + 1)
     {
       cmpl_state->updated_text =
-	(gchar*)g_realloc(cmpl_state->updated_text,
-			  cmpl_state->updated_text_alloc);
+	(gchar*)g_realloc (cmpl_state->updated_text,
+			   cmpl_state->updated_text_alloc);
       cmpl_state->updated_text_alloc = 2*cmpl_len;
     }
 
-  if(cmpl_state->updated_text_len < 0)
+  if (cmpl_state->updated_text_len < 0)
     {
-      strcpy(cmpl_state->updated_text, cmpl_this_completion(poss));
+      strcpy (cmpl_state->updated_text, cmpl_this_completion (poss));
       cmpl_state->updated_text_len = cmpl_len;
-      cmpl_state->re_complete = cmpl_is_directory(poss);
+      cmpl_state->re_complete = cmpl_is_directory (poss);
     }
-  else if(cmpl_state->updated_text_len == 0)
+  else if (cmpl_state->updated_text_len == 0)
     {
       cmpl_state->re_complete = FALSE;
     }
   else
     {
       gint first_diff =
-	first_diff_index(cmpl_state->updated_text,
-			 cmpl_this_completion(poss));
+	first_diff_index (cmpl_state->updated_text,
+			  cmpl_this_completion (poss));
 
       cmpl_state->re_complete = FALSE;
 
-      if(first_diff == PATTERN_MATCH)
+      if (first_diff == PATTERN_MATCH)
 	return;
 
-      if(first_diff > cmpl_state->updated_text_len)
-	strcpy(cmpl_state->updated_text, cmpl_this_completion(poss));
+      if (first_diff > cmpl_state->updated_text_len)
+	strcpy (cmpl_state->updated_text, cmpl_this_completion (poss));
 
       cmpl_state->updated_text_len = first_diff;
       cmpl_state->updated_text[first_diff] = 0;
@@ -2743,16 +2809,16 @@ update_cmpl(PossibleCompletion* poss, CompletionState* cmpl_state)
 }
 
 static PossibleCompletion*
-attempt_file_completion(CompletionState *cmpl_state)
+attempt_file_completion (CompletionState *cmpl_state)
 {
   gchar *pat_buf, *first_slash;
   CompletionDir *dir = cmpl_state->active_completion_dir;
 
   dir->cmpl_index += 1;
 
-  if(dir->cmpl_index == dir->sent->entry_count)
+  if (dir->cmpl_index == dir->sent->entry_count)
     {
-      if(dir->cmpl_parent == NULL)
+      if (dir->cmpl_parent == NULL)
 	{
 	  cmpl_state->active_completion_dir = NULL;
 
@@ -2762,49 +2828,49 @@ attempt_file_completion(CompletionState *cmpl_state)
 	{
 	  cmpl_state->active_completion_dir = dir->cmpl_parent;
 
-	  return attempt_file_completion(cmpl_state);
+	  return attempt_file_completion (cmpl_state);
 	}
     }
 
-  g_assert(dir->cmpl_text);
+  g_assert (dir->cmpl_text);
 
-  first_slash = strchr(dir->cmpl_text, G_DIR_SEPARATOR);
+  first_slash = strchr (dir->cmpl_text, G_DIR_SEPARATOR);
 
-  if(first_slash)
+  if (first_slash)
     {
       gint len = first_slash - dir->cmpl_text;
 
       pat_buf = g_new (gchar, len + 1);
-      strncpy(pat_buf, dir->cmpl_text, len);
+      strncpy (pat_buf, dir->cmpl_text, len);
       pat_buf[len] = 0;
     }
   else
     {
-      gint len = strlen(dir->cmpl_text);
+      gint len = strlen (dir->cmpl_text);
 
       pat_buf = g_new (gchar, len + 2);
-      strcpy(pat_buf, dir->cmpl_text);
+      strcpy (pat_buf, dir->cmpl_text);
       /* Don't append a * if the user entered one herself.
        * This way one can complete *.h and don't get matches
        * on any .help files, for instance.
        */
-      if (strchr(pat_buf, '*') == NULL)
-	strcpy(pat_buf + len, "*");
+      if (strchr (pat_buf, '*') == NULL)
+	strcpy (pat_buf + len, "*");
     }
 
-  if(first_slash)
+  if (first_slash)
     {
-      if(dir->sent->entries[dir->cmpl_index].is_dir)
+      if (dir->sent->entries[dir->cmpl_index].is_dir)
 	{
-	  if(fnmatch(pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
-		     FNMATCH_FLAGS) != FNM_NOMATCH)
+	  if (fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
+		       FNMATCH_FLAGS) != FNM_NOMATCH)
 	    {
 	      CompletionDir* new_dir;
 
-	      new_dir = open_relative_dir(dir->sent->entries[dir->cmpl_index].entry_name,
-					  dir, cmpl_state);
+	      new_dir = open_relative_dir (dir->sent->entries[dir->cmpl_index].entry_name,
+					   dir, cmpl_state);
 
-	      if(!new_dir)
+	      if (!new_dir)
 		{
 		  g_free (pat_buf);
 		  return NULL;
@@ -2818,39 +2884,39 @@ attempt_file_completion(CompletionState *cmpl_state)
 	      cmpl_state->active_completion_dir = new_dir;
 
 	      g_free (pat_buf);
-	      return attempt_file_completion(cmpl_state);
+	      return attempt_file_completion (cmpl_state);
 	    }
 	  else
 	    {
 	      g_free (pat_buf);
-	      return attempt_file_completion(cmpl_state);
+	      return attempt_file_completion (cmpl_state);
 	    }
 	}
       else
 	{
 	  g_free (pat_buf);
-	  return attempt_file_completion(cmpl_state);
+	  return attempt_file_completion (cmpl_state);
 	}
     }
   else
     {
-      if(dir->cmpl_parent != NULL)
+      if (dir->cmpl_parent != NULL)
 	{
-	  append_completion_text(dir->fullname +
-				 strlen(cmpl_state->completion_dir->fullname) + 1,
-				 cmpl_state);
-	  append_completion_text(G_DIR_SEPARATOR_S, cmpl_state);
+	  append_completion_text (dir->fullname +
+				  strlen (cmpl_state->completion_dir->fullname) + 1,
+				  cmpl_state);
+	  append_completion_text (G_DIR_SEPARATOR_S, cmpl_state);
 	}
 
-      append_completion_text(dir->sent->entries[dir->cmpl_index].entry_name, cmpl_state);
+      append_completion_text (dir->sent->entries[dir->cmpl_index].entry_name, cmpl_state);
 
       cmpl_state->the_completion.is_a_completion =
-	(fnmatch(pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
-		 FNMATCH_FLAGS) != FNM_NOMATCH);
+	fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
+		 FNMATCH_FLAGS) != FNM_NOMATCH;
 
       cmpl_state->the_completion.is_directory = dir->sent->entries[dir->cmpl_index].is_dir;
-      if(dir->sent->entries[dir->cmpl_index].is_dir)
-	append_completion_text(G_DIR_SEPARATOR_S, cmpl_state);
+      if (dir->sent->entries[dir->cmpl_index].is_dir)
+	append_completion_text (G_DIR_SEPARATOR_S, cmpl_state);
 
       g_free (pat_buf);
       return &cmpl_state->the_completion;
@@ -2860,66 +2926,80 @@ attempt_file_completion(CompletionState *cmpl_state)
 #ifdef HAVE_PWD_H
 
 static gint
-get_pwdb(CompletionState* cmpl_state)
+get_pwdb (CompletionState* cmpl_state)
 {
   struct passwd *pwd_ptr;
   gchar* buf_ptr;
+  gchar *utf8;
   gint len = 0, i, count = 0;
 
-  if(cmpl_state->user_dir_name_buffer)
+  if (cmpl_state->user_dir_name_buffer)
     return TRUE;
   setpwent ();
 
-  while ((pwd_ptr = getpwent()) != NULL)
+  while ((pwd_ptr = getpwent ()) != NULL)
     {
-      len += strlen(pwd_ptr->pw_name);
-      len += strlen(pwd_ptr->pw_dir);
+      utf8 = g_filename_to_utf8 (pwd_ptr->pw_name);
+      len += strlen (utf8);
+      g_free (utf8);
+      utf8 = g_filename_to_utf8 (pwd_ptr->pw_dir);
+      len += strlen (utf8);
+      g_free (utf8);
       len += 2;
       count += 1;
     }
 
   setpwent ();
 
-  cmpl_state->user_dir_name_buffer = g_new(gchar, len);
-  cmpl_state->user_directories = g_new(CompletionUserDir, count);
+  cmpl_state->user_dir_name_buffer = g_new (gchar, len);
+  cmpl_state->user_directories = g_new (CompletionUserDir, count);
   cmpl_state->user_directories_len = count;
 
   buf_ptr = cmpl_state->user_dir_name_buffer;
 
-  for(i = 0; i < count; i += 1)
+  for (i = 0; i < count; i += 1)
     {
-      pwd_ptr = getpwent();
-      if(!pwd_ptr)
+      pwd_ptr = getpwent ();
+      if (!pwd_ptr)
 	{
 	  cmpl_errno = errno;
 	  goto error;
 	}
 
-      strcpy(buf_ptr, pwd_ptr->pw_name);
+      utf8 = g_filename_to_utf8 (pwd_ptr->pw_name);
+      strcpy (buf_ptr, utf8);
+      g_free (utf8);
+
       cmpl_state->user_directories[i].login = buf_ptr;
-      buf_ptr += strlen(buf_ptr);
+
+      buf_ptr += strlen (buf_ptr);
       buf_ptr += 1;
-      strcpy(buf_ptr, pwd_ptr->pw_dir);
+
+      utf8 = g_filename_to_utf8 (pwd_ptr->pw_dir);
+      strcpy (buf_ptr, utf8);
+      g_free (utf8);
+
       cmpl_state->user_directories[i].homedir = buf_ptr;
-      buf_ptr += strlen(buf_ptr);
+
+      buf_ptr += strlen (buf_ptr);
       buf_ptr += 1;
     }
 
-  qsort(cmpl_state->user_directories,
-	cmpl_state->user_directories_len,
-	sizeof(CompletionUserDir),
-	compare_user_dir);
+  qsort (cmpl_state->user_directories,
+	 cmpl_state->user_directories_len,
+	 sizeof (CompletionUserDir),
+	 compare_user_dir);
 
-  endpwent();
+  endpwent ();
 
   return TRUE;
 
 error:
 
-  if(cmpl_state->user_dir_name_buffer)
-    g_free(cmpl_state->user_dir_name_buffer);
-  if(cmpl_state->user_directories)
-    g_free(cmpl_state->user_directories);
+  if (cmpl_state->user_dir_name_buffer)
+    g_free (cmpl_state->user_dir_name_buffer);
+  if (cmpl_state->user_directories)
+    g_free (cmpl_state->user_directories);
 
   cmpl_state->user_dir_name_buffer = NULL;
   cmpl_state->user_directories = NULL;
@@ -2928,36 +3008,38 @@ error:
 }
 
 static gint
-compare_user_dir(const void* a, const void* b)
+compare_user_dir (const void *a,
+		  const void *b)
 {
-  return strcmp((((CompletionUserDir*)a))->login,
-		(((CompletionUserDir*)b))->login);
+  return strcmp ((((CompletionUserDir*)a))->login,
+		 (((CompletionUserDir*)b))->login);
 }
 
 #endif
 
 static gint
-compare_cmpl_dir(const void* a, const void* b)
+compare_cmpl_dir (const void *a,
+		  const void *b)
 {
 #if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
-  return strcmp((((CompletionDirEntry*)a))->entry_name,
-		(((CompletionDirEntry*)b))->entry_name);
+  return strcmp ((((CompletionDirEntry*)a))->entry_name,
+		 (((CompletionDirEntry*)b))->entry_name);
 #else
-  return g_strcasecmp((((CompletionDirEntry*)a))->entry_name,
-		      (((CompletionDirEntry*)b))->entry_name);
+  return g_strcasecmp ((((CompletionDirEntry*)a))->entry_name,
+		       (((CompletionDirEntry*)b))->entry_name);
 #endif
 }
 
 static gint
-cmpl_state_okay(CompletionState* cmpl_state)
+cmpl_state_okay (CompletionState* cmpl_state)
 {
   return  cmpl_state && cmpl_state->reference_dir;
 }
 
 static gchar*
-cmpl_strerror(gint err)
+cmpl_strerror (gint err)
 {
-  if(err == CMPL_ERRNO_TOO_LONG)
+  if (err == CMPL_ERRNO_TOO_LONG)
     return "Name too long";
   else
     return g_strerror (err);

@@ -1,3 +1,9 @@
+2000-08-11  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilesel.c: Add more calls to g_filename_{to,from}_utf8()
+	to convert back and forth from UTF-8 and the "system" (or "current
+	locale") charset when necessary. Indentation/spacing cleanup.
+
 2000-08-10  Havoc Pennington  <hp@redhat.com>
 
 	* Makefile.am (snapshot): Change the format of the snapshot
