@@ -2359,10 +2359,10 @@ gdk_event_translate (GdkDisplay *display,
     case WM_INPUTLANGCHANGE:
       _gdk_input_locale = (HKL) msg->lParam;
       _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
-      TranslateCharsetInfo ((DWORD FAR *) msg->wParam,
-			    &charset_info,
-			    TCI_SRCCHARSET);
-      _gdk_input_codepage = charset_info.ciACP;
+      GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
+		     LOCALE_IDEFAULTANSICODEPAGE,
+		     buf, sizeof (buf));
+      _gdk_input_codepage = atoi (buf);
       _gdk_keymap_serial++;
       GDK_NOTE (EVENTS,
 		g_print (" cs:%lu hkl:%lx%s cp:%d",

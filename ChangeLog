@@ -1,3 +1,20 @@
+2005-02-01  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkkeys-win32.c (handle_special, set_shift_vks,
+	reset_after_dead, handle_dead): New functions, code blocks
+	refactored out of update_keymap(). No functionality change.
+
+	(update_keymap): Use ToUnicodeEx() when available (on NT-based
+	Windows) instead of ToAsciiEx(). Makes keyboard input work in
+	Unicode-only input locales that don't have any ANSI codepage, for
+	instance Hindi and Bengali. Use _gdk_input_codepage only on
+	Win9x. (#165723)
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
+	WM_INPUTLANGCHANGE, use GetLocaleInfo() instead of
+	TranslateCharsetInfo() to get the input locale's corresponding
+	codepage, if any.
+
 2005-01-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/input/gtkimcontextxim.c: Use NULL, not 0 to terminate 
