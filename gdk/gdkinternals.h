@@ -262,10 +262,6 @@ void     _gdk_windowing_window_clear_area_e     (GdkWindow  *window,
 						 gint        width,
 						 gint        height);
 
-void _gdk_windowing_set_surface_device_offset (cairo_surface_t *surface,
-					       gint             x_offset,
-					       gint             y_offset);
-
 void       _gdk_windowing_get_pointer        (GdkDisplay       *display,
 					      GdkScreen       **screen,
 					      gint             *x,

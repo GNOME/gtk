@@ -240,6 +240,7 @@ _gdk_x11_drawable_finish (GdkDrawable *drawable)
   
   if (impl->cairo_surface)
     {
+      cairo_surface_finish (impl->cairo_surface);
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
 				   NULL, NULL);
     }
@@ -1459,14 +1460,6 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
     cairo_surface_reference (impl->cairo_surface);
 
   return impl->cairo_surface;
-}
-
-void
-_gdk_windowing_set_surface_device_offset (cairo_surface_t *surface,
-					  gint             x_offset,
-					  gint             y_offset)
-{
-  cairo_xlib_surface_set_device_offset (surface, x_offset, y_offset);
 }
 
 #define __GDK_DRAWABLE_X11_C__

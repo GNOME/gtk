@@ -1,3 +1,11 @@
+2005-03-18  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_drawable_finish): 
+	Call cairo_surface_finish()
+
+	* gdk/gdkinternals.c gdk/x11/gdkdrawable-x11.c: Remoev
+	_gdk_windowing_set_surface_device_offset().
+
 2005-03-18  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
