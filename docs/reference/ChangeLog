@@ -1,3 +1,8 @@
+2003-07-29  Sven Neumann  <sven@gimp.org>
+
+	* gdk/tmpl/pixmaps.sgml: Resurrected documentation that got lost
+	when the window parameter was renamed to drawable.
+
 2003-07-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkdnd.sgml: It is GTK_DEST_DEFAULT_DROP, not GTK_DRAG_DEFAULT_DROP. (#117917, 

@@ -9,6 +9,7 @@ gdk-pixbuf.hierarchy
 gdk-pixbuf.interfaces
 gdk-pixbuf.prerequisites
 gdk-pixbuf.signals
+deprecated
 html
 xml
 *.stamp
