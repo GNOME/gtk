@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-19 12:03+0200\n"
+"POT-Creation-Date: 2004-08-25 13:27-0400\n"
 "PO-Revision-Date: 2004-03-03 10:48+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -472,8 +472,6 @@ msgstr ""
 "Nëse TRUE, instrumenti shfaqet në një grup dytësor instrumentësh bij, i "
 "përdorshëm, p.sh. për pulsantët e ndihmës"
 
-#. GRUT modified this item
-#. GRUT modified this item
 #: gtk/gtkbox.c:129 gtk/gtkexpander.c:229
 msgid "Spacing"
 msgstr "Hapësira e ndërmjetme"
@@ -832,7 +830,6 @@ msgstr "Pixbuf i zgjerueshëm i mbyllur"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf për objektin e zgjerueshëm i mbyllur"
 
-#. GRUT modified this item
 #: gtk/gtkcellrendererpixbuf.c:161 gtk/gtkimage.c:177
 msgid "Stock ID"
 msgstr "ID e ikonës"
@@ -873,7 +870,6 @@ msgstr "Markues"
 msgid "Marked up text to render"
 msgstr "Teksti i markuar që duhet vizatuar"
 
-#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:299
 msgid "Attributes"
 msgstr "Veçoritë"
@@ -922,7 +918,6 @@ msgstr "Ngjyra ballore"
 msgid "Foreground color as a GdkColor"
 msgstr "Ngjyra e përparme e shprehur si GdkColor"
 
-#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
@@ -1306,7 +1301,6 @@ msgstr "Shigjetat (pulsantët) gjithmonë aktive"
 msgid "Obsolete property, ignored"
 msgstr "Veti e vjetëruar, shpërfillet"
 
-#. GRUT modified this item
 #: gtk/gtkcombo.c:158
 msgid "Case sensitive"
 msgstr "Ndjeshmëri gërma të mëdha/të vogla"
@@ -1773,11 +1767,11 @@ msgstr "Shfaq të padukshmit"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Nëse files dhe kartelat e padukshme duhen shfaqur"
 
-#: gtk/gtkfilechooserdefault.c:569
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Default file chooser backend"
 msgstr "Zgjedhësi backend i prezgjedhur i file"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:571
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Emri i GtkFileChooser backend që duhet përdorur si i prezgjedhur"
 
@@ -1995,7 +1989,6 @@ msgstr "Maskë bitmap për t'u përdorur me GdkImage ose GdkPixmap"
 msgid "Filename to load and display"
 msgstr "Emri i file për t'u ngarkuar dhe shfaqur"
 
-#. GRUT modified this item
 #: gtk/gtkimage.c:178
 msgid "Stock ID for a stock image to display"
 msgstr "ID e ikonës për figurën e ikonës që duhet shfaqur"
@@ -4506,4 +4499,3 @@ msgstr "Gjendja e stilit IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Tregon si duhet shfaqur metod e input e panelit të gjendjes"
-

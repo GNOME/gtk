@@ -7,16 +7,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
-"POT-Creation-Date: 2004-08-14 20:18+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-25 13:27-0400\n"
 "PO-Revision-Date: 2004-08-19 16:16+0530\n"
 "Last-Translator: Jayaradha N <jaya@pune.redhat.com>\n"
 "Language-Team: Tamil <zhakanini@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "X-Generator: KBabel 1.3.1\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
@@ -71,7 +72,8 @@ msgid "Rowstride"
 msgstr "வரிசைதாண்டல்"
 
 #: gdk-pixbuf/gdk-pixbuf.c:166
-msgid "The number of bytes between the start of a row and the start of the next row"
+msgid ""
+"The number of bytes between the start of a row and the start of the next row"
 msgstr "வரிசைகளின் துவக்கத்திலும் அடுத்த வரிசைகளின் துவக்கத்திலும் உள்ள பிட்களின் எண்ணிக்கை"
 
 #: gdk-pixbuf/gdk-pixbuf.c:176
@@ -155,7 +157,8 @@ msgstr "மேலிருந்து கீழாக இருக்கும�
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
-msgstr "கருவிப்பட்டி உருப்படிகள் கருவிப்பட்டி மேலிருந்து கீழாக அமைந்திருக்கும் போது தெரியும்"
+msgstr ""
+"கருவிப்பட்டி உருப்படிகள் கருவிப்பட்டி மேலிருந்து கீழாக அமைந்திருக்கும் போது தெரியும்"
 
 #: gtk/gtkaction.c:236 gtk/gtktoolitem.c:165
 msgid "Visible when vertical"
@@ -165,7 +168,8 @@ msgstr "இடமிருந்து வலமாக அமைந்திர�
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
-msgstr "கருவிப்பட்டி உருப்படிகள் கருவிப்பட்டி இடமிருந்து வலமாக அமைந்திருக்கும் போது தெரியும்"
+msgstr ""
+"கருவிப்பட்டி உருப்படிகள் கருவிப்பட்டி இடமிருந்து வலமாக அமைந்திருக்கும் போது தெரியும்"
 
 #: gtk/gtkaction.c:243 gtk/gtktoolitem.c:172
 msgid "Is important"
@@ -175,7 +179,9 @@ msgstr "இது முக்கியம்"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "இந்த செயல் முக்கியம் என கொள்ளப்பட்டதா. உண்மை, இந்த செயலுக்கான கருவிவி உருப்படிக உரையை GTK_TOOLBAR_BOTH_HORIZ பாங்கில் காட்டினால்ள்"
+msgstr ""
+"இந்த செயல் முக்கியம் என கொள்ளப்பட்டதா. உண்மை, இந்த செயலுக்கான கருவிவி உருப்படிக உரையை "
+"GTK_TOOLBAR_BOTH_HORIZ பாங்கில் காட்டினால்ள்"
 
 #: gtk/gtkaction.c:250
 msgid "Hide if empty"
@@ -210,7 +216,8 @@ msgstr "செயல் குழு"
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr "Gtkசெயல்குழுவின்வி  Gtசெயல் தொடர்புடையதா அல்லது பூஜ்ஜியமா(உள் பயன்பாட்டிற்கு மட்டும்) "
+msgstr ""
+"Gtkசெயல்குழுவின்வி  Gtசெயல் தொடர்புடையதா அல்லது பூஜ்ஜியமா(உள் பயன்பாட்டிற்கு மட்டும்) "
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
@@ -280,7 +287,9 @@ msgstr "கிடை நேர்ப்படுத்தம்"
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr "கிடைத்துள்ள இடத்தில் செயலின் மேல்கீழ் நிலை 0.0 இடது பக்கமும்  1.0 வலது பக்கமும் பொருத்தப்பட்டுள்ளது"
+msgstr ""
+"கிடைத்துள்ள இடத்தில் செயலின் மேல்கீழ் நிலை 0.0 இடது பக்கமும்  1.0 வலது பக்கமும் "
+"பொருத்தப்பட்டுள்ளது"
 
 #: gtk/gtkalignment.c:127
 msgid "Vertical alignment"
@@ -290,7 +299,9 @@ msgstr "செங்குத்தமான நேர்ப்படுத்�
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
-msgstr "கிடைத்துள்ள இடத்தில் செயலின் வலமிருந்து நிலை 0.0 மேல் பக்கமும்  1.0 கீழ் பக்கமும் பொருத்தப்பட்டுள்ளது"
+msgstr ""
+"கிடைத்துள்ள இடத்தில் செயலின் வலமிருந்து நிலை 0.0 மேல் பக்கமும்  1.0 கீழ் பக்கமும் "
+"பொருத்தப்பட்டுள்ளது"
 
 #: gtk/gtkalignment.c:136
 msgid "Horizontal scale"
@@ -300,7 +311,9 @@ msgstr "கிடை அளவுகோல்"
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "தேவைப்பட்ட இடத்தை விட ஒதுக்கப்பட்டதை விட பெயரியது எனில், செயல் 0.0 எனில் எதுவுமில்லை, 1.0 எனில் எல்லாம்"
+msgstr ""
+"தேவைப்பட்ட இடத்தை விட ஒதுக்கப்பட்டதை விட பெயரியது எனில், செயல் 0.0 எனில் எதுவுமில்லை, "
+"1.0 எனில் எல்லாம்"
 
 #: gtk/gtkalignment.c:145
 msgid "Vertical scale"
@@ -310,7 +323,9 @@ msgstr "செங்குத்தமான அளவுகோல்"
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "தேவைப்பட்ட மேல்கீழ் இடத்தை விட ஒதுக்கப்பட்டதை விட பெயரியது எனில், செயல் 0.0 எனில் எதுவுமில்லை, 1.0 எனில் எல்லாம்"
+msgstr ""
+"தேவைப்பட்ட மேல்கீழ் இடத்தை விட ஒதுக்கப்பட்டதை விட பெயரியது எனில், செயல் 0.0 எனில் "
+"எதுவுமில்லை, 1.0 எனில் எல்லாம்"
 
 #: gtk/gtkalignment.c:163
 msgid "Top Padding"
@@ -497,7 +512,8 @@ msgstr "அடுக்கும் வகை"
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
-msgstr "GtkPack வகை செயல் அதன் மூல செயலின் தொடக்கம் மற்றும் முடிவை கொண்டு கட்டுகளாக்கப்பட்டதா"
+msgstr ""
+"GtkPack வகை செயல் அதன் மூல செயலின் தொடக்கம் மற்றும் முடிவை கொண்டு கட்டுகளாக்கப்பட்டதா"
 
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:491 gtk/gtkpaned.c:239
 #: gtk/gtkruler.c:139
@@ -512,7 +528,8 @@ msgstr "மூல செயலில் உள்ள துணை செயல�
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr "பட்டனில் சிறுசாளரத்தின் பெயர் இருந்தால் பட்டனிலிருக்கும் சிறுசாளரத்தின் பெயரில் உள்ள உரை"
+msgstr ""
+"பட்டனில் சிறுசாளரத்தின் பெயர் இருந்தால் பட்டனிலிருக்கும் சிறுசாளரத்தின் பெயரில் உள்ள உரை"
 
 #: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
@@ -532,8 +549,10 @@ msgid "Use stock"
 msgstr "Use stock"
 
 #: gtk/gtkbutton.c:229
-msgid "If set, the label is used to pick a stock item instead of being displayed"
-msgstr "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
+msgstr ""
+"If set, the label is used to pick a stock item instead of being displayed"
 
 #: gtk/gtkbutton.c:236
 msgid "Focus on click"
@@ -584,16 +603,20 @@ msgid "Child X Displacement"
 msgstr "Child X Displacement"
 
 #: gtk/gtkbutton.c:364
-msgid "How far in the x direction to move the child when the button is depressed"
-msgstr "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
+msgstr ""
+"How far in the x direction to move the child when the button is depressed"
 
 #: gtk/gtkbutton.c:371
 msgid "Child Y Displacement"
 msgstr "Child Y Displacement"
 
 #: gtk/gtkbutton.c:372
-msgid "How far in the y direction to move the child when the button is depressed"
-msgstr "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
+msgstr ""
+"How far in the y direction to move the child when the button is depressed"
 
 #: gtk/gtkbutton.c:379
 msgid "Show button images"
@@ -627,7 +650,9 @@ msgstr "நாள்"
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
-msgstr "தேர்வு செய்யப்பட தேதி(1 லிருந்து 31 வரை அல்லது தற்போது தேர்வு செய்த தேதியை நீக்க 0 ஐ தேர்வு செய்யவும்)"
+msgstr ""
+"தேர்வு செய்யப்பட தேதி(1 லிருந்து 31 வரை அல்லது தற்போது தேர்வு செய்த தேதியை நீக்க 0 ஐ "
+"தேர்வு செய்யவும்)"
 
 #: gtk/gtkcalendar.c:493
 msgid "Show Heading"
@@ -953,8 +978,10 @@ msgid "Rise"
 msgstr "எழிந்திரு"
 
 #: gtk/gtkcellrenderertext.c:360
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:464
 msgid "Strikethrough"
@@ -981,7 +1008,9 @@ msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
-msgstr "இந்த உரையின் மொழிய ன்ISO எண் . பாங்கோ இதை பயன்படுத்து உரையை நடைமுறைப்படுத்துகிறது. இதை புரிந்துகொள்ள வில்லைஎனில், இது ஒருவேலை உங்களுக்கு தேவைப்படாமல் இருக்கலாம்"
+msgstr ""
+"இந்த உரையின் மொழிய ன்ISO எண் . பாங்கோ இதை பயன்படுத்து உரையை நடைமுறைப்படுத்துகிறது. "
+"இதை புரிந்துகொள்ள வில்லைஎனில், இது ஒருவேலை உங்களுக்கு தேவைப்படாமல் இருக்கலாம்"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:195 gtk/gtktexttag.c:509
 msgid "Background set"
@@ -1198,7 +1227,8 @@ msgstr "தற்போதைய Alpha"
 
 #: gtk/gtkcolorbutton.c:248
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "தேர்வு செய்யப்பட்ட ஒளிபுகா மதிப்பு (0 முழுயான ஒளிபுகாமை, 65535 ஒலிபுகும் தன்மை)"
+msgstr ""
+"தேர்வு செய்யப்பட்ட ஒளிபுகா மதிப்பு (0 முழுயான ஒளிபுகாமை, 65535 ஒலிபுகும் தன்மை)"
 
 #: gtk/gtkcolorsel.c:1767
 msgid "Has Opacity Control"
@@ -1437,7 +1467,8 @@ msgid "Selection Bound"
 msgstr "தேர்வு செய்த வரம்பு"
 
 #: gtk/gtkentry.c:474 gtk/gtklabel.c:381
-msgid "The position of the opposite end of the selection from the cursor in chars"
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr "கர்சர் தேர்வு செய்த எழுத்துக்களின் எதிர் இறுதி முனையின் நிலை"
 
 #: gtk/gtkentry.c:484
@@ -1478,7 +1509,8 @@ msgstr "பார்க்கமுடியாத வரியுரு"
 
 #: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "உள்ளீடு பொருற்களை மறைக்கும்போது பயன்படுத்த வேண்டிய வரியுரு (\"password mode\" இனுல்)"
+msgstr ""
+"உள்ளீடு பொருற்களை மறைக்கும்போது பயன்படுத்த வேண்டிய வரியுரு (\"password mode\" இனுல்)"
 
 #: gtk/gtkentry.c:524
 msgid "Activates default"
@@ -1488,7 +1520,9 @@ msgstr "கொடா நிலையை தொடங்கும்"
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
-msgstr "என்டர் விசையை அழுத்தும்போது (உரையாடல் பெட்டியில் உள்ளது போன்ற) இயல்பான சிறு சாளரத்தை செயல்படுத்த வேண்டுமா"
+msgstr ""
+"என்டர் விசையை அழுத்தும்போது (உரையாடல் பெட்டியில் உள்ளது போன்ற) இயல்பான சிறு சாளரத்தை "
+"செயல்படுத்த வேண்டுமா"
 
 #: gtk/gtkentry.c:531
 msgid "Width in chars"
@@ -1562,7 +1596,8 @@ msgstr "துணை செயலுக்கு மேல்"
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr "நிகழுவுகள் பெட்டியில் உள்ள செயல்-தொடர்தல் சாளரம் துணை சிறு சாளரத்திற்கு மேலே உள்ளதா"
+msgstr ""
+"நிகழுவுகள் பெட்டியில் உள்ள செயல்-தொடர்தல் சாளரம் துணை சிறு சாளரத்திற்கு மேலே உள்ளதா"
 
 #: gtk/gtkexpander.c:197
 msgid "Expanded"
@@ -1582,7 +1617,8 @@ msgstr "Use markup"
 
 #: gtk/gtkexpander.c:222 gtk/gtklabel.c:307
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "விளக்கசீட்டில் உள்ள உரையில் XML குறிமொழி உள்ளது pango_parse_markup() ஐ பார்க்கவும்"
+msgstr ""
+"விளக்கசீட்டில் உள்ள உரையில் XML குறிமொழி உள்ளது pango_parse_markup() ஐ பார்க்கவும்"
 
 #: gtk/gtkexpander.c:230
 msgid "Space to put between the label and the child"
@@ -1653,8 +1689,10 @@ msgid "Preview Widget Active"
 msgstr "முன்காட்சி சிறுசாளரம் செயலில்"
 
 #: gtk/gtkfilechooser.c:207
-msgid "Whether the application supplied widget for custom previews should be shown."
-msgstr "பயன்பாடு சிறுதாளரத்தின் தனிப்பயன் முன்காட்சிக்கு பயன்படுத்திய பயன்பாட்டை காட்ட வேண்டுமா?"
+msgid ""
+"Whether the application supplied widget for custom previews should be shown."
+msgstr ""
+"பயன்பாடு சிறுதாளரத்தின் தனிப்பயன் முன்காட்சிக்கு பயன்படுத்திய பயன்பாட்டை காட்ட வேண்டுமா?"
 
 #: gtk/gtkfilechooser.c:212
 msgid "Use Preview Label"
@@ -1688,11 +1726,11 @@ msgstr "மறைந்திருப்பதை காண்பிக்க�
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "காட்ட வேண்டிய கோப்புகள் மற்றும் அடைவுகளை மறைக்க வேண்டுமா"
 
-#: gtk/gtkfilechooserdefault.c:569
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Default file chooser backend"
 msgstr "இயல்பான பின்புல தேர்வு"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:571
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "பின்புலத்தில் பொதுவாக பயன்படுத்தும் Gtkகோப்புதேர்வாளரின் பெயர்"
 
@@ -1867,7 +1905,9 @@ msgstr "பொருத்த விளிம்பை அமை"
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
-msgstr "பொருத்த விளிம்பு பண்புகளை பயன்படுத்த வேண்டுமா அல்லது கையாளம் நிலையிலிருந்து பயன்படுத்த வேண்டுமா"
+msgstr ""
+"பொருத்த விளிம்பு பண்புகளை பயன்படுத்த வேண்டுமா அல்லது கையாளம் நிலையிலிருந்து பயன்படுத்த "
+"வேண்டுமா"
 
 #: gtk/gtkimage.c:136
 msgid "Pixbuf"
@@ -1982,7 +2022,9 @@ msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
-msgstr "விளக்கச்சீட்டில் உள்ள உரைகளின் வரிகளின் சீரமைப்பு ஒன்றோடொன்று தொடர்புடையதாகவும் விளக்கச்சீட்டின் ஒதுக்கத்தை பாதிக்காத வகையிலும் இருக்கும்.GtkMisc::xalign ஐ பார்க்கவும்"
+msgstr ""
+"விளக்கச்சீட்டில் உள்ள உரைகளின் வரிகளின் சீரமைப்பு ஒன்றோடொன்று தொடர்புடையதாகவும் "
+"விளக்கச்சீட்டின் ஒதுக்கத்தை பாதிக்காத வகையிலும் இருக்கும்.GtkMisc::xalign ஐ பார்க்கவும்"
 
 #: gtk/gtklabel.c:330
 msgid "Pattern"
@@ -2125,16 +2167,20 @@ msgid "Can change accelerators"
 msgstr "முடுக்கியை மாற்றலாம்"
 
 #: gtk/gtkmenu.c:667
-msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr "மெனுவில் மேல் உள்ள உருப்படிகளை க்ளிக் செய்வதன் மூலம் மெனு முடக்கியை மாற்ற முடியுமா"
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgstr ""
+"மெனுவில் மேல் உள்ள உருப்படிகளை க்ளிக் செய்வதன் மூலம் மெனு முடக்கியை மாற்ற முடியுமா"
 
 #: gtk/gtkmenu.c:672
 msgid "Delay before submenus appear"
 msgstr "துணை மெனு தோன்றுவதற்கு முன் தாமதி"
 
 #: gtk/gtkmenu.c:673
-msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr "துணை மெனு தோன்றுவதற்கு முன் மெனு உருப்படியின் மேல் அம்புக்குறி இருக்க வேண்டிய கால அளவு"
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+"துணை மெனு தோன்றுவதற்கு முன் மெனு உருப்படியின் மேல் அம்புக்குறி இருக்க வேண்டிய கால அளவு"
 
 #: gtk/gtkmenu.c:680
 msgid "Delay before hiding a submenu"
@@ -2144,7 +2190,8 @@ msgstr "துணைமெனுவை மறைப்பதற்கு மு�
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
-msgstr "அம்புக்குறி துணைபட்டியலை நோக்கி நகரும் போது துணைப்பட்டியல் மறைக்கப்பட வேண்டிய கால அளவு"
+msgstr ""
+"அம்புக்குறி துணைபட்டியலை நோக்கி நகரும் போது துணைப்பட்டியல் மறைக்கப்பட வேண்டிய கால அளவு"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
@@ -2172,14 +2219,16 @@ msgstr "உருவம்/அடையாள எல்லை"
 
 #: gtk/gtkmessagedialog.c:108
 msgid "Width of border around the label and image in the message dialog"
-msgstr "தகவல் உரையாடலில்லிருக்கும் அடையாளத்திற்கும் உருவத்திற்கும் சுற்றியுள்ள எல்லையின் அகலம்"
+msgstr ""
+"தகவல் உரையாடலில்லிருக்கும் அடையாளத்திற்கும் உருவத்திற்கும் சுற்றியுள்ள எல்லையின் அகலம்"
 
 #: gtk/gtkmessagedialog.c:123
 msgid "Use separator"
 msgstr "பிரிப்பானை பயன்படுத்து"
 
 #: gtk/gtkmessagedialog.c:124
-msgid "Whether to put a separator between the message dialog's text and the buttons"
+msgid ""
+"Whether to put a separator between the message dialog's text and the buttons"
 msgstr "உரையாடல் பெட்டிக்கும் பட்டனுக்கும் இடையே பிரிப்பான் அவசியாமா"
 
 #: gtk/gtkmessagedialog.c:130
@@ -2211,16 +2260,20 @@ msgid "X pad"
 msgstr "X pad"
 
 #: gtk/gtkmisc.c:120
-msgid "The amount of space to add on the left and right of the widget, in pixels"
-msgstr "பிக்செல்களில், விட்செட்டுக்கு வலது பக்கத்திலும் இடது பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
+msgstr ""
+"பிக்செல்களில், விட்செட்டுக்கு வலது பக்கத்திலும் இடது பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
 
 #: gtk/gtkmisc.c:129
 msgid "Y pad"
 msgstr "Y pad"
 
 #: gtk/gtkmisc.c:130
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr "பிக்செல்களில், விட்செட்டுக்கு மேல் பக்கத்திலும் கீழ் பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
+msgstr ""
+"பிக்செல்களில், விட்செட்டுக்கு மேல் பக்கத்திலும் கீழ் பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
 
 #: gtk/gtknotebook.c:397
 msgid "Page"
@@ -2343,7 +2396,8 @@ msgid "Secondary backward stepper"
 msgstr "Secondary backward stepper"
 
 #: gtk/gtknotebook.c:529
-msgid "Display a second backward arrow button on the opposite end of the tab area"
+msgid ""
+"Display a second backward arrow button on the opposite end of the tab area"
 msgstr "தத்தல் பரப்பின் எதிர் முனையில் இரண்டாவது பின்பக்க அம்புக்குறியை காட்ட வேண்டுமா"
 
 #: gtk/gtknotebook.c:545 gtk/gtkscrollbar.c:122
@@ -2351,7 +2405,8 @@ msgid "Secondary forward stepper"
 msgstr "இரண்டாவது முன் ஏற்றி"
 
 #: gtk/gtknotebook.c:546
-msgid "Display a second forward arrow button on the opposite end of the tab area"
+msgid ""
+"Display a second forward arrow button on the opposite end of the tab area"
 msgstr "தத்தல் பரப்பின் எதிர் முனையில் இரண்டாவது முன்பக்க க அம்புக்குறியை காட்ட வேண்டுமா"
 
 #: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
@@ -2387,7 +2442,8 @@ msgid "Spacing around indicator"
 msgstr "காட்டியைச் சுற்றிருக்கும் இடைவெளி அளவு"
 
 #: gtk/gtkpaned.c:240
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "பிக்செல்லால் குறிப்பிடப்பட்ட பிரிப்பானின் நிலை(0 எனில் இடது/மேல்)"
 
 #: gtk/gtkpaned.c:248
@@ -2439,8 +2495,10 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "உண்மையெனில் துணை செயல் தேவையான அளவை விட சிறியதாகும்"
 
 #: gtk/gtkpreview.c:133
-msgid "Whether the preview widget should take up the entire space it is allocated"
-msgstr "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
+msgstr ""
+"Whether the preview widget should take up the entire space it is allocated"
 
 #: gtk/gtkprogress.c:130
 msgid "Activity mode"
@@ -2451,7 +2509,10 @@ msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
-msgstr "உண்மையெனில் GtkProgres செயல்படும், அதாவது வேலை நடந்துகொண்டிருப்பதை தெரியப்படுத்தும் ஆனால் எவ்வளவு வேலை நடந்து முடிந்தது என்பதை தெரியப்படுத்தாது. இது நீங்கள் செய்துகொண்டிருக்கும் வேலையின் கால அளவு உங்களுக்கு தெரியாத நிலையில் பயன்படும்"
+msgstr ""
+"உண்மையெனில் GtkProgres செயல்படும், அதாவது வேலை நடந்துகொண்டிருப்பதை தெரியப்படுத்தும் "
+"ஆனால் எவ்வளவு வேலை நடந்து முடிந்தது என்பதை தெரியப்படுத்தாது. இது நீங்கள் "
+"செய்துகொண்டிருக்கும் வேலையின் கால அளவு உங்களுக்கு தெரியாத நிலையில் பயன்படும்"
 
 #: gtk/gtkprogress.c:138
 msgid "Show text"
@@ -2469,7 +2530,8 @@ msgstr "உரையின் x நேர்ப்படுத்தம்"
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
-msgstr "உரையின் கிடைமட்ட பொருத்தத்தை காட்டும் சாளரத்தில் உள்ள 0.0 மற்றும் 1.0 விற்கு இடைப்பட்ட எண்கள்"
+msgstr ""
+"உரையின் கிடைமட்ட பொருத்தத்தை காட்டும் சாளரத்தில் உள்ள 0.0 மற்றும் 1.0 விற்கு இடைப்பட்ட எண்கள்"
 
 #: gtk/gtkprogress.c:155
 msgid "Text y alignment"
@@ -2565,7 +2627,9 @@ msgstr "மதிப்பு"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr "இந்த செயல் குழுவின் தற்போதைய செயலாக இருக்கும் போது gtk_radio_action_get_current_value() கொடுத்த மதிப்பு"
+msgstr ""
+"இந்த செயல் குழுவின் தற்போதைய செயலாக இருக்கும் போது "
+"gtk_radio_action_get_current_value() கொடுத்த மதிப்பு"
 
 #: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:112
 msgid "Group"
@@ -2636,7 +2700,8 @@ msgid "Arrow X Displacement"
 msgstr "அம்புக்குறி X இடப்பெயர்வு"
 
 #: gtk/gtkrange.c:341
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr "பட்டன் அழுத்தப்படும் போது எவ்வளவு தூரம் x திசையில் நகர வேண்டும்"
 
 #: gtk/gtkrange.c:348
@@ -2644,7 +2709,8 @@ msgid "Arrow Y Displacement"
 msgstr "அம்புக்குறி Y இடப்பெயர்சி"
 
 #: gtk/gtkrange.c:349
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr "பட்டன் அழுத்தி இருக்கும் போது y திசையில் எவ்வளவு தூரம் நகர வேண்டும்"
 
 #: gtk/gtkruler.c:119
@@ -2732,12 +2798,16 @@ msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "Don't change slider size, just lock it to the minimum length"
 
 #: gtk/gtkscrollbar.c:115
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
+msgstr ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 
 #: gtk/gtkscrollbar.c:123
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
-msgstr "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgstr ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 
 #: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
@@ -2815,7 +2885,9 @@ msgstr "தூரத்தை இரண்டு முறை க்ளிக்
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr "இரண்டு முறை க்ளிக்செய்யப்பட்டது என்பதை அறிந்து கொள்ள இரண்டு க்ளிக்கிற்கு இடைப்பட்ட காலஅளவு(பிக் செல்களில்)"
+msgstr ""
+"இரண்டு முறை க்ளிக்செய்யப்பட்டது என்பதை அறிந்து கொள்ள இரண்டு க்ளிக்கிற்கு இடைப்பட்ட காலஅளவு"
+"(பிக் செல்களில்)"
 
 #: gtk/gtksettings.c:278
 msgid "Cursor Blink"
@@ -2923,7 +2995,8 @@ msgstr "Xft குறிப்பு பாணி"
 
 #: gtk/gtksettings.c:386
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr "குறிப்பை பயன்படுத்த வேண்டிய அளவு, எதுவுமில்லை, குறைவாக, நடுநிலையாக மற்றும் முழுவதும்"
+msgstr ""
+"குறிப்பை பயன்படுத்த வேண்டிய அளவு, எதுவுமில்லை, குறைவாக, நடுநிலையாக மற்றும் முழுவதும்"
 
 #: gtk/gtksettings.c:395
 msgid "Xft RGBA"
@@ -3000,8 +3073,10 @@ msgid "Update Policy"
 msgstr "நிகழ்நிலைப் புதிப்பித்தல் திட்டம்"
 
 #: gtk/gtkspinbutton.c:294
-msgid "Whether the spin button should update always, or only when the value is legal"
-msgstr "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
+msgstr ""
+"Whether the spin button should update always, or only when the value is legal"
 
 #: gtk/gtkspinbutton.c:303
 msgid "Reads the current value, or sets a new value"
@@ -3121,7 +3196,8 @@ msgstr "செங்குத்து மை நிரப்பல்"
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
-msgstr "துணை செயல் மற்றும் மேல் மற்றும் கீழ் அருகாமை செயல்களுக்கு தரவேண்டிய இடைவெளி பிக்செல்லில்"
+msgstr ""
+"துணை செயல் மற்றும் மேல் மற்றும் கீழ் அருகாமை செயல்களுக்கு தரவேண்டிய இடைவெளி பிக்செல்லில்"
 
 #: gtk/gtktext.c:603
 msgid "Horizontal adjustment for the text widget"
@@ -3161,7 +3237,9 @@ msgstr "அடையாள ஒட்டுப் பெயர்"
 
 #: gtk/gtktexttag.c:197
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr "உரை அடையாளத்தை குறிப்பிடுவதற்கு பயன்படுத்தப்படும் பெயர். பெயரற்ற குறிப்பிற்கு எதுவுமில்லை என கொள்க"
+msgstr ""
+"உரை அடையாளத்தை குறிப்பிடுவதற்கு பயன்படுத்தப்படும் பெயர். பெயரற்ற குறிப்பிற்கு "
+"எதுவுமில்லை என கொள்க"
 
 #: gtk/gtktexttag.c:215
 msgid "Background color as a (possibly unallocated) GdkColor"
@@ -3223,7 +3301,8 @@ msgstr "பாங்கோ மாறியின் எழுத்துறு 
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
-msgstr "எழுத்துருவின் தடிமன் எண்ணாக, பாங்கோ தடிமனில் மதிப்பை பார்; உதாரணம், PANGO_WEIGHT_BOLD "
+msgstr ""
+"எழுத்துருவின் தடிமன் எண்ணாக, பாங்கோ தடிமனில் மதிப்பை பார்; உதாரணம், PANGO_WEIGHT_BOLD "
 
 #: gtk/gtktexttag.c:337
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
@@ -3238,7 +3317,10 @@ msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
-msgstr "இயல்பான எழுத்துரு அளவுவோடு தொடர்புடைய அளவு மாற்ற எழுத்துரு அளவு, இது கருப்பொருள் மாற்றங்களை பொருத்து மாறும். அதனால் இதை பரிந்துரைக்கிறோம்.பாங்கோ சில அளவுகளை PANGO_SCALE_X_LARGE குறிப்பிடும்"
+msgstr ""
+"இயல்பான எழுத்துரு அளவுவோடு தொடர்புடைய அளவு மாற்ற எழுத்துரு அளவு, இது கருப்பொருள் "
+"மாற்றங்களை பொருத்து மாறும். அதனால் இதை பரிந்துரைக்கிறோம்.பாங்கோ சில அளவுகளை "
+"PANGO_SCALE_X_LARGE குறிப்பிடும்"
 
 #: gtk/gtktexttag.c:376 gtk/gtktextview.c:605
 msgid "Left, right, or center justification"
@@ -3303,7 +3385,8 @@ msgid "Wrap mode"
 msgstr "மடிப்பு முறைமை"
 
 #: gtk/gtktexttag.c:482 gtk/gtktextview.c:596
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "சொல் எல்லைகளில், அல்லது வரியுரு எல்லைகளில், அல்லது வரிசைகளை மடிப்பிக்க வேண்டுமா"
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:643
@@ -3575,7 +3658,8 @@ msgid "Toolbar style"
 msgstr "கருவிப் பட்டையின் பாணி"
 
 #: gtk/gtktoolbar.c:582
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "கொடா நிலை கருவிப் பட்டைகளில் உரை மட்டும், உரையும் குறும்படங்களும், குறும்படங்கள் "
 "மட்டும், ...."
@@ -3596,7 +3680,9 @@ msgstr "இந்த உருப்படியில் காட்ட வே
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
-msgstr "விளக்கசீட்டின் பண்புள் உள்ள உரையில் இருக்கும் அடிக்கோடு நீங்கள் வழியும் மெனுவில் உள்ள நினைவுக்குறிப்பு முடுக்கியை பயன்படுத்த வேண்டும் என்பதை குறிக்கும்."
+msgstr ""
+"விளக்கசீட்டின் பண்புள் உள்ள உரையில் இருக்கும் அடிக்கோடு நீங்கள் வழியும் மெனுவில் உள்ள "
+"நினைவுக்குறிப்பு முடுக்கியை பயன்படுத்த வேண்டும் என்பதை குறிக்கும்."
 
 #: gtk/gtktoolbutton.c:195
 msgid "Widget to use as the item label"
@@ -3622,7 +3708,9 @@ msgstr "இந்த உருப்படியில் காட்டப்�
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr "கருவிப்பட்டி உருப்படி மிக முக்கியம் என கொள்ளப்பட வேண்டுமா.உண்மை எனில், கருவிப்பட்டி பட்டனில் GTK_TOOLBAR_BOTH_HORIZ பாங்கில் உரையை காட்டவும்"
+msgstr ""
+"கருவிப்பட்டி உருப்படி மிக முக்கியம் என கொள்ளப்பட வேண்டுமா.உண்மை எனில், கருவிப்பட்டி "
+"பட்டனில் GTK_TOOLBAR_BOTH_HORIZ பாங்கில் உரையை காட்டவும்"
 
 #: gtk/gtktreemodelsort.c:329
 msgid "TreeModelSort Model"
@@ -3912,7 +4000,8 @@ msgstr "அகலம் வேண்டுகோள்"
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
-msgstr "சிறு சாளரத்தின் அகலமாற்ற கோரிக்கையை புறக்கணிக்கிறது அல்லது -1 எனில் கோரிக்கை ஏற்கப்பட்டது"
+msgstr ""
+"சிறு சாளரத்தின் அகலமாற்ற கோரிக்கையை புறக்கணிக்கிறது அல்லது -1 எனில் கோரிக்கை ஏற்கப்பட்டது"
 
 #: gtk/gtkwidget.c:433
 msgid "Height request"
@@ -3922,7 +4011,8 @@ msgstr "உயரம் வேண்டுகோள்"
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr "சிறு சாளரத்தின் உயரமாற்ற கோரிக்கையை புறக்கணிக்கிறது அல்லது -1 எனில் கோரிக்கை ஏற்கப்பட்டது"
+msgstr ""
+"சிறு சாளரத்தின் உயரமாற்ற கோரிக்கையை புறக்கணிக்கிறது அல்லது -1 எனில் கோரிக்கை ஏற்கப்பட்டது"
 
 #: gtk/gtkwidget.c:443
 msgid "Whether the widget is visible"
@@ -4005,8 +4095,7 @@ msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
-"சிறுசாளரத்தின் பாணியில் ,அது பார்க்க எப்படி இருக்கும் என குறிப்பிடும் "
-"(வண்னங்கள் ..)."
+"சிறுசாளரத்தின் பாணியில் ,அது பார்க்க எப்படி இருக்கும் என குறிப்பிடும் (வண்னங்கள் ..)."
 
 #: gtk/gtkwidget.c:519
 msgid "Events"
@@ -4022,7 +4111,8 @@ msgstr "நீடிப்பு நிகழ்ச்சிகள்"
 
 #: gtk/gtkwidget.c:528
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr "இந்த சாளரத்திற்கு கிடைக்க வேண்டிய நீட்சி எப்படிபட்டது என்பதை இந்த நிகழ்வு தீர்மானிக்கும்"
+msgstr ""
+"இந்த சாளரத்திற்கு கிடைக்க வேண்டிய நீட்சி எப்படிபட்டது என்பதை இந்த நிகழ்வு தீர்மானிக்கும்"
 
 #: gtk/gtkwidget.c:535
 msgid "No show all"
@@ -4080,7 +4170,9 @@ msgstr "இரண்டால் கர்சர் நிறம்"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
-msgstr "இடவலமாகவும் வலஇடமாகவும் திருத்தப்படும் போது இரண்டாவது செருகல் கர்சர் வரையப்படும் நிறத்தை காட்டவும்"
+msgstr ""
+"இடவலமாகவும் வலஇடமாகவும் திருத்தப்படும் போது இரண்டாவது செருகல் கர்சர் வரையப்படும் நிறத்தை "
+"காட்டவும்"
 
 #: gtk/gtkwidget.c:1415
 msgid "Cursor line aspect ratio"
@@ -4123,7 +4215,9 @@ msgstr "Allow Shrink"
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
-msgstr "உண்மை எனில் சாளரம் குறைந்த பட்ச அளவில் தெரியும் . உண்மை என அமைப்பது 99% சரியான முடிவில்லை"
+msgstr ""
+"உண்மை எனில் சாளரம் குறைந்த பட்ச அளவில் தெரியும் . உண்மை என அமைப்பது 99% சரியான "
+"முடிவில்லை"
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Grow"
@@ -4145,7 +4239,9 @@ msgstr "Modal"
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
-msgstr "உண்மை எனில் சாளரம் முறையானது(இது செயலில் இருக்கும் போது மற்ற சாளரத்தை பயன்படுத்த முடியாது)."
+msgstr ""
+"உண்மை எனில் சாளரம் முறையானது(இது செயலில் இருக்கும் போது மற்ற சாளரத்தை பயன்படுத்த "
+"முடியாது)."
 
 #: gtk/gtkwindow.c:498
 msgid "Window Position"
@@ -4168,7 +4264,8 @@ msgid "Default Height"
 msgstr "கொடா நிலை உயரம்"
 
 #: gtk/gtkwindow.c:518
-msgid "The default height of the window, used when initially showing the window"
+msgid ""
+"The default height of the window, used when initially showing the window"
 msgstr "சாளரத்தை காட்டும் போது பயன்படுத்தப்பட வேண்டிய சாளரத்தின் இயல்பான உயரம்"
 
 #: gtk/gtkwindow.c:527
@@ -4211,7 +4308,9 @@ msgstr "குறிப்பு வகை"
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
-msgstr "மேல்மேசை சூழல் எப்படிப்பட்ட சாளரத்தை பயன்படுத்துகிறது மற்றும் எப்படி நடத்தப்படுகிறது என்பதை குறிப்பிட வேண்டுமா"
+msgstr ""
+"மேல்மேசை சூழல் எப்படிப்பட்ட சாளரத்தை பயன்படுத்துகிறது மற்றும் எப்படி நடத்தப்படுகிறது "
+"என்பதை குறிப்பிட வேண்டுமா"
 
 #: gtk/gtkwindow.c:576
 msgid "Skip taskbar"
@@ -4268,4 +4367,3 @@ msgstr "GTK IM நிகழ்நிலை பாணி"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "நிலைப்பட்டியின் உள்ளீடு முறையை பெறுவது எப்படி"
-

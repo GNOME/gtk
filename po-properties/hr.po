@@ -10,14 +10,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
-"POT-Creation-Date: 2004-08-14 20:18+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-25 13:27-0400\n"
 "PO-Revision-Date: 2004-03-24 05:39+CET\n"
 "Last-Translator: Robert Sedak <robert.sedak@sk.tel.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "X-Generator: TransDict server\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:101
@@ -1753,11 +1753,11 @@ msgstr "Prikaži skriveno"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Mogu li biti prikazane sakrivene datoteke i mape"
 
-#: gtk/gtkfilechooserdefault.c:569
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Default file chooser backend"
 msgstr "Podrška za pretpostavljeni odabiratelj datoteka"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:571
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Ime podrške koja će se koristiti za GtkFileChooser "
 

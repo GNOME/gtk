@@ -1,5 +1,9 @@
 2004-08-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.4.8 ===
+
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (check_is_folder): Use get_file_info() rather 
 	than trying get_folder() and checking for an error directly because older 
 	versions of the gnome-vfs backend don't return an error 

@@ -1,3 +1,7 @@
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.8 ===
+
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_new_with_mime_type): Use

@@ -1,3 +1,34 @@
+<!-- ##### SECTION ./tmpl/gtkaboutdialog.sgml:Long_Description ##### -->
+<para>
+The #GtkAboutDialog offers a simple way to display information about
+a program like its logo, name, copyright, website and license. It is
+also possible to give credits to the authors, documenters, translators
+and artists who have worked on the program. An about dialog is typically
+opened when the user selects the <literal>About</literal> option from 
+the <literal>Help</literal> menu. All parts of the dialog are optional.
+</para>
+<para>
+About dialog often contain links and email addresses. #GtkAboutDialog 
+supports this by offering global hooks, which are called when the user
+clicks on a link or email address, see gtk_about_dialog_set_email_hook()
+and gtk_about_dialog_set_url_hook().
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkaboutdialog.sgml:See_Also ##### -->
+<para>
+#GTK_STOCK_ABOUT
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkaboutdialog.sgml:Short_Description ##### -->
+a widget displaying information about a program
+
+
+<!-- ##### SECTION ./tmpl/gtkaboutdialog.sgml:Title ##### -->
+GtkAboutDialog
+
+
 <!-- ##### SECTION ./tmpl/gtkarg.sgml:Long_Description ##### -->
 <para>
 All the functions in here are marked a Non-public.
@@ -99,6 +130,26 @@ Debugging
 
 <!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Title ##### -->
 gtkenums.sgml
+
+
+<!-- ##### SECTION ./tmpl/gtkfilechooserbutton.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkfilechooserbutton.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkfilechooserbutton.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkfilechooserbutton.sgml:Title ##### -->
+GtkFileChooserButton
 
 
 <!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Long_Description ##### -->
@@ -513,6 +564,24 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 @b: 
 @Returns: 
 
+<!-- ##### STRUCT GtkAboutDialog ##### -->
+<para>
+The <structname>GtkAboutDialog</structname> struct contains
+only private fields and should not be directly accessed.
+</para>
+
+@parent_instance: 
+
+<!-- ##### USER_FUNCTION GtkAboutDialogActivateLinkFunc ##### -->
+<para>
+The type of a function which is called when a URL or email
+link is activated. 
+</para>
+
+@about: the #GtkAboutDialog in which the link was activated
+@link: the URL or email address to whiche the activated link points
+@data: 
+
 <!-- ##### STRUCT GtkAccelEntry ##### -->
 <para>
 This is a private struct used by GTK+ internally, don't worry about it.
@@ -840,6 +909,12 @@ You may not attach these to signals created with the
 
 
 <!-- ##### ARG GtkFileChooser:file-system ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkFileChooserButton ##### -->
 <para>
 
 </para>
@@ -1459,6 +1534,225 @@ If the window shrinks automatically when widgets within it shrink.
 
 </para>
 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_artists ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_authors ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_comments ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_copyright ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_documenters ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_license ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_logo ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_name ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_translator_credits ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_version ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_website ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_get_website_label ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_artists ##### -->
+<para>
+
+</para>
+
+@about: 
+@artists: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_authors ##### -->
+<para>
+
+</para>
+
+@about: 
+@authors: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_comments ##### -->
+<para>
+
+</para>
+
+@about: 
+@comments: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_copyright ##### -->
+<para>
+
+</para>
+
+@about: 
+@copyright: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_documenters ##### -->
+<para>
+
+</para>
+
+@about: 
+@documenters: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_email_hook ##### -->
+<para>
+
+</para>
+
+@func: 
+@data: 
+@destroy: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_license ##### -->
+<para>
+
+</para>
+
+@about: 
+@license: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_logo ##### -->
+<para>
+
+</para>
+
+@about: 
+@logo: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_name ##### -->
+<para>
+
+</para>
+
+@about: 
+@name: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_translator_credits ##### -->
+<para>
+
+</para>
+
+@about: 
+@translator_credits: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_url_hook ##### -->
+<para>
+
+</para>
+
+@func: 
+@data: 
+@destroy: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_version ##### -->
+<para>
+
+</para>
+
+@about: 
+@version: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_website ##### -->
+<para>
+
+</para>
+
+@about: 
+@website: 
+
+<!-- ##### FUNCTION gtk_about_dialog_set_website_label ##### -->
+<para>
+
+</para>
+
+@about: 
+@website_label: 
 
 <!-- ##### FUNCTION gtk_accel_group_add ##### -->
 <para>
@@ -2099,6 +2393,63 @@ Claim or disclaim ownership of the PRIMARY X selection.
 @editable: a #GtkEditable widget.
 @claim: if %TRUE, claim the selection, otherwise, disclaim it.
 @time: the timestamp for claiming the selection.
+
+<!-- ##### FUNCTION gtk_file_chooser_button_get_active ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_chooser_button_get_title ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new_with_backend ##### -->
+<para>
+
+</para>
+
+@title: 
+@backend: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new_with_dialog ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_chooser_button_set_active ##### -->
+<para>
+
+</para>
+
+@button: 
+@is_active: 
+
+<!-- ##### FUNCTION gtk_file_chooser_button_set_title ##### -->
+<para>
+
+</para>
+
+@button: 
+@title: 
 
 <!-- ##### FUNCTION gtk_file_chooser_get_folder_mode ##### -->
 <para>
@@ -2760,6 +3111,15 @@ Internal function.
 </para>
 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_show_about_dialog ##### -->
+<para>
+
+</para>
+
+@parent: 
+@first_property_name: 
+@Varargs: 
 
 <!-- ##### FUNCTION gtk_signal_add_emission_hook ##### -->
 <para>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-25 20:57+0200\n"
+"POT-Creation-Date: 2004-08-25 13:27-0400\n"
 "PO-Revision-Date: 2004-07-19 00:47+0200\n"
 "Last-Translator: Kenan Hadžiavdić <kenan@bgnett.no>\n"
 "Language-Team: Bosnian <lokal@linux.org.ba>\n"
@@ -1563,21 +1563,21 @@ msgstr "Broj piksli polja za unos koje su pomjerene izvan ekrana u lijevo"
 msgid "The contents of the entry"
 msgstr "Sadržaj unosa"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X align"
 
-#: gtk/gtkentry.c:560 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "Vodoravno ravnanje, od 0 (lijevo) do 1 (desno). Obrnuto za RTL prikaze"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "Izaberi ako je fokusirano"
 
-#: gtk/gtkentry.c:794
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Da li izabrati sadržaj unosa ako je fokusiran"
 
@@ -1752,11 +1752,11 @@ msgstr "Prikaži skriveno"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Da li će se prikazati skrivene datoteke i direktoriji"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Default file chooser backend"
 msgstr "Podrška za uobičajeni iybornik datoteka"
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:571
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Ime GtkFileChooser podrške koja će se koristiti uobičajeno"
 

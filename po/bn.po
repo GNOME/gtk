@@ -6,14 +6,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2\n"
-"POT-Creation-Date: 2004-08-14 20:18+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-25 13:27-0400\n"
 "PO-Revision-Date: 2004-03-17 21:00+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
@@ -136,11 +136,11 @@ msgstr "ছবির হেডার ত্রুটিপূর্ণ"
 msgid "Image format unknown"
 msgstr "ছবির ফরম্যাট অজ্ঞাত"
 
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:459
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:486
 msgid "Image pixel data corrupt"
 msgstr "ছবির পিক্সেল সংক্রান্ত তথ্য ত্রুটিপূর্ণ"
 
-#: gdk-pixbuf/gdk-pixdata.c:403
+#: gdk-pixbuf/gdk-pixdata.c:430
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
@@ -185,7 +185,7 @@ msgstr "বিএমপি ছবির হেডারের আকার অ�
 msgid "BMP image has bogus header data"
 msgstr " বিএমপি ছবিটির হেডারের তথ্য সঠিক নয়"
 
-#: gdk-pixbuf/io-bmp.c:1122
+#: gdk-pixbuf/io-bmp.c:1132
 msgid "The BMP image format"
 msgstr " বিএমপি ছবির ফরম্যাট"
 
@@ -927,7 +927,7 @@ msgstr "ইউনিকোড কন্ট্রোল ক্যারেকট�
 msgid "Invalid filename: %s"
 msgstr "ফাইলের নাম বেঠিক: %s"
 
-#: gtk/gtkfilechooserdefault.c:740
+#: gtk/gtkfilechooserdefault.c:791
 #, c-format
 msgid ""
 "Could not retrieve information about %s:\n"
@@ -936,7 +936,7 @@ msgstr ""
 "%s সম্পর্কে তথ্য জানা যায় নি:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:751
+#: gtk/gtkfilechooserdefault.c:802
 #, c-format
 msgid ""
 "Could not add a bookmark for %s:\n"
@@ -945,7 +945,7 @@ msgstr ""
 "%s-এর জন্য বুকমার্ক যোগ করা যায় নি:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5434
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -954,7 +954,7 @@ msgstr ""
 "%s' এবং '%s' থেকে ফাইলের নাম তৈরি করা যায় নি:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:782
+#: gtk/gtkfilechooserdefault.c:833
 #, c-format
 msgid ""
 "Could not change the current folder to %s:\n"
@@ -963,15 +963,15 @@ msgstr ""
 "%s-কে বর্তমান ফোল্ডার করা যায় নি:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1081 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1143 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "ব্যক্তিগত ফোল্ডার"
 
-#: gtk/gtkfilechooserdefault.c:1104 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1166 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "ডেস্কটপ"
 
-#: gtk/gtkfilechooserdefault.c:1548
+#: gtk/gtkfilechooserdefault.c:1564
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -980,12 +980,12 @@ msgstr ""
 "%s নাম ফোল্ডার তৈরি করা যায় নি:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1731
+#: gtk/gtkfilechooserdefault.c:1744
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "%s কোন ফোল্ডার নয় বিধায় এর জন্য বুকমার্ক যোগ করা যায় নি।"
 
-#: gtk/gtkfilechooserdefault.c:1827
+#: gtk/gtkfilechooserdefault.c:1849
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -995,134 +995,134 @@ msgstr ""
 "%s"
 
 # FIXME
-#: gtk/gtkfilechooserdefault.c:2409
+#: gtk/gtkfilechooserdefault.c:2431
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s কোন নির্ভূল পাথ (Path) না হওয়ায় এর জন্য বুকমার্ক যোগ করা যায় নি।"
 
-#: gtk/gtkfilechooserdefault.c:2541
+#: gtk/gtkfilechooserdefault.c:2572
 msgid "Shortcuts"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2595
+#: gtk/gtkfilechooserdefault.c:2626
 msgid "Folder"
 msgstr "ফোল্ডার"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2642 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2673 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "যোগ (_য)"
 
-#: gtk/gtkfilechooserdefault.c:2652 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2683 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "অপসারণ (_অ)"
 
-#: gtk/gtkfilechooserdefault.c:2731
+#: gtk/gtkfilechooserdefault.c:2762
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2846 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "ফাইল"
 
-#: gtk/gtkfilechooserdefault.c:2873
+#: gtk/gtkfilechooserdefault.c:2904
 msgid "Name"
 msgstr "নাম"
 
-#: gtk/gtkfilechooserdefault.c:2895
+#: gtk/gtkfilechooserdefault.c:2926
 msgid "Size"
 msgstr "আকার"
 
-#: gtk/gtkfilechooserdefault.c:2907
+#: gtk/gtkfilechooserdefault.c:2938
 msgid "Modified"
 msgstr "পরিবর্তিত"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2952
+#: gtk/gtkfilechooserdefault.c:2983
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "ফোল্ডার তৈরি করো (_ত)"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3059
+#: gtk/gtkfilechooserdefault.c:3090
 msgid "_Name:"
 msgstr "নাম (_ন):"
 
 # FIXME
-#: gtk/gtkfilechooserdefault.c:3103
+#: gtk/gtkfilechooserdefault.c:3134
 msgid "_Browse for other folders"
 msgstr "অন্যান্য ফোল্ডারের জন্য ব্রাউজ করো (_ব)"
 
-#: gtk/gtkfilechooserdefault.c:3345
+#: gtk/gtkfilechooserdefault.c:3376
 msgid "Save in _folder:"
 msgstr "এই ফোল্ডারে সংরক্ষণ করো (_ফ):"
 
-#: gtk/gtkfilechooserdefault.c:3347
+#: gtk/gtkfilechooserdefault.c:3378
 msgid "Create in _folder:"
 msgstr "এই ফোল্ডারে তৈরি করো (_ল):"
 
-#: gtk/gtkfilechooserdefault.c:4034
+#: gtk/gtkfilechooserdefault.c:4065
 #, fuzzy
 msgid "Can't change to folder because it isn't local"
 msgstr ""
 "যে ফোল্ডারটি উল্লেখ করেছেন তার পাথ (Path) বেঠিক হওয়ায় তাতে প্রবেশ করা যায় নি।"
 
-#: gtk/gtkfilechooserdefault.c:4177
+#: gtk/gtkfilechooserdefault.c:4208
 #, fuzzy
 msgid "Could not find the path"
 msgstr "অবশিষ্ট অংশটুকু সংরক্ষণ করা যায় নি"
 
-#: gtk/gtkfilechooserdefault.c:4533
+#: gtk/gtkfilechooserdefault.c:4569
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s শর্টকাটের অস্তিত্ব নেই"
 
-#: gtk/gtkfilechooserdefault.c:5207
+#: gtk/gtkfilechooserdefault.c:5242
 msgid "Type name of new folder"
 msgstr "নতুন ফোল্ডারের নাম লিখুন"
 
-#: gtk/gtkfilechooserdefault.c:5236
+#: gtk/gtkfilechooserdefault.c:5271
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d বাইট"
 msgstr[1] "%d বাইট"
 
-#: gtk/gtkfilechooserdefault.c:5238
+#: gtk/gtkfilechooserdefault.c:5273
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f কিলোবাইট"
 
-#: gtk/gtkfilechooserdefault.c:5240
+#: gtk/gtkfilechooserdefault.c:5275
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f মেগাবাইট"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5277
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f গিগাবাইট"
 
-#: gtk/gtkfilechooserdefault.c:5287
+#: gtk/gtkfilechooserdefault.c:5322
 msgid "Today"
 msgstr "আজ"
 
-#: gtk/gtkfilechooserdefault.c:5289
+#: gtk/gtkfilechooserdefault.c:5324
 msgid "Yesterday"
 msgstr "গতকাল"
 
-#: gtk/gtkfilechooserdefault.c:5300
+#: gtk/gtkfilechooserdefault.c:5335
 msgid "Unknown"
 msgstr "অজ্ঞাত"
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5430
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "যে ফোল্ডারটি উল্লেখ করেছেন তার পাথ (Path) বেঠিক হওয়ায় তাতে প্রবেশ করা যায় নি।"
 
-#: gtk/gtkfilechooserdefault.c:5472
+#: gtk/gtkfilechooserdefault.c:5507
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1131,16 +1131,16 @@ msgstr ""
 "%s-কে বাছাই করা যায় নি:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5511
+#: gtk/gtkfilechooserdefault.c:5546
 msgid "Open Location"
 msgstr "এই অবস্থান খোলো"
 
-#: gtk/gtkfilechooserdefault.c:5518
+#: gtk/gtkfilechooserdefault.c:5553
 #, fuzzy
 msgid "Save in Location"
 msgstr "এই অবস্থান খোলো"
 
-#: gtk/gtkfilechooserdefault.c:5537
+#: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
 msgstr "অবস্থান (_অ):"
 
@@ -1327,8 +1327,8 @@ msgstr "(ফাঁকা)"
 msgid "%s: %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
-#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1358
+#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:621
+#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1364
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "'%s' সংক্রান্ত তথ্য পেতে সমস্যা হয়েছে: %s"
@@ -1348,29 +1348,29 @@ msgid "Filesystem"
 msgstr "ফাইল-সিস্টেম"
 
 # FIXME
-#: gtk/gtkfilesystemunix.c:731
+#: gtk/gtkfilesystemunix.c:735
 #, fuzzy, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "'%s' ফাইল সম্পর্কে তথ্য এই পাওয়া যায় নি: %s"
 
-#: gtk/gtkfilesystemunix.c:826
+#: gtk/gtkfilesystemunix.c:830
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
+#: gtk/gtkfilesystemunix.c:1438 gtk/gtkfilesystemwin32.c:923
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "বুকমার্ক সংরক্ষণ করার প্রচেষ্টা ব্যর্থ হয়েছে (%s)"
 
-#: gtk/gtkfilesystemunix.c:1730
+#: gtk/gtkfilesystemunix.c:1734
 #, fuzzy, c-format
 msgid "error getting information for '%s'"
 msgstr "'%s' সংক্রান্ত তথ্য পেতে সমস্যা হয়েছে: %s"
 
-#: gtk/gtkfilesystemwin32.c:1120
+#: gtk/gtkfilesystemwin32.c:1126
 msgid "This file system does not support icons for everything"
 msgstr "এই ফাইল-সিস্টেমটি সব কিছুর জন্য আইকনের ব্যবহার সমর্থন করে না"
 

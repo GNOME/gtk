@@ -1,3 +1,7 @@
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.8 ===
+
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-csource.xml: Document bugs of
