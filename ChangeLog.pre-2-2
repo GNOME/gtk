@@ -1,3 +1,12 @@
+Wed Mar 20 16:36:08 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/*.c: Patch from Erwann Chenede, #73900 fixing
+	a lot of warnings with Forte CC, mostly implicit
+	casts between void * and function pointers.
+	
+	* gdk/gdkevents.c (gdk_event_get_state): GdkEventVisibility's
+	state field is not a GdkModifierType. (Also #73900)
+
 Wed Mar 20 12:35:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_grab_default): Remove

@@ -516,8 +516,6 @@ gdk_event_get_state (GdkEvent        *event,
 	*state =  event->property.state;
         return TRUE;
       case GDK_VISIBILITY_NOTIFY:
-        *state =  event->visibility.state;
-        return TRUE;
       case GDK_CLIENT_EVENT:
       case GDK_NO_EXPOSE:
       case GDK_CONFIGURE:

@@ -489,10 +489,11 @@ load_module (GSList      *gtk_modules,
 	  g_module_symbol (module, "gtk_module_init", (gpointer *) &modinit_func) &&
 	  modinit_func)
 	{
-	  if (!g_slist_find (gtk_modules, modinit_func))
+	  if (!g_slist_find (gtk_modules, (gconstpointer) modinit_func))
 	    {
 	      g_module_make_resident (module);
-	      gtk_modules = g_slist_prepend (gtk_modules, modinit_func);
+	      gtk_modules = g_slist_prepend (gtk_modules,
+					     (gpointer) modinit_func);
 	    }
 	  else
 	    {
@@ -762,7 +763,7 @@ gtk_init_check (int	 *argc,
 	{
 	  GtkModuleInitFunc modinit;
 	  
-	  modinit = slist->data;
+	  modinit = (GtkModuleInitFunc) slist->data;
 	  modinit (argc, argv);
 	}
     }

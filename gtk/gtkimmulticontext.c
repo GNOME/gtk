@@ -163,16 +163,16 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 	gtk_im_context_reset (multicontext->slave);
       
       g_signal_handlers_disconnect_by_func (multicontext->slave,
-					    gtk_im_multicontext_preedit_start_cb,
+					    (gpointer) gtk_im_multicontext_preedit_start_cb,
 					    multicontext);
       g_signal_handlers_disconnect_by_func (multicontext->slave,
-					    gtk_im_multicontext_preedit_end_cb,
+					    (gpointer) gtk_im_multicontext_preedit_end_cb,
 					    multicontext);
       g_signal_handlers_disconnect_by_func (multicontext->slave,
-					    gtk_im_multicontext_preedit_changed_cb,
+					    (gpointer) gtk_im_multicontext_preedit_changed_cb,
 					    multicontext);
       g_signal_handlers_disconnect_by_func (multicontext->slave,
-					    gtk_im_multicontext_commit_cb,
+					    (gpointer) gtk_im_multicontext_commit_cb,
 					    multicontext);
 
       g_object_unref (multicontext->slave);

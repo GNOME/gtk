@@ -1087,7 +1087,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_slist_free (copy);
 
       g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->buffer),
-                                            gtk_text_view_mark_set_handler, text_view);
+                                            (gpointer) gtk_text_view_mark_set_handler, text_view);
       g_object_unref (G_OBJECT (text_view->buffer));
       text_view->dnd_mark = NULL;
 
@@ -3921,7 +3921,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
     }
 
   g_signal_handlers_disconnect_by_func (gdk_keymap_get_default (),
-                                        keymap_direction_changed,
+                                        (gpointer) keymap_direction_changed,
                                         text_view);
 
   text_view->need_im_reset = TRUE;
@@ -5307,9 +5307,11 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
       gtk_text_view_end_selection_drag (text_view, NULL);
 
       g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
-                                            invalidated_handler, text_view);
+                                            (gpointer) invalidated_handler,
+					    text_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
-                                            changed_handler, text_view);
+                                            (gpointer) changed_handler, 
+					    text_view);
       g_object_unref (G_OBJECT (text_view->layout));
       text_view->layout = NULL;
     }

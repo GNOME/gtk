@@ -7425,15 +7425,15 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       gtk_tree_view_unref_and_check_selection_tree (tree_view, tree_view->priv->tree);
 
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_row_changed, tree_view);
+					    (gpointer) gtk_tree_view_row_changed, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_row_inserted, tree_view);
+					    (gpointer) gtk_tree_view_row_inserted, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_row_has_child_toggled, tree_view);
+					    (gpointer) gtk_tree_view_row_has_child_toggled, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_row_deleted, tree_view);
+					    (gpointer) gtk_tree_view_row_deleted, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_rows_reordered, tree_view);
+					    (gpointer) gtk_tree_view_rows_reordered, tree_view);
       if (tree_view->priv->tree)
 	{
 	  _gtk_rbtree_free (tree_view->priv->tree);

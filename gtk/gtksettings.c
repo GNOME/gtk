@@ -319,8 +319,7 @@ gtk_settings_get_property (GObject     *object,
         {
           GValue tmp_value = { 0, };
           GValue gstring_value = { 0, };
-          GtkRcPropertyParser parser = g_param_spec_get_qdata (pspec,
-                                                               quark_property_parser);
+          GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
           
           g_value_init (&gstring_value, G_TYPE_GSTRING);
 
@@ -448,7 +447,7 @@ apply_queued_setting (GtkSettings      *data,
 		      GtkSettingsValue *qvalue)
 {
   GValue tmp_value = { 0, };
-  GtkRcPropertyParser parser = g_param_spec_get_qdata (pspec, quark_property_parser);
+  GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
 
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   if (_gtk_settings_parse_convert (parser, &qvalue->value,
@@ -508,7 +507,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
     g_object_freeze_notify (node->data);
 
   g_object_class_install_property (G_OBJECT_CLASS (class), ++class_n_properties, pspec);
-  g_param_spec_set_qdata (pspec, quark_property_parser, parser);
+  g_param_spec_set_qdata (pspec, quark_property_parser, (gpointer) parser);
 
   for (node = object_list; node; node = node->next)
     {

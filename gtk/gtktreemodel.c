@@ -1492,17 +1492,17 @@ disconnect_ref_callbacks (GtkTreeModel *model)
   g_signal_handlers_disconnect_matched (G_OBJECT (model),
                                         G_SIGNAL_MATCH_FUNC,
                                         0, 0, NULL,
-					gtk_tree_row_ref_inserted_callback,
+					(gpointer) gtk_tree_row_ref_inserted_callback,
 					NULL);
   g_signal_handlers_disconnect_matched (G_OBJECT (model),
                                         G_SIGNAL_MATCH_FUNC,
                                         0, 0, NULL,
-					gtk_tree_row_ref_deleted_callback,
+					(gpointer) gtk_tree_row_ref_deleted_callback,
 					NULL);
   g_signal_handlers_disconnect_matched (G_OBJECT (model),
                                         G_SIGNAL_MATCH_FUNC,
                                         0, 0, NULL,
-					gtk_tree_row_ref_reordered_callback,
+					(gpointer) gtk_tree_row_ref_reordered_callback,
 					NULL);
 }
 

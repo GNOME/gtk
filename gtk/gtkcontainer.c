@@ -1916,7 +1916,7 @@ chain_widget_destroyed (GtkWidget *widget,
   chain = g_list_remove (chain, widget);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (widget),
-                                        chain_widget_destroyed,
+                                        (gpointer) chain_widget_destroyed,
                                         user_data);
   
   g_object_set_data (G_OBJECT (container),
@@ -2043,7 +2043,7 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
       while (tmp_list != NULL)
         {
           g_signal_handlers_disconnect_by_func (G_OBJECT (tmp_list->data),
-                                                chain_widget_destroyed,
+                                                (gpointer) chain_widget_destroyed,
                                                 container);
           
           tmp_list = g_list_next (tmp_list);

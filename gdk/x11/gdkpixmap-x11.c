@@ -314,7 +314,8 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   GdkPixmapImplX11 *pix_impl;
   Pixmap xpixmap;
   Window root_return;
-  unsigned int x_ret, y_ret, w_ret, h_ret, bw_ret, depth_ret;
+  int x_ret, y_ret;
+  unsigned int w_ret, h_ret, bw_ret, depth_ret;
 
   /* check to make sure we were passed something at
      least a little sane */

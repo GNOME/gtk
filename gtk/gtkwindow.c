@@ -1135,7 +1135,7 @@ gtk_window_remove_accel_group (GtkWindow     *window,
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
 
   g_signal_handlers_disconnect_by_func (accel_group,
-					G_CALLBACK (gtk_window_notify_keys_changed),
+					(gpointer) gtk_window_notify_keys_changed,
 					window);
   _gtk_accel_group_detach (accel_group, G_OBJECT (window));
 }
