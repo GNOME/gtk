@@ -153,8 +153,10 @@ struct _GifContext
 
 static int GetDataBlock (GifContext *, unsigned char *);
 
-
+#ifdef IO_GIFDEBUG
 static int count = 0;
+#endif
+
 /* Returns TRUE if Read is OK,
  * FALSE if more memory is needed. */
 static int
@@ -165,8 +167,8 @@ ReadOK (GifContext *context, guchar *buffer, size_t len)
 	gint i;
 #endif
 	if (context->file) {
-		count += len;
 #ifdef IO_GIFDEBUG
+		count += len;
 		g_print ("Fsize :%d\tcount :%d\t", len, count);
 #endif
 		retval = (fread(buffer, len, 1, context->file) != 0);
@@ -183,8 +185,10 @@ ReadOK (GifContext *context, guchar *buffer, size_t len)
 //		g_print ("\tlooking for %d bytes.  size == %d, ptr == %d\n", len, context->size, context->ptr);
 #endif
 		if ((context->size - context->ptr) >= len) {
+#ifdef IO_GIFDEBUG
 			count += len;
-			memmove (buffer, context->buf + context->ptr, len);
+#endif
+			memcpy (buffer, context->buf + context->ptr, len);
 			context->ptr += len;
 			context->amount_needed = 0;
 #ifdef IO_GIFDEBUG
@@ -329,10 +333,11 @@ gif_get_extension (GifContext *context)
 			if (context->pixbuf == NULL) {
 				/* I only want to set the transparency if I haven't
 				 * created the pixbuf yet. */
-				if ((context->block_buf[0] & 0x1) != 0)
+				if ((context->block_buf[0] & 0x1) != 0) {
 					context->gif89.transparent = context->block_buf[3];
-				else
-					context->gif89.transparent = -1;
+				} else {
+					context->gif89.transparent = FALSE;
+				}
 			}
 
 			/* Now we've successfully loaded this one, we continue on our way */
@@ -660,7 +665,7 @@ gif_get_lzw (GifContext *context)
 			*temp = context->color_map [0][(guchar) v];
 			*(temp+1) = context->color_map [1][(guchar) v];
 			*(temp+2) = context->color_map [2][(guchar) v];
-			*(temp+3) = (guchar) ((v == context->gif89.transparent) ? 0 : 65535);
+			*(temp+3) = (guchar) ((v == context->gif89.transparent) ? 0 : -1);
 		} else {
 			temp = dest + context->draw_ypos * gdk_pixbuf_get_rowstride (context->pixbuf) + context->draw_xpos * 3;
 			*temp = context->color_map [0][(guchar) v];
@@ -962,7 +967,9 @@ image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
 {
 	GifContext *context;
 
+#ifdef IO_GIFDEBUG
 	count = 0;
+#endif
 	context = g_new (GifContext, 1);
 	context->func = func;
 	context->user_data = user_data;
