@@ -2056,6 +2056,7 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
 
   if ((!node->next) && (cmp_a > 0))
     {
+      new_location++;
       node->next = G_NODE (iter->user_data);
       node->next->prev = node;
     }

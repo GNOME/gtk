@@ -1,3 +1,9 @@
+Thu Mar  7 21:32:01 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_sort_iter_changed): increase
+	value of new_location by one if cmp_a > 0 and we hit the end of
+	the list.
+
 Thu Mar  7 10:31:57 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_timer): Fix problem where
