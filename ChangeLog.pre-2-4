@@ -1,3 +1,9 @@
+Sun Nov 22 14:34:58 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.5
+
+	* configure.in: require GLib 1.1.5
+
 Mon Nov 23 03:21:17 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktext.c (gtk_text_destroy): disconnect hadj & vadj, not
@@ -13,8 +19,6 @@ Sat Nov 21 18:41:13 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 	  README:
 	  gtk+.spec:
 	  docs/gtk-config.1: Version incremented to 1.1.5
-
-	* Released GTK+ 1.1.5
 
 Sun Nov 22 16:21:28 1998  Tim Janik  <timj@gtk.org>
 

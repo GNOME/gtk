@@ -40,6 +40,14 @@ else
 	exit 1
 fi
 
+echo -n "configure.in..."
+if [ "x`grep $VERSION gtk+-$VERSION/configure.in | wc -l | awk -F' ' '{print $1}'`" == "x2" ]; then 
+	echo "ok" 
+else
+	echo "failed."
+	exit 1
+fi
+
 
 echo ""
 echo "Number of lines in created documentation files:"
