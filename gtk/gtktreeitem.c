@@ -697,22 +697,23 @@ gtk_tree_item_expose_child (GtkWidget *child,
     GtkWidget *container;
     GdkEventExpose *event;
   } *data = client_data;
-  GdkEventExpose child_event;
 
   if (GTK_WIDGET_DRAWABLE (child) &&
       GTK_WIDGET_NO_WINDOW (child) &&
       (child->window == data->event->window))
     {
-      child_event = *data->event;
+      GdkEvent *child_event = gdk_event_new (GDK_EXPOSE);
+      child_event->expose = *data->event;
+      g_object_ref (child_event->expose.window);
 
-      child_event.region = gtk_widget_region_intersect (child,
-                                                        data->event->region);
-      if (!gdk_region_empty (child_event.region))
+      child_event->expose.region = gtk_widget_region_intersect (child,
+								data->event->region);
+      if (!gdk_region_empty (child_event->expose.region))
         {
-          gdk_region_get_clipbox (child_event.region, &child_event.area);
-          gtk_widget_send_expose (child, (GdkEvent *) &child_event);
+          gdk_region_get_clipbox (child_event->expose.region, &child_event->expose.area);
+          gtk_widget_send_expose (child, child_event);
 	}
-      gdk_region_destroy (child_event.region);
+      gdk_event_free (child_event);
     }
 }
 

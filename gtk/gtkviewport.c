@@ -582,7 +582,6 @@ gtk_viewport_expose (GtkWidget      *widget,
 {
   GtkViewport *viewport;
   GtkBin *bin;
-  GdkEventExpose child_event;
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
@@ -593,8 +592,6 @@ gtk_viewport_expose (GtkWidget      *widget,
 	gtk_viewport_paint (widget, &event->area);
       else if (event->window == viewport->bin_window)
 	{
-	  child_event = *event;
-
 	  gtk_paint_flat_box(widget->style, viewport->bin_window, 
 			     GTK_STATE_NORMAL, GTK_SHADOW_NONE,
 			     &event->area, widget, "viewportbin",

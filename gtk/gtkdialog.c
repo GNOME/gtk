@@ -349,20 +349,16 @@ gtk_dialog_close (GtkDialog *dialog)
 {
   /* Synthesize delete_event to close dialog. */
   
-  GdkEventAny event;
+  GdkEvent *event = gdk_event_new (GDK_DELETE);
   GtkWidget *widget;
 
   widget = GTK_WIDGET (dialog);
   
-  event.type = GDK_DELETE;
-  event.window = widget->window;
-  event.send_event = TRUE;
+  event->any.window = g_object_ref (widget->window);
+  event->any.send_event = TRUE;
   
-  g_object_ref (G_OBJECT (event.window));
-  
-  gtk_main_do_event ((GdkEvent*)&event);
-  
-  g_object_unref (G_OBJECT (event.window));
+  gtk_main_do_event (event);
+  gdk_event_free (event);
 }
 
 GtkWidget*

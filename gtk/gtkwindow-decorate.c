@@ -481,18 +481,14 @@ gtk_decorated_window_button_release (GtkWidget	    *widget,
       type = gtk_decorated_window_region_type (window, event->x, event->y);
       if (type == GTK_WINDOW_REGION_CLOSE)
 	{
-	  GdkEventAny event;
+	  GdkEvent *event = gdk_event_new (GDK_DELETE);
 
-	  event.type = GDK_DELETE;
-	  event.window = widget->window;
-	  event.send_event = TRUE;
+	  event->any.type = GDK_DELETE;
+	  event->any.window = g_object_ref (widget->window);
+	  event->any.send_event = TRUE;
 
-	    /* Synthesize delete_event */
-	  g_object_ref (event.window);
-  
-	  gtk_main_do_event ((GdkEvent *) &event);
-	  
-	  g_object_unref (event.window);
+	  gtk_main_do_event (event);
+	  gdk_event_free (event);
 	}
     }
   

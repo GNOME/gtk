@@ -1644,7 +1644,6 @@ static gint
 gtk_text_scroll_timeout (gpointer data)
 {
   GtkText *text;
-  GdkEventMotion event;
   gint x, y;
   GdkModifierType mask;
   
@@ -1657,12 +1656,16 @@ gtk_text_scroll_timeout (gpointer data)
   
   if (mask & (GDK_BUTTON1_MASK | GDK_BUTTON3_MASK))
     {
-      event.is_hint = 0;
-      event.x = x;
-      event.y = y;
-      event.state = mask;
+      GdkEvent *event = gdk_event_new (GDK_MOTION_NOTIFY);
       
-      gtk_text_motion_notify (GTK_WIDGET (text), &event);
+      event->motion.is_hint = 0;
+      event->motion.x = x;
+      event->motion.y = y;
+      event->motion.state = mask;
+      
+      gtk_text_motion_notify (GTK_WIDGET (text), (GdkEventMotion *)event);
+
+      gdk_event_free (event);
     }
 
   GDK_THREADS_LEAVE ();

@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <string.h>		/* For memset() */
+
 #include "gdk.h"
 #include "gdkinternals.h"
 
@@ -259,9 +261,10 @@ static GMemChunk *event_chunk = NULL;
 static GHashTable *event_hash = NULL;
 
 GdkEvent*
-_gdk_event_new (void)
+gdk_event_new (GdkEventType type)
 {
-  GdkEventPrivate *new_event;
+  GdkEventPrivate *new_private;
+  GdkEvent *new_event;
   
   if (event_chunk == NULL)
     {
@@ -272,13 +275,59 @@ _gdk_event_new (void)
       event_hash = g_hash_table_new (g_direct_hash, NULL);
     }
   
-  new_event = g_chunk_new (GdkEventPrivate, event_chunk);
-  new_event->flags = 0;
-  new_event->screen = NULL;
-
-  g_hash_table_insert (event_hash, new_event, GUINT_TO_POINTER (1));
+  new_private = g_chunk_new (GdkEventPrivate, event_chunk);
+  memset (new_private, 0, sizeof (GdkEventPrivate));
   
-  return (GdkEvent*) new_event;
+  new_private->flags = 0;
+  new_private->screen = NULL;
+
+  g_hash_table_insert (event_hash, new_private, GUINT_TO_POINTER (1));
+
+  new_event = (GdkEvent *) new_private;
+
+  new_event->any.type = type;
+
+  /*
+   * Bytewise 0 initialization is reasonable for most of the 
+   * current event types. Explicitely initialize double fields
+   * since I trust bytewise 0 == 0. less than for integers
+   * or pointers.
+   */
+  switch (type)
+    {
+    case GDK_MOTION_NOTIFY:
+      new_event->motion.x = 0.;
+      new_event->motion.y = 0.;
+      new_event->motion.x_root = 0.;
+      new_event->motion.y_root = 0.;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      new_event->button.x = 0.;
+      new_event->button.y = 0.;
+      new_event->button.x_root = 0.;
+      new_event->button.y_root = 0.;
+      break;
+    case GDK_SCROLL:
+      new_event->scroll.x = 0.;
+      new_event->scroll.y = 0.;
+      new_event->scroll.x_root = 0.;
+      new_event->scroll.y_root = 0.;
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      new_event->crossing.x = 0.;
+      new_event->crossing.y = 0.;
+      new_event->crossing.x_root = 0.;
+      new_event->crossing.y_root = 0.;
+      break;
+    default:
+      break;
+    }
+  
+  return new_event;
 }
 
 static gboolean
@@ -303,15 +352,22 @@ gdk_event_is_allocated (GdkEvent *event)
 GdkEvent*
 gdk_event_copy (GdkEvent *event)
 {
+  GdkEventPrivate *private;
+  GdkEventPrivate *new_private;
   GdkEvent *new_event;
   
   g_return_val_if_fail (event != NULL, NULL);
   
-  new_event = _gdk_event_new ();
-  
+  new_event = gdk_event_new (GDK_NOTHING);
+  new_private = (GdkEventPrivate *)new_event;
+
+  private = (GdkEventPrivate *)event;
+
   *new_event = *event;
   if (new_event->any.window)
     g_object_ref (new_event->any.window);
+
+  new_private->screen = private->screen;
   
   switch (event->any.type)
     {

@@ -269,7 +269,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   
   if (xevent.xany.type == GraphicsExpose)
     {
-      event = _gdk_event_new ();
+      event = gdk_event_new (GDK_NOTHING);
       
       if (gdk_event_translate (GDK_WINDOW_DISPLAY (window), event,
 			       &xevent, TRUE))
@@ -1799,9 +1799,8 @@ _gdk_events_queue (GdkDisplay *display)
 	    continue;
 	}
       
-      event = _gdk_event_new ();
+      event = gdk_event_new (GDK_NOTHING);
       
-      event->any.type = GDK_NOTHING;
       event->any.window = NULL;
       event->any.send_event = xevent.xany.send_event ? TRUE : FALSE;
 

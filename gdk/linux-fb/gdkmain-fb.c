@@ -1456,12 +1456,11 @@ gdk_event_make (GdkWindow *window,
 		GdkEventType type,
 		gboolean append_to_queue)
 {
-  GdkEvent *event = _gdk_event_new ();
+  GdkEvent *event = gdk_event_new (type);
   guint32 the_time;
   
   the_time = gdk_fb_get_time ();
   
-  event->any.type = type;
   event->any.window = gdk_window_ref (window);
   event->any.send_event = FALSE;
   switch (type)

@@ -1,3 +1,35 @@
+Thu Oct  3 14:13:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c (gdk_event_new): Add a 'type'
+	parameter, make public.
+
+	* gdk/gdkevents.c (gdk_event_copy): Copy the screen.
+
+	* gdk/gdkevents.c gdk/linux-fb/gdkmain-fb.c
+	gdk/x11/gdkevents-x11.c	gdk/win32/gdkevents-win32.c:
+	_gdk_event_new() => gdk_event_new().
+	
+	* gdk/win32/gdkevents-win32.c (real_window_procedure): 
+	Fix event_private->screen breakage that results from evil 
+	encapsulation breakage here.
+	
+	* gtk/gtkclist.c gtk/gtkcombo.c gtk/gtkcontainer.c
+	gtk/gtkdialog.c gtk/gtkdnd.c gtk/gtkdrawingarea.c
+	gtk/gtkimcontextsimple.c gtk/gtklist.c gtk/gtkmenu.c
+	gtk/gtknotebook.c gtk/gtkplug.c gtk/gtkselection.c
+	gtk/gtktext.c gtk/gtktreeitem.c gtk/gtktreeview.c
+	gtk/gtkviewport.c gtk/gtkwindow-decorate.c gtk/gtkwindow.c
+	tests/testgtk.c: Remove most usage of stack-allocated 
+	GdkEvent structures.
+
+	* gtk/gtktreeview.c: Use a cut-and-paste of the full 
+	send_focus_event() from gtkwindow.c that does the necessary 
+	notification of the ::has-focus property and setting of 
+	the HAS_FOCUS flag.x
+
+	* gtk/gtkdnd.c: Clean up some mess/duplicated code; removing
+	an extraneous use of a GdkEvent.
+
 Wed Oct  2 17:46:53 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdrawable.h gdk/gdkinternals.h gdk/gdkdraw.c

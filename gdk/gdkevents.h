@@ -237,7 +237,6 @@ struct _GdkEventNoExpose
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
-  /* XXX: does anyone need the X major_code or minor_code fields? */
 };
 
 struct _GdkEventVisibility
@@ -451,6 +450,7 @@ GdkEvent* gdk_event_peek                (void);
 GdkEvent* gdk_event_get_graphics_expose (GdkWindow 	*window);
 void      gdk_event_put	 		(GdkEvent  	*event);
 
+GdkEvent* gdk_event_new                 (GdkEventType    type);
 GdkEvent* gdk_event_copy     		(GdkEvent 	*event);
 void	  gdk_event_free     		(GdkEvent 	*event);
 

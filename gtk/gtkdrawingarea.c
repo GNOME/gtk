@@ -151,17 +151,17 @@ static void
 gtk_drawing_area_send_configure (GtkDrawingArea *darea)
 {
   GtkWidget *widget;
-  GdkEventConfigure event;
+  GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
 
   widget = GTK_WIDGET (darea);
 
-  event.type = GDK_CONFIGURE;
-  event.window = widget->window;
-  event.send_event = TRUE;
-  event.x = widget->allocation.x;
-  event.y = widget->allocation.y;
-  event.width = widget->allocation.width;
-  event.height = widget->allocation.height;
+  event->configure.window = g_object_ref (widget->window);
+  event->configure.send_event = TRUE;
+  event->configure.x = widget->allocation.x;
+  event->configure.y = widget->allocation.y;
+  event->configure.width = widget->allocation.width;
+  event->configure.height = widget->allocation.height;
   
-  gtk_widget_event (widget, (GdkEvent*) &event);
+  gtk_widget_event (widget, event);
+  gdk_event_free (event);
 }

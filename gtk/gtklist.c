@@ -2317,22 +2317,25 @@ gtk_list_move_focus_child (GtkList       *list,
     }
 }
 
+static void
+do_fake_motion (GtkWidget *list)
+{
+  GdkEvent *event = gdk_event_new (GDK_MOTION_NOTIFY);
+
+  event->motion.send_event = TRUE;
+
+  gtk_list_motion_notify (list, (GdkEventMotion *)event);
+  gdk_event_free (event);
+}
+
 static gint
 gtk_list_horizontal_timeout (GtkWidget *list)
 {
-  GdkEventMotion event;
-
-  memset (&event, 0, sizeof (event));
-
   GDK_THREADS_ENTER ();
 
   GTK_LIST (list)->htimer = 0;
-
-  event.type = GDK_MOTION_NOTIFY;
-  event.send_event = TRUE;
-
-  gtk_list_motion_notify (list, &event);
-
+  do_fake_motion (list);
+  
   GDK_THREADS_LEAVE ();
 
   return FALSE;
@@ -2341,18 +2344,10 @@ gtk_list_horizontal_timeout (GtkWidget *list)
 static gint
 gtk_list_vertical_timeout (GtkWidget *list)
 {
-  GdkEventMotion event;
-
-  memset (&event, 0, sizeof (event));
-
   GDK_THREADS_ENTER ();
 
   GTK_LIST (list)->vtimer = 0;
-
-  event.type = GDK_MOTION_NOTIFY;
-  event.send_event = TRUE;
-
-  gtk_list_motion_notify (list, &event);
+  do_fake_motion (list);
 
   GDK_THREADS_LEAVE ();
 

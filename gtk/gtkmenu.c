@@ -1979,17 +1979,17 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
       if (event->x >= 0 && event->x < width &&
 	  event->y >= 0 && event->y < height)
 	{
-	  GdkEvent send_event;
+	  GdkEvent *send_event = gdk_event_new (GDK_ENTER_NOTIFY);
+	  gboolean result;
 
-	  memset (&send_event, 0, sizeof (send_event));
-	  send_event.crossing.type = GDK_ENTER_NOTIFY;
-	  send_event.crossing.window = event->window;
-	  send_event.crossing.time = event->time;
-	  send_event.crossing.send_event = TRUE;
-	  send_event.crossing.x_root = event->x_root;
-	  send_event.crossing.y_root = event->y_root;
-	  send_event.crossing.x = event->x;
-	  send_event.crossing.y = event->y;
+	  send_event->crossing.type = GDK_ENTER_NOTIFY;
+	  send_event->crossing.window = g_object_ref (event->window);
+	  send_event->crossing.time = event->time;
+	  send_event->crossing.send_event = TRUE;
+	  send_event->crossing.x_root = event->x_root;
+	  send_event->crossing.y_root = event->y_root;
+	  send_event->crossing.x = event->x;
+	  send_event->crossing.y = event->y;
 
 	  /* We send the event to 'widget', the currently active menu,
 	   * instead of 'menu', the menu that the pointer is in. This
@@ -1997,7 +1997,10 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 	   * menuitem is a child of the active menu or some parent
 	   * menu of the active menu.
 	   */
-	  return gtk_widget_event (widget, &send_event);
+	  result = gtk_widget_event (widget, &send_event);
+	  gdk_event_free (send_event);
+
+	  return result;
 	}
     }
 
@@ -2244,15 +2247,15 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 
       if (child_window)
 	{
-	  GdkEventCrossing send_event;
+	  GdkEvent *send_event = gdk_event_new (GDK_ENTER_NOTIFY);
 
-	  memset (&send_event, 0, sizeof (send_event));
-	  send_event.window = child_window;
-	  send_event.type = GDK_ENTER_NOTIFY;
-	  send_event.time = GDK_CURRENT_TIME; /* Bogus */
-	  send_event.send_event = TRUE;
+	  send_event->crossing.window = g_object_ref (child_window);
+	  send_event->crossing.time = GDK_CURRENT_TIME; /* Bogus */
+	  send_event->crossing.send_event = TRUE;
 
-	  GTK_WIDGET_CLASS (parent_class)->enter_notify_event (GTK_WIDGET (menu), &send_event); 
+	  GTK_WIDGET_CLASS (parent_class)->enter_notify_event (GTK_WIDGET (menu), (GdkEventCrossing *)send_event);
+
+	  gdk_event_free (send_event);
 	}
     }
 

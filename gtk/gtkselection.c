@@ -380,14 +380,15 @@ gtk_selection_owner_set_for_display (GdkDisplay   *display,
        */
       if (old_owner && old_owner != widget)
 	{
-	  GdkEventSelection event;
+	  GdkEvent *event = gdk_event_new (GDK_SELECTION_CLEAR);
 	  
-	  event.type = GDK_SELECTION_CLEAR;
-	  event.window = old_owner->window;
-	  event.selection = selection;
-	  event.time = time;
+	  event->selection.window = g_object_ref (old_owner->window);
+	  event->selection.selection = selection;
+	  event->selection.time = time;
 	  
-	  gtk_widget_event (old_owner, (GdkEvent *) &event);
+	  gtk_widget_event (old_owner, event);
+
+	  gdk_event_free (event);
 	}
       return TRUE;
     }

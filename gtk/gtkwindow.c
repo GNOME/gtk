@@ -4077,24 +4077,25 @@ static void
 do_focus_change (GtkWidget *widget,
 		 gboolean   in)
 {
-  GdkEventFocus fevent;
-
+  GdkEvent *fevent = gdk_event_new (GDK_FOCUS_CHANGE);
+  
   g_object_ref (widget);
-   
- if (in)
+  
+  if (in)
     GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   else
     GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-
-  fevent.type = GDK_FOCUS_CHANGE;
-  fevent.window = widget->window;
-  fevent.in = in;
   
-  gtk_widget_event (widget, (GdkEvent*) &fevent);
+  fevent->focus_change.type = GDK_FOCUS_CHANGE;
+  fevent->focus_change.window = g_object_ref (widget->window);
+  fevent->focus_change.in = in;
+  
+  gtk_widget_event (widget, fevent);
   
   g_object_notify (G_OBJECT (widget), "has_focus");
 
   g_object_unref (widget);
+  gdk_event_free (fevent);
 }
 
 static gint
@@ -4140,20 +4141,22 @@ gtk_window_read_rcfiles (GtkWidget *widget,
   embedded_windows = g_object_get_data (G_OBJECT (widget), "gtk-embedded");
   if (embedded_windows)
     {
-      GdkEventClient sev;
+      GdkEvent *send_event = gdk_event_new (GDK_CLIENT_EVENT);
       int i;
       
       for (i = 0; i < 5; i++)
-	sev.data.l[i] = 0;
-      sev.data_format = 32;
-      sev.message_type = atom_rcfiles;
+	send_event->client.data.l[i] = 0;
+      send_event->client.data_format = 32;
+      send_event->client.message_type = atom_rcfiles;
       
       while (embedded_windows)
 	{
 	  guint xid = GPOINTER_TO_UINT (embedded_windows->data);
-	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), (GdkEvent *) &sev, xid);
+	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), send_event, xid);
 	  embedded_windows = embedded_windows->next;
 	}
+
+      gdk_event_free (send_event);
     }
 
   gtk_rc_reparse_all_for_settings (gtk_widget_get_settings (widget), FALSE);

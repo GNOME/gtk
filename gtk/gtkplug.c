@@ -247,6 +247,24 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   g_signal_emit_by_name (G_OBJECT (socket), "plug_added", 0);
 }
 
+static void
+send_delete_event (GtkWidget *widget)
+{
+  GdkEvent *event = gdk_event_new (GDK_DELETE);
+  
+  event->any.window = g_object_ref (widget->window);
+  event->any.send_event = FALSE;
+
+  gtk_widget_ref (widget);
+  
+  if (!gtk_widget_event (widget, event))
+    gtk_widget_destroy (widget);
+  
+  gtk_widget_unref (widget);
+
+  gdk_event_free (event);
+}
+
 /**
  * _gtk_plug_remove_from_socket:
  * @plug: a #GtkPlug
@@ -259,7 +277,6 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 			      GtkSocket *socket)
 {
   GtkWidget *widget;
-  GdkEvent event;
   gboolean result;
   gboolean widget_was_visible;
 
@@ -298,14 +315,8 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   if (!result)
     gtk_widget_destroy (GTK_WIDGET (socket));
 
-  event.any.type = GDK_DELETE;
-  event.any.window = g_object_ref (widget->window);
-  event.any.send_event = FALSE;
-  
-  if (!gtk_widget_event (widget, &event))
-    gtk_widget_destroy (widget);
-  
-  g_object_unref (event.any.window);
+  send_delete_event (widget);
+
   g_object_unref (plug);
 
   if (widget_was_visible && GTK_WIDGET_VISIBLE (socket))
@@ -1110,18 +1121,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 		 */
 
 		if (xre->parent == GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen)))
-		  {
-		    GdkEvent event;
-		    
-		    event.any.type = GDK_DELETE;
-		    event.any.window = g_object_ref (widget->window);
-		    event.any.send_event = FALSE;
-		    
-		    if (!gtk_widget_event (widget, &event))
-		      gtk_widget_destroy (widget);
-		    
-		    g_object_unref (event.any.window);
-		  }
+		  send_delete_event (widget);
 	      }
 	    else
 	      goto done;

@@ -7047,21 +7047,24 @@ move_vertical (GtkCList *clist,
   gtk_adjustment_set_value (clist->vadjustment, value);
 }
 
+static void
+do_fake_motion (GtkWidget *widget)
+{
+  GdkEvent *event = gdk_event_new (GDK_MOTION_NOTIFY);
+
+  event->motion.send_event = TRUE;
+
+  gtk_clist_motion (widget, (GdkEventMotion *)event);
+  gdk_event_free (event);
+}
+
 static gint
 horizontal_timeout (GtkCList *clist)
 {
-  GdkEventMotion event;
-
-  memset (&event, 0, sizeof (event));
-
   GDK_THREADS_ENTER ();
 
   clist->htimer = 0;
-
-  event.type = GDK_MOTION_NOTIFY;
-  event.send_event = TRUE;
-
-  gtk_clist_motion (GTK_WIDGET (clist), &event);
+  do_fake_motion (GTK_WIDGET (clist));
 
   GDK_THREADS_LEAVE ();
   
@@ -7071,18 +7074,10 @@ horizontal_timeout (GtkCList *clist)
 static gint
 vertical_timeout (GtkCList *clist)
 {
-  GdkEventMotion event;
-
-  memset (&event, 0, sizeof (event));
-
   GDK_THREADS_ENTER ();
 
   clist->vtimer = 0;
-
-  event.type = GDK_MOTION_NOTIFY;
-  event.send_event = TRUE;
-
-  gtk_clist_motion (GTK_WIDGET (clist), &event);
+  do_fake_motion (GTK_WIDGET (clist));
 
   GDK_THREADS_LEAVE ();
 

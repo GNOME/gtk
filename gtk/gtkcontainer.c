@@ -2296,7 +2296,7 @@ gtk_container_propagate_expose (GtkContainer   *container,
 				GtkWidget      *child,
 				GdkEventExpose *event)
 {
-  GdkEventExpose child_event;
+  GdkEvent *child_event;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -2308,14 +2308,16 @@ gtk_container_propagate_expose (GtkContainer   *container,
       GTK_WIDGET_NO_WINDOW (child) &&
       (child->window == event->window))
     {
-      child_event = *event;
+      child_event = gdk_event_new (GDK_EXPOSE);
+      child_event->expose = *event;
+      g_object_ref (child_event->expose.window);
 
-      child_event.region = gtk_widget_region_intersect (child, event->region);
-      if (!gdk_region_empty (child_event.region))
+      child_event->expose.region = gtk_widget_region_intersect (child, event->region);
+      if (!gdk_region_empty (child_event->expose.region))
 	{
-	  gdk_region_get_clipbox (child_event.region, &child_event.area);
-	  gtk_widget_send_expose (child, (GdkEvent *)&child_event);
+	  gdk_region_get_clipbox (child_event->expose.region, &child_event->expose.area);
+	  gtk_widget_send_expose (child, child_event);
 	}
-      gdk_region_destroy (child_event.region);
+      gdk_event_free (child_event);
     }
 }

@@ -169,9 +169,6 @@ extern gchar     *_gdk_display_name;
 
 extern const GdkPointerHooks *_gdk_current_pointer_hooks;
 
-GdkEvent* _gdk_event_new (void);
-
-
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 

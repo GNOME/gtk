@@ -166,6 +166,7 @@ real_window_procedure (HWND   hwnd,
   msg.pt.y = HIWORD (pos);
 
   event.flags = GDK_EVENT_PENDING;
+  event.screen = NULL;
   if (gdk_event_translate (display, &event.event, &msg, &ret_val_flag, &ret_val, FALSE))
     {
       event.flags &= ~GDK_EVENT_PENDING;
@@ -217,7 +218,7 @@ real_window_procedure (HWND   hwnd,
 	    }
 	}
 #endif
-      eventp = _gdk_event_new ();
+      eventp = gdk_event_new (GDK_NOTHING);
       *((GdkEventPrivate *) eventp) = event;
 
       /* Philippe Colantoni <colanton@aris.ss.uci.edu> suggests this
@@ -505,7 +506,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
 #else
   if (PeekMessage (&msg, GDK_WINDOW_HWND (window), WM_PAINT, WM_PAINT, PM_REMOVE))
     {
-      event = _gdk_event_new ();
+      event = gdk_event_new (GDK_NOTHING);
       
       if (gdk_event_translate (gdk_drawable_get_display (window), 
                                event, &msg, NULL, NULL, TRUE))
@@ -1246,8 +1247,7 @@ synthesize_enter_or_leave_event (GdkWindow    *window,
 {
   GdkEvent *event;
   
-  event = _gdk_event_new ();
-  event->crossing.type = type;
+  event = gdk_event_new (type);
   event->crossing.window = window;
   event->crossing.send_event = FALSE;
   gdk_window_ref (event->crossing.window);
@@ -1468,8 +1468,7 @@ synthesize_expose_events (GdkWindow *window)
 	WIN32_GDI_FAILED ("GetClipBox");
       else if (k != NULLREGION)
 	{
-	  event = _gdk_event_new ();
-	  event->expose.type = GDK_EXPOSE;
+	  event = gdk_event_new (GDK_EXPOSE);
 	  event->expose.window = window;
 	  gdk_window_ref (window);
 	  event->expose.area.x = r.left;
@@ -2533,7 +2532,7 @@ gdk_event_translate (GdkDisplay *display,
 	       * (from which it will be fetched before the release
 	       * event).
 	       */
-	      GdkEvent *event2 = _gdk_event_new ();
+	      GdkEvent *event2 = gdk_event_new (GDK_KEY_PRESS);
 	      build_keypress_event (event2, msg);
 	      event2->key.window = window;
 	      gdk_drawable_ref (window);

@@ -710,7 +710,7 @@ gtk_combo_list_enter (GtkWidget        *widget,
       (combo->current_button != 0) && 
       (!GTK_WIDGET_HAS_GRAB (combo->list)))
     {
-      GdkEvent tmp_event;
+      GdkEvent *tmp_event = gdk_event_new (GDK_BUTTON_PRESS);
       gint x, y;
       GdkModifierType mask;
 
@@ -721,19 +721,19 @@ gtk_combo_list_enter (GtkWidget        *widget,
        */
       gdk_window_get_pointer (combo->list->window, &x, &y, &mask);
 
-      tmp_event.button.type = GDK_BUTTON_PRESS;
-      tmp_event.button.window = combo->list->window;
-      tmp_event.button.send_event = TRUE;
-      tmp_event.button.time = GDK_CURRENT_TIME; /* bad */
-      tmp_event.button.x = x;
-      tmp_event.button.y = y;
+      tmp_event->button.window = g_object_ref (combo->list->window);
+      tmp_event->button.send_event = TRUE;
+      tmp_event->button.time = GDK_CURRENT_TIME; /* bad */
+      tmp_event->button.x = x;
+      tmp_event->button.y = y;
       /* We leave all the XInput fields unfilled here, in the expectation
        * that GtkList doesn't care.
        */
-      tmp_event.button.button = combo->current_button;
-      tmp_event.button.state = mask;
+      tmp_event->button.button = combo->current_button;
+      tmp_event->button.state = mask;
 
-      gtk_widget_event (combo->list, &tmp_event);
+      gtk_widget_event (combo->list, tmp_event);
+      gdk_event_free (tmp_event);
     }
 
   return FALSE;

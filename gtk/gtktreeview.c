@@ -6802,7 +6802,7 @@ void
 _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 				  GtkTreeViewColumn *column)
 {
-  GdkEvent send_event;
+  GdkEvent *send_event;
   GtkAllocation allocation;
   gint x, y, width, height;
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
@@ -6838,29 +6838,31 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   gtk_grab_remove (column->button);
 
-  send_event.crossing.type = GDK_LEAVE_NOTIFY;
-  send_event.crossing.send_event = TRUE;
-  send_event.crossing.window = column->button->window;
-  send_event.crossing.subwindow = NULL;
-  send_event.crossing.detail = GDK_NOTIFY_ANCESTOR;
-  send_event.crossing.time = GDK_CURRENT_TIME;
+  send_event = gdk_event_new (GDK_LEAVE_NOTIFY);
+  send_event->crossing.send_event = TRUE;
+  send_event->crossing.window = g_object_ref (column->button->window);
+  send_event->crossing.subwindow = NULL;
+  send_event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+  send_event->crossing.time = GDK_CURRENT_TIME;
 
-  gtk_propagate_event (column->button, &send_event);
+  gtk_propagate_event (column->button, send_event);
+  gdk_event_free (send_event);
 
-  send_event.button.type = GDK_BUTTON_RELEASE;
-  send_event.button.window = gdk_screen_get_root_window (screen);
-  send_event.button.send_event = TRUE;
-  send_event.button.time = GDK_CURRENT_TIME;
-  send_event.button.x = -1;
-  send_event.button.y = -1;
-  send_event.button.axes = NULL;
-  send_event.button.state = 0;
-  send_event.button.button = 1;
-  send_event.button.device = gdk_display_get_core_pointer (display);
-  send_event.button.x_root = 0;
-  send_event.button.y_root = 0;
+  send_event = gdk_event_new (GDK_BUTTON_RELEASE);
+  send_event->button.window = g_object_ref (gdk_screen_get_root_window (screen));
+  send_event->button.send_event = TRUE;
+  send_event->button.time = GDK_CURRENT_TIME;
+  send_event->button.x = -1;
+  send_event->button.y = -1;
+  send_event->button.axes = NULL;
+  send_event->button.state = 0;
+  send_event->button.button = 1;
+  send_event->button.device = gdk_display_get_core_pointer (display);
+  send_event->button.x_root = 0;
+  send_event->button.y_root = 0;
 
-  gtk_propagate_event (column->button, &send_event);
+  gtk_propagate_event (column->button, send_event);
+  gdk_event_free (send_event);
 
   gdk_window_move_resize (tree_view->priv->drag_window,
 			  column->button->allocation.x,
@@ -7515,13 +7517,38 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
   gtk_tree_path_free (cursor_path);
 }
 
+/* Cut and paste from gtkwindow.c */
+static void
+send_focus_change (GtkWidget *widget,
+		   gboolean   in)
+{
+  GdkEvent *fevent = gdk_event_new (GDK_FOCUS_CHANGE);
+
+  g_object_ref (widget);
+   
+ if (in)
+    GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
+  else
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+
+  fevent->focus_change.type = GDK_FOCUS_CHANGE;
+  fevent->focus_change.window = g_object_ref (widget->window);
+  fevent->focus_change.in = in;
+  
+  gtk_widget_event (widget, fevent);
+  
+  g_object_notify (G_OBJECT (widget), "has_focus");
+
+  g_object_unref (widget);
+  gdk_event_free (fevent);
+}
+
 static void
 gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
 {
   GtkWidget *window;
   GtkWidget *entry;
   GtkWidget *search_dialog;
-  GdkEventFocus focus_event;
 
   if (! GTK_WIDGET_HAS_FOCUS (tree_view))
     return;
@@ -7566,9 +7593,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
   gtk_widget_grab_focus (entry);
 
   /* send focus-in event */
-  focus_event.type = GDK_FOCUS_CHANGE;
-  focus_event.in = TRUE;
-  gtk_widget_event (entry, (GdkEvent *) &focus_event);
+  send_focus_change (entry, TRUE);
 
   /* position window */
 
@@ -10448,11 +10473,8 @@ gtk_tree_view_search_dialog_destroy (GtkWidget   *search_dialog,
 
   if (entry)
     {
-      GdkEventFocus focus_event;
-
-      focus_event.type = GDK_FOCUS_CHANGE;
-      focus_event.in = FALSE;
-      gtk_widget_event (GTK_WIDGET (entry), (GdkEvent *) &focus_event);
+      /* send focus-in event */
+      send_focus_change (GTK_WIDGET (entry), FALSE);
     }
 
   /* remove data from tree_view */

@@ -234,6 +234,8 @@ static void gtk_drag_drop                      (GtkDragSourceInfo *info,
 static void gtk_drag_drop_finished             (GtkDragSourceInfo *info,
 						gboolean           success,
 						guint              time);
+static void gtk_drag_cancel                    (GtkDragSourceInfo *info,
+						guint32            time);
 
 static gint gtk_drag_source_event_cb           (GtkWidget         *widget,
 						GdkEvent          *event,
@@ -1886,15 +1888,7 @@ gtk_drag_begin (GtkWidget         *widget,
     {
       if (gdk_keyboard_grab (info->ipc_widget->window, FALSE, time) != 0)
 	{
-	  /* FIXME: This should be cleaned up... */
-	  GdkEventButton ev;
-
-	  ev.time = time;
-	  ev.type = GDK_BUTTON_RELEASE;
-	  ev.button = info->button;
-
-	  gtk_drag_button_release_cb (widget, &ev, info);
-
+	  gtk_drag_cancel (info, time);
 	  return NULL;
 	}
     }
@@ -3015,15 +3009,15 @@ gtk_drag_update (GtkDragSourceInfo *info,
  *     Called when the user finishes to drag, either by
  *     releasing the mouse, or by pressing Esc.
  *   arguments:
- *     widget: GtkInvisible widget for this drag
- *     info: 
+ *     info: Source info for the drag
+ *     time: Timestamp for ending the drag
  *   results:
  *************************************************************/
 
 static void
 gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 {
-  GdkEvent send_event;
+  GdkEvent *send_event;
   GtkWidget *source_widget = info->widget;
   GdkDisplay *display = gtk_widget_get_display (source_widget);
 
@@ -3050,20 +3044,39 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
    * expect propagation.
    */
 
-  send_event.button.type = GDK_BUTTON_RELEASE;
-  send_event.button.window = gtk_widget_get_root_window (source_widget);
-  send_event.button.send_event = TRUE;
-  send_event.button.time = time;
-  send_event.button.x = 0;
-  send_event.button.y = 0;
-  send_event.button.axes = NULL;
-  send_event.button.state = 0;
-  send_event.button.button = info->button;
-  send_event.button.device = gdk_display_get_core_pointer (display);
-  send_event.button.x_root = 0;
-  send_event.button.y_root = 0;
+  send_event = gdk_event_new (GDK_BUTTON_RELEASE);
+  send_event->button.window = g_object_ref (gtk_widget_get_root_window (source_widget));
+  send_event->button.send_event = TRUE;
+  send_event->button.time = time;
+  send_event->button.x = 0;
+  send_event->button.y = 0;
+  send_event->button.axes = NULL;
+  send_event->button.state = 0;
+  send_event->button.button = info->button;
+  send_event->button.device = gdk_display_get_core_pointer (display);
+  send_event->button.x_root = 0;
+  send_event->button.y_root = 0;
 
-  gtk_propagate_event (source_widget, &send_event);
+  gtk_propagate_event (source_widget, send_event);
+  gdk_event_free (send_event);
+}
+
+/*************************************************************
+ * gtk_drag_cancel:
+ *    Called on cancellation of a drag, either by the user
+ *    or programmatically.
+ *   arguments:
+ *     info: Source info for the drag
+ *     time: Timestamp for ending the drag
+ *   results:
+ *************************************************************/
+
+static void
+gtk_drag_cancel (GtkDragSourceInfo *info, guint32 time)
+{
+  gtk_drag_end (info, time);
+  gdk_drag_abort (info->context, time);
+  gtk_drag_drop_finished (info, FALSE, time);
 }
 
 /*************************************************************
@@ -3117,9 +3130,7 @@ gtk_drag_key_cb (GtkWidget         *widget,
     {
       if (event->keyval == GDK_Escape)
 	{
-	  gtk_drag_end (info, event->time);
-	  gdk_drag_abort (info->context, event->time);
-	  gtk_drag_drop_finished (info, FALSE, event->time);
+	  gtk_drag_cancel (info, event->time);
 
 	  return TRUE;
 	}
@@ -3158,16 +3169,14 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
   if (event->button != info->button)
     return FALSE;
 
-  gtk_drag_end (info, event->time);
-
   if ((info->context->action != 0) && (info->context->dest_window != NULL))
     {
+      gtk_drag_end (info, event->time);
       gtk_drag_drop (info, event->time);
     }
   else
     {
-      gdk_drag_abort (info->context, event->time);
-      gtk_drag_drop_finished (info, FALSE, event->time);
+      gtk_drag_cancel (info, event->time);
     }
 
   return TRUE;
