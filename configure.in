@@ -792,12 +792,6 @@ dnl Test for libpng
 *** from CVS.])
   fi
 
-  REBUILD_PNGS=\#
-  if test -z "$LIBPNG"; then
-     REBUILD_PNGS=
-  fi
-  AC_SUBST(REBUILD_PNGS)
-
 AC_SUBST(LIBTIFF)
 AC_SUBST(LIBJPEG)
 AC_SUBST(LIBPNG)
@@ -919,6 +913,11 @@ fi
 
 AM_CONDITIONAL(USE_MMX, test x$use_mmx_asm = xyes)
 
+REBUILD_PNGS=
+if test -z "$LIBPNG"; then
+  REBUILD_PNGS=#
+fi
+
 dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
@@ -926,9 +925,19 @@ AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 if test $cross_compiling = yes; then
   AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
   if test x$GDK_PIXBUF_CSOURCE = xno; then
-    AC_MSG_ERROR(Could not find a gdk-pixbuf-csource in your PATH)
+    REBUILD_PNGS=#
   fi
 fi
+
+if test ! -f $srcdir/gtk/stock-icons/gtkstockpixbufs.h && 
+   test "x$REBUILD_PNGS" = "x#" ; then
+     AC_MSG_ERROR([
+*** gtkstockpixbufs.h is not in the tree, and cannot be built
+*** because you don't have libpng, or (when cross-compiling) you 
+*** don't have a prebuilt gdk-pixbuf-csource on the host system.])
+fi
+
+AC_SUBST(REBUILD_PNGS)
 
 GDK_PIXBUF_PACKAGES="gmodule-2.0 gobject-2.0"
 GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB"

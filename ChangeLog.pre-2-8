@@ -1,3 +1,13 @@
+Mon Aug 18 10:51:57 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Rework handling of REBUILD_PNGS,
+	so that we also don't try to REBUILD_PNGS when
+	cross-compiling and there is no gdk-pixbuf-csource.
+	But give an error if gtk/stock-icons/gtkstockpixbufs.h
+	is not in the source tree. (Note that REBUILDS_PNG
+	was set backwards before, which is why you always
+	had to manually recreate gtkstockpixbufs.h!)
+
 Mon Aug 18 10:19:55 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk+-2.0-uninstalled.pc.in: Add a missing gtk/ in the
