@@ -1,3 +1,20 @@
+2004-05-11  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkevents-win32.c (propagate): Don't propagate mouse
+	events to windows that want extended input events. (#142943)
+	(gdk_event_translate): Move check for extended input devices to
+	propagate, new parameter to propagate.
+	(gdk_pointer_grab, gdk_display_pointer_ungrab): Enable calls to
+	_gdk_input_(un)grab_pointer. (#142943)
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Check for
+	input grab. [Fix missing update of impl in "dijkstra" event
+	propagation loop] Drop the parallel "impl" pointer, just use a
+	cast. Don't propagate beyond windows that want normal input
+	events. (#142943)
+	(gdk_input_grab_pointer, gdk_input_ungrab_pointer): Limited
+	implementation of input grab. (#142943)
+
 2004-05-22  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkinput-win32.c (print_lc): Remove duplicated

@@ -77,6 +77,16 @@ static GdkWindow *wintab_window;
 
 #endif /* HAVE_WINTAB */
 
+#ifdef HAVE_SOME_XINPUT
+
+static GdkWindow *x_grab_window = NULL; /* Window that currently holds
+					 * the extended inputs grab
+					 */
+static GdkEventMask x_grab_mask;
+static gboolean x_grab_owner_events;
+
+#endif /* HAVE_SOME_XINPUT */
+
 #ifdef HAVE_WINTAB
 
 static GdkDevicePrivate *
@@ -694,8 +704,7 @@ _gdk_input_other_event (GdkEvent  *event,
   GdkWindow *current_window;
 #endif
   GdkDisplay *display;
-  GdkWindowObject *obj;
-  GdkWindowImplWin32 *impl;
+  GdkWindowObject *obj, *grab_obj;
   GdkInputWindow *input_window;
   GdkDevicePrivate *gdkdev = NULL;
   GdkEventMask masktest;
@@ -741,12 +750,11 @@ _gdk_input_other_event (GdkEvent  *event,
     }
 
   obj = GDK_WINDOW_OBJECT (window);
-  impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
 
   switch (msg->message)
     {
     case WT_PACKET:
-      if (window == _gdk_parent_root)
+      if (window == _gdk_parent_root && x_grab_window == NULL)
 	{
 	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...is root\n"));
 	  return FALSE;
@@ -805,17 +813,46 @@ _gdk_input_other_event (GdkEvent  *event,
 	    masktest |= GDK_BUTTON_MOTION_MASK | GDK_BUTTON3_MOTION_MASK;
 	}
 
+      /* See if input is grabbed */
+      /* FIXME: x_grab_owner_events should probably be handled somehow */
+      if (x_grab_window != NULL)
+	{
+	  grab_obj = GDK_WINDOW_OBJECT (x_grab_window);
+	  if (!GDK_WINDOW_IMPL_WIN32 (grab_obj->impl)->extension_events_selected
+	      || !(grab_obj->extension_events & masktest)
+	      || !(x_grab_mask && masktest))
+	    {
+	      GDK_NOTE (EVENTS_OR_INPUT, 
+			g_print ("...grabber doesn't want it\n"));
+	      return FALSE;
+	    }
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...to grabber\n"));
+
+	  g_object_ref(x_grab_window);
+	  g_object_unref(window);
+	  window = x_grab_window;
+	  obj = grab_obj;
+	}
       /* Now we can check if the window wants the event, and
        * propagate if necessary.
        */
     dijkstra:
-      if (!impl->extension_events_selected
+      if (!GDK_WINDOW_IMPL_WIN32 (obj->impl)->extension_events_selected
 	  || !(obj->extension_events & masktest))
 	{
 	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...not selected\n"));
 
 	  if (obj->parent == GDK_WINDOW_OBJECT (_gdk_parent_root))
 	    return FALSE;
+
+	  /* It is not good to propagate the extended events up to the parent
+	   * if this window wants normal (not extended) motion/button events */
+	  if (obj->event_mask & masktest)
+	    {
+	      GDK_NOTE (EVENTS_OR_INPUT, 
+			g_print ("...wants ordinary event, ignoring this\n"));
+	      return FALSE;
+	    }
 	  
 	  pt.x = x;
 	  pt.y = y;
@@ -1026,6 +1063,11 @@ _gdk_input_grab_pointer (GdkWindow    *window,
   if (new_window)
     {
       new_window->grabbed = TRUE;
+      x_grab_window = window;
+      x_grab_mask = event_mask;
+      x_grab_owner_events = owner_events;
+
+      /* FIXME: Do we need to handle confine_to and time? */
       
       tmp_list = _gdk_input_devices;
       while (tmp_list)
@@ -1055,6 +1097,7 @@ _gdk_input_grab_pointer (GdkWindow    *window,
     }
   else
     { 
+      x_grab_window = NULL;
       tmp_list = _gdk_input_devices;
       while (tmp_list)
 	{
@@ -1113,6 +1156,7 @@ _gdk_input_ungrab_pointer (guint32 time)
 	}
     }
 #endif
+  x_grab_window = NULL;
 }
 
 gboolean
