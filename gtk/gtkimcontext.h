@@ -82,6 +82,11 @@ struct _GtkIMContextClass
   gboolean (*get_surrounding)     (GtkIMContext   *context,
 				   gchar         **text,
 				   gint           *cursor_index);
+
+  /* Some padding for future expansion. Must be left NULL for now */
+  void     (*pad1)                (void);
+  void     (*pad2)                (void);
+  void     (*pad3)                (void);
 };
 
 GtkType       gtk_im_context_get_type           (void) G_GNUC_CONST;

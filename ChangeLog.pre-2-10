@@ -1,3 +1,8 @@
+Fri Nov  2 15:53:23 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontext.h (struct _GtkIMContextClass): Pad
+	the structure for future expansion.
+
 Fri Nov  2 15:30:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from HideToshi Tajima (#51922)
