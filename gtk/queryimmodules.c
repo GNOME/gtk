@@ -76,10 +76,10 @@ query_module (const char *dir, const char *name)
     }
 	  
   if (module &&
-      g_module_symbol (module, "im_module_list", (gpointer)&list) &&
-      g_module_symbol (module, "im_module_init", (gpointer)&init) &&
-      g_module_symbol (module, "im_module_exit", (gpointer)&exit) &&
-      g_module_symbol (module, "im_module_create", (gpointer)&create))
+      g_module_symbol (module, "im_module_list", (gpointer *) &list) &&
+      g_module_symbol (module, "im_module_init", (gpointer *) &init) &&
+      g_module_symbol (module, "im_module_exit", (gpointer *) &exit) &&
+      g_module_symbol (module, "im_module_create", (gpointer *) &create))
     {
       const GtkIMContextInfo **contexts;
       guint n_contexts;

@@ -68,7 +68,7 @@ do_item_factory (void)
       item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
       g_object_set_data_full (G_OBJECT (window), "<main>",
 			      item_factory, (GDestroyNotify) g_object_unref);
-      gtk_window_add_accel_group (window, accel_group);
+      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);

@@ -5288,7 +5288,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  *   scrolled_window->hscrollbar = gtk_hscrollbar_new (hadjustment);
  *   gtk_widget_set_composite_name (scrolled_window->hscrollbar, "hscrollbar");
  *   gtk_widget_pop_composite_child ();
-     gtk_widget_set_parent (scrolled_window->hscrollbar, 
+ *   gtk_widget_set_parent (scrolled_window->hscrollbar, 
  *                          GTK_WIDGET (scrolled_window));
  *   gtk_widget_ref (scrolled_window->hscrollbar);
  * </programlisting>

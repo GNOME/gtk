@@ -1,3 +1,14 @@
+2001-12-04  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkmain.c
+	* gtk/queryimmodules.c: g_module_symbol takes a gpointer *, not just
+        a gpointer.
+
+	* gtk/gtkwidget.c (gtk_widget_push_composite_child): minor cosmetic
+	correction to docs.
+
+	* demos/gtk-demo/item_factory.c: add GTK_WINDOW() cast
+
 2001-12-04  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbtree.c (gtk_text_btree_remove_tag_info): remove

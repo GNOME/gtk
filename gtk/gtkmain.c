@@ -368,7 +368,7 @@ load_module (GSList      *gtk_modules,
     {
       module = find_module (module_path, name);
       if (module &&
-	  g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
+	  g_module_symbol (module, "gtk_module_init", (gpointer *) &modinit_func) &&
 	  modinit_func)
 	{
 	  if (!g_slist_find (gtk_modules, modinit_func))
