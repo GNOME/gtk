@@ -445,12 +445,12 @@ msgstr "Página %u"
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
-"Imposible de encontrar un archivo imágen en pixmap_path: \"%s\" línea %s"
+"Imposible de encontrar un archivo imagen en pixmap_path: \"%s\" línea %s"
 
 #: gtk/gtkrc.c:1524
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Imposible de encontrar un archivo imágen en pixmap_path: \"%s\""
+msgstr "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:71
 #, c-format
