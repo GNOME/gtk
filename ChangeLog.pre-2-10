@@ -1,5 +1,7 @@
 2004-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: Add new symbols.
+
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_store_clipboard): Fix the 
 	doc comment.
 
