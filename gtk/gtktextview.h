@@ -48,7 +48,7 @@ typedef struct _GtkTextView GtkTextView;
 typedef struct _GtkTextViewClass GtkTextViewClass;
 
 struct _GtkTextView {
-  GtkLayout parent_instance;
+  GtkContainer parent_instance;
 
   struct _GtkTextLayout *layout;
   GtkTextBuffer *buffer;
@@ -61,6 +61,15 @@ struct _GtkTextView {
 
   GtkWrapMode wrap_mode;	/* Default wrap mode */
 
+  GdkWindow *bin_window;
+  GtkAdjustment *hadjustment;
+  GtkAdjustment *vadjustment;
+
+  gint xoffset;			/* Offsets between widget coordinates and buffer coordinates */
+  gint yoffset;
+  gint width;			/* Width and height of the buffer */
+  gint height;
+  
   /* The virtual cursor position is normally the same as the
    * actual (strong) cursor position, except in two circumstances:
    *
@@ -104,6 +113,9 @@ struct _GtkTextViewClass {
   void (* paste_text)    (GtkTextView *text_view);
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
+  void  (*set_scroll_adjustments)   (GtkTextView    *text_view,
+				     GtkAdjustment  *hadjustment,
+				     GtkAdjustment  *vadjustment);
 };
 
 GtkType        gtk_text_view_get_type              (void);

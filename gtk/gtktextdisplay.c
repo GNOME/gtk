@@ -476,8 +476,8 @@ void
 gtk_text_layout_draw (GtkTextLayout *layout,
 		      GtkWidget *widget,
 		      GdkDrawable *drawable,
-		      /* Location of the buffer
-			 in layout coordinates */
+		      /* Location of the layout
+			 in buffer coordinates */
 		      gint x_offset,
 		      gint y_offset,
 		      /* Region of the layout to
@@ -488,7 +488,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 		      gint height)
 {
   GdkRectangle clip;
-  gint buffer_x, buffer_y, current_y;
+  gint current_y;
   GSList *line_list;
   GSList *tmp_list;
   GSList *cursor_list;
@@ -502,32 +502,20 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (x_offset >= 0);
   g_return_if_fail (y_offset >= 0);
-  g_return_if_fail (x >= 0);
-  g_return_if_fail (y >= 0);
   g_return_if_fail (width >= 0);
   g_return_if_fail (height >= 0);
 
   if (width == 0 || height == 0)
     return;
 
-  line_list =  gtk_text_layout_get_lines (layout, y, y + height, &current_y);
+  line_list =  gtk_text_layout_get_lines (layout, y + y_offset, y + y_offset + height, &current_y);
   current_y -= y_offset;
-  
+
   if (line_list == NULL)
     return; /* nothing on the screen */
 
-  /* Convert to buffer coordinates */
-  buffer_x = x - x_offset;
-  buffer_y = y - y_offset;
-
-  /* Don't draw outside the buffer */
-  if (buffer_x < 0)
-    buffer_x = 0;
-  if (buffer_y < 0)
-    buffer_y = 0;
-
-  clip.x = buffer_x;
-  clip.y = buffer_y;
+  clip.x = x;
+  clip.y = y;
   clip.width = width;
   clip.height = height;
 
@@ -580,7 +568,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 	}
   
       render_para (drawable, render_state, line_display,
-		   0,
+		   - x_offset,
 		   current_y + line_display->top_margin,
 		   selection_start_index, selection_end_index);
 

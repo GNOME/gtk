@@ -1,3 +1,22 @@
+Thu May 18 18:53:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Fix up the x_offset
+	and y_offset coordinates to do what we need now. (The offset between
+	buffer and layout coordinates has been reintroduced, but is a 
+	bit different than before.)
+
+	* gtk/gtktextview.[ch]: No longer inherit from GtkLayout; instead
+	handle the adjustments ourselves, and scroll as necessary using
+	the new gdk_window_scroll().
+	
+	The advantage of this is that when we are incrementally revalidating,
+	we are essentially rearranging things around the visible portion
+	of the screen. With the old setup, the visible portion of the
+	screen was moved around in the layout, so scrolling and redrawing
+	to track that caused jumping of the display. Since we now
+	control the scrolling ourselves, we can suppress this and
+	only redraw when things actually change.
+
 Thu May 18 18:47:25 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextbtree.c (redisplay_mark): We need to invalidate
