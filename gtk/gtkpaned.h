@@ -96,6 +96,12 @@ struct _GtkPanedClass
 				    gboolean       reverse);
   gboolean (* accept_position)     (GtkPaned	  *paned);
   gboolean (* cancel_position)     (GtkPaned	  *paned);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

@@ -70,6 +70,8 @@ gboolean
 _gdk_windowing_init_check (int    argc,
 			   char **argv)
 {
+  gchar buf[10];
+
 #ifdef HAVE_WINTAB
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     gdk_input_ignore_wintab = TRUE;
@@ -84,6 +86,14 @@ _gdk_windowing_init_check (int    argc,
   gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   gdk_root_window = GetDesktopWindow ();
   windows_version = GetVersion ();
+
+  _gdk_input_locale = GetKeyboardLayout (0);
+  GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
+		 LOCALE_IDEFAULTANSICODEPAGE,
+		 buf, sizeof (buf));
+  _gdk_input_codepage = atoi (buf);
+  GDK_NOTE (MISC, g_print ("input_locale: %#lx, codepage:%d\n",
+			   _gdk_input_locale, _gdk_input_codepage));
 
   CoInitialize (NULL);
 

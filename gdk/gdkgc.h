@@ -183,6 +183,12 @@ struct _GdkGCClass
 			  gint	          dash_offset,
 			  gint8           dash_list[],
 			  gint            n);
+  
+  /* Padding for future expansion */
+  void         (*_gdk_reserved1)  (void);
+  void         (*_gdk_reserved2)  (void);
+  void         (*_gdk_reserved3)  (void);
+  void         (*_gdk_reserved4)  (void);
 };
 
 

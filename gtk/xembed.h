@@ -12,6 +12,10 @@
 #define XEMBED_MODALITY_ON              10
 #define XEMBED_MODALITY_OFF             11
 
+/* Non standard messages*/
+#define XEMBED_GTK_GRAB_KEY             108 
+#define XEMBED_GTK_UNGRAB_KEY           109
+
 /* Details for  XEMBED_FOCUS_IN: */
 #define XEMBED_FOCUS_CURRENT            0
 #define XEMBED_FOCUS_FIRST              1

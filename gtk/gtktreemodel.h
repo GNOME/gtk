@@ -22,9 +22,7 @@
 
 #include <gtk/gtkobject.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_MODEL            (gtk_tree_model_get_type ())
 #define GTK_TREE_MODEL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_MODEL, GtkTreeModel))
@@ -116,7 +114,8 @@ struct _GtkTreeModelIface
 GtkTreePath *gtk_tree_path_new              (void);
 GtkTreePath *gtk_tree_path_new_from_string  (const gchar       *path);
 gchar       *gtk_tree_path_to_string        (GtkTreePath       *path);
-GtkTreePath *gtk_tree_path_new_root         (void);
+#define gtk_tree_path_new_root() gtk_tree_path_new_first()
+GtkTreePath *gtk_tree_path_new_first        (void);
 void         gtk_tree_path_append_index     (GtkTreePath       *path,
 					     gint               index);
 void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
@@ -179,7 +178,8 @@ gboolean          gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
 gboolean          gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 						       GtkTreeIter  *iter,
 						       const gchar  *path_string);
-gboolean          gtk_tree_model_get_iter_root   (GtkTreeModel *tree_model,
+#define gtk_tree_model_get_iter_root(tree_model, iter) gtk_tree_model_get_iter_first(tree_model, iter)
+gboolean          gtk_tree_model_get_iter_first  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 GtkTreePath *     gtk_tree_model_get_path        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
@@ -240,9 +240,6 @@ void gtk_tree_model_rows_reordered        (GtkTreeModel *tree_model,
 
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_TREE_MODEL_H__ */

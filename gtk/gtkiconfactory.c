@@ -449,109 +449,331 @@ static void
 get_default_icons (GtkIconFactory *factory)
 {
   /* KEEP IN SYNC with gtkstock.c */
-
-  add_unsized (factory, stock_missing_image, GTK_STOCK_MISSING_IMAGE);
   
-  add_sized (factory, dialog_error, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_ERROR);
-  add_sized (factory, dialog_info, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_INFO);
-  add_sized (factory, dialog_question, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_QUESTION);
-  add_sized (factory, dialog_warning, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_WARNING);
+  add_sized (factory, stock_dialog_error_48, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_ERROR);
+  add_sized (factory, stock_dialog_info_48, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_INFO);
+  add_sized (factory, stock_dialog_question_48, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_QUESTION);
+  add_sized (factory, stock_dialog_warning_48, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_WARNING);
   
   /* dnd size only */
-  add_sized (factory, stock_new, GTK_ICON_SIZE_DND, GTK_STOCK_DND);
-  add_sized (factory, stock_dnd_multiple, GTK_ICON_SIZE_DND, GTK_STOCK_DND_MULTIPLE);
+  add_sized (factory, stock_dnd_32, GTK_ICON_SIZE_DND, GTK_STOCK_DND);
+  add_sized (factory, stock_dnd_multiple_32, GTK_ICON_SIZE_DND, GTK_STOCK_DND_MULTIPLE);
   
   /* Only have button sizes */
-  add_sized (factory, stock_button_apply, GTK_ICON_SIZE_BUTTON, GTK_STOCK_APPLY);
-  add_sized (factory, stock_button_cancel, GTK_ICON_SIZE_BUTTON, GTK_STOCK_CANCEL);
-  add_sized (factory, stock_button_no, GTK_ICON_SIZE_BUTTON, GTK_STOCK_NO);
-  add_sized (factory, stock_button_ok, GTK_ICON_SIZE_BUTTON, GTK_STOCK_OK);
-  add_sized (factory, stock_button_yes, GTK_ICON_SIZE_BUTTON, GTK_STOCK_YES);
+  add_sized (factory, stock_apply_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_APPLY);
+  add_sized (factory, stock_cancel_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_CANCEL);
+  add_sized (factory, stock_no_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_NO);
+  add_sized (factory, stock_ok_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_OK);
+  add_sized (factory, stock_yes_20, GTK_ICON_SIZE_BUTTON, GTK_STOCK_YES);
 
   /* Generic + button sizes */
   add_sized_with_fallback (factory,
-                           stock_close,
-                           stock_button_close,
+                           stock_close_24,
+                           stock_close_20,
                            GTK_ICON_SIZE_BUTTON,
                            GTK_STOCK_CLOSE);
 
   /* Generic + menu sizes */  
+  add_sized_with_fallback (factory,
+			   stock_align_center_24,
+			   stock_align_center_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_JUSTIFY_CENTER);
 
   add_sized_with_fallback (factory,
-                           stock_print_preview,
-                           stock_menu_print_preview,
+			   stock_align_justify_24,
+			   stock_align_justify_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_JUSTIFY_FILL);
+
+  add_sized_with_fallback (factory,
+			   stock_align_left_24,
+			   stock_align_left_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_JUSTIFY_LEFT);
+
+  add_sized_with_fallback (factory,
+			   stock_align_right_24,
+			   stock_align_right_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_JUSTIFY_RIGHT);
+
+  add_sized_with_fallback (factory,
+			   stock_bottom_24,
+			   stock_bottom_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_GOTO_BOTTOM);
+
+  add_sized_with_fallback (factory,
+                           stock_cdrom_24,
+                           stock_cdrom_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_CDROM);
+
+  add_sized_with_fallback (factory,
+                           stock_convert_24,
+                           stock_convert_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_CONVERT);
+
+  add_sized_with_fallback (factory,
+			   stock_copy_24,
+			   stock_copy_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_COPY);
+
+  add_sized_with_fallback (factory,
+			   stock_cut_24,
+			   stock_cut_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_CUT);
+
+  add_sized_with_fallback (factory,
+                           stock_down_arrow_24,
+                           stock_down_arrow_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_GO_DOWN);
+
+  add_sized_with_fallback (factory,
+			   stock_exec_24,
+			   stock_exec_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_EXECUTE);
+
+  add_sized_with_fallback (factory,
+			   stock_exit_24,
+			   stock_exit_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_QUIT);
+
+  add_sized_with_fallback (factory,
+			   stock_first_24,
+			   stock_first_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_GOTO_FIRST);
+
+  add_sized_with_fallback (factory,
+			   stock_font_24,
+                           stock_font_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_SELECT_FONT);
+
+  add_sized_with_fallback (factory,
+                           stock_help_24,
+                           stock_help_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_HELP);
+
+  add_sized_with_fallback (factory,
+                           stock_home_24,
+                           stock_home_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_HOME);
+
+  add_sized_with_fallback (factory,
+			   stock_jump_to_24,
+			   stock_jump_to_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_JUMP_TO);
+
+  add_sized_with_fallback (factory,
+                           stock_last_24,
+                           stock_last_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_GOTO_LAST);
+
+  add_sized_with_fallback (factory,
+                           stock_left_arrow_24,
+                           stock_left_arrow_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_GO_BACK);
+
+  add_sized_with_fallback (factory,
+			   stock_missing_image_24,
+			   stock_missing_image_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_MISSING_IMAGE);
+
+  add_sized_with_fallback (factory,
+			   stock_new_24,
+			   stock_new_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_NEW);
+
+  add_sized_with_fallback (factory,
+			   stock_open_24,
+			   stock_open_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_OPEN);
+
+  add_sized_with_fallback (factory,
+                           stock_paste_24,
+                           stock_paste_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_PASTE);
+
+  add_sized_with_fallback (factory,
+                           stock_preferences_24,
+                           stock_preferences_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_PREFERENCES);
+
+  add_sized_with_fallback (factory,
+                           stock_print_24,
+                           stock_print_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_PRINT);
+
+  add_sized_with_fallback (factory,
+                           stock_print_preview_24,
+                           stock_print_preview_16,
                            GTK_ICON_SIZE_MENU,
                            GTK_STOCK_PRINT_PREVIEW);
 
   add_sized_with_fallback (factory,
-                           stock_sort_descending,
-                           stock_menu_sort_descending,
+                           stock_redo_24,
+                           stock_redo_16,
                            GTK_ICON_SIZE_MENU,
-                           GTK_STOCK_SORT_DESCENDING);
-  
+                           GTK_STOCK_REDO);
 
   add_sized_with_fallback (factory,
-                           stock_sort_ascending,
-                           stock_menu_sort_ascending,
+			   stock_refresh_24,
+			   stock_refresh_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_REFRESH);
+
+  add_sized_with_fallback (factory,
+			   stock_revert_24,
+			   stock_revert_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_REVERT_TO_SAVED);
+
+  add_sized_with_fallback (factory,
+                           stock_right_arrow_24,
+                           stock_right_arrow_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_GO_FORWARD);
+
+  add_sized_with_fallback (factory,
+			   stock_save_24,
+			   stock_save_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_SAVE);
+
+  add_sized_with_fallback (factory,
+			   stock_save_24,
+			   stock_save_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_FLOPPY);
+
+  add_sized_with_fallback (factory,
+			   stock_save_as_24,
+			   stock_save_as_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_SAVE_AS);
+
+  add_sized_with_fallback (factory,
+			   stock_search_24,
+			   stock_search_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_FIND);
+
+  add_sized_with_fallback (factory,
+			   stock_search_replace_24,
+			   stock_search_replace_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_FIND_AND_REPLACE);
+
+  add_sized_with_fallback (factory,
+                           stock_sort_descending_24,
+                           stock_sort_descending_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_SORT_DESCENDING);
+
+  add_sized_with_fallback (factory,
+                           stock_sort_ascending_24,
+                           stock_sort_ascending_16,
                            GTK_ICON_SIZE_MENU,
                            GTK_STOCK_SORT_ASCENDING);
-  
+
+  add_sized_with_fallback (factory,
+			   stock_spellcheck_24,
+			   stock_spellcheck_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_SPELL_CHECK);
+
+  add_sized_with_fallback (factory,
+			   stock_stop_24,
+			   stock_stop_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_STOP);
+
+  add_sized_with_fallback (factory,
+                           stock_text_bold_24,
+                           stock_text_bold_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_BOLD);
+
+  add_sized_with_fallback (factory,
+                           stock_text_italic_24,
+                           stock_text_italic_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_ITALIC);
+
+  add_sized_with_fallback (factory,
+                           stock_text_strikethrough_24,
+                           stock_text_strikethrough_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_STRIKETHROUGH);
+
+  add_sized_with_fallback (factory,
+                           stock_text_underline_24,
+                           stock_text_underline_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_UNDERLINE);
+
+  add_sized_with_fallback (factory,
+			   stock_top_24,
+			   stock_top_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_GOTO_TOP);
+
+  add_sized_with_fallback (factory,
+                           stock_trash_24,
+                           stock_trash_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_DELETE);
+
+  add_sized_with_fallback (factory,
+                           stock_undelete_24,
+                           stock_undelete_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_UNDELETE);
+
+  add_sized_with_fallback (factory,
+                           stock_undo_24,
+                           stock_undo_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_UNDO);
+
+  add_sized_with_fallback (factory,
+                           stock_up_arrow_24,
+                           stock_up_arrow_16,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_GO_UP);
+
 /* Generic size only */
 
-  add_unsized (factory, stock_add, GTK_STOCK_ADD);
-  add_unsized (factory, stock_align_center, GTK_STOCK_JUSTIFY_CENTER);
-  add_unsized (factory, stock_align_justify, GTK_STOCK_JUSTIFY_FILL);
-  add_unsized (factory, stock_align_left, GTK_STOCK_JUSTIFY_LEFT);
-  add_unsized (factory, stock_align_right, GTK_STOCK_JUSTIFY_RIGHT);
-  add_unsized (factory, stock_bottom, GTK_STOCK_GOTO_BOTTOM);  
-  add_unsized (factory, stock_cdrom, GTK_STOCK_CDROM);
-  add_unsized (factory, stock_clear, GTK_STOCK_CLEAR);
-  add_unsized (factory, stock_colorselector, GTK_STOCK_SELECT_COLOR);
-  add_unsized (factory, stock_convert, GTK_STOCK_CONVERT);
-  add_unsized (factory, stock_copy, GTK_STOCK_COPY);
-  add_unsized (factory, stock_cut, GTK_STOCK_CUT);
-  add_unsized (factory, stock_down_arrow, GTK_STOCK_GO_DOWN);
-  add_unsized (factory, stock_exec, GTK_STOCK_EXECUTE);
-  add_unsized (factory, stock_exit, GTK_STOCK_QUIT);
-  add_unsized (factory, stock_first, GTK_STOCK_GOTO_FIRST);
-  add_unsized (factory, stock_font, GTK_STOCK_SELECT_FONT);
-  add_unsized (factory, stock_help, GTK_STOCK_HELP);
-  add_unsized (factory, stock_home, GTK_STOCK_HOME);
-  add_unsized (factory, stock_index, GTK_STOCK_INDEX);
-  add_unsized (factory, stock_jump_to, GTK_STOCK_JUMP_TO);
-  add_unsized (factory, stock_last, GTK_STOCK_GOTO_LAST);
-  add_unsized (factory, stock_left_arrow, GTK_STOCK_GO_BACK);
-  add_unsized (factory, stock_new, GTK_STOCK_NEW);
-  add_unsized (factory, stock_open, GTK_STOCK_OPEN);
-  add_unsized (factory, stock_paste, GTK_STOCK_PASTE);
-  add_unsized (factory, stock_preferences, GTK_STOCK_PREFERENCES);
-  add_unsized (factory, stock_print, GTK_STOCK_PRINT);
-  add_unsized (factory, stock_properties, GTK_STOCK_PROPERTIES);
-  add_unsized (factory, stock_redo, GTK_STOCK_REDO);
-  add_unsized (factory, stock_refresh, GTK_STOCK_REFRESH);
-  add_unsized (factory, stock_remove, GTK_STOCK_REMOVE);
-  add_unsized (factory, stock_revert, GTK_STOCK_REVERT_TO_SAVED);
-  add_unsized (factory, stock_right_arrow, GTK_STOCK_GO_FORWARD);
-  add_unsized (factory, stock_save, GTK_STOCK_FLOPPY);
-  add_unsized (factory, stock_save, GTK_STOCK_SAVE);
-  add_unsized (factory, stock_save_as, GTK_STOCK_SAVE_AS);
-  add_unsized (factory, stock_search, GTK_STOCK_FIND);
-  add_unsized (factory, stock_search_replace, GTK_STOCK_FIND_AND_REPLACE);
-  add_unsized (factory, stock_spellcheck, GTK_STOCK_SPELL_CHECK);
-  add_unsized (factory, stock_stop, GTK_STOCK_STOP);
-  add_unsized (factory, stock_text_bold, GTK_STOCK_BOLD);
-  add_unsized (factory, stock_text_italic, GTK_STOCK_ITALIC);
-  add_unsized (factory, stock_text_strikeout, GTK_STOCK_STRIKETHROUGH);
-  add_unsized (factory, stock_text_underline, GTK_STOCK_UNDERLINE);
-  add_unsized (factory, stock_top, GTK_STOCK_GOTO_TOP);
-  add_unsized (factory, stock_trash, GTK_STOCK_DELETE);
-  add_unsized (factory, stock_undelete, GTK_STOCK_UNDELETE);
-  add_unsized (factory, stock_undo, GTK_STOCK_UNDO);
-  add_unsized (factory, stock_up_arrow, GTK_STOCK_GO_UP);
-  add_unsized (factory, stock_zoom_1, GTK_STOCK_ZOOM_100);
-  add_unsized (factory, stock_zoom_fit, GTK_STOCK_ZOOM_FIT);
-  add_unsized (factory, stock_zoom_in, GTK_STOCK_ZOOM_IN);
-  add_unsized (factory, stock_zoom_out, GTK_STOCK_ZOOM_OUT);
+  add_unsized (factory, stock_add_24, GTK_STOCK_ADD);
+  add_unsized (factory, stock_clear_24, GTK_STOCK_CLEAR);
+  add_unsized (factory, stock_colorselector_24, GTK_STOCK_SELECT_COLOR);
+  add_unsized (factory, stock_index_24, GTK_STOCK_INDEX);
+  add_unsized (factory, stock_properties_24, GTK_STOCK_PROPERTIES);
+  add_unsized (factory, stock_remove_24, GTK_STOCK_REMOVE);
+  add_unsized (factory, stock_zoom_1_24, GTK_STOCK_ZOOM_100);
+  add_unsized (factory, stock_zoom_fit_24, GTK_STOCK_ZOOM_FIT);
+  add_unsized (factory, stock_zoom_in_24, GTK_STOCK_ZOOM_IN);
+  add_unsized (factory, stock_zoom_out_24, GTK_STOCK_ZOOM_OUT);
 }
 
 /* Sizes */
@@ -612,8 +834,8 @@ init_icon_sizes (void)
 
       icon_sizes[GTK_ICON_SIZE_BUTTON].size = GTK_ICON_SIZE_BUTTON;
       icon_sizes[GTK_ICON_SIZE_BUTTON].name = "gtk-button";
-      icon_sizes[GTK_ICON_SIZE_BUTTON].width = 24;
-      icon_sizes[GTK_ICON_SIZE_BUTTON].height = 24;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].width = 20;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].height = 20;
 
       icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].size = GTK_ICON_SIZE_SMALL_TOOLBAR;
       icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].name = "gtk-small-toolbar";
@@ -1090,7 +1312,7 @@ render_fallback_image (GtkStyle          *style,
   static GtkIconSource fallback_source = { NULL, NULL, 0, 0, 0, TRUE, TRUE, TRUE };
 
   if (fallback_source.pixbuf == NULL)
-    fallback_source.pixbuf = gdk_pixbuf_new_from_inline (-1, stock_missing_image, FALSE, NULL);
+    fallback_source.pixbuf = gdk_pixbuf_new_from_inline (-1, stock_missing_image_24, FALSE, NULL);
   
   return gtk_style_render_icon (style,
                                 &fallback_source,

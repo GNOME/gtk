@@ -1000,13 +1000,13 @@ gtk_layout_size_allocate (GtkWidget     *widget,
     }
 
   layout->hadjustment->page_size = allocation->width;
-  layout->hadjustment->page_increment = allocation->width / 2;
+  layout->hadjustment->page_increment = allocation->width * 0.9;
   layout->hadjustment->lower = 0;
   layout->hadjustment->upper = MAX (allocation->width, layout->width);
   gtk_signal_emit_by_name (GTK_OBJECT (layout->hadjustment), "changed");
 
   layout->vadjustment->page_size = allocation->height;
-  layout->vadjustment->page_increment = allocation->height / 2;
+  layout->vadjustment->page_increment = allocation->height * 0.9;
   layout->vadjustment->lower = 0;
   layout->vadjustment->upper = MAX (allocation->height, layout->height);
   gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");

@@ -51,7 +51,8 @@ extern "C" {
 typedef struct _GtkLayout        GtkLayout;
 typedef struct _GtkLayoutClass   GtkLayoutClass;
 
-struct _GtkLayout {
+struct _GtkLayout
+{
   GtkContainer container;
 
   GList *children;
@@ -73,12 +74,19 @@ struct _GtkLayout {
   guint freeze_count;
 };
 
-struct _GtkLayoutClass {
+struct _GtkLayoutClass
+{
   GtkContainerClass parent_class;
 
   void  (*set_scroll_adjustments)   (GtkLayout	    *layout,
 				     GtkAdjustment  *hadjustment,
 				     GtkAdjustment  *vadjustment);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GtkType        gtk_layout_get_type        (void) G_GNUC_CONST;

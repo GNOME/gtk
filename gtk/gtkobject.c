@@ -38,7 +38,7 @@ enum {
 };
 enum {
   PROP_0,
-  PROP_USER_DATA,
+  PROP_USER_DATA
 };
 
 

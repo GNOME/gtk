@@ -56,6 +56,8 @@ struct _GtkPlug
   GdkWindow *socket_window;
   GtkWidget *modality_window;
   GtkWindowGroup *modality_group;
+  GHashTable *grabbed_keys;
+
   guint same_app : 1;
 };
 
@@ -64,6 +66,12 @@ struct _GtkPlugClass
   GtkWindowClass parent_class;
 
   void (*embedded) (GtkPlug *plug);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

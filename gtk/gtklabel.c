@@ -1328,6 +1328,51 @@ gtk_label_clear_layout (GtkLabel *label)
     }
 }
 
+typedef struct _LabelWrapWidth LabelWrapWidth;
+struct _LabelWrapWidth
+{
+  gint width;
+  PangoFontDescription *font_desc;
+};
+
+static void
+label_wrap_width_free (gpointer data)
+{
+  LabelWrapWidth *wrap_width = data;
+  pango_font_description_free (wrap_width->font_desc);
+  g_free (wrap_width);
+}
+
+static gint
+get_label_wrap_width (GtkLabel *label)
+{
+  PangoLayout *layout;
+  GtkStyle *style = GTK_WIDGET (label)->style;
+
+  LabelWrapWidth *wrap_width = g_object_get_data (G_OBJECT (style), "gtk-label-wrap-width");
+  if (!wrap_width)
+    {
+      wrap_width = g_new0 (LabelWrapWidth, 1);
+      g_object_set_data_full (G_OBJECT (style), "gtk-label-wrap-width",
+			      wrap_width, label_wrap_width_free);
+    }
+
+  if (wrap_width->font_desc && pango_font_description_equal (wrap_width->font_desc, style->font_desc))
+    return wrap_width->width;
+
+  if (wrap_width->font_desc)
+    pango_font_description_free (wrap_width->font_desc);
+
+  wrap_width->font_desc = pango_font_description_copy (style->font_desc);
+
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (label), 
+					   "This long string gives a good enough length for any line to have.");
+  pango_layout_get_size (layout, &wrap_width->width, NULL);
+  g_object_unref (layout);
+
+  return wrap_width->width;
+}
+
 static void
 gtk_label_ensure_layout (GtkLabel *label)
 {
@@ -1383,6 +1428,8 @@ gtk_label_ensure_layout (GtkLabel *label)
 	  else
 	    {
 	      GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (label));
+	      gint wrap_width;
+	      
 	      pango_layout_set_width (label->layout, -1);
 	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
@@ -1390,13 +1437,9 @@ gtk_label_ensure_layout (GtkLabel *label)
 	      
 	      /* Try to guess a reasonable maximum width */
 	      longest_paragraph = width;
-	      width = MIN (width,
-			   PANGO_SCALE * gdk_string_width 
-			   (gtk_style_get_font_for_display 
-			    (gdk_screen_get_display (screen),
-			     GTK_WIDGET (label)->style),
-			    "This long string gives a good enough"
-			    " length for any line to have."));
+
+	      wrap_width = get_label_wrap_width (label);
+	      width = MIN (width, wrap_width);
 	      width = MIN (width,
 			   PANGO_SCALE * 
 			   (gdk_screen_get_width (screen) + 1) / 2);
@@ -1657,6 +1700,8 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
 
+      dir1 = widget_direction;
+      
       if (split_cursor)
 	{
 	  gc1 = label->select_info->cursor_gc;
@@ -1665,7 +1710,6 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  if (strong_pos.x != weak_pos.x ||
 	      strong_pos.y != weak_pos.y)
 	    {
-	      dir1 = widget_direction;
 	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
 	      
 	      gc2 = widget->style->black_gc;
@@ -1688,9 +1732,10 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       cursor_location.height = PANGO_PIXELS (cursor1->height);
       
       _gtk_draw_insertion_cursor (widget, widget->window, gc1,
-				  &cursor_location, dir1);
+				  &cursor_location, dir1,
+                                  dir2 != GTK_TEXT_DIR_NONE);
       
-      if (gc2)
+      if (dir2 != GTK_TEXT_DIR_NONE)
 	{
 	  cursor_location.x = xoffset + PANGO_PIXELS (cursor2->x);
 	  cursor_location.y = yoffset + PANGO_PIXELS (cursor2->y);
@@ -1698,7 +1743,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  cursor_location.height = PANGO_PIXELS (cursor2->height);
 	  
 	  _gtk_draw_insertion_cursor (widget, widget->window, gc2,
-				      &cursor_location, dir2);
+				      &cursor_location, dir2, TRUE);
 	}
     }
 }
@@ -1836,7 +1881,7 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
 	    {
 	      *pattern_dest++ = '_';
 	      if (accel_key == GDK_VoidSymbol)
-		accel_key = gdk_keyval_to_lower (c);
+		accel_key = gdk_keyval_to_lower (gdk_unicode_to_keyval (c));
 	    }
 
 	  while (src < next_src)

@@ -328,20 +328,26 @@ gdk_selection_property_get (GdkWindow  *requestor,
     {
       *data = g_new (guchar, length);
       
-      if (prop_type == XA_ATOM)
+      if (prop_type == XA_ATOM || prop_type == 
+	  gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
 	{
 	  Atom* atoms = (Atom*) t;
-	  GdkAtom* atoms_dest = (GdkAtom*) *data;
+	  GdkAtom* atoms_dest;
 	  gint num_atom, i;
+
+	  num_atom = (length - 1) / sizeof (Atom);
+	  length = sizeof (GdkAtom) * num_atom + 1;
+	  *data = g_malloc (length);
+	  (*data)[length - 1] = '\0';
+	  atoms_dest = (GdkAtom *)(*data);
 	  
-	  num_atom = (length - 1) / sizeof (GdkAtom);
 	  for (i=0; i < num_atom; i++)
 	    atoms_dest[i] = 
 	      gdk_x11_xatom_to_atom_for_display (display, atoms[i]);
 	}
       else
 	{
-	  memcpy (*data, t, length);
+	  *data = g_memdup (t, length);
 	}
       
       if (t)

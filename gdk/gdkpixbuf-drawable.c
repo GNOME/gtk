@@ -414,7 +414,7 @@ rgb565lsb (GdkImage    *image,
 	  ((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
 	  ((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
 	  ((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
-          ((char *) o) += 3;
+	  o = (guint16 *) (((char *) o) + 3);
           ++xx;
 	}
 
@@ -519,7 +519,7 @@ rgb565msb (GdkImage    *image,
 	  ((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
 	  ((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
 
-          ((char *) o) += 3;
+	  o = (guint16 *) (((char *) o) + 3);
           ++xx;
 	}
 
@@ -745,7 +745,7 @@ rgb555lsb (GdkImage     *image,
 	  ((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
 	  ((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
 	  ((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
-          ((char *) o) += 3;
+	  o = (guint16 *) (((char *) o) + 3);
           ++xx;
 	}
 
@@ -845,7 +845,7 @@ rgb555msb (GdkImage    *image,
 	  ((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
 	  ((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
 
-          ((char *) o) += 3;
+	  o = (guint16 *) (((char *) o) + 3);
           ++xx;
 	}
 

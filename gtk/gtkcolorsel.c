@@ -82,7 +82,7 @@ enum {
   PROP_HAS_PALETTE,
   PROP_HAS_OPACITY_CONTROL,
   PROP_CURRENT_COLOR,
-  PROP_CURRENT_ALPHA,
+  PROP_CURRENT_ALPHA
 };
 
 enum {
@@ -1955,7 +1955,7 @@ gtk_color_selection_finalize (GObject *object)
 
       g_signal_handler_disconnect (gtk_settings_get_for_screen (
 				   GDK_SCREEN (g_object_get_data (object, 
-								  "gtk-fs-screen"))),
+							"gtk-fs-screen"))),
                                    priv->settings_connection);
       
       g_free (cselection->private_data);

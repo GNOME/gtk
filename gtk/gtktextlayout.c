@@ -2430,6 +2430,7 @@ find_display_line_above (GtkTextLayout *layout,
           if (tmp_top < y)
             {
               found_line = line;
+	      pango_layout_iter_free (layout_iter);
               goto done;
             }
         }

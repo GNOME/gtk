@@ -191,9 +191,6 @@ add_tab_bindings (GtkBindingSet    *binding_set,
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
                                 "move_focus_out", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, modifiers,
-                                "move_focus_out", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
 static void
@@ -305,11 +302,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   add_scroll_binding (binding_set, GDK_Right, GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  TRUE);
   add_scroll_binding (binding_set, GDK_Up,    GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, FALSE);
   add_scroll_binding (binding_set, GDK_Down,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  FALSE);
-
-  add_scroll_binding (binding_set, GDK_Page_Up,   GDK_CONTROL_MASK, GTK_SCROLL_PAGE_BACKWARD, TRUE);
-  add_scroll_binding (binding_set, GDK_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_FORWARD,  TRUE);
-  add_scroll_binding (binding_set, GDK_Page_Up,   0,                GTK_SCROLL_PAGE_BACKWARD, FALSE);
-  add_scroll_binding (binding_set, GDK_Page_Down, 0,                GTK_SCROLL_PAGE_FORWARD,  FALSE);
 
   add_scroll_binding (binding_set, GDK_Page_Up,   GDK_CONTROL_MASK, GTK_SCROLL_PAGE_BACKWARD, TRUE);
   add_scroll_binding (binding_set, GDK_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_FORWARD,  TRUE);
@@ -1234,6 +1226,7 @@ gtk_scrolled_window_focus (GtkWidget        *widget,
 			   GtkDirectionType  direction)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  gboolean had_focus_child = GTK_CONTAINER (widget)->focus_child != NULL;
   
   if (scrolled_window->focus_out)
     {
@@ -1253,8 +1246,13 @@ gtk_scrolled_window_focus (GtkWidget        *widget,
 	return TRUE;
     }
 
-  gtk_widget_grab_focus (widget);
-  return TRUE;
+  if (!had_focus_child)
+    {
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 static void

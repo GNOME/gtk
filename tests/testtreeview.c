@@ -1290,7 +1290,7 @@ run_automated_tests (void)
         ++i;
       }
 
-    while (gtk_tree_model_get_iter_root (model, &iter))
+    while (gtk_tree_model_get_iter_first (model, &iter))
       gtk_list_store_remove (store, &iter);
 
     gtk_list_store_append (store, &iter);
@@ -1322,7 +1322,7 @@ run_automated_tests (void)
       }
 
     /* remove everything again */
-    while (gtk_tree_model_get_iter_root (model, &iter))
+    while (gtk_tree_model_get_iter_first (model, &iter))
       gtk_list_store_remove (store, &iter);
 
 
@@ -1337,7 +1337,7 @@ run_automated_tests (void)
       }
 
     /* remove everything again */
-    while (gtk_tree_model_get_iter_root (model, &iter))
+    while (gtk_tree_model_get_iter_first (model, &iter))
       gtk_list_store_remove (store, &iter);
     
     g_object_unref (G_OBJECT (store));

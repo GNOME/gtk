@@ -1090,7 +1090,7 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
  * made a child of @parent.  Otherwise, the row will be created at the toplevel.
  * If @position is larger than the number of rows at that level, then the new
  * row will be inserted to the end of the list.  @iter will be changed to point
- * to this new row.  The row will be empty before this function is called.  To
+ * to this new row.  The row will be empty after this function is called.  To
  * fill in values, you need to call gtk_tree_store_set() or
  * gtk_tree_store_set_value().
  *

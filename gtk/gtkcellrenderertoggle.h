@@ -53,6 +53,12 @@ struct _GtkCellRendererToggleClass
 
   void (* toggled) (GtkCellRendererToggle *cell_renderer_toggle,
 		    const gchar                 *path);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GtkType          gtk_cell_renderer_toggle_get_type  (void);

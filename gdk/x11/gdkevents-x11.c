@@ -778,6 +778,8 @@ gdk_event_translate (GdkDisplay *display,
       event->key.length = 0;
       event->key.string = NULL;
       
+      event->key.group = (xevent->xkey.state & KEYBOARD_GROUP_MASK) >> KEYBOARD_GROUP_SHIFT;
+
       break;
       
     case ButtonPress:
@@ -2302,13 +2304,15 @@ static struct
 } settings_map[] = {
   { "Net/DoubleClickTime", "gtk-double-click-time" },
   { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
+  { "Gtk/CanChangeAccels", "gtk-can-change-accels" },
   { "Gtk/ColorPalette", "gtk-color-palette" },
+  { "Gtk/FontName", "gtk-font-name" },
+  { "Gtk/KeyThemeName", "gtk-key-theme-name" },
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
   { "Net/CursorBlink", "gtk-cursor-blink" },
   { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
-  { "Net/ThemeName", "gtk-theme-name" },
-  { "Gtk/KeyThemeName", "gtk-key-theme-name" }
+  { "Net/ThemeName", "gtk-theme-name" }
 };
 
 void

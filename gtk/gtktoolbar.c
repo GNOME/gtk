@@ -53,7 +53,7 @@
 enum {
   PROP_0,
   PROP_ORIENTATION,
-  PROP_TOOLBAR_STYLE,
+  PROP_TOOLBAR_STYLE
 };
 
 enum {

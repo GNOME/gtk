@@ -2130,7 +2130,7 @@ gtk_calendar_select_day (GtkCalendar *calendar,
   
   calendar->selected_day = day;
   
-  /* Deselect the new day */
+  /* Select the new day */
   if (day != 0)
     {
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (calendar)))

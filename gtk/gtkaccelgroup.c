@@ -513,7 +513,9 @@ gtk_accel_group_connect (GtkAccelGroup	*accel_group,
 
   g_object_ref (accel_group);
   if (!closure->is_invalid)
-    quick_accel_add (accel_group, accel_key, accel_mods, accel_flags, closure, 0);
+    quick_accel_add (accel_group,
+		     gdk_keyval_to_lower (accel_key),
+		     accel_mods, accel_flags, closure, 0);
   g_object_unref (accel_group);
 }
 
@@ -552,7 +554,7 @@ gtk_accel_group_connect_by_path (GtkAccelGroup	*accel_group,
 
   if (gtk_accel_map_lookup_entry (accel_path, &key))
     {
-      accel_key = key.accel_key;
+      accel_key = gdk_keyval_to_lower (key.accel_key),
       accel_mods = key.accel_mods;
     }
 
@@ -615,6 +617,7 @@ gtk_accel_group_disconnect_key (GtkAccelGroup  *accel_group,
 
   g_object_ref (accel_group);
   
+  accel_key = gdk_keyval_to_lower (accel_key);
   entries = quick_accel_find (accel_group, accel_key, accel_mods, &n);
   while (n--)
     {
@@ -714,7 +717,7 @@ gtk_accel_group_from_accel_closure (GClosure *closure)
 
   g_return_val_if_fail (closure != NULL, NULL);
 
-  /* a few remarks on wat we do here. in general, we need a way to reverse lookup
+  /* a few remarks on what we do here. in general, we need a way to reverse lookup
    * accel_groups from closures that are being used in accel groups. this could
    * be done e.g via a hashtable. it is however cheaper (memory wise) to just
    * use the invalidation notifier on the closure itself (which we need to install
@@ -805,6 +808,8 @@ gtk_accelerator_valid (guint		  keyval,
     GDK_Shift_L, GDK_Shift_R, GDK_Shift_Lock, GDK_Caps_Lock, GDK_ISO_Lock,
     GDK_Control_L, GDK_Control_R, GDK_Meta_L, GDK_Meta_R,
     GDK_Alt_L, GDK_Alt_R, GDK_Super_L, GDK_Super_R, GDK_Hyper_L, GDK_Hyper_R,
+    GDK_ISO_Level3_Shift, GDK_ISO_Next_Group, GDK_ISO_Prev_Group,
+    GDK_ISO_First_Group, GDK_ISO_Last_Group,
     GDK_Mode_switch, GDK_Num_Lock, GDK_Multi_key,
     GDK_Scroll_Lock, GDK_Sys_Req, 
     GDK_Up, GDK_Down, GDK_Left, GDK_Right, GDK_Tab, GDK_ISO_Left_Tab,

@@ -1040,22 +1040,16 @@ range_get_scroll_for_grab (GtkRange      *range)
         case 3:
           return GTK_SCROLL_END;
           break;
-        }
+       }
       break;
 
       /* In the trough */
     case MOUSE_TROUGH:
       {
         if (range->trough_click_forward)
-          {
-            return range->layout->grab_button == 3
-              ? GTK_SCROLL_STEP_FORWARD : GTK_SCROLL_PAGE_FORWARD;
-          }
+	  return GTK_SCROLL_PAGE_FORWARD;
         else
-          {
-            return range->layout->grab_button == 3
-              ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_PAGE_BACKWARD;
-          }
+	  return GTK_SCROLL_PAGE_BACKWARD;
       }
       break;
 
@@ -1116,10 +1110,9 @@ gtk_range_button_press (GtkWidget      *widget,
     gtk_widget_queue_draw (widget);
     
   if (range->layout->mouse_location == MOUSE_TROUGH  &&
-      (event->button == 1 || event->button == 3))
+      event->button == 1)
     {
-      /* button 1 steps by step increment, as with button 1 on a stepper,
-       * button 3 steps by page increment, as with button 2 on a stepper
+      /* button 1 steps by page increment, as with button 2 on a stepper
        */
       GtkScrollType scroll;
       gdouble click_value;
@@ -1256,25 +1249,13 @@ gtk_range_button_release (GtkWidget      *widget,
   
   if (range->layout->grab_button == event->button)
     {
-      GtkScrollType scroll;
       MouseLocation grab_location;
 
       grab_location = range->layout->grab_location;
 
-      scroll = range_get_scroll_for_grab (range);
-      
       range_grab_remove (range);
       gtk_range_remove_step_timer (range);
       
-      /* We only do the move if we're still on top of the button at
-       * release
-       */
-      if (grab_location == range->layout->mouse_location &&
-          scroll != GTK_SCROLL_NONE)
-        {
-          gtk_range_scroll (range, scroll);
-        }
-
       if (grab_location == MOUSE_SLIDER)
         update_slider_position (range, event->x, event->y);
 
@@ -2265,6 +2246,8 @@ gtk_range_add_step_timer (GtkRange      *range,
                    initial_timeout,
                    range);
   range->timer->step = step;
+
+  gtk_range_scroll (range, range->timer->step);
 }
 
 static void

@@ -43,6 +43,7 @@
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtksizegroup.h"          /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
 #include "gtktextutil.h"
 #include "gtkwindow.h"
 #include <string.h>
@@ -406,7 +407,6 @@ static GtkTargetEntry target_table[] = {
   { "UTF8_STRING", 0, TARGET_UTF8_STRING },
   { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
   { "TEXT", 0, TARGET_TEXT },
-  { "text/plain", 0, TARGET_STRING },
   { "STRING",     0, TARGET_STRING }
 };
 
@@ -934,17 +934,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_CONTROL_MASK,
                                 "move_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, GDK_CONTROL_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
   
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                 "move_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                 "move_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 }
@@ -2936,14 +2930,16 @@ gtk_text_view_size_allocate (GtkWidget *widget,
     }
 
   text_view->hadjustment->page_size = SCREEN_WIDTH (text_view);
-  text_view->hadjustment->page_increment = SCREEN_WIDTH (text_view) / 2;
+  text_view->hadjustment->page_increment = SCREEN_WIDTH (text_view) * 0.9;
+  text_view->hadjustment->step_increment = SCREEN_WIDTH (text_view) * 0.1;
   text_view->hadjustment->lower = 0;
   text_view->hadjustment->upper = MAX (SCREEN_WIDTH (text_view),
                                        text_view->width);
   gtk_signal_emit_by_name (GTK_OBJECT (text_view->hadjustment), "changed");
 
   text_view->vadjustment->page_size = SCREEN_HEIGHT (text_view);
-  text_view->vadjustment->page_increment = SCREEN_HEIGHT (text_view) / 2;
+  text_view->vadjustment->page_increment = SCREEN_HEIGHT (text_view) * 0.9;
+  text_view->vadjustment->step_increment = SCREEN_HEIGHT (text_view) * 0.1;
   text_view->vadjustment->lower = 0;
   text_view->vadjustment->upper = MAX (SCREEN_HEIGHT (text_view),
                                        text_view->height);
@@ -3256,7 +3252,10 @@ changed_handler (GtkTextLayout     *layout,
 
     if (old_req.width != new_req.width ||
         old_req.height != new_req.height)
-      gtk_widget_queue_resize (widget);
+      {
+        /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
+        _gtk_size_group_queue_resize (widget);
+      }
   }
 }
 
@@ -3665,8 +3664,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     }
   /* Pass through Tab as literal tab, unless Control is held down */
   else if ((event->keyval == GDK_Tab ||
-            event->keyval == GDK_KP_Tab ||
-            event->keyval == GDK_ISO_Left_Tab) &&
+            event->keyval == GDK_KP_Tab) &&
            !(event->state & GDK_CONTROL_MASK))
     {
       /* If the text isn't editable, move the focus instead */
@@ -3937,7 +3935,6 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   DV(g_print (G_STRLOC": focus_in_event\n"));
@@ -3964,7 +3961,6 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   DV(g_print (G_STRLOC": focus_out_event\n"));
@@ -5820,6 +5816,77 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
     gtk_text_view_value_changed (NULL, text_view);
 }
 
+/* FIXME this adjust_allocation is a big cut-and-paste from
+ * GtkCList, needs to be some "official" way to do this
+ * factored out.
+ */
+typedef struct
+{
+  GdkWindow *window;
+  int dx;
+  int dy;
+} ScrollData;
+
+/* The window to which widget->window is relative */
+#define ALLOCATION_WINDOW(widget)		\
+   (GTK_WIDGET_NO_WINDOW (widget) ?		\
+    (widget)->window :                          \
+     gdk_window_get_parent ((widget)->window))
+
+static void
+adjust_allocation_recurse (GtkWidget *widget,
+			   gpointer   data)
+{
+  ScrollData *scroll_data = data;
+
+  /* Need to really size allocate instead of just poking
+   * into widget->allocation if the widget is not realized.
+   * FIXME someone figure out why this was.
+   */
+  if (!GTK_WIDGET_REALIZED (widget))
+    {
+      if (GTK_WIDGET_VISIBLE (widget))
+	{
+	  GdkRectangle tmp_rectangle = widget->allocation;
+	  tmp_rectangle.x += scroll_data->dx;
+          tmp_rectangle.y += scroll_data->dy;
+          
+	  gtk_widget_size_allocate (widget, &tmp_rectangle);
+	}
+    }
+  else
+    {
+      if (ALLOCATION_WINDOW (widget) == scroll_data->window)
+	{
+	  widget->allocation.x += scroll_data->dx;
+          widget->allocation.y += scroll_data->dy;
+          
+	  if (GTK_IS_CONTAINER (widget))
+	    gtk_container_forall (GTK_CONTAINER (widget),
+				  adjust_allocation_recurse,
+				  data);
+	}
+    }
+}
+
+static void
+adjust_allocation (GtkWidget *widget,
+		   int        dx,
+                   int        dy)
+{
+  ScrollData scroll_data;
+
+  if (GTK_WIDGET_REALIZED (widget))
+    scroll_data.window = ALLOCATION_WINDOW (widget);
+  else
+    scroll_data.window = NULL;
+    
+  scroll_data.dx = dx;
+  scroll_data.dy = dy;
+  
+  adjust_allocation_recurse (widget, &scroll_data);
+}
+            
 static void
 gtk_text_view_value_changed (GtkAdjustment *adj,
                              GtkTextView   *text_view)
@@ -5898,17 +5965,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
           GtkTextViewChild *child = tmp_list->data;
           
           if (child->anchor)
-            {              
-              child->widget->allocation.x -= dx;
-              child->widget->allocation.y -= dy;
-
-#if 0
-              g_print ("allocation for %p tweaked to %d,%d\n",
-                       child->widget,
-                       child->widget->allocation.x,
-                       child->widget->allocation.y);
-#endif
-            }
+            adjust_allocation (child->widget, dx, dy);
           
           tmp_list = g_slist_next (tmp_list);
         }
@@ -6752,33 +6809,17 @@ buffer_to_widget (GtkTextView      *text_view,
                   gint              buffer_y,
                   gint             *window_x,
                   gint             *window_y)
-{
-  gint focus_edge_width;
-  gboolean interior_focus;
-  gint focus_width;
-  
-  gtk_widget_style_get (GTK_WIDGET (text_view),
-			"interior_focus", &interior_focus,
-		        "focus_line_width", &focus_width,
-			NULL);
-
-  if (interior_focus)
-    focus_edge_width = 0;
-  else
-    focus_edge_width = focus_width;
-  
+{  
   if (window_x)
     {
-      *window_x = buffer_x - text_view->xoffset + focus_edge_width;
-      if (text_view->left_window)
-        *window_x += text_view->left_window->allocation.width;
+      *window_x = buffer_x - text_view->xoffset;
+      *window_x += text_view->text_window->allocation.x;
     }
 
   if (window_y)
     {
-      *window_y = buffer_y - text_view->yoffset + focus_edge_width;
-      if (text_view->top_window)
-        *window_y += text_view->top_window->allocation.height;
+      *window_y = buffer_y - text_view->yoffset;
+      *window_y += text_view->text_window->allocation.y;
     }
 }
 
@@ -6903,33 +6944,17 @@ widget_to_buffer (GtkTextView *text_view,
                   gint         widget_y,
                   gint        *buffer_x,
                   gint        *buffer_y)
-{
-  gint focus_edge_width;
-  gboolean interior_focus;
-  gint focus_width;
-  
-  gtk_widget_style_get (GTK_WIDGET (text_view),
-			"interior_focus", &interior_focus,
-		        "focus_line_width", &focus_width,
-			NULL);
-
-  if (interior_focus)
-    focus_edge_width = 0;
-  else
-    focus_edge_width = focus_width;
-  
+{  
   if (buffer_x)
     {
-      *buffer_x = widget_x - focus_edge_width + text_view->xoffset;
-      if (text_view->left_window)
-        *buffer_x -= text_view->left_window->allocation.width;
+      *buffer_x = widget_x + text_view->xoffset;
+      *buffer_x -= text_view->text_window->allocation.x;
     }
 
   if (buffer_y)
     {
-      *buffer_y = widget_y - focus_edge_width + text_view->yoffset;
-      if (text_view->top_window)
-        *buffer_y -= text_view->top_window->allocation.height;
+      *buffer_y = widget_y + text_view->yoffset;
+      *buffer_y -= text_view->text_window->allocation.y;
     }
 }
 

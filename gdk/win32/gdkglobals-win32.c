@@ -33,6 +33,9 @@ HDC		  gdk_display_hdc;
 HINSTANCE	  gdk_dll_hinstance;
 HINSTANCE	  gdk_app_hmodule;
 
+HKL		  _gdk_input_locale;
+UINT		  _gdk_input_codepage;
+
 WORD  		  cf_rtf;
 WORD		  cf_utf8_string;
 

@@ -87,6 +87,12 @@ struct _GtkCurveClass
   GtkDrawingAreaClass parent_class;
 
   void (* curve_type_changed) (GtkCurve *curve);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

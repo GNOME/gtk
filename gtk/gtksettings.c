@@ -31,6 +31,7 @@ enum {
   PROP_KEY_THEME_NAME,
   PROP_MENU_BAR_ACCEL,
   PROP_DND_DRAG_THRESHOLD,
+  PROP_FONT_NAME,
   PROP_SCREEN
 };
 
@@ -143,11 +144,10 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_object_class_install_property (gobject_class,
 				   PROP_SCREEN,
 				   g_param_spec_object ("screen",
- 							_("Screen"),
- 							_("The screen this GtkSettings manages"),
+							_("Screen"),
+							_("The screen this GtkSettings manages"),
 							GDK_TYPE_SCREEN,
- 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
 
@@ -217,7 +217,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                G_PARAM_READWRITE),
 					     NULL);
   g_assert (result == PROP_DND_DRAG_THRESHOLD);
-  
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-font-name",
+								   _("Font Name"),
+								   _("Name of default font to use"),
+								  "Sans 10",
+								  G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_FONT_NAME);
+ 
 }
 
 static void

@@ -761,16 +761,37 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu->position_func_data = data;
   menu_shell->activate_time = activate_time;
 
-  gtk_menu_position (menu);
-
-  /* We need to show the menu _here_ because code expects to be
-   * able to tell if the menu is onscreen by looking at the
-   * GTK_WIDGET_VISIBLE (menu)
+  /* We need to show the menu here rather in the init function because
+   * code expects to be able to tell if the menu is onscreen by
+   * looking at the GTK_WIDGET_VISIBLE (menu)
    */
   gtk_widget_show (GTK_WIDGET (menu));
-  gtk_widget_show (menu->toplevel);
+
+  /* Compute the size of the toplevel and realize it so we
+   * can position and scroll correctly.
+   */
+  {
+    GtkRequisition tmp_request;
+    GtkAllocation tmp_allocation = { 0, };
+
+    gtk_widget_size_request (menu->toplevel, &tmp_request);
+    
+    tmp_allocation.width = tmp_request.width;
+    tmp_allocation.height = tmp_request.height;
+
+    gtk_widget_size_allocate (menu->toplevel, &tmp_allocation);
+    
+    gtk_widget_realize (GTK_WIDGET (menu));
+  }
+
+  gtk_menu_position (menu);
 
   gtk_menu_scroll_to (menu, menu->scroll_offset);
+
+  /* Once everything is set up correctly, map the toplevel window on
+     the screen.
+   */
+  gtk_widget_show (menu->toplevel);
 
   if (xgrab_shell == widget)
     popup_grab_on_window (widget->window, activate_time); /* Should always succeed */
@@ -1323,8 +1344,9 @@ gtk_menu_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, menu->view_window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 
-  gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
-				GTK_MENU_SHELL (widget)->active_menu_item);
+  if (GTK_MENU_SHELL (widget)->active_menu_item)
+    gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
+				  GTK_MENU_SHELL (widget)->active_menu_item);
 
   gdk_window_show (menu->bin_window);
   gdk_window_show (menu->view_window);
@@ -1352,7 +1374,8 @@ menu_grab_transfer_window_get (GtkMenu *menu)
 
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
       
-      window = gdk_window_new (NULL, &attributes, attributes_mask);
+      window = gdk_window_new (gtk_widget_get_root_window (GTK_WIDGET (menu)),
+			       &attributes, attributes_mask);
       gdk_window_set_user_data (window, menu);
 
       gdk_window_show (window);
@@ -1737,6 +1760,8 @@ gtk_menu_key_press (GtkWidget	*widget,
   gboolean can_change_accels;
   gchar *accel = NULL;
   guint accel_key, accel_mods;
+  GdkModifierType consumed_modifiers;
+  GdkScreen *screen;
   
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -1748,8 +1773,10 @@ gtk_menu_key_press (GtkWidget	*widget,
 
   if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     return TRUE;
+
+  screen = gtk_widget_get_screen (widget);
     
-  g_object_get (G_OBJECT (gtk_settings_get_for_screen (gtk_widget_get_screen (widget))),
+  g_object_get (G_OBJECT (gtk_settings_get_for_screen (screen)),
                 "gtk-menu-bar-accel",
                 &accel,
                 NULL);
@@ -1793,14 +1820,26 @@ gtk_menu_key_press (GtkWidget	*widget,
     }
 
   g_object_get (G_OBJECT 
-		(gtk_settings_get_for_screen (gtk_widget_get_screen (widget))),
+		(gtk_settings_get_for_screen (screen)),
 		"gtk-can-change-accels",
 		&can_change_accels,
 		NULL);
-  
-  accel_key = event->keyval;
-  accel_mods = event->state & gtk_accelerator_get_default_mod_mask ();
 
+  /* Figure out what modifiers went into determining the key symbol */
+  gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display
+				       (gtk_widget_get_display (widget)),
+				       event->hardware_keycode, event->state, event->group,
+				       NULL, NULL, NULL, &consumed_modifiers);
+
+  accel_key = gdk_keyval_to_lower (event->keyval);
+  accel_mods = event->state & gtk_accelerator_get_default_mod_mask () & ~consumed_modifiers;
+
+  /* If lowercasing affects the keysym, then we need to include SHIFT in the modifiers,
+   * We re-upper case when we match against the keyval, but display and save in caseless form.
+   */
+  if (accel_key != event->keyval)
+    accel_mods |= GDK_SHIFT_MASK;
+  
   /* Modify the accelerators */
   if (can_change_accels &&
       menu_shell->active_menu_item &&

@@ -1286,6 +1286,8 @@ gtk_widget_init (GtkWidget *widget)
 			GTK_DOUBLE_BUFFERED);
 
   GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
 
   widget->style = gtk_widget_get_default_style ();
   g_object_ref (widget->style);
@@ -2869,35 +2871,20 @@ static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
-  gboolean handled = FALSE;
-
-  if (!handled)
-    handled = gtk_bindings_activate (GTK_OBJECT (widget),
-				     event->keyval,
-				     event->state);
-
-  return handled;
+  return _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
 }
 
 static gboolean
 gtk_widget_real_key_release_event (GtkWidget         *widget,
 				   GdkEventKey       *event)
 {
-  gboolean handled = FALSE;
-
-  if (!handled)
-    handled = gtk_bindings_activate (GTK_OBJECT (widget),
-				     event->keyval,
-				     event->state | GDK_RELEASE_MASK);
-
-  return handled;
+  return _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
 }
 
 static gboolean
 gtk_widget_real_focus_in_event (GtkWidget     *widget,
                                 GdkEventFocus *event)
 {
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   return FALSE;
@@ -2907,7 +2894,6 @@ static gboolean
 gtk_widget_real_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   return FALSE;
@@ -3231,6 +3217,8 @@ gtk_widget_reparent (GtkWidget *widget,
 	  gtk_widget_reparent_container_child (widget,
 					       gtk_widget_get_parent_window (widget));
 	}
+
+      g_object_notify (G_OBJECT (widget), "parent");
     }
 }
 

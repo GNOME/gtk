@@ -81,7 +81,6 @@ struct _GtkSpinButton
   GdkWindow *panel;
   
   guint32 timer;
-  guint32 ev_time;
   
   gdouble climb_rate;
   gdouble timer_step;
@@ -111,6 +110,12 @@ struct _GtkSpinButtonClass
   /* Action signals for keybindings, do not connect to these */
   void (*change_value) (GtkSpinButton *spin_button,
 			GtkScrollType  scroll);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

@@ -10,6 +10,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
+	-DGTK_HOST=\"@host@\"	                        \
 	-DGTK_COMPILATION				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
@@ -307,6 +308,8 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkinvisible.c		\
 	gtkitem.c		\
 	gtkitemfactory.c	\
+	gtkkeyhash.c		\
+	gtkkeyhash.h		\
 	gtklabel.c		\
 	gtklayout.c		\
 	gtklist.c		\

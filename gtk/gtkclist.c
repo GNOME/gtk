@@ -6048,8 +6048,10 @@ adjust_adjustments (GtkCList *clist,
   if (clist->vadjustment)
     {
       clist->vadjustment->page_size = clist->clist_window_height;
-      clist->vadjustment->page_increment = clist->clist_window_height / 2;
       clist->vadjustment->step_increment = clist->row_height;
+      clist->vadjustment->page_increment =
+	MAX (clist->vadjustment->page_size - clist->vadjustment->step_increment,
+	     clist->vadjustment->page_size / 2);
       clist->vadjustment->lower = 0;
       clist->vadjustment->upper = LIST_HEIGHT (clist);
 
@@ -6067,8 +6069,10 @@ adjust_adjustments (GtkCList *clist,
   if (clist->hadjustment)
     {
       clist->hadjustment->page_size = clist->clist_window_width;
-      clist->hadjustment->page_increment = clist->clist_window_width / 2;
       clist->hadjustment->step_increment = 10;
+      clist->vadjustment->page_increment =
+	MAX (clist->vadjustment->page_size - clist->vadjustment->step_increment,
+	     clist->vadjustment->page_size / 2);
       clist->hadjustment->lower = 0;
       clist->hadjustment->upper = LIST_WIDTH (clist);
 
@@ -6556,14 +6560,7 @@ static gint
 gtk_clist_focus_in (GtkWidget     *widget,
 		    GdkEventFocus *event)
 {
-  GtkCList *clist;
-
-  g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-
-  clist = GTK_CLIST (widget);
+  GtkCList *clist = GTK_CLIST (widget);
 
   if (clist->selection_mode == GTK_SELECTION_BROWSE &&
       clist->selection == NULL && clist->focus_row > -1)
@@ -6587,17 +6584,10 @@ static gint
 gtk_clist_focus_out (GtkWidget     *widget,
 		     GdkEventFocus *event)
 {
-  GtkCList *clist;
-
-  g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+  GtkCList *clist = GTK_CLIST (widget);
 
   gtk_clist_draw_focus (widget);
   
-  clist = GTK_CLIST (widget);
-
   GTK_CLIST_GET_CLASS (widget)->resync_selection (clist, (GdkEvent *) event);
 
   return FALSE;

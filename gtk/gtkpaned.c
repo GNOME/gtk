@@ -44,9 +44,9 @@ enum {
   TOGGLE_HANDLE_FOCUS,
   MOVE_HANDLE,
   CYCLE_HANDLE_FOCUS,
-  LAST_SIGNAL,
   ACCEPT_POSITION,
-  CANCEL_POSITION
+  CANCEL_POSITION,
+  LAST_SIGNAL
 };
 
 static void     gtk_paned_class_init            (GtkPanedClass    *klass);
@@ -143,9 +143,6 @@ add_tab_bindings (GtkBindingSet    *binding_set,
                                 "cycle_handle_focus", 1,
                                 G_TYPE_BOOLEAN, reverse);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
-                                "cycle_handle_focus", 1,
-                                G_TYPE_BOOLEAN, reverse);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, modifiers,
                                 "cycle_handle_focus", 1,
                                 G_TYPE_BOOLEAN, reverse);
 }
@@ -1263,7 +1260,7 @@ gtk_paned_move_handle (GtkPaned      *paned,
       
       enum {
 	SINGLE_STEP_SIZE = 1,
-	PAGE_STEP_SIZE   = 75,
+	PAGE_STEP_SIZE   = 75
       };
       
       old_position = gtk_paned_get_position (paned);

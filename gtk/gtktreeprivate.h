@@ -101,6 +101,9 @@ struct _GtkTreeViewPrivate
   GdkWindow *drag_highlight_window;
   GtkTreeViewColumn *drag_column;
 
+  GtkTreeRowReference *last_single_clicked;
+  GtkTreeRowReference *last_single_clicked_2;
+
   /* bin_window offset */
   GtkTreeRowReference *top_row;
   gint top_row_dy;
@@ -166,7 +169,7 @@ struct _GtkTreeViewPrivate
   gint press_start_y;
 
   /* Scroll-to functionality when unrealized */
-  GtkTreePath *scroll_to_path;
+  GtkTreeRowReference *scroll_to_path;
   GtkTreeViewColumn *scroll_to_column;
   gfloat scroll_to_row_align;
   gfloat scroll_to_col_align;
@@ -181,6 +184,7 @@ struct _GtkTreeViewPrivate
   
   /* interactive search */
   guint enable_search : 1;
+  guint disable_popdown : 1;
   gint search_column;
   GtkTreeViewSearchDialogPositionFunc search_dialog_position_func;
   GtkTreeViewSearchEqualFunc search_equal_func;
@@ -310,7 +314,22 @@ GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree
 void              _gtk_tree_selection_set_tree_view      (GtkTreeSelection *selection,
                                                           GtkTreeView      *tree_view);
 
-
+void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn *tree_column,
+							  GdkWindow         *window,
+							  GdkRectangle      *background_area,
+							  GdkRectangle      *cell_area,
+							  GdkRectangle      *expose_area,
+							  guint              flags);
+gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn *tree_column,
+							  gint               direction);
+void		  _gtk_tree_view_column_cell_draw_focus  (GtkTreeViewColumn *tree_column,
+							  GdkWindow         *window,
+							  GdkRectangle      *background_area,
+							  GdkRectangle      *cell_area,
+							  GdkRectangle      *expose_area,
+							  guint              flags);
+void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn *tree_column,
+							  gboolean           install_handler);
 
 
 #ifdef __cplusplus

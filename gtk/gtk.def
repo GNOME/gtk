@@ -583,10 +583,13 @@ EXPORTS
 	gtk_false
 	gtk_file_selection_complete
 	gtk_file_selection_get_filename
+	gtk_file_selection_get_select_multiple
+	gtk_file_selection_get_selections
 	gtk_file_selection_get_type
 	gtk_file_selection_hide_fileop_buttons
 	gtk_file_selection_new
 	gtk_file_selection_set_filename
+	gtk_file_selection_set_select_multiple
 	gtk_file_selection_show_fileop_buttons
 	gtk_fixed_get_has_window
 	gtk_fixed_get_type
@@ -1720,8 +1723,8 @@ EXPORTS
 	gtk_tree_model_get_column_type
 	gtk_tree_model_get_flags
 	gtk_tree_model_get_iter
+	gtk_tree_model_get_iter_first
 	gtk_tree_model_get_iter_from_string
-	gtk_tree_model_get_iter_root
 	gtk_tree_model_get_n_columns
 	gtk_tree_model_get_path
 	gtk_tree_model_get_type
@@ -1760,8 +1763,8 @@ EXPORTS
 	gtk_tree_path_is_ancestor
 	gtk_tree_path_is_descendant
 	gtk_tree_path_new
+	gtk_tree_path_new_first
 	gtk_tree_path_new_from_string
-	gtk_tree_path_new_root
 	gtk_tree_path_next
 	gtk_tree_path_prepend_index
 	gtk_tree_path_prev
@@ -1830,13 +1833,9 @@ EXPORTS
 	gtk_tree_view_collapse_all
 	gtk_tree_view_collapse_row
 	gtk_tree_view_column_add_attribute
-	gtk_tree_view_column_cell_draw_focus
-	gtk_tree_view_column_cell_focus
 	gtk_tree_view_column_cell_get_size
 	gtk_tree_view_column_cell_is_visible
-	gtk_tree_view_column_cell_render
 	gtk_tree_view_column_cell_set_cell_data
-	gtk_tree_view_column_cell_set_dirty
 	gtk_tree_view_column_clear
 	gtk_tree_view_column_clear_attributes
 	gtk_tree_view_column_clicked

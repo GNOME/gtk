@@ -479,10 +479,8 @@ gdk_property_get (GdkWindow   *window,
     {
       XFree (ret_data);
       g_warning ("Couldn't match property type %s to %s\n", 
-		 gdk_x11_get_xatom_name_for_display 
-		 (GDK_WINDOW_DISPLAY (window), ret_prop_type), 
-		 gdk_x11_get_xatom_name_for_display 
-		 (GDK_WINDOW_DISPLAY (window), xtype));
+		 gdk_x11_get_xatom_name_for_display (display, ret_prop_type), 
+		 gdk_x11_get_xatom_name_for_display (display, xtype));
       return FALSE;
     }
 
@@ -490,7 +488,9 @@ gdk_property_get (GdkWindow   *window,
 
   if (data)
     {
-      if (ret_prop_type == XA_ATOM)
+      if (ret_prop_type == XA_ATOM ||
+	  ret_prop_type == 
+	  gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
 	{
 	  /*
 	   * data is an array of X atom, we need to convert it
@@ -505,6 +505,9 @@ gdk_property_get (GdkWindow   *window,
 	  for (i = 0; i < ret_nitems; i++)
 	    ret_atoms[i] = gdk_x11_xatom_to_atom_for_display (display,
 							      xatoms[i]);
+
+	  if (actual_length)
+	    *actual_length = ret_nitems * sizeof (GdkAtom);
 	}
       else
 	{
@@ -571,7 +574,8 @@ gdk_property_change (GdkWindow    *window,
   xtype = gdk_x11_atom_to_xatom_for_display (display, type);
   xwindow = GDK_WINDOW_XID (window);
 
-  if (xtype == XA_ATOM)
+  if (xtype == XA_ATOM ||
+      xtype == gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
     {
       /*
        * data is an array of GdkAtom, we need to convert it

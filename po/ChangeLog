@@ -1,3 +1,35 @@
+2002-02-26  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Fixed Swedish translation.
+
+2002-02-25  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Updated Swedish translation.
+
+2002-02-24  Matthias Warkus  <mawarkus@gnome.org>
+
+	* de.po: Updated for release.
+
+2002-02-24  Hasbullah Bin Pit <sebol@ikhlas.com>
+
+	* ms.po: Updated Malay Translation.
+
+2002-02-23  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* no.po: Updated Norwegian (bokmål) translation.
+	
+2002-02-23  Ole Laursen  <olau@hardworking.dk>
+
+	* da.po: Updated Danish translation.
+
+2002-02-23  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* cy.po: Added Welsh translation
+
+2002-02-21  Fatih Demir <kabalak@gtranslator.org>
+
+	* tr.po: Committed updated Turkish translation by Nilgün.
+
 Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* POTFILES.in: Add io-wbmp.c.

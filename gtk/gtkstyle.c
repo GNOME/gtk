@@ -332,53 +332,86 @@ typedef enum {
   CHECK_LIGHT,
   CHECK_MID,
   CHECK_TEXT,
+  CHECK_INCONSISTENT_AA,
+  CHECK_INCONSISTENT_TEXT,
   RADIO_BASE,
   RADIO_BLACK,
   RADIO_DARK,
   RADIO_LIGHT,
   RADIO_MID,
-  RADIO_TEXT
+  RADIO_TEXT,
+  RADIO_INCONSISTENT_AA,
+  RADIO_INCONSISTENT_TEXT
 } IndicatorPart;
 
-static char check_aa_bits[] = {
- 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x58,0x00,0xa0,
- 0x00,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static char check_base_bits[] = {
- 0x00,0x00,0x00,0x00,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,
- 0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0x00,0x00,0x00,0x00};
+/*
+ * Extracted from check-13.png, width=13, height=13
+ */
 static char check_black_bits[] = {
- 0x00,0x00,0xfe,0x0f,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,
- 0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x00,0x00};
+  0x00,0x00,0xfe,0x0f,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,
+  0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x00,0x00,0x00,0x00};
 static char check_dark_bits[] = {
- 0xff,0x1f,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,
- 0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00};
-static char check_light_bits[] = {
- 0x00,0x00,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,
- 0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0xfe,0x1f};
+  0xff,0x1f,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,
+  0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x00,0x00};
 static char check_mid_bits[] = {
- 0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00,
- 0x08,0x00,0x08,0x00,0x08,0x00,0x08,0xfc,0x0f,0x00,0x00};
+  0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00,
+  0x08,0x00,0x08,0x00,0x08,0x00,0x08,0xfc,0x0f,0x00,0x00,0x00,0x00};
+static char check_light_bits[] = {
+  0x00,0x00,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,
+  0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0xfe,0x1f,0x00,0x00};
 static char check_text_bits[] = {
- 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x03,0x80,0x01,0x80,0x00,0xd8,
- 0x00,0x60,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static char radio_base_bits[] = {
- 0x00,0x00,0x00,0x00,0xf0,0x01,0xf8,0x03,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,
- 0x07,0xfc,0x07,0xf8,0x03,0xf0,0x01,0x00,0x00,0x00,0x00};
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x03,0x80,0x01,0x80,0x00,0x58,
+  0x00,0x60,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+static char check_aa_bits[] = {
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x58,0x00,0xa0,
+  0x00,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+static char check_base_bits[] = {
+  0x00,0x00,0x00,0x00,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,
+  0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0x00,0x00,0x00,0x00,0x00,0x00};
+
+/*
+ * Extracted from check-13-inconsistent-ssp.png, width=13, height=13
+ */
+static char check_inconsistent_text_bits[] = {
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf8,0x03,0xf8,
+  0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+static char check_inconsistent_aa_bits[] = {
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+
+/*
+ * Extracted from radio-13-ssp.png, width=13, height=13
+ */
 static char radio_black_bits[] = {
- 0x00,0x00,0xf0,0x01,0x08,0x02,0x04,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,
- 0x00,0x02,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  0x00,0x00,0xf0,0x01,0x0c,0x02,0x04,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,
+  0x00,0x02,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 static char radio_dark_bits[] = {
- 0xf0,0x01,0x08,0x02,0x04,0x04,0x02,0x04,0x01,0x00,0x01,0x00,0x01,0x00,0x01,
- 0x00,0x01,0x00,0x02,0x00,0x0c,0x00,0x00,0x00,0x00,0x00};
-static char radio_light_bits[] = {
- 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x10,0x00,0x10,0x00,0x10,0x00,
- 0x10,0x00,0x10,0x00,0x08,0x00,0x04,0x08,0x02,0xf0,0x01};
+  0xf0,0x00,0x0c,0x02,0x02,0x04,0x02,0x04,0x01,0x08,0x01,0x08,0x01,0x08,0x01,
+  0x08,0x00,0x04,0x02,0x04,0x0c,0x03,0xf0,0x00,0x00,0x00,0x00,0x00};
 static char radio_mid_bits[] = {
- 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x08,0x00,0x08,0x00,
- 0x08,0x00,0x08,0x00,0x04,0x00,0x02,0xf0,0x01,0x00,0x00};
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+static char radio_light_bits[] = {
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x10,0x00,0x10,0x00,
+  0x10,0x00,0x08,0x00,0x08,0x00,0x04,0x00,0x03,0xf0,0x00,0x00,0x00};
 static char radio_text_bits[] = {
- 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xe0,0x00,0xf0,0x01,0xf0,0x01,0xf0,
- 0x01,0xe0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xe0,0x00,0xf0,0x01,0xf0,0x01,0xf0,
+  0x01,0xe0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+static char radio_aa_bits[] = {
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+static char radio_base_bits[] = {
+  0x00,0x00,0x00,0x00,0xf0,0x01,0xf8,0x03,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,
+  0x07,0xfc,0x03,0xf8,0x03,0xf0,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+/*
+ * Extracted from radio-13-inconsistent-ssp.png, width=13, height=13
+ */
+static char radio_inconsistent_text_bits[] = {
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf8,0x03,0x00,
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+static char radio_inconsistent_aa_bits[] = {
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf8,0x03,0x00,0x00,0xf8,
+  0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 
 static struct {
   char      *bits;
@@ -391,12 +424,16 @@ static struct {
   { check_light_bits, NULL },
   { check_mid_bits, NULL },
   { check_text_bits, NULL },
+  { check_inconsistent_aa_bits, NULL },
+  { check_inconsistent_text_bits, NULL },
   { radio_base_bits, NULL },
   { radio_black_bits, NULL },
   { radio_dark_bits, NULL },
   { radio_light_bits, NULL },
   { radio_mid_bits, NULL },
-  { radio_text_bits, NULL }
+  { radio_text_bits, NULL },
+  { radio_inconsistent_aa_bits, NULL },
+  { radio_inconsistent_text_bits, NULL },
 };
 
 /* --- variables --- */
@@ -449,9 +486,22 @@ static void
 gtk_style_init (GtkStyle *style)
 {
   gint i;
-  
-  style->font_desc = pango_font_description_from_string ("Sans 10");
+  const gchar *font_name = _gtk_rc_context_get_default_font_name 
+    (gtk_settings_get_for_screen (gdk_get_default_screen ()));
 
+  style->font_desc = pango_font_description_from_string (font_name);
+
+  if (!pango_font_description_get_family (style->font_desc))
+    {
+      g_warning ("Default font does not have a family set");
+      pango_font_description_set_family (style->font_desc, "Sans");
+    }
+  if (pango_font_description_get_size (style->font_desc) <= 0)
+    {
+      g_warning ("Default font does not have a positive size");
+      pango_font_description_set_size (style->font_desc, 10 * PANGO_SCALE);
+    }
+  
   style->attach_count = 0;
   style->colormap = NULL;
   style->depth = -1;
@@ -2228,19 +2278,18 @@ draw_spin_entry_shadow (GtkStyle      *style,
 }
 
 static void
-draw_spinbutton_shadow (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state,
-			GdkRectangle  *area,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+draw_spinbutton_shadow (GtkStyle        *style,
+			GdkWindow       *window,
+			GtkStateType     state,
+			GtkTextDirection direction,
+			GdkRectangle    *area,
+			gint             x,
+			gint             y,
+			gint             width,
+			gint             height)
 {
-  gint y_middle = y + height / 2;
-
   sanitize_size (window, &width, &height);
-  
+
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->black_gc, area);
@@ -2248,33 +2297,42 @@ draw_spinbutton_shadow (GtkStyle      *style,
       gdk_gc_set_clip_rectangle (style->dark_gc[state], area);
       gdk_gc_set_clip_rectangle (style->light_gc[state], area);
     }
-  
-  gdk_draw_line (window, style->black_gc,
-		 x, y + 2, x, y + height - 3);
-  gdk_draw_line (window, style->black_gc,
-		 x, y + 1, x + width - 2, y + 1);
-  gdk_draw_line (window, style->black_gc,
-		 x + width - 2, y + 2, x + width - 2, y + height - 3);
-  
-  gdk_draw_line (window, style->bg_gc[state],
-		 x, y + height - 2, x + width - 2, y + height - 2);
 
-  gdk_draw_line (window, style->dark_gc[state],
-		 x, y, x + width - 1, y);
-  gdk_draw_line (window, style->dark_gc[state],
-		 x + 1, y_middle - 1, x + width - 3, y_middle - 1);
-  gdk_draw_line (window, style->dark_gc[state],
-		 x + 1, y + height - 3, x + width - 3, y + height - 3);
-
-  gdk_draw_line (window, style->light_gc[state],
-		 x + 1, y + 2, x + width - 3, y + 2);
-  gdk_draw_line (window, style->light_gc[state],
-		 x + 1, y_middle, x + width - 3, y_middle);
-  gdk_draw_line (window, style->light_gc[state],
-		 x + width - 1, y + 1, x + width - 1, y + height - 1);
-  gdk_draw_line (window, style->light_gc[state],
-		 x, y + height - 1, x + width - 2, y + height - 1);
-      
+  if (direction == GTK_TEXT_DIR_LTR)
+    {
+      gdk_draw_line (window, style->dark_gc[state],
+		     x, y, x + width - 1, y);
+      gdk_draw_line (window, style->black_gc,
+		     x, y + 1, x + width - 2, y + 1);
+      gdk_draw_line (window, style->black_gc,
+		     x + width - 2, y + 2, x + width - 2, y + height - 3);
+      gdk_draw_line (window, style->light_gc[state],
+		     x + width - 1, y + 1, x + width - 1, y + height - 2);
+      gdk_draw_line (window, style->light_gc[state],
+		     x, y + height - 1, x + width - 1, y + height - 1);
+      gdk_draw_line (window, style->bg_gc[state],
+		     x, y + height - 2, x + width - 2, y + height - 2);
+      gdk_draw_line (window, style->black_gc,
+		     x, y + 2, x, y + height - 3);
+    }
+  else
+    {
+      gdk_draw_line (window, style->dark_gc[state],
+		     x, y, x + width - 1, y);
+      gdk_draw_line (window, style->dark_gc[state],
+		     x, y + 1, x, y + height - 1);
+      gdk_draw_line (window, style->black_gc,
+		     x + 1, y + 1, x + width - 1, y + 1);
+      gdk_draw_line (window, style->black_gc,
+		     x + 1, y + 2, x + 1, y + height - 2);
+      gdk_draw_line (window, style->black_gc,
+		     x + width - 1, y + 2, x + width - 1, y + height - 3);
+      gdk_draw_line (window, style->light_gc[state],
+		     x + 1, y + height - 1, x + width - 1, y + height - 1);
+      gdk_draw_line (window, style->bg_gc[state],
+		     x + 2, y + height - 2, x + width - 1, y + height - 2);
+    }
+  
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->black_gc, NULL);
@@ -2330,11 +2388,12 @@ gtk_default_draw_shadow (GtkStyle      *style,
 				  x, y, width, height);
 	  return;
 	}
-      else if (widget && GTK_IS_SPIN_BUTTON (widget) &&
-	       detail && strcmp (detail, "spinbutton") == 0)
+      if (widget && GTK_IS_SPIN_BUTTON (widget) &&
+         detail && strcmp (detail, "spinbutton") == 0)
 	{
 	  draw_spinbutton_shadow (style, window, state_type,
-				  area, x, y, width, height);
+				  gtk_widget_get_direction (widget), area, x, y, width, height);
+	  
 	  return;
 	}
     }
@@ -2559,6 +2618,52 @@ gtk_default_draw_shadow (GtkStyle      *style,
       
       break;
     }
+
+  if (shadow_type == GTK_SHADOW_IN &&
+      widget && GTK_IS_SPIN_BUTTON (widget) &&
+      detail && strcmp (detail, "entry") == 0)
+    {
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	{
+	  gdk_draw_line (window,
+			 style->base_gc[state_type],
+			 x + width - 1, y + 2,
+			 x + width - 1, y + height - 3);
+	  gdk_draw_line (window,
+			 style->base_gc[state_type],
+			 x + width - 2, y + 2,
+			 x + width - 2, y + height - 3);
+	  gdk_draw_point (window,
+			  style->black_gc,
+			  x + width - 1, y + 1);
+	  gdk_draw_point (window,
+			  style->bg_gc[state_type],
+			  x + width - 1, y + height - 2);
+	}
+      else
+	{
+	  gdk_draw_line (window,
+			 style->base_gc[state_type],
+			 x, y + 2,
+			 x, y + height - 3);
+	  gdk_draw_line (window,
+			 style->base_gc[state_type],
+			 x + 1, y + 2,
+			 x + 1, y + height - 3);
+	  gdk_draw_point (window,
+			  style->black_gc,
+			  x, y + 1);
+	  gdk_draw_line (window,
+			 style->bg_gc[state_type],
+			 x, y + height - 2,
+			 x + 1, y + height - 2);
+	  gdk_draw_point (window,
+			  style->light_gc[state_type],
+			  x, y + height - 1);
+	}
+    }
+
+
   if (area)
     {
       gdk_gc_set_clip_rectangle (gc1, NULL);
@@ -3119,10 +3224,41 @@ gtk_default_draw_box (GtkStyle      *style,
 		      gint           width,
 		      gint           height)
 {
+  gboolean is_spinbutton_box = FALSE;
+  
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
   
   sanitize_size (window, &width, &height);
+
+  if (widget && GTK_IS_SPIN_BUTTON (widget) && detail)
+    {
+      if (strcmp (detail, "spinbutton_up") == 0)
+	{
+	  y += 2;
+	  width -= 3;
+	  height -= 2;
+
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	    x += 2;
+	  else
+	    x += 1;
+
+	  is_spinbutton_box = TRUE;
+	}
+      else if (strcmp (detail, "spinbutton_down") == 0)
+	{
+	  width -= 3;
+	  height -= 2;
+
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	    x += 2;
+	  else
+	    x += 1;
+
+	  is_spinbutton_box = TRUE;
+	}
+    }
   
   if (!style->bg_pixmap[state_type] || 
       GDK_IS_PIXMAP (window))
@@ -3139,7 +3275,35 @@ gtk_default_draw_box (GtkStyle      *style,
     gtk_style_apply_default_background (style, window,
                                         widget && !GTK_WIDGET_NO_WINDOW (widget),
                                         state_type, area, x, y, width, height);
-  
+
+  if (is_spinbutton_box)
+    {
+      GdkGC *upper_gc;
+      GdkGC *lower_gc;
+      
+      lower_gc = style->dark_gc[state_type];
+      if (shadow_type == GTK_SHADOW_OUT)
+	upper_gc = style->light_gc[state_type];
+      else
+	upper_gc = style->dark_gc[state_type];
+
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+	  gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
+	}
+      
+      gdk_draw_line (window, upper_gc, x, y, x + width - 1, y);
+      gdk_draw_line (window, lower_gc, x, y + height - 1, x + width - 1, y + height - 1);
+
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+	  gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
+	}
+      return;
+    }
+
   gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
                     x, y, width, height);
 
@@ -3337,19 +3501,34 @@ gtk_default_draw_check (GtkStyle      *style,
 	      draw_part (window, style->black_gc, area, x, y, CHECK_TEXT);
 	      draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_AA);
 	    }
+	  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+	    {
+	      draw_part (window, style->black_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
+	      draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_INCONSISTENT_AA);
+	    }
 	}
       else
 	{
+	  GdkGC *base_gc = style->base_gc[state_type];
+
+	  if (state_type == GTK_STATE_ACTIVE)
+	    base_gc = style->bg_gc[state_type];
+	  
+	  draw_part (window, base_gc, area, x, y, CHECK_BASE);
 	  draw_part (window, style->black_gc, area, x, y, CHECK_BLACK);
 	  draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_DARK);
 	  draw_part (window, style->mid_gc[state_type], area, x, y, CHECK_MID);
 	  draw_part (window, style->light_gc[state_type], area, x, y, CHECK_LIGHT);
-	  draw_part (window, style->base_gc[state_type], area, x, y, CHECK_BASE);
 	  
 	  if (shadow_type == GTK_SHADOW_IN)
 	    {
 	      draw_part (window, style->text_gc[state_type], area, x, y, CHECK_TEXT);
 	      draw_part (window, style->text_aa_gc[state_type], area, x, y, CHECK_AA);
+	    }
+	  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+	    {
+	      draw_part (window, style->text_gc[state_type], area, x, y, CHECK_INCONSISTENT_TEXT);
+	      draw_part (window, style->text_aa_gc[state_type], area, x, y, CHECK_INCONSISTENT_AA);
 	    }
 	}
     }
@@ -3399,18 +3578,37 @@ gtk_default_draw_option (GtkStyle      *style,
       if (strcmp (detail, "option") == 0)	/* Menu item */
 	{
 	  if (shadow_type == GTK_SHADOW_IN)
-	    draw_part (window, style->fg_gc[state_type], area, x, y, RADIO_TEXT);
+	    {
+	      draw_part (window, style->fg_gc[state_type], area, x, y, RADIO_TEXT);
+	    }
+	  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+	    {
+	      draw_part (window, style->black_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
+	      draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_INCONSISTENT_AA);
+	    }
 	}
       else
 	{
+	  GdkGC *base_gc = style->base_gc[state_type];
+
+	  if (state_type == GTK_STATE_ACTIVE)
+	    base_gc = style->bg_gc[state_type];
+
+	  draw_part (window, base_gc, area, x, y, RADIO_BASE);
 	  draw_part (window, style->black_gc, area, x, y, RADIO_BLACK);
 	  draw_part (window, style->dark_gc[state_type], area, x, y, RADIO_DARK);
 	  draw_part (window, style->mid_gc[state_type], area, x, y, RADIO_MID);
 	  draw_part (window, style->light_gc[state_type], area, x, y, RADIO_LIGHT);
-	  draw_part (window, style->base_gc[state_type], area, x, y, RADIO_BASE);
 	  
 	  if (shadow_type == GTK_SHADOW_IN)
-	    draw_part (window, style->text_gc[state_type], area, x, y, RADIO_TEXT);
+	    {
+	      draw_part (window, style->text_gc[state_type], area, x, y, RADIO_TEXT);
+	    }
+	  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+	    {
+	      draw_part (window, style->text_aa_gc[state_type], area, x, y, RADIO_INCONSISTENT_AA);
+	      draw_part (window, style->text_gc[state_type], area, x, y, RADIO_INCONSISTENT_TEXT);
+	    }
 	}
     }
 }
@@ -5578,9 +5776,10 @@ gtk_style_set_font (GtkStyle *style,
  * @drawable: a #GdkDrawable
  * @gc: a #GdkGC
  * @location: location where to draw the cursor (@location->width is ignored)
- * @dir: text direction for the cursor, used to decide whether to draw a
- *       directional arrow on the cursor and in what direction. Unless both
- *       strong and weak cursors are displayed, this should be %GTK_TEXT_DIR_NONE.
+ * @direction: whether the cursor is left-to-right or
+ *             right-to-left. Should never be #GTK_TEXT_DIR_NONE
+ * @draw_arrow: %TRUE to draw a directional arrow on the
+ *        cursor. Should be %FALSE unless the cursor is split.
  * 
  * Draws a text caret on @drawable at @location. This is not a style function
  * but merely a convenience function for drawing the standard cursor shape.
@@ -5590,48 +5789,61 @@ _gtk_draw_insertion_cursor (GtkWidget        *widget,
 			    GdkDrawable      *drawable,
 			    GdkGC            *gc,
 			    GdkRectangle     *location,
-			    GtkTextDirection  dir)
+                            GtkTextDirection  direction,
+                            gboolean          draw_arrow)
 {
   gint stem_width;
   gint arrow_width;
   gint x, y;
   gint i;
   gfloat cursor_aspect_ratio;
-
+  gint offset;
+  
+  g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
+  
   gtk_widget_style_get (widget, "cursor-aspect-ratio", &cursor_aspect_ratio, NULL);
   
   stem_width = location->height * cursor_aspect_ratio + 1;
   arrow_width = stem_width + 1;
- 
+
+  /* put (stem_width % 2) on the proper side of the cursor */
+  if (direction == GTK_TEXT_DIR_LTR)
+    offset = stem_width / 2;
+  else
+    offset = stem_width - stem_width / 2;
+  
   for (i = 0; i < stem_width; i++)
     gdk_draw_line (drawable, gc,
-		   location->x + i - stem_width / 2, location->y,
-		   location->x + i - stem_width / 2, location->y + location->height);
+		   location->x + i - offset, location->y,
+		   location->x + i - offset, location->y + location->height - 1);
 
-  if (dir == GTK_TEXT_DIR_RTL)
+  if (draw_arrow)
     {
-      x = location->x - stem_width / 2 - 1;
-      y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+      if (direction == GTK_TEXT_DIR_RTL)
+        {
+          x = location->x - offset - 1;
+          y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
   
-      for (i = 0; i < arrow_width; i++)
-	{
-	  gdk_draw_line (drawable, gc,
-			 x, y + i + 1,
-			 x, y + 2 * arrow_width - i - 1);
-	  x --;
-	}
-    }
-  else if (dir == GTK_TEXT_DIR_LTR)
-    {
-      x = location->x + stem_width - stem_width / 2;
-      y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+          for (i = 0; i < arrow_width; i++)
+            {
+              gdk_draw_line (drawable, gc,
+                             x, y + i + 1,
+                             x, y + 2 * arrow_width - i - 1);
+              x --;
+            }
+        }
+      else if (direction == GTK_TEXT_DIR_LTR)
+        {
+          x = location->x + stem_width - offset;
+          y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
   
-      for (i = 0; i < arrow_width; i++) 
-	{
-	  gdk_draw_line (drawable, gc,
-			 x, y + i + 1,
-			 x, y + 2 * arrow_width - i - 1);
-	  x++;
-	}
+          for (i = 0; i < arrow_width; i++) 
+            {
+              gdk_draw_line (drawable, gc,
+                             x, y + i + 1,
+                             x, y + 2 * arrow_width - i - 1);
+              x++;
+            }
+        }
     }
 }

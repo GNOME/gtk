@@ -115,6 +115,12 @@ struct _GtkRcStyleClass
   /* Create an empty style suitable to this RC style
    */
   GtkStyle * (*create_style) (GtkRcStyle *rc_style);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 void	  _gtk_rc_init			(void);
@@ -238,6 +244,7 @@ const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
 gchar*  gtk_win32_get_installation_directory (void);
 #endif
 
+const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
 
 #ifdef __cplusplus
 }

@@ -99,7 +99,6 @@ static GtkTargetEntry target_table[] = {
   { "UTF8_STRING",   0, 0 },
   { "COMPOUND_TEXT", 0, 0 },
   { "TEXT",          0, 0 },
-  { "text/plain",    0, 0 },
   { "STRING",        0, 0 }
 };
 
@@ -1573,7 +1572,6 @@ gtk_entry_focus_in (GtkWidget     *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
   
   entry->need_im_reset = TRUE;
@@ -1594,7 +1592,6 @@ gtk_entry_focus_out (GtkWidget     *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   entry->need_im_reset = TRUE;
@@ -1676,8 +1673,6 @@ gtk_entry_insert_text (GtkEditable *editable,
   strncpy (text, new_text, new_text_length);
   
   g_signal_emit_by_name (editable, "insert_text", text, new_text_length, position);
-  g_signal_emit_by_name (editable, "changed");
-  g_object_notify (G_OBJECT (editable), "text");
 
   if (new_text_length > 63)
     g_free (text);
@@ -1702,8 +1697,6 @@ gtk_entry_delete_text (GtkEditable *editable,
   g_object_ref (G_OBJECT (editable));
 
   g_signal_emit_by_name (editable, "delete_text", start_pos, end_pos);
-  g_signal_emit_by_name (editable, "changed");
-  g_object_notify (G_OBJECT (editable), "text");
 
   g_object_unref (G_OBJECT (editable));
 }
@@ -1908,6 +1901,9 @@ gtk_entry_real_insert_text (GtkEditable *editable,
   *position += n_chars;
 
   gtk_entry_recompute (entry);
+
+  g_signal_emit_by_name (editable, "changed");
+  g_object_notify (G_OBJECT (editable), "text");
 }
 
 static void
@@ -1936,14 +1932,16 @@ gtk_entry_real_delete_text (GtkEditable *editable,
 
       if (entry->selection_bound > start_pos)
 	entry->selection_bound -= MIN (entry->selection_bound, end_pos) - start_pos;
+      /* We might have deleted the selection
+       */
+      if (GTK_WIDGET_REALIZED (entry))
+	gtk_entry_update_primary_selection (entry);
+      
+      gtk_entry_recompute (entry);
+      
+      g_signal_emit_by_name (editable, "changed");
+      g_object_notify (G_OBJECT (editable), "text");
     }
-
-  /* We might have deleted the selection
-   */
-  if(GTK_WIDGET_REALIZED (entry))
-    gtk_entry_update_primary_selection (entry);
-
-  gtk_entry_recompute (entry);
 }
 
 /* Compute the X position for an offset that corresponds to the "more important
@@ -2715,6 +2713,8 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
 
+      dir1 = widget_direction;
+      
       if (split_cursor)
 	{
 	  gc1 = entry->cursor_gc;
@@ -2722,7 +2722,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
 	  if (weak_x != strong_x)
 	    {
-	      dir1 = widget_direction;
 	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
 	      
 	      gc2 = widget->style->text_gc[GTK_STATE_NORMAL];
@@ -2745,13 +2744,15 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       cursor_location.height = text_area_height - 2 * INNER_BORDER ;
       
       _gtk_draw_insertion_cursor (widget, entry->text_area, gc1,
-				  &cursor_location, dir1);
+				  &cursor_location, dir1,
+                                  dir2 != GTK_TEXT_DIR_NONE);
       
-      if (gc2)
+      if (dir2 != GTK_TEXT_DIR_NONE)
 	{
 	  cursor_location.x = xoffset + x2;
 	  _gtk_draw_insertion_cursor (widget, entry->text_area, gc2,
-				      &cursor_location, dir2);
+				      &cursor_location, dir2,
+                                      TRUE);
 	}
     }
 }

@@ -352,7 +352,7 @@ gdk_input_wintab_init (void)
 	      WTInfo (WTI_CURSORS + cursorix, CSR_ACTIVE, &active);
 	      if (!active)
 		continue;
-	      gdkdev = g_new (GdkDevicePrivate, 1);
+	      gdkdev = g_object_new (GDK_TYPE_DEVICE, NULL);
 	      WTInfo (WTI_CURSORS + cursorix, CSR_NAME, csrname);
 	      gdkdev->info.name = g_strconcat (devname, " ", csrname, NULL);
 	      gdkdev->info.source = GDK_SOURCE_PEN;

@@ -87,9 +87,6 @@ struct _GdkWindowImplWin32
   gint hint_max_width, hint_max_height;
 
   gboolean extension_events_selected;
-
-  HKL input_locale;
-  CHARSETINFO charset_info;
 };
  
 struct _GdkWindowImplWin32Class 

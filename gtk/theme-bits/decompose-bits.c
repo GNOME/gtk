@@ -58,9 +58,9 @@ do_part (GdkPixbuf  *pixbuf,
 
       while (n--)
 	{
-	  if ((part1_index > 0 && memcmp (p, color1, n_channels) == 0) ||
-	      (part2_index > 0 && memcmp (p, color2, n_channels) == 0) ||
-	      (part3_index > 0 && memcmp (p, color3, n_channels) == 0))
+	  if ((part1_index >= 0 && memcmp (p, color1, n_channels) == 0) ||
+	      (part2_index >= 0 && memcmp (p, color2, n_channels) == 0) ||
+	      (part3_index >= 0 && memcmp (p, color3, n_channels) == 0))
 	    byte |= bit;
 
 	  if (bit == 0x80)

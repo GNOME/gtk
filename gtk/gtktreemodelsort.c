@@ -1430,7 +1430,7 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
     }
   else
     {
-      data.parent_path = gtk_tree_path_new_root ();
+      data.parent_path = gtk_tree_path_new_first ();
     }
   data.parent_path_depth = gtk_tree_path_get_depth (data.parent_path);
   data.parent_path_indices = gtk_tree_path_get_indices (data.parent_path);
@@ -2017,7 +2017,7 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
 
   if (parent_level == NULL)
     {
-      if (gtk_tree_model_get_iter_root (tree_model_sort->child_model, &iter) == FALSE)
+      if (gtk_tree_model_get_iter_first (tree_model_sort->child_model, &iter) == FALSE)
 	return;
       length = gtk_tree_model_iter_n_children (tree_model_sort->child_model, NULL);
     }

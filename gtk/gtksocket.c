@@ -44,6 +44,7 @@
 
 static void     gtk_socket_class_init           (GtkSocketClass   *klass);
 static void     gtk_socket_init                 (GtkSocket        *socket);
+static void     gtk_socket_finalize             (GObject          *object);
 static void     gtk_socket_realize              (GtkWidget        *widget);
 static void     gtk_socket_unrealize            (GtkWidget        *widget);
 static void     gtk_socket_size_request         (GtkWidget        *widget,
@@ -132,15 +133,30 @@ gtk_socket_get_type (void)
 }
 
 static void
+gtk_socket_finalize (GObject *object)
+{
+  GtkSocket *socket = GTK_SOCKET (object);
+  
+  g_object_unref (socket->accel_group);
+  socket->accel_group = NULL;
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
 gtk_socket_class_init (GtkSocketClass *class)
 {
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
+  GObjectClass *gobject_class;
 
+  gobject_class = (GObjectClass *) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+
+  gobject_class->finalize = gtk_socket_finalize;
 
   widget_class->realize = gtk_socket_realize;
   widget_class->unrealize = gtk_socket_unrealize;
@@ -187,6 +203,9 @@ gtk_socket_init (GtkSocket *socket)
   socket->focus_in = FALSE;
   socket->have_size = FALSE;
   socket->need_map = FALSE;
+
+  socket->accel_group = gtk_accel_group_new ();
+  g_object_set_data (G_OBJECT (socket->accel_group), "gtk-socket", socket);
 }
 
 /**
@@ -339,6 +358,27 @@ gtk_socket_realize (GtkWidget *widget)
 }
 
 static void
+gtk_socket_end_embedding (GtkSocket *socket)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
+  gint i;
+  
+  if (toplevel && GTK_IS_WINDOW (toplevel))
+    gtk_window_remove_embedded_xid (GTK_WINDOW (toplevel), 
+				    GDK_WINDOW_XWINDOW (socket->plug_window));
+
+  g_object_unref (socket->plug_window);
+  socket->plug_window = NULL;
+
+  /* Remove from end to avoid indexes shifting. This is evil */
+  for (i = socket->accel_group->n_accels - 1; i >= 0; i--)
+    {
+      GtkAccelGroupEntry *accel_entry = &socket->accel_group->priv_accels[i];
+      gtk_accel_group_disconnect (socket->accel_group, accel_entry->closure);
+    }
+}
+
+static void
 gtk_socket_unrealize (GtkWidget *widget)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
@@ -351,24 +391,9 @@ gtk_socket_unrealize (GtkWidget *widget)
     }
   else if (socket->plug_window)
     {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
-      if (toplevel && GTK_IS_WINDOW (toplevel))
-	gtk_window_remove_embedded_xid 
-	  (GTK_WINDOW (toplevel), GDK_WINDOW_XWINDOW (socket->plug_window));
-
-      g_object_unref (socket->plug_window);
-      socket->plug_window = NULL;
+      gtk_socket_end_embedding (socket);
     }
 
-#if 0  
-  if (socket->grabbed_keys)
-    {
-      g_hash_table_foreach (socket->grabbed_keys, (GHFunc)g_free, NULL);
-      g_hash_table_destroy (socket->grabbed_keys);
-      socket->grabbed_keys = NULL;
-    }
-#endif
-  
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
@@ -498,121 +523,112 @@ gtk_socket_size_allocate (GtkWidget     *widget,
     }
 }
 
-#if 0
 
 typedef struct
 {
-  guint			 accelerator_key;
-  GdkModifierType	 accelerator_mods;
+  guint			 accel_key;
+  GdkModifierType	 accel_mods;
 } GrabbedKey;
 
-static guint
-grabbed_key_hash (gconstpointer a)
+static void
+activate_key (GtkAccelGroup *accel_group,
+	      GrabbedKey    *grabbed_key)
 {
-  const GrabbedKey *key = a;
-  guint h;
+  XEvent xevent;
+  GdkEvent *gdk_event = gtk_get_current_event ();
   
-  h = key->accelerator_key << 16;
-  h ^= key->accelerator_key >> 16;
-  h ^= key->accelerator_mods;
+  GtkSocket *socket = g_object_get_data (G_OBJECT (accel_group), "gtk-socket");
 
-  return h;
+  if (gdk_event && gdk_event->type == GDK_KEY_PRESS && socket->plug_window)
+    {
+      xevent.xkey.type = KeyPress;
+      xevent.xkey.window = GDK_WINDOW_XWINDOW (socket->plug_window);
+      xevent.xkey.root = GDK_WINDOW_XROOTWIN (socket->plug_window);
+      xevent.xkey.subwindow = None;
+      xevent.xkey.time = gdk_event->key.time;
+      xevent.xkey.x = 0;
+      xevent.xkey.y = 0;
+      xevent.xkey.x_root = 0;
+      xevent.xkey.y_root = 0;
+      xevent.xkey.state = gdk_event->key.state;
+      xevent.xkey.keycode = gdk_event->key.hardware_keycode;
+      xevent.xkey.same_screen = True;
+
+      gdk_error_trap_push ();
+      XSendEvent (GDK_WINDOW_XDISPLAY (socket->plug_window),
+		  GDK_WINDOW_XWINDOW (socket->plug_window),
+		  False, KeyPressMask, &xevent);
+      gdk_flush ();
+      gdk_error_trap_pop ();
+    }
+
+  if (gdk_event)
+    gdk_event_free (gdk_event);
 }
 
 static gboolean
-grabbed_key_equal (gconstpointer a, gconstpointer b)
+find_accel_key (GtkAccelKey *key,
+		GClosure    *closure,
+		gpointer     data)
 {
-  const GrabbedKey *keya = a;
-  const GrabbedKey *keyb = b;
-
-  return (keya->accelerator_key == keyb->accelerator_key &&
-	  keya->accelerator_mods == keyb->accelerator_mods);
+  GrabbedKey *grabbed_key = data;
+  
+  return (key->accel_key == grabbed_key->accel_key &&
+	  key->accel_mods == grabbed_key->accel_mods);
 }
 
 static void
-add_grabbed_key (GtkSocket      *socket,
-		 guint           hardware_keycode,
-		 GdkModifierType mods)
+add_grabbed_key (GtkSocket       *socket,
+		 guint            keyval,
+		 GdkModifierType  modifiers)
 {
-  GrabbedKey key;
-  GrabbedKey *new_key;
-  GrabbedKey *found_key;
+  GClosure *closure;
+  GrabbedKey *grabbed_key;
 
-  if (socket->grabbed_keys)
+  grabbed_key = g_new (GrabbedKey, 1);
+  
+  grabbed_key->accel_key = keyval;
+  grabbed_key->accel_mods = modifiers;
+
+  if (gtk_accel_group_find (socket->accel_group,
+			    find_accel_key,
+			    &grabbed_key))
     {
-      key.accelerator_key = hardware_keycode;
-      key.accelerator_mods = mods;
-
-      found_key = g_hash_table_lookup (socket->grabbed_keys, &key);
-
-      if (found_key)
-	{
-	  g_warning ("GtkSocket: request to add already present grabbed key %u,%#x\n",
-		     hardware_keycode, mods);
-	  return;
-	}
+      g_warning ("GtkSocket: request to add already present grabbed key %u,%#x\n",
+		 keyval, modifiers);
+      g_free (grabbed_key);
+      return;
     }
-  
-  if (!socket->grabbed_keys)
-    socket->grabbed_keys = g_hash_table_new (grabbed_key_hash, grabbed_key_equal);
 
-  new_key = g_new (GrabbedKey, 1);
-  
-  new_key->accelerator_key = hardware_keycode;
-  new_key->accelerator_mods = mods;
+  closure = g_cclosure_new (G_CALLBACK (activate_key), grabbed_key, (GClosureNotify)g_free);
 
-  g_hash_table_insert (socket->grabbed_keys, new_key, new_key);
+  gtk_accel_group_connect (socket->accel_group, keyval, modifiers, GTK_ACCEL_LOCKED,
+			   closure);
 }
 
 static void
 remove_grabbed_key (GtkSocket      *socket,
-		    guint           hardware_keycode,
-		    GdkModifierType mods)
+		    guint           keyval,
+		    GdkModifierType modifiers)
 {
-  GrabbedKey key;
-  GrabbedKey *found_key = NULL;
+  gint i;
 
-  if (socket->grabbed_keys)
+  for (i = 0; i < socket->accel_group->n_accels; i++)
     {
-      key.accelerator_key = hardware_keycode;
-      key.accelerator_mods = mods;
-
-      found_key = g_hash_table_lookup (socket->grabbed_keys, &key);
+      GtkAccelGroupEntry *accel_entry = &socket->accel_group->priv_accels[i];
+      if (accel_entry->key.accel_key == keyval &&
+	  accel_entry->key.accel_mods == modifiers)
+	{
+	  gtk_accel_group_disconnect (socket->accel_group,
+				      accel_entry->closure);
+	  return;
+	}
+	
     }
 
-  if (found_key)
-    {
-      g_hash_table_remove (socket->grabbed_keys, &key);
-      g_free (found_key);
-    }
-  else
-    g_warning ("GtkSocket: request to remove non-present grabbed key %u,%#x\n",
-	       hardware_keycode, mods);
+  g_warning ("GtkSocket: request to remove non-present grabbed key %u,%#x\n",
+	     keyval, modifiers);
 }
-
-static gboolean
-toplevel_key_press_handler (GtkWidget   *toplevel,
-			    GdkEventKey *event,
-			    GtkSocket   *socket)
-{
-  GrabbedKey search_key;
-
-  search_key.accelerator_key = event->hardware_keycode;
-  search_key.accelerator_mods = event->state;
-
-  if (socket->grabbed_keys &&
-      g_hash_table_lookup (socket->grabbed_keys, &search_key))
-    {
-      gtk_socket_key_press_event (GTK_WIDGET (socket), event);
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (toplevel), "key_press_event");
-
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
-#endif
 
 static gboolean
 toplevel_focus_in_handler (GtkWidget     *toplevel,
@@ -656,25 +672,16 @@ gtk_socket_hierarchy_changed (GtkWidget *widget,
     {
       if (socket->toplevel)
 	{
-#if 0
-	  gtk_signal_disconnect_by_func (GTK_OBJECT (socket->toplevel), GTK_SIGNAL_FUNC (toplevel_key_press_handler), socket);
-#endif	  
-	  gtk_signal_disconnect_by_func (GTK_OBJECT (socket->toplevel), 
-					 GTK_SIGNAL_FUNC 
-					 (toplevel_focus_in_handler), socket);
-	  gtk_signal_disconnect_by_func (GTK_OBJECT (socket->toplevel), 
-					 GTK_SIGNAL_FUNC 
-					 (toplevel_focus_out_handler), socket);
+	  gtk_window_remove_accel_group (GTK_WINDOW (socket->toplevel), socket->accel_group);
+	  gtk_signal_disconnect_by_func (GTK_OBJECT (socket->toplevel), GTK_SIGNAL_FUNC (toplevel_focus_in_handler), socket);
+	  gtk_signal_disconnect_by_func (GTK_OBJECT (socket->toplevel), GTK_SIGNAL_FUNC (toplevel_focus_out_handler), socket);
 	}
 
       socket->toplevel = toplevel;
 
       if (toplevel)
 	{
-#if 0
-	  gtk_signal_connect (GTK_OBJECT (socket->toplevel), "key_press_event",
-			      GTK_SIGNAL_FUNC (toplevel_key_press_handler), socket);
-#endif
+	  gtk_window_add_accel_group (GTK_WINDOW (socket->toplevel), socket->accel_group);
 	  gtk_signal_connect (GTK_OBJECT (socket->toplevel), "focus_in_event",
 			      GTK_SIGNAL_FUNC (toplevel_focus_in_handler), 
 			      socket);
@@ -739,17 +746,9 @@ gtk_socket_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
 
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
-    {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  
-      if (socket->plug_window)
-	{
-          send_xembed_message (socket, XEMBED_FOCUS_IN, 
-			       XEMBED_FOCUS_CURRENT, 0, 0,
-			       gtk_get_current_event_time ());
-	}
-    }
+  if (socket->plug_window)
+    send_xembed_message (socket, XEMBED_FOCUS_IN, XEMBED_FOCUS_CURRENT, 0, 0,
+			 gtk_get_current_event_time ());
   
   return TRUE;
 }
@@ -758,8 +757,6 @@ static gboolean
 gtk_socket_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
 
 #if 0
   GtkWidget *toplevel;
@@ -1208,15 +1205,15 @@ handle_xembed_message (GtkSocket *socket,
 	break;
       }
       
-    case XEMBED_GRAB_KEY:
-#if 0
+    case XEMBED_GTK_GRAB_KEY:
       add_grabbed_key (socket, data1, data2);
-#endif
       break; 
-    case XEMBED_UNGRAB_KEY:
-#if 0      
+    case XEMBED_GTK_UNGRAB_KEY:
       remove_grabbed_key (socket, data1, data2);
-#endif
+      break;
+
+    case XEMBED_GRAB_KEY:
+    case XEMBED_UNGRAB_KEY:
       break;
       
     default:
@@ -1355,20 +1352,13 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	if (socket->plug_window && 
 	    (xdwe->window == GDK_WINDOW_XWINDOW (socket->plug_window)))
 	  {
-	    GtkWidget *toplevel;
 	    gboolean result;
 	    
 	    GTK_NOTE(PLUGSOCKET,
 		     g_message ("GtkSocket - destroy notify"));
 	    
-	    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
-	    if (toplevel && GTK_IS_WINDOW (toplevel))
-	      gtk_window_remove_embedded_xid (GTK_WINDOW (toplevel), 
-					      xdwe->window);
-	    
 	    gdk_window_destroy_notify (socket->plug_window);
-	    g_object_unref (socket->plug_window);
-	    socket->plug_window = NULL;
+	    gtk_socket_end_embedding (socket);
 
 	    g_object_ref (widget);
 	    g_signal_emit (G_OBJECT (widget), socket_signals[PLUG_REMOVED], 

@@ -430,7 +430,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
     node = node->left;
 
   /* find the node internally */
-  path = gtk_tree_path_new_root ();
+  path = gtk_tree_path_new_first ();
   gtk_tree_model_get_iter (selection->tree_view->priv->model,
 			   &iter, path);
 

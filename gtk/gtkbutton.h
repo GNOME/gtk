@@ -65,6 +65,7 @@ struct _GtkButton
   guint use_underline : 1;
   guint use_stock : 1;
   guint depressed : 1;
+  guint depress_on_activate : 1;
 };
 
 struct _GtkButtonClass
@@ -77,6 +78,12 @@ struct _GtkButtonClass
   void (* enter)    (GtkButton *button);
   void (* leave)    (GtkButton *button);
   void (* activate) (GtkButton *button);
+  
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

@@ -76,7 +76,11 @@ struct _GtkMessageDialogClass
 {
   GtkDialogClass parent_class;
 
-  
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GtkType    gtk_message_dialog_get_type (void);

@@ -53,6 +53,12 @@ struct _GtkIMMulticontext
 struct _GtkIMMulticontextClass
 {
   GtkIMContextClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GtkType       gtk_im_multicontext_get_type (void) G_GNUC_CONST;

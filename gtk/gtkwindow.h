@@ -82,7 +82,7 @@ struct _GtkWindow
   guint need_default_position : 1;
   guint need_default_size : 1;
   guint position : 3;
-  GtkWindowType type : 4;
+  guint type : 4; /* GtkWindowType */ 
   guint has_user_ref_count : 1;
   guint has_focus : 1;
 
@@ -97,8 +97,8 @@ struct _GtkWindow
   guint maximize_initially : 1;
   guint decorated : 1;
   
-  GdkWindowTypeHint type_hint : 3;
-  GdkGravity gravity : 5;
+  guint type_hint : 3; /* GdkWindowTypeHint */ 
+  guint gravity : 5; /* GdkGravity */ 
   
   guint frame_left;
   guint frame_top;
@@ -125,8 +125,15 @@ struct _GtkWindowClass
   void     (* activate_focus)          (GtkWindow       *window);
   void     (* activate_default)        (GtkWindow       *window);
   void     (* move_focus)              (GtkWindow       *window,
-                                        GtkDirectionType direction);  
+                                        GtkDirectionType direction);
+  
   void	   (*keys_changed)	       (GtkWindow	*window);
+  
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 #define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())
@@ -146,6 +153,12 @@ struct _GtkWindowGroup
 struct _GtkWindowGroupClass
 {
   GObjectClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GtkType    gtk_window_get_type                 (void) G_GNUC_CONST;
@@ -328,6 +341,18 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint      *new_width,
 						gint      *new_height);
 GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
+gboolean        _gtk_window_activate_key       (GtkWindow   *window,
+						GdkEventKey *event);
+
+typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
+					  guint           keyval,
+					  GdkModifierType modifiers,
+					  gboolean        is_mnemonic,
+					  gpointer        data);
+
+void _gtk_window_keys_foreach (GtkWindow               *window,
+			       GtkWindowKeysForeachFunc func,
+			       gpointer                 func_data);
 
 /* --- internal (GtkAcceleratable) --- */
 gboolean	_gtk_window_query_nonaccels	(GtkWindow	*window,

@@ -51,7 +51,7 @@ enum {
   PROP_0,
   PROP_BORDER_WIDTH,
   PROP_RESIZE_MODE,
-  PROP_CHILD,
+  PROP_CHILD
 };
 
 #define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
