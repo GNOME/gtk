@@ -1,3 +1,9 @@
+Fri May 30 20:24:11 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* configure.in: added "li" to ALL_LINGUAS
+	* po/li.po: added Limburgish translation from Mathieu van Woerkom
+	<mathieu@brabants.org>
+
 Thu May 29 18:30:55 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/imipa.c: 

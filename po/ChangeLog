@@ -1,3 +1,8 @@
+Fri May 30 20:26:50 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* li.po: Added Limburgish translation from Mathieu van Woerkom
+	<mathieu@brabants.org>
+
 Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* POTFILES.in: add gtk/gtkimmodule.c (#113850)
