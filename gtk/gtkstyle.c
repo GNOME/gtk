@@ -2562,6 +2562,20 @@ draw_menu_shadow (GtkStyle        *style,
 		   x + 1, y + 1, x + 1, y + height - 3);
 }
 
+static GtkTextDirection
+get_direction (GtkWidget *widget)
+{
+  GtkTextDirection dir;
+  
+  if (widget)
+    dir = gtk_widget_get_direction (widget);
+  else
+    dir = GTK_TEXT_DIR_LTR;
+  
+  return dir;
+}
+
+
 static void
 gtk_default_draw_shadow (GtkStyle      *style,
                          GdkWindow     *window,
@@ -2604,8 +2618,8 @@ gtk_default_draw_shadow (GtkStyle      *style,
       if (widget && GTK_IS_SPIN_BUTTON (widget) &&
          detail && strcmp (detail, "spinbutton") == 0)
 	{
-	  draw_spinbutton_shadow (style, window, state_type,
-				  gtk_widget_get_direction (widget), area, x, y, width, height);
+	  draw_spinbutton_shadow (style, window, state_type, 
+				  get_direction (widget), area, x, y, width, height);
 	  
 	  return;
 	}
@@ -2842,7 +2856,7 @@ gtk_default_draw_shadow (GtkStyle      *style,
       widget && GTK_IS_SPIN_BUTTON (widget) &&
       detail && strcmp (detail, "entry") == 0)
     {
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+      if (get_direction (widget) == GTK_TEXT_DIR_LTR)
 	{
 	  gdk_draw_line (window,
 			 style->base_gc[state_type],
@@ -3409,7 +3423,7 @@ gtk_default_draw_box (GtkStyle      *style,
 	  width -= 3;
 	  height -= 2;
 
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	  if (get_direction (widget) == GTK_TEXT_DIR_RTL)
 	    x += 2;
 	  else
 	    x += 1;
@@ -3421,7 +3435,7 @@ gtk_default_draw_box (GtkStyle      *style,
 	  width -= 3;
 	  height -= 2;
 
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	  if (get_direction (widget) == GTK_TEXT_DIR_RTL)
 	    x += 2;
 	  else
 	    x += 1;
@@ -3495,7 +3509,7 @@ gtk_default_draw_box (GtkStyle      *style,
 
       sanitize_size (window, &width, &height);
 
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+      if (get_direction (widget) == GTK_TEXT_DIR_RTL)
 	vline_x = x + indicator_size.width + indicator_spacing.left + indicator_spacing.right;
       else 
 	vline_x = x + width - (indicator_size.width + indicator_spacing.left + indicator_spacing.right) - style->xthickness;
@@ -5009,13 +5023,13 @@ gtk_default_draw_expander (GtkStyle        *style,
   switch (expander_style)
     {
     case GTK_EXPANDER_COLLAPSED:
-      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 180 : 0;
+      degrees = (get_direction (widget) == GTK_TEXT_DIR_RTL) ? 180 : 0;
       break;
     case GTK_EXPANDER_SEMI_COLLAPSED:
-      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 150 : 30;
+      degrees = (get_direction (widget) == GTK_TEXT_DIR_RTL) ? 150 : 30;
       break;
     case GTK_EXPANDER_SEMI_EXPANDED:
-      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 120 : 60;
+      degrees = (get_direction (widget) == GTK_TEXT_DIR_RTL) ? 120 : 60;
       break;
     case GTK_EXPANDER_EXPANDED:
       degrees = 90;

@@ -1,3 +1,8 @@
+2004-07-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstyle.c: Fix some cases where style functions were 
+	not handling widget == NULL properly.  (#146282)
+
 Thu Jul  8 22:38:58 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c: Improve the EXPANDER_MAX warning.
