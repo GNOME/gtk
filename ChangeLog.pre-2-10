@@ -1,3 +1,8 @@
+Sun Jun  8 18:27:14 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/gdkpixbuf-drawable.c (G8fromRGB565): swap G and B.
+	Fixes (#114669)
+
 Sun Jun  8 11:27:29 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkviewport.c (viewport_set_adjustment): Fix bug with 
