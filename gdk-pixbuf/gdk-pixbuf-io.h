@@ -29,7 +29,7 @@
 
 #include <gmodule.h>
 #include <stdio.h>
-#include "gdk-pixbuf/gdk-pixbuf.h"
+#include "gdk-pixbuf.h"
 
 #ifdef __cplusplus
 extern "C" {

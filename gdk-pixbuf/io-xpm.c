@@ -27,7 +27,7 @@
 #include <string.h>
 #include <glib.h>
 #include <gdk/gdk.h>
-#include "gdk-pixbuf/gdk-pixbuf.h"
+#include "gdk-pixbuf.h"
 
 
 

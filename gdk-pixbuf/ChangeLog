@@ -1,5 +1,50 @@
 1999-12-02  Federico Mena Quintero  <federico@redhat.com>
 
+	* src/testpixbuf.c: #include <config.h>, and fix includes.
+
+	* src/testpixbuf-drawable.c: #include <config.h>, and fix includes.
+
+	* src/io-xpm.c: Fix includes.
+
+	* src/io-tiff.c: Fix includes.
+
+	* src/io-ras.c: Fix includes, and do not include more stuff than needed.
+
+	* src/io-pnm.c: Fix inlcudes, and do not include more stuff than needed.
+
+	* src/io-png.c: Fix includes.
+
+	* src/io-ico.c: Fix includes, and do not include more stuff than needed.
+
+	* src/io-gif.c: Fix includes, and do not include more stuff than needed.
+
+	* src/io-bmp.c: Fix includes, and do not include more stuff than needed.
+
+	* src/gnome-canvas-pixbuf.c: Fix includes.
+
+	* src/gdk-pixbuf.c: Fix includes.
+
+	* src/gdk-pixbuf-util.c: Fix includes.
+
+	* src/gdk-pixbuf-render.c: Fix includes.
+
+	* src/gdk-pixbuf-io.h: Fix includes.
+
+	* src/gdk-pixbuf-drawable.c: Fix includes.
+
+	* src/gdk-pixbuf-drawable.h: Use angle brackets for the gdk-pixbuf
+	include files.
+
+	* src/gdk-pixbuf-data.c: Fix includes.
+
+	* src/gdk-pixbuf-loader.c: #include <config.h>
+
+	* src/gdk-pixbuf-loader.h: Use angle brackets for the gdk-pixbuf
+	include files.
+
+	* src/Makefile.am: Commented out the gdk-pixbuf-drawable stuff,
+	since it is not finished.
+
 	* src/gdk-pixbuf.h: Removed unused transformation prototypes.
 
 	* src/gdk-pixbuf-util.c: New file with utility and convenience

@@ -35,12 +35,8 @@ Known bugs:
 #include <config.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/mman.h>
-#include <glib.h>
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
-#include "gdk-pixbuf/gdk-pixbuf.h"
-#include "gdk-pixbuf/gdk-pixbuf-io.h"
+#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-io.h"
 
 
 

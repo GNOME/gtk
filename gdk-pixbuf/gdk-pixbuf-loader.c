@@ -25,9 +25,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+#include <gtk/gtksignal.h>
 #include "gdk-pixbuf-loader.h"
 #include "gdk-pixbuf-io.h"
-#include <gtk/gtksignal.h>
 
 
 
