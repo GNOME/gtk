@@ -299,7 +299,8 @@ static GSList *rc_dir_stack = NULL;
 static gchar *
 gtk_rc_make_default_dir (const gchar *type)
 {
-  gchar *var, *path;
+  const gchar *var;
+  gchar *path;
 
   var = g_getenv ("GTK_EXE_PREFIX");
   if (var)
@@ -345,7 +346,8 @@ gtk_rc_get_im_module_file (void)
 gchar *
 gtk_rc_get_theme_dir (void)
 {
-  gchar *var, *path;
+  const gchar *var;
+  gchar *path;
 
   var = g_getenv ("GTK_DATA_PREFIX");
   if (var)

@@ -1,3 +1,7 @@
+2002-01-14  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkrc.c: g_getenv() returns a const string.
+
 2002-01-14  Hasbullah Bin Pit  <sebol@ikhlas.com>
 
         * configure.in: Added ms at ALL_LINGUAS.
