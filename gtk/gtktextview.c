@@ -43,6 +43,7 @@
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtkprivate.h"
 #include "gtksizegroup.h"          /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
 #include "gtktextutil.h"
 #include "gtkwindow.h"
@@ -346,7 +347,7 @@ static void gtk_text_view_remove (GtkContainer *container,
                                   GtkWidget    *child);
 static void gtk_text_view_forall (GtkContainer *container,
                                   gboolean      include_internals,
-                                 GtkCallback   callback,
+                                  GtkCallback   callback,
                                   gpointer      callback_data);
 
 /* FIXME probably need the focus methods. */
@@ -2877,6 +2878,19 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
                                                     &child_loc,
                                                     child->anchor);
 
+	  /* Since anchored children are only ever allocated from
+           * gtk_text_layout_get_line_display() we have to make sure
+	   * that the display line caching in the layout doesn't 
+           * get in the way. Invalidating the layout around the anchor
+           * achieves this.
+	   */ 
+	  if (GTK_WIDGET_ALLOC_NEEDED (child->widget))
+	    {
+	      GtkTextIter end = child_loc;
+	      gtk_text_iter_forward_char (&end);
+	      gtk_text_layout_invalidate (text_view->layout, &child_loc, &end);
+	    }
+
           gtk_text_layout_validate_yrange (text_view->layout,
                                            &child_loc,
                                            0, 1);
@@ -4176,7 +4190,7 @@ gtk_text_view_paint (GtkWidget      *widget,
   while (tmp_list != NULL)
     {
       GtkWidget *child = tmp_list->data;
-      
+  
       gtk_container_propagate_expose (GTK_CONTAINER (text_view),
                                       child,
                                       event);
@@ -6108,7 +6122,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
   GtkTextIter drop_point;
   GtkTextView *text_view;
   gboolean success = FALSE;
-  GtkTextBuffer *buffer;
+  GtkTextBuffer *buffer = NULL;
 
   text_view = GTK_TEXT_VIEW (widget);
 

@@ -1,3 +1,9 @@
+2004-04-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_allocate_children): Make
+	sure anchored children get size allocated, even if the layout
+	is valid.  (#122323, Andrew E. Makeev)
+
 Mon Apr 19 17:59:17 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* INSTALL.in: Update libpng and libjpeg URLs, remove
