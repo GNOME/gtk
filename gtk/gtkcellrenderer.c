@@ -35,6 +35,7 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 enum {
   PROP_ZERO,
   PROP_CAN_ACTIVATE,
+  PROP_CAN_EDIT,
   PROP_VISIBLE,
   PROP_XALIGN,
   PROP_YALIGN,
@@ -77,6 +78,7 @@ static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
 {
   cell->can_activate = FALSE;
+  cell->can_edit = FALSE;
   cell->visible = TRUE;
   cell->width = -1;
   cell->height = -1;
@@ -106,6 +108,15 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
 
+  g_object_class_install_property (object_class,
+				   PROP_CAN_EDIT,
+				   g_param_spec_boolean ("can_edit",
+							 _("can_edit"),
+							 _("Cell supports CellEditable interface."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
+  
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
@@ -214,6 +225,9 @@ gtk_cell_renderer_get_property (GObject     *object,
     case PROP_CAN_ACTIVATE:
       g_value_set_boolean (value, cell->can_activate);
       break;
+    case PROP_CAN_EDIT:
+      g_value_set_boolean (value, cell->can_edit);
+      break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, cell->visible);
       break;
@@ -261,6 +275,22 @@ gtk_cell_renderer_set_property (GObject      *object,
     case PROP_CAN_ACTIVATE:
       cell->can_activate = g_value_get_boolean (value);
       g_object_notify (object, "can_activate");
+      /* can_activate and can_edit are mutually exclusive */
+      if (cell->can_activate && cell->can_edit)
+	{
+	  cell->can_edit = FALSE;
+	  g_object_notify (object, "can_edit");
+	}
+      break;
+    case PROP_CAN_EDIT:
+      cell->can_edit = g_value_get_boolean (value);
+      g_object_notify (object, "can_edit");
+      /* can_activate and can_edit are mutually exclusive */
+      if (cell->can_activate && cell->can_edit)
+	{
+	  cell->can_activate = FALSE;
+	  g_object_notify (object, "can_activate");
+	}
       break;
     case PROP_VISIBLE:
       cell->visible = g_value_get_boolean (value);
@@ -401,7 +431,7 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
 }
 
 /**
- * gtk_cell_renderer_event:
+ * gtk_cell_renderer_activate:
  * @cell: a #GtkCellRenderer
  * @event: a #GdkEvent
  * @widget: widget that received the event
@@ -410,37 +440,79 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
  * @cell_area: cell area as passed to gtk_cell_renderer_render()
  * @flags: render flags
  *
- * Passes an event to the cell renderer for possible processing.  Some
- * cell renderers may use events; for example, #GtkCellRendererToggle
- * toggles when it gets a mouse click.
+ * Passes an activate event to the cell renderer for possible processing.  Some
+ * cell renderers may use events; for example, #GtkCellRendererToggle toggles
+ * when it gets a mouse click.
  *
  * Return value: %TRUE if the event was consumed/handled
  **/
 gboolean
-gtk_cell_renderer_event (GtkCellRenderer     *cell,
-			 GdkEvent            *event,
-			 GtkWidget           *widget,
-			 gchar               *path,
-			 GdkRectangle        *background_area,
-			 GdkRectangle        *cell_area,
-			 GtkCellRendererState flags)
+gtk_cell_renderer_activate (GtkCellRenderer      *cell,
+			    GdkEvent             *event,
+			    GtkWidget            *widget,
+			    gchar                *path,
+			    GdkRectangle         *background_area,
+			    GdkRectangle         *cell_area,
+			    GtkCellRendererState  flags)
 {
-  /* It's actually okay to pass in a NULL cell, as we run into that
-   * a lot
-   */
-  if (cell == NULL)
-    return FALSE;
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
-  if (GTK_CELL_RENDERER_GET_CLASS (cell)->event == NULL)
+
+  if (! cell->can_activate)
     return FALSE;
 
-  return GTK_CELL_RENDERER_GET_CLASS (cell)->event (cell,
-						    event,
-						    widget,
-						    path,
-						    background_area,
-						    cell_area,
-						    flags);
+  if (GTK_CELL_RENDERER_GET_CLASS (cell)->activate == NULL)
+    return FALSE;
+
+  return GTK_CELL_RENDERER_GET_CLASS (cell)->activate (cell,
+						       event,
+						       widget,
+						       path,
+						       background_area,
+						       cell_area,
+						       flags);
+}
+
+
+/**
+ * gtk_cell_renderer_start_editing:
+ * @cell: a #GtkCellRenderer
+ * @event: a #GdkEvent
+ * @widget: widget that received the event
+ * @path: widget-dependent string representation of the event location; e.g. for #GtkTreeView, a string representation of #GtkTreePath
+ * @background_area: background area as passed to gtk_cell_renderer_render()
+ * @cell_area: cell area as passed to gtk_cell_renderer_render()
+ * @flags: render flags
+ * 
+ * Passes an activate event to the cell renderer for possible processing.
+ * 
+ * Return value: A new #GtkCellEditable, or %NULL
+ **/
+GtkCellEditable *
+gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
+				 GdkEvent             *event,
+				 GtkWidget            *widget,
+				 gchar                *path,
+				 GdkRectangle         *background_area,
+				 GdkRectangle         *cell_area,
+				 GtkCellRendererState  flags)
+
+{
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), NULL);
+
+  if (! cell->can_edit)
+    return NULL;
+
+  if (GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing == NULL)
+    return NULL;
+
+  
+  return GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing (cell,
+							    event,
+							    widget,
+							    path,
+							    background_area,
+							    cell_area,
+							    flags);
 }
 
 /**

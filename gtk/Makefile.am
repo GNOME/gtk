@@ -69,6 +69,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkctree.h		\
 	gtkcurve.h		\
 	gtkcellrenderer.h	\
+	gtkcelleditable.h	\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellrendererpixbuf.h	\
@@ -215,6 +216,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkbutton.c		\
 	gtkcalendar.c		\
 	gtkcellrenderer.c	\
+	gtkcelleditable.c	\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
 	gtkcellrendererpixbuf.c	\

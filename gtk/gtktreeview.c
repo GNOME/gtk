@@ -165,7 +165,6 @@ static gboolean gtk_tree_view_button_release       (GtkWidget        *widget,
 						    GdkEventButton   *event);
 static void     gtk_tree_view_set_focus_child      (GtkContainer     *container,
 						    GtkWidget        *child);
-static void     gtk_tree_view_draw_focus           (GtkWidget        *widget);
 static gint     gtk_tree_view_focus_in             (GtkWidget        *widget,
 						    GdkEventFocus    *event);
 static gint     gtk_tree_view_focus_out            (GtkWidget        *widget,
@@ -340,6 +339,7 @@ static gboolean gtk_tree_view_real_expand_row                (GtkTreeView       
 static void     gtk_tree_view_real_set_cursor                (GtkTreeView       *tree_view,
 							      GtkTreePath       *path,
 							      gboolean           clear_and_select);
+static void     gtk_tree_view_ensure_focus_column            (GtkTreeView       *tree_view);
 
 
 /* interactive search */
@@ -1897,6 +1897,29 @@ ensure_unprelighted (GtkTreeView *tree_view)
   g_assert (tree_view->priv->prelight_node == NULL);
 }
 
+static void
+gtk_tree_view_ensure_focus_column (GtkTreeView *tree_view)
+{
+  GList *list;
+  if (tree_view->priv->focus_column != NULL &&
+      tree_view->priv->focus_column->visible)
+    return;
+
+  if (tree_view->priv->focus_column)
+    gtk_tree_view_column_cell_focus (tree_view->priv->focus_column, 0, TRUE);
+
+  for (list = tree_view->priv->columns; list; list = list->next)
+    {
+      GtkTreeViewColumn *column = list->data;
+
+      if (column->visible)
+	{
+	  gtk_tree_view_column_cell_focus (column, 1, FALSE);
+	  return;
+	}
+    }
+}
+
 
 
 /* Our motion arrow is either a box (in the case of the original spot)
@@ -2354,93 +2377,6 @@ gtk_tree_view_motion (GtkWidget      *widget,
   return FALSE;
 }
 
-/* Draws the focus rectangle around the cursor row */
-static void
-gtk_tree_view_draw_focus (GtkWidget *widget)
-{
-  GtkTreeView *tree_view;
-  GtkTreePath *cursor_path;
-  GtkRBTree *tree = NULL;
-  GtkRBNode *node = NULL;
-  gint x, y;
-  gint width, height;
-  gint vertical_separator;
-
-  g_return_if_fail (GTK_IS_TREE_VIEW (widget));
-
-  tree_view = GTK_TREE_VIEW (widget);
-
-  gtk_widget_style_get (widget,	"vertical_separator", &vertical_separator, NULL);
-
-  if (! GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS))
-    return;
-
-  if (! gtk_tree_row_reference_valid (tree_view->priv->cursor))
-    return;
-
-  cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
-
-  _gtk_tree_view_find_node (tree_view, cursor_path, &tree, &node);
-
-  if (tree == NULL)
-    {
-      gtk_tree_path_free (cursor_path);
-      return;
-    }
-
-  gdk_drawable_get_size (tree_view->priv->bin_window,
-                         &width, NULL);
-
-
-  x = 0;
-  y = BACKGROUND_FIRST_PIXEL (tree_view, tree, node);
-  gdk_drawable_get_size (tree_view->priv->bin_window,
-			 &width, NULL);
-  width = width - 1;
-  height = BACKGROUND_HEIGHT (node) - 1;
-  if (tree_view->priv->focus_column != NULL)
-    {
-      GtkTreeIter iter;
-
-      gtk_tree_model_get_iter (tree_view->priv->model, &iter, cursor_path);
-      gtk_tree_view_column_cell_set_cell_data (tree_view->priv->focus_column,
-					       tree_view->priv->model,
-					       &iter,
-					       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
-					       node->children?TRUE:FALSE);
-
-      if (gtk_tree_view_column_cell_can_focus (tree_view->priv->focus_column))
-	{
-	  GdkRectangle cell_area;
-	  gint x_offset;
-	  gint y_offset;
-
-	  cell_area.x = tree_view->priv->focus_column->button->allocation.x;
-	  cell_area.y = y;
-	  cell_area.width = tree_view->priv->focus_column->width;
-	  cell_area.height = CELL_HEIGHT (node, vertical_separator);
-
-	  gtk_tree_view_column_cell_get_size (tree_view->priv->focus_column,
-					      &cell_area, &x_offset, &y_offset, &width, &height);
-
-	  width += 2;
-	  height += 2;
-
-	  x = cell_area.x + x_offset - 1;
-	  y = cell_area.y + y_offset - 1 + vertical_separator/2;
-	}
-    }
-
-  gtk_paint_focus (widget->style,
-		   tree_view->priv->bin_window,
-		   NULL,
-		   widget,
-		   "treeview",
-		   x, y, width, height);
-
-  gtk_tree_path_free (cursor_path);
-}
-
 /* Warning: Very scary function.
  * Modify at your own risk
  */
@@ -2481,14 +2417,11 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
     return TRUE;
 
   gtk_tree_view_check_dirty_and_clean (GTK_TREE_VIEW (widget));
-  /* we want to account for a potential HEADER offset.
-   * That is, if the header exists, we want to offset our event by its
-   * height to find the right node.
+  gtk_tree_view_ensure_focus_column (GTK_TREE_VIEW (widget));
+  /* we want to account for a potential HEADER offset.  That is, if the header
+   * exists, we want to offset our event by its height to find the right node.
    */
   new_y = (event->area.y<TREE_VIEW_HEADER_HEIGHT (tree_view))?TREE_VIEW_HEADER_HEIGHT (tree_view):event->area.y;
-
-  /* y_offset is the */
-
   y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree,
                                        TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, new_y),
 				       &tree,
@@ -2645,7 +2578,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  else
 	    state = GTK_STATE_NORMAL;
 
-          /* Draw background */
+	  /* Draw background */
           gtk_paint_flat_box (widget->style,
                               event->window,
 			      state,
@@ -2695,11 +2628,20 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 						&event->area,
 						flags);
 	    }
+	  if (node == cursor &&
+	      GTK_WIDGET_HAS_FOCUS (widget) &&
+	      column == tree_view->priv->focus_column)
+	    {
+	      gtk_tree_view_column_cell_draw_focus (column,
+						    event->window,
+						    &background_area,
+						    &cell_area,
+						    &event->area,
+						    flags);
+	    }
 	  cell_offset += column->width;
 	}
 
-      if (node == cursor && GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_tree_view_draw_focus (widget);
 
       if (node == drag_highlight)
         {
@@ -5853,14 +5795,11 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 						&iter,
 						GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
 						cursor_node->children?TRUE:FALSE);
-      if (gtk_tree_view_column_cell_can_focus (column))
+      if (gtk_tree_view_column_cell_focus (column, count, FALSE))
 	{
-	  if (gtk_tree_view_column_cell_focus (column, count, FALSE))
-	    {
-	      tree_view->priv->focus_column = column;
-	      found_column = TRUE;
-	      break;
-	    }
+	  tree_view->priv->focus_column = column;
+	  found_column = TRUE;
+	  break;
 	}
     loop_end:
       if (count == 1)

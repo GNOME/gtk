@@ -46,13 +46,13 @@ static void gtk_cell_renderer_toggle_render     (GtkCellRenderer            *cel
 						 GdkRectangle               *cell_area,
 						 GdkRectangle               *expose_area,
 						 guint                       flags);
-static gboolean gtk_cell_renderer_toggle_event  (GtkCellRenderer            *cell,
-						 GdkEvent                   *event,
-						 GtkWidget                  *widget,
-						 gchar                      *path,
-						 GdkRectangle               *background_area,
-						 GdkRectangle               *cell_area,
-						 guint                       flags);
+static gboolean gtk_cell_renderer_toggle_activate  (GtkCellRenderer            *cell,
+						    GdkEvent                   *event,
+						    GtkWidget                  *widget,
+						    gchar                      *path,
+						    GdkRectangle               *background_area,
+						    GdkRectangle               *cell_area,
+						    guint                       flags);
 
 
 enum {
@@ -119,7 +119,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 
   cell_class->get_size = gtk_cell_renderer_toggle_get_size;
   cell_class->render = gtk_cell_renderer_toggle_render;
-  cell_class->event = gtk_cell_renderer_toggle_event;
+  cell_class->activate = gtk_cell_renderer_toggle_activate;
   
   g_object_class_install_property (object_class,
 				   PROP_ACTIVE,
@@ -321,13 +321,13 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
 }
 
 static gint
-gtk_cell_renderer_toggle_event (GtkCellRenderer *cell,
-				GdkEvent        *event,
-				GtkWidget       *widget,
-				gchar           *path,
-				GdkRectangle    *background_area,
-				GdkRectangle    *cell_area,
-				guint            flags)
+gtk_cell_renderer_toggle_activate (GtkCellRenderer *cell,
+				   GdkEvent        *event,
+				   GtkWidget       *widget,
+				   gchar           *path,
+				   GdkRectangle    *background_area,
+				   GdkRectangle    *cell_area,
+				   guint            flags)
 {
   GtkCellRendererToggle *celltoggle;
   gboolean retval = FALSE;

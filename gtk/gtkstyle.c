@@ -408,6 +408,8 @@ static GdkColor gtk_default_active_bg =      { 0, 0xc350, 0xc350, 0xc350 };
 static GdkColor gtk_default_prelight_bg =    { 0, 0xea60, 0xea60, 0xea60 };
 static GdkColor gtk_default_selected_bg =    { 0,      0,      0, 0x9c40 };
 static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
+static GdkColor gtk_default_selected_base =  { 0, 0xa4a4, 0xdfdf, 0xffff };
+static GdkColor gtk_default_active_base =    { 0, 0xbcbc, 0xd2d2, 0xeeee };
 
 static gpointer parent_class = NULL;
 static GdkFont *static_default_font = NULL;
@@ -496,7 +498,10 @@ gtk_style_init (GtkStyle *style)
       style->base[i] = style->white;
     }
 
-  style->base[GTK_STATE_SELECTED] = gtk_default_selected_bg;
+  style->base[GTK_STATE_SELECTED] = gtk_default_selected_base;
+  style->text[GTK_STATE_SELECTED] = style->black;
+  style->base[GTK_STATE_ACTIVE] = gtk_default_active_base;
+  style->text[GTK_STATE_ACTIVE] = style->black;
   style->base[GTK_STATE_INSENSITIVE] = gtk_default_prelight_bg;
   style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
   
@@ -2941,12 +2946,10 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 		   !strncmp ("cell_odd", detail, strlen ("cell_odd")))
             {
 	      /* This has to be really broken; alex made me do it. -jrb */
-	      /* Red rum!!! REd RUM!!! */
 	      if (GTK_WIDGET_HAS_FOCUS (widget))
-		gc1 = style->bg_gc[state_type];
+		gc1 = style->base_gc[state_type];
 	      else 
-		gc1 = style->bg_gc[GTK_STATE_ACTIVE];
-	      
+		gc1 = style->base_gc[GTK_STATE_ACTIVE];
             }
           else
             {

@@ -1402,6 +1402,20 @@ Sets the default size of child buttons.
 @accel_group: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_cell_renderer_event ##### -->
+<para>
+
+</para>
+
+@cell: 
+@event: 
+@widget: 
+@path: 
+@background_area: 
+@cell_area: 
+@flags: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_cell_renderer_text_pixbuf_new ##### -->
 <para>
 

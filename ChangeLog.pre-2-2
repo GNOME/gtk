@@ -1,7 +1,17 @@
+Mon Sep 17 17:39:52 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcelleditable.[ch]: Add editable interface.  This should
+	be the last big GtkTreeView API change.
+
+	* gtk/gtkcellrenderer.[ch]: Get rid of the "event" vfunc, and
+	replace with "activate" and "start_editing".  Also, added a
+	"can_activate" and "can_edit" property.
+
+	* gtk/gtktreeviewcolumn.c: modify to use above.
+
 2001-09-16  Alexander Larsson  <alla@lysator.liu.se>
 
-	* gtk/gtkoptionmenu.c:
-	Handle scroll wheel events.
+	* gtk/gtkoptionmenu.c:	Handle scroll wheel events.
 
 Fri Sep 14 22:31:25 2001  Matthias Clasen  <matthiasc@poet.de>
 

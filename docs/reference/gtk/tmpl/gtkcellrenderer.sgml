@@ -37,6 +37,7 @@ GtkCellRenderer
 @xpad: 
 @ypad: 
 @can_activate: 
+@can_edit: 
 @visible: 
 @is_expander: 
 @is_expanded: 
@@ -67,20 +68,5 @@ GtkCellRenderer
 @cell_area: 
 @expose_area: 
 @flags: 
-
-
-<!-- ##### FUNCTION gtk_cell_renderer_event ##### -->
-<para>
-
-</para>
-
-@cell: 
-@event: 
-@widget: 
-@path: 
-@background_area: 
-@cell_area: 
-@flags: 
-@Returns: 
 
 

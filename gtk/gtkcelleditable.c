@@ -1,0 +1,98 @@
+/* gtkcelleditable.c
+ * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+
+#include "gtkcelleditable.h"
+#include "gtksignal.h"
+
+static void gtk_cell_editable_base_init (gpointer g_class);
+
+GtkType
+gtk_cell_editable_get_type (void)
+{
+  static GtkType cell_editable_type = 0;
+
+  if (! cell_editable_type)
+    {
+      static const GTypeInfo cell_editable_info =
+      {
+	sizeof (GtkCellEditableIface), /* class_size */
+	gtk_cell_editable_base_init,   /* base_init */
+	NULL,		/* base_finalize */
+	NULL,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	0,
+	0,
+	NULL
+      };
+      cell_editable_type = g_type_register_static (G_TYPE_INTERFACE, "GtkCellEditable", &cell_editable_info, 0);
+      g_type_interface_add_prerequisite (cell_editable_type, GTK_TYPE_WIDGET);
+    }
+
+  return cell_editable_type;
+}
+
+static void
+gtk_cell_editable_base_init (gpointer g_class)
+{
+  static gboolean initialized = FALSE;
+
+  if (! initialized)
+    {
+      g_signal_new ("editing_done",
+                    GTK_TYPE_CELL_EDITABLE,
+                    G_SIGNAL_RUN_LAST,
+                    G_STRUCT_OFFSET (GtkCellEditableIface, editing_done),
+                    NULL, NULL,
+                    gtk_marshal_VOID__VOID,
+                    G_TYPE_NONE, 0);
+      g_signal_new ("remove_widget",
+                    GTK_TYPE_CELL_EDITABLE,
+                    G_SIGNAL_RUN_LAST,
+                    G_STRUCT_OFFSET (GtkCellEditableIface, remove_widget),
+                    NULL, NULL,
+                    gtk_marshal_VOID__VOID,
+                    G_TYPE_NONE, 0);
+      initialized = TRUE;
+    }
+}
+
+void
+gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,
+				 GdkEvent        *event)
+{
+}
+
+void
+gtk_cell_editable_stop_editing (GtkCellEditable *cell_editable)
+{
+}
+
+
+void
+gtk_cell_editable_editing_done (GtkCellEditable *cell_editable)
+{
+}
+
+void
+gtk_cell_editable_remove_widget (GtkCellEditable *cell_editable)
+{
+
+}

@@ -22,11 +22,9 @@
 
 #include <gtk/gtkobject.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkcelleditable.h>
 
-#ifdef __cplusplus
-extern "C" {
-
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef enum
 {
@@ -61,6 +59,7 @@ struct _GtkCellRenderer
   guint16 ypad;
 
   guint can_activate : 1;
+  guint can_edit : 1;
   guint visible : 1;
   guint is_expander : 1;
   guint is_expanded : 1;
@@ -71,64 +70,75 @@ struct _GtkCellRendererClass
   GtkObjectClass parent_class;
 
   /* vtable - not signals */
-  void (* get_size)  (GtkCellRenderer *cell,
-		      GtkWidget       *widget,
-		      GdkRectangle    *cell_area,
-		      gint            *x_offset,
-		      gint            *y_offset,
-		      gint            *width,
-		      gint            *height);
-
-  void (* render)    (GtkCellRenderer     *cell,
-		      GdkWindow           *window,
-		      GtkWidget           *widget,
-		      GdkRectangle        *background_area,
-		      GdkRectangle        *cell_area,
-		      GdkRectangle        *expose_area,
-		      GtkCellRendererState flags);
-
-  gboolean (* event) (GtkCellRenderer     *cell,
-		      GdkEvent            *event,
-		      GtkWidget           *widget,
-		      gchar               *path,
-		      GdkRectangle        *background_area,
-		      GdkRectangle        *cell_area,
-                      GtkCellRendererState flags);
+  void             (* get_size)      (GtkCellRenderer      *cell,
+				      GtkWidget            *widget,
+				      GdkRectangle         *cell_area,
+				      gint                 *x_offset,
+				      gint                 *y_offset,
+				      gint                 *width,
+				      gint                 *height);
+  void             (* render)        (GtkCellRenderer      *cell,
+				      GdkWindow            *window,
+				      GtkWidget            *widget,
+				      GdkRectangle         *background_area,
+				      GdkRectangle         *cell_area,
+				      GdkRectangle         *expose_area,
+				      GtkCellRendererState  flags);
+  gboolean         (* activate)      (GtkCellRenderer      *cell,
+				      GdkEvent             *event,
+				      GtkWidget            *widget,
+				      gchar                *path,
+				      GdkRectangle         *background_area,
+				      GdkRectangle         *cell_area,
+				      GtkCellRendererState  flags);
+  GtkCellEditable *(* start_editing) (GtkCellRenderer      *cell,
+				      GdkEvent             *event,
+				      GtkWidget            *widget,
+				      gchar                *path,
+				      GdkRectangle         *background_area,
+				      GdkRectangle         *cell_area,
+				      GtkCellRendererState  flags);
 };
 
-GtkType  gtk_cell_renderer_get_type       (void);
-void     gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
-					   GtkWidget            *widget,
-					   GdkRectangle         *cell_area,
-					   gint                 *x_offset,
-					   gint                 *y_offset,
-					   gint                 *width,
-					   gint                 *height);
-void     gtk_cell_renderer_render         (GtkCellRenderer      *cell,
-					   GdkWindow            *window,
-					   GtkWidget            *widget,
-					   GdkRectangle         *background_area,
-					   GdkRectangle         *cell_area,
-					   GdkRectangle         *expose_area,
-					   GtkCellRendererState  flags);
-gboolean gtk_cell_renderer_event          (GtkCellRenderer      *cell,
-					   GdkEvent             *event,
-					   GtkWidget            *widget,
-					   gchar                *path,
-					   GdkRectangle         *background_area,
-					   GdkRectangle         *cell_area,
-					   GtkCellRendererState  flags);
-void     gtk_cell_renderer_set_fixed_size (GtkCellRenderer      *cell,
-					   gint                  width,
-					   gint                  height);
-void     gtk_cell_renderer_get_fixed_size (GtkCellRenderer      *cell,
-					   gint                 *width,
-					   gint                 *height);
+GType            gtk_cell_renderer_get_type       (void) G_GNUC_CONST;
+
+void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
+						   GtkWidget            *widget,
+						   GdkRectangle         *cell_area,
+						   gint                 *x_offset,
+						   gint                 *y_offset,
+						   gint                 *width,
+						   gint                 *height);
+void             gtk_cell_renderer_render         (GtkCellRenderer      *cell,
+						   GdkWindow            *window,
+						   GtkWidget            *widget,
+						   GdkRectangle         *background_area,
+						   GdkRectangle         *cell_area,
+						   GdkRectangle         *expose_area,
+						   GtkCellRendererState  flags);
+gboolean         gtk_cell_renderer_activate       (GtkCellRenderer      *cell,
+						   GdkEvent             *event,
+						   GtkWidget            *widget,
+						   gchar                *path,
+						   GdkRectangle         *background_area,
+						   GdkRectangle         *cell_area,
+						   GtkCellRendererState  flags);
+GtkCellEditable *gtk_cell_renderer_start_editing  (GtkCellRenderer      *cell,
+						   GdkEvent             *event,
+						   GtkWidget            *widget,
+						   gchar                *path,
+						   GdkRectangle         *background_area,
+						   GdkRectangle         *cell_area,
+						   GtkCellRendererState  flags);
+void             gtk_cell_renderer_set_fixed_size (GtkCellRenderer      *cell,
+						   gint                  width,
+						   gint                  height);
+void             gtk_cell_renderer_get_fixed_size (GtkCellRenderer      *cell,
+						   gint                 *width,
+						   gint                 *height);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+ 
+G_END_DECLS
 
 #endif /* __GTK_CELL_RENDERER_H__ */
