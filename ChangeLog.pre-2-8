@@ -1,3 +1,10 @@
+1998-11-21  Andrew T. Veliath  <andrewtv@usa.net>
+
+	* gtk/gtkhandlebox.[ch]: Add shadow_type and
+	gtk_handle_box_set_shadow_type function (plus a
+	GtkHandleBox::shadow arg) to allow configuration of shadow in the
+	bin window.
+
 Thu Nov 19 23:47:38 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkcalendar.c: Fix for marking days from 

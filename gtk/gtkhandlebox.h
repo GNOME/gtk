@@ -50,6 +50,7 @@ struct _GtkHandleBox
 
   GdkWindow      *bin_window;	/* parent window for children */
   GdkWindow      *float_window;
+  GtkShadowType   shadow_type;
   guint		  handle_position : 2;
   guint		  float_window_mapped : 1;
   guint		  child_detached : 1;
@@ -72,6 +73,8 @@ struct _GtkHandleBoxClass
 
 guint          gtk_handle_box_get_type        (void);
 GtkWidget*     gtk_handle_box_new             (void);
+void           gtk_handle_box_set_shadow_type (GtkHandleBox    *handle_box,
+                                               GtkShadowType    type);
 
 
 #ifdef __cplusplus

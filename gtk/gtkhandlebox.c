@@ -26,6 +26,10 @@
 #include "gtksignal.h"
 #include "gtkwindow.h"
 
+enum {
+  ARG_0,
+  ARG_SHADOW
+};
 
 #define DRAG_HANDLE_SIZE 10
 #define CHILDLESS_SIZE	25
@@ -40,6 +44,12 @@ enum
 
 static void gtk_handle_box_class_init     (GtkHandleBoxClass *klass);
 static void gtk_handle_box_init           (GtkHandleBox      *handle_box);
+static void gtk_handle_box_set_arg        (GtkObject         *object,
+					   GtkArg            *arg,
+					   guint              arg_id);
+static void gtk_handle_box_get_arg       (GtkObject          *object,
+					  GtkArg             *arg,
+					  guint               arg_id);
 static void gtk_handle_box_destroy        (GtkObject         *object);
 static void gtk_handle_box_map            (GtkWidget         *widget);
 static void gtk_handle_box_unmap          (GtkWidget         *widget);
@@ -113,6 +123,11 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
+  gtk_object_add_arg_type ("GtkHandleBox::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
+
+  object_class->set_arg = gtk_handle_box_set_arg;
+  object_class->get_arg = gtk_handle_box_get_arg;
+  
   handle_box_signals[SIGNAL_CHILD_ATTACHED] =
     gtk_signal_new ("child_attached",
 		    GTK_RUN_FIRST,
@@ -162,6 +177,7 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
 
   handle_box->bin_window = NULL;
   handle_box->float_window = NULL;
+  handle_box->shadow_type = GTK_SHADOW_OUT;
   handle_box->handle_position = GTK_POS_LEFT;
   handle_box->float_window_mapped = FALSE;
   handle_box->child_detached = FALSE;
@@ -171,6 +187,45 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
   handle_box->dragoff_y = 0;
 }
 
+static void
+gtk_handle_box_set_arg (GtkObject      *object,
+			GtkArg         *arg,
+			guint           arg_id)
+{
+  GtkHandleBox *handle_box;
+
+  handle_box = GTK_HANDLE_BOX (object);
+
+  switch (arg_id)
+    {
+    case ARG_SHADOW:
+      gtk_handle_box_set_shadow_type (handle_box, GTK_VALUE_ENUM (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_handle_box_get_arg (GtkObject      *object,
+			GtkArg         *arg,
+			guint           arg_id)
+{
+  GtkHandleBox *handle_box;
+
+  handle_box = GTK_HANDLE_BOX (object);
+
+  switch (arg_id)
+    {
+    case ARG_SHADOW:
+      GTK_VALUE_ENUM (*arg) = handle_box->shadow_type;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+ 
 GtkWidget*
 gtk_handle_box_new (void)
 {
@@ -606,6 +661,25 @@ draw_textured_frame (GtkWidget *widget, GdkWindow *window, GdkRectangle *rect, G
 		    GTK_ORIENTATION_VERTICAL);
 }
 
+void
+gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
+				GtkShadowType  type)
+{
+  g_return_if_fail (handle_box != NULL);
+  g_return_if_fail (GTK_IS_HANDLE_BOX (handle_box));
+
+  if ((GtkShadowType) handle_box->shadow_type != type)
+    {
+      handle_box->shadow_type = type;
+
+      if (GTK_WIDGET_DRAWABLE (handle_box))
+        {
+          gtk_widget_queue_clear (GTK_WIDGET (handle_box));
+        }
+      gtk_widget_queue_resize (GTK_WIDGET (handle_box));
+    }
+}
+
 static void
 gtk_handle_box_paint (GtkWidget      *widget,
 		      GdkEventExpose *event,
@@ -644,14 +718,14 @@ gtk_handle_box_paint (GtkWidget      *widget,
    gtk_paint_box(widget->style,
 		 hb->bin_window,
 		 GTK_WIDGET_STATE (widget),
-		 GTK_SHADOW_OUT,
+		 hb->shadow_type,
 		 area, widget, "handlebox_bin",
 		 0, 0, -1, -1);
   else
    gtk_paint_box(widget->style,
 		 hb->bin_window,
 		 GTK_WIDGET_STATE (widget),
-		 GTK_SHADOW_OUT,
+		 hb->shadow_type,
 		 &event->area, widget, "handlebox_bin",
 		 0, 0, -1, -1);
 
