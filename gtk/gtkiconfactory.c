@@ -451,6 +451,7 @@ get_default_icons (GtkIconFactory *factory)
   /* KEEP IN SYNC with gtkstock.c */
 
   /* Have dialog size */
+  add_icon (factory, GTK_STOCK_DIALOG_AUTHENTICATION, 48, stock_dialog_authentication_48);
   add_icon (factory, GTK_STOCK_DIALOG_ERROR, 48, stock_dialog_error_48);
   add_icon (factory, GTK_STOCK_DIALOG_INFO, 48, stock_dialog_info_48);
   add_icon (factory, GTK_STOCK_DIALOG_QUESTION, 48, stock_dialog_question_48);

@@ -1,5 +1,10 @@
 2003-07-19  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkstock.h (GTK_STOCK_DIALOG_AUTHENTICATION): New stock id. 
+	* gtk/gtkiconfactory.c (get_default_icons): Add stock_dialog_authentication_48.  (#65765)
+	* gtk/stock-icons/Makefile.am (VARIABLES2, IMAGES): Here too.
+	* gtk/stock-icons/stock_dialog_authentication_48.png: New image.
+
 	* gtk/gtkbbox.h: 
 	* gtk/gtkbbox.c (gtk_button_box_get_child_secondary): New function. (#64562)
 

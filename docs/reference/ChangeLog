@@ -1,5 +1,9 @@
 2003-07-19  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtk-sections.txt: Add GTK_STOCK_DIALOG_AUTHENTICATION.
+
+	* gtk/tmpl/gtkstock.sgml: Add GTK_STOCK_DIALOG_AUTHENTICATION.
+
 	* gtk/gtk-sections.txt: Add gtk_button_box_get_child_secondary().
 
 2003-07-18  Matthias Clasen  <maclas@gmx.de>

@@ -29,6 +29,7 @@ IMAGES = \
 	stock_copy_24.png 		\
 	stock_cut_16.png		\
 	stock_cut_24.png 		\
+	stock_dialog_authentication_48.png \
 	stock_dialog_error_48.png	\
 	stock_dialog_info_48.png	\
 	stock_dialog_question_48.png	\
@@ -161,6 +162,7 @@ VARIABLES2 = \
 	stock_copy_24		$(srcdir)/stock_copy_24.png            	\
 	stock_cut_16		$(srcdir)/stock_cut_16.png		\
 	stock_cut_24		$(srcdir)/stock_cut_24.png		\
+	stock_dialog_authentication_48  $(srcdir)/stock_dialog_authentication_48.png	\
 	stock_dialog_error_48  	$(srcdir)/stock_dialog_error_48.png	\
 	stock_dialog_info_48   	$(srcdir)/stock_dialog_info_48.png	\
 	stock_dialog_question_48  $(srcdir)/stock_dialog_question_48.png  \

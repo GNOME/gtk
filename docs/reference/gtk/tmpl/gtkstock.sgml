@@ -193,6 +193,15 @@ The "Delete" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_DIALOG_AUTHENTICATION ##### -->
+<para>
+The "Authentication" item.
+<inlinegraphic fileref="stock_dialog_authentication_48.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.4
+
+
 <!-- ##### MACRO GTK_STOCK_DIALOG_ERROR ##### -->
 <para>
 The "Error" item.

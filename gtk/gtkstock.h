@@ -62,6 +62,8 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 
 
 /* Stock IDs (not all are stock items; some are images only) */
+#define GTK_STOCK_DIALOG_AUTHENTICATION \
+                                   "gtk-dialog-authentication"
 #define GTK_STOCK_DIALOG_INFO      "gtk-dialog-info"
 #define GTK_STOCK_DIALOG_WARNING   "gtk-dialog-warning"
 #define GTK_STOCK_DIALOG_ERROR     "gtk-dialog-error"
