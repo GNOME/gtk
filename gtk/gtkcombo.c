@@ -227,7 +227,7 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
 
       if (nprefix && strlen (nprefix) > strlen (prefix)) 
 	{
-	  gtk_editable_insert_text (editable, nprefix + pos, 
+	  gtk_editable_insert_text (editable, g_utf8_offset_to_pointer (nprefix, pos), 
 				    strlen (nprefix) - strlen (prefix), &pos);
 	  gtk_editable_set_position (editable, pos);
 	}
