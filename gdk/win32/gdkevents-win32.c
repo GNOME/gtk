@@ -1622,6 +1622,7 @@ gdk_event_translate (GdkEvent *event,
    window_impl = (window ? GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl) : NULL))
 
   GdkWindow *orig_window, *new_window;
+  GdkColormap *colormap;
   GdkColormapPrivateWin32 *colormap_private;
   GdkPixmap *pixmap;
   GdkPixmapImplWin32 *pixmap_impl;
@@ -2595,9 +2596,11 @@ gdk_event_translate (GdkEvent *event,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-      colormap_private = GDK_COLORMAP_PRIVATE_DATA (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap);
+      colormap = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
+      if (colormap)
+	colormap_private = GDK_COLORMAP_PRIVATE_DATA (colormap);
       hdc = (HDC) msg->wParam;
-      if (colormap_private && colormap_private->xcolormap->rc_palette)
+      if (colormap && colormap_private->xcolormap->rc_palette)
 	{
 	  int k;
 
