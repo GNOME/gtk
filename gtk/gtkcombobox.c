@@ -4108,7 +4108,7 @@ gtk_combo_box_get_wrap_width (GtkComboBox *combo_box)
  * @width: Preferred number of columns.
  *
  * Sets the wrap width of @combo_box to be @width. The wrap width is basically
- * the preferred number of columns when you want to the popup to be layed out
+ * the preferred number of columns when you want the popup to be layed out
  * in a table.
  *
  * Since: 2.4
