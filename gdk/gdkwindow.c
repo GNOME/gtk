@@ -1413,14 +1413,11 @@ static guint update_idle = 0;
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window, *cur;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   gboolean save_region = FALSE;
 
-  for(cur = private; cur; cur = cur->parent)
-    {
-      if(!cur->mapped)
-	return;
-    }
+  if (!gdk_window_is_viewable (window))
+    return;
 
   /* If an update got queued during update processing, we can get a
    * window in the update queue that has an empty update_area.
