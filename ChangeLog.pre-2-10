@@ -1,3 +1,8 @@
+2002-07-24  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c: Apply patch from Gustavo
+	Giraldez for bug #78513
+
 Mon Aug  5 17:01:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/Makefile.am (LDFLAGS): When overriding LDFLAGS,
