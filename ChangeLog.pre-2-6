@@ -1,3 +1,9 @@
+Wed Dec 26 12:28:24 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_highlight): Connect 
+	gtk_drag_hightlight_expose _after_, so it works with
+	widgets that paint there entire background. (#66735)
+
 Wed Dec 26 12:17:06 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkplug.c (gtk_plug_size_allocate): Assign the

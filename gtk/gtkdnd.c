@@ -760,9 +760,9 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 void 
 gtk_drag_highlight (GtkWidget  *widget)
 {
-  gtk_signal_connect (GTK_OBJECT (widget), "expose_event",
-		      GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
-		      NULL);
+  gtk_signal_connect_after (GTK_OBJECT (widget), "expose_event",
+			    GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
+			    NULL);
 
   gtk_widget_queue_draw (widget);
 }
