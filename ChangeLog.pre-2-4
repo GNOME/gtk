@@ -1,5 +1,8 @@
 2003-02-19  Matthias Clasen  <maclas@gmx.de>
 
+	* tests/testdnd.c: Replace gtk_timeout_* by their GLib
+	counterparts. (#106532)
+
 	* gdk/gdkkeys.c (gdk_keymap_class_init): Associate the
 	keys_changed virtual function with the keys_changed signal.
 	(#106512, Jeff Franks)

@@ -446,7 +446,7 @@ popup_motion	   (GtkWidget	       *widget,
       if (popdown_timer)
 	{
 	  g_print ("removed popdown\n");
-	  gtk_timeout_remove (popdown_timer);
+	  g_source_remove (popdown_timer);
 	  popdown_timer = 0;
 	}
     }
@@ -465,7 +465,7 @@ popup_leave	   (GtkWidget	       *widget,
       if (!popdown_timer)
 	{
 	  g_print ("added popdown\n");
-	  popdown_timer = gtk_timeout_add (500, popdown_cb, NULL);
+	  popdown_timer = g_timeout_add (500, popdown_cb, NULL);
 	}
     }
 }
@@ -514,7 +514,7 @@ popup_cb (gpointer data)
       popped_up = TRUE;
     }
 
-  popdown_timer = gtk_timeout_add (500, popdown_cb, NULL);
+  popdown_timer = g_timeout_add (500, popdown_cb, NULL);
   g_print ("added popdown\n");
 
   popup_timer = FALSE;
@@ -530,7 +530,7 @@ popsite_motion	   (GtkWidget	       *widget,
 		    guint               time)
 {
   if (!popup_timer)
-    popup_timer = gtk_timeout_add (500, popup_cb, NULL);
+    popup_timer = g_timeout_add (500, popup_cb, NULL);
 
   return TRUE;
 }
@@ -542,7 +542,7 @@ popsite_leave	   (GtkWidget	       *widget,
 {
   if (popup_timer)
     {
-      gtk_timeout_remove (popup_timer);
+      g_source_remove (popup_timer);
       popup_timer = 0;
     }
 }
