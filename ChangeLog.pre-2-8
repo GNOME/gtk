@@ -1,3 +1,13 @@
+2000-12-20  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderer*.c (::get_property): remove g_value_init
+	calls, as they are no longer needed.
+
+	* gtk/gtktreemodelsort.c: Fix up the comparison code.
+	
+	* gtk/gtktreemodel.h: Start work on ::reordered signal.  Need to
+	figure out how to emit a signal on an interface.
+
 2000-12-20  Havoc Pennington  <hp@redhat.com>
 
 	* tests: new directory to contain tests, gtk/test* should move

@@ -419,10 +419,7 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *sort,
   GtkTreeIter iter;
   SortElt elt;
   gint offset;
-  gint middle, j;
-  GValueCompareFunc func;
-  GValue s_value = {0, };
-  GValue tmp_value = {0, };
+  gint j;
   SortElt *tmp_elt;
   offset = gtk_tree_path_get_indices (s_path)[gtk_tree_path_get_depth (s_path) - 1];
 
@@ -465,8 +462,6 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *sort,
   index = gtk_tree_model_sort_array_find_insert (sort, array, (GtkTreeIter *) &elt, FALSE);
 
   g_array_insert_vals (array, index, &elt, 1);
-
-  g_value_unset (&s_value);
 
   /* update all the larger offsets */
   tmp_elt = (SortElt *) array->data;
@@ -1104,8 +1099,8 @@ gtk_tree_model_sort_func  (gconstpointer a,
 			   gconstpointer b,
 			   gpointer      user_data)
 {
-  GValue value_a;
-  GValue value_b;
+  GValue value_a = {0, };
+  GValue value_b = {0, };
   SortData *sort_data = user_data;
   gint retval;
 

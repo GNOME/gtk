@@ -40,6 +40,12 @@ gtk_tree_model_get_type (void)
         sizeof (GtkTreeModelIface), /* class_size */
 	NULL,		/* base_init */
 	NULL,		/* base_finalize */
+	NULL,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	0,
+	0,              /* n_preallocs */
+	NULL
       };
 
       tree_model_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeModel", &tree_model_info, 0);

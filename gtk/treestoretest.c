@@ -18,14 +18,18 @@ static void
 node_set (GtkTreeIter *iter)
 {
   static gint i = 0;
-
+  gint n;
   gchar *str;
 
-  str = g_strdup_printf ("FOO: %d", i++);
+  str = g_strdup_printf ("Row (%d)", i++);
   gtk_tree_store_set (base_model, iter, 0, str, -1);
   g_free (str);
 
-  str = g_strdup_printf ("%d", g_random_int ());
+  n = g_random_int ();
+  if (n < 0)
+    n *= -1;
+  str = g_strdup_printf ("%d", n);
+
   gtk_tree_store_set (base_model, iter, 1, str, -1);
   g_free (str);
 }
@@ -133,7 +137,7 @@ iter_insert_after (GtkWidget *button, GtkTreeView *tree_view)
 	  gtk_tree_store_insert_after (model,
 				       &iter,
 				       NULL,
-				       &selected);
+				       NULL);
 	  node_set (&iter);
 	}
     }
@@ -303,12 +307,12 @@ make_window (gboolean use_sort)
   /* A few to start */
   if (!use_sort)
     {
-      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
-      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
-      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
-      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
-      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
-      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
+      iter_append (NULL, GTK_TREE_VIEW (tree_view));
+      iter_append (NULL, GTK_TREE_VIEW (tree_view));
+      iter_append (NULL, GTK_TREE_VIEW (tree_view));
+      iter_append (NULL, GTK_TREE_VIEW (tree_view));
+      iter_append (NULL, GTK_TREE_VIEW (tree_view));
+      iter_append (NULL, GTK_TREE_VIEW (tree_view));
     }
   /* Show it all */
   gtk_widget_show_all (window);

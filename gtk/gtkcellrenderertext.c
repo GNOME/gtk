@@ -205,22 +205,18 @@ gtk_cell_renderer_text_get_property (GObject        *object,
   switch (param_id)
     {
     case PROP_TEXT:
-      g_value_init (value, G_TYPE_STRING);
       g_value_set_string (value, celltext->text);
       break;
     case PROP_STRIKETHROUGH:
-      g_value_init (value, G_TYPE_BOOLEAN);
       attr_iter = pango_attr_list_get_iterator (celltext->attr_list);
       attr = pango_attr_iterator_get (attr_iter,
 				      PANGO_ATTR_STRIKETHROUGH);
       g_value_set_boolean (value, ((PangoAttrInt*) attr)->value);
       break;
     case PROP_UNDERLINE:
-      g_value_init (value, G_TYPE_BOOLEAN);
       g_value_set_boolean (value, celltext->underline);
       break;
     case PROP_EDITABLE:
-      g_value_init (value, G_TYPE_BOOLEAN);
       g_value_set_boolean (value, celltext->editable);
       break;
     default:

@@ -946,7 +946,7 @@ gtk_tree_view_motion (GtkWidget *widget,
 	  gtk_tree_view_column_set_size (gtk_tree_view_get_column (GTK_TREE_VIEW (widget), tree_view->priv->drag_pos), new_width);
 	}
 
-      /* FIXME: We need to scroll */
+      /* FIXME: Do we need to scroll */
       _gtk_tree_view_set_size (GTK_TREE_VIEW (widget), -1, tree_view->priv->height);
       return FALSE;
     }
@@ -1437,7 +1437,7 @@ gtk_tree_view_focus_out (GtkWidget     *widget,
 }
 
 /* FIXME: It would be neat to someday make the headers a seperate widget that
- * can be shared between various apps
+ * can be shared between various apps.  Wishful thinking, though...
  */
 /* Returns TRUE if the focus is within the headers, after the focus operation is
  * done

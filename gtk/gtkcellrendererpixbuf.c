@@ -121,7 +121,6 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
   switch (param_id)
     {
     case PROP_PIXBUF:
-      g_value_init (value, G_TYPE_OBJECT);
       g_value_set_object (value, G_OBJECT (cellpixbuf->pixbuf));
       break;
     default:

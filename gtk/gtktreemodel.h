@@ -71,6 +71,9 @@ struct _GtkTreeModelIface
 				      GtkTreeIter  *iter);
   void         (* deleted)           (GtkTreeModel *tree_model,
 				      GtkTreePath  *path);
+  void         (* reordered)         (GtkTreeModel *tree_model,
+				      GtkTreePath  *path,
+				      gint         *new_order);
 
   /* VTable - not signals */
   guint        (* get_flags)       (GtkTreeModel *tree_model);   

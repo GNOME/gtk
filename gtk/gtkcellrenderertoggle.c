@@ -164,11 +164,9 @@ gtk_cell_renderer_toggle_get_property (GObject     *object,
   switch (param_id)
     {
     case PROP_STATE:
-      g_value_init (value, G_TYPE_BOOLEAN);
       g_value_set_boolean (value, celltoggle->state);
       break;
     case PROP_RADIO:
-      g_value_init (value, G_TYPE_BOOLEAN);
       g_value_set_boolean (value, celltoggle->radio);
       break;
     default:
