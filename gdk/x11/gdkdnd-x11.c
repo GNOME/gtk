@@ -1451,6 +1451,11 @@ motif_read_initiator_info (Window source_window,
 
   motif_read_target_table ();
 
+  initiator_info->targets_index = 
+    card16_to_host (initiator_info->targets_index, initiator_info->byte_order);
+  initiator_info->selection_atom = 
+    card32_to_host (initiator_info->selection_atom, initiator_info->byte_order);
+  
   if (initiator_info->targets_index >= motif_n_target_lists)
     {
       g_warning ("Invalid target index in TOP_LEVEL_ENTER MESSAGE");
@@ -1458,11 +1463,6 @@ motif_read_initiator_info (Window source_window,
       return GDK_FILTER_REMOVE;
     }
 
-  initiator_info->targets_index = 
-    card16_to_host (initiator_info->targets_index, initiator_info->byte_order);
-  initiator_info->selection_atom = 
-    card32_to_host (initiator_info->selection_atom, initiator_info->byte_order);
-  
   tmp_list = g_list_last (motif_target_lists[initiator_info->targets_index]);
 
   *targets = NULL;

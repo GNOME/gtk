@@ -1,3 +1,8 @@
+Sun Jan 24 18:09:24 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (motif_read_initiator_info): Byteswap
+	the MotifInitiatorInfo structure _before_ using it.
+
 Sun Jan 24 12:17:39 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkcolor.c (gdk_colormap_real_destroy): Fix 
