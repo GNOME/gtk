@@ -167,10 +167,13 @@ gtk_bin_draw (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_BIN (widget));
 
   bin = GTK_BIN (widget);
-  
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child) &&
-      gtk_widget_intersect (bin->child, area, &child_area))
-    gtk_widget_draw (bin->child, &child_area);
+
+  if (GTK_WIDGET_DRAWABLE (bin))
+    {
+      if (bin->child && GTK_WIDGET_DRAWABLE (bin->child) &&
+	  gtk_widget_intersect (bin->child, area, &child_area))
+	gtk_widget_draw (bin->child, &child_area);
+    }
 }
 
 static gint
@@ -189,7 +192,7 @@ gtk_bin_expose (GtkWidget      *widget,
       bin = GTK_BIN (widget);
 
       child_event = *event;
-      if (bin->child &&
+      if (bin->child && GTK_WIDGET_DRAWABLE (bin->child) &&
 	  GTK_WIDGET_NO_WINDOW (bin->child) &&
 	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	gtk_widget_event (bin->child, (GdkEvent*) &child_event);

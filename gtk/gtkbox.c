@@ -660,7 +660,8 @@ gtk_box_draw (GtkWidget    *widget,
 	  child = children->data;
 	  children = children->next;
 	     
-	  if (gtk_widget_intersect (child->widget, area, &child_area))
+	  if (GTK_WIDGET_DRAWABLE (child->widget) &&
+	      gtk_widget_intersect (child->widget, area, &child_area))
 	    gtk_widget_draw (child->widget, &child_area);
 	}
     }
@@ -691,7 +692,8 @@ gtk_box_expose (GtkWidget      *widget,
 	  child = children->data;
 	  children = children->next;
 
-	  if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+	  if (GTK_WIDGET_DRAWABLE (child->widget) &&
+	      GTK_WIDGET_NO_WINDOW (child->widget) &&
 	      gtk_widget_intersect (child->widget, &event->area, &child_event.area))
 	    gtk_widget_event (child->widget, (GdkEvent*) &child_event);
 	}

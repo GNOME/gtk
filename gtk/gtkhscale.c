@@ -278,8 +278,8 @@ gtk_hscale_draw (GtkWidget    *widget,
       
       gtk_hscale_pos_trough (GTK_HSCALE (widget), &x, &y, &width, &height);
       
-      tmp_area.x = x;
-      tmp_area.y = y;
+      tmp_area.x = x + widget->allocation.x;
+      tmp_area.y = y + widget->allocation.y;
       tmp_area.width = width;
       tmp_area.height = height;
       
