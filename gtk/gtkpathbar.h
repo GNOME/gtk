@@ -59,10 +59,10 @@ struct _GtkPathBarClass
 };
 
 GType gtk_path_bar_get_type (void) G_GNUC_CONST;
-void  gtk_path_bar_set_path (GtkPathBar         *path_bar,
-			     const GtkFilePath  *file_path,
-			     GtkFileSystem      *file_system,
-			     GError            **error);
+gboolean gtk_path_bar_set_path (GtkPathBar         *path_bar,
+				const GtkFilePath  *file_path,
+				GtkFileSystem      *file_system,
+				GError            **error);
 G_END_DECLS
 
 #endif /* __GTK_PATH_BAR__ */

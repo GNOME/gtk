@@ -468,7 +468,7 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				0);
 
   _gtk_file_chooser_install_properties (gobject_class);
-  
+
   gtk_settings_install_property (g_param_spec_string ("gtk-file-chooser-backend",
 						      P_("Default file chooser backend"),
 						      P_("Name of the GtkFileChooser backend to use by default"),
@@ -2245,7 +2245,7 @@ set_file_system_backend (GtkFileChooserDefault *impl,
     {
       GtkSettings *settings = gtk_settings_get_default ();
       gchar *default_backend = NULL;
-      
+
       g_object_get (settings, "gtk-file-chooser-backend", &default_backend, NULL);
       if (default_backend)
 	{
@@ -2837,14 +2837,24 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     const GtkFilePath *path)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
+  GError *error;
 
-  if (impl->current_folder)
-    gtk_file_path_free (impl->current_folder);
+  error = NULL;
+  if (!gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, impl->file_system, &error))
+    {
+      error_dialog (impl,
+		    _("Could not set current folder: %s"),
+		    path, error);
+      return;
+    }
 
-  impl->current_folder = gtk_file_path_copy (path);
+  if (impl->current_folder != path)
+    {
+      if (impl->current_folder)
+	gtk_file_path_free (impl->current_folder);
 
-  /* Change the current folder label */
-  gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, impl->file_system, NULL);
+      impl->current_folder = gtk_file_path_copy (path);
+    }
 
   /* Update the widgets that may trigger a folder chnage themselves */
 
@@ -3362,12 +3372,12 @@ gtk_file_chooser_default_get_resizable_hints (GtkFileChooserEmbed *chooser_embed
 
   g_return_if_fail (resize_horizontally != NULL);
   g_return_if_fail (resize_vertically != NULL);
-  
+
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
   *resize_horizontally = TRUE;
   *resize_vertically = TRUE;
-  
+
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {

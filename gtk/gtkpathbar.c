@@ -629,7 +629,7 @@ make_directory_button (const char  *dir_name,
 }
 
 
-void
+gboolean
 gtk_path_bar_set_path (GtkPathBar         *path_bar,
 		       const GtkFilePath  *file_path,
 		       GtkFileSystem      *file_system,
@@ -637,10 +637,13 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
 {
   GtkFilePath *path;
   gboolean first_directory = TRUE;
-  
-  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
-  g_return_if_fail (file_path != NULL);
-  g_return_if_fail (file_system != NULL);
+  gboolean result;
+
+  g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), FALSE);
+  g_return_val_if_fail (file_path != NULL, FALSE);
+  g_return_val_if_fail (file_system != NULL, FALSE);
+
+  result = TRUE;
 
   gtk_path_bar_clear_buttons (path_bar);
   path = gtk_file_path_copy (file_path);
@@ -663,8 +666,8 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
 					  &err);
       if (!valid)
 	{
+	  result = FALSE;
 	  g_propagate_error (error, err);
-	  g_error_free (err);
 	  gtk_file_path_free (path);
 	  break;
 	}
@@ -679,8 +682,10 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
       file_info = gtk_file_folder_get_info (file_folder, path, &err);
       if (!file_info)
 	{
+	  result = FALSE;
 	  g_propagate_error (error, err);
-	  g_error_free (err);
+	  g_object_unref (file_folder);
+	  gtk_file_path_free (parent_path);
 	  gtk_file_path_free (path);
 	  break;
 	}
@@ -703,4 +708,6 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
   gtk_widget_pop_composite_child ();
 
   path_bar->button_list = g_list_reverse (path_bar->button_list);
+
+  return result;
 }

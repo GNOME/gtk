@@ -1,3 +1,18 @@
+2004-03-02  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_set_current_folder): Handle errors in
+	setting the path bar's path.  Fixes #136000, based on a patch by
+	Morten Welinder.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_insert_bookmark):
+	Don't free our own propagated error.
+
+	* gtk/gtkpathbar.c (gtk_path_bar_set_path): Likewise, and free the
+	parent_path upon error.  Fixes #136006, patch by Morten Welinder.
+	(gtk_path_bar_set_path): Unref the file_folder upon error.
+	(gtk_path_bar_set_path): Return a boolean success code.
+
 Wed Mar  3 00:28:59 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testcombochange.c: Add an animation mode, to test 

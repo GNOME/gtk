@@ -1086,7 +1086,6 @@ gtk_file_system_unix_insert_bookmark (GtkFileSystem     *file_system,
   if (!bookmark_list_read (&bookmarks, &err) && err->code != G_FILE_ERROR_NOENT)
     {
       g_propagate_error (error, err);
-      g_error_free (err);
       return FALSE;
     }
 
