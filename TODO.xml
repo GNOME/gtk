@@ -69,7 +69,7 @@
 	  customizable
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
       <bugs>#3958</bugs>
     </entry>
 
@@ -89,7 +89,7 @@
           looking at for this task.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="medium" status="0%" target="1.4">
@@ -102,7 +102,7 @@
           friends, though.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
   </section> <!-- GDK -->
@@ -196,7 +196,7 @@
 	  "GLib based object and type system").
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="big" status="0%" target="1.4">
@@ -283,7 +283,7 @@
 	  code (especially on AIX).
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
 
@@ -299,7 +299,7 @@
           being colormap issues.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="small" status="0%" target="1.4">
@@ -320,7 +320,7 @@
         </p>
 
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="medium" status="0%" target="> 1.4">
@@ -331,7 +331,7 @@
           Consider a GtkClipboard object to simplify cut-and-paste handling.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
 
@@ -357,7 +357,7 @@
           GTK+ API for this.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="big" status="0%" target="> 1.4">
@@ -371,7 +371,7 @@
           help browser gizmo into GTK.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
 
@@ -383,7 +383,7 @@
           blink, etc., from a control panel type of deal.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
   </section> <!-- Core -->
@@ -403,7 +403,7 @@
 	  in that slot.)
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="big" status="50%" target="1.4">
@@ -424,7 +424,7 @@
 	  Pango works at a sub-paragraph scale.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="small" status="0%" target="1.4">
@@ -439,7 +439,7 @@
 	  will fit in with well with the rest of the GTK+ look.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="small" status="0%" target="1.4">
@@ -455,7 +455,7 @@
 	  side of the submenu.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="small" status="0%" target="1.4 ?">
@@ -476,7 +476,7 @@
 	  windowing systems.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="big" status="90%" target="1.4">
@@ -527,7 +527,7 @@
 	  both the simplicity and power of the interfaces.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="small" status="0%" target="1.4">
@@ -551,7 +551,7 @@
           don't have to use gtk_statusbar_get_context_id().
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
     
     <entry size="small" status="95%" target="1.4">
@@ -584,7 +584,7 @@
           see GtkSpinButton where these are already implemented.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="big" status="0%" target="> 1.4">
@@ -605,7 +605,7 @@
           (Havoc has a proposed interface for this, mail hp@redhat.com)
         </p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="medium" status="0%" target="> 1.4">
@@ -616,7 +616,7 @@
           the like.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="medium" status="0%" target="> 1.4">
@@ -629,7 +629,7 @@
           saving the current positions of the various docked bars.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="big" status="0%" target="> 1.4">
@@ -639,7 +639,7 @@
           Figure out how to get GnomeCanvas or a derived work into GTK+ itself.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="medium" status="0%" target="1.4">
@@ -650,7 +650,7 @@
           as on the Mac.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="medium" status="0%" target="1.4">
@@ -661,7 +661,7 @@
           wrapping or drop-down deal. (See Windows/Mac apps for examples.)
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="small" status="0%" target="1.4">
@@ -682,7 +682,7 @@
           Keep GtkMenu from prelighting the first menu item.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="small" status="0%" target="1.4">
@@ -695,7 +695,7 @@
           still called GtkColorSelector).
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
     <entry size="medium" status="0%" target="1.4">
@@ -708,7 +708,31 @@
           it makes sense (like gnome-terminal probably).
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>gtk-devel-list@gnome.org</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Stack Widget</title>
+      <description>
+	<p>
+          Jonathan has a widget like a tabless/frameless notebook, used for
+          something like the GNOME control center where you want to toggle which
+          widget is visible to the user. Needs to be cleaned up and considered
+          for GTK.
+	</p>
+      </description>
+      <contact>gtk-devel-list@gnome.org, jrb@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Clean up GtkNotebook</title>
+      <description>
+	<p>
+          GtkNotebook currently breaks GTK invariants about
+          mapping/visibility/etc., needs fixing.
+	</p>
+      </description>
+      <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
   </section> <!-- GTK+ -->
