@@ -797,7 +797,7 @@ start_element_handler (GMarkupParseContext *context,
 	  action = attribute_values[i];
 	  action_quark = g_quark_from_string (attribute_values[i]);
 	}
-      else if (!strcmp (attribute_names[i], "pos"))
+      else if (!strcmp (attribute_names[i], "position"))
 	{
 	  top = !strcmp (attribute_values[i], "top");
 	}

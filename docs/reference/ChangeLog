@@ -1,5 +1,8 @@
 2003-09-04  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkuimanager.sgml: Change the name of the "pos" 
+	attribute to "position".
+
 	* gtk/tmpl/gtkactiongroup.sgml: Doc tweaks.
 
 2003-09-02  Matthias Clasen  <maclas@gmx.de>

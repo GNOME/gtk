@@ -1,9 +1,17 @@
 2003-09-04  Matthias Clasen  <maclas@gmx.de>
 
+	* tests/merge-2.ui: Use "position" instead of "pos".
+
+	* gtk/gtkuimanager.c (start_element_handler): No need 
+	to be terse: Change the name of the "pos" attribute
+	to "position".
+
+2003-09-04  Matthias Clasen  <maclas@gmx.de>
+
 	* gtk/gtkuimanager.c: Un-prefix GtkUIManagerNodeType and 
 	GtkUIManagerNode to shorten the names and to make the
 	GTK_UI_MANAGER_<TYPE> names available for a public enum.
-	
+
 	* gtk/gtkactiongroup.c:
 	* gtk/gtkuimanager.c: Various doc tweaks.	
 

@@ -24,19 +24,19 @@ roughly described by the following DTD.
 &lt;!ELEMENT menuitem     EMPTY &gt;
 &lt;!ELEMENT toolitem     EMPTY &gt;
 &lt;!ELEMENT separator    EMPTY &gt;
-&lt;!ATTLIST menubar      name             &num;IMPLIED &gt;
-&lt;!ATTLIST toolbar      name             &num;IMPLIED &gt;
-&lt;!ATTLIST popup        name             &num;IMPLIED &gt;
-&lt;!ATTLIST placeholder  name             &num;IMPLIED &gt;
-&lt;!ATTLIST menu         name             &num;IMPLIED
-                       action           &num;REQUIRED
-                       pos    (top|bot) &num;IMPLIED &gt;
-&lt;!ATTLIST menuitem     name             &num;IMPLIED
-                       action           &num;REQUIRED
-                       pos    (top|bot) &num;IMPLIED &gt;
-&lt;!ATTLIST toolitem     name             &num;IMPLIED
-                       action           &num;REQUIRED
-                       pos    (top|bot) &num;IMPLIED &gt;
+&lt;!ATTLIST menubar      name               &num;IMPLIED &gt;
+&lt;!ATTLIST toolbar      name               &num;IMPLIED &gt;
+&lt;!ATTLIST popup        name               &num;IMPLIED &gt;
+&lt;!ATTLIST placeholder  name               &num;IMPLIED &gt;
+&lt;!ATTLIST menu         name               &num;IMPLIED
+                       action             &num;REQUIRED
+                       position (top|bot) &num;IMPLIED &gt;
+&lt;!ATTLIST menuitem     name               &num;IMPLIED
+                       action             &num;REQUIRED
+                       position (top|bot) &num;IMPLIED &gt;
+&lt;!ATTLIST toolitem     name               &num;IMPLIED
+                       action             &num;REQUIRED
+                       position (top|bot) &num;IMPLIED &gt;
 </programlisting>
 There are some additional restrictions beyond those specified in the
 DTD, e.g. every toolitem must have a toolbar in its anchestry and
@@ -108,7 +108,7 @@ action</para></listitem>
 </variablelist>
 </para>
 <para>
-The pos attribute determines where a constructed widget is positioned
+The "position" attribute determines where a constructed widget is positioned
 wrt. to its siblings in the partially constructed tree. If it is
 "top", the widget is prepended, otherwise it is appended.
 </para>
