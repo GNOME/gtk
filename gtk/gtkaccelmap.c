@@ -365,7 +365,7 @@ internal_change_entry (const gchar    *accel_path,
 	    if (!removable)
 	      goto break_loop_step5;
 	    if (ag_entry[i].accel_path_quark)
-	      replace_list = g_slist_prepend (replace_list, GUINT_TO_POINTER (ag_entry->accel_path_quark));
+	      replace_list = g_slist_prepend (replace_list, GUINT_TO_POINTER (ag_entry[i].accel_path_quark));
 	  }
       }
  break_loop_step5:

@@ -1,5 +1,11 @@
 2004-12-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaccelmap.c (internal_change_entry): Remove all 
+	entries for the same key, not just the first one.  (#159498, 
+	Christian Persch)
+
+2004-12-08  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (_gtk_tree_view_column_start_drag): Use
 	button->event_window for the fake leave event, otherwise
 	the button ignores it.  
