@@ -554,6 +554,8 @@ gtk_im_context_xim_finalize (GObject *obj)
 
   g_free (context_xim->locale);
   g_free (context_xim->mb_charset);
+
+  G_OBJECT_CLASS (parent_class)->finalize (obj);
 }
 
 static void
