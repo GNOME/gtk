@@ -1,5 +1,7 @@
 Thu Oct 23 21:55:10 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
+	Fix bug 116297 and 125472
+	
 	* gtk/gtktoolbar.c (gtk_toolbar_highlight_drop_location): Make
 	this function take an index and a GtkToolItem.
 
