@@ -1,3 +1,7 @@
+2004-07-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_parse_args.
+
 Tue Jul 13 02:01:56 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkaboutdialog.sgml: Additions.

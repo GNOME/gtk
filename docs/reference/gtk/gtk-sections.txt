@@ -4613,6 +4613,7 @@ gtk_window_group_get_type
 gtk_set_locale
 gtk_disable_setlocale
 gtk_get_default_language
+gtk_parse_args
 gtk_init
 gtk_init_check
 gtk_exit
