@@ -14,12 +14,12 @@ require extensive effort on the user's part.
 </para>
 
 <para>
-Gtk+ treats a dialog as a window split horizontally. The top section is a
-#GtkVBox, and is where widgets such as a #GtkLabel or a #GtkEntry should be
-packed. The second area is known as the
-<structfield>action_area</structfield>. This is generally used for packing
-buttons into the dialog which may perform functions such as cancel, ok, or
-apply. The two areas are separated by a #GtkHSeparator.
+Gtk+ treats a dialog as a window split vertically. The top section is a
+#GtkVBox, and is where widgets such as a #GtkLabel or a #GtkEntry should
+be packed. The bottom area is known as the
+<structfield>action_area</structfield>. This is generally used for
+packing buttons into the dialog which may perform functions such as
+cancel, ok, or apply. The two areas are separated by a #GtkHSeparator.
 </para>
 
 <para>
