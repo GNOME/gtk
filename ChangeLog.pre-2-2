@@ -1,3 +1,7 @@
+1999-09-28  Kjartan Maraas  <kmaraas@online.no>
+
+	* configure.in: Added "ro" to ALL_LINGUAS.
+	
 Mon Sep 27 02:50:15 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkvscale.c (gtk_vscale_draw): Don't add in
