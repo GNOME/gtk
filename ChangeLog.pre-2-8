@@ -1,5 +1,9 @@
 2004-01-20  Federico Mena Quintero  <federico@ximian.com>
 
+	* NEWS: Added details about GtkFileChooser changes.
+
+2004-01-20  Federico Mena Quintero  <federico@ximian.com>
+
 	Fix #99425, add accessor functions for GtkPaned's children.
 
 	* gtk/gtkpaned.c (gtk_paned_get_child1): New function.

@@ -39,7 +39,12 @@ Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 * Implement or improve RTL support in GtkComboBox, GtkCellView, 
   GtkViewport [IBM L3 NLS Support Team, Matthias, Kristian]
 * Support for "no focus" windows. [Matthias]
-* Many GtkFileChooser improvements [Federico, Jan Arne Petersen]
+* Fix new filename entry in Save mode in GtkFileChooser. [Jan Arne Petersen]
+* Improved the look of GtkFileChooserDefault. [Federico, Tuomas Kuosmanen]
+* Added support for file system volumes such as CD-ROMs, floppies, and network
+  shares to GtkFileChooser. [Federico]
+* Add a "New Folder" button for Save mode in GtkFileChooser. [Federico]
+* Better support for Folder mode in GtkFileChooser. [Federico]
 * Documentation improvements [Matthias, Federico, Manish, 
   Murray Cumming, Theppitak Karoonboonyanan]
 * FAQ updates [Tony Gale]
