@@ -1,3 +1,36 @@
+2000-11-15  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Added virtual functions set_pixel, get_color,
+	fill_span and draw_drawable to the GC.
+	Added global _gdk_fb_screen_gc to use instead of
+	NULL when drawing to the screen.
+	Added _gdk_fb_gc_calc_state() prototype.
+
+	* gdk/linux-fb/gdkgc-fb.c:
+	Call _gdk_fb_gc_calc_state() on any gc state change.
+
+	* gdk/linux-fb/gdkglobals-fb.c:
+	Add _gdk_fb_screen_gc
+		
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	_gdk_fb_gc_calc_state() calculates best functions
+	for the GC state and depth.
+	Moved bpp specialized code to separate functions.
+	Added optimized 24 bpp AA draw_drawable.
+
+	* gdk/linux-fb/gdkevents-fb.c:
+	Silence gcc warning.
+
+	* gdk/linux-fb/gdkimage-fb.c:
+	Use _gdk_fb_screen_gc
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Init and use _gdk_fb_screen_gc
+
+	* gdk/linux-fb/mitypes.h:
+	Remove unused types.
+
 2000-11-14  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextlayout.c (add_cursor): use PANGO_PIXELS() to convert

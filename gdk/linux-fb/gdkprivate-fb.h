@@ -57,6 +57,8 @@
 typedef struct _GdkDrawableFBData GdkDrawableFBData;
 typedef struct _GdkWindowFBData GdkWindowFBData;
 typedef struct _GdkPixmapFBData GdkPixmapFBData;
+typedef struct _GdkFBDrawingContext GdkFBDrawingContext;
+
 #define GDK_DRAWABLE_PIXMAP (GDK_WINDOW_FOREIGN+1)
 
 struct _GdkDrawableFBData
@@ -161,6 +163,36 @@ typedef struct {
 #define GDK_GC_FBDATA(x) ((GdkGCFBData *)(x))
 #define GDK_GC_P(x) ((GdkGC *)(x))
 
+typedef enum {
+  GPR_USED_BG,
+  GPR_AA_GRAYVAL,
+  GPR_NONE,
+  GPR_ERR_BOUNDS
+} GetPixelRet;
+
+typedef enum {
+  GDK_FB_SRC_BPP_1,
+  GDK_FB_SRC_BPP_8,
+  GDK_FB_SRC_BPP_16,
+  GDK_FB_SRC_BPP_24,
+  GDK_FB_SRC_BPP_32,
+  GDK_FB_SRC_BPP_7_AA_GRAYVAL,
+  GDK_FB_SRC_BPP_8_AA_GRAYVAL,
+  GDK_NUM_FB_SRCBPP
+} GdkFbSrcBPP;
+
+typedef void gdk_fb_draw_drawable_func (GdkDrawable *drawable,
+					GdkGC       *gc,
+					GdkPixmap   *src,
+					GdkFBDrawingContext *dc,
+					gint         start_y,
+					gint         end_y,
+					gint         start_x,
+					gint         end_x,
+					gint         src_x_off,
+					gint         src_y_off,
+					gint         draw_direction);
+
 typedef struct {
   GdkGC parent_instance;
 
@@ -170,48 +202,88 @@ typedef struct {
   GdkGCValues values;
   gint dash_offset;
   gushort dash_list_len;
-  guchar depth, alu;
+  guchar alu;
+
+  /* The GC can only be used with target drawables of
+   * the same depth as the initial drawable
+   * specified in gd_gc_new().
+   */
+  guchar depth;
+  
+  /* Calculated state: */
+  /* These functions can only be called for drawables
+   * that have the same depth as the gc. 
+   */
+  void        (*set_pixel) (GdkDrawable    *drawable,
+			    GdkGC          *gc,
+			    int             x,
+			    int             y,
+			    gulong          pixel);
+
+  GetPixelRet (*get_color) (GdkDrawable      *drawable,
+			    GdkGC            *gc,
+			    int               x,
+			    int               y,
+			    GdkColor         *color);
+  
+  void        (*fill_span) (GdkDrawable *drawable,
+			    GdkGC       *gc,
+			    GdkSegment  *cur,
+			    GdkColor    *color);
+
+  gdk_fb_draw_drawable_func *draw_drawable[GDK_NUM_FB_SRCBPP];
 } GdkGCFBData;
 
 typedef struct {
   GdkGCClass parent_class;
 } GdkGCFBClass;
 
+
+extern GdkGC *_gdk_fb_screen_gc;
+
 GType gdk_gc_fb_get_type (void) G_GNUC_CONST;
 
 /* Routines from gdkgeometry-fb.c */
 
-void _gdk_window_init_position     (GdkWindow    *window);
-void _gdk_window_move_resize_child (GdkWindow    *window,
-				    gint          x,
-				    gint          y,
-				    gint          width,
-				    gint          height);
-void _gdk_window_process_expose    (GdkWindow    *window,
-				    gulong        serial,
-				    GdkRectangle *area);
-void gdk_window_invalidate_region_clear(GdkWindow *window, GdkRegion *region);
-void gdk_window_invalidate_rect_clear(GdkWindow *window, GdkRectangle *rect);
-GdkGC *_gdk_fb_gc_new(GdkDrawable *drawable, GdkGCValues *values, GdkGCValuesMask values_mask);
+void      _gdk_window_init_position          (GdkWindow       *window);
+void      _gdk_window_move_resize_child      (GdkWindow       *window,
+					      gint             x,
+					      gint             y,
+					      gint             width,
+					      gint             height);
+void      _gdk_window_process_expose         (GdkWindow       *window,
+					      gulong           serial,
+					      GdkRectangle    *area);
+void      gdk_window_invalidate_region_clear (GdkWindow       *window,
+					      GdkRegion       *region);
+void      gdk_window_invalidate_rect_clear   (GdkWindow       *window,
+					      GdkRectangle    *rect);
 
-GdkImage*_gdk_fb_get_image (GdkDrawable *drawable,
-			    gint         x,
-			    gint         y,
-			    gint         width,
-			    gint         height);
-  
-void gdk_fb_drawable_clear (GdkDrawable *drawable);
-void gdk_fb_draw_drawable  (GdkDrawable    *drawable,
-			    GdkGC          *gc,
-			    GdkPixmap      *src,
-			    gint            xsrc,
-			    gint            ysrc,
-			    gint            xdest,
-			    gint            ydest,
-			    gint            width,
-			    gint            height);
+GdkGC *   _gdk_fb_gc_new                     (GdkDrawable     *drawable,
+					      GdkGCValues     *values,
+					      GdkGCValuesMask  values_mask);
 
-typedef struct {
+#define _GDK_FB_GC_DEPTH (1<<31)
+void      _gdk_fb_gc_calc_state              (GdkGC           *gc,
+					      GdkGCValuesMask  changed);
+
+GdkImage *_gdk_fb_get_image                  (GdkDrawable     *drawable,
+					      gint             x,
+					      gint             y,
+					      gint             width,
+					      gint             height);
+void      gdk_fb_drawable_clear              (GdkDrawable     *drawable);
+void      gdk_fb_draw_drawable               (GdkDrawable     *drawable,
+					      GdkGC           *gc,
+					      GdkPixmap       *src,
+					      gint             xsrc,
+					      gint             ysrc,
+					      gint             xdest,
+					      gint             ydest,
+					      gint             width,
+					      gint             height);
+
+struct _GdkFBDrawingContext {
   GdkWindow *bg_relto;
   GdkPixmap *bgpm;
 
@@ -226,7 +298,7 @@ typedef struct {
   gboolean draw_bg : 1;
   gboolean copy_region : 1;
   gboolean handle_cursor : 1;
-} GdkFBDrawingContext;
+};
 
 void gdk_fb_drawing_context_init(GdkFBDrawingContext *dc, GdkDrawable *drawable,
 				 GdkGC *gc, gboolean draw_bg, gboolean do_clipping);

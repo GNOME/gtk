@@ -39,3 +39,4 @@ GdkEventMask _gdk_fb_pointer_grab_events, _gdk_fb_keyboard_grab_events;
 GdkFBWindow *gdk_root_window = NULL;
 GdkFBDisplay *gdk_display = NULL;
 GdkCursor *_gdk_fb_pointer_grab_cursor;
+GdkGC *_gdk_fb_screen_gc = NULL;

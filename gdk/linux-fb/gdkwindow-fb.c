@@ -135,6 +135,9 @@ _gdk_windowing_window_init (void)
 
   GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->lim_x = attr.width;
   GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->lim_y = attr.height;
+
+  _gdk_fb_screen_gc = gdk_gc_new (gdk_parent_root);
+  
   gdk_fb_drawable_clear (gdk_parent_root);
 }
 
@@ -871,7 +874,9 @@ gdk_fb_window_move_resize (GdkWindow *window,
 		    {
 		      GdkRegionBox *reg = ltmp->data;
 
-		      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL(gdk_parent_root), NULL, GDK_DRAWABLE_IMPL(gdk_parent_root),
+		      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL(gdk_parent_root),
+					      _gdk_fb_screen_gc,
+					      GDK_DRAWABLE_IMPL(gdk_parent_root),
 					      &fbdc,
 					      (reg->x1 - dx),
 					      (reg->y1 - dy),
@@ -1018,7 +1023,7 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
 	      xstep = GDK_DRAWABLE_IMPL_FBDATA (bgpm)->width - draww;
 
 	      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL (window),
-				      NULL,
+				      _gdk_fb_screen_gc,
 				      GDK_DRAWABLE_IMPL (bgpm),
 				      &fbdc,
 				      draww, drawh,
@@ -1030,7 +1035,7 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
       gdk_fb_drawing_context_finalize (&fbdc);
     }
   else if (!bgpm)
-    gdk_fb_draw_rectangle (GDK_DRAWABLE_IMPL (window), NULL, TRUE, x, y, width, height);
+    gdk_fb_draw_rectangle (GDK_DRAWABLE_IMPL (window), _gdk_fb_screen_gc, TRUE, x, y, width, height);
 }
 
 /* What's the diff? */

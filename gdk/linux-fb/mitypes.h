@@ -23,15 +23,8 @@ typedef struct _miDash *miDashPtr;
 #define CT_YXSORTED             14
 #define CT_YXBANDED             18
 
-typedef union {
-  guint32 val;
-  gpointer ptr;
-} ChangeGCVal, *ChangeGCValPtr;
-
 #define PixmapBytePad(w, d) (w)
 #define BitmapBytePad(w) (w)
-
-typedef GdkSegment BoxRec, *BoxPtr;
 
 typedef struct _miArc {
     gint16 x, y;

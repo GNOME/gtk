@@ -201,7 +201,7 @@ _gdk_fb_get_image (GdkDrawable *drawable,
   fbd.drawable_data.window_type = GDK_DRAWABLE_PIXMAP;
 
   gdk_fb_draw_drawable_2 ((GdkPixmap *)&fbd,
-			  NULL,
+			  _gdk_fb_screen_gc,
 			  drawable,
 			  x, y,
 			  0, 0,

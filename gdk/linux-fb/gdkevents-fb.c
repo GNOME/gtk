@@ -204,7 +204,7 @@ fb_events_dispatch (gpointer source_data,
 
   GDK_THREADS_ENTER ();
 
-  while (event = gdk_event_unqueue ())
+  while ((event = gdk_event_unqueue ()))
     {
       if (event->type == GDK_EXPOSE &&
 	  event->expose.window == gdk_parent_root)
