@@ -46,6 +46,9 @@ static GdkKeymap *default_keymap = NULL;
 
 static guint *keysym_tab = NULL;
 
+typedef int (WINAPI *t_ToUnicodeEx) (UINT,UINT,PBYTE,LPWSTR,int,UINT,HKL);
+static t_ToUnicodeEx p_ToUnicodeEx = NULL;
+
 #ifdef G_ENABLE_DEBUG
 static void
 print_keysym_tab (void)
@@ -73,16 +76,264 @@ print_keysym_tab (void)
 #endif
 
 static void
+handle_special (guint  vk,
+		guint *ksymp,
+		gint   shift)
+
+{
+  switch (vk)
+    {
+    case VK_CANCEL:
+      *ksymp = GDK_Cancel; break;
+    case VK_BACK:
+      *ksymp = GDK_BackSpace; break;
+    case VK_TAB:
+      if (shift & 0x1)
+	*ksymp = GDK_ISO_Left_Tab;
+      else
+	*ksymp = GDK_Tab;
+      break;
+    case VK_CLEAR:
+      *ksymp = GDK_Clear; break;
+    case VK_RETURN:
+      *ksymp = GDK_Return; break;
+    case VK_SHIFT:
+    case VK_LSHIFT:
+      *ksymp = GDK_Shift_L; break;
+    case VK_CONTROL:
+    case VK_LCONTROL:
+      *ksymp = GDK_Control_L; break;
+    case VK_MENU:
+    case VK_LMENU:
+      *ksymp = GDK_Alt_L; break;
+    case VK_PAUSE:
+      *ksymp = GDK_Pause; break;
+    case VK_ESCAPE:
+      *ksymp = GDK_Escape; break;
+    case VK_PRIOR:
+      *ksymp = GDK_Prior; break;
+    case VK_NEXT:
+      *ksymp = GDK_Next; break;
+    case VK_END:
+      *ksymp = GDK_End; break;
+    case VK_HOME:
+      *ksymp = GDK_Home; break;
+    case VK_LEFT:
+      *ksymp = GDK_Left; break;
+    case VK_UP:
+      *ksymp = GDK_Up; break;
+    case VK_RIGHT:
+      *ksymp = GDK_Right; break;
+    case VK_DOWN:
+      *ksymp = GDK_Down; break;
+    case VK_SELECT:
+      *ksymp = GDK_Select; break;
+    case VK_PRINT:
+      *ksymp = GDK_Print; break;
+    case VK_EXECUTE:
+      *ksymp = GDK_Execute; break;
+    case VK_INSERT:
+      *ksymp = GDK_Insert; break;
+    case VK_DELETE:
+      *ksymp = GDK_Delete; break;
+    case VK_HELP:
+      *ksymp = GDK_Help; break;
+    case VK_LWIN:
+      *ksymp = GDK_Meta_L; break;
+    case VK_RWIN:
+      *ksymp = GDK_Meta_R; break;
+    case VK_MULTIPLY:
+      *ksymp = GDK_KP_Multiply; break;
+    case VK_ADD:
+      *ksymp = GDK_KP_Add; break;
+    case VK_SEPARATOR:
+      *ksymp = GDK_KP_Separator; break;
+    case VK_SUBTRACT:
+      *ksymp = GDK_KP_Subtract; break;
+    case VK_DIVIDE:
+      *ksymp = GDK_KP_Divide; break;
+    case VK_F1:
+      *ksymp = GDK_F1; break;
+    case VK_F2:
+      *ksymp = GDK_F2; break;
+    case VK_F3:
+      *ksymp = GDK_F3; break;
+    case VK_F4:
+      *ksymp = GDK_F4; break;
+    case VK_F5:
+      *ksymp = GDK_F5; break;
+    case VK_F6:
+      *ksymp = GDK_F6; break;
+    case VK_F7:
+      *ksymp = GDK_F7; break;
+    case VK_F8:
+      *ksymp = GDK_F8; break;
+    case VK_F9:
+      *ksymp = GDK_F9; break;
+    case VK_F10:
+      *ksymp = GDK_F10; break;
+    case VK_F11:
+      *ksymp = GDK_F11; break;
+    case VK_F12:
+      *ksymp = GDK_F12; break;
+    case VK_F13:
+      *ksymp = GDK_F13; break;
+    case VK_F14:
+      *ksymp = GDK_F14; break;
+    case VK_F15:
+      *ksymp = GDK_F15; break;
+    case VK_F16:
+      *ksymp = GDK_F16; break;
+    case VK_F17:
+      *ksymp = GDK_F17; break;
+    case VK_F18:
+      *ksymp = GDK_F18; break;
+    case VK_F19:
+      *ksymp = GDK_F19; break;
+    case VK_F20:
+      *ksymp = GDK_F20; break;
+    case VK_F21:
+      *ksymp = GDK_F21; break;
+    case VK_F22:
+      *ksymp = GDK_F22; break;
+    case VK_F23:
+      *ksymp = GDK_F23; break;
+    case VK_F24:
+      *ksymp = GDK_F24; break;
+    case VK_NUMLOCK:
+      *ksymp = GDK_Num_Lock; break;
+    case VK_SCROLL:
+      *ksymp = GDK_Scroll_Lock; break;
+    case VK_RSHIFT:
+      *ksymp = GDK_Shift_R; break;
+    case VK_RCONTROL:
+      *ksymp = GDK_Control_R; break;
+    case VK_RMENU:
+      *ksymp = GDK_Alt_R; break;
+    }
+}
+
+static void
+set_shift_vks (guchar *key_state,
+	       gint    shift)
+{
+  switch (shift)
+    {
+    case 0:
+      key_state[VK_SHIFT] = 0;
+      key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
+      break;
+    case 1:
+      key_state[VK_SHIFT] = 0x80;
+      key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
+      break;
+    case 2:
+      key_state[VK_SHIFT] = 0;
+      key_state[VK_CONTROL] = key_state[VK_MENU] = 0x80;
+      break;
+    case 3:
+      key_state[VK_SHIFT] = 0x80;
+      key_state[VK_CONTROL] = key_state[VK_MENU] = 0x80;
+      break;
+    }
+}
+
+static void
+reset_after_dead (guchar key_state[256])
+{
+  guchar temp_key_state[256];
+
+  memmove (temp_key_state, key_state, sizeof (key_state));
+
+  temp_key_state[VK_SHIFT] =
+    temp_key_state[VK_CONTROL] =
+    temp_key_state[VK_MENU] = 0;
+
+  if (G_WIN32_HAVE_WIDECHAR_API ())
+    {
+      wchar_t wcs[2];
+      (*p_ToUnicodeEx) (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
+			temp_key_state, wcs, G_N_ELEMENTS (wcs),
+			0, _gdk_input_locale);
+    }
+  else
+    {
+      char chars[2];
+      ToAsciiEx (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
+		 temp_key_state, (LPWORD) chars, 0,
+		 _gdk_input_locale);
+    }
+}
+
+static gboolean
+handle_dead (guint  keysym,
+	     guint *ksymp)
+{
+  switch (keysym)
+    {
+    case '"': /* 0x022 */
+      *ksymp = GDK_dead_diaeresis; break;
+    case '\'': /* 0x027 */
+      *ksymp = GDK_dead_acute; break;
+    case GDK_asciicircum: /* 0x05e */
+      *ksymp = GDK_dead_circumflex; break;
+    case GDK_grave:	/* 0x060 */
+      *ksymp = GDK_dead_grave; break;
+    case GDK_asciitilde: /* 0x07e */
+      *ksymp = GDK_dead_tilde; break;
+    case GDK_diaeresis: /* 0x0a8 */
+      *ksymp = GDK_dead_diaeresis; break;
+    case GDK_degree: /* 0x0b0 */
+      *ksymp = GDK_dead_abovering; break;
+    case GDK_acute:	/* 0x0b4 */
+      *ksymp = GDK_dead_acute; break;
+    case GDK_periodcentered: /* 0x0b7 */
+      *ksymp = GDK_dead_abovedot; break;
+    case GDK_cedilla: /* 0x0b8 */
+      *ksymp = GDK_dead_cedilla; break;
+    case GDK_breve:	/* 0x1a2 */
+      *ksymp = GDK_dead_breve; break;
+    case GDK_ogonek: /* 0x1b2 */
+      *ksymp = GDK_dead_ogonek; break;
+    case GDK_caron:	/* 0x1b7 */
+      *ksymp = GDK_dead_caron; break;
+    case GDK_doubleacute: /* 0x1bd */
+      *ksymp = GDK_dead_doubleacute; break;
+    case GDK_abovedot: /* 0x1ff */
+      *ksymp = GDK_dead_abovedot; break;
+    case 0x1000384: /* Greek tonos */
+      *ksymp = GDK_dead_acute; break;
+    case GDK_Greek_accentdieresis: /* 0x7ae */
+      *ksymp = GDK_Greek_accentdieresis; break;
+    default:
+      return FALSE;
+    }
+  return TRUE;
+}
+
+static void
 update_keymap (void)
 {
   static guint current_serial = 0;
-  guchar key_state[256], temp_key_state[256];
+  guchar key_state[256];
   guint scancode;
   guint vk;
   gboolean capslock_tested = FALSE;
+  static HMODULE user32 = NULL;
 
   if (keysym_tab != NULL && current_serial == _gdk_keymap_serial)
     return;
+
+  g_assert (G_WIN32_HAVE_WIDECHAR_API () || _gdk_input_codepage != 0);
+
+  if (G_WIN32_HAVE_WIDECHAR_API () && user32 == NULL)
+    {
+      user32 = GetModuleHandle ("user32.dll");
+
+      g_assert (user32 != NULL);
+
+      p_ToUnicodeEx = (t_ToUnicodeEx) GetProcAddress (user32, "ToUnicodeEx");
+    }
 
   current_serial = _gdk_keymap_serial;
 
@@ -111,25 +362,7 @@ update_keymap (void)
 	      guint *ksymp = keysym_tab + vk*4 + shift;
 	      guchar chars[2];
 	      
-	      switch (shift)
-		{
-		case 0:
-		  key_state[VK_SHIFT] = 0;
-		  key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
-		  break;
-		case 1:
-		  key_state[VK_SHIFT] = 0x80;
-		  key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
-		  break;
-		case 2:
-		  key_state[VK_SHIFT] = 0;
-		  key_state[VK_CONTROL] = key_state[VK_MENU] = 0x80;
-		  break;
-		case 3:
-		  key_state[VK_SHIFT] = 0x80;
-		  key_state[VK_CONTROL] = key_state[VK_MENU] = 0x80;
-		  break;
-		}
+	      set_shift_vks (key_state, shift);
 
 	      *ksymp = 0;
 
@@ -138,253 +371,108 @@ update_keymap (void)
 	       * turn some them into a ASCII character (like TAB and
 	       * ESC).
 	       */
-	      switch (vk)
-		{
-		case VK_CANCEL:
-		  *ksymp = GDK_Cancel; break;
-		case VK_BACK:
-		  *ksymp = GDK_BackSpace; break;
-		case VK_TAB:
-		  if (shift & 0x1)
-		    *ksymp = GDK_ISO_Left_Tab;
-		  else
-		    *ksymp = GDK_Tab;
-		  break;
-		case VK_CLEAR:
-		  *ksymp = GDK_Clear; break;
-		case VK_RETURN:
-		  *ksymp = GDK_Return; break;
-		case VK_SHIFT:
-		case VK_LSHIFT:
-		  *ksymp = GDK_Shift_L; break;
-		case VK_CONTROL:
-		case VK_LCONTROL:
-		  *ksymp = GDK_Control_L; break;
-		case VK_MENU:
-		case VK_LMENU:
-		  *ksymp = GDK_Alt_L; break;
-		case VK_PAUSE:
-		  *ksymp = GDK_Pause; break;
-		case VK_ESCAPE:
-		  *ksymp = GDK_Escape; break;
-		case VK_PRIOR:
-		  *ksymp = GDK_Prior; break;
-		case VK_NEXT:
-		  *ksymp = GDK_Next; break;
-		case VK_END:
-		  *ksymp = GDK_End; break;
-		case VK_HOME:
-		  *ksymp = GDK_Home; break;
-		case VK_LEFT:
-		  *ksymp = GDK_Left; break;
-		case VK_UP:
-		  *ksymp = GDK_Up; break;
-		case VK_RIGHT:
-		  *ksymp = GDK_Right; break;
-		case VK_DOWN:
-		  *ksymp = GDK_Down; break;
-		case VK_SELECT:
-		  *ksymp = GDK_Select; break;
-		case VK_PRINT:
-		  *ksymp = GDK_Print; break;
-		case VK_EXECUTE:
-		  *ksymp = GDK_Execute; break;
-		case VK_INSERT:
-		  *ksymp = GDK_Insert; break;
-		case VK_DELETE:
-		  *ksymp = GDK_Delete; break;
-		case VK_HELP:
-		  *ksymp = GDK_Help; break;
-		case VK_LWIN:
-		  *ksymp = GDK_Meta_L; break;
-		case VK_RWIN:
-		  *ksymp = GDK_Meta_R; break;
-		case VK_MULTIPLY:
-		  *ksymp = GDK_KP_Multiply; break;
-		case VK_ADD:
-		  *ksymp = GDK_KP_Add; break;
-		case VK_SEPARATOR:
-		  *ksymp = GDK_KP_Separator; break;
-		case VK_SUBTRACT:
-		  *ksymp = GDK_KP_Subtract; break;
-		case VK_DIVIDE:
-		  *ksymp = GDK_KP_Divide; break;
-		case VK_F1:
-		  *ksymp = GDK_F1; break;
-		case VK_F2:
-		  *ksymp = GDK_F2; break;
-		case VK_F3:
-		  *ksymp = GDK_F3; break;
-		case VK_F4:
-		  *ksymp = GDK_F4; break;
-		case VK_F5:
-		  *ksymp = GDK_F5; break;
-		case VK_F6:
-		  *ksymp = GDK_F6; break;
-		case VK_F7:
-		  *ksymp = GDK_F7; break;
-		case VK_F8:
-		  *ksymp = GDK_F8; break;
-		case VK_F9:
-		  *ksymp = GDK_F9; break;
-		case VK_F10:
-		  *ksymp = GDK_F10; break;
-		case VK_F11:
-		  *ksymp = GDK_F11; break;
-		case VK_F12:
-		  *ksymp = GDK_F12; break;
-		case VK_F13:
-		  *ksymp = GDK_F13; break;
-		case VK_F14:
-		  *ksymp = GDK_F14; break;
-		case VK_F15:
-		  *ksymp = GDK_F15; break;
-		case VK_F16:
-		  *ksymp = GDK_F16; break;
-		case VK_F17:
-		  *ksymp = GDK_F17; break;
-		case VK_F18:
-		  *ksymp = GDK_F18; break;
-		case VK_F19:
-		  *ksymp = GDK_F19; break;
-		case VK_F20:
-		  *ksymp = GDK_F20; break;
-		case VK_F21:
-		  *ksymp = GDK_F21; break;
-		case VK_F22:
-		  *ksymp = GDK_F22; break;
-		case VK_F23:
-		  *ksymp = GDK_F23; break;
-		case VK_F24:
-		  *ksymp = GDK_F24; break;
-		case VK_NUMLOCK:
-		  *ksymp = GDK_Num_Lock; break;
-		case VK_SCROLL:
-		  *ksymp = GDK_Scroll_Lock; break;
-		case VK_RSHIFT:
-		  *ksymp = GDK_Shift_R; break;
-		case VK_RCONTROL:
-		  *ksymp = GDK_Control_R; break;
-		case VK_RMENU:
-		  *ksymp = GDK_Alt_R; break;
-		}
+	      handle_special (vk, ksymp, shift);
+
 	      if (*ksymp == 0)
 		{
-		  wchar_t wcs[1];
-		  gint k = ToAsciiEx (vk, scancode, key_state,
-				      (LPWORD) chars, 0, _gdk_input_locale);
+		  wchar_t wcs[10];
+		  gint k;
+
+		  if (G_WIN32_HAVE_WIDECHAR_API ())
+		    {
+		      k = (*p_ToUnicodeEx) (vk, scancode, key_state,
+					    wcs, G_N_ELEMENTS (wcs),
+					    0, _gdk_input_locale);
 #if 0
-		  g_print ("ToAsciiEx(%02x, %d: %d): %d, %02x%02x\n",
-			   vk, scancode, shift, k, chars[0], chars[1]);
+		      g_print ("ToUnicodeEx(%02x, %d: %d): %d, %04x %04x\n",
+			       vk, scancode, shift, k,
+			       (k != 0 ? wcs[0] : 0),
+			       (k >= 2 ? wcs[1] : 0));
 #endif
+		      if (k == 1)
+			*ksymp = gdk_unicode_to_keyval (wcs[0]);
+		    }
+		  else
+		    {
+		      k = ToAsciiEx (vk, scancode, key_state,
+				     (LPWORD) chars, 0, _gdk_input_locale);
+#if 0
+		      g_print ("ToAsciiEx(%02x, %d: %d): %d, %02x %02x\n",
+			       vk, scancode, shift, k,
+			       (k != 0 ? chars[0] : 0),
+			       (k == 2 ? chars[1] : 0));
+#endif
+		      if (k == 1)
+			{
+			  if (_gdk_input_codepage >= 1250 &&
+			      _gdk_input_codepage <= 1258 &&
+			      chars[0] >= GDK_space &&
+			      chars[0] <= GDK_asciitilde)
+			    *ksymp = chars[0];
+			  else
+			    {
+			      if (MultiByteToWideChar (_gdk_input_codepage, 0,
+						       chars, 1, wcs, 1) > 0)
+				*ksymp = gdk_unicode_to_keyval (wcs[0]);
+			    }
+			}
+		      else if (k == -1)
+			{
+			  MultiByteToWideChar (_gdk_input_codepage, 0,
+					       chars, 1, wcs, 1);
+			}
+		    }
+
 		  if (k == 1)
 		    {
-		      if (_gdk_input_codepage >= 1250 &&
-			  _gdk_input_codepage <= 1258 &&
-			  chars[0] >= GDK_space && chars[0] <= GDK_asciitilde)
-			*ksymp = chars[0];
-		      else
-			{
-			  if (MultiByteToWideChar (_gdk_input_codepage, 0,
-						   chars, 1, wcs, 1) > 0)
-			    *ksymp = gdk_unicode_to_keyval (wcs[0]);
-			}
+		      /* Keysym already stored above */
 		    }
 		  else if (k == -1)
 		    {
-		      guint keysym;
-
-		      MultiByteToWideChar (_gdk_input_codepage, 0,
-					   chars, 1, wcs, 1);
+		      guint keysym = gdk_unicode_to_keyval (wcs[0]);
 
 		      /* It is a dead key, and it's has been stored in
-		       * the keyboard layout's state by ToAsciiEx(). 
-		       * Yes, this is an incredibly silly API! Make
-		       * the keyboard layout forget it by calling
-		       * ToAsciiEx() once more, with the virtual key
-		       * code and scancode for the spacebar, without
-		       * shift or AltGr. Otherwise the next call to
-		       * ToAsciiEx() with a different key would try to
-		       * combine with the dead key.
+		       * the keyboard layout's state by
+		       * ToAsciiEx()/ToUnicodeEx(). Yes, this is an
+		       * incredibly silly API! Make the keyboard
+		       * layout forget it by calling
+		       * ToAsciiEx()/ToUnicodeEx() once more, with the
+		       * virtual key code and scancode for the
+		       * spacebar, without shift or AltGr. Otherwise
+		       * the next call to ToAsciiEx() with a different
+		       * key would try to combine with the dead key.
 		       */
+		      reset_after_dead (key_state);
 
-		      memmove (temp_key_state, key_state, sizeof (key_state));
-		      temp_key_state[VK_SHIFT] =
-			temp_key_state[VK_CONTROL] =
-			temp_key_state[VK_MENU] = 0;
-		      ToAsciiEx (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
-				 temp_key_state, (LPWORD) chars, 0,
-				 _gdk_input_locale);
-		      
 		      /* Use dead keysyms instead of "undead" ones */
-		      keysym = gdk_unicode_to_keyval (wcs[0]);
-		      switch (keysym)
-			{
-			case '"': /* 0x022 */
-			  *ksymp = GDK_dead_diaeresis; break;
-			case '\'': /* 0x027 */
-			  *ksymp = GDK_dead_acute; break;
-			case GDK_asciicircum: /* 0x05e */
-			  *ksymp = GDK_dead_circumflex; break;
-			case GDK_grave:	/* 0x060 */
-			  *ksymp = GDK_dead_grave; break;
-			case GDK_asciitilde: /* 0x07e */
-			  *ksymp = GDK_dead_tilde; break;
-			case GDK_diaeresis: /* 0x0a8 */
-			  *ksymp = GDK_dead_diaeresis; break;
-			case GDK_degree: /* 0x0b0 */
-			  *ksymp = GDK_dead_abovering; break;
-			case GDK_acute:	/* 0x0b4 */
-			  *ksymp = GDK_dead_acute; break;
-			case GDK_periodcentered: /* 0x0b7 */
-			  *ksymp = GDK_dead_abovedot; break;
-			case GDK_cedilla: /* 0x0b8 */
-			  *ksymp = GDK_dead_cedilla; break;
-			case GDK_breve:	/* 0x1a2 */
-			  *ksymp = GDK_dead_breve; break;
-			case GDK_ogonek: /* 0x1b2 */
-			  *ksymp = GDK_dead_ogonek; break;
-			case GDK_caron:	/* 0x1b7 */
-			  *ksymp = GDK_dead_caron; break;
-			case GDK_doubleacute: /* 0x1bd */
-			  *ksymp = GDK_dead_doubleacute; break;
-			case GDK_abovedot: /* 0x1ff */
-			  *ksymp = GDK_dead_abovedot; break;
-			case 0x1000384: /* Greek tonos */
-			  *ksymp = GDK_dead_acute; break;
-			case GDK_Greek_accentdieresis: /* 0x7ae */
-			  *ksymp = GDK_Greek_accentdieresis; break;
-			default:
-			  GDK_NOTE (EVENTS,
-				    g_print ("Unhandled dead key cp:%d vk:%02x sc:%x ch:%02x wc:%04x keysym:%04x%s%s\n",
-					     _gdk_input_codepage, vk,
-					     scancode, chars[0],
-					     wcs[0], keysym,
-					     (shift&0x1 ? " shift" : ""),
-					     (shift&0x2 ? " altgr" : "")));
-			}
+		      if (!handle_dead (keysym, ksymp))
+			GDK_NOTE (EVENTS,
+				  g_print ("Unhandled dead key cp:%d vk:%02x sc:%x ch:%02x wc:%04x keysym:%04x%s%s\n",
+					   _gdk_input_codepage, vk,
+					   scancode, chars[0],
+					   wcs[0], keysym,
+					   (shift&0x1 ? " shift" : ""),
+					   (shift&0x2 ? " altgr" : "")));
+
 		    }
 		  else if (k == 0)
 		    {
 		      /* Seems to be necessary to "reset" the keyboard layout
 		       * in this case, too. Otherwise problems on NT4.
 		       */
-		      memmove (temp_key_state, key_state, sizeof (key_state));
-		      temp_key_state[VK_SHIFT] =
-			temp_key_state[VK_CONTROL] =
-			temp_key_state[VK_MENU] = 0;
-		      ToAsciiEx (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
-				 temp_key_state, (LPWORD) chars, 0,
-				 _gdk_input_locale);
+		      reset_after_dead (key_state);
 		    }
 		  else
 		    {
 #if 0
-		      GDK_NOTE (EVENTS, g_print ("ToAsciiEx returns %d "
-						 "for vk:%02x, sc:%02x%s%s\n",
-						 k, vk, scancode,
-						 (shift&0x1 ? " shift" : ""),
-						 (shift&0x2 ? " altgr" : "")));
+		      GDK_NOTE (EVENTS,
+				g_print ("%s returns %d "
+					 "for vk:%02x, sc:%02x%s%s\n",
+					 (G_WIN32_HAVE_WIDECHAR_API () ?
+					  "ToUnicodeEx" : "ToAsciiEx"),
+					 k, vk, scancode,
+					 (shift&0x1 ? " shift" : ""),
+					 (shift&0x2 ? " altgr" : "")));
 #endif
 		    }
 		}
