@@ -885,12 +885,11 @@ gtk_container_queue_resize (GtkContainer *container)
 	}
       else
 	{
-	  /* We need to let hidden toplevels know that something
-	   * changed while they where hidden. For other resize containers,
-	   * they will get resized after they are shown.
+	  /* we need to let hidden resize containers know that something
+	   * changed while they where hidden (currently only evaluated by
+	   * toplevels).
 	   */
-	  if (GTK_WIDGET_TOPLEVEL (resize_container))
-	    gtk_container_check_resize (resize_container);
+	  resize_container->need_resize = TRUE;
 	}
     }
 }
@@ -900,7 +899,7 @@ gtk_container_check_resize (GtkContainer *container)
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
-
+  
   gtk_signal_emit (GTK_OBJECT (container), container_signals[CHECK_RESIZE]);
 }
 

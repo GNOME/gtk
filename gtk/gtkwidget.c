@@ -1426,7 +1426,8 @@ gtk_widget_show (GtkWidget *widget)
   
   if (!GTK_WIDGET_VISIBLE (widget))
     {
-      gtk_widget_queue_resize (widget);
+      if (!GTK_WIDGET_TOPLEVEL (widget))
+	gtk_widget_queue_resize (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
     }
 }
@@ -1509,7 +1510,8 @@ gtk_widget_hide (GtkWidget *widget)
   if (GTK_WIDGET_VISIBLE (widget))
     {
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
-      gtk_widget_queue_resize (widget);
+      if (!GTK_WIDGET_TOPLEVEL (widget))
+	gtk_widget_queue_resize (widget);
     }
 }
 

@@ -1,3 +1,38 @@
+Wed Sep  1 04:41:25 1999  Tim Janik  <timj@gtk.org>
+
+	* cleaned up the GtkContainer.need_resize flag handling mess, we
+	only need to force resize requests when we were prematurely
+	realized, or our widget tree was modified when we were temporarily
+	hidden. handling these cases directly upon showing the window (i.e.
+	while the GdkWindow is still unmapped) avoids the need to wait for
+	a configure event response and therefore makes the GUI more snappier
+	and avoids blank windows during the roundtrip.
+
+	* gtk/gtkwidget.c:
+	(gtk_widget_hide): 
+	(gtk_widget_show): don't queue resizes on toplevels, they know how
+	to deal with matters.
+
+	* gtk/gtkcontainer.c (gtk_container_queue_resize): set the ->need_resize
+	flag directly for not visible resize containers and spare us unecessary
+	signal emissions.
+
+	* gtk/gtkwindow.c:
+	(gtk_window_realize): if we need to enforce premature size allocation,
+	queue a container resize so we are correctly resized later on.
+	(gtk_window_init):
+	(gtk_window_size_request):
+	don't freak around with the ->need_resize flag,
+	gtk_container_queue_resize() will care about that.
+	(gtk_window_show):
+	handle initial resizing issues here, we can handle matters better in
+	this place, especially since we know that our GdkWindow is still
+	unmapped.
+	(gtk_window_move_resize):
+	don't care about ->need_resize at all.
+	handle size changes properly that occoured while we waited for a
+	configure event.
+
 Tue Aug 31 15:58:46 1999  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtkwidget.c (gtk_widget_set_uposition):

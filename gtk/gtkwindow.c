@@ -251,8 +251,6 @@ gtk_window_init (GtkWindow *window)
 
   gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
-  GTK_CONTAINER (window)->need_resize = TRUE;
-
   window->title = NULL;
   window->wmclass_name = g_strdup (g_get_prgname ());
   window->wmclass_class = g_strdup (gdk_progclass);
@@ -853,28 +851,35 @@ gtk_window_finalize (GtkObject *object)
 static void
 gtk_window_show (GtkWidget *widget)
 {
+  gboolean need_resize;
+
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
 
-  if (!GTK_WIDGET_REALIZED (widget))
+  need_resize = GTK_CONTAINER (widget)->need_resize || !GTK_WIDGET_REALIZED (widget);
+  GTK_CONTAINER (widget)->need_resize = FALSE;
+
+  if (need_resize)
     {
       guint width, height;
       GtkAllocation allocation;
       
       gtk_widget_size_request (widget, NULL);
       gtk_window_compute_default_size (GTK_WINDOW (widget), &width, &height);
-
+      
       allocation.width = 0;
       allocation.height = 0;
       allocation.width  = width;
       allocation.height = height;
       
       gtk_widget_size_allocate (widget, &allocation);
-      GTK_CONTAINER (widget)->need_resize = FALSE;
       
-      gtk_widget_realize (widget);
+      if (GTK_WIDGET_REALIZED (widget))
+	gdk_window_resize (widget->window, width, height);
+      else
+	gtk_widget_realize (widget);
     }
   
   gtk_container_check_resize (GTK_CONTAINER (widget));
@@ -950,7 +955,7 @@ gtk_window_realize (GtkWidget *widget)
 
   window = GTK_WINDOW (widget);
 
-  /* size_allocate the widget tree if that hasn't happened yet */
+  /* ensure widget tree is properly size allocated */
   if (widget->allocation.x == -1 &&
       widget->allocation.y == -1 &&
       widget->allocation.width == 1 &&
@@ -958,7 +963,7 @@ gtk_window_realize (GtkWidget *widget)
     {
       GtkRequisition requisition;
       GtkAllocation allocation = { 0, 0, 200, 200 };
-      
+
       gtk_widget_size_request (widget, &requisition);
       if (requisition.width || requisition.height)
 	{
@@ -968,6 +973,8 @@ gtk_window_realize (GtkWidget *widget)
 	}
       gtk_widget_size_allocate (widget, &allocation);
       
+      gtk_container_queue_resize (GTK_CONTAINER (widget));
+
       g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
     }
   
@@ -1044,11 +1051,6 @@ gtk_window_size_request (GtkWidget      *widget,
 
       requisition->width += child_requisition.width;
       requisition->height += child_requisition.height;
-    }
-  else
-    {
-      if (!GTK_WIDGET_VISIBLE (window))
-	GTK_CONTAINER (window)->need_resize = TRUE;
     }
 }
 
@@ -1416,8 +1418,6 @@ gtk_window_check_resize (GtkContainer *container)
 
   if (GTK_WIDGET_VISIBLE (container))
     gtk_window_move_resize (window);
-  else
-    GTK_CONTAINER (window)->need_resize = TRUE;
 }
 
 static void
@@ -1590,8 +1590,12 @@ gtk_window_move_resize (GtkWindow *window)
     }
   else
     gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
-
-  /* handle actuall resizing
+  
+  /* handle actuall resizing:
+   * - handle reallocations due to configure events
+   * - figure whether we need to request a new window size
+   * - handle simple resizes within our widget tree
+   * - reposition window if neccessary
    */
   if (window->handling_resize)
     { 
@@ -1603,30 +1607,21 @@ gtk_window_move_resize (GtkWindow *window)
        * earlier, we go ahead, allocate the new size and we're done
        * (see gtk_window_configure_event() for more details).
        */
-
+      
       window->handling_resize = FALSE;
       
       allocation = widget->allocation;
       
       gtk_widget_size_allocate (widget, &allocation);
       gtk_widget_queue_draw (widget);
-      
-      if (x != -1 && y != -1)
-	gdk_window_move (widget->window, x, y);
     }
-  else if (container->need_resize ||
-	   ((size_changed || hints_changed) &&
-	    (width != new_width || height != new_height)))
+  if ((size_changed || hints_changed) &&
+      (width != new_width || height != new_height))
     {
-      /* we handle two cases here:
-       * - (container->need_resize == TRUE)
-       *   we need a full layout, since visibility has changed and
-       *   we didn't keep track of what changed.
-       * - our requisition has changed and we need a different window size.
+      /* our requisition has changed and we need a different window size,
+       * so we request it from the window manager.
        */
-
-      container->need_resize = FALSE;
-
+      
       /* request a new window size */
       if (x != -1 && y != -1)
 	gdk_window_move_resize (GTK_WIDGET (window)->window, x, y, new_width, new_height);
@@ -1646,7 +1641,7 @@ gtk_window_move_resize (GtkWindow *window)
        * idle handler but when the configure event arrives.
        *
        * FIXME: we should also dequeue the pending redraws here, since
-       * we handle those ourselves in ->need_resize==TRUE.
+       * we handle those ourselves in ->handling_resize==TRUE.
        */
       gtk_container_queue_resize (container);
       if (container->resize_mode == GTK_RESIZE_QUEUE)
@@ -1656,8 +1651,9 @@ gtk_window_move_resize (GtkWindow *window)
     {
       if (x != -1 && y != -1)
 	gdk_window_move (widget->window, x, y);
-      
-      gtk_container_resize_children (GTK_CONTAINER (window));
+
+      if (container->resize_widgets)
+	gtk_container_resize_children (GTK_CONTAINER (window));
     }
 }
 
@@ -1671,7 +1667,7 @@ gtk_window_compare_hints (GdkGeometry *geometry_a,
 {
   if (flags_a != flags_b)
     return FALSE;
-
+  
   if ((flags_a & GDK_HINT_MIN_SIZE) &&
       (geometry_a->min_width != geometry_b->min_width ||
        geometry_a->min_height != geometry_b->min_height))
