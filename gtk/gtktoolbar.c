@@ -3636,12 +3636,13 @@ internal_insert_element (GtkToolbar          *toolbar,
       if (text && use_stock)
 	{
 	  GtkStockItem stock_item;
-	  gtk_stock_lookup (text, &stock_item);
+	  if (gtk_stock_lookup (text, &stock_item))
+	    {
+	      if (!icon)
+		icon = gtk_image_new_from_stock (text, toolbar->icon_size);
 	  
-	  if (!icon)
-	    icon = gtk_image_new_from_stock (text, toolbar->icon_size);
-	  
-	  text = free_me = _gtk_toolbar_elide_underscores (stock_item.label);
+	      text = free_me = _gtk_toolbar_elide_underscores (stock_item.label);
+	    }
 	}
       
       if (text)

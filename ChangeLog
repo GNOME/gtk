@@ -1,3 +1,9 @@
+2004-03-06  Gustavo J. A. M. Carneiro  <gustavo@users.sourceforge.net>
+
+	* gtk/gtktoolbar.c (internal_insert_element): Check return value
+	of gtk_stock_lookup; if stock lookup fails, just use stock_id as
+	label, instead of crashing. Fixes #136202.
+
 2004-03-05  Federico Mena Quintero  <federico@ximian.com>
 
 	* gdk/linux-fb/gdkglobals-fb.c: Make <config.h> the very first
