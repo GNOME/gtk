@@ -1,3 +1,8 @@
+2001-12-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkoptionmenu.sgml: add brief explanation of how to use
+	GtkOptionMenu
+
 2001-11-30  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/tmpl/colors.sgml, gdk/tmpl/pixmaps.sgml, gdk/tmpl/dnd.sgml,

@@ -12,6 +12,16 @@ choice.  When activated the #GtkOptionMenu displays a popup #GtkMenu
 which allows the user to make a new choice.
 </para>
 
+<para>
+Using a #GtkOptionMenu is simple; build a #GtkMenu, by calling
+gtk_menu_new(), then appending menu items to it with 
+gtk_menu_shell_append(). Set that menu on the option menu 
+with gtk_option_menu_set_menu(). Set the selected menu item with
+gtk_option_menu_set_history(); connect to the "changed" signal on
+the option menu; in the "changed" signal, check the new selected 
+menu item with gtk_option_menu_get_history().
+</para>
+
 <!-- ##### SECTION See_Also ##### -->
 
 
