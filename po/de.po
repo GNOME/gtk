@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 2.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-07-29 10:07+0200\n"
-"PO-Revision-Date: 2003-07-39 09:59+0200\n"
+"POT-Creation-Date: 2003-07-29 17:11+0200\n"
+"PO-Revision-Date: 2003-07-29 17:11+0200\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -3599,7 +3599,7 @@ msgstr "_Zurück"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "A_bwärts"
+msgstr "Hin_unter"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
@@ -3607,7 +3607,7 @@ msgstr "_Vor"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "A_ufwärts"
+msgstr "Hin_auf"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
