@@ -22,6 +22,16 @@ Sun Jun 11 10:22:36 2000  Owen Taylor  <otaylor@redhat.com>
 	rather than 8 * sizeof (GdkAtom), to work correctly
 	on Alpha.
 
+Thu Jun  8 21:54:51 2000 Christopher Blizzard  <blizzard@redhat.com>
+
+	* gtk/Makefile.am (DEPS): deps include libgtk-x11.la, not
+	libgtk.la
+	(LDADDS): include libgtk-x11.la and libgdk-x11.la, not the non-x11
+	versions
+
+	* gtk/gtklabel.c (gtk_label_get_text): Make sure that the error
+	checking macros return NULL since the function has a return value.
+
 Wed Jun  7 15:44:42 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (LDFLAGS): Add missing backslash that was keeping
