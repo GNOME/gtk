@@ -1,3 +1,7 @@
+1998-05-18    <sopwith@moebuis.labs.redhat.com>
+
+	* gtk/gtk{debug.h,signal.c,main.c}: Allow GTK_DEBUG=signals
+
 Mon May 18 04:01:41 1998  Tim Janik  <timj@gtk.org>
 
         * gtk/gtkwidget.c (gtk_widget_class_init): changed "proximity-in-event",
