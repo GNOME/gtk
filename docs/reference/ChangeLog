@@ -1,3 +1,7 @@
+2003-06-22  Matthias Clasen  <matthias@localhost.localdomain>
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Fix a typo.
+
 2003-06-19  Matthias Clasen  <maclas@gmx.de>
  
 	* gtk/question_index.sgml: Add a question about changing 
