@@ -136,6 +136,8 @@ gdk_region_rectangle (GdkRectangle *rectangle)
 {
   GdkRegion *temp;
 
+  g_return_val_if_fail (rectangle != NULL, NULL);
+
   if (rectangle->width <= 0 || rectangle->height <= 0)
     return gdk_region_new();
 
@@ -165,6 +167,8 @@ gdk_region_copy (GdkRegion *region)
 {
   GdkRegion *temp;
 
+  g_return_val_if_fail (region != NULL, NULL);
+
   temp = g_new (GdkRegion, 1);
   temp->rects = g_new (GdkRegionBox, region->numRects);
 
@@ -180,6 +184,9 @@ gdk_region_copy (GdkRegion *region)
 void
 gdk_region_get_clipbox (GdkRegion *r, GdkRectangle *rect)
 {
+  g_return_if_fail (r != NULL);
+  g_return_if_fail (rect != NULL);
+  
   rect->x = r->extents.x1;
   rect->y = r->extents.y1;
   rect->width = r->extents.x2 - r->extents.x1;
@@ -236,6 +243,9 @@ gdk_region_union_with_rect (GdkRegion    *region,
 			    GdkRectangle *rect)
 {
   GdkRegion tmp_region;
+
+  g_return_if_fail (region != NULL);
+  g_return_if_fail (rect != NULL);
 
   if (!rect->width || !rect->height)
     return;
@@ -315,8 +325,10 @@ miSetExtents (GdkRegion *pReg)
 void
 gdk_region_destroy (GdkRegion *r)
 {
-    g_free (r->rects);
-    g_free (r);
+  g_return_if_fail (r != NULL);
+  
+  g_free (r->rects);
+  g_free (r);
 }
 
 
@@ -332,6 +344,8 @@ gdk_region_offset (GdkRegion *region,
 {
   int nbox;
   GdkRegionBox *pbox;
+
+  g_return_if_fail (region != NULL);
 
   pbox = region->rects;
   nbox = region->numRects;
@@ -413,6 +427,8 @@ gdk_region_shrink (GdkRegion *r,
 {
   GdkRegion *s, *t;
   int grow;
+
+  g_return_if_fail (r != NULL);
 
   if (!dx && !dy)
     return;
@@ -530,6 +546,9 @@ void
 gdk_region_intersect (GdkRegion *region,
 		      GdkRegion *other)
 {
+  g_return_if_fail (region != NULL);
+  g_return_if_fail (other != NULL);
+  
   /* check for trivial reject */
   if ((!(region->numRects)) || (!(other->numRects))  ||
       (!EXTENTCHECK(&region->extents, &other->extents)))
@@ -1145,6 +1164,9 @@ void
 gdk_region_union (GdkRegion *region,
 		  GdkRegion *other)
 {
+  g_return_if_fail (region != NULL);
+  g_return_if_fail (other != NULL);
+  
   /*  checks all the simple cases */
 
     /*
@@ -1403,6 +1425,9 @@ void
 gdk_region_subtract (GdkRegion *region,
 		     GdkRegion *other)
 {
+  g_return_if_fail (region != NULL);
+  g_return_if_fail (other != NULL);
+  
   /* check for trivial reject */
   if ((!(region->numRects)) || (!(other->numRects)) ||
       (!EXTENTCHECK(&region->extents, &other->extents)))
@@ -1435,6 +1460,9 @@ gdk_region_xor (GdkRegion *sra,
 {
   GdkRegion *trb;
 
+  g_return_if_fail (sra != NULL);
+  g_return_if_fail (srb != NULL);
+
   trb = gdk_region_copy (srb);
 
   gdk_region_subtract (trb, sra);
@@ -1452,6 +1480,8 @@ gdk_region_xor (GdkRegion *sra,
 gboolean
 gdk_region_empty (GdkRegion *r)
 {
+  g_return_val_if_fail (r != NULL, FALSE);
+  
   if (r->numRects == 0)
     return TRUE;
   else
@@ -1466,6 +1496,9 @@ gdk_region_equal (GdkRegion *r1,
 		  GdkRegion *r2)
 {
   int i;
+
+  g_return_val_if_fail (r1 != NULL, FALSE);
+  g_return_val_if_fail (r2 != NULL, FALSE);
 
   if (r1->numRects != r2->numRects) return FALSE;
   else if (r1->numRects == 0) return TRUE;
@@ -1491,6 +1524,8 @@ gdk_region_point_in (GdkRegion *region,
 {
   int i;
 
+  g_return_val_if_fail (region != NULL, FALSE);
+
   if (region->numRects == 0)
     return FALSE;
   if (!INBOX(region->extents, x, y))
@@ -1512,9 +1547,13 @@ gdk_region_rect_in (GdkRegion    *region,
   GdkRegionBox  rect;
   GdkRegionBox *prect = &rect;
   gboolean      partIn, partOut;
+  gint rx, ry;
 
-  gint rx = rectangle->x;
-  gint ry = rectangle->y;
+  g_return_val_if_fail (region != NULL, GDK_OVERLAP_RECTANGLE_OUT);
+  g_return_val_if_fail (rectangle != NULL, GDK_OVERLAP_RECTANGLE_OUT);
+
+  rx = rectangle->x;
+  ry = rectangle->y;
   
   prect->x1 = rx;
   prect->y1 = ry;
@@ -1659,6 +1698,9 @@ gdk_region_spans_intersect_foreach (GdkRegion  *region,
   GdkSpan *span, *tmpspan;
   GdkSpan *end_span;
   GdkSpan out_span;
+
+  g_return_if_fail (region != NULL);
+  g_return_if_fail (spans != NULL);
 
   if (!sorted)
     {

@@ -1,3 +1,8 @@
+Fri Aug  2 16:38:34 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkregion-generic.c: Comprehensively add
+	g_return_[val]if_fail() statements. (#89491, Robin Lu)
+
 Fri Aug  2 16:24:32 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkmain-x11.c: Remove references to 
