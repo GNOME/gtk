@@ -1,3 +1,8 @@
+Fri Apr 30 13:38:16 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c:
+	* gtk/gtkctree.c: merges from gtk-1-2
+
 1999-04-25  Tor Lillqvist  <tml@iki.fi>
 
 	Support added for building using a GNU toolchain on Win32,
