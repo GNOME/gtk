@@ -1,3 +1,9 @@
+Wed Apr 24 17:34:16 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_stop_editing): temporarily set
+	->priv->edited_column to NULL. Pleas read the comment in this
+	function for an explanation (fixes #79632).
+
 2002-04-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_buffer_to_window_coords): 

@@ -9984,7 +9984,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 					   &cell_area,
 					   &expose_area,
 					   0);
-
       cell_offset += column->width;
     }
 
@@ -10676,11 +10675,28 @@ static void
 gtk_tree_view_stop_editing (GtkTreeView *tree_view,
 			    gboolean     cancel_editing)
 {
+  GtkTreeViewColumn *column;
+
   if (tree_view->priv->edited_column == NULL)
     return;
 
-  if (! cancel_editing)
-    gtk_cell_editable_editing_done (tree_view->priv->edited_column->editable_widget);
+  /**
+   * This is very evil. We need to do this, because
+   * gtk_cell_editable_editing_done may trigger gtk_tree_view_row_changed
+   * later on. If gtk_tree_view_row_changed notices
+   * tree_view->priv->edited_column != NULL, it'll call
+   * gtk_tree_view_stop_editing again. Bad things will happen then.
+   *
+   * Please read that again if you intend to modify anything here.
+   */
 
-  gtk_cell_editable_remove_widget (tree_view->priv->edited_column->editable_widget);
+  column = tree_view->priv->edited_column;
+  tree_view->priv->edited_column = NULL;
+
+  if (! cancel_editing)
+    gtk_cell_editable_editing_done (column->editable_widget);
+
+  tree_view->priv->edited_column = column;
+
+  gtk_cell_editable_remove_widget (column->editable_widget);
 }
