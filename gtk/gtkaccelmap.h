@@ -29,14 +29,14 @@ G_BEGIN_DECLS
 typedef void (*GtkAccelMapForeach)		(gpointer	 data,
 						 const gchar	*accel_path,
 						 guint           accel_key,
-						 guint           accel_mods,
+						 GdkModifierType accel_mods,
 						 gboolean	 changed);
 
 
 /* --- public API --- */
 void	   gtk_accel_map_add_entry	(const gchar		*accel_path,
 					 guint			 accel_key,
-					 guint			 accel_mods);
+					 GdkModifierType         accel_mods);
 gboolean   gtk_accel_map_lookup_entry	(const gchar		*accel_path,
 					 GtkAccelKey		*key);
 gboolean   gtk_accel_map_change_entry	(const gchar		*accel_path,

@@ -2603,12 +2603,12 @@ widget_new_accel_closure (GtkWidget *widget,
  * instead.
  */
 void
-gtk_widget_add_accelerator (GtkWidget     *widget,
-			    const gchar   *accel_signal,
-			    GtkAccelGroup *accel_group,
-			    guint          accel_key,
-			    guint          accel_mods,
-			    GtkAccelFlags  accel_flags)
+gtk_widget_add_accelerator (GtkWidget      *widget,
+			    const gchar    *accel_signal,
+			    GtkAccelGroup  *accel_group,
+			    guint           accel_key,
+			    GdkModifierType accel_mods,
+			    GtkAccelFlags   accel_flags)
 {
   GClosure *closure;
   GSignalQuery query;
@@ -2659,10 +2659,10 @@ gtk_widget_add_accelerator (GtkWidget     *widget,
  * gtk_widget_add_accelerator().
  */
 gboolean
-gtk_widget_remove_accelerator (GtkWidget     *widget,
-			       GtkAccelGroup *accel_group,
-			       guint          accel_key,
-			       guint          accel_mods)
+gtk_widget_remove_accelerator (GtkWidget      *widget,
+			       GtkAccelGroup  *accel_group,
+			       guint           accel_key,
+			       GdkModifierType accel_mods)
 {
   GtkAccelGroupEntry *ag_entry;
   GList *slist, *clist;

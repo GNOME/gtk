@@ -125,9 +125,9 @@ _gtk_accel_path_is_valid (const gchar *accel_path)
  * "&lt;Gimp-Toolbox&gt;/File/Dialogs/Tool Options...".
  */
 void
-gtk_accel_map_add_entry (const gchar *accel_path,
-			 guint        accel_key,
-			 guint        accel_mods)
+gtk_accel_map_add_entry (const gchar    *accel_path,
+			 guint           accel_key,
+			 GdkModifierType accel_mods)
 {
   AccelEntry *entry;
 
@@ -589,7 +589,7 @@ static void
 accel_map_print (gpointer        data,
 		 const gchar    *accel_path,
 		 guint           accel_key,
-		 guint           accel_mods,
+		 GdkModifierType accel_mods,
 		 gboolean        changed)
 {
   GString *gstring = g_string_new (changed ? NULL : "; ");

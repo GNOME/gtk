@@ -1,3 +1,16 @@
+Tue Jan 29 21:50:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelmap.[ch] gtk/gtkbindings.[ch] gtk/gtkwidget.[ch]:
+	Consistently use GdkModifierType. (#66950, Mark Patton)
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_new_from_stock):
+	For consistency with gtk_button_new_from_stock(), fall back
+	to gtk_image_menu_item_new_with_mnemnonic(). (#65944,
+	Havoc Pennington)
+	
+	* gtk/gtkitemfactory.[ch] (gtk_item_factory_path_from_widget): 
+	Make G_CONST_RETURN. (#68527, Matt Wilson)
+
 Tue Jan 29 20:56:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk[vh]scale.c (gtk_[vh]scale_new_with_range): Document
