@@ -1,3 +1,10 @@
+2005-01-09  Tor Lillqvist  <tlillqvist@novell.com>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_cursor): Set current
+	cursor also when changing the cursor of a window that is the first
+	ancestor of the window containing the pointer that has a cursor
+	defined. (#163035, Ivan Wong)
+
 2005-01-09  Anders Carlsson <andersca@gnome.org>
 
 	* gtk/gtkcellrenderertext.c: (get_size):

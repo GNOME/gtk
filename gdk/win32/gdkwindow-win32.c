@@ -1823,10 +1823,31 @@ gdk_window_set_cursor (GdkWindow *window,
 			       hcursor, impl->hcursor));
     }
 
-  /* If the pointer is over our window, set new cursor if given */
-  if (gdk_window_get_pointer(window, NULL, NULL, NULL) == window)
-    if (impl->hcursor != NULL)
-      SetCursor (impl->hcursor);
+  if (impl->hcursor != NULL)
+    {
+      /* If the pointer is over our window, set new cursor */
+      GdkWindow *curr_window = gdk_window_get_pointer (window, NULL, NULL, NULL);
+      if (curr_window == window)
+        SetCursor (impl->hcursor);
+      else
+	{
+	  /* Climb up the tree and find whether our window is the
+	   * first ancestor that has cursor defined, and if so, set
+	   * new cursor.
+	   */
+	  GdkWindowObject *curr_window_obj = GDK_WINDOW_OBJECT (curr_window);
+	  while (curr_window_obj &&
+		 !GDK_WINDOW_IMPL_WIN32 (curr_window_obj->impl)->hcursor)
+	    {
+	      curr_window_obj = curr_window_obj->parent;
+	      if (curr_window_obj == GDK_WINDOW_OBJECT (window))
+		{
+	          SetCursor (impl->hcursor);
+		  break;
+		}
+	    }
+	}
+    }
 
   /* Destroy the previous cursor: Need to make sure it's no longer in
    * use before we destroy it, in case we're not over our window but
