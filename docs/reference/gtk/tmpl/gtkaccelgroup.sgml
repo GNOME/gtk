@@ -106,6 +106,7 @@ Deprecated equivalent of g_object_unref().
 @closure: 
 @data: 
 @Returns: 
+@Since: 2.2
 
 
 <!-- ##### FUNCTION gtk_accel_group_disconnect ##### -->

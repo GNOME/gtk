@@ -286,6 +286,7 @@ cleaned from any arguments that GTK+ handles itself.
 </para>
 
 @display: 
+@Since: 2.2
 
 
 <!-- ##### FUNCTION gtk_true ##### -->

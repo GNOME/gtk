@@ -237,6 +237,7 @@ time.
 @screen: 
 @colors: 
 @n_colors: 
+@Since: 2.2
 
 
 <!-- ##### FUNCTION gtk_color_selection_set_color ##### -->

@@ -143,6 +143,7 @@ module. Only modules should access the fields directly.
 @extensions: a %NULL-terminated array of typical filename extensions for the
 image format.
 @flags: 
+@Since: 2.2
 
 <!-- ##### ENUM GdkPixbufFormatFlags ##### -->
 <para>
@@ -150,6 +151,7 @@ image format.
 </para>
 
 @GDK_PIXBUF_FORMAT_WRITABLE: 
+@Since: 2.2
 
 <!-- ##### STRUCT GdkPixbufModulePattern ##### -->
 <para>
@@ -170,6 +172,8 @@ The signature of a module is stored as an array of
 @mask: mask containing bytes which modify how the prefix is matched against
   test data
 @relevance: relevance of this pattern
+@Since: 2.2
+
 
 <!-- ##### USER_FUNCTION GdkPixbufModuleFillVtableFunc ##### -->
 <para>
@@ -178,6 +182,8 @@ Defines the type of the function used to set the vtable of a
 </para>
 
 @module: a #GdkPixbufModule.
+@Since: 2.2
+
 
 
 <!-- ##### USER_FUNCTION GdkPixbufModuleFillInfoFunc ##### -->
@@ -187,6 +193,8 @@ Defines the type of the function used to fill a
 </para>
 
 @info: a #GdkPixbufFormat.
+@Since: 2.2
+
 
 
 <!-- ##### USER_FUNCTION GdkPixbufModuleSizeFunc ##### -->
@@ -205,6 +213,8 @@ then perform the required scaling on the completely loaded image.
 @width: pointer to a location containing the current image width
 @height: pointer to a location containing the current image height
 @user_data: the loader.
+@Since: 2.2
+
 
 
 <!-- ##### USER_FUNCTION GdkPixbufModulePreparedFunc ##### -->
@@ -221,6 +231,8 @@ signal.
 @pixbuf: the #GdkPixbuf that is currently being loaded.
 @anim: if an animation is being loaded, the #GdkPixbufAnimation, else %NULL.
 @user_data: the loader.
+@Since: 2.2
+
 
 
 <!-- ##### USER_FUNCTION GdkPixbufModuleUpdatedFunc ##### -->
@@ -240,6 +252,8 @@ signal.
 @width: the width of the updated area.
 @height: the height of the updated area.
 @user_data: the loader.
+@Since: 2.2
+
 
 
 <!-- ##### STRUCT GdkPixbufModule ##### -->

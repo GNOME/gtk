@@ -251,9 +251,10 @@ gdk_colormap_alloc_color (GdkColormap *colormap,
  *    <structfield>pixel</structfield> field will be filled in.
  * 
  * Allocates a single color from a colormap.
- * This function is obsolete. See gdk_colormap_alloc_color().
  * 
  * Return value: %TRUE if the allocation succeeded.
+ *
+ * Deprecated: Use gdk_colormap_alloc_color() instead.
  **/
 gboolean
 gdk_color_alloc (GdkColormap *colormap,

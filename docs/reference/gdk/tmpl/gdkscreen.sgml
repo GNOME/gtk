@@ -29,6 +29,7 @@ the @window_at_pointer function in #GdkPointerHooks. It will be used
 when GDK gets multihead support. 
 </para>
 
+@Since: 2.2
 
 <!-- ##### FUNCTION gdk_screen_get_default ##### -->
 <para>

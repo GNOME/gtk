@@ -375,8 +375,9 @@ Obtains the #GdkFont for the given Xlib font ID on @display, or %NULL if no
 #GdkFont has been created for @xid.
 </para>
 
-@display: 
-@xid: 
+@display: a #GdkDisplay
+@xid: an Xlib font ID
+Since: 2.2
 
 
 <!-- ##### FUNCTION gdk_x11_lookup_xdisplay ##### -->

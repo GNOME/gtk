@@ -22,6 +22,7 @@ The <structname>GdkDisplayManager</structname> struct has no interesting
 fields.
 </para>
 
+@Since: 2.2
 
 <!-- ##### FUNCTION gdk_display_manager_get ##### -->
 <para>

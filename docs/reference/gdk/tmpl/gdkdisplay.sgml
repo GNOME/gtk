@@ -34,6 +34,7 @@ The <structname>GdkDisplay</structname> struct is the GDK representation
 of an X display. All its fields are private and should not be accessed directly. 
 </para>
 
+@Since: 2.2
 
 <!-- ##### FUNCTION gdk_display_open ##### -->
 <para>
@@ -240,6 +241,7 @@ Applications should never have any reason to use this facility
   returning the location of that window in @win_x, @win_y. Returns %NULL 
   if the window under the mouse pointer is not known to GDK (for example, 
   belongs to another application).
+@Since: 2.2
 
 <!-- ##### FUNCTION gdk_display_set_pointer_hooks ##### -->
 <para>

@@ -1,5 +1,16 @@
 2002-12-06  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/tmpl/x_interaction.sgml: 
+	* gdk/tmpl/gdkscreen.sgml: 
+	* gdk/tmpl/gdkdisplaymanager.sgml: 
+	* gdk/tmpl/gdkdisplay.sgml: 
+	* gtk/tmpl/gtkstock.sgml: 
+	* gtk/tmpl/gtkwidget.sgml: 
+	* gtk/tmpl/gtkmain.sgml: 
+	* gtk/tmpl/gtkcolorsel.sgml: 
+	* gtk/tmpl/gtkaccelgroup.sgml: 
+	* gdk-pixbuf/tmpl/module_interface.sgml: Add "Since" information.
+
 	* gtk/gtk-sections.txt: Replace gtk_list_store_move by
 	_move_before and _move_after.
 
