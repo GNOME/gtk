@@ -74,3 +74,30 @@ min_width <= max_width
 
 (column != last visible column) => width == CLAMP (requested_width, min_width, max_width)
 
+
+HOW THE VERTICAL OFFSET IS CALCULATED
+(This has nothing to do with columns)
+=====================================
+
+The current offset of the tree is determined by:
+
+tree_view->priv->dy
+
+All motion/button/expose events take this as the offset when trying to
+draw the tree.  There are also two other related members:
+
+tree_view->priv->top_row
+tree_view->priv->top_row_dy
+
+In general _gtk_rbtree_node_find_offset (tree_view->priv->top_row) +
+tree_view->priv->top_row_dy is the same as tree_view->priv->dy.
+We have the alternate method so we can update dy when the tree changes.
+There are two functions:
+
+gtk_tree_view_dy_to_top_row
+   and
+gtk_tree_view_top_row_to_dy
+
+They are called when the tree's confirmation changes, in order to sync
+the value appropriately.  Note that these two functions sometimes call
+each other to negotiate a correct value if needed.
