@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-27 12:47+0200\n"
-"PO-Revision-Date: 2004-10-27 12:48+0200\n"
+"PO-Revision-Date: 2004-11-14 21:33+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:195
 msgid "Program version"
-msgstr ""
+msgstr "Programversjon"
 
 #: gtk/gtkaboutdialog.c:196
 #, fuzzy
@@ -145,7 +145,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:241
 msgid "Authors"
-msgstr ""
+msgstr "Forfattere"
 
 #: gtk/gtkaboutdialog.c:242
 msgid "List of authors of the programs"
@@ -178,7 +178,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:272
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: gtk/gtkaboutdialog.c:273
 msgid ""
