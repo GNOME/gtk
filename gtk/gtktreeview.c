@@ -8747,6 +8747,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 			 GtkTreeModel *model)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (GTK_IS_TREE_MODEL (model));
 
   if (model == tree_view->priv->model)
     return;
