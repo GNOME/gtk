@@ -1,3 +1,7 @@
+2003-01-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in (DEVZIP): Add gdk-pixbuf-csource.exe and .1.
+
 2003-01-03  Havoc Pennington  <hp@pobox.com>
 
 	* docs/Makefile.am (EXTRA_DIST): put it in EXTRA_DIST
