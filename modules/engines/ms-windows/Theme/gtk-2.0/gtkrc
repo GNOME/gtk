@@ -10,6 +10,8 @@ style "wimp-default"
   GtkButton::child_displacement_x = 1
   GtkButton::child_displacement_y = 1
 
+  GtkTreeView::allow-rules = 0
+
   engine "wimp" 
   {
   }

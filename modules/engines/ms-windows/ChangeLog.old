@@ -1,5 +1,8 @@
 2003-08-20  Raymond Penners <raymond@dotsphinx.com>
 
+	* src/Theme/gtk-2.0/gtkrc: Disabled the colored, alternating
+	rules for GtkTreeViews to match the Windows behaviour.
+
 	* */Makefile.msc: Provided MS-VC++ make files.
 	
 	* src/xp_theme.c: The open/close tree expander symbols were
