@@ -1,5 +1,8 @@
 2005-03-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/editable_cells.c: Use GtkCellRendererCombo
+	(#169607, Mark McLoughlin)
+	
 	* gtk/gtk.symbols: Add the new attributes here, too.
 
 	* gtk/gtkwidget.h: 
