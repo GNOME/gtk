@@ -901,8 +901,9 @@ gtk_text_freeze (GtkText *text)
 {
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
-  
+
   text->freeze_count++;
+  undraw_cursor (text, FALSE);
 }
 
 void
@@ -917,6 +918,7 @@ gtk_text_thaw (GtkText *text)
 	recompute_geometry (text);
 	gtk_widget_queue_draw (GTK_WIDGET (text));
       }
+  draw_cursor (text, FALSE);
 }
 
 void

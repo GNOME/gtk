@@ -1,3 +1,22 @@
+Sat Oct 23 03:03:08 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktext.c (gtk_text_freeze): 
+	(gtk_text_thaw): undraw/draw cursor here to avoid unnecessary scrolling
+	in frozen state (and aparently crashes). patch provided by Anders
+	Melchiorsen <and@kampsax.dtu.dk>.
+
+Sat Oct 23 02:53:20 1999  Tim Janik  <timj@gtk.org>
+
+	* fix insensitive default/focus widget activation,
+	reported by Matt Goodall <mgg@isotek.co.uk>.
+
+	* gtk/gtkwindow.c (gtk_window_key_press_event): 
+	(gtk_window_activate_default):
+	(gtk_window_activate_focus):
+	return handled=FALSE for actiavtion of insensitive default
+	widgets. return handled=TRUE for activation of insensitive
+	focus widgets. don't activate in either case.
+
 Tue Oct 19 09:55:08 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk-config.in (lib_gtk): Switch order of @x_cflags@

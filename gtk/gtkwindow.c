@@ -525,7 +525,8 @@ gtk_window_activate_focus (GtkWindow      *window)
 
   if (window->focus_widget)
     {
-      gtk_widget_activate (window->focus_widget);
+      if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+	gtk_widget_activate (window->focus_widget);
       return TRUE;
     }
 
@@ -538,7 +539,7 @@ gtk_window_activate_default (GtkWindow      *window)
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (window->default_widget)
+  if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget))
     {
       gtk_widget_activate (window->default_widget);
       return TRUE;
@@ -1179,22 +1180,23 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	case GDK_space:
 	  if (window->focus_widget)
 	    {
-	      gtk_widget_activate (window->focus_widget);
+	      if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+		gtk_widget_activate (window->focus_widget);
 	      handled = TRUE;
 	    }
 	  break;
 	case GDK_Return:
 	case GDK_KP_Enter:
-	  if (window->default_widget &&
-	      (!window->focus_widget || 
-	       !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget)))
+	  if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget) &&
+	      (!window->focus_widget || !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget)))
 	    {
 	      gtk_widget_activate (window->default_widget);
 	      handled = TRUE;
 	    }
           else if (window->focus_widget)
 	    {
-	      gtk_widget_activate (window->focus_widget);
+	      if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+		gtk_widget_activate (window->focus_widget);
 	      handled = TRUE;
 	    }
 	  break;
