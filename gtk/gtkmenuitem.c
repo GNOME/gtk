@@ -962,7 +962,8 @@ gtk_menu_item_select_timeout (gpointer data)
 
   parent = GTK_WIDGET (menu_item)->parent;
 
-  if (parent && GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->active)
+  if ((GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->active) || 
+      (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off))
     {
       gtk_menu_item_popup_submenu (data);
       if (menu_item->timer_from_keypress && menu_item->submenu)

@@ -1,3 +1,8 @@
+Thu May  6 23:48:42 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_select_timeout): Also 
+	popup the submenu for items in torn off menus.  (#122051)
+	
 2004-05-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_state_changed): Remove
