@@ -100,6 +100,8 @@ gdk_fb_gc_finalize (GObject *obj)
     gdk_pixmap_unref(GDK_GC_FBDATA (gc)->values.stipple);
   if (GDK_GC_FBDATA (gc)->values.tile)
     gdk_pixmap_unref(GDK_GC_FBDATA (gc)->values.tile);
+
+  G_OBJECT_CLASS (parent_class)->finalize (obj);
 }
 
 static void

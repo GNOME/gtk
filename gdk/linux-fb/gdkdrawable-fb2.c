@@ -209,6 +209,9 @@ gdk_fb_clip_region(GdkDrawable *drawable, GdkGC *gc, gboolean do_clipping, gbool
   if(skipit)
     return real_clip_region;
 
+  if(gc && GDK_GC_FBDATA(gc)->values.subwindow_mode == GDK_INCLUDE_INFERIORS)
+    do_children = FALSE;
+
   if(do_clipping && GDK_IS_WINDOW(GDK_DRAWABLE_FBDATA(drawable)->wrapper) && GDK_WINDOW_P(GDK_DRAWABLE_P(drawable)->wrapper)->mapped && !GDK_WINDOW_P(GDK_DRAWABLE_FBDATA(drawable)->wrapper)->input_only)
     {
       GdkWindow *parentwin, *lastwin;

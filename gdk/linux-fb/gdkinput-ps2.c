@@ -922,7 +922,7 @@ keyboard_get_state(Keyboard *k)
   return retval;
 }
 
-static GdkWindow *
+GdkWindow *
 gdk_window_find_focus(void)
 {
   if(_gdk_fb_keyboard_grab_window)

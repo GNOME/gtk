@@ -472,6 +472,7 @@ pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
   FT_GlyphSlot g;
   PangoRectangle *my_logical_rect, *my_ink_rect;
   FT_Face ftf;
+  gboolean free_buffer = FALSE;
 
   ftf = fbf->ftf;
 
@@ -506,6 +507,7 @@ pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph)
 	g_error("Glyph render failed");
 
       renderme = &bgy->bitmap;
+      free_buffer = TRUE;
     }
   else
     renderme = &g->bitmap;
