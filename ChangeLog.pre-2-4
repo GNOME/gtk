@@ -55,7 +55,6 @@ Wed Nov 15 16:02:20 2000  Owen Taylor  <otaylor@redhat.com>
 
 2000-11-15  Havoc Pennington  <hp@redhat.com>
 
->>>>>>> 1.1532
 	* gtk/gtktextview.c (changed_handler): offset redraw rect by
 	xoffset in addition to yoffset, so horizontal scrolling doesn't
 	break redraws
