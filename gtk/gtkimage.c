@@ -261,7 +261,7 @@ gtk_image_class_init (GtkImageClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_STORAGE_TYPE,
-                                   g_param_spec_enum ("storage-Type",
+                                   g_param_spec_enum ("storage-type",
                                                       P_("Storage type"),
                                                       P_("The representation being used for image data"),
                                                       GTK_TYPE_IMAGE_TYPE,
