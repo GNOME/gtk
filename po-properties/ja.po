@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-12-04 01:02+0900\n"
+"POT-Creation-Date: 2004-12-17 10:05+0900\n"
+"PO-Revision-Date: 2004-12-17 10:03+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -2231,61 +2231,51 @@ msgstr "アイコンビューのモデル"
 
 #: gtk/gtkiconview.c:397
 msgid "The model for the icon view"
-msgstr "アイコン表示に使用するモデル"
+msgstr "アイコン表示に使用するモデルです"
 
 #: gtk/gtkiconview.c:413
-#, fuzzy
 msgid "Number of columns"
-msgstr "チャンネルの数"
+msgstr "X-方向に表示するアイテムの数"
 
 #: gtk/gtkiconview.c:414
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "表示する 10 進単位の数"
+msgstr "X-方向に表示するアイテムの数です"
 
 #: gtk/gtkiconview.c:431
-#, fuzzy
 msgid "Width for each item"
-msgstr "項目のラベルとして使用されるウィジェット"
+msgstr "各アイテムの幅"
 
 #: gtk/gtkiconview.c:432
 msgid "The width used for each item"
-msgstr ""
+msgstr "各アイテムで使用する幅です"
 
 #: gtk/gtkiconview.c:448
-#, fuzzy
 msgid "Space which is inserted between cells of an item"
-msgstr "セルの間に挿入する領域"
+msgstr "X-方向のアイテムとアイテムの間に挿入する空き領域です"
 
 #: gtk/gtkiconview.c:463
-#, fuzzy
 msgid "Row Spacing"
 msgstr "行の間隔"
 
 #: gtk/gtkiconview.c:464
-#, fuzzy
 msgid "Space which is inserted between grid rows"
-msgstr "セルの間に挿入する領域"
+msgstr "Y-方向のグリッドの間に挿入する空き領域です"
 
 #: gtk/gtkiconview.c:479
-#, fuzzy
 msgid "Column Spacing"
 msgstr "列の間隔"
 
 #: gtk/gtkiconview.c:480
-#, fuzzy
 msgid "Space which is inserted between grid column"
-msgstr "セルの間に挿入する領域"
+msgstr "X-方向のグリッドの間に挿入する空き領域です"
 
 #: gtk/gtkiconview.c:495
-#, fuzzy
 msgid "Margin"
-msgstr "左マージン"
+msgstr "マージン"
 
 #: gtk/gtkiconview.c:496
-#, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "セルの間に挿入する領域"
+msgstr "アイコン表示の隅に挿入する空き領域です"
 
 #: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2506,14 +2496,12 @@ msgid "Angle at which the label is rotated"
 msgstr "ラベルを回転させる際の角度です"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "ボタンの幅"
+msgstr "文字数単位での最大幅"
 
 #: gtk/gtklabel.c:514
-#, fuzzy
 msgid "The desired maximum width of the label, in characters"
-msgstr "ラベルの幅 (文字単位)"
+msgstr "ラベルの最大幅 (文字数) です"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -4891,6 +4879,3 @@ msgstr "IM ステータスのスタイル"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "入力メソッドのステータスバーの表示方法"
-
-#~ msgid "Width In Chararacters"
-#~ msgstr "ラベルの幅"

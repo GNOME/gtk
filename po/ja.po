@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-11-04 02:03+0900\n"
+"POT-Creation-Date: 2004-12-17 10:06+0900\n"
+"PO-Revision-Date: 2004-12-17 09:51+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -915,7 +915,7 @@ msgstr "calendar:week_start:0"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr ""
+msgstr "プログレスバーのラベル|%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1089,7 +1089,7 @@ msgstr "ファイルの選択"
 
 #: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
-msgstr ""
+msgstr "その他..."
 
 #: gtk/gtkfilechooserdefault.c:863
 #, c-format
@@ -2213,9 +2213,3 @@ msgstr "X 入力メソッド"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ファイル '%s' の情報を取得できませんでした: %s"
-
-#~ msgid "Could not find the path"
-#~ msgstr "パスが見つかりませんでした"
-
-#~ msgid "Input Methods"
-#~ msgstr "入力メソッド"
