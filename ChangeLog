@@ -1,3 +1,7 @@
+2004-11-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2004-11-29  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (trap_activate_cb): Don't handle
@@ -92,7 +96,6 @@
 	in unfocused selected cells. Also avoid creating two PangoLayouts
 	per render call.  (#154615, #154611, Billy Biggs)
 
->>>>>>> 1.5367.2.315
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c: 

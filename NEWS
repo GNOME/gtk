@@ -1,3 +1,32 @@
+Overview of Changes from GTK+ 2.4.13 to GTK+ 2.4.14
+===================================================
+* GtkFileChooser
+  - Improve keybindings [Federico Mena Quintero]
+  - Speed up loading of large directories [Federico]
+  - Move "Browse for other folders" expander up [Federico]
+  - Support DND from the path bar [Federico]
+* GtkUIManager
+  - Speed up [Dave Neary, Michael Natterer, Sven Neumann,
+    Soeren Sandmann]
+* GtkTreeView
+  - Fix resizing artifacts in empty, focused 
+    treeviews  [Billy Biggs, Vincent Noel]
+* GtkSettings
+  - Handle changes to gtk-menu-images and gtk-button-images
+    much more efficiently [Matthias Clasen]
+* GDK
+  - Allow to set wm hints on leader windows [Sebastien Bacher]
+* Win32
+  - Implement resize grips  [Robert Ögren]
+  - Bug fixes [Robert, Tor Lillqvist]
+* Bug fixes [Morten Welinder, William Jon McCann, 
+  Anders Carlsson, Philip Langdale, Christian Persch,
+  John Finlay, Carlos Garnacho Parro, Tim Janik, Gavin Romig-Koch,
+  Jonathan Blandford, Billy Biggs, Federico, Christian Neumair,
+  Kristian Høgsberg]
+Updated translations (ca,id,nb,no,pa,zh_CN)
+Bugs fixed 155400,154945,155658,155881,156863,143285,156573,155545,157301,157528,152035,143668,137551,143668,154615,154611,155744,158477,141077,158475,159373
+
 Overview of Changes from GTK+ 2.4.11 to GTK+ 2.4.13
 ===================================================
 * Fix size allocation problems. [Crispin Flowerday, Tim Janik, Tommi Komulainen, Owen Taylor]
