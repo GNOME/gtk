@@ -1,3 +1,8 @@
+2004-10-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaboutdialog.c (gtk_show_about_dialog): Destroy
+	the dialog with the parent.  (#156557, Paolo Borelli)
+
 2004-10-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* Bump version

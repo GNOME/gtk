@@ -2014,6 +2014,7 @@ gtk_show_about_dialog (GtkWindow   *parent,
       if (parent) 
 	{
 	  gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+	  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 	  g_object_set_data_full (G_OBJECT (parent), "gtk-about-dialog", 
 				  dialog, g_object_unref);
 	}
