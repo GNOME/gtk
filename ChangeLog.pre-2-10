@@ -1,3 +1,10 @@
+Sat Jan 24 17:38:48 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkradiotoolbutton.c (gtk_radio_tool_button_class_init):
+	Add a write-only property ::group to be consistent with
+	GtkRadioAction and GtkRadioButton. (#132159, Patch from Olivier
+	Andrieu)
+
 Fri Jan 23 23:46:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfontbutton.c (gtk_font_button_label_use_font): Don't leak the 
