@@ -1,3 +1,13 @@
+Sat Dec 19 17:28:30 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Don't add the gthread libs to 
+	GLIB_LIBS either, or -lgthread -lpthread will get 
+	pulled into all applications because of shlib deps.
+
+	* gtk/gtkmain.h gtk/gtkwidget.c gtk/gtk gdk/gdk: 
+	Use GLIB's priority #define. Revise scale of 
+	priorities.
+
 Sat Dec 19 03:44:29 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkmain.c: always run a g_main_iteration, even if

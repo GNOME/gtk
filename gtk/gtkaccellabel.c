@@ -304,7 +304,7 @@ gtk_accel_label_queue_refetch (GtkAccelLabel *accel_label)
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
   if (accel_label->queue_id == 0)
-    accel_label->queue_id = gtk_idle_add_priority (GTK_PRIORITY_HIGH - 2,
+    accel_label->queue_id = gtk_idle_add_priority (G_PRIORITY_HIGH_IDLE,
 						   (GtkFunction) gtk_accel_label_refetch_idle,
 						   accel_label);
 }

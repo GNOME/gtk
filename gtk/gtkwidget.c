@@ -1731,7 +1731,7 @@ gtk_widget_queue_draw_data (GtkWidget *widget,
 	{
 	  GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_PENDING);
 	  if (gtk_widget_redraw_queue == NULL)
-	    gtk_idle_add_priority (GTK_PRIORITY_INTERNAL,
+	    gtk_idle_add_priority (GTK_PRIORITY_REDRAW,
 				   gtk_widget_idle_draw,
 				   NULL);
 	  gtk_widget_redraw_queue = g_slist_prepend (gtk_widget_redraw_queue, widget);

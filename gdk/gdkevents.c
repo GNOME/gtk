@@ -122,7 +122,7 @@ gdk_events_init (void)
   GDK_NOTE (MISC,
 	    g_message ("connection number: %d", connection_number));
 
-  g_source_add (-10, TRUE, &event_funcs, NULL, NULL, NULL);
+  g_source_add (G_PRIORITY_DEFAULT, TRUE, &event_funcs, NULL, NULL, NULL);
 
   event_poll_fd.fd = connection_number;
   event_poll_fd.events = G_IO_IN;
@@ -767,7 +767,8 @@ gdk_input_add_full (gint	      source,
     cond |= G_IO_ERR|G_IO_HUP|G_IO_NVAL;
 
   channel = g_io_channel_unix_new (source);
-  result = g_io_add_watch_full   (channel, 0, cond, gdk_io_invoke,
+  result = g_io_add_watch_full   (channel, G_PRIORITY_DEFAULT, cond, 
+				  gdk_io_invoke,
 				  closure, gdk_io_destroy);
   g_io_channel_unref (channel);
 

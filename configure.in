@@ -188,6 +188,7 @@ if test x$with_glib = x ; then
   # we do not want to make all gtk progs to link to thread libraries.
   glib_cflags=`$GLIB_CONFIG glib gmodule --cflags`
   glib_libs=`$GLIB_CONFIG glib gmodule --libs`
+  GLIB_LIBS="$glib_libs"
 else
   # Use uninstalled glib (assume they got the version right)
 
@@ -199,8 +200,8 @@ else
   fi
 
   # For use in gtk-config
-  glib_cflags=`$GLIB_CONFIG --cflags`
-  glib_libs=`$GLIB_CONFIG --libs`
+  glib_cflags=`$GLIB_CONFIG --cflags gmodule`
+  glib_libs=`$GLIB_CONFIG --libs gmodule`
 
   glib_release=`$GLIB_CONFIG --version | sed 's%\\.[[0-9]]*$%%'`
 

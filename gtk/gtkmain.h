@@ -28,10 +28,17 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GTK_PRIORITY_HIGH      -20
-#define GTK_PRIORITY_INTERNAL  -10
-#define GTK_PRIORITY_DEFAULT	-5
-#define GTK_PRIORITY_LOW	10
+/* Priorities for redrawing and resizing
+ */
+#define GTK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
+#define GTK_PRIORITY_RESIZE     (G_PRIORITY_HIGH_IDLE + 10)
+
+/* Deprecated. Use G_PRIORITY #define's instead
+ */
+#define GTK_PRIORITY_HIGH       G_PRIORITY_HIGH
+#define GTK_PRIORITY_INTERNAL   GTK_PRIORITY_REDRAW
+#define GTK_PRIORITY_DEFAULT	G_PRIORITY_DEFAULT_IDLE
+#define GTK_PRIORITY_LOW	G_PRIORITY_LOW
 
 typedef void	(*GtkModuleInitFunc)	(gint		*argc,
 					 gchar	      ***argv);
