@@ -249,22 +249,22 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
       
       if (((i + check_y) >> check_shift) & 1)
 	{
-	  r1 = color2 & 0xff0000 >> 16;
-	  g1 = color2 & 0xff00 >> 8;
+	  r1 = (color2 & 0xff0000) >> 16;
+	  g1 = (color2 & 0xff00) >> 8;
 	  b1 = color2 & 0xff;
 
-	  r2 = color1 & 0xff0000 >> 16;
-	  g2 = color1 & 0xff00 >> 8;
+	  r2 = (color1 & 0xff0000) >> 16;
+	  g2 = (color1 & 0xff00) >> 8;
 	  b2 = color1 & 0xff;
 	}
       else
 	{
-	  r1 = color1 & 0xff0000 >> 16;
-	  g1 = color1 & 0xff00 >> 8;
+	  r1 = (color1 & 0xff0000) >> 16;
+	  g1 = (color1 & 0xff00) >> 8;
 	  b1 = color1 & 0xff;
 
-	  r2 = color2 & 0xff0000 >> 16;
-	  g2 = color2 & 0xff00 >> 8;
+	  r2 = (color2 & 0xff0000) >> 16;
+	  g2 = (color2 & 0xff00) >> 8;
 	  b2 = color2 & 0xff;
 	}
 
@@ -512,14 +512,14 @@ composite_pixel_color (art_u8 *dest, int dest_x, int dest_channels, int dest_has
 
   if ((dest_x >> check_shift) & 1)
     {
-      dest_r = color2 & 0xff0000 >> 16;
-      dest_g = color2 & 0xff00 >> 8;
+      dest_r = (color2 & 0xff0000) >> 16;
+      dest_g = (color2 & 0xff00) >> 8;
       dest_b = color2 & 0xff;
     }
   else
     {
-      dest_r = color1 & 0xff0000 >> 16;
-      dest_g = color1 & 0xff00 >> 8;
+      dest_r = (color1 & 0xff0000) >> 16;
+      dest_g = (color1 & 0xff00) >> 8;
       dest_b = color1 & 0xff;
     }
 
@@ -548,12 +548,12 @@ composite_line_color (int *weights, int n_x, int n_y,
 
   g_return_val_if_fail (check_size != 0, dest);
 
-  dest_r1 = color1 & 0xff0000 >> 16;
-  dest_g1 = color1 & 0xff00 >> 8;
+  dest_r1 = (color1 & 0xff0000) >> 16;
+  dest_g1 = (color1 & 0xff00) >> 8;
   dest_b1 = color1 & 0xff;
 
-  dest_r2 = color2 & 0xff0000 >> 16;
-  dest_g2 = color2 & 0xff00 >> 8;
+  dest_r2 = (color2 & 0xff0000) >> 16;
+  dest_g2 = (color2 & 0xff00) >> 8;
   dest_b2 = color2 & 0xff;
 
   while (dest < dest_end)

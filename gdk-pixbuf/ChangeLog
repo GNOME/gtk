@@ -1,3 +1,9 @@
+2000-03-27  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/pixops/pixops.c: Fix problem with 
+	precendence of >> and & which was keeping composite_color
+	from working with non-gray images.
+
 2000-03-08  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/io-gif.c (gdk_pixbuf__gif_image_load): free the context.
