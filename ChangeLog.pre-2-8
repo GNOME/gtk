@@ -1,3 +1,18 @@
+2005-03-15  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_key_to_string): New
+	debugging function. As GetKeyNameText() returns a localized key
+	name we need to convert it to UTF-8.
+
+	* gdk/win32/gdkprivate-win32.h: Declare it.
+
+	* gdk/win32/gdkevents-win32.c: Use it.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new_internal): Fix
+	handling of children of foreign windows. They should be child
+	windows from Windows's perspective, even if they are toplevel GDK
+	windows.
+
 2005-03-13  Ivan, Wong Yat Cheung  <email@ivanwong.info>
 
 	* gdk/win32/gdkgeometry-win32.c (gdk_window_scroll): A further fix

@@ -403,6 +403,7 @@ gchar *_gdk_win32_psstyle_to_string    (DWORD        pen_style);
 gchar *_gdk_win32_psendcap_to_string   (DWORD        pen_style);
 gchar *_gdk_win32_psjoin_to_string     (DWORD        pen_style);
 gchar *_gdk_win32_message_to_string    (UINT         msg);
+gchar *_gdk_win32_key_to_string        (LONG         lParam);
 gchar *_gdk_win32_rect_to_string       (const RECT  *rect);
 
 gchar *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);

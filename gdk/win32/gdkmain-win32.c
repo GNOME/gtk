@@ -905,6 +905,26 @@ _gdk_win32_message_to_string (UINT msg)
 }
 
 gchar *
+_gdk_win32_key_to_string (LONG lParam)
+{
+  char buf[100];
+  gchar *keyname_utf8;
+
+  if (GetKeyNameText (lParam, buf, sizeof (buf)) &&
+      (keyname_utf8 = g_locale_to_utf8 (buf, -1, NULL, NULL, NULL)) != NULL)
+    {
+      gchar *retval = static_printf ("%s", keyname_utf8);
+
+      g_free (keyname_utf8);
+
+      return retval;
+    }
+
+  return static_printf ("unk-%#lx", lParam);
+}
+      
+
+gchar *
 _gdk_win32_rect_to_string (const RECT *rect)
 {
   return static_printf ("%ldx%ld@+%ld+%ld",

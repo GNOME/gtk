@@ -2210,7 +2210,7 @@ gdk_event_translate (GdkDisplay *display,
 	   * removed it. Repost the same message to our queue so that
 	   * we will get it later when we are prepared.
 	   */
-	  GDK_NOTE (MISC, g_print (" (posted)"));
+	  GDK_NOTE (EVENTS, g_print (" (posted)"));
 	
 	  PostMessage (msg->hwnd, msg->message,
 		       msg->wParam, msg->lParam);
@@ -2375,9 +2375,7 @@ gdk_event_translate (GdkDisplay *display,
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
 		g_print (" %s ch:%.02x %s",
-			 (GetKeyNameText (msg->lParam, buf,
-					  sizeof (buf)) > 0 ?
-			  buf : ""),
+			 _gdk_win32_key_to_string (msg->lParam),
 			 msg->wParam,
 			 decode_key_lparam (msg->lParam)));
 
@@ -2403,9 +2401,7 @@ gdk_event_translate (GdkDisplay *display,
     case WM_KEYDOWN:
       GDK_NOTE (EVENTS, 
 		g_print (" %s ch:%.02x %s",
-			 (GetKeyNameText (msg->lParam, buf,
-					  sizeof (buf)) > 0 ?
-			  buf : ""),
+			 _gdk_win32_key_to_string (msg->lParam),
 			 msg->wParam,
 			 decode_key_lparam (msg->lParam)));
 

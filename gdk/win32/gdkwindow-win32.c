@@ -341,7 +341,7 @@ _gdk_windowing_window_init (void)
  
   _gdk_window_init_position (GDK_WINDOW (private));
 
-  gdk_win32_handle_table_insert (&_gdk_root_window, _gdk_parent_root);
+  gdk_win32_handle_table_insert ((HANDLE *) &_gdk_root_window, _gdk_parent_root);
 
   GDK_NOTE (MISC, g_print ("_gdk_parent_root=%p\n", GDK_WINDOW_HWND (_gdk_parent_root)));
 }
@@ -488,6 +488,7 @@ gdk_window_new_internal (GdkWindow     *parent,
   DWORD dwStyle = 0, dwExStyle;
   RECT rect;
   GdkWindow *window;
+  GdkWindow *orig_parent;
   GdkWindowObject *private;
   GdkWindowImplWin32 *impl;
   GdkDrawableImplWin32 *draw_impl;
@@ -510,6 +511,8 @@ gdk_window_new_internal (GdkWindow     *parent,
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
   
+  orig_parent = parent;
+
   GDK_NOTE (MISC,
 	    g_print ("gdk_window_new: %s\n",
 		     (attributes->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
@@ -605,30 +608,38 @@ gdk_window_new_internal (GdkWindow     *parent,
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-      dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
-      hparent = _gdk_root_window;
-      offset_x = _gdk_offset_x;
-      offset_y = _gdk_offset_y;
+    case GDK_WINDOW_DIALOG:
+      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
+	{
+	  g_warning (G_STRLOC ": Toplevel windows must be created as children\n"
+		     "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
+	  hparent = _gdk_root_window;
+	}
+      /* Children of foreign windows aren't toplevel windows */
+      if (GDK_WINDOW_TYPE (orig_parent) == GDK_WINDOW_FOREIGN)
+	{
+	  dwStyle = WS_CHILDWINDOW | WS_CLIPCHILDREN;
+	}
+      else
+	{
+	  if (private->window_type == GDK_WINDOW_TOPLEVEL)
+	    dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
+	  else
+	    dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+
+	  offset_x = _gdk_offset_x;
+	  offset_y = _gdk_offset_y;
+	}
       break;
 
     case GDK_WINDOW_CHILD:
       dwStyle = WS_CHILDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       break;
 
-    case GDK_WINDOW_DIALOG:
-      dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
-#if 0
-      dwExStyle |= WS_EX_TOPMOST; /* //HB: want this? */
-#endif
-      hparent = _gdk_root_window;
-      offset_x = _gdk_offset_x;
-      offset_y = _gdk_offset_y;
-      break;
-
     case GDK_WINDOW_TEMP:
-      dwStyle = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-      /* a temp window is not necessarily a top level window */
-      dwStyle |= (_gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
+      /* A temp window is not necessarily a top level window */
+      dwStyle = (_gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
+      dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       dwExStyle |= WS_EX_TOOLWINDOW;
       offset_x = _gdk_offset_x;
       offset_y = _gdk_offset_y;
@@ -666,7 +677,7 @@ gdk_window_new_internal (GdkWindow     *parent,
   else
     title = get_default_title ();
   if (!title || !*title)
-    title = "GDK client window";
+    title = "";
 
   private->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
       
@@ -2833,8 +2844,6 @@ gboolean
 gdk_window_set_static_gravities (GdkWindow *window,
 				 gboolean   use_static)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
