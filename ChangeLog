@@ -1,3 +1,8 @@
+Fri Apr 27 20:27:21 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.[hc]: Massive reorder/cleanup of a lot of the
+	code.  Some documentation added.
+
 2001-04-27  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_popup_button_press): fix warning
