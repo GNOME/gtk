@@ -1,5 +1,9 @@
+1999-06-01  Jose H Mercado  <jmercado@mit.edu>
+
+	* gtk+.spec.in: Corrected some typos in files section.
+	
 1999-06-15  Tor Lillqvist  <tml@iki.fi>
-y
+
 	* README.win32: Mention using GNU gettext.
 	* config.h.win32: Enable NLS stuff.
 	* gtk/makefile.msc: Use GNU gettext.
