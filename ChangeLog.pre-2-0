@@ -1,3 +1,8 @@
+Sat Feb 23 15:43:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktogglebutton.c: Make button draw depressed whenever
+	the user clicks / activates it, whether it's off/on/inconsistent.
+
 Sat Feb 23 11:54:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/*.h gdk/*.h: Massive padding addition to class structures.
