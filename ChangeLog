@@ -1,3 +1,29 @@
+Mon Dec  7 01:29:27 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwindow.c: New functions
+        gtk_window_set_transient_for() - set up a "transient for" relationship.
+	gtk_window_set_default_size() - set the initial size of a window
+	   distinct from its minimum size.
+	gtk_window_set_geometry_hints() - Allow the user to set
+	   minimum, maximum sizes, aspect rations, and gridded geometry, 
+	   possibly all with respect to a subwidget of the window.
+	These interfaces are still a wee bit experimental.
+
+	* gdk/gdk.c: Added gdk_window_set_transient_for(),
+	gdk_window_set_geometry_hints(), and gdk_window_set_role().
+
+	* gdk/gdktypes.h: Added new types for find-grained specification
+	of WM hints.
+
+	* gtk/testgtk.c: Various changes to tests to test the
+	above new functions.
+
+	* gtk/gtkfontsel.c: Squash a few 'const' warnings.
+	
+	* gtk/gtktogglebutton.c (gtk_toggle_button_realize): Restored
+	call to gtk_style_set_background() to prevent egregious
+	flashing to black.
+
 Mon Dec  7 03:52:01 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_handlers_run): when marshalling connect_object
@@ -7,7 +33,7 @@ Mon Dec  7 03:52:01 1998  Tim Janik  <timj@gtk.org>
 Mon Dec  7 03:08:39 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.h: 
-	* gtk/gtktypeutils.c: reverted marius change to expose the type systems
+	* gtk/gtktypeutils.c: reverted Marius's change to expose the type systems
 	internal type info data to the user. if such functionality is required
 	we should provide wrapping accessors, ala gtk_signal_query(). also the
 	GtkTypeInfo structures are dynamically allocated memory portions, so

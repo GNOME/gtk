@@ -277,8 +277,18 @@ void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   max_width,
 					  gint		   max_height,
 					  gint		   flags);
-void	      gdk_window_set_title	 (GdkWindow	  *window,
-					  const gchar	  *title);
+void          gdk_window_set_geometry_hints (GdkWindow        *window,
+					     GdkGeometry      *geometry,
+					     GdkWindowHints    flags);
+void          gdk_set_sm_client_id         (const gchar     *id);
+
+
+void	      gdk_window_set_title	   (GdkWindow	  *window,
+					    const gchar	  *title);
+void          gdk_window_set_role          (GdkWindow       *window,
+					    const gchar     *role);
+void          gdk_window_set_transient_for (GdkWindow       *window, 
+					    GdkWindow       *leader);
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  GdkColor	  *color);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,

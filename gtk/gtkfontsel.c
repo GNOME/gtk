@@ -441,7 +441,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gchar buffer[128];
   gchar *size;
   gint size_to_match;
-  gchar *row_text[3];
+  const gchar *row_text[3];
   gchar *property, *text;
   gboolean inserted;
   
@@ -1316,7 +1316,8 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel)
 {
   FontInfo *font;
   FontStyle *styles, *style;
-  guint16 *standard_sizes, *bitmapped_sizes, bitmap_size;
+  const guint16 *standard_sizes;
+  guint16 *bitmapped_sizes, bitmap_size;
   gint nstandard_sizes, nbitmapped_sizes;
   gchar buffer[16], *size;
   gfloat bitmap_size_float;

@@ -2375,7 +2375,7 @@ cmw_destroy_cb(GtkWidget *widget)
 }
 
 static void
-cmw_color (GtkWidget *widget)
+cmw_color (GtkWidget *widget, GtkWidget *parent)
 {
     GtkWidget *csd;
 
@@ -2383,6 +2383,9 @@ cmw_color (GtkWidget *widget)
 
     /* Set as modal */
     gtk_window_set_modal (GTK_WINDOW(csd),TRUE);
+
+    /* And mark it as a transient dialog */
+    gtk_window_set_transient_for (GTK_WINDOW (csd), GTK_WINDOW (parent));
     
     gtk_signal_connect (GTK_OBJECT(csd), "destroy",
 		        GTK_SIGNAL_FUNC(cmw_destroy_cb),NULL);
@@ -2400,7 +2403,7 @@ cmw_color (GtkWidget *widget)
 }
 
 static void
-cmw_file (GtkWidget *widget)
+cmw_file (GtkWidget *widget, GtkWidget *parent)
 {
     GtkWidget *fs;
 
@@ -2408,6 +2411,9 @@ cmw_file (GtkWidget *widget)
 
     /* Set as modal */
     gtk_window_set_modal (GTK_WINDOW(fs),TRUE);
+
+    /* And mark it as a transient dialog */
+    gtk_window_set_transient_for (GTK_WINDOW (fs), GTK_WINDOW (parent));
 
     gtk_signal_connect (GTK_OBJECT(fs), "destroy",
                         GTK_SIGNAL_FUNC(cmw_destroy_cb),NULL);
@@ -2471,9 +2477,9 @@ create_modal_window (void)
                       GTK_SIGNAL_FUNC (cmw_destroy_cb),NULL);
   
   gtk_signal_connect (GTK_OBJECT (btnColor), "clicked",
-                      GTK_SIGNAL_FUNC (cmw_color),NULL);
+                      GTK_SIGNAL_FUNC (cmw_color),window);
   gtk_signal_connect (GTK_OBJECT (btnFile), "clicked",
-                      GTK_SIGNAL_FUNC (cmw_file),NULL);
+                      GTK_SIGNAL_FUNC (cmw_file),window);
 
   /* Show widgets */
   gtk_widget_show_all (window);
@@ -2558,6 +2564,7 @@ create_scrolled_windows (void)
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
 
+      gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -7548,6 +7555,8 @@ create_scroll_test (void)
   GtkWidget *scrollbar;
   GtkWidget *button;
   GtkAdjustment *adj;
+  GdkGeometry geometry;
+  GdkWindowHints geometry_mask;
   
   if (!window)
     {
@@ -7599,6 +7608,22 @@ create_scroll_test (void)
 				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_widget_show (button);
+
+      /* Set up gridded geometry */
+
+      geometry_mask = GDK_HINT_MIN_SIZE | 
+	               GDK_HINT_BASE_SIZE | 
+	               GDK_HINT_RESIZE_INC;
+
+      geometry.min_width = 20;
+      geometry.min_height = 20;
+      geometry.base_width = 0;
+      geometry.base_height = 0;
+      geometry.width_inc = 10;
+      geometry.height_inc = 10;
+      
+      gtk_window_set_geometry_hints (GTK_WINDOW (window),
+			       drawing_area, &geometry, geometry_mask);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -8109,7 +8134,8 @@ void create_layout (void)
 	  {
 	    sprintf(buf, "Button %d, %d", i, j);
 	    if ((i + j) % 2)
-	      button = gtk_button_new_with_label (buf);
+	      // button = gtk_button_new_with_label (buf);
+	      button = gtk_combo_new();
 	    else
 	      button = gtk_label_new (buf);
 

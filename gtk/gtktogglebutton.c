@@ -538,7 +538,11 @@ gtk_toggle_button_realize (GtkWidget *widget)
 	gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
       gdk_window_set_user_data (widget->window, toggle_button);
     }
+
   widget->style = gtk_style_attach (widget->style, widget->window);
+
+  if (!toggle_button->draw_indicator)
+    gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 }
   
 static void

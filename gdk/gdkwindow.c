@@ -1012,6 +1012,82 @@ gdk_window_set_hints (GdkWindow *window,
     XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
 }
 
+void 
+gdk_window_set_geometry_hints (GdkWindow      *window,
+			       GdkGeometry    *geometry,
+			       GdkWindowHints  geom_mask)
+{
+  GdkWindowPrivate *private;
+  XSizeHints size_hints;
+  
+  g_return_if_fail (window != NULL);
+  
+  private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return;
+  
+  size_hints.flags = 0;
+  
+  if (geom_mask & GDK_HINT_POS)
+    size_hints.flags |= PPosition;
+  
+  if (geom_mask & GDK_HINT_MIN_SIZE)
+    {
+      size_hints.flags |= PMinSize;
+      size_hints.min_width = geometry->min_width;
+      size_hints.min_height = geometry->min_height;
+    }
+  
+  if (geom_mask & GDK_HINT_MAX_SIZE)
+    {
+      size_hints.flags |= PMaxSize;
+      size_hints.max_width = geometry->max_width;
+      size_hints.max_height = geometry->max_height;
+    }
+  
+  if (geom_mask & GDK_HINT_BASE_SIZE)
+    {
+      size_hints.flags |= PBaseSize;
+      size_hints.base_width = geometry->base_width;
+      size_hints.base_height = geometry->base_height;
+    }
+  
+  if (geom_mask & GDK_HINT_RESIZE_INC)
+    {
+      size_hints.flags |= PResizeInc;
+      size_hints.width_inc = geometry->width_inc;
+      size_hints.height_inc = geometry->height_inc;
+    }
+  
+  if (geom_mask & GDK_HINT_ASPECT)
+    {
+      size_hints.flags |= PAspect;
+      if (geometry->min_aspect <= 1)
+	{
+	  size_hints.min_aspect.x = G_MAXINT * geometry->min_aspect;
+	  size_hints.min_aspect.y = G_MAXINT;
+	}
+      else
+	{
+	  size_hints.min_aspect.x = G_MAXINT;
+	  size_hints.min_aspect.y = G_MAXINT / geometry->min_aspect;;
+	}
+      if (geometry->max_aspect <= 1)
+	{
+	  size_hints.max_aspect.x = G_MAXINT * geometry->max_aspect;
+	  size_hints.max_aspect.y = G_MAXINT;
+	}
+      else
+	{
+	  size_hints.max_aspect.x = G_MAXINT;
+	  size_hints.max_aspect.y = G_MAXINT / geometry->max_aspect;;
+	}
+    }
+  
+  if (geom_mask)
+    XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
+}
+
 void
 gdk_window_set_title (GdkWindow   *window,
 		      const gchar *title)
@@ -1024,6 +1100,42 @@ gdk_window_set_title (GdkWindow   *window,
   if (!private->destroyed)
     XmbSetWMProperties (private->xdisplay, private->xwindow,
 			title, title, NULL, 0, NULL, NULL, NULL);
+}
+
+void          
+gdk_window_set_role (GdkWindow   *window,
+		     const gchar *role)
+{
+  GdkWindowPrivate *private;
+  
+  g_return_if_fail (window != NULL);
+  
+  private = (GdkWindowPrivate*) window;
+
+  if (role)
+    XChangeProperty (private->xdisplay, private->xwindow,
+		     gdk_atom_intern ("WM_WINDOW_ROLE", FALSE), XA_STRING,
+		     8, PropModeReplace, role, strlen(role));
+  else
+    XDeleteProperty (private->xdisplay, private->xwindow,
+		     gdk_atom_intern ("WM_WINDOW_ROLE", FALSE));
+}
+
+void          
+gdk_window_set_transient_for (GdkWindow *window, 
+			      GdkWindow *parent)
+{
+  GdkWindowPrivate *private;
+  GdkWindowPrivate *parent_private;
+  
+  g_return_if_fail (window != NULL);
+  
+  private = (GdkWindowPrivate*) window;
+  parent_private = (GdkWindowPrivate*) parent;
+
+  if (!private->destroyed && !parent_private->destroyed)
+    XSetTransientForHint (private->xdisplay, 
+			  private->xwindow, parent_private->xwindow);
 }
 
 void
@@ -2350,3 +2462,4 @@ gdk_drawable_set_data (GdkDrawable   *drawable,
 {
   g_dataset_set_data_full (drawable, key, data, destroy_func);
 }
+

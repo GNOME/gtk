@@ -52,6 +52,7 @@ struct _GtkWindow
 
   GtkWidget *focus_widget;
   GtkWidget *default_widget;
+  GtkWindow *transient_parent;
 
   gushort resize_count;
   guint allow_shrink : 1;
@@ -59,6 +60,13 @@ struct _GtkWindow
   guint auto_shrink : 1;
   guint handling_resize : 1;
   guint position : 2;
+
+  /* The following flag is initially TRUE when a window is mapped.
+   * and will be set to FALSE after it is first positioned.
+   * It is also temporarily reset when the window's size changes.
+   * 
+   * When TRUE, we move the window to the position the app set.
+   */
   guint use_uposition : 1;
   guint modal : 1;
 };
@@ -95,6 +103,20 @@ void       gtk_window_set_position             (GtkWindow           *window,
 						GtkWindowPosition    position);
 gint	   gtk_window_activate_focus	       (GtkWindow           *window);
 gint	   gtk_window_activate_default	       (GtkWindow           *window);
+
+void       gtk_window_set_transient_for        (GtkWindow           *window, 
+						GtkWindow           *parent);
+void       gtk_window_set_geometry_hints       (GtkWindow           *window,
+						GtkWidget           *geometry_widget,
+						GdkGeometry         *geometry,
+						GdkWindowHints       geom_mask);
+/* The following differs from gtk_widget_set_usize, in that
+ * gtk_widget_set_usize() overrides the requisition, so sets a minimum
+ * size, while this only sets the size requested from the WM.
+ */
+void       gtk_window_set_default_size         (GtkWindow            *window,
+						gint                  width,
+						gint                  height);
 
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal                (GtkWindow           *window,

@@ -50,6 +50,7 @@ typedef struct _GdkWindow	      GdkWindow;
 typedef struct _GdkWindow	      GdkPixmap;
 typedef struct _GdkWindow	      GdkBitmap;
 typedef struct _GdkWindow	      GdkDrawable;
+typedef struct _GdkGeometry           GdkGeometry;
 typedef struct _GdkImage	      GdkImage;
 typedef struct _GdkGCValues	      GdkGCValues;
 typedef struct _GdkGC		      GdkGC;
@@ -207,9 +208,12 @@ typedef enum
  */
 typedef enum
 {
-  GDK_HINT_POS	     = 1 << 0,
-  GDK_HINT_MIN_SIZE  = 1 << 1,
-  GDK_HINT_MAX_SIZE  = 1 << 2
+  GDK_HINT_POS	      = 1 << 0,
+  GDK_HINT_MIN_SIZE   = 1 << 1,
+  GDK_HINT_MAX_SIZE   = 1 << 2,
+  GDK_HINT_BASE_SIZE  = 1 << 3,
+  GDK_HINT_ASPECT     = 1 << 4,
+  GDK_HINT_RESIZE_INC = 1 << 5
 } GdkWindowHints;
 
 /* GC function types.
@@ -771,6 +775,20 @@ struct _GdkWindowAttr
 struct _GdkWindow
 {
   gpointer user_data;
+};
+
+struct _GdkGeometry {
+  gint min_width;
+  gint min_height;
+  gint max_width;
+  gint max_height;
+  gint base_width;
+  gint base_height;
+  gint width_inc;
+  gint height_inc;
+  gdouble min_aspect;
+  gdouble max_aspect;
+  /* GdkGravity gravity; */
 };
 
 struct _GdkImage

@@ -42,6 +42,16 @@ enum {
   ARG_WIN_POS
 };
 
+typedef struct {
+  GdkGeometry    geometry;
+  GdkWindowHints mask;
+  GtkWidget     *widget;
+  gint           width;
+  gint           height;
+  gint           last_width;
+  gint           last_height;
+} GtkWindowGeometryInfo;
+
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_set_arg            (GtkObject         *object,
@@ -95,6 +105,15 @@ static gint gtk_window_expose             (GtkWidget         *widget,
 				           GdkEventExpose    *event);
 static void gtk_window_style_set          (GtkWidget         *widget,
 				           GtkStyle          *previous_style);
+static void gtk_window_unset_transient_for         (GtkWindow  *window);
+static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
+						    GtkWidget  *window);
+static void gtk_window_transient_parent_unrealized (GtkWidget  *parent,
+						    GtkWidget  *window);
+
+static GtkWindowGeometryInfo* gtk_window_get_geometry_info (GtkWindow *window,
+							    gboolean   create);
+static void gtk_window_geometry_destroy  (GtkWindowGeometryInfo *info);
 
 static GtkBinClass *parent_class = NULL;
 static guint window_signals[LAST_SIGNAL] = { 0 };
@@ -539,12 +558,175 @@ gtk_window_shutdown (GtkObject *object)
 }
 
 static void
+gtk_window_transient_parent_realized (GtkWidget *parent,
+				      GtkWidget *window)
+{
+  if (GTK_WIDGET_REALIZED (window))
+    gdk_window_set_transient_for (parent->window, window->window);
+}
+
+static void
+gtk_window_transient_parent_unrealized (GtkWidget *parent,
+					GtkWidget *window)
+{
+  if (GTK_WIDGET_REALIZED (window))
+    gdk_property_delete (window->window, 
+			 gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE));
+}
+
+static void       
+gtk_window_unset_transient_for  (GtkWindow *window)
+{
+  if (window->transient_parent)
+    {
+      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
+				     GTK_SIGNAL_FUNC (gtk_window_transient_parent_realized),
+				     window);
+      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
+				     GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
+				     window);
+      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
+				     GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+				     &window->transient_parent);
+
+      window->transient_parent = NULL;
+    }
+}
+
+void       
+gtk_window_set_transient_for  (GtkWindow *window, 
+			       GtkWindow *parent)
+{
+  g_return_if_fail (window != 0);
+
+  if (window->transient_parent)
+    {
+      gtk_window_unset_transient_for (window);
+      
+      if (GTK_WIDGET_REALIZED (window) && 
+	  GTK_WIDGET_REALIZED (window->transient_parent) && 
+	  (!parent || !GTK_WIDGET_REALIZED (parent)))
+	gtk_window_transient_parent_unrealized (GTK_WIDGET (window->transient_parent),
+						GTK_WIDGET (window));
+    }
+
+  window->transient_parent = parent;
+
+  if (parent)
+    {
+      gtk_signal_connect (GTK_OBJECT (parent), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window->transient_parent);
+      gtk_signal_connect (GTK_OBJECT (parent), "realize",
+			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_realized),
+			  window);
+      gtk_signal_connect (GTK_OBJECT (parent), "unrealize",
+			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
+			  window);
+
+      if (GTK_WIDGET_REALIZED (window) &&
+	  GTK_WIDGET_REALIZED (parent))
+	gtk_window_transient_parent_realized (GTK_WIDGET (parent),
+					      GTK_WIDGET (window));
+    }
+}
+
+static void
+gtk_window_geometry_destroy (GtkWindowGeometryInfo *info)
+{
+  if (info->widget)
+    gtk_signal_disconnect_by_func (GTK_OBJECT (info->widget),
+				   GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+				   &info->widget);
+  g_free (info);
+}
+
+static GtkWindowGeometryInfo *
+gtk_window_get_geometry_info (GtkWindow *window, gboolean create)
+{
+  GtkWindowGeometryInfo *info;
+
+  info = gtk_object_get_data (GTK_OBJECT (window), "gtk-window-geometry");
+
+  if (!info && create)
+    {
+      info = g_new (GtkWindowGeometryInfo, 1);
+
+      info->width = - 1;
+      info->height = -1;
+      info->last_width = -1;
+      info->last_height = -1;
+      info->widget = NULL;
+      info->mask = 0;
+
+      gtk_object_set_data_full (GTK_OBJECT (window), 
+				
+				"gtk-window-geometry",
+				info, 
+				(GtkDestroyNotify) gtk_window_geometry_destroy);
+    }
+
+  return info;
+}
+
+void       
+gtk_window_set_geometry_hints (GtkWindow       *window,
+			       GtkWidget       *geometry_widget,
+			       GdkGeometry     *geometry,
+			       GdkWindowHints   geom_mask)
+{
+  GtkWindowGeometryInfo *info;
+
+  g_return_if_fail (window != NULL);
+
+  info = gtk_window_get_geometry_info (window, TRUE);
+  
+  if (info->widget)
+    gtk_signal_disconnect_by_func (GTK_OBJECT (info->widget),
+				   GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+				   &info->widget);
+  
+  info->widget = geometry_widget;
+  if (info->widget)
+    gtk_signal_connect (GTK_OBJECT (geometry_widget), "destroy",
+			GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			&info->widget);
+
+  if (geometry)
+    info->geometry = *geometry;
+
+  info->mask = geom_mask;
+}
+
+void       
+gtk_window_set_default_size (GtkWindow   *window,
+			     gint         width,
+			     gint         height)
+{
+  GtkWindowGeometryInfo *info;
+
+  g_return_if_fail (window != NULL);
+
+  info = gtk_window_get_geometry_info (window, TRUE);
+
+  info->width = width;
+  info->height = height;
+}
+  
+static void
 gtk_window_destroy (GtkObject *object)
 {
+  GtkWindow *window;
+  
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_WINDOW (object));
 
+  window = GTK_WINDOW (object);
+  
   gtk_container_unregister_toplevel (GTK_CONTAINER (object));
+
+  if (window->transient_parent)
+    gtk_window_unset_transient_for (window);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -682,6 +864,11 @@ gtk_window_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
   gtk_window_paint (widget, NULL);
+
+  if (window->transient_parent &&
+      GTK_WIDGET_REALIZED (window->transient_parent))
+    gdk_window_set_transient_for (widget->window,
+				  GTK_WIDGET (window->transient_parent)->window);
 }
 
 static void
@@ -1093,9 +1280,12 @@ static void
 gtk_window_move_resize (GtkWindow *window)
 {
   GtkWidget    *widget;
+  GtkWindowGeometryInfo *info;
   GtkContainer *container;
   gint x, y;
   gint width, height;
+  gint new_width, new_height;
+  gint min_width, min_height;
   gint screen_width;
   gint screen_height;
   gboolean needed_resize;
@@ -1107,14 +1297,76 @@ gtk_window_move_resize (GtkWindow *window)
   widget = GTK_WIDGET (window);
   container = GTK_CONTAINER (widget);
 
+  info = gtk_window_get_geometry_info (window, FALSE);
+  
   /* Remember old size, to know if we have to reset hints */
-  width = widget->requisition.width;
-  height = widget->requisition.height;
+  if (info && (info->last_width > 0))
+    width = info->last_width;
+  else
+    width = widget->requisition.width;
+
+  if (info && (info->last_height > 0))
+    height = info->last_height;
+  else
+    height = widget->requisition.height;
+
   gtk_widget_size_request (widget, &widget->requisition);
 
-  size_changed = ((width != widget->requisition.width) ||
-		  (height != widget->requisition.height));
-  
+  /* Figure out the new desired size */
+
+  size_changed = FALSE;
+
+  if (info && info->width > 0)
+    {
+      size_changed = size_changed || (width != info->width);
+      info->last_width = width;
+      new_width = info->width;
+    }
+  else
+    {
+      size_changed = size_changed || (width != widget->requisition.width);
+      new_width = widget->requisition.width;
+    }
+
+  if (info && info->height > 0)
+    {
+      size_changed = size_changed || (height != info->height);
+      info->last_height = height;
+      new_height = info->height;
+    }
+  else
+    {
+      size_changed = size_changed || (height != widget->requisition.height);
+      new_height = widget->requisition.height;
+    }
+
+  /* Figure out the new minimum size */
+
+  if (info && (info->mask & (GDK_HINT_MIN_SIZE | GDK_HINT_BASE_SIZE)))
+    {
+      if (info->mask && GDK_HINT_MIN_SIZE)
+	{
+	  min_width = info->geometry.min_width;
+	  min_height = info->geometry.min_height;
+	}
+      else
+	{
+	  min_width = info->geometry.base_width;
+	  min_height = info->geometry.base_height;
+	}
+
+      if (info->widget)
+	{
+	  min_width += widget->requisition.width - info->widget->requisition.width;
+	  min_height += widget->requisition.height - info->widget->requisition.height;
+	}
+    }
+  else
+    {
+      min_width = widget->requisition.width;
+      min_height = widget->requisition.height;
+    }
+
   if (size_changed)
     {
       gboolean saved_use_upos;
@@ -1126,35 +1378,33 @@ gtk_window_move_resize (GtkWindow *window)
   
   x = -1;
   y = -1;
-  width = widget->requisition.width;
-  height = widget->requisition.height;
   
   if (window->use_uposition)
     switch (window->position)
       {
       case GTK_WIN_POS_CENTER:
-	x = (gdk_screen_width () - width) / 2;
-	y = (gdk_screen_height () - height) / 2;
+	x = (gdk_screen_width () - new_width) / 2;
+	y = (gdk_screen_height () - new_height) / 2;
 	gtk_widget_set_uposition (widget, x, y);
 	break;
       case GTK_WIN_POS_MOUSE:
 	gdk_window_get_pointer (NULL, &x, &y, NULL);
 	
-	x -= width / 2;
-	y -= height / 2;
+	x -= new_width / 2;
+	y -= new_height / 2;
 	
 	screen_width = gdk_screen_width ();
 	screen_height = gdk_screen_height ();
 	
 	if (x < 0)
 	  x = 0;
-	else if (x > (screen_width - width))
-	  x = screen_width - width;
+	else if (x > (screen_width - new_width))
+	  x = screen_width - new_width;
 	
 	if (y < 0)
 	  y = 0;
-	else if (y > (screen_height - height))
-	  y = screen_height - height;
+	else if (y > (screen_height - new_height))
+	  y = screen_height - new_height;
 	
 	gtk_widget_set_uposition (widget, x, y);
 	break;
@@ -1165,11 +1415,10 @@ gtk_window_move_resize (GtkWindow *window)
   needed_resize = container->need_resize;
   container->need_resize = FALSE;
 
-  if ((widget->requisition.width == 0) ||
-      (widget->requisition.height == 0))
+  if ((new_width == 0) || (new_height == 0))
     {
-      widget->requisition.width = 200;
-      widget->requisition.height = 200;
+      new_width = 200;
+      new_height = 200;
     }
   
   if (!GTK_WIDGET_REALIZED (window))
@@ -1178,8 +1427,8 @@ gtk_window_move_resize (GtkWindow *window)
 
       allocation.x = 0;
       allocation.y = 0;
-      allocation.width = widget->requisition.width;
-      allocation.height = widget->requisition.height;
+      allocation.width = new_width;
+      allocation.height = new_height;
       
       gtk_widget_size_allocate (widget, &allocation);
 
@@ -1194,20 +1443,27 @@ gtk_window_move_resize (GtkWindow *window)
 
   if (size_changed && 
       (((window->auto_shrink &&
-	((width != widget->requisition.width) ||
-	 (height != widget->requisition.height)))) ||
-       ((width < widget->requisition.width) ||
-	(height < widget->requisition.height))))
+	((width != new_width) ||
+	 (height != new_height)))) ||
+       ((width < min_width) ||
+	(height < min_height))))
     {
       window->resize_count += 1;
+
+      if (!window->auto_shrink)
+	{
+	  new_width = MAX(width, min_width);
+	  new_height = MAX(height, min_height);
+	}
+      
       if ((x != -1) && (y != -1))
 	gdk_window_move_resize (widget->window, x, y,
-				widget->requisition.width,
-				widget->requisition.height);
+				new_width,
+				new_height);
       else
         gdk_window_resize (widget->window,
-			   widget->requisition.width,
-			   widget->requisition.height);
+			   new_width,
+			   new_height);
     }
   else if (needed_resize)
     {
@@ -1219,8 +1475,8 @@ gtk_window_move_resize (GtkWindow *window)
       
       allocation.x = 0;
       allocation.y = 0;
-      allocation.width = widget->requisition.width;
-      allocation.height = widget->requisition.height;
+      allocation.width = new_width;
+      allocation.height = new_height;
       
       gtk_widget_size_allocate (widget, &allocation);
     }
@@ -1269,8 +1525,12 @@ gtk_window_set_hints (GtkWidget      *widget,
 {
   GtkWindow *window;
   GtkWidgetAuxInfo *aux_info;
+  GtkWindowGeometryInfo *geometry_info;
+  GdkGeometry new_geometry;
   gint flags;
   gint ux, uy;
+  gint extra_width = 0;
+  gint extra_height = 0;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
@@ -1280,7 +1540,22 @@ gtk_window_set_hints (GtkWidget      *widget,
     {
       window = GTK_WINDOW (widget);
 
-      flags = 0;
+      geometry_info = gtk_window_get_geometry_info (GTK_WINDOW (widget), FALSE);
+
+      if (geometry_info)
+	{
+	  flags = geometry_info->mask;
+	  new_geometry = geometry_info->geometry;
+
+	  if (geometry_info->widget)
+	    {
+	      extra_width = requisition->width - geometry_info->widget->requisition.width;
+	      extra_height = requisition->height - geometry_info->widget->requisition.height;
+	    }
+	}
+      else
+	flags = 0;
+      
       ux = 0;
       uy = 0;
 
@@ -1291,17 +1566,49 @@ gtk_window_set_hints (GtkWidget      *widget,
 	  uy = aux_info->y;
 	  flags |= GDK_HINT_POS;
 	}
+      
+      if (flags & GDK_HINT_BASE_SIZE)
+	{
+	  new_geometry.base_width += extra_width;
+	  new_geometry.base_height += extra_height;
+	}
+      else if (!(flags & GDK_HINT_MIN_SIZE) &&
+	       (flags & GDK_HINT_RESIZE_INC) &&
+	       ((extra_width != 0) || (extra_height != 0)))
+	{
+	  flags |= GDK_HINT_BASE_SIZE;
 
-      if (!window->allow_shrink)
-	flags |= GDK_HINT_MIN_SIZE;
-      if (!window->allow_grow)
-	flags |= GDK_HINT_MAX_SIZE;
+	  new_geometry.base_width = extra_width;
+	  new_geometry.base_height = extra_height;
+	}
 
-      gdk_window_set_hints (widget->window,
-			    ux, uy,
-			    requisition->width, requisition->height,
-			    requisition->width, requisition->height,
-			    flags);
+      if (flags & GDK_HINT_MIN_SIZE)
+	{
+	  new_geometry.min_width += extra_width;
+	  new_geometry.min_height += extra_height;
+	}
+      else if (!window->allow_shrink)
+	{
+	  flags |= GDK_HINT_MIN_SIZE;
+
+	  new_geometry.min_width = requisition->width;
+	  new_geometry.min_height = requisition->height;
+	}
+
+      if (flags & GDK_HINT_MAX_SIZE)
+	{
+	  new_geometry.max_width += extra_width;
+	  new_geometry.max_height += extra_height;
+	}
+      else if (!window->allow_grow)
+	{
+	  flags |= GDK_HINT_MAX_SIZE;
+
+	  new_geometry.max_width = requisition->width;
+	  new_geometry.max_height = requisition->height;
+	}
+
+      gdk_window_set_geometry_hints (widget->window, &new_geometry, flags);
 
       if (window->use_uposition && (flags & GDK_HINT_POS))
 	{
