@@ -1,3 +1,17 @@
+2001-02-16  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtktreemodelmapping.[ch]:
+	New files. Implement GtkTreeModelMapping.
+	
+	* gtk/Makefile.am:
+	Add gtktreemodelmapping.[ch].
+	
+	* gtk/gtk.h:
+	Add gtktreemodelmapping.h
+
+	* gtk/treestoretest.c:
+	Test the GtkTreeModelMapping
+
 Tue Feb 13 13:16:09 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* demos/gtk-demo/panes.c (create_pane_options): If we're going to

@@ -144,6 +144,7 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreemodelsimple.h>
 #include <gtk/gtktreemodelsort.h>
+#include <gtk/gtktreemodelmapping.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreestore.h>
 #include <gtk/gtktreeview.h>

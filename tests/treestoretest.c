@@ -201,7 +201,20 @@ iter_append (GtkWidget *button, GtkTreeView *tree_view)
 }
 
 static void
-make_window (gboolean use_sort)
+uppercase_value (const GValue *src, GValue *dest, gpointer data)
+{
+  gchar *str;
+  
+  g_value_init (dest, G_TYPE_STRING);
+  str = g_strdup (g_value_get_string (src));
+  if (str)
+    g_strup (str);
+  g_value_set_string (dest, str);
+  g_free (str);
+}
+
+static void
+make_window (gint view_type)
 {
   GtkWidget *window;
   GtkWidget *vbox;
@@ -215,26 +228,61 @@ make_window (gboolean use_sort)
 
   /* Make the Widgets/Objects */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  if (use_sort)
-    gtk_window_set_title (GTK_WINDOW (window), "Sorted list");
-  else
-    gtk_window_set_title (GTK_WINDOW (window), "Unsorted list");
+  switch (view_type)
+    {
+    case 0:
+      gtk_window_set_title (GTK_WINDOW (window), "Unsorted list");
+      break;
+    case 1:
+      gtk_window_set_title (GTK_WINDOW (window), "Sorted list");
+      break;
+    case 2:
+      gtk_window_set_title (GTK_WINDOW (window), "Uppercase flipped list");
+      break;
+    }
 
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 350);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  if (use_sort)
+  switch (view_type)
     {
-      GtkTreeModel *sort_model;
-
-      sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (base_model),
-						       NULL, 1);
-      tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (sort_model));
-    }
-  else
-    {
+    case 0:
       tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (base_model));
+      break;
+    case 1:
+      {
+	GtkTreeModel *sort_model;
+	
+	sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (base_model),
+							 NULL, 1);
+	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (sort_model));
+      }
+      break;
+    case 2:
+      {
+	GtkTreeModel *map_model;
+	
+	map_model = gtk_tree_model_mapping_new_with_model (GTK_TREE_MODEL (base_model));
+
+	gtk_tree_model_mapping_set_n_columns (GTK_TREE_MODEL_MAPPING (map_model), 2);
+	gtk_tree_model_mapping_set_column_mapping (GTK_TREE_MODEL_MAPPING (map_model),
+						   0,
+						   1,
+						   G_TYPE_STRING,
+						   uppercase_value,
+						   NULL);
+	gtk_tree_model_mapping_set_column_mapping (GTK_TREE_MODEL_MAPPING (map_model),
+						   1,
+						   0,
+						   G_TYPE_STRING,
+						   uppercase_value,
+						   NULL);
+	
+	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (map_model));
+	
+      }
+      break;
     }
 
   selection = GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)));
@@ -305,7 +353,7 @@ make_window (gboolean use_sort)
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   /* A few to start */
-  if (!use_sort)
+  if (view_type == 0)
     {
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
@@ -326,10 +374,12 @@ main (int argc, char *argv[])
   base_model = gtk_tree_store_new_with_types (2, G_TYPE_STRING, G_TYPE_STRING);
 
   /* FIXME: reverse this */
-  make_window (FALSE);
-  make_window (TRUE);
+  make_window (0);
+  make_window (1);
+  make_window (2);
 
   gtk_main ();
 
   return 0;
 }
+
