@@ -1,3 +1,8 @@
+Sat Feb 14 00:05:18 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreemodelfilter.c (bsearch_elt_with_offset): 
+	Use do instead of while.  (#134031, Morten Welinder);
+
 Sat Feb 14 00:00:52 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Suppress xsltproc and xmlcatalog checks

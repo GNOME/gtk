@@ -992,7 +992,7 @@ bsearch_elt_with_offset (GArray *array,
         return NULL;
     }
 
-  while (start != end)
+  do
     {
       middle = (start + end) / 2;
 
@@ -1005,6 +1005,7 @@ bsearch_elt_with_offset (GArray *array,
       else
         break;
     }
+  while (start != end);
 
   if (elt->offset == offset)
     {
