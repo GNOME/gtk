@@ -1,3 +1,9 @@
+Fri Aug  9 08:04:47 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdisplay.h (struct _GdkDisplayClass): Fix 
+	weird usage of 'class' for GdkDisplay * argumnent name.
+	(#9031, Laszlo Peter)
+
 Thu Aug  8 23:26:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkmain-x11.c gdk/x11/gdkscreen-x11.c: Remove

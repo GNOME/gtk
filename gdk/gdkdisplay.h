@@ -73,7 +73,7 @@ struct _GdkDisplayClass
 
   
   /* Signals */
-  void (*closed) (GdkDisplay *class,
+  void (*closed) (GdkDisplay *display,
 		  gboolean    is_error);
 };
 
