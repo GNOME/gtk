@@ -56,7 +56,6 @@ struct _GtkFileChooserEntry
 
   guint has_completion : 1;
   guint in_change      : 1;
-  guint no_pop_down    : 1;
 };
 
 enum
@@ -266,10 +265,6 @@ match_selected_callback (GtkEntryCompletion  *completion,
   gtk_file_path_free (path);
   g_free (display_name);
 
-  /* We surpress the completion for a second.  It's confusing to click on an
-   * entry and have it pop back up immediately */
-  chooser_entry->no_pop_down = TRUE;
-
   return TRUE;
 }
 
@@ -295,10 +290,6 @@ completion_match_func (GtkEntryCompletion *comp,
     {
       return FALSE;
     }
-
-  /* If this is set, than someone is surpressing the popdown temporarily */
-  if (chooser_entry->no_pop_down)
-    return FALSE;
 
   gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store), iter, DISPLAY_NAME_COLUMN, &name, -1);
   if (!name)
@@ -772,7 +763,6 @@ clear_completion_callback (GtkFileChooserEntry *chooser_entry,
       chooser_entry->has_completion = FALSE;
       gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
     }
-  chooser_entry->no_pop_down = FALSE;
 }
 
 /**

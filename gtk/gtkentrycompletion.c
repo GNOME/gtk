@@ -627,9 +627,13 @@ gtk_entry_completion_list_button_press (GtkWidget      *widget,
                                &iter, path);
       gtk_tree_path_free (path);
 
+      g_signal_handler_block (completion->priv->entry,
+			      completion->priv->changed_id);
       g_signal_emit (completion, entry_completion_signals[MATCH_SELECTED],
                      0, GTK_TREE_MODEL (completion->priv->filter_model),
                      &iter, &entry_set);
+      g_signal_handler_unblock (completion->priv->entry,
+				completion->priv->changed_id);
 
       if (!entry_set)
         {
