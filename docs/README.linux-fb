@@ -59,6 +59,10 @@ to own a copy of Windows to use these) and the type1 fonts URW Gothic,
 URW Bookman and Courier. You will need to have at least Arial or URW
 Gothic installed, because the "Sans" font is used as a last case font.
 
+If you've done all this and fonts still doesn't work, make sure you've
+run pango-querymodules as described in the building and installing
+section.
+
 Running:
 --------
 To run a program you should only need to start it, but there are some
