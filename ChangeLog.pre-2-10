@@ -1,5 +1,11 @@
 2005-03-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): 
+	Don't warn if a stock icon cannot be found.  (#168830,
+	Sven Neumann)
+
+2005-03-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkwidget.c (gtk_widget_reparent_subwindows): 
 	Avoid warnings if gtk_widget_reparent() is called at
 	unusual times.  (#168966, Christian Persch)

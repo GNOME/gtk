@@ -510,25 +510,8 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GdkPixbuf *colorized = NULL;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
-  gboolean stock_pixbuf = FALSE;
 
   priv = GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE (cell);
-
-  pixbuf = cellpixbuf->pixbuf;
-  if (cell->is_expander)
-    {
-      if (cell->is_expanded &&
-	  cellpixbuf->pixbuf_expander_open != NULL)
-	pixbuf = cellpixbuf->pixbuf_expander_open;
-      else if (! cell->is_expanded &&
-	       cellpixbuf->pixbuf_expander_closed != NULL)
-	pixbuf = cellpixbuf->pixbuf_expander_closed;
-    }
-
-  if (!pixbuf && !priv->stock_id)
-    return;
-  else if (!pixbuf && priv->stock_id)
-    stock_pixbuf = TRUE;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, cell_area,
 				     &pix_rect.x,
@@ -536,9 +519,6 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 				     &pix_rect.width,
 				     &pix_rect.height);
 
-  if (stock_pixbuf)
-    pixbuf = cellpixbuf->pixbuf;
-  
   pix_rect.x += cell_area->x;
   pix_rect.y += cell_area->y;
   pix_rect.width  -= cell->xpad * 2;
@@ -548,6 +528,21 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       !gdk_rectangle_intersect (expose_area, &draw_rect, &draw_rect))
     return;
 
+  pixbuf = cellpixbuf->pixbuf;
+
+  if (cell->is_expander)
+    {
+      if (cell->is_expanded &&
+	  cellpixbuf->pixbuf_expander_open != NULL)
+	pixbuf = cellpixbuf->pixbuf_expander_open;
+      else if (!cell->is_expanded &&
+	       cellpixbuf->pixbuf_expander_closed != NULL)
+	pixbuf = cellpixbuf->pixbuf_expander_closed;
+    }
+
+  if (!pixbuf)
+    return;
+
   if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE || !cell->sensitive)
     {
       GtkIconSource *source;
@@ -555,7 +550,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       source = gtk_icon_source_new ();
       gtk_icon_source_set_pixbuf (source, pixbuf);
       /* The size here is arbitrary; since size isn't
-       * wildcarded in the souce, it isn't supposed to be
+       * wildcarded in the source, it isn't supposed to be
        * scaled by the engine function
        */
       gtk_icon_source_set_size (source, GTK_ICON_SIZE_SMALL_TOOLBAR);
