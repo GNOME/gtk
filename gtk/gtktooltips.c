@@ -390,10 +390,13 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   GtkRequisition requisition;
   GtkWidget *widget;
   GtkStyle *style;
-  gint x, y, w, h, scr_w, scr_h;
+  gint x, y, w, h;
   GtkTooltipsData *data;
   gboolean keyboard_mode;
   GdkScreen *screen;
+  GdkScreen *pointer_screen;
+  gint monitor_num, px, py;
+  GdkRectangle monitor;
 
   if (!tooltips->tip_window)
     gtk_tooltips_force_window (tooltips);
@@ -410,8 +413,6 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   gtk_tooltips_update_screen (tooltips, FALSE);
   
   screen = gtk_widget_get_screen (widget);
-  scr_w = gdk_screen_get_width (screen);
-  scr_h = gdk_screen_get_height (screen);
 
   data = tooltips->active_tips_data;
 
@@ -436,12 +437,22 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
 
   x -= (w / 2 + 4);
 
-  if ((x + w) > scr_w)
-    x -= (x + w) - scr_w;
-  else if (x < 0)
-    x = 0;
+  gdk_display_get_pointer (gdk_screen_get_display (screen),
+			   &pointer_screen, &px, &py, NULL);
+  if (pointer_screen != screen) 
+    {
+      px = x;
+      py = y;
+    }
+  monitor_num = gdk_screen_get_monitor_at_point (screen, px, py);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-  if ((y + h + widget->allocation.height + 4) > scr_h)
+  if ((x + w) > monitor.x + monitor.width)
+    x -= (x + w) - (monitor.x + monitor.width);
+  else if (x < monitor.x)
+    x = monitor.x;
+
+  if ((y + h + widget->allocation.height + 4) > monitor.y + monitor.height)
     y = y - h - 4;
   else
     y = y + widget->allocation.height + 4;

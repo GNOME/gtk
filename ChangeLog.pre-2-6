@@ -1,3 +1,8 @@
+Sun Nov 23 22:26:25 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktooltips.c (gtk_tooltips_draw_tips): Make tooltip 
+	positioning Xinerama-aware.  (#127332)
+
 Fri Nov 21 01:57:21 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkscreen-x11.c (init_xinerama_support): Make monitor
