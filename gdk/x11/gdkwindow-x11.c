@@ -806,16 +806,6 @@ gdk_window_reparent (GdkWindow *window,
 }
 
 void
-gdk_window_clear (GdkWindow *window)
-{
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  if (!GDK_DRAWABLE_DESTROYED (window))
-    XClearWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
-}
-
-void
 _gdk_windowing_window_clear_area (GdkWindow *window,
 				  gint       x,
 				  gint       y,

@@ -43,12 +43,21 @@
 #include "gdk/gdkkeysyms.h"
 
 #include "circles.xbm"
+#include "test.xpm"
 
 typedef struct _OptionMenuItem
 {
   gchar        *name;
   GtkSignalFunc func;
 } OptionMenuItem;
+
+gboolean
+file_exists (const char *filename)
+{
+  struct stat statbuf;
+
+  return stat("filename", &statbuf) == 0;
+}
 
 GtkWidget *
 shape_create_icon (char     *xpm_file,
@@ -586,9 +595,18 @@ new_pixmap (char      *filename,
   GdkPixmap *pixmap;
   GdkBitmap *mask;
 
-  pixmap = gdk_pixmap_create_from_xpm (window, &mask,
-				       background,
-				       filename);
+  if (strcmp (filename, "test.xpm") == 0 ||
+      !file_exists (filename))
+    {
+      pixmap = gdk_pixmap_create_from_xpm_d (window, &mask,
+					     background,
+					     openfile);
+    }
+  else
+    pixmap = gdk_pixmap_create_from_xpm (window, &mask,
+					 background,
+					 filename);
+  
   wpixmap = gtk_pixmap_new (pixmap, mask);
 
   return wpixmap;
@@ -1998,8 +2016,6 @@ create_pixmap (void)
   GtkWidget *label;
   GtkWidget *separator;
   GtkWidget *pixmapwid;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
 
   if (!window)
     {
@@ -2023,11 +2039,7 @@ create_pixmap (void)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
 
-      pixmap = gdk_pixmap_create_from_xpm (window->window, &mask, NULL,
-					   "test.xpm");
-      pixmapwid = gtk_pixmap_new (pixmap, mask);
-      gdk_pixmap_unref (pixmap);
-      gdk_pixmap_unref (mask);
+      pixmapwid = new_pixmap ("test.xpm", window->window, NULL);
 
       label = gtk_label_new ("Pixmap\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
@@ -6819,6 +6831,12 @@ create_shapes (void)
   static GtkWidget *sheets = NULL;
   static GtkWidget *rings = NULL;
 
+  if (!(file_exists ("Modeller.xpm") &&
+	file_exists ("FilesQueue.xpm") &&
+	file_exists ("3DRings.xpm")))
+    return;
+  
+
   if (!modeller)
     {
       modeller = shape_create_icon ("Modeller.xpm",
@@ -8604,7 +8622,6 @@ int
 main (int argc, char *argv[])
 {
   GtkBindingSet *binding_set;
-  struct stat statbuf;
 
   srand (time (NULL));
 
@@ -8613,14 +8630,8 @@ main (int argc, char *argv[])
   /* Check to see if we are being run from the correct
    * directory.
    */
-  if (stat("./testgtkrc", &statbuf) < 0)
-    {
-      fprintf (stderr, "*** The testgtk program must be run from within the\n"
-	               "*** gtk/ subdirectory of the GTK+ distribution.\n");
-      exit (1);
-    }
-
-  gtk_rc_add_default_file ("testgtkrc");
+  if (file_exists ("testgtkrc"))
+    gtk_rc_add_default_file ("testgtkrc");
 
   gtk_init (&argc, &argv);
 

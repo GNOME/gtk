@@ -995,6 +995,18 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 }
 
 void
+gdk_window_clear (GdkWindow *window)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  gdk_window_clear_area (window, 0, 0,
+			 private->drawable.width, private->drawable.height);
+}
+
+void
 gdk_window_clear_area (GdkWindow *window,
 		       gint       x,
 		       gint       y,

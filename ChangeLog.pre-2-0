@@ -1,3 +1,21 @@
+Fri May  5 11:18:47 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c gdk/x11/gdkwindow-x11.c (gdk_window_clear): Move
+	gdk_window_clear() into common code, implement in terms of
+	gdk_window_clear_area(). (Fixes bug where gdk_window_clear() was
+	not redirected to the backing rectangle.
+
+Wed Apr 26 01:53:23 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (EXTRA_DIST): Add OLD_STAMP into 
+	EXTRA_DIST. It does not work well when the file that
+	everything depends on is not in the tarball.
+
+Wed Apr 26 00:56:14 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c: Some hacks and fixes so that it basically
+	works when not sitting in the GTK+ build tree.
+
 2000-05-03  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbtree.c (gtk_text_line_next_could_contain_tag):
