@@ -261,7 +261,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 {
   gulong nitems;
   gulong nbytes;
-  gulong length;
+  gulong length = 0;		/* Quiet GCC */
   Atom prop_type;
   gint prop_format;
   guchar *t = NULL;

@@ -81,6 +81,13 @@ gdk_screen_get_number (GdkScreen *screen)
   return 0;
 }
 
+gchar * 
+_gdk_windowing_substitute_screen_number (gchar *display_name,
+					 int    screen_number)
+{
+  return g_strdup (display_name);
+}
+
 gchar *
 gdk_screen_make_display_name (GdkScreen *screen)
 {

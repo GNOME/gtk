@@ -552,6 +552,45 @@ _gdk_x11_screen_window_manager_changed (GdkScreen *screen)
 }
 
 /**
+ * _gdk_windowing_substitute_screen_number:
+ * @display_name : The name of a display, in the form used by 
+ *                 gdk_display_open (). If %NULL a default value
+ *                 will be used. On X11, this is derived from the DISPLAY
+ *                 environment variable.
+ * @screen_number : The number of a screen within the display
+ *                  referred to by @display_name.
+ *
+ * Modifies a @display_name to make @screen_number the default
+ * screen when the display is opened.
+ *
+ * Return value: a newly allocated string holding the resulting
+ *   display name. Free with g_free().
+ */
+gchar * 
+_gdk_windowing_substitute_screen_number (const gchar *display_name,
+					 gint         screen_number)
+{
+  GString *str;
+  gchar   *p;
+
+  if (!display_name)
+    display_name = getenv ("DISPLAY");
+
+  if (!display_name)
+    return NULL;
+
+  str = g_string_new (display_name);
+
+  p = strrchr (str->str, '.');
+  if (p && p >	strchr (str->str, ':'))
+    g_string_truncate (str, p - str->str);
+
+  g_string_append_printf (str, ".%d", screen_number);
+
+  return g_string_free (str, FALSE);
+}
+
+/**
  * gdk_screen_make_display_name:
  * @screen: a #GdkScreen
  * 
@@ -563,20 +602,12 @@ _gdk_x11_screen_window_manager_changed (GdkScreen *screen)
 gchar *
 gdk_screen_make_display_name (GdkScreen *screen)
 {
-  GString     *str;
   const gchar *old_display;
-  gchar       *p;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   old_display = gdk_display_get_name (gdk_screen_get_display (screen));
 
-  str = g_string_new (old_display);
-        
-  p = strrchr (str->str, '.');
-  if (p && p >  strchr (str->str, ':'))
-    g_string_truncate (str, p - str->str);
-
-  g_string_append_printf (str, ".%d", gdk_screen_get_number (screen));
-
-  return g_string_free (str, FALSE);
+  return _gdk_windowing_substitute_screen_number (old_display, 
+						  gdk_screen_get_number (screen));
 }
-

@@ -85,8 +85,8 @@ void	  gdk_set_use_xshm		(gboolean	 use_xshm);
 gboolean  gdk_get_use_xshm		(void);
 #endif /* GDK_DISABLE_DEPRECATED */
 
-gchar*	  gdk_get_display		(void);
-gchar*	  gdk_get_display_arg_name	(void);
+gchar*	                  gdk_get_display		(void);
+G_CONST_RETURN gchar*	  gdk_get_display_arg_name	(void);
 
 #ifndef GDK_DISABLE_DEPRECATED
 gint gdk_input_add_full	  (gint		     source,

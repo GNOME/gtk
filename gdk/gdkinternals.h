@@ -166,6 +166,8 @@ extern GDestroyNotify _gdk_event_notify;
 
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
+extern gint       _gdk_screen_number;
+extern gchar     *_gdk_display_arg_name;
 
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
@@ -235,6 +237,9 @@ extern GdkArgDesc _gdk_windowing_args[];
 void     _gdk_windowing_init                    (gint       *argc,
                                                  gchar    ***argv);
 void     _gdk_windowing_set_default_display     (GdkDisplay *display);
+
+gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
+					        gint         screen_number);
 
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,

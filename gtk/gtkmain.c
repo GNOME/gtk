@@ -871,19 +871,7 @@ gtk_init_check (int	 *argc,
   if (!gtk_parse_args (argc, argv))
     return FALSE;
 
-  if (gdk_display_get_default ())
-    return TRUE;
-
-  display = gdk_display_open (gdk_get_display_arg_name ());
-
-  if (display)
-    {
-      gdk_display_manager_set_default_display (gdk_display_manager_get (),
-					       display);
-      return TRUE;
-    }
-  else
-    return FALSE;
+  return gdk_display_open_default_libgtk_only () != NULL;
 }
 
 #undef gtk_init

@@ -35,6 +35,8 @@ gint                _gdk_error_code = 0;
 gint                _gdk_error_warnings = TRUE;
 GList              *_gdk_default_filters = NULL;
 gchar              *_gdk_display_name = NULL;
+gint                _gdk_screen_number = -1;
+gchar              *_gdk_display_arg_name = NULL;
 
 GSList             *_gdk_displays = NULL;
 

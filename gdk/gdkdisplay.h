@@ -146,6 +146,8 @@ GdkWindow *      gdk_display_get_window_at_pointer (GdkDisplay             *disp
 GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay                   *display,
 						       const GdkDisplayPointerHooks *new_hooks);
 
+GdkDisplay *gdk_display_open_default_libgtk_only (void);
+
 G_END_DECLS
 
 #endif				/* __GDK_DISPLAY_H__ */
