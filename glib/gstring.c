@@ -254,8 +254,11 @@ GString*
 g_string_append (GString *fstring, gchar *val)
 {
   GRealString *string = (GRealString*)fstring;
-  int len = strlen (val);
+  int len;
 
+  g_return_val_if_fail (val != NULL, fstring);
+  
+  len = strlen (val);
   g_string_maybe_expand (string, len);
 
   strcpy (string->str + string->len, val);
@@ -282,8 +285,11 @@ GString*
 g_string_prepend (GString *fstring, gchar *val)
 {
   GRealString *string = (GRealString*)fstring;
-  gint len = strlen (val);
+  gint len;
 
+  g_return_val_if_fail (val != NULL, fstring);
+
+  len = strlen (val);
   g_string_maybe_expand (string, len);
 
   g_memmove (string->str + len, string->str, string->len);
@@ -319,10 +325,13 @@ GString *
 g_string_insert (GString *fstring, gint pos, gchar *val)
 {
   GRealString *string = (GRealString*)fstring;
-  gint len = strlen (val);
+  gint len;
 
+  g_return_val_if_fail (val != NULL, fstring);
+  g_return_val_if_fail (pos >= 0, fstring);
   g_return_val_if_fail (pos <= string->len, fstring);
 
+  len = strlen (val);
   g_string_maybe_expand (string, len);
 
   g_memmove (string->str + pos + len, string->str + pos, string->len - pos);
@@ -361,10 +370,13 @@ g_string_erase (GString *fstring, gint pos, gint len)
 {
   GRealString *string = (GRealString*)fstring;
 
+  g_return_val_if_fail (len >= 0, fstring);
+  g_return_val_if_fail (pos >= 0, fstring);
   g_return_val_if_fail (pos <= string->len, fstring);
   g_return_val_if_fail (pos + len <= string->len, fstring);
 
-  g_memmove (string->str + pos, string->str + pos + len, string->len - (pos + len));
+  if (pos + len < string->len)
+    g_memmove (string->str + pos, string->str + pos + len, string->len - (pos + len));
 
   string->len -= len;
   

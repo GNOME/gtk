@@ -1,3 +1,8 @@
+Thu Apr 30 21:41:30 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gstring.c : Check arguments more carefully, 
+	(gtk-draco-980423-1.patch; ramsey@rhrk.uni-kl.de) 
+
 Tue Apr  7 19:36:48 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gutils.c (g_direct_compare): Removed, because that's what
