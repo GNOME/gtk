@@ -18,3 +18,4 @@ Makefile.in
 *.vrs
 html
 text
+gtk-config.1
