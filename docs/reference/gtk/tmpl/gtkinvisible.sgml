@@ -2,12 +2,12 @@
 GtkInvisible
 
 <!-- ##### SECTION Short_Description ##### -->
-internally-used widget which is not displayed.
+a widget which is not displayed.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The #GtkInvisible widget is used internally in GTK+, and is probably not useful
-for application developers.
+The #GtkInvisible widget is used internally in GTK+, and is probably not 
+very useful for application developers.
 </para>
 <para>
 It is used for reliable pointer grabs and selection handling in the code

@@ -1,3 +1,12 @@
+Fri Mar  5 23:45:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkinvisible.sgml: Remove "internally-used"
+	which sounds like "private".
+
+Tue Mar  2 23:51:24 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkentrycompletion.sgml: Add a bit about actions.
+
 Mon Mar  1 19:47:48 2004  Owen Taylor  <otaylor@redhat.com>
 
 	 * === Released 2.3.5 ====

@@ -9,10 +9,17 @@ completion functionality for GtkEntry
 #GtkEntryCompletion is an auxiliary object to be used in conjunction with
 #GtkEntry to provide the completion functionality. It implements the
 #GtkCellLayout interface, to allow the user to add extra cells to the 
-TreeView with completion matches. 
+#GtkTreeView with completion matches. 
 </para>
 <para>
 To add completion functionality to an entry, use gtk_entry_set_completion().
+</para>
+<para>
+In addition to regular completion matches, which will be inserted into the
+entry when they are selected, #GtkEntryCompletion also allows to display 
+"actions" in the popup window. Their appearance is similar to menuitems, 
+to differentiate them clearly from completion strings. When an action is 
+selected, the ::action-activated signal is emitted.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
