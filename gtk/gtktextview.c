@@ -3860,9 +3860,10 @@ static void
 gtk_text_view_reset_im_context (GtkTextView *text_view)
 {
   if (text_view->need_im_reset)
-    text_view->need_im_reset = 0;
-
-  gtk_im_context_reset (text_view->im_context);
+    {
+      text_view->need_im_reset = 0;
+      gtk_im_context_reset (text_view->im_context);
+    }
 }
 
 /*

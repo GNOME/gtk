@@ -1866,9 +1866,10 @@ static void
 gtk_entry_reset_im_context (GtkEntry *entry)
 {
   if (entry->need_im_reset)
-    entry->need_im_reset = 0;
-
-  gtk_im_context_reset (entry->im_context);
+    {
+      entry->need_im_reset = 0;
+      gtk_im_context_reset (entry->im_context);
+    }
 }
 
 static gint
