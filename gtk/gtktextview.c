@@ -47,8 +47,8 @@
 enum {
   MOVE,
   SET_ANCHOR,
-  INSERT,
-  DELETE,
+  INSERT_AT_CURSOR,
+  DELETE_AT_CURSOR,
   CUT_CLIPBOARD,
   COPY_CLIPBOARD,
   PASTE_CLIPBOARD,
@@ -157,11 +157,11 @@ static void gtk_text_view_move             (GtkTextView           *text_view,
 static void gtk_text_view_set_anchor       (GtkTextView           *text_view);
 static void gtk_text_view_scroll_pages     (GtkTextView           *text_view,
 					    gint                   count);
-static void gtk_text_view_insert           (GtkTextView           *text_view,
+static void gtk_text_view_insert_at_cursor (GtkTextView           *text_view,
 					    const gchar           *str);
-static void gtk_text_view_delete           (GtkTextView           *text_view,
-					    GtkDeleteType          type,
-					    gint                   count);
+static void gtk_text_view_delete_at_cursor (GtkTextView           *text_view,
+                                            GtkDeleteType          type,
+                                            gint                   count);
 static void gtk_text_view_cut_clipboard    (GtkTextView           *text_view);
 static void gtk_text_view_copy_clipboard   (GtkTextView           *text_view);
 static void gtk_text_view_paste_clipboard  (GtkTextView           *text_view);
@@ -394,19 +394,19 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                       gtk_marshal_VOID__VOID,
                       GTK_TYPE_NONE, 0);
 
-  signals[INSERT] = 
-      gtk_signal_new ("insert",
+  signals[INSERT_AT_CURSOR] = 
+      gtk_signal_new ("insert_at_cursor",
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkTextViewClass, insert),
+                      GTK_SIGNAL_OFFSET (GtkTextViewClass, insert_at_cursor),
                       gtk_marshal_VOID__POINTER,
                       GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
 
-  signals[DELETE] = 
-      gtk_signal_new ("delete",
+  signals[DELETE_AT_CURSOR] = 
+      gtk_signal_new ("delete_at_cursor",
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkTextViewClass, delete),
+                      GTK_SIGNAL_OFFSET (GtkTextViewClass, delete_at_cursor),
                       gtk_marshal_VOID__ENUM_INT,
                       GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
 
@@ -527,55 +527,55 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, 1);
   
   gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_CONTROL_MASK,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, -1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_CONTROL_MASK,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_MOD1_MASK,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				GTK_TYPE_INT, -1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_k, GDK_CONTROL_MASK,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_u, GDK_CONTROL_MASK,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPHS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
 				GTK_TYPE_INT, 1);
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-				"insert", 1,
+				"insert_at_cursor", 1,
 				GTK_TYPE_STRING, " ");
 
   gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_MOD1_MASK,
-				"delete", 2,
+				"delete_at_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
 				GTK_TYPE_INT, 1);
   
@@ -643,8 +643,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   
   klass->move = gtk_text_view_move;
   klass->set_anchor = gtk_text_view_set_anchor;
-  klass->insert = gtk_text_view_insert;
-  klass->delete = gtk_text_view_delete;
+  klass->insert_at_cursor = gtk_text_view_insert_at_cursor;
+  klass->delete_at_cursor = gtk_text_view_delete_at_cursor;
   klass->cut_clipboard = gtk_text_view_cut_clipboard;
   klass->copy_clipboard = gtk_text_view_copy_clipboard;
   klass->paste_clipboard = gtk_text_view_paste_clipboard;
@@ -2534,15 +2534,15 @@ find_whitepace_region (const GtkTextIter *center,
 }
 
 static void
-gtk_text_view_insert (GtkTextView *text_view,
-		      const gchar *str)
+gtk_text_view_insert_at_cursor (GtkTextView *text_view,
+                                const gchar *str)
 {
   gtk_text_buffer_insert_interactive_at_cursor (text_view->buffer, str, -1,
 						text_view->editable);
 }
 
 static void
-gtk_text_view_delete (GtkTextView   *text_view,
+gtk_text_view_delete_at_cursor (GtkTextView   *text_view,
 			   GtkDeleteType  type,
 			   gint           count)
 {
@@ -3465,7 +3465,7 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
   else
     {
       if (text_view->overwrite_mode)
-	gtk_text_view_delete (text_view, GTK_DELETE_CHARS, 1);
+	gtk_text_view_delete_at_cursor (text_view, GTK_DELETE_CHARS, 1);
       gtk_text_buffer_insert_interactive_at_cursor (text_view->buffer, str, -1,
                                                     text_view->editable);
     }
