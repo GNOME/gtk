@@ -406,7 +406,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							 _("Headers Clickable"),
 							 _("Column headers respond to click events"),
 							 FALSE,
-							 G_PARAM_WRITE));
+							 G_PARAM_WRITABLE));
 
   g_object_class_install_property (o_class,
                                    PROP_EXPANDER_COLUMN,
