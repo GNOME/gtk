@@ -1,3 +1,21 @@
+Tue Sep 15 13:09:24 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkimage.c (gdk_image_new): Reverted global changes
+	of g_new to malloc(), added back in the one place where
+	it actually mattered. #include <stdlib.h>.
+
+	* gdk/gdkrgb.c: g_malloc() to malloc() as above.
+
+Tue Sep 15 11:30:03 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c: Keep a list of directories in which we never
+	want to stat the entries (like /afs), and assume everything in
+	those directories is a subdirectory.
+
+	- When following a path, try to open components even when
+	we don't find them in their parent's directory to
+	support automounters.
+
 Tue Sep 15 11:06:13 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): Don't request

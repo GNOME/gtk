@@ -591,10 +591,9 @@ gdk_input_gxi_grab_pointer (GdkWindow *     window,
 			    GdkWindow *     confine_to,
 			    guint32         time)
 {
-  GdkInputWindow *input_window, *new_window;
   GList *tmp_list;
+  GdkInputWindow *input_window;
   GdkDevicePrivate *gdkdev;
-  GList *tmp_list;
 
   tmp_list = gdk_input_windows;
   while (tmp_list)
@@ -602,27 +601,25 @@ gdk_input_gxi_grab_pointer (GdkWindow *     window,
       input_window = (GdkInputWindow *)tmp_list->data;
 
       if (input_window->window == window)
-	new_window = input_window;
-      else (input_window->grabbed)
+	input_window->grabbed = TRUE;
+      else if (input_window->grabbed)
 	input_window->grabbed = FALSE;
 
-      tmp_list = gdk_input_devices;
-      while (tmp_list)
-	{
-	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
-	  if (gdkdev->info.deviceid != GDK_CORE_POINTER && 
-	      gdkdev->xdevice &&
-	      (gdkdev->button_state != 0))
-	    gdkdev->button_state = 0;
-	  
-	  tmp_list = tmp_list->next;
-	}
-      
+      tmp_list = tmp_list->next;
+    }
+
+  tmp_list = gdk_input_devices;
+  while (tmp_list)
+    {
+      gdkdev = (GdkDevicePrivate *)tmp_list->data;
+      if (gdkdev->info.deviceid != GDK_CORE_POINTER && 
+	  gdkdev->xdevice &&
+	  (gdkdev->button_state != 0))
+	gdkdev->button_state = 0;
       
       tmp_list = tmp_list->next;
     }
 
-  new_window->grabbed = TRUE;
   return Success;
 }
 
