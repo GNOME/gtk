@@ -1,3 +1,9 @@
+Wed Sep 29 15:41:08 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_size_allocate): 
+	Get rid of stupid C unsigned integer bug.
+	(Bug #2272)
+
 1999-09-28  Kjartan Maraas  <kmaraas@online.no>
 
 	* configure.in: Added "ro" to ALL_LINGUAS.
@@ -1490,6 +1496,16 @@ Thu Apr  1 18:41:25 1999  Owen Taylor  <otaylor@redhat.com>
 	* gdk/gdkevents.c (gdk_compress_exposures): Set the
 	window field of the event structure before calling
 	user filters.
+
+Wed Mar 24 23:03:49 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.2.1
+
+	* docs/gtk-config.1.in:
+	  docs/Makefile.am:
+	  configure.in: gtk-config is now generated.
+
+	* docs/gtk-config.1: Removed, now generated.
 
 1999-03-31  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 

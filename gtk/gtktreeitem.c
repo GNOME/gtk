@@ -527,7 +527,7 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkTreeItem* item;
   GtkAllocation child_allocation;
-  guint border_width;
+  gint border_width;
   int temp;
 
   g_return_if_fail (widget != NULL);
