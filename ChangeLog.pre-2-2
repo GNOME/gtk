@@ -1,3 +1,10 @@
+Thu Jul  9 21:03:19 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkpreview.c: add in just enough support for 1 or 4 bits
+	  so that it seems to allow normal operation in those modes,
+	  although you will only see black  (GIMP toolbar now pops up,
+	  just don't create a new image and GIMP now works in 4 bit.)
+
 Thu Jul  9 20:20:04 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gdk/gdkvisuals.c: 4 bit support, increased available_depths

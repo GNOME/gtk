@@ -831,9 +831,11 @@ gtk_preview_get_visuals (GtkPreviewClass *klass)
     GDK_VISUAL_DIRECT_COLOR,
     GDK_VISUAL_TRUE_COLOR,
     GDK_VISUAL_DIRECT_COLOR,
-    GDK_VISUAL_PSEUDO_COLOR
+    GDK_VISUAL_PSEUDO_COLOR,
+    GDK_VISUAL_STATIC_COLOR,
+    GDK_VISUAL_STATIC_GRAY
   };
-  static gint depths[] = { 24, 24, 32, 32, 16, 16, 15, 15, 8 };
+  static gint depths[] = { 24, 24, 32, 32, 16, 16, 15, 15, 8, 4, 1 };
   static gint nvisual_types = sizeof (types) / sizeof (types[0]);
 
   int i;
@@ -887,6 +889,8 @@ gtk_preview_get_visuals (GtkPreviewClass *klass)
     
   switch (klass->info.visual->depth)
     {
+    case 1:
+    case 4:
     case 8:
       klass->info.bpp = 1;
       break;
