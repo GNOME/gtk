@@ -1,3 +1,8 @@
+Wed May 10 16:08:09 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (GTK_LIBS_EXTRA): Remove gobject that snuck
+	in prematurely.
+
 2000-05-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Fix typo. I
