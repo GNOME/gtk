@@ -1,3 +1,9 @@
+Thu Sep  4 19:11:23 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable.
+
+	* docs/RELEASE-HOWTO: updates.
+
 2003-09-04  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/merge-2.ui: Use "position" instead of "pos".

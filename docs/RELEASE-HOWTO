@@ -4,8 +4,8 @@ How to do a GTK+ release?
 Make sure you have Owen's special autoconf and libtool RPMs, available at:
 http://people.redhat.com/otaylor/gtk/autotools/.
 
-Also make sure you have the following packages installed (I used the RPM
-package names from RedHat 8.0):
+Also make sure you have the following packages installed with all their
+dependencies (I used the RPM package names from RedHat 9):
 * gtk-doc
 * linuxdoc-tools
 * docbook-utils
@@ -16,10 +16,9 @@ Without those packages make distcheck will *not* pass.
 0) Blow away your gtk+ directory, check a new version out
 1) autogen and build it, make sure to enable docs.
 2) Update NEWS based on ChangeLog
-3) Update version in configure.in, increase MICRO, interface and binary
-age by 1. (Note that this is critical, a slip-up here will cause the soname
-to change).
-4) Add === Released 2.0.x === at the top of the ChangeLog
+3) Update version in configure.in, increase micro and interface age by 1.
+(Note that this is critical, a slip-up here will cause the soname to change).
+4) Add === Released 2.x.y === at the top of the ChangeLog
 5) make mydistcheck
 6) Fix broken stuff found by 4) repeat
 7) cvs commit; you'll have a bunch of po file changes, and maybe some
@@ -27,7 +26,7 @@ doc changes too (NOTE: be sure to use cvs with compression, else you'll
 end up waiting for a long time :).
 8) If 7) fails because someone else committed inbetween, curse, cvs up
 fix conflicts and go to 5)
-9) type 'cvs tag GTK_2_0_9' in the toplevel directory
+9) type 'cvs tag GTK_2_x_y' in the toplevel directory
 10) You now have the tarball, and the CVS tag, now upload the tarball to
 gnome.org and gtk.org
 11) Go to the gnome-announce list archives, find the last announce message,
