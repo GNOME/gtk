@@ -6,7 +6,7 @@ Application-driven image loading.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
-    #GdkPIxbufLoader provides a way for applications to drive the
+    #GdkPixbufLoader provides a way for applications to drive the
     process of loading an image.  Applications can use this
     functionality instead of gdk_pixbuf_new_from_file() when they need
     to parse image data in small chunks, such as when reading it from
