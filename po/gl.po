@@ -1,0 +1,475 @@
+# Galician translation of gtk+.
+#
+# Se desexas colaborar connosco na traducción de programas libres ó galego,
+# vai mira-la páxina do noso grupo:  http://www.ctv.es/USERS/jtarrio/trans
+#
+# Copyright (C) 1999 Jesus Bravo Alvarez
+# Jesus Bravo Alvarez <jba@pobox.com>, 1999.
+#
+# Conclusion Date: 1999-08-30 18:49+0200
+# Based on es.po by Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+# and pt.po by Nuno Ferreira <nmrf@rnl.ist.utl.pt>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.2.5\n"
+"POT-Creation-Date: 1999-09-23 19:59-0500\n"
+"PO-Revision-Date: 1999-10-03 17:34+0200\n"
+"Last-Translator: Jesus Bravo Alvarez <jba@pobox.com>\n"
+"Language-Team: Galician <gpul-traduccion@ceu.fi.udc.es>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkcolorsel.c:221
+msgid "Hue:"
+msgstr "Tinte:"
+
+#: gtk/gtkcolorsel.c:222
+msgid "Saturation:"
+msgstr "Saturación:"
+
+#: gtk/gtkcolorsel.c:223
+msgid "Value:"
+msgstr "Valor:"
+
+#: gtk/gtkcolorsel.c:224
+msgid "Red:"
+msgstr "Vermello:"
+
+#: gtk/gtkcolorsel.c:225
+msgid "Green:"
+msgstr "Verde:"
+
+#: gtk/gtkcolorsel.c:226
+msgid "Blue:"
+msgstr "Azul:"
+
+#: gtk/gtkcolorsel.c:227
+msgid "Opacity:"
+msgstr "Opacidade:"
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
+#: gtk/gtkgamma.c:416
+msgid "OK"
+msgstr "Aceptar"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
+#: gtk/gtkgamma.c:424
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: gtk/gtkcolorsel.c:1738
+msgid "Help"
+msgstr "Axuda"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:418
+msgid "Directories"
+msgstr "Directorios"
+
+#. The files clist
+#: gtk/gtkfilesel.c:437
+msgid "Files"
+msgstr "Ficheiros"
+
+#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Directorio ilexible: %s"
+
+#: gtk/gtkfilesel.c:539
+msgid "Create Dir"
+msgstr "Crear Directorio"
+
+#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
+msgid "Delete File"
+msgstr "Borrar Ficheiro"
+
+#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
+msgid "Rename File"
+msgstr "Renomear Ficheiro"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:722
+msgid "Error"
+msgstr "Erro"
+
+#. close button
+#: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
+msgid "Close"
+msgstr "Pechar"
+
+#: gtk/gtkfilesel.c:820
+msgid "Create Directory"
+msgstr "Crear Directorio"
+
+#: gtk/gtkfilesel.c:834
+msgid "Directory name:"
+msgstr "Nome do Directorio:"
+
+#. buttons
+#: gtk/gtkfilesel.c:847
+msgid "Create"
+msgstr "Crear"
+
+#. buttons
+#: gtk/gtkfilesel.c:947
+msgid "Delete"
+msgstr "Borrar"
+
+#. buttons
+#: gtk/gtkfilesel.c:1062
+msgid "Rename"
+msgstr "Renomear"
+
+#: gtk/gtkfilesel.c:1445
+msgid "Selection: "
+msgstr "Selección: "
+
+#: gtk/gtkfontsel.c:210
+msgid "Foundry:"
+msgstr "Fundición:"
+
+#: gtk/gtkfontsel.c:211
+msgid "Family:"
+msgstr "Familia:"
+
+#: gtk/gtkfontsel.c:212
+msgid "Weight:"
+msgstr "Peso:"
+
+#: gtk/gtkfontsel.c:213
+msgid "Slant:"
+msgstr "Inclinación:"
+
+#: gtk/gtkfontsel.c:214
+msgid "Set Width:"
+msgstr "Ancho:"
+
+#: gtk/gtkfontsel.c:215
+msgid "Add Style:"
+msgstr "Engadir Estilo:"
+
+#: gtk/gtkfontsel.c:216
+msgid "Pixel Size:"
+msgstr "Tamaño en Píxeles:"
+
+#: gtk/gtkfontsel.c:217
+msgid "Point Size:"
+msgstr "Tamaño en Puntos:"
+
+#: gtk/gtkfontsel.c:218
+msgid "Resolution X:"
+msgstr "Resolución X:"
+
+#: gtk/gtkfontsel.c:219
+msgid "Resolution Y:"
+msgstr "Resolución Y:"
+
+#: gtk/gtkfontsel.c:220
+msgid "Spacing:"
+msgstr "Espacio:"
+
+#: gtk/gtkfontsel.c:221
+msgid "Average Width:"
+msgstr "Ancho Medio:"
+
+#: gtk/gtkfontsel.c:222
+msgid "Charset:"
+msgstr "Código de caracteres:"
+
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:459
+msgid "Font Property"
+msgstr "Propiedades da Fonte"
+
+#: gtk/gtkfontsel.c:460
+msgid "Requested Value"
+msgstr "Valor Desexado"
+
+#: gtk/gtkfontsel.c:461
+msgid "Actual Value"
+msgstr "Valor Actual"
+
+#: gtk/gtkfontsel.c:494
+msgid "Font"
+msgstr "Fonte"
+
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2158 gtk/gtkfontsel.c:2388
+msgid "Font:"
+msgstr "Fonte:"
+
+#: gtk/gtkfontsel.c:509
+msgid "Font Style:"
+msgstr "Estilo de Fonte"
+
+#: gtk/gtkfontsel.c:514
+msgid "Size:"
+msgstr "Tamaño:"
+
+#: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
+msgid "Reset Filter"
+msgstr "Recomezar Filtro"
+
+#: gtk/gtkfontsel.c:660
+msgid "Metric:"
+msgstr "Métrica:"
+
+#: gtk/gtkfontsel.c:664
+msgid "Points"
+msgstr "Puntos:"
+
+#: gtk/gtkfontsel.c:671
+msgid "Pixels"
+msgstr "Pixels"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:687
+msgid "Preview:"
+msgstr "Previsualización:"
+
+#: gtk/gtkfontsel.c:716
+msgid "Font Information"
+msgstr "Información da Fonte"
+
+#: gtk/gtkfontsel.c:749
+msgid "Requested Font Name:"
+msgstr "Nome de Fonte Pedido:"
+
+#: gtk/gtkfontsel.c:760
+msgid "Actual Font Name:"
+msgstr "Nome de Fonte Actual:"
+
+#: gtk/gtkfontsel.c:771
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i fontes disponibles cun total de %i estilos."
+
+#: gtk/gtkfontsel.c:786
+msgid "Filter"
+msgstr "Filtro"
+
+#: gtk/gtkfontsel.c:799
+msgid "Font Types:"
+msgstr "Tipos de Fonte:"
+
+#: gtk/gtkfontsel.c:807
+msgid "Bitmap"
+msgstr "Mapa de Bits"
+
+#: gtk/gtkfontsel.c:813
+msgid "Scalable"
+msgstr "Escalable"
+
+#: gtk/gtkfontsel.c:819
+msgid "Scaled Bitmap"
+msgstr "Mapa de Bits Escalado"
+
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr "(nulo)"
+
+#: gtk/gtkfontsel.c:1215
+msgid "regular"
+msgstr "regular"
+
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
+msgid "italic"
+msgstr "itálica"
+
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
+msgid "oblique"
+msgstr "oblícua"
+
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
+msgid "reverse italic"
+msgstr "itálica invertida"
+
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
+msgid "reverse oblique"
+msgstr "oblícua invertida"
+
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
+msgid "other"
+msgstr "outra"
+
+#: gtk/gtkfontsel.c:1231
+msgid "[M]"
+msgstr "[M]"
+
+#: gtk/gtkfontsel.c:1232
+msgid "[C]"
+msgstr "[C]"
+
+#: gtk/gtkfontsel.c:1782
+msgid "The selected font is not available."
+msgstr "A fonte seleccionada non está disponible."
+
+#: gtk/gtkfontsel.c:1788
+msgid "The selected font is not a valid font."
+msgstr "A fonte seleccionada non é unha fonte válida."
+
+#: gtk/gtkfontsel.c:1846
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "Esta é una fonte de 2 bytes e pode non ser amosada correctamente."
+
+#: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
+msgid "(unknown)"
+msgstr "(descoñecido)"
+
+#: gtk/gtkfontsel.c:1949
+msgid "roman"
+msgstr "roman"
+
+#: gtk/gtkfontsel.c:1961
+msgid "proportional"
+msgstr "proporcional"
+
+#: gtk/gtkfontsel.c:1962
+msgid "monospaced"
+msgstr "monoespaciada"
+
+#: gtk/gtkfontsel.c:1963
+msgid "char cell"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2163
+msgid "Font: (Filter Applied)"
+msgstr "Fonte: (Filtro Aplicado)"
+
+#: gtk/gtkfontsel.c:2639
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "MAX_FONTS excedido.  Poden faltar algunhas fontes."
+
+#: gtk/gtkfontsel.c:3474
+msgid "Apply"
+msgstr "Aplicar"
+
+#: gtk/gtkfontsel.c:3496
+msgid "Font Selection"
+msgstr "Selección de Fonte"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "Valor gamma"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:200
+msgid "Input"
+msgstr "Entrada"
+
+#: gtk/gtkinputdialog.c:208
+msgid "No input devices"
+msgstr "Ningún dispositivo de entrada"
+
+#: gtk/gtkinputdialog.c:237
+msgid "Device:"
+msgstr "Dispositivo:"
+
+#: gtk/gtkinputdialog.c:253
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: gtk/gtkinputdialog.c:261
+msgid "Screen"
+msgstr "Pantalla"
+
+#: gtk/gtkinputdialog.c:269
+msgid "Window"
+msgstr "Fiestra"
+
+#: gtk/gtkinputdialog.c:277
+msgid "Mode: "
+msgstr "Modo: "
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:307
+msgid "Axes"
+msgstr "Eixes"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:323
+msgid "Keys"
+msgstr "Teclas"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:345
+msgid "Save"
+msgstr "Gardar"
+
+#: gtk/gtkinputdialog.c:500
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:501
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:502
+msgid "Pressure"
+msgstr "Presión"
+
+#: gtk/gtkinputdialog.c:503
+msgid "X Tilt"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:504
+msgid "Y Tilt"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:544
+msgid "none"
+msgstr "ningún"
+
+#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+msgid "(disabled)"
+msgstr "(desactivado)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:692
+msgid "clear"
+msgstr "limpar"
+
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#, c-format
+msgid "Page %u"
+msgstr "Páxina %u"
+
+#: gtk/gtkrc.c:1627
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr ""
+"Foi imposible atopa-lo ficheiro de imaxe no pixmap_path: \"%s\" line %d"
+
+#: gtk/gtkrc.c:1630
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Foi imposible atopa-lo ficheiro de imaxe no pixmap_path: \"%s\""
+
+#: gtk/gtkthemes.c:79
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Foi imposible atopa-lo módulo no module_path: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- Sen Tip ---"
