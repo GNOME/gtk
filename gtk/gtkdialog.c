@@ -855,10 +855,10 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  *   switch (result)
  *     {
  *       case GTK_RESPONSE_ACCEPT:
- *          do_application_specific_something (<!>);
+ *          do_application_specific_something (<!-- -->);
  *          break;
  *       default:
- *          do_nothing_since_dialog_was_cancelled (<!>);
+ *          do_nothing_since_dialog_was_cancelled (<!-- -->);
  *          break;
  *     }
  *   gtk_widget_destroy (dialog);
