@@ -80,7 +80,7 @@ gxid_SOURCES = gxid.c
 gxid_LDADD = $(LDADDS)
 
 install-data-local:
-	../../$(MKINSTALLDIRS) $(includedir)/gdk
+	$(MKINSTALLDIRS) $(includedir)/gdk
 	$(INSTALL_DATA) $(srcdir)/gdkx.h $(includedir)/gdk
-	../../$(MKINSTALLDIRS) $(includedir)/gdk/x11
+	$(MKINSTALLDIRS) $(includedir)/gdk/x11
 	$(INSTALL_DATA) $(srcdir)/gdkprivate-x11.h $(includedir)/gdk/x11
