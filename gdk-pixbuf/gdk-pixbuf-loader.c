@@ -1,3 +1,5 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+
 /* GdkPixbuf library - Main header file
  *
  * Copyright (C) 1999 The Free Software Foundation
@@ -48,11 +50,14 @@ static guint pixbuf_loader_signals[LAST_SIGNAL] = { 0 };
 
 
 /* Internal data */
+
+#define LOADER_HEADER_SIZE 128
+
 typedef struct {
 	GdkPixbuf *pixbuf;
 	gboolean closed;
-	gchar buf[128];
-	gint buf_offset;
+	gchar header_buf[LOADER_HEADER_SIZE];
+	gint header_buf_offset;
 	GdkPixbufModule *image_module;
 	gpointer context;
 } GdkPixbufLoaderPrivate;
@@ -230,6 +235,60 @@ gdk_pixbuf_loader_new (void)
 	return gtk_type_new (gdk_pixbuf_loader_get_type ());
 }
 
+static int
+gdk_pixbuf_loader_load_module(GdkPixbufLoader *loader)
+{
+	GdkPixbufLoaderPrivate *priv = loader->private;
+
+	priv->image_module = gdk_pixbuf_get_module (priv->header_buf, priv->header_buf_offset);
+
+	if (priv->image_module == NULL)
+		return 0;
+
+	if (priv->image_module->module == NULL)
+		gdk_pixbuf_load_module (priv->image_module);
+
+	if (priv->image_module->module == NULL)
+		return 0;
+
+	if ((priv->image_module->begin_load == NULL) ||
+	    (priv->image_module->stop_load == NULL) ||
+	    (priv->image_module->load_increment == NULL)) {
+		g_warning ("module %s does not support incremental loading.\n",
+			   priv->image_module->module_name);
+		return 0;
+	}
+
+	priv->context = (*priv->image_module->begin_load) (gdk_pixbuf_loader_prepare, loader);
+
+	if (priv->context == NULL) {
+		g_warning("Failed to begin progressive load");
+		return 0;
+	}
+
+	if( (* priv->image_module->load_increment) (priv->context, priv->header_buf, priv->header_buf_offset) )
+		return priv->header_buf_offset;
+ 
+	return 0;
+}
+
+static int
+gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, guchar *buf, size_t count)
+{
+	int nbytes;
+	GdkPixbufLoaderPrivate *priv = loader->private;
+
+	nbytes = MIN(LOADER_HEADER_SIZE - priv->header_buf_offset, count);
+	memcpy (priv->header_buf + priv->header_buf_offset, buf, nbytes);
+	    
+	priv->header_buf_offset += nbytes;
+	    
+	if(priv->header_buf_offset >= LOADER_HEADER_SIZE) {
+		return gdk_pixbuf_loader_load_module(loader);
+	} else
+		return nbytes;
+}
+
 /**
  * gdk_pixbuf_loader_write:
  * @loader: A pixbuf loader.
@@ -250,6 +309,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader, guchar *buf, size_t count)
 
 	g_return_val_if_fail (loader != NULL, FALSE);
 	g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), FALSE);
+
 	g_return_val_if_fail (buf != NULL, FALSE);
 	g_return_val_if_fail (count >= 0, FALSE);
 
@@ -259,56 +319,17 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader, guchar *buf, size_t count)
 	g_return_val_if_fail (priv->closed == FALSE, FALSE);
 
 	if (priv->image_module == NULL) {
-		gboolean retval = TRUE;
+		int eaten;
 
-		memcpy (priv->buf + priv->buf_offset,
-			buf,
-			(priv->buf_offset + count > 128) ? (128 - priv->buf_offset) : count);
+		eaten = gdk_pixbuf_loader_eat_header_write(loader, buf, count);
+		if (eaten <= 0)
+			return FALSE;
 
-		if (priv->buf_offset + count >= 128) {
-			/* We have enough data to start doing something with the image */
-			priv->image_module = gdk_pixbuf_get_module (priv->buf, 128);
-			if (priv->image_module == NULL)
-				return FALSE;
-			else if (priv->image_module->module == NULL)
-				gdk_pixbuf_load_module (priv->image_module);
-
-			if ((priv->image_module->begin_load == NULL) ||
-			    (priv->image_module->stop_load == NULL) ||
-			    (priv->image_module->load_increment == NULL)) {
-				g_warning ("module %s does not support incremental loading.\n",
-					   priv->image_module->module_name);
-				return FALSE;
-			} else {
-				priv->context = (*priv->image_module->begin_load) (
-					gdk_pixbuf_loader_prepare, loader);
-				
-                                if (priv->context == NULL) {
-                                        g_warning("Failed to begin progressive load");
-                                        return FALSE;
-                                }
-                                
-				retval = (* priv->image_module->load_increment) (
-					priv->context, priv->buf, 128);
-
-				/* if we had more then 128 bytes total, we want
-				 * to send the rest of the buffer.
-				 */
-
-				if (retval && (priv->buf_offset + count) > 128) {
-					retval = (* priv->image_module->load_increment) (
-						priv->context,
-						buf,
-						count + priv->buf_offset - 128);
-				}
-			}
-		} else
-			priv->buf_offset += count;
-
-		return retval;
+		count -= eaten;
+		buf += eaten;
 	}
 
-	if (priv->image_module->load_increment)
+	if (count > 0 && priv->image_module->load_increment)
 		return (* priv->image_module->load_increment) (priv->context, buf, count);
 
 	return (FALSE);
@@ -360,22 +381,8 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
 	g_return_if_fail (priv->closed == FALSE);
 
 	/* We have less the 128 bytes in the image.  Flush it, and keep going. */
-	if (priv->image_module == NULL) {
-		priv->image_module = gdk_pixbuf_get_module (priv->buf, priv->buf_offset);
-		if (priv->image_module &&
-		    ((priv->image_module->begin_load == NULL) ||
-		     (priv->image_module->stop_load == NULL) ||
-		     (priv->image_module->load_increment == NULL))) {
-			g_warning ("module %s does not support incremental loading.\n",
-				   priv->image_module->module_name);
-		} else if (priv->image_module) {
-			g_print ("module loaded: name is %s\n", priv->image_module->module_name);
-			priv->context = (* priv->image_module->begin_load) (
-				gdk_pixbuf_loader_prepare, loader);
-			(* priv->image_module->load_increment) (priv->context,
-								priv->buf, priv->buf_offset);
-		}
-	}
+	if (priv->image_module == NULL)
+		gdk_pixbuf_loader_load_module (loader);
 
 	if (priv->image_module && priv->image_module->stop_load)
 		(* priv->image_module->stop_load) (priv->context);

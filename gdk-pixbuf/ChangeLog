@@ -1,5 +1,10 @@
-1999-11-01  Federico Mena Quintero  <federico@redhat.com>
+1999-11-02 Elliot Lee <sopwith@redhat.com>
+	* src/gdk-pixbuf-loader.c: Reorganize gdk_pixbuf_loader_write into
+ 	three functions, and eliminate duplication of code from write()
+ 	and close(). Also fix bug where the 128-byte header was being
+ 	written twice.
 
+1999-11-01  Federico Mena Quintero  <federico@redhat.com>
 	* src/gnome-canvas-pixbuf.c (recompute_bounding_box): Fixed
 	bounding box computation.
 
