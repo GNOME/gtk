@@ -78,6 +78,7 @@ struct _GdkPixbufGifAnim {
         guchar bg_blue;
         
         int loop;
+        gboolean loading;
 };
 
 struct _GdkPixbufGifAnimClass {
@@ -113,6 +114,8 @@ struct _GdkPixbufGifAnimIter {
         gint                position;
         
         GList              *current_frame;
+        
+        gint                first_loop_slowness;
 };
 
 struct _GdkPixbufGifAnimIterClass {
