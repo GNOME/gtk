@@ -204,16 +204,20 @@ get_direction (void)
 
   XkbGetState (gdk_display, XkbUseCoreKbd, &state_rec);
 
-  name = gdk_atom_name (xkb->names->groups[state_rec.locked_group]);
-  if (g_strcasecmp (name, "arabic") == 0 ||
-      g_strcasecmp (name, "hebrew") == 0 ||
-      g_strcasecmp (name, "israelian") == 0)
-    result = PANGO_DIRECTION_RTL;
-  else
+  if (xkb->names->groups[state_rec.locked_group] == None)
     result = PANGO_DIRECTION_LTR;
+  else
+    {
+      name = gdk_atom_name (xkb->names->groups[state_rec.locked_group]);
+      if (g_strcasecmp (name, "arabic") == 0 ||
+	  g_strcasecmp (name, "hebrew") == 0 ||
+	  g_strcasecmp (name, "israelian") == 0)
+	result = PANGO_DIRECTION_RTL;
+      else
+	result = PANGO_DIRECTION_LTR;
+      g_free (name);
+    }
     
-  g_free (name);
-
   return result;
 }
 

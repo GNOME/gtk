@@ -1,3 +1,8 @@
+Fri Sep  7 12:48:56 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/x11/gdkkeys-x11.c (get_direction): Don't call
+	g_strcasecmp on NULL strings. (#59058)
+
 2001-09-06  Alex Larsson  <alexl@redhat.com>
 
 	* gtk/gtkbin.c:
