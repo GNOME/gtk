@@ -52,11 +52,6 @@
  *  cwikla@wri.com
  */
 
-/* NOTES:
- *
- * - When a CC is destroyed, remember to destroy the hash table properly.
- */
-
 
 #include <X11/Xlib.h>
 #include <stdlib.h>
@@ -710,13 +705,9 @@ gdk_color_context_get_pixel (GdkColorContext *cc,
       {
 	gdouble value;
 
-	red   <<= 8;
-	green <<= 8;
-	blue  <<= 8;
-
-	value = red / 65535.0 * 0.30
-	  + green / 65535.0 * 0.59
-	  + blue / 65535.0 * 0.11;
+	value = (red / 65535.0 * 0.30
+		 + green / 65535.0 * 0.59
+		 + blue / 65535.0 * 0.11);
 
 	if (value > 0.5)
 	  return cc->white_pixel;
@@ -728,28 +719,21 @@ gdk_color_context_get_pixel (GdkColorContext *cc,
       {
 	gulong ired, igreen, iblue;
 
-	red   <<= 8;
-	green <<= 8;
-	blue  <<= 8;
-
 	red   = red * 0.30 + green * 0.59 + blue * 0.11;
 	green = 0;
 	blue  = 0;
 
-	if ((ired = red * (ccp->std_cmap.red_max + 1) / 0xffff)
-	    > ccp->std_cmap.red_max)
+	if ((ired = red * (ccp->std_cmap.red_max + 1) / 0xffff) > ccp->std_cmap.red_max)
 	  ired = ccp->std_cmap.red_max;
 
 	ired *= ccp->std_cmap.red_mult;
 
-	if ((igreen = green * (ccp->std_cmap.green_max + 1) / 0xffff)
-	    > ccp->std_cmap.green_max)
+	if ((igreen = green * (ccp->std_cmap.green_max + 1) / 0xffff) > ccp->std_cmap.green_max)
 	  igreen = ccp->std_cmap.green_max;
 
 	igreen *= ccp->std_cmap.green_mult;
 
-	if ((iblue = blue * (ccp->std_cmap.blue_max + 1) / 0xffff)
-	    > ccp->std_cmap.blue_max)
+	if ((iblue = blue * (ccp->std_cmap.blue_max + 1) / 0xffff) > ccp->std_cmap.blue_max)
 	  iblue = ccp->std_cmap.blue_max;
 
 	iblue *= ccp->std_cmap.blue_mult;
@@ -763,10 +747,6 @@ gdk_color_context_get_pixel (GdkColorContext *cc,
     case GDK_CC_MODE_TRUE:
       {
 	gulong ired, igreen, iblue;
-
-	red   <<= 8;
-	green <<= 8;
-	blue  <<= 8;
 
 	if (cc->clut == NULL)
 	  {
@@ -796,10 +776,6 @@ gdk_color_context_get_pixel (GdkColorContext *cc,
       {
 	GdkColor color;
 	GdkColor *result;
-
-	red   <<= 8;
-	green <<= 8;
-	blue  <<= 8;
 
 	color.red   = red;
 	color.green = green;
@@ -976,15 +952,6 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 
   my_x_query_colors (cc->colormap, cmap, cmapsize);
 
-  /* speedup: downscale here instead of in the matching code */
-
-  for (i = 0; i < cmapsize; i++)
-    {
-      cmap[i].red   >>= 8;
-      cmap[i].green >>= 8;
-      cmap[i].blue  >>= 8;
-    }
-
   /* get a close match for any unallocated colors */
 
   counter = nopen;
@@ -998,7 +965,7 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 
       i = failed[idx];
 
-      mdist = 1000000;
+      mdist = 0x1000000;
       close = -1;
 
       /* Store these vals.  Small performance increase as this skips three
@@ -1015,9 +982,11 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 
       for (j = 0; (j < cmapsize) && (mdist != 0); j++)
 	{
-	  rd = ri - cmap[j].red;
-	  gd = gi - cmap[j].green;
-	  bd = bi - cmap[j].blue;
+	  /* Don't replace these by shifts; the sign may get clobbered */
+
+	  rd = (ri - cmap[j].red) / 256;
+	  gd = (gi - cmap[j].green) / 256;
+	  bd = (bi - cmap[j].blue) / 256;
 
 	  d = rd * rd + gd * gd + bd * bd;
 
@@ -1083,7 +1052,7 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 
       i = failed[idx];
 
-      mdist = 1000000;
+      mdist = 0x1000000;
       close = -1;
 
       /* store */
@@ -1098,9 +1067,11 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 	{
 	  k = allocated[j];
 
-	  rd = ri - defs[k].red;
-	  gd = gi - defs[k].green;
-	  bd = bi - defs[k].blue;
+	  /* Don't replace these by shifts; the sign may get clobbered */
+
+	  rd = (ri - defs[k].red) / 256;
+	  gd = (gi - defs[k].green) / 256;
+	  bd = (bi - defs[k].blue) / 256;
 
 	  d = rd * rd + gd * gd + bd * bd;
 
@@ -1247,16 +1218,9 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
       cmap[i].red = cmap[i].green = cmap[i].blue = 0;
     }
 
-  /* read and downscale */
+  /* read */
 
   my_x_query_colors (cc->colormap, cmap, cmapsize);
-
-  for (i = 0; i < cmapsize; i++)
-    {
-      cmap[i].red   >>= 8;
-      cmap[i].green >>= 8;
-      cmap[i].blue  >>= 8;
-    }
 
   /* now match any unallocated colors */
 
@@ -1271,7 +1235,7 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 
       i = failed[idx];
 
-      mdist = 1000000;
+      mdist = 0x1000000;
       close = -1;
 
       /* store */
@@ -1282,9 +1246,11 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 
       for (j = 0; (j < cmapsize) && (mdist != 0); j++)
 	{
-	  rd = ri - cmap[j].red;
-	  gd = gi - cmap[j].green;
-	  bd = bi - cmap[j].blue;
+	  /* Don't replace these by shifts; the sign may get clobbered */
+
+	  rd = (ri - cmap[j].red) / 256;
+	  gd = (gi - cmap[j].green) / 256;
+	  bd = (bi - cmap[j].blue) / 256;
 
 	  d = rd * rd + gd * gd + bd * bd;
 
@@ -1349,7 +1315,7 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 
       i = failed[idx];
 
-      mdist = 1000000;
+      mdist = 0x1000000;
       close = -1;
 
       ri = reds[i];
@@ -1363,10 +1329,11 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 	  k = allocated[j];
 
 	  /* downscale */
+	  /* Don't replace these by shifts; the sign may get clobbered */
 
-	  rd = ri - defs[k].red;
-	  gd = gi - defs[k].green;
-	  bd = bi - defs[k].blue;
+	  rd = (ri - defs[k].red) / 256;
+	  gd = (gi - defs[k].green) / 256;
+	  bd = (bi - defs[k].blue) / 256;
 
 	  d = rd * rd + gd * gd + bd * bd;
 

@@ -1,3 +1,14 @@
+Fri Jan 30 08:51:16 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdkcc.c (gdk_color_context_get_pixel): red/green/blue
+ 	parameters are now expected to be in [0, 65535], to be consistent
+ 	with the rest of Gdk.
+	(gdk_color_context_get_pixels): Made it use 16-bit color values as
+ 	well.  Fixed mdist=1000000 buglet (it should start with at least
+ 	0x1000000).
+	(gdk_color_context_get_pixels_incremental): Same as
+	gdk_color_context_get_pixels().
+
 Thu Jan 29 22:57:39 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkstyle.c (gtk_default_draw_polygon): Close
