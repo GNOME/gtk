@@ -1,3 +1,10 @@
+Mon Feb  4 10:40:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_resize_grip):
+	Fix from Matthias Clasen to clear background appropriately
+	for theme by calling gtk_style_apply_default_background().
+	(#70449)
+
 Mon Feb  4 10:06:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c: gtk-double-click-time,

@@ -4670,11 +4670,10 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
     }
 
   /* Clear background */
-  gdk_draw_rectangle (window,
-                      style->bg_gc[state_type],
-                      TRUE,
-                      x, y, width, height);
-  
+  gtk_style_apply_default_background (style, window, FALSE,
+				      state_type, area,
+				      x, y, width, height);   
+
   switch (edge)
     {
     case GDK_WINDOW_EDGE_SOUTH_EAST:
