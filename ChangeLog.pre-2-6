@@ -1,3 +1,10 @@
+Sat Jun 26 00:40:02 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (render_icon_name_pixbuf): 
+	* gtk/gtkiconfactory.c (gtk_icon_set_render_icon): 
+	* gtk/gtkstyle.c (gtk_default_render_icon): Accept a NULL 
+	style.
+
 Sat Jun 26 00:04:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_model): 

@@ -2164,7 +2164,7 @@ gtk_default_render_icon (GtkStyle            *style,
       screen = gtk_widget_get_screen (widget);
       settings = gtk_settings_get_for_screen (screen);
     }
-  else if (style->colormap)
+  else if (style && style->colormap)
     {
       screen = gdk_colormap_get_screen (style->colormap);
       settings = gtk_settings_get_for_screen (screen);

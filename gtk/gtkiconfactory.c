@@ -1595,7 +1595,7 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
   
   if (widget && gtk_widget_has_screen (widget))
     screen = gtk_widget_get_screen (widget);
-  else if (style->colormap)
+  else if (style && style->colormap)
     screen = gdk_colormap_get_screen (style->colormap);
   else
     {
@@ -1768,7 +1768,7 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
   GdkPixbuf *icon;
   
   g_return_val_if_fail (icon_set != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
+  g_return_val_if_fail (style == NULL || GTK_IS_STYLE (style), NULL);
 
   if (icon_set->sources == NULL)
     return render_fallback_image (style, direction, state, size, widget, detail);
