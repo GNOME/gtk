@@ -1,3 +1,17 @@
+Tue Feb 10 12:02:14 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/xsettings-client.c (read_settings): Avoid
+	triggering an X error when the client->manager_window
+	is None...makes logs look cleaner.
+
+	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Handle
+	GDK_NONE to mean AnyPropertyType as documented. (Reported 
+	by Yu Shao)
+
+	* gdk/x11/gdkevents-x11.c (fetch_net_wm_check_window,
+	gdk_x11_screen_get_window_manager_name): Fix error trap
+	we've been leaking since 2002... (#129538)
+
 2004-02-10  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes the entry-related part of #133852.

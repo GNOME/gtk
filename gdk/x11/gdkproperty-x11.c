@@ -505,7 +505,10 @@ gdk_property_get (GdkWindow   *window,
 
   display = gdk_drawable_get_display (window);
   xproperty = gdk_x11_atom_to_xatom_for_display (display, property);
-  xtype = gdk_x11_atom_to_xatom_for_display (display, type);
+  if (type == GDK_NONE)
+    xtype = AnyPropertyType;
+  else
+    xtype = GDK_NONE;
 
   ret_data = NULL;
   

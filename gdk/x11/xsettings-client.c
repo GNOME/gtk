@@ -373,24 +373,27 @@ read_settings (XSettingsClient *client)
   XSettingsList *old_list = client->settings;
 
   client->settings = NULL;
-  
-  old_handler = XSetErrorHandler (ignore_errors);
-  result = XGetWindowProperty (client->display, client->manager_window,
-			       client->xsettings_atom, 0, LONG_MAX,
-			       False, client->xsettings_atom,
-			       &type, &format, &n_items, &bytes_after, &data);
-  XSetErrorHandler (old_handler);
 
-  if (result == Success && type == client->xsettings_atom)
+  if (client->manager_window)
     {
-      if (format != 8)
+      old_handler = XSetErrorHandler (ignore_errors);
+      result = XGetWindowProperty (client->display, client->manager_window,
+				   client->xsettings_atom, 0, LONG_MAX,
+				   False, client->xsettings_atom,
+				   &type, &format, &n_items, &bytes_after, &data);
+      XSetErrorHandler (old_handler);
+      
+      if (result == Success && type == client->xsettings_atom)
 	{
-	  fprintf (stderr, "Invalid format for XSETTINGS property %d", format);
+	  if (format != 8)
+	    {
+	      fprintf (stderr, "Invalid format for XSETTINGS property %d", format);
+	    }
+	  else
+	    client->settings = parse_settings (data, n_items);
+	  
+	  XFree (data);
 	}
-      else
-	client->settings = parse_settings (data, n_items);
-
-      XFree (data);
     }
 
   notify_changes (client, old_list);

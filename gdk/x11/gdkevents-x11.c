@@ -2406,15 +2406,19 @@ fetch_net_wm_check_window (GdkScreen *screen)
   
   /* Find out if this WM goes away, so we can reset everything. */
   XSelectInput (screen_x11->xdisplay, *xwindow, StructureNotifyMask);
+  gdk_display_sync (display);
 
-  screen_x11->wmspec_check_window = *xwindow;
-  XFree (xwindow);
-
-  screen_x11->need_refetch_net_supported = TRUE;
-  screen_x11->need_refetch_wm_name = TRUE;
-  
-  /* Careful, reentrancy */
-  _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
+  if (gdk_error_trap_pop () == Success)
+    {
+      screen_x11->wmspec_check_window = *xwindow;
+      XFree (xwindow);
+      
+      screen_x11->need_refetch_net_supported = TRUE;
+      screen_x11->need_refetch_wm_name = TRUE;
+      
+      /* Careful, reentrancy */
+      _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
+    }
 }
 
 /**
@@ -2455,6 +2459,8 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
           guchar *name;
           
           name = NULL;
+
+	  gdk_error_trap_push ();
           
           XGetWindowProperty (GDK_DISPLAY_XDISPLAY (screen_x11->display),
                               screen_x11->wmspec_check_window,
