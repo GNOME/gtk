@@ -1368,7 +1368,14 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 	  /* We know it affects us. */
 	  if (path->indices[i] == reference->path->indices[i])
 	    {
-	      gtk_tree_row_reference_unref_path (reference->path, reference->model, reference->path->depth - 1);
+	      if (reference->path->depth > path->depth)
+		/* some parent was deleted, trying to unref any node
+		 * between the deleted parent and the node the reference
+		 * is pointing to is bad, as those nodes are already gone.
+		 */
+		gtk_tree_row_reference_unref_path (reference->path, reference->model, path->depth - 1);
+	      else
+	        gtk_tree_row_reference_unref_path (reference->path, reference->model, reference->path->depth - 1);
 	      gtk_tree_path_free (reference->path);
 	      reference->path = NULL;
 	    }
