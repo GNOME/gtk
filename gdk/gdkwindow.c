@@ -278,6 +278,23 @@ gdk_window_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+static void
+window_remove_filters (GdkWindow *window)
+{
+  GdkWindowObject *obj = (GdkWindowObject*) window;
+
+  if (obj->filters)
+    {
+      GList *tmp_list;
+      
+      for (tmp_list = obj->filters; tmp_list; tmp_list = tmp_list->next)
+	g_free (tmp_list->data);
+    
+      g_list_free (obj->filters);
+      obj->filters = NULL;
+    }
+}
+
 /**
  * _gdk_window_destroy_hierarchy:
  * @window: a #GdkWindow
@@ -309,6 +326,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
   
   private = (GdkWindowObject*) window;
   
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+    
   switch (GDK_WINDOW_TYPE (window))
     {
     case GDK_WINDOW_TOPLEVEL:
@@ -316,7 +336,25 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
     case GDK_WINDOW_FOREIGN:
-      if (!GDK_WINDOW_DESTROYED (window))
+      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_FOREIGN && !foreign_destroy)
+	{
+	  /* Logically, it probably makes more sense to send
+	   * a "destroy yourself" message to the foreign window
+	   * whether or not it's in our heirarchy; but for historical
+	   * reasons, we only send "destroy yourself" messages to
+	   * foreign windows in our heirarchy.
+	   */
+	  if (private->parent)
+	    _gdk_windowing_window_destroy_foreign (window);
+
+	  /* Also for historical reasons, we remove any filters
+	   * on a foreign window when it or a parent is destroyed;
+	   * this likely causes problems if two separate portions
+	   * of code are maintaining filter lists on a foreign window.
+	   */
+	  window_remove_filters (window);
+	}
+      else
 	{
 	  private->state |= GDK_WINDOW_STATE_WITHDRAWN;
 	  
@@ -363,19 +401,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  private->parent = NULL;
 	  private->destroyed = TRUE;
 
-	  if (private->filters)
-	    {
-	      tmp = private->filters;
-	      
-	      while (tmp)
-		{
-		  g_free (tmp->data);
-		  tmp = tmp->next;
-		}
-	      
-	      g_list_free (private->filters);
-	      private->filters = NULL;
-	    }
+	  window_remove_filters (window);
 
           gdk_drawable_set_colormap (GDK_DRAWABLE (window), NULL);
 	}

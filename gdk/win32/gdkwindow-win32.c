@@ -810,30 +810,30 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (private->extension_events != 0)
     _gdk_input_window_destroy (window);
 
-  if (private->window_type == GDK_WINDOW_FOREIGN)
-    {
-      if (!foreign_destroy && (private->parent != NULL))
-	{
-	  /* It's somebody else's window, but in our hierarchy,
-	   * so reparent it to the root window, and then call
-	   * DestroyWindow() on it.
-	   */
-	  gdk_window_hide (window);
-	  gdk_window_reparent (window, NULL, 0, 0);
-	  
-	  /* Is this too drastic? Many (most?) applications
-	   * quit if any window receives WM_QUIT I think.
-	   * OTOH, I don't think foreign windows are much
-	   * used, so the question is maybe academic.
-	   */
-	  PostMessage (GDK_WINDOW_HWND (window), WM_QUIT, 0, 0);
-	}
-    }
-  else if (!recursing && !foreign_destroy)
+
+  if (!recursing && !foreign_destroy)
     {
       private->destroyed = TRUE;
       DestroyWindow (GDK_WINDOW_HWND (window));
     }
+}
+
+void
+_gdk_windowing_window_destroy_foreign (GdkWindow *window)
+{
+  /* It's somebody else's window, but in our hierarchy,
+   * so reparent it to the root window, and then call
+   * DestroyWindow() on it.
+   */
+  gdk_window_hide (window);
+  gdk_window_reparent (window, NULL, 0, 0);
+  
+  /* Is this too drastic? Many (most?) applications
+   * quit if any window receives WM_QUIT I think.
+   * OTOH, I don't think foreign windows are much
+   * used, so the question is maybe academic.
+   */
+  PostMessage (GDK_WINDOW_HWND (window), WM_QUIT, 0, 0);
 }
 
 /* This function is called when the window really gone.

@@ -204,9 +204,11 @@ gdk_window_impl_x11_finalize (GObject *object)
 
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
-      _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (object), draw_impl->xid);
+      GdkDisplay *display = GDK_WINDOW_DISPLAY (wrapper);
+      
+      _gdk_xid_table_remove (display, draw_impl->xid);
       if (window_impl->toplevel && window_impl->toplevel->focus_window)
-	_gdk_xid_table_remove (GDK_WINDOW_DISPLAY (object), window_impl->toplevel->focus_window);
+	_gdk_xid_table_remove (display, window_impl->toplevel->focus_window);
     }
 
   if (window_impl->toplevel)
@@ -937,43 +939,42 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (draw_impl->xft_draw)
     XftDrawDestroy (draw_impl->xft_draw);
 
-  if (private->window_type == GDK_WINDOW_FOREIGN)
-    {
-      if (!foreign_destroy && (private->parent != NULL))
-	{
-	  /* It's somebody else's window, but in our heirarchy,
-	   * so reparent it to the root window, and then send
-	   * it a delete event, as if we were a WM
-	   */
-	  XClientMessageEvent xevent;
-	  
-	  gdk_error_trap_push ();
-	  gdk_window_hide (window);
-	  gdk_window_reparent (window, NULL, 0, 0);
-	  
-	  xevent.type = ClientMessage;
-	  xevent.window = GDK_WINDOW_XID (window);
-	  xevent.message_type = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
-								       "WM_PROTOCOLS");
-	  xevent.format = 32;
-	  xevent.data.l[0] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
-								    "WM_DELETE_WINDOW");
-	  xevent.data.l[1] = CurrentTime;
-	  xevent.data.l[2] = 0;
-	  xevent.data.l[3] = 0;
-	  xevent.data.l[4] = 0;
-	  
-	  XSendEvent (GDK_WINDOW_XDISPLAY (window),
-		      GDK_WINDOW_XID (window),
-		      False, 0, (XEvent *)&xevent);
-	  gdk_display_sync (GDK_WINDOW_DISPLAY (window));
-	  gdk_error_trap_pop ();
-	}
-    }
-  else if (!recursing && !foreign_destroy)
+  if (!recursing && !foreign_destroy)
     {
       XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
     }
+}
+
+void
+_gdk_windowing_window_destroy_foreign (GdkWindow *window)
+{
+  /* It's somebody else's window, but in our heirarchy,
+   * so reparent it to the root window, and then send
+   * it a delete event, as if we were a WM
+   */
+  XClientMessageEvent xevent;
+  
+  gdk_error_trap_push ();
+  gdk_window_hide (window);
+  gdk_window_reparent (window, NULL, 0, 0);
+  
+  xevent.type = ClientMessage;
+  xevent.window = GDK_WINDOW_XID (window);
+  xevent.message_type = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+							       "WM_PROTOCOLS");
+  xevent.format = 32;
+  xevent.data.l[0] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+							    "WM_DELETE_WINDOW");
+  xevent.data.l[1] = CurrentTime;
+  xevent.data.l[2] = 0;
+  xevent.data.l[3] = 0;
+  xevent.data.l[4] = 0;
+  
+  XSendEvent (GDK_WINDOW_XDISPLAY (window),
+	      GDK_WINDOW_XID (window),
+	      False, 0, (XEvent *)&xevent);
+  gdk_display_sync (GDK_WINDOW_DISPLAY (window));
+  gdk_error_trap_pop ();
 }
 
 /* This function is called when the XWindow is really gone.
@@ -1502,6 +1503,12 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      (new_parent && GDK_WINDOW_DESTROYED (new_parent)))
+    {
+      return;
+    }
   
   if (!new_parent)
     new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
@@ -1513,11 +1520,10 @@ gdk_window_reparent (GdkWindow *window,
   parent_private = (GdkWindowObject*) new_parent;
   impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
   
-  if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (new_parent))
-    XReparentWindow (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
-		     GDK_WINDOW_XID (new_parent),
-		     x, y);
+  XReparentWindow (GDK_WINDOW_XDISPLAY (window),
+		   GDK_WINDOW_XID (window),
+		   GDK_WINDOW_XID (new_parent),
+		   x, y);
 
   window_private->x = x;
   window_private->y = y;

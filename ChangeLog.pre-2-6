@@ -1,3 +1,22 @@
+Sat Mar 13 12:17:16 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_reparent): Make
+	this a total no-op when the new or old parent is
+	destroyed. (#134230, patch from Soeren Sandmann)
+
+	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy):
+	For foreign windows in our heirarchy, call
+	_gdk_windowing_window_destroy_foreign (window) and skip
+	all the normal destruction logic.
+
+	* gdk/x11/gdkwindow-x11.c gdk/win32/gdkwindow-win32.c:
+	Move code to request destruction of a foreign window
+	code into a separate _gdk_windowing_window_destroy_foreign().
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_finalize):
+	Call GDK_WINDOW_DISPLAY() on the wrapper not on the
+	impl. (Also from Soeren's patch)
+
 Sat Mar 13 10:49:46 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (_gtk_drag_dest_handle_event): For
