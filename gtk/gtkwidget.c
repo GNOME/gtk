@@ -1877,7 +1877,7 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 	    height = wheight - y;
 	}
 
-      gtk_widget_queue_draw_data (widget, x, y, width, height, NULL);
+      gtk_widget_queue_draw_data (widget, x, y, width, height, widget->window);
     }
 }
 

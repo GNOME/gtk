@@ -1,3 +1,10 @@
+Thu Feb 18 17:26:09 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): 
+	 When queueing clears relative to widget->window,
+	 actually store widget->window so we know that
+	 the coordinates are window-relative.
+
 Thu Feb 18 11:46:57 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk.m4: Fix glib_config_args gtk_config_args
