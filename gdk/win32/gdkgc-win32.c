@@ -1252,20 +1252,16 @@ _gdk_win32_gdkregion_to_hrgn (GdkRegion *region,
   rgndata->rdh.iType = RDH_RECTANGLES;
   rgndata->rdh.nCount = rgndata->rdh.nRgnSize = 0;
   SetRect (&rgndata->rdh.rcBound,
-	   G_MAXSHORT, G_MAXSHORT, G_MINSHORT, G_MINSHORT);
+	   G_MAXLONG, G_MAXLONG, G_MINLONG, G_MINLONG);
 
   for (i = 0; i < region->numRects; i++)
     {
       rect = ((RECT *) rgndata->Buffer) + rgndata->rdh.nCount++;
 
-      rect->left = CLAMP (boxes[i].x1 + x_origin,
-			  G_MINSHORT, G_MAXSHORT);
-      rect->right = CLAMP (boxes[i].x2 + x_origin,
-			   G_MINSHORT, G_MAXSHORT);
-      rect->top = CLAMP (boxes[i].y1 + y_origin,
-			 G_MINSHORT, G_MAXSHORT);
-      rect->bottom = CLAMP (boxes[i].y2 + y_origin,
-			    G_MINSHORT, G_MAXSHORT);
+      rect->left = boxes[i].x1 + x_origin;
+      rect->right = boxes[i].x2 + x_origin;
+      rect->top = boxes[i].y1 + y_origin;
+      rect->bottom = boxes[i].y2 + y_origin;
 
       if (rect->left < rgndata->rdh.rcBound.left)
 	rgndata->rdh.rcBound.left = rect->left;

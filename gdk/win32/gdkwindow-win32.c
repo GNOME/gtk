@@ -288,8 +288,8 @@ gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable)
         {
           GdkRectangle gr;
 
-          gr.x = r.left;
-          gr.y = r.top;
+          gr.x = r.left + impl->position_info.x_offset;
+          gr.y = r.top + impl->position_info.y_offset;
           gr.width = r.right - r.left;
           gr.height = r.bottom - r.top;
 
@@ -661,9 +661,6 @@ gdk_window_new_internal (GdkWindow     *parent,
       window_height = impl->position_info.height;
     }
 
-  if (impl->position_info.big)
-    private->guffaw_gravity = TRUE;
-
   if (attributes_mask & GDK_WA_TITLE)
     title = attributes->title;
   else
@@ -673,11 +670,6 @@ gdk_window_new_internal (GdkWindow     *parent,
 
   private->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
       
-  if (private->parent && private->parent->guffaw_gravity)
-    {
-      /* XXX ??? */
-    }
-
   if (private->parent)
     private->parent->children = g_list_prepend (private->parent->children, window);
 
@@ -1346,13 +1338,6 @@ gdk_window_reparent (GdkWindow *window,
   if (old_parent_private)
     old_parent_private->children =
       g_list_remove (old_parent_private->children, window);
-
-#if 0
-  if ((old_parent_private &&
-       (!old_parent_private->guffaw_gravity != !parent_private->guffaw_gravity)) ||
-      (!old_parent_private && parent_private->guffaw_gravity))
-    gdk_window_set_static_win_gravity (window, parent_private->guffaw_gravity);
-#endif
 
   parent_private->children = g_list_prepend (parent_private->children, window);
   _gdk_window_init_position (GDK_WINDOW (window_private));
@@ -2844,15 +2829,7 @@ gdk_window_set_static_gravities (GdkWindow *window,
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  if (!use_static == !private->guffaw_gravity)
-    return TRUE;
-  
-  if (use_static)
-    return FALSE;
-  
-  private->guffaw_gravity = use_static;
-  
-  return TRUE;
+  return !use_static;
 }
 
 void
