@@ -391,7 +391,7 @@ gdk_property_change (GdkWindow    *window,
 	  cf = CF_TEXT;
 	  for (i = 0; i < nelements; i++)
 	    {
-	      if (*data == '\n')
+	      if (data[i] == '\n')
 		*ucptr++ = '\r';
 	      *ucptr++ = data[i];
 	    }
