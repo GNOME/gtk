@@ -21,12 +21,13 @@
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserutils.h"
-#ifdef G_OS_UNIX
+#include "gtktypebuiltins.h"
+
+#if defined (G_OS_UNIX)
 #include "gtkfilesystemunix.h"
-#else if defined G_OS_WIN32
+#elif defined (G_OS_WIN32)
 #include "gtkfilesystemwin32.h"
 #endif
-#include "gtktypebuiltins.h"
 
 struct _GtkFileChooserWidgetPrivate
 {
@@ -135,9 +136,9 @@ gtk_file_chooser_widget_constructor (GType                  type,
 
   if (!priv->file_system)
     {
-#if defined G_OS_UNIX
+#if defined (G_OS_UNIX)
       priv->file_system = gtk_file_system_unix_new ();
-#else if defined G_OS_WIN32
+#elif defined (G_OS_WIN32)
       priv->file_system = gtk_file_system_win32_new ();
 #endif
     }

@@ -1,3 +1,8 @@
+Tue Dec 16 15:01:10 2003  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkfilechooserwidget.c: fix preprocessor conditional confusion.
+	(G_OS_UNIX/G_OS_WIN32 stuff)
+
 Tue Dec 16 01:46:46 2003  Matthias Clasen  <maclas@gmx.de>
 
 	Do not interpret distant clicks as double-clicks  (#116541,
