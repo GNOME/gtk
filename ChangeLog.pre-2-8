@@ -1,3 +1,167 @@
+Mon Feb  2 04:15:08 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkcontainer.h: 
+	* gtk/gtkcontainer.c: GTK_RESIZE_NEEDED is a private flag now.
+	  (gtk_container_register_toplevel): new function.
+	  (gtk_container_unregister_toplevel): new function.
+
+	* gtk/gtkmain.c: GTK_LEAVE_PENDING is a private flag now.
+
+	* gtk/gtkmenu.c: call gtk_container_register_toplevel in
+	  gtk_menu_class_init instead of this dirty gtk_widget_set_parent(,NULL)
+	  hack. new default handler gtk_menu_destroy for calling
+ 	  gtk_container_unregister_toplevel. removed GTK_ANCHORED, GTK_UNMAPPED.
+
+	* gtk/gtkobject.h: macro cleanups, added GTK_DESTROYED flag.
+
+	* gtk/gtkobject.c: only emit DESTROY signal if !GTK_OBJECT_DESTROYED
+ 	  (object).
+
+	* gtk/gtkprivate.h: new file that will not be automatically included.
+	  it holds the private flags for GtkWidget along with it's SET/UNSET
+	  and examination macros.
+
+	* gtk/gtkwidget.c: private flags: GTK_RESIZE_NEEDED, GTK_REDRAW_PENDING,
+	  GTK_RESIZE_PENDING, GTK_IN_REPARENT, GTK_USER_STYLE. GTK_ANCHORED is
+ 	  replaced by GTK_TOPLEVEL. added missing UNSET for GTK_IN_REPARENT.
+ 	  removed the gtk_widget_set_parent(, NULL) hack for toplevels.
+	  upon destroy free memory for widgets with GTK_WIDGET_HAS_SHAPE_MASK.
+
+	* gtk/gtkwidget.h: split up the widget flags into a public and a private
+	  portion. added an extra field private_flags to GtkWidget without making
+	  it bigger by using an alignment gap of 16 bit. macro cleanups.
+
+	* gtk/gtkwindow.c: removed GTK_ANCHORED. new function gtk_window_destroy
+	  for calling gtk_container_unregister_toplevel. removed the
+ 	  gtk_widget_set_parent(,NULL), call gtk_container_register_toplevel
+	  instead. remove GTK_UNMAPPED. GTK_RESIZE_NEEDED is private now.
+
+	* gtk/gtksignal.c (gtk_signal_disconnect): removed a bug on
+	  removal that cut off the handler list -> living_objects == 0
+	  with testgtk. made some warnings more descriptive.
+	  new function gtk_signal_connect_object_while_alive, which
+	  will automatically destroy the connection once one of the objects
+	  is destroyed. didn't include this before removal of the above
+	  mentioned bug.
+
+Sat Jan 31 23:55:03 1998  Tim Janik  <timj@gimp.org>
+
+	* ChangeLog entry for Friday (incorporation of Marius Vollmer's
+	  reference counting revolution, plus various fixups and additions
+	  from myself).
+
+	* gdk/gdk.h:
+ 	* gdk/gdkgc.c: new functions gdk_gc_ref/gdk_gc_unref.
+
+	* gdk/gdkprivate.h: cleanups on ref_count field sizes.
+
+	* gtk/gtkadjustment.c (gtk_adjustment_set_value): new function for
+ 	  emission of GtkAdjustment::value_changed signal.
+
+	* gtk/gtkbin.c:
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkcurve.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkframe.c:
+	* gtk/gtkinputdialog.c:
+	* gtk/gtklabel.c:
+	* gtk/gtkpixmap.c:
+	* gtk/gtkpreview.c:
+	* gtk/gtkrange.c:
+	* gtk/gtktable.c:
+	* gtk/gtkwindow.c:
+	  replaced functionality of gtk_*_destroy by gtk_*_finalize.
+
+	* gtk/gtkbox.c:
+	* gtk/gtkbutton.c:
+	* gtk/gtkfixed.c:
+	* gtk/gtkmenushell.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkpaned.c:
+	* gtk/gtkscale.c:
+ 	  removed default destroy handler.
+
+	* in general: reference parent->window for NO_WINDOW widgets.
+	  set user data of a GdkWindow to NULL before destruction.
+	
+	* gtk/gtkbutton.c: use gtk_widget_unparent instead of gtk_widget_destroy
+	  in *_set_arg.
+
+	* gtk/gtkcontainer.c: provide other containers with a default destroy
+	  handler that will destroy all children.
+	  new function gtk_container_foreach_interp.
+	  new field resize_widgets.
+
+	* gtk/gtklist.c: handle destruction of children in gtk_list_destroy.
+	  replaced occourances of gtk_widget_destroy with gtk_widget_unparent.
+	  reference children that are in the selection list.
+
+	* gtk/gtkmain.c: reference grab widgets.
+	  (gtk_get_event_widget): check for event.window != NULL. Note: this
+ 	  function may return NULL now!.
+	  (gtk_propagate_event): much simplified by using proper reference
+ 	  counting.
+
+	* gtk/gtkmenu.c: introduce GTK_TOPLEVEL, and gtk_widget_set_parent(,
+	  NULL) hack.
+
+	* gtk/gtkmenuitem.c: gtk_widget_(un)ref the submenu.
+
+	* gtk/gtkmenushell.c: check for return value of gtk_get_event_widget.
+
+	* gtk/gtknotebook.c: proper gtk_widget_unparent()ing.
+
+	* gtk/gtkobject.c: new functions gtk_object_finalize,
+ 	  gtk_object_notify_weaks, gtk_object_debug, gtk_object_sink,
+ 	  gtk_object_weakref, gtk_object_weakunref. implementation of the new
+	  reference counting scheme for gtkobjects (consult gtk+/REFCOUNTING).
+
+	* gtk/gtkoptionmenu.c: proper reference counting for option_menu->menu.
+
+	* gtk/gtkscrolledwindow.c: new finalize handler for proper referencing
+	  of the subwidgets.
+
+	* gtk/gtksignal.c: internal representation of signal_type is now 16 bit
+	  instead of 13 bits. this is needed because of user signals.
+	  new functions gtk_signal_handler_ref and gtk_signal_handler_unref
+ 	  (replacement for gtk_signal_handler_destroy).
+	  gtk_signal_emit, gtk_signal_emit_by_name, gtk_signal_real_emit used
+ 	  to return the existence of a GtkObject. this will always be TRUE now,
+	  therefore the return value is now void.
+
+	* gtk/gtktooltips.h:
+	* gtk/gtktooltips.c: GtkTooltips is now a descendant of GtkData and
+	  therefore a real GtkObject.
+
+	* gtk/gtktree.c: reference changes similar to thos in gtklist.c.
+
+	* gtk/gtktreeitem.c: reference th e pixmaps properly.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c: new function gtk_arg_copy() to conform to
+	  the requirements of gtk_object_get().
+
+	* gtk/gtkviewport.c: finalize handler for proper referencing of the
+	  adjustments.
+
+	* gtk/gtkwidget.c: substituted VISIBILITY_NOTIFY_EVENT by NO_EXPOSE_EVENT.
+ 	  added finalize handler. added gtk_widget_ref/gtk_widget_unref.
+	  new functions gtk_widget_idle_draw and gtk_widget_idle_sizer, that
+	  will handle all widgets that are currently in either queue.
+	  referencing all over the place. changes because gtk_signal_emit
+ 	  returns void now. moved queue removal into the destroy handler.
+	  gtk_widget_real_unrealize propagates now down the tree. new flag
+	  GTK_TOPLEVEL. new function gtk_widget_destroyed for connection to the
+	  destroy signal of a widget. this function nullifies the widgets
+	  structure pointer, look at gtkmain.c for an example on this.
+
+	* gtk/gtkwindow.c: new functions gtk_window_activate_focus,
+	  gtk_window_activate_default. for activation of the appropriate
+	  children. changes to the resizing code because there is a new
+	  field resize_widgets in GtkContainer now.
+
+	* gtk/testgtk.c: some changes because of all the above ;)
+
 Sat Jan 31 21:26:27 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwidget.c: Added a new GTK_IN_REPARENT flag and revised
