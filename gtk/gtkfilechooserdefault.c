@@ -2326,16 +2326,19 @@ update_appearance (GtkFileChooserDefault *impl)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      gtk_widget_show (impl->browse_new_folder_button);
       gtk_widget_hide (impl->browse_files_swin);
       gtk_widget_show (impl->browse_directories_swin);
     }
   else
     {
-      gtk_widget_hide (impl->browse_new_folder_button);
       gtk_widget_hide (impl->browse_directories_swin);
       gtk_widget_show (impl->browse_files_swin);
     }
+
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    gtk_widget_hide (impl->browse_new_folder_button);
+  else
+    gtk_widget_show (impl->browse_new_folder_button);
 
   if (impl->extra_widget)
     {

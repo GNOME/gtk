@@ -1,3 +1,8 @@
+Thu Mar  4 15:20:55 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (update_appearance): show the 'New
+	Folder' button in SAVE mode again.
+
 Thu Mar  4 21:53:46 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconfactory.c (copy_cache): Increment the reference
