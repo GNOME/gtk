@@ -1095,9 +1095,11 @@ void
 _gtk_sequence_set	      (GtkSequencePtr	  ptr,
 			       gpointer		  data)
 {
+  GtkSequence *seq;
+
   g_return_if_fail (!_gtk_sequence_ptr_is_end (ptr));
   
-  GtkSequence *seq = _gtk_sequence_node_get_sequence (ptr);
+  seq = _gtk_sequence_node_get_sequence (ptr);
   if (seq->data_destroy_notify)
     seq->data_destroy_notify (ptr->data);
   ptr->data = data;
