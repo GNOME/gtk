@@ -213,7 +213,8 @@ gtk_tooltips_update_screen (GtkTooltips *tooltips,
 {
   gboolean screen_changed = FALSE;
   
-  if (tooltips->active_tips_data->widget)
+  if (tooltips->active_tips_data &&
+      tooltips->active_tips_data->widget)
     {
       GdkScreen *screen = gtk_widget_get_screen (tooltips->active_tips_data->widget);
 

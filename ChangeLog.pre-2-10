@@ -1,3 +1,29 @@
+Thu Oct 31 17:41:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_update_screen): Fix
+	from Nam SungHyun for crashes when tooltips->active_tips_data
+	is NULL.
+
+Thu Oct 31 12:40:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.[ch] gdk/gdkglobals.c gdk/gdkinternals.h 
+	gdk/{x11,win32,linux-fb}/gdkscreen-{x11,win32,linux-fb}.c:
+	Add a --screen option for setting the default screen. 
+	(Based on a patch from Balamurali Viswanathan, #81145)
+
+	* gdk/gdk.c gdkdisplay.h gtk/gtkmain.c: Add 
+	gdk_display_open_default_libgtk_only(), so gtk_init_check()
+	and gdk_init_check() can share the same behavior w.r.t.
+	--screen.
+
+	* gdk/gdk.[ch]: Make gdk_get_display_arg_name() G_CONST_RETURN.
+
+	* gdk/x11/gdkselection-x11.c (gdk_selection_property_get): 
+	Suppress a spurious warning.
+
+	* tests/testgtkrc: Remove someleft-over commented out 
+	includes that could be confusing.
+
 2002-10-31  Padraig O'Briain  <padraig.obriain@sun.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_insert_stock): Move g_free()
