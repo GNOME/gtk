@@ -361,6 +361,7 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 {
 	GtkWidget *window;
 	GtkWidget *vbox;
+	GtkWidget *temp_box;
 	GtkWidget *button;
 	GtkWidget *drawing_area;
 	gint w, h;
@@ -385,8 +386,11 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 
 	drawing_area = gtk_drawing_area_new ();
 
+	temp_box = gtk_hbox_new (FALSE, 0);
 	gtk_drawing_area_size (GTK_DRAWING_AREA(drawing_area), w, h);
-	gtk_box_pack_start (GTK_BOX (vbox), drawing_area, FALSE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (temp_box), drawing_area, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), temp_box, FALSE, FALSE, 0);
+	
 
 	gtk_signal_connect (GTK_OBJECT(drawing_area), "expose_event",
 			    GTK_SIGNAL_FUNC(expose_func), NULL);
