@@ -1,3 +1,7 @@
+Thu Mar  8 18:13:20 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c: re-enabled event watcher emission hooks.
+
 Thu Mar  8 16:51:21 2001  Tim Janik  <timj@gtk.org>
 
 	* *.c: added accumulator data argument to g_signal_newc()

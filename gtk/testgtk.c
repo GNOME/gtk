@@ -6220,15 +6220,14 @@ static gboolean event_watcher_enter_id = 0;
 static gboolean event_watcher_leave_id = 0;
 
 static gboolean
-event_watcher (GtkObject      *object,
-	       guint           signal_id,
-	       guint           n_params,
-	       GtkArg         *params,
-	       gpointer        data)
+event_watcher (GSignalInvocationHint *ihint,
+	       guint                  n_param_values,
+	       const GValue          *param_values,
+	       gpointer               data)
 {
   g_print ("Watch: \"%s\" emitted for %s\n",
-	   gtk_signal_name (signal_id),
-	   gtk_type_name (GTK_OBJECT_TYPE (object)));
+	   gtk_signal_name (ihint->signal_id),
+	   gtk_type_name (GTK_OBJECT_TYPE (g_value_get_object (param_values + 0))));
 
   return TRUE;
 }
@@ -6241,10 +6240,10 @@ event_watcher_down (void)
       guint signal_id;
 
       signal_id = gtk_signal_lookup ("enter_notify_event", GTK_TYPE_WIDGET);
-      // gtk_signal_remove_emission_hook (signal_id, event_watcher_enter_id);
+      g_signal_remove_emission_hook (signal_id, event_watcher_enter_id);
       event_watcher_enter_id = 0;
       signal_id = gtk_signal_lookup ("leave_notify_event", GTK_TYPE_WIDGET);
-      // gtk_signal_remove_emission_hook (signal_id, event_watcher_leave_id);
+      g_signal_remove_emission_hook (signal_id, event_watcher_leave_id);
       event_watcher_leave_id = 0;
     }
 }
@@ -6259,9 +6258,9 @@ event_watcher_toggle (void)
       guint signal_id;
 
       signal_id = gtk_signal_lookup ("enter_notify_event", GTK_TYPE_WIDGET);
-      // event_watcher_enter_id = gtk_signal_add_emission_hook (signal_id, event_watcher, NULL);
+      event_watcher_enter_id = g_signal_add_emission_hook (signal_id, 0, event_watcher, NULL, NULL);
       signal_id = gtk_signal_lookup ("leave_notify_event", GTK_TYPE_WIDGET);
-      // event_watcher_leave_id = gtk_signal_add_emission_hook (signal_id, event_watcher, NULL);
+      event_watcher_leave_id = g_signal_add_emission_hook (signal_id, 0, event_watcher, NULL, NULL);
     }
 }
 
