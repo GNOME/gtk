@@ -4,7 +4,7 @@
 	consistent with Win32 behavior.
 	* src/Theme/gtk-2.0/gtkrc: Make menubars have shadow=NONE. More
 	consisten with Win32 behavior, though Win32 apps tend to differ in this
-	area.
+	area. Setup menu and toolbar icon sizes to be compatible with win32
 	
 2003-11-04  Dom Lachowicz <cinamod@hotmail.com>
 
