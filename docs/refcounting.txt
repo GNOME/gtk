@@ -240,7 +240,7 @@ Taking care of proper referencing
 ---------------------------------
 
 There are some cases where referencing of widgets from outside the toolkit
-(on the application side is needed).
+(on the application side) is needed.
 Once the application performes an operation on a widget that will cause
 its reference count to drop, if it wants to take further actions on the
 widget, it needs to hold a reference to it.
