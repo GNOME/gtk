@@ -1349,10 +1349,7 @@ gtk_propagate_event (GtkWidget *widget,
 	   * a first crack at the key event
 	   */
 	  if (widget != window && GTK_WIDGET_HAS_GRAB (widget))
-	    {
-	      handled_event = gtk_widget_event (widget, event);
-	      g_print ("Sent event to grab widget, %d\n", handled_event);
-	    }
+	    handled_event = gtk_widget_event (widget, event);
 	  
 	  if (!handled_event)
 	    {

@@ -1306,8 +1306,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  data->found = data->callback (widget,
 					data->context,
-					data->x - new_allocation.x,
-					data->y - new_allocation.y,
+					data->x - x_offset,
+					data->y - y_offset,
 					data->time);
 	  /* If so, send a "drag_leave" to the last widget */
 	  if (data->found)

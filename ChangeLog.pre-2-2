@@ -1,3 +1,13 @@
+Tue Feb 27 04:14:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_propagate_event): Remove
+	left-over debug-printf.
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Don't use
+	new_allocation.x/new_allocation.y for coordinate,
+	translation since they are clip, use the 
+	x_offset/y_offset variables we keep for the purpose instead.
+
 Tue Feb 27 02:29:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_find_widget): When recursing,
