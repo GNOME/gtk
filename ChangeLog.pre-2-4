@@ -1,3 +1,11 @@
+Thu Dec 10 20:42:22 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_handle_event): Use 
+	gdk_window_get_origin() instead of gdk_window_get_position,
+	because get_position is unreliable for plugs. 
+
+	This is a bad hack, maybe we need GDK_WINDOW_PLUG?
+
 Thu Dec 10 17:58:49 GMT 1998  Tony Gale  <gale@gtk.org>
 
 	* docs/gtk_tut.sgml:

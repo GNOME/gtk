@@ -864,7 +864,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	if (event->type == GDK_DROP_START)
 	  info->dropped = TRUE;
 
-	gdk_window_get_position (toplevel->window, &tx, &ty);
+	gdk_window_get_origin (toplevel->window, &tx, &ty);
 
 	data.x = event->dnd.x_root - tx;
 	data.y = event->dnd.y_root - ty;
