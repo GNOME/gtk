@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-19 11:39+0300\n"
-"PO-Revision-Date: 2004-01-20 13:42+0300\n"
+"POT-Creation-Date: 2004-01-21 04:36+0100\n"
+"PO-Revision-Date: 2004-01-21 14:52+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -971,7 +971,7 @@ msgstr ""
 "не удалось добавить закладку для \"%s\":\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:454 gtk/gtkfilechooserdefault.c:2882
+#: gtk/gtkfilechooserdefault.c:454 gtk/gtkfilechooserdefault.c:2906
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1065,21 +1065,21 @@ msgid "Preview"
 msgstr "Образец"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2092
+#: gtk/gtkfilechooserdefault.c:2107
 #, c-format
 msgid "Current folder: %s"
 msgstr "Текущая папка: %s"
 
-#: gtk/gtkfilechooserdefault.c:2495
+#: gtk/gtkfilechooserdefault.c:2510
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "ярлык %s не существует"
 
-#: gtk/gtkfilechooserdefault.c:3029
+#: gtk/gtkfilechooserdefault.c:3052
 msgid "Type name of new folder"
 msgstr "Введите имя новой папки"
 
-#: gtk/gtkfilechooserdefault.c:3056
+#: gtk/gtkfilechooserdefault.c:3079
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1087,34 +1087,34 @@ msgstr[0] "%d байт"
 msgstr[1] "%d байта"
 msgstr[2] "%d байтов"
 
-#: gtk/gtkfilechooserdefault.c:3058
+#: gtk/gtkfilechooserdefault.c:3081
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Кб"
 
-#: gtk/gtkfilechooserdefault.c:3060
+#: gtk/gtkfilechooserdefault.c:3083
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Мб"
 
-#: gtk/gtkfilechooserdefault.c:3062
+#: gtk/gtkfilechooserdefault.c:3085
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Гб"
 
-#: gtk/gtkfilechooserdefault.c:3107
+#: gtk/gtkfilechooserdefault.c:3130
 msgid "Today"
 msgstr "Сегодня"
 
-#: gtk/gtkfilechooserdefault.c:3109
+#: gtk/gtkfilechooserdefault.c:3132
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: gtk/gtkfilechooserdefault.c:3117
+#: gtk/gtkfilechooserdefault.c:3140
 msgid "%d/%b/%Y"
 msgstr "%d.%b.%Y"
 
-#: gtk/gtkfilechooserdefault.c:3120
+#: gtk/gtkfilechooserdefault.c:3143
 msgid "Unknown"
 msgstr "Неизвестен"
 
@@ -1386,12 +1386,29 @@ msgstr "_Гамма-значение"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1551
+#: gtk/gtkiconfactory.c:1559
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Произошла ошибка загрузки значка: %s"
 
-#: gtk/gtkicontheme.c:1217
+#: gtk/gtkicontheme.c:1182
+#, c-format
+msgid "Could not find the icon '%s'.  The '"
+msgstr "Не удалось найти значок \"%s\". Также тема\""
+
+#: gtk/gtkicontheme.c:1182
+msgid ""
+"' theme\n"
+"was not found either, perhaps you need to install it.\n"
+"You can get a copy from :\n"
+"\thttp://freedesktop.org/Software/icon-theme/releases"
+msgstr ""
+"\"\n"
+"не была найдена, возможно, требуется её установить.\n"
+"Скачать тему можно по ссылке:\n"
+"\thttp://freedesktop.org/Software/icon-theme/releases"
+
+#: gtk/gtkicontheme.c:1247
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Значок \"%s\" не присутствует в теме"
@@ -1641,154 +1658,162 @@ msgid "_Home"
 msgstr "_Домой"
 
 #: gtk/gtkstock.c:301
+msgid "Increase Indent"
+msgstr "Увеличить отступ"
+
+#: gtk/gtkstock.c:302
+msgid "Decrease Indent"
+msgstr "Уменьшить отступ"
+
+#: gtk/gtkstock.c:303
 msgid "_Index"
 msgstr "_Индекс"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:304
 msgid "_Italic"
 msgstr "_Курсив"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:305
 msgid "_Jump to"
 msgstr "Перейти _к"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:306
 msgid "_Center"
 msgstr "По _центру"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:307
 msgid "_Fill"
 msgstr "По _ширине"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:308
 msgid "_Left"
 msgstr "По _левому краю"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:309
 msgid "_Right"
 msgstr "По _правому краю"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:310
 msgid "_New"
 msgstr "_Создать"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:311
 msgid "_No"
 msgstr "_Нет"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:312
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:313
 msgid "_Open"
 msgstr "_Открыть"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:314
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:315
 msgid "_Preferences"
 msgstr "_Изменить настройки"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:316
 msgid "_Print"
 msgstr "На_печатать"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:317
 msgid "Print Pre_view"
 msgstr "Посмотреть образе_ц печати"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:318
 msgid "_Properties"
 msgstr "_Изменить свойства"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:319
 msgid "_Quit"
 msgstr "В_ыйти"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:320
 msgid "_Redo"
 msgstr "Возв_ратить"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:321
 msgid "_Refresh"
 msgstr "Об_новить"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:322
 msgid "_Remove"
 msgstr "У_брать"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:323
 msgid "_Revert"
 msgstr "_Восстановить"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:324
 msgid "_Save"
 msgstr "Со_хранить"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:325
 msgid "Save _As"
 msgstr "Сохранить _как"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:326
 msgid "_Color"
 msgstr "_Цвет"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:327
 msgid "_Font"
 msgstr "_Шрифт"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:328
 msgid "_Ascending"
 msgstr "По воз_растанию"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:329
 msgid "_Descending"
 msgstr "По _убыванию"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:330
 msgid "_Spell Check"
 msgstr "Проверить право_писание"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:331
 msgid "_Stop"
 msgstr "О_становить"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:332
 msgid "_Strikethrough"
 msgstr "Пере_черкивание"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:333
 msgid "_Undelete"
 msgstr "Вос_становить удалённое"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:334
 msgid "_Underline"
 msgstr "По_дчеркивание"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:335
 msgid "_Undo"
 msgstr "_Откатить"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:336
 msgid "_Yes"
 msgstr "_Да"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:337
 msgid "Zoom _100%"
 msgstr "Восстановить ис_ходный масштаб"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:338
 msgid "Zoom to _Fit"
 msgstr "Подогнать масштаб по _ширине"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:339
 msgid "Zoom _In"
 msgstr "У_величить масштаб"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:340
 msgid "Zoom _Out"
 msgstr "У_меньшить масштаб"
 
