@@ -1132,15 +1132,18 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
         }
     }
 
+  gtk_tree_model_filter_increment_stamp (filter);
+
   if (!path)
     path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
                                                                   c_path,
                                                                   TRUE,
                                                                   TRUE);
 
-  g_return_if_fail (path != NULL);
+  if (!path)
+    /* parent is probably being filtered out */
+    goto done;
 
-  gtk_tree_model_filter_increment_stamp (filter);
   gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
 
   level = FILTER_LEVEL (iter.user_data);
