@@ -1,3 +1,8 @@
+Wed Jan 19 17:17:31 2005  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_frame_extents): Squash
+	strict aliasing warning in _NET_VIRTUAL_ROOTS code.
+
 2005-01-19  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkkeys-win32.c (update_keymap,

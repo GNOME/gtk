@@ -3134,6 +3134,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   Window xparent;
   Window root;
   Window *children;
+  guchar *data;
   Window *vroots;
   Atom type_return;
   unsigned int nchildren;
@@ -3182,11 +3183,14 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 								 "_NET_VIRTUAL_ROOTS"),
 			  0, 0x7fffffff, False, XA_WINDOW, &type_return,
 			  &format_return, &nitems_return, &bytes_after_return,
-			  (unsigned char **)(&vroots))
+			  &data)
       == Success)
     {
-      if ((type_return == XA_WINDOW) && (format_return == 32) && (vroots))
-	nvroots = nitems_return;
+      if ((type_return == XA_WINDOW) && (format_return == 32) && (data))
+	{
+	  nvroots = nitems_return;
+	  vroots = (Window *)data;
+	}
     }
 
   xparent = GDK_WINDOW_XID (window);
