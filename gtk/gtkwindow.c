@@ -2508,8 +2508,8 @@ gtk_window_resize (GtkWindow *window,
  * @width: return location for width, or %NULL
  * @height: return location for height, or %NULL
  *
- * Obtains the current size of @window. If @window is not onscreen, it
- * returns the size GTK+ will suggest to the <link
+ * Obtains the current size of @window. If @window is not onscreen,
+ * it returns the size GTK+ will suggest to the <link
  * linkend="gtk-X11-arch">window manager</link> for the initial window
  * size (but this is not reliably the same as the size the window
  * manager will actually select). The size obtained by
@@ -2529,10 +2529,10 @@ gtk_window_resize (GtkWindow *window,
  * "configure_event" on the window and adjust your size-dependent
  * state to match the size delivered in the #GdkEventConfigure.
  *
- * Note 2: The returned size does <emphasis>not</emphasis> include the size of the window
- * manager decorations (aka the window frame or border). Those
- * are not drawn by GTK+ and GTK+ has no reliable method of
- * determining their size.
+ * Note 2: The returned size does <emphasis>not</emphasis> include the
+ * size of the window manager decorations (aka the window frame or
+ * border). Those are not drawn by GTK+ and GTK+ has no reliable
+ * method of determining their size.
  *
  * Note 3: If you are getting a window size in order to position
  * the window onscreen, there may be a better way. The preferred

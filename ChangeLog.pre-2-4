@@ -1,3 +1,8 @@
+2002-01-25  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkwindow.c (gtk_window_get_size): changed the comment so
+	that gtk-doc doesn't get confused.
+
 Fri Jan 25 14:03:36 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_draw_arrow): assert
