@@ -3,21 +3,21 @@
 # Hasbullah Bin Pit (sebol)<sebol@ikhlas.com>, 2002.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gtk+ 1.3.x\n"
-"POT-Creation-Date: 2002-05-23 17:08-0400\n"
+"Project-Id-Version: Gtk+ 2.0.x\n"
+"POT-Creation-Date: 2002-06-05 04:26+0800\n"
 "PO-Revision-Date: 2002-04-06 02:30+0800\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Gagal membuka fail '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Fail imej '%s' tida mengandungi data"
@@ -27,7 +27,7 @@ msgstr "Fail imej '%s' tida mengandungi data"
 msgid "Don't know how to load the animation in file '%s'"
 msgstr "Tak tahu bagaimana untuk memuatkan animasi pada fail '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
+#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -42,12 +42,12 @@ msgid ""
 msgstr ""
 "Gagal memuatkan animasi '%s':sebab tidak diketahui, mungkin fail imej rosak"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:354
+#: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Gagal memuatkan modul  image-loading: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:373
+#: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -56,41 +56,41 @@ msgstr ""
 "Modul Image-loading %s tidak boleh mengeksport antaramuka dengan betul; "
 "mungkin ianya daripada GTK versi lain"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
+#: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Jenis imej '%s'tidak disokong"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:538
+#: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Tak dapat mengenali format fail imej pada fail '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:544
+#: gdk-pixbuf/gdk-pixbuf-io.c:548
 msgid "Unrecognized image file format"
 msgstr "Jenis format fail imej tidak dikenali"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:614
+#: gdk-pixbuf/gdk-pixbuf-io.c:618
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
 msgstr "Tak tahu bagaimana untuk memuatkan imej pada fail '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:647
+#: gdk-pixbuf/gdk-pixbuf-io.c:651
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Gagal memuatkan imej '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:752
+#: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Binaan  gdk-pixbuf ini tak menyokong penyimpanan format imej: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Gagal membuka fail '%s' untuk ditulis: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:880
+#: gdk-pixbuf/gdk-pixbuf-io.c:884
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -545,7 +545,7 @@ msgstr "Lebar atau tinggi imej TIFF ialah sifar"
 
 #: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "Dimensi bagi imej TIFF terlalu besar"
 
 #: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
@@ -583,15 +583,15 @@ msgstr "Tak cukup memori untuk memuatkan imej"
 msgid "Couldn't save the rest"
 msgstr "Tak dapat menyimpang yang selebihnya"
 
-#: gdk-pixbuf/io-xbm.c:283
+#: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
 msgstr "Fail XBM tidak sah"
 
-#: gdk-pixbuf/io-xbm.c:293
+#: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
 msgstr "Tak cukup memori untuk memuatkan fail imej XBM"
 
-#: gdk-pixbuf/io-xbm.c:427
+#: gdk-pixbuf/io-xbm.c:429
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Gagal menulis ke fail sementara bila memuatkan imej XBM"
 
@@ -897,6 +897,8 @@ msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
+"Ruang ekstra untuk menambah butang CAN_DEFAULT yang sentiasa dilukis di luar "
+"sempadan"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
@@ -1079,7 +1081,7 @@ msgstr "Warna latardepan sebagai GdkColor"
 #: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:568
 msgid "Editable"
-msgstr "boleh diedit"
+msgstr "Boleh diedit"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
@@ -1114,7 +1116,7 @@ msgstr "Gaya font"
 #: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
-msgstr "Variant font"
+msgstr "Varian font"
 
 #: gtk/gtkcellrenderertext.c:281 gtk/gtkcellrenderertext.c:282
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
@@ -1207,7 +1209,7 @@ msgstr "Samada tag ini mempengaruhi keluarga font"
 
 #: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:540
 msgid "Font style set"
-msgstr "Set gaya Font:"
+msgstr "Set gaya font"
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
@@ -1299,7 +1301,7 @@ msgstr "Keadaan Radio"
 
 #: gtk/gtkcellrenderertoggle.c:149
 msgid "Draw the toggle button as a radio button"
-msgstr ""
+msgstr "Lukis butang toggle sebagai butang radio"
 
 #: gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:195
 msgid "Indicator Size"
@@ -1327,11 +1329,11 @@ msgstr "Samada item menu dicheck."
 
 #: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
 msgid "Inconsistent"
-msgstr ""
+msgstr "Tidak konsisten"
 
 #: gtk/gtkcheckmenuitem.c:124
 msgid "Whether to display an \"inconsistent\" state."
-msgstr ""
+msgstr "Samada memapar keadaan \"Tidak konsisten\"."
 
 #: gtk/gtkcolorsel.c:582
 msgid ""
@@ -1785,7 +1787,7 @@ msgid "Folder unreadable: %s"
 msgstr "Folder tidak boleh dibaca: %s"
 
 #: gtk/gtkfilesel.c:946
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "available to this program.\n"
@@ -2365,21 +2367,21 @@ msgstr "Tinggi layout"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:191
+#: gtk/gtkmenu.c:194
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:192
+#: gtk/gtkmenu.c:195
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
 msgstr ""
 
-#: gtk/gtkmenu.c:260
+#: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
 msgstr "Boleh tukar Pemecut"
 
-#: gtk/gtkmenu.c:261
+#: gtk/gtkmenu.c:265
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
@@ -3140,7 +3142,7 @@ msgstr "_Tambah"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr "Ter_apkan"
+msgstr "_Terap"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
@@ -3156,7 +3158,7 @@ msgstr "_CD-Rom"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "_Terangkan"
+msgstr "_Kosongkan"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
@@ -3164,7 +3166,7 @@ msgstr "_Tutup"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr ""
+msgstr "_Tukar"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
@@ -3172,7 +3174,7 @@ msgstr "_Salin"
 
 #: gtk/gtkstock.c:284
 msgid "C_ut"
-msgstr "Po_tong"
+msgstr "_Potong"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -3284,7 +3286,7 @@ msgstr "Te_pek"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr "_Keutamaan"
+msgstr "Ke_Utamaan"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
@@ -3371,6 +3373,7 @@ msgid "_Yes"
 msgstr "_Ya"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
@@ -3456,7 +3459,7 @@ msgstr "Nama tag"
 
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
-msgstr ""
+msgstr "Nama digunakan untuk merujuk tag teks"
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
@@ -3474,7 +3477,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:235
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr ""
+msgstr "Bitmap digunakan untuk menopeng bila melukis latarbelakang teks"
 
 #: gtk/gtktexttag.c:260
 msgid "Foreground stipple mask"
@@ -3482,7 +3485,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:261
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
+msgstr "Bitmap digunakan untuk menopeng bila melukis latardepan teks"
 
 #: gtk/gtktexttag.c:268
 msgid "Text direction"
@@ -3502,7 +3505,7 @@ msgstr "Bahasa"
 
 #: gtk/gtktexttag.c:388
 msgid "Language engine code to use for rendering the text"
-msgstr ""
+msgstr "Kod jentera bahasa untuk digunakan untuk merender teks"
 
 #: gtk/gtktexttag.c:395
 msgid "Left margin"
@@ -3550,7 +3553,7 @@ msgstr "Piksel di dalam pembalut"
 
 #: gtk/gtktexttag.c:458 gtk/gtktextview.c:559
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr ""
+msgstr "Piksel ruang kosong diantara baris dibalut pada perenggan"
 
 #: gtk/gtktexttag.c:484
 msgid "Wrap mode"
@@ -4188,9 +4191,8 @@ msgid "Composite child"
 msgstr "Anak Gubahan"
 
 #: gtk/gtkwidget.c:480
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "Samada widget digubah oleh widget lain"
+msgstr "Samada widget adalah sebahagian dari widget komposit"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
