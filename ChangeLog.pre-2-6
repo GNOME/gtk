@@ -1,3 +1,8 @@
+Wed Jun 25 18:59:15 BST 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Fix typos. Update
+	thread example I missed yesterday.
+
 2003-06-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_class_init): Add a blurb for shadow_type.

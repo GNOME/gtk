@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>June 24th 2003</date>
+  <date>June 25th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -698,9 +698,7 @@ presents a list of GTK+ bindings.</para>
   <listitem><simpara>the gtkmm package, which is a wrapper for
   GTK+. You can find the home page at <ulink
   url="http://www.gtkmm.org">
-  http://www.gtkmm.org/</ulink>. The FTP site is 
-  <ulink url="ftp://ftp.gtk.org/pub/gtk/gtk--">
-  ftp://ftp.gtk.org/pub/gtk/gtk--</ulink>.</simpara>
+  http://www.gtkmm.org/</ulink>.</simpara>
   </listitem>
 
   <listitem><simpara>the VDK package, which was built as
@@ -851,7 +849,7 @@ out there you can look at.</para>
 libglade API docs
 (<ulink url="http://developer.gnome.org/doc/API/2.0/libglade/libglade-notes.html#libglade-basics">
 http://developer.gnome.org/doc/API/2.0/libglade/libglade-notes.html#libglade-basics</ulink>)
-</para>
+.</para>
 
 </sect1>
 
@@ -1194,7 +1192,11 @@ main (int argc, char *argv[])
 {
   GtkWidget *window;
 
+  /* init threads */	
   g_thread_init(NULL);
+  gdk_threads_init();
+  
+  /* init gtk */
   gtk_init(&amp;argc, &amp;argv);
 
   window = create_window();
@@ -1204,7 +1206,7 @@ main (int argc, char *argv[])
   gtk_main();
   gdk_threads_leave();
 
-  return(0);
+  return 0;
 }
 </programlisting>
 
@@ -1395,7 +1397,7 @@ XFlush() directly:</para>
 
 <programlisting role="C">
 
-#include <gdk/gdkx.h>
+#include &lt;gdk/gdkx.h&gt;
 
 void my_flush_commands (void)
 {
