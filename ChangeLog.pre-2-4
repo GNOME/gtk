@@ -1,3 +1,12 @@
+Sun Sep  2 17:38:42 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_deleted): Patch from
+	vishnu@pobox.com (Joshua N Pritikin) to emit signal at the correct
+	time, #59727
+
+	* gtk/gtkbutton.c (gtk_button_update_state): Get depressed
+	correctly.
+
 Sun Sep  2 21:41:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (update_keymaps): Set current serial

@@ -4512,6 +4512,7 @@ gtk_tree_view_deleted (GtkTreeModel *model,
   GtkRBTree *tree;
   GtkRBNode *node;
   GList *list;
+  gint selection_changed;
 
   g_return_if_fail (path != NULL);
 
@@ -4524,8 +4525,7 @@ gtk_tree_view_deleted (GtkTreeModel *model,
   gtk_tree_row_reference_deleted (G_OBJECT (data), path);
 
   /* Change the selection */
-  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-    g_signal_emit_by_name (G_OBJECT (tree_view->priv->selection), "changed");
+  selection_changed = GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED);
 
   for (list = tree_view->priv->columns; list; list = list->next)
     if (((GtkTreeViewColumn *)list->data)->visible &&
@@ -4568,6 +4568,9 @@ gtk_tree_view_deleted (GtkTreeModel *model,
     }
 
   _gtk_tree_view_update_size (GTK_TREE_VIEW (data));
+
+  if (selection_changed)
+    g_signal_emit_by_name (G_OBJECT (tree_view->priv->selection), "changed");
 }
 
 

@@ -1054,6 +1054,7 @@ gtk_button_finish_activate (GtkButton *button,
   gtk_grab_remove (widget);
 
   button->button_down = FALSE;
+
   gtk_button_update_state (button);
 
   if (do_it)
@@ -1224,8 +1225,8 @@ gtk_button_update_state (GtkButton *button)
   gboolean depressed;
   GtkStateType new_state;
 
-  depressed = button->in_button && button->button_down;
-      
+  depressed = button->button_down && (button->in_button || button->activate_timeout);
+
   if (!button->button_down && button->in_button)
     new_state = GTK_STATE_PRELIGHT;
   else
