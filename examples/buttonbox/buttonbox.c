@@ -43,7 +43,7 @@ GtkWidget *create_bbox( gint  horizontal,
 int main( int   argc,
           char *argv[] )
 {
-  GtkWidget *window;
+  static GtkWidget* window = NULL;
   GtkWidget *main_vbox;
   GtkWidget *vbox;
   GtkWidget *hbox;

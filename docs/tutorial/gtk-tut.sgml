@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>January 15, 2003</date>
+    <date>January 23, 2003</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -3129,6 +3129,7 @@ void cb_page_size( GtkAdjustment *get,
     gtk_adjustment_set_value (set, CLAMP (set->value,
 					  set->lower,
 					  (set->upper - set->page_size)));
+    g_signal_emit_by_name(G_OBJECT(set), "changed");
 }
 
 void cb_draw_value( GtkToggleButton *button )
@@ -8963,9 +8964,9 @@ static void print_selected(gpointer   callback_data,
 /* Our menu, an array of GtkItemFactoryEntry structures that defines each menu item */
 static GtkItemFactoryEntry menu_items[] = {
   { "/_File",         NULL,         NULL,           0, "&amp;lt;Branch&amp;gt;" },
-  { "/File/_New",     "&amp;lt;control&amp;gt;N", print_hello,    0, "&lt;Item&gt;" },
-  { "/File/_Open",    "&amp;lt;control&amp;gt;O", print_hello,    0, "&lt;Item&gt;" },
-  { "/File/_Save",    "&amp;lt;control&amp;gt;S", print_hello,    0, "&lt;Item&gt;" },
+  { "/File/_New",     "&amp;lt;control&amp;gt;N", print_hello,    0, "&lt;StockItem&gt;", GTK_STOCK_NEW },
+  { "/File/_Open",    "&amp;lt;control&amp;gt;O", print_hello,    0, "&lt;StockItem&gt;", GTK_STOCK_OPEN },
+  { "/File/_Save",    "&amp;lt;control&amp;gt;S", print_hello,    0, "&lt;StockItem&gt;", GTK_STOCK_SAVE },
   { "/File/Save _As", NULL,         NULL,           0, "&lt;Item&gt;" },
   { "/File/sep1",     NULL,         NULL,           0, "&amp;lt;Separator&amp;gt;" },
   { "/File/_Quit",    "&lt;CTRL&gt;Q", gtk_main_quit, 0, "&lt;StockItem&gt;", GTK_STOCK_QUIT },
@@ -11096,19 +11097,7 @@ depressed. </para>
 class that holds all of the elements of the composite widget. For
 example, the parent class of the FileSelection widget is the
 Dialog class. Since our buttons will be arranged in a table, it
-might seem natural to make our parent class the Table
-class. Unfortunately, this turns out not to work. The creation of a
-widget is divided among two functions - a <literal>WIDGETNAME_new()</literal>
-function that the user calls, and a <literal>WIDGETNAME_init()</literal> function
-which does the basic work of initializing the widget which is
-independent of the arguments passed to the <literal>_new()</literal>
-function. Descendant widgets only call the <literal>_init</literal> function of
-their parent widget. But this division of labor doesn't work well for
-tables, which when created need to know the number of rows and
-columns in the table. Unless we want to duplicate most of the
-functionality of <literal>gtk_table_new()</literal> in our Tictactoe widget, we had
-best avoid deriving it from Table. For that reason, we derive it
-from VBox instead, and stick our table inside the VBox.</para>
+is natural to make our parent class the Table class.</para>
 
 </sect2>
 
@@ -11116,8 +11105,8 @@ from VBox instead, and stick our table inside the VBox.</para>
 <sect2>
 <title>The header file</title>
 
-<para>Each widget class has a header file which declares the object and
-class structures for that widget, along with public functions. 
+<para>Each GObject class has a header file which declares the object and
+class structures for that object, along with public functions. 
 A couple of features are worth pointing out. To prevent duplicate
 definitions, we wrap the entire header file in:</para>
 
@@ -11133,20 +11122,21 @@ definitions, we wrap the entire header file in:</para>
 <para>And to keep C++ programs that include the header file happy, in:</para>
 
 <programlisting role="C">
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#include &lt;glib.h&gt;
+
+G_BEGIN_DECLS
 .
 .
 .
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 </programlisting>
 
-<para>Along with the functions and structures, we declare three standard
-macros in our header file, <literal>TICTACTOE(obj)</literal>,
-<literal>TICTACTOE_CLASS(klass)</literal>, and <literal>IS_TICTACTOE(obj)</literal>, which cast a
+<para>Along with the functions and structures, we declare five standard
+macros in our header file, <literal>TICTACTOE_TYPE</literal>,
+<literal>TICTACTOE(obj)</literal>,
+<literal>TICTACTOE_CLASS(klass)</literal>,
+<literal>IS_TICTACTOE(obj)</literal>, and
+<literal>IS_TICTACTOE_CLASS(klass)</literal>, which cast a
 pointer into a pointer to the object or class structure, and check
 if an object is a Tictactoe widget respectively.</para>
 
@@ -11177,17 +11167,18 @@ if an object is a Tictactoe widget respectively.</para>
 #define __TICTACTOE_H__
 
 
-#include &lt;gdk/gdk.h&gt;
-#include &lt;gtk/gtkvbox.h&gt;
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtktable.h&gt;
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
-#define TICTACTOE(obj)          GTK_CHECK_CAST (obj, tictactoe_get_type (), Tictactoe)
-#define TICTACTOE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, tictactoe_get_type (), TictactoeClass)
-#define IS_TICTACTOE(obj)       GTK_CHECK_TYPE (obj, tictactoe_get_type ())
+#define TICTACTOE_TYPE            (tictactoe_get_type ())
+#define TICTACTOE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), TICTACTOE_TYPE, Tictactoe))
+#define TICTACTOE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), TICTACTOE_TYPE, TictactoeClass))
+#define IS_TICTACTOE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TICTACTOE_TYPE))
+#define IS_TICTACTOE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TICTACTOE_TYPE))
 
 
 typedef struct _Tictactoe       Tictactoe;
@@ -11195,25 +11186,23 @@ typedef struct _TictactoeClass  TictactoeClass;
 
 struct _Tictactoe
 {
-  GtkVBox vbox;
+  GtkTable table;
   
   GtkWidget *buttons[3][3];
 };
 
 struct _TictactoeClass
 {
-  GtkVBoxClass parent_class;
+  GtkTableClass parent_class;
 
   void (* tictactoe) (Tictactoe *ttt);
 };
 
-GtkType        tictactoe_get_type        (void);
+GType          tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
 void	       tictactoe_clear           (Tictactoe *ttt);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __TICTACTOE_H__ */
 
@@ -11227,59 +11216,73 @@ void	       tictactoe_clear           (Tictactoe *ttt);
 <title>The <literal>_get_type()</literal> function</title>
 
 <para>We now continue on to the implementation of our widget. A core
-function for every widget is the function
+function for every object is the function
 <literal>WIDGETNAME_get_type()</literal>. This function, when first called, tells
-GTK about the widget class, and gets an ID that uniquely identifies
-the widget class. Upon subsequent calls, it just returns the ID.</para>
+Glib about the new class, and gets an ID that uniquely identifies
+the class. Upon subsequent calls, it just returns the ID.</para>
 
 <programlisting role="C">
-GtkType
-tictactoe_get_type ()
+GType
+tictactoe_get_type (void)
 {
-  static guint ttt_type = 0;
+  static GType ttt_type = 0;
 
   if (!ttt_type)
     {
-      GtkTypeInfo ttt_info =
+      static const GTypeInfo ttt_info =
       {
-	"Tictactoe",
-	sizeof (Tictactoe),
 	sizeof (TictactoeClass),
-	(GtkClassInitFunc) tictactoe_class_init,
-	(GtkObjectInitFunc) tictactoe_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL
+	NULL, /* base_init */
+	NULL, /* base_finalize */
+	(GClassInitFunc) tictactoe_class_init,
+	NULL, /* class_finalize */
+	NULL, /* class_data */
+	sizeof (Tictactoe),
+	0,    /* n_preallocs */
+	(GInstanceInitFunc) tictactoe_init,
       };
 
-      ttt_type = gtk_type_unique (gtk_vbox_get_type (), &amp;ttt_info);
+      ttt_type = g_type_register_static (GTK_TYPE_TABLE,
+                                         "Tictactoe",
+                                         &amp;ttt_info,
+                                         0);
     }
 
   return ttt_type;
 }
 </programlisting>
 
-<para>The GtkTypeInfo structure has the following definition:</para>
+<para>The GTypeInfo structure has the following definition:</para>
 
 <programlisting role="C">
-struct _GtkTypeInfo
+struct _GTypeInfo
 {
-  gchar *type_name;
-  guint object_size;
-  guint class_size;
-  GtkClassInitFunc class_init_func;
-  GtkObjectInitFunc object_init_func;
-  GtkArgSetFunc arg_set_func;
-  GtkArgGetFunc arg_get_func;
+  /* interface types, classed types, instantiated types */
+  guint16                class_size;
+   
+  GBaseInitFunc          base_init;
+  GBaseFinalizeFunc      base_finalize;
+   
+  /* classed types, instantiated types */
+  GClassInitFunc         class_init;
+  GClassFinalizeFunc     class_finalize;
+  gconstpointer          class_data;
+   
+  /* instantiated types */
+  guint16                instance_size;
+  guint16                n_preallocs;
+  GInstanceInitFunc      instance_init;
+   
+  /* value handling */
+  const GTypeValueTable *value_table;
 };
 </programlisting>
 
-<para>The fields of this structure are pretty self-explanatory. We'll ignore
-the <literal>arg_set_func</literal> and <literal>arg_get_func</literal> fields here: they have an important, 
-but as yet largely
-unimplemented, role in allowing widget options to be conveniently set
-from interpreted languages. Once GTK has a correctly filled in copy of
-this structure, it knows how to create objects of a particular widget
-type. </para>
+<para>The important fields of this structure are pretty self-explanatory.
+We'll ignore the <literal>base_init</literal> and
+ <literal>base_finalize</literal> as well as the <literal>vlaue_table</literal>
+fields here. Once Glib has a correctly filled in copy of
+this structure, it knows how to create objects of a particular type. </para>
 
 </sect2>
 
@@ -11301,22 +11304,15 @@ enum {
 static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
 
 static void
-tictactoe_class_init (TictactoeClass *class)
+tictactoe_class_init (TictactoeClass *klass)
 {
-  GtkObjectClass *object_class;
-
-  object_class = (GtkObjectClass*) class;
-  
-  tictactoe_signals[TICTACTOE_SIGNAL] = gtk_signal_new ("tictactoe",
-					 GTK_RUN_FIRST,
-					 object_class->type,
-					 GTK_SIGNAL_OFFSET (TictactoeClass, tictactoe),
-					 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
-
-
-  gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);
-
-  class->tictactoe = NULL;
+  tictactoe_signals[TICTACTOE_SIGNAL] =
+    g_signal_new ("tictactoe",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (TictactoeClass, tictactoe),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 </programlisting>
 
@@ -11329,45 +11325,57 @@ things are going to get a bit complicated.</para>
 <para>The function:</para>
 
 <programlisting role="C">
-gint gtk_signal_new( const gchar         *name,
-                     GtkSignalRunType     run_type,
-                     GtkType              object_type,
-                     gint                 function_offset,
-                     GtkSignalMarshaller  marshaller,
-                     GtkType              return_val,
-                     guint                nparams,
-                     ...);
+guint g_signal_new( const gchar         *signal_name,
+                    GType                itype,
+                    GSignalFlags         signal_flags,
+                    guint                class_offset,
+                    GSignalAccumulator  *accumulator,
+                    gpointer             accu_data,
+                    GSignalCMarshaller  *c_marshaller,
+                    GType                return_type,
+                    guint                n_params,
+                    ...);
 </programlisting>
 
 <para>Creates a new signal. The parameters are:</para>
 
 <itemizedlist>
-<listitem><simpara> <literal>name</literal>: The name of the signal.</simpara>
+<listitem><simpara> <literal>signal_name</literal>: The name of the signal.</simpara>
 </listitem>
 
-<listitem><simpara> <literal>run_type</literal>: Whether the default handler runs before or after
-user handlers. Usually this will be <literal>GTK_RUN_FIRST</literal>, or <literal>GTK_RUN_LAST</literal>,
-although there are other possibilities.</simpara>
-</listitem>
-
-<listitem><simpara> <literal>object_type</literal>: The ID of the object that this signal applies
+<listitem><simpara> <literal>itype</literal>: The ID of the object that this signal applies
 to. (It will also apply to that objects descendants.)</simpara>
 </listitem>
+                                                                                
+<listitem><simpara> <literal>signal_flags</literal>: Whether the default handler runs before or after
+user handlers and other flags. Usually this will be one of
+<literal>G_SIGNAL_RUN_FIRST</literal>, or <literal>G_SIGNAL_RUN_LAST</literal>,
+although there are other possibilities. The flag
+<literal>G_SIGNAL_ACTION</literal> specifies that no extra code needs to
+run that performs special pre or post emission adjustments. This means that
+ther signal can also be emitted from object external code.</simpara>
+</listitem>
 
-<listitem><simpara> <literal>function_offset</literal>: The offset within the class structure of
+<listitem><simpara> <literal>class_offset</literal>: The offset within the class structure of
 a pointer to the default handler.</simpara>
 </listitem>
 
-<listitem><simpara> <literal>marshaller</literal>: A function that is used to invoke the signal
+<listitem><simpara> <literal>accumulator</literal>: For most classes this can
+be set to NULL.</simpara></listitem>
+
+<listitem><simpara> <literal>accu_data</literal>: User data that will be handed
+to the accumulator function.</simpara></listitem>
+
+<listitem><simpara> <literal>c_marshaller</literal>: A function that is used to invoke the signal
 handler. For signal handlers that have no arguments other than the
 object that emitted the signal and user data, we can use the
-pre-supplied marshaller function <literal>gtk_signal_default_marshaller</literal>.</simpara>
+pre-supplied marshaller function <literal>g_cclosure_marshal_VOID__VOID</literal>.</simpara>
 </listitem>
 
-<listitem><simpara> <literal>return_val</literal>: The type of the return val.</simpara>
+<listitem><simpara> <literal>return_type</literal>: The type of the return value.</simpara>
 </listitem>
 
-<listitem><simpara> <literal>nparams</literal>: The number of parameters of the signal handler
+<listitem><simpara> <literal>n_params</literal>: The number of parameters of the signal handler
 (other than the two default ones mentioned above)</simpara>
 </listitem>
 
@@ -11375,52 +11383,38 @@ pre-supplied marshaller function <literal>gtk_signal_default_marshaller</literal
 </listitem>
 </itemizedlist>
 
-<para>When specifying types, the <literal>GtkType</literal> enumeration is used:</para>
+<para>When specifying types, the following standard types can be used:</para>
 
 <programlisting role="C">
-typedef enum
-{
-  GTK_TYPE_INVALID,
-  GTK_TYPE_NONE,
-  GTK_TYPE_CHAR,
-  GTK_TYPE_BOOL,
-  GTK_TYPE_INT,
-  GTK_TYPE_UINT,
-  GTK_TYPE_LONG,
-  GTK_TYPE_ULONG,
-  GTK_TYPE_FLOAT,
-  GTK_TYPE_DOUBLE,
-  GTK_TYPE_STRING,
-  GTK_TYPE_ENUM,
-  GTK_TYPE_FLAGS,
-  GTK_TYPE_BOXED,
-  GTK_TYPE_FOREIGN,
-  GTK_TYPE_CALLBACK,
-  GTK_TYPE_ARGS,
-
-  GTK_TYPE_POINTER,
-
-  /* it'd be great if the next two could be removed eventually */
-  GTK_TYPE_SIGNAL,
-  GTK_TYPE_C_CALLBACK,
-
-  GTK_TYPE_OBJECT
-
-} GtkFundamentalType;
+G_TYPE_INVALID
+G_TYPE_NONE
+G_TYPE_INTERFACE
+G_TYPE_CHAR
+G_TYPE_UCHAR
+G_TYPE_BOOLEAN
+G_TYPE_INT
+G_TYPE_UINT
+G_TYPE_LONG
+G_TYPE_ULONG
+G_TYPE_INT64
+G_TYPE_UINT64
+G_TYPE_ENUM
+G_TYPE_FLAGS
+G_TYPE_FLOAT
+G_TYPE_DOUBLE
+G_TYPE_STRING
+G_TYPE_POINTER
+G_TYPE_BOXED
+G_TYPE_PARAM
+G_TYPE_OBJECT
 </programlisting>
 
-<para><literal>gtk_signal_new()</literal> returns a unique integer identifier for the
+<para><literal>g_signal_new()</literal> returns a unique integer identifier for the
 signal, that we store in the <literal>tictactoe_signals</literal> array, which we
 index using an enumeration. (Conventionally, the enumeration elements
 are the signal name, uppercased, but here there would be a conflict
 with the <literal>TICTACTOE()</literal> macro, so we called it <literal>TICTACTOE_SIGNAL</literal>
 instead.</para>
-
-<para>After creating our signals, we need to tell GTK to associate our
-signals with the Tictactoe class. We do that by calling
-<literal>gtk_object_class_add_signals()</literal>. We then set the pointer which
-points to the default handler for the "tictactoe" signal to NULL,
-indicating that there is no default action.</para>
 
 </sect2>
 
@@ -11428,7 +11422,7 @@ indicating that there is no default action.</para>
 <sect2>
 <title>The <literal>_init()</literal> function</title>
 
-<para>Each widget class also needs a function to initialize the object
+<para>Each class also needs a function to initialize the object
 structure. Usually, this function has the fairly limited role of
 setting the fields of the structure to default values. For composite
 widgets, however, this function also creates the component widgets.</para>
@@ -11437,21 +11431,19 @@ widgets, however, this function also creates the component widgets.</para>
 static void
 tictactoe_init (Tictactoe *ttt)
 {
-  GtkWidget *table;
   gint i,j;
-  
-  table = gtk_table_new (3, 3, TRUE);
-  gtk_container_add (GTK_CONTAINER(ttt), table);
-  gtk_widget_show (table);
 
-  for (i=0;i<3; i++)
-    for (j=0;j<3; j++)
+  gtk_table_resize (GTK_TABLE (ttt), 3, 3);
+  gtk_table_set_homogeneous (GTK_TABLE (ttt), TRUE);
+
+  for (i=0;i&lt;3; i++)
+    for (j=0;j&lt;3; j++)
       {
 	ttt->buttons[i][j] = gtk_toggle_button_new ();
-	gtk_table_attach_defaults (GTK_TABLE(table), ttt->buttons[i][j], 
+	gtk_table_attach_defaults (GTK_TABLE (ttt), ttt->buttons[i][j], 
 				   i, i+1, j, j+1);
-	gtk_signal_connect (GTK_OBJECT (ttt->buttons[i][j]), "toggled",
-			    GTK_SIGNAL_FUNC (tictactoe_toggle), ttt);
+	g_signal_connect (G_OBJECT (ttt->buttons[i][j]), "toggled",
+			  G_CALLBACK (tictactoe_toggle), ttt);
 	gtk_widget_set_size_request (ttt->buttons[i][j], 20, 20);
 	gtk_widget_show (ttt->buttons[i][j]);
       }
@@ -11464,17 +11456,17 @@ tictactoe_init (Tictactoe *ttt)
 <sect2>
 <title>And the rest...</title>
 
-<para>There is one more function that every widget (except for base widget
-types like Bin that cannot be instantiated) needs to have - the
+<para>There is one more function that every object (except for abstract
+classes like Bin that cannot be instantiated) needs to have - the
 function that the user calls to create an object of that type. This is
-conventionally called <literal>WIDGETNAME_new()</literal>. In some
+conventionally called <literal>OBJECTNAME_new()</literal>. In some
 widgets, though not for the Tictactoe widgets, this function takes
 arguments, and does some setup based on the arguments. The other two
 functions are specific to the Tictactoe widget. </para>
 
 <para><literal>tictactoe_clear()</literal> is a public function that resets all the
 buttons in the widget to the up position. Note the use of
-<literal>gtk_signal_handler_block_by_data()</literal> to keep our signal handler for
+<literal>g_signal_handlers_block_matches()</literal> to keep our signal handler for
 button toggles from being triggered unnecessarily.</para>
 
 <para><literal>tictactoe_toggle()</literal> is the signal handler that is invoked when the
@@ -11484,9 +11476,9 @@ the "tictactoe" signal.</para>
 
 <programlisting role="C">
 GtkWidget*
-tictactoe_new ()
+tictactoe_new (void)
 {
-  return GTK_WIDGET ( gtk_type_new (tictactoe_get_type ()));
+  return GTK_WIDGET ( g_object_new (TICTACTOE_TYPE, NULL));
 }
 
 void	       
@@ -11494,13 +11486,17 @@ tictactoe_clear (Tictactoe *ttt)
 {
   int i,j;
 
-  for (i=0;i<3;i++)
-    for (j=0;j<3;j++)
+  for (i=0;i&lt;3;i++)
+    for (j=0;j&lt;3;j++)
       {
-	gtk_signal_handler_block_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
+	g_signal_handlers_block_matched (G_OBJECT (ttt->buttons[i][j]),
+                                         G_SIGNAL_MATCH_DATA,
+                                         0, 0, NULL, NULL, ttt);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt->buttons[i][j]),
 				     FALSE);
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
+	g_signal_handlers_unblock_matched (G_OBJECT (ttt->buttons[i][j]),
+                                           G_SIGNAL_MATCH_DATA,
+                                           0, 0, NULL, NULL, ttt);
       }
 }
 
@@ -11518,12 +11514,12 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 
   int success, found;
 
-  for (k=0; k<8; k++)
+  for (k=0; k&lt;8; k++)
     {
       success = TRUE;
       found = FALSE;
 
-      for (i=0;i<3;i++)
+      for (i=0;i&lt;3;i++)
 	{
 	  success = success &amp;&amp; 
 	    GTK_TOGGLE_BUTTON(ttt->buttons[rwins[k][i]][cwins[k][i]])->active;
@@ -11533,8 +11529,8 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
       
       if (success &amp;&amp; found)
 	{
-	  gtk_signal_emit (GTK_OBJECT (ttt), 
-			   tictactoe_signals[TICTACTOE_SIGNAL]);
+	  g_signal_emit (G_OBJECT (ttt), 
+			 tictactoe_signals[TICTACTOE_SIGNAL], 0);
 	  break;
 	}
     }
@@ -11567,8 +11563,8 @@ main (int argc, char *argv[])
   
   gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
   
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -11578,8 +11574,8 @@ main (int argc, char *argv[])
   gtk_widget_show (ttt);
 
   /* And attach to its "tictactoe" signal */
-  gtk_signal_connect (GTK_OBJECT (ttt), "tictactoe",
-		      GTK_SIGNAL_FUNC (win), NULL);
+  g_signal_connect (G_OBJECT (ttt), "tictactoe",
+                    G_CALLBACK (win), NULL);
 
   gtk_widget_show (window);
   
@@ -14557,7 +14553,6 @@ which are not included in complete form elsewhere.</para>
 
 <programlisting role="C">
 <!-- example-start tictactoe tictactoe.h -->
-
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -14580,17 +14575,18 @@ which are not included in complete form elsewhere.</para>
 #define __TICTACTOE_H__
 
 
-#include &lt;gdk/gdk.h&gt;
-#include &lt;gtk/gtkvbox.h&gt;
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtktable.h&gt;
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
-#define TICTACTOE(obj)          GTK_CHECK_CAST (obj, tictactoe_get_type (), Tictactoe)
-#define TICTACTOE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, tictactoe_get_type (), TictactoeClass)
-#define IS_TICTACTOE(obj)       GTK_CHECK_TYPE (obj, tictactoe_get_type ())
+#define TICTACTOE_TYPE            (tictactoe_get_type ())
+#define TICTACTOE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), TICTACTOE_TYPE, Tictactoe))
+#define TICTACTOE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), TICTACTOE_TYPE, TictactoeClass))
+#define IS_TICTACTOE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TICTACTOE_TYPE))
+#define IS_TICTACTOE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TICTACTOE_TYPE))
 
 
 typedef struct _Tictactoe       Tictactoe;
@@ -14598,25 +14594,23 @@ typedef struct _TictactoeClass  TictactoeClass;
 
 struct _Tictactoe
 {
-  GtkVBox vbox;
+  GtkTable table;
   
   GtkWidget *buttons[3][3];
 };
 
 struct _TictactoeClass
 {
-  GtkVBoxClass parent_class;
+  GtkTableClass parent_class;
 
   void (* tictactoe) (Tictactoe *ttt);
 };
 
-GtkType        tictactoe_get_type        (void);
+GType          tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
 void	       tictactoe_clear           (Tictactoe *ttt);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __TICTACTOE_H__ */
 
@@ -14650,9 +14644,9 @@ void	       tictactoe_clear           (Tictactoe *ttt);
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "gtk/gtksignal.h"
-#include "gtk/gtktable.h"
-#include "gtk/gtktogglebutton.h"
+#include &lt;gtk/gtksignal.h&gt;
+#include &lt;gtk/gtktable.h&gt;
+#include &lt;gtk/gtktogglebutton.h&gt;
 #include "tictactoe.h"
 
 enum {
@@ -14667,7 +14661,7 @@ static void tictactoe_toggle              (GtkWidget *widget, Tictactoe *ttt);
 static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
 
 GType
-tictactoe_get_type ()
+tictactoe_get_type (void)
 {
   static GType ttt_type = 0;
 
@@ -14676,57 +14670,50 @@ tictactoe_get_type ()
       static const GTypeInfo ttt_info =
       {
 	sizeof (TictactoeClass),
-	NULL,
-        NULL,
+	NULL, /* base_init */
+        NULL, /* base_finalize */
 	(GClassInitFunc) tictactoe_class_init,
-        NULL,
-	NULL,
+        NULL, /* class_finalize */
+	NULL, /* class_data */
         sizeof (Tictactoe),
 	0,
 	(GInstanceInitFunc) tictactoe_init,
       };
 
-      ttt_type = g_type_register_static (GTK_TYPE_VBOX, "Tictactoe", &amp;ttt_info, 0);
+      ttt_type = g_type_register_static (GTK_TYPE_TABLE, "Tictactoe", &amp;ttt_info, 0);
     }
 
   return ttt_type;
 }
 
 static void
-tictactoe_class_init (TictactoeClass *class)
+tictactoe_class_init (TictactoeClass *klass)
 {
-  GtkObjectClass *object_class;
-
-  object_class = (GtkObjectClass*) class;
   
   tictactoe_signals[TICTACTOE_SIGNAL] = g_signal_new ("tictactoe",
-					 G_TYPE_FROM_CLASS (object_class),
-	                                 G_SIGNAL_RUN_FIRST,
-	                                 0,
+					 G_TYPE_FROM_CLASS (klass),
+	                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+	                                 G_STRUCT_OFFSET (TictactoeClass, tictactoe),
                                          NULL, 
                                          NULL,                
 					 g_cclosure_marshal_VOID__VOID,
-                                         G_TYPE_NONE, 0, NULL);
+                                         G_TYPE_NONE, 0);
 
 
-  class-&gt;tictactoe = NULL;
 }
 
 static void
 tictactoe_init (Tictactoe *ttt)
 {
-  GtkWidget *table;
   gint i,j;
   
-  table = gtk_table_new (3, 3, TRUE);
-  gtk_container_add (GTK_CONTAINER (ttt), table);
-  gtk_widget_show (table);
+  gtk_table_resize (GTK_TABLE (ttt), 3, 3);
+  gtk_table_set_homogeneous (GTK_TABLE (ttt), TRUE);
 
-  for (i = 0; i &lt; 3; i++)
-    for (j = 0; j &lt; 3; j++)
-      {
+  for (i=0;i&lt;3; i++)
+    for (j=0;j&lt;3; j++)      {
 	ttt-&gt;buttons[i][j] = gtk_toggle_button_new ();
-	gtk_table_attach_defaults (GTK_TABLE (table), ttt-&gt;buttons[i][j], 
+	gtk_table_attach_defaults (GTK_TABLE (ttt), ttt-&gt;buttons[i][j], 
 				   i, i+1, j, j+1);
 	g_signal_connect (G_OBJECT (ttt-&gt;buttons[i][j]), "toggled",
 			  G_CALLBACK (tictactoe_toggle), (gpointer) ttt);
@@ -14746,15 +14733,17 @@ tictactoe_clear (Tictactoe *ttt)
 {
   int i,j;
 
-  for (i = 0; i &lt; 3; i++)
-    for (j = 0; j &lt; 3; j++)
+  for (i = 0; i&lt;3; i++)
+    for (j = 0; j&lt;3; j++)
       {
-	g_signal_handlers_block_by_func (G_OBJECT (ttt-&gt;buttons[i][j]), 
-                                         NULL, ttt);
+	g_signal_handlers_block_matched (G_OBJECT (ttt-&gt;buttons[i][j]), 
+                                         G_SIGNAL_MATCH_DATA,
+                                         0, 0, NULL, NULL, ttt);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt-&gt;buttons[i][j]),
 				      FALSE);
-	g_signal_handlers_unblock_by_func (G_OBJECT (ttt-&gt;buttons[i][j]), 
-                                           NULL, ttt);
+	g_signal_handlers_unblock_matched (G_OBJECT (ttt->buttons[i][j]),
+                                           G_SIGNAL_MATCH_DATA,
+                                           0, 0, NULL, NULL, ttt);
       }
 }
 
@@ -14772,12 +14761,12 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 
   int success, found;
 
-  for (k = 0; k &lt; 8; k++)
+  for (k = 0; k&lt;8; k++)
     {
       success = TRUE;
       found = FALSE;
 
-      for (i = 0; i &lt; 3; i++)
+      for (i = 0; i&lt;3; i++)
 	{
 	  success = success &amp;&amp; 
 	    GTK_TOGGLE_BUTTON (ttt-&gt;buttons[rwins[k][i]][cwins[k][i]])-&gt;active;
@@ -14839,6 +14828,7 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), ttt);
   gtk_widget_show (ttt);
 
+  /* And attach to its "tictactoe" signal */
   g_signal_connect (G_OBJECT (ttt), "tictactoe",
 		    G_CALLBACK (win), NULL);
 
