@@ -1,3 +1,7 @@
+2002-11-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/gdkdisplaymanager.sgml: Add some docs.
+
 2002-11-27  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Replace gtk_tree_store_move by

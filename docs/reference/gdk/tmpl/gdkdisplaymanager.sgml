@@ -6,7 +6,9 @@ Maintains a list of all open <type>GdkDisplay</type>s
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The purpose of the #GdkDisplayManager singleton object is to offer
+notification when displays appear or disappear or the default display 
+changes.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,7 +18,8 @@ Maintains a list of all open <type>GdkDisplay</type>s
 
 <!-- ##### STRUCT GdkDisplayManager ##### -->
 <para>
-
+The <structname>GdkDisplayManager</structname> struct has no interesting 
+fields.
 </para>
 
 
