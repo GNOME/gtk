@@ -700,23 +700,46 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
       
-      event->button.type = GDK_BUTTON_PRESS;
-      event->button.window = window;
-      event->button.time = xevent->xbutton.time;
-      event->button.x = xevent->xbutton.x;
-      event->button.y = xevent->xbutton.y;
-      event->button.x_root = (gfloat)xevent->xbutton.x_root;
-      event->button.y_root = (gfloat)xevent->xbutton.y_root;
-      event->button.pressure = 0.5;
-      event->button.xtilt = 0;
-      event->button.ytilt = 0;
-      event->button.state = (GdkModifierType) xevent->xbutton.state;
-      event->button.button = xevent->xbutton.button;
-      event->button.source = GDK_SOURCE_MOUSE;
-      event->button.deviceid = GDK_CORE_POINTER;
+      /* If we get a ButtonPress event where the button is 4 or 5,
+	 it's a Scroll event */
+      if (xevent->xbutton.button == 4 || xevent->xbutton.button == 5)
+	{
+	  event->scroll.type = GDK_SCROLL;
+	  event->scroll.direction = (xevent->xbutton.button == 4) ? 
+	    GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+	  event->scroll.window = window;
+	  event->scroll.time = xevent->xbutton.x;
+	  event->scroll.x = xevent->xbutton.x;
+	  event->scroll.y = xevent->xbutton.y;
+	  event->scroll.x_root = (gfloat)xevent->xbutton.x_root;
+	  event->scroll.y_root = (gfloat)xevent->xbutton.y_root;
+	  event->scroll.pressure = 0.5;
+	  event->scroll.xtilt = 0;
+	  event->scroll.ytilt = 0;
+	  event->scroll.state = (GdkModifierType) xevent->xbutton.state;
+	  event->scroll.source = GDK_SOURCE_MOUSE;
+	  event->scroll.deviceid = GDK_CORE_POINTER;
+	}
+      else
+	{
+	  event->button.type = GDK_BUTTON_PRESS;
+	  event->button.window = window;
+	  event->button.time = xevent->xbutton.time;
+	  event->button.x = xevent->xbutton.x;
+	  event->button.y = xevent->xbutton.y;
+	  event->button.x_root = (gfloat)xevent->xbutton.x_root;
+	  event->button.y_root = (gfloat)xevent->xbutton.y_root;
+	  event->button.pressure = 0.5;
+	  event->button.xtilt = 0;
+	  event->button.ytilt = 0;
+	  event->button.state = (GdkModifierType) xevent->xbutton.state;
+	  event->button.button = xevent->xbutton.button;
+	  event->button.source = GDK_SOURCE_MOUSE;
+	  event->button.deviceid = GDK_CORE_POINTER;
+	  
+	  gdk_event_button_generate (event);
+	}
 
-      gdk_event_button_generate (event);
-      
       break;
       
     case ButtonRelease:
@@ -736,6 +759,13 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
       
+      /* We treat button presses as scroll wheel events, so ignore the release */
+      if (xevent->xbutton.button == 4 || xevent->xbutton.button == 5)
+	{
+	  return_val = FALSE;
+	  break;
+	}
+
       event->button.type = GDK_BUTTON_RELEASE;
       event->button.window = window;
       event->button.time = xevent->xbutton.time;

@@ -13,3 +13,9 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
 - gtk_paned_set_gutter_size() has been removed, since the small handle tab
   has been changed to include the entire area previously occupied by
   the gutter.
+
+- GDK no longer selects OwnerGrabButtonMask for button presses. This means  
+  that the automatic grab that occurs when the user presses a button
+  will have owner_events = FALSE, so all events are redirected to the
+  grab window, even events that would normally go to  other windows of the
+  window's owner.

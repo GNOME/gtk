@@ -95,6 +95,8 @@ static void gtk_scrolled_window_size_request       (GtkWidget              *widg
 						    GtkRequisition         *requisition);
 static void gtk_scrolled_window_size_allocate      (GtkWidget              *widget,
 						    GtkAllocation          *allocation);
+static gint gtk_scrolled_window_scroll_event       (GtkWidget              *widget,
+						    GdkEventScroll         *event);
 static void gtk_scrolled_window_add                (GtkContainer           *container,
 						    GtkWidget              *widget);
 static void gtk_scrolled_window_remove             (GtkContainer           *container,
@@ -107,7 +109,6 @@ static void gtk_scrolled_window_relative_allocation(GtkWidget              *widg
 						    GtkAllocation          *allocation);
 static void gtk_scrolled_window_adjustment_changed (GtkAdjustment          *adjustment,
 						    gpointer                data);
-
 
 static GtkContainerClass *parent_class = NULL;
 
@@ -180,6 +181,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->draw = gtk_scrolled_window_draw;
   widget_class->size_request = gtk_scrolled_window_size_request;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
+  widget_class->scroll_event = gtk_scrolled_window_scroll_event;
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
@@ -270,6 +272,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   scrolled_window->hscrollbar_visible = FALSE;
   scrolled_window->vscrollbar_visible = FALSE;
   scrolled_window->window_placement = GTK_CORNER_TOP_LEFT;
+  
 }
 
 GtkWidget*
@@ -848,6 +851,39 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
     gtk_widget_hide (scrolled_window->vscrollbar);
 }
 
+static gint
+gtk_scrolled_window_scroll_event (GtkWidget *widget,
+				  GdkEventScroll *event)
+{
+  GtkWidget *range;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);  
+
+  if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_DOWN)
+    range = GTK_SCROLLED_WINDOW (widget)->vscrollbar;
+  else
+    range = GTK_SCROLLED_WINDOW (widget)->hscrollbar;
+
+  if (range && GTK_WIDGET_VISIBLE (range))
+    {
+      GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
+      gfloat new_value;
+
+      if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT)
+	new_value = adj->value - adj->page_increment / 2;
+      else
+	new_value = adj->value + adj->page_increment / 2;
+
+      new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
+      gtk_adjustment_set_value (adj, new_value);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
 
 static void
 gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,

@@ -17,6 +17,7 @@ typedef struct _GdkEventNoExpose    GdkEventNoExpose;
 typedef struct _GdkEventVisibility  GdkEventVisibility;
 typedef struct _GdkEventMotion	    GdkEventMotion;
 typedef struct _GdkEventButton	    GdkEventButton;
+typedef struct _GdkEventScroll      GdkEventScroll;  
 typedef struct _GdkEventKey	    GdkEventKey;
 typedef struct _GdkEventFocus	    GdkEventFocus;
 typedef struct _GdkEventCrossing    GdkEventCrossing;
@@ -69,6 +70,7 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   Map: A window has been mapped. (It is now visible on the screen).
  *   Unmap: A window has been unmapped. (It is no longer visible on
  *	    the screen).
+ *   Scroll: A mouse wheel was scrolled either up or down.
  */
 typedef enum
 {
@@ -103,7 +105,8 @@ typedef enum
   GDK_DROP_FINISHED     = 27,
   GDK_CLIENT_EVENT	= 28,
   GDK_VISIBILITY_NOTIFY = 29,
-  GDK_NO_EXPOSE		= 30
+  GDK_NO_EXPOSE		= 30,
+  GDK_SCROLL            = 31
 } GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
@@ -131,14 +134,24 @@ typedef enum
   GDK_PROXIMITY_IN_MASK		= 1 << 18,
   GDK_PROXIMITY_OUT_MASK	= 1 << 19,
   GDK_SUBSTRUCTURE_MASK		= 1 << 20,
-  GDK_ALL_EVENTS_MASK		= 0x0FFFFF
+  GDK_SCROLL_MASK               = 1 << 21,
+  GDK_ALL_EVENTS_MASK		= 0x3FFFFE
 } GdkEventMask;
 
-typedef enum {
+typedef enum
+{
   GDK_VISIBILITY_UNOBSCURED,
   GDK_VISIBILITY_PARTIAL,
   GDK_VISIBILITY_FULLY_OBSCURED
 } GdkVisibilityState;
+
+typedef enum
+{
+  GDK_SCROLL_UP,
+  GDK_SCROLL_DOWN,
+  GDK_SCROLL_LEFT,
+  GDK_SCROLL_RIGHT
+} GdkScrollDirection;
 
 /* Types of enter/leave notifications.
  *   Ancestor:
@@ -239,6 +252,24 @@ struct _GdkEventButton
   gdouble ytilt;
   guint state;
   guint button;
+  GdkInputSource source;
+  guint32 deviceid;
+  gdouble x_root, y_root;
+};
+
+struct _GdkEventScroll
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble pressure;
+  gdouble xtilt;
+  gdouble ytilt;
+  guint state;
+  GdkScrollDirection direction;
   GdkInputSource source;
   guint32 deviceid;
   gdouble x_root, y_root;
@@ -361,6 +392,7 @@ union _GdkEvent
   GdkEventVisibility	    visibility;
   GdkEventMotion	    motion;
   GdkEventButton	    button;
+  GdkEventScroll            scroll;
   GdkEventKey		    key;
   GdkEventCrossing	    crossing;
   GdkEventFocus		    focus_change;

@@ -7609,6 +7609,19 @@ scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
   return TRUE;
 }
 
+static gint
+scroll_test_scroll (GtkWidget *widget, GdkEventScroll *event,
+		    GtkAdjustment *adj)
+{
+  gfloat new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ?
+				   -adj->page_increment / 2:
+				   adj->page_increment / 2);
+  new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
+  gtk_adjustment_set_value (adj, new_value);  
+  
+  return TRUE;
+}
+
 static void
 scroll_test_configure (GtkWidget *widget, GdkEventConfigure *event,
 		       GtkAdjustment *adj)
@@ -7728,7 +7741,7 @@ create_scroll_test (void)
       gtk_box_pack_start (GTK_BOX (hbox), drawing_area, TRUE, TRUE, 0);
       gtk_widget_show (drawing_area);
 
-      gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK);
+      gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK | GDK_SCROLL_MASK);
 
       adj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0));
       scroll_test_pos = 0.0;
@@ -7741,7 +7754,8 @@ create_scroll_test (void)
 			  GTK_SIGNAL_FUNC (scroll_test_expose), adj);
       gtk_signal_connect (GTK_OBJECT (drawing_area), "configure_event",
 			  GTK_SIGNAL_FUNC (scroll_test_configure), adj);
-
+      gtk_signal_connect (GTK_OBJECT (drawing_area), "scroll_event",
+			  GTK_SIGNAL_FUNC (scroll_test_scroll), adj);
       
       gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
 			  GTK_SIGNAL_FUNC (scroll_test_adjustment_changed),

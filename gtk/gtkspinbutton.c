@@ -45,8 +45,6 @@
 #define MAX_TEXT_LENGTH                    256
 #define MAX_TIMER_CALLS                    5
 #define EPSILON                            1e-5
-#define WHEEL_UP_BUTTON                    4
-#define WHEEL_DOWN_BUTTON                  5
 
 enum {
   ARG_0,
@@ -113,6 +111,8 @@ static gint gtk_spin_button_key_press      (GtkWidget          *widget,
 					    GdkEventKey        *event);
 static gint gtk_spin_button_key_release    (GtkWidget          *widget,
 					    GdkEventKey        *event);
+static gint gtk_spin_button_scroll         (GtkWidget          *widget,
+					    GdkEventScroll     *event);
 static void gtk_spin_button_activate       (GtkEditable        *editable);
 static void gtk_spin_button_snap           (GtkSpinButton      *spin_button,
 					    gfloat              val);
@@ -235,6 +235,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->size_allocate = gtk_spin_button_size_allocate;
   widget_class->draw = gtk_spin_button_draw;
   widget_class->expose_event = gtk_spin_button_expose;
+  widget_class->scroll_event = gtk_spin_button_scroll;
   widget_class->button_press_event = gtk_spin_button_button_press;
   widget_class->button_release_event = gtk_spin_button_button_release;
   widget_class->motion_notify_event = gtk_spin_button_motion_notify;
@@ -752,6 +753,36 @@ gtk_spin_button_focus_out (GtkWidget     *widget,
 }
 
 static gint
+gtk_spin_button_scroll (GtkWidget      *widget,
+			GdkEventScroll *event)
+{
+  GtkSpinButton *spin;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  spin = GTK_SPIN_BUTTON (widget);
+
+  if (event->direction == GDK_SCROLL_UP)
+    {
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+      gtk_spin_button_real_spin (spin, spin->adjustment->step_increment);
+    }
+  else if (event->direction == GDK_SCROLL_DOWN)
+    {
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+      gtk_spin_button_real_spin (spin, -spin->adjustment->step_increment); 
+    }
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
+static gint
 gtk_spin_button_button_press (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
@@ -765,19 +796,7 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 
   if (!spin->button)
     {
-      if (event->button == WHEEL_UP_BUTTON)
-	{
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
-	    gtk_widget_grab_focus (widget);
-	  gtk_spin_button_real_spin (spin, spin->adjustment->step_increment);
-	}
-      else if (event->button == WHEEL_DOWN_BUTTON)
-	{
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
-	    gtk_widget_grab_focus (widget);
-	  gtk_spin_button_real_spin (spin, -spin->adjustment->step_increment); 
-	}
-      else if (event->window == spin->panel)
+      if (event->window == spin->panel)
 	{
 	  if (!GTK_WIDGET_HAS_FOCUS (widget))
 	    gtk_widget_grab_focus (widget);

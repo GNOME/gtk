@@ -467,7 +467,7 @@ gtk_layout_realize (GtkWidget *widget)
 
   attributes.x = 0;
   attributes.y = 0;
-  attributes.event_mask = GDK_EXPOSURE_MASK | 
+  attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK |
                           gtk_widget_get_events (widget);
 
   layout->bin_window = gdk_window_new (widget->window,

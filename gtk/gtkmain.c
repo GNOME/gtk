@@ -757,45 +757,10 @@ gtk_main_do_event (GdkEvent *event)
       gtk_widget_event (event_widget, event);
       break;
 
+    case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
-    /* We treat button 4-5 specially, assume we have
-     * a MS-style scrollwheel mouse, and try to find
-     * a plausible widget to scroll. We also trap
-     * button 4-5 double and triple clicks here, since
-     * they will be generated if the user scrolls quickly.
-     */
-      if ((grab_widget == event_widget) &&
-	  (event->button.button == 4 || event->button.button == 5))
-	{
-	  GtkWidget *range = NULL;
-	  GtkWidget *scrollwin;
-	  
-	  if (GTK_IS_RANGE (event_widget))
-	    range = event_widget;
-	  else
-	    {
-	      scrollwin = gtk_widget_get_ancestor (event_widget,
-						   GTK_TYPE_SCROLLED_WINDOW);
-	      if (scrollwin)
-		range = GTK_SCROLLED_WINDOW (scrollwin)->vscrollbar;
-	    }
-	  
-	  if (range && GTK_WIDGET_VISIBLE (range))
-	    {
-	      if (event->type == GDK_BUTTON_PRESS)
-		{
-		  GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
-		  gfloat new_value = adj->value + ((event->button.button == 4) ? 
-						   -adj->page_increment / 2: 
-						    adj->page_increment / 2);
-		  new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
-		  gtk_adjustment_set_value (adj, new_value);
-		}
-	      break;
-	    }
-	}
       gtk_propagate_event (grab_widget, event);
       break;
 

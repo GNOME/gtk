@@ -64,6 +64,7 @@ enum {
   EVENT,
   BUTTON_PRESS_EVENT,
   BUTTON_RELEASE_EVENT,
+  SCROLL_EVENT,
   MOTION_NOTIFY_EVENT,
   DELETE_EVENT,
   DESTROY_EVENT,
@@ -431,6 +432,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, button_release_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[SCROLL_EVENT] =
+    gtk_signal_new ("scroll_event",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, scroll_event),
 		    gtk_marshal_BOOL__POINTER,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
@@ -2727,6 +2736,9 @@ gtk_widget_event (GtkWidget *widget,
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
       signal_num = BUTTON_PRESS_EVENT;
+      break;
+    case GDK_SCROLL:
+      signal_num = SCROLL_EVENT;
       break;
     case GDK_BUTTON_RELEASE:
       signal_num = BUTTON_RELEASE_EVENT;

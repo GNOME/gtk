@@ -297,6 +297,8 @@ struct _GtkWidgetClass
 				    GdkEventButton     *event);
   gint (* button_release_event)	   (GtkWidget	       *widget,
 				    GdkEventButton     *event);
+  gint (* scroll_event)            (GtkWidget          *widget,
+				    GdkEventScroll     *event);
   gint (* motion_notify_event)	   (GtkWidget	       *widget,
 				    GdkEventMotion     *event);
   gint (* delete_event)		   (GtkWidget	       *widget,

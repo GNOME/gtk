@@ -73,6 +73,8 @@ static gint gtk_range_focus_in                 (GtkWidget        *widget,
 						GdkEventFocus    *event);
 static gint gtk_range_focus_out                (GtkWidget        *widget,
 						GdkEventFocus    *event);
+static gint gtk_range_scroll_event             (GtkWidget        *widget,
+						GdkEventScroll   *event);
 static void gtk_range_style_set                 (GtkWidget       *widget,
 						 GtkStyle        *previous_style);
 
@@ -153,6 +155,7 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->button_press_event = gtk_range_button_press;
   widget_class->button_release_event = gtk_range_button_release;
   widget_class->motion_notify_event = gtk_range_motion_notify;
+  widget_class->scroll_event = gtk_range_scroll_event;
   widget_class->key_press_event = gtk_range_key_press;
   widget_class->enter_notify_event = gtk_range_enter_notify;
   widget_class->leave_notify_event = gtk_range_leave_notify;
@@ -974,6 +977,30 @@ gtk_range_button_release (GtkWidget      *widget,
 
       range->click_child = 0;
     }
+
+  return FALSE;
+}
+
+static gint
+gtk_range_scroll_event (GtkWidget      *widget,
+			GdkEventScroll *event)
+{
+  GtkRange *range;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  range = GTK_RANGE (widget);
+
+  if (GTK_WIDGET_VISIBLE (range)) {
+    GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
+    gfloat new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ? 
+				     -adj->page_increment / 2: 
+				     adj->page_increment / 2);
+    new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
+    gtk_adjustment_set_value (adj, new_value);
+  }
 
   return FALSE;
 }

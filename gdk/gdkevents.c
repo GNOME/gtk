@@ -410,6 +410,7 @@ gdk_event_get_time (GdkEvent *event)
       case GDK_2BUTTON_PRESS:
       case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
+      case GDK_SCROLL:
 	return event->button.time;
       case GDK_KEY_PRESS:
       case GDK_KEY_RELEASE:

@@ -46,7 +46,7 @@
 #include <X11/extensions/shape.h>
 #endif
 
-const int gdk_event_mask_table[20] =
+const int gdk_event_mask_table[21] =
 {
   ExposureMask,
   PointerMotionMask,
@@ -55,8 +55,8 @@ const int gdk_event_mask_table[20] =
   Button1MotionMask,
   Button2MotionMask,
   Button3MotionMask,
-  ButtonPressMask | OwnerGrabButtonMask,
-  ButtonReleaseMask | OwnerGrabButtonMask,
+  ButtonPressMask,
+  ButtonReleaseMask,
   KeyPressMask,
   KeyReleaseMask,
   EnterWindowMask,
@@ -67,7 +67,8 @@ const int gdk_event_mask_table[20] =
   VisibilityChangeMask,
   0,				/* PROXIMITY_IN */
   0,				/* PROXIMTY_OUT */
-  SubstructureNotifyMask
+  SubstructureNotifyMask,
+  ButtonPressMask      /* SCROLL; on X mouse wheel events is treated as mouse button 4/5 */
 };
 const int gdk_nevent_masks = sizeof (gdk_event_mask_table) / sizeof (int);
 
