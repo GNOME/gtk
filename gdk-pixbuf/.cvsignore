@@ -18,3 +18,4 @@ test-loaders-seed
 gdk-pixbuf-features.h
 gdk-pixbuf-enum-types.[ch]
 s-enum-types-[ch]
+gdk_pixbuf.rc
