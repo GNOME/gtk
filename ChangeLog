@@ -1,9 +1,9 @@
-Sun Jan 27 23:23:23  Kristian Rietveld  <kris@gtk.org>
+Sun Jan 27 23:23:23 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkrbtree.[ch]: add _gtk_rbtree_mark_invalid (my previous
 	commit already needed this ...)
 
-Sun Jan 27 22:13:02  Kristian Rietveld  <kris@gtk.org>
+Sun Jan 27 22:13:02 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Fix for bug #69586
 
