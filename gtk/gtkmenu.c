@@ -60,7 +60,7 @@
 #define MENU_SCROLL_ARROW_HEIGHT 16
 #define MENU_SCROLL_FAST_ZONE 8
 #define MENU_SCROLL_TIMEOUT1 50
-#define MENU_SCROLL_TIMEOUT2 50
+#define MENU_SCROLL_TIMEOUT2 20
 
 #define ATTACH_INFO_KEY "gtk-menu-child-attach-info-key"
 #define ATTACHED_MENUS "gtk-attached-menus"
