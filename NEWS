@@ -1,3 +1,29 @@
+Overview of Changes from GTK+ 2.5.6 to GTK+ 2.6.0
+=================================================
+* GtkListStore
+  - Emit rows_reordered if the list is reordered [Matthias Clasen]
+  - Add functions to allow inserting rows with values [Matthias]
+* GtkTextView
+  - Add function which allow to determine the character
+    at a position [Padraig O'Briain, Matthias]
+* GtkFileChooser
+  - Center select row during typeahead [Federico Mena Quintero]
+  - Reset filters when necessary [Carlos Garnacho Parro]
+* GtkMenu
+  - Make mnemonics without Alt work in menubars [Owen Taylor]
+* GtkLabel
+  - Add a max-width-chars property to specify the maximal 
+    width of a label in characters [Christian Persch]
+* Win32
+  - Implement keynav for the color picker [Hans Breuer]
+  - Use GLib stdio wrappers [Tor Lillqvist]
+* Bug fixes [Kazuki IWAMOTO, Damon Chaplin, Matthias, Christian, 
+  Michael Natterer, Jonathan Blandford, Manish Singh, John Finlay, 
+  Robert Ögren, Mariano Suárez-Alvarez, Marco Pesenti Gritti]
+* Documentation improvements [Matthias, Jay Camp, Paolo Borelli]
+* New and improved translations (bg,nb,no,nso,pt_BR,zh_CN)
+Bugs fixed: 160437,160376,159640, 160679,159498,111031,160826,160063,145463,159896,160911,101309,160936,161109,161050,160500,155944,161142,160838
+
 Overview of Changes from GTK+ 2.5.5 to GTK+ 2.5.6
 =================================================
 * GtkFileChooser

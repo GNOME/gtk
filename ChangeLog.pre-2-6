@@ -1,5 +1,7 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkwidget.c (gtk_widget_class_init): Add some docs for
 	GtkWidget::delete-event and GtkWidget::destroy-event.  (#161142,
 	Paolo Borelli)
@@ -186,8 +188,7 @@ Fri Dec 10 13:59:32 2004  Manish Singh  <yosh@gimp.org>
 
 2004-12-07  Marco Pesenti Gritti  <marco@gnome.org>
 
-	* gtk/gtkcellview.c: (gtk_cell_view_set_background_color):
-
+	* gtk/gtkcellview.c (gtk_cell_view_set_background_color):
 	Fix a typo in last commit
 
 2004-12-07  Matthias Clasen  <mclasen@redhat.com>
