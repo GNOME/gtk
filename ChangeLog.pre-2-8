@@ -1,3 +1,14 @@
+Fri Feb  1 23:25:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_init): Parse the
+	RC string here when the first object is created
+	rather than in the class_init to not break doc 
+	building. (#70341, Havoc Pennington.)
+
+	* gtk/gtkrc.c (parse_include_file): Use the directories
+	for the currently parsed files as the starting point
+	to look for include files. (#59975)
+
 Fri Feb  1 20:21:56 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkinputdialog.c: use gtk_label_new_with_mnemonic for labels

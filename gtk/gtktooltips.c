@@ -99,18 +99,24 @@ gtk_tooltips_class_init (GtkTooltipsClass *class)
   parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
   object_class->destroy = gtk_tooltips_destroy;
-
-  gtk_rc_parse_string ("style \"gtk-default-tooltips-style\" {\n"
-		       "  bg[NORMAL] = \"#ffffc0\"\n"
-		       "  fg[NORMAL] = \"#000000\"\n"
-		       "}\n"
-		       "\n"
-		       "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
 }
 
 static void
 gtk_tooltips_init (GtkTooltips *tooltips)
 {
+  static gboolean have_rc = FALSE;
+  if (have_rc)
+    {
+      have_rc = TRUE;
+      
+      gtk_rc_parse_string ("style \"gtk-default-tooltips-style\" {\n"
+			   "  bg[NORMAL] = \"#ffffc0\"\n"
+			   "  fg[NORMAL] = \"#000000\"\n"
+			   "}\n"
+			   "\n"
+			   "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
+    }
+  
   tooltips->tip_window = NULL;
   tooltips->active_tips_data = NULL;
   tooltips->tips_data_list = NULL;

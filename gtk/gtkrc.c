@@ -2201,6 +2201,58 @@ is_c_identifier (const gchar *string)
   return is_varname;
 }
 
+static void
+parse_include_file (GtkRcContext *context,
+		    GScanner     *scanner,
+		    const gchar  *filename)
+{
+  char *to_parse = NULL;
+  
+  if (g_path_is_absolute (filename))
+    {
+      /* For abolute paths, we call gtk_rc_parse_file unconditionally. We
+       * don't print an error in this case.
+       */
+      to_parse = g_strdup (filename);
+    }
+  else
+    {
+      /* if a relative path, we look relative to all the RC files in the
+       * include stack. We require the file to be found in this case
+       * so we can give meaningful error messages, and because on reparsing
+       * non-absolute paths don't make sense.
+       */
+      GSList *tmp_list = rc_dir_stack;
+      while (tmp_list)
+	{
+	  gchar *tmpname = g_build_filename (tmp_list->data, filename, NULL);
+
+	  if (g_file_test (tmpname, G_FILE_TEST_EXISTS))
+	    {
+	      to_parse = tmpname;
+	      break;
+	    }
+
+	  g_free (tmpname);
+	  
+	  tmp_list = tmp_list->next;
+	}
+    }
+
+  if (to_parse)
+    {
+      gtk_rc_parse_file (context, to_parse, context->default_priority, FALSE);
+      g_free (to_parse);
+    }
+  else
+    {
+      g_scanner_warn (scanner, 
+		      _("Unable to find include file: \"%s\""),
+		      filename);
+    }
+
+}
+
 static guint
 gtk_rc_parse_statement (GtkRcContext *context,
 			GScanner     *scanner)
@@ -2217,7 +2269,7 @@ gtk_rc_parse_statement (GtkRcContext *context,
       token = g_scanner_get_next_token (scanner);
       if (token != G_TOKEN_STRING)
 	return G_TOKEN_STRING;
-      gtk_rc_parse_file (context, scanner->value.v_string, context->default_priority, FALSE);
+      parse_include_file (context, scanner, scanner->value.v_string);
       return G_TOKEN_NONE;
       
     case GTK_RC_TOKEN_STYLE:
