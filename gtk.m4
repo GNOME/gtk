@@ -142,7 +142,7 @@ main ()
      fi
   fi
   if test "x$no_gtk" = x ; then
-     AC_MSG_RESULT(yes)
+     AC_MSG_RESULT(yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version))
      ifelse([$2], , :, [$2])     
   else
      AC_MSG_RESULT(no)
