@@ -662,6 +662,14 @@ get_default_icons (GtkIconFactory *factory)
 	     16, stock_text_underline_16,
 	     24, stock_text_underline_24);
 
+  add_icon2 (factory, GTK_STOCK_INDENT,
+	     16, stock_text_indent_16,
+	     24, stock_text_indent_24);
+
+  add_icon2 (factory, GTK_STOCK_UNINDENT,
+	     16, stock_text_unindent_16,
+	     24, stock_text_unindent_24);
+
   add_icon2 (factory, GTK_STOCK_GOTO_TOP,
 	     16, stock_top_16,
 	     24, stock_top_24);

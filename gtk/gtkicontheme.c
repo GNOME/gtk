@@ -630,8 +630,8 @@ gtk_icon_theme_finalize (GObject *object)
  * the right name is found directly in one of the elements of
  * @path, then that image will be used for the icon name.
  * (This is legacy feature, and new icons should be put
- * into the default icon theme, which is called "hicolor", rather than
- * directly on the icon path.)
+ * into the default icon theme, which is called DEFAULT_THEME_NAME,
+ * rather than directly on the icon path.)
  *
  * Since: 2.4
  **/
@@ -1157,6 +1157,36 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
  out:
   if (icon_info)
     icon_info->desired_size = size;
+  else
+    {
+      static gboolean check_for_default_theme = TRUE;
+      char *default_theme_path;
+      gboolean found = FALSE;
+      unsigned i;
+
+      if (check_for_default_theme)
+	{
+	  check_for_default_theme = FALSE;
+
+	  for (i = 0; !found && i < priv->search_path_len; i++)
+	    {
+	      default_theme_path = g_build_filename (priv->search_path[i],
+						     DEFAULT_THEME_NAME,
+						     "index.theme",
+						     NULL);
+	      found = g_file_test (default_theme_path, G_FILE_TEST_IS_REGULAR);
+	      g_free (default_theme_path);
+	    }
+	  if (!found)
+	    {
+	      g_warning (_("Could not find the icon '%s'.  The '" DEFAULT_THEME_NAME "' theme\n"
+			   "was not found either, perhaps you need to install it.\n"
+			   "You can get a copy from :\n"
+			   "\thttp://freedesktop.org/Software/icon-theme/releases"),
+			 icon_name);
+	    }
+	}
+    }
 
   return icon_info;
 }

@@ -114,6 +114,10 @@ IMAGES = \
 	stock_text_strikethrough_24.png \
 	stock_text_underline_16.png	\
 	stock_text_underline_24.png 	\
+	stock_text_indent_16.png	\
+	stock_text_indent_24.png 	\
+	stock_text_unindent_16.png	\
+	stock_text_unindent_24.png 	\
 	stock_top_16.png		\
 	stock_top_24.png 		\
 	stock_trash_16.png		\
@@ -255,6 +259,10 @@ VARIABLES6 = \
 	stock_text_strikethrough_24 $(srcdir)/stock_text_strikethrough_24.png \
 	stock_text_underline_16	$(srcdir)/stock_text_underline_16.png	\
 	stock_text_underline_24	$(srcdir)/stock_text_underline_24.png	\
+	stock_text_indent_16	$(srcdir)/stock_text_indent_16.png	\
+	stock_text_indent_24	$(srcdir)/stock_text_indent_24.png	\
+	stock_text_unindent_16	$(srcdir)/stock_text_unindent_16.png	\
+	stock_text_unindent_24	$(srcdir)/stock_text_unindent_24.png	\
 	stock_top_16		$(srcdir)/stock_top_16.png		\
 	stock_top_24		$(srcdir)/stock_top_24.png		\
 	stock_trash_16		$(srcdir)/stock_trash_16.png		\

@@ -508,6 +508,19 @@ Wed Jan  7 02:50:55 2004  Matthias Clasen  <maclas@gmx.de>
 	* gdk/gdkimage.h: Added <public> documentation to the struct, as
 	suggested by Owen Taylor.
 
+2004-01-05  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkiconfactory.c (get_default_icons) : add stock indent, unindent
+	  I would have prefered outdent, but compatibility seems more
+	  important.
+	* gtk/gtkstock.c (builtin_items) : ditto.
+	* gtk/gtkstock.h : ditto.
+	* gtk/stock-icons/Makefile.am : ditto.
+	* gtk/stock-icons/stock_text_indent_16.png :
+	* gtk/stock-icons/stock_text_indent_24.png :
+	* gtk/stock-icons/stock_text_unindent_16.png :
+	* gtk/stock-icons/stock_text_unindent_24.png : from gnome-icon-theme
+
 Sun Jan  4 15:29:04 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkradiotoolbutton.[ch]
@@ -786,6 +799,13 @@ Fri Dec 19 01:35:34 2003  Matthias Clasen  <maclas@gmx.de>
 	* gtk/gtkradioaction.c: 
 	* gtk/gtktoggleaction.c: Always use _gtk_action_emit_activate()
 	instead of gtk_action_activate().
+
+2003-12-18  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_lookup_icon)) : Add a sanity test
+	  to ensure that the base hicolor theme is installed.  Silently
+	  failing to produce icons that apps assume exist in the theme seems
+	  like a bad idea.
 
 Thu Dec 18 19:13:12 2003  Kristian Rietveld  <kris@gtk.org>
 

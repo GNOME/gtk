@@ -100,6 +100,8 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 #define GTK_STOCK_HELP             "gtk-help"
 #define GTK_STOCK_HOME             "gtk-home"
 #define GTK_STOCK_INDEX            "gtk-index"
+#define GTK_STOCK_INDENT           "gtk-indent"		/* since gtk-2.4 */
+#define GTK_STOCK_UNINDENT         "gtk-unindent"	/* since gtk-2.4 */
 #define GTK_STOCK_ITALIC           "gtk-italic"
 #define GTK_STOCK_JUMP_TO          "gtk-jump-to"
 #define GTK_STOCK_JUSTIFY_CENTER   "gtk-justify-center"

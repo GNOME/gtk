@@ -298,6 +298,8 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_HARDDISK, N_("_Harddisk"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_HELP, N_("_Help"), GDK_CONTROL_MASK, 'h', GETTEXT_PACKAGE },
   { GTK_STOCK_HOME, N_("_Home"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_INDENT, N_("Increase Indent"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_UNINDENT, N_("Decrease Indent"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_INDEX, N_("_Index"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_ITALIC, N_("_Italic"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_JUMP_TO, N_("_Jump to"), 0, 0, GETTEXT_PACKAGE },
