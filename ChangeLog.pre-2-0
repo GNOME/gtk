@@ -1,3 +1,12 @@
+2000-11-15  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (changed_handler): Invalidate the side windows
+	when we invalidate the main window.
+
+	* gtk/testtext.c (create_view): Get rid of text_changed_callback,
+	GtkTextView will now invalidate the side windows for us when text
+	changes.
+
 Wed Nov 15 16:02:20 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (changed_handler): Call scroll_calc_now()

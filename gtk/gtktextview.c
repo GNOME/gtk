@@ -2109,7 +2109,7 @@ changed_handler (GtkTextLayout *layout,
   widget = GTK_WIDGET (data);
 
   if (GTK_WIDGET_REALIZED (text_view))
-    {
+    {      
       gtk_text_view_get_visible_rect (text_view, &visible_rect);
 
       redraw_rect.x = visible_rect.x;
@@ -2123,10 +2123,22 @@ changed_handler (GtkTextLayout *layout,
 
       if (gdk_rectangle_intersect (&redraw_rect, &visible_rect, &redraw_rect))
         {
-          redraw_rect.x -= text_view->xoffset;
-          redraw_rect.y -= text_view->yoffset;
+          /* text_window_invalidate_rect() takes buffer coordinates */
           text_window_invalidate_rect (text_view->text_window,
                                        &redraw_rect);
+
+          if (text_view->left_window)
+            text_window_invalidate_rect (text_view->left_window,
+                                         &redraw_rect);
+          if (text_view->right_window)
+            text_window_invalidate_rect (text_view->right_window,
+                                         &redraw_rect);
+          if (text_view->top_window)
+            text_window_invalidate_rect (text_view->top_window,
+                                         &redraw_rect);
+          if (text_view->bottom_window)
+            text_window_invalidate_rect (text_view->bottom_window,
+                                         &redraw_rect);
         }
     }
 
@@ -4480,7 +4492,44 @@ static void
 text_window_invalidate_rect (GtkTextWindow *win,
                              GdkRectangle  *rect)
 {
-  gdk_window_invalidate_rect (win->bin_window, rect, FALSE);
+  GdkRectangle window_rect;
+
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (win->widget),
+                                         win->type,
+                                         rect->x,
+                                         rect->y,
+                                         &window_rect.x,
+                                         &window_rect.y);
+
+  window_rect.width = rect->width;
+  window_rect.height = rect->height;
+  
+  /* Adjust the rect as appropriate */
+  
+  switch (win->type)
+    {
+    case GTK_TEXT_WINDOW_TEXT:
+      break;
+
+    case GTK_TEXT_WINDOW_LEFT:
+    case GTK_TEXT_WINDOW_RIGHT:
+      window_rect.x = 0;
+      window_rect.width = win->allocation.width;
+      break;
+
+    case GTK_TEXT_WINDOW_TOP:
+    case GTK_TEXT_WINDOW_BOTTOM:
+      window_rect.y = 0;
+      window_rect.height = win->allocation.height;
+      break;
+
+    default:
+      g_warning ("%s: bug!", G_STRLOC);
+      return;
+      break;
+    }
+          
+  gdk_window_invalidate_rect (win->bin_window, &window_rect, FALSE);
 }
 
 static gint
