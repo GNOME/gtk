@@ -1,5 +1,10 @@
+2003-02-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.def: Add gdk_screen_get_system_visual. Noticed by Ed
+	Woods.
+
 Fri Jan 31 17:48:53 2003  Manish Singh  <yosh@gimp.org>
-                                                                                
+
         * demos/pixbuf-demo.c
         * demos/testpixbuf.c
         * demos/gtk-demo/pixbufs.c
