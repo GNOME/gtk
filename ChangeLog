@@ -1,3 +1,8 @@
+Mon Dec 10 16:21:38 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkrbtree.c (_fixup_parity): New function to fixup parity.
+	RBTree corruption bug--
+
 2001-12-10  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_remove_widget): Return
