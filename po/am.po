@@ -3149,7 +3149,7 @@ msgstr "ወደ _ላይ"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "ረዳት"
+msgstr "መረጃ"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
@@ -3221,7 +3221,7 @@ msgstr " _ሁኔታዎች"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr "_ማቆሚያ"
+msgstr "_ውጣ"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
@@ -3245,7 +3245,7 @@ msgstr " _አስቀምጥ"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "በ...ስም _አስቀምጥ"
+msgstr "በሌላ ስም _አስቀምጥ"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
@@ -4277,7 +4277,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:499
 msgid "Icon"
-msgstr ""
+msgstr "ምልክት"
 
 #: gtk/gtkwindow.c:500
 msgid "Icon for this window"
