@@ -1,3 +1,7 @@
+2001-12-12  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtk*.h (GTK_IS_*_CLASS): s/obj/klass/ where appropriate
+
 Wed Dec 12 17:22:45 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimmulticontext.c (gtk_im_multicontext_set_slave):
