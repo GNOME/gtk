@@ -1560,9 +1560,18 @@ correct_dir_fullname(CompletionDir* cmpl_dir)
   struct stat sbuf;
 
   if (strcmp(cmpl_dir->fullname + length - 2, "/.") == 0)
-    cmpl_dir->fullname[length - 2] = 0;
+    {
+      if (length == 2) 
+	{
+	  strcpy(cmpl_dir->fullname, "/");
+	  cmpl_dir->fullname_len = 1;
+	  return TRUE;
+	} else {
+	  cmpl_dir->fullname[length - 2] = 0;
+	}
+    }
   else if (strcmp(cmpl_dir->fullname + length - 3, "/./") == 0)
-    cmpl_dir->fullname[length - 3] = 0;
+    cmpl_dir->fullname[length - 2] = 0;
   else if (strcmp(cmpl_dir->fullname + length - 3, "/..") == 0)
     {
       if(length == 3)
