@@ -55,3 +55,10 @@ by @socket_id.
 @Returns: the new #GtkPlug widget.
 
 
+<!-- ##### SIGNAL GtkPlug::embedded ##### -->
+<para>
+
+</para>
+
+@plug: the object which received the signal.
+

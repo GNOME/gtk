@@ -104,19 +104,31 @@ never be set by an application.)
 
 <!-- ##### FUNCTION gtk_socket_new ##### -->
 <para>
-Create a new empty #GtkSocket.
 </para>
 
-@Returns: the new #GtkSocket.
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_socket_steal ##### -->
 <para>
-Reparents a pre-existing toplevel window into a
-#GtkSocket.
 </para>
 
 @socket: a #GtkSocket.
-@wid: the XID of an existing toplevel window.
+@wid: 
 
+
+<!-- ##### SIGNAL GtkSocket::plug-added ##### -->
+<para>
+
+</para>
+
+@socket: the object which received the signal.
+
+<!-- ##### SIGNAL GtkSocket::plug-removed ##### -->
+<para>
+
+</para>
+
+@socket: the object which received the signal.
+@Returns: 
 

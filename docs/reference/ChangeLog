@@ -1,3 +1,8 @@
+Wed Jul  4 22:53:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkplug.sgml gtk/tmpl/gtksocket.sgml: Some
+	updates and moving docs to the C files.
+
 2001-05-19  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf/tmpl/initialization_versions.sgml: docs
