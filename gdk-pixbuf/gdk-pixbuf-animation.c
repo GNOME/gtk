@@ -137,6 +137,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 	GdkPixbufModule *image_module;
 
 	g_return_val_if_fail (filename != NULL, NULL);
+        g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	f = fopen (filename, "rb");
 	if (!f) {

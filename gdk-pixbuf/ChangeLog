@@ -1,3 +1,14 @@
+2003-04-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): 
+	(gdk_pixbuf_loader_new_with_type): 
+	(gdk_pixbuf_loader_close): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file): 
+	(gdk_pixbuf_save): 
+	(gdk_pixbuf_savev): 
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_new_from_file): 
+	Add sanity checks for GError handling.  (#108345) 
+
 Tue Apr  1 15:33:51 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c (make_weights): Exploit the fact that all

@@ -423,6 +423,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
   
         g_return_val_if_fail (buf != NULL, FALSE);
         g_return_val_if_fail (count >= 0, FALSE);
+        g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
   
         priv = loader->priv;
 
@@ -499,11 +500,12 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
 {
         GdkPixbufLoader *retval;
         GError *tmp;
+        g_return_val_if_fail (error == NULL || *error == NULL, NULL);
   
         retval = g_object_new (GDK_TYPE_PIXBUF_LOADER, NULL);
 
         tmp = NULL;
-        gdk_pixbuf_loader_load_module(retval, image_type, &tmp);
+        gdk_pixbuf_loader_load_module (retval, image_type, &tmp);
         if (tmp != NULL)
                 {
                         g_propagate_error (error, tmp);
@@ -602,6 +604,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
   
         g_return_val_if_fail (loader != NULL, TRUE);
         g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), TRUE);
+        g_return_val_if_fail (error == NULL || *error == NULL, TRUE);
   
         priv = loader->priv;
   

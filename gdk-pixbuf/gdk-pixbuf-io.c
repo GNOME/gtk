@@ -694,6 +694,7 @@ gdk_pixbuf_new_from_file (const char *filename,
 	GdkPixbufModule *image_module;
 
 	g_return_val_if_fail (filename != NULL, NULL);
+        g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	f = fopen (filename, "rb");
 	if (!f) {
@@ -914,6 +915,8 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
         gchar **values = NULL;
         va_list args;
         gboolean result;
+
+        g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
         
         va_start (args, error);
         
@@ -961,6 +964,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
        
         g_return_val_if_fail (filename != NULL, FALSE);
         g_return_val_if_fail (type != NULL, FALSE);
+        g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
        
         f = fopen (filename, "wb");
         
