@@ -716,7 +716,7 @@ gtk_accelerator_valid (guint		  keyval,
     GDK_Terminate_Server, GDK_AudibleBell_Enable,
     0
   };
-  guint *ac_val;
+  const guint *ac_val;
 
   modifiers &= GDK_MODIFIER_MASK;
     

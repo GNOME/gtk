@@ -521,7 +521,6 @@ gdk_text_extents_wc (GdkFont        *font,
   int direction;
   int font_ascent;
   int font_descent;
-  gint i;
 
   g_return_if_fail (font != NULL);
   g_return_if_fail (text != NULL);

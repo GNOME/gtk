@@ -7953,7 +7953,7 @@ static void
 toggle_idle_container (GtkObject *button,
 		       GtkContainer *container)
 {
-  gtk_container_set_resize_mode (container, (guint) gtk_object_get_user_data (button));
+  gtk_container_set_resize_mode (container, GPOINTER_TO_INT (gtk_object_get_user_data (button)));
 }
 
 static void

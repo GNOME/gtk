@@ -1264,7 +1264,7 @@ gtk_font_selection_select_best_style(GtkFontSelection *fontsel,
   FontInfo *font;
   FontStyle *styles;
   gint row, prop, style, matched;
-  gint best_matched = -1, best_style = -1, best_row;
+  gint best_matched = -1, best_style = -1, best_row = -1;
   
 #ifdef FONTSEL_DEBUG
   g_message("In select_best_style\n");
@@ -1301,6 +1301,7 @@ gtk_font_selection_select_best_style(GtkFontSelection *fontsel,
 	}
     }
   g_return_if_fail (best_style != -1);
+  g_return_if_fail (best_row != -1);
 
   fontsel->style = best_style;
 

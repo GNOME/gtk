@@ -56,17 +56,17 @@ struct _GtkTargetPair {
   guint     info;
 };
 
-GtkTargetList *gtk_target_list_new       (GtkTargetEntry *targets,
-					  guint           ntargets);
+GtkTargetList *gtk_target_list_new       (const GtkTargetEntry *targets,
+					  guint                 ntargets);
 void           gtk_target_list_ref       (GtkTargetList  *list);
 void           gtk_target_list_unref     (GtkTargetList  *list);
 void           gtk_target_list_add       (GtkTargetList  *list,
 				  	  GdkAtom         target,
 					  guint           flags,
 					  guint           info);
-void           gtk_target_list_add_table (GtkTargetList  *list,
-					  GtkTargetEntry *targets,
-					  guint           ntargets);
+void           gtk_target_list_add_table (GtkTargetList        *list,
+					  const GtkTargetEntry *targets,
+					  guint                 ntargets);
 void           gtk_target_list_remove    (GtkTargetList  *list,
 					  GdkAtom         target);
 gboolean       gtk_target_list_find      (GtkTargetList  *list,
@@ -82,10 +82,10 @@ void gtk_selection_add_target (GtkWidget           *widget,
 			       GdkAtom              selection,
 			       GdkAtom              target,
 			       guint                info);
-void gtk_selection_add_targets (GtkWidget           *widget, 
-				GdkAtom              selection,
-				GtkTargetEntry      *targets,
-				guint                ntargets);
+void gtk_selection_add_targets (GtkWidget            *widget, 
+				GdkAtom               selection,
+				const GtkTargetEntry *targets,
+				guint                 ntargets);
 gint gtk_selection_convert   (GtkWidget 	  *widget, 
 			      GdkAtom    	   selection, 
 			      GdkAtom    	   target,

@@ -58,11 +58,11 @@ GtkWidget *gtk_drag_get_source_widget (GdkDragContext *context);
 void gtk_drag_highlight   (GtkWidget  *widget);
 void gtk_drag_unhighlight (GtkWidget  *widget);
 
-void gtk_drag_dest_set   (GtkWidget          *widget,
-			  GtkDestDefaults     flags,
-  		          GtkTargetEntry     *targets,
-			  gint                n_targets,
-			  GdkDragAction       actions);
+void gtk_drag_dest_set   (GtkWidget            *widget,
+			  GtkDestDefaults       flags,
+  		          const GtkTargetEntry *targets,
+			  gint                  n_targets,
+			  GdkDragAction         actions);
 
 void gtk_drag_dest_set_proxy (GtkWidget      *widget,
 			      GdkWindow      *proxy_window,
@@ -77,11 +77,11 @@ void gtk_drag_dest_unset (GtkWidget          *widget);
 
 /* Source side */
 
-void gtk_drag_source_set  (GtkWidget         *widget,
-			   GdkModifierType    start_button_mask,
-			   GtkTargetEntry    *targets,
-			   gint               n_targets,
-			   GdkDragAction      actions);
+void gtk_drag_source_set  (GtkWidget            *widget,
+			   GdkModifierType       start_button_mask,
+			   const GtkTargetEntry *targets,
+			   gint                  n_targets,
+			   GdkDragAction         actions);
 
 void gtk_drag_source_unset (GtkWidget        *widget);
 

@@ -1,3 +1,16 @@
+Thu Dec 24 12:40:45 1998  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gdk/gdkfont.c: removed unused var
+	* gdk/gdkim.c: 64-bit cast
+	* gtk/gtkaccelgroup.c: point to const data
+	* gtk/gtkdnd.[ch]: (gtk_drag_dest_set, gtk_drag_source_set):
+	  Made const-correct.
+	* gtk/gtkfontsel.c: kill uninitialized var warning
+	* gtk/gtkselection.[ch]: (gtk_target_list_new,
+	  gtk_target_list_add_table, gtk_selection_add_targets):
+	  Made const-correct.
+	* gtk/testgtk.c: 64-bit cast
+
 Thu Dec 24 03:16:52 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.10

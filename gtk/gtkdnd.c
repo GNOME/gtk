@@ -698,11 +698,11 @@ gtk_drag_unhighlight (GtkWidget  *widget)
  *************************************************************/
 
 void 
-gtk_drag_dest_set   (GtkWidget       *widget,
-		     GtkDestDefaults  flags,
-		     GtkTargetEntry  *targets,
-		     gint             n_targets,
-		     GdkDragAction    actions)
+gtk_drag_dest_set   (GtkWidget            *widget,
+		     GtkDestDefaults       flags,
+		     const GtkTargetEntry *targets,
+		     gint                  n_targets,
+		     GdkDragAction         actions)
 {
   GtkDragDestSite *site;
   
@@ -1571,11 +1571,11 @@ gtk_drag_begin (GtkWidget         *widget,
  *************************************************************/
 
 void 
-gtk_drag_source_set  (GtkWidget         *widget,
-		      GdkModifierType    start_button_mask,
-		      GtkTargetEntry    *targets,
-		      gint               n_targets,
-		      GdkDragAction      actions)
+gtk_drag_source_set  (GtkWidget            *widget,
+		      GdkModifierType       start_button_mask,
+		      const GtkTargetEntry *targets,
+		      gint                  n_targets,
+		      GdkDragAction         actions)
 {
   GtkDragSourceSite *site;
 

@@ -151,8 +151,8 @@ static const char *gtk_selection_handler_key = "gtk-selection-handlers";
  */
 
 GtkTargetList *
-gtk_target_list_new (GtkTargetEntry  *targets,
-		     guint            ntargets)
+gtk_target_list_new (const GtkTargetEntry *targets,
+		     guint                 ntargets)
 {
   GtkTargetList *result = g_new (GtkTargetList, 1);
   result->list = NULL;
@@ -206,9 +206,9 @@ gtk_target_list_add (GtkTargetList *list,
 }
 
 void               
-gtk_target_list_add_table (GtkTargetList   *list,
-			   GtkTargetEntry  *targets,
-			   guint            ntargets)
+gtk_target_list_add_table (GtkTargetList        *list,
+			   const GtkTargetEntry *targets,
+			   guint                 ntargets)
 {
   gint i;
 
@@ -461,10 +461,10 @@ gtk_selection_add_target (GtkWidget	    *widget,
 }
 
 void 
-gtk_selection_add_targets (GtkWidget           *widget, 
-			   GdkAtom              selection,
-			   GtkTargetEntry      *targets,
-			   guint                ntargets)
+gtk_selection_add_targets (GtkWidget            *widget, 
+			   GdkAtom               selection,
+			   const GtkTargetEntry *targets,
+			   guint                 ntargets)
 {
   GtkTargetList *list;
   

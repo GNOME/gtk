@@ -731,7 +731,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
   if (mask & GDK_IC_LINE_SPACING)
     {
       arg->name = XNLineSpace;
-      arg->value = (gpointer) attr->line_spacing;
+      arg->value = GINT_TO_POINTER( attr->line_spacing );
 
       if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
 	error |= GDK_IC_LINE_SPACING;
