@@ -1,8 +1,11 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusbar.c (gtk_statusbar_set_has_resize_grip): 
+	Show the grip_window if necessary.  
+
 	* gtk/gtkstyle.c (gtk_default_draw_resize_grip): Only
 	clear the triangle below the grip to the background,
-	not the full area.
+	not the full area. 
 
 	* gtk/gtklabel.c (draw_insertion_cursor, gtk_label_expose): 
 	Clip when drawing the cursor. This prevents bits of a

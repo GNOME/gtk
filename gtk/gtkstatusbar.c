@@ -416,7 +416,10 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
       if (GTK_WIDGET_REALIZED (statusbar))
         {
           if (statusbar->has_resize_grip && statusbar->grip_window == NULL)
-            gtk_statusbar_create_window (statusbar);
+	    {
+	      gtk_statusbar_create_window (statusbar);
+	      gdk_window_show (statusbar->grip_window);
+	    }
           else if (!statusbar->has_resize_grip && statusbar->grip_window != NULL)
             gtk_statusbar_destroy_window (statusbar);
         }
