@@ -638,9 +638,7 @@ gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
  * @iter: The uninitialized #GtkTreeIter.
  * @path: The #GtkTreePath.
  *
- * Sets @iter to a valid iterator pointing to @path.  If the model does not
- * provide an implementation of this function, it is implemented in terms of
- * @gtk_tree_model_iter_nth_child.
+ * Sets @iter to a valid iterator pointing to @path.
  *
  * Return value: TRUE, if @iter was set.
  **/
@@ -649,33 +647,12 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter,
 			 GtkTreePath  *path)
 {
-  GtkTreeIter parent;
-  gint *indices;
-  gint depth, i;
-
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter != NULL, FALSE);
 
-  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter != NULL)
-    return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter) (tree_model, iter, path);
-
-  indices = gtk_tree_path_get_indices (path);
-  depth = gtk_tree_path_get_depth (path);
-
-  g_return_val_if_fail (depth > 0, FALSE);
-
-  if (! gtk_tree_model_iter_nth_child (tree_model, iter, NULL, indices[0]))
-    return FALSE;
-
-  for (i = 1; i < depth; i++)
-    {
-      parent = *iter;
-      if (! gtk_tree_model_iter_nth_child (tree_model, iter, &parent, indices[i]))
-	return FALSE;
-    }
-
-  return TRUE;
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter) (tree_model, iter, path);
 }
 
 
@@ -1447,7 +1424,8 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
  * gtk_tree_row_reference_get_path:
  * @reference: A #GtkTreeRowReference
  * 
- * Returns a path that the row reference currently points to, or NULL if 
+ * Returns a path that the row reference currently points to, or NULL if the
+ * path pointed to is no longer valid.
  * 
  * Return value: A current path, or NULL.
  **/

@@ -1,3 +1,8 @@
+Wed Jun 20 19:19:15 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_up_down): clean up
+	(gtk_tree_view_move_cursor_page_up_down): implement.
+
 Wed Jun 20 05:32:05 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkspinbutton.c: make maximum digits compile time configurable

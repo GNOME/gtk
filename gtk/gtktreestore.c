@@ -37,6 +37,9 @@ static guint        gtk_tree_store_get_flags       (GtkTreeModel      *tree_mode
 static gint         gtk_tree_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GType        gtk_tree_store_get_column_type (GtkTreeModel      *tree_model,
 						    gint               index);
+static gboolean     gtk_tree_store_get_iter        (GtkTreeModel      *tree_model,
+						    GtkTreeIter       *iter,
+						    GtkTreePath       *path);
 static GtkTreePath *gtk_tree_store_get_path        (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter);
 static void         gtk_tree_store_get_value       (GtkTreeModel      *tree_model,
@@ -190,6 +193,7 @@ gtk_tree_store_tree_model_init (GtkTreeModelIface *iface)
   iface->get_flags = gtk_tree_store_get_flags;
   iface->get_n_columns = gtk_tree_store_get_n_columns;
   iface->get_column_type = gtk_tree_store_get_column_type;
+  iface->get_iter = gtk_tree_store_get_iter;
   iface->get_path = gtk_tree_store_get_path;
   iface->get_value = gtk_tree_store_get_value;
   iface->iter_next = gtk_tree_store_iter_next;
@@ -369,6 +373,39 @@ gtk_tree_store_get_column_type (GtkTreeModel *tree_model,
 			index >= 0, G_TYPE_INVALID);
 
   return GTK_TREE_STORE (tree_model)->column_headers[index];
+}
+
+static gboolean
+gtk_tree_store_get_iter (GtkTreeModel *tree_model,
+			 GtkTreeIter  *iter,
+			 GtkTreePath  *path)
+{
+  GtkTreeStore *tree_store = (GtkTreeStore *) tree_model;
+  GtkTreeIter parent;
+  gint *indices;
+  gint depth, i;
+
+  g_return_val_if_fail (GTK_IS_TREE_STORE (tree_store), FALSE);
+  
+  indices = gtk_tree_path_get_indices (path);
+  depth = gtk_tree_path_get_depth (path);
+
+  g_return_val_if_fail (depth > 0, FALSE);
+
+  parent.stamp = tree_store->stamp;
+  parent.user_data = tree_store->root;
+
+  if (! gtk_tree_model_iter_nth_child (tree_model, iter, &parent, indices[0]))
+    return FALSE;
+
+  for (i = 1; i < depth; i++)
+    {
+      parent = *iter;
+      if (! gtk_tree_model_iter_nth_child (tree_model, iter, &parent, indices[i]))
+	return FALSE;
+    }
+
+  return TRUE;
 }
 
 static GtkTreePath *
