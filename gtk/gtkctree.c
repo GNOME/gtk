@@ -432,45 +432,45 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_select_row),
-		    gtk_marshal_VOID__BOXED_INT,
+		    gtk_marshal_VOID__POINTER_INT,
 		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE,
+		    GTK_TYPE_CTREE_NODE,
 		    GTK_TYPE_INT);
   ctree_signals[TREE_UNSELECT_ROW] =
     gtk_signal_new ("tree_unselect_row",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_unselect_row),
-		    gtk_marshal_VOID__BOXED_INT,
+		    gtk_marshal_VOID__POINTER_INT,
 		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE,
+		    GTK_TYPE_CTREE_NODE,
 		    GTK_TYPE_INT);
   ctree_signals[TREE_EXPAND] =
     gtk_signal_new ("tree_expand",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_expand),
-		    gtk_marshal_VOID__BOXED,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE);
+		    GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_COLLAPSE] =
     gtk_signal_new ("tree_collapse",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
-		    gtk_marshal_VOID__BOXED,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE);
+		    GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_MOVE] =
     gtk_signal_new ("tree_move",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_move),
-		    gtk_marshal_VOID__BOXED_BOXED_BOXED,
+		    gtk_marshal_VOID__POINTER_POINTER_POINTER,
 		    GTK_TYPE_NONE, 3,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE);
+		    GTK_TYPE_CTREE_NODE,
+		    GTK_TYPE_CTREE_NODE,
+		    GTK_TYPE_CTREE_NODE);
   ctree_signals[CHANGE_FOCUS_ROW_EXPANSION] =
     gtk_signal_new ("change_focus_row_expansion",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
@@ -6126,30 +6126,13 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
     }
 }
 
-/* dummy boxed type definition, used so that the GtkCTreeNode signal
- * arguments have a reasonable type.
- */
-static gpointer
-ctree_node_copy (gpointer boxed)
-{
-  return boxed;
-}
-
-static void
-ctree_node_free (gpointer boxed)
-{
-  /* nothing */
-}
-
 GType
 gtk_ctree_node_get_type (void)
 {
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkCTreeNode",
-                                             (GBoxedCopyFunc)ctree_node_copy,
-                                             (GBoxedFreeFunc)ctree_node_free);
+    our_type = g_pointer_type_register_static ("GtkCTreeNode");
 
   return our_type;
 }
