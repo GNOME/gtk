@@ -383,7 +383,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkTextViewClass, move),
-                      gtk_marshal_VOID__INT_INT_INT,
+                      gtk_marshal_VOID__ENUM_INT_BOOLEAN,
                       GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
 
   signals[SET_ANCHOR] = 
