@@ -1,5 +1,9 @@
 2004-08-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/Makefile.am: 
+	* gtk/Makefile.am: Define TESTS, not TEST, so that make check
+	actually triggers abicheck.sh.
+
 	* gdk/makegdkalias.pl: 
 	* gtk/makegtkalias.pl: Include glib.h before using glib symbols. D'oh.
 

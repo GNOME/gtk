@@ -183,7 +183,7 @@ gdkalias.h: gdk.symbols
 	 cpp -P gdk.symbols -DGDK_WINDOWING_X11 | ./makegdkalias.pl > gdkalias.h
 
 if OS_UNIX
-TEST = abicheck.sh
+TESTS = abicheck.sh
 endif
 
 

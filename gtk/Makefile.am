@@ -77,7 +77,7 @@ gtkalias.h: gtk.symbols
 	 cpp -P -DG_OS_UNIX -DGTK_WINDOWING_X11 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | ./makegtkalias.pl > gtkalias.h
 
 if OS_UNIX
-TEST = abicheck.sh
+TESTS = abicheck.sh
 endif
 
 # libtool stuff: set version and export symbols for resolving
