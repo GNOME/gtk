@@ -63,7 +63,7 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y,
    Display *disp;
    Window *list=NULL;
    Window child=0,parent_win=0,root_win=0;
-   unsigned int num,i,ww,wh,wb,wd;
+   int num,i,ww,wh,wb,wd;
    int wx,wy;
    
    window=(GdkWindow*)&gdk_root_parent;
@@ -82,11 +82,11 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y,
 	  {
 	     if ((!excl_child)||(!g_list_find(excludes,(gpointer *)list[i])))
 	       {
-		  if ((child=gdk_window_xid_at(list[i],wx,wy,x,y,excludes,excl_child))!=0)
-		    {
-		       XFree(list);
-		       return child;
-		    }
+		 if ((child=gdk_window_xid_at(list[i],wx,wy,x,y,excludes,excl_child))!=0)
+		   {
+		     XFree(list);
+		     return child;
+		   }
 	       }
 	     if (!i) break;
 	  }
@@ -116,7 +116,8 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
    Display *disp;
    Window *list=NULL;
    Window root,child=0,parent_win=0,root_win=0;
-   unsigned int num,i;
+   unsigned int num;
+   int i;
    GList *gl;
    
    window=(GdkWindow*)&gdk_root_parent;
@@ -129,31 +130,38 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
 	return root;
    if (list)
      {
-	for (i=num-1;;i--)
-	  {
-	     if ((!excl_child)||(!g_list_find(excludes,(gpointer *)list[i])))
-	       {
-		  if ((child=gdk_window_xid_at(list[i],0,0,x,y,excludes,excl_child))!=0)
-		    {
-		       if (excludes)
-			 {
-			    if (!g_list_find(excludes,(gpointer *)child))
-			      {
-				 XFree(list);
-				 XUngrabServer(disp);
-				 return child;
-			      }
-			 }
-		       else
-			 {
-			    XFree(list);
-			    XUngrabServer(disp);
-			    return child;
-			 }
-		    }
-	       }
-	     if (!i) break;
-	  }
+       i = num - 1;
+       do
+	 {
+	   XWindowAttributes xwa;
+
+	   XGetWindowAttributes (disp, list [i], &xwa);
+
+	   if (xwa.map_state != IsViewable)
+	     continue;
+
+	   if (excl_child && g_list_find(excludes,(gpointer *)list[i]))
+	     continue;
+	   
+	   if ((child = gdk_window_xid_at (list[i], 0, 0, x, y, excludes, excl_child)) == 0)
+	     continue;
+
+	   if (excludes)
+	     {
+	       if (!g_list_find(excludes,(gpointer *)child))
+		 {
+		   XFree(list);
+		   XUngrabServer(disp);
+		   return child;
+		 }
+	     }
+	   else
+	     {
+	       XFree(list);
+	       XUngrabServer(disp);
+	       return child;
+	     }
+	 } while (--i > 0);
 	XFree(list);
      }
    XUngrabServer(disp);

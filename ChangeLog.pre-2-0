@@ -1,3 +1,10 @@
+Mon Mar 16 22:31:02 1998  Federico Mena  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkwindow.c (gdk_window_xid_at): Use signed integers so that
+	testing will not fail for windows that are off-screen.  
+
+	(gdk_window_xid_at_coords): Only considers visible windows. 	
+
 Tue Mar 17 03:56:13 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkspinbutton.h: exported gtk_spin_button_spin since it is
@@ -13,6 +20,7 @@ Mon Mar 16 18:19:31 GMT 1998 Tony Gale  <gale@gimp.org>
 	    - new question on updating progressbars
 	    - update all the links to gtk.org
 
+>>>>>>> 1.255
 Mon Mar 16 09:15:03 GMT 1998 Tony Gale  <gale@gimp.org>
 
 	* docs/gtk_tut.sgml: 
