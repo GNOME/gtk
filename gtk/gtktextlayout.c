@@ -1587,7 +1587,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   GtkTextAttributes *style;
   gchar *text;
   PangoAttrList *attrs;
-  gint byte_count, byte_offset;
+  gint byte_count, layout_byte_offset, layout_only_bytes;
   gdouble align;
   PangoRectangle extents;
   gboolean para_values_set = FALSE;
@@ -1635,7 +1635,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   attrs = pango_attr_list_new ();
 
   /* Iterate over segments, creating display chunks for them. */
-  byte_offset = 0;
+  layout_byte_offset = 0; /* current length of layout text (includes preedit) */
+  layout_only_bytes = 0; /* bytes in layout_byte_offset not in buffer */
   seg = _gtk_text_iter_get_any_segment (&iter);
   while (seg != NULL)
     {
@@ -1646,7 +1647,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
         {
           _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                             &iter, line,
-                                            byte_offset);
+                                            layout_byte_offset - layout_only_bytes);
           style = get_style (layout, &iter);
 
           /* We have to delay setting the paragraph values until we
@@ -1683,8 +1684,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                     {
                       if (seg->type == &gtk_text_char_type)
                         {
-                          memcpy (text + byte_offset, seg->body.chars, seg->byte_count);
-                          byte_offset += seg->byte_count;
+                          memcpy (text + layout_byte_offset, seg->body.chars, seg->byte_count);
+                          layout_byte_offset += seg->byte_count;
                           bytes += seg->byte_count;
                         }
  		      else if (seg->type == &gtk_text_right_mark_type ||
@@ -1701,7 +1702,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
  			  if (seg->body.mark.visible)
  			    {
-			      cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (byte_offset));
+			      cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (layout_byte_offset));
 			      cursor_segs = g_slist_prepend (cursor_segs, seg);
 			    }
                         }
@@ -1715,23 +1716,23 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
  		  seg = prev_seg; /* Back up one */
                   add_generic_attrs (layout, &style->appearance,
                                      bytes,
-                                     attrs, byte_offset - bytes,
+                                     attrs, layout_byte_offset - bytes,
                                      size_only, TRUE);
                   add_text_attrs (layout, style, bytes, attrs,
-                                  byte_offset - bytes, size_only);
+                                  layout_byte_offset - bytes, size_only);
                 }
               else if (seg->type == &gtk_text_pixbuf_type)
                 {
                   add_generic_attrs (layout,
                                      &style->appearance,
                                      seg->byte_count,
-                                     attrs, byte_offset,
+                                     attrs, layout_byte_offset,
                                      size_only, FALSE);
                   add_pixbuf_attrs (layout, display, style,
-                                    seg, attrs, byte_offset);
-                  memcpy (text + byte_offset, gtk_text_unknown_char_utf8,
+                                    seg, attrs, layout_byte_offset);
+                  memcpy (text + layout_byte_offset, gtk_text_unknown_char_utf8,
                           seg->byte_count);
-                  byte_offset += seg->byte_count;
+                  layout_byte_offset += seg->byte_count;
                 }
               else if (seg->type == &gtk_text_child_type)
                 {
@@ -1739,13 +1740,13 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                   
                   add_generic_attrs (layout, &style->appearance,
                                      seg->byte_count,
-                                     attrs, byte_offset,
+                                     attrs, layout_byte_offset,
                                      size_only, FALSE);
                   add_child_attrs (layout, display, style,
-                                   seg, attrs, byte_offset);
-                  memcpy (text + byte_offset, gtk_text_unknown_char_utf8,
+                                   seg, attrs, layout_byte_offset);
+                  memcpy (text + layout_byte_offset, gtk_text_unknown_char_utf8,
                           seg->byte_count);
-                  byte_offset += seg->byte_count;
+                  layout_byte_offset += seg->byte_count;
                 }
               else
                 {
@@ -1776,7 +1777,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 	  if (_gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
 					     seg->body.mark.obj))
 	    {
-	      display->insert_index = byte_offset;
+	      display->insert_index = layout_byte_offset;
 	      
 	      if (layout->preedit_len > 0)
 		{
@@ -1784,12 +1785,13 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 		  text = g_realloc (text, byte_count);
 
 		  style = get_style (layout, &iter);
-		  add_preedit_attrs (layout, style, attrs, byte_offset, size_only);
+		  add_preedit_attrs (layout, style, attrs, layout_byte_offset, size_only);
 		  release_style (layout, style);
                   
-		  memcpy (text + byte_offset, layout->preedit_string, layout->preedit_len);
-		  byte_offset += layout->preedit_len;
-
+		  memcpy (text + layout_byte_offset, layout->preedit_string, layout->preedit_len);
+		  layout_byte_offset += layout->preedit_len;
+                  layout_only_bytes += layout->preedit_len;
+                  
 		  cursor_offset = layout->preedit_cursor - layout->preedit_len;
 		}
 	    }
@@ -1800,7 +1802,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
           if (seg->body.mark.visible)
             {
               cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets,
-                                                     GINT_TO_POINTER (byte_offset + cursor_offset));
+                                                     GINT_TO_POINTER (layout_byte_offset + cursor_offset));
               cursor_segs = g_slist_prepend (cursor_segs, seg);
             }
         }
@@ -1818,7 +1820,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       release_style (layout, style);
     }
 
-  g_assert (byte_offset == byte_count);
+  g_assert (layout_byte_offset == byte_count);
   
   /* Pango doesn't want the trailing paragraph delimiters */
 
@@ -1829,24 +1831,24 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 #define PARAGRAPH_SEPARATOR 0x2029
     gunichar ch = 0;
 
-    if (byte_offset > 0)
+    if (layout_byte_offset > 0)
       {
-        const char *prev = g_utf8_prev_char (text + byte_offset);
+        const char *prev = g_utf8_prev_char (text + layout_byte_offset);
         ch = g_utf8_get_char (prev);
         if (ch == PARAGRAPH_SEPARATOR || ch == '\r' || ch == '\n')
-          byte_offset = prev - text; /* chop off */
+          layout_byte_offset = prev - text; /* chop off */
 
-        if (ch == '\n' && byte_offset > 0)
+        if (ch == '\n' && layout_byte_offset > 0)
           {
             /* Possibly chop a CR as well */
-            prev = g_utf8_prev_char (text + byte_offset);
+            prev = g_utf8_prev_char (text + layout_byte_offset);
             if (*prev == '\r')
-              --byte_offset;
+              --layout_byte_offset;
           }
       }
   }
   
-  pango_layout_set_text (display->layout, text, byte_offset);
+  pango_layout_set_text (display->layout, text, layout_byte_offset);
   pango_layout_set_attributes (display->layout, attrs);
 
   tmp_list1 = cursor_byte_offsets;

@@ -1,5 +1,12 @@
 2001-01-19  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display):
+	byte_offset variable was being used to mean both "offset into
+	layout" and "offset into buffer line" which was no longer true
+	with addition of preedit string; fix
+
+2001-01-19  Havoc Pennington  <hp@redhat.com>
+
 	* demos/gtk-demo/main.c (button_press_event_cb): sync to tree changes
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_node_find_offset): fix this
