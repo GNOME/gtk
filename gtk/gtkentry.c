@@ -371,6 +371,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->timer = 0;
   entry->button = 0;
   entry->ascent = 0;
+  entry->descent = 0;
 
   /* This object is completely private. No external entity can gain a reference
    * to it; so we create it here and destroy it in finalize().
@@ -681,6 +682,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   g_object_unref (G_OBJECT (font));
 
   entry->ascent = metrics.ascent;
+  entry->descent = metrics.descent;
   
   requisition->width = MIN_ENTRY_WIDTH + (widget->style->xthickness + INNER_BORDER) * 2;
   requisition->height = ((metrics.ascent + metrics.descent) / PANGO_SCALE + 
@@ -1184,6 +1186,7 @@ gtk_entry_draw_text (GtkEntry *entry)
     {
       PangoRectangle logical_rect;
       gint area_width, area_height;
+      gint y_pos;
 
       gdk_window_get_size (entry->text_area, &area_width, &area_height);
       area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
@@ -1194,16 +1197,28 @@ gtk_entry_draw_text (GtkEntry *entry)
 			  GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
 			  NULL, widget, "entry_bg", 
 			  0, 0, area_width, area_height);
-
+      
       gtk_entry_ensure_layout (entry);
-
+      
       line = pango_layout_get_lines (entry->layout)->data;
       pango_layout_line_get_extents (line, NULL, &logical_rect);
 
+      /* Align primarily for locale's ascent/descent */
+      y_pos = ((area_height - entry->ascent - entry->descent) / 2 + 
+	       entry->ascent + logical_rect.y);
+
+      /* Now see if we need to adjust to fit in actual drawn string */
+      if (logical_rect.height > area_height)
+	y_pos = (area_height - logical_rect.height) / 2;
+      else if (y_pos < 0)
+	y_pos = 0;
+      else if (y_pos + logical_rect.height > area_height)
+	y_pos = area_height - logical_rect.height;
+      
+      y_pos = INNER_BORDER + y_pos / PANGO_SCALE;
+
       gdk_draw_layout (entry->text_area, widget->style->text_gc [widget->state], 
-		       INNER_BORDER - entry->scroll_offset,
-		       INNER_BORDER + ((area_height - logical_rect.height) / 2 +
-				       entry->ascent + logical_rect.y) / PANGO_SCALE,
+		       INNER_BORDER - entry->scroll_offset, y_pos,
 		       entry->layout);
 
       if (editable->selection_start_pos != editable->selection_end_pos)
@@ -1224,7 +1239,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 	      GdkRectangle rect;
 
 	      rect.x = INNER_BORDER - entry->scroll_offset + ranges[2*i] / PANGO_SCALE;
-	      rect.y = INNER_BORDER + (entry->ascent + logical_rect.y) / PANGO_SCALE;
+	      rect.y = y_pos;
 	      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
 	      rect.height = logical_rect.height / PANGO_SCALE;
 	      
@@ -1236,9 +1251,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 
 	  gdk_gc_set_clip_region (widget->style->fg_gc [selected_state], clip_region);
 	  gdk_draw_layout (entry->text_area, widget->style->fg_gc [selected_state], 
-			   INNER_BORDER - entry->scroll_offset,
-			   INNER_BORDER + ((area_height - logical_rect.height) / 2 +
-					   entry->ascent + logical_rect.y) / PANGO_SCALE,
+			   INNER_BORDER - entry->scroll_offset, y_pos,
 			   entry->layout);
 	  gdk_gc_set_clip_region (widget->style->fg_gc [selected_state], NULL);
 	  
@@ -1321,6 +1334,7 @@ gtk_entry_find_position (GtkEntry *entry,
 {
   PangoLayoutLine *line;
   gint index;
+  gint pos;
   gboolean trailing;
   
   gtk_entry_ensure_layout (entry);
@@ -1328,10 +1342,12 @@ gtk_entry_find_position (GtkEntry *entry,
   line = pango_layout_get_lines (entry->layout)->data;
   pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
 
+  pos = g_utf8_pointer_to_offset (entry->text, entry->text + index);
+  
   if (trailing)
-    index = g_utf8_next_char (entry->text + index) - entry->text;
+    pos += 1;
 
-  return index;
+  return pos;
 }
 
 static void

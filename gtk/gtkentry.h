@@ -70,6 +70,7 @@ struct _GtkEntry
   PangoLayout *layout;
   gint    scroll_offset;
   gint    ascent;	/* font ascent, in pango units  */
+  gint    descent;	/* font descent, in pango units  */
   GtkIMContext *im_context;
 };
 

@@ -1,3 +1,11 @@
+Sat Jul 22 17:41:26 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.[ch]: Fix some problems with vertical
+	alignment.
+
+	* gtk/gtkentry.c (gtk_entry_find_position): Fix 
+	char/byte confusion.
+
 Sat Jul 22 11:16:05 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (changed_handler): Fix bug where
