@@ -335,11 +335,17 @@ Indicated the relief to be drawn around a #GtkButton.
 
 </para>
 
-@GTK_SELECTION_NONE: 
-@GTK_SELECTION_SINGLE: 
-@GTK_SELECTION_BROWSE: 
-@GTK_SELECTION_MULTIPLE: 
-@GTK_SELECTION_EXTENDED: 
+@GTK_SELECTION_NONE: No selection is possible.
+@GTK_SELECTION_SINGLE: Zero or one element may be selected. 
+@GTK_SELECTION_BROWSE: Exactly one element is always selected 
+   (this can be false after you have changed the selection mode).
+@GTK_SELECTION_MULTIPLE: Any number of elements may be selected. 
+   Clicks toggle the state of an item. Any number of elements may be selected. 
+   Click-drag selects a range of elements; the Ctrl key may be used to enlarge 
+   the selection, and Shift key to select between the focus and the child 
+   pointed to. 
+@GTK_SELECTION_EXTENDED: Deprecated, behaves identical to 
+   %GTK_SELECTION_MULTIPLE.
 
 <!-- ##### ENUM GtkShadowType ##### -->
 <para>
