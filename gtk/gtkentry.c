@@ -780,6 +780,12 @@ gtk_entry_class_init (GtkEntryClass *class)
 				"toggle_overwrite", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Insert, 0,
 				"toggle_overwrite", 0);
+
+  gtk_settings_install_property (g_param_spec_boolean ("gtk-entry-select-on-focus",
+						       _("Select on focus"),
+						       _("Whether to select the contents of an entry when it is focused."),
+						       TRUE,
+						       G_PARAM_READWRITE));
 }
 
 static void
@@ -1659,9 +1665,16 @@ gtk_entry_focus_out (GtkWidget     *widget,
 static void
 gtk_entry_grab_focus (GtkWidget        *widget)
 {
-   GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
+  gboolean select_on_focus;
+  
+  GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
 
-  if (!GTK_ENTRY (widget)->in_click)
+  g_object_get (G_OBJECT (gtk_settings_get_default ()),
+		"gtk-entry-select-on-focus",
+		&select_on_focus,
+		NULL);
+  
+  if (select_on_focus && !GTK_ENTRY (widget)->in_click)
     gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
 }
 

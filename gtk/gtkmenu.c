@@ -256,6 +256,12 @@ gtk_menu_class_init (GtkMenuClass *class)
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
+
+  gtk_settings_install_property (g_param_spec_boolean ("gtk-can-change-accels",
+						       _("Can change accelerators"),
+						       _("Whether menu accelerators can be changed by pressing a key over the menu item."),
+						       FALSE,
+						       G_PARAM_READWRITE));
 }
 
 
@@ -1700,8 +1706,8 @@ gtk_menu_key_press (GtkWidget	*widget,
 {
   GtkMenuShell *menu_shell;
   GtkMenu *menu;
-  GtkAccelGroup *accel_group;
   gboolean delete = FALSE;
+  gboolean can_change_accels;
   gchar *accel = NULL;
   guint accel_key, accel_mods;
   
@@ -1710,7 +1716,6 @@ gtk_menu_key_press (GtkWidget	*widget,
       
   menu_shell = GTK_MENU_SHELL (widget);
   menu = GTK_MENU (widget);
-  accel_group = gtk_menu_get_accel_group (menu);
   
   gtk_menu_stop_navigating_submenu (menu);
 
@@ -1760,17 +1765,20 @@ gtk_menu_key_press (GtkWidget	*widget,
       break;
     }
 
+  g_object_get (G_OBJECT (gtk_settings_get_default ()),
+		"gtk-can-change-accels",
+		&can_change_accels,
+		NULL);
+  
   accel_key = event->keyval;
   accel_mods = event->state & gtk_accelerator_get_default_mod_mask ();
 
   /* Modify the accelerators */
-  if (menu_shell->active_menu_item &&
+  if (can_change_accels &&
+      menu_shell->active_menu_item &&
       GTK_BIN (menu_shell->active_menu_item)->child &&			/* no seperators */
       GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL &&	/* no submenus */
-      (delete ||
-       (gtk_accelerator_valid (event->keyval, event->state) &&
-	(accel_mods ||
-	 (accel_key >= GDK_F1 && accel_key <= GDK_F35)))))
+      (delete || gtk_accelerator_valid (event->keyval, event->state)))
     {
       GtkWidget *menu_item = menu_shell->active_menu_item;
       gboolean replace_accels = TRUE;
@@ -1791,10 +1799,20 @@ gtk_menu_key_press (GtkWidget	*widget,
 	{
 	  gboolean changed;
 
+	  /* For the keys that act to delete the current setting, we delete
+	   * the current setting if there is one, otherwise, we set the
+	   * key as the accelerator.
+	   */
 	  if (delete)
 	    {
-	      accel_key = 0;
-	      accel_mods = 0;
+	      GtkAccelKey key;
+	      
+	      if (gtk_accel_map_lookup_entry (path, &key) &&
+		  key.accel_key || key.accel_mods)
+		{
+		  accel_key = 0;
+		  accel_mods = 0;
+		}
 	    }
 	  changed = gtk_accel_map_change_entry (path, accel_key, accel_mods, replace_accels);
 

@@ -1,3 +1,28 @@
+Sat Feb  2 17:43:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_grab_focus): Add a GtkSetting
+	(gtk-entry-select-on-focus) controlling whether the
+	contents of an entry are selected on focus in.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): Add a GtkSetting
+	(gtk-can-change-accels) controlling whether accelerators can be
+	changed on the fly or not. (#51902)
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): Allow unmodified
+	accelerators, now that accelerator changing can be turned
+	off for those who won't expect it. (#61285)
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Allow 
+	Backspace/Delete/KP_Delete as valid accelerators.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): Allow setting of
+	Delete/Backspace as accelerators by making them toggle
+	the menu item between empty and the pressed key.
+	(#58605)
+
+	* tests/testgtkrc: Remove the objectionably short cursor blink
+	time setting.
+
 Sat Feb  2 16:43:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup): To get around the fact
