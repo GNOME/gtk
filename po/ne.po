@@ -1,11 +1,15 @@
+# Nepali translation of gtk+
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gtk+ package.
+# Pawan Chitrakar <pawan@nplinux.org>, 2004.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ \n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 12:06-0400\n"
-"PO-Revision-Date: 1999-02-07 17:37+0100\n"
-"Last-Translator: Pawan Chitrakar <pawan@nplinux.org>\n"
-"Language-Team: \n"
+"Report-Msgid-Bugs-To: <pawan@nplinux.org>\n"
+"POT-Creation-Date: 2004-04-05 04:03+0200\n"
+"PO-Revision-Date: 2004-06-07 17:37+0545\n"
+"Last-Translator: Laxmi Prasad Khatiwada<laxmi@mpp.org.np>\n"
+"Language-Team: Nepali <info@mpp.org.np>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,688 +18,687 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:902 tests/testfilechooser.c:192
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr " '%s': %s मिसिल खुलेन"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:779
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "प्रतिबिम्ब मिसिल '%s' मा तथ्याङ्क छैन"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:813
 #: gdk-pixbuf/gdk-pixbuf-io.c:939 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
+msgstr "चित्रलेख '%s'भर्न असफल : कारण थाहा भएन, सायद खराब चित्रलेख होला"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
+msgstr "रङ्गचित्र '%s'भर्न असफल: कारण थाहा भएन, सायद  रङ्गचित्र खराब होला"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:415
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr ""
+msgstr "चित्र भर्ने तरिका : %s: %s भर्न असफल"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:430
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr ""
+msgstr "चित्र भर्ने तरिका %s ले उचित पद्धति निर्यात गर्न सकेन; सायद यो अर्को जीटीकेबाट होला"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "'%s' किसिमको  चित्रले सहयोग गर्दैन"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:657
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "'%s'फाइलका लागि प्रतिबिम्ब फाइल-प्रारुप  चिन्न सकिएन"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:663
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "नचिनिने प्रतिबिम्ब फाइल-प्रारुप"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:824
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "प्रतिबिम्ब भर्न असफल '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1127
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr ""
+msgstr "प्रतिबिम्ब फाइलमा लेख्दा गल्ती %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1171 gdk-pixbuf/gdk-pixbuf-io.c:1287
 #, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
+#,fuzzy
+msgid "This build of gdk-pixbuf does not support saving the image format"
+msgstr " प्रतिबिम्ब फाइल-प्रारुप: %s  भणडारण क्रममा जी टी के पिक्स-बफले सहयोग गर्दैन"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1200
 msgid "Insufficient memory to save image to callback"
-msgstr ""
+msgstr "प्तिविम्ब-चित्र प्रशोधन क्रममा अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1212
 msgid "Failed to open temporary file"
-msgstr ""
+msgstr "अस्थायी फाइल खोल्न सकिएन"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1231
 msgid "Failed to read from temporary file"
-msgstr ""
+msgstr "अस्थायी फाइल पढ्न सकिएन"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1411
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "लेख्नका लागि '%s' खोल्न सकिएन: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1432
 #, c-format
+#, fuzzy
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
+msgstr "चित्र लेखिरहदा '%s' बन्द गर्न असफल, सबै तथ्याङक्क %s भणडाण नभएको हुन सक्छ:"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1618 gdk-pixbuf/gdk-pixbuf-io.c:1668
 msgid "Insufficient memory to save image into a buffer"
-msgstr ""
+msgstr "अस्थाइ फाइलमा चित्र भणडारण गर्न  अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:378
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
+msgstr "बढ्दोक्रमको '%s' चित्रले  सहयोग गर्दैन"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:402 gdk-pixbuf/gdk-pixbuf-loader.c:504
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
-msgstr ""
+msgstr "आन्तरिक गल्ती: चित्र भर्ने प्रक्रिया '%s' ले चित्र भर्न सकेन"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
-msgstr ""
+msgstr "चित्रको शीर्ष खराब"
 
 #: gdk-pixbuf/gdk-pixdata.c:151
 msgid "Image format unknown"
-msgstr ""
+msgstr "अज्ञाँत प्रारुप-चित्र"
 
 #: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:459
 msgid "Image pixel data corrupt"
-msgstr ""
+msgstr "चित्रको पिक्सेल तथ्याङ्क खराब"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] ""	
+#msgstr[0] "चित्र स्मृतिको %u स्वनेमिक एकाइ छुट्याउन असफल "
+#msgstr[1] "चित्र स्मृतिको %u स्वनेमिक एकाइहरु छुट्याउन असफल "
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
-msgstr ""
+msgstr "रङ्गचित्राङ्कन क्रममा अनपेक्षित वस्तु भेटियो "
 
 #: gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
-msgstr ""
+msgstr "असहयोगी रङ्गचित्राङ्कन तरिका"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
 msgid "Invalid header in animation"
-msgstr ""
+msgstr "रङ्गचित्राङ्कनमा अमान्य शीर्षक"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
 msgid "Not enough memory to load animation"
-msgstr ""
+msgstr "रङ्गचित्राङ्कन गर्न अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
-msgstr ""
+msgstr "रङ्गचित्राङ्कनमा विकृत टुक्रा"
 
 #: gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr ""
+msgstr "एनआई चित्रको ढाँचा"
 
 #: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:370
 msgid "Not enough memory to load bitmap image"
-msgstr ""
+msgstr "विटको नक्सा भर्न अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/io-bmp.c:267
 msgid "BMP image has unsupported header size"
-msgstr ""
+msgstr "बीएमपी चित्रसँग मेल नखाने आकारको शीर्षक"
 
 #: gdk-pixbuf/io-bmp.c:282 gdk-pixbuf/io-bmp.c:307 gdk-pixbuf/io-bmp.c:330
 #: gdk-pixbuf/io-bmp.c:401
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "बीएमपी चित्रमा नक्कली शीर्ष-तथ्याङ्क"
 
 #: gdk-pixbuf/io-bmp.c:1118
 msgid "The BMP image format"
-msgstr ""
+msgstr "बीएमपी चित्रको ढाँचा"
 
 #: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "जिआइएफ: %s पढ्न असफल"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
+msgstr "जिआइएफको केही तथ्याङक् हराएको छ(सायद यो कुनै प्रकारले छाँटिएछ)"
 
 #: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr ""
+msgstr "जिआइएफ भर्ने (%s) मा  आन्तरिक गल्ती "
 
 #: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
-msgstr ""
+msgstr "रेसाको अतिबहन"
 
 #: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
-msgstr ""
+msgstr "जीआईएफ चित्र भर्नेले यो चित्र बुझ्न सक्दैन"
 
 #: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
-msgstr ""
+msgstr "खराब संकेतको सामना"
 
 #: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "जीआइएफ  फाइलमा गोलाकार तालिकको प्रविष्टि "
 
 #: gdk-pixbuf/io-gif.c:869 gdk-pixbuf/io-gif.c:1430 gdk-pixbuf/io-gif.c:1476
 #: gdk-pixbuf/io-gif.c:1591
 msgid "Not enough memory to load GIF file"
-msgstr ""
+msgstr "जीआइएफ फाइल भर्न अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/io-gif.c:1095
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "जीआइएफ फाइल चित्र खराब छ(गलत LZW संपीडन)"
 
 #: gdk-pixbuf/io-gif.c:1145
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "जीआइएफ फाइलको रुपमा फाइल देखापर्दैन"
 
 #: gdk-pixbuf/io-gif.c:1157
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "जीआइएफ फाइलको ढाँचाको पाठ-रुप %s ले सहयोग गर्दैन"
 
 #: gdk-pixbuf/io-gif.c:1266
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
+msgstr "जीआइएफ चित्रमा विश्वव्यापी रङ्गीन-नक्सा छैन, र त्यस भित्रको आकृतिमा समेत स्थानीय रङ्गीन-नक्सा छैन"
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "जीआइएफ चित्र छाँटिएछ वा अपुरोछ"
 
 #: gdk-pixbuf/io-gif.c:1650
 msgid "The GIF image format"
-msgstr ""
+msgstr "जीआइएफ चित्र-आकृति"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
 #: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
 msgid "Not enough memory to load icon"
-msgstr ""
+msgstr " संकेतचित्र भर्न अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/io-ico.c:256
 msgid "Invalid header in icon"
-msgstr ""
+msgstr "संकेतचित्रमा  अमान्य शीर्षक"
 
 #: gdk-pixbuf/io-ico.c:293
 msgid "Icon has zero width"
-msgstr ""
+msgstr " संकेतचित्रको चौडाई शून्य छ"
 
 #: gdk-pixbuf/io-ico.c:303
 msgid "Icon has zero height"
-msgstr ""
+msgstr "संकेतचित्रको लम्बाई शून्य छ"
 
 #: gdk-pixbuf/io-ico.c:347
 msgid "Compressed icons are not supported"
-msgstr ""
+msgstr "संपीडक संकेतचित्रहरु मान्य छैनन् "
 
 #: gdk-pixbuf/io-ico.c:380
 msgid "Unsupported icon type"
-msgstr ""
+msgstr "अमान्य संकेतचित्रको किसिम"
 
 #: gdk-pixbuf/io-ico.c:474
 msgid "Not enough memory to load ICO file"
-msgstr ""
+msgstr "आइसीओ फाइल भर्न अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/io-ico.c:939
 msgid "Image too large to be saved as ICO"
-msgstr ""
+msgstr "आइसीओको रुपमा भणडारण गर्न चित्र  धेरै ठूलो भयो"
 
 #: gdk-pixbuf/io-ico.c:950
 msgid "Cursor hotspot outside image"
-msgstr ""
+msgstr "कर्सरको तात्कालीक स्थान चित्रभन्दा बाहिर छ"
 
 #: gdk-pixbuf/io-ico.c:973
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
-msgstr ""
+msgstr "आइसीओ फाइल: %dका लागि अमान्य गहिराइ "
 
 #: gdk-pixbuf/io-ico.c:1202
 msgid "The ICO image format"
-msgstr ""
+msgstr "आइसीओ चित्रको ढाँचा"
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgid "Error  JPEG image file (%s)"
+msgstr "जेपेज फाइल-चित्र (%s)मा  गल्ती"
 
 #: gdk-pixbuf/io-jpeg.c:349
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
+msgstr "चित्र भर्दा अपर्याप्त स्मृति क्षमता, स्मृति क्षमता बढाउन कुनै फाइल खालीगर्ने  प्रयास गर्नुहोस्"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr ""
+msgstr "अमान्य जेपेज रङ्गको स्थान(%s)"
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
 #: gdk-pixbuf/io-jpeg.c:950
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
+msgstr "जेपेज फाइल लोडगर्न  स्मृति क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-jpeg.c:893
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
+msgstr "जेपेज गुणको मूल्य शून्यदेखि सयसम्म हुनुपर्छ; '%s' को मूल्य क्रमान्वित हुँदैन"
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
+msgstr "जेपेज गुणको मूल्य शून्यदेखि सयसम्म हुनुपर्छ; '%d'को मूल्य स्वीकार्य हुँदैन"
+
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
-msgstr ""
+msgstr "जेपेज चित्रको आकृति"
 
 #: gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
-msgstr ""
+msgstr "शीर्षकका लागि स्मृति क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
 msgid "Couldn't allocate memory for context buffer"
-msgstr ""
+msgstr "अस्थायी विषय विस्तुको लागि स्मृति क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-pcx.c:607
 msgid "Image has invalid width and/or height"
-msgstr ""
+msgstr "चित्रको  चौडाई र लम्बाई अमान्य छ"
 
 #: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
 msgid "Image has unsupported bpp"
-msgstr ""
+msgstr "चित्रले bpp लाई मान्यता दिएको छैन"
 
 #: gdk-pixbuf/io-pcx.c:624 gdk-pixbuf/io-pcx.c:632
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
-msgstr ""
+msgstr "चित्रले समतल विट %d-को संख्यालाई मान्यता दिएको छैन"
 
 #: gdk-pixbuf/io-pcx.c:648
 msgid "Couldn't create new pixbuf"
-msgstr ""
+msgstr "नयाँ pixbuf रचना गर्न सकिएन"
 
 #: gdk-pixbuf/io-pcx.c:656
 msgid "Couldn't allocate memory for line data"
-msgstr ""
+msgstr "पक्ति तथ्याङ्कको लागि स्मृति क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-pcx.c:663
 msgid "Couldn't allocate memory for paletted data"
-msgstr ""
+msgstr "paletted तथ्याङ्कको (डाटा) लागि स्मृति क्षमता छुट्याउन नसक्नु"
 
 #: gdk-pixbuf/io-pcx.c:710
 msgid "Didn't get all lines of PCX image"
-msgstr ""
+msgstr "'पिसिएक्स' (PCX) चित्रको सबै रेखा नपाएको"
 
 #: gdk-pixbuf/io-pcx.c:717
 msgid "No palette found at end of PCX data"
-msgstr ""
+msgstr "'पिसिएक्स' तथ्याङक्को (डाटा) अन्त्यमा रङ्गदानी नपाएको"
 
 #: gdk-pixbuf/io-pcx.c:758
 msgid "The PCX image format"
-msgstr ""
+msgstr "'पिसिएक्स' चित्रको ढाँचा"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr ""
+msgstr "'पिएनजी चित्रको प्रति-चयानल विट अमान्य"
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr ""
+msgstr "परिवर्तित पिएनजीको चौडाई र लम्बाई शून्य छ"
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
+msgstr "परिवर्तित पिएनजी चित्रको प्रति-चयानल विट आठ होईन"
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
+msgstr "परिवर्तित पिएनजी आरजिबि वा आजिबिए होइन"
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
+msgstr "परिवतित PNG मा सपोर्त (support) नगर्ने channels को संख्या, तीन अथवा चार हुनुपर्छ"
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
+msgstr "पिएनजी फाइलचित्रमा गल्ती  :%s"
 
 #: gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
-msgstr ""
+msgstr "पिएनजी फाइलचित्र गर्न अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/io-png.c:618
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
-msgstr ""
+msgstr "%ld by %ld अपर्याप्त स्मृति क्षमता "
 
 #: gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
-msgstr ""
+msgstr "पिएनजी  चित्र लेखपत्र पढाइमा घातक दोष "
 
 #: gdk-pixbuf/io-png.c:718
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
+msgstr "%s पिएनजी  चित्र लेखपत्र पढाइमा घातक दोष "
 
+ 
 #: gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
+msgstr "पिएनजी पाठ-सूत्रको मात्राका लागि स्वनहरु कम्तीमा १ र बढीमा ७९ सम्म हुनुपर्छ"
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
+msgstr" पिएनजी पाठ-सूत्रको मात्राका लागि स्वनहरु आस्कीमा हुनुपर्छ"
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr ""
+msgstr "पिएनजी पाठ-मूल्य %s आइएसओ-८८९५-१ संकेतनमा रुपान्तरित गर्न असफल"  
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
-msgstr ""
+msgstr "पिएनजी चित्रको ढाँचा"
 
 #: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
+msgstr "पी एम एम भर्नेले पूर्णसंख्या खोज्यो तर पाइएन"
 
 #: gdk-pixbuf/io-pnm.c:281
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "पी एम एम फाइलसँग गलत आरम्भिक स्वनिम छ"
 
 #: gdk-pixbuf/io-pnm.c:311
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "पी एन एम लेखपत्र  पी एन एम उप-आकृतिमा छैन"
+ 
 
 #: gdk-pixbuf/io-pnm.c:336
 msgid "PNM file has an image width of 0"
-msgstr ""
+msgstr "चित्रको चौडाई शून्य भएको पिएनएम फाइल "
 
 #: gdk-pixbuf/io-pnm.c:357
 msgid "PNM file has an image height of 0"
-msgstr ""
+msgstr "पी एन एम लेखपत्रसँग ऊचाई शून्य भएको एउटा चित्र छ"
 
 #: gdk-pixbuf/io-pnm.c:380
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "पि एन एम लेखपत्रमा अधिकतमम र‌‌ङ्गको मान शून्य"
 
 #: gdk-pixbuf/io-pnm.c:388
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "पि एन एम लेखपत्रमा अधिक्तम र‌‌ङ्गको मान ज्यादै ठूलो"
 
-#: gdk-pixbuf/io-pnm.c:396
+ #: gdk-pixbuf/io-pnm.c:396
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr ""
+msgstr "२५५ भन्दा ज्यादा मान भएको अधिकतमम र‌‌ङ्गको पि एन एम लेखपत्र समाल्न असमर्थ"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
-msgid "Raw PNM image type is invalid"
-msgstr ""
+msgid "Raw PNM is invalid"
+msgstr "कोरा पी एन एम अमान्य छ"
 
 #: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
 msgid "PNM image format is invalid"
-msgstr ""
+msgstr "पि एन एम  चित्रको ढाँचा अमान्य छ"
 
 #: gdk-pixbuf/io-pnm.c:656
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
+msgstr " पि एन एम चित्र भर्नेले यो  पि एन एम उप-आकृतिलाई सहयोग गर्दैन"
 
 #: gdk-pixbuf/io-pnm.c:711
 msgid "Premature end-of-file encountered"
-msgstr ""
+msgstr "अपरिपक्व अन्त्य-को-फाइलको सामना गर्नु पर्‌यो"
 
 #: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
+msgstr "नमूना तथ्याङ्कभन्दा पहिलेको कोरा पी एन एम ढाँचाले एउटा खाली स्थान माग गर्छ "
 
 #: gdk-pixbuf/io-pnm.c:770
 msgid "Can't allocate memory for loading PNM image"
-msgstr ""
+msgstr "पि एन एम चित्र लोडगर्न स्मृति क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-pnm.c:820
 msgid "Insufficient memory to load PNM context struct"
-msgstr ""
+msgstr "पि एन एम  सन्दर्भ वस्तु लोडगर्न अपर्याप्त  स्मृति क्षमता  "
 
 #: gdk-pixbuf/io-pnm.c:871
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "पि एन एम  चित्र तथ्याँङकको  अप्रत्याशित अन्त्य"
 
 #: gdk-pixbuf/io-pnm.c:1003
 msgid "Insufficient memory to load PNM file"
-msgstr ""
+msgstr "पि एन एम फाइल लोडगर्न  अपर्याप्त  स्मृति क्षमता   "
 
 #: gdk-pixbuf/io-pnm.c:1082
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr ""
+msgstr "पीएनएम/पीबीएम/पीजीएम/पीपीएम चित्र आकृति परिवार"
 
 #: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
-msgstr ""
+msgstr "आर ए एस चित्रमा नक्कली तथ्याङ्क शीर्षक छ"
 
 #: gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
-msgstr ""
+msgstr " अज्ञात प्रकारको आर एस चित्र"
 
 #: gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr ""
+msgstr " आरएएस चित्रको विविधिता अमान्य छ"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
-msgstr ""
+msgstr "आर ए एस चित्र भर्न स्मृति क्षमता अपुग"
 
 #: gdk-pixbuf/io-ras.c:543
-msgid "The Sun raster image format"
-msgstr ""
-
+msgid "T"                                                                                            
+msgstr "टी"   
+                                                     
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr ""
+msgstr "आई ओ अस्थायी संरचनाका लागि स्मृति क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
-msgstr ""
+msgstr "आई ओ अस्थायी संरचनाका लागि स्मृति क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
-msgstr ""
+msgstr "आई ओ अस्थायी तथ्याङ्क पुन: छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
-msgstr ""
+msgstr "आई ओ अस्थायी तथ्याङ्क छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:353
 msgid "Can't allocate new pixbuf"
-msgstr ""
+msgstr "नयाँ पिक्सबफ छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:692
 msgid "Can't allocate colormap structure"
-msgstr ""
+msgstr "रङ्गचित्रको बनाबट छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:699
 msgid "Can't allocate colormap entries"
-msgstr ""
+msgstr "रङ्गचित्रको प्रविष्टि छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:721
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "रङ्गचित्रको प्रविष्टिका लागि अप्रत्याशित गहिराइ विट "
 
 #: gdk-pixbuf/io-tga.c:739
 msgid "Can't allocate TGA header memory"
-msgstr ""
+msgstr "टि जि ए शीर्षक क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:772
 msgid "TGA image has invalid dimensions"
-msgstr ""
+msgstr "टि जि ए चित्रमा अमान्य आयामहरु छन्"
 
 #: gdk-pixbuf/io-tga.c:778 gdk-pixbuf/io-tga.c:787 gdk-pixbuf/io-tga.c:797
 #: gdk-pixbuf/io-tga.c:807 gdk-pixbuf/io-tga.c:814
 msgid "TGA image type not supported"
-msgstr ""
+msgstr "टि जि ए किसिमको चित्र लिन मान्दैन"
 
 #: gdk-pixbuf/io-tga.c:861
 msgid "Can't allocate memory for TGA context struct"
-msgstr ""
+msgstr "टी जी ए सन्दर्भ संरचनाका लागि स्मृति क्षमता छुट्याउन सकिएन"
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Excess data in file"
-msgstr ""
+msgstr "लेखपत्रमा अत्याधिक तथ्यांक"
 
 #: gdk-pixbuf/io-tga.c:995
 msgid "The Targa image format"
-msgstr ""
+msgstr "टार्गा चित्रको आकृति"
 
 #: gdk-pixbuf/io-tiff.c:194
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "चित्रको चौडाइ पाइएन(खराब टीआईएफएफ फाइल)"
 
 #: gdk-pixbuf/io-tiff.c:201
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "टीआईएफएफ चित्रको उचाइ पाइएन(खराब टीआईएफएफ फाइल)"
 
 #: gdk-pixbuf/io-tiff.c:209
 msgid "Width or height of TIFF image is zero"
-msgstr ""
+msgstr "टीआईएफएफ चित्रको उचाइ अथबा चौडाइ शून्य"
 
 #: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:227
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "टीआईएफएफ चित्रको आकार ज्यादै ठूलो छ"
 
 #: gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:258 gdk-pixbuf/io-tiff.c:566
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
+msgstr "टीआईएफएफ पत्रलेख खोल्न अपर्याप्त स्म्रीति"
 
 #: gdk-pixbuf/io-tiff.c:270
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "आर जी बी तथ्याङकTIFF पत्रलेकबाट load गर्न असमर्थ"
 
 #: gdk-pixbuf/io-tiff.c:278
 msgid "Unsupported TIFF variant"
-msgstr ""
+msgstr "अमान्य टीआईएफएफ विविधता"
 
 #: gdk-pixbuf/io-tiff.c:348
 msgid "Failed to open TIFF image"
-msgstr ""
+msgstr "टि आइ एफ एफ  चित्र खोल्न असफल"
 
 #: gdk-pixbuf/io-tiff.c:361
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "टि आइ एफ एफ बन्द गर्ने कार्य असफल"
 
 #: gdk-pixbuf/io-tiff.c:496 gdk-pixbuf/io-tiff.c:509
 msgid "Failed to load TIFF image"
-msgstr ""
+msgstr "टि आइ एफ एफ चित्र भर्न असफल"
 
 #: gdk-pixbuf/io-tiff.c:604
 msgid "The TIFF image format"
-msgstr ""
+msgstr "टि आइ एफ एफ  चित्र आकृति"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
-msgstr ""
+msgstr "चित्रको चोडाइ शून्य छ"
 
 #: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
-msgstr ""
+msgstr "चित्रको उचाइ शून्य छ"
 
 #: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr ""
+msgstr "चित्र भर्न अपुग स्मृति क्षमता"
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "बाँकि भाग भण्डारण भएन"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr ""
+msgstr "डब्लु बी एम पी चित्र आकृति"
 
 #: gdk-pixbuf/io-xbm.c:287
 msgid "Invalid XBM file"
-msgstr ""
+msgstr "एक्स बी एम फाइल अमान्य"
 
 #: gdk-pixbuf/io-xbm.c:297
 msgid "Insufficient memory to load XBM image file"
-msgstr ""
+msgstr "एक्स बी एम चित्र फाइल लोडगर्न अपर्याप्त स्मृति क्षमता"
 
 #: gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
+msgstr "एक्स बी एम चित्र भर्ने क्रममा  अस्थायी पत्रलेख लेख्न सकिएन"
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
-msgstr ""
+msgstr"एक्स बी एम  चित्र आकृति"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
-msgstr ""
+msgstr "एक्स पी एम को शीर्षक  पाइएन"
 
 #: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
-msgstr ""
+msgstr "एक्स पी एम पत्रलेखमा चित्रको चोढाइ <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1245
 msgid "XPM file has image height <= 0"
-msgstr ""
+msgstr "एक्स पी एम  पत्रलेखमा चित्रको उचाइ <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM file has invalid number of colors"
-msgstr ""
+msgstr "एक्स पी एम  पत्रलेखमा रङ्गको संख्या अयोग्य"
 
 #: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
-msgstr ""
+msgstr "एक्स पी एम मा प्रति पिक्सेल स्वन संख्या अयोग्य"
 
 #: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
-msgstr ""
+msgstr "एक्स पी एम रङ्गचित्र पढ् सकिएनन"
 
 #: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
-msgstr ""
-
-#: gdk-pixbuf/io-xpm.c:1508
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-
-#: gdk-pixbuf/io-xpm.c:1543
-msgid "The XPM image format"
-msgstr ""
+msgstr "एक्स पी एम चित्र भर्नलँई स्मृति क्षमता छुट्याउन सकिएन"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -704,7 +707,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:118
 msgid "Shift"
-msgstr ""
+msgstr "बदल्नुहोस्"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -713,7 +716,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:124
 msgid "Ctrl"
-msgstr ""
+msgstr "कन्ट्रोल"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -722,7 +725,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:130
 msgid "Alt"
-msgstr ""
+msgstr "अल्टर"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -736,7 +739,7 @@ msgstr ""
 #: gtk/gtkcalendar.c:709
 #, fuzzy
 msgid "calendar:MY"
-msgstr "à¤¸à¤«à¤¾ à¤à¤°"
+msgstr "Ã Â¤Â¸Ã Â¤Â«Ã Â¤Â¾ Ã Â¤Â—Ã Â¤Â°"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -744,376 +747,384 @@ msgstr "à¤¸à¤«à¤¾ à¤à¤°"
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "भित्तेपात्रो:सप्ताह_सुरू:0"
+
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
-msgstr ""
+msgstr "रङ्ग छान"
 
 #: gtk/gtkcolorbutton.c:465
 msgid "Received invalid color data\n"
-msgstr ""
+msgstr "अयोग्य रङ्गको तथ्याङक प्राप्त \n"
 
-#: gtk/gtkcolorsel.c:567
+#: gtk/gtkcolorsel.c:562
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
-msgstr ""
+msgstr " तुलनाका लागि तपाईंले छानेको पूर्व निर्धारित रङ्ग छान्न रङ्गदानी खिच वा दुबैतर्फ कपडा जस्तो रंगीन ब्रस खिच"
 
-#: gtk/gtkcolorsel.c:572
+#: gtk/gtkcolorsel.c:567
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr ""
+msgstr "तिमीले छानेको रङ्ग तानेर रङ्गदानीमा भणडारण गर यो भबिष्यमा काम आउँछ"
 
-#: gtk/gtkcolorsel.c:933
+#: gtk/gtkcolorsel.c:928
 msgid "_Save color here"
-msgstr ""
+msgstr "_रङ्ग यहाँ राख"
 
-#: gtk/gtkcolorsel.c:1138
+#: gtk/gtkcolorsel.c:1133
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1846
+msgstr "हालको जस्तो रङ्ग भर्न रङ्गदानीमा क्लिक गर। यो रङ्ग परिवर्तन गर्न कपडा जस्तो ब्रस तान वा दायाँ क्लिक थिच र \"रङ्ग यहाँ भण्डारण गर\""
+	
+#: gtk/gtkcolorsel.c:1840
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr ""
+msgstr "बाहिरी परिधिमा लगाउने रङ्ग छान। भित्री त्रि-आयामिक रङ्ग प्रयोगका लागि श्याम वा श्वेत छान"
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1865
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr ""
+msgstr "आइ ड्रपरमा क्लिक गर,र यो रङ्ग भर्न कम्प्युटर पर्दाको कनै ठाउँमा क्लिक गर"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1874
 #, fuzzy
 msgid "_Hue:"
-msgstr "Hue:"
+msgstr "_गाढा रङ्ग:"
 
-#: gtk/gtkcolorsel.c:1881
+#: gtk/gtkcolorsel.c:1875
 msgid "Position on the color wheel."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1877
 #, fuzzy
 msgid "_Saturation:"
-msgstr "Saturation:"
+msgstr "_संशोषण:"
 
-#: gtk/gtkcolorsel.c:1884
+#: gtk/gtkcolorsel.c:1878
 msgid "\"Deepness\" of the color."
-msgstr ""
+msgstr "रङ्गको \"गाढापन\" "
 
-#: gtk/gtkcolorsel.c:1885
+#: gtk/gtkcolorsel.c:1879
 #, fuzzy
-msgid "_Value:"
-msgstr "à¤®à¤¾à¤¨:"
-
-#: gtk/gtkcolorsel.c:1886
-msgid "Brightness of the color."
+msgid "_मान:_Ã Â¤Â®Ã Â¤Â¾Ã Â¤Â¨:"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1887
+#: gtk/gtkcolorsel.c:1880
+msgid "Brightness of the color."
+msgstr "रङ्गको चमक"
+
+#: gtk/gtkcolorsel.c:1881
 #, fuzzy
 msgid "_Red:"
-msgstr "à¤°à¤¾à¤¤à¥:"
+msgstr"_रातो:"
+ 
 
-#: gtk/gtkcolorsel.c:1888
+#: gtk/gtkcolorsel.c:1882
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr " रङ्गमा रातो प्रकासको मात्रा"
 
-#: gtk/gtkcolorsel.c:1889
+#: gtk/gtkcolorsel.c:1883
 #, fuzzy
 msgid "_Green:"
-msgstr "à¤¹à¤°à¤¿à¤¯à¥:"
+msgstr "Ã Â¤Â¹Ã Â¤Â°Ã Â¤Â¿Ã Â¤Â¯Ã Â¥Â‹:"
 
-#: gtk/gtkcolorsel.c:1890
+
+#: gtk/gtkcolorsel.c:1884
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "रङ्गमा हरियो प्रकासको मात्रा"
 
-#: gtk/gtkcolorsel.c:1891
-#, fuzzy
+#: gtk/gtkcolorsel.c:1885
 msgid "_Blue:"
-msgstr "à¤¨à¤¿à¤²à¥:"
+msgstr "_निलो:"
 
-#: gtk/gtkcolorsel.c:1892
+
+#: gtk/gtkcolorsel.c:1886
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "रङ्गमा नीलो प्रकासको मात्रा"
 
-#: gtk/gtkcolorsel.c:1895
+#: gtk/gtkcolorsel.c:1889
 msgid "_Opacity:"
-msgstr ""
+msgstr "_धमिलोपन"
 
-#: gtk/gtkcolorsel.c:1903 gtk/gtkcolorsel.c:1914
+#: gtk/gtkcolorsel.c:1897 gtk/gtkcolorsel.c:1908
 msgid "Transparency of the color."
-msgstr ""
+msgstr "रङ्गको पारदर्शकता"
 
-#: gtk/gtkcolorsel.c:1921
+#: gtk/gtkcolorsel.c:1915
 msgid "Color _Name:"
-msgstr ""
+msgstr "रङ्ग _नाम:"
 
-#: gtk/gtkcolorsel.c:1936
+#: gtk/gtkcolorsel.c:1930
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
-msgstr ""
+msgstr "तपाईं एचटीएमएल-शैलीको हेक्सादशमलब रङ्ग मान प्रयोग गर्न सक्नुहुन्छ, वा कुनै रङ्गको नाम जस्तै 'सुन्तलारङ्ग' भनेर प्योग गर्न सक्नुहन्छ"
 
-#: gtk/gtkcolorsel.c:1955
+#: gtk/gtkcolorsel.c:1949
 msgid "_Palette"
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1987
-#, fuzzy
-msgid "Color Wheel"
-msgstr "à¤«à¤¨à¥à¤ à¤à¤¨à¥à¤"
+msgstr "_रङ्गदानी"
 
 #: gtk/gtkcolorseldialog.c:116
 #, fuzzy
 msgid "Color Selection"
-msgstr "à¤«à¤¨à¥à¤ à¤à¤¨à¥à¤"
+msgstr "Ã Â¤Â«Ã Â¤Â¨Ã Â¥ÂÃ Â¤ÂŸ Ã Â¤Â›Ã Â¤Â¨Ã Â¥Â‹Ã Â¤ÂŸ"
+msgid "रङ्ग चयन"
+msgstr "Ã Â¤Â«Ã Â¤Â¨Ã Â¥ÂÃ Â¤ÂŸ Ã Â¤Â›Ã Â¤Â¨Ã Â¥Â‹Ã Â¤ÂŸ"
 
-#: gtk/gtkentry.c:4215 gtk/gtktextview.c:6925
+#: gtk/gtkentry.c:4214 gtk/gtktextview.c:6907
 #, fuzzy
 msgid "Select _All"
-msgstr "à¤à¤¨à¥à¤: "
+msgstr "Ã Â¤Â›Ã Â¤Â¨Ã Â¥Â‹Ã Â¤ÂŸ: "
+msgid "सबै _छान"
+msgstr "Ã Â¤Â›Ã Â¤Â¨Ã Â¥Â‹Ã Â¤ÂŸ: "
 
-#: gtk/gtkentry.c:4225 gtk/gtktextview.c:6935
+#: gtk/gtkentry.c:4224 gtk/gtktextview.c:6917
 msgid "Input _Methods"
-msgstr ""
+msgstr "निवेश गर्ने _तरिका"
 
-#: gtk/gtkentry.c:4235 gtk/gtktextview.c:6946
+#: gtk/gtkentry.c:4234 gtk/gtktextview.c:6928
 msgid "_Insert Unicode Control Character"
-msgstr ""
+msgstr "युनीकोड कण्ट्रोल स्वन _घुसाउ"
 
-#: gtk/gtkfilechooser.c:1583 gtk/gtkfilechooser.c:1627
-#: gtk/gtkfilechooser.c:1702 gtk/gtkfilechooser.c:1746
+#: gtk/gtkfilechooser.c:1501 gtk/gtkfilechooser.c:1545
+#: gtk/gtkfilechooser.c:1620 gtk/gtkfilechooser.c:1664
 #, c-format
 msgid "Invalid filename: %s"
-msgstr ""
+msgstr " %s फाइलको नाम अमान्य "
 
-#: gtk/gtkfilechooserdefault.c:728
+#: gtk/gtkfilechooserdefault.c:719
 #, c-format
 msgid ""
 "Could not retrieve information about %s:\n"
 "%s"
-msgstr ""
+msgstr " %s:का बारेमा कुनै पुनरुद्धार गर्न सकिएन\n"
+"%s"
 
-#: gtk/gtkfilechooserdefault.c:739
+#: gtk/gtkfilechooserdefault.c:730
 #, c-format
 msgid ""
 "Could not add a bookmark for %s:\n"
 "%s"
-msgstr ""
+msgstr "%s:का लागि पृष्ठ-चिन्ह थप्न सकिएन\n"
+"%s"
 
-#: gtk/gtkfilechooserdefault.c:754 gtk/gtkfilechooserdefault.c:5230
+#: gtk/gtkfilechooserdefault.c:745 gtk/gtkfilechooserdefault.c:5022
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
 "%s"
-msgstr ""
+msgstr "'%s' र '%s':बाट फाइलको नाम राख्न सकिएन \n"
+"%s"	
 
-#: gtk/gtkfilechooserdefault.c:770
+#: gtk/gtkfilechooserdefault.c:761
 #, c-format
 msgid ""
 "Could not change the current folder to %s:\n"
 "%s"
-msgstr ""
+msgstr "अहिलेको फाइल पत्र %s:मा परिवर्तन गर्न सकिएन \n"
+"%s"
 
-#: gtk/gtkfilechooserdefault.c:1052 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1043 gtk/gtkpathbar.c:828
 msgid "Home"
-msgstr ""
+msgstr "होम "
 
-#: gtk/gtkfilechooserdefault.c:1070 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1061 gtk/gtkpathbar.c:830
 msgid "Desktop"
-msgstr ""
+msgstr "मंडला"
 
-#: gtk/gtkfilechooserdefault.c:1509
+#: gtk/gtkfilechooserdefault.c:1500
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
 "%s"
-msgstr ""
+msgstr "%s:फाइलपत्र निर्माण गर्न सकिएन \n"
+"%s"
 
-#: gtk/gtkfilechooserdefault.c:1656
+#: gtk/gtkfilechooserdefault.c:1647
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr ""
+msgstr "%s:का लागि पृष्ठ-चिन्ह थप्न सकिएन किनकि यो फाइल पत्र होइन"
 
-#: gtk/gtkfilechooserdefault.c:1734
+#: gtk/gtkfilechooserdefault.c:1728
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
 "%s"
-msgstr ""
+msgstr "%s:का लागि पृष्ठ-चिन्ह हटाउन सकिएन\n"
+"%s"
 
-#: gtk/gtkfilechooserdefault.c:2328
+#: gtk/gtkfilechooserdefault.c:2294
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr ""
+msgstr "%s:का लागि पृष्ठ-चिन्ह थप्न सकिएन किनकि यो अस्वीकृत मार्ग हो"
 
-#: gtk/gtkfilechooserdefault.c:2519
+
+#: gtk/gtkfilechooserdefault.c:2482
 #, fuzzy
 msgid "Folder"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
+msgid "फाइल-पत्र"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2566 gtk/gtkstock.c:276
+#: gtk/gtkfilechooserdefault.c:2529 gtk/gtkstock.c:276
 msgid "_Add"
-msgstr ""
+msgstr "_थप्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:2576 gtk/gtkstock.c:324
+#: gtk/gtkfilechooserdefault.c:2539 gtk/gtkstock.c:324
 msgid "_Remove"
-msgstr ""
+msgstr "_हटाउनुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:2653
-msgid "Show _Hidden Files"
-msgstr ""
-
-#: gtk/gtkfilechooserdefault.c:2765
+#: gtk/gtkfilechooserdefault.c:2619
 #, fuzzy
 msgid "Name"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
+msgid "नाम"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
-#: gtk/gtkfilechooserdefault.c:2787
+#: gtk/gtkfilechooserdefault.c:2641
 #, fuzzy
 msgid "Size"
-msgstr "à¤¸à¤¾à¤à¤:"
+msgstr "Ã Â¤Â¸Ã Â¤Â¾Ã Â¤ÂˆÃ Â¤Âœ:"
 
-#: gtk/gtkfilechooserdefault.c:2799
+#: gtk/gtkfilechooserdefault.c:2653
 msgid "Modified"
-msgstr ""
+msgstr "सुधारिएको"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2861
+#: gtk/gtkfilechooserdefault.c:2715
 #, fuzzy
-msgid "Create Fo_lder"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgid "Create _Folder"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2968
+#: gtk/gtkfilechooserdefault.c:2822
 #, fuzzy
 msgid "_Name:"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
+msgid "_नाम:"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
-#: gtk/gtkfilechooserdefault.c:3010
+#: gtk/gtkfilechooserdefault.c:2864
 msgid "_Browse for other folders"
-msgstr ""
+msgstr "_अरु फाइलपत्रहरु खोलेर हेर्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3247
+#: gtk/gtkfilechooserdefault.c:3101
 #, fuzzy
 msgid "Save in _folder:"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
+msgid " _फाइलपत्रमा सुरक्षित गर्नुहोस्:"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
-#: gtk/gtkfilechooserdefault.c:3249
+#: gtk/gtkfilechooserdefault.c:3103
 #, fuzzy
 msgid "Create in _folder:"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
+msgid " _फाइलपत्रमा निर्माण गर्नुहोस्:"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
-#: gtk/gtkfilechooserdefault.c:3874
+#: gtk/gtkfilechooserdefault.c:3729
 msgid "Can't change to folder because it isn't local"
-msgstr ""
+msgstr "फाइल पत्र परिबर्तन भएन किनकि यो लोकल होइन"
 
-#: gtk/gtkfilechooserdefault.c:4009
-msgid "Could not find the path"
-msgstr ""
-
-#: gtk/gtkfilechooserdefault.c:4357
+#: gtk/gtkfilechooserdefault.c:4180
 #, c-format
 msgid "shortcut %s does not exist"
-msgstr ""
+msgstr "%s को छोटकरी रुप भेटिँदैन"
 
-#: gtk/gtkfilechooserdefault.c:5003
+#: gtk/gtkfilechooserdefault.c:4795
 msgid "Type name of new folder"
-msgstr ""
+msgstr "नयाँ फइलपत्रको नाम लेख"
 
-#: gtk/gtkfilechooserdefault.c:5032
+#: gtk/gtkfilechooserdefault.c:4824
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
-
-#: gtk/gtkfilechooserdefault.c:5034
+#msgstr[0] "%d वाइट"
+#msgstr[1] "%d वाइटहरु"
+#: gtk/gtkfilechooserdefault.c:4826
 #, c-format
 msgid "%.1f K"
-msgstr ""
-
-#: gtk/gtkfilechooserdefault.c:5036
+msgstr "%.1f K"
+#: gtk/gtkfilechooserdefault.c:4828
 #, c-format
 msgid "%.1f M"
-msgstr ""
-
-#: gtk/gtkfilechooserdefault.c:5038
+msgstr "%.1f M"
+#: gtk/gtkfilechooserdefault.c:4830
 #, c-format
 msgid "%.1f G"
-msgstr ""
-
-#: gtk/gtkfilechooserdefault.c:5083
+msgstr"%.1f G"
+#: gtk/gtkfilechooserdefault.c:4875
 msgid "Today"
-msgstr ""
-
-#: gtk/gtkfilechooserdefault.c:5085
+msgstr "आज"
+#: gtk/gtkfilechooserdefault.c:4877
 msgid "Yesterday"
-msgstr ""
+msgstr "हिजो"
 
-#: gtk/gtkfilechooserdefault.c:5096
+#: gtk/gtkfilechooserdefault.c:4888
 #, fuzzy
 msgid "Unknown"
-msgstr "(à¤à¤ªà¤°à¤¿à¤à¤¿à¤¤)"
+msgstr "(Ã Â¤Â…Ã Â¤ÂªÃ Â¤Â°Ã Â¤Â¿Ã Â¤ÂšÃ Â¤Â¿Ã Â¤Â¤)"
+msgid "अज्ञात"
+msgstr "(Ã Â¤Â…Ã Â¤ÂªÃ Â¤Â°Ã Â¤Â¿Ã Â¤ÂšÃ Â¤Â¿Ã Â¤Â¤)"
 
-#: gtk/gtkfilechooserdefault.c:5191
+#: gtk/gtkfilechooserdefault.c:4983
 msgid "Cannot change to the folder you specified as it is an invalid path."
-msgstr ""
+msgstr "फाइलपत्रलाइ चाहेको ठाउँमा लान मिलेन कारण यो अस्वीकृत मार्ग हो "
 
-#: gtk/gtkfilechooserdefault.c:5268
+#: gtk/gtkfilechooserdefault.c:5060
 #, c-format
 msgid ""
 "Could not select %s:\n"
 "%s"
-msgstr ""
+msgstr "%s:को चयन भएन \n"
+"%s"
 
-#: gtk/gtkfilechooserdefault.c:5306
+#: gtk/gtkfilechooserdefault.c:5098
 msgid "Open Location"
-msgstr ""
+msgstr "खुला स्थान"
 
-#: gtk/gtkfilechooserdefault.c:5312
-#, fuzzy
-msgid "Save in Location"
-msgstr "à¤à¤¨à¥à¤: "
-
-#: gtk/gtkfilechooserdefault.c:5330
+#: gtk/gtkfilechooserdefault.c:5122
 #, fuzzy
 msgid "_Location:"
-msgstr "à¤à¤¨à¥à¤: "
+msgstr "Ã Â¤Â›Ã Â¤Â¨Ã Â¥Â‹Ã Â¤ÂŸ: "
+msgid "_स्थान:"
+msgstr "Ã Â¤Â›Ã Â¤Â¨Ã Â¥Â‹Ã Â¤ÂŸ: "
 
 #: gtk/gtkfilesel.c:730
 #, fuzzy
 msgid "Folders"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
 #: gtk/gtkfilesel.c:734
 #, fuzzy
 msgid "Fol_ders"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
 #: gtk/gtkfilesel.c:766
 msgid "Files"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
 #: gtk/gtkfilesel.c:770
 #, fuzzy
 msgid "_Files"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, fuzzy, c-format
-msgid "Folder unreadable: %s"
-msgstr "Directories à¤ªà¤¢à¥à¤¨ à¤¸à¤à¤¿à¤à¤¨: %s"
+msgid "Folder unreadable:%s"
+msgstr "Directories Ã Â¤ÂªÃ Â¤Â¢Ã Â¥ÂÃ Â¤Â¨ Ã Â¤Â¸Ã Â¤Â•Ã Â¤Â¿Ã Â¤ÂÃ Â¤Â¨: %s"
 
 #: gtk/gtkfilesel.c:984
 #, c-format
@@ -1125,30 +1136,31 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
-msgstr ""
+msgstr "_नयाँ फाइलपत्र"
 
 #: gtk/gtkfilesel.c:1126
 #, fuzzy
 msgid "De_lete File"
-msgstr "à¤«à¤¾à¤à¤² à¤®à¥à¤à¥à¤¨à¥"
+msgstr ""
 
 #: gtk/gtkfilesel.c:1137
 #, fuzzy
 msgid "_Rename File"
-msgstr "à¤«à¤¾à¤à¤² à¤®à¥à¤à¥à¤¨à¥"
+msgstr ""
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "\"%s\" नाममा यस्ता संकेतहरु छन् जो फाइलनामका लागि अयोग्य छन् "
 
 #: gtk/gtkfilesel.c:1441
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
-msgstr ""
+msgstr "\"%s\": %s फाइलपत्र निर्माण क्रममा गल्ती \n"
+"%s"
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
@@ -1156,33 +1168,30 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
-msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1484
-msgid "New Folder"
-msgstr ""
+msgid "Error creating folder \"%s\": %s"
+msgstr "\"%s\": %s फाइलपत्र निर्माण क्रममा गल्ती"
 
 #: gtk/gtkfilesel.c:1499
 msgid "_Folder name:"
-msgstr ""
+msgstr "_फाइलपत्रको नाम:"
 
 #: gtk/gtkfilesel.c:1523
 #, fuzzy
 msgid "C_reate"
-msgstr "à¤¬à¤¨à¤¾à¤"
+msgstr ""
 
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "\"%s\" नाममा यस्ता संकेतहरु छन् जो फाइलनामका लागि अयोग्य छन् "
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
-msgstr ""
+msgstr "\"%s\": %s फाइल हटाउने क्रममा गल्ती \n"
+"%s"
 
 #: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
@@ -1191,16 +1200,16 @@ msgstr ""
 #: gtk/gtkfilesel.c:1580
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "\"%s\": %s फाइल हटाउने क्रममा गल्ती"
 
 #: gtk/gtkfilesel.c:1623
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr ""
+msgstr "फाइल \"%s\" पुरै हट्यो ? "
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr "à¤«à¤¾à¤à¤² à¤®à¥à¤à¥à¤¨à¥"
+msgstr ""
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
@@ -1212,168 +1221,164 @@ msgstr ""
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
-msgstr ""
+msgstr "\"%s\": %s फाइल पुनर्नामाकरण क्रममा गल्ती \n"
+"%s"
 
 #: gtk/gtkfilesel.c:1690
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
-msgstr ""
-
+msgstr "\"%s\": %s फाइल पुनर्नामाकरण क्रममा गल्ती \n"
+"%s"
+	
 #: gtk/gtkfilesel.c:1700
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "फाइल \"%s\"बाट\"%s\": %s मा पुनर्नामाकरण क्रममा गल्ती"
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
-msgstr ""
+msgstr "फाइलको पुनर्नामाकरण गर्नुहोस्"
 
 #: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr ""
+msgstr "फाइल \"%s\"लाई पुनर्नामाकरण गर्नुहोस्"
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
-msgstr ""
+msgstr "_नयाँ नाम "
 
 #: gtk/gtkfilesel.c:2223
 #, fuzzy
 msgid "_Selection: "
-msgstr "à¤à¤¨à¥à¤: "
+msgstr "Ã Â¤Â›Ã Â¤Â¨Ã Â¥Â‹Ã Â¤ÂŸ: "
 
 #: gtk/gtkfilesel.c:3139
 #, c-format
 msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
+"The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
+"environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
-msgstr ""
+msgstr "अमान्य युट्टिएफ-८"
 
 #: gtk/gtkfilesel.c:4019
 msgid "Name too long"
-msgstr ""
+msgstr "धेरै लामो नाम"
 
 #: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "फाइलको नाम परिवर्तन गर्न सकिएन"
 
 #: gtk/gtkfilesystemmodel.c:1272
 msgid "(Empty)"
-msgstr ""
+msgstr "(खालि)"
 
-#: gtk/gtkfilesystemunix.c:418 gtk/gtkfilesystemwin32.c:385
+#: gtk/gtkfilesystemunix.c:417 gtk/gtkfilesystemwin32.c:380
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:425 gtk/gtkfilesystemunix.c:616
-#: gtk/gtkfilesystemunix.c:1734 gtk/gtkfilesystemwin32.c:392
-#: gtk/gtkfilesystemwin32.c:1318
+#: gtk/gtkfilesystemunix.c:424 gtk/gtkfilesystemunix.c:615
+#: gtk/gtkfilesystemunix.c:1666 gtk/gtkfilesystemwin32.c:387
+#: gtk/gtkfilesystemwin32.c:1269
 #, c-format
 msgid "error getting information for '%s': %s"
-msgstr ""
+msgstr "'%s': %s का लागि सूचना प्राप्त गर्ने क्रममा गल्ती"
 
-#: gtk/gtkfilesystemunix.c:489 gtk/gtkfilesystemwin32.c:433
+#: gtk/gtkfilesystemunix.c:488 gtk/gtkfilesystemwin32.c:428
 #, c-format
 msgid "error creating directory '%s': %s"
-msgstr ""
+msgstr "'%s': %s का लागि निर्देशिका निर्माण गर्ने क्रममा गल्ती"
 
-#: gtk/gtkfilesystemunix.c:569 gtk/gtkfilesystemwin32.c:493
+
+#: gtk/gtkfilesystemunix.c:568 gtk/gtkfilesystemwin32.c:488
 msgid "This file system does not support mounting"
-msgstr ""
+msgstr "यो लेखपत्रले (फाइल) mounting सपोर्त (support) गर्दैन"
 
-#: gtk/gtkfilesystemunix.c:577
+#: gtk/gtkfilesystemunix.c:576
 #, fuzzy
 msgid "Filesystem"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
-#: gtk/gtkfilesystemunix.c:778
-#, c-format
-msgid ""
-"The name \"%s\" is not valid because it contains the character \"%s\". "
-"Please use a different name."
-msgstr ""
-
-#: gtk/gtkfilesystemunix.c:1328 gtk/gtkfilesystemwin32.c:922
+#: gtk/gtkfilesystemunix.c:1260 gtk/gtkfilesystemwin32.c:875
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1624
+#: gtk/gtkfilesystemunix.c:1556
 #, c-format
 msgid "error getting information for '%s'"
-msgstr ""
+msgstr "'%s' का लागि सूचना लिँदाको गल्ति"
 
-#: gtk/gtkfilesystemwin32.c:1080
+#: gtk/gtkfilesystemwin32.c:1031
 msgid "This file system does not support icons for everything"
-msgstr ""
+msgstr "यस लेखप्रणालीले सबै चित्रसंकेतलाई सहयोग गर्दैन"
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
-msgstr ""
+msgstr "लिपि छान्नुहोस्।"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:288
 msgid "Sans 12"
-msgstr ""
+msgstr "सन्स १२"
 
 #: gtk/gtkfontbutton.c:806
 msgid "Font"
-msgstr "à¤«à¤¨à¥à¤"
+msgstr "Ã Â¤Â«Ã Â¤Â¨Ã Â¥ÂÃ Â¤ÂŸ"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "abcdefghijk ABCDEFGHIJK"
 
 #: gtk/gtkfontsel.c:333
 #, fuzzy
 msgid "_Family:"
-msgstr "à¤µà¤°à¥à¤:"
+msgstr "Ã Â¤ÂµÃ Â¤Â°Ã Â¥ÂÃ Â¤Â—:"
 
 #: gtk/gtkfontsel.c:339
 #, fuzzy
 msgid "_Style:"
-msgstr "à¤¶à¥à¤²à¥ à¤¥à¤ªà¥à¤¨à¥:"
+msgstr "Ã Â¤Â¶Ã Â¥ÂˆÃ Â¤Â²Ã Â¥Â€ Ã Â¤Â¥Ã Â¤ÂªÃ Â¥ÂÃ Â¤Â¨Ã Â¥Â:"
 
 #: gtk/gtkfontsel.c:345
 #, fuzzy
 msgid "Si_ze:"
-msgstr "à¤¸à¤¾à¤à¤:"
+msgstr "Ã Â¤Â¸Ã Â¤Â¾Ã Â¤ÂˆÃ Â¤Âœ:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:470
 #, fuzzy
 msgid "_Preview:"
-msgstr "à¤¦à¥à¤·à¥à¤¯:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1286
 msgid "Font Selection"
-msgstr "à¤«à¤¨à¥à¤ à¤à¤¨à¥à¤"
+msgstr ""
 
 #: gtk/gtkgamma.c:400
 msgid "Gamma"
-msgstr "Gamma"
+msgstr "गामा"
 
 #: gtk/gtkgamma.c:410
 #, fuzzy
 msgid "_Gamma value"
-msgstr "Gamma à¤®à¤¾à¤¨"
+msgstr "_गामा "
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
 #: gtk/gtkiconfactory.c:1564
 #, c-format
-msgid "Error loading icon: %s"
-msgstr ""
+msgid "Error loading icon:"
+msgstr "चित्रसंकेत  लोड गर्दाको गल्ति:"
 
 #: gtk/gtkicontheme.c:1186
 #, c-format
@@ -1392,98 +1397,98 @@ msgstr ""
 #: gtk/gtkimmodule.c:421
 #, fuzzy
 msgid "Default"
-msgstr "à¤®à¥à¤à¥à¤¨à¥"
+msgstr "Ã Â¤Â®Ã Â¥Â‡Ã Â¤ÂŸÃ Â¥ÂÃ Â¤Â¨Ã Â¥Â"
 
 #: gtk/gtkinputdialog.c:234
 msgid "Input"
-msgstr "Input"
+msgstr "निवेश"
 
 #: gtk/gtkinputdialog.c:243
 msgid "No extended input devices"
-msgstr ""
+msgstr "निवेश साधनहरु नफराकिएको"
 
 #: gtk/gtkinputdialog.c:255
 #, fuzzy
 msgid "_Device:"
-msgstr "à¤à¤ªà¤à¤°à¤£:"
+msgstr "Ã Â¤Â‰Ã Â¤ÂªÃ Â¤Â•Ã Â¤Â°Ã Â¤Â£:"
 
 #: gtk/gtkinputdialog.c:272
 msgid "Disabled"
-msgstr "à¤à¤¸à¤®à¤°à¥à¤¥"
+msgstr "Ã Â¤Â…Ã Â¤Â¸Ã Â¤Â®Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¥"
 
 #: gtk/gtkinputdialog.c:279
 msgid "Screen"
-msgstr ""
+msgstr "पर्दा"
 
 #: gtk/gtkinputdialog.c:286
 msgid "Window"
-msgstr "à¤µà¤¿à¤¨à¥à¤¡à¥"
+msgstr "Ã Â¤ÂµÃ Â¤Â¿Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¡Ã Â¥Â‹"
 
 #: gtk/gtkinputdialog.c:293
 msgid "_Mode: "
-msgstr ""
+msgstr "_शौली"
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:324
 #, fuzzy
 msgid "_Axes"
-msgstr "à¤à¤à¥à¤¸à¥à¤¸"
+msgstr "Ã Â¤ÂÃ Â¤Â•Ã Â¥ÂÃ Â¤Â¸Ã Â¥Â‡Ã Â¤Â¸"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:341
 #, fuzzy
 msgid "_Keys"
-msgstr "Keys"
+msgstr "_कीज्"
 
 #: gtk/gtkinputdialog.c:561
 msgid "X"
-msgstr "X"
+msgstr "एक्स"
 
 #: gtk/gtkinputdialog.c:562
 msgid "Y"
-msgstr "Y"
+msgstr "वाई"
 
 #: gtk/gtkinputdialog.c:563
 msgid "Pressure"
-msgstr ""
+msgstr "चाप"
 
 #: gtk/gtkinputdialog.c:564
 msgid "X Tilt"
-msgstr ""
+msgstr "ढल्किएको एक्स"
 
 #: gtk/gtkinputdialog.c:565
 msgid "Y Tilt"
-msgstr ""
+msgstr "ढल्किएको वाई"
 
 #: gtk/gtkinputdialog.c:566
 msgid "Wheel"
-msgstr ""
+msgstr "पाङ्ग्रा"
 
 #: gtk/gtkinputdialog.c:606
 msgid "none"
-msgstr "à¤à¥à¤¹à¤¿à¤ªà¤¨à¤¿ à¤à¥à¤¨"
+msgstr "Ã Â¤Â•Ã Â¥Â‡Ã Â¤Â¹Ã Â¤Â¿Ã Â¤ÂªÃ Â¤Â¨Ã Â¤Â¿ Ã Â¤Â›Ã Â¥ÂˆÃ Â¤Â¨"
 
 #: gtk/gtkinputdialog.c:642 gtk/gtkinputdialog.c:678
 msgid "(disabled)"
-msgstr "(à¤à¤¸à¤®à¤°à¥à¤¥)"
+msgstr "(Ã Â¤Â…Ã Â¤Â¸Ã Â¤Â®Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¥)"
 
 #: gtk/gtkinputdialog.c:671
 msgid "(unknown)"
-msgstr "(à¤à¤ªà¤°à¤¿à¤à¤¿à¤¤)"
+msgstr "(Ã Â¤Â…Ã Â¤ÂªÃ Â¤Â°Ã Â¤Â¿Ã Â¤ÂšÃ Â¤Â¿Ã Â¤Â¤)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:758
 msgid "clear"
-msgstr "à¤¸à¤«à¤¾ à¤à¤°"
+msgstr "Ã Â¤Â¸Ã Â¤Â«Ã Â¤Â¾ Ã Â¤Â—Ã Â¤Â°"
 
 #: gtk/gtklabel.c:3297
 #, fuzzy
 msgid "Select All"
-msgstr "à¤à¤¨à¥à¤: "
+msgstr "Ã Â¤Â›Ã Â¤Â¨Ã Â¥Â‹Ã Â¤ÂŸ: "
 
 #: gtk/gtklabel.c:3307
 msgid "Input Methods"
-msgstr ""
+msgstr "निबेस तरिका"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1492,16 +1497,16 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:854
 msgid "default:LTR"
-msgstr "default:LTR"
+msgstr "पूर्वनिर्धारित :एल टि आर "
 
 #: gtk/gtknotebook.c:2680 gtk/gtknotebook.c:5073
 #, c-format
 msgid "Page %u"
-msgstr "à¤ªà¥à¤·à¥à¤  %u"
+msgstr "Ã Â¤ÂªÃ Â¥ÂƒÃ Â¤Â·Ã Â¥ÂÃ Â¤Â  %u"
 
 #: gtk/gtkradiotoolbutton.c:90
 msgid "Group"
-msgstr ""
+msgstr "समूह"
 
 #: gtk/gtkradiotoolbutton.c:91
 msgid "The radio tool button whose group this button belongs to."
@@ -1510,12 +1515,12 @@ msgstr ""
 #: gtk/gtkrc.c:2390
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr ""
+msgstr "समावेश फाइल : \"%s\" भेट्टिएन"
 
 #: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr ""
+msgstr "पिक्सम्याप _मार्ग \"%s\"मा चित्रात्मक फाइल पत्ता लागेन"
 
 #: gtk/gtkrc.c:3467
 #, c-format
@@ -1526,258 +1531,258 @@ msgstr ""
 #: gtk/gtkstock.c:268
 #, fuzzy
 msgid "Information"
-msgstr "à¤«à¤¨à¥à¤à¤à¥ à¤¬à¤¾à¤°à¥à¤®à¤¾ à¤¸à¥à¤à¤¨à¤¾"
+msgstr "Ã Â¤Â«Ã Â¤Â¨Ã Â¥ÂÃ Â¤ÂŸÃ Â¤Â•Ã Â¥Â‹ Ã Â¤Â¬Ã Â¤Â¾Ã Â¤Â°Ã Â¥Â‡Ã Â¤Â®Ã Â¤Â¾ Ã Â¤Â¸Ã Â¥ÂÃ Â¤ÂšÃ Â¤Â¨Ã Â¤Â¾"
 
 #: gtk/gtkstock.c:269
 msgid "Warning"
-msgstr ""
+msgstr "चेतावनी"
 
 #: gtk/gtkstock.c:270
 msgid "Error"
-msgstr "à¤¤à¥à¤°à¥à¤à¤¿"
+msgstr "Ã Â¤Â¤Ã Â¥ÂÃ Â¤Â°Ã Â¥ÂÃ Â¤ÂŸÃ Â¤Â¿"
 
 #: gtk/gtkstock.c:271
 msgid "Question"
-msgstr ""
+msgstr "प्रश्न"
 
 #: gtk/gtkstock.c:277
 #, fuzzy
 msgid "_Apply"
-msgstr "à¤²à¤¾à¤à¥ à¤à¤°à¥à¤¨à¥"
+msgstr "Ã Â¤Â²Ã Â¤Â¾Ã Â¤Â—Ã Â¥Â Ã Â¤Â—Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¨Ã Â¥Â"
 
 #: gtk/gtkstock.c:278
 msgid "_Bold"
-msgstr ""
+msgstr "_गाढा"
 
 #: gtk/gtkstock.c:279
 #, fuzzy
 msgid "_Cancel"
-msgstr "à¤à¤¾à¤°à¥à¤à¥"
+msgstr "Ã Â¤Â–Ã Â¤Â¾Ã Â¤Â°Ã Â¥Â‡Ã Â¤ÂœÃ Â¥Â€"
 
 #: gtk/gtkstock.c:280
 msgid "_CD-Rom"
-msgstr ""
+msgstr "सी डी-रोम"
 
 #: gtk/gtkstock.c:281
 #, fuzzy
 msgid "_Clear"
-msgstr "à¤¸à¤«à¤¾ à¤à¤°"
+msgstr "Ã Â¤Â¸Ã Â¤Â«Ã Â¤Â¾ Ã Â¤Â—Ã Â¤Â°"
 
 #: gtk/gtkstock.c:282
 #, fuzzy
 msgid "_Close"
-msgstr "à¤¬à¤¨à¥à¤¦ à¤à¤°à¥à¤¨à¥"
+msgstr "Ã Â¤Â¬Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¦ Ã Â¤Â—Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¨Ã Â¥Â"
 
 #: gtk/gtkstock.c:283
 msgid "_Convert"
-msgstr ""
+msgstr "_बद्लिनु"
 
 #: gtk/gtkstock.c:284
 msgid "_Copy"
-msgstr ""
+msgstr "_प्रतिलिपि"
 
 #: gtk/gtkstock.c:285
 msgid "Cu_t"
-msgstr ""
+msgstr "_काट्नु"
 
 #: gtk/gtkstock.c:286
 #, fuzzy
 msgid "_Delete"
-msgstr "à¤®à¥à¤à¥à¤¨à¥"
+msgstr "Ã Â¤Â®Ã Â¥Â‡Ã Â¤ÂŸÃ Â¥ÂÃ Â¤Â¨Ã Â¥Â"
 
 #: gtk/gtkstock.c:287
 msgid "_Execute"
-msgstr ""
+msgstr "_कार्यान्यन गर्नु"
 
 #: gtk/gtkstock.c:288
 msgid "_Find"
-msgstr ""
+msgstr "_खोज्नु"
 
 #: gtk/gtkstock.c:289
 msgid "Find and _Replace"
-msgstr ""
+msgstr "खोज्नु र _स्थानपूर्ति गर्नु"
 
 #: gtk/gtkstock.c:290
 msgid "_Floppy"
-msgstr ""
+msgstr "_फ्लपी"
 
 #: gtk/gtkstock.c:291
 msgid "_Bottom"
-msgstr ""
+msgstr "_तल"
 
 #: gtk/gtkstock.c:292
 msgid "_First"
-msgstr ""
+msgstr "_पहिलो"
 
 #: gtk/gtkstock.c:293
 msgid "_Last"
-msgstr ""
+msgstr "_अन्तिम"
 
 #: gtk/gtkstock.c:294
 msgid "_Top"
-msgstr ""
+msgstr "_टुप्पो"
 
 #: gtk/gtkstock.c:295
 msgid "_Back"
-msgstr ""
+msgstr "_कालो"
 
 #: gtk/gtkstock.c:296
 msgid "_Down"
-msgstr ""
+msgstr "_तल"
 
 #: gtk/gtkstock.c:297
 msgid "_Forward"
-msgstr ""
+msgstr "_अगिल्लो"
 
 #: gtk/gtkstock.c:298
 msgid "_Up"
-msgstr ""
+msgstr "_माथि"
 
 #: gtk/gtkstock.c:299
 msgid "_Harddisk"
-msgstr ""
+msgstr "_Harddisk"
 
 #: gtk/gtkstock.c:300
 #, fuzzy
 msgid "_Help"
-msgstr "à¤¸à¤¹à¤¾à¤¯à¤"
+msgstr "Ã Â¤Â¸Ã Â¤Â¹Ã Â¤Â¾Ã Â¤Â¯Ã Â¤Â•"
 
 #: gtk/gtkstock.c:301
 msgid "_Home"
-msgstr ""
+msgstr "_मुख्य"
 
 #: gtk/gtkstock.c:302
 msgid "Increase Indent"
-msgstr ""
+msgstr "बड्दो दाँतीक्रम"
 
 #: gtk/gtkstock.c:303
 msgid "Decrease Indent"
-msgstr ""
+msgstr "घट्दो दाँतीक्रम"
 
 #: gtk/gtkstock.c:304
 msgid "_Index"
-msgstr ""
+msgstr "_सूची"
 
 #: gtk/gtkstock.c:305
 #, fuzzy
 msgid "_Italic"
-msgstr "italic"
+msgstr "_छड्के"
 
 #: gtk/gtkstock.c:306
 msgid "_Jump to"
-msgstr ""
+msgstr "_मा उफ्र"
 
 #: gtk/gtkstock.c:307
 #, fuzzy
 msgid "_Center"
-msgstr "à¤¬à¤¨à¤¾à¤"
+msgstr "Ã Â¤Â¬Ã Â¤Â¨Ã Â¤Â¾Ã Â¤Â‰"
 
 #: gtk/gtkstock.c:308
 #, fuzzy
 msgid "_Fill"
-msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
 #: gtk/gtkstock.c:309
 msgid "_Left"
-msgstr ""
+msgstr "_देब्रे"
 
 #: gtk/gtkstock.c:310
 msgid "_Right"
-msgstr ""
+msgstr "_दाहिने"
 
 #: gtk/gtkstock.c:311
 msgid "_Network"
-msgstr ""
+msgstr "_सञ्जाल"
 
 #: gtk/gtkstock.c:312
 msgid "_New"
-msgstr ""
+msgstr "_नयाँ"
 
 #: gtk/gtkstock.c:313
 msgid "_No"
-msgstr ""
+msgstr "_होइन"
 
 #: gtk/gtkstock.c:314
 #, fuzzy
 msgid "_OK"
-msgstr "à¤ à¥à¤ à¤"
+msgstr "Ã Â¤Â Ã Â¥Â€Ã Â¤Â• Ã Â¤Â›"
 
 #: gtk/gtkstock.c:315
 msgid "_Open"
-msgstr ""
+msgstr "_खोल्नु"
 
 #: gtk/gtkstock.c:316
 msgid "_Paste"
-msgstr ""
+msgstr "_टाँस"
 
 #: gtk/gtkstock.c:317
 msgid "_Preferences"
-msgstr ""
+msgstr "_अधिमान्य"
 
 #: gtk/gtkstock.c:318
 msgid "_Print"
-msgstr ""
+msgstr "_टंकण"
 
 #: gtk/gtkstock.c:319
 #, fuzzy
 msgid "Print Pre_view"
-msgstr "à¤¦à¥à¤·à¥à¤¯:"
+msgstr "Ã Â¤Â¦Ã Â¥ÂƒÃ Â¤Â·Ã Â¥ÂÃ Â¤Â¯:"
 
 #: gtk/gtkstock.c:320
 msgid "_Properties"
-msgstr ""
+msgstr "_गुण"
 
 #: gtk/gtkstock.c:321
 msgid "_Quit"
-msgstr ""
+msgstr "_अन्त्य"
 
 #: gtk/gtkstock.c:322
 #, fuzzy
 msgid "_Redo"
-msgstr "à¤°à¤¾à¤¤à¥:"
+msgstr "Ã Â¤Â°Ã Â¤Â¾Ã Â¤Â¤Ã Â¥Â‹:"
 
 #: gtk/gtkstock.c:323
 msgid "_Refresh"
-msgstr ""
+msgstr "_पुनर्ताजगीकरण"
 
 #: gtk/gtkstock.c:325
 msgid "_Revert"
-msgstr ""
+msgstr "_फर्काउनु"
 
 #: gtk/gtkstock.c:326
 #, fuzzy
 msgid "_Save"
-msgstr "à¤¸à¥à¤­"
+msgstr "Ã Â¤Â¸Ã Â¥Â‡Ã Â¤Â­"
 
 #: gtk/gtkstock.c:327
 #, fuzzy
 msgid "Save _As"
-msgstr "à¤¸à¥à¤­"
+msgstr "Ã Â¤Â¸Ã Â¥Â‡Ã Â¤Â­"
 
 #: gtk/gtkstock.c:328
 msgid "_Color"
-msgstr ""
+msgstr "_रङ्ग"
 
 #: gtk/gtkstock.c:329
 #, fuzzy
 msgid "_Font"
-msgstr "à¤«à¤¨à¥à¤"
+msgstr "Ã Â¤Â«Ã Â¤Â¨Ã Â¥ÂÃ Â¤ÂŸ"
 
 #: gtk/gtkstock.c:330
 msgid "_Ascending"
-msgstr ""
+msgstr "वढ्दो"
 
 #: gtk/gtkstock.c:331
 msgid "_Descending"
-msgstr ""
+msgstr "_घट्दो"
 
 #: gtk/gtkstock.c:332
 msgid "_Spell Check"
-msgstr ""
+msgstr "_हिज्जे जाँच्नु"
 
 #: gtk/gtkstock.c:333
 msgid "_Stop"
-msgstr ""
+msgstr "_रोक्नु"
 
 #: gtk/gtkstock.c:334
 msgid "_Strikethrough"
@@ -1786,43 +1791,43 @@ msgstr ""
 #: gtk/gtkstock.c:335
 #, fuzzy
 msgid "_Undelete"
-msgstr "à¤®à¥à¤à¥à¤¨à¥"
+msgstr "Ã Â¤Â®Ã Â¥Â‡Ã Â¤ÂŸÃ Â¥ÂÃ Â¤Â¨Ã Â¥Â"
 
 #: gtk/gtkstock.c:336
 msgid "_Underline"
-msgstr ""
+msgstr "_रेखांकित"
 
 #: gtk/gtkstock.c:337
 msgid "_Undo"
-msgstr ""
+msgstr "_गरेको कुरा उल्टाउनु"
 
 #: gtk/gtkstock.c:338
 msgid "_Yes"
-msgstr ""
+msgstr "_हो"
 
 #: gtk/gtkstock.c:339
 msgid "_Normal Size"
-msgstr ""
+msgstr "_साधारण आकार"
 
 #: gtk/gtkstock.c:340
 msgid "Best _Fit"
-msgstr ""
+msgstr "ऊत्तम  _योग्य"
 
 #: gtk/gtkstock.c:341
 msgid "Zoom _In"
-msgstr ""
+msgstr "दृश्य _बढाउ"
 
 #: gtk/gtkstock.c:342
 msgid "Zoom _Out"
-msgstr ""
+msgstr "दृश्य _घटाउ"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "एलआरएम _देब्रे-बाट-दाहिने चिन्ह"
 
 #: gtk/gtktextutil.c:48
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "आरएलएम_दाहिने-बाट-देब्रे चिन्ह"
 
 #: gtk/gtktextutil.c:49
 msgid "LRE Left-to-right _embedding"
@@ -1863,86 +1868,86 @@ msgstr ""
 
 #: gtk/gtktipsquery.c:185
 msgid "--- No Tip ---"
-msgstr "--- à¤¸à¥à¤à¤¾à¤¬ à¤à¥à¤¨ ---"
+msgstr "--- Ã Â¤Â¸Ã Â¥ÂÃ Â¤ÂÃ Â¤Â¾Ã Â¤Â¬ Ã Â¤Â›Ã Â¥ÂˆÃ Â¤Â¨ ---"
 
-#: gtk/gtkuimanager.c:1077
+#: gtk/gtkuimanager.c:1075
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1295
+#: gtk/gtkuimanager.c:1284
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr ""
+msgstr "रेखामा अप्रत्याशित '%s' start tag %d char %d"
 
-#: gtk/gtkuimanager.c:1380
+#: gtk/gtkuimanager.c:1369
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr ""
+msgstr " रेखामा अप्रत्याशित क्यारेक्टर तथ्याङक् (डाटा) %d char %d"
 
-#: gtk/gtkuimanager.c:2157
+#: gtk/gtkuimanager.c:2146
 msgid "Empty"
-msgstr ""
+msgstr "खाली"
 
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "अंहारिक (इजेड+) (EZ+)"
 
 #. ID
 #: modules/input/imcedilla.c:91
 msgid "Cedilla"
-msgstr ""
+msgstr "सिडिल्ला"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "सिरिलिक भाषा (Transliterated)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "इनुकिटुत (Transliterated)"
 
 #. ID
 #: modules/input/imipa.c:145
 msgid "IPA"
-msgstr ""
+msgstr "'आईपिऐ'"
 
 #. ID
 #: modules/input/imthai-broken.c:178
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "थाई (भाचेको)"
 
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "टाइग्रिगना-इरित्रिन (इजेड+) (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "टाइग्रिगना-इठोपिएन (इजेड+) (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "भेट्नामिज (भिआईक्युआर)"
 
 #. ID
 #: modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr ""
+msgstr "'एक्स' input विधि"
 
 #: tests/testfilechooser.c:179
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr ""
+msgstr "लेखपत्रको लागि पूर्ण सूचना(जानकारी) नभएको '%s': %s"
 
 #, fuzzy
 #~ msgid "File name"
-#~ msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+#~ msgstr "Ã Â¤Â«Ã Â¤Â¾Ã Â¤Â‡Ã Â¤Â²Ã Â¤Â¹Ã Â¤Â°Ã Â¥Â‚"
 
 #, fuzzy
 #~ msgid "Preview"
-#~ msgstr "à¤¦à¥à¤·à¥à¤¯:"
+#~ msgstr "Ã Â¤Â¦Ã Â¥ÂƒÃ Â¤Â·Ã Â¥ÂÃ Â¤Â¯:"
