@@ -1,3 +1,8 @@
+Sat Dec 19 01:56:13 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_button_press): fixed GDK_2BUTTON_PRESS
+ 	bug.
+
 Fri Dec 18 15:30:43 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in: add ja to ALL_LINGUAS

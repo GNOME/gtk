@@ -4852,6 +4852,9 @@ gtk_clist_button_press (GtkWidget      *widget,
   /* selections on the list */
   if (event->window == clist->clist_window)
     {
+      if (clist->drag_button)
+	return FALSE;
+
       x = event->x;
       y = event->y;
 
@@ -4878,7 +4881,7 @@ gtk_clist_button_press (GtkWidget      *widget,
 	    }
 	  else
 	    {
-	      if (clist->drag_button == 0)
+	      if (clist->click_cell.row >= 0 || clist->click_cell.column >= 0)
 		return FALSE;
 
 	      clist->click_cell.row = -1;
@@ -5001,7 +5004,6 @@ gtk_clist_button_press (GtkWidget      *widget,
 		}
 	    }
 	}
-
       return FALSE;
     }
 
@@ -5028,8 +5030,6 @@ gtk_clist_button_press (GtkWidget      *widget,
 	if (GTK_CLIST_ADD_MODE(clist))
 	  gdk_gc_set_line_attributes (clist->xor_gc, 1, GDK_LINE_SOLID, 0, 0);
 	draw_xor_line (clist);
-
-	return FALSE;
       }
   return FALSE;
 }
@@ -5081,7 +5081,7 @@ gtk_clist_button_release (GtkWidget      *widget,
       return FALSE;
     }
 
-  if (clist->drag_button)
+  if (clist->drag_button == event->button)
     {
       gint row;
       gint column;
@@ -5136,7 +5136,8 @@ gtk_clist_motion (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
 
   clist = GTK_CLIST (widget);
-  if (!(gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)))
+  if (!(gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)) ||
+      !clist->drag_button)
     return FALSE;
 
   button_actions = clist->button_actions[clist->drag_button - 1];
@@ -5187,7 +5188,8 @@ gtk_clist_motion (GtkWidget      *widget,
   if (GTK_CLIST_REORDERABLE(clist) && button_actions & GTK_BUTTON_DRAGS)
     {
       /* delayed drag start */
-      if (clist->click_cell.row >= 0 && clist->click_cell.column >= 0 &&
+      if (event->window == clist->clist_window &&
+	  clist->click_cell.row >= 0 && clist->click_cell.column >= 0 &&
 	  (y < 0 || y >= clist->clist_window_height ||
 	   x < 0 || x >= clist->clist_window_width  ||
 	   y < ROW_TOP_YPIXEL (clist, clist->click_cell.row) ||
