@@ -173,7 +173,6 @@ Thu Jan 22 18:45:26 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Organized, added some names.
 
->>>>>>> 1.4833
 Thu Jan 22 16:59:36 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkliststore.c (gtk_list_store_reorder): Doc fix.
