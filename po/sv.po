@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
-"PO-Revision-Date: 2002-03-05 03:02+0100\n"
+"POT-Creation-Date: 2002-04-02 00:30+0200\n"
+"PO-Revision-Date: 2002-04-02 00:30+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -119,6 +119,23 @@ msgstr ""
 "Internt fel: Bildinläsningsmodulen \"%s\" misslyckades med att läsa in en "
 "bild, men gav inte en anledning till misslyckandet"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Bildhuvudet är trasigt"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Bildformatet är okänt"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Bildpunktsdata är trasigt"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "misslyckades med att allokera bildbuffert på %u byte"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Inte tillräckligt med minne för att läsa in bilden"
@@ -130,44 +147,6 @@ msgstr "BMP-bilden har huvudstorlek som inte stöds"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP-bilden har felaktig huvuddata"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Misslyckades med att läsa ICO: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "ICO-filen saknade en del data (den kanske klipptes på något sätt?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Inte tillräckligt med minne för att läsa in ikonen"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "Ogiltigt huvud i ikon"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Ikonen har ingen bredd"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Ikonen har ingen höjd"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Komprimerade ikoner stöds inte"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Ikontypen stöds inte"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "Inte tillräckligt med minne för att läsa in ICO-filen"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -214,9 +193,8 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Version %s av filformatet GIF stöds inte"
 
 #: gdk-pixbuf/io-gif.c:1144
-#, fuzzy
 msgid "GIF image contained a frame with height or width 0."
-msgstr "GIF-animationen innehöll en ram med en felaktig storlek"
+msgstr "GIF-bilden innehöll en ram med höjden eller bredden 0."
 
 #: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
@@ -239,6 +217,44 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bilden var trunkerad eller ofullständig."
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Misslyckades med att läsa ICO: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "ICO-filen saknade en del data (den kanske klipptes på något sätt?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Inte tillräckligt med minne för att läsa in ikonen"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "Ogiltigt huvud i ikon"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Ikonen har ingen bredd"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Ikonen har ingen höjd"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Komprimerade ikoner stöds inte"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Ikontypen stöds inte"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "Inte tillräckligt med minne för att läsa in ICO-filen"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -275,25 +291,25 @@ msgstr ""
 "tillåtet."
 
 #: gdk-pixbuf/io-png.c:55
-#, fuzzy
 msgid "Bits per channel of PNG image is invalid."
-msgstr "Råa PNM-bildtypen är ogiltig"
+msgstr "Bitar per kanal i PNG-bilden är ogiltigt."
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr ""
+msgstr "Transformerad PNG har bredden eller höjden noll."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
+msgstr "Bitar per kanal av transformerad PNG är inte 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
+msgstr "Transformerad PNG är inte RGB eller RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
+"Transformerad PNG har antal kanaler som inte stöds, måste vara 3 eller 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -404,6 +420,18 @@ msgstr "Oväntat slut på PNM-bilddata"
 msgid "Insufficient memory to load PNM file"
 msgstr "Inte tillräckligt med minne för att läsa in PNM-fil"
 
+#: gdk-pixbuf/io-ras.c:158
+msgid "RAS image has bogus header data"
+msgstr "RAS-bilden har felaktig huvuddata"
+
+#: gdk-pixbuf/io-ras.c:180
+msgid "RAS image has unknown type"
+msgstr "RAS-bilden har okänd typ"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+msgid "Not enough memory to load RAS image"
+msgstr "Inte tillräckligt med minne för att läsa in RAS-bilden"
+
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Kan inte allokera minne för IOBuffer-struct"
@@ -430,9 +458,8 @@ msgstr "fseek() misslyckades -- för tidigt filslut troligen påträffat"
 
 #: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1030 gdk-pixbuf/io-tga.c:1142
 #: gdk-pixbuf/io-tga.c:1225
-#, fuzzy
 msgid "Insufficient memory to load TGA image"
-msgstr "Inte tillräckligt med minne för att läsa in PNG-fil"
+msgstr "Inte tillräckligt med minne för att läsa in TGA-bild"
 
 #: gdk-pixbuf/io-tga.c:305
 msgid "Can't allocate new pixbuf"
@@ -606,23 +633,6 @@ msgstr "Kan inte allokera minne för inläsning av XPM-bild"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Misslyckades med skrivning till temporär fil vid inläsning av XPM-bild"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Bildhuvudet är trasigt"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Bildformatet är okänt"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Bildpunktsdata är trasigt"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "misslyckades med att allokera bildbuffert på %u byte"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1928,18 +1938,17 @@ msgid "Selection: "
 msgstr "Markering: "
 
 #: gtk/gtkfilesel.c:2983
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
-"Filnamnet %s kunde inte konverteras till UTF-8. Prova att ställa in "
-"miljövariabeln G_BROKEN_FILENAMES."
+"Filnamnet \"%s\" kunde inte konverteras till UTF-8 (prova att ställa in "
+"miljövariabeln G_BROKEN_FILENAMES): %s"
 
 #: gtk/gtkfilesel.c:2986
-#, fuzzy
 msgid "Invalid Utf-8"
-msgstr "Ogiltig XBM-fil"
+msgstr "Ogiltig UTF-8"
 
 #: gtk/gtkfilesel.c:3852
 msgid "Name too long"
@@ -2600,21 +2609,6 @@ msgstr "Storlek på handtag"
 msgid "Width of handle"
 msgstr "Bredd på handtag"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "Kan inte hitta inkluderingsfil: \"%s\""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Sökvägselement till bild: \"%s\" måste vara absolut, %s, rad %d"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Utöka"
@@ -2822,6 +2816,21 @@ msgstr "Y-förflyttning av pil"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hur långt bort i y-riktningen pilen ska flyttas då knappen trycks ned"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Kan inte hitta inkluderingsfil: \"%s\""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Sökvägselement till bild: \"%s\" måste vara absolut, %s, rad %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3064,6 +3073,18 @@ msgstr "Typsnittsnamn"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Namn på standardtypsnittet att använda"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Läge"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"De riktningar som storleksgruppen påverkar de begärda storlekarna på dess "
+"komponentwidgetar."
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4403,18 +4424,6 @@ msgstr "Ikon"
 msgid "Icon for this window"
 msgstr "Ikon för detta fönster"
 
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Läge"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"De riktningar som storleksgruppen påverkar de begärda storlekarna på dess "
-"komponentwidgetar."
-
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
@@ -4459,6 +4468,9 @@ msgstr "Vietnamesisk (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "Ogiltig UTF-8"
 
 #~ msgid "Cancel"
 #~ msgstr "Avbryt"
