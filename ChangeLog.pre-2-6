@@ -1,3 +1,12 @@
+Sun Mar  7 16:07:08 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init): set
+	redraw_on_allocate, #135902.
+
+	* gtk/gtkfilesystemmodel.c (model_refilter_recurse): Patch from
+	Damon Chaplin to set a node to be visible before emitting the
+	inserted signal, #135555.
+
 Sun Mar  7 22:24:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkbutton.c (_gtk_button_paint): Don't use xthickness in the

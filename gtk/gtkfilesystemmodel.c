@@ -782,9 +782,8 @@ model_refilter_recurse (GtkFileSystemModel *model,
 	  GtkTreeIter iter;
 
 	  iter.user_data = nodes;
-	  gtk_tree_model_row_inserted (tree_model, path, &iter);
-
 	  nodes->is_visible = TRUE;
+	  gtk_tree_model_row_inserted (tree_model, path, &iter);
 	}
       else
 	model_refilter_recurse (model, nodes, path);
