@@ -1,17 +1,17 @@
-# This is the German locale definition for Gtk+.
-# Copyright (C) 1998-2002 Free Software Foundation, Inc.
+# German GTK+ translation
+# Copyright (C) 1998-2003 Free Software Foundation, Inc.
 # Daniel Egger <Daniel.Egger@t-online>, 1998.
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
 # Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
-# Christian Neumair <chris@gnome-de.org>, 2002.
+# Christian Neumair <chris@gnome-de.org>, 2002, 2003.
 #
 # IM = Input method => Eingabemethode
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.1.x\n"
-"POT-Creation-Date: 2002-12-20 15:52-0500\n"
-"PO-Revision-Date: 2002-12-11 17:13+0100\n"
+"Project-Id-Version: gtk+ 2.3.x\n"
+"POT-Creation-Date: 2003-01-06 17:06+0100\n"
+"PO-Revision-Date: 2003-01-06 17:04+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -78,19 +78,19 @@ msgstr "Format der Bilddatei unbekannt"
 msgid "Failed to load image '%s': %s"
 msgstr "Bild »%s« konnte nicht geladen werden: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:864
+#: gdk-pixbuf/gdk-pixbuf-io.c:866
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Diese Fassung von gdk-pixbuf unterstützt das Speichern in diesem Bildformat "
 "nicht: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:969
+#: gdk-pixbuf/gdk-pixbuf-io.c:971
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "»%s« konnte nicht zum Schreiben geöffnet werden: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:990
+#: gdk-pixbuf/gdk-pixbuf-io.c:992
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -1303,11 +1303,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Die Vordergrundfarbe als GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:456 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:570
 msgid "Editable"
 msgstr "Änderbar"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:567
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:571
 msgid "Whether the text can be modified by the user"
 msgstr "Soll der Text durch den Benutzer änderbar sein?"
 
@@ -1979,7 +1979,7 @@ msgstr "Alles markieren"
 msgid "Input Methods"
 msgstr "Eingabemethoden"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6524
 msgid "_Insert Unicode control character"
 msgstr "Unicode-Steuerzeichen e_infügen"
 
@@ -2014,7 +2014,7 @@ msgstr "Ordner"
 
 #: gtk/gtkfilesel.c:687
 msgid "Fol_ders"
-msgstr "_Ordner"
+msgstr "O_rdner"
 
 #: gtk/gtkfilesel.c:719
 msgid "Files"
@@ -2169,7 +2169,7 @@ msgstr "_Umbenennen"
 
 #: gtk/gtkfilesel.c:2184
 msgid "_Selection: "
-msgstr "_Markierung:"
+msgstr "Au_swahl:"
 
 #: gtk/gtkfilesel.c:3077
 #, c-format
@@ -2538,7 +2538,7 @@ msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "Der Text der Beschriftung enthält XML-Markup. Siehe pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:583
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:587
 msgid "Justification"
 msgstr "Ausrichtung"
 
@@ -3697,7 +3697,7 @@ msgstr "_Aktualisieren"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "_Entfernen"
+msgstr "E_ntfernen"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
@@ -4015,7 +4015,7 @@ msgstr ""
 "ist daher empfehlenswert. Pango stellt einige vordefinierte Skalierungen zur "
 "Verfügung, so z.B. PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:588
 msgid "Left, right, or center justification"
 msgstr "Den Text linksbündig, rechtsbündig oder zentriert ausrichten"
 
@@ -4037,7 +4037,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Linker Rand"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:597
 msgid "Width of the left margin in pixels"
 msgstr "Die Breite des linken Randes in Pixel"
 
@@ -4045,15 +4045,15 @@ msgstr "Die Breite des linken Randes in Pixel"
 msgid "Right margin"
 msgstr "Rechter Rand"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:607
 msgid "Width of the right margin in pixels"
 msgstr "Die Breite des rechten Randes in Pixel"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:616
 msgid "Indent"
 msgstr "Einrücken"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:617
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Die Einrückungstiefe des Absatzes in Pixel"
 
@@ -4069,7 +4069,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pixel über Zeilen"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:537
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:541
 msgid "Pixels of blank space above paragraphs"
 msgstr "Der Leerraum über Absätzen in Pixel"
 
@@ -4077,7 +4077,7 @@ msgstr "Der Leerraum über Absätzen in Pixel"
 msgid "Pixels below lines"
 msgstr "Pixel unter Zeilen"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:551
 msgid "Pixels of blank space below paragraphs"
 msgstr "Der Leerraum unter Absätzen in Pixel"
 
@@ -4086,7 +4086,7 @@ msgid "Pixels inside wrap"
 msgstr "Pixel im Umbruch"
 
 # CHECK!!!
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:561
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 "Der Leerraum zwischen umgebrochenen Zeilen innerhalb eines Absatzes in Pixel"
@@ -4095,16 +4095,16 @@ msgstr ""
 msgid "Wrap mode"
 msgstr "Umbruchmodus"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:575
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:579
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Zeilen nie, an Wort-, oder an Zeichengrenzen umbrechen?"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:626
 msgid "Tabs"
 msgstr "Reiter"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:627
 msgid "Custom tabs for this text"
 msgstr "Eigene Reiter für diesen Text"
 
@@ -4267,39 +4267,39 @@ msgstr "ZWJ-_Verbinder mit Breite null"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ-_Trenner mit Breite null"
 
-#: gtk/gtktextview.c:536
+#: gtk/gtktextview.c:540
 msgid "Pixels Above Lines"
 msgstr "Pixel über Zeilen"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:550
 msgid "Pixels Below Lines"
 msgstr "Pixel unter Zeilen"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:560
 msgid "Pixels Inside Wrap"
 msgstr "Pixel im Umbruch"
 
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:578
 msgid "Wrap Mode"
 msgstr "Umbruchmodus"
 
-#: gtk/gtktextview.c:592
+#: gtk/gtktextview.c:596
 msgid "Left Margin"
 msgstr "Linker Rand"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:606
 msgid "Right Margin"
 msgstr "Rechter Rand"
 
-#: gtk/gtktextview.c:630
+#: gtk/gtktextview.c:634
 msgid "Cursor Visible"
 msgstr "Cursor sichtbar"
 
-#: gtk/gtktextview.c:631
+#: gtk/gtktextview.c:635
 msgid "If the insertion cursor is shown"
 msgstr "Soll der Einfügecursor gezeigt werden?"
 
-#: gtk/gtktextview.c:6475
+#: gtk/gtktextview.c:6515
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
