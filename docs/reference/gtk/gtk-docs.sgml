@@ -375,6 +375,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkTreeViewColumn;
         &GtkTreeView;
         &GtkTreeDND;
+        &GtkIconView;
 	&GtkTreeSortable;
         &GtkTreeModelSort;
         &GtkTreeModelFilter;

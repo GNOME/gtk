@@ -1,3 +1,9 @@
+2004-07-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: 
+	Actually add the iconview docs somewhere (in the tree view
+	section, for lack of a better place).
+
 2004-07-04  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtk-docs.sgml:
