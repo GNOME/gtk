@@ -1784,3 +1784,45 @@ gtk_file_chooser_list_shortcut_folder_uris (GtkFileChooser *chooser)
   gtk_file_paths_free (folders);
   return result;
 }
+
+
+/**
+ * gtk_file_chooser_set_show_hidden:
+ * @chooser: a #GtkFileChooser
+ * @show_hidden: %TRUE if hidden files and folders should be displayed.
+ * 
+ * Sets whether hidden files and folders are displayed in the file selector.  
+ *
+ * Since: 2.6
+ **/
+void
+gtk_file_chooser_set_select_multiple (GtkFileChooser *chooser,
+				      gboolean        show_hidden)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  g_object_set (chooser, "show-hidden", show_hidden, NULL);
+}
+
+/**
+ * gtk_file_chooser_get_show_hidden:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets whether hidden files and folders are displayed in the file selector.   
+ * See gtk_file_chooser_set_show_hidden().
+ * 
+ * Return value: %TRUE if hidden files and folders are displayed.
+ *
+ * Since: 2.6
+ **/
+gboolean
+gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
+{
+  gboolean show_hidden;
+  
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+
+  g_object_get (chooser, "show-hidden", &show_hidden, NULL);
+
+  return show_hidden;
+}

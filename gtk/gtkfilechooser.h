@@ -64,6 +64,9 @@ gboolean             gtk_file_chooser_get_local_only      (GtkFileChooser       
 void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       *chooser,
 							   gboolean              select_multiple);
 gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       *chooser);
+void                 gtk_file_chooser_set_show_hidden     (GtkFileChooser       *chooser,
+							   gboolean              show_hidden);
+gboolean             gtk_file_chooser_get_show_hidden     (GtkFileChooser       *chooser);
 
 /* Suggested name for the Save-type actions
  */

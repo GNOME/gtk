@@ -1,3 +1,7 @@
+2004-08-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_file_chooser_[sg]et_show_hidden.
+
 2004-08-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add hover-expand setter and getter.

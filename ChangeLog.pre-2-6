@@ -1,5 +1,8 @@
 2004-08-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooser.[hc]: Add setter and getter for the 
+	::show-hidden property.  (#145610, Jeff Franks)
+
 	* tests/testiconview.c: Add buttons to select and unselect all
 	nodes, make the popup menu actually work.
 
