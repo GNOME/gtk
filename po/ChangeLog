@@ -1,7 +1,11 @@
+2005-01-31  Žygimantas Beručka  <uid0@akl.lt>
+
+	* lt.po: Updated Lithuanian translation.
+
 2005-01-30  Alessio Frusciante  <algol@firenze.linux.it>
 
 	* it.po: Updated Italian translation by
-	Alessio Dess� <alessiodessi@tiscali.it>.
+	Alessio Dessì <alessiodessi@tiscali.it>.
 
 2005-01-29  Priit Laes  <plaes@cvs.gnome.org>
 
@@ -48,7 +52,7 @@
 2005-01-23  Alessio Frusciante  <algol@firenze.linux.it>
 
 	* it.po: Updated Italian translation by
-	Alessio Dess� <alessiodessi@tiscali.it>.
+	Alessio Dessì <alessiodessi@tiscali.it>.
 
 2005-01-22   Funda Wang  <fundawang@linux.net.cn>
 
@@ -225,7 +229,7 @@
 
 	* es.po: Updated SPanish translation.
 
-2004-12-31  Žygimantas Beručka  <uid0@akl.lt>
+2004-12-31  Åœygimantas BeruÄka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -359,7 +363,7 @@
 
         * de.po: Updated German translation.
 	
-2004-11-14  Žygimantas Beručka  <uid0@akl.lt>
+2004-11-14  Åœygimantas BeruÄka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -420,13 +424,13 @@
                                                                                 
         * en_GB.po: Updated British English translation.
                                                                                 
-2004-10-15  Danilo Šegan  <dsegan@gmx.net>
+2004-10-15  Danilo Å egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
 	* POTFILES.in: Added missing files.
 
-2004-10-15  Danilo Šegan  <dsegan@gmx.net>
+2004-10-15  Danilo Å egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -529,16 +533,16 @@
 
 	* === Released 2.5.2 ===
 
-2004-08-23  Iñaki Larrañaga  <dooteo@euskalgnu.org>
+2004-08-23  IÃ±aki LarraÃ±aga  <dooteo@euskalgnu.org>
 
 	* eu.po: Updated Basque translation.
 
 2004-08-16  Christian Rose  <menthos@menthos.com>
 
 	* bs.po: Added Bosnian translation by
-	Kenan Hadžiavdić <kenanh@frisurf.no>.
+	Kenan HadÅŸiavdiÄ <kenanh@frisurf.no>.
 
-2004-08-15  Žygimantas Beručka  <uid0@akl.lt>
+2004-08-15  Åœygimantas BeruÄka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -564,7 +568,7 @@
 
 2004-07-26  Christian Rose  <menthos@menthos.com>
 
-	* sv.po: Fix for #148437. Thanks to Robert Ögren for
+	* sv.po: Fix for #148437. Thanks to Robert Ãgren for
 	discovering the problem.
 
 2004-07-22  Gustavo Maciel Dias Vieira  <gustavo@sagui.org>
@@ -614,7 +618,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* ne.po: Updated Nepali Translation
 
-2004-06-29  Žygimantas Beručka  <uid0@akl.lt>
+2004-06-29  Åœygimantas BeruÄka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -634,7 +638,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 2004-05-29  Christian Rose  <menthos@menthos.com>
 
 	* tk.po: Added Turkmen translation by
-	Gurban Mühemmet Tewekgeli <gmtavakkoli@yahoo.com>.
+	Gurban MÃŒhemmet Tewekgeli <gmtavakkoli@yahoo.com>.
 
 2004-05-03  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
@@ -682,7 +686,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 	* mi.po: Updated Maori translation
 	from Wesley Parish <wes.parish@paradise.net.nz>.
 
-2004-04-19  Žygimantas Beručka  <uid0@akl.lt>
+2004-04-19  Åœygimantas BeruÄka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -700,11 +704,11 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 	* pt_BR.po: Updated Brazilian Portuguese translation
 	from Raphael Higino <raphaelh@uai.com.br>.
 
-2004-04-17  Mətin Əmirov  <metin@karegen.com>
+2004-04-17  MÉtin Æmirov  <metin@karegen.com>
 
 	* az.po: Translation updated.
 
-2004-04-17  Danilo Šegan  <dsegan@gmx.net>
+2004-04-17  Danilo Å egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po, sr@ije.po: Updated Serbian translations.
 
@@ -756,11 +760,11 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* nl.po: Translation updated by Tino Meinen.
 
-2004-04-15  Mətin Əmirov  <metin@karegen.com>
+2004-04-15  MÉtin Æmirov  <metin@karegen.com>
 
 	* az.po: Translation updated.
 
-2004-04-15 Iñaki Larrañaga  <dooteo@euskalgnu.org>
+2004-04-15 IÃ±aki LarraÃ±aga  <dooteo@euskalgnu.org>
 
 	* eu.po: Updated Basque translation.
 
@@ -792,7 +796,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* hu.po: Updated Hungarian translation.
 
-2004-04-15  Danilo Šegan  <dsegan@gmx.net>
+2004-04-15  Danilo Å egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -808,7 +812,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* pt.po: Updated Portuguese translation.
 
-2004-04-13  Danilo Šegan  <dsegan@gmx.net>
+2004-04-13  Danilo Å egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -819,7 +823,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2004-04-11  John C Barstow  <jbowtie@amathaine.com>
 
-	* mi.po: Updated Māori translation.
+	* mi.po: Updated MÄori translation.
 
 2004-04-09  Gareth Owen  <gowen72@yahoo.com>
 
@@ -876,16 +880,16 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* uk.po: Updated Ukrainian translation.
 
-2004-04-07  Samúel Jón Gunnarsson  <sammi@techattack.nu>
+2004-04-07  SamÃºel JÃ³n Gunnarsson  <sammi@techattack.nu>
 
 	* is.po: Updated Icelandic translation by
-	Helgi Þormar Þorbjörnsson  <helgi@trance.is>
+	Helgi Ãormar ÃorbjÃ¶rnsson  <helgi@trance.is>
 
 2004-04-06  Adam Weinberger  <adamw@gnome.org>
 
 	* en_CA.po: Updated Canadian English translation.
 
-2004-04-07  Žygimantas Beručka  <uid0@akl.lt>
+2004-04-07  Åœygimantas BeruÄka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -959,11 +963,11 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 	
 	* ga.po: Update Irish translation.
 
-2004-03-21  Åsmund Skjæveland  <aasmunds@fys.uio.no>
+2004-03-21  Ãsmund SkjÃŠveland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
 
-2004-03-21  Žygimantas Beručka  <uid0@akl.lt>
+2004-03-21  Åœygimantas BeruÄka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -984,7 +988,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* ar.po: Updated Arabic translation.
 
-2004-03-19  Danilo Šegan  <dsegan@gmx.net>
+2004-03-19  Danilo Å egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po, sr@ije.po: Updated Serbian translations.
 
@@ -1005,7 +1009,7 @@ Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 	* mr.po: Added Marathi translation by 
 	Indictrans Team <indictrans@fastmail.fm>.
 
-2004-03-18  Mətin Əmirov  <metin@karegen.com>
+2004-03-18  MÉtin Æmirov  <metin@karegen.com>
 
 	* az.po: Translation updated.
 
@@ -1091,7 +1095,7 @@ Tue Mar 16 13:17:18 2004  Owen Taylor  <otaylor@redhat.com>
 2004-03-15  Mugurel Tudor  <mugurelu@go.ro>
 
 	* ro.po: Updated Romanian translation
-	by Mi?u Moldovan  <dumol@go.ro>
+	by Mi?Âu Moldovan  <dumol@go.ro>
 
 2004-03-15  Christian Neumair  <chris@gnome-de.org>
 
@@ -1129,7 +1133,7 @@ Tue Mar 16 13:17:18 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* zh_CN.po: Updated Simplified Chinese translation.
 
-2004-03-12  ?œygimantas Beru?ka  <uid0@akl.lt>
+2004-03-12  ?Åygimantas Beru?Âka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -1146,7 +1150,7 @@ Tue Mar 16 13:17:18 2004  Owen Taylor  <otaylor@redhat.com>
 	* ru.po: Updated Russian translation
 	from Russian team <gnome-cyr@gnome.org>.
 
-2004-03-10  M?tin ?mirov  <metin@karegen.com>
+2004-03-10  M?Âtin ?Âmirov  <metin@karegen.com>
 
 	* az.po: Translation updated.
 
@@ -1222,7 +1226,7 @@ Tue Mar  9 10:04:02 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* hu.po: Updated Hungarian translation.
 
-2004-03-09  Danilo ? egan  <dsegan@gmx.net>
+2004-03-09  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po, sr@ije.po: Updated Serbian translations.
 
@@ -1245,7 +1249,7 @@ Tue Mar  9 10:04:02 2004  Owen Taylor  <otaylor@redhat.com>
 	* en_CA.po: Updated Canadian English translation to "405
 	translated messages, 2 fuzzy translations" status.
 
-2004-03-07  M?tin ?mirov  <metin@karegen.com>
+2004-03-07  M?Âtin ?Âmirov  <metin@karegen.com>
 
 	* az.po: Translation updated.
 
@@ -1285,7 +1289,7 @@ Tue Mar  9 10:04:02 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* sv.po: Updated Swedish translation.
 
-2004-03-06  M?tin ?mirov  <metin@karegen.com>
+2004-03-06  M?Âtin ?Âmirov  <metin@karegen.com>
 
 	* az.po: Translation updated.
 
@@ -1293,7 +1297,7 @@ Tue Mar  9 10:04:02 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* es.po: Updated Spansih translation.
 
-2004-03-06  ?œygimantas Beru?ka  <uid0@akl.lt>
+2004-03-06  ?Åygimantas Beru?Âka  <uid0@akl.lt>
 
 	* lt.po: Updated Lithuanian translation.
 
@@ -1309,7 +1313,7 @@ Tue Mar  9 10:04:02 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* ko.po: Updated Korean translation.
 
-2004-03-06  Danilo ? egan  <dsegan@gmx.net>
+2004-03-06  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po, sr@ije.po: Updated Serbian translation.
 
@@ -1410,7 +1414,7 @@ Tue Mar  2 17:06:05 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* en_CA.po: Updated Canadian English translation.
 
-2004-03-01  Danilo ? egan  <dsegan@gmx.net>
+2004-03-01  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po, sr@ije.po: Updated Serbian translation.
 
@@ -1458,16 +1462,16 @@ Tue Mar  2 17:06:05 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* th.po: Updated Thai (th) translation.
 
-2004-02-25  Danilo ? egan  <dsegan@gmx.net>
+2004-02-25  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr@ije.po: Added Serbian Jekavian translation by
-	Bojan Suzi? <bojans@teol.net>.
+	Bojan Suzi?Â <bojans@teol.net>.
 
 2004-02-25  Takeshi AIHANA <aihana@gnome.gr.jp>
 
 	* ja.po: Updated Japanese translation.
 
-2004-02-25  Danilo ? egan  <dsegan@gmx.net>
+2004-02-25  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -1548,7 +1552,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 	* ta.po: Updated Tamil translation by
 	Dinesh Nadarajah <dinesh_list@sbcglobal.net>
 
-2004-02-22  M?tin ?mirov  <metin@karegen.com>
+2004-02-22  M?Âtin ?Âmirov  <metin@karegen.com>
 
 	* az.po: Updated Azerbaijani translation.
 
@@ -1571,7 +1575,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 	* it.po: Updated Italian translation by
 	Alessio Dessi` <alessiodessi@tiscali.it>.
 
-2004-02-19  Danilo ? egan  <dsegan@gmx.net>
+2004-02-19  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Reviewed Serbian translation.
 
@@ -1591,7 +1595,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* th.po: Updated Thai (th) translation.
 
-2004-02-15  M?tin ?mirov  <metin@karegen.com>
+2004-02-15  M?Âtin ?Âmirov  <metin@karegen.com>
 
 	* az.po: Translation updated.
 
@@ -1600,7 +1604,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 	* ru.po: Updated Russian translation
 	from Russian team <gnome-cyr@gnome.org>.
 
-2004-02-12  Danilo ? egan  <dsegan@gmx.net>
+2004-02-12  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -1674,7 +1678,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* fi.po: Updated Finnish translation.
 
-2004-02-05  M?tin ?mirov  <metin@karegen.com>
+2004-02-05  M?Âtin ?Âmirov  <metin@karegen.com>
 
 	* az.po: Translation updated.
 
@@ -1720,7 +1724,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* pt.po: Updated Portuguese translation.
 
-2004-02-01  Danilo ? egan  <dsegan@gmx.net>
+2004-02-01  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -1789,7 +1793,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 	* mi.po: Updated Maori translation by
 	John C Barstow <jbowtie@amathaine.com>.
 
-2004-01-27  ?smund Skj?Šveland  <aasmunds@fys.uio.no>
+2004-01-27  ?Âsmund Skj?Å veland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
 	* ChangeLog: Removed leftover conflict indicator.
@@ -1839,7 +1843,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* cs.po: Updated Czech translation.
 
-2004-01-23  Danilo ? egan  <dsegan@gmx.net>
+2004-01-23  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -1909,7 +1913,7 @@ Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* sv.po: Updated Swedish translation.
 
-2004-01-18  Danilo ? egan  <dsegan@gmx.net>
+2004-01-18  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -1963,7 +1967,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* cs.po: Updated Czech translation.
 
-2004-01-15  Danilo ? egan  <dsegan@gmx.net>
+2004-01-15  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -1991,7 +1995,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* cs.po: Updated Czech translation.
 
-2004-01-13  Danilo ? egan  <dsegan@gmx.net>
+2004-01-13  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2003,7 +2007,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* no.po: Updated Norwegian translation.
 
-2004-01-10  Danilo ? egan  <dsegan@gmx.net>
+2004-01-10  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2052,7 +2056,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* nl.po: Translation updated by Tino Meinen.
 
-2004-01-05  Danilo ? egan  <dsegan@gmx.net>
+2004-01-05  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 	* POTFILES.in: Added gdk-pixbuf/gdk-pixbuf.c.
@@ -2061,7 +2065,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* nl.po: Translation updated by Tino Meinen.
 
-2004-01-04  ?smund Skj?Šveland  <aasmunds@fys.uio.no>
+2004-01-04  ?Âsmund Skj?Å veland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
 
@@ -2073,7 +2077,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* pt.po: Updated Portuguese translation.
 
-2004-01-02  T?µivo Leedj?€rv  <toivo@linux.ee>
+2004-01-02  T?Âµivo Leedj?â¬rv  <toivo@linux.ee>
 
 	* et.po: Updated Estonian translation.
 
@@ -2081,7 +2085,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* fr.po: Updated French translation.
 
-2004-01-02  Danilo ? egan  <dsegan@gmx.net>
+2004-01-02  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2106,7 +2110,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* fa.po: Updated Persian translation.
 
-2004-01-01  ?smund Skj?Šveland  <aasmunds@fys.uio.no>
+2004-01-01  ?Âsmund Skj?Å veland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
 
@@ -2118,7 +2122,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* de.po: Updated German translation.
 
-2003-12-31  ?œygimantas Beru?ka  <uid0@tuxfamily.org>
+2003-12-31  ?Åygimantas Beru?Âka  <uid0@tuxfamily.org>
 
 	* lt.po: Updated Lithuanian translation by Tomas Kuliavas.
 
@@ -2131,7 +2135,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 	* hr.po: Updated Croatian translation by
 	Robert Sedak <robert.sedak@sk.tel.hr>.
 
-2003-12-27  ?smund Skj?Šveland  <aasmunds@fys.uio.no>
+2003-12-27  ?Âsmund Skj?Å veland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
 
@@ -2167,7 +2171,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* de.po: Updated German translation.
 
-2003-12-19  Danilo ? egan  <dsegan@gmx.net>
+2003-12-19  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2183,7 +2187,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* sv.po: Updated Swedish translation.
 
-2003-12-16  Danilo ? egan  <dsegan@gmx.net>
+2003-12-16  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2195,7 +2199,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* es.po: Updated Spanish translation.
 
-2003-12-15  Danilo ? egan  <dsegan@gmx.net>
+2003-12-15  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2223,7 +2227,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* es.po Updates Spanish translation.
 
-2003-12-11  Danilo ? egan  <dsegan@gmx.net>
+2003-12-11  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2264,13 +2268,13 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* mn.po: Updated Mongolian translation.
 
-2003-12-03  Danilo ? egan  <dsegan@gmx.net>
+2003-12-03  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
 	* POTFILES.in: Added gtk/gtkfilesystemwin32.c.
 
-2003-12-02  ?smund Skj?Šveland  <aasmunds@fys.uio.no>
+2003-12-02  ?Âsmund Skj?Å veland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
 
@@ -2286,11 +2290,11 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* el.po: Updated Greek translation.
 
-2003-11-20  Danilo ? egan  <dsegan@gmx.net>
+2003-11-20  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Another update.
 
-2003-11-20  Danilo ? egan  <dsegan@gmx.net>
+2003-11-20  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2307,7 +2311,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 	* pl.po: Updated Polish translation by
 	GNOME PL Team <translators@gnome.pl>
 
-2003-11-14  Danilo ? egan  <dsegan@gmx.net>
+2003-11-14  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2319,7 +2323,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* ca.po: Updated Catalan translation.
 
-2003-11-12  ?smund Skj?Šveland  <aasmunds@fys.uio.no>
+2003-11-12  ?Âsmund Skj?Å veland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
 
@@ -2341,7 +2345,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* cy.po: Commit ported translation for real this time. Blydi CVS.
 
-2003-11-06  Danilo ? egan  <dsegan@gmx.net>
+2003-11-06  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2349,7 +2353,7 @@ Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* cy.po: Translation ported from gnome-2-4 branch.
 
-2003-11-04  Danilo ? egan  <dsegan@gmx.net>
+2003-11-04  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2375,7 +2379,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* el.po: Updated  Greek translation.
 
-2003-11-02  ?smund Skj?Šveland  <aasmunds@fys.uio.no>
+2003-11-02  ?Âsmund Skj?Å veland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
 
@@ -2387,7 +2391,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* no.po: Update Norwegian translation.
 
-2003-10-29  ?smund Skj?Šveland  <aasmunds@fys.uio.no>
+2003-10-29  ?Âsmund Skj?Å veland  <aasmunds@fys.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation. Resolved a number
 	of CVS conflicts.
@@ -2400,7 +2404,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* nl.po: Dutch translation updated by Tino Meinen.
 
-2003-10-07  Danilo ? egan  <dsegan@gmx.net>
+2003-10-07  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2413,7 +2417,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
         * es.po: Updated Spanish translation by
                  Francisco Javier F. Serrador <serrador@arrakis.es>.
 
-2003-10-06  Danilo ? egan  <dsegan@gmx.net>
+2003-10-06  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn: Updated Serbian translation.
 
@@ -2425,7 +2429,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* ja.po: Updated Japanese translation.
 
-2003-10-04  Danilo ? egan  <dsegan@gmx.net>
+2003-10-04  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2437,7 +2441,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* POTFILES.in: Added missing files.
 
-2003-10-04  Danilo ? egan  <dsegan@gmx.net>
+2003-10-04  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2455,7 +2459,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 	* fr.po: Updated French translation from
 	David Bellot <David.Bellot@inrialpes.fr>.
 
-2003-09-18  Danilo ? egan  <dsegan@gmx.net>
+2003-09-18  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2475,7 +2479,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 2003-09-02  Mugurel Tudor  <mugurelu@go.ro>
 
 	* ro.po: Updated Romanian translation by
-		Mi?u Moldovan  <dumol@go.ro>
+		Mi?Âu Moldovan  <dumol@go.ro>
 
 2003-09-02  KAMAGASAKO Masatoshi  <emerald@gnome.gr.jp>
 
@@ -2505,7 +2509,7 @@ Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* az.po: Updated Azerbaijani translation.
 
-2003-08-16  Danilo ? egan  <dsegan@gmx.net>
+2003-08-16  Danilo ?Â egan  <dsegan@gmx.net>
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
@@ -2574,7 +2578,7 @@ Wed Jul  2 18:00:32 2003  Owen Taylor  <otaylor@redhat.com>
 2003-06-10  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
 
 	* es.po: Updated Spanish translation by
-                 Juan Manuel Garc?­a Molina <juanma_gm@wanadoo.es>.
+                 Juan Manuel Garc?Â­a Molina <juanma_gm@wanadoo.es>.
 
 2003-06-03  Christian Rose  <menthos@menthos.com>
 
@@ -2621,7 +2625,7 @@ Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 2003-05-05  Christian Rose  <menthos@menthos.com>
 
 	* sr.po, sr@Latn.po: Added Serbian translation by
-	Danilo ? egan <dsegan@gmx.net>.
+	Danilo ?Â egan <dsegan@gmx.net>.
 	* sp.po: Removed. Replaced by sr@Latn.po.
 
 2003-04-29  Hasbullah Bin Pit <sebol@ikhlas.com>
@@ -2666,7 +2670,7 @@ Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 2003-03-24  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
 
 	* es.po: Updated Spanish translation by
-          Carlos Perell?³ Mar?­n <carlos@gnome-db.org>.
+          Carlos Perell?Â³ Mar?Â­n <carlos@gnome-db.org>.
 
 2003-03-23  Christian Rose  <menthos@menthos.com>
 
@@ -2927,7 +2931,7 @@ Wed Dec 11 14:06:50 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-12-07  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-12-07  Andras Timar  <timar@gnome.hu>
 
@@ -2959,7 +2963,7 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-11-28  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-11-26  Daniel Elstner  <daniel.elstner@gmx.net>
 
@@ -2975,7 +2979,7 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 	
 2002-11-15  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-11-22  Dmitry G. Mastrukov  <dmitry@taurussoft.org>
 
@@ -3002,11 +3006,11 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-11-15  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-11-10  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-11-09  Christian Neumair  <chris@gnome-de.org>
 
@@ -3037,15 +3041,15 @@ Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-10-21  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-10-04  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-09-24  German Poo Caaman~o <gpoo@ubiobio.cl>
 
-	* es.po: Fixed bug #93072 by Juan Manuel Garc???­a Molina
+	* es.po: Fixed bug #93072 by Juan Manuel Garc??Â?Â­a Molina
 			<juanma_gm@wanadoo.es>.
 
 2002-09-09  Yanko Kaneti <yaneti@declera.com>
@@ -3144,15 +3148,15 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 2002-04-28  Fatih Demir <kabalak@gtranslator.org>
 
-	* tr.po: Committed updated Turkish translation by ???mer.
+	* tr.po: Committed updated Turkish translation by ??Â?Âmer.
 
 2002-04-23  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-04-22  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-04-22  Christophe Merlet  <christophe@merlet.net>
 
@@ -3219,7 +3223,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 	* ko.po: Updated Korean translation.
 
-2002-04-02  T???µivo Leedj???€rv  <toivo@linux.ee>
+2002-04-02  T??Â?Âµivo Leedj??Â?â¬rv  <toivo@linux.ee>
 
 	* et.po: Updated Estonian translation.
 
@@ -3238,7 +3242,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 2002-03-28  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-03-28  Ole Laursen  <olau@hardworking.dk>
 
@@ -3275,7 +3279,7 @@ Mon Jun 03 16:42:53 2002  George Lebl <jirka@5z.com>
 
 2002-03-17  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-03-16  Christian Meyer  <chrisime@gnome.org>
 
@@ -3315,9 +3319,9 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 	
 2002-03-06  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
-2002-03-06  Germ??n Poo-Caama???±o <gpoo@ubiobio.cl>
+2002-03-06  Germ??n Poo-Caama??Â?Â±o <gpoo@ubiobio.cl>
 
         * es.po: Updated spanish translation.
 
@@ -3335,7 +3339,7 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 2002-03-03  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-03-03  Zbigniew Chyla  <cyba@gnome.pl>
 
@@ -3358,7 +3362,7 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 	* da.po: Updated Danish translation.
 
-2002-02-28  T???µivo Leedj???€rv  <leedjarv@interest.ee>
+2002-02-28  T??Â?Âµivo Leedj??Â?â¬rv  <leedjarv@interest.ee>
 
 	* et.po: Updated Estonian translation.
 
@@ -3405,7 +3409,7 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 2002-02-23  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-02-23  Ole Laursen  <olau@hardworking.dk>
 
@@ -3417,19 +3421,19 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 
 2002-02-21  Fatih Demir <kabalak@gtranslator.org>
 
-	* tr.po: Committed updated Turkish translation by Nilg???Œn.
+	* tr.po: Committed updated Turkish translation by Nilg??Â?Ån.
 
 Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* POTFILES.in: Add io-wbmp.c.
 
-2002-02-16  T???µivo Leedj???€rv  <leedjarv@interest.ee>
+2002-02-16  T??Â?Âµivo Leedj??Â?â¬rv  <leedjarv@interest.ee>
 
 	* et.po: Updated Estonian translation.
 
 2002-02-12  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-02-11  Duarte Loreto <happyguy_pt@hotmail.com>
 
@@ -3437,7 +3441,7 @@ Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-02-09  Ole Laursen  <olau@hardworking.dk>
 
@@ -3469,7 +3473,7 @@ Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-02-01  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-02-01  Ole Laursen  <olau@hardworking.dk>
 
@@ -3528,7 +3532,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-01-11  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¥l) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¥l) translation.
 	
 2002-01-07  Zbigniew Chyla  <cyba@gnome.pl>
 
@@ -3565,7 +3569,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2001-12-13  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¯?????œ) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¯????Â?Å) translation.
 	
 2001-12-13  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
 
@@ -3582,7 +3586,7 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2001-12-05  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¯?????œ) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¯????Â?Å) translation.
 	
 2001-12-04  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
 
@@ -3594,9 +3598,9 @@ Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 2001-12-01  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¯?????œ) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¯????Â?Å) translation.
 	
-2001-11-28  Carlos Perell Mar???¯?????œ <carlos@gnome-db.org>
+2001-11-28  Carlos Perell Mar??Â?Â¯????Â?Å <carlos@gnome-db.org>
 
 	* es.po: Some fixes.
 
@@ -3614,7 +3618,7 @@ Sat Nov 24 13:19:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-11-14  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¯?????œ) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¯????Â?Å) translation.
 	
 2001-11-11  Fatih Demir <kabalak@gtranslator.org>
 
@@ -3660,7 +3664,7 @@ Sat Nov 24 13:19:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-09-27  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¯?????œ) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¯????Â?Å) translation.
 	
 Wed Sep 26 15:34:46 2001  Owen Taylor  <otaylor@redhat.com>
 
@@ -3684,7 +3688,7 @@ Wed Sep 26 15:34:46 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-09-19  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¯?????œ) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¯????Â?Å) translation.
 	
 2001-09-14  Christian Rose  <menthos@menthos.com>
 
@@ -3766,7 +3770,7 @@ Sat Sep  8 01:44:32 2001  Jonathan Blandford  <jrb@redhat.com>
 
 2001-08-06  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* no.po: Updated Norwegian (bokm???¯?????œ) translation.
+	* no.po: Updated Norwegian (bokm??Â?Â¯????Â?Å) translation.
 	
 2001-07-28  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
@@ -4300,7 +4304,7 @@ Tue Dec 22 14:24:37 1998  Owen Taylor  <otaylor@redhat.com>
 
 Sat Dec 19 18:42:39 PST 1998 Shawn T. Amundson <amundson@gtk.org>
 
-	* sv.po: added translation by Tomas ???¯?????œren <stric@ing.umu.se>
+	* sv.po: added translation by Tomas ??Â?Â¯????Â?Åren <stric@ing.umu.se>
 
 Fri Dec 18 09:52:28 1998  Owen Taylor  <otaylor@redhat.com>
 
