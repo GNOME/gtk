@@ -1091,7 +1091,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkRequisition popup_req;
   GtkTreePath *path;
   gboolean above;
-
+  gint width;
+  
   gdk_window_get_origin (completion->priv->entry->window, &x, &y);
   get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
 
@@ -1110,9 +1111,14 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     gtk_widget_show (completion->priv->scrolled_window);
 
+  screen = gtk_widget_get_screen (GTK_WIDGET (completion->priv->entry));
+  monitor_num = gdk_screen_get_monitor_at_window (screen, 
+						  GTK_WIDGET (completion->priv->entry)->window);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+  width = MIN (completion->priv->entry->allocation.width, monitor.width);
   gtk_widget_set_size_request (completion->priv->tree_view,
-                               completion->priv->entry->allocation.width - 2 * x_border,
-                               items * height);
+                               width - 2 * x_border, items * height);
 
   /* default on no match */
   completion->priv->current_selected = -1;
@@ -1128,18 +1134,12 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
                                           &height);
 
       gtk_widget_set_size_request (completion->priv->action_view,
-                                   completion->priv->entry->allocation.width - 2 * x_border,
-                                   items * height);
+                                   width - 2 * x_border, items * height);
     }
   else
     gtk_widget_hide (completion->priv->action_view);
 
   gtk_widget_size_request (completion->priv->popup_window, &popup_req);
-
-  screen = gtk_widget_get_screen (GTK_WIDGET (completion->priv->entry));
-  monitor_num = gdk_screen_get_monitor_at_window (screen, 
-						  GTK_WIDGET (completion->priv->entry)->window);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
   
   if (x < monitor.x)
     x = monitor.x;
