@@ -1,13 +1,13 @@
 # gtk+.po
-# Copyright (C) 1998-2001 Free Software Foundation, Inc.
+# Copyright (C) 1998-2002 Free Software Foundation, Inc.
 # Vincent Renardias <vincent@debian.org>, 1998-1999.
-# maintainer: Christophe Merlet (RedFox) <redfox@eikonex.org>, 2000-2001.
+# maintainer: Christophe Merlet (RedFox) <redfox@eikonex.org>, 2000-2002.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.3.9\n"
-"POT-Creation-Date: 2002-02-27 18:10-0500\n"
-"PO-Revision-Date: 2001-10-13 09:45+0200\n"
+"Project-Id-Version: gtk+ 1.3.15\n"
+"POT-Creation-Date: 2002-02-28 09:38+0100\n"
+"PO-Revision-Date: 2002-02-28 09:26+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@eikonex.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -543,9 +543,8 @@ msgid "Image has zero height"
 msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:307
-#, fuzzy
 msgid "Not enough memory to load image"
-msgstr "Pas essez de mémoire pour charger l'image bitmap"
+msgstr "Pas assez de mémoire pour charger l'image"
 
 #: gdk-pixbuf/io-wbmp.c:365
 msgid "Couldn't save the rest"
@@ -553,7 +552,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-xbm.c:283
 msgid "Invalid XBM file"
-msgstr ""
+msgstr "Fichier XBM invalide"
 
 #: gdk-pixbuf/io-xbm.c:293
 #, fuzzy
@@ -623,7 +622,7 @@ msgstr "Échec du chargement de l'image « %s » : %s"
 #.
 #: gtk/gtkaccellabel.c:116
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -632,7 +631,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:122
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -641,7 +640,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:128
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
@@ -671,7 +670,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
-msgstr ""
+msgstr "Alignement vertical"
 
 #: gtk/gtkalignment.c:113
 msgid ""
@@ -737,7 +736,7 @@ msgstr "Le y-align du pixbuf."
 
 #: gtk/gtkaspectframe.c:121
 msgid "Ratio"
-msgstr ""
+msgstr "Ratio"
 
 #: gtk/gtkaspectframe.c:122
 msgid "Aspect ratio if obey_child is FALSE"
@@ -1716,9 +1715,8 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
 #: gtk/gtkentry.c:3834 gtk/gtklabel.c:3211
-#, fuzzy
 msgid "Select All"
-msgstr "Effacer"
+msgstr "Sélectionner tout"
 
 #: gtk/gtkentry.c:3844 gtk/gtklabel.c:3221
 msgid "Input Methods"
@@ -1746,32 +1744,28 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
 #: gtk/gtkfilesel.c:549
-#, fuzzy
 msgid "Select multiple"
-msgstr "Effacer"
+msgstr "Sélection multiple"
 
 #: gtk/gtkfilesel.c:550
 msgid "Whether to allow multiple files to be selected."
 msgstr ""
 
 #: gtk/gtkfilesel.c:685
-#, fuzzy
 msgid "Folders"
-msgstr "Fichiers"
+msgstr "Dossiers"
 
 #: gtk/gtkfilesel.c:689
-#, fuzzy
 msgid "Fol_ders"
-msgstr "Fichiers"
+msgstr "_Dossiers"
 
 #: gtk/gtkfilesel.c:717
 msgid "Files"
 msgstr "Fichiers"
 
 #: gtk/gtkfilesel.c:721
-#, fuzzy
 msgid "_Files"
-msgstr "Fichiers"
+msgstr "_Fichiers"
 
 #: gtk/gtkfilesel.c:797 gtk/gtkfilesel.c:2099
 #, fuzzy, c-format
@@ -1915,25 +1909,23 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3817
 msgid "Name too long"
-msgstr ""
+msgstr "Nom trop long"
 
 #: gtk/gtkfilesel.c:3819
 msgid "Couldn't convert filename"
 msgstr ""
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
-#, fuzzy
 msgid "X position"
-msgstr "Chaîne de texte"
+msgstr "Position X"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
 msgid "X position of child widget"
 msgstr ""
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
-#, fuzzy
 msgid "Y position"
-msgstr "Chaîne de texte"
+msgstr "Position Y"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
 msgid "Y position of child widget"
@@ -1943,12 +1935,11 @@ msgstr ""
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:61
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "abcdefghijk ABCDEFGHIJK"
 
 #: gtk/gtkfontsel.c:194
-#, fuzzy
 msgid "Font name"
-msgstr "Famille de police"
+msgstr "Nom de police"
 
 #: gtk/gtkfontsel.c:195
 #, fuzzy
@@ -1969,25 +1960,21 @@ msgid "The text to display in order to demonstrate the selected font."
 msgstr ""
 
 #: gtk/gtkfontsel.c:311
-#, fuzzy
 msgid "_Family:"
-msgstr "Famille :"
+msgstr "_Famille :"
 
 #: gtk/gtkfontsel.c:317
-#, fuzzy
 msgid "_Style:"
-msgstr "Style :"
+msgstr "_Style :"
 
 #: gtk/gtkfontsel.c:323
-#, fuzzy
 msgid "Si_ze:"
-msgstr "Taille :"
+msgstr "_Taille :"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:452
-#, fuzzy
 msgid "_Preview:"
-msgstr "Aperçu :"
+msgstr "_Aperçu :"
 
 #: gtk/gtkfontsel.c:1237
 msgid "Font Selection"
@@ -2080,27 +2067,24 @@ msgid "Error loading icon: %s"
 msgstr "Erreur de chargement de l'icone : %s"
 
 #: gtk/gtkimage.c:129
-#, fuzzy
 msgid "Pixbuf"
-msgstr "Objet pixbuf"
+msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:130
 msgid "A GdkPixbuf to display."
 msgstr ""
 
 #: gtk/gtkimage.c:137
-#, fuzzy
 msgid "Pixmap"
-msgstr "Bitmap"
+msgstr "Pixmap"
 
 #: gtk/gtkimage.c:138
 msgid "A GdkPixmap to display."
 msgstr ""
 
 #: gtk/gtkimage.c:145
-#, fuzzy
 msgid "Image"
-msgstr "Page %u"
+msgstr "Image"
 
 #: gtk/gtkimage.c:146
 msgid "A GdkImage to display."
@@ -2108,7 +2092,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:153
 msgid "Mask"
-msgstr ""
+msgstr "Masque"
 
 #: gtk/gtkimage.c:154
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
@@ -2137,9 +2121,8 @@ msgid "Icon set to display."
 msgstr ""
 
 #: gtk/gtkimage.c:186
-#, fuzzy
 msgid "Icon size"
-msgstr "Taille de la police"
+msgstr "Taille de l'icône"
 
 #: gtk/gtkimage.c:187
 msgid "Size to use for stock icon or icon set."
@@ -3910,9 +3893,8 @@ msgid "Vertical Adjustment for the widget"
 msgstr ""
 
 #: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:425
-#, fuzzy
 msgid "Visible"
-msgstr "Désactivé"
+msgstr "Visible"
 
 #: gtk/gtktreeview.c:539
 msgid "Show the column header buttons"
@@ -4013,9 +3995,8 @@ msgid "Whether to display the column"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:434
-#, fuzzy
 msgid "Resizable"
-msgstr "Désactivé"
+msgstr "Redimensionnable"
 
 #: gtk/gtktreeviewcolumn.c:183
 msgid "Column is user-resizable"
@@ -4034,9 +4015,8 @@ msgid "Resize mode of the column"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:208
-#, fuzzy
 msgid "Fixed Width"
-msgstr "Largeur moyenne :"
+msgstr "Largeur fixe"
 
 #: gtk/gtktreeviewcolumn.c:209
 msgid "Current fixed width of the column"
@@ -4044,24 +4024,23 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:218
 msgid "Minimum Width"
-msgstr ""
+msgstr "Largeur minimum"
 
 #: gtk/gtktreeviewcolumn.c:219
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "Largeur minimum de la colonne autorisée"
 
 #: gtk/gtktreeviewcolumn.c:228
 msgid "Maximum Width"
-msgstr ""
+msgstr "Largeur maximum"
 
 #: gtk/gtktreeviewcolumn.c:229
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "Largeur maximum de la colonne autorisée"
 
 #: gtk/gtktreeviewcolumn.c:238
-#, fuzzy
 msgid "Title"
-msgstr "Éditable"
+msgstr "Titre"
 
 #: gtk/gtktreeviewcolumn.c:239
 msgid "Title to appear in column header"
@@ -4076,9 +4055,8 @@ msgid "Whether the header can be clicked"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:255
-#, fuzzy
 msgid "Widget"
-msgstr "Poids :"
+msgstr "Widget"
 
 #: gtk/gtktreeviewcolumn.c:256
 msgid "Widget to put in column header button instead of column title"
@@ -4086,7 +4064,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:263
 msgid "Alignment"
-msgstr ""
+msgstr "Alignement"
 
 #: gtk/gtktreeviewcolumn.c:264
 msgid "X Alignment of the column header text or widget"
@@ -4129,14 +4107,12 @@ msgid "Determines how the shadowed box around the viewport is drawn."
 msgstr ""
 
 #: gtk/gtkwidget.c:392
-#, fuzzy
 msgid "Widget name"
-msgstr "Poids :"
+msgstr "Nom du widget"
 
 #: gtk/gtkwidget.c:393
-#, fuzzy
 msgid "The name of the widget"
-msgstr "Le texte du rendeur."
+msgstr "Le nom du widget"
 
 #: gtk/gtkwidget.c:399
 msgid "Parent widget"
@@ -4237,9 +4213,8 @@ msgid "Whether the widget is composed of other widgets"
 msgstr ""
 
 #: gtk/gtkwidget.c:488
-#, fuzzy
 msgid "Style"
-msgstr "Style :"
+msgstr "Style"
 
 #: gtk/gtkwidget.c:489
 msgid ""
@@ -4249,7 +4224,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:495
 msgid "Events"
-msgstr ""
+msgstr "Événements"
 
 #: gtk/gtkwidget.c:496
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
@@ -4312,24 +4287,20 @@ msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
 #: gtk/gtkwindow.c:399
-#, fuzzy
 msgid "Window Type"
-msgstr "Fenêtre"
+msgstr "Type de fenêtre"
 
 #: gtk/gtkwindow.c:400
-#, fuzzy
 msgid "The type of the window"
-msgstr "Le ypad du pixbuf."
+msgstr "Le type de la fenêtre"
 
 #: gtk/gtkwindow.c:409
-#, fuzzy
 msgid "Window Title"
-msgstr "Fenêtre"
+msgstr "Titre de la fenêtre"
 
 #: gtk/gtkwindow.c:410
-#, fuzzy
 msgid "The title of the window"
-msgstr "L'état de bascule du bouton"
+msgstr "Le titre de la fenêtre"
 
 #: gtk/gtkwindow.c:417
 msgid "Allow Shrink"
@@ -4375,7 +4346,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:459
 msgid "Default Width"
-msgstr ""
+msgstr "Largeur par défaut"
 
 #: gtk/gtkwindow.c:460
 msgid ""
@@ -4383,9 +4354,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkwindow.c:469
-#, fuzzy
 msgid "Default Height"
-msgstr "Épaisseur de police"
+msgstr "Hauteur par défaut"
 
 #: gtk/gtkwindow.c:470
 msgid ""
@@ -4402,16 +4372,15 @@ msgstr ""
 
 #: gtk/gtkwindow.c:487
 msgid "Icon"
-msgstr ""
+msgstr "Icône"
 
 #: gtk/gtkwindow.c:488
 msgid "Icon for this window"
 msgstr ""
 
 #: gtk/gtksizegroup.c:242
-#, fuzzy
 msgid "Mode"
-msgstr "Mode : "
+msgstr "Mode"
 
 #: gtk/gtksizegroup.c:243
 msgid ""
