@@ -1,3 +1,8 @@
+Mon Jan 28 12:17:07 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixbuf-render.c (compute_hint): Fix problems in computing
+	MISSING hint.
+
 Sun Jan 27 23:58:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixbuf-render.c (compute_hint): Optimize the case

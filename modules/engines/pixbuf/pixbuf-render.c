@@ -344,9 +344,9 @@ compute_hint (GdkPixbuf *pixbuf,
       if (n_channels == 4)
 	a = *(p++);
 
-      for (j = x0 + 1; j < x1 ; j++)
+      for (j = x0; j < x1 ; j++)
 	{
-	  if (n_channels != 4 || p[4] != 0)
+	  if (n_channels != 4 || p[3] != 0)
 	    {
 	      hints &= ~THEME_MISSING;
 	      if (!(hints & THEME_CONSTANT_ROWS))
