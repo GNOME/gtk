@@ -1,3 +1,13 @@
+2002-01-09  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkaccellabel.sgml: Remove duplicate docs.
+	
+	* gdk-pixbuf/Makefile.am (content_files): Add 
+	gdk-pixbuf-from-drawables.sgml. (#68232)
+	
+	* gtk/tmpl/gtkwidget.sgml: Improve docs for GTK_NO_REPARENT
+	and GTK_APP_PAINTABLE. (#68060)
+
 2002-01-08  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtkgc.sgml: Improve wording.

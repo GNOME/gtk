@@ -114,11 +114,11 @@ Creates a new #GtkAccelLabel.
 
 <!-- ##### FUNCTION gtk_accel_label_set_accel_widget ##### -->
 <para>
-Sets the widget whose accelerators are to be shown.
+
 </para>
 
-@accel_label: a #GtkAccelLabel.
-@accel_widget: the widget whose accelerators are to be displayed.
+@accel_label: 
+@accel_widget:
 
 
 <!-- ##### FUNCTION gtk_accel_label_get_accel_width ##### -->

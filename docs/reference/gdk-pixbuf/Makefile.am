@@ -40,6 +40,7 @@ HTML_IMAGES =
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files =				\
+	gdk-pixbuf-from-drawables.sgml	\
 	gdk-pixbuf.sgml			\
 	porting-from-imlib.sgml
 

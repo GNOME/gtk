@@ -76,9 +76,12 @@ Tells about certain properties of the widget.
 @GTK_COMPOSITE_CHILD: 
         Indicates that the widget is a composite child of its parent; see 
         gtk_widget_push_composite_child(), gtk_widget_pop_composite_child().
-@GTK_NO_REPARENT: 
+@GTK_NO_REPARENT:
+	Unused since before GTK+ 1.2, will be removed in a future version. 
 @GTK_APP_PAINTABLE: 
         Set and unset by gtk_widget_set_app_paintable().
+        Must be set on widgets whose window the application directly draws on, 
+	in order to keep GTK+ from overwriting the drawn stuff.
 @GTK_RECEIVES_DEFAULT: 
         The widget when focused will receive the default action and have 
         %GTK_HAS_DEFAULT set even if there is a different widget set as default.

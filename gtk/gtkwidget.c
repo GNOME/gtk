@@ -204,8 +204,6 @@ static void             gtk_widget_reset_rc_style               (GtkWidget      
 static void		gtk_widget_set_style_internal		(GtkWidget	  *widget,
 								 GtkStyle	  *style,
 								 gboolean	   initial_emission);
-static void		gtk_widget_set_style_recurse		(GtkWidget	  *widget,
-								 gpointer	   client_data);
 static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 								 GdkEvent	  *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
@@ -3736,7 +3734,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   gtk_widget_propagate_state (widget, &data);
   
-  gtk_widget_set_style_recurse (widget, NULL);
+  gtk_widget_reset_rc_styles (widget);
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
   if (GTK_WIDGET_ANCHORED (widget->parent))
@@ -4183,19 +4181,6 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 }
 
 static void
-gtk_widget_set_style_recurse (GtkWidget *widget,
-			      gpointer	 client_data)
-{
-  if (GTK_WIDGET_RC_STYLE (widget))
-    gtk_widget_reset_rc_style (widget);
-  
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-			  gtk_widget_set_style_recurse,
-			  NULL);
-}
-
-static void
 gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
 						gpointer   client_data)
 {
@@ -4247,12 +4232,24 @@ _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
     g_object_unref (previous_toplevel);
 }
 
+static void
+reset_rc_styles_recurse (GtkWidget *widget, gpointer data)
+{
+  if (GTK_WIDGET_RC_STYLE (widget))
+    gtk_widget_reset_rc_style (widget);
+  
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget),
+			  reset_rc_styles_recurse,
+			  NULL);
+}
+
 void
 gtk_widget_reset_rc_styles (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_set_style_recurse (widget, NULL);
+  reset_rc_styles_recurse (widget, NULL);
 }
 
 /**

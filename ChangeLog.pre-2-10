@@ -1,3 +1,8 @@
+2002-01-08  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkwidget.c (gtk_widget_set_style_recurse): Rename to
+	reset_rc_styles_recurse(). (#68084)
+
 2002-01-10            Vitaly Tishkov       <tvv@sparc.spb.su>
         * gtk/gtkimage.c
 	* gtk/gtkimcontext.c
@@ -175,6 +180,7 @@ Wed Jan  9 11:23:39 2002  Tim Janik  <timj@gtk.org>
 	* gtk/gtktreesortable.h : ditto.
 	* gtk/gtkwidget.h : Don't reference incomplete _GdkRectangle type.
 
+>>>>>>> 1.2791
 2002-01-08  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkplug.c, gtk/gtksocket.c: Speak of window IDs rather 
