@@ -434,7 +434,7 @@ install-data-local: install-ms-lib install-libtool-import-lib
 	  echo "***" ; \
 	  echo "*** Warning: gdk-pixbuf.loaders not built" ; \
 	  echo "***" ; \
-	  echo "*** Generate this file manually on on host" ; \
+	  echo "*** Generate this file manually on host" ; \
 	  echo "*** system using gdk-pixbuf-query-loaders" ; \
 	  echo "***" ; \
 	fi
