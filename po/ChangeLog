@@ -1,3 +1,8 @@
+2002-06-13  Christian Rose  <menthos@menthos.com>
+
+	* desk.pl, update.pl, update.sh, README.tools: Removed. These are
+	obsoleted by intltool.
+
 2002-06-10  Naba Kumar <kh_naba@users.sourceforge.net>
 
 	* hi.po: Added new hindi translation.
