@@ -391,7 +391,7 @@ gtk_combo_init (GtkCombo * combo)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (combo->popup),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   combo->list = gtk_list_new ();
-  /*gtk_list_set_selection_mode(GTK_LIST(combo->list), GTK_SELECTION_SINGLE); */
+  gtk_list_set_selection_mode(GTK_LIST(combo->list), GTK_SELECTION_BROWSE);
   gtk_container_add (GTK_CONTAINER (combo->popwin), combo->popup);
   gtk_container_add (GTK_CONTAINER (combo->popup), combo->list);
   gtk_widget_show (combo->list);
