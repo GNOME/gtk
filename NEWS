@@ -1,10 +1,14 @@
 Overview of Changes in GTK+ 1.0.6:
 
 * Minor documentation fixups.
-* Fixes for Entry, Text, FileSelection, Paned, Table and CList widgets.
+* Miscellaneous fixes for Entry, Paned, Table and CList widgets.
+* More fixes for GtkText, should behave much more stable now.
+* GtkFileSelection should behave much more nicely in combination with AFS now.
 * Configuration fixes on various platforms.
 * Miscellaneous fixes to XInput support.
 * Build with shared library dependencies on Linux
+* Fix for a major bug in the type systems memory allocation code that could
+  cause random crashes.
 
 Overview of Changes in GTK+ 1.0.5:
 
@@ -14,15 +18,18 @@ Overview of Changes in GTK+ 1.0.5:
 * Minor ficup about base class initializations in the type system.
 * Fix for a major bug in the signal code that would cause random crashes.
 
+
 Overview of Changes in GTK+ 1.0.4:
 
 * Documentation changes (Thanks to Tony Gale!)
 * autoconf fix for x_lib variable
 * fixed pixmap clipping in gtkclist
 
+
 Overview of Changes in GTK+ 1.0.3:
 
 * Bug fixes, including fix for visuals on SGI machines
+
 
 Overview of Changes in GTK+ 1.0.2:
 
@@ -37,12 +44,14 @@ Overview of Changes in GTK+ 1.0.2:
   - A segfault with selections on Solaris and IRIX.
   - A segfault that occured for all keypresses on Linux/Alpha.
 
+
 Overview of Changes in GTK+ 1.0.1:
 
 * Significant speedups to widget creation and destruction
 * Upgrade to libtool-1.2
 * Lots of bug fixes, including one that fixed a major memory leak 
   in 1.0.0.
+
 
 Overview of Changes in GTK+ 1.0.0:
 
