@@ -1,3 +1,7 @@
+1998-12-16  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gdk/gdkglobals.c: Define gdk_xim_ic only, if USE_XIM is defined.
+
 Wed Dec 16 07:03:32 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.h: 
