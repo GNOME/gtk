@@ -1,3 +1,7 @@
+Thu Sep 23 20:11:38 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.2.5
+
 Fri Sep 24 02:00:21 1999  Tim Janik  <timj@gtk.org>
 
 	* configure.in (GTK_VERSION): changed version from Gtk+-1.2.5-pre2,

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.5\n"
-"POT-Creation-Date: 1999-09-17 10:03+0200\n"
+"POT-Creation-Date: 1999-09-23 19:59-0500\n"
 "PO-Revision-Date: 1999-09-04 11:33+02:00\n"
 "Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
