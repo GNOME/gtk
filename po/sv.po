@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-07-26 08:00+0200\n"
+"POT-Creation-Date: 2004-12-18 13:21+0100\n"
+"PO-Revision-Date: 2004-12-18 13:21+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -215,7 +215,6 @@ msgid "Stack overflow"
 msgstr "Stackspill"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF-bildinläsaren kan inte förstå denna bild."
 
@@ -456,7 +455,7 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Nycklar för PNG-textstycken måste vara ASCII-tecken."
 
 #: gdk-pixbuf/io-png.c:854
-#, fuzzy, c-format
+#, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "Värdet för PNG-textstycket %s kan inte konverteras till ISO-8859-1-kodning."
@@ -494,7 +493,6 @@ msgid "Maximum color value in PNM file is too large"
 msgstr "Maximala färgvärdet i PNM-filen är för stort"
 
 #: gdk-pixbuf/io-pnm.c:396
-#, fuzzy
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "Kan inte hantera PNM-filer med maximala färgvärden större än 255"
 
@@ -519,7 +517,6 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Råa PNM-format kräver precis ett blanktecken före provdata"
 
 #: gdk-pixbuf/io-pnm.c:770
-#, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Kan inte allokera minne för inläsning av PNM-bild"
 
@@ -560,37 +557,30 @@ msgid "The Sun raster image format"
 msgstr "Bildformatet Sun-raster"
 
 #: gdk-pixbuf/io-tga.c:159
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Kan inte allokera minne för IOBuffer-struct"
 
 #: gdk-pixbuf/io-tga.c:178
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Kan inte allokera minne för IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:189
-#, fuzzy
 msgid "Cannot realloc IOBuffer data"
 msgstr "Kan inte omallokera IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:219
-#, fuzzy
 msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Kan inte allokera temporär IOBuffer-data"
+msgstr "Kan inte allokera temporära IOBuffer-data"
 
 #: gdk-pixbuf/io-tga.c:353
-#, fuzzy
 msgid "Cannot allocate new pixbuf"
 msgstr "Kan inte allokera ny pixbuf"
 
 #: gdk-pixbuf/io-tga.c:692
-#, fuzzy
 msgid "Cannot allocate colormap structure"
 msgstr "Kan inte allokera färgkartestruktur"
 
 #: gdk-pixbuf/io-tga.c:699
-#, fuzzy
 msgid "Cannot allocate colormap entries"
 msgstr "Kan inte allokera färgkarteposter"
 
@@ -599,7 +589,6 @@ msgid "Unexpected bitdepth for colormap entries"
 msgstr "Oväntat bitdjup för färgkarteposter"
 
 #: gdk-pixbuf/io-tga.c:739
-#, fuzzy
 msgid "Cannot allocate TGA header memory"
 msgstr "Kan inte allokera TGA-huvudminne"
 
@@ -613,7 +602,6 @@ msgid "TGA image type not supported"
 msgstr "TGA-bildtypen stöds inte"
 
 #: gdk-pixbuf/io-tga.c:861
-#, fuzzy
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Kan inte allokera minne för TGA-kontextstruct"
 
@@ -723,12 +711,10 @@ msgid "XPM file has invalid number of colors"
 msgstr "XPM-filen har ogiltigt antal färger"
 
 #: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
-#, fuzzy
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Kan inte allokera minne för inläsning av XPM-bild"
 
 #: gdk-pixbuf/io-xpm.c:1295
-#, fuzzy
 msgid "Cannot read XPM colormap"
 msgstr "Kan inte läsa XPM-färgkarta"
 
@@ -743,48 +729,47 @@ msgstr "Bildformatet XPM"
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:115
 msgid "Program class as used by the window manager"
-msgstr ""
+msgstr "Programklass som den används av fönsterhanteraren"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:116
 msgid "CLASS"
-msgstr ""
+msgstr "KLASS"
 
 #. Description of --name=NAME in --help output
 #: gdk/gdk.c:118
 msgid "Program name as used by the window manager"
-msgstr ""
+msgstr "Programnamn som det används av fönsterhanteraren"
 
 #. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:119
 msgid "NAME"
-msgstr ""
+msgstr "NAMN"
 
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:121
 msgid "X display to use"
-msgstr ""
+msgstr "X-display att använda"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:122
-#, fuzzy
 msgid "DISPLAY"
-msgstr "IPA"
+msgstr "DISPLAY"
 
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:124
 msgid "X screen to use"
-msgstr ""
+msgstr "X-skärm att använda"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: gdk/gdk.c:125
 msgid "SCREEN"
-msgstr ""
+msgstr "SKÄRM"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:128
 msgid "Gdk debugging flags to set"
-msgstr ""
+msgstr "Gdk-felsökningsflaggor att ställa in"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -792,90 +777,90 @@ msgstr ""
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:405 gtk/gtkmain.c:408
 msgid "FLAGS"
-msgstr ""
+msgstr "FLAGGOR"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:131
 msgid "Gdk debugging flags to unset"
-msgstr ""
+msgstr "Gdk-felsökningsflaggor att inte ställa in"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:60
 msgid "Don't batch GDI requests"
-msgstr ""
+msgstr "Samla inte GDI-förfrågningar i en batch"
 
 #. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr ""
+msgstr "Använd inte Wintab-API:t för stöd av ritbrädor"
 
 #. Description of --ignore-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:64
 msgid "Same as --no-wintab"
-msgstr ""
+msgstr "Samma som --no-wintab"
 
 #. Description of --use-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
-msgstr ""
+msgstr "Använd inte Wintab-API:t [standard]"
 
 #. Description of --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:68
 msgid "Size of the palette in 8 bit mode"
-msgstr ""
+msgstr "Storlek på paletten i 8-bitarsläge"
 
 #. Placeholder in --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:69
 msgid "COLORS"
-msgstr ""
+msgstr "FÄRGER"
 
 #. Description of --sync in --help output
 #: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "Gör X-anrop synkrona"
 
 #: gtk/gtkaboutdialog.c:260 gtk/gtkaboutdialog.c:1938
 msgid "License"
-msgstr ""
+msgstr "Licens"
 
 #: gtk/gtkaboutdialog.c:261
 msgid "The license of the program"
-msgstr ""
+msgstr "Licensen för programmet"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:481
 msgid "_Credits"
-msgstr ""
+msgstr "_Tack"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:490
 msgid "_License"
-msgstr ""
+msgstr "_Licens"
 
 #: gtk/gtkaboutdialog.c:681
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "Om %s"
 
 #: gtk/gtkaboutdialog.c:1875
 msgid "Credits"
-msgstr ""
+msgstr "Tack"
 
 #: gtk/gtkaboutdialog.c:1900
 msgid "Written by"
-msgstr ""
+msgstr "Skrivet av"
 
 #: gtk/gtkaboutdialog.c:1903
 msgid "Documented by"
-msgstr ""
+msgstr "Dokumenterat av"
 
 #: gtk/gtkaboutdialog.c:1915
 msgid "Translated by"
-msgstr ""
+msgstr "Översatt av"
 
 #: gtk/gtkaboutdialog.c:1919
 msgid "Artwork by"
-msgstr ""
+msgstr "Grafik av"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -930,7 +915,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr ""
+msgstr "etikett för förloppsindikator|%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1096,18 +1081,16 @@ msgid "Desktop"
 msgstr "Skrivbord"
 
 #: gtk/gtkfilechooserbutton.c:64
-#, fuzzy
 msgid "(None)"
-msgstr "inget"
+msgstr "(Ingen)"
 
 #: gtk/gtkfilechooserbutton.c:349
-#, fuzzy
 msgid "Select a File"
-msgstr "Ta bort fil"
+msgstr "Välj en fil"
 
 #: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
-msgstr ""
+msgstr "Annan..."
 
 #: gtk/gtkfilechooserdefault.c:863
 #, c-format
@@ -1171,20 +1154,20 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2078
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr ""
+msgstr "Lägg till mappen \"%s\" till bokmärkena"
 
 #: gtk/gtkfilechooserdefault.c:2119
 msgid "Add the current folder to the bookmarks"
-msgstr ""
+msgstr "LÄgg till den aktuella mappen till bokmärkena"
 
 #: gtk/gtkfilechooserdefault.c:2121
 msgid "Add the selected folders to the bookmarks"
-msgstr ""
+msgstr "Lägg till de valda mapparna till bokmärkena"
 
 #: gtk/gtkfilechooserdefault.c:2161
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr ""
+msgstr "Ta bort bokmärket \"%s\""
 
 #: gtk/gtkfilechooserdefault.c:2566
 #, c-format
@@ -1195,7 +1178,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:2744
 msgid "Shortcuts"
-msgstr ""
+msgstr "Genvägar"
 
 #: gtk/gtkfilechooserdefault.c:2798
 msgid "Folder"
@@ -1207,7 +1190,7 @@ msgstr "_Lägg till"
 
 #: gtk/gtkfilechooserdefault.c:2857
 msgid "Add the selected folder to the bookmarks"
-msgstr ""
+msgstr "Lägg till den valda mappen till bokmärkena"
 
 #: gtk/gtkfilechooserdefault.c:2862 gtk/gtkstock.c:352
 msgid "_Remove"
@@ -1215,11 +1198,11 @@ msgstr "_Ta bort"
 
 #: gtk/gtkfilechooserdefault.c:2869
 msgid "Remove the selected bookmark"
-msgstr ""
+msgstr "Ta bort markerat bokmärke"
 
 #: gtk/gtkfilechooserdefault.c:2964
 msgid "_Add to Shortcuts"
-msgstr ""
+msgstr "_Lägg till i genvägar"
 
 #: gtk/gtkfilechooserdefault.c:2978
 msgid "Show _Hidden Files"
@@ -1243,7 +1226,7 @@ msgstr "Ändrad"
 
 #: gtk/gtkfilechooserdefault.c:3203
 msgid "Select which types of files are shown"
-msgstr ""
+msgstr "Välj vilka typer av filer som visas"
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:3239
@@ -1268,7 +1251,6 @@ msgid "Create in _folder:"
 msgstr "Skapa i _mappen:"
 
 #: gtk/gtkfilechooserdefault.c:4469
-#, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan inte byta till mappen eftersom den inte är lokal"
 
@@ -1543,9 +1525,9 @@ msgid "Filesystem"
 msgstr "Filsystem"
 
 #: gtk/gtkfilesystemunix.c:738
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Kunde inte hämta information för filen \"%s\": %s"
+msgstr "Kunde inte hämta en standardikon för %s"
 
 #: gtk/gtkfilesystemunix.c:833
 #, c-format
@@ -1736,27 +1718,27 @@ msgstr "Markera allt"
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:398
 msgid "Load additional GTK+ modules"
-msgstr ""
+msgstr "Läs in ytterligare GTK+-moduler"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:399
 msgid "MODULES"
-msgstr ""
+msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
 #: gtk/gtkmain.c:401
 msgid "Make all warnings fatal"
-msgstr ""
+msgstr "Gör alla varningar ödesdigra"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:404
 msgid "GTK+ debugging flags to set"
-msgstr ""
+msgstr "GTK+-felsökningsflaggor att ställa in"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:407
 msgid "GTK+ debugging flags to unset"
-msgstr ""
+msgstr "GTK+-felsökningsflaggor att inte ställa in"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1769,11 +1751,11 @@ msgstr "default:LTR"
 
 #: gtk/gtkmain.c:565
 msgid "GTK+ Options"
-msgstr ""
+msgstr "Alternativ för GTK+"
 
 #: gtk/gtkmain.c:565
 msgid "Show GTK+ Options"
-msgstr ""
+msgstr "Visa alternativ för GTK+"
 
 #: gtk/gtknotebook.c:2712 gtk/gtknotebook.c:5060
 #, c-format
@@ -1825,7 +1807,7 @@ msgstr "Fråga"
 #.
 #: gtk/gtkstock.c:294
 msgid "_About"
-msgstr ""
+msgstr "_Om"
 
 #: gtk/gtkstock.c:296
 msgid "_Apply"
@@ -1873,7 +1855,7 @@ msgstr "_Kör"
 
 #: gtk/gtkstock.c:307
 msgid "_Edit"
-msgstr ""
+msgstr "_Redigera"
 
 #: gtk/gtkstock.c:308
 msgid "_Find"
@@ -1968,33 +1950,28 @@ msgid "_Right"
 msgstr "_Höger"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgid "_Next"
-msgstr "_Ny"
+msgstr "_Nästa"
 
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgid "P_ause"
-msgstr "Klistra _in"
+msgstr "Gör _paus"
 
 #: gtk/gtkstock.c:334
 msgid "_Play"
-msgstr ""
+msgstr "_Spela"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgid "Pre_vious"
-msgstr "Förhandsvisning"
+msgstr "Före_gående"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgid "_Record"
-msgstr "_Röd:"
+msgstr "Spela _in"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgid "R_ewind"
-msgstr "_Sök"
+msgstr "Spola _bakåt"
 
 #: gtk/gtkstock.c:338 gtk/gtkstock.c:361
 msgid "_Stop"
@@ -2205,9 +2182,8 @@ msgstr "Kyrillisk (Translitererad)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
-#, fuzzy
 msgid "Inuktitut (Transliterated)"
-msgstr "Inukitut (Translitererad)"
+msgstr "Inuktitut (Translitererad)"
 
 #. ID
 #: modules/input/imipa.c:145
