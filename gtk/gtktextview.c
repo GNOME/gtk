@@ -967,11 +967,11 @@ gtk_text_view_init (GtkTextView *text_view)
    */
   text_view->im_context = gtk_im_multicontext_new ();
 
-  gtk_signal_connect (GTK_OBJECT (text_view->im_context), "commit",
-                      GTK_SIGNAL_FUNC (gtk_text_view_commit_handler), text_view);
+  g_signal_connect (G_OBJECT (text_view->im_context), "commit",
+                    G_CALLBACK (gtk_text_view_commit_handler), text_view);
 
-  gtk_signal_connect (GTK_OBJECT (text_view->im_context), "preedit_changed",
- 		      GTK_SIGNAL_FUNC (gtk_text_view_preedit_changed_handler), text_view);
+  g_signal_connect (G_OBJECT (text_view->im_context), "preedit_changed",
+ 		    G_CALLBACK (gtk_text_view_preedit_changed_handler), text_view);
 
   text_view->cursor_visible = TRUE;
 

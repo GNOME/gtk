@@ -903,10 +903,10 @@ gtk_entry_init (GtkEntry *entry)
    */
   entry->im_context = gtk_im_multicontext_new ();
   
-  gtk_signal_connect (GTK_OBJECT (entry->im_context), "commit",
-		      GTK_SIGNAL_FUNC (gtk_entry_commit_cb), entry);
-  gtk_signal_connect (GTK_OBJECT (entry->im_context), "preedit_changed",
-		      GTK_SIGNAL_FUNC (gtk_entry_preedit_changed_cb), entry);
+  g_signal_connect (G_OBJECT (entry->im_context), "commit",
+		    G_CALLBACK (gtk_entry_commit_cb), entry);
+  g_signal_connect (G_OBJECT (entry->im_context), "preedit_changed",
+		    G_CALLBACK (gtk_entry_preedit_changed_cb), entry);
 }
 
 static void
@@ -921,7 +921,7 @@ gtk_entry_finalize (GObject *object)
   if (entry->cached_layout)
     g_object_unref (G_OBJECT (entry->cached_layout));
 
-  gtk_object_unref (GTK_OBJECT (entry->im_context));
+  g_object_unref (G_OBJECT (entry->im_context));
 
   if (entry->blink_timeout)
     g_source_remove (entry->blink_timeout);

@@ -1,3 +1,9 @@
+Fri Oct 19 18:35:22 2001  Manish Singh  <yosh@gimp.org>
+
+	* gtk/{gtkentry.c,gtktextview.c}: since GtkIMContext derives directly
+	from GObject now, we have to use the g_object_* functions, not
+	gtk_object_*.
+
 Fri Oct 19 22:46:54 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreemodelsort.[ch]: we probably have rows_reordered
