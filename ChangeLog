@@ -1,5 +1,11 @@
 2001-03-16  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkwidget.h (struct _GtkWidgetAuxInfo): change to use gint
+	instead of gint16, to avoid overflow issues, since sizes > 16-bit
+	are now allowed.
+
+2001-03-16  Havoc Pennington  <hp@redhat.com>
+
 	* Applied patch from Nils Barth (bug # 51041) to 
 	replace "gint" with "gboolean" and 0/1 with TRUE/FALSE
 	in various places.

@@ -380,10 +380,10 @@ struct _GtkWidgetClass
 
 struct _GtkWidgetAuxInfo
 {
-  gint16  x;
-  gint16  y;
-  gint16 width;
-  gint16 height;
+  gint x;
+  gint y;
+  gint width;
+  gint height;
 };
 
 struct _GtkWidgetShapeInfo

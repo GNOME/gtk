@@ -394,7 +394,6 @@ An advanced widget set.
       <title>Deprecated</title>
         &GtkCList;      
         &GtkCTree;
-        &GtkData;
         &GtkList;
         &GtkListItem;
         &GtkPacker;
