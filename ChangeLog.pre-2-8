@@ -1,3 +1,8 @@
+Tue Jul 13 21:53:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkicontheme.c (free_unthemed_icon): Don't leak
+	no_svg_filename.  (#147399, Kjartan Maraas)
+
 2004-07-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_get_neighbor_sizes): 
