@@ -43,6 +43,7 @@ struct _GtkToolItem
 {
   GtkBin parent;
 
+  /*< private >*/
   GtkToolItemPrivate *priv;
 };
 

@@ -27,7 +27,7 @@
 #include "gtktoolbar.h"
 
 /* note: keep in sync with DEFAULT_SPACE_SIZE and DEFAULT_SPACE_STYLE in gtktoolbar.c */
-#define DEFAULT_SPACE_SIZE 5    
+#define DEFAULT_SPACE_SIZE 4
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 
 #define SPACE_LINE_DIVISION 10
@@ -35,6 +35,8 @@
 #define SPACE_LINE_END      7
 
 static void                 gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class);
+static void		    gtk_separator_tool_item_size_request (GtkWidget      *widget,
+								  GtkRequisition *requisition);
 static gboolean             gtk_separator_tool_item_expose     (GtkWidget                 *widget,
 								GdkEventExpose            *event);
 static void                 gtk_separator_tool_item_add        (GtkContainer              *container,
@@ -115,6 +117,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
   toolitem_class = (GtkToolItemClass *)class;
   widget_class = (GtkWidgetClass *)class;
 
+  widget_class->size_request = gtk_separator_tool_item_size_request;
   widget_class->expose_event = gtk_separator_tool_item_expose;
   
   container_class->add = gtk_separator_tool_item_add;
@@ -125,6 +128,25 @@ gtk_separator_tool_item_add (GtkContainer *container,
 			     GtkWidget    *child)
 {
   g_warning("attempt to add a child to an GtkSeparatorToolItem");
+}
+
+static void
+gtk_separator_tool_item_size_request (GtkWidget      *widget,
+				      GtkRequisition *requisition)
+{
+  GtkToolItem *item = GTK_TOOL_ITEM (widget);
+  GtkOrientation orientation = gtk_tool_item_get_orientation (item);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      requisition->width = get_space_size (item);
+      requisition->height = 1;
+    }
+  else
+    {
+      requisition->height = get_space_size (item);
+      requisition->width = 1;
+    }
 }
 
 static gboolean
@@ -143,7 +165,7 @@ gtk_separator_tool_item_expose (GtkWidget      *widget,
       allocation = &(widget->allocation);
       orientation = gtk_tool_item_get_orientation (tool_item);
       area = &(event->area);
-      
+
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  gtk_paint_vline (widget->style, widget->window,

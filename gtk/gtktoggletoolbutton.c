@@ -33,6 +33,11 @@ enum {
   LAST_SIGNAL
 };
 
+struct _GtkToggleToolButtonPrivate
+{
+  guint active : 1;
+};
+  
 static void gtk_toggle_tool_button_init       (GtkToggleToolButton      *button);
 static void gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass);
 
@@ -102,8 +107,10 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
 static void
 gtk_toggle_tool_button_init (GtkToggleToolButton *button)
 {
-  g_signal_connect_object (GTK_TOOL_BUTTON (button)->button, "toggled",
-			   G_CALLBACK (button_toggled), button, 0);
+  button->priv = g_new0 (GtkToggleToolButtonPrivate, 1);
+  
+  g_signal_connect_object (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button)),
+			   "toggled", G_CALLBACK (button_toggled), button, 0);
 }
 
 static gboolean
@@ -116,14 +123,21 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
   gboolean use_mnemonic = TRUE;
   const char *label = "";
 
-  if (tool_button->label_widget && GTK_IS_LABEL (tool_button->label_widget))
-    label = gtk_label_get_label (GTK_LABEL (tool_button->label_widget));
-  else if (tool_button->label_text)
+  GtkWidget *label_widget = gtk_tool_button_get_label_widget (tool_button);
+  const gchar *label_text = gtk_tool_button_get_label (tool_button);
+  gboolean use_underline = gtk_tool_button_get_use_underline (tool_button);
+  const gchar *stock_id = gtk_tool_button_get_stock_id (tool_button);
+
+  if (label_widget && GTK_IS_LABEL (label_widget))
     {
-      label = tool_button->label_text;
-      use_mnemonic = tool_button->use_underline;
+      label = gtk_label_get_label (GTK_LABEL (label_widget));
     }
-  else if (tool_button->stock_id && gtk_stock_lookup (tool_button->stock_id, &stock_item))
+  else if (label_text)
+    {
+      label = label_text;
+      use_mnemonic = use_underline;
+    }
+  else if (stock_id && gtk_stock_lookup (stock_id, &stock_item))
     label = stock_item.label;
   
   if (use_mnemonic)
@@ -132,7 +146,7 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
     menu_item = gtk_check_menu_item_new_with_label (label);
 
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
-				  toggle_tool_button->active);
+				  toggle_tool_button->priv->active);
 
   g_signal_connect_closure_by_id (menu_item,
 				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
@@ -164,12 +178,12 @@ menu_item_activated (GtkWidget           *menu_item,
   GtkToolButton *tool_button = GTK_TOOL_BUTTON (toggle_tool_button);
   gboolean menu_active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item));
 
-  if (toggle_tool_button->active != menu_active)
+  if (toggle_tool_button->priv->active != menu_active)
     {
-      toggle_tool_button->active = menu_active;
+      toggle_tool_button->priv->active = menu_active;
 
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tool_button->button),
-				    toggle_tool_button->active);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (_gtk_tool_button_get_button (tool_button)),
+				    toggle_tool_button->priv->active);
 
       g_signal_emit (G_OBJECT (toggle_tool_button), toggle_signals[TOGGLED], 0);
     }
@@ -181,17 +195,17 @@ button_toggled (GtkWidget           *widget,
 {
   gboolean toggle_active = GTK_TOGGLE_BUTTON (widget)->active;
 
-  if (toggle_tool_button->active != toggle_active)
+  if (toggle_tool_button->priv->active != toggle_active)
     {
       GtkWidget *menu_item;
       
-      toggle_tool_button->active = toggle_active;
+      toggle_tool_button->priv->active = toggle_active;
        
       if ((menu_item =
 	   gtk_tool_item_get_proxy_menu_item (GTK_TOOL_ITEM (toggle_tool_button), MENU_ID)))
 	{
 	  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
-					  toggle_tool_button->active);
+					  toggle_tool_button->priv->active);
 	}
 
       g_signal_emit (G_OBJECT (toggle_tool_button), toggle_signals[TOGGLED], 0);
@@ -231,8 +245,8 @@ gtk_toggle_tool_button_set_active (GtkToggleToolButton *button,
 
   is_active = is_active != FALSE;
 
-  if (button->active != is_active)
-    gtk_button_clicked (GTK_BUTTON (GTK_TOOL_BUTTON (button)->button));
+  if (button->priv->active != is_active)
+    gtk_button_clicked (GTK_BUTTON (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button))));
 }
 
 gboolean
@@ -240,5 +254,5 @@ gtk_toggle_tool_button_get_active (GtkToggleToolButton *button)
 {
   g_return_val_if_fail (GTK_IS_TOGGLE_TOOL_BUTTON (button), FALSE);
 
-  return button->active;
+  return button->priv->active;
 }

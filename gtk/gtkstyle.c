@@ -3095,10 +3095,6 @@ gtk_default_draw_arrow (GtkStyle      *style,
 
   calculate_arrow_geometry (arrow_type, &x, &y, &width, &height);
 
-  if (detail && strcmp (detail, "menuitem") == 0
-      && gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    x = original_x + original_width - width;
-
   if (detail && strcmp (detail, "menu_scroll_arrow_up") == 0)
     y++;
 

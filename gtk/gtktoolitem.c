@@ -508,6 +508,8 @@ gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 
   g_signal_emit (tool_item, toolitem_signals[TOOLBAR_RECONFIGURED], 0);
+  
+  gtk_widget_queue_resize (GTK_WIDGET (tool_item));
 }
 
 void

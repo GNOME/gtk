@@ -67,7 +67,8 @@ gtk_radio_tool_button_class_init (GtkRadioToolButtonClass *klass)
 static void
 gtk_radio_tool_button_init (GtkRadioToolButton *button)
 {
-  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (GTK_TOOL_BUTTON (button)->button), FALSE);
+  GtkToolButton *tool_button = GTK_TOOL_BUTTON (button);
+  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (_gtk_tool_button_get_button (tool_button)), FALSE);
 }
 
 GtkToolItem *
@@ -128,12 +129,18 @@ gtk_radio_tool_button_new_with_stock_from_widget (GtkWidget *group)
   return gtk_radio_tool_button_new (list);
 }
 
+static GtkRadioButton *
+get_radio_button (GtkRadioToolButton *button)
+{
+  return GTK_RADIO_BUTTON (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button)));
+}
+
 GSList *
 gtk_radio_tool_button_get_group (GtkRadioToolButton *button)
 {
   g_return_val_if_fail (GTK_IS_RADIO_TOOL_BUTTON (button), NULL);
 
-  return gtk_radio_button_get_group (GTK_RADIO_BUTTON (GTK_TOOL_BUTTON (button)->button));
+  return gtk_radio_button_get_group (get_radio_button (button));
 }
 
 void
@@ -142,6 +149,6 @@ gtk_radio_tool_button_set_group (GtkRadioToolButton *button,
 {
   g_return_if_fail (GTK_IS_RADIO_TOOL_BUTTON (button));
 
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (GTK_TOOL_BUTTON (button)->button), group);
+  gtk_radio_button_set_group (get_radio_button (button), group);
 }
 

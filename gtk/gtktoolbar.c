@@ -51,7 +51,7 @@
 #define DEFAULT_IPADDING 0
 
 /* note: keep in sync with DEFAULT_SPACE_SIZE and DEFAULT_SPACE_STYLE in gtkseparatortoolitem.c */
-#define DEFAULT_SPACE_SIZE  5
+#define DEFAULT_SPACE_SIZE  4
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
@@ -161,7 +161,6 @@ static void                 gtk_toolbar_arrow_button_clicked (GtkWidget      *bu
 							       GtkToolbar     *toolbar);
 static void                 gtk_toolbar_update_button_relief (GtkToolbar     *toolbar);
 static GtkReliefStyle       get_button_relief                (GtkToolbar     *toolbar);
-static gint                 get_space_size                   (GtkToolbar     *toolbar);
 static gint                 get_internal_padding             (GtkToolbar     *toolbar);
 static void                 gtk_toolbar_remove_tool_item     (GtkToolbar     *toolbar,
 							      GtkToolItem    *item);
@@ -564,6 +563,12 @@ toolbar_item_visible (GtkToolbar  *toolbar,
   return FALSE;
 }
 
+static gboolean
+toolbar_item_is_homogeneous (GtkToolItem *item)
+{
+  return (gtk_tool_item_get_homogeneous (item) && !GTK_IS_SEPARATOR_TOOL_ITEM (item));
+}
+
 static void
 toolbar_item_set_is_overflow (GtkToolItem *item,
 			      gboolean     is_overflow)
@@ -773,7 +778,6 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  gint space_size = get_space_size (toolbar);
   GList *list;
   gint max_child_height;
   gint max_child_width;
@@ -803,7 +807,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
       max_child_width = MAX (max_child_width, requisition.width);
       max_child_height = MAX (max_child_height, requisition.height);
 
-      if (gtk_tool_item_get_homogeneous (item) && GTK_BIN (item)->child)
+      if (toolbar_item_is_homogeneous (item))
 	{
 	  max_homogeneous_child_width = MAX (max_homogeneous_child_width, requisition.width);
 	  max_homogeneous_child_height = MAX (max_homogeneous_child_height, requisition.height);
@@ -825,11 +829,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
       if (!toolbar_item_visible (toolbar, item))
 	continue;
       
-      if (!GTK_BIN (item)->child)
-	{
-	  size = space_size;
-	}
-      else if (gtk_tool_item_get_homogeneous (item))
+      if (toolbar_item_is_homogeneous (item))
 	{
 	  size = homogeneous_size;
 	}
@@ -922,21 +922,18 @@ get_item_size (GtkToolbar *toolbar,
   GtkRequisition requisition;
   GtkToolItem *item = GTK_TOOL_ITEM (child);
 
-  if (!GTK_BIN (item)->child)
-    return get_space_size (toolbar);
-
   gtk_widget_get_child_requisition (child, &requisition);
   
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (gtk_tool_item_get_homogeneous (item))
+      if (toolbar_item_is_homogeneous (item))
 	return toolbar->button_maxw;
       else
 	return requisition.width;
     }
   else
     {
-      if (gtk_tool_item_get_homogeneous (item))
+      if (toolbar_item_is_homogeneous (item))
 	return toolbar->button_maxh;
       else
 	return requisition.height;
@@ -949,7 +946,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  gint space_size;
   GtkAllocation *allocations;
   GtkAllocation arrow_allocation;
   gint arrow_size;
@@ -966,8 +962,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkRequisition arrow_requisition;
 
   widget->allocation = *allocation;
-
-  space_size = get_space_size (toolbar);
 
   border_width = GTK_CONTAINER (toolbar)->border_width;
 
@@ -1093,7 +1087,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       
       if (toolbar_item_visible (toolbar, item) &&
 	  gtk_tool_item_get_expand (item) &&
-	  !toolbar_item_get_is_overflow (item) && GTK_BIN (item)->child)
+	  !toolbar_item_get_is_overflow (item) &&
+	  !GTK_IS_SEPARATOR_TOOL_ITEM (item))
 	{
 	  n_expand_items++;
 	}
@@ -1104,7 +1099,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       GtkToolItem *item = list->data;
       
       if (toolbar_item_visible (toolbar, item) && gtk_tool_item_get_expand (item) &&
-	  !toolbar_item_get_is_overflow (item) && GTK_BIN (item)->child)
+	  !toolbar_item_get_is_overflow (item) &&
+	  !GTK_IS_SEPARATOR_TOOL_ITEM (item))
 	{
 	  gint extra = size / n_expand_items;
 	  if (size % n_expand_items != 0)
@@ -2020,18 +2016,6 @@ get_button_relief (GtkToolbar *toolbar)
 }
 
 static gint
-get_space_size (GtkToolbar *toolbar)
-{
-  gint space_size = DEFAULT_SPACE_SIZE;
-
-  gtk_widget_style_get (GTK_WIDGET (toolbar),
-                        "space_size", &space_size,
-                        NULL);
-
-  return space_size;
-}
-
-static gint
 get_internal_padding (GtkToolbar *toolbar)
 {
   gint ipadding = 0;
@@ -2515,9 +2499,10 @@ gtk_toolbar_remove_space (GtkToolbar *toolbar,
       return;
     }
 
-  if (GTK_BIN (item)->child)
+  if (!GTK_IS_SEPARATOR_TOOL_ITEM (item))
     {
       g_warning ("Toolbar position %d is not a space", position);
+      return;
     }
 
   gtk_toolbar_remove_tool_item (toolbar, item);
@@ -2686,19 +2671,19 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
 
     case GTK_TOOLBAR_CHILD_BUTTON:
       item = gtk_tool_button_new (NULL, NULL);
-      child->widget = GTK_TOOL_BUTTON (item)->button;
+      child->widget = _gtk_tool_button_get_button (GTK_TOOL_BUTTON (item));
       break;
       
     case GTK_TOOLBAR_CHILD_TOGGLEBUTTON:
       item = gtk_toggle_tool_button_new ();
-      child->widget = GTK_TOOL_BUTTON (item)->button;
+      child->widget = _gtk_tool_button_get_button (GTK_TOOL_BUTTON (item));
       break;
 
     case GTK_TOOLBAR_CHILD_RADIOBUTTON:
       item = gtk_radio_tool_button_new (widget
 					? gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget))
 					: NULL);
-      child->widget = GTK_TOOL_BUTTON (item)->button;
+      child->widget = _gtk_tool_button_get_button (GTK_TOOL_BUTTON (item));
       break;
     }
 

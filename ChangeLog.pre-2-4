@@ -1,3 +1,37 @@
+Tue Jul  8 19:57:14 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkstyle.c (gtk_default_draw_arrow): remove correction on x
+	when detail is "menuitem". With the new menu look is isn't needed
+	anymore.
+
+	* gtk/gtktoolitem.c (gtk_tool_item_toolbar_reconfigured): queue a
+	resize here, so that tool items will get a chance to relayout
+	themselves based on the toolbar configuration.
+
+	change DEFAULT_SPACE_SIZE to 4 instead of 5
+
+	* gtk/gtktoolbar.c 
+	Get rid of "!GTK_BIN (item)->child means separator". Separators
+	are widgets in their own right
+
+	change DEFAULT_SPACE_SIZE to 4 instead of 5
+	
+	(get_space_size): remove this function
+	(toolbar_item_is_homogeneous): new function
+
+	* gtk/gtkseparatortoolitem.c
+	(gtk_separator_tool_item_size_request): new function.
+
+Tue Jul  8 14:10:35 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoggletoolbutton.h: use private data, add new
+	internal function _gtk_toggle_tool_button_get_button()
+
+	* gtk/gtktoolbutton.h: move to private data
+
+	* gtk/gtkradiotoolbutton.c, gtk/gtktoolbutton.c: updates for new
+	private data.
+
 Tue Jul  8 12:50:20 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbutton.c (gtk_tool_button_get_icon_widget): fix a

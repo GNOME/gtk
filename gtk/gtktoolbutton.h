@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 #define GTK_IS_TOOL_BUTTON(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TOOL_BUTTON))
 #define GTK_IS_TOOL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TOOL_BUTTON))
 #define GTK_TOOL_BUTTON_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_TOOL_BUTTON, GtkToolButtonClass))
+#define GTK_TOOL_ITEM_GET_PRIVATE(obj)  (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TOOL_BUTTON, GtkToolButtonPrivate))
 
 typedef struct _GtkToolButton        GtkToolButton;
 typedef struct _GtkToolButtonClass   GtkToolButtonClass;
@@ -42,14 +43,8 @@ struct _GtkToolButton
 {
   GtkToolItem parent;
 
-  GtkWidget *button;
-
-  gchar *stock_id;
-  gchar *label_text;
-  GtkWidget *label_widget;
-  GtkWidget *icon_widget;
-  
-  guint use_underline : 1;
+  /*< private >*/
+  GtkToolButtonPrivate *priv;
 };
 
 struct _GtkToolButtonClass
@@ -83,6 +78,9 @@ GtkWidget *           gtk_tool_button_get_icon_widget (GtkToolButton *button);
 void                  gtk_tool_button_set_label_widget (GtkToolButton *button,
 							GtkWidget     *label_widget);
 GtkWidget *           gtk_tool_button_get_label_widget (GtkToolButton *button);
+
+/* internal function */
+GtkWidget *_gtk_tool_button_get_button (GtkToolButton *button);
 
 G_END_DECLS
 
