@@ -6,6 +6,8 @@ Bugs:
    quite a bit of flickering
    Actually this affects both scrollbar implementation, you can best
    tell if you run the application with --sync (timj)
+   
+ * remove gtk_tree_item_idle_hack from gtktreeitem.c.
 
  * signal parameters don't seem to get refreshed on recursive invokations
    of GTK_NO_RECURSE signals, which causes the restarted emissions to loose

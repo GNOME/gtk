@@ -190,69 +190,45 @@ static void
 gtk_tree_item_init (GtkTreeItem *tree_item)
 {
   GtkWidget *eventbox, *pixmapwid;
-  static GdkPixmap *pixmap_plus = NULL;
-  static GdkPixmap *pixmap_minus = NULL;
-  static GdkBitmap *mask_plus = NULL; 
-  static GdkBitmap *mask_minus = NULL;
-  GdkColor xpmcolor;
-
+  
   tree_item->expanded = FALSE;
   tree_item->subtree = NULL;
   GTK_WIDGET_SET_FLAGS (tree_item, GTK_CAN_FOCUS);
-
-  /* check if icons are already created */
-  if(pixmap_plus == NULL && pixmap_minus == NULL) 
-    {
-      /* create pixmaps for plus icon */
-      pixmap_plus = gdk_pixmap_create_from_xpm_d(GTK_WIDGET(tree_item)->window,
-                                               &mask_plus,
-                                               &xpmcolor,
-                                               tree_plus);
-      /* create pixmaps for minus icon */
-      pixmap_minus = gdk_pixmap_create_from_xpm_d(GTK_WIDGET(tree_item)->window,
-                                                &mask_minus,
-                                                &xpmcolor,
-                                                tree_minus);
-    }
   
-  if(pixmap_plus && pixmap_minus) 
-    {
-      /* create an event box containing one pixmaps */
-      eventbox = gtk_event_box_new();
-      gtk_widget_set_events (eventbox, GDK_BUTTON_PRESS_MASK);
-      gtk_signal_connect(GTK_OBJECT(eventbox), "state_changed",
-			 (GtkSignalFunc)gtk_tree_item_subtree_button_changed_state, 
-			 (gpointer)NULL);
-      gtk_signal_connect(GTK_OBJECT(eventbox), "realize",
-			 (GtkSignalFunc)gtk_tree_item_subtree_button_changed_state, 
-			 (gpointer)NULL);
-      gtk_signal_connect(GTK_OBJECT(eventbox), "button_press_event",
-			 (GtkSignalFunc)gtk_tree_item_subtree_button_click,
-			 (gpointer)NULL);
-      gtk_object_set_user_data(GTK_OBJECT(eventbox), tree_item);
-      tree_item->pixmaps_box = eventbox;
+  /* create an event box containing one pixmaps */
+  eventbox = gtk_event_box_new();
+  gtk_widget_set_events (eventbox, GDK_BUTTON_PRESS_MASK);
+  gtk_signal_connect(GTK_OBJECT(eventbox), "state_changed",
+		     (GtkSignalFunc)gtk_tree_item_subtree_button_changed_state, 
+		     (gpointer)NULL);
+  gtk_signal_connect(GTK_OBJECT(eventbox), "realize",
+		     (GtkSignalFunc)gtk_tree_item_subtree_button_changed_state, 
+		     (gpointer)NULL);
+  gtk_signal_connect(GTK_OBJECT(eventbox), "button_press_event",
+		     (GtkSignalFunc)gtk_tree_item_subtree_button_click,
+		     (gpointer)NULL);
+  gtk_object_set_user_data(GTK_OBJECT(eventbox), tree_item);
+  tree_item->pixmaps_box = eventbox;
 
-      /* create pixmap for button '+' */
-      pixmapwid = gtk_pixmap_new (pixmap_plus, mask_plus);
-      if(!tree_item->expanded) 
-	gtk_container_add(GTK_CONTAINER(eventbox), pixmapwid);
-      gtk_widget_show(pixmapwid);
-      tree_item->plus_pix_widget = pixmapwid;
-      gtk_widget_ref (tree_item->plus_pix_widget);
-      gtk_object_sink (GTK_OBJECT (tree_item->plus_pix_widget));
-      
-      /* create pixmap for button '-' */
-      pixmapwid = gtk_pixmap_new (pixmap_minus, mask_minus);
-      if(tree_item->expanded) 
-	gtk_container_add(GTK_CONTAINER(eventbox), pixmapwid);
-      gtk_widget_show(pixmapwid);
-      tree_item->minus_pix_widget = pixmapwid;
-      gtk_widget_ref (tree_item->minus_pix_widget);
-      gtk_object_sink (GTK_OBJECT (tree_item->minus_pix_widget));
-      
-      gtk_widget_set_parent(eventbox, GTK_WIDGET(tree_item));
-    } else
-      tree_item->pixmaps_box = NULL;
+  /* create pixmap for button '+' */
+  pixmapwid = gtk_type_new (gtk_pixmap_get_type ());
+  if (!tree_item->expanded) 
+    gtk_container_add (GTK_CONTAINER (eventbox), pixmapwid);
+  gtk_widget_show (pixmapwid);
+  tree_item->plus_pix_widget = pixmapwid;
+  gtk_widget_ref (tree_item->plus_pix_widget);
+  gtk_object_sink (GTK_OBJECT (tree_item->plus_pix_widget));
+  
+  /* create pixmap for button '-' */
+  pixmapwid = gtk_type_new (gtk_pixmap_get_type ());
+  if (tree_item->expanded) 
+    gtk_container_add (GTK_CONTAINER (eventbox), pixmapwid);
+  gtk_widget_show (pixmapwid);
+  tree_item->minus_pix_widget = pixmapwid;
+  gtk_widget_ref (tree_item->minus_pix_widget);
+  gtk_object_sink (GTK_OBJECT (tree_item->minus_pix_widget));
+  
+  gtk_widget_set_parent (eventbox, GTK_WIDGET (tree_item));
 }
 
 
@@ -303,7 +279,7 @@ gtk_tree_item_set_subtree (GtkTreeItem *tree_item,
   GTK_TREE(subtree)->root_tree = GTK_TREE(GTK_WIDGET(tree_item)->parent)->root_tree;
 
   /* show subtree button */
-  if(tree_item->pixmaps_box)
+  if (tree_item->pixmaps_box)
     gtk_widget_show(tree_item->pixmaps_box);
 
   /* set parent widget */
@@ -362,6 +338,35 @@ gtk_tree_item_collapse (GtkTreeItem *tree_item)
 
 }
 
+static gint
+gtk_tree_item_idle_hack (GtkTreeItem *tree_item)
+{
+  static GdkPixmap *pixmap_plus = NULL;
+  static GdkPixmap *pixmap_minus = NULL;
+  static GdkBitmap *mask_plus = NULL; 
+  static GdkBitmap *mask_minus = NULL;
+  GdkColor xpmcolor = { 0, 0, 0, 0 };
+  
+  if (!pixmap_plus)
+    {
+      /* create pixmaps for plus icon */
+      pixmap_plus = gdk_pixmap_create_from_xpm_d (GTK_WIDGET (tree_item)->window,
+						  &mask_plus,
+						  &xpmcolor,
+						  tree_plus);
+      
+      /* create pixmaps for minus icon */
+      pixmap_minus = gdk_pixmap_create_from_xpm_d (GTK_WIDGET (tree_item)->window,
+						   &mask_minus,
+						   &xpmcolor,
+						   tree_minus);
+    }
+  gtk_pixmap_set (GTK_PIXMAP (tree_item->plus_pix_widget), pixmap_plus, mask_plus);
+  gtk_pixmap_set (GTK_PIXMAP (tree_item->minus_pix_widget), pixmap_minus, mask_minus);
+
+  return FALSE;
+}
+
 static void
 gtk_tree_item_realize (GtkWidget *widget)
 {    
@@ -373,6 +378,10 @@ gtk_tree_item_realize (GtkWidget *widget)
   
   gdk_window_set_background (widget->window, 
 			     &widget->style->base[GTK_STATE_NORMAL]);
+
+  gtk_idle_add_priority (-64,
+			 (GtkFunction) gtk_tree_item_idle_hack,
+			 (gpointer) widget);
 }
 
 static void
@@ -633,9 +642,9 @@ gtk_tree_item_draw_focus (GtkWidget *widget)
 			  widget->allocation.width - 1 - dx,
 			  widget->allocation.height - 1);
 
-      if(GTK_TREE(widget->parent)->view_line &&
-	 (!GTK_IS_ROOT_TREE(widget->parent) ||
-	  (GTK_IS_ROOT_TREE(widget->parent) && GTK_TREE_ITEM(widget)->subtree != NULL))) 
+      if (GTK_TREE (widget->parent)->view_line &&
+	 (!GTK_IS_ROOT_TREE (widget->parent) ||
+	  (GTK_IS_ROOT_TREE (widget->parent) && GTK_TREE_ITEM(widget)->subtree))) 
 	{
 	  gtk_tree_item_draw_lines(widget);
 	}
