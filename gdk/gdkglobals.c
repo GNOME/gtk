@@ -20,8 +20,7 @@
 #include "gdktypes.h"
 #include "gdkprivate.h"
 
-gint              gdk_debug_level = 0;
-gint              gdk_show_events = FALSE;
+guint             gdk_debug_flags = 0;
 gint              gdk_use_xshm = TRUE;
 gchar            *gdk_display_name = NULL;
 Display          *gdk_display = NULL;

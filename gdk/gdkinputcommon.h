@@ -581,13 +581,13 @@ gdk_input_common_other_event (GdkEvent *event,
       event->button.state = gdk_input_translate_state(xdbe->state,xdbe->device_state);
       event->button.button = xdbe->button;
 
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("button %s:\t\twindow: %ld  device: %ld  x,y: %f %f  button: %d\n",
 		 (event->button.type == GDK_BUTTON_PRESS) ? "press" : "release",
 		 xdbe->window,
 		 xdbe->deviceid,
 		 event->button.x, event->button.y,
-		 xdbe->button);
+		 xdbe->button));
 
       return TRUE;
   }
@@ -597,12 +597,12 @@ gdk_input_common_other_event (GdkEvent *event,
     {
       XDeviceKeyEvent *xdke = (XDeviceKeyEvent *)(xevent);
 
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("device key %s:\twindow: %ld  device: %ld  keycode: %d\n",
 		 (event->key.type == GDK_KEY_PRESS) ? "press" : "release",
 		 xdke->window,
 		 xdke->deviceid,
-		 xdke->keycode);
+		 xdke->keycode));
 
       if (xdke->keycode < gdkdev->min_keycode ||
 	  xdke->keycode >= gdkdev->min_keycode + gdkdev->info.num_keys)
@@ -615,8 +615,8 @@ gdk_input_common_other_event (GdkEvent *event,
 
       if (event->key.keyval == 0) 
 	{
-	  if (gdk_show_events)
-	    g_print ("\t\ttranslation - NONE\n");
+	  GDK_NOTE (EVENTS,
+	    g_print ("\t\ttranslation - NONE\n"));
 	  
 	  return FALSE;
 	}
@@ -644,10 +644,10 @@ gdk_input_common_other_event (GdkEvent *event,
 	  event->key.string = g_new0 (gchar, 1);
 	}
 
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("\t\ttranslation - keyval: %d modifiers: %#x\n",
 		 event->key.keyval,
-		 event->key.state);
+		 event->key.state));
 
       return TRUE;
     }
@@ -672,13 +672,13 @@ gdk_input_common_other_event (GdkEvent *event,
       event->motion.source = gdkdev->info.source;
       event->motion.deviceid = xdme->deviceid;
 
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("motion notify:\t\twindow: %ld  device: %ld  x,y: %f %f  state %#4x  hint: %s\n",
 		 xdme->window,
 		 xdme->deviceid,
 		 event->motion.x, event->motion.y,
 		 event->motion.state,
-		 (xdme->is_hint) ? "true" : "false");
+		 (xdme->is_hint) ? "true" : "false"));
       
       
       return TRUE;

@@ -17,8 +17,6 @@
  */
 #include "../config.h"
 
-/* #define DEBUG_DND 1 */ /* Shouldn't be needed much these days */
-
 /* If you don't want to use gdk's signal handlers define this */
 /* #define I_NEED_TO_ACTUALLY_DEBUG_MY_PROGRAMS 1 */
 
@@ -227,6 +225,15 @@ static GList *putback_events = NULL;
 static gulong base_id;
 static gint autorepeat;
 
+#ifdef G_ENABLE_DEBUG
+static GDebugKey gdk_debug_keys[] = {
+  {"events",        GDK_DEBUG_EVENTS},
+  {"misc",          GDK_DEBUG_MISC},
+  {"dnd",           GDK_DEBUG_DND},
+  {"color-context", GDK_DEBUG_COLOR_CONTEXT},
+  {"xim",           GDK_DEBUG_XIM}
+};
+#endif /* G_ENABLE_DEBUG */
 
 /*
  *--------------------------------------------------------------
@@ -260,6 +267,8 @@ gdk_init (int    *argc,
   int argc_orig = *argc;
   char **argv_orig;
 
+  gboolean debug_set = FALSE;
+
   argv_orig = malloc ((argc_orig + 1) * sizeof (char*));
   for (i = 0; i < argc_orig; i++)
     argv_orig[i] = g_strdup ((*argv)[i]);
@@ -291,11 +300,30 @@ gdk_init (int    *argc,
 
       for (i = 1; i < *argc;)
 	{
-	  if (strcmp ("--display", (*argv)[i]) == 0)
+	  if ((*argv)[i] == NULL)
+	    continue;
+	  
+#ifdef G_ENABLE_DEBUG	  
+	  if (strcmp ("--gdk-debug", (*argv)[i]) == 0)
 	    {
 	      (*argv)[i] = NULL;
 
-	      if ((i + 1) < *argc)
+	      if ((i + 1) < *argc && (*argv)[i + 1])
+		{
+		  gdk_debug_flags = g_parse_debug_string ((*argv)[i+1],
+							  gdk_debug_keys,
+ 			          sizeof(gdk_debug_keys) / sizeof(GDebugKey));
+		  debug_set = TRUE;
+		  (*argv)[i + 1] = NULL;
+		  i += 1;
+		}
+	    }
+#endif G_ENABLE_DEBUG
+	  else if (strcmp ("--display", (*argv)[i]) == 0)
+	    {
+	      (*argv)[i] = NULL;
+
+	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gdk_display_name = g_strdup ((*argv)[i + 1]);
 		  (*argv)[i + 1] = NULL;
@@ -307,33 +335,14 @@ gdk_init (int    *argc,
 	      (*argv)[i] = NULL;
 	      synchronize = TRUE;
 	    }
-	  else if (strcmp ("--show-events", (*argv)[i]) == 0)
-	    {
-	      (*argv)[i] = NULL;
-	      gdk_show_events = TRUE;
-	    }
-	  else if (strcmp ("--no-show-events", (*argv)[i]) == 0)
-	    {
-	      (*argv)[i] = NULL;
-	      gdk_show_events = FALSE;
-	    }
 	  else if (strcmp ("--no-xshm", (*argv)[i]) == 0)
 	    {
 	      (*argv)[i] = NULL;
 	      gdk_use_xshm = FALSE;
 	    }
-	  else if (strcmp ("--debug-level", (*argv)[i]) == 0)
-	    {
-	      if ((i + 1) < *argc)
-		{
-		  (*argv)[i++] = NULL;
-		  gdk_debug_level = atoi ((*argv)[i]);
-		  (*argv)[i] = NULL;
-		}
-	    }
 	  else if (strcmp ("--name", (*argv)[i]) == 0)
 	    {
-	      if ((i + 1) < *argc)
+	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  (*argv)[i++] = NULL;
 		  gdk_progname = (*argv)[i];
@@ -342,7 +351,7 @@ gdk_init (int    *argc,
 	    }
 	  else if (strcmp ("--class", (*argv)[i]) == 0)
 	    {
-	      if ((i + 1) < *argc)
+	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  (*argv)[i++] = NULL;
 		  gdk_progclass = (*argv)[i];
@@ -352,7 +361,7 @@ gdk_init (int    *argc,
 #ifdef XINPUT_GXI
 	  else if (strcmp ("--gxid_host", (*argv)[i]) == 0)
 	    {
-	      if ((i + 1) < *argc)
+	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  (*argv)[i++] = NULL;
 		  gdk_input_gxid_host = ((*argv)[i]);
@@ -361,7 +370,7 @@ gdk_init (int    *argc,
 	    }
 	  else if (strcmp ("--gxid_port", (*argv)[i]) == 0)
 	    {
-	      if ((i + 1) < *argc)
+	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  (*argv)[i++] = NULL;
 		  gdk_input_gxid_port = atoi ((*argv)[i]);
@@ -372,7 +381,7 @@ gdk_init (int    *argc,
 #ifdef USE_XIM
 	  else if (strcmp ("--xim-preedit", (*argv)[i]) == 0)
 	    {
-	      if ((i + 1) < *argc)
+	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  (*argv)[i++] = NULL;
 		  if (strcmp ("none", (*argv)[i]) == 0)
@@ -389,7 +398,7 @@ gdk_init (int    *argc,
 	    }
 	  else if (strcmp ("--xim-status", (*argv)[i]) == 0)
 	    {
-	      if ((i + 1) < *argc)
+	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  (*argv)[i++] = NULL;
 		  if (strcmp ("none", (*argv)[i]) == 0)
@@ -427,6 +436,15 @@ gdk_init (int    *argc,
       gdk_progname = "<unknown>";
     }
 
+  if (!debug_set)
+    {
+      gchar *debug_string = getenv("GDK_DEBUG");
+      if (debug_string != NULL)
+	gdk_debug_flags = g_parse_debug_string (debug_string,
+						gdk_debug_keys,
+			        sizeof(gdk_debug_keys) / sizeof(GDebugKey));
+    }
+
   gdk_display = XOpenDisplay (gdk_display_name);
   if (!gdk_display)
     {
@@ -440,12 +458,11 @@ gdk_init (int    *argc,
    */
   /* base_id = RESOURCE_BASE; */
   base_id = 0;
-  if (gdk_show_events)
-    g_print ("base id: %lu\n", base_id);
+  GDK_NOTE (EVENTS, g_print ("base id: %lu\n", base_id));
 
   connection_number = ConnectionNumber (gdk_display);
-  if (gdk_debug_level >= 1)
-    g_print ("connection number: %d\n", connection_number);
+  GDK_NOTE (MISC,
+    g_print ("connection number: %d\n", connection_number));
 
   if (synchronize)
     XSynchronize (gdk_display, True);
@@ -929,31 +946,6 @@ gdk_event_free (GdkEvent *event)
 
 /*
  *--------------------------------------------------------------
- * gdk_set_debug_level
- *
- *   Sets the debugging level.
- *
- * Arguments:
- *   "level" is the new debugging level.
- *
- * Results:
- *
- * Side effects:
- *   Other function calls to "gdk" use the debugging
- *   level to determine what kind of debugging information
- *   to print out.
- *
- *--------------------------------------------------------------
- */
-
-void
-gdk_set_debug_level (int level)
-{
-  gdk_debug_level = level;
-}
-
-/*
- *--------------------------------------------------------------
  * gdk_set_show_events
  *
  *   Turns on/off the showing of events.
@@ -975,7 +967,10 @@ gdk_set_debug_level (int level)
 void
 gdk_set_show_events (int show_events)
 {
-  gdk_show_events = show_events;
+  if (show_events)
+    gdk_debug_flags |= GDK_DEBUG_EVENTS;
+  else
+    gdk_debug_flags &= ~GDK_DEBUG_EVENTS;
 }
 
 void
@@ -985,15 +980,9 @@ gdk_set_use_xshm (gint use_xshm)
 }
 
 gint
-gdk_get_debug_level ()
-{
-  return gdk_debug_level;
-}
-
-gint
 gdk_get_show_events ()
 {
-  return gdk_show_events;
+  return gdk_debug_flags & GDK_DEBUG_EVENTS;
 }
 
 gint
@@ -1750,8 +1739,8 @@ gdk_event_translate (GdkEvent *event,
 	  if (status == XBufferOverflow)
 	    {                     /* retry */
 	      /* alloc adequate size of buffer */
-	      if (gdk_debug_level >= 1)
-		g_print("XIM: overflow (required %i)\n", charcount);
+	      GDK_NOTE (XIM,
+		g_print("XIM: overflow (required %i)\n", charcount));
 
 	      while (buf_len <= charcount)
 		buf_len *= 2;
@@ -1784,7 +1773,8 @@ gdk_event_translate (GdkEvent *event,
 
       /* Print debugging info.
        */
-      if (gdk_show_events)
+#ifdef G_ENABLE_DEBUG
+      if (gdk_debug_flags & GDK_DEBUG_EVENTS)
 	{
 	  g_print ("key press:\twindow: %ld  key: %12s  %d\n",
 		   xevent->xkey.window - base_id,
@@ -1794,6 +1784,7 @@ gdk_event_translate (GdkEvent *event,
 	    g_print ("\t\tlength: %4d string: \"%s\"\n",
 		     charcount, buf);
 	}
+#endif /* G_ENABLE_DEBUG */
 
       event->key.type = GDK_KEY_PRESS;
       event->key.window = window;
@@ -1818,11 +1809,11 @@ gdk_event_translate (GdkEvent *event,
 
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS, 
 	g_print ("key release:\t\twindow: %ld  key: %12s  %d\n",
 		 xevent->xkey.window - base_id,
 		 XKeysymToString (event->key.keyval),
-		 event->key.keyval);
+		 event->key.keyval));
 
       event->key.type = GDK_KEY_RELEASE;
       event->key.window = window;
@@ -1837,12 +1828,12 @@ gdk_event_translate (GdkEvent *event,
     case ButtonPress:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS, 
 	g_print ("button press[%d]:\t\twindow: %ld  x,y: %d %d  button: %d\n",
 		 window_private?window_private->dnd_drag_enabled:0,
 		 xevent->xbutton.window - base_id,
 		 xevent->xbutton.x, xevent->xbutton.y,
-		 xevent->xbutton.button);
+		 xevent->xbutton.button));
 
       if (window_private &&
 	  (window_private->extension_events != 0) &&
@@ -1941,12 +1932,12 @@ gdk_event_translate (GdkEvent *event,
     case ButtonRelease:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS, 
 	g_print ("button release[%d]:\twindow: %ld  x,y: %d %d  button: %d\n",
 		 window_private?window_private->dnd_drag_enabled:0,
 		 xevent->xbutton.window - base_id,
 		 xevent->xbutton.x, xevent->xbutton.y,
-		 xevent->xbutton.button);
+		 xevent->xbutton.button));
 
       if (window_private &&
 	  (window_private->extension_events != 0) &&
@@ -2018,12 +2009,12 @@ gdk_event_translate (GdkEvent *event,
     case MotionNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("motion notify:\t\twindow: %ld  x,y: %d %d  hint: %s d:%d r%d\n",
 		 xevent->xmotion.window - base_id,
 		 xevent->xmotion.x, xevent->xmotion.y,
 		 (xevent->xmotion.is_hint) ? "true" : "false",
-		 dnd_drag_perhaps, gdk_dnd.drag_really);
+		 dnd_drag_perhaps, gdk_dnd.drag_really));
 
       if (window_private &&
 	  (window_private->extension_events != 0) &&
@@ -2075,10 +2066,9 @@ gdk_event_translate (GdkEvent *event,
 					x, y, &x, &y, &twin);
 		}
 	    }
-#if defined(DEBUG_DND) /* && defined(DEBUG_DND_MORE_DETAILS) */
-	  g_print("Drag is now in window %#x, lastwin was %#x, ddc = %#x\n",
-		curwin, lastwin, dnd_drag_curwin);
-#endif
+	  GDK_NOTE (DND,
+	    g_print("Drag is now in window %#lx, lastwin was %#lx, ddc = %#lx\n",
+		    curwin, lastwin, dnd_drag_curwin));
 	  if(curwin != dnd_drag_curwin && curwin != lastwin)
 	    {
 	      /* We have left one window and entered another
@@ -2090,10 +2080,10 @@ gdk_event_translate (GdkEvent *event,
 	      dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
 	      dnd_drag_dropzone.width = dnd_drag_dropzone.height = 0;
 	      dnd_drag_target = None;
-#ifdef DEBUG_DND
-	      g_print("curwin = %#x, lastwin = %#x, dnd_drag_curwin = %#x\n",
-		      curwin, lastwin, dnd_drag_curwin);
-#endif
+	      GDK_NOTE (DND,
+	        g_print("curwin = %#lx, lastwin = %#lx, dnd_drag_curwin = %#lx\n",
+		        curwin, lastwin, dnd_drag_curwin));
+
 	      XChangeActivePointerGrab(gdk_display,
 				       ButtonMotionMask |
 				       ButtonPressMask | ButtonReleaseMask,
@@ -2139,13 +2129,11 @@ gdk_event_translate (GdkEvent *event,
     case EnterNotify:
       /* Print debugging info.
        */
-#if !(defined(DEBUG_DND) && defined(DEBUG_DND_MORE_DETAILS))
-      if (gdk_show_events)
-#endif
+      GDK_NOTE (EVENTS,
 	g_print ("enter notify:\t\twindow: %ld  detail: %d subwin: %ld\n",
 		 xevent->xcrossing.window - base_id,
 		 xevent->xcrossing.detail,
-		 xevent->xcrossing.subwindow - base_id);
+		 xevent->xcrossing.subwindow - base_id));
 
       /* Tell XInput stuff about it if appropriate */
       if (window_private &&
@@ -2188,21 +2176,20 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
 
-#ifdef DEBUG_DND
-	if(dnd_drag_perhaps)
-	{
-	  g_print("We may[%d] have a drag into %#x = %#x\n",
-		  gdk_dnd.drag_really,
-		  xevent->xcrossing.window, real_sw->xwindow);
-	}
-#endif
+        if ((gdk_debug_flags & GDK_DEBUG_DND) & dnd_drag_perhaps)
+	  {
+	    g_print("We may[%d] have a drag into %#lx = %#lx\n",
+		    gdk_dnd.drag_really,
+		    xevent->xcrossing.window, real_sw->xwindow);
+	  }
+
 	if (dnd_drag_perhaps && gdk_dnd.drag_really && 
 	    (xevent->xcrossing.window == real_sw->xwindow))
 	  {
 	    gdk_dnd.drag_really = 0;
-#ifdef DEBUG_DND
-	    g_print("Ungrabbed\n");
-#endif
+
+	    GDK_NOTE (DND, g_print("Ungrabbed\n"));
+
 	    gdk_dnd.drag_numwindows = 0;
 	    g_free(gdk_dnd.drag_startwindows);
 	    gdk_dnd.drag_startwindows = NULL;
@@ -2217,12 +2204,10 @@ gdk_event_translate (GdkEvent *event,
     case LeaveNotify:
       /* Print debugging info.
        */
-#if !(defined(DEBUG_DND) && defined(DEBUG_DND_MORE_DETAILS))
-      if (gdk_show_events)
-#endif
+      GDK_NOTE (EVENTS, 
 	g_print ("leave notify:\t\twindow: %ld  detail: %d subwin: %ld\n",
 		 xevent->xcrossing.window - base_id,
-		 xevent->xcrossing.detail, xevent->xcrossing.subwindow - base_id);
+		 xevent->xcrossing.detail, xevent->xcrossing.subwindow - base_id));
 
       event->crossing.type = GDK_LEAVE_NOTIFY;
       event->crossing.window = window;
@@ -2258,14 +2243,12 @@ gdk_event_translate (GdkEvent *event,
 	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
 	  break;
 	}
-#ifdef DEBUG_DND
-      if(dnd_drag_perhaps)
+      if ((gdk_debug_flags & GDK_DEBUG_DND) & dnd_drag_perhaps)
 	{
-	  g_print("We may[%d] have a drag out of %#x = %#x\n",
+	  g_print("We may[%d] have a drag out of %#lx = %#lx\n",
 		  gdk_dnd.drag_really,
 		  xevent->xcrossing.window, real_sw->xwindow);
 	}
-#endif
       if (dnd_drag_perhaps && !gdk_dnd.drag_really &&
 	  (xevent->xcrossing.window == real_sw->xwindow))
 	{
@@ -2295,10 +2278,10 @@ gdk_event_translate (GdkEvent *event,
 	case NotifyNonlinear:
 	  /* Print debugging info.
 	   */
-	  if (gdk_show_events)
+	  GDK_NOTE (EVENTS,
 	    g_print ("focus %s:\t\twindow: %ld\n",
 		     (xevent->xany.type == FocusIn) ? "in" : "out",
-		     xevent->xfocus.window - base_id);
+		     xevent->xfocus.window - base_id));
 	  
 	  event->focus_change.type = GDK_FOCUS_CHANGE;
 	  event->focus_change.window = window;
@@ -2314,8 +2297,8 @@ gdk_event_translate (GdkEvent *event,
     case KeymapNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
-	g_print ("keymap notify\n");
+      GDK_NOTE (EVENTS,
+	g_print ("keymap notify\n"));
 
       /* Not currently handled */
       break;
@@ -2323,11 +2306,11 @@ gdk_event_translate (GdkEvent *event,
     case Expose:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("expose:\t\twindow: %ld  %d  x,y: %d %d  w,h: %d %d\n",
 		 xevent->xexpose.window - base_id, xevent->xexpose.count,
 		 xevent->xexpose.x, xevent->xexpose.y,
-		 xevent->xexpose.width, xevent->xexpose.height);
+		 xevent->xexpose.width, xevent->xexpose.height));
 
       event->expose.type = GDK_EXPOSE;
       event->expose.window = window;
@@ -2343,9 +2326,9 @@ gdk_event_translate (GdkEvent *event,
     case GraphicsExpose:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("graphics expose:\tdrawable: %ld\n",
-		 xevent->xgraphicsexpose.drawable - base_id);
+		 xevent->xgraphicsexpose.drawable - base_id));
 
       event->expose.type = GDK_EXPOSE;
       event->expose.window = window;
@@ -2361,9 +2344,9 @@ gdk_event_translate (GdkEvent *event,
     case NoExpose:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("no expose:\t\tdrawable: %ld\n",
-		 xevent->xnoexpose.drawable - base_id);
+		 xevent->xnoexpose.drawable - base_id));
 
       event->no_expose.type = GDK_NO_EXPOSE;
       event->no_expose.window = window;
@@ -2374,7 +2357,7 @@ gdk_event_translate (GdkEvent *event,
     case VisibilityNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      if (gdk_debug_flags & GDK_DEBUG_EVENTS)
 	switch (xevent->xvisibility.state)
 	  {
 	  case VisibilityFullyObscured:
@@ -2419,9 +2402,9 @@ gdk_event_translate (GdkEvent *event,
     case DestroyNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("destroy notify:\twindow: %ld\n",
-		 xevent->xdestroywindow.window - base_id);
+		 xevent->xdestroywindow.window - base_id));
 
       event->any.type = GDK_DESTROY;
       event->any.window = window;
@@ -2434,9 +2417,9 @@ gdk_event_translate (GdkEvent *event,
     case UnmapNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("unmap notify:\t\twindow: %ld\n",
-		 xevent->xmap.window - base_id);
+		 xevent->xmap.window - base_id));
 
       event->any.type = GDK_UNMAP;
       event->any.window = window;
@@ -2450,9 +2433,9 @@ gdk_event_translate (GdkEvent *event,
     case MapNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("map notify:\t\twindow: %ld\n",
-		 xevent->xmap.window - base_id);
+		 xevent->xmap.window - base_id));
 
       event->any.type = GDK_MAP;
       event->any.window = window;
@@ -2463,9 +2446,9 @@ gdk_event_translate (GdkEvent *event,
     case ReparentNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("reparent notify:\twindow: %ld\n",
-		 xevent->xreparent.window - base_id);
+		 xevent->xreparent.window - base_id));
 
       /* Not currently handled */
       break;
@@ -2478,7 +2461,7 @@ gdk_event_translate (GdkEvent *event,
 				    ConfigureNotify, xevent))
 	/*XSync (gdk_display, 0)*/;
       
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("configure notify:\twindow: %ld  x,y: %d %d  w,h: %d %d  b-w: %d  above: %ld  ovr: %d\n",
 		 xevent->xconfigure.window - base_id,
 		 xevent->xconfigure.x,
@@ -2487,7 +2470,7 @@ gdk_event_translate (GdkEvent *event,
 		 xevent->xconfigure.height,
 		 xevent->xconfigure.border_width,
 		 xevent->xconfigure.above - base_id,
-		 xevent->xconfigure.override_redirect);
+		 xevent->xconfigure.override_redirect));
       
       if (window_private)
 	{
@@ -2540,9 +2523,9 @@ gdk_event_translate (GdkEvent *event,
     case PropertyNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("property notify:\twindow: %ld\n",
-		 xevent->xproperty.window - base_id);
+		 xevent->xproperty.window - base_id));
 
       event->property.type = GDK_PROPERTY_NOTIFY;
       event->property.window = window;
@@ -2554,9 +2537,9 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case SelectionClear:
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("selection clear:\twindow: %ld\n",
-		 xevent->xproperty.window - base_id);
+		 xevent->xproperty.window - base_id));
 
       event->selection.type = GDK_SELECTION_CLEAR;
       event->selection.window = window;
@@ -2567,9 +2550,9 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case SelectionRequest:
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("selection request:\twindow: %ld\n",
-		 xevent->xproperty.window - base_id);
+		 xevent->xproperty.window - base_id));
 
       event->selection.type = GDK_SELECTION_REQUEST;
       event->selection.window = window;
@@ -2583,9 +2566,9 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case SelectionNotify:
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("selection notify:\twindow: %ld\n",
-		 xevent->xproperty.window - base_id);
+		 xevent->xproperty.window - base_id));
 
 
       event->selection.type = GDK_SELECTION_NOTIFY;
@@ -2601,9 +2584,9 @@ gdk_event_translate (GdkEvent *event,
     case ColormapNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("colormap notify:\twindow: %ld\n",
-		 xevent->xcolormap.window - base_id);
+		 xevent->xcolormap.window - base_id));
 
       /* Not currently handled */
       break;
@@ -2611,9 +2594,9 @@ gdk_event_translate (GdkEvent *event,
     case ClientMessage:
       /* Print debugging info.
        */
-      if (gdk_show_events)
+      GDK_NOTE (EVENTS,
 	g_print ("client message:\twindow: %ld\n",
-		 xevent->xclient.window - base_id);
+		 xevent->xclient.window - base_id));
 
       /* Client messages are the means of the window manager
        *  communicating with a program. We'll first check to
@@ -2635,9 +2618,9 @@ gdk_event_translate (GdkEvent *event,
 
 	      /* Print debugging info.
 	       */
-	      if (gdk_show_events)
+	      GDK_NOTE (EVENTS,
 		g_print ("delete window:\t\twindow: %ld\n",
-			 xevent->xclient.window - base_id);
+			 xevent->xclient.window - base_id));
 
 	      event->any.type = GDK_DELETE;
 	      event->any.window = window;
@@ -2653,11 +2636,9 @@ gdk_event_translate (GdkEvent *event,
 	  Atom reptype = 0;
 
 	  event->dropenter.u.allflags = xevent->xclient.data.l[1];
-#ifndef DEBUG_DND
-	  if (gdk_show_events)
-#endif
-	    g_print ("GDK_DROP_ENTER [%d][%d]\n",
-		window_private->dnd_drop_enabled, event->dropenter.u.flags.sendreply);
+
+	  GDK_NOTE (DND, g_print ("GDK_DROP_ENTER [%d][%d]\n",
+		window_private->dnd_drop_enabled, event->dropenter.u.flags.sendreply));
 	  return_val = FALSE;
 
 	  /* Now figure out if we really want this drop...
@@ -2694,18 +2675,18 @@ gdk_event_translate (GdkEvent *event,
 	      event->any.window = window;
 	      event->dropenter.requestor = replyev.xclient.window;
 	      event->dropenter.u.allflags = xevent->xclient.data.l[1];
-#ifdef DEBUG_DND
-	      g_print("We sent a GDK_DROP_ENTER on to Gtk\n");
-#endif
+
+	      GDK_NOTE (DND, g_print("We sent a GDK_DROP_ENTER on to Gtk\n"));
 	      return_val = TRUE;
 	    }
 	}
       else if (xevent->xclient.message_type == gdk_dnd.gdk_XdeLeave)
 	{
-#ifndef DEBUG_DND
-	  if (gdk_show_events)
-#endif
+#ifdef G_ENABLE_DEBUG	  
+	  if (gdk_debug_flags & (GDK_DEBUG_EVENTS | GDK_DEBUG_DND))
 	    g_print ("GDK_DROP_LEAVE\n");
+#endif	  
+
 	  if (window_private && window_private->dnd_drop_enabled)
 	    {
 	      event->dropleave.type = GDK_DROP_LEAVE;
@@ -2723,10 +2704,10 @@ gdk_event_translate (GdkEvent *event,
 	   * make sure to only handle requests from the window the cursor is
 	   * over 
 	   */
-#ifndef DEBUG_DND
-	  if (gdk_show_events)
-#endif
+#ifdef G_ENABLE_DEBUG	  
+	  if (gdk_debug_flags & (GDK_DEBUG_EVENTS | GDK_DEBUG_DND))
 	    g_print ("GDK_DRAG_REQUEST\n");
+#endif	  
 	  event->dragrequest.u.allflags = xevent->xclient.data.l[1];
 	  return_val = FALSE;
 
@@ -2778,10 +2759,10 @@ gdk_event_translate (GdkEvent *event,
 	    gulong tmp_long;
 	    guchar *tmp_charptr;
 
-#ifndef DEBUG_DND
-	    if(gdk_show_events)
-#endif
-	      g_print("GDK_DROP_DATA_AVAIL\n");
+#ifdef G_ENABLE_DEBUG	  
+	  if (gdk_debug_flags & (GDK_DEBUG_EVENTS | GDK_DEBUG_DND))
+	    g_print("GDK_DROP_DATA_AVAIL\n");
+#endif	  
 	    event->dropdataavailable.u.allflags = xevent->xclient.data.l[1];
 	    if(window
 	       /* No preview of data ATM */
@@ -2809,10 +2790,8 @@ gdk_event_translate (GdkEvent *event,
 		  }
 		else
 		  {
-#ifdef DEBUG_DND
-		    g_print("XGetWindowProperty got us %d bytes\n",
-			    event->dropdataavailable.data_numbytes);
-#endif
+		    GDK_NOTE (DND, g_print("XGetWindowProperty got us %ld bytes\n",
+			    event->dropdataavailable.data_numbytes));
 		    event->dropdataavailable.data =
 			g_malloc (event->dropdataavailable.data_numbytes);
 		    memcpy (event->dropdataavailable.data,
@@ -2844,8 +2823,8 @@ gdk_event_translate (GdkEvent *event,
     case MappingNotify:
       /* Print debugging info.
        */
-      if (gdk_show_events)
-	g_print ("mapping notify\n");
+      GDK_NOTE (EVENTS,
+	g_print ("mapping notify\n"));
 
       /* Let XLib know that there is a new keyboard mapping.
        */
@@ -3569,9 +3548,9 @@ gdk_ic_cleanup (void)
          destroyed++;
        }
     }
-  if (gdk_debug_level >= 1 && destroyed > 0)
+  if ((gdk_debug_flags & GDK_DEBUG_XIM) && destroyed > 0)
     {
-      g_warning ("Cleanuped %i IC\n", destroyed);
+      g_warning ("Cleaned up %i IC(s)\n", destroyed);
     }
   g_list_free(xim_ic_list);
   xim_ic_list = NULL;

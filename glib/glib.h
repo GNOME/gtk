@@ -182,6 +182,13 @@
  *  in order to support gcc's __PRETTY_FUNCTION__ capability.
  */
 
+#ifdef G_DISABLE_ASSERT
+
+#define g_assert(expr)
+#define g_assert_not_reached()
+
+#else /* !G_DISABLE_ASSERT */
+
 #ifdef __GNUC__
 
 #define g_assert(expr)			G_STMT_START{\
@@ -197,6 +204,33 @@
 	      __FILE__,						      \
 	      __LINE__,						      \
 	      __PRETTY_FUNCTION__);	}G_STMT_END
+
+#else /* !__GNUC__ */
+
+#define g_assert(expr)			G_STMT_START{\
+     if (!(expr))				     \
+       g_error ("file %s: line %d: \"%s\"",	     \
+		__FILE__,			     \
+		__LINE__,			     \
+		#expr);			}G_STMT_END
+
+#define g_assert_not_reached()		G_STMT_START{		      \
+     g_error ("file %s: line %d: \"should not be reached\"",	      \
+	      __FILE__,						      \
+	      __LINE__);		}G_STMT_END
+
+#endif /* __GNUC__ */
+
+#endif /* G_DISABLE_ASSERT */
+
+#ifdef G_DISABLE_CHECKS
+
+#define g_return_if_fail(expr)
+#define g_return_val_if_fail(expr,val)
+
+#else /* !G_DISABLE_CHECKS */
+
+#ifdef __GNUC__
 
 #define g_return_if_fail(expr)		G_STMT_START{	       \
      if (!(expr))					       \
@@ -220,19 +254,7 @@
 	 return val;					       \
        };				}G_STMT_END
 
-#else /* __GNUC__ */
-
-#define g_assert(expr)			G_STMT_START{\
-     if (!(expr))				     \
-       g_error ("file %s: line %d: \"%s\"",	     \
-		__FILE__,			     \
-		__LINE__,			     \
-		#expr);			}G_STMT_END
-
-#define g_assert_not_reached()		G_STMT_START{		      \
-     g_error ("file %s: line %d: \"should not be reached\"",	      \
-	      __FILE__,						      \
-	      __LINE__);		}G_STMT_END
+#else /* !__GNUC__ */
 
 #define g_return_if_fail(expr)		G_STMT_START{	 \
      if (!(expr))					 \
@@ -254,8 +276,9 @@
 	 return val;					 \
        };				}G_STMT_END
 
-#endif /* __GNUC__ */
+#endif /* !__GNUC__ */
 
+#endif /* G_DISABLE_CHECKS */
 
 #ifdef __cplusplus
 extern "C" {
@@ -327,6 +350,7 @@ typedef struct _GListAllocator GListAllocator;
 typedef struct _GStringChunk   GStringChunk;
 typedef struct _GString	       GString;
 typedef struct _GArray	       GArray;
+typedef struct _GDebugKey      GDebugKey;
 
 typedef void (*GFunc) (gpointer data, gpointer user_data);
 typedef void (*GHFunc) (gpointer key, gpointer value, gpointer user_data);
@@ -368,6 +392,12 @@ struct _GArray
 {
   gchar *data;
   guint len;
+};
+
+struct _GDebugKey
+{
+  gchar *key;
+  guint  value;
 };
 
 struct _GHashTable { gint dummy; };
@@ -649,6 +679,10 @@ GErrorFunc   g_set_error_handler   (GErrorFunc	 func);
 GWarningFunc g_set_warning_handler (GWarningFunc func);
 GPrintFunc   g_set_message_handler (GPrintFunc func);
 GPrintFunc   g_set_print_handler   (GPrintFunc func);
+
+guint        g_parse_debug_string  (const gchar *string, 
+				    GDebugKey   *keys, 
+				    guint        nkeys);
 
 void g_debug	      (char *progname);
 void g_attach_process (char *progname, int query);

@@ -18,11 +18,10 @@
 #ifndef __GTK_OBJECT_H__
 #define __GTK_OBJECT_H__
 
-#define GTK_TRACE_OBJECTS	1
-
 
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypeutils.h>
+#include <gtk/gtkdebug.h>
 
 
 #ifdef __cplusplus
@@ -35,12 +34,12 @@ extern "C" {
  *  before proceeding, but they are definately slower than their less
  *  careful counterparts as they involve no less than 3 function calls.
  */
-#ifdef NDEBUG
+#ifdef GTK_NO_CHECK_CASTS
 
 #define GTK_CHECK_CAST(obj,cast_type,cast)         ((cast*) (obj))
 #define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) ((cast*) (klass))
 
-#else /* NDEBUG */
+#else /* !GTK_NO_CHECK_CASTS */
 
 #define GTK_CHECK_CAST(obj,cast_type,cast) \
   ((cast*) gtk_object_check_cast ((GtkObject*) (obj), cast_type))
@@ -48,7 +47,7 @@ extern "C" {
 #define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) \
   ((cast*) gtk_object_check_class_cast ((GtkObjectClass*) (klass), cast_type))
 
-#endif /* NDEBUG */
+#endif /* GTK_NO_CHECK_CASTS */
 
 
 /* Determines whether 'obj' is a type of 'otype'.
@@ -304,7 +303,7 @@ void	gtk_trace_referencing	(gpointer    *object,
 				 guint        line,
 				 gboolean     do_ref);
      
-#if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
+#if G_ENABLE_DEBUG && defined (__GNUC__)
 #  define gtk_object_ref(o)   G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 1);f--;}G_STMT_END
 #  define gtk_object_unref(o) G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 0);f--;}G_STMT_END
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */

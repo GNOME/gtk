@@ -862,3 +862,50 @@ g_strcasecmp (const guchar *s1, const guchar *s2)
   return ((gint) *s1 - (gint) *s2);
 #endif
 }
+
+guint        
+g_parse_debug_string  (const gchar *string, 
+		       GDebugKey   *keys, 
+		       guint        nkeys)
+{
+  guint i;
+  guint result = 0;
+
+  g_return_val_if_fail (string != NULL, 0);
+
+  if (!strcmp (string, "ALL"))
+    {
+      for (i=0; i<nkeys; i++)
+	result |= keys[i].value;
+    }
+  else
+    {
+      gchar *str = g_strdup (string);
+      gchar *p = str;
+      gchar *q;
+      gboolean done = FALSE;
+
+      while (*p && !done)
+	{
+	  q = strchr (p, ':');
+	  if (!q)
+	    {
+	      q = p + strlen(p);
+	      done = TRUE;
+	    }
+
+	  *q = 0;
+
+	  for (i=0; i<nkeys; i++)
+	    if (!strcmp(keys[i].key, p))
+	      result |= keys[i].value;
+
+	  p = q+1;
+	}
+      
+      g_free (str);
+    }
+
+  return result;
+}
+

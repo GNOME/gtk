@@ -170,7 +170,6 @@ typedef struct _GdkICPrivate GdkICPrivate;
 
 #endif /* USE_XIM */
 
-
 struct _GdkColorContextPrivate
 {
   GdkColorContext color_context;
@@ -178,6 +177,13 @@ struct _GdkColorContextPrivate
   XStandardColormap std_cmap;
 };
 
+typedef enum {
+  GDK_DEBUG_MISC = 1<<0,
+  GDK_DEBUG_EVENTS = 1 << 1,
+  GDK_DEBUG_DND = 1<<2,
+  GDK_DEBUG_COLOR_CONTEXT = 1<<3,
+  GDK_DEBUG_XIM = 1<<4
+} GdkDebugFlag;
 
 void gdk_window_init (void);
 void gdk_visual_init (void);
@@ -218,6 +224,22 @@ extern gchar            *gdk_progname;
 extern gchar            *gdk_progclass;
 extern gint              gdk_error_code;
 extern gint              gdk_error_warnings;
+
+/* Debugging support */
+
+#ifdef G_ENABLE_DEBUG
+
+#define GDK_NOTE(type,action)                G_STMT_START { \
+    if (gdk_debug_flags & GDK_DEBUG_##type)                 \
+       action;                               } G_STMT_END
+
+#else /* !G_ENABLE_DEBUG */
+
+#define GDK_NOTE(type,action)
+      
+#endif /* G_ENABLE_DEBUG */
+
+extern guint gdk_debug_flags;
 
 
 #ifdef __cplusplus

@@ -1,3 +1,28 @@
+Thu Feb 19 01:11:48 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* configure.in         gdk/gdk.[ch]         gdk/gdkcc.c 
+	  gdk/gdkglobals.c     gdk/gdkinputcommon.h gdk/gdkprivate.h 
+	  gdk/gdkvisual.c      glib/configure.in    glib/glib.h
+	  glib/gutils.c        gtk/Makefile.am      gtk/gtkmain.c
+	  gtk/gtkobject.[ch]   gtk/gtkdebug.h       docs/debugging.txt   
+
+	New system for controlling debugging:
+
+	* --enable-debug=[no/yes/minimum]
+	* G_DISABLE_ASSERT and G_DISABLE_CHECKS for glib
+	* G_NO_CHECK_CASTS to control cast checking
+	* G_ENABLE_DEBUG enables run time checking which controls:
+	    Object tracing
+	    Showing events
+	    Miscellaneous g_print's in GDK
+	  And is controlled by --gdk-debug/GDK_DEBUG, --gtk-debug/GTK_DEBUG
+        * debug_level and show_events are gone from GTK
+
+	See docs/debugging.txt for details.
+	
+	And some fixups to the configure.in's so '-g' can be
+	overriden on the command line for --enable-debug
+	
 Thu Feb 19 05:40:51 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtknotebook.h:

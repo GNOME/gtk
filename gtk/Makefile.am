@@ -112,6 +112,7 @@ gtkinclude_HEADERS = \
 	gtkcontainer.h		\
 	gtkcurve.h		\
 	gtkdata.h		\
+	gtkdebug.h              \
 	gtkdialog.h		\
 	gtkdrawingarea.h	\
 	gtkentry.h		\

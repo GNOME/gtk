@@ -42,7 +42,6 @@ void gdk_event_put       (GdkEvent     *event);
 GdkEvent *gdk_event_copy (GdkEvent *event);
 void      gdk_event_free (GdkEvent *event);
 
-void gdk_set_debug_level (gint  level);
 void gdk_set_show_events (gint  show_events);
 void gdk_set_use_xshm    (gint  use_xshm);
 

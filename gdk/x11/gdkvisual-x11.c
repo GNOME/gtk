@@ -201,7 +201,7 @@ gdk_visual_init ()
 	break;
       }
 
-  if (gdk_debug_level >= 1)
+  if (gdk_debug_flags & GDK_DEBUG_MISC)
     for (i = 0; i < nvisuals; i++)
       g_print ("visual: %s: %d\n",
 	       visual_names[visuals[i].visual.type],

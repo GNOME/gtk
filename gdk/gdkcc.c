@@ -552,11 +552,11 @@ gdk_color_context_new (GdkVisual   *visual,
 	{
 	case GDK_VISUAL_STATIC_GRAY:
 	case GDK_VISUAL_GRAYSCALE:
-	  if (gdk_debug_level >= 1)
+	  GDK_NOTE (COLOR_CONTEXT,
 	    g_print ("gdk_color_context_new: visual class is %s\n",
 		     (visual->type == GDK_VISUAL_STATIC_GRAY) ?
 		     "GDK_VISUAL_STATIC_GRAY" :
-		     "GDK_VISUAL_GRAYSCALE");
+		     "GDK_VISUAL_GRAYSCALE"));
 
 	  if (GDK_VISUAL_XVISUAL (cc->visual)->map_entries == 2)
 	    init_bw (cc);
@@ -566,26 +566,26 @@ gdk_color_context_new (GdkVisual   *visual,
 	  break;
 
 	case GDK_VISUAL_TRUE_COLOR: /* shifts */
-	  if (gdk_debug_level >= 1)
-	    g_print ("gdk_color_context_new: visual class is GDK_VISUAL_TRUE_COLOR\n");
+	  GDK_NOTE (COLOR_CONTEXT,
+	    g_print ("gdk_color_context_new: visual class is GDK_VISUAL_TRUE_COLOR\n"));
 
 	  init_true_color (cc);
 	  break;
 
 	case GDK_VISUAL_DIRECT_COLOR: /* shifts and fake CLUT */
-	  if (gdk_debug_level >= 1)
-	    g_print ("gdk_color_context_new: visual class is GDK_VISUAL_DIRECT_COLOR\n");
+	  GDK_NOTE (COLOR_CONTEXT,
+	    g_print ("gdk_color_context_new: visual class is GDK_VISUAL_DIRECT_COLOR\n"));
 
 	  init_direct_color (cc);
 	  break;
 
 	case GDK_VISUAL_STATIC_COLOR:
 	case GDK_VISUAL_PSEUDO_COLOR:
-	  if (gdk_debug_level >= 1)
+	  GDK_NOTE (COLOR_CONTEXT,
 	    g_print ("gdk_color_context_new: visual class is %s\n",
 		     (visual->type == GDK_VISUAL_STATIC_COLOR) ?
 		     "GDK_VISUAL_STATIC_COLOR" :
-		     "GDK_VISUAL_PSEUDO_COLOR");
+		     "GDK_VISUAL_PSEUDO_COLOR"));
 
 	  init_color (cc);
 	  break;
@@ -607,9 +607,9 @@ gdk_color_context_new (GdkVisual   *visual,
 
   cc->num_allocated = 0;
 
-  if (gdk_debug_level >= 1)
+  GDK_NOTE (COLOR_CONTEXT,
     g_print ("gdk_color_context_new: screen depth is %i, no. of colors is %i\n",
-	     cc->visual->depth, cc->num_colors);
+	     cc->visual->depth, cc->num_colors));
 
   /* check if we need to initialize a hash table */
 
@@ -811,10 +811,10 @@ gdk_color_context_get_pixel (GdkColorContext *cc,
 		  {
 		    cc->max_colors *= 2;
 
-		    if (gdk_debug_level >= 1)
+		    GDK_NOTE (COLOR_CONTEXT,
 		      g_print ("gdk_color_context_get_pixel: "
 			       "resizing CLUT to %i entries\n",
-			       cc->max_colors);
+			       cc->max_colors));
 
 		    cc->clut = g_realloc (cc->clut,
 					  cc->max_colors * sizeof (gulong));
@@ -906,9 +906,9 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 
   if ((ncols == ncolors) || (nopen == 0))
     {
-      if (gdk_debug_level >= 1)
+      GDK_NOTE (COLOR_CONTEXT,
 	g_print ("gdk_color_context_get_pixels: got all %i colors; "
-		 "(%i colors allocated so far)\n", ncolors, cc->num_allocated);
+		 "(%i colors allocated so far)\n", ncolors, cc->num_allocated));
 
       return;
     }
@@ -1031,10 +1031,10 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
 
   if ((ncols == ncolors) || (nopen == 0))
     {
-      if (gdk_debug_level >= 1)
+      GDK_NOTE (COLOR_CONTEXT,
 	g_print ("gdk_color_context_get_pixels: got %i colors, %i exact and "
 		 "%i close (%i colors allocated so far)\n",
-		 ncolors, exact_col, close_col, cc->num_allocated);
+		 ncolors, exact_col, close_col, cc->num_allocated));
 
       return;
     }
@@ -1102,10 +1102,10 @@ gdk_color_context_get_pixels (GdkColorContext *cc,
     }
   while (++idx < nopen);
 
-  if (gdk_debug_level >= 1)
+  GDK_NOTE (COLOR_CONTEXT,
     g_print ("gdk_color_context_get_pixels: got %i colors, %i exact, %i close, "
 	     "%i substituted, %i to black (%i colors allocated so far)\n",
-	     ncolors, exact_col, close_col, subst_col, black_col, cc->num_allocated);
+	     ncolors, exact_col, close_col, subst_col, black_col, cc->num_allocated));
 }
 
 void
@@ -1176,9 +1176,9 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 	    }
 #ifdef DEBUG
 	  else
-	    if (gdk_debug_level >= 1)
+	    GDK_NOTE (COLOR_CONTEXT,
 	      g_print ("gdk_color_context_get_pixels_incremental: "
-		       "pixel at slot %i already allocated, skipping\n", i);
+		       "pixel at slot %i already allocated, skipping\n", i));
 #endif
 	}
     }
@@ -1187,10 +1187,10 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 
   if ((ncols == ncolors) || (nopen == 0))
     {
-      if (gdk_debug_level >= 1)
+      GDK_NOTE (COLOR_CONTEXT,
 	g_print ("gdk_color_context_get_pixels_incremental: got all %i colors "
 		 "(%i colors allocated so far)\n",
-		 ncolors, cc->num_allocated);
+		 ncolors, cc->num_allocated));
 
       return;
     }
@@ -1293,11 +1293,11 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 
   if ((ncols == ncolors) || (nopen == 0))
     {
-      if (gdk_debug_level >= 1)
+      GDK_NOTE (COLOR_CONTEXT,
 	g_print ("gdk_color_context_get_pixels_incremental: "
 		 "got %i colors, %i exact and %i close "
 		 "(%i colors allocated so far)\n",
-		 ncolors, exact_col, close_col, cc->num_allocated);
+		 ncolors, exact_col, close_col, cc->num_allocated));
 
       return;
     }
@@ -1364,11 +1364,11 @@ gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
     }
   while (++idx < nopen);
 
-  if (gdk_debug_level >= 1)
+  GDK_NOTE (COLOR_CONTEXT,
     g_print ("gdk_color_context_get_pixels_incremental: "
 	     "got %i colors, %i exact, %i close, %i substituted, %i to black "
 	     "(%i colors allocated so far)\n",
-	     ncolors, exact_col, close_col, subst_col, black_col, cc->num_allocated);
+	     ncolors, exact_col, close_col, subst_col, black_col, cc->num_allocated));
 }
 
 gint
