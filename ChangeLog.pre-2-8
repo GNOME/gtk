@@ -1,3 +1,8 @@
+Tue Jan 19 00:02:10 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_node_set_row_data_full): 
+	add a sanity check [from Todd Dukes <todddukes@netscape.net>]
+	
 Mon Jan 18 22:54:11 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_button_press): only call grab_add
