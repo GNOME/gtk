@@ -2192,6 +2192,16 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
+<!-- ##### ARG GtkWidget:cursor-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWidget:focus-line-width ##### -->
 <para>
 
@@ -2207,22 +2217,12 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:cursor-color ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
+<!-- ##### ARG GtkWidget:focus-padding ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkWidget:focus-line-pattern ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:focus-padding ##### -->
 <para>
 
 </para>

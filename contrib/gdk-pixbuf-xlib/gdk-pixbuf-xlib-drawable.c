@@ -1145,7 +1145,7 @@ xlib_window_is_viewable (Window w)
 		if (nchildren > 0)
 			XFree (children);
 
-		if (parent == root)
+		if ((parent == root) || (w == root))
 			return TRUE;
 
 		w = parent;

@@ -153,11 +153,6 @@ Emitted when the range value changes.
 
 </para>
 
-<!-- ##### ARG GtkRange:trough-border ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkRange:stepper-spacing ##### -->
 <para>
 
@@ -168,17 +163,22 @@ Emitted when the range value changes.
 
 </para>
 
+<!-- ##### ARG GtkRange:trough-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:slider-width ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkRange:arrow-displacement-y ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkRange:arrow-displacement-x ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:slider-width ##### -->
 <para>
 
 </para>
