@@ -1,3 +1,13 @@
+Fri May  7 00:41:46 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktearoffmenuitem.h: 
+	* gtk/gtktearoffmenuitem.c: Make the tearoff 
+	functionality model/view, the tearoffmenuitem being
+	the view and the tearoff_state property of the menu
+	being the model.  (#101185, Owen Taylor)
+
+	* gtk/gtkmenu.c: Add a tearoff_state property.
+
 Thu May  6 23:52:13 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Merge from 2.4:

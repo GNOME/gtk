@@ -96,7 +96,6 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
 static void
 gtk_tearoff_menu_item_init (GtkTearoffMenuItem *tearoff_menu_item)
 {
-  tearoff_menu_item->torn_off = FALSE;
 }
 
 static void
@@ -104,7 +103,7 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
 				    GtkRequisition *requisition)
 {
   GtkTearoffMenuItem *tearoff;
-
+  
   tearoff = GTK_TEAROFF_MENU_ITEM (widget);
   
   requisition->width = (GTK_CONTAINER (widget)->border_width +
@@ -113,7 +112,7 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
   requisition->height = (GTK_CONTAINER (widget)->border_width +
 			 widget->style->ythickness) * 2;
 
-  if (tearoff->torn_off)
+  if (GTK_IS_MENU (widget->parent) && GTK_MENU (widget->parent)->torn_off)
     {
       requisition->height += ARROW_SIZE;
     }
@@ -166,7 +165,7 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
       else
 	gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
 
-      if (tearoff_item->torn_off)
+      if (GTK_IS_MENU (widget->parent) && GTK_MENU (widget->parent)->torn_off)
 	{
 	  gint arrow_x;
 
@@ -239,36 +238,19 @@ gtk_tearoff_menu_item_expose (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_tearoff_menu_item_delete_cb (GtkMenuItem *menu_item, GdkEventAny *event)
-{
-  gtk_tearoff_menu_item_activate (menu_item);
-  return TRUE;
-}
-
 static void
 gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (menu_item);
 
-  tearoff_menu_item->torn_off = !tearoff_menu_item->torn_off;
-  gtk_widget_queue_resize (GTK_WIDGET (menu_item));
-
   if (GTK_IS_MENU (GTK_WIDGET (menu_item)->parent))
     {
       GtkMenu *menu = GTK_MENU (GTK_WIDGET (menu_item)->parent);
-      gboolean need_connect;
       
-      	need_connect = (tearoff_menu_item->torn_off && !menu->tearoff_window);
-
-	gtk_menu_set_tearoff_state (GTK_MENU (GTK_WIDGET (menu_item)->parent),
-				    tearoff_menu_item->torn_off);
-
-	if (need_connect)
-	  g_signal_connect_swapped (menu->tearoff_window,
-				    "delete_event",
-				    G_CALLBACK (gtk_tearoff_menu_item_delete_cb),
-				    menu_item);
+      gtk_menu_set_tearoff_state (GTK_MENU (GTK_WIDGET (menu_item)->parent),
+				  !menu->torn_off);
     }
-}
+
+  gtk_widget_queue_resize (GTK_WIDGET (menu_item));
+ }
 

@@ -110,6 +110,7 @@ enum {
 
 enum {
   PROP_0,
+  PROP_TEAROFF_STATE,
   PROP_TEAROFF_TITLE
 };
 
@@ -519,7 +520,22 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                         P_("Tearoff Title"),
                                                         P_("A title that may be displayed by the window manager when this menu is torn-off"),
                                                         "",
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                        G_PARAM_READWRITE));
+
+  /**
+   * GtkMenu:tearoff-state:
+   *
+   * A boolean that indicates whether the menu is torn-off.
+   *
+   * Since: 2.6
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEAROFF_STATE,
+                                   g_param_spec_boolean ("tearoff-state",
+							 P_("Tearoff State"),
+							 P_("A boolean that indicates whether the menu is torn-off"),
+							 FALSE,
+							 G_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical-padding",
@@ -700,6 +716,9 @@ gtk_menu_set_property (GObject      *object,
   
   switch (prop_id)
     {
+    case PROP_TEAROFF_STATE:
+      gtk_menu_set_tearoff_state (menu, g_value_get_boolean (value));
+      break;
     case PROP_TEAROFF_TITLE:
       gtk_menu_set_title (menu, g_value_get_string (value));
       break;	  
@@ -721,6 +740,9 @@ gtk_menu_get_property (GObject     *object,
   
   switch (prop_id)
     {
+    case PROP_TEAROFF_STATE:
+      g_value_set_boolean (value, gtk_menu_get_tearoff_state (menu));
+      break;
     case PROP_TEAROFF_TITLE:
       g_value_set_string (value, gtk_menu_get_title (menu));
       break;
@@ -1840,6 +1862,8 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	  menu->tearoff_scrollbar = NULL;
 	  menu->tearoff_adjustment = NULL;
 	}
+
+      g_object_notify (G_OBJECT (menu), "tearoff_state");
     }
 }
 
