@@ -186,6 +186,7 @@ gdk_pixbuf_format_get_description
 gdk_pixbuf_format_get_mime_types
 gdk_pixbuf_format_get_extensions
 gdk_pixbuf_format_is_writable
+gdk_pixbuf_format_is_scalable
 GdkPixbufFormat
 GdkPixbufFormatFlags
 GdkPixbufModulePattern

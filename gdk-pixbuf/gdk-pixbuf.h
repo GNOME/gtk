@@ -340,6 +340,7 @@ gchar     *gdk_pixbuf_format_get_description (GdkPixbufFormat *format);
 gchar    **gdk_pixbuf_format_get_mime_types  (GdkPixbufFormat *format);
 gchar    **gdk_pixbuf_format_get_extensions  (GdkPixbufFormat *format);
 gboolean   gdk_pixbuf_format_is_writable     (GdkPixbufFormat *format);
+gboolean   gdk_pixbuf_format_is_scalable     (GdkPixbufFormat *format);
 
 GdkPixbufFormat *gdk_pixbuf_get_file_info (const gchar  *filename,
 					   gint         *width, 

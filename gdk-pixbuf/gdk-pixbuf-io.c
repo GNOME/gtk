@@ -1783,6 +1783,27 @@ gdk_pixbuf_format_is_writable (GdkPixbufFormat *format)
 	return (format->flags & GDK_PIXBUF_FORMAT_WRITABLE) != 0;
 }
 
+/**
+ * gdk_pixbuf_format_is_scalable:
+ * @format: a #GdkPixbufFormat
+ *
+ * Returns whether this image format is scalable. If a file is in a 
+ * scalable format, it is preferable to load it at the desired size, 
+ * rather than loading it at the default size and scaling the 
+ * resulting pixbuf to the desired size.
+ * 
+ * Return value: whether this image format is scalable.
+ *
+ * Since: 2.6
+ */
+gboolean
+gdk_pixbuf_format_is_scalable (GdkPixbufFormat *format)
+{
+	g_return_val_if_fail (format != NULL, FALSE);
+
+	return (format->flags & GDK_PIXBUF_FORMAT_SCALABLE) != 0;
+}
+
 GdkPixbufFormat *
 _gdk_pixbuf_get_format (GdkPixbufModule *module)
 {
