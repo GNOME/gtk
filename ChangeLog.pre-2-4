@@ -1,3 +1,18 @@
+2002-02-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkcolor-win32.c: Remove the actually unused
+	colormap_hash table and add_colormap() and remove_colormap()
+	functions. Move the sync_colormap() function inline to the only
+	place where it was called. (Its semantics didn't match the
+	corresponding function on X11 anyway. On Windows the entries in a
+	logical palette don't change behind the curtain. Logical palettes
+	are private to the application.)
+	
+	* gdk/win32/gdkprivate-win32.h: Remove the now unnecessary
+	include of <time.h>.
+	(struct _GdkColormapPrivateWin32): Remove the now unused
+	last_sync_time.
+
 2002-02-06  Tor Lillqvist  <tml@iki.fi>
 
 	A batch of changes mainly with improvements to 256-color mode. Add
@@ -85,7 +100,8 @@
 	* gdk/win32/gdkprivate-win32.h: Declate gdk_win32_blit() and
 	gdk_max_colors.
 
-	* gdk/win32/gdkselection-win32.c (gdk_text_property_to_text_list): Fix lint.
+	* gdk/win32/gdkselection-win32.c (gdk_text_property_to_text_list):
+	Fix some lint.
 
 	* gdk/win32/gdkvisual-win32.c (gdk_visual_init): Look for a
 	GDK_WIN32_MAX_COLORS environment variable, and check the

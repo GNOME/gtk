@@ -183,8 +183,6 @@
 #define CopyCursor(pcur) ((HCURSOR)CopyIcon((HICON)(pcur)))
 #endif
 
-#include <time.h>
-
 #include <gdk/gdktypes.h>
 #include <gdk/gdkprivate.h>
 
@@ -346,7 +344,6 @@ struct _GdkColormapPrivateWin32
   gint private_val;
   GHashTable *hash;
   GdkColorInfo *info;
-  time_t last_sync_time;
 };
 
 struct _GdkImagePrivateWin32
