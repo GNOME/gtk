@@ -1,3 +1,7 @@
+Tue, 20 Oct 1998 11:33:10 +0200 Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkdnd.h,gtk/gtkdnd.c: delete is a reserved word in c++.
+
 Mon Oct 19 23:44:41 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c: rearranged some functions

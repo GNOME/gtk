@@ -44,7 +44,7 @@ void gtk_drag_get_data (GtkWidget      *widget,
 			guint32         time);
 void gtk_drag_finish   (GdkDragContext *context,
 			gboolean        success,
-			gboolean        delete,
+			gboolean        del,
 			guint32         time);
 
 void gtk_drag_highlight   (GtkWidget  *widget);
