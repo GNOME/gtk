@@ -1165,7 +1165,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
 				start_path,
 				&end_tree,
 				&end_node);
-      anchor_path = end_path;
+      anchor_path = start_path;
       break;
     case 0:
       _gtk_tree_view_find_node (selection->tree_view,

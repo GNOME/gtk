@@ -1867,7 +1867,11 @@ gtk_list_store_move (GtkListStore *store,
   if (!prev)
     store->root = G_SLIST (iter->user_data)->next;
   else
-    prev->next = G_SLIST (iter->user_data)->next;
+    {
+      prev->next = G_SLIST (iter->user_data)->next;
+      if (!prev->next)
+	store->tail = prev;
+    }
 
   /* and reinsert it */
   if (a)
@@ -1901,12 +1905,12 @@ gtk_list_store_move (GtkListStore *store,
 
   if (new_pos > old_pos)
     {
-      if (before)
+      if (before && position)
 	new_pos--;
     }
   else
     {
-      if (!before)
+      if (!before && position)
 	new_pos++;
     }
 

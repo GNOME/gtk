@@ -446,7 +446,8 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   pix_rect.width -= cell->xpad * 2;
   pix_rect.height -= cell->ypad * 2;
 
-  if (gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
+  if (gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect) &&
+      gdk_rectangle_intersect (expose_area, &draw_rect, &draw_rect))
     gdk_draw_pixbuf (window,
 		     widget->style->black_gc,
 		     pixbuf,
