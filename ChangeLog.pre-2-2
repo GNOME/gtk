@@ -1,5 +1,10 @@
 2002-03-23  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtktextview.c (gtk_text_view_do_popup): end any selection in
+	progress, patch from db@zigo.dhs.org, #74620
+
+2002-03-23  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): extend
 	selection for pageup/pagedown and ctrl+pageup/pagedown if 
 	shift is held. more of #53934

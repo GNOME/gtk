@@ -6411,6 +6411,9 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 {
   PopupInfo *info = g_new (PopupInfo, 1);
 
+  /* should not need this, see http://bugzilla.gnome.org/show_bug.cgi?id=74620 */
+  gtk_text_view_end_selection_drag (text_view, event);
+  
   /* In order to know what entries we should make sensitive, we
    * ask for the current targets of the clipboard, and when
    * we get them, then we actually pop up the menu.
