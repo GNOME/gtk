@@ -1,3 +1,20 @@
+Fri Apr  5 05:55:14 2002  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_grab_focus): implement.
+	  (gtk_tree_view_move_cursor_up_down): check for focus
+	  (gtk_tree_view_move_cursor_page_up_down): ditto
+	  (gtk_tree_view_move_cursor_left_right): ditto
+	  (gtk_tree_view_move_cursor_start_end): ditto
+	  (gtk_tree_view_real_select_all): ditto
+	  (gtk_tree_view_real_unselect_all): ditto
+	  (gtk_tree_view_real_select_cursor_row): ditto	
+	  (gtk_tree_view_real_toggle_cursor_row): ditto
+	  (gtk_tree_view_real_expand_collapse_cursor_row): ditto
+	  (gtk_tree_view_real_select_cursor_parent): ditto
+	  (gtk_tree_view_real_start_interactive_search): ditto
+
+	* gtk/gtktreeviewcolumn.c: grab focus
+
 2002-04-05  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkkeyboard-fb.c (write_string):

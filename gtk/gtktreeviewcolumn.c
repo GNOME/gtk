@@ -548,7 +548,6 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   g_signal_connect (G_OBJECT (tree_column->button), "event",
 		    G_CALLBACK (gtk_tree_view_column_button_event),
 		    (gpointer) tree_column);
-
   g_signal_connect (G_OBJECT (tree_column->button), "clicked",
 		    (GtkSignalFunc) gtk_tree_view_column_button_clicked,
 		    (gpointer) tree_column);
@@ -661,10 +660,10 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       break;
     }
 
-  /* Put arrow on the right if the text is left-or-center justified,
-       * and on the left otherwise; do this by packing boxes, so flipping
-       * text direction will reverse things
-       */
+  /* Put arrow on the right if the text is left-or-center justified, and on the
+   * left otherwise; do this by packing boxes, so flipping text direction will
+   * reverse things
+   */
   gtk_widget_ref (arrow);
   gtk_container_remove (GTK_CONTAINER (hbox), arrow);
 
@@ -685,8 +684,8 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   else
     gtk_widget_hide (arrow);
 
-  /* It's always safe to hide the button.  It isn't always safe to show it, as if you show it
-   * before it's realized, it'll get the wrong window. */
+  /* It's always safe to hide the button.  It isn't always safe to show it, as
+   * if you show it before it's realized, it'll get the wrong window. */
   if (tree_column->button &&
       tree_column->tree_view != NULL &&
       GTK_WIDGET_REALIZED (tree_column->tree_view))
@@ -817,17 +816,13 @@ gtk_tree_view_column_mnemonic_activate (GtkWidget *widget,
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), FALSE);
 
+  GTK_TREE_VIEW (column->tree_view)->priv->focus_column = column;
   if (column->clickable)
     gtk_button_clicked (GTK_BUTTON (column->button));
   else if (GTK_WIDGET_CAN_FOCUS (column->button))
     gtk_widget_grab_focus (column->button);
   else
-    {
-      GTK_TREE_VIEW (column->tree_view)->priv->focus_column = column;
-      GTK_TREE_VIEW_SET_FLAG (GTK_TREE_VIEW (column->tree_view),
-			      GTK_TREE_VIEW_DRAW_KEYFOCUS);
-      gtk_widget_grab_focus (column->tree_view);
-    }
+    gtk_widget_grab_focus (column->tree_view);
 
   return TRUE;
 }
