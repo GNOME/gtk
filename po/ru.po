@@ -8,28 +8,28 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-02 12:33+0300\n"
+"POT-Creation-Date: 2004-01-17 01:16+0100\n"
 "PO-Revision-Date: 2003-12-10 06:55+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
-#: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Произошёл сбой при открытии файла \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:741
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Файл изображения \"%s\" не содержит никаких данных"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:775
-#: gdk-pixbuf/gdk-pixbuf-io.c:901 tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
+#: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -46,12 +46,12 @@ msgstr ""
 "Произошёл сбой при загрузке анимации \"%s\": причина неизвестна, возможно, "
 "файл анимации повреждён"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:377
+#: gdk-pixbuf/gdk-pixbuf-io.c:382
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Невозможно загрузить модуль загрузки изображений: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:392
+#: gdk-pixbuf/gdk-pixbuf-io.c:397
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -60,38 +60,60 @@ msgstr ""
 "Модуль загрузки изображений \"%s\" не экспортирует соответствующий "
 "интерфейс; может быть, модуль остался от предыдущей версии пакета GTK?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:539 gdk-pixbuf/gdk-pixbuf-io.c:587
+#: gdk-pixbuf/gdk-pixbuf-io.c:544 gdk-pixbuf/gdk-pixbuf-io.c:592
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Тип изображения \"%s\" не поддерживается"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:619
+#: gdk-pixbuf/gdk-pixbuf-io.c:624
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Не удалось распознать формат изображения для файла \"%s\""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:625
+#: gdk-pixbuf/gdk-pixbuf-io.c:630
 msgid "Unrecognized image file format"
 msgstr "Формат файла изображения не распознан"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:786
+#: gdk-pixbuf/gdk-pixbuf-io.c:791
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Произошёл сбой при загрузке изображения \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1012
+#: gdk-pixbuf/gdk-pixbuf-io.c:1095
+#, fuzzy, c-format
+msgid "Error writing to image file: %s"
+msgstr "Произошла ошибка интерпретации файла изображения формата JPEG (%s)"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Эта сборка подсистемы \"gdk-pixbuf\" не поддерживает сохранение изображений "
 "в таком формате: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1123
+#: gdk-pixbuf/gdk-pixbuf-io.c:1168
+#, fuzzy
+msgid "Insufficient memory to save image to callback"
+msgstr "Недостаточно памяти для загрузки файла изображения формата XBM"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1180
+#, fuzzy
+msgid "Failed to open temporary file"
+msgstr "Произошёл сбой при открытии изображения формата TIFF"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1199
+#, fuzzy
+msgid "Failed to read from temporary file"
+msgstr ""
+"Произошёл сбой при записи временного файла во время загрузки изображения "
+"формата XBM"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1379
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Произошёл сбой при открытии файла \"%s\" для записи: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1144
+#: gdk-pixbuf/gdk-pixbuf-io.c:1400
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -100,12 +122,17 @@ msgstr ""
 "Произошёл сбой при закрытии файла \"%s\" во время записи изображения, не все "
 "данные могли быть сохранены: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:332
+#: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
+#, fuzzy
+msgid "Insufficient memory to save image into a buffer"
+msgstr "Недостаточно памяти для загрузки файла изображения формата XBM"
+
+#: gdk-pixbuf/gdk-pixbuf-loader.c:377
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Пошаговая загрузка изображения формата \"%s\" не поддерживается"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:356 gdk-pixbuf/gdk-pixbuf-loader.c:458
+#: gdk-pixbuf/gdk-pixbuf-loader.c:401 gdk-pixbuf/gdk-pixbuf-loader.c:503
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -122,14 +149,18 @@ msgstr "Заголовок изображения повреждён"
 msgid "Image format unknown"
 msgstr "Формат изображения неизвестен"
 
-#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:456
+#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:458
 msgid "Image pixel data corrupt"
 msgstr "Пиксельные данные изображения повреждены"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr ""
+#, fuzzy, c-format
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] ""
+"произошёл сбой при распределении памяти  в размере %u байт для буфера "
+"изображения"
+msgstr[1] ""
 "произошёл сбой при распределении памяти  в размере %u байт для буфера "
 "изображения"
 
@@ -158,19 +189,19 @@ msgstr "Данная последовательность кадров в ани
 msgid "The ANI image format"
 msgstr "Формат ANI для изображений"
 
-#: gdk-pixbuf/io-bmp.c:223 gdk-pixbuf/io-bmp.c:339
+#: gdk-pixbuf/io-bmp.c:224 gdk-pixbuf/io-bmp.c:352
 msgid "Not enough memory to load bitmap image"
 msgstr "Недостаточно памяти для загрузки изображения"
 
-#: gdk-pixbuf/io-bmp.c:263
+#: gdk-pixbuf/io-bmp.c:264
 msgid "BMP image has unsupported header size"
 msgstr "Изображение формата BMP имеет неподдерживаемый размер заголовка"
 
-#: gdk-pixbuf/io-bmp.c:288 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:371
+#: gdk-pixbuf/io-bmp.c:289 gdk-pixbuf/io-bmp.c:312 gdk-pixbuf/io-bmp.c:383
 msgid "BMP image has bogus header data"
 msgstr "Изображение формата BMP имеет неправильные данные в заголовке"
 
-#: gdk-pixbuf/io-bmp.c:1076
+#: gdk-pixbuf/io-bmp.c:1092
 msgid "The BMP image format"
 msgstr "Формат BMP для изображений"
 
@@ -239,49 +270,49 @@ msgstr "Изображение формата GIF было обрезано ил
 msgid "The GIF image format"
 msgstr "Формат GIF для изображений"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:270 gdk-pixbuf/io-ico.c:331
-#: gdk-pixbuf/io-ico.c:394 gdk-pixbuf/io-ico.c:411
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
+#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
 msgid "Not enough memory to load icon"
 msgstr "Недостаточно памяти для загрузки значка"
 
-#: gdk-pixbuf/io-ico.c:255
+#: gdk-pixbuf/io-ico.c:256
 msgid "Invalid header in icon"
 msgstr "Заголовок значка недопустим"
 
-#: gdk-pixbuf/io-ico.c:292
+#: gdk-pixbuf/io-ico.c:293
 msgid "Icon has zero width"
 msgstr "Ширина значка равна нулю"
 
-#: gdk-pixbuf/io-ico.c:302
+#: gdk-pixbuf/io-ico.c:303
 msgid "Icon has zero height"
 msgstr "Высота значка равна нулю"
 
-#: gdk-pixbuf/io-ico.c:346
+#: gdk-pixbuf/io-ico.c:347
 msgid "Compressed icons are not supported"
 msgstr "Сжатые значки не поддерживаются"
 
-#: gdk-pixbuf/io-ico.c:379
+#: gdk-pixbuf/io-ico.c:380
 msgid "Unsupported icon type"
 msgstr "Данный тип значка не поддерживается"
 
-#: gdk-pixbuf/io-ico.c:459
+#: gdk-pixbuf/io-ico.c:474
 msgid "Not enough memory to load ICO file"
 msgstr "Недостаточно памяти для загрузки файла формата ICO"
 
-#: gdk-pixbuf/io-ico.c:921
+#: gdk-pixbuf/io-ico.c:939
 msgid "Image too large to be saved as ICO"
 msgstr "Изображение слишком велико для сохранения в формате ICO"
 
-#: gdk-pixbuf/io-ico.c:932
+#: gdk-pixbuf/io-ico.c:950
 msgid "Cursor hotspot outside image"
 msgstr "Активирующая область определена за границами изображения"
 
-#: gdk-pixbuf/io-ico.c:955
+#: gdk-pixbuf/io-ico.c:973
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Глубина цвета %d для файла формата ICO не поддерживается"
 
-#: gdk-pixbuf/io-ico.c:1184
+#: gdk-pixbuf/io-ico.c:1202
 msgid "The ICO image format"
 msgstr "Формат ICO для изображений"
 
@@ -298,16 +329,17 @@ msgstr ""
 "Недостаточно памяти для загрузки изображения; попытайтесь закрыть некоторые "
 "приложения, чтобы освободить память"
 
-#: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:744
+#: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Цветовое пространство (%s) формата JPEG не поддерживается"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
+#: gdk-pixbuf/io-jpeg.c:950
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Не удалось распределить память для загрузки файла формата JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:812
+#: gdk-pixbuf/io-jpeg.c:893
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -316,14 +348,14 @@ msgstr ""
 "Качество формата JPEG должно быть между 0 и 100; значение \"%s\" не может "
 "быть обработано."
 
-#: gdk-pixbuf/io-jpeg.c:827
+#: gdk-pixbuf/io-jpeg.c:908
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Качество формата JPEG должно быть между 0 и 100; значение \"%d\" недопустимо."
 
-#: gdk-pixbuf/io-jpeg.c:940
+#: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
 msgstr "Формат JPEG для изображений"
 
@@ -339,36 +371,36 @@ msgstr "Невозможно распределить память для буф
 msgid "Image has invalid width and/or height"
 msgstr "Изображение имеет нулевую ширину и/или высоту"
 
-#: gdk-pixbuf/io-pcx.c:614 gdk-pixbuf/io-pcx.c:675
+#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:679
 msgid "Image has unsupported bpp"
 msgstr "Изображение имеет неподдерживаемое число бит на пиксель"
 
-#: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:627
+#: gdk-pixbuf/io-pcx.c:623 gdk-pixbuf/io-pcx.c:631
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Изображение имеет неподдерживаемое число многобитовых (%d) плоскостей"
 
-#: gdk-pixbuf/io-pcx.c:643
+#: gdk-pixbuf/io-pcx.c:647
 msgid "Couldn't create new pixbuf"
 msgstr "Невозможно распределить память для новой структуры pixbuf"
 
-#: gdk-pixbuf/io-pcx.c:651
+#: gdk-pixbuf/io-pcx.c:655
 msgid "Couldn't allocate memory for line data"
 msgstr "Невозможно распределить память для данных строки"
 
-#: gdk-pixbuf/io-pcx.c:658
+#: gdk-pixbuf/io-pcx.c:662
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Невозможно распределить память для данных палитры"
 
-#: gdk-pixbuf/io-pcx.c:705
+#: gdk-pixbuf/io-pcx.c:709
 msgid "Didn't get all lines of PCX image"
 msgstr "Не получены все строки изображения формата PCX"
 
-#: gdk-pixbuf/io-pcx.c:712
+#: gdk-pixbuf/io-pcx.c:716
 msgid "No palette found at end of PCX data"
 msgstr "Палитра не найдена в конце данных формата PCX"
 
-#: gdk-pixbuf/io-pcx.c:753
+#: gdk-pixbuf/io-pcx.c:757
 msgid "The PCX image format"
 msgstr "Формат PCX для изображений"
 
@@ -406,7 +438,7 @@ msgstr "Произошла фатальная ошибка в файле изо�
 msgid "Insufficient memory to load PNG file"
 msgstr "Недостаточно памяти для загрузки файла формата PNG"
 
-#: gdk-pixbuf/io-png.c:605
+#: gdk-pixbuf/io-png.c:618
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -415,30 +447,30 @@ msgstr ""
 "Недостаточно памяти для хранения %ld из %ld изображений; попробуйте закрыть "
 "некоторые приложения, чтобы уменьшить количество используемой памяти"
 
-#: gdk-pixbuf/io-png.c:656
+#: gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
 msgstr "Произошла фатальная ошибка при чтении файла изображения формата PNG"
 
-#: gdk-pixbuf/io-png.c:705
+#: gdk-pixbuf/io-png.c:718
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 "Произошла фатальная ошибка при чтении файла изображения формата PNG: %s"
 
-#: gdk-pixbuf/io-png.c:771
+#: gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Ключи для блоков текста в изображении формата PNG должны содержать не менее "
 "1 и не более 79 символов."
 
-#: gdk-pixbuf/io-png.c:779
+#: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr ""
 "Ключи для блоков текста в изображении формата PNG должны быть символами "
 "набора ASCII."
 
-#: gdk-pixbuf/io-png.c:812
+#: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
@@ -446,206 +478,206 @@ msgstr ""
 "Значение для блока текста %s в изображении формата PNG не может быть "
 "преобразовано в кодировку ISO-8859-1."
 
-#: gdk-pixbuf/io-png.c:919
+#: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
 msgstr "Формат PNG для изображений"
 
-#: gdk-pixbuf/io-pnm.c:248
+#: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 "Загрузчик изображений формата PNM ожидал найти целое число, но не нашёл его"
 
-#: gdk-pixbuf/io-pnm.c:280
+#: gdk-pixbuf/io-pnm.c:281
 msgid "PNM file has an incorrect initial byte"
 msgstr "Файл формата PNM имеет неправильный первый байт"
 
-#: gdk-pixbuf/io-pnm.c:310
+#: gdk-pixbuf/io-pnm.c:311
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Файл формата PNM имеет нераспознаваемый субформат PNM"
 
-#: gdk-pixbuf/io-pnm.c:335
+#: gdk-pixbuf/io-pnm.c:336
 msgid "PNM file has an image width of 0"
 msgstr "Файл формата PNM имеет нулевую ширину изображения"
 
-#: gdk-pixbuf/io-pnm.c:356
+#: gdk-pixbuf/io-pnm.c:357
 msgid "PNM file has an image height of 0"
 msgstr "Файл формата PNM имеет нулевую высоту изображения"
 
-#: gdk-pixbuf/io-pnm.c:379
+#: gdk-pixbuf/io-pnm.c:380
 msgid "Maximum color value in PNM file is 0"
 msgstr "Максимальное значение цвета в файле формата PNM равняется 0"
 
-#: gdk-pixbuf/io-pnm.c:387
+#: gdk-pixbuf/io-pnm.c:388
 msgid "Maximum color value in PNM file is too large"
 msgstr "Максимальное значение цвета в файле формата PNM слишком велико"
 
-#: gdk-pixbuf/io-pnm.c:395
+#: gdk-pixbuf/io-pnm.c:396
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
 "Невозможно обработать файлы формата PNM с максимальными значениями цвета "
 "большими, чем 255"
 
-#: gdk-pixbuf/io-pnm.c:434 gdk-pixbuf/io-pnm.c:462 gdk-pixbuf/io-pnm.c:494
+#: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
 msgstr "Данный тип изображения формата PNM недопустим"
 
-#: gdk-pixbuf/io-pnm.c:554 gdk-pixbuf/io-pnm.c:596
+#: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
 msgid "PNM image format is invalid"
 msgstr "Данное изображение формата PNM недопустимо"
 
-#: gdk-pixbuf/io-pnm.c:655
+#: gdk-pixbuf/io-pnm.c:656
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Загрузчик изображений формата PNM не поддерживает этот субформат PNM"
 
-#: gdk-pixbuf/io-pnm.c:710
+#: gdk-pixbuf/io-pnm.c:711
 msgid "Premature end-of-file encountered"
 msgstr "Преждевременный конец файла обнаружен"
 
-#: gdk-pixbuf/io-pnm.c:742 gdk-pixbuf/io-pnm.c:962
+#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Формат PNM требует в точности одного пробела перед данными семпла"
 
-#: gdk-pixbuf/io-pnm.c:769
+#: gdk-pixbuf/io-pnm.c:770
 msgid "Can't allocate memory for loading PNM image"
 msgstr ""
 "Невозможно распределить память для загрузки файла изображения формата PNM"
 
-#: gdk-pixbuf/io-pnm.c:819
+#: gdk-pixbuf/io-pnm.c:820
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Недостаточно памяти для загрузки структуры формата PNM"
 
-#: gdk-pixbuf/io-pnm.c:869
+#: gdk-pixbuf/io-pnm.c:871
 msgid "Unexpected end of PNM image data"
 msgstr "Непредвиденный конец данных  обнаружен в изображении формата PNM"
 
-#: gdk-pixbuf/io-pnm.c:991
+#: gdk-pixbuf/io-pnm.c:1003
 msgid "Insufficient memory to load PNM file"
 msgstr "Недостаточно памяти для загрузки файла формата PNM"
 
-#: gdk-pixbuf/io-pnm.c:1070
+#: gdk-pixbuf/io-pnm.c:1082
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Семейство форматов PNM/PBM/PGM/PPM для изображений"
 
-#: gdk-pixbuf/io-ras.c:125
+#: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
 msgstr "Заголовок изображения формата RAS содержит неправильные данные"
 
-#: gdk-pixbuf/io-ras.c:147
+#: gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
 msgstr "Тип изображения формата RAS неизвестен"
 
-#: gdk-pixbuf/io-ras.c:155
+#: gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
 msgstr "данная разновидность изображения формата RAS не поддерживается"
 
-#: gdk-pixbuf/io-ras.c:170 gdk-pixbuf/io-ras.c:190
+#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "Недостаточно памяти для загрузки изображения формата RAS"
 
-#: gdk-pixbuf/io-ras.c:532
+#: gdk-pixbuf/io-ras.c:543
 msgid "The Sun raster image format"
 msgstr "Растровый формат компании Сан (Sun) для изображений"
 
-#: gdk-pixbuf/io-tga.c:157
+#: gdk-pixbuf/io-tga.c:158
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Невозможно распределить память для структуры IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:176
+#: gdk-pixbuf/io-tga.c:177
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "Невозможно распределить память для данных структуры IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:187
+#: gdk-pixbuf/io-tga.c:188
 msgid "Can't realloc IOBuffer data"
 msgstr "Невозможно перераспределить память для данных структуры IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:217
+#: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Невозможно распределить память для временных данных структуры IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:341
+#: gdk-pixbuf/io-tga.c:352
 msgid "Can't allocate new pixbuf"
 msgstr "Невозможно распределить память для новой структуры pixbuf"
 
-#: gdk-pixbuf/io-tga.c:680
+#: gdk-pixbuf/io-tga.c:691
 msgid "Can't allocate colormap structure"
 msgstr "Невозможно распределить память для структуры карты цветов"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:698
 msgid "Can't allocate colormap entries"
 msgstr "Невозможно распределить память для элемента карты цветов"
 
-#: gdk-pixbuf/io-tga.c:709
+#: gdk-pixbuf/io-tga.c:720
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Непредвиденная глубина цвета обнаружена для элемента карты цветов"
 
-#: gdk-pixbuf/io-tga.c:727
+#: gdk-pixbuf/io-tga.c:738
 msgid "Can't allocate TGA header memory"
 msgstr "Невозможно распределить память для заголовка формата TGA"
 
-#: gdk-pixbuf/io-tga.c:760
+#: gdk-pixbuf/io-tga.c:771
 msgid "TGA image has invalid dimensions"
 msgstr "Размер изображения формата TGA недопустим"
 
-#: gdk-pixbuf/io-tga.c:766 gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:785
-#: gdk-pixbuf/io-tga.c:795 gdk-pixbuf/io-tga.c:802
+#: gdk-pixbuf/io-tga.c:777 gdk-pixbuf/io-tga.c:786 gdk-pixbuf/io-tga.c:796
+#: gdk-pixbuf/io-tga.c:806 gdk-pixbuf/io-tga.c:813
 msgid "TGA image type not supported"
 msgstr "Данный тип формата TGA не поддерживается"
 
-#: gdk-pixbuf/io-tga.c:849
+#: gdk-pixbuf/io-tga.c:860
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Невозможно распределить память для структуры содержания формата TGA"
 
-#: gdk-pixbuf/io-tga.c:913
+#: gdk-pixbuf/io-tga.c:925
 msgid "Excess data in file"
 msgstr "Данные в файле избыточны"
 
-#: gdk-pixbuf/io-tga.c:982
+#: gdk-pixbuf/io-tga.c:994
 msgid "The Targa image format"
 msgstr "Формат Targa для изображений"
 
-#: gdk-pixbuf/io-tiff.c:191
+#: gdk-pixbuf/io-tiff.c:192
 msgid "Could not get image width (bad TIFF file)"
 msgstr ""
 "Не удалось определить ширину изображения (испорченный файл формата TIFF)"
 
-#: gdk-pixbuf/io-tiff.c:198
+#: gdk-pixbuf/io-tiff.c:199
 msgid "Could not get image height (bad TIFF file)"
 msgstr ""
 "Не удалось определить высоту изображения (испорченный файл формата TIFF)"
 
-#: gdk-pixbuf/io-tiff.c:206
+#: gdk-pixbuf/io-tiff.c:207
 msgid "Width or height of TIFF image is zero"
 msgstr "Ширина или высота изображения формата TIFF равна 0"
 
-#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
+#: gdk-pixbuf/io-tiff.c:216 gdk-pixbuf/io-tiff.c:225
 msgid "Dimensions of TIFF image too large"
 msgstr "Изображение формата TIFF слишком большое"
 
-#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:553
+#: gdk-pixbuf/io-tiff.c:244 gdk-pixbuf/io-tiff.c:256 gdk-pixbuf/io-tiff.c:564
 msgid "Insufficient memory to open TIFF file"
 msgstr "Недостаточно памяти для открытия файла формата TIFF"
 
-#: gdk-pixbuf/io-tiff.c:258
+#: gdk-pixbuf/io-tiff.c:268
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Произошёл сбой при загрузке данных RGB из файла формата TIFF"
 
-#: gdk-pixbuf/io-tiff.c:266
+#: gdk-pixbuf/io-tiff.c:276
 msgid "Unsupported TIFF variant"
 msgstr "Данный вариант формата TIFF не поддерживается"
 
-#: gdk-pixbuf/io-tiff.c:336
+#: gdk-pixbuf/io-tiff.c:346
 msgid "Failed to open TIFF image"
 msgstr "Произошёл сбой при открытии изображения формата TIFF"
 
-#: gdk-pixbuf/io-tiff.c:349
+#: gdk-pixbuf/io-tiff.c:359
 msgid "TIFFClose operation failed"
 msgstr "Произошёл сбой в функции TIFFClose"
 
-#: gdk-pixbuf/io-tiff.c:483 gdk-pixbuf/io-tiff.c:496
+#: gdk-pixbuf/io-tiff.c:494 gdk-pixbuf/io-tiff.c:507
 msgid "Failed to load TIFF image"
 msgstr "Произошёл сбой при загрузке изображения формата TIFF"
 
-#: gdk-pixbuf/io-tiff.c:591
+#: gdk-pixbuf/io-tiff.c:602
 msgid "The TIFF image format"
 msgstr "Формат TIFF для изображений"
 
@@ -725,14 +757,6 @@ msgstr ""
 msgid "The XPM image format"
 msgstr "Формат XPM для изображений"
 
-#: gdk/gdkdisplaymanager.c:126
-msgid "Default Display"
-msgstr "Исходный дисплей"
-
-#: gdk/gdkdisplaymanager.c:127
-msgid "The default display for GDK"
-msgstr "Исходный дисплей для подсистемы GDK"
-
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
@@ -760,514 +784,6 @@ msgstr "Ctrl"
 msgid "Alt"
 msgstr "Alt"
 
-#: gtk/gtkaccellabel.c:137
-msgid "Accelerator Closure"
-msgstr "Переменная для акселератора"
-
-#: gtk/gtkaccellabel.c:138
-msgid "The closure to be monitored for accelerator changes"
-msgstr "Переменная, в которой отражаются изменения акселератора"
-
-#: gtk/gtkaccellabel.c:144
-msgid "Accelerator Widget"
-msgstr "Элемент управления \"акселератор\""
-
-#: gtk/gtkaccellabel.c:145
-msgid "The widget to be monitored for accelerator changes"
-msgstr "Элемент управления, который отвечает за изменение акселератора"
-
-#: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:117
-#, fuzzy
-msgid "Name"
-msgstr "Название шрифта"
-
-#: gtk/gtkaction.c:186
-msgid "A unique name for the action."
-msgstr ""
-
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:202
-#: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
-msgid "Label"
-msgstr "Метка"
-
-#: gtk/gtkaction.c:194
-msgid "The label used for menu items and buttons that activate this action."
-msgstr ""
-
-#: gtk/gtkaction.c:200
-#, fuzzy
-msgid "Short label"
-msgstr "Метка вкладки"
-
-#: gtk/gtkaction.c:201
-msgid "A shorter label that may be used on toolbar buttons."
-msgstr ""
-
-#: gtk/gtkaction.c:207
-msgid "Tooltip"
-msgstr ""
-
-#: gtk/gtkaction.c:208
-msgid "A tooltip for this action."
-msgstr ""
-
-#: gtk/gtkaction.c:214
-#, fuzzy
-msgid "Stock Icon"
-msgstr "ID встроенного значка"
-
-#: gtk/gtkaction.c:215
-msgid "The stock icon displayed in widgets representing this action."
-msgstr ""
-
-#: gtk/gtkaction.c:221 gtk/gtktoolitem.c:168
-msgid "Is important"
-msgstr ""
-
-#: gtk/gtkaction.c:222
-msgid ""
-"Whether the action is considered important. When TRUE, toolitem proxies for "
-"this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr ""
-
-#: gtk/gtkaction.c:228
-msgid "Hide if empty"
-msgstr ""
-
-#: gtk/gtkaction.c:229
-msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr ""
-
-#: gtk/gtkaction.c:235 gtk/gtkwidget.c:446
-msgid "Sensitive"
-msgstr "Чувствительный"
-
-#: gtk/gtkaction.c:236
-#, fuzzy
-msgid "Whether the action is enabled."
-msgstr "Будет ли виджет видимым"
-
-#: gtk/gtkaction.c:242 gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:219
-#: gtk/gtkwidget.c:439
-msgid "Visible"
-msgstr "Видимый"
-
-#: gtk/gtkaction.c:243
-#, fuzzy
-msgid "Whether the action is visible."
-msgstr "Будет ли виджет видимым"
-
-#: gtk/gtkactiongroup.c:118
-msgid "A name for the action group."
-msgstr ""
-
-#: gtk/gtkalignment.c:116
-msgid "Horizontal alignment"
-msgstr "Горизонтальное выравнивание"
-
-#: gtk/gtkalignment.c:117
-msgid ""
-"Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
-"right aligned"
-msgstr ""
-"Горизонтальное расположение вложенного элемента в доступном пространстве. "
-"0.0 -- выровнен по левому краю, 1.0 -- выровнен по правому краю"
-
-#: gtk/gtkalignment.c:126
-msgid "Vertical alignment"
-msgstr "Вертикальное выравнивание"
-
-#: gtk/gtkalignment.c:127
-msgid ""
-"Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
-"bottom aligned"
-msgstr ""
-"Вертикальное расположение вложенного элемента в доступном пространстве. 0.0 "
-"-- выровнен по верхнему краю, 1.0 -- выровнен по нижнему краю"
-
-#: gtk/gtkalignment.c:135
-msgid "Horizontal scale"
-msgstr "Горизонтальное масштабирование"
-
-#: gtk/gtkalignment.c:136
-msgid ""
-"If available horizontal space is bigger than needed for the child, how much "
-"of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr ""
-"Если доступное горизонтальное пространство больше, чем необходимо для "
-"элемента, как много будет использовано этим элементом. 0.0 -- ничего, 1.0 -- "
-"всё"
-
-#: gtk/gtkalignment.c:144
-msgid "Vertical scale"
-msgstr "Вертикальное масштабирование"
-
-#: gtk/gtkalignment.c:145
-msgid ""
-"If available vertical space is bigger than needed for the child, how much of "
-"it to use for the child. 0.0 means none, 1.0 means all"
-msgstr ""
-"Если доступное вертикальное пространство больше, чем необходимо для "
-"элемента, как много будет использовано этим элементом. 0.0 -- ничего, 1.0 -- "
-"всё"
-
-#: gtk/gtkalignment.c:162
-msgid "Top Padding"
-msgstr "Дополнение сверху"
-
-#: gtk/gtkalignment.c:163
-msgid "The padding to insert at the top of the widget."
-msgstr "Пространство, добавляемое к элементу управления сверху."
-
-#: gtk/gtkalignment.c:179
-msgid "Bottom Padding"
-msgstr "Дополнение снизу"
-
-#: gtk/gtkalignment.c:180
-msgid "The padding to insert at the bottom of the widget."
-msgstr "Пространство, добавляемое к элементу управления снизу."
-
-#: gtk/gtkalignment.c:196
-msgid "Left Padding"
-msgstr "Дополнение слева"
-
-#: gtk/gtkalignment.c:197
-msgid "The padding to insert at the left of the widget."
-msgstr "Пространство, добавляемое к элементу управления слева."
-
-#: gtk/gtkalignment.c:213
-msgid "Right Padding"
-msgstr "Дополнение справа"
-
-#: gtk/gtkalignment.c:214
-msgid "The padding to insert at the right of the widget."
-msgstr "Пространство, добавляемое к элементу управления справа."
-
-#: gtk/gtkarrow.c:98
-msgid "Arrow direction"
-msgstr "Направление стрелки"
-
-#: gtk/gtkarrow.c:99
-msgid "The direction the arrow should point"
-msgstr "Направление, в котором должна указывать стрелка"
-
-#: gtk/gtkarrow.c:106
-msgid "Arrow shadow"
-msgstr "Тень стрелки"
-
-#: gtk/gtkarrow.c:107
-msgid "Appearance of the shadow surrounding the arrow"
-msgstr "Внешний вид тени, отбрасываемой стрелкой"
-
-#: gtk/gtkaspectframe.c:108
-msgid "Horizontal Alignment"
-msgstr "Горизонтальное выравнивание"
-
-#: gtk/gtkaspectframe.c:109
-msgid "X alignment of the child"
-msgstr "Выравнивание вложенного элемента по оси X"
-
-#: gtk/gtkaspectframe.c:115
-msgid "Vertical Alignment"
-msgstr "Вертикальное выравнивание"
-
-#: gtk/gtkaspectframe.c:116
-msgid "Y alignment of the child"
-msgstr "Выравнивание вложенного элемента по оси Y"
-
-#: gtk/gtkaspectframe.c:122
-msgid "Ratio"
-msgstr "Отношение"
-
-#: gtk/gtkaspectframe.c:123
-msgid "Aspect ratio if obey_child is FALSE"
-msgstr ""
-"Коэффициент пропорциональности, если для параметра \"Подчинённый элемент"
-"\" (obey_child) выбрано значение \"ЛОЖНО\""
-
-#: gtk/gtkaspectframe.c:129
-msgid "Obey child"
-msgstr "Подчинённый элемент"
-
-#: gtk/gtkaspectframe.c:130
-msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
-"Привести коэффициент пропорциональности в соответствие с таковым у дочернего "
-"элемента рамки"
-
-#: gtk/gtkbbox.c:119
-msgid "Minimum child width"
-msgstr "Минимальная ширина вложенного элемента"
-
-#: gtk/gtkbbox.c:120
-msgid "Minimum width of buttons inside the box"
-msgstr "Минимальная ширина кнопок внутри контейнера"
-
-#: gtk/gtkbbox.c:128
-msgid "Minimum child height"
-msgstr "Минимальная высота вложенного элемента"
-
-#: gtk/gtkbbox.c:129
-msgid "Minimum height of buttons inside the box"
-msgstr "Минимальная высота кнопок внутри контейнера"
-
-#: gtk/gtkbbox.c:137
-msgid "Child internal width padding"
-msgstr "Внутреннее дополнение по ширине"
-
-#: gtk/gtkbbox.c:138
-msgid "Amount to increase child's size on either side"
-msgstr "Степень увеличения размера элемента слева и справа"
-
-#: gtk/gtkbbox.c:146
-msgid "Child internal height padding"
-msgstr "Внутреннее дополнение по высоте"
-
-#: gtk/gtkbbox.c:147
-msgid "Amount to increase child's size on the top and bottom"
-msgstr "Степень увеличения размера элемента сверху и снизу"
-
-#: gtk/gtkbbox.c:155
-msgid "Layout style"
-msgstr "Стиль выравнивания"
-
-#: gtk/gtkbbox.c:156
-msgid ""
-"How to layout the buttons in the box. Possible values are default, spread, "
-"edge, start and end"
-msgstr ""
-"Как размещаются кнопки в окне.  Возможные значения: default (\"по умолчанию"
-"\"), spread (\"распределённо\"), edge (\"по краям\"), start (\"с начала\") и "
-"end (\"с конца\")"
-
-#: gtk/gtkbbox.c:164
-msgid "Secondary"
-msgstr "Вторичный"
-
-#: gtk/gtkbbox.c:165
-msgid ""
-"If TRUE, the child appears in a secondary group of children, suitable for, e."
-"g., help buttons"
-msgstr ""
-"Если \"ИСТИНА\", то вложенный элемент появляется во вторичной группе "
-"вложенных элементов; может использоваться, например, для кнопок вызова "
-"справки"
-
-#: gtk/gtkbox.c:128 gtk/gtkexpander.c:226
-msgid "Spacing"
-msgstr "Интервал"
-
-#: gtk/gtkbox.c:129
-msgid "The amount of space between children"
-msgstr "Расстояние между вложенными элементами"
-
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
-msgid "Homogeneous"
-msgstr "Гомогенность"
-
-#: gtk/gtkbox.c:139
-msgid "Whether the children should all be the same size"
-msgstr "Должны ли все вложенные элементы иметь одинаковый размер"
-
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
-#: gtk/gtktreeviewcolumn.c:291
-msgid "Expand"
-msgstr "Расширяемость"
-
-#: gtk/gtkbox.c:147
-msgid "Whether the child should receive extra space when the parent grows"
-msgstr ""
-"Должны ли все вложенные элементы расширяться при увеличении размера "
-"родительского элемента"
-
-#: gtk/gtkbox.c:153
-msgid "Fill"
-msgstr "Заполнение"
-
-#: gtk/gtkbox.c:154
-msgid ""
-"Whether extra space given to the child should be allocated to the child or "
-"used as padding"
-msgstr ""
-"Должно ли дополнительное пространство, отданное дочернему элементу, "
-"распределяться внутри этого элемента (fill), или использовать его для "
-"дополнения (padding)"
-
-#: gtk/gtkbox.c:160
-msgid "Padding"
-msgstr "Дополнение"
-
-#: gtk/gtkbox.c:161
-msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr ""
-"Дополнительное пространство, которое будет помещено между дочерним элементом "
-"и его соседями, в точках растра"
-
-#: gtk/gtkbox.c:167
-msgid "Pack type"
-msgstr "Тип упаковки"
-
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:512
-msgid ""
-"A GtkPackType indicating whether the child is packed with reference to the "
-"start or end of the parent"
-msgstr ""
-"GtkPackType указывает относительно чего упаковывается дочерний элемент -- "
-"относительно начала, конца, или элемента-родителя"
-
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:238
-#: gtk/gtkruler.c:138
-msgid "Position"
-msgstr "Позиция"
-
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:491
-msgid "The index of the child in the parent"
-msgstr "Индекс элемента-потомка в элементе-родителе"
-
-#: gtk/gtkbutton.c:191
-msgid ""
-"Text of the label widget inside the button, if the button contains a label "
-"widget"
-msgstr "Текст виджета-метки на кнопке, если кнопка содержит метку."
-
-#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
-#: gtk/gtktoolbutton.c:186
-msgid "Use underline"
-msgstr "Использовать подчеркивание"
-
-#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
-msgid ""
-"If set, an underline in the text indicates the next character should be used "
-"for the mnemonic accelerator key"
-msgstr ""
-"Если установлено, подчёркивание в тексте обозначает, что следующий символ "
-"должен использоваться в комбинации клавиш."
-
-#: gtk/gtkbutton.c:206
-msgid "Use stock"
-msgstr "Использовать встроенное"
-
-#: gtk/gtkbutton.c:207
-msgid ""
-"If set, the label is used to pick a stock item instead of being displayed"
-msgstr ""
-"Если установлено, метка будет использована для выбора из встроенныхкнопок "
-"вместо отображения"
-
-#: gtk/gtkbutton.c:214
-msgid "Focus on click"
-msgstr "Фокус по щелчку"
-
-#: gtk/gtkbutton.c:215
-msgid "Whether the button grabs focus when it is clicked with the mouse"
-msgstr "Должна ли кнопка захватывать фокус ввода при щелчке мышью по ней"
-
-#: gtk/gtkbutton.c:222
-msgid "Border relief"
-msgstr "Рельефные границы"
-
-#: gtk/gtkbutton.c:223
-msgid "The border relief style"
-msgstr "Стиль рельефа границы"
-
-#: gtk/gtkbutton.c:280
-msgid "Default Spacing"
-msgstr "Интервал по умолчанию"
-
-#: gtk/gtkbutton.c:281
-msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr "Дополнительное пространство для кнопок CAN_DEFAULT"
-
-#: gtk/gtkbutton.c:287
-msgid "Default Outside Spacing"
-msgstr "Внешний интервал по умолчанию"
-
-#: gtk/gtkbutton.c:288
-msgid ""
-"Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
-"border"
-msgstr ""
-"Дополнительное пространство для кнопок CAN_DEFAULT, которое всегда "
-"добавляется к границам кнопок"
-
-#: gtk/gtkbutton.c:293
-msgid "Child X Displacement"
-msgstr "Перемещение дочернего элемента по горизонтали"
-
-#: gtk/gtkbutton.c:294
-msgid ""
-"How far in the x direction to move the child when the button is depressed"
-msgstr ""
-"Насколько переместить дочерний элемент по горизонтали, если нажата кнопка"
-
-#: gtk/gtkbutton.c:301
-msgid "Child Y Displacement"
-msgstr "Перемещение дочернего элемента по вертикали"
-
-#: gtk/gtkbutton.c:302
-msgid ""
-"How far in the y direction to move the child when the button is depressed"
-msgstr ""
-"Насколько переместить дочерний элемент по вертикали, если нажата кнопка"
-
-#: gtk/gtkcalendar.c:464
-msgid "Year"
-msgstr "Год"
-
-#: gtk/gtkcalendar.c:465
-msgid "The selected year"
-msgstr "Выбранный год"
-
-#: gtk/gtkcalendar.c:471
-msgid "Month"
-msgstr "Месяц"
-
-#: gtk/gtkcalendar.c:472
-msgid "The selected month (as a number between 0 and 11)"
-msgstr "Выбранный месяц (как номер между 0 и 11)"
-
-#: gtk/gtkcalendar.c:478
-msgid "Day"
-msgstr "День"
-
-#: gtk/gtkcalendar.c:479
-msgid ""
-"The selected day (as a number between 1 and 31, or 0 to unselect the "
-"currently selected day)"
-msgstr "Выбранный день (как номер между 1 и 31 или 0 для отмены выбора)"
-
-#: gtk/gtkcalendar.c:493
-msgid "Show Heading"
-msgstr "Показывать заголовок"
-
-#: gtk/gtkcalendar.c:494
-msgid "If TRUE, a heading is displayed"
-msgstr "Если \"ИСТИНА\", то заголовок отображается"
-
-#: gtk/gtkcalendar.c:508
-msgid "Show Day Names"
-msgstr "Показывать имена дней"
-
-#: gtk/gtkcalendar.c:509
-msgid "If TRUE, day names are displayed"
-msgstr "Если \"ИСТИНА\", то имена дней отображаются"
-
-#: gtk/gtkcalendar.c:522
-msgid "No Month Change"
-msgstr "Месяц не изменяется"
-
-#: gtk/gtkcalendar.c:523
-msgid "If TRUE, the selected month can not be changed"
-msgstr "Если \"ИСТИНА\", то изменить месяц невозможно"
-
-#: gtk/gtkcalendar.c:537
-msgid "Show Week Numbers"
-msgstr "Показывать номера недель"
-
-#: gtk/gtkcalendar.c:538
-msgid "If TRUE, week numbers are displayed"
-msgstr "Если \"ИСТИНА\", то номера недель отображаются"
-
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1282,541 +798,17 @@ msgstr "Если \"ИСТИНА\", то номера недель отображ
 msgid "calendar:MY"
 msgstr "очистить"
 
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:720
+#: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
 msgstr ""
-
-#: gtk/gtkcellrenderer.c:116
-msgid "mode"
-msgstr "режим"
-
-#: gtk/gtkcellrenderer.c:117
-msgid "Editable mode of the CellRenderer"
-msgstr "Редактируемый режим приложения CellRenderer"
-
-#: gtk/gtkcellrenderer.c:126
-msgid "visible"
-msgstr "видимое"
-
-#: gtk/gtkcellrenderer.c:127
-msgid "Display the cell"
-msgstr "Показать эту ячейку"
-
-#: gtk/gtkcellrenderer.c:135
-msgid "xalign"
-msgstr "x-выравнивание"
-
-#: gtk/gtkcellrenderer.c:136
-msgid "The x-align"
-msgstr "Выравнивание по оси X"
-
-#: gtk/gtkcellrenderer.c:146
-msgid "yalign"
-msgstr "y-выравнивание"
-
-#: gtk/gtkcellrenderer.c:147
-msgid "The y-align"
-msgstr "Выравнивание по оси Y"
-
-#: gtk/gtkcellrenderer.c:157
-msgid "xpad"
-msgstr "заполнение по горизонтали"
-
-#: gtk/gtkcellrenderer.c:158
-msgid "The xpad"
-msgstr "Заполнение по горизонтали"
-
-#: gtk/gtkcellrenderer.c:168
-msgid "ypad"
-msgstr "заполнение по вертикали"
-
-#: gtk/gtkcellrenderer.c:169
-msgid "The ypad"
-msgstr "Заполнение по вертикали"
-
-#: gtk/gtkcellrenderer.c:179
-msgid "width"
-msgstr "ширина"
-
-#: gtk/gtkcellrenderer.c:180
-msgid "The fixed width"
-msgstr "Фиксированная ширина"
-
-#: gtk/gtkcellrenderer.c:190
-msgid "height"
-msgstr "высота"
-
-#: gtk/gtkcellrenderer.c:191
-msgid "The fixed height"
-msgstr "Фиксированная высота"
-
-#: gtk/gtkcellrenderer.c:201
-msgid "Is Expander"
-msgstr "Расширяемая"
-
-#: gtk/gtkcellrenderer.c:202
-msgid "Row has children"
-msgstr "У строки есть дочерние элементы"
-
-#: gtk/gtkcellrenderer.c:211
-msgid "Is Expanded"
-msgstr "Расширенная"
-
-#: gtk/gtkcellrenderer.c:212
-msgid "Row is an expander row, and is expanded"
-msgstr "Строка является расширяемой, и она расширена"
-
-#: gtk/gtkcellrenderer.c:220
-msgid "Cell background color name"
-msgstr "Название цвета фона ячейки"
-
-#: gtk/gtkcellrenderer.c:221
-msgid "Cell background color as a string"
-msgstr "Цвет фона ячейки в виде строки"
-
-#: gtk/gtkcellrenderer.c:228
-msgid "Cell background color"
-msgstr "Цвет фона ячейки"
-
-#: gtk/gtkcellrenderer.c:229
-msgid "Cell background color as a GdkColor"
-msgstr "Цвет фона ячейки в виде GdkColor"
-
-#: gtk/gtkcellrenderer.c:237
-msgid "Cell background set"
-msgstr "Установка фона ячейки"
-
-#: gtk/gtkcellrenderer.c:238
-msgid "Whether this tag affects the cell background color"
-msgstr "Влияет ли этот тег на цвет фона ячейки"
-
-#: gtk/gtkcellrendererpixbuf.c:132
-msgid "Pixbuf Object"
-msgstr "Объект Pixbuf"
-
-#: gtk/gtkcellrendererpixbuf.c:133
-msgid "The pixbuf to render"
-msgstr "Объект Рixbuf для визуализации"
-
-#: gtk/gtkcellrendererpixbuf.c:141
-msgid "Pixbuf Expander Open"
-msgstr "Открытый расширяемый объект Pixbuf"
-
-#: gtk/gtkcellrendererpixbuf.c:142
-msgid "Pixbuf for open expander"
-msgstr "Объект Pixbuf для открытого расширяемого объекта"
-
-#: gtk/gtkcellrendererpixbuf.c:150
-msgid "Pixbuf Expander Closed"
-msgstr "Закрытый расширяемый объект Pixbuf"
-
-#: gtk/gtkcellrendererpixbuf.c:151
-msgid "Pixbuf for closed expander"
-msgstr "Объект Pixbuf для закрытого расширяемого объекта"
-
-#: gtk/gtkcellrendererpixbuf.c:159 gtk/gtkimage.c:176
-msgid "Stock ID"
-msgstr "ID встроенного значка"
-
-#: gtk/gtkcellrendererpixbuf.c:160
-msgid "The stock ID of the stock icon to render"
-msgstr "ID встроенного значка для визуализации"
-
-#: gtk/gtkcellrendererpixbuf.c:167 gtk/gtkfilechooserdefault.c:1226
-msgid "Size"
-msgstr "Размер"
-
-#: gtk/gtkcellrendererpixbuf.c:168
-msgid "The size of the rendered icon"
-msgstr "Размер отрисованной иконки"
-
-#: gtk/gtkcellrendererpixbuf.c:176
-msgid "Detail"
-msgstr "Подробности"
-
-#: gtk/gtkcellrendererpixbuf.c:177
-msgid "Render detail to pass to the theme engine"
-msgstr "Подробности визуализации (render detail) для передачи \"движку\" темы"
-
-#: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
-msgid "Text"
-msgstr "Текст"
-
-#: gtk/gtkcellrenderertext.c:176
-msgid "Text to render"
-msgstr "Отображаемый текст"
-
-#: gtk/gtkcellrenderertext.c:183
-msgid "Markup"
-msgstr "Разметка"
-
-#: gtk/gtkcellrenderertext.c:184
-msgid "Marked up text to render"
-msgstr "Разметка текста для отображения"
-
-#: gtk/gtkcellrenderertext.c:191 gtk/gtklabel.c:297
-msgid "Attributes"
-msgstr "Атрибуты"
-
-#: gtk/gtkcellrenderertext.c:192
-msgid "A list of style attributes to apply to the text of the renderer"
-msgstr "Список атрибутов стиля, применяемых к визуализируемому тексту"
-
-#: gtk/gtkcellrenderertext.c:199 gtk/gtkcellview.c:174 gtk/gtktexttag.c:205
-msgid "Background color name"
-msgstr "Название цвета фона"
-
-#: gtk/gtkcellrenderertext.c:200 gtk/gtkcellview.c:175 gtk/gtktexttag.c:206
-msgid "Background color as a string"
-msgstr "Цвет фона как строка"
-
-#: gtk/gtkcellrenderertext.c:207 gtk/gtkcellview.c:181 gtk/gtktexttag.c:213
-msgid "Background color"
-msgstr "Цвет фона"
-
-#: gtk/gtkcellrenderertext.c:208 gtk/gtkcellview.c:182
-msgid "Background color as a GdkColor"
-msgstr "Цвет фона как GdkColor"
-
-#: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:239
-msgid "Foreground color name"
-msgstr "Название цвета текста"
-
-#: gtk/gtkcellrenderertext.c:216 gtk/gtktexttag.c:240
-msgid "Foreground color as a string"
-msgstr "Цвет текста как строка"
-
-#: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:247
-msgid "Foreground color"
-msgstr "Цвет текста"
-
-#: gtk/gtkcellrenderertext.c:224
-msgid "Foreground color as a GdkColor"
-msgstr "Цвет текста как GdkColor"
-
-#: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:585
-msgid "Editable"
-msgstr "Редактируемое"
-
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:586
-msgid "Whether the text can be modified by the user"
-msgstr "Может ли текст быть изменен пользователем"
-
-#: gtk/gtkcellrenderertext.c:240 gtk/gtkcellrenderertext.c:248
-#: gtk/gtkfontbutton.c:806 gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281
-#: gtk/gtktexttag.c:289
-msgid "Font"
-msgstr "Шрифт"
-
-#: gtk/gtkcellrenderertext.c:241
-msgid "Font description as a string"
-msgstr "Описание шрифта строкой"
-
-#: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:290
-msgid "Font description as a PangoFontDescription struct"
-msgstr "Описание шрифта структурой PangoFontDescription"
-
-#: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:298
-msgid "Font family"
-msgstr "Семейство шрифта:"
-
-#: gtk/gtkcellrenderertext.c:258 gtk/gtktexttag.c:299
-msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "Название семейства шрифта, т.е. Санс, Гельветика, Таймс"
-
-#: gtk/gtkcellrenderertext.c:265 gtk/gtkcellrenderertext.c:266
-#: gtk/gtktexttag.c:306
-msgid "Font style"
-msgstr "Стиль шрифта"
-
-#: gtk/gtkcellrenderertext.c:274 gtk/gtkcellrenderertext.c:275
-#: gtk/gtktexttag.c:315
-msgid "Font variant"
-msgstr "Вариант шрифта"
-
-#: gtk/gtkcellrenderertext.c:283 gtk/gtkcellrenderertext.c:284
-#: gtk/gtktexttag.c:324
-msgid "Font weight"
-msgstr "Жирность шрифта"
-
-#: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:294
-#: gtk/gtktexttag.c:335
-msgid "Font stretch"
-msgstr "Ширина шрифта"
-
-#: gtk/gtkcellrenderertext.c:302 gtk/gtkcellrenderertext.c:303
-#: gtk/gtktexttag.c:344
-msgid "Font size"
-msgstr "Размер шрифта"
-
-#: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:364
-msgid "Font points"
-msgstr "Пункты шрифта"
-
-#: gtk/gtkcellrenderertext.c:313 gtk/gtktexttag.c:365
-msgid "Font size in points"
-msgstr "Размер шрифта в пунктах"
-
-#: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:354
-msgid "Font scale"
-msgstr "Масштаб шрифта"
-
-#: gtk/gtkcellrenderertext.c:323
-msgid "Font scaling factor"
-msgstr "Коэффициент масштабирования шрифта"
-
-#: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:423
-msgid "Rise"
-msgstr "Поднять"
-
-#: gtk/gtkcellrenderertext.c:333
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr ""
-"Сдвинуть текст над линией шрифта (под линию шрифта, для отрицательных "
-"значений)"
-
-#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
-msgid "Strikethrough"
-msgstr "Перечеркивание"
-
-#: gtk/gtkcellrenderertext.c:344 gtk/gtktexttag.c:464
-msgid "Whether to strike through the text"
-msgstr "Будет ли текст перечеркнут"
-
-#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:471
-msgid "Underline"
-msgstr "Подчеркивание"
-
-#: gtk/gtkcellrenderertext.c:352 gtk/gtktexttag.c:472
-msgid "Style of underline for this text"
-msgstr "Стиль подчеркивания для этого текста"
-
-#: gtk/gtkcellrenderertext.c:362 gtk/gtkcellview.c:189 gtk/gtktexttag.c:508
-msgid "Background set"
-msgstr "Установка фона"
-
-#: gtk/gtkcellrenderertext.c:363 gtk/gtkcellview.c:190 gtk/gtktexttag.c:509
-msgid "Whether this tag affects the background color"
-msgstr "Влияет ли этот тег на цвет фона"
-
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:520
-msgid "Foreground set"
-msgstr "Установка переднего плана"
-
-#: gtk/gtkcellrenderertext.c:367 gtk/gtktexttag.c:521
-msgid "Whether this tag affects the foreground color"
-msgstr "Влияет ли этот тег на цвет переднего плана"
-
-#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:528
-msgid "Editability set"
-msgstr "Установка редактируемости"
-
-#: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:529
-msgid "Whether this tag affects text editability"
-msgstr "Влияет ли этот тег на редактируемость текста"
-
-#: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:532
-msgid "Font family set"
-msgstr "Установка семейства шрифта"
-
-#: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:533
-msgid "Whether this tag affects the font family"
-msgstr "Влияет ли этот тэг на семейство шрифта"
-
-#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:536
-msgid "Font style set"
-msgstr "Установка стиля шрифта"
-
-#: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:537
-msgid "Whether this tag affects the font style"
-msgstr "Влияет ли этот тэг на стиль шрифта"
-
-#: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:540
-msgid "Font variant set"
-msgstr "Установка варианта шрифта"
-
-#: gtk/gtkcellrenderertext.c:383 gtk/gtktexttag.c:541
-msgid "Whether this tag affects the font variant"
-msgstr "Влияет ли этот тэг на вариант шрифта"
-
-#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:544
-msgid "Font weight set"
-msgstr "Установка жирности шрифта"
-
-#: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:545
-msgid "Whether this tag affects the font weight"
-msgstr "Влияет ли этот тэг на плотность шрифта"
-
-#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:548
-msgid "Font stretch set"
-msgstr "Ширина шрифта"
-
-#: gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:549
-msgid "Whether this tag affects the font stretch"
-msgstr "Влияет ли этот тэг на ширину шрифта"
-
-#: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:552
-msgid "Font size set"
-msgstr "Установка размера шрифта"
-
-#: gtk/gtkcellrenderertext.c:395 gtk/gtktexttag.c:553
-msgid "Whether this tag affects the font size"
-msgstr "Влияет ли этот тэг на размер шрифта"
-
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:556
-msgid "Font scale set"
-msgstr "Установка масштаба шрифта"
-
-#: gtk/gtkcellrenderertext.c:399 gtk/gtktexttag.c:557
-msgid "Whether this tag scales the font size by a factor"
-msgstr "Масштабирует ли этот тег размер шрифта на коэффициент"
-
-#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:576
-msgid "Rise set"
-msgstr "Смещение"
-
-#: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:577
-msgid "Whether this tag affects the rise"
-msgstr "Влияет ли этот тэг на смещение"
-
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:592
-msgid "Strikethrough set"
-msgstr "Установка зачёркивания"
-
-#: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:593
-msgid "Whether this tag affects strikethrough"
-msgstr "Влияет ли этот тэг на зачеркивание"
-
-#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:600
-msgid "Underline set"
-msgstr "Установка подчёркивания"
-
-#: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:601
-msgid "Whether this tag affects underlining"
-msgstr "Влияет ли этот тэг на подчеркивание"
-
-#: gtk/gtkcellrenderertoggle.c:132
-msgid "Toggle state"
-msgstr "Переключить состояние"
-
-#: gtk/gtkcellrenderertoggle.c:133
-msgid "The toggle state of the button"
-msgstr "Переключить состояние кнопки"
-
-#: gtk/gtkcellrenderertoggle.c:141
-msgid "Inconsistent state"
-msgstr "Нечувствительное состояние"
-
-#: gtk/gtkcellrenderertoggle.c:142
-msgid "The inconsistent state of the button"
-msgstr "Нечувствительное состояние кнопки"
-
-#: gtk/gtkcellrenderertoggle.c:150
-msgid "Activatable"
-msgstr "Активируемое"
-
-#: gtk/gtkcellrenderertoggle.c:151
-msgid "The toggle button can be activated"
-msgstr "Кнопка-переключатель может быть активирована"
-
-#: gtk/gtkcellrenderertoggle.c:159
-msgid "Radio state"
-msgstr "Радио-состояние"
-
-#: gtk/gtkcellrenderertoggle.c:160
-msgid "Draw the toggle button as a radio button"
-msgstr "Нарисовать кнопку переключатель как радио-кнопку"
-
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
-msgid "Indicator Size"
-msgstr "Размер индикатора"
-
-#: gtk/gtkcheckbutton.c:99
-msgid "Size of check or radio indicator"
-msgstr "Размер текста флажка или радио-кнопки"
-
-#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:252 gtk/gtkoptionmenu.c:205
-msgid "Indicator Spacing"
-msgstr "Интервал индикатора"
-
-#: gtk/gtkcheckbutton.c:107
-msgid "Spacing around check or radio indicator"
-msgstr "Пространство вокруг текста флажка или радио-кнопки"
-
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
-msgid "Active"
-msgstr "Активный"
-
-#: gtk/gtkcheckmenuitem.c:119
-msgid "Whether the menu item is checked"
-msgstr "Отмечен ли элемент меню"
-
-#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
-msgid "Inconsistent"
-msgstr "Нечувствительный"
-
-#: gtk/gtkcheckmenuitem.c:127
-msgid "Whether to display an \"inconsistent\" state"
-msgstr "Изображать ли состояние \"нечувствительный\""
-
-#: gtk/gtkcheckmenuitem.c:134
-msgid "Draw as radio menu item"
-msgstr ""
-
-#: gtk/gtkcheckmenuitem.c:135
-#, fuzzy
-msgid "Whether the menu item looks like a radio menu item"
-msgstr "Отмечен ли элемент меню"
-
-#: gtk/gtkcolorbutton.c:202
-#, fuzzy
-msgid "Use alpha"
-msgstr "Использовать разметку"
-
-#: gtk/gtkcolorbutton.c:203
-msgid "Whether or not to give the color an alpha value"
-msgstr ""
-
-#: gtk/gtkcolorbutton.c:217 gtk/gtkfontbutton.c:175
-#: gtk/gtktreeviewcolumn.c:283
-msgid "Title"
-msgstr "Заголовок"
-
-#: gtk/gtkcolorbutton.c:218
-#, fuzzy
-msgid "The title of the color selection dialog"
-msgstr "Заголовок окна"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
 msgstr ""
-
-#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1775
-msgid "Current Color"
-msgstr "Текущий цвет"
-
-#: gtk/gtkcolorbutton.c:233
-#, fuzzy
-msgid "The selected color"
-msgstr "Выбранный год"
-
-#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1782
-msgid "Current Alpha"
-msgstr "Текущий альфа-канал"
-
-#: gtk/gtkcolorbutton.c:248
-#, fuzzy
-msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
-"Текущее значение непрозрачности (\"0\" - абсолютно прозрачно, \"65535\" - "
-"абсолютно непрозрачно)"
 
 #: gtk/gtkcolorbutton.c:465
 msgid "Received invalid color data\n"
@@ -1852,40 +844,6 @@ msgstr ""
 "Щёлкните по элементу в палитре, чтобы сделать его текущим цветом. Чтобы "
 "изменить этот элемент, перетащите сюда образец цвета или щёлкните правой "
 "клавишей и выберите \"Сохранить цвет здесь\""
-
-#: gtk/gtkcolorsel.c:1761
-msgid "Has Opacity Control"
-msgstr "Имеет управление непрозрачностью"
-
-#: gtk/gtkcolorsel.c:1762
-msgid "Whether the color selector should allow setting opacity"
-msgstr "Должна ли использоваться непрозрачность"
-
-#: gtk/gtkcolorsel.c:1768
-msgid "Has palette"
-msgstr "Имеет палитру"
-
-#: gtk/gtkcolorsel.c:1769
-msgid "Whether a palette should be used"
-msgstr "Должна ли использоваться палитра"
-
-#: gtk/gtkcolorsel.c:1776
-msgid "The current color"
-msgstr "Текущий цвет"
-
-#: gtk/gtkcolorsel.c:1783
-msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
-"Текущее значение непрозрачности (\"0\" - абсолютно прозрачно, \"65535\" - "
-"абсолютно непрозрачно)"
-
-#: gtk/gtkcolorsel.c:1797
-msgid "Custom palette"
-msgstr "Другая палитра"
-
-#: gtk/gtkcolorsel.c:1798
-msgid "Palette to use in the color selector"
-msgstr "Палитра, используемая в диалоге выбора цвета"
 
 #: gtk/gtkcolorsel.c:1839
 msgid ""
@@ -1980,310 +938,6 @@ msgstr "Па_литра"
 msgid "Color Selection"
 msgstr "Выбор цвета"
 
-#: gtk/gtkcombo.c:143
-msgid "Enable arrow keys"
-msgstr "Включить клавиши-стрелки"
-
-#: gtk/gtkcombo.c:144
-msgid "Whether the arrow keys move through the list of items"
-msgstr "Будут ли клавиши управления курсором перемещать по списку элементов"
-
-#: gtk/gtkcombo.c:150
-msgid "Always enable arrows"
-msgstr "Всегда включать стрелки"
-
-#: gtk/gtkcombo.c:151
-msgid "Obsolete property, ignored"
-msgstr "Устарелое свойство, игнорируется"
-
-#: gtk/gtkcombo.c:157
-msgid "Case sensitive"
-msgstr "Чувствительный к регистру"
-
-#: gtk/gtkcombo.c:158
-msgid "Whether list item matching is case sensitive"
-msgstr "Учитывает ли поиск элемента в списке регистр"
-
-#: gtk/gtkcombo.c:165
-msgid "Allow empty"
-msgstr "Позволить пустое"
-
-#: gtk/gtkcombo.c:166
-msgid "Whether an empty value may be entered in this field"
-msgstr "Может ли пустое значение быть введено в это поле"
-
-#: gtk/gtkcombo.c:173
-msgid "Value in list"
-msgstr "Значение из списка"
-
-#: gtk/gtkcombo.c:174
-msgid "Whether entered values must already be present in the list"
-msgstr "Должны ли вводимые значения уже присутствовать в списке"
-
-#: gtk/gtkcombobox.c:338
-msgid "ComboBox model"
-msgstr ""
-
-#: gtk/gtkcombobox.c:339
-#, fuzzy
-msgid "The model for the combo box"
-msgstr "Модель для просмотра в виде дерева"
-
-#: gtk/gtkcombobox.c:346
-#, fuzzy
-msgid "Wrap width"
-msgstr "Ширина"
-
-#: gtk/gtkcombobox.c:347
-msgid "Wrap width for layouting the items in a grid"
-msgstr ""
-
-#: gtk/gtkcombobox.c:356
-#, fuzzy
-msgid "Row span column"
-msgstr "Интервал строк"
-
-#: gtk/gtkcombobox.c:357
-msgid "TreeModel column containing the row span values"
-msgstr ""
-
-#: gtk/gtkcombobox.c:366
-#, fuzzy
-msgid "Column span column"
-msgstr "Интервал столбцов"
-
-#: gtk/gtkcombobox.c:367
-msgid "TreeModel column containing the column span values"
-msgstr ""
-
-#: gtk/gtkcombobox.c:376
-#, fuzzy
-msgid "Active item"
-msgstr "Активный"
-
-#: gtk/gtkcombobox.c:377
-#, fuzzy
-msgid "The item which is currently active"
-msgstr "GdkFont, выбранный на текущий момент"
-
-#: gtk/gtkcombobox.c:385
-msgid "ComboBox appareance"
-msgstr ""
-
-#: gtk/gtkcombobox.c:386
-msgid "ComboBox appearance, where TRUE means Windows-style."
-msgstr ""
-
-#: gtk/gtkcomboboxentry.c:104
-#, fuzzy
-msgid "Text Column"
-msgstr "Найти столбец"
-
-#: gtk/gtkcomboboxentry.c:105
-msgid "A column in the data source model to get the strings from"
-msgstr ""
-
-#: gtk/gtkcontainer.c:203
-msgid "Resize mode"
-msgstr "Режим изменения размера"
-
-#: gtk/gtkcontainer.c:204
-msgid "Specify how resize events are handled"
-msgstr "Укажите способ обработки событий, возникающих при изменении размера"
-
-#: gtk/gtkcontainer.c:211
-msgid "Border width"
-msgstr "Ширина границы"
-
-#: gtk/gtkcontainer.c:212
-msgid "The width of the empty border outside the containers children"
-msgstr "Ширина пустой границы за пределами дочерних объектов контейнера"
-
-#: gtk/gtkcontainer.c:220
-msgid "Child"
-msgstr "Вложенный элемент"
-
-#: gtk/gtkcontainer.c:221
-msgid "Can be used to add a new child to the container"
-msgstr ""
-"Может быть использовано для добавления нового дочернего элемента в контейнер"
-
-#: gtk/gtkcurve.c:121
-msgid "Curve type"
-msgstr "Тип кривой"
-
-#: gtk/gtkcurve.c:122
-msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr ""
-"Является ли эта кривая линейной, интерполированной сплайнами или свободной"
-
-#: gtk/gtkcurve.c:130
-msgid "Minimum X"
-msgstr "Минимум X"
-
-#: gtk/gtkcurve.c:131
-msgid "Minimum possible value for X"
-msgstr "Минимально возможное значение для X"
-
-#: gtk/gtkcurve.c:140
-msgid "Maximum X"
-msgstr "Максимум X"
-
-#: gtk/gtkcurve.c:141
-msgid "Maximum possible X value"
-msgstr "Максимально возможное значение для X"
-
-#: gtk/gtkcurve.c:150
-msgid "Minimum Y"
-msgstr "Минимум Y"
-
-#: gtk/gtkcurve.c:151
-msgid "Minimum possible value for Y"
-msgstr "Минимально возможное значение для Y"
-
-#: gtk/gtkcurve.c:160
-msgid "Maximum Y"
-msgstr "Максимум Y"
-
-#: gtk/gtkcurve.c:161
-msgid "Maximum possible value for Y"
-msgstr "Максимально возможное значение для Y"
-
-#: gtk/gtkdialog.c:136
-msgid "Has separator"
-msgstr "Имеет разделитель"
-
-#: gtk/gtkdialog.c:137
-msgid "The dialog has a separator bar above its buttons"
-msgstr "Диалог имеет полосу разделителя над кнопками"
-
-#: gtk/gtkdialog.c:162
-msgid "Content area border"
-msgstr "Граница области содержимого"
-
-#: gtk/gtkdialog.c:163
-msgid "Width of border around the main dialog area"
-msgstr "Ширина границы вокруг области основного диалога"
-
-#: gtk/gtkdialog.c:170
-msgid "Button spacing"
-msgstr "Интервал кнопок"
-
-#: gtk/gtkdialog.c:171
-msgid "Spacing between buttons"
-msgstr "Интервал между кнопками"
-
-#: gtk/gtkdialog.c:179
-msgid "Action area border"
-msgstr "Граница области действий"
-
-#: gtk/gtkdialog.c:180
-msgid "Width of border around the button area at the bottom of the dialog"
-msgstr "Ширина отсупа вокруг кнопки снизу в диалоге"
-
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:368
-msgid "Cursor Position"
-msgstr "Позиция курсора"
-
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:369
-msgid "The current position of the insertion cursor in chars"
-msgstr "Текущая позиция точки вставки (insertion cursor) в символах"
-
-#: gtk/gtkentry.c:456 gtk/gtklabel.c:378
-msgid "Selection Bound"
-msgstr "Граница выделения"
-
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:379
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
-msgstr "Положение противоположного конца выделения от курсора в символах"
-
-#: gtk/gtkentry.c:467
-msgid "Whether the entry contents can be edited"
-msgstr "Может ли содержимое поля ввода быть изменено"
-
-#: gtk/gtkentry.c:474
-msgid "Maximum length"
-msgstr "Максимальная длина"
-
-#: gtk/gtkentry.c:475
-msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr ""
-"Максимальное число символов для этого поля ввода.  \"0\" -- без ограничений"
-
-#: gtk/gtkentry.c:483
-msgid "Visibility"
-msgstr "Видимость"
-
-#: gtk/gtkentry.c:484
-msgid ""
-"FALSE displays the \"invisible char\" instead of the actual text (password "
-"mode)"
-msgstr ""
-"Значение \"ЛОЖНО\" приводит к отображению \"невидимого символа\" вместо "
-"самого текста (режим ввода пароля)"
-
-#: gtk/gtkentry.c:491
-msgid "Has Frame"
-msgstr "Имеет рамку"
-
-#: gtk/gtkentry.c:492
-msgid "FALSE removes outside bevel from entry"
-msgstr "Значение \"Ложь\" удаляет из элемента внешнюю рамку"
-
-#: gtk/gtkentry.c:499
-msgid "Invisible character"
-msgstr "Невидимый символ"
-
-#: gtk/gtkentry.c:500
-msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr ""
-"Символ, используемый для сокрытия содержимого поля ввода (в \"режиме пароля"
-"\")"
-
-#: gtk/gtkentry.c:507
-msgid "Activates default"
-msgstr "Активизирует элемент управления по умолчанию"
-
-#: gtk/gtkentry.c:508
-msgid ""
-"Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed"
-msgstr ""
-"Активизировать ли элемент управления по умолчанию (например, кнопку, "
-"используемую по умолчанию в диалоге), если нажата клавиша \"Ввод\"."
-
-#: gtk/gtkentry.c:514
-msgid "Width in chars"
-msgstr "Ширина в символах"
-
-#: gtk/gtkentry.c:515
-msgid "Number of characters to leave space for in the entry"
-msgstr "Число символов, для которых оставлено место в поле ввода"
-
-#: gtk/gtkentry.c:524
-msgid "Scroll offset"
-msgstr "Смещение при прокрутке"
-
-#: gtk/gtkentry.c:525
-msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr ""
-"Количество пикселей поля ввода, вышедших за левую границу экрана при "
-"прокрутке"
-
-#: gtk/gtkentry.c:535
-msgid "The contents of the entry"
-msgstr "Содержимое поля ввода"
-
-#: gtk/gtkentry.c:766
-msgid "Select on focus"
-msgstr "Выделение при фокусировании"
-
-#: gtk/gtkentry.c:767
-msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
-"Будет ли содержимое поля ввода выделяться когда поле ввода получает фокус"
-
 #: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
 msgid "Select _All"
 msgstr "Выделить вс_ё"
@@ -2296,350 +950,163 @@ msgstr "Использовать _методы ввода"
 msgid "_Insert Unicode Control Character"
 msgstr "Вс_тавить управляющий символ набора Юникод"
 
-#: gtk/gtkentrycompletion.c:193
-msgid "Completion Model"
-msgstr ""
-
-#: gtk/gtkentrycompletion.c:194
-#, fuzzy
-msgid "The model to find matches in"
-msgstr "Модель для просмотра в виде дерева"
-
-#: gtk/gtkentrycompletion.c:200
-#, fuzzy
-msgid "Minimum Key Length"
-msgstr "Минимальная длина полосы прокрутки"
-
-#: gtk/gtkentrycompletion.c:201
-msgid "Minimum length of the search key in order to look up matches"
-msgstr ""
-
-#: gtk/gtkeventbox.c:119
-#, fuzzy
-msgid "Visible Window"
-msgstr "Видимый"
-
-#: gtk/gtkeventbox.c:120
-msgid ""
-"Whether the event box is visible, as opposed to invisible and only used to "
-"trap events."
-msgstr ""
-
-#: gtk/gtkeventbox.c:126
-#, fuzzy
-msgid "Above child"
-msgstr "Подчинённый элемент"
-
-#: gtk/gtkeventbox.c:127
-msgid ""
-"Whether the event-trapping window of the eventbox is above the window of the "
-"child widget as opposed to below it."
-msgstr ""
-
-#: gtk/gtkexpander.c:194
-#, fuzzy
-msgid "Expanded"
-msgstr "Расширяемость"
-
-#: gtk/gtkexpander.c:195
-#, fuzzy
-msgid "Whether the expander has been opened to reveal the child widget"
-msgstr "Может ли элемент управления быть \"элементом по умолчанию\""
-
-#: gtk/gtkexpander.c:203
-#, fuzzy
-msgid "Text of the expander's label"
-msgstr "Текст метки рамки"
-
-#: gtk/gtkexpander.c:218 gtk/gtklabel.c:304
-msgid "Use markup"
-msgstr "Использовать разметку"
-
-#: gtk/gtkexpander.c:219 gtk/gtklabel.c:305
-msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "Текст метки включает разметку XML.  См. pango_parse_markup()"
-
-#: gtk/gtkexpander.c:227
-#, fuzzy
-msgid "Space to put between the label and the child"
-msgstr ""
-"Дополнительное пространство, которое будет помещено между дочерним элементом "
-"и его соседями, в точках растра"
-
-#: gtk/gtkexpander.c:236 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
-msgid "Label widget"
-msgstr "Виджет \"Метка\""
-
-#: gtk/gtkexpander.c:237
-#, fuzzy
-msgid "A widget to display in place of the usual expander label"
-msgstr ""
-"Элемент управления, который будет отображаться вместо обычной метки рамки"
-
-#: gtk/gtkexpander.c:243 gtk/gtktreeview.c:607
-msgid "Expander Size"
-msgstr "Размер расширяемого объекта"
-
-#: gtk/gtkexpander.c:244 gtk/gtktreeview.c:608
-msgid "Size of the expander arrow"
-msgstr "Размер расширяющей стрелки"
-
-#: gtk/gtkexpander.c:253
-#, fuzzy
-msgid "Spacing around expander arrow"
-msgstr "Интервал вокруг индикатора"
-
-#: gtk/gtkfilechooser.c:92
-#, fuzzy
-msgid "Action"
-msgstr "Дробь"
-
-#: gtk/gtkfilechooser.c:93
-msgid "The type of operation that the file selector is performing"
-msgstr ""
-
-#: gtk/gtkfilechooser.c:99
-#, fuzzy
-msgid "File System"
-msgstr "Файлы"
-
-#: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr ""
-
-#: gtk/gtkfilechooser.c:105
-#, fuzzy
-msgid "Filter"
-msgstr "Файлы"
-
-#: gtk/gtkfilechooser.c:106
-#, fuzzy
-msgid "The current filter for selecting which files are displayed"
-msgstr "Отображаемый буфер"
-
-#: gtk/gtkfilechooser.c:111
-#, fuzzy
-msgid "Folder Mode"
-msgstr "И_мя каталога:"
-
-#: gtk/gtkfilechooser.c:112
-#, fuzzy
-msgid "Whether to select folders rather than files"
-msgstr "Будет ли ход выполнения процесса отображаться в виде текста"
-
-#: gtk/gtkfilechooser.c:117
-msgid "Local Only"
-msgstr ""
-
-#: gtk/gtkfilechooser.c:118
-#, fuzzy
-msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "Будет ли ход выполнения процесса отображаться в виде текста"
-
-#: gtk/gtkfilechooser.c:123
-#, fuzzy
-msgid "Preview widget"
-msgstr "Образец текста"
-
-#: gtk/gtkfilechooser.c:124
-msgid "Application supplied widget for custom previews."
-msgstr ""
-
-#: gtk/gtkfilechooser.c:129
-#, fuzzy
-msgid "Preview Widget Active"
-msgstr "Образец текста"
-
-#: gtk/gtkfilechooser.c:130
-msgid ""
-"Whether the application supplied widget for custom previews should be shown."
-msgstr ""
-
-#: gtk/gtkfilechooser.c:135
-#, fuzzy
-msgid "Extra widget"
-msgstr "Виджет \"Изображение\""
-
-#: gtk/gtkfilechooser.c:136
-msgid "Application supplied widget for extra options."
-msgstr ""
-
-#: gtk/gtkfilechooser.c:141
-#, fuzzy
-msgid "Select Multiple"
-msgstr "Выделять несколько"
-
-#: gtk/gtkfilechooser.c:142 gtk/gtkfilesel.c:575
-msgid "Whether to allow multiple files to be selected"
-msgstr "Допускать ли выделение нескольких файлов"
-
-#: gtk/gtkfilechooser.c:148
-#, fuzzy
-msgid "Show Hidden"
-msgstr "Показывать текст"
-
-#: gtk/gtkfilechooser.c:149
-#, fuzzy
-msgid "Whether the hidden files and folders should be displayed"
-msgstr "Должны ли быть показаны кнопки для создания/обработки файлов"
-
-#: gtk/gtkfilechooser.c:1446 gtk/gtkfilechooser.c:1490
-#: gtk/gtkfilechooser.c:1565 gtk/gtkfilechooser.c:1609
+#: gtk/gtkfilechooser.c:1452 gtk/gtkfilechooser.c:1496
+#: gtk/gtkfilechooser.c:1571 gtk/gtkfilechooser.c:1615
 #, fuzzy, c-format
 msgid "Invalid filename: %s"
 msgstr "Файл формата XBM недопустим"
 
-#: gtk/gtkfilechooserdefault.c:408
+#: gtk/gtkfilechooserdefault.c:428
 #, c-format
 msgid ""
 "Could not retrieve information about %s:\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:419
+#: gtk/gtkfilechooserdefault.c:439
 #, c-format
 msgid ""
 "Could not add a bookmark for %s:\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:565
-#, c-format
-msgid "%s's Home"
-msgstr ""
+#: gtk/gtkfilechooserdefault.c:590
+#, fuzzy
+msgid "Home"
+msgstr "_Домой"
 
 #. FIXME: What is the Right Way of finding the desktop directory?
-#: gtk/gtkfilechooserdefault.c:588
+#: gtk/gtkfilechooserdefault.c:606
 msgid "Desktop"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:728
+#: gtk/gtkfilechooserdefault.c:845
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:797
-msgid "Files of _type:"
-msgstr ""
+#: gtk/gtkfilechooserdefault.c:900
+#, fuzzy
+msgid "Add"
+msgstr "Доб_авить"
 
-#: gtk/gtkfilechooserdefault.c:853 gtk/gtkfilechooserdefault.c:1208
+#: gtk/gtkfilechooserdefault.c:909
+#, fuzzy
+msgid "Remove"
+msgstr "У_брать"
+
+#: gtk/gtkfilechooserdefault.c:918
+#, fuzzy
+msgid "Up"
+msgstr "_Вверх"
+
+#: gtk/gtkfilechooserdefault.c:988 gtk/gtkfilechooserdefault.c:1343
 #, fuzzy
 msgid "File name"
 msgstr "Имя файла"
 
-#: gtk/gtkfilechooserdefault.c:879
+#: gtk/gtkfilechooserdefault.c:1014
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:920
+#: gtk/gtkfilechooserdefault.c:1062
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1050
+#: gtk/gtkfilechooserdefault.c:1217
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1112
+#: gtk/gtkfilechooserdefault.c:1290
 #, fuzzy
 msgid "Folder"
 msgstr "Каталоги"
 
-#: gtk/gtkfilechooserdefault.c:1150
-msgid "Add bookmark"
-msgstr ""
+#: gtk/gtkfilechooserdefault.c:1361
+msgid "Size"
+msgstr "Размер"
 
-#: gtk/gtkfilechooserdefault.c:1238
+#: gtk/gtkfilechooserdefault.c:1373
 #, fuzzy
 msgid "Modified"
 msgstr "Режим"
 
-#: gtk/gtkfilechooserdefault.c:1259
+#. Label and entry
+#: gtk/gtkfilechooserdefault.c:1396
 #, fuzzy
-msgid "_Location:"
-msgstr "_Выбор: "
+msgid "_Filename:"
+msgstr "Имя файла"
 
 #. Preview
-#: gtk/gtkfilechooserdefault.c:1380
+#: gtk/gtkfilechooserdefault.c:1481
 #, fuzzy
 msgid "Preview"
 msgstr "Образе_ц:"
 
-#: gtk/gtkfilechooserdefault.c:2136
-#, c-format
-msgid "shortcut %s does not exist"
-msgstr ""
+#. Change the current folder label
+#: gtk/gtkfilechooserdefault.c:1972
+#, fuzzy, c-format
+msgid "Current folder: %s"
+msgstr "Текущий цвет"
 
-#: gtk/gtkfilechooserdefault.c:2484
+#: gtk/gtkfilechooserdefault.c:2173 gtk/gtkfilechooserdefault.c:2750
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2642
+#: gtk/gtkfilechooserdefault.c:2382
 #, c-format
-msgid "%d bytes"
+msgid "shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2644
+#: gtk/gtkfilechooserdefault.c:2915
+#, c-format
+msgid "%d byte"
+msgid_plural "%d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: gtk/gtkfilechooserdefault.c:2917
 #, c-format
 msgid "%.1f K"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2646
+#: gtk/gtkfilechooserdefault.c:2919
 #, c-format
 msgid "%.1f M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2648
+#: gtk/gtkfilechooserdefault.c:2921
 #, c-format
 msgid "%.1f G"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2688
+#: gtk/gtkfilechooserdefault.c:2961
 #, fuzzy
 msgid "Today"
 msgstr "Модальное"
 
-#: gtk/gtkfilechooserdefault.c:2708
+#: gtk/gtkfilechooserdefault.c:2963
 msgid "Yesterday"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2711 gtk/gtkfilechooserdefault.c:2722
-#, fuzzy
-msgid "Unknown"
-msgstr "(неизвестен)"
-
-#: gtk/gtkfilechooserdefault.c:2721
+#: gtk/gtkfilechooserdefault.c:2971
 msgid "%d/%b/%Y"
 msgstr ""
 
-#: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
-msgid "Filename"
-msgstr "Имя файла"
-
-#: gtk/gtkfilesel.c:560
-msgid "The currently selected filename"
-msgstr "Текущее выбранное имя файла"
-
-#: gtk/gtkfilesel.c:566
-msgid "Show file operations"
-msgstr "Показать файловые операции"
-
-#: gtk/gtkfilesel.c:567
-msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr "Должны ли быть показаны кнопки для создания/обработки файлов"
-
-#: gtk/gtkfilesel.c:574
-msgid "Select multiple"
-msgstr "Выделять несколько"
+#: gtk/gtkfilechooserdefault.c:2974
+#, fuzzy
+msgid "Unknown"
+msgstr "(неизвестен)"
 
 #: gtk/gtkfilesel.c:730
 msgid "Folders"
@@ -2745,8 +1212,8 @@ msgid "Error deleting file \"%s\": %s"
 msgstr "Произошла ошибка удаления файла \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1623
-#, c-format
-msgid "Really delete file \"%s\" ?"
+#, fuzzy, c-format
+msgid "Really delete file \"%s\"?"
 msgstr "Действительно удалить файл \"%s\"?"
 
 #: gtk/gtkfilesel.c:1628
@@ -2819,126 +1286,64 @@ msgstr "Имя слишком длинное"
 msgid "Couldn't convert filename"
 msgstr "Не удалось преобразовать название файла"
 
-#: gtk/gtkfilesystemmodel.c:1018
+#: gtk/gtkfilesystemmodel.c:1021
 msgid "(Empty)"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:306
+#: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
 #, fuzzy, c-format
 msgid "error creating directory '%s': %s"
 msgstr "Произошла ошибка  создания каталога \"%s\": %s\n"
 
-#: gtk/gtkfilesystemunix.c:566
+#: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
+msgid "This file system does not support mounting"
+msgstr ""
+
+#: gtk/gtkfilesystemunix.c:386
+#, fuzzy
+msgid "Filesystem"
+msgstr "Файлы"
+
+#: gtk/gtkfilesystemunix.c:648
 msgid "This file system does not support icons"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:579 gtk/gtkfilesystemunix.c:592
+#: gtk/gtkfilesystemunix.c:661 gtk/gtkfilesystemunix.c:674
 msgid "This file system does not support bookmarks"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:765
+#: gtk/gtkfilesystemunix.c:847 gtk/gtkfilesystemwin32.c:1197
 #, fuzzy, c-format
 msgid "error getting information for '%s': %s"
 msgstr "Произошла ошибка  создания каталога \"%s\": %s\n"
 
-#: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
-msgid "X position"
-msgstr "Позиция по X"
+#: gtk/gtkfilesystemwin32.c:820
+#, c-format
+msgid "Bookmark saving failed (%s)"
+msgstr ""
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
-msgid "X position of child widget"
-msgstr "Позиция вложенного виджета по горизонтали"
-
-#: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
-msgid "Y position"
-msgstr "Позиция по Y"
-
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
-msgid "Y position of child widget"
-msgstr "Позиция вложенного виджета по вертикали"
-
-#: gtk/gtkfontbutton.c:176
-#, fuzzy
-msgid "The title of the font selection dialog"
-msgstr "Заголовок окна"
+#: gtk/gtkfilesystemwin32.c:976
+msgid "This file system does not support icons for everything"
+msgstr ""
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:210
-msgid "Font name"
-msgstr "Название шрифта"
-
-#: gtk/gtkfontbutton.c:192
-#, fuzzy
-msgid "The name of the selected font"
-msgstr "Название виджета"
-
 #. Initialize fields
-#: gtk/gtkfontbutton.c:193 gtk/gtkfontbutton.c:288
+#: gtk/gtkfontbutton.c:288
 msgid "Sans 12"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:207
-msgid "Use font in label"
-msgstr ""
-
-#: gtk/gtkfontbutton.c:208
-#, fuzzy
-msgid "Whether the label is drawn in the selected font"
-msgstr "Может ли текст метки быть выделен с помощью мыши"
-
-#: gtk/gtkfontbutton.c:223
-msgid "Use size in label"
-msgstr ""
-
-#: gtk/gtkfontbutton.c:224
-#, fuzzy
-msgid "Whether the label is drawn with the selected font size"
-msgstr "Может ли текст метки быть выделен с помощью мыши"
-
-#: gtk/gtkfontbutton.c:240
-#, fuzzy
-msgid "Show style"
-msgstr "Тип тени"
-
-#: gtk/gtkfontbutton.c:241
-#, fuzzy
-msgid "Whether the selected font style is shown in the label"
-msgstr "Будет ли ход выполнения процесса отображаться в виде текста"
-
-#: gtk/gtkfontbutton.c:256
-#, fuzzy
-msgid "Show size"
-msgstr "Показывать текст"
-
-#: gtk/gtkfontbutton.c:257
-#, fuzzy
-msgid "Whether selected font size is shown in the label"
-msgstr "Будет ли ход выполнения процесса отображаться в виде текста"
+#: gtk/gtkfontbutton.c:806
+msgid "Font"
+msgstr "Шрифт"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:68
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "абвгде АБВГДЕ abcde ABCDE"
-
-#: gtk/gtkfontsel.c:211
-msgid "The X string that represents this font"
-msgstr "X-Строка, представляющая этот шрифт."
-
-#: gtk/gtkfontsel.c:218
-msgid "The GdkFont that is currently selected"
-msgstr "GdkFont, выбранный на текущий момент"
-
-#: gtk/gtkfontsel.c:224
-msgid "Preview text"
-msgstr "Образец текста"
-
-#: gtk/gtkfontsel.c:225
-msgid "The text to display in order to demonstrate the selected font"
-msgstr "Текст, используемый для демонстрации выбранного шрифта"
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
@@ -2961,43 +1366,6 @@ msgstr "Образе_ц:"
 msgid "Font Selection"
 msgstr "Выбор шрифта"
 
-#: gtk/gtkframe.c:126
-msgid "Text of the frame's label"
-msgstr "Текст метки рамки"
-
-#: gtk/gtkframe.c:133
-msgid "Label xalign"
-msgstr "Выравнивание метки по оси X"
-
-#: gtk/gtkframe.c:134
-msgid "The horizontal alignment of the label"
-msgstr "Горизонтальное выравнивание метки"
-
-#: gtk/gtkframe.c:143
-msgid "Label yalign"
-msgstr "Выравнивание метки по оси Y"
-
-#: gtk/gtkframe.c:144
-msgid "The vertical alignment of the label"
-msgstr "Вертикальное выравнивание метки"
-
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
-msgid "Deprecated property, use shadow_type instead"
-msgstr "Устаревшее свойство, используйте вместо него параметр shadow_type."
-
-#: gtk/gtkframe.c:160
-msgid "Frame shadow"
-msgstr "Тень рамки"
-
-#: gtk/gtkframe.c:161
-msgid "Appearance of the frame border"
-msgstr "Внешний вид границы рамки"
-
-#: gtk/gtkframe.c:170
-msgid "A widget to display in place of the usual frame label"
-msgstr ""
-"Элемент управления, который будет отображаться вместо обычной метки рамки"
-
 #: gtk/gtkgamma.c:399
 msgid "Gamma"
 msgstr "Гамма"
@@ -3006,51 +1374,10 @@ msgstr "Гамма"
 msgid "_Gamma value"
 msgstr "_Гамма-значение"
 
-#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
-msgid "Shadow type"
-msgstr "Тип тени"
-
-#: gtk/gtkhandlebox.c:203
-msgid "Appearance of the shadow that surrounds the container"
-msgstr "Внешний вид тени, окружающей контейнер"
-
-#: gtk/gtkhandlebox.c:211
-msgid "Handle position"
-msgstr "Позиция регулятора"
-
-#: gtk/gtkhandlebox.c:212
-msgid "Position of the handle relative to the child widget"
-msgstr "Позиция регулятора относительно дочернего элемента управления"
-
-#: gtk/gtkhandlebox.c:220
-msgid "Snap edge"
-msgstr "Выравнивать края"
-
-#: gtk/gtkhandlebox.c:221
-msgid ""
-"Side of the handlebox that's lined up with the docking point to dock the "
-"handlebox"
-msgstr ""
-"Сторона пульта управления, выровненная по точке парковки для парковки пульта "
-"управления."
-
-#: gtk/gtkhandlebox.c:229
-msgid "Snap edge set"
-msgstr "Выравнивание краёв установлено"
-
-#: gtk/gtkhandlebox.c:230
-msgid ""
-"Whether to use the value from the snap_edge property or a value derived from "
-"handle_position"
-msgstr ""
-"Использовать ли значение из свойства snap_edge (\"Выравнивать края\") или "
-"значение, унаследованное от handle_position (\"Позиция регулятора\")"
-
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1547
+#: gtk/gtkiconfactory.c:1551
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Произошла ошибка загрузки пиктограммы: %s"
@@ -3059,87 +1386,6 @@ msgstr "Произошла ошибка загрузки пиктограммы:
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr ""
-
-#: gtk/gtkimage.c:135
-msgid "Pixbuf"
-msgstr "Pixbuf"
-
-#: gtk/gtkimage.c:136
-msgid "A GdkPixbuf to display"
-msgstr "Отображаемая картинка (GdkPixbuf)"
-
-#: gtk/gtkimage.c:143
-msgid "Pixmap"
-msgstr "Растровая картинка"
-
-#: gtk/gtkimage.c:144
-msgid "A GdkPixmap to display"
-msgstr "Отображаемая картинка (GdkPixmap)"
-
-#: gtk/gtkimage.c:151
-msgid "Image"
-msgstr "Изображение"
-
-#: gtk/gtkimage.c:152
-msgid "A GdkImage to display"
-msgstr "Отображаемое изображение (GdkImage)"
-
-#: gtk/gtkimage.c:159
-msgid "Mask"
-msgstr "Маска"
-
-#: gtk/gtkimage.c:160
-msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr "Битовая маска, используемая с объектами GdkImage или GdkPixmap"
-
-#: gtk/gtkimage.c:168
-msgid "Filename to load and display"
-msgstr "Имя файла для загрузки и отображения"
-
-#: gtk/gtkimage.c:177
-msgid "Stock ID for a stock image to display"
-msgstr "ID встроенного изображения для вывода на экран"
-
-#: gtk/gtkimage.c:184
-msgid "Icon set"
-msgstr "Набор пиктограмм"
-
-#: gtk/gtkimage.c:185
-msgid "Icon set to display"
-msgstr "Отображаемый набор пиктограмм"
-
-#: gtk/gtkimage.c:192
-msgid "Icon size"
-msgstr "Размер пиктограммы"
-
-#: gtk/gtkimage.c:193
-msgid "Size to use for stock icon or icon set"
-msgstr "Размер для встроенной пиктограммы или набора пиктограмм"
-
-#: gtk/gtkimage.c:201
-msgid "Animation"
-msgstr "Анимация"
-
-#: gtk/gtkimage.c:202
-msgid "GdkPixbufAnimation to display"
-msgstr "Объект GdkPixbufAnimation для вывода на экран"
-
-#: gtk/gtkimage.c:209
-msgid "Storage type"
-msgstr "Тип хранения"
-
-#: gtk/gtkimage.c:210
-msgid "The representation being used for image data"
-msgstr "Представление, используемое для данных изображения"
-
-#: gtk/gtkimagemenuitem.c:124
-msgid "Image widget"
-msgstr "Виджет \"Изображение\""
-
-#: gtk/gtkimagemenuitem.c:125
-msgid "Child widget to appear next to the menu text"
-msgstr ""
-"Дочерний элемент управления, появляющийся на экране рядом с текстом меню"
 
 #: gtk/gtkimmodule.c:419
 msgid "Default"
@@ -3162,7 +1408,7 @@ msgstr "_Устройство:"
 msgid "Disabled"
 msgstr "Выключен"
 
-#: gtk/gtkinputdialog.c:278 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:540
+#: gtk/gtkinputdialog.c:278
 msgid "Screen"
 msgstr "Экран"
 
@@ -3225,793 +1471,27 @@ msgstr "(неизвестен)"
 msgid "clear"
 msgstr "очистить"
 
-#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:541
-msgid "The screen where this window will be displayed"
-msgstr "Экран, на котором будет отображено окно"
-
-#: gtk/gtklabel.c:291
-msgid "The text of the label"
-msgstr "Текст метки"
-
-#: gtk/gtklabel.c:298
-msgid "A list of style attributes to apply to the text of the label"
-msgstr "Список атрибутов стиля, применяемых к тексту метки"
-
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
-msgid "Justification"
-msgstr "Выравнивание"
-
-#: gtk/gtklabel.c:320
-msgid ""
-"The alignment of the lines in the text of the label relative to each other. "
-"This does NOT affect the alignment of the label within its allocation. See "
-"GtkMisc::xalign for that"
-msgstr ""
-"Выравнивание строк текста метки относительно друг друга.  НЕ влияет на "
-"выравнивание метки внутри указанного для нее места.  По этому вопросу см. "
-"GtkMisc::xalign"
-
-#: gtk/gtklabel.c:328
-msgid "Pattern"
-msgstr "Шаблон"
-
-#: gtk/gtklabel.c:329
-msgid ""
-"A string with _ characters in positions correspond to characters in the text "
-"to underline"
-msgstr ""
-"Строка с символами _ , позиция которых соответствует позиции символов, "
-"которые надо подчеркнуть в тексте"
-
-#: gtk/gtklabel.c:336
-msgid "Line wrap"
-msgstr "Перенос строк"
-
-#: gtk/gtklabel.c:337
-msgid "If set, wrap lines if the text becomes too wide"
-msgstr "Если установлено, переносит слишком длинные строки текста"
-
-#: gtk/gtklabel.c:343
-msgid "Selectable"
-msgstr "Выделяемый"
-
-#: gtk/gtklabel.c:344
-msgid "Whether the label text can be selected with the mouse"
-msgstr "Может ли текст метки быть выделен с помощью мыши"
-
-#: gtk/gtklabel.c:350
-msgid "Mnemonic key"
-msgstr "Мнемоническая клавиша"
-
-#: gtk/gtklabel.c:351
-msgid "The mnemonic accelerator key for this label"
-msgstr "Мнемоническая клавиша-акселератор для этой метки"
-
-#: gtk/gtklabel.c:359
-msgid "Mnemonic widget"
-msgstr "Мнемонический элемент управления (виджет)"
-
-#: gtk/gtklabel.c:360
-msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr ""
-"Элемент управления (виджет), который будет активизирован при нажатии "
-"мнемонической клавиши метки"
-
-#: gtk/gtklabel.c:3224
+#: gtk/gtklabel.c:3225
 msgid "Select All"
 msgstr "Выделить все"
 
-#: gtk/gtklabel.c:3234
+#: gtk/gtklabel.c:3235
 msgid "Input Methods"
 msgstr "Методы ввода"
-
-#: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
-msgid "Horizontal adjustment"
-msgstr "Выравнивание по горизонтали"
-
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:236
-msgid "The GtkAdjustment for the horizontal position"
-msgstr "Значение GtkAdjustment для горизонтальной позиции элемента"
-
-#: gtk/gtklayout.c:639 gtk/gtkviewport.c:142
-msgid "Vertical adjustment"
-msgstr "Выравнивание по вертикали"
-
-#: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:243
-msgid "The GtkAdjustment for the vertical position"
-msgstr "Значение GtkAdjustment для вертикальной позиции элемента."
-
-#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:235
-msgid "Width"
-msgstr "Ширина"
-
-#: gtk/gtklayout.c:648
-msgid "The width of the layout"
-msgstr "Ширина макета"
-
-#: gtk/gtklayout.c:656
-msgid "Height"
-msgstr "Высота"
-
-#: gtk/gtklayout.c:657
-msgid "The height of the layout"
-msgstr "Высота макета"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:840
+#: gtk/gtkmain.c:851
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:349
-msgid "Tearoff Title"
-msgstr "Заголовок отделённого меню"
-
-#: gtk/gtkmenu.c:350
-msgid ""
-"A title that may be displayed by the window manager when this menu is torn-"
-"off"
-msgstr ""
-"Заголовок, который диспетчер окон будет отображать для этого меню после его "
-"отделения"
-
-#: gtk/gtkmenu.c:356
-#, fuzzy
-msgid "Vertical Padding"
-msgstr "Вертикальное дополнение"
-
-#: gtk/gtkmenu.c:357
-#, fuzzy
-msgid "Extra space at the top and bottom of the menu"
-msgstr ""
-"Пространство, добавляемое к элементу управления сверху и снизу, в пикселях"
-
-#: gtk/gtkmenu.c:365
-#, fuzzy
-msgid "Vertical Offset"
-msgstr "Вертикальное масштабирование"
-
-#: gtk/gtkmenu.c:366
-msgid ""
-"When the menu is a submenu, position it this number of pixels offset "
-"vertically"
-msgstr ""
-
-#: gtk/gtkmenu.c:374
-#, fuzzy
-msgid "Horizontal Offset"
-msgstr "Горизонтальное масштабирование"
-
-#: gtk/gtkmenu.c:375
-msgid ""
-"When the menu is a submenu, position it this number of pixels offset "
-"horizontally"
-msgstr ""
-
-#: gtk/gtkmenu.c:385
-#, fuzzy
-msgid "Left Attach"
-msgstr "Прибавление слева"
-
-#: gtk/gtkmenu.c:386 gtk/gtktable.c:203
-msgid "The column number to attach the left side of the child to"
-msgstr "Число столбцов, прибавляемых к левой стороне вложенного элемента"
-
-#: gtk/gtkmenu.c:393
-#, fuzzy
-msgid "Right Attach"
-msgstr "Прибавление справа"
-
-#: gtk/gtkmenu.c:394
-#, fuzzy
-msgid "The column number to attach the right side of the child to"
-msgstr "Число столбцов, прибавляемых к левой стороне вложенного элемента"
-
-#: gtk/gtkmenu.c:401
-#, fuzzy
-msgid "Top Attach"
-msgstr "Прибавление сверху"
-
-#: gtk/gtkmenu.c:402
-#, fuzzy
-msgid "The row number to attach the top of the child to"
-msgstr "Число строк, прибавляемых к нижней стороне вложенного элемента"
-
-#: gtk/gtkmenu.c:409
-#, fuzzy
-msgid "Bottom Attach"
-msgstr "Прибавление снизу"
-
-#: gtk/gtkmenu.c:410 gtk/gtktable.c:224
-msgid "The row number to attach the bottom of the child to"
-msgstr "Число строк, прибавляемых к нижней стороне вложенного элемента"
-
-#: gtk/gtkmenu.c:497
-msgid "Can change accelerators"
-msgstr "Может изменять комбинации клавиш"
-
-#: gtk/gtkmenu.c:498
-msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr ""
-"Можно ли изменить клавишу-акселератор меню при нажатии клавиши на элементе "
-"меню"
-
-#: gtk/gtkmenu.c:503
-msgid "Delay before submenus appear"
-msgstr "Задержка перед появлением подменю"
-
-#: gtk/gtkmenu.c:504
-msgid ""
-"Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
-"Минимальное время, которое указатель мыши должен находиться над пунктом "
-"меню, чтобы было отбражено подменю"
-
-#: gtk/gtkmenu.c:511
-msgid "Delay before hiding a submenu"
-msgstr "Задержка перед сокрытием подменю"
-
-#: gtk/gtkmenu.c:512
-msgid ""
-"The time before hiding a submenu when the pointer is moving towards the "
-"submenu"
-msgstr ""
-"Минимальное время, которое указатель мыши должен провести вне пределов "
-"подменю, чтобы оно (подменю) было скрыто"
-
-#: gtk/gtkmenubar.c:157
-msgid "Style of bevel around the menubar"
-msgstr "Стиль скоса вокруг строки меню"
-
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
-msgid "Internal padding"
-msgstr "Внутреннее дополнение"
-
-#: gtk/gtkmenubar.c:165
-msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "Пространство между тенью панели меню и элементами меню"
-
-#: gtk/gtkmenubar.c:172
-msgid "Delay before drop down menus appear"
-msgstr "Задержка перед появлением \"выпадающего вниз\" меню"
-
-#: gtk/gtkmenubar.c:173
-msgid "Delay before the submenus of a menu bar appear"
-msgstr "Задержка перед появлением подменю у основного меню"
-
-#: gtk/gtkmessagedialog.c:106
-msgid "Image/label border"
-msgstr "Граница изображения/метки"
-
-#: gtk/gtkmessagedialog.c:107
-msgid "Width of border around the label and image in the message dialog"
-msgstr "Ширина отсупа вокруг метки и изображения в диалоге сообщения"
-
-#: gtk/gtkmessagedialog.c:115
-msgid "Message Type"
-msgstr "Тип сообщения"
-
-#: gtk/gtkmessagedialog.c:116
-msgid "The type of message"
-msgstr "Тип сообщения"
-
-#: gtk/gtkmessagedialog.c:123
-msgid "Message Buttons"
-msgstr "Кнопки сообщения"
-
-#: gtk/gtkmessagedialog.c:124
-msgid "The buttons shown in the message dialog"
-msgstr "Кнопки, отображаемые в диалоге сообщения"
-
-#: gtk/gtkmisc.c:98
-msgid "X align"
-msgstr "X-выравнивание"
-
-#: gtk/gtkmisc.c:99
-msgid "The horizontal alignment, from 0 (left) to 1 (right)"
-msgstr "Горизонтальное выравнивание от 0 (влево) до 1 (вправо)"
-
-#: gtk/gtkmisc.c:108
-msgid "Y align"
-msgstr "Y-выравнивание"
-
-#: gtk/gtkmisc.c:109
-msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr "Вертикальное выравнивание от 0 (вверх) до 1 (вниз)"
-
-#: gtk/gtkmisc.c:118
-msgid "X pad"
-msgstr "Заполнение по горизонтали"
-
-#: gtk/gtkmisc.c:119
-msgid ""
-"The amount of space to add on the left and right of the widget, in pixels"
-msgstr ""
-"Пространство, добавляемое к элементу управления слева и справа, в пикселях"
-
-#: gtk/gtkmisc.c:128
-msgid "Y pad"
-msgstr "Заполнение по вертикали"
-
-#: gtk/gtkmisc.c:129
-msgid ""
-"The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr ""
-"Пространство, добавляемое к элементу управления сверху и снизу, в пикселях"
-
-#: gtk/gtknotebook.c:396
-msgid "Page"
-msgstr "Страница"
-
-#: gtk/gtknotebook.c:397
-msgid "The index of the current page"
-msgstr "Индекс текущей страницы"
-
-#: gtk/gtknotebook.c:405
-msgid "Tab Position"
-msgstr "Размещение ярлыка"
-
-#: gtk/gtknotebook.c:406
-msgid "Which side of the notebook holds the tabs"
-msgstr "На какой стороне блокнота помещаются ярлыки"
-
-#: gtk/gtknotebook.c:413
-msgid "Tab Border"
-msgstr "Граница ярлыка"
-
-#: gtk/gtknotebook.c:414
-msgid "Width of the border around the tab labels"
-msgstr "Ширина отсупа вокруг меток ярлыка"
-
-#: gtk/gtknotebook.c:422
-msgid "Horizontal Tab Border"
-msgstr "Горизонтальная граница вкладки"
-
-#: gtk/gtknotebook.c:423
-msgid "Width of the horizontal border of tab labels"
-msgstr "Ширина горизонтальной границы ярлыков вкладки"
-
-#: gtk/gtknotebook.c:431
-msgid "Vertical Tab Border"
-msgstr "Вертикальная граница вкладки"
-
-#: gtk/gtknotebook.c:432
-msgid "Width of the vertical border of tab labels"
-msgstr "Ширина вертикальной границы ярлыков вкладки"
-
-#: gtk/gtknotebook.c:440
-msgid "Show Tabs"
-msgstr "Показать ярлыки"
-
-#: gtk/gtknotebook.c:441
-msgid "Whether tabs should be shown or not"
-msgstr "Должны ли быть показаны ярлыки"
-
-#: gtk/gtknotebook.c:447
-msgid "Show Border"
-msgstr "Показать границу"
-
-#: gtk/gtknotebook.c:448
-msgid "Whether the border should be shown or not"
-msgstr "Будет ли отображаться граница элемента"
-
-#: gtk/gtknotebook.c:454
-msgid "Scrollable"
-msgstr "Прокручиваемое"
-
-#: gtk/gtknotebook.c:455
-msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr ""
-"Если \"Истина\", то стрелки прокрутки будут добавлены, если есть слишком "
-"много вкладок, чтобы поместиться в окне"
-
-#: gtk/gtknotebook.c:461
-msgid "Enable Popup"
-msgstr "Включить всплывающие меню"
-
-#: gtk/gtknotebook.c:462
-msgid ""
-"If TRUE, pressing the right mouse button on the notebook pops up a menu that "
-"you can use to go to a page"
-msgstr ""
-"Если значение \"ИСТИНА\", то при нажатии правой клавиши мыши в области "
-"блокнота появится всплывающее меню, которое можно использовать для "
-"перемещения по страницам"
-
-#: gtk/gtknotebook.c:469
-msgid "Whether tabs should have homogeneous sizes"
-msgstr "Должны ли вкладки иметь одинаковый размер"
-
-#: gtk/gtknotebook.c:476
-msgid "Tab label"
-msgstr "Метка вкладки"
-
-#: gtk/gtknotebook.c:477
-msgid "The string displayed on the childs tab label"
-msgstr "Строка, отображаемая на метке вкладки"
-
-#: gtk/gtknotebook.c:483
-msgid "Menu label"
-msgstr "Метка меню"
-
-#: gtk/gtknotebook.c:484
-msgid "The string displayed in the childs menu entry"
-msgstr "Строка, отображаемая в пункте меню вкладки"
-
-#: gtk/gtknotebook.c:497
-msgid "Tab expand"
-msgstr "Расширение вкладок"
-
-#: gtk/gtknotebook.c:498
-msgid "Whether to expand the childs tab or not"
-msgstr "Должны ли расширяться вкладки"
-
-#: gtk/gtknotebook.c:504
-msgid "Tab fill"
-msgstr "Заполнение вкладок"
-
-#: gtk/gtknotebook.c:505
-msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Должны ли вкладки заполнять всю область"
-
-#: gtk/gtknotebook.c:511
-msgid "Tab pack type"
-msgstr "Тип упаковки вкладки"
-
-#: gtk/gtknotebook.c:527 gtk/gtkscrollbar.c:113
-msgid "Secondary backward stepper"
-msgstr "Дополнительная кнопка перемещения назад"
-
-#: gtk/gtknotebook.c:528
-msgid ""
-"Display a second backward arrow button on the opposite end of the tab area"
-msgstr ""
-"Отображать вторую кнопку со стрелкой назад на противоположной стороне полосы "
-"вкладок"
-
-#: gtk/gtknotebook.c:544 gtk/gtkscrollbar.c:121
-msgid "Secondary forward stepper"
-msgstr "Дополнительная кнопка перемещения вперед"
-
-#: gtk/gtknotebook.c:545
-msgid ""
-"Display a second forward arrow button on the opposite end of the tab area"
-msgstr ""
-"Отображать вторую кнопку со стрелкой вперед на противоположной стороне "
-"полосы вкладок"
-
-#: gtk/gtknotebook.c:560 gtk/gtkscrollbar.c:97
-msgid "Backward stepper"
-msgstr "Кнопка перемещения назад"
-
-#: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
-msgid "Display the standard backward arrow button"
-msgstr "Отображать стандартную кнопку со стрелкой назад"
-
-#: gtk/gtknotebook.c:576 gtk/gtkscrollbar.c:105
-msgid "Forward stepper"
-msgstr "Кнопка перемещения вперед"
-
-#: gtk/gtknotebook.c:577 gtk/gtkscrollbar.c:106
-msgid "Display the standard forward arrow button"
-msgstr "Отображать стандартную кнопку со стрелкой вперед"
-
-#: gtk/gtknotebook.c:2645 gtk/gtknotebook.c:4971
+#: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5072
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
-
-#: gtk/gtkoptionmenu.c:192
-msgid "Menu"
-msgstr "Меню"
-
-#: gtk/gtkoptionmenu.c:193
-msgid "The menu of options"
-msgstr "Параметры меню"
-
-#: gtk/gtkoptionmenu.c:200
-msgid "Size of dropdown indicator"
-msgstr "Размер выпадающего индикатора"
-
-#: gtk/gtkoptionmenu.c:206
-msgid "Spacing around indicator"
-msgstr "Интервал вокруг индикатора"
-
-#: gtk/gtkpaned.c:239
-msgid ""
-"Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr ""
-"Позиция разделителя в пикселях (0 означает все пространство до левого "
-"верхнего угла)"
-
-#: gtk/gtkpaned.c:247
-msgid "Position Set"
-msgstr "Задавать положение"
-
-#: gtk/gtkpaned.c:248
-msgid "TRUE if the Position property should be used"
-msgstr "Истинно, если должно использоваться свойство Position"
-
-#: gtk/gtkpaned.c:254
-msgid "Handle Size"
-msgstr "Размер элемента"
-
-#: gtk/gtkpaned.c:255
-msgid "Width of handle"
-msgstr "Ширина элемента"
-
-#: gtk/gtkpaned.c:271
-#, fuzzy
-msgid "Minimal Position"
-msgstr "Расположение значения"
-
-#: gtk/gtkpaned.c:272
-msgid "Smallest possible value for the \"position\" property"
-msgstr ""
-
-#: gtk/gtkpaned.c:289
-#, fuzzy
-msgid "Maximal Position"
-msgstr "Расположение значения"
-
-#: gtk/gtkpaned.c:290
-msgid "Largest possible value for the \"position\" property"
-msgstr ""
-
-#: gtk/gtkpaned.c:307
-msgid "Resize"
-msgstr "Изменяемый"
-
-#: gtk/gtkpaned.c:308
-msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr ""
-"Если \"ИСТИНА\", то вложенный элемент изменяет размеры вместе с родительским"
-
-#: gtk/gtkpaned.c:323
-msgid "Shrink"
-msgstr "Сжимаемый"
-
-#: gtk/gtkpaned.c:324
-msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr ""
-"Если \"ИСТИНА\", то вложенный элемент может быть сжат относительно "
-"запрошенных размеров"
-
-#: gtk/gtkpreview.c:133
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
-msgstr ""
-"Будет ли элемент просмотра образца занимать всё отведенное ему пространство"
-
-#: gtk/gtkprogress.c:129
-msgid "Activity mode"
-msgstr "Режим активности"
-
-#: gtk/gtkprogress.c:130
-msgid ""
-"If TRUE the GtkProgress is in activity mode, meaning that it signals "
-"something is happening, but not how much of the activity is finished. This "
-"is used when you're doing something that you don't know how long it will take"
-msgstr ""
-"Если \"Истина\", то объект GtkProgress находится в т.н. \"режиме активности"
-"\", сигнализируя, что что-то происходит, но как долго осталось до завершения "
-"-- неизвестно.  Это используется для индикации длительного процесса, когда "
-"время завершения процесса неизвестно."
-
-#: gtk/gtkprogress.c:137
-msgid "Show text"
-msgstr "Показывать текст"
-
-#: gtk/gtkprogress.c:138
-msgid "Whether the progress is shown as text"
-msgstr "Будет ли ход выполнения процесса отображаться в виде текста"
-
-#: gtk/gtkprogress.c:145
-msgid "Text x alignment"
-msgstr "Выравнивание текста по X"
-
-#: gtk/gtkprogress.c:146
-msgid ""
-"A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
-"in the progress widget"
-msgstr ""
-"Число между 0.0 и 1.0 указывающее горизонтальное выравнивание текста в "
-"индикаторе прогресса"
-
-#: gtk/gtkprogress.c:154
-msgid "Text y alignment"
-msgstr "Выравнивание текста по Y"
-
-#: gtk/gtkprogress.c:155
-msgid ""
-"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
-"in the progress widget"
-msgstr ""
-"Число между 0,0 и 1,0, указывающее вертикальное выравнивание текста в "
-"индикаторе прогресса"
-
-#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
-msgid "Adjustment"
-msgstr "Подгонка"
-
-#: gtk/gtkprogressbar.c:143
-msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr ""
-"Компонент GtkAdjustment, связанный с индикатором прогремма (Устаревший)"
-
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
-msgid "Orientation"
-msgstr "Ориентация"
-
-#: gtk/gtkprogressbar.c:151
-msgid "Orientation and growth direction of the progress bar"
-msgstr "Ориентация и направление роста индикатора прогресса"
-
-#: gtk/gtkprogressbar.c:159
-msgid "Bar style"
-msgstr "Стиль строки"
-
-#: gtk/gtkprogressbar.c:160
-msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
-msgstr ""
-"Определяет вид индикатора в режиме процентного соотношения (Устаревший)"
-
-#: gtk/gtkprogressbar.c:168
-msgid "Activity Step"
-msgstr "Шаг активности"
-
-#: gtk/gtkprogressbar.c:169
-msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr ""
-"Приращение, выполняемое при каждой итерации в \"режиме активности"
-"\" (Устаревший)"
-
-#: gtk/gtkprogressbar.c:178
-msgid "Activity Blocks"
-msgstr "Блоки активности"
-
-#: gtk/gtkprogressbar.c:179
-msgid ""
-"The number of blocks which can fit in the progress bar area in activity mode "
-"(Deprecated)"
-msgstr ""
-"Количество блоков индикации, которые помещаются в области индикатора "
-"прогресса в \"режиме активности\" (Устаревший)"
-
-#: gtk/gtkprogressbar.c:188
-msgid "Discrete Blocks"
-msgstr "Отдельные блоки индикации"
-
-#: gtk/gtkprogressbar.c:189
-msgid ""
-"The number of discrete blocks in a progress bar (when shown in the discrete "
-"style)"
-msgstr ""
-"Количество отдельных блоков в индикаторе прогресса (если индикатор "
-"отображается как несплошная линия)"
-
-#: gtk/gtkprogressbar.c:198
-msgid "Fraction"
-msgstr "Дробь"
-
-#: gtk/gtkprogressbar.c:199
-msgid "The fraction of total work that has been completed"
-msgstr "Выполненная часть работы"
-
-#: gtk/gtkprogressbar.c:208
-msgid "Pulse Step"
-msgstr "Шаг приращения"
-
-#: gtk/gtkprogressbar.c:209
-msgid "The fraction of total progress to move the bouncing block when pulsed"
-msgstr ""
-"Доля общего объема работы, при выполнении которой происходит приращение "
-"индикатора процесса"
-
-#: gtk/gtkprogressbar.c:219
-msgid "Text to be displayed in the progress bar"
-msgstr "Текст, отображаемый в индикаторе прогресса"
-
-#: gtk/gtkradioaction.c:137
-#, fuzzy
-msgid "The value"
-msgstr "Название темы"
-
-#: gtk/gtkradioaction.c:138
-msgid ""
-"The value returned by gtk_radio_action_get_current_value() when this action "
-"is the current action of its group."
-msgstr ""
-
-#: gtk/gtkradiobutton.c:109
-msgid "Group"
-msgstr "Группа"
-
-#: gtk/gtkradiobutton.c:110
-msgid "The radio button whose group this widget belongs."
-msgstr "Радио-кнопка, которой принадлежит этот виджет."
-
-#: gtk/gtkrange.c:281
-msgid "Update policy"
-msgstr "Метод обновления"
-
-#: gtk/gtkrange.c:282
-msgid "How the range should be updated on the screen"
-msgstr "Как диапазон должен обновляться на экране"
-
-#: gtk/gtkrange.c:291
-msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr ""
-"Объект GtkAdjustment, где хранится текущее значение этого объекта типа "
-"\"диапазон\""
-
-#: gtk/gtkrange.c:298
-msgid "Inverted"
-msgstr "Инвертированное"
-
-#: gtk/gtkrange.c:299
-msgid "Invert direction slider moves to increase range value"
-msgstr "Инвертировать области, отмеченной ползунками, для увеличения диапазона"
-
-#: gtk/gtkrange.c:305
-msgid "Slider Width"
-msgstr "Ширина полосы прокрутки"
-
-#: gtk/gtkrange.c:306
-msgid "Width of scrollbar or scale thumb"
-msgstr "Ширина полосы прокрутки или указателя масштаба"
-
-#: gtk/gtkrange.c:313
-msgid "Trough Border"
-msgstr "Граница направляющей"
-
-#: gtk/gtkrange.c:314
-msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr ""
-"Расстояние между указателем/кнопками перемещения и внешней границей "
-"направляющей"
-
-#: gtk/gtkrange.c:321
-msgid "Stepper Size"
-msgstr "Размер кнопки перемещения"
-
-#: gtk/gtkrange.c:322
-msgid "Length of step buttons at ends"
-msgstr "Длина кнопок перемещения от края до края"
-
-#: gtk/gtkrange.c:329
-msgid "Stepper Spacing"
-msgstr "Расстояние между кнопками перемещения"
-
-#: gtk/gtkrange.c:330
-msgid "Spacing between step buttons and thumb"
-msgstr "Расстояние между кнопками перемещения и указателем"
-
-#: gtk/gtkrange.c:337
-msgid "Arrow X Displacement"
-msgstr "Горизонтальное смещение стрелки"
-
-#: gtk/gtkrange.c:338
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
-msgstr ""
-"Насколько стрелка будет перемещаться в горизонтальном направлении при "
-"нажатии кнопки"
-
-#: gtk/gtkrange.c:345
-msgid "Arrow Y Displacement"
-msgstr "Вертикальное смещение стрелки"
-
-#: gtk/gtkrange.c:346
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
-msgstr ""
-"Насколько стрелка будет перемещаться в вертикальном направлении при нажатии "
-"кнопки"
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -4027,357 +1507,6 @@ msgstr "Файл с изображением не найден в pixmap_path: \
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Компонент пути к рисунку \"%s\" должен быть абсолютным, %s, строка %d"
-
-#: gtk/gtkruler.c:118
-msgid "Lower"
-msgstr "Ниже"
-
-#: gtk/gtkruler.c:119
-msgid "Lower limit of ruler"
-msgstr "Нижний предел линейки"
-
-#: gtk/gtkruler.c:128
-msgid "Upper"
-msgstr "Выше"
-
-#: gtk/gtkruler.c:129
-msgid "Upper limit of ruler"
-msgstr "Верхний предел линейки"
-
-#: gtk/gtkruler.c:139
-msgid "Position of mark on the ruler"
-msgstr "Расположение отметки на линейке"
-
-#: gtk/gtkruler.c:148
-msgid "Max Size"
-msgstr "Макс. размер"
-
-#: gtk/gtkruler.c:149
-msgid "Maximum size of the ruler"
-msgstr "Максимальный размер линейки"
-
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
-msgid "Digits"
-msgstr "Цифры"
-
-#: gtk/gtkscale.c:157
-msgid "The number of decimal places that are displayed in the value"
-msgstr "Число десятичных цифр, отображаемых для значения"
-
-#: gtk/gtkscale.c:166
-msgid "Draw Value"
-msgstr "Показывать значение"
-
-#: gtk/gtkscale.c:167
-msgid "Whether the current value is displayed as a string next to the slider"
-msgstr "Будет ли текущее значение отображаться в виде строки рядом с ползунком"
-
-#: gtk/gtkscale.c:174
-msgid "Value Position"
-msgstr "Расположение значения"
-
-#: gtk/gtkscale.c:175
-msgid "The position in which the current value is displayed"
-msgstr "Место, в котором отображается текущее значение"
-
-#: gtk/gtkscale.c:182
-msgid "Slider Length"
-msgstr "Длина полосы прокрутки"
-
-#: gtk/gtkscale.c:183
-msgid "Length of scale's slider"
-msgstr "Длина полосы прокрутки"
-
-#: gtk/gtkscale.c:191
-msgid "Value spacing"
-msgstr "Отступ значения"
-
-#: gtk/gtkscale.c:192
-msgid "Space between value text and the slider/trough area"
-msgstr ""
-"Расстояние между отображаемым значением и областью ползунка/направляющей"
-
-#: gtk/gtkscrollbar.c:80
-msgid "Minimum Slider Length"
-msgstr "Минимальная длина полосы прокрутки"
-
-#: gtk/gtkscrollbar.c:81
-msgid "Minimum length of scrollbar slider"
-msgstr "Минимальная длина полосы прокрутки"
-
-#: gtk/gtkscrollbar.c:89
-msgid "Fixed slider size"
-msgstr "Фиксированный размер полосы прокрутки"
-
-#: gtk/gtkscrollbar.c:90
-msgid "Don't change slider size, just lock it to the minimum length"
-msgstr "Не изменять размер ползунка, просто задать ему минимальный размер"
-
-#: gtk/gtkscrollbar.c:114
-msgid ""
-"Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr ""
-"Отображать вторую кнопку со стрелкой назад на противоположной стороне полосы "
-"прокрутки"
-
-#: gtk/gtkscrollbar.c:122
-msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
-msgstr ""
-"Отображать вторую кнопку со стрелкой вперед на противоположной стороне "
-"полосы прокрутки"
-
-#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:529
-msgid "Horizontal Adjustment"
-msgstr "Выравнивание по горизонтали"
-
-#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:537
-msgid "Vertical Adjustment"
-msgstr "Выравнивание по вертикали"
-
-#: gtk/gtkscrolledwindow.c:249
-msgid "Horizontal Scrollbar Policy"
-msgstr "Горизонтальная полоса прокрутки"
-
-#: gtk/gtkscrolledwindow.c:250
-msgid "When the horizontal scrollbar is displayed"
-msgstr "Когда будет отображаться горизонтальная полоса прокрутки"
-
-#: gtk/gtkscrolledwindow.c:257
-msgid "Vertical Scrollbar Policy"
-msgstr "Вертикальная полоса прокрутки"
-
-#: gtk/gtkscrolledwindow.c:258
-msgid "When the vertical scrollbar is displayed"
-msgstr "Когда будет отображаться вертикальная полоса прокрутки"
-
-#: gtk/gtkscrolledwindow.c:266
-msgid "Window Placement"
-msgstr "Размещение окна"
-
-#: gtk/gtkscrolledwindow.c:267
-msgid "Where the contents are located with respect to the scrollbars"
-msgstr "Как будут размещены компоненты окна относительно полос прокрутки"
-
-#: gtk/gtkscrolledwindow.c:274
-msgid "Shadow Type"
-msgstr "Тип тени"
-
-#: gtk/gtkscrolledwindow.c:275
-msgid "Style of bevel around the contents"
-msgstr "Стиль скоса вокруг содержимого"
-
-#: gtk/gtkscrolledwindow.c:282
-msgid "Scrollbar spacing"
-msgstr "Интервал полос прокрутки"
-
-#: gtk/gtkscrolledwindow.c:283
-msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr ""
-"Количество точек растра между полосами прокрутки и прокручиваемым окном"
-
-#: gtk/gtkseparatortoolitem.c:159
-msgid "Draw"
-msgstr ""
-
-#: gtk/gtkseparatortoolitem.c:160
-#, fuzzy
-msgid "Whether the separator is drawn, or just blank"
-msgstr "Будут ли разделители вертикальными линиями или просто пустыми"
-
-#: gtk/gtksettings.c:169
-msgid "Double Click Time"
-msgstr "Интервал двойного щелчка"
-
-#: gtk/gtksettings.c:170
-msgid ""
-"Maximum time allowed between two clicks for them to be considered a double "
-"click (in milliseconds)"
-msgstr ""
-"Максимальное время между двумя щелчками, при котором они считаются двойным "
-"щелчком (в милисекундах)"
-
-#: gtk/gtksettings.c:177
-msgid "Cursor Blink"
-msgstr "Мигающий курсор"
-
-#: gtk/gtksettings.c:178
-msgid "Whether the cursor should blink"
-msgstr "Должен ли курсор мигать"
-
-#: gtk/gtksettings.c:185
-msgid "Cursor Blink Time"
-msgstr "Частота мигания курсора"
-
-#: gtk/gtksettings.c:186
-msgid "Length of the cursor blink cycle, in milleseconds"
-msgstr "Длина цикла мигания курсора в миллисекундах"
-
-#: gtk/gtksettings.c:193
-msgid "Split Cursor"
-msgstr "Разделить курсор"
-
-#: gtk/gtksettings.c:194
-msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and right-to-"
-"left text"
-msgstr ""
-"Будут ли отображаться два курсора для смешанного справа-налево и слева-"
-"направо текста"
-
-#: gtk/gtksettings.c:201
-msgid "Theme Name"
-msgstr "Название темы"
-
-#: gtk/gtksettings.c:202
-msgid "Name of theme RC file to load"
-msgstr "Название файла RC тему для загрузки"
-
-#: gtk/gtksettings.c:209
-#, fuzzy
-msgid "Icon Theme Name"
-msgstr "Название темы"
-
-#: gtk/gtksettings.c:210
-#, fuzzy
-msgid "Name of icon theme to use"
-msgstr "Название шрифта используемого по умолчанию"
-
-#: gtk/gtksettings.c:217
-msgid "Key Theme Name"
-msgstr "Название ключевой темы"
-
-#: gtk/gtksettings.c:218
-msgid "Name of key theme RC file to load"
-msgstr "Имя RC-файла с ключевой темой, который нужно загрузить"
-
-#: gtk/gtksettings.c:226
-msgid "Menu bar accelerator"
-msgstr "Клавиша вызова строки меню"
-
-#: gtk/gtksettings.c:227
-msgid "Keybinding to activate the menu bar"
-msgstr "Клавиша предназначенная для вызова строки меню"
-
-#: gtk/gtksettings.c:235
-msgid "Drag threshold"
-msgstr "Порог перетаскивания"
-
-#: gtk/gtksettings.c:236
-msgid "Number of pixels the cursor can move before dragging"
-msgstr ""
-"Число точек растра, на которое может сместиться курсор до перетаскивания"
-
-#: gtk/gtksettings.c:244
-msgid "Font Name"
-msgstr "Название шрифта"
-
-#: gtk/gtksettings.c:245
-msgid "Name of default font to use"
-msgstr "Название шрифта используемого по умолчанию"
-
-#: gtk/gtksettings.c:253
-msgid "Icon Sizes"
-msgstr "Размеры иконок"
-
-#: gtk/gtksettings.c:254
-msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
-msgstr "Список размеров иконок (gtk-menu=16,16;gtk-button=20,20..."
-
-#: gtk/gtksizegroup.c:241
-msgid "Mode"
-msgstr "Режим"
-
-#: gtk/gtksizegroup.c:242
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets"
-msgstr ""
-"Направления, в которых \"группа по размеру\" влияет на заданные размеры "
-"входящих в нее элементов управления"
-
-#: gtk/gtkspinbutton.c:241
-msgid "The adjustment that holds the value of the spinbutton"
-msgstr "Свойство, хранящее значение кнопки-счётчика"
-
-#: gtk/gtkspinbutton.c:248
-msgid "Climb Rate"
-msgstr "Ускорение"
-
-#: gtk/gtkspinbutton.c:249
-msgid "The acceleration rate when you hold down a button"
-msgstr "Ускорение прокрутки значений при удерживании нажатой кнопки"
-
-#: gtk/gtkspinbutton.c:259
-msgid "The number of decimal places to display"
-msgstr "Количество отображаемых десятичных разрядов"
-
-#: gtk/gtkspinbutton.c:268
-msgid "Snap to Ticks"
-msgstr "Заменять на ближайшее"
-
-#: gtk/gtkspinbutton.c:269
-msgid ""
-"Whether erroneous values are automatically changed to a spin button's "
-"nearest step increment"
-msgstr ""
-"Будут ли недопустимые значения автоматически заменяться на ближайшее "
-"значение счетчика"
-
-#: gtk/gtkspinbutton.c:276
-msgid "Numeric"
-msgstr "Числовое"
-
-#: gtk/gtkspinbutton.c:277
-msgid "Whether non-numeric characters should be ignored"
-msgstr "Будут ли игнорироваться нецифровые символы"
-
-#: gtk/gtkspinbutton.c:284
-msgid "Wrap"
-msgstr "Перенос"
-
-#: gtk/gtkspinbutton.c:285
-msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr ""
-"Будет ли счетчик переходить к другому концу шкалы при достижении предельных "
-"значений"
-
-#: gtk/gtkspinbutton.c:292
-msgid "Update Policy"
-msgstr "Политика обновления"
-
-#: gtk/gtkspinbutton.c:293
-msgid ""
-"Whether the spin button should update always, or only when the value is legal"
-msgstr ""
-"Должен ли счетчик обновляться всегда или только если значение является "
-"допустимым"
-
-#: gtk/gtkspinbutton.c:301
-msgid "Value"
-msgstr "Значение"
-
-#: gtk/gtkspinbutton.c:302
-msgid "Reads the current value, or sets a new value"
-msgstr "Читает текущее значение или устанавливает новое значение"
-
-#: gtk/gtkspinbutton.c:311
-#, fuzzy
-msgid "Style of bevel around the spin button"
-msgstr "Стиль скоса вокруг содержимого"
-
-#: gtk/gtkstatusbar.c:167
-msgid "Has Resize Grip"
-msgstr ""
-
-#: gtk/gtkstatusbar.c:168
-#, fuzzy
-msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr "Является ли элемент управления получающим фокус"
-
-#: gtk/gtkstatusbar.c:195
-msgid "Style of bevel around the statusbar text"
-msgstr "Стиль скоса вокруг текста строки состояния"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
@@ -4492,607 +1621,168 @@ msgid "_Up"
 msgstr "_Вверх"
 
 #: gtk/gtkstock.c:298
+msgid "_Harddisk"
+msgstr ""
+
+#: gtk/gtkstock.c:299
 msgid "_Help"
 msgstr "_Справка"
 
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:300
 msgid "_Home"
 msgstr "_Домой"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:301
 msgid "_Index"
 msgstr "_Индекс"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:302
 msgid "_Italic"
 msgstr "_Курсив"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:303
 msgid "_Jump to"
 msgstr "Перейти _к"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:304
 msgid "_Center"
 msgstr "По _центру"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:305
 msgid "_Fill"
 msgstr "По _ширине"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:306
 msgid "_Left"
 msgstr "По _левому краю"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:307
 msgid "_Right"
 msgstr "По _правому краю"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:308
 msgid "_New"
 msgstr "_Создать"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:309
 msgid "_No"
 msgstr "_Нет"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:310
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgid "_Open"
 msgstr "_Открыть"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_Preferences"
 msgstr "_Изменить настройки"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Print"
 msgstr "На_печатать"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "Print Pre_view"
 msgstr "Посмотреть образе_ц печати"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Properties"
 msgstr "_Изменить свойства"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Quit"
 msgstr "В_ыйти"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "_Redo"
 msgstr "Возв_ратить"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Refresh"
 msgstr "Об_новить"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Remove"
 msgstr "У_брать"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Revert"
 msgstr "_Восстановить"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Save"
 msgstr "Со_хранить"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "Save _As"
 msgstr "Сохранить _как"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Color"
 msgstr "_Цвет"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Font"
 msgstr "_Шрифт"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "_Ascending"
 msgstr "По воз_растанию"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Descending"
 msgstr "По _убыванию"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Spell Check"
 msgstr "Проверить право_писание"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Stop"
 msgstr "О_становить"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Strikethrough"
 msgstr "Пере_черкивание"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Undelete"
 msgstr "Вос_становить удалённое"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Underline"
 msgstr "По_дчеркивание"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Undo"
 msgstr "_Откатить"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Yes"
 msgstr "_Да"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "Zoom _100%"
 msgstr "Восстановить ис_ходный масштаб"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "Zoom to _Fit"
 msgstr "Подогнать масштаб по _ширине"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "Zoom _In"
 msgstr "У_величить масштаб"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _Out"
 msgstr "У_меньшить масштаб"
-
-#: gtk/gtktable.c:158
-msgid "Rows"
-msgstr "Строки"
-
-#: gtk/gtktable.c:159
-msgid "The number of rows in the table"
-msgstr "Число строк в таблице"
-
-#: gtk/gtktable.c:167
-msgid "Columns"
-msgstr "Столбцы"
-
-#: gtk/gtktable.c:168
-msgid "The number of columns in the table"
-msgstr "Число столбцов в таблице"
-
-#: gtk/gtktable.c:176
-msgid "Row spacing"
-msgstr "Интервал строк"
-
-#: gtk/gtktable.c:177
-msgid "The amount of space between two consecutive rows"
-msgstr "Расстояние между соседними строками"
-
-#: gtk/gtktable.c:185
-msgid "Column spacing"
-msgstr "Интервал столбцов"
-
-#: gtk/gtktable.c:186
-msgid "The amount of space between two consecutive columns"
-msgstr "Расстояние между соседними столбцами"
-
-#: gtk/gtktable.c:194
-msgid "Homogenous"
-msgstr "Гомогенно"
-
-#: gtk/gtktable.c:195
-msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Если \"ИСТИНА\", то ячейки таблицы имеют одинаковую высоту и ширину"
-
-#: gtk/gtktable.c:202
-msgid "Left attachment"
-msgstr "Прибавление слева"
-
-#: gtk/gtktable.c:209
-msgid "Right attachment"
-msgstr "Прибавление справа"
-
-#: gtk/gtktable.c:210
-#, fuzzy
-msgid "The column number to attach the right side of a child widget to"
-msgstr "Число столбцов, прибавляемых к правой стороне вложенного элемента"
-
-#: gtk/gtktable.c:216
-msgid "Top attachment"
-msgstr "Прибавление сверху"
-
-#: gtk/gtktable.c:217
-msgid "The row number to attach the top of a child widget to"
-msgstr "Число строк, прибавляемых к верхней стороне вложенного элемента"
-
-#: gtk/gtktable.c:223
-msgid "Bottom attachment"
-msgstr "Прибавление снизу"
-
-#: gtk/gtktable.c:230
-msgid "Horizontal options"
-msgstr "Горизонтальные параметры"
-
-#: gtk/gtktable.c:231
-msgid "Options specifying the horizontal behaviour of the child"
-msgstr "Параметры, определяющие горизонтальное поведение вложенного элемента"
-
-#: gtk/gtktable.c:237
-msgid "Vertical options"
-msgstr "Вертикальные параметры"
-
-#: gtk/gtktable.c:238
-msgid "Options specifying the vertical behaviour of the child"
-msgstr "Параметры, определяющие вертикальное поведение вложенного элемента"
-
-#: gtk/gtktable.c:244
-msgid "Horizontal padding"
-msgstr "Горизонтальное дополнение"
-
-#: gtk/gtktable.c:245
-msgid ""
-"Extra space to put between the child and its left and right neighbors, in "
-"pixels"
-msgstr ""
-"Дополнительное количество пространства, помещаемое между дочерним элементом "
-"и левым и его правым соседями, в точках растра"
-
-#: gtk/gtktable.c:251
-msgid "Vertical padding"
-msgstr "Вертикальное дополнение"
-
-#: gtk/gtktable.c:252
-msgid ""
-"Extra space to put between the child and its upper and lower neighbors, in "
-"pixels"
-msgstr ""
-"Дополнительное количество пространства, помещаемое между дочерним элементом "
-"и его верхним и нижним соседями, в точках растра"
-
-#: gtk/gtktext.c:602
-msgid "Horizontal adjustment for the text widget"
-msgstr "Горизонтальное выравнивание текстового элемента управления"
-
-#: gtk/gtktext.c:610
-msgid "Vertical adjustment for the text widget"
-msgstr "Вертикальное выравнивание текстового элемента управления"
-
-#: gtk/gtktext.c:617
-msgid "Line Wrap"
-msgstr "Перенос строк"
-
-#: gtk/gtktext.c:618
-msgid "Whether lines are wrapped at widget edges"
-msgstr "Будет ли происходить перевод строк у границ элемента управления"
-
-#: gtk/gtktext.c:625
-msgid "Word Wrap"
-msgstr "Перенос слов"
-
-#: gtk/gtktext.c:626
-msgid "Whether words are wrapped at widget edges"
-msgstr "Будет ли делаться перенос слов на границах элемента управления"
-
-#: gtk/gtktextbuffer.c:180
-msgid "Tag Table"
-msgstr "Таблица ярлыков"
-
-#: gtk/gtktextbuffer.c:181
-msgid "Text Tag Table"
-msgstr "Таблица ярлыков текста"
-
-#: gtk/gtktexttag.c:195
-msgid "Tag name"
-msgstr "Имя ярлыка"
-
-#: gtk/gtktexttag.c:196
-msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr ""
-"Имя, используемое для ссылки на текстовый ярлык. NULL для безымянных ярлыков"
-
-#: gtk/gtktexttag.c:214
-msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "Цвет фона как (возможно нераспределённая) структура GdkColor"
-
-#: gtk/gtktexttag.c:221
-msgid "Background full height"
-msgstr "Полная высота фона"
-
-#: gtk/gtktexttag.c:222
-msgid ""
-"Whether the background color fills the entire line height or only the height "
-"of the tagged characters"
-msgstr ""
-"Будет ли цвет фона применен на высоту всей строки или только на высоту "
-"символов, отмеченных тегами"
-
-#: gtk/gtktexttag.c:230
-msgid "Background stipple mask"
-msgstr "Узорная маска фона"
-
-#: gtk/gtktexttag.c:231
-msgid "Bitmap to use as a mask when drawing the text background"
-msgstr ""
-"Точечный рисунок, который будет использоваться в качестве маски при "
-"прорисовке фона текста"
-
-#: gtk/gtktexttag.c:248
-msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "Цвет текста как (возможно нераспределённая) структура GdkColor"
-
-#: gtk/gtktexttag.c:256
-msgid "Foreground stipple mask"
-msgstr "Узорная маска текста"
-
-#: gtk/gtktexttag.c:257
-msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
-"Точечный рисунок, который будет использоваться в качестве маски при "
-"прорисовке переднего плана текста"
-
-#: gtk/gtktexttag.c:264
-msgid "Text direction"
-msgstr "Направление текста"
-
-#: gtk/gtktexttag.c:265
-msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "Направление текста, т.е. справа налево или слева направо"
-
-#: gtk/gtktexttag.c:282
-msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Описание шрифта в виде строки, например, \"Sans Italic 12\""
-
-#: gtk/gtktexttag.c:307
-msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr "Стиль шрифта в виде PangoStyle, например, PANGO_STYLE_ITALIC"
-
-#: gtk/gtktexttag.c:316
-msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr "Вариант шрифта в виде PangoVariant, например, PANGO_VARIANT_SMALL_CAPS"
-
-#: gtk/gtktexttag.c:325
-msgid ""
-"Font weight as an integer, see predefined values in PangoWeight; for "
-"example, PANGO_WEIGHT_BOLD"
-msgstr ""
-"Вес шрифта как целое число, смотрите предопределённые значения в наборе "
-"PangoWeight; к примеру, PANGO_WEIGHT_BOLD"
-
-#: gtk/gtktexttag.c:336
-msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
-"Разрядка шрифта как значение в наборе PangoStretch; к примеру, "
-"PANGO_STRETCH_CONDENCED"
-
-#: gtk/gtktexttag.c:345
-msgid "Font size in Pango units"
-msgstr "Размер шрифта в единицах системы Pango"
-
-#: gtk/gtktexttag.c:355
-msgid ""
-"Font size as a scale factor relative to the default font size. This properly "
-"adapts to theme changes etc. so is recommended. Pango predefines some scales "
-"such as PANGO_SCALE_X_LARGE"
-msgstr ""
-"Размер шрифта, как коэффициент масштабирования относительно \"шрифта по "
-"умолчанию\".  Это свойство позволяет адаптироваться к изменениям тем, и "
-"потому рекомендуется.  Pango имеет несколько предопределённых масштабов, "
-"например PANGO_SCALE_X_LARGE"
-
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:603
-msgid "Left, right, or center justification"
-msgstr "Выравнивание влево, вправо или по центру"
-
-#: gtk/gtktexttag.c:383
-msgid "Language"
-msgstr "Язык"
-
-#: gtk/gtktexttag.c:384
-msgid ""
-"The language this text is in, as an ISO code. Pango can use this as a hint "
-"when rendering the text. If you don't understand this parameter, you "
-"probably don't need it"
-msgstr ""
-"Язык, на котором написан текст, в виде ISO-кода.  Pango может использовать "
-"это, как подсказку (hint) при визуализации текста.  Если вы не понимаете, "
-"что это за параметр, то он вам, скорее всего, не нужен."
-
-#: gtk/gtktexttag.c:391
-msgid "Left margin"
-msgstr "Отступ слева"
-
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:612
-msgid "Width of the left margin in pixels"
-msgstr "Ширина отсупа слева в точках растра"
-
-#: gtk/gtktexttag.c:401
-msgid "Right margin"
-msgstr "Отступ справа"
-
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:622
-msgid "Width of the right margin in pixels"
-msgstr "Ширина отступа справа в пикселях"
-
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:631
-msgid "Indent"
-msgstr "Абзац"
-
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
-msgid "Amount to indent the paragraph, in pixels"
-msgstr "Абзацный отступ, в пикселях"
-
-#: gtk/gtktexttag.c:424
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative) "
-"in pixels"
-msgstr ""
-"Смещение текста над базовой линией (под линию шрифта, для отрицательных "
-"значений)"
-
-#: gtk/gtktexttag.c:433
-msgid "Pixels above lines"
-msgstr "Пикселей над строками"
-
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:556
-msgid "Pixels of blank space above paragraphs"
-msgstr "Пикселей в пространстве над абзацами"
-
-#: gtk/gtktexttag.c:443
-msgid "Pixels below lines"
-msgstr "Пикселей под строками"
-
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:566
-msgid "Pixels of blank space below paragraphs"
-msgstr "Пикселей в пространстве под абзацами"
-
-#: gtk/gtktexttag.c:453
-msgid "Pixels inside wrap"
-msgstr "Пикселей в абзаце"
-
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:576
-msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr "Пикселей в пространстве между перенесёнными строками в абзаце"
-
-#: gtk/gtktexttag.c:480
-msgid "Wrap mode"
-msgstr "Режим переноса"
-
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:594
-msgid ""
-"Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr ""
-"Никогда не переносить строки, переносить ли по границам слов или по символам"
-
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:641
-msgid "Tabs"
-msgstr "Табуляторы"
-
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
-msgid "Custom tabs for this text"
-msgstr "Пользовательские табуляторы для этого текста"
-
-#: gtk/gtktexttag.c:498
-msgid "Invisible"
-msgstr "Невидимый"
-
-#: gtk/gtktexttag.c:499
-msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "Должен ли текст быть скрытым. Не реализовано в библиотере GTK 2.0"
-
-#: gtk/gtktexttag.c:512
-msgid "Background full height set"
-msgstr "Полная высота фона"
-
-#: gtk/gtktexttag.c:513
-msgid "Whether this tag affects background height"
-msgstr "Влияет ли этот тег на высоту фона"
-
-#: gtk/gtktexttag.c:516
-msgid "Background stipple set"
-msgstr "Узор фона"
-
-#: gtk/gtktexttag.c:517
-msgid "Whether this tag affects the background stipple"
-msgstr "Влияет ли этот тег на узор фона"
-
-#: gtk/gtktexttag.c:524
-msgid "Foreground stipple set"
-msgstr "Узор переднего плана"
-
-#: gtk/gtktexttag.c:525
-msgid "Whether this tag affects the foreground stipple"
-msgstr "Влияет ли этот тег на узор переднего плана"
-
-#: gtk/gtktexttag.c:560
-msgid "Justification set"
-msgstr "Выравнивание"
-
-#: gtk/gtktexttag.c:561
-msgid "Whether this tag affects paragraph justification"
-msgstr "Влияет ли этот тег на выравнивание абзацев"
-
-#: gtk/gtktexttag.c:564
-msgid "Language set"
-msgstr "Язык"
-
-#: gtk/gtktexttag.c:565
-msgid "Whether this tag affects the language the text is rendered as"
-msgstr "Влияет ли этот тег на язык отображения текста"
-
-#: gtk/gtktexttag.c:568
-msgid "Left margin set"
-msgstr "Левое поле"
-
-#: gtk/gtktexttag.c:569
-msgid "Whether this tag affects the left margin"
-msgstr "Влияет ли этот тег на левое поле"
-
-#: gtk/gtktexttag.c:572
-msgid "Indent set"
-msgstr "Отступ"
-
-#: gtk/gtktexttag.c:573
-msgid "Whether this tag affects indentation"
-msgstr "Влияет ли этот тег на отступ"
-
-#: gtk/gtktexttag.c:580
-msgid "Pixels above lines set"
-msgstr "Пиксели над строками"
-
-#: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
-msgid "Whether this tag affects the number of pixels above lines"
-msgstr "Влияет ли этот тег на количество пикселей над строками"
-
-#: gtk/gtktexttag.c:584
-msgid "Pixels below lines set"
-msgstr "Пиксели под строками"
-
-#: gtk/gtktexttag.c:588
-msgid "Pixels inside wrap set"
-msgstr "Пиксели между перенесенными строками"
-
-#: gtk/gtktexttag.c:589
-msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr "Влияет ли этот тег на количество пикселей между перенесенными строками"
-
-#: gtk/gtktexttag.c:596
-msgid "Right margin set"
-msgstr "Правое поле"
-
-#: gtk/gtktexttag.c:597
-msgid "Whether this tag affects the right margin"
-msgstr "Влияет ли этот тег на правое поле"
-
-#: gtk/gtktexttag.c:604
-msgid "Wrap mode set"
-msgstr "Режим переноса"
-
-#: gtk/gtktexttag.c:605
-msgid "Whether this tag affects line wrap mode"
-msgstr "Влияет ли этот тег на режим переноса строк"
-
-#: gtk/gtktexttag.c:608
-msgid "Tabs set"
-msgstr "Табуляция"
-
-#: gtk/gtktexttag.c:609
-msgid "Whether this tag affects tabs"
-msgstr "Влияет ли этот тег на табуляцию"
-
-#: gtk/gtktexttag.c:612
-msgid "Invisible set"
-msgstr "Невидимость"
-
-#: gtk/gtktexttag.c:613
-msgid "Whether this tag affects text visibility"
-msgstr "Влияет ли этот тег на видимость текста"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
@@ -5134,63 +1824,6 @@ msgstr "ZWJ Нулевой о_бъединитель"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Нулевой ра_зъединитель"
 
-#: gtk/gtktextview.c:555
-msgid "Pixels Above Lines"
-msgstr "Точек растра над строками"
-
-#: gtk/gtktextview.c:565
-msgid "Pixels Below Lines"
-msgstr "Точек растра под строками"
-
-#: gtk/gtktextview.c:575
-msgid "Pixels Inside Wrap"
-msgstr "Пиксели между перенесенными строками"
-
-#: gtk/gtktextview.c:593
-msgid "Wrap Mode"
-msgstr "Режим переноса"
-
-#: gtk/gtktextview.c:611
-msgid "Left Margin"
-msgstr "Отступ слева"
-
-#: gtk/gtktextview.c:621
-msgid "Right Margin"
-msgstr "Отступ справа"
-
-#: gtk/gtktextview.c:649
-msgid "Cursor Visible"
-msgstr "Видимый курсор"
-
-#: gtk/gtktextview.c:650
-msgid "If the insertion cursor is shown"
-msgstr "Показывается ли точка вставки"
-
-#: gtk/gtktextview.c:657
-msgid "Buffer"
-msgstr "Буфер"
-
-#: gtk/gtktextview.c:658
-msgid "The buffer which is displayed"
-msgstr "Отображаемый буфер"
-
-#: gtk/gtktextview.c:665
-msgid "Overwrite mode"
-msgstr "Режим перезаписи"
-
-#: gtk/gtktextview.c:666
-msgid "Whether entered text overwrites existing contents"
-msgstr "Должен ли вводимый текст перезаписывать существующий"
-
-#: gtk/gtktextview.c:673
-msgid "Accepts tab"
-msgstr "Использовать табуляции"
-
-#: gtk/gtktextview.c:674
-msgid "Whether Tab will result in a tab character being entered"
-msgstr ""
-"Должен ли вставляться символ табуляции при нажатии на клавишу табуляции"
-
 #: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
@@ -5200,863 +1833,24 @@ msgstr "Загружаемый модуль тем не найден в module_p
 msgid "--- No Tip ---"
 msgstr "--- Нет подсказки ---"
 
-#: gtk/gtktoggleaction.c:129
-#, fuzzy
-msgid "Create the same proxies as a radio action"
-msgstr "Нарисовать кнопку переключатель как радио-кнопку"
-
-#: gtk/gtktoggleaction.c:130
-msgid "Whether the proxies for this action look like radio action proxies"
-msgstr ""
-
-#: gtk/gtktogglebutton.c:133
-msgid "If the toggle button should be pressed in or not"
-msgstr "Должна ли кнопка-переключатель быть нажата или нет"
-
-#: gtk/gtktogglebutton.c:141
-msgid "If the toggle button is in an \"in between\" state"
-msgstr "Если кнопка-переключатель в \"промежуточном\" состоянии."
-
-#: gtk/gtktogglebutton.c:148
-msgid "Draw Indicator"
-msgstr "Рисовать индикатор"
-
-#: gtk/gtktogglebutton.c:149
-msgid "If the toggle part of the button is displayed"
-msgstr "Если отображена переключающая часть кнопки"
-
-#: gtk/gtktoolbar.c:442
-msgid "The orientation of the toolbar"
-msgstr "Ориентация панели инструментов"
-
-#: gtk/gtktoolbar.c:450
-msgid "Toolbar Style"
-msgstr "Стиль панели инструментов"
-
-#: gtk/gtktoolbar.c:451
-msgid "How to draw the toolbar"
-msgstr "Как рисовать панель инструментов"
-
-#: gtk/gtktoolbar.c:458
-#, fuzzy
-msgid "Show Arrow"
-msgstr "Показать границу"
-
-#: gtk/gtktoolbar.c:459
-msgid "If an arrow should be shown if the toolbar doesn't fit"
-msgstr ""
-
-#: gtk/gtktoolbar.c:468
-#, fuzzy
-msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr ""
-"Должны ли все вложенные элементы расширяться при увеличении размера "
-"родительского элемента"
-
-#: gtk/gtktoolbar.c:476
-#, fuzzy
-msgid "Whether the item should be the same size as other homogeneous items"
-msgstr "Должны ли все вложенные элементы иметь одинаковый размер"
-
-#: gtk/gtktoolbar.c:483
-msgid "Spacer size"
-msgstr "Размер разделителя"
-
-#: gtk/gtktoolbar.c:484
-msgid "Size of spacers"
-msgstr "Размер разделителей"
-
-#: gtk/gtktoolbar.c:493
-msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr "Расстояние между тенью панели инструментов и кнопками"
-
-#: gtk/gtktoolbar.c:501
-msgid "Space style"
-msgstr "Стиль разделителя"
-
-#: gtk/gtktoolbar.c:502
-msgid "Whether spacers are vertical lines or just blank"
-msgstr "Будут ли разделители вертикальными линиями или просто пустыми"
-
-#: gtk/gtktoolbar.c:509
-msgid "Button relief"
-msgstr "Рельеф кнопки"
-
-#: gtk/gtktoolbar.c:510
-msgid "Type of bevel around toolbar buttons"
-msgstr "Тип скоса вокруг кнопок панели инструментов"
-
-#: gtk/gtktoolbar.c:517
-msgid "Style of bevel around the toolbar"
-msgstr "Стиль скоса вокруг панели инструментов"
-
-#: gtk/gtktoolbar.c:523
-msgid "Toolbar style"
-msgstr "Стиль панели инструментов"
-
-#: gtk/gtktoolbar.c:524
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
-"Будет ли на панели инструментов по умолчанию только текст, текст и значки, "
-"только значки и т. д."
-
-#: gtk/gtktoolbar.c:530
-msgid "Toolbar icon size"
-msgstr "Размер пиктограмм панели инструментов"
-
-#: gtk/gtktoolbar.c:531
-msgid "Size of icons in default toolbars"
-msgstr "Размер пиктограмм в панели инструментов по умолчанию"
-
-#: gtk/gtktoolbutton.c:180
-#, fuzzy
-msgid "Text to show in the item."
-msgstr "Число строк в таблице"
-
-#: gtk/gtktoolbutton.c:187
-#, fuzzy
-msgid ""
-"If set, an underline in the label property indicates that the next character "
-"should be used for the mnemonic accelerator key in the overflow menu"
-msgstr ""
-"Если установлено, подчёркивание в тексте обозначает, что следующий символ "
-"должен использоваться в комбинации клавиш."
-
-#: gtk/gtktoolbutton.c:194
-#, fuzzy
-msgid "Widget to use as the item label"
-msgstr "Ширина отсупа вокруг меток ярлыка"
-
-#: gtk/gtktoolbutton.c:200
-#, fuzzy
-msgid "Stock Id"
-msgstr "ID встроенного значка"
-
-#: gtk/gtktoolbutton.c:201
-#, fuzzy
-msgid "The stock icon displayed on the item"
-msgstr "Строка, отображаемая на метке вкладки"
-
-#: gtk/gtktoolbutton.c:207
-#, fuzzy
-msgid "Icon widget"
-msgstr "Набор пиктограмм"
-
-#: gtk/gtktoolbutton.c:208
-#, fuzzy
-msgid "Icon widget to display in the item"
-msgstr "Отображаемый набор пиктограмм"
-
-#: gtk/gtktoolitem.c:154
-msgid "Visible when horizontal"
-msgstr ""
-
-#: gtk/gtktoolitem.c:155
-msgid ""
-"Whether the toolbar item is visible when the toolbar is in a horizontal "
-"orientation."
-msgstr ""
-
-#: gtk/gtktoolitem.c:161
-msgid "Visible when vertical"
-msgstr ""
-
-#: gtk/gtktoolitem.c:162
-msgid ""
-"Whether the toolbar item is visible when the toolbar is in a vertical "
-"orientation."
-msgstr ""
-
-#: gtk/gtktoolitem.c:169
-msgid ""
-"Whether the toolbar item is considered important. When TRUE, toolbar buttons "
-"show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr ""
-
-#: gtk/gtktreemodelsort.c:306
-msgid "TreeModelSort Model"
-msgstr "Модель TreeModelSort"
-
-#: gtk/gtktreemodelsort.c:307
-msgid "The model for the TreeModelSort to sort"
-msgstr "Модель для сортировки TreeModelSort"
-
-#: gtk/gtktreeview.c:521
-msgid "TreeView Model"
-msgstr "Модель TreeView"
-
-#: gtk/gtktreeview.c:522
-msgid "The model for the tree view"
-msgstr "Модель для просмотра в виде дерева"
-
-#: gtk/gtktreeview.c:530
-msgid "Horizontal Adjustment for the widget"
-msgstr "Горизонтальное выравнивание элемента управления"
-
-#: gtk/gtktreeview.c:538
-msgid "Vertical Adjustment for the widget"
-msgstr "Вертикальное выравнивание элемента управления"
-
-#: gtk/gtktreeview.c:546
-msgid "Show the column header buttons"
-msgstr "Показывать кнопки заголовков столбцов"
-
-#: gtk/gtktreeview.c:553
-msgid "Headers Clickable"
-msgstr "Заголовки чувствительны к нажатиям"
-
-#: gtk/gtktreeview.c:554
-msgid "Column headers respond to click events"
-msgstr "Заголовки столбцов чувствительны к нажатиям"
-
-#: gtk/gtktreeview.c:561
-msgid "Expander Column"
-msgstr "Расширяемая колонка"
-
-#: gtk/gtktreeview.c:562
-msgid "Set the column for the expander column"
-msgstr "Задать колонку для расширяемой колонки"
-
-#: gtk/gtktreeview.c:569 gtk/gtktreeviewcolumn.c:326
-msgid "Reorderable"
-msgstr "Переставляемые"
-
-#: gtk/gtktreeview.c:570
-msgid "View is reorderable"
-msgstr "Элементы просмотра можно перегруппировывать"
-
-#: gtk/gtktreeview.c:577
-msgid "Rules Hint"
-msgstr "Подсказка для правил"
-
-#: gtk/gtktreeview.c:578
-msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr ""
-"Задать подсказку для процессора тем для окрашивания строк в разные цвета"
-
-#: gtk/gtktreeview.c:585
-msgid "Enable Search"
-msgstr "Разрешён поиск"
-
-#: gtk/gtktreeview.c:586
-msgid "View allows user to search through columns interactively"
-msgstr ""
-"Просмотр позволяет пользователю выполнять поиск по колонкам в интерактивном "
-"режиме"
-
-#: gtk/gtktreeview.c:593
-msgid "Search Column"
-msgstr "Найти столбец"
-
-#: gtk/gtktreeview.c:594
-msgid "Model column to search through when searching through code"
-msgstr "Столбец-эталон, по которому следует выполнять поиск при поиске по коду"
-
-#: gtk/gtktreeview.c:616
-msgid "Vertical Separator Width"
-msgstr "Ширина вертикального разделителя"
-
-#: gtk/gtktreeview.c:617
-msgid "Vertical space between cells.  Must be an even number"
-msgstr "Вертикальный пробел между ячейками.  Должен быть четным числом"
-
-#: gtk/gtktreeview.c:625
-msgid "Horizontal Separator Width"
-msgstr "Ширина горизонтального разделителя"
-
-#: gtk/gtktreeview.c:626
-msgid "Horizontal space between cells.  Must be an even number"
-msgstr "Горизонтальный пробел между ячейками.  Должен быть четным числом"
-
-#: gtk/gtktreeview.c:634
-msgid "Allow Rules"
-msgstr "Разрешающие правила"
-
-#: gtk/gtktreeview.c:635
-msgid "Allow drawing of alternating color rows"
-msgstr "Разрешить окраску строк в разный цвет"
-
-#: gtk/gtktreeview.c:641
-msgid "Indent Expanders"
-msgstr "Отступ расширителя"
-
-#: gtk/gtktreeview.c:642
-msgid "Make the expanders indented"
-msgstr "Создает отступы в расширяемых объектах"
-
-#: gtk/gtktreeview.c:648
-msgid "Even Row Color"
-msgstr "Цвет чётных рядов"
-
-#: gtk/gtktreeview.c:649
-msgid "Color to use for even rows"
-msgstr "Цвет для чётных рядов"
-
-#: gtk/gtktreeview.c:655
-msgid "Odd Row Color"
-msgstr "Цвет нечётных рядов"
-
-#: gtk/gtktreeview.c:656
-msgid "Color to use for odd rows"
-msgstr "Цвет для нечётных рядов"
-
-#: gtk/gtktreeviewcolumn.c:220
-msgid "Whether to display the column"
-msgstr "Отображать ли столбец"
-
-#: gtk/gtktreeviewcolumn.c:227 gtk/gtkwindow.c:479
-msgid "Resizable"
-msgstr "С изменяемым размером"
-
-#: gtk/gtktreeviewcolumn.c:228
-msgid "Column is user-resizable"
-msgstr "Размер столбца может быть изменён пользователем"
-
-#: gtk/gtktreeviewcolumn.c:236
-msgid "Current width of the column"
-msgstr "Текущая ширина столбца"
-
-#: gtk/gtktreeviewcolumn.c:244
-msgid "Sizing"
-msgstr "Установка размера"
-
-#: gtk/gtktreeviewcolumn.c:245
-msgid "Resize mode of the column"
-msgstr "Режим изменения размера столбца"
-
-#: gtk/gtktreeviewcolumn.c:253
-msgid "Fixed Width"
-msgstr "Фиксированная ширина"
-
-#: gtk/gtktreeviewcolumn.c:254
-msgid "Current fixed width of the column"
-msgstr "Текущая фиксированная ширина столбца"
-
-#: gtk/gtktreeviewcolumn.c:263
-msgid "Minimum Width"
-msgstr "Минимальная ширина"
-
-#: gtk/gtktreeviewcolumn.c:264
-msgid "Minimum allowed width of the column"
-msgstr "Минимально допустимая ширина столбца"
-
-#: gtk/gtktreeviewcolumn.c:273
-msgid "Maximum Width"
-msgstr "Максимальная ширина"
-
-#: gtk/gtktreeviewcolumn.c:274
-msgid "Maximum allowed width of the column"
-msgstr "Максимально допустимая ширина столбца"
-
-#: gtk/gtktreeviewcolumn.c:284
-msgid "Title to appear in column header"
-msgstr "Заголовок, отображаемый в заголовке столбца"
-
-#: gtk/gtktreeviewcolumn.c:292
-msgid "Column gets share of extra width allocated to the widget"
-msgstr "Столбцы расширяются до размеров выделенной виджету области"
-
-#: gtk/gtktreeviewcolumn.c:299
-msgid "Clickable"
-msgstr "Чувствительный к нажатиям"
-
-#: gtk/gtktreeviewcolumn.c:300
-msgid "Whether the header can be clicked"
-msgstr "Чувствителен ли заголовок к нажатиям"
-
-#: gtk/gtktreeviewcolumn.c:308
-msgid "Widget"
-msgstr "Виджет"
-
-#: gtk/gtktreeviewcolumn.c:309
-msgid "Widget to put in column header button instead of column title"
-msgstr "Элемент управления для замены заголовка столбца кнопкой"
-
-#: gtk/gtktreeviewcolumn.c:316
-msgid "Alignment"
-msgstr "Выравнивание"
-
-#: gtk/gtktreeviewcolumn.c:317
-msgid "X Alignment of the column header text or widget"
-msgstr ""
-"Выравнивание текста или элемента управления в заголовке столбца по "
-"горизонтали"
-
-#: gtk/gtktreeviewcolumn.c:327
-msgid "Whether the column can be reordered around the headers"
-msgstr "Может ли столбец быть перемещен в другое место"
-
-#: gtk/gtktreeviewcolumn.c:334
-msgid "Sort indicator"
-msgstr "Индикатор сортировки"
-
-#: gtk/gtktreeviewcolumn.c:335
-msgid "Whether to show a sort indicator"
-msgstr "Показывать ли индикатор сортировки"
-
-#: gtk/gtktreeviewcolumn.c:342
-msgid "Sort order"
-msgstr "Порядок сортировки"
-
-#: gtk/gtktreeviewcolumn.c:343
-msgid "Sort direction the sort indicator should indicate"
-msgstr "Направление сортировки должно отображаться индикатором"
-
-#: gtk/gtkuimanager.c:213
-msgid "Add tearoffs to menus"
-msgstr ""
-
-#: gtk/gtkuimanager.c:214
-#, fuzzy
-msgid "Whether tearoff menu items should be added to menus"
-msgstr "Отмечен ли элемент меню"
-
-#: gtk/gtkuimanager.c:221
-msgid "Merged UI definition"
-msgstr ""
-
-#: gtk/gtkuimanager.c:222
-msgid "An XML string describing the merged UI"
-msgstr ""
-
-#: gtk/gtkuimanager.c:865
+#: gtk/gtkuimanager.c:1065
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1074
+#: gtk/gtkuimanager.c:1274
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1158
+#: gtk/gtkuimanager.c:1359
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1923
+#: gtk/gtkuimanager.c:2136
 msgid "Empty"
 msgstr ""
-
-#: gtk/gtkviewport.c:135
-msgid ""
-"The GtkAdjustment that determines the values of the horizontal position for "
-"this viewport"
-msgstr ""
-"GtkAdjustment, который определяет координаты этого окна просмотра по "
-"горизонтали"
-
-#: gtk/gtkviewport.c:143
-msgid ""
-"The GtkAdjustment that determines the values of the vertical position for "
-"this viewport"
-msgstr ""
-"GtkAdjustment, который определяет координаты этого окна просмотра по "
-"горизонтали"
-
-#: gtk/gtkviewport.c:151
-msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr "Определяет способ прорисовки тени вокруг окна просмотра"
-
-#: gtk/gtkwidget.c:406
-msgid "Widget name"
-msgstr "Название виджета"
-
-#: gtk/gtkwidget.c:407
-msgid "The name of the widget"
-msgstr "Название виджета"
-
-#: gtk/gtkwidget.c:413
-msgid "Parent widget"
-msgstr "Родительский виджет"
-
-#: gtk/gtkwidget.c:414
-msgid "The parent widget of this widget. Must be a Container widget"
-msgstr ""
-"Родительский виджет для этого виджета. Должен быть виджетом-контейнером"
-
-#: gtk/gtkwidget.c:421
-msgid "Width request"
-msgstr "Запрос на установку ширины"
-
-#: gtk/gtkwidget.c:422
-msgid ""
-"Override for width request of the widget, or -1 if natural request should be "
-"used"
-msgstr ""
-"Изменение использования запроса на установку ширины этого элемента "
-"управления или -1, если нужно использовать исходный запрос"
-
-#: gtk/gtkwidget.c:430
-msgid "Height request"
-msgstr "Запрос на установку высоты"
-
-#: gtk/gtkwidget.c:431
-msgid ""
-"Override for height request of the widget, or -1 if natural request should "
-"be used"
-msgstr ""
-"Изменение запроса на установку высоты этого элемента управления или -1, если "
-"нужно использовать исходный запрос"
-
-#: gtk/gtkwidget.c:440
-msgid "Whether the widget is visible"
-msgstr "Будет ли виджет видимым"
-
-#: gtk/gtkwidget.c:447
-msgid "Whether the widget responds to input"
-msgstr "Будет ли виждет использовать ввод"
-
-#: gtk/gtkwidget.c:453
-msgid "Application paintable"
-msgstr "Отрисовываемый приложением"
-
-#: gtk/gtkwidget.c:454
-msgid "Whether the application will paint directly on the widget"
-msgstr "Будет ли приложение рисовать напрямую в виджете"
-
-#: gtk/gtkwidget.c:460
-msgid "Can focus"
-msgstr "Может иметь фокус"
-
-#: gtk/gtkwidget.c:461
-msgid "Whether the widget can accept the input focus"
-msgstr "Будет ли виджет принимать фокус ввода"
-
-#: gtk/gtkwidget.c:467
-msgid "Has focus"
-msgstr "Имеет фокус"
-
-#: gtk/gtkwidget.c:468
-msgid "Whether the widget has the input focus"
-msgstr "Имеет ли виджет фокус ввода"
-
-#: gtk/gtkwidget.c:474
-msgid "Is focus"
-msgstr "Имеет фокус"
-
-#: gtk/gtkwidget.c:475
-msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "Является ли элемент управления получающим фокус"
-
-#: gtk/gtkwidget.c:481
-msgid "Can default"
-msgstr "Выбирается по умолчанию"
-
-#: gtk/gtkwidget.c:482
-msgid "Whether the widget can be the default widget"
-msgstr "Может ли элемент управления быть \"элементом по умолчанию\""
-
-#: gtk/gtkwidget.c:488
-msgid "Has default"
-msgstr "Выбран по умолчанию"
-
-#: gtk/gtkwidget.c:489
-msgid "Whether the widget is the default widget"
-msgstr "Является ли элемент управления \"элементом по умолчанию\""
-
-#: gtk/gtkwidget.c:495
-msgid "Receives default"
-msgstr "Действие по умолчанию"
-
-#: gtk/gtkwidget.c:496
-msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr ""
-"Если значение \"ИСТИНА\", то элемент управления получает действие по "
-"умолчанию при получении фокуса ввода"
-
-#: gtk/gtkwidget.c:502
-msgid "Composite child"
-msgstr "Составной дочерний объект"
-
-#: gtk/gtkwidget.c:503
-msgid "Whether the widget is part of a composite widget"
-msgstr "Является ли элемент управления частью составного элемента управления"
-
-#: gtk/gtkwidget.c:509
-msgid "Style"
-msgstr "Стиль"
-
-#: gtk/gtkwidget.c:510
-msgid ""
-"The style of the widget, which contains information about how it will look "
-"(colors etc)"
-msgstr "Стиль элемента управления, описывающий его внешний вид (цвета и т.п.)"
-
-#: gtk/gtkwidget.c:516
-msgid "Events"
-msgstr "События"
-
-#: gtk/gtkwidget.c:517
-msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr ""
-"Маска события, определяющая, какие события GdkEvents может получать этот "
-"элемент управления"
-
-#: gtk/gtkwidget.c:524
-msgid "Extension events"
-msgstr "События изменения размеров"
-
-#: gtk/gtkwidget.c:525
-msgid "The mask that decides what kind of extension events this widget gets"
-msgstr ""
-"Маска, определяющая, какие типы событий изменения размеров может получать "
-"этот элемент управления"
-
-#: gtk/gtkwidget.c:532
-msgid "No show all"
-msgstr ""
-
-#: gtk/gtkwidget.c:533
-msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr ""
-
-#: gtk/gtkwidget.c:1350
-msgid "Interior Focus"
-msgstr "Внутренний фокус ввода"
-
-#: gtk/gtkwidget.c:1351
-msgid "Whether to draw the focus indicator inside widgets"
-msgstr "Рисовать ли индикатор фокуса ввода внутри элементов управления"
-
-#: gtk/gtkwidget.c:1357
-msgid "Focus linewidth"
-msgstr "Ширина линии фокуса ввода"
-
-#: gtk/gtkwidget.c:1358
-msgid "Width, in pixels, of the focus indicator line"
-msgstr "Ширина линии-индикатора фокуса вода, в точках растра"
-
-#: gtk/gtkwidget.c:1364
-msgid "Focus line dash pattern"
-msgstr "Штрих линии фокуса ввода"
-
-#: gtk/gtkwidget.c:1365
-msgid "Dash pattern used to draw the focus indicator"
-msgstr "Образец штрихов для отображения линии-индикатора фокуса ввода"
-
-#: gtk/gtkwidget.c:1370
-msgid "Focus padding"
-msgstr "Отступ фокуса ввода"
-
-#: gtk/gtkwidget.c:1371
-msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr ""
-"Расстояние между индикатором фокуса ввода и 'рамкой' элемента управления, в "
-"точках растра"
-
-#: gtk/gtkwidget.c:1376
-msgid "Cursor color"
-msgstr "Цвет курсора"
-
-#: gtk/gtkwidget.c:1377
-msgid "Color with which to draw insertion cursor"
-msgstr "Цвет, используемый для курсора"
-
-#: gtk/gtkwidget.c:1382
-msgid "Secondary cursor color"
-msgstr "Цвет второго курсора"
-
-#: gtk/gtkwidget.c:1383
-msgid ""
-"Color with which to draw the secondary insertion cursor when editing mixed "
-"right-to-left and left-to-right text"
-msgstr ""
-"Цвет для отображения второго курсора при использовании смешанного (справа "
-"налево и слева направо) ввода текста"
-
-#: gtk/gtkwidget.c:1388
-msgid "Cursor line aspect ratio"
-msgstr "Пропорции курсора"
-
-#: gtk/gtkwidget.c:1389
-msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "Пропорции курсора"
-
-#: gtk/gtkwindow.c:437
-msgid "Window Type"
-msgstr "Тип окна"
-
-#: gtk/gtkwindow.c:438
-msgid "The type of the window"
-msgstr "Тип окна"
-
-#: gtk/gtkwindow.c:446
-msgid "Window Title"
-msgstr "Заголовок окна"
-
-#: gtk/gtkwindow.c:447
-msgid "The title of the window"
-msgstr "Заголовок окна"
-
-#: gtk/gtkwindow.c:454
-msgid "Window Role"
-msgstr "Роль окна"
-
-#: gtk/gtkwindow.c:455
-msgid "Unique identifier for the window to be used when restoring a session"
-msgstr "Уникальный идентификатор окна, используемый при восттановлении сессии"
-
-#: gtk/gtkwindow.c:462
-msgid "Allow Shrink"
-msgstr "Разрешить сжатие"
-
-#: gtk/gtkwindow.c:464
-#, no-c-format
-msgid ""
-"If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
-"time a bad idea"
-msgstr ""
-"Если \"Истина\", то окно не имеет минимального размера.  Использование этого "
-"значения в 99% случаев нерационально"
-
-#: gtk/gtkwindow.c:471
-msgid "Allow Grow"
-msgstr "Позволить увеличение"
-
-#: gtk/gtkwindow.c:472
-msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr "Если \"ИСТИНА\", то можно задать окну размер больше минимального."
-
-#: gtk/gtkwindow.c:480
-msgid "If TRUE, users can resize the window"
-msgstr "Если \"ИСТИНА\", то пользователь может изменять размер окна"
-
-#: gtk/gtkwindow.c:487
-msgid "Modal"
-msgstr "Модальное"
-
-#: gtk/gtkwindow.c:488
-msgid ""
-"If TRUE, the window is modal (other windows are not usable while this one is "
-"up)"
-msgstr ""
-"Если \"ИСТИНА\", то окно является модальным (нельзя обратиться к другим "
-"окнам, пока оно не будет закрыто)"
-
-#: gtk/gtkwindow.c:495
-msgid "Window Position"
-msgstr "Позиция окна"
-
-#: gtk/gtkwindow.c:496
-msgid "The initial position of the window"
-msgstr "Начальная позиция окна"
-
-#: gtk/gtkwindow.c:504
-msgid "Default Width"
-msgstr "Ширина по умолчанию"
-
-#: gtk/gtkwindow.c:505
-msgid "The default width of the window, used when initially showing the window"
-msgstr ""
-"Ширина окна по умолчанию, используется при первоначальном отображении окна"
-
-#: gtk/gtkwindow.c:514
-msgid "Default Height"
-msgstr "Высота по умолчанию"
-
-#: gtk/gtkwindow.c:515
-msgid ""
-"The default height of the window, used when initially showing the window"
-msgstr ""
-"Высота окна по умолчанию, используется при первоначальном отображении окна"
-
-#: gtk/gtkwindow.c:524
-msgid "Destroy with Parent"
-msgstr "Уничтожать вместе с родителем"
-
-#: gtk/gtkwindow.c:525
-msgid "If this window should be destroyed when the parent is destroyed"
-msgstr "Должно ли это окно уничтожаться при уничтожении родительского окна"
-
-#: gtk/gtkwindow.c:532
-msgid "Icon"
-msgstr "Значок"
-
-#: gtk/gtkwindow.c:533
-msgid "Icon for this window"
-msgstr "Значок для этого окна"
-
-#: gtk/gtkwindow.c:548
-msgid "Is Active"
-msgstr "Активный"
-
-#: gtk/gtkwindow.c:549
-msgid "Whether the toplevel is the current active window"
-msgstr "Является ли окно активным"
-
-#: gtk/gtkwindow.c:556
-msgid "Focus in Toplevel"
-msgstr "/Фокус находится в окне"
-
-#: gtk/gtkwindow.c:557
-msgid "Whether the input focus is within this GtkWindow"
-msgstr "Находится ли фокус ввода в данном GtkWindow"
-
-#: gtk/gtkwindow.c:564
-msgid "Type hint"
-msgstr "Тип подсказки"
-
-#: gtk/gtkwindow.c:565
-msgid ""
-"Hint to help the desktop environment understand what kind of window this is "
-"and how to treat it."
-msgstr ""
-"Подсказка (hint), позволяющая оконному окружению понять, к какому типу "
-"относится данное окно и как с ним обходиться."
-
-#: gtk/gtkwindow.c:573
-msgid "Skip taskbar"
-msgstr "Скрыть из переключателя задач"
-
-#: gtk/gtkwindow.c:574
-msgid "TRUE if the window should not be in the task bar."
-msgstr "\"Истина\", если окно не должно быть видимо в переключателе задач."
-
-#: gtk/gtkwindow.c:581
-msgid "Skip pager"
-msgstr "Скрыть из переключателя рабочих мест"
-
-#: gtk/gtkwindow.c:582
-msgid "TRUE if the window should not be in the pager."
-msgstr ""
-"\"Истина\", если окно не должно быть видимо в переключателе рабочих мест."
-
-#: gtk/gtkwindow.c:596
-msgid "Decorated"
-msgstr ""
-
-#: gtk/gtkwindow.c:597
-#, fuzzy
-msgid "Whether the window should be decorated by the window manager"
-msgstr ""
-"\"Истина\", если окно не должно быть видимо в переключателе рабочих мест."
-
-#: gtk/gtkwindow.c:612
-msgid "Gravity"
-msgstr ""
-
-#: gtk/gtkwindow.c:613
-#, fuzzy
-msgid "The window gravity of the window"
-msgstr "Тип окна"
-
-#: modules/input/gtkimcontextxim.c:325
-msgid "IM Preedit style"
-msgstr "Стиль IM Preedit"
-
-#: modules/input/gtkimcontextxim.c:326
-msgid "How to draw the input method preedit string"
-msgstr "Как рисовать строку IM Preedit"
-
-#: modules/input/gtkimcontextxim.c:334
-msgid "IM Status style"
-msgstr "Стиль строки состояния метода ввода"
-
-#: modules/input/gtkimcontextxim.c:335
-msgid "How to draw the input method statusbar"
-msgstr "Как рисовать строку состояния метода ввода"
 
 #. ID
 #: modules/input/imam-et.c:453
@@ -6112,33 +1906,3 @@ msgstr "Метод XInput"
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не удалось распознать формат изображения для файла \"%s\""
-
-#~ msgid "Image has unsupported number of 1-bit planes"
-#~ msgstr "Изображение имеет неподдерживаемое число однобитовых плоскостей"
-
-#, fuzzy
-#~ msgid "Whether the item is positioned at the end of the toolbar"
-#~ msgstr "Является ли элемент управления получающим фокус"
-
-#~ msgid "GIF image contained a frame with height or width 0."
-#~ msgstr ""
-#~ "Изображение формата GIF содержит кадр с нулевой шириной или высотой."
-
-#~ msgid "GIF image contained a frame appearing outside the image bounds."
-#~ msgstr ""
-#~ "Изображение формата GIF содержит кадр, выходящий за пределы изображения."
-
-#~ msgid ""
-#~ "First frame of GIF image had 'revert to previous' as its disposal mode."
-#~ msgstr ""
-#~ "Первый кадр изображения формата GIF имел режим размещения \"возврат к "
-#~ "предыдущему\""
-
-#~ msgid "TGA image comment length is too long"
-#~ msgstr "Комментарий к изображению формата TGA слишком длинный"
-
-#~ msgid "Week Start Monday"
-#~ msgstr "Неделя начинается в понедельник"
-
-#~ msgid "If TRUE, Monday is displayed as the first day of the week"
-#~ msgstr "Если \"ИСТИНА\", то понедельник отображается как первый день недели"

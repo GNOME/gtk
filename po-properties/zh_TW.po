@@ -1,0 +1,4257 @@
+# traditional Chinese translation of gtk+ 2.x
+# Copyright (C) 2000, 01, 02, 03 Free Software Foundation, Inc.
+# 辛立仁 <hsin@med.cgu.edu.tw>, 2000.
+# Chih-Wei Huang <cwhuang@linux.org.tw>, 2000.
+# Abel Cheung <maddog@linux.org.hk>, 2001-2003.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 2.3.0\n"
+"POT-Creation-Date: 2004-01-17 01:51+0100\n"
+"PO-Revision-Date: 2003-05-07 17:36+0800\n"
+"Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
+"Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+"Report-Msgid-Bugs-To: \n"
+
+#: gdk-pixbuf/gdk-pixbuf.c:100
+msgid "Number of Channels"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixbuf.c:101
+#, fuzzy
+msgid "The number of samples per pixel"
+msgstr "XPM 每個像素佔用的位元組數目不正確"
+
+#: gdk-pixbuf/gdk-pixbuf.c:111
+#, fuzzy
+msgid "Colorspace"
+msgstr "關閉"
+
+#: gdk-pixbuf/gdk-pixbuf.c:112
+msgid "The colorspace in which the samples are interpreted"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixbuf.c:122
+#, fuzzy
+msgid "Has Alpha"
+msgstr "有色盤"
+
+#: gdk-pixbuf/gdk-pixbuf.c:123
+msgid "Whether the pixbuf has an alpha channel"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixbuf.c:131
+msgid "Bits per Sample"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixbuf.c:132
+#, fuzzy
+msgid "The number of bits per sample"
+msgstr "表格的行數"
+
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
+msgid "Width"
+msgstr "寬度"
+
+#: gdk-pixbuf/gdk-pixbuf.c:143
+#, fuzzy
+msgid "The number of columns of the pixbuf"
+msgstr "表格的列數"
+
+#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:656
+msgid "Height"
+msgstr "高度"
+
+#: gdk-pixbuf/gdk-pixbuf.c:154
+#, fuzzy
+msgid "The number of rows of the pixbuf"
+msgstr "表格的行數"
+
+#: gdk-pixbuf/gdk-pixbuf.c:164
+#, fuzzy
+msgid "Rowstride"
+msgstr "行數"
+
+#: gdk-pixbuf/gdk-pixbuf.c:165
+#, fuzzy
+msgid ""
+"The number of bytes between the start of a row and the start of the next row"
+msgstr "捲動列及要捲動的視窗之間的像素數目"
+
+#: gdk-pixbuf/gdk-pixbuf.c:175
+msgid "Pixels"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixbuf.c:176
+msgid "A pointer to the pixel data of the pixbuf"
+msgstr ""
+
+#: gdk/gdkdisplaymanager.c:126
+msgid "Default Display"
+msgstr ""
+
+#: gdk/gdkdisplaymanager.c:127
+msgid "The default display for GDK"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:137
+msgid "Accelerator Closure"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:138
+msgid "The closure to be monitored for accelerator changes"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:144
+msgid "Accelerator Widget"
+msgstr "捷徑鍵元件"
+
+#: gtk/gtkaccellabel.c:145
+msgid "The widget to be monitored for accelerator changes"
+msgstr ""
+
+#: gtk/gtkaction.c:193 gtk/gtkactiongroup.c:133
+#, fuzzy
+msgid "Name"
+msgstr "字型名稱"
+
+#: gtk/gtkaction.c:194
+msgid "A unique name for the action."
+msgstr ""
+
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
+msgid "Label"
+msgstr "標籤"
+
+#: gtk/gtkaction.c:202
+msgid "The label used for menu items and buttons that activate this action."
+msgstr ""
+
+#: gtk/gtkaction.c:208
+#, fuzzy
+msgid "Short label"
+msgstr "顯示標簽"
+
+#: gtk/gtkaction.c:209
+msgid "A shorter label that may be used on toolbar buttons."
+msgstr ""
+
+#: gtk/gtkaction.c:215
+msgid "Tooltip"
+msgstr ""
+
+#: gtk/gtkaction.c:216
+msgid "A tooltip for this action."
+msgstr ""
+
+#: gtk/gtkaction.c:222
+#, fuzzy
+msgid "Stock Icon"
+msgstr "內置圖示代碼"
+
+#: gtk/gtkaction.c:223
+msgid "The stock icon displayed in widgets representing this action."
+msgstr ""
+
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
+msgid "Visible when horizontal"
+msgstr ""
+
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:155
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a horizontal "
+"orientation."
+msgstr ""
+
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
+msgid "Visible when vertical"
+msgstr ""
+
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:162
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a vertical "
+"orientation."
+msgstr ""
+
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
+msgid "Is important"
+msgstr ""
+
+#: gtk/gtkaction.c:244
+msgid ""
+"Whether the action is considered important. When TRUE, toolitem proxies for "
+"this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
+msgstr ""
+
+#: gtk/gtkaction.c:250
+msgid "Hide if empty"
+msgstr ""
+
+#: gtk/gtkaction.c:251
+msgid "When TRUE, empty menu proxies for this action are hidden."
+msgstr ""
+
+#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:446
+msgid "Sensitive"
+msgstr "有反應"
+
+#: gtk/gtkaction.c:258
+#, fuzzy
+msgid "Whether the action is enabled."
+msgstr "是否顯示元件"
+
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:551
+#: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:439
+msgid "Visible"
+msgstr "顯示"
+
+#: gtk/gtkaction.c:265
+#, fuzzy
+msgid "Whether the action is visible."
+msgstr "是否顯示元件"
+
+#: gtk/gtkaction.c:271
+#, fuzzy
+msgid "Action Group"
+msgstr "比例"
+
+#: gtk/gtkaction.c:272
+msgid ""
+"The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
+"use)."
+msgstr ""
+
+#: gtk/gtkactiongroup.c:134
+msgid "A name for the action group."
+msgstr ""
+
+#: gtk/gtkactiongroup.c:142
+#, fuzzy
+msgid "Whether the action group is enabled."
+msgstr "是否顯示元件"
+
+#: gtk/gtkactiongroup.c:149
+#, fuzzy
+msgid "Whether the action group is visible."
+msgstr "是否顯示元件"
+
+#: gtk/gtkalignment.c:116
+msgid "Horizontal alignment"
+msgstr "水平對齊位置"
+
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
+msgid ""
+"Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
+"right aligned"
+msgstr ""
+"指定在已提供的空間中，副元件排列的水平位置。0.0 表示靠左對齊，1.0 表示靠右對"
+"齊"
+
+#: gtk/gtkalignment.c:126
+msgid "Vertical alignment"
+msgstr "垂直對齊位置"
+
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
+msgid ""
+"Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
+"bottom aligned"
+msgstr ""
+"指定在已提供的空間中，副元件排列的垂直位置。0.0 表示靠頂對齊，1.0 表示靠底對"
+"齊"
+
+#: gtk/gtkalignment.c:135
+msgid "Horizontal scale"
+msgstr "水平縮放比率"
+
+#: gtk/gtkalignment.c:136
+msgid ""
+"If available horizontal space is bigger than needed for the child, how much "
+"of it to use for the child. 0.0 means none, 1.0 means all"
+msgstr ""
+"指定當提供的水平空間大於副元件所需的空間時，副元件會使用多少剩餘的空間。0.0 "
+"表示不使用，1.0 表示使用全部"
+
+#: gtk/gtkalignment.c:144
+msgid "Vertical scale"
+msgstr "垂直縮放比率"
+
+#: gtk/gtkalignment.c:145
+msgid ""
+"If available vertical space is bigger than needed for the child, how much of "
+"it to use for the child. 0.0 means none, 1.0 means all"
+msgstr ""
+"指定當提供的垂直空間大於副元件所需的空間時，副元件會使用多少剩餘的空間。0.0 "
+"表示不使用，1.0 表示使用全部"
+
+#: gtk/gtkalignment.c:162
+#, fuzzy
+msgid "Top Padding"
+msgstr "留邊"
+
+#: gtk/gtkalignment.c:163
+#, fuzzy
+msgid "The padding to insert at the top of the widget."
+msgstr "元件的名稱"
+
+#: gtk/gtkalignment.c:179
+#, fuzzy
+msgid "Bottom Padding"
+msgstr "留邊"
+
+#: gtk/gtkalignment.c:180
+msgid "The padding to insert at the bottom of the widget."
+msgstr ""
+
+#: gtk/gtkalignment.c:196
+#, fuzzy
+msgid "Left Padding"
+msgstr "留邊"
+
+#: gtk/gtkalignment.c:197
+#, fuzzy
+msgid "The padding to insert at the left of the widget."
+msgstr "元件的名稱"
+
+#: gtk/gtkalignment.c:213
+#, fuzzy
+msgid "Right Padding"
+msgstr "右邊邊界"
+
+#: gtk/gtkalignment.c:214
+msgid "The padding to insert at the right of the widget."
+msgstr ""
+
+#: gtk/gtkarrow.c:98
+msgid "Arrow direction"
+msgstr "箭咀方向"
+
+#: gtk/gtkarrow.c:99
+msgid "The direction the arrow should point"
+msgstr "箭咀所指的方向"
+
+#: gtk/gtkarrow.c:106
+msgid "Arrow shadow"
+msgstr "箭咀陰影"
+
+#: gtk/gtkarrow.c:107
+msgid "Appearance of the shadow surrounding the arrow"
+msgstr "箭咀周圍出現的陰影"
+
+#: gtk/gtkaspectframe.c:108
+msgid "Horizontal Alignment"
+msgstr "水平對齊位置"
+
+#: gtk/gtkaspectframe.c:109
+msgid "X alignment of the child"
+msgstr "副元件的水平對齊位置"
+
+#: gtk/gtkaspectframe.c:115
+msgid "Vertical Alignment"
+msgstr "垂直對齊位置"
+
+#: gtk/gtkaspectframe.c:116
+msgid "Y alignment of the child"
+msgstr "副元件的垂直對齊位置"
+
+#: gtk/gtkaspectframe.c:122
+msgid "Ratio"
+msgstr "比率"
+
+#: gtk/gtkaspectframe.c:123
+msgid "Aspect ratio if obey_child is FALSE"
+msgstr "obey_child 為 FALSE 時的長寬比"
+
+#: gtk/gtkaspectframe.c:129
+msgid "Obey child"
+msgstr "配合副元件"
+
+#: gtk/gtkaspectframe.c:130
+msgid "Force aspect ratio to match that of the frame's child"
+msgstr ""
+
+#: gtk/gtkbbox.c:119
+msgid "Minimum child width"
+msgstr "副元件寬度下限"
+
+#: gtk/gtkbbox.c:120
+msgid "Minimum width of buttons inside the box"
+msgstr "在 button box 內按鈕的寬度下限"
+
+#: gtk/gtkbbox.c:128
+msgid "Minimum child height"
+msgstr "副元件高度下限"
+
+#: gtk/gtkbbox.c:129
+msgid "Minimum height of buttons inside the box"
+msgstr "在 button box 內按鈕的高度下限"
+
+#: gtk/gtkbbox.c:137
+msgid "Child internal width padding"
+msgstr "副元件內部寬度留邊"
+
+#: gtk/gtkbbox.c:138
+msgid "Amount to increase child's size on either side"
+msgstr "副元件左右兩邊增加的尺寸"
+
+#: gtk/gtkbbox.c:146
+msgid "Child internal height padding"
+msgstr "副元件內部高度留邊"
+
+#: gtk/gtkbbox.c:147
+msgid "Amount to increase child's size on the top and bottom"
+msgstr "副元件頂及底增加的尺寸"
+
+#: gtk/gtkbbox.c:155
+msgid "Layout style"
+msgstr "排列樣式"
+
+#: gtk/gtkbbox.c:156
+msgid ""
+"How to layout the buttons in the box. Possible values are default, spread, "
+"edge, start and end"
+msgstr ""
+"如何排列 button box 中的按鈕。可使用的值為 default、spread、edge、start 及 "
+"end"
+
+#: gtk/gtkbbox.c:164
+msgid "Secondary"
+msgstr ""
+
+#: gtk/gtkbbox.c:165
+msgid ""
+"If TRUE, the child appears in a secondary group of children, suitable for, e."
+"g., help buttons"
+msgstr ""
+
+#: gtk/gtkbox.c:128 gtk/gtkexpander.c:226
+msgid "Spacing"
+msgstr "間隔"
+
+#: gtk/gtkbox.c:129
+msgid "The amount of space between children"
+msgstr "副元件之間的間隔"
+
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
+msgid "Homogeneous"
+msgstr "統一尺寸"
+
+#: gtk/gtkbox.c:139
+msgid "Whether the children should all be the same size"
+msgstr "副元件的大小應否統一"
+
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
+#: gtk/gtktreeviewcolumn.c:294
+msgid "Expand"
+msgstr "擴張"
+
+#: gtk/gtkbox.c:147
+msgid "Whether the child should receive extra space when the parent grows"
+msgstr "當主元件放大時副元件應否同時放大"
+
+#: gtk/gtkbox.c:153
+msgid "Fill"
+msgstr "填充"
+
+#: gtk/gtkbox.c:154
+msgid ""
+"Whether extra space given to the child should be allocated to the child or "
+"used as padding"
+msgstr ""
+"當分配了多餘的空間給副元件時，該空間應成為副元件本身的尺寸還是作為留邊使用"
+
+#: gtk/gtkbox.c:160
+msgid "Padding"
+msgstr "留邊"
+
+#: gtk/gtkbox.c:161
+msgid "Extra space to put between the child and its neighbors, in pixels"
+msgstr "加入額外的空位隔開副元件及周圍的元件，以像素為單位"
+
+#: gtk/gtkbox.c:167
+msgid "Pack type"
+msgstr "排列方式"
+
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:512
+msgid ""
+"A GtkPackType indicating whether the child is packed with reference to the "
+"start or end of the parent"
+msgstr ""
+"一個 GtkPackType，表示副元件應該從主元件的開始位置排列，還是從結束位置開始排"
+"列"
+
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:238
+#: gtk/gtkruler.c:138
+msgid "Position"
+msgstr "位置"
+
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:491
+msgid "The index of the child in the parent"
+msgstr "副元件在主元件中的索引編號"
+
+#: gtk/gtkbutton.c:204
+msgid ""
+"Text of the label widget inside the button, if the button contains a label "
+"widget"
+msgstr "如果按鈕中有標籤元件，指定該標籤元件中的文字"
+
+#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
+#: gtk/gtktoolbutton.c:186
+msgid "Use underline"
+msgstr "使用底線"
+
+#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
+msgid ""
+"If set, an underline in the text indicates the next character should be used "
+"for the mnemonic accelerator key"
+msgstr ""
+
+#: gtk/gtkbutton.c:219
+msgid "Use stock"
+msgstr "使用內置物件"
+
+#: gtk/gtkbutton.c:220
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
+msgstr ""
+
+#: gtk/gtkbutton.c:227
+msgid "Focus on click"
+msgstr ""
+
+#: gtk/gtkbutton.c:228
+msgid "Whether the button grabs focus when it is clicked with the mouse"
+msgstr ""
+
+#: gtk/gtkbutton.c:235
+msgid "Border relief"
+msgstr ""
+
+#: gtk/gtkbutton.c:236
+msgid "The border relief style"
+msgstr ""
+
+#: gtk/gtkbutton.c:253
+#, fuzzy
+msgid "Horizontal alignment for child"
+msgstr "水平對齊位置"
+
+#: gtk/gtkbutton.c:272
+#, fuzzy
+msgid "Vertical alignment for child"
+msgstr "垂直對齊位置"
+
+#: gtk/gtkbutton.c:340
+msgid "Default Spacing"
+msgstr "預設間隔"
+
+#: gtk/gtkbutton.c:341
+msgid "Extra space to add for CAN_DEFAULT buttons"
+msgstr ""
+
+#: gtk/gtkbutton.c:347
+msgid "Default Outside Spacing"
+msgstr ""
+
+#: gtk/gtkbutton.c:348
+msgid ""
+"Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
+"border"
+msgstr ""
+
+#: gtk/gtkbutton.c:353
+msgid "Child X Displacement"
+msgstr "副元件的水平移動距離"
+
+#: gtk/gtkbutton.c:354
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
+msgstr "當放開按鈕時副元件應移動的水平距離"
+
+#: gtk/gtkbutton.c:361
+msgid "Child Y Displacement"
+msgstr "副元件的垂直移動距離"
+
+#: gtk/gtkbutton.c:362
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
+msgstr "當放開按鈕時副元件應移動的垂直距離"
+
+#: gtk/gtkcalendar.c:464
+#, fuzzy
+msgid "Year"
+msgstr "清除"
+
+#: gtk/gtkcalendar.c:465
+#, fuzzy
+msgid "The selected year"
+msgstr "目前選取的檔案名稱"
+
+#: gtk/gtkcalendar.c:471
+#, fuzzy
+msgid "Month"
+msgstr "字型"
+
+#: gtk/gtkcalendar.c:472
+msgid "The selected month (as a number between 0 and 11)"
+msgstr ""
+
+#: gtk/gtkcalendar.c:478
+msgid "Day"
+msgstr ""
+
+#: gtk/gtkcalendar.c:479
+msgid ""
+"The selected day (as a number between 1 and 31, or 0 to unselect the "
+"currently selected day)"
+msgstr ""
+
+#: gtk/gtkcalendar.c:493
+#, fuzzy
+msgid "Show Heading"
+msgstr "行距"
+
+#: gtk/gtkcalendar.c:494
+msgid "If TRUE, a heading is displayed"
+msgstr ""
+
+#: gtk/gtkcalendar.c:508
+#, fuzzy
+msgid "Show Day Names"
+msgstr "顯示標簽"
+
+#: gtk/gtkcalendar.c:509
+msgid "If TRUE, day names are displayed"
+msgstr ""
+
+#: gtk/gtkcalendar.c:522
+msgid "No Month Change"
+msgstr ""
+
+#: gtk/gtkcalendar.c:523
+msgid "If TRUE, the selected month can not be changed"
+msgstr ""
+
+#: gtk/gtkcalendar.c:537
+msgid "Show Week Numbers"
+msgstr ""
+
+#: gtk/gtkcalendar.c:538
+msgid "If TRUE, week numbers are displayed"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:150
+msgid "mode"
+msgstr "模式"
+
+#: gtk/gtkcellrenderer.c:151
+msgid "Editable mode of the CellRenderer"
+msgstr "CellRenderer 的編輯模式"
+
+#: gtk/gtkcellrenderer.c:160
+msgid "visible"
+msgstr "可見"
+
+#: gtk/gtkcellrenderer.c:161
+msgid "Display the cell"
+msgstr "會顯示該格"
+
+#: gtk/gtkcellrenderer.c:169
+msgid "xalign"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:170
+msgid "The x-align"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:180
+msgid "yalign"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:181
+msgid "The y-align"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:191
+msgid "xpad"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:192
+msgid "The xpad"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:202
+msgid "ypad"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:203
+msgid "The ypad"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:213
+msgid "width"
+msgstr "寬度"
+
+#: gtk/gtkcellrenderer.c:214
+msgid "The fixed width"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:224
+msgid "height"
+msgstr "高度"
+
+#: gtk/gtkcellrenderer.c:225
+msgid "The fixed height"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:235
+msgid "Is Expander"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:236
+msgid "Row has children"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:245
+msgid "Is Expanded"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:246
+msgid "Row is an expander row, and is expanded"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:254
+msgid "Cell background color name"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:255
+msgid "Cell background color as a string"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:262
+msgid "Cell background color"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:263
+msgid "Cell background color as a GdkColor"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:271
+msgid "Cell background set"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:272
+msgid "Whether this tag affects the cell background color"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:133
+msgid "Pixbuf Object"
+msgstr "Pixbuf 物件"
+
+#: gtk/gtkcellrendererpixbuf.c:134
+msgid "The pixbuf to render"
+msgstr "準備描繪的 pixbuf。"
+
+#: gtk/gtkcellrendererpixbuf.c:142
+msgid "Pixbuf Expander Open"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:143
+msgid "Pixbuf for open expander"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:151
+msgid "Pixbuf Expander Closed"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:152
+msgid "Pixbuf for closed expander"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:160 gtk/gtkimage.c:176
+msgid "Stock ID"
+msgstr "內置圖示代碼"
+
+#: gtk/gtkcellrendererpixbuf.c:161
+msgid "The stock ID of the stock icon to render"
+msgstr "準備顯示的內置圖示的代碼"
+
+#: gtk/gtkcellrendererpixbuf.c:168
+msgid "Size"
+msgstr "大小"
+
+#: gtk/gtkcellrendererpixbuf.c:169
+msgid "The size of the rendered icon"
+msgstr "準備描繪的圖示大小"
+
+#: gtk/gtkcellrendererpixbuf.c:177
+msgid "Detail"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:178
+msgid "Render detail to pass to the theme engine"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:192 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
+msgid "Text"
+msgstr "文字"
+
+#: gtk/gtkcellrenderertext.c:193
+msgid "Text to render"
+msgstr "準備描繪的文字"
+
+#: gtk/gtkcellrenderertext.c:200
+msgid "Markup"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:201
+msgid "Marked up text to render"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:297
+msgid "Attributes"
+msgstr "屬性"
+
+#: gtk/gtkcellrenderertext.c:209
+msgid "A list of style attributes to apply to the text of the renderer"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:216
+msgid "Single Paragraph Mode"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:217
+msgid "Whether or not to keep all text in a single paragraph"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:179 gtk/gtktexttag.c:205
+msgid "Background color name"
+msgstr "背景顏色名稱"
+
+#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:180 gtk/gtktexttag.c:206
+msgid "Background color as a string"
+msgstr "以字串方式表達的背景顏色"
+
+#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:186 gtk/gtktexttag.c:213
+msgid "Background color"
+msgstr "背景顏色"
+
+#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:187
+msgid "Background color as a GdkColor"
+msgstr "以 GdkColor 方式表達的背景顏色"
+
+#: gtk/gtkcellrenderertext.c:241 gtk/gtktexttag.c:239
+msgid "Foreground color name"
+msgstr "前景顏色名稱"
+
+#: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:240
+msgid "Foreground color as a string"
+msgstr "以字串方式表達的前景顏色"
+
+#: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:247
+msgid "Foreground color"
+msgstr "前景顏色"
+
+#: gtk/gtkcellrenderertext.c:250
+msgid "Foreground color as a GdkColor"
+msgstr "以 GdkColor 方式表達的前景顏色"
+
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
+#: gtk/gtktextview.c:585
+msgid "Editable"
+msgstr "可編輯"
+
+#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:274 gtk/gtktextview.c:586
+msgid "Whether the text can be modified by the user"
+msgstr "使用者可否修改文字"
+
+#: gtk/gtkcellrenderertext.c:266 gtk/gtkcellrenderertext.c:274
+#: gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281 gtk/gtktexttag.c:289
+msgid "Font"
+msgstr "字型"
+
+#: gtk/gtkcellrenderertext.c:267
+msgid "Font description as a string"
+msgstr "以字串方式表達的字型描述"
+
+#: gtk/gtkcellrenderertext.c:275 gtk/gtktexttag.c:290
+msgid "Font description as a PangoFontDescription struct"
+msgstr "以 PangoFontDescription 結構表達的字型描述"
+
+#: gtk/gtkcellrenderertext.c:283 gtk/gtktexttag.c:298
+msgid "Font family"
+msgstr "字型集"
+
+#: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:299
+msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
+msgstr "字型集名稱，例如：Sans、Helvetica、Times、Monospace"
+
+#: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
+#: gtk/gtktexttag.c:306
+msgid "Font style"
+msgstr "字款"
+
+#: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
+#: gtk/gtktexttag.c:315
+msgid "Font variant"
+msgstr "字型變化"
+
+#: gtk/gtkcellrenderertext.c:309 gtk/gtkcellrenderertext.c:310
+#: gtk/gtktexttag.c:324
+msgid "Font weight"
+msgstr "字型粗幼"
+
+#: gtk/gtkcellrenderertext.c:319 gtk/gtkcellrenderertext.c:320
+#: gtk/gtktexttag.c:335
+msgid "Font stretch"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:328 gtk/gtkcellrenderertext.c:329
+#: gtk/gtktexttag.c:344
+msgid "Font size"
+msgstr "字型大小"
+
+#: gtk/gtkcellrenderertext.c:338 gtk/gtktexttag.c:364
+msgid "Font points"
+msgstr "字型點數"
+
+#: gtk/gtkcellrenderertext.c:339 gtk/gtktexttag.c:365
+msgid "Font size in points"
+msgstr "以點數表達的字型大小"
+
+#: gtk/gtkcellrenderertext.c:348 gtk/gtktexttag.c:354
+msgid "Font scale"
+msgstr "字型比例"
+
+#: gtk/gtkcellrenderertext.c:349
+msgid "Font scaling factor"
+msgstr "字型縮放比例"
+
+#: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:423
+msgid "Rise"
+msgstr "升起"
+
+#: gtk/gtkcellrenderertext.c:359
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr "文字在基準線以上的距離 (負數表示文字在基準線以下)"
+
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:463
+msgid "Strikethrough"
+msgstr "刪除線"
+
+#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:464
+msgid "Whether to strike through the text"
+msgstr "應否在文字中央加上刪除線"
+
+#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:471
+msgid "Underline"
+msgstr "底線"
+
+#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
+msgid "Style of underline for this text"
+msgstr "此文字的底線款式"
+
+#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:383
+msgid "Language"
+msgstr "語言"
+
+#: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:384
+msgid ""
+"The language this text is in, as an ISO code. Pango can use this as a hint "
+"when rendering the text. If you don't understand this parameter, you "
+"probably don't need it"
+msgstr ""
+"該文字所用的語言，以 ISO 代碼表示。Pango 在描繪文字時會使用這個設定作為提示。"
+"如果閣下不明白這個參數的意義，即是表示不需要使用它了。"
+
+#: gtk/gtkcellrenderertext.c:397 gtk/gtkcellview.c:194 gtk/gtktexttag.c:508
+msgid "Background set"
+msgstr "背景顏色設定"
+
+#: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:195 gtk/gtktexttag.c:509
+msgid "Whether this tag affects the background color"
+msgstr "本標籤會否影響背景顏色"
+
+#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:520
+msgid "Foreground set"
+msgstr "前景顏色設定"
+
+#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:521
+msgid "Whether this tag affects the foreground color"
+msgstr "本標籤會否影響前景顏色"
+
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:528
+msgid "Editability set"
+msgstr "可編輯性設定"
+
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:529
+msgid "Whether this tag affects text editability"
+msgstr "本標籤會否影響文字的可編輯性"
+
+#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:532
+msgid "Font family set"
+msgstr "字型集設定"
+
+#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:533
+msgid "Whether this tag affects the font family"
+msgstr "本標籤會否影響字型集"
+
+#: gtk/gtkcellrenderertext.c:413 gtk/gtktexttag.c:536
+msgid "Font style set"
+msgstr "字型款式設定"
+
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
+msgid "Whether this tag affects the font style"
+msgstr "本標籤會否影響字型款式"
+
+#: gtk/gtkcellrenderertext.c:417 gtk/gtktexttag.c:540
+msgid "Font variant set"
+msgstr "字型變化設定"
+
+#: gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:541
+msgid "Whether this tag affects the font variant"
+msgstr "本標籤會否影響字型變化"
+
+#: gtk/gtkcellrenderertext.c:421 gtk/gtktexttag.c:544
+msgid "Font weight set"
+msgstr "字型粗幼設定"
+
+#: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:545
+msgid "Whether this tag affects the font weight"
+msgstr "本標籤會否影響字型粗幼"
+
+#: gtk/gtkcellrenderertext.c:425 gtk/gtktexttag.c:548
+msgid "Font stretch set"
+msgstr "字型寬緊設定"
+
+#: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:549
+msgid "Whether this tag affects the font stretch"
+msgstr "本標籤會否影響字型寬緊"
+
+#: gtk/gtkcellrenderertext.c:429 gtk/gtktexttag.c:552
+msgid "Font size set"
+msgstr "字型大小設定"
+
+#: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:553
+msgid "Whether this tag affects the font size"
+msgstr "本標籤會否影響字型大小"
+
+#: gtk/gtkcellrenderertext.c:433 gtk/gtktexttag.c:556
+msgid "Font scale set"
+msgstr "字型縮放設定"
+
+#: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:557
+msgid "Whether this tag scales the font size by a factor"
+msgstr "本標籤會否縮放字型"
+
+#: gtk/gtkcellrenderertext.c:437 gtk/gtktexttag.c:576
+msgid "Rise set"
+msgstr "升高文字設定"
+
+#: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:577
+msgid "Whether this tag affects the rise"
+msgstr "本標籤會否影響文字升高的情況"
+
+#: gtk/gtkcellrenderertext.c:441 gtk/gtktexttag.c:592
+msgid "Strikethrough set"
+msgstr "刪除線設定"
+
+#: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:593
+msgid "Whether this tag affects strikethrough"
+msgstr "本標籤會否影響刪除線的設定"
+
+#: gtk/gtkcellrenderertext.c:445 gtk/gtktexttag.c:600
+msgid "Underline set"
+msgstr "底線設定"
+
+#: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:601
+msgid "Whether this tag affects underlining"
+msgstr "本標籤會否影響底線的設定"
+
+#: gtk/gtkcellrenderertext.c:449 gtk/gtktexttag.c:564
+msgid "Language set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
+msgid "Whether this tag affects the language the text is rendered as"
+msgstr ""
+
+#: gtk/gtkcellrenderertoggle.c:140
+msgid "Toggle state"
+msgstr "切換狀態"
+
+#: gtk/gtkcellrenderertoggle.c:141
+msgid "The toggle state of the button"
+msgstr "按鈕的切換狀態"
+
+#: gtk/gtkcellrenderertoggle.c:149
+msgid "Inconsistent state"
+msgstr ""
+
+#: gtk/gtkcellrenderertoggle.c:150
+msgid "The inconsistent state of the button"
+msgstr ""
+
+#: gtk/gtkcellrenderertoggle.c:158
+msgid "Activatable"
+msgstr "可啟用"
+
+#: gtk/gtkcellrenderertoggle.c:159
+msgid "The toggle button can be activated"
+msgstr "該切換按鈕是可啟用的"
+
+#: gtk/gtkcellrenderertoggle.c:167
+msgid "Radio state"
+msgstr ""
+
+#: gtk/gtkcellrenderertoggle.c:168
+msgid "Draw the toggle button as a radio button"
+msgstr ""
+
+#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
+msgid "Indicator Size"
+msgstr "指示線大小"
+
+#: gtk/gtkcheckbutton.c:99
+msgid "Size of check or radio indicator"
+msgstr ""
+
+#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:252 gtk/gtkoptionmenu.c:205
+msgid "Indicator Spacing"
+msgstr "指示線間隔"
+
+#: gtk/gtkcheckbutton.c:107
+msgid "Spacing around check or radio indicator"
+msgstr ""
+
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
+msgid "Active"
+msgstr ""
+
+#: gtk/gtkcheckmenuitem.c:119
+msgid "Whether the menu item is checked"
+msgstr ""
+
+#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
+msgid "Inconsistent"
+msgstr ""
+
+#: gtk/gtkcheckmenuitem.c:127
+msgid "Whether to display an \"inconsistent\" state"
+msgstr ""
+
+#: gtk/gtkcheckmenuitem.c:134
+msgid "Draw as radio menu item"
+msgstr ""
+
+#: gtk/gtkcheckmenuitem.c:135
+msgid "Whether the menu item looks like a radio menu item"
+msgstr ""
+
+#: gtk/gtkcolorbutton.c:202
+msgid "Use alpha"
+msgstr ""
+
+#: gtk/gtkcolorbutton.c:203
+msgid "Whether or not to give the color an alpha value"
+msgstr ""
+
+#: gtk/gtkcolorbutton.c:217 gtk/gtkfontbutton.c:175
+#: gtk/gtktreeviewcolumn.c:286
+msgid "Title"
+msgstr "標題文字"
+
+#: gtk/gtkcolorbutton.c:218
+#, fuzzy
+msgid "The title of the color selection dialog"
+msgstr "視窗的標題"
+
+#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1775
+msgid "Current Color"
+msgstr "目前的顏色"
+
+#: gtk/gtkcolorbutton.c:233
+#, fuzzy
+msgid "The selected color"
+msgstr "目前的顏色"
+
+#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1782
+msgid "Current Alpha"
+msgstr "目前的透明度"
+
+#: gtk/gtkcolorbutton.c:248
+#, fuzzy
+msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
+msgstr "目前的透明度 (0 為完全透明，65535 為完全不透明)"
+
+#: gtk/gtkcolorsel.c:1761
+msgid "Has Opacity Control"
+msgstr "可控制透明度"
+
+#: gtk/gtkcolorsel.c:1762
+msgid "Whether the color selector should allow setting opacity"
+msgstr "設定顏色選擇程序是否允許設定透明度"
+
+#: gtk/gtkcolorsel.c:1768
+msgid "Has palette"
+msgstr "有色盤"
+
+#: gtk/gtkcolorsel.c:1769
+msgid "Whether a palette should be used"
+msgstr "應否使用色盤"
+
+#: gtk/gtkcolorsel.c:1776
+msgid "The current color"
+msgstr "目前的顏色"
+
+#: gtk/gtkcolorsel.c:1783
+msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
+msgstr "目前的透明度 (0 為完全透明，65535 為完全不透明)"
+
+#: gtk/gtkcolorsel.c:1797
+msgid "Custom palette"
+msgstr "自訂色盤"
+
+#: gtk/gtkcolorsel.c:1798
+msgid "Palette to use in the color selector"
+msgstr "顏色選擇程序使用的色盤"
+
+#: gtk/gtkcombo.c:143
+msgid "Enable arrow keys"
+msgstr "啟用箭咀鍵"
+
+#: gtk/gtkcombo.c:144
+msgid "Whether the arrow keys move through the list of items"
+msgstr ""
+
+#: gtk/gtkcombo.c:150
+msgid "Always enable arrows"
+msgstr "永遠啟用箭頭"
+
+#: gtk/gtkcombo.c:151
+msgid "Obsolete property, ignored"
+msgstr "本屬性己經過時，因此不會理會"
+
+#: gtk/gtkcombo.c:157
+msgid "Case sensitive"
+msgstr "區分大小寫"
+
+#: gtk/gtkcombo.c:158
+msgid "Whether list item matching is case sensitive"
+msgstr "在清單中搜尋項目時是否區分大小寫"
+
+#: gtk/gtkcombo.c:165
+msgid "Allow empty"
+msgstr "接受空白"
+
+#: gtk/gtkcombo.c:166
+msgid "Whether an empty value may be entered in this field"
+msgstr "本欄位可否接受空白的變數值"
+
+#: gtk/gtkcombo.c:173
+msgid "Value in list"
+msgstr "變數值在清單內"
+
+#: gtk/gtkcombo.c:174
+msgid "Whether entered values must already be present in the list"
+msgstr "輸入的值是否必須在清單中出現"
+
+#: gtk/gtkcombobox.c:341
+msgid "ComboBox model"
+msgstr ""
+
+#: gtk/gtkcombobox.c:342
+msgid "The model for the combo box"
+msgstr ""
+
+#: gtk/gtkcombobox.c:349
+#, fuzzy
+msgid "Wrap width"
+msgstr "寬度"
+
+#: gtk/gtkcombobox.c:350
+msgid "Wrap width for layouting the items in a grid"
+msgstr ""
+
+#: gtk/gtkcombobox.c:359
+#, fuzzy
+msgid "Row span column"
+msgstr "行距"
+
+#: gtk/gtkcombobox.c:360
+msgid "TreeModel column containing the row span values"
+msgstr ""
+
+#: gtk/gtkcombobox.c:369
+#, fuzzy
+msgid "Column span column"
+msgstr "列距"
+
+#: gtk/gtkcombobox.c:370
+msgid "TreeModel column containing the column span values"
+msgstr ""
+
+#: gtk/gtkcombobox.c:379
+#, fuzzy
+msgid "Active item"
+msgstr "可啟用"
+
+#: gtk/gtkcombobox.c:380
+#, fuzzy
+msgid "The item which is currently active"
+msgstr "目前選定的 GdkFont"
+
+#: gtk/gtkcombobox.c:388
+msgid "ComboBox appareance"
+msgstr ""
+
+#: gtk/gtkcombobox.c:389
+msgid "ComboBox appearance, where TRUE means Windows-style."
+msgstr ""
+
+#: gtk/gtkcomboboxentry.c:104
+#, fuzzy
+msgid "Text Column"
+msgstr "列數"
+
+#: gtk/gtkcomboboxentry.c:105
+msgid "A column in the data source model to get the strings from"
+msgstr ""
+
+#: gtk/gtkcontainer.c:203
+msgid "Resize mode"
+msgstr "調整尺寸模式"
+
+#: gtk/gtkcontainer.c:204
+msgid "Specify how resize events are handled"
+msgstr "指定如何處理調整尺寸的要求"
+
+#: gtk/gtkcontainer.c:211
+msgid "Border width"
+msgstr "邊框寬度"
+
+#: gtk/gtkcontainer.c:212
+msgid "The width of the empty border outside the containers children"
+msgstr ""
+
+#: gtk/gtkcontainer.c:220
+msgid "Child"
+msgstr ""
+
+#: gtk/gtkcontainer.c:221
+msgid "Can be used to add a new child to the container"
+msgstr ""
+
+#: gtk/gtkcurve.c:121
+msgid "Curve type"
+msgstr "曲線類型"
+
+#: gtk/gtkcurve.c:122
+msgid "Is this curve linear, spline interpolated, or free-form"
+msgstr ""
+
+#: gtk/gtkcurve.c:130
+msgid "Minimum X"
+msgstr "X 最小值"
+
+#: gtk/gtkcurve.c:131
+msgid "Minimum possible value for X"
+msgstr "X 可能出現的最小值"
+
+#: gtk/gtkcurve.c:140
+msgid "Maximum X"
+msgstr "X 最大值"
+
+#: gtk/gtkcurve.c:141
+msgid "Maximum possible X value"
+msgstr "X 可能出現的最大值"
+
+#: gtk/gtkcurve.c:150
+msgid "Minimum Y"
+msgstr "Y 最小值"
+
+#: gtk/gtkcurve.c:151
+msgid "Minimum possible value for Y"
+msgstr "Y 可能出現的最小值"
+
+#: gtk/gtkcurve.c:160
+msgid "Maximum Y"
+msgstr "Y 最大值"
+
+#: gtk/gtkcurve.c:161
+msgid "Maximum possible value for Y"
+msgstr "Y 可能出現的最大值"
+
+#: gtk/gtkdialog.c:136
+msgid "Has separator"
+msgstr ""
+
+#: gtk/gtkdialog.c:137
+msgid "The dialog has a separator bar above its buttons"
+msgstr ""
+
+#: gtk/gtkdialog.c:162
+msgid "Content area border"
+msgstr "內容區域邊框"
+
+#: gtk/gtkdialog.c:163
+msgid "Width of border around the main dialog area"
+msgstr "主對話窗區域的邊框寬度"
+
+#: gtk/gtkdialog.c:170
+msgid "Button spacing"
+msgstr "按鈕間隔"
+
+#: gtk/gtkdialog.c:171
+msgid "Spacing between buttons"
+msgstr "按鈕之間的間隔"
+
+#: gtk/gtkdialog.c:179
+msgid "Action area border"
+msgstr ""
+
+#: gtk/gtkdialog.c:180
+msgid "Width of border around the button area at the bottom of the dialog"
+msgstr ""
+
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:368
+msgid "Cursor Position"
+msgstr "游標位置"
+
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:369
+msgid "The current position of the insertion cursor in chars"
+msgstr "游標目前的位置，以字元計。"
+
+#: gtk/gtkentry.c:456 gtk/gtklabel.c:378
+msgid "Selection Bound"
+msgstr ""
+
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:379
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
+msgstr ""
+
+#: gtk/gtkentry.c:467
+msgid "Whether the entry contents can be edited"
+msgstr "可否編輯欄位的內容"
+
+#: gtk/gtkentry.c:474
+msgid "Maximum length"
+msgstr "最大長度"
+
+#: gtk/gtkentry.c:475
+msgid "Maximum number of characters for this entry. Zero if no maximum"
+msgstr "本欄位的最大長度，0 表示不設上限"
+
+#: gtk/gtkentry.c:483
+msgid "Visibility"
+msgstr "可見狀態"
+
+#: gtk/gtkentry.c:484
+msgid ""
+"FALSE displays the \"invisible char\" instead of the actual text (password "
+"mode)"
+msgstr "FALSE 表示顯示「隱形字元」而非實際文字（密碼模式）"
+
+#: gtk/gtkentry.c:491
+msgid "Has Frame"
+msgstr ""
+
+#: gtk/gtkentry.c:492
+msgid "FALSE removes outside bevel from entry"
+msgstr ""
+
+#: gtk/gtkentry.c:499
+msgid "Invisible character"
+msgstr "隱形字元"
+
+#: gtk/gtkentry.c:500
+msgid "The character to use when masking entry contents (in \"password mode\")"
+msgstr "用來遮蓋輸入內容的字元（在「密碼模式」裡）"
+
+#: gtk/gtkentry.c:507
+msgid "Activates default"
+msgstr ""
+
+#: gtk/gtkentry.c:508
+msgid ""
+"Whether to activate the default widget (such as the default button in a "
+"dialog) when Enter is pressed"
+msgstr ""
+
+#: gtk/gtkentry.c:514
+msgid "Width in chars"
+msgstr ""
+
+#: gtk/gtkentry.c:515
+msgid "Number of characters to leave space for in the entry"
+msgstr ""
+
+#: gtk/gtkentry.c:524
+msgid "Scroll offset"
+msgstr ""
+
+#: gtk/gtkentry.c:525
+msgid "Number of pixels of the entry scrolled off the screen to the left"
+msgstr ""
+
+#: gtk/gtkentry.c:535
+msgid "The contents of the entry"
+msgstr "輸入的內容"
+
+#: gtk/gtkentry.c:766
+msgid "Select on focus"
+msgstr ""
+
+#: gtk/gtkentry.c:767
+msgid "Whether to select the contents of an entry when it is focused"
+msgstr ""
+
+#: gtk/gtkentrycompletion.c:196
+msgid "Completion Model"
+msgstr ""
+
+#: gtk/gtkentrycompletion.c:197
+#, fuzzy
+msgid "The model to find matches in"
+msgstr "視窗的類型"
+
+#: gtk/gtkentrycompletion.c:203
+#, fuzzy
+msgid "Minimum Key Length"
+msgstr "最大長度"
+
+#: gtk/gtkentrycompletion.c:204
+msgid "Minimum length of the search key in order to look up matches"
+msgstr ""
+
+#: gtk/gtkeventbox.c:119
+#, fuzzy
+msgid "Visible Window"
+msgstr "顯示"
+
+#: gtk/gtkeventbox.c:120
+msgid ""
+"Whether the event box is visible, as opposed to invisible and only used to "
+"trap events."
+msgstr ""
+
+#: gtk/gtkeventbox.c:126
+#, fuzzy
+msgid "Above child"
+msgstr "配合副元件"
+
+#: gtk/gtkeventbox.c:127
+msgid ""
+"Whether the event-trapping window of the eventbox is above the window of the "
+"child widget as opposed to below it."
+msgstr ""
+
+#: gtk/gtkexpander.c:194
+#, fuzzy
+msgid "Expanded"
+msgstr "擴張"
+
+#: gtk/gtkexpander.c:195
+#, fuzzy
+msgid "Whether the expander has been opened to reveal the child widget"
+msgstr "該元件可否成為預設的視窗元件"
+
+#: gtk/gtkexpander.c:203
+#, fuzzy
+msgid "Text of the expander's label"
+msgstr "框架的標籤文字"
+
+#: gtk/gtkexpander.c:218 gtk/gtklabel.c:304
+msgid "Use markup"
+msgstr ""
+
+#: gtk/gtkexpander.c:219 gtk/gtklabel.c:305
+msgid "The text of the label includes XML markup. See pango_parse_markup()"
+msgstr ""
+
+#: gtk/gtkexpander.c:227
+#, fuzzy
+msgid "Space to put between the label and the child"
+msgstr "加入額外的空位隔開副元件及周圍的元件，以像素為單位"
+
+#: gtk/gtkexpander.c:236 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
+msgid "Label widget"
+msgstr "標籤元件"
+
+#: gtk/gtkexpander.c:237
+msgid "A widget to display in place of the usual expander label"
+msgstr ""
+
+#: gtk/gtkexpander.c:243 gtk/gtktreeview.c:621
+msgid "Expander Size"
+msgstr "展開資料的箭頭的大小"
+
+#: gtk/gtkexpander.c:244 gtk/gtktreeview.c:622
+msgid "Size of the expander arrow"
+msgstr "展開資料的箭頭的大小"
+
+#: gtk/gtkexpander.c:253
+#, fuzzy
+msgid "Spacing around expander arrow"
+msgstr "展開資料的箭頭的大小"
+
+#: gtk/gtkfilechooser.c:92
+#, fuzzy
+msgid "Action"
+msgstr "比例"
+
+#: gtk/gtkfilechooser.c:93
+msgid "The type of operation that the file selector is performing"
+msgstr ""
+
+#: gtk/gtkfilechooser.c:99
+#, fuzzy
+msgid "File System"
+msgstr "檔案"
+
+#: gtk/gtkfilechooser.c:100
+msgid "File system object to use"
+msgstr ""
+
+#: gtk/gtkfilechooser.c:105
+#, fuzzy
+msgid "Filter"
+msgstr "檔案"
+
+#: gtk/gtkfilechooser.c:106
+msgid "The current filter for selecting which files are displayed"
+msgstr ""
+
+#: gtk/gtkfilechooser.c:111
+#, fuzzy
+msgid "Folder Mode"
+msgstr "資料夾名稱(_F)："
+
+#: gtk/gtkfilechooser.c:112
+#, fuzzy
+msgid "Whether to select folders rather than files"
+msgstr "進度是否以文字方式顯示"
+
+#: gtk/gtkfilechooser.c:117
+msgid "Local Only"
+msgstr ""
+
+#: gtk/gtkfilechooser.c:118
+#, fuzzy
+msgid "Whether the selected file(s) should be limited to local file: URLs"
+msgstr "進度是否以文字方式顯示"
+
+#: gtk/gtkfilechooser.c:123
+#, fuzzy
+msgid "Preview widget"
+msgstr "預覽文字"
+
+#: gtk/gtkfilechooser.c:124
+msgid "Application supplied widget for custom previews."
+msgstr ""
+
+#: gtk/gtkfilechooser.c:129
+#, fuzzy
+msgid "Preview Widget Active"
+msgstr "預覽文字"
+
+#: gtk/gtkfilechooser.c:130
+msgid ""
+"Whether the application supplied widget for custom previews should be shown."
+msgstr ""
+
+#: gtk/gtkfilechooser.c:135
+#, fuzzy
+msgid "Extra widget"
+msgstr "圖像元件"
+
+#: gtk/gtkfilechooser.c:136
+msgid "Application supplied widget for extra options."
+msgstr ""
+
+#: gtk/gtkfilechooser.c:141
+#, fuzzy
+msgid "Select Multiple"
+msgstr "選取多個項目"
+
+#: gtk/gtkfilechooser.c:142 gtk/gtkfilesel.c:575
+msgid "Whether to allow multiple files to be selected"
+msgstr "可否同時選取多個檔案"
+
+#: gtk/gtkfilechooser.c:148
+#, fuzzy
+msgid "Show Hidden"
+msgstr "顯示文字"
+
+#: gtk/gtkfilechooser.c:149
+msgid "Whether the hidden files and folders should be displayed"
+msgstr ""
+
+#: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
+msgid "Filename"
+msgstr "檔案名稱"
+
+#: gtk/gtkfilesel.c:560
+msgid "The currently selected filename"
+msgstr "目前選取的檔案名稱"
+
+#: gtk/gtkfilesel.c:566
+msgid "Show file operations"
+msgstr "顯示檔案處理"
+
+#: gtk/gtkfilesel.c:567
+msgid "Whether buttons for creating/manipulating files should be displayed"
+msgstr ""
+
+#: gtk/gtkfilesel.c:574
+msgid "Select multiple"
+msgstr "選取多個項目"
+
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
+msgid "X position"
+msgstr "水平位置"
+
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
+msgid "X position of child widget"
+msgstr "副元件的水平位置"
+
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
+msgid "Y position"
+msgstr "垂直位置"
+
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
+msgid "Y position of child widget"
+msgstr "副元件的垂直位置"
+
+#: gtk/gtkfontbutton.c:176
+#, fuzzy
+msgid "The title of the font selection dialog"
+msgstr "視窗的標題"
+
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:210
+msgid "Font name"
+msgstr "字型名稱"
+
+#: gtk/gtkfontbutton.c:192
+#, fuzzy
+msgid "The name of the selected font"
+msgstr "元件的名稱"
+
+#: gtk/gtkfontbutton.c:193
+msgid "Sans 12"
+msgstr ""
+
+#: gtk/gtkfontbutton.c:207
+msgid "Use font in label"
+msgstr ""
+
+#: gtk/gtkfontbutton.c:208
+#, fuzzy
+msgid "Whether the label is drawn in the selected font"
+msgstr "標籤文字可否使用滑鼠來選取"
+
+#: gtk/gtkfontbutton.c:223
+msgid "Use size in label"
+msgstr ""
+
+#: gtk/gtkfontbutton.c:224
+#, fuzzy
+msgid "Whether the label is drawn with the selected font size"
+msgstr "標籤文字可否使用滑鼠來選取"
+
+#: gtk/gtkfontbutton.c:240
+#, fuzzy
+msgid "Show style"
+msgstr "陰影類型"
+
+#: gtk/gtkfontbutton.c:241
+#, fuzzy
+msgid "Whether the selected font style is shown in the label"
+msgstr "進度是否以文字方式顯示"
+
+#: gtk/gtkfontbutton.c:256
+#, fuzzy
+msgid "Show size"
+msgstr "顯示文字"
+
+#: gtk/gtkfontbutton.c:257
+#, fuzzy
+msgid "Whether selected font size is shown in the label"
+msgstr "進度是否以文字方式顯示"
+
+#: gtk/gtkfontsel.c:211
+msgid "The X string that represents this font"
+msgstr "表示本字型的 X 字串"
+
+#: gtk/gtkfontsel.c:218
+msgid "The GdkFont that is currently selected"
+msgstr "目前選定的 GdkFont"
+
+#: gtk/gtkfontsel.c:224
+msgid "Preview text"
+msgstr "預覽文字"
+
+#: gtk/gtkfontsel.c:225
+msgid "The text to display in order to demonstrate the selected font"
+msgstr "顯示選定的字型時所使用的字串"
+
+#: gtk/gtkframe.c:126
+msgid "Text of the frame's label"
+msgstr "框架的標籤文字"
+
+#: gtk/gtkframe.c:133
+msgid "Label xalign"
+msgstr "標籤水平位置"
+
+#: gtk/gtkframe.c:134
+msgid "The horizontal alignment of the label"
+msgstr "標籤的水平位置"
+
+#: gtk/gtkframe.c:143
+msgid "Label yalign"
+msgstr "標籤垂直位置"
+
+#: gtk/gtkframe.c:144
+msgid "The vertical alignment of the label"
+msgstr "標籤的垂直位置"
+
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
+msgid "Deprecated property, use shadow_type instead"
+msgstr "本屬性已經過時，請使用 shadow_type"
+
+#: gtk/gtkframe.c:160
+msgid "Frame shadow"
+msgstr "框架陰影"
+
+#: gtk/gtkframe.c:161
+msgid "Appearance of the frame border"
+msgstr "框架的外觀"
+
+#: gtk/gtkframe.c:170
+msgid "A widget to display in place of the usual frame label"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
+#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
+msgid "Shadow type"
+msgstr "陰影類型"
+
+#: gtk/gtkhandlebox.c:203
+msgid "Appearance of the shadow that surrounds the container"
+msgstr "容器元件周圍的陰影的外觀"
+
+#: gtk/gtkhandlebox.c:211
+msgid "Handle position"
+msgstr "控制項位置"
+
+#: gtk/gtkhandlebox.c:212
+msgid "Position of the handle relative to the child widget"
+msgstr "相對於副元件的控制項位置"
+
+#: gtk/gtkhandlebox.c:220
+msgid "Snap edge"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:221
+msgid ""
+"Side of the handlebox that's lined up with the docking point to dock the "
+"handlebox"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:229
+msgid "Snap edge set"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:230
+msgid ""
+"Whether to use the value from the snap_edge property or a value derived from "
+"handle_position"
+msgstr ""
+
+#: gtk/gtkimage.c:135
+msgid "Pixbuf"
+msgstr "Pixbuf"
+
+#: gtk/gtkimage.c:136
+msgid "A GdkPixbuf to display"
+msgstr "準備顯示的 GdkPixbuf"
+
+#: gtk/gtkimage.c:143
+msgid "Pixmap"
+msgstr "Pixmap"
+
+#: gtk/gtkimage.c:144
+msgid "A GdkPixmap to display"
+msgstr "準備顯示的 GdkPixmap"
+
+#: gtk/gtkimage.c:151
+msgid "Image"
+msgstr "圖像"
+
+#: gtk/gtkimage.c:152
+msgid "A GdkImage to display"
+msgstr "準備顯示的 GdkImage"
+
+#: gtk/gtkimage.c:159
+msgid "Mask"
+msgstr "遮罩"
+
+#: gtk/gtkimage.c:160
+msgid "Mask bitmap to use with GdkImage or GdkPixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:168
+msgid "Filename to load and display"
+msgstr "準備載入及顯示的檔案"
+
+#: gtk/gtkimage.c:177
+msgid "Stock ID for a stock image to display"
+msgstr ""
+
+#: gtk/gtkimage.c:184
+msgid "Icon set"
+msgstr "圖示集"
+
+#: gtk/gtkimage.c:185
+msgid "Icon set to display"
+msgstr "準備顯示的圖示集"
+
+#: gtk/gtkimage.c:192
+msgid "Icon size"
+msgstr "圖示大小"
+
+#: gtk/gtkimage.c:193
+msgid "Size to use for stock icon or icon set"
+msgstr ""
+
+#: gtk/gtkimage.c:201
+msgid "Animation"
+msgstr "動畫"
+
+#: gtk/gtkimage.c:202
+msgid "GdkPixbufAnimation to display"
+msgstr "準備顯示的 GdkPixbufAnimation"
+
+#: gtk/gtkimage.c:209
+msgid "Storage type"
+msgstr ""
+
+#: gtk/gtkimage.c:210
+msgid "The representation being used for image data"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:124
+msgid "Image widget"
+msgstr "圖像元件"
+
+#: gtk/gtkimagemenuitem.c:125
+msgid "Child widget to appear next to the menu text"
+msgstr ""
+
+#: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:542
+msgid "Screen"
+msgstr "螢幕"
+
+#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:543
+msgid "The screen where this window will be displayed"
+msgstr ""
+
+#: gtk/gtklabel.c:291
+msgid "The text of the label"
+msgstr "標籤中的文字"
+
+#: gtk/gtklabel.c:298
+msgid "A list of style attributes to apply to the text of the label"
+msgstr ""
+
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
+msgid "Justification"
+msgstr "對齊"
+
+#: gtk/gtklabel.c:320
+msgid ""
+"The alignment of the lines in the text of the label relative to each other. "
+"This does NOT affect the alignment of the label within its allocation. See "
+"GtkMisc::xalign for that"
+msgstr ""
+
+#: gtk/gtklabel.c:328
+msgid "Pattern"
+msgstr "樣式"
+
+#: gtk/gtklabel.c:329
+msgid ""
+"A string with _ characters in positions correspond to characters in the text "
+"to underline"
+msgstr ""
+
+#: gtk/gtklabel.c:336
+msgid "Line wrap"
+msgstr "自動換行"
+
+#: gtk/gtklabel.c:337
+msgid "If set, wrap lines if the text becomes too wide"
+msgstr "如使用本選項，當字句太長時會自動換行"
+
+#: gtk/gtklabel.c:343
+msgid "Selectable"
+msgstr "可選取"
+
+#: gtk/gtklabel.c:344
+msgid "Whether the label text can be selected with the mouse"
+msgstr "標籤文字可否使用滑鼠來選取"
+
+#: gtk/gtklabel.c:350
+msgid "Mnemonic key"
+msgstr ""
+
+#: gtk/gtklabel.c:351
+msgid "The mnemonic accelerator key for this label"
+msgstr ""
+
+#: gtk/gtklabel.c:359
+msgid "Mnemonic widget"
+msgstr ""
+
+#: gtk/gtklabel.c:360
+msgid "The widget to be activated when the label's mnemonic key is pressed"
+msgstr ""
+
+#: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
+msgid "Horizontal adjustment"
+msgstr "水平調整"
+
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:236
+msgid "The GtkAdjustment for the horizontal position"
+msgstr ""
+
+#: gtk/gtklayout.c:639 gtk/gtkviewport.c:142
+msgid "Vertical adjustment"
+msgstr "垂直調整"
+
+#: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:243
+msgid "The GtkAdjustment for the vertical position"
+msgstr ""
+
+#: gtk/gtklayout.c:648
+msgid "The width of the layout"
+msgstr ""
+
+#: gtk/gtklayout.c:657
+msgid "The height of the layout"
+msgstr ""
+
+#: gtk/gtkmenu.c:352
+msgid "Tearoff Title"
+msgstr ""
+
+#: gtk/gtkmenu.c:353
+msgid ""
+"A title that may be displayed by the window manager when this menu is torn-"
+"off"
+msgstr ""
+
+#: gtk/gtkmenu.c:359
+#, fuzzy
+msgid "Vertical Padding"
+msgstr "垂直留邊"
+
+#: gtk/gtkmenu.c:360
+msgid "Extra space at the top and bottom of the menu"
+msgstr ""
+
+#: gtk/gtkmenu.c:368
+#, fuzzy
+msgid "Vertical Offset"
+msgstr "垂直縮放比率"
+
+#: gtk/gtkmenu.c:369
+msgid ""
+"When the menu is a submenu, position it this number of pixels offset "
+"vertically"
+msgstr ""
+
+#: gtk/gtkmenu.c:377
+#, fuzzy
+msgid "Horizontal Offset"
+msgstr "水平縮放比率"
+
+#: gtk/gtkmenu.c:378
+msgid ""
+"When the menu is a submenu, position it this number of pixels offset "
+"horizontally"
+msgstr ""
+
+#: gtk/gtkmenu.c:388
+msgid "Left Attach"
+msgstr ""
+
+#: gtk/gtkmenu.c:389 gtk/gtktable.c:203
+msgid "The column number to attach the left side of the child to"
+msgstr ""
+
+#: gtk/gtkmenu.c:396
+msgid "Right Attach"
+msgstr ""
+
+#: gtk/gtkmenu.c:397
+msgid "The column number to attach the right side of the child to"
+msgstr ""
+
+#: gtk/gtkmenu.c:404
+msgid "Top Attach"
+msgstr ""
+
+#: gtk/gtkmenu.c:405
+msgid "The row number to attach the top of the child to"
+msgstr ""
+
+#: gtk/gtkmenu.c:412
+#, fuzzy
+msgid "Bottom Attach"
+msgstr "底部(_B)"
+
+#: gtk/gtkmenu.c:413 gtk/gtktable.c:224
+msgid "The row number to attach the bottom of the child to"
+msgstr ""
+
+#: gtk/gtkmenu.c:500
+msgid "Can change accelerators"
+msgstr "可更改捷徑鍵"
+
+#: gtk/gtkmenu.c:501
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgstr ""
+
+#: gtk/gtkmenu.c:506
+msgid "Delay before submenus appear"
+msgstr "顯示副選單前的延遲時間"
+
+#: gtk/gtkmenu.c:507
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+
+#: gtk/gtkmenu.c:514
+msgid "Delay before hiding a submenu"
+msgstr "隱藏副選單前的延遲時間"
+
+#: gtk/gtkmenu.c:515
+msgid ""
+"The time before hiding a submenu when the pointer is moving towards the "
+"submenu"
+msgstr ""
+
+#: gtk/gtkmenubar.c:157
+msgid "Style of bevel around the menubar"
+msgstr "選單列的斜邊款式"
+
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
+msgid "Internal padding"
+msgstr ""
+
+#: gtk/gtkmenubar.c:165
+msgid "Amount of border space between the menubar shadow and the menu items"
+msgstr "選單列陰影和選單項目之間的空間寬度"
+
+#: gtk/gtkmenubar.c:172
+msgid "Delay before drop down menus appear"
+msgstr ""
+
+#: gtk/gtkmenubar.c:173
+msgid "Delay before the submenus of a menu bar appear"
+msgstr ""
+
+#: gtk/gtkmessagedialog.c:106
+msgid "Image/label border"
+msgstr "圖像/標籤邊框"
+
+#: gtk/gtkmessagedialog.c:107
+msgid "Width of border around the label and image in the message dialog"
+msgstr "訊息對話窗的標籤和圖像周圍的邊框寬度"
+
+#: gtk/gtkmessagedialog.c:115
+msgid "Message Type"
+msgstr "訊息類型"
+
+#: gtk/gtkmessagedialog.c:116
+msgid "The type of message"
+msgstr "訊息的類型"
+
+#: gtk/gtkmessagedialog.c:123
+msgid "Message Buttons"
+msgstr "訊息按鈕"
+
+#: gtk/gtkmessagedialog.c:124
+msgid "The buttons shown in the message dialog"
+msgstr "訊息對話窗顯示的按鈕"
+
+#: gtk/gtkmisc.c:98
+msgid "X align"
+msgstr ""
+
+#: gtk/gtkmisc.c:99
+msgid "The horizontal alignment, from 0 (left) to 1 (right)"
+msgstr ""
+
+#: gtk/gtkmisc.c:108
+msgid "Y align"
+msgstr ""
+
+#: gtk/gtkmisc.c:109
+msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
+msgstr ""
+
+#: gtk/gtkmisc.c:118
+msgid "X pad"
+msgstr ""
+
+#: gtk/gtkmisc.c:119
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
+msgstr ""
+
+#: gtk/gtkmisc.c:128
+msgid "Y pad"
+msgstr ""
+
+#: gtk/gtkmisc.c:129
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
+msgstr ""
+
+#: gtk/gtknotebook.c:396
+msgid "Page"
+msgstr "頁碼"
+
+#: gtk/gtknotebook.c:397
+msgid "The index of the current page"
+msgstr "本頁的索引"
+
+#: gtk/gtknotebook.c:405
+msgid "Tab Position"
+msgstr "標簽位置"
+
+#: gtk/gtknotebook.c:406
+msgid "Which side of the notebook holds the tabs"
+msgstr "標簽頁中含有標簽的一邊"
+
+#: gtk/gtknotebook.c:413
+msgid "Tab Border"
+msgstr "標簽邊框"
+
+#: gtk/gtknotebook.c:414
+msgid "Width of the border around the tab labels"
+msgstr "標簽標題周圍的邊框寬度"
+
+#: gtk/gtknotebook.c:422
+msgid "Horizontal Tab Border"
+msgstr "水平標簽邊框"
+
+#: gtk/gtknotebook.c:423
+msgid "Width of the horizontal border of tab labels"
+msgstr "標簽標題周圍的水平邊框寬度"
+
+#: gtk/gtknotebook.c:431
+msgid "Vertical Tab Border"
+msgstr "垂直標簽邊框"
+
+#: gtk/gtknotebook.c:432
+msgid "Width of the vertical border of tab labels"
+msgstr "標籤標題周圍的垂直邊框寬度"
+
+#: gtk/gtknotebook.c:440
+msgid "Show Tabs"
+msgstr "顯示標簽"
+
+#: gtk/gtknotebook.c:441
+msgid "Whether tabs should be shown or not"
+msgstr "應否顯示標簽"
+
+#: gtk/gtknotebook.c:447
+msgid "Show Border"
+msgstr "顯示邊框"
+
+#: gtk/gtknotebook.c:448
+msgid "Whether the border should be shown or not"
+msgstr "應否顯示邊框"
+
+#: gtk/gtknotebook.c:454
+msgid "Scrollable"
+msgstr "可捲動"
+
+#: gtk/gtknotebook.c:455
+msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
+msgstr "若設為 TRUE，如果標籤太多時，會在兩旁加上箭頭"
+
+#: gtk/gtknotebook.c:461
+msgid "Enable Popup"
+msgstr ""
+
+#: gtk/gtknotebook.c:462
+msgid ""
+"If TRUE, pressing the right mouse button on the notebook pops up a menu that "
+"you can use to go to a page"
+msgstr ""
+
+#: gtk/gtknotebook.c:469
+msgid "Whether tabs should have homogeneous sizes"
+msgstr "標籤的尺寸應否統一"
+
+#: gtk/gtknotebook.c:476
+msgid "Tab label"
+msgstr ""
+
+#: gtk/gtknotebook.c:477
+msgid "The string displayed on the childs tab label"
+msgstr ""
+
+#: gtk/gtknotebook.c:483
+msgid "Menu label"
+msgstr ""
+
+#: gtk/gtknotebook.c:484
+msgid "The string displayed in the childs menu entry"
+msgstr ""
+
+#: gtk/gtknotebook.c:497
+msgid "Tab expand"
+msgstr ""
+
+#: gtk/gtknotebook.c:498
+msgid "Whether to expand the childs tab or not"
+msgstr ""
+
+#: gtk/gtknotebook.c:504
+msgid "Tab fill"
+msgstr ""
+
+#: gtk/gtknotebook.c:505
+msgid "Wheather the childs tab should fill the allocated area or not"
+msgstr ""
+
+#: gtk/gtknotebook.c:511
+msgid "Tab pack type"
+msgstr ""
+
+#: gtk/gtknotebook.c:527 gtk/gtkscrollbar.c:113
+msgid "Secondary backward stepper"
+msgstr ""
+
+#: gtk/gtknotebook.c:528
+msgid ""
+"Display a second backward arrow button on the opposite end of the tab area"
+msgstr ""
+
+#: gtk/gtknotebook.c:544 gtk/gtkscrollbar.c:121
+msgid "Secondary forward stepper"
+msgstr ""
+
+#: gtk/gtknotebook.c:545
+msgid ""
+"Display a second forward arrow button on the opposite end of the tab area"
+msgstr ""
+
+#: gtk/gtknotebook.c:560 gtk/gtkscrollbar.c:97
+msgid "Backward stepper"
+msgstr ""
+
+#: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
+msgid "Display the standard backward arrow button"
+msgstr ""
+
+#: gtk/gtknotebook.c:576 gtk/gtkscrollbar.c:105
+msgid "Forward stepper"
+msgstr ""
+
+#: gtk/gtknotebook.c:577 gtk/gtkscrollbar.c:106
+msgid "Display the standard forward arrow button"
+msgstr ""
+
+#: gtk/gtkoptionmenu.c:192
+msgid "Menu"
+msgstr "選單"
+
+#: gtk/gtkoptionmenu.c:193
+msgid "The menu of options"
+msgstr ""
+
+#: gtk/gtkoptionmenu.c:200
+msgid "Size of dropdown indicator"
+msgstr ""
+
+#: gtk/gtkoptionmenu.c:206
+msgid "Spacing around indicator"
+msgstr ""
+
+#: gtk/gtkpaned.c:239
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgstr ""
+
+#: gtk/gtkpaned.c:247
+msgid "Position Set"
+msgstr ""
+
+#: gtk/gtkpaned.c:248
+msgid "TRUE if the Position property should be used"
+msgstr ""
+
+#: gtk/gtkpaned.c:254
+msgid "Handle Size"
+msgstr ""
+
+#: gtk/gtkpaned.c:255
+msgid "Width of handle"
+msgstr ""
+
+#: gtk/gtkpaned.c:271
+#, fuzzy
+msgid "Minimal Position"
+msgstr "標簽位置"
+
+#: gtk/gtkpaned.c:272
+msgid "Smallest possible value for the \"position\" property"
+msgstr ""
+
+#: gtk/gtkpaned.c:289
+#, fuzzy
+msgid "Maximal Position"
+msgstr "標簽位置"
+
+#: gtk/gtkpaned.c:290
+msgid "Largest possible value for the \"position\" property"
+msgstr ""
+
+#: gtk/gtkpaned.c:307
+#, fuzzy
+msgid "Resize"
+msgstr "可調整尺寸"
+
+#: gtk/gtkpaned.c:308
+msgid "If TRUE, the child expands and shrinks along with the paned widget"
+msgstr ""
+
+#: gtk/gtkpaned.c:323
+#, fuzzy
+msgid "Shrink"
+msgstr "可縮小"
+
+#: gtk/gtkpaned.c:324
+msgid "If TRUE, the child can be made smaller than its requisition"
+msgstr ""
+
+#: gtk/gtkpreview.c:133
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
+msgstr ""
+
+#: gtk/gtkprogress.c:129
+msgid "Activity mode"
+msgstr ""
+
+#: gtk/gtkprogress.c:130
+msgid ""
+"If TRUE the GtkProgress is in activity mode, meaning that it signals "
+"something is happening, but not how much of the activity is finished. This "
+"is used when you're doing something that you don't know how long it will take"
+msgstr ""
+
+#: gtk/gtkprogress.c:137
+msgid "Show text"
+msgstr "顯示文字"
+
+#: gtk/gtkprogress.c:138
+msgid "Whether the progress is shown as text"
+msgstr "進度是否以文字方式顯示"
+
+#: gtk/gtkprogress.c:145
+msgid "Text x alignment"
+msgstr ""
+
+#: gtk/gtkprogress.c:146
+msgid ""
+"A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
+"in the progress widget"
+msgstr ""
+
+#: gtk/gtkprogress.c:154
+msgid "Text y alignment"
+msgstr ""
+
+#: gtk/gtkprogress.c:155
+msgid ""
+"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
+"in the progress widget"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
+msgid "Adjustment"
+msgstr "調整"
+
+#: gtk/gtkprogressbar.c:143
+msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
+msgstr "和進度列有關的 GtkAdjustment (過時)"
+
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
+msgid "Orientation"
+msgstr "方向"
+
+#: gtk/gtkprogressbar.c:151
+msgid "Orientation and growth direction of the progress bar"
+msgstr "進度列的排列方向及表示進度增加的方向"
+
+#: gtk/gtkprogressbar.c:159
+msgid "Bar style"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:160
+msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:168
+msgid "Activity Step"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:169
+msgid "The increment used for each iteration in activity mode (Deprecated)"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:178
+msgid "Activity Blocks"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:179
+msgid ""
+"The number of blocks which can fit in the progress bar area in activity mode "
+"(Deprecated)"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:188
+msgid "Discrete Blocks"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:189
+msgid ""
+"The number of discrete blocks in a progress bar (when shown in the discrete "
+"style)"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:198
+msgid "Fraction"
+msgstr "比例"
+
+#: gtk/gtkprogressbar.c:199
+msgid "The fraction of total work that has been completed"
+msgstr "工作已完成的比例"
+
+#: gtk/gtkprogressbar.c:208
+msgid "Pulse Step"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:209
+msgid "The fraction of total progress to move the bouncing block when pulsed"
+msgstr ""
+
+#: gtk/gtkprogressbar.c:219
+msgid "Text to be displayed in the progress bar"
+msgstr "進度列中所顯示的文字"
+
+#: gtk/gtkradioaction.c:138
+#, fuzzy
+msgid "The value"
+msgstr "佈景名稱"
+
+#: gtk/gtkradioaction.c:139
+msgid ""
+"The value returned by gtk_radio_action_get_current_value() when this action "
+"is the current action of its group."
+msgstr ""
+
+#: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:109
+msgid "Group"
+msgstr "群組"
+
+#: gtk/gtkradioaction.c:156
+msgid "The radio action whose group this action belongs."
+msgstr ""
+
+#: gtk/gtkradiobutton.c:110
+msgid "The radio button whose group this widget belongs."
+msgstr ""
+
+#: gtk/gtkrange.c:281
+msgid "Update policy"
+msgstr ""
+
+#: gtk/gtkrange.c:282
+msgid "How the range should be updated on the screen"
+msgstr ""
+
+#: gtk/gtkrange.c:291
+msgid "The GtkAdjustment that contains the current value of this range object"
+msgstr ""
+
+#: gtk/gtkrange.c:298
+msgid "Inverted"
+msgstr ""
+
+#: gtk/gtkrange.c:299
+msgid "Invert direction slider moves to increase range value"
+msgstr ""
+
+#: gtk/gtkrange.c:305
+msgid "Slider Width"
+msgstr ""
+
+#: gtk/gtkrange.c:306
+msgid "Width of scrollbar or scale thumb"
+msgstr ""
+
+#: gtk/gtkrange.c:313
+msgid "Trough Border"
+msgstr ""
+
+#: gtk/gtkrange.c:314
+msgid "Spacing between thumb/steppers and outer trough bevel"
+msgstr ""
+
+#: gtk/gtkrange.c:321
+msgid "Stepper Size"
+msgstr ""
+
+#: gtk/gtkrange.c:322
+msgid "Length of step buttons at ends"
+msgstr ""
+
+#: gtk/gtkrange.c:329
+msgid "Stepper Spacing"
+msgstr ""
+
+#: gtk/gtkrange.c:330
+msgid "Spacing between step buttons and thumb"
+msgstr ""
+
+#: gtk/gtkrange.c:337
+msgid "Arrow X Displacement"
+msgstr ""
+
+#: gtk/gtkrange.c:338
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
+msgstr ""
+
+#: gtk/gtkrange.c:345
+msgid "Arrow Y Displacement"
+msgstr ""
+
+#: gtk/gtkrange.c:346
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
+msgstr ""
+
+#: gtk/gtkruler.c:118
+msgid "Lower"
+msgstr "下限"
+
+#: gtk/gtkruler.c:119
+msgid "Lower limit of ruler"
+msgstr "尺規的下限"
+
+#: gtk/gtkruler.c:128
+msgid "Upper"
+msgstr "上限"
+
+#: gtk/gtkruler.c:129
+msgid "Upper limit of ruler"
+msgstr "尺規的上限"
+
+#: gtk/gtkruler.c:139
+msgid "Position of mark on the ruler"
+msgstr "尺規中的標記的位置"
+
+#: gtk/gtkruler.c:148
+msgid "Max Size"
+msgstr "最大尺寸"
+
+#: gtk/gtkruler.c:149
+msgid "Maximum size of the ruler"
+msgstr "尺規的最大尺寸"
+
+#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+msgid "Digits"
+msgstr "位數"
+
+#: gtk/gtkscale.c:157
+msgid "The number of decimal places that are displayed in the value"
+msgstr ""
+
+#: gtk/gtkscale.c:166
+msgid "Draw Value"
+msgstr ""
+
+#: gtk/gtkscale.c:167
+msgid "Whether the current value is displayed as a string next to the slider"
+msgstr ""
+
+#: gtk/gtkscale.c:174
+msgid "Value Position"
+msgstr ""
+
+#: gtk/gtkscale.c:175
+msgid "The position in which the current value is displayed"
+msgstr ""
+
+#: gtk/gtkscale.c:182
+msgid "Slider Length"
+msgstr ""
+
+#: gtk/gtkscale.c:183
+msgid "Length of scale's slider"
+msgstr ""
+
+#: gtk/gtkscale.c:191
+msgid "Value spacing"
+msgstr ""
+
+#: gtk/gtkscale.c:192
+msgid "Space between value text and the slider/trough area"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:80
+msgid "Minimum Slider Length"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:81
+msgid "Minimum length of scrollbar slider"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:89
+msgid "Fixed slider size"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:90
+msgid "Don't change slider size, just lock it to the minimum length"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:114
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
+msgstr ""
+
+#: gtk/gtkscrollbar.c:122
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:535
+msgid "Horizontal Adjustment"
+msgstr "水平調整"
+
+#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:543
+msgid "Vertical Adjustment"
+msgstr "垂直調整"
+
+#: gtk/gtkscrolledwindow.c:249
+msgid "Horizontal Scrollbar Policy"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:250
+msgid "When the horizontal scrollbar is displayed"
+msgstr "何時顯示水平捲動列"
+
+#: gtk/gtkscrolledwindow.c:257
+msgid "Vertical Scrollbar Policy"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:258
+msgid "When the vertical scrollbar is displayed"
+msgstr "何時顯示垂直捲動列"
+
+#: gtk/gtkscrolledwindow.c:266
+msgid "Window Placement"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:267
+msgid "Where the contents are located with respect to the scrollbars"
+msgstr "相應於捲動列的哪個位置顯示內容"
+
+#: gtk/gtkscrolledwindow.c:274
+msgid "Shadow Type"
+msgstr "陰影類型"
+
+#: gtk/gtkscrolledwindow.c:275
+msgid "Style of bevel around the contents"
+msgstr "內容周圍的斜邊樣式"
+
+#: gtk/gtkscrolledwindow.c:282
+msgid "Scrollbar spacing"
+msgstr "捲動列間隔"
+
+#: gtk/gtkscrolledwindow.c:283
+msgid "Number of pixels between the scrollbars and the scrolled window"
+msgstr "捲動列及要捲動的視窗之間的像素數目"
+
+#: gtk/gtkseparatortoolitem.c:159
+msgid "Draw"
+msgstr ""
+
+#: gtk/gtkseparatortoolitem.c:160
+#, fuzzy
+msgid "Whether the separator is drawn, or just blank"
+msgstr "游標應否閃爍"
+
+#: gtk/gtksettings.c:170
+msgid "Double Click Time"
+msgstr "雙擊時間"
+
+#: gtk/gtksettings.c:171
+msgid ""
+"Maximum time allowed between two clicks for them to be considered a double "
+"click (in milliseconds)"
+msgstr "代表雙擊的兩下按鍵之間可接受的最長時間 (亳秒)，如果再長則不作雙擊處理"
+
+#: gtk/gtksettings.c:178
+#, fuzzy
+msgid "Double Click Distance"
+msgstr "雙擊時間"
+
+#: gtk/gtksettings.c:179
+#, fuzzy
+msgid ""
+"Maximum distance allowed between two clicks for them to be considered a "
+"double click (in pixels)"
+msgstr "代表雙擊的兩下按鍵之間可接受的最長時間 (亳秒)，如果再長則不作雙擊處理"
+
+#: gtk/gtksettings.c:186
+msgid "Cursor Blink"
+msgstr "閃爍游標"
+
+#: gtk/gtksettings.c:187
+msgid "Whether the cursor should blink"
+msgstr "游標應否閃爍"
+
+#: gtk/gtksettings.c:194
+msgid "Cursor Blink Time"
+msgstr "游標閃爍時間"
+
+#: gtk/gtksettings.c:195
+msgid "Length of the cursor blink cycle, in milleseconds"
+msgstr "游標每次閃爍的時間間隔 (毫秒)"
+
+#: gtk/gtksettings.c:202
+msgid "Split Cursor"
+msgstr "分開游標"
+
+#: gtk/gtksettings.c:203
+msgid ""
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
+msgstr "當左至右和右至左的文字混合出現時應否分別顯示游標"
+
+#: gtk/gtksettings.c:210
+msgid "Theme Name"
+msgstr "佈景名稱"
+
+#: gtk/gtksettings.c:211
+msgid "Name of theme RC file to load"
+msgstr "準備載入的佈景主題檔案名稱"
+
+#: gtk/gtksettings.c:218
+#, fuzzy
+msgid "Icon Theme Name"
+msgstr "佈景名稱"
+
+#: gtk/gtksettings.c:219
+#, fuzzy
+msgid "Name of icon theme to use"
+msgstr "預設使用的字型名稱"
+
+#: gtk/gtksettings.c:226
+msgid "Key Theme Name"
+msgstr ""
+
+#: gtk/gtksettings.c:227
+msgid "Name of key theme RC file to load"
+msgstr ""
+
+#: gtk/gtksettings.c:235
+msgid "Menu bar accelerator"
+msgstr "選單列捷徑鍵"
+
+#: gtk/gtksettings.c:236
+msgid "Keybinding to activate the menu bar"
+msgstr "啟用選單列所用的按鍵結合"
+
+#: gtk/gtksettings.c:244
+msgid "Drag threshold"
+msgstr "拖曳距離界限"
+
+#: gtk/gtksettings.c:245
+msgid "Number of pixels the cursor can move before dragging"
+msgstr "未作為拖曳之前，鼠標應移動的距離，以像素表示"
+
+#: gtk/gtksettings.c:253
+msgid "Font Name"
+msgstr "字型名稱"
+
+#: gtk/gtksettings.c:254
+msgid "Name of default font to use"
+msgstr "預設使用的字型名稱"
+
+#: gtk/gtksettings.c:262
+msgid "Icon Sizes"
+msgstr "圖示大小"
+
+#: gtk/gtksettings.c:263
+msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
+msgstr "表示圖示大小的清單 (gtk-menu=16,16;gtk-button=20,20..."
+
+#: gtk/gtksizegroup.c:241
+msgid "Mode"
+msgstr "模式"
+
+#: gtk/gtksizegroup.c:242
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:241
+msgid "The adjustment that holds the value of the spinbutton"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:248
+msgid "Climb Rate"
+msgstr "數值調整速度"
+
+#: gtk/gtkspinbutton.c:249
+msgid "The acceleration rate when you hold down a button"
+msgstr "按下按鈕時數值調整的加速度"
+
+#: gtk/gtkspinbutton.c:259
+msgid "The number of decimal places to display"
+msgstr "顯示的小數點後位數"
+
+#: gtk/gtkspinbutton.c:268
+msgid "Snap to Ticks"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:269
+msgid ""
+"Whether erroneous values are automatically changed to a spin button's "
+"nearest step increment"
+msgstr "當微調按鈕內的數值不正確時，是否自動更換為最接近的正確數值"
+
+#: gtk/gtkspinbutton.c:276
+msgid "Numeric"
+msgstr "數字"
+
+#: gtk/gtkspinbutton.c:277
+msgid "Whether non-numeric characters should be ignored"
+msgstr "是否忽略非數字的字元"
+
+#: gtk/gtkspinbutton.c:284
+msgid "Wrap"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:285
+msgid "Whether a spin button should wrap upon reaching its limits"
+msgstr ""
+
+#: gtk/gtkspinbutton.c:292
+msgid "Update Policy"
+msgstr "更新方式"
+
+#: gtk/gtkspinbutton.c:293
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
+msgstr "微調按鈕應該任何時候都更新，還是只有輸入的數值合法時才會更新"
+
+#: gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "數值"
+
+#: gtk/gtkspinbutton.c:302
+msgid "Reads the current value, or sets a new value"
+msgstr "讀取目前的數值，或是設定新的數值"
+
+#: gtk/gtkspinbutton.c:311
+#, fuzzy
+msgid "Style of bevel around the spin button"
+msgstr "內容周圍的斜邊樣式"
+
+#: gtk/gtkstatusbar.c:167
+msgid "Has Resize Grip"
+msgstr ""
+
+#: gtk/gtkstatusbar.c:168
+msgid "Whether the statusbar has a grip for resizing the toplevel"
+msgstr ""
+
+#: gtk/gtkstatusbar.c:195
+msgid "Style of bevel around the statusbar text"
+msgstr "狀態列文字周圍的斜邊樣式"
+
+#: gtk/gtktable.c:158
+msgid "Rows"
+msgstr "行數"
+
+#: gtk/gtktable.c:159
+msgid "The number of rows in the table"
+msgstr "表格的行數"
+
+#: gtk/gtktable.c:167
+msgid "Columns"
+msgstr "列數"
+
+#: gtk/gtktable.c:168
+msgid "The number of columns in the table"
+msgstr "表格的列數"
+
+#: gtk/gtktable.c:176
+msgid "Row spacing"
+msgstr "行距"
+
+#: gtk/gtktable.c:177
+msgid "The amount of space between two consecutive rows"
+msgstr "兩行之間的距離"
+
+#: gtk/gtktable.c:185
+msgid "Column spacing"
+msgstr "列距"
+
+#: gtk/gtktable.c:186
+msgid "The amount of space between two consecutive columns"
+msgstr "兩列之間的距離"
+
+#: gtk/gtktable.c:194
+msgid "Homogenous"
+msgstr "統一尺寸"
+
+#: gtk/gtktable.c:195
+msgid "If TRUE this means the table cells are all the same width/height"
+msgstr "設為 TRUE 表示表格中所有儲存格尺寸都一樣"
+
+#: gtk/gtktable.c:202
+msgid "Left attachment"
+msgstr ""
+
+#: gtk/gtktable.c:209
+msgid "Right attachment"
+msgstr ""
+
+#: gtk/gtktable.c:210
+msgid "The column number to attach the right side of a child widget to"
+msgstr ""
+
+#: gtk/gtktable.c:216
+msgid "Top attachment"
+msgstr ""
+
+#: gtk/gtktable.c:217
+msgid "The row number to attach the top of a child widget to"
+msgstr ""
+
+#: gtk/gtktable.c:223
+msgid "Bottom attachment"
+msgstr ""
+
+#: gtk/gtktable.c:230
+msgid "Horizontal options"
+msgstr "水平選項"
+
+#: gtk/gtktable.c:231
+msgid "Options specifying the horizontal behaviour of the child"
+msgstr ""
+
+#: gtk/gtktable.c:237
+msgid "Vertical options"
+msgstr "垂直選項"
+
+#: gtk/gtktable.c:238
+msgid "Options specifying the vertical behaviour of the child"
+msgstr ""
+
+#: gtk/gtktable.c:244
+msgid "Horizontal padding"
+msgstr "水平留邊"
+
+#: gtk/gtktable.c:245
+msgid ""
+"Extra space to put between the child and its left and right neighbors, in "
+"pixels"
+msgstr "副元件與鄰接左右的元件之間的額外空位，以像素表示"
+
+#: gtk/gtktable.c:251
+msgid "Vertical padding"
+msgstr "垂直留邊"
+
+#: gtk/gtktable.c:252
+msgid ""
+"Extra space to put between the child and its upper and lower neighbors, in "
+"pixels"
+msgstr "副元件與鄰接上下的元件之間的額外空位，以像素表示"
+
+#: gtk/gtktext.c:602
+msgid "Horizontal adjustment for the text widget"
+msgstr "文字元件的水平調整位置"
+
+#: gtk/gtktext.c:610
+msgid "Vertical adjustment for the text widget"
+msgstr "文字元件的垂直調整位置"
+
+#: gtk/gtktext.c:617
+msgid "Line Wrap"
+msgstr "換行"
+
+#: gtk/gtktext.c:618
+msgid "Whether lines are wrapped at widget edges"
+msgstr "在元件的邊緣會否自動換行"
+
+#: gtk/gtktext.c:625
+msgid "Word Wrap"
+msgstr ""
+
+#: gtk/gtktext.c:626
+msgid "Whether words are wrapped at widget edges"
+msgstr ""
+
+#: gtk/gtktextbuffer.c:180
+msgid "Tag Table"
+msgstr ""
+
+#: gtk/gtktextbuffer.c:181
+msgid "Text Tag Table"
+msgstr ""
+
+#: gtk/gtktexttag.c:195
+msgid "Tag name"
+msgstr ""
+
+#: gtk/gtktexttag.c:196
+msgid "Name used to refer to the text tag. NULL for anonymous tags"
+msgstr ""
+
+#: gtk/gtktexttag.c:214
+msgid "Background color as a (possibly unallocated) GdkColor"
+msgstr "以 GdkColor 方式表達 (可能仍未配置) 的背景顏色"
+
+#: gtk/gtktexttag.c:221
+msgid "Background full height"
+msgstr ""
+
+#: gtk/gtktexttag.c:222
+msgid ""
+"Whether the background color fills the entire line height or only the height "
+"of the tagged characters"
+msgstr ""
+
+#: gtk/gtktexttag.c:230
+msgid "Background stipple mask"
+msgstr ""
+
+#: gtk/gtktexttag.c:231
+msgid "Bitmap to use as a mask when drawing the text background"
+msgstr ""
+
+#: gtk/gtktexttag.c:248
+msgid "Foreground color as a (possibly unallocated) GdkColor"
+msgstr "以 GdkColor 方式表達 (可能仍未配置) 的前景顏色"
+
+#: gtk/gtktexttag.c:256
+msgid "Foreground stipple mask"
+msgstr ""
+
+#: gtk/gtktexttag.c:257
+msgid "Bitmap to use as a mask when drawing the text foreground"
+msgstr ""
+
+#: gtk/gtktexttag.c:264
+msgid "Text direction"
+msgstr "文字方向"
+
+#: gtk/gtktexttag.c:265
+msgid "Text direction, e.g. right-to-left or left-to-right"
+msgstr "文字方向，例如左至右或右至左"
+
+#: gtk/gtktexttag.c:282
+msgid "Font description as a string, e.g. \"Sans Italic 12\""
+msgstr "以字串方式表達的字型，例如“Sans Italic 12”"
+
+#: gtk/gtktexttag.c:307
+msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
+msgstr "以 PangoStyle 方式表示的字型款式，例如 PANGO_STYLE_ITALIC"
+
+#: gtk/gtktexttag.c:316
+msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
+msgstr "以 PangoVariant 方式表示的字型變化，例如 PANGO_VARIANT_SMALL_CAPS"
+
+#: gtk/gtktexttag.c:325
+msgid ""
+"Font weight as an integer, see predefined values in PangoWeight; for "
+"example, PANGO_WEIGHT_BOLD"
+msgstr ""
+"以數字表示的字型粗幼度，請參考 PangoWeight 中預先定義的數值，例如 "
+"PANGO_WEIGHT_BOLD"
+
+#: gtk/gtktexttag.c:336
+msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
+msgstr ""
+
+#: gtk/gtktexttag.c:345
+msgid "Font size in Pango units"
+msgstr "以 Pango 單位表示的字型大小"
+
+#: gtk/gtktexttag.c:355
+msgid ""
+"Font size as a scale factor relative to the default font size. This properly "
+"adapts to theme changes etc. so is recommended. Pango predefines some scales "
+"such as PANGO_SCALE_X_LARGE"
+msgstr ""
+
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:603
+msgid "Left, right, or center justification"
+msgstr "靠左、靠右或是置中對齊"
+
+#: gtk/gtktexttag.c:391
+msgid "Left margin"
+msgstr "左邊邊界"
+
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:612
+msgid "Width of the left margin in pixels"
+msgstr "左邊邊界的寬度，以像素數目表示"
+
+#: gtk/gtktexttag.c:401
+msgid "Right margin"
+msgstr "右邊邊界"
+
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:622
+msgid "Width of the right margin in pixels"
+msgstr "右邊邊界的寬度，以像素數目表示"
+
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:631
+msgid "Indent"
+msgstr "縮排"
+
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
+msgid "Amount to indent the paragraph, in pixels"
+msgstr "段落縮排的程度，以像素數目表示"
+
+#: gtk/gtktexttag.c:424
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative) "
+"in pixels"
+msgstr "文字在基準線以上的距離 (負數表示文字在基準線以下)，以像素數目表示"
+
+#: gtk/gtktexttag.c:433
+msgid "Pixels above lines"
+msgstr "段落頂端空間"
+
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:556
+msgid "Pixels of blank space above paragraphs"
+msgstr "段落頂端的空間的像素數目"
+
+#: gtk/gtktexttag.c:443
+msgid "Pixels below lines"
+msgstr "段落底部空間"
+
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:566
+msgid "Pixels of blank space below paragraphs"
+msgstr "段落底部的空間的像素數目"
+
+#: gtk/gtktexttag.c:453
+msgid "Pixels inside wrap"
+msgstr "段落內部行距"
+
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:576
+msgid "Pixels of blank space between wrapped lines in a paragraph"
+msgstr "段落內部的行距的像素數目"
+
+#: gtk/gtktexttag.c:480
+msgid "Wrap mode"
+msgstr "換行模式"
+
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:594
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgstr "選擇永遠不換行、字詞邊界換行或是字元邊界換行"
+
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:641
+msgid "Tabs"
+msgstr ""
+
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
+msgid "Custom tabs for this text"
+msgstr ""
+
+#: gtk/gtktexttag.c:498
+msgid "Invisible"
+msgstr "隱藏"
+
+#: gtk/gtktexttag.c:499
+msgid "Whether this text is hidden. Not implemented in GTK 2.0"
+msgstr "是否隱藏本字串。GTK 2.0 中未有此項功能"
+
+#: gtk/gtktexttag.c:512
+msgid "Background full height set"
+msgstr ""
+
+#: gtk/gtktexttag.c:513
+msgid "Whether this tag affects background height"
+msgstr ""
+
+#: gtk/gtktexttag.c:516
+msgid "Background stipple set"
+msgstr ""
+
+#: gtk/gtktexttag.c:517
+msgid "Whether this tag affects the background stipple"
+msgstr ""
+
+#: gtk/gtktexttag.c:524
+msgid "Foreground stipple set"
+msgstr ""
+
+#: gtk/gtktexttag.c:525
+msgid "Whether this tag affects the foreground stipple"
+msgstr ""
+
+#: gtk/gtktexttag.c:560
+msgid "Justification set"
+msgstr ""
+
+#: gtk/gtktexttag.c:561
+msgid "Whether this tag affects paragraph justification"
+msgstr ""
+
+#: gtk/gtktexttag.c:568
+msgid "Left margin set"
+msgstr ""
+
+#: gtk/gtktexttag.c:569
+msgid "Whether this tag affects the left margin"
+msgstr ""
+
+#: gtk/gtktexttag.c:572
+msgid "Indent set"
+msgstr ""
+
+#: gtk/gtktexttag.c:573
+msgid "Whether this tag affects indentation"
+msgstr ""
+
+#: gtk/gtktexttag.c:580
+msgid "Pixels above lines set"
+msgstr ""
+
+#: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
+msgid "Whether this tag affects the number of pixels above lines"
+msgstr ""
+
+#: gtk/gtktexttag.c:584
+msgid "Pixels below lines set"
+msgstr ""
+
+#: gtk/gtktexttag.c:588
+msgid "Pixels inside wrap set"
+msgstr ""
+
+#: gtk/gtktexttag.c:589
+msgid "Whether this tag affects the number of pixels between wrapped lines"
+msgstr ""
+
+#: gtk/gtktexttag.c:596
+msgid "Right margin set"
+msgstr "右邊邊界設定"
+
+#: gtk/gtktexttag.c:597
+msgid "Whether this tag affects the right margin"
+msgstr "本標籤會否影響右邊邊界"
+
+#: gtk/gtktexttag.c:604
+msgid "Wrap mode set"
+msgstr "換行模式設定"
+
+#: gtk/gtktexttag.c:605
+msgid "Whether this tag affects line wrap mode"
+msgstr "本標籤會否影響換行模式"
+
+#: gtk/gtktexttag.c:608
+msgid "Tabs set"
+msgstr ""
+
+#: gtk/gtktexttag.c:609
+msgid "Whether this tag affects tabs"
+msgstr ""
+
+#: gtk/gtktexttag.c:612
+msgid "Invisible set"
+msgstr "隱藏設定"
+
+#: gtk/gtktexttag.c:613
+msgid "Whether this tag affects text visibility"
+msgstr ""
+
+#: gtk/gtktextview.c:555
+msgid "Pixels Above Lines"
+msgstr "段落頂端空間"
+
+#: gtk/gtktextview.c:565
+msgid "Pixels Below Lines"
+msgstr "段落底部空間"
+
+#: gtk/gtktextview.c:575
+msgid "Pixels Inside Wrap"
+msgstr "段落內部行距"
+
+#: gtk/gtktextview.c:593
+msgid "Wrap Mode"
+msgstr "換行模式"
+
+#: gtk/gtktextview.c:611
+msgid "Left Margin"
+msgstr "左邊邊界"
+
+#: gtk/gtktextview.c:621
+msgid "Right Margin"
+msgstr "右邊邊界"
+
+#: gtk/gtktextview.c:649
+msgid "Cursor Visible"
+msgstr "顯示游標"
+
+#: gtk/gtktextview.c:650
+msgid "If the insertion cursor is shown"
+msgstr "是否顯示游標"
+
+#: gtk/gtktextview.c:657
+msgid "Buffer"
+msgstr "緩衝區"
+
+#: gtk/gtktextview.c:658
+msgid "The buffer which is displayed"
+msgstr ""
+
+#: gtk/gtktextview.c:665
+#, fuzzy
+msgid "Overwrite mode"
+msgstr "調整尺寸模式"
+
+#: gtk/gtktextview.c:666
+msgid "Whether entered text overwrites existing contents"
+msgstr ""
+
+#: gtk/gtktextview.c:673
+msgid "Accepts tab"
+msgstr ""
+
+#: gtk/gtktextview.c:674
+msgid "Whether Tab will result in a tab character being entered"
+msgstr ""
+
+#: gtk/gtktoggleaction.c:129
+msgid "Create the same proxies as a radio action"
+msgstr ""
+
+#: gtk/gtktoggleaction.c:130
+msgid "Whether the proxies for this action look like radio action proxies"
+msgstr ""
+
+#: gtk/gtktogglebutton.c:133
+msgid "If the toggle button should be pressed in or not"
+msgstr ""
+
+#: gtk/gtktogglebutton.c:141
+msgid "If the toggle button is in an \"in between\" state"
+msgstr ""
+
+#: gtk/gtktogglebutton.c:148
+msgid "Draw Indicator"
+msgstr ""
+
+#: gtk/gtktogglebutton.c:149
+msgid "If the toggle part of the button is displayed"
+msgstr ""
+
+#: gtk/gtktoolbar.c:442
+msgid "The orientation of the toolbar"
+msgstr "工具列的方向"
+
+#: gtk/gtktoolbar.c:450
+msgid "Toolbar Style"
+msgstr "工具列式樣"
+
+#: gtk/gtktoolbar.c:451
+msgid "How to draw the toolbar"
+msgstr "如何繪畫工具列"
+
+#: gtk/gtktoolbar.c:458
+#, fuzzy
+msgid "Show Arrow"
+msgstr "顯示邊框"
+
+#: gtk/gtktoolbar.c:459
+msgid "If an arrow should be shown if the toolbar doesn't fit"
+msgstr ""
+
+#: gtk/gtktoolbar.c:468
+#, fuzzy
+msgid "Whether the item should receive extra space when the toolbar grows"
+msgstr "當主元件放大時副元件應否同時放大"
+
+#: gtk/gtktoolbar.c:476
+#, fuzzy
+msgid "Whether the item should be the same size as other homogeneous items"
+msgstr "副元件的大小應否統一"
+
+#: gtk/gtktoolbar.c:483
+msgid "Spacer size"
+msgstr ""
+
+#: gtk/gtktoolbar.c:484
+msgid "Size of spacers"
+msgstr ""
+
+#: gtk/gtktoolbar.c:493
+msgid "Amount of border space between the toolbar shadow and the buttons"
+msgstr ""
+
+#: gtk/gtktoolbar.c:501
+msgid "Space style"
+msgstr ""
+
+#: gtk/gtktoolbar.c:502
+msgid "Whether spacers are vertical lines or just blank"
+msgstr ""
+
+#: gtk/gtktoolbar.c:509
+msgid "Button relief"
+msgstr "按鈕斜邊"
+
+#: gtk/gtktoolbar.c:510
+msgid "Type of bevel around toolbar buttons"
+msgstr "工具列按鈕邊緣的斜邊樣式"
+
+#: gtk/gtktoolbar.c:517
+msgid "Style of bevel around the toolbar"
+msgstr "工具列邊緣的斜邊樣式"
+
+#: gtk/gtktoolbar.c:523
+msgid "Toolbar style"
+msgstr "工具列樣式"
+
+#: gtk/gtktoolbar.c:524
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
+msgstr "決定預設的工具列只顯示文字，還是文字加圖示，或是只顯示圖示等等"
+
+#: gtk/gtktoolbar.c:530
+msgid "Toolbar icon size"
+msgstr "工具列圖示尺寸"
+
+#: gtk/gtktoolbar.c:531
+msgid "Size of icons in default toolbars"
+msgstr "預設工具列的圖示尺寸"
+
+#: gtk/gtktoolbutton.c:180
+#, fuzzy
+msgid "Text to show in the item."
+msgstr "表格的行數"
+
+#: gtk/gtktoolbutton.c:187
+msgid ""
+"If set, an underline in the label property indicates that the next character "
+"should be used for the mnemonic accelerator key in the overflow menu"
+msgstr ""
+
+#: gtk/gtktoolbutton.c:194
+#, fuzzy
+msgid "Widget to use as the item label"
+msgstr "標簽標題周圍的邊框寬度"
+
+#: gtk/gtktoolbutton.c:200
+#, fuzzy
+msgid "Stock Id"
+msgstr "內置圖示代碼"
+
+#: gtk/gtktoolbutton.c:201
+#, fuzzy
+msgid "The stock icon displayed on the item"
+msgstr "進度列中所顯示的文字"
+
+#: gtk/gtktoolbutton.c:207
+#, fuzzy
+msgid "Icon widget"
+msgstr "圖示集"
+
+#: gtk/gtktoolbutton.c:208
+#, fuzzy
+msgid "Icon widget to display in the item"
+msgstr "準備顯示的圖示集"
+
+#: gtk/gtktoolitem.c:169
+msgid ""
+"Whether the toolbar item is considered important. When TRUE, toolbar buttons "
+"show text in GTK_TOOLBAR_BOTH_HORIZ mode"
+msgstr ""
+
+#: gtk/gtktreemodelsort.c:328
+msgid "TreeModelSort Model"
+msgstr ""
+
+#: gtk/gtktreemodelsort.c:329
+msgid "The model for the TreeModelSort to sort"
+msgstr ""
+
+#: gtk/gtktreeview.c:527
+msgid "TreeView Model"
+msgstr ""
+
+#: gtk/gtktreeview.c:528
+msgid "The model for the tree view"
+msgstr ""
+
+#: gtk/gtktreeview.c:536
+msgid "Horizontal Adjustment for the widget"
+msgstr ""
+
+#: gtk/gtktreeview.c:544
+msgid "Vertical Adjustment for the widget"
+msgstr ""
+
+#: gtk/gtktreeview.c:552
+msgid "Show the column header buttons"
+msgstr ""
+
+#: gtk/gtktreeview.c:559
+msgid "Headers Clickable"
+msgstr "可以按下標頭"
+
+#: gtk/gtktreeview.c:560
+msgid "Column headers respond to click events"
+msgstr ""
+
+#: gtk/gtktreeview.c:567
+msgid "Expander Column"
+msgstr ""
+
+#: gtk/gtktreeview.c:568
+msgid "Set the column for the expander column"
+msgstr ""
+
+#: gtk/gtktreeview.c:575 gtk/gtktreeviewcolumn.c:329
+msgid "Reorderable"
+msgstr "可重新排列"
+
+#: gtk/gtktreeview.c:576
+msgid "View is reorderable"
+msgstr ""
+
+#: gtk/gtktreeview.c:583
+msgid "Rules Hint"
+msgstr ""
+
+#: gtk/gtktreeview.c:584
+msgid "Set a hint to the theme engine to draw rows in alternating colors"
+msgstr ""
+
+#: gtk/gtktreeview.c:591
+msgid "Enable Search"
+msgstr "可以搜尋"
+
+#: gtk/gtktreeview.c:592
+msgid "View allows user to search through columns interactively"
+msgstr ""
+
+#: gtk/gtktreeview.c:599
+msgid "Search Column"
+msgstr ""
+
+#: gtk/gtktreeview.c:600
+msgid "Model column to search through when searching through code"
+msgstr ""
+
+#: gtk/gtktreeview.c:609
+msgid "Fixed Height Mode"
+msgstr ""
+
+#: gtk/gtktreeview.c:610
+msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
+msgstr ""
+
+#: gtk/gtktreeview.c:630
+msgid "Vertical Separator Width"
+msgstr "垂直分隔元件寬度"
+
+#: gtk/gtktreeview.c:631
+msgid "Vertical space between cells.  Must be an even number"
+msgstr "儲存格之間的垂直寬度。必須是偶數"
+
+#: gtk/gtktreeview.c:639
+msgid "Horizontal Separator Width"
+msgstr "水平分隔元件寬度"
+
+#: gtk/gtktreeview.c:640
+msgid "Horizontal space between cells.  Must be an even number"
+msgstr "儲存格之間的水平寬度。必須是偶數"
+
+#: gtk/gtktreeview.c:648
+msgid "Allow Rules"
+msgstr ""
+
+#: gtk/gtktreeview.c:649
+msgid "Allow drawing of alternating color rows"
+msgstr ""
+
+#: gtk/gtktreeview.c:655
+msgid "Indent Expanders"
+msgstr "令展開資料的箭頭縮排"
+
+#: gtk/gtktreeview.c:656
+msgid "Make the expanders indented"
+msgstr "令展開資料的箭頭縮排"
+
+#: gtk/gtktreeview.c:662
+msgid "Even Row Color"
+msgstr "偶數行的顏色"
+
+#: gtk/gtktreeview.c:663
+msgid "Color to use for even rows"
+msgstr "在偶數的行中所使用的顏色"
+
+#: gtk/gtktreeview.c:669
+msgid "Odd Row Color"
+msgstr "奇數行的顏色"
+
+#: gtk/gtktreeview.c:670
+msgid "Color to use for odd rows"
+msgstr "在奇數的行中所使用的顏色"
+
+#: gtk/gtktreeviewcolumn.c:223
+msgid "Whether to display the column"
+msgstr "是否顯示該列資料"
+
+#: gtk/gtktreeviewcolumn.c:230 gtk/gtkwindow.c:481
+msgid "Resizable"
+msgstr "可調整尺寸"
+
+#: gtk/gtktreeviewcolumn.c:231
+msgid "Column is user-resizable"
+msgstr "欄寬可以調整"
+
+#: gtk/gtktreeviewcolumn.c:239
+msgid "Current width of the column"
+msgstr "目前的欄寬"
+
+#: gtk/gtktreeviewcolumn.c:247
+msgid "Sizing"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:248
+msgid "Resize mode of the column"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:256
+msgid "Fixed Width"
+msgstr "固定寬度"
+
+#: gtk/gtktreeviewcolumn.c:257
+msgid "Current fixed width of the column"
+msgstr "目前的固定欄寬"
+
+#: gtk/gtktreeviewcolumn.c:266
+msgid "Minimum Width"
+msgstr "最小寬度"
+
+#: gtk/gtktreeviewcolumn.c:267
+msgid "Minimum allowed width of the column"
+msgstr "可接受的最小欄寬"
+
+#: gtk/gtktreeviewcolumn.c:276
+msgid "Maximum Width"
+msgstr "最大寬度"
+
+#: gtk/gtktreeviewcolumn.c:277
+msgid "Maximum allowed width of the column"
+msgstr "可接受的最大欄寬"
+
+#: gtk/gtktreeviewcolumn.c:287
+msgid "Title to appear in column header"
+msgstr "欄位標題中所顯示的文字"
+
+#: gtk/gtktreeviewcolumn.c:295
+msgid "Column gets share of extra width allocated to the widget"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:302
+msgid "Clickable"
+msgstr "可按下"
+
+#: gtk/gtktreeviewcolumn.c:303
+msgid "Whether the header can be clicked"
+msgstr "可否按下欄位標頭"
+
+#: gtk/gtktreeviewcolumn.c:311
+msgid "Widget"
+msgstr "元件"
+
+#: gtk/gtktreeviewcolumn.c:312
+msgid "Widget to put in column header button instead of column title"
+msgstr "在欄位標頭中，以指定元件代替標題文字"
+
+#: gtk/gtktreeviewcolumn.c:319
+msgid "Alignment"
+msgstr "對齊"
+
+#: gtk/gtktreeviewcolumn.c:320
+msgid "X Alignment of the column header text or widget"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:330
+msgid "Whether the column can be reordered around the headers"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:337
+#, fuzzy
+msgid "Sort indicator"
+msgstr "排序指示器"
+
+#: gtk/gtktreeviewcolumn.c:338
+#, fuzzy
+msgid "Whether to show a sort indicator"
+msgstr "是否顯示排序指示器"
+
+#: gtk/gtktreeviewcolumn.c:345
+msgid "Sort order"
+msgstr "排列次序"
+
+#: gtk/gtktreeviewcolumn.c:346
+#, fuzzy
+msgid "Sort direction the sort indicator should indicate"
+msgstr "排序指示器應顯示的排序方向"
+
+#: gtk/gtkuimanager.c:217
+msgid "Add tearoffs to menus"
+msgstr ""
+
+#: gtk/gtkuimanager.c:218
+#, fuzzy
+msgid "Whether tearoff menu items should be added to menus"
+msgstr "應否使用色盤"
+
+#: gtk/gtkuimanager.c:225
+msgid "Merged UI definition"
+msgstr ""
+
+#: gtk/gtkuimanager.c:226
+msgid "An XML string describing the merged UI"
+msgstr ""
+
+#: gtk/gtkviewport.c:135
+msgid ""
+"The GtkAdjustment that determines the values of the horizontal position for "
+"this viewport"
+msgstr ""
+
+#: gtk/gtkviewport.c:143
+msgid ""
+"The GtkAdjustment that determines the values of the vertical position for "
+"this viewport"
+msgstr ""
+
+#: gtk/gtkviewport.c:151
+msgid "Determines how the shadowed box around the viewport is drawn"
+msgstr ""
+
+#: gtk/gtkwidget.c:406
+msgid "Widget name"
+msgstr "元件名稱"
+
+#: gtk/gtkwidget.c:407
+msgid "The name of the widget"
+msgstr "元件的名稱"
+
+#: gtk/gtkwidget.c:413
+msgid "Parent widget"
+msgstr "主元件"
+
+#: gtk/gtkwidget.c:414
+msgid "The parent widget of this widget. Must be a Container widget"
+msgstr "該元件的主元件，必須是容器元件"
+
+#: gtk/gtkwidget.c:421
+msgid "Width request"
+msgstr "指定寬度"
+
+#: gtk/gtkwidget.c:422
+msgid ""
+"Override for width request of the widget, or -1 if natural request should be "
+"used"
+msgstr "自行指定元件的寬度，使用 -1 則表示使用預設寬度"
+
+#: gtk/gtkwidget.c:430
+msgid "Height request"
+msgstr "指定高度"
+
+#: gtk/gtkwidget.c:431
+msgid ""
+"Override for height request of the widget, or -1 if natural request should "
+"be used"
+msgstr "自行指定元件的高度，使用 -1 則表示使用預設高度"
+
+#: gtk/gtkwidget.c:440
+msgid "Whether the widget is visible"
+msgstr "是否顯示元件"
+
+#: gtk/gtkwidget.c:447
+msgid "Whether the widget responds to input"
+msgstr "元件是否對輸入有反應"
+
+#: gtk/gtkwidget.c:453
+msgid "Application paintable"
+msgstr ""
+
+#: gtk/gtkwidget.c:454
+msgid "Whether the application will paint directly on the widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:460
+msgid "Can focus"
+msgstr "可接受焦點"
+
+#: gtk/gtkwidget.c:461
+msgid "Whether the widget can accept the input focus"
+msgstr "元件可否接受輸入焦點"
+
+#: gtk/gtkwidget.c:467
+msgid "Has focus"
+msgstr "獲得焦點"
+
+#: gtk/gtkwidget.c:468
+msgid "Whether the widget has the input focus"
+msgstr "元件是否在輸入焦點內"
+
+#: gtk/gtkwidget.c:474
+msgid "Is focus"
+msgstr ""
+
+#: gtk/gtkwidget.c:475
+msgid "Whether the widget is the focus widget within the toplevel"
+msgstr ""
+
+#: gtk/gtkwidget.c:481
+msgid "Can default"
+msgstr "可成為預設元件"
+
+#: gtk/gtkwidget.c:482
+msgid "Whether the widget can be the default widget"
+msgstr "該元件可否成為預設的視窗元件"
+
+#: gtk/gtkwidget.c:488
+msgid "Has default"
+msgstr "是預設元件"
+
+#: gtk/gtkwidget.c:489
+msgid "Whether the widget is the default widget"
+msgstr "該元件是否預設的視窗元件"
+
+#: gtk/gtkwidget.c:495
+msgid "Receives default"
+msgstr ""
+
+#: gtk/gtkwidget.c:496
+msgid "If TRUE, the widget will receive the default action when it is focused"
+msgstr ""
+
+#: gtk/gtkwidget.c:502
+msgid "Composite child"
+msgstr "屬於組合元件"
+
+#: gtk/gtkwidget.c:503
+msgid "Whether the widget is part of a composite widget"
+msgstr "該元件是否組合元件的一部分"
+
+#: gtk/gtkwidget.c:509
+msgid "Style"
+msgstr "樣式"
+
+#: gtk/gtkwidget.c:510
+msgid ""
+"The style of the widget, which contains information about how it will look "
+"(colors etc)"
+msgstr "元件的樣式，包括與外觀有關的資訊(例如色彩)。"
+
+#: gtk/gtkwidget.c:516
+msgid "Events"
+msgstr "事件"
+
+#: gtk/gtkwidget.c:517
+msgid "The event mask that decides what kind of GdkEvents this widget gets"
+msgstr ""
+
+#: gtk/gtkwidget.c:524
+msgid "Extension events"
+msgstr "延伸事件"
+
+#: gtk/gtkwidget.c:525
+msgid "The mask that decides what kind of extension events this widget gets"
+msgstr ""
+
+#: gtk/gtkwidget.c:532
+msgid "No show all"
+msgstr ""
+
+#: gtk/gtkwidget.c:533
+msgid "Whether gtk_widget_show_all() should not affect this widget"
+msgstr ""
+
+#: gtk/gtkwidget.c:1362
+msgid "Interior Focus"
+msgstr "在內部顯示焦點"
+
+#: gtk/gtkwidget.c:1363
+msgid "Whether to draw the focus indicator inside widgets"
+msgstr "是否在視窗元件內部顯示焦點線"
+
+#: gtk/gtkwidget.c:1369
+msgid "Focus linewidth"
+msgstr "焦點線寬度"
+
+#: gtk/gtkwidget.c:1370
+msgid "Width, in pixels, of the focus indicator line"
+msgstr "輸入焦點指示線的寬度，以像素為單位"
+
+#: gtk/gtkwidget.c:1376
+msgid "Focus line dash pattern"
+msgstr "焦點線虛線樣式"
+
+#: gtk/gtkwidget.c:1377
+msgid "Dash pattern used to draw the focus indicator"
+msgstr "顯示輸入焦點指示線時使用的虛線樣式"
+
+#: gtk/gtkwidget.c:1382
+msgid "Focus padding"
+msgstr "焦點指示線留邊"
+
+#: gtk/gtkwidget.c:1383
+msgid "Width, in pixels, between focus indicator and the widget 'box'"
+msgstr "輸入焦點指示線及視窗元件邊界之間的寬度，以像素為單位"
+
+#: gtk/gtkwidget.c:1388
+msgid "Cursor color"
+msgstr "游標顏色"
+
+#: gtk/gtkwidget.c:1389
+msgid "Color with which to draw insertion cursor"
+msgstr "繪畫游標使用的顏色"
+
+#: gtk/gtkwidget.c:1394
+msgid "Secondary cursor color"
+msgstr "第二游標顏色"
+
+#: gtk/gtkwidget.c:1395
+msgid ""
+"Color with which to draw the secondary insertion cursor when editing mixed "
+"right-to-left and left-to-right text"
+msgstr "當編輯混合右至左及左至右的文字時，繪畫第二個插入游標所使用的顏色。"
+
+#: gtk/gtkwidget.c:1400
+msgid "Cursor line aspect ratio"
+msgstr "游標長寬比"
+
+#: gtk/gtkwidget.c:1401
+msgid "Aspect ratio with which to draw insertion cursor"
+msgstr "繪畫游標時使用的長寬比例"
+
+#: gtk/gtkwindow.c:439
+msgid "Window Type"
+msgstr "視窗類型"
+
+#: gtk/gtkwindow.c:440
+msgid "The type of the window"
+msgstr "視窗的類型"
+
+#: gtk/gtkwindow.c:448
+msgid "Window Title"
+msgstr "視窗標題"
+
+#: gtk/gtkwindow.c:449
+msgid "The title of the window"
+msgstr "視窗的標題"
+
+#: gtk/gtkwindow.c:456
+msgid "Window Role"
+msgstr ""
+
+#: gtk/gtkwindow.c:457
+msgid "Unique identifier for the window to be used when restoring a session"
+msgstr ""
+
+#: gtk/gtkwindow.c:464
+msgid "Allow Shrink"
+msgstr "可縮小"
+
+#: gtk/gtkwindow.c:466
+#, no-c-format
+msgid ""
+"If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
+"time a bad idea"
+msgstr "若設為 TRUE，視窗沒有最小尺寸。這種設定十居其九會出問題"
+
+#: gtk/gtkwindow.c:473
+msgid "Allow Grow"
+msgstr "可擴大"
+
+#: gtk/gtkwindow.c:474
+msgid "If TRUE, users can expand the window beyond its minimum size"
+msgstr "若設為 TRUE，使用者可以將視窗擴大至超過最小尺寸。"
+
+#: gtk/gtkwindow.c:482
+msgid "If TRUE, users can resize the window"
+msgstr "若設為 TRUE，使用者可以調整視窗的尺寸"
+
+#: gtk/gtkwindow.c:489
+msgid "Modal"
+msgstr "強制回應"
+
+#: gtk/gtkwindow.c:490
+msgid ""
+"If TRUE, the window is modal (other windows are not usable while this one is "
+"up)"
+msgstr ""
+"如果是 TRUE，表示該視窗是強制回應的 (當顯示該視窗時其它視窗對任何輸入都不會有"
+"反應)"
+
+#: gtk/gtkwindow.c:497
+msgid "Window Position"
+msgstr "視窗位置"
+
+#: gtk/gtkwindow.c:498
+msgid "The initial position of the window"
+msgstr "視窗的起始位置"
+
+#: gtk/gtkwindow.c:506
+msgid "Default Width"
+msgstr "預設寬度"
+
+#: gtk/gtkwindow.c:507
+msgid "The default width of the window, used when initially showing the window"
+msgstr "預設的視窗寬度，在初次顯示視窗時使用"
+
+#: gtk/gtkwindow.c:516
+msgid "Default Height"
+msgstr "預設高度"
+
+#: gtk/gtkwindow.c:517
+msgid ""
+"The default height of the window, used when initially showing the window"
+msgstr "預設的視窗高度，在初次顯示視窗時使用"
+
+#: gtk/gtkwindow.c:526
+msgid "Destroy with Parent"
+msgstr "隨主視窗關閉"
+
+#: gtk/gtkwindow.c:527
+msgid "If this window should be destroyed when the parent is destroyed"
+msgstr "當關閉主視窗時是否連本視窗也一起關閉"
+
+#: gtk/gtkwindow.c:534
+msgid "Icon"
+msgstr "圖示"
+
+#: gtk/gtkwindow.c:535
+msgid "Icon for this window"
+msgstr "本視窗所用的圖示"
+
+#: gtk/gtkwindow.c:550
+msgid "Is Active"
+msgstr "使用中"
+
+#: gtk/gtkwindow.c:551
+msgid "Whether the toplevel is the current active window"
+msgstr ""
+
+#: gtk/gtkwindow.c:558
+msgid "Focus in Toplevel"
+msgstr ""
+
+#: gtk/gtkwindow.c:559
+msgid "Whether the input focus is within this GtkWindow"
+msgstr "輸入焦點是否在該 GtkWindow 之內"
+
+#: gtk/gtkwindow.c:566
+msgid "Type hint"
+msgstr "類型提示"
+
+#: gtk/gtkwindow.c:567
+msgid ""
+"Hint to help the desktop environment understand what kind of window this is "
+"and how to treat it."
+msgstr "為桌面環境提供提示，指定它是哪一種視窗及如何處理該種視窗。"
+
+#: gtk/gtkwindow.c:575
+msgid "Skip taskbar"
+msgstr "忽略工作列"
+
+#: gtk/gtkwindow.c:576
+msgid "TRUE if the window should not be in the task bar."
+msgstr "如果不想在桌面工作列內顯示該視窗的資訊則設定為 TRUE。"
+
+#: gtk/gtkwindow.c:583
+msgid "Skip pager"
+msgstr "忽略小型畫面管理程式"
+
+#: gtk/gtkwindow.c:584
+msgid "TRUE if the window should not be in the pager."
+msgstr "如果視窗不應該在小型畫面管理程式中出現則設定為 TRUE。"
+
+#: gtk/gtkwindow.c:598
+msgid "Accept focus"
+msgstr ""
+
+#: gtk/gtkwindow.c:599
+#, fuzzy
+msgid "TRUE if the window should receive the input focus."
+msgstr "如果視窗不應該在小型畫面管理程式中出現則設定為 TRUE。"
+
+#: gtk/gtkwindow.c:613
+#, fuzzy
+msgid "Decorated"
+msgstr "目錄"
+
+#: gtk/gtkwindow.c:614
+#, fuzzy
+msgid "Whether the window should be decorated by the window manager"
+msgstr "如果視窗不應該在小型畫面管理程式中出現則設定為 TRUE。"
+
+#: gtk/gtkwindow.c:629
+msgid "Gravity"
+msgstr ""
+
+#: gtk/gtkwindow.c:630
+#, fuzzy
+msgid "The window gravity of the window"
+msgstr "視窗的類型"
+
+#: modules/input/gtkimcontextxim.c:325
+msgid "IM Preedit style"
+msgstr "輸入法 Preedit 樣式"
+
+#: modules/input/gtkimcontextxim.c:326
+msgid "How to draw the input method preedit string"
+msgstr "如何顯示輸入法 preedit 字串"
+
+#: modules/input/gtkimcontextxim.c:334
+msgid "IM Status style"
+msgstr "輸入法狀態的式樣"
+
+#: modules/input/gtkimcontextxim.c:335
+msgid "How to draw the input method statusbar"
+msgstr "如何顯示輸入法的狀態列"

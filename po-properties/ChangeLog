@@ -1,0 +1,15 @@
+Sat Jan 17 23:12:09 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* README.translators: Add a hint regarding the split.
+
+Sat Jan 17 23:07:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* New directory, a copy of ../po, with the following
+	modifications: 
+
+	- Set GETTEXT_PACKAGE to @GETTEXT_PACKAGE@-properties
+	
+	- Change the xgettext invokation to use --keyword --keyword=P_
+
+	- Only keep the property nick and blurb translations in the
+	  po files

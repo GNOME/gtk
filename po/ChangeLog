@@ -1,3 +1,14 @@
+Sat Jan 17 23:12:45 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* README.translators: Add a hint regarding the split.
+
+	* *.po: Move the property blurbs and nicks to the
+	po files in ../po-properties.
+	
+	* Makefile.in.in: Remove --keyword=P_ again, since
+	the property blurbs and nicks are now collected in
+	a separate domain, see ../po-properties.
+
 2004-01-01  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* wa.po: Updated Walloon file
