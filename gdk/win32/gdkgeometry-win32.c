@@ -36,6 +36,8 @@
 #include "gdkdrawable-win32.h"
 #include "gdkwindow-win32.h"
 
+#define SIZE_LIMIT 32000
+
 typedef struct _GdkWindowQueueItem GdkWindowQueueItem;
 typedef struct _GdkWindowParentPos GdkWindowParentPos;
 
@@ -360,13 +362,13 @@ _gdk_window_move_resize_child (GdkWindow *window,
       
       if (d_xoffset > 0 || d_yoffset > 0)
 	gdk_window_queue_translation (window, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
-      
+
       /* FIXME: 
        */
-      if (new_info.x + new_info.width > 32767)
-        new_info.width = 32767 - new_info.x;
-      if (new_info.y + new_info.height > 32767)
-        new_info.height = 32767 - new_info.y;
+      if (new_info.x + new_info.width > SIZE_LIMIT)
+        new_info.width = SIZE_LIMIT - new_info.x;
+      if (new_info.y + new_info.height > SIZE_LIMIT)
+        new_info.height = SIZE_LIMIT - new_info.y;
 
       if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
 		       new_info.x, new_info.y, new_info.width, new_info.height,
@@ -441,7 +443,7 @@ gdk_window_compute_position (GdkWindowImplWin32   *window,
 
   info->big = FALSE;
   
-  if (window->width <= 32768)
+  if (window->width <= SIZE_LIMIT)
     {
       info->width = window->width;
       info->x = parent_pos->x + wrapper->x - parent_pos->win32_x;
@@ -449,19 +451,19 @@ gdk_window_compute_position (GdkWindowImplWin32   *window,
   else
     {
       info->big = TRUE;
-      info->width = 32768;
-      if (parent_pos->x + wrapper->x < -16384)
+      info->width = SIZE_LIMIT;
+      if (parent_pos->x + wrapper->x < -(SIZE_LIMIT/2))
 	{
-	  if (parent_pos->x + wrapper->x + window->width < 16384)
-	    info->x = parent_pos->x + wrapper->x + window->width - 32768 - parent_pos->win32_x;
+	  if (parent_pos->x + wrapper->x + window->width < (SIZE_LIMIT/2))
+	    info->x = parent_pos->x + wrapper->x + window->width - SIZE_LIMIT - parent_pos->win32_x;
 	  else
-	    info->x = -16384 - parent_pos->win32_y;
+	    info->x = -(SIZE_LIMIT/2) - parent_pos->win32_y;
 	}
       else
 	info->x = parent_pos->x + wrapper->x - parent_pos->win32_x;
     }
 
-  if (window->height <= 32768)
+  if (window->height <= SIZE_LIMIT)
     {
       info->height = window->height;
       info->y = parent_pos->y + wrapper->y - parent_pos->win32_y;
@@ -469,13 +471,13 @@ gdk_window_compute_position (GdkWindowImplWin32   *window,
   else
     {
       info->big = TRUE;
-      info->height = 32768;
-      if (parent_pos->y + wrapper->y < -16384)
+      info->height = SIZE_LIMIT;
+      if (parent_pos->y + wrapper->y < -(SIZE_LIMIT/2))
 	{
-	  if (parent_pos->y + wrapper->y + window->height < 16384)
-	    info->y = parent_pos->y + wrapper->y + window->height - 32768 - parent_pos->win32_y;
+	  if (parent_pos->y + wrapper->y + window->height < (SIZE_LIMIT/2))
+	    info->y = parent_pos->y + wrapper->y + window->height - SIZE_LIMIT - parent_pos->win32_y;
 	  else
-	    info->y = -16384 - parent_pos->win32_y;
+	    info->y = -(SIZE_LIMIT/2) - parent_pos->win32_y;
 	}
       else
 	info->y = parent_pos->y + wrapper->y - parent_pos->win32_y;

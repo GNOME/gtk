@@ -233,7 +233,7 @@ real_window_procedure (HWND   hwnd,
        * GDK_EVENT_FUNC_FROM_WINDOW_PROC env var to get this
        * behaviour.
        */
-      if (gdk_event_func_from_window_proc && gdk_event_func)
+      if (gdk_event_func_from_window_proc && _gdk_event_func)
 	{
 	  GDK_THREADS_ENTER ();
 	  
@@ -2758,6 +2758,12 @@ gdk_event_translate (GdkEvent *event,
         }
       break;
 
+    case WM_GETICON:
+      GDK_NOTE (EVENTS, g_print ("WM_GETICON: %#lx %s\n",
+				 (gulong) msg->hwnd, 
+				 (ICON_BIG == msg->wParam ? "big" : "small")));
+      break;
+ 
     case WM_SETCURSOR:
       GDK_NOTE (EVENTS, g_print ("WM_SETCURSOR: %#lx %#x %#x\n",
 				 (gulong) msg->hwnd,
@@ -2864,7 +2870,39 @@ gdk_event_translate (GdkEvent *event,
 	    _gdk_input_configure_event (&event->configure, window);
 	}
       break;
+#if 0
+    case WM_SIZING :
+      {
+        LPRECT lpr = (LPRECT) msg->lParam;
+        NONCLIENTMETRICS ncm;
+        ncm.cbSize = sizeof (NONCLIENTMETRICS);
 
+        SystemParametersInfo (SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, 0);
+
+        g_print ("WM_SIZING borderWidth %d captionHeight %d\n",
+                 ncm.iBorderWidth, ncm.iCaptionHeight);
+	  event->configure.type = GDK_CONFIGURE;
+	  event->configure.window = window;
+
+	  event->configure.x = lpr->left + ncm.iBorderWidth;
+	  event->configure.y = lpr->top + ncm.iCaptionHeight;
+	  event->configure.width = lpr->right - lpr->left - 2 * ncm.iBorderWidth;
+	  event->configure.height = lpr->bottom - lpr->top - ncm.iCaptionHeight;
+	  GDK_WINDOW_OBJECT (window)->x = event->configure.x;
+	  GDK_WINDOW_OBJECT (window)->y = event->configure.y;
+	  window_impl->width = event->configure.width;
+	  window_impl->height = event->configure.height;
+
+	  if (GDK_WINDOW_OBJECT (window)->resize_count > 1)
+	    GDK_WINDOW_OBJECT (window)->resize_count -= 1;
+
+	  return_val = !GDK_WINDOW_DESTROYED (window);
+	  if (return_val
+	      && GDK_WINDOW_OBJECT (window)->extension_events != 0)
+	    _gdk_input_configure_event (&event->configure, window);
+      }
+      break;
+#endif
     case WM_GETMINMAXINFO:
       GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %#lx\n", (gulong) msg->hwnd));
 
@@ -3234,12 +3272,14 @@ gdk_flush (void)
 {
   MSG msg;
 
+#if 0
   /* Process all messages currently available */
   while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
       TranslateMessage (&msg); /* Translate virt. key codes */
       DispatchMessage (&msg);  /* Dispatch msg. to window */
     }
+#endif
 
   GdiFlush ();
 }

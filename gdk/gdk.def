@@ -35,7 +35,7 @@ EXPORTS
 	gdk_colors_alloc
 	gdk_colors_free
 	gdk_colors_store
-	gdk_core_pointer
+	gdk_device_get_core_pointer
 	gdk_crossing_mode_get_type
 	gdk_cursor_new
 	gdk_cursor_new_from_pixmap
@@ -51,7 +51,6 @@ EXPORTS
 	gdk_device_set_mode
 	gdk_device_set_source
 	gdk_devices_list
-	gdk_dnd_init
 	gdk_drag_abort
 	gdk_drag_action_get_type
 	gdk_drag_begin
@@ -102,15 +101,10 @@ EXPORTS
 	gdk_drawable_unref
 	gdk_drop_finish
 	gdk_drop_reply
-	gdk_error_code
 	gdk_error_trap_pop
 	gdk_error_trap_push
-	gdk_error_warnings
-	gdk_event_button_generate
 	gdk_event_copy
-	gdk_event_data
 	gdk_event_free
-	gdk_event_func
 	gdk_event_get
 	gdk_event_get_axis
 	gdk_event_get_graphics_expose
@@ -119,16 +113,11 @@ EXPORTS
 	gdk_event_get_type
 	gdk_event_handler_set
 	gdk_event_mask_get_type
-	gdk_event_new
 	gdk_event_peek
 	gdk_event_put
-	gdk_event_queue_append
-	gdk_event_queue_find_first
-	gdk_event_queue_remove_link
 	gdk_event_send_client_message
 	gdk_event_send_clientmessage_toall
 	gdk_event_type_get_type
-	gdk_event_unqueue
 	gdk_events_pending
 	gdk_exit
 	gdk_extension_mode_get_type
@@ -177,7 +166,9 @@ EXPORTS
 	gdk_gc_set_tile
 	gdk_gc_set_ts_origin
 	gdk_gc_unref
+	gdk_get_default_root_window
 	gdk_get_display
+	gdk_get_program_class
 	gdk_get_show_events
 	gdk_get_use_xshm
 	gdk_grab_status_get_type
@@ -196,16 +187,12 @@ EXPORTS
 	gdk_input_add
 	gdk_input_add_full
 	gdk_input_condition_get_type
-	gdk_input_exit
-	gdk_input_init
 	gdk_input_mode_get_type
 	gdk_input_motion_events
 	gdk_input_remove
 	gdk_input_set_extension_events
 	gdk_input_source_get_type
 	gdk_join_style_get_type
-	gdk_key_repeat_disable
-	gdk_key_repeat_restore
 	gdk_keyboard_grab
 	gdk_keyboard_ungrab
 	gdk_keymap_get_default
@@ -234,9 +221,9 @@ EXPORTS
 	gdk_pango_context_get
 	gdk_pango_context_set_colormap
 	gdk_pango_layout_get_clip_region
-	gdk_parent_root
 	gdk_pixbuf_get_from_drawable
 	gdk_pixbuf_render_pixmap_and_mask
+	gdk_pixbuf_render_pixmap_and_mask_for_colormap
 	gdk_pixbuf_render_threshold_alpha
 	gdk_pixbuf_render_to_drawable
 	gdk_pixbuf_render_to_drawable_alpha
@@ -300,7 +287,6 @@ EXPORTS
 	gdk_selection_get_type
 	gdk_selection_owner_get
 	gdk_selection_owner_set
-	gdk_selection_property
 	gdk_selection_property_get
 	gdk_selection_send_notify
 	gdk_set_double_click_time
@@ -344,6 +330,7 @@ EXPORTS
 	gdk_visual_get_type
 	gdk_visual_type_get_type
 	gdk_wcstombs
+	gdk_win32_drawable_get_handle
 	gdk_win32_handle_table_lookup
 	gdk_win32_hdc_get
 	gdk_win32_hdc_release
@@ -416,6 +403,7 @@ EXPORTS
 	gdk_window_set_group
 	gdk_window_set_hints
 	gdk_window_set_icon
+	gdk_window_set_icon_list
 	gdk_window_set_icon_name
 	gdk_window_set_modal_hint
 	gdk_window_set_override_redirect

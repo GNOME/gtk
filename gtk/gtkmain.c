@@ -235,8 +235,13 @@ get_module_path (void)
   if (exe_prefix)
     default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", "modules", NULL);
   else
-    default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", "modules", NULL);
-
+    {
+#ifndef G_OS_WIN32
+      default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", "modules", NULL);
+#else
+      default_dir = g_build_filename (get_gtk_win32_directory (""), "modules", NULL);
+#endif
+    }
   module_path = g_strconcat (module_path ? module_path : "",
 			     module_path ? G_SEARCHPATH_SEPARATOR_S : "",
 			     default_dir, NULL);
@@ -264,6 +269,7 @@ find_module (gchar      **module_path,
     {
       gchar *version_directory;
 
+#ifndef G_OS_WIN32 /* ignoring GTK_BINARY_VERSION elsewhere too */
       version_directory = g_build_filename (module_path[i], GTK_BINARY_VERSION, NULL);
       module_name = g_module_build_path (version_directory, name);
       g_free (version_directory);
@@ -275,13 +281,15 @@ find_module (gchar      **module_path,
 	}
       
       g_free (module_name);
+#endif
 
       module_name = g_module_build_path (module_path[i], name);
       
       if (g_file_test (module_name, G_FILE_TEST_EXISTS))
 	{
+	  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
 	  g_free (module_name);
-	  return g_module_open (module_name, G_MODULE_BIND_LAZY);
+	  return module;
 	}
 
       g_free (module_name);
@@ -523,7 +531,7 @@ gtk_init_check (int	 *argc,
   {
     bindtextdomain (GETTEXT_PACKAGE,
 		    g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE,
-								   g_strdup_printf ("gtk-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION),
+								   g_strdup_printf ("gtk-win32-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION),
 								   "locale"));
   }
 #endif

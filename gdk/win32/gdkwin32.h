@@ -28,6 +28,7 @@
 #define __GDK_WIN32_H__
 
 #include <gdk/gdkprivate.h>
+#include <gdk/gdkinternals.h>
 #include <gdk/gdkcursor.h>
 
 #ifndef STRICT
@@ -196,6 +197,8 @@ extern "C" {
 #define CopyCursor(pcur) ((HCURSOR)CopyIcon((HICON)(pcur)))
 #endif
 
+#ifdef INSIDE_GDK_WIN32
+
 #include <gdk/gdkprivate.h>
 
 /* Define corresponding Windows types for some X11 types, just for laziness. */
@@ -339,9 +342,8 @@ struct _GdkGCWin32Class
 
 GType gdk_gc_win32_get_type (void);
 
-#define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
+#undef GDK_ROOT_PARENT /* internal access is direct */
 #define GDK_ROOT_PARENT()             ((GdkWindow *) _gdk_parent_root)
-#define GDK_DISPLAY()                 NULL
 #define GDK_WINDOW_HWND(win)          (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
 #define GDK_PIXMAP_HBITMAP(pixmap)    (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)pixmap)->impl)->handle)
 #define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? (GDK_WINDOW_HWND (win)) : (GDK_PIXMAP_HBITMAP (win)))
@@ -350,12 +352,24 @@ GType gdk_gc_win32_get_type (void);
 #define GDK_COLORMAP_WIN32COLORMAP(cmap) (((GdkColormapPrivateWin32 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
 
+#else
+/* definition for exported 'internals' go here */
+#define GDK_WINDOW_HWND(d) (gdk_win32_drawable_get_handle (d))
+
+#endif
+
+#define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
+#define GDK_DISPLAY()                 NULL
+
 /* Functions to create GDK pixmaps and windows from their native equivalents */
 GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
 GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
 
 /* Return the Gdk* for a particular HANDLE */
 gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
+
+/* Translate from drawable to windows handle */
+HWND          gdk_win32_drawable_get_handle (GdkDrawable *drawable);
 
 #define gdk_window_lookup(hwnd) (GdkWindow*) gdk_win32_handle_table_lookup (hwnd)
 #define gdk_pixmap_lookup(hbm)	(GdkPixmap*) gdk_win32_handle_table_lookup (hbm)

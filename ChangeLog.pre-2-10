@@ -1,3 +1,31 @@
+2001-09-21  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.def :
+	* gtk/gtk.def : updated externals
+
+	* gtk/gtkmain.h : define get_gtk_win32_directoty () 
+	* gtk/gtkmain.c (find_module) : don't use module_name after freeing it.
+	Also handle that Win32 pathes cann't be hard-coded	
+
+	* gtk/gtkrc.c : use get_gtk_win32_directoty () to cleanup the various
+	module, themes etc directory calculations
+
+	* gdk/win32/gdkgeometry-win32.c : some more hacking to get coordinates
+	>16 bit right. The size limit within Win9x appears _not_ to be 32767
+	but slightly smaller ...
+
+	* gdk/win32/gdkwindow-win32.c : use impl->position_info to avoid 
+	>16 bit clipping. Added dummy body for gdk_window_set_icon_list ()
+
+	* gdk/win32/gdkdrawable-win32.c : implement gdk_win32_drawable_get_handle ()
+
+	* gdk/win32/gdkevents-win32.c : some tweaking to get better expose
+	handling. I'm not sure if it is better now, but at least not worse
+
+	* gdk/win32/makefile.msc : define INSIDE_GDK_WIN32, some cleanup
+
+	* gdk/win32/gdkwin32.h : reflect recent API restrictions
+
 2001-09-21  Matt Wilson  <msw@redhat.com>
 
 	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_destroy): set

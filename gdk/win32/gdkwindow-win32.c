@@ -610,8 +610,8 @@ gdk_window_new (GdkWindow     *parent,
 				      MAKEINTRESOURCE(klass),
 				      mbtitle,
 				      dwStyle,
-				      x, y, 
-				      width, height,
+				      impl->position_info.x, impl->position_info.y, 
+				      impl->position_info.width, impl->position_info.height,
 				      hparent,
 				      NULL,
 				      gdk_app_hmodule,
@@ -623,8 +623,8 @@ gdk_window_new (GdkWindow     *parent,
 		    MAKEINTRESOURCE(klass),
 		    mbtitle,
 		    dwStyle,
-		    x, y, 
-		    width, height,
+		    impl->position_info.x, impl->position_info.y, 
+		    impl->position_info.width, impl->position_info.height,
 		    hparent,
 		    NULL,
 		    gdk_app_hmodule,
@@ -1303,7 +1303,7 @@ gdk_window_set_hints (GdkWindow *window,
 	  impl->hint_min_width = rect.right - rect.left;
 	  impl->hint_min_height = rect.bottom - rect.top;
 
-	  /* Also chek if he current size of the window is in bounds. */
+	  /* Also check if he current size of the window is in bounds. */
 	  GetClientRect (GDK_WINDOW_HWND (window), &rect);
 	  if (rect.right < min_width && rect.bottom < min_height)
 	    gdk_window_resize (window, min_width, min_height);
@@ -2003,6 +2003,22 @@ gdk_window_set_override_redirect (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   g_warning ("gdk_window_set_override_redirect not implemented");
+}
+
+void          
+gdk_window_set_icon_list (GdkWindow *window,
+			  GList     *pixbufs)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* We could convert it to a hIcon and DrawIcon () it when getting
+   * a WM_PAINT with IsIconic, but is it worth it ? Same probably
+   * goes for gdk_window_set_icon (). Patches accepted :-)  --hb
+   * Or do we only need to deliver the Icon on WM_GETICON ?
+   */
 }
 
 void          
