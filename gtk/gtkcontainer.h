@@ -43,6 +43,7 @@ struct _GtkContainer
   GtkWidget widget;
 
   GtkWidget *focus_child;
+
   gint16 border_width;
   guint auto_resize : 1;
   guint need_resize : 1;
@@ -72,29 +73,32 @@ struct _GtkContainerClass
 
 
 
-guint  gtk_container_get_type       (void);
-void   gtk_container_border_width   (GtkContainer     *container,
-				     gint              border_width);
-void   gtk_container_add            (GtkContainer     *container,
-				     GtkWidget        *widget);
-void   gtk_container_remove         (GtkContainer     *container,
-				     GtkWidget        *widget);
-void   gtk_container_disable_resize (GtkContainer     *container);
-void   gtk_container_enable_resize  (GtkContainer     *container);
-void   gtk_container_block_resize   (GtkContainer     *container);
-void   gtk_container_unblock_resize (GtkContainer     *container);
-gint   gtk_container_need_resize    (GtkContainer     *container);
-void   gtk_container_foreach        (GtkContainer     *container,
-				     GtkCallback       callback,
-				     gpointer          callback_data);
-void   gtk_container_foreach_interp (GtkContainer     *container,
-                                     GtkCallbackMarshal callback,
-                                     gpointer          callback_data,
-				     GtkDestroyNotify  notify);
-gint   gtk_container_focus          (GtkContainer     *container,
-				     GtkDirectionType  direction);
-GList* gtk_container_children       (GtkContainer     *container);
+guint  gtk_container_get_type            (void);
+void   gtk_container_border_width        (GtkContainer     *container,
+					  gint              border_width);
+void   gtk_container_add                 (GtkContainer     *container,
+					  GtkWidget        *widget);
+void   gtk_container_remove              (GtkContainer     *container,
+					  GtkWidget        *widget);
+void   gtk_container_disable_resize      (GtkContainer     *container);
+void   gtk_container_enable_resize       (GtkContainer     *container);
+void   gtk_container_block_resize        (GtkContainer     *container);
+void   gtk_container_unblock_resize      (GtkContainer     *container);
+gint   gtk_container_need_resize         (GtkContainer     *container);
+void   gtk_container_foreach             (GtkContainer     *container,
+					  GtkCallback       callback,
+					  gpointer          callback_data);
+void   gtk_container_foreach_interp      (GtkContainer     *container,
+					  GtkCallbackMarshal callback,
+					  gpointer          callback_data,
+					  GtkDestroyNotify  notify);
+gint   gtk_container_focus               (GtkContainer     *container,
+					  GtkDirectionType  direction);
+GList* gtk_container_children            (GtkContainer     *container);
 
+void   gtk_container_register_toplevel   (GtkContainer     *container);
+void   gtk_container_unregister_toplevel (GtkContainer     *container);
+     
 
 #ifdef __cplusplus
 }

@@ -30,96 +30,70 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-/* The flags that are used in the flags member of the GtkObject
- *  structure.
+/* The flags that are used by GtkWidget on top of the
+ * flags field of GtkObject.
  */
 enum
 {
-  GTK_VISIBLE		= 1 << 3,
-  GTK_MAPPED		= 1 << 4,
-  GTK_UNMAPPED		= 1 << 5,
-  GTK_REALIZED		= 1 << 6,
-  GTK_SENSITIVE		= 1 << 7,
-  GTK_PARENT_SENSITIVE	= 1 << 8,
-  GTK_NO_WINDOW		= 1 << 9,
-  GTK_HAS_FOCUS		= 1 << 10,
-  GTK_CAN_FOCUS		= 1 << 11,
-  GTK_HAS_DEFAULT	= 1 << 12,
-  GTK_CAN_DEFAULT	= 1 << 13,
-  GTK_PROPAGATE_STATE	= 1 << 14,
-  GTK_ANCHORED		= 1 << 15,
-  GTK_BASIC		= 1 << 16,
-  GTK_USER_STYLE	= 1 << 17,
-  GTK_HAS_GRAB		= 1 << 18,
-  GTK_REDRAW_PENDING	= 1 << 19,
-  GTK_RESIZE_PENDING	= 1 << 20,
-  GTK_RESIZE_NEEDED	= 1 << 21,
-  GTK_HAS_SHAPE_MASK	= 1 << 22,
-  GTK_LEAVE_PENDING	= 1 << 23,
-  GTK_TOPLEVEL		= 1 << 24,
-  GTK_TOPLEVEL_ONSCREEN	= 1 << 25,
-  /* Private flag. If set, don't unrealize a widget when it is removed
-   * from its parent. Used by gtk_widget_reparent().
-   */
-  GTK_IN_REPARENT       = 1 << 26
+  GTK_TOPLEVEL          = 1 <<  4,
+  GTK_NO_WINDOW         = 1 <<  5,
+  GTK_REALIZED          = 1 <<  6,
+  GTK_MAPPED            = 1 <<  7,
+  GTK_VISIBLE           = 1 <<  8,
+  GTK_SENSITIVE         = 1 <<  9,
+  GTK_PARENT_SENSITIVE  = 1 << 10,
+  GTK_CAN_FOCUS         = 1 << 11,
+  GTK_HAS_FOCUS         = 1 << 12,
+  GTK_CAN_DEFAULT       = 1 << 13,
+  GTK_HAS_DEFAULT       = 1 << 14,
+  GTK_HAS_GRAB          = 1 << 15,
+  GTK_BASIC		= 1 << 16
 };
 
 
 /* Macro for casting a pointer to a GtkWidget pointer.
  */
-#define GTK_WIDGET(obj)			  GTK_CHECK_CAST (obj, gtk_widget_get_type (), GtkWidget)
+#define GTK_WIDGET(wid)			  GTK_CHECK_CAST ((wid), gtk_widget_get_type (), GtkWidget)
 
-/* Macro for casting the "class" field of an object to
- *  a GtkWidgetClass pointer.
+/* Macro for casting the klass field of a widget to a GtkWidgetClass pointer.
  */
-#define GTK_WIDGET_CLASS(klass)		  GTK_CHECK_CLASS_CAST (klass, gtk_widget_get_type (), GtkWidgetClass)
+#define GTK_WIDGET_CLASS(klass)		  GTK_CHECK_CLASS_CAST ((klass), gtk_widget_get_type (), GtkWidgetClass)
 
-/* Macros for extracting various fields from GtkWidget and
- *  GtkWidgetClass structures.
+/* Macros for extracting various fields from GtkWidget and GtkWidgetClass.
  */
-#define GTK_WIDGET_TYPE(obj)		  (GTK_OBJECT_TYPE (obj))
-#define GTK_WIDGET_STATE(obj)		  (GTK_WIDGET (obj)->state)
-#define GTK_WIDGET_SAVED_STATE(obj)	  (GTK_WIDGET (obj)->saved_state)
-#define GTK_WIDGET_VISIBLE(obj)		  (GTK_OBJECT_FLAGS (obj) & GTK_VISIBLE)
-#define GTK_WIDGET_MAPPED(obj)		  (GTK_OBJECT_FLAGS (obj) & GTK_MAPPED)
-#define GTK_WIDGET_UNMAPPED(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_UNMAPPED)
-#define GTK_WIDGET_REALIZED(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_REALIZED)
-#define GTK_WIDGET_SENSITIVE(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_SENSITIVE)
-#define GTK_WIDGET_PARENT_SENSITIVE(obj)  (GTK_OBJECT_FLAGS (obj) & GTK_PARENT_SENSITIVE)
-#define GTK_WIDGET_IS_SENSITIVE(obj)	  ((GTK_WIDGET_SENSITIVE (obj) && \
-					    GTK_WIDGET_PARENT_SENSITIVE (obj)) != 0)
-#define GTK_WIDGET_NO_WINDOW(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_NO_WINDOW)
-#define GTK_WIDGET_HAS_FOCUS(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_HAS_FOCUS)
-#define GTK_WIDGET_CAN_FOCUS(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_CAN_FOCUS)
-#define GTK_WIDGET_HAS_DEFAULT(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_HAS_DEFAULT)
-#define GTK_WIDGET_CAN_DEFAULT(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_CAN_DEFAULT)
-#define GTK_WIDGET_PROPAGATE_STATE(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_PROPAGATE_STATE)
-#define GTK_WIDGET_DRAWABLE(obj)	  (GTK_WIDGET_VISIBLE (obj) && GTK_WIDGET_MAPPED (obj))
-#define GTK_WIDGET_ANCHORED(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_ANCHORED)
-#define GTK_WIDGET_BASIC(obj)		  (GTK_OBJECT_FLAGS (obj) & GTK_BASIC)
-#define GTK_WIDGET_USER_STYLE(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_USER_STYLE)
-#define GTK_WIDGET_HAS_GRAB(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_HAS_GRAB)
-#define GTK_WIDGET_REDRAW_PENDING(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_REDRAW_PENDING)
-#define GTK_WIDGET_RESIZE_PENDING(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_RESIZE_PENDING)
-#define GTK_WIDGET_RESIZE_NEEDED(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_RESIZE_NEEDED)
-#define GTK_WIDGET_HAS_SHAPE_MASK(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_HAS_SHAPE_MASK)
-#define GTK_WIDGET_LEAVE_PENDING(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_LEAVE_PENDING)
-#define GTK_WIDGET_TOPLEVEL(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_TOPLEVEL)
-#define GTK_WIDGET_TOPLEVEL_ONSCREEN(obj) (GTK_OBJECT_FLAGS (obj) & GTK_TOPLEVEL_ONSCREEN)
-#define GTK_WIDGET_IN_REPARENT(obj)       (GTK_OBJECT_FLAGS (obj) & GTK_IN_REPARENT)
+#define GTK_WIDGET_TYPE(wid)		  (GTK_OBJECT_TYPE (wid))
+#define GTK_WIDGET_STATE(wid)		  (GTK_WIDGET (wid)->state)
+#define GTK_WIDGET_SAVED_STATE(wid)	  (GTK_WIDGET (wid)->saved_state)
+
+/* Macros for extracting the widget flags from GtkWidget.
+ */
+#define GTK_WIDGET_FLAGS(wid)             (GTK_OBJECT_FLAGS (wid))
+#define GTK_WIDGET_TOPLEVEL(wid)          (GTK_WIDGET_FLAGS (wid) & GTK_TOPLEVEL)
+#define GTK_WIDGET_NO_WINDOW(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_NO_WINDOW)
+#define GTK_WIDGET_REALIZED(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_REALIZED)
+#define GTK_WIDGET_MAPPED(wid)		  (GTK_WIDGET_FLAGS (wid) & GTK_MAPPED)
+#define GTK_WIDGET_VISIBLE(wid)		  (GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE)
+#define GTK_WIDGET_DRAWABLE(wid)	  (GTK_WIDGET_VISIBLE (wid) && GTK_WIDGET_MAPPED (wid))
+#define GTK_WIDGET_SENSITIVE(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_SENSITIVE)
+#define GTK_WIDGET_PARENT_SENSITIVE(wid)  (GTK_WIDGET_FLAGS (wid) & GTK_PARENT_SENSITIVE)
+#define GTK_WIDGET_IS_SENSITIVE(wid)	  ((GTK_WIDGET_SENSITIVE (wid) && \
+					    GTK_WIDGET_PARENT_SENSITIVE (wid)) != 0)
+#define GTK_WIDGET_CAN_FOCUS(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_CAN_FOCUS)
+#define GTK_WIDGET_HAS_FOCUS(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_FOCUS)
+#define GTK_WIDGET_CAN_DEFAULT(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_CAN_DEFAULT)
+#define GTK_WIDGET_HAS_DEFAULT(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_DEFAULT)
+#define GTK_WIDGET_HAS_GRAB(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB)
+#define GTK_WIDGET_BASIC(wid)		  (GTK_WIDGET_FLAGS (wid) & GTK_BASIC)
       
+/* Macros for setting and clearing widget flags.
+ */
+#define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
+#define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
+
+/* Macros for testing whether "wid" is of type GtkWidget.
+ */
+#define GTK_IS_WIDGET(wid)		  GTK_CHECK_TYPE ((wid), GTK_TYPE_WIDGET)
 #define GTK_TYPE_WIDGET			  (gtk_widget_get_type ())
-
-/* Macro for testing whether "obj" is of type GtkWidget.
- */
-#define GTK_IS_WIDGET(obj)		  GTK_CHECK_TYPE (obj, GTK_TYPE_WIDGET)
-
-/* Macros for setting and clearing widget flags. Notice
- *  that these are only wrappers for the macros which
- *  set and clear the flags in the GtkObject structure.
- */
-#define GTK_WIDGET_SET_FLAGS(obj,flag)	  (GTK_OBJECT_SET_FLAGS (obj, flag))
-#define GTK_WIDGET_UNSET_FLAGS(obj,flag)  (GTK_OBJECT_UNSET_FLAGS (obj, flag))
 
 
 
@@ -188,6 +162,13 @@ struct _GtkWidget
    *  GtkObject pointer.
    */
   GtkObject object;
+
+  /* 16 bits of internally used private flags.
+   * this will be packed into the same 4 byte alignment frame that
+   * state and saved_state go. we therefore don't waste any new
+   * space on this.
+   */
+  guint16 private_flags;
 
   /* The state of the widget. There are actually only
    *  5 widget states (defined in "gtkenums.h").

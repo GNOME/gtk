@@ -149,6 +149,7 @@ gtkinclude_HEADERS = \
 	gtkpaned.h		\
 	gtkpixmap.h		\
 	gtkpreview.h		\
+	gtkprivate.h		\
 	gtkprogressbar.h	\
 	gtkradiobutton.h	\
 	gtkradiomenuitem.h	\

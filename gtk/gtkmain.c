@@ -31,6 +31,7 @@
 #include "gtkvscrollbar.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
+#include "gtkprivate.h"
 
 
 /* Private type definitions
@@ -439,14 +440,14 @@ gtk_main_iteration_do (gboolean blocking)
 	    {
 	      gtk_widget_event (grab_widget, event);
 	      if (event_widget == grab_widget)
-		GTK_WIDGET_SET_FLAGS (event_widget, GTK_LEAVE_PENDING);
+		GTK_PRIVATE_SET_FLAGS (event_widget, GTK_LEAVE_PENDING);
 	    }
 	  break;
 
 	case GDK_LEAVE_NOTIFY:
 	  if (event_widget && GTK_WIDGET_LEAVE_PENDING (event_widget))
 	    {
-	      GTK_WIDGET_UNSET_FLAGS (event_widget, GTK_LEAVE_PENDING);
+	      GTK_PRIVATE_UNSET_FLAGS (event_widget, GTK_LEAVE_PENDING);
 	      gtk_widget_event (event_widget, event);
 	    }
 	  else if (grab_widget && GTK_WIDGET_IS_SENSITIVE (grab_widget))
@@ -1194,11 +1195,11 @@ gtk_print (gchar *str)
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      /*
-       * gtk_signal_connect (GTK_OBJECT (window), "destroy",
-       *		     (GtkSignalFunc) gtk_widget_destroyed,
-       *		     &window);
-       */
+      
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  (GtkSignalFunc) gtk_widget_destroyed,
+			  &window);
+      
       gtk_window_set_title (GTK_WINDOW (window), "Messages");
       
       box1 = gtk_vbox_new (FALSE, 0);

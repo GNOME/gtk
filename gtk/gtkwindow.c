@@ -20,6 +20,7 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdkx.h"
+#include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 
@@ -64,6 +65,7 @@ static void gtk_window_set_arg            (GtkWindow         *window,
 static void gtk_window_get_arg            (GtkWindow         *window,
 					   GtkArg            *arg,
 					   guint	      arg_id);
+static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_finalize           (GtkObject         *object);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
@@ -177,6 +179,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gtk_object_class_add_signals (object_class, window_signals, LAST_SIGNAL);
 
+  object_class->destroy = gtk_window_destroy;
   object_class->finalize = gtk_window_finalize;
 
   widget_class->show = gtk_window_show;
@@ -206,7 +209,7 @@ static void
 gtk_window_init (GtkWindow *window)
 {
   GTK_WIDGET_UNSET_FLAGS (window, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (window, GTK_ANCHORED | GTK_TOPLEVEL);
+  GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
 
   window->title = NULL;
   window->wmclass_name = NULL;
@@ -224,8 +227,7 @@ gtk_window_init (GtkWindow *window)
   window->position = GTK_WIN_POS_NONE;
   window->use_uposition = TRUE;
   
-  /* gtk_container_add (gtk_root, GTK_WIDGET (window)); */
-  gtk_widget_set_parent (GTK_WIDGET (window), NULL);
+  gtk_container_register_toplevel (GTK_CONTAINER (window));
 }
 
 static void
@@ -482,6 +484,18 @@ gtk_window_marshal_signal_2 (GtkObject      *object,
 }
 
 static void
+gtk_window_destroy (GtkObject *object)
+{
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (object));
+
+  gtk_container_unregister_toplevel (GTK_CONTAINER (object));
+
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+static void
 gtk_window_finalize (GtkObject *object)
 {
   GtkWindow *window;
@@ -525,7 +539,6 @@ gtk_window_map (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_UNMAPPED);
 
   gtk_window_move_resize (widget);
   window = GTK_WINDOW (widget);
@@ -548,7 +561,6 @@ gtk_window_unmap (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  GTK_WIDGET_SET_FLAGS (widget, GTK_UNMAPPED);
   gdk_window_hide (widget->window);
 
   window = GTK_WINDOW (widget);
@@ -669,9 +681,6 @@ gtk_window_expose_event (GtkWidget      *widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
-  if (!GTK_WIDGET_UNMAPPED (widget))
-    GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     if (GTK_WIDGET_CLASS (parent_class)->expose_event)
@@ -1064,7 +1073,8 @@ gtk_real_window_move_resize (GtkWindow *window,
        *  widgets and reallocate their sizes appropriately. We
        *  make the optimization of not performing reallocation
        *  for a widget who also has a parent in the resize widgets
-       *  list.
+       *  list. GTK_RESIZE_NEEDED is used for flagging those
+       *  parents inside this function.
        */
       GSList *resize_widgets, *node;
 
@@ -1075,7 +1085,7 @@ gtk_real_window_move_resize (GtkWindow *window,
 	{
 	  child = (GtkWidget *)node->data;
 
-	  GTK_WIDGET_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
+	  GTK_PRIVATE_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
 
 	  widget = child->parent;
 	  while (widget &&
@@ -1084,7 +1094,7 @@ gtk_real_window_move_resize (GtkWindow *window,
 	    widget = widget->parent;
 
 	  if (widget)
-	    GTK_WIDGET_SET_FLAGS (widget, GTK_RESIZE_NEEDED);
+	    GTK_PRIVATE_SET_FLAGS (widget, GTK_RESIZE_NEEDED);
 	}
 
       for (node = resize_widgets; node; node = node->next)
@@ -1105,7 +1115,7 @@ gtk_real_window_move_resize (GtkWindow *window,
 	    {
 	      if (GTK_WIDGET_RESIZE_NEEDED (widget))
 		{
-		  GTK_WIDGET_UNSET_FLAGS (resize_container, GTK_RESIZE_NEEDED);
+		  GTK_PRIVATE_UNSET_FLAGS (resize_container, GTK_RESIZE_NEEDED);
 		  resize_container = widget;
 		}
 	      widget = widget->parent;
@@ -1125,7 +1135,7 @@ gtk_real_window_move_resize (GtkWindow *window,
          widget = tmp_list->data;
          tmp_list = tmp_list->next;
 
-	 GTK_WIDGET_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
+	 GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
          gtk_widget_size_allocate (widget, &widget->allocation);
          gtk_widget_queue_draw (widget);
        }

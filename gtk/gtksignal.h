@@ -108,6 +108,12 @@ gint   gtk_signal_connect_interp          (GtkObject           *object,
 					   gpointer             data,
 					   GtkDestroyNotify     destroy_func,
 					   gint                 after);
+
+void   gtk_signal_connect_object_while_alive (GtkObject        *object,
+					      const gchar      *signal,
+					      GtkSignalFunc     func,
+					      GtkObject        *alive_object);
+
 void   gtk_signal_disconnect              (GtkObject           *object,
 					   gint                 anid);
 void   gtk_signal_disconnect_by_data      (GtkObject           *object,

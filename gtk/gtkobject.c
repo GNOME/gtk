@@ -105,7 +105,9 @@ gtk_object_debug (void)
   printf ("%d living objects\n", obj_count);
   for (node = living_objs; node; node = node->next)
     {
-      GtkObject *obj = (GtkObject *)node->data;
+      GtkObject *obj;
+
+      obj = (GtkObject*) node->data;
       /*
 	printf ("%p: %s %d %s\n",
 	obj, gtk_type_name (GTK_OBJECT_TYPE (obj)),
@@ -187,6 +189,25 @@ gtk_object_class_init (GtkObjectClass *class)
 }
 
 /*****************************************
+ * gtk_object_real_destroy:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+static void
+gtk_object_real_destroy (GtkObject *object)
+{
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  /* FIXME: gtk_signal_handlers_destroy (object); */
+
+  /* object->klass = gtk_type_class (gtk_destroyed_get_type ()); */
+}
+
+/*****************************************
  * gtk_object_init:
  *
  *   arguments:
@@ -197,7 +218,8 @@ gtk_object_class_init (GtkObjectClass *class)
 static void
 gtk_object_init (GtkObject *object)
 {
-  object->flags = GTK_FLOATING;
+  GTK_OBJECT_FLAGS (object) = GTK_FLOATING;
+
   object->ref_count = 1;
   object->object_data = NULL;
 
@@ -474,26 +496,11 @@ gtk_object_destroy (GtkObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  gtk_signal_emit (object, object_signals[DESTROY]);
-}
-
-/*****************************************
- * gtk_object_real_destroy:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_object_real_destroy (GtkObject *object)
-{
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-
-  gtk_signal_handlers_destroy (object);
-
-  /* object->klass = gtk_type_class (gtk_destroyed_get_type ()); */
+  if (!GTK_OBJECT_DESTROYED (object))
+    {
+      GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
+      gtk_signal_emit (object, object_signals[DESTROY]);
+    }
 }
 
 /*****************************************

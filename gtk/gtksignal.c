@@ -140,7 +140,7 @@ static GHashTable *signal_info_hash_table = NULL;
 static gint next_signal = 1;
 static gint next_handler_id = 1;
 
-static const char *handler_key = "signal_handlers";
+static const gchar *handler_key = "gtk-signal-handlers";
 
 static GMemChunk *handler_mem_chunk = NULL;
 static GMemChunk *emission_mem_chunk = NULL;
@@ -532,6 +532,59 @@ gtk_signal_connect_object_after (GtkObject     *object,
 				     TRUE, FALSE);
 }
 
+typedef struct _GtkDisconnectInfo       GtkDisconnectInfo;
+struct _GtkDisconnectInfo
+{
+  GtkObject     *object1;
+  gint          disconnect_handler1;
+  gint          signal_handler;
+  GtkObject     *object2;
+  gint          disconnect_handler2;
+};
+
+static gint
+gtk_alive_disconnecter (GtkDisconnectInfo *info)
+{
+  g_return_val_if_fail (info != NULL, 0);
+
+  gtk_signal_disconnect (info->object1, info->disconnect_handler1);
+  gtk_signal_disconnect (info->object1, info->signal_handler);
+  gtk_signal_disconnect (info->object2, info->disconnect_handler2);
+  g_free (info);
+
+  return 0;
+}
+
+void
+gtk_signal_connect_object_while_alive (GtkObject        *object,
+				       const gchar      *signal,
+				       GtkSignalFunc     func,
+				       GtkObject        *alive_object)
+{
+  GtkDisconnectInfo *info;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+  g_return_if_fail (signal != NULL);
+  g_return_if_fail (func != NULL);
+  g_return_if_fail (alive_object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (alive_object));
+
+  info = g_new (GtkDisconnectInfo, 1);
+  info->object1 = object;
+  info->object2 = alive_object;
+
+  info->signal_handler = gtk_signal_connect_object (object, signal, func, alive_object);
+  info->disconnect_handler1 = gtk_signal_connect_object (info->object1,
+							 "destroy",
+							 GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
+							 (GtkObject*) info);
+  info->disconnect_handler2 = gtk_signal_connect_object (info->object2,
+							 "destroy",
+							 GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
+							 (GtkObject*) info);
+}
+
 void
 gtk_signal_disconnect (GtkObject *object,
 		       gint       anid)
@@ -554,8 +607,7 @@ gtk_signal_disconnect (GtkObject *object,
 	  if (prev)
 	    prev->next = tmp->next;
 	  else
-	    gtk_object_set_data (object, handler_key, tmp->next);
-	  gtk_signal_handler_unref (tmp, object);
+	    gtk_signal_handler_unref (tmp, object);
 	  return;
 	}
 
@@ -563,7 +615,7 @@ gtk_signal_disconnect (GtkObject *object,
       tmp = tmp->next;
     }
 
-  g_warning ("could not find handler (%d)", anid);
+  g_warning ("gtk_signal_disconnect(): could not find handler (%d)", anid);
 }
 
 void
@@ -594,7 +646,7 @@ gtk_signal_disconnect_by_data (GtkObject *object,
     }
 
   if (!found_one)
-    g_warning ("could not find handler containing data (0x%0lX)", (long) data);
+    g_warning ("gtk_signal_disconnect_by_data(): could not find handler containing data (0x%0lX)", (long) data);
 }
 
 void
@@ -621,7 +673,7 @@ gtk_signal_handler_block (GtkObject *object,
       tmp = tmp->next;
     }
 
-  g_warning ("could not find handler (%d)", anid);
+  g_warning ("gtk_signal_handler_block(): could not find handler (%d)", anid);
 }
 
 void
@@ -651,7 +703,7 @@ gtk_signal_handler_block_by_data (GtkObject *object,
     }
 
   if (!found_one)
-    g_warning ("could not find handler containing data (0x%0lX)", (long) data);
+    g_warning ("gtk_signal_handler_block_by_data(): could not find handler containing data (0x%0lX)", (long) data);
 }
 
 void
@@ -678,7 +730,7 @@ gtk_signal_handler_unblock (GtkObject *object,
       tmp = tmp->next;
     }
 
-  g_warning ("could not find handler (%d)", anid);
+  g_warning ("gtk_signal_handler_unblock(): could not find handler (%d)", anid);
 }
 
 void
@@ -708,7 +760,7 @@ gtk_signal_handler_unblock_by_data (GtkObject *object,
     }
 
   if (!found_one)
-    g_warning ("could not find handler containing data (0x%0lX)", (long) data);
+    g_warning ("gtk_signal_handler_unblock_by_data(): could not find handler containing data (0x%0lX)", (long) data);
 }
 
 void

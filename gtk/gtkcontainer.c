@@ -17,6 +17,7 @@
  */
 #include <string.h>
 #include "gtkcontainer.h"
+#include "gtkprivate.h"
 #include "gtksignal.h"
 
 
@@ -215,12 +216,15 @@ gtk_container_destroy (GtkObject *object)
 {
   GSList *node;
   
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (object));
+
   for (node = GTK_CONTAINER (object)->resize_widgets; node; node = node->next)
     {
       GtkWidget *child;
       
       child = (GtkWidget*) node->data;
-      GTK_WIDGET_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
+      GTK_PRIVATE_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
     }
   g_slist_free (GTK_CONTAINER (object)->resize_widgets);
   GTK_CONTAINER (object)->resize_widgets = NULL;
@@ -466,6 +470,18 @@ gtk_container_children (GtkContainer *container)
   return g_list_reverse (children);
 }
 
+void
+gtk_container_register_toplevel (GtkContainer *container)
+{
+  gtk_widget_ref (GTK_WIDGET (container));
+  gtk_object_sink (GTK_OBJECT (container));
+}
+
+void
+gtk_container_unregister_toplevel (GtkContainer *container)
+{
+  gtk_widget_unref (GTK_WIDGET (container));
+}
 
 static void
 gtk_container_marshal_signal_1 (GtkObject      *object,

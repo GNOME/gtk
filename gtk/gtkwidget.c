@@ -24,6 +24,7 @@
 #include "gtksignal.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
+#include "gtkprivate.h"
 #include "gdk/gdk.h"
 #include "gdk/gdkx.h"
 
@@ -881,7 +882,7 @@ gtk_widget_init (GtkWidget *widget)
   GdkColormap *colormap;
   GdkVisual *visual;
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE | GTK_PARENT_SENSITIVE);
+  GTK_PRIVATE_FLAGS (widget) = 0;
   widget->state = GTK_STATE_NORMAL;
   widget->saved_state = GTK_STATE_NORMAL;
   widget->name = NULL;
@@ -893,6 +894,8 @@ gtk_widget_init (GtkWidget *widget)
   widget->allocation.height = 1;
   widget->window = NULL;
   widget->parent = NULL;
+
+  GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE | GTK_PARENT_SENSITIVE);
 
   widget->style = gtk_widget_peek_style ();
   gtk_style_ref (widget->style);
@@ -1227,7 +1230,7 @@ gtk_widget_hide_all (GtkWidget *widget)
       if (toplevel != widget)
 	GTK_CONTAINER (toplevel)->resize_widgets =
 	  g_slist_remove (GTK_CONTAINER (toplevel)->resize_widgets, widget);
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
+      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
     }
   
   widget_class = GTK_WIDGET_CLASS(GTK_OBJECT(widget)->klass);
@@ -1310,11 +1313,10 @@ gtk_widget_realize (GtkWidget *widget)
       
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[REALIZE]);
       
-      if (GTK_WIDGET_HAS_SHAPE_MASK(widget))
+      if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
 	{
 	  shape_info = gtk_object_get_data (GTK_OBJECT (widget),
 					    shape_info_key);
-	  g_assert (shape_info != 0);
 	  gdk_window_shape_combine_mask (widget->window,
 					 shape_info->shape_mask,
 					 shape_info->offset_x,
@@ -1396,7 +1398,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 	  parent = parent->parent;
 	}
       
-      GTK_WIDGET_SET_FLAGS (widget, GTK_REDRAW_PENDING);
+      GTK_PRIVATE_SET_FLAGS (widget, GTK_REDRAW_PENDING);
       if (gtk_widget_redraw_queue == NULL)
 	gtk_idle_add ((GtkFunction) gtk_widget_idle_draw, NULL);
 
@@ -1436,13 +1438,13 @@ gtk_widget_queue_resize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   
   toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_WIDGET_ANCHORED (toplevel))
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
     {
       if (GTK_WIDGET_VISIBLE (toplevel))
 	{
 	  if (!GTK_WIDGET_RESIZE_PENDING (toplevel))
 	    {
-	      GTK_WIDGET_SET_FLAGS (toplevel, GTK_RESIZE_PENDING);
+	      GTK_PRIVATE_SET_FLAGS (toplevel, GTK_RESIZE_PENDING);
               if (gtk_widget_resize_queue == NULL)
 		gtk_idle_add ((GtkFunction) gtk_widget_idle_sizer, NULL);
 	      gtk_widget_resize_queue = g_slist_prepend (gtk_widget_resize_queue, toplevel);
@@ -1450,7 +1452,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
 	  
           if (!GTK_WIDGET_RESIZE_NEEDED (widget))
 	    {
-	      GTK_WIDGET_SET_FLAGS (widget, GTK_RESIZE_NEEDED);
+	      GTK_PRIVATE_SET_FLAGS (widget, GTK_RESIZE_NEEDED);
 	      GTK_CONTAINER (toplevel)->resize_widgets =
 		g_slist_prepend (GTK_CONTAINER (toplevel)->resize_widgets, widget);
 	    }
@@ -1881,7 +1883,7 @@ gtk_widget_reparent (GtkWidget *widget,
  	{
 	  /* Set a flag so that gtk_widget_unparent doesn't unrealize widget
 	   */
-	  GTK_WIDGET_SET_FLAGS (widget, GTK_IN_REPARENT);
+	  GTK_PRIVATE_SET_FLAGS (widget, GTK_IN_REPARENT);
 	}
 
       gtk_widget_ref (widget);
@@ -1917,6 +1919,8 @@ gtk_widget_reparent (GtkWidget *widget,
 	    }
 	  else
 	    gdk_window_reparent (widget->window, gtk_widget_get_parent_window (widget), 0, 0);
+
+	  GTK_PRIVATE_UNSET_FLAGS (widget, GTK_IN_REPARENT);
 	}
     }
 }
@@ -2230,18 +2234,6 @@ gtk_widget_set_parent (GtkWidget *widget,
   
   g_return_if_fail (widget != NULL);
   g_assert (widget->parent == NULL);
-  
-  if (GTK_WIDGET_TOPLEVEL (widget))
-    {
-      g_assert (parent == NULL);
-      g_assert (!GTK_WIDGET_TOPLEVEL_ONSCREEN (widget));
-
-      gtk_widget_ref (widget);
-      gtk_object_sink (GTK_OBJECT (widget));
-      GTK_WIDGET_SET_FLAGS (widget, GTK_TOPLEVEL_ONSCREEN);
-      return;
-    }
-
   g_return_if_fail (parent != NULL);
 
   gtk_widget_ref (widget);
@@ -2259,7 +2251,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   while (parent->parent != NULL)
     parent = parent->parent;
   
-  if (GTK_WIDGET_ANCHORED (parent))
+  if (GTK_WIDGET_TOPLEVEL (parent))
     {
       if (!GTK_WIDGET_USER_STYLE (widget))
 	{
@@ -2347,7 +2339,7 @@ gtk_widget_set_style (GtkWidget *widget,
 {
   g_return_if_fail (widget != NULL);
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_USER_STYLE);
+  GTK_PRIVATE_SET_FLAGS (widget, GTK_USER_STYLE);
   gtk_widget_set_style_internal (widget, style);
 }
 
@@ -3085,13 +3077,13 @@ gtk_widget_real_destroy (GtkObject *object)
   if (GTK_WIDGET_REDRAW_PENDING (widget))
     {
       gtk_widget_redraw_queue = g_slist_remove (gtk_widget_redraw_queue, widget);
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
+      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
     }
   
   if (GTK_WIDGET_RESIZE_PENDING (widget))
     {
       gtk_widget_resize_queue = g_slist_remove (gtk_widget_resize_queue, widget);
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_RESIZE_PENDING);
+      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_PENDING);
     }
 
   if (GTK_WIDGET_RESIZE_NEEDED (widget))
@@ -3101,23 +3093,18 @@ gtk_widget_real_destroy (GtkObject *object)
       toplevel = gtk_widget_get_toplevel (widget);
       GTK_CONTAINER (toplevel)->resize_widgets =
 	g_slist_remove (GTK_CONTAINER (toplevel)->resize_widgets, widget);
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
+      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
     }
-  
+
+  if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
+    gtk_widget_shape_combine_mask (widget, NULL, -1, -1);
+
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
   gtk_widget_unrealize (widget);
 
   if (widget->parent)
     gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
-  else if (GTK_WIDGET_TOPLEVEL (widget) &&
-	   GTK_WIDGET_TOPLEVEL_ONSCREEN (widget))
-    {
-      /* printf ("special toplevel case %p %s\n", widget, gtk_type_name (GTK_WIDGET_TYPE (widget)));
-       */
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_TOPLEVEL_ONSCREEN);
-      gtk_widget_unref (widget);
-    }
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -3381,7 +3368,7 @@ gtk_widget_real_queue_draw (GtkWidget *widget)
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
+  GTK_PRIVATE_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
   gtk_widget_draw (widget, NULL);
   
   return FALSE;
@@ -3401,7 +3388,7 @@ gtk_widget_real_queue_resize (GtkWidget *widget)
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_RESIZE_PENDING);
+  GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_PENDING);
   gtk_container_need_resize (GTK_CONTAINER (widget));
 
   return FALSE;
@@ -3709,32 +3696,44 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
   GtkWidgetShapeInfo* shape_info;
   
   g_return_if_fail (widget != NULL);
-  g_return_if_fail (shape_mask != NULL);
   /*  set_shape doesn't work on widgets without gdk window */
   g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
-  
-  /*
-   * remember shape mask for later gtk_widget_realize's
-   */
-  shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
-  if (!shape_info)
+
+  if (!shape_mask)
     {
-      shape_info = g_new (GtkWidgetShapeInfo, 1);
-      gtk_object_set_data (GTK_OBJECT (widget), shape_info_key, shape_info);
+      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_HAS_SHAPE_MASK);
+      
+      shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
+      gtk_object_remove_data (GTK_OBJECT (widget), shape_info_key);
+      g_free (shape_info);
+
+      if (widget->window)
+	{
+	  /* FIXME: we need gdk code here that removes the shape from a window
+	   */
+	}
     }
-  shape_info->shape_mask = shape_mask;
-  shape_info->offset_x = offset_x;
-  shape_info->offset_y = offset_y;
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_SHAPE_MASK);
-  
-  /* 
-   * set shape if widget has a gdk window allready.
-   * otherwise the shape is scheduled to be set by gtk_widget_realize.
-   */
-  if (widget->window)
-    gdk_window_shape_combine_mask (widget->window, shape_mask,
-				   offset_x, offset_y);	
-  
+  else
+    {
+      GTK_PRIVATE_SET_FLAGS (widget, GTK_HAS_SHAPE_MASK);
+
+      shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
+      if (!shape_info)
+	{
+	  shape_info = g_new (GtkWidgetShapeInfo, 1);
+	  gtk_object_set_data (GTK_OBJECT (widget), shape_info_key, shape_info);
+	}
+      shape_info->shape_mask = shape_mask;
+      shape_info->offset_x = offset_x;
+      shape_info->offset_y = offset_y;
+      
+      /* set shape if widget has a gdk window allready.
+       * otherwise the shape is scheduled to be set by gtk_widget_realize.
+       */
+      if (widget->window)
+	gdk_window_shape_combine_mask (widget->window, shape_mask,
+				       offset_x, offset_y);
+    }
 }
 
 /*****************************************

@@ -28,18 +28,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-/* GtkObject only uses the first 3 bits of the "flags" field.
- *  They refer to the following flags.
- * GtkWidget uses the remaining bits. Though this is a kinda nasty
- *  break up, it does make the size of GtkWidget smaller.
- */
-enum
-{
-  GTK_FLOATING          = 1 << 0,
-  GTK_RESERVED_1        = 1 << 1,
-  GTK_RESERVED_2        = 1 << 2
-};
-
 
 /* The debugging versions of the casting macros make sure the cast is "ok"
  *  before proceeding, but they are definately slower than their less
@@ -47,48 +35,62 @@ enum
  */
 #ifdef NDEBUG
 
-#define GTK_CHECK_CAST(obj,cast_type,cast)         ((cast*) obj)
-#define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) ((cast*) klass)
+#define GTK_CHECK_CAST(obj,cast_type,cast)         ((cast*) (obj))
+#define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) ((cast*) (klass))
 
 #else /* NDEBUG */
 
 #define GTK_CHECK_CAST(obj,cast_type,cast) \
-  ((cast*) gtk_object_check_cast ((GtkObject*) obj, cast_type))
+  ((cast*) gtk_object_check_cast ((GtkObject*) (obj), cast_type))
 
 #define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) \
-  ((cast*) gtk_object_check_class_cast ((GtkObjectClass*) klass, cast_type))
+  ((cast*) gtk_object_check_class_cast ((GtkObjectClass*) (klass), cast_type))
 
 #endif /* NDEBUG */
 
 
 /* Determines whether 'obj' is a type of 'otype'.
  */
-#define GTK_CHECK_TYPE(obj,otype)  (gtk_type_is_a (((GtkObject*) obj)->klass->type, otype))
+#define GTK_CHECK_TYPE(obj,otype)  (gtk_type_is_a (((GtkObject*) (obj))->klass->type, otype))
 
 
 /* Macro for casting a pointer to a GtkObject pointer.
  */
-#define GTK_OBJECT(obj)                   GTK_CHECK_CAST (obj, gtk_object_get_type (), GtkObject)
+#define GTK_OBJECT(obj)                   GTK_CHECK_CAST ((obj), gtk_object_get_type (), GtkObject)
 
-/* Macros for extracting various fields from GtkObject and
- *  GtkObjectClass.
+/* Macros for extracting various fields from GtkObject and GtkObjectClass.
  */
-#define GTK_OBJECT_CLASS(klass)           GTK_CHECK_CLASS_CAST (klass, gtk_object_get_type (), GtkObjectClass)
-#define GTK_OBJECT_FLAGS(obj)             (GTK_OBJECT (obj)->flags)
-#define GTK_OBJECT_FLOATING(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_FLOATING)
-#define GTK_OBJECT_DESTROY(obj)           (GTK_OBJECT (obj)->klass->destroy)
+#define GTK_OBJECT_CLASS(klass)           (GTK_CHECK_CLASS_CAST ((klass), gtk_object_get_type (), GtkObjectClass))
 #define GTK_OBJECT_TYPE(obj)              (GTK_OBJECT (obj)->klass->type)
 #define GTK_OBJECT_SIGNALS(obj)           (GTK_OBJECT (obj)->klass->signals)
 #define GTK_OBJECT_NSIGNALS(obj)          (GTK_OBJECT (obj)->klass->nsignals)
 
+/* GtkObject only uses the first 4 bits of the flags field.
+ * GtkWidget uses the remaining bits. Though this is a kinda nasty
+ * break up, it does make the size of GtkWidget smaller.
+ */
+enum
+ {
+   GTK_DESTROYED         = 1 << 0,
+   GTK_FLOATING          = 1 << 1,
+   GTK_RESERVED_1        = 1 << 2,
+   GTK_RESERVED_2        = 1 << 3
+ };
+
+/* Macros for extracting the object_flags from GtkObject.
+ */
+#define GTK_OBJECT_FLAGS(obj)             (GTK_OBJECT (obj)->flags)
+#define GTK_OBJECT_DESTROYED(obj)         (GTK_OBJECT_FLAGS (obj) & GTK_DESTROYED)
+#define GTK_OBJECT_FLOATING(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_FLOATING)
+
+/* Macros for setting and clearing bits in the object_flags field of GtkObject.
+ */
+#define GTK_OBJECT_SET_FLAGS(obj,flag)    G_STMT_START{ (GTK_OBJECT_FLAGS (obj) |= (flag)); }G_STMT_END
+#define GTK_OBJECT_UNSET_FLAGS(obj,flag)  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) &= ~(flag)); }G_STMT_END
+
 /* Macro for testing whether "obj" is of type GtkObject.
  */
-#define GTK_IS_OBJECT(obj)                GTK_CHECK_TYPE (obj, gtk_object_get_type ())
-
-/* Macros for setting and clearing bits in the "flags" field of GtkObject.
- */
-#define GTK_OBJECT_SET_FLAGS(obj,flag)    (GTK_OBJECT_FLAGS (obj) |= (flag))
-#define GTK_OBJECT_UNSET_FLAGS(obj,flag)  (GTK_OBJECT_FLAGS (obj) &= ~(flag))
+#define GTK_IS_OBJECT(obj)                (GTK_CHECK_TYPE ((obj), gtk_object_get_type ()))
 
 
 typedef struct _GtkObjectClass  GtkObjectClass;
@@ -99,10 +101,16 @@ typedef struct _GtkObjectClass  GtkObjectClass;
  */
 struct _GtkObject
 {
-  /* 32 bits of flags. GtkObject only uses 3 of these bits and
+  /* A pointer to the objects class. This will actually point to
+   *  the derived objects class struct (which will be derived from
+   *  GtkObjectClass).
+   */
+  GtkObjectClass *klass;
+
+  /* 32 bits of flags. GtkObject only uses 4 of these bits and
    *  GtkWidget uses the rest. This is done because structs are
-   *  aligned on 4 or 8 byte boundaries. If bitfields were used
-   *  both here and in GtkWidget much space would be wasted.
+   *  aligned on 4 or 8 byte boundaries. If a new bitfield were
+   *  used in GtkWidget much space would be wasted.
    */
   guint32 flags;
 
@@ -110,12 +118,6 @@ struct _GtkObject
    * refer to the file REFCOUNTING on this issue.
    */
   guint ref_count;
-
-  /* A pointer to the objects class. This will actually point to
-   *  the derived objects class struct (which will be derived from
-   *  GtkObjectClass).
-   */
-  GtkObjectClass *klass;
 
   /* The list of signal handlers and other data
    *  fields for this object.

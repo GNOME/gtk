@@ -28,6 +28,7 @@
 
 static void gtk_menu_class_init     (GtkMenuClass      *klass);
 static void gtk_menu_init           (GtkMenu           *menu);
+static void gtk_menu_destroy        (GtkObject         *object);
 static void gtk_menu_show           (GtkWidget         *widget);
 static void gtk_menu_map            (GtkWidget         *widget);
 static void gtk_menu_unmap          (GtkWidget         *widget);
@@ -50,6 +51,7 @@ static void gtk_menu_deactivate     (GtkMenuShell      *menu_shell);
 static void gtk_menu_show_all       (GtkWidget         *widget);
 static void gtk_menu_hide_all       (GtkWidget         *widget);
 
+static GtkMenuShellClass *parent_class = NULL;
 
 guint
 gtk_menu_get_type ()
@@ -78,13 +80,18 @@ gtk_menu_get_type ()
 static void
 gtk_menu_class_init (GtkMenuClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkMenuShellClass *menu_shell_class;
 
+  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
+  parent_class = gtk_type_class (gtk_menu_shell_get_type ());
+
+  object_class->destroy = gtk_menu_destroy;
 
   widget_class->show = gtk_menu_show;
   widget_class->map = gtk_menu_map;
@@ -108,7 +115,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 static void
 gtk_menu_init (GtkMenu *menu)
 {
-  GTK_WIDGET_SET_FLAGS (menu, GTK_ANCHORED | GTK_TOPLEVEL);
+  GTK_WIDGET_SET_FLAGS (menu, GTK_TOPLEVEL);
 
   menu->parent_menu_item = NULL;
   menu->old_active_menu_item = NULL;
@@ -118,8 +125,19 @@ gtk_menu_init (GtkMenu *menu)
   
   GTK_MENU_SHELL (menu)->menu_flag = TRUE;
   
-  /* gtk_container_add (gtk_root, GTK_WIDGET (menu)); */
-  gtk_widget_set_parent (GTK_WIDGET (menu), NULL);
+  gtk_container_register_toplevel (GTK_CONTAINER (menu));
+}
+
+static void
+gtk_menu_destroy (GtkObject         *object)
+{
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_MENU (object));
+
+  gtk_container_unregister_toplevel (GTK_CONTAINER (object));
+
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 GtkWidget*
@@ -292,7 +310,6 @@ gtk_menu_map (GtkWidget *widget)
   menu = GTK_MENU (widget);
   menu_shell = GTK_MENU_SHELL (widget);
   GTK_WIDGET_SET_FLAGS (menu_shell, GTK_MAPPED);
-  GTK_WIDGET_UNSET_FLAGS (menu_shell, GTK_UNMAPPED);
 
   gtk_widget_size_request (widget, &widget->requisition);
 
@@ -357,7 +374,6 @@ gtk_menu_unmap (GtkWidget *widget)
   g_return_if_fail (GTK_IS_MENU (widget));
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  GTK_WIDGET_SET_FLAGS (widget, GTK_UNMAPPED);
   gdk_window_hide (widget->window);
 }
 
@@ -559,9 +575,6 @@ gtk_menu_expose (GtkWidget      *widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
-  if (!GTK_WIDGET_UNMAPPED (widget))
-    GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
