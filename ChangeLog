@@ -1,3 +1,14 @@
+Wed Nov 15 21:51:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/Makefile.am (im_xim_la_LDFLAGS): Point
+	-rpath to the right install location.
+
+	* modules/input/Makefile.am (im_inuktitut_la_LDFLAGS): Remove
+	-export-dynamic.
+
+	* gtk/gtkthemes.c (gtk_theme_engine_get): Set engine->name
+	properly.
+
 2000-11-15  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c (gtk_text_view_start_cursor_blink): Apply

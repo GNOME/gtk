@@ -175,6 +175,7 @@ gtk_theme_engine_get (const gchar *name)
     {
       result = GTK_THEME_ENGINE (g_object_new (GTK_TYPE_THEME_ENGINE, NULL));
       g_type_module_set_name (G_TYPE_MODULE (result), name);
+      result->name = g_strdup (name);
 
       g_hash_table_insert (engine_hash, result->name, result);
     }
