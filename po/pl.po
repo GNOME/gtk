@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "POT-Creation-Date: 2002-05-29 17:43+0200\n"
-"PO-Revision-Date: 2002-05-29 17:41+0200\n"
+"PO-Revision-Date: 2002-05-29 22:06+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2581,7 +2581,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:1
 msgid "Enable Popup"
-msgstr "Wyskakujące menu"
+msgstr "Menu podręczne"
 
 #: gtk/gtknotebook.c:1
 msgid ""
