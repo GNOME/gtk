@@ -14,8 +14,11 @@ If you are accessing gtk+ via CVS, then you will need to take several
 steps to get it to compile.  These are:
 
 	cvsroot/gtk+# aclocal; automake; autoconf
+        cvsroot/gtk+/glib# aclocal; automake; autoconf
 
-The "configure" script will not exist until you take these steps.
+The "configure" scripts will not exist until you take these steps.
+you only need to call "configure" i cvsroot/gtk+ as the one in
+glib will be invoked automatically.
 
 Before running configure, make sure you have libtool in your path
 
