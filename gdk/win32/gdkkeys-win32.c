@@ -376,6 +376,22 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 	}
     }
 
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
+    {
+      gint i;
+
+      g_print ("gdk_keymap_get_entries_for_keyval: %#.04x (%s):",
+	       keyval, gdk_keyval_name (keyval));
+      for (i = 0; i < retval->len; i++)
+	{
+	  GdkKeymapKey *entry = (GdkKeymapKey *) retval->data + i;
+	  g_print ("  %#.02x %d %d", entry->keycode, entry->group, entry->level);
+	}
+      g_print ("\n");
+    }
+#endif
+
   if (retval->len > 0)
     {
       *keys = (GdkKeymapKey*) retval->data;
@@ -638,7 +654,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   if (keyval)
     *keyval = tmp_keyval;
 
-  return FALSE;
+  return tmp_keyval != GDK_VoidSymbol;
 }
 
 /* Key handling not part of the keymap */

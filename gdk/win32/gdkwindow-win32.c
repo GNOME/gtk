@@ -91,7 +91,6 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->width = 1;
   impl->height = 1;
 
-  impl->event_mask = 0;
   impl->hcursor = NULL;
   impl->hint_flags = 0;
   impl->extension_events_selected = FALSE;
@@ -486,8 +485,7 @@ gdk_window_new (GdkWindow     *parent,
   if (!title || !*title)
     title = "GDK client window";
 
-  impl->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
-  private->event_mask = impl->event_mask;
+  private->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
       
   if (private->parent && private->parent->guffaw_gravity)
     {
@@ -707,6 +705,7 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   impl->height = rect.bottom - rect.top;
   private->window_type = GDK_WINDOW_FOREIGN;
   private->destroyed = FALSE;
+  private->event_mask = GDK_ALL_EVENTS_MASK; /* XXX */
   if (IsWindowVisible ((HWND) anid))
     private->state &= (~GDK_WINDOW_STATE_WITHDRAWN);
   else
@@ -1929,7 +1928,7 @@ gdk_window_get_events (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return 0;
 
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->event_mask;
+  return GDK_WINDOW_OBJECT (window)->event_mask;
 }
 
 void          
@@ -1942,8 +1941,11 @@ gdk_window_set_events (GdkWindow   *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
-  GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->event_mask = event_mask;
+  /* gdk_window_new() always sets the GDK_STRUCTURE_MASK, so better
+   * set it here, too. Not that I know or remember why it is
+   * necessary, will have to test some day.
+   */
+  GDK_WINDOW_OBJECT (window)->event_mask = GDK_STRUCTURE_MASK | event_mask;
 }
 
 void

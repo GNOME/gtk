@@ -1,3 +1,28 @@
+2002-03-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.h (struct _GdkWindowImplWin32): Remove
+	the event_mask, it is now in GdkWindowObject.
+
+	* gdk/win32/gdkwindow-win32.c: Change accordingly. Set the
+	GDK_STRUCTURE_MASK in gdk_window_set_events(), as it is always set
+	in gdk_window_new(), too. (Bug#72921)
+
+	* gdk/win32/gdkevents-win32.c: Change accordingly here, too.
+	(vk_from_char): New function, calculates the virtual keycode
+	corresponding to the char in a WM_CHAR message.
+	(build_keypress_event, build_keyrelease_event): Use it.
+	(build_keypress_event): Call ImmReleaseContext() after using the
+	input context. This might plug a memory or resource leak.
+	(build_key_event_state): Remove #if 0 code.
+	(gdk_event_translate): Actually, it would be preferrable to always
+	handle just the WM_KEYDOWN and WM_KEYUP messages, not WM_CHAR at
+	all, and thus drop the contorted logic with ignore_wm_char etc.
+
+	* gdk/win32/gdkkeys-win32.c: (gdk_keymap_get_entries_for_keyval):
+	Debugging output.
+	(gdk_keymap_translate_keyboard_state): Return correct value. (But
+	_gtk_key_hash_lookup() doesn't check the return value...)
+
 Thu Feb 28 14:49:08 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_foreign_new): Initialize
