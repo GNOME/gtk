@@ -615,7 +615,7 @@ gdk_property_change (GdkWindow    *window,
       screen = gdk_screen_get_default ();
       window = gdk_screen_get_root_window (screen);
       
-      GDK_NOTE (MULTIHEAD, g_message ("gdk_property_delete(): window is NULL\n"));
+      GDK_NOTE (MULTIHEAD, g_message ("gdk_property_change(): window is NULL\n"));
     }
 
 
