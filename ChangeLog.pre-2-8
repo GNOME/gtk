@@ -1,3 +1,11 @@
+2003-12-31 13:49 Daniel Rogers <dsrogers@phasevelocity.org>
+
+        * gdk/x11/gdkinput-x11.c: (gdk_input_translate_coordinates)
+        
+	Fix to allow reasonable pointer behavior in window mode when an
+	extended input device reports an incorrect resolution of 0.  Fixes
+	bug #123546
+	
 2003-12-31  Christian Neumair  <chris@gnome-de.org>
 
 	* gdk-pixbuf/gdk-pixdata.c: (gdk_pixbuf_from_pixdata):
