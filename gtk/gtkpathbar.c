@@ -54,7 +54,7 @@ typedef enum {
 static guint path_bar_signals [LAST_SIGNAL] = { 0 };
 
 /* Icon size for if we can't get it from the theme */
-#define FALLBACK_ICON_SIZE 20
+#define FALLBACK_ICON_SIZE 16
 
 typedef struct _ButtonData ButtonData;
 
@@ -92,6 +92,7 @@ static void gtk_path_bar_scroll_up                (GtkWidget        *button,
 						   GtkPathBar       *path_bar);
 static void gtk_path_bar_scroll_down              (GtkWidget        *button,
 						   GtkPathBar       *path_bar);
+static void gtk_path_bar_stop_scrolling           (GtkPathBar       *path_bar);
 static gboolean gtk_path_bar_slider_button_press  (GtkWidget        *widget,
 						   GdkEventButton   *event,
 						   GtkPathBar       *path_bar);
@@ -197,6 +198,9 @@ gtk_path_bar_finalize (GObject *object)
   GtkPathBar *path_bar;
 
   path_bar = GTK_PATH_BAR (object);
+
+  gtk_path_bar_stop_scrolling (path_bar);
+
   g_list_free (path_bar->button_list);
   if (path_bar->root_path)
     gtk_file_path_free (path_bar->root_path);
@@ -835,7 +839,7 @@ change_icon_theme (GtkPathBar *path_bar)
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (path_bar)));
 
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_BUTTON, &width, &height))
+  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
     path_bar->icon_size = MAX (width, height);
   else
     path_bar->icon_size = FALLBACK_ICON_SIZE;
