@@ -1,5 +1,8 @@
 2002-11-08  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkstyle.c (gtk_default_draw_arrow): Improve drawing of RTL
+	submenu indicators.
+
 	* gtk/gtkoptionmenu.c (gtk_option_menu_paint): Fix drawing of RTL
 	optionmenus by flipping the indicator_spacing.
 
