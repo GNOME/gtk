@@ -957,6 +957,8 @@ gtk_label_parse_uline (GtkLabel    *label,
   gint length, wc_length;
   gboolean underscore;
   
+  g_return_val_if_fail(string != NULL, GDK_VoidSymbol);
+
   /* Convert text to wide characters */
   length = strlen (string);
   string_wc = g_new (GdkWChar, length + 1);
