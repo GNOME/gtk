@@ -1,3 +1,11 @@
+2004-11-20  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-4:
+
+	* gtk/gtkfilechooserdefault.c (list_icon_data_func): Set an empty
+	icon if we are on the editable row:  if we don't set the cell
+	renderer at all, it will reuse the last thing it painted.
+
 2004-11-19  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-4:
