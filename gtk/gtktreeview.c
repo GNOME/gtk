@@ -1929,7 +1929,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	      tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
 	      tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
 	      gtk_tree_view_draw_arrow (GTK_TREE_VIEW (widget),
-                                        tree_view->priv->prelight_tree,
+					tree_view->priv->prelight_tree,
 					tree_view->priv->prelight_node,
 					event->x,
 					event->y);
@@ -2380,39 +2380,6 @@ coords_are_over_arrow (GtkTreeView *tree_view,
 }
 
 static void
-do_unprelight (GtkTreeView *tree_view,
-               /* these are in tree window coords */
-               gint x,
-               gint y)
-{
-  if (tree_view->priv->prelight_node == NULL)
-    return;
-
-  GTK_RBNODE_UNSET_FLAG (tree_view->priv->prelight_node, GTK_RBNODE_IS_PRELIT);
-
-  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT) &&
-      !coords_are_over_arrow (tree_view,
-                              tree_view->priv->prelight_tree,
-                              tree_view->priv->prelight_node,
-                              x,
-                              y))
-    /* We need to unprelight the old arrow. */
-    {
-      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_ARROW_PRELIT);
-
-      gtk_tree_view_draw_arrow (tree_view,
-                                tree_view->priv->prelight_tree,
-                                tree_view->priv->prelight_node,
-                                x,
-                                y);
-
-    }
-
-  tree_view->priv->prelight_node = NULL;
-  tree_view->priv->prelight_tree = NULL;
-}
-
-static void
 do_prelight (GtkTreeView *tree_view,
              GtkRBTree   *tree,
              GtkRBNode   *node,
@@ -2420,21 +2387,91 @@ do_prelight (GtkTreeView *tree_view,
              gint         x,
              gint         y)
 {
-  if (coords_are_over_arrow (tree_view, tree, node, x, y))
+  if (tree_view->priv->prelight_tree == tree &&
+      tree_view->priv->prelight_node == node)
     {
-      GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_ARROW_PRELIT);
+      /*  We are still on the same node,
+	  but we might need to take care of the arrow  */
+
+      if (tree && node)
+	{
+	  gboolean over_arrow;
+	  gboolean flag_set;
+
+	  over_arrow = coords_are_over_arrow (tree_view, tree, node, x, y);
+	  flag_set = GTK_TREE_VIEW_FLAG_SET (tree_view,
+					     GTK_TREE_VIEW_ARROW_PRELIT);
+
+	  if (over_arrow != flag_set)
+	    {
+	      if (over_arrow)
+		GTK_TREE_VIEW_SET_FLAG (tree_view,
+					GTK_TREE_VIEW_ARROW_PRELIT);
+	      else
+		GTK_TREE_VIEW_UNSET_FLAG (tree_view,
+					  GTK_TREE_VIEW_ARROW_PRELIT);
+
+	      gtk_tree_view_draw_arrow (tree_view, tree, node, x, y);
+	    }
+	}
+
+      return;
     }
+
+  if (tree_view->priv->prelight_tree && tree_view->priv->prelight_node)
+    {
+      /*  Unprelight the old node and arrow  */
+
+      GTK_RBNODE_UNSET_FLAG (tree_view->priv->prelight_node,
+			     GTK_RBNODE_IS_PRELIT);
+
+      if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
+	{
+	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_ARROW_PRELIT);
+	  
+	  gtk_tree_view_draw_arrow (tree_view,
+				    tree_view->priv->prelight_tree,
+				    tree_view->priv->prelight_node,
+				    x,
+				    y);
+	}
+
+      _gtk_tree_view_queue_draw_node (tree_view,
+				      tree_view->priv->prelight_tree,
+				      tree_view->priv->prelight_node,
+				      NULL);
+    }
+
+
+  /*  Set the new prelight values  */
 
   tree_view->priv->prelight_node = node;
   tree_view->priv->prelight_tree = tree;
 
+  if (!node || !tree)
+    return;
+
+  /*  Prelight the new node and arrow  */
+
+  if (coords_are_over_arrow (tree_view, tree, node, x, y))
+    {
+      GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_ARROW_PRELIT);
+
+      gtk_tree_view_draw_arrow (tree_view, tree, node, x, y);
+    }
+
   GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_PRELIT);
+
+  _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
 }
 
 static void
 ensure_unprelighted (GtkTreeView *tree_view)
 {
-  do_unprelight (tree_view, -1000, -1000); /* coords not possibly over an arrow */
+  do_prelight (tree_view,
+	       NULL, NULL,
+	       -1000, -1000); /* coords not possibly over an arrow */
+
   g_assert (tree_view->priv->prelight_node == NULL);
 }
 
@@ -2851,9 +2888,6 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
   GtkRBTree *tree;
   GtkRBNode *node;
   gint new_y;
-  GtkRBTree *old_prelight_tree;
-  GtkRBNode *old_prelight_node;
-  gboolean old_arrow_prelit;
 
   tree_view = (GtkTreeView *) widget;
 
@@ -2862,54 +2896,19 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
 
   gtk_tree_view_maybe_begin_dragging_row (tree_view, event);
 
-  old_prelight_tree = tree_view->priv->prelight_tree;
-  old_prelight_node = tree_view->priv->prelight_node;
-  old_arrow_prelit = GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT);
-
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, event->y);
   if (new_y < 0)
     new_y = 0;
-  do_unprelight (tree_view, event->x, event->y);
-  _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
-  if (tree == NULL)
-    return TRUE;
+  _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
   /* If we are currently pressing down a button, we don't want to prelight anything else. */
   if ((tree_view->priv->button_pressed_node != NULL) &&
       (tree_view->priv->button_pressed_node != node))
-    return TRUE;
-
+    node = NULL;
 
   do_prelight (tree_view, tree, node, event->x, event->y);
 
-  if (old_prelight_node != tree_view->priv->prelight_node)
-    {
-      if (old_prelight_node)
-	{
-	  _gtk_tree_view_queue_draw_node (tree_view,
-					  old_prelight_tree,
-					  old_prelight_node,
-					  NULL);
-	}
-      if (tree_view->priv->prelight_node)
-	{
-	  _gtk_tree_view_queue_draw_node (tree_view,
-					  tree_view->priv->prelight_tree,
-					  tree_view->priv->prelight_node,
-					  NULL);
-	}
-    }
-  else if (old_arrow_prelit != GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
-    {
-      if (tree_view->priv->prelight_node)
-	{
-	  _gtk_tree_view_queue_draw_node (tree_view,
-					 tree_view->priv->prelight_tree,
-					 tree_view->priv->prelight_node,
-					 NULL);
-	}
-    }
   return TRUE;
 }
 
@@ -3836,16 +3835,7 @@ gtk_tree_view_enter_notify (GtkWidget        *widget,
     new_y = 0;
   _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
-  if (node == NULL)
-    return FALSE;
-
   do_prelight (tree_view, tree, node, event->x, event->y);
-
-  if (tree_view->priv->prelight_node)
-    _gtk_tree_view_queue_draw_node (tree_view,
-                                   tree_view->priv->prelight_tree,
-                                   tree_view->priv->prelight_node,
-                                   NULL);
 
   return TRUE;
 }
