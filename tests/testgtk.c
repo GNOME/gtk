@@ -20,7 +20,7 @@
 #include "gtk.h"
 #include "../gdk/gdk.h"
 #include "../gdk/gdkx.h"
-
+#include "gtkhandlebox.h"
 
 void
 destroy_window (GtkWidget  *widget,
@@ -539,6 +539,50 @@ create_button_box ()
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC(test_vbbox), 0);
     gtk_container_add (GTK_CONTAINER (bbox), button);
+    gtk_widget_show (button);
+  }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+void
+create_handle_box ()
+{
+  static GtkWidget* window = NULL;
+  GtkWidget* hbox;
+  GtkWidget* button;
+	
+  if (!window)
+  {
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title (GTK_WINDOW (window),
+			  "Handle Box Test");
+    
+    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			GTK_SIGNAL_FUNC(destroy_window), &window);
+    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			GTK_SIGNAL_FUNC(destroy_window), &window);
+    
+    gtk_container_border_width (GTK_CONTAINER (window), 20);
+    
+    /* 
+     *these 15 lines are a nice and easy example for GtkHButtonBox 
+     */
+    hbox = gtk_handle_box_new ();
+    gtk_container_add (GTK_CONTAINER (window), hbox);
+    gtk_widget_set_usize(hbox, 300, 40);
+    gtk_widget_show (hbox);
+
+#if 0
+    button = gtk_toggle_button_new_with_label ("Let's try this");
+#else
+    button = gtk_label_new ("Let's try this");
+#endif
+    gtk_container_add (GTK_CONTAINER (hbox), button);
+    gtk_widget_set_usize(button, 250, 40);
     gtk_widget_show (button);
   }
 
@@ -3234,6 +3278,7 @@ create_main_window ()
       { "check buttons", create_check_buttons },
       { "radio buttons", create_radio_buttons },
       { "button box", create_button_box },
+      { "handle box", create_handle_box },
       { "reparent", create_reparent },
       { "pixmap", create_pixmap },
       { "tooltips", create_tooltips },

@@ -15,7 +15,8 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-/* The GtkHandleBox is to allow
+/* The GtkHandleBox is to allow widgets to be dragged in and out of
+ their parents */
 #ifndef __GTK_HANDLE_BOX_H__
 #define __GTK_HANDLE_BOX_H__
 
