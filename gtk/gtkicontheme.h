@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ICON_INFO              (gtk_icon_info_get_type)
+#define GTK_TYPE_ICON_INFO              (gtk_icon_info_get_type ())
 
 #define GTK_TYPE_ICON_THEME             (gtk_icon_theme_get_type ())
 #define GTK_ICON_THEME(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_THEME, GtkIconTheme))

@@ -1,3 +1,8 @@
+Tue Dec 23 22:34:50 2003  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkicontheme.h: fix GTK_TYPE_ICON_INFO macro, reported by
+	muppet.
+
 Wed Dec 24 01:12:53 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkclipboard.[hc]: Add GtkClipboardTargetReceivedFunc,
