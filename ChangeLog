@@ -1,3 +1,9 @@
+Fri Aug  1 16:44:51 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (update_cmpl): Fix obvious reallocation
+	bug in rarely or never hit code path (#118071,
+	Tor Lillqvist)
+
 Fri Aug  1 16:30:13 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_have_render): 
