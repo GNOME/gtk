@@ -202,6 +202,8 @@ static gchar *add_dll_suffix(gchar *module_name)
 static gboolean
 check_setugid (void)
 {
+/* this isn't at all relevant on Windoze and doesn't compile ... --hb */
+#ifndef G_OS_WIN32
   uid_t ruid, euid, suid; /* Real, effective and saved user ID's */
   gid_t rgid, egid, sgid; /* Real, effective and saved group ID's */
   
@@ -231,7 +233,7 @@ check_setugid (void)
 		 "Refusing to initialize GTK+.");
       exit (1);
     }
-
+#endif
   return TRUE;
 }
 

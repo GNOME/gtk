@@ -1,3 +1,42 @@
+2001-02-19  Hans Breuer <hans@breuer.org>
+
+	* gtk/gtk.def : updated exported symbols
+
+	* gtk/makefile.msc.in : updated
+
+	* gtk/gtkstyle.c (gtk_style_realize) : gets called without
+	a colormap, when invoked from testgtk::entry. I'm not sure where
+	the bug is, but g_return_if_fail (GDK_IS_COLORMAP (colormap));
+	avoids immediate crashing ...
+
+	* gtk/gtkmain.c (check_setugid) : totally disabled on win32;
+	any objections ?
+
+	* gtk/gtktreemodel.c : called G_VALUE_LCOPY with an extra
+	0 parameter. At least msvc doesn't like macros with var args. 
+	I simply removed the extra 0, was it a feature or a typo ?
+
+	* gtk/gtktreeviewcolumn.[hc] (gtk_tree_view_column_set_func) :
+	removed the extra indirection from the GtkTreeViewColumnFunc parameter,
+	because the value assignment to the internal struct wasn't working.
+	I'm not absolutely sure. The problem could have been resolved by
+	changing the "func" declartion in the struct, but was the pointer
+	to the function pointer intended ?
+
+	* gtk+/gtk/gtktreedatalist.c : include gboxed.h
+
+	* gdk/gdk.def : updated exported symbols
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_image) :
+	only use SetDIBitsToDevice if there is a palette at the drawable
+	and the image is GDK_VISUAL_PSEUDO_COLOR
+
+	* gdk/win32/gdkkeys-win32.c : msvc still has no <unistd.h> ...
+
+	* gdk/win32/gdkwindow-win32.c : #include "gdk.h" /* gdk_rectangle_intersect */
+
+	* gdk/*/makefile.msc : updated
+
 2001-02-19  Havoc Pennington  <hp@redhat.com>
 
 	* demos/gtk-demo/Makefile.am (INCLUDES): GDK_DISABLE_COMPAT_H,

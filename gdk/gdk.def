@@ -66,6 +66,7 @@ EXPORTS
 	gdk_draw_indexed_image
 	gdk_draw_layout
 	gdk_draw_layout_line
+	gdk_draw_layout_with_colors
 	gdk_draw_line
 	gdk_draw_lines
 	gdk_draw_point
@@ -215,6 +216,7 @@ EXPORTS
 	gdk_pango_attr_stipple_new
 	gdk_pango_context_get
 	gdk_pango_context_set_colormap
+	gdk_pango_layout_get_clip_region
 	gdk_parent_root
 	gdk_pixbuf_get_from_drawable
 	gdk_pixbuf_render_pixmap_and_mask

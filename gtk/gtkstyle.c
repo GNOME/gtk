@@ -659,6 +659,7 @@ gtk_style_realize (GtkStyle    *style,
                    GdkColormap *colormap)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
   
   style->colormap = gdk_colormap_ref (colormap);
   style->depth = gdk_colormap_get_visual (colormap)->depth;

@@ -35,7 +35,6 @@ all: \
 	gdk.res
 
 gdk_win32_OBJECTS = \
-	gdkcc-win32.obj \
 	gdkcolor-win32.obj \
 	gdkcursor-win32.obj \
 	gdkdnd-win32.obj \

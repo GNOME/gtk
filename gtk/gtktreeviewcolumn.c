@@ -643,7 +643,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  **/
 void
 gtk_tree_view_column_set_func (GtkTreeViewColumn     *tree_column,
-			       GtkTreeViewColumnFunc *func,
+			       GtkTreeViewColumnFunc  func,
 			       gpointer               func_data,
 			       GtkDestroyNotify       destroy)
 {
