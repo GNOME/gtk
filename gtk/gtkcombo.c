@@ -607,7 +607,7 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
 	{
 	  combo->current_button = 0;
 	  GTK_BUTTON (combo->button)->in_button = FALSE;
-	  gtk_button_released (combo->button);
+	  gtk_button_released (GTK_BUTTON (combo->button));
 	  gtk_grab_remove (combo->button);
 	}
       return TRUE;

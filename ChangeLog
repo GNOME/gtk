@@ -1,3 +1,9 @@
+Mon Aug  3 00:04:09 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (abort_column_resize): reset drag_pos after abort
+	* gtk/gtkclist.c (gtk_clist_key_press): removed a few unneeded lines
+	* gtk/gtkcombo.c (gtk_combo_list_key_press): fixed compiler warning
+
 Sun Aug  2 03:08:07 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdkwindow.c (gdk_window_reparent): Change 

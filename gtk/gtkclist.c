@@ -2744,6 +2744,9 @@ gtk_clist_button_press (GtkWidget * widget,
   for (i = 0; i < clist->columns; i++)
     if (clist->column[i].window && event->window == clist->column[i].window)
       {
+	if (!GTK_WIDGET_HAS_FOCUS (widget))
+	  gtk_widget_grab_focus (widget);
+
 	GTK_CLIST_SET_FLAG (clist, CLIST_IN_DRAG);
 	gtk_widget_get_pointer (widget, &clist->x_drag, NULL);
 
@@ -5513,7 +5516,8 @@ abort_column_resize (GtkCList *clist)
 
   GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
   gtk_grab_remove (GTK_WIDGET (clist));
-  gdk_pointer_ungrab (gdk_time_get());
+  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+  clist->drag_pos = -1;
 
   if (clist->x_drag >= 0 && clist->x_drag <= clist->clist_window_width - 1)
     draw_xor_line (clist);
@@ -5529,39 +5533,13 @@ static gint
 gtk_clist_key_press (GtkWidget   * widget,
 		     GdkEventKey * event)
 {
-  GtkCList *clist;
-  gboolean handled = FALSE;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  clist = GTK_CLIST (widget);
-
-
-  if (event->keyval == GDK_Escape && GTK_CLIST_IN_DRAG (clist))
-    {
-      GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
-      gtk_grab_remove (widget);
-      gdk_pointer_ungrab (event->time);
-
-      if (clist->x_drag >= 0 && clist->x_drag <= clist->clist_window_width - 1)
-	draw_xor_line (clist);
-
-      if (GTK_CLIST_ADD_MODE (clist))
-	{
-	  gdk_gc_set_line_attributes (clist->xor_gc, 1, GDK_LINE_ON_OFF_DASH,
-				      0, 0);
-	  gdk_gc_set_dashes (clist->xor_gc, 0, "\4\4", 2);
-	}
-      return TRUE;
-    }
-
-  if (GTK_WIDGET_CLASS (parent_class)->key_press_event)
-    handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
-
-  if (handled)
-    return handled;
+  if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
+      GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+    return TRUE;
 
   switch (event->keyval)
     {
