@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>January 9th 2004</date>
+  <date>January 13th 2004</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -976,7 +976,7 @@ url="ftp://ftp.gnu.org/gnu/make/">ftp://ftp.gnu.org/gnu/make/</ulink>).</para>
 
 <sect1>
 <title>I want to add some configure stuff, how could I do
-this?</title>
+this? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>To use autoconf/automake, you must first install the
 relevant packages. These are:</para>
@@ -985,10 +985,10 @@ relevant packages. These are:</para>
 <listitem><simpara>the m4 preprocessor v1.4 or better</simpara>
 </listitem>
 
-<listitem><simpara>autoconf v2.13 or better</simpara>
+<listitem><simpara>autoconf v2.54 or better</simpara>
 </listitem>
 
-<listitem><simpara>automake v1.4 or better</simpara>
+<listitem><simpara>automake v1.7 or better suggested</simpara>
 </listitem>
 </itemizedlist>
 
@@ -1003,20 +1003,20 @@ you must create a configure.in which may look like:</para>
 dnl Process this file with autoconf to produce a configure script.
 dnl configure.in for a GTK+ based program
 
-AC_INIT(myprg.c)dnl
-AM_INIT_AUTOMAKE(mypkgname,0.0.1)dnl
-AM_CONFIG_HEADER(config.h)dnl
+AC_INIT(myprg.c)
+AM_INIT_AUTOMAKE(mypkgname, 0.0.1)
+AM_CONFIG_HEADER(config.h)
 
 dnl Checks for programs.
 AC_PROG_CC dnl check for the c compiler
 dnl you should add CFLAGS="" here, 'cos it is set to -g by PROG_CC
 
 dnl Checks for libraries.
-AM_PATH_GTK(1.2.0,,AC_MSG_ERROR(mypkgname 0.1 needs GTK))dnl
+AM_PATH_GTK_2_0(2.2.0,,AC_MSG_ERROR(mypkgname 0.1 needs GTK+ 2.2.0))
 
 AC_OUTPUT(
 	Makefile
-)dnl
+)
 </programlisting>
 
 <para>You must add a Makefile.am file:</para>

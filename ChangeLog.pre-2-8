@@ -1,3 +1,7 @@
+Tue Jan 13 14:48:27 GMT 2004  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Update info on using autoconf
+
 Mon Jan 12 23:40:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testmerge.c: Adjust to the new connect_proxy signals.
