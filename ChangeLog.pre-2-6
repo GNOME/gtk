@@ -1,5 +1,10 @@
 2004-11-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (menu_change_screen): Don't unnecessarily
+	call gtk_menu_position(), since that function has issues
+	when called on a menu whose parent is unrealized.  (#157354,
+	Adam Hooper)
+
 	* gtk/gtkmain.c: Document new functions.
 
 2004-11-04  Matthias Clasen  <mclasen@redhat.com>

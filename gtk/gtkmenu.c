@@ -980,6 +980,12 @@ menu_change_screen (GtkMenu   *menu,
 {
   GtkMenuPrivate *private = gtk_menu_get_private (menu);
 
+  if (gtk_widget_has_screen (menu))
+    {
+      if (new_screen == gtk_widget_get_screen (menu))
+	return;
+    }
+
   if (menu->torn_off)
     {
       gtk_window_set_screen (GTK_WINDOW (menu->tearoff_window), new_screen);
@@ -1705,7 +1711,7 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
   geometry_hints.max_width = width;
     
   geometry_hints.min_height = 0;
-  geometry_hints.max_height = GTK_WIDGET (menu)->requisition.height;
+  geometry_hints.max_height = GTK_WIDGET (menu)->requisition.height + 10;
 
   gtk_window_set_geometry_hints (GTK_WINDOW (menu->tearoff_window),
 				 NULL,
