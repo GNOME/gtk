@@ -1,0 +1,14 @@
+# $(gtkconfigdir)/gtkrc.zh_TW
+#
+# This file defines the fontsets for Chinese language (ch) using
+# the traditional chinese Big5 encoding as used in Taiwan (TW)
+#
+# 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+#
+
+style "default" {
+       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
+		  -*-*-medium-r-normal--14-*-*-*-*-*-big5-0"
+}
+class "GtkWidget" style "default"
+

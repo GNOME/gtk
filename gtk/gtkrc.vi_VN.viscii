@@ -1,0 +1,18 @@
+# $(gtkconfigdir)/gtkrc.vi_VN.viscii
+#
+# This file defines the fontsets for Vietnamese language (vi) using
+# the viscii 1.1 charset encoding.
+#
+# You can find links for viscii True Type fonts following the
+# links at my page on vietnamese localisation at
+# http://www.ping.be/linux/viet/
+#
+# 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+#
+
+style "default" {
+       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
+		  -*-verdana-medium-r-normal--14-*-*-*-*-*-viscii1.1-1"
+}
+class "GtkWidget" style "default"
+
