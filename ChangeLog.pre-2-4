@@ -1,3 +1,10 @@
+Thu Dec 27 14:04:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c (gtk_socket_key_press_event): 
+	gtk/gtkplug.c (gtk_plug_key_press_event): Don't do
+	special handling of key presses unless we are doing 
+	iter-app embedding. (Fixes #67590, Anders Carlsson)
+
 Thu Dec 27 16:37:04 2001  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted),

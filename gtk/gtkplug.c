@@ -567,13 +567,18 @@ static gboolean
 gtk_plug_key_press_event (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
-  if (!GTK_WINDOW (widget)->has_focus)
+  if (GTK_WIDGET_TOPLEVEL (widget))
     {
-      gtk_plug_forward_key_press (GTK_PLUG (widget), event);
-      return TRUE;
+      if (!GTK_WINDOW (widget)->has_focus)
+	{
+	  gtk_plug_forward_key_press (GTK_PLUG (widget), event);
+	  return TRUE;
+	}
+      else
+	return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
     }
   else
-    return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+    return FALSE;
 }
 
 static void

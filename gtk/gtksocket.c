@@ -687,7 +687,7 @@ gtk_socket_key_press_event (GtkWidget   *widget,
 {
   GtkSocket *socket = GTK_SOCKET (widget);
   
-  if (socket->plug_window)
+  if (GTK_WIDGET_HAS_FOCUS (socket) && socket->plug_window && !socket->plug_widget)
     {
       XEvent xevent;
       
