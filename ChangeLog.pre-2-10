@@ -1,3 +1,8 @@
+Sun May 20 20:07:35 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.[hc] (gtk_signal_connect_full): make hanlder id a
+	gulong as in GSignal.
+
 Fri May 25 19:04:17 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_calc_size): Remove almost all

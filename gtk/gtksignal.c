@@ -130,7 +130,7 @@ gtk_signal_connect_while_alive (GtkObject    *object,
 				  FALSE);
 }
 
-guint
+gulong
 gtk_signal_connect_full (GtkObject           *object,
 			 const gchar         *name,
 			 GtkSignalFunc        func,

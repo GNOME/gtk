@@ -1564,6 +1564,15 @@ a gtk_object_unref().
 @column: 
 @value: 
 
+<!-- ##### FUNCTION gtk_tree_view_column_set_cell_data ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@tree_model: 
+@iter: 
+
 <!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
 <para>
 Given a GtkTypeClass pointer @klass, and a GtkType @cast_type, make

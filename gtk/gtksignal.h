@@ -117,7 +117,7 @@ void	gtk_signal_connect_while_alive		(GtkObject	    *object,
 						 GtkSignalFunc	     func,
 						 gpointer	     func_data,
 						 GtkObject	    *alive_object);
-guint	gtk_signal_connect_full			(GtkObject	    *object,
+gulong	gtk_signal_connect_full			(GtkObject	    *object,
 						 const gchar	    *name,
 						 GtkSignalFunc	     func,
 						 GtkCallbackMarshal  unsupported,

@@ -116,16 +116,6 @@ GtkTreeViewColumn
 @Varargs: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_set_cell_data ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@tree_model: 
-@iter: 
-
-
 <!-- ##### FUNCTION gtk_tree_view_column_set_visible ##### -->
 <para>
 
