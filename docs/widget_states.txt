@@ -1,0 +1,290 @@
+This file contains some notes as to how the widget system does
+and should work. It consists of three parts:
+
+ I) A list of invariants about the states of the widgets. 
+    (Throughout this document, we refer to the states of the
+     widgets by referring to the flags for gtkwidget)
+
+ II) Some notes about the ways that a widget changes states
+
+ III) A list of responsibilities of various widget signals when
+    the states change.
+
+Any necessary actions which is implied by the I) section but not
+mentioned in III) are the responsibility of the core GTK code, 
+which is roughly defined as:
+
+  gtkobject.c
+  gtkwidget.c
+  gtkcontainer.c
+  gtkmain.c
+
+I. Invariants:
+-------------
+
+1)  GTK_DESTROYED => !GTK_REALIZED
+                  => !GTK_VISIBLE
+[ The latter is not currently in place, but it should be ] 
+ 
+2) GTK_MAPPED => GTK_REALIZED
+
+3) if GTK_WIDGET_TOPLEVEL (widget):
+   GTK_WIDGET_VISIBLE (widget) <=> GTK_WIDGET_MAPPED (widget)
+
+4) if !GTK_WIDGET_TOPLEVEL (widget):
+  widget->parent && GTK_WIDGET_REALIZED (widget->parent) <=>
+     GTK_WIDGET_REALIZED (widget)
+
+(When a widget is force-unrealized, to maintain this invariant,
+ the widget is removed from its parent. Not currently implemented)
+
+5) if !GTK_WIDGET_TOPLEVEL (widget):
+   widget->parent && GTK_WIDGET_MAPPED (widget->parent) && 
+   GTK_WIDGET_VISIBLE (widget) <=>
+     GTK_WIDGET_MAPPED (widget)
+
+
+Note:, the definition
+
+  GTK_WIDGET_DRAWABLE = GTK_WIDGET_VISIBLE && GTK_WIDGET_MAPPED
+  is made in gtkwidget.c, but by 3) and 5), 
+     
+     GTK_WIDGET_MAPPED => GTK_WIDGET_VISIBLE
+
+II. How states are changed:
+---------------------------
+
+How can the user control the state of a widget:
+-----------------------------------------------
+
+(In the following, set flag means set the flag, do appropriate
+actions, and enforce above invariants) 
+
+gtk_widget_show: 
+ if !GTK_DESTROYED sets GTK_VISIBLE
+
+gtk_widget_hide:
+ if !GTK_VISIBLE for widget
+
+gtk_widget_destroy:
+ sets GTK_DESTROYED
+ For a top-level widget
+
+gtk_widget_realize:
+ if !GTK_DESTROYED sets GTK_REALIZED
+- Calling gtk_widget_realize when the widget is not a descendent
+  of a toplevel is an ERROR.
+
+gtk_container_add (container, widget) [ and container-specific variants ]
+ Sets widget->parent 
+
+gtk_container_remove (container, widget)
+ unsets widget->parent
+
+
+gtk_widget_unrealize
+ sets !GTK_REALIZED for widget
+(can we say this is never to be called from user code?)
+
+gtk_widget_(un)map are not to be called from applications.
+(can we get rid of them completely?)
+
+
+When The X window corresponding to a GTK window is destroyed:
+-------------------------------------------------------------
+
+gtk_widget_destroy is called (as above).
+
+
+III. Responsibilities of widgets
+--------------------------------
+
+Adding to a container
+---------------------
+
+When a widget is added to a container, the container:
+
+  1) calls gtk_widget_set_parent (widget, container)
+  2) calls gtk_widget_set_parent_window (widget, window) if 
+     the widget is being added to something other than container->window
+  3) if container is realized, and not widget, realizes widget
+  4) if container is mapped, and not widget, realizes widget
+  5) Queues a resize
+
+Note: It would be nice to remove 3) and 4) out of widget specific code
+  since they are of the invariant-enforcing nature, but it is
+  a bit hard, since they can't be done until after 2)
+
+
+Removing from a container
+-------------------------
+
+When a widget is removed to a container, the container:
+
+  1) Calls gtk_widget_unparent (widget)
+  2) Sets widget->parent to NULL
+  3) Queues a resize.
+
+Notes:
+
+ gtk_widget_unparent unrealizes the widget except in the 
+ special case GTK_IN_REPARENT is set. (Special case)
+
+ gtk_widget_unparent is quite different than
+ gtk_widget_set_parent (widget, NULL) which is for setting
+   up toplevel windows.
+
+
+At widget creation
+------------------
+
+Widgets are created in an unrealized state. 
+
+ 1) The widget should allocate and initialize needed data structures
+
+The Realize signal
+------------------
+
+When a widget recieves the "realize" signal it should:
+
+ NO_WINDOW widgets: (probably OK to use default handler)
+
+  1) set the realized flag
+  2) set widget->window
+      widget->window = gtk_widget_get_parent_window (widget);
+      gdk_window_ref (widget->window);
+  3) attach the widget's style
+
+  widget->style = gtk_style_attach (widget->style, widget->window);
+
+ widget with window(s)
+
+  1) set the REALIZED flag
+  2) create windows with the parent obtained from
+      gtk_widget_get_parent_window (widget);
+  3) attach the widget's style
+  4) set the background color for the new window based on the style
+
+The Map signal
+--------------
+
+  1) Set the MAPPED flag
+  2) If the widget has a window, gdk_window_show that window
+  3) If the widget does not hae a window, then map all child
+     windows.
+  3) Do any other functions related to putting the widget onscreen.
+     (for instance, showing extra popup windows...)
+
+The Unmap signal
+----------------
+
+When a widget receives the unmap signal, it must:
+
+ 1) If the widget has a window, gdk_window_hide that window, 
+
+ 2) If the widget does not have a window, unmap all child widgets
+
+ 3) Do any other functions related to taking the widget offscreen
+     (for instance, removing popup windows...)
+
+ 3) Unset GTK_MAPPED
+
+Note: Could we do a better job at providing default map/unmap handlers?
+
+The Unrealize signal
+--------------------
+
+When a widget receives the unrealize signal, it must
+
+ 1) For any windows other than widget->window do:
+
+    gdk_window_set_user_data (window, NULL);
+    gdk_window_destroy (window);
+
+ 2) Call the parent's unrealize handler
+
+
+As a side effect of the unrealize signal, the widget will be
+removed from its parent
+
+
+The Destroy Signal
+------------------
+
+Commentary:
+
+  The destroy signal probably shouldn't exist at all. A widget
+  should merely be unrealized and removed from its parent
+  when the user calls gtk_widget_destroy or a GDK_DESTROY event
+  is received. However, a large body of code depends on
+  getting a definitive signal when a widget goes away.
+
+  That could be put in the finalization step, but, especially
+  with language bindings, the cleanup step may need to refer
+  back to the widget. (To use gtk_widget_get_data, for instance)
+  If it does so via a pointer in a closure (natural for
+  Scheme, or Perl), then the finalization procedure will never
+  be called. 
+
+  Also, if we made that the finalization step, we would have
+  to propagate the GDK_DESTROY event in any case, since it is
+  at that point at which user-visible actions need to be taken.
+
+
+When a widget receives the destroy signal, it must:
+
+  1) If the widget "owns" any widgets other than its child
+     widgets, (for instance popup windows) it should
+     destroy them.
+
+  2) Call the parent class's destroy handler.
+
+
+The "destroy" signal will only be received once. A widget
+will never receive any other signals after the destroy
+signal (but see the sectionalize on "Finalize" below)
+
+The widget must handle calls to all publically accessible
+functions in an innocuous manner even after a "destroy"
+signal. (A widget can assume that it will not be realized 
+after a "destroy" signal is received, which may simplify
+handling this requirement)
+
+
+The Finalize Pseudo-signal
+--------------------------
+
+The finalize pseudo-signal is received after all references
+to the widget have been removed. The finalize callback
+cannot make any GTK calls with the widget as a parameter.
+
+1) Free any memory allocated by the widget. (But _not_
+   the widget structure itself.
+
+2) Call the parent classes finalize signal
+
+
+A note on chaining "destroy" signals and finalize signals:
+---------------------------------------------------------
+
+This is done by code like:
+
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+
+It may not be completely obvious why this works. Note
+that parent_class is a static variable on a per-class
+basis. So say: we have
+
+  GtkFoo <- GtkBar <- GtkWidget <-GtkObject
+
+And that Foo, Widget, and Object all have destructors, but
+not Bar.
+
+Then gtk_foo_destroy will call gtk_widget_destroy (because
+it was not overridden in the Bar class structure) and
+gtk_widget_destroy will call gtk_object_destroy because
+the parent_class variable referenced by gtk_foo_destroy is the 
+static variable in gtkwidget.c: GtkObjectClass.
+
+
