@@ -401,6 +401,8 @@ gtk_socket_end_embedding (GtkSocket *socket)
 
   g_object_unref (socket->plug_window);
   socket->plug_window = NULL;
+  socket->current_width = 0;
+  socket->current_height = 0;
   private->resize_count = 0;
 
   /* Remove from end to avoid indexes shifting. This is evil */
