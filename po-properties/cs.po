@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-12-13 22:32+0100\n"
+"POT-Creation-Date: 2004-12-19 04:35+0100\n"
+"PO-Revision-Date: 2004-12-19 13:00+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2230,58 +2230,49 @@ msgid "The model for the icon view"
 msgstr "Model pro ikonový pohled"
 
 #: gtk/gtkiconview.c:413
-#, fuzzy
 msgid "Number of columns"
-msgstr "Počet kanálů"
+msgstr "Počet sloupců"
 
 #: gtk/gtkiconview.c:414
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "Počet zobrazovaných desetinných míst"
+msgstr "Počet zobrazovaných sloupců"
 
 #: gtk/gtkiconview.c:431
-#, fuzzy
 msgid "Width for each item"
-msgstr "Widget, který používat jako popisek položky"
+msgstr "Šířka každé položky"
 
 #: gtk/gtkiconview.c:432
 msgid "The width used for each item"
-msgstr ""
+msgstr "Šířka používaná pro každou položku"
 
 #: gtk/gtkiconview.c:448
-#, fuzzy
 msgid "Space which is inserted between cells of an item"
-msgstr "Místo, které je vložené mezi buňky"
+msgstr "Místo, které je vloženo mezi buňky položky"
 
 #: gtk/gtkiconview.c:463
-#, fuzzy
 msgid "Row Spacing"
 msgstr "Rozestup řádků"
 
 #: gtk/gtkiconview.c:464
-#, fuzzy
 msgid "Space which is inserted between grid rows"
-msgstr "Místo, které je vložené mezi buňky"
+msgstr "Místo, které je vloženo mezi řádky mřížky"
 
 #: gtk/gtkiconview.c:479
-#, fuzzy
 msgid "Column Spacing"
 msgstr "Rozestup sloupců"
 
+# FIXME: s/column/columns/
 #: gtk/gtkiconview.c:480
-#, fuzzy
 msgid "Space which is inserted between grid column"
-msgstr "Místo, které je vložené mezi buňky"
+msgstr "Místo, které je vloženo mezi sloupce mřížky"
 
 #: gtk/gtkiconview.c:495
-#, fuzzy
 msgid "Margin"
-msgstr "Levý okraj"
+msgstr "Okraj"
 
 #: gtk/gtkiconview.c:496
-#, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "Místo, které je vložené mezi buňky"
+msgstr "Místo, které je vloženo na okraje ikonového pohledu"
 
 #: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2503,12 +2494,10 @@ msgid "Angle at which the label is rotated"
 msgstr "Úhel, o který je popisek rotován"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
 msgstr "Maximální šířka ve znacích"
 
 #: gtk/gtklabel.c:514
-#, fuzzy
 msgid "The desired maximum width of the label, in characters"
 msgstr "Požadovaná maximální šířka popisku ve znacích"
 

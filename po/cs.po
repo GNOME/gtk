@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-12-13 22:31+0100\n"
+"POT-Creation-Date: 2004-12-19 04:34+0100\n"
+"PO-Revision-Date: 2004-12-19 12:59+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1086,7 +1086,7 @@ msgstr "Zvolte soubor"
 
 #: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
-msgstr ""
+msgstr "Jiné..."
 
 #: gtk/gtkfilechooserdefault.c:863
 #, c-format
