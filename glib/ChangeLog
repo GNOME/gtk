@@ -1,8 +1,16 @@
+Sun May 17 10:48:27 1998  Tim Janik  <timj@gtk.org>
+
+	* gscanner.c (g_scanner_unexp_token): provide usefull default
+ 	specifications for identifier_spec and symbol_spec.
+
+	* glib.h: new functions g_slist_nth_data and g_list_nth_data to return
+ 	the data of the nth element in the list.
+
 Fri May 15 22:31:49 1998  Tim Janik  <timj@gtk.org>
 
-	* gscanner.c (g_scanner_unexp_token): removed sputious va_end(args) that
-	for some reason didn't produce a compiler wrning on my machine (is
- 	va_end undefined for i386?).
+	* gscanner.c (g_scanner_unexp_token): removed spurious va_end(args)
+ 	that for some reason didn't produce a compiler wrning on my machine
+ 	(is va_end undefined for i386?).
 
 Fri May 15 12:32:08 1998  rodo  <doulik@karlin.mff.cuni.cz>
 

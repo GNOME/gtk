@@ -665,6 +665,11 @@ g_scanner_unexp_token (GScanner		*scanner,
     msg_handler = g_scanner_error;
   else
     msg_handler = g_scanner_warn;
+
+  if (!identifier_spec)
+    identifier_spec = "identifier";
+  if (!symbol_spec)
+    symbol_spec = "symbol";
   
   token_string_len = 56;
   token_string = g_new (gchar, token_string_len + 1);

@@ -300,6 +300,16 @@ g_list_nth (GList *list,
   return list;
 }
 
+gpointer
+g_list_nth_data (GList     *list,
+		 guint      n)
+{
+  while ((n-- > 0) && list)
+    list = list->next;
+  
+  return list ? list->data : NULL;
+}
+
 GList*
 g_list_find (GList    *list,
 	     gpointer  data)

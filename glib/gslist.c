@@ -289,6 +289,16 @@ g_slist_nth (GSList *list,
   return list;
 }
 
+gpointer
+g_slist_nth_data (GSList   *list,
+		  guint     n)
+{
+  while ((n-- > 0) && list)
+    list = list->next;
+
+  return list ? list->data : NULL;
+}
+
 GSList*
 g_slist_find (GSList   *list,
 	      gpointer  data)
