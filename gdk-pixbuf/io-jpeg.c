@@ -45,8 +45,6 @@
 
 #include <config.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <setjmp.h>
 #include <jpeglib.h>
 #include "gdk-pixbuf.h"
@@ -55,12 +53,11 @@
 
 
 /* we are a "source manager" as far as libjpeg is concerned */
-#define JPEG_PROG_BUF_SIZE 4096
-
 typedef struct {
 	struct jpeg_source_mgr pub;   /* public fields */
 
-	JOCTET buffer[JPEG_PROG_BUF_SIZE];              /* start of buffer */
+	JOCTET * buffer;              /* start of buffer */
+	gboolean start_of_file;       /* have we gotten any data yet? */
 	long  skip_next;              /* number of bytes to skip next read */
 
 } my_source_mgr;
@@ -87,6 +84,8 @@ typedef struct {
 	struct jpeg_decompress_struct cinfo;
 	struct error_handler_data     jerr;
 } JpegProgContext;
+
+#define JPEG_PROG_BUF_SIZE 4096
 
 GdkPixbuf *image_load (FILE *f);
 gpointer image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data);
@@ -228,6 +227,7 @@ init_source (j_decompress_ptr cinfo)
 {
 	my_src_ptr src = (my_src_ptr) cinfo->src;
 
+	src->start_of_file = TRUE;
 	src->skip_next = 0;
 }
 
@@ -278,7 +278,7 @@ image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
 	JpegProgContext *context;
 	my_source_mgr   *src;
 
-	context = g_new0 (JpegProgContext, 1);
+	context = g_new (JpegProgContext, 1);
 	context->notify_func = func;
 	context->notify_user_data = user_data;
 	context->pixbuf = NULL;
@@ -289,8 +289,9 @@ image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
 	/* create libjpeg structures */
 	jpeg_create_decompress (&context->cinfo);
 
-	context->cinfo.src = (struct jpeg_source_mgr *) g_new0 (my_source_mgr, 1);
+	context->cinfo.src = (struct jpeg_source_mgr *) g_new (my_source_mgr, 1);
 	src = (my_src_ptr) context->cinfo.src;
+	src->buffer = g_malloc (JPEG_PROG_BUF_SIZE);
 
 	context->cinfo.err = jpeg_std_error (&context->jerr.pub);
 
@@ -315,7 +316,6 @@ void
 image_stop_load (gpointer data)
 {
 	JpegProgContext *context = (JpegProgContext *) data;
-
 	g_return_if_fail (context != NULL);
 
 	if (context->pixbuf)
@@ -324,6 +324,8 @@ image_stop_load (gpointer data)
 	if (context->cinfo.src) {
 		my_src_ptr src = (my_src_ptr) context->cinfo.src;
 		
+		if (src->buffer)
+			g_free (src->buffer);
 		g_free (src);
 	}
 
@@ -350,12 +352,12 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 	struct jpeg_decompress_struct *cinfo;
 	my_src_ptr  src;
 	guint       num_left, num_copy;
+	guchar      *nextptr;
 
 	g_return_val_if_fail (context != NULL, FALSE);
 	g_return_val_if_fail (buf != NULL, FALSE);
 
 	src = (my_src_ptr) context->cinfo.src;
-
 	cinfo = &context->cinfo;
 
 	/* skip over data if requested, handle unsigned int sizes cleanly */
@@ -374,26 +376,22 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 
 	while (num_left > 0) {
 		/* copy as much data into buffer as possible */
-
-		if(src->pub.bytes_in_buffer)
-		  {
-		    int space_used =
-		      JPEG_PROG_BUF_SIZE - src->pub.bytes_in_buffer;
-
-		    memmove(src->buffer, src->buffer + space_used, src->pub.bytes_in_buffer);
-		    g_print("Moving %d bytes from offset %d to head\n", src->pub.bytes_in_buffer, space_used);
-		  }
-
 		num_copy = MIN (JPEG_PROG_BUF_SIZE - src->pub.bytes_in_buffer,
 				size);
+
 		if (num_copy == 0) 
-		  g_error ("Buffer overflow!");
-		memcpy(src->buffer + src->pub.bytes_in_buffer, buf, num_copy);
+			g_assert ("Buffer overflow!\n");
+
+		nextptr = src->buffer + src->pub.bytes_in_buffer;
+		memcpy (nextptr, buf, num_copy);
+		
+		if (src->pub.next_input_byte == NULL ||
+		    src->pub.bytes_in_buffer == 0)
 		src->pub.next_input_byte = src->buffer;
+
 		src->pub.bytes_in_buffer += num_copy;
+
 		num_left -= num_copy;
-		g_print("Copied %d bytes, now have %d in buffer, %d left\n", num_copy, src->pub.bytes_in_buffer, num_left);
-		G_BREAKPOINT();
 
 		/* try to load jpeg header */
 		if (!context->got_header) {
@@ -401,7 +399,6 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 
 			rc = jpeg_read_header (cinfo, TRUE);
 			context->src_initialized = TRUE;
-
 			if (rc == JPEG_SUSPENDED)
 				continue;
 
@@ -421,7 +418,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 
 			if (context->pixbuf == NULL) {
 				/* Failed to allocate memory */
-				g_error ("Couldn't allocate gdkpixbuf");
+				g_assert ("Couldn't allocate gdkpixbuf\n");
 			}
 
 			/* Use pixbuf buffer to store decompressed data */
@@ -433,6 +430,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 				(* context->notify_func) (context->pixbuf,
 							  context->notify_user_data);
 
+			src->start_of_file = FALSE;
 		} else if (!context->did_prescan) {
 			int rc;
 
