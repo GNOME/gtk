@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "POT-Creation-Date: 2003-11-06 18:12+0100\n"
-"PO-Revision-Date: 2003-12-30 20:47+CET\n"
+"PO-Revision-Date: 2003-12-31 18:44+CET\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgid ""
 msgstr "Ne mogu učitati animaciju „%s“: razlog nepoznat, vjerojatno neispravan zapis"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Ne mogu učitati modul za učitavanje slika: %s: %s"
 
@@ -2500,7 +2500,7 @@ msgid "_Files"
 msgstr "_Datoteke"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
-#, fuzzy, c-format
+#, c-format
 msgid "Folder unreadable: %s"
 msgstr "Nečitljiva mapa: %s"
 
@@ -2615,7 +2615,7 @@ msgid "Rename File"
 msgstr "Promijeni ime datoteci"
 
 #: gtk/gtkfilesel.c:1762
-#, fuzzy, c-format
+#, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Promijeni ime datoteke \"%s\" u:"
 
@@ -4900,7 +4900,7 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr "Što će Tab proizvesti kad se znak tab upiše"
 
 #: gtk/gtkthemes.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Ne mogu pronaći modul tema u putanji modula: \"%s\","
 
