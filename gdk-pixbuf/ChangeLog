@@ -1,3 +1,9 @@
+1999-11-30  Havoc Pennington  <hp@pobox.com>
+
+	* configure.in: Add AM_CONDITIONAL for inside gnome-libs
+
+	* src/Makefile.am: conditionalize GnomeCanvasPixbuf
+	
 1999-11-29  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/Makefile.am: Uncomment the GnomeCanvasPixbuf sources.  This

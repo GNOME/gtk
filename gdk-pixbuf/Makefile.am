@@ -57,6 +57,14 @@ GDK_PIXBUF_LIBS = $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 #
 # The GdkPixBuf library
 #
+if INSIDE_GNOME_LIBS
+CANVAS_SOURCEFILES=
+CANVAS_HEADERFILES=
+else
+CANVAS_SOURCEFILES=	gnome-canvas-pixbuf.c
+CANVAS_HEADERFILES=	gnome-canvas-pixbuf.h
+endif
+
 libgdk_pixbufincludedir = $(includedir)/gdk-pixbuf
 
 libgdk_pixbuf_la_SOURCES = 	\
@@ -66,7 +74,7 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-loader.c	\
 	gdk-pixbuf-render.c	\
 	gdk-pixbuf-drawable.c	\
-	gnome-canvas-pixbuf.c
+	$(CANVAS_SOURCEFILES)
 
 libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0
 
@@ -74,7 +82,7 @@ libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
 	gdk-pixbuf-drawable.h	\
 	gdk-pixbuf-loader.h	\
-	gnome-canvas-pixbuf.h
+	$(CANVAS_HEADERFILES)
 
 noinst_HEADERS = \
 	gdk-pixbuf-io.h
