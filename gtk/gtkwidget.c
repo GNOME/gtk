@@ -133,7 +133,8 @@ typedef	struct	_GtkStateData	 GtkStateData;
 struct _GtkStateData
 {
   GtkStateType  state;
-  gint          parent_sensitive;
+  guint		state_restauration : 1;
+  guint         parent_sensitive : 1;
 };
 
 
@@ -760,6 +761,8 @@ gtk_widget_set_arg (GtkWidget	*widget,
 		    GtkArg	*arg,
 		    guint	 arg_id)
 {
+  guint32 saved_flags;
+
   switch (arg_id)
     {
     case ARG_NAME:
@@ -790,20 +793,26 @@ gtk_widget_set_arg (GtkWidget	*widget,
       gtk_widget_set_sensitive (widget, GTK_VALUE_BOOL (*arg));
       break;
     case ARG_CAN_FOCUS:
+      saved_flags = GTK_WIDGET_FLAGS (widget);
       if (GTK_VALUE_BOOL (*arg))
 	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
+      if (saved_flags != GTK_WIDGET_FLAGS (widget))
+	gtk_widget_queue_resize (widget);
       break;
     case ARG_HAS_FOCUS:
       if (GTK_VALUE_BOOL (*arg))
 	gtk_widget_grab_focus (widget);
       break;
     case ARG_CAN_DEFAULT:
+      saved_flags = GTK_WIDGET_FLAGS (widget);
       if (GTK_VALUE_BOOL (*arg))
 	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
+      if (saved_flags != GTK_WIDGET_FLAGS (widget))
+	gtk_widget_queue_resize (widget);
       break;
     case ARG_HAS_DEFAULT:
       if (GTK_VALUE_BOOL (*arg))
@@ -2255,6 +2264,7 @@ gtk_widget_set_state (GtkWidget           *widget,
 		      GtkStateType         state)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (state == GTK_WIDGET_STATE (widget))
     return;
@@ -2264,19 +2274,16 @@ gtk_widget_set_state (GtkWidget           *widget,
   else
     {
       GtkStateData data;
-      GtkStateType old_state;
 
       data.state = state;
+      data.state_restauration = FALSE;
       if (widget->parent)
-	data.parent_sensitive = GTK_WIDGET_IS_SENSITIVE (widget->parent);
+	data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
       else
-	data.parent_sensitive = GTK_PARENT_SENSITIVE;
-
-      old_state = GTK_WIDGET_STATE (widget);
+	data.parent_sensitive = TRUE;
 
       gtk_widget_propagate_state (widget, &data);
-      if (old_state != GTK_WIDGET_STATE (widget))
-	gtk_widget_queue_draw (widget);
+      gtk_widget_queue_draw (widget);
     }
 }
 
@@ -2295,33 +2302,34 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 			  gint       sensitive)
 {
   GtkStateData data;
-  GtkStateType old_state;
 
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  sensitive = (sensitive != FALSE);
+
+  if (sensitive == (GTK_WIDGET_SENSITIVE (widget) != FALSE))
+    return;
 
   if (sensitive)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE);
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
-	data.state = GTK_WIDGET_SAVED_STATE (widget);
-      else
-	data.state = GTK_WIDGET_STATE (widget);
+      data.state = GTK_WIDGET_SAVED_STATE (widget);
     }
   else
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_SENSITIVE);
       data.state = GTK_WIDGET_STATE (widget);
     }
+  data.state_restauration = TRUE;
 
   if (widget->parent)
-    data.parent_sensitive = GTK_WIDGET_IS_SENSITIVE (widget->parent);
+    data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
   else
-    data.parent_sensitive = GTK_PARENT_SENSITIVE;
+    data.parent_sensitive = TRUE;
 
-  old_state = GTK_WIDGET_STATE (widget);
   gtk_widget_propagate_state (widget, &data);
-  if (old_state != GTK_WIDGET_STATE (widget))
-    gtk_widget_queue_draw (widget);
+  gtk_widget_queue_draw (widget);
 }
 
 /*****************************************
@@ -2354,7 +2362,8 @@ gtk_widget_set_parent (GtkWidget *widget,
     data.state = GTK_WIDGET_STATE (parent);
   else
     data.state = GTK_WIDGET_STATE (widget);
-  data.parent_sensitive = GTK_WIDGET_IS_SENSITIVE (parent);
+  data.state_restauration = FALSE;
+  data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (parent) != FALSE);
 
   gtk_widget_propagate_state (widget, &data);
   
@@ -3752,8 +3761,8 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 {
   guint8 old_state;
 
-  /* don't call this function with state=GTK_STATE_INSENSITIVE,
-   * parent_sensitive=TRUE and a sensitive widget
+  /* don't call this function with state==GTK_STATE_INSENSITIVE,
+   * parent_sensitive==TRUE on a sensitive widget
    */
 
   old_state = GTK_WIDGET_STATE (widget);
@@ -3763,20 +3772,31 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       GTK_WIDGET_SET_FLAGS (widget, GTK_PARENT_SENSITIVE);
 
       if (GTK_WIDGET_IS_SENSITIVE (widget))
-	GTK_WIDGET_STATE (widget) = data->state;
+	{
+	  if (data->state_restauration)
+	    GTK_WIDGET_STATE (widget) = GTK_WIDGET_SAVED_STATE (widget);
+	  else
+	    GTK_WIDGET_STATE (widget) = data->state;
+	}
       else
 	{
 	  GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
-	  if (data->state != GTK_STATE_INSENSITIVE)
+	  if (!data->state_restauration &&
+	      data->state != GTK_STATE_INSENSITIVE)
 	    GTK_WIDGET_SAVED_STATE (widget) = data->state;
 	}
     }
   else
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
+      if (!data->state_restauration)
+	{
+	  if (data->state != GTK_STATE_INSENSITIVE)
+	    GTK_WIDGET_SAVED_STATE (widget) = data->state;
+	}
+      else if (GTK_WIDGET_STATE (widget) != GTK_STATE_INSENSITIVE)
+	GTK_WIDGET_SAVED_STATE (widget) = GTK_WIDGET_STATE (widget);
       GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
-      if (data->state != GTK_STATE_INSENSITIVE)
-	GTK_WIDGET_SAVED_STATE (widget) = data->state;
     }
 
   if (GTK_WIDGET_HAS_FOCUS (widget) && !GTK_WIDGET_IS_SENSITIVE (widget))
@@ -3795,7 +3815,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       
       if (GTK_IS_CONTAINER (widget))
 	{
-	  data->parent_sensitive = GTK_WIDGET_IS_SENSITIVE (widget);
+	  data->parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget) != FALSE);
 	  data->state = GTK_WIDGET_STATE (widget);
 	  gtk_container_foreach (GTK_CONTAINER (widget),
 				 (GtkCallback) gtk_widget_propagate_state,

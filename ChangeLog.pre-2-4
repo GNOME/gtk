@@ -1,3 +1,29 @@
+Thu Mar 26 21:37:57 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_draw_indicator): always
+	display the correct active state.
+
+	* gtk/gtkcheckbutton.c (gtk_real_check_button_draw_indicator): always
+	display the correct active state.
+
+	* gtk/gtkwidget.c (gtk_widget_set_arg): CAN_FOCUS and CAN_DEFAULT flag
+ 	changes need to queue a resize.
+
+	* gtk/gtkbutton.c (gtk_button_paint): take border_width into
+ 	consideration for restrict area.
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_class_init): enable the
+ 	draw_default member of GtkButton, otherwise the diplay is messed up
+	for CAN_DEFAULT toggles.
+	(gtk_toggle_button_draw_focus): always display whether the toggle button
+	is active or not.
+
+	* gtk/gtkwidget.c (gtk_widget_set_state): 
+	(gtk_widget_set_sensitive): 
+	(gtk_widget_set_parent): 
+	(gtk_widget_propagate_state): take into consideration, whether we really
+	want to change childrens states, or just restauration of old states.
+
 Thu Mar 26 15:33:50 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwidget.c: When gtk_widget_draw() is called on a 

@@ -92,7 +92,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   gtk_object_class_add_signals (object_class, toggle_button_signals, LAST_SIGNAL);
 
   widget_class->draw_focus = gtk_toggle_button_draw_focus;
-  widget_class->draw_default = NULL;
 
   button_class->pressed = gtk_toggle_button_pressed;
   button_class->released = gtk_toggle_button_released;
@@ -181,15 +180,15 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
 
-  if  (GTK_WIDGET_DRAWABLE (widget))
+  if (GTK_WIDGET_DRAWABLE (widget))
     {
       button = GTK_BUTTON (widget);
       toggle_button = GTK_TOGGLE_BUTTON (widget);
 
       x = 0;
       y = 0;
-      width = widget->allocation.width  - GTK_CONTAINER (widget)->border_width * 2;
-      height = widget->allocation.height  - GTK_CONTAINER (widget)->border_width * 2;
+      width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
+      height = widget->allocation.height - GTK_CONTAINER (widget)->border_width * 2;
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
         {
@@ -210,7 +209,7 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
 	}
       else
 	{
-	  if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
+	  if (GTK_WIDGET_STATE (toggle_button) == GTK_STATE_ACTIVE)
 	    gdk_draw_rectangle (widget->window,
 				widget->style->bg_gc[GTK_WIDGET_STATE (widget)], FALSE,
 				x + 1, y + 1, width - 4, height - 4);
@@ -220,9 +219,7 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
 				x + 2, y + 2, width - 5, height - 5);
 	}
 
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
-	shadow_type = GTK_SHADOW_IN;
-      else if ((GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT) && toggle_button->active)
+      if (toggle_button->active)
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;

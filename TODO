@@ -73,6 +73,13 @@ TODO AFTER GTK 1.0
 ------------------
 
  * Make all widget attributes configurable after the widget is created (timj).
+ 
+ * Widgets dervied from GtkButton need to be able to override
+   GtkButtonClass.paint. e.g. redrawing of GtkToggleButton with CAN_DEFAULT
+   is messed up otheriwse. This does in fact not only apply to (toggle)buttons,
+   we should introduce a common paint member for the GtkWidgetClass.
+ 
+ * Radio buttons need to display CAN/HAS_DEFAULT correctly.
 
  * GtkCList improvements. (Jay Painter)
 

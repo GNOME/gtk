@@ -362,9 +362,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
       width = CHECK_BUTTON_CLASS (widget)->indicator_size;
       height = CHECK_BUTTON_CLASS (widget)->indicator_size;
 
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
-	shadow_type = GTK_SHADOW_IN;
-      else if ((GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT) && toggle_button->active)
+      if (GTK_TOGGLE_BUTTON (widget)->active)
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
