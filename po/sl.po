@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-03-07 12:30+0100\n"
+"POT-Creation-Date: 2002-04-23 14:58+0200\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andra¾ Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -114,6 +114,23 @@ msgstr ""
 "Notranja napaka: Modul nalagalnika slik '%s' ni uspel zaèeti nalagati slike, "
 "a ni podal razloga za neuspeh"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Glava slike je pokvarjena"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Oblika zapisa slike ni znana"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Podatki o pikslih slike so pokvarjeni"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "nisem uspel rezervirati slikovnega medpomnilnika v velikosti %u bajtov"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Ni dovolj pomnilnika za nalo¾itev slike"
@@ -122,9 +139,78 @@ msgstr "Ni dovolj pomnilnika za nalo¾itev slike"
 msgid "BMP image has unsupported header size"
 msgstr "Slika BMP ima nepodprto velikost glave"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "Slika BMP ima v glavi neveljavne podatke"
+
+#: gdk-pixbuf/io-gif.c:218
+#, c-format
+msgid "Failure reading GIF: %s"
+msgstr "Napaka ob branju GIF: %s"
+
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+"V datoteki GIF manjka nekaj podatkov (morda je bila na nek naèin skraj¹ana?)"
+
+#: gdk-pixbuf/io-gif.c:469
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "Notranja napaka v nalagalniku GIF (%s)"
+
+#: gdk-pixbuf/io-gif.c:592
+msgid "GIF image loader can't understand this image."
+msgstr "Nalagalnik slik GIF ne razume te slike"
+
+#: gdk-pixbuf/io-gif.c:621
+msgid "Bad code encountered"
+msgstr "Naletel sem na neveljavno kodo"
+
+#: gdk-pixbuf/io-gif.c:630
+msgid "Circular table entry in GIF file"
+msgstr "Kro¾ni vnost tabele v datoteki GIF"
+
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1530
+msgid "Not enough memory to load GIF file"
+msgstr "Ni dovolj pomnilnika za nalo¾itev slike GIF"
+
+#: gdk-pixbuf/io-gif.c:1009
+msgid "GIF image is corrupt (incorrect LZW compression)"
+msgstr "Slika GIF je pokvarjena (nepravilno komprimiranje LZW)"
+
+#: gdk-pixbuf/io-gif.c:1059
+msgid "File does not appear to be a GIF file"
+msgstr "Zdi se, da to ni datoteka GIF"
+
+#: gdk-pixbuf/io-gif.c:1071
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "Oblika zapisa GIF razlièica %s ni podprta"
+
+#: gdk-pixbuf/io-gif.c:1144
+msgid "GIF image contained a frame with height or width 0."
+msgstr "Slika GIF je vsebovala okvir, ki je imel vi¹ino ali ¹irino 0."
+
+#: gdk-pixbuf/io-gif.c:1157
+msgid "GIF image contained a frame appearing outside the image bounds."
+msgstr "Slika GIF je vsebovala okvir, ki se pojavlja zunaj meja slike"
+
+#: gdk-pixbuf/io-gif.c:1173
+msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
+msgstr ""
+"Prvi okvir slike GIF je imel kot naèin odstranitve naveden 'vrni se na "
+"prej¹njega'."
+
+#: gdk-pixbuf/io-gif.c:1208
+msgid ""
+"GIF image has no global colormap, and a frame inside it has no local "
+"colormap."
+msgstr "Slika GIF nima globalne karte barv in okvir nima krajevne karte barv."
+
+#: gdk-pixbuf/io-gif.c:1437
+msgid "GIF image was truncated or incomplete."
+msgstr "Slika GIF je bila skraj¹ana ali pa je nepopolna."
 
 #: gdk-pixbuf/io-ico.c:207
 #, c-format
@@ -165,77 +251,12 @@ msgstr "Nepodprta vrsta ikone"
 msgid "Not enough memory to load ICO file"
 msgstr "Ni dovolj pomnilnika za nalo¾itev datoteke ICO"
 
-#: gdk-pixbuf/io-gif.c:218
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Napaka ob branju GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"V datoteki GIF manjka nekaj podatkov (morda je bila na nek naèin skraj¹ana?)"
-
-#: gdk-pixbuf/io-gif.c:469
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Notranja napaka v nalagalniku GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:592
-msgid "GIF image loader can't understand this image."
-msgstr "Nalagalnik slik GIF ne razume te slike"
-
-#: gdk-pixbuf/io-gif.c:621
-msgid "Bad code encountered"
-msgstr "Naletel sem na neveljavno kodo"
-
-#: gdk-pixbuf/io-gif.c:630
-msgid "Circular table entry in GIF file"
-msgstr "Kro¾ni vnost tabele v datoteki GIF"
-
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
-#: gdk-pixbuf/io-gif.c:1518
-msgid "Not enough memory to load GIF file"
-msgstr "Ni dovolj pomnilnika za nalo¾itev slike GIF"
-
-#: gdk-pixbuf/io-gif.c:1009
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Slika GIF je pokvarjena (nepravilno komprimiranje LZW)"
-
-#: gdk-pixbuf/io-gif.c:1059
-msgid "File does not appear to be a GIF file"
-msgstr "Zdi se, da to ni datoteka GIF"
-
-#: gdk-pixbuf/io-gif.c:1071
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Oblika zapisa GIF razlièica %s ni podprta"
-
-#: gdk-pixbuf/io-gif.c:1146
-msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr "Slika GIF je vsebovala okvir, ki se pojavlja zunaj meja slike"
-
-#: gdk-pixbuf/io-gif.c:1162
-msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
-"Prvi okvir slike GIF je imel kot naèin odstranitve naveden 'vrni se na "
-"prej¹njega'."
-
-#: gdk-pixbuf/io-gif.c:1197
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "Slika GIF nima globalne karte barv in okvir nima krajevne karte barv."
-
-#: gdk-pixbuf/io-gif.c:1426
-msgid "GIF image was truncated or incomplete."
-msgstr "Slika GIF je bila skraj¹ana ali pa je nepopolna."
-
-#: gdk-pixbuf/io-jpeg.c:125
+#: gdk-pixbuf/io-jpeg.c:126
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Napaka ob interpretiranju slikovne datoteke JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:234
+#: gdk-pixbuf/io-jpeg.c:307
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -243,11 +264,11 @@ msgstr ""
 "Ni dovolj pomnilnika za nalo¾itev slike; za sprostiev pomnilnika zaprite "
 "nekaj programov"
 
-#: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
+#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nisem mogel rezervirati pomnilnika za nalaganje datoteke JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:664
+#: gdk-pixbuf/io-jpeg.c:721
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -256,23 +277,43 @@ msgstr ""
 "Kvaliteta JPEG mora biti vrednost med 0 in 100; vrednost '%s' ne more biti "
 "razèlenjena."
 
-#: gdk-pixbuf/io-jpeg.c:679
+#: gdk-pixbuf/io-jpeg.c:736
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Kvaliteta JPEG mora biti vrednost med 0 in 100; vrednost '%d' ni dovoljena."
 
-#: gdk-pixbuf/io-png.c:161
+#: gdk-pixbuf/io-png.c:55
+msgid "Bits per channel of PNG image is invalid."
+msgstr "Podatek o bitih na kanal slike PNG ni veljaven."
+
+#: gdk-pixbuf/io-png.c:136
+msgid "Transformed PNG has zero width or height."
+msgstr "Preoblikovan PNG ima nièno vi¹ino ali ¹irino"
+
+#: gdk-pixbuf/io-png.c:144
+msgid "Bits per channel of transformed PNG is not 8."
+msgstr "Podatek o bitih na kanal preoblikovanega PNG ni 8."
+
+#: gdk-pixbuf/io-png.c:153
+msgid "Transformed PNG not RGB or RGBA."
+msgstr "Pretvorjen PNG ni RGB ali RGBA."
+
+#: gdk-pixbuf/io-png.c:162
+msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+msgstr "Pretvorjen PNG ima nepodprto ¹tevilo kanalov, mora biti 3 ali 4."
+
+#: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "Usodna napak v slikovni datoteki PNG: %s"
 
-#: gdk-pixbuf/io-png.c:273
+#: gdk-pixbuf/io-png.c:296
 msgid "Insufficient memory to load PNG file"
 msgstr "Ni dovolj pomnilnika za nalo¾itev datoteke PNG"
 
-#: gdk-pixbuf/io-png.c:591
+#: gdk-pixbuf/io-png.c:599
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -281,235 +322,252 @@ msgstr ""
 "Ni dovolj pomnilnika za shranitev slike velikosti %ld x %ld; za sprostitev "
 "pomnilnika zaprite nekaj programov"
 
-#: gdk-pixbuf/io-png.c:642
+#: gdk-pixbuf/io-png.c:650
 msgid "Fatal error reading PNG image file"
 msgstr "Usodna napaka med branjem slikovne datoteke PNG"
 
-#: gdk-pixbuf/io-png.c:691
+#: gdk-pixbuf/io-png.c:699
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Usodna napaka med branjem slikovne datoteke PNG: %s"
 
-#: gdk-pixbuf/io-png.c:757
+#: gdk-pixbuf/io-png.c:765
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr "Kljuèi za sklope PNG tEXt morajo imeti vsaj 1 in najveè 79 znakov"
 
-#: gdk-pixbuf/io-png.c:765
+#: gdk-pixbuf/io-png.c:773
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr "Kljuèi za sklope PNG tEXt morajo biti znaki ASCII"
 
-#: gdk-pixbuf/io-png.c:786
+#: gdk-pixbuf/io-png.c:794
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "Vrednost za sklop PNG tEXT ne more biti pretvorjena v kodno tabelo ISO-8859-1"
 
-#: gdk-pixbuf/io-pnm.c:254
+#: gdk-pixbuf/io-pnm.c:247
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "Nalagalnik PNM je prièakoval celo ¹tevilo, a ga ni na¹el"
 
-#: gdk-pixbuf/io-pnm.c:286
+#: gdk-pixbuf/io-pnm.c:279
 msgid "PNM file has an incorrect initial byte"
 msgstr "Datoteka PNM ima napaèen zaèetni bajt"
 
-#: gdk-pixbuf/io-pnm.c:316
+#: gdk-pixbuf/io-pnm.c:309
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Datoteka PNM ni v prepepoznani podobliki zapisa PNM"
 
-#: gdk-pixbuf/io-pnm.c:341
+#: gdk-pixbuf/io-pnm.c:334
 msgid "PNM file has an image width of 0"
 msgstr "Datoteka PNM ima ¹irino slike 0"
 
-#: gdk-pixbuf/io-pnm.c:362
+#: gdk-pixbuf/io-pnm.c:355
 msgid "PNM file has an image height of 0"
 msgstr "Datoteka PNM ima vi¹ino slike 0"
 
-#: gdk-pixbuf/io-pnm.c:385
+#: gdk-pixbuf/io-pnm.c:378
 msgid "Maximum color value in PNM file is 0"
 msgstr "Najveèja vrednost barve v datoteki PNM je 0"
 
-#: gdk-pixbuf/io-pnm.c:393
+#: gdk-pixbuf/io-pnm.c:386
 msgid "Maximum color value in PNM file is too large"
 msgstr "Najveèja vrednost barve v datoteki PNM je prevelika"
 
-#: gdk-pixbuf/io-pnm.c:401
+#: gdk-pixbuf/io-pnm.c:394
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
 "Ne morem obravnavati datotek PNM z najveèjimi vrednostmi barve veèjimi od 255"
 
-#: gdk-pixbuf/io-pnm.c:440 gdk-pixbuf/io-pnm.c:468 gdk-pixbuf/io-pnm.c:500
+#: gdk-pixbuf/io-pnm.c:433 gdk-pixbuf/io-pnm.c:461 gdk-pixbuf/io-pnm.c:493
 msgid "Raw PNM image type is invalid"
 msgstr "Surova vrsta slike PNM ni veljavna"
 
-#: gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
+#: gdk-pixbuf/io-pnm.c:553 gdk-pixbuf/io-pnm.c:595
 msgid "PNM image format is invalid"
 msgstr "Oblika zapisa slike PNM ni veljavna"
 
-#: gdk-pixbuf/io-pnm.c:661
+#: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Nalagalnik slik PNM ne podpira te podoblike zapisa PNM"
 
-#: gdk-pixbuf/io-pnm.c:716
+#: gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr "Naletel sem na predèasni konec datoteke"
 
-#: gdk-pixbuf/io-pnm.c:748 gdk-pixbuf/io-pnm.c:967
+#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:960
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Surove oblike zapisa PNM zahtevajo natanèno en presledek pred podatki"
 
-#: gdk-pixbuf/io-pnm.c:775
+#: gdk-pixbuf/io-pnm.c:768
 msgid "Can't allocate memory for loading PNM image"
 msgstr "Ne morem rezervirati pomnilnika za nalaganje slike PNM"
 
-#: gdk-pixbuf/io-pnm.c:824
+#: gdk-pixbuf/io-pnm.c:817
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Ni dovolj pomnilnika za nalo¾itev strukture konteksta PNM"
 
-#: gdk-pixbuf/io-pnm.c:874
+#: gdk-pixbuf/io-pnm.c:867
 msgid "Unexpected end of PNM image data"
 msgstr "Neprièakovan konec podatkov slike PNM"
 
-#: gdk-pixbuf/io-pnm.c:996
+#: gdk-pixbuf/io-pnm.c:989
 msgid "Insufficient memory to load PNM file"
 msgstr "Ni dovolj pomnilnika za nalo¾itev slike PNM"
 
-#: gdk-pixbuf/io-tga.c:157
+#: gdk-pixbuf/io-ras.c:158
+msgid "RAS image has bogus header data"
+msgstr "Slika RAS ima v glavi neveljavne podatke"
+
+#: gdk-pixbuf/io-ras.c:180
+msgid "RAS image has unknown type"
+msgstr "Slika RAS je nezane vrste"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+msgid "Not enough memory to load RAS image"
+msgstr "Ni dovolj pomnilnika za nalo¾itev slike RAS"
+
+#: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Ne morem rezervirati pomnilnika za strukturo IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:176
+#: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "Ne morem rezervirati pomnilnika za podatke IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:187
+#: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
 msgstr "Ne morem znova rezervirati pomnilnika za podatke IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:216
+#: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Ne morem rezervirati pomnilnika za zaèasne podatke IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:249
+#: gdk-pixbuf/io-tga.c:282
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "fread() ni uspel - verjetno je naletel na prezgodnji konec datoteke"
 
-#: gdk-pixbuf/io-tga.c:259
+#: gdk-pixbuf/io-tga.c:292
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() ni uspel - verjetno je naletel na prezgodnji konec datoteke"
 
-#: gdk-pixbuf/io-tga.c:288
+#: gdk-pixbuf/io-tga.c:325
 msgid "Can't allocate new pixbuf"
 msgstr "Ne morem rezervirati novega medpomnilnika slik"
 
-#: gdk-pixbuf/io-tga.c:557
+#: gdk-pixbuf/io-tga.c:638
 msgid "Can't allocate colormap structure"
 msgstr "Ne morem rezervirati strukture barvne karte"
 
-#: gdk-pixbuf/io-tga.c:564
+#: gdk-pixbuf/io-tga.c:645
 msgid "Can't allocate colormap entries"
 msgstr "Ne morem rezervirati vnosov barvne karte"
 
-#: gdk-pixbuf/io-tga.c:587
+#: gdk-pixbuf/io-tga.c:667
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Neprièakovana barvna globina za vnose barvne karte"
 
-#: gdk-pixbuf/io-tga.c:607
+#: gdk-pixbuf/io-tga.c:685
 msgid "Can't allocate TGA header memory"
 msgstr "Ne morem rezervirati pomnilnika za glavo TGA"
 
-#: gdk-pixbuf/io-tga.c:618
+#: gdk-pixbuf/io-tga.c:718
 msgid "TGA image has invalid dimensions"
 msgstr "Slika TGA ima neveljavne dimenzije"
 
-#: gdk-pixbuf/io-tga.c:624
+#: gdk-pixbuf/io-tga.c:724
 msgid "TGA image comment length is too long"
 msgstr "Komentar k sliki TGA je predolg"
 
-#: gdk-pixbuf/io-tga.c:633 gdk-pixbuf/io-tga.c:647
+#: gdk-pixbuf/io-tga.c:733 gdk-pixbuf/io-tga.c:742 gdk-pixbuf/io-tga.c:752
+#: gdk-pixbuf/io-tga.c:762 gdk-pixbuf/io-tga.c:769
 msgid "TGA image type not supported"
 msgstr "Vrsta zapisa slike TGA ni podprta"
 
-#: gdk-pixbuf/io-tga.c:692
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Ne morem rezervirati pomnilnika za strukturo konteksta TGA"
 
-#: gdk-pixbuf/io-tga.c:756
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "Preveè podatkov v datoteki"
 
-#: gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr "Ne morem rezervirati pomnilnika za glavo TGA"
 
-#: gdk-pixbuf/io-tga.c:808
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr "Prevelika vrednost v polju infolen glave TGA"
 
-#: gdk-pixbuf/io-tga.c:832
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr ""
 "Ne morem rezervirati pomnilnika za zaèasni izravnalni pomnilnik barvne karte "
 "TGA"
 
-#: gdk-pixbuf/io-tga.c:844
+#: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "Ne morem rezervirati pomnilnika za strukturo barvne karte"
 
-#: gdk-pixbuf/io-tga.c:853
+#: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "Ne morem rezervirati pomnilnika za vnose barvne karte TGA"
 
-#: gdk-pixbuf/io-tga.c:863
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Neprièakovana barvna globina za barvno karto TGA"
 
-#: gdk-pixbuf/io-tga.c:903
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr "Kvazi-barvna slika brez barvne karte"
 
-#: gdk-pixbuf/io-tga.c:910
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 "Ne morem se postaviti na odmik v sliki -- verjetno sem naletel na konec "
 "datoteke"
 
-#: gdk-pixbuf/io-tga.c:919 gdk-pixbuf/io-tga.c:1015 gdk-pixbuf/io-tga.c:1081
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr "Ne morem rezervirati medpomnilnika slike"
 
-#: gdk-pixbuf/io-tga.c:1147 gdk-pixbuf/io-tga.c:1176
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr "Nepodprt zapis slike TGA"
 
-#: gdk-pixbuf/io-tiff.c:152
+#: gdk-pixbuf/io-tiff.c:187
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Nisem mogel dobiti ¹irine slike (slaba datoteka TIFF)"
 
-#: gdk-pixbuf/io-tiff.c:159
+#: gdk-pixbuf/io-tiff.c:194
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Nisem mogel dobiti vi¹ine slike (slaba datoteka TIFF)"
 
-#: gdk-pixbuf/io-tiff.c:169
+#: gdk-pixbuf/io-tiff.c:202
 msgid "Width or height of TIFF image is zero"
 msgstr "©irina ali vi¹ina slike TIFF je niè"
 
-#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
+#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+msgid "Dimensions of TIFF image too large"
+msgstr "Dimenzije slike TIFF so prevelike"
+
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ni dovolj pomnilnika za odprtje datoteke TIFF"
 
-#: gdk-pixbuf/io-tiff.c:201
+#: gdk-pixbuf/io-tiff.c:254
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Nisem uspel nalo¾iti podatkov RGB iz datoteke TIFF"
 
-#: gdk-pixbuf/io-tiff.c:270
+#: gdk-pixbuf/io-tiff.c:309
 msgid "Failed to open TIFF image"
 msgstr "Nisem uspel odpreti slike TIFF"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:322
 msgid "TIFFClose operation failed"
 msgstr "Operacija TIFFClose ni uspela"
 
-#: gdk-pixbuf/io-tiff.c:416 gdk-pixbuf/io-tiff.c:430
+#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
 msgid "Failed to load TIFF image"
 msgstr "Nisem uspel nalo¾iti slike TIFF"
 
@@ -525,7 +583,7 @@ msgstr "Ikona ima vi¹ino niè"
 msgid "Not enough memory to load image"
 msgstr "Ni dovolj pomnilnika za nalo¾itev slike"
 
-#: gdk-pixbuf/io-wbmp.c:365
+#: gdk-pixbuf/io-wbmp.c:366
 msgid "Couldn't save the rest"
 msgstr "Nisem mogel shraniti preostanka"
 
@@ -541,54 +599,37 @@ msgstr "Ni dovolj pomnilnika za nalo¾itev slikovne datoteke XBM"
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Nisem uspel zapisati v zaèasno datoteko med nalaganjem slike XBM"
 
-#: gdk-pixbuf/io-xpm.c:1235
+#: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
 msgstr "Glava XPM ni bila najdena"
 
-#: gdk-pixbuf/io-xpm.c:1243
+#: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
 msgstr "Datoteka XPM ima ¹irino slike <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1251
+#: gdk-pixbuf/io-xpm.c:1245
 msgid "XPM file has image height <= 0"
 msgstr "Datoteka XPM ima vi¹ino slike <=0"
 
-#: gdk-pixbuf/io-xpm.c:1259
+#: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM file has invalid number of colors"
 msgstr "Datoteka XPM ima neveljavno ¹tevilo barv"
 
-#: gdk-pixbuf/io-xpm.c:1267
+#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM ima neveljavno ¹tevilo znakov na piksel"
 
-#: gdk-pixbuf/io-xpm.c:1285
+#: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
 msgstr "Ne morem prebrati barvne karte XPM"
 
-#: gdk-pixbuf/io-xpm.c:1326
+#: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Ne morem rezervirati pomnilnika za nalo¾itev slike XPM"
 
-#: gdk-pixbuf/io-xpm.c:1509
+#: gdk-pixbuf/io-xpm.c:1498
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Nisem uspel pisati v zaèasno datoteko med nalaganjem slike XPM"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Glava slike je pokvarjena"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Oblika zapisa slike ni znana"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Podatki o pikslih slike so pokvarjeni"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "nisem uspel rezervirati slikovnega medpomnilnika v velikosti %u bajtov"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -960,284 +1001,308 @@ msgstr "Je raz¹irjen"
 msgid "Row is an expander row, and is expanded"
 msgstr "Vrstica ima otroke in je raz¹irjena"
 
-#: gtk/gtkcellrendererpixbuf.c:104
+#: gtk/gtkcellrendererpixbuf.c:117
 msgid "Pixbuf Object"
 msgstr "Predmet slièice"
 
-#: gtk/gtkcellrendererpixbuf.c:105
+#: gtk/gtkcellrendererpixbuf.c:118
 msgid "The pixbuf to render."
 msgstr "Slièica, ki naj se izri¹e."
 
-#: gtk/gtkcellrendererpixbuf.c:113
+#: gtk/gtkcellrendererpixbuf.c:126
 msgid "Pixbuf Expander Open"
 msgstr "Slièica odprtja raz¹iritve"
 
-#: gtk/gtkcellrendererpixbuf.c:114
+#: gtk/gtkcellrendererpixbuf.c:127
 msgid "Pixbuf for open expander."
 msgstr "Slièica za odprtje raz¹iritve"
 
-#: gtk/gtkcellrendererpixbuf.c:122
+#: gtk/gtkcellrendererpixbuf.c:135
 msgid "Pixbuf Expander Closed"
 msgstr "Slièica zaprtja raz¹iritve"
 
-#: gtk/gtkcellrendererpixbuf.c:123
+#: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf for closed expander."
 msgstr "Slièica za zaprtje raz¹iritve"
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkimage.c:170
+msgid "Stock ID"
+msgstr "Osnovni ID"
+
+#: gtk/gtkcellrendererpixbuf.c:145
+msgid "The stock ID of the stock icon to render"
+msgstr "Osnovni ID osnovne ikone za izris"
+
+#: gtk/gtkcellrendererpixbuf.c:152
+msgid "Size"
+msgstr "Velikost"
+
+#: gtk/gtkcellrendererpixbuf.c:153
+msgid "The size of the rendered icon"
+msgstr "Velikost izrisane ikone"
+
+#: gtk/gtkcellrendererpixbuf.c:161
+msgid "Detail"
+msgstr "Podrobnost"
+
+#: gtk/gtkcellrendererpixbuf.c:162
+msgid "Render detail to pass to the theme engine"
+msgstr "Izri¹i podrobnosti za podajo gonilu teme"
+
+#: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
 msgstr "Besedilo"
 
-#: gtk/gtkcellrenderertext.c:175
+#: gtk/gtkcellrenderertext.c:174
 msgid "Text to render"
 msgstr "Besedilo za izris"
 
-#: gtk/gtkcellrenderertext.c:182
+#: gtk/gtkcellrenderertext.c:181
 msgid "Markup"
 msgstr "Oznaèevanje"
 
-#: gtk/gtkcellrenderertext.c:183
+#: gtk/gtkcellrenderertext.c:182
 msgid "Marked up text to render"
 msgstr "Oznaèeno besedilo za izris"
 
-#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:287
+#: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
 msgstr "Atributi"
 
-#: gtk/gtkcellrenderertext.c:191
+#: gtk/gtkcellrenderertext.c:190
 msgid "A list of style attributes to apply to the text of the renderer."
 msgstr "Seznam slogov atributov, ki naj se uveljavijo na besedilu izrisovalca."
 
-#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
+#: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:209
 msgid "Background color name"
 msgstr "Ime barve ozadja"
 
-#: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
+#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:210
 msgid "Background color as a string"
 msgstr "Barva ozadja kot niz"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
+#: gtk/gtkcellrenderertext.c:205 gtk/gtktexttag.c:217
 msgid "Background color"
 msgstr "Barva ozadja"
 
-#: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
+#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
 msgstr "Barva ozadja kot GdkColor"
 
-#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
+#: gtk/gtkcellrenderertext.c:213 gtk/gtktexttag.c:243
 msgid "Foreground color name"
 msgstr "Ime barve ospredja"
 
-#: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
+#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
 msgstr "Barva ospredja kot niz"
 
-#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:221 gtk/gtktexttag.c:251
 msgid "Foreground color"
 msgstr "Barva ospredja"
 
-#: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
+#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
 msgstr "Barva ospredja kot GdkColor"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
-#: gtk/gtktextview.c:566
+#: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
+#: gtk/gtktextview.c:568
 msgid "Editable"
 msgstr "Uredljiv"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:567
+#: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
 msgstr "Ali lahko uporabnik spremeni besedilo"
 
-#: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
+#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Pisava"
 
-#: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:286
+#: gtk/gtkcellrenderertext.c:239 gtk/gtktexttag.c:286
 msgid "Font description as a string"
 msgstr "Opis pisave kot niz"
 
-#: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:294
+#: gtk/gtkcellrenderertext.c:247 gtk/gtktexttag.c:294
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Opis pisave kot struktura PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
+#: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:302
 msgid "Font family"
 msgstr "Dru¾ina pisav"
 
-#: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
+#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Ime dru¾ine pisav, npr.: Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
+#: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
 msgstr "Slog pisave"
 
-#: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
+#: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
 msgstr "Razlièica pisave"
 
-#: gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
+#: gtk/gtkcellrenderertext.c:281 gtk/gtkcellrenderertext.c:282
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
 msgstr "Te¾a pisave"
 
-#: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
+#: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
 msgstr "Razteg pisave"
 
-#: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
+#: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
 msgstr "Velikost pisave"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:368
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:368
 msgid "Font points"
 msgstr "Toèke pisave"
 
-#: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:369
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:369
 msgid "Font size in points"
 msgstr "Velikost pisave v toèkah"
 
-#: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
+#: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
 msgstr "Poveèava pisave"
 
-#: gtk/gtkcellrenderertext.c:322
+#: gtk/gtkcellrenderertext.c:321
 msgid "Font scaling factor"
 msgstr "Faktor poveèave pisave"
 
-#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:427
+#: gtk/gtkcellrenderertext.c:330 gtk/gtktexttag.c:427
 msgid "Rise"
 msgstr "Dvig"
 
-#: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
+#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Odmik besedila nad osnovno èrto (pod osnovno èrto, je èe dvig negativen)"
 
-#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
+#: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
 msgid "Strikethrough"
 msgstr "Preèrtanost"
 
-#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
+#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
 msgstr "Ali naj bo besedilo preèrtano"
 
-#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
+#: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:475
 msgid "Underline"
 msgstr "Podèrtanost"
 
-#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
+#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
 msgstr "Slog podèrtave za to besedilo"
 
-#: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
+#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:512
 msgid "Background set"
 msgstr "Nastavi ozadje"
 
-#: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
+#: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
 msgstr "Ali ta oznaka vpliva na barvo ozadja"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
+#: gtk/gtkcellrenderertext.c:364 gtk/gtktexttag.c:524
 msgid "Foreground set"
 msgstr "Nastavi ospredje"
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
 msgstr "Ali ta oznaka vpliva na barvo ospredja"
 
-#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
+#: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:532
 msgid "Editability set"
 msgstr "Nastavi uredljivost"
 
-#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:533
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
 msgstr "Ali ta oznaka vpliva na mo¾nost spremembe besedila"
 
-#: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
+#: gtk/gtkcellrenderertext.c:372 gtk/gtktexttag.c:536
 msgid "Font family set"
 msgstr "Nastavi dru¾ino pisave"
 
-#: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:537
+#: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
 msgstr "Ali ta oznaka vpliva na dru¾ino pisave"
 
-#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
+#: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:540
 msgid "Font style set"
 msgstr "Nastavi slog pisave:"
 
-#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:541
+#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
 msgstr "Ali ta oznaka vpliva na slog pisave"
 
-#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:380 gtk/gtktexttag.c:544
 msgid "Font variant set"
 msgstr "Nastavi razlièico pisave"
 
-#: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:545
+#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
 msgstr "Ali ta oznaka vpliva na razlièico pisave"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
+#: gtk/gtkcellrenderertext.c:384 gtk/gtktexttag.c:548
 msgid "Font weight set"
 msgstr "Nastavi te¾o pisave"
 
-#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:549
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font weight"
 msgstr "Ali ta oznaka vpliva na te¾o pisave"
 
-#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
+#: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:552
 msgid "Font stretch set"
 msgstr "Nastavi raztegnjenost pisave"
 
-#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
+#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
 msgstr "Ali ta oznaka vpliva na raztegnjenost pisave"
 
-#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:392 gtk/gtktexttag.c:556
 msgid "Font size set"
 msgstr "Nastavi velikost pisave"
 
-#: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font size"
 msgstr "Ali ta oznaka vpliva na velikost pisave"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
+#: gtk/gtkcellrenderertext.c:396 gtk/gtktexttag.c:560
 msgid "Font scale set"
 msgstr "Nastavi poveèavo pisave"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Ali ta oznaka vpliva na faktor poveèave velikosti pisave"
 
-#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:400 gtk/gtktexttag.c:580
 msgid "Rise set"
 msgstr "Nastavi dvig"
 
-#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the rise"
 msgstr "Ali ta oznaka vpliva na dvig"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:404 gtk/gtktexttag.c:596
 msgid "Strikethrough set"
 msgstr "Nastavi preèrtanost"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:597
 msgid "Whether this tag affects strikethrough"
 msgstr "Ali ta oznaka vpliva na preèrtanost"
 
-#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:408 gtk/gtktexttag.c:604
 msgid "Underline set"
 msgstr "Nastavi podèrtavo"
 
-#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:605
 msgid "Whether this tag affects underlining"
 msgstr "Ali ta oznaka vpliva na podèrtavo"
 
@@ -1692,15 +1757,15 @@ msgstr "Izbira fokusa"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Ali naj se izbere vsebina vnosa, ko je fokusiran"
 
-#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3176
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3186
 msgid "Input Methods"
 msgstr "Naèini vnosa"
 
-#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
 msgid "_Insert Unicode control character"
 msgstr "_Vstavi kontrolni znak Unicode"
 
@@ -1728,57 +1793,56 @@ msgstr "Izbira veè datotek"
 msgid "Whether to allow multiple files to be selected."
 msgstr "Ali naj bo mo¾no izbrati veè datotek hrkrati."
 
-#: gtk/gtkfilesel.c:695
+#: gtk/gtkfilesel.c:707
 msgid "Folders"
 msgstr "Mape"
 
-#: gtk/gtkfilesel.c:699
+#: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
 msgstr "_Mape"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:746
 msgid "_Files"
 msgstr "_Datoteke"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Neberljiv imenik: %s"
 
-#: gtk/gtkfilesel.c:934
-#, c-format
+#: gtk/gtkfilesel.c:946
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
-"availible to this program.\n"
+"available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
 "Datoteka \"%s\" je na drugem raèunalniku (imenovanem %s) in morda ni na "
 "voljo temu programu.\n"
-"Ste preprièani, da jo ¾elite izbrati."
+"Ste preprièani, da jo ¾elite izbrati?"
 
-#: gtk/gtkfilesel.c:1064
+#: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
 msgstr "_Nova mapa"
 
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
 msgstr "_Zbri¹i datoteko"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
 msgstr "P_reimenuj datoteko"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Ime mape \"%s\" vsebuje simbole, ki v imenih map niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1787,34 +1851,34 @@ msgstr ""
 "Napaka ob ustvarjanju mape \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Verjetno ste uporabili simbole, ki niso dovoljeni v imenih datotek"
 
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Napaka ob ustvarjanju mape: \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1403
 msgid "New Folder"
 msgstr "Nova mapa"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
 msgstr "Ime _mape:"
 
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1444
 msgid "Create"
 msgstr "Ustvari"
 
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1485
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1488
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1823,31 +1887,31 @@ msgstr ""
 "Napaka ob brisanju datoteke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
+#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Verjetno vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Napaka ob brisanju datoteke \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Resnièno zbri¹i datoteko \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1547
 msgid "Delete File"
 msgstr "Zbri¹i datoteko"
 
-#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1595
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1856,7 +1920,7 @@ msgstr ""
 "Napaka ob preimenovanju datoteke v \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1609
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1865,42 +1929,45 @@ msgstr ""
 "Napaka ob preimenovanju datoteke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Napaka ob preimenovanju datoteke \"%s\" v \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1666
 msgid "Rename File"
 msgstr "Preimenuj datoteko"
 
-#: gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1681
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Preimenuj datoteko \"%s\" v:"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1712
 msgid "Rename"
 msgstr "Preimenuj"
 
-#: gtk/gtkfilesel.c:2091
+#: gtk/gtkfilesel.c:2103
 msgid "Selection: "
 msgstr "Izbira: "
 
-#: gtk/gtkfilesel.c:2969
-#, c-format
+#: gtk/gtkfilesel.c:2983
 msgid ""
-"The filename %s couldn't be converted to UTF-8. Try setting the environment "
-"variable G_BROKEN_FILENAMES."
+"The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
+"environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
-"Imena datoteke %s ni bilo moè pretvoriti v UTF-8. Poskusite nastaviti "
-"okoljsko spremenljivko G_BROKEN__FILENAMES."
+"Imena datoteke \"%s\" ni bilo moè pretvoriti v UTF-8. (Poskusite nastaviti "
+"okoljsko spremenljivko G_BROKEN__FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3833
+#: gtk/gtkfilesel.c:2986
+msgid "Invalid Utf-8"
+msgstr "Neveljaven Utf-8"
+
+#: gtk/gtkfilesel.c:3852
 msgid "Name too long"
 msgstr "Ime je predolgo"
 
-#: gtk/gtkfilesel.c:3835
+#: gtk/gtkfilesel.c:3854
 msgid "Couldn't convert filename"
 msgstr "Nisem mogel pretvoriti imena datoteke"
 
@@ -2045,7 +2112,7 @@ msgstr "Stran ¹katle z roèico, ki je poravnana z toèko doka."
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1308
+#: gtk/gtkiconfactory.c:1318
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Napaka ob nalaganju ikone: %s"
@@ -2085,10 +2152,6 @@ msgstr "Slika maske, ki naj se uporabi z GdkImage ali GdkPixmap"
 #: gtk/gtkimage.c:162
 msgid "Filename to load and display."
 msgstr "Ime datoteke, ki naj se nalo¾i in prika¾e."
-
-#: gtk/gtkimage.c:170
-msgid "Stock ID"
-msgstr "Osnovni ID"
 
 #: gtk/gtkimage.c:171
 msgid "Stock ID for a stock image to display."
@@ -2230,7 +2293,7 @@ msgstr "Uporabi oznaèevanje"
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
 msgstr "Besedilo oznake vkljuèuje oznake XML. Poglejte pango_parse_markup()."
 
-#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:583
+#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
 msgid "Justification"
 msgstr "Poravnava"
 
@@ -2303,7 +2366,7 @@ msgstr "Navpièna poravnava"
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment za navpièno poravnavo."
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
+#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:191
 msgid "Width"
 msgstr "©irina"
 
@@ -2324,7 +2387,7 @@ msgstr "Vi¹ina postavitve."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:734
+#: gtk/gtkmain.c:732
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2503,7 +2566,7 @@ msgstr "Èe je RESNIÈNO, se ob pritisku na desni mi¹kin gumb prika¾e men"
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ali naj imajo vsi uhlji enako velikost"
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
+#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
 #, c-format
 msgid "Page %u"
 msgstr "Stran %u"
@@ -2548,21 +2611,6 @@ msgstr "Velikost roèice"
 #: gtk/gtkpaned.c:225
 msgid "Width of handle"
 msgstr "©irina roèice"
-
-#: gtk/gtkrc.c:2253
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "Nisem uspel najti vkljuèene datoteke: \"%s\""
-
-#: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\""
-
-#: gtk/gtkrc.c:3329
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Predmet poti pixmap: \"%s\" mora biti absoluten, %s, vrstica %d"
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
@@ -2768,6 +2816,21 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Kako daleè v smeri Y naj se premakne pu¹èica, ko je gumb spu¹èen"
 
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Nisem uspel najti vkljuèene datoteke: \"%s\""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Predmet poti pixmap: \"%s\" mora biti absoluten, %s, vrstica %d"
+
 #: gtk/gtkruler.c:118
 msgid "Lower"
 msgstr "Spodaj"
@@ -2886,11 +2949,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Ka¾i gumb za drugotni korak naprej na drugem koncu drsnika"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "Vodoravna prilagoditev"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "Navpièna prilagoditev"
 
@@ -3005,6 +3068,18 @@ msgstr "Ime pisave"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Ime privzeto uporabljene pisave"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Naèin"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"Smeri v katerih velikostna skupina vpliva na ¾elene velikosti njenih "
+"gradnikov."
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3455,7 +3530,7 @@ msgstr "Smer besedila"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Smer besedila, npr. desna-proti-levi ali leva-proti-desni"
 
-#: gtk/gtktexttag.c:379 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
 msgid "Left, right, or center justification"
 msgstr "Poravnava levo, desno ali po sredini"
 
@@ -3471,7 +3546,7 @@ msgstr "©tevilka jezika, ki naj se uporabi za izrisovanje besedila"
 msgid "Left margin"
 msgstr "Levi odmik"
 
-#: gtk/gtktexttag.c:396 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 msgid "Width of the left margin in pixels"
 msgstr "©irina levega odmika v pikslih"
 
@@ -3479,15 +3554,15 @@ msgstr "©irina levega odmika v pikslih"
 msgid "Right margin"
 msgstr "Desni odmik"
 
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:605
 msgid "Width of the right margin in pixels"
 msgstr "©irina desnega odmika v pikslih"
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:614
 msgid "Indent"
 msgstr "Zamik"
 
-#: gtk/gtktexttag.c:417 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:417 gtk/gtktextview.c:615
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Za koliko pikslov naj bo zamaknjen odstavek"
 
@@ -3495,7 +3570,7 @@ msgstr "Za koliko pikslov naj bo zamaknjen odstavek"
 msgid "Pixels above lines"
 msgstr "Piksli nad èrtami"
 
-#: gtk/gtktexttag.c:438 gtk/gtktextview.c:537
+#: gtk/gtktexttag.c:438 gtk/gtktextview.c:539
 msgid "Pixels of blank space above paragraphs"
 msgstr "©tevilo pikslov praznega prostora nad odstavki"
 
@@ -3503,7 +3578,7 @@ msgstr "©tevilo pikslov praznega prostora nad odstavki"
 msgid "Pixels below lines"
 msgstr "Pikslov pod èrtami"
 
-#: gtk/gtktexttag.c:448 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:448 gtk/gtktextview.c:549
 msgid "Pixels of blank space below paragraphs"
 msgstr "©tevilo pikslov praznega prostora pod odstavki"
 
@@ -3511,7 +3586,7 @@ msgstr "©tevilo pikslov praznega prostora pod odstavki"
 msgid "Pixels inside wrap"
 msgstr "Pikslov znotraj odstavkov"
 
-#: gtk/gtktexttag.c:458 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:458 gtk/gtktextview.c:559
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 "©tevilo pikslov praznega prosotra med lomljenimi vrsticami znotraj odstavkov"
@@ -3520,16 +3595,16 @@ msgstr ""
 msgid "Wrap mode"
 msgstr "Naèin lomljenja"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:575
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Ali naj se vrstice lomi nikoli, na meji mesed ali na meji znakov"
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
 msgstr "Uhlji"
 
-#: gtk/gtktexttag.c:495 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
 msgstr "Poljubni uhlji za to besedilo"
 
@@ -3690,39 +3765,39 @@ msgstr "ZWN _Zdru¾evalec niène ¹irine"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ _Nezdru¾evalec niène ¹irine"
 
-#: gtk/gtktextview.c:536
+#: gtk/gtktextview.c:538
 msgid "Pixels Above Lines"
 msgstr "Piksli nad èrtami"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Below Lines"
 msgstr "Piksli pod èrtami"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Inside Wrap"
 msgstr "Piksli znotraj odstavkov"
 
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:576
 msgid "Wrap Mode"
 msgstr "Naèin loma"
 
-#: gtk/gtktextview.c:592
+#: gtk/gtktextview.c:594
 msgid "Left Margin"
 msgstr "Levi odmik"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Right Margin"
 msgstr "Desni odmik"
 
-#: gtk/gtktextview.c:630
+#: gtk/gtktextview.c:632
 msgid "Cursor Visible"
 msgstr "Viden kazalec"
 
-#: gtk/gtktextview.c:631
+#: gtk/gtktextview.c:633
 msgid "If the insertion cursor is shown"
 msgstr "Ali je vstavitveni kazalec viden"
 
-#: gtk/gtktextview.c:6335
+#: gtk/gtktextview.c:6366
 msgid "Input _Methods"
 msgstr "_Naèini vnosa"
 
@@ -3821,215 +3896,215 @@ msgstr "Naèin TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Naèin po katerem naj ureja TreeModelSort"
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:515
 msgid "TreeView Model"
 msgstr "Naèin TreeView"
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:516
 msgid "The model for the tree view"
 msgstr "Naèin za drevesni pogled"
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:524
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vodoravna prilagoditev za gradnik"
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:532
 msgid "Vertical Adjustment for the widget"
 msgstr "Navpièna prilagoditev za gradnik"
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Viden"
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:540
 msgid "Show the column header buttons"
 msgstr "Ka¾i gumbe glave stolpca"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:547
 msgid "Headers Clickable"
 msgstr "Klikabilne glave"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:548
 msgid "Column headers respond to click events"
 msgstr "Glave stolpcev se odzivajo na dogodke klikov"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:555
 msgid "Expander Column"
 msgstr "Stolpec raz¹iritve"
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:556
 msgid "Set the column for the expander column"
 msgstr "Nastavi stolpec raz¹iritvenega stolpca"
 
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:274
 msgid "Reorderable"
 msgstr "Vnoviè uredljiv"
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:564
 msgid "View is reorderable"
 msgstr "Pogled je vnoviè uredljiv"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:571
 msgid "Rules Hint"
 msgstr "Namig ravnil"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Nastavi namig struju tem, da ri¹e vrstice izmenljivih barv"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:579
 msgid "Enable Search"
 msgstr "Vkljuèi iskanje"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:580
 msgid "View allows user to search through columns interactively"
 msgstr "Pogled dovoli uporabniku, da interaktivno i¹èe po stolpcih"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:587
 msgid "Search Column"
 msgstr "I¹èi stolpec"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:588
 msgid "Model column to search through when searching through code"
 msgstr "Stolpec skozi katerega naj se i¹èe ob iskanju skozi kodo"
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:601
 msgid "Expander Size"
 msgstr "Velikost raz¹iritvene pu¹èice"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:602
 msgid "Size of the expander arrow."
 msgstr "Velikost raz¹iritvene pu¹èice."
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:610
 msgid "Vertical Separator Width"
 msgstr "©irina navpiène loènice"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:611
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Navpièni prostor med celicami.  Mora biti sodo ¹tevilo."
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:619
 msgid "Horizontal Separator Width"
 msgstr "©irina vodoravne loènice"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:620
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Vodoravni prostor med celicami.  Mora biti sodo ¹tevilo."
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:628
 msgid "Allow Rules"
 msgstr "Dovoli ravnila"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:629
 msgid "Allow drawing of alternating color rows."
 msgstr "Dovoli risanje izmeniènih barv vrstic"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:635
 msgid "Indent Expanders"
 msgstr "Zamakni raz¹irilnike"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:636
 msgid "Make the expanders indented."
 msgstr "Naredi raz¹irilnike zamaknjene"
 
-#: gtk/gtktreeviewcolumn.c:175
+#: gtk/gtktreeviewcolumn.c:176
 msgid "Whether to display the column"
 msgstr "Ali naj se stolpec prika¾e"
 
-#: gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:441
 msgid "Resizable"
 msgstr "Spremenljive velikosti"
 
-#: gtk/gtktreeviewcolumn.c:183
+#: gtk/gtktreeviewcolumn.c:184
 msgid "Column is user-resizable"
 msgstr "Stolpec je spremenljive velikosti"
 
-#: gtk/gtktreeviewcolumn.c:191
+#: gtk/gtktreeviewcolumn.c:192
 msgid "Current width of the column"
 msgstr "Trenutna ¹irina stoplca"
 
-#: gtk/gtktreeviewcolumn.c:199
+#: gtk/gtktreeviewcolumn.c:200
 msgid "Sizing"
 msgstr "Spreminjanje velikosti"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Resize mode of the column"
 msgstr "Naèin spreminjanja velikosti stolpca"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Fixed Width"
 msgstr "Nespremenljiva ¹irina"
 
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Current fixed width of the column"
 msgstr "Trenutna nespremenljiva ¹irina stolpca"
 
-#: gtk/gtktreeviewcolumn.c:218
+#: gtk/gtktreeviewcolumn.c:219
 msgid "Minimum Width"
 msgstr "Najmanj¹a ¹irina"
 
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum allowed width of the column"
 msgstr "Najmanj¹a dovoljena ¹irina stolpca"
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:229
 msgid "Maximum Width"
 msgstr "Najveèja ¹irina"
 
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum allowed width of the column"
 msgstr "Najveèja dovoljena ¹irina stolpca"
 
-#: gtk/gtktreeviewcolumn.c:238
+#: gtk/gtktreeviewcolumn.c:239
 msgid "Title"
 msgstr "Naziv"
 
-#: gtk/gtktreeviewcolumn.c:239
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title to appear in column header"
 msgstr "Naziv, ki naj se pojavi v glavi stolpca"
 
-#: gtk/gtktreeviewcolumn.c:246
+#: gtk/gtktreeviewcolumn.c:247
 msgid "Clickable"
 msgstr "Klikabilen"
 
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Whether the header can be clicked"
 msgstr "Ali je mo¾no na glavo klikniti"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Widget"
 msgstr "Gradnik"
 
-#: gtk/gtktreeviewcolumn.c:256
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget to put in column header button instead of column title"
 msgstr "Gradnik, ki naj bo v glavi stolpca namesto naziva stolpca"
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:264
 msgid "Alignment"
 msgstr "Poravnava"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "X Alignment of the column header text or widget"
 msgstr "Poravnava besedila glave stolpca ali gradnika po X"
 
-#: gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeviewcolumn.c:275
 msgid "Whether the column can be reordered around the headers"
 msgstr "Ali je lahko stolpec pri glavah drugaèe urejen"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Sort indicator"
 msgstr "Pokazatelj urejanja"
 
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Whether to show a sort indicator"
 msgstr "Ali naj se ka¾e pokazatelj urejanja"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Sort order"
 msgstr "Vrstni red"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Smer urejanja, ki naj jo ka¾e pokazatelj"
 
@@ -4237,7 +4312,8 @@ msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
-"Barva s katero se nari¹e drugotni kazalec vstavljanja, kadar se ureja me¹ano besedilo - skupaj desno-proti-levi in levo-proti desni."
+"Barva s katero se nari¹e drugotni kazalec vstavljanja, kadar se ureja me¹ano "
+"besedilo - skupaj desno-proti-levi in levo-proti desni."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
@@ -4342,18 +4418,6 @@ msgstr "Ikona"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ikona za to okno"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Naèin"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"Smeri v katerih velikostna skupina vpliva na ¾elene velikosti njenih "
-"gradnikov."
 
 #. ID
 #: modules/input/imam-et.c:454
