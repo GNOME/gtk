@@ -70,7 +70,10 @@ enum {
   PROP_DESTROY_WITH_PARENT,
   PROP_ICON,
   PROP_SCREEN,
-
+  PROP_TYPE_HINT,
+  PROP_SKIP_TASKBAR_HINT,
+  PROP_SKIP_PAGER_HINT,
+  
   /* Readonly properties */
   PROP_IS_ACTIVE,
   PROP_HAS_TOPLEVEL_FOCUS,
@@ -134,19 +137,30 @@ struct _GtkWindowGeometryInfo
   GtkWindowLastGeometryInfo last;
 };
 
-typedef struct {
+typedef struct _GtkWindowMnemonic GtkWindowMnemonic;
+
+struct _GtkWindowMnemonic {
   GtkWindow *window;
   guint keyval;
 
   GSList *targets;
-} GtkWindowMnemonic;
+};
 
+typedef struct _GtkWindowPrivate GtkWindowPrivate;
+
+struct _GtkWindowPrivate
+{
+  guint fullscreen_initially : 1;
+  guint skips_taskbar : 1;
+  guint skips_pager : 1;
+};
 
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_dispose            (GObject           *object);
 static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_finalize           (GObject           *object);
+static void gtk_window_private_finalize   (GtkWindowPrivate  *priv);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
 static void gtk_window_map                (GtkWidget         *widget);
@@ -286,6 +300,33 @@ mnemonic_equal (gconstpointer a, gconstpointer b)
   return
     (ka->window == kb->window) &&
     (ka->keyval == kb->keyval);
+}
+
+GtkWindowPrivate*
+gtk_window_get_private (GtkWindow *window)
+{
+  GtkWindowPrivate *private;
+  static GQuark private_quark = 0;
+
+  if (!private_quark)
+    private_quark = g_quark_from_static_string ("gtk-window-private");
+
+  private = g_object_get_qdata (G_OBJECT (window), private_quark);
+
+  if (!private)
+    {
+      private = g_new0 (GtkWindowPrivate, 1);
+
+      private->fullscreen_initially = FALSE;
+      private->skips_pager = FALSE;
+      private->skips_taskbar = FALSE;
+      
+      g_object_set_qdata_full (G_OBJECT (window), private_quark,
+			       private,
+                               (GDestroyNotify) gtk_window_private_finalize);
+    }
+
+  return private;
 }
 
 GtkType
@@ -523,7 +564,32 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 _("Whether the input focus is within this GtkWindow"),
 							 FALSE,
 							 G_PARAM_READABLE));
-  
+
+  g_object_class_install_property (gobject_class,
+				   PROP_TYPE_HINT,
+				   g_param_spec_enum ("type_hint",
+                                                      _("Type hint"),
+                                                      _("Hint to help the desktop environment understand what kind of window this is and how to treat it."),
+                                                      GDK_TYPE_WINDOW_TYPE_HINT,
+                                                      GDK_WINDOW_TYPE_HINT_NORMAL,
+                                                      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_SKIP_TASKBAR_HINT,
+				   g_param_spec_boolean ("skip_taskbar_hint",
+                                                         _("Skip taskbar"),
+                                                         _("TRUE if the window should not be in the task bar."),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_SKIP_PAGER_HINT,
+				   g_param_spec_boolean ("skip_pager_hint",
+                                                         _("Skip pager"),
+                                                         _("TRUE if the window should not be in the pager."),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));  
+
   window_signals[SET_FOCUS] =
     g_signal_new ("set_focus",
                   G_TYPE_FROM_CLASS (object_class),
@@ -728,6 +794,19 @@ gtk_window_set_property (GObject      *object,
     case PROP_SCREEN:
       gtk_window_set_screen (window, g_value_get_object (value));
       break;
+    case PROP_TYPE_HINT:
+      gtk_window_set_type_hint (window,
+                                g_value_get_enum (value));
+      break;
+    case PROP_SKIP_TASKBAR_HINT:
+      gtk_window_set_skip_taskbar_hint (window,
+                                        g_value_get_boolean (value));
+      break;
+    case PROP_SKIP_PAGER_HINT:
+      gtk_window_set_skip_pager_hint (window,
+                                      g_value_get_boolean (value));
+      break;
+      
     default:
       break;
     }
@@ -795,6 +874,18 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_HAS_TOPLEVEL_FOCUS:
       g_value_set_boolean (value, window->has_toplevel_focus);
+      break;
+    case PROP_TYPE_HINT:
+      g_value_set_enum (value,
+                        window->type_hint);
+      break;
+    case PROP_SKIP_TASKBAR_HINT:
+      g_value_set_boolean (value,
+                           gtk_window_get_skip_taskbar_hint (window));
+      break;
+    case PROP_SKIP_PAGER_HINT:
+      g_value_set_boolean (value,
+                           gtk_window_get_skip_pager_hint (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1774,6 +1865,111 @@ gtk_window_get_type_hint (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), GDK_WINDOW_TYPE_HINT_NORMAL);
 
   return window->type_hint;
+}
+
+/**
+ * gtk_window_set_skip_taskbar_hint:
+ * @window: a #GtkWindow 
+ * @setting: %TRUE to keep this window from appearing in the task bar
+ * 
+ * Windows may set a hint asking the desktop environment not to display
+ * the window in the task bar. This function toggles this hint.
+ * 
+ **/
+void
+gtk_window_set_skip_taskbar_hint (GtkWindow *window,
+                                  gboolean   setting)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  
+  priv = gtk_window_get_private (window);
+
+  setting = setting != FALSE;
+
+  if (priv->skips_taskbar != setting)
+    {
+      priv->skips_taskbar = setting;
+      if (GTK_WIDGET_REALIZED (window))
+        gdk_window_set_skip_taskbar_hint (GTK_WIDGET (window)->window,
+                                          priv->skips_taskbar);
+      g_object_notify (G_OBJECT (window), "skip_taskbar_hint");
+    }
+}
+
+/**
+ * gtk_window_get_skip_taskbar_hint:
+ * @window: a #GtkWindow
+ * 
+ * Gets the value set by gtk_window_set_skip_taskbar_hint()
+ * 
+ * Return value: %TRUE if window shouldn't be in taskbar
+ **/
+gboolean
+gtk_window_get_skip_taskbar_hint (GtkWindow *window)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+  
+  priv = gtk_window_get_private (window);
+
+  return priv->skips_taskbar;
+}
+
+/**
+ * gtk_window_set_skip_pager_hint:
+ * @window: a #GtkWindow 
+ * @setting: %TRUE to keep this window from appearing in the pager
+ * 
+ * Windows may set a hint asking the desktop environment not to display
+ * the window in the pager. This function toggles this hint.
+ * (A "pager" is any desktop navigation tool such as a workspace
+ * switcher that displays a thumbnail representation of the windows
+ * on the screen.)
+ * 
+ **/
+void
+gtk_window_set_skip_pager_hint (GtkWindow *window,
+                                gboolean   setting)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  
+  priv = gtk_window_get_private (window);
+
+  setting = setting != FALSE;
+
+  if (priv->skips_pager != setting)
+    {
+      priv->skips_pager = setting;
+      if (GTK_WIDGET_REALIZED (window))
+        gdk_window_set_skip_pager_hint (GTK_WIDGET (window)->window,
+                                        priv->skips_pager);
+      g_object_notify (G_OBJECT (window), "skip_pager_hint");
+    }
+}
+
+/**
+ * gtk_window_get_skip_pager_hint:
+ * @window: a #GtkWindow
+ * 
+ * Gets the value set by gtk_window_set_skip_pager_hint().
+ * 
+ * Return value: %TRUE if window shouldn't be in pager
+ **/
+gboolean
+gtk_window_get_skip_pager_hint (GtkWindow *window)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+  
+  priv = gtk_window_get_private (window);
+
+  return priv->skips_pager;
 }
 
 /**
@@ -3058,6 +3254,13 @@ gtk_window_mnemonic_hash_remove (gpointer	key,
 }
 
 static void
+gtk_window_private_finalize (GtkWindowPrivate  *priv)
+{
+  
+  g_free (priv);
+}
+
+static void
 gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
@@ -3192,6 +3395,9 @@ gtk_window_map (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GdkWindow *toplevel;
+  GtkWindowPrivate *priv;
+
+  priv = gtk_window_get_private (window);
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
@@ -3220,6 +3426,11 @@ gtk_window_map (GtkWidget *widget)
   else
     gdk_window_deiconify (toplevel);
 
+  if (priv->fullscreen_initially)
+    gdk_window_fullscreen (toplevel);
+  else
+    gdk_window_unfullscreen (toplevel);
+  
   /* No longer use the default settings */
   window->need_default_size = FALSE;
   window->need_default_position = FALSE;
@@ -3396,6 +3607,12 @@ gtk_window_realize (GtkWidget *widget)
 
   gdk_window_set_type_hint (widget->window, window->type_hint);
 
+  if (gtk_window_get_skip_pager_hint (window))
+    gdk_window_set_skip_pager_hint (widget->window, TRUE);
+
+  if (gtk_window_get_skip_taskbar_hint (window))
+    gdk_window_set_skip_taskbar_hint (widget->window, TRUE);
+  
   /* transient_for must be set to allow the modal hint */
   if (window->transient_parent && window->modal)
     gdk_window_set_modal_hint (widget->window, TRUE);
@@ -5239,6 +5456,85 @@ gtk_window_unmaximize (GtkWindow *window)
   if (toplevel != NULL)
     gdk_window_unmaximize (toplevel);
 }
+
+/**
+ * gtk_window_fullscreen:
+ * @window: a #GtkWindow
+ *
+ * Asks to place @window in the fullscreen state. Note that you
+ * shouldn't assume the window is definitely full screen afterward,
+ * because other entities (e.g. the user or <link
+ * linkend="gtk-X11-arch">window manager</link>) could unfullscreen it
+ * again, and not all window managers honor requests to fullscreen
+ * windows. But normally the window will end up fullscreen. Just
+ * don't write code that crashes if not.
+ *
+ * You can track the fullscreen state via the "window_state_event" signal
+ * on #GtkWidget.
+ * 
+ **/
+void
+gtk_window_fullscreen (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  GtkWindowPrivate *priv;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+  priv = gtk_window_get_private (window);
+  
+  priv->fullscreen_initially = TRUE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (toplevel != NULL)
+    gdk_window_fullscreen (toplevel);
+}
+
+/**
+ * gtk_window_unfullscreen:
+ * @window: a #GtkWindow
+ *
+ * Asks to toggle off the fullscreen state for @window. Note that you
+ * shouldn't assume the window is definitely not full screen
+ * afterward, because other entities (e.g. the user or <link
+ * linkend="gtk-X11-arch">window manager</link>) could fullscreen it
+ * again, and not all window managers honor requests to unfullscreen
+ * windows. But normally the window will end up restored to its normal
+ * state. Just don't write code that crashes if not.
+ *
+ * You can track the fullscreen state via the "window_state_event" signal
+ * on #GtkWidget.
+ * 
+ **/
+void
+gtk_window_unfullscreen (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  GtkWindowPrivate *priv;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+  priv = gtk_window_get_private (window);
+  
+  priv->fullscreen_initially = FALSE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (toplevel != NULL)
+    gdk_window_unfullscreen (toplevel);
+}
+
 
 /**
  * gtk_window_set_resizable:

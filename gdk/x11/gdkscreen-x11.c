@@ -46,8 +46,14 @@ static void         gdk_screen_x11_dispose     (GObject		  *object);
 static void         gdk_screen_x11_finalize    (GObject		  *object);
 static void	    init_xinerama_support      (GdkScreen	  *screen);
 
+enum
+{
+  WINDOW_MANAGER_CHANGED,
+  LAST_SIGNAL
+};
 
 static gpointer parent_class = NULL;
+static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
 _gdk_screen_x11_get_type ()
@@ -84,6 +90,16 @@ gdk_screen_x11_class_init (GdkScreenX11Class *klass)
   object_class->finalize = gdk_screen_x11_finalize;
 
   parent_class = g_type_class_peek_parent (klass);
+
+  signals[WINDOW_MANAGER_CHANGED] =
+    g_signal_new ("window_manager_changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkScreenX11Class, window_manager_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 /**
@@ -247,7 +263,7 @@ gdk_screen_x11_dispose (GObject *object)
   screen_x11->screen_num = -1;
   screen_x11->xroot_window = None;
   screen_x11->wmspec_check_window = None;
-
+  
   G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -264,10 +280,12 @@ gdk_screen_x11_finalize (GObject *object)
     g_object_unref (screen_x11->visuals[i]);*/
   g_free (screen_x11->visuals);
   g_hash_table_destroy (screen_x11->visual_hash);
+
+  g_free (screen_x11->window_manager_name);  
+
   g_hash_table_destroy (screen_x11->colormap_hash);
   /* X settings */
   g_free (screen_x11->xsettings_client);
-
   g_free (screen_x11->monitors);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -360,7 +378,9 @@ _gdk_x11_screen_new (GdkDisplay *display,
   screen_x11->screen_num = screen_number;
   screen_x11->xroot_window = RootWindow (display_x11->xdisplay,screen_number);
   screen_x11->wmspec_check_window = None;
-
+  /* we want this to be always non-null */
+  screen_x11->window_manager_name = g_strdup ("unknown");
+  
   init_xinerama_support (screen);
   
   _gdk_visual_init (screen);
@@ -463,7 +483,6 @@ init_xinerama_support (GdkScreen * screen)
   
 #ifdef HAVE_XINERAMA
   int opcode, firstevent, firsterror;
-  gint result;
   
   if (XQueryExtension (GDK_SCREEN_XDISPLAY (screen), "XINERAMA",
 		       &opcode, &firstevent, &firsterror))
@@ -482,6 +501,13 @@ init_xinerama_support (GdkScreen * screen)
   screen_x11->monitors[0].y = 0;
   screen_x11->monitors[0].width = WidthOfScreen (screen_x11->xscreen);
   screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen);
+}
+
+void
+_gdk_x11_screen_window_manager_changed (GdkScreen *screen)
+{
+  g_signal_emit (G_OBJECT (screen),
+                 signals[WINDOW_MANAGER_CHANGED], 0);
 }
 
 /**
@@ -512,3 +538,4 @@ gdk_screen_make_display_name (GdkScreen *screen)
 
   return g_string_free (str, FALSE);
 }
+

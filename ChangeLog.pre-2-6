@@ -1,3 +1,52 @@
+2002-09-24  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkwindow.c: fix GtkWindowMnemonic to have a separate
+	typedef
+
+	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): monitor
+	FULLSCREEN state
+
+	* tests/testgtk.c (get_state_controls): add
+	fullscreen/unfullscreen test
+
+	* gdk/gdkdisplay.c (gdk_display_finalize): fix unused variable
+
+	* gdk/x11/gdkscreen-x11.c (init_xinerama_support): fix unused
+	variable
+
+	* gdk/x11/gdkevents-x11.c (gdk_xsettings_watch_cb): mop up unused
+	variable
+
+	* gdk/x11/gdkscreen-x11.c
+	(_gdk_x11_screen_window_manager_changed): emit
+	window_manager_changed signal
+
+	* gdk/x11/gdkscreen-x11.h (struct _GdkScreenX11Class): add
+	window_manager_changed signal
+
+	* gdk/x11/gdkevents-x11.c
+	(gdk_x11_screen_get_window_manager_name): new function
+
+	* gtk/gtkwindow.c (gtk_window_class_init): add type_hint,
+	skip_taskbar_hint, skip_pager_hint properties
+	(gtk_window_set_skip_taskbar_hint):
+	(gtk_window_get_skip_taskbar_hint):
+	(gtk_window_set_skip_pager_hint):
+	(gtk_window_get_skip_pager_hint):
+	(gtk_window_fullscreen):
+	(gtk_window_unfullscreen): new functions
+
+	* gdk/gdkevents.h (GdkWindowState): add FULLSCREEN state
+
+	* gdk/gdkwindow.h (GdkWindowTypeHint): add missing type hint
+	values
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_skip_taskbar_hint):
+	(gdk_window_set_skip_pager_hint):
+	(gdk_window_fullscreen):
+	(gdk_window_unfullscreen): new functions
+	(set_initial_hints): set fullscreen here if appropriate
+	
 Wed Sep 25 10:51:24 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkscreen.h gdk/{x11,win32,linux-fb}/gdkscreen-*.c:

@@ -53,7 +53,18 @@ struct _GdkScreenX11
   gint screen_num;
   Window xroot_window;
   GdkWindow *root_window;
+
+  /* Window manager */
   Window wmspec_check_window;
+  char *window_manager_name;
+  /* TRUE if wmspec_check_window has changed since last
+   * fetch of _NET_SUPPORTED
+   */
+  guint need_refetch_net_supported : 1;
+  /* TRUE if wmspec_check_window has changed since last
+   * fetch of window manager name
+   */
+  guint need_refetch_wm_name : 1;
   
   /* Visual Part */
   GdkVisualPrivate *system_visual;
@@ -82,11 +93,15 @@ struct _GdkScreenX11
 struct _GdkScreenX11Class
 {
   GdkScreenClass parent_class;
+
+  void (* window_manager_changed) (GdkScreenX11 *screen_x11);
 };
 
 GType       _gdk_screen_x11_get_type (void);
 GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
 				      gint	  screen_number);
+
+void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);
 
 G_END_DECLS
 

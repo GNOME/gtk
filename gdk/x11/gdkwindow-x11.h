@@ -83,6 +83,10 @@ struct _GdkWindowImplX11
    */
   guint has_pointer_focus : 1;
 
+  /* Set if we are requesting these hints */
+  guint skip_taskbar_hint : 1;
+  guint skip_pager_hint : 1;
+  
   /* We use an extra X window for toplevel windows that we XSetInputFocus()
    * to in order to avoid getting keyboard events redirected to subwindows
    * that might not even be part of this app

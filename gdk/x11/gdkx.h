@@ -53,6 +53,9 @@ Display *gdk_x11_gc_get_xdisplay          (GdkGC       *gc);
 GC       gdk_x11_gc_get_xgc               (GdkGC       *gc);
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
 int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
+
+const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
+
 #ifndef GDK_MULTIHEAD_SAFE
 Window   gdk_x11_get_default_root_xwindow (void);
 Display *gdk_x11_get_default_xdisplay     (void);

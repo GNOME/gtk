@@ -195,6 +195,12 @@ GtkWindow *gtk_window_get_transient_for        (GtkWindow           *window);
 void       gtk_window_set_type_hint            (GtkWindow           *window, 
 						GdkWindowTypeHint    hint);
 GdkWindowTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
+void       gtk_window_set_skip_taskbar_hint    (GtkWindow           *window,
+                                                gboolean             setting);
+gboolean   gtk_window_get_skip_taskbar_hint    (GtkWindow           *window);
+void       gtk_window_set_skip_pager_hint      (GtkWindow           *window,
+                                                gboolean             setting);
+gboolean   gtk_window_get_skip_pager_hint      (GtkWindow           *window);
 void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
 gboolean   gtk_window_get_destroy_with_parent  (GtkWindow           *window);
@@ -270,6 +276,8 @@ void     gtk_window_stick         (GtkWindow *window);
 void     gtk_window_unstick       (GtkWindow *window);
 void     gtk_window_maximize      (GtkWindow *window);
 void     gtk_window_unmaximize    (GtkWindow *window);
+void     gtk_window_fullscreen    (GtkWindow *window);
+void     gtk_window_unfullscreen  (GtkWindow *window);
 
 void gtk_window_begin_resize_drag (GtkWindow     *window,
                                    GdkWindowEdge  edge,

@@ -364,7 +364,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
   gulong bytes_after;
   Atom *atoms = NULL;
   gulong i;
-  gboolean found_sticky, found_maxvert, found_maxhorz;
+  gboolean found_sticky, found_maxvert, found_maxhorz, found_fullscreen;
   GdkWindowState old_state;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
   
@@ -375,6 +375,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
   found_sticky = FALSE;
   found_maxvert = FALSE;
   found_maxhorz = FALSE;
+  found_fullscreen = FALSE;
   
   XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
@@ -386,7 +387,8 @@ gdk_check_wm_state_changed (GdkWindow *window)
       Atom sticky_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_STICKY");
       Atom maxvert_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_VERT");
       Atom maxhorz_atom	= gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_HORZ");
-
+      Atom fullscreen_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FULLSCREEN");
+      
       i = 0;
       while (i < nitems)
         {
@@ -396,7 +398,9 @@ gdk_check_wm_state_changed (GdkWindow *window)
             found_maxvert = TRUE;
           else if (atoms[i] == maxhorz_atom)
             found_maxhorz = TRUE;
-
+          else if (atoms[i] == fullscreen_atom)
+            found_fullscreen = TRUE;
+          
           ++i;
         }
 
@@ -444,6 +448,21 @@ gdk_check_wm_state_changed (GdkWindow *window)
                                      GDK_WINDOW_STATE_STICKY);
     }
 
+  if (old_state & GDK_WINDOW_STATE_FULLSCREEN)
+    {
+      if (!found_fullscreen)
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_FULLSCREEN,
+                                     0);
+    }
+  else
+    {
+      if (found_fullscreen)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_FULLSCREEN);
+    }
+  
   /* Our "maximized" means both vertical and horizontal; if only one,
    * we don't expose that via GDK
    */
@@ -607,7 +626,14 @@ gdk_event_translate (GdkDisplay *display,
       xevent->xany.window == screen_x11->wmspec_check_window)
     {
       if (xevent->type == DestroyNotify)
-        screen_x11->wmspec_check_window = None;
+        {
+          screen_x11->wmspec_check_window = None;
+          g_free (screen_x11->window_manager_name);
+          screen_x11->window_manager_name = g_strdup ("unknown");
+
+          /* careful, reentrancy */
+          _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
+        }
       
       /* Eat events on this window unless someone had wrapped
        * it as a foreign window
@@ -2052,6 +2078,108 @@ gdk_x11_get_server_time (GdkWindow *window)
   return xevent.xproperty.time;
 }
 
+static void
+fetch_net_wm_check_window (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11;
+  GdkDisplay *display;
+  Atom type;
+  gint format;
+  gulong n_items;
+  gulong bytes_after;
+  Window *xwindow;
+  
+  /* This function is very slow on every call if you are not running a
+   * spec-supporting WM. For now not optimized, because it isn't in
+   * any critical code paths, but if you used it somewhere that had to
+   * be fast you want to avoid "GTK is slow with old WMs" complaints.
+   * Probably at that point the function should be changed to query
+   * _NET_SUPPORTING_WM_CHECK only once every 10 seconds or something.
+   */
+  
+  screen_x11 = GDK_SCREEN_X11 (screen);
+  display = screen_x11->display;
+  
+  if (screen_x11->wmspec_check_window != None)
+    return; /* already have it */
+  
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
+		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
+		      0, G_MAXLONG, False, XA_WINDOW, &type, &format, 
+		      &n_items, &bytes_after, (guchar **) & xwindow);
+  
+  if (type != XA_WINDOW)
+    return;
+
+  gdk_error_trap_push ();
+  
+  /* Find out if this WM goes away, so we can reset everything. */
+  XSelectInput (screen_x11->xdisplay, *xwindow, StructureNotifyMask);
+
+  screen_x11->wmspec_check_window = *xwindow;
+  XFree (xwindow);
+
+  screen_x11->need_refetch_net_supported = TRUE;
+  screen_x11->need_refetch_wm_name = TRUE;
+  
+  /* Careful, reentrancy */
+  _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
+}
+
+const char*
+gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11;
+
+  screen_x11 = GDK_SCREEN_X11 (screen);
+  
+  fetch_net_wm_check_window (screen);
+
+  if (screen_x11->need_refetch_wm_name)
+    {
+      /* Get the name of the window manager */
+      screen_x11->need_refetch_wm_name = FALSE;
+
+      g_free (screen_x11->window_manager_name);
+      screen_x11->window_manager_name = g_strdup ("unknown");
+      
+      if (screen_x11->wmspec_check_window != None)
+        {
+          Atom type;
+          gint format;
+          gulong n_items;
+          gulong bytes_after;
+          guchar *name;
+          
+          name = NULL;
+          
+          XGetWindowProperty (GDK_DISPLAY_XDISPLAY (screen_x11->display),
+                              screen_x11->wmspec_check_window,
+                              gdk_x11_get_xatom_by_name_for_display (screen_x11->display,
+                                                                     "_NET_WM_NAME"),
+                              0, G_MAXLONG, False,
+                              gdk_x11_get_xatom_by_name_for_display (screen_x11->display,
+                                                                     "UTF8_STRING"),
+                              &type, &format, 
+                              &n_items, &bytes_after,
+                              (guchar **)&name);
+          
+          gdk_display_sync (screen_x11->display);
+          
+          gdk_error_trap_pop ();
+          
+          if (name != NULL)
+            {
+              g_free (screen_x11->window_manager_name);
+              screen_x11->window_manager_name = g_strdup (name);
+              XFree (name);
+            }
+        }
+    }
+  
+  return GDK_SCREEN_X11 (screen)->window_manager_name;
+}
+
 typedef struct _NetWmSupportedAtoms NetWmSupportedAtoms;
 
 struct _NetWmSupportedAtoms
@@ -2076,6 +2204,8 @@ struct _NetWmSupportedAtoms
  * is that your application can start up before the window manager
  * does when the user logs in, and before the window manager starts
  * gdk_x11_screen_supports_net_wm_hint() will return %FALSE for every property.
+ * You can monitor the window_manager_changed signal on #GdkScreen to detect
+ * a window manager change.
  * 
  * Return value: %TRUE if the window manager supports @property
  **/
@@ -2083,11 +2213,6 @@ gboolean
 gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
 				     GdkAtom    property)
 {
-  Atom type;
-  gint format;
-  gulong nitems;
-  gulong bytes_after;
-  Window *xwindow;
   gulong i;
   GdkScreenX11 *screen_x11;
   NetWmSupportedAtoms *supported_atoms;
@@ -2105,72 +2230,51 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
       g_object_set_data (G_OBJECT (screen), "gdk-net-wm-supported-atoms", supported_atoms);
     }
 
-  if (screen_x11->wmspec_check_window != None)
+  fetch_net_wm_check_window (screen);
+
+  if (screen_x11->wmspec_check_window == None)
+    return FALSE;
+  
+  if (screen_x11->need_refetch_net_supported)
     {
-      if (supported_atoms->atoms == NULL)
+      /* WM has changed since we last got the supported list,
+       * refetch it.
+       */
+      Atom type;
+      gint format;
+      gulong bytes_after;
+
+      screen_x11->need_refetch_net_supported = FALSE;
+      
+      if (supported_atoms->atoms)
+        XFree (supported_atoms->atoms);
+      
+      supported_atoms->atoms = NULL;
+      supported_atoms->n_atoms = 0;
+      
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
+                          gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTED"),
+                          0, G_MAXLONG, False, XA_ATOM, &type, &format, 
+                          &supported_atoms->n_atoms, &bytes_after,
+                          (guchar **)&supported_atoms->atoms);
+      
+      if (type != XA_ATOM)
         return FALSE;
-      
-      i = 0;
-      while (i < supported_atoms->n_atoms)
-        {
-          if (supported_atoms->atoms[i] == gdk_x11_atom_to_xatom_for_display (display, property))
-            return TRUE;
-          
-          ++i;
-        }
-      
-      return FALSE;
     }
-
-  if (supported_atoms->atoms)
-    XFree (supported_atoms->atoms);
-
-  supported_atoms->atoms = NULL;
-  supported_atoms->n_atoms = 0;
   
-  /* This function is very slow on every call if you are not running a
-   * spec-supporting WM. For now not optimized, because it isn't in
-   * any critical code paths, but if you used it somewhere that had to
-   * be fast you want to avoid "GTK is slow with old WMs" complaints.
-   * Probably at that point the function should be changed to query
-   * _NET_SUPPORTING_WM_CHECK only once every 10 seconds or something.
-   */
-  
-  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
-		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
-		      0, G_MAXLONG, False, XA_WINDOW, &type, &format, 
-		      &nitems, &bytes_after, (guchar **) & xwindow);
-  
-  if (type != XA_WINDOW)
+  if (supported_atoms->atoms == NULL)
     return FALSE;
-
-  gdk_error_trap_push ();
-
-  /* Find out if this WM goes away, so we can reset everything. */
-  XSelectInput (screen_x11->xdisplay, *xwindow, StructureNotifyMask);
-
-  gdk_display_sync (screen_x11->display);
   
-  if (gdk_error_trap_pop ())
+  i = 0;
+  while (i < supported_atoms->n_atoms)
     {
-      XFree (xwindow);
-      return FALSE;
+      if (supported_atoms->atoms[i] == gdk_x11_atom_to_xatom_for_display (display, property))
+        return TRUE;
+      
+      ++i;
     }
   
-  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
-		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTED"),
-		      0, G_MAXLONG, False, XA_ATOM, &type, &format, 
-		      &supported_atoms->n_atoms, &bytes_after,
-		      (guchar **)&supported_atoms->atoms);
-  
-  if (type != XA_ATOM)
-    return FALSE;
-  
-  screen_x11->wmspec_check_window = *xwindow;
-  XFree (xwindow);
-  
-  /* since wmspec_check_window != None this isn't infinite. ;-) */
-  return gdk_x11_screen_supports_net_wm_hint (screen, property);
+  return FALSE;
 }
 
 /**
@@ -2393,7 +2497,6 @@ gdk_xsettings_watch_cb (Window   window,
 {
   GdkWindow *gdkwin;
   GdkScreen *screen = cb_data;
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
   gdkwin = gdk_window_lookup_for_display (gdk_screen_get_display (screen), window);
 

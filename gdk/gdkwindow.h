@@ -104,7 +104,11 @@ typedef enum
   GDK_WINDOW_TYPE_HINT_NORMAL,
   GDK_WINDOW_TYPE_HINT_DIALOG,
   GDK_WINDOW_TYPE_HINT_MENU,
-  GDK_WINDOW_TYPE_HINT_TOOLBAR
+  GDK_WINDOW_TYPE_HINT_TOOLBAR,
+  GDK_WINDOW_TYPE_HINT_SPLASHSCREEN,
+  GDK_WINDOW_TYPE_HINT_UTILITY,
+  GDK_WINDOW_TYPE_HINT_DOCK,
+  GDK_WINDOW_TYPE_HINT_DESKTOP
 } GdkWindowTypeHint;
 
 
@@ -396,10 +400,16 @@ void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   max_height,
 					  gint		   flags);
 #endif
-void          gdk_window_set_type_hint   (GdkWindow       *window,
-					  GdkWindowTypeHint hint);
-void          gdk_window_set_modal_hint  (GdkWindow       *window,
-					  gboolean         modal);
+void          gdk_window_set_type_hint    (GdkWindow       *window,
+					   GdkWindowTypeHint hint);
+void          gdk_window_set_modal_hint   (GdkWindow       *window,
+                                           gboolean         modal);
+
+void gdk_window_set_skip_taskbar_hint (GdkWindow *window,
+                                       gboolean   skips_taskbar);
+void gdk_window_set_skip_pager_hint   (GdkWindow *window,
+                                       gboolean   skips_pager);
+
 void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkGeometry      *geometry,
 					     GdkWindowHints    geom_mask);
@@ -490,6 +500,8 @@ void          gdk_window_stick           (GdkWindow       *window);
 void          gdk_window_unstick         (GdkWindow       *window);
 void          gdk_window_maximize        (GdkWindow       *window);
 void          gdk_window_unmaximize      (GdkWindow       *window);
+void          gdk_window_fullscreen      (GdkWindow       *window);
+void          gdk_window_unfullscreen    (GdkWindow       *window);
 
 void          gdk_window_register_dnd    (GdkWindow       *window);
 

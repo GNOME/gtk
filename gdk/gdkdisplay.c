@@ -121,8 +121,6 @@ gdk_display_dispose (GObject *object)
 static void
 gdk_display_finalize (GObject *object)
 {
-  GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
-  
   parent_class->finalize (object);
 }
 

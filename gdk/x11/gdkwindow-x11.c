@@ -133,7 +133,7 @@ _gdk_window_impl_get_type (void)
 
 static void
 gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
-{
+{  
   impl->width = 1;
   impl->height = 1;
 }
@@ -900,7 +900,7 @@ static void
 set_initial_hints (GdkWindow *window)
 {
   GdkWindowObject *private;
-  Atom atoms[5];
+  Atom atoms[6];
   gint i;
   
   private = (GdkWindowObject*) window;
@@ -946,6 +946,13 @@ set_initial_hints (GdkWindow *window)
       ++i;
     }
 
+  if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
+    {
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+							"_NET_WM_STATE_FULLSCREEN");
+      ++i;
+    }
+  
   if (private->modal_hint)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
@@ -1610,6 +1617,18 @@ gdk_window_set_type_hint (GdkWindow        *window,
     case GDK_WINDOW_TYPE_HINT_TOOLBAR:
       atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_TOOLBAR");
       break;
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+      atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_UTILITY");
+      break;
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+      atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_SPLASHSCREEN");
+      break;
+    case GDK_WINDOW_TYPE_HINT_DOCK:
+      atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DOCK");
+      break;
+    case GDK_WINDOW_TYPE_HINT_DESKTOP:
+      atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DESKTOP");
+      break;
     default:
       g_warning ("Unknown hint %d passed to gdk_window_set_type_hint", hint);
       /* Fall thru */
@@ -1685,6 +1704,79 @@ gdk_window_set_modal_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (modal, window,
 			     gdk_atom_intern ("_NET_WM_STATE_MODAL", FALSE), 
+			     0);
+}
+
+/**
+ * gdk_window_set_skip_taskbar_hint:
+ * @window: a #GdkWindow
+ * @skips_taskbar: %TRUE to skip the taskbar
+ * 
+ * Toggles whether a window should appear in a task list or window
+ * list. If a window's semantic type as specified with
+ * gdk_window_set_type_hint() already fully describes the window, this
+ * function should NOT be called in addition, instead you should allow
+ * the window to be treated according to standard policy for its
+ * semantic type.
+ **/
+void
+gdk_window_set_skip_taskbar_hint (GdkWindow *window,
+                                  gboolean   skips_taskbar)
+{
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  private = (GdkWindowObject*) window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+  impl->skip_taskbar_hint = skips_taskbar;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    gdk_wmspec_change_state (skips_taskbar, window,
+			     gdk_atom_intern ("_NET_WM_STATE_SKIP_TASKBAR", FALSE), 
+			     0);
+}
+
+/**
+ * gdk_window_set_skip_pager_hint:
+ * @window: a #GdkWindow
+ * @skips_taskbar: %TRUE to skip the pager
+ * 
+ * Toggles whether a window should appear in a pager (workspace
+ * switcher, or other desktop utility program that displays a small
+ * thumbnail representation of the windows on the desktop). If a
+ * window's semantic type as specified with gdk_window_set_type_hint()
+ * already fully describes the window, this function should NOT be
+ * called in addition, instead you should allow the window to be
+ * treated according to standard policy for its semantic type.
+ **/
+void
+gdk_window_set_skip_pager_hint (GdkWindow *window,
+                                gboolean   skips_pager)
+{
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  private = (GdkWindowObject*) window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+  impl->skip_pager_hint = skips_pager;
+  
+  if (GDK_WINDOW_IS_MAPPED (window))
+    gdk_wmspec_change_state (skips_pager, window,
+			     gdk_atom_intern ("_NET_WM_STATE_SKIP_PAGER", FALSE), 
 			     0);
 }
 
@@ -3297,13 +3389,17 @@ gdk_window_unstick (GdkWindow *window)
  * gdk_window_maximize:
  * @window: a #GdkWindow
  *
- * Asks the window manager to maximize @window, if the window manager supports
- * this operation. Not all window managers support this, and some deliberately
- * ignore it or don't have a concept of "maximized"; so you can't rely on the
- * maximization actually happening. But it will happen with most standard
- * window managers, and GDK makes a best effort to get it to happen.
+ * Maximizes the window. If the window was already maximized, then
+ * this function does nothing.
+ * 
+ * On X11, asks the window manager to maximize @window, if the window
+ * manager supports this operation. Not all window managers support
+ * this, and some deliberately ignore it or don't have a concept of
+ * "maximized"; so you can't rely on the maximization actually
+ * happening. But it will happen with most standard window managers,
+ * and GDK makes a best effort to get it to happen.
  *
- * If the window was already maximized, then this function does nothing.
+ * On Windows, reliably maximizes the window.
  * 
  **/
 void
@@ -3328,13 +3424,17 @@ gdk_window_maximize (GdkWindow *window)
  * gdk_window_unmaximize:
  * @window: a #GdkWindow
  *
- * Asks the window manager to unmaximize @window, if the window manager supports
- * this operation. Not all window managers support this, and some deliberately
- * ignore it or don't have a concept of "maximized"; so you can't rely on the
- * unmaximization actually happening. But it will happen with most standard
- * window managers, and GDK makes a best effort to get it to happen.
+ * Unmaximizes the window. If the window wasn't maximized, then this
+ * function does nothing.
+ * 
+ * On X11, asks the window manager to unmaximize @window, if the
+ * window manager supports this operation. Not all window managers
+ * support this, and some deliberately ignore it or don't have a
+ * concept of "maximized"; so you can't rely on the unmaximization
+ * actually happening. But it will happen with most standard window
+ * managers, and GDK makes a best effort to get it to happen.
  *
- * If the window wasn't maximized, then this function does nothing.
+ * On Windows, reliably unmaximizes the window.
  * 
  **/
 void
@@ -3354,6 +3454,80 @@ gdk_window_unmaximize (GdkWindow *window)
 				 GDK_WINDOW_STATE_MAXIMIZED,
 				 0);
 }
+
+/**
+ * gdk_window_fullscreen:
+ * @window: a #GdkWindow
+ *
+ * Moves the window into fullscreen mode. This means the
+ * window covers the entire screen and is above any panels
+ * or task bars.
+ *
+ * If the window was already fullscreen, then this function does nothing.
+ * 
+ * On X11, asks the window manager to put @window in a fullscreen
+ * state, if the window manager supports this operation. Not all
+ * window managers support this, and some deliberately ignore it or
+ * don't have a concept of "fullscreen"; so you can't rely on the
+ * fullscreenification actually happening. But it will happen with
+ * most standard window managers, and GDK makes a best effort to get
+ * it to happen.
+ *
+ **/
+void
+gdk_window_fullscreen (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    gdk_wmspec_change_state (TRUE, window,
+			     gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE),
+                             GDK_NONE);
+
+  else
+    gdk_synthesize_window_state (window,
+                                 0,
+                                 GDK_WINDOW_STATE_FULLSCREEN);
+}
+
+/**
+ * gdk_window_unfullscreen:
+ * @window: a #GdkWindow
+ *
+ * Moves the window out of fullscreen mode. If the window was not
+ * fullscreen, does nothing.
+ * 
+ * On X11, asks the window manager to move @window out of the fullscreen
+ * state, if the window manager supports this operation. Not all
+ * window managers support this, and some deliberately ignore it or
+ * don't have a concept of "fullscreen"; so you can't rely on the
+ * unfullscreenification actually happening. But it will happen with
+ * most standard window managers, and GDK makes a best effort to get
+ * it to happen.
+ * 
+ **/
+void
+gdk_window_unfullscreen (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    gdk_wmspec_change_state (FALSE, window,
+			     gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE),
+                             GDK_NONE);
+
+  else
+    gdk_synthesize_window_state (window,
+				 GDK_WINDOW_STATE_FULLSCREEN,
+				 0);
+}
+
 
 /**
  * gdk_window_set_group:

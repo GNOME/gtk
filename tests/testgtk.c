@@ -9215,7 +9215,9 @@ window_state_callback (GtkWidget *widget,
                      (event->new_window_state & GDK_WINDOW_STATE_STICKY) ?
                      "sticky" : "not sticky", ", ",
                      (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ?
-                     "maximized" : "not maximized",
+                     "maximized" : "not maximized", ", ",
+                     (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ?
+                     "fullscreen" : "not fullscreen",
                      NULL);
   
   gtk_label_set_text (GTK_LABEL (label), msg);
@@ -9259,6 +9261,20 @@ tracking_label (GtkWidget *window)
   gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_window_iconify),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Fullscreen");
+  gtk_signal_connect_object (GTK_OBJECT (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_fullscreen),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Unfullscreen");
+  gtk_signal_connect_object (GTK_OBJECT (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_unfullscreen),
                              GTK_OBJECT (window));
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   
@@ -9324,6 +9340,20 @@ get_state_controls (GtkWidget *window)
                              GTK_OBJECT (window));
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
+  button = gtk_button_new_with_label ("Fullscreen");
+  gtk_signal_connect_object (GTK_OBJECT (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_fullscreen),
+                             GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Unfullscreen");
+  gtk_signal_connect_object (GTK_OBJECT (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_unfullscreen),
+                             GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
   button = gtk_button_new_with_label ("Hide (withdraw)");
   gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
