@@ -2283,6 +2283,25 @@ distribution, in the file <filename>gtk/testdnd.c</filename>.</para>
 
 </sect1>
 
+<!-- ----------------------------------------------------------------- -->
+
+<sect1>
+<title>Why does GTK+/GLib leak memory?</title>
+
+<para>It doesn't. Both GLib and the C library (malloc implementation)
+will cache allocated memory on occasion, even if you free it with
+free().</para>
+
+<para>So you can't generally use tools such as top to see if you are
+using free() properly (aside from the very roughest of estimations, i.e.
+if you are really, really screwing up top will show that, but you can't
+distinguish small mistakes from the GLib/malloc caches).</para>
+
+<para>In order to find memory leaks, use proper memory profiling
+tools.</para>
+
+</sect1>
+
 </chapter>
 
 <!-- ***************************************************************** -->
