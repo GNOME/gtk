@@ -1,5 +1,7 @@
 2005-04-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbuffer.c: Some trivial doc fixes.
+
 	* gtk/gtkwidget.c (gtk_widget_set_redraw_on_allocate): Improve 
 	the wording of the doc comment.  (#172422, Vincent Untz)
 

@@ -1467,7 +1467,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
  *
  * Returns the text in the range [@start,@end). Excludes undisplayed
  * text (text marked with tags that set the invisibility attribute) if
- * @include_hidden_chars is FALSE. Does not include characters
+ * @include_hidden_chars is %FALSE. Does not include characters
  * representing embedded images, so byte and character indexes into
  * the returned string do <emphasis>not</emphasis> correspond to byte
  * and character indexes into the buffer. Contrast with
@@ -1502,7 +1502,7 @@ gtk_text_buffer_get_text (GtkTextBuffer      *buffer,
  *
  * Returns the text in the range [@start,@end). Excludes undisplayed
  * text (text marked with tags that set the invisibility attribute) if
- * @include_hidden_chars is FALSE. The returned string includes a
+ * @include_hidden_chars is %FALSE. The returned string includes a
  * 0xFFFC character whenever the buffer contains
  * embedded images, so byte and character indexes into
  * the returned string <emphasis>do</emphasis> correspond to byte
