@@ -2099,7 +2099,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       tree_view->priv->focus_column = column;
 
       /* decide if we edit */
-      if (event->type == GDK_BUTTON_PRESS &&
+      if (event->type == GDK_BUTTON_PRESS && event->button == 1 &&
 	  !(event->state & gtk_accelerator_get_default_mod_mask ()))
 	{
 	  GtkTreePath *anchor;

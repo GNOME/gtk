@@ -1,3 +1,9 @@
+Thu Dec 18 01:10:16 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): only start
+	editing when activated by the left mouse button. (#106869,
+	patch from Evan Martin).
+
 Thu Dec 18 00:57:18 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Migrating all cell renderers to use the new instance private data
