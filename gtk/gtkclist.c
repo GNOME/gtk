@@ -19,7 +19,7 @@
  */
 #include <stdlib.h>
 #include <string.h>
-#include "../config.h"
+#include "config.h"
 #include "gtkmain.h"
 #include "gtkclist.h"
 #include "gtkbindings.h"

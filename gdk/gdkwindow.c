@@ -22,7 +22,7 @@
 #include <X11/Xatom.h>
 #include <netinet/in.h>
 #include "gdk.h"
-#include "../config.h"
+#include "config.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "MwmUtil.h"

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "../config.h"
+#include "config.h"
 
 /* If you don't want to use gdk's signal handlers define this */
 /* #define I_NEED_TO_ACTUALLY_DEBUG_MY_PROGRAMS 1 */

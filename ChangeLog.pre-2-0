@@ -1,3 +1,17 @@
+1998-11-23  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gdk/Makefile.am, gtk/Makefile.am:
+	Removed DEFS "+=" mess that breaks recent automakes.
+	INCLUDES is the correct way to add to CFLAGS from Makefile.am.
+
+	* gdk/gdk.c, gdk/gdkglobals.c, gdk/gdkimage.c, gdk/gdkinput.c,
+	gdk/gdkpixmap.c, gdk/gdkthreads.c, gdk/gdkwindow.c,
+	gdk/gxid_lib.c, gtk/fnmatch.c, gtk/gtkclist.c, gtk/gtkmain.c,
+	gtk/testthreads.c:
+	Include "config.h" instead of "../config.h".
+	Now that DEFS works again, automake will automatically pass us
+	the location of config.h in -I.
+
 Mon Nov 23 22:10:09 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am gtk/gtk.h gtk/gtklayout.[ch]

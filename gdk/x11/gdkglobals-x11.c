@@ -20,7 +20,7 @@
 #include <X11/Xlib.h>
 #include "gdktypes.h"
 #include "gdkprivate.h"
-#include "../config.h"
+#include "config.h"
 
 guint             gdk_debug_flags = 0;
 gint              gdk_use_xshm = TRUE;

@@ -3,7 +3,8 @@
 gdkincludedir = $(includedir)/gdk
 
 lib_LTLIBRARIES = libgdk.la
-DEFS += -DG_LOG_DOMAIN=\"Gdk\"
+
+INCLUDES = -DG_LOG_DOMAIN=\"Gdk\" -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@ 
 
 libgdk_la_SOURCES = \
 	gdk.c		\
@@ -53,8 +54,6 @@ gdkinclude_HEADERS = \
 libgdk_la_LDFLAGS = \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE) \
          @x_ldflags@ @x_libs@
-
-INCLUDES = -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@ 
 
 EXTRA_PROGRAMS = gxid
 

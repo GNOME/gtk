@@ -1,7 +1,6 @@
 ### Process this file with automake to produce Makefile.in
 
 gtkincludedir = $(includedir)/gtk
-DEFS += -DG_LOG_DOMAIN=\"Gtk\"
 
 lib_LTLIBRARIES = libgtk.la
 
@@ -340,6 +339,7 @@ EXTRA_DIST = \
         circles.xbm
 
 INCLUDES = \
+	-DG_LOG_DOMAIN=\"Gtk\" \
 	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"   \
 	-DGTK_DATA_PREFIX=\"$(prefix)\"   \
 	-I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@

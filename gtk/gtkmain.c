@@ -39,7 +39,7 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gdk/gdki18n.h"
-#include "../config.h"
+#include "config.h"
 #include "gtkdebug.h"
 
 

@@ -4,7 +4,7 @@
  * Copyright 1997 Owen Taylor <owt1@cornell.edu>
 */
 
-#include "../config.h"
+#include "config.h"
 #include "gxid_lib.h"
 
 #ifdef XINPUT_GXI
