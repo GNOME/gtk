@@ -16,9 +16,9 @@ VS_VERSION_INFO VERSIONINFO
 	VALUE "CompanyName", "The GTK developer community"
 	VALUE "FileDescription", "GIMP Toolkit"
 	VALUE "FileVersion", "@GTK_VERSION@.BUILDNUMBER"
-	VALUE "InternalName", "libgdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@"
+	VALUE "InternalName", "libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@"
 	VALUE "LegalCopyright", "Copyright (C) 1999 The Free Software Foundation. Modified by the GTK+ Team and others 1999-2002."
-	VALUE "OriginalFilename", "libgdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll"
+	VALUE "OriginalFilename", "libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll"
 	VALUE "ProductName", "GTK+"
 	VALUE "ProductVersion", "@GTK_VERSION@"
       END

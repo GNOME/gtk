@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-03-05 03:02+0100\n"
+"POT-Creation-Date: 2002-03-05 22:16-0500\n"
 "PO-Revision-Date: 2002-03-05 03:02+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -119,17 +119,17 @@ msgstr ""
 "Internt fel: Bildinläsningsmodulen \"%s\" misslyckades med att läsa in en "
 "bild, men gav inte en anledning till misslyckandet"
 
-#: gdk-pixbuf/io-bmp.c:267
+#: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
+msgid "Not enough memory to load bitmap image"
+msgstr "Inte tillräckligt med minne för att läsa in bilden"
+
+#: gdk-pixbuf/io-bmp.c:275
 msgid "BMP image has unsupported header size"
 msgstr "BMP-bilden har huvudstorlek som inte stöds"
 
-#: gdk-pixbuf/io-bmp.c:292 gdk-pixbuf/io-bmp.c:315
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
 msgid "BMP image has bogus header data"
 msgstr "BMP-bilden har felaktig huvuddata"
-
-#: gdk-pixbuf/io-bmp.c:341
-msgid "Not enough memory to load bitmap image"
-msgstr "Inte tillräckligt med minne för att läsa in bilden"
 
 #: gdk-pixbuf/io-ico.c:207
 #, c-format
@@ -1055,7 +1055,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Huruvida texten kan ändras av användaren"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
-#: gtk/gtkfontsel.c:201 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Typsnitt"
 
@@ -1929,48 +1929,48 @@ msgstr "Y-position på barnwidgeten"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:61
+#: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:194
+#: gtk/gtkfontsel.c:202
 msgid "Font name"
 msgstr "Typsnittsnamn"
 
-#: gtk/gtkfontsel.c:195
+#: gtk/gtkfontsel.c:203
 msgid "The X string that represents this font."
 msgstr "Den X-sträng som motsvarar detta typsnitt."
 
-#: gtk/gtkfontsel.c:202
+#: gtk/gtkfontsel.c:210
 msgid "The GdkFont that is currently selected."
 msgstr "Den GdkFont som är vald för tillfället."
 
-#: gtk/gtkfontsel.c:208
+#: gtk/gtkfontsel.c:216
 msgid "Preview text"
 msgstr "Förhandsgranskningstext"
 
-#: gtk/gtkfontsel.c:209
+#: gtk/gtkfontsel.c:217
 msgid "The text to display in order to demonstrate the selected font."
 msgstr "Den text som ska visas för att demonstrera det valda typsnittet."
 
-#: gtk/gtkfontsel.c:311
+#: gtk/gtkfontsel.c:321
 msgid "_Family:"
 msgstr "_Familj:"
 
-#: gtk/gtkfontsel.c:317
+#: gtk/gtkfontsel.c:327
 msgid "_Style:"
 msgstr "_Stil:"
 
-#: gtk/gtkfontsel.c:323
+#: gtk/gtkfontsel.c:333
 msgid "Si_ze:"
 msgstr "S_torlek:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:452
+#: gtk/gtkfontsel.c:462
 msgid "_Preview:"
 msgstr "_Förhandsgranskning:"
 
-#: gtk/gtkfontsel.c:1237
+#: gtk/gtkfontsel.c:1253
 msgid "Font Selection"
 msgstr "Typsnittsval"
 

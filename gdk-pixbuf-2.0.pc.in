@@ -7,6 +7,6 @@ Name: GdkPixbuf
 Description: Image loading and scaling
 Version: @VERSION@
 Requires: gobject-2.0,gmodule-2.0
-Libs: -L${libdir} -lgdk_pixbuf-1.3 @GDK_PIXBUF_EXTRA_LIBS@
+Libs: -L${libdir} -lgdk_pixbuf-@GTK_API_VERSION@ @GDK_PIXBUF_EXTRA_LIBS@
 Cflags: -I${includedir}/gtk-2.0 @GDK_PIXBUF_EXTRA_CFLAGS@
 

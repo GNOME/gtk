@@ -429,13 +429,22 @@ main (int argc, char **argv)
   TEST_RANDOM (TIFF2_HEADER, 150, FALSE);
 #define PNM_HEADER 'P', '6'
   TEST_RANDOM (PNM_HEADER, 150, FALSE);
-  
-  TEST_RANDOMLY_MODIFIED (valid_tiff1_test, FALSE);
+#define XBM_HEADER '#', 'd', 'e', 'f', 'i', 'n', 'e', ' '  
+  TEST_RANDOM (XBM_HEADER, 150, FALSE);
+#define BMP_HEADER 'B', 'M'  
+  TEST_RANDOM (BMP_HEADER, 150, FALSE);
+#define XPM_HEADER '/', '*', ' ', 'X', 'P', 'M', ' ', '*', '/'
+  TEST_RANDOM (XPM_HEADER, 150, FALSE);
+
+
+  TEST_RANDOMLY_MODIFIED (valid_tiff1_test, FALSE);  
   TEST_RANDOMLY_MODIFIED (valid_gif_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_png_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_tga_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);
   TEST_RANDOMLY_MODIFIED (valid_ico_test, FALSE);
+  TEST_RANDOMLY_MODIFIED (valid_bmp_test, FALSE);
+  TEST_RANDOMLY_MODIFIED (valid_xpm_test, FALSE);
   
 
   /* memory tests */

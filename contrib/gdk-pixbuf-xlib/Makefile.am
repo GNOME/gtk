@@ -1,4 +1,4 @@
-lib_LTLIBRARIES=libgdk_pixbuf_xlib-1.3.la
+lib_LTLIBRARIES=libgdk_pixbuf_xlib-2.0.la
 
 INCLUDES = @STRIP_BEGIN@			\
 	-I$(top_srcdir) -I$(top_builddir) 	\
@@ -11,11 +11,11 @@ LDADDS = @STRIP_BEGIN@ 				\
 	@GDK_PIXBUF_XLIB_DEP_LIBS@		\
 @STRIP_END@
 
-libgdk_pixbuf_xlib_1_3_la_LDFLAGS =         \
+libgdk_pixbuf_xlib_2_0_la_LDFLAGS =         \
 	-export-dynamic						\
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
-libgdk_pixbuf_xlib_1_3_la_SOURCES =         \
+libgdk_pixbuf_xlib_2_0_la_SOURCES =         \
 	gdk-pixbuf-xlib-private.h	\
         gdk-pixbuf-xlib.c               \
         gdk-pixbuf-xlib-render.c        \

@@ -10,9 +10,8 @@ TOP = ..\..
 ################################################################
 
 # Possibly override versions from build/win32/module.defs
-GTK_VER = 1.3
-GDK_PIXBUF_VER = 1.3
-GTK_VER=1.3
+GTK_VER = 2.0
+GDK_PIXBUF_VER = 2.0
 
 GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
 GTK_LIBS = ../gtk/gtk-win32-$(GTK_VER).lib

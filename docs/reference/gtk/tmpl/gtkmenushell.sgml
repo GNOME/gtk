@@ -161,6 +161,14 @@ Causes the GtkMenuShell::selection-done signal to be emitted.
 
 @menushell: the object which received the signal.
 
+<!-- ##### SIGNAL GtkMenuShell::cycle-focus ##### -->
+<para>
+
+</para>
+
+@menushell: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkMenuShell::deactivate ##### -->
 <para>
 This signal is emitted when a menu shell is deactivated.

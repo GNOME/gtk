@@ -1714,12 +1714,12 @@ gtk_tree_row_reference_inserted (GObject     *proxy,
 }
 
 /**
- * gtk_tree_row_reference_inserted:
+ * gtk_tree_row_reference_deleted:
  * @proxy: A #GObject
  * @path: The path position that was deleted
  * 
  * Lets a set of row reference created by gtk_tree_row_reference_new_proxy()
- * know that the model emitted the "row_inserted" signal.
+ * know that the model emitted the "row_deleted" signal.
  **/
 void
 gtk_tree_row_reference_deleted (GObject     *proxy,

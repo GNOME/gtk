@@ -9,7 +9,7 @@ PKG_VER = $(GDK_PIXBUF_VER)
 PERL = perl
 !ENDIF
 
-GDK_PIXBUF_VER = 1.3
+GDK_PIXBUF_VER = 2.0
 
 # to get _working_ include modules we need respective defines ...
 BUILT_IN_FORMATS = -DINCLUDE_png -DINCLUDE_bmp -DINCLUDE_gif \

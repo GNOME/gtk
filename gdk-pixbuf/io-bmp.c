@@ -241,7 +241,15 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 
 	if (State->BufferSize < GUINT32_FROM_LE (* (guint32 *) &BIH[0]) + 14) {
 		State->BufferSize = GUINT32_FROM_LE (* (guint32 *) &BIH[0]) + 14;
-		State->buff = g_realloc (State->buff, State->BufferSize);
+		State->buff = g_try_realloc (State->buff, State->BufferSize);
+		if (State->buff == NULL) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Not enough memory to load bitmap image"));
+			State->read_state = READ_STATE_ERROR;
+			return FALSE;
+		}
 		return TRUE;
 	}
 

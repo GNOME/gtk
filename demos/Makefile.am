@@ -14,14 +14,14 @@ INCLUDES = @STRIP_BEGIN@ \
 @STRIP_END@
 
 DEPS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
-	$(top_builddir)/gdk/@gdktargetlib@ 		\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
+	$(top_builddir)/gdk/@gdktargetlib@ 				\
 	$(top_builddir)/gtk/@gtktargetlib@
 
-LDADDS = @STRIP_BEGIN@ 					\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
-	$(top_builddir)/gdk/@gdktargetlib@        	\
-	$(top_builddir)/gtk/@gtktargetlib@ 		\
+LDADDS = @STRIP_BEGIN@ 							\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
+	$(top_builddir)/gdk/@gdktargetlib@        			\
+	$(top_builddir)/gtk/@gtktargetlib@ 				\
 @STRIP_END@
 
 noinst_PROGRAMS = 		\

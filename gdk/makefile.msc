@@ -33,7 +33,7 @@ CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
 LDFLAGS = /link $(LINKDEBUG)
 
 # overwrite version?
-GTK_VER=1.3
+GTK_VER=2.0
 GDK_PIXBUF_VER=$(GTK_VER)
 
 !IFNDEF PERL

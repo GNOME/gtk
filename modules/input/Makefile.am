@@ -15,15 +15,15 @@ INCLUDES = @STRIP_BEGIN@ \
 @STRIP_END@
 
 DEPS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
-	$(top_builddir)/gdk/@gdktargetlib@ 		\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
+	$(top_builddir)/gdk/@gdktargetlib@ 				\
 	$(top_builddir)/gtk/@gtktargetlib@
 
-LDADDS = @STRIP_BEGIN@ 					\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
-	$(top_builddir)/gdk/@gdktargetlib@        	\
-	$(top_builddir)/gtk/@gtktargetlib@ 		\
-	@GTK_DEP_LIBS@					\
+LDADDS = @STRIP_BEGIN@ 							\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
+	$(top_builddir)/gdk/@gdktargetlib@        			\
+	$(top_builddir)/gtk/@gtktargetlib@ 				\
+	@GTK_DEP_LIBS@							\
 @STRIP_END@
 
 moduledir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules

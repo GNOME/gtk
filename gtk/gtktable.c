@@ -953,7 +953,7 @@ gtk_table_size_request_init (GtkTable *table)
   for (row = 0; row < table->nrows; row++)
     {
       table->rows[row].requisition = 0;
-      table->cols[row].expand = FALSE;
+      table->rows[row].expand = FALSE;
     }
   for (col = 0; col < table->ncols; col++)
     {

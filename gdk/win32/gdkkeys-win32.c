@@ -113,7 +113,11 @@ update_keymap (void)
 		case VK_BACK:
 		  *ksymp = GDK_BackSpace; break;
 		case VK_TAB:
-		  *ksymp = GDK_Tab; break;
+		  if (i & 1)
+		    *ksymp = GDK_ISO_Left_Tab;
+		  else
+		    *ksymp = GDK_Tab;
+		  break;
 		case VK_CLEAR:
 		  *ksymp = GDK_Clear; break;
 		case VK_RETURN:
@@ -261,15 +265,17 @@ update_keymap (void)
 #ifdef G_ENABLE_DEBUG
   if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
     {
-      gint i, j;
+      gint vk;
 
       g_print ("keymap:\n");
-      for (i = 0; i < 256; i++)
+      for (vk = 0; vk < 256; vk++)
 	{
-	  g_print ("%#.02x: ", i);
-	  for (j = 0; j < 4; j++)
+	  gint state;
+
+	  g_print ("%#.02x: ", vk);
+	  for (state = 0; state < 4; state++)
 	    {
-	      gchar *name = gdk_keyval_name (keysym_tab[i*4 + j]);
+	      gchar *name = gdk_keyval_name (keysym_tab[vk*4 + state]);
 	      if (name == NULL)
 		name = "(none)";
 	      g_print ("%s ", name);
@@ -597,11 +603,18 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      GdkModifierType *consumed_modifiers)
 {
   guint tmp_keyval;
+  guint tmp_modifiers;
+  guint *keyvals;
   gint shift_level;
+  gboolean ignore_shift = FALSE;
+  gboolean ignore_group = FALSE;
       
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group < 4, FALSE);
   
+  GDK_NOTE (EVENTS, g_print ("gdk_keymap_translate_keyboard_state: keycode=%#x state=%#x group=%d\n",
+			     hardware_keycode, state, group));
+
   if (keyval)
     *keyval = 0;
   if (effective_group)
@@ -630,7 +643,51 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   update_keymap ();
 
-  tmp_keyval = keysym_tab[hardware_keycode*4 + group*2 + shift_level];
+  keyvals = keysym_tab + hardware_keycode*4;
+
+  /* Drop group and shift if there are no keysymbols on
+   * the key for those.
+   */
+  if (shift_level == 1 &&
+      keyvals[group*2 + 1] == GDK_VoidSymbol &&
+      keyvals[group*2] != GDK_VoidSymbol)
+    {
+      shift_level = 0;
+      ignore_shift = TRUE;
+    }
+
+  if (group == 1 &&
+      keyvals[2 + shift_level] == GDK_VoidSymbol &&
+      keyvals[0 + shift_level] != GDK_VoidSymbol)
+    {
+      group = 0;
+      ignore_group = TRUE;
+    }
+
+  if (keyvals[group *2 + shift_level] == GDK_VoidSymbol &&
+      keyvals[0 + 0] != GDK_VoidSymbol)
+    {
+      shift_level = 0;
+      group = 0;
+      ignore_group = TRUE;
+      ignore_shift = TRUE;
+    }
+
+  /* See whether the group and shift level actually mattered
+   * to know what to put in consumed_modifiers
+   */
+  if (keyvals[group*2 + 1] == GDK_VoidSymbol ||
+      keyvals[group*2 + 0] == keyvals[group*2 + 1])
+    ignore_shift = TRUE;
+
+  if (keyvals[2 + shift_level] == GDK_VoidSymbol ||
+      keyvals[0 + shift_level] == keyvals[2 + shift_level])
+    ignore_group = TRUE;
+
+  tmp_keyval = keyvals[group*2 + shift_level];
+
+  tmp_modifiers = ignore_group ? 0 : GDK_MOD2_MASK;
+  tmp_modifiers |= ignore_shift ? 0 : (GDK_SHIFT_MASK | GDK_LOCK_MASK);
 
   if (effective_group)
     *effective_group = group;
@@ -638,21 +695,14 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   if (level)
     *level = shift_level;
 
-  /* GDK_ISO_Left_Tab, as usually configured through XKB, really messes
-   * up the whole idea of "consumed modifiers" because shift is consumed.
-   * However, <shift>Tab is not _consistently_ GDK_ISO_Left_Tab, so people
-   * can't bind to GDK_ISO_Left_Tab instead. So, we force consistency here.
-   */
-  if (tmp_keyval == GDK_Tab && shift_level == 1)
-    {
-      tmp_keyval = GDK_ISO_Left_Tab;
-    }
-
   if (consumed_modifiers)
-    *consumed_modifiers = GDK_SHIFT_MASK | GDK_LOCK_MASK;
+    *consumed_modifiers = tmp_modifiers;
 				
   if (keyval)
     *keyval = tmp_keyval;
+
+  GDK_NOTE (EVENTS, g_print ("...group=%d level=%d cmods=%#x keyval=%s\n",
+			     group, shift_level, tmp_modifiers, gdk_keyval_name (tmp_keyval)));
 
   return tmp_keyval != GDK_VoidSymbol;
 }
@@ -1979,9 +2029,17 @@ gdk_keys_keyval_compare (const void *pkey, const void *pbase)
 }
 
 gchar*
-gdk_keyval_name (guint	      keyval)
+gdk_keyval_name (guint keyval)
 {
+  static gchar buf[100];
   struct gdk_key *found;
+
+  /* Check for directly encoded 24-bit UCS characters: */
+  if ((keyval & 0xff000000) == 0x01000000)
+    {
+      sprintf (buf, "U+%.04X", (keyval & 0x00ffffff));
+      return buf;
+    }
 
   found = bsearch (&keyval, gdk_keys_by_keyval,
 		   GDK_NUM_KEYS, sizeof (struct gdk_key),
@@ -1996,7 +2054,10 @@ gdk_keyval_name (guint	      keyval)
       return (gchar *) found->name;
     }
   else
-    return NULL;
+    {
+      sprintf (buf, "%#x", keyval);
+      return buf;
+    }
 }
 
 static int 

@@ -8264,7 +8264,7 @@ gtk_menu_new() and a "menu item" as created by the gtk_menu_item_new()
 functions. The menu item will be an actual button with an associated
 action, whereas a menu will be a container holding menu items.</para>
 
-<para>The gtk_menu_new_with_label() and gtk_menu_new() functions are just as
+<para>The gtk_menu_item_new_with_label() and gtk_menu_item_new() functions are just as
 you'd expect after reading about the buttons. One creates a new menu
 item with a label already packed into it, and the other just creates a
 blank menu item.</para>
