@@ -722,12 +722,6 @@ gint  g_str_equal (const gpointer v,
 		   const gpointer v2);
 guint g_str_hash  (const gpointer v);
 
-/* Deprecated, use g_string_*
- */
-gint  g_string_equal (gpointer v,
-		      gpointer v2);
-guint g_string_hash  (gpointer v);
-
 
 
 /* GScanner: Flexible lexical scanner for general purpose.

@@ -72,33 +72,6 @@ g_str_hash (const gpointer v)
   return h /* % M */;
 }
 
-/* Deprecated, use g_str_* ... */
-
-gint
-g_string_equal (gpointer v, gpointer v2)
-{
-  return strcmp ((gchar*) v, (gchar*)v2) == 0;
-}
-
-/* a char* hash function from ASU */
-guint
-g_string_hash (gpointer v)
-{
-  char *s = (char*)v;
-  char *p;
-  guint h=0, g;
-
-  for(p = s; *p != '\0'; p += 1) {
-    h = ( h << 4 ) + *p;
-    if ( ( g = h & 0xf0000000 ) ) {
-      h = h ^ (g >> 24);
-      h = h ^ g;
-    }
-  }
-
-  return h /* % M */;
-}
-
 
 /* String Chunks.
  */
