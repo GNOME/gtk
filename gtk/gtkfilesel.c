@@ -407,7 +407,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (list_hbox);
 
   /* The directories clist */
-  filesel->dir_list = gtk_clist_new_with_titles (1, dir_title);
+  filesel->dir_list = gtk_clist_new_with_titles (1, (gchar**) dir_title);
   gtk_widget_set_usize (filesel->dir_list, DIR_LIST_WIDTH, DIR_LIST_HEIGHT);
   gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_dir_button, 
@@ -424,7 +424,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (scrolled_win);
 
   /* The files clist */
-  filesel->file_list = gtk_clist_new_with_titles (1, file_title);
+  filesel->file_list = gtk_clist_new_with_titles (1, (gchar**) file_title);
   gtk_widget_set_usize (filesel->file_list, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
   gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_file_button, 
@@ -1078,12 +1078,8 @@ gtk_file_selection_key_press (GtkWidget   *widget,
 
   if (event->keyval == GDK_Tab)
     {
-      gboolean intercept;
-
       fs = GTK_FILE_SELECTION (user_data);
       text = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
-
-      intercept = text && *text;
 
       text = g_strdup (text);
 
@@ -1091,10 +1087,9 @@ gtk_file_selection_key_press (GtkWidget   *widget,
 
       g_free (text);
 
-      if (intercept)
-	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+      gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
 
-      return intercept;
+      return TRUE;
     }
 
   return FALSE;
@@ -2026,7 +2021,7 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
    * expensive.
    */
 
-  static const struct {
+  static struct {
     gchar *name;
     gboolean present;
     struct stat statbuf;
@@ -2043,9 +2038,9 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
   if (!initialized)
     {
       initialized = TRUE;
-      for (i=0; i<n_no_stat_dirs; i++)
+      for (i = 0; i < n_no_stat_dirs; i++)
 	{
-	  if (stat(no_stat_dirs[i].name, &no_stat_dirs[i].statbuf) == 0)
+	  if (stat (no_stat_dirs[i].name, &no_stat_dirs[i].statbuf) == 0)
 	    no_stat_dirs[i].present = TRUE;
 	}
     }

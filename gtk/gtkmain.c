@@ -1091,6 +1091,7 @@ gtk_timeout_add_interp (guint32		   interval,
 			gpointer	   data,
 			GtkDestroyNotify   destroy)
 {
+  g_message ("gtk_timeout_add_interp() is deprecated");
   return gtk_timeout_add_full (interval, NULL, function, data, destroy);
 }
 
@@ -1252,6 +1253,7 @@ gtk_idle_add_interp  (GtkCallbackMarshal   marshal,
 		      gpointer		   data,
 		      GtkDestroyNotify	   destroy)
 {
+  g_message ("gtk_idle_add_interp() is deprecated");
   return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, NULL, marshal, data, destroy);
 }
 

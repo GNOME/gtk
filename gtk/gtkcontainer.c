@@ -1154,6 +1154,7 @@ gtk_container_foreach_interp (GtkContainer       *container,
 			      gpointer            callback_data,
 			      GtkDestroyNotify    notify)
 {
+  g_message ("gtk_container_foreach_interp() is deprecated");
   gtk_container_foreach_full (container, NULL, marshal, 
 			      callback_data, notify);
 }

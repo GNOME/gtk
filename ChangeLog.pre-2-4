@@ -1,3 +1,56 @@
+Mon Dec  7 03:08:39 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h: 
+	* gtk/gtktypeutils.c: reverted marius change to expose the type systems
+	internal type info data to the user. if such functionality is required
+	we should provide wrapped accessors, ala gtk_signal_query().
+
+	* gtk/gtksignal.c (gtk_signal_connect_by_type): reverted marius change,
+	since it destroys the possibility to implement automatic marshaller
+	lookups some day, and it also disables third party code's ability to
+	connect to any signal. also the GtkTypeInfo structures are dynamically
+	allocated memory portions, so only the type system is really allowed
+	to access that stuff.
+
+Mon Dec  7 01:32:18 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_key_press): always intercept the
+	Tab key on the entry. the focus shouldn't get lost even if completion
+	is attempted from an empty entry, since an empty entry string does
+	indeed have a valid completion meaning (complete all).
+	(gtk_file_selection_init): cast the gchar array parameter in calls to
+	gtk_clist_new_with_titles() to quit compiler warnings.
+	(check_dir): the no_stat_dirs struct must not be const, since we do
+	indeed modify its contents.
+
+	* gtk/testgtk.c (event_watcher): adapted prototype to fit new emission
+	hook semantics.
+
+	* gtk/gtksignal.h:
+	* gtk/gtksignal.c:
+	changed emission allocation, so we don't use a doubly linked list
+	but link ourselfs (singly linked).
+	changed emission hooks, they get the emision parameters passed as
+	well now and are emitted during the actuall signal emission (after
+	the RUN_FIRST class method, but prior to RUN_FIRST handlers).
+	the existing restrictions do still apply to signal emission hooks,
+ 	i.e. an emission may not be stopped or restarted from an emission hook.
+	due to possibly huge perfomance impacts, frequent use of emision hooks
+	is also not recommended.
+ 	(gtk_signal_next_and_invalidate): added an
+ 	assertments which explicits what the code assumes anyways: a
+	maximum amount of 65535 signals.
+
+	* gtk/gtkcontainer.h: deprecated gtk_container_foreach_interp(),
+	gtk_container_foreach_full() should be used instead.
+
+	* gtk/gtkmain.h:
+	deprecated gtk_timeout_add_interp and gtk_idle_add_interp, since
+	we provide _full variants.
+
+	* gtk/gtksignal.h: deprecated gtk_signal_connect_interp(), we provide
+	gtk_signal_connect_full() for long enough now.
+
 1998-12-06  Marius Vollmer  <mvo@zagadka.ping.de>
 
 	* gtk/gtksignal.c (gtk_signal_newv): Allow a NULL marshaller.

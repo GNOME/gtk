@@ -5332,6 +5332,8 @@ static gboolean event_watcher_leave_id = 0;
 static gboolean
 event_watcher (GtkObject      *object,
 	       guint           signal_id,
+	       guint           n_params,
+	       GtkArg         *params,
 	       gpointer        data)
 {
   g_print ("Watch: \"%s\" emitted for %s\n",
@@ -5404,9 +5406,9 @@ create_event_watcher (void)
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Close");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			  dialog_window);
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
+				 (GtkObject*) dialog_window);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area),
 			  button, TRUE, TRUE, 0);

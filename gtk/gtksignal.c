@@ -43,7 +43,7 @@ typedef struct _GtkSignal		GtkSignal;
 typedef struct _GtkSignalHash		GtkSignalHash;
 typedef struct _GtkHandler		GtkHandler;
 typedef struct _GtkEmission		GtkEmission;
-typedef union  _GtkEmissionAllocator	GtkEmissionAllocator;
+typedef struct _GtkEmissionHookData	GtkEmissionHookData;
 typedef struct _GtkDisconnectInfo	GtkDisconnectInfo;
 
 typedef void (*GtkSignalMarshaller0) (GtkObject *object,
@@ -88,14 +88,18 @@ struct _GtkHandler
 
 struct _GtkEmission
 {
-  GtkObject *object;
-  guint	     signal_id;
+  GtkObject   *object;
+  guint16      signal_id;
+  guint	       in_hook : 1;
+  GtkEmission *next;
 };
 
-union _GtkEmissionAllocator
+struct _GtkEmissionHookData
 {
-  GtkEmissionAllocator *next;
-  GtkEmission		emission;
+  GtkObject *object;
+  guint signal_id;
+  guint n_params;
+  GtkArg *params;
 };
 
 struct _GtkDisconnectInfo
@@ -132,13 +136,13 @@ static guint	    gtk_signal_connect_by_type (GtkObject     *object,
 						gint	       no_marshal);
 static guint	    gtk_alive_disconnecter     (GtkDisconnectInfo *info);
 static GtkEmission* gtk_emission_new	       (void);
-static void	    gtk_emission_add	       (GList	      **emissions,
+static void	    gtk_emission_add	       (GtkEmission   **emissions,
 						GtkObject      *object,
 						guint		signal_type);
-static void	    gtk_emission_remove	       (GList	      **emissions,
+static void	    gtk_emission_remove	       (GtkEmission   **emissions,
 						GtkObject      *object,
 						guint		signal_type);
-static gint	    gtk_emission_check	       (GList	       *emissions,
+static gint	    gtk_emission_check	       (GtkEmission    *emissions,
 						GtkObject      *object,
 						guint		signal_type);
 static gint	    gtk_handlers_run	       (GtkHandler     *handlers,
@@ -172,13 +176,13 @@ static guint	   		 gtk_n_signals = 0;
 static GMemChunk   		*gtk_signal_hash_mem_chunk = NULL;
 static GMemChunk   		*gtk_disconnect_info_mem_chunk = NULL;
 static GtkHandler  		*gtk_handler_free_list = NULL;
-static GtkEmissionAllocator	*gtk_emission_free_list = NULL;
+static GtkEmission		*gtk_free_emissions = NULL;
 
 
 
-static GList *current_emissions = NULL;
-static GList *stop_emissions = NULL;
-static GList *restart_emissions = NULL;
+static GtkEmission *current_emissions = NULL;
+static GtkEmission *stop_emissions = NULL;
+static GtkEmission *restart_emissions = NULL;
 
 static GtkSignal*
 gtk_signal_next_and_invalidate (void)
@@ -213,6 +217,8 @@ gtk_signal_next_and_invalidate (void)
   
   new_signal_id = gtk_n_signals++;
   gtk_n_free_signals--;
+
+  g_assert (gtk_n_signals < 65535);
   
   signal = LOOKUP_SIGNAL_ID (new_signal_id);
   if (signal)
@@ -244,7 +250,7 @@ gtk_signal_init (void)
 			 sizeof (GtkDisconnectInfo) * DISCONNECT_INFO_BLOCK_SIZE,
 			 G_ALLOC_AND_FREE);
       gtk_handler_free_list = NULL;
-      gtk_emission_free_list = NULL;
+      gtk_free_emissions = NULL;
       
       gtk_signal_hash_table = g_hash_table_new (gtk_signal_hash,
 						gtk_signal_compare);
@@ -268,6 +274,7 @@ gtk_signal_newv (const gchar	     *r_name,
   gchar *name;
   
   g_return_val_if_fail (r_name != NULL, 0);
+  g_return_val_if_fail (marshaller != NULL, 0);
   g_return_val_if_fail (nparams < MAX_SIGNAL_PARAMS, 0);
   if (nparams)
     g_return_val_if_fail (params != NULL, 0);
@@ -587,10 +594,17 @@ void
 gtk_signal_emit_stop (GtkObject *object,
 		      guint	  signal_id)
 {
+  gint state;
+
   g_return_if_fail (object != NULL);
   g_return_if_fail (signal_id >= 1);
   
-  if (gtk_emission_check (current_emissions, object, signal_id))
+  state = gtk_emission_check (current_emissions, object, signal_id);
+  if (state > 1)
+    g_warning ("gtk_signal_emit_stop(): emission (%u) for object `%s' cannot be stopped from emission hook",
+	       signal_id,
+	       gtk_type_name (GTK_OBJECT_TYPE (object)));
+  else if (state)
     {
       if (!gtk_emission_check (stop_emissions, object, signal_id))
 	gtk_emission_add (&stop_emissions, object, signal_id);
@@ -623,21 +637,16 @@ guint
 gtk_signal_n_emissions (GtkObject  *object,
 			guint	    signal_id)
 {
-  GList *list;
+  GtkEmission *emission;
   guint n;
   
   g_return_val_if_fail (object != NULL, 0);
   g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
   
   n = 0;
-  for (list = current_emissions; list; list = list->next)
+  for (emission = current_emissions; emission; emission = emission->next)
     {
-      GtkEmission *emission;
-      
-      emission = list->data;
-      
-      if ((emission->object == object) &&
-	  (emission->signal_id == signal_id))
+      if (emission->object == object && emission->signal_id == signal_id)
 	n++;
     }
   
@@ -759,6 +768,8 @@ gtk_signal_connect_interp (GtkObject	     *object,
 			   GtkDestroyNotify   destroy_func,
 			   gint		      after)
 {
+  g_message ("gtk_signal_connect_interp() is deprecated");
+
   return gtk_signal_connect_full (object, name, NULL, func,
 				  func_data, destroy_func, FALSE, after);
 }
@@ -1346,16 +1357,10 @@ gtk_signal_real_emit (GtkObject *object,
 		      guint      signal_id,
 		      GtkArg	*params)
 {
-  static guint emission_hooks_called = 0;
   GtkSignal     signal;
   GtkHandler	*handlers;
   GtkSignalFunc  signal_func;
-
-  if (emission_hooks_called)
-    {
-      g_warning ("gtk_signal_real_emit() may not recurse from emission hooks");
-      return;
-    }
+  GtkEmission   *emission;
 
   /* gtk_handlers_run() expects a reentrant GtkSignal*, so we allocate
    * it locally on the stack. we save some lookups ourselves with this as well.
@@ -1376,18 +1381,28 @@ gtk_signal_real_emit (GtkObject *object,
 	       signal_func);
 #endif  /* G_ENABLE_DEBUG */
   
-  if (signal.signal_flags & GTK_RUN_NO_RECURSE &&
-      gtk_emission_check (current_emissions, object, signal_id))
+  if (signal.signal_flags & GTK_RUN_NO_RECURSE)
     {
-      if (!gtk_emission_check (restart_emissions, object, signal_id))
-	gtk_emission_add (&restart_emissions, object, signal_id);
-
-      return;
+      gint state;
+      
+      state = gtk_emission_check (current_emissions, object, signal_id);
+      if (state)
+	{
+	  if (state > 1)
+	    g_warning ("gtk_signal_real_emit(): emission (%u) for object `%s' cannot be restarted from emission hook",
+		       signal_id,
+		       gtk_type_name (GTK_OBJECT_TYPE (object)));
+	  else if (!gtk_emission_check (restart_emissions, object, signal_id))
+	    gtk_emission_add (&restart_emissions, object, signal_id);
+	  
+	  return;
+	}
     }
   
   gtk_object_ref (object);
   
   gtk_emission_add (&current_emissions, object, signal_id);
+  emission = current_emissions;
   
  emission_restart:
   
@@ -1410,6 +1425,19 @@ gtk_signal_real_emit (GtkObject *object,
 	}
     }
   
+  if (signal.hook_list && !GTK_OBJECT_DESTROYED (object))
+    {
+      GtkEmissionHookData data;
+
+      data.object = object;
+      data.n_params = signal.nparams;
+      data.params = params;
+      data.signal_id = signal_id;
+      emission->in_hook = 1;
+      g_hook_list_marshal_check (signal.hook_list, TRUE, gtk_emission_hook_marshaller, &data);
+      emission->in_hook = 0;
+    }
+
   if (GTK_OBJECT_CONNECTED (object))
     {
       handlers = gtk_signal_get_handlers (object, signal_id);
@@ -1475,19 +1503,6 @@ gtk_signal_real_emit (GtkObject *object,
   
   gtk_emission_remove (&current_emissions, object, signal_id);
   
-  /* the hook invokation portion may not be moved!
-   */
-  if (signal.hook_list && !GTK_OBJECT_DESTROYED (object))
-    {
-      gpointer data[2];
-
-      data[0] = &signal;
-      data[1] = object;
-      emission_hooks_called++;
-      g_hook_list_marshal_check (signal.hook_list, TRUE, gtk_emission_hook_marshaller, &data);
-      emission_hooks_called--;
-    }
-
   gtk_object_unref (object);
 }
 
@@ -1646,15 +1661,15 @@ static gboolean
 gtk_emission_hook_marshaller (GHook   *hook,
 			      gpointer data_p)
 {
-  gpointer *data = data_p;
-  GtkSignal *signal;
+  GtkEmissionHookData *data = data_p;
   GtkEmissionHook func;
 
-  signal = data[0];
   func = hook->func;
 
-  if (!GTK_OBJECT_DESTROYED (data[1]))
-    return func (data[1], signal->signal_id, hook->data);
+  if (!GTK_OBJECT_DESTROYED (data->object))
+    return func (data->object, data->signal_id,
+		 data->n_params, data->params,
+		 hook->data);
   else
     return TRUE;
 }
@@ -1677,11 +1692,7 @@ gtk_signal_connect_by_type (GtkObject	    *object,
   g_return_val_if_fail (object != NULL, 0);
   g_return_val_if_fail (object->klass != NULL, 0);
   
-  /* A signal without a default marshaller can only take no_marshal
-     handlers. */
-
   signal = LOOKUP_SIGNAL_ID (signal_id);
-  g_return_val_if_fail (signal->marshaller || no_marshal, 0);
 
   /* Search through the signals for this object and make
    *  sure the one we are adding is valid. We need to perform
@@ -1744,36 +1755,38 @@ gtk_emission_new (void)
 {
   GtkEmission *emission;
   
-  if (!gtk_emission_free_list)
+  if (!gtk_free_emissions)
     {
-      GtkEmissionAllocator *emission_block;
+      GtkEmission *emission_block;
       guint i;
 
-      emission_block = g_new0 (GtkEmissionAllocator, EMISSION_BLOCK_SIZE);
+      emission_block = g_new0 (GtkEmission, EMISSION_BLOCK_SIZE);
       for (i = 1; i < EMISSION_BLOCK_SIZE; i++)
 	{
-	  (emission_block + i)->next = gtk_emission_free_list;
-	  gtk_emission_free_list = (emission_block + i);
+	  (emission_block + i)->next = gtk_free_emissions;
+	  gtk_free_emissions = (emission_block + i);
 	}
 
-      emission = &emission_block->emission;
+      emission = emission_block;
     }
   else
     {
-      emission = &gtk_emission_free_list->emission;
-      gtk_emission_free_list = gtk_emission_free_list->next;
+      emission = gtk_free_emissions;
+      gtk_free_emissions = emission->next;
     }
 
   emission->object = NULL;
   emission->signal_id = 0;
+  emission->in_hook = 0;
+  emission->next = NULL;
   
   return emission;
 }
 
 static void
-gtk_emission_add (GList	    **emissions,
-		  GtkObject  *object,
-		  guint	      signal_id)
+gtk_emission_add (GtkEmission **emissions,
+		  GtkObject    *object,
+		  guint	        signal_id)
 {
   GtkEmission *emission;
   
@@ -1783,58 +1796,51 @@ gtk_emission_add (GList	    **emissions,
   emission = gtk_emission_new ();
   emission->object = object;
   emission->signal_id = signal_id;
-  
-  *emissions = g_list_prepend (*emissions, emission);
+
+  emission->next = *emissions;
+  *emissions = emission;
 }
 
 static void
-gtk_emission_remove (GList     **emissions,
-		     GtkObject	*object,
-		     guint	 signal_id)
+gtk_emission_remove (GtkEmission **emissions,
+		     GtkObject	  *object,
+		     guint	   signal_id)
 {
-  GList *tmp;
+  GtkEmission *emission, *last;
   
   g_return_if_fail (emissions != NULL);
-  
-  tmp = *emissions;
-  while (tmp)
-    {
-      GtkEmissionAllocator *ea;
-      
-      ea = tmp->data;
-      
-      if ((ea->emission.object == object) &&
-	  (ea->emission.signal_id == signal_id))
-	{
-	  *emissions = g_list_remove_link (*emissions, tmp);
-	  g_list_free (tmp);
 
-	  ea->next = gtk_emission_free_list;
-	  gtk_emission_free_list = ea;
+  last = NULL;
+  emission = *emissions;
+  while (emission)
+    {
+      if (emission->object == object && emission->signal_id == signal_id)
+	{
+	  if (last)
+	    last->next = emission->next;
+	  else
+	    *emissions = emission->next;
+
+	  emission->next = gtk_free_emissions;
+	  gtk_free_emissions = emission;
 	  break;
 	}
-      
-      tmp = tmp->next;
+
+      last = emission;
+      emission = last->next;
     }
 }
 
 static gint
-gtk_emission_check (GList     *emissions,
-		    GtkObject *object,
-		    guint      signal_id)
+gtk_emission_check (GtkEmission *emission,
+		    GtkObject   *object,
+		    guint        signal_id)
 {
-  GtkEmission *emission;
-  GList *tmp;
-  
-  tmp = emissions;
-  while (tmp)
+  while (emission)
     {
-      emission = tmp->data;
-      tmp = tmp->next;
-      
-      if ((emission->object == object) &&
-	  (emission->signal_id == signal_id))
-	return TRUE;
+      if (emission->object == object && emission->signal_id == signal_id)
+	return 1 + emission->in_hook;
+      emission = emission->next;
     }
   return FALSE;
 }

@@ -86,18 +86,14 @@ guint	   gtk_quit_add_full	   (guint	       main_level,
 				    GtkDestroyNotify   destroy);
 void	   gtk_quit_remove	   (guint	       quit_handler_id);
 void	   gtk_quit_remove_by_data (gpointer	       data);
+guint	   gtk_timeout_add	   (guint32	       interval,
+				    GtkFunction	       function,
+				    gpointer	       data);
 guint	   gtk_timeout_add_full	   (guint32	       interval,
 				    GtkFunction	       function,
 				    GtkCallbackMarshal marshal,
 				    gpointer	       data,
 				    GtkDestroyNotify   destroy);
-guint	   gtk_timeout_add	   (guint32	       interval,
-				    GtkFunction	       function,
-				    gpointer	       data);
-guint	   gtk_timeout_add_interp  (guint32	       interval,
-				    GtkCallbackMarshal function,
-				    gpointer	       data,
-				    GtkDestroyNotify   notify);
 void	   gtk_timeout_remove	   (guint	       timeout_handler_id);
 
 guint	   gtk_idle_add		   (GtkFunction	       function,
@@ -108,9 +104,6 @@ guint	   gtk_idle_add_priority   (gint	       priority,
 guint	   gtk_idle_add_full	   (gint	       priority,
 				    GtkFunction	       function,
 				    GtkCallbackMarshal marshal,
-				    gpointer	       data,
-				    GtkDestroyNotify   destroy);
-guint	   gtk_idle_add_interp	   (GtkCallbackMarshal marshal,
 				    gpointer	       data,
 				    GtkDestroyNotify   destroy);
 void	   gtk_idle_remove	   (guint	       idle_handler_id);
@@ -131,6 +124,15 @@ void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
 GdkEvent*  gtk_get_current_event   (void);
 GtkWidget* gtk_get_event_widget	 (GdkEvent	*event);
 
+
+/* deprecated */
+guint	   gtk_idle_add_interp	   (GtkCallbackMarshal marshal,
+				    gpointer	       data,
+				    GtkDestroyNotify   destroy);
+guint	   gtk_timeout_add_interp  (guint32	       interval,
+				    GtkCallbackMarshal function,
+				    gpointer	       data,
+				    GtkDestroyNotify   notify);
 
 #ifdef __cplusplus
 }

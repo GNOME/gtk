@@ -42,6 +42,8 @@ typedef void    (*GtkSignalMarshal) (GtkObject	    *object,
 typedef void    (*GtkSignalDestroy) (gpointer	     data);
 typedef gboolean (*GtkEmissionHook) (GtkObject	    *object,
 				     guint           signal_id,
+				     guint	     n_params,
+				     GtkArg	    *params,
 				     gpointer        data);
 
 
@@ -123,12 +125,6 @@ guint  gtk_signal_connect_full		  (GtkObject	       *object,
 					   GtkDestroyNotify	destroy_func,
 					   gint			object_signal,
 					   gint			after);
-guint  gtk_signal_connect_interp	  (GtkObject	       *object,
-					   const gchar	       *name,
-					   GtkCallbackMarshal	func,
-					   gpointer		data,
-					   GtkDestroyNotify	destroy_func,
-					   gint			after);
 
 void   gtk_signal_connect_object_while_alive (GtkObject	       *object,
 					      const gchar      *signal,
@@ -189,6 +185,13 @@ void   gtk_signal_set_funcs		  (GtkSignalMarshal	marshal_func,
  */
 GtkSignalQuery* gtk_signal_query	  (guint		signal_id);
 
+/* deprecated */
+guint  gtk_signal_connect_interp	  (GtkObject	       *object,
+					   const gchar	       *name,
+					   GtkCallbackMarshal	func,
+					   gpointer		data,
+					   GtkDestroyNotify	destroy_func,
+					   gint			after);
 
 #ifdef __cplusplus
 }
