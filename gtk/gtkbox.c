@@ -371,6 +371,7 @@ gtk_box_pack_start (GtkBox    *box,
   child_info->expand = expand ? TRUE : FALSE;
   child_info->fill = fill ? TRUE : FALSE;
   child_info->pack = GTK_PACK_START;
+  child_info->is_secondary = FALSE;
 
   box->children = g_list_append (box->children, child_info);
 
@@ -416,6 +417,7 @@ gtk_box_pack_end (GtkBox    *box,
   child_info->expand = expand ? TRUE : FALSE;
   child_info->fill = fill ? TRUE : FALSE;
   child_info->pack = GTK_PACK_END;
+  child_info->is_secondary = FALSE;
 
   box->children = g_list_append (box->children, child_info);
 

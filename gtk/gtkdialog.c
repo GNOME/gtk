@@ -514,7 +514,10 @@ gtk_dialog_add_action_widget  (GtkDialog *dialog,
 
   gtk_box_pack_end (GTK_BOX (dialog->action_area),
                     child,
-                    FALSE, TRUE, 0);  
+                    FALSE, TRUE, 0);
+  
+  if (response_id == GTK_RESPONSE_HELP)
+    gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (dialog->action_area), child, TRUE);
 }
 
 /**

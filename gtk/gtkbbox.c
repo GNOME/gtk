@@ -33,16 +33,31 @@ enum {
   PROP_LAST
 };
 
-static void gtk_button_box_class_init    (GtkButtonBoxClass   *klass);
-static void gtk_button_box_init          (GtkButtonBox        *box);
-static void gtk_button_box_set_property  (GObject         *object,
-					  guint            prop_id,
-					  const GValue    *value,
-					  GParamSpec      *pspec);
-static void gtk_button_box_get_property  (GObject         *object,
-					  guint            prop_id,
-					  GValue          *value,
-					  GParamSpec      *pspec);
+enum {
+  CHILD_PROP_0,
+  CHILD_PROP_SECONDARY
+};
+
+static void gtk_button_box_class_init         (GtkButtonBoxClass *klass);
+static void gtk_button_box_init               (GtkButtonBox      *box);
+static void gtk_button_box_set_property       (GObject           *object,
+					       guint              prop_id,
+					       const GValue      *value,
+					       GParamSpec        *pspec);
+static void gtk_button_box_get_property       (GObject           *object,
+					       guint              prop_id,
+					       GValue            *value,
+					       GParamSpec        *pspec);
+static void gtk_button_box_set_child_property (GtkContainer      *container,
+					       GtkWidget         *child,
+					       guint              property_id,
+					       const GValue      *value,
+					       GParamSpec        *pspec);
+static void gtk_button_box_get_child_property (GtkContainer      *container,
+					       GtkWidget         *child,
+					       guint              property_id,
+					       GValue            *value,
+					       GParamSpec        *pspec);
 
 #define DEFAULT_CHILD_MIN_WIDTH 85
 #define DEFAULT_CHILD_MIN_HEIGHT 27
@@ -79,12 +94,17 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 {
   GtkWidgetClass *widget_class;
   GObjectClass *gobject_class;
+  GtkContainerClass *container_class;
 
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
+  container_class = (GtkContainerClass*) class;
 
   gobject_class->set_property = gtk_button_box_set_property;
   gobject_class->get_property = gtk_button_box_get_property;
+
+  container_class->set_child_property = gtk_button_box_set_child_property;
+  container_class->get_child_property = gtk_button_box_get_child_property;
   
   /* FIXME we need to override the "spacing" property on GtkBox once
    * libgobject allows that.
@@ -133,6 +153,14 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 						      GTK_TYPE_BUTTON_BOX_STYLE,
 						      GTK_BUTTONBOX_DEFAULT_STYLE,
                                                       G_PARAM_READWRITE));
+
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_SECONDARY,
+					      g_param_spec_boolean ("secondary", 
+								    _("Secondary"),
+								    _("If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons."),
+								    FALSE,
+								    G_PARAM_READWRITE));
 }
 
 static void
@@ -181,7 +209,57 @@ gtk_button_box_get_property (GObject         *object,
     }
 }
 
+static void
+gtk_button_box_set_child_property (GtkContainer    *container,
+				   GtkWidget       *child,
+				   guint            property_id,
+				   const GValue    *value,
+				   GParamSpec      *pspec)
+{
+  switch (property_id)
+    {
+    case CHILD_PROP_SECONDARY:
+      gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (container), child,
+					  g_value_get_boolean (value));
+      break;
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      break;
+    }
+}
 
+static void
+gtk_button_box_get_child_property (GtkContainer *container,
+				   GtkWidget    *child,
+				   guint         property_id,
+				   GValue       *value,
+				   GParamSpec   *pspec)
+{
+  GList *list;
+  GtkBoxChild *child_info = NULL;
+
+  list = GTK_BOX (container)->children;
+  while (list)
+    {
+      child_info = list->data;
+      if (child_info->widget == child)
+	break;
+
+      list = list->next;
+    }
+
+  g_assert (list != NULL);
+  
+  switch (property_id)
+    {
+    case CHILD_PROP_SECONDARY:
+      g_value_set_boolean (value, child_info->is_secondary);
+      break;
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      break;
+    }
+}
 
 /* set per widget values for spacing, child size and child internal padding */
 
@@ -229,26 +307,79 @@ void gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
   *ipad_y = widget->child_ipad_y;
 }
 
-GtkButtonBoxStyle gtk_button_box_get_layout (GtkButtonBox *widget)
+GtkButtonBoxStyle 
+gtk_button_box_get_layout (GtkButtonBox *widget)
 {
+  g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), GTK_BUTTONBOX_SPREAD);
+  
   return widget->layout_style;
 }
 
+/**
+ * gtk_button_box_set_child_secondary
+ * @widget: a #GtkButtonBox
+ * @child: a child of @widget
+ * @is_secondary: if %TRUE, the @child appears in a secondary group of the
+ *                button box.
+ *
+ * Sets whether @child should appear in a secondary group of children.
+ * A typical use of a secondary child is the help button in a dialog.
+ *
+ * This group appears after the other children if the style
+ * is %GTK_BUTTONBOX_START, %GTK_BUTTONBOX_SPREAD or
+ * %GTK_BUTTONBOX_EDGE, and before the the other children if the style
+ * is %GTK_BUTTONBOX_END. For horizontal button boxes, the definition
+ * of before/after depends on direction of the widget. (See
+ * gtk_widget_set_direction()) If the style is %GTK_BUTTONBOX_START,
+ * or %GTK_BUTTONBOX_START, then the secondary children are aligned at
+ * the other end of the button box from the main children. For the
+ * other styles, they appear immediately next to the main children.
+ **/
+void 
+gtk_button_box_set_child_secondary (GtkButtonBox *widget, 
+				    GtkWidget    *child,
+				    gboolean      is_secondary)
+{
+  GList *list;
+  
+  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent == GTK_WIDGET (widget));
 
+  list = GTK_BOX (widget)->children;
+  while (list)
+    {
+      GtkBoxChild *child_info = list->data;
+      if (child_info->widget == child)
+	{
+	  child_info->is_secondary = is_secondary;
+	  break;
+	}
+
+      list = list->next;
+    }
+
+  gtk_widget_child_notify (child, "secondary");
+
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (child))
+    gtk_widget_queue_resize (child);
+}
 
 /* Ask children how much space they require and round up 
    to match minimum size and internal padding.
    Returns the size each single child should have. */
 void
 _gtk_button_box_child_requisition (GtkWidget *widget,
-                                   int *nvis_children,
-                                   int *width,
-                                   int *height)
+                                   int       *nvis_children,
+				   int       *nvis_secondaries,
+                                   int       *width,
+                                   int       *height)
 {
   GtkButtonBox *bbox;
   GtkBoxChild *child;
   GList *children;
   gint nchildren;
+  gint nsecondaries;
   gint needed_width;
   gint needed_height;
   GtkRequisition child_requisition;
@@ -289,6 +420,7 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
 	  ? bbox->child_ipad_y : ipad_y_default;
 
   nchildren = 0;
+  nsecondaries = 0;
   children = GTK_BOX(bbox)->children;
   needed_width = child_min_width;
   needed_height = child_min_height;  
@@ -304,14 +436,22 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
 	{
 	  nchildren += 1;
 	  gtk_widget_size_request (child->widget, &child_requisition);
+	  
 	  if (child_requisition.width + ipad_w > needed_width)
-		  needed_width = child_requisition.width + ipad_w;
+	    needed_width = child_requisition.width + ipad_w;
 	  if (child_requisition.height + ipad_h > needed_height)
-		  needed_height = child_requisition.height + ipad_h;
+	    needed_height = child_requisition.height + ipad_h;
+	  if (child->is_secondary)
+	    nsecondaries++;
 	}
     }
-  
-  *nvis_children = nchildren;
-  *width = needed_width;
-  *height = needed_height;
+
+  if (nvis_children)
+    *nvis_children = nchildren;
+  if (nvis_secondaries)
+    *nvis_secondaries = nsecondaries;
+  if (width)
+    *width = needed_width;
+  if (height)
+    *height = needed_height;
 }

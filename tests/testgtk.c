@@ -6143,6 +6143,7 @@ create_color_selection (void)
       GtkWidget *check_button;
       
       window = gtk_color_selection_dialog_new ("color selection dialog");
+      gtk_widget_show (GTK_COLOR_SELECTION_DIALOG (window)->help_button);
 
       gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
 

@@ -66,28 +66,37 @@ struct _GtkButtonBoxClass
 
 GtkType gtk_button_box_get_type (void) G_GNUC_CONST;
 
-GtkButtonBoxStyle gtk_button_box_get_layout  (GtkButtonBox      *widget);
-void              gtk_button_box_set_layout  (GtkButtonBox      *widget,
-                                              GtkButtonBoxStyle  layout_style);
+GtkButtonBoxStyle gtk_button_box_get_layout          (GtkButtonBox      *widget);
+void              gtk_button_box_set_layout          (GtkButtonBox      *widget,
+						      GtkButtonBoxStyle  layout_style);
+void              gtk_button_box_set_child_secondary (GtkButtonBox      *widget,
+						      GtkWidget         *child,
+						      gboolean           is_secondary);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_button_box_set_spacing gtk_box_set_spacing
 #define gtk_button_box_get_spacing gtk_box_get_spacing
 
-void gtk_button_box_set_child_size (GtkButtonBox *widget,
-				    gint min_width, gint min_height);
-void gtk_button_box_set_child_ipadding (GtkButtonBox *widget, gint ipad_x, gint ipad_y);
-void gtk_button_box_get_child_size (GtkButtonBox *widget,
-				    gint *min_width, gint *min_height);
-void gtk_button_box_get_child_ipadding (GtkButtonBox *widget, gint *ipad_x, gint *ipad_y);
+void gtk_button_box_set_child_size     (GtkButtonBox *widget,
+					gint          min_width,
+					gint          min_height);
+void gtk_button_box_set_child_ipadding (GtkButtonBox *widget,
+					gint          ipad_x,
+					gint          ipad_y);
+void gtk_button_box_get_child_size     (GtkButtonBox *widget,
+					gint         *min_width,
+					gint         *min_height);
+void gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
+					gint         *ipad_x,
+					gint         *ipad_y);
 #endif
 
 /* Internal method - do not use. */
 void _gtk_button_box_child_requisition (GtkWidget *widget,
-                                        int *nvis_children,
-                                        int *width,
-                                        int *height);
-
+					int       *nvis_children,
+					int       *nvis_secondaries,
+					int       *width,
+					int       *height);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -1,3 +1,20 @@
+Thu Jul  5 21:53:46 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbbox.[ch] gtk/gtkbox.[ch] gtk/gtk[hv]bbox.c:
+	Patch from Gregory Merchan to add 
+	gtk_button_box_set_secondary(), which separates
+	the child into a separate group from the normal
+	buttons. (#56331)
+
+	* gtk/gtkdialog.c: Make help buttons secondary by
+	default.
+
+	* gtk/gtkbbox.c: Added a child property "secondary".
+
+	* gtk/testgtk.c: Turn on the help button for the 
+	color selector to check that it properly appears
+	as secondary.
+
 Mon Jul  2 01:09:37 2001  Owen Taylor  <otaylor@redhat.com>
  
  	* gdk/gdkwindow.[ch] gdk/gdkinternals.h gdk/x11/gdkwindow-x11.c
