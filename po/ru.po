@@ -5,9 +5,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.1\n"
+"Project-Id-Version: gtk+ 2.0.2\n"
 "POT-Creation-Date: 2002-04-02 13:13+0200\n"
-"PO-Revision-Date: 2002-03-18 13:33+0300\n"
+"PO-Revision-Date: 2002-04-14 19:15+0400\n"
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -4080,7 +4080,7 @@ msgstr "Обновить"
 # gtk/gtkstock.c:319
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "Удалить"
+msgstr "Убрать"
 
 # gtk/gtkstock.c:320
 #: gtk/gtkstock.c:320
