@@ -3574,7 +3574,7 @@ gtk_widget_reset_rc_style (GtkWidget *widget)
     new_style = gtk_widget_get_default_style ();
 
   if (initial_emission || new_style != widget->style)
-    gtk_widget_set_style_internal (widget, new_style, TRUE);
+    gtk_widget_set_style_internal (widget, new_style, initial_emission);
 }
 
 /**

@@ -1,3 +1,9 @@
+Thu Jul  5 08:57:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_reset_rc_style): Pass
+	in the right value of initial_emission to
+	gtk_widget_set_style_internal (#57091)
+
 Wed Jul  4 23:17:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_dest_hierarchy_changed):
