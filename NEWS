@@ -1,3 +1,44 @@
+Overview of Changes in GTK+ 1.3.1:
+
+* GTK+ now uses the Pango library for text manipulation. All
+  strings in GTK+ now are in Unicode, languages written
+  from right-to-left, and complex-text languages are now supported.
+* The gdk-pixbuf library for image loading and manipulation is 
+  has been integrated with GTK+.
+* The GTK+ object system has mostly been moved to GLib, separating
+  it from the GUI code. Many significant enhancements have been
+  made as part of this.
+* A new text widget is now included. This started as a port
+  of the Tk text widget, and includes such features of the Tk
+  text widget as tags, marks, and unicode text support. It
+  has been enhanced to support model-view operation and the
+  full power of Pango.
+* The GDK library has been extensively revised to support multiple
+  windowing systems. The only fully functional backend in 1.3.1
+  is the X11 backend, however, ports to Win32, Linux-framebuffer,
+  Nano-X, BeOS, and MacOS exist in various states of completion,
+  and at least some of these will be finished and integrated in 
+  before the final GTK+-2.0 release.
+* 32-bit coordinates are now supported throughout GDK and GTK+
+  (they are emulated where not supported by the windowing system.)
+* Many minor bug fixes and enhancements. Incompatible changes
+  are documented in docs/Changes-2.0.txt
+
+Overview of Changes in GTK+ 1.2.8:
+
+* GNU Make 3.79 bug workaround
+* FAQ and tutorial updates and improvements
+* Miscellaneous bug fixes: CList, Calendar, rc-files, FontSelection
+
+Overview of Changes in GTK+ 1.2.7:
+
+* More header cleanups.
+* Fixed activation bug for insensitive widgets.
+* Locale fixes to RC file parsing code.
+* Miscellaneous bugfixes for Item Factory, CList, CTree, X Selections,
+  HScale, VScale, Pixmap, Viewport, OptionMenu, Entry and Notebook.
+* Upgrade to libtool 1.3.4.
+
 Overview of Changes in GTK+ 1.2.6:
 
 * container queue_resize fixes
