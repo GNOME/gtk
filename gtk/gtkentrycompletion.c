@@ -1098,7 +1098,7 @@ gboolean
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
   gint x, y;
-  gint items, height, x_border, y_border;
+  gint matches, items, height, x_border, y_border;
   GdkScreen *screen;
   gint monitor_num;
   GdkRectangle monitor;
@@ -1112,9 +1112,9 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   x += x_border;
   y += 2 * y_border;
 
-  items = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
+  matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
 
-  items = MIN (items, 15);
+  items = MIN (matches, 15);
 
   gtk_tree_view_column_cell_get_size (completion->priv->column, NULL,
                                       NULL, NULL, NULL, &height);
@@ -1164,17 +1164,20 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     {
       y += height;
       above = FALSE;
-      path = gtk_tree_path_new_from_indices (0, -1);
     }
   else
     {
       y -= popup_req.height;
       above = TRUE;
-      path = gtk_tree_path_new_from_indices (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL) - 1, -1);
     }
   
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (completion->priv->tree_view), path, NULL, FALSE, 0.0, 0.0);
-  gtk_tree_path_free (path);
+  if (matches > 0) 
+    {
+      path = gtk_tree_path_new_from_indices (above ? matches - 1 : 0, -1);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (completion->priv->tree_view), path, 
+				    NULL, FALSE, 0.0, 0.0);
+      gtk_tree_path_free (path);
+    }
 
   gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y);
 
