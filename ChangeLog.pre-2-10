@@ -1,3 +1,14 @@
+2005-02-02  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	* gtk/gtkfilechooserdefault.c (pending_select_paths_process):
+	Don't select the first row if the chooser is not mapped.  This
+	happens when it's acting on behalf of GtkFileChooserButton.  Also,
+	don't select the first row if we are in SAVE or CREATE_FOLDER
+	modes --- I had missed that (see the ChangeLog entry from
+	2005-01-18).  Fixes #165264.
+
 2005-02-02  Tor Lillqvist  <tml@novell.com>
 
 	Implement lazy extended input initialization on Win32, by Robert
