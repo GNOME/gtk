@@ -316,22 +316,7 @@ gdk_image_new (GdkImageType  type,
 	  image->byte_order = private->ximage->byte_order;
 	  image->mem = private->ximage->data;
 	  image->bpl = private->ximage->bytes_per_line;
-
-	  switch (private->ximage->bits_per_pixel)
-	    {
-	    case 8:
-	      image->bpp = 1;
-	      break;
-	    case 16:
-	      image->bpp = 2;
-	      break;
-	    case 24:
-	      image->bpp = 3;
-	      break;
-	    case 32:
-	      image->bpp = 4;
-	      break;
-	    }
+	  image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
 	}
     }
 

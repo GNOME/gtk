@@ -1513,17 +1513,6 @@ gtk_window_move_resize (GtkWindow *window)
   container = GTK_CONTAINER (widget);
   info = gtk_window_get_geometry_info (window, TRUE);
 
-  /* Compute new set of hints for the window
-   */
-  gtk_window_compute_hints (window, &new_geometry, &new_flags);
-  if (!gtk_window_compare_hints (&info->last_geometry, info->last_flags,
-				 &new_geometry, new_flags))
-    {
-      hints_changed = TRUE;
-      info->last_geometry = new_geometry;
-      info->last_flags = new_flags;
-    }
-
   gtk_widget_size_request (widget, NULL);
   gtk_window_compute_default_size (window, &new_width, &new_height);
   
@@ -1542,6 +1531,17 @@ gtk_window_move_resize (GtkWindow *window)
   info->last_width = new_width;
   info->last_height = new_height;
   
+  /* Compute new set of hints for the window
+   */
+  gtk_window_compute_hints (window, &new_geometry, &new_flags);
+  if (!gtk_window_compare_hints (&info->last_geometry, info->last_flags,
+				 &new_geometry, new_flags))
+    {
+      hints_changed = TRUE;
+      info->last_geometry = new_geometry;
+      info->last_flags = new_flags;
+    }
+
   /* From the default size and the allocation, figure out the size
    * the window should be.
    */

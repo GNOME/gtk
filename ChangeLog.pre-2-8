@@ -1,3 +1,8 @@
+Wed Sep  1 12:37:44 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Compute
+	  the hints after we request the new size.
+
 Wed Sep  1 10:38:37 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_compute_hints): Removed
