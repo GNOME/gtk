@@ -1,8 +1,14 @@
-# Makefile.in generated automatically by automake 1.2 from Makefile.am
+# Makefile.in generated automatically by automake 1.2d from Makefile.am
 
 # Copyright (C) 1994, 1995, 1996, 1997 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
-# gives unlimited permission to copy, distribute and modify it.
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
 
 
 SHELL = /bin/sh
@@ -43,12 +49,12 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 transform = @program_transform_name@
 
-NORMAL_INSTALL = true
-PRE_INSTALL = true
-POST_INSTALL = true
-NORMAL_UNINSTALL = true
-PRE_UNINSTALL = true
-POST_UNINSTALL = true
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 CC = @CC@
@@ -123,7 +129,7 @@ gxid_LDADD = \
 
 BUILT_SOURCES = gdkcursors.h gdkkeysyms.h
 
-EXTRA_DIST = makecursors makecursors.sed makekeysyms makekeysyms.sed
+EXTRA_DIST = makecursors.awk makekeysyms.awk
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -159,7 +165,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP = --best
 DEP_FILES =  .deps/gdk.P .deps/gdkcolor.P .deps/gdkcursor.P \
 .deps/gdkdraw.P .deps/gdkfont.P .deps/gdkgc.P .deps/gdkglobals.P \
@@ -172,7 +178,7 @@ OBJECTS = $(libgdk_la_OBJECTS) $(gxid_OBJECTS)
 default: all
 
 .SUFFIXES:
-.SUFFIXES: .c .lo .o
+.SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: @MAINT@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu gdk/Makefile
 
@@ -184,7 +190,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status $(BUILT_SOURCES)
 mostlyclean-libLTLIBRARIES:
 
 clean-libLTLIBRARIES:
-	test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
 
 distclean-libLTLIBRARIES:
 
@@ -195,8 +201,8 @@ install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	$(mkinstalldirs) $(libdir)
 	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "$(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(libdir)/$$p"; \
-	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(libdir)/$$p; \
+	    echo "$(LIBTOOL)  --mode=install $(INSTALL_DATA) $$p $(libdir)/$$p"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_DATA) $$p $(libdir)/$$p; \
 	  else :; fi; \
 	done
 
@@ -209,24 +215,36 @@ uninstall-libLTLIBRARIES:
 .c.o:
 	$(COMPILE) -c $<
 
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
+	$(COMPILE) -c $<
+
 mostlyclean-compile:
-	rm -f *.o core
+	-rm -f *.o core
 
 clean-compile:
 
 distclean-compile:
-	rm -f *.tab.c
+	-rm -f *.tab.c
 
 maintainer-clean-compile:
 
 .c.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
 mostlyclean-libtool:
-	rm -f *.lo
+	-rm -f *.lo
 
 clean-libtool:
-	rm -rf .libs
+	-rm -rf .libs _libs
 
 distclean-libtool:
 
@@ -238,7 +256,7 @@ libgdk.la: $(libgdk_la_OBJECTS) $(libgdk_la_DEPENDENCIES)
 mostlyclean-binPROGRAMS:
 
 clean-binPROGRAMS:
-	test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
 distclean-binPROGRAMS:
 
@@ -280,21 +298,22 @@ uninstall-gdkincludeHEADERS:
 
 tags: TAGS
 
-ID: $(HEADERS) $(SOURCES)
-	here=`pwd` && cd $(srcdir) && mkid -f$$here/ID $(SOURCES) $(HEADERS)
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $(SOURCES) $(HEADERS) $(LISP)
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES)
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	test -z "$(ETAGS_ARGS)$(SOURCES)$(HEADERS)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $(SOURCES) $(HEADERS) -o $$here/TAGS)
+	test -z "$(ETAGS_ARGS)$(SOURCES)$(HEADERS)$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $(SOURCES) $(HEADERS) $(LISP) -o $$here/TAGS)
 
 mostlyclean-tags:
 
 clean-tags:
 
 distclean-tags:
-	rm -f TAGS ID
+	-rm -f TAGS ID
 
 maintainer-clean-tags:
 
@@ -305,6 +324,7 @@ subdir = gdk
 distdir: $(DISTFILES)
 	here=`cd $(top_builddir) && pwd`; \
 	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu gdk/Makefile
 	@for file in $(DISTFILES); do \
@@ -314,7 +334,7 @@ distdir: $(DISTFILES)
 	  || cp -p $$d/$$file $(distdir)/$$file; \
 	done
 
-MKDEP = gcc -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+MKDEP = $(CC) -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 
 DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
 -include .deps/.P
@@ -330,7 +350,7 @@ clean-depend:
 distclean-depend:
 
 maintainer-clean-depend:
-	rm -rf .deps
+	-rm -rf .deps
 
 .deps/%.P: %.c
 	@echo "Computing dependencies for $<..."
@@ -364,19 +384,19 @@ installdirs:
 
 
 mostlyclean-generic:
-	test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
+	-test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
 
 clean-generic:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	rm -f Makefile $(DISTCLEANFILES)
-	rm -f config.cache config.log stamp-h stamp-h[0-9]*
-	test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f Makefile $(DISTCLEANFILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 
 maintainer-clean-generic:
-	test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
-	test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 mostlyclean:  mostlyclean-libLTLIBRARIES mostlyclean-compile \
 		mostlyclean-libtool mostlyclean-binPROGRAMS \
 		mostlyclean-tags mostlyclean-depend mostlyclean-generic
@@ -388,8 +408,8 @@ clean:  clean-libLTLIBRARIES clean-compile clean-libtool \
 distclean:  distclean-libLTLIBRARIES distclean-compile distclean-libtool \
 		distclean-binPROGRAMS distclean-tags distclean-depend \
 		distclean-generic clean
-	rm -f config.status
-	rm -f libtool
+	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-libLTLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
@@ -416,10 +436,10 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 gdkcursors.h:
-	$(srcdir)/makecursors @x_includes@/X11/cursorfont.h > $@
+	awk -f $(srcdir)/makecursors.awk @x_includes@/X11/cursorfont.h > $@
 
 gdkkeysyms.h:
-	$(srcdir)/makekeysyms @x_includes@/X11/keysymdef.h > $@
+	awk -f $(srcdir)/makekeysyms.awk @x_includes@/X11/keysymdef.h > $@
 
 .PHONY: files
 

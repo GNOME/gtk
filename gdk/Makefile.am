@@ -60,13 +60,13 @@ gxid_LDADD = \
 
 BUILT_SOURCES = gdkcursors.h gdkkeysyms.h
 
-EXTRA_DIST = makecursors makecursors.sed makekeysyms makekeysyms.sed
+EXTRA_DIST = makecursors.awk makekeysyms.awk
 
 gdkcursors.h:
-	$(srcdir)/makecursors @x_includes@/X11/cursorfont.h > $@
+	awk -f $(srcdir)/makecursors.awk @x_includes@/X11/cursorfont.h > $@
 
 gdkkeysyms.h:
-	$(srcdir)/makekeysyms @x_includes@/X11/keysymdef.h > $@
+	awk -f $(srcdir)/makekeysyms.awk @x_includes@/X11/keysymdef.h > $@
 
 .PHONY: files
 
