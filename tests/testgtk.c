@@ -680,6 +680,10 @@ create_radio_buttons (void)
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
+      box2 = gtk_vbox_new (FALSE, 10);
+      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+
       button = gtk_radio_button_new_with_label (NULL, "button4");
       gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
