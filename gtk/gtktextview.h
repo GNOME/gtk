@@ -184,6 +184,11 @@ struct _GtkTextViewClass
   void (* paste_clipboard) (GtkTextView *text_view);
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
+
+  GtkFunction pad1;
+  GtkFunction pad2;
+  GtkFunction pad3;
+  GtkFunction pad4;
 };
 
 GtkType        gtk_text_view_get_type              (void) G_GNUC_CONST;

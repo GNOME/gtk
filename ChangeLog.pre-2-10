@@ -1,5 +1,16 @@
 2001-11-13  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_add_child_in_window): docs
+	including reference to bugzilla bug about how we should have 
+	a better way of positioning children
+
+	* gtk/gtktextview.h (struct _GtkTextViewClass): add some padding
+
+	* gtk/gtktextview.c (gtk_text_view_size_allocate): assign zero
+	size to side rects if they don't exist, #63438
+
+2001-11-13  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_key_press_event): fix to
 	properly replace selection with Return or Tab
 

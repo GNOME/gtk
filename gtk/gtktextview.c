@@ -2612,7 +2612,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    */
 
   gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
-
+  
   if (interior_focus)
     focus_edge_width = 0;
   else
@@ -2623,14 +2623,14 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   if (text_view->left_window)
     left_rect.width = text_view->left_window->requisition.width;
   else
-    left_rect.width = 1;
+    left_rect.width = 0;
 
   width -= left_rect.width;
 
   if (text_view->right_window)
     right_rect.width = text_view->right_window->requisition.width;
   else
-    right_rect.width = 1;
+    right_rect.width = 0;
 
   width -= right_rect.width;
 
@@ -2645,14 +2645,14 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   if (text_view->top_window)
     top_rect.height = text_view->top_window->requisition.height;
   else
-    top_rect.height = 1;
+    top_rect.height = 0;
 
   height -= top_rect.height;
 
   if (text_view->bottom_window)
     bottom_rect.height = text_view->bottom_window->requisition.height;
   else
-    bottom_rect.height = 1;
+    bottom_rect.height = 0;
 
   height -= bottom_rect.height;
 
@@ -6718,6 +6718,32 @@ gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
   g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (text_view));
 }
 
+/**
+ * gtk_text_view_add_child_in_window:
+ * @text_view: a #GtkTextView
+ * @child: a #GtkWidget
+ * @which_window: which window the child should appear in
+ * @xpos: X position of child in window coordinates
+ * @ypos: Y position of child in window coordinates
+ *
+ * Adds a child at fixed coordinates in one of the text widget's
+ * windows.  The window must have nonzero size (see
+ * gtk_text_view_set_border_window_size()).  Note that the child
+ * coordinates are given relative to the #GdkWindow in question, and
+ * that these coordinates have no sane relationship to scrolling. When
+ * placing a child in #GTK_TEXT_WINDOW_WIDGET, scrolling is
+ * irrelevant, the child floats above all scrollable areas. But when
+ * placing a child in one of the scrollable windows (border windows or
+ * text window), you'll need to compute the child's correct position
+ * in buffer coordinates any time scrolling occurs or buffer changes
+ * occur, and then call gtk_text_view_move_child() to update the
+ * child's position. Unfortunately there's no good way to detect that
+ * scrolling has occurred, using the current API; a possible hack
+ * would be to update all child positions when the scroll adjustments
+ * change or the text buffer changes. See bug 64518 on
+ * bugzilla.gnome.org for status of fixing this issue.
+ *
+ **/
 void
 gtk_text_view_add_child_in_window (GtkTextView          *text_view,
                                    GtkWidget            *child,
@@ -6740,6 +6766,16 @@ gtk_text_view_add_child_in_window (GtkTextView          *text_view,
   g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (text_view));
 }
 
+/**
+ * gtk_text_view_move_child:
+ * @text_view: a #GtkTextView
+ * @child: child widget already added to the text view
+ * @xpos: new X position in window coordinates
+ * @ypos: new Y position in window coordinates
+ *
+ * Updates the position of a child, as for gtk_text_view_add_child_in_window().
+ * 
+ **/
 void
 gtk_text_view_move_child          (GtkTextView          *text_view,
                                    GtkWidget            *child,
