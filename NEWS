@@ -6,9 +6,23 @@ Overview of Changes in GTK+ 1.1.0:
 * Speedups in signal lookup, creation and emissions and connection handling.
 * Additions to the signal handling API (e.g. *_emitv).
 * Minor speedups with object data allocation and destruction.
+* Support for rc-file reparsing.
+* Resizing logic is now implemented on container widget basis, rather than
+  for toplevel GtkWindows only.
+* Buttons support relief styles now.
+* Some widgets are now allocated through memchunks to behave more memory wise.
 * Newly included file gtkfeatures.h which defines compatibility macros to
   test for certain API features upon program compilation.
 * New widget GtkCTree
+* New widget GtkFontSelector.
+* GtkTables are now fully resizable.
+* New container widget GtkPacker.
+* New object GtkItemFactory, GtkMenuFactory is deprecated.
+* Far better support for widget arguments.
+* Child arguments support for container widgets.
+* Removed GtkAcceleratorTable in favour of GtkAccelGroup, accelerator display
+  is now performed by a new widget GtkAccelLabel.
+* Runtime information is available to query enum/flag definition values.
 * Upgrade to libtool-1.2
-* Lots of bug fixes, including one that fixed a major memory leak
+* Legions of bug fixes, including one that fixed a major memory leak
   in 1.0.0.

@@ -56,7 +56,7 @@ Additions:
    reads. so one can take advantage of buffering. Currently each read() takes
    a separate syscall.
    
- * implement gtk_default_draw_oval
+ * implement gtk_default_draw_oval and other missing things in gtkstyle.c.
  
  * Lists should scroll to center the recently selected item if it isn't
    visible.
@@ -70,15 +70,10 @@ Additions:
    allocate GtkTooltipsData from memchunks
    look into incorporation of outdated/gtk-dairiki-971208-[01].patch.gz
                           
- * Make widget attributes configurable after the widget is created (timj).
-
  * Change gtk_widget_propagate_default_style() mechanism to
    void gtk_rc_string_export (const gchar *rc_additions,
                               gboolean     override_rc_styles);
 
- * Should release grab before activating menu item (and remove
-   menu from screen?)
- 
  * Make all widget attributes configurable after the widget is created (timj).
  
  * Widgets dervied from GtkButton need to be able to override
@@ -90,8 +85,8 @@ Additions:
 
  * GtkCList improvements. (Jay Painter)
 
- * Seperate GtkObject and signaling system from Gdk dependancies?
-  
+ * Seperate GtkObject, type and signaling system from Gdk dependancies,
+   by moving them into a seperate libgtkobj.
  * move *_input_add (wrappers for select(2)) mechanism into glib.
 
  * Make sure a widget added to a list is a list item and a widget added
@@ -129,7 +124,7 @@ Additions:
    retrieve X values, and so they don't have to know the value of the
    XNxxx character constants.
 
- * The "-geometry" option should be supported
+ * The "--geometry" option should be supported
 
   - Having gdk_init() parse the geometry option. (putting it into
     GDK means you can use XParseGeometry() without wrapping it)
@@ -200,22 +195,16 @@ Additions:
  * Generic ScrolledWindow interface, which provide automatic scrollbar
    capability to Viewport, Text, and CList widgets.
 
-   GTK_POLICY_NEVER for scrolled windows.
+ * GTK_POLICY_NEVER for scrolled windows.
 
  * Consider caching more state in GdkWindowPrivate. Currently, 
    every widget realization involves a XGetGeometry and a
    XGetWindowAttributes. And every GdkWindow destruction
    involves a XQueryTree.
 
- * Scrolled windows need to be smarter about when they size-request/allocate
-   their children. In particular, we should not be queuing the resizes
-   on the toplevel window, but on the Viewport.
-
  * Should all the default handlers really return FALSE? This can
    cause confusing presses to be sent to containers that actually
    want to get events on themselves.
-
- * Fix block_resize, disable_resize.
 
  * Buttons's should derive from Bin's. (GTK 2.0 change, breaks
    lots of stuff)
@@ -293,4 +282,3 @@ Text/Edit widget:
     [ From: Stefan Jeske <jeske@braunschweig.netsurf.de> ]
 
   - "changed" emitted when doing deletes on empty Text widget.
-
