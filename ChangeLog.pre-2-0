@@ -1,3 +1,13 @@
+2002-02-10  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtk.def: Add a couple of missing entry points.
+
+	* gdk/win32/gdkcolor-win32.c (gdk_colormap_free_colors): Don't
+	unnecessarily use a GdkColormapPrivateWin32 pointer.
+
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_create_from_data): Use
+	gdk_win32_blit(), not gdk_draw_drawable().
+
 2002-02-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkcolor-win32.c: Remove the actually unused

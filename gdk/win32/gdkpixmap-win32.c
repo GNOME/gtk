@@ -437,7 +437,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   GdkGC *gc = gdk_gc_new (result);
   gdk_gc_set_foreground (gc, fg);
   gdk_gc_set_background (gc, bg);
-  gdk_draw_drawable (result, gc, source, 0, 0, 0, 0, width, height);
+  gdk_win32_blit (TRUE, result, gc, source, 0, 0, 0, 0, width, height);
   gdk_drawable_unref (source);
   gdk_gc_unref (gc);
 

@@ -1656,17 +1656,14 @@ gdk_colormap_free_colors (GdkColormap *colormap,
 			  GdkColor    *colors,
 			  gint         ncolors)
 {
-  GdkColormapPrivateWin32 *cmapp;
   gulong *pixels;
   gint i;
 
   g_return_if_fail (colormap != NULL);
   g_return_if_fail (colors != NULL);
 
-  cmapp = (GdkColormapPrivateWin32 *) colormap;
-
-  if ((cmapp->base.visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
-      (cmapp->base.visual->type != GDK_VISUAL_GRAYSCALE))
+  if ((((GdkColormapPrivate *) colormap)->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
+      (((GdkColormapPrivate *) colormap)->visual->type != GDK_VISUAL_GRAYSCALE))
     return;
 
   pixels = g_new (gulong, ncolors);

@@ -333,6 +333,7 @@ EXPORTS
 	gtk_container_arg_set
 	gtk_container_check_resize
 	gtk_container_child_arg_get_info
+	gtk_container_child_args_collect
 	gtk_container_child_composite_name
 	gtk_container_child_getv
 	gtk_container_child_set
@@ -340,6 +341,7 @@ EXPORTS
 	gtk_container_child_type
 	gtk_container_children
 	gtk_container_clear_resize_widgets
+	gtk_container_dequeue_resize_handler
 	gtk_container_focus
 	gtk_container_forall
 	gtk_container_foreach
