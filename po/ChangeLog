@@ -1,3 +1,8 @@
+2002-11-21  Christian Neumair  <chris@gnome-de.org>
+
+	* de.po: Updated German translation.
+	* POTFILES.in: Added missing files.
+
 2002-11-18  Abi Brady  <morwen@evilmagic.org>
 
 	* en_GB.po:  Updated British Translation.
