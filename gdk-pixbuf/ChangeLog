@@ -1,3 +1,12 @@
+1999-11-13  Cody Russell  <bratsche@dfw.net>
+	* src/testpixbuf-drawable.c: Added a test program for drawable
+	code.
+
+	* src/Makefile.am: Build testpixbuf-drawable.
+
+1999-11-12  Cody Russell  <bratsche@dfw.net>
+	* src/gdk-pixbuf-drawable.c: Merged in Michael Zucchi's changes.
+
 1999-11-10  Federico Mena Quintero  <federico@redhat.com>
 
 	* doc/tmpl/gdk-pixbuf-loader.sgml: Populated.

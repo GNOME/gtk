@@ -32,7 +32,7 @@ libexec_LTLIBRARIES =		\
 	$(TIFF_LIB)	\
 	$(PNM_LIB)
 
-noinst_PROGRAMS = testpixbuf
+noinst_PROGRAMS = testpixbuf testpixbuf-drawable
 
 
 DEPS = libgdk_pixbuf.la
@@ -42,6 +42,8 @@ AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS)
 
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
+
+testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
 
 #
 # The GdkPixBuf library
