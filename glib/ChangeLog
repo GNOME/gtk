@@ -1,3 +1,8 @@
+Thu Mar 26 20:47:21 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* configure.in glib glibconfig.h.in: Add test for atexit/on_exit -
+	use on_exit if atexit not found in definition of ATEXIT.
+
 Wed Mar 25 15:23:37 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* Makefile.am: Switched glibconfig.h rule from HEADERS

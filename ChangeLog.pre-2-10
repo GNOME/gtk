@@ -1,3 +1,20 @@
+Fri Mar 27 00:13:18 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c (gtk_propagate_event): If the widget is _not_
+	a descendant of a Window widget, propagate key presses like
+	other events.
+
+	* gtk/gtkentry.c gtk/gtktext.c: Ignore multiple simultaneous
+	button presses instead of treating subsequent presses as
+	release/press pairs for tablet compatibility.
+
+	* configure.in config.h.in: Removed inline checks, because they
+	are duplicated in glib.
+
+	* gtk/gtkwidget.c (gtk_widget_draw): When gtk_widget_draw ()
+	occurs with queued draw already in place, redraw _entire_
+	widget. (Pointed out by Tim Janik)
+
 Thu Mar 26 23:12:54 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_propagate_event): make a clear distinction between

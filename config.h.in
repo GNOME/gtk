@@ -6,9 +6,6 @@
 /* Define if you have a working `mmap' system call.  */
 #undef HAVE_MMAP
 
-/* Define as __inline if that's what the C compiler calls it.  */
-#undef inline
-
 /* Define as the return type of signal handlers (int or void).  */
 #undef RETSIGTYPE
 

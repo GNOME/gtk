@@ -122,7 +122,11 @@
 #endif /* CLAMP */
 
 #ifndef ATEXIT
-#define ATEXIT(proc)   (atexit (proc))
+#  ifdef HAVE_ATEXIT
+#    define ATEXIT(proc)   (atexit (proc))
+#  elif defined (HAVE_ON_EXIT)
+#    define ATEXIT(proc)   (on_exit ((void (*)(int, void *))(proc), NULL))
+#  endif    
 #endif /* ATEXIT */
 
 

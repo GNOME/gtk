@@ -188,20 +188,27 @@ TODO AFTER GTK 1.0
 
   - In word wrap mode, break:
 
-aaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+     aaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-as:
-                       | Maximum column
-aaaaaaaaaaa bbbbbbbbbbb|
-bbbbbbbbbbbbbbbbbbbbbbb|
-bbbbbbbbb              |
+     as:
+     | Maximum column
+     aaaaaaaaaaa bbbbbbbbbbb|
+     bbbbbbbbbbbbbbbbbbbbbbb|
+     bbbbbbbbb              |
 
-Instead of:
-                       | 
-aaaaaaaaaaa            |
-bbbbbbbbbbbbbbbbbbbbbbb|
-bbbbbbbbbbbbbbbbbbbb   |
+     Instead of:
+     | 
+     aaaaaaaaaaa            |
+     bbbbbbbbbbbbbbbbbbbbbbb|
+     bbbbbbbbbbbbbbbbbbbb   |
 
+  - Blinking cursor
+
+  - API's : gtk_text_clear, gtk_text_delete_lines (gint start, gint end),
+    gtk_text_append/prepend, gtk_text_insert_at (gint row, gint column),
+    some function to get the row/column from the x/y-coordinates of a 
+    mouse click, some function to get the word/line under the mouse pointer 
+    [ From: Stefan Jeske <jeske@braunschweig.netsurf.de> ]
 
  ? Allow moving the separator for paned widgets by dragging 
    it directly instead of using the handle. 

@@ -727,15 +727,8 @@ gtk_entry_button_press (GtkWidget      *widget,
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
   
-  if (entry->button && (event->type == GDK_BUTTON_PRESS))
-    {
-      GdkEventButton release_event = *event;
-
-      release_event.type = GDK_BUTTON_RELEASE;
-      release_event.button = entry->button;
-
-      gtk_entry_button_release (widget, &release_event);
-    }
+  if (entry->button && (event->button != entry->button))
+    return FALSE;
 
   entry->button = event->button;
   
