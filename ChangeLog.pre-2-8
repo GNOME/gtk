@@ -1,3 +1,9 @@
+Tue Sep 24 16:24:22 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/win32/gdkimage-win32.c gdk/x11/gdkimage-x11.c 
+	* gdk/linux-fb/gdkimage-fb.c (gdk_image_put/get_pixel): 
+	Add bounds-checking g_return_if_fail(). (Olexiy Avramchenko)
+
 Tue Sep 24 16:04:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdkprivate-x11.h gdkcolor-x11.c gdkvisual-x11.c
