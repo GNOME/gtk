@@ -1,7 +1,23 @@
+Wed May 21 15:53:14 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkprogress.c (gtk_progress_set_format_string,
+ 	gtk_progress_set_show_text): Always queue a resize ... 
+ 	we rely on the size-allocate to do the update, plus a 
+ 	different format can actually change our size requisition.
+ 	(#111052)
+ 
+	* gtk/gtkprogress.c (gtk_progress_changed): Track
+ 	::changed as well as ::value_changed, and queue a
+	resize on ::changed when necessary.
+ 
+ 	* gtk/gtkprogress.c (gtk_progress_set_adjustment): 
+ 	Call gtk_progress_changed() here to update or 
+ 	queue a resize as necessary.
+ 
 Wed May 21 14:09:52 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* gtk/gtkimcontextsimple.c: added composing rules of
-	Greek acceted letters, patch by Vasilis Vasaitis (#107507)
+	Greek accented letters, patch by Vasilis Vasaitis (#107507)
 
 Wed May 21 12:15:34 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
@@ -11,7 +27,7 @@ Wed May 21 12:15:34 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 Wed May 21 12:52:01 2003  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtkkeyhash.[ch] (_gtk_key_hash_looku): We need 
+	* gtk/gtkkeyhash.[ch] (_gtk_key_hash_lookup): We need 
 	to pass the unmasked state to gdk_keymap_translate_keyboard_state() 
 	to handle the case where a modifier not in the mask
 	(like Num_Lock) changes the key value, so replace

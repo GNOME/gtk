@@ -62,6 +62,8 @@ static void gtk_progress_size_allocate   (GtkWidget        *widget,
 static void gtk_progress_create_pixmap   (GtkProgress      *progress);
 static void gtk_progress_value_changed   (GtkAdjustment    *adjustment,
 					  GtkProgress      *progress);
+static void gtk_progress_changed         (GtkAdjustment    *adjustment,
+					  GtkProgress      *progress);
 
 
 static GtkWidgetClass *parent_class = NULL;
@@ -283,6 +285,9 @@ gtk_progress_destroy (GtkObject *object)
       g_signal_handlers_disconnect_by_func (progress->adjustment,
 					    gtk_progress_value_changed,
 					    progress);
+      g_signal_handlers_disconnect_by_func (progress->adjustment,
+					    gtk_progress_changed,
+					    progress);
       g_object_unref (progress->adjustment);
       progress->adjustment = NULL;
     }
@@ -366,6 +371,19 @@ gtk_progress_create_pixmap (GtkProgress *progress)
 						   -1);
       GTK_PROGRESS_GET_CLASS (progress)->paint (progress);
     }
+}
+
+static void
+gtk_progress_changed (GtkAdjustment *adjustment,
+		      GtkProgress   *progress)
+{
+  /* A change in the value of adjustment->upper can change
+   * the size request
+   */
+  if (progress->use_text_format && progress->show_text)
+    gtk_widget_queue_resize (progress);
+  else
+    GTK_PROGRESS_GET_CLASS (progress)->update (progress);
 }
 
 static void
@@ -504,6 +522,9 @@ gtk_progress_set_adjustment (GtkProgress   *progress,
       if (progress->adjustment)
         {
 	  g_signal_handlers_disconnect_by_func (progress->adjustment,
+						gtk_progress_changed,
+						progress);
+	  g_signal_handlers_disconnect_by_func (progress->adjustment,
 						gtk_progress_value_changed,
 						progress);
           g_object_unref (progress->adjustment);
@@ -513,10 +534,15 @@ gtk_progress_set_adjustment (GtkProgress   *progress,
         {
           g_object_ref (adjustment);
 	  gtk_object_sink (GTK_OBJECT (adjustment));
+          g_signal_connect (adjustment, "changed",
+			    G_CALLBACK (gtk_progress_changed),
+			    progress);
           g_signal_connect (adjustment, "value_changed",
 			    G_CALLBACK (gtk_progress_value_changed),
 			    progress);
         }
+
+      gtk_progress_changed (adjustment, progress);
     }
 }
 
@@ -622,8 +648,7 @@ gtk_progress_set_show_text (GtkProgress *progress,
     {
       progress->show_text = show_text;
 
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
-	gtk_widget_queue_resize (GTK_WIDGET (progress));
+      gtk_widget_queue_resize (GTK_WIDGET (progress));
 
       g_object_notify (G_OBJECT (progress), "show_text");
     }
@@ -680,8 +705,7 @@ gtk_progress_set_format_string (GtkProgress *progress,
   progress->format = g_strdup (format);
   g_free (old_format);
   
-  if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
-    gtk_widget_queue_resize (GTK_WIDGET (progress));
+  gtk_widget_queue_resize (GTK_WIDGET (progress));
 }
 
 gchar *
