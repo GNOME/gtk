@@ -1,3 +1,16 @@
+Fri Oct  4 17:13:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c: Improve checks on public entry points,
+	including, among other things checking whether drag
+	contexts passed in are source or dest. (Fixes
+	#76762, Alexey A. Malyshev)
+
+	* tests/testtext.c tests/testgtk.c tests/testdnd.c:
+	Fix uninstalled operation for new pixbuf changes.
+
+	* gtk/stock-icons/Makefile.am (pixbuf_csource): 
+	Fix makefile for uninstalled operation.
+
 Fri Oct  4 21:21:47 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_paint): remove unused

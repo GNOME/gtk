@@ -262,7 +262,7 @@ CLEANFILES = $(noinst_DATA)
 if CROSS_COMPILING
 pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
 else
-pixbuf_csource=GDK_PIXBUF_MODULEDIR=$(top_builddir)/gdk-pixbuf $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource
+pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$$topdir/gdk-pixbuf/gdk-pixbuf.loaders $$topdir/gdk-pixbuf/gdk-pixbuf-csource
 endif
 
 gtkstockpixbufs.h: @REBUILD_PNGS@ $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(IMAGES)

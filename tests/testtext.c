@@ -2528,19 +2528,13 @@ view_add_example_widgets (View *view)
     }
 }
 
-static gboolean
-file_exists (const char *filename)
-{
-  struct stat statbuf;
-
-  return stat (filename, &statbuf) == 0;
-}
 void
 test_init ()
 {
-  if (file_exists ("../gdk-pixbuf/libpixbufloader-pnm.la"))
+  if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
+		   G_FILE_TEST_EXISTS))
     {
-      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+      putenv ("GDK_PIXBUF_MODULE_FILE=../gdk-pixbuf/gdk-pixbuf.loaders");
       putenv ("GTK_IM_MODULE_FILE=../modules/input/gtk.immodules");
     }
 }

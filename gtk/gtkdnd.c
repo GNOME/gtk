@@ -616,8 +616,9 @@ gtk_drag_get_data (GtkWidget      *widget,
 {
   GtkWidget *selection_widget;
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (context != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (!context->is_source);
 
   selection_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
 
@@ -652,6 +653,9 @@ gtk_drag_get_source_widget (GdkDragContext *context)
 {
   GSList *tmp_list;
 
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+  g_return_val_if_fail (!context->is_source, NULL);
+  
   tmp_list = source_widgets;
   while (tmp_list)
     {
@@ -690,7 +694,8 @@ gtk_drag_finish (GdkDragContext *context,
 {
   GdkAtom target = GDK_NONE;
 
-  g_return_if_fail (context != NULL);
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (!context->is_source);
 
   if (success && del)
     {
@@ -782,6 +787,8 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 void 
 gtk_drag_highlight (GtkWidget  *widget)
 {
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
   gtk_signal_connect_after (GTK_OBJECT (widget), "expose_event",
 			    GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
 			    NULL);
@@ -800,8 +807,8 @@ gtk_drag_highlight (GtkWidget  *widget)
 void 
 gtk_drag_unhighlight (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
-
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
   gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
 				 GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
 				 NULL);
@@ -856,7 +863,7 @@ gtk_drag_dest_set   (GtkWidget            *widget,
 {
   GtkDragDestSite *site;
   
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   site = g_new (GtkDragDestSite, 1);
 
@@ -894,7 +901,8 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
 {
   GtkDragDestSite *site;
   
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (!proxy_window || GDK_IS_WINDOW (proxy_window));
 
   site = g_new (GtkDragDestSite, 1);
 
@@ -923,7 +931,7 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
 void 
 gtk_drag_dest_unset (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_object_set_data (GTK_OBJECT (widget), "gtk-drag-dest", NULL);
 }
@@ -941,6 +949,8 @@ GtkTargetList*
 gtk_drag_dest_get_target_list (GtkWidget *widget)
 {
   GtkDragDestSite *site;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
 
@@ -961,6 +971,8 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
                                GtkTargetList  *target_list)
 {
   GtkDragDestSite *site;
+  
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
   
@@ -1107,6 +1119,8 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GDK_NONE);
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
+  g_return_val_if_fail (!context->is_source, GDK_NONE);
+
 
   source_widget = gtk_drag_get_source_widget (context);
 
@@ -1795,7 +1809,7 @@ gtk_drag_begin (GtkWidget         *widget,
   GdkDragContext *context;
   GtkWidget *ipc_widget;
 
-  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
   g_return_val_if_fail (target_list != NULL, NULL);
 
@@ -1920,7 +1934,7 @@ gtk_drag_source_set (GtkWidget            *widget,
 {
   GtkDragSourceSite *site;
 
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
 
@@ -1976,7 +1990,7 @@ gtk_drag_source_unset (GtkWidget        *widget)
 {
   GtkDragSourceSite *site;
 
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
 
@@ -2037,7 +2051,7 @@ gtk_drag_source_set_icon (GtkWidget     *widget,
 {
   GtkDragSourceSite *site;
 
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
   g_return_if_fail (GDK_IS_PIXMAP (pixmap));
   g_return_if_fail (!mask || GDK_IS_PIXMAP (mask));
@@ -2074,7 +2088,7 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
 {
   GtkDragSourceSite *site;
 
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
@@ -2101,7 +2115,7 @@ gtk_drag_source_set_icon_stock (GtkWidget   *widget,
 {
   GtkDragSourceSite *site;
 
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (stock_id != NULL);
 
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
@@ -2120,9 +2134,6 @@ gtk_drag_set_icon_window (GdkDragContext *context,
 			  gboolean        destroy_on_release)
 {
   GtkDragSourceInfo *info;
-
-  g_return_if_fail (context != NULL);
-  g_return_if_fail (widget != NULL);
 
   info = gtk_drag_get_source_info (context, FALSE);
   gtk_drag_remove_icon (info);
@@ -2163,8 +2174,9 @@ gtk_drag_set_icon_widget (GdkDragContext    *context,
 			  gint               hot_x,
 			  gint               hot_y)
 {
-  g_return_if_fail (context != NULL);
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_drag_set_icon_window (context, widget, hot_x, hot_y, FALSE);
 }
@@ -2252,6 +2264,7 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
 			   gint            hot_y)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   
   set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y);
@@ -2274,6 +2287,7 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
 			  gint            hot_y)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
   g_return_if_fail (stock_id != NULL);
   
   set_icon_stock_pixbuf (context, stock_id, NULL, hot_x, hot_y);
@@ -2305,9 +2319,11 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
   GtkWidget *window;
   gint width, height;
       
-  g_return_if_fail (context != NULL);
-  g_return_if_fail (colormap != NULL);
-  g_return_if_fail (pixmap != NULL);
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  g_return_if_fail (GDK_IS_PIXMAP (pixmap));
+  g_return_if_fail (!mask || GDK_IS_PIXMAP (mask));
 
   gdk_window_get_size (pixmap, &width, &height);
 
@@ -2342,7 +2358,8 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
 void 
 gtk_drag_set_icon_default (GdkDragContext    *context)
 {
-  g_return_if_fail (context != NULL);
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
 
   if (!default_icon_pixmap)
     gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
@@ -2375,8 +2392,9 @@ gtk_drag_set_default_icon (GdkColormap   *colormap,
 			   gint           hot_x,
 			   gint           hot_y)
 {
-  g_return_if_fail (colormap != NULL);
-  g_return_if_fail (pixmap != NULL);
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  g_return_if_fail (GDK_IS_PIXMAP (pixmap));
+  g_return_if_fail (!mask || GDK_IS_PIXMAP (mask));
   
   if (default_icon_colormap)
     gdk_colormap_unref (default_icon_colormap);
@@ -3223,6 +3241,8 @@ gtk_drag_check_threshold (GtkWidget *widget,
 			  gint       current_y)
 {
   gint drag_threshold;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   g_object_get (gtk_widget_get_settings (widget),
 		"gtk-dnd-drag-threshold", &drag_threshold,
