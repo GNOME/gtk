@@ -178,8 +178,6 @@ AC_ARG_ENABLE(shm, [  --enable-shm            support shared memory if available
 		   echo $enable_shm, enable_shm="yes")
 AC_ARG_ENABLE(ansi, [  --enable-ansi           turn on strict ansi [default=no]],
 		    , enable_ansi=no)
-AC_ARG_ENABLE(xim, [  --enable-xim            support XIM [default=yes]],
-			, enable_xim="yes")
 AC_ARG_ENABLE(xkb, [  --enable-xkb            support XKB [default=maybe]],
 			, enable_xkb="maybe")
 AC_ARG_ENABLE(rebuilds, [  --disable-rebuilds      disable all source autogeneration rules],,enable_rebuilds=yes)
@@ -1151,11 +1149,20 @@ if test "x$gdktarget" = "xx11"; then
       ,
       $x_libs_for_checks)
 
-  # Check for XIM support.
+  # Generic X11R6 check needed for XIM support; we could
+  # probably use this to replace the above, but we'll
+  # leave the separate XConvertCase check for clarity
 
-  if test "x$enable_xim" = "xyes"; then
-    GTK_XIM_FLAGS="-DUSE_XIM"
+  have_x11r6=false
+  AC_CHECK_LIB(X11, XAddConnectionWatch,
+      have_x11r6=true,
+      ,
+      $x_libs_for_checks)
+
+  if $have_x11r6; then
+    AC_DEFINE(HAVE_X11R6,1,[Define if we have X11R6])
   fi
+  AM_CONDITIONAL(HAVE_X11R6, $have_x11r6)
 
   # Check for XKB support.
 
