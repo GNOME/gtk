@@ -101,11 +101,11 @@ void               gtk_tree_view_column_set_cell_data       (GtkTreeViewColumn  
 void               gtk_tree_view_column_set_visible         (GtkTreeViewColumn     *tree_column,
 							     gboolean               visible);
 gboolean           gtk_tree_view_column_get_visible         (GtkTreeViewColumn     *tree_column);
-void               gtk_tree_view_column_set_sizing        (GtkTreeViewColumn     *tree_column,
-							     GtkTreeViewColumnSizing  type);
-gint               gtk_tree_view_column_get_col_type        (GtkTreeViewColumn     *tree_column);
-gint               gtk_tree_view_column_get_size            (GtkTreeViewColumn     *tree_column);
-void               gtk_tree_view_column_set_width            (GtkTreeViewColumn     *tree_column,
+void               gtk_tree_view_column_set_sizing          (GtkTreeViewColumn     *tree_column,
+                                                             GtkTreeViewColumnSizing  type);
+gint               gtk_tree_view_column_get_sizing          (GtkTreeViewColumn     *tree_column);
+gint               gtk_tree_view_column_get_width           (GtkTreeViewColumn     *tree_column);
+void               gtk_tree_view_column_set_width           (GtkTreeViewColumn     *tree_column,
 							     gint                   size);
 void               gtk_tree_view_column_set_min_width       (GtkTreeViewColumn     *tree_column,
 							     gint                   min_width);
@@ -122,8 +122,9 @@ void               gtk_tree_view_column_clicked             (GtkTreeViewColumn  
 void               gtk_tree_view_column_set_title           (GtkTreeViewColumn     *tree_column,
 							     gchar                 *title);
 gchar             *gtk_tree_view_column_get_title           (GtkTreeViewColumn     *tree_column);
-void               gtk_tree_view_column_set_header_clickable   (GtkTreeViewColumn     *tree_column,
-							     gboolean               active);
+void               gtk_tree_view_column_set_clickable       (GtkTreeViewColumn     *tree_column,
+                                                             gboolean               active);
+gboolean           gtk_tree_view_column_get_clickable       (GtkTreeViewColumn     *tree_column);
 void               gtk_tree_view_column_set_widget          (GtkTreeViewColumn     *tree_column,
 							     GtkWidget             *widget);
 GtkWidget         *gtk_tree_view_column_get_widget          (GtkTreeViewColumn     *tree_column);

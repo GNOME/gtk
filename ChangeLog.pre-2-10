@@ -1,5 +1,44 @@
 2001-01-09  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_expose): don't draw if label->layout
+	is NULL due to a pending resize
+
+	* gtk/gtktreeview.c (gtk_tree_view_check_dirty): don't set the
+	column width to values less than 1
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_width): clamp
+	width to be between min/max width, and still set the width 
+	even if autosize is turned on, so the tree view can use this 
+	function in order to autosize.
+	(gtk_tree_view_column_init): set initial width to 1 not 0
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_request_buttons): use
+	setter function to modify column width, so we get notification
+	(gtk_tree_view_insert_iter_height): ditto
+	(gtk_tree_view_calc_size): ditto
+	(gtk_tree_view_check_dirty): ditto
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): Add
+	properties to change all the interesting attributes of the tree
+	view column.
+	(gtk_tree_view_column_set_header_clickable): rename set_clickable
+	(gtk_tree_view_column_get_clickable): add
+	(gtk_tree_view_column_set_cell_renderer): don't unset the current
+	attributes; assume a cell renderer with equivalent object
+	properties has been swapped in. Do g_object_notify().
+	(gtk_tree_view_column_set_visible): g_object_notify
+	(gtk_tree_view_column_get_sizing): rename from get_col_type
+	(gtk_tree_view_column_set_sizing): g_object_notify
+	(gtk_tree_view_column_set_width): add g_object_notify
+	(gtk_tree_view_column_set_min_width): ditto
+	(gtk_tree_view_column_set_max_width): ditto
+	(gtk_tree_view_column_set_title): ditto
+	(gtk_tree_view_column_set_clickable): ditto
+	(gtk_tree_view_column_set_widget): ditto
+	(gtk_tree_view_column_set_justification): ditto
+
+2001-01-09  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_check_dirty): handle case where
 	there are no rows in the model
 

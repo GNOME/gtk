@@ -711,9 +711,13 @@ gtk_label_expose (GtkWidget      *widget,
   g_return_val_if_fail (event != NULL, FALSE);
   
   label = GTK_LABEL (widget);
-  
+
+  /* if label->layout is NULL it means we got a set_text since
+   * our last size request, so a resize should be queued,
+   * which means a full expose is in the queue anyway.
+   */
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
-      label->label && (*label->label != '\0'))
+      label->layout && label->label && (*label->label != '\0'))
     {
       misc = GTK_MISC (widget);
       

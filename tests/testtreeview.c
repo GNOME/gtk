@@ -140,6 +140,28 @@ get_model_types (void)
 }
 
 static void
+col_clicked_cb (GtkTreeViewColumn *col, gpointer data)
+{
+  GtkWindow *win;
+
+  win = GTK_WINDOW (create_prop_editor (G_OBJECT (col)));
+
+  gtk_window_set_title (win, gtk_tree_view_column_get_title (col));
+}
+
+static void
+setup_column (GtkTreeViewColumn *col)
+{
+  g_signal_connect_data (G_OBJECT (col),
+                         "clicked",
+                         (GCallback) col_clicked_cb,
+                         NULL,
+                         NULL,
+                         FALSE,
+                         FALSE);
+}
+
+static void
 set_columns_type (GtkTreeView *tree_view, ColumnsType type)
 {
   GtkTreeViewColumn *col;
@@ -165,6 +187,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       rend,
                                                       "text", 1,
                                                       NULL);
+      setup_column (col);
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
@@ -178,6 +201,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       "text", 0,
                                                       "pixbuf", 2,
                                                       NULL);
+
+      setup_column (col);
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
@@ -193,6 +218,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
                                                       rend,
                                                       "text", 0,
                                                       NULL);
+
+      setup_column (col);
       
       gtk_tree_view_insert_column (GTK_TREE_VIEW (tree_view), col, 0);
       
@@ -941,18 +968,44 @@ get_param_specs (GObject *object,
   *n_specs = G_OBJECT_GET_CLASS (object)->n_property_specs;
 }
 
+typedef struct
+{
+  gpointer instance;
+  guint id;
+} DisconnectData;
+
+static void
+disconnect_func (gpointer data)
+{
+  DisconnectData *dd = data;
+  
+  g_signal_handler_disconnect (dd->instance, dd->id);
+  g_free (dd);
+}
+
 static void
 g_object_connect_property (GObject *object,
                            const gchar *prop_name,
                            GtkSignalFunc func,
-                           gpointer data)
+                           gpointer data,
+                           GObject *alive_object)
 {
   gchar *with_detail = g_strconcat ("notify::", prop_name, NULL);
-  
-  g_signal_connect_data (object, with_detail,
-                         func, data,
-                         NULL, FALSE, FALSE);
+  DisconnectData *dd;
 
+  dd = g_new (DisconnectData, 1);
+  
+  dd->id = g_signal_connect_data (object, with_detail,
+                                  func, data,
+                                  NULL, FALSE, FALSE);
+
+  dd->instance = object;
+  
+  g_object_set_data_full (G_OBJECT (alive_object),
+                          "alive-object",
+                          dd,
+                          disconnect_func);
+  
   g_free (with_detail);
 }
 
@@ -1188,7 +1241,7 @@ create_prop_editor (GObject *object)
 
           g_object_connect_property (object, spec->name,
                                      GTK_SIGNAL_FUNC (int_changed),
-                                     adj);
+                                     adj, G_OBJECT (adj));
 
           if (can_modify)
             connect_controller (G_OBJECT (adj), "value_changed",
@@ -1208,7 +1261,7 @@ create_prop_editor (GObject *object)
 
           g_object_connect_property (object, spec->name,
                                      GTK_SIGNAL_FUNC (string_changed),
-                                     prop_edit);
+                                     prop_edit, G_OBJECT (prop_edit));
 
           if (can_modify)
             connect_controller (G_OBJECT (prop_edit), "changed",
@@ -1228,7 +1281,7 @@ create_prop_editor (GObject *object)
 
           g_object_connect_property (object, spec->name,
                                      GTK_SIGNAL_FUNC (bool_changed),
-                                     prop_edit);
+                                     prop_edit, G_OBJECT (prop_edit));
 
           if (can_modify)
             connect_controller (G_OBJECT (prop_edit), "toggled",
@@ -1275,7 +1328,7 @@ create_prop_editor (GObject *object)
             
               g_object_connect_property (object, spec->name,
                                          GTK_SIGNAL_FUNC (enum_changed),
-                                         prop_edit);
+                                         prop_edit, G_OBJECT (prop_edit));
             
               if (can_modify)
                 connect_controller (G_OBJECT (prop_edit), "changed",

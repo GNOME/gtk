@@ -520,7 +520,8 @@ gtk_tree_view_size_request_buttons (GtkTreeView *tree_view)
           
           gtk_widget_size_request (column->button, &requisition);
           
-          column->width = MAX (column->width, requisition.width);
+          gtk_tree_view_column_set_width (column,
+                                          MAX (column->width, requisition.width));
           tree_view->priv->header_height = MAX (tree_view->priv->header_height, requisition.height);
         }
     }
@@ -2215,9 +2216,11 @@ gtk_tree_view_insert_iter_height (GtkTreeView *tree_view,
       max_height = MAX (max_height, TREE_VIEW_VERTICAL_SEPARATOR + height);
 
       if (first == TRUE && TREE_VIEW_DRAW_EXPANDERS (tree_view))
-	column->width = MAX (column->width, depth * tree_view->priv->tab_offset + width);
+	gtk_tree_view_column_set_width (column,
+                                        MAX (column->width, depth * tree_view->priv->tab_offset + width));
       else
-	column->width = MAX (column->width, width);
+        gtk_tree_view_column_set_width (column,
+                                        MAX (column->width, width));
 
       first = FALSE;
     }
@@ -2311,9 +2314,10 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
 	    continue;
 
 	  if (i == 0 && TREE_VIEW_DRAW_EXPANDERS (tree_view))
-	    column->width = MAX (column->width, depth * tree_view->priv->tab_offset + width);
+            gtk_tree_view_column_set_width (column,
+                                            MAX (column->width, depth * tree_view->priv->tab_offset + width));
 	  else
-	    column->width = MAX (column->width, width);
+            gtk_tree_view_column_set_width (column, MAX (column->width, width));
 	}
       _gtk_rbtree_node_set_height (tree, temp, max_height);
       if (temp->children != NULL &&
@@ -2445,7 +2449,7 @@ gtk_tree_view_check_dirty (GtkTreeView *tree_view)
 	  dirty = TRUE;
 	  if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
 	    {
-	      column->width = column->button->requisition.width;
+              gtk_tree_view_column_set_width (column, MAX (column->button->requisition.width, 1));
 	    }
 	}
     }
@@ -3279,9 +3283,6 @@ gtk_tree_view_columns_autosize (GtkTreeView *tree_view)
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 }
 
-/* FIXME let's rename this to be "interactive" or something,
- * "active" is confusing since it also is a widget state
- */
 /**
  * gtk_tree_view_set_headers_clickable:
  * @tree_view: A #GtkTreeView.
@@ -3300,7 +3301,7 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
   g_return_if_fail (tree_view->priv->model != NULL);
 
   for (list = tree_view->priv->columns; list; list = list->next)
-    gtk_tree_view_column_set_header_clickable (GTK_TREE_VIEW_COLUMN (list->data), setting);
+    gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (list->data), setting);
 }
 
 /**
