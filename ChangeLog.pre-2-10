@@ -1,3 +1,9 @@
+2002-07-16  Federico Mena Quintero  <federico@ximian.com>
+
+	* gdk/gdkpixbuf-drawable.c (rgb565lsb): Fixed the LSB -> MSB case.
+	Fixes #79463.
+	(rgb565msb): Fix the MSB -> MSB case. Fixes #79190.
+
 Fri Apr 19 16:30:09 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeprivate.h, gtk/gtktreeview.c: rename
