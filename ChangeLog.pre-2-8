@@ -1,3 +1,10 @@
+2000-10-04  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkstock.h, gtk/gtkstock.c, gtk/gtkiconfactory.h,
+	gtk/gtkiconfactory.c: Fix copyrights	
+
+	* demos/testpixbuf.c: add inline pixbuf test
+	
 Mon Sep 25 15:05:17 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.h gdk/x11/gdkwindow-x11.c (gdk_window_iconify):
