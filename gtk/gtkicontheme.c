@@ -1331,7 +1331,7 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 {
   GList *l, *d;
   GHashTable *sizes;
-  gint *result;
+  gint *result, *r;
   guint suffix;
   
   GtkIconThemePrivate *priv;
@@ -1362,9 +1362,9 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 	}
     }
 
-  result = g_new0 (gint, g_hash_table_size (sizes) + 1);
+  r = result = g_new0 (gint, g_hash_table_size (sizes) + 1);
 
-  g_hash_table_foreach (sizes, add_size, &result);
+  g_hash_table_foreach (sizes, add_size, &r);
   g_hash_table_destroy (sizes);
   
   return result;

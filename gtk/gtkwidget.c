@@ -5041,7 +5041,8 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * @widget: a #GtkWidget
  * @stock_id: a stock ID
  * @size: a stock size. A size of (GtkIconSize)-1 means render at 
-      the size of the source and don't scale.
+ *     the size of the source and don't scale (if there are multiple 
+ *     source sizes, GTK+ picks one of the available sizes).
  * @detail: render detail to pass to theme engine
  * 
  * A convenience function that uses the theme engine and RC file

@@ -1649,6 +1649,7 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
   GtkIconTheme *icon_theme;
   GtkSettings *settings;
   gint width, height, pixel_size;
+  gint *sizes, *s, dist;
   GError *error = NULL;
   
   if (widget && gtk_widget_has_screen (widget))
@@ -1667,8 +1668,45 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 
   if (!gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
     {
-      g_warning ("Invalid icon size %d\n", size);
-      width = height = 24;
+      if (size == -1)
+	{
+	  /* Find an available size close to 48 
+	   */
+	  sizes = gtk_icon_theme_get_icon_sizes (icon_theme, icon_source->source.icon_name);
+	  dist = 1000;
+	  width = height = 48;
+	  for (s = sizes; *s; s++)
+	    {
+	      if (*s == -1)
+		{
+		  width = height = 48;
+		  break;
+		}
+	      if (*s < 48)
+		{
+		  if (48 - *s < dist)
+		    {
+		      width = height = *s;
+		      dist = 48 - *s;
+		    }
+		}
+	      else 
+		{
+		  if (*s - 48 < dist)
+		    {
+		      width = height = *s;
+		      dist = *s - 48;
+		    }
+		}
+	    }
+	  
+	  g_free (sizes);
+	}
+      else
+	{
+	  g_warning ("Invalid icon size %d\n", size);
+	  width = height = 24;
+	}
     }
 
   pixel_size = MIN (width, height);

@@ -1,3 +1,14 @@
+<<<<<<< ChangeLog
+2004-08-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_render_icon): Doc update.
+
+	* gtk/gtkiconfactory.c (render_icon_name_pixbuf): When the size is -1,
+	use the available size closest to 48.  (#150147)
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_get_icon_sizes): Actually return
+	a pointer to the beginning of the sizes array, not the end.
+
 2004-08-16  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtksequence.c (_gtk_sequence_set): Fix C99ism.
@@ -8,7 +19,6 @@
 
 Mon Aug 16 01:35:25 2004  Matthias Clasen  <maclas@gmx.de>
 
-	Fix #150125:
 	
 	* gtk/gtkcombobox.[hc]: Add a ::focus-on-click property and
 	change the default behaviour to focus on click.
