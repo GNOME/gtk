@@ -182,6 +182,14 @@ typedef enum
   GTK_JUSTIFY_FILL
 } GtkJustification;
 
+/* list selection modes */
+typedef enum
+{
+  GTK_SELECTION_SINGLE,
+  GTK_SELECTION_BROWSE,
+  GTK_SELECTION_MULTIPLE,
+  GTK_SELECTION_EXTENDED
+} GtkSelectionMode;
 
 #ifdef __cplusplus
 }

@@ -20,6 +20,7 @@
 
 
 #include <gdk/gdk.h>
+#include <gtk/gtkenums.h>
 #include <gtk/gtkcontainer.h>
 
 
@@ -35,14 +36,6 @@ extern "C" {
 
 typedef struct _GtkList       GtkList;
 typedef struct _GtkListClass  GtkListClass;
-
-typedef enum
-{
-  GTK_SELECTION_SINGLE,
-  GTK_SELECTION_BROWSE,
-  GTK_SELECTION_MULTIPLE,
-  GTK_SELECTION_EXTENDED
-} GtkSelectionMode;
 
 struct _GtkList
 {
