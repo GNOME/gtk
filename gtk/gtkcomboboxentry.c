@@ -128,6 +128,8 @@ gtk_combo_box_entry_init (GtkComboBoxEntry *entry_box)
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (entry_box),
                               entry_box->priv->text_renderer, TRUE);
 
+  gtk_combo_box_set_active_item (GTK_COMBO_BOX (entry_box), -1);
+
   g_signal_connect (entry_box->priv->entry, "changed",
                     G_CALLBACK (gtk_combo_box_entry_contents_changed),
                     entry_box);
@@ -188,9 +190,7 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
                                    gtk_combo_box_entry_contents_changed,
                                    combo_box);
 
-  if (index < 0)
-    gtk_entry_set_text (GTK_ENTRY (entry_box->priv->entry), "");
-  else
+  if (index >= 0)
     {
       gchar *str = NULL;
       GtkTreeIter iter;

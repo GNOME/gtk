@@ -1,3 +1,14 @@
+Wed Oct 15 22:04:59 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_get_active),
+	(gtk_combo_box_set_active): mention in the docs that -1 is a valid
+	value and what it means.
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_init): set the active
+	item to -1 (default),
+	(gtk_combo_box_entry_active_changed): do nothing when the index is
+	< 0.
+
 Tue Oct 14 16:10:21 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_active_iter): New function

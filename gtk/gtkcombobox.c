@@ -2316,9 +2316,11 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
  * gtk_combo_box_get_active:
  * @combo_box: A #GtkComboBox.
  *
- * Returns the index of the currently active item.
+ * Returns the index of the currently active item, or -1 if there's no
+ * active item.
  *
- * Return value: An integer which is the index of the currently active item.
+ * Return value: An integer which is the index of the currently active item, or
+ * -1 if there's no active item.
  *
  * Since: 2.4
  */
@@ -2333,7 +2335,8 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
 /**
  * gtk_combo_box_set_active:
  * @combo_box: A #GtkComboBox.
- * @index: An index in the model passed during construction.
+ * @index: An index in the model passed during construction, or -1 to have
+ * no active item.
  *
  * Sets the active item of @combo_box to be the item at @index.
  *
