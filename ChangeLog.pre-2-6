@@ -1,3 +1,10 @@
+Thu Jul 17 16:11:21 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_rows_reordered): stop editing
+	if needed. (Fixes #115869, reported by Michael Natterer).
+
 2003-07-15  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkcursor-x11.c (gdk_display_get_maximal_cursor_size): Fight against gtk-doc stupidity.

@@ -6529,6 +6529,9 @@ gtk_tree_view_rows_reordered (GtkTreeModel *model,
   if (tree == NULL)
     return;
 
+  if (tree_view->priv->edited_column)
+    gtk_tree_view_stop_editing (tree_view, TRUE);
+
   /* we need to be unprelighted */
   ensure_unprelighted (tree_view);
 
