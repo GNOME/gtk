@@ -3649,6 +3649,7 @@ create_notebook ()
       gtk_box_pack_start (GTK_BOX (box1), notebook, TRUE, TRUE, 0);
       gtk_container_border_width (GTK_CONTAINER (notebook), 10);
 
+      gtk_widget_realize (notebook);
       book_open = gdk_pixmap_create_from_xpm_d (notebook->window,
 						&book_open_mask, 
 						&transparent, 
