@@ -1,3 +1,16 @@
+Wed Apr  8 00:00:48 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtklabel.c (gtk_label_expose): don't take '\n' into account for
+	size computation (Damon Chaplin).
+
+	* gtk/gtkvscale.c (gtk_vscale_draw_value): adjusted static snprintf()
+	buffer size to 32 characters (Damon Chaplin).
+	* gtk/gtkhscale.c (gtk_hscale_draw_value): likewise.
+
+	* gtk/gtkmain.c (gtk_main_iteration_do): gdk_flush() the X-queue if
+ 	iteration_done==TRUE since we will most likely not get invoked again
+	(Marius Vollmer).
+
 Mon Apr  6 23:48:29 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwindow.c (gtk_window_realize): Set the

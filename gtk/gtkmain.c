@@ -519,11 +519,19 @@ gtk_main_iteration_do (gboolean blocking)
   if (current_timeouts)
     {
       gtk_handle_current_timeouts( gdk_time_get());
+
+      if (iteration_done)
+	gdk_flush ();
+
       return iteration_done;
     }
   if (current_idles)
     {
       gtk_handle_current_idles ();
+
+      if (iteration_done)
+	gdk_flush ();
+
       return iteration_done;
     }
   
@@ -737,6 +745,9 @@ event_handling_done:
   /* Handle timeout functions that may have expired.
    */
   gtk_handle_timeouts ();
+  
+  if (iteration_done)
+    gdk_flush ();
   
   return iteration_done;
 }

@@ -264,8 +264,9 @@ gtk_label_size_request (GtkWidget      *widget,
     {
       if (row->next)
   	  width = MAX (width,
-                       gdk_text_width (GTK_WIDGET (label)->style->font, row->data,
-                                       (gchar*) row->next->data - (gchar*) row->data));
+                       gdk_text_width (GTK_WIDGET (label)->style->font,
+				       row->data,
+                                       (gchar*) row->next->data - (gchar*) row->data) - 1);
       else
         width = MAX (width, gdk_string_width (GTK_WIDGET (label)->style->font, row->data));
       row = row->next;
@@ -322,7 +323,7 @@ gtk_label_expose (GtkWidget      *widget,
       row = label->row;
       while (row && row->next)
 	{
-	  len = (gchar*) row->next->data - (gchar*) row->data;
+	  len = (gchar*) row->next->data - (gchar*) row->data - 1;
 	  offset = 0;
 
 	  if (label->jtype == GTK_JUSTIFY_CENTER)

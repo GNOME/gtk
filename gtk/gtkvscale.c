@@ -334,7 +334,7 @@ static void
 gtk_vscale_draw_value (GtkScale *scale)
 {
   GtkStateType state_type;
-  gchar buffer[16];
+  gchar buffer[32];
   gint text_width;
   gint width, height;
   gint x, y;
