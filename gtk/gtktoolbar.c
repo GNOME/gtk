@@ -2193,7 +2193,7 @@ gtk_toolbar_set_child_property (GtkContainer *container,
       break;
       
     case CHILD_PROP_EXPAND:
-      gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (child), g_value_get_boolean (value));
+      gtk_tool_item_set_expand (GTK_TOOL_ITEM (child), g_value_get_boolean (value));
       break;
       
     default:
