@@ -46,6 +46,7 @@ typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
+typedef struct _GdkClientFilter	       GdkClientFilter;
 typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
 typedef struct _GdkRegionPrivate       GdkRegionPrivate;
 
@@ -193,6 +194,12 @@ struct _GdkEventFilter {
   gpointer data;
 };
 
+struct _GdkClientFilter {
+  GdkAtom       type;
+  GdkFilterFunc function;
+  gpointer      data;
+};
+
 #ifdef USE_XIM
 
 struct _GdkICPrivate
@@ -228,6 +235,7 @@ typedef enum {
 
 void gdk_window_init (void);
 void gdk_visual_init (void);
+void gdk_dnd_init    (void);
 
 void gdk_image_init  (void);
 void gdk_image_exit (void);

@@ -40,8 +40,9 @@ GdkEvent *gdk_event_get	 (void);
 GdkEvent *gdk_event_get_graphics_expose (GdkWindow *window);
 void gdk_event_put	 (GdkEvent     *event);
 
-GdkEvent *gdk_event_copy (GdkEvent *event);
-void	  gdk_event_free (GdkEvent *event);
+GdkEvent *gdk_event_copy     (GdkEvent *event);
+void	  gdk_event_free     (GdkEvent *event);
+guint32   gdk_event_get_time (GdkEvent *event);
 
 void gdk_set_show_events (gint	show_events);
 void gdk_set_use_xshm	 (gint	use_xshm);
@@ -196,51 +197,61 @@ void gdk_window_shape_combine_mask (GdkWindow	    *window,
 				    gint	     offset_x,
 				    gint	     offset_y);
 
-/* 
- * Drag & Drop
- * Algorithm (drop source):
- * A window being dragged will be sent a GDK_DRAG_BEGIN message.
- * It will then do gdk_dnd_drag_addwindow() for any other windows that are to be
- * dragged.
- * When we get a DROP_ENTER incoming, we send it on to the window in question.
- * That window needs to use gdk_dnd_drop_enter_reply() to indicate the state of
- * things (it must call that even if it's not going to accept the drop)
- *
- * These two turn on/off drag or drop, and if enabling it also
- * sets the list of types supported. The list of types passed in
- * should be in order of decreasing preference.
+/*
+ * The following function adds a global filter for all client
+ * messages of type message_type
  */
-void gdk_window_dnd_drag_set (GdkWindow	 *window,
-			      guint8	  drag_enable,
-			      gchar	**typelist,
-			      guint	  numtypes);
+void gdk_add_client_message_filter (GdkAtom       message_type,
+				    GdkFilterFunc func,
+				    gpointer      data);
 
-/* 
- *XXX todo: add a GDK_DROP_ENTER which can look at actual data
- */
-void gdk_window_dnd_drop_set (GdkWindow	 *window,
-			      guint8	  drop_enable,
-			      gchar	**typelist,
-			      guint	  numtypes,
-			      guint8	  destructive_op);
+/* Drag and Drop */
 
-/* 
- * This is used by the GDK_DRAG_BEGIN handler. An example of usage would be a
- * file manager where multiple icons were selected and the drag began.
- * The icon that the drag actually began on would gdk_dnd_drag_addwindow
- * for all the other icons that were being dragged... 
- */
-void gdk_dnd_drag_addwindow  (GdkWindow	 *window);
-void gdk_window_dnd_data_set (GdkWindow	 *window,
-			      GdkEvent	 *event,
-			      gpointer	  data,
-			      gulong	  data_numbytes);
-void gdk_dnd_set_drag_cursors(GdkCursor *default_cursor,
-			      GdkCursor *goahead_cursor);
-void gdk_dnd_set_drag_shape(GdkWindow *default_pixmapwin,
-			    GdkPoint *default_hotspot,
-			    GdkWindow *goahead_pixmapwin,
-			    GdkPoint *goahead_hotspot);
+GdkDragContext * gdk_drag_context_new        (void);
+void             gdk_drag_context_ref        (GdkDragContext *context);
+void             gdk_drag_context_unref      (GdkDragContext *context);
+
+/* Destination side */
+
+void             gdk_drag_status        (GdkDragContext   *context,
+				         GdkDragAction     action,
+					 guint32           time);
+void             gdk_drop_reply         (GdkDragContext   *context,
+					 gboolean          ok,
+					 guint32           time);
+void             gdk_drop_finish        (GdkDragContext   *context,
+					 gboolean          success,
+					 guint32           time);
+GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
+
+/* Source side */
+
+GdkDragContext * gdk_drag_begin      (GdkWindow      *window,
+				      GList          *targets,
+				      GdkDragAction   actions);
+gboolean         gdk_drag_get_protocol (guint32          xid,
+					GdkDragProtocol *protocol);
+void             gdk_drag_find_window (GdkDragContext   *context,
+				       GdkWindow       *drag_window,
+			 	       gint             x_root,
+				       gint             y_root,
+				       GdkWindow      **dest_window,
+				       GdkDragProtocol *protocol);
+gboolean        gdk_drag_motion      (GdkDragContext *context,
+				      GdkWindow      *dest_window,
+				      GdkDragProtocol protocol,
+				      gint            x_root, 
+				      gint            y_root,
+				      GdkDragAction   action,
+				      guint32         time);
+void            gdk_drag_drop        (GdkDragContext *context,
+				      guint32         time);
+void            gdk_drag_abort       (GdkDragContext *context,
+				      guint32         time);
+
+GdkAtom       gdk_drag_get_selection (GdkDragContext *context);
+
+/* GdkWindow */
 
 void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   x,
@@ -308,6 +319,8 @@ void	      gdk_window_set_decorations (GdkWindow	  *window,
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
 GList *       gdk_window_get_toplevels   (void);
+
+void          gdk_window_register_dnd    (GdkWindow       *window);
 
 void          gdk_drawable_set_data      (GdkDrawable     *drawable,
 					  const gchar     *key,
@@ -477,14 +490,24 @@ gboolean gdk_colormap_alloc_color (GdkColormap *colormap,
 void     gdk_colormap_free_colors (GdkColormap *colormap,
 				   GdkColor    *colors,
 				   gint         ncolors);
-     
-void gdk_colors_store	 (GdkColormap	*colormap,
-			  GdkColor	*colors,
-			  gint		 ncolors);
 
+GdkVisual *gdk_colormap_get_visual (GdkColormap *colormap);
+     
 GdkColor *gdk_color_copy (GdkColor *color);
 void      gdk_color_free (GdkColor *color);
 
+gint gdk_color_parse	 (const gchar	*spec,
+			  GdkColor	*color);
+guint gdk_color_hash     (const GdkColor *colora,
+			  const GdkColor *colorb);
+gint gdk_color_equal	 (const GdkColor *colora,
+			  const GdkColor *colorb);
+
+
+/* The following functions are deprecated */
+void gdk_colors_store	 (GdkColormap	*colormap,
+			  GdkColor	*colors,
+			  gint		 ncolors);
 gint gdk_colors_alloc	 (GdkColormap	*colormap,
 			  gint		 contiguous,
 			  gulong	*planes,
@@ -499,16 +522,10 @@ gint gdk_color_white	 (GdkColormap	*colormap,
 			  GdkColor	*color);
 gint gdk_color_black	 (GdkColormap	*colormap,
 			  GdkColor	*color);
-gint gdk_color_parse	 (const gchar	*spec,
-			  GdkColor	*color);
 gint gdk_color_alloc	 (GdkColormap	*colormap,
 			  GdkColor	*color);
 gint gdk_color_change	 (GdkColormap	*colormap,
 			  GdkColor	*color);
-guint gdk_color_hash     (const GdkColor *colora,
-			  const GdkColor *colorb);
-gint gdk_color_equal	 (const GdkColor *colora,
-			  const GdkColor *colorb);
 
 
 /* Fonts

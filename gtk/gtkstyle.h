@@ -28,7 +28,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-
 typedef struct _GtkStyle       GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;
 

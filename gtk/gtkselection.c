@@ -70,7 +70,6 @@ typedef struct _GtkSelectionInfo GtkSelectionInfo;
 typedef struct _GtkIncrConversion GtkIncrConversion;
 typedef struct _GtkIncrInfo GtkIncrInfo;
 typedef struct _GtkRetrievalInfo GtkRetrievalInfo;
-typedef struct _GtkSelectionHandler GtkSelectionHandler;
 
 struct _GtkSelectionInfo
 {
@@ -117,16 +116,7 @@ struct _GtkRetrievalInfo
   guchar   *buffer;		/* Buffer in which to accumulate results */
   gint	   offset;		/* Current offset in buffer, -1 indicates
 				   not yet started */
-};
-
-struct _GtkSelectionHandler
-{
-  GdkAtom selection;		/* selection thats handled */
-  GdkAtom target;		/* target thats handled */
-  GtkSelectionFunction function; /* callback function */
-  GtkCallbackMarshal marshal;	 /* Marshalling function */
-  gpointer data;		 /* callback data */
-  GtkDestroyNotify destroy;	 /* called when callback is removed */
+  guint32 notify_time;		/* Timestamp from SelectionNotify */
 };
 
 /* Local Functions */
@@ -135,9 +125,11 @@ static gint gtk_selection_incr_timeout		 (GtkIncrInfo *info);
 static gint gtk_selection_retrieval_timeout	 (GtkRetrievalInfo *info);
 static void gtk_selection_retrieval_report	 (GtkRetrievalInfo *info,
 						  GdkAtom type, gint format, 
-						  guchar *buffer, gint length);
+						  guchar *buffer, gint length,
+						  guint32 time);
 static void gtk_selection_invoke_handler	 (GtkWidget	   *widget,
-						  GtkSelectionData *data);
+						  GtkSelectionData *data,
+						  guint             time);
 static void gtk_selection_default_handler	 (GtkWidget	  *widget,
 						  GtkSelectionData *data);
 
@@ -149,6 +141,136 @@ static GList *current_selections = NULL;
 
 static GdkAtom gtk_selection_atoms[LAST_ATOM];
 static const char *gtk_selection_handler_key = "gtk-selection-handlers";
+
+/****************
+ * Target Lists *
+ ****************/
+
+/*
+ * Target lists
+ */
+
+GtkTargetList *
+gtk_target_list_new (GtkTargetEntry  *targets,
+		     guint            ntargets)
+{
+  GtkTargetList *result = g_new (GtkTargetList, 1);
+  result->list = NULL;
+  result->ref_count = 1;
+
+  if (targets)
+    gtk_target_list_add_table (result, targets, ntargets);
+  
+  return result;
+}
+
+void               
+gtk_target_list_ref (GtkTargetList *list)
+{
+  list->ref_count++;
+}
+
+void               
+gtk_target_list_unref (GtkTargetList *list)
+{
+  list->ref_count--;
+  if (list->ref_count == 0)
+    {
+      GList *tmp_list = list->list;
+      while (tmp_list)
+	{
+	  GtkTargetEntry *entry = tmp_list->data;
+	  g_free (entry);
+
+	  tmp_list = tmp_list->next;
+	}
+    }
+}
+
+void 
+gtk_target_list_add (GtkTargetList *list,
+		     GdkAtom            target,
+		     guint              flags,
+		     guint              info)
+{
+  GtkTargetPair *pair;
+
+  g_return_if_fail (list != NULL);
+  
+  pair = g_new (GtkTargetPair, 1);
+  pair->target = target;
+  pair->flags = flags;
+  pair->info = info;
+
+  list->list = g_list_append (list->list, pair);
+}
+
+void               
+gtk_target_list_add_table (GtkTargetList   *list,
+			   GtkTargetEntry  *targets,
+			   guint            ntargets)
+{
+  gint i;
+
+  for (i=ntargets-1; i >= 0; i--)
+    {
+      GtkTargetPair *pair = g_new (GtkTargetPair, 1);
+      pair->target = gdk_atom_intern (targets[i].target, FALSE);
+      pair->flags = targets[i].flags;
+      pair->info = targets[i].info;
+      
+      list->list = g_list_prepend (list->list, pair);
+    }
+}
+
+void 
+gtk_target_list_remove (GtkTargetList *list,
+			GdkAtom            target)
+{
+  GList *tmp_list;
+
+  g_return_if_fail (list != NULL);
+
+  tmp_list = list->list;
+  while (tmp_list)
+    {
+      GtkTargetPair *pair = tmp_list->data;
+      
+      if (pair->target == target)
+	{
+	  g_free (pair);
+
+	  list->list = g_list_remove (list->list, tmp_list);
+	  g_list_free_1 (tmp_list);
+
+	  return;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
+}
+
+gboolean
+gtk_target_list_find (GtkTargetList *list,
+		      GdkAtom        target,
+		      guint         *info)
+{
+  GList *tmp_list = list->list;
+  while (tmp_list)
+    {
+      GtkTargetPair *pair = tmp_list->data;
+
+      if (pair->target == target)
+	{
+	  *info = pair->info;
+	  return TRUE;
+	}
+      tmp_list = tmp_list->next;
+    }
+
+  return FALSE;
+}
+
 
 /*************************************************************
  * gtk_selection_owner_set:
@@ -252,95 +374,105 @@ gtk_selection_owner_set (GtkWidget *widget,
 }
 
 /*************************************************************
- * gtk_selection_add_handler_full:
- *     Add a handler for a specified selection/target pair
+ * gtk_selection_add_target
+ *     Add specified target to list of supported targets
  *
  *   arguments:
- *     widget:	   The widget the handler applies to
+ *     widget:	   The widget for which this target applies
  *     selection:
  *     target:
- *     format:	   Format in which this handler will return data
- *     function:   Callback function (can be NULL)
- *     marshal:	   Callback marshal function
- *     data:	   User data for callback
- *     destroy:	   Called when handler removed
+ *     info:       guint to pass to to the selection_get signal 
  *
  *   results:
  *************************************************************/
 
-void
-gtk_selection_add_handler (GtkWidget	       *widget, 
-			   GdkAtom		selection,
-			   GdkAtom		target,
-			   GtkSelectionFunction function,
-			   gpointer		data)
+typedef struct _GtkSelectionTargetList GtkSelectionTargetList;
+
+struct _GtkSelectionTargetList {
+  GdkAtom selection;
+  GtkTargetList *list;
+};
+
+static GtkTargetList *
+gtk_selection_target_list_get (GtkWidget    *widget,
+			       GdkAtom       selection)
 {
-  gtk_selection_add_handler_full (widget, selection, target, function,
-				  NULL, data, NULL);
+  GtkSelectionTargetList *sellist;
+  GList *tmp_list;
+  GList *lists;
+
+  lists = gtk_object_get_data (GTK_OBJECT (widget), gtk_selection_handler_key);
+  
+  tmp_list = lists;
+  while (tmp_list)
+    {
+      sellist = tmp_list->data;
+      if (sellist->selection == selection)
+	return sellist->list;
+      tmp_list = tmp_list->next;
+    }
+
+  sellist = g_new (GtkSelectionTargetList, 1);
+  sellist->selection = selection;
+  sellist->list = gtk_target_list_new (NULL, 0);
+
+  lists = g_list_prepend (lists, sellist);
+  gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key, lists);
+
+  return sellist->list;
+}
+
+static void
+gtk_selection_target_list_remove (GtkWidget    *widget)
+{
+  GtkSelectionTargetList *sellist;
+  GList *tmp_list;
+  GList *lists;
+
+  lists = gtk_object_get_data (GTK_OBJECT (widget), gtk_selection_handler_key);
+  
+  tmp_list = lists;
+  while (tmp_list)
+    {
+      sellist = tmp_list->data;
+
+      gtk_target_list_unref (sellist->list);
+
+      g_free (sellist);
+      tmp_list = tmp_list->next;
+    }
+
+  g_list_free (lists);
+  gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key, NULL);
 }
 
 void 
-gtk_selection_add_handler_full (GtkWidget	    *widget, 
-				GdkAtom		     selection,
-				GdkAtom		     target,
-				GtkSelectionFunction function,
-				GtkCallbackMarshal   marshal,
-				gpointer	     data,
-				GtkDestroyNotify     destroy)
+gtk_selection_add_target (GtkWidget	    *widget, 
+			  GdkAtom	     selection,
+			  GdkAtom	     target,
+			  guint              info)
 {
-  GList *selection_handlers;
-  GList *tmp_list;
-  GtkSelectionHandler *handler;
+  GtkTargetList *list;
+
+  g_return_if_fail (widget != NULL);
+
+  list = gtk_selection_target_list_get (widget, selection);
+  gtk_target_list_add (list, target, 0, info);
+}
+
+void 
+gtk_selection_add_targets (GtkWidget           *widget, 
+			   GdkAtom              selection,
+			   GtkTargetEntry      *targets,
+			   guint                ntargets)
+{
+  GtkTargetList *list;
   
   g_return_if_fail (widget != NULL);
-  if (initialize)
-    gtk_selection_init ();
+  g_return_if_fail (targets != NULL);
   
-  selection_handlers = gtk_object_get_data (GTK_OBJECT (widget),
-					    gtk_selection_handler_key);
-  
-  /* Reuse old handler structure, if present */
-  tmp_list = selection_handlers;
-  while (tmp_list)
-    {
-      handler = (GtkSelectionHandler *)tmp_list->data;
-      if ((handler->selection == selection) && (handler->target == target))
-	{
-	  if (handler->destroy)
-	    (*handler->destroy)(handler->data);
-	  if (function)
-	    {
-	      handler->function = function;
-	      handler->marshal = marshal;
-	      handler->data = data;
-	      handler->destroy = destroy;
-	    }
-	  else
-	    {
-	      selection_handlers = g_list_remove_link (selection_handlers, 
-						       tmp_list);
-	      g_list_free (tmp_list);
-	      g_free (handler);
-	    }
-	  return;
-	}
-      tmp_list = tmp_list->next;
-    }
-  
-  if (tmp_list == NULL && function)
-    {
-      handler = g_new (GtkSelectionHandler, 1);
-      handler->selection = selection;
-      handler->target = target;
-      handler->function = function;
-      handler->marshal = marshal;
-      handler->data = data;
-      handler->destroy = destroy;
-      selection_handlers = g_list_append (selection_handlers, handler);
-    }
-  
-  gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key,
-		       selection_handlers);
+  list = gtk_selection_target_list_get (widget, selection);
+  gtk_target_list_add_table (list, targets, ntargets);
 }
 
 /*************************************************************
@@ -360,8 +492,6 @@ gtk_selection_remove_all (GtkWidget *widget)
   GList *tmp_list;
   GList *next;
   GtkSelectionInfo *selection_info;
-  GList *selection_handlers;
-  GtkSelectionHandler *handler;
   
   /* Remove pending requests/incrs for this widget */
   
@@ -413,28 +543,9 @@ gtk_selection_remove_all (GtkWidget *widget)
       
       tmp_list = next;
     }
-  
-  /* Now remove all handlers */
-  
-  selection_handlers = gtk_object_get_data (GTK_OBJECT (widget),
-					    gtk_selection_handler_key);
-  gtk_object_remove_data (GTK_OBJECT (widget), gtk_selection_handler_key);
-  
-  tmp_list = selection_handlers;
-  while (tmp_list)
-    {
-      next = tmp_list->next;
-      handler = (GtkSelectionHandler *)tmp_list->data;
-      
-      if (handler->destroy)
-	(*handler->destroy)(handler->data);
-      
-      g_free (handler);
-      
-      tmp_list = next;
-    }
-  
-  g_list_free (selection_handlers);
+
+  /* Remove all selection lists */
+  gtk_selection_target_list_remove (widget);
 }
 
 /*************************************************************
@@ -516,13 +627,15 @@ gtk_selection_convert (GtkWidget *widget,
       if (owner_widget != NULL)
 	{
 	  gtk_selection_invoke_handler (owner_widget, 
-					&selection_data);
+					&selection_data,
+					time);
 	  
 	  gtk_selection_retrieval_report (info,
 					  selection_data.type, 
 					  selection_data.format,
 					  selection_data.data,
-					  selection_data.length);
+					  selection_data.length,
+					  time);
 	  
 	  g_free (selection_data.data);
 	  
@@ -666,6 +779,9 @@ gtk_selection_request (GtkWidget *widget,
   guchar *mult_atoms;
   int i;
   
+  if (initialize)
+    gtk_selection_init ();
+  
   /* Check if we own selection */
   
   tmp_list = current_selections;
@@ -704,10 +820,9 @@ gtk_selection_request (GtkWidget *widget,
       gint     length;
       
       mult_atoms = NULL;
-      if (!gdk_property_get (info->requestor, event->property, GDK_SELECTION_TYPE_ATOM,
+      if (!gdk_property_get (info->requestor, event->property, 0, /* AnyPropertyType */
 			     0, GTK_SELECTION_MAX_SIZE, FALSE,
-			     &type, &format, &length, &mult_atoms) ||
-	  type != GDK_SELECTION_TYPE_ATOM || format != 8*sizeof(GdkAtom))
+			     &type, &format, &length, &mult_atoms))
 	{
 	  gdk_selection_send_notify (event->requestor, event->selection,
 				     event->target, GDK_NONE, event->time);
@@ -753,7 +868,7 @@ gtk_selection_request (GtkWidget *widget,
 		 event->requestor, event->property);
 #endif
       
-      gtk_selection_invoke_handler (widget, &data);
+      gtk_selection_invoke_handler (widget, &data, event->time);
       
       if (data.length < 0)
 	{
@@ -822,7 +937,7 @@ gtk_selection_request (GtkWidget *widget,
       gdk_property_change (info->requestor, event->property,
 			   GDK_SELECTION_TYPE_ATOM, 8*sizeof(GdkAtom), 
 			   GDK_PROP_MODE_REPLACE,
-			   mult_atoms, info->num_conversions);
+			   mult_atoms, 2*info->num_conversions);
       g_free (mult_atoms);
     }
   
@@ -1051,7 +1166,7 @@ gtk_selection_notify (GtkWidget	       *widget,
       g_list_free (tmp_list);
       /* structure will be freed in timeout */
       gtk_selection_retrieval_report (info,
-				      GDK_NONE, 0, NULL, -1);
+				      GDK_NONE, 0, NULL, -1, event->time);
       
       return TRUE;
     }
@@ -1063,7 +1178,8 @@ gtk_selection_notify (GtkWidget	       *widget,
     {
       /* The remainder of the selection will come through PropertyNotify
 	 events */
-      
+
+      info->notify_time = event->time;
       info->idle_time = 0;
       info->offset = 0;		/* Mark as OK to proceed */
       gdk_window_set_events (widget->window,
@@ -1079,7 +1195,7 @@ gtk_selection_notify (GtkWidget	       *widget,
       info->offset = length;
       gtk_selection_retrieval_report (info,
 				      type, format, 
-				      buffer, length);
+				      buffer, length, event->time);
     }
   
   gdk_property_delete (widget->window, event->property);
@@ -1157,7 +1273,8 @@ gtk_selection_property_notify (GtkWidget	*widget,
       gtk_selection_retrieval_report (info,
 				      type, format, 
 				      (type == GDK_NONE) ?  NULL : info->buffer,
-				      (type == GDK_NONE) ?  -1 : info->offset);
+				      (type == GDK_NONE) ?  -1 : info->offset,
+				      info->notify_time);
     }
   else				/* append on newly arrived data */
     {
@@ -1219,7 +1336,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
 	{
 	  current_retrievals = g_list_remove_link (current_retrievals, tmp_list);
 	  g_list_free (tmp_list);
-	  gtk_selection_retrieval_report (info, GDK_NONE, 0, NULL, -1);
+	  gtk_selection_retrieval_report (info, GDK_NONE, 0, NULL, -1, GDK_CURRENT_TIME);
 	}
       
       g_free (info->buffer);
@@ -1242,13 +1359,15 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
  *   arguments:
  *     info:	  information about the retrieval that completed
  *     buffer:	  buffer containing data (NULL => errror)
+ *     time:      timestamp for data in buffer
  *   results:
  *************************************************************/
 
 static void
 gtk_selection_retrieval_report (GtkRetrievalInfo *info,
 				GdkAtom type, gint format, 
-				guchar *buffer, gint length)
+				guchar *buffer, gint length,
+				guint32 time)
 {
   GtkSelectionData data;
   
@@ -1261,7 +1380,8 @@ gtk_selection_retrieval_report (GtkRetrievalInfo *info,
   data.data = buffer;
   
   gtk_signal_emit_by_name (GTK_OBJECT(info->widget),
-			   "selection_received", &data);
+			   "selection_received", 
+			   &data, time);
 }
 
 /*************************************************************
@@ -1273,6 +1393,7 @@ gtk_selection_retrieval_report (GtkRetrievalInfo *info,
  *   arguments:
  *     widget:	    selection owner
  *     data:	    selection data [INOUT]
+ *     time:        time from requeset
  *     
  *   results:
  *     Number of bytes written to buffer, -1 if error
@@ -1280,44 +1401,26 @@ gtk_selection_retrieval_report (GtkRetrievalInfo *info,
 
 static void
 gtk_selection_invoke_handler (GtkWidget	       *widget,
-			      GtkSelectionData *data)
+			      GtkSelectionData *data,
+			      guint             time)
 {
-  GList *tmp_list;
-  GtkSelectionHandler *handler;
+  GtkTargetList *target_list;
+  guint info;
   
+
   g_return_if_fail (widget != NULL);
-  
-  tmp_list = gtk_object_get_data (GTK_OBJECT (widget),
-				  gtk_selection_handler_key);
-  
-  while (tmp_list)
+
+  target_list = gtk_selection_target_list_get (widget, data->selection);
+  if (target_list && 
+      gtk_target_list_find (target_list, data->target, &info))
     {
-      handler = (GtkSelectionHandler *)tmp_list->data;
-      if ((handler->selection == data->selection) && 
-	  (handler->target == data->target))
-	break;
-      tmp_list = tmp_list->next;
+      gtk_signal_emit_by_name (GTK_OBJECT (widget), 
+			       "selection_get",
+			       data,
+			       info, time);
     }
-  
-  if (tmp_list == NULL)
-    gtk_selection_default_handler (widget, data);
   else
-    {
-      if (handler->marshal)
-	{
-	  GtkArg args[2];
-	  args[0].type = GTK_TYPE_BOXED;
-	  args[0].name = NULL;
-	  GTK_VALUE_BOXED(args[0]) = data;
-	  args[1].type = GTK_TYPE_NONE;
-	  args[1].name = NULL;
-	  
-	  handler->marshal (GTK_OBJECT(widget), handler->data, 1, args);
-	}
-      else
-	if (handler->function)
-	  handler->function (widget, data, handler->data);
-    }
+    gtk_selection_default_handler (widget, data);
 }
 
 /*************************************************************
@@ -1369,18 +1472,16 @@ gtk_selection_default_handler (GtkWidget	*widget,
       GdkAtom *p;
       gint count;
       GList *tmp_list;
-      GtkSelectionHandler *handler;
+      GtkTargetList *target_list;
+      GtkTargetPair *pair;
       
       count = 3;
-      tmp_list = gtk_object_get_data (GTK_OBJECT(widget),
-				      gtk_selection_handler_key);
+      target_list = gtk_selection_target_list_get (widget,
+						   data->selection);
+      tmp_list = target_list->list;
       while (tmp_list)
 	{
-	  handler = (GtkSelectionHandler *)tmp_list->data;
-	  
-	  if (handler->selection == data->selection)
-	    count++;
-	  
+	  count++;
 	  tmp_list = tmp_list->next;
 	}
       
@@ -1395,14 +1496,11 @@ gtk_selection_default_handler (GtkWidget	*widget,
       *p++ = gtk_selection_atoms[TARGETS];
       *p++ = gtk_selection_atoms[MULTIPLE];
       
-      tmp_list = gtk_object_get_data (GTK_OBJECT(widget),
-				      gtk_selection_handler_key);
+      tmp_list = target_list->list;
       while (tmp_list)
 	{
-	  handler = (GtkSelectionHandler *)tmp_list->data;
-	  
-	  if (handler->selection == data->selection)
-	    *p++ = handler->target;
+	  pair = (GtkTargetPair *)tmp_list->data;
+	  *p++ = pair->target;
 	  
 	  tmp_list = tmp_list->next;
 	}

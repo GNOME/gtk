@@ -72,16 +72,18 @@ enum {
   SELECTION_CLEAR_EVENT,
   SELECTION_REQUEST_EVENT,
   SELECTION_NOTIFY_EVENT,
+  SELECTION_GET,
   SELECTION_RECEIVED,
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
-  DRAG_BEGIN_EVENT,
-  DRAG_REQUEST_EVENT,
-  DRAG_END_EVENT,
-  DROP_ENTER_EVENT,
-  DROP_LEAVE_EVENT,
-  DROP_DATA_AVAILABLE_EVENT,
-  OTHER_EVENT,
+  DRAG_BEGIN,
+  DRAG_END,
+  DRAG_DATA_DELETE,
+  DRAG_LEAVE,
+  DRAG_MOTION,
+  DRAG_DROP,
+  DRAG_DATA_GET,
+  DRAG_DATA_RECEIVED,
   CLIENT_EVENT,
   NO_EXPOSE_EVENT,
   VISIBILITY_NOTIFY_EVENT,
@@ -548,9 +550,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_received),
-		    gtk_marshal_NONE__ENUM,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_SELECTION_DATA);
+		    gtk_marshal_NONE__POINTER_UINT,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_SELECTION_DATA,
+		    GTK_TYPE_UINT);
+  widget_signals[SELECTION_GET] =
+    gtk_signal_new ("selection_get",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_get),
+		    gtk_marshal_NONE__POINTER_UINT_UINT,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_SELECTION_DATA,
+		    GTK_TYPE_UINT,
+		    GTK_TYPE_UINT);
   widget_signals[PROXIMITY_IN_EVENT] =
     gtk_signal_new ("proximity_in_event",
 		    GTK_RUN_LAST,
@@ -567,55 +580,83 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_marshal_BOOL__POINTER,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DRAG_BEGIN_EVENT] =
-    gtk_signal_new ("drag_begin_event",
+  widget_signals[DRAG_LEAVE] =
+    gtk_signal_new ("drag_leave",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_begin_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DRAG_REQUEST_EVENT] =
-    gtk_signal_new ("drag_request_event",
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_leave),
+		    gtk_marshal_NONE__POINTER_UINT,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_UINT);
+  widget_signals[DRAG_BEGIN] =
+    gtk_signal_new ("drag_begin",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_request_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DRAG_END_EVENT] =
-    gtk_signal_new ("drag_end_event",
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_begin),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_GDK_DRAG_CONTEXT);
+  widget_signals[DRAG_END] =
+    gtk_signal_new ("drag_end",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_end_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DROP_ENTER_EVENT] =
-    gtk_signal_new ("drop_enter_event",
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_end),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_GDK_DRAG_CONTEXT);
+  widget_signals[DRAG_DATA_DELETE] =
+    gtk_signal_new ("drag_data_delete",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drop_enter_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DROP_LEAVE_EVENT] =
-    gtk_signal_new ("drop_leave_event",
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_delete),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_GDK_DRAG_CONTEXT);
+  widget_signals[DRAG_MOTION] =
+    gtk_signal_new ("drag_motion",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drop_leave_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DROP_DATA_AVAILABLE_EVENT] =
-    gtk_signal_new ("drop_data_available_event",
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_motion),
+		    gtk_marshal_BOOL__POINTER_INT_INT_UINT,
+		    GTK_TYPE_BOOL, 4,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_UINT);
+  widget_signals[DRAG_DROP] =
+    gtk_signal_new ("drag_drop",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass,
-				       drop_data_available_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_drop),
+		    gtk_marshal_BOOL__POINTER_INT_INT_UINT,
+		    GTK_TYPE_BOOL, 4,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_UINT);
+  widget_signals[DRAG_DATA_GET] =
+    gtk_signal_new ("drag_data_get",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_get),
+		    gtk_marshal_NONE__POINTER_POINTER_UINT_UINT,
+		    GTK_TYPE_NONE, 4,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_SELECTION_DATA,
+		    GTK_TYPE_UINT,
+		    GTK_TYPE_UINT);
+  widget_signals[DRAG_DATA_RECEIVED] =
+    gtk_signal_new ("drag_data_received",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_received),
+		    gtk_marshal_NONE__POINTER_POINTER_UINT_UINT,
+		    GTK_TYPE_NONE, 4,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_SELECTION_DATA,
+		    GTK_TYPE_UINT,
+		    GTK_TYPE_UINT);
   widget_signals[VISIBILITY_NOTIFY_EVENT] =
     gtk_signal_new ("visibility_notify_event",
 		    GTK_RUN_LAST,
@@ -637,14 +678,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, no_expose_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[OTHER_EVENT] =
-    gtk_signal_new ("other_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, other_event),
 		    gtk_marshal_BOOL__POINTER,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
@@ -706,13 +739,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->selection_received = NULL;
   klass->proximity_in_event = NULL;
   klass->proximity_out_event = NULL;
-  klass->drag_begin_event = NULL;
-  klass->drag_request_event = NULL;
-  klass->drop_enter_event = NULL;
-  klass->drop_leave_event = NULL;
-  klass->drop_data_available_event = NULL;
+  klass->drag_begin = NULL;
+  klass->drag_end = NULL;
+  klass->drag_data_delete = NULL;
+  klass->drag_leave = NULL;
+  klass->drag_motion = NULL;
+  klass->drag_drop = NULL;
+  klass->drag_data_received = NULL;
+
   klass->no_expose_event = NULL;
-  klass->other_event = NULL;
 
   klass->debug_msg = gtk_widget_debug_msg;
 }
@@ -2071,24 +2106,6 @@ gtk_widget_event (GtkWidget *widget,
     case GDK_PROXIMITY_OUT:
       signal_num = PROXIMITY_OUT_EVENT;
       break;
-    case GDK_DRAG_BEGIN:
-      signal_num = DRAG_BEGIN_EVENT;
-      break;
-    case GDK_DRAG_REQUEST:
-      signal_num = DRAG_REQUEST_EVENT;
-      break;
-    case GDK_DROP_ENTER:
-      signal_num = DROP_ENTER_EVENT;
-      break;
-    case GDK_DROP_LEAVE:
-      signal_num = DROP_LEAVE_EVENT;
-      break;
-    case GDK_DROP_DATA_AVAIL:
-      signal_num = DROP_DATA_AVAILABLE_EVENT;
-      break;
-    case GDK_OTHER_EVENT:
-      signal_num = OTHER_EVENT;
-      break;
     case GDK_NO_EXPOSE:
       signal_num = NO_EXPOSE_EVENT;
       break;
@@ -2996,6 +3013,51 @@ gtk_widget_set_events (GtkWidget *widget,
     {
       g_free (eventp);
       gtk_object_remove_data_by_id (GTK_OBJECT (widget), event_key_id);
+    }
+}
+
+/*****************************************
+ * gtk_widget_add_events:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_add_events (GtkWidget *widget,
+		       gint	  events)
+{
+  gint *eventp;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
+  
+  eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
+  
+  if (events)
+    {
+      if (!eventp)
+	{
+	  eventp = g_new (gint, 1);
+	  *eventp = 0;
+	}
+      
+      *eventp |= events;
+      if (!event_key_id)
+	event_key_id = g_quark_from_static_string (event_key);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), event_key_id, eventp);
+    }
+  else if (eventp)
+    {
+      g_free (eventp);
+      gtk_object_remove_data_by_id (GTK_OBJECT (widget), event_key_id);
+    }
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_set_events (widget->window,
+			     gdk_window_get_events (widget->window) | events);
     }
 }
 
@@ -3947,96 +4009,6 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
 	gdk_window_shape_combine_mask (widget->window, shape_mask,
 				       offset_x, offset_y);
     }
-}
-
-/*****************************************
- * gtk_widget_dnd_drag_add:
- *   when you get a DRAG_ENTER event, you can use this		 
- *   to tell Gtk ofother widgets that are to be dragged as well
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-void
-gtk_widget_dnd_drag_add (GtkWidget *widget)
-{
-}
-
-/*****************************************
- * gtk_widget_dnd_drag_set:
- *   these two functions enable drag and/or drop on a
- *   widget and also let Gtk know what data types will be accepted
- *   use MIME type naming,plus tacking "URL:" on the front for link 
- *   dragging
- *	       
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-void
-gtk_widget_dnd_drag_set (GtkWidget   *widget,
-			 guint8	      drag_enable,
-			 gchar	    **type_accept_list,
-			 guint	      numtypes)
-{
-  g_return_if_fail(widget != NULL);
-  
-  if (!widget->window)
-    gtk_widget_realize (widget);
-  
-  g_return_if_fail (widget->window != NULL);
-  gdk_window_dnd_drag_set (widget->window,
-			   drag_enable,
-			   type_accept_list,
-			   numtypes);
-}
-
-/*****************************************
- * gtk_widget_dnd_drop_set:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-void
-gtk_widget_dnd_drop_set (GtkWidget   *widget,
-			 guint8	      drop_enable,
-			 gchar	    **type_accept_list,
-			 guint	      numtypes,
-			 guint8	      is_destructive_operation)
-{
-  g_return_if_fail(widget != NULL);
-  
-  if (!widget->window)
-    gtk_widget_realize (widget);
-  
-  g_return_if_fail (widget->window != NULL);
-  gdk_window_dnd_drop_set (widget->window,
-			   drop_enable,
-			   type_accept_list,
-			   numtypes,
-			   is_destructive_operation);
-}
-
-/*****************************************
- * gtk_widget_dnd_data_set:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-void
-gtk_widget_dnd_data_set (GtkWidget   *widget,
-			 GdkEvent    *event,
-			 gpointer     data,
-			 gulong	      data_numbytes)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (widget->window != NULL);
-  
-  gdk_window_dnd_data_set (widget->window, event, data, data_numbytes);
 }
 
 void

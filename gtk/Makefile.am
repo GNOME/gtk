@@ -29,6 +29,7 @@ libgtk_la_SOURCES = \
 	gtkcurve.c		\
 	gtkdata.c		\
 	gtkdialog.c		\
+	gtkdnd.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c           \
 	gtkentry.c		\
@@ -49,6 +50,7 @@ libgtk_la_SOURCES = \
 	gtkhseparator.c		\
 	gtkimage.c		\
 	gtkinputdialog.c	\
+	gtkinvisible.c		\
 	gtkitem.c		\
 	gtkitemfactory.c	\
 	gtklabel.c		\
@@ -135,6 +137,7 @@ source_headers = \
 	gtkdata.h		\
 	gtkdebug.h              \
 	gtkdialog.h		\
+	gtkdnd.h		\
 	gtkdrawingarea.h	\
 	gtkeditable.h           \
 	gtkentry.h		\
@@ -156,6 +159,7 @@ source_headers = \
 	gtkhseparator.h		\
 	gtkimage.h		\
 	gtkinputdialog.h	\
+	gtkinvisible.h		\
 	gtkitem.h		\
 	gtkitemfactory.h	\
 	gtklabel.h		\
@@ -306,7 +310,9 @@ EXTRA_DIST = \
 
 INCLUDES = -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@
 
-noinst_PROGRAMS = testgtk testinput testselection testthreads testrgb simple 
+noinst_PROGRAMS = testgtk testinput testselection testthreads testrgb testdnd simple 
+
+# FIXME, we currently rely on linking against libglib-1.1
 
 DEPS =	\
 	libgtk.la					\
@@ -325,6 +331,7 @@ testinput_DEPENDENCIES = $(DEPS)
 testthreads_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 testrgb_DEPENDENCIES = $(DEPS)
+testdnd_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
 
 testgtk_LDADD = $(LDADDS)
@@ -332,6 +339,7 @@ testinput_LDADD = $(LDADDS)
 testthreads_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
+testdnd_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 
 .PHONY: files test test-debug

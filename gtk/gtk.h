@@ -44,6 +44,7 @@
 #include <gtk/gtkcurve.h>
 #include <gtk/gtkdata.h>
 #include <gtk/gtkdialog.h>
+#include <gtk/gtkdnd.h>
 #include <gtk/gtkdrawingarea.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkentry.h>

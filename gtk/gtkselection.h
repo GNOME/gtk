@@ -29,36 +29,63 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef struct _GtkSelectionData GtkSelectioData;
+typedef struct _GtkTargetList    GtkTargetList;
+typedef struct _GtkTargetEntry   GtkTargetEntry;
 
-/* a callback function that provides the selection. Arguments are:
-   widget: selection owner
-   offset: offset into selection
-   buffer: buffer into which to store selection 
-   length: length of buffer
-   bytes_after: (sizeof(selection) - offset - length ) (return)
-   data:   callback data */
+struct _GtkTargetEntry {
+  gchar *target;
+  guint  flags;
+  guint  info;
+};
 
-typedef void (*GtkSelectionFunction) (GtkWidget *widget, 
-				      GtkSelectionData *selection_data,
-				      gpointer data);
+/* These structures not public, and are here only for the convenience of
+ * gtkdnd.c 
+ */
+
+typedef struct _GtkTargetPair GtkTargetPair;
+
+/* This structure is a list of destinations, and associated guint id's */
+struct _GtkTargetList {
+  GList *list;
+  guint ref_count;
+};
+
+struct _GtkTargetPair {
+  GdkAtom   target;
+  guint     flags;
+  guint     info;
+};
+
+GtkTargetList *gtk_target_list_new       (GtkTargetEntry *targets,
+					  guint           ntargets);
+void           gtk_target_list_ref       (GtkTargetList  *list);
+void           gtk_target_list_unref     (GtkTargetList  *list);
+void           gtk_target_list_add       (GtkTargetList  *list,
+				  	  GdkAtom         target,
+					  guint           flags,
+					  guint           info);
+void           gtk_target_list_add_table (GtkTargetList  *list,
+					  GtkTargetEntry *targets,
+					  guint           ntargets);
+void           gtk_target_list_remove    (GtkTargetList  *list,
+					  GdkAtom         target);
+gboolean       gtk_target_list_find      (GtkTargetList  *list,
+					  GdkAtom         target,
+					  guint          *info);
 
 /* Public interface */
 
 gint gtk_selection_owner_set (GtkWidget 	  *widget,
 			      GdkAtom    	   selection,
 			      guint32    	   time);
-void gtk_selection_add_handler (GtkWidget           *widget, 
+void gtk_selection_add_target (GtkWidget           *widget, 
+			       GdkAtom              selection,
+			       GdkAtom              target,
+			       guint                info);
+void gtk_selection_add_targets (GtkWidget           *widget, 
 				GdkAtom              selection,
-				GdkAtom              target,
-				GtkSelectionFunction function,
-				gpointer             data);
-void gtk_selection_add_handler_full (GtkWidget           *widget, 
-				     GdkAtom              selection,
-				     GdkAtom              target,
-				     GtkSelectionFunction function,
-				     GtkCallbackMarshal   marshal,
-				     gpointer             data,
-				     GtkDestroyNotify     destroy);
+				GtkTargetEntry      *targets,
+				guint                ntargets);
 gint gtk_selection_convert   (GtkWidget 	  *widget, 
 			      GdkAtom    	   selection, 
 			      GdkAtom    	   target,

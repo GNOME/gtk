@@ -1,3 +1,114 @@
+Sun Oct 18 18:16:39 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdk.c gdkprivate.h: Added a modular client-message-filter
+	mechanism, that is used for the DND messages.
+
+	  Removed all the old DND code.
+
+	* gdk/gdkcolormap.c gdk/gdkcolormap.h: Add a function to
+	get the visual of a given colormap.
+	
+	* gtk/gtkcolorsel.c: Conversion to new DND, drag 
+	a color-swatch.
+
+	* gdk/gdk.h gdk/gdkdnd.c: The low-level
+	X oriented portions of drag and drop protocols.
+	Sending and receiving client messages, and navigating
+	window trees.
+
+	* gdk/gdkimage.c: added a gdk_flush() when destroying
+	SHM images to hopefully make it more likely that
+        X will gracefully handle the segment being destroyed.
+
+	* gdk/gdkprivate.h gtk/gtkdebug.h: Add new 
+	DND debugging flags.
+
+	* gtk/gtkeditable.[ch]: Updates for the selection handling
+	changes.
+	
+	* gtk/gtkselection.[ch]: Added GtkTargetList, a 
+	refcounted data structure for keeping track of lists
+	of GdkAtom + information. Removed selection_handler_add
+	in favor of a "drag_data_get" signal.
+
+	* gtk/gtkdnd.[ch] gtk/gtk.h: New files - highlevel (event loop
+	dependent) parts of the DND protocols, display of drag icons,
+	drag-under highlighting, and the "default handlers".
+
+	* gtk/gtkinvisible.[ch]: New widget - InputOnly offscreen
+	windows that are used for reliable pointer grabs and
+	selection handling in the DND code.
+
+	* gtk/testdnd.c: New test program for new DND. (Old
+	DND tests in testgtk still need to be converted.)
+
+	* gtk/testselection.c: Use the new selection API.
+	
+	* docs/dnd_internals: Start at describing how
+	all the new code works inside.
+
+	* docs/Changes-1.2.txt: New file describing source-incompatible
+	changes in GTK+-1.2.
+
+Sat Oct 17 22:50:34 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkwindow.c (gdk_window_remove_filter): Free
+	the right list node.
+
+	* gdk/gdkwindow.c (gdk_window_init): Add gdk_root_parent
+	to the XID table so we can receive events on it.
+
+Wed Oct 14 12:57:40 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c gdk/gdk.h (gdk_event_get_time): New function
+	to get the timestamp from a generic event.
+
+Fri Oct  9 13:16:04 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_add_events): Added function
+	that safely adds additional events to a widget's event 
+	mask, even if the widget has previously been realized.
+	(We can do this, but not remove events from the event
+	 mask).
+
+Fri Oct  2 17:35:35 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkproperty.c (gdk_property_get): Allow type == 0,
+	for AnyPropertyType.
+
+Fri Oct  2 10:32:21 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkproperty.c (gdk_atom_intern): Add client-local
+	hashing.
+
+Thu Sep 24 20:33:54 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_event_send_clientmessage_toall): serial
+	isn't a timestamp.
+
+Thu Sep 17 14:23:03 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_event_translate): Removed printing
+	of unknown window lookup warnings. (Made it
+	a GDK_NOTE) - they happen in many circumstances.
+
+Tue Sep  8 12:38:43 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* Call XFilterEvent() on events we get for unknown
+        windows, since it may be the window Xlib uses to
+	communicate with the IM. 
+	(From Yung-Ching Hsiao <yhsiao@cae.wisc.edu>)
+
+Tue Sep  1 10:53:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkprogress.c (gtk_progress_finalize): Unref
+	the adjustment.
+
+Thu Aug 27 12:03:14 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksignal.c (gtk_signal_newv): Improve warning
+	message for return_value + GTK_RUN_FIRST.
+
 1998-10-18  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtk/gtktext.c (gtk_text_set_line_wrap): new function to toggle

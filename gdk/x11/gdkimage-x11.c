@@ -409,6 +409,8 @@ gdk_image_destroy (GdkImage *image)
 
     case GDK_IMAGE_SHARED:
 #ifdef USE_SHM
+      gdk_flush();
+
       XShmDetach (private->xdisplay, private->x_shm_info);
       XDestroyImage (private->ximage);
 

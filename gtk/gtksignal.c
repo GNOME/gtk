@@ -290,7 +290,7 @@ gtk_signal_newv (const gchar	     *r_name,
   if (return_val != GTK_TYPE_NONE &&
       (signal_flags & GTK_RUN_BOTH) == GTK_RUN_FIRST)
     {
-      g_warning ("gtk_signal_newv(): signal \"%s\" with return value `%s' excludes GTK_RUN_LAST",
+      g_warning ("gtk_signal_newv(): signal \"%s\" - return value `%s' incompatible with GTK_RUN_FIRST",
 		 name, gtk_type_name (return_val));
       g_free (name);
       return 0;

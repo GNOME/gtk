@@ -22,12 +22,21 @@
 #include "gdk.h"
 #include "gdkprivate.h"
 
-
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
 		 gint         only_if_exists)
 {
-  return XInternAtom (gdk_display, atom_name, only_if_exists);
+  GdkAtom retval;
+  static GHashTable *atom_hash = NULL;
+  
+  if (!atom_hash)
+    atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+  retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash, atom_name));
+  if (!retval)
+    retval = XInternAtom (gdk_display, atom_name, only_if_exists);
+
+  return retval;
 }
 
 gchar *
@@ -35,14 +44,16 @@ gdk_atom_name (GdkAtom atom)
 {
   gchar *t;
   gchar *name;
+  gint old_error_warnings;
 
   /* If this atom doesn't exist, we'll die with an X error unless
      we take precautions */
 
+  old_error_warnings = gdk_error_warnings;
   gdk_error_warnings = 0;
   gdk_error_code = 0;
   t = XGetAtomName (gdk_display, atom);
-  gdk_error_warnings = 1;
+  gdk_error_warnings = old_error_warnings;
 
   if (gdk_error_code == -1)
     {
@@ -115,7 +126,7 @@ gdk_property_get (GdkWindow   *window,
   if (actual_format_type)
     *actual_format_type = ret_format;
 
-  if (ret_prop_type != type)
+  if ((type != AnyPropertyType) && (ret_prop_type != type))
     {
       gchar *rn, *pn;
 

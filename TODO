@@ -297,3 +297,21 @@ Calendar Widget:
 
  - The keyboard support has to be finished.
 
+DND
+===
+
+ - Use a cursor instead of an ICON when over Motif windows,
+   to get rid of the current junk that Motif leaves because
+   of it's XCopyArea stupidity for doing highlighting.
+
+ - Add a GTK_DRAG_VERIFY target flag and a "drag_data_verify"   
+   signal so that apps can easily check if a, say, 
+   text/uri-list URL looks OK during the drop.
+
+ - Check more for memory leaks.
+
+ - Drag and drop for Entry and Text widgets.
+
+ - Send synthetic motion events on structure changes so 
+   drag_enter/leave get sent properly. (See the popup
+   in testdnd)

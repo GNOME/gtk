@@ -179,6 +179,18 @@ gdk_colormap_unref (GdkColormap *cmap)
     gdk_colormap_real_destroy (cmap);
 }
 
+GdkVisual *
+gdk_colormap_get_visual (GdkColormap *colormap)
+{
+  GdkColormapPrivate *private;
+
+  g_return_val_if_fail (colormap != NULL, NULL);
+  
+  private = (GdkColormapPrivate *)colormap;
+
+  return private->visual;
+}
+     
 #define MIN_SYNC_TIME 2
 
 void

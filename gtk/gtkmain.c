@@ -22,6 +22,7 @@
 #include <string.h>
 #include <gmodule.h>
 #include "gtkbutton.h"
+#include "gtkdnd.h"
 #include "gtkfeatures.h"
 #include "gtkhscrollbar.h"
 #include "gtkhseparator.h"
@@ -224,7 +225,8 @@ guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
 static GDebugKey gtk_debug_keys[] = {
   {"objects", GTK_DEBUG_OBJECTS},
   {"misc", GTK_DEBUG_MISC},
-  {"signals", GTK_DEBUG_SIGNALS}
+  {"signals", GTK_DEBUG_SIGNALS},
+  {"dnd", GTK_DEBUG_DND}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
@@ -764,6 +766,9 @@ gtk_main_iteration_do (gboolean blocking)
        *  1) these events have no meaning for the grabbing widget
        *  and 2) redirecting these events to the grabbing widget
        *  could cause the display to be messed up.
+       * 
+       * Drag events are also not redirected, since it isn't
+       *  clear what the semantics of that would be.
        */
       switch (event->type)
 	{
@@ -797,11 +802,6 @@ gtk_main_iteration_do (gboolean blocking)
 	case GDK_SELECTION_REQUEST:
 	case GDK_SELECTION_NOTIFY:
 	case GDK_CLIENT_EVENT:
-	case GDK_DRAG_BEGIN:
-	case GDK_DRAG_REQUEST:
-	case GDK_DROP_ENTER:
-	case GDK_DROP_LEAVE:
-	case GDK_DROP_DATA_AVAIL:
 	case GDK_VISIBILITY_NOTIFY:
 	  gtk_widget_event (event_widget, event);
 	  break;
@@ -821,7 +821,6 @@ gtk_main_iteration_do (gboolean blocking)
 	case GDK_BUTTON_RELEASE:
 	case GDK_PROXIMITY_IN:
 	case GDK_PROXIMITY_OUT:
-	case GDK_OTHER_EVENT:
 	  gtk_propagate_event (grab_widget, event);
 	  break;
 	  
@@ -842,6 +841,17 @@ gtk_main_iteration_do (gboolean blocking)
 	    }
 	  else if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
 	    gtk_widget_event (grab_widget, event);
+	  break;
+
+	case GDK_DRAG_STATUS:
+	case GDK_DROP_FINISHED:
+	  gtk_drag_source_handle_event (event_widget, event);
+	  break;
+	case GDK_DRAG_ENTER:
+	case GDK_DRAG_LEAVE:
+	case GDK_DRAG_MOTION:
+	case GDK_DROP_START:
+	  gtk_drag_dest_handle_event (event_widget, event);
 	  break;
 	}
       

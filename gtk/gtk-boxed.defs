@@ -42,6 +42,9 @@
   gdk_window_ref
   gdk_window_unref)
 
+(define-boxed GdkDragContext
+  gdk_drag_context_ref
+  gdk_drag_context_unref)
 (define-boxed GdkEvent
   gdk_event_copy
   gdk_event_free

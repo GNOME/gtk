@@ -58,7 +58,14 @@ enum {
   ARG_TEXT_POSITION,
   ARG_EDITABLE
 };
-  
+
+/* values for selection info */
+
+enum {
+  TARGET_STRING,
+  TARGET_TEXT,
+  TARGET_COMPOUND_TEXT,
+};
 
 static void gtk_editable_class_init          (GtkEditableClass *klass);
 static void gtk_editable_init                (GtkEditable      *editable);
@@ -71,11 +78,13 @@ static void gtk_editable_get_arg	     (GtkObject        *object,
 static void gtk_editable_finalize            (GtkObject        *object);
 static gint gtk_editable_selection_clear     (GtkWidget        *widget,
 					     GdkEventSelection *event);
-static void gtk_editable_selection_handler   (GtkWidget        *widget,
-					   GtkSelectionData    *selection_data,
-					   gpointer             data);
+static void gtk_editable_selection_get      (GtkWidget         *widget,
+					     GtkSelectionData  *selection_data,
+					     guint              info,
+					     guint              time);
 static void gtk_editable_selection_received  (GtkWidget        *widget,
-  				            GtkSelectionData *selection_data);
+					      GtkSelectionData *selection_data,
+					      guint             time);
 
 static void gtk_editable_set_selection    (GtkEditable      *editable,
 					   gint              start,
@@ -90,8 +99,7 @@ static void gtk_editable_real_set_editable    (GtkEditable     *editable,
 
 static GtkWidgetClass *parent_class = NULL;
 static guint editable_signals[LAST_SIGNAL] = { 0 };
-static GdkAtom ctext_atom = GDK_NONE;
-static GdkAtom text_atom = GDK_NONE;
+
 static GdkAtom clipboard_atom = GDK_NONE;
 
 GtkType
@@ -287,6 +295,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 
   widget_class->selection_clear_event = gtk_editable_selection_clear;
   widget_class->selection_received = gtk_editable_selection_received;
+  widget_class->selection_get = gtk_editable_selection_get;
 
   class->insert_text = NULL;
   class->delete_text = NULL;
@@ -362,6 +371,13 @@ gtk_editable_get_arg (GtkObject      *object,
 static void
 gtk_editable_init (GtkEditable *editable)
 {
+  static GtkTargetEntry targets[] = {
+    { "STRING", TARGET_STRING },
+    { "TEXT",   TARGET_TEXT }, 
+    { "COMPOUND_TEXT", TARGET_COMPOUND_TEXT }
+  };
+  static gint n_targets = sizeof(targets) / sizeof(targets[0]);
+  
   GTK_WIDGET_SET_FLAGS (editable, GTK_CAN_FOCUS);
 
   editable->selection_start_pos = 0;
@@ -377,36 +393,10 @@ gtk_editable_init (GtkEditable *editable)
   if (!clipboard_atom)
     clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
 
-  gtk_selection_add_handler (GTK_WIDGET(editable), GDK_SELECTION_PRIMARY,
-			     GDK_TARGET_STRING, gtk_editable_selection_handler,
-			     NULL);
-  gtk_selection_add_handler (GTK_WIDGET(editable), clipboard_atom,
-			     GDK_TARGET_STRING, gtk_editable_selection_handler,
-			     NULL);
-
-  if (!text_atom)
-    text_atom = gdk_atom_intern ("TEXT", FALSE);
-
-  gtk_selection_add_handler (GTK_WIDGET(editable), GDK_SELECTION_PRIMARY,
-			     text_atom,
-			     gtk_editable_selection_handler,
-			     NULL);
-  gtk_selection_add_handler (GTK_WIDGET(editable), clipboard_atom,
-			     text_atom,
-			     gtk_editable_selection_handler,
-			     NULL);
-
-  if (!ctext_atom)
-    ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-
-  gtk_selection_add_handler (GTK_WIDGET(editable), GDK_SELECTION_PRIMARY,
-			     ctext_atom,
-			     gtk_editable_selection_handler,
-			     NULL);
-  gtk_selection_add_handler (GTK_WIDGET(editable), clipboard_atom,
-			     ctext_atom,
-			     gtk_editable_selection_handler,
-			     NULL);
+  gtk_selection_add_targets (GTK_WIDGET (editable), GDK_SELECTION_PRIMARY,
+			     targets, n_targets);
+  gtk_selection_add_targets (GTK_WIDGET (editable), clipboard_atom,
+			     targets, n_targets);
 }
 
 static void
@@ -580,9 +570,10 @@ gtk_editable_selection_clear (GtkWidget         *widget,
 }
 
 static void
-gtk_editable_selection_handler (GtkWidget        *widget,
-				GtkSelectionData *selection_data,
-				gpointer          data)
+gtk_editable_selection_get (GtkWidget        *widget,
+			    GtkSelectionData *selection_data,
+			    guint             info,
+			    guint             time)
 {
   GtkEditable *editable;
   gint selection_start_pos;
@@ -614,14 +605,13 @@ gtk_editable_selection_handler (GtkWidget        *widget,
       length = strlen (editable->clipboard_text);
     }
   
-  if (selection_data->target == GDK_SELECTION_TYPE_STRING)
+  if (info == TARGET_STRING)
     {
       gtk_selection_data_set (selection_data,
                               GDK_SELECTION_TYPE_STRING,
                               8*sizeof(gchar), (guchar *)str, length);
     }
-  else if (selection_data->target == text_atom ||
-           selection_data->target == ctext_atom)
+  else if ((info == TARGET_TEXT) || (info == TARGET_COMPOUND_TEXT))
     {
       guchar *text;
       gchar c;
@@ -643,7 +633,8 @@ gtk_editable_selection_handler (GtkWidget        *widget,
 
 static void
 gtk_editable_selection_received  (GtkWidget         *widget,
-				  GtkSelectionData  *selection_data)
+				  GtkSelectionData  *selection_data,
+				  guint              time)
 {
   GtkEditable *editable;
   gint reselect;
@@ -658,7 +649,8 @@ gtk_editable_selection_received  (GtkWidget         *widget,
 
   if (selection_data->type == GDK_TARGET_STRING)
     type = STRING;
-  else if (selection_data->type == ctext_atom)
+  else if ((selection_data->type == gdk_atom_intern ("COMPOUND_TEXT", FALSE)) ||
+	   (selection_data->type == gdk_atom_intern ("TEXT", FALSE)))
     type = CTEXT;
   else
     type = INVALID;
@@ -668,7 +660,7 @@ gtk_editable_selection_received  (GtkWidget         *widget,
     /* avoid infinite loop */
     if (selection_data->target != GDK_TARGET_STRING)
       gtk_selection_convert (widget, selection_data->selection,
-			     GDK_TARGET_STRING, GDK_CURRENT_TIME);
+			     GDK_TARGET_STRING, time);
     return;
   }
 
@@ -934,7 +926,8 @@ gtk_editable_real_paste_clipboard (GtkEditable *editable)
   time = gtk_editable_get_event_time (editable);
   if (editable->editable)
     gtk_selection_convert (GTK_WIDGET(editable), 
-			   clipboard_atom, ctext_atom, time);
+			   clipboard_atom, 
+			   gdk_atom_intern ("COMPOUND_TEXT", FALSE), time);
 }
 
 void

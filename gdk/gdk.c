@@ -116,13 +116,6 @@ static Bool	 gdk_event_get_type	(Display      *display,
 static void	 gdk_synthesize_click	(GdkEvent     *event, 
 					 gint	       nclicks);
 
-static void	 gdk_dnd_drag_begin	(GdkWindow    *initial_window);
-static void	 gdk_dnd_drag_enter	(Window	       dest);
-static void	 gdk_dnd_drag_leave	(Window	       dest);
-static void	 gdk_dnd_drag_end	(Window	       dest,
-					 GdkPoint      coords);
-static GdkAtom	 gdk_dnd_check_types	(GdkWindow    *window,
-					 XEvent	      *xevent);
 #ifdef DEBUG_DND
 static void	 gdk_print_atom		(GdkAtom       anatom);
 #endif
@@ -162,6 +155,10 @@ static gint   gdk_im_open		(XrmDatabase db,
 					 gchar* rec_class);
 static void   gdk_im_close		(void);
 static void   gdk_ic_cleanup		(void);
+
+GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
+					 GdkEvent  *event,
+					 gpointer   data);
 
 #endif /* USE_XIM */
 
@@ -216,6 +213,8 @@ static guint button_number[2];			    /* The last 2 buttons to be pressed.
 static GdkWindowPrivate *xgrab_window = NULL;	    /* Window that currently holds the
 						     *	x pointer grab
 						     */
+
+static GList *client_filters;	                    /* Filters for client messages */
 
 #ifdef USE_XIM
 static gint xim_using;				/* using XIM Protocol if TRUE */
@@ -549,14 +548,6 @@ gdk_init (int	 *argc,
   gdk_wm_window_protocols[1] = gdk_wm_take_focus;
   gdk_selection_property = XInternAtom (gdk_display, "GDK_SELECTION", False);
   
-  gdk_dnd.gdk_XdeEnter = gdk_atom_intern("_XDE_ENTER", FALSE);
-  gdk_dnd.gdk_XdeLeave = gdk_atom_intern("_XDE_LEAVE", FALSE);
-  gdk_dnd.gdk_XdeRequest = gdk_atom_intern("_XDE_REQUEST", FALSE);
-  gdk_dnd.gdk_XdeDataAvailable = gdk_atom_intern("_XDE_DATA_AVAILABLE", FALSE);
-  gdk_dnd.gdk_XdeTypelist = gdk_atom_intern("_XDE_TYPELIST", FALSE);
-  gdk_dnd.c->gdk_cursor_dragdefault = XCreateFontCursor(gdk_display, XC_bogosity);
-  gdk_dnd.c->gdk_cursor_dragok = XCreateFontCursor(gdk_display, XC_heart);
-  
   XGetKeyboardControl (gdk_display, &keyboard_state);
   autorepeat = keyboard_state.global_auto_repeat;
   
@@ -577,6 +568,10 @@ gdk_init (int	 *argc,
   gdk_window_init ();
   gdk_image_init ();
   gdk_input_init ();
+  gdk_dnd_init ();
+
+  gdk_add_client_message_filter (gdk_wm_protocols, 
+				 gdk_wm_protocols_filter, NULL);
   
 #ifdef USE_XIM
   /* initialize XIM Protocol variables */
@@ -928,13 +923,15 @@ gdk_event_copy (GdkEvent *event)
 	gdk_window_ref (event->crossing.subwindow);
       break;
       
-    case GDK_DROP_DATA_AVAIL:
-      new_event->dropdataavailable.data_type = g_strdup (event->dropdataavailable.data_type);
-      new_event->dropdataavailable.data = g_malloc (event->dropdataavailable.data_numbytes);
-      memcpy (new_event->dropdataavailable.data,
-	      event->dropdataavailable.data, 
-	      event->dropdataavailable.data_numbytes);
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+      gdk_drag_context_ref (event->dnd.context);
       break;
+
       
     default:
       break;
@@ -983,14 +980,15 @@ gdk_event_free (GdkEvent *event)
 	gdk_window_unref (event->crossing.subwindow);
       break;
       
-    case GDK_DROP_DATA_AVAIL:
-      g_free (event->dropdataavailable.data_type);
-      g_free (event->dropdataavailable.data);
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+      gdk_drag_context_unref (event->dnd.context);
       break;
-      
-    case GDK_DRAG_REQUEST:
-      g_free (event->dragrequest.data_type);
-      break;
+
       
     default:
       break;
@@ -1018,6 +1016,60 @@ gdk_event_free (GdkEvent *event)
  *
  *--------------------------------------------------------------
  */
+
+/*
+ *--------------------------------------------------------------
+ * gdk_event_get_time:
+ *    Get the timestamp from an event.
+ *   arguments:
+ *     event:
+ *   results:
+ *    The event's time stamp, if it has one, otherwise
+ *    GDK_CURRENT_TIME.
+ *--------------------------------------------------------------
+ */
+
+guint32
+gdk_event_get_time (GdkEvent *event)
+{
+  if (event)
+    switch (event->type)
+      {
+      case GDK_MOTION_NOTIFY:
+	return event->motion.time;
+      case GDK_BUTTON_PRESS:
+      case GDK_2BUTTON_PRESS:
+      case GDK_3BUTTON_PRESS:
+      case GDK_BUTTON_RELEASE:
+	return event->button.time;
+      case GDK_KEY_PRESS:
+      case GDK_KEY_RELEASE:
+	return event->key.time;
+      case GDK_ENTER_NOTIFY:
+      case GDK_LEAVE_NOTIFY:
+	return event->crossing.time;
+      case GDK_PROPERTY_NOTIFY:
+	return event->property.time;
+      case GDK_SELECTION_CLEAR:
+      case GDK_SELECTION_REQUEST:
+      case GDK_SELECTION_NOTIFY:
+	return event->selection.time;
+      case GDK_PROXIMITY_IN:
+      case GDK_PROXIMITY_OUT:
+	return event->proximity.time;
+      case GDK_DRAG_ENTER:
+      case GDK_DRAG_LEAVE:
+      case GDK_DRAG_MOTION:
+      case GDK_DRAG_STATUS:
+      case GDK_DROP_START:
+      case GDK_DROP_FINISHED:
+	return event->dnd.time;
+      default:			/* use current time */
+	break;
+      }
+  
+  return GDK_CURRENT_TIME;
+}
 
 void
 gdk_set_show_events (int show_events)
@@ -1773,6 +1825,20 @@ gdk_event_apply_filters (XEvent *xevent,
   return GDK_FILTER_CONTINUE;
 }
 
+void 
+gdk_add_client_message_filter (GdkAtom       message_type,
+			       GdkFilterFunc func,
+			       gpointer      data)
+{
+  GdkClientFilter *filter = g_new (GdkClientFilter, 1);
+
+  filter->type = message_type;
+  filter->function = func;
+  filter->data = data;
+  
+  client_filters = g_list_prepend (client_filters, filter);
+}
+
 static gint
 gdk_event_translate (GdkEvent *event,
 		     XEvent   *xevent)
@@ -1793,15 +1859,9 @@ gdk_event_translate (GdkEvent *event,
   
   return_val = FALSE;
   
-  /* We need to play catch-up with the dnd motion events */
-  if(gdk_dnd.drag_really && xevent->type == MotionNotify)
-    while (XCheckTypedEvent(xevent->xany.display,MotionNotify,xevent));
-  
   /* Find the GdkWindow that this event occurred in.
-   * All events occur in some GdkWindow (otherwise, why
-   *  would we be receiving them). It really is an error
-   *  to receive an event for which we cannot find the
-   *  corresponding GdkWindow. We handle events with window=None
+   * 
+   * We handle events with window=None
    *  specially - they are generated by XFree86's XInput under
    *  some circumstances.
    */
@@ -1822,15 +1882,20 @@ gdk_event_translate (GdkEvent *event,
   
   if (window != NULL)
     gdk_window_ref (window);
-  else if (gdk_null_window_warnings)
-    {
-      /* Special purpose programs that
-       * get events for other windows may
-       * want to disable this
-       */
-      g_warning ("xwindow(%#lx) lookup reveals NULL", xevent->xany.window);
-    }
+#ifdef USE_XIM
+  else if (XFilterEvent(xevent, None)) /* for xlib XIM handling */
+    return FALSE;
+#endif
+  else
+    GDK_NOTE (EVENTS, 
+      g_message ("Got event for unknown window: %#lx\n", xevent->xany.window));
   
+  event->any.window = window;
+  event->any.send_event = xevent->xany.send_event;
+  
+  if (window_private && window_private->destroyed)
+    return FALSE;
+
   /* Check for filters for this window */
   
   {
@@ -1845,7 +1910,7 @@ gdk_event_translate (GdkEvent *event,
 	return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
       }
   }
-  
+
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so
    *  the conversion is fairly straightforward. We also
@@ -2031,44 +2096,7 @@ gdk_event_translate (GdkEvent *event,
 	  button_number[1] = -1;
 	  button_number[0] = event->button.button;
 	}
-      if(window_private
-	 && window_private->dnd_drag_enabled
-	 && !gdk_dnd.drag_perhaps
-	 && event->button.button == 1
-	 && !gdk_dnd.drag_really)
-	{
-	  gdk_dnd.drag_perhaps = 1;
-	  gdk_dnd.dnd_drag_start.x = xevent->xbutton.x_root;
-	  gdk_dnd.dnd_drag_start.y = xevent->xbutton.y_root;
-	  gdk_dnd.real_sw = window_private;
-	  
-	  if(gdk_dnd.drag_startwindows)
-	    {
-	      g_free(gdk_dnd.drag_startwindows);
-	      gdk_dnd.drag_startwindows = NULL;
-	    }
-	  gdk_dnd.drag_numwindows = gdk_dnd.drag_really = 0;
-	  gdk_dnd.dnd_grabbed = FALSE;
-	  
-	  {
-	    /* Set motion mask for first DnD'd window, since it
-	       will be the one that is actually dragged */
-	    XWindowAttributes dnd_winattr;
-	    XSetWindowAttributes dnd_setwinattr;
-	    
-	    /* We need to get motion events while the button is down, so
-	       we can know whether to really start dragging or not... */
-	    XGetWindowAttributes(gdk_display, (Window)window_private->xwindow,
-				 &dnd_winattr);
-	    
-	    window_private->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
-	    dnd_setwinattr.event_mask = 
-	      window_private->dnd_drag_eventmask = ButtonMotionMask | ButtonPressMask | ButtonReleaseMask |
-	      EnterWindowMask | LeaveWindowMask | ExposureMask;
-	    XChangeWindowAttributes(gdk_display, window_private->xwindow,
-				    CWEventMask, &dnd_setwinattr);
-	  }
-	}
+
       return_val = window_private && !window_private->destroyed;
       break;
       
@@ -2102,66 +2130,18 @@ gdk_event_translate (GdkEvent *event,
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
       
-      gdk_dnd.last_drop_time = xevent->xbutton.time;
-      if(gdk_dnd.drag_perhaps)
-	{
-	  {
-	    XSetWindowAttributes attrs;
-	    /* Reset event mask to pre-drag value, assuming event_mask
-	       doesn't change during drag */
-	    attrs.event_mask = gdk_dnd.real_sw->dnd_drag_savedeventmask;
-	    XChangeWindowAttributes(gdk_display, gdk_dnd.real_sw->xwindow,
-				    CWEventMask, &attrs);
-	  }
-	  
-	  if (gdk_dnd.dnd_grabbed) 
-	    {
-	      gdk_dnd_display_drag_cursor(-2,
-					  -2,
-					  FALSE, TRUE);
-	      XUngrabPointer(gdk_display, CurrentTime);
-	      gdk_dnd.dnd_grabbed = FALSE;
-	    }
-	  
-	  if(gdk_dnd.drag_really)
-	    {
-	      GdkPoint foo;
-	      foo.x = xevent->xbutton.x_root;
-	      foo.y = xevent->xbutton.y_root;
-	      
-	      if(gdk_dnd.dnd_drag_target != None)
-		gdk_dnd_drag_end(gdk_dnd.dnd_drag_target, foo);
-	      gdk_dnd.drag_really = 0;
-	      
-	      gdk_dnd.drag_numwindows = 0;
-	      if(gdk_dnd.drag_startwindows)
-		{
-		  g_free(gdk_dnd.drag_startwindows);
-		  gdk_dnd.drag_startwindows = NULL;
-		}
-	      
-	      gdk_dnd.real_sw = NULL;
-	    }
-	  
-	  gdk_dnd.drag_perhaps = 0;
-	  gdk_dnd.dnd_drag_start.x = gdk_dnd.dnd_drag_start.y = 0;
-	  gdk_dnd.dnd_drag_dropzone.x = gdk_dnd.dnd_drag_dropzone.y = 0;
-	  gdk_dnd.dnd_drag_dropzone.width = gdk_dnd.dnd_drag_dropzone.height = 0;
-	  gdk_dnd.dnd_drag_curwin = None;
-	  return_val = window_private?TRUE:FALSE;
-	} else
-	  return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
+
       break;
       
     case MotionNotify:
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS,
-		g_message ("motion notify:\t\twindow: %ld  x,y: %d %d  hint: %s d:%d r%d",
+		g_message ("motion notify:\t\twindow: %ld  x,y: %d %d  hint: %s", 
 			   xevent->xmotion.window - base_id,
 			   xevent->xmotion.x, xevent->xmotion.y,
-			   (xevent->xmotion.is_hint) ? "true" : "false",
-			   gdk_dnd.drag_perhaps, gdk_dnd.drag_really));
+			   (xevent->xmotion.is_hint) ? "true" : "false"));
       
       if (window_private &&
 	  (window_private->extension_events != 0) &&
@@ -2183,114 +2163,7 @@ gdk_event_translate (GdkEvent *event,
       event->motion.source = GDK_SOURCE_MOUSE;
       event->motion.deviceid = GDK_CORE_POINTER;
       
-#define IS_IN_ZONE(cx, cy) (cx >= gdk_dnd.dnd_drag_dropzone.x \
-     && cy >= gdk_dnd.dnd_drag_dropzone.y \
-     && cx < (gdk_dnd.dnd_drag_dropzone.x + gdk_dnd.dnd_drag_dropzone.width) \
-     && cy < (gdk_dnd.dnd_drag_dropzone.y + gdk_dnd.dnd_drag_dropzone.height))
-      
-      if(gdk_dnd.drag_perhaps && gdk_dnd.drag_really
-	 /* && event->motion.is_hint */ /* HINTME */)
-	{
-	  /* First, we have to find what window the motion was in... */
-	  /* XXX there has to be a better way to do this, perhaps with
-	     XTranslateCoordinates or XQueryTree - I don't know how,
-	     and this sort of works */
-	  static Window lastwin = None, curwin = None;
-#if 0
-	  Window twin;
-#endif
-	  Window childwin = gdk_root_window;
-	  int x, y, ox, oy;
-	  
-	  /* Interlude - display cursor for the drag ASAP */
-	  gdk_dnd_display_drag_cursor(xevent->xmotion.x_root,
-				      xevent->xmotion.y_root,
-				      gdk_dnd.dnd_drag_target?TRUE:FALSE,
-				      FALSE);
-	  
-	  lastwin = curwin;
-	  curwin = gdk_root_window;
-	  ox = x = xevent->xmotion.x_root;
-	  oy = y = xevent->xmotion.y_root;
-#if 1
-	  curwin = gdk_window_xid_at_coords(xevent->xmotion.x_root,
-					    xevent->xmotion.y_root,
-					    gdk_dnd.c->xids,TRUE);
-	  XTranslateCoordinates(gdk_display, gdk_root_window, curwin,
-				x, y, &x, &y, &childwin);
-#else
-	  while(childwin != None)
-	    {
-	      ox = x; oy = y;
-	      curwin = childwin;
-	      XTranslateCoordinates(gdk_display, curwin, curwin,
-				    x, y, &x, &y, &childwin);
-	      if(childwin != None) 
-		{
-		  XTranslateCoordinates(gdk_display, curwin, childwin,
-					x, y, &x, &y, &twin);
-		}
-	    }
-#endif
-	  GDK_NOTE (DND,
-		    g_message("Drag is now in window %#lx, lastwin was %#lx, ddc = %#lx",
-			      curwin, lastwin, gdk_dnd.dnd_drag_curwin));
-	  if(curwin != gdk_dnd.dnd_drag_curwin && curwin != lastwin)
-	    {
-	      /* We have left one window and entered another
-		 (do leave & enter bits) */
-	      if(gdk_dnd.dnd_drag_curwin != None)
-		gdk_dnd_drag_leave(gdk_dnd.dnd_drag_curwin);
-	      gdk_dnd.dnd_drag_curwin = curwin;
-	      gdk_dnd_drag_enter(gdk_dnd.dnd_drag_curwin);
-	      gdk_dnd.dnd_drag_dropzone.x = gdk_dnd.dnd_drag_dropzone.y = 0;
-	      gdk_dnd.dnd_drag_dropzone.width = gdk_dnd.dnd_drag_dropzone.height = 0;
-	      gdk_dnd.dnd_drag_target = None;
-	      GDK_NOTE (DND,
-			g_message("curwin = %#lx, lastwin = %#lx, dnd_drag_curwin = %#lx",
-				  curwin, lastwin, gdk_dnd.dnd_drag_curwin));
-	      
-	      gdk_dnd_display_drag_cursor(xevent->xmotion.x_root,
-					  xevent->xmotion.y_root,
-					  FALSE, TRUE);
-	    }
-	  else if(gdk_dnd.dnd_drag_dropzone.width > 0
-		  && gdk_dnd.dnd_drag_dropzone.height > 0
-		  && curwin == gdk_dnd.dnd_drag_curwin)
-	    {
-	      /* Handle all that dropzone stuff - thanks John ;-) */
-	      if (gdk_dnd.dnd_drag_target != None)
-		{
-		  gboolean in_zone = IS_IN_ZONE(xevent->xmotion.x_root,
-						xevent->xmotion.y_root);
-		  gboolean old_in_zone = IS_IN_ZONE(gdk_dnd.dnd_drag_oldpos.x, 
-						    gdk_dnd.dnd_drag_oldpos.y);
-		  
-		  if (!in_zone && old_in_zone)
-		    {
-		      /* We were in the drop zone and moved out */
-		      gdk_dnd.dnd_drag_target = None;
-		      gdk_dnd_drag_leave(curwin);
-		      gdk_dnd_display_drag_cursor(xevent->xmotion.x_root,
-						  xevent->xmotion.y_root,
-						  FALSE, TRUE);
-		    }
-		  else if (!in_zone && !old_in_zone)
-		    {
-		      /* We were outside drop zone but in the window
-			 - have to send enter events */
-		      gdk_dnd_drag_enter(curwin);
-		      gdk_dnd.dnd_drag_curwin = curwin;
-		      gdk_dnd.dnd_drag_dropzone.x = gdk_dnd.dnd_drag_dropzone.y = 0;
-		      gdk_dnd.dnd_drag_target = None;
-		    }
-		}
-	    } /* else
-		 dnd_drag_curwin = None; */
-	  return_val = FALSE;
-	}
-      else
-	return_val = window_private && !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
       
     case EnterNotify:
@@ -2366,35 +2239,7 @@ gdk_event_translate (GdkEvent *event,
       
       event->crossing.focus = xevent->xcrossing.focus;
       event->crossing.state = xevent->xcrossing.state;
-      
-#ifdef G_ENABLE_DEBUG
-      if ((gdk_debug_flags & GDK_DEBUG_DND) & gdk_dnd.drag_perhaps)
-	{
-	  g_message("We may[%d] have a drag into %#lx = %#lx",
-		    gdk_dnd.drag_really,
-		    xevent->xcrossing.window, gdk_dnd.real_sw->xwindow);
-	}
-#endif /* G_ENABLE_DEBUG */
-      
-      if (gdk_dnd.drag_perhaps && gdk_dnd.drag_really && 
-	  (xevent->xcrossing.window == gdk_dnd.real_sw->xwindow))
-	{
-#if 0
-	  gdk_dnd.drag_really = 0;
-	  
-	  GDK_NOTE (DND, g_message("Ungrabbed"));
-	  
-	  gdk_dnd.drag_numwindows = 0;
-	  g_free(gdk_dnd.drag_startwindows);
-	  gdk_dnd.drag_startwindows = NULL;
-	  /* We don't want to ungrab the pointer here, or we'll
-	   * start getting spurious enter/leave events */
-#endif
-#if 0
-	  XChangeActivePointerGrab (gdk_display, 0, None, CurrentTime);
-#endif
-	}
-      
+  
       return_val = window_private && !window_private->destroyed;
       break;
       
@@ -2464,37 +2309,6 @@ gdk_event_translate (GdkEvent *event,
       
       event->crossing.focus = xevent->xcrossing.focus;
       event->crossing.state = xevent->xcrossing.state;
-      
-#ifdef G_ENABLE_DEBUG
-      if ((gdk_debug_flags & GDK_DEBUG_DND) & gdk_dnd.drag_perhaps)
-	{
-	  g_message("We may[%d] have a drag out of %#lx = %#lx",
-		    gdk_dnd.drag_really,
-		    xevent->xcrossing.window, gdk_dnd.real_sw->xwindow);
-	}
-#endif /* G_ENABLE_DEBUG */
-      if (gdk_dnd.drag_perhaps && !gdk_dnd.drag_really &&
-	  (xevent->xcrossing.window == gdk_dnd.real_sw->xwindow))
-	{
-	  gboolean xgpret;
-	  gdk_dnd_drag_addwindow((GdkWindow *) gdk_dnd.real_sw);
-	  gdk_dnd_drag_begin((GdkWindow *) gdk_dnd.real_sw);
-	  xgpret = 
-	    XGrabPointer(gdk_display, gdk_dnd.real_sw->xwindow, False,
-			 ButtonMotionMask | PointerMotionMask |
-			 /* PointerMotionHintMask | */ /* HINTME */
-			 ButtonPressMask | ButtonReleaseMask,
-			 GrabModeAsync, GrabModeAsync, None,
-			 None, CurrentTime);
-#ifdef G_ENABLE_DEBUG
-	  GDK_NOTE(DND, g_message("xgpret = %d", xgpret));
-#endif
-	  gdk_dnd.dnd_grabbed = TRUE;
-	  gdk_dnd.drag_really = 1;
-	  gdk_dnd_display_drag_cursor(xevent->xmotion.x_root,
-				      xevent->xmotion.y_root,
-				      FALSE, TRUE);
-	}
       
       return_val = window_private && !window_private->destroyed;
       break;
@@ -2852,231 +2666,50 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case ClientMessage:
-      /* Print debugging info.
-       */
-      GDK_NOTE (EVENTS,
-		g_message ("client message:\twindow: %ld",
-			   xevent->xclient.window - base_id));
-      
-      /* Client messages are the means of the window manager
-       *  communicating with a program. We'll first check to
-       *  see if this is really the window manager talking
-       *  to us.
-       */
-      if (xevent->xclient.message_type == gdk_wm_protocols)
-	{
-	  if ((Atom) xevent->xclient.data.l[0] == gdk_wm_delete_window)
-	    {
-	      /* The delete window request specifies a window
-	       *  to delete. We don't actually destroy the
-	       *  window because "it is only a request". (The
-	       *  window might contain vital data that the
-	       *  program does not want destroyed). Instead
-	       *  the event is passed along to the program,
-	       *  which should then destroy the window.
-	       */
-	      
-	      /* Print debugging info.
-	       */
-	      GDK_NOTE (EVENTS,
-			g_message ("delete window:\t\twindow: %ld",
-				   xevent->xclient.window - base_id));
-	      
-	      event->any.type = GDK_DELETE;
-	      event->any.window = window;
-	      
-	      return_val = window_private && !window_private->destroyed;
-	    }
-	  else if ((Atom) xevent->xclient.data.l[0] == gdk_wm_take_focus)
-	    {
-	    }
-	}
-      else if (xevent->xclient.message_type == gdk_dnd.gdk_XdeEnter)
-	{
-	  Atom reptype = 0;
-	  
-	  event->dropenter.u.allflags = xevent->xclient.data.l[1];
-	  
-	  GDK_NOTE (DND, g_message ("GDK_DROP_ENTER [%d][%d]",
-				    window_private->dnd_drop_enabled, event->dropenter.u.flags.sendreply));
-	  return_val = FALSE;
-	  
-	  /* Now figure out if we really want this drop...
-	   * If someone is trying funky clipboard stuff, ignore 
-	   */
-	  if (window_private
-	      && window_private->dnd_drop_enabled
-	      && event->dropenter.u.flags.sendreply
-	      && (reptype = gdk_dnd_check_types (window, xevent)))
-	    {
-	      XEvent replyev;
-	      
-	      replyev.xclient.type = ClientMessage;
-	      replyev.xclient.window = xevent->xclient.data.l[0];
-	      replyev.xclient.format = 32;
-	      replyev.xclient.message_type = gdk_dnd.gdk_XdeRequest;
-	      replyev.xclient.data.l[0] = window_private->xwindow;
-	      
-	      event->dragrequest.u.allflags = 0;
-	      event->dragrequest.u.flags.protocol_version =
-		DND_PROTOCOL_VERSION;
-	      event->dragrequest.u.flags.willaccept = 1;
-	      event->dragrequest.u.flags.delete_data =
-		(window_private->dnd_drop_destructive_op) ? 1 : 0;
-	      
-	      replyev.xclient.data.l[1] = event->dragrequest.u.allflags;
-	      replyev.xclient.data.l[2] = replyev.xclient.data.l[3] = 0;
-	      replyev.xclient.data.l[4] = reptype;
-	      
-	      if (!gdk_send_xevent (replyev.xclient.window, False, 
-				    NoEventMask, &replyev))
-		GDK_NOTE (DND, g_message("Sending XdeRequest to %#lx failed",
-					 replyev.xclient.window));
-	      
-	      event->any.type = GDK_DROP_ENTER;
-	      event->any.window = window;
-	      event->dropenter.requestor = replyev.xclient.window;
-	      event->dropenter.u.allflags = xevent->xclient.data.l[1];
-	      
-	      GDK_NOTE (DND, g_message("We sent a GDK_DROP_ENTER on to Gtk"));
-	      return_val = TRUE;
-	    }
-	}
-      else if (xevent->xclient.message_type == gdk_dnd.gdk_XdeLeave)
-	{
-#ifdef G_ENABLE_DEBUG	  
-	  if (gdk_debug_flags & (GDK_DEBUG_EVENTS | GDK_DEBUG_DND))
-	    g_message ("GDK_DROP_LEAVE");
-#endif	  
-	  
-	  if (window_private && window_private->dnd_drop_enabled)
-	    {
-	      event->dropleave.type = GDK_DROP_LEAVE;
-	      event->dropleave.window = window;
-	      event->dropleave.requestor = xevent->xclient.data.l[0];
-	      event->dropleave.u.allflags = xevent->xclient.data.l[1];
-	      return_val = TRUE;
-	    }
-	  else
+      {
+	GList *tmp_list;
+	GdkFilterReturn result = GDK_FILTER_CONTINUE;
+
+	/* Print debugging info.
+	 */
+	GDK_NOTE (EVENTS,
+		  g_message ("client message:\twindow: %ld",
+			     xevent->xclient.window - base_id));
+	
+	tmp_list = client_filters;
+	while (tmp_list)
+	  {
+	    GdkClientFilter *filter = tmp_list->data;
+	    if (filter->type == xevent->xclient.message_type)
+	      {
+		result = (*filter->function) (xevent, event, filter->data);
+		break;
+	      }
+	    
+	    tmp_list = tmp_list->next;
+	  }
+
+	switch (result)
+	  {
+	  case GDK_FILTER_REMOVE:
 	    return_val = FALSE;
-	}
-      else if (xevent->xclient.message_type == gdk_dnd.gdk_XdeRequest)
-	{
-	  /* 
-	   * make sure to only handle requests from the window the cursor is
-	   * over 
-	   */
-#ifdef G_ENABLE_DEBUG	  
-	  if (gdk_debug_flags & (GDK_DEBUG_EVENTS | GDK_DEBUG_DND))
-	    g_message ("GDK_DRAG_REQUEST");
-#endif	  
-	  event->dragrequest.u.allflags = xevent->xclient.data.l[1];
-	  return_val = FALSE;
-	  
-	  if (window && gdk_dnd.drag_really &&
-	      xevent->xclient.data.l[0] == gdk_dnd.dnd_drag_curwin &&
-	      event->dragrequest.u.flags.sendreply == 0)
-	    {
-	      /* Got request - do we need to ask user? */
-	      if (!event->dragrequest.u.flags.willaccept
-		  && event->dragrequest.u.flags.senddata)
-		{
-		  /* Yes we do :) */
-		  event->dragrequest.type = GDK_DRAG_REQUEST;
-		  event->dragrequest.window = window;
-		  event->dragrequest.requestor = xevent->xclient.data.l[0];
-		  event->dragrequest.isdrop = 0;
-		  event->dragrequest.drop_coords.x =
-		    event->dragrequest.drop_coords.y = 0;
-		  return_val = TRUE;
-		}
-	      else if (event->dragrequest.u.flags.willaccept)
-		{
-		  window_private->dnd_drag_destructive_op =
-		    event->dragrequest.u.flags.delete_data;
-		  window_private->dnd_drag_accepted = 1;
-		  window_private->dnd_drag_data_type =
-		    xevent->xclient.data.l[4];
-		  
-		  gdk_dnd.dnd_drag_target = gdk_dnd.dnd_drag_curwin;
-		  gdk_dnd_display_drag_cursor(-1, -1, TRUE, TRUE);
-		}
-	      gdk_dnd.dnd_drag_dropzone.x = xevent->xclient.data.l[2] & 65535;
-	      gdk_dnd.dnd_drag_dropzone.y =
-		(xevent->xclient.data.l[2] >> 16) & 65535;
-	      gdk_dnd.dnd_drag_dropzone.width = xevent->xclient.data.l[3] & 65535;
-	      gdk_dnd.dnd_drag_dropzone.height =
-		(xevent->xclient.data.l[3] >> 16) & 65535;
-	    }
-	}
-      else if(xevent->xclient.message_type == gdk_dnd.gdk_XdeDataAvailable)
-	{
-	  gint tmp_int; Atom tmp_atom;
-	  gulong tmp_long;
-	  guchar *tmp_charptr;
-	  
-#ifdef G_ENABLE_DEBUG	  
-	  if (gdk_debug_flags & (GDK_DEBUG_EVENTS | GDK_DEBUG_DND))
-	    g_message("GDK_DROP_DATA_AVAIL");
-#endif	  
-	  event->dropdataavailable.u.allflags = xevent->xclient.data.l[1];
-	  event->dropdataavailable.timestamp = xevent->xclient.data.l[4];
-	  event->dropdataavailable.coords.x =
-	    xevent->xclient.data.l[3] & 0xffff;
-	  event->dropdataavailable.coords.y =
-	    (xevent->xclient.data.l[3] >> 16) & 0xffff;
-	  if(window
-	     /* No preview of data ATM */
-	     && event->dropdataavailable.u.flags.isdrop)
-	    {
-	      event->dropdataavailable.type = GDK_DROP_DATA_AVAIL;
-	      event->dropdataavailable.window = window;
-	      event->dropdataavailable.requestor = xevent->xclient.data.l[0];
-	      event->dropdataavailable.data_type =
-		gdk_atom_name(xevent->xclient.data.l[2]);
-	      if(XGetWindowProperty (gdk_display,
-				     event->dropdataavailable.requestor,
-				     xevent->xclient.data.l[2],
-				     0, LONG_MAX - 1,
-				     False, XA_PRIMARY, &tmp_atom,
-				     &tmp_int,
-				     &event->dropdataavailable.data_numbytes,
-				     &tmp_long,
-				     &tmp_charptr)
-		 != Success)
-		{
-		  g_warning("XGetWindowProperty on %#x may have failed\n",
-			    event->dropdataavailable.requestor);
-		  event->dropdataavailable.data = NULL;
-		}
-	      else
-		{
-		  GDK_NOTE (DND, g_message("XGetWindowProperty got us %ld bytes",
-					   event->dropdataavailable.data_numbytes));
-		  event->dropdataavailable.data =
-		    g_malloc (event->dropdataavailable.data_numbytes);
-		  memcpy (event->dropdataavailable.data,
-			  tmp_charptr, event->dropdataavailable.data_numbytes);
-		  XFree(tmp_charptr);
-		  return_val = TRUE;
-		}
-	      return_val = TRUE;
-	    }
-	}
-      else
-	{
-	  /* Send unknown ClientMessage's on to Gtk for it to use */
-	  event->client.type = GDK_CLIENT_EVENT;
-	  event->client.window = window;
-	  event->client.message_type = xevent->xclient.message_type;
-	  event->client.data_format = xevent->xclient.format;
-	  memcpy(&event->client.data, &xevent->xclient.data,
-		 sizeof(event->client.data));
-	  if(window)
+	    break;
+	  case GDK_FILTER_TRANSLATE:
 	    return_val = TRUE;
-	  else	
-	    return_val = FALSE;
-	}
+	    break;
+	  case GDK_FILTER_CONTINUE:
+	    /* Send unknown ClientMessage's on to Gtk for it to use */
+	    event->client.type = GDK_CLIENT_EVENT;
+	    event->client.window = window;
+	    event->client.message_type = xevent->xclient.message_type;
+	    event->client.data_format = xevent->xclient.format;
+	    memcpy(&event->client.data, &xevent->xclient.data,
+		   sizeof(event->client.data));
+	    
+	    return_val = (window != NULL);
+	  }
+      }
+      
       if(window_private)
 	return_val = return_val && !window_private->destroyed;
       break;
@@ -3127,6 +2760,38 @@ gdk_event_translate (GdkEvent *event,
     gdk_window_unref (window);
   
   return return_val;
+}
+
+GdkFilterReturn
+gdk_wm_protocols_filter (GdkXEvent *xev,
+		     GdkEvent  *event,
+		     gpointer data)
+{
+  XEvent *xevent = (XEvent *)xev;
+
+  if ((Atom) xevent->xclient.data.l[0] == gdk_wm_delete_window)
+    {
+  /* The delete window request specifies a window
+   *  to delete. We don't actually destroy the
+   *  window because "it is only a request". (The
+   *  window might contain vital data that the
+   *  program does not want destroyed). Instead
+   *  the event is passed along to the program,
+   *  which should then destroy the window.
+   */
+      GDK_NOTE (EVENTS,
+		g_message ("delete window:\t\twindow: %ld",
+			   xevent->xclient.window - base_id));
+      
+      event->any.type = GDK_DELETE;
+
+      return GDK_FILTER_TRANSLATE;
+    }
+  else if ((Atom) xevent->xclient.data.l[0] == gdk_wm_take_focus)
+    {
+    }
+
+  return GDK_FILTER_REMOVE;
 }
 
 #if 0
@@ -3343,67 +3008,6 @@ gdk_signal (int sig_num)
   gdk_exit (1);
 #endif /* !G_ENABLE_DEBUG */
 }
-
-static void
-gdk_dnd_drag_begin (GdkWindow *initial_window)
-{
-  GdkEvent tev;
-  
-  GDK_NOTE(DND, g_message("------- STARTING DRAG from %p", initial_window));
-  
-  tev.type = GDK_DRAG_BEGIN;
-  tev.dragbegin.window = initial_window;
-  tev.dragbegin.u.allflags = 0;
-  tev.dragbegin.u.flags.protocol_version = DND_PROTOCOL_VERSION;
-  
-  gdk_event_put (&tev);
-}
-
-static void
-gdk_dnd_drag_enter (Window dest)
-{
-  XEvent sev;
-  GdkEventDropEnter tev;
-  int i;
-  GdkWindowPrivate *wp;
-  
-  sev.xclient.type = ClientMessage;
-  sev.xclient.format = 32;
-  sev.xclient.message_type = gdk_dnd.gdk_XdeEnter;
-  sev.xclient.window = dest;
-  
-  tev.u.allflags = 0;
-  tev.u.flags.protocol_version = DND_PROTOCOL_VERSION;
-  tev.u.flags.sendreply = 1;
-  for (i = 0; i < gdk_dnd.drag_numwindows; i++)
-    {
-      wp = (GdkWindowPrivate *) gdk_dnd.drag_startwindows[i];
-      if (wp->dnd_drag_data_numtypesavail)
-	{
-	  sev.xclient.data.l[0] = wp->xwindow;
-	  tev.u.flags.extended_typelist = (wp->dnd_drag_data_numtypesavail > 3)?1:0;
-	  sev.xclient.data.l[1] = tev.u.allflags;
-	  sev.xclient.data.l[2] = wp->dnd_drag_data_typesavail[0];
-	  if (wp->dnd_drag_data_numtypesavail > 1)
-	    {
-	      sev.xclient.data.l[3] = wp->dnd_drag_data_typesavail[1];
-	      if (wp->dnd_drag_data_numtypesavail > 2)
-		{
-		  sev.xclient.data.l[4] = wp->dnd_drag_data_typesavail[2];
-		}
-	      else
-		sev.xclient.data.l[4] = None;
-	    }
-	  else
-	    sev.xclient.data.l[3] = sev.xclient.data.l[4] = None;
-	  if (!gdk_send_xevent (dest, False, StructureNotifyMask, &sev))
-	    GDK_NOTE (DND, g_message("Sending XdeEnter to %#lx failed",
-				     dest));
-	}
-      
-    }
-}
-
 
 #ifdef USE_XIM
 
@@ -4051,133 +3655,6 @@ _g_mbtowc (wchar_t *wstr, const char *str, size_t len)
 
 #endif /* X_LOCALE */
 
-static void
-gdk_dnd_drag_leave (Window dest)
-{
-  XEvent sev;
-  GdkEventDropLeave tev;
-  int i;
-  GdkWindowPrivate *wp;
-  
-  tev.u.allflags = 0;
-  
-  tev.u.flags.protocol_version = DND_PROTOCOL_VERSION;
-  sev.xclient.type = ClientMessage;
-  sev.xclient.window = dest;
-  sev.xclient.format = 32;
-  sev.xclient.message_type = gdk_dnd.gdk_XdeLeave;
-  sev.xclient.data.l[1] = tev.u.allflags;
-  for (i = 0; i < gdk_dnd.drag_numwindows; i++)
-    {
-      wp = (GdkWindowPrivate *) gdk_dnd.drag_startwindows[i];
-      sev.xclient.data.l[0] = wp->xwindow;
-      if (!gdk_send_xevent (dest, False, StructureNotifyMask, &sev))
-	GDK_NOTE (DND, g_message("Sending XdeLeave to %#lx failed",
-				 dest));
-      wp->dnd_drag_accepted = 0;
-    }
-}
-
-/* 
- * when a drop occurs, we go through the list of windows being dragged and
- * tell them that it has occurred, so that they can set things up and reply
- * to 'dest' window 
- */
-static void
-gdk_dnd_drag_end (Window     dest, 
-		  GdkPoint   coords)
-{
-  GdkWindowPrivate *wp;
-  GdkEvent tev;
-  int i;
-  
-  tev.dragrequest.type = GDK_DRAG_REQUEST;
-  tev.dragrequest.drop_coords = coords;
-  tev.dragrequest.requestor = dest;
-  tev.dragrequest.u.allflags = 0;
-  tev.dragrequest.u.flags.protocol_version = DND_PROTOCOL_VERSION;
-  tev.dragrequest.isdrop = 1;
-  
-  for (i = 0; i < gdk_dnd.drag_numwindows; i++)
-    {
-      wp = (GdkWindowPrivate *) gdk_dnd.drag_startwindows[i];
-      if (wp->dnd_drag_accepted)
-	{
-	  tev.dragrequest.window = (GdkWindow *) wp;
-	  tev.dragrequest.u.flags.delete_data = wp->dnd_drag_destructive_op;
-	  tev.dragrequest.timestamp = gdk_dnd.last_drop_time;
-	  tev.dragrequest.data_type = 
-	    gdk_atom_name(wp->dnd_drag_data_type);
-	  
-	  gdk_event_put(&tev);
-	}
-    }
-}
-
-static GdkAtom
-gdk_dnd_check_types (GdkWindow	 *window, 
-		     XEvent	 *xevent)
-{
-  GdkWindowPrivate *wp = (GdkWindowPrivate *) window;
-  int i, j;
-  GdkEventDropEnter event;
-  
-  g_return_val_if_fail(window != NULL, 0);
-  g_return_val_if_fail(xevent != NULL, 0);
-  g_return_val_if_fail(xevent->type == ClientMessage, 0);
-  g_return_val_if_fail(xevent->xclient.message_type == gdk_dnd.gdk_XdeEnter, 0);
-  
-  if(wp->dnd_drop_data_numtypesavail <= 0 ||
-     !wp->dnd_drop_data_typesavail)
-    return 0;
-  
-  for (i = 2; i <= 4; i++)
-    {
-      for (j = 0; j < wp->dnd_drop_data_numtypesavail; j++)
-	{
-	  if (xevent->xclient.data.l[i] == wp->dnd_drop_data_typesavail[j])
-	    return xevent->xclient.data.l[i];
-	}
-    }
-  
-  /* Now we get the extended type list if it's available */
-  event.u.allflags = xevent->xclient.data.l[1];
-  if (event.u.flags.extended_typelist)
-    {
-      Atom *exttypes, realtype;
-      gulong nitems, nbar;
-      gint realfmt;
-      
-      if (XGetWindowProperty(gdk_display, xevent->xclient.data.l[0],
-			     gdk_dnd.gdk_XdeTypelist, 0L, LONG_MAX - 1,
-			     False, AnyPropertyType, &realtype, &realfmt,
-			     &nitems, &nbar, (unsigned char **) &exttypes)
-	  != Success)
-	return 0;
-      
-      if (realfmt != (sizeof(Atom) * 8))
-	{
-	  g_warning("XdeTypelist property had format of %d instead of the expected %ld, on window %#lx\n",
-		    realfmt, (glong)sizeof(Atom) * 8, xevent->xclient.data.l[0]);
-	  return 0;
-	}
-      
-      for (i = 0; i <= nitems; i++)
-	{
-	  for (j = 0; j < wp->dnd_drop_data_numtypesavail; j++)
-	    {
-	      if (exttypes[i] == wp->dnd_drop_data_typesavail[j])
-		{
-		  XFree (exttypes);
-		  return exttypes[i];
-		}
-	    }
-	}
-      XFree (exttypes);
-    }
-  return 0;
-}
-
 /* 
  * used for debugging only 
  */
@@ -4192,78 +3669,6 @@ gdk_print_atom (GdkAtom anatom)
     g_free(tmpstr);
 }
 #endif
-
-/* 
- * used only by below routine and itself 
- */
-static Window 
-getchildren (Display	 *dpy, 
-	     Window	  win, 
-	     Atom	  WM_STATE)
-{
-  Window root, parent, *children, inf = 0;
-  Atom type = None;
-  unsigned int nchildren, i;
-  int format;
-  unsigned long nitems, after;
-  unsigned char *data;
-  
-  if (XQueryTree(dpy, win, &root, &parent, &children, &nchildren) == 0)
-    return 0;
-  
-  for (i = 0; !inf && (i < nchildren); i++)
-    {
-      XGetWindowProperty (dpy, children[i], WM_STATE, 0, 0, False,
-			  AnyPropertyType, &type, &format, &nitems,
-			  &after, &data);
-      if (type != 0)
-	inf = children[i];
-      XFree(data);
-    }
-  
-  for (i = 0; !inf && (i < nchildren); i++)
-    inf = getchildren (dpy, children[i], WM_STATE);
-  
-  if (children != None)
-    XFree ((char *) children);
-  
-  return inf;
-}
-
-/* 
- * find a window with WM_STATE, else return win itself, as per ICCCM
- *
- * modification of the XmuClientWindow() routine from X11R6.3
- */
-Window
-gdk_get_client_window (Display	*dpy, 
-		       Window	 win)
-{
-  Atom WM_STATE;
-  Atom type = None;
-  int format;
-  unsigned long nitems, after;
-  unsigned char *data;
-  Window inf;
-  
-  if (win == 0)
-    return DefaultRootWindow(dpy);
-  
-  if ((WM_STATE = XInternAtom (dpy, "WM_STATE", True)) == 0)
-    return win;
-  
-  XGetWindowProperty (dpy, win, WM_STATE, 0, 0, False, AnyPropertyType,
-		      &type, &format, &nitems, &after, &data);
-  if (type)
-    return win;
-  
-  inf = getchildren (dpy, win, WM_STATE);
-  
-  if (inf == 0)
-    return win;
-  else
-    return inf;
-}
 
 #ifdef WE_HAVE_MOTIF_DROPS_DONE
 static GdkWindow *
@@ -4305,6 +3710,81 @@ gdk_drop_get_real_window (GdkWindow   *w,
 }
 #endif
 
+/* 
+ * used only by below routine and itself 
+ */
+static Window 
+getchildren (Display	 *dpy, 
+	     Window	  win, 
+	     Atom	  wm_state_atom)
+{
+  Window root, parent, *children, inf = 0;
+  Atom type = None;
+  unsigned int nchildren, i;
+  int format;
+  unsigned long nitems, after;
+  unsigned char *data;
+  
+  if (XQueryTree(dpy, win, &root, &parent, &children, &nchildren) == 0)
+    return 0;
+  
+  for (i = 0; !inf && (i < nchildren); i++)
+    {
+      XGetWindowProperty (dpy, children[i], wm_state_atom, 0, 0, False,
+			  AnyPropertyType, &type, &format, &nitems,
+			  &after, &data);
+      if (type != 0)
+	inf = children[i];
+      XFree(data);
+    }
+  
+  for (i = 0; !inf && (i < nchildren); i++)
+    inf = getchildren (dpy, children[i], wm_state_atom);
+  
+  if (children != None)
+    XFree ((char *) children);
+  
+  return inf;
+}
+
+/* 
+ * find a window with WM_STATE, else return win itself, as per ICCCM
+ *
+ * modification of the XmuClientWindow() routine from X11R6.3
+ */
+Window
+gdk_get_client_window (Display	*dpy, 
+		       Window	 win)
+{
+  static Atom wm_state_atom = None;
+  Atom type = None;
+  int format;
+  unsigned long nitems, after;
+  unsigned char *data;
+  Window inf;
+  
+  if (win == 0)
+    return DefaultRootWindow(dpy);
+  
+  if ((wm_state_atom = XInternAtom (dpy, "WM_STATE", True)) == 0)
+    return win;
+
+  XGetWindowProperty (dpy, win, wm_state_atom, 0, 0, False, AnyPropertyType,
+		      &type, &format, &nitems, &after, &data);
+  if (type)
+    {
+      XFree (data);
+      return win;
+    }
+  
+  inf = getchildren (dpy, win, wm_state_atom);
+  
+  if (inf == 0)
+    return win;
+  else
+    return inf;
+}
+
 /* Sends a ClientMessage to all toplevel client windows */
 void
 gdk_event_send_clientmessage_toall (GdkEvent *event)
@@ -4320,7 +3800,6 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   sev.xclient.type = ClientMessage;
   sev.xclient.display = gdk_display;
   sev.xclient.format = event->client.data_format;
-  sev.xclient.serial = CurrentTime;
   memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
   sev.xclient.message_type = event->client.message_type;
   
@@ -4352,13 +3831,14 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 		 XEvent *event_send)
 {
   Status result;
+  gint old_warnings = gdk_error_warnings;
   
   gdk_error_code = 0;
   
   gdk_error_warnings = 0;
   result = XSendEvent (gdk_display, window, propagate, event_mask, event_send);
   XSync (gdk_display, False);
-  gdk_error_warnings = 1;
+  gdk_error_warnings = old_warnings;
   
   return result && (gdk_error_code != -1);
 }

@@ -136,7 +136,7 @@ struct _GtkAllocation
    no fields should be modified directly, they should not be created
    directly, and pointers to them should not be stored beyond the duration of
    a callback. (If the last is changed, we'll need to add reference
-   counting) */
+   counting.) The time field gives the timestamp at which the data was sent. */
 
 struct _GtkSelectionData
 {
@@ -314,31 +314,55 @@ struct _GtkWidgetClass
 				    GdkEventProximity  *event);
   gint (* proximity_out_event)	   (GtkWidget	       *widget,
 				    GdkEventProximity  *event);
-  gint (* drag_begin_event)	   (GtkWidget	       *widget,
-				    GdkEventDragBegin  *event);
-  gint (* drag_request_event)	   (GtkWidget	       *widget,
-				    GdkEventDragRequest *event);
-  gint (* drag_end_event)	   (GtkWidget	       *widget,
-				    GdkEvent	       *event);
-  gint (* drop_enter_event)	   (GtkWidget	       *widget,
-				    GdkEventDropEnter  *event);
-  gint (* drop_leave_event)	   (GtkWidget	       *widget,
-				    GdkEventDropLeave  *event);
-  gint (* drop_data_available_event)(GtkWidget	       *widget,
-				     GdkEventDropDataAvailable *event);
   gint (* visibility_notify_event)  (GtkWidget	       *widget,
 				     GdkEventVisibility *event);
   gint (* client_event)		   (GtkWidget	       *widget,
 				    GdkEventClient     *event);
   gint (* no_expose_event)	   (GtkWidget	       *widget,
 				    GdkEventAny	       *event);
-  gint (* other_event)		   (GtkWidget	       *widget,
-				    GdkEventOther      *event);
-  
-  /* selection */
-  void (* selection_received)      (GtkWidget          *widget,
-				    GtkSelectionData   *selection_data);
 
+  /* selection */
+  void (* selection_get)           (GtkWidget          *widget,
+				    GtkSelectionData   *selection_data,
+				    guint               info,
+				    guint               time);
+  void (* selection_received)      (GtkWidget          *widget,
+				    GtkSelectionData   *selection_data,
+				    guint               time);
+
+  /* Source side drag signals */
+  void (* drag_begin)	           (GtkWidget	       *widget,
+				    GdkDragContext     *context);
+  void (* drag_end)	           (GtkWidget	       *widget,
+				    GdkDragContext     *context);
+  void (* drag_data_get)           (GtkWidget          *widget,
+				    GdkDragContext     *context,
+				    GtkSelectionData   *selection_data,
+				    guint               info,
+				    guint32             time);
+  void (* drag_data_delete)        (GtkWidget	       *widget,
+				    GdkDragContext     *context);
+
+  /* Target side drag signals */
+  void (* drag_leave)	           (GtkWidget	       *widget,
+				    GdkDragContext     *context,
+				    guint               time);
+  gboolean (* drag_motion)         (GtkWidget	       *widget,
+				    GdkDragContext     *context,
+				    gint                x,
+				    gint                y,
+				    guint               time);
+  gboolean (* drag_drop)           (GtkWidget	       *widget,
+				    GdkDragContext     *context,
+				    gint                x,
+				    gint                y,
+				    guint               time);
+  void (* drag_data_received)      (GtkWidget          *widget,
+				    GdkDragContext     *context,
+				    GtkSelectionData   *selection_data,
+				    guint               info,
+				    guint32             time);
+  
   /* action signals */
   void (* debug_msg)		   (GtkWidget	       *widget,
 				    const gchar	       *string);
@@ -460,6 +484,8 @@ void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
 					   gint			height);
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 					   gint			events);
+void       gtk_widget_add_events          (GtkWidget           *widget,
+					   gint	                events);
 void	   gtk_widget_set_extension_events (GtkWidget		*widget,
 					    GdkExtensionMode	mode);
 
@@ -535,33 +561,6 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 					    guint     *path_length,
 					    gchar    **path,
 					    gchar    **path_reversed);
-
-/* When you get a drag_enter event, you can use this to tell Gtk of other
- *  items that are to be dragged as well...
- */
-void	     gtk_widget_dnd_drag_add (GtkWidget *widget);
-
-/* These two functions enable drag and/or drop on a widget,
- *  and also let Gtk know what data types will be accepted (use MIME
- *  type naming, plus tacking "URL:" on the front for link dragging)
- */
-void	     gtk_widget_dnd_drag_set (GtkWidget	    *widget,
-				      guint8	     drag_enable,
-				      gchar	   **type_accept_list,
-				      guint	     numtypes);
-void	     gtk_widget_dnd_drop_set (GtkWidget	    *widget,
-				      guint8	     drop_enable,
-				      gchar	   **type_accept_list,
-				      guint	     numtypes,
-				      guint8	     is_destructive_operation);
-
-/* Used to reply to a DRAG_REQUEST event - if you don't want to 
- * give the data then pass in NULL for it 
- */
-void	     gtk_widget_dnd_data_set (GtkWidget	    *widget,
-				      GdkEvent	    *event,
-				      gpointer	     data,
-				      gulong	     data_numbytes);
 
 #if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
 #  define gtk_widget_ref gtk_object_ref

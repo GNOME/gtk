@@ -6039,6 +6039,7 @@ create_panes (void)
  * Drag -N- Drop
  */
 
+#if 0
 gint
 dnd_drop_destroy_popup (GtkWidget *widget, GtkWindow **window)
 {
@@ -6263,6 +6264,7 @@ create_dnd (void)
   else
     gtk_widget_destroy (window);
 }
+#endif 
 
 /*
  * Shaped Windows
@@ -7908,7 +7910,7 @@ create_main_window (void)
       { "ctree", create_ctree },
       { "cursors", create_cursors },
       { "dialog", create_dialog },
-      { "dnd", create_dnd },
+      /*      { "dnd", create_dnd }, */
       { "entry", create_entry },
       { "file selection", create_file_selection },
       { "font selection", create_font_selection },
