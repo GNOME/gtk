@@ -235,6 +235,9 @@ gdk_fb_set_pixel_1(GdkDrawable *drawable,
   guint rowstride = private->rowstride;
   guchar *ptr;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   g_assert (private->depth == GDK_GC_FBDATA (gc)->depth);
   
   ptr = mem + (y*rowstride) + (x >> 3);
@@ -256,6 +259,9 @@ gdk_fb_set_pixel_8(GdkDrawable *drawable,
   guchar *mem = private->mem;
   guint rowstride = private->rowstride;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   g_assert (private->depth == GDK_GC_FBDATA (gc)->depth);
 
   mem[x + y*rowstride] = pixel;
@@ -272,6 +278,9 @@ gdk_fb_set_pixel_16(GdkDrawable *drawable,
   guchar *mem = private->mem;
   guint rowstride = private->rowstride;
   guint16 *ptr;
+
+  if (!_gdk_fb_is_active_vt)
+    return;
 
   g_assert (private->depth == GDK_GC_FBDATA (gc)->depth);
   
@@ -291,6 +300,9 @@ gdk_fb_set_pixel_24(GdkDrawable *drawable,
   guint rowstride = private->rowstride;
   guchar *smem;
   
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   g_assert (private->depth == GDK_GC_FBDATA (gc)->depth);
   
   smem = &mem[x*3 + y*rowstride];
@@ -310,6 +322,9 @@ gdk_fb_set_pixel_32(GdkDrawable *drawable,
   guchar *mem = private->mem;
   guint rowstride = private->rowstride;
   guint32 *smem;
+
+  if (!_gdk_fb_is_active_vt)
+    return;
 
   g_assert (private->depth == GDK_GC_FBDATA (gc)->depth);
   
@@ -342,6 +357,9 @@ gdk_fb_fill_span_generic (GdkDrawable *drawable,
   GdkDrawableFBData *ts_private;
   gboolean solid_stipple;
   GdkFunction func;
+
+  if (!_gdk_fb_is_active_vt)
+    return;
 
   private = GDK_DRAWABLE_FBDATA (drawable);
   gc_private = GDK_GC_FBDATA (gc);
@@ -501,6 +519,9 @@ gdk_fb_fill_span_simple_1 (GdkDrawable *drawable,
   guint rowstride;
   gint left, right, y;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   private = GDK_DRAWABLE_FBDATA (drawable);
   gc_private = GDK_GC_FBDATA (gc);
 
@@ -567,6 +588,9 @@ gdk_fb_fill_span_simple_8 (GdkDrawable *drawable,
   guchar *mem, *ptr;
   guint rowstride;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   private = GDK_DRAWABLE_FBDATA (drawable);
   gc_private = GDK_GC_FBDATA (gc);
 
@@ -583,6 +607,7 @@ gdk_fb_fill_span_simple_8 (GdkDrawable *drawable,
   ptr = mem + span->y*rowstride + span->x;
   memset (ptr, color->pixel, span->width);
 }
+
 static void
 gdk_fb_fill_span_simple_16 (GdkDrawable *drawable,
 			    GdkGC       *gc,
@@ -596,6 +621,9 @@ gdk_fb_fill_span_simple_16 (GdkDrawable *drawable,
   guint16 *p16;
   int n;
   int i;
+
+  if (!_gdk_fb_is_active_vt)
+    return;
 
   private = GDK_DRAWABLE_FBDATA (drawable);
   gc_private = GDK_GC_FBDATA (gc);
@@ -630,6 +658,9 @@ gdk_fb_fill_span_simple_24 (GdkDrawable *drawable,
   guchar redval, greenval, blueval;
   guchar *firstline, *ptr_end;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   private = GDK_DRAWABLE_FBDATA (drawable);
   gc_private = GDK_GC_FBDATA (gc);
 
@@ -659,6 +690,7 @@ gdk_fb_fill_span_simple_24 (GdkDrawable *drawable,
       ptr += 3;
     }
 }
+
 static void
 gdk_fb_fill_span_simple_32 (GdkDrawable *drawable,
 			    GdkGC       *gc,
@@ -672,6 +704,9 @@ gdk_fb_fill_span_simple_32 (GdkDrawable *drawable,
   guint32 *p32;
   int n;
   int i;
+
+  if (!_gdk_fb_is_active_vt)
+    return;
 
   private = GDK_DRAWABLE_FBDATA (drawable);
   gc_private = GDK_GC_FBDATA (gc);
@@ -880,6 +915,9 @@ gdk_fb_draw_drawable_memmove (GdkDrawable *drawable,
   int linelen = (end_x - start_x)*(depth>>3);
   gint cur_y;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   if (draw_direction < 0)
     {
       int tmp;
@@ -925,6 +963,9 @@ gdk_fb_draw_drawable_aa_24 (GdkDrawable *drawable,
   GdkColor fg;
   gint fg_r, fg_g, fg_b;
   
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   gc_private = GDK_GC_FBDATA (gc);
 
   fg = GDK_GC_FBDATA (gc)->values.foreground;
@@ -1006,6 +1047,9 @@ gdk_fb_fill_rectangle_generic (GdkDrawable    *drawable,
   GdkSpan *spans;
   int i;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   private = GDK_DRAWABLE_FBDATA (drawable);
 
   spans = g_new (GdkSpan, rect->height);
@@ -1035,6 +1079,9 @@ gdk_fb_fill_rectangle_simple_16 (GdkDrawable    *drawable,
   guint32 pixel;
   gint height;
   
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   private = GDK_DRAWABLE_FBDATA (drawable);
   gc_private = GDK_GC_FBDATA (gc);
 
@@ -1081,6 +1128,9 @@ gdk_fb_fill_rectangle_simple_32 (GdkDrawable    *drawable,
   guint32 pixel;
   gint height;
   
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   private = GDK_DRAWABLE_FBDATA (drawable);
   gc_private = GDK_GC_FBDATA (gc);
 
@@ -1212,6 +1262,9 @@ gdk_shadow_fb_copy_rect_0 (gint x, gint y, gint width, gint height)
   guchar *dst, *src;
   gint depth;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   depth = gdk_display->modeinfo.bits_per_pixel / 8;
 
   dst = gdk_display->fb_mmap + x * depth + gdk_display->sinfo.line_length * y;
@@ -1234,6 +1287,9 @@ gdk_shadow_fb_copy_rect_90 (gint x, gint y, gint width, gint height)
   gint depth;
   gint w;
   gint i;
+
+  if (!_gdk_fb_is_active_vt)
+    return;
 
   depth = gdk_display->modeinfo.bits_per_pixel / 8;
 
@@ -1264,6 +1320,9 @@ gdk_shadow_fb_copy_rect_180 (gint x, gint y, gint width, gint height)
   gint w;
   gint i;
 
+  if (!_gdk_fb_is_active_vt)
+    return;
+
   depth = gdk_display->modeinfo.bits_per_pixel / 8;
 
   src = gdk_display->fb_mem + x * depth + gdk_display->fb_stride * y;
@@ -1292,6 +1351,9 @@ gdk_shadow_fb_copy_rect_270 (gint x, gint y, gint width, gint height)
   gint depth;
   gint w;
   gint i;
+
+  if (!_gdk_fb_is_active_vt)
+    return;
 
   depth = gdk_display->modeinfo.bits_per_pixel / 8;
 

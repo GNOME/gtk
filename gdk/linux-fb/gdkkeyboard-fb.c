@@ -1327,8 +1327,6 @@ raw_io (GIOChannel *gioc,
 
 	      /* Do the whole funky VT switch thing */
 	      ioctl (gdk_display->console_fd, VT_ACTIVATE, vtnum);
-	      ioctl (gdk_display->console_fd, VT_WAITACTIVE, gdk_display->vt);
-	      gdk_fb_redraw_all ();
 	    }
 
 	  continue;

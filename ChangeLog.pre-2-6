@@ -1,3 +1,9 @@
+Wed Dec  4 19:41:14 2002  Eric Warmenhoven <eric@warmenhoven.org>
+
+	* gdk/linux-fb/gdkglobals-fb.c gdk/linux-fb/gdkkeyboard-fb.c
+	gdk/linux-fb/gdkmain-fb.c gdk/linux-fb/gdkprivate-fb.h
+	gdk/linux-fb/gdkrender-fb.c: More proper vt switch handling
+
 Wed Dec  4 14:31:46 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c: Always look up and create the

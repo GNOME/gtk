@@ -679,12 +679,48 @@ gdk_fb_manager_connect (GdkFBDisplay *display)
 #endif
 }
 
+static void
+gdk_fb_switch (int sig)
+{
+  if (sig == SIGUSR1)
+    {
+      ioctl (gdk_display->tty_fd, VT_RELDISP, 1);
+      _gdk_fb_is_active_vt = FALSE;
+      gdk_shadow_fb_stop_updates ();
+      gdk_fb_mouse_close ();
+      gdk_fb_keyboard_close ();
+    }
+  else
+    {
+      GdkColormap *cmap;
+      ioctl (gdk_display->tty_fd, VT_RELDISP, VT_ACKACQ);
+      _gdk_fb_is_active_vt = TRUE;
+
+      /* XXX: is it dangerous to put all this stuff in a signal handler? */
+      cmap = gdk_screen_get_default_colormap (_gdk_screen);
+      gdk_colormap_change (cmap, cmap->size);
+
+      gdk_shadow_fb_update (0, 0,
+			    gdk_display->fb_width,
+			    gdk_display->fb_height);
+
+      if (!gdk_fb_keyboard_open ())
+        g_warning ("Failed to re-initialize keyboard");
+
+      if (!gdk_fb_mouse_open ())
+        g_warning ("Failed to re-initialize mouse");
+
+      gdk_fb_redraw_all ();
+    }
+}
+
 static GdkFBDisplay *
 gdk_fb_display_new ()
 {
   GdkFBDisplay *display;
   gchar *fb_filename;
   struct vt_stat vs;
+  struct vt_mode vtm;
   int vt, n;
   gchar *s, *send;
   char buf[32];
@@ -744,9 +780,18 @@ gdk_fb_display_new ()
       return NULL;
     }
 
-  /* Set controlling tty */
-  ioctl (0, TIOCNOTTY, 0);
-  ioctl (display->tty_fd, TIOCSCTTY, 0);
+  /* set up switch signals */
+  if (ioctl (display->tty_fd, VT_GETMODE, &vtm) >= 0)
+    {
+      signal (SIGUSR1, gdk_fb_switch);
+      signal (SIGUSR2, gdk_fb_switch);
+      vtm.mode = VT_PROCESS;
+      vtm.waitv = 0;
+      vtm.relsig = SIGUSR1;
+      vtm.acqsig = SIGUSR2;
+      ioctl (display->tty_fd, VT_SETMODE, &vtm);
+    }
+  _gdk_fb_is_active_vt = TRUE;
   
   fb_filename = gdk_get_display ();
   display->fb_fd = open (fb_filename, O_RDWR);

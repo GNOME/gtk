@@ -427,7 +427,9 @@ extern gboolean _gdk_fb_keyboard_grab_owner_events;
 extern GdkFBDisplay *gdk_display;
 extern GdkDisplay *_gdk_display;
 extern GdkScreen *_gdk_screen;
-extern FILE *debug_out;
+
+extern volatile gboolean _gdk_fb_is_active_vt;
+
 GdkEvent *gdk_event_make(GdkWindow *window,
 			 GdkEventType type,
 			 gboolean append_to_queue);
