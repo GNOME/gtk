@@ -1,3 +1,24 @@
+Tue Feb 24 22:47:01 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c: Added some support for i18n. The support 
+	for input methods, including preedit, is there, but input
+	is ignored unless it comes one byte at a time, so the
+	CJK locales won't really work. Fixing that would require
+	variable-width character support in the Text widget, which
+	is probably the wrong approach. Eventually we'll probably
+	want to go to UCS-4 internally.
+
+	Also, revised key press handling, which should improve
+	the forwarding of non-handled keypresses to the toplevel,
+	and make adding selection handling easier.
+
+	* gtk/gtkentry.c: Minor changes so that C-d, etc delete
+	the selection if there is one.
+
+	* gdk/gdk.c (gdk_ic_get_events): Check the result of
+	XGetICValues - it is failing for some reason, and 
+	causing some warnings to be printed.
+
 Mon Feb 23 15:41:13 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwidget.c gtk/gtkmenu.c: Don't process configure events

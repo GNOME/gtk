@@ -18,6 +18,9 @@
 #include <ctype.h>
 #include <string.h>
 #include "gdk/gdkkeysyms.h"
+#ifdef USE_XIM
+#include "gdk/gdkx.h"
+#endif
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtktext.h"
@@ -619,6 +622,14 @@ gtk_text_finalize (GtkObject *object)
   if (text->vadj)
     gtk_object_unref (GTK_OBJECT (text->vadj));
 
+#ifdef USE_XIM
+  if (text->ic)
+    {
+      gdk_ic_destroy (text->ic);
+      text->ic = NULL;
+    }
+#endif
+
   GTK_OBJECT_CLASS(parent_class)->finalize (object);
 }
 
@@ -686,6 +697,71 @@ gtk_text_realize (GtkWidget *widget)
   text->gc = gdk_gc_new (text->text_area);
   gdk_gc_set_exposures (text->gc, TRUE);
   gdk_gc_set_foreground (text->gc, &widget->style->fg[GTK_STATE_NORMAL]);
+
+#ifdef USE_XIM
+  if (gdk_im_ready ())
+    {
+      GdkPoint spot;
+      GdkRectangle rect;
+      gint width, height;
+      GdkEventMask mask;
+      GdkIMStyle style;
+      GdkIMStyle supported_style = GdkIMPreeditNone | GdkIMPreeditNothing |
+			GdkIMPreeditPosition |
+			GdkIMStatusNone | GdkIMStatusNothing;
+
+      if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
+	supported_style &= ~GdkIMPreeditPosition;
+
+      style = gdk_im_decide_style (supported_style);
+      switch (style & GdkIMPreeditMask)
+	{
+	case GdkIMPreeditPosition:
+	  if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
+	    {
+	      g_warning ("over-the-spot style requires fontset");
+	      break;
+	    }
+	  gdk_window_get_size (text->text_area, &width, &height);
+	  rect.x = 0;
+	  rect.y = 0;
+	  rect.width = width;
+	  rect.height = height;
+	  spot.x = 0;
+	  spot.y = height;
+	  
+	  text->ic = gdk_ic_new (text->text_area, text->text_area,
+  			       style,
+			       "spotLocation", &spot,
+			       "area", &rect,
+			       "fontSet", GDK_FONT_XFONT (widget->style->font),
+			       NULL);
+	  break;
+	default:
+	  text->ic = gdk_ic_new (text->text_area, text->text_area,
+				  style, NULL);
+	}
+     
+      if (text->ic == NULL)
+	g_warning ("Can't create input context.");
+      else
+	{
+	  GdkColormap *colormap;
+
+	  mask = gdk_window_get_events (text->text_area);
+	  mask |= gdk_ic_get_events (text->ic);
+	  gdk_window_set_events (text->text_area, mask);
+
+	  if ((colormap = gtk_widget_get_colormap (widget)) !=
+	    	gtk_widget_get_default_colormap ())
+	    {
+	      gdk_ic_set_attr (text->ic, "preeditAttributes",
+	      		       "colorMap", GDK_COLORMAP_XCOLORMAP (colormap),
+			       NULL);
+	    }
+	}
+    }
+#endif
 
   init_properties (text);
 
@@ -883,6 +959,21 @@ gtk_text_size_allocate (GtkWidget     *widget,
 							  TEXT_BORDER_ROOM) * 2,
 			      widget->allocation.height - (widget->style->klass->ythickness +
 							   TEXT_BORDER_ROOM) * 2);
+
+#ifdef USE_XIM
+      if (text->ic && (gdk_ic_get_style (text->ic) & GdkIMPreeditPosition))
+	{
+	  gint width, height;
+	  GdkRectangle rect;
+
+	  gdk_window_get_size (text->text_area, &width, &height);
+	  rect.x = 0;
+	  rect.y = 0;
+	  rect.width = width;
+	  rect.height = height;
+	  gdk_ic_set_attr (text->ic, "preeditAttributes", "area", &rect, NULL);
+	}
+#endif
 
       recompute_geometry (text);
     }
@@ -1085,100 +1176,108 @@ gtk_text_key_press (GtkWidget   *widget,
 
   text = GTK_TEXT (widget);
 
-  if (!return_val)
+  key = event->keyval;
+  return_val = TRUE;
+
+  if (text->is_editable == FALSE)
     {
-      key = event->keyval;
-      return_val = TRUE;
-
-      if (text->is_editable == FALSE)
+      switch (event->keyval)
 	{
-	  switch (event->keyval)
-	    {
-	    case GDK_Home:      scroll_int (text, -text->vadj->value); break;
-	    case GDK_End:       scroll_int (text, +text->vadj->upper); break;
-	    case GDK_Page_Up:   scroll_int (text, -text->vadj->page_increment); break;
-	    case GDK_Page_Down: scroll_int (text, +text->vadj->page_increment); break;
-	    case GDK_Up:        scroll_int (text, -KEY_SCROLL_PIXELS); break;
-	    case GDK_Down:      scroll_int (text, +KEY_SCROLL_PIXELS); break;
-	    default: break;
-	    }
+	case GDK_Home:      scroll_int (text, -text->vadj->value); break;
+	case GDK_End:       scroll_int (text, +text->vadj->upper); break;
+	case GDK_Page_Up:   scroll_int (text, -text->vadj->page_increment); break;
+	case GDK_Page_Down: scroll_int (text, +text->vadj->page_increment); break;
+	case GDK_Up:        scroll_int (text, -KEY_SCROLL_PIXELS); break;
+	case GDK_Down:      scroll_int (text, +KEY_SCROLL_PIXELS); break;
+	default:
+	  return_val = FALSE;
+	  break;
 	}
-      else
+    }
+  else
+    {
+      text->point = find_mark (text, text->cursor_mark.index);
+
+      switch (event->keyval)
 	{
-	  text->point = find_mark (text, text->cursor_mark.index);
+	case GDK_Home:      move_cursor_buffer_ver (text, -1); break;
+	case GDK_End:       move_cursor_buffer_ver (text, +1); break;
+	case GDK_Page_Up:   move_cursor_page_ver (text, -1); break;
+	case GDK_Page_Down: move_cursor_page_ver (text, +1); break;
+	case GDK_Up:        move_cursor_ver (text, -1); break;
+	case GDK_Down:      move_cursor_ver (text, +1); break;
+	case GDK_Left:      move_cursor_hor (text, -1); break;
+	case GDK_Right:     move_cursor_hor (text, +1); break;
 
-	  switch (event->keyval)
+	case GDK_BackSpace:
+	  if (!text->has_cursor || text->cursor_mark.index == 0)
+	    break;
+
+	  gtk_text_backward_delete_1_at_point (text);
+	  break;
+	case GDK_Delete:
+	  if (!text->has_cursor || LAST_INDEX (text, text->cursor_mark))
+	    break;
+
+	  gtk_text_forward_delete_1_at_point (text);
+	  break;
+	case GDK_Tab:
+	  if (!text->has_cursor)
+	    break;
+
+	  gtk_text_insert_1_at_point (text, '\t');
+	  break;
+	case GDK_Return:
+	  if (!text->has_cursor)
+	    break;
+
+	  gtk_text_insert_1_at_point (text, '\n');
+	  break;
+	case GDK_Escape:
+	  /* Don't insert literally */
+	  return_val = FALSE;
+	  break;
+
+	default:
+	  return_val = FALSE;
+
+	  if (!text->has_cursor)
+	    break;
+
+	  if (event->state & GDK_CONTROL_MASK)
 	    {
-	    case GDK_Home:      move_cursor_buffer_ver (text, -1); break;
-	    case GDK_End:       move_cursor_buffer_ver (text, +1); break;
-	    case GDK_Page_Up:   move_cursor_page_ver (text, -1); break;
-	    case GDK_Page_Down: move_cursor_page_ver (text, +1); break;
-	    case GDK_Up:        move_cursor_ver (text, -1); break;
-	    case GDK_Down:      move_cursor_ver (text, +1); break;
-	    case GDK_Left:      move_cursor_hor (text, -1); break;
-	    case GDK_Right:     move_cursor_hor (text, +1); break;
-
-	    case GDK_BackSpace:
-	      if (!text->has_cursor || text->cursor_mark.index == 0)
-		break;
-
-	      gtk_text_backward_delete_1_at_point (text);
-	      break;
-	    case GDK_Delete:
-	      if (!text->has_cursor || LAST_INDEX (text, text->cursor_mark))
-		break;
-
-	      gtk_text_forward_delete_1_at_point (text);
-	      break;
-	    case GDK_Tab:
-	      if (!text->has_cursor)
-		break;
-
-	      gtk_text_insert_1_at_point (text, '\t');
-	      break;
-	    case GDK_Return:
-	      if (!text->has_cursor)
-		break;
-
-	      gtk_text_insert_1_at_point (text, '\n');
-	      break;
-	    default:
-	      if (!text->has_cursor)
-		break;
-
-	      if ((event->keyval >= 0x20) && (event->keyval <= 0x7e))
+	      if ((key >= 'A') && (key <= 'Z'))
+		key -= 'A' - 'a';
+	      
+	      if ((key >= 'a') && (key <= 'z') && text->control_keys[(int) (key - 'a')])
 		{
+		  (* text->control_keys[(int) (key - 'a')]) (text);
 		  return_val = TRUE;
-
-		  if (event->state & GDK_CONTROL_MASK)
-		    {
-		      if ((key >= 'A') && (key <= 'Z'))
-			key -= 'A' - 'a';
-
-		      if ((key >= 'a') && (key <= 'z') && text->control_keys[(int) (key - 'a')])
-			(* text->control_keys[(int) (key - 'a')]) (text);
-		    }
-		  else if (event->state & GDK_MOD1_MASK)
-		    {
-		      g_message ("alt key");
-
-		      if ((key >= 'A') && (key <= 'Z'))
-			key -= 'A' - 'a';
-
-		      if ((key >= 'a') && (key <= 'z') && text->alt_keys[(int) (key - 'a')])
-			(* text->alt_keys[(int) (key - 'a')]) (text);
-		    }
-		  else
-		    {
-		      gtk_text_insert_1_at_point (text, key);
-		    }
 		}
-	      else
-		{
-		  return_val = FALSE;
-		}
+
 	      break;
 	    }
+	  else if (event->state & GDK_MOD1_MASK)
+	    {
+	      if ((key >= 'A') && (key <= 'Z'))
+		key -= 'A' - 'a';
+	      
+	      if ((key >= 'a') && (key <= 'z') && text->alt_keys[(int) (key - 'a')])
+		{
+		  (* text->alt_keys[(int) (key - 'a')]) (text);
+		  return_val = TRUE;
+		}
+
+	      break;
+	    }
+	  else if (event->length > 0)
+	    {
+	      if (event->length == 1)
+		gtk_text_insert_1_at_point (text, event->string[0]);
+	      return_val = TRUE;
+	    }
+	  else
+	    return_val = FALSE;
 	}
     }
 
@@ -1197,6 +1296,11 @@ gtk_text_focus_in (GtkWidget     *widget,
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
+
+#ifdef USE_XIM
+  if (GTK_TEXT(widget)->ic)
+    gdk_im_begin (GTK_TEXT(widget)->ic, GTK_TEXT(widget)->text_area);
+#endif
 
   draw_cursor (GTK_TEXT(widget), TRUE);
 
@@ -1217,6 +1321,10 @@ gtk_text_focus_out (GtkWidget     *widget,
   gtk_widget_draw_focus (widget);
 
   undraw_cursor (GTK_TEXT(widget), TRUE);
+
+#ifdef USE_XIM
+  gdk_im_end ();
+#endif
 
   return FALSE;
 }
@@ -2265,6 +2373,28 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
     text->cursor_char = ch;
   else
     text->cursor_char = 0;
+
+#ifdef USE_XIM
+  if (gdk_im_ready() && text->ic && 
+      gdk_ic_get_style (text->ic) & GdkIMPreeditPosition)
+    {
+      GdkPoint spot;
+      
+      spot.x = text->cursor_pos_x;
+      spot.y = text->cursor_pos_y - text->cursor_char_offset;
+      if (MARK_CURRENT_FONT (&mark)->type == GDK_FONT_FONTSET)
+	gdk_ic_set_attr (text->ic, "preeditAttributes", 
+			 "fontSet", GDK_FONT_XFONT (MARK_CURRENT_FONT (&mark)),
+			 NULL);
+
+      gdk_ic_set_attr (text->ic, "preeditAttributes", 
+		       "spotLocation", &spot,
+		       "lineSpace", LINE_HEIGHT (*start_line),
+		       "foreground", MARK_CURRENT_FORE (&mark)->pixel,
+		       "background", MARK_CURRENT_BACK (&mark)->pixel,
+		       NULL);
+    }
+#endif 
 }
 
 static void
@@ -2281,6 +2411,7 @@ find_cursor (GtkText* text)
     find_cursor_at_line (text,
 			 &CACHE_DATA(text->current_line),
 			 pixel_height_of(text, text->current_line));
+
 }
 
 static void

@@ -1038,17 +1038,12 @@ gtk_entry_key_press (GtkWidget   *widget,
        break;
     case GDK_Delete:
       return_val = TRUE;
-      if (entry->selection_start_pos != entry->selection_end_pos)
-	gtk_delete_selection (entry);
+      if (event->state & GDK_CONTROL_MASK)
+	gtk_delete_line (entry);
+      else if (event->state & GDK_SHIFT_MASK)
+	gtk_entry_cut_clipboard (entry, event);
       else
-	{
-	  if (event->state & GDK_CONTROL_MASK)
-	    gtk_delete_line (entry);
-	  else if (event->state & GDK_SHIFT_MASK)
-	    gtk_entry_cut_clipboard (entry, event);
-	  else
-	    gtk_delete_forward_character (entry);
-	}
+	gtk_delete_forward_character (entry);
       break;
     case GDK_Home:
       return_val = TRUE;
@@ -1965,9 +1960,14 @@ gtk_delete_forward_character (GtkEntry *entry)
 {
   gint old_pos;
 
-  old_pos = entry->current_pos;
-  gtk_move_forward_character (entry);
-  gtk_entry_delete_text (entry, old_pos, entry->current_pos);
+  if (entry->selection_start_pos != entry->selection_end_pos)
+    gtk_delete_selection (entry);
+  else
+    {
+      old_pos = entry->current_pos;
+      gtk_move_forward_character (entry);
+      gtk_entry_delete_text (entry, old_pos, entry->current_pos);
+    }
 }
 
 static void
@@ -1975,9 +1975,14 @@ gtk_delete_backward_character (GtkEntry *entry)
 {
   gint old_pos;
 
-  old_pos = entry->current_pos;
-  gtk_move_backward_character (entry);
-  gtk_entry_delete_text (entry, entry->current_pos, old_pos);
+  if (entry->selection_start_pos != entry->selection_end_pos)
+    gtk_delete_selection (entry);
+  else
+    {
+      old_pos = entry->current_pos;
+      gtk_move_backward_character (entry);
+      gtk_entry_delete_text (entry, entry->current_pos, old_pos);
+    }
 }
 
 static void
@@ -1985,9 +1990,14 @@ gtk_delete_forward_word (GtkEntry *entry)
 {
   gint old_pos;
 
-  old_pos = entry->current_pos;
-  gtk_move_forward_word (entry);
-  gtk_entry_delete_text (entry, old_pos, entry->current_pos);
+  if (entry->selection_start_pos != entry->selection_end_pos)
+    gtk_delete_selection (entry);
+  else
+    {
+      old_pos = entry->current_pos;
+      gtk_move_forward_word (entry);
+      gtk_entry_delete_text (entry, old_pos, entry->current_pos);
+    }
 }
 
 static void
@@ -1995,9 +2005,14 @@ gtk_delete_backward_word (GtkEntry *entry)
 {
   gint old_pos;
 
-  old_pos = entry->current_pos;
-  gtk_move_backward_word (entry);
-  gtk_entry_delete_text (entry, entry->current_pos, old_pos);
+  if (entry->selection_start_pos != entry->selection_end_pos)
+    gtk_delete_selection (entry);
+  else
+    {
+      old_pos = entry->current_pos;
+      gtk_move_backward_word (entry);
+      gtk_entry_delete_text (entry, entry->current_pos, old_pos);
+    }
 }
 
 static void
