@@ -4787,72 +4787,6 @@ gtk_default_draw_handle (GtkStyle      *style,
 }
 
 static void
-create_expander_affine (gdouble affine[6],
-			gint    degrees,
-			gint    expander_size,
-			gint    x,
-			gint    y)
-{
-  gdouble s, c;
-  gdouble width;
-  gdouble height;
-
-  width = expander_size / 4.0;
-  height = expander_size / 2.0;
-
-  switch (degrees)
-    {
-    case 0:
-      s = 0.0;
-      c = 1.0;
-      break;
-    case 90:
-      s = 1.0;
-      c = 0.0;
-      break;
-    case 180:
-      s = 0.0;
-      c = -1.0;
-      break;
-    default:
-      s = sin (degrees * G_PI / 180.0);
-      c = cos (degrees * G_PI / 180.0);
-      break;
-    }
-  
-  affine[0] = c;
-  affine[1] = s;
-  affine[2] = -s;
-  affine[3] = c;
-  affine[4] = -width * c - height * -s + x;
-  affine[5] = -width * s - height * c + y;
-}
-
-static void
-apply_affine_on_point (double affine[6], GdkPoint *point)
-{
-  gdouble x, y;
-
-  x = point->x * affine[0] + point->y * affine[2] + affine[4];
-  y = point->x * affine[1] + point->y * affine[3] + affine[5];
-
-  point->x = floor (x);
-  point->y = floor (y);
-}
-
-static void
-gtk_style_draw_polygon_with_gc (GdkWindow *window, GdkGC *gc, gint line_width,
-				gboolean do_fill, GdkPoint *points, gint n_points)
-{
-  gdk_gc_set_line_attributes (gc, line_width,
-			      GDK_LINE_SOLID,
-			      GDK_CAP_BUTT, GDK_JOIN_MITER);
-
-  gdk_draw_polygon (window, gc, do_fill, points, n_points);
-  gdk_gc_set_line_attributes (gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
-}
-
-static void
 gtk_default_draw_expander (GtkStyle        *style,
                            GdkWindow       *window,
                            GtkStateType     state_type,
@@ -4863,34 +4797,38 @@ gtk_default_draw_expander (GtkStyle        *style,
                            gint             y,
 			   GtkExpanderStyle expander_style)
 {
+#define DEFAULT_EXPANDER_SIZE 12
+
   gint expander_size;
-  GdkPoint points[3];
-  gint i;
-  gint line_width, o;
-  gdouble affine[6];
+  gint line_width;
+  double vertical_overshoot;
+  int diameter;
+  double radius;
+  double x_double, y_double;
   gint degrees = 0;
 
-  gtk_widget_style_get (widget,
-			"expander-size", &expander_size,
-			NULL);
-  line_width = MAX (1, expander_size/9);
-
+  cairo_t *cr = gdk_drawable_create_cairo_context (window);
+  
   if (area)
     {
-      gdk_gc_set_clip_rectangle (style->fg_gc[GTK_STATE_NORMAL], area);
-      gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], area);
+      cairo_save (cr);
+      cairo_rectangle (cr, area->x, area->y, area->width, area->height);
+      cairo_clip (cr);
+      cairo_new_path (cr);
     }
 
-  /* a rough estimate of how much the joins of the triangle will overshoot. 
-   * 2.4 ~ 1 / tan (45 / 2)
-   */
-  o = ceil (2.4 * line_width / 2.0);
-  points[0].x = line_width / 2;
-  points[0].y = o;
-  points[1].x = expander_size / 2 + line_width / 2 - o;
-  points[1].y = expander_size / 2;
-  points[2].x = line_width / 2;
-  points[2].y = expander_size - o;
+  if (widget &&
+      gtk_widget_class_find_style_property (GTK_WIDGET_GET_CLASS (widget),
+					    "expander-size"))
+    {
+      gtk_widget_style_get (widget,
+			    "expander-size", &expander_size,
+			    NULL);
+    }
+  else
+    expander_size = DEFAULT_EXPANDER_SIZE;
+    
+  line_width = MAX (1, expander_size/9);
 
   switch (expander_style)
     {
@@ -4910,35 +4848,67 @@ gtk_default_draw_expander (GtkStyle        *style,
       g_assert_not_reached ();
     }
 
-  create_expander_affine (affine, degrees, expander_size, x, y);
+  /* Compute distance that the stroke extends beyonds the end
+   * of the triangle we draw.
+   */
+  vertical_overshoot = line_width / 2.0 * (1. / tan (G_PI / 8));
 
-  for (i = 0; i < 3; i++)
-    apply_affine_on_point (affine, &points[i]);
-
-  if (state_type == GTK_STATE_PRELIGHT)
-    {
-      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_PRELIGHT],
-				      1, TRUE, points, 3);
-    }
-  else if (state_type == GTK_STATE_ACTIVE)
-    {
-      gtk_style_draw_polygon_with_gc (window, style->light_gc[GTK_STATE_ACTIVE],
-				      1, TRUE, points, 3);
-      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
-				      line_width, FALSE, points, 3);
-    }
+  /* For odd line widths, we end the vertical line of the triangle
+   * at a half pixel, so we round differently.
+   */
+  if (line_width % 2 == 1)
+    vertical_overshoot = ceil (0.5 + vertical_overshoot) - 0.5;
   else
-    {
-      gtk_style_draw_polygon_with_gc (window, style->base_gc[GTK_STATE_NORMAL],
-				      1, TRUE, points, 3);
-      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
-				      line_width, FALSE, points, 3);
-    }
+    vertical_overshoot = ceil (vertical_overshoot);
+
+  /* Adjust the size of the triangle we draw so that the entire stroke fits
+   */
+  diameter = MAX (3, expander_size - 2 * vertical_overshoot);
+
+  /* If the line width is odd, we want the diameter to be even,
+   * and vice versa, so force the sum to be odd
+   */
+  diameter -= (1 - (diameter + line_width) % 2);
+  
+  radius = diameter / 2.;
+
+  /* Adjust the center so that the stroke is properly aligned with
+   * the pixel grid
+   */
+  x_double = floor (x - (radius + line_width) / 2.) + (radius + line_width) / 2.;
+  y_double = y + 0.5;
+  
+  cairo_translate (cr, x_double, y_double);
+  cairo_rotate (cr, degrees * M_PI / 180);
+
+  cairo_move_to (cr, - radius / 2., - radius);
+  cairo_line_to (cr,   radius / 2.,   0);
+  cairo_line_to (cr, - radius / 2.,   radius);
+  cairo_close_path (cr);
+  
+  cairo_set_line_width (cr, line_width);
+
+  cairo_save (cr);
+  if (state_type == GTK_STATE_PRELIGHT)
+    gdk_cairo_set_source_color (cr,
+				&style->fg[GTK_STATE_PRELIGHT]);
+  else if (state_type == GTK_STATE_ACTIVE)
+    gdk_cairo_set_source_color (cr,
+				&style->light[GTK_STATE_ACTIVE]);
+  else
+    gdk_cairo_set_source_color (cr,
+				&style->base[GTK_STATE_NORMAL]);
+  
+  cairo_fill (cr);
+  cairo_restore (cr);
+  
+  gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+  cairo_stroke (cr);
+  
   if (area)
-    {
-      gdk_gc_set_clip_rectangle (style->fg_gc[GTK_STATE_NORMAL], NULL);
-      gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], NULL);
-    }
+    cairo_restore (cr);
+
+  cairo_destroy (cr);
 }
 
 typedef struct _ByteRange ByteRange;
@@ -6317,9 +6287,19 @@ gtk_paint_handle (GtkStyle      *style,
  * @detail: a style detail (may be %NULL)
  * @x: the x position to draw the expander at
  * @y: the y position to draw the expander at
- * @expander_style: the style to draw the expander in
+ * @expander_style: the style to draw the expander in; determines
+ *   whether the expander is collapsed, expanded, or in an
+ *   intermediate state.
  * 
- * Draws an expander as used in #GtkTreeView.
+ * Draws an expander as used in #GtkTreeView. @x and @y specify the
+ * center the expander. The size of the expander is determined by the
+ * "expander-size" style property of @widget.  (If widget is not
+ * specified or doesn't have an "expander-size" property, an
+ * unspecified default size will be used, since the caller doesn't
+ * have sufficient information to position the expander, this is
+ * likely not useful.) The expander is expander_size pixels tall
+ * in the collapsed position and expander_size pixels wide in the
+ * expanded position.
  **/
 void
 gtk_paint_expander (GtkStyle        *style,

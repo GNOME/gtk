@@ -1,3 +1,10 @@
+2005-04-04  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_expander): Covert expander
+	drawing to Cairo. Also always draw the entire triangle instead
+	of just drawing the center for prelight. (Fixes inconsistent
+	drawing in GtkTreeView.)
+
 2005-04-04  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtk.symbols: Remove symbols accidentally added.
