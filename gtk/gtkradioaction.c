@@ -33,6 +33,7 @@
 #include "gtkradioaction.h"
 #include "gtkradiomenuitem.h"
 #include "gtktoggleactionprivate.h"
+#include "gtktoggletoolbutton.h"
 #include "gtkintl.h"
 
 #define GTK_RADIO_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RADIO_ACTION, GtkRadioActionPrivate))
@@ -67,6 +68,7 @@ static void gtk_radio_action_get_property (GObject         *object,
 				           GValue          *value,
 				           GParamSpec      *pspec);
 static void gtk_radio_action_activate     (GtkAction *action);
+static GtkWidget *create_menu_item        (GtkAction *action);
 
 
 GType
@@ -115,6 +117,8 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
   gobject_class->get_property = gtk_radio_action_get_property;
 
   action_class->activate = gtk_radio_action_activate;
+
+  action_class->create_menu_item = create_menu_item;
 
   /**
    * GtkRadioAction:value:
@@ -288,6 +292,14 @@ gtk_radio_action_activate (GtkAction *action)
     }
 
   gtk_toggle_action_toggled (toggle_action);
+}
+
+static GtkWidget *
+create_menu_item (GtkAction *action)
+{
+  return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, 
+		       "draw_as_radio", TRUE,
+		       NULL);
 }
 
 /**

@@ -1,5 +1,8 @@
 2003-08-29  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkradioaction.c (create_menu_item): Set "draw_as_radio" on proxy menu items
+	for radio actions.
+
 	* gtk/gtkgamma.c (gamma_ok_callback): Use g_strtod instead of strtod.
 
 Fri Aug 29 21:40:01 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
