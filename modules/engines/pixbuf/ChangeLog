@@ -1,3 +1,15 @@
+2001-09-21  Hans Breuer  <hans@breuer.org>
+
+	* src/pixbuf-rc-style-c :  GtkRcStyle::parse has a GtkSettings
+	parameter now. Pass it through theme_parse_file () to use it
+	gtk_rc_find_pixmap_in_path ()
+
+	* src/pixbuf-draw.c : the font field from GtkStyle is private
+	now, use accessor gtk_style_get_font ()
+
+	* makefile.msc : compile on win32, use it if you have a _real_
+	fast computer or want to see gtk in slow motion :-)
+
 Thu May  3 05:36:06 2001  Owen Taylor  <otaylor@redhat.com>
 
         * pixbuf.h: Fix trailing comma on enumeration. (#54071)

@@ -634,7 +634,7 @@ draw_string (GtkStyle * style,
 	  gdk_gc_set_clip_rectangle(style->fg_gc[state], area);
 	}
 
-      gdk_draw_string(window, style->font, style->fg_gc[state], x, y, string);
+      gdk_draw_string(window, gtk_style_get_font (style), style->fg_gc[state], x, y, string);
       
       if (area)
 	{
@@ -645,7 +645,7 @@ draw_string (GtkStyle * style,
   else
     {
       gdk_gc_set_clip_rectangle(style->fg_gc[state], area);
-      gdk_draw_string(window, style->font, style->fg_gc[state], x, y, string);
+      gdk_draw_string(window, gtk_style_get_font (style), style->fg_gc[state], x, y, string);
       gdk_gc_set_clip_rectangle(style->fg_gc[state], NULL);
     }
 }

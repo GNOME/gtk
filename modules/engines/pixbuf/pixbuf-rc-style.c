@@ -28,6 +28,7 @@ static void      pixbuf_rc_style_init         (PixbufRcStyle      *style);
 static void      pixbuf_rc_style_class_init   (PixbufRcStyleClass *klass);
 static void      pixbuf_rc_style_finalize     (GObject            *object);
 static guint     pixbuf_rc_style_parse        (GtkRcStyle         *rc_style,
+					       GtkSettings  *settings,
 					       GScanner           *scanner);
 static void      pixbuf_rc_style_merge        (GtkRcStyle         *dest,
 					       GtkRcStyle         *src);
@@ -170,7 +171,8 @@ pixbuf_rc_style_finalize (GObject *object)
 }
 
 static guint
-theme_parse_file(GScanner     *scanner,
+theme_parse_file(GtkSettings  *settings,
+		 GScanner     *scanner,
 		 ThemePixbuf **theme_pb)
 {
   guint token;
@@ -190,7 +192,7 @@ theme_parse_file(GScanner     *scanner,
   if (!*theme_pb)
     *theme_pb = theme_pixbuf_new ();
 
-  pixmap = gtk_rc_find_pixmap_in_path(scanner, scanner->value.v_string);
+  pixmap = gtk_rc_find_pixmap_in_path(settings, scanner, scanner->value.v_string);
   if (pixmap)
     {
       theme_pixbuf_set_filename (*theme_pb, pixmap);
@@ -547,7 +549,8 @@ theme_image_unref (ThemeImage *data)
 }
 
 static guint
-theme_parse_image(GScanner      *scanner,
+theme_parse_image(GtkSettings  *settings,
+		  GScanner      *scanner,
 		  PixbufRcStyle *pixbuf_style,
 		  ThemeImage   **data_return)
 {
@@ -609,7 +612,7 @@ theme_parse_image(GScanner      *scanner,
 	  token = theme_parse_orientation(scanner, data);
 	  break;
 	case TOKEN_FILE:
-	  token = theme_parse_file(scanner, &data->background);
+	  token = theme_parse_file(settings, scanner, &data->background);
 	  break;
 	case TOKEN_BORDER:
 	  token = theme_parse_border(scanner, &data->background);
@@ -618,25 +621,25 @@ theme_parse_image(GScanner      *scanner,
 	  token = theme_parse_stretch(scanner, &data->background);
 	  break;
 	case TOKEN_GAP_FILE:
-	  token = theme_parse_file(scanner, &data->gap);
+	  token = theme_parse_file(settings, scanner, &data->gap);
 	  break;
 	case TOKEN_GAP_BORDER:
 	  token = theme_parse_border(scanner, &data->gap);
 	  break;
 	case TOKEN_GAP_START_FILE:
-	  token = theme_parse_file(scanner, &data->gap_start);
+	  token = theme_parse_file(settings, scanner, &data->gap_start);
 	  break;
 	case TOKEN_GAP_START_BORDER:
 	  token = theme_parse_border(scanner, &data->gap_start);
 	  break;
 	case TOKEN_GAP_END_FILE:
-	  token = theme_parse_file(scanner, &data->gap_end);
+	  token = theme_parse_file(settings, scanner, &data->gap_end);
 	  break;
 	case TOKEN_GAP_END_BORDER:
 	  token = theme_parse_border(scanner, &data->gap_end);
 	  break;
 	case TOKEN_OVERLAY_FILE:
-	  token = theme_parse_file(scanner, &data->overlay);
+	  token = theme_parse_file(settings, scanner, &data->overlay);
 	  break;
 	case TOKEN_OVERLAY_BORDER:
 	  token = theme_parse_border(scanner, &data->overlay);
@@ -676,6 +679,7 @@ theme_parse_image(GScanner      *scanner,
 
 static guint
 pixbuf_rc_style_parse (GtkRcStyle *rc_style,
+		       GtkSettings  *settings,
 		       GScanner   *scanner)
 		     
 {
@@ -721,7 +725,7 @@ pixbuf_rc_style_parse (GtkRcStyle *rc_style,
 	{
 	case TOKEN_IMAGE:
 	  img = NULL;
-	  token = theme_parse_image(scanner, pixbuf_style, &img);
+	  token = theme_parse_image(settings, scanner, pixbuf_style, &img);
 	  break;
 	default:
 	  g_scanner_get_next_token(scanner);
