@@ -784,18 +784,43 @@ get_effective_direction (GtkNotebook      *notebook,
   /* Remap the directions into the effective direction it would be for a
    * GTK_POS_TOP notebook
    */
+
 #define D(rest) GTK_DIR_##rest
 
-  static const GtkDirectionType translate_direction[4][6] = {
-    /* LEFT */   { D(TAB_FORWARD),  D(TAB_BACKWARD), D(LEFT), D(RIGHT), D(UP),   D(DOWN) },
+  static const GtkDirectionType translate_direction[2][4][6] = {
+    /* LEFT */   {{ D(TAB_FORWARD),  D(TAB_BACKWARD), D(LEFT), D(RIGHT), D(UP),   D(DOWN) },
     /* RIGHT */  { D(TAB_BACKWARD), D(TAB_FORWARD),  D(LEFT), D(RIGHT), D(DOWN), D(UP)   },
     /* TOP */    { D(TAB_FORWARD),  D(TAB_BACKWARD), D(UP),   D(DOWN),  D(LEFT), D(RIGHT) },
-    /* BOTTOM */ { D(TAB_BACKWARD), D(TAB_FORWARD),  D(DOWN), D(UP),    D(LEFT), D(RIGHT) },
+    /* BOTTOM */ { D(TAB_BACKWARD), D(TAB_FORWARD),  D(DOWN), D(UP),    D(LEFT), D(RIGHT) }},
+    /* LEFT */  {{ D(TAB_BACKWARD), D(TAB_FORWARD),  D(LEFT), D(RIGHT), D(DOWN), D(UP)   },
+    /* RIGHT */  { D(TAB_FORWARD),  D(TAB_BACKWARD), D(LEFT), D(RIGHT), D(UP),   D(DOWN) },
+    /* TOP */    { D(TAB_FORWARD),  D(TAB_BACKWARD), D(UP),   D(DOWN),  D(RIGHT), D(LEFT) },
+    /* BOTTOM */ { D(TAB_BACKWARD), D(TAB_FORWARD),  D(DOWN), D(UP),    D(RIGHT), D(LEFT) }},
   };
 
 #undef D
 
-  return translate_direction[notebook->tab_pos][direction];
+  int text_dir = gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL ? 1 : 0;
+
+  return translate_direction[text_dir][notebook->tab_pos][direction];
+}
+
+static gint
+get_effective_tab_pos (GtkNotebook *notebook)
+{
+  if (gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL)
+    {
+      switch (notebook->tab_pos) 
+	{
+	case GTK_POS_LEFT:
+	  return GTK_POS_RIGHT;
+	case GTK_POS_RIGHT:
+	  return GTK_POS_LEFT;
+	default: ;
+	}
+    }
+
+  return notebook->tab_pos;
 }
 
 static void
@@ -808,7 +833,6 @@ gtk_notebook_move_focus_out (GtkNotebook      *notebook,
   if (GTK_CONTAINER (notebook)->focus_child && effective_direction == GTK_DIR_UP)
     if (focus_tabs_in (notebook))
       return;
-  
   if (gtk_widget_is_focus (GTK_WIDGET (notebook)) && effective_direction == GTK_DIR_DOWN)
     if (focus_child_in (notebook, GTK_DIR_TAB_FORWARD))
       return;
@@ -991,6 +1015,7 @@ gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
   gint border_width = GTK_CONTAINER (notebook)->border_width;
   GtkNotebookPage *visible_page = NULL;
   GList *tmp_list;
+  gint tab_pos = get_effective_tab_pos (notebook);
 
   for (tmp_list = notebook->children; tmp_list; tmp_list = tmp_list->next)
     {
@@ -1009,20 +1034,20 @@ gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
 	  rectangle->x = widget->allocation.x + border_width;
 	  rectangle->y = widget->allocation.y + border_width;
 	  
-	  switch (notebook->tab_pos)
+	  switch (tab_pos)
 	    {
 	    case GTK_POS_TOP:
 	    case GTK_POS_BOTTOM:
 	      rectangle->width = widget->allocation.width - 2 * border_width;
 	      rectangle->height = visible_page->requisition.height;
-	      if (notebook->tab_pos == GTK_POS_BOTTOM)
+	      if (tab_pos == GTK_POS_BOTTOM)
 		rectangle->y += widget->allocation.height - 2 * border_width - rectangle->height;
 	      break;
 	    case GTK_POS_LEFT:
 	    case GTK_POS_RIGHT:
 	      rectangle->width = visible_page->requisition.width;
 	      rectangle->height = widget->allocation.height - 2 * border_width;
-	      if (notebook->tab_pos == GTK_POS_RIGHT)
+	      if (tab_pos == GTK_POS_RIGHT)
 		rectangle->x += widget->allocation.width - 2 * border_width - rectangle->width;
 	      break;
 	    }
@@ -1406,6 +1431,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   gint vis_pages = 0;
+  gint tab_pos = get_effective_tab_pos (notebook);
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
@@ -1447,7 +1473,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 
 	  if (notebook->show_tabs && notebook->children && notebook->cur_page)
 	    {
-	      switch (notebook->tab_pos)
+	      switch (tab_pos)
 		{
 		case GTK_POS_TOP:
 		  child_allocation.y += notebook->cur_page->requisition.height;
@@ -1642,7 +1668,11 @@ gtk_notebook_do_arrow (GtkNotebook     *notebook,
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
   GtkDirectionType dir;
-  gboolean left = ARROW_IS_LEFT (arrow);
+  gboolean is_rtl, left;
+
+  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  left = (ARROW_IS_LEFT (arrow) && !is_rtl) || 
+         (!ARROW_IS_LEFT (arrow) && is_rtl);
   
   if (!notebook->focus_tab ||
       gtk_notebook_search_page (notebook, notebook->focus_tab,
@@ -1651,9 +1681,9 @@ gtk_notebook_do_arrow (GtkNotebook     *notebook,
     {
       if (notebook->tab_pos == GTK_POS_LEFT ||
 	  notebook->tab_pos == GTK_POS_RIGHT)
-	dir = left ? GTK_DIR_UP : GTK_DIR_DOWN;
+	dir = ARROW_IS_LEFT (arrow) ? GTK_DIR_UP : GTK_DIR_DOWN;
       else
-	dir = left ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
+	dir = ARROW_IS_LEFT (arrow) ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
       gtk_widget_child_focus (widget, dir);
     }
 }
@@ -1664,7 +1694,10 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
 				 GdkEventButton   *event)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
-  
+  gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  gboolean left = (ARROW_IS_LEFT (arrow) && !is_rtl) || 
+                  (!ARROW_IS_LEFT (arrow) && is_rtl);
+
   if (!GTK_WIDGET_HAS_FOCUS (widget))
     gtk_widget_grab_focus (widget);
   
@@ -1689,7 +1722,7 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
     gtk_notebook_switch_focus_tab (notebook,
 				   gtk_notebook_search_page (notebook,
 							     NULL,
-							     ARROW_IS_LEFT (arrow) ? STEP_NEXT : STEP_PREV,
+							     left ? STEP_NEXT : STEP_PREV,
 							     TRUE));
   gtk_notebook_redraw_arrows (notebook);
 
@@ -2427,6 +2460,7 @@ gtk_notebook_redraw_tabs (GtkNotebook *notebook)
   GtkNotebookPage *page;
   GdkRectangle redraw_rect;
   gint border;
+  gint tab_pos = get_effective_tab_pos (notebook);
 
   widget = GTK_WIDGET (notebook);
   border = GTK_CONTAINER (notebook)->border_width;
@@ -2439,7 +2473,7 @@ gtk_notebook_redraw_tabs (GtkNotebook *notebook)
   redraw_rect.x = border;
   redraw_rect.y = border;
 
-  switch (notebook->tab_pos)
+  switch (tab_pos)
     {
     case GTK_POS_BOTTOM:
       redraw_rect.y = (widget->allocation.height - border -
@@ -2780,7 +2814,9 @@ gtk_notebook_paint (GtkWidget    *widget,
   gint width, height;
   gint x, y;
   gint border_width = GTK_CONTAINER (widget)->border_width;
-  gint gap_x = 0, gap_width = 0;
+  gint gap_x = 0, gap_width = 0, step = STEP_PREV;
+  gboolean is_rtl;
+  gint tab_pos;
    
   g_return_if_fail (GTK_IS_NOTEBOOK (widget));
   g_return_if_fail (area != NULL);
@@ -2789,6 +2825,8 @@ gtk_notebook_paint (GtkWidget    *widget,
     return;
 
   notebook = GTK_NOTEBOOK (widget);
+  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  tab_pos = get_effective_tab_pos (notebook);
 
   if ((!notebook->show_tabs && !notebook->show_border) ||
       !notebook->cur_page || !GTK_WIDGET_VISIBLE (notebook->cur_page->child))
@@ -2813,7 +2851,7 @@ gtk_notebook_paint (GtkWidget    *widget,
     {
       page = notebook->first_tab->data;
 
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	  y += page->allocation.height + widget->style->ythickness;
@@ -2833,7 +2871,7 @@ gtk_notebook_paint (GtkWidget    *widget,
     }
   else
     {
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	  y += notebook->cur_page->allocation.height;
@@ -2847,33 +2885,35 @@ gtk_notebook_paint (GtkWidget    *widget,
 	  break;
 	}
 
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
 	  gap_x = (notebook->cur_page->allocation.x - widget->allocation.x - border_width);
 	  gap_width = notebook->cur_page->allocation.width;
+	  step = is_rtl ? STEP_NEXT : STEP_PREV;
 	  break;
 	case GTK_POS_LEFT:
 	case GTK_POS_RIGHT:
 	  gap_x = (notebook->cur_page->allocation.y - widget->allocation.y - border_width);
 	  gap_width = notebook->cur_page->allocation.height;
+	  step = STEP_PREV;
 	  break;
 	}
-      gtk_paint_box_gap(widget->style, widget->window,
-			GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-			area, widget, "notebook",
-			x, y, width, height,
-			notebook->tab_pos, gap_x, gap_width);
+      gtk_paint_box_gap (widget->style, widget->window,
+			 GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+			 area, widget, "notebook",
+			 x, y, width, height,
+			 tab_pos, gap_x, gap_width);
     }
 
   showarrow = FALSE;
-  children = gtk_notebook_search_page (notebook, NULL, STEP_PREV, TRUE);
+  children = gtk_notebook_search_page (notebook, NULL, step, TRUE);
   while (children)
     {
       page = children->data;
       children = gtk_notebook_search_page (notebook, children,
-					   STEP_PREV, TRUE);
+					   step, TRUE);
       if (!GTK_WIDGET_VISIBLE (page->child))
 	continue;
       if (!GTK_WIDGET_MAPPED (page->tab_label))
@@ -2905,6 +2945,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   GdkRectangle page_area;
   GtkStateType state_type;
   GtkPositionType gap_side;
+  gint tab_pos = get_effective_tab_pos (notebook);
   
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (page != NULL);
@@ -2925,7 +2966,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 
       widget = GTK_WIDGET (notebook);
       gap_side = 0;
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	  gap_side = GTK_POS_BOTTOM;
@@ -2994,10 +3035,15 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
   GtkWidget *widget;
   GdkRectangle arrow_rect;
   GtkArrowType arrow;
+  gboolean is_rtl, left;
 
   gtk_notebook_get_arrow_rect (notebook, &arrow_rect, nbarrow);
 
   widget = GTK_WIDGET (notebook);
+
+  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  left = (ARROW_IS_LEFT (nbarrow) && !is_rtl) ||
+         (!ARROW_IS_LEFT (nbarrow) && is_rtl); 
 
   if (GTK_WIDGET_DRAWABLE (notebook))
     {
@@ -3018,7 +3064,7 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
 
       if (notebook->focus_tab &&
 	  !gtk_notebook_search_page (notebook, notebook->focus_tab,
-				     ARROW_IS_LEFT (nbarrow) ? STEP_PREV : STEP_NEXT, TRUE))
+				      left? STEP_PREV : STEP_NEXT, TRUE))
 	{
 	  shadow_type = GTK_SHADOW_ETCHED_IN;
 	  state_type = GTK_STATE_INSENSITIVE;
@@ -3060,6 +3106,10 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
   gint n = 1;
   gint old_fill = 0;
   gint new_fill = 0;
+  gint tab_pos = get_effective_tab_pos (notebook);
+  gboolean is_rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL &&
+		     (tab_pos == GTK_POS_TOP || tab_pos == GTK_POS_BOTTOM));
+  gint memo_x;
 
   if (!notebook->show_tabs || !notebook->children || !notebook->cur_page)
     return;
@@ -3067,7 +3117,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
   child_allocation.x = widget->allocation.x + container->border_width;
   child_allocation.y = widget->allocation.y + container->border_width;
 
-  switch (notebook->tab_pos)
+  switch (tab_pos)
     {
     case GTK_POS_BOTTOM:
       child_allocation.y = (widget->allocation.y +
@@ -3103,7 +3153,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
       else
 	focus_tab = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, TRUE);
 
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
@@ -3294,7 +3344,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 
       n = 0;
       children = notebook->children;
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
@@ -3339,7 +3389,22 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
     }
   
   children = notebook->first_tab;
-  i = 1;
+  i = 1; 
+
+  memo_x = child_allocation.x;
+  if (notebook->children && is_rtl)
+     {
+      child_allocation.x = (allocation->x + allocation->width -
+				container->border_width); 
+      if (notebook->scrollable) 
+	{
+	  if (notebook->has_after_previous)
+	    child_allocation.x -= ARROW_SPACING + ARROW_SIZE;
+	  if (notebook->has_after_next)
+	    child_allocation.x -= ARROW_SPACING + ARROW_SIZE;
+	}
+     }
+
   while (children)
     {
       if (children == last_child)
@@ -3349,7 +3414,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 	}
 
       page = children->data;
-      if (!showarrow && page->pack != GTK_PACK_START)
+      if (!showarrow && page->pack != GTK_PACK_START) 
 	break;
       children = gtk_notebook_search_page (notebook, children, STEP_NEXT,TRUE);
       
@@ -3361,12 +3426,14 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 	  old_fill = new_fill;
 	}
       
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
 	  child_allocation.width = (page->requisition.width +
 				    TAB_OVERLAP + delta);
+          if (is_rtl)
+	      child_allocation.x -= child_allocation.width;
 	  break;
 	case GTK_POS_LEFT:
 	case GTK_POS_RIGHT:
@@ -3376,12 +3443,15 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 	}
 
       gtk_notebook_page_allocate (notebook, page, &child_allocation);
-	  
-      switch (notebook->tab_pos)
+
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
-	  child_allocation.x += child_allocation.width - TAB_OVERLAP;
+          if (!is_rtl)
+	     child_allocation.x += child_allocation.width - TAB_OVERLAP;
+          else
+             child_allocation.x += TAB_OVERLAP;
 	  break;
 	case GTK_POS_LEFT:
 	case GTK_POS_RIGHT:
@@ -3396,12 +3466,16 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
   if (children)
     {
       children = notebook->children;
-      switch (notebook->tab_pos)
+
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
-	  child_allocation.x = (allocation->x + allocation->width -
-				container->border_width);
+          if (!is_rtl)
+	     child_allocation.x = (allocation->x + allocation->width -
+	   			  container->border_width);
+          else
+             child_allocation.x = memo_x; 
 	  break;
 	case GTK_POS_LEFT:
 	case GTK_POS_RIGHT:
@@ -3415,8 +3489,8 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 	  page = children->data;
 	  children = children->next;
 
-	  if (page->pack != GTK_PACK_END || !GTK_WIDGET_VISIBLE (page->child))
-	    continue;
+          if (page->pack != GTK_PACK_END || !GTK_WIDGET_VISIBLE (page->child))
+             continue;
 
 	  delta = 0;
 	  if (n && (page->expand || notebook->homogeneous))
@@ -3426,13 +3500,14 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 	      old_fill = new_fill;
 	    }
 
-	  switch (notebook->tab_pos)
+	  switch (tab_pos)
 	    {
 	    case GTK_POS_TOP:
 	    case GTK_POS_BOTTOM:
 	      child_allocation.width = (page->requisition.width +
 					TAB_OVERLAP + delta);
-	      child_allocation.x -= child_allocation.width;
+              if (!is_rtl)
+	         child_allocation.x -= child_allocation.width;
 	      break;
 	    case GTK_POS_LEFT:
 	    case GTK_POS_RIGHT:
@@ -3444,11 +3519,14 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
 
 	  gtk_notebook_page_allocate (notebook, page, &child_allocation);
 
-	  switch (notebook->tab_pos)
+	  switch (tab_pos)
 	    {
 	    case GTK_POS_TOP:
 	    case GTK_POS_BOTTOM:
-	      child_allocation.x += TAB_OVERLAP;
+              if (!is_rtl)
+	         child_allocation.x += TAB_OVERLAP;
+              else
+                 child_allocation.x += child_allocation.width - TAB_OVERLAP;
 	      break;
 	    case GTK_POS_LEFT:
 	    case GTK_POS_RIGHT:
@@ -3477,6 +3555,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   gint ythickness;
   gint padding;
   gint focus_width;
+  gint tab_pos = get_effective_tab_pos (notebook);
 
   gtk_widget_style_get (widget, "focus-line-width", &focus_width, NULL);
   
@@ -3493,7 +3572,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 
       border_width = GTK_CONTAINER (notebook)->border_width;
 
-      switch (notebook->tab_pos)
+      switch (tab_pos)
        {
        case GTK_POS_TOP:
          width = widget->allocation.width;
@@ -3533,7 +3612,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 
   if (notebook->cur_page != page)
     {
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	  page->allocation.y += ythickness;
@@ -3550,7 +3629,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	}
     }
 
-  switch (notebook->tab_pos)
+  switch (tab_pos)
     {
     case GTK_POS_TOP:
     case GTK_POS_BOTTOM:
@@ -3572,7 +3651,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	}
       child_allocation.y = (notebook->tab_vborder + focus_width +
 			    page->allocation.y);
-      if (notebook->tab_pos == GTK_POS_TOP)
+      if (tab_pos == GTK_POS_TOP)
 	child_allocation.y += ythickness;
       child_allocation.height = MAX (1, (((gint) page->allocation.height) - ythickness -
 					 2 * (notebook->tab_vborder + focus_width)));
@@ -3594,7 +3673,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	  child_allocation.height = tab_requisition.height;
 	}
       child_allocation.x = page->allocation.x + notebook->tab_hborder + focus_width;
-      if (notebook->tab_pos == GTK_POS_LEFT)
+      if (tab_pos == GTK_POS_LEFT)
 	child_allocation.x += xthickness;
       child_allocation.width = MAX (1, (((gint) page->allocation.width) - xthickness -
 					2 * (notebook->tab_hborder + focus_width)));
@@ -3616,6 +3695,7 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
   GList *children;
   GList *last_list = NULL;
   gboolean pack;
+  gint tab_pos = get_effective_tab_pos (notebook);
 
   if (!start)
     return;
@@ -3627,7 +3707,7 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
 
   while (1)
     {
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	case GTK_POS_BOTTOM:
@@ -3795,6 +3875,7 @@ gtk_notebook_page_select (GtkNotebook *notebook,
 {
   GtkNotebookPage *page;
   GtkDirectionType dir = GTK_DIR_DOWN; /* Quiet GCC */
+  gint tab_pos = get_effective_tab_pos (notebook);
 
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
 
@@ -3806,7 +3887,7 @@ gtk_notebook_page_select (GtkNotebook *notebook,
 
   if (move_focus)
     {
-      switch (notebook->tab_pos)
+      switch (tab_pos)
 	{
 	case GTK_POS_TOP:
 	  dir = GTK_DIR_DOWN;
@@ -4255,7 +4336,7 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
   page->menu_label = menu_label;
   page->expand = FALSE;
   page->fill = TRUE;
-  page->pack = GTK_PACK_START;
+  page->pack = GTK_PACK_START; 
 
   if (!menu_label)
     page->default_menu = TRUE;
