@@ -2831,7 +2831,7 @@ changed_handler (GtkTextLayout *layout,
   GtkWidget *widget;
   GdkRectangle visible_rect;
   GdkRectangle redraw_rect;
-
+  
   text_view = GTK_TEXT_VIEW (data);
   widget = GTK_WIDGET (data);
   
@@ -2905,6 +2905,8 @@ changed_handler (GtkTextLayout *layout,
           tmp_list = g_slist_next (tmp_list);
         }
     }
+
+  gtk_widget_queue_resize (widget);
 }
 
 static void

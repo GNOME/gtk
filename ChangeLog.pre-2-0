@@ -1,5 +1,11 @@
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (changed_handler): queue a resize here; will
+	temporarily slow down the widget a lot, until we figure out how to
+	optimize to avoid full redraw everytime we queue a resize
+
+2001-10-23  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextiter.c (test_log_attrs): handle case where offset ==
 	0 and char_len == 0, bug #61729
 
