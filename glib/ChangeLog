@@ -1,3 +1,7 @@
+Fri May 15 12:32:08 1998  rodo  <doulik@karlin.mff.cuni.cz>
+
+	* gscanner.c: replaced some snprintf with g_snprintf
+
 Fri May 15 00:56:59 1998  Tim Janik  <timj@gtk.org>
 
 	* glib.h: further support for gcc function attributes: G_GNUC_FORMAT,
