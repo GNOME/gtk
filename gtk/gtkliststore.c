@@ -1426,43 +1426,6 @@ gtk_list_store_reorder (GtkListStore *store,
   gtk_tree_path_free (path);
 }
 
-/**
- * gtk_list_store_swap:
- * @store: A #GtkListStore.
- * @a: A #GtkTreeIter.
- * @b: Another #GtkTreeIter.
- *
- * Swaps @a and @b in @store. Note that this function only works with
- * unsorted stores.
- *
- * Since: 2.2
- **/
-void
-gtk_list_store_swap (GtkListStore *store,
-		     GtkTreeIter  *a,
-		     GtkTreeIter  *b)
-{
-  GtkTreePath *path;
-
-  g_return_if_fail (GTK_IS_LIST_STORE (store));
-  g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
-  g_return_if_fail (VALID_ITER (a, store));
-  g_return_if_fail (VALID_ITER (b, store));
-
-  if (a->user_data == b->user_data)
-    return;
-
-  _gtk_sequence_swap (a->user_data, b->user_data);
-  
-  /* emit signal */
-  path = gtk_tree_path_new ();
-  
-  gtk_tree_model_row_changed (GTK_TREE_MODEL (store), path, a);
-  gtk_tree_model_row_changed (GTK_TREE_MODEL (store), path, b);
-  
-  gtk_tree_path_free (path);
-}
-
 static GHashTable *
 save_positions (GtkSequence *seq)
 {
@@ -1500,6 +1463,48 @@ generate_order (GtkSequence *seq,
   g_hash_table_destroy (old_positions);
 
   return order;
+}
+
+/**
+ * gtk_list_store_swap:
+ * @store: A #GtkListStore.
+ * @a: A #GtkTreeIter.
+ * @b: Another #GtkTreeIter.
+ *
+ * Swaps @a and @b in @store. Note that this function only works with
+ * unsorted stores.
+ *
+ * Since: 2.2
+ **/
+void
+gtk_list_store_swap (GtkListStore *store,
+		     GtkTreeIter  *a,
+		     GtkTreeIter  *b)
+{
+  GHashTable *old_positions;
+  gint *order;
+  GtkTreePath *path;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (store));
+  g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
+  g_return_if_fail (VALID_ITER (a, store));
+  g_return_if_fail (VALID_ITER (b, store));
+
+  if (a->user_data == b->user_data)
+    return;
+
+  old_positions = save_positions (store->seq);
+  
+  _gtk_sequence_swap (a->user_data, b->user_data);
+
+  order = generate_order (store->seq, old_positions);
+  path = gtk_tree_path_new ();
+  
+  gtk_tree_model_rows_reordered (GTK_TREE_MODEL (store),
+				 path, NULL, order);
+
+  gtk_tree_path_free (path);
+  g_free (order);
 }
 
 static void

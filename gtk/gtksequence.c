@@ -1070,21 +1070,35 @@ void
 _gtk_sequence_swap (GtkSequencePtr a,
 		    GtkSequencePtr b)
 {
-  GtkSequenceNode temp;
-  gpointer temp_data;
+  GtkSequenceNode *leftmost, *rightmost, *rightmost_next;
+  int a_pos, b_pos;
   
   g_return_if_fail (!_gtk_sequence_ptr_is_end (a));
   g_return_if_fail (!_gtk_sequence_ptr_is_end (b));
+
+  if (a == b)
+      return;
+
+  a_pos = _gtk_sequence_ptr_get_position (a);
+  b_pos = _gtk_sequence_ptr_get_position (b);
+
+  if (a_pos > b_pos)
+    {
+      leftmost = b;
+      rightmost = a;
+    }
+  else
+    {
+      leftmost = a;
+      rightmost = b;
+    }
+
+  rightmost_next = _gtk_sequence_node_next (rightmost);
+
+  /* Situation now:  ..., leftmost, ......., rightmost, rightmost_next, ... */
   
-  /* swap contents of the nodes */
-  temp = *a;
-  *a = *b;
-  *b = temp;
-  
-  /* swap data back */
-  temp_data = a->data;
-  a->data = b->data;
-  b->data = temp_data;
+  _gtk_sequence_move (rightmost, leftmost);
+  _gtk_sequence_move (leftmost, rightmost_next);
 }
 
 void

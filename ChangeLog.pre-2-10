@@ -1,3 +1,13 @@
+Sat Oct 23 16:07:46 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtksequence.c (_gtk_sequence_swap): Replace broken, overly
+	clever implementation with one that works.
+	
+	* gtk/gtkliststore.c (gtk_list_store_swap): emit "rows_reordered"
+	instead of "changed" twice.
+
+	Bug 153479
+
 Sat Oct 23 15:17:55 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkmenutoolbutton.c (button_state_changed_cb): Remove check
