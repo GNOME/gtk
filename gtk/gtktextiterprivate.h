@@ -1,11 +1,11 @@
 #ifndef GTK_TEXT_ITER_PRIVATE_H
 #define GTK_TEXT_ITER_PRIVATE_H
 
+#include <gtk/gtktextiter.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include <gtk/gtktextiter.h>
 
 GtkTextLineSegment *gtk_text_iter_get_indexable_segment(const GtkTextIter *iter);
 GtkTextLineSegment *gtk_text_iter_get_any_segment(const GtkTextIter *iter);

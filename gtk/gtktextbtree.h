@@ -1,10 +1,6 @@
 #ifndef GTK_TEXT_BTREE_H
 #define GTK_TEXT_BTREE_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktextmark.h>
@@ -12,6 +8,9 @@ extern "C" {
 #include <gtk/gtktextsegment.h>
 #include <gtk/gtktextiter.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 GtkTextBTree  *gtk_text_btree_new        (GtkTextTagTable *table,
                                           GtkTextBuffer   *buffer);

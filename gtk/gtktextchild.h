@@ -1,11 +1,11 @@
 #ifndef GTK_TEXT_CHILD_H
 #define GTK_TEXT_CHILD_H
 
+#include <gtk/gtktexttypes.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include <gtk/gtktexttypes.h>
 
 typedef struct _GtkTextPixmap GtkTextPixmap;
 

@@ -1,6 +1,11 @@
 #ifndef GTK_TEXT_SEGMENT_H
 #define GTK_TEXT_SEGMENT_H
 
+#include <gtk/gtktexttag.h>
+#include <gtk/gtktextiter.h>
+#include <gtk/gtktextmarkprivate.h>
+#include <gtk/gtktextchild.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -14,11 +19,6 @@ extern "C" {
 
 /* This header has the segment type, and two specific segments
    (character and toggle segments) */
-
-#include <gtk/gtktexttag.h>
-#include <gtk/gtktextiter.h>
-#include <gtk/gtktextmarkprivate.h>
-#include <gtk/gtktextchild.h>
 
 /* Information a BTree stores about a tag. */
 typedef struct _GtkTextTagInfo GtkTextTagInfo;

@@ -1,12 +1,12 @@
 #ifndef GTK_TEXT_TAG_H
 #define GTK_TEXT_TAG_H
 
+#include <gtk/gtkobject.h>
+#include <gdk/gdk.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include <gtk/gtkobject.h>
-#include <gdk/gdk.h>
 
 typedef struct _GtkTextIter GtkTextIter;
 typedef struct _GtkTextBTreeNode GtkTextBTreeNode;

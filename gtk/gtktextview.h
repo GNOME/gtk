@@ -1,13 +1,13 @@
 #ifndef GTK_TEXT_VIEW_H
 #define GTK_TEXT_VIEW_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtktextbuffer.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 typedef enum {
   GTK_TEXT_MOVEMENT_CHAR,       /* move by forw/back chars */

@@ -31,13 +31,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#include <gtk/gtkwidget.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <gtk/gtkwidget.h>
-
 
 #define GTK_TYPE_HSV            (gtk_hsv_get_type ())
 #define GTK_HSV(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HSV, GtkHSV))

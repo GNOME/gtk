@@ -1,6 +1,11 @@
 #ifndef GTK_TEXT_BUFFER_H
 #define GTK_TEXT_BUFFER_H
 
+#include <gtk/gtkwidget.h>
+#include <gtk/gtktexttagtable.h>
+#include <gtk/gtktextiter.h>
+#include <gtk/gtktextmark.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -9,11 +14,6 @@ extern "C" {
  * This is the PUBLIC representation of a text buffer.
  * GtkTextBTree is the PRIVATE internal representation of it.
  */
-
-#include <gtk/gtkwidget.h>
-#include <gtk/gtktexttagtable.h>
-#include <gtk/gtktextiter.h>
-#include <gtk/gtktextmark.h>
 
 typedef struct _GtkTextBTree GtkTextBTree;
 

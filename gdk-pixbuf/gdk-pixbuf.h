@@ -26,13 +26,13 @@
 #ifndef GDK_PIXBUF_H
 #define GDK_PIXBUF_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <glib.h>
 #include <gdk-pixbuf/gdk-pixbuf-features.h>
 #include <gobject/gobject.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 

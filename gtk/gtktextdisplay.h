@@ -1,6 +1,8 @@
 #ifndef GTK_TEXT_DISPLAY_H
 #define GTK_TEXT_DISPLAY_H
 
+#include <gtk/gtktextlayout.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -9,8 +11,6 @@ extern "C" {
   A semi-public header intended for use by code that also
   uses GtkTextLayout
 */
-
-#include <gtk/gtktextlayout.h>
 
 /* The drawable should be pre-initialized to your preferred
    background. */

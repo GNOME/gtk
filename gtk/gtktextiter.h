@@ -1,6 +1,8 @@
 #ifndef GTK_TEXT_ITER_H
 #define GTK_TEXT_ITER_H
 
+#include <gtk/gtktexttag.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -10,8 +12,6 @@ extern "C" {
  * characters/pixmaps/widgets (indexable objects) in the text buffer
  * are changed.
  */
-
-#include <gtk/gtktexttag.h>
 
 typedef struct _GtkTextBuffer GtkTextBuffer;
 

@@ -1,3 +1,14 @@
+2000-07-19  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gdk-pixbuf/gdk-pixbuf.h, gtk/gtkhsv.h, gtk/gtktextbtree.h,
+	gtk/gtktextbuffer.h, gtk/gtktextchild.h, gtk/gtktextdisplay.h,
+	gtk/gtktextiter.h, gtk/gtktextiterprivate.h, gtk/gtktextlayout.h,
+	gtk/gtktextmarkprivate.h, gtk/gtktextsegment.h, gtk/gtktexttag.h,
+	gtk/gtktexttagtable.h, gtk/gtktexttypes.h, gtk/gtktextview.h,
+	gtk/gtktypeutils.h: Include files outside of the extern "C"
+	block. Makes some C++ compiler happy. Reported by Denis Vakatov
+	<vakatov@peony.nlm.nih.gov>.
+
 Wed Jul 19 14:07:57 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml: Yet more clean ups.

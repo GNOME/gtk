@@ -1,14 +1,14 @@
 #ifndef GTK_TEXT_TYPES_H
 #define GTK_TEXT_TYPES_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <glib.h>
 
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktexttagprivate.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 typedef struct _GtkTextLine GtkTextLine;
 typedef struct _GtkTextCounter GtkTextCounter;

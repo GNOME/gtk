@@ -95,9 +95,17 @@ typedef GBaseInitFunc		GtkClassInitFunc;
 typedef GInstanceInitFunc	GtkObjectInitFunc;
 
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 /* Builtin Types
  */
 #include <gtk/gtktypebuiltins.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 
 /* --- typedefs --- */

@@ -1,6 +1,10 @@
 #ifndef GTK_TEXT_LAYOUT_H
 #define GTK_TEXT_LAYOUT_H
 
+#include <gtk/gtktextbuffer.h>
+#include <gtk/gtktextiter.h>
+#include <gtk/gtktextbtree.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -11,11 +15,6 @@ extern "C" {
  * canvas item can use it, but users are not supposed
  * to use it. 
  */
-
-#include <gtk/gtktextbuffer.h>
-#include <gtk/gtktextiter.h>
-#include <gtk/gtktextbtree.h>
-
 
 #define GTK_TYPE_TEXT_LAYOUT             (gtk_text_layout_get_type())
 #define GTK_TEXT_LAYOUT(obj)             (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_LAYOUT, GtkTextLayout))

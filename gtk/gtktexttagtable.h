@@ -1,11 +1,11 @@
 #ifndef GTK_TEXT_TAG_TABLE_H
 #define GTK_TEXT_TAG_TABLE_H
 
+#include <gtk/gtktexttag.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include <gtk/gtktexttag.h>
 
 #define GTK_TYPE_TEXT_TAG_TABLE            (gtk_text_tag_table_get_type())
 #define GTK_TEXT_TAG_TABLE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_TAG_TABLE, GtkTextTagTable))
