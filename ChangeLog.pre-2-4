@@ -3,7 +3,7 @@ Wed Mar 27 11:10:39 2002  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtknotebook.c (gtk_notebook_real_remove): Set
 	page->last_focus_child to NULL as well as removing the
 	weak reference, to deal with reentrancy in set_focus_child().
-	(#76634)
+	(#76634, Dennis Björklund)
 
 2002-03-27  Murray Cumming  <murrayc@usa.net>
  
