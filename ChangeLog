@@ -1,3 +1,11 @@
+2004-09-18  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from 2.4:
+
+	* gtk/gtkfilesystem.h: Removed the GTK_FILE_PATH() and
+	GTK_IS_FILE_PATH() macros.  They are not supposed to exist, as
+	GtkFilePath is not an object.  And they never worked, anyway.
+
 2004-09-18  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* gtk/gtkentry.c: (gtk_entry_completion_key_press):
