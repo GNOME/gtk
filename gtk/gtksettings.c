@@ -760,6 +760,22 @@ gtk_settings_set_double_property (GtkSettings *settings,
   g_value_unset (&svalue.value);
 }
 
+/**
+ * gtk_rc_property_parse_color:
+ * @pspec: a #GParamSpec
+ * @gstring: the #GString to be parsed
+ * @property_value: a #GValue which must hold #GdkColor values.
+ * 
+ * A #GtkRcPropertyParser for use with gtk_settings_install_property_parser()
+ * or gtk_widget_class_install_style_property_parser() which parses a
+ * color given either by its name or in the form 
+ * <literal>{ red, green, blue }</literal> where %red, %green and
+ * %blue are integers between 0 and 65535 or floating-point numbers
+ * between 0 and 1.
+ * 
+ * Return value: %TRUE if @gstring could be parsed and @property_value
+ * has been set to the resulting #GdkColor.
+ **/
 gboolean
 gtk_rc_property_parse_color (const GParamSpec *pspec,
 			     const GString    *gstring,
@@ -787,6 +803,23 @@ gtk_rc_property_parse_color (const GParamSpec *pspec,
   return success;
 }
 
+/**
+ * gtk_rc_property_parse_enum:
+ * @pspec: a #GParamSpec
+ * @gstring: the #GString to be parsed
+ * @property_value: a #GValue which must hold enum values.
+ * 
+ * A #GtkRcPropertyParser for use with gtk_settings_install_property_parser()
+ * or gtk_widget_class_install_style_property_parser() which parses a single
+ * enumeration value.
+ *
+ * The enumeration value can be specified by its name, its nickname or
+ * its numeric value. For consistency with flags parsing, the value
+ * may be surrounded by parentheses.
+ * 
+ * Return value: %TRUE if @gstring could be parsed and @property_value
+ * has been set to the resulting #GEnumValue.
+ **/
 gboolean
 gtk_rc_property_parse_enum (const GParamSpec *pspec,
 			    const GString    *gstring,
@@ -803,7 +836,7 @@ gtk_rc_property_parse_enum (const GParamSpec *pspec,
   g_scanner_input_text (scanner, gstring->str, gstring->len);
 
   /* we just want to parse _one_ value, but for consistency with flags parsing
-   * we support optional paranthesis
+   * we support optional parenthesis
    */
   g_scanner_get_next_token (scanner);
   if (scanner->token == '(')
@@ -866,13 +899,29 @@ parse_flags_value (GScanner    *scanner,
   return G_TOKEN_IDENTIFIER;
 }
 
+/**
+ * gtk_rc_property_parse_flags:
+ * @pspec: a #GParamSpec
+ * @gstring: the #GString to be parsed
+ * @property_value: a #GValue which must hold flags values.
+ * 
+ * A #GtkRcPropertyParser for use with gtk_settings_install_property_parser()
+ * or gtk_widget_class_install_style_property_parser() which parses flags. 
+ * 
+ * Flags can be specified by their name, their nickname or
+ * numerically. Multiple flags can be specified in the form 
+ * <literal>"( flag1 | flag2 | ... )"</literal>.
+ * 
+ * Return value: %TRUE if @gstring could be parsed and @property_value
+ * has been set to the resulting flags value.
+ **/
 gboolean
 gtk_rc_property_parse_flags (const GParamSpec *pspec,
 			     const GString    *gstring,
 			     GValue           *property_value)
 {
   GFlagsClass *class;
-  gboolean success = FALSE;
+   gboolean success = FALSE;
   GScanner *scanner;
 
   g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), FALSE);
@@ -956,6 +1005,20 @@ get_braced_int (GScanner *scanner,
   return TRUE;
 }
 
+/**
+ * gtk_rc_property_parse_requisition:
+ * @pspec: a #GParamSpec
+ * @gstring: the #GString to be parsed
+ * @property_value: a #GValue which must hold boxed values.
+ * 
+ * A #GtkRcPropertyParser for use with gtk_settings_install_property_parser()
+ * or gtk_widget_class_install_style_property_parser() which parses a
+ * requisition in the form 
+ * <literal>"{ width, height }"</literal> for integers %width and %height.
+ * 
+ * Return value: %TRUE if @gstring could be parsed and @property_value
+ * has been set to the resulting #GtkRequisition.
+ **/
 gboolean
 gtk_rc_property_parse_requisition  (const GParamSpec *pspec,
 				    const GString    *gstring,
@@ -983,6 +1046,21 @@ gtk_rc_property_parse_requisition  (const GParamSpec *pspec,
   return success;
 }
 
+/**
+ * gtk_rc_property_parse_border:
+ * @pspec: a #GParamSpec
+ * @gstring: the #GString to be parsed
+ * @property_value: a #GValue which must hold boxed values.
+ * 
+ * A #GtkRcPropertyParser for use with gtk_settings_install_property_parser()
+ * or gtk_widget_class_install_style_property_parser() which parses
+ * borders in the form 
+ * <literal>"{ left, right, top, bottom }"</literal> for integers 
+ * %left, %right, %top and %bottom.
+ * 
+ * Return value: %TRUE if @gstring could be parsed and @property_value
+ * has been set to the resulting #GtkBorder.
+ **/
 gboolean
 gtk_rc_property_parse_border (const GParamSpec *pspec,
 			      const GString    *gstring,
