@@ -2084,7 +2084,7 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
   gboolean removable = FALSE;
-  gchar *name;
+  gchar *name = NULL;
   
   if (shortcuts_get_selected (impl, &iter))
     gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
