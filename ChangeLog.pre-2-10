@@ -1,5 +1,12 @@
 2005-01-05  Federico Mena Quintero  <federico@ximian.com>
 
+	Fix #161409:
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_row_activated_cb): Queue
+	a pending operation to select the first row.
+
+2005-01-05  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): Don't call
 	button_data_free() explicitly; the button is weak-reffed and the
 	callback will free the button data.  Fixes #163010.

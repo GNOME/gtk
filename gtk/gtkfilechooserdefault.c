@@ -5561,6 +5561,7 @@ shortcuts_row_activated_cb (GtkTreeView           *tree_view,
 						    &child_iter,
 						    &iter);
   shortcuts_activate_iter (impl, &child_iter);
+  pending_op_queue (impl, PENDING_OP_SELECT_FIRST, NULL);
 
   gtk_widget_grab_focus (impl->browse_files_tree_view);
 }
