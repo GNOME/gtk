@@ -277,7 +277,8 @@ GtkTextTag    *gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
                                            ...);
 
 /* Obtain iterators pointed at various places, then you can move the
-   iterator around using the GtkTextIter operators */
+ * iterator around using the GtkTextIter operators
+ */
 void gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
                                               gint           line_number,

@@ -55,6 +55,8 @@ static void gtk_dialog_get_property      (GObject          *object,
                                           guint             prop_id,
                                           GValue           *value,
                                           GParamSpec       *pspec);
+static void gtk_dialog_style_set         (GtkWidget        *widget,
+                                          GtkStyle         *prev_style);
 
 enum {
   PROP_0,
@@ -111,7 +113,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class->get_property = gtk_dialog_get_property;
   
   widget_class->key_press_event = gtk_dialog_key_press;
-
+  widget_class->style_set = gtk_dialog_style_set;
+  
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_SEPARATOR,
                                    g_param_spec_boolean ("has_separator",
@@ -128,6 +131,59 @@ gtk_dialog_class_init (GtkDialogClass *class)
                     gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_INT);
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("content_area_border",
+                                                             _("Content area border"),
+                                                             _("Width of border around the main dialog area"),
+                                                             0,
+                                                             G_MAXINT,
+                                                             2,
+                                                             G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("button_spacing",
+                                                             _("Button spacing"),
+                                                             _("Spacing between buttons"),
+                                                             0,
+                                                             G_MAXINT,
+                                                             1,
+                                                             G_PARAM_READABLE));
+  
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("action_area_border",
+                                                             _("Action area border"),
+                                                             _("Width of border around the button area at the bottom of the dialog"),
+                                                             0,
+                                                             G_MAXINT,
+                                                             0,
+                                                             G_PARAM_READABLE));
+}
+
+static void
+update_spacings (GtkDialog *dialog)
+{
+  GtkWidget *widget;
+  gint content_area_border;
+  gint button_spacing;
+  gint action_area_border;
+  
+  widget = GTK_WIDGET (dialog);
+
+  gtk_widget_style_get (widget,
+                        "content_area_border",
+                        &content_area_border,
+                        "button_spacing",
+                        &button_spacing,
+                        "action_area_border",
+                        &action_area_border,
+                        NULL);
+
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox),
+                                  content_area_border);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area),
+                       button_spacing);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area),
+                                  action_area_border);
 }
 
 static void
@@ -143,8 +199,6 @@ gtk_dialog_init (GtkDialog *dialog)
                       NULL);
   
   dialog->vbox = gtk_vbox_new (FALSE, 0);
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 2);
   
   gtk_container_add (GTK_CONTAINER (dialog), dialog->vbox);
   gtk_widget_show (dialog->vbox);
@@ -152,11 +206,8 @@ gtk_dialog_init (GtkDialog *dialog)
   dialog->action_area = gtk_hbutton_box_new ();
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog->action_area),
-                             GTK_BUTTONBOX_END);
+                             GTK_BUTTONBOX_END);  
 
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 5);
-  
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
   gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->action_area,
                     FALSE, TRUE, 0);
   gtk_widget_show (dialog->action_area);
@@ -250,6 +301,13 @@ gtk_dialog_key_press (GtkWidget   *widget,
   g_object_unref (G_OBJECT (event.window));
 
   return TRUE;
+}
+
+static void
+gtk_dialog_style_set (GtkWidget *widget,
+                      GtkStyle  *prev_style)
+{
+  update_spacings (GTK_DIALOG (widget));
 }
 
 GtkWidget*
@@ -444,7 +502,7 @@ gtk_dialog_add_action_widget  (GtkDialog *dialog,
 
   gtk_box_pack_end (GTK_BOX (dialog->action_area),
                     child,
-                    FALSE, TRUE, 5);  
+                    FALSE, TRUE, 0);  
 }
 
 /**

@@ -30,10 +30,14 @@
 #include "gtkimage.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
+#include "gtkintl.h"
 
 static void gtk_message_dialog_class_init (GtkMessageDialogClass *klass);
 static void gtk_message_dialog_init       (GtkMessageDialog      *dialog);
+static void gtk_message_dialog_style_set  (GtkWidget             *widget,
+                                           GtkStyle              *prev_style);
 
+static gpointer parent_class;
 
 GtkType
 gtk_message_dialog_get_type (void)
@@ -63,6 +67,22 @@ gtk_message_dialog_get_type (void)
 static void
 gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 {
+  GtkWidgetClass *widget_class;
+
+  widget_class = GTK_WIDGET_CLASS (class);
+
+  parent_class = g_type_class_peek_parent (class);
+  
+  widget_class->style_set = gtk_message_dialog_style_set;
+  
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("message_border",
+                                                             _("Image/label border"),
+                                                             _("Width of border around the label and image in the message dialog"),
+                                                             0,
+                                                             G_MAXINT,
+                                                             8,
+                                                             G_PARAM_READABLE));
 }
 
 static void
@@ -75,19 +95,17 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   
   gtk_label_set_line_wrap (GTK_LABEL (dialog->label), TRUE);
 
-  hbox = gtk_hbox_new (FALSE, 10);
+  hbox = gtk_hbox_new (FALSE, 6);
 
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
-  
   gtk_box_pack_start (GTK_BOX (hbox), dialog->image,
-                      FALSE, FALSE, 2);
+                      FALSE, FALSE, 0);
 
   gtk_box_pack_start (GTK_BOX (hbox), dialog->label,
-                      TRUE, TRUE, 2);
+                      TRUE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
                       hbox,
-                      FALSE, FALSE, 10);
+                      FALSE, FALSE, 0);
 
   gtk_widget_show_all (hbox);
 }
@@ -246,4 +264,26 @@ gtk_message_dialog_new (GtkWindow     *parent,
     }
 
   return widget;
+}
+
+static void
+gtk_message_dialog_style_set (GtkWidget *widget,
+                              GtkStyle  *prev_style)
+{
+  GtkWidget *parent;
+  gint border_width = 0;
+
+  parent = GTK_WIDGET (GTK_MESSAGE_DIALOG (widget)->image->parent);
+
+  if (parent)
+    {
+      gtk_widget_style_get (widget, "message_border",
+                            &border_width, NULL);
+      
+      gtk_container_set_border_width (GTK_CONTAINER (parent),
+                                      border_width);
+    }
+
+  if (GTK_WIDGET_CLASS (parent_class)->style_set)
+    (GTK_WIDGET_CLASS (parent_class)->style_set) (widget, prev_style);
 }

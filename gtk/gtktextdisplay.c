@@ -739,66 +739,71 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       GtkTextLine *line = tmp_list->data;
 
       line_display = gtk_text_layout_get_line_display (layout, line, FALSE);
-      
-      if (have_selection)
+
+      if (line_display->height > 0)
         {
-          GtkTextIter line_start, line_end;
-          gint byte_count;
-
-          gtk_text_layout_get_iter_at_line (layout,
-                                            &line_start,
-                                            line, 0);
-          byte_count = gtk_text_iter_get_bytes_in_line (&line_start);
+          g_assert (line_display->layout != NULL);
           
-          /* FIXME the -1 assumes a newline I think */
-          gtk_text_layout_get_iter_at_line (layout,
-                                            &line_end,
-                                            line, byte_count - 1);
-
-          if (gtk_text_iter_compare (&selection_start, &line_end) < 0 &&
-              gtk_text_iter_compare (&selection_end, &line_start) > 0)
+          if (have_selection)
             {
-              if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
-                selection_start_index = gtk_text_iter_get_line_index (&selection_start);
-              else
-                selection_start_index = -1;
+              GtkTextIter line_start, line_end;
+              gint byte_count;
 
-              if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
-                selection_end_index = gtk_text_iter_get_line_index (&selection_end);
-              else
-                selection_end_index = byte_count;
+              gtk_text_layout_get_iter_at_line (layout,
+                                                &line_start,
+                                                line, 0);
+              byte_count = gtk_text_iter_get_bytes_in_line (&line_start);
+          
+              /* FIXME the -1 assumes a newline I think */
+              gtk_text_layout_get_iter_at_line (layout,
+                                                &line_end,
+                                                line, byte_count - 1);
+
+              if (gtk_text_iter_compare (&selection_start, &line_end) < 0 &&
+                  gtk_text_iter_compare (&selection_end, &line_start) > 0)
+                {
+                  if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
+                    selection_start_index = gtk_text_iter_get_line_index (&selection_start);
+                  else
+                    selection_start_index = -1;
+
+                  if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
+                    selection_end_index = gtk_text_iter_get_line_index (&selection_end);
+                  else
+                    selection_end_index = byte_count;
+                }
             }
-        }
 
-      render_para (drawable, render_state, line_display,
-                   - x_offset,
-                   current_y,
-                   selection_start_index, selection_end_index);
+          render_para (drawable, render_state, line_display,
+                       - x_offset,
+                       current_y,
+                       selection_start_index, selection_end_index);
 
 
-      /* We paint the cursors last, because they overlap another chunk
+          /* We paint the cursors last, because they overlap another chunk
          and need to appear on top. */
 
-      cursor_list = line_display->cursors;
-      while (cursor_list)
-        {
-          GtkTextCursorDisplay *cursor = cursor_list->data;
-          GdkGC *gc;
+          cursor_list = line_display->cursors;
+          while (cursor_list)
+            {
+              GtkTextCursorDisplay *cursor = cursor_list->data;
+              GdkGC *gc;
 
-          if (cursor->is_strong)
-            gc = widget->style->base_gc[GTK_STATE_SELECTED];
-          else
-            gc = widget->style->text_gc[GTK_STATE_NORMAL];
+              if (cursor->is_strong)
+                gc = widget->style->base_gc[GTK_STATE_SELECTED];
+              else
+                gc = widget->style->text_gc[GTK_STATE_NORMAL];
 
-          gdk_draw_line (drawable, gc,
-                         line_display->x_offset + cursor->x - x_offset,
-                         current_y + line_display->top_margin + cursor->y,
-                         line_display->x_offset + cursor->x - x_offset,
-                         current_y + line_display->top_margin + cursor->y + cursor->height - 1);
+              gdk_draw_line (drawable, gc,
+                             line_display->x_offset + cursor->x - x_offset,
+                             current_y + line_display->top_margin + cursor->y,
+                             line_display->x_offset + cursor->x - x_offset,
+                             current_y + line_display->top_margin + cursor->y + cursor->height - 1);
 
-          cursor_list = cursor_list->next;
-        }
-
+              cursor_list = cursor_list->next;
+            }
+        } /* line_display->height > 0 */
+          
       current_y += line_display->height;
       gtk_text_layout_free_line_display (layout, line_display);
       render_state->last_appearance = NULL;

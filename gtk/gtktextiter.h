@@ -78,6 +78,9 @@ gint gtk_text_iter_get_line        (const GtkTextIter *iter);
 gint gtk_text_iter_get_line_offset (const GtkTextIter *iter);
 gint gtk_text_iter_get_line_index  (const GtkTextIter *iter);
 
+gint gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter);
+gint gtk_text_iter_get_visible_line_index (const GtkTextIter *iter);
+
 
 /*
  * "Dereference" operators
@@ -197,6 +200,10 @@ void     gtk_text_iter_set_line_index     (GtkTextIter *iter,
 void     gtk_text_iter_forward_to_end     (GtkTextIter *iter);
 gboolean gtk_text_iter_forward_to_line_end (GtkTextIter *iter);
 
+void     gtk_text_iter_set_visible_line_offset (GtkTextIter *iter,
+                                                gint         char_on_line);
+void     gtk_text_iter_set_visible_line_index  (GtkTextIter *iter,
+                                                gint         byte_on_line);
 
 /* returns TRUE if a toggle was found; NULL for the tag pointer
  * means "any tag toggle", otherwise the next toggle of the

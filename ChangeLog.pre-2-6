@@ -1,3 +1,27 @@
+2001-04-21  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): handle 0-height
+	empty/invisible lines.
+
+	* gtk/gtktextiter.c (gtk_text_iter_set_visible_line_offset)
+	(gtk_text_iter_set_visible_line_index): new functions to set
+	indexes excluding invisible text
+
+	* gtk/gtktextlayout.c (line_display_iter_to_index): get visible 
+	index
+
+	* gtk/gtktextiter.c (gtk_text_iter_get_visible_line_index)
+	(gtk_text_iter_get_visible_line_offset): new functions to 
+	get indexes excluding invisible text
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_init): strip out a
+	bunch of extra padding that served no purpose
+
+	* gtk/gtkdialog.c: Make all the spacings configurable via style
+	properties, for chubbiness configuration in themes
+
+	* tests/testtext.c: fix path to the immodules.
+	
 Mon Apr 23 18:57:03 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtksocket.c (gtk_socket_filter_func): add missing '}' that

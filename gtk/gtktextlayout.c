@@ -994,14 +994,16 @@ totally_invisible_line (GtkTextLayout *layout,
   int bytes = 0;
 
   /* If we have a cached style, then we know it does actually apply
-     and we can just see if it is invisible. */
+   * and we can just see if it is invisible.
+   */
   if (layout->one_style_cache &&
       !layout->one_style_cache->invisible)
     return FALSE;
   /* Without the cache, we check if the first char is visible, if so
-     we are partially visible.  Note that we have to check this since
-     we don't know the current invisible/noninvisible toggle state; this
-     function can use the whole btree to get it right. */
+   * we are partially visible.  Note that we have to check this since
+   * we don't know the current invisible/noninvisible toggle state; this
+   * function can use the whole btree to get it right.
+   */
   else
     {
       _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
@@ -1020,10 +1022,11 @@ totally_invisible_line (GtkTextLayout *layout,
         bytes += seg->byte_count;
 
       /* Note that these two tests can cause us to bail out
-         when we shouldn't, because a higher-priority tag
-         may override these settings. However the important
-         thing is to only invisible really-invisible lines, rather
-         than to invisible all really-invisible lines. */
+       * when we shouldn't, because a higher-priority tag
+       * may override these settings. However the important
+       * thing is to only invisible really-invisible lines, rather
+       * than to invisible all really-invisible lines.
+       */
 
       else if (seg->type == &gtk_text_toggle_on_type)
         {
@@ -1478,8 +1481,6 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
               pango_layout_iter_get_run_extents (iter,
                                                  NULL,
                                                  &extents);
-
-              g_print ("extents at %d,%d\n", extents.x, extents.y);
               
               g_signal_emit (G_OBJECT (text_layout),
                              signals[ALLOCATE_CHILD],
@@ -1593,7 +1594,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   GtkTextAttributes *style;
   gchar *text;
   PangoAttrList *attrs;
-  gint byte_count, layout_byte_offset, layout_only_bytes;
+  gint text_allocated, layout_byte_offset, buffer_byte_offset;
   gdouble align;
   PangoRectangle extents;
   gboolean para_values_set = FALSE;
@@ -1635,14 +1636,14 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   /* Allocate space for flat text for buffer
    */
-  byte_count = _gtk_text_line_byte_count (line);
-  text = g_malloc (byte_count);
+  text_allocated = _gtk_text_line_byte_count (line);
+  text = g_malloc (text_allocated);
 
   attrs = pango_attr_list_new ();
 
   /* Iterate over segments, creating display chunks for them. */
-  layout_byte_offset = 0; /* current length of layout text (includes preedit) */
-  layout_only_bytes = 0; /* bytes in layout_byte_offset not in buffer */
+  layout_byte_offset = 0; /* current length of layout text (includes preedit, does not include invisible text) */
+  buffer_byte_offset = 0; /* position in the buffer line */
   seg = _gtk_text_iter_get_any_segment (&iter);
   while (seg != NULL)
     {
@@ -1653,7 +1654,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
         {
           _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                             &iter, line,
-                                            layout_byte_offset - layout_only_bytes);
+                                            buffer_byte_offset);
           style = get_style (layout, &iter);
 
           /* We have to delay setting the paragraph values until we
@@ -1692,6 +1693,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                         {
                           memcpy (text + layout_byte_offset, seg->body.chars, seg->byte_count);
                           layout_byte_offset += seg->byte_count;
+                          buffer_byte_offset += seg->byte_count;
                           bytes += seg->byte_count;
                         }
  		      else if (seg->type == &gtk_text_right_mark_type ||
@@ -1739,6 +1741,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                   memcpy (text + layout_byte_offset, gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;
+                  buffer_byte_offset += seg->byte_count;
                 }
               else if (seg->type == &gtk_text_child_type)
                 {
@@ -1753,11 +1756,19 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                   memcpy (text + layout_byte_offset, gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;
+                  buffer_byte_offset += seg->byte_count;
                 }
               else
                 {
+                  /* We don't know this segment type */
                   g_assert_not_reached ();
                 }
+              
+            } /* if (segment was visible) */
+          else
+            {
+              /* Invisible segment */
+              buffer_byte_offset += seg->byte_count;
             }
 
           release_style (layout, style);
@@ -1787,8 +1798,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 	      
 	      if (layout->preedit_len > 0)
 		{
-		  byte_count += layout->preedit_len;
-		  text = g_realloc (text, byte_count);
+		  text_allocated += layout->preedit_len;
+		  text = g_realloc (text, text_allocated);
 
 		  style = get_style (layout, &iter);
 		  add_preedit_attrs (layout, style, attrs, layout_byte_offset, size_only);
@@ -1796,7 +1807,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                   
 		  memcpy (text + layout_byte_offset, layout->preedit_string, layout->preedit_len);
 		  layout_byte_offset += layout->preedit_len;
-                  layout_only_bytes += layout->preedit_len;
+                  /* DO NOT increment the buffer byte offset for preedit */
                   
 		  cursor_offset = layout->preedit_cursor - layout->preedit_len;
 		}
@@ -1825,8 +1836,6 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       set_para_values (layout, style, display, &align);
       release_style (layout, style);
     }
-
-  g_assert (layout_byte_offset == byte_count);
   
   /* Pango doesn't want the trailing paragraph delimiters */
 
@@ -1897,7 +1906,8 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 {
   if (display != layout->one_display_cache)
     {
-      g_object_unref (G_OBJECT (display->layout));
+      if (display->layout)
+        g_object_unref (G_OBJECT (display->layout));
 
       if (display->cursors)
         {
@@ -1911,7 +1921,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 }
 
 /* Functions to convert iter <=> index for the line of a GtkTextLineDisplay
- * taking into account the preedit string, if necessary.
+ * taking into account the preedit string and invisible text if necessary.
  */
 static gint
 line_display_iter_to_index (GtkTextLayout      *layout,
@@ -1922,8 +1932,8 @@ line_display_iter_to_index (GtkTextLayout      *layout,
 
   g_return_val_if_fail (_gtk_text_iter_get_text_line (iter) == display->line, 0);
 
-  index = gtk_text_iter_get_line_index (iter);
-
+  index = gtk_text_iter_get_visible_line_index (iter);
+  
   if (index >= display->insert_index)
     index += layout->preedit_len;
 
@@ -1937,8 +1947,6 @@ line_display_index_to_iter (GtkTextLayout      *layout,
 			    gint                index,
 			    gint                trailing)
 {
-  gint line_len;
-  
   if (index >= display->insert_index + layout->preedit_len)
     index -= layout->preedit_len;
   else if (index > display->insert_index)
@@ -1946,27 +1954,24 @@ line_display_index_to_iter (GtkTextLayout      *layout,
       index = display->insert_index;
       trailing = 0;
     }
-  
-  line_len = _gtk_text_line_byte_count (display->line);
-  g_assert (index <= line_len);
 
-  if (index < line_len)
-    _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                      iter, display->line, index);
-  else
+  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+                                    iter, display->line, 0);
+
+  gtk_text_iter_set_visible_line_index (iter, index);
+  
+  if (_gtk_text_iter_get_text_line (iter) != display->line)
     {
       /* Clamp to end of line - really this clamping should have been done
        * before here, maybe in Pango, this is a broken band-aid I think
        */
-      g_assert (index == line_len);
-      
       _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                         iter, display->line, 0);
 
       if (!gtk_text_iter_ends_line (iter))
         gtk_text_iter_forward_to_line_end (iter);
     }
-
+  
   /* FIXME should this be cursor positions? */
   gtk_text_iter_forward_chars (iter, trailing);
 }
@@ -2414,7 +2419,7 @@ gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout *layout,
 }
 
 /**
- * gtk_text_layout_move_iter_to_next_line:
+ * gtk_text_layout_move_iter_to_previous_line:
  * @layout: a #GtkLayout
  * @iter:   a #GtkTextIter
  *
@@ -2439,9 +2444,10 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
   orig = *iter;
   
   line = _gtk_text_iter_get_text_line (iter);
-  display = gtk_text_layout_get_line_display (layout, line, FALSE);
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);  
   line_byte = line_display_iter_to_index (layout, display, iter);
 
+  /* FIXME can't use layout until we check display->height > 0) */
   tmp_list = pango_layout_get_lines (display->layout);
   layout_line = tmp_list->data;
 
@@ -2449,6 +2455,8 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
     {
       GtkTextLine *prev_line = _gtk_text_line_previous (line);
 
+      /* FIXME keep going back while display->height == 0 */
+      
       if (prev_line)
         {
           gtk_text_layout_free_line_display (layout, display);

@@ -650,7 +650,6 @@ gtk_text_iter_get_line (const GtkTextIter *iter)
 gint
 gtk_text_iter_get_line_offset (const GtkTextIter *iter)
 {
-
   GtkTextRealIter *real;
 
   g_return_val_if_fail (iter != NULL, 0);
@@ -683,7 +682,7 @@ gint
 gtk_text_iter_get_line_index (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
-
+  
   g_return_val_if_fail (iter != NULL, 0);
 
   real = gtk_text_iter_make_surreal (iter);
@@ -696,6 +695,108 @@ gtk_text_iter_get_line_index (const GtkTextIter *iter)
   check_invariants (iter);
 
   return real->line_byte_offset;
+}
+
+gint
+gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
+{
+  GtkTextRealIter *real;
+  gint vis_offset;
+  GtkTextLineSegment *seg;
+  GtkTextIter pos;
+  
+  g_return_val_if_fail (iter != NULL, 0);
+
+  real = gtk_text_iter_make_real (iter);
+
+  if (real == NULL)
+    return 0;
+
+  ensure_char_offsets (real);
+
+  check_invariants (iter);
+
+  vis_offset = real->line_char_offset;
+
+  _gtk_text_btree_get_iter_at_line (real->tree,
+                                    &pos,
+                                    real->line,
+                                    0);
+
+  seg = _gtk_text_iter_get_indexable_segment (&pos);
+
+  while (seg != real->segment)
+    {
+      /* This is a pretty expensive call, making the
+       * whole function pretty lame; we could keep track
+       * of current invisibility state by looking at toggle
+       * segments as we loop, and then call this function
+       * only once per line, in order to speed up the loop
+       * quite a lot.
+       */
+      if (_gtk_text_btree_char_is_invisible (&pos))
+        vis_offset -= seg->char_count;
+
+      _gtk_text_iter_forward_indexable_segment (&pos);
+
+      seg = _gtk_text_iter_get_indexable_segment (&pos);
+    }
+
+  if (_gtk_text_btree_char_is_invisible (&pos))
+    vis_offset -= real->segment_char_offset;
+  
+  return vis_offset;
+}
+
+gint
+gtk_text_iter_get_visible_line_index (const GtkTextIter *iter)
+{
+  GtkTextRealIter *real;
+  gint vis_offset;
+  GtkTextLineSegment *seg;
+  GtkTextIter pos;
+  
+  g_return_val_if_fail (iter != NULL, 0);
+
+  real = gtk_text_iter_make_real (iter);
+
+  if (real == NULL)
+    return 0;
+
+  ensure_char_offsets (real);
+
+  check_invariants (iter);
+
+  vis_offset = real->line_byte_offset;
+
+  _gtk_text_btree_get_iter_at_line (real->tree,
+                                    &pos,
+                                    real->line,
+                                    0);
+
+  seg = _gtk_text_iter_get_indexable_segment (&pos);
+
+  while (seg != real->segment)
+    {
+      /* This is a pretty expensive call, making the
+       * whole function pretty lame; we could keep track
+       * of current invisibility state by looking at toggle
+       * segments as we loop, and then call this function
+       * only once per line, in order to speed up the loop
+       * quite a lot.
+       */
+      if (_gtk_text_btree_char_is_invisible (&pos))
+        vis_offset -= seg->byte_count;
+
+      _gtk_text_iter_forward_indexable_segment (&pos);
+
+      seg = _gtk_text_iter_get_indexable_segment (&pos);
+    }
+
+  if (_gtk_text_btree_char_is_invisible (&pos))
+    vis_offset -= real->segment_byte_offset;
+  
+  return vis_offset;
 }
 
 /*
@@ -3274,6 +3375,97 @@ gtk_text_iter_set_line_index (GtkTextIter *iter,
                G_STRLOC, byte_on_line);
 
   check_invariants (iter);
+}
+
+
+/**
+ * gtk_text_iter_set_visible_line_offset:
+ * @iter: a #GtkTextIter
+ * @char_on_line: a character offset
+ * 
+ * Like gtk_text_iter_set_line_offset(), but the offset is in visible
+ * characters, i.e. text with a tag making it invisible is not
+ * counted in the offset.
+ **/
+void
+gtk_text_iter_set_visible_line_offset (GtkTextIter *iter,
+                                       gint         char_on_line)
+{
+  gint chars_seen = 0;
+  GtkTextIter pos;
+
+  g_return_if_fail (iter != NULL);
+  
+  pos = *iter;
+
+  /* For now we use a ludicrously slow implementation */
+  while (chars_seen < char_on_line)
+    {
+      if (!_gtk_text_btree_char_is_invisible (&pos))
+        ++chars_seen;
+
+      if (!gtk_text_iter_forward_char (&pos))
+        break;
+
+      if (chars_seen == char_on_line)
+        break;
+    }
+  
+  if (_gtk_text_iter_get_text_line (&pos) == _gtk_text_iter_get_text_line (iter))
+    *iter = pos;
+  else
+    gtk_text_iter_forward_line (iter);
+}
+
+static gint
+bytes_in_char (GtkTextIter *iter)
+{
+  return g_unichar_to_utf8 (gtk_text_iter_get_char (iter), NULL);
+}
+
+/**
+ * gtk_text_iter_set_visible_line_index:
+ * @iter: a #GtkTextIter
+ * @byte_on_line: a byte index
+ * 
+ * Like gtk_text_iter_set_line_index(), but the index is in visible
+ * bytes, i.e. text with a tag making it invisible is not counted
+ * in the index.
+ **/
+void
+gtk_text_iter_set_visible_line_index  (GtkTextIter *iter,
+                                       gint         byte_on_line)
+{
+  gint bytes_seen = 0;
+  GtkTextIter pos;
+
+  g_return_if_fail (iter != NULL);
+  
+  pos = *iter;
+
+  /* For now we use a ludicrously slow implementation */
+  while (bytes_seen < byte_on_line)
+    {
+      if (!_gtk_text_btree_char_is_invisible (&pos))
+        bytes_seen += bytes_in_char (&pos);
+
+      if (!gtk_text_iter_forward_char (&pos))
+        break;
+
+      if (bytes_seen >= byte_on_line)
+        break;
+    }
+
+  if (bytes_seen > byte_on_line)
+    g_warning ("%s: Incorrect visible byte index %d falls in the middle of a UTF-8 "
+               "character; this will crash the text buffer. "
+               "Byte indexes must refer to the start of a character.",
+               G_STRLOC, byte_on_line);
+  
+  if (_gtk_text_iter_get_text_line (&pos) == _gtk_text_iter_get_text_line (iter))
+    *iter = pos;
+  else
+    gtk_text_iter_forward_line (iter);
 }
 
 /**
