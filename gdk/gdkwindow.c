@@ -1421,7 +1421,7 @@ gdk_window_draw_text_wc (GdkDrawable    *drawable,
 }
 
 static GdkDrawable*
-gdk_window_get_composite_drawable (GdkDrawable *window,
+gdk_window_get_composite_drawable (GdkDrawable *drawable,
                                    gint         x,
                                    gint         y,
                                    gint         width,
@@ -1429,7 +1429,7 @@ gdk_window_get_composite_drawable (GdkDrawable *window,
                                    gint        *composite_x_offset,
                                    gint        *composite_y_offset)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkWindowPaint *paint;
   GdkRegion *buffered_region;
   GSList *tmp_list;
@@ -1441,14 +1441,15 @@ gdk_window_get_composite_drawable (GdkDrawable *window,
   gint windowing_x_offset, windowing_y_offset;
   gint buffer_x_offset, buffer_y_offset;
 
-  if (GDK_WINDOW_DESTROYED (window) || private->paint_stack == NULL)
+  if ((GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
+      || private->paint_stack == NULL)
     {
       /* No backing store */
-      _gdk_windowing_window_get_offsets (window,
+      _gdk_windowing_window_get_offsets (drawable,
                                          composite_x_offset,
                                          composite_y_offset);
       
-      return g_object_ref (window);
+      return g_object_ref (drawable);
     }
   
   buffered_region = NULL;
@@ -1494,20 +1495,20 @@ gdk_window_get_composite_drawable (GdkDrawable *window,
     {
       gdk_region_destroy (buffered_region);
 
-      _gdk_windowing_window_get_offsets (window,
+      _gdk_windowing_window_get_offsets (drawable,
                                          composite_x_offset,
                                          composite_y_offset);
 
-      return g_object_ref (window);
+      return g_object_ref (drawable);
     }
   
-  tmp_pixmap = gdk_pixmap_new (window,
+  tmp_pixmap = gdk_pixmap_new (drawable,
                                width, height,
                                -1);
 
   tmp_gc = gdk_gc_new (tmp_pixmap);
 
-  _gdk_windowing_window_get_offsets (window,
+  _gdk_windowing_window_get_offsets (drawable,
                                      &windowing_x_offset,
                                      &windowing_y_offset);
   
