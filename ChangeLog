@@ -1,3 +1,8 @@
+Sat Jan 26 19:27:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c (gtk_socket_grab_notify): Don't
+	send MODALITY_ON/OFF if socket->same_app (More fixes for #69735)
+
 Sat Jan 26 19:04:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (check_is_grabbed): Return FALSE not true

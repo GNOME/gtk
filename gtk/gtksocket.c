@@ -677,9 +677,12 @@ static void
 gtk_socket_grab_notify (GtkWidget *widget,
 			gboolean   was_grabbed)
 {
-  send_xembed_message (GTK_SOCKET (widget),
-		       was_grabbed ? XEMBED_MODALITY_OFF : XEMBED_MODALITY_ON,
-		       0, 0, 0, gtk_get_current_event_time ());
+  GtkSocket *socket = GTK_SOCKET (widget);
+
+  if (!socket->same_app)
+    send_xembed_message (GTK_SOCKET (widget),
+			 was_grabbed ? XEMBED_MODALITY_OFF : XEMBED_MODALITY_ON,
+			 0, 0, 0, gtk_get_current_event_time ());
 }
 
 static gboolean
