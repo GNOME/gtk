@@ -59,3 +59,6 @@
 
 /* Define if you have the <wctype.h> header file.  */
 #undef HAVE_WCTYPE_H
+
+/* Define if you have the X11 library (-lX11).  */
+#undef HAVE_LIBX11

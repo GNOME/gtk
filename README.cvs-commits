@@ -43,6 +43,17 @@ Notes:
 * If you are going to be changing many files in an experimental fashion,
   it probably is a good idea to create a separate branch for your changes.
 
+* The ChangeLog entries should preferrably match in date format
+  with the existing entries. You can set how emacs does this
+  by using customize mode:
+
+  - M-x customize
+  - set Programming/Tools/ChangeLog/Add Log Time Format to
+    'Old Format'
+
+ Or, set the add-log-time-format to 'current-time-string in
+ your .emacs file.
+
 Owen Taylor
 13 Aug 1998
 

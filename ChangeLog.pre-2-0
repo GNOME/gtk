@@ -1,3 +1,10 @@
+Wed Dec  9 13:06:31 1998  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+ 
+ 	* gdk/gdkim.c (gdk_ic_new,gdk_ic_{set,get}_attr): Fixed argument
+ 	list and return type for non-XIM fallback.
+ 
+ 	* configure.in: Only build XIM-support if available.
+ 
 Wed Dec  9 12:23:30 1998  Owen Taylor  <otaylor@redhat.com>
 	
 	* gtk/testselection.c (main): Add in missing 'flags'

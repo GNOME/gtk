@@ -1317,10 +1317,8 @@ gdk_im_ready (void)
   return FALSE;
 }
 
-GdkIC 
-gdk_ic_new (GdkWindow* client_window,
-	    GdkWindow* focus_window,
-	    GdkIMStyle style, ...)
+GdkIC * 
+gdk_ic_new (GdkICAttr *attr, GdkICAttributesType mask)
 {
   return NULL;
 }
@@ -1346,14 +1344,16 @@ gdk_ic_get_values (GdkIC *ic, ...)
 {
 }
 
-void 
-gdk_ic_set_attr (GdkIC *ic, const char *target, ...)
+GdkICAttributesType 
+gdk_ic_set_attr (GdkIC *ic, GdkICAttr *attr, GdkICAttributesType mask)
 {
+  return 0;
 }
 
-void 
-gdk_ic_get_attr (GdkIC *ic, const char *target, ...)
+GdkICAttributesType 
+gdk_ic_get_attr (GdkIC *ic, GdkICAttr *attr, GdkICAttributesType mask)
 {
+  return 0;
 }
 
 GdkEventMask 
